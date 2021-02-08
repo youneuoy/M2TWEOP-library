@@ -1,41 +1,128 @@
 #include "pch.h"
 #include "graphicsD3D.h"
+#include "plugins.h"
 graphicsD3D::dataT graphicsD3D::dataS;
 
 
 template<typename T>
-T FnCast(uint64_t fnToCast, T pFnCastTo) {
+T FnCast(uint32_t fnToCast, T pFnCastTo) {
 	(void)pFnCastTo;
 	return (T)fnToCast;
 }
-NOINLINE LRESULT graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
+	{
+		return true;
+	}
+	if (dataS.ifMouseOrKeyBoardAtImgui)
+	{
+		return true;
+	}
+
 	return FnCast(dataS.hookD.onewGameWndProc,&hkWndProc2)(hWnd, uMsg, wParam, lParam);
 }
-
-NOINLINE LRESULT graphicsD3D::hkWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 {
+	plugins::onEndScene(pDevice);
+
+
+	return;
+}
+NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+
+
 	return CallWindowProc(dataS.hookD.oWndProc, hWnd, uMsg, wParam, lParam);
 }
 
-
-NOINLINE HRESULT graphicsD3D::hkEndScene(IDirect3DDevice9* pDevice)
+char testtext[50]{};
+NOINLINE HRESULT APIENTRY graphicsD3D::hkEndScene(IDirect3DDevice9* pDevice)
 {
+	if (!dataS.ImInitialized)
+	{
+		initImgGui(pDevice);
+	}
+
+
+	ImGui_ImplDX9_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
+
+	/*ImGui::Begin("test");
+	ImGui::Text(testtext);
+	if (ImGui::Button(testtext))
+	{
+		memset(testtext,0,50);
+	}
+	ImGui::InputText("testText", testtext,50);
+	
+	ImGui::End();*/
+
+
+	dataS.ifMouseOrKeyBoardAtImgui = ImGui::GetIO().WantCaptureMouse;
+	dataS.ifMouseOrKeyBoardAtImgui |= ImGui::GetIO().WantCaptureKeyboard;
+
+	ImGui::EndFrame();
+	ImGui::Render();
+	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+
 	return FnCast(dataS.hookD.oEndScene, &hkEndScene)(pDevice);
 }
 
-NOINLINE HRESULT graphicsD3D::hkReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
+NOINLINE HRESULT APIENTRY graphicsD3D::hkReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
 {
+	if (dataS.ImInitCount > 0)
+	{
+		D3DDEVICE_CREATION_PARAMETERS d3dcp{ 0 };
+
+		ImGui_ImplDX9_Shutdown();
+		ImGui_ImplWin32_Shutdown();
+		dataS.ImInitialized = false;
+	}
 	return FnCast(dataS.hookD.oReset,&hkReset)(pDevice, pPresentationParameters);
+}
+
+NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
+{
+	dataS.ImInitCount++;
+
+
+	ImFontConfig font_config;
+	font_config.OversampleH = 1;
+	font_config.OversampleV = 1;
+	font_config.PixelSnapH = 1;
+
+
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
+	io.MouseDrawCursor = false;
+	string f = globals::dataS.modPatch;
+	if (f.size() == 0)
+	{
+		MessageBoxA(NULL, "graphics init error", "Error", NULL);
+		exit(0);
+	}
+	f = f + "\\youneuoy_Data\\inGame.ttf";
+
+
+	io.Fonts->AddFontFromFileTTF(f.c_str(), 12, &font_config, io.Fonts->GetGlyphRangesCyrillic());
+
+	ImGui_ImplWin32_Init(dataS.Window);
+	ImGui_ImplDX9_Init(pDevice);
+
+	dataS.ImInitialized = true;
+	return;
 }
 
 bool graphicsD3D::init()
 {
-/*	IMGUI_CHECKVERSION();
-	ImGuiContext* imCtx = ImGui::CreateContext();*/
-	//	plugins::onChangeImGuiCtx(imCtx);
+	IMGUI_CHECKVERSION();
+	ImGuiContext* imCtx = ImGui::CreateContext();
+	plugins::onChangeImGuiCtx(imCtx);
 
-		//menuStopTime = GetTickCount() + 7000;
+
 	while (dataS.Window == nullptr)
 	{
 		dataS.Window = FindWindowA(0, ("Medieval 2"));
@@ -83,13 +170,12 @@ DWORD __stdcall graphicsD3D::InitS()
 		{
 			return 1;
 		}
-
 	}
 	else
 	{
 		return 0;
 	}
-/*	DWORD adr = 0;
+	DWORD adr = 0;
 	if (globals::dataS.gamever == 2)//steam
 	{
 		adr = 0x01178a40;
@@ -107,7 +193,7 @@ DWORD __stdcall graphicsD3D::InitS()
 	if (MH_EnableHook((char*)adr) != MH_OK)
 	{
 		return 1;
-	}*/
+	}
 
 	return 1;
 }

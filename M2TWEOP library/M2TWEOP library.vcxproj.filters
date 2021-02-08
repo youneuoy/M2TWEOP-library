@@ -108,9 +108,6 @@
     <ClInclude Include="imgui\imconfig.h">
       <Filter>3rd\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="imgui\imfilebrowser.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\imgui.h">
       <Filter>3rd\imgui</Filter>
     </ClInclude>
@@ -162,6 +159,9 @@
     <ClInclude Include="fastFunctsHelpers.h">
       <Filter>Исходные файлы\functions\helpers</Filter>
     </ClInclude>
+    <ClInclude Include="headersGraphics.h">
+      <Filter>technical</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -206,9 +206,6 @@
     <ClCompile Include="imgui\imgui.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui_demo.cpp">
-      <Filter>3rd\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\imgui_draw.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
@@ -247,6 +244,9 @@
     </ClCompile>
     <ClCompile Include="fastFunctsHelpers.cpp">
       <Filter>Исходные файлы\functions\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>3rd\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
