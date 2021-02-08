@@ -524,6 +524,14 @@ void plugins::onChangeTurnNum()
 	}
 }
 
+void plugins::onWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	for (plugin* pl : pluginsCfg.plugins)
+	{
+		(*(*pl->onWndProc))(hWnd, uMsg, wParam, lParam);
+	}
+}
+
 void plugins::onEndScene(LPDIRECT3DDEVICE9 pDevice)
 {
 	for (plugin* pl : pluginsCfg.plugins)
@@ -1110,5 +1118,9 @@ int plugin::init(string* nameP)
 	//onChangeImGuiContext
 	fName = "onChangeImGuiContext";
 	onChangeImGuiContext.Load(&plPath, &fName);
+
+	//onWndProc
+	fName = "onWndProc";
+	onWndProc.Load(&plPath, &fName);
 	return 1;
 }

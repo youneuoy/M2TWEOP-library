@@ -21,7 +21,7 @@ public:
 		{
 			WNDPROC oWndProc = NULL;
 			// Originals
-			uint32_t onewGameWndProc = NULL;
+			WNDPROC onewGameWndProc = NULL;
 			uint32_t oEndScene = NULL;
 			uint32_t oReset = NULL;
 		}hookD;

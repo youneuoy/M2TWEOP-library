@@ -11,6 +11,8 @@ T FnCast(uint32_t fnToCast, T pFnCastTo) {
 }
 NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	plugins::onWindowProc(hWnd, uMsg, wParam, lParam);
+
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
 	{
 		return true;
@@ -20,7 +22,8 @@ NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM w
 		return true;
 	}
 
-	return FnCast(dataS.hookD.onewGameWndProc,&hkWndProc2)(hWnd, uMsg, wParam, lParam);
+
+	return CallWindowProc(dataS.hookD.onewGameWndProc,hWnd, uMsg, wParam, lParam);
 }
 NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 {
@@ -36,7 +39,7 @@ NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc(HWND hWnd, UINT uMsg, WPARAM wP
 	return CallWindowProc(dataS.hookD.oWndProc, hWnd, uMsg, wParam, lParam);
 }
 
-char testtext[50]{};
+
 NOINLINE HRESULT APIENTRY graphicsD3D::hkEndScene(IDirect3DDevice9* pDevice)
 {
 	if (!dataS.ImInitialized)
@@ -49,16 +52,8 @@ NOINLINE HRESULT APIENTRY graphicsD3D::hkEndScene(IDirect3DDevice9* pDevice)
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
+	Draw(pDevice);
 
-	/*ImGui::Begin("test");
-	ImGui::Text(testtext);
-	if (ImGui::Button(testtext))
-	{
-		memset(testtext,0,50);
-	}
-	ImGui::InputText("testText", testtext,50);
-	
-	ImGui::End();*/
 
 
 	dataS.ifMouseOrKeyBoardAtImgui = ImGui::GetIO().WantCaptureMouse;
@@ -88,7 +83,6 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 {
 	dataS.ImInitCount++;
 
-
 	ImFontConfig font_config;
 	font_config.OversampleH = 1;
 	font_config.OversampleV = 1;
@@ -107,7 +101,7 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 	f = f + "\\youneuoy_Data\\inGame.ttf";
 
 
-	io.Fonts->AddFontFromFileTTF(f.c_str(), 12, &font_config, io.Fonts->GetGlyphRangesCyrillic());
+	io.Fonts->AddFontFromFileTTF(f.c_str(), 24, &font_config, io.Fonts->GetGlyphRangesCyrillic());
 
 	ImGui_ImplWin32_Init(dataS.Window);
 	ImGui_ImplDX9_Init(pDevice);
