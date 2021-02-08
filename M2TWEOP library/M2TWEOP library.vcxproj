@@ -187,10 +187,10 @@
     <ClInclude Include="functionsOffsets.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="graphicsD3D.h" />
+    <ClInclude Include="headersGraphics.h" />
     <ClInclude Include="headersMEM.h" />
     <ClInclude Include="headersSTD.h" />
     <ClInclude Include="imgui\imconfig.h" />
-    <ClInclude Include="imgui\imfilebrowser.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx9.h" />
     <ClInclude Include="imgui\imgui_impl_win32.h" />
@@ -224,10 +224,10 @@
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="graphicsD3D.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
-    <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_impl_dx9.cpp" />
     <ClCompile Include="imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Injects.cpp" />
     <ClCompile Include="managerF.cpp" />
