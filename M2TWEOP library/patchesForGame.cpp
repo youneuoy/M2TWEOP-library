@@ -1,9 +1,13 @@
 #include "pch.h"
 #include "patchesForGame.h"
 #include "tilesChange.h"
+#include "graphicsD3D.h"
 void __stdcall patchesForGame::afterEDUread()
 {
-
+	if (!graphicsD3D::InitS())
+		{
+			MessageBoxA(NULL, "Cant run M2TWEOP, graphics error", "ERROR", NULL);
+		}
 }
 
 void __stdcall patchesForGame::onChangeTurnNum()

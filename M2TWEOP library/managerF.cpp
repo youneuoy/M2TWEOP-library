@@ -201,14 +201,11 @@ void managerF::doPachs()
 	f1.close();
 }
 
-#include "tests.h"
+//#include "tests.h"
 void managerF::initThread()
 {
 	readMF();
-	/*if (!graphicsD3D::InitS())
-	{
-		MessageBoxA(NULL, "Cant run M2TWEOP, graphics error", "ERROR", NULL);
-	}*/
+
 	read_modConfig();
 	codes::initCodes(globals::dataS.gamever);
 	dataOffsets::initDataOffsets(globals::dataS.gamever);
