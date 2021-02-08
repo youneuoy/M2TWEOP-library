@@ -1,0 +1,114 @@
+#include "stratModelsChange.h"
+namespace stratModelsChange
+{
+	void changeResourceStratModel(resStrat* resource, model_Rigid* modelP)
+	{
+		if (resource->stratMod->model == modelP)return;
+		stratResMod* newMod = new stratResMod();
+
+		newMod->resource_cost = 0;
+		newMod->hasMine = 0;
+		newMod->resource_num = resource->stratMod->resource_num;
+		newMod->model = modelP;
+		resource->stratMod = newMod;
+	}
+	void changeFortStratModel(fortStruct* fort, model_Rigid* modelP, model_Rigid* modelP2)
+	{
+		if (fort->stratModel->centerModel == modelP
+			&& fort->stratModel->wallsModel == modelP2
+			)return;
+
+
+		stratFortMod* newMod = new stratFortMod[33];
+		memset(newMod, 0, sizeof(stratFortMod) * 33);
+
+
+		newMod->centerModel = modelP;
+
+		/*newMod->centerModelPath = model->stratFortModel->centerModelPath;
+		newMod->centerModelPathCrypt = model->stratFortModel->centerModelPathCrypt;*/
+
+		newMod->wallsModel = modelP2;
+
+		/*newMod->wallsModelPath = model->stratFortModel->wallsModelPath;
+		newMod->wallsModelPathCrypt = model->stratFortModel->wallsModelPathCrypt;*/
+		fort->stratModel = newMod;
+
+	}
+
+	void changePortStratModel(portBuildingStruct* port, model_Rigid* modelP, model_Rigid* modelP2)
+	{
+		if (port->portDock == nullptr)
+		{
+			if (port->portStratModel->model_rigid == modelP)
+			{
+				return;
+			}
+		}
+		else
+		{
+			if (port->portStratModel->model_rigid == modelP
+				&& port->portDock->dockStratModel->model_rigid == modelP2
+				)return;
+		}
+
+
+		stratPortModel* newMod = new stratPortModel();
+		memset(newMod, 0, sizeof(stratPortModel));
+
+
+		newMod->model_rigid = modelP;
+
+
+		port->portStratModel = newMod;
+
+
+		if (port->portDock == nullptr)return;
+		stratPortModel* newDockMod = new stratPortModel();
+		memset(newDockMod, 0, sizeof(stratPortModel));
+
+		newDockMod->model_rigid = modelP2;
+
+
+		port->portDock->dockStratModel = newDockMod;
+
+	}
+	void stratModelsChange::changeModel(int x, int y, model_Rigid* modelP, model_Rigid* modelP2)
+	{
+		if (modelP == nullptr)return;
+
+		fortStruct* fort = nullptr;
+		portBuildingStruct* port = nullptr;
+		resStrat* resource = nullptr;
+
+		if (modelP2 != nullptr)
+		{
+			fort = fastFuncts::findFort(x, y);
+			if (fort != nullptr)
+			{
+				changeFortStratModel(fort, modelP, modelP2);
+				return;
+			}
+
+
+			port = fastFuncts::findPort(x, y);
+			if (port != nullptr)
+			{
+
+				changePortStratModel(port, modelP, modelP2);
+				return;
+			}
+		}
+
+		resource = fastFuncts::findResource(x, y);
+		if (resource != nullptr)
+		{
+			changeResourceStratModel(resource, modelP);
+			return;
+		}
+
+
+		return;
+	}
+
+}
