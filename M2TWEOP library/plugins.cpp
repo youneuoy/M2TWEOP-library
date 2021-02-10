@@ -39,6 +39,8 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 		call eax
 		mov event, eax
 	}
+
+	if (event == nullptr)return;
 	/*if (strcmp(event, "CharacterSelected")==0)
 	{
 		generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
