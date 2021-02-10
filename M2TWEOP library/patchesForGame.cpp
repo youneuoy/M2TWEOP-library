@@ -12,6 +12,7 @@ void __stdcall patchesForGame::afterEDUread()
 
 void __stdcall patchesForGame::onChangeTurnNum()
 {
+	plugins::onChangeTurnNum();
 }
 
 void __stdcall patchesForGame::onGiveTrait()
