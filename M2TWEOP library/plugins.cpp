@@ -42,7 +42,7 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 
 	if (event == nullptr)return;
 
-	if (strcmp(event, "CharacterSelected")==0)
+	/*if (strcmp(event, "CharacterSelected")==0)
 	{
 		generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
 
@@ -62,7 +62,7 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 			}
 		}
 
-
+		*/
 	/*	int x = prs->gen->xCoord;
 		int y = prs->gen->yCoord;
 		general* gen = fastFuncts::createCharacter((char*)"named character", fastFuncts::getFactionsList()[1], 22, (char*)"Henry", NULL, 31, NULL, x + 1, y);
