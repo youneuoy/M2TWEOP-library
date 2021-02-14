@@ -19,6 +19,11 @@ void codes::initCodes(int gameVer)
 		offsets.getGeneralReadyForMovingFunc = 0x004cd460;
 
 
+		offsets.makeTrackedPointerToAttackFunc = 0x004e6000;
+		offsets.makeCadAttackFunc = 0x005b5420;
+		offsets.somethingWithTrackedPointerAttackFunc = 0x004cb6d0;
+
+
 
 		//CAMERA
 		offsets.moveStratCameraSlowFunc = 0x0098d940;
@@ -62,6 +67,11 @@ void codes::initCodes(int gameVer)
 		offsets.getReadyForMovingFunc = 0x005b0540;
 		offsets.getReadyForMoving2Func = 0x005a0d50;
 		offsets.getGeneralReadyForMovingFunc = 0x004cda20;
+
+
+		offsets.makeTrackedPointerToAttackFunc = 0x004e6600;
+		offsets.makeCadAttackFunc = 0x005b5900;
+		offsets.somethingWithTrackedPointerAttackFunc = 0x004cbc90;
 
 		//CAMERA
 		offsets.moveStratCameraSlowFunc = 0x0098e4c0;

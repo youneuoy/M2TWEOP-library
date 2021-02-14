@@ -189,6 +189,7 @@ void managerF::doPachs()
 
 	f1 << "Done" << endl;
 
+
 	f1 << "Start applying start fort models patch" << endl;
 	toStratModelsSelect* stratModSel = new toStratModelsSelect(mem, (LPVOID)patchesForGame::checkAndChangeModels, globals::dataS.gamever);
 	stratModSel->SetlStratModelsCode();

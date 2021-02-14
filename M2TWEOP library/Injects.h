@@ -377,7 +377,7 @@ private:
 	LPVOID funcAdress;
 };
 
-//on custom tiles file read
+//on strat models select
 class toStratModelsSelect
 	:public AATemplate
 {

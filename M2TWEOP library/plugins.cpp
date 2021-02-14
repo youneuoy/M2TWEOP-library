@@ -41,17 +41,36 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 	}
 
 	if (event == nullptr)return;
-	/*if (strcmp(event, "CharacterSelected")==0)
+
+	if (strcmp(event, "CharacterSelected")==0)
 	{
 		generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
-		int x = prs->gen->xCoord;
+
+		factionStruct** facs = fastFuncts::getFactionsList();
+		for (int i = 0; i < fastFuncts::getFactionsCount(); i++)
+		{
+			factionStruct* fac = facs[i];
+
+			for (int j = 0; j < fac->numOfCharacters; j++)
+			{
+				if (fac->characters[j]->xCoord == 62
+					&& fac->characters[j]->yCoord == 37
+					)
+				{
+					actionsStrat::attackArmy(prs->gen, fac->characters[j]);
+				}
+			}
+		}
+
+
+	/*	int x = prs->gen->xCoord;
 		int y = prs->gen->yCoord;
 		general* gen = fastFuncts::createCharacter((char*)"named character", fastFuncts::getFactionsList()[1], 22, (char*)"Henry", NULL, 31, NULL, x + 1, y);
 		stackStruct* army = fastFuncts::createArmy(gen);
 		unit* un = fastFuncts::createUnitN("NE Bodyguard", fastFuncts::getFactionsList()[1]->dipNum, 1, 1, 1);
 		fastFuncts::addUnitToArmy(army, un);
-		fastFuncts::setBodyguard(gen, un);
-	}*/
+		fastFuncts::setBodyguard(gen, un);*/
+	}
 	
 	for (plugin* pl : pluginsCfg.plugins)
 	{

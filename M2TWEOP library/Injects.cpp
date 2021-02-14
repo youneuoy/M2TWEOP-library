@@ -1494,16 +1494,18 @@ void toStratModelsSelect::SetlStratModelsCode()
 {
 	Assembler* a = new Assembler();
 
+
+	a->lea(edi, dword_ptr(ebx, 0x228));
+
 	a->pushad();
 	a->pushf();
 
 	a->mov(eax, (DWORD)funcAdress);
+
 	a->call(eax);
 
 	a->popf();
 	a->popad();
-
-	a->lea(edi, dword_ptr(ebx, 0x228));
 
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();

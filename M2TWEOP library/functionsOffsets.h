@@ -22,6 +22,9 @@ public:
 		DWORD getReadyForMoving2Func = NULL;
 		DWORD getGeneralReadyForMovingFunc = NULL;
 
+		DWORD makeTrackedPointerToAttackFunc = NULL;
+		DWORD makeCadAttackFunc = NULL;
+		DWORD somethingWithTrackedPointerAttackFunc = NULL;
 
 
 		//strat camera funcs
