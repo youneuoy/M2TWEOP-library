@@ -69,8 +69,8 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 		stackStruct* army = fastFuncts::createArmy(gen);
 		unit* un = fastFuncts::createUnitN("NE Bodyguard", fastFuncts::getFactionsList()[1]->dipNum, 1, 1, 1);
 		fastFuncts::addUnitToArmy(army, un);
-		fastFuncts::setBodyguard(gen, un);*/
-	}
+		fastFuncts::setBodyguard(gen, un);
+	}*/
 	
 	for (plugin* pl : pluginsCfg.plugins)
 	{
