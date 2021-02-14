@@ -22,5 +22,48 @@ namespace actionsStrat {
 
 	}
 
+	NOINLINE EOP_EXPORT void attackArmy(general* attacker, general* defender)
+	{
+
+		if (attacker->armyLeaded == nullptr || defender->armyLeaded == nullptr)
+		{
+			return;
+		}
+
+		DWORD mem = fastFuncts::allocateGameMem(0x302c);
+		if (mem == 0)return;
+
+
+
+		int trackedObject[2]{0};
+
+		DWORD makeTrackedPointerToAttackFunc= codes::offsets.makeTrackedPointerToAttackFunc;
+		DWORD makeCadAttackFunc = codes::offsets.makeCadAttackFunc;
+		DWORD somethingWithTrackedPointerAttackFunc = codes::offsets.somethingWithTrackedPointerAttackFunc;
+
+		_asm
+		{
+			push defender
+			lea ecx, trackedObject
+			mov eax, makeTrackedPointerToAttackFunc
+			call eax
+
+
+			push 0
+			push eax
+			push 0
+			mov ecx,mem
+			mov eax, makeCadAttackFunc
+			call eax
+
+			lea ecx, trackedObject
+			mov eax, somethingWithTrackedPointerAttackFunc
+			call eax
+		}
+		finalizeAction(mem, attacker);
+
+
+	}
+
 
 }

@@ -20,4 +20,5 @@ namespace actionsStrat
 
 	NOINLINE EOP_EXPORT void siegeSettlement(general* gen, settlementStruct* sett);
 	NOINLINE EOP_EXPORT void moveNormal(general* gen, int x,int y);
+	NOINLINE EOP_EXPORT void attackArmy(general* attacker, general* defender);
 };

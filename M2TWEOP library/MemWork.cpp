@@ -57,11 +57,22 @@ void MemWork::InjectCode(void* ptr, DWORD target, DWORD cave, unsigned char* ori
 
 int MemWork::GetASMSize(unsigned char* ptr)
 {
-	for (int i = 0; i < 1024; i++)
+	DISASM MyDisasm = { 0 };
+	MyDisasm.EIP = (UIntPtr)ptr;
+	int totallen = 0;
+
+	while (totallen < 1024)
 	{
-		if (ptr[i] == 0xC3)
-			return i;
+		int currentlen = Disasm(&MyDisasm);
+
+		if (MyDisasm.Instruction.Opcode == 0xC3)
+		{
+			return totallen;
+		}
+		MyDisasm.EIP += currentlen;
+		totallen += currentlen;
 	}
+
 	return 0;
 }
 
