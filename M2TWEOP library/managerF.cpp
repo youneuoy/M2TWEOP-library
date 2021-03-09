@@ -224,7 +224,7 @@ void managerF::initThread()
 
 int managerF::readMF()
 {
-	CreateDirectory(L"logs", NULL);
+	CreateDirectoryA("logs", NULL);
 	string gamever;
 	ifstream f1("runningMod.youneuoycfg");
 

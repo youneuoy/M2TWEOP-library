@@ -24,6 +24,10 @@ public:
 			WNDPROC onewGameWndProc = NULL;
 			uint32_t oEndScene = NULL;
 			uint32_t oReset = NULL;
+			uint32_t oPresent = NULL;
+			uint32_t oBeginScene = NULL;
+			uint32_t oGetRenderTargetData = NULL;
+
 		}hookD;
 	}dataS;
 	static NOINLINE void APIENTRY Draw(LPDIRECT3DDEVICE9 pDevice);

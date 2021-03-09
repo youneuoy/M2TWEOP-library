@@ -22,7 +22,7 @@ namespace actionsStrat {
 
 	}
 
-	NOINLINE EOP_EXPORT void attackArmy(general* attacker, general* defender)
+	NOINLINE EOP_EXPORT void attackCharacter(general* attacker, general* defender)
 	{
 
 		if (attacker->armyLeaded == nullptr || defender->armyLeaded == nullptr)
