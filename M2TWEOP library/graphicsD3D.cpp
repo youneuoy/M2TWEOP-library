@@ -55,7 +55,6 @@ NOINLINE HRESULT APIENTRY graphicsD3D::hkEndScene(IDirect3DDevice9* pDevice)
 	Draw(pDevice);
 
 
-
 	dataS.ifMouseOrKeyBoardAtImgui = ImGui::GetIO().WantCaptureMouse;
 	dataS.ifMouseOrKeyBoardAtImgui |= ImGui::GetIO().WantCaptureKeyboard;
 
@@ -64,10 +63,9 @@ NOINLINE HRESULT APIENTRY graphicsD3D::hkEndScene(IDirect3DDevice9* pDevice)
 	ImGui::Render();
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 
-
-
 	return FnCast(dataS.hookD.oEndScene, &hkEndScene)(pDevice);
 }
+
 
 NOINLINE HRESULT APIENTRY graphicsD3D::hkReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
 {
@@ -143,7 +141,6 @@ DWORD __stdcall graphicsD3D::InitS()
 	}
 
 	init();
-
 
 	if (GetD3D9Device(dataS.d3d9Device, sizeof(dataS.d3d9Device)))
 	{
