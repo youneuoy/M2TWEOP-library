@@ -75,12 +75,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;E:\libs;E:\libs\hook\release;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(DXSDK_DIR)\include;E:\headers\BeaEngine;E:\headers\AsmJit;$(SolutionDir)\M2TWEOP library\imgui;E:\libs\hook;$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR)\include;E:\headers\BeaEngine;E:\headers\AsmJit;$(SolutionDir)\3rd\imgui;E:\libs\hook;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;E:\libs;E:\libs\hook\release;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(DXSDK_DIR)\include;E:\headers\BeaEngine;E:\headers\AsmJit;$(SolutionDir)\M2TWEOP library\imgui;E:\libs\hook;$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR)\include;E:\headers\BeaEngine;E:\headers\AsmJit;$(SolutionDir)\3rd\imgui;E:\libs\hook;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -110,6 +110,8 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -132,6 +134,8 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -177,8 +181,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\3rd\imgui\imconfig.h" />
+    <ClInclude Include="..\3rd\imgui\imgui.h" />
+    <ClInclude Include="..\3rd\imgui\imgui_impl_dx9.h" />
+    <ClInclude Include="..\3rd\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="..\3rd\imgui\imgui_internal.h" />
+    <ClInclude Include="..\3rd\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\3rd\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\3rd\imgui\imstb_truetype.h" />
     <ClInclude Include="actionsStrat.h" />
     <ClInclude Include="agePatch.h" />
+    <ClInclude Include="C:\Users\COMP\vcpkg\installed\x86-windows-static-md\include\MinHook.h" />
     <ClInclude Include="dataOffsets.h" />
     <ClInclude Include="eventsCodes.h" />
     <ClInclude Include="exportHeader.h" />
@@ -191,14 +204,6 @@
     <ClInclude Include="headersGraphics.h" />
     <ClInclude Include="headersMEM.h" />
     <ClInclude Include="headersSTD.h" />
-    <ClInclude Include="imgui\imconfig.h" />
-    <ClInclude Include="imgui\imgui.h" />
-    <ClInclude Include="imgui\imgui_impl_dx9.h" />
-    <ClInclude Include="imgui\imgui_impl_win32.h" />
-    <ClInclude Include="imgui\imgui_internal.h" />
-    <ClInclude Include="imgui\imstb_rectpack.h" />
-    <ClInclude Include="imgui\imstb_textedit.h" />
-    <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Injects.h" />
     <ClInclude Include="managerF.h" />
     <ClInclude Include="MemWork.h" />
@@ -214,6 +219,12 @@
     <ClInclude Include="tilesChange.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\3rd\imgui\imgui.cpp" />
+    <ClCompile Include="..\3rd\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\3rd\imgui\imgui_impl_dx9.cpp" />
+    <ClCompile Include="..\3rd\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\3rd\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\3rd\imgui\imgui_widgets.cpp" />
     <ClCompile Include="actionsStrat.cpp" />
     <ClCompile Include="actionsStratHelpers.cpp" />
     <ClCompile Include="agePatch.cpp" />
@@ -224,12 +235,6 @@
     <ClCompile Include="functionsOffsets.cpp" />
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="graphicsD3D.cpp" />
-    <ClCompile Include="imgui\imgui.cpp" />
-    <ClCompile Include="imgui\imgui_draw.cpp" />
-    <ClCompile Include="imgui\imgui_impl_dx9.cpp" />
-    <ClCompile Include="imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="imgui\imgui_tables.cpp" />
-    <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Injects.cpp">
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Default</BasicRuntimeChecks>
       <FunctionLevelLinking Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</FunctionLevelLinking>
