@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "M2TWEOP library", "M2TWEOP 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "d3d9", "d3d9\d3d9.vcxproj", "{86A4EA9B-4B06-4EEE-ABC5-3B3F8B848E8C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "M2TWEOP GUI", "M2TWEOP GUI\M2TWEOP GUI.vcxproj", "{D5F3609B-70D1-4DC8-A37B-C9BF490C5E4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -29,6 +31,14 @@ Global
 		{86A4EA9B-4B06-4EEE-ABC5-3B3F8B848E8C}.Release|x64.ActiveCfg = Release|Win32
 		{86A4EA9B-4B06-4EEE-ABC5-3B3F8B848E8C}.Release|x86.ActiveCfg = Release|Win32
 		{86A4EA9B-4B06-4EEE-ABC5-3B3F8B848E8C}.Release|x86.Build.0 = Release|Win32
+		{D5F3609B-70D1-4DC8-A37B-C9BF490C5E4B}.Debug|x64.ActiveCfg = Debug|x64
+		{D5F3609B-70D1-4DC8-A37B-C9BF490C5E4B}.Debug|x64.Build.0 = Debug|x64
+		{D5F3609B-70D1-4DC8-A37B-C9BF490C5E4B}.Debug|x86.ActiveCfg = Debug|Win32
+		{D5F3609B-70D1-4DC8-A37B-C9BF490C5E4B}.Debug|x86.Build.0 = Debug|Win32
+		{D5F3609B-70D1-4DC8-A37B-C9BF490C5E4B}.Release|x64.ActiveCfg = Release|x64
+		{D5F3609B-70D1-4DC8-A37B-C9BF490C5E4B}.Release|x64.Build.0 = Release|x64
+		{D5F3609B-70D1-4DC8-A37B-C9BF490C5E4B}.Release|x86.ActiveCfg = Release|Win32
+		{D5F3609B-70D1-4DC8-A37B-C9BF490C5E4B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="3rd">
+      <UniqueIdentifier>{a8713ec9-bb43-4929-8870-a3b85cf04d76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\imgui">
+      <UniqueIdentifier>{d5fba55b-8fae-4732-9932-9553615d0d2f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imgui\imgui.cpp">
+      <Filter>3rd\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imgui\imgui_draw.cpp">
+      <Filter>3rd\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imgui\imgui_impl_dx9.cpp">
+      <Filter>3rd\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imgui\imgui_impl_win32.cpp">
+      <Filter>3rd\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imgui\imgui_tables.cpp">
+      <Filter>3rd\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imgui\imgui_widgets.cpp">
+      <Filter>3rd\imgui</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\3rd\imgui\imconfig.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imgui\imgui.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imgui\imgui_impl_dx9.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imgui\imgui_impl_win32.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imgui\imgui_internal.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imgui\imstb_rectpack.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imgui\imstb_textedit.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imgui\imstb_truetype.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="M2TWEOP GUI.rc">
+      <Filter>Файлы ресурсов</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="M2TWEOP.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

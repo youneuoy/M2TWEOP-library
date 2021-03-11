@@ -15,7 +15,7 @@ namespace tilesChange
 				)
 			{
 				DWORD ctOffset = 0;
-				if (globals::dataS.gamever==2)//steam
+				if (globals::dataS.gamever == 2)//steam
 				{
 					ctOffset = 0x02BF2E98;
 				}
