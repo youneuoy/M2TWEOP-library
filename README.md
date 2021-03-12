@@ -1,6 +1,6 @@
 
 <div align="center">
-    <a href="https://www.twcenter.net/forums/forumdisplay.php?2296-M2TW-Engine-Overhaul-Project"><img src="https://i.imgur.com/wUioNfJ.png" width="1920" alt="EOP" /></a>
+    <a href="https://www.twcenter.net/forums/forumdisplay.php?2296-M2TW-Engine-Overhaul-Project"><img src="https://cdn.discordapp.com/attachments/744306199075225627/819862096527097876/unknown.png" width="1920" alt="EOP" /></a>
     <br>
     <br>
   <p>
