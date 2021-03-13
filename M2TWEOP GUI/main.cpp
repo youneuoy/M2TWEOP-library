@@ -1,36 +1,12 @@
-#define _WIN32_WINNT 0x0501
-#pragma comment(lib, "d3d9.lib")
-#pragma comment(lib, "d3dx9.lib")
-#include <windows.h>
-#include <string>
-#include <d3d9.h>
-#include <d3dx9.h>
-#include <d3dx9tex.h>
-#include "resource.h"
-#include "imgui.h"
-#include "imgui_impl_dx9.h"
-#include "imgui_impl_win32.h"
-#define DIRECTINPUT_VERSION 0x0800
-#include <dinput.h>
-#include <tchar.h>
-#include <system_error>
-/*
-<div align="center">
-	<a href="https://www.twcenter.net/forums/forumdisplay.php?2296-M2TW-Engine-Overhaul-Project"><img src="https://i.imgur.com/wUioNfJ.png" width="1920" alt="EOP" /></a>
-	<br>
-	<br>
-  <p>
-	<a href="https://discord.gg/AfFNeQhf"><img src="https://i.imgur.com/lWD9kdU.png" alt="Discord server" width="250" height="70"></a>
-	<a href="https://www.twcenter.net/forums/forumdisplay.php?2296-M2TW-Engine-Overhaul-Project"><img src="https://i.imgur.com/rvo91ZR.png" alt="TWC" width="250" height="70"/></a>
-	<a href="https://www.youtube.com/channel/UCMyHomaKeeGR4ZPGrBo9dYw"><img src="https://i.imgur.com/iwypXWd.png" alt="YouTube" width="250" height="70"/></a>
-  </p>
-</div>
-*/
-// Data
-static LPDIRECT3D9              g_pD3D = NULL;
-static LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
-static D3DPRESENT_PARAMETERS    g_d3dpp = {};
+#include "headersSTD.h"
 
+#include "dataG.h"
+#include "resource.h"
+
+#include "helpers.h"
+#include "toolRoutine.h"
+
+#include "managerG.h"
 // Forward declarations of helper functions
 bool CreateDeviceD3D(HWND hWnd);
 void CleanupDeviceD3D();
@@ -38,15 +14,6 @@ void ResetDevice();
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 using namespace std;
-void loadTexture(string* path, LPDIRECT3DTEXTURE9* image)
-{
-	HRESULT res = D3DXCreateTextureFromFile(g_pd3dDevice, path->c_str(), image);
-	string t = std::system_category().message(res);
-	if (res != D3D_OK)
-	{
-		MessageBoxA(NULL, t.c_str(), "Loading texture err!", MB_OK | MB_ICONASTERISK);
-	}
-}
 
 // Main code
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
@@ -56,7 +23,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
 	::RegisterClassEx(&wc);
 
-	HWND hwnd = ::CreateWindow(wc.lpszClassName, _T("M2TWEOP"), WS_OVERLAPPEDWINDOW, 100, 100, 1280, 800, NULL, NULL, wc.hInstance, NULL);
+	HWND hwnd = ::CreateWindow(wc.lpszClassName, _T("M2TWEOP"), WS_OVERLAPPEDWINDOW, 100, 100, 100, 100, NULL, NULL, wc.hInstance, NULL);
 
 
 	// Initialize Direct3D
@@ -68,25 +35,31 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	}
 
 	// Show the window
-	::ShowWindow(hwnd, SW_SHOWDEFAULT);
+	::ShowWindow(hwnd, SW_HIDE);
 	::UpdateWindow(hwnd);
+
 
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.IniFilename = NULL;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;           // Enable Docking
+
+
 
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
 	// Setup Dear ImGui style
-	ImGui::StyleColorsDark();
+	ImGui::StyleGrey();
 	//ImGui::StyleColorsClassic();
+	ImGuiStyle& style = ImGui::GetStyle();
 
 	// Setup Platform/Renderer bindings
 	ImGui_ImplWin32_Init(hwnd);
-	ImGui_ImplDX9_Init(g_pd3dDevice);
+	ImGui_ImplDX9_Init(dataG::data.d3d.g_pd3dDevice);
 	// Load Fonts
 	// - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
 	// - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
@@ -104,6 +77,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
 
 	ImVec4 clear_color = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);
+	managerG::init();
+	bool isOpen = true;
 
 	// Main loop
 	MSG msg;
@@ -122,35 +97,45 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 			continue;
 		}
 
+
 		ImGui_ImplDX9_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		ImGui::SetNextWindowPos(ImVec2(0, 0));
-		ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
-		ImGui::Begin("M2TWEOPimg", NULL, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoBringToFrontOnFocus);
-		ImGui::End();
+		toolRoutine::drawTick(&isOpen);
+
 
 
 
 		// Rendering
 		ImGui::EndFrame();
-		g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
-		g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-		g_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, FALSE);
+		dataG::data.d3d.g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+		dataG::data.d3d.g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+		dataG::data.d3d.g_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, FALSE);
 		D3DCOLOR clear_col_dx = D3DCOLOR_RGBA((int)(clear_color.x * 255.0f), (int)(clear_color.y * 255.0f), (int)(clear_color.z * 255.0f), (int)(clear_color.w * 255.0f));
-		g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, clear_col_dx, 1.0f, 0);
-		if (g_pd3dDevice->BeginScene() >= 0)
+		dataG::data.d3d.g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, clear_col_dx, 1.0f, 0);
+		if (dataG::data.d3d.g_pd3dDevice->BeginScene() >= 0)
 		{
 			ImGui::Render();
 			ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-			g_pd3dDevice->EndScene();
+			dataG::data.d3d.g_pd3dDevice->EndScene();
 		}
-		HRESULT result = g_pd3dDevice->Present(NULL, NULL, NULL, NULL);
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+		}
+
+		HRESULT result = dataG::data.d3d.g_pd3dDevice->Present(NULL, NULL, NULL, NULL);
 
 		// Handle loss of D3D9 device
-		if (result == D3DERR_DEVICELOST && g_pd3dDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET)
+		if (result == D3DERR_DEVICELOST && dataG::data.d3d.g_pd3dDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET)
 			ResetDevice();
+
+		if (isOpen == false)
+		{
+			break;
+		}
 	}
 
 	ImGui_ImplDX9_Shutdown();
@@ -168,19 +153,19 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
 bool CreateDeviceD3D(HWND hWnd)
 {
-	if ((g_pD3D = Direct3DCreate9(D3D_SDK_VERSION)) == NULL)
+	if ((dataG::data.d3d.g_pD3D = Direct3DCreate9(D3D_SDK_VERSION)) == NULL)
 		return false;
 
 	// Create the D3DDevice
-	ZeroMemory(&g_d3dpp, sizeof(g_d3dpp));
-	g_d3dpp.Windowed = TRUE;
-	g_d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	g_d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;
-	g_d3dpp.EnableAutoDepthStencil = TRUE;
-	g_d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
-	g_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_ONE;           // Present with vsync
+	ZeroMemory(&dataG::data.d3d.g_d3dpp, sizeof(dataG::data.d3d.g_d3dpp));
+	dataG::data.d3d.g_d3dpp.Windowed = TRUE;
+	dataG::data.d3d.g_d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+	dataG::data.d3d.g_d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;
+	dataG::data.d3d.g_d3dpp.EnableAutoDepthStencil = TRUE;
+	dataG::data.d3d.g_d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
+	dataG::data.d3d.g_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_ONE;           // Present with vsync
 	//g_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;   // Present without vsync, maximum unthrottled framerate
-	if (g_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &g_d3dpp, &g_pd3dDevice) < 0)
+	if (dataG::data.d3d.g_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &dataG::data.d3d.g_d3dpp, &dataG::data.d3d.g_pd3dDevice) < 0)
 		return false;
 
 	return true;
@@ -188,14 +173,14 @@ bool CreateDeviceD3D(HWND hWnd)
 
 void CleanupDeviceD3D()
 {
-	if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
-	if (g_pD3D) { g_pD3D->Release(); g_pD3D = NULL; }
+	if (dataG::data.d3d.g_pd3dDevice) { dataG::data.d3d.g_pd3dDevice->Release(); dataG::data.d3d.g_pd3dDevice = NULL; }
+	if (dataG::data.d3d.g_pD3D) { dataG::data.d3d.g_pD3D->Release(); dataG::data.d3d.g_pD3D = NULL; }
 }
 
 void ResetDevice()
 {
 	ImGui_ImplDX9_InvalidateDeviceObjects();
-	HRESULT hr = g_pd3dDevice->Reset(&g_d3dpp);
+	HRESULT hr = dataG::data.d3d.g_pd3dDevice->Reset(&dataG::data.d3d.g_d3dpp);
 	if (hr == D3DERR_INVALIDCALL)
 		IM_ASSERT(0);
 	ImGui_ImplDX9_CreateDeviceObjects();
@@ -213,10 +198,10 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 	case WM_SIZE:
-		if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
+		if (dataG::data.d3d.g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
 		{
-			g_d3dpp.BackBufferWidth = LOWORD(lParam);
-			g_d3dpp.BackBufferHeight = HIWORD(lParam);
+			dataG::data.d3d.g_d3dpp.BackBufferWidth = LOWORD(lParam);
+			dataG::data.d3d.g_d3dpp.BackBufferHeight = HIWORD(lParam);
 			ResetDevice();
 		}
 		return 0;

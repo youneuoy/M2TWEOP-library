@@ -47,7 +47,6 @@ NOINLINE HRESULT APIENTRY graphicsD3D::hkEndScene(IDirect3DDevice9* pDevice)
 		initImgGui(pDevice);
 	}
 
-
 	ImGui_ImplDX9_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
