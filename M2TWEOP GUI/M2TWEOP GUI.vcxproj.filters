@@ -19,57 +19,135 @@
     <Filter Include="3rd\imgui">
       <UniqueIdentifier>{d5fba55b-8fae-4732-9932-9553615d0d2f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\ui">
+      <UniqueIdentifier>{3c1070f6-a501-4ef3-b6a7-ebc61fe40ff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\helpers">
+      <UniqueIdentifier>{6d12a968-8aa1-4af6-a826-83dea4c640d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\data">
+      <UniqueIdentifier>{a31a6197-c2a5-4808-a322-d0f3a9912817}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\manager">
+      <UniqueIdentifier>{94825a78-6035-4b4d-acb2-64b6203f5719}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\3rd\imgui\imgui.cpp">
+    <ClCompile Include="aboutUI.cpp">
+      <Filter>Исходные файлы\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="helpers.cpp">
+      <Filter>Исходные файлы\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="dataG.cpp">
+      <Filter>Исходные файлы\data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imguiDocking\imgui.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\3rd\imgui\imgui_draw.cpp">
+    <ClCompile Include="..\3rd\imguiDocking\imgui_draw.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\3rd\imgui\imgui_impl_dx9.cpp">
+    <ClCompile Include="..\3rd\imguiDocking\imgui_impl_dx9.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\3rd\imgui\imgui_impl_win32.cpp">
+    <ClCompile Include="..\3rd\imguiDocking\imgui_impl_win32.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\3rd\imgui\imgui_tables.cpp">
+    <ClCompile Include="..\3rd\imguiDocking\imgui_tables.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\3rd\imgui\imgui_widgets.cpp">
+    <ClCompile Include="..\3rd\imguiDocking\imgui_widgets.cpp">
       <Filter>3rd\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="mainUI.cpp">
+      <Filter>Исходные файлы\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="toolRoutine.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="managerG.cpp">
+      <Filter>Исходные файлы\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="managerGHelpers.cpp">
+      <Filter>Исходные файлы\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="gameSTDUI.cpp">
+      <Filter>Исходные файлы\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="gameStarter.cpp">
+      <Filter>Исходные файлы\manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\3rd\imgui\imconfig.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imgui.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imgui_impl_dx9.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imgui_impl_win32.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imgui_internal.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imstb_rectpack.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imstb_textedit.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imstb_truetype.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imgui\imgui_markdown.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="headersSTD.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="aboutUI.h">
+      <Filter>Исходные файлы\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="aboutUIHelpers.h">
+      <Filter>Исходные файлы\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers.h">
+      <Filter>Исходные файлы\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="dataG.h">
+      <Filter>Исходные файлы\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\imconfig.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\imgui.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\imgui_impl_dx9.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\imgui_impl_win32.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\imgui_internal.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\imgui_markdown.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\imstb_rectpack.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\imstb_textedit.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\imstb_truetype.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="mainUI.h">
+      <Filter>Исходные файлы\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="toolRoutine.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="managerGHelpers.h">
+      <Filter>Исходные файлы\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="managerG.h">
+      <Filter>Исходные файлы\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="gameSTDUI.h">
+      <Filter>Исходные файлы\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="gameStarter.h">
+      <Filter>Исходные файлы\manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -81,5 +159,8 @@
     <Image Include="M2TWEOP.ico">
       <Filter>Файлы ресурсов</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="manifest.xml" />
   </ItemGroup>
 </Project>
