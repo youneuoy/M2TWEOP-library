@@ -3,12 +3,14 @@
 #include "headersSTD.h"
 #include "dataG.h"
 #include "helpers.h"
+#include "gameStarter.h"
 namespace gameSTDUI
 {
 	struct
 	{
 		int campaign = 0;
 	}gameSTDUIData;
+
 
 	void drawSTDUI(bool* isOpen)
 	{
@@ -26,7 +28,7 @@ namespace gameSTDUI
 		{
 			gameSTDUIData.campaign = 2;
 		}
-		if (ImGui::Button("British_isles", helpers::getScreen().centerXButton))
+		if (ImGui::Button("British isles", helpers::getScreen().centerXButton))
 		{
 			gameSTDUIData.campaign = 3;
 		}
@@ -45,34 +47,12 @@ namespace gameSTDUI
 
 		if (gameSTDUIData.campaign!=0)
 		{
-
-			STARTUPINFO si;
-			PROCESS_INFORMATION pi;
-
-			ZeroMemory(&si, sizeof(si));
-			si.cb = sizeof(si);
-			ZeroMemory(&pi, sizeof(pi));
-
-			// Start the child process. 
-			if (!CreateProcessA(TEXT("..\\..\\medieval2.exe"),   // No module name (use command line)
-				NULL,        // Command line
-				NULL,           // Process handle not inheritable
-				NULL,           // Thread handle not inheritable
-				FALSE,          // Set handle inheritance to FALSE
-				0,              // No creation flags
-				NULL,           // Use parent's environment block
-				TEXT("..\\.."),           // Use parent's starting directory 
-				&si,            // Pointer to STARTUPINFO structure
-				&pi            // Pointer to PROCESS_INFORMATION structure
-			))
-			{
-				DWORD err = GetLastError();
-				string s = "Error: ";
-				s += to_string(err);
-				MessageBox(NULL, "CreateProcess failed",s.c_str(), MB_OK);
-			}
+			dataG::data.gameData.gameMode = gameSTDUIData.campaign;
 
 			gameSTDUIData.campaign = 0;
+
+
+			gameStarter::startGame();
 		}
 	}
 };

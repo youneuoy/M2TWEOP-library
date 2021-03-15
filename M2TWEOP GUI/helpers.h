@@ -12,5 +12,12 @@ public:
 	static d3dImage* findImage(const char* name,int nameLen);
 
 	static ImFont* findFont(const char* name);
+
+
+	static bool runGame(const char* exeFile,const char* exeParam);
+
+	static bool addModPathArg(string& args, int gameMode);
+
+	static bool selectGameExe(int gameMode);
 };
 

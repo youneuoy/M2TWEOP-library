@@ -1,8 +1,13 @@
 #pragma once
+
+#include "headersSTD.h"
+#include "dataG.h"
+#include "helpers.h"
 class gameStarter
 {
 public:
-	static void startVanilla();
-	static void startDLC(int dlcNumber);
+	static bool startGame();
+private:
+	static bool runGameExe();
 };
 

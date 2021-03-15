@@ -7,6 +7,20 @@ public:
 	{
 		struct
 		{
+			int gameMode = 0;
+
+			
+			string gamePath;
+			string exeName;
+			string gameArgs;
+
+			int gameVer = 0;
+
+		}gameData;
+
+
+		struct
+		{
 			fontS mainFont;
 
 			fontS markdownH1Font;
