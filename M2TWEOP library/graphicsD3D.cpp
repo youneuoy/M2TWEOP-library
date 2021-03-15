@@ -100,7 +100,7 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 	}
 	f = f + "\\youneuoy_Data\\inGame.ttf";
 
-
+	ImGui::StyleGrey();
 	io.Fonts->AddFontFromFileTTF(f.c_str(), 24, &font_config, io.Fonts->GetGlyphRangesCyrillic());
 
 	ImGui_ImplWin32_Init(dataS.Window);
