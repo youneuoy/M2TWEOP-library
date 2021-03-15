@@ -31,7 +31,7 @@ void codes::initCodes(int gameVer)
 		offsets.zoomStratCameraFunc = 0x0098d6a0;
 
 
-		offsets.teleportCharacterFunc = 0x0059ba70;
+		offsets.teleportCharacterFunc = 0x0059b580;
 
 
 
@@ -79,8 +79,7 @@ void codes::initCodes(int gameVer)
 		offsets.zoomStratCameraFunc = 0x0098e220;
 
 
-		offsets.teleportCharacterFunc = 0x0059b580;
-
+		offsets.teleportCharacterFunc = 0x0059ba70;
 
 		offsets.replenishUnitFunc = 0x007495a0;
 		offsets.setUnitArmorFunc = 0x0073c470;
