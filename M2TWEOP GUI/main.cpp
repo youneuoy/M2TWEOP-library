@@ -14,7 +14,12 @@ void ResetDevice();
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 using namespace std;
-
+/*
+extern "C"
+{
+#include "gifdec.h"
+}
+*/
 // Main code
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {
@@ -24,7 +29,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	::RegisterClassEx(&wc);
 
 	HWND hwnd = ::CreateWindow(wc.lpszClassName, _T("M2TWEOP"), WS_OVERLAPPEDWINDOW, 100, 100, 100, 100, NULL, NULL, wc.hInstance, NULL);
-
 
 	// Initialize Direct3D
 	if (!CreateDeviceD3D(hwnd))
@@ -38,7 +42,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	::ShowWindow(hwnd, SW_HIDE);
 	::UpdateWindow(hwnd);
 
-
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -46,8 +49,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	io.IniFilename = NULL;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;           // Enable Docking
-
-
 
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
@@ -75,7 +76,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	//ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
 	//IM_ASSERT(font != NULL);
 
-
 	ImVec4 clear_color = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);
 	managerG::init();
 	bool isOpen = true;
@@ -83,6 +83,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	// Main loop
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
+
+	/*gd_GIF* gif = gd_open_gif("123.gif");*/
+
 	while (msg.message != WM_QUIT)
 	{
 		// Poll and handle messages (inputs, window resize, etc.)
@@ -97,17 +100,27 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 			continue;
 		}
 
-
 		ImGui_ImplDX9_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
 		toolRoutine::drawTick(&isOpen);
 
+		/*
+			IDirect3DTexture9* d3dTexture;
+			ImGui::Begin("t");
+			if (!gd_get_frame(gif))
+			{
+				gd_rewind(gif);
+			}
 
+			//gd_render_frame(gif, buffer);
+			d3dTexture = helpers::loadTextureFromMem((char*)gif->canvas, gif->width, gif->height);
+			ImGui::Image(d3dTexture, ImVec2(gif->width, gif->height));
 
+			ImGui::End();*/
 
-		// Rendering
+			// Rendering
 		ImGui::EndFrame();
 		dataG::data.d3d.g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 		dataG::data.d3d.g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
@@ -131,7 +144,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 		// Handle loss of D3D9 device
 		if (result == D3DERR_DEVICELOST && dataG::data.d3d.g_pd3dDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET)
 			ResetDevice();
-
+		/*		d3dTexture->Release();
+				delete d3dTexture;*/
 		if (isOpen == false)
 		{
 			break;

@@ -4,4 +4,3 @@ namespace toolRoutine
 {
 	void drawTick(bool* isOpen);
 };
-

@@ -72,12 +72,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\icons</IncludePath>
+    <IncludePath>$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\icons;$(SolutionDir)\3rd\gif</IncludePath>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\icons</IncludePath>
+    <IncludePath>$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\icons;$(SolutionDir)\3rd\gif</IncludePath>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -157,10 +157,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\3rd\gif\gifdec.c" />
     <ClCompile Include="..\3rd\imguiDocking\imgui.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_draw.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_impl_dx9.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\3rd\imguiDocking\imgui_stdlib.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_tables.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_widgets.cpp" />
     <ClCompile Include="aboutUI.cpp" />
@@ -172,15 +174,20 @@
     <ClCompile Include="mainUI.cpp" />
     <ClCompile Include="managerG.cpp" />
     <ClCompile Include="managerGHelpers.cpp" />
+    <ClCompile Include="modSettingsUI.cpp" />
     <ClCompile Include="toolRoutine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\3rd\gif\gifdec.h" />
+    <ClInclude Include="..\3rd\gif\stb_image.h" />
+    <ClInclude Include="..\3rd\gif\stb_image_write.h" />
     <ClInclude Include="..\3rd\imguiDocking\imconfig.h" />
     <ClInclude Include="..\3rd\imguiDocking\imgui.h" />
     <ClInclude Include="..\3rd\imguiDocking\imgui_impl_dx9.h" />
     <ClInclude Include="..\3rd\imguiDocking\imgui_impl_win32.h" />
     <ClInclude Include="..\3rd\imguiDocking\imgui_internal.h" />
     <ClInclude Include="..\3rd\imguiDocking\imgui_markdown.h" />
+    <ClInclude Include="..\3rd\imguiDocking\imgui_stdlib.h" />
     <ClInclude Include="..\3rd\imguiDocking\imstb_rectpack.h" />
     <ClInclude Include="..\3rd\imguiDocking\imstb_textedit.h" />
     <ClInclude Include="..\3rd\imguiDocking\imstb_truetype.h" />
@@ -195,6 +202,7 @@
     <ClInclude Include="mainUI.h" />
     <ClInclude Include="managerG.h" />
     <ClInclude Include="managerGHelpers.h" />
+    <ClInclude Include="modSettingsUI.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="toolRoutine.h" />
   </ItemGroup>

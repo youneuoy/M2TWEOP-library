@@ -9,15 +9,20 @@ public:
 		{
 			int gameMode = 0;
 
-			
 			string gamePath;
 			string exeName;
 			string gameArgs;
 
 			int gameVer = 0;
-
 		}gameData;
 
+		struct
+		{
+			string configName;
+			bool useVanillaConfig = false;
+
+			bool useCustomD3D = false;
+		}modData;
 
 		struct
 		{
@@ -26,7 +31,6 @@ public:
 			fontS markdownH1Font;
 			fontS markdownH2Font;
 			fontS markdownH3Font;
-
 		}fonts;
 		std::vector<fontS*>staticFontsCollection =
 		{
@@ -38,10 +42,10 @@ public:
 		screenS screen;
 		struct
 		{
-			d3dImage empty{.path="empty"};
+			d3dImage empty{ .path = "empty" };
 			d3dImage logoAbout;
 		}images;
-		std::vector< d3dImage*>staticImagesCollection=
+		std::vector< d3dImage*>staticImagesCollection =
 		{
 			&dataG::dataGS::images.empty,
 			&dataG::dataGS::images.logoAbout
@@ -55,4 +59,3 @@ public:
 		}d3d;
 	}data;
 };
-

@@ -2,7 +2,4 @@
 namespace aboutUI
 {
 	void drawAboutUi(bool* isOpen);
-
-
 };
-

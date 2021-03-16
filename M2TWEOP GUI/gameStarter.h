@@ -10,4 +10,3 @@ public:
 private:
 	static bool runGameExe();
 };
-
