@@ -4,4 +4,3 @@ namespace managerG
 {
 	void init();
 };
-

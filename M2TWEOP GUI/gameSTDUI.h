@@ -3,4 +3,3 @@ namespace gameSTDUI
 {
 	void drawSTDUI(bool* isOpen);
 };
-

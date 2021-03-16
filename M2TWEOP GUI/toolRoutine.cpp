@@ -4,7 +4,6 @@
 #include "helpers.h"
 namespace toolRoutine
 {
-
 	void drawTick(bool* isOpen)
 	{
 		helpers::updateMetrics();

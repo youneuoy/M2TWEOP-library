@@ -31,6 +31,12 @@
     <Filter Include="Исходные файлы\manager">
       <UniqueIdentifier>{94825a78-6035-4b4d-acb2-64b6203f5719}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\ui\mod settings">
+      <UniqueIdentifier>{badabc94-ff79-48af-afcc-d55647c7fb6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\gif">
+      <UniqueIdentifier>{7bd5ccf1-cac2-4ae6-a27e-d60f15a8af91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -80,6 +86,15 @@
     </ClCompile>
     <ClCompile Include="gameStarter.cpp">
       <Filter>Исходные файлы\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="modSettingsUI.cpp">
+      <Filter>Исходные файлы\ui\mod settings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imguiDocking\imgui_stdlib.cpp">
+      <Filter>3rd\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\gif\gifdec.c">
+      <Filter>3rd\gif</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +163,21 @@
     </ClInclude>
     <ClInclude Include="gameStarter.h">
       <Filter>Исходные файлы\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="modSettingsUI.h">
+      <Filter>Исходные файлы\ui\mod settings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\imgui_stdlib.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\gif\stb_image.h">
+      <Filter>3rd\gif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\gif\stb_image_write.h">
+      <Filter>3rd\gif</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\gif\gifdec.h">
+      <Filter>3rd\gif</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

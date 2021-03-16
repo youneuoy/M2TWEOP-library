@@ -1,17 +1,15 @@
 #include "gameStarter.h"
 
-
-
 bool gameStarter::startGame()
 {
 	string gameStartArgs;
 
 	if (dataG::data.gameData.gameMode == 0)
 	{
-			return false;
+		return false;
 	}
-	
-	if (helpers::selectGameExe(dataG::data.gameData.gameMode)==false)
+
+	if (helpers::selectGameExe(dataG::data.gameData.gameMode) == false)
 	{
 		MessageBoxA(NULL, "Cannot select exe file! Need correct medieval2 or kingdoms", "Error!", NULL);
 		return false;
@@ -37,7 +35,7 @@ bool gameStarter::startGame()
 		}
 	}
 	//mod
-	else 
+	else
 	{
 
 	}

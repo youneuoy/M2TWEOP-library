@@ -3,4 +3,3 @@ namespace mainUI
 {
 	void draw(bool* isOpen);
 };
-

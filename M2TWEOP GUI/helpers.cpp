@@ -1,14 +1,17 @@
 #include "helpers.h"
 #include "dataG.h"
+#include "DXERR.h"
+
+#pragma comment(lib, "DXERR.lib")
+
 void helpers::loadTexture(d3dImage* image)
 {
 	HRESULT res = D3DXCreateTextureFromFile(dataG::data.d3d.g_pd3dDevice, image->path.c_str(), &image->image);
-	string t = std::system_category().message(res);
 	if (res != D3D_OK)
 	{
-		MessageBoxA(NULL, t.c_str(), "Loading texture err!", MB_OK | MB_ICONASTERISK);
+		MessageBoxA(NULL, DXGetErrorString(res), "Loading texture err!", MB_OK | MB_ICONASTERISK);
+		return;
 	}
-
 
 	D3DSURFACE_DESC my_image_desc;
 	image->image->GetLevelDesc(0, &my_image_desc);
@@ -17,10 +20,58 @@ void helpers::loadTexture(d3dImage* image)
 	image->ySize = (int)my_image_desc.Height;
 }
 
+IDirect3DTexture9* helpers::loadTextureFromMem(char* mem, int x, int y)
+{
+	IDirect3DTexture9* d3dTexture = NULL;
+
+	HRESULT err;
+	IDirect3DTexture9* texture = NULL;
+	err = D3DXCreateTexture(dataG::data.d3d.g_pd3dDevice, x, y, 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &d3dTexture);
+	if (err != D3D_OK)
+	{
+		MessageBoxA(NULL, DXGetErrorString(err), "Loading texture err!", MB_OK | MB_ICONASTERISK);
+		return nullptr;
+	}
+
+	D3DLOCKED_RECT lockRect;
+
+	err = d3dTexture->LockRect(0, &lockRect, NULL, 0);
+	if (err != D3D_OK)
+	{
+		MessageBoxA(NULL, DXGetErrorString(err), "Loading texture err!", MB_OK | MB_ICONASTERISK);
+		return nullptr;
+	}
+
+	for (int line = 0; line < y; line++)
+	{
+		int dwOffset = line * x;
+
+		for (int width = 0; width < x; width)
+		{
+			char b = mem[2] & 0xFF;
+			char g = mem[1] & 0xFF;
+			char r = mem[0] & 0xFF;
+			char a = 0xFF;
+			mem += 3;
+			((int*)lockRect.pBits)[dwOffset + width] = ((a << 24L) + (r << 16L) + (g << 8L) + (b));
+			width++;
+		}
+	}
+
+	err = d3dTexture->UnlockRect(0);
+	if (err != D3D_OK)
+	{
+		MessageBoxA(NULL, DXGetErrorString(err), "Loading texture err!", MB_OK | MB_ICONASTERISK);
+		return nullptr;
+	}
+
+	return d3dTexture;
+}
+
 void helpers::updateMetrics()
 {
-	dataG::data.screen.screenSize.x = GetSystemMetrics(SM_CXSCREEN);
-	dataG::data.screen.screenSize.y = GetSystemMetrics(SM_CYSCREEN);
+	dataG::data.screen.screenSize.x = (float)GetSystemMetrics(SM_CXSCREEN);
+	dataG::data.screen.screenSize.y = (float)GetSystemMetrics(SM_CYSCREEN);
 
 	dataG::data.screen.screenHalfSize.x = dataG::data.screen.screenSize.x / 2;
 	dataG::data.screen.screenHalfSize.y = dataG::data.screen.screenSize.y / 2;
@@ -49,7 +100,6 @@ ImFont* helpers::findFont(const char* name)
 {
 	for (fontS* fnt : dataG::data.staticFontsCollection)
 	{
-
 		if (strcmp(name, fnt->name.c_str()) == 0)
 		{
 			return fnt->font;
@@ -67,7 +117,7 @@ bool helpers::runGame(const char* exeFile, const char* exeParam)
 	si.cb = sizeof(si);
 	ZeroMemory(&pi, sizeof(pi));
 
-	// Start the child process. 
+	// Start the child process.
 	if (!CreateProcessA(exeFile,   // No module name (use command line)
 		const_cast<char*>(exeParam),        // Command line
 		NULL,           // Process handle not inheritable
@@ -75,7 +125,7 @@ bool helpers::runGame(const char* exeFile, const char* exeParam)
 		FALSE,          // Set handle inheritance to FALSE
 		0,              // No creation flags
 		NULL,           // Use parent's environment block
-		TEXT("..\\.."),           // Use parent's starting directory 
+		TEXT("..\\.."),           // Use parent's starting directory
 		&si,            // Pointer to STARTUPINFO structure
 		&pi            // Pointer to PROCESS_INFORMATION structure
 	))
@@ -106,13 +156,13 @@ bool helpers::addModPathArg(string& args, int gameMode)
 	{
 		args += "--features.mod=mods/british_isles ";
 	}
-	
-	else if (gameMode ==4)
+
+	else if (gameMode == 4)
 	{
 		args += "--features.mod=mods/crusades ";
 	}
-	
-	else if (gameMode ==5)
+
+	else if (gameMode == 5)
 	{
 		args += "--features.mod=mods/teutonic ";
 	}
@@ -150,7 +200,6 @@ int getVersion(string& exePath)
 
 	f1.close();
 
-
 	DWORD steam = 0x7ce239e8;
 	DWORD disk = 0xb60f0350;
 	if (read == steam)
@@ -166,11 +215,10 @@ int getVersion(string& exePath)
 	return ver;
 }
 
-
 bool helpers::selectGameExe(int gameMode)
 {
 	string exePath = "..\\..\\medieval2.exe";
-	int gameVersion=getVersion(exePath);
+	int gameVersion = getVersion(exePath);
 	if (gameMode == 1)
 	{
 		if (gameVersion != 0)
@@ -181,7 +229,7 @@ bool helpers::selectGameExe(int gameMode)
 			return true;
 		}
 	}
-	if (gameVersion == 2|| gameVersion == 1)
+	if (gameVersion == 2 || gameVersion == 1)
 	{
 		dataG::data.gameData.exeName = "medieval2.exe";
 		dataG::data.gameData.gameVer = gameVersion;
@@ -201,4 +249,3 @@ bool helpers::selectGameExe(int gameMode)
 
 	return false;
 }
-
