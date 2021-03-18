@@ -10,6 +10,8 @@ public:
 			int gameMode = 0;
 
 			string gamePath;
+			string modFolder;
+
 			string exeName;
 			string gameArgs;
 
@@ -19,7 +21,8 @@ public:
 		struct
 		{
 			string configName;
-			bool useVanillaConfig = false;
+			bool useVanillaConfig = true;
+			bool useM2TWEOP = false;
 
 			bool useCustomD3D = false;
 		}modData;

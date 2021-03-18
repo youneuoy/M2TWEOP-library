@@ -53,7 +53,7 @@ ULONG m_IDirect3DDevice9Ex::Release()
 
 	return count;
 }
-HRESULT m_IDirect3DDevice9Ex::Reset(D3DPRESENT_PARAMETERS *pPresentationParameters)
+HRESULT m_IDirect3DDevice9Ex::Reset(D3DPRESENT_PARAMETERS* pPresentationParameters)
 {
 	return ProxyInterface->Reset(pPresentationParameters);
 }
@@ -68,11 +68,11 @@ void m_IDirect3DDevice9Ex::SetCursorPosition(int X, int Y, DWORD Flags)
 	return ProxyInterface->SetCursorPosition(X, Y, Flags);
 }
 
-HRESULT m_IDirect3DDevice9Ex::SetCursorProperties(UINT XHotSpot, UINT YHotSpot, IDirect3DSurface9 *pCursorBitmap)
+HRESULT m_IDirect3DDevice9Ex::SetCursorProperties(UINT XHotSpot, UINT YHotSpot, IDirect3DSurface9* pCursorBitmap)
 {
 	if (pCursorBitmap)
 	{
-		pCursorBitmap = static_cast<m_IDirect3DSurface9 *>(pCursorBitmap)->GetProxyInterface();
+		pCursorBitmap = static_cast<m_IDirect3DSurface9*>(pCursorBitmap)->GetProxyInterface();
 	}
 
 	return ProxyInterface->SetCursorProperties(XHotSpot, YHotSpot, pCursorBitmap);
@@ -83,7 +83,7 @@ BOOL m_IDirect3DDevice9Ex::ShowCursor(BOOL bShow)
 	return ProxyInterface->ShowCursor(bShow);
 }
 
-HRESULT m_IDirect3DDevice9Ex::CreateAdditionalSwapChain(D3DPRESENT_PARAMETERS *pPresentationParameters, IDirect3DSwapChain9 **ppSwapChain)
+HRESULT m_IDirect3DDevice9Ex::CreateAdditionalSwapChain(D3DPRESENT_PARAMETERS* pPresentationParameters, IDirect3DSwapChain9** ppSwapChain)
 {
 	HRESULT hr = ProxyInterface->CreateAdditionalSwapChain(pPresentationParameters, ppSwapChain);
 
@@ -208,7 +208,7 @@ HRESULT m_IDirect3DDevice9Ex::EndStateBlock(THIS_ IDirect3DStateBlock9** ppSB)
 	return hr;
 }
 
-HRESULT m_IDirect3DDevice9Ex::GetClipStatus(D3DCLIPSTATUS9 *pClipStatus)
+HRESULT m_IDirect3DDevice9Ex::GetClipStatus(D3DCLIPSTATUS9* pClipStatus)
 {
 	return ProxyInterface->GetClipStatus(pClipStatus);
 }
@@ -218,7 +218,7 @@ HRESULT m_IDirect3DDevice9Ex::GetDisplayMode(THIS_ UINT iSwapChain, D3DDISPLAYMO
 	return ProxyInterface->GetDisplayMode(iSwapChain, pMode);
 }
 
-HRESULT m_IDirect3DDevice9Ex::GetRenderState(D3DRENDERSTATETYPE State, DWORD *pValue)
+HRESULT m_IDirect3DDevice9Ex::GetRenderState(D3DRENDERSTATETYPE State, DWORD* pValue)
 {
 	return ProxyInterface->GetRenderState(State, pValue);
 }
@@ -235,12 +235,12 @@ HRESULT m_IDirect3DDevice9Ex::GetRenderTarget(THIS_ DWORD RenderTargetIndex, IDi
 	return hr;
 }
 
-HRESULT m_IDirect3DDevice9Ex::GetTransform(D3DTRANSFORMSTATETYPE State, D3DMATRIX *pMatrix)
+HRESULT m_IDirect3DDevice9Ex::GetTransform(D3DTRANSFORMSTATETYPE State, D3DMATRIX* pMatrix)
 {
 	return ProxyInterface->GetTransform(State, pMatrix);
 }
 
-HRESULT m_IDirect3DDevice9Ex::SetClipStatus(CONST D3DCLIPSTATUS9 *pClipStatus)
+HRESULT m_IDirect3DDevice9Ex::SetClipStatus(CONST D3DCLIPSTATUS9* pClipStatus)
 {
 	return ProxyInterface->SetClipStatus(pClipStatus);
 }
@@ -254,13 +254,13 @@ HRESULT m_IDirect3DDevice9Ex::SetRenderTarget(THIS_ DWORD RenderTargetIndex, IDi
 {
 	if (pRenderTarget)
 	{
-		pRenderTarget = static_cast<m_IDirect3DSurface9 *>(pRenderTarget)->GetProxyInterface();
+		pRenderTarget = static_cast<m_IDirect3DSurface9*>(pRenderTarget)->GetProxyInterface();
 	}
 
 	return ProxyInterface->SetRenderTarget(RenderTargetIndex, pRenderTarget);
 }
 
-HRESULT m_IDirect3DDevice9Ex::SetTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX *pMatrix)
+HRESULT m_IDirect3DDevice9Ex::SetTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX* pMatrix)
 {
 	return ProxyInterface->SetTransform(State, pMatrix);
 }
@@ -280,12 +280,12 @@ HRESULT m_IDirect3DDevice9Ex::DeletePatch(UINT Handle)
 	return ProxyInterface->DeletePatch(Handle);
 }
 
-HRESULT m_IDirect3DDevice9Ex::DrawRectPatch(UINT Handle, CONST float *pNumSegs, CONST D3DRECTPATCH_INFO *pRectPatchInfo)
+HRESULT m_IDirect3DDevice9Ex::DrawRectPatch(UINT Handle, CONST float* pNumSegs, CONST D3DRECTPATCH_INFO* pRectPatchInfo)
 {
 	return ProxyInterface->DrawRectPatch(Handle, pNumSegs, pRectPatchInfo);
 }
 
-HRESULT m_IDirect3DDevice9Ex::DrawTriPatch(UINT Handle, CONST float *pNumSegs, CONST D3DTRIPATCH_INFO *pTriPatchInfo)
+HRESULT m_IDirect3DDevice9Ex::DrawTriPatch(UINT Handle, CONST float* pNumSegs, CONST D3DTRIPATCH_INFO* pTriPatchInfo)
 {
 	return ProxyInterface->DrawTriPatch(Handle, pNumSegs, pTriPatchInfo);
 }
@@ -306,7 +306,7 @@ HRESULT m_IDirect3DDevice9Ex::SetIndices(THIS_ IDirect3DIndexBuffer9* pIndexData
 {
 	if (pIndexData)
 	{
-		pIndexData = static_cast<m_IDirect3DIndexBuffer9 *>(pIndexData)->GetProxyInterface();
+		pIndexData = static_cast<m_IDirect3DIndexBuffer9*>(pIndexData)->GetProxyInterface();
 	}
 
 	return ProxyInterface->SetIndices(pIndexData);
@@ -317,17 +317,17 @@ UINT m_IDirect3DDevice9Ex::GetAvailableTextureMem()
 	return ProxyInterface->GetAvailableTextureMem();
 }
 
-HRESULT m_IDirect3DDevice9Ex::GetCreationParameters(D3DDEVICE_CREATION_PARAMETERS *pParameters)
+HRESULT m_IDirect3DDevice9Ex::GetCreationParameters(D3DDEVICE_CREATION_PARAMETERS* pParameters)
 {
 	return ProxyInterface->GetCreationParameters(pParameters);
 }
 
-HRESULT m_IDirect3DDevice9Ex::GetDeviceCaps(D3DCAPS9 *pCaps)
+HRESULT m_IDirect3DDevice9Ex::GetDeviceCaps(D3DCAPS9* pCaps)
 {
 	return ProxyInterface->GetDeviceCaps(pCaps);
 }
 
-HRESULT m_IDirect3DDevice9Ex::GetDirect3D(IDirect3D9 **ppD3D9)
+HRESULT m_IDirect3DDevice9Ex::GetDirect3D(IDirect3D9** ppD3D9)
 {
 	if (ppD3D9)
 	{
@@ -345,17 +345,17 @@ HRESULT m_IDirect3DDevice9Ex::GetRasterStatus(THIS_ UINT iSwapChain, D3DRASTER_S
 	return ProxyInterface->GetRasterStatus(iSwapChain, pRasterStatus);
 }
 
-HRESULT m_IDirect3DDevice9Ex::GetLight(DWORD Index, D3DLIGHT9 *pLight)
+HRESULT m_IDirect3DDevice9Ex::GetLight(DWORD Index, D3DLIGHT9* pLight)
 {
 	return ProxyInterface->GetLight(Index, pLight);
 }
 
-HRESULT m_IDirect3DDevice9Ex::GetLightEnable(DWORD Index, BOOL *pEnable)
+HRESULT m_IDirect3DDevice9Ex::GetLightEnable(DWORD Index, BOOL* pEnable)
 {
 	return ProxyInterface->GetLightEnable(Index, pEnable);
 }
 
-HRESULT m_IDirect3DDevice9Ex::GetMaterial(D3DMATERIAL9 *pMaterial)
+HRESULT m_IDirect3DDevice9Ex::GetMaterial(D3DMATERIAL9* pMaterial)
 {
 	return ProxyInterface->GetMaterial(pMaterial);
 }
@@ -366,18 +366,18 @@ HRESULT m_IDirect3DDevice9Ex::LightEnable(DWORD LightIndex, BOOL bEnable)
 	return ProxyInterface->LightEnable(LightIndex, bEnable);
 }
 
-HRESULT m_IDirect3DDevice9Ex::SetLight(DWORD Index, CONST D3DLIGHT9 *pLight)
+HRESULT m_IDirect3DDevice9Ex::SetLight(DWORD Index, CONST D3DLIGHT9* pLight)
 {
 
 	return ProxyInterface->SetLight(Index, pLight);
 }
 
-HRESULT m_IDirect3DDevice9Ex::SetMaterial(CONST D3DMATERIAL9 *pMaterial)
+HRESULT m_IDirect3DDevice9Ex::SetMaterial(CONST D3DMATERIAL9* pMaterial)
 {
 	return ProxyInterface->SetMaterial(pMaterial);
 }
 
-HRESULT m_IDirect3DDevice9Ex::MultiplyTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX *pMatrix)
+HRESULT m_IDirect3DDevice9Ex::MultiplyTransform(D3DTRANSFORMSTATETYPE State, CONST D3DMATRIX* pMatrix)
 {
 	return ProxyInterface->MultiplyTransform(State, pMatrix);
 }
@@ -386,12 +386,12 @@ HRESULT m_IDirect3DDevice9Ex::ProcessVertices(THIS_ UINT SrcStartIndex, UINT Des
 {
 	if (pDestBuffer)
 	{
-		pDestBuffer = static_cast<m_IDirect3DVertexBuffer9 *>(pDestBuffer)->GetProxyInterface();
+		pDestBuffer = static_cast<m_IDirect3DVertexBuffer9*>(pDestBuffer)->GetProxyInterface();
 	}
 
 	if (pVertexDecl)
 	{
-		pVertexDecl = static_cast<m_IDirect3DVertexDeclaration9 *>(pVertexDecl)->GetProxyInterface();
+		pVertexDecl = static_cast<m_IDirect3DVertexDeclaration9*>(pVertexDecl)->GetProxyInterface();
 	}
 
 	return ProxyInterface->ProcessVertices(SrcStartIndex, DestIndex, VertexCount, pDestBuffer, pVertexDecl, Flags);
@@ -402,12 +402,12 @@ HRESULT m_IDirect3DDevice9Ex::TestCooperativeLevel()
 	return ProxyInterface->TestCooperativeLevel();
 }
 
-HRESULT m_IDirect3DDevice9Ex::GetCurrentTexturePalette(UINT *pPaletteNumber)
+HRESULT m_IDirect3DDevice9Ex::GetCurrentTexturePalette(UINT* pPaletteNumber)
 {
 	return ProxyInterface->GetCurrentTexturePalette(pPaletteNumber);
 }
 
-HRESULT m_IDirect3DDevice9Ex::GetPaletteEntries(UINT PaletteNumber, PALETTEENTRY *pEntries)
+HRESULT m_IDirect3DDevice9Ex::GetPaletteEntries(UINT PaletteNumber, PALETTEENTRY* pEntries)
 {
 	return ProxyInterface->GetPaletteEntries(PaletteNumber, pEntries);
 }
@@ -417,7 +417,7 @@ HRESULT m_IDirect3DDevice9Ex::SetCurrentTexturePalette(UINT PaletteNumber)
 	return ProxyInterface->SetCurrentTexturePalette(PaletteNumber);
 }
 
-HRESULT m_IDirect3DDevice9Ex::SetPaletteEntries(UINT PaletteNumber, CONST PALETTEENTRY *pEntries)
+HRESULT m_IDirect3DDevice9Ex::SetPaletteEntries(UINT PaletteNumber, CONST PALETTEENTRY* pEntries)
 {
 	return ProxyInterface->SetPaletteEntries(PaletteNumber, pEntries);
 }
@@ -450,13 +450,13 @@ HRESULT m_IDirect3DDevice9Ex::SetPixelShader(THIS_ IDirect3DPixelShader9* pShade
 {
 	if (pShader)
 	{
-		pShader = static_cast<m_IDirect3DPixelShader9 *>(pShader)->GetProxyInterface();
+		pShader = static_cast<m_IDirect3DPixelShader9*>(pShader)->GetProxyInterface();
 	}
 
 	return ProxyInterface->SetPixelShader(pShader);
 }
 
-HRESULT m_IDirect3DDevice9Ex::Present(CONST RECT *pSourceRect, CONST RECT *pDestRect, HWND hDestWindowOverride, CONST RGNDATA *pDirtyRegion)
+HRESULT m_IDirect3DDevice9Ex::Present(CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDestWindowOverride, CONST RGNDATA* pDirtyRegion)
 {
 	return ProxyInterface->Present(pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion);
 }
@@ -466,7 +466,7 @@ HRESULT m_IDirect3DDevice9Ex::DrawIndexedPrimitive(THIS_ D3DPRIMITIVETYPE Type, 
 	return ProxyInterface->DrawIndexedPrimitive(Type, BaseVertexIndex, MinVertexIndex, NumVertices, startIndex, primCount);
 }
 
-HRESULT m_IDirect3DDevice9Ex::DrawIndexedPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType, UINT MinIndex, UINT NumVertices, UINT PrimitiveCount, CONST void *pIndexData, D3DFORMAT IndexDataFormat, CONST void *pVertexStreamZeroData, UINT VertexStreamZeroStride)
+HRESULT m_IDirect3DDevice9Ex::DrawIndexedPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType, UINT MinIndex, UINT NumVertices, UINT PrimitiveCount, CONST void* pIndexData, D3DFORMAT IndexDataFormat, CONST void* pVertexStreamZeroData, UINT VertexStreamZeroStride)
 {
 	return ProxyInterface->DrawIndexedPrimitiveUP(PrimitiveType, MinIndex, NumVertices, PrimitiveCount, pIndexData, IndexDataFormat, pVertexStreamZeroData, VertexStreamZeroStride);
 }
@@ -476,7 +476,7 @@ HRESULT m_IDirect3DDevice9Ex::DrawPrimitive(D3DPRIMITIVETYPE PrimitiveType, UINT
 	return ProxyInterface->DrawPrimitive(PrimitiveType, StartVertex, PrimitiveCount);
 }
 
-HRESULT m_IDirect3DDevice9Ex::DrawPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType, UINT PrimitiveCount, CONST void *pVertexStreamZeroData, UINT VertexStreamZeroStride)
+HRESULT m_IDirect3DDevice9Ex::DrawPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType, UINT PrimitiveCount, CONST void* pVertexStreamZeroData, UINT VertexStreamZeroStride)
 {
 	return ProxyInterface->DrawPrimitiveUP(PrimitiveType, PrimitiveCount, pVertexStreamZeroData, VertexStreamZeroStride);
 }
@@ -502,7 +502,7 @@ HRESULT m_IDirect3DDevice9Ex::SetStreamSource(THIS_ UINT StreamNumber, IDirect3D
 {
 	if (pStreamData)
 	{
-		pStreamData = static_cast<m_IDirect3DVertexBuffer9 *>(pStreamData)->GetProxyInterface();
+		pStreamData = static_cast<m_IDirect3DVertexBuffer9*>(pStreamData)->GetProxyInterface();
 	}
 
 	return ProxyInterface->SetStreamSource(StreamNumber, pStreamData, OffsetInBytes, Stride);
@@ -520,7 +520,7 @@ HRESULT m_IDirect3DDevice9Ex::GetBackBuffer(THIS_ UINT iSwapChain, UINT iBackBuf
 	return hr;
 }
 
-HRESULT m_IDirect3DDevice9Ex::GetDepthStencilSurface(IDirect3DSurface9 **ppZStencilSurface)
+HRESULT m_IDirect3DDevice9Ex::GetDepthStencilSurface(IDirect3DSurface9** ppZStencilSurface)
 {
 	HRESULT hr = ProxyInterface->GetDepthStencilSurface(ppZStencilSurface);
 
@@ -532,7 +532,7 @@ HRESULT m_IDirect3DDevice9Ex::GetDepthStencilSurface(IDirect3DSurface9 **ppZSten
 	return hr;
 }
 
-HRESULT m_IDirect3DDevice9Ex::GetTexture(DWORD Stage, IDirect3DBaseTexture9 **ppTexture)
+HRESULT m_IDirect3DDevice9Ex::GetTexture(DWORD Stage, IDirect3DBaseTexture9** ppTexture)
 {
 	HRESULT hr = ProxyInterface->GetTexture(Stage, ppTexture);
 
@@ -557,25 +557,25 @@ HRESULT m_IDirect3DDevice9Ex::GetTexture(DWORD Stage, IDirect3DBaseTexture9 **pp
 	return hr;
 }
 
-HRESULT m_IDirect3DDevice9Ex::GetTextureStageState(DWORD Stage, D3DTEXTURESTAGESTATETYPE Type, DWORD *pValue)
+HRESULT m_IDirect3DDevice9Ex::GetTextureStageState(DWORD Stage, D3DTEXTURESTAGESTATETYPE Type, DWORD* pValue)
 {
 	return ProxyInterface->GetTextureStageState(Stage, Type, pValue);
 }
 
-HRESULT m_IDirect3DDevice9Ex::SetTexture(DWORD Stage, IDirect3DBaseTexture9 *pTexture)
+HRESULT m_IDirect3DDevice9Ex::SetTexture(DWORD Stage, IDirect3DBaseTexture9* pTexture)
 {
 	if (pTexture)
 	{
 		switch (pTexture->GetType())
 		{
 		case D3DRTYPE_TEXTURE:
-			pTexture = static_cast<m_IDirect3DTexture9 *>(pTexture)->GetProxyInterface();
+			pTexture = static_cast<m_IDirect3DTexture9*>(pTexture)->GetProxyInterface();
 			break;
 		case D3DRTYPE_VOLUMETEXTURE:
-			pTexture = static_cast<m_IDirect3DVolumeTexture9 *>(pTexture)->GetProxyInterface();
+			pTexture = static_cast<m_IDirect3DVolumeTexture9*>(pTexture)->GetProxyInterface();
 			break;
 		case D3DRTYPE_CUBETEXTURE:
-			pTexture = static_cast<m_IDirect3DCubeTexture9 *>(pTexture)->GetProxyInterface();
+			pTexture = static_cast<m_IDirect3DCubeTexture9*>(pTexture)->GetProxyInterface();
 			break;
 		default:
 			return D3DERR_INVALIDCALL;
@@ -590,20 +590,20 @@ HRESULT m_IDirect3DDevice9Ex::SetTextureStageState(DWORD Stage, D3DTEXTURESTAGES
 	return ProxyInterface->SetTextureStageState(Stage, Type, Value);
 }
 
-HRESULT m_IDirect3DDevice9Ex::UpdateTexture(IDirect3DBaseTexture9 *pSourceTexture, IDirect3DBaseTexture9 *pDestinationTexture)
+HRESULT m_IDirect3DDevice9Ex::UpdateTexture(IDirect3DBaseTexture9* pSourceTexture, IDirect3DBaseTexture9* pDestinationTexture)
 {
 	if (pSourceTexture)
 	{
 		switch (pSourceTexture->GetType())
 		{
 		case D3DRTYPE_TEXTURE:
-			pSourceTexture = static_cast<m_IDirect3DTexture9 *>(pSourceTexture)->GetProxyInterface();
+			pSourceTexture = static_cast<m_IDirect3DTexture9*>(pSourceTexture)->GetProxyInterface();
 			break;
 		case D3DRTYPE_VOLUMETEXTURE:
-			pSourceTexture = static_cast<m_IDirect3DVolumeTexture9 *>(pSourceTexture)->GetProxyInterface();
+			pSourceTexture = static_cast<m_IDirect3DVolumeTexture9*>(pSourceTexture)->GetProxyInterface();
 			break;
 		case D3DRTYPE_CUBETEXTURE:
-			pSourceTexture = static_cast<m_IDirect3DCubeTexture9 *>(pSourceTexture)->GetProxyInterface();
+			pSourceTexture = static_cast<m_IDirect3DCubeTexture9*>(pSourceTexture)->GetProxyInterface();
 			break;
 		default:
 			return D3DERR_INVALIDCALL;
@@ -614,13 +614,13 @@ HRESULT m_IDirect3DDevice9Ex::UpdateTexture(IDirect3DBaseTexture9 *pSourceTextur
 		switch (pDestinationTexture->GetType())
 		{
 		case D3DRTYPE_TEXTURE:
-			pDestinationTexture = static_cast<m_IDirect3DTexture9 *>(pDestinationTexture)->GetProxyInterface();
+			pDestinationTexture = static_cast<m_IDirect3DTexture9*>(pDestinationTexture)->GetProxyInterface();
 			break;
 		case D3DRTYPE_VOLUMETEXTURE:
-			pDestinationTexture = static_cast<m_IDirect3DVolumeTexture9 *>(pDestinationTexture)->GetProxyInterface();
+			pDestinationTexture = static_cast<m_IDirect3DVolumeTexture9*>(pDestinationTexture)->GetProxyInterface();
 			break;
 		case D3DRTYPE_CUBETEXTURE:
-			pDestinationTexture = static_cast<m_IDirect3DCubeTexture9 *>(pDestinationTexture)->GetProxyInterface();
+			pDestinationTexture = static_cast<m_IDirect3DCubeTexture9*>(pDestinationTexture)->GetProxyInterface();
 			break;
 		default:
 			return D3DERR_INVALIDCALL;
@@ -630,32 +630,32 @@ HRESULT m_IDirect3DDevice9Ex::UpdateTexture(IDirect3DBaseTexture9 *pSourceTextur
 	return ProxyInterface->UpdateTexture(pSourceTexture, pDestinationTexture);
 }
 
-HRESULT m_IDirect3DDevice9Ex::ValidateDevice(DWORD *pNumPasses)
+HRESULT m_IDirect3DDevice9Ex::ValidateDevice(DWORD* pNumPasses)
 {
 	return ProxyInterface->ValidateDevice(pNumPasses);
 }
 
-HRESULT m_IDirect3DDevice9Ex::GetClipPlane(DWORD Index, float *pPlane)
+HRESULT m_IDirect3DDevice9Ex::GetClipPlane(DWORD Index, float* pPlane)
 {
 	return ProxyInterface->GetClipPlane(Index, pPlane);
 }
 
-HRESULT m_IDirect3DDevice9Ex::SetClipPlane(DWORD Index, CONST float *pPlane)
+HRESULT m_IDirect3DDevice9Ex::SetClipPlane(DWORD Index, CONST float* pPlane)
 {
 	return ProxyInterface->SetClipPlane(Index, pPlane);
 }
 
-HRESULT m_IDirect3DDevice9Ex::Clear(DWORD Count, CONST D3DRECT *pRects, DWORD Flags, D3DCOLOR Color, float Z, DWORD Stencil)
+HRESULT m_IDirect3DDevice9Ex::Clear(DWORD Count, CONST D3DRECT* pRects, DWORD Flags, D3DCOLOR Color, float Z, DWORD Stencil)
 {
 	return ProxyInterface->Clear(Count, pRects, Flags, Color, Z, Stencil);
 }
 
-HRESULT m_IDirect3DDevice9Ex::GetViewport(D3DVIEWPORT9 *pViewport)
+HRESULT m_IDirect3DDevice9Ex::GetViewport(D3DVIEWPORT9* pViewport)
 {
 	return ProxyInterface->GetViewport(pViewport);
 }
 
-HRESULT m_IDirect3DDevice9Ex::SetViewport(CONST D3DVIEWPORT9 *pViewport)
+HRESULT m_IDirect3DDevice9Ex::SetViewport(CONST D3DVIEWPORT9* pViewport)
 {
 	return ProxyInterface->SetViewport(pViewport);
 }
@@ -688,7 +688,7 @@ HRESULT m_IDirect3DDevice9Ex::SetVertexShader(THIS_ IDirect3DVertexShader9* pSha
 {
 	if (pShader)
 	{
-		pShader = static_cast<m_IDirect3DVertexShader9 *>(pShader)->GetProxyInterface();
+		pShader = static_cast<m_IDirect3DVertexShader9*>(pShader)->GetProxyInterface();
 	}
 
 	return ProxyInterface->SetVertexShader(pShader);
@@ -802,7 +802,7 @@ HRESULT m_IDirect3DDevice9Ex::SetVertexDeclaration(THIS_ IDirect3DVertexDeclarat
 {
 	if (pDecl)
 	{
-		pDecl = static_cast<m_IDirect3DVertexDeclaration9 *>(pDecl)->GetProxyInterface();
+		pDecl = static_cast<m_IDirect3DVertexDeclaration9*>(pDecl)->GetProxyInterface();
 	}
 
 	return ProxyInterface->SetVertexDeclaration(pDecl);
@@ -874,7 +874,7 @@ HRESULT m_IDirect3DDevice9Ex::SetDepthStencilSurface(THIS_ IDirect3DSurface9* pN
 {
 	if (pNewZStencil)
 	{
-		pNewZStencil = static_cast<m_IDirect3DSurface9 *>(pNewZStencil)->GetProxyInterface();
+		pNewZStencil = static_cast<m_IDirect3DSurface9*>(pNewZStencil)->GetProxyInterface();
 	}
 
 	return ProxyInterface->SetDepthStencilSurface(pNewZStencil);
@@ -896,7 +896,7 @@ HRESULT m_IDirect3DDevice9Ex::ColorFill(THIS_ IDirect3DSurface9* pSurface, CONST
 {
 	if (pSurface)
 	{
-		pSurface = static_cast<m_IDirect3DSurface9 *>(pSurface)->GetProxyInterface();
+		pSurface = static_cast<m_IDirect3DSurface9*>(pSurface)->GetProxyInterface();
 	}
 
 	return ProxyInterface->ColorFill(pSurface, pRect, color);
@@ -906,12 +906,12 @@ HRESULT m_IDirect3DDevice9Ex::StretchRect(THIS_ IDirect3DSurface9* pSourceSurfac
 {
 	if (pSourceSurface)
 	{
-		pSourceSurface = static_cast<m_IDirect3DSurface9 *>(pSourceSurface)->GetProxyInterface();
+		pSourceSurface = static_cast<m_IDirect3DSurface9*>(pSourceSurface)->GetProxyInterface();
 	}
 
 	if (pDestSurface)
 	{
-		pDestSurface = static_cast<m_IDirect3DSurface9 *>(pDestSurface)->GetProxyInterface();
+		pDestSurface = static_cast<m_IDirect3DSurface9*>(pDestSurface)->GetProxyInterface();
 	}
 
 	return ProxyInterface->StretchRect(pSourceSurface, pSourceRect, pDestSurface, pDestRect, Filter);
@@ -921,7 +921,7 @@ HRESULT m_IDirect3DDevice9Ex::GetFrontBufferData(THIS_ UINT iSwapChain, IDirect3
 {
 	if (pDestSurface)
 	{
-		pDestSurface = static_cast<m_IDirect3DSurface9 *>(pDestSurface)->GetProxyInterface();
+		pDestSurface = static_cast<m_IDirect3DSurface9*>(pDestSurface)->GetProxyInterface();
 	}
 
 	return ProxyInterface->GetFrontBufferData(iSwapChain, pDestSurface);
@@ -931,12 +931,12 @@ HRESULT m_IDirect3DDevice9Ex::GetRenderTargetData(THIS_ IDirect3DSurface9* pRend
 {
 	if (pRenderTarget)
 	{
-		pRenderTarget = static_cast<m_IDirect3DSurface9 *>(pRenderTarget)->GetProxyInterface();
+		pRenderTarget = static_cast<m_IDirect3DSurface9*>(pRenderTarget)->GetProxyInterface();
 	}
 
 	if (pDestSurface)
 	{
-		pDestSurface = static_cast<m_IDirect3DSurface9 *>(pDestSurface)->GetProxyInterface();
+		pDestSurface = static_cast<m_IDirect3DSurface9*>(pDestSurface)->GetProxyInterface();
 	}
 
 	return ProxyInterface->GetRenderTargetData(pRenderTarget, pDestSurface);
@@ -946,12 +946,12 @@ HRESULT m_IDirect3DDevice9Ex::UpdateSurface(THIS_ IDirect3DSurface9* pSourceSurf
 {
 	if (pSourceSurface)
 	{
-		pSourceSurface = static_cast<m_IDirect3DSurface9 *>(pSourceSurface)->GetProxyInterface();
+		pSourceSurface = static_cast<m_IDirect3DSurface9*>(pSourceSurface)->GetProxyInterface();
 	}
 
 	if (pDestinationSurface)
 	{
-		pDestinationSurface = static_cast<m_IDirect3DSurface9 *>(pDestinationSurface)->GetProxyInterface();
+		pDestinationSurface = static_cast<m_IDirect3DSurface9*>(pDestinationSurface)->GetProxyInterface();
 	}
 
 	return ProxyInterface->UpdateSurface(pSourceSurface, pSourceRect, pDestinationSurface, pDestPoint);
@@ -983,22 +983,22 @@ HRESULT m_IDirect3DDevice9Ex::ComposeRects(THIS_ IDirect3DSurface9* pSrc, IDirec
 {
 	if (pSrc)
 	{
-		pSrc = static_cast<m_IDirect3DSurface9 *>(pSrc)->GetProxyInterface();
+		pSrc = static_cast<m_IDirect3DSurface9*>(pSrc)->GetProxyInterface();
 	}
 
 	if (pDst)
 	{
-		pDst = static_cast<m_IDirect3DSurface9 *>(pDst)->GetProxyInterface();
+		pDst = static_cast<m_IDirect3DSurface9*>(pDst)->GetProxyInterface();
 	}
 
 	if (pSrcRectDescs)
 	{
-		pSrcRectDescs = static_cast<m_IDirect3DVertexBuffer9 *>(pSrcRectDescs)->GetProxyInterface();
+		pSrcRectDescs = static_cast<m_IDirect3DVertexBuffer9*>(pSrcRectDescs)->GetProxyInterface();
 	}
 
 	if (pDstRectDescs)
 	{
-		pDstRectDescs = static_cast<m_IDirect3DVertexBuffer9 *>(pDstRectDescs)->GetProxyInterface();
+		pDstRectDescs = static_cast<m_IDirect3DVertexBuffer9*>(pDstRectDescs)->GetProxyInterface();
 	}
 
 	return ProxyInterface->ComposeRects(pSrc, pDst, pSrcRectDescs, NumRects, pDstRectDescs, Operation, Xoffset, Yoffset);
@@ -1035,25 +1035,25 @@ HRESULT m_IDirect3DDevice9Ex::CheckResourceResidency(THIS_ IDirect3DResource9** 
 				switch (pResourceArray[i]->GetType())
 				{
 				case D3DRTYPE_SURFACE:
-					pResourceArray[i] = static_cast<m_IDirect3DSurface9 *>(pResourceArray[i])->GetProxyInterface();
+					pResourceArray[i] = static_cast<m_IDirect3DSurface9*>(pResourceArray[i])->GetProxyInterface();
 					break;
 				case D3DRTYPE_VOLUME:
-					pResourceArray[i] = (IDirect3DResource9*)reinterpret_cast<m_IDirect3DVolume9 *>(pResourceArray[i])->GetProxyInterface();
+					pResourceArray[i] = (IDirect3DResource9*)reinterpret_cast<m_IDirect3DVolume9*>(pResourceArray[i])->GetProxyInterface();
 					break;
 				case D3DRTYPE_TEXTURE:
-					pResourceArray[i] = static_cast<m_IDirect3DTexture9 *>(pResourceArray[i])->GetProxyInterface();
+					pResourceArray[i] = static_cast<m_IDirect3DTexture9*>(pResourceArray[i])->GetProxyInterface();
 					break;
 				case D3DRTYPE_VOLUMETEXTURE:
-					pResourceArray[i] = static_cast<m_IDirect3DVolumeTexture9 *>(pResourceArray[i])->GetProxyInterface();
+					pResourceArray[i] = static_cast<m_IDirect3DVolumeTexture9*>(pResourceArray[i])->GetProxyInterface();
 					break;
 				case D3DRTYPE_CUBETEXTURE:
-					pResourceArray[i] = static_cast<m_IDirect3DCubeTexture9 *>(pResourceArray[i])->GetProxyInterface();
+					pResourceArray[i] = static_cast<m_IDirect3DCubeTexture9*>(pResourceArray[i])->GetProxyInterface();
 					break;
 				case D3DRTYPE_VERTEXBUFFER:
-					pResourceArray[i] = static_cast<m_IDirect3DVertexBuffer9 *>(pResourceArray[i])->GetProxyInterface();
+					pResourceArray[i] = static_cast<m_IDirect3DVertexBuffer9*>(pResourceArray[i])->GetProxyInterface();
 					break;
 				case D3DRTYPE_INDEXBUFFER:
-					pResourceArray[i] = static_cast<m_IDirect3DIndexBuffer9 *>(pResourceArray[i])->GetProxyInterface();
+					pResourceArray[i] = static_cast<m_IDirect3DIndexBuffer9*>(pResourceArray[i])->GetProxyInterface();
 					break;
 				default:
 					return D3DERR_INVALIDCALL;
@@ -1116,7 +1116,7 @@ HRESULT m_IDirect3DDevice9Ex::CreateDepthStencilSurfaceEx(THIS_ UINT Width, UINT
 	return hr;
 }
 
-HRESULT m_IDirect3DDevice9Ex::ResetEx(THIS_ D3DPRESENT_PARAMETERS* pPresentationParameters, D3DDISPLAYMODEEX *pFullscreenDisplayMode)
+HRESULT m_IDirect3DDevice9Ex::ResetEx(THIS_ D3DPRESENT_PARAMETERS* pPresentationParameters, D3DDISPLAYMODEEX* pFullscreenDisplayMode)
 {
 	return ProxyInterface->ResetEx(pPresentationParameters, pFullscreenDisplayMode);
 }

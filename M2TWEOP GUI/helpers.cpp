@@ -217,6 +217,7 @@ int getVersion(string& exePath)
 
 bool helpers::selectGameExe(int gameMode)
 {
+	setModFolder(dataG::data.gameData.modFolder);
 	string exePath = "..\\..\\medieval2.exe";
 	int gameVersion = getVersion(exePath);
 	if (gameMode == 1)
@@ -248,4 +249,70 @@ bool helpers::selectGameExe(int gameMode)
 	}
 
 	return false;
+}
+
+bool helpers::compareFiles(string& oneFile, string& nextFile)
+{
+	ifstream in1(oneFile, ios::binary);
+	ifstream in2(nextFile, ios::binary);
+	if (in1.is_open() == false)
+	{
+		in1.close();
+		in2.close();
+		return false;
+	}
+	if (in2.is_open() == false)
+	{
+		in1.close();
+		in2.close();
+		return false;
+	}
+
+	ifstream::pos_type size1, size2;
+
+	size1 = in1.seekg(0, ifstream::end).tellg();
+	in1.seekg(0, ifstream::beg);
+
+	size2 = in2.seekg(0, ifstream::end).tellg();
+	in2.seekg(0, ifstream::beg);
+
+	if (size1 != size2)
+	{
+		in1.close();
+		in2.close();
+		return false;
+	}
+	static const size_t BLOCKSIZE = 4096;
+	size_t remaining = size1;
+
+	while (remaining)
+	{
+		char buffer1[BLOCKSIZE], buffer2[BLOCKSIZE];
+		size_t size = min(BLOCKSIZE, remaining);
+
+		in1.read(buffer1, size);
+		in2.read(buffer2, size);
+
+		if (0 != memcmp(buffer1, buffer2, size))
+		{
+			in1.close();
+			in2.close();
+			return false;
+		}
+
+		remaining -= size;
+	}
+
+	in1.close();
+	in2.close();
+	return true;
+}
+
+void helpers::setModFolder(string& modFolder)
+{
+	TCHAR currentPath[MAX_PATH] = { 0 };
+	DWORD ret = GetCurrentDirectoryA(MAX_PATH, currentPath);
+	modFolder = currentPath;
+	size_t pos = modFolder.find_last_of("\\/")+1;
+	modFolder = modFolder.substr(pos);
 }
