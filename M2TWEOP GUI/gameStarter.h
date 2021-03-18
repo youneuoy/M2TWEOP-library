@@ -9,4 +9,6 @@ public:
 	static bool startGame();
 private:
 	static bool runGameExe();
+
+	static bool initM2TWEOP();
 };

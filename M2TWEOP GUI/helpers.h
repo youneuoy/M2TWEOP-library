@@ -19,4 +19,9 @@ public:
 	static bool addModPathArg(string& args, int gameMode);
 
 	static bool selectGameExe(int gameMode);
+
+	static bool compareFiles(string& oneFile, string& nextFile);
+
+private:
+	static void setModFolder(string& modFolder);
 };

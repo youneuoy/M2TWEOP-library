@@ -33,6 +33,8 @@ namespace modSettingsUI
 		ImGui::SameLine();
 
 		ImGui::Checkbox("Use standard config", &dataG::data.modData.useVanillaConfig);
+		ImGui::NewLine();
+		ImGui::Checkbox("Use M2TWEOP", &dataG::data.modData.useM2TWEOP);
 
 		ImGui::End();
 	}

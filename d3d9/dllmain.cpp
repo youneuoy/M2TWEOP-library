@@ -14,6 +14,7 @@
 *   3. This notice may not be removed or altered from any source distribution.
 */
 
+
 #include "d3d9.h"
 
 
@@ -197,14 +198,14 @@ int WINAPI Direct3D9EnableMaximizedWindowedModeShim(BOOL mEnable)
 	return m_pDirect3D9EnableMaximizedWindowedModeShim(mEnable);
 }
 
-IDirect3D9 *WINAPI Direct3DCreate9(UINT SDKVersion)
+IDirect3D9* WINAPI Direct3DCreate9(UINT SDKVersion)
 {
 	if (!m_pDirect3DCreate9)
 	{
 		return nullptr;
 	}
 
-	IDirect3D9 *pD3D9 = m_pDirect3DCreate9(SDKVersion);
+	IDirect3D9* pD3D9 = m_pDirect3DCreate9(SDKVersion);
 
 	if (pD3D9)
 	{
@@ -214,7 +215,7 @@ IDirect3D9 *WINAPI Direct3DCreate9(UINT SDKVersion)
 	return nullptr;
 }
 
-HRESULT WINAPI Direct3DCreate9Ex(UINT SDKVersion, IDirect3D9Ex **ppD3D)
+HRESULT WINAPI Direct3DCreate9Ex(UINT SDKVersion, IDirect3D9Ex** ppD3D)
 {
 	if (!m_pDirect3DCreate9Ex)
 	{

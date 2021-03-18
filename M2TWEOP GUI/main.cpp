@@ -14,15 +14,10 @@ void ResetDevice();
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 using namespace std;
-/*
-extern "C"
-{
-#include "gifdec.h"
-}
-*/
+
 // Main code
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
-{
+{	
 	// Create application window
 	WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T("M2TWEOP w"), NULL };
 	wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));

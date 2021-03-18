@@ -6,6 +6,7 @@
 #include "aboutUI.h"
 #include "gameSTDUI.h"
 #include "modSettingsUI.h"
+#include "gameStarter.h"
 
 namespace mainUI
 {
@@ -48,6 +49,9 @@ namespace mainUI
 		}
 		if (ImGui::Button("Run mod", helpers::getScreen().centerXButton))
 		{
+			dataG::data.gameData.gameMode = 7;
+			gameStarter::startGame();
+			dataG::data.gameData.gameMode = 0;
 		}
 		if (ImGui::Button("Mod settings", helpers::getScreen().centerXButton))
 		{
