@@ -3,12 +3,18 @@
 #include "headersMEM.h"
 #include "headersGraphics.h"
 #include "globals.h"
+
+
+#include "exportHeader.h"
+
 class graphicsD3D
 {
 public:
 	static struct dataT
 	{
 		void* d3d9Device[119];
+		IDirect3DDevice9* pDevice = nullptr;
+
 		HWND Window = nullptr;
 
 
@@ -44,5 +50,12 @@ public:
 	static bool init();
 	static DWORD WINAPI InitS();
 	static bool GetD3D9Device(void** pTable, size_t Size);
+
+
 };
 
+
+namespace graphicsExport
+{
+	NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9* loadTexture(const char*path, int* x, int* y);
+};

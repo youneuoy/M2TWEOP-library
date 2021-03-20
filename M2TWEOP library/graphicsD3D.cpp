@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "graphicsD3D.h"
 #include "plugins.h"
+#include <DxErr.h>
+#pragma comment(lib, "DXERR.lib")
 graphicsD3D::dataT graphicsD3D::dataS;
 
 
@@ -23,7 +25,7 @@ NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM w
 	}
 
 
-	return CallWindowProc(dataS.hookD.onewGameWndProc,hWnd, uMsg, wParam, lParam);
+	return CallWindowProc(dataS.hookD.onewGameWndProc, hWnd, uMsg, wParam, lParam);
 }
 NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 {
@@ -76,11 +78,13 @@ NOINLINE HRESULT APIENTRY graphicsD3D::hkReset(IDirect3DDevice9* pDevice, D3DPRE
 		dataS.ImInitCount = 0;
 		dataS.ImInitialized = false;
 	}
-	return FnCast(dataS.hookD.oReset,&hkReset)(pDevice, pPresentationParameters);
+	return FnCast(dataS.hookD.oReset, &hkReset)(pDevice, pPresentationParameters);
 }
 
 NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 {
+	dataS.pDevice = pDevice;
+
 	dataS.ImInitCount++;
 
 	ImFontConfig font_config;
@@ -230,4 +234,24 @@ bool graphicsD3D::GetD3D9Device(void** pTable, size_t Size)
 	pDummyDevice->Release();
 	pD3D->Release();
 	return true;
+}
+
+NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9* graphicsExport::loadTexture(const char* path, int* x, int* y)
+{
+	LPDIRECT3DTEXTURE9* imageRet = nullptr;
+	HRESULT res = D3DXCreateTextureFromFileA(graphicsD3D::dataS.pDevice, path, imageRet);
+	if (res != D3D_OK || imageRet == nullptr)
+	{
+		MessageBoxA(NULL, DXGetErrorStringA(res), "Loading texture err!", MB_OK | MB_ICONASTERISK);
+		return nullptr;
+	}
+
+	D3DSURFACE_DESC my_image_desc;
+
+	(*imageRet)->GetLevelDesc(0, &my_image_desc);
+
+	*x = (int)my_image_desc.Width;
+	*y = (int)my_image_desc.Height;
+
+	return imageRet;
 }
