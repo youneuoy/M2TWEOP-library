@@ -5,6 +5,7 @@
 #include "headersMEM.h"
 #include "realGameTypes.h"
 #include "globals.h"
+
 namespace fastFunctsHelpers
 {
 	int getEDUIndex(const char* type);

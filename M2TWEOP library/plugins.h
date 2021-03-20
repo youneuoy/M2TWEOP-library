@@ -185,6 +185,7 @@ public:
 
 
 	ProcLoader<void(__cdecl*)(LPDIRECT3DDEVICE9 pDevice)> drawOnEndScene;
+	ProcLoader<void(__cdecl*)(LPDIRECT3DDEVICE9 pDevice)> onReset;
 
 
 	ProcLoader<void(__cdecl*)(ImGuiContext*)> onChangeImGuiContext;
@@ -215,6 +216,8 @@ public:
 
 	static void onWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	static void onEndScene(LPDIRECT3DDEVICE9 pDevice);
+	static void onReset(LPDIRECT3DDEVICE9 pDevice);
+
 	static void onChangeImGuiCtx(ImGuiContext* imCtx);
 
 	static vector<const char*>* eventNames;

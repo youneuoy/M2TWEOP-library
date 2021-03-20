@@ -562,6 +562,14 @@ void plugins::onEndScene(LPDIRECT3DDEVICE9 pDevice)
 	}
 }
 
+void plugins::onReset(LPDIRECT3DDEVICE9 pDevice)
+{
+	for (plugin* pl : pluginsCfg.plugins)
+	{
+		(*(*pl->onReset))(pDevice);
+	}
+}
+
 void plugins::onChangeImGuiCtx(ImGuiContext* imCtx)
 {
 	for (plugin* pl : pluginsCfg.plugins)
@@ -1134,6 +1142,10 @@ int plugin::init(string* nameP)
 	//drawOnEndScene
 	fName = "drawOnEndScene";
 	drawOnEndScene.Load(&plPath, &fName);
+
+	//onReset
+	fName = "onReset";
+	onReset.Load(&plPath, &fName);
 
 
 	//onChangeImGuiContext
