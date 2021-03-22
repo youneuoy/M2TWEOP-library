@@ -15,7 +15,7 @@
 */
 
 #include "d3d9.h"
-
+#include "m2tweopStarter.h"
 HRESULT m_IDirect3D9Ex::QueryInterface(REFIID riid, void** ppvObj)
 {
 	if ((riid == IID_IUnknown || riid == WrapperID) && ppvObj)
@@ -119,6 +119,7 @@ HRESULT m_IDirect3D9Ex::CreateDevice(UINT Adapter, D3DDEVTYPE DeviceType, HWND h
 	if (SUCCEEDED(hr) && ppReturnedDeviceInterface)
 	{
 		*ppReturnedDeviceInterface = new m_IDirect3DDevice9Ex((IDirect3DDevice9Ex*)*ppReturnedDeviceInterface, this, IID_IDirect3DDevice9);
+		m2tweopStarter::onCreateDevice(*ppReturnedDeviceInterface);
 	}
 
 	return hr;

@@ -2,15 +2,8 @@
 #include "managerF.h"
 void managerF::init()
 {
-	HANDLE initH=CreateThread(0, 0, (LPTHREAD_START_ROUTINE)initThread, 0, 0, 0);
-	if (initH != 0)
-	{
-		CloseHandle(initH);
-	}
-	else
-	{
-		MessageBoxA(NULL, "Cant run M2TWEOP, graphics error", "ERROR",NULL);
-	}
+
+	initThread();
 }
 
 
@@ -317,4 +310,9 @@ bool managerF::read_limits()
 	f1.close();
 
 	return true;
+}
+
+NOINLINE EOP_EXPORT void managerExport::initEOP()
+{
+	managerF::init();
 }

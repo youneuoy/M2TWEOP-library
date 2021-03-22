@@ -3,7 +3,14 @@
 #include "plugins.h"
 #include <DxErr.h>
 #pragma comment(lib, "DXERR.lib")
+
+
+#if _DEBUG
+#pragma comment(lib, "minhook.x32d.lib")
+#else
 #pragma comment(lib, "minhook.x32.lib")
+
+#endif
 graphicsD3D::dataT graphicsD3D::dataS;
 
 
@@ -43,50 +50,12 @@ NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc(HWND hWnd, UINT uMsg, WPARAM wP
 }
 
 
-NOINLINE HRESULT APIENTRY graphicsD3D::hkEndScene(IDirect3DDevice9* pDevice)
-{
-	if (!dataS.ImInitialized)
-	{
-		initImgGui(pDevice);
-	}
-
-	ImGui_ImplDX9_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
-
-	Draw(pDevice);
 
 
-	dataS.ifMouseOrKeyBoardAtImgui = ImGui::GetIO().WantCaptureMouse;
-	dataS.ifMouseOrKeyBoardAtImgui |= ImGui::GetIO().WantCaptureKeyboard;
 
-
-	ImGui::EndFrame();
-	ImGui::Render();
-	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-
-	return FnCast(dataS.hookD.oEndScene, &hkEndScene)(pDevice);
-}
-
-
-NOINLINE HRESULT APIENTRY graphicsD3D::hkReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
-{
-	if (dataS.ImInitCount > 0)
-	{
-		ImGui_ImplDX9_Shutdown();
-		ImGui_ImplWin32_Shutdown();
-
-		dataS.ImInitCount = 0;
-		dataS.ImInitialized = false;
-	}
-	return FnCast(dataS.hookD.oReset, &hkReset)(pDevice, pPresentationParameters);
-}
 
 NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 {
-	dataS.pDevice = pDevice;
-
-	dataS.ImInitCount++;
 
 	ImFontConfig font_config;
 	font_config.OversampleH = 1;
@@ -146,33 +115,6 @@ DWORD __stdcall graphicsD3D::InitS()
 
 	init();
 
-	if (GetD3D9Device(dataS.d3d9Device, sizeof(dataS.d3d9Device)))
-	{
-		if (MH_CreateHook((char*)dataS.d3d9Device[42], &hkEndScene,
-			reinterpret_cast<LPVOID*>(&dataS.hookD.oEndScene)) != MH_OK)
-		{
-			return 1;
-		}
-		if (MH_EnableHook((char*)dataS.d3d9Device[42]) != MH_OK)
-		{
-			return 1;
-		}
-
-
-		if (MH_CreateHook((char*)dataS.d3d9Device[16], &hkReset,
-			reinterpret_cast<LPVOID*>(&dataS.hookD.oReset)) != MH_OK)
-		{
-			return 1;
-		}
-		if (MH_EnableHook((char*)dataS.d3d9Device[16]) != MH_OK)
-		{
-			return 1;
-		}
-	}
-	else
-	{
-		return 0;
-	}
 	DWORD adr = 0;
 	if (globals::dataS.gamever == 2)//steam
 	{
@@ -196,46 +138,6 @@ DWORD __stdcall graphicsD3D::InitS()
 	return 1;
 }
 
-bool graphicsD3D::GetD3D9Device(void** pTable, size_t Size)
-{
-	if (!pTable)
-		return false;
-
-	IDirect3D9* pD3D = Direct3DCreate9(D3D_SDK_VERSION);
-
-	if (!pD3D)
-		return false;
-
-	IDirect3DDevice9* pDummyDevice = NULL;
-
-
-	D3DPRESENT_PARAMETERS d3dpp = {};
-	d3dpp.Windowed = false;
-	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	d3dpp.hDeviceWindow = dataS.Window;
-
-	HRESULT dummyDeviceCreated = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, d3dpp.hDeviceWindow, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &pDummyDevice);
-
-	if (dummyDeviceCreated != S_OK)
-	{
-
-		d3dpp.Windowed = !d3dpp.Windowed;
-
-		dummyDeviceCreated = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, d3dpp.hDeviceWindow, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, &pDummyDevice);
-
-		if (dummyDeviceCreated != S_OK)
-		{
-			pD3D->Release();
-			return false;
-		}
-	}
-
-	memcpy(pTable, *reinterpret_cast<void***>(pDummyDevice), Size);
-
-	pDummyDevice->Release();
-	pD3D->Release();
-	return true;
-}
 
 NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* path, int* x, int* y)
 {
@@ -261,4 +163,41 @@ NOINLINE EOP_EXPORT void graphicsExport::unloadTexture(LPDIRECT3DTEXTURE9 textur
 {
 	texture->Release();
 	texture = nullptr;
+}
+
+NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevice)
+{
+	graphicsD3D::dataS.pDevice = pDevice;
+
+	graphicsD3D::InitS();
+	graphicsD3D::initImgGui(pDevice);
+}
+
+NOINLINE EOP_EXPORT void graphicsExport::onEndScene(IDirect3DDevice9* pDevice)
+{
+	ImGui_ImplDX9_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
+	graphicsD3D::Draw(pDevice);
+
+
+	graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui = ImGui::GetIO().WantCaptureMouse;
+	graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui |= ImGui::GetIO().WantCaptureKeyboard;
+
+
+	ImGui::EndFrame();
+	ImGui::Render();
+	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+}
+
+NOINLINE EOP_EXPORT void graphicsExport::onReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
+{
+	ImGui_ImplDX9_InvalidateDeviceObjects();
+
+}
+
+NOINLINE EOP_EXPORT void graphicsExport::afterReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
+{
+	ImGui_ImplDX9_CreateDeviceObjects();
 }
