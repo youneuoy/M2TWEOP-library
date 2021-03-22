@@ -93,12 +93,14 @@
     <VcpkgManifestInstall>false</VcpkgManifestInstall>
     <VcpkgEnabled>true</VcpkgEnabled>
     <VcpkgTriplet>x86-windows-static-md</VcpkgTriplet>
+    <VcpkgAutoLink>false</VcpkgAutoLink>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <VcpkgUseStatic>false</VcpkgUseStatic>
     <VcpkgManifestInstall>false</VcpkgManifestInstall>
     <VcpkgEnabled>true</VcpkgEnabled>
     <VcpkgTriplet>x86-windows-static-md</VcpkgTriplet>
+    <VcpkgAutoLink>false</VcpkgAutoLink>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
