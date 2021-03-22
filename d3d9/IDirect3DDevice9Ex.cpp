@@ -15,7 +15,7 @@
 */
 
 #include "d3d9.h"
-
+#include "m2tweopStarter.h"
 HRESULT m_IDirect3DDevice9Ex::QueryInterface(REFIID riid, void** ppvObj)
 {
 	if ((riid == IID_IUnknown || riid == WrapperID) && ppvObj)
@@ -55,11 +55,18 @@ ULONG m_IDirect3DDevice9Ex::Release()
 }
 HRESULT m_IDirect3DDevice9Ex::Reset(D3DPRESENT_PARAMETERS* pPresentationParameters)
 {
-	return ProxyInterface->Reset(pPresentationParameters);
+	m2tweopStarter::onReset(ProxyInterface, pPresentationParameters);
+
+	HRESULT hres= ProxyInterface->Reset(pPresentationParameters);
+
+	m2tweopStarter::afterReset(ProxyInterface, pPresentationParameters);
+	return hres;
 }
 
 HRESULT m_IDirect3DDevice9Ex::EndScene()
 {
+	m2tweopStarter::onEndScene(ProxyInterface);
+
 	return ProxyInterface->EndScene();
 }
 

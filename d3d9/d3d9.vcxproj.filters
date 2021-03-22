@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="InterfaceQuery.cpp">
+      <Filter>d3dSTD</Filter>
+    </ClCompile>
+    <ClCompile Include="IDirect3D9Ex.cpp">
+      <Filter>d3dSTD</Filter>
+    </ClCompile>
+    <ClCompile Include="IDirect3DCubeTexture9.cpp">
+      <Filter>d3dSTD</Filter>
+    </ClCompile>
+    <ClCompile Include="IDirect3DDevice9Ex.cpp">
+      <Filter>d3dSTD</Filter>
+    </ClCompile>
+    <ClCompile Include="IDirect3DIndexBuffer9.cpp">
+      <Filter>d3dSTD</Filter>
+    </ClCompile>
+    <ClCompile Include="IDirect3DPixelShader9.cpp">
+      <Filter>d3dSTD</Filter>
+    </ClCompile>
+    <ClCompile Include="IDirect3DQuery9.cpp">
+      <Filter>d3dSTD</Filter>
+    </ClCompile>
+    <ClCompile Include="IDirect3DStateBlock9.cpp">
+      <Filter>d3dSTD</Filter>
+    </ClCompile>
+    <ClCompile Include="IDirect3DSurface9.cpp">
+      <Filter>d3dSTD</Filter>
+    </ClCompile>
+    <ClCompile Include="IDirect3DSwapChain9Ex.cpp">
+      <Filter>d3dSTD</Filter>
+    </ClCompile>
+    <ClCompile Include="IDirect3DTexture9.cpp">
+      <Filter>d3dSTD</Filter>
+    </ClCompile>
+    <ClCompile Include="IDirect3DVertexBuffer9.cpp">
+      <Filter>d3dSTD</Filter>
+    </ClCompile>
+    <ClCompile Include="IDirect3DVertexDeclaration9.cpp">
+      <Filter>d3dSTD</Filter>
+    </ClCompile>
+    <ClCompile Include="IDirect3DVertexShader9.cpp">
+      <Filter>d3dSTD</Filter>
+    </ClCompile>
+    <ClCompile Include="IDirect3DVolume9.cpp">
+      <Filter>d3dSTD</Filter>
+    </ClCompile>
+    <ClCompile Include="IDirect3DVolumeTexture9.cpp">
+      <Filter>d3dSTD</Filter>
+    </ClCompile>
+    <ClCompile Include="m2tweopStarter.cpp">
+      <Filter>m2tweop</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="d3d9.h" />
+    <ClInclude Include="IDirect3D9Ex.h">
+      <Filter>d3dSTD</Filter>
+    </ClInclude>
+    <ClInclude Include="IDirect3DCubeTexture9.h">
+      <Filter>d3dSTD</Filter>
+    </ClInclude>
+    <ClInclude Include="IDirect3DDevice9Ex.h">
+      <Filter>d3dSTD</Filter>
+    </ClInclude>
+    <ClInclude Include="IDirect3DIndexBuffer9.h">
+      <Filter>d3dSTD</Filter>
+    </ClInclude>
+    <ClInclude Include="IDirect3DPixelShader9.h">
+      <Filter>d3dSTD</Filter>
+    </ClInclude>
+    <ClInclude Include="IDirect3DQuery9.h">
+      <Filter>d3dSTD</Filter>
+    </ClInclude>
+    <ClInclude Include="IDirect3DStateBlock9.h">
+      <Filter>d3dSTD</Filter>
+    </ClInclude>
+    <ClInclude Include="IDirect3DSurface9.h">
+      <Filter>d3dSTD</Filter>
+    </ClInclude>
+    <ClInclude Include="IDirect3DSwapChain9Ex.h">
+      <Filter>d3dSTD</Filter>
+    </ClInclude>
+    <ClInclude Include="IDirect3DTexture9.h">
+      <Filter>d3dSTD</Filter>
+    </ClInclude>
+    <ClInclude Include="IDirect3DVertexBuffer9.h">
+      <Filter>d3dSTD</Filter>
+    </ClInclude>
+    <ClInclude Include="IDirect3DVertexDeclaration9.h">
+      <Filter>d3dSTD</Filter>
+    </ClInclude>
+    <ClInclude Include="IDirect3DVertexShader9.h">
+      <Filter>d3dSTD</Filter>
+    </ClInclude>
+    <ClInclude Include="IDirect3DVolume9.h">
+      <Filter>d3dSTD</Filter>
+    </ClInclude>
+    <ClInclude Include="IDirect3DVolumeTexture9.h">
+      <Filter>d3dSTD</Filter>
+    </ClInclude>
+    <ClInclude Include="AddressLookupTable.h">
+      <Filter>d3dSTD</Filter>
+    </ClInclude>
+    <ClInclude Include="m2tweopStarter.h">
+      <Filter>m2tweop</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="d3dSTD">
+      <UniqueIdentifier>{973f5b93-499f-439c-9898-cd6e5e2e28d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="m2tweop">
+      <UniqueIdentifier>{e1b45f90-1464-4d0c-bcda-fd4e3a12c5f4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="d3d9.def">
+      <Filter>d3dSTD</Filter>
+    </None>
+  </ItemGroup>
+</Project>

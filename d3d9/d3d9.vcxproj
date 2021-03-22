@@ -80,6 +80,7 @@
     <ClCompile Include="IDirect3DVolume9.cpp" />
     <ClCompile Include="IDirect3DVolumeTexture9.cpp" />
     <ClCompile Include="InterfaceQuery.cpp" />
+    <ClCompile Include="m2tweopStarter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AddressLookupTable.h" />
@@ -99,6 +100,7 @@
     <ClInclude Include="IDirect3DVertexShader9.h" />
     <ClInclude Include="IDirect3DVolume9.h" />
     <ClInclude Include="IDirect3DVolumeTexture9.h" />
+    <ClInclude Include="m2tweopStarter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="d3d9.def" />

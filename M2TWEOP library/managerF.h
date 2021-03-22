@@ -7,6 +7,9 @@
 #include "functionsOffsets.h"
 #include "dataOffsets.h"
 #include "plugins.h"
+
+
+#include "exportHeader.h"
 class managerF
 {
 public:
@@ -20,3 +23,9 @@ private:
 	static bool read_modConfig();
 	static bool read_limits();
 };
+
+namespace managerExport
+{
+	NOINLINE EOP_EXPORT void initEOP();
+
+}

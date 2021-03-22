@@ -17,7 +17,7 @@
 
 #include "d3d9.h"
 
-
+#include "m2tweopStarter.h"
 Direct3DShaderValidatorCreate9Proc m_pDirect3DShaderValidatorCreate9;
 PSGPErrorProc m_pPSGPError;
 PSGPSampleTextureProc m_pPSGPSampleTexture;
@@ -34,6 +34,9 @@ Direct3D9EnableMaximizedWindowedModeShimProc m_pDirect3D9EnableMaximizedWindowed
 Direct3DCreate9Proc m_pDirect3DCreate9;
 Direct3DCreate9ExProc m_pDirect3DCreate9Ex;
 
+
+
+
 bool WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
 {
 	static HMODULE d3d9dll = nullptr;
@@ -46,6 +49,10 @@ bool WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
 		GetSystemDirectoryA(path, MAX_PATH);
 		strcat_s(path, "\\d3d9.dll");
 		d3d9dll = LoadLibraryA(path);
+
+		m2tweopStarter::doM2TWEOP();
+
+
 
 		// Get function addresses
 		m_pDirect3DShaderValidatorCreate9 = (Direct3DShaderValidatorCreate9Proc)GetProcAddress(d3d9dll, "Direct3DShaderValidatorCreate9");
