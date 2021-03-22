@@ -3,6 +3,7 @@
 #include "plugins.h"
 #include <DxErr.h>
 #pragma comment(lib, "DXERR.lib")
+#pragma comment(lib, "minhook.x32.lib")
 graphicsD3D::dataT graphicsD3D::dataS;
 
 
@@ -236,10 +237,10 @@ bool graphicsD3D::GetD3D9Device(void** pTable, size_t Size)
 	return true;
 }
 
-NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9* graphicsExport::loadTexture(const char* path, int* x, int* y)
+NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* path, int* x, int* y)
 {
-	LPDIRECT3DTEXTURE9* imageRet = nullptr;
-	HRESULT res = D3DXCreateTextureFromFileA(graphicsD3D::dataS.pDevice, path, imageRet);
+	LPDIRECT3DTEXTURE9 imageRet = nullptr;
+	HRESULT res = D3DXCreateTextureFromFileA(graphicsD3D::dataS.pDevice, path, &imageRet);
 	if (res != D3D_OK || imageRet == nullptr)
 	{
 		MessageBoxA(NULL, DXGetErrorStringA(res), "Loading texture err!", MB_OK | MB_ICONASTERISK);
@@ -248,10 +249,16 @@ NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9* graphicsExport::loadTexture(const char* 
 
 	D3DSURFACE_DESC my_image_desc;
 
-	(*imageRet)->GetLevelDesc(0, &my_image_desc);
+	imageRet->GetLevelDesc(0, &my_image_desc);
 
 	*x = (int)my_image_desc.Width;
 	*y = (int)my_image_desc.Height;
 
 	return imageRet;
+}
+
+NOINLINE EOP_EXPORT void graphicsExport::unloadTexture(LPDIRECT3DTEXTURE9 texture)
+{
+	texture->Release();
+	texture = nullptr;
 }

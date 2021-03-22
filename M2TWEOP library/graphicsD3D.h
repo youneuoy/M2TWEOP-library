@@ -57,5 +57,6 @@ public:
 
 namespace graphicsExport
 {
-	NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9* loadTexture(const char*path, int* x, int* y);
+	NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 loadTexture(const char*path, int* x, int* y);
+	NOINLINE EOP_EXPORT void unloadTexture(LPDIRECT3DTEXTURE9 texture);
 };
