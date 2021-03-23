@@ -2,7 +2,7 @@
 
 bool gameStarter::startGame()
 {
-	//SetCurrentDirectoryA("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Medieval II Total War\\mods\\teutonic");
+	SetCurrentDirectoryA("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Medieval II Total War\\mods\\teutonic");
 	string gameStartArgs;
 
 	if (dataG::data.gameData.gameMode == 0)
@@ -72,6 +72,22 @@ bool gameStarter::startGame()
 
 bool gameStarter::runGameExe()
 {
+	if (dataG::data.modData.useM2TWEOP == true)
+	{
+		string currentPath;
+		helpers::getCurrentPath(currentPath);
+
+		dataG::data.gameData.gameArgs += "m2tweopStartCommand";
+		dataG::data.gameData.gameArgs += to_string(dataG::data.gameData.gameVer);
+
+		dataG::data.gameData.gameArgs += "eopModFolder=*";
+		dataG::data.gameData.gameArgs += currentPath;
+		dataG::data.gameData.gameArgs += "*";
+
+		dataG::data.gameData.gameArgs += "eopGameVer=*";
+		dataG::data.gameData.gameArgs += to_string(dataG::data.gameData.gameVer);
+		dataG::data.gameData.gameArgs += "*";
+	}
 	return helpers::runGame(dataG::data.gameData.gamePath.c_str(), dataG::data.gameData.gameArgs.c_str());
 }
 

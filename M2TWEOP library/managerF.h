@@ -18,7 +18,6 @@ private:
 	static void doPachs();
 
 	static void initThread();
-	static int readMF();
 
 	static bool read_modConfig();
 	static bool read_limits();
@@ -26,6 +25,6 @@ private:
 
 namespace managerExport
 {
-	NOINLINE EOP_EXPORT void initEOP();
+	NOINLINE EOP_EXPORT void initEOP(const char*modPath,int gameVer);
 
 }

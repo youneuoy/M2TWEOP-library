@@ -22,6 +22,7 @@ public:
 
 	static bool compareFiles(string& oneFile, string& nextFile);
 
+	static void getCurrentPath(string& path);
 private:
 	static void setModFolder(string& modFolder);
 };
