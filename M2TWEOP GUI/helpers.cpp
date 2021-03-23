@@ -117,15 +117,22 @@ bool helpers::runGame(const char* exeFile, const char* exeParam)
 	si.cb = sizeof(si);
 	ZeroMemory(&pi, sizeof(pi));
 
+	string line = "\"";
+	line += dataG::data.gameData.gamePath;
+	line += "\" \"";
+
+	line += exeParam;
+	line += "\"";
+
 	// Start the child process.
-	if (!CreateProcessA(exeFile,   // No module name (use command line)
-		const_cast<char*>(exeParam),        // Command line
+	if (!CreateProcessA(NULL,   // No module name (use command line)
+		const_cast<char*>(line.c_str()),        // Command line
 		NULL,           // Process handle not inheritable
 		NULL,           // Thread handle not inheritable
 		FALSE,          // Set handle inheritance to FALSE
 		0,              // No creation flags
 		NULL,           // Use parent's environment block
-		TEXT("..\\.."),           // Use parent's starting directory
+		TEXT("..\\.."),           // starting directory
 		&si,            // Pointer to STARTUPINFO structure
 		&pi            // Pointer to PROCESS_INFORMATION structure
 	))
@@ -306,6 +313,13 @@ bool helpers::compareFiles(string& oneFile, string& nextFile)
 	in1.close();
 	in2.close();
 	return true;
+}
+
+void helpers::getCurrentPath(string& path)
+{
+	TCHAR currentPath[MAX_PATH] = { 0 };
+	DWORD ret = GetCurrentDirectoryA(MAX_PATH, currentPath);
+	path = currentPath;
 }
 
 void helpers::setModFolder(string& modFolder)

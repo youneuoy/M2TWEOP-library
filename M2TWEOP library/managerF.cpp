@@ -198,8 +198,6 @@ void managerF::doPachs()
 //#include "tests.h"
 void managerF::initThread()
 {
-	readMF();
-
 	read_modConfig();
 	codes::initCodes(globals::dataS.gamever);
 	dataOffsets::initDataOffsets(globals::dataS.gamever);
@@ -215,34 +213,6 @@ void managerF::initThread()
 	//stratResTest::test();
 }
 
-int managerF::readMF()
-{
-	CreateDirectoryA("logs", NULL);
-	string gamever;
-	ifstream f1("runningMod.youneuoycfg");
-
-	getline(f1, gamever);
-	globals::dataS.gamever = stoi(gamever);
-
-	if (globals::dataS.gamever == 1500)
-	{
-		globals::dataS.gamever = 1;
-	}
-	else if (globals::dataS.gamever == 1520)
-	{
-		globals::dataS.gamever = 2;
-	}
-	else
-	{
-		return 0;
-	}
-
-	getline(f1, globals::dataS.modPatch);
-	f1.close();
-
-
-	return 1;
-}
 
 bool managerF::read_modConfig()
 {
@@ -312,7 +282,12 @@ bool managerF::read_limits()
 	return true;
 }
 
-NOINLINE EOP_EXPORT void managerExport::initEOP()
+NOINLINE EOP_EXPORT void managerExport::initEOP(const char* modPath,int gameVer)
 {
+	globals::dataS.gamever = gameVer;
+	globals::dataS.modPatch = modPath;
+
+	CreateDirectoryA("logs", NULL);
+
 	managerF::init();
 }

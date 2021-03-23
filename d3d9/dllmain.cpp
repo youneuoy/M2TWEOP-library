@@ -40,7 +40,6 @@ Direct3DCreate9ExProc m_pDirect3DCreate9Ex;
 bool WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
 {
 	static HMODULE d3d9dll = nullptr;
-
 	switch (dwReason)
 	{
 	case DLL_PROCESS_ATTACH:
