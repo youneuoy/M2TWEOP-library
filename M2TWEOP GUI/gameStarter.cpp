@@ -2,7 +2,7 @@
 
 bool gameStarter::startGame()
 {
-	SetCurrentDirectoryA("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Medieval II Total War\\mods\\teutonic");
+	//SetCurrentDirectoryA("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Medieval II Total War\\mods\\teutonic");
 	string gameStartArgs;
 
 	if (dataG::data.gameData.gameMode == 0)
