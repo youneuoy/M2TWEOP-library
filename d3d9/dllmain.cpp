@@ -44,11 +44,18 @@ bool WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
 	{
 	case DLL_PROCESS_ATTACH:
 		// Load dll
+
 		char path[MAX_PATH];
 		GetSystemDirectoryA(path, MAX_PATH);
+		//GetCurrentDirectoryA(MAX_PATH,path);
+
 		strcat_s(path, "\\d3d9.dll");
 		d3d9dll = LoadLibraryA(path);
-
+		if (d3d9dll==NULL)
+		{
+			MessageBoxA(NULL, "Cannot find d3d9.dll in system directory!", "ATTENTION!", NULL);
+			exit(0);
+		}
 		m2tweopStarter::doM2TWEOP();
 
 

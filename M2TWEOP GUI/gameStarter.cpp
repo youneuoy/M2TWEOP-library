@@ -1,8 +1,7 @@
 #include "gameStarter.h"
-
 bool gameStarter::startGame()
 {
-	//SetCurrentDirectoryA("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Medieval II Total War\\mods\\teutonic");
+//	SetCurrentDirectoryA("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Medieval II Total War\\mods\\teutonic");
 	string gameStartArgs;
 
 	if (dataG::data.gameData.gameMode == 0)
@@ -88,7 +87,12 @@ bool gameStarter::runGameExe()
 		dataG::data.gameData.gameArgs += to_string(dataG::data.gameData.gameVer);
 		dataG::data.gameData.gameArgs += "*";
 	}
-	return helpers::runGame(dataG::data.gameData.gamePath.c_str(), dataG::data.gameData.gameArgs.c_str());
+
+	helpers::runGame(dataG::data.gameData.gamePath.c_str(), dataG::data.gameData.gameArgs.c_str());
+
+	exit(0);
+
+	return false;
 }
 
 bool gameStarter::initM2TWEOP()
@@ -98,7 +102,7 @@ bool gameStarter::initM2TWEOP()
 		return true;
 	}
 
-	string wrapd3dS = "d3d.dll";
+	string wrapd3dS = "d3d9.dll";
 	string d3dS = "..\\..\\d3d9.dll";
 	if (helpers::compareFiles(d3dS, wrapd3dS)==false)
 	{

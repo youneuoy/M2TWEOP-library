@@ -15,7 +15,7 @@ namespace smallFuncs
 			ancillariesOffset = 0x005A57CD;
 		}
 
-		Write(&limit, ancillariesOffset, 1);
+		MemWork::WriteData(&limit, ancillariesOffset, 1);
 	}
 	NOINLINE EOP_EXPORT void setMaxBgSize(unsigned char size)
 	{
@@ -52,10 +52,10 @@ namespace smallFuncs
 		{
 			uchar jz = 0x74;
 			uchar ch;
-			Read(cmd, &ch, 1);
+			MemWork::ReadData(cmd, &ch, 1);
 			if (ch == jz)
 			{
-				Write(nops, cmd, 2);
+				MemWork::WriteData(nops, cmd, 2);
 			}
 		}
 	}

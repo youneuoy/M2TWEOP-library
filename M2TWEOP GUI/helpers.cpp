@@ -89,13 +89,19 @@ bool helpers::runGame(const char* exeFile, const char* exeParam)
 	si.cb = sizeof(si);
 	ZeroMemory(&pi, sizeof(pi));
 
-	string line = "\"";
+	string line;
+	line+= "\"";
 	line += dataG::data.gameData.gamePath;
-	line += "\" \"";
-
-	line += exeParam;
 	line += "\"";
-
+	if (dataG::data.modData.useM2TWEOP == true)
+	{
+		line += "\"";
+	}
+	line += exeParam;
+	if (dataG::data.modData.useM2TWEOP == true)
+	{
+		line += "\"";
+	}
 	// Start the child process.
 	if (!CreateProcessA(NULL,   // No module name (use command line)
 		const_cast<char*>(line.c_str()),        // Command line

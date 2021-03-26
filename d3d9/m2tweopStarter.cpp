@@ -143,7 +143,6 @@ namespace m2tweopStarter
 
 	void doM2TWEOP()
 	{
-		MessageBoxA(NULL, "Cannot find M2TWEOPD3D.cfgm m2tweop dont work now!", "ATTENTION!", NULL);
 		parseCommandLine();
 
 		if (dataEOP.isEOPCommandLine == false)
@@ -152,17 +151,8 @@ namespace m2tweopStarter
 			return;
 		}
 
-		string libPath;
-		ifstream f1("M2TWEOPD3D.cfg");
-		if (f1.is_open() == false)
-		{
-			MessageBoxA(NULL,"Cannot find M2TWEOPD3D.cfgm m2tweop dont work now!","ATTENTION!",NULL);
-			return;
-		}
 
-		getline(f1, libPath);
-		f1.close();
-
+		string libPath = dataEOP.modPath+"\\M2TWEOPLibrary.dll";
 		dataEOP.hmtw=LoadLibraryA(libPath.c_str());
 		if (dataEOP.hmtw == NULL)
 		{
