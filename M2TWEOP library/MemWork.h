@@ -29,23 +29,25 @@ public:
 	int m_bufSize;
 
 	unsigned char* m_buf;
+
+
+	static void WriteData(void* ptr, DWORD to, size_t size)
+	{
+
+		HANDLE h = GetCurrentProcess();
+		DWORD oldMemProtect = 0;
+		VirtualProtectEx(h, (LPVOID)to, size, PAGE_EXECUTE_READWRITE, &oldMemProtect);
+		WriteProcessMemory(h, (LPVOID)to, ptr, size, NULL);
+		VirtualProtectEx(h, (LPVOID)to, size, oldMemProtect, &oldMemProtect);
+
+		CloseHandle(h);
+	}
+
+	template <typename  data>
+	static void ReadData(DWORD from, data* p, size_t size = 4)
+	{
+		memset(p, 0, size);
+		memcpy(p, (LPVOID)from, size);
+	}
 };
 
-void Write(void* ptr, DWORD to, size_t size)
-{
-
-	HANDLE h = GetCurrentProcess();
-	DWORD oldMemProtect = 0;
-	VirtualProtectEx(h, (LPVOID)to, size, PAGE_EXECUTE_READWRITE, &oldMemProtect);
-	WriteProcessMemory(h, (LPVOID)to, ptr, size, NULL);
-	VirtualProtectEx(h, (LPVOID)to, size, oldMemProtect, &oldMemProtect);
-
-	CloseHandle(h);
-}
-
-template <typename  data>
-void Read(DWORD from, data* p, size_t size = 4)
-{
-	memset(p, 0, size);
-	memcpy(p, (LPVOID)from, size);
-}

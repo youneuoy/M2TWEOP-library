@@ -2,6 +2,7 @@
 #include "headersSTD.h"
 #include "helpers.h"
 #include "dataG.h"
+#include "managerG.h"
 
 namespace modSettingsUI
 {
@@ -36,6 +37,11 @@ namespace modSettingsUI
 		ImGui::NewLine();
 		ImGui::Checkbox("Use M2TWEOP", &dataG::data.modData.useM2TWEOP);
 
+		ImGui::NewLine();
+		if (ImGui::Button("Save", helpers::getScreen().centerXButton))
+		{
+			managerG::saveSettings();
+		}
 		ImGui::End();
 	}
 };
