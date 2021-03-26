@@ -4,10 +4,10 @@
 #include "helpers.h"
 namespace toolRoutine
 {
-	void drawTick(bool* isOpen)
+	int drawTick(bool* isOpen)
 	{
 		helpers::updateMetrics();
 
-		mainUI::draw(isOpen);
+		return mainUI::draw(isOpen);
 	}
 };

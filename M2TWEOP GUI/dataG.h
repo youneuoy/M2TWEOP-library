@@ -45,20 +45,15 @@ public:
 		screenS screen;
 		struct
 		{
-			d3dImage empty{ .path = "empty" };
-			d3dImage logoAbout;
+			GLImage empty{ .path = "empty" };
+			GLImage logoAbout;
 		}images;
-		std::vector< d3dImage*>staticImagesCollection =
+		std::vector< GLImage*>staticImagesCollection =
 		{
 			&dataG::dataGS::images.empty,
 			&dataG::dataGS::images.logoAbout
 		};
 
-		struct
-		{
-			LPDIRECT3D9              g_pD3D = NULL;
-			LPDIRECT3DDEVICE9        g_pd3dDevice = NULL;
-			D3DPRESENT_PARAMETERS    g_d3dpp = {};
-		}d3d;
+
 	}data;
 };

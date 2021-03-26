@@ -1,6 +1,5 @@
 #pragma once
 #include "headersSTD.h"
-#include "helpers.h"
 
 namespace managerG
 {

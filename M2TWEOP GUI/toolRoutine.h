@@ -2,5 +2,5 @@
 #include "mainUI.h"
 namespace toolRoutine
 {
-	void drawTick(bool* isOpen);
+	int drawTick(bool* isOpen);
 };

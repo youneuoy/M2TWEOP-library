@@ -90,6 +90,12 @@
     <ClCompile Include="..\3rd\imguiDocking\imgui_stdlib.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="..\3rd\imguiDocking\imgui_impl_glfw.cpp">
+      <Filter>3rd\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imguiDocking\imgui_impl_opengl2.cpp">
+      <Filter>3rd\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -162,6 +168,15 @@
       <Filter>Исходные файлы\ui\mod settings</Filter>
     </ClInclude>
     <ClInclude Include="..\3rd\imguiDocking\imgui_stdlib.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\imgui_impl_glfw.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\imgui_impl_opengl2.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\stb_image.h">
       <Filter>3rd\imgui</Filter>
     </ClInclude>
   </ItemGroup>
