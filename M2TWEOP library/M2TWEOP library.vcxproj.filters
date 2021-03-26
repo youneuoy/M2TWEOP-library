@@ -168,6 +168,9 @@
     <ClInclude Include="technicalStringsFuncs.h">
       <Filter>Исходные файлы\functions</Filter>
     </ClInclude>
+    <ClInclude Include="smallFuncs.h">
+      <Filter>Исходные файлы\functions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -253,6 +256,9 @@
     </ClCompile>
     <ClCompile Include="globals.cpp">
       <Filter>Исходные файлы\data</Filter>
+    </ClCompile>
+    <ClCompile Include="smallFuncs.cpp">
+      <Filter>Исходные файлы\functions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

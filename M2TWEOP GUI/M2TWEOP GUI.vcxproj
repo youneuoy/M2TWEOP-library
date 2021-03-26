@@ -87,10 +87,10 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <VcpkgEnabled>false</VcpkgEnabled>
+    <VcpkgEnabled>true</VcpkgEnabled>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <VcpkgEnabled>false</VcpkgEnabled>
+    <VcpkgEnabled>true</VcpkgEnabled>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -99,6 +99,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>..\3rd\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -117,6 +118,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>..\3rd\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -160,6 +162,8 @@
     <ClCompile Include="..\3rd\imguiDocking\imgui.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_draw.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_impl_dx9.cpp" />
+    <ClCompile Include="..\3rd\imguiDocking\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\3rd\imguiDocking\imgui_impl_opengl2.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_impl_win32.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_stdlib.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_tables.cpp" />
@@ -180,6 +184,8 @@
     <ClInclude Include="..\3rd\imguiDocking\imconfig.h" />
     <ClInclude Include="..\3rd\imguiDocking\imgui.h" />
     <ClInclude Include="..\3rd\imguiDocking\imgui_impl_dx9.h" />
+    <ClInclude Include="..\3rd\imguiDocking\imgui_impl_glfw.h" />
+    <ClInclude Include="..\3rd\imguiDocking\imgui_impl_opengl2.h" />
     <ClInclude Include="..\3rd\imguiDocking\imgui_impl_win32.h" />
     <ClInclude Include="..\3rd\imguiDocking\imgui_internal.h" />
     <ClInclude Include="..\3rd\imguiDocking\imgui_markdown.h" />
@@ -187,6 +193,7 @@
     <ClInclude Include="..\3rd\imguiDocking\imstb_rectpack.h" />
     <ClInclude Include="..\3rd\imguiDocking\imstb_textedit.h" />
     <ClInclude Include="..\3rd\imguiDocking\imstb_truetype.h" />
+    <ClInclude Include="..\3rd\imguiDocking\stb_image.h" />
     <ClInclude Include="..\3rd\imgui\imgui_markdown.h" />
     <ClInclude Include="aboutUI.h" />
     <ClInclude Include="aboutUIHelpers.h" />

@@ -1,5 +1,5 @@
 #pragma once
 namespace mainUI
 {
-	void draw(bool* isOpen);
+	int draw(bool* isOpen);
 };

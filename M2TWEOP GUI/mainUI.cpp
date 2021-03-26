@@ -17,22 +17,22 @@ namespace mainUI
 
 		bool isModSettingsUIOpen = false;
 	}childs;
-	void draw(bool* isOpen)
+	int draw(bool* isOpen)
 	{
 		if (childs.isAboutOpen == true)
 		{
 			aboutUI::drawAboutUi(&childs.isAboutOpen);
-			return;
+			return 0;
 		}
 		if (childs.isGameSTDMenuOpen == true)
 		{
 			gameSTDUI::drawSTDUI(&childs.isGameSTDMenuOpen);
-			return;
+			return 0;
 		}
 		if (childs.isModSettingsUIOpen == true)
 		{
 			modSettingsUI::drawModSettingsUI(&childs.isModSettingsUIOpen);
-			return;
+			return 0;
 		}
 
 		ImVec2 windowSize = ImGui::CalcTextSize("Run vanilla or dlc(no M2TWEOP capabilities)");
@@ -63,5 +63,12 @@ namespace mainUI
 			childs.isAboutOpen = true;
 		}
 		ImGui::End();
+
+		if (*isOpen == 0)
+		{
+			return 1;
+		}
+
+		return 0;
 	}
 };

@@ -3,14 +3,14 @@
 class helpers
 {
 public:
-	static void loadTexture(d3dImage* image);
-	static IDirect3DTexture9* loadTextureFromMem(char* mem, int x, int y);
+	static bool loadTexture(const char* filename, GLuint* out_texture, int* out_width, int* out_height);
 
+	static void setWindowIcon(GLFWwindow*window);
 	static void updateMetrics();
 
 	static screenS& getScreen();
 
-	static d3dImage* findImage(const char* name, int nameLen);
+	static GLImage* findImage(const char* name, int nameLen);
 
 	static ImFont* findFont(const char* name);
 

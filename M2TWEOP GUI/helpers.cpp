@@ -1,71 +1,43 @@
 #include "helpers.h"
 #include "dataG.h"
-#include "DXERR.h"
-
-#pragma comment(lib, "DXERR.lib")
-
-void helpers::loadTexture(d3dImage* image)
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+bool helpers::loadTexture(const char* filename, GLuint* out_texture, int* out_width, int* out_height)
 {
-	HRESULT res = D3DXCreateTextureFromFile(dataG::data.d3d.g_pd3dDevice, image->path.c_str(), &image->image);
-	if (res != D3D_OK)
-	{
-		MessageBoxA(NULL, DXGetErrorString(res), "Loading texture err!", MB_OK | MB_ICONASTERISK);
-		return;
-	}
+	// Load from file
+	int image_width = 0;
+	int image_height = 0;
+	unsigned char* image_data = stbi_load(filename, &image_width, &image_height, NULL, 4);
+	if (image_data == NULL)
+		return false;
 
-	D3DSURFACE_DESC my_image_desc;
-	image->image->GetLevelDesc(0, &my_image_desc);
+	// Create a OpenGL texture identifier
+	GLuint image_texture;
+	glGenTextures(1, &image_texture);
+	glBindTexture(GL_TEXTURE_2D, image_texture);
 
-	image->xSize = (int)my_image_desc.Width;
-	image->ySize = (int)my_image_desc.Height;
+	// Setup filtering parameters for display
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// Upload pixels into texture
+#if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)
+	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+#endif
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_width, image_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_data);
+	stbi_image_free(image_data);
+
+	*out_texture = image_texture;
+	*out_width = image_width;
+	*out_height = image_height;
+
+	return true;
 }
 
-IDirect3DTexture9* helpers::loadTextureFromMem(char* mem, int x, int y)
+
+void helpers::setWindowIcon(GLFWwindow* window)
 {
-	IDirect3DTexture9* d3dTexture = NULL;
-
-	HRESULT err;
-	IDirect3DTexture9* texture = NULL;
-	err = D3DXCreateTexture(dataG::data.d3d.g_pd3dDevice, x, y, 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &d3dTexture);
-	if (err != D3D_OK)
-	{
-		MessageBoxA(NULL, DXGetErrorString(err), "Loading texture err!", MB_OK | MB_ICONASTERISK);
-		return nullptr;
-	}
-
-	D3DLOCKED_RECT lockRect;
-
-	err = d3dTexture->LockRect(0, &lockRect, NULL, 0);
-	if (err != D3D_OK)
-	{
-		MessageBoxA(NULL, DXGetErrorString(err), "Loading texture err!", MB_OK | MB_ICONASTERISK);
-		return nullptr;
-	}
-
-	for (int line = 0; line < y; line++)
-	{
-		int dwOffset = line * x;
-
-		for (int width = 0; width < x; width)
-		{
-			char b = mem[2] & 0xFF;
-			char g = mem[1] & 0xFF;
-			char r = mem[0] & 0xFF;
-			char a = 0xFF;
-			mem += 3;
-			((int*)lockRect.pBits)[dwOffset + width] = ((a << 24L) + (r << 16L) + (g << 8L) + (b));
-			width++;
-		}
-	}
-
-	err = d3dTexture->UnlockRect(0);
-	if (err != D3D_OK)
-	{
-		MessageBoxA(NULL, DXGetErrorString(err), "Loading texture err!", MB_OK | MB_ICONASTERISK);
-		return nullptr;
-	}
-
-	return d3dTexture;
+	glfwSetWindowIcon(window, 1, dataG::data.screen.programIcon);
 }
 
 void helpers::updateMetrics()
@@ -82,9 +54,9 @@ screenS& helpers::getScreen()
 	return dataG::data.screen;
 }
 
-d3dImage* helpers::findImage(const char* name, int nameLen)
+GLImage* helpers::findImage(const char* name, int nameLen)
 {
-	for (d3dImage* img : dataG::data.staticImagesCollection)
+	for (GLImage* img : dataG::data.staticImagesCollection)
 	{
 		if (img->path.size() != nameLen)continue;
 

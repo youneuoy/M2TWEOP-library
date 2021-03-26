@@ -213,6 +213,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="plugins.h" />
     <ClInclude Include="realGameTypes.h" />
+    <ClInclude Include="smallFuncs.h" />
     <ClInclude Include="stratModelsChange.h" />
     <ClInclude Include="techFuncs.h" />
     <ClInclude Include="technicalStringsFuncs.h" />
@@ -252,6 +253,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="plugins.cpp" />
+    <ClCompile Include="smallFuncs.cpp" />
     <ClCompile Include="stratModelsChange.cpp" />
     <ClCompile Include="stratModelsHelper.cpp" />
     <ClCompile Include="techFuncs.cpp" />

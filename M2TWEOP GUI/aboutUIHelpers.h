@@ -30,9 +30,9 @@ namespace aboutUI
 	{
 		// In your application you would load an image based on data_ input. Here we just use the imgui font texture.
 	   // ImTextureID image = ImGui::GetIO().Fonts->TexID;
-		d3dImage* imgFinded = helpers::findImage(data_.link, data_.linkLength);
+		GLImage* imgFinded = helpers::findImage(data_.link, data_.linkLength);
 
-		ImTextureID image = imgFinded->image;
+		ImTextureID image = (void*)(intptr_t)imgFinded->image;
 
 		// > C++14 can use ImGui::MarkdownImageData imageData{ true, false, image, ImVec2( 40.0f, 20.0f ) };
 		ImGui::MarkdownImageData imageData;
@@ -104,7 +104,7 @@ namespace aboutUI
 	void MarkdownExample()
 	{
 		const std::string markdownText = R"(
-![logo](youneuoyData/images/logoAbout.png)
+![logo](eopData/images/logoAbout.png)
 ## What is M2TW Engine Overhaul Project?
 
 M2TW Engine Overhaul Project is designed to expand the capabilities of the game *Medieval 2: Total War*.
