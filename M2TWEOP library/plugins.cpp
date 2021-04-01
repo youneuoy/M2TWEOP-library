@@ -14,7 +14,7 @@ void plugins::init()
 	initEvNames();
 	for (string s : plList)
 	{
-		if (s == "HotSeatToolLib.dll"
+		if (s == "M2TWEOPLibrary.dll"
 			|| s == "lua.dll")continue;
 		plugin* pl = new plugin();
 		if (!pl->init(&s))

@@ -63,10 +63,12 @@ namespace m2tweopStarter
 		folderEnd = strstr(folderEnd, "*");
 		if (folderEnd == nullptr)return;
 
+
 		for (char* fld = folderStart + 1; fld < folderEnd; fld++)
 		{
 			dataEOP.modPath.push_back(fld[0]);
 		}
+
 	}
 	void parseEOPCMD(char* commandLine)
 	{
@@ -84,6 +86,15 @@ namespace m2tweopStarter
 
 	}
 
+
+	void squeeze(char s[], int c) {
+		int i, j;
+
+		for (i = j = 0; s[i] != '\0'; i++)
+			if (s[i] != c)
+				s[j++] = s[i];
+		s[j] = '\0';
+	}
 	void parseCommandLine()
 	{
 		char* cmd = GetCommandLineA();
@@ -115,8 +126,6 @@ namespace m2tweopStarter
 
 		if (ver == 1)
 		{
-			parseEOPCMD(eopS);
-			memset(eopS, 0, strlen(eopS));
 
 			int len = strlen(cmd);
 			int symbCount = 0;
@@ -127,10 +136,16 @@ namespace m2tweopStarter
 					symbCount++;
 					if (symbCount > 2)
 					{
-						cmd[i] = ' ';
+						squeeze(cmd+i, '\"');
+						break;
 					}
 				}
 			}
+
+			eopS = strstr(cmd, eopCMDdisk);
+			parseEOPCMD(eopS);
+			memset(eopS, 0, strlen(eopS));
+
 		}
 		else if (ver == 2)
 		{
