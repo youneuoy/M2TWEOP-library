@@ -369,7 +369,6 @@ HRESULT m_IDirect3DDevice9Ex::GetMaterial(D3DMATERIAL9* pMaterial)
 
 HRESULT m_IDirect3DDevice9Ex::LightEnable(DWORD LightIndex, BOOL bEnable)
 {
-	bEnable = false;
 	return ProxyInterface->LightEnable(LightIndex, bEnable);
 }
 
@@ -874,6 +873,7 @@ HRESULT m_IDirect3DDevice9Ex::GetSamplerState(THIS_ DWORD Sampler, D3DSAMPLERSTA
 
 HRESULT m_IDirect3DDevice9Ex::SetSamplerState(THIS_ DWORD Sampler, D3DSAMPLERSTATETYPE Type, DWORD Value)
 {
+
 	return ProxyInterface->SetSamplerState(Sampler, Type, Value);
 }
 
