@@ -105,6 +105,8 @@ bool graphicsD3D::init()
 	return true;
 }
 
+
+
 DWORD __stdcall graphicsD3D::InitS()
 {
 	// Initialize MinHook.
@@ -134,6 +136,8 @@ DWORD __stdcall graphicsD3D::InitS()
 	{
 		return 1;
 	}
+
+
 
 	return 1;
 }
