@@ -31,10 +31,11 @@ The functionality of the program is divided into two parts
 * Set your own prefix for units with the *legio* parameter
 * Fixed crash when using berserkers in battle
 * Added the ability to repeatedly upgrade the guard of characters.
+* Added ability to write your own add-ons in C ++. The library exports many different functions.
 
 ## Versions
-* [M2TWEOP Library](https://github.com/youneuoy/M2TWEOP-library)
-* [M2TWEOP Plugins](https://github.com/youneuoy/M2TWEOP-luaPlugin)
+* [M2TWEOP Library](https://github.com/youneuoy/M2TWEOP-library) - main project
+* [M2TWEOP Plugins](https://github.com/youneuoy/M2TWEOP-luaPlugin) - a plugin that adds the ability to script in the lua language (from game logic to extending the interface).
 
 ### Compatibility
 

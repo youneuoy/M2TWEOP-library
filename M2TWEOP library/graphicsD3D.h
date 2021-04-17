@@ -26,7 +26,6 @@ public:
 			WNDPROC oWndProc = NULL;
 			// Originals
 			WNDPROC onewGameWndProc = NULL;
-
 		}hookD;
 	}dataS;
 	static NOINLINE void APIENTRY Draw(LPDIRECT3DDEVICE9 pDevice);

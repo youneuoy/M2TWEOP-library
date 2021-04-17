@@ -1,4 +1,6 @@
 #include "gameStarter.h"
+
+#include "pipe.h"
 bool gameStarter::startGame()
 {
 //SetCurrentDirectoryA("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Medieval II Total War\\mods\\teutonic");
@@ -87,6 +89,7 @@ bool gameStarter::runGameExe()
 		dataG::data.gameData.gameArgs += to_string(dataG::data.gameData.gameVer);
 		dataG::data.gameData.gameArgs += "*";
 	}
+
 
 	helpers::runGame(dataG::data.gameData.gamePath.c_str(), dataG::data.gameData.gameArgs.c_str());
 
