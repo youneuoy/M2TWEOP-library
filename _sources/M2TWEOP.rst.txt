@@ -1,5 +1,0 @@
-
-Это пример
-==========
-`M2TWEOP Lua docs <_static/LuaLib/index.html>`_
-
