@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <windows.h>
+#include "helpers.h"
 using namespace std;
 
 namespace m2tweopStarter
@@ -26,141 +27,47 @@ namespace m2tweopStarter
 
 		bool isEOP = false;
 
-		bool isEOPCommandLine = false;
+		bool isEOPipe = false;
 
 
 		string modPath;
 		int gameVer=0;
 	}dataEOP;
 
-
-	void setGameVer(char* commandLine)
+	bool parsePipeMessage(const string&msg)
 	{
-		char* folderStart = commandLine;
-		folderStart = strstr(folderStart, "*");
-		if (folderStart == nullptr)return;
-
-		char* folderEnd = folderStart + 1;
-		folderEnd = strstr(folderEnd, "*");
-		if (folderEnd == nullptr)return;
-
-		string modVer;
-		for (char* fld = folderStart + 1; fld < folderEnd; fld++)
+		vector<string>args=helpers::splitString(msg, "\n");
+		if (args.size() != 5)
 		{
-			modVer.push_back(fld[0]);
+			return false;
 		}
 
-		dataEOP.gameVer= stoi(modVer);
+		if (args[0] != "m2tweopStartCommand")
+		{
+			return false;
+		}
+
+		if (args[1] != "eopModFolder:")
+		{
+			return false;
+		}
+		dataEOP.modPath = args[2];
+
+		if (args[3] != "GameVer:")
+		{
+			return false;
+		}
+
+		dataEOP.gameVer = stoi(args[4]);
+		return true;
 	}
-
-	void setModFolder(char* commandLine)
-	{
-		char* folderStart = commandLine;
-		folderStart = strstr(folderStart,"*");
-		if (folderStart == nullptr)return;
-
-		char* folderEnd = folderStart + 1;
-		folderEnd = strstr(folderEnd, "*");
-		if (folderEnd == nullptr)return;
-
-
-		for (char* fld = folderStart + 1; fld < folderEnd; fld++)
-		{
-			dataEOP.modPath.push_back(fld[0]);
-		}
-
-	}
-	void parseEOPCMD(char* commandLine)
-	{
-		char* modFolder = strstr(commandLine, "eopModFolder");
-		if (modFolder != nullptr)
-		{
-			setModFolder(modFolder);
-		}
-		
-		char* gameVer= strstr(commandLine, "eopGameVer");
-		if (gameVer != nullptr)
-		{
-			setGameVer(gameVer);
-		}
-
-	}
-
-
-	void squeeze(char s[], int c) {
-		int i, j;
-
-		for (i = j = 0; s[i] != '\0'; i++)
-			if (s[i] != c)
-				s[j++] = s[i];
-		s[j] = '\0';
-	}
-	void parseCommandLine()
-	{
-		char* cmd = GetCommandLineA();
-		const char eopCMDsteam[] = "m2tweopStartCommand2";
-
-		const char eopCMDdisk[] = "m2tweopStartCommand1";
-
-		char*  eopS=strstr(cmd, eopCMDdisk);
-
-		//disk - 1,steam-2
-		int ver = 0;
-		if (eopS == nullptr)
-		{
-			eopS = strstr(cmd, eopCMDsteam);
-
-			if (eopS == nullptr)
-			{
-				return;
-			}
-			else
-			{
-				ver = 2;
-			}
-		}
-		else
-		{
-			ver = 1;
-		}
-
-		if (ver == 1)
-		{
-
-			int len = strlen(cmd);
-			int symbCount = 0;
-			for (int i = 0; i < len; i++)
-			{
-				if (cmd[i] == '\"')
-				{
-					symbCount++;
-					if (symbCount > 2)
-					{
-						squeeze(cmd+i, '\"');
-						break;
-					}
-				}
-			}
-
-			eopS = strstr(cmd, eopCMDdisk);
-			parseEOPCMD(eopS);
-			memset(eopS, 0, strlen(eopS));
-
-		}
-		else if (ver == 2)
-		{
-			eopS[19] = '1';
-			return;
-		}
-
-		dataEOP.isEOPCommandLine = true;
-	}
-
 	void doM2TWEOP()
 	{
-		parseCommandLine();
+		string resMsg;
+		helpers::doEOPPipe(resMsg,1);
+		dataEOP.isEOPipe=parsePipeMessage(resMsg);
 
-		if (dataEOP.isEOPCommandLine == false)
+		if (dataEOP.isEOPipe == false)
 		{
 			dataEOP.isEOP = false;
 			return;
@@ -211,6 +118,7 @@ namespace m2tweopStarter
 
 	void onCreateDevice(IDirect3DDevice9* pDevice)
 	{
+		doM2TWEOP();
 		if (dataEOP.isEOP == false)
 		{
 			return;

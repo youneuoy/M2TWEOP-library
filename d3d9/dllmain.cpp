@@ -51,13 +51,11 @@ bool WINAPI DllMain(HMODULE hModule, DWORD dwReason, LPVOID lpReserved)
 
 		strcat_s(path, "\\d3d9.dll");
 		d3d9dll = LoadLibraryA(path);
-		if (d3d9dll==NULL)
+		if (d3d9dll == NULL)
 		{
 			MessageBoxA(NULL, "Cannot find d3d9.dll in system directory!", "ATTENTION!", NULL);
 			exit(0);
 		}
-		m2tweopStarter::doM2TWEOP();
-
 
 
 		// Get function addresses

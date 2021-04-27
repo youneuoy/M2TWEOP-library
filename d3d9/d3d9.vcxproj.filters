@@ -53,6 +53,9 @@
     <ClCompile Include="m2tweopStarter.cpp">
       <Filter>m2tweop</Filter>
     </ClCompile>
+    <ClCompile Include="helpers.cpp">
+      <Filter>m2tweop</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3d9.h" />
@@ -105,6 +108,9 @@
       <Filter>d3dSTD</Filter>
     </ClInclude>
     <ClInclude Include="m2tweopStarter.h">
+      <Filter>m2tweop</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers.h">
       <Filter>m2tweop</Filter>
     </ClInclude>
   </ItemGroup>

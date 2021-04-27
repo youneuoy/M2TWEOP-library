@@ -28,7 +28,7 @@ public:
 
 	BOOL Load(string* pczNameLibrary, string* pczNameProcedure, char* sCmp = nullptr)
 	{
-		m_strNameProcedure = pczNameProcedure->c_str();
+		m_strNameProcedure = *pczNameProcedure;
 		m_pProc = NULL;
 		strCmp = sCmp;
 		HANDLE hModule;

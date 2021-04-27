@@ -14,9 +14,9 @@ void findIntParam(param_type* arg, string s, string param)
 class technicalStringsFuncs
 {
 public:
-	static void findOWParam(int* arg, string s, string param);
-	static void readStringInQuotes(string* arg, string s, string param);
-	static void findFloatParam(float* arg, string s, string param);
+	static void findOWParam(int* arg, const string& s, const string& param);
+	static void readStringInQuotes(string* arg, const string & s, const string& param);
+	static void findFloatParam(float* arg, const string &s, const string &param);
 private:
 	static void replaceAll(string& s, const string& search, const string& replace);
 };

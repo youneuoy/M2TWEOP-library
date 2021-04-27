@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "technicalStringsFuncs.h"
 
-void technicalStringsFuncs::findOWParam(int* arg, string s, string param)
+void technicalStringsFuncs::findOWParam(int* arg, const string &s, const string & param)
 {
 	if (s.find(param) != string::npos && s[0] != ';')
 	{
@@ -12,12 +12,12 @@ void technicalStringsFuncs::findOWParam(int* arg, string s, string param)
 	}
 }
 
-void technicalStringsFuncs::readStringInQuotes(string* arg, string s, string param)
+void technicalStringsFuncs::readStringInQuotes(string* arg, const string& s, const string &param)
 {
 	if (s.find(param) != string::npos && s[0] != ';')
 	{
-		size_t pos = s.find_first_of("\"");
-		size_t endpos = s.find_last_of("\"");
+		size_t pos = s.find_first_of('\"');
+		size_t endpos = s.find_last_of('\"');
 		if (pos == string::npos || endpos == string::npos || pos == endpos) return;
 		pos++;
 		*arg = s.substr(pos, endpos - pos);
@@ -39,7 +39,7 @@ void technicalStringsFuncs::replaceAll(string& s, const string& search, const st
 	}
 }
 
-void technicalStringsFuncs::findFloatParam(float* arg, string s, string param)
+void technicalStringsFuncs::findFloatParam(float* arg, const string &s, const string &param)
 {
 	if (s.find(param) != string::npos && s[0] != ';')
 	{

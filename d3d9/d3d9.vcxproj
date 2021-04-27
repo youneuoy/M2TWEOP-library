@@ -64,6 +64,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="helpers.cpp" />
     <ClCompile Include="IDirect3D9Ex.cpp" />
     <ClCompile Include="IDirect3DCubeTexture9.cpp" />
     <ClCompile Include="IDirect3DDevice9Ex.cpp" />
@@ -85,6 +86,7 @@
   <ItemGroup>
     <ClInclude Include="AddressLookupTable.h" />
     <ClInclude Include="d3d9.h" />
+    <ClInclude Include="helpers.h" />
     <ClInclude Include="IDirect3D9Ex.h" />
     <ClInclude Include="IDirect3DCubeTexture9.h" />
     <ClInclude Include="IDirect3DDevice9Ex.h" />
