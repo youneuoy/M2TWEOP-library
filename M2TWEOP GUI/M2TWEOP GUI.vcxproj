@@ -167,9 +167,11 @@
     <ClCompile Include="..\3rd\imguiDocking\imgui_impl_glfw.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_impl_opengl2.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\3rd\imguiDocking\imgui_md.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_stdlib.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_tables.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_widgets.cpp" />
+    <ClCompile Include="..\3rd\imguiDocking\md4c.c" />
     <ClCompile Include="aboutUI.cpp" />
     <ClCompile Include="dataG.cpp" />
     <ClCompile Include="gameStarter.cpp" />
@@ -191,10 +193,12 @@
     <ClInclude Include="..\3rd\imguiDocking\imgui_impl_win32.h" />
     <ClInclude Include="..\3rd\imguiDocking\imgui_internal.h" />
     <ClInclude Include="..\3rd\imguiDocking\imgui_markdown.h" />
+    <ClInclude Include="..\3rd\imguiDocking\imgui_md.h" />
     <ClInclude Include="..\3rd\imguiDocking\imgui_stdlib.h" />
     <ClInclude Include="..\3rd\imguiDocking\imstb_rectpack.h" />
     <ClInclude Include="..\3rd\imguiDocking\imstb_textedit.h" />
     <ClInclude Include="..\3rd\imguiDocking\imstb_truetype.h" />
+    <ClInclude Include="..\3rd\imguiDocking\md4c.h" />
     <ClInclude Include="..\3rd\imguiDocking\stb_image.h" />
     <ClInclude Include="..\3rd\imgui\imgui_markdown.h" />
     <ClInclude Include="aboutUI.h" />
