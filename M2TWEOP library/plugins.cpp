@@ -712,7 +712,7 @@ void plugins::initEvNames()
 int plugin::init(string* nameP)
 {
 	//set the name of plugin(filename)
-	name = nameP->c_str();
+	name = *nameP;
 
 	//load the init function and call it
 	string plPath = plugins::pluginsCfg.pluginsPath + "\\";

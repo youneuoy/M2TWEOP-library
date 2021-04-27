@@ -3,6 +3,9 @@
 class helpers
 {
 public:
+	//make formated string
+	static std::string makeFString(const char* fmt, ...);
+
 	static bool loadTexture(const char* filename, GLuint* out_texture, int* out_width, int* out_height);
 
 	static void setWindowIcon(GLFWwindow*window);
@@ -14,9 +17,11 @@ public:
 
 	static ImFont* findFont(const char* name);
 
-	static bool runGame(const char* exeFile, const char* exeParam);
+	static bool runGame(const char* exeFile, const char* exeParam,const string& eopArgs,bool isPipeNeed);
 
 	static bool addModPathArg(string& args, int gameMode);
+
+	static bool doPipe(const string &message);
 
 	static bool selectGameExe(int gameMode);
 

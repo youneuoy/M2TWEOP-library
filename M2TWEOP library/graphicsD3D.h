@@ -17,7 +17,6 @@ public:
 		HWND Window = nullptr;
 
 
-
 		//if imgui initialized
 		bool ImInitialized = false;
 		bool ifMouseOrKeyBoardAtImgui = false;

@@ -2,6 +2,33 @@
 #include "dataG.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+std::string helpers::makeFString(const char* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	std::vector<char> v(1024);
+	while (true)
+	{
+		va_list args2;
+		va_copy(args2, args);
+		int res = vsnprintf(v.data(), v.size(), fmt, args2);
+		if ((res >= 0) && (res < static_cast<int>(v.size())))
+		{
+			va_end(args);
+			va_end(args2);
+			return std::string(v.data());
+		}
+		size_t size;
+		if (res < 0)
+			size = v.size() * 2;
+		else
+			size = static_cast<size_t>(res) + 1;
+		v.clear();
+		v.resize(size);
+		va_end(args2);
+	}
+}
+
 bool helpers::loadTexture(const char* filename, GLuint* out_texture, int* out_width, int* out_height)
 {
 	// Load from file
@@ -80,7 +107,7 @@ ImFont* helpers::findFont(const char* name)
 	return findFont("mainFont");
 }
 
-bool helpers::runGame(const char* exeFile, const char* exeParam)
+bool helpers::runGame(const char* exeFile, const char* exeParam, const string& eopArgs, bool isPipeNeed)
 {
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
@@ -93,15 +120,15 @@ bool helpers::runGame(const char* exeFile, const char* exeParam)
 	line+= "\"";
 	line += dataG::data.gameData.gamePath;
 	line += "\"";
-	if (dataG::data.modData.useM2TWEOP == true)
+	/*if (dataG::data.modData.useM2TWEOP == true)
 	{
 		line += "\"";
-	}
+	}*/
 	line += exeParam;
-	if (dataG::data.modData.useM2TWEOP == true)
+	/*if (dataG::data.modData.useM2TWEOP == true)
 	{
 		line += "\"";
-	}
+	}*/
 	// Start the child process.
 	if (!CreateProcessA(NULL,   // No module name (use command line)
 		const_cast<char*>(line.c_str()),        // Command line
@@ -128,7 +155,11 @@ bool helpers::runGame(const char* exeFile, const char* exeParam)
 
 	CloseHandle(pi.hProcess);
 	CloseHandle(pi.hThread);
-	return true;
+
+	if (isPipeNeed==true)
+	{
+		doPipe(eopArgs);
+	}
 }
 
 bool helpers::addModPathArg(string& args, int gameMode)
@@ -157,6 +188,45 @@ bool helpers::addModPathArg(string& args, int gameMode)
 	}
 
 	return true;
+}
+
+bool helpers::doPipe(const string& message)
+{
+	HANDLE hPipe;
+	DWORD dwWritten;
+
+	do
+	{
+		hPipe = CreateFile(TEXT("\\\\.\\pipe\\M2TWEOPStartPipe"),
+			GENERIC_READ | GENERIC_WRITE,
+			0,
+			NULL,
+			OPEN_EXISTING,
+			0,
+			NULL);
+	} while (hPipe == INVALID_HANDLE_VALUE);
+	if (hPipe != INVALID_HANDLE_VALUE)
+	{
+
+
+		BOOL writeRes;
+		do
+		{
+			writeRes=WriteFile(hPipe,
+				message.c_str(),
+				message.size() + 1,   // = length of string + terminating '\0' !!!
+				&dwWritten,
+				NULL);
+
+		} while (writeRes == false);
+
+
+		FlushFileBuffers(hPipe);
+		DisconnectNamedPipe(hPipe);
+		CloseHandle(hPipe);
+	}
+
+	return false;
 }
 
 int makeFullPath(string& path)
@@ -239,6 +309,7 @@ bool helpers::selectGameExe(int gameMode)
 bool helpers::compareFiles(string& oneFile, string& nextFile)
 {
 	ifstream in1(oneFile, ios::binary);
+
 	ifstream in2(nextFile, ios::binary);
 	if (in1.is_open() == false)
 	{
@@ -248,6 +319,8 @@ bool helpers::compareFiles(string& oneFile, string& nextFile)
 	}
 	if (in2.is_open() == false)
 	{
+		MessageBoxA(NULL, "Cannot run M2TWEOP, missing d3d9.dll. Reinstall it for M2TWEOP(dont try any standard d3d9.dll or files from internet, M2TWEOP use custom one).", "ERROR", MB_OK);
+		exit(0);
 		in1.close();
 		in2.close();
 		return false;

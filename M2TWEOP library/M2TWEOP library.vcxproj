@@ -76,11 +76,13 @@
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;E:\libs;E:\libs\hook\release;$(LibraryPath)</LibraryPath>
     <IncludePath>$(DXSDK_DIR)\include;E:\headers\BeaEngine;E:\headers\AsmJit;$(SolutionDir)\3rd\imgui;E:\libs\hook;$(IncludePath)</IncludePath>
+    <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;E:\libs;E:\libs\hook\release;$(LibraryPath)</LibraryPath>
     <IncludePath>$(DXSDK_DIR)\include;E:\headers\BeaEngine;E:\headers\AsmJit;$(SolutionDir)\3rd\imgui;E:\libs\hook;$(IncludePath)</IncludePath>
+    <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

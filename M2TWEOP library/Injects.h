@@ -329,7 +329,6 @@ public:
 	void SetOriginalSizeCode();
 	void SetlSizeCode();
 protected:
-	UINT32 gamever;
 	float sizeX;
 	float sizeY;
 };

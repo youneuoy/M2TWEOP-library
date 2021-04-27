@@ -41,7 +41,7 @@ bool gameStarter::startGame()
 	{
 		if (initM2TWEOP() == false)
 		{
-			MessageBoxA(NULL, "Cannot init M2TWEOP.", "ERROR", MB_OK);
+			MessageBoxA(NULL, "Cannot init M2TWEOP. START M2TWEOP WITH ADMIN RIGHTS IF IT NOT WORK.", "ERROR", MB_OK);
 			exit(0);
 		}
 		if (dataG::data.modData.useVanillaConfig == true)
@@ -73,12 +73,24 @@ bool gameStarter::startGame()
 
 bool gameStarter::runGameExe()
 {
-	if (dataG::data.modData.useM2TWEOP == true)
+	string eopArgs;
+	bool isEopNeeded = dataG::data.modData.useM2TWEOP;
+	if (isEopNeeded == true)
 	{
+
 		string currentPath;
 		helpers::getCurrentPath(currentPath);
+		
+		eopArgs=helpers::makeFString(
+		"%s\n%s\n%s\n%s\n%s",
+		"m2tweopStartCommand",
+		"eopModFolder:",
+		 currentPath.c_str(),
+		"GameVer:",
+		to_string(dataG::data.gameData.gameVer).c_str()
+		);
 
-		dataG::data.gameData.gameArgs += "m2tweopStartCommand";
+		/*dataG::data.gameData.gameArgs += "m2tweopStartCommand";
 		dataG::data.gameData.gameArgs += to_string(dataG::data.gameData.gameVer);
 
 		dataG::data.gameData.gameArgs += "eopModFolder=*";
@@ -87,11 +99,11 @@ bool gameStarter::runGameExe()
 
 		dataG::data.gameData.gameArgs += "eopGameVer=*";
 		dataG::data.gameData.gameArgs += to_string(dataG::data.gameData.gameVer);
-		dataG::data.gameData.gameArgs += "*";
+		dataG::data.gameData.gameArgs += "*";*/
 	}
 
 
-	helpers::runGame(dataG::data.gameData.gamePath.c_str(), dataG::data.gameData.gameArgs.c_str());
+	helpers::runGame(dataG::data.gameData.gamePath.c_str(), dataG::data.gameData.gameArgs.c_str(), eopArgs, isEopNeeded);
 
 	exit(0);
 
@@ -111,7 +123,7 @@ bool gameStarter::initM2TWEOP()
 	{
 		if (CopyFileA(wrapd3dS.c_str(), d3dS.c_str(), FALSE) == false)
 		{
-			MessageBoxA(NULL, "Cannot run M2TWEOP, d3d9.dll replasing error! Try to delete d3d9.dll in game folder or copy d3d.dll from M2TWEOP archive. ", "ERROR", MB_OK);
+			MessageBoxA(NULL, "Cannot run M2TWEOP, d3d9.dll replasing error! Try to delete d3d9.dll in game folder or copy d3d.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
 			exit(0);
 		}
 	}

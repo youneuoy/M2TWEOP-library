@@ -35,23 +35,60 @@ NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM w
 
 	return CallWindowProc(dataS.hookD.onewGameWndProc, hWnd, uMsg, wParam, lParam);
 }
+
+struct
+{
+	float drawInfoEndTime = 0;
+	bool drawEOPStartInfo=false;
+
+	ImVec2 beginCoords{ 0.f,0.f };
+}drawParams;
 NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 {
+
 	plugins::onEndScene(pDevice);
 
+	if (drawParams.drawEOPStartInfo == true)
+	{
+		float currTime = (float)ImGui::GetTime();
 
+		if (currTime < drawParams.drawInfoEndTime)
+		{
+			static ImGuiWindowFlags transparentF = ImGuiWindowFlags_NoBackground| ImGuiWindowFlags_NoDecoration| ImGuiWindowFlags_AlwaysAutoResize| ImGuiWindowFlags_NoMove;
+
+			ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+			ImGui::Begin("eopInitTitle", nullptr, transparentF);
+
+			ImGui::Text("M2TWEOP 2.0 TEST");
+
+			ImGui::End();
+		}
+		else
+		{
+			drawParams.drawEOPStartInfo = false;
+		}
+	}
+
+	/*ImGui::Begin("test");
+
+	if (ImGui::Button("fight"))
+	{
+		_asm
+		{
+			push 1
+			mov ecx, 0x02BF8550
+			mov eax,0x0044edb0
+			call eax
+			add esp, 4
+		}
+	}
+	ImGui::End();*/
 	return;
 }
 NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-
-
 	return CallWindowProc(dataS.hookD.oWndProc, hWnd, uMsg, wParam, lParam);
 }
-
-
-
-
 
 
 NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
@@ -81,6 +118,9 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 	ImGui_ImplDX9_Init(pDevice);
 
 	dataS.ImInitialized = true;
+
+	drawParams.drawEOPStartInfo = true;
+	drawParams.drawInfoEndTime = (float)ImGui::GetTime()+20.0f;
 	return;
 }
 
