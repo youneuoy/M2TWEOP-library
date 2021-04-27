@@ -34,6 +34,9 @@
     <Filter Include="Исходные файлы\ui\mod settings">
       <UniqueIdentifier>{badabc94-ff79-48af-afcc-d55647c7fb6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rd\md4c">
+      <UniqueIdentifier>{3b1b0c7a-5953-470e-8c8e-4bfaaf43fda5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -95,6 +98,12 @@
     </ClCompile>
     <ClCompile Include="..\3rd\imguiDocking\imgui_impl_opengl2.cpp">
       <Filter>3rd\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imguiDocking\imgui_md.cpp">
+      <Filter>3rd\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imguiDocking\md4c.c">
+      <Filter>3rd\md4c</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +187,12 @@
     </ClInclude>
     <ClInclude Include="..\3rd\imguiDocking\stb_image.h">
       <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\imgui_md.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\md4c.h">
+      <Filter>3rd\md4c</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

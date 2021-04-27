@@ -1,105 +1,98 @@
 #pragma once
-#include "imgui_markdown.h"
 #include "helpers.h"
+#include "imgui_md.h"
+#include "Shellapi.h"
 namespace aboutUI
 {
-#include "ImGui.h"                // https://github.com/ocornut/imgui
-#include "imgui_markdown.h"       // https://github.com/juliettef/imgui_markdown
-#include "IconsFontAwesome5.h"    // https://github.com/juliettef/IconFontCppHeaders
+	//Fonts and images (ImTextureID) must be loaded in other place,
+	//see https://github.com/ocornut/imgui/blob/master/docs/FONTS.md
 
-	// Following includes for Windows LinkCallback
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#include "Shellapi.h"
-#include <string>
-	void LinkCallback(ImGui::MarkdownLinkCallbackData data_);
-	inline ImGui::MarkdownImageData ImageCallback(ImGui::MarkdownLinkCallbackData data_);
-
-	static ImGui::MarkdownConfig mdConfig;
-
-	void LinkCallback(ImGui::MarkdownLinkCallbackData data_)
+	struct
 	{
-		std::string url(data_.link, data_.linkLength);
-		if (!data_.isImage)
-		{
-			ShellExecuteA(NULL, "open", url.c_str(), NULL, NULL, SW_SHOWNORMAL);
-		}
+		ImFont* g_font_regular = nullptr;
+		ImFont* g_font_bold = nullptr;
+		ImFont* g_font_bold_large = nullptr;
+	}fontsS;
+
+	void setFonts()
+	{
+		fontsS.g_font_regular = helpers::findFont("markH1");
+		fontsS.g_font_bold = helpers::findFont("markH2");
+		fontsS.g_font_bold_large = helpers::findFont("markH3");
 	}
+	extern ImTextureID g_texture1;
 
-	inline ImGui::MarkdownImageData ImageCallback(ImGui::MarkdownLinkCallbackData data_)
+	struct my_markdown : public imgui_md
 	{
-		// In your application you would load an image based on data_ input. Here we just use the imgui font texture.
-	   // ImTextureID image = ImGui::GetIO().Fonts->TexID;
-		GLImage* imgFinded = helpers::findImage(data_.link, data_.linkLength);
 
-		ImTextureID image = (void*)(intptr_t)imgFinded->image;
 
-		// > C++14 can use ImGui::MarkdownImageData imageData{ true, false, image, ImVec2( 40.0f, 20.0f ) };
-		ImGui::MarkdownImageData imageData;
-		imageData.isValid = true;
-		imageData.useLinkCallback = false;
-		imageData.user_texture_id = image;
-		imageData.size = ImVec2((float)imgFinded->xSize, (float)imgFinded->ySize);
-
-		// For image resize when available size.x > image width, add
-		ImVec2 const contentSize = ImGui::GetContentRegionAvail();
-		if (imageData.size.x > contentSize.x)
+		ImFont* get_font() const override
 		{
-			float const ratio = imageData.size.y / imageData.size.x;
-			imageData.size.x = contentSize.x;
-			imageData.size.y = contentSize.x * ratio;
-		}
+			if (m_is_table_header) {
+				return fontsS.g_font_bold;
+			}
 
-		return imageData;
-	}
-
-	void ExampleMarkdownFormatCallback(const ImGui::MarkdownFormatInfo& markdownFormatInfo_, bool start_)
-	{
-		// Call the default first so any settings can be overwritten by our implementation.
-		// Alternatively could be called or not called in a switch statement on a case by case basis.
-		// See defaultMarkdownFormatCallback definition for furhter examples of how to use it.
-		ImGui::defaultMarkdownFormatCallback(markdownFormatInfo_, start_);
-
-		switch (markdownFormatInfo_.type)
-		{
-			// example: change the colour of heading level 2
-		case ImGui::MarkdownFormatType::HEADING:
-		{
-			if (markdownFormatInfo_.level == 2)
+			switch (m_hlevel)
 			{
-				if (start_)
-				{
-					ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyle().Colors[ImGuiCol_TextDisabled]);
+			case 0:
+				return m_is_strong ? fontsS.g_font_bold : fontsS.g_font_regular;
+			case 1:
+				return fontsS.g_font_bold_large;
+			default:
+				return fontsS.g_font_bold;
+			}
+		};
+
+
+		void open_url() const override
+		{
+			//platform dependent code
+			ShellExecuteA(NULL, "open", m_href.c_str(), NULL, NULL, SW_SHOWNORMAL);
+
+		}
+
+
+		bool get_image(image_info& nfo) const override
+		{
+
+			GLImage* imgFinded = helpers::findImage(m_href.c_str(), strlen(m_href.c_str()));
+
+
+			nfo.texture_id = (void*)(intptr_t)imgFinded->image;
+			nfo.size = ImVec2((float)imgFinded->xSize, (float)imgFinded->ySize);
+						nfo.uv0 = { 0,0 };
+			nfo.uv1 = { 1,1 };
+			nfo.col_tint = { 1,1,1,1 };
+			nfo.col_border = { 0,0,0,0 };
+
+
+			return true;
+		}
+
+		void html_div(const std::string& dclass, bool e) override
+		{
+			if (dclass == "red") {
+				if (e) {
+					m_table_border = false;
+					ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 0, 0, 255));
 				}
-				else
-				{
+				else {
 					ImGui::PopStyleColor();
+					m_table_border = true;
 				}
 			}
-			break;
 		}
-		default:
-		{
-			break;
-		}
-		}
+	};
+
+
+	//call this function to render your markdown
+	void markdown(const char* str, const char* str_end)
+	{
+		static my_markdown s_printer;
+		s_printer.print(str, str_end);
 	}
 
-	void Markdown(const std::string& markdown_)
-	{
-		// You can make your own Markdown function with your prefered string container and markdown config.
-		// > C++14 can use ImGui::MarkdownConfig mdConfig{ LinkCallback, NULL, ImageCallback, ICON_FA_LINK, { { H1, true }, { H2, true }, { H3, false } }, NULL };
-		mdConfig.linkCallback = LinkCallback;
-		mdConfig.tooltipCallback = NULL;
-		mdConfig.imageCallback = ImageCallback;
-		mdConfig.linkIcon = ICON_FA_LINK;
-		mdConfig.headingFormats[0] = { helpers::findFont("markH1"), true };
-		mdConfig.headingFormats[1] = { helpers::findFont("markH2"), true };
-		mdConfig.headingFormats[2] = { helpers::findFont("markH3"), false };
-		mdConfig.userData = NULL;
-		mdConfig.formatCallback = ExampleMarkdownFormatCallback;
-		ImGui::Markdown(markdown_.c_str(), markdown_.length(), mdConfig);
-	}
+
 
 	void MarkdownExample()
 	{
@@ -114,6 +107,8 @@ The functionality of the program is divided into two parts
 1. Making changes to the game code when starting MTW2 (changing various engine limits, finer tuning, etc.)
 2. Manipulations with the game after its launch.
 
+
+
 ### Features
 
 * Hugely expanded scripting system
@@ -121,13 +116,24 @@ The functionality of the program is divided into two parts
 * Allows you to set your own limits for the number of religions, ancillaries, block resizing units
 * Set the boundaries of the number of soldiers in units, the size of the battle map and the cost of siege equipment (rams, ladders, siege towers)
 * Make any characters immortal and change the way their age is displayed on the screen
-* Set your own prefix for units with the *legio* parameter
 * Fixed crash when using berserkers in battle
-* Added the ability to repeatedly upgrade the guard of characters.
+* Added ability to write your own add-ons in C ++. The library exports many different functions.
+* and many many more
 
-## Versions
-* [M2TWEOP Library](https://github.com/youneuoy/M2TWEOP-library)
-* [M2TWEOP Plugins](https://github.com/youneuoy/M2TWEOP-luaPlugin)
+### Creators
+* **youneuoy** - project founder, main developer
+* **Jojo00182** - did a lot of great stuff and much more to come
+  
+### Contributors
+* **Edmond** - project idea, first attempts to implement hotseats with online battles
+* **Xamax** - lots of ideas and testing
+* **Erken** - lots of ideas and testing
+* **DinarMayor** - ideas and testing
+* **Medik** - help in creating documentation
+
+## Project composition
+* [M2TWEOP Library](https://github.com/youneuoy/M2TWEOP-library) - main project
+* [M2TWEOP LUA plugin](https://github.com/youneuoy/M2TWEOP-luaPlugin) - a plugin that adds the ability to script in the lua language (from game logic to extending the interface), add new console to the game and much more.
 
 ### Compatibility
 
@@ -135,36 +141,108 @@ This program works with game versions 1.5 (disk version) and 1.52 (steam version
 
 ### Usage
 
-All program settings are set in the config files and are applied when the game starts. You can read more about this on the [forums](https://www.twcenter.net/forums/showthread.php?803575-Download-links-important-information-and-instructions-for-the-program-in-pictures).
+All program settings are set in the config files and scripts and are applied when the game starts. You can read more about this on the [forums](https://www.twcenter.net/forums/showthread.php?803575-Download-links-important-information-and-instructions-for-the-program-in-pictures).
 All changes made work correctly in an ongoing campaign, nothing breaks during updates, it’s enough just not to activate new features.
 
 If you use an antivirus, add the program to the exceptions! There may be false positives.
 
+### License 
+The project uses the [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.html).
+
 ## Build
-M2TWEOP is developed in C++ and Assembly. You can get support for building/developing on the [Discord](https://discord.gg/AfFNeQhf).
+M2TWEOP is developed in C++ and Assembly. You can get support for building/developing on the our [Discord](https://discord.gg/Epqjm8u2WK) server.
 
-## Documentation
-Detailed documentation on all features can be found on the [Total War Center Forums](https://www.twcenter.net/forums/showthread.php?803575-Download-links-important-information-and-instructions-for-the-program-in-pictures).
-
-You can find videos on various features on [YouTube](https://www.youtube.com/channel/UCMyHomaKeeGR4ZPGrBo9dYw).
-
-Come join the [Discord](https://discord.gg/AfFNeQhf) if you have questions or suggestions.
-
-Also see - **M2TW Ultimate Docudemons 4.0.xls** (included in this repo) for more information on documentation for specific functions.
-
-### Support the project
-
-* [Patreon](https://www.patreon.com/m2tweop)
+## Support the project
 
 It would be nice if all interested people supported the project in an accessible way (for example, you can test various changes, participate in planning new game mechanics or discuss them, sponsor development with money, etc.).
+* Come join the our [Discord](https://discord.gg/Epqjm8u2WK) server if you have questions or suggestions.
+* [Patreon](https://www.patreon.com/m2tweop)
+
 
 With the help of this program, it will probably be possible someday to give modders the opportunity to change the MTW2 gameplay beyond recognition.
 
-### Disclaimer
+
+## Disclaimer
 
 Please do not include the program in your modifications without my permission (and I will allow, if you ask). I just want to have some usage statistics.
 
+## Acknowledgments
+* To all users participating in the discussion and improvement of the project.
+* Users and administration of the forum https://gamehacklab.ru/. Without them, I would not have learned to do this kind of thing.
+* d3d9.dll wrapper based on this repository: https://github.com/elishacloud/DirectX-Wrappers
+* Used GUI library: https://github.com/ocornut/imgui
+* Used LUA binding: https://github.com/ThePhD/sol2
+* ImGui lua binding is based on this repository:
+https://github.com/MSeys/sol2_ImGui_Bindings
+
+## Version History
+* **v.2.0 test1:**
+Added lua plugin and a huge number of functions for it.
+Fixed many crashes and issues.
+Optimization.
+* **v.1.18:**
+Completion of the diplomacy system, adding the ability to check vassal relationships using scripts
+The ability to make forts part of the eternal, and part - temporary
+The ability of change the heir
+The ability to automatically create historical battles
+The ability to automatically edit armies on a strategic map in accordance with the results of online battle
+Fixed incorrect display of the age of the characters on the disk version of the game
+Now you can run the program and the game using the .bat file (not all of the new launch methods worked correctly)
+* **v.1.17:**
+fixed crash if the character has no name in the game
+added ability to partially disable logging
+added the ability to use the console command "change faction" in a single player game
+improved scripting system
+added ability to make factions vassals of other factions
+Added the ability to strategically view the battle map (Z key during the battle)
+* **v.1.16:**
+added launch of the game from the program
+added ability to replace legio prefix for units
+improved scripting system
+added ability to change characters labels
+* **v.1.15:**
+fixed several bugs
+added the ability to upgrade guard of characters
+* **v.1.14:**
+Added the ability to set the cost of siege equipment (rams, ladders, siege towers).
+* **v.1.13:**
+Fixed crash when using berserkers in the game.
+Added the ability to quickly modify an additional file.
+* **v.1.12:**
+Improved editing descr_buildings (extended range of possible values)
+Added the ability to make immortal characters and change the display settings for age.
+* **v.1.11:**
+Added several patches that apply to the game when the program starts, as well as the ability to configure them in the config file.
+* **v.1.10:**
+parameters from the game were not always correctly read, fixed.
+* **v.1.09:**
+improved generation of descr_battle.txt. Added the conclusion of the battle season (winter or summer) and the time of the battle, as well as the portrait, model and special ability of the general.
+* **v.1.08:**
+improved generation of descr_battle.txt. Now coordinates of deployment of armies are displayed.
+* **v.1.07:**
+improved generation of descr_battle.txt.
+* **v.1.06:**
+now, when generating descr_battle.txt, a list of fractions, the year of the battle and a little more standard information is written.
+* **v.1.05:**
+Added display of coordinates of each of the fighting armies when generating descr_battle.txt
+* **v1.04:**
+The system of auto-calculation of losses has been changed, the units of the generals are removed at the same time, but the generals themselves can be considered live for a certain number of moves.
+This is done to avoid crashes.
+It is recommended that when manually killing generals, this is always done with a daw "mark if there is only one general in the stack." Otherwise, departures during the campaign are possible.
+* **v1.03:**
+Now the program only works with the Steam version of MTW2.
+'Temporarily' ;) cut out the Russian language.
+* **v1.02:**
+Fixed crash during loss auto transfer.
+Fixed auto-accrual of losses, they could not be accrued to all units.
+* **v1.01:**
+Added general traits (including hidden traits) when generating descr_battle.txt.
+Added the ability to automatically transfer losses after an online battle.
+Improving the stability of the program.
+* **v1.0:**
+First release.
 )";
-		Markdown(markdownText);
+		const char* end_ptr = markdownText.c_str() + markdownText.size();
+		markdown(markdownText.c_str(), end_ptr);
 	}
 };
