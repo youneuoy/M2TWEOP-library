@@ -1,5 +1,6 @@
 #include "gameStarter.h"
 
+#include "gameRunnerUI.h"
 bool gameStarter::startGame()
 {
 //SetCurrentDirectoryA("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Medieval II Total War\\mods\\teutonic");
@@ -89,38 +90,39 @@ bool gameStarter::runGameExe()
 		to_string(dataG::data.gameData.gameVer).c_str()
 		);
 
-		/*dataG::data.gameData.gameArgs += "m2tweopStartCommand";
-		dataG::data.gameData.gameArgs += to_string(dataG::data.gameData.gameVer);
-
-		dataG::data.gameData.gameArgs += "eopModFolder=*";
-		dataG::data.gameData.gameArgs += currentPath;
-		dataG::data.gameData.gameArgs += "*";
-
-		dataG::data.gameData.gameArgs += "eopGameVer=*";
-		dataG::data.gameData.gameArgs += to_string(dataG::data.gameData.gameVer);
-		dataG::data.gameData.gameArgs += "*";*/
 	}
 
+	//mod
+	if (dataG::data.gameData.gameMode == 7&& isEopNeeded)
+	{
+		gameRunnerUI::setRunParams(dataG::data.gameData.gamePath, dataG::data.gameData.gameArgs, eopArgs, isEopNeeded);
+	}
+	else
+	{
+		helpers::runGame(dataG::data.gameData.gamePath.c_str(), dataG::data.gameData.gameArgs.c_str(), eopArgs, isEopNeeded);
+		exit(0);
+	}
 
-	helpers::runGame(dataG::data.gameData.gamePath.c_str(), dataG::data.gameData.gameArgs.c_str(), eopArgs, isEopNeeded);
-
-	exit(0);
-
-	return false;
+	return true;
 }
 
 bool gameStarter::initM2TWEOP()
 {
+	using namespace boost::filesystem;
 	if (dataG::data.modData.useM2TWEOP == false)
 	{
 		return true;
 	}
 
-	string wrapd3dS = "d3d9.dll";
-	string d3dS = "..\\..\\d3d9.dll";
-	if (helpers::compareFiles(d3dS, wrapd3dS)==false)
+	path wrapd3dS = system_complete("d3d9.dll");
+
+	path d3dS = system_complete("..\\..\\d3d9.dll");
+	string wrapd3dStr = wrapd3dS.string();
+	string d3dStr = d3dS.string();
+
+	if (helpers::compareFiles(d3dStr, wrapd3dStr)==false)
 	{
-		if (CopyFileA(wrapd3dS.c_str(), d3dS.c_str(), FALSE) == false)
+		if (copy_file(wrapd3dS, d3dS, copy_option::overwrite_if_exists) == false)
 		{
 			MessageBoxA(NULL, "Cannot run M2TWEOP, d3d9.dll replasing error! Try to delete d3d9.dll in game folder or copy d3d.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
 			exit(0);

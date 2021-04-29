@@ -23,6 +23,7 @@ public:
 			string configName;
 			bool useVanillaConfig = true;
 			bool useM2TWEOP = false;
+			bool hideLauncherAtStart = false;
 
 			bool useCustomD3D = false;
 		}modData;
@@ -47,11 +48,13 @@ public:
 		{
 			GLImage empty{ .path = "empty" };
 			GLImage logoAbout;
+			GLImage logoBad;
 		}images;
 		std::vector< GLImage*>staticImagesCollection =
 		{
 			&dataG::dataGS::images.empty,
-			&dataG::dataGS::images.logoAbout
+			&dataG::dataGS::images.logoAbout,
+			&dataG::dataGS::images.logoBad
 		};
 
 

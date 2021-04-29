@@ -9,6 +9,10 @@ namespace managerG
 
 		helpers::loadTexture(dataG::data.images.logoAbout.path.c_str(),&dataG::data.images.logoAbout.image,
 			&dataG::data.images.logoAbout.xSize, &dataG::data.images.logoAbout.ySize);
+
+		dataG::data.images.logoBad.path = "eopData/images/deathDance.png";
+		helpers::loadTexture(dataG::data.images.logoBad.path.c_str(), &dataG::data.images.logoBad.image,
+			&dataG::data.images.logoBad.xSize, &dataG::data.images.logoBad.ySize);
 	}
 	void loadFont(fontS* fnt, const char* path, const char* name, float fontSize)
 	{

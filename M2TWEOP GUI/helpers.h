@@ -21,8 +21,8 @@ public:
 
 	static bool addModPathArg(string& args, int gameMode);
 
-	static bool doPipe(const string &message);
-
+	static bool doPipe(const string &message, int waitSeconds);
+	static void removePipe();
 	static bool selectGameExe(int gameMode);
 
 	static bool compareFiles(string& oneFile, string& nextFile);

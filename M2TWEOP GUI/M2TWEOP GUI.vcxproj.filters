@@ -105,6 +105,12 @@
     <ClCompile Include="..\3rd\imguiDocking\md4c.c">
       <Filter>3rd\md4c</Filter>
     </ClCompile>
+    <ClCompile Include="gameRunnerUI.cpp">
+      <Filter>Исходные файлы\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="markdownHelper.cpp">
+      <Filter>Исходные файлы\helpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -117,9 +123,6 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="aboutUI.h">
-      <Filter>Исходные файлы\ui</Filter>
-    </ClInclude>
-    <ClInclude Include="aboutUIHelpers.h">
       <Filter>Исходные файлы\ui</Filter>
     </ClInclude>
     <ClInclude Include="helpers.h">
@@ -193,6 +196,12 @@
     </ClInclude>
     <ClInclude Include="..\3rd\imguiDocking\md4c.h">
       <Filter>3rd\md4c</Filter>
+    </ClInclude>
+    <ClInclude Include="gameRunnerUI.h">
+      <Filter>Исходные файлы\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="markdownHelper.h">
+      <Filter>Исходные файлы\helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

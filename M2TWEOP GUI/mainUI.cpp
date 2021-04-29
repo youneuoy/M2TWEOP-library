@@ -7,7 +7,7 @@
 #include "gameSTDUI.h"
 #include "modSettingsUI.h"
 #include "gameStarter.h"
-
+#include "gameRunnerUI.h"
 namespace mainUI
 {
 	struct
@@ -16,7 +16,21 @@ namespace mainUI
 		bool isGameSTDMenuOpen = false;
 
 		bool isModSettingsUIOpen = false;
+
+		bool isGameRunnerUIOpen = false;
 	}childs;
+	void tryJustStartMod()
+	{
+		if (dataG::data.modData.hideLauncherAtStart == false)
+		{
+			return;
+		}
+
+		dataG::data.gameData.gameMode = 7;
+		gameStarter::startGame();
+		childs.isGameRunnerUIOpen = true;
+		dataG::data.gameData.gameMode = 0;
+	}
 	int draw(bool* isOpen)
 	{
 		if (childs.isAboutOpen == true)
@@ -24,17 +38,21 @@ namespace mainUI
 			aboutUI::drawAboutUi(&childs.isAboutOpen);
 			return 0;
 		}
-		if (childs.isGameSTDMenuOpen == true)
+		else if (childs.isGameSTDMenuOpen == true)
 		{
 			gameSTDUI::drawSTDUI(&childs.isGameSTDMenuOpen);
 			return 0;
 		}
-		if (childs.isModSettingsUIOpen == true)
+		else if (childs.isModSettingsUIOpen == true)
 		{
 			modSettingsUI::drawModSettingsUI(&childs.isModSettingsUIOpen);
 			return 0;
 		}
-
+		else if (childs.isGameRunnerUIOpen == true)
+		{
+			gameRunnerUI::drawUI(&childs.isGameRunnerUIOpen);
+			return 0;
+		}
 		ImVec2 windowSize = ImGui::CalcTextSize("Run vanilla or dlc(no M2TWEOP capabilities)");
 		windowSize.x *= 1.5;
 
@@ -51,6 +69,7 @@ namespace mainUI
 		{
 			dataG::data.gameData.gameMode = 7;
 			gameStarter::startGame();
+			childs.isGameRunnerUIOpen = true;
 			dataG::data.gameData.gameMode = 0;
 		}
 		if (ImGui::Button("Mod settings", helpers::getScreen().centerXButton))
@@ -61,6 +80,10 @@ namespace mainUI
 		if (ImGui::Button("About M2TWEOP", helpers::getScreen().centerXButton))
 		{
 			childs.isAboutOpen = true;
+		}		
+		if (ImGui::Button("Open M2TWEOP documentation", helpers::getScreen().centerXButton))
+		{
+			HINSTANCE res=ShellExecuteA(NULL, "open", "eopData\\helpPages\\index.html", NULL, NULL, SW_SHOWNORMAL);
 		}
 		ImGui::End();
 

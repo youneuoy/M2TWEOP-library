@@ -16,6 +16,7 @@
 
 #include "d3d9.h"
 #include "m2tweopStarter.h"
+
 HRESULT m_IDirect3D9Ex::QueryInterface(REFIID riid, void** ppvObj)
 {
 	if ((riid == IID_IUnknown || riid == WrapperID) && ppvObj)

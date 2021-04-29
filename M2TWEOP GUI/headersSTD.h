@@ -19,7 +19,7 @@
 #include <tchar.h>
 
 using namespace std;
-
+#include <boost/filesystem.hpp>
 struct fontS
 {
 	ImFont* font;
@@ -39,6 +39,7 @@ struct screenS
 	ImVec2 screenSize{ 0,0 };
 
 	ImVec2 screenHalfSize{ 0,0 };
+	ImVec2 screenUpperPos{ 0,0 };
 	ImVec2 centerXButton{ -1.0f,0.0f };
 
 

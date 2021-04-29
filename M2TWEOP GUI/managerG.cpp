@@ -39,6 +39,11 @@ namespace managerG
 				getline(f1, s);
 				dataG::data.modData.useM2TWEOP = stoi(s);
 			}
+			else if (s == "Hide_launcher:")
+			{
+				getline(f1, s);
+				dataG::data.modData.hideLauncherAtStart = stoi(s);
+			}
 		}
 
 
@@ -55,6 +60,8 @@ namespace managerG
 		f1 << dataG::data.modData.configName << endl;
 		f1 << "Use_M2TWEOP:" << endl;
 		f1 << dataG::data.modData.useM2TWEOP << endl;
+		f1 << "Hide_launcher:" << endl;
+		f1 << dataG::data.modData.hideLauncherAtStart << endl;
 
 
 		f1.close();

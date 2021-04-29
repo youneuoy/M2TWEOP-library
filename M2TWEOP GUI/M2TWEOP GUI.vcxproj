@@ -72,13 +72,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\icons;$(SolutionDir)\3rd\windowsPipes</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\M2TWEOPBoost</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)\3rd\M2TWEOPBoost\boostLibs</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\icons;$(SolutionDir)\3rd\windowsPipes</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\M2TWEOPBoost</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)\3rd\M2TWEOPBoost\boostLibs</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -105,6 +105,8 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
+      <EnableUAC>true</EnableUAC>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>manifest.xml</AdditionalManifestFiles>
@@ -127,6 +129,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
+      <EnableUAC>true</EnableUAC>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>manifest.xml</AdditionalManifestFiles>
@@ -174,6 +178,7 @@
     <ClCompile Include="..\3rd\imguiDocking\md4c.c" />
     <ClCompile Include="aboutUI.cpp" />
     <ClCompile Include="dataG.cpp" />
+    <ClCompile Include="gameRunnerUI.cpp" />
     <ClCompile Include="gameStarter.cpp" />
     <ClCompile Include="gameSTDUI.cpp" />
     <ClCompile Include="helpers.cpp" />
@@ -181,6 +186,7 @@
     <ClCompile Include="mainUI.cpp" />
     <ClCompile Include="managerG.cpp" />
     <ClCompile Include="managerGHelpers.cpp" />
+    <ClCompile Include="markdownHelper.cpp" />
     <ClCompile Include="modSettingsUI.cpp" />
     <ClCompile Include="toolRoutine.cpp" />
   </ItemGroup>
@@ -202,8 +208,8 @@
     <ClInclude Include="..\3rd\imguiDocking\stb_image.h" />
     <ClInclude Include="..\3rd\imgui\imgui_markdown.h" />
     <ClInclude Include="aboutUI.h" />
-    <ClInclude Include="aboutUIHelpers.h" />
     <ClInclude Include="dataG.h" />
+    <ClInclude Include="gameRunnerUI.h" />
     <ClInclude Include="gameStarter.h" />
     <ClInclude Include="gameSTDUI.h" />
     <ClInclude Include="headersSTD.h" />
@@ -211,6 +217,7 @@
     <ClInclude Include="mainUI.h" />
     <ClInclude Include="managerG.h" />
     <ClInclude Include="managerGHelpers.h" />
+    <ClInclude Include="markdownHelper.h" />
     <ClInclude Include="modSettingsUI.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="toolRoutine.h" />
