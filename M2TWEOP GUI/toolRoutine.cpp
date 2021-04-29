@@ -4,6 +4,10 @@
 #include "helpers.h"
 namespace toolRoutine
 {
+	void tryJustStartMod()
+	{
+		mainUI::tryJustStartMod();
+	}
 	int drawTick(bool* isOpen)
 	{
 		helpers::updateMetrics();

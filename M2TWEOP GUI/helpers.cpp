@@ -74,6 +74,9 @@ void helpers::updateMetrics()
 
 	dataG::data.screen.screenHalfSize.x = dataG::data.screen.screenSize.x / 2;
 	dataG::data.screen.screenHalfSize.y = dataG::data.screen.screenSize.y / 2;
+
+	dataG::data.screen.screenUpperPos.x = dataG::data.screen.screenSize.x / 2;
+	dataG::data.screen.screenUpperPos.y = dataG::data.screen.screenSize.y *0.3f;
 }
 
 screenS& helpers::getScreen()
@@ -158,7 +161,7 @@ bool helpers::runGame(const char* exeFile, const char* exeParam, const string& e
 
 	if (isPipeNeed==true)
 	{
-		doPipe(eopArgs);
+		doPipe(eopArgs,30);
 	}
 }
 
@@ -190,43 +193,39 @@ bool helpers::addModPathArg(string& args, int gameMode)
 	return true;
 }
 
-bool helpers::doPipe(const string& message)
+#define BOOST_DATE_TIME_NO_LIB 1
+#include <boost/interprocess/managed_shared_memory.hpp>
+#include <boost/interprocess/allocators/allocator.hpp>
+#include <boost/interprocess/containers/string.hpp>
+bool helpers::doPipe(const string& message, int waitSeconds)
 {
-	HANDLE hPipe;
-	DWORD dwWritten;
+	using namespace boost::interprocess;
+	typedef boost::interprocess::allocator<char, boost::interprocess::managed_shared_memory::segment_manager> CharAllocator;
+	typedef boost::interprocess::basic_string<char, std::char_traits<char>, CharAllocator> ourS;
 
-	do
+	boost::interprocess::shared_memory_object::remove("M2TWEOPStartPipe");
+
+	//Create a shared memory object.
+	managed_shared_memory shm(create_only, "M2TWEOPStartPipe", 4096);
+
+	ourS* s = shm.construct<ourS>("EOPStr")(message.c_str(), shm.get_segment_manager());
+
+	DWORD endTime = GetTickCount() + 1000 * waitSeconds;
+	while (shm.find<ourS>("EOPStr").first
+		&& GetTickCount()< endTime
+		)
 	{
-		hPipe = CreateFile(TEXT("\\\\.\\pipe\\M2TWEOPStartPipe"),
-			GENERIC_READ | GENERIC_WRITE,
-			0,
-			NULL,
-			OPEN_EXISTING,
-			0,
-			NULL);
-	} while (hPipe == INVALID_HANDLE_VALUE);
-	if (hPipe != INVALID_HANDLE_VALUE)
-	{
 
-
-		BOOL writeRes;
-		do
-		{
-			writeRes=WriteFile(hPipe,
-				message.c_str(),
-				message.size() + 1,   // = length of string + terminating '\0' !!!
-				&dwWritten,
-				NULL);
-
-		} while (writeRes == false);
-
-
-		FlushFileBuffers(hPipe);
-		DisconnectNamedPipe(hPipe);
-		CloseHandle(hPipe);
 	}
 
-	return false;
+
+	boost::interprocess::shared_memory_object::remove("M2TWEOPStartPipe");
+	return true;
+}
+
+void helpers::removePipe()
+{
+	boost::interprocess::shared_memory_object::remove("M2TWEOPStartPipe");
 }
 
 int makeFullPath(string& path)

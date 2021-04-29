@@ -31,6 +31,8 @@ namespace smallFuncs
 			cmpAdr = 0x008ebd95 + 2;
 			retAdr = 0x008ebd9a + 1;
 		}
+		MemWork::WriteData(&size, cmpAdr, 1);
+		MemWork::WriteData(&size, retAdr, 1);
 	}
 	NOINLINE EOP_EXPORT void unlockConsoleCommands()
 	{

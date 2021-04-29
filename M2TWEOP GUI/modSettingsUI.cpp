@@ -37,6 +37,8 @@ namespace modSettingsUI
 		ImGui::NewLine();
 		ImGui::Checkbox("Use M2TWEOP", &dataG::data.modData.useM2TWEOP);
 
+		ImGui::Checkbox("Hide launcher on startup", &dataG::data.modData.hideLauncherAtStart);
+		
 		ImGui::NewLine();
 		if (ImGui::Button("Save", helpers::getScreen().centerXButton))
 		{
