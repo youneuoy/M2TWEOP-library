@@ -74,14 +74,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>$(DXSDK_DIR)\lib\x86;E:\libs;E:\libs\hook\release;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(DXSDK_DIR)\include;E:\headers\BeaEngine;E:\headers\AsmJit;$(SolutionDir)\3rd\imgui;E:\libs\hook;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(IncludePath)</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>$(DXSDK_DIR)\lib\x86;E:\libs;E:\libs\hook\release;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(DXSDK_DIR)\include;E:\headers\BeaEngine;E:\headers\AsmJit;$(SolutionDir)\3rd\imgui;E:\libs\hook;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(IncludePath)</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -93,14 +93,14 @@
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <VcpkgUseStatic>false</VcpkgUseStatic>
     <VcpkgManifestInstall>false</VcpkgManifestInstall>
-    <VcpkgEnabled>true</VcpkgEnabled>
+    <VcpkgEnabled>false</VcpkgEnabled>
     <VcpkgTriplet>x86-windows-static-md</VcpkgTriplet>
     <VcpkgAutoLink>false</VcpkgAutoLink>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <VcpkgUseStatic>false</VcpkgUseStatic>
     <VcpkgManifestInstall>false</VcpkgManifestInstall>
-    <VcpkgEnabled>true</VcpkgEnabled>
+    <VcpkgEnabled>false</VcpkgEnabled>
     <VcpkgTriplet>x86-windows-static-md</VcpkgTriplet>
     <VcpkgAutoLink>false</VcpkgAutoLink>
   </PropertyGroup>

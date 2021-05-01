@@ -3,9 +3,9 @@
 #include "managerF.h"
 #if _DEBUG
 
-#pragma comment(lib,"asmjit/AsmJit_debug.lib")
+#pragma comment(lib,"AsmJit_debug.lib")
 #else
-#pragma comment(lib,"asmjit/AsmJit.lib")
+#pragma comment(lib,"AsmJit.lib")
 
 #endif
 #pragma comment(lib,"BeaEngine_s.lib")

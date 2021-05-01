@@ -5,12 +5,8 @@
 #pragma comment(lib, "DXERR.lib")
 
 
-#if _DEBUG
-#pragma comment(lib, "minhook.x32d.lib")
-#else
-#pragma comment(lib, "minhook.x32.lib")
 
-#endif
+
 graphicsD3D::dataT graphicsD3D::dataS;
 
 
