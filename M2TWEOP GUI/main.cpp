@@ -17,97 +17,78 @@
 
 #include "managerG.h"
 
-
-#if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
-#pragma comment(lib, "legacy_stdio_definitions")
-#endif
 #include <stb_image.h>
 
-static void glfw_error_callback(int error, const char* description)
-{
-    fprintf(stderr, "Glfw Error %d: %s\n", error, description);
-}
 
 struct {
-    GLFWwindow* window;
+    SDL_Window* window;
+    SDL_GLContext gl_context;
 }mainData;
 
 void beginRender()
 {
-    glfwPollEvents();
 
     // Start the Dear ImGui frame
     ImGui_ImplOpenGL2_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
+    ImGui_ImplSDL2_NewFrame(mainData.window);
     ImGui::NewFrame();
 }
 
 void endRender()
 {
-    ImGuiIO& io = ImGui::GetIO();
-   static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     // Rendering
     ImGui::Render();
-    int display_w, display_h;
-    glfwGetFramebufferSize(mainData.window, &display_w, &display_h);
-    glViewport(0, 0, display_w, display_h);
+    ImGuiIO& io = ImGui::GetIO(); 
+    glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
     glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
     glClear(GL_COLOR_BUFFER_BIT);
-
-    // If you are using this code with non-legacy OpenGL header/contexts (which you should not, prefer using imgui_impl_opengl3.cpp!!),
-    // you may need to backup/reset/restore other state, e.g. for current shader using the commented lines below.
-    //GLint last_program;
-    //glGetIntegerv(GL_CURRENT_PROGRAM, &last_program);
-    //glUseProgram(0);
+    //glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
     ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-    //glUseProgram(last_program);
 
     // Update and Render additional Platform Windows
     // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
-    //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+    //  For this specific demo app we could also call SDL_GL_MakeCurrent(window, gl_context) directly)
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
-        GLFWwindow* backup_current_context = glfwGetCurrentContext();
+        SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
+        SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
-        glfwMakeContextCurrent(backup_current_context);
+        SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
     }
-    glfwSwapBuffers(mainData.window);
+
+    SDL_GL_SwapWindow(mainData.window);
 }
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
+
+void initRender()
 {
-    int x = 0;
-    int y = 0;
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
+    {
+        MessageBoxA(NULL, SDL_GetError(), "ERROR", NULL);
+        exit(0);
+    }
+    SDL_Surface icon;
+    icon.pixels = stbi_load("eopData/EOPIcon.png",
+        &icon.w,
+        &icon.h, 0, 4);
+    SDL_SetWindowIcon(mainData.window, &icon);
     // Setup window
-    glfwSetErrorCallback(glfw_error_callback);
-    if (!glfwInit())
-        return 1;
-    mainData.window = glfwCreateWindow(1, 1, "M2TWEOP", NULL , NULL);
-
-    
-    if (mainData.window == NULL)
-        return 1;
-
-
-    dataG::data.screen.programIcon[0].pixels= stbi_load("eopData/EOPIcon.png", 
-        &dataG::data.screen.programIcon[0].width,
-        &dataG::data.screen.programIcon[0].height, 0, 4);
-
-
-
-    glfwHideWindow(mainData.window);
-    glfwPollEvents();
-
-    glfwMakeContextCurrent(mainData.window);
-    glfwSwapInterval(1); 
-
-    
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+    SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
+    mainData.window = SDL_CreateWindow("M2TWEOP", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1, 1, window_flags);
+    mainData.gl_context = SDL_GL_CreateContext(mainData.window);
+    SDL_GL_MakeCurrent(mainData.window, mainData.gl_context);
+    SDL_GL_SetSwapInterval(1); // Enable vsync
+    SDL_HideWindow(mainData.window);
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
-
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.IniFilename = NULL;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
@@ -128,33 +109,36 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     }
 
     // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(mainData.window, true);
+    ImGui_ImplSDL2_InitForOpenGL(mainData.window, mainData.gl_context);
     ImGui_ImplOpenGL2_Init();
+}
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
+{
+    initRender();
 
-    // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Read 'docs/FONTS.md' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/ProggyTiny.ttf", 10.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != NULL);
+    /*dataG::data.screen.programIcon[0].pixels= stbi_load("eopData/EOPIcon.png", 
+        &dataG::data.screen.programIcon[0].width,
+        &dataG::data.screen.programIcon[0].height, 0, 4);
+        */
 
 
     managerG::init();
     bool isOpen = true;
     int isExit = 0;
 
-
+    bool done = false;
     // Main loop
-    if (!glfwWindowShouldClose(mainData.window))
+    if (!done)
     {
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            ImGui_ImplSDL2_ProcessEvent(&event);
+            if (event.type == SDL_QUIT)
+                done = true;
+            if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(mainData.window))
+                done = true;
+        }
 
         beginRender();
 
@@ -162,15 +146,24 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
         endRender();
     }
-    while (!glfwWindowShouldClose(mainData.window))
+    while (!done)
     {
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            ImGui_ImplSDL2_ProcessEvent(&event);
+            if (event.type == SDL_QUIT)
+                done = true;
+            if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(mainData.window))
+                done = true;
+        }
         beginRender();
 
-        isExit=toolRoutine::drawTick(&isOpen);
+        isExit =toolRoutine::drawTick(&isOpen);
 
         endRender();
 
-        if (isExit == 1)
+        if (isExit == 1|| done==true)
         {
             break;
         }
@@ -178,11 +171,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     // Cleanup
     ImGui_ImplOpenGL2_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
 
-    glfwDestroyWindow(mainData.window);
-    glfwTerminate();
+    SDL_GL_DeleteContext(mainData.gl_context);
+    SDL_DestroyWindow(mainData.window);
+    SDL_Quit();
 
     return 0;
 }

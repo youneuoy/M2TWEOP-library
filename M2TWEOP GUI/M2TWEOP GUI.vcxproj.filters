@@ -57,9 +57,6 @@
     <ClCompile Include="..\3rd\imguiDocking\imgui_draw.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\3rd\imguiDocking\imgui_impl_dx9.cpp">
-      <Filter>3rd\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="..\3rd\imguiDocking\imgui_impl_win32.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
@@ -93,9 +90,6 @@
     <ClCompile Include="..\3rd\imguiDocking\imgui_stdlib.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\3rd\imguiDocking\imgui_impl_glfw.cpp">
-      <Filter>3rd\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="..\3rd\imguiDocking\imgui_impl_opengl2.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
@@ -112,6 +106,9 @@
       <Filter>Исходные файлы\helpers</Filter>
     </ClCompile>
     <ClCompile Include="..\3rd\imgui\eopImgui.cpp">
+      <Filter>3rd\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imguiDocking\imgui_impl_sdl.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
   </ItemGroup>
@@ -138,9 +135,6 @@
       <Filter>3rd\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\3rd\imguiDocking\imgui.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imguiDocking\imgui_impl_dx9.h">
       <Filter>3rd\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\3rd\imguiDocking\imgui_impl_win32.h">
@@ -185,9 +179,6 @@
     <ClInclude Include="..\3rd\imguiDocking\imgui_stdlib.h">
       <Filter>3rd\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\3rd\imguiDocking\imgui_impl_glfw.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
     <ClInclude Include="..\3rd\imguiDocking\imgui_impl_opengl2.h">
       <Filter>3rd\imgui</Filter>
     </ClInclude>
@@ -209,6 +200,9 @@
     <ClInclude Include="..\3rd\imgui\eopImgui.h">
       <Filter>3rd\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\imgui_impl_sdl.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="M2TWEOP GUI.rc">
@@ -216,11 +210,11 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="M2TWEOP.ico">
-      <Filter>Файлы ресурсов</Filter>
-    </Image>
+    <Xml Include="manifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="manifest.xml" />
+    <Image Include="EOPIcon.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
   </ItemGroup>
 </Project>

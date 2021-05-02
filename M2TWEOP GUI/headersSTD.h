@@ -5,15 +5,26 @@
 #include <fstream>
 #include <vector>
 
-#pragma comment(lib, "opengl32.lib")
-#pragma comment(lib, "../3rd/glfw/lib-vc2010-32/glfw3.lib")
 
+#if _DEBUG
+#pragma comment(lib,"SDL2_D.lib")
+#pragma comment(lib,"SDL2main_d.lib")
+#else
+#pragma comment(lib,"SDL2.lib")
+#pragma comment(lib,"SDL2main.lib")
+
+#endif
+#pragma comment(lib, "opengl32.lib")
 #include "imgui.h"
-#include "imgui_impl_glfw.h"
+#include "eopImGui.h"
+#include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl2.h"
+#include <stdio.h>
+#include <SDL.h>
+#include <SDL_opengl.h>
+
 #include "imgui_stdlib.h"
 #include <imgui_internal.h>
-#include <GLFW/glfw3.h>
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #include <tchar.h>
@@ -43,7 +54,7 @@ struct screenS
 	ImVec2 centerXButton{ -1.0f,0.0f };
 
 
-	GLFWimage programIcon[1];
+	//GLFWimage programIcon[1];
 };
 
 #include "dataG.h"

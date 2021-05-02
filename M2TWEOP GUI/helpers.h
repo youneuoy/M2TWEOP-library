@@ -8,7 +8,7 @@ public:
 
 	static bool loadTexture(const char* filename, GLuint* out_texture, int* out_width, int* out_height);
 
-	static void setWindowIcon(GLFWwindow*window);
+
 	static void updateMetrics();
 
 	static screenS& getScreen();

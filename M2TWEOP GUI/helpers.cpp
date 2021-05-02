@@ -62,10 +62,7 @@ bool helpers::loadTexture(const char* filename, GLuint* out_texture, int* out_wi
 }
 
 
-void helpers::setWindowIcon(GLFWwindow* window)
-{
-	glfwSetWindowIcon(window, 1, dataG::data.screen.programIcon);
-}
+
 
 void helpers::updateMetrics()
 {
