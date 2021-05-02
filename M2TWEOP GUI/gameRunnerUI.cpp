@@ -80,7 +80,7 @@ namespace gameRunnerUI
 		);
 		startProcess.gameProcess->wait();
 
-		bool startResult =helpers::doPipe(eopArgs, 30);
+		bool startResult =helpers::doPipe(eopArgs, 10);
 
 		if (startResult == false)
 		{
