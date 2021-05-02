@@ -68,11 +68,7 @@ void initRender()
         MessageBoxA(NULL, SDL_GetError(), "ERROR", NULL);
         exit(0);
     }
-    SDL_Surface icon;
-    icon.pixels = stbi_load("eopData/EOPIcon.png",
-        &icon.w,
-        &icon.h, 0, 4);
-    SDL_SetWindowIcon(mainData.window, &icon);
+
     // Setup window
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);

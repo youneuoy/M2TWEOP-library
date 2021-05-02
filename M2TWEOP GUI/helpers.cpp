@@ -192,10 +192,45 @@ bool helpers::addModPathArg(string& args, int gameMode)
 
 #define BOOST_DATE_TIME_NO_LIB 1
 #include <boost/interprocess/managed_shared_memory.hpp>
-#include <boost/interprocess/allocators/allocator.hpp>
-#include <boost/interprocess/containers/string.hpp>
 bool helpers::doPipe(const string& message, int waitSeconds)
 {
+	using namespace boost::interprocess;
+	using namespace boost::interprocess;
+	struct shmWork
+	{
+		shmWork() { shared_memory_object::remove("M2TWEOPStartMem"); }
+		~shmWork() { shared_memory_object::remove("M2TWEOPStartMem"); }
+	} shmPass;
+
+	//Create a shared memory object.
+	shared_memory_object shm(create_only, "M2TWEOPStartMem", read_write);
+	//Set size
+	shm.truncate(static_cast<boost::interprocess::offset_t>(message.size()) + 1);
+
+	//Map the whole shared memory in this process
+	mapped_region region(shm, read_write);
+
+
+	int sSize = message.size() + 1;
+	memcpy(region.get_address(), &sSize, sizeof(sSize));
+	char* adr = reinterpret_cast<char*>(region.get_address());
+	adr += sizeof(sSize);
+	memcpy(adr, message.c_str(), sSize);
+
+	adr = (char*)region.get_address();
+
+	DWORD endTime = GetTickCount() + 1000 * waitSeconds;
+	
+	int responce = 1;
+	do
+	{
+		responce = *adr;
+
+		Sleep(1);
+	} while (responce!=0 && GetTickCount() < endTime);
+
+
+	/*
 	using namespace boost::interprocess;
 	typedef boost::interprocess::allocator<char, boost::interprocess::managed_shared_memory::segment_manager> CharAllocator;
 	typedef boost::interprocess::basic_string<char, std::char_traits<char>, CharAllocator> ourS;
@@ -216,13 +251,13 @@ bool helpers::doPipe(const string& message, int waitSeconds)
 	}
 
 
-	boost::interprocess::shared_memory_object::remove("M2TWEOPStartPipe");
+	boost::interprocess::shared_memory_object::remove("M2TWEOPStartPipe");*/
 	return true;
 }
 
 void helpers::removePipe()
 {
-	boost::interprocess::shared_memory_object::remove("M2TWEOPStartPipe");
+	boost::interprocess::shared_memory_object::remove("M2TWEOPStartMem");
 }
 
 int makeFullPath(string& path)
