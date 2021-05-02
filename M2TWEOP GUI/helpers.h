@@ -17,10 +17,12 @@ public:
 
 	static ImFont* findFont(const char* name);
 
-	static bool runGame(const char* exeFile, const char* exeParam,const string& eopArgs,bool isPipeNeed);
+	//run game without eop only
+	static bool runGame(const char* exeFile, const char* exeParam);
 
 	static bool addModPathArg(string& args, int gameMode);
 
+	//false if dont get responce
 	static bool doPipe(const string &message, int waitSeconds);
 	static void removePipe();
 	static bool selectGameExe(int gameMode);

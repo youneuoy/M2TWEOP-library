@@ -1,3 +1,4 @@
+#include <boost/process.hpp>
 #include "gameRunnerUI.h"
 
 #include "headersSTD.h"
@@ -19,7 +20,7 @@ namespace gameRunnerUI
 
 		ImGui::Text(text);
 	}
-
+	namespace bp = boost::process;
 	struct
 	{
 		string exePath;
@@ -31,6 +32,7 @@ namespace gameRunnerUI
 
 		atomic_bool isRunStarted{ false };
 		atomic_bool isRunEnded{ false };
+		atomic_bool isGetResponce{ false };
 		bool isRunProcessInitiated = false;
 
 		float xWindowSize = 500.f;
@@ -39,9 +41,12 @@ namespace gameRunnerUI
 		bool isWindowTooSmall = false;
 
 		float sendingEndTime = 0.f;
+
+		bp::child *gameProcess=nullptr;
 	}startProcess;
 	void setRunParams(const string& exePath, const string& exeArgs, const string& eopArgs, bool isEopNeeded)
 	{
+		startProcess.gameProcess = nullptr;
 		startProcess.exePath = exePath;
 		startProcess.exeArgs = exeArgs;
 		startProcess.eopArgs = eopArgs;
@@ -62,10 +67,31 @@ namespace gameRunnerUI
 			}
 		}
 	}
-	void runGameThread(std::atomic_bool& isStarted, std::atomic_bool& isEnded, const string& exePath, const string& exeArgs, const string& eopArgs, bool isEopNeeded)
+	void runGameThread(std::atomic_bool& isStarted, std::atomic_bool& isEnded, std::atomic_bool& isGetResponce, const string& exePath, const string& exeArgs, const string& eopArgs, bool isEopNeeded)
 	{
-		helpers::runGame(exePath.c_str(), exeArgs.c_str(), eopArgs, true);
+		string line;
+		line += "\"";
+		line += dataG::data.gameData.gamePath;
+		line += "\"";
+
+		line += exeArgs;
+		startProcess.gameProcess=new bp::child(bp::cmd(line)
+			, bp::start_dir = "..\\.."
+		);
+		startProcess.gameProcess->wait();
+
+		bool startResult =helpers::doPipe(eopArgs, 30);
+
+		if (startResult == false)
+		{
+			startProcess.gameProcess->terminate();
+			isGetResponce = false;
+		}
+		delete startProcess.gameProcess;
+		startProcess.gameProcess=nullptr;
+
 		isEnded = true;
+		isGetResponce = true;
 	}
 
 	void drawUI(bool* isOpen)
@@ -98,7 +124,12 @@ namespace gameRunnerUI
 			ImGui::ProgressBar(progress, ImVec2(-1.0f, 0.0f));
 		}
 
-		if (startProcess.isRunStarted == true&& ImGui::GetTime()> startProcess.sendingEndTime)
+		if (startProcess.isRunStarted == true&&
+				( ImGui::GetTime()> startProcess.sendingEndTime
+					|| (startProcess.isRunEnded == true && startProcess.isGetResponce == false)
+				)
+			
+			)
 		{
 			const std::string badMSG = R"(
 ![badLogo](eopData/images/deathDance.png)
@@ -126,18 +157,19 @@ namespace gameRunnerUI
 			startProcess.isRunStarted = true;
 
 			std::thread thrUrl(
-				runGameThread, std::ref(startProcess.isRunStarted), std::ref(startProcess.isRunEnded)
+				runGameThread, std::ref(startProcess.isRunStarted), std::ref(startProcess.isRunEnded),std::ref(startProcess.isGetResponce)
 				, std::ref(startProcess.exePath)
 				, std::ref(startProcess.exeArgs)
 				, std::ref(startProcess.eopArgs)
 				, startProcess.isEopNeeded);
 			thrUrl.detach();
 
-			startProcess.sendingEndTime = ImGui::GetTime() + 0.5f;
+			startProcess.sendingEndTime = ImGui::GetTime() + 4.5f;
 
 		}
 
-		if (startProcess.isRunEnded == true|| *isOpen==false)
+
+		if ((startProcess.isRunEnded == true&& startProcess.isGetResponce == true)|| *isOpen==false)
 		{
 			helpers::removePipe();
 			exit(0);
