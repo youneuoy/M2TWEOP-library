@@ -111,6 +111,9 @@
     <ClCompile Include="markdownHelper.cpp">
       <Filter>Исходные файлы\helpers</Filter>
     </ClCompile>
+    <ClCompile Include="..\3rd\imgui\eopImgui.cpp">
+      <Filter>3rd\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -202,6 +205,9 @@
     </ClInclude>
     <ClInclude Include="markdownHelper.h">
       <Filter>Исходные файлы\helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imgui\eopImgui.h">
+      <Filter>3rd\imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
