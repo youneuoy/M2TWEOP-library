@@ -8,6 +8,8 @@
 #include "modSettingsUI.h"
 #include "gameStarter.h"
 #include "gameRunnerUI.h"
+
+#include <shellapi.h>
 namespace mainUI
 {
 	struct
@@ -31,6 +33,8 @@ namespace mainUI
 		childs.isGameRunnerUIOpen = true;
 		dataG::data.gameData.gameMode = 0;
 	}
+
+
 	int draw(bool* isOpen)
 	{
 		if (childs.isAboutOpen == true)

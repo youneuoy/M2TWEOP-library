@@ -106,60 +106,21 @@ ImFont* helpers::findFont(const char* name)
 	}
 	return findFont("mainFont");
 }
-
-bool helpers::runGame(const char* exeFile, const char* exeParam, const string& eopArgs, bool isPipeNeed)
+#include <boost/process.hpp>
+namespace bp = boost::process;
+bool helpers::runGame(const char* exeFile, const char* exeParam)
 {
-	STARTUPINFO si;
-	PROCESS_INFORMATION pi;
-
-	ZeroMemory(&si, sizeof(si));
-	si.cb = sizeof(si);
-	ZeroMemory(&pi, sizeof(pi));
-
 	string line;
 	line+= "\"";
 	line += dataG::data.gameData.gamePath;
 	line += "\"";
-	/*if (dataG::data.modData.useM2TWEOP == true)
-	{
-		line += "\"";
-	}*/
+
 	line += exeParam;
-	/*if (dataG::data.modData.useM2TWEOP == true)
-	{
-		line += "\"";
-	}*/
-	// Start the child process.
-	if (!CreateProcessA(NULL,   // No module name (use command line)
-		const_cast<char*>(line.c_str()),        // Command line
-		NULL,           // Process handle not inheritable
-		NULL,           // Thread handle not inheritable
-		FALSE,          // Set handle inheritance to FALSE
-		0,              // No creation flags
-		NULL,           // Use parent's environment block
-		TEXT("..\\.."),           // starting directory
-		&si,            // Pointer to STARTUPINFO structure
-		&pi            // Pointer to PROCESS_INFORMATION structure
-	))
-	{
-		DWORD err = GetLastError();
-		string s = "Error: ";
-		s += to_string(err);
+	bp::child c(bp::cmd(line)
+		, bp::start_dir = "..\\.."
+	);
+	c.wait();
 
-		MessageBox(NULL, "CreateProcess failed", s.c_str(), MB_OK);
-		return false;
-	}
-
-	//wait for game start
-	WaitForSingleObject(pi.hProcess, INFINITE);
-
-	CloseHandle(pi.hProcess);
-	CloseHandle(pi.hThread);
-
-	if (isPipeNeed==true)
-	{
-		doPipe(eopArgs,30);
-	}
 }
 
 bool helpers::addModPathArg(string& args, int gameMode)
@@ -195,7 +156,6 @@ bool helpers::addModPathArg(string& args, int gameMode)
 bool helpers::doPipe(const string& message, int waitSeconds)
 {
 	using namespace boost::interprocess;
-	using namespace boost::interprocess;
 	struct shmWork
 	{
 		shmWork() { shared_memory_object::remove("M2TWEOPStartMem"); }
@@ -229,30 +189,13 @@ bool helpers::doPipe(const string& message, int waitSeconds)
 		Sleep(1);
 	} while (responce!=0 && GetTickCount() < endTime);
 
-
-	/*
-	using namespace boost::interprocess;
-	typedef boost::interprocess::allocator<char, boost::interprocess::managed_shared_memory::segment_manager> CharAllocator;
-	typedef boost::interprocess::basic_string<char, std::char_traits<char>, CharAllocator> ourS;
-
-	boost::interprocess::shared_memory_object::remove("M2TWEOPStartPipe");
-
-	//Create a shared memory object.
-	managed_shared_memory shm(create_only, "M2TWEOPStartPipe", 4096);
-
-	ourS* s = shm.construct<ourS>("EOPStr")(message.c_str(), shm.get_segment_manager());
-
-	DWORD endTime = GetTickCount() + 1000 * waitSeconds;
-	while (shm.find<ourS>("EOPStr").first
-		&& GetTickCount()< endTime
-		)
+	if (responce == 0)
 	{
-
+		return true;
 	}
 
 
-	boost::interprocess::shared_memory_object::remove("M2TWEOPStartPipe");*/
-	return true;
+	return false;
 }
 
 void helpers::removePipe()

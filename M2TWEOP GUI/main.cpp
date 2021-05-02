@@ -6,7 +6,6 @@
 // **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
 // **Prefer using the code in the example_glfw_opengl2/ folder**
 // See imgui_impl_glfw.cpp for details.
-
 #include "headersSTD.h"
 
 #include "dataG.h"

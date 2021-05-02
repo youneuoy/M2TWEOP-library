@@ -99,7 +99,7 @@ bool gameStarter::runGameExe()
 	}
 	else
 	{
-		helpers::runGame(dataG::data.gameData.gamePath.c_str(), dataG::data.gameData.gameArgs.c_str(), eopArgs, isEopNeeded);
+		helpers::runGame(dataG::data.gameData.gamePath.c_str(), dataG::data.gameData.gameArgs.c_str());
 		exit(0);
 	}
 
