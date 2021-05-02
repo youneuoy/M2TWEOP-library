@@ -185,6 +185,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\3rd\imgui\eopImgui.h" />
     <ClInclude Include="..\3rd\imgui\imconfig.h" />
     <ClInclude Include="..\3rd\imgui\imgui.h" />
     <ClInclude Include="..\3rd\imgui\imgui_impl_dx9.h" />
@@ -224,6 +225,7 @@
     <ClInclude Include="tilesChange.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\3rd\imgui\eopImgui.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui_draw.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui_impl_dx9.cpp" />

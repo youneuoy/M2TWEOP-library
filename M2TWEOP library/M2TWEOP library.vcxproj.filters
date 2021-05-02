@@ -171,6 +171,9 @@
     <ClInclude Include="smallFuncs.h">
       <Filter>Исходные файлы\functions</Filter>
     </ClInclude>
+    <ClInclude Include="..\3rd\imgui\eopImgui.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -259,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="smallFuncs.cpp">
       <Filter>Исходные файлы\functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imgui\eopImgui.cpp">
+      <Filter>3rd\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

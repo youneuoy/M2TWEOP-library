@@ -82,7 +82,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
         return 1;
-    mainData.window = glfwCreateWindow(1, 1, "M2TWEOP", NULL, NULL);
+    mainData.window = glfwCreateWindow(1, 1, "M2TWEOP", NULL , NULL);
 
     
     if (mainData.window == NULL)
