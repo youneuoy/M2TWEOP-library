@@ -1,4 +1,5 @@
 #include <boost/process.hpp>
+
 #include "gameRunnerUI.h"
 
 #include "headersSTD.h"
@@ -26,7 +27,7 @@ namespace gameRunnerUI
 		string exePath;
 		string exeArgs;
 		string eopArgs;
-		bool isEopNeeded;
+		bool isEopNeeded = false;;
 
 
 
@@ -42,11 +43,10 @@ namespace gameRunnerUI
 
 		float sendingEndTime = 0.f;
 
-		bp::child *gameProcess=nullptr;
 	}startProcess;
 	void setRunParams(const string& exePath, const string& exeArgs, const string& eopArgs, bool isEopNeeded)
 	{
-		startProcess.gameProcess = nullptr;
+
 		startProcess.exePath = exePath;
 		startProcess.exeArgs = exeArgs;
 		startProcess.eopArgs = eopArgs;
@@ -69,26 +69,26 @@ namespace gameRunnerUI
 	}
 	void runGameThread(std::atomic_bool& isStarted, std::atomic_bool& isEnded, std::atomic_bool& isGetResponce, const string& exePath, const string& exeArgs, const string& eopArgs, bool isEopNeeded)
 	{
-		string line;
-		line += "\"";
-		line += dataG::data.gameData.gamePath;
-		line += "\"";
 
-		line += exeArgs;
-		startProcess.gameProcess=new bp::child(bp::cmd(line)
-			, bp::start_dir = "..\\.."
+		string startArgs = exeArgs;
+		startArgs.erase(0, 1);
+
+
+		bp::child gameProcess(
+			dataG::data.gameData.gamePath,
+			bp::args(startArgs),
+			 bp::start_dir = "..\\.."
 		);
-		startProcess.gameProcess->wait();
+		gameProcess.detach();
+		bool startResult =helpers::doPipe(eopArgs, 20);
 
-		bool startResult =helpers::doPipe(eopArgs, 10);
-
+		
 		if (startResult == false)
 		{
-			startProcess.gameProcess->terminate();
+			helpers::closeGame(dataG::data.gameData.exeName);
+
 			isGetResponce = false;
 		}
-		delete startProcess.gameProcess;
-		startProcess.gameProcess=nullptr;
 
 		isEnded = true;
 		isGetResponce = true;
@@ -96,7 +96,6 @@ namespace gameRunnerUI
 
 	void drawUI(bool* isOpen)
 	{
-		//ImGui::SetNextWindowPos(helpers::getScreen().screenHalfSize, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
 		ImGui::SetNextWindowPos(helpers::getScreen().screenUpperPos, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
 		if (startProcess.isWindowTooSmall == false)
 		{
@@ -172,6 +171,10 @@ namespace gameRunnerUI
 		if ((startProcess.isRunEnded == true&& startProcess.isGetResponce == true)|| *isOpen==false)
 		{
 			helpers::removePipe();
+			if (startProcess.isGetResponce == false)
+			{
+				helpers::closeGame(dataG::data.gameData.exeName);
+			}
 			exit(0);
 		}
 	}

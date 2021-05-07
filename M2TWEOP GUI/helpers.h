@@ -8,6 +8,7 @@ public:
 
 	static bool loadTexture(const char* filename, GLuint* out_texture, int* out_width, int* out_height);
 
+	static void closeGame(const string& exeName);
 
 	static void updateMetrics();
 
@@ -18,7 +19,7 @@ public:
 	static ImFont* findFont(const char* name);
 
 	//run game without eop only
-	static bool runGame(const char* exeFile, const char* exeParam);
+	static void runGame(const char* exeFile, const char* exeParam);
 
 	static bool addModPathArg(string& args, int gameMode);
 

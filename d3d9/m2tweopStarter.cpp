@@ -16,13 +16,13 @@ namespace m2tweopStarter
 	typedef void (*m2tweopAfterReset)(IDirect3DDevice9*, D3DPRESENT_PARAMETERS*);
 	struct
 	{
-		HMODULE hmtw;
-		m2tweopEndScene onEndScene;
+		HMODULE hmtw = nullptr;
+		m2tweopEndScene onEndScene=nullptr;
 
-		m2tweopOnReset onReset;
-		m2tweopAfterReset afterReset;
+		m2tweopOnReset onReset = nullptr;
+		m2tweopAfterReset afterReset = nullptr;
 
-		m2tweopInit eopInitF;
+		m2tweopInit eopInitF = nullptr;
 
 
 		bool isEOP = false;

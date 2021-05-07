@@ -2,6 +2,7 @@
 #include "dataG.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#include <TlHelp32.h>
 std::string helpers::makeFString(const char* fmt, ...)
 {
 	va_list args;
@@ -61,6 +62,27 @@ bool helpers::loadTexture(const char* filename, GLuint* out_texture, int* out_wi
 	return true;
 }
 
+void helpers::closeGame(const string& exeName)
+{
+	HANDLE gameHNDL = NULL;
+	PROCESSENTRY32 Pc = { sizeof(PROCESSENTRY32) };
+	HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, 0);
+	if (Process32First(hSnapshot, &Pc)) {
+		do {
+			if (!strcmp(Pc.szExeFile, exeName.c_str())) {
+				gameHNDL= OpenProcess(PROCESS_ALL_ACCESS, TRUE, Pc.th32ProcessID);
+				break;
+			}
+		} while (Process32Next(hSnapshot, &Pc));
+	}
+	if (gameHNDL == NULL)return;
+
+	DWORD fdwExit = 0;
+	GetExitCodeProcess(gameHNDL, &fdwExit);
+	TerminateProcess(gameHNDL, fdwExit);
+	CloseHandle(gameHNDL);
+}
+
 
 
 
@@ -107,9 +129,10 @@ ImFont* helpers::findFont(const char* name)
 	return findFont("mainFont");
 }
 #include <boost/process.hpp>
-namespace bp = boost::process;
-bool helpers::runGame(const char* exeFile, const char* exeParam)
+
+void helpers::runGame(const char* exeFile, const char* exeParam)
 {
+	namespace bp = boost::process;
 	string line;
 	line+= "\"";
 	line += dataG::data.gameData.gamePath;
@@ -155,28 +178,28 @@ bool helpers::addModPathArg(string& args, int gameMode)
 #include <boost/interprocess/managed_shared_memory.hpp>
 bool helpers::doPipe(const string& message, int waitSeconds)
 {
-	using namespace boost::interprocess;
+	namespace bip = boost::interprocess;
 	struct shmWork
 	{
-		shmWork() { shared_memory_object::remove("M2TWEOPStartMem"); }
-		~shmWork() { shared_memory_object::remove("M2TWEOPStartMem"); }
+		shmWork() { bip::shared_memory_object::remove("M2TWEOPStartMem1"); }
+		~shmWork() { bip::shared_memory_object::remove("M2TWEOPStartMem1"); }
 	} shmPass;
 
 	//Create a shared memory object.
-	shared_memory_object shm(create_only, "M2TWEOPStartMem", read_write);
+	bip::shared_memory_object shm(bip::create_only, "M2TWEOPStartMem1", bip::read_write);
 	//Set size
-	shm.truncate(static_cast<boost::interprocess::offset_t>(message.size()) + 1);
+	shm.truncate(static_cast<bip::offset_t>(message.size()*2 + 1));
 
 	//Map the whole shared memory in this process
-	mapped_region region(shm, read_write);
+	bip::mapped_region region(shm, bip::read_write);
 
+	char* adr = reinterpret_cast<char*>(region.get_address());
 
 	int sSize = message.size() + 1;
-	memcpy(region.get_address(), &sSize, sizeof(sSize));
-	char* adr = reinterpret_cast<char*>(region.get_address());
-	adr += sizeof(sSize);
-	memcpy(adr, message.c_str(), sSize);
+	memcpy(adr, &sSize, sizeof(sSize));
 
+	adr += sizeof(sSize);
+	memcpy(adr, message.c_str(), message.size() + 1);
 	adr = (char*)region.get_address();
 
 	DWORD endTime = GetTickCount() + 1000 * waitSeconds;
@@ -188,12 +211,11 @@ bool helpers::doPipe(const string& message, int waitSeconds)
 
 		Sleep(1);
 	} while (responce!=0 && GetTickCount() < endTime);
-
+	Sleep(1000);
 	if (responce == 0)
 	{
 		return true;
 	}
-
 
 	return false;
 }
@@ -294,9 +316,10 @@ bool helpers::compareFiles(string& oneFile, string& nextFile)
 	if (in2.is_open() == false)
 	{
 		MessageBoxA(NULL, "Cannot run M2TWEOP, missing d3d9.dll. Reinstall it for M2TWEOP(dont try any standard d3d9.dll or files from internet, M2TWEOP use custom one).", "ERROR", MB_OK);
-		exit(0);
 		in1.close();
 		in2.close();
+
+		exit(0);
 		return false;
 	}
 
