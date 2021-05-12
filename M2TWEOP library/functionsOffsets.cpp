@@ -51,6 +51,9 @@ void codes::initCodes(int gameVer)
 
 		offsets.killCharStratMapFunc = 0x00592900;
 		offsets.killUnitStratMapFunc = 0x007417e0;
+
+		offsets.destroyBuildingFunc = 0x005e4f10;
+		offsets.createBuildingFunc = 0x00d32cd0;
 	}
 	else if (gameVer == 2)
 	{
@@ -99,6 +102,9 @@ void codes::initCodes(int gameVer)
 		offsets.killCharStratMapFunc = 0x00592e00;
 		offsets.killUnitStratMapFunc = 0x00741F70;
 		offsets.killUnitStratMapFunc = 0x00741F70;
+
+		offsets.destroyBuildingFunc = 0x005e5380;
+		offsets.createBuildingFunc = 0x00d2d050;
 
 	}
 }

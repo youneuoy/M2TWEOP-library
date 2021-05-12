@@ -5,6 +5,12 @@ typedef unsigned char   undefined;
 typedef unsigned int    uint;
 typedef unsigned char    uchar;
 
+struct UNICODE_STRING {
+	USHORT Length;
+	USHORT MaximumLength;
+	PWSTR Buffer;
+};
+
 struct stratPortModel {
 	struct model_Rigid* model_rigid;
 	undefined field_0x4[4];
@@ -128,9 +134,11 @@ struct siegeEngine {
 };
 //building data
 struct building_data { /* SETTLEMENT_CONDITION_SETTLEMENT_FACTION */
-	undefined field_0x0[128];
+	undefined field_0x0[98];
+	char isDestroyAllowed;
+	undefined field_0x63[29];
 	char* type; /* type of building(core_building,barracks)  */
-	undefined field_0x84[4];
+	int typeHash;
 	struct buildingDrawInfo* drawInfo; /* name of building(stone_wall), tga`s, etc */
 };
 //building
@@ -153,15 +161,17 @@ struct settlementStruct {
 	struct stackStruct* army; /* army on the settlement */
 	undefined field_0x48[260];
 	struct settMod* model;
-	undefined field_0x150[20];
-	char* name; /* name  of the settlement */
-	undefined field_0x168[8];
+	int descr_culturestxt;
+	undefined field_0x154[16];
+	char* name; /* name  of the province */
+	int nameCrypt;
+	UNICODE_STRING** localizedName;
 	struct factionStruct* ownerFac; /* faction of the owner */
 	undefined field_0x174[36];
 	int level; /* level of the settlement/castle */
 	int fac_creatorModNum;
 	undefined field_0x1a0[4];
-	uchar isCastle; /* castle or settlement */
+	BYTE isCastle; /* castle or settlement */
 	undefined field_0x1a5[3];
 	UINT32 regionNumber; /* number of region */
 	undefined field_0x1ac[1544];

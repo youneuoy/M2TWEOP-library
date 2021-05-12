@@ -10,10 +10,6 @@
 
 namespace fastFuncts
 {
-	//set new crypted string
-	//alloc memory, copy string to it
-	//copy crypt to next 4 bytes after pointer
-	NOINLINE EOP_EXPORT void setCryptedString(char* targetS, const char* newS);
 
 	//count of factions in game
 	NOINLINE EOP_EXPORT UINT32 getFactionsCount();
@@ -58,6 +54,8 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT void killUnit(unit* un);
 	NOINLINE EOP_EXPORT void killCharacter(general* gen);
 
+	NOINLINE EOP_EXPORT void destroyBuildings(settlementStruct* sett, const char* typeName, bool isReturnMoney);
+	NOINLINE EOP_EXPORT void createBuilding(settlementStruct* sett, const char* building_level_id);
 
 	NOINLINE EOP_EXPORT general* createCharacter(char*type,factionStruct*fac,int age,char*name,char*name2,int subFaction,char*portrait,int x,int y);
 
