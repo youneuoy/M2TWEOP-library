@@ -58,11 +58,15 @@ public:
 		DWORD setBodyguard = NULL;
 
 		//kill character on stratmap
-		DWORD killCharStratMapFunc;
+		DWORD killCharStratMapFunc = NULL;
 		//kill unit on stratmap
-		DWORD killUnitStratMapFunc;
+		DWORD killUnitStratMapFunc = NULL;
 
+		//destroy all building of type in settlement
+		DWORD destroyBuildingFunc = NULL;
+		//create building
+		DWORD createBuildingFunc = NULL;
 	}offsets;
 
-	static void initCodes(int gameVer);;
+	static void initCodes(int gameVer);
 };

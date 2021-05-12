@@ -4,16 +4,7 @@
 #include "fastFunctsHelpers.h"
 namespace fastFuncts
 {
-	NOINLINE EOP_EXPORT void setCryptedString(char* targetS, const char* newS)
-	{
-		UINT32 functionOffset = codes::offsets.stringCryptFunc;
-		_asm {
-			push newS
-			mov ecx, targetS
-			mov eax, functionOffset
-			call eax
-		}
-	}
+
 
 	NOINLINE EOP_EXPORT factionStruct** getFactionsList()
 	{
@@ -317,6 +308,43 @@ namespace fastFuncts
 		}
 	}
 
+	NOINLINE EOP_EXPORT void destroyBuildings(settlementStruct* sett, const char* typeName, bool isReturnMoney)
+	{
+
+		DWORD adr = codes::offsets.destroyBuildingFunc;
+		char** buildTypeS = fastFunctsHelpers::makeCryptedString(typeName);
+		if (buildTypeS == nullptr)return;
+		char* buildType = buildTypeS[0];
+		char* hash = buildTypeS[1];
+		_asm {
+			push isReturnMoney
+			push hash
+			push buildType
+			mov ecx, [sett]
+			mov eax, [adr]
+			call eax
+		}
+		return;
+	}
+
+	NOINLINE EOP_EXPORT void createBuilding(settlementStruct* sett, const char* building_level_id)
+	{
+		DWORD adrFunc = codes::offsets.createBuildingFunc;
+		string command = sett->name;
+		command.push_back(' ');
+		command += building_level_id;
+		char buffer[100]{};
+		const char* cmdC = command.c_str();
+		_asm
+		{
+			lea eax,buffer
+			push eax
+			push cmdC
+			mov eax, adrFunc
+			call eax
+		}
+	}
+
 	NOINLINE EOP_EXPORT general* createCharacter(char* type, factionStruct* fac, int age, char* name, char* name2, int subFaction, char* portrait, int x, int y)
 	{
 		DWORD adrFunc = codes::offsets.createCharacterFunc;
@@ -329,7 +357,7 @@ namespace fastFuncts
 			return gen;
 		}
 		cryptS[0] = _strdup(type);
-		setCryptedString((char*)cryptS, type);
+		fastFunctsHelpers::setCryptedString((char*)cryptS, type);
 		DWORD adrType = (DWORD)cryptS;
 		_asm
 		{

@@ -192,6 +192,7 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 		else if (compareEvent(event, &pl->onSettlementSelected.stringAdr, pl->onSettlementSelected.strCmp))
 		{
 			settlementStruct* setl = reinterpret_cast<settlementStruct*>(vTab[1]);
+
 			(*(*pl->onSettlementSelected))(setl);
 		}
 		else if (compareEvent(event, &pl->onSettlementUpgraded.stringAdr, pl->onSettlementUpgraded.strCmp))
