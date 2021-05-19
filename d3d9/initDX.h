@@ -41,13 +41,13 @@ void initDX9()
 		MessageBoxA(NULL, "Cannot find d3d9.dll in system directory!", "ATTENTION!", NULL);
 		exit(0);
 	}
-	DWORD err = GetLastError();
+	/*DWORD err = GetLastError();
 	if (err)
 	{
 		std::string errorS = std::to_string(err);
 		MessageBoxA(NULL, errorS.c_str(), "ATTENTION!", NULL);
 		exit(0);
-	}
+	}*/
 	// Get function addresses
 	m_pDirect3DShaderValidatorCreate9 = (Direct3DShaderValidatorCreate9Proc)GetProcAddress(d3d9dll, "Direct3DShaderValidatorCreate9");
 	m_pPSGPError = (PSGPErrorProc)GetProcAddress(d3d9dll, "PSGPError");
@@ -64,13 +64,13 @@ void initDX9()
 	m_pDirect3D9EnableMaximizedWindowedModeShim = (Direct3D9EnableMaximizedWindowedModeShimProc)GetProcAddress(d3d9dll, "Direct3D9EnableMaximizedWindowedModeShim");
 	m_pDirect3DCreate9 = (Direct3DCreate9Proc)GetProcAddress(d3d9dll, "Direct3DCreate9");
 	m_pDirect3DCreate9Ex = (Direct3DCreate9ExProc)GetProcAddress(d3d9dll, "Direct3DCreate9Ex");
-	err = GetLastError();
+	/*DWORD err = GetLastError();
 	if (err)
 	{
 		std::string errorS = std::to_string(err);
 		MessageBoxA(NULL, errorS.c_str(), "ATTENTION!", NULL);
 		exit(0);
-	}
+	}*/
 }
 
 void deInit()

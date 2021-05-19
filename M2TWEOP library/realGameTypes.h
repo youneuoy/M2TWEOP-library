@@ -4,6 +4,60 @@
 typedef unsigned char   undefined;
 typedef unsigned int    uint;
 typedef unsigned char    uchar;
+struct gameDataAllStruct {
+	undefined field_0x0[88];
+	struct battleDataS* battleHandler;
+	undefined field_0x5c[164];
+};
+struct armyAndCharacter { /* in battle leader and leader army */
+	struct stackStruct* army;
+	struct general* character;
+};
+struct deploymentAreaS {
+	undefined field_0x0[4];
+	float* coordsPairs;
+	undefined field_0x8[4];
+	int coordsNum;
+};
+struct trackedPointerArmy {
+	undefined field_0x0[4];
+	struct stackStruct* stack;
+	undefined field_0x8[44];
+	struct deploymentAreaS* deploymentArea;
+	undefined field_0x38[40];
+};
+
+struct battleSide {
+	bool isDefender;
+	uchar field_0x1;
+	bool isCanDeploy;
+	undefined field_0x3[8];
+	undefined field_0xb;
+	DWORD winConditions[4];
+	undefined field_0x1c[20];
+	struct armyAndCharacter* forces;
+	undefined field_0x34[4];
+	int armiesNum;
+	undefined field_0x3c[28];
+	struct trackedPointerArmy armies[8];
+	undefined field_0x358[5588];
+};
+
+struct battleDataS {
+	undefined field_0x0[24];
+	int xCoord;
+	int yCoord;
+	undefined field_0x20[16];
+	int attackerXCoord;
+	int attackerYCoord;
+	int defenderXCoord;
+	int defenderYCoord;
+	undefined field_0x40[92];
+	struct battleSide sides[8];
+	undefined field_0xc9fc[124];
+	int sidesNum;
+};
+
 
 struct UNICODE_STRING {
 	USHORT Length;
@@ -150,6 +204,30 @@ struct building { /* building structure */
 	int hp; /* health points of the building */
 	struct settlementStruct* settlement;
 };
+struct buildingInQueue { /* building in settlement queue */
+	int something;
+	struct building_data* buildingData;
+	struct building* existsBuilding; /* 0 if building dont exist yet */
+	struct settlementStruct* settlement;
+	int currentLevel;
+	int pastLevel;
+	int buildCost;
+	int something2;
+	int turnsToBuild;
+	int buildTurnsPassed;
+	int petcentBuilded;
+	int flags;
+	int buildCost2;
+	int turnsToBuild2;
+	void* texture;
+};
+struct buildingsQueue {
+	struct buildingInQueue items[6];
+	int firstIndex;
+	int lastIndex;
+	int buildingsInQueue;
+	int currentBuildingIndex;
+};
 //settlement
 struct settlementStruct {
 	undefined field_0x0[4];
@@ -174,7 +252,10 @@ struct settlementStruct {
 	BYTE isCastle; /* castle or settlement */
 	undefined field_0x1a5[3];
 	UINT32 regionNumber; /* number of region */
-	undefined field_0x1ac[1544];
+	undefined field_0x1ac[644];
+	undefined field_0x430[4];
+	struct buildingsQueue buildingsQueueArray;
+	undefined field_0x5ac[520];
 	struct building* buildings[128];
 	int buldingsNum; /* number of the buildings in the settlement */
 	undefined field_0x9b8[1100];
@@ -184,6 +265,8 @@ struct settlementStruct {
 	struct resStrat** resources;
 	undefined field_0xe48[4];
 	int resourcesNum;
+	undefined field_0xe50[2572];
+	int populationSize;
 };
 
 /* I_CompareCounter script command */
@@ -229,7 +312,10 @@ struct general { /* character on the stratmap, who has a unit in a stack */
 //additional character data(name,label,traits, etc)
 struct generalCharacterictics { /* many important info about character */
 	UINT32 index; /* index of character */
-	undefined field_0x4[16];
+	UNICODE_STRING** localizedFullName; /* displaying name */
+	UNICODE_STRING** localizedNameForSave; /* saved to save file */
+	UNICODE_STRING** localizedNextNameForSave; /* saved to save file */
+	UNICODE_STRING** localizedNicknameForSave; /* saved to save file */
 	char* shortName; /* not a full name) */
 	undefined field_0x18[12];
 	char* fullName; /* full name of character) */

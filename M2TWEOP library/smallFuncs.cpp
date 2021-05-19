@@ -1,5 +1,6 @@
 #include "smallFuncs.h"
 #include "MemWork.h"
+#include "dataOffsets.h"
 namespace smallFuncs
 {
 	NOINLINE EOP_EXPORT void setAncLimit(unsigned char limit)
@@ -60,5 +61,50 @@ namespace smallFuncs
 				MemWork::WriteData(nops, cmd, 2);
 			}
 		}
+	}
+	NOINLINE EOP_EXPORT int getBattleCondCode(DWORD condObject)
+	{
+		if (condObject == 0)
+		{
+			return -1;
+		}
+
+		DWORD* objectPtr = reinterpret_cast<DWORD*>(condObject);
+		DWORD vtablePtr = *objectPtr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			switch (vtablePtr)
+			{
+			case 0x012ed814: return 0; break;//destroy_or_rout_enemy
+			case 0x012fe30c: return 1; break;//balance_of_strength_percent
+			case 0x012fe334: return 2; break;//destroy_enemy_strength_percent
+			case 0x012fe2bc: return 3; break;//capture_location
+			case 0x12fe9c4: return 4; break;//destroy_character
+			case 0x012ed7ec: return 5; break;//capture_major_settlement
+			case 0x012fe2e4: return 6; break;//capture_army_settlement
+			}
+		}
+		else//disk version
+		{
+			switch (vtablePtr)
+			{
+			case 0x01332834: return 0; break;//destroy_or_rout_enemy
+			case 0x0134332c: return 1; break;//balance_of_strength_percent
+			case 0x01343354: return 2; break;//destroy_enemy_strength_percent
+			case 0x013432dc: return 3; break;//capture_location
+			case 0x013439e4: return 4; break;//destroy_character
+			case 0x0133280c: return 5; break;//capture_major_settlement
+			case 0x01343304: return 6; break;//capture_army_settlement
+			}
+		}
+
+
+		return -1;
+	}
+	NOINLINE EOP_EXPORT gameDataAllStruct* getGameDataAll()
+	{
+		gameDataAllStruct* retStruct = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
+
+		return retStruct;
 	}
 };

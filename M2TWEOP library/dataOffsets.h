@@ -15,6 +15,8 @@ public:
 		DWORD unitTypesStart = NULL;
 		//if on stratmap then not 0
 		DWORD someStratmapPointer = NULL;
+
+		DWORD gameDataAllOffset = NULL;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);
