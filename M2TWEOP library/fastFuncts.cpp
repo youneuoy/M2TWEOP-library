@@ -308,7 +308,7 @@ namespace fastFuncts
 		}
 	}
 
-	NOINLINE EOP_EXPORT void destroyBuildings(settlementStruct* sett, const char* typeName, bool isReturnMoney)
+	NOINLINE EOP_EXPORT void destroyBuilding(settlementStruct* sett, const char* typeName, bool isReturnMoney)
 	{
 
 		DWORD adr = codes::offsets.destroyBuildingFunc;

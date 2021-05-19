@@ -14,6 +14,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.stratMapAllOffsetStart = 0x02c74ff4;
 
 		offsets.someStratmapPointer = 0x019b3134;
+
+		offsets.gameDataAllOffset = 0x02c74f90;
 	}
 	else if (gameVer == 2)
 	{
@@ -26,5 +28,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.stratMapAllOffsetStart = 0x02c2bf3c;
 
 		offsets.someStratmapPointer = 0x0196a004;
+
+
+		offsets.gameDataAllOffset = 0x02c2bed8;
 	}
 }

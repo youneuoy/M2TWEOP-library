@@ -22,4 +22,3 @@ namespace stratModelsChange
 	void changeModel(int x, int y, model_Rigid* modelP, model_Rigid* modelP2);
 	void WINAPI disableChecker();
 };
-

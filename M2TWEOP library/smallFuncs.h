@@ -12,6 +12,9 @@ namespace smallFuncs
 	NOINLINE EOP_EXPORT void setAncLimit(unsigned char limit);
 	NOINLINE EOP_EXPORT void setMaxBgSize(unsigned char size);
 	NOINLINE EOP_EXPORT void unlockConsoleCommands();
+	NOINLINE EOP_EXPORT int getBattleCondCode(DWORD condObject);
 
+
+	NOINLINE EOP_EXPORT gameDataAllStruct* getGameDataAll();
 };
 
