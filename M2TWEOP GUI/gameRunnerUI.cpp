@@ -170,7 +170,6 @@ namespace gameRunnerUI
 
 		if ((startProcess.isRunEnded == true&& startProcess.isGetResponce == true)|| *isOpen==false)
 		{
-			helpers::removePipe();
 			if (startProcess.isGetResponce == false)
 			{
 				helpers::closeGame(dataG::data.gameData.exeName);
