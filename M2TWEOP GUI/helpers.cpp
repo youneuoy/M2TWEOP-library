@@ -182,27 +182,37 @@ bool helpers::doPipe(const string& message, int waitSeconds)
 	namespace bip = boost::interprocess;
 
 
+
 	//Create a native windows shared memory object.
 	bip::windows_shared_memory shm(bip::create_only, "M2TWEOPStartMem1", bip::read_write, message.size() + 5);
 
 	//Map the whole shared memory in this process
 	bip::mapped_region region(shm, bip::read_write);
-
-
+	char* adr = reinterpret_cast<char*>(region.get_address());
+	for (int i = 0; i < message.size(); i++)
+	{
+		adr[i] = message[i];
+	}
+	adr[message.size()] = 0;
+	/*
 	int sSize = message.size() + 1;
 	memcpy(region.get_address(), &sSize, sizeof(sSize));
 	char* adr = reinterpret_cast<char*>(region.get_address());
 	adr += sizeof(sSize);
 	memcpy(adr, message.c_str(), sSize);
 
+
+	*/
 	adr = (char*)region.get_address();
 
-	DWORD endTime = GetTickCount() + 1000 * waitSeconds;
+	ULONGLONG startTime = GetTickCount();
+	ULONGLONG endTime = startTime + 1000ull * waitSeconds;
 
 	int responce = 1;
 	do
 	{
 		responce = *adr;
+		f1 << responce << endl;
 		Sleep(1);
 	} while (responce != 0 && GetTickCount() < endTime);
 	Sleep(1000);
