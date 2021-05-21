@@ -18,7 +18,8 @@ vector<std::string> helpers::splitString(const std::string& phrase, const std::s
 
 
 #define BOOST_DATE_TIME_NO_LIB 1
-#include <boost/interprocess/managed_shared_memory.hpp>
+#include <boost/interprocess/windows_shared_memory.hpp>
+#include <boost/interprocess/mapped_region.hpp>
 void helpers::doEOPPipe(std::string& result, int waitSeconds)
 {
     ULONGLONG endTime = GetTickCount64() + 1000ull * waitSeconds;
@@ -29,8 +30,7 @@ void helpers::doEOPPipe(std::string& result, int waitSeconds)
         try
         {
             //Open already created shared memory object.
-            bip::shared_memory_object shm(bip::open_only, "M2TWEOPStartMem1", bip::read_write);
-
+            bip::windows_shared_memory shm(bip::open_only, "M2TWEOPStartMem1", bip::read_write);
 
             //Map the whole shared memory in this process
             bip::mapped_region region(shm, bip::read_write);
@@ -50,7 +50,6 @@ void helpers::doEOPPipe(std::string& result, int waitSeconds)
             *mem = 0;
 
             region.flush();
-
         }
         catch (...)
         {

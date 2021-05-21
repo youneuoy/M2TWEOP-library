@@ -175,42 +175,36 @@ bool helpers::addModPathArg(string& args, int gameMode)
 }
 
 #define BOOST_DATE_TIME_NO_LIB 1
-#include <boost/interprocess/managed_shared_memory.hpp>
+#include <boost/interprocess/windows_shared_memory.hpp>
+#include <boost/interprocess/mapped_region.hpp>
 bool helpers::doPipe(const string& message, int waitSeconds)
 {
 	namespace bip = boost::interprocess;
-	struct shmWork
-	{
-		shmWork() { bip::shared_memory_object::remove("M2TWEOPStartMem1"); }
-		~shmWork() { bip::shared_memory_object::remove("M2TWEOPStartMem1"); }
-	} shmPass;
 
-	//Create a shared memory object.
-	bip::shared_memory_object shm(bip::create_only, "M2TWEOPStartMem1", bip::read_write);
-	//Set size
-	shm.truncate(static_cast<bip::offset_t>(message.size()*2 + 1));
+
+	//Create a native windows shared memory object.
+	bip::windows_shared_memory shm(bip::create_only, "M2TWEOPStartMem1", bip::read_write, message.size() + 5);
 
 	//Map the whole shared memory in this process
 	bip::mapped_region region(shm, bip::read_write);
 
-	char* adr = reinterpret_cast<char*>(region.get_address());
 
 	int sSize = message.size() + 1;
-	memcpy(adr, &sSize, sizeof(sSize));
-
+	memcpy(region.get_address(), &sSize, sizeof(sSize));
+	char* adr = reinterpret_cast<char*>(region.get_address());
 	adr += sizeof(sSize);
-	memcpy(adr, message.c_str(), message.size() + 1);
+	memcpy(adr, message.c_str(), sSize);
+
 	adr = (char*)region.get_address();
 
 	DWORD endTime = GetTickCount() + 1000 * waitSeconds;
-	
+
 	int responce = 1;
 	do
 	{
 		responce = *adr;
-
 		Sleep(1);
-	} while (responce!=0 && GetTickCount() < endTime);
+	} while (responce != 0 && GetTickCount() < endTime);
 	Sleep(1000);
 	if (responce == 0)
 	{
@@ -220,10 +214,7 @@ bool helpers::doPipe(const string& message, int waitSeconds)
 	return false;
 }
 
-void helpers::removePipe()
-{
-	boost::interprocess::shared_memory_object::remove("M2TWEOPStartMem");
-}
+
 
 int makeFullPath(string& path)
 {
