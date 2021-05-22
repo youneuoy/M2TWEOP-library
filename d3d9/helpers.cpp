@@ -34,23 +34,7 @@ void helpers::doEOPPipe(std::string& result, int waitSeconds)
 
             //Map the whole shared memory in this process
             bip::mapped_region region(shm, bip::read_write);
-
-          
-            
-            
-            //Check that memory was initialized to 1
             char* mem = static_cast<char*>(region.get_address());
-         /*   int strSize = *mem;
-            f1 << strSize << endl;
-            std::string buf;
-            buf.resize(strSize);
-            //example of the function that can write to a buffer with 10-100 characters.
-            memcpy(&buf[0], mem + sizeof(strSize), strSize);
-
-            buf.resize(strSize);
-            buf.shrink_to_fit();
-           
-            result = buf;*/
             result = mem;
 
             *mem = 0;

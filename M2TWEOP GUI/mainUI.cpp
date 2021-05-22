@@ -10,6 +10,7 @@
 #include "gameRunnerUI.h"
 
 #include <shellapi.h>
+
 namespace mainUI
 {
 	struct
@@ -64,22 +65,46 @@ namespace mainUI
 		ImGui::SetNextWindowSize(ImVec2(windowSize.x, -1), ImGuiCond_Once);
 		ImGui::Begin("M2TWEOP", isOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
-		ImGui::NewLine();
-		if (ImGui::Button("Run vanilla or dlc(no M2TWEOP capabilities)", helpers::getScreen().centerXButton))
-		{
-			childs.isGameSTDMenuOpen = true;
+		const char logoName[] = "eopData/images/logoAbout.png";
+		GLImage* imgFinded = helpers::findImage("eopData/images/logoAbout.png", sizeof logoName-1);
+
+		ImVec2 const csz = ImGui::GetContentRegionAvail();
+		ImVec2 logoSize = ImVec2((float)imgFinded->xSize, (float)imgFinded->ySize);
+		if (logoSize.x > csz.x) {
+			const float r = logoSize.y / logoSize.x;
+			logoSize.x = csz.x;
+			logoSize.y = csz.x * r;
 		}
-		if (ImGui::Button("Run mod", helpers::getScreen().centerXButton))
+		ImGui::Image((void*)(intptr_t)imgFinded->image, logoSize);
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.584, 0.270, 0.250, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.564, 0.250, 0.230, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.804, 0.490, 0.470, 1.0f));
+		ImGuiContext& g = *GImGui;
+		const ImGuiStyle& style = g.Style;
+		const ImVec2 label_size = ImGui::CalcTextSize("Run mod", NULL, true);
+		if (ImGui::Button("Run mod", ImVec2(-1.0f,(label_size.y + style.FramePadding.y * 2.0f)*2)))
 		{
 			dataG::data.gameData.gameMode = 7;
 			gameStarter::startGame();
 			childs.isGameRunnerUIOpen = true;
 			dataG::data.gameData.gameMode = 0;
 		}
+		ImGui::PopStyleColor();
+		ImGui::PopStyleColor();
+		ImGui::PopStyleColor();
+
+
 		if (ImGui::Button("Mod settings", helpers::getScreen().centerXButton))
 		{
 			childs.isModSettingsUIOpen = true;
 		}
+		ImGui::NewLine();
+		if (ImGui::Button("Run vanilla or dlc(no M2TWEOP capabilities)", helpers::getScreen().centerXButton))
+		{
+			childs.isGameSTDMenuOpen = true;
+		}
+
 		ImGui::NewLine();
 		if (ImGui::Button("About M2TWEOP", helpers::getScreen().centerXButton))
 		{
