@@ -2,5 +2,5 @@
 #include "imgui.h"
 namespace ImGui
 {
-	inline void StyleGrey();
+	void StyleGrey();
 };
