@@ -98,7 +98,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -162,7 +162,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\imguiDocking\eopImgui.cpp" />
+    <ClCompile Include="..\3rd\imguiDocking\ImFileDialog.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui.cpp" />
+    <ClCompile Include="..\3rd\imguiDocking\imgui_demo.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_draw.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_impl_opengl2.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_impl_sdl.cpp" />
@@ -176,11 +178,14 @@
     <ClCompile Include="helpers.cpp" />
     <ClCompile Include="M2TWEOP tools.cpp" />
     <ClCompile Include="mainUI.cpp" />
+    <ClCompile Include="modelsFilesUI.cpp" />
+    <ClCompile Include="modelsFilesWorker.cpp" />
     <ClCompile Include="toolRoutine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\imguiDocking\eopImgui.h" />
     <ClInclude Include="..\3rd\imguiDocking\imconfig.h" />
+    <ClInclude Include="..\3rd\imguiDocking\ImFileDialog.h" />
     <ClInclude Include="..\3rd\imguiDocking\imgui.h" />
     <ClInclude Include="..\3rd\imguiDocking\imgui_impl_opengl2.h" />
     <ClInclude Include="..\3rd\imguiDocking\imgui_impl_sdl.h" />
@@ -197,6 +202,8 @@
     <ClInclude Include="headersSTD.h" />
     <ClInclude Include="helpers.h" />
     <ClInclude Include="mainUI.h" />
+    <ClInclude Include="modelsFilesUI.h" />
+    <ClInclude Include="modelsFilesWorker.h" />
     <ClInclude Include="toolRoutine.h" />
   </ItemGroup>
   <ItemGroup>

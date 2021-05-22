@@ -1,6 +1,8 @@
 #include "mainUI.h"
 #include "headersSTD.h"
 #include "helpers.h"
+
+#include "modelsFilesUI.h"
 /*#include "dataG.h"
 
 #include "aboutUI.h"
@@ -15,19 +17,20 @@ namespace mainUI
 {
 	struct
 	{
-		bool isAboutOpen = false;
+		bool isModelsFilesOpen = false;
 	}childs;
 
 
 	int draw(bool* isOpen)
 	{
-		if (childs.isAboutOpen == true)
+
+		if (childs.isModelsFilesOpen == true)
 		{
-		//	aboutUI::drawAboutUi(&childs.isAboutOpen);
+			modelsFilesUI::draw(&childs.isModelsFilesOpen);
 			return 0;
 		}
 
-		ImVec2 windowSize = ImGui::CalcTextSize("Run vanilla or dlc(no M2TWEOP capabilities)");
+		ImVec2 windowSize = ImGui::CalcTextSize("Adapt m2tweop v1.x models change files");
 		windowSize.x *= 1.5;
 
 		ImGui::SetNextWindowPos(helpers::getScreen().screenHalfSize, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
@@ -35,9 +38,9 @@ namespace mainUI
 		ImGui::Begin("M2TWEOP tools", isOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
 
-		if (ImGui::Button("About M2TWEOP", helpers::getScreen().centerXButton))
+		if (ImGui::Button("Convert m2tweop v1.x stratmodels files", helpers::getScreen().centerXButton))
 		{
-			childs.isAboutOpen = true;
+			childs.isModelsFilesOpen = true;
 		}
 
 		ImGui::End();

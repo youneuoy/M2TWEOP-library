@@ -25,7 +25,7 @@ public:
 		screenS screen;
 		struct
 		{
-			GLImage empty{ .path = "empty" };
+			GLImage empty{  "empty" };
 			GLImage logoAbout;
 			GLImage logoBad;
 		}images;

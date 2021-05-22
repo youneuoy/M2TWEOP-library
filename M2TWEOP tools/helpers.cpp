@@ -188,3 +188,23 @@ void helpers::getCurrentPath(string& path)
 	path = currentPath;
 }
 
+string helpers::getSubstring(const string& s, const string& start, const string& end)
+{
+
+	std::string temp;
+
+
+	size_t pos = s.find_last_of(start);
+	size_t endpos = s.find_last_of(end);
+	if (pos == std::string::npos || endpos == std::string::npos || pos == endpos) return "";
+
+	pos+= start.size();
+	temp = s.substr(pos, endpos - pos);
+
+
+	int len = temp.size() + 1;
+
+
+	return temp;
+}
+
