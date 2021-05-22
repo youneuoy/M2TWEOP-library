@@ -194,15 +194,7 @@ bool helpers::doPipe(const string& message, int waitSeconds)
 		adr[i] = message[i];
 	}
 	adr[message.size()] = 0;
-	/*
-	int sSize = message.size() + 1;
-	memcpy(region.get_address(), &sSize, sizeof(sSize));
-	char* adr = reinterpret_cast<char*>(region.get_address());
-	adr += sizeof(sSize);
-	memcpy(adr, message.c_str(), sSize);
 
-
-	*/
 	adr = (char*)region.get_address();
 
 	ULONGLONG startTime = GetTickCount();
@@ -212,7 +204,7 @@ bool helpers::doPipe(const string& message, int waitSeconds)
 	do
 	{
 		responce = *adr;
-		f1 << responce << endl;
+
 		Sleep(1);
 	} while (responce != 0 && GetTickCount() < endTime);
 	Sleep(1000);

@@ -65,6 +65,28 @@ NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 		}
 	}
 
+	/*MEMORYSTATUSEX statex;
+
+	statex.dwLength = sizeof(statex);
+
+	GlobalMemoryStatusEx(&statex);
+	ImGui::Begin("Ram test");
+	ImGui::Text("There are %I64d total MB of virtual memory.\n",
+		statex.ullTotalVirtual / 1048576);
+	ImGui::Text("There are %I64d free  MB of virtual memory.\n",
+		statex.ullAvailVirtual / 1048576);
+
+	static float progress = 0.0f, progress_dir = 1.0f;
+
+
+	float prop =1.0f- (double)statex.ullAvailVirtual / (double)statex.ullTotalVirtual;
+
+	ImGui::Text("Memory usage:");
+	ImGui::ProgressBar(prop, ImVec2(-1.0f, 0.0f));
+
+	ImGui::End();*/
+
+
 	/*ImGui::Begin("test");
 
 	if (ImGui::Button("fight"))
