@@ -19,14 +19,17 @@
     <Filter Include="3rd\ImGui">
       <UniqueIdentifier>{0244b6b4-7c7c-4627-a9d0-d268009b3f18}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Исходные файлы\GUI">
-      <UniqueIdentifier>{5e43f6b1-4383-4a7e-822b-704c3d82b25d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Исходные файлы\helpers">
       <UniqueIdentifier>{feef9727-1e3c-41df-8cae-d9ddf8342162}</UniqueIdentifier>
     </Filter>
     <Filter Include="Исходные файлы\data">
       <UniqueIdentifier>{0353de54-22ab-490d-9096-b4aa7e377f1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\menu">
+      <UniqueIdentifier>{5e43f6b1-4383-4a7e-822b-704c3d82b25d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\menu\modelsFiles">
+      <UniqueIdentifier>{f4d992e3-13df-4e14-8251-49b71845419f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -70,7 +73,7 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="mainUI.cpp">
-      <Filter>Исходные файлы\GUI</Filter>
+      <Filter>Исходные файлы\menu</Filter>
     </ClCompile>
     <ClCompile Include="helpers.cpp">
       <Filter>Исходные файлы\helpers</Filter>
@@ -78,11 +81,20 @@
     <ClCompile Include="dataG.cpp">
       <Filter>Исходные файлы\data</Filter>
     </ClCompile>
+    <ClCompile Include="..\3rd\imguiDocking\ImFileDialog.cpp">
+      <Filter>3rd\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imguiDocking\imgui_demo.cpp">
+      <Filter>3rd\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="modelsFilesUI.cpp">
+      <Filter>Исходные файлы\menu\modelsFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="modelsFilesWorker.cpp">
+      <Filter>Исходные файлы\menu\modelsFiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headersSTD.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="..\3rd\imguiDocking\eopImgui.h">
       <Filter>3rd\ImGui</Filter>
     </ClInclude>
@@ -125,17 +137,29 @@
     <ClInclude Include="..\3rd\imguiDocking\stb_image.h">
       <Filter>3rd\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="toolRoutine.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="mainUI.h">
-      <Filter>Исходные файлы\GUI</Filter>
+      <Filter>Исходные файлы\menu</Filter>
     </ClInclude>
     <ClInclude Include="helpers.h">
       <Filter>Исходные файлы\helpers</Filter>
     </ClInclude>
     <ClInclude Include="dataG.h">
       <Filter>Исходные файлы\data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imguiDocking\ImFileDialog.h">
+      <Filter>3rd\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="toolRoutine.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="headersSTD.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="modelsFilesUI.h">
+      <Filter>Исходные файлы\menu\modelsFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="modelsFilesWorker.h">
+      <Filter>Исходные файлы\menu\modelsFiles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -75,3 +75,16 @@ void ImGui::StyleGrey()
 	style.ScrollbarRounding = 2;
 	style.GrabRounding = 3;
 }
+
+void ImGui::donePopup()
+{
+	if (ImGui::BeginPopupModal("Done", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::Text("You are very lucky, probably the job was done successfully");
+		ImGui::NewLine();
+
+		if (ImGui::Button("OK",ImVec2(-1.0f,0))) { ImGui::CloseCurrentPopup(); }
+		ImGui::SetItemDefaultFocus();
+		ImGui::EndPopup();
+	}
+}
