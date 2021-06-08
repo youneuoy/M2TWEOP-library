@@ -114,10 +114,16 @@ namespace modelsFilesUI
 	void drawMenu()
 	{
 		makeCfgFileButtDialog("Custom_tilesOpenDialog", "Open a custom_tiles", data.selectedFiles.custom_tiles, "Set custom_tiles.yoneuoycfg");
-		makeCfgFileButtDialog("stratFortsModelsChangeListOpenDialog", "Open a stratFortsModelsChangeList", data.selectedFiles.stratFortsModelsChangeList, "Set stratFortsModelsChangeList.yoneuoycfg");
-		makeCfgFileButtDialog("stratModelsChangeList", "Open a stratModelsChangeList", data.selectedFiles.stratModelsChangeList, "Set stratModelsChangeList.yoneuoycfg");
-		makeCfgFileButtDialog("stratPortsModelsChangeList", "Open a stratPortsModelsChangeList", data.selectedFiles.stratPortsModelsChangeList, "Set stratPortsModelsChangeList.yoneuoycfg");
+		ImGui::Separator();
 
+		makeCfgFileButtDialog("stratFortsModelsChangeListOpenDialog", "Open a stratFortsModelsChangeList", data.selectedFiles.stratFortsModelsChangeList, "Set stratFortsModelsChangeList.yoneuoycfg");
+		ImGui::Separator();
+
+		makeCfgFileButtDialog("stratModelsChangeList", "Open a stratModelsChangeList", data.selectedFiles.stratModelsChangeList, "Set stratModelsChangeList.yoneuoycfg");
+		ImGui::Separator();
+
+		makeCfgFileButtDialog("stratPortsModelsChangeList", "Open a stratPortsModelsChangeList", data.selectedFiles.stratPortsModelsChangeList, "Set stratPortsModelsChangeList.yoneuoycfg");
+		ImGui::Separator();
 		ImGui::NewLine();
 		makeCfgSaveDialog();
 

@@ -3,7 +3,7 @@ namespace stratModelsChange
 {
 	struct stratModelRecord
 	{
-		UINT32 modelId;
+		UINT32 modelId=0;
 		string path;
 		model_Rigid* modelP = nullptr;
 	};

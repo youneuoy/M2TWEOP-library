@@ -36,5 +36,27 @@ namespace fastFunctsHelpers
 		setCryptedString((char*)cryptS, string);
 		return cryptS;
 	}
+	std::string wstrToANSIStr(const std::wstring& wstr)
+	{		if (wstr.empty()) return std::string();
+
+		std::string strTo;
+		char* szTo = new char[wstr.length() + 1];
+		szTo[wstr.size()] = '\0';
+		WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, szTo, (int)wstr.length(), NULL, NULL);
+
+		strTo = szTo;
+		delete[] szTo;
+
+		return strTo;
+
+	}
+	std::wstring ANSIStrToWstr(const std::string& str)
+	{
+		if (str.empty()) return std::wstring();
+		int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
+		std::wstring wstrTo(size_needed, 0);
+		MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
+		return wstrTo;
+	}
 }
 

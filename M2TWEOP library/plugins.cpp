@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "plugins.h"
 #include "tests.h"
+
+#include "smallFuncs.h"
 plugins::configT plugins::pluginsCfg;
 vector<const char*>* plugins::eventNames;
 void plugins::init()
@@ -143,6 +145,7 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 		else if (compareEvent(event, &pl->onCharacterSelected.stringAdr, pl->onCharacterSelected.strCmp))
 		{
 			generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
+
 			(*(*pl->onCharacterSelected))(prs);
 
 

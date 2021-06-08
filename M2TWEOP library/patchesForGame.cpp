@@ -2,7 +2,7 @@
 #include "patchesForGame.h"
 #include "tilesChange.h"
 #include "graphicsD3D.h"
-#define TESTPATCHES
+//#define TESTPATCHES
 void __stdcall patchesForGame::afterEDUread()
 {
 #if defined TESTPATCHES
