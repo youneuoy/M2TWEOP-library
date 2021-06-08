@@ -16,5 +16,8 @@ namespace fastFunctsHelpers
 	int getEDUIndex(const char* type);
 
 	char** makeCryptedString(const char* string);
+
+	std::string wstrToANSIStr(const std::wstring& wstr);
+	std::wstring ANSIStrToWstr(const std::string& str);
 };
 

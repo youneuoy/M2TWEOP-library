@@ -14,6 +14,8 @@ namespace smallFuncs
 	NOINLINE EOP_EXPORT void unlockConsoleCommands();
 	NOINLINE EOP_EXPORT int getBattleCondCode(DWORD condObject);
 
+	NOINLINE EOP_EXPORT void createUniString(UNICODE_STRING**& newUniStringPointer,const char*nonUniStr);
+
 
 	NOINLINE EOP_EXPORT gameDataAllStruct* getGameDataAll();
 };

@@ -42,7 +42,7 @@ public:
 			string langP;
 
 			//legio string for soldiers
-			char* legioString;
+			char* legioString=nullptr;
 		}modConfig;
 
 

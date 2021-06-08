@@ -1,6 +1,10 @@
 #include "smallFuncs.h"
 #include "MemWork.h"
 #include "dataOffsets.h"
+
+#include "fastFunctsHelpers.h"
+
+#include "utf8.h"
 namespace smallFuncs
 {
 	NOINLINE EOP_EXPORT void setAncLimit(unsigned char limit)
@@ -101,6 +105,61 @@ namespace smallFuncs
 
 		return -1;
 	}
+	NOINLINE EOP_EXPORT void createUniString(UNICODE_STRING** &newUniStringPointer, const char* nonUniStr)
+	{
+		DWORD funcAdr = 0;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			funcAdr = 0x00f01eb0;
+		}
+		else
+		{
+			funcAdr = 0x00f018e0;
+		}
+
+
+
+		size_t lenS = strlen(nonUniStr);
+
+
+		newUniStringPointer = (UNICODE_STRING**)new char[(lenS + 6) * 2];
+
+		UNICODE_STRING** uniStr = newUniStringPointer;
+		_asm {
+			mov ecx, uniStr
+			push nonUniStr
+			mov eax, funcAdr
+			call eax
+		}
+
+		newUniStringPointer = (UNICODE_STRING**)*uniStr;
+
+
+		//string utf8TempS = nonUniStr;
+
+
+
+		int wchars_num = MultiByteToWideChar(CP_UTF8, 0, nonUniStr, -1, NULL, 0);
+		wchar_t* wstr = new wchar_t[wchars_num];
+		MultiByteToWideChar(CP_UTF8, 0, nonUniStr, -1, wstr, wchars_num);
+
+		wstring utf16line = wstr;
+		// do whatever with wstr
+		delete[] wstr;
+
+
+	//	vector<unsigned short> utf16line;
+		//utf8::utf8to16(utf8TempS.begin(), utf8TempS.end(), back_inserter(utf16line));
+		unsigned short* ptr = (unsigned short*)&(*newUniStringPointer)->Buffer;
+
+		for (int i = 0; i < utf16line.size(); i++)
+		{
+
+			*(ptr+i) = utf16line[i];
+		}
+		*(ptr + utf16line.size()) = (unsigned short)0;
+	}
+
 	NOINLINE EOP_EXPORT gameDataAllStruct* getGameDataAll()
 	{
 		gameDataAllStruct* retStruct = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
