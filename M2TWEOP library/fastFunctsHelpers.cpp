@@ -30,9 +30,12 @@ namespace fastFunctsHelpers
 		char** cryptS = (char**)malloc(8);
 		if (cryptS == nullptr)
 		{
+			MessageBoxA(NULL, "Cannot allocate memory for m2tweop", "ERROR!", NULL);
+			exit(0);
 			return nullptr;
 		}
-		cryptS[0] = _strdup(string);
+		memset(cryptS, 0, 8);
+		//cryptS[0] = _strdup(string);
 		setCryptedString((char*)cryptS, string);
 		return cryptS;
 	}

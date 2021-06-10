@@ -5,6 +5,8 @@
 typedef unsigned char   undefined;
 typedef unsigned int    uint;
 typedef unsigned char    uchar;
+
+#pragma pack(push,1) 
 struct gameDataAllStruct {
 	undefined field_0x0[88];
 	struct battleDataS* battleHandler;
@@ -60,14 +62,12 @@ struct battleDataS {
 	int sidesNum;
 };
 
-#pragma pack(push,1) 
 struct UNICODE_STRING {
 	USHORT something;//idk
 	USHORT Length;//idk
 	USHORT something2;//idk
 	PWSTR Buffer;//y
 };
-#pragma pack(pop)
 struct stratPortModel {
 	struct model_Rigid* model_rigid;
 	undefined field_0x4[4];
@@ -797,3 +797,6 @@ struct console_command { /* structure of console command */
 	int idk;
 };
 
+
+
+#pragma pack(pop)
