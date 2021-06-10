@@ -345,19 +345,14 @@ namespace fastFuncts
 		}
 	}
 
-	NOINLINE EOP_EXPORT general* createCharacter(char* type, factionStruct* fac, int age, char* name, char* name2, int subFaction, char* portrait, int x, int y)
+	NOINLINE EOP_EXPORT general* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
 	{
 		DWORD adrFunc = codes::offsets.createCharacterFunc;
 
 		general* gen = nullptr;
 
-		char** cryptS = (char**)malloc(8);
-		if (cryptS == nullptr)
-		{
-			return gen;
-		}
-		cryptS[0] = _strdup(type);
-		fastFunctsHelpers::setCryptedString((char*)cryptS, type);
+		char** cryptS = fastFunctsHelpers::makeCryptedString(type);
+
 		DWORD adrType = (DWORD)cryptS;
 		_asm
 		{
@@ -384,6 +379,7 @@ namespace fastFuncts
 
 		adrFunc = codes::offsets.spawnCreatedCharacterFunc;
 		xyS* xyP = &xy;
+
 		_asm
 		{
 			push xyP

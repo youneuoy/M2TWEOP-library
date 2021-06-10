@@ -44,34 +44,32 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 
 	if (event == nullptr)return;
 
-	/*if (strcmp(event, "CharacterSelected")==0)
+	/*if (strcmp(event, "CharacterSelected") == 0)
 	{
 		generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
 
-		factionStruct** facs = fastFuncts::getFactionsList();
-		for (int i = 0; i < fastFuncts::getFactionsCount(); i++)
+
+		//int x = prs->gen->xCoord;
+		//int y = prs->gen->yCoord;
+
+
+		int count = 0;
+		for (int y = 0; y < 5; y++)
 		{
-			factionStruct* fac = facs[i];
-
-			for (int j = 0; j < fac->numOfCharacters; j++)
+			for (int x = 0; x < 90; x++)
 			{
-				if (fac->characters[j]->xCoord == 62
-					&& fac->characters[j]->yCoord == 37
-					)
-				{
-					actionsStrat::attackArmy(prs->gen, fac->characters[j]);
-				}
+				ofstream f1("test", ios::app);
+				string name = "Henry";
+				name += to_string(GetTickCount());
+				general* gen = fastFuncts::createCharacter((char*)"named character", fastFuncts::getFactionsList()[y], 22, (char*)name.c_str(), (char*)name.c_str(), fastFuncts::getFactionsList()[0]->dipNum, NULL, x, y);
+				stackStruct* army = fastFuncts::createArmy(gen);
+				unit* un = fastFuncts::createUnitN("NE Bodyguard", fastFuncts::getFactionsList()[y]->dipNum, 1, 1, 1);
+				fastFuncts::addUnitToArmy(army, un);
+				fastFuncts::setBodyguard(gen, un);
+				f1 << x << " " << y << std::endl;
+				f1.close();
 			}
-		}
-
-		*/
-	/*	int x = prs->gen->xCoord;
-		int y = prs->gen->yCoord;
-		general* gen = fastFuncts::createCharacter((char*)"named character", fastFuncts::getFactionsList()[1], 22, (char*)"Henry", NULL, 31, NULL, x + 1, y);
-		stackStruct* army = fastFuncts::createArmy(gen);
-		unit* un = fastFuncts::createUnitN("NE Bodyguard", fastFuncts::getFactionsList()[1]->dipNum, 1, 1, 1);
-		fastFuncts::addUnitToArmy(army, un);
-		fastFuncts::setBodyguard(gen, un);
+	}
 	}*/
 	
 	for (plugin* pl : pluginsCfg.plugins)
