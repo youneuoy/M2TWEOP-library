@@ -166,4 +166,52 @@ namespace smallFuncs
 
 		return retStruct;
 	}
+
+
+	bool highlightOn = false;
+	NOINLINE EOP_EXPORT void swUnBMapHighlight()
+	{
+		static unsigned char highLightOn = 0x8f;
+		static unsigned char highLightOff = 0x8e;
+
+		DWORD codeAdr = 0;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			codeAdr = 0x009e0ec4;
+		}
+		else
+		{
+			codeAdr = 0x009e1a64;
+		}
+
+		if (!highlightOn)
+		{
+			MemWork::WriteData(&highLightOn, codeAdr + 0x1, 1);
+			highlightOn = true;
+		}
+		else
+		{
+			MemWork::WriteData(&highLightOff, codeAdr + 0x1, 1);
+			highlightOn = false;
+		}
+
+
+		return;
+	}
+	NOINLINE EOP_EXPORT void setReligionsLimit(unsigned char limit)
+	{
+		DWORD codeAdr = 0;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			codeAdr = 0x0411E0E;
+		}
+		else
+		{
+			codeAdr = 0x0411C0E;
+		}
+
+		MemWork::WriteData(&limit, codeAdr, 1);
+
+		return;
+	}
 };

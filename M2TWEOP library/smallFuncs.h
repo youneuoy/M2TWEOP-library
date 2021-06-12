@@ -18,5 +18,10 @@ namespace smallFuncs
 
 
 	NOINLINE EOP_EXPORT gameDataAllStruct* getGameDataAll();
+
+	//toggle the highlighting of units on the tactical map.
+	NOINLINE EOP_EXPORT void swUnBMapHighlight();
+
+	NOINLINE EOP_EXPORT void setReligionsLimit(unsigned char limit);
 };
 
