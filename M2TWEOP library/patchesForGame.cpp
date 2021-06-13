@@ -140,6 +140,16 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab)
 	plugins::onEvent(vTab);
 }
 
+void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
+{
+	plugins::onLoadGame(savePath);
+}
+
+void __fastcall patchesForGame::onSaveGame(UNICODE_STRING**& savePath)
+{
+	plugins::onSaveGame(savePath);
+}
+
 void __fastcall patchesForGame::onTileCheck(int* coords)
 {
 #if defined TESTPATCHES

@@ -40,6 +40,11 @@ public:
 	//parse events in this functions
 	static void __fastcall onEvent(DWORD** vTab);
 
+	//load game
+	static void __fastcall onLoadSaveFile(UNICODE_STRING**& savePath);
+	//save game
+	static void __fastcall onSaveGame(UNICODE_STRING**& savePath);
+
 	//check of custom tile before battle, replace it here
 	static void __fastcall onTileCheck(int* coords);
 	//read custom tiles file and make right strings, structures, etc

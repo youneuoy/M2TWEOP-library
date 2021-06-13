@@ -3,6 +3,7 @@
 #include "tests.h"
 
 #include "smallFuncs.h"
+#include "techFuncs.h"
 plugins::configT plugins::pluginsCfg;
 vector<const char*>* plugins::eventNames;
 void plugins::init()
@@ -545,6 +546,42 @@ void plugins::onChangeTurnNum()
 	{
 		(*(*pl->onChangeTurnNum))(num);
 	}
+}
+
+void plugins::onLoadGame(UNICODE_STRING**& savePath)
+{
+
+	vector<string>files=techFuncs::loadGameLoadArchive(savePath);
+	
+
+	for (plugin* pl : pluginsCfg.plugins)
+	{
+		(*(*pl->onLoadGamePl))(&files);
+	}
+
+	techFuncs::deleteFiles(files);
+}
+
+void plugins::onSaveGame(UNICODE_STRING**& savePath)
+{
+	vector<string>files;
+
+	for (plugin* pl : pluginsCfg.plugins)
+	{
+		vector<string>*plugFiles= (*(*pl->onSaveGamePl))(savePath);
+
+		for (string& path : *plugFiles)
+		{
+			files.push_back(path);
+		}
+
+		delete plugFiles;
+	}
+
+	techFuncs::saveGameMakeArchive(savePath, files);
+
+
+	techFuncs::deleteFiles(files);
 }
 
 void plugins::onWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -1157,5 +1194,13 @@ int plugin::init(string* nameP)
 	//onWndProc
 	fName = "onWndProc";
 	onWndProc.Load(&plPath, &fName);
+
+	//onSaveGamePl
+	fName = "onSaveGamePl";
+	onSaveGamePl.Load(&plPath, &fName);
+
+	//onLoadGamePl
+	fName = "onLoadGamePl";
+	onLoadGamePl.Load(&plPath, &fName);
 	return 1;
 }

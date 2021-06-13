@@ -1512,3 +1512,104 @@ void toStratModelsSelect::SetlStratModelsCode()
 
 	delete a;
 }
+
+toLoadSaveFile::toLoadSaveFile(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAdress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x004347fe;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x004344be;
+}
+
+toLoadSaveFile::~toLoadSaveFile()
+{
+}
+
+void toLoadSaveFile::SetOriginalLoadCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(eax, 0x3bc8);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toLoadSaveFile::SetlLoadCode()
+{
+	Assembler* a = new Assembler();
+
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(ecx, dword_ptr(esp, 0x34));
+	a->mov(eax, (DWORD)funcAdress);
+
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+	a->mov(eax, 0x3bc8);
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+toSaveGame::toSaveGame(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAdress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0043530a;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00434fca;
+}
+
+toSaveGame::~toSaveGame()
+{
+}
+
+void toSaveGame::SetOriginalSaveCode()
+{
+	Assembler* a = new Assembler();
+
+	a->add(esp, 0x3be4);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toSaveGame::SetlSaveCode()
+{
+	Assembler* a = new Assembler();
+
+	a->add(esp, 0x3be4);
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(ecx, dword_ptr(esp, 0x28));
+	a->mov(eax, (DWORD)funcAdress);
+
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
