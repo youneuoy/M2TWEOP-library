@@ -70,6 +70,10 @@ class plugin
 {
 public:
 
+	ProcLoader<vector<string>*(__cdecl*)(UNICODE_STRING**& savePath)> onSaveGamePl;
+	ProcLoader<void(__cdecl*)(vector<string>*)> onLoadGamePl;
+
+
 	ProcLoader<void(__cdecl*)(int)> onChangeTurnNum;
 
 
@@ -213,6 +217,8 @@ public:
 	//from here calls all plugins
 
 	static void onChangeTurnNum();
+	static void onLoadGame(UNICODE_STRING**& savePath);
+	static void onSaveGame(UNICODE_STRING**& savePath);
 
 	static void onWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	static void onEndScene(LPDIRECT3DDEVICE9 pDevice);

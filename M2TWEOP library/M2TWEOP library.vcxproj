@@ -75,13 +75,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(IncludePath)</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(IncludePath)</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -194,6 +194,7 @@
     <ClInclude Include="..\3rd\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\3rd\imgui\imstb_textedit.h" />
     <ClInclude Include="..\3rd\imgui\imstb_truetype.h" />
+    <ClInclude Include="..\3rd\miniz\miniz.h" />
     <ClInclude Include="actionsStrat.h" />
     <ClInclude Include="agePatch.h" />
     <ClInclude Include="C:\Users\COMP\vcpkg\installed\x86-windows-static-md\include\MinHook.h" />
@@ -232,6 +233,7 @@
     <ClCompile Include="..\3rd\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="..\3rd\miniz\miniz.c" />
     <ClCompile Include="actionsStrat.cpp" />
     <ClCompile Include="actionsStratHelpers.cpp" />
     <ClCompile Include="agePatch.cpp" />

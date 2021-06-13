@@ -389,3 +389,32 @@ public:
 private:
 	LPVOID funcAdress;
 };
+
+
+//before load savegame
+class toLoadSaveFile
+	:public AATemplate
+{
+public:
+	toLoadSaveFile(MemWork* mem, LPVOID adr, int ver);
+	~toLoadSaveFile();
+
+	void SetOriginalLoadCode();
+	void SetlLoadCode();
+private:
+	LPVOID funcAdress;
+};
+
+//after save game
+class toSaveGame
+	:public AATemplate
+{
+public:
+	toSaveGame(MemWork* mem, LPVOID adr, int ver);
+	~toSaveGame();
+
+	void SetOriginalSaveCode();
+	void SetlSaveCode();
+private:
+	LPVOID funcAdress;
+};

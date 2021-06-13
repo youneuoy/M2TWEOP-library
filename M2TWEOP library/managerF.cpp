@@ -190,6 +190,23 @@ void managerF::doPachs()
 
 	f1 << "Done" << endl;
 
+
+	f1 << "Start applying load save patch" << endl;
+	toLoadSaveFile* loadSave = new toLoadSaveFile(mem, (LPVOID)patchesForGame::onLoadSaveFile, globals::dataS.gamever);
+	loadSave->SetlLoadCode();
+	loadSave->Enable();
+
+	f1 << "Done" << endl;
+
+	f1 << "Start applying save game patch" << endl;
+	toSaveGame* saveGame = new toSaveGame(mem, (LPVOID)patchesForGame::onSaveGame, globals::dataS.gamever);
+	saveGame->SetlSaveCode();
+	saveGame->Enable();
+
+	f1 << "Done" << endl;
+
+
+
 	f1 << "End." << endl;
 
 	f1.close();

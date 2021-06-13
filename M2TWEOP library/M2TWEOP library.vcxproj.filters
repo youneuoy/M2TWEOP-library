@@ -58,6 +58,9 @@
     <Filter Include="Исходные файлы\headers">
       <UniqueIdentifier>{42fce446-d3b7-4127-9bd3-720caccfbc87}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rd\miniz">
+      <UniqueIdentifier>{2d701366-815a-4653-8b91-008a98f3ce33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -174,6 +177,9 @@
     <ClInclude Include="..\3rd\imgui\eopImgui.h">
       <Filter>3rd\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="..\3rd\miniz\miniz.h">
+      <Filter>3rd\miniz</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -265,6 +271,9 @@
     </ClCompile>
     <ClCompile Include="..\3rd\imgui\eopImgui.cpp">
       <Filter>3rd\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\miniz\miniz.c">
+      <Filter>3rd\miniz</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
