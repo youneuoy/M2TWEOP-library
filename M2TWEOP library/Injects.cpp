@@ -1613,3 +1613,52 @@ void toSaveGame::SetlSaveCode()
 
 	delete a;
 }
+
+toStartNewGame::toStartNewGame(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAdress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0047e815;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0047e435;
+}
+
+toStartNewGame::~toStartNewGame()
+{
+}
+
+void toStartNewGame::SetOriginalStartCode()
+{
+	Assembler* a = new Assembler();
+
+	a->sub(esp, 0xbc);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toStartNewGame::SetlStartCode()
+{
+	Assembler* a = new Assembler();
+
+	a->sub(esp, 0xbc);
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAdress);
+
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

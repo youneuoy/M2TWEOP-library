@@ -4,8 +4,11 @@
 class patchesForGame
 {
 public:
+	//after loading of campaign map
+	static void WINAPI onNewGameStart();
 	//after reading EDU
 	static void WINAPI afterEDUread();
+
 
 	//before start of a first faction turn
 	static void WINAPI onChangeTurnNum();

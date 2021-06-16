@@ -2,6 +2,11 @@
 #include "patchesForGame.h"
 #include "tilesChange.h"
 #include "graphicsD3D.h"
+void __stdcall patchesForGame::onNewGameStart()
+{
+	plugins::onNewGameStart();
+
+}
 //#define TESTPATCHES
 void __stdcall patchesForGame::afterEDUread()
 {

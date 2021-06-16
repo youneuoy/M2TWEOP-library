@@ -418,3 +418,18 @@ public:
 private:
 	LPVOID funcAdress;
 };
+
+
+//new game start
+class toStartNewGame
+	:public AATemplate
+{
+public:
+	toStartNewGame(MemWork* mem, LPVOID adr, int ver);
+	~toStartNewGame();
+
+	void SetOriginalStartCode();
+	void SetlStartCode();
+private:
+	LPVOID funcAdress;
+};
