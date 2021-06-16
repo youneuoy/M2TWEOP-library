@@ -83,19 +83,19 @@ void managerF::doPachs()
 
 	f1 << "Done" << endl;
 
-	f1 << "Start applying DiplomaticStanceFromFaction patch #1" << endl;
+	/*f1 << "Start applying DiplomaticStanceFromFaction patch #1" << endl;
 	toDSFromFacCh* dsff1 = new toDSFromFacCh(mem, (LPVOID)patchesForGame::checkDipString, globals::dataS.gamever);
 	dsff1->SetlDsFromFacCode();
 	dsff1->Enable();
 
-	f1 << "Done" << endl;
+	f1 << "Done" << endl;*/
 
-	f1 << "Start applying DiplomaticStanceFromFaction patch #2" << endl;
+	/*f1 << "Start applying DiplomaticStanceFromFaction patch #2" << endl;
 	toDiplomaticStanceCheck* dsff2 = new toDiplomaticStanceCheck(mem, (LPVOID)patchesForGame::checkFacDip, globals::dataS.gamever);
 	dsff2->SetlDsCheckCode();
 	dsff2->Enable();
 
-	f1 << "Done" << endl;
+	f1 << "Done" << endl;*/
 
 
 	f1 << "Start applying spawn_army coords patch" << endl;
@@ -146,14 +146,6 @@ void managerF::doPachs()
 	f1 << "Done" << endl;
 
 
-	/*f1 << "Start applying models load patch #2" << endl;
-	toEndReadModels* readModelsEnd = new toEndReadModels(mem, (LPVOID)stratModelsPatch::enableChecker, globals::dataS.gamever);
-	readModelsEnd->SetlEndReadModelsCode();
-	readModelsEnd->Enable();
-
-	f1 << "Done" << endl;*/
-
-
 	f1 << "Start applying unical strat models patch" << endl;
 	toResourcesReadModels* readResModels = new toResourcesReadModels(mem, (LPVOID)patchesForGame::unicalStratModsRead, globals::dataS.gamever);
 	readResModels->SetlResModelsCode();
@@ -202,6 +194,15 @@ void managerF::doPachs()
 	toSaveGame* saveGame = new toSaveGame(mem, (LPVOID)patchesForGame::onSaveGame, globals::dataS.gamever);
 	saveGame->SetlSaveCode();
 	saveGame->Enable();
+
+	f1 << "Done" << endl;
+
+
+
+	f1 << "Start applying new game patch" << endl;
+	toStartNewGame* newGame = new toStartNewGame(mem, (LPVOID)patchesForGame::onNewGameStart, globals::dataS.gamever);
+	newGame->SetlStartCode();
+	newGame->Enable();
 
 	f1 << "Done" << endl;
 

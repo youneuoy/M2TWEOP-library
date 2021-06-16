@@ -70,6 +70,7 @@ class plugin
 {
 public:
 
+	ProcLoader<void(__cdecl*)()> onNewGameStart;
 	ProcLoader<vector<string>*(__cdecl*)(UNICODE_STRING**& savePath)> onSaveGamePl;
 	ProcLoader<void(__cdecl*)(vector<string>*)> onLoadGamePl;
 
@@ -216,6 +217,7 @@ public:
 
 	//from here calls all plugins
 
+	static void onNewGameStart();
 	static void onChangeTurnNum();
 	static void onLoadGame(UNICODE_STRING**& savePath);
 	static void onSaveGame(UNICODE_STRING**& savePath);

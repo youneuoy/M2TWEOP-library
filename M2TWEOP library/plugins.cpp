@@ -539,6 +539,15 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 
 
 
+
+void plugins::onNewGameStart()
+{
+	for (plugin* pl : pluginsCfg.plugins)
+	{
+		(*(*pl->onNewGameStart))(num);
+	}
+}
+
 void plugins::onChangeTurnNum()
 {
 	int num = fastFuncts::getPassedTurnsNum();
@@ -550,7 +559,6 @@ void plugins::onChangeTurnNum()
 
 void plugins::onLoadGame(UNICODE_STRING**& savePath)
 {
-
 	vector<string>files=techFuncs::loadGameLoadArchive(savePath);
 	
 
@@ -1202,5 +1210,10 @@ int plugin::init(string* nameP)
 	//onLoadGamePl
 	fName = "onLoadGamePl";
 	onLoadGamePl.Load(&plPath, &fName);
+
+
+	//onNewGameStart
+	fName = "onNewGameStart";
+	onNewGameStart.Load(&plPath, &fName);
 	return 1;
 }
