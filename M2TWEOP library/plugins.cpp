@@ -544,7 +544,7 @@ void plugins::onNewGameStart()
 {
 	for (plugin* pl : pluginsCfg.plugins)
 	{
-		(*(*pl->onNewGameStart))(num);
+		(*(*pl->onNewGameStart))();
 	}
 }
 

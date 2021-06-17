@@ -119,6 +119,7 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 
 
 	ImGuiIO& io = ImGui::GetIO();
+	io.IniFilename = nullptr;
 	io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
 	io.MouseDrawCursor = false;
 	string f = globals::dataS.modPatch;
