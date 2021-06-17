@@ -172,6 +172,21 @@ namespace fastFuncts
 			call eax
 		}
 
+		if (globals::dataS.gamever == 2)//steam
+		{
+			adrFunc = 0x00599900;
+		}
+		else
+		{
+			adrFunc = 0x00599410;
+		}
+
+		_asm
+		{
+			mov ecx, gen
+			mov eax, adrFunc
+			call eax
+		}
 		return;
 	}
 

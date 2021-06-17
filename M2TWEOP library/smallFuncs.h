@@ -23,5 +23,7 @@ namespace smallFuncs
 	NOINLINE EOP_EXPORT void swUnBMapHighlight();
 
 	NOINLINE EOP_EXPORT void setReligionsLimit(unsigned char limit);
+
+	NOINLINE EOP_EXPORT bool isTileFree(int* xy);
 };
 

@@ -214,4 +214,26 @@ namespace smallFuncs
 
 		return;
 	}
+	NOINLINE EOP_EXPORT bool isTileFree(int* xy)
+	{
+		DWORD funcAdr = 0;
+		bool retZ = false;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			funcAdr = 0x004c9220;
+		}
+		else
+		{
+			funcAdr = 0x004c8c70;
+		}
+
+		_asm {
+			push xy
+			mov eax, funcAdr
+			call eax
+			mov retZ,al
+		}
+
+		return retZ;
+	}
 };
