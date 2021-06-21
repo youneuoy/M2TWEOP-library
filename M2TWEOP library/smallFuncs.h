@@ -25,5 +25,8 @@ namespace smallFuncs
 	NOINLINE EOP_EXPORT void setReligionsLimit(unsigned char limit);
 
 	NOINLINE EOP_EXPORT bool isTileFree(int* xy);
+
+	NOINLINE EOP_EXPORT int getScriptCounter(const char*counterName,bool&isFinded);
+	NOINLINE EOP_EXPORT void setScriptCounter(const char*counterName,int counterValue);
 };
 
