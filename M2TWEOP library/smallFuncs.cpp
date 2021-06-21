@@ -236,4 +236,109 @@ namespace smallFuncs
 
 		return retZ;
 	}
+	struct counterS
+	{
+		counterS* something1;
+		counterS* something2;
+		counterS* something3;
+		char* counterName;
+		int nameCrypt;
+		int counterValue;
+	};
+	struct countersObjectS
+	{
+		void* something;
+		void* testCounterSValue;
+	};
+	NOINLINE EOP_EXPORT int getScriptCounter(const char* counterName, bool& isFinded)
+	{
+		countersObjectS* eventsObject = 0;
+		counterS* retS = 0;
+		int retValue = 0;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			eventsObject = (countersObjectS * )0x016A7A58;
+		}
+		else
+		{
+			eventsObject = (countersObjectS * )0x016F0BF0;
+		}
+		DWORD funcAdr = 0;
+
+		if (globals::dataS.gamever == 2)//steam
+		{
+			funcAdr = 0x00489760;
+		}
+		else
+		{
+			funcAdr = 0x00489360;
+		}
+
+		char** cryptS = fastFunctsHelpers::makeCryptedString(counterName);
+		_asm {
+			push cryptS
+			mov ecx, eventsObject
+			mov eax, funcAdr
+			call eax
+			mov retS, eax
+		}
+
+
+		if (retS == eventsObject->testCounterSValue)
+		{
+			isFinded = false;
+		}
+		else
+		{
+
+			if (retS != nullptr)
+			{			
+				if (retS->nameCrypt == (int)cryptS[1])
+				{
+					isFinded = true;
+					return retS->counterValue;
+				}
+				else isFinded = false;
+			}
+		}
+
+
+		return 0;
+	}
+	NOINLINE EOP_EXPORT void setScriptCounter(const char* counterName, int counterValue)
+	{
+		DWORD eventsObject;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			eventsObject = 0x016A7A30;
+		}
+		else
+		{
+			eventsObject = 0x16F0BC8;
+		}
+
+		DWORD funcAdr = 0;
+
+
+		if (globals::dataS.gamever == 2)//steam
+		{
+			funcAdr = 0x0048cce0;
+		}
+		else
+		{
+			funcAdr = 0x0048c8e0;
+		}
+
+		char** cryptS = fastFunctsHelpers::makeCryptedString(counterName);
+		_asm {
+			push counterValue
+			push cryptS
+			mov ecx, eventsObject
+			mov eax, funcAdr
+			call eax
+		}
+
+
+		return;
+	}
 };
