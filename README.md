@@ -42,6 +42,7 @@ The functionality of the program is divided into two parts
 * **Erken** - lots of ideas and testing
 * **DinarMayor** - ideas and testing
 * **Medik** - help in creating documentation
+* **Fynn** - testing
 
 ## Project composition
 * [M2TWEOP Library](https://github.com/youneuoy/M2TWEOP-library) - main project
@@ -62,12 +63,12 @@ If you use an antivirus, add the program to the exceptions! There may be false p
 The project uses the [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.html).
 
 ## Build
-M2TWEOP is developed in C++ and Assembly. You can get support for building/developing on the our [Discord](https://discord.gg/AfFNeQhf) server.
+M2TWEOP is developed in C++ and Assembly. You can get support for building/developing on the our [Discord](https://discord.gg/Epqjm8u2WK) server.
 
 ## Support the project
 
 It would be nice if all interested people supported the project in an accessible way (for example, you can test various changes, participate in planning new game mechanics or discuss them, sponsor development with money, etc.).
-* Come join the our [Discord](https://discord.gg/AfFNeQhf) server if you have questions or suggestions.
+* Come join the our [Discord](https://discord.gg/Epqjm8u2WK) server if you have questions or suggestions.
 * [Patreon](https://www.patreon.com/m2tweop)
 
 
@@ -88,6 +89,12 @@ Please do not include the program in your modifications without my permission (a
 https://github.com/MSeys/sol2_ImGui_Bindings
 
 ## Version History
+* **v.2.0:**
+A huge number of fixes and optimizations. Lots of new features in the lua plugin, as well as features exported for use in other plugins.
+* **v.2.0 test2:**
+Changed initializing way
+Added an option to hide the launcher at startup
+Added a window that will appear in case of some probable problems with the initialization of the game. The launcher will not freeze when launching the game.
 * **v.2.0 test1:**
 Added lua plugin and a huge number of functions for it.
 Fixed many crashes and issues.
