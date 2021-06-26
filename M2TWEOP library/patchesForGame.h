@@ -5,6 +5,9 @@ class patchesForGame
 {
 public:
 	//after loading of campaign map
+	static void WINAPI afterCampaignMapLoaded();
+
+	//after new game start
 	static void WINAPI onNewGameStart();
 	//after reading EDU
 	static void WINAPI afterEDUread();

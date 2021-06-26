@@ -19,8 +19,7 @@ private:
 
 	static void initThread();
 
-	static bool read_modConfig();
-	static bool read_limits();
+
 };
 
 namespace managerExport

@@ -21,6 +21,40 @@ namespace fastFuncts
 		return count;
 	}
 
+	NOINLINE EOP_EXPORT void setHeir(generalCharacterictics* gen, bool isJustSet)
+	{
+		factionStruct* fac = gen->faction;
+		if (isJustSet == true)
+		{
+			for (UINT32 i = 0; i < fac->numOfCharacters; i++)
+			{
+				if (fac->characters[i]->genChar->status & 2)
+				{
+					fac->characters[i]->genChar->status = 0;
+				}
+			}
+
+			fac->heir = gen;
+
+			gen->status = 2;
+		}
+
+		else
+		{
+			_asm {
+				push gen
+				mov ecx, fac
+				mov eax, [fac]
+				mov eax, [eax]
+				mov eax, [eax + 0x20]
+				call eax
+			}
+		}
+
+
+		return;
+	}
+
 	NOINLINE EOP_EXPORT UINT32 getFactionsCount()
 	{
 		UINT32 count = 0;

@@ -540,6 +540,14 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 
 
 
+void plugins::onCampaignMapLoaded()
+{
+	for (plugin* pl : pluginsCfg.plugins)
+	{
+		(*(*pl->onCampaignMapLoaded))();
+	}
+}
+
 void plugins::onNewGameStart()
 {
 	for (plugin* pl : pluginsCfg.plugins)
@@ -1215,5 +1223,9 @@ int plugin::init(string* nameP)
 	//onNewGameStart
 	fName = "onNewGameStart";
 	onNewGameStart.Load(&plPath, &fName);
+
+	//onCampaignMapLoaded
+	fName = "onCampaignMapLoaded";
+	onCampaignMapLoaded.Load(&plPath, &fName);
 	return 1;
 }

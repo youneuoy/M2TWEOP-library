@@ -15,7 +15,7 @@ void managerF::doPachs()
 	f1 << "Log:" << endl;
 	mem = new MemWork();
 
-	f1 << "Start applying age patch" << endl;
+	//f1 << "Start applying age patch" << endl;
 /*	f1 << "first step" << endl;
 	Age* inj = new Age(mem, (LPVOID)ageFunc, globals::dataS.gamever);
 	f1 << "step 2" << endl;
@@ -31,14 +31,41 @@ void managerF::doPachs()
 	agV->Enable();
 	f1 << "Done" << endl;*/
 
-	if (globals::dataS.modConfig.bersPatch == 1) {
-		f1 << "Start applying berserkers patch" << endl;
 
-		berserkersP* brs = new berserkersP(mem, globals::dataS.gamever);
-		brs->SetlBersCode();
-		brs->Enable();
-		f1 << "Done" << endl;
+	f1 << "Start applying berserkers patch" << endl;
+
+	berserkersP* brs = new berserkersP(mem, globals::dataS.gamever);
+	brs->SetlBersCode();
+	brs->Enable();
+	f1 << "Done" << endl;
+
+
+	f1 << "Start applying history battles patch" << endl;
+	{
+		unsigned char disSold[2] = { 0x90, 0x90 };
+		DWORD nPtr;
+		DWORD nbPtr;
+
+
+		if (globals::dataS.gamever == 2)
+		{
+
+			nPtr = 0x008eebbd;
+			nbPtr = 0x008EEBB5;
+
+		}
+		else
+		{
+			nPtr = 0x008ee13d;
+			nbPtr = 0x008ee135;
+
+		}
+
+		MemWork::WriteData(disSold, nPtr, 2);
+		MemWork::WriteData(disSold, nbPtr, 2);
 	}
+	f1 << "Done" << endl;
+
 
 	f1 << "Start applying unit types patch #1" << endl;
 
@@ -207,6 +234,14 @@ void managerF::doPachs()
 	f1 << "Done" << endl;
 
 
+	f1 << "Start applying strategical map loading patch" << endl;
+	toEndReadModels* stratMapLoaded = new toEndReadModels(mem, (LPVOID)patchesForGame::afterCampaignMapLoaded, globals::dataS.gamever);
+	stratMapLoaded->SetlEndReadModelsCode();
+	stratMapLoaded->Enable();
+
+	f1 << "Done" << endl;
+
+
 
 	f1 << "End." << endl;
 
@@ -216,10 +251,10 @@ void managerF::doPachs()
 //#include "tests.h"
 void managerF::initThread()
 {
-	read_modConfig();
+	//read_modConfig();
 	codes::initCodes(globals::dataS.gamever);
 	dataOffsets::initDataOffsets(globals::dataS.gamever);
-	read_limits();
+	//read_limits();
 
 
 
@@ -232,80 +267,20 @@ void managerF::initThread()
 }
 
 
-bool managerF::read_modConfig()
-{
-	string s = globals::dataS.modPatch + "\\modConfig.youneuoycfg";
-	string ls;
-	ifstream f2(s);
-	while (f2.good())
+#include "stratModelsOptimise.h"
+NOINLINE EOP_EXPORT void managerExport::initEOP(const char* modPath, int gameVer)
+{	// Initialize MinHook.
+	if (MH_Initialize() != MH_OK)
 	{
-
-		getline(f2, s);
-
-		technicalStringsFuncs::findOWParam(&globals::dataS.modConfig.fullLogging, s, "FullLoggingEnabled");
-		technicalStringsFuncs::findOWParam(&globals::dataS.modConfig.unlockChangeFaction, s, "UnlockConsoleChangeFaction");
-		technicalStringsFuncs::findOWParam(&globals::dataS.modConfig.bersPatch, s, "CorrectionOfBerserkers");
-		technicalStringsFuncs::findOWParam(&globals::dataS.modConfig.histBattleFix, s, "HistoryBattlesSoldiersNumberFix");
-		technicalStringsFuncs::findOWParam(&globals::dataS.modConfig.DCI, s, "DCI");
-		technicalStringsFuncs::findOWParam(&globals::dataS.modConfig.spawnArmyCoords, s, "SpawnArmyCoordsPatch");
-		technicalStringsFuncs::findOWParam(&globals::dataS.modConfig.characterUIMenus, s, "CharacterUIMenus");
-		technicalStringsFuncs::findOWParam(&globals::dataS.modConfig.unlockConsoleCommands, s, "UnlockConsoleCommands");
-
-		technicalStringsFuncs::findOWParam(&globals::dataS.modConfig.maxBodSize, s, "MaxBodyguardSize");
-
-		technicalStringsFuncs::readStringInQuotes(&ls, s, "LegioString");
-		technicalStringsFuncs::readStringInQuotes(&globals::dataS.modConfig.langP, s, "Lang");
+		return;
 	}
-
-
-	f2.close();
-	globals::dataS.modConfig.langP = globals::dataS.modPatch + "\\youneuoy_Data\\localisation\\" + globals::dataS.modConfig.langP;
-
-	if (ls.empty())
-		ls = "Legio ";
-	globals::dataS.modConfig.legioString = new char[ls.length() + 1];
-	memcpy(globals::dataS.modConfig.legioString, ls.c_str(), ls.length() + 1);
-
-
-	return true;
-}
-
-bool managerF::read_limits()
-{
-	string s = globals::dataS.modPatch + "\\limits.youneuoycfg";
-	ifstream f1(s);
-	while (f1.good())
-	{
-		getline(f1, s);
-
-		technicalStringsFuncs::findOWParam(&globals::dataS.limits.religionLimit, s, "Religion_Limit");
-
-		technicalStringsFuncs::findOWParam(&globals::dataS.limits.ancillariesLimit, s, "Ancillaries_Limit");
-
-		technicalStringsFuncs::findOWParam(&globals::dataS.limits.lockSizeOfUnit, s, "Lock_Size_Of_Unit");
-		technicalStringsFuncs::findOWParam(&globals::dataS.limits.sizeOfUnit, s, "Size_Of_Unit");
-
-		findIntParam(&globals::dataS.limits.minSoldiersEdu, s, "Min_Soldiers_In_Edu");
-		findIntParam(&globals::dataS.limits.maxSoldiersEdu, s, "Max_Soldiers_In_Edu");
-
-		technicalStringsFuncs::findFloatParam(&globals::dataS.limits.battlefieldMapSizeX, s, "Battlefield_Map_Size_X");
-		technicalStringsFuncs::findFloatParam(&globals::dataS.limits.battlefieldMapSizeY, s, "Battlefield_Map_Size_Y");
-
-		findIntParam(&globals::dataS.limits.siegeRamCost, s, "Siege_Ram_Cost");
-		findIntParam(&globals::dataS.limits.siegeLadderCost, s, "Siege_Ladder_Cost");
-		findIntParam(&globals::dataS.limits.siegeTowerCost, s, "Siege_Tower_Cost");
-	}
-	f1.close();
-
-	return true;
-}
-
-NOINLINE EOP_EXPORT void managerExport::initEOP(const char* modPath,int gameVer)
-{
+	
 	globals::dataS.gamever = gameVer;
 	globals::dataS.modPatch = modPath;
 
 	CreateDirectoryA("logs", NULL);
 
 	managerF::init();
+
+	stratModelsOptimise::createHook();
 }

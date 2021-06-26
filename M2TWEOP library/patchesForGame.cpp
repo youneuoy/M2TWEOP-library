@@ -2,6 +2,10 @@
 #include "patchesForGame.h"
 #include "tilesChange.h"
 #include "graphicsD3D.h"
+void __stdcall patchesForGame::afterCampaignMapLoaded()
+{
+	plugins::onCampaignMapLoaded();
+}
 void __stdcall patchesForGame::onNewGameStart()
 {
 	plugins::onNewGameStart();
