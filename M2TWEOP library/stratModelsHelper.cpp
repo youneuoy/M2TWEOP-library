@@ -19,8 +19,8 @@ namespace stratModelsChange
 			)return;
 
 
-		stratFortMod* newMod = new stratFortMod[33];
-		memset(newMod, 0, sizeof(stratFortMod) * 33);
+		stratFortMod* newMod = new stratFortMod;
+		memset(newMod, 0, sizeof(stratFortMod));
 
 
 		newMod->centerModel = modelP;

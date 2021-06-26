@@ -70,6 +70,8 @@ class plugin
 {
 public:
 
+	ProcLoader<void(__cdecl*)()> onCampaignMapLoaded;
+
 	ProcLoader<void(__cdecl*)()> onNewGameStart;
 	ProcLoader<vector<string>*(__cdecl*)(UNICODE_STRING**& savePath)> onSaveGamePl;
 	ProcLoader<void(__cdecl*)(vector<string>*)> onLoadGamePl;
@@ -216,6 +218,9 @@ public:
 	static void __fastcall onEvent(DWORD** vTab);
 
 	//from here calls all plugins
+
+	static void onCampaignMapLoaded();
+
 
 	static void onNewGameStart();
 	static void onChangeTurnNum();

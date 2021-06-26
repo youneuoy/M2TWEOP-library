@@ -87,9 +87,6 @@
     <ClInclude Include="plugins.h">
       <Filter>Исходные файлы\plugins</Filter>
     </ClInclude>
-    <ClInclude Include="realGameTypes.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="eventsCodes.h">
       <Filter>Исходные файлы\data</Filter>
     </ClInclude>
@@ -179,6 +176,12 @@
     </ClInclude>
     <ClInclude Include="..\3rd\miniz\miniz.h">
       <Filter>3rd\miniz</Filter>
+    </ClInclude>
+    <ClInclude Include="stratModelsOptimise.h">
+      <Filter>Исходные файлы\patches\stratModels</Filter>
+    </ClInclude>
+    <ClInclude Include="realGameTypes.h">
+      <Filter>Файлы ресурсов</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -274,6 +277,9 @@
     </ClCompile>
     <ClCompile Include="..\3rd\miniz\miniz.c">
       <Filter>3rd\miniz</Filter>
+    </ClCompile>
+    <ClCompile Include="stratModelsOptimise.cpp">
+      <Filter>Исходные файлы\patches\stratModels</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

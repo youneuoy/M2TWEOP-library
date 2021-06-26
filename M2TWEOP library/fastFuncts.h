@@ -11,6 +11,9 @@
 namespace fastFuncts
 {
 
+	//set character as heir
+	NOINLINE EOP_EXPORT void setHeir(generalCharacterictics* gen,bool isJustSet);
+
 	//count of factions in game
 	NOINLINE EOP_EXPORT UINT32 getFactionsCount();
 	//array of pointers to factions

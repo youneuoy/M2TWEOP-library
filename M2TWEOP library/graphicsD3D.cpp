@@ -39,6 +39,8 @@ struct
 
 	ImVec2 beginCoords{ 0.f,0.f };
 }drawParams;
+
+
 NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 {
 
@@ -168,11 +170,11 @@ bool graphicsD3D::init()
 
 DWORD __stdcall graphicsD3D::InitS()
 {
-	// Initialize MinHook.
+	/* Initialize MinHook.
 	if (MH_Initialize() != MH_OK)
 	{
 		return 1;
-	}
+	}*/
 
 	init();
 
@@ -252,6 +254,9 @@ NOINLINE EOP_EXPORT void graphicsExport::onEndScene(IDirect3DDevice9* pDevice)
 	ImGui::EndFrame();
 	ImGui::Render();
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+
+
+
 }
 
 NOINLINE EOP_EXPORT void graphicsExport::onReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)

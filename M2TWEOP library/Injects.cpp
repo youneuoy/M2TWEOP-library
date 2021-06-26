@@ -1195,6 +1195,15 @@ void toEndReadModels::SetlEndReadModelsCode()
 {
 	Assembler* a = new Assembler();
 
+	if (m_adress == 0x0044f741)
+	{
+		a->mov(eax, 0x00420710);
+	}
+	else {
+		a->mov(eax, 0x004203e0);
+	}
+	a->call(eax);
+
 	a->pushad();
 	a->pushf();
 
@@ -1204,14 +1213,6 @@ void toEndReadModels::SetlEndReadModelsCode()
 	a->popf();
 	a->popad();
 
-	if (m_adress == 0x0044f741)
-	{
-		a->mov(eax, 0x00420710);
-	}
-	else {
-		a->mov(eax, 0x004203e0);
-	}
-	a->call(eax);
 
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();

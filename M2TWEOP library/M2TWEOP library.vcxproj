@@ -219,6 +219,7 @@
     <ClInclude Include="realGameTypes.h" />
     <ClInclude Include="smallFuncs.h" />
     <ClInclude Include="stratModelsChange.h" />
+    <ClInclude Include="stratModelsOptimise.h" />
     <ClInclude Include="techFuncs.h" />
     <ClInclude Include="technicalStringsFuncs.h" />
     <ClInclude Include="TemplateCh.h" />
@@ -262,6 +263,7 @@
     <ClCompile Include="smallFuncs.cpp" />
     <ClCompile Include="stratModelsChange.cpp" />
     <ClCompile Include="stratModelsHelper.cpp" />
+    <ClCompile Include="stratModelsOptimise.cpp" />
     <ClCompile Include="techFuncs.cpp" />
     <ClCompile Include="technicalStringsFuncs.cpp" />
     <ClCompile Include="TemplateCh.cpp" />

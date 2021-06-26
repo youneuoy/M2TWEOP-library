@@ -4,7 +4,7 @@
 
 #include "fastFunctsHelpers.h"
 
-#include "utf8.h"
+
 namespace smallFuncs
 {
 	NOINLINE EOP_EXPORT void setAncLimit(unsigned char limit)
@@ -21,6 +21,29 @@ namespace smallFuncs
 		}
 
 		MemWork::WriteData(&limit, ancillariesOffset, 1);
+	}
+
+	NOINLINE EOP_EXPORT void setEDUUnitsSize(signed short min, signed short max)
+	{
+		DWORD codeOffset = 0;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			codeOffset = 0x008efe01;
+		}
+		else
+		{
+			codeOffset = 0x008ef381;
+		}
+
+		codeOffset += 0x82C;
+
+		MemWork::WriteData(&min, codeOffset, 2);
+
+		codeOffset += 6;
+		MemWork::WriteData(&max, codeOffset, 2);
+
+
+		return;
 	}
 	NOINLINE EOP_EXPORT void setMaxBgSize(unsigned char size)
 	{
@@ -65,6 +88,20 @@ namespace smallFuncs
 				MemWork::WriteData(nops, cmd, 2);
 			}
 		}
+
+
+		//unlock change_faction 
+		uchar nops1[6] = { 0x90,0x90,0x90,0x90,0x90,0x90 };
+		if (globals::dataS.gamever == 2)//steam
+		{
+			cmd = 0x00d2cd2a;
+		}
+		else
+		{
+			cmd = 0x00d329aa;
+		}
+
+		MemWork::WriteData(nops1, cmd, 6);
 	}
 	NOINLINE EOP_EXPORT int getBattleCondCode(DWORD condObject)
 	{
@@ -148,8 +185,7 @@ namespace smallFuncs
 		delete[] wstr;
 
 
-	//	vector<unsigned short> utf16line;
-		//utf8::utf8to16(utf8TempS.begin(), utf8TempS.end(), back_inserter(utf16line));
+
 		unsigned short* ptr = (unsigned short*)&(*newUniStringPointer)->Buffer;
 
 		for (int i = 0; i < utf16line.size(); i++)
