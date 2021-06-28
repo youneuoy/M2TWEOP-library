@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "managerF.h"
+
 void managerF::init()
 {
 
@@ -242,6 +243,22 @@ void managerF::doPachs()
 	f1 << "Done" << endl;
 
 
+	f1 << "Start applying click on tile patch" << endl;
+	toClickAtCoords* clickAtTile = new toClickAtCoords(mem, (LPVOID)patchesForGame::clickAtTile, globals::dataS.gamever);
+	clickAtTile->SetlClickCode();
+	clickAtTile->Enable();
+
+	f1 << "Done" << endl;
+
+
+	/*f1 << "Start replacing cas loading function" << endl;
+	toLoadCas* loadCasF = new toLoadCas(mem, (LPVOID)stratModelsOptimise::loadCasProc, globals::dataS.gamever);
+	loadCasF->SetlCasCode();
+	loadCasF->Enable(true);
+
+	f1 << "Done" << endl;*/
+
+
 
 	f1 << "End." << endl;
 
@@ -282,5 +299,4 @@ NOINLINE EOP_EXPORT void managerExport::initEOP(const char* modPath, int gameVer
 
 	managerF::init();
 
-	stratModelsOptimise::createHook();
 }

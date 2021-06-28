@@ -52,7 +52,7 @@ public:
 	AATemplate(MemWork* mem);
 	virtual ~AATemplate();
 
-	void Enable();
+	void Enable(bool addRet=false);
 	void Disable();
 protected:
 	void AllocCodeCave();

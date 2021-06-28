@@ -7,10 +7,13 @@
 
 
 #include "exportHeader.h"
+
+#include "realGameTypes.h"
 using namespace std;
+//unused now
 namespace stratModelsOptimise
 {
-	void createHook();
 
+	model_Rigid* _fastcall loadCasProc();
 };
 

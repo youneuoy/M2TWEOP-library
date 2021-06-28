@@ -128,7 +128,9 @@ AATemplate::~AATemplate()
 	}
 }
 
-void AATemplate::Enable()
+
+
+void AATemplate::Enable(bool addRet)
 {
 	if (!m_adress || !m_cheatBytes)
 		return;
@@ -143,6 +145,13 @@ void AATemplate::Enable()
 	else
 	{
 		m_memory->InjectCode(m_cheatBytes, m_adress, m_codeCave, 0, 0);
+	}
+
+	if (addRet == true)
+	{
+		int size=m_memory->GetASMSize(m_cheatBytes);
+		unsigned char buffer[1] = { 0xC3 };
+		m_memory->Write(buffer, m_codeCave + size, 1);
 	}
 	m_state = 1;
 }

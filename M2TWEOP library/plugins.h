@@ -70,6 +70,8 @@ class plugin
 {
 public:
 
+	ProcLoader<void(__cdecl*)(int,int)> onClickAtTile;
+
 	ProcLoader<void(__cdecl*)()> onCampaignMapLoaded;
 
 	ProcLoader<void(__cdecl*)()> onNewGameStart;
@@ -219,6 +221,7 @@ public:
 
 	//from here calls all plugins
 
+	static void onClickAtTile(int x,int y);
 	static void onCampaignMapLoaded();
 
 
