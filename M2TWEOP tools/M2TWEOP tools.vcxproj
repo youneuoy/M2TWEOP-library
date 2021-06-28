@@ -96,7 +96,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OPENXLSX_STATIC_DEFINE;WIN32;WIN32_LEAN_AND_MEAN;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -116,7 +116,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OPENXLSX_STATIC_DEFINE;WIN32;WIN32_LEAN_AND_MEAN;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -175,11 +175,13 @@
     <ClCompile Include="..\3rd\imguiDocking\imgui_widgets.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\md4c.c" />
     <ClCompile Include="dataG.cpp" />
+    <ClCompile Include="filesGenerator.cpp" />
     <ClCompile Include="helpers.cpp" />
     <ClCompile Include="M2TWEOP tools.cpp" />
     <ClCompile Include="mainUI.cpp" />
     <ClCompile Include="modelsFilesUI.cpp" />
     <ClCompile Include="modelsFilesWorker.cpp" />
+    <ClCompile Include="techExcellFuncs.cpp" />
     <ClCompile Include="toolRoutine.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -198,12 +200,15 @@
     <ClInclude Include="..\3rd\imguiDocking\imstb_truetype.h" />
     <ClInclude Include="..\3rd\imguiDocking\md4c.h" />
     <ClInclude Include="..\3rd\imguiDocking\stb_image.h" />
+    <ClInclude Include="..\3rd\xlsx\OpenXLSX.hpp" />
     <ClInclude Include="dataG.h" />
+    <ClInclude Include="filesGenerator.h" />
     <ClInclude Include="headersSTD.h" />
     <ClInclude Include="helpers.h" />
     <ClInclude Include="mainUI.h" />
     <ClInclude Include="modelsFilesUI.h" />
     <ClInclude Include="modelsFilesWorker.h" />
+    <ClInclude Include="techExcellFuncs.h" />
     <ClInclude Include="toolRoutine.h" />
   </ItemGroup>
   <ItemGroup>

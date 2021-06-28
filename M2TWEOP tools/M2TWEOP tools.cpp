@@ -122,8 +122,14 @@ void initRender()
         glDeleteTextures(1, &texID);
     };
 }
+
+#include "filesGenerator.h"
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {
+
+    filesGenerator filesGenerator;
+    std::atomic_bool isGenEnd{ false };
+    filesGenerator.startConvertation("test.xlsx","testPath",std::ref(isGenEnd));
     initRender();
 
     /*dataG::data.screen.programIcon[0].pixels= stbi_load("eopData/EOPIcon.png",

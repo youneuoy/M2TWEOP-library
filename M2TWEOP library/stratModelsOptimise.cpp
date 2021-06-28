@@ -1,16 +1,11 @@
 #include "stratModelsOptimise.h"
-#include "realGameTypes.h"
 #include "fastFuncts.h"
 
 #include <ctime>
 namespace stratModelsOptimise
 {
-	template<typename T>
-	T FnCast(uint32_t fnToCast, T pFnCastTo) {
-		(void)pFnCastTo;
-		return (T)fnToCast;
-	}
 
+//	typedef  model_Rigid* (APIENTRY *loadCasF)(char*, int, int, int, int, int);
 	struct
 	{
 		LPVOID oldLoadCasProc = nullptr;
@@ -55,49 +50,25 @@ namespace stratModelsOptimise
 	{
 		return nullptr;
 	}
-	static NOINLINE model_Rigid* APIENTRY hkLoadCasProc(char* fileName, int param_2, int param_3, int param_4, int param_5, int param_6)
+
+
+
+
+	model_Rigid* _fastcall loadCasProc()
 	{
+		char* fileName;
+		int param_2, param_3,  param_4,  param_5,  param_6;
 
-		// здесь должен быть фрагмент кода, время выполнения которого нужно измерить
+		model_Rigid* modelP = constructObject();
+		someCasS* someCas = createSomeCas();
 
-
-				//model_Rigid* modelP = constructObject();
-				//someCasS* someCas = createSomeCas();
-
-
-				//string pathWithModFolder = "mods/teutonic/";
-				//pathWithModFolder += fileName;
-
-			//	return modelP;
-
-
-		return FnCast((uint32_t)ourData.oldLoadCasProc, &hkLoadCasProc)(fileName, param_2, param_3, param_4, param_5, param_6);
-	}
+		return modelP;
 
 
 
 
-	void createHook()
-	{
-		DWORD adr = 0;
-		if (globals::dataS.gamever == 2)//steam
-		{
-			adr = 0x00a04f00;
-		}
-		else
-		{
-			adr = 0x00a04380;
-		}
-
-		if (MH_CreateHook((char*)adr, &hkLoadCasProc,
-			reinterpret_cast<LPVOID*>(&ourData.oldLoadCasProc)) != MH_OK)
-		{
-			return;
-		}
-		if (MH_EnableHook((char*)adr) != MH_OK)
-		{
-			return;
-		}
+		//return ourData.oldLoadCasProc(fileName, param_2, param_3, param_4, param_5, param_6);
+		//return FnCast((uint32_t)ourData.oldLoadCasProc, &hkLoadCasProc)(fileName, param_2, param_3, param_4, param_5, param_6);
 	}
 
 };

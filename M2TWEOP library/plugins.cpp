@@ -540,6 +540,14 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 
 
 
+void plugins::onClickAtTile(int x, int y)
+{
+	for (plugin* pl : pluginsCfg.plugins)
+	{
+		(*(*pl->onClickAtTile))(x,y);
+	}
+}
+
 void plugins::onCampaignMapLoaded()
 {
 	for (plugin* pl : pluginsCfg.plugins)
@@ -1227,5 +1235,10 @@ int plugin::init(string* nameP)
 	//onCampaignMapLoaded
 	fName = "onCampaignMapLoaded";
 	onCampaignMapLoaded.Load(&plPath, &fName);
+
+
+	//onClickAtTile
+	fName = "onClickAtTile";
+	onClickAtTile.Load(&plPath, &fName);
 	return 1;
 }

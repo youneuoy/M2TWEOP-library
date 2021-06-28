@@ -433,3 +433,38 @@ public:
 private:
 	LPVOID funcAdress;
 };
+
+
+
+
+//load cas model
+class toLoadCas
+	:public AATemplate
+{
+public:
+	toLoadCas(MemWork* mem, LPVOID adr, int ver);
+	~toLoadCas();
+
+	void SetOriginalStartCode();
+	void SetlCasCode();
+private:
+	LPVOID funcAdress;
+};
+
+
+
+//click at stratmap
+class toClickAtCoords
+	:public AATemplate
+{
+public:
+	toClickAtCoords(MemWork* mem, LPVOID adr, int ver);
+	~toClickAtCoords();
+
+	void SetOriginalClickCode();
+	void SetlClickCode();
+private:
+	LPVOID funcAdress;
+};
+
+

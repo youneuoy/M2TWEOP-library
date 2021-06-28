@@ -31,6 +31,12 @@
     <Filter Include="Исходные файлы\menu\modelsFiles">
       <UniqueIdentifier>{f4d992e3-13df-4e14-8251-49b71845419f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\menu\GeneratorFromExcell">
+      <UniqueIdentifier>{ff82a208-3075-4ff8-b56b-4c7cf21850ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\xlsx">
+      <UniqueIdentifier>{027ca428-49a1-4974-8c9d-42cec5565408}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="M2TWEOP tools.cpp">
@@ -92,6 +98,12 @@
     </ClCompile>
     <ClCompile Include="modelsFilesWorker.cpp">
       <Filter>Исходные файлы\menu\modelsFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="filesGenerator.cpp">
+      <Filter>Исходные файлы\menu\GeneratorFromExcell</Filter>
+    </ClCompile>
+    <ClCompile Include="techExcellFuncs.cpp">
+      <Filter>Исходные файлы\menu\GeneratorFromExcell</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +172,15 @@
     </ClInclude>
     <ClInclude Include="modelsFilesWorker.h">
       <Filter>Исходные файлы\menu\modelsFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="filesGenerator.h">
+      <Filter>Исходные файлы\menu\GeneratorFromExcell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\xlsx\OpenXLSX.hpp">
+      <Filter>3rd\xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="techExcellFuncs.h">
+      <Filter>Исходные файлы\menu\GeneratorFromExcell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

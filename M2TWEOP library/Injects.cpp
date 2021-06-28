@@ -1663,3 +1663,98 @@ void toStartNewGame::SetlStartCode()
 
 	delete a;
 }
+
+toLoadCas::toLoadCas(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAdress(adr)
+{
+
+	if (ver == 2)//steam
+		m_adress = 0x00a04f00;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00a04380;
+}
+
+toLoadCas::~toLoadCas()
+{
+}
+
+void toLoadCas::SetOriginalStartCode()
+{
+	//nothing xD
+}
+
+void toLoadCas::SetlCasCode()
+{
+	Assembler* a = new Assembler();
+
+	a->pushad();
+	a->pushf();
+
+
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAdress);
+	a->call(eax);
+
+
+	a->popf();
+	a->popad();
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+toClickAtCoords::toClickAtCoords(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAdress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00c2e9a4;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00c345d4;
+}
+
+toClickAtCoords::~toClickAtCoords()
+{
+}
+
+void toClickAtCoords::SetOriginalClickCode()
+{
+	Assembler* a = new Assembler();
+
+	a->lea(eax,dword_ptr(esp,0x4));
+	a->mov(esi, ecx);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toClickAtCoords::SetlClickCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(eax, dword_ptr(esp, 0x18));
+	a->pushad();
+	a->pushf();
+
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAdress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+	a->lea(eax, dword_ptr(esp, 0x4));
+	a->mov(esi, ecx);
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

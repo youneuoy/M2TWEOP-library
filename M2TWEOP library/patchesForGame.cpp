@@ -2,6 +2,10 @@
 #include "patchesForGame.h"
 #include "tilesChange.h"
 #include "graphicsD3D.h"
+void __fastcall patchesForGame::clickAtTile(int* xy)
+{
+	plugins::onClickAtTile(xy[0],xy[1]);
+}
 void __stdcall patchesForGame::afterCampaignMapLoaded()
 {
 	plugins::onCampaignMapLoaded();

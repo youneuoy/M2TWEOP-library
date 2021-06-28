@@ -4,6 +4,9 @@
 class patchesForGame
 {
 public:
+	//click at tile
+	static void __fastcall clickAtTile(int* xy);
+
 	//after loading of campaign map
 	static void WINAPI afterCampaignMapLoaded();
 

@@ -1,0 +1,3689 @@
+type             Unit number 1
+dictionary       Unit_number_1
+category         ship
+class            light
+voice_type       
+
+
+type             Unit number 2
+dictionary       Unit_number_2
+category         ship
+class            light
+voice_type       
+
+
+type             Unit number 3
+dictionary       Unit_number_3
+category         ship
+class            heavy
+voice_type       
+
+
+type             Unit number 4
+dictionary       Unit_number_4
+category         ship
+class            heavy
+voice_type       
+
+
+type             Unit number 5
+dictionary       Unit_number_5
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 6
+dictionary       Unit_number_6
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 7
+dictionary       Unit_number_7
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 8
+dictionary       Unit_number_8
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 9
+dictionary       Unit_number_9
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 10
+dictionary       Unit_number_10
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 11
+dictionary       Unit_number_11
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 12
+dictionary       Unit_number_12
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 13
+dictionary       Unit_number_13
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 14
+dictionary       Unit_number_14
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 15
+dictionary       Unit_number_15
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 16
+dictionary       Unit_number_16
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 17
+dictionary       Unit_number_17
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 18
+dictionary       Unit_number_18
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 19
+dictionary       Unit_number_19
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 20
+dictionary       Unit_number_20
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 21
+dictionary       Unit_number_21
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 22
+dictionary       Unit_number_22
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 23
+dictionary       Unit_number_23
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 24
+dictionary       Unit_number_24
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 25
+dictionary       Unit_number_25
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 26
+dictionary       Unit_number_26
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 27
+dictionary       Unit_number_27
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 28
+dictionary       Unit_number_28
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 29
+dictionary       Unit_number_29
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 30
+dictionary       Unit_number_30
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 31
+dictionary       Unit_number_31
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 32
+dictionary       Unit_number_32
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 33
+dictionary       Unit_number_33
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 34
+dictionary       Unit_number_34
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 35
+dictionary       Unit_number_35
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 36
+dictionary       Unit_number_36
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 37
+dictionary       Unit_number_37
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 38
+dictionary       Unit_number_38
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 39
+dictionary       Unit_number_39
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 40
+dictionary       Unit_number_40
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 41
+dictionary       Unit_number_41
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 42
+dictionary       Unit_number_42
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 43
+dictionary       Unit_number_43
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 44
+dictionary       Unit_number_44
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 45
+dictionary       Unit_number_45
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 46
+dictionary       Unit_number_46
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 47
+dictionary       Unit_number_47
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 48
+dictionary       Unit_number_48
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 49
+dictionary       Unit_number_49
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 50
+dictionary       Unit_number_50
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 51
+dictionary       Unit_number_51
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 52
+dictionary       Unit_number_52
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 53
+dictionary       Unit_number_53
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 54
+dictionary       Unit_number_54
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 55
+dictionary       Unit_number_55
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 56
+dictionary       Unit_number_56
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 57
+dictionary       Unit_number_57
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 58
+dictionary       Unit_number_58
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 59
+dictionary       Unit_number_59
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 60
+dictionary       Unit_number_60
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 61
+dictionary       Unit_number_61
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 62
+dictionary       Unit_number_62
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 63
+dictionary       Unit_number_63
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 64
+dictionary       Unit_number_64
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 65
+dictionary       Unit_number_65
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 66
+dictionary       Unit_number_66
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 67
+dictionary       Unit_number_67
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 68
+dictionary       Unit_number_68
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 69
+dictionary       Unit_number_69
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 70
+dictionary       Unit_number_70
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 71
+dictionary       Unit_number_71
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 72
+dictionary       Unit_number_72
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 73
+dictionary       Unit_number_73
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 74
+dictionary       Unit_number_74
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 75
+dictionary       Unit_number_75
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 76
+dictionary       Unit_number_76
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 77
+dictionary       Unit_number_77
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 78
+dictionary       Unit_number_78
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 79
+dictionary       Unit_number_79
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 80
+dictionary       Unit_number_80
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 81
+dictionary       Unit_number_81
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 82
+dictionary       Unit_number_82
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 83
+dictionary       Unit_number_83
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 84
+dictionary       Unit_number_84
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 85
+dictionary       Unit_number_85
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 86
+dictionary       Unit_number_86
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 87
+dictionary       Unit_number_87
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 88
+dictionary       Unit_number_88
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 89
+dictionary       Unit_number_89
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 90
+dictionary       Unit_number_90
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 91
+dictionary       Unit_number_91
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 92
+dictionary       Unit_number_92
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 93
+dictionary       Unit_number_93
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 94
+dictionary       Unit_number_94
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 95
+dictionary       Unit_number_95
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 96
+dictionary       Unit_number_96
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 97
+dictionary       Unit_number_97
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 98
+dictionary       Unit_number_98
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 99
+dictionary       Unit_number_99
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 100
+dictionary       Unit_number_100
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 101
+dictionary       Unit_number_101
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 102
+dictionary       Unit_number_102
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 103
+dictionary       Unit_number_103
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 104
+dictionary       Unit_number_104
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 105
+dictionary       Unit_number_105
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 106
+dictionary       Unit_number_106
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 107
+dictionary       Unit_number_107
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 108
+dictionary       Unit_number_108
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 109
+dictionary       Unit_number_109
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 110
+dictionary       Unit_number_110
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 111
+dictionary       Unit_number_111
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 112
+dictionary       Unit_number_112
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 113
+dictionary       Unit_number_113
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 114
+dictionary       Unit_number_114
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 115
+dictionary       Unit_number_115
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 116
+dictionary       Unit_number_116
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 117
+dictionary       Unit_number_117
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 118
+dictionary       Unit_number_118
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 119
+dictionary       Unit_number_119
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 120
+dictionary       Unit_number_120
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 121
+dictionary       Unit_number_121
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 122
+dictionary       Unit_number_122
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 123
+dictionary       Unit_number_123
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 124
+dictionary       Unit_number_124
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 125
+dictionary       Unit_number_125
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 126
+dictionary       Unit_number_126
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 127
+dictionary       Unit_number_127
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 128
+dictionary       Unit_number_128
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 129
+dictionary       Unit_number_129
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 130
+dictionary       Unit_number_130
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 131
+dictionary       Unit_number_131
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 132
+dictionary       Unit_number_132
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 133
+dictionary       Unit_number_133
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 134
+dictionary       Unit_number_134
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 135
+dictionary       Unit_number_135
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 136
+dictionary       Unit_number_136
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 137
+dictionary       Unit_number_137
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 138
+dictionary       Unit_number_138
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 139
+dictionary       Unit_number_139
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 140
+dictionary       Unit_number_140
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 141
+dictionary       Unit_number_141
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 142
+dictionary       Unit_number_142
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 143
+dictionary       Unit_number_143
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 144
+dictionary       Unit_number_144
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 145
+dictionary       Unit_number_145
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 146
+dictionary       Unit_number_146
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 147
+dictionary       Unit_number_147
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 148
+dictionary       Unit_number_148
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 149
+dictionary       Unit_number_149
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 150
+dictionary       Unit_number_150
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 151
+dictionary       Unit_number_151
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 152
+dictionary       Unit_number_152
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 153
+dictionary       Unit_number_153
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 154
+dictionary       Unit_number_154
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 155
+dictionary       Unit_number_155
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 156
+dictionary       Unit_number_156
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 157
+dictionary       Unit_number_157
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 158
+dictionary       Unit_number_158
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 159
+dictionary       Unit_number_159
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 160
+dictionary       Unit_number_160
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 161
+dictionary       Unit_number_161
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 162
+dictionary       Unit_number_162
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 163
+dictionary       Unit_number_163
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 164
+dictionary       Unit_number_164
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 165
+dictionary       Unit_number_165
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 166
+dictionary       Unit_number_166
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 167
+dictionary       Unit_number_167
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 168
+dictionary       Unit_number_168
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 169
+dictionary       Unit_number_169
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 170
+dictionary       Unit_number_170
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 171
+dictionary       Unit_number_171
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 172
+dictionary       Unit_number_172
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 173
+dictionary       Unit_number_173
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 174
+dictionary       Unit_number_174
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 175
+dictionary       Unit_number_175
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 176
+dictionary       Unit_number_176
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 177
+dictionary       Unit_number_177
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 178
+dictionary       Unit_number_178
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 179
+dictionary       Unit_number_179
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 180
+dictionary       Unit_number_180
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 181
+dictionary       Unit_number_181
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 182
+dictionary       Unit_number_182
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 183
+dictionary       Unit_number_183
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 184
+dictionary       Unit_number_184
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 185
+dictionary       Unit_number_185
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 186
+dictionary       Unit_number_186
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 187
+dictionary       Unit_number_187
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 188
+dictionary       Unit_number_188
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 189
+dictionary       Unit_number_189
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 190
+dictionary       Unit_number_190
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 191
+dictionary       Unit_number_191
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 192
+dictionary       Unit_number_192
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 193
+dictionary       Unit_number_193
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 194
+dictionary       Unit_number_194
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 195
+dictionary       Unit_number_195
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 196
+dictionary       Unit_number_196
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 197
+dictionary       Unit_number_197
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 198
+dictionary       Unit_number_198
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 199
+dictionary       Unit_number_199
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 200
+dictionary       Unit_number_200
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 201
+dictionary       Unit_number_201
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 202
+dictionary       Unit_number_202
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 203
+dictionary       Unit_number_203
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 204
+dictionary       Unit_number_204
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 205
+dictionary       Unit_number_205
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 206
+dictionary       Unit_number_206
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 207
+dictionary       Unit_number_207
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 208
+dictionary       Unit_number_208
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 209
+dictionary       Unit_number_209
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 210
+dictionary       Unit_number_210
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 211
+dictionary       Unit_number_211
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 212
+dictionary       Unit_number_212
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 213
+dictionary       Unit_number_213
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 214
+dictionary       Unit_number_214
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 215
+dictionary       Unit_number_215
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 216
+dictionary       Unit_number_216
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 217
+dictionary       Unit_number_217
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 218
+dictionary       Unit_number_218
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 219
+dictionary       Unit_number_219
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 220
+dictionary       Unit_number_220
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 221
+dictionary       Unit_number_221
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 222
+dictionary       Unit_number_222
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 223
+dictionary       Unit_number_223
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 224
+dictionary       Unit_number_224
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 225
+dictionary       Unit_number_225
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 226
+dictionary       Unit_number_226
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 227
+dictionary       Unit_number_227
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 228
+dictionary       Unit_number_228
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 229
+dictionary       Unit_number_229
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 230
+dictionary       Unit_number_230
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 231
+dictionary       Unit_number_231
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 232
+dictionary       Unit_number_232
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 233
+dictionary       Unit_number_233
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 234
+dictionary       Unit_number_234
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 235
+dictionary       Unit_number_235
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 236
+dictionary       Unit_number_236
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 237
+dictionary       Unit_number_237
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 238
+dictionary       Unit_number_238
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 239
+dictionary       Unit_number_239
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 240
+dictionary       Unit_number_240
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 241
+dictionary       Unit_number_241
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 242
+dictionary       Unit_number_242
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 243
+dictionary       Unit_number_243
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 244
+dictionary       Unit_number_244
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 245
+dictionary       Unit_number_245
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 246
+dictionary       Unit_number_246
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 247
+dictionary       Unit_number_247
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 248
+dictionary       Unit_number_248
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 249
+dictionary       Unit_number_249
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 250
+dictionary       Unit_number_250
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 251
+dictionary       Unit_number_251
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 252
+dictionary       Unit_number_252
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 253
+dictionary       Unit_number_253
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 254
+dictionary       Unit_number_254
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 255
+dictionary       Unit_number_255
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 256
+dictionary       Unit_number_256
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 257
+dictionary       Unit_number_257
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 258
+dictionary       Unit_number_258
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 259
+dictionary       Unit_number_259
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 260
+dictionary       Unit_number_260
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 261
+dictionary       Unit_number_261
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 262
+dictionary       Unit_number_262
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 263
+dictionary       Unit_number_263
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 264
+dictionary       Unit_number_264
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 265
+dictionary       Unit_number_265
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 266
+dictionary       Unit_number_266
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 267
+dictionary       Unit_number_267
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 268
+dictionary       Unit_number_268
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 269
+dictionary       Unit_number_269
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 270
+dictionary       Unit_number_270
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 271
+dictionary       Unit_number_271
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 272
+dictionary       Unit_number_272
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 273
+dictionary       Unit_number_273
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 274
+dictionary       Unit_number_274
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 275
+dictionary       Unit_number_275
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 276
+dictionary       Unit_number_276
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 277
+dictionary       Unit_number_277
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 278
+dictionary       Unit_number_278
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 279
+dictionary       Unit_number_279
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 280
+dictionary       Unit_number_280
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 281
+dictionary       Unit_number_281
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 282
+dictionary       Unit_number_282
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 283
+dictionary       Unit_number_283
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 284
+dictionary       Unit_number_284
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 285
+dictionary       Unit_number_285
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 286
+dictionary       Unit_number_286
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 287
+dictionary       Unit_number_287
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 288
+dictionary       Unit_number_288
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 289
+dictionary       Unit_number_289
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 290
+dictionary       Unit_number_290
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 291
+dictionary       Unit_number_291
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 292
+dictionary       Unit_number_292
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 293
+dictionary       Unit_number_293
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 294
+dictionary       Unit_number_294
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 295
+dictionary       Unit_number_295
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 296
+dictionary       Unit_number_296
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 297
+dictionary       Unit_number_297
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 298
+dictionary       Unit_number_298
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 299
+dictionary       Unit_number_299
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 300
+dictionary       Unit_number_300
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 301
+dictionary       Unit_number_301
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 302
+dictionary       Unit_number_302
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 303
+dictionary       Unit_number_303
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 304
+dictionary       Unit_number_304
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 305
+dictionary       Unit_number_305
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 306
+dictionary       Unit_number_306
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 307
+dictionary       Unit_number_307
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 308
+dictionary       Unit_number_308
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 309
+dictionary       Unit_number_309
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 310
+dictionary       Unit_number_310
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 311
+dictionary       Unit_number_311
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 312
+dictionary       Unit_number_312
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 313
+dictionary       Unit_number_313
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 314
+dictionary       Unit_number_314
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 315
+dictionary       Unit_number_315
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 316
+dictionary       Unit_number_316
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 317
+dictionary       Unit_number_317
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 318
+dictionary       Unit_number_318
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 319
+dictionary       Unit_number_319
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 320
+dictionary       Unit_number_320
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 321
+dictionary       Unit_number_321
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 322
+dictionary       Unit_number_322
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 323
+dictionary       Unit_number_323
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 324
+dictionary       Unit_number_324
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 325
+dictionary       Unit_number_325
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 326
+dictionary       Unit_number_326
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 327
+dictionary       Unit_number_327
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 328
+dictionary       Unit_number_328
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 329
+dictionary       Unit_number_329
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 330
+dictionary       Unit_number_330
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 331
+dictionary       Unit_number_331
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 332
+dictionary       Unit_number_332
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 333
+dictionary       Unit_number_333
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 334
+dictionary       Unit_number_334
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 335
+dictionary       Unit_number_335
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 336
+dictionary       Unit_number_336
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 337
+dictionary       Unit_number_337
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 338
+dictionary       Unit_number_338
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 339
+dictionary       Unit_number_339
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 340
+dictionary       Unit_number_340
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 341
+dictionary       Unit_number_341
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 342
+dictionary       Unit_number_342
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 343
+dictionary       Unit_number_343
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 344
+dictionary       Unit_number_344
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 345
+dictionary       Unit_number_345
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 346
+dictionary       Unit_number_346
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 347
+dictionary       Unit_number_347
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 348
+dictionary       Unit_number_348
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 349
+dictionary       Unit_number_349
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 350
+dictionary       Unit_number_350
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 351
+dictionary       Unit_number_351
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 352
+dictionary       Unit_number_352
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 353
+dictionary       Unit_number_353
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 354
+dictionary       Unit_number_354
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 355
+dictionary       Unit_number_355
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 356
+dictionary       Unit_number_356
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 357
+dictionary       Unit_number_357
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 358
+dictionary       Unit_number_358
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 359
+dictionary       Unit_number_359
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 360
+dictionary       Unit_number_360
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 361
+dictionary       Unit_number_361
+category         infantry
+class            тяжёлый
+voice_type       
+
+
+type             Unit number 362
+dictionary       Unit_number_362
+category         infantry
+class            тяжёлый
+voice_type       
+
+
+type             Unit number 363
+dictionary       Unit_number_363
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 364
+dictionary       Unit_number_364
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 365
+dictionary       Unit_number_365
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 366
+dictionary       Unit_number_366
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 367
+dictionary       Unit_number_367
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 368
+dictionary       Unit_number_368
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 369
+dictionary       Unit_number_369
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 370
+dictionary       Unit_number_370
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 371
+dictionary       Unit_number_371
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 372
+dictionary       Unit_number_372
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 373
+dictionary       Unit_number_373
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 374
+dictionary       Unit_number_374
+category         cavalry
+class            тяжёлый
+voice_type       
+
+
+type             Unit number 375
+dictionary       Unit_number_375
+category         cavalry
+class            тяжёлый
+voice_type       
+
+
+type             Unit number 376
+dictionary       Unit_number_376
+category         cavalry
+class            тяжёлый
+voice_type       
+
+
+type             Unit number 377
+dictionary       Unit_number_377
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 378
+dictionary       Unit_number_378
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 379
+dictionary       Unit_number_379
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 380
+dictionary       Unit_number_380
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 381
+dictionary       Unit_number_381
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 382
+dictionary       Unit_number_382
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 383
+dictionary       Unit_number_383
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 384
+dictionary       Unit_number_384
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 385
+dictionary       Unit_number_385
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 386
+dictionary       Unit_number_386
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 387
+dictionary       Unit_number_387
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 388
+dictionary       Unit_number_388
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 389
+dictionary       Unit_number_389
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 390
+dictionary       Unit_number_390
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 391
+dictionary       Unit_number_391
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 392
+dictionary       Unit_number_392
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 393
+dictionary       Unit_number_393
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 394
+dictionary       Unit_number_394
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 395
+dictionary       Unit_number_395
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 396
+dictionary       Unit_number_396
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 397
+dictionary       Unit_number_397
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 398
+dictionary       Unit_number_398
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 399
+dictionary       Unit_number_399
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 400
+dictionary       Unit_number_400
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 401
+dictionary       Unit_number_401
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 402
+dictionary       Unit_number_402
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 403
+dictionary       Unit_number_403
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 404
+dictionary       Unit_number_404
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 405
+dictionary       Unit_number_405
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 406
+dictionary       Unit_number_406
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 407
+dictionary       Unit_number_407
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 408
+dictionary       Unit_number_408
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 409
+dictionary       Unit_number_409
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 410
+dictionary       Unit_number_410
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 411
+dictionary       Unit_number_411
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 412
+dictionary       Unit_number_412
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 413
+dictionary       Unit_number_413
+category         siege
+class            missile
+voice_type       
+
+
+type             Unit number 414
+dictionary       Unit_number_414
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 415
+dictionary       Unit_number_415
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 416
+dictionary       Unit_number_416
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 417
+dictionary       Unit_number_417
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 418
+dictionary       Unit_number_418
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 419
+dictionary       Unit_number_419
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 420
+dictionary       Unit_number_420
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 421
+dictionary       Unit_number_421
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 422
+dictionary       Unit_number_422
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 423
+dictionary       Unit_number_423
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 424
+dictionary       Unit_number_424
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 425
+dictionary       Unit_number_425
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 426
+dictionary       Unit_number_426
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 427
+dictionary       Unit_number_427
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 428
+dictionary       Unit_number_428
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 429
+dictionary       Unit_number_429
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 430
+dictionary       Unit_number_430
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 431
+dictionary       Unit_number_431
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 432
+dictionary       Unit_number_432
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 433
+dictionary       Unit_number_433
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 434
+dictionary       Unit_number_434
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 435
+dictionary       Unit_number_435
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 436
+dictionary       Unit_number_436
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 437
+dictionary       Unit_number_437
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 438
+dictionary       Unit_number_438
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 439
+dictionary       Unit_number_439
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 440
+dictionary       Unit_number_440
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 441
+dictionary       Unit_number_441
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 442
+dictionary       Unit_number_442
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 443
+dictionary       Unit_number_443
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 444
+dictionary       Unit_number_444
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 445
+dictionary       Unit_number_445
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 446
+dictionary       Unit_number_446
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 447
+dictionary       Unit_number_447
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 448
+dictionary       Unit_number_448
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 449
+dictionary       Unit_number_449
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 450
+dictionary       Unit_number_450
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 451
+dictionary       Unit_number_451
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 452
+dictionary       Unit_number_452
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 453
+dictionary       Unit_number_453
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 454
+dictionary       Unit_number_454
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 455
+dictionary       Unit_number_455
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 456
+dictionary       Unit_number_456
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 457
+dictionary       Unit_number_457
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 458
+dictionary       Unit_number_458
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 459
+dictionary       Unit_number_459
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 460
+dictionary       Unit_number_460
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 461
+dictionary       Unit_number_461
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 462
+dictionary       Unit_number_462
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 463
+dictionary       Unit_number_463
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 464
+dictionary       Unit_number_464
+category         cavalry
+class            light
+voice_type       
+
+
+type             Unit number 465
+dictionary       Unit_number_465
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 466
+dictionary       Unit_number_466
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 467
+dictionary       Unit_number_467
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 468
+dictionary       Unit_number_468
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 469
+dictionary       Unit_number_469
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 470
+dictionary       Unit_number_470
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 471
+dictionary       Unit_number_471
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 472
+dictionary       Unit_number_472
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 473
+dictionary       Unit_number_473
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 474
+dictionary       Unit_number_474
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 475
+dictionary       Unit_number_475
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 476
+dictionary       Unit_number_476
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 477
+dictionary       Unit_number_477
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 478
+dictionary       Unit_number_478
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 479
+dictionary       Unit_number_479
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 480
+dictionary       Unit_number_480
+category         cavalry
+class            heavy
+voice_type       
+
+
+type             Unit number 481
+dictionary       Unit_number_481
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 482
+dictionary       Unit_number_482
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 483
+dictionary       Unit_number_483
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 484
+dictionary       Unit_number_484
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 485
+dictionary       Unit_number_485
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 486
+dictionary       Unit_number_486
+category         
+class            
+voice_type       
+
+
+type             Unit number 487
+dictionary       Unit_number_487
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 488
+dictionary       Unit_number_488
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 489
+dictionary       Unit_number_489
+category         
+class            
+voice_type       
+
+
+type             Unit number 490
+dictionary       Unit_number_490
+category         
+class            
+voice_type       
+
+
+type             Unit number 491
+dictionary       Unit_number_491
+category         
+class            
+voice_type       
+
+
+type             Unit number 492
+dictionary       Unit_number_492
+category         
+class            
+voice_type       
+
+
+type             Unit number 493
+dictionary       Unit_number_493
+category         
+class            
+voice_type       
+
+
+type             Unit number 494
+dictionary       Unit_number_494
+category         
+class            
+voice_type       
+
+
+type             Unit number 495
+dictionary       Unit_number_495
+category         
+class            
+voice_type       
+
+
+type             Unit number 496
+dictionary       Unit_number_496
+category         
+class            
+voice_type       
+
+
+type             Unit number 497
+dictionary       Unit_number_497
+category         
+class            
+voice_type       
+
+
+type             Unit number 498
+dictionary       Unit_number_498
+category         
+class            
+voice_type       
+
+
+type             Unit number 499
+dictionary       Unit_number_499
+category         
+class            
+voice_type       
+
+
+type             Unit number 500
+dictionary       Unit_number_500
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         cavalry
+class            missile
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         
+class            
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         
+class            
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         
+class            
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         
+class            
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            missile
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            light
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            spearmen
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            heavy
+voice_type       
+
+
+type             Unit number 501
+dictionary       Unit_number_501
+category         infantry
+class            heavy
+voice_type       
+
+
