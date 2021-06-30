@@ -2,6 +2,98 @@
 #include "patchesForGame.h"
 #include "tilesChange.h"
 #include "graphicsD3D.h"
+#include <functional>
+
+
+
+string getRecordName(worldRecord* selectedRecord)
+{
+	int allocatedLen = selectedRecord->allocatedNameLen;
+	char* str = nullptr;
+	if (allocatedLen > 15)
+	{
+		str = *(char**)selectedRecord->recordName;
+	}
+	else
+	{
+		str = &selectedRecord->recordName[0];
+	}
+
+	int nameLen = selectedRecord->nameLen;
+
+	string retS;
+	for (int i = 0; i < nameLen; i++)
+	{
+		retS.push_back(str[i]);
+	}
+	retS[nameLen] = '\0';
+
+	return retS;
+}
+
+
+string getRecordGroup(worldRecord* selectedRecord)
+{
+	int allocatedLen = selectedRecord->allocatedGroupLen;
+	char* str = nullptr;
+	if (allocatedLen > 15)
+	{
+		str = *(char**)selectedRecord->recordGroup;
+	}
+	else
+	{
+		str = &selectedRecord->recordGroup[0];
+	}
+
+	int groupLen = selectedRecord->groupLen;
+
+	string retS;
+	for (int i = 0; i < groupLen; i++)
+	{
+		retS.push_back(str[i]);
+	}
+	retS[groupLen] = '\0';
+
+	return retS;
+}
+
+worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, worldRecord* selectedRecord)
+{
+	string selectRecordS = getRecordName(selectedRecord);
+	string selectRecordG = getRecordGroup(selectedRecord);
+	string selectedWorld= plugins::onSelectWorldpkgdesc(selectRecordS.c_str(), selectRecordG.c_str());
+	if (selectedWorld.empty()||selectedWorld == selectRecordS)
+	{
+		return nullptr;
+	}
+
+	string selectedWorldCPP = selectedWorld;
+	struct dataBaseS
+	{
+		int something;
+		int something2;
+		worldRecord* records;
+		worldRecord* recordsEnd;
+	};
+
+	dataBaseS* db = (dataBaseS*)database;
+
+	worldRecord* currRecord = db->records;
+	do
+	{
+		string recName = getRecordName(currRecord);
+		string recGroup=getRecordGroup(selectedRecord);
+		if (recName== selectedWorldCPP&& recGroup== selectRecordG)
+		{
+			return currRecord;
+		}
+
+
+		currRecord++;
+	} while (currRecord!= db->recordsEnd);
+
+	return nullptr;
+}
 void __fastcall patchesForGame::clickAtTile(int* xy)
 {
 	plugins::onClickAtTile(xy[0],xy[1]);

@@ -4,6 +4,9 @@
 class patchesForGame
 {
 public:
+	//select worldpkgdesc from db
+	static worldRecord* __fastcall selectWorldpkgdesc(char* database, worldRecord* selectedRecord);
+
 	//click at tile
 	static void __fastcall clickAtTile(int* xy);
 

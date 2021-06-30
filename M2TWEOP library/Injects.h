@@ -468,3 +468,18 @@ private:
 };
 
 
+//select worldpkgdesc from db
+class toSelectWorldFromDB
+	:public AATemplate
+{
+public:
+	toSelectWorldFromDB(MemWork* mem, LPVOID adr, int ver);
+	~toSelectWorldFromDB();
+
+	void SetOriginalSelectCode();
+	void SetlSelectCode();
+private:
+	LPVOID funcAdress;
+};
+
+

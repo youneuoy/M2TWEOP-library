@@ -6,6 +6,7 @@
 #include "techFuncs.h"
 plugins::configT plugins::pluginsCfg;
 vector<const char*>* plugins::eventNames;
+
 void plugins::init()
 {
 	pluginsCfg.pluginsPath = globals::dataS.modPatch;
@@ -539,6 +540,21 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 
 
 
+std::string plugins::onSelectWorldpkgdesc(const char* selectedRec, const char* selectedGroup)
+{
+	std::string retVal;
+
+	for (plugin* pl : pluginsCfg.plugins)
+	{
+		std::string *tmpVal=(*(*pl->onSelectWorldpkgdesc))(selectedRec, selectedGroup);
+
+		retVal = *tmpVal;
+
+		delete tmpVal;
+	}
+
+	return retVal;
+}
 
 void plugins::onClickAtTile(int x, int y)
 {
@@ -1240,5 +1256,9 @@ int plugin::init(string* nameP)
 	//onClickAtTile
 	fName = "onClickAtTile";
 	onClickAtTile.Load(&plPath, &fName);
+
+	//onSelectWorldpkgdesc
+	fName = "onSelectWorldpkgdesc";
+	onSelectWorldpkgdesc.Load(&plPath, &fName);
 	return 1;
 }
