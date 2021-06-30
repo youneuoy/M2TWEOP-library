@@ -7,6 +7,19 @@ typedef unsigned int    uint;
 typedef unsigned char    uchar;
 
 #pragma pack(push,1) 
+struct worldRecord {
+	undefined field_0x0[4];
+	char recordName[16]; /* pointer if allocatedNameLen>15 */
+	int nameLen;
+	int allocatedNameLen;
+	undefined field_0x1c[4];
+	char recordGroup[16]; /* pointer if allocatedGroupLen>15 */
+	int groupLen;
+	int allocatedGroupLen;
+	undefined field_0x38[40];
+};
+
+
 struct gameDataAllStruct {
 	undefined field_0x0[88];
 	struct battleDataS* battleHandler;

@@ -70,6 +70,8 @@ class plugin
 {
 public:
 
+	ProcLoader<std::string*(__cdecl*)(const char*, const char*)> onSelectWorldpkgdesc;
+
 	ProcLoader<void(__cdecl*)(int,int)> onClickAtTile;
 
 	ProcLoader<void(__cdecl*)()> onCampaignMapLoaded;
@@ -215,12 +217,14 @@ public:
 	}
 	pluginsCfg;
 
+
 	static void init();
 
 	static void __fastcall onEvent(DWORD** vTab);
 
 	//from here calls all plugins
 
+	static std::string onSelectWorldpkgdesc(const char* selectedRec,const char* selectedGroup);
 	static void onClickAtTile(int x,int y);
 	static void onCampaignMapLoaded();
 

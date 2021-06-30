@@ -1758,3 +1758,76 @@ void toClickAtCoords::SetlClickCode()
 
 	delete a;
 }
+
+toSelectWorldFromDB::toSelectWorldFromDB(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAdress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x010b8ab5;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x010b82c5;
+}
+
+toSelectWorldFromDB::~toSelectWorldFromDB()
+{
+}
+
+void toSelectWorldFromDB::SetOriginalSelectCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(esi);
+	a->lea(ecx, dword_ptr(esp,0x18));
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toSelectWorldFromDB::SetlSelectCode()
+{
+	Assembler* a = new Assembler();
+	Label overrideWorld = a->newLabel();
+	Label standardWorld = a->newLabel();
+	Label exLab = a->newLabel();
+
+	a->mov(ecx, esi);
+	a->pushad();
+	a->pushf();
+
+	a->mov(ecx, edi);//pointer to db
+	a->mov(edx, esi);//selected record
+	a->mov(eax, (DWORD)funcAdress);
+	a->call(eax);
+
+		a->test(eax, eax);
+
+		//if 0, when standard world, else not
+		a->jnz(overrideWorld);
+
+	a->bind(standardWorld);
+	a->popf();
+	a->popad();
+	a->push(esi);
+	a->jmp(exLab);
+
+
+	a->bind(overrideWorld);
+	a->popf();
+	a->mov(dword_ptr(esp, 0x4), eax);//mov our eax to esi
+	a->popad();
+
+	a->push(esi);
+	a->mov(esi, ecx);
+	a->bind(exLab);
+
+	a->lea(ecx, dword_ptr(esp, 0x18));
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

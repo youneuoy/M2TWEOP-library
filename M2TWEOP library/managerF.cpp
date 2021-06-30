@@ -250,6 +250,12 @@ void managerF::doPachs()
 
 	f1 << "Done" << endl;
 
+	f1 << "Start applying select worldpkgdesc from db patch" << endl;
+	toSelectWorldFromDB* selWorld = new toSelectWorldFromDB(mem, (LPVOID)patchesForGame::selectWorldpkgdesc, globals::dataS.gamever);
+	selWorld->SetlSelectCode();
+	selWorld->Enable();
+
+	f1 << "Done" << endl;
 
 	/*f1 << "Start replacing cas loading function" << endl;
 	toLoadCas* loadCasF = new toLoadCas(mem, (LPVOID)stratModelsOptimise::loadCasProc, globals::dataS.gamever);
