@@ -7,7 +7,11 @@
 #include "eopImgui.h"
 
 
+#include <d3d9.h>
+#include <d3dx9.h>
+
 graphicsD3D::dataT graphicsD3D::dataS;
+
 
 
 template<typename T>
@@ -45,7 +49,11 @@ NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 {
 
 	plugins::onEndScene(pDevice);
+	ImGui::Begin("testW");
 
+	ImGui::Text("This is test window");
+
+	ImGui::End();
 	if (drawParams.drawEOPStartInfo == true)
 	{
 		float currTime = (float)ImGui::GetTime();
@@ -231,11 +239,15 @@ NOINLINE EOP_EXPORT void graphicsExport::unloadTexture(LPDIRECT3DTEXTURE9 textur
 }
 
 NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevice)
-{
+{	
 	graphicsD3D::dataS.pDevice = pDevice;
 
 	graphicsD3D::InitS();
+
+
 	graphicsD3D::initImgGui(pDevice);
+
+	graphicsD3D::dataS.d3dT.InitGeometry(pDevice);
 }
 
 NOINLINE EOP_EXPORT void graphicsExport::onEndScene(IDirect3DDevice9* pDevice)
@@ -250,22 +262,23 @@ NOINLINE EOP_EXPORT void graphicsExport::onEndScene(IDirect3DDevice9* pDevice)
 	graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui = ImGui::GetIO().WantCaptureMouse;
 	graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui |= ImGui::GetIO().WantCaptureKeyboard;
 
-
+	graphicsD3D::dataS.d3dT.draw();
 	ImGui::EndFrame();
 	ImGui::Render();
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-
-
-
 }
 
 NOINLINE EOP_EXPORT void graphicsExport::onReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
 {
 	ImGui_ImplDX9_InvalidateDeviceObjects();
 
+
+	graphicsD3D::dataS.d3dT.onResetDevice();
 }
 
 NOINLINE EOP_EXPORT void graphicsExport::afterReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
 {
 	ImGui_ImplDX9_CreateDeviceObjects();
+
+	graphicsD3D::dataS.d3dT.afterResetDevice();
 }
