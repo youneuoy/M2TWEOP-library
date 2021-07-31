@@ -12,6 +12,20 @@ namespace stratModelsChange
 		newMod->model = modelP;
 		resource->stratMod = newMod;
 	}
+
+	void changeSettlementStratModel(settlementStruct* settlement, model_Rigid* modelP)
+	{
+		if (settlement->model->castle == modelP
+			&& settlement->model->town == modelP
+			)return;
+
+		settMod* newMod = new settMod();
+
+		newMod->castle = modelP;
+		newMod->town = modelP;
+		settlement->model = newMod;
+
+	}
 	void changeFortStratModel(fortStruct* fort, model_Rigid* modelP, model_Rigid* modelP2)
 	{
 		if (fort->stratModel->centerModel == modelP
@@ -80,6 +94,7 @@ namespace stratModelsChange
 		fortStruct* fort = nullptr;
 		portBuildingStruct* port = nullptr;
 		resStrat* resource = nullptr;
+		settlementStruct* settlement = nullptr;
 
 		if (modelP2 != nullptr)
 		{
@@ -104,6 +119,12 @@ namespace stratModelsChange
 		if (resource != nullptr)
 		{
 			changeResourceStratModel(resource, modelP);
+			return;
+		}
+		settlement= fastFuncts::findSettlement(x, y);
+		if (settlement != nullptr)
+		{
+			changeSettlementStratModel(settlement, modelP);
 			return;
 		}
 

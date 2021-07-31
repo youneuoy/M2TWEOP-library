@@ -141,7 +141,11 @@ bool unitRecord::readUnit(XLWorksheet* wks, size_t lineNum)
 		}
 		ACell.clear();
 	}
+	
 
+	{
+
+	}
 	if (brokenFields > 0)
 	{
 		return false;
