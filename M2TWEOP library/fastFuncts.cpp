@@ -124,10 +124,34 @@ namespace fastFuncts
 						&&
 						setS->resources[k]->yCoord == y
 						)
+					{
 						return setS->resources[k];
+					}
 				}
 			}
 		}
+
+		return nullptr;
+	}
+
+	NOINLINE EOP_EXPORT settlementStruct* findSettlement(int x, int y)
+	{
+		UINT32 numFac = fastFuncts::getFactionsCount();
+		factionStruct** listFac = fastFuncts::getFactionsList();
+
+		for (UINT32 i = 0; i < numFac; i++)
+		{
+			for (int j = 0; j < listFac[i]->settlementsNum; j++)
+			{
+				settlementStruct* setS = listFac[i]->settlements[j];
+				if (setS->xCoord == x && setS->yCoord == y)
+				{
+					return setS;
+				}
+			}
+		}
+
+
 
 		return nullptr;
 	}
