@@ -99,7 +99,7 @@ public:
 		g_pd3dDevice->GetTransform(D3DTS_PROJECTION, &last_projection);
 
 
-		//pStateBlock->Apply();
+		pStateBlock->Apply();
 
 
 		// Turn on the zbuffer
@@ -111,7 +111,7 @@ public:
 		for (DWORD i = 0; i < g_dwNumMaterials; i++)
 		{
 			// Set the material and texture for this subset
-		  //  g_pd3dDevice->SetMaterial(&g_pMeshMaterials[i]);
+		    g_pd3dDevice->SetMaterial(&g_pMeshMaterials[i]);
 			g_pd3dDevice->SetTexture(0, g_pMeshTextures[i]);
 
 			// Draw the mesh subset
