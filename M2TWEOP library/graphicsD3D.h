@@ -3,7 +3,7 @@
 #include "headersMEM.h"
 #include "headersGraphics.h"
 #include "globals.h"
-
+#include "techFuncs.h"
 
 #include "exportHeader.h"
 
@@ -132,7 +132,15 @@ public:
 	{
 		// Set up world matrix
 		D3DXMATRIXA16 matWorld;
-		D3DXMatrixRotationY(&matWorld, 1);
+		//D3DXMatrixRotationY(&matWorld, 1);
+		D3DXMatrixIdentity(&matWorld);
+		//g_pd3dDevice->SetTransform(D3DTS_WORLD, &matWorld);
+
+		static float worldCoords[3]{100,3,100};
+		matWorld[12] = worldCoords[0];
+		matWorld[13] = worldCoords[1];
+		matWorld[14] = worldCoords[2];
+
 		g_pd3dDevice->SetTransform(D3DTS_WORLD, &matWorld);
 
 		// Set up our view matrix. A view matrix can be defined given an eye point,
@@ -146,7 +154,9 @@ public:
 
 
 
-		ImGui::Begin("Matrixes settings");
+		ImGui::Begin("Matrixes settings	");
+
+		ImGui::InputFloat3("modelCoordinates", (float*)&worldCoords, "%.1f");
 
 		ImGui::InputFloat3("vEyePt", (float*)&vEyePtF, "%.1f");
 		ImGui::InputFloat3("vLookatPt", (float*)&vLookatPtF, "%.1f");
@@ -157,7 +167,25 @@ public:
 		D3DXVECTOR3 vLookatPt(vLookatPtF[0], vLookatPtF[1], vLookatPtF[2]);
 		D3DXVECTOR3 vUpVec(vUpVecF[0], vUpVecF[1], vUpVecF[2]);
 		D3DXMATRIXA16 matView;
-		D3DXMatrixLookAtLH(&matView, &vEyePt, &vLookatPt, &vUpVec);
+		//D3DXMatrixLookAtLH(&matView, &vEyePt, &vLookatPt, &vUpVec);
+
+		float camCoords[3];
+		float camPitch;
+		techFuncs::Read(0x0193D538, &camCoords, 4*3);
+		techFuncs::Read(0x0193D628, &camPitch, 4);		
+		
+		D3DXMATRIXA16 camTransMat;
+
+		D3DXMatrixTranslation(&camTransMat, -camCoords[0], -camCoords[1], -camCoords[2]);
+
+
+
+		D3DXMATRIXA16 camRotMat;
+		D3DXMatrixRotationX(&camRotMat, -camPitch / 2 * D3DX_PI);
+		D3DXMatrixMultiply(&matView, &camRotMat, &camTransMat);
+
+		techFuncs::Read(0x0193D604, &matView, 16 * 4);
+
 		g_pd3dDevice->SetTransform(D3DTS_VIEW, &matView);
 
 		// For the projection matrix, we set up a perspective transform (which
@@ -168,6 +196,7 @@ public:
 		// what distances geometry should be no longer be rendered).
 		D3DXMATRIXA16 matProj;
 		D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.0f);
+		techFuncs::Read(0x02C9E0F8, &matProj, 16 * 4);
 		g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &matProj);
 	}
 
