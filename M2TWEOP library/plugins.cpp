@@ -1054,7 +1054,7 @@ int plugin::init(string* nameP)
 	onUnitDisbanded.strCmp = (*plugins::eventNames)[UnitDisbandedCode];
 
 	//onUnitTrained
-	fName = "onUnitDisbanded";
+	fName = "onUnitTrained";
 	onUnitTrained.Load(&plPath, &fName);
 	onUnitTrained.strCmp = (*plugins::eventNames)[UnitTrainedCode];
 
