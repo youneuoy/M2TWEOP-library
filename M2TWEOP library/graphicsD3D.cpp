@@ -243,7 +243,7 @@ NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevic
 
 	graphicsD3D::initImgGui(pDevice);
 
-//	graphicsD3D::dataS.d3dT.InitGeometry(pDevice);
+	//graphicsD3D::dataS.d3dT.InitGeometry(pDevice);
 }
 
 NOINLINE EOP_EXPORT void graphicsExport::onEndScene(IDirect3DDevice9* pDevice)
@@ -258,7 +258,7 @@ NOINLINE EOP_EXPORT void graphicsExport::onEndScene(IDirect3DDevice9* pDevice)
 	graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui = ImGui::GetIO().WantCaptureMouse;
 	graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui |= ImGui::GetIO().WantCaptureKeyboard;
 
-	//graphicsD3D::dataS.d3dT.draw();
+//	graphicsD3D::dataS.d3dT.draw();
 	ImGui::EndFrame();
 	ImGui::Render();
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
