@@ -32,6 +32,8 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT resStrat* findResource(int x, int y);
 	//find settlement on coords
 	NOINLINE EOP_EXPORT settlementStruct* findSettlement(int x, int y);
+	//find watchtower on coords
+	NOINLINE EOP_EXPORT watchTowerStruct* findWatchTower(int x, int y);
 
 	//move stratmap camera slow
 	NOINLINE EOP_EXPORT void moveStratCameraSlow(int x, int y);
