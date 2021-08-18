@@ -1,6 +1,16 @@
 #include "stratModelsChange.h"
 namespace stratModelsChange
 {
+	void changeWatchTowerStratModel(watchTowerStruct* tower, model_Rigid* modelP)
+	{
+		if (tower->model->modelP == modelP)return;
+
+		watchTowerModel* newMod = new watchTowerModel();
+
+		newMod->modelP = modelP;
+
+		tower->model = newMod;
+	}
 	void changeResourceStratModel(resStrat* resource, model_Rigid* modelP)
 	{
 		if (resource->stratMod->model == modelP)return;
@@ -95,6 +105,7 @@ namespace stratModelsChange
 		portBuildingStruct* port = nullptr;
 		resStrat* resource = nullptr;
 		settlementStruct* settlement = nullptr;
+		watchTowerStruct* tower = nullptr;
 
 		if (modelP2 != nullptr)
 		{
@@ -127,7 +138,12 @@ namespace stratModelsChange
 			changeSettlementStratModel(settlement, modelP);
 			return;
 		}
-
+		tower = fastFuncts::findWatchTower(x, y);
+		if (tower != nullptr)
+		{
+			changeWatchTowerStratModel(tower, modelP);
+			return;
+		}
 
 		return;
 	}

@@ -7,6 +7,20 @@ typedef unsigned int    uint;
 typedef unsigned char    uchar;
 
 #pragma pack(push,1) 
+struct watchTowerModel {
+	struct model_Rigid* modelP;
+	undefined field_0x4[26];
+};
+
+struct watchTowerStruct {
+	undefined field_0x0[12];
+	int xCoord;
+	int yCoord;
+	undefined field_0x14[16];
+	struct watchTowerModel* model;
+};
+
+
 struct worldRecord {
 	undefined field_0x0[4];
 	char recordName[16]; /* pointer if allocatedNameLen>15 */
@@ -511,7 +525,7 @@ struct factionStruct {
 	struct fortStruct** forts;
 	undefined field_0x138[4];
 	int fortsNum;
-	int field_0x140;
+	struct watchTowerStruct** watchTowers;
 	undefined field_0x144[4];
 	uint wathtowersNum;
 	struct portBuildingStruct** portBuildings; /* port buildings */
@@ -525,7 +539,6 @@ struct factionStruct {
 	undefined field_0xa50[156];
 	int money; /* money of the faction */
 };
-
 //tupe of unit from edu
 struct EduEntry
 {

@@ -156,6 +156,28 @@ namespace fastFuncts
 		return nullptr;
 	}
 
+	NOINLINE EOP_EXPORT watchTowerStruct* findWatchTower(int x, int y)
+	{
+		UINT32 numFac = fastFuncts::getFactionsCount();
+		factionStruct** listFac = fastFuncts::getFactionsList();
+
+		for (UINT32 i = 0; i < numFac; i++)
+		{
+			for (int j = 0; j < listFac[i]->wathtowersNum; j++)
+			{
+				watchTowerStruct* towS = listFac[i]->watchTowers[j];
+				if (towS->xCoord == x && towS->yCoord == y)
+				{
+					return towS;
+				}
+			}
+		}
+
+
+
+		return nullptr;
+	}
+
 	NOINLINE EOP_EXPORT void moveStratCameraSlow(int x, int y)
 	{
 		int* isStratMap = reinterpret_cast<int*>(dataOffsets::offsets.someStratmapPointer);
