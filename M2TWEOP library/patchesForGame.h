@@ -68,4 +68,8 @@ public:
 	//moment before game start select stratmap models for drawing
 	//replace models for the settlements, forts, ports, etc here without craches
 	static void WINAPI checkAndChangeModels();
+
+
+
+	static void WINAPI battleLoaded();
 };

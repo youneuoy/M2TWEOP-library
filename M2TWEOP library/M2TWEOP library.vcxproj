@@ -74,14 +74,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(SolutionDir)\3rd\discord-files\lib;$(ProgramW6432)\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x86\release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord-files;$(ProgramW6432)\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(IncludePath)</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(SolutionDir)\3rd\discord-files\lib;$(ProgramW6432)\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x86\release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord-files;$(ProgramW6432)\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(IncludePath)</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -108,7 +108,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;M2TWEOPLIBRARY_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FBXSDK_SHARED;WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;M2TWEOPLIBRARY_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -121,7 +121,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>Winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libfbxsdk.lib;Winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -130,7 +130,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;M2TWEOPLIBRARY_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FBXSDK_SHARED;WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;M2TWEOPLIBRARY_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -149,7 +149,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalDependencies>Winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libfbxsdk.lib;Winmm.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -187,6 +187,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\3rd\discord-files\achievement_manager.h" />
+    <ClInclude Include="..\3rd\discord-files\activity_manager.h" />
+    <ClInclude Include="..\3rd\discord-files\application_manager.h" />
+    <ClInclude Include="..\3rd\discord-files\core.h" />
+    <ClInclude Include="..\3rd\discord-files\discord.h" />
+    <ClInclude Include="..\3rd\discord-files\event.h" />
+    <ClInclude Include="..\3rd\discord-files\ffi.h" />
+    <ClInclude Include="..\3rd\discord-files\image_manager.h" />
+    <ClInclude Include="..\3rd\discord-files\lobby_manager.h" />
+    <ClInclude Include="..\3rd\discord-files\network_manager.h" />
+    <ClInclude Include="..\3rd\discord-files\overlay_manager.h" />
+    <ClInclude Include="..\3rd\discord-files\relationship_manager.h" />
+    <ClInclude Include="..\3rd\discord-files\storage_manager.h" />
+    <ClInclude Include="..\3rd\discord-files\store_manager.h" />
+    <ClInclude Include="..\3rd\discord-files\types.h" />
+    <ClInclude Include="..\3rd\discord-files\user_manager.h" />
+    <ClInclude Include="..\3rd\discord-files\voice_manager.h" />
     <ClInclude Include="..\3rd\imgui\eopImgui.h" />
     <ClInclude Include="..\3rd\imgui\imconfig.h" />
     <ClInclude Include="..\3rd\imgui\imgui.h" />
@@ -197,6 +214,7 @@
     <ClInclude Include="..\3rd\imgui\imstb_textedit.h" />
     <ClInclude Include="..\3rd\imgui\imstb_truetype.h" />
     <ClInclude Include="..\3rd\miniz\miniz.h" />
+    <ClInclude Include="..\3rd\nlohmann\json.hpp" />
     <ClInclude Include="actionsStrat.h" />
     <ClInclude Include="agePatch.h" />
     <ClInclude Include="C:\Users\COMP\vcpkg\installed\x86-windows-static-md\include\MinHook.h" />
@@ -215,13 +233,16 @@
     <ClInclude Include="Injects.h" />
     <ClInclude Include="managerF.h" />
     <ClInclude Include="MemWork.h" />
+    <ClInclude Include="onlineThings.h" />
     <ClInclude Include="patchesForGame.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="plugins.h" />
     <ClInclude Include="realGameTypes.h" />
+    <ClInclude Include="SingleFbxMesh.h" />
     <ClInclude Include="smallFuncs.h" />
     <ClInclude Include="stratModelsChange.h" />
     <ClInclude Include="stratModelsOptimise.h" />
+    <ClInclude Include="tAutodeskMemoryStream.h" />
     <ClInclude Include="techFuncs.h" />
     <ClInclude Include="technicalStringsFuncs.h" />
     <ClInclude Include="TemplateCh.h" />
@@ -229,6 +250,20 @@
     <ClInclude Include="tilesChange.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\3rd\discord-files\achievement_manager.cpp" />
+    <ClCompile Include="..\3rd\discord-files\activity_manager.cpp" />
+    <ClCompile Include="..\3rd\discord-files\application_manager.cpp" />
+    <ClCompile Include="..\3rd\discord-files\core.cpp" />
+    <ClCompile Include="..\3rd\discord-files\image_manager.cpp" />
+    <ClCompile Include="..\3rd\discord-files\lobby_manager.cpp" />
+    <ClCompile Include="..\3rd\discord-files\network_manager.cpp" />
+    <ClCompile Include="..\3rd\discord-files\overlay_manager.cpp" />
+    <ClCompile Include="..\3rd\discord-files\relationship_manager.cpp" />
+    <ClCompile Include="..\3rd\discord-files\storage_manager.cpp" />
+    <ClCompile Include="..\3rd\discord-files\store_manager.cpp" />
+    <ClCompile Include="..\3rd\discord-files\types.cpp" />
+    <ClCompile Include="..\3rd\discord-files\user_manager.cpp" />
+    <ClCompile Include="..\3rd\discord-files\voice_manager.cpp" />
     <ClCompile Include="..\3rd\imgui\eopImgui.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui_draw.cpp" />
@@ -254,6 +289,7 @@
     </ClCompile>
     <ClCompile Include="managerF.cpp" />
     <ClCompile Include="MemWork.cpp" />
+    <ClCompile Include="onlineThings.cpp" />
     <ClCompile Include="patchesForGame.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -262,10 +298,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="plugins.cpp" />
+    <ClCompile Include="SingleFbxMesh.cpp" />
     <ClCompile Include="smallFuncs.cpp" />
     <ClCompile Include="stratModelsChange.cpp" />
     <ClCompile Include="stratModelsHelper.cpp" />
     <ClCompile Include="stratModelsOptimise.cpp" />
+    <ClCompile Include="tAutodeskMemoryStream.cpp" />
     <ClCompile Include="techFuncs.cpp" />
     <ClCompile Include="technicalStringsFuncs.cpp" />
     <ClCompile Include="TemplateCh.cpp" />

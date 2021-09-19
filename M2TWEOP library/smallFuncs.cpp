@@ -7,6 +7,7 @@
 
 namespace smallFuncs
 {
+
 	NOINLINE EOP_EXPORT void setAncLimit(unsigned char limit)
 	{
 
@@ -141,6 +142,21 @@ namespace smallFuncs
 
 
 		return -1;
+	}
+	std::string getWinConditionS(DWORD condObject)
+	{
+		int conditionCode = getBattleCondCode(condObject);
+		switch (conditionCode)
+		{
+		case 0: return "destroy_or_rout_enemy"; break;
+		case 1: return "balance_of_strength_percent"; break;
+		case 2: return "destroy_enemy_strength_percent"; break;
+		case 3: return "capture_location"; break;
+		case 4: return "destroy_character"; break;
+		case 5: return "capture_major_settlement"; break;
+		case 6: return "capture_army_settlement"; break;
+		default: return "unknown_condition"; break;
+		}
 	}
 	NOINLINE EOP_EXPORT void createUniString(UNICODE_STRING** &newUniStringPointer, const char* nonUniStr)
 	{

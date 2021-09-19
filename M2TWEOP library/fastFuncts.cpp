@@ -21,6 +21,26 @@ namespace fastFuncts
 		return count;
 	}
 
+	NOINLINE EOP_EXPORT UINT32 getSeason()
+	{
+		UINT32 season = 0;
+
+		techFuncs::Read(dataOffsets::offsets.factionOffsetsStart + 0x710, &season);
+
+		return season;
+	}
+
+	NOINLINE EOP_EXPORT UINT32 getYear()
+	{
+		UINT32 year = 0;
+		float t = 0;
+
+		techFuncs::Read(dataOffsets::offsets.factionOffsetsStart + 0x70c, &t);
+
+		year = (UINT32)t;
+		return year;
+	}
+
 	NOINLINE EOP_EXPORT void setHeir(generalCharacterictics* gen, bool isJustSet)
 	{
 		factionStruct* fac = gen->faction;
