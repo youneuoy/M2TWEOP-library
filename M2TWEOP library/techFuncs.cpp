@@ -171,8 +171,8 @@ void techFuncs::saveGameMakeArchive(UNICODE_STRING**& savePath, vector<string>& 
 
     zip(packPath, zipfiles, relativePath,"M2TWEOPTEMPgameSaveDONTTOUCHTHISFILE.sav");
 
-    filesystem::remove(filesystem::path(relativePath));
-    filesystem::copy_file(filesystem::path(packPath), filesystem::path(relativePath));
+    bool isRemoved=filesystem::remove(filesystem::path(relativePath));
+    bool isCopied=filesystem::copy_file(filesystem::path(packPath), filesystem::path(relativePath));
 
 
 }

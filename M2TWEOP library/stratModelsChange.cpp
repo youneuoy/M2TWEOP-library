@@ -24,10 +24,10 @@ namespace stratModelsChange
 
 	struct stratModelChangeRecord
 	{
-		UINT32 modelId;
-		UINT32 modelId2;
-		int x;
-		int y;
+		UINT32 modelId=0;
+		UINT32 modelId2=0;
+		int x=0;
+		int y=0;
 	};
 
 	vector<stratModelChangeRecord*>stratModelChangeList;
@@ -85,8 +85,6 @@ namespace stratModelsChange
 			mod2 = findStratModel(changeMod->modelId2);
 
 			changeModel(changeMod->x, changeMod->y, mod1->modelP, mod2->modelP);
-
-
 		}
 	}
 
@@ -108,6 +106,7 @@ namespace stratModelsChange
 
 		for (stratModelRecord* modRec : stratModels)
 		{
+			modRec->modelP = nullptr;
 			modRec->modelP = loadModel(modRec->path.c_str());
 		}
 		modelsLoaded = true;
@@ -133,7 +132,7 @@ namespace stratModelsChange
 		int* modsNum = reinterpret_cast<int*>(dataOffsets::offsets.statStratModelsListOffset + 0x8dc);
 
 		model_Rigid** modRig = reinterpret_cast<model_Rigid**>(dataOffsets::offsets.statStratModelsListOffset);
-		modRig[*modsNum] = nullptr;
+		modRig[*modsNum-1] = nullptr;
 
 		*modsNum = *modsNum - 1;
 

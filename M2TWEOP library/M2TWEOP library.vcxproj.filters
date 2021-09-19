@@ -61,6 +61,15 @@
     <Filter Include="3rd\miniz">
       <UniqueIdentifier>{2d701366-815a-4653-8b91-008a98f3ce33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rd\discord">
+      <UniqueIdentifier>{09891219-cde6-4ce2-b2b2-1ae470f56ff2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="onlineThings">
+      <UniqueIdentifier>{2143ae68-fb3b-4946-8cb2-460523c5e8cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\json">
+      <UniqueIdentifier>{cfef3814-4ac2-4e6e-a30d-2a51e64b8055}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -183,6 +192,69 @@
     <ClInclude Include="realGameTypes.h">
       <Filter>Файлы ресурсов</Filter>
     </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\achievement_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\activity_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\application_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\core.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\discord.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\event.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\ffi.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\image_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\lobby_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\network_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\overlay_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\relationship_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\storage_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\store_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\types.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\user_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord-files\voice_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="SingleFbxMesh.h">
+      <Filter>dif</Filter>
+    </ClInclude>
+    <ClInclude Include="tAutodeskMemoryStream.h">
+      <Filter>dif</Filter>
+    </ClInclude>
+    <ClInclude Include="onlineThings.h">
+      <Filter>onlineThings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\nlohmann\json.hpp">
+      <Filter>3rd\json</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -280,6 +352,57 @@
     </ClCompile>
     <ClCompile Include="stratModelsOptimise.cpp">
       <Filter>Исходные файлы\patches\stratModels</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord-files\achievement_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord-files\activity_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord-files\application_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord-files\core.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord-files\image_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord-files\lobby_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord-files\network_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord-files\overlay_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord-files\relationship_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord-files\storage_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord-files\store_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord-files\types.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord-files\user_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord-files\voice_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="SingleFbxMesh.cpp">
+      <Filter>dif</Filter>
+    </ClCompile>
+    <ClCompile Include="tAutodeskMemoryStream.cpp">
+      <Filter>dif</Filter>
+    </ClCompile>
+    <ClCompile Include="onlineThings.cpp">
+      <Filter>onlineThings</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

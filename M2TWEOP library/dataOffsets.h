@@ -1,5 +1,6 @@
 #pragma once
 #include"headersSTD.h"
+#include"realGameTypes.h"
 class dataOffsets
 {
 public:
@@ -16,7 +17,7 @@ public:
 		//if on stratmap then not 0
 		DWORD someStratmapPointer = NULL;
 
-		DWORD gameDataAllOffset = NULL;
+		gameDataAllStruct* gameDataAllOffset = NULL;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);

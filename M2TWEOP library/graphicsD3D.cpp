@@ -10,6 +10,8 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
+
+#include "discord.h"
 graphicsD3D::dataT graphicsD3D::dataS;
 
 
@@ -44,10 +46,12 @@ struct
 	ImVec2 beginCoords{ 0.f,0.f };
 }drawParams;
 
-
+struct {
+	//std::unique_ptr<discord::Core> core;
+}DiscordState;
 NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 {
-
+//	DiscordState.core->RunCallbacks();
 	plugins::onEndScene(pDevice);
 
 	if (drawParams.drawEOPStartInfo == true)
@@ -243,6 +247,29 @@ NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevic
 
 	graphicsD3D::initImgGui(pDevice);
 
+
+	/*discord::Core* core{};
+	auto response = discord::Core::Create(879470336565981186, DiscordCreateFlags_Default, &core);
+	DiscordState.core.reset(core);
+
+	if (!DiscordState.core) {
+	//	std::cout << "Failed to instantiate Discord!";
+		std::exit(-1);
+	}
+
+	discord::Activity activity{};
+	activity.SetDetails("Medieval II total war");
+	activity.SetState("M2TWEOP");
+	activity.GetAssets().SetSmallImage("test.png");
+	activity.GetAssets().SetSmallText("123321");
+	activity.GetAssets().SetLargeImage("test.png");
+	activity.GetAssets().SetLargeText("321123");
+	activity.SetType(discord::ActivityType::Playing);
+	DiscordState.core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {
+	//	std::cout << ((result == discord::Result::Ok) ? "Succeeded" : "Failed")
+		//	<< " updating activity!\n";
+		});
+	*/
 	//graphicsD3D::dataS.d3dT.InitGeometry(pDevice);
 }
 
@@ -258,7 +285,7 @@ NOINLINE EOP_EXPORT void graphicsExport::onEndScene(IDirect3DDevice9* pDevice)
 	graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui = ImGui::GetIO().WantCaptureMouse;
 	graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui |= ImGui::GetIO().WantCaptureKeyboard;
 
-//	graphicsD3D::dataS.d3dT.draw();
+	//graphicsD3D::dataS.d3dT.draw();
 	ImGui::EndFrame();
 	ImGui::Render();
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());

@@ -33,11 +33,72 @@ struct worldRecord {
 	undefined field_0x38[40];
 };
 
-
+struct campaign {
+	undefined field_0x0[4];
+	undefined field_0x4[52];
+	int playerFactionId;
+	undefined field_0x3c[4];
+	int hotSeatPlayer2FactionId;
+	undefined field_0x44[232];
+	int humanPlayers;
+	int factionIdPow; /* pow(2,factionId) */
+	int campaignDifficultyFaction[8];
+	undefined field_0x154[120];
+	int battleDifficulty07;
+	undefined field_0x1d0[88];
+	int battleDifficulty30;
+	struct factionStruct* factionsSortedByDescrStrat[31];
+	struct factionStruct* factionsSortedByID[31];
+	int numberOfFactionsWithSlave;
+	undefined field_0x328[28];
+	struct factionStruct* currentFactionTurn;
+	int field_0x348; /* FactionTurn? */
+	undefined field_0x34c[32];
+	int field_0x36c; /* TickCount? */
+	int MillisecondCount;
+	float SecondCount;
+	int TurnNumber;
+	int field_0x37c; /* PauseForBattleDialog? */
+	float TimeScale;
+	undefined field_0x384[4];
+	struct settlementStruct* rome;
+	undefined field_0x38c[4];
+	struct settlementStruct* constantinople;
+	undefined field_0x394[60];
+	int8_t field_0x3d0;
+	int8_t field_0x3d1;
+	undefined field_0x3d2[26];
+	float BrigandSpawnValue;
+	float PirateSpawnValue;
+	undefined field_0x3f4[4];
+	int FreeUpkeepForts;
+	int ActiveFactions;
+	undefined field_0x400[12];
+	int lastrandomseed;
+	undefined field_0x410[748];
+	int8_t hotseatConsole;
+	int8_t hotseatConsole2;
+	undefined field_0x6fe[14];
+	float currentDate;
+	int season; /* season(0-summer,1-winter) */
+	float startDate;
+	int startSeason;
+	float endDate;
+	int endSeason;
+	undefined field_0x724[4];
+	float timeAtStartBattle;
+	int daysInBattle;
+	float currentTimeInBattle; /* 24 max, so calc as daysInBattle*24+currentTimeInBattle */
+	undefined field_0x734[5000];
+};
 struct gameDataAllStruct {
-	undefined field_0x0[88];
+	undefined field_0x0[40];
+	struct campaign* campaignData;
+	undefined field_0x2c[8];
+	struct tilesS* stratMap;
+	undefined field_0x38[32];
 	struct battleDataS* battleHandler;
-	undefined field_0x5c[164];
+	undefined field_0x60[164];
 };
 struct armyAndCharacter { /* in battle leader and leader army */
 	struct stackStruct* army;
@@ -366,7 +427,7 @@ struct generalCharacterictics { /* many important info about character */
 	int nobility; /* nobility of the general */
 	int leaderAutority; /* autority of the leader */
 	undefined field_0x6c[376];
-	struct trait** traits; /* names at [item number] -0x4-here. Not have number, read it in while(traits != 0){this->m_memory->Read(traits + 0x08, 4).toINT32();} */
+	struct traitContainer* traits;
 	undefined field_0x1e8[4];
 	struct anchData** anchillaries; /* pointers to character anchillaries, names at  [item number] -0-0c-here) */
 	undefined field_0x1f0[4];
@@ -416,33 +477,44 @@ struct anchillary { /* structure of anchillary */
 	undefined field_0x1e;
 	undefined field_0x1f;
 };
-//trait of character
 struct trait { /* traits of the character */
 	struct sometNameStruct* nameS;
-	UINT32* level; /* level of trait */
-	struct trait** nextTrait; /* pointer or 0 or 1 */
-	undefined field_0xc;
-	undefined field_0xd;
-	undefined field_0xe;
-	undefined field_0xf;
-	undefined field_0x10;
-	undefined field_0x11;
-	undefined field_0x12;
-	undefined field_0x13;
+	int* level; /* level of trait */
+	struct trait* nextTrait;
+	undefined field_0xc[8];
 };
-//string
+
 struct sometNameStruct { /* char* at 0x4 */
-	undefined field_0x0;
-	undefined field_0x1;
-	undefined field_0x2;
-	undefined field_0x3;
+	undefined field_0x0[4];
 	char* name;
 };
+
+struct traitContainer {
+	struct trait* trait;
+	struct traitContainer* prev;
+	struct traitContainer* next;
+};
+
 struct trackedPointerUnit {
 	undefined field_0x0[4];
 	struct unit* unit;
 	undefined field_0x8[88];
 };
+struct engineRecord {
+	undefined field_0x0[4];
+	char* type;
+	undefined field_0x8[172];
+	int classID;
+	undefined field_0xb8[564];
+};
+struct soldierInBattle {
+	undefined field_0x0[24];
+	float xCoord;
+	float zCoord;
+	float yCoord;
+	undefined field_0x24[1440];
+};
+
 //unit data
 struct unit {
 	undefined field_0x0[4];
@@ -458,7 +530,7 @@ struct unit {
 	int numberMax; /* max number of soldiers */
 	undefined field_0x518[216];
 	UINT32 stats; /* def/atk/etc */
-	undefined field_0x5f4[4];
+	struct soldierInBattle** soldiersBattleArr; /* array of soldiers battle data */
 	struct soldierData* soldiersArr; /* array of soldiers data */
 	undefined field_0x5fc[6780];
 	UNICODE_STRING** alias; /* Legio string etc */
@@ -466,6 +538,9 @@ struct unit {
 	struct siegeEngine** siegeEngine;
 	undefined field_0x20ac[4];
 	int siegeEnNum; /* number of siege engines */
+	undefined field_0x20b4[36];
+	struct engineRecord* engineRec;
+	undefined field_0x20dc[4];
 };
 //army data
 struct stackStruct { /* structure of stack */

@@ -257,6 +257,15 @@ void managerF::doPachs()
 
 	f1 << "Done" << endl;
 
+
+
+	f1 << "Battle loaded" << endl;
+	toBattleLoaded* battleLoad = new toBattleLoaded(mem, (LPVOID)patchesForGame::battleLoaded, globals::dataS.gamever);
+	battleLoad->SetlLoadCode();
+	battleLoad->Enable();
+
+	f1 << "Done" << endl;
+
 	/*f1 << "Start replacing cas loading function" << endl;
 	toLoadCas* loadCasF = new toLoadCas(mem, (LPVOID)stratModelsOptimise::loadCasProc, globals::dataS.gamever);
 	loadCasF->SetlCasCode();

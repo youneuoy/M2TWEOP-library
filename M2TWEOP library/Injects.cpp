@@ -1468,10 +1468,10 @@ toStratModelsSelect::toStratModelsSelect(MemWork* mem, LPVOID adr, int ver)
 	:AATemplate(mem), funcAdress(adr)
 {
 	if (ver == 2)//steam
-		m_adress = 0x0046c44f;
+		m_adress = 0x0044f861;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x0046c08f;
+		m_adress = 0x0044f521;
 }
 
 toStratModelsSelect::~toStratModelsSelect()
@@ -1482,7 +1482,7 @@ void toStratModelsSelect::SetOriginalStratModelsCode()
 {
 	Assembler* a = new Assembler();
 
-	a->lea(edi, dword_ptr(ebx, 0x228));
+	a->mov(byte_ptr(eax,0x740), 0x0);
 
 	a->ret();
 	m_originalBytes = (unsigned char*)a->make();
@@ -1496,7 +1496,7 @@ void toStratModelsSelect::SetlStratModelsCode()
 	Assembler* a = new Assembler();
 
 
-	a->lea(edi, dword_ptr(ebx, 0x228));
+	a->mov(byte_ptr(eax, 0x740), 0x0);
 
 	a->pushad();
 	a->pushf();
@@ -1825,6 +1825,53 @@ void toSelectWorldFromDB::SetlSelectCode()
 	a->bind(exLab);
 
 	a->lea(ecx, dword_ptr(esp, 0x18));
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+toBattleLoaded::toBattleLoaded(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAdress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00441f01;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00441bc1;
+}
+
+toBattleLoaded::~toBattleLoaded()
+{
+}
+
+void toBattleLoaded::SetOriginalLoadCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(ecx, dword_ptr(esp, 0xb4));
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toBattleLoaded::SetlLoadCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(ecx, dword_ptr(esp, 0xb4));
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAdress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
 
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();
