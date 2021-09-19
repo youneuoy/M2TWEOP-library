@@ -120,10 +120,12 @@ bool gameStarter::initM2TWEOP()
 	string wrapd3dStr = wrapd3dS.string();
 	string d3dStr = d3dS.string();
 
-	if (helpers::compareFiles(d3dStr, wrapd3dStr)==false)
+	if (helpers::compareFiles(d3dStr, wrapd3dStr) == false)
 	{
-		if (copy_file(wrapd3dS, d3dS, copy_option::overwrite_if_exists) == false)
+
+		if (CopyFileA(wrapd3dStr.c_str(), d3dStr.c_str(), FALSE) == false)
 		{
+			DWORD ERR=GetLastError();
 			MessageBoxA(NULL, "Cannot run M2TWEOP, d3d9.dll replasing error! Try to delete d3d9.dll in game folder or copy d3d.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
 			exit(0);
 		}

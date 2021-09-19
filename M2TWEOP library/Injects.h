@@ -483,3 +483,19 @@ private:
 };
 
 
+
+//select worldpkgdesc from db
+class toBattleLoaded
+	:public AATemplate
+{
+public:
+	toBattleLoaded(MemWork* mem, LPVOID adr, int ver);
+	~toBattleLoaded();
+
+	void SetOriginalLoadCode();
+	void SetlLoadCode();
+private:
+	LPVOID funcAdress;
+};
+
+
