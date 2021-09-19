@@ -5,7 +5,7 @@
 #include <functional>
 
 
-
+#include "onlineThings.h"
 string getRecordName(worldRecord* selectedRecord)
 {
 	int allocatedLen = selectedRecord->allocatedNameLen;
@@ -303,4 +303,9 @@ void __stdcall patchesForGame::checkAndChangeModels()
 	f1.close();
 #endif
 	stratModelsChange::checkAndChangeStratModels();
+}
+
+void __stdcall patchesForGame::battleLoaded()
+{
+	battleCreator::startCreationThread();
 }

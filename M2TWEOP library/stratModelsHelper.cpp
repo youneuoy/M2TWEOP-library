@@ -15,7 +15,7 @@ namespace stratModelsChange
 	{
 		if (resource->stratMod->model == modelP)return;
 		stratResMod* newMod = new stratResMod();
-
+		memcpy(newMod, resource->stratMod, sizeof(stratResMod));
 		newMod->resource_cost = 0;
 		newMod->hasMine = 0;
 		newMod->resource_num = resource->stratMod->resource_num;
@@ -43,8 +43,8 @@ namespace stratModelsChange
 			)return;
 
 
-		stratFortMod* newMod = new stratFortMod;
-		memset(newMod, 0, sizeof(stratFortMod));
+		stratFortMod* newMod = new stratFortMod[33];
+		memset(newMod, 0, sizeof(stratFortMod) * 33);
 
 
 		newMod->centerModel = modelP;
