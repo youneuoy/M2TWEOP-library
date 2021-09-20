@@ -11,7 +11,7 @@
 #include <d3dx9.h>
 
 
-#include "discord.h"
+//#include "discord.h"
 graphicsD3D::dataT graphicsD3D::dataS;
 
 

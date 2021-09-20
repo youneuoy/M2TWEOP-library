@@ -8,8 +8,8 @@
 #include "exportHeader.h"
 
 
-#include "SingleFbxMesh.h"
-#include "fbxSdk.h"
+//#include "SingleFbxMesh.h"
+//#include "fbxSdk.h"
 class testD3D
 {
 public:
@@ -82,7 +82,7 @@ public:
 		pD3DXMtrlBuffer->Release();
 		*/
 
-		g_SingleFbxMesh.load(g_pd3dDevice, "scorpid.fbx", "scorp.dds", 50);
+		//g_SingleFbxMesh.load(g_pd3dDevice, "scorpid.fbx", "scorp.dds", 50);
 		return S_OK;
 	}
 
@@ -199,7 +199,7 @@ public:
 		techFuncs::Read(0x02C9E0F8, &matProj, 16 * 4);
 		//g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &matProj);
 
-		g_SingleFbxMesh.advanceTime();
+		//g_SingleFbxMesh.advanceTime();
 
 		D3DXMATRIXA16 worldViewProj;
 		D3DXMATRIX matScale;
@@ -217,7 +217,7 @@ public:
 		worldViewProj = matScale*matWorld*matView * matProj;
 
 
-		g_SingleFbxMesh.render(worldViewProj);
+		//g_SingleFbxMesh.render(worldViewProj);
 	}
 
 	void onResetDevice()
@@ -231,7 +231,7 @@ public:
 	}
 
 private:
-	SingleFbxMesh        g_SingleFbxMesh;
+	//SingleFbxMesh        g_SingleFbxMesh;
 
 
 

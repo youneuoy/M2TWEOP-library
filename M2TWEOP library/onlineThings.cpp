@@ -111,7 +111,7 @@ namespace battleCreator
 		fileStrings.push_back("{");
 
 		fileStrings.push_back(string("	level ").append(getSettlLevelString(sett->level)));
-		fileStrings.push_back(string("	tile ").append(to_string(sett->xCoord).append(to_string(sett->yCoord))));
+		fileStrings.push_back(string("	tile ").append(to_string(sett->xCoord).append(" ").append(to_string(sett->yCoord))));
 		fileStrings.push_back("	year_founded 0");
 		fileStrings.push_back("	population 999");
 		fileStrings.push_back("	plan_set default_set");
@@ -197,7 +197,7 @@ namespace battleCreator
 
 		if (gen->genChar->anchNum != 0)
 		{
-			tempS = "ancillaries";
+			tempS = "ancillaries ";
 			UINT32 anchNum = gen->genChar->anchNum;
 			for (UINT32 i = 0; i < anchNum; i++)
 			{
