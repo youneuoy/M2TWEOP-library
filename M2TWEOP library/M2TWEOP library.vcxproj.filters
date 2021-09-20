@@ -243,12 +243,6 @@
     <ClInclude Include="..\3rd\discord-files\voice_manager.h">
       <Filter>3rd\discord</Filter>
     </ClInclude>
-    <ClInclude Include="SingleFbxMesh.h">
-      <Filter>dif</Filter>
-    </ClInclude>
-    <ClInclude Include="tAutodeskMemoryStream.h">
-      <Filter>dif</Filter>
-    </ClInclude>
     <ClInclude Include="onlineThings.h">
       <Filter>onlineThings</Filter>
     </ClInclude>
@@ -394,12 +388,6 @@
     </ClCompile>
     <ClCompile Include="..\3rd\discord-files\voice_manager.cpp">
       <Filter>3rd\discord</Filter>
-    </ClCompile>
-    <ClCompile Include="SingleFbxMesh.cpp">
-      <Filter>dif</Filter>
-    </ClCompile>
-    <ClCompile Include="tAutodeskMemoryStream.cpp">
-      <Filter>dif</Filter>
     </ClCompile>
     <ClCompile Include="onlineThings.cpp">
       <Filter>onlineThings</Filter>
