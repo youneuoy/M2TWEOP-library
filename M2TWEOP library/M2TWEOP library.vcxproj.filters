@@ -70,6 +70,9 @@
     <Filter Include="3rd\json">
       <UniqueIdentifier>{cfef3814-4ac2-4e6e-a30d-2a51e64b8055}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rd\ImNotify">
+      <UniqueIdentifier>{d71c722e-322d-4461-9d75-db85485afcb5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -248,6 +251,15 @@
     </ClInclude>
     <ClInclude Include="..\3rd\nlohmann\json.hpp">
       <Filter>3rd\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\ImNotify\fa_solid_900.h">
+      <Filter>3rd\ImNotify</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\ImNotify\font_awesome_5.h">
+      <Filter>3rd\ImNotify</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\ImNotify\imgui_notify.h">
+      <Filter>3rd\ImNotify</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
