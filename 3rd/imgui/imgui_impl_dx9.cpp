@@ -135,7 +135,7 @@ static void ImGui_ImplDX9_SetupRenderState(ImDrawData* draw_data)
             (L + R) / (L - R),  (T + B) / (B - T),  0.5f,  1.0f
         } } };
         bd->pd3dDevice->SetTransform(D3DTS_WORLD, &mat_identity);
-        bd->pd3dDevice->SetTransform(D3DTS_VIEW, &mat_identity);
+        //bd->pd3dDevice->SetTransform(D3DTS_VIEW, &mat_identity);
         bd->pd3dDevice->SetTransform(D3DTS_PROJECTION, &mat_projection);
     }
 }
@@ -252,7 +252,7 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
                 const LPDIRECT3DTEXTURE9 texture = (LPDIRECT3DTEXTURE9)pcmd->GetTexID();
                 bd->pd3dDevice->SetTexture(0, texture);
                 bd->pd3dDevice->SetScissorRect(&r);
-                bd->pd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, pcmd->VtxOffset + global_vtx_offset, 0, (UINT)cmd_list->VtxBuffer.Size, pcmd->IdxOffset + global_idx_offset, pcmd->ElemCount / 3);
+                bd->pd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, pcmd->VtxOffset + global_vtx_offset, 0, 0, pcmd->IdxOffset + global_idx_offset, pcmd->ElemCount / 3);
             }
         }
         global_idx_offset += cmd_list->IdxBuffer.Size;
