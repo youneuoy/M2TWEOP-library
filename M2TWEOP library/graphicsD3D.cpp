@@ -5,7 +5,7 @@
 #pragma comment(lib, "DXERR.lib")
 
 #include "eopImgui.h"
-
+#include "imgui_notify.h"
 
 #include <d3d9.h>
 #include <d3dx9.h>
@@ -75,6 +75,12 @@ NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 		}
 	}
 
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.f);
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(43.f / 255.f, 43.f / 255.f, 43.f / 255.f, 100.f / 255.f));
+	ImGui::RenderNotifications();
+	ImGui::PopStyleVar(1); // Don't forget to Pop()
+	ImGui::PopStyleColor(1);
+
 	/*MEMORYSTATUSEX statex;
 
 	statex.dwLength = sizeof(statex);
@@ -122,10 +128,6 @@ NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc(HWND hWnd, UINT uMsg, WPARAM wP
 NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 {
 
-	ImFontConfig font_config;
-	font_config.OversampleH = 1;
-	font_config.OversampleV = 1;
-	font_config.PixelSnapH = 1;
 
 
 	ImGuiIO& io = ImGui::GetIO();
@@ -141,10 +143,24 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 	f = f + "\\youneuoy_Data\\inGame.ttf";
 
 	ImGui::StyleGrey();
-	io.Fonts->AddFontFromFileTTF(f.c_str(), 24, &font_config, io.Fonts->GetGlyphRangesCyrillic());
+
 
 	ImGui_ImplWin32_Init(dataS.Window);
 	ImGui_ImplDX9_Init(pDevice);
+
+
+	ImFontConfig font_config;
+	font_config.OversampleH = 1;
+	font_config.OversampleV = 1;
+	font_config.PixelSnapH = 1;
+	font_config.FontDataOwnedByAtlas = false;
+	ImFont* newFont = io.Fonts->AddFontFromFileTTF(f.c_str(), 24.f, &font_config, io.Fonts->GetGlyphRangesCyrillic());
+	if (newFont == nullptr)
+	{
+		io.Fonts->AddFontDefault(&font_config);
+	}
+	//init imnotify
+	ImGui::MergeIconsWithLatestFont(ImGui::GetFontSize(), false);
 
 	dataS.ImInitialized = true;
 
