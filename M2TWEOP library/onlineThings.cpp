@@ -1,8 +1,9 @@
 #include "onlineThings.h"
-
+#include "imgui_notify.h"
 namespace battleCreator
 {
-	struct {
+	struct 
+	{
 		bool isGenerationNeeded = true;
 
 		atomic_bool isRunStarted{ false };
@@ -377,12 +378,23 @@ namespace battleCreator
 				tempS = "army	";
 				tempS.append(armyFacName);
 
-				int currFacNumInAlliance=facArms.count(armyFacName);
-				facArms.insert(pair<string, int>(armyFacName, currFacNumInAlliance + 1));
+
+
+				int ifHere=facArms.count(armyFacName);
+				int newCount = 0;
+				if (ifHere > 0)
+				{
+					auto res = facArms.find(armyFacName);
+
+					res->second++;
+					newCount=res->second;
+				}
+
+				facArms.insert(pair<string, int>(armyFacName, newCount));
 
 
 				tempS.append(", ");
-				tempS.append(to_string(currFacNumInAlliance));
+				tempS.append(to_string(newCount));
 				tempS.append(", no_withdraw, supporting_armies 0, reform_point ");
 				tempS.append(to_string(army->reform_point_x));
 				tempS.append(", ");
@@ -521,6 +533,7 @@ namespace battleCreator
 			return;
 		}
 
+
 		readParams();
 
 
@@ -531,11 +544,43 @@ namespace battleCreator
 
 		isStarted = true;
 
+		std::string bName= makeBattleName();
+
+		ImGuiToast readyMsg(ImGuiToastType_Info, 25000); 
+		readyMsg.set_title("Battle generation");
+		readyMsg.set_content("Started generation of %s", bName.c_str());
+		ImGui::InsertNotification(readyMsg);
+
+
 		vector<string>fileStrings;
 		createHeaderSection(fileStrings);
+
+		ImGuiToast headSecMsg(ImGuiToastType_Info, 10000);
+		headSecMsg.set_title("Battle generation");
+		headSecMsg.set_content("Header section of %s done", bName.c_str());
+		ImGui::InsertNotification(headSecMsg);
+
+
 		createFactionsSection(fileStrings);
+
+		ImGuiToast facSecMsg(ImGuiToastType_Info, 10000);
+		facSecMsg.set_title("Battle generation");
+		facSecMsg.set_content("Factions section of %s done", bName.c_str());
+		ImGui::InsertNotification(facSecMsg);
+
 		createBattleSection(fileStrings);
+
+		ImGuiToast battSecMsg(ImGuiToastType_Info, 10000);
+		battSecMsg.set_title("Battle generation");
+		battSecMsg.set_content("Battle section of %s done", bName.c_str());
+		ImGui::InsertNotification(battSecMsg);
+
 		createObjectivesSection(fileStrings);
+
+		ImGuiToast objSecMsg(ImGuiToastType_Info, 10000);
+		objSecMsg.set_title("Battle generation");
+		objSecMsg.set_content("Objectives section of %s done", bName.c_str());
+		ImGui::InsertNotification(objSecMsg);
 
 		std::string fPath = globals::dataS.modPatch;
 		fPath += "\\eopBattles";
@@ -544,7 +589,7 @@ namespace battleCreator
 		filesystem::remove_all(fPath);
 		filesystem::create_directory(fPath);
 		fPath +="\\";
-		fPath += makeBattleName();
+		fPath += bName;
 
 
 		filesystem::create_directory(fPath);
@@ -555,6 +600,11 @@ namespace battleCreator
 			f1 << s<<endl;
 		}
 		f1.close();
+
+		ImGuiToast doneMsg(ImGuiToastType_Success, 25000); 
+		doneMsg.set_title("Battle generation");
+		doneMsg.set_content("Done generation of %s", bName.c_str());
+		ImGui::InsertNotification(doneMsg);
 
 		isStarted = false;
 	}
