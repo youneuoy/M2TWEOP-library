@@ -202,6 +202,7 @@ public:
 	ProcLoader<void(__cdecl*)(ImGuiContext*)> onChangeImGuiContext;
 
 	ProcLoader<LRESULT(__cdecl*)(HWND, UINT, WPARAM, LPARAM)> onWndProc;
+	ProcLoader<void(__cdecl*)()> onReadGameDbsAtStart;
 	int init(string* nameP);
 private:
 	string name;
@@ -233,6 +234,8 @@ public:
 	static void onChangeTurnNum();
 	static void onLoadGame(UNICODE_STRING**& savePath);
 	static void onSaveGame(UNICODE_STRING**& savePath);
+
+	static void onReadGameDbsAtStart();
 
 	static void onWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	static void onEndScene(LPDIRECT3DDEVICE9 pDevice);

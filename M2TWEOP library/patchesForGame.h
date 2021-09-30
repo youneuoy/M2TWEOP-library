@@ -72,4 +72,5 @@ public:
 
 
 	static void WINAPI battleLoaded();
+	static void WINAPI toReadGameDbsAtStart();
 };

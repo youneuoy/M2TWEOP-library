@@ -259,10 +259,18 @@ void managerF::doPachs()
 
 
 
-	f1 << "Battle loaded" << endl;
+	f1 << "Start applying battle loaded patch" << endl;
 	toBattleLoaded* battleLoad = new toBattleLoaded(mem, (LPVOID)patchesForGame::battleLoaded, globals::dataS.gamever);
 	battleLoad->SetlLoadCode();
 	battleLoad->Enable();
+
+	f1 << "Done" << endl;
+
+
+	f1 << "Start applying toReadGameDBsAtGameStart patch" << endl;
+	toReadGameDBsAtGameStart* toReadGameDbsAtStart = new toReadGameDBsAtGameStart(mem, (LPVOID)patchesForGame::toReadGameDbsAtStart, globals::dataS.gamever);
+	toReadGameDbsAtStart->SetlReadCode();
+	toReadGameDbsAtStart->Enable();
 
 	f1 << "Done" << endl;
 
