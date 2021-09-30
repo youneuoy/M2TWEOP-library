@@ -61,9 +61,6 @@
     <Filter Include="3rd\miniz">
       <UniqueIdentifier>{2d701366-815a-4653-8b91-008a98f3ce33}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3rd\discord">
-      <UniqueIdentifier>{09891219-cde6-4ce2-b2b2-1ae470f56ff2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="onlineThings">
       <UniqueIdentifier>{2143ae68-fb3b-4946-8cb2-460523c5e8cd}</UniqueIdentifier>
     </Filter>
@@ -72,6 +69,9 @@
     </Filter>
     <Filter Include="3rd\ImNotify">
       <UniqueIdentifier>{d71c722e-322d-4461-9d75-db85485afcb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="eduThings">
+      <UniqueIdentifier>{bf155e05-95f7-4050-ab15-28d5f001fc7f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -195,57 +195,6 @@
     <ClInclude Include="realGameTypes.h">
       <Filter>Файлы ресурсов</Filter>
     </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\achievement_manager.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\activity_manager.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\application_manager.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\core.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\discord.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\event.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\ffi.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\image_manager.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\lobby_manager.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\network_manager.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\overlay_manager.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\relationship_manager.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\storage_manager.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\store_manager.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\types.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\user_manager.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\discord-files\voice_manager.h">
-      <Filter>3rd\discord</Filter>
-    </ClInclude>
     <ClInclude Include="onlineThings.h">
       <Filter>onlineThings</Filter>
     </ClInclude>
@@ -260,6 +209,12 @@
     </ClInclude>
     <ClInclude Include="..\3rd\ImNotify\imgui_notify.h">
       <Filter>3rd\ImNotify</Filter>
+    </ClInclude>
+    <ClInclude Include="eduThings.h">
+      <Filter>eduThings</Filter>
+    </ClInclude>
+    <ClInclude Include="eduFastFuncts.h">
+      <Filter>eduThings</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -359,50 +314,14 @@
     <ClCompile Include="stratModelsOptimise.cpp">
       <Filter>Исходные файлы\patches\stratModels</Filter>
     </ClCompile>
-    <ClCompile Include="..\3rd\discord-files\achievement_manager.cpp">
-      <Filter>3rd\discord</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\discord-files\activity_manager.cpp">
-      <Filter>3rd\discord</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\discord-files\application_manager.cpp">
-      <Filter>3rd\discord</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\discord-files\core.cpp">
-      <Filter>3rd\discord</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\discord-files\image_manager.cpp">
-      <Filter>3rd\discord</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\discord-files\lobby_manager.cpp">
-      <Filter>3rd\discord</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\discord-files\network_manager.cpp">
-      <Filter>3rd\discord</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\discord-files\overlay_manager.cpp">
-      <Filter>3rd\discord</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\discord-files\relationship_manager.cpp">
-      <Filter>3rd\discord</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\discord-files\storage_manager.cpp">
-      <Filter>3rd\discord</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\discord-files\store_manager.cpp">
-      <Filter>3rd\discord</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\discord-files\types.cpp">
-      <Filter>3rd\discord</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\discord-files\user_manager.cpp">
-      <Filter>3rd\discord</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\discord-files\voice_manager.cpp">
-      <Filter>3rd\discord</Filter>
-    </ClCompile>
     <ClCompile Include="onlineThings.cpp">
       <Filter>onlineThings</Filter>
+    </ClCompile>
+    <ClCompile Include="eduThings.cpp">
+      <Filter>eduThings</Filter>
+    </ClCompile>
+    <ClCompile Include="eduFastFuncts.cpp">
+      <Filter>eduThings</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -175,7 +175,7 @@ namespace smallFuncs
 		size_t lenS = strlen(nonUniStr);
 
 
-		newUniStringPointer = (UNICODE_STRING**)new char[(lenS + 6) * 2];
+		newUniStringPointer = (UNICODE_STRING**)new char[(lenS + 6+4) * 2];
 
 		UNICODE_STRING** uniStr = newUniStringPointer;
 		_asm {
@@ -200,7 +200,8 @@ namespace smallFuncs
 		// do whatever with wstr
 		delete[] wstr;
 
-
+		(*newUniStringPointer)->Length = utf16line.size();
+		(*newUniStringPointer)->something2 = utf16line.size();
 
 		unsigned short* ptr = (unsigned short*)&(*newUniStringPointer)->Buffer;
 
