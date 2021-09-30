@@ -309,3 +309,9 @@ void __stdcall patchesForGame::battleLoaded()
 {
 	battleCreator::startCreationThread();
 }
+
+void __stdcall patchesForGame::toReadGameDbsAtStart()
+{
+	plugins::onReadGameDbsAtStart();
+}
+

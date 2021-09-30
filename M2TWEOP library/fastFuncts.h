@@ -76,6 +76,7 @@ namespace fastFuncts
 	//facNum - dipnum
 	NOINLINE EOP_EXPORT unit* createUnitN(const char* type, int facNum, int exp, int arm, int weap);
 	NOINLINE EOP_EXPORT unit* createUnitIdx(int index, int facNum, int exp, int arm, int weap);
+	NOINLINE EOP_EXPORT unit* createUnitEDB(int edb, int facNum, int exp, int arm, int weap);
 
 	NOINLINE EOP_EXPORT int addUnitToArmy(stackStruct* army, unit* un);
 	NOINLINE EOP_EXPORT void setBodyguard(general*gen,unit* un);

@@ -572,6 +572,34 @@ namespace fastFuncts
 		return res;
 	}
 
+	NOINLINE EOP_EXPORT unit* createUnitEDB(int edb, int facNum, int exp, int arm, int weap)
+	{
+		if (edb == 0)
+		{
+			return nullptr;
+		}
+		unit* res = nullptr;
+
+		DWORD adr = codes::offsets.createUnitFunc;
+		_asm {
+				mov ecx, edb;
+
+				push weap
+				push arm
+				push - 1
+				push exp
+				push facNum
+				push 0
+				push 0
+
+				mov eax, [adr]
+				call eax
+				mov res, eax
+		}
+
+		return res;
+	}
+
 	NOINLINE EOP_EXPORT int addUnitToArmy(stackStruct* army, unit* un)
 	{
 		if (army->numOfUnits == 20)return 0;
