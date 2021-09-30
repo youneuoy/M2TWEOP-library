@@ -80,6 +80,9 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT int addUnitToArmy(stackStruct* army, unit* un);
 	NOINLINE EOP_EXPORT void setBodyguard(general*gen,unit* un);
 
+
+	NOINLINE EOP_EXPORT ModelDbEntry* findBattleModel(const char* modelName);
+
 	//allocate mem for game class/etc
 	NOINLINE EOP_EXPORT DWORD allocateGameMem(size_t amount);
 };

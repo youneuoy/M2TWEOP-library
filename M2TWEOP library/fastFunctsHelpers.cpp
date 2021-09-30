@@ -1,7 +1,7 @@
 #include "fastFunctsHelpers.h"
 namespace fastFunctsHelpers
 {
-	NOINLINE EOP_EXPORT void setCryptedString(char* targetS, const char* newS)
+	NOINLINE EOP_EXPORT void setCryptedString(char** targetS, const char* newS)
 	{
 		UINT32 functionOffset = codes::offsets.stringCryptFunc;
 		_asm {
@@ -25,6 +25,34 @@ namespace fastFunctsHelpers
 		}
 		return -1;
 	}
+	EduEntry* getEDUEntry(const char* type)
+	{
+		eduEntryes* EDB = reinterpret_cast<eduEntryes*>(dataOffsets::offsets.unitTypesStart - 4);
+
+		int unitsNum = EDB->numberOfTupes;
+		for (int i = 0; i < unitsNum; i++)
+		{
+			if (strcmp(EDB->unitTupes[i].Type, type) == 0)
+			{
+				return &EDB->unitTupes[i];
+			}
+		}
+		return nullptr;
+	}
+	EduEntry* getEDUEntryById(int id)
+	{
+		eduEntryes* EDB = reinterpret_cast<eduEntryes*>(dataOffsets::offsets.unitTypesStart - 4);
+
+		int unitsNum = EDB->numberOfTupes;
+		for (int i = 0; i < unitsNum; i++)
+		{
+			if (EDB->unitTupes[i].Index==id)
+			{
+				return &EDB->unitTupes[i];
+			}
+		}
+		return nullptr;
+	}
 	char** makeCryptedString(const char* string)
 	{
 		char** cryptS = (char**)malloc(8);
@@ -36,7 +64,7 @@ namespace fastFunctsHelpers
 		}
 		memset(cryptS, 0, 8);
 		//cryptS[0] = _strdup(string);
-		setCryptedString((char*)cryptS, string);
+		setCryptedString(cryptS, string);
 		return cryptS;
 	}
 	std::string wstrToANSIStr(const std::wstring& wstr)

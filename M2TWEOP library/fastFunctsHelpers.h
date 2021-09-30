@@ -11,9 +11,11 @@ namespace fastFunctsHelpers
 	//set new crypted string
 	//alloc memory, copy string to it
 	//copy crypt to next 4 bytes after pointer
-	NOINLINE EOP_EXPORT void setCryptedString(char* targetS, const char* newS);
+	NOINLINE EOP_EXPORT void setCryptedString(char** targetS, const char* newS);
 
 	int getEDUIndex(const char* type);
+	EduEntry* getEDUEntry(const char* type);
+	EduEntry* getEDUEntryById(int id);
 
 	char** makeCryptedString(const char* string);
 
