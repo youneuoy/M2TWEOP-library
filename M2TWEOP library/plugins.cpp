@@ -4,6 +4,8 @@
 
 #include "smallFuncs.h"
 #include "techFuncs.h"
+
+#include "eduThings.h"
 plugins::configT plugins::pluginsCfg;
 vector<const char*>* plugins::eventNames;
 
@@ -46,33 +48,44 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 
 	if (event == nullptr)return;
 
-	/*if (strcmp(event, "CharacterSelected") == 0)
+	if (strcmp(event, "CharacterSelected") == 0)
 	{
+		
 		generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
 
-
-		//int x = prs->gen->xCoord;
-		//int y = prs->gen->yCoord;
-
-
-		int count = 0;
-		for (int y = 0; y < 5; y++)
+		stackStruct* army = prs->gen->armyLeaded;
+		if (army)
 		{
-			for (int x = 0; x < 90; x++)
-			{
-				ofstream f1("test", ios::app);
-				string name = "Henry";
-				name += to_string(GetTickCount());
-				general* gen = fastFuncts::createCharacter((char*)"named character", fastFuncts::getFactionsList()[y], 22, (char*)name.c_str(), (char*)name.c_str(), fastFuncts::getFactionsList()[0]->dipNum, NULL, x, y);
-				stackStruct* army = fastFuncts::createArmy(gen);
-				unit* un = fastFuncts::createUnitN("NE Bodyguard", fastFuncts::getFactionsList()[y]->dipNum, 1, 1, 1);
-				fastFuncts::addUnitToArmy(army, un);
-				fastFuncts::setBodyguard(gen, un);
-				f1 << x << " " << y << std::endl;
-				f1.close();
+			eduThings::addEntry(army->units[0]->eduEntry->Index,1000);
+			int edb=eduThings::getDataEntry(1000);
+			eduThings::setEntryUnitCardTga(1000,"#akavir_swordsmen.tga");
+			eduThings::setEntryInfoCardTga(1000,"akavir_swordsmen_info.tga");
+			eduThings::setEntrySoldierModel(1000,"Sword_and_Buckler_Men");
+			eduThings::setEntryLocalizedName(1000,u8"Тест");
+			eduThings::setEntryLocalizedDescr(1000, u8"Описание");
+			eduThings::setEntryLocalizedShortDescr(1000, u8"Короткое описание");
+
+			unit* res = nullptr;
+
+			DWORD adr = codes::offsets.createUnitFunc;
+			_asm {
+					mov ecx, edb
+
+					push 1
+					push 1
+					push -1
+					push 1
+					push 0
+					push 0
+					push 0
+
+					mov eax, [adr]
+					call eax
+					mov res, eax
 			}
+			fastFuncts::addUnitToArmy(army, res);
+		}
 	}
-	}*/
 	
 	for (plugin* pl : pluginsCfg.plugins)
 	{
