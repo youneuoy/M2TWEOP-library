@@ -1878,3 +1878,50 @@ void toBattleLoaded::SetlLoadCode()
 
 	delete a;
 }
+
+toReadGameDBsAtGameStart::toReadGameDBsAtGameStart(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAdress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x004122ec;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x004120ec;
+}
+
+toReadGameDBsAtGameStart::~toReadGameDBsAtGameStart()
+{
+}
+
+void toReadGameDBsAtGameStart::SetOriginalReadCode()
+{
+	Assembler* a = new Assembler();
+
+	a->add(esp,0xdc);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toReadGameDBsAtGameStart::SetlReadCode()
+{
+	Assembler* a = new Assembler();
+
+	a->add(esp, 0xdc);
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAdress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
