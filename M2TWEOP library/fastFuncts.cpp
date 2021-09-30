@@ -600,6 +600,43 @@ namespace fastFuncts
 		return;
 	}
 
+	NOINLINE EOP_EXPORT ModelDbEntry* findBattleModel(const char* modelName)
+	{
+
+		DWORD funcAdr = 0;
+		DWORD paramAdr = 0;
+
+		if (globals::dataS.gamever == 2)//steam
+		{
+			funcAdr = 0x010e8ee0;
+
+			paramAdr = *(int*)0x016a0b98;
+			paramAdr += 0x84;
+		}
+		else
+		{
+			funcAdr = 0x010e86c0;
+
+			paramAdr = *(int*)0x016e9dc8;
+			paramAdr += 0x84;
+		}
+
+
+		ModelDbEntry* res = nullptr;
+		_asm {
+			mov ecx, paramAdr
+
+			push modelName
+
+			mov eax, [funcAdr]
+			call eax
+			mov res, eax
+		}
+
+		
+		return res;
+	}
+
 	NOINLINE EOP_EXPORT void setUnitParams(unit* un, int count, int exp, int armor, int weap)
 	{
 		setSoldiersCount(un, count);

@@ -5,8 +5,18 @@
 typedef unsigned char   undefined;
 typedef unsigned int    uint;
 typedef unsigned char    uchar;
-
+typedef unsigned short    ushort;
 #pragma pack(push,1) 
+
+
+//diplomacy data of faction to another faction
+struct factionDiplomacy {
+	undefined field_0x0[16];
+	int state; /* diplomatic state(war, alliance, peace)(600/0/200) */
+	int trade; /* trade rights(0 or 1) */
+	int protectorate; /* protectorate or not(15 or 6) */
+	undefined field_0x1c[108];
+};
 struct watchTowerModel {
 	struct model_Rigid* modelP;
 	undefined field_0x4[26];
@@ -89,7 +99,8 @@ struct campaign {
 	float timeAtStartBattle;
 	int daysInBattle;
 	float currentTimeInBattle; /* 24 max, so calc as daysInBattle*24+currentTimeInBattle */
-	undefined field_0x734[5000];
+	undefined field_0x734[4124];
+	struct factionDiplomacy dipArray[31][31];
 };
 struct gameDataAllStruct {
 	undefined field_0x0[40];
@@ -419,22 +430,76 @@ struct generalCharacterictics { /* many important info about character */
 	uchar status; /* 5-leader,2 - heir, 0 - ordinary man */
 	undefined field_0x3d[7];
 	int authority; /* authority of the general */
-	undefined field_0x48[8];
+	int influence;
+	int subterfuge;
 	int loyality; /* loyality of the general */
-	undefined field_0x54[8];
+	int charm;
+	int finance;
 	int piety; /* piety of the general */
-	undefined field_0x60[4];
+	int magic;
 	int nobility; /* nobility of the general */
 	int leaderAutority; /* autority of the leader */
-	undefined field_0x6c[376];
-	struct traitContainer* traits;
+	int level;
+	int32_t unorthodoxy; //0x0070
+	int32_t heresyImmunity; //0x0074
+	int32_t assassination; //0x0078
+	int32_t sabotage; //0x007C
+	int32_t eligibility; //0x0080
+	int32_t purity; //0x0084
+	int32_t violence; //0x0088
+	int32_t disposition; //0x008C
+	int32_t boldness; //0x0090
+	int32_t generosity; //0x0094
+	int32_t management; //0x0098
+	int32_t bodyguardSize; //0x009C
+	int32_t troopMorale; //0x00A0
+	int32_t movementPointsBonus; //0x00A4
+	int32_t attack; //0x00A8
+	int32_t defence; //0x00AC
+	int32_t siegeAttack; //0x00B0
+	int32_t siegeDefense; //0x00B4
+	int32_t ambush; //0x00B8
+	int32_t navalCommand; //0x00BC
+	int32_t siegeEngineering; //0x00C0
+	int32_t nightBattle; //0x00C4
+	int32_t personalSecurity; //0x00C8
+	int32_t publicSecurity; //0x00CC
+	int32_t bribery; //0x00D0
+	int32_t bribeResistance; //0x00D4
+	int32_t electability; //0x00D8
+	int32_t lineOfSight; //0x00DC
+	int32_t trainingUnits; //0x00E0
+	int32_t trainingAgents; //0x00E4
+	int32_t construction; //0x00E8
+	int32_t trading; //0x00EC
+	int32_t localPopularity; //0x00F0
+	int32_t footInTheDoor; //0x00F4
+	int32_t farming; //0x00F8
+	int32_t mining; //0x00FC
+	int32_t taxCollection; //0x0100
+	int32_t fertility; //0x0104
+	int32_t cavalryCommand; //0x0108
+	int32_t infantryCommand; //0x010C
+	int32_t gunpowerCommand; //0x0110
+	int32_t artilleryCommand; //0x0114
+	undefined pad_0118[168]; //0x0118
+	int32_t health; //0x01C0
+	int32_t squalor; //0x01C4
+	int32_t unrest; //0x01C8
+	int32_t law; //0x01CC
+	int32_t looting; //0x01D0
+	int32_t bodyguardValour; //0x01D4
+	int32_t hitpoints; //0x01D8
+	int32_t trainingAnimalUnits; //0x01DC
+	int32_t battleSurgery; //0x01E0
+	struct traitContainer* traits; /* names at [item number] -0x4-here. Not have number, read it in while(traits != 0){this->m_memory->Read(traits + 0x08, 4).toINT32();} */
 	undefined field_0x1e8[4];
 	struct anchData** anchillaries; /* pointers to character anchillaries, names at  [item number] -0-0c-here) */
 	undefined field_0x1f0[4];
 	UINT32 anchNum; /* number of character  anchillaries */
 	struct general* gen; /* on stratmap */
 	undefined field_0x1fc[8];
-	int yearOfBirth; /* yearOfBirth */
+	float yearOfBirth; /* yearOfBirth */
 	undefined field_0x208[16];
 	struct factionStruct* faction;
 	int subFaction;
@@ -614,209 +679,236 @@ struct factionStruct {
 	undefined field_0xa50[156];
 	int money; /* money of the faction */
 };
-//tupe of unit from edu
-struct EduEntry
+struct ModelDbEntry
 {
-	char* Type; //0x0000
-	int32_t Dictionary; //0x0004
-	int32_t Index; //0x0008
-	int32_t UnitCreatedCounter; //0x000C
-	char* UnitCardTga; //0x0010
-	char pad_0014[4]; //0x0014
-	char* InfoCardTga; //0x0018
-	char pad_001C[4]; //0x001C
-	int32_t nothing; //0x0020
-	int32_t nothing2; //0x0024
-	char* InfoPicDir; //0x0028
-	int32_t DifferentForShip; //0x002C
-	class Description* Description; //0x0030
-	void* DescriptionShort; //0x0034
-	void* DescriptionName; //0x0038
-	int32_t Category; //0x003C
-	int32_t Class; //0x0040
-	int32_t Unknown; //0x0044
-	int32_t VoiceType; //0x0048
-	char* Accent; //0x004C
-	char pad_0050[4]; //0x0050
-	char* BannerFaction; //0x0054
-	char pad_0058[4]; //0x0058
-	char* BannerUnit; //0x005C
-	char pad_0060[4]; //0x0060
-	char* BannerHoly; //0x0064
-	char pad_0068[4]; //0x0068
-	char* BannerMarine; //0x006C
-	char pad_0070[4]; //0x0070
-	char* BannerSecondary; //0x0074
-	char pad_0078[12]; //0x0078
-	int32_t Trained; //0x0084
-	int32_t StatMentalDicipline; //0x0088
-	int8_t MoraleLocked; //0x008C
-	int8_t Morale; //0x008D
-	int8_t StatHealth; //0x008E
-	int8_t StatHealthAnimal; //0x008F
-	int8_t StatHeat; //0x0090
-	int8_t StatGround1; //0x0091
-	int8_t StatGround2; //0x0092
-	int8_t StatGround3; //0x0093
-	int8_t StatGround4; //0x0094
-	char pad_0095[1]; //0x0095
-	int16_t StatFood1; //0x0096
-	int16_t StatFood2; //0x0098
-	int16_t StatFireDelay; //0x009A
-	int32_t StatStl; //0x009C
-	float ChargeDistance; //0x00A0
-	int32_t mountEffectClass; //0x00A4
-	char pad_00A8[4]; //0x00A8
-	int32_t mountEffectAmount2; //0x00AC
-	int32_t mountEffectClass2; //0x00B0
-	char pad_00B4[4]; //0x00B4
-	int32_t mountEffectAmount3; //0x00B8
-	int32_t mountEffectClass3; //0x00BC
-	char pad_00C0[4]; //0x00C0
-	int32_t mountEffectAmount4; //0x00C4
-	int32_t MountEffectCount; //0x00C8
-	int16_t StatCost1; //0x00CC
-	int16_t StatCost2; //0x00CE
-	int16_t StatCost3; //0x00D0
-	int16_t StatCost4; //0x00D2
-	int16_t StatCost5; //0x00D4
-	int16_t StatCost6; //0x00D6
-	int16_t StatCost7; //0x00D8
-	int16_t StatCost8; //0x00DA
-	int32_t CrusadingUpkeepModifier; //0x00DC
-	int32_t RecruitPriorityOffsetTimes4; //0x00E0
-	int8_t Formation; //0x00E4
-	int8_t Formation2; //0x00E5
-	int8_t Formation3; //0x00E6
-	int8_t Formation4; //0x00E7
-	int8_t Formation5; //0x00E8
-	int8_t Formation6; //0x00E9
-	char pad_00EA[2]; //0x00EA
-	int8_t N000000AA; //0x00EC
-	int8_t N00000218; //0x00ED
-	char pad_00EE[2]; //0x00EE
-	int32_t DefaultNubmerOfRanks; //0x00F0
-	float UnitSpacingFrontToBackClose; //0x00F4
-	float UnitSpacingSideToSideClose; //0x00F8
-	float UnitSpacingFrontToBackLoose; //0x00FC
-	float UnitSpacingSideToSideLoose; //0x0100
-	char* Soldier; //0x0104
-	char pad_0108[12]; //0x0108
-	class ModelDbEntry* ModelDBEntry; //0x0114
-	int32_t SoldierCount; //0x0118
-	float Mass; //0x011C
-	float Width; //0x0120
-	float Height; //0x0124
-	int8_t HasPrimaryWeapon; //0x0128
-	int8_t nothing3; //0x0129
-	int8_t AttackValueBitshiftedleftby18; //0x012A
-	int8_t ChargeBonusBitshiftedleftby24; //0x012B
-	int32_t Ammunition; //0x012C
-	int32_t MissleRange; //0x0130
-	float MissleRangeSquared; //0x0134
-	int32_t Unknown4; //0x0138
-	class Projectile* StatPriMissle; //0x013C
-	int32_t WeaponType; //0x0140
-	int32_t TechType; //0x0144
-	int32_t DamageType; //0x0148
-	int32_t SoundType; //0x014C
-	int32_t AttackMinDelay; //0x0150
-	char pad_0154[4]; //0x0154
-	char WeaponShootEffect[20]; //0x0158
-	char pad_016C[4]; //0x016C
-	int8_t HasSecondaryWeapon; //0x0170
-	int8_t nothing4; //0x0171
-	int8_t SecAttackValueBitshiftedleftby18; //0x0172
-	int8_t SecChargeBonusBitshiftedleftby24; //0x0173
-	int32_t SecAmmunition; //0x0174
-	int32_t SecMissleRange; //0x0178
-	float SecMissleRangeSquared; //0x017C
-	int32_t Unknown2; //0x0180
-	void* StatSecMissle; //0x0184
-	int32_t SecWeaponType; //0x0188
-	int32_t SecTechType; //0x018C
-	int32_t SecDamageType; //0x0190
-	int32_t SecSoundType; //0x0194
-	int32_t SecAttackMinDelay; //0x0198
-	char pad_019C[28]; //0x019C
-	int32_t PriDefenseSkillAndShield; //0x01B8
-	char pad_01BC[4]; //0x01BC
-	char* FirstOfficier; //0x01C0
-	void* N000000E0; //0x01C4
-	char pad_01C8[8]; //0x01C8
-	void* N000000E3; //0x01D0
-	char* SecondOfficier; //0x01D4
-	void* N000000E5; //0x01D8
-	char pad_01DC[8]; //0x01DC
-	void* N000000E8; //0x01E4
-	char* ThirdOfficier; //0x01E8
-	void* N000000EA; //0x01EC
-	char pad_01F0[8]; //0x01F0
-	void* N000000ED; //0x01F8
-	int32_t OfficierCount; //0x01FC
-	char pad_0200[4]; //0x0200
-	void* ArmorUpgrade; //0x0204
-	void* ArmorUpgrad1; //0x0208
-	void* ArmorUpgrade2; //0x020C
-	char pad_0210[4]; //0x0210
-	void* ArmorUpgrade3; //0x0214
-	void* ArmorUpgrade4; //0x0218
-	void* ArmorUpgrade5; //0x021C
-	char pad_0220[4]; //0x0220
-	class Engine* N000000F8; //0x0224
-	char pad_0228[4]; //0x0228
-	int8_t N000000FA; //0x022C
-	int8_t N000003B1; //0x022D
-	int8_t EngineMissleAttack; //0x022E
-	int8_t EngineMissleChargeBonus; //0x022F
-	int32_t EngineMissleAmmunition; //0x0230
-	int32_t EngineMissleRange; //0x0234
-	float EngineMissleRangeSquared; //0x0238
-	int32_t Unknown3; //0x023C
-	class Projectile* EngineMissle; //0x0240
-	int32_t EngineMissleWeaponType; //0x0244
-	int32_t EngineMissleTechType; //0x0248
-	int32_t EngineMissleDamageType; //0x024C
-	int32_t EngineMissleSoundType; //0x0250
-	int32_t EngineMissleAttackMinDelay; //0x0254
-	char pad_0258[48]; //0x0258
-	class Projectile* N00000111; //0x0288
-	int32_t N00000112; //0x028C
-	int32_t N00000113; //0x0290
-	int32_t N00000114; //0x0294
-	int32_t N00000115; //0x0298
-	int32_t TerMissleAttackMinDelay; //0x029C
-	char pad_02A0[36]; //0x02A0
-	void* MountModel; //0x02C4
-	void* MountSomerthing; //0x02C8
-	int32_t StatSecAndSecArmour; //0x02CC
-	char pad_02D0[68]; //0x02D0
-	int32_t Mount; //0x0314
-	char pad_0318[8]; //0x0318
-	void* AnimalModel; //0x0320
-	void* AnimalSomething; //0x0324
-	char pad_0328[84]; //0x0328
-	class Ship* Ship; //0x037C
-	char pad_0380[8]; //0x0380
-	void* N00000151; //0x0388
-	void* N00000152; //0x038C
-	void* N00000153; //0x0390
-	char pad_0394[12]; //0x0394
-	class Attributes* Attributes; //0x03A0
-	void* EndOfAttributes; //0x03A4
-	void* BytesBeforeNextAttributes; //0x03A8
-	uint8_t Attributes2; //0x03AC
-	uint8_t Attributes3; //0x03AD
-	uint8_t Attributes4; //0x03AE
-	uint8_t Attributes5; //0x03AF
-	uint32_t Attributes6; //0x03B0
-	float MoveSpeedMod; //0x03B4
-	int32_t AttributeAreaEffect; //0x03B8
-	char pad_03BC[28]; //0x03BC
-	float PriSkeletonCompFactor; //0x03D8
-	float SecSkeletonCompFactor; //0x03DC
-	float TerSkeletonCompFactor; //0x03E0
-}; //Size: 0x03E4
+public:
+	char pad_0000[4]; //0x0000
+	char N00002889[8]; //0x0004
+	char pad_000C[8]; //0x000C
+	int32_t nameLength; //0x0014
+	char pad_0018[4]; //0x0018
+	float scale; //0x001C
+	char pad_0020[4]; //0x0020
+	class ModelDbMesh* Mesh; //0x0024
+	char pad_0028[12]; //0x0028
+	class ModelDbEntryTextures* Textures; //0x0034
+	char pad_0038[12]; //0x0038
+	class ModelDbEntryTextures* AttTextures; //0x0044
+	char pad_0048[12]; //0x0048
+	class ModelDbAnims* Animations; //0x0054
+	char pad_0058[8]; //0x0058
+	int32_t torchAttachBone; //0x0060
+	float N00000857; //0x0064
+	float N00000858; //0x0068
+	float N00000859; //0x006C
+	float N0000085A; //0x0070
+	float N0000085B; //0x0074
+	float N0000085C; //0x0078
+	char pad_007C[4]; //0x007C
+}; //Size: 0x0080
+//tupe of unit from edu
+struct EduEntry {
+	char* Type;
+	DWORD typeHash;
+	DWORD Index;
+	DWORD UnitCreatedCounter;
+	char* UnitCardTga;
+	char pad_0014[4];
+	char* InfoCardTga;
+	char pad_001C[4];
+	DWORD nothing;
+	DWORD nothing2;
+	char* InfoPicDir;
+	DWORD DifferentForShip;
+	UNICODE_STRING*** localizedName;
+	UNICODE_STRING*** localizedDescr;
+	UNICODE_STRING*** localizedDescrShort;
+	DWORD Category;
+	DWORD Class;
+	DWORD Unknown;
+	DWORD VoiceType;
+	char* Accent;
+	char pad_0050[4];
+	char* BannerFaction;
+	char pad_0058[4];
+	char* BannerUnit;
+	char pad_0060[4];
+	char* BannerHoly;
+	char pad_0068[4];
+	char* BannerMarine;
+	char pad_0070[4];
+	char* BannerSecondary;
+	char pad_0078[12];
+	DWORD Trained;
+	DWORD StatMentalDicipline;
+	int8_t MoraleLocked;
+	int8_t Morale;
+	int8_t StatHealth;
+	int8_t StatHealthAnimal;
+	int8_t StatHeat;
+	int8_t StatGround1;
+	int8_t StatGround2;
+	int8_t StatGround3;
+	int8_t StatGround4;
+	char pad_0095[1];
+	ushort StatFood1;
+	ushort StatFood2;
+	ushort StatFireDelay;
+	DWORD StatStl;
+	float ChargeDistance;
+	DWORD mountEffectClass;
+	char pad_00A8[4];
+	DWORD mountEffectAmount2;
+	DWORD mountEffectClass2;
+	char pad_00B4[4];
+	DWORD mountEffectAmount3;
+	DWORD mountEffectClass3;
+	char pad_00C0[4];
+	DWORD mountEffectAmount4;
+	DWORD MountEffectCount;
+	ushort StatCost1;
+	ushort StatCost2;
+	ushort StatCost3;
+	ushort StatCost4;
+	ushort StatCost5;
+	ushort StatCost6;
+	ushort StatCost7;
+	ushort StatCost8;
+	DWORD CrusadingUpkeepModifier;
+	DWORD RecruitPriorityOffsetTimes4;
+	int8_t Formation;
+	int8_t Formation2;
+	int8_t Formation3;
+	int8_t Formation4;
+	int8_t Formation5;
+	int8_t Formation6;
+	char pad_00EA[2];
+	int8_t N000000AA;
+	int8_t N00000218;
+	char pad_00EE[2];
+	DWORD DefaultNubmerOfRanks;
+	float UnitSpacingFrontToBackClose;
+	float UnitSpacingSideToSideClose;
+	float UnitSpacingFrontToBackLoose;
+	float UnitSpacingSideToSideLoose;
+	char* Soldier;
+	char pad_0108[12];
+	struct ModelDbEntry* ModelDBEntry;
+	DWORD SoldierCount;
+	float Mass;
+	float Width;
+	float Height;
+	int8_t HasPrimaryWeapon;
+	int8_t nothing3;
+	int8_t AttackValueBitshiftedleftby18;
+	int8_t ChargeBonusBitshiftedleftby24;
+	DWORD Ammunition;
+	DWORD MissleRange;
+	float MissleRangeSquared;
+	DWORD Unknown4;
+	void* StatPriMissle;
+	DWORD WeaponType;
+	DWORD TechType;
+	DWORD DamageType;
+	DWORD SoundType;
+	DWORD AttackMinDelay;
+	char pad_0154[4];
+	char WeaponShootEffect[20];
+	char pad_016C[4];
+	int8_t HasSecondaryWeapon;
+	int8_t nothing4;
+	int8_t SecAttackValueBitshiftedleftby18;
+	int8_t SecChargeBonusBitshiftedleftby24;
+	DWORD SecAmmunition;
+	DWORD SecMissleRange;
+	float SecMissleRangeSquared;
+	DWORD Unknown2;
+	void* StatSecMissle;
+	DWORD SecWeaponType;
+	DWORD SecTechType;
+	DWORD SecDamageType;
+	DWORD SecSoundType;
+	DWORD SecAttackMinDelay;
+	char pad_019C[28];
+	DWORD PriDefenseSkillAndShield;
+	char pad_01BC[4];
+	char* FirstOfficier;
+	void* N000000E0;
+	char pad_01C8[8];
+	void* N000000E3;
+	char* SecondOfficier;
+	void* N000000E5;
+	char pad_01DC[8];
+	void* N000000E8;
+	char* ThirdOfficier;
+	void* N000000EA;
+	char pad_01F0[8];
+	void* N000000ED;
+	DWORD OfficierCount;
+	char pad_0200[4];
+	void* ArmorUpgrade;
+	void* ArmorUpgrad1;
+	void* ArmorUpgrade2;
+	char pad_0210[4];
+	void* ArmorUpgrade3;
+	void* ArmorUpgrade4;
+	void* ArmorUpgrade5;
+	char pad_0220[4];
+	void* N000000F8;
+	char pad_0228[4];
+	int8_t N000000FA;
+	int8_t N000003B1;
+	int8_t EngineMissleAttack;
+	int8_t EngineMissleChargeBonus;
+	DWORD EngineMissleAmmunition;
+	DWORD EngineMissleRange;
+	float EngineMissleRangeSquared;
+	DWORD Unknown3;
+	void* EngineMissle;
+	DWORD EngineMissleWeaponType;
+	DWORD EngineMissleTechType;
+	DWORD EngineMissleDamageType;
+	DWORD EngineMissleSoundType;
+	DWORD EngineMissleAttackMinDelay;
+	char pad_0258[48];
+	void* N00000111;
+	DWORD N00000112;
+	DWORD N00000113;
+	DWORD N00000114;
+	DWORD N00000115;
+	DWORD TerMissleAttackMinDelay;
+	char pad_02A0[36];
+	void* MountModel;
+	void* MountSomerthing;
+	DWORD StatSecAndSecArmour;
+	char pad_02D0[68];
+	DWORD Mount;
+	char pad_0318[8];
+	void* AnimalModel;
+	void* AnimalSomething;
+	char pad_0328[84];
+	void* Ship;
+	char pad_0380[8];
+	void* N00000151;
+	void* N00000152;
+	void* N00000153;
+	char pad_0394[12];
+	void* Attributes;
+	void* EndOfAttributes;
+	void* BytesBeforeNextAttributes;
+	int8_t Attributes2;
+	int8_t Attributes3;
+	int8_t Attributes4;
+	int8_t Attributes5;
+	DWORD Attributes6;
+	float MoveSpeedMod;
+	DWORD AttributeAreaEffect;
+	char pad_03BC[28];
+	float PriSkeletonCompFactor;
+	float SecSkeletonCompFactor;
+	float TerSkeletonCompFactor;
+};
+
 struct eduEntryes { /* structure with all edu entries */
 	UINT32 qq;
 	struct EduEntry unitTupes[500];
@@ -843,14 +935,7 @@ struct soldierData { /* one soldier in unit */
 	undefined field_0x3;
 };
 #pragma pack(pop)
-//diplomacy data of faction to another faction
-struct factionDiplomacy {
-	undefined field_0x0[12];
-	int state; /* diplomatic state(war, alliance, peace) */
-	int trade; /* trade rights(0 or 1) */
-	int protectorate; /* protectorate or not(15 or 6) */
-	undefined field_0x18[112];
-};
+
 //fort
 struct fortStruct {
 	undefined field_0x0[4];
