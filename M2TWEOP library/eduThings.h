@@ -18,10 +18,10 @@ using namespace std;
 
 namespace eduThings
 {
-	NOINLINE EOP_EXPORT EduEntry* addEntry(int baseIdx , int newIdx);
-	NOINLINE EOP_EXPORT EduEntry* getEntry(int idx);
+	NOINLINE EOP_EXPORT EduEntry* addEopEduEntry(int baseIdx , int newIdx);
+	NOINLINE EOP_EXPORT EduEntry* getEopEduEntry(int idx);
 	//used for creatinon of new units, etc
-	NOINLINE EOP_EXPORT int getDataEntry(int idx);
+	NOINLINE EOP_EXPORT int getDataEopEdu(int idx);
 
 
 

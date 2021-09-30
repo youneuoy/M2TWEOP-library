@@ -48,7 +48,7 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 
 	if (event == nullptr)return;
 
-	if (strcmp(event, "CharacterSelected") == 0)
+	/*if (strcmp(event, "CharacterSelected") == 0)
 	{
 		
 		generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
@@ -56,8 +56,8 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 		stackStruct* army = prs->gen->armyLeaded;
 		if (army)
 		{
-			eduThings::addEntry(army->units[0]->eduEntry->Index,1000);
-			int edb=eduThings::getDataEntry(1000);
+			eduThings::addEopEduEntry(army->units[0]->eduEntry->Index,1000);
+			int edb=eduThings::getDataEopEdu(1000);
 			eduThings::setEntryUnitCardTga(1000,"#akavir_swordsmen.tga");
 			eduThings::setEntryInfoCardTga(1000,"akavir_swordsmen_info.tga");
 			eduThings::setEntrySoldierModel(1000,"Sword_and_Buckler_Men");
@@ -85,7 +85,7 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 			}
 			fastFuncts::addUnitToArmy(army, res);
 		}
-	}
+	}*/
 	
 	for (plugin* pl : pluginsCfg.plugins)
 	{
@@ -635,6 +635,14 @@ void plugins::onSaveGame(UNICODE_STRING**& savePath)
 
 
 	techFuncs::deleteFiles(files);
+}
+
+void plugins::onReadGameDbsAtStart()
+{
+	for (plugin* pl : pluginsCfg.plugins)
+	{
+		(*(*pl->onReadGameDbsAtStart))();
+	}
 }
 
 void plugins::onWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -1273,5 +1281,10 @@ int plugin::init(string* nameP)
 	//onSelectWorldpkgdesc
 	fName = "onSelectWorldpkgdesc";
 	onSelectWorldpkgdesc.Load(&plPath, &fName);
+
+
+	//onReadGameDbsAtStart
+	fName = "onReadGameDbsAtStart";
+	onReadGameDbsAtStart.Load(&plPath, &fName);
 	return 1;
 }

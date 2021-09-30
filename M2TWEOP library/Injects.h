@@ -499,3 +499,19 @@ private:
 };
 
 
+
+//select worldpkgdesc from db
+class toReadGameDBsAtGameStart
+	:public AATemplate
+{
+public:
+	toReadGameDBsAtGameStart(MemWork* mem, LPVOID adr, int ver);
+	~toReadGameDBsAtGameStart();
+
+	void SetOriginalReadCode();
+	void SetlReadCode();
+private:
+	LPVOID funcAdress;
+};
+
+
