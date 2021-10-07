@@ -27,57 +27,35 @@ void writeToLogFile(
    fclose(fp);
 }
 
-SingleFbxMesh::SingleFbxMesh()
-   :m_sdkManagerPtr(nullptr)
-   , m_devicePtr(nullptr)
-   , m_filename()
-   , m_scenePtr(nullptr)
-   , m_majorFileVersion(0)
-   , m_minorFileVersion(0)
-   , m_revisionFileVersion(0)
-   , m_modelVector()
-   , m_textureName()
-   , m_boneVector()
-   , m_allByControlPoint(true)
-   , m_boneMatrixVectorSize(0)
-   , m_boneMatrixVector()
-   , m_initialAnimationDurationInMs(0)
-   , m_texturePtr(nullptr)
-   , m_effectPtr(nullptr)
-   , m_skinnedMeshVertexDeclarationPtr(nullptr)
+SingleFbxMesh::SingleFbxMesh(int meshID)
+    :m_sdkManagerPtr(nullptr)
+    , m_devicePtr(nullptr)
+    , m_filename()
+    , m_scenePtr(nullptr)
+    , m_majorFileVersion(0)
+    , m_minorFileVersion(0)
+    , m_revisionFileVersion(0)
+    , m_modelVector()
+    , m_textureName()
+    , m_boneVector()
+    , m_allByControlPoint(true)
+    , m_boneMatrixVectorSize(0)
+    , m_boneMatrixVector()
+    , m_initialAnimationDurationInMs(0)
+    , m_texturePtr(nullptr)
+    , m_effectPtr(nullptr)
+    , m_skinnedMeshVertexDeclarationPtr(nullptr)
+    , modelID(meshID)
 {
 //The first thing to do is to create the FBX Manager which is the object allocator for almost all the classes in the SDK
-   m_sdkManagerPtr = FbxManager::Create();
+   m_sdkManagerPtr = fbxHelper::getFbxManager();
    assert(nullptr != m_sdkManagerPtr);
-
-// Create an IOSettings object. This object holds all import settings.
-   fbxsdk::FbxIOSettings* ioSettingsPtr = FbxIOSettings::Create(m_sdkManagerPtr, IOSROOT);
-   m_sdkManagerPtr->SetIOSettings(ioSettingsPtr);
-
-// I probably could have made more things false for this example. You might want
-// to revisit this.
-   m_sdkManagerPtr->GetIOSettings()->SetBoolProp(IMP_FBX_CONSTRAINT, false);
-   m_sdkManagerPtr->GetIOSettings()->SetBoolProp(IMP_FBX_CONSTRAINT_COUNT, false);
-   m_sdkManagerPtr->GetIOSettings()->SetBoolProp(IMP_FBX_MATERIAL, true);
-   m_sdkManagerPtr->GetIOSettings()->SetBoolProp(IMP_FBX_TEXTURE, true);
-   m_sdkManagerPtr->GetIOSettings()->SetBoolProp(IMP_FBX_LINK, true);
-   m_sdkManagerPtr->GetIOSettings()->SetBoolProp(IMP_FBX_SHAPE, true);
-   m_sdkManagerPtr->GetIOSettings()->SetBoolProp(IMP_FBX_GOBO, false);
-   m_sdkManagerPtr->GetIOSettings()->SetBoolProp(IMP_FBX_ANIMATION, true);
-   m_sdkManagerPtr->GetIOSettings()->SetBoolProp(IMP_FBX_GLOBAL_SETTINGS, true);
 }
 
 SingleFbxMesh::~SingleFbxMesh()
 {
 // Unloads the model.
    _releaseFile();
-
-   if (nullptr != m_sdkManagerPtr)
-   {
-// Destroys all objects assocated with the manager.
-      m_sdkManagerPtr->Destroy();
-      m_sdkManagerPtr = nullptr;
-   }
 }
 
 void SingleFbxMesh::load(
@@ -117,10 +95,11 @@ void SingleFbxMesh::release()
    _releaseMeshBuffers();
 }
 
-void SingleFbxMesh::advanceTime()
+void SingleFbxMesh::advanceTime(unsigned long long timeMod)
 {
    fbxsdk::FbxTime fbxFrameTime;
-   unsigned long long localAnimationTime = GetTickCount64() % m_initialAnimationDurationInMs;
+
+   unsigned long long localAnimationTime = (GetTickCount64()* timeMod) % m_initialAnimationDurationInMs;
 
    fbxFrameTime.SetMilliSeconds(localAnimationTime);
 
@@ -133,6 +112,7 @@ void SingleFbxMesh::render(
    m_effectPtr->SetMatrix("gWorldViewProj", &worldViewProj);
    m_effectPtr->SetTexture("gBaseTexture", m_texturePtr);
    m_effectPtr->SetTechnique("minimalSkinnedTechnique");
+
 
    for (size_t modelIndex = 0; modelIndex < m_modelVector.size(); ++modelIndex)
    {
@@ -1175,7 +1155,7 @@ unsigned long long SingleFbxMesh::_getAnimationDuration()
    FbxAnimStack* fbxAnimStackPtr = m_scenePtr->GetSrcObject<FbxAnimStack>(0);
    if (fbxAnimStackPtr== nullptr)
    {
-
+       return 0;
    }
    assert(nullptr != fbxAnimStackPtr);
 
@@ -1184,7 +1164,7 @@ unsigned long long SingleFbxMesh::_getAnimationDuration()
    int animStackNameArraySize = animStackNameArray.GetCount();
    if (animStackNameArraySize < 1)
    {
-
+       return 0;
    }
    assert(animStackNameArraySize >= 1);
 

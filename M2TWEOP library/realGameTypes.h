@@ -147,10 +147,12 @@ struct battleSide {
 };
 
 struct battleDataS {
-	undefined field_0x0[24];
+	undefined field_0x0[4];
+	int battleState; /* 0-not in battle,5-active battle,9-results screen,etc */
+	undefined field_0xc[16];
 	int xCoord;
 	int yCoord;
-	undefined field_0x20[16];
+	undefined somethingRelatedToBattleType[16];
 	int attackerXCoord;
 	int attackerYCoord;
 	int defenderXCoord;
