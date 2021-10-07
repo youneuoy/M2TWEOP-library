@@ -315,3 +315,8 @@ void __stdcall patchesForGame::toReadGameDbsAtStart()
 	plugins::onReadGameDbsAtStart();
 }
 
+void __stdcall patchesForGame::onDrawPartsOfStratObjects()
+{
+	graphicsD3D::onDrawPartsOfStratObjects();
+}
+

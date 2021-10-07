@@ -61,17 +61,23 @@
     <Filter Include="3rd\miniz">
       <UniqueIdentifier>{2d701366-815a-4653-8b91-008a98f3ce33}</UniqueIdentifier>
     </Filter>
-    <Filter Include="onlineThings">
-      <UniqueIdentifier>{2143ae68-fb3b-4946-8cb2-460523c5e8cd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="3rd\json">
       <UniqueIdentifier>{cfef3814-4ac2-4e6e-a30d-2a51e64b8055}</UniqueIdentifier>
     </Filter>
     <Filter Include="3rd\ImNotify">
       <UniqueIdentifier>{d71c722e-322d-4461-9d75-db85485afcb5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="eduThings">
+    <Filter Include="feathures">
+      <UniqueIdentifier>{f478812c-bb51-4383-891a-49ea7fcb576d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="feathures\eduThings">
       <UniqueIdentifier>{bf155e05-95f7-4050-ab15-28d5f001fc7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="feathures\fbxStrat">
+      <UniqueIdentifier>{775825f1-801f-474d-8bd8-c4f5f50e98e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="feathures\onlineThings">
+      <UniqueIdentifier>{2143ae68-fb3b-4946-8cb2-460523c5e8cd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -196,7 +202,7 @@
       <Filter>Файлы ресурсов</Filter>
     </ClInclude>
     <ClInclude Include="onlineThings.h">
-      <Filter>onlineThings</Filter>
+      <Filter>feathures\onlineThings</Filter>
     </ClInclude>
     <ClInclude Include="..\3rd\nlohmann\json.hpp">
       <Filter>3rd\json</Filter>
@@ -211,10 +217,22 @@
       <Filter>3rd\ImNotify</Filter>
     </ClInclude>
     <ClInclude Include="eduThings.h">
-      <Filter>eduThings</Filter>
+      <Filter>feathures\eduThings</Filter>
     </ClInclude>
     <ClInclude Include="eduFastFuncts.h">
-      <Filter>eduThings</Filter>
+      <Filter>feathures\eduThings</Filter>
+    </ClInclude>
+    <ClInclude Include="SingleFbxMesh.h">
+      <Filter>dif</Filter>
+    </ClInclude>
+    <ClInclude Include="tAutodeskMemoryStream.h">
+      <Filter>dif</Filter>
+    </ClInclude>
+    <ClInclude Include="fbxModels.h">
+      <Filter>feathures\fbxStrat</Filter>
+    </ClInclude>
+    <ClInclude Include="fbxHelper.h">
+      <Filter>dif</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -315,13 +333,25 @@
       <Filter>Исходные файлы\patches\stratModels</Filter>
     </ClCompile>
     <ClCompile Include="onlineThings.cpp">
-      <Filter>onlineThings</Filter>
+      <Filter>feathures\onlineThings</Filter>
     </ClCompile>
     <ClCompile Include="eduThings.cpp">
-      <Filter>eduThings</Filter>
+      <Filter>feathures\eduThings</Filter>
     </ClCompile>
     <ClCompile Include="eduFastFuncts.cpp">
-      <Filter>eduThings</Filter>
+      <Filter>feathures\eduThings</Filter>
+    </ClCompile>
+    <ClCompile Include="SingleFbxMesh.cpp">
+      <Filter>dif</Filter>
+    </ClCompile>
+    <ClCompile Include="tAutodeskMemoryStream.cpp">
+      <Filter>dif</Filter>
+    </ClCompile>
+    <ClCompile Include="fbxModels.cpp">
+      <Filter>feathures\fbxStrat</Filter>
+    </ClCompile>
+    <ClCompile Include="fbxHelper.cpp">
+      <Filter>dif</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 #pragma once
 #include "plugins.h"
 #include "stratModelsChange.h"
+#include "graphicsD3D.h"
 class patchesForGame
 {
 public:
@@ -73,4 +74,7 @@ public:
 
 	static void WINAPI battleLoaded();
 	static void WINAPI toReadGameDbsAtStart();
+
+
+	static void WINAPI onDrawPartsOfStratObjects();
 };

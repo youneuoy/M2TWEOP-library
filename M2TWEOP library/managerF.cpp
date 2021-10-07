@@ -273,6 +273,15 @@ void managerF::doPachs()
 	toReadGameDbsAtStart->Enable();
 
 	f1 << "Done" << endl;
+	
+
+
+	f1 << "Start applying toDrawPartsOfStratObjects patch" << endl;
+	toDrawPartsOfStratObjects* toDrawPartsOfStratO = new toDrawPartsOfStratObjects(mem, (LPVOID)patchesForGame::onDrawPartsOfStratObjects, globals::dataS.gamever);
+	toDrawPartsOfStratO->SetlDrawCode();
+	toDrawPartsOfStratO->Enable();
+
+	f1 << "Done" << endl;
 
 	/*f1 << "Start replacing cas loading function" << endl;
 	toLoadCas* loadCasF = new toLoadCas(mem, (LPVOID)stratModelsOptimise::loadCasProc, globals::dataS.gamever);

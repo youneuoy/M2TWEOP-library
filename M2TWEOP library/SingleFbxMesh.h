@@ -14,24 +14,26 @@
 #include <d3dx9math.h>
 #include <vector>
 #include <string>
-
+#include "fbxHelper.h"
 class SingleFbxMesh
 {
 public:
-   SingleFbxMesh();
+   SingleFbxMesh(int meshID);
+   SingleFbxMesh()=delete;
    ~SingleFbxMesh();
 
    void load(
       LPDIRECT3DDEVICE9 devicePtr,
       const char* meshName,
       const char* textureName,
-      unsigned long boneMatrixVectorSize = 50);
+      unsigned long boneMatrixVectorSize =50);
    void release();
-   void advanceTime();
+   void advanceTime(unsigned long long timeMod=1);
    void render(
       const D3DXMATRIX& worldViewProj);
-
+   int modelID = 0;
 private:
+
 // All the necessary pices to keep the Autodesk SDK loaded
    fbxsdk::FbxManager* m_sdkManagerPtr;
    LPDIRECT3DDEVICE9 m_devicePtr;

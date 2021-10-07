@@ -1925,3 +1925,55 @@ void toReadGameDBsAtGameStart::SetlReadCode()
 
 	delete a;
 }
+
+toDrawPartsOfStratObjects::toDrawPartsOfStratObjects(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAdress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x009e2a00;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x009e1e60;
+}
+
+toDrawPartsOfStratObjects::~toDrawPartsOfStratObjects()
+{
+}
+
+void toDrawPartsOfStratObjects::SetOriginalDrawCode()
+{
+	Assembler* a = new Assembler();
+
+	a->sub(esp, 0x10);
+	a->push(ebx);
+	a->push(ebp);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toDrawPartsOfStratObjects::SetlDrawCode()
+{
+	Assembler* a = new Assembler();
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAdress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+	a->sub(esp, 0x10);
+	a->push(ebx);
+	a->push(ebp);
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

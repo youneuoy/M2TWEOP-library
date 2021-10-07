@@ -10,10 +10,9 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
-
+#include "fbxModels.h"
 //#include "discord.h"
 graphicsD3D::dataT graphicsD3D::dataS;
-
 
 
 template<typename T>
@@ -44,6 +43,10 @@ struct
 	bool drawEOPStartInfo=false;
 
 	ImVec2 beginCoords{ 0.f,0.f };
+
+
+	int drawsCount = 0;
+	int drawsCount2 = 0;
 }drawParams;
 
 struct {
@@ -118,6 +121,50 @@ NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 	}
 	ImGui::End();*/
 	return;
+}
+NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
+{
+	//Backup the DX9 state
+	IDirect3DStateBlock9* d3d9_state_block = NULL;
+	if (graphicsD3D::dataS.pDevice->CreateStateBlock(D3DSBT_ALL, &d3d9_state_block) < 0)
+		return;
+	if (d3d9_state_block->Capture() < 0)
+	{
+		d3d9_state_block->Release();
+		return;
+	}
+	// Backup the DX9 transform (DX9 documentation suggests that it is included in the StateBlock but it doesn't appear to)
+	D3DMATRIX last_world, last_view, last_projection;
+	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_WORLD, &last_world);
+	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_VIEW, &last_view);
+	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_PROJECTION, &last_projection);
+
+
+	graphicsD3D::dataS.clearStateBlock->Apply();
+
+
+
+	int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
+
+	//1-stratmap
+	//2-tactmap
+	int drawType = 2;
+	if (battleState == 0)
+	{
+		drawType = 1;
+	}
+
+	fbxModels::draw(drawType);
+
+
+	// Restore the DX9 transform
+	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_WORLD, &last_world);
+	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_VIEW, &last_view);
+	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_PROJECTION, &last_projection);
+
+	// Restore the DX9 state
+	d3d9_state_block->Apply();
+	d3d9_state_block->Release();
 }
 NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -286,7 +333,20 @@ NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevic
 		//	<< " updating activity!\n";
 		});
 	*/
-	//graphicsD3D::dataS.d3dT.InitGeometry(pDevice);
+	fbxModels::set3dDevice(pDevice);
+
+	fbxModels::addFbxModel("scorpid.fbx", "scorp.dds",1);
+	fbxModels::addFbxModel("Tiger.fbx", "FbxTemp_0001.jpg",3);
+
+
+	void* obj=fbxModels::addFbxObject(1,2);
+	void* obj2=fbxModels::addFbxObject(3,4);
+
+	float coords[3]{ 0,0,0 };
+	float coords2[3]{ 2,0,2 };
+	fbxModels::setFbxObjectCoords(obj, coords);
+	fbxModels::setFbxObjectCoords(obj2, coords2);
+	fbxModels::setFbxObjectSize(obj2,0.007);
 }
 
 NOINLINE EOP_EXPORT void graphicsExport::onEndScene(IDirect3DDevice9* pDevice)
@@ -301,7 +361,6 @@ NOINLINE EOP_EXPORT void graphicsExport::onEndScene(IDirect3DDevice9* pDevice)
 	graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui = ImGui::GetIO().WantCaptureMouse;
 	graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui |= ImGui::GetIO().WantCaptureKeyboard;
 
-	//graphicsD3D::dataS.d3dT.draw();
 	ImGui::EndFrame();
 	ImGui::Render();
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
@@ -312,12 +371,13 @@ NOINLINE EOP_EXPORT void graphicsExport::onReset(IDirect3DDevice9* pDevice, D3DP
 	ImGui_ImplDX9_InvalidateDeviceObjects();
 
 
-	//graphicsD3D::dataS.d3dT.onResetDevice();
+	if (graphicsD3D::dataS.clearStateBlock != NULL)
+		graphicsD3D::dataS.clearStateBlock->Release();
 }
 
 NOINLINE EOP_EXPORT void graphicsExport::afterReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
 {
 	ImGui_ImplDX9_CreateDeviceObjects();
 
-	//graphicsD3D::dataS.d3dT.afterResetDevice();
+	pDevice->CreateStateBlock(D3DSBT_ALL, &graphicsD3D::dataS.clearStateBlock);
 }

@@ -515,3 +515,19 @@ private:
 };
 
 
+
+//draw parts of stratmodels
+class toDrawPartsOfStratObjects
+	:public AATemplate
+{
+public:
+	toDrawPartsOfStratObjects(MemWork* mem, LPVOID adr, int ver);
+	~toDrawPartsOfStratObjects();
+
+	void SetOriginalDrawCode();
+	void SetlDrawCode();
+private:
+	LPVOID funcAdress;
+};
+
+
