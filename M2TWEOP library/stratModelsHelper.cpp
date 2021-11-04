@@ -30,7 +30,7 @@ namespace stratModelsChange
 			)return;
 
 		settMod* newMod = new settMod();
-
+		memset(newMod, 0, sizeof(settMod));
 		newMod->castle = modelP;
 		newMod->town = modelP;
 		settlement->model = newMod;

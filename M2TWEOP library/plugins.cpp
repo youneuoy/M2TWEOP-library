@@ -596,6 +596,17 @@ void plugins::onEndSiege(settlementStruct* sett)//settlement or fort!
 	}
 }
 
+void plugins::onStartSiege(settlementStruct* sett)
+{
+	int x = sett->xCoord;
+	int y = sett->yCoord;
+
+	for (plugin* pl : pluginsCfg.plugins)
+	{
+		(*(*pl->onStartSiege))(x, y);
+	}
+}
+
 void plugins::onNewGameStart()
 {
 	for (plugin* pl : pluginsCfg.plugins)
@@ -1301,5 +1312,9 @@ int plugin::init(string* nameP)
 	//onEndSiege
 	fName = "onEndSiege";
 	onEndSiege.Load(&plPath, &fName);
+
+	//onStartSiege
+	fName = "onStartSiege";
+	onStartSiege.Load(&plPath, &fName);
 	return 1;
 }

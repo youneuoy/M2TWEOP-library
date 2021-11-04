@@ -211,7 +211,6 @@
     <ClInclude Include="exportHeader.h" />
     <ClInclude Include="fastFuncts.h" />
     <ClInclude Include="fastFunctsHelpers.h" />
-    <ClInclude Include="fbxHelper.h" />
     <ClInclude Include="fbxModels.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="functionsOffsets.h" />
@@ -228,11 +227,9 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="plugins.h" />
     <ClInclude Include="realGameTypes.h" />
-    <ClInclude Include="SingleFbxMesh.h" />
     <ClInclude Include="smallFuncs.h" />
     <ClInclude Include="stratModelsChange.h" />
     <ClInclude Include="stratModelsOptimise.h" />
-    <ClInclude Include="tAutodeskMemoryStream.h" />
     <ClInclude Include="techFuncs.h" />
     <ClInclude Include="technicalStringsFuncs.h" />
     <ClInclude Include="TemplateCh.h" />
@@ -257,7 +254,6 @@
     <ClCompile Include="eduThings.cpp" />
     <ClCompile Include="fastFuncts.cpp" />
     <ClCompile Include="fastFunctsHelpers.cpp" />
-    <ClCompile Include="fbxHelper.cpp" />
     <ClCompile Include="fbxModels.cpp" />
     <ClCompile Include="functionsOffsets.cpp" />
     <ClCompile Include="globals.cpp" />
@@ -278,12 +274,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="plugins.cpp" />
-    <ClCompile Include="SingleFbxMesh.cpp" />
     <ClCompile Include="smallFuncs.cpp" />
     <ClCompile Include="stratModelsChange.cpp" />
     <ClCompile Include="stratModelsHelper.cpp" />
     <ClCompile Include="stratModelsOptimise.cpp" />
-    <ClCompile Include="tAutodeskMemoryStream.cpp" />
     <ClCompile Include="techFuncs.cpp" />
     <ClCompile Include="technicalStringsFuncs.cpp" />
     <ClCompile Include="TemplateCh.cpp" />

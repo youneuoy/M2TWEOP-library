@@ -2026,3 +2026,53 @@ void toEndSettlementSiege::SetlSiegeCode()
 
 	delete a;
 }
+
+toStartSettlementSiege::toStartSettlementSiege(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAdress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x004bf80d;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x004bf27d;
+}
+
+
+toStartSettlementSiege::~toStartSettlementSiege()
+{
+}
+
+void toStartSettlementSiege::SetOriginalSiegeCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(dword_ptr(esi, 0x4), eax);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toStartSettlementSiege::SetlSiegeCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(dword_ptr(esi, 0x4), eax);
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(ecx, edi);//settlement
+	a->mov(eax, (DWORD)funcAdress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

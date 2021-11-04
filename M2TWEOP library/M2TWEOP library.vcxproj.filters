@@ -222,17 +222,8 @@
     <ClInclude Include="eduFastFuncts.h">
       <Filter>feathures\eduThings</Filter>
     </ClInclude>
-    <ClInclude Include="SingleFbxMesh.h">
-      <Filter>3rd\dif</Filter>
-    </ClInclude>
-    <ClInclude Include="tAutodeskMemoryStream.h">
-      <Filter>3rd\dif</Filter>
-    </ClInclude>
     <ClInclude Include="fbxModels.h">
       <Filter>feathures\fbxStrat</Filter>
-    </ClInclude>
-    <ClInclude Include="fbxHelper.h">
-      <Filter>3rd\dif</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -341,17 +332,8 @@
     <ClCompile Include="eduFastFuncts.cpp">
       <Filter>feathures\eduThings</Filter>
     </ClCompile>
-    <ClCompile Include="SingleFbxMesh.cpp">
-      <Filter>3rd\dif</Filter>
-    </ClCompile>
-    <ClCompile Include="tAutodeskMemoryStream.cpp">
-      <Filter>3rd\dif</Filter>
-    </ClCompile>
     <ClCompile Include="fbxModels.cpp">
       <Filter>feathures\fbxStrat</Filter>
-    </ClCompile>
-    <ClCompile Include="fbxHelper.cpp">
-      <Filter>3rd\dif</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

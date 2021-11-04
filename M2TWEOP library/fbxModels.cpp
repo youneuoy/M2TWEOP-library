@@ -1,5 +1,5 @@
 #include "fbxModels.h"
-#include "SingleFbxMesh.h"
+/*#include "SingleFbxMesh.h"
 #include "fbxSdk.h"
 
 
@@ -294,3 +294,5 @@ namespace fbxModels
 	}
 
 };
+
+*/

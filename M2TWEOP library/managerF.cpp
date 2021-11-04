@@ -285,7 +285,12 @@ void managerF::doPachs()
 	f1 << "Start applying toEndSettlementSiege patch" << endl;
 	toEndSettlementSiege* toEndSiegSett = new toEndSettlementSiege(mem, (LPVOID)patchesForGame::onEndSiege, globals::dataS.gamever);
 	toEndSiegSett->SetlSiegeCode();
-	toEndSiegSett->Enable();
+	toEndSiegSett->Enable();	
+
+	f1 << "Start applying toStartSettlementSiege patch" << endl;
+	toStartSettlementSiege* toStartSiegSett = new toStartSettlementSiege(mem, (LPVOID)patchesForGame::onStartSiege, globals::dataS.gamever);
+	toStartSiegSett->SetlSiegeCode();
+	toStartSiegSett->Enable();
 
 	f1 << "Done" << endl;
 

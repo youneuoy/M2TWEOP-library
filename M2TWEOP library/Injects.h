@@ -548,3 +548,19 @@ private:
 };
 
 
+
+//siege of settlement ended
+class toStartSettlementSiege
+	:public AATemplate
+{
+public:
+	toStartSettlementSiege(MemWork* mem, LPVOID adr, int ver);
+	~toStartSettlementSiege();
+
+	void SetOriginalSiegeCode();
+	void SetlSiegeCode();
+private:
+	LPVOID funcAdress;
+};
+
+
