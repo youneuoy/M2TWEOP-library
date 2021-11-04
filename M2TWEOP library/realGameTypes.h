@@ -7,8 +7,13 @@ typedef unsigned int    uint;
 typedef unsigned char    uchar;
 typedef unsigned short    ushort;
 #pragma pack(push,1) 
-
-
+typedef struct stackStruct stackStruct, * PstackStruct;
+typedef struct settlementStruct settlementStruct, * PsettlementStruct;
+struct siegeS {
+	undefined field_0x0[12];
+	struct settlementStruct* goal; /* settlement or fort */
+	struct stackStruct* army;
+};
 //diplomacy data of faction to another faction
 struct factionDiplomacy {
 	undefined field_0x0[16];
@@ -284,7 +289,9 @@ struct resStrat { /* traiding resource on stratmap */
 struct settMod {
 	struct model_Rigid* town;
 	struct model_Rigid* castle;
+	undefined field_0x8[924];
 };
+
 
 //models on the stratmap(settlements, resources, etc)
 struct stratMod {
@@ -370,7 +377,9 @@ struct settlementStruct {
 	UINT32 yCoord; /* y coordinate */
 	undefined field_0x14[48];
 	struct stackStruct* army; /* army on the settlement */
-	undefined field_0x48[260];
+	undefined field_0x48[4];
+	struct siegeS* siege;
+	undefined field_0x50[252];
 	struct settMod* model;
 	int descr_culturestxt;
 	undefined field_0x154[16];
@@ -648,7 +657,8 @@ struct stackStruct { /* structure of stack */
 	int numOfUnits;
 	undefined field_0x60[56];
 	struct stackStruct* boardedArmy; /* if fleet, here army */
-	undefined field_0x9c[20];
+	undefined field_0x9c[16];
+	struct siegeS* siege;
 	struct portBuildingStruct* blockedPort; /* if port blocked by this army when it here */
 	undefined field_0xb4[32];
 	struct general* gen; /* 0 if in settlement/fort */

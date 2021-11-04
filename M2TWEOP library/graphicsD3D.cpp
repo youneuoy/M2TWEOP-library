@@ -125,7 +125,7 @@ NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 {
 	//Backup the DX9 state
-	IDirect3DStateBlock9* d3d9_state_block = NULL;
+	/*IDirect3DStateBlock9* d3d9_state_block = NULL;
 	if (graphicsD3D::dataS.pDevice->CreateStateBlock(D3DSBT_ALL, &d3d9_state_block) < 0)
 		return;
 	if (d3d9_state_block->Capture() < 0)
@@ -165,6 +165,7 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	// Restore the DX9 state
 	d3d9_state_block->Apply();
 	d3d9_state_block->Release();
+	*/
 }
 NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -333,7 +334,11 @@ NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevic
 		//	<< " updating activity!\n";
 		});
 	*/
-	fbxModels::set3dDevice(pDevice);
+
+
+	//fbxModels::set3dDevice(pDevice);
+
+
 
 	//fbxModels::addFbxModel("scorpid.fbx", "scorp.dds",1);
 	//fbxModels::addFbxModel("Tiger.fbx", "FbxTemp_0001.jpg",3);

@@ -325,3 +325,12 @@ void __fastcall patchesForGame::onEndSiege(settlementStruct* sett)
 	plugins::onEndSiege(sett);
 }
 
+void __fastcall patchesForGame::onStartSiege(settlementStruct* sett)
+{
+	if (sett->siege == nullptr)
+	{
+		return;
+	}
+	plugins::onStartSiege(sett);
+}
+

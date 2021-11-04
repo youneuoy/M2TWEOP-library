@@ -205,6 +205,7 @@ public:
 	ProcLoader<void(__cdecl*)()> onReadGameDbsAtStart;
 
 	ProcLoader<void(__cdecl*)(int,int)> onEndSiege;
+	ProcLoader<void(__cdecl*)(int,int)> onStartSiege;
 	int init(string* nameP);
 private:
 	string name;
@@ -232,6 +233,7 @@ public:
 	static void onCampaignMapLoaded();
 
 	static void onEndSiege(settlementStruct*sett);//settlement or fort!
+	static void onStartSiege(settlementStruct*sett);//settlement or fort!
 
 	static void onNewGameStart();
 	static void onChangeTurnNum();

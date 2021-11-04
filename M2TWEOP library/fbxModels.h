@@ -1,5 +1,5 @@
 #pragma once
-#include <string>
+/*#include <string>
 #include <vector>
 #include <windows.h>
 #include "FastFuncts.h" 
@@ -46,3 +46,4 @@ namespace fbxModels
 	NOINLINE EOP_EXPORT bool getFbxObjectAnimState(void* object);
 };
 
+*/
