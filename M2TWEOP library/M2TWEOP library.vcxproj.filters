@@ -46,9 +46,6 @@
     <Filter Include="Исходные файлы\functions\helpers">
       <UniqueIdentifier>{c677d152-1df7-4e3a-8261-58aa8474622d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dif">
-      <UniqueIdentifier>{4b98bd9a-21b5-472b-b96c-8f030f7277b2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="technical">
       <UniqueIdentifier>{d733bb66-83ba-4b7e-9b16-3ce5c6645050}</UniqueIdentifier>
     </Filter>
@@ -78,6 +75,9 @@
     </Filter>
     <Filter Include="feathures\onlineThings">
       <UniqueIdentifier>{2143ae68-fb3b-4946-8cb2-460523c5e8cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\dif">
+      <UniqueIdentifier>{4b98bd9a-21b5-472b-b96c-8f030f7277b2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -136,7 +136,7 @@
       <Filter>Исходные файлы\functions\helpers</Filter>
     </ClInclude>
     <ClInclude Include="graphicsD3D.h">
-      <Filter>dif</Filter>
+      <Filter>3rd\dif</Filter>
     </ClInclude>
     <ClInclude Include="exportHeader.h">
       <Filter>Файлы заголовков</Filter>
@@ -223,16 +223,16 @@
       <Filter>feathures\eduThings</Filter>
     </ClInclude>
     <ClInclude Include="SingleFbxMesh.h">
-      <Filter>dif</Filter>
+      <Filter>3rd\dif</Filter>
     </ClInclude>
     <ClInclude Include="tAutodeskMemoryStream.h">
-      <Filter>dif</Filter>
+      <Filter>3rd\dif</Filter>
     </ClInclude>
     <ClInclude Include="fbxModels.h">
       <Filter>feathures\fbxStrat</Filter>
     </ClInclude>
     <ClInclude Include="fbxHelper.h">
-      <Filter>dif</Filter>
+      <Filter>3rd\dif</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -288,7 +288,7 @@
       <Filter>Исходные файлы\functions\helpers</Filter>
     </ClCompile>
     <ClCompile Include="graphicsD3D.cpp">
-      <Filter>dif</Filter>
+      <Filter>3rd\dif</Filter>
     </ClCompile>
     <ClCompile Include="MemWork.cpp">
       <Filter>technical</Filter>
@@ -342,16 +342,16 @@
       <Filter>feathures\eduThings</Filter>
     </ClCompile>
     <ClCompile Include="SingleFbxMesh.cpp">
-      <Filter>dif</Filter>
+      <Filter>3rd\dif</Filter>
     </ClCompile>
     <ClCompile Include="tAutodeskMemoryStream.cpp">
-      <Filter>dif</Filter>
+      <Filter>3rd\dif</Filter>
     </ClCompile>
     <ClCompile Include="fbxModels.cpp">
       <Filter>feathures\fbxStrat</Filter>
     </ClCompile>
     <ClCompile Include="fbxHelper.cpp">
-      <Filter>dif</Filter>
+      <Filter>3rd\dif</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

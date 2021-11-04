@@ -335,18 +335,23 @@ NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevic
 	*/
 	fbxModels::set3dDevice(pDevice);
 
-	fbxModels::addFbxModel("scorpid.fbx", "scorp.dds",1);
-	fbxModels::addFbxModel("Tiger.fbx", "FbxTemp_0001.jpg",3);
+	//fbxModels::addFbxModel("scorpid.fbx", "scorp.dds",1);
+	//fbxModels::addFbxModel("Tiger.fbx", "FbxTemp_0001.jpg",3);
+	//fbxModels::addFbxModel("Intergalactic_Spaceship-(FBX 6.1 ASCII).fbx", "Intergalactic Spaceship_rough.jpg",5);
 
 
-	void* obj=fbxModels::addFbxObject(1,2);
-	void* obj2=fbxModels::addFbxObject(3,4);
+	//void* obj=fbxModels::addFbxObject(1,2);
+	//void* obj2=fbxModels::addFbxObject(3,4);
+	//void* obj3=fbxModels::addFbxObject(5,6);
 
-	float coords[3]{ 0,0,0 };
-	float coords2[3]{ 2,0,2 };
-	fbxModels::setFbxObjectCoords(obj, coords);
-	fbxModels::setFbxObjectCoords(obj2, coords2);
-	fbxModels::setFbxObjectSize(obj2,0.007);
+	//float coords[3]{ 0,0,0 };
+	//float coords2[3]{ 2,0,2 };
+	//float coords3[3]{ 4,5,4 };
+	//fbxModels::setFbxObjectCoords(obj, coords);
+	//fbxModels::setFbxObjectCoords(obj2, coords2);
+	//fbxModels::setFbxObjectCoords(obj3, coords3);
+	//fbxModels::setFbxObjectSize(obj2,0.007);
+	//fbxModels::setFbxObjectSize(obj3,0.003);
 }
 
 NOINLINE EOP_EXPORT void graphicsExport::onEndScene(IDirect3DDevice9* pDevice)

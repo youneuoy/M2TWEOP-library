@@ -531,3 +531,20 @@ private:
 };
 
 
+
+
+//siege of settlement ended
+class toEndSettlementSiege
+	:public AATemplate
+{
+public:
+	toEndSettlementSiege(MemWork* mem, LPVOID adr, int ver);
+	~toEndSettlementSiege();
+
+	void SetOriginalSiegeCode();
+	void SetlSiegeCode();
+private:
+	LPVOID funcAdress;
+};
+
+

@@ -70,4 +70,17 @@ namespace techExcellFuncs
 		delete[] cres;
 		return res;
     }
+	double getNum(XLCellValue* cellVal)
+	{
+		double resVal = 0;
+		if (cellVal->valueType() == XLValueType::Float)
+		{
+			resVal = cellVal->get<double>();
+		}
+		else if (cellVal->valueType() == XLValueType::Integer)
+		{
+			resVal = cellVal->get<int>();
+		}
+		return resVal;
+	}
 };
