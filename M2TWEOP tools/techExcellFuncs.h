@@ -13,5 +13,7 @@ namespace techExcellFuncs
 	void makeNextCell(std::string* cell, std::string* col, int row);
     string cp1251_to_utf8(const char* str);
     
+
+    double getNum(XLCellValue*cellVal);
 };
 

@@ -1977,3 +1977,52 @@ void toDrawPartsOfStratObjects::SetlDrawCode()
 
 	delete a;
 }
+
+toEndSettlementSiege::toEndSettlementSiege(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAdress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x004bf8af;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x004bf31f;
+}
+
+toEndSettlementSiege::~toEndSettlementSiege()
+{
+}
+
+void toEndSettlementSiege::SetOriginalSiegeCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(byte_ptr(esi, 0x88), bl);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toEndSettlementSiege::SetlSiegeCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(byte_ptr(esi, 0x88), bl);
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(ecx, esi);//settlement
+	a->mov(eax, (DWORD)funcAdress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

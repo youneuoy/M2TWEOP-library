@@ -77,4 +77,7 @@ public:
 
 
 	static void WINAPI onDrawPartsOfStratObjects();
+
+
+	static void __fastcall onEndSiege(settlementStruct*sett);
 };

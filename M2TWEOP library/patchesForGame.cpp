@@ -320,3 +320,8 @@ void __stdcall patchesForGame::onDrawPartsOfStratObjects()
 	graphicsD3D::onDrawPartsOfStratObjects();
 }
 
+void __fastcall patchesForGame::onEndSiege(settlementStruct* sett)
+{
+	plugins::onEndSiege(sett);
+}
+

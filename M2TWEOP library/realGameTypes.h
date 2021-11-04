@@ -17,6 +17,35 @@ struct factionDiplomacy {
 	int protectorate; /* protectorate or not(15 or 6) */
 	undefined field_0x1c[108];
 };
+
+struct factionStratMapDescrS { /* see descr_sm_factions.txt */
+	int id;
+	char* facName;
+	DWORD facNameHash;
+	undefined field_0xc[60];
+	struct model_Rigid* symbol;
+	char* symbolPath;
+	DWORD symbolPathHash;
+	struct model_Rigid* rebel_symbol;
+	char* rebel_symbolPath;
+	DWORD rebel_symbolPathHash;
+	undefined field_0x60[8];
+	char* loading_logo;
+	DWORD loading_logoHash;
+	uchar primary_colour_blue;
+	uchar primary_colour_green;
+	uchar primary_colour_red;
+	uchar secondary_colour_blue;
+	uchar secondary_colour_green;
+	uchar secondary_colour_red;
+	undefined field_0x76[2];
+	int triumph_value;
+	int standard_index;
+	int logo_index;
+	int small_logo_index;
+	undefined field_0x88[88];
+};
+
 struct watchTowerModel {
 	struct model_Rigid* modelP;
 	undefined field_0x4[26];
@@ -634,7 +663,6 @@ struct stackStruct { /* structure of stack */
 	float reform_point_x;
 	float reform_point_y;
 };
-//faction data
 struct factionStruct {
 	undefined field_0x0[180];
 	int dipNum; /* number of faction in diplomatic array */
@@ -644,7 +672,7 @@ struct factionStruct {
 	struct settlementStruct* capital; /* capital of the faction */
 	struct generalCharacterictics* leader; /* faction leader */
 	struct generalCharacterictics* heir; /* faction heir */
-	struct someFactNameStruct* factName;
+	struct factionStratMapDescrS* factSmDescr;
 	int isPlayerControlled; /* is faction a controlled by player */
 	UINT32* ai_assistant;
 	undefined field_0xdc[20];

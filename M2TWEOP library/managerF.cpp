@@ -280,6 +280,12 @@ void managerF::doPachs()
 	toDrawPartsOfStratObjects* toDrawPartsOfStratO = new toDrawPartsOfStratObjects(mem, (LPVOID)patchesForGame::onDrawPartsOfStratObjects, globals::dataS.gamever);
 	toDrawPartsOfStratO->SetlDrawCode();
 	toDrawPartsOfStratO->Enable();
+	
+
+	f1 << "Start applying toEndSettlementSiege patch" << endl;
+	toEndSettlementSiege* toEndSiegSett = new toEndSettlementSiege(mem, (LPVOID)patchesForGame::onEndSiege, globals::dataS.gamever);
+	toEndSiegSett->SetlSiegeCode();
+	toEndSiegSett->Enable();
 
 	f1 << "Done" << endl;
 
