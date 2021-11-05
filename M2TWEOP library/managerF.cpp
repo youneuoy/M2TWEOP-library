@@ -41,7 +41,7 @@ void managerF::doPachs()
 	f1 << "Done" << endl;
 
 
-	f1 << "Start applying history battles patch" << endl;
+	f1 << "Start applying history battles soldier patch" << endl;
 	{
 		unsigned char disSold[2] = { 0x90, 0x90 };
 		DWORD nPtr;
@@ -64,6 +64,28 @@ void managerF::doPachs()
 
 		MemWork::WriteData(disSold, nPtr, 2);
 		MemWork::WriteData(disSold, nbPtr, 2);
+	}
+	f1 << "Done" << endl;
+
+	f1 << "Start applying history battles army leader patch" << endl;
+	{
+		unsigned char disLeader[3] = { 0x8b, 0x01,0x90 };
+		DWORD nPtr;
+
+
+		if (globals::dataS.gamever == 2)
+		{
+
+			nPtr = 0x0047bb66;
+
+		}
+		else
+		{
+			nPtr = 0x0047b786;
+
+		}
+
+		MemWork::WriteData(disLeader, nPtr,sizeof disLeader);
 	}
 	f1 << "Done" << endl;
 
