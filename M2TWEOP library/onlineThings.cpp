@@ -122,7 +122,6 @@ namespace battleCreator
 		for (int bnum = 0; bnum < sett->buldingsNum; bnum++)
 		{
 			fileStrings.push_back("	building");
-			fileStrings.push_back("	{");
 
 			string buildType = sett->buildings[bnum]->bData->type;
 			string buildName = sett->buildings[bnum]->bData->drawInfo[sett->buildings[bnum]->level].name;
