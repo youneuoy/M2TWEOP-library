@@ -513,7 +513,7 @@ namespace fastFuncts
 			mov eax, adrFunc
 			call eax
 		}
-
+		
 		return gen;
 	}
 

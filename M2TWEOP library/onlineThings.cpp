@@ -1,5 +1,7 @@
 #include "onlineThings.h"
 #include "imgui_notify.h"
+
+#include "onlineThings2.h"
 namespace battleCreator
 {
 	struct 
@@ -525,23 +527,8 @@ namespace battleCreator
 		}
 		json.at("enableAutoGeneration").get_to(data.isGenerationNeeded);
 	}
-	void createBattle(std::atomic_bool& isStarted)
+	void createBattle()
 	{
-		if (isStarted == true)
-		{
-			return;
-		}
-
-
-		readParams();
-
-
-		if (data.isGenerationNeeded == false)
-		{
-			return;
-		}
-
-		isStarted = true;
 
 		std::string bName= makeBattleName();
 
@@ -605,19 +592,57 @@ namespace battleCreator
 		doneMsg.set_content("Done generation of %s", bName.c_str());
 		ImGui::InsertNotification(doneMsg);
 
+
+
+
+
+	}
+
+
+
+
+	void doWork(std::atomic_bool& isStarted)
+	{
+		if (isStarted == true)
+		{
+			return;
+		}
+
+		readParams();
+
+
+		if (data.isGenerationNeeded == false)
+		{
+			return;
+		}
+
+		isStarted = true;
+
+		createBattle();
+		initStructsForResults();
+
+
 		isStarted = false;
 	}
 	void startCreationThread()
 	{
+
+
 		if (data.isGenerationNeeded == false)
 		{
 			return;
 		}
 
 
+
+
 		std::thread thrUrl(
-			createBattle, std::ref(data.isRunStarted));
+			doWork, std::ref(data.isRunStarted));
+		thrUrl.detach();
+	}
+	void onBattleResultsScreen()
+	{
+		std::thread thrUrl(createResultsFile);
 		thrUrl.detach();
 	}
 };
-

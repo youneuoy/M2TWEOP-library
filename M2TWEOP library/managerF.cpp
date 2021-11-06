@@ -67,26 +67,19 @@ void managerF::doPachs()
 	}
 	f1 << "Done" << endl;
 
-	f1 << "Start applying history battles army leader patch" << endl;
-	{
-		unsigned char disLeader[3] = { 0x8b, 0x01,0x90 };
-		DWORD nPtr;
 
+	f1 << "Start applying toLoadDescrBattleCharacter patch #1" << endl;
 
-		if (globals::dataS.gamever == 2)
-		{
+	toLoadDescrBattleCharacter* toDescrChar = new toLoadDescrBattleCharacter(mem, (LPVOID)patchesForGame::onLoadDescrBattleCharacter, globals::dataS.gamever);
+	toDescrChar->SetlBattleCode();
+	toDescrChar->Enable();
+	f1 << "Done" << endl;
 
-			nPtr = 0x0047bb66;
+	f1 << "Start applying toBattleStateResults patch #1" << endl;
 
-		}
-		else
-		{
-			nPtr = 0x0047b786;
-
-		}
-
-		MemWork::WriteData(disLeader, nPtr,sizeof disLeader);
-	}
+	toBattleStateResults* toBattleStats = new toBattleStateResults(mem, (LPVOID)patchesForGame::onBattleStateChange, globals::dataS.gamever);
+	toBattleStats->SetlBattleCode();
+	toBattleStats->Enable();
 	f1 << "Done" << endl;
 
 
