@@ -2076,3 +2076,102 @@ void toStartSettlementSiege::SetlSiegeCode()
 
 	delete a;
 }
+
+toLoadDescrBattleCharacter::toLoadDescrBattleCharacter(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAdress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0047bb66;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0047b786;
+}
+toLoadDescrBattleCharacter::~toLoadDescrBattleCharacter()
+{
+}
+
+void toLoadDescrBattleCharacter::SetOriginalBattleCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(eax,dword_ptr(ecx,0x4));
+	a->push(eax);
+	a->mov(ecx, esi);
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toLoadDescrBattleCharacter::SetlBattleCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(eax, dword_ptr(ecx));
+	a->push(eax);
+	a->mov(ecx, esi);
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(ecx, edi);//army
+	a->mov(eax, (DWORD)funcAdress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+toBattleStateResults::toBattleStateResults(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAdress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00618f26;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00618b86;
+}
+
+toBattleStateResults::~toBattleStateResults()
+{
+}
+
+void toBattleStateResults::SetOriginalBattleCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(dword_ptr(esi, 0x4), 0x9);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toBattleStateResults::SetlBattleCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(dword_ptr(esi, 0x4), 0x9);
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAdress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

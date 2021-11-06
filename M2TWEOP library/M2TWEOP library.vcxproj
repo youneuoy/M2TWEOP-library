@@ -223,6 +223,7 @@
     <ClInclude Include="managerF.h" />
     <ClInclude Include="MemWork.h" />
     <ClInclude Include="onlineThings.h" />
+    <ClInclude Include="onlineThings2.h" />
     <ClInclude Include="patchesForGame.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="plugins.h" />
@@ -266,6 +267,7 @@
     <ClCompile Include="managerF.cpp" />
     <ClCompile Include="MemWork.cpp" />
     <ClCompile Include="onlineThings.cpp" />
+    <ClCompile Include="onlineThings2.cpp" />
     <ClCompile Include="patchesForGame.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

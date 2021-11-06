@@ -1,3 +1,5 @@
+//do not include in any file except onlineThings.cpp
+//you really don`t need it
 #pragma once
 #include <string>
 #include <vector>
@@ -20,14 +22,8 @@
 using namespace std;
 namespace battleCreator
 {
-	void setCreationNeeded(bool isNeeded = false);
+	void initStructsForResults();
 
-	//for creation of battles and battles results
-	//not threadsafe, but looks stable
-	void startCreationThread();
-
-
-	void onBattleResultsScreen();
+	void createResultsFile();
 };
-
 

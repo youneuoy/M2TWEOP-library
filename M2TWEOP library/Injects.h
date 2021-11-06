@@ -564,3 +564,35 @@ private:
 };
 
 
+
+class toLoadDescrBattleCharacter
+	:public AATemplate
+{
+public:
+	toLoadDescrBattleCharacter(MemWork* mem, LPVOID adr, int ver);
+	~toLoadDescrBattleCharacter();
+
+	void SetOriginalBattleCode();
+	void SetlBattleCode();
+private:
+	LPVOID funcAdress;
+};
+
+
+
+
+//battle finished and we see results scroll
+class toBattleStateResults
+	:public AATemplate
+{
+public:
+	toBattleStateResults(MemWork* mem, LPVOID adr, int ver);
+	~toBattleStateResults();
+
+	void SetOriginalBattleCode();
+	void SetlBattleCode();
+private:
+	LPVOID funcAdress;
+};
+
+

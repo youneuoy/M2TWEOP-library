@@ -225,6 +225,9 @@
     <ClInclude Include="fbxModels.h">
       <Filter>feathures\fbxStrat</Filter>
     </ClInclude>
+    <ClInclude Include="onlineThings2.h">
+      <Filter>feathures\onlineThings</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -334,6 +337,9 @@
     </ClCompile>
     <ClCompile Include="fbxModels.cpp">
       <Filter>feathures\fbxStrat</Filter>
+    </ClCompile>
+    <ClCompile Include="onlineThings2.cpp">
+      <Filter>feathures\onlineThings</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

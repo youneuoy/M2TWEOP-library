@@ -9,6 +9,13 @@ typedef unsigned short    ushort;
 #pragma pack(push,1) 
 typedef struct stackStruct stackStruct, * PstackStruct;
 typedef struct settlementStruct settlementStruct, * PsettlementStruct;
+
+struct UNICODE_STRING {
+	USHORT something;//idk
+	USHORT Length;//idk
+	USHORT something2;//idk
+	PWSTR Buffer;//y
+};
 struct siegeS {
 	undefined field_0x0[12];
 	struct settlementStruct* goal; /* settlement or fort */
@@ -97,7 +104,8 @@ struct campaign {
 	undefined field_0x328[28];
 	struct factionStruct* currentFactionTurn;
 	int field_0x348; /* FactionTurn? */
-	undefined field_0x34c[32];
+	UNICODE_STRING** currentDescrFile; /* path to descr_battle.txt or to descr_strat.txt */
+	undefined field_0x350[28];
 	int field_0x36c; /* TickCount? */
 	int MillisecondCount;
 	float SecondCount;
@@ -133,7 +141,7 @@ struct campaign {
 	float timeAtStartBattle;
 	int daysInBattle;
 	float currentTimeInBattle; /* 24 max, so calc as daysInBattle*24+currentTimeInBattle */
-	undefined field_0x734[4124];
+	undefined field_0x734[4128];
 	struct factionDiplomacy dipArray[31][31];
 };
 struct gameDataAllStruct {
@@ -197,12 +205,7 @@ struct battleDataS {
 	int sidesNum;
 };
 
-struct UNICODE_STRING {
-	USHORT something;//idk
-	USHORT Length;//idk
-	USHORT something2;//idk
-	PWSTR Buffer;//y
-};
+
 struct stratPortModel {
 	struct model_Rigid* model_rigid;
 	undefined field_0x4[4];

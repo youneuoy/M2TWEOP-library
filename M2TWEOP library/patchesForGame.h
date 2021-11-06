@@ -81,4 +81,9 @@ public:
 
 	static void __fastcall onEndSiege(settlementStruct*sett);
 	static void __fastcall onStartSiege(settlementStruct*sett);
+	static void __fastcall onLoadDescrBattleCharacter(stackStruct*army);
+
+
+	//called not in all cases!
+	static void WINAPI onBattleStateChange();
 };
