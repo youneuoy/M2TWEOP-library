@@ -32,6 +32,9 @@ namespace battleCreator
 
 	void onBattleStratScreen();
 	void draw(LPDIRECT3DDEVICE9 pDevice);
+
+
+	void addCharactersToCustomBattleArmy(stackStruct* army, const std::string& relativePath);
 };
 
 

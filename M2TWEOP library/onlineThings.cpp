@@ -212,6 +212,9 @@ namespace battleCreator
 			tempS.append(", label ").append(gen->genChar->label);
 		}
 
+
+
+
 		fileStrings.push_back(tempS);
 
 		if (gen->genChar->traits != nullptr)
@@ -586,6 +589,8 @@ namespace battleCreator
 
 
 		filesystem::create_directory(fPath);
+		writeCharactersJson(fPath + "\\m2tweopDescr1.json");
+
 		fPath += "\\descr_battle.txt";
 		ofstream f1(fPath);
 		for (string& s : fileStrings)
@@ -622,8 +627,9 @@ namespace battleCreator
 
 		isStarted = true;
 
-		createBattle();
+
 		initStructsForResults();
+		createBattle();
 
 
 		isStarted = false;
@@ -782,5 +788,11 @@ namespace battleCreator
 			}
 			ImGui::EndPopup();
 		}
+	}
+	void addCharactersToCustomBattleArmy(stackStruct* army, const std::string& relativePath)
+	{
+		std::filesystem::path charactersPath = relativePath;
+		charactersPath.replace_filename("m2tweopDescr1.json");
+		onLoadCharacter(army, charactersPath);
 	}
 };

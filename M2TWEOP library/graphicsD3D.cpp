@@ -199,7 +199,7 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 		MessageBoxA(NULL, "graphics init error", "Error", NULL);
 		exit(0);
 	}
-	f = f + "\\youneuoy_Data\\inGame.ttf";
+	f = f + "\\eopData\\fonts\\mainFont.ttf";
 
 	ImGui::StyleGrey();
 
@@ -211,15 +211,17 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 	ImFontConfig font_config;
 	font_config.OversampleH = 1;
 	font_config.OversampleV = 1;
+	font_config.SizePixels = 12.f;
 	font_config.PixelSnapH = 1;
 	font_config.FontDataOwnedByAtlas = false;
-	ImFont* newFont = io.Fonts->AddFontFromFileTTF(f.c_str(), 24.f, &font_config, io.Fonts->GetGlyphRangesCyrillic());
+
+	ImFont* newFont = io.Fonts->AddFontFromFileTTF(f.c_str(), 12.f, &font_config, io.Fonts->GetGlyphRangesCyrillic());
 	if (newFont == nullptr)
 	{
 		io.Fonts->AddFontDefault(&font_config);
 	}
 	//init imnotify
-	ImGui::MergeIconsWithLatestFont(ImGui::GetFontSize(), false);
+	ImGui::MergeIconsWithLatestFont(24.f, false);
 
 	dataS.ImInitialized = true;
 
