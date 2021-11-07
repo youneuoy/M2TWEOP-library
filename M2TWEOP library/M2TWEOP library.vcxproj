@@ -189,13 +189,16 @@
   <ItemGroup>
     <ClInclude Include="..\3rd\imgui\eopImgui.h" />
     <ClInclude Include="..\3rd\imgui\imconfig.h" />
+    <ClInclude Include="..\3rd\imgui\ImFileDialog.h" />
     <ClInclude Include="..\3rd\imgui\imgui.h" />
     <ClInclude Include="..\3rd\imgui\imgui_impl_dx9.h" />
     <ClInclude Include="..\3rd\imgui\imgui_impl_win32.h" />
     <ClInclude Include="..\3rd\imgui\imgui_internal.h" />
+    <ClInclude Include="..\3rd\imgui\imgui_stdlib.h" />
     <ClInclude Include="..\3rd\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\3rd\imgui\imstb_textedit.h" />
     <ClInclude Include="..\3rd\imgui\imstb_truetype.h" />
+    <ClInclude Include="..\3rd\imgui\stb_image.h" />
     <ClInclude Include="..\3rd\ImNotify\fa_solid_900.h" />
     <ClInclude Include="..\3rd\ImNotify\font_awesome_5.h" />
     <ClInclude Include="..\3rd\ImNotify\imgui_notify.h" />
@@ -239,10 +242,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\imgui\eopImgui.cpp" />
+    <ClCompile Include="..\3rd\imgui\ImFileDialog.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui_draw.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui_impl_dx9.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\3rd\imgui\imgui_stdlib.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\3rd\miniz\miniz.c" />

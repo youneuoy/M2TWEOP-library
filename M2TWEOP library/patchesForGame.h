@@ -47,7 +47,7 @@ public:
 	static int WINAPI spawnCharacterCoords();
 
 	//check and replace characters battle models before battle
-	static void WINAPI checkAndChangeCharacterBattleModels();
+	static void WINAPI onBattleStratScreen();
 
 
 	//parse events in this functions

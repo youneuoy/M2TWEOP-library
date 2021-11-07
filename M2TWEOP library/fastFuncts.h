@@ -60,6 +60,7 @@ namespace fastFuncts
 	//edit unit characteristics
 	NOINLINE EOP_EXPORT void setUnitParams(unit* un, int count, int exp, int armor, int weap);
 	NOINLINE EOP_EXPORT void setSoldiersCount(unit* un,int count);
+	NOINLINE EOP_EXPORT void setSoldiersCountAndExp(unit* un,int count, int exp);
 
 	//kills
 	NOINLINE EOP_EXPORT void killUnit(unit* un);
@@ -86,5 +87,14 @@ namespace fastFuncts
 
 	//allocate mem for game class/etc
 	NOINLINE EOP_EXPORT DWORD allocateGameMem(size_t amount);
+
+	//attacker or defender
+	NOINLINE EOP_EXPORT bool autoWin(const char* winnerSide);
+
+
+	NOINLINE EOP_EXPORT void autoResolve();
+
+
+	NOINLINE EOP_EXPORT bool useButton(const char* buttonName);
 };
 

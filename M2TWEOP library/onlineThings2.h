@@ -25,5 +25,7 @@ namespace battleCreator
 	void initStructsForResults();
 
 	void createResultsFile();
+
+	bool transferResults(const std::string&resultsPath,int selectedWinner);
 };
 

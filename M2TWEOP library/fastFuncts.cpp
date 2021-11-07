@@ -370,6 +370,11 @@ namespace fastFuncts
 		return retr;
 	}
 
+	NOINLINE EOP_EXPORT void setSoldiersCountAndExp(unit* un, int count, int exp)
+	{
+		un->expScreen = exp;
+		setSoldiersCount(un, count);
+	}
 	NOINLINE EOP_EXPORT void setSoldiersCount(unit* un, int count)
 	{
 		int diff = count - un->number;
@@ -442,6 +447,62 @@ namespace fastFuncts
 		return;
 	}
 
+	NOINLINE EOP_EXPORT bool useButton(const char* buttonName)
+	{
+		DWORD findedButton = 0;
+		char** cryptS = fastFunctsHelpers::makeCryptedString(buttonName);
+		DWORD adrF = codes::offsets.getUiElementFunc;
+		_asm
+		{
+			push cryptS
+			mov eax, adrF
+			call eax
+			mov findedButton, eax
+			add esp, 0x4
+		}
+		if (findedButton == 0)
+		{
+			return false;
+		}
+
+		adrF = codes::offsets.useButtonFunc;
+		_asm
+		{
+			mov ecx, findedButton
+			mov eax, adrF
+			call eax
+		}
+		return true;
+	}
+	NOINLINE EOP_EXPORT void autoResolve()
+	{
+		DWORD adrFunc = codes::offsets.autoResolveFunc;
+
+		_asm
+		{
+			mov eax, adrFunc
+			call eax
+		}
+	}
+	NOINLINE EOP_EXPORT bool autoWin(const char* winnerSide)
+	{
+		DWORD adrFunc = codes::offsets.autoWinFunc;
+		string command = winnerSide;
+		char buffer[100]{};
+		const char* cmdC = command.c_str();
+
+		bool result = false;
+		_asm
+		{
+			lea eax, buffer
+			push eax
+			push cmdC
+			mov eax, adrFunc
+			call eax
+			mov result, al
+		}
+		return result;
+	}
 	NOINLINE EOP_EXPORT void createBuilding(settlementStruct* sett, const char* building_level_id)
 	{
 		DWORD adrFunc = codes::offsets.createBuildingFunc;
@@ -452,7 +513,7 @@ namespace fastFuncts
 		const char* cmdC = command.c_str();
 		_asm
 		{
-			lea eax,buffer
+			lea eax, buffer
 			push eax
 			push cmdC
 			mov eax, adrFunc
@@ -513,7 +574,7 @@ namespace fastFuncts
 			mov eax, adrFunc
 			call eax
 		}
-		
+
 		return gen;
 	}
 
@@ -554,9 +615,9 @@ namespace fastFuncts
 		DWORD EDB = dataOffsets::offsets.unitTypesStart - 4;
 		DWORD adr = codes::offsets.createUnitFunc;
 		_asm {
-				mov ecx, EDB;
+			mov ecx, EDB;
 
-				push weap
+			push weap
 				push arm
 				push - 1
 				push exp
@@ -582,9 +643,9 @@ namespace fastFuncts
 
 		DWORD adr = codes::offsets.createUnitFunc;
 		_asm {
-				mov ecx, edb;
+			mov ecx, edb;
 
-				push weap
+			push weap
 				push arm
 				push - 1
 				push exp
@@ -661,13 +722,13 @@ namespace fastFuncts
 			mov res, eax
 		}
 
-		
+
 		return res;
 	}
 
 	NOINLINE EOP_EXPORT void setUnitParams(unit* un, int count, int exp, int armor, int weap)
 	{
-		setSoldiersCount(un, count);
+		setSoldiersCountAndExp(un, count, exp);
 		DWORD adrFunc = codes::offsets.setUnitArmorFunc;
 		_asm
 		{
