@@ -336,13 +336,13 @@ void __fastcall patchesForGame::onStartSiege(settlementStruct* sett)
 	plugins::onStartSiege(sett);
 }
 
-void __fastcall patchesForGame::onLoadDescrBattleCharacter(stackStruct* army)
+void __fastcall patchesForGame::onLoadDescrBattleCharacter(stackStruct* army, general* goalGen)
 {
-	//"mods/british_isles/data/world/maps/battle/custom/winter_T3_ireland/descr_battle.txt"
+	fastFuncts::setBodyguard(goalGen, army->units[0]);
 	std::string relativePath = techFuncs::uniToANSI(smallFuncs::getGameDataAll()->campaignData->currentDescrFile);
-	int i = 0;
+
+	battleCreator::addCharactersToCustomBattleArmy(army, relativePath);
 	//general*newGen=fastFuncts::createCharacter("named character",army->faction,25,"testGen", "testGen",0,nullptr, 0,0);
-	//fastFuncts::setBodyguard(newGen, army->units[1]);
 }
 
 void __stdcall patchesForGame::onBattleStateChange()

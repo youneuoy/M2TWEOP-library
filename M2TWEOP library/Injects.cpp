@@ -2092,11 +2092,14 @@ toLoadDescrBattleCharacter::~toLoadDescrBattleCharacter()
 
 void toLoadDescrBattleCharacter::SetOriginalBattleCode()
 {
+
 	Assembler* a = new Assembler();
 
 	a->mov(eax,dword_ptr(ecx,0x4));
 	a->push(eax);
 	a->mov(ecx, esi);
+
+	//call of set bodyguard here
 	a->ret();
 	m_originalBytes = (unsigned char*)a->make();
 	m_originalSize = m_memory->GetASMSize(m_originalBytes);
@@ -2106,15 +2109,20 @@ void toLoadDescrBattleCharacter::SetOriginalBattleCode()
 
 void toLoadDescrBattleCharacter::SetlBattleCode()
 {
+	unsigned char nops[5] = { 0x90, 0x90, 0x90, 0x90, 0x90 };
+	MemWork::WriteData(nops, m_adress+6, 5);
+
 	Assembler* a = new Assembler();
 
 	a->mov(eax, dword_ptr(ecx));
-	a->push(eax);
+	//a->push(eax);
 	a->mov(ecx, esi);
+
 
 	a->pushad();
 	a->pushf();
 
+	a->mov(edx, ecx);//character
 	a->mov(ecx, edi);//army
 	a->mov(eax, (DWORD)funcAdress);
 	a->call(eax);

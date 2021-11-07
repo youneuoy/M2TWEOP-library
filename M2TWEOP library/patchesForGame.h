@@ -81,7 +81,7 @@ public:
 
 	static void __fastcall onEndSiege(settlementStruct*sett);
 	static void __fastcall onStartSiege(settlementStruct*sett);
-	static void __fastcall onLoadDescrBattleCharacter(stackStruct*army);
+	static void __fastcall onLoadDescrBattleCharacter(stackStruct*army,general*goalGen);
 
 
 	//called not in all cases!

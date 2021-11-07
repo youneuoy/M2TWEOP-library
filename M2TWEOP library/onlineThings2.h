@@ -25,7 +25,12 @@ namespace battleCreator
 	void initStructsForResults();
 
 	void createResultsFile();
+	void writeCharactersJson(const std::string& filePath);
 
 	bool transferResults(const std::string&resultsPath,int selectedWinner);
+
+
+	//create new characters here
+	void onLoadCharacter(stackStruct* army, const std::filesystem::path& relativePath);
 };
 

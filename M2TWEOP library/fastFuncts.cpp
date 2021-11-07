@@ -521,6 +521,51 @@ namespace fastFuncts
 		}
 	}
 
+	NOINLINE EOP_EXPORT general* createCharacterWithoutSpawning(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
+	{
+		DWORD adrFunc = codes::offsets.createCharacterFunc;
+
+		general* gen = nullptr;
+
+		char** cryptS = fastFunctsHelpers::makeCryptedString(type);
+
+		DWORD adrType = (DWORD)cryptS;
+		_asm
+		{
+			push portrait
+			push subFaction
+			push name2
+			push name
+			push age
+			push fac
+			push adrType
+			mov eax, adrFunc
+			call eax
+			mov gen, eax
+			add esp, 0x1c
+		}
+		struct xyS
+		{
+			int x = 0;
+			int y = 0;
+		}xy;
+		xy.x = x;
+		xy.y = y;
+
+
+		adrFunc = codes::offsets.spawnCreatedCharacterFunc;
+		xyS* xyP = &xy;
+
+		_asm
+		{
+			push xyP
+			push gen
+			mov eax, adrFunc
+			call eax
+		}
+
+		return gen;
+	}
 	NOINLINE EOP_EXPORT general* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
 	{
 		DWORD adrFunc = codes::offsets.createCharacterFunc;
