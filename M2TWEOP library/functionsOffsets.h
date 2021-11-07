@@ -66,6 +66,14 @@ public:
 		DWORD destroyBuildingFunc = NULL;
 		//create building
 		DWORD createBuildingFunc = NULL;
+		DWORD autoWinFunc = NULL;
+
+
+		DWORD autoResolveFunc = NULL;
+
+
+		DWORD useButtonFunc = NULL;
+		DWORD getUiElementFunc = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

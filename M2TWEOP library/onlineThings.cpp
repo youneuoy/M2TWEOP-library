@@ -2,15 +2,45 @@
 #include "imgui_notify.h"
 
 #include "onlineThings2.h"
+
+#include <ImFileDialog.h>
+#include <imgui_internal.h>
 namespace battleCreator
 {
-	struct 
+	struct
 	{
 		bool isGenerationNeeded = true;
+		bool isResultTransferNeeded = true;
 
 		atomic_bool isRunStarted{ false };
 		atomic_bool isRunEnded{ false };
 	}data;
+
+	void readParams()
+	{
+		jsn::json json;
+
+		std::string fPath = globals::dataS.modPatch;
+		fPath += "\\eopBattles\\battlesCfg.json";
+
+
+		std::ifstream f1(fPath);
+
+		f1 >> json;
+
+		f1.close();
+
+		try
+		{
+			json.at("enableAutoGeneration").get_to(data.isGenerationNeeded);
+			json.at("enableResultsTransfer").get_to(data.isResultTransferNeeded);
+		}
+		catch (jsn::json::type_error& e)
+		{
+			MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
+	}
+
 	void setCreationNeeded(bool isNeeded)
 	{
 		data.isGenerationNeeded = isNeeded;
@@ -186,7 +216,7 @@ namespace battleCreator
 
 		if (gen->genChar->traits != nullptr)
 		{
-			tempS= "traits";
+			tempS = "traits";
 			traitContainer* traitCont = gen->genChar->traits;
 			while (traitCont != nullptr)
 			{
@@ -269,7 +299,7 @@ namespace battleCreator
 					fileStrings.push_back(string("faction	").append(army->faction->factSmDescr->facName));
 				}
 
-				if (army->gen != nullptr&& army->gen->xCoord == battleData->xCoord
+				if (army->gen != nullptr && army->gen->xCoord == battleData->xCoord
 					&& army->gen->yCoord == battleData->yCoord
 					)
 				{
@@ -301,7 +331,7 @@ namespace battleCreator
 					tempS.append(" exp ").append(to_string(un->expScreen));
 					tempS.append(" armour ").append(to_string(un->stats >> 0xd & 0x1f));
 					tempS.append(" weapon_lvl ").append(to_string(un->stats >> 0x8 & 0x1f));
-					
+
 					fileStrings.push_back(tempS);
 				}
 				fileStrings.push_back("\n");
@@ -362,8 +392,8 @@ namespace battleCreator
 			}
 			fileStrings.push_back(tempS);
 		}
-		
-		
+
+
 
 		for (int i = 0; i < battleData->sidesNum; i++)
 		{
@@ -381,14 +411,14 @@ namespace battleCreator
 
 
 
-				int ifHere=facArms.count(armyFacName);
+				int ifHere = facArms.count(armyFacName);
 				int newCount = 0;
 				if (ifHere > 0)
 				{
 					auto res = facArms.find(armyFacName);
 
 					res->second++;
-					newCount=res->second;
+					newCount = res->second;
 				}
 
 				facArms.insert(pair<string, int>(armyFacName, newCount));
@@ -404,13 +434,13 @@ namespace battleCreator
 				fileStrings.push_back("\n");
 
 				int coordsPairsNum = side.armies[j].deploymentArea->coordsNum;
-				float*coords=side.armies[j].deploymentArea->coordsPairs;
+				float* coords = side.armies[j].deploymentArea->coordsPairs;
 				for (int k = 0; k < coordsPairsNum; k++)
 				{
 					tempS = "deployment_area_point	";
-					tempS.append(to_string(coords[k*2]));
+					tempS.append(to_string(coords[k * 2]));
 					tempS.append(", ");
-					tempS.append(to_string(coords[k * 2+1]));
+					tempS.append(to_string(coords[k * 2 + 1]));
 					fileStrings.push_back(tempS);
 				}
 				fileStrings.push_back("\n");
@@ -441,7 +471,7 @@ namespace battleCreator
 						tempS.append("50");
 
 
-						if (un->eduEntry->Category == 0&&un->engineRec !=nullptr)
+						if (un->eduEntry->Category == 0 && un->engineRec != nullptr)
 						{
 							engineRecord* enRec = un->engineRec;
 							if (enRec->classID == 18)//ram
@@ -452,7 +482,7 @@ namespace battleCreator
 							{
 								tempS.append(", attach_engine ladder");
 							}
-							else if (enRec->classID ==17)//tower
+							else if (enRec->classID == 17)//tower
 							{
 								tempS.append(", attach_engine tower");
 							}
@@ -503,36 +533,13 @@ namespace battleCreator
 	}
 
 
-	void readParams()
-	{
-		jsn::json json;
 
-		std::string fPath = globals::dataS.modPatch;
-		fPath+="\\eopBattles\\battlesCfg.json";
-
-
-		std::ifstream f1(fPath);
-
-		f1 >> json;
-
-		f1.close();
-
-		try
-		{
-			json.at("enableAutoGeneration").get_to(data.isGenerationNeeded);
-		}
-		catch (jsn::json::type_error& e)
-		{
-			MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL| MB_SETFOREGROUND);
-		}
-		json.at("enableAutoGeneration").get_to(data.isGenerationNeeded);
-	}
 	void createBattle()
 	{
 
-		std::string bName= makeBattleName();
+		std::string bName = makeBattleName();
 
-		ImGuiToast readyMsg(ImGuiToastType_Info, 25000); 
+		ImGuiToast readyMsg(ImGuiToastType_Info, 25000);
 		readyMsg.set_title("Battle generation");
 		readyMsg.set_content("Started generation of %s", bName.c_str());
 		ImGui::InsertNotification(readyMsg);
@@ -574,7 +581,7 @@ namespace battleCreator
 		fPath += "\\lastBattle";
 		filesystem::remove_all(fPath);
 		filesystem::create_directory(fPath);
-		fPath +="\\";
+		fPath += "\\";
 		fPath += bName;
 
 
@@ -583,11 +590,11 @@ namespace battleCreator
 		ofstream f1(fPath);
 		for (string& s : fileStrings)
 		{
-			f1 << s<<endl;
+			f1 << s << endl;
 		}
 		f1.close();
 
-		ImGuiToast doneMsg(ImGuiToastType_Success, 25000); 
+		ImGuiToast doneMsg(ImGuiToastType_Success, 25000);
 		doneMsg.set_title("Battle generation");
 		doneMsg.set_content("Done generation of %s", bName.c_str());
 		ImGui::InsertNotification(doneMsg);
@@ -607,9 +614,6 @@ namespace battleCreator
 		{
 			return;
 		}
-
-		readParams();
-
 
 		if (data.isGenerationNeeded == false)
 		{
@@ -644,5 +648,139 @@ namespace battleCreator
 	{
 		std::thread thrUrl(createResultsFile);
 		thrUrl.detach();
+	}
+
+
+
+	bool battleResultsMenuOpened = false;
+	bool battleResultsSuccessOpened = false;
+	void onBattleStratScreen()
+	{
+		if (data.isResultTransferNeeded == false)
+		{
+			return;
+		}
+
+		battleResultsMenuOpened = true;
+	}
+
+	void draw(LPDIRECT3DDEVICE9 pDevice)
+	{
+		if (battleResultsMenuOpened == true)
+		{
+			ImGui::OpenPopup("Select winner##Online battles results transfering");
+		}
+		if (battleResultsSuccessOpened == true)
+		{
+			ImGui::OpenPopup("Succes##Online battles results transfer");
+		}
+
+
+		ImGui::SetNextWindowSize({300,0}, ImGuiCond_Always);
+		if (ImGui::BeginPopupModal("Select winner##Online battles results transfering", &battleResultsMenuOpened, ImGuiWindowFlags_NoMove|ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			static int resolveVariant = 0;
+
+			const float ItemSpacing = ImGui::GetStyle().ItemSpacing.x;
+			static float defenderButtonWidth = 10.0f;
+			static float drawButtonWidth = 10.0f;
+			float pos = 0;
+
+
+
+
+			ImGui::RadioButton("attacker", &resolveVariant, 0); 
+
+			ImGui::SameLine(ImGui::GetWindowWidth()/2- defenderButtonWidth/2);
+			ImGui::RadioButton("defender", &resolveVariant, 1); 
+			defenderButtonWidth = ImGui::GetItemRectSize().x;
+
+			pos =drawButtonWidth + ItemSpacing;
+			ImGui::SameLine(ImGui::GetWindowWidth() - pos);
+			ImGui::RadioButton("draw", &resolveVariant, 2);
+			drawButtonWidth = ImGui::GetItemRectSize().x;
+
+
+
+			ImGui::NewLine();
+
+			static std::string selectedFile;
+
+			if (ImGui::Button("select results file", { -1.0f,0.0f }))
+			{
+				ifd::FileDialog::Instance().Open("select results file", "select results file", "results file (*.json;){.json},.*");
+			}
+			if (ifd::FileDialog::Instance().IsDone("select results file")) {
+				if (ifd::FileDialog::Instance().HasResult()) {
+					selectedFile = ifd::FileDialog::Instance().GetResult().u8string();
+				}
+				ifd::FileDialog::Instance().Close();
+			}
+
+			if (!selectedFile.empty())
+			{
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+				ImGui::Separator();
+				ImGui::TextWrapped(selectedFile.c_str());
+				ImGui::Separator();
+				//ImGui::InputText("Selected results file", &selectedFile);
+				ImGui::PopItemFlag();
+				ImGui::PopStyleVar();
+
+				ImGui::NewLine();
+				ImGui::NewLine();
+				ImGui::NewLine();
+				if (ImGui::Button("Transfer results now", { -1.0f,0.0f }))
+				{
+					bool res=transferResults(selectedFile, resolveVariant);
+					if (res == true)
+					{
+
+						battleResultsMenuOpened = false;
+						battleResultsSuccessOpened = true;
+						ImGui::CloseCurrentPopup();
+						selectedFile.clear();
+						resolveVariant = 0;
+					}
+				}
+			}
+			else
+			{
+				ImGui::NewLine();
+				ImGui::NewLine();
+				ImGui::NewLine();
+				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+
+				ImGui::Button("Transfer results now", { -1.0f,0.0f });
+
+				ImGui::PopItemFlag();
+				ImGui::PopStyleVar();
+			}
+
+			ImGui::NewLine();
+
+			/*if (ImGui::Button("decline"))
+			{
+				ImGui::CloseCurrentPopup();
+				battleResultsMenuOpened = false;
+			}*/
+
+			ImGui::EndPopup();
+		}
+
+
+		ImGui::SetNextWindowSize({ 300,0 }, ImGuiCond_Always);
+		if (ImGui::BeginPopupModal("Succes##Online battles results transfer", &battleResultsSuccessOpened, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize))
+		{
+
+			if (ImGui::Button("Continue the game", { -1.0f,0.0f }))
+			{
+				ImGui::CloseCurrentPopup();
+				battleResultsSuccessOpened = false;
+			}
+			ImGui::EndPopup();
+		}
 	}
 };

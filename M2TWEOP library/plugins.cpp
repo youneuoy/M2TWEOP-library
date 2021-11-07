@@ -6,6 +6,7 @@
 #include "techFuncs.h"
 
 #include "eduThings.h"
+#include "onlineThings.h"
 plugins::configT plugins::pluginsCfg;
 vector<const char*>* plugins::eventNames;
 
@@ -48,6 +49,15 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 
 	if (event == nullptr)return;
 
+
+	if (strcmp(event, "ScrollOpened") == 0)
+	{
+		char* str = reinterpret_cast<char*>(vTab[1]);
+		if (strcmp(str, "prebattle_scroll") == 0)
+		{
+			battleCreator::onBattleStratScreen();
+		}
+	}
 	/*if (strcmp(event, "CharacterSelected") == 0)
 	{
 		

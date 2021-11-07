@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "managerF.h"
 
+#include "onlineThings.h"
 void managerF::init()
 {
 
@@ -165,7 +166,7 @@ void managerF::doPachs()
 
 
 	f1 << "Start applying battle_start patch" << endl;
-	toBattleStratScreen* bstart = new toBattleStratScreen(mem, (LPVOID)patchesForGame::checkAndChangeCharacterBattleModels, globals::dataS.gamever);
+	toBattleStratScreen* bstart = new toBattleStratScreen(mem, (LPVOID)patchesForGame::onBattleStratScreen, globals::dataS.gamever);
 	bstart->SetlBSCode();
 	bstart->Enable();
 
@@ -338,6 +339,7 @@ void managerF::initThread()
 
 	plugins::init();
 
+	battleCreator::readParams();
 	//stratResTest::test();
 }
 

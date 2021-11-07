@@ -224,14 +224,16 @@ int __stdcall patchesForGame::spawnCharacterCoords()
 	return 0;
 }
 
-void __stdcall patchesForGame::checkAndChangeCharacterBattleModels()
+void __stdcall patchesForGame::onBattleStratScreen()
 {
 #if defined TESTPATCHES
 	ofstream f1("logs\\TESTPATCHES.log", ios::app);
 
-	f1 << "checkAndChangeCharacterBattleModels" << endl;
+	f1 << "onBattleStratScreen" << endl;
 	f1.close();
 #endif
+	//battleCreator::onBattleStratScreen();
+
 }
 
 void __fastcall patchesForGame::onEvent(DWORD** vTab)

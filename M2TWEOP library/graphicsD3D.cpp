@@ -11,10 +11,13 @@
 #include <d3dx9.h>
 
 #include "fbxModels.h"
+
+
+#include <ImFileDialog.h>
 //#include "discord.h"
 graphicsD3D::dataT graphicsD3D::dataS;
 
-
+#include "onlineThings.h"
 template<typename T>
 T FnCast(uint32_t fnToCast, T pFnCastTo) {
 	(void)pFnCastTo;
@@ -52,6 +55,11 @@ struct
 struct {
 	//std::unique_ptr<discord::Core> core;
 }DiscordState;
+
+struct
+{
+	std::vector<IDirect3DTexture9*>texturesForDeleting;
+}tempData;
 NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 {
 //	DiscordState.core->RunCallbacks();
@@ -77,6 +85,9 @@ NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 			drawParams.drawEOPStartInfo = false;
 		}
 	}
+	battleCreator::draw(pDevice);
+
+
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.f);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(43.f / 255.f, 43.f / 255.f, 43.f / 255.f, 100.f / 255.f));
@@ -357,6 +368,40 @@ NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevic
 	//fbxModels::setFbxObjectCoords(obj3, coords3);
 	//fbxModels::setFbxObjectSize(obj2,0.007);
 	//fbxModels::setFbxObjectSize(obj3,0.003);
+
+
+	ifd::FileDialog::Instance().CreateTexture = [](uint8_t* data, int w, int h, char fmt) -> void* {
+		IDirect3DTexture9* texture = NULL;
+
+		// Create empty IDirect3DTexture9*
+		if (fmt)
+		{
+			graphicsD3D::dataS.pDevice->CreateTexture(w, h, 1, 0,
+				D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &texture, 0);
+		}
+		else
+		{
+			graphicsD3D::dataS.pDevice->CreateTexture(w, h, 1, 0,
+				D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &texture, 0);
+
+		}
+		if (!texture)
+		{
+			throw std::runtime_error("CreateTexture failed");
+		}
+
+		D3DLOCKED_RECT rect;
+		texture->LockRect(0, &rect, 0, D3DLOCK_DISCARD);
+		unsigned char* dest = static_cast<unsigned char*>(rect.pBits);
+		memcpy(dest, &data[0], sizeof(unsigned char) * w * h * 4);
+		texture->UnlockRect(0);
+
+		return (void*)texture;
+	};
+
+	ifd::FileDialog::Instance().DeleteTexture = [](void* tex) {
+		tempData.texturesForDeleting.push_back((IDirect3DTexture9*)tex);
+	};
 }
 
 NOINLINE EOP_EXPORT void graphicsExport::onEndScene(IDirect3DDevice9* pDevice)
@@ -374,6 +419,15 @@ NOINLINE EOP_EXPORT void graphicsExport::onEndScene(IDirect3DDevice9* pDevice)
 	ImGui::EndFrame();
 	ImGui::Render();
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+
+	if (tempData.texturesForDeleting.size())
+	{
+		for (auto tex : tempData.texturesForDeleting)
+		{
+			tex->Release();
+		}
+		tempData.texturesForDeleting.clear();
+	}
 }
 
 NOINLINE EOP_EXPORT void graphicsExport::onReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)

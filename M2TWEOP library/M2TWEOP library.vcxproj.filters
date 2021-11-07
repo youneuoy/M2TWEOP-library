@@ -228,6 +228,15 @@
     <ClInclude Include="onlineThings2.h">
       <Filter>feathures\onlineThings</Filter>
     </ClInclude>
+    <ClInclude Include="..\3rd\imgui\ImFileDialog.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imgui\stb_image.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\imgui\imgui_stdlib.h">
+      <Filter>3rd\imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -340,6 +349,12 @@
     </ClCompile>
     <ClCompile Include="onlineThings2.cpp">
       <Filter>feathures\onlineThings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imgui\ImFileDialog.cpp">
+      <Filter>3rd\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imgui\imgui_stdlib.cpp">
+      <Filter>3rd\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

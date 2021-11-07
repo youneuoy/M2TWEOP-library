@@ -54,6 +54,14 @@ void codes::initCodes(int gameVer)
 
 		offsets.destroyBuildingFunc = 0x005e4f10;
 		offsets.createBuildingFunc = 0x00d32cd0;
+
+		offsets.autoWinFunc = 0x00d2dcf0;
+
+		offsets.autoResolveFunc = 0x00aa6bc0;
+
+
+		offsets.useButtonFunc = 0x00b0daf0;
+		offsets.getUiElementFunc = 0x00b4bff0;
 	}
 	else if (gameVer == 2)
 	{
@@ -106,5 +114,14 @@ void codes::initCodes(int gameVer)
 		offsets.destroyBuildingFunc = 0x005e5380;
 		offsets.createBuildingFunc = 0x00d2d050;
 
+
+		offsets.autoWinFunc = 0x00d28070;
+
+
+		offsets.autoResolveFunc = 0x00aa7bf0;
+
+
+		offsets.useButtonFunc = 0x00b07e00;
+		offsets.getUiElementFunc = 0x00b46340;
 	}
 }
