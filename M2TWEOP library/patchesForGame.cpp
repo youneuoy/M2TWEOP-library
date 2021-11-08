@@ -339,9 +339,12 @@ void __fastcall patchesForGame::onStartSiege(settlementStruct* sett)
 void __fastcall patchesForGame::onLoadDescrBattleCharacter(stackStruct* army, general* goalGen)
 {
 	fastFuncts::setBodyguard(goalGen, army->units[0]);
-	std::string relativePath = techFuncs::uniToANSI(smallFuncs::getGameDataAll()->campaignData->currentDescrFile);
 
-	battleCreator::addCharactersToCustomBattleArmy(army, relativePath);
+	std::string relativePath = techFuncs::uniToANSI(smallFuncs::getGameDataAll()->campaignData->currentDescrFile);
+	if (relativePath.find("battle") != std::string::npos)
+	{
+		battleCreator::addCharactersToCustomBattleArmy(army, relativePath);
+	}
 	//general*newGen=fastFuncts::createCharacter("named character",army->faction,25,"testGen", "testGen",0,nullptr, 0,0);
 }
 
