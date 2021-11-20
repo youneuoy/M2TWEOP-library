@@ -2240,7 +2240,7 @@ CastleConversionLvlSetter::CastleConversionLvlSetter(MemWork* mem, LPVOID addr, 
 	if (ver == 2)//steam
 		m_adress = 0x005E9304;
 	else if (ver == 1)
-		m_adress = 0x000;
+		m_adress = 0x005E8EA4;
 }
 
 CastleConversionLvlSetter::~CastleConversionLvlSetter()
@@ -2289,7 +2289,7 @@ CityConversionLvlSetter::CityConversionLvlSetter(MemWork* mem, LPVOID addr, int 
 	if (ver == 2)//steam
 		m_adress = 0x005E9344;
 	else if (ver == 1)
-		m_adress = 0x000;
+		m_adress = 0x005E8EE4;
 }
 
 CityConversionLvlSetter::~CityConversionLvlSetter()
