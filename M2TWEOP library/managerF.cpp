@@ -2,6 +2,7 @@
 #include "managerF.h"
 
 #include "onlineThings.h"
+#include "settlementConversionLvlSetter.h"
 void managerF::init()
 {
 
@@ -321,6 +322,19 @@ void managerF::doPachs()
 	loadCasF->Enable(true);
 
 	f1 << "Done" << endl;*/
+
+
+	f1 << "Start applying CastleConversionLvl patch" << endl;
+	CastleConversionLvlSetter* castleConversionLvlSetter = new CastleConversionLvlSetter(mem, (LPVOID)settlementConversionLvlSetter::getConversionLvlFromCastle, globals::dataS.gamever);
+	castleConversionLvlSetter->SetNewCode();
+	castleConversionLvlSetter->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying CityConversionLvl patch" << endl;
+	CityConversionLvlSetter* cityConversionLvlSetter = new CityConversionLvlSetter(mem, (LPVOID)settlementConversionLvlSetter::getConversionLvlFromCity, globals::dataS.gamever);
+	cityConversionLvlSetter->SetNewCode();
+	cityConversionLvlSetter->Enable();
+	f1 << "Done" << endl;
 
 
 
