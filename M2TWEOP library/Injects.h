@@ -613,3 +613,30 @@ private:
 };
 
 
+
+class CastleConversionLvlSetter
+	:public AATemplate
+{
+public:
+	CastleConversionLvlSetter(MemWork* mem, LPVOID addr, int ver);
+	~CastleConversionLvlSetter();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+
+class CityConversionLvlSetter
+	:public AATemplate
+{
+public:
+	CityConversionLvlSetter(MemWork* mem, LPVOID addr, int ver);
+	~CityConversionLvlSetter();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};

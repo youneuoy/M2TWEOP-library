@@ -64,23 +64,26 @@
     <Filter Include="3rd\ImNotify">
       <UniqueIdentifier>{d71c722e-322d-4461-9d75-db85485afcb5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="feathures">
-      <UniqueIdentifier>{f478812c-bb51-4383-891a-49ea7fcb576d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="feathures\eduThings">
-      <UniqueIdentifier>{bf155e05-95f7-4050-ab15-28d5f001fc7f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="feathures\fbxStrat">
-      <UniqueIdentifier>{775825f1-801f-474d-8bd8-c4f5f50e98e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="feathures\onlineThings">
-      <UniqueIdentifier>{2143ae68-fb3b-4946-8cb2-460523c5e8cd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="3rd\dif">
       <UniqueIdentifier>{4b98bd9a-21b5-472b-b96c-8f030f7277b2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="feathures\interactiveMap">
+    <Filter Include="features">
+      <UniqueIdentifier>{f478812c-bb51-4383-891a-49ea7fcb576d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\eduThings">
+      <UniqueIdentifier>{bf155e05-95f7-4050-ab15-28d5f001fc7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\fbxStrat">
+      <UniqueIdentifier>{775825f1-801f-474d-8bd8-c4f5f50e98e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\onlineThings">
+      <UniqueIdentifier>{2143ae68-fb3b-4946-8cb2-460523c5e8cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\interactiveMap">
       <UniqueIdentifier>{df1d3dd5-dd44-48fa-a37b-7cef17561e76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\settlementConversionLvlSetter">
+      <UniqueIdentifier>{916fe1d7-b236-40f6-9961-71d6eecd49b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -205,7 +208,7 @@
       <Filter>Файлы ресурсов</Filter>
     </ClInclude>
     <ClInclude Include="onlineThings.h">
-      <Filter>feathures\onlineThings</Filter>
+      <Filter>features\onlineThings</Filter>
     </ClInclude>
     <ClInclude Include="..\3rd\nlohmann\json.hpp">
       <Filter>3rd\json</Filter>
@@ -220,16 +223,16 @@
       <Filter>3rd\ImNotify</Filter>
     </ClInclude>
     <ClInclude Include="eduThings.h">
-      <Filter>feathures\eduThings</Filter>
+      <Filter>features\eduThings</Filter>
     </ClInclude>
     <ClInclude Include="eduFastFuncts.h">
-      <Filter>feathures\eduThings</Filter>
+      <Filter>features\eduThings</Filter>
     </ClInclude>
     <ClInclude Include="fbxModels.h">
-      <Filter>feathures\fbxStrat</Filter>
+      <Filter>features\fbxStrat</Filter>
     </ClInclude>
     <ClInclude Include="onlineThings2.h">
-      <Filter>feathures\onlineThings</Filter>
+      <Filter>features\onlineThings</Filter>
     </ClInclude>
     <ClInclude Include="..\3rd\imgui\ImFileDialog.h">
       <Filter>3rd\imgui</Filter>
@@ -241,13 +244,16 @@
       <Filter>3rd\imgui</Filter>
     </ClInclude>
     <ClInclude Include="m2tweopMap.h">
-      <Filter>feathures\interactiveMap</Filter>
+      <Filter>features\interactiveMap</Filter>
     </ClInclude>
     <ClInclude Include="m2tweopTile.h">
-      <Filter>feathures\interactiveMap</Filter>
+      <Filter>features\interactiveMap</Filter>
     </ClInclude>
     <ClInclude Include="m2tweopMapManager.h">
-      <Filter>feathures\interactiveMap</Filter>
+      <Filter>features\interactiveMap</Filter>
+    </ClInclude>
+    <ClInclude Include="settlementConversionLvlSetter.h">
+      <Filter>features\settlementConversionLvlSetter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -348,19 +354,19 @@
       <Filter>Исходные файлы\patches\stratModels</Filter>
     </ClCompile>
     <ClCompile Include="onlineThings.cpp">
-      <Filter>feathures\onlineThings</Filter>
+      <Filter>features\onlineThings</Filter>
     </ClCompile>
     <ClCompile Include="eduThings.cpp">
-      <Filter>feathures\eduThings</Filter>
+      <Filter>features\eduThings</Filter>
     </ClCompile>
     <ClCompile Include="eduFastFuncts.cpp">
-      <Filter>feathures\eduThings</Filter>
+      <Filter>features\eduThings</Filter>
     </ClCompile>
     <ClCompile Include="fbxModels.cpp">
-      <Filter>feathures\fbxStrat</Filter>
+      <Filter>features\fbxStrat</Filter>
     </ClCompile>
     <ClCompile Include="onlineThings2.cpp">
-      <Filter>feathures\onlineThings</Filter>
+      <Filter>features\onlineThings</Filter>
     </ClCompile>
     <ClCompile Include="..\3rd\imgui\ImFileDialog.cpp">
       <Filter>3rd\imgui</Filter>
@@ -369,16 +375,19 @@
       <Filter>3rd\imgui</Filter>
     </ClCompile>
     <ClCompile Include="m2tweopMap.cpp">
-      <Filter>feathures\interactiveMap</Filter>
+      <Filter>features\interactiveMap</Filter>
     </ClCompile>
     <ClCompile Include="m2tweopTile.cpp">
-      <Filter>feathures\interactiveMap</Filter>
+      <Filter>features\interactiveMap</Filter>
     </ClCompile>
     <ClCompile Include="m2tweopMapManager.cpp">
-      <Filter>feathures\interactiveMap</Filter>
+      <Filter>features\interactiveMap</Filter>
     </ClCompile>
     <ClCompile Include="..\3rd\imgui\imgui_demo.cpp">
       <Filter>3rd\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="settlementConversionLvlSetter.cpp">
+      <Filter>features\settlementConversionLvlSetter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

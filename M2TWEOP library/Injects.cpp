@@ -2233,3 +2233,102 @@ void toGameFormDrawImage::SetlDrawCode()
 
 	delete a;
 }
+
+CastleConversionLvlSetter::CastleConversionLvlSetter(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005E9304;
+	else if (ver == 1)
+		m_adress = 0x000;
+}
+
+CastleConversionLvlSetter::~CastleConversionLvlSetter()
+{
+
+}
+
+void CastleConversionLvlSetter::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+	// Unfinished!
+	delete a;
+}
+
+void CastleConversionLvlSetter::SetNewCode()
+{
+	unsigned char nops[9] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 , 0x90 , 0x90 , 0x90 };
+	MemWork::WriteData(nops, m_adress + 0x5, 9);
+	Assembler* a = new Assembler();
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+	a->mov(dword_ptr(esp, 0x1C), eax);
+	a->popad();
+
+	a->ret();
+
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+CityConversionLvlSetter::CityConversionLvlSetter(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005E9344;
+	else if (ver == 1)
+		m_adress = 0x000;
+}
+
+CityConversionLvlSetter::~CityConversionLvlSetter()
+{
+
+}
+
+void CityConversionLvlSetter::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+	// Unfinished!
+	delete a;
+}
+
+void CityConversionLvlSetter::SetNewCode()
+{
+	unsigned char nops[15] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 , 0x90 , 0x90 , 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
+	MemWork::WriteData(nops, m_adress + 0x5, 15);
+	Assembler* a = new Assembler();
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+	a->mov(dword_ptr(esp, 0x1C), eax);
+	a->popad();
+
+	a->ret();
+
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+

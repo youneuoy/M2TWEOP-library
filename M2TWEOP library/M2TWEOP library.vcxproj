@@ -235,6 +235,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="plugins.h" />
     <ClInclude Include="realGameTypes.h" />
+    <ClInclude Include="settlementConversionLvlSetter.h" />
     <ClInclude Include="smallFuncs.h" />
     <ClInclude Include="stratModelsChange.h" />
     <ClInclude Include="stratModelsOptimise.h" />
@@ -289,6 +290,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="plugins.cpp" />
+    <ClCompile Include="settlementConversionLvlSetter.cpp" />
     <ClCompile Include="smallFuncs.cpp" />
     <ClCompile Include="stratModelsChange.cpp" />
     <ClCompile Include="stratModelsHelper.cpp" />
