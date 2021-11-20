@@ -16,6 +16,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.someStratmapPointer = 0x019b3134;
 
 		offsets.gameDataAllOffset = reinterpret_cast<gameDataAllStruct*>(0x02c74f90);
+
+		offsets.consoleCommands = reinterpret_cast<consoleCommands*>(0x02cbce50);
 	}
 	else if (gameVer == 2)
 	{
@@ -31,5 +33,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 
 
 		offsets.gameDataAllOffset = reinterpret_cast<gameDataAllStruct*>(0x02c2bed8);
+
+		offsets.consoleCommands= reinterpret_cast<consoleCommands*>(0x02c73df8);
 	}
 }

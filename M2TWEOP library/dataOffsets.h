@@ -18,6 +18,7 @@ public:
 		DWORD someStratmapPointer = NULL;
 
 		gameDataAllStruct* gameDataAllOffset = NULL;
+		consoleCommands* consoleCommands = NULL;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);

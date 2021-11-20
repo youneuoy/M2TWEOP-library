@@ -10,6 +10,20 @@ typedef unsigned short    ushort;
 typedef struct stackStruct stackStruct, * PstackStruct;
 typedef struct settlementStruct settlementStruct, * PsettlementStruct;
 
+struct tilesS {
+	undefined field_0x0[44];
+	int xBound;
+	int yBound;
+	undefined field_0x34[20];
+	struct oneTile* tilesArr;
+	undefined field_0x4c[4];
+};
+
+struct oneTile {
+	undefined field_0x0[20];
+	int regionId;
+	undefined field_0x18[28];
+};
 struct UNICODE_STRING {
 	USHORT something;//idk
 	USHORT Length;//idk
@@ -700,8 +714,9 @@ struct factionStruct {
 	struct stackStruct** stacks;
 	undefined field_0x114[4];
 	int stackNum;
-	undefined field_0x11c[8];
-	int someNum;
+	int* regionsID;
+	undefined field_0x120[4];
+	int regionsNum;
 	struct settlementStruct** settlements;
 	undefined field_0x12c[4];
 	int settlementsNum;
@@ -1019,13 +1034,18 @@ struct tradingResources {
 
 
 struct console_command { /* structure of console command */
-	void** function;
+	bool(_stdcall**function)(const char*, char*);
 	char* name;
 	char* description;
 	int type;
 	int idk;
 };
 
+struct consoleCommands {
+	struct console_command** commands;
+	int reservedElements;
+	int size;
+};
 
 
 #pragma pack(pop)

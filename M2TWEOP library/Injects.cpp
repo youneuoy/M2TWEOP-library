@@ -2183,3 +2183,53 @@ void toBattleStateResults::SetlBattleCode()
 
 	delete a;
 }
+
+toGameFormDrawImage::toGameFormDrawImage(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAdress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x008fbd6a;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x008fb2da;
+}
+
+toGameFormDrawImage::~toGameFormDrawImage()
+{
+}
+
+void toGameFormDrawImage::SetOriginalDrawCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(byte_ptr(esp,0x18),0x0);
+
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toGameFormDrawImage::SetlDrawCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(byte_ptr(esp, 0x18), 0x0);
+
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAdress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

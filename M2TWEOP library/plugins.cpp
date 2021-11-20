@@ -58,9 +58,10 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 			battleCreator::onBattleStratScreen();
 		}
 	}
+
 	/*if (strcmp(event, "CharacterSelected") == 0)
 	{
-		
+
 		generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
 
 		stackStruct* army = prs->gen->armyLeaded;
@@ -96,7 +97,7 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 			fastFuncts::addUnitToArmy(army, res);
 		}
 	}*/
-	
+
 	for (plugin* pl : pluginsCfg.plugins)
 	{
 		if (compareEvent(event, &pl->onFactionTurnStart.stringAdr, pl->onFactionTurnStart.strCmp))
@@ -569,7 +570,7 @@ std::string plugins::onSelectWorldpkgdesc(const char* selectedRec, const char* s
 
 	for (plugin* pl : pluginsCfg.plugins)
 	{
-		std::string *tmpVal=(*(*pl->onSelectWorldpkgdesc))(selectedRec, selectedGroup);
+		std::string* tmpVal = (*(*pl->onSelectWorldpkgdesc))(selectedRec, selectedGroup);
 
 		retVal = *tmpVal;
 
@@ -583,7 +584,7 @@ void plugins::onClickAtTile(int x, int y)
 {
 	for (plugin* pl : pluginsCfg.plugins)
 	{
-		(*(*pl->onClickAtTile))(x,y);
+		(*(*pl->onClickAtTile))(x, y);
 	}
 }
 
@@ -602,7 +603,7 @@ void plugins::onEndSiege(settlementStruct* sett)//settlement or fort!
 
 	for (plugin* pl : pluginsCfg.plugins)
 	{
-		(*(*pl->onEndSiege))(x,y);
+		(*(*pl->onEndSiege))(x, y);
 	}
 }
 
@@ -636,8 +637,8 @@ void plugins::onChangeTurnNum()
 
 void plugins::onLoadGame(UNICODE_STRING**& savePath)
 {
-	vector<string>files=techFuncs::loadGameLoadArchive(savePath);
-	
+	vector<string>files = techFuncs::loadGameLoadArchive(savePath);
+
 
 	for (plugin* pl : pluginsCfg.plugins)
 	{
@@ -653,7 +654,7 @@ void plugins::onSaveGame(UNICODE_STRING**& savePath)
 
 	for (plugin* pl : pluginsCfg.plugins)
 	{
-		vector<string>*plugFiles= (*(*pl->onSaveGamePl))(savePath);
+		vector<string>* plugFiles = (*(*pl->onSaveGamePl))(savePath);
 
 		for (string& path : *plugFiles)
 		{

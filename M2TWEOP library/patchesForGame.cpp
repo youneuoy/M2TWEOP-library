@@ -6,6 +6,9 @@
 
 
 #include "onlineThings.h"
+
+
+
 string getRecordName(worldRecord* selectedRecord)
 {
 	int allocatedLen = selectedRecord->allocatedNameLen;
@@ -125,7 +128,10 @@ void __stdcall patchesForGame::onChangeTurnNum()
 
 	f1 << "onChangeTurnNum" << endl;
 	f1.close();
+
+
 #endif
+
 	plugins::onChangeTurnNum();
 }
 
@@ -320,6 +326,11 @@ void __stdcall patchesForGame::toReadGameDbsAtStart()
 void __stdcall patchesForGame::onDrawPartsOfStratObjects()
 {
 	graphicsD3D::onDrawPartsOfStratObjects();
+}
+
+void __stdcall patchesForGame::onDrawAll()
+{
+	graphicsD3D::onDrawAllGameStuff();
 }
 
 void __fastcall patchesForGame::onEndSiege(settlementStruct* sett)

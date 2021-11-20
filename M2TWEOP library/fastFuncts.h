@@ -10,6 +10,11 @@
 
 namespace fastFuncts
 {
+
+
+	NOINLINE EOP_EXPORT UINT32 getTileRegionID(int x,int y);
+	NOINLINE EOP_EXPORT factionStruct* getRegionOwner(int regionID);
+
 	//season(0-summer,1-winter)
 	NOINLINE EOP_EXPORT UINT32 getSeason();
 
@@ -96,6 +101,8 @@ namespace fastFuncts
 
 
 	NOINLINE EOP_EXPORT void autoResolve();
+
+	NOINLINE EOP_EXPORT bool callGameConsoleCommand(const char* name, const char*  arg,char*errorBuffer);
 
 
 	NOINLINE EOP_EXPORT bool useButton(const char* buttonName);
