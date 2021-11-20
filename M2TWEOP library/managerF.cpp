@@ -296,6 +296,11 @@ void managerF::doPachs()
 	toDrawPartsOfStratObjects* toDrawPartsOfStratO = new toDrawPartsOfStratObjects(mem, (LPVOID)patchesForGame::onDrawPartsOfStratObjects, globals::dataS.gamever);
 	toDrawPartsOfStratO->SetlDrawCode();
 	toDrawPartsOfStratO->Enable();
+
+	f1 << "Start applying toGameFormDrawImage patch" << endl;
+	toGameFormDrawImage* toDrawAllSt = new toGameFormDrawImage(mem, (LPVOID)patchesForGame::onDrawAll, globals::dataS.gamever);
+	toDrawAllSt->SetlDrawCode();
+	toDrawAllSt->Enable();
 	
 
 	f1 << "Start applying toEndSettlementSiege patch" << endl;

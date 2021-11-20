@@ -6,6 +6,34 @@ namespace fastFuncts
 {
 
 
+	NOINLINE EOP_EXPORT factionStruct* getRegionOwner(int regionID)
+	{
+		UINT32 numFac = fastFuncts::getFactionsCount();
+		factionStruct** listFac = fastFuncts::getFactionsList();
+
+		for (UINT32 i = 0; i < numFac; i++)
+		{
+			for (int j = 0; j < listFac[i]->regionsNum; j++)
+			{
+				if (regionID==listFac[i]->regionsID[j])
+				{
+					return listFac[i];
+				}
+			}
+		}
+
+
+
+		return nullptr;
+	}
+	NOINLINE EOP_EXPORT UINT32 getTileRegionID(int x, int y)
+	{
+		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
+		UINT32 redID = gameDataAll->stratMap->tilesArr[gameDataAll->stratMap->xBound*y+x].regionId;
+
+
+		return redID;
+	}
 	NOINLINE EOP_EXPORT factionStruct** getFactionsList()
 	{
 		factionStruct** list;
@@ -502,6 +530,22 @@ namespace fastFuncts
 			mov result, al
 		}
 		return result;
+	}
+	NOINLINE EOP_EXPORT bool callGameConsoleCommand(const char* name, const char* arg, char* errorBuffer)
+	{
+		auto cmd = dataOffsets::offsets.consoleCommands;
+		for (int i = 0; i < cmd->size; i++)
+		{
+			auto currCom = cmd->commands[i];
+			if (strcmp(currCom->name, name) != 0)
+			{
+				continue;
+			}
+
+			return (**currCom->function)(arg, errorBuffer);
+		}
+
+		return false;
 	}
 	NOINLINE EOP_EXPORT void createBuilding(settlementStruct* sett, const char* building_level_id)
 	{

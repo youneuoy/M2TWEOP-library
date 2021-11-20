@@ -35,6 +35,7 @@ public:
 	static NOINLINE void APIENTRY Draw(LPDIRECT3DDEVICE9 pDevice);
 
 	static NOINLINE void APIENTRY onDrawPartsOfStratObjects();
+	static NOINLINE void APIENTRY onDrawAllGameStuff();
 
 
 

@@ -596,3 +596,20 @@ private:
 };
 
 
+
+
+//we can draw here and it will eat not so many fps
+class toGameFormDrawImage
+	:public AATemplate
+{
+public:
+	toGameFormDrawImage(MemWork* mem, LPVOID adr, int ver);
+	~toGameFormDrawImage();
+
+	void SetOriginalDrawCode();
+	void SetlDrawCode();
+private:
+	LPVOID funcAdress;
+};
+
+

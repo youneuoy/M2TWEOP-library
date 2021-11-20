@@ -18,6 +18,8 @@
 graphicsD3D::dataT graphicsD3D::dataS;
 
 #include "onlineThings.h"
+
+#include "m2tweopMapManager.h"
 template<typename T>
 T FnCast(uint32_t fnToCast, T pFnCastTo) {
 	(void)pFnCastTo;
@@ -31,11 +33,31 @@ NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM w
 	{
 		return true;
 	}
+
 	if (dataS.ifMouseOrKeyBoardAtImgui)
 	{
-		return true;
-	}
+		switch (uMsg)
+		{
+		case WM_LBUTTONDOWN: case WM_LBUTTONDBLCLK:
+		case WM_RBUTTONDOWN: case WM_RBUTTONDBLCLK:
+		case WM_MBUTTONDOWN: case WM_MBUTTONDBLCLK:
+		case WM_XBUTTONDOWN: case WM_XBUTTONDBLCLK:
+		case WM_LBUTTONUP:
+		case WM_RBUTTONUP:
+		case WM_MBUTTONUP:
+		case WM_XBUTTONUP:
+		case WM_MOUSEHWHEEL:
+		case WM_MOUSEWHEEL:
+		case WM_CHAR:
+		case WM_SETCURSOR:
+		case WM_MOUSEMOVE:
+		case WM_INPUTLANGCHANGE:
+		case WM_KEYDOWN:
+		case WM_KEYUP:
+			return true;
+		}
 
+	}
 
 	return CallWindowProc(dataS.hookD.onewGameWndProc, hWnd, uMsg, wParam, lParam);
 }
@@ -46,10 +68,6 @@ struct
 	bool drawEOPStartInfo=false;
 
 	ImVec2 beginCoords{ 0.f,0.f };
-
-
-	int drawsCount = 0;
-	int drawsCount2 = 0;
 }drawParams;
 
 struct {
@@ -63,37 +81,7 @@ struct
 NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 {
 //	DiscordState.core->RunCallbacks();
-	plugins::onEndScene(pDevice);
 
-	if (drawParams.drawEOPStartInfo == true)
-	{
-		float currTime = (float)ImGui::GetTime();
-
-		if (currTime < drawParams.drawInfoEndTime)
-		{
-			static ImGuiWindowFlags transparentF = ImGuiWindowFlags_NoBackground| ImGuiWindowFlags_NoDecoration| ImGuiWindowFlags_AlwaysAutoResize| ImGuiWindowFlags_NoMove;
-
-			ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-			ImGui::Begin("eopInitTitle", nullptr, transparentF);
-
-			ImGui::Text("M2TWEOP 2.0");
-
-			ImGui::End();
-		}
-		else
-		{
-			drawParams.drawEOPStartInfo = false;
-		}
-	}
-	battleCreator::draw(pDevice);
-
-
-
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.f);
-	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(43.f / 255.f, 43.f / 255.f, 43.f / 255.f, 100.f / 255.f));
-	ImGui::RenderNotifications();
-	ImGui::PopStyleVar(1); // Don't forget to Pop()
-	ImGui::PopStyleColor(1);
 
 	/*MEMORYSTATUSEX statex;
 
@@ -135,6 +123,10 @@ NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 }
 NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 {
+
+	//plugins::onEndScene(pDevice);
+
+
 	//Backup the DX9 state
 	/*IDirect3DStateBlock9* d3d9_state_block = NULL;
 	if (graphicsD3D::dataS.pDevice->CreateStateBlock(D3DSBT_ALL, &d3d9_state_block) < 0)
@@ -178,6 +170,75 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	d3d9_state_block->Release();
 	*/
 }
+void graphicsD3D::onDrawAllGameStuff()
+{
+	if (graphicsD3D::dataS.pDevice->BeginScene() < 0)
+	{
+		return;
+	}
+
+	ImGui_ImplDX9_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
+
+	plugins::onEndScene(graphicsD3D::dataS.pDevice);
+	//graphicsD3D::Draw(pDevice);
+	if (drawParams.drawEOPStartInfo == true)
+	{
+		float currTime = (float)ImGui::GetTime();
+
+		if (currTime < drawParams.drawInfoEndTime)
+		{
+			static ImGuiWindowFlags transparentF = ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove;
+
+			ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+			ImGui::Begin("eopInitTitle", nullptr, transparentF);
+
+			ImGui::Text("M2TWEOP 2.0");
+
+			ImGui::End();
+		}
+		else
+		{
+			drawParams.drawEOPStartInfo = false;
+		}
+	}
+	battleCreator::draw(graphicsD3D::dataS.pDevice);
+
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.f);
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(43.f / 255.f, 43.f / 255.f, 43.f / 255.f, 100.f / 255.f));
+	ImGui::RenderNotifications();
+	ImGui::PopStyleVar(1); // Don't forget to Pop()
+	ImGui::PopStyleColor(1);
+
+
+
+	m2tweopMapManager::draw();
+
+	ImGuiIO& io = ImGui::GetIO();
+
+	graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui = ImGui::GetIO().WantCaptureMouse;
+	graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui |= ImGui::GetIO().WantCaptureKeyboard;
+	io.MouseDrawCursor = graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui;
+
+
+	ImGui::EndFrame();
+	ImGui::Render();
+	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+
+	if (tempData.texturesForDeleting.size())
+	{
+		for (auto tex : tempData.texturesForDeleting)
+		{
+			tex->Release();
+		}
+		tempData.texturesForDeleting.clear();
+	}
+
+
+	graphicsD3D::dataS.pDevice->EndScene();
+}
 NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	return CallWindowProc(dataS.hookD.oWndProc, hWnd, uMsg, wParam, lParam);
@@ -192,6 +253,7 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 	ImGuiIO& io = ImGui::GetIO();
 	io.IniFilename = nullptr;
 	io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
+	io.ConfigFlags &= ~ImGuiConfigFlags_NavEnableKeyboard;
 	io.MouseDrawCursor = false;
 	string f = globals::dataS.modPatch;
 	if (f.size() == 0)
@@ -408,28 +470,7 @@ NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevic
 
 NOINLINE EOP_EXPORT void graphicsExport::onEndScene(IDirect3DDevice9* pDevice)
 {
-	ImGui_ImplDX9_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
 
-	graphicsD3D::Draw(pDevice);
-
-
-	graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui = ImGui::GetIO().WantCaptureMouse;
-	graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui |= ImGui::GetIO().WantCaptureKeyboard;
-
-	ImGui::EndFrame();
-	ImGui::Render();
-	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
-
-	if (tempData.texturesForDeleting.size())
-	{
-		for (auto tex : tempData.texturesForDeleting)
-		{
-			tex->Release();
-		}
-		tempData.texturesForDeleting.clear();
-	}
 }
 
 NOINLINE EOP_EXPORT void graphicsExport::onReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)

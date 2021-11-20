@@ -141,6 +141,7 @@
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
+      <CCppSupport>Cpp17Support</CCppSupport>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -223,6 +224,9 @@
     <ClInclude Include="headersMEM.h" />
     <ClInclude Include="headersSTD.h" />
     <ClInclude Include="Injects.h" />
+    <ClInclude Include="m2tweopMap.h" />
+    <ClInclude Include="m2tweopMapManager.h" />
+    <ClInclude Include="m2tweopTile.h" />
     <ClInclude Include="managerF.h" />
     <ClInclude Include="MemWork.h" />
     <ClInclude Include="onlineThings.h" />
@@ -244,6 +248,7 @@
     <ClCompile Include="..\3rd\imgui\eopImgui.cpp" />
     <ClCompile Include="..\3rd\imgui\ImFileDialog.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui.cpp" />
+    <ClCompile Include="..\3rd\imgui\imgui_demo.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui_draw.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui_impl_dx9.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui_impl_win32.cpp" />
@@ -269,6 +274,9 @@
       <FunctionLevelLinking Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</FunctionLevelLinking>
       <DebugInformationFormat Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ProgramDatabase</DebugInformationFormat>
     </ClCompile>
+    <ClCompile Include="m2tweopMap.cpp" />
+    <ClCompile Include="m2tweopMapManager.cpp" />
+    <ClCompile Include="m2tweopTile.cpp" />
     <ClCompile Include="managerF.cpp" />
     <ClCompile Include="MemWork.cpp" />
     <ClCompile Include="onlineThings.cpp" />

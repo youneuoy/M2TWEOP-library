@@ -79,6 +79,9 @@
     <Filter Include="3rd\dif">
       <UniqueIdentifier>{4b98bd9a-21b5-472b-b96c-8f030f7277b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="feathures\interactiveMap">
+      <UniqueIdentifier>{df1d3dd5-dd44-48fa-a37b-7cef17561e76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -237,6 +240,15 @@
     <ClInclude Include="..\3rd\imgui\imgui_stdlib.h">
       <Filter>3rd\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="m2tweopMap.h">
+      <Filter>feathures\interactiveMap</Filter>
+    </ClInclude>
+    <ClInclude Include="m2tweopTile.h">
+      <Filter>feathures\interactiveMap</Filter>
+    </ClInclude>
+    <ClInclude Include="m2tweopMapManager.h">
+      <Filter>feathures\interactiveMap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -354,6 +366,18 @@
       <Filter>3rd\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\3rd\imgui\imgui_stdlib.cpp">
+      <Filter>3rd\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="m2tweopMap.cpp">
+      <Filter>feathures\interactiveMap</Filter>
+    </ClCompile>
+    <ClCompile Include="m2tweopTile.cpp">
+      <Filter>feathures\interactiveMap</Filter>
+    </ClCompile>
+    <ClCompile Include="m2tweopMapManager.cpp">
+      <Filter>feathures\interactiveMap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\imgui\imgui_demo.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
   </ItemGroup>
