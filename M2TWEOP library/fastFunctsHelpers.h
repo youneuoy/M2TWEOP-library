@@ -4,7 +4,7 @@
 #include"headersSTD.h"
 #include "headersMEM.h"
 #include "realGameTypes.h"
-#include "globals.h"
+#include "globalData.h"
 #include "exportHeader.h"
 namespace fastFunctsHelpers
 {
