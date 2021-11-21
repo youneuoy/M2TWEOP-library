@@ -2,7 +2,7 @@
 #include"headersSTD.h"
 #include "headersMEM.h"
 #include "headersGraphics.h"
-#include "globals.h"
+#include "globalData.h"
 #include "techFuncs.h"
 
 #include "exportHeader.h"

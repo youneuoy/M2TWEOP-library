@@ -3,7 +3,7 @@
 #include <vector>
 #include <windows.h>
 #include "FastFuncts.h" 
-#include "globals.h"
+#include "globalData.h"
 
 #include "techFuncs.h"
 #include "fastFuncts.h"

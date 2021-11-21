@@ -6,7 +6,7 @@
 #include "realGameTypes.h"
 
 #include "exportHeader.h"
-#include "globals.h"
+#include "globalData.h"
 namespace smallFuncs
 {	
 	NOINLINE EOP_EXPORT void setAncLimit(unsigned char limit);
