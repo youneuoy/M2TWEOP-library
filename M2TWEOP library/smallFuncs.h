@@ -30,5 +30,8 @@ namespace smallFuncs
 
 	NOINLINE EOP_EXPORT int getScriptCounter(const char*counterName,bool&isFinded);
 	NOINLINE EOP_EXPORT void setScriptCounter(const char*counterName,int counterValue);
+
+	NOINLINE EOP_EXPORT void setBuildingChainLimit(unsigned int limit);
+
 };
 
