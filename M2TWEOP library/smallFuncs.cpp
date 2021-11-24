@@ -397,4 +397,22 @@ namespace smallFuncs
 
 		return;
 	}
+
+	NOINLINE EOP_EXPORT void setBuildingChainLimit(unsigned int limit)
+	{
+		DWORD codeAdr = 0;
+
+		if (globals::dataS.gamever == 2)//steam
+		{
+			codeAdr = 0x008AC174;
+		}
+		else
+		{
+			codeAdr = 0x008AB794;
+		}
+		memHelpers::writeToMem(&limit, (void*)codeAdr, 4);
+
+		return;
+	}
+
 };
