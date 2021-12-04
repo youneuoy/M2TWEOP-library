@@ -537,7 +537,7 @@ namespace codeInjects
 			a->pushad();
 			a->pushf();
 
-			a->mov(ecx, dword_ptr(esp, 0x28));
+			a->mov(ecx, dword_ptr(esp, 0x26));
 			a->mov(eax, patchesForGame::onSaveGame);
 
 			a->call(eax);
