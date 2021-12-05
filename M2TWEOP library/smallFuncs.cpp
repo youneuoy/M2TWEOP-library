@@ -415,4 +415,21 @@ namespace smallFuncs
 		return;
 	}
 
+	NOINLINE EOP_EXPORT void setGuildCooldown(unsigned char turns)
+	{
+		DWORD codeAdr = 0;
+
+		if (globals::dataS.gamever == 2)//steam
+		{
+			codeAdr = 0x004F5D7B;
+		}
+		else
+		{
+			codeAdr = 0x004F57AB;
+		}
+		memHelpers::writeToMem(&turns, (void*)codeAdr, 1);
+
+	}
+
+
 };
