@@ -90,10 +90,9 @@ namespace codeInjects
 		codePatchID patchID = patchesManager.addPatch(patchName, injectAdr, codePatchFlag_none, 5);
 		Assembler* a = patchesManager.prepareForCoding(patchID);
 
-
 		//code
 		{
-			Assembler* a = new Assembler();
+			
 
 			a->mov(eax, dword_ptr(ecx));
 			//a->push(eax);
