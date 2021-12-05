@@ -33,5 +33,7 @@ namespace smallFuncs
 
 	NOINLINE EOP_EXPORT void setBuildingChainLimit(unsigned int limit);
 
+	NOINLINE EOP_EXPORT void setGuildCooldown(unsigned char turns);
+
 };
 
