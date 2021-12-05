@@ -637,7 +637,7 @@ void plugins::onChangeTurnNum()
 
 void plugins::onLoadGame(UNICODE_STRING**& savePath)
 {
-	vector<string>files = techFuncs::loadGameLoadArchive(savePath);
+	/*vector<string>files = techFuncs::loadGameLoadArchive(savePath);
 
 
 	for (plugin* pl : pluginsCfg.plugins)
@@ -646,10 +646,12 @@ void plugins::onLoadGame(UNICODE_STRING**& savePath)
 	}
 
 	techFuncs::deleteFiles(files);
+	*/
 }
 
 void plugins::onSaveGame(UNICODE_STRING**& savePath)
 {
+	/*
 	vector<string>files;
 
 	for (plugin* pl : pluginsCfg.plugins)
@@ -668,6 +670,7 @@ void plugins::onSaveGame(UNICODE_STRING**& savePath)
 
 
 	techFuncs::deleteFiles(files);
+	*/
 }
 
 void plugins::onReadGameDbsAtStart()
