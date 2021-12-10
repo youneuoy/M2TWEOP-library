@@ -112,6 +112,44 @@ namespace fastFuncts
 		return count;
 	}
 
+	NOINLINE EOP_EXPORT guild* getGuild(unsigned char index)
+	{
+		uintptr_t currentOffsett = dataOffsets::offsets.guildDataStart;
+		UINT32 count = 0;
+		UINT32 maxCount = 0;
+		UINT8 currID = 0;
+		
+		do{
+			techFuncs::Read(currentOffsett + 0x10, &count);
+			techFuncs::Read(currentOffsett + 0xC, &maxCount);
+			uintptr_t guilds = * (uintptr_t*) currentOffsett;
+
+			if (guilds == 0)
+			{
+				return nullptr;
+			}
+
+			for (int i = 0; i < count; ++i)
+			{
+				if (index == currID)
+				{
+					return  (guild*)(guilds + 0x4C * i);
+				}
+				++currID;
+			}
+			
+			if (count < maxCount ||  *(uintptr_t*)(currentOffsett+0x4) == 0 )
+			{
+				return nullptr;
+			}
+			currentOffsett = *(uintptr_t*)(currentOffsett + 0x4);
+			
+		} while (*(uintptr_t*)currentOffsett != 0);
+
+		return nullptr;
+	}
+
+
 	NOINLINE EOP_EXPORT fortStruct* findFort(int x, int y)
 	{
 		UINT32 numFac = fastFuncts::getFactionsCount();

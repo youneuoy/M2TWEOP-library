@@ -421,12 +421,30 @@ struct settlementStruct {
 	uchar isProvokedRebellion;
 	uchar field_0xe05[3];
 	undefined field_0xe08[60];
-	struct resStrat** resources;
+	struct resStrat** resources; // 0xE44
 	undefined field_0xe48[4];
-	int resourcesNum;
-	undefined field_0xe50[2572];
-	int populationSize;
+	int resourcesNum; // 0x0E4C
+	undefined field_0xe50[2164];
+	intptr_t guildStandings; // 0x16C4
+	undefined field_0x16c8[404]; // 0x16C8
+	int populationSize; // 0x185C
 };
+
+struct guild
+{
+	char* name; //0x0000
+	DWORD nameHash; //0x0004
+	uint8_t id; //0x0008
+	char pad_0009[3]; //0x0009
+	void* building; //0x000C
+	int32_t level1Threshold; //0x0010
+	int32_t level2Threshold; //0x0014
+	int32_t level3Threshold; //0x0018
+	char pad_001C[4]; //0x001C
+	void* excludedGuildIds; //0x0020
+	char pad_0024[40]; //0x0024
+}; //Size: 0x004C
+
 
 /* I_CompareCounter script command */
 struct CompareCounter { /* I_CompareCounter script command */
