@@ -18,6 +18,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.gameDataAllOffset = reinterpret_cast<gameDataAllStruct*>(0x02c74f90);
 
 		offsets.consoleCommands = reinterpret_cast<consoleCommands*>(0x02cbce50);
+
+		offsets.guildDataStart = 0x018FD958;
 	}
 	else if (gameVer == 2)
 	{
@@ -35,5 +37,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.gameDataAllOffset = reinterpret_cast<gameDataAllStruct*>(0x02c2bed8);
 
 		offsets.consoleCommands= reinterpret_cast<consoleCommands*>(0x02c73df8);
+
+		offsets.guildDataStart = 0x18B47E8;
 	}
 }

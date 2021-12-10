@@ -19,6 +19,8 @@ public:
 
 		gameDataAllStruct* gameDataAllOffset = NULL;
 		consoleCommands* consoleCommands = NULL;
+
+		DWORD guildDataStart = NULL;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);

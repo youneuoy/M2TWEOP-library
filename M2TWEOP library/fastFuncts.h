@@ -31,6 +31,8 @@ namespace fastFuncts
 	//number of passed turns
 	NOINLINE EOP_EXPORT UINT32 getPassedTurnsNum();
 
+	//get guild by index
+	NOINLINE EOP_EXPORT guild* getGuild(unsigned char index);
 
 
 	//find fort on coords

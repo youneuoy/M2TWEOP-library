@@ -126,7 +126,7 @@ bool gameStarter::initM2TWEOP()
 		if (CopyFileA(wrapd3dStr.c_str(), d3dStr.c_str(), FALSE) == false)
 		{
 			DWORD ERR=GetLastError();
-			MessageBoxA(NULL, "Cannot run M2TWEOP, d3d9.dll replasing error! Try to delete d3d9.dll in game folder or copy d3d.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
+			MessageBoxA(NULL, "Cannot run M2TWEOP, d3d9.dll replacing error! Try to delete d3d9.dll in game folder or copy d3d.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
 			exit(0);
 		}
 	}
