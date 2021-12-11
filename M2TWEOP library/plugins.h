@@ -192,6 +192,9 @@ public:
 
 	ProcLoader<void(__cdecl*)(factionStruct*, const char*, factionStruct*)> onTransgression;
 
+	ProcLoader<void(__cdecl*)(settlementStruct*, const char*)> onGuildUpgraded;
+	ProcLoader<void(__cdecl*)(settlementStruct*, unsigned char)> onGuildDestroyed;
+
 
 
 

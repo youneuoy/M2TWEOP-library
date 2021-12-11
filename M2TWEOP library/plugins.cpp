@@ -558,6 +558,18 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 			factionStruct* fac2 = reinterpret_cast<factionStruct*>(vTab[4]);
 			(*(*pl->onTransgression))(fac, str, fac2);
 		}
+		else if (compareEvent(event, &pl->onGuildUpgraded.stringAdr, pl->onGuildUpgraded.strCmp))
+		{
+			settlementStruct* sett = reinterpret_cast<settlementStruct*>(vTab[1]);
+			char* str = reinterpret_cast<char*>(vTab[2]);
+			(*(*pl->onGuildUpgraded))(sett, str);
+		}
+		else if (compareEvent(event, &pl->onGuildDestroyed.stringAdr, pl->onGuildDestroyed.strCmp))
+		{
+			settlementStruct* sett = reinterpret_cast<settlementStruct*>(vTab[1]);
+			unsigned char guildID = (((BYTE*)vTab)[8]);
+			(*(*pl->onGuildDestroyed))(sett, guildID);
+		}
 
 	}
 }
@@ -1270,6 +1282,16 @@ int plugin::init(string* nameP)
 	fName = "onTransgression";
 	onTransgression.Load(&plPath, &fName);
 	onTransgression.strCmp = (*plugins::eventNames)[TransgressionCode];
+
+	//onGuildUpgraded
+	fName = "onGuildUpgraded";
+	onGuildUpgraded.Load(&plPath, &fName);
+	onGuildUpgraded.strCmp = (*plugins::eventNames)[GuildUpgradedCode];
+
+	//onGuildDestroyed
+	fName = "onGuildDestroyed";
+	onGuildDestroyed.Load(&plPath, &fName);
+	onGuildDestroyed.strCmp = (*plugins::eventNames)[GuildDestroyedCode];
 
 
 
