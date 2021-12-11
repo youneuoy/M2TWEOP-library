@@ -37,8 +37,8 @@
 #define BuildingCompletedCode 34//!
 #define BuildingDestroyedCode 35//!
 #define AddedToBuildingQueueCode 36//!
-//#define GuildUpgradedCode 37
-//#define GuildDestroyedCode 38
+#define GuildUpgradedCode 37
+#define GuildDestroyedCode 38
 #define AgentCreatedCode 39//!
 #define UnitTrainedCode 40//!
 #define UnitDisbandedCode 41//!
