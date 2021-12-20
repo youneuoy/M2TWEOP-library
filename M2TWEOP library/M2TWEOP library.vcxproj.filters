@@ -85,6 +85,9 @@
     <Filter Include="features\settlementConversionLvlSetter">
       <UniqueIdentifier>{916fe1d7-b236-40f6-9961-71d6eecd49b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rd\asmjit">
+      <UniqueIdentifier>{0bd2d4be-0e4e-4039-8e7a-6f1df76ee557}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -94,9 +97,6 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="managerF.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="Injects.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="agePatch.h">
@@ -116,9 +116,6 @@
     </ClInclude>
     <ClInclude Include="fastFuncts.h">
       <Filter>Исходные файлы\functions</Filter>
-    </ClInclude>
-    <ClInclude Include="globals.h">
-      <Filter>Исходные файлы\data</Filter>
     </ClInclude>
     <ClInclude Include="dataOffsets.h">
       <Filter>Исходные файлы\data</Filter>
@@ -179,15 +176,6 @@
     </ClInclude>
     <ClInclude Include="headersGraphics.h">
       <Filter>Исходные файлы\headers</Filter>
-    </ClInclude>
-    <ClInclude Include="TemplateCh.h">
-      <Filter>technical</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\Users\COMP\vcpkg\installed\x86-windows-static-md\include\MinHook.h">
-      <Filter>technical</Filter>
-    </ClInclude>
-    <ClInclude Include="MemWork.h">
-      <Filter>technical</Filter>
     </ClInclude>
     <ClInclude Include="technicalStringsFuncs.h">
       <Filter>Исходные файлы\functions</Filter>
@@ -255,6 +243,78 @@
     <ClInclude Include="settlementConversionLvlSetter.h">
       <Filter>features\settlementConversionLvlSetter</Filter>
     </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\ApiBegin.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\ApiEnd.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\AsmJit.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\Assembler.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\AssemblerX86X64.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\Build.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\CodeGenerator.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\Compiler.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\CompilerX86X64.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\Config.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\CpuInfo.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\Defs.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\DefsX86X64.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\Logger.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\MemoryManager.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\Operand.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\OperandX86X64.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\Platform.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\Util.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\AsmJit\headers\Util_p.h">
+      <Filter>3rd\asmjit</Filter>
+    </ClInclude>
+    <ClInclude Include="Injects.h">
+      <Filter>technical</Filter>
+    </ClInclude>
+    <ClInclude Include="MemWork.h">
+      <Filter>technical</Filter>
+    </ClInclude>
+    <ClInclude Include="TemplateCh.h">
+      <Filter>technical</Filter>
+    </ClInclude>
+    <ClInclude Include="globals.h">
+      <Filter>Исходные файлы\data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -264,9 +324,6 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="managerF.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="Injects.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="agePatch.cpp">
@@ -311,12 +368,6 @@
     <ClCompile Include="graphicsD3D.cpp">
       <Filter>3rd\dif</Filter>
     </ClCompile>
-    <ClCompile Include="MemWork.cpp">
-      <Filter>technical</Filter>
-    </ClCompile>
-    <ClCompile Include="TemplateCh.cpp">
-      <Filter>technical</Filter>
-    </ClCompile>
     <ClCompile Include="..\3rd\imgui\imgui.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
@@ -337,9 +388,6 @@
     </ClCompile>
     <ClCompile Include="technicalStringsFuncs.cpp">
       <Filter>Исходные файлы\functions</Filter>
-    </ClCompile>
-    <ClCompile Include="globals.cpp">
-      <Filter>Исходные файлы\data</Filter>
     </ClCompile>
     <ClCompile Include="smallFuncs.cpp">
       <Filter>Исходные файлы\functions</Filter>
@@ -389,8 +437,64 @@
     <ClCompile Include="settlementConversionLvlSetter.cpp">
       <Filter>features\settlementConversionLvlSetter</Filter>
     </ClCompile>
+    <ClCompile Include="..\3rd\AsmJit\headers\Assembler.cpp">
+      <Filter>3rd\asmjit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\AsmJit\headers\AssemblerX86X64.cpp">
+      <Filter>3rd\asmjit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\AsmJit\headers\CodeGenerator.cpp">
+      <Filter>3rd\asmjit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\AsmJit\headers\Compiler.cpp">
+      <Filter>3rd\asmjit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\AsmJit\headers\CompilerX86X64.cpp">
+      <Filter>3rd\asmjit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\AsmJit\headers\CpuInfo.cpp">
+      <Filter>3rd\asmjit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\AsmJit\headers\Defs.cpp">
+      <Filter>3rd\asmjit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\AsmJit\headers\DefsX86X64.cpp">
+      <Filter>3rd\asmjit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\AsmJit\headers\Logger.cpp">
+      <Filter>3rd\asmjit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\AsmJit\headers\MemoryManager.cpp">
+      <Filter>3rd\asmjit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\AsmJit\headers\Operand.cpp">
+      <Filter>3rd\asmjit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\AsmJit\headers\OperandX86X64.cpp">
+      <Filter>3rd\asmjit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\AsmJit\headers\Platform.cpp">
+      <Filter>3rd\asmjit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\AsmJit\headers\Util.cpp">
+      <Filter>3rd\asmjit</Filter>
+    </ClCompile>
+    <ClCompile Include="Injects.cpp">
+      <Filter>technical</Filter>
+    </ClCompile>
+    <ClCompile Include="MemWork.cpp">
+      <Filter>technical</Filter>
+    </ClCompile>
+    <ClCompile Include="TemplateCh.cpp">
+      <Filter>technical</Filter>
+    </ClCompile>
+    <ClCompile Include="globals.cpp">
+      <Filter>Исходные файлы\data</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" />
+    <None Include="..\3rd\AsmJit\headers\Regenerate.py">
+      <Filter>3rd\asmjit</Filter>
+    </None>
   </ItemGroup>
 </Project>

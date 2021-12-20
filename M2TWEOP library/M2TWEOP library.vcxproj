@@ -36,7 +36,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>false</UseOfMfc>
@@ -75,13 +75,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(SolutionDir)\3rd\discord-files\lib;$(ProgramW6432)\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x86\release;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord-files;$(ProgramW6432)\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord-files;$(ProgramW6432)\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(SolutionDir)\3rd\discord-files\lib;$(ProgramW6432)\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x86\release;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord-files;$(ProgramW6432)\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord-files;$(ProgramW6432)\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -188,77 +188,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\3rd\AsmJit\asmjit\asmjit-scope-begin.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\asmjit-scope-end.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\asmjit.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\api-build_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\api-config.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\archcommons.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\archtraits.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\assembler.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\builder.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\codebuffer.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\codeholder.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\codewriter_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\compiler.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\compilerdefs.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\constpool.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\cpuinfo.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\datatypes.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\emithelper_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\emitter.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\emitterutils_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\environment.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\errorhandler.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\features.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\formatter.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\func.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\funcargscontext_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\globals.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\inst.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\jitallocator.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\jitruntime.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\logger.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\misc_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\operand.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\osutils.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\osutils_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\raassignment_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\rabuilders_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\radefs_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\ralocal_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\rapass_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\rastack_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\string.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\support.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\target.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\type.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\virtmem.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\zone.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\zonehash.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\zonelist.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\zonestack.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\zonestring.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\zonetree.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\core\zonevector.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86\x86archtraits_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86\x86assembler.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86\x86builder.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86\x86compiler.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86\x86emithelper_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86\x86emitter.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86\x86features.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86\x86formatter_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86\x86func_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86\x86globals.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86\x86instapi_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86\x86instdb.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86\x86instdb_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86\x86opcode_p.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86\x86operand.h" />
-    <ClInclude Include="..\3rd\AsmJit\asmjit\x86\x86rapass_p.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\ApiBegin.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\ApiEnd.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\AsmJit.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\Assembler.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\AssemblerX86X64.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\Build.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\CodeGenerator.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\Compiler.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\CompilerX86X64.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\Config.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\CpuInfo.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\Defs.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\DefsX86X64.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\Logger.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\MemoryManager.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\Operand.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\OperandX86X64.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\Platform.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\Util.h" />
+    <ClInclude Include="..\3rd\AsmJit\headers\Util_p.h" />
     <ClInclude Include="..\3rd\imgui\eopImgui.h" />
     <ClInclude Include="..\3rd\imgui\imconfig.h" />
     <ClInclude Include="..\3rd\imgui\ImFileDialog.h" />
@@ -278,7 +227,6 @@
     <ClInclude Include="..\3rd\nlohmann\json.hpp" />
     <ClInclude Include="actionsStrat.h" />
     <ClInclude Include="agePatch.h" />
-    <ClInclude Include="codeInjects.h" />
     <ClInclude Include="dataOffsets.h" />
     <ClInclude Include="eduFastFuncts.h" />
     <ClInclude Include="eduThings.h" />
@@ -289,20 +237,20 @@
     <ClInclude Include="fbxModels.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="functionsOffsets.h" />
-    <ClInclude Include="globalData.h" />
+    <ClInclude Include="globals.h" />
     <ClInclude Include="graphicsD3D.h" />
     <ClInclude Include="headersGraphics.h" />
     <ClInclude Include="headersMEM.h" />
     <ClInclude Include="headersSTD.h" />
+    <ClInclude Include="Injects.h" />
     <ClInclude Include="m2tweopMap.h" />
     <ClInclude Include="m2tweopMapManager.h" />
     <ClInclude Include="m2tweopTile.h" />
     <ClInclude Include="managerF.h" />
-    <ClInclude Include="memHelpers.h" />
+    <ClInclude Include="MemWork.h" />
     <ClInclude Include="onlineThings.h" />
     <ClInclude Include="onlineThings2.h" />
     <ClInclude Include="patchesForGame.h" />
-    <ClInclude Include="patchesWorker.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="plugins.h" />
     <ClInclude Include="realGameTypes.h" />
@@ -312,58 +260,25 @@
     <ClInclude Include="stratModelsOptimise.h" />
     <ClInclude Include="techFuncs.h" />
     <ClInclude Include="technicalStringsFuncs.h" />
+    <ClInclude Include="TemplateCh.h" />
     <ClInclude Include="tests.h" />
     <ClInclude Include="tilesChange.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\archtraits.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\assembler.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\builder.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\codeholder.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\codewriter.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\compiler.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\constpool.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\cpuinfo.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\emithelper.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\emitter.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\emitterutils.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\environment.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\errorhandler.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\formatter.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\func.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\funcargscontext.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\globals.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\inst.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\jitallocator.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\jitruntime.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\logger.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\operand.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\osutils.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\ralocal.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\rapass.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\rastack.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\string.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\support.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\target.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\type.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\virtmem.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\zone.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\zonehash.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\zonelist.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\zonestack.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\zonetree.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\core\zonevector.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\x86\x86assembler.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\x86\x86builder.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\x86\x86compiler.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\x86\x86emithelper.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\x86\x86features.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\x86\x86formatter.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\x86\x86func.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\x86\x86instapi.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\x86\x86instdb.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\x86\x86operand.cpp" />
-    <ClCompile Include="..\3rd\AsmJit\asmjit\x86\x86rapass.cpp" />
+    <ClCompile Include="..\3rd\AsmJit\headers\Assembler.cpp" />
+    <ClCompile Include="..\3rd\AsmJit\headers\AssemblerX86X64.cpp" />
+    <ClCompile Include="..\3rd\AsmJit\headers\CodeGenerator.cpp" />
+    <ClCompile Include="..\3rd\AsmJit\headers\Compiler.cpp" />
+    <ClCompile Include="..\3rd\AsmJit\headers\CompilerX86X64.cpp" />
+    <ClCompile Include="..\3rd\AsmJit\headers\CpuInfo.cpp" />
+    <ClCompile Include="..\3rd\AsmJit\headers\Defs.cpp" />
+    <ClCompile Include="..\3rd\AsmJit\headers\DefsX86X64.cpp" />
+    <ClCompile Include="..\3rd\AsmJit\headers\Logger.cpp" />
+    <ClCompile Include="..\3rd\AsmJit\headers\MemoryManager.cpp" />
+    <ClCompile Include="..\3rd\AsmJit\headers\Operand.cpp" />
+    <ClCompile Include="..\3rd\AsmJit\headers\OperandX86X64.cpp" />
+    <ClCompile Include="..\3rd\AsmJit\headers\Platform.cpp" />
+    <ClCompile Include="..\3rd\AsmJit\headers\Util.cpp" />
     <ClCompile Include="..\3rd\imgui\eopImgui.cpp" />
     <ClCompile Include="..\3rd\imgui\ImFileDialog.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui.cpp" />
@@ -378,7 +293,6 @@
     <ClCompile Include="actionsStrat.cpp" />
     <ClCompile Include="actionsStratHelpers.cpp" />
     <ClCompile Include="agePatch.cpp" />
-    <ClCompile Include="codeInjects.cpp" />
     <ClCompile Include="dataOffsets.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="eduFastFuncts.cpp" />
@@ -387,17 +301,17 @@
     <ClCompile Include="fastFunctsHelpers.cpp" />
     <ClCompile Include="fbxModels.cpp" />
     <ClCompile Include="functionsOffsets.cpp" />
-    <ClCompile Include="globalData.cpp" />
+    <ClCompile Include="globals.cpp" />
     <ClCompile Include="graphicsD3D.cpp" />
+    <ClCompile Include="Injects.cpp" />
     <ClCompile Include="m2tweopMap.cpp" />
     <ClCompile Include="m2tweopMapManager.cpp" />
     <ClCompile Include="m2tweopTile.cpp" />
     <ClCompile Include="managerF.cpp" />
-    <ClCompile Include="memHelpers.cpp" />
+    <ClCompile Include="MemWork.cpp" />
     <ClCompile Include="onlineThings.cpp" />
     <ClCompile Include="onlineThings2.cpp" />
     <ClCompile Include="patchesForGame.cpp" />
-    <ClCompile Include="patchesWorker.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -412,10 +326,11 @@
     <ClCompile Include="stratModelsOptimise.cpp" />
     <ClCompile Include="techFuncs.cpp" />
     <ClCompile Include="technicalStringsFuncs.cpp" />
+    <ClCompile Include="TemplateCh.cpp" />
     <ClCompile Include="tilesChange.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" />
+    <None Include="..\3rd\AsmJit\headers\Regenerate.py" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

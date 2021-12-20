@@ -244,7 +244,9 @@ void __stdcall patchesForGame::onBattleStratScreen()
 
 void __fastcall patchesForGame::onEvent(DWORD** vTab)
 {
-
+	std::ofstream f1("D:\\WMS\\2.txt");
+	f1 << "sdsdsd" << std::endl;
+	f1.close();
 #if defined TESTPATCHES
 	ofstream f1("logs\\TESTPATCHES.log", ios::app);
 
