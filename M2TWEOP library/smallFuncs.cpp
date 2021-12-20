@@ -407,8 +407,9 @@ namespace smallFuncs
 		{
 			codeAdr = 0x008AB794;
 		}
-		memHelpers::writeToMem(&limit, (void*)codeAdr, 4);
 
+
+		MemWork::WriteData(&limit, codeAdr, 4);
 		return;
 	}
 
@@ -424,7 +425,8 @@ namespace smallFuncs
 		{
 			codeAdr = 0x004F57AB;
 		}
-		memHelpers::writeToMem(&turns, (void*)codeAdr, 1);
+
+		MemWork::WriteData(&turns, codeAdr, 1);
 
 	}
 
