@@ -3,7 +3,7 @@
 
 #include "miniz.h"
 #include <filesystem>
-#include "globalData.h"
+#include "globals.h"
 #include "smallFuncs.h"
 std::vector<std::string>techFuncs::unzip(std::string const& zipFile, std::string const& path)
 {

@@ -1,5 +1,5 @@
 #include "smallFuncs.h"
-#include "memHelpers.h"
+#include "MemWork.h"
 #include "dataOffsets.h"
 
 #include "fastFunctsHelpers.h"
@@ -20,7 +20,8 @@ namespace smallFuncs
 		{
 			ancillariesOffset = 0x005A57CD;
 		}
-		memHelpers::writeToMem(&limit, (void*)ancillariesOffset,1);
+
+		MemWork::WriteData(&limit, ancillariesOffset, 1);
 	}
 
 	NOINLINE EOP_EXPORT void setEDUUnitsSize(signed short min, signed short max)
@@ -37,11 +38,10 @@ namespace smallFuncs
 
 		codeOffset += 0x82C;
 
-		memHelpers::writeToMem(&min, (void*)codeOffset,2);
-
+		MemWork::WriteData(&min, codeOffset, 2);
 
 		codeOffset += 6;
-		memHelpers::writeToMem(&max, (void*)codeOffset, 2);
+		MemWork::WriteData(&max, codeOffset, 2);
 
 
 		return;
@@ -60,8 +60,8 @@ namespace smallFuncs
 			cmpAdr = 0x008ebd95 + 2;
 			retAdr = 0x008ebd9a + 1;
 		}
-		memHelpers::writeToMem(&size, (void*)cmpAdr, 1);
-		memHelpers::writeToMem(&size, (void*)retAdr, 1);
+		MemWork::WriteData(&size, cmpAdr, 1);
+		MemWork::WriteData(&size, retAdr, 1);
 	}
 	NOINLINE EOP_EXPORT void unlockConsoleCommands()
 	{
@@ -83,12 +83,10 @@ namespace smallFuncs
 		{
 			uchar jz = 0x74;
 			uchar ch;
-			memHelpers::readFromMem((void*)cmd, &ch, 1);
-
-
+			MemWork::ReadData(cmd, &ch, 1);
 			if (ch == jz)
 			{
-				memHelpers::writeToMem(nops, (void*)cmd, 2);
+				MemWork::WriteData(nops, cmd, 2);
 			}
 		}
 
@@ -104,7 +102,7 @@ namespace smallFuncs
 			cmd = 0x00d329aa;
 		}
 
-		memHelpers::writeToMem(nops1, (void*)cmd, 6);
+		MemWork::WriteData(nops1, cmd, 6);
 	}
 	NOINLINE EOP_EXPORT int getBattleCondCode(DWORD condObject)
 	{
@@ -232,22 +230,21 @@ namespace smallFuncs
 		DWORD codeAdr = 0;
 		if (globals::dataS.gamever == 2)//steam
 		{
-			codeAdr = 0x009e0ec4+1;
+			codeAdr = 0x009e0ec4;
 		}
 		else
 		{
-			codeAdr = 0x009e1a64+1;
+			codeAdr = 0x009e1a64;
 		}
 
 		if (!highlightOn)
 		{
-			memHelpers::writeToMem(&highLightOn, (void*)codeAdr, 1);
-
+			MemWork::WriteData(&highLightOn, codeAdr + 0x1, 1);
 			highlightOn = true;
 		}
 		else
 		{
-			memHelpers::writeToMem(&highLightOn, (void*)codeAdr, 1);
+			MemWork::WriteData(&highLightOff, codeAdr + 0x1, 1);
 			highlightOn = false;
 		}
 
@@ -266,7 +263,7 @@ namespace smallFuncs
 			codeAdr = 0x0411C0E;
 		}
 
-		memHelpers::writeToMem(&limit, (void*)codeAdr, 1);
+		MemWork::WriteData(&limit, codeAdr, 1);
 
 		return;
 	}

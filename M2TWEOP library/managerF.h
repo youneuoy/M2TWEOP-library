@@ -1,5 +1,7 @@
 #pragma once
 #include "graphicsD3D.h"
+#include "MemWork.h"
+#include "Injects.h"
 #include "technicalStringsFuncs.h"
 #include "patchesForGame.h"
 #include "functionsOffsets.h"

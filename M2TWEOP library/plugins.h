@@ -4,7 +4,7 @@
 #include <windows.h>
 #include "FastFuncts.h" 
 #include "eventsCodes.h" 
-#include "globalData.h"
+#include "globals.h"
 
 #include "techFuncs.h"
 #include "fastFuncts.h"
