@@ -116,10 +116,12 @@ string techFuncs::uniToANSI(UNICODE_STRING**& uniStr)
 	wchar_t* wstr = (wchar_t*)&uniS->Buffer;
 
 	std::string strTo;
-	char* szTo = new char[uniS->Length + 1];
-	szTo[uniS->Length] = '\0';
-	WideCharToMultiByte(CP_ACP, 0, wstr, -1, szTo, (int)uniS->Length, NULL, NULL);
+    int size_needed = WideCharToMultiByte(CP_ACP, 0, wstr, -1, NULL, 0, NULL, NULL);
 
+	char* szTo = new char[size_needed];
+
+	WideCharToMultiByte(CP_ACP, 0, wstr, -1, szTo, size_needed, NULL, NULL);
+    szTo[uniS->Length] = '\0';
 	strTo = szTo;
 	delete[] szTo;
 

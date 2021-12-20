@@ -48,7 +48,6 @@ bool m2tweopTile::drawTile(const ImVec2& tileSize, const ImVec2& coordsStart, ve
 
 	ImVec2 butCoords= ImGui::GetCursorPos();
 
-
 	ImGui::PushStyleColor(ImGuiCol_Button, tileColor);
 
 	isSelected = ImGui::Button("", tileSize);
