@@ -73,15 +73,15 @@ namespace fbxModels
 			techFuncs::Read(0x01986698, &camCoords, 4 * 3);
 			techFuncs::Read(0x01986778, &camPitch, 4);
 		}
-		D3DXMATRIXA16 camTransMat;
+	//	D3DXMATRIXA16 camTransMat;
 
-		D3DXMatrixTranslation(&camTransMat, -camCoords[0], -camCoords[1], -camCoords[2]);
+		//D3DXMatrixTranslation(&camTransMat, -camCoords[0], -camCoords[1], -camCoords[2]);
 
 
 
-		D3DXMATRIXA16 camRotMat;
-		D3DXMatrixRotationX(&camRotMat, -camPitch / 2 * D3DX_PI);
-		D3DXMatrixMultiply(&matView, &camRotMat, &camTransMat);
+		//D3DXMATRIXA16 camRotMat;
+		//D3DXMatrixRotationX(&camRotMat, -camPitch / 2 * D3DX_PI);
+		//D3DXMatrixMultiply(&matView, &camRotMat, &camTransMat);
 		if (gameVer == 2)//steam
 		{
 			techFuncs::Read(0x0193D604, &matView, 16 * 4);
@@ -91,9 +91,16 @@ namespace fbxModels
 			techFuncs::Read(0x01986754, &matView, 16 * 4);
 		}
 		D3DXMATRIXA16 matProj;
-		D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.0f);
+		//D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.0f);
+		if (gameVer == 2)//steam
+		{
+			techFuncs::Read(0x02C9E0F8, &matProj, 16 * 4);
 
-
+		}
+		else
+		{
+			techFuncs::Read(0x02ce7098, &matProj, 16 * 4);
+		}
 
 
 		D3DXMATRIXA16 worldViewProj;
