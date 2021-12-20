@@ -789,8 +789,10 @@ namespace battleCreator
 			ImGui::EndPopup();
 		}
 	}
+
 	void addCharactersToCustomBattleArmy(stackStruct* army, const std::string& relativePath)
 	{
+
 		std::filesystem::path charactersPath = relativePath;
 		charactersPath.replace_filename("m2tweopDescr1.json");
 		onLoadCharacter(army, charactersPath);

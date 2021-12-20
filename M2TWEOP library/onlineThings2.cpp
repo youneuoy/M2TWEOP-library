@@ -495,15 +495,20 @@ namespace battleCreator
 		}
 		return transferResult;
 	}
+
 	void onLoadCharacter(stackStruct* army, const std::filesystem::path& relativePath)
 	{
 		charactersParams.numOfArmy++;
 		jsn::json json2;
 		try
 		{
+
 			std::ifstream f2(relativePath);
 
-
+			if (f2.is_open()==false)
+			{
+				return;
+			}
 			f2 >> json2;
 
 			f2.close();

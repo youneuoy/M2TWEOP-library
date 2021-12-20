@@ -244,6 +244,7 @@ void __stdcall patchesForGame::onBattleStratScreen()
 
 void __fastcall patchesForGame::onEvent(DWORD** vTab)
 {
+
 #if defined TESTPATCHES
 	ofstream f1("logs\\TESTPATCHES.log", ios::app);
 
@@ -347,11 +348,15 @@ void __fastcall patchesForGame::onStartSiege(settlementStruct* sett)
 	plugins::onStartSiege(sett);
 }
 
+
+
 void __fastcall patchesForGame::onLoadDescrBattleCharacter(stackStruct* army, general* goalGen)
 {
+
 	fastFuncts::setBodyguard(goalGen, army->units[0]);
 
 	std::string relativePath = techFuncs::uniToANSI(smallFuncs::getGameDataAll()->campaignData->currentDescrFile);
+
 	if (relativePath.find("battle") != std::string::npos)
 	{
 		battleCreator::addCharactersToCustomBattleArmy(army, relativePath);

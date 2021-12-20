@@ -136,7 +136,6 @@ namespace codeInjects
 
 		//code
 		{
-			Assembler* a = new Assembler();
 
 
 			a->pushad();
