@@ -28,6 +28,7 @@ public:
         LPDIRECT3DDEVICE9 devicePtr,
         const char* meshName,
         const char* textureName,
+        const char* shaderName,
         unsigned long boneMatrixVectorSize = 50);
     void release();
     void advanceTime(unsigned long long timeMod=1);
@@ -148,6 +149,7 @@ private:
     typedef tMatrixVector::const_iterator tMatrixConstIterator;
 
     std::string m_filename;
+    std::string m_shaderName;
     fbxsdk::FbxScene* m_scenePtr;
     int m_majorFileVersion;
     int m_minorFileVersion;

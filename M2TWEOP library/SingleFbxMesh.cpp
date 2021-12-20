@@ -65,6 +65,7 @@ void SingleFbxMesh::load(
     LPDIRECT3DDEVICE9 devicePtr,
     const char* meshName,
     const char* textureName,
+    const char* shaderName,
     unsigned long boneMatrixVectorSize)
 {
     // Generally, you want this to be around 30-50. Going below 12
@@ -77,6 +78,7 @@ void SingleFbxMesh::load(
     m_devicePtr = devicePtr;
     m_filename = meshName;
     m_textureName = textureName;
+    m_shaderName=shaderName;
     m_boneMatrixVectorSize = boneMatrixVectorSize;
 
     // This is safe to do before we have the device created.
@@ -210,7 +212,7 @@ void SingleFbxMesh::_loadModelEffect()
 
     if (0 != D3DXCreateEffectFromFileA(
         m_devicePtr,
-        "skinned.fx",
+        m_shaderName.c_str(),
         nullptr, // CONST D3DXMACRO* pDefines
         nullptr, // LPD3DXINCLUDE pInclude
         0, // shader flags

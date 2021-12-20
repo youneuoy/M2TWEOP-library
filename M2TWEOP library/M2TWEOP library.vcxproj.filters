@@ -88,6 +88,15 @@
     <Filter Include="3rd\asmjit">
       <UniqueIdentifier>{0bd2d4be-0e4e-4039-8e7a-6f1df76ee557}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\fbxStrat\drawer">
+      <UniqueIdentifier>{0c17b9b4-015a-40d2-8a5d-89016df6410c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\Autodesk">
+      <UniqueIdentifier>{64b742c9-2415-4e17-b0e5-3f6e66be6e1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\Autodesk\fbx sdk">
+      <UniqueIdentifier>{c7cb89e6-121d-426b-8b57-7cfb1d5bc41b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -315,6 +324,18 @@
     <ClInclude Include="globals.h">
       <Filter>Исходные файлы\data</Filter>
     </ClInclude>
+    <ClInclude Include="SingleFbxMesh.h">
+      <Filter>features\fbxStrat\drawer</Filter>
+    </ClInclude>
+    <ClInclude Include="tAutodeskMemoryStream.h">
+      <Filter>features\fbxStrat\drawer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\Autodesk\FBX\FBX SDK\2019.5\include\fbxsdk.h">
+      <Filter>3rd\Autodesk\fbx sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="fbxHelper.h">
+      <Filter>features\fbxStrat\drawer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -490,6 +511,15 @@
     </ClCompile>
     <ClCompile Include="globals.cpp">
       <Filter>Исходные файлы\data</Filter>
+    </ClCompile>
+    <ClCompile Include="SingleFbxMesh.cpp">
+      <Filter>features\fbxStrat\drawer</Filter>
+    </ClCompile>
+    <ClCompile Include="tAutodeskMemoryStream.cpp">
+      <Filter>features\fbxStrat\drawer</Filter>
+    </ClCompile>
+    <ClCompile Include="fbxHelper.cpp">
+      <Filter>features\fbxStrat\drawer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

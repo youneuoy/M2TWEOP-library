@@ -74,14 +74,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(SolutionDir)\3rd\discord-files\lib;$(ProgramW6432)\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x86\release;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord-files;$(ProgramW6432)\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(SolutionDir)\3rd\discord-files\lib;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x86\release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord-files;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(SolutionDir)\3rd\discord-files\lib;$(ProgramW6432)\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x86\release;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord-files;$(ProgramW6432)\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(SolutionDir)\3rd\discord-files\lib;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x86\release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord-files;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -208,6 +208,7 @@
     <ClInclude Include="..\3rd\AsmJit\headers\Platform.h" />
     <ClInclude Include="..\3rd\AsmJit\headers\Util.h" />
     <ClInclude Include="..\3rd\AsmJit\headers\Util_p.h" />
+    <ClInclude Include="..\3rd\Autodesk\FBX\FBX SDK\2019.5\include\fbxsdk.h" />
     <ClInclude Include="..\3rd\imgui\eopImgui.h" />
     <ClInclude Include="..\3rd\imgui\imconfig.h" />
     <ClInclude Include="..\3rd\imgui\ImFileDialog.h" />
@@ -234,6 +235,7 @@
     <ClInclude Include="exportHeader.h" />
     <ClInclude Include="fastFuncts.h" />
     <ClInclude Include="fastFunctsHelpers.h" />
+    <ClInclude Include="fbxHelper.h" />
     <ClInclude Include="fbxModels.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="functionsOffsets.h" />
@@ -255,9 +257,11 @@
     <ClInclude Include="plugins.h" />
     <ClInclude Include="realGameTypes.h" />
     <ClInclude Include="settlementConversionLvlSetter.h" />
+    <ClInclude Include="SingleFbxMesh.h" />
     <ClInclude Include="smallFuncs.h" />
     <ClInclude Include="stratModelsChange.h" />
     <ClInclude Include="stratModelsOptimise.h" />
+    <ClInclude Include="tAutodeskMemoryStream.h" />
     <ClInclude Include="techFuncs.h" />
     <ClInclude Include="technicalStringsFuncs.h" />
     <ClInclude Include="TemplateCh.h" />
@@ -299,6 +303,7 @@
     <ClCompile Include="eduThings.cpp" />
     <ClCompile Include="fastFuncts.cpp" />
     <ClCompile Include="fastFunctsHelpers.cpp" />
+    <ClCompile Include="fbxHelper.cpp" />
     <ClCompile Include="fbxModels.cpp" />
     <ClCompile Include="functionsOffsets.cpp" />
     <ClCompile Include="globals.cpp" />
@@ -320,10 +325,12 @@
     </ClCompile>
     <ClCompile Include="plugins.cpp" />
     <ClCompile Include="settlementConversionLvlSetter.cpp" />
+    <ClCompile Include="SingleFbxMesh.cpp" />
     <ClCompile Include="smallFuncs.cpp" />
     <ClCompile Include="stratModelsChange.cpp" />
     <ClCompile Include="stratModelsHelper.cpp" />
     <ClCompile Include="stratModelsOptimise.cpp" />
+    <ClCompile Include="tAutodeskMemoryStream.cpp" />
     <ClCompile Include="techFuncs.cpp" />
     <ClCompile Include="technicalStringsFuncs.cpp" />
     <ClCompile Include="TemplateCh.cpp" />

@@ -1,5 +1,5 @@
 #pragma once
-/*#include <string>
+#include <string>
 #include <vector>
 #include <windows.h>
 #include "FastFuncts.h" 
@@ -18,7 +18,7 @@ namespace fbxModels
 
 	//1-stratmap
 	//2-tactmap
-	void draw(int drawType);
+	void draw(int drawType,int gameVer);
 
 	NOINLINE EOP_EXPORT bool addFbxModel(const char* path, const char* texture,int modelID);
 	NOINLINE EOP_EXPORT bool deleteFbxModel(int modelID);
@@ -46,4 +46,3 @@ namespace fbxModels
 	NOINLINE EOP_EXPORT bool getFbxObjectAnimState(void* object);
 };
 
-*/

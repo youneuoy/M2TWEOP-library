@@ -1,5 +1,5 @@
 #include "fbxModels.h"
-/*#include "SingleFbxMesh.h"
+#include "SingleFbxMesh.h"
 #include "fbxSdk.h"
 
 
@@ -51,7 +51,7 @@ namespace fbxModels
 		vector<fbxObject*>objects;
 	}data;
 
-	void draw(int drawType)
+	void draw(int drawType, int gameVer)
 	{
 		// Set up world matrix
 		D3DXMATRIXA16 matWorld;
@@ -63,9 +63,16 @@ namespace fbxModels
 
 		float camCoords[3];
 		float camPitch;
-		techFuncs::Read(0x0193D538, &camCoords, 4 * 3);
-		techFuncs::Read(0x0193D628, &camPitch, 4);
-
+		if (gameVer == 2)//steam
+		{
+			techFuncs::Read(0x0193D538, &camCoords, 4 * 3);
+			techFuncs::Read(0x0193D628, &camPitch, 4);
+		}
+		else
+		{
+			techFuncs::Read(0x01986698, &camCoords, 4 * 3);
+			techFuncs::Read(0x01986778, &camPitch, 4);
+		}
 		D3DXMATRIXA16 camTransMat;
 
 		D3DXMatrixTranslation(&camTransMat, -camCoords[0], -camCoords[1], -camCoords[2]);
@@ -75,9 +82,14 @@ namespace fbxModels
 		D3DXMATRIXA16 camRotMat;
 		D3DXMatrixRotationX(&camRotMat, -camPitch / 2 * D3DX_PI);
 		D3DXMatrixMultiply(&matView, &camRotMat, &camTransMat);
-
-		techFuncs::Read(0x0193D604, &matView, 16 * 4);
-
+		if (gameVer == 2)//steam
+		{
+			techFuncs::Read(0x0193D604, &matView, 16 * 4);
+		}
+		else
+		{
+			techFuncs::Read(0x01986754, &matView, 16 * 4);
+		}
 		D3DXMATRIXA16 matProj;
 		D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.0f);
 
@@ -102,7 +114,9 @@ namespace fbxModels
 			D3DXMatrixScaling(&matScale, scale, scale, scale);
 
 			float* coords = obj->getCoords();
-			float xCoord = coords[0];
+
+			//model moving
+			/*float xCoord = coords[0];
 			if (xCoord > 50)
 			{
 				xCoord = 0;
@@ -111,7 +125,7 @@ namespace fbxModels
 			{
 				xCoord += 0.01;
 			}
-			coords[0] = xCoord;
+			coords[0] = xCoord;*/
 			matWorld[12] = coords[0];
 			matWorld[13] = coords[1];
 			matWorld[14] = coords[2];
@@ -127,12 +141,14 @@ namespace fbxModels
 
 	NOINLINE EOP_EXPORT bool addFbxModel(const char* path, const char* texture, int modelID)
 	{
+		std::string fPath = globals::dataS.modPatch;
+		fPath += "\\eopData\\shaders\\skinned.fx";
 
 
 		data.models.push_back(new SingleFbxMesh(modelID));
 
 		SingleFbxMesh* newModel = (SingleFbxMesh*)getFbxModel(modelID);
-		newModel->load(data.currDevice, path, texture, 50);
+		newModel->load(data.currDevice, path, texture, fPath.c_str(), 50);
 		SingleFbxMesh* newModel2 = (SingleFbxMesh*)getFbxModel(modelID);
 		return true;
 	}
@@ -295,4 +311,3 @@ namespace fbxModels
 
 };
 
-*/

@@ -128,7 +128,7 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 
 
 	//Backup the DX9 state
-	/*IDirect3DStateBlock9* d3d9_state_block = NULL;
+	IDirect3DStateBlock9* d3d9_state_block = NULL;
 	if (graphicsD3D::dataS.pDevice->CreateStateBlock(D3DSBT_ALL, &d3d9_state_block) < 0)
 		return;
 	if (d3d9_state_block->Capture() < 0)
@@ -157,7 +157,7 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 		drawType = 1;
 	}
 
-	fbxModels::draw(drawType);
+	fbxModels::draw(drawType, globals::dataS.gamever);
 
 
 	// Restore the DX9 transform
@@ -168,7 +168,7 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	// Restore the DX9 state
 	d3d9_state_block->Apply();
 	d3d9_state_block->Release();
-	*/
+	
 }
 void graphicsD3D::onDrawAllGameStuff()
 {
@@ -411,23 +411,23 @@ NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevic
 	*/
 
 
-	//fbxModels::set3dDevice(pDevice);
+	fbxModels::set3dDevice(pDevice);
 
 
 
-	//fbxModels::addFbxModel("scorpid.fbx", "scorp.dds",1);
+	fbxModels::addFbxModel("scorpid.fbx", "scorp.dds",1);
 	//fbxModels::addFbxModel("Tiger.fbx", "FbxTemp_0001.jpg",3);
 	//fbxModels::addFbxModel("Intergalactic_Spaceship-(FBX 6.1 ASCII).fbx", "Intergalactic Spaceship_rough.jpg",5);
 
 
-	//void* obj=fbxModels::addFbxObject(1,2);
+	void* obj=fbxModels::addFbxObject(1,2);
 	//void* obj2=fbxModels::addFbxObject(3,4);
 	//void* obj3=fbxModels::addFbxObject(5,6);
 
-	//float coords[3]{ 0,0,0 };
+	float coords[3]{ 0,0,0 };
 	//float coords2[3]{ 2,0,2 };
 	//float coords3[3]{ 4,5,4 };
-	//fbxModels::setFbxObjectCoords(obj, coords);
+	fbxModels::setFbxObjectCoords(obj, coords);
 	//fbxModels::setFbxObjectCoords(obj2, coords2);
 	//fbxModels::setFbxObjectCoords(obj3, coords3);
 	//fbxModels::setFbxObjectSize(obj2,0.007);

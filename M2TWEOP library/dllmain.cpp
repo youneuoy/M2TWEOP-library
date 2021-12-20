@@ -9,7 +9,7 @@
 
 #endif
 #pragma comment(lib,"BeaEngine_s.lib")
-//#pragma comment(lib,"libfbxsdk.lib")
+#pragma comment(lib,"libfbxsdk.lib")
 //#pragma comment(lib,"discord_game_sdk.dll.lib")
 
 BOOL APIENTRY DllMain( HMODULE hModule,
