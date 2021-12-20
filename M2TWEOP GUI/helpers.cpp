@@ -308,7 +308,7 @@ bool helpers::compareFiles(string& oneFile, string& nextFile)
 	}
 	if (in2.is_open() == false)
 	{
-		MessageBoxA(NULL, "Cannot run M2TWEOP, missing d3d9.dll. Reinstall it for M2TWEOP(dont try any standard d3d9.dll or files from internet, M2TWEOP use custom one).", "ERROR", MB_OK);
+		MessageBoxA(NULL, "Cannot run M2TWEOP, missing dll. Reinstall M2TWEOP.", "ERROR", MB_OK);
 		in1.close();
 		in2.close();
 

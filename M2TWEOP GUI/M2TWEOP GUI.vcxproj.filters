@@ -105,10 +105,10 @@
     <ClCompile Include="markdownHelper.cpp">
       <Filter>Исходные файлы\helpers</Filter>
     </ClCompile>
-    <ClCompile Include="..\3rd\imgui\eopImgui.cpp">
+    <ClCompile Include="..\3rd\imguiDocking\imgui_impl_sdl.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\3rd\imguiDocking\imgui_impl_sdl.cpp">
+    <ClCompile Include="..\3rd\imguiDocking\eopImgui.cpp">
       <Filter>3rd\imgui</Filter>
     </ClCompile>
   </ItemGroup>
@@ -197,10 +197,10 @@
     <ClInclude Include="markdownHelper.h">
       <Filter>Исходные файлы\helpers</Filter>
     </ClInclude>
-    <ClInclude Include="..\3rd\imgui\eopImgui.h">
+    <ClInclude Include="..\3rd\imguiDocking\imgui_impl_sdl.h">
       <Filter>3rd\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="..\3rd\imguiDocking\imgui_impl_sdl.h">
+    <ClInclude Include="..\3rd\imguiDocking\eopImgui.h">
       <Filter>3rd\imgui</Filter>
     </ClInclude>
   </ItemGroup>

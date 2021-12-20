@@ -3,6 +3,4 @@
 namespace ImGui
 {
 	void StyleGrey();
-
-	void donePopup();
 };
