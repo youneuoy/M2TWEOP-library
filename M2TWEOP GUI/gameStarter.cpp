@@ -3,7 +3,7 @@
 #include "gameRunnerUI.h"
 bool gameStarter::startGame()
 {
-//SetCurrentDirectoryA("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Medieval II Total War\\mods\\teutonic");
+	//SetCurrentDirectoryA("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Medieval II Total War\\mods\\teutonic");
 	string gameStartArgs;
 
 	if (dataG::data.gameData.gameMode == 0)
@@ -80,20 +80,20 @@ bool gameStarter::runGameExe()
 
 		string currentPath;
 		helpers::getCurrentPath(currentPath);
-		
-		eopArgs=helpers::makeFString(
-		"%s\n%s\n%s\n%s\n%s",
-		"m2tweopStartCommand",
-		"eopModFolder:",
-		 currentPath.c_str(),
-		"GameVer:",
-		to_string(dataG::data.gameData.gameVer).c_str()
+
+		eopArgs = helpers::makeFString(
+			"%s\n%s\n%s\n%s\n%s",
+			"m2tweopStartCommand",
+			"eopModFolder:",
+			currentPath.c_str(),
+			"GameVer:",
+			to_string(dataG::data.gameData.gameVer).c_str()
 		);
 
 	}
 
 	//mod
-	if (dataG::data.gameData.gameMode == 7&& isEopNeeded)
+	if (dataG::data.gameData.gameMode == 7 && isEopNeeded)
 	{
 		gameRunnerUI::setRunParams(dataG::data.gameData.gamePath, dataG::data.gameData.gameArgs, eopArgs, isEopNeeded);
 	}
@@ -125,8 +125,24 @@ bool gameStarter::initM2TWEOP()
 
 		if (CopyFileA(wrapd3dStr.c_str(), d3dStr.c_str(), FALSE) == false)
 		{
-			DWORD ERR=GetLastError();
+			DWORD ERR = GetLastError();
 			MessageBoxA(NULL, "Cannot run M2TWEOP, d3d9.dll replacing error! Try to delete d3d9.dll in game folder or copy d3d.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
+			exit(0);
+		}
+	}
+
+	path newFbxS = system_complete("libfbxsdk.dll");
+	path fbxS = system_complete("..\\..\\libfbxsdk.dll");
+
+	string newFbxStr = newFbxS.string();
+	string fbxStr = fbxS.string();
+	if (helpers::compareFiles(fbxStr, newFbxStr) == false)
+	{
+
+		if (CopyFileA(newFbxStr.c_str(), fbxStr.c_str(), FALSE) == false)
+		{
+			DWORD ERR = GetLastError();
+			MessageBoxA(NULL, "Cannot run M2TWEOP, libfbxsdk.dll replacing error! Try to delete libfbxsdk.dll in game folder or copy libfbxsdk.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
 			exit(0);
 		}
 	}
