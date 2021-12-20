@@ -6,7 +6,7 @@
 #include "realGameTypes.h"
 #include "techFuncs.h"
 #include "exportHeader.h"
-#include "globalData.h"
+#include "globals.h"
 
 namespace fastFuncts
 {

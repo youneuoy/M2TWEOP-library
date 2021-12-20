@@ -1,7 +1,13 @@
 ﻿// dllmain.cpp : Определяет точку входа для приложения DLL.
 #include "pch.h"
 #include "managerF.h"
+#if _DEBUG
 
+#pragma comment(lib,"AsmJit_debug.lib")
+#else
+#pragma comment(lib,"AsmJit.lib")
+
+#endif
 #pragma comment(lib,"BeaEngine_s.lib")
 //#pragma comment(lib,"libfbxsdk.lib")
 //#pragma comment(lib,"discord_game_sdk.dll.lib")
