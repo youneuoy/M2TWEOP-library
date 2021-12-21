@@ -222,7 +222,7 @@ void graphicsD3D::onDrawAllGameStuff()
 
 	graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui = ImGui::GetIO().WantCaptureMouse;
 	graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui |= ImGui::GetIO().WantCaptureKeyboard;
-	io.MouseDrawCursor = graphicsD3D::dataS.ifMouseOrKeyBoardAtImgui;
+
 
 
 	ImGui::EndFrame();
