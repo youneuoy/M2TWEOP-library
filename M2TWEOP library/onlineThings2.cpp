@@ -303,6 +303,7 @@ namespace battleCreator
 	}
 	void initStructsForResults()
 	{
+		battleArmies.sides.clear();
 		battleDataS* battle = smallFuncs::getGameDataAll()->battleHandler;
 		for (int i = 0; i < battle->sidesNum; i++)
 		{
