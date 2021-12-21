@@ -146,6 +146,21 @@ bool gameStarter::initM2TWEOP()
 			exit(0);
 		}
 	}
+	path newLuaS = system_complete("lua5.1.dll");
+	path luaS = system_complete("..\\..\\lua5.1.dll");
+
+	string newLuaStr = newLuaS.string();
+	string luaStr = luaS.string();
+	if (helpers::compareFiles(luaStr, newLuaStr) == false)
+	{
+
+		if (CopyFileA(newLuaStr.c_str(), luaStr.c_str(), FALSE) == false)
+		{
+			DWORD ERR = GetLastError();
+			MessageBoxA(NULL, "Cannot run M2TWEOP, lua5.1.dll replacing error! Try to delete lua5.1.dll in game folder or copy lua5.1.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
+			exit(0);
+		}
+	}
 
 	return true;
 }
