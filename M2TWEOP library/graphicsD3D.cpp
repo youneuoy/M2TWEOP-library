@@ -160,6 +160,7 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	fbxModels::draw(drawType, globals::dataS.gamever);
 
 
+
 	// Restore the DX9 transform
 	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_WORLD, &last_world);
 	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_VIEW, &last_view);
@@ -209,12 +210,13 @@ void graphicsD3D::onDrawAllGameStuff()
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.f);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(43.f / 255.f, 43.f / 255.f, 43.f / 255.f, 100.f / 255.f));
 	ImGui::RenderNotifications();
-	ImGui::PopStyleVar(1); // Don't forget to Pop()
+	ImGui::PopStyleVar(1); 
 	ImGui::PopStyleColor(1);
 
 
 
 	m2tweopMapManager::draw();
+
 
 	ImGuiIO& io = ImGui::GetIO();
 
@@ -373,8 +375,7 @@ NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* p
 
 NOINLINE EOP_EXPORT void graphicsExport::unloadTexture(LPDIRECT3DTEXTURE9 texture)
 {
-	texture->Release();
-	texture = nullptr;
+	tempData.texturesForDeleting.push_back(texture);
 }
 
 NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevice)

@@ -542,41 +542,43 @@ namespace battleCreator
 
 		std::string bName = makeBattleName();
 
-		ImGuiToast readyMsg(ImGuiToastType_Info, 25000);
-		readyMsg.set_title("Battle generation");
-		readyMsg.set_content("Started generation of %s", bName.c_str());
-		ImGui::InsertNotification(readyMsg);
+		ImGuiToast bMsg(ImGuiToastType_Info, 25000);
+
+		bMsg.set_title("Battle generation");
+		bMsg.set_content("Started generation of %s", bName.c_str());
+		ImGui::InsertNotification(bMsg);
 
 
 		vector<string>fileStrings;
 		createHeaderSection(fileStrings);
 
-		ImGuiToast headSecMsg(ImGuiToastType_Info, 10000);
-		headSecMsg.set_title("Battle generation");
-		headSecMsg.set_content("Header section of %s done", bName.c_str());
-		ImGui::InsertNotification(headSecMsg);
+
+		bMsg = ImGuiToast(ImGuiToastType_Info, 10000);
+		bMsg.set_title("Battle generation");
+		bMsg.set_content("Header section of %s done", bName.c_str());
+		ImGui::InsertNotification(bMsg);
 
 
 		createFactionsSection(fileStrings);
 
-		ImGuiToast facSecMsg(ImGuiToastType_Info, 10000);
-		facSecMsg.set_title("Battle generation");
-		facSecMsg.set_content("Factions section of %s done", bName.c_str());
-		ImGui::InsertNotification(facSecMsg);
+		bMsg = ImGuiToast(ImGuiToastType_Info, 10000);
+		bMsg.set_title("Battle generation");
+		bMsg.set_content("Factions section of %s done", bName.c_str());
+		ImGui::InsertNotification(bMsg);
 
 		createBattleSection(fileStrings);
 
-		ImGuiToast battSecMsg(ImGuiToastType_Info, 10000);
-		battSecMsg.set_title("Battle generation");
-		battSecMsg.set_content("Battle section of %s done", bName.c_str());
-		ImGui::InsertNotification(battSecMsg);
+		bMsg = ImGuiToast(ImGuiToastType_Info, 10000);
+		bMsg.set_title("Battle generation");
+		bMsg.set_content("Battle section of %s done", bName.c_str());
+		ImGui::InsertNotification(bMsg);
 
 		createObjectivesSection(fileStrings);
 
-		ImGuiToast objSecMsg(ImGuiToastType_Info, 10000);
-		objSecMsg.set_title("Battle generation");
-		objSecMsg.set_content("Objectives section of %s done", bName.c_str());
-		ImGui::InsertNotification(objSecMsg);
+		bMsg = ImGuiToast(ImGuiToastType_Info, 10000);
+		bMsg.set_title("Battle generation");
+		bMsg.set_content("Objectives section of %s done", bName.c_str());
+		ImGui::InsertNotification(bMsg);
 
 		std::string fPath = globals::dataS.modPatch;
 		fPath += "\\eopBattles";
@@ -599,15 +601,10 @@ namespace battleCreator
 		}
 		f1.close();
 
-		ImGuiToast doneMsg(ImGuiToastType_Success, 25000);
-		doneMsg.set_title("Battle generation");
-		doneMsg.set_content("Done generation of %s", bName.c_str());
-		ImGui::InsertNotification(doneMsg);
-
-
-
-
-
+		bMsg = ImGuiToast(ImGuiToastType_Success, 25000);
+		bMsg.set_title("Battle generation");
+		bMsg.set_content("Done generation of %s", bName.c_str());
+		ImGui::InsertNotification(bMsg);
 	}
 
 
