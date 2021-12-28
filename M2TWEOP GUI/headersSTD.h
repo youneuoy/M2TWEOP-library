@@ -29,6 +29,8 @@
 #include <dinput.h>
 #include <tchar.h>
 
+
+#include <SFML/Audio.hpp>
 using namespace std;
 #include <boost/filesystem.hpp>
 struct fontS

@@ -44,6 +44,16 @@ namespace managerG
 				getline(f1, s);
 				dataG::data.modData.hideLauncherAtStart = stoi(s);
 			}
+			else if (s == "Play_background_music:")
+			{
+				getline(f1, s);
+				dataG::data.audio.bkgMusic.isMusicNeeded = stoi(s);
+			}
+			else if (s == "Music_volume:")
+			{
+				getline(f1, s);
+				dataG::data.audio.bkgMusic.musicVolume = stoi(s);
+			}
 		}
 
 
@@ -62,6 +72,10 @@ namespace managerG
 		f1 << dataG::data.modData.useM2TWEOP << endl;
 		f1 << "Hide_launcher:" << endl;
 		f1 << dataG::data.modData.hideLauncherAtStart << endl;
+		f1 << "Play_background_music:" << endl;
+		f1 << dataG::data.audio.bkgMusic.isMusicNeeded << endl;
+		f1 << "Music_volume:" << endl;
+		f1 << dataG::data.audio.bkgMusic.musicVolume << endl;
 
 
 		f1.close();

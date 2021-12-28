@@ -13,7 +13,7 @@ namespace modSettingsUI
 
 		ImGui::SetNextWindowPos(helpers::getScreen().screenHalfSize, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
 		ImGui::SetNextWindowSize(ImVec2(windowSize.x, -1), ImGuiCond_Once);
-		ImGui::Begin("M2TWEOP mod settings", isOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+		ImGui::Begin("M2TWEOP settings", isOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
 		if (dataG::data.modData.useVanillaConfig == true)
 		{
@@ -39,6 +39,24 @@ namespace modSettingsUI
 
 		ImGui::Checkbox("Hide launcher on startup", &dataG::data.modData.hideLauncherAtStart);
 		
+		ImGui::NewLine();
+		ImGui::Separator();
+
+		if (ImGui::Checkbox("Play background music", &dataG::data.audio.bkgMusic.isMusicNeeded))
+		{
+			if (dataG::data.audio.bkgMusic.isMusicNeeded == false)
+			{
+				dataG::data.audio.bkgMusic.music.stop();
+			}
+			else
+			{
+				dataG::data.audio.bkgMusic.music.play();
+			}
+		}
+		if (ImGui::SliderInt("Music volume", &dataG::data.audio.bkgMusic.musicVolume,0,100))
+		{
+			dataG::data.audio.bkgMusic.music.setVolume(dataG::data.audio.bkgMusic.musicVolume);
+		}
 		ImGui::NewLine();
 		if (ImGui::Button("Save", helpers::getScreen().centerXButton))
 		{

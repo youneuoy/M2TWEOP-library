@@ -1,11 +1,19 @@
-// Dear ImGui: standalone example application for GLFW + OpenGL2, using legacy fixed pipeline
-// (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context creation, etc.)
-// If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
-// Read online: https://github.com/ocornut/imgui/tree/master/docs
+//sfml(for audio)
+#if _DEBUG
+#pragma comment(lib,"sfml-system-s-d.lib")
+#pragma comment(lib,"sfml-audio-s-d.lib")
+#else
+#pragma comment(lib,"sfml-system-s.lib")
+#pragma comment(lib,"sfml-audio-s.lib")
 
-// **DO NOT USE THIS CODE IF YOUR CODE/ENGINE IS USING MODERN OPENGL (SHADERS, VBO, VAO, etc.)**
-// **Prefer using the code in the example_glfw_opengl2/ folder**
-// See imgui_impl_glfw.cpp for details.
+#endif
+#pragma comment(lib,"vorbisfile.lib")
+#pragma comment(lib,"vorbisenc.lib")
+#pragma comment(lib,"vorbis.lib")
+#pragma comment(lib,"openal32.lib")
+#pragma comment(lib,"ogg.lib")
+#pragma comment(lib,"flac.lib")
+
 #include "headersSTD.h"
 
 #include "dataG.h"
@@ -17,6 +25,7 @@
 #include "managerG.h"
 
 #include <stb_image.h>
+
 
 
 struct {
@@ -140,6 +149,21 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         toolRoutine::tryJustStartMod();
 
         endRender();
+    }
+
+    if (dataG::data.modData.hideLauncherAtStart == false)
+    {
+        dataG::data.audio.bkgMusic.musicLoaded=dataG::data.audio.bkgMusic.music.openFromFile("eopData/music/bkg.flac");
+
+            if (dataG::data.audio.bkgMusic.musicLoaded == true)
+            {
+                dataG::data.audio.bkgMusic.music.setLoop(true);
+                dataG::data.audio.bkgMusic.music.setVolume(dataG::data.audio.bkgMusic.musicVolume);
+                if (dataG::data.audio.bkgMusic.isMusicNeeded == true)
+                {
+                    dataG::data.audio.bkgMusic.music.play();
+                }
+            }
     }
     while (!done)
     {

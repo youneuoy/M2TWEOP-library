@@ -95,7 +95,7 @@ namespace mainUI
 		ImGui::PopStyleColor();
 
 
-		if (ImGui::Button("Mod settings", helpers::getScreen().centerXButton))
+		if (ImGui::Button("Settings", helpers::getScreen().centerXButton))
 		{
 			childs.isModSettingsUIOpen = true;
 		}

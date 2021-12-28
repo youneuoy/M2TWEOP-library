@@ -1,5 +1,8 @@
 #pragma once
 #include "headersSTD.h"
+
+
+
 class dataG
 {
 public:
@@ -50,6 +53,20 @@ public:
 			GLImage logoAbout;
 			GLImage logoBad;
 		}images;
+
+		struct
+		{
+			struct
+			{
+				bool musicLoaded = false;
+				sf::Music music;
+
+				bool isMusicNeeded = false;
+				int musicVolume = 20;
+			}bkgMusic;
+
+		}audio;
+
 		std::vector< GLImage*>staticImagesCollection =
 		{
 			&dataG::dataGS::images.empty,
