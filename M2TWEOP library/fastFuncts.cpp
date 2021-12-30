@@ -443,6 +443,14 @@ namespace fastFuncts
 	}
 	NOINLINE EOP_EXPORT void setSoldiersCount(unit* un, int count)
 	{
+		if (count == 0)
+		{
+			killUnit(un);
+			return;
+		}
+
+
+
 		int diff = count - un->number;
 		if (diff == 0)
 		{
@@ -454,6 +462,7 @@ namespace fastFuncts
 			DWORD adrFunc = codes::offsets.replenishUnitFunc;
 			_asm
 			{
+				push diff
 				push exp
 				mov ecx, un
 				mov eax, adrFunc
@@ -472,6 +481,11 @@ namespace fastFuncts
 
 	NOINLINE EOP_EXPORT void killUnit(unit* un)
 	{
+		if (un->general)
+		{
+			killCharacter(un->general);
+			return;
+		}
 		DWORD adr = codes::offsets.killUnitStratMapFunc;
 
 		_asm {

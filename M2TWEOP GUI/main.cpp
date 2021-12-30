@@ -71,6 +71,7 @@ void endRender()
 
 void initRender()
 {
+
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
     {
         MessageBoxA(NULL, SDL_GetError(), "ERROR", NULL);

@@ -667,6 +667,20 @@ namespace battleCreator
 		battleResultsMenuOpened = true;
 	}
 
+	void onHotseatScreen()
+	{
+		battleResultsMenuOpened = false;
+	}
+
+	void onPostBattleStratScreen()
+	{
+		if (data.isResultTransferNeeded == false)
+		{
+			return;
+		}
+		transferResults2();
+	}
+
 	void draw(LPDIRECT3DDEVICE9 pDevice)
 	{
 		if (battleResultsMenuOpened == true)

@@ -28,7 +28,7 @@ namespace battleCreator
 	void writeCharactersJson(const std::string& filePath);
 
 	bool transferResults(const std::string&resultsPath,int selectedWinner);
-
+	void transferResults2();
 
 	//create new characters here
 	void onLoadCharacter(stackStruct* army, const std::filesystem::path& relativePath);

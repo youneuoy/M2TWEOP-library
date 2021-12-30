@@ -384,6 +384,7 @@ namespace battleCreator
 
 	bool doTransfer()
 	{
+		Sleep(200);
 		battleDataS* battle = smallFuncs::getGameDataAll()->battleHandler;
 
 		std::vector<std::pair<shared_ptr<unitDataS>, unit*>>transferPairs;
@@ -488,6 +489,7 @@ namespace battleCreator
 				return false;
 			}
 		}
+		return true;
 		bool transferResult = doTransfer();
 		if (transferResult == false)
 		{
@@ -495,6 +497,13 @@ namespace battleCreator
 			return false;
 		}
 		return transferResult;
+	}
+
+	void transferResults2()
+	{
+		std::thread thrUrl(
+			doTransfer);
+		thrUrl.detach();
 	}
 
 	void onLoadCharacter(stackStruct* army, const std::filesystem::path& relativePath)

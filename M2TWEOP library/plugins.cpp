@@ -49,13 +49,22 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 
 	if (event == nullptr)return;
 
-
+	//hotseat_scroll
 	if (strcmp(event, "ScrollOpened") == 0)
 	{
 		char* str = reinterpret_cast<char*>(vTab[1]);
+		fastFuncts::useButton("hs_start_button");
 		if (strcmp(str, "prebattle_scroll") == 0)
 		{
 			battleCreator::onBattleStratScreen();
+		}
+		else if (strcmp(str, "post_battle_scroll") == 0)
+		{
+			battleCreator::onPostBattleStratScreen();
+		}
+		else if (strcmp(str, "hotseat_scroll") == 0)
+		{
+			battleCreator::onHotseatScreen();
 		}
 	}
 

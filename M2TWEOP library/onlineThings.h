@@ -31,6 +31,8 @@ namespace battleCreator
 	void onBattleResultsScreen();
 
 	void onBattleStratScreen();
+	void onHotseatScreen();
+	void onPostBattleStratScreen();
 	void draw(LPDIRECT3DDEVICE9 pDevice);
 
 
