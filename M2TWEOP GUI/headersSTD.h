@@ -1,5 +1,4 @@
 #pragma once
-#define _WIN32_WINNT 0x0501
 #include <windows.h>
 #include <string>
 #include <fstream>
@@ -29,10 +28,26 @@
 #include <dinput.h>
 #include <tchar.h>
 
-
 #include <SFML/Audio.hpp>
 using namespace std;
 #include <boost/filesystem.hpp>
+
+
+#include "json.hpp"
+//json namespace
+
+namespace jsn = nlohmann;
+
+
+//macro for fast getting values from json. Need jsn::json obect, named json!
+#define getJson(field,jsonName)\
+field= json.at(jsonName);
+
+//macro for fast setting values to json. Need jsn::json obect, named json!
+#define setJson(jsonName,field)\
+json[jsonName]=field;
+
+
 struct fontS
 {
 	ImFont* font;
@@ -60,3 +75,4 @@ struct screenS
 };
 
 #include "dataG.h"
+

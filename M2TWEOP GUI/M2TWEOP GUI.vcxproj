@@ -72,12 +72,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\M2TWEOPBoost;$(SolutionDir)\3rd\sdl\include</IncludePath>
+    <IncludePath>$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\M2TWEOPBoost;$(SolutionDir)\3rd\sdl\include;$(SolutionDir)\3rd\ImNotify;$(SolutionDir)\3rd\nlohmann</IncludePath>
     <LibraryPath>$(SolutionDir)\3rd\sfml\lib;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)\3rd\M2TWEOPBoost\boostLibs;$(SolutionDir)\3rd\sdl\libs</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\M2TWEOPBoost;$(SolutionDir)\3rd\sdl\include</IncludePath>
+    <IncludePath>$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\M2TWEOPBoost;$(SolutionDir)\3rd\sdl\include;$(SolutionDir)\3rd\ImNotify;$(SolutionDir)\3rd\nlohmann</IncludePath>
     <LibraryPath>$(SolutionDir)\3rd\sfml\lib;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)\3rd\M2TWEOPBoost\boostLibs;$(SolutionDir)\3rd\sdl\libs</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -209,6 +209,10 @@
     <ClInclude Include="..\3rd\imguiDocking\md4c.h" />
     <ClInclude Include="..\3rd\imguiDocking\stb_image.h" />
     <ClInclude Include="..\3rd\imgui\imgui_markdown.h" />
+    <ClInclude Include="..\3rd\ImNotify\fa_solid_900.h" />
+    <ClInclude Include="..\3rd\ImNotify\font_awesome_5.h" />
+    <ClInclude Include="..\3rd\ImNotify\imgui_notify.h" />
+    <ClInclude Include="..\3rd\nlohmann\json.hpp" />
     <ClInclude Include="aboutUI.h" />
     <ClInclude Include="dataG.h" />
     <ClInclude Include="gameRunnerUI.h" />

@@ -10,6 +10,13 @@ public:
 	{
 		struct
 		{
+			bool isGenerationNeeded = false;
+			bool isResultTransferNeeded = false;
+		}battlesData;
+
+
+		struct
+		{
 			int gameMode = 0;
 
 			string gamePath;

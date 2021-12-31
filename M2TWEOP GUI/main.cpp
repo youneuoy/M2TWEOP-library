@@ -116,6 +116,8 @@ void initRender()
     // Setup Platform/Renderer backends
     ImGui_ImplSDL2_InitForOpenGL(mainData.window, mainData.gl_context);
     ImGui_ImplOpenGL2_Init();
+
+
 }
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {

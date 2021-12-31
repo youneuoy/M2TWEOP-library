@@ -2,6 +2,7 @@
 #include "helpers.h"
 
 #include "managerGHelpers.h"
+#include "modSettingsUI.h"
 namespace managerG
 {
 	void loadSettings();
@@ -12,11 +13,44 @@ namespace managerG
 		loadTextures();
 		loadFonts();
 		loadSettings();
+
+
+		modSettingsUI::initSettingsUI();
 	}
 
+	void loadJsonSettings()
+	{
+		jsn::json json;
 
+		std::string fPath = ".\\eopBattles\\battlesCfg.json";
+
+
+		std::ifstream f1(fPath);
+		if(f1.is_open())
+		{ 
+		f1 >> json;
+		}
+		f1.close();
+
+		try
+		{
+			if (json.contains("enableAutoGeneration"))
+			{
+				getJson(dataG::data.battlesData.isGenerationNeeded, "enableAutoGeneration");
+			}
+			if (json.contains("enableResultsTransfer"))
+			{
+				getJson(dataG::data.battlesData.isResultTransferNeeded, "enableResultsTransfer");
+			}
+		}
+		catch (jsn::json::type_error& e)
+		{
+			MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
+	}
 	void loadSettings()
 	{
+		loadJsonSettings();
 		ifstream f1("M2TWEOPGUI.cfg");
 
 
@@ -59,9 +93,20 @@ namespace managerG
 
 		f1.close();
 	}
+	void saveJsonSettings()
+	{
+		std::string fPath = ".\\eopBattles\\battlesCfg.json";
+		ofstream f1(fPath);
+		jsn::json json;
+		setJson("enableAutoGeneration", dataG::data.battlesData.isGenerationNeeded);
+		setJson("enableResultsTransfer", dataG::data.battlesData.isResultTransferNeeded);
 
+		f1 << setw(4) << json;
+		f1.close();
+	}
 	void saveSettings()
 	{
+		saveJsonSettings();
 		ofstream f1("M2TWEOPGUI.cfg");
 
 		f1 << "Use_vanilla_cfg:" << endl;

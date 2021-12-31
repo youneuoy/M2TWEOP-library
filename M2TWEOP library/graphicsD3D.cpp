@@ -196,7 +196,7 @@ void graphicsD3D::onDrawAllGameStuff()
 			ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
 			ImGui::Begin("eopInitTitle", nullptr, transparentF);
 
-			ImGui::Text("M2TWEOP 2.0");
+			ImGui::Text("M2TWEOP 2.1 beta");
 
 			ImGui::End();
 		}
@@ -279,18 +279,26 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 	font_config.PixelSnapH = 1;
 	font_config.FontDataOwnedByAtlas = false;
 
-	ImFont* newFont = io.Fonts->AddFontFromFileTTF(f.c_str(), 12.f, &font_config, io.Fonts->GetGlyphRangesCyrillic());
+	ImFont* newFont = io.Fonts->AddFontFromFileTTF(f.c_str(), 16.f, &font_config, io.Fonts->GetGlyphRangesCyrillic());
 	if (newFont == nullptr)
 	{
 		io.Fonts->AddFontDefault(&font_config);
 	}
 	//init imnotify
-	ImGui::MergeIconsWithLatestFont(24.f, false);
+	ImGui::MergeIconsWithLatestFont(16.f, false);
 
 	dataS.ImInitialized = true;
 
 	drawParams.drawEOPStartInfo = true;
 	drawParams.drawInfoEndTime = (float)ImGui::GetTime()+20.0f;
+
+
+
+	ImGuiToast bMsg(ImGuiToastType_Success, 25000);
+
+	bMsg.set_title("Initializing M2TWEOP");
+	bMsg.set_content("Done");
+	ImGui::InsertNotification(bMsg);
 	return;
 }
 

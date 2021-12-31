@@ -17,6 +17,16 @@ namespace managerG
 	void loadFont(fontS* fnt, const char* path, const char* name, float fontSize)
 	{
 		fnt->font = ImGui::GetIO().Fonts->AddFontFromFileTTF(path, fontSize);
+		if (fnt->font == nullptr)
+		{
+			ImFontConfig font_config;
+			font_config.OversampleH = 1;
+			font_config.OversampleV = 1;
+			font_config.SizePixels = fontSize;
+			font_config.PixelSnapH = 1;
+			font_config.FontDataOwnedByAtlas = false;
+			fnt->font = ImGui::GetIO().Fonts->AddFontDefault(&font_config);
+		}
 		fnt->path = path;
 		fnt->name = name;
 	}

@@ -37,6 +37,12 @@
     <Filter Include="3rd\md4c">
       <UniqueIdentifier>{3b1b0c7a-5953-470e-8c8e-4bfaaf43fda5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rd\ImNotify">
+      <UniqueIdentifier>{a39da62c-373a-486c-b99a-4ed8e765baf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\json">
+      <UniqueIdentifier>{5e19e956-b8b1-4e68-b229-61ed171262cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -202,6 +208,18 @@
     </ClInclude>
     <ClInclude Include="..\3rd\imguiDocking\eopImgui.h">
       <Filter>3rd\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\ImNotify\fa_solid_900.h">
+      <Filter>3rd\ImNotify</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\ImNotify\font_awesome_5.h">
+      <Filter>3rd\ImNotify</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\ImNotify\imgui_notify.h">
+      <Filter>3rd\ImNotify</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\nlohmann\json.hpp">
+      <Filter>3rd\json</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
