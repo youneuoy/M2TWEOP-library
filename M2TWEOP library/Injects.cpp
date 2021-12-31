@@ -2332,3 +2332,49 @@ void CityConversionLvlSetter::SetNewCode()
 	delete a;
 }
 
+mercenaryMovepointsGetGeneral::mercenaryMovepointsGetGeneral(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0060bc93;
+	else if (ver == 1)
+		m_adress = 0x0060b8f3;
+}
+
+mercenaryMovepointsGetGeneral::~mercenaryMovepointsGetGeneral()
+{
+}
+
+void mercenaryMovepointsGetGeneral::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	//call func
+
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+	// Unfinished!
+	delete a;
+}
+
+void mercenaryMovepointsGetGeneral::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->pushad();
+	a->pushf();
+
+	//stack struct in ecx
+	a->mov(eax, (DWORD)funcAddress);//here we must specify general or 0
+	a->call(eax);
+	//return general
+	a->mov(dword_ptr(esp,0x20),eax);//move eax to stored eax
+
+	a->popf();
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

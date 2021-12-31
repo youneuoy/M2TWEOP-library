@@ -97,6 +97,19 @@ worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, world
 
 	return nullptr;
 }
+general* __fastcall patchesForGame::mercenaryMovepointsGetGeneral(stackStruct* army)
+{
+	general* gen = army->gen;
+	if (gen == nullptr)
+	{
+		if (army->settlement != nullptr)
+		{
+			gen = army->settlement->gubernator;
+		}
+		
+	}
+	return gen;
+}
 void __fastcall patchesForGame::clickAtTile(int* xy)
 {
 	plugins::onClickAtTile(xy[0],xy[1]);

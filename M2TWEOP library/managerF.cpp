@@ -338,6 +338,14 @@ void managerF::doPachs()
 
 
 
+	f1 << "Start applying mercenaryMovepointsGetGeneral patch" << endl;
+	mercenaryMovepointsGetGeneral* mercP = new mercenaryMovepointsGetGeneral(mem, (LPVOID)patchesForGame::mercenaryMovepointsGetGeneral, globals::dataS.gamever);
+	mercP->SetNewCode();
+	mercP->Enable();
+	f1 << "Done" << endl;
+
+
+
 	f1 << "End." << endl;
 
 	f1.close();

@@ -11,6 +11,7 @@ namespace modSettingsUI
 		selectedSettingsPage_general,
 		selectedSettingsPage_launcher,
 		selectedSettingsPage_hs,
+		selectedSettingsPage_rules
 	};
 
 
@@ -63,6 +64,16 @@ namespace modSettingsUI
 
 			settingsUIData.settingsPages.push_back(std::move(hsPage));
 		}
+
+		/*
+		//rules page
+		{
+			settingsPage rulesPage;
+			rulesPage.pageId = selectedSettingsPage_rules;
+			rulesPage.pageName = "Rules";
+
+			settingsUIData.settingsPages.push_back(std::move(rulesPage));
+		}*/
 
 		settingsUIData.selectablesSize.x = settingsUIData.selectableSize.x;
 		settingsUIData.selectablesSize.y = settingsUIData.selectableSize.y * settingsUIData.settingsPages.size() + ImGui::GetStyle().ItemSpacing.y * settingsUIData.settingsPages.size();
@@ -139,6 +150,11 @@ namespace modSettingsUI
 		}
 	}
 
+	void drawRulesSettings()
+	{
+
+	}
+
 	void drawHsSettings()
 	{
 		ImGui::Checkbox("Autogeneration of historical battles", &dataG::data.battlesData.isGenerationNeeded);
@@ -209,6 +225,10 @@ namespace modSettingsUI
 			else if (settingsUIData.selectedPage == selectedSettingsPage_launcher)
 			{
 				drawLauncherSettigs();
+			}
+			else if (settingsUIData.selectedPage == selectedSettingsPage_rules)
+			{
+				drawRulesSettings();
 			}
 			else if (settingsUIData.selectedPage == selectedSettingsPage_hs)
 			{

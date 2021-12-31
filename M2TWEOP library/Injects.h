@@ -640,3 +640,17 @@ public:
 private:
 	LPVOID funcAddress;
 };
+
+
+class mercenaryMovepointsGetGeneral
+	:public AATemplate
+{
+public:
+	mercenaryMovepointsGetGeneral(MemWork* mem, LPVOID addr, int ver);
+	~mercenaryMovepointsGetGeneral();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
