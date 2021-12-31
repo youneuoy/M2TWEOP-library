@@ -14,6 +14,10 @@ namespace battleCreator
 
 		atomic_bool isRunStarted{ false };
 		atomic_bool isRunEnded{ false };
+
+
+
+		bool isTransferResultsRunning = false;
 	}data;
 
 	void readParams()
@@ -649,6 +653,11 @@ namespace battleCreator
 	}
 	void onBattleResultsScreen()
 	{
+		if (data.isGenerationNeeded == false)
+		{
+			return;
+		}
+
 		std::thread thrUrl(createResultsFile);
 		thrUrl.detach();
 	}
@@ -678,6 +687,13 @@ namespace battleCreator
 		{
 			return;
 		}
+		if (data.isTransferResultsRunning == false)
+		{
+			return;
+		}
+
+		data.isTransferResultsRunning = false;
+
 		transferResults2();
 	}
 
@@ -753,7 +769,7 @@ namespace battleCreator
 					bool res=transferResults(selectedFile, resolveVariant);
 					if (res == true)
 					{
-
+						data.isTransferResultsRunning = true;
 						battleResultsMenuOpened = false;
 						battleResultsSuccessOpened = true;
 						ImGui::CloseCurrentPopup();

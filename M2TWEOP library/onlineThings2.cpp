@@ -332,6 +332,7 @@ namespace battleCreator
 	}
 	void createResultsFile()
 	{
+
 		ImGuiToast* readyMsg = new ImGuiToast(ImGuiToastType_Info, 25000);
 		readyMsg->set_title("Battle results generation");
 		readyMsg->set_content("Started generation of results");
@@ -489,6 +490,11 @@ namespace battleCreator
 				return false;
 			}
 		}
+		else//draw
+		{
+			transferResults2();
+		}
+
 		return true;
 		bool transferResult = doTransfer();
 		if (transferResult == false)
