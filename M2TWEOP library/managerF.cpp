@@ -367,6 +367,27 @@ void managerF::doPachs()
 	f1 << "Done" << endl;
 
 
+	f1 << "Start applying onGameConsoleCommandFromConsole patch" << endl;
+	onGameConsoleCommandFromConsole* cons1 = new onGameConsoleCommandFromConsole(mem, (LPVOID)patchessForConsole::onGameConsoleCommandFromConsole, globals::dataS.gamever);
+	cons1->SetNewCode();
+	cons1->Enable();
+	f1 << "Done" << endl;
+	
+
+	f1 << "Start applying onGameConsoleCommandFromScript patch" << endl;
+	onGameConsoleCommandFromScript* cons2 = new onGameConsoleCommandFromScript(mem, (LPVOID)patchessForConsole::onGameConsoleCommandFromScript, globals::dataS.gamever);
+	cons2->SetNewCode();
+	cons2->Enable();
+	f1 << "Done" << endl;	
+
+
+	f1 << "Start applying onGameConsoleCommandFromScript patch" << endl;
+	OnReadLogonOrLogoff* cons3 = new OnReadLogonOrLogoff(mem, (LPVOID)patchessForConsole::OnReadLogonOrLogoff, globals::dataS.gamever);
+	cons3->SetNewCode();
+	cons3->Enable();
+	f1 << "Done" << endl;
+
+
 
 	f1 << "End." << endl;
 

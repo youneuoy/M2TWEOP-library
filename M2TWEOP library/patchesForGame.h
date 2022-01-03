@@ -90,4 +90,16 @@ public:
 
 	//called not in all cases!
 	static void WINAPI onBattleStateChange();
+
+
+
+};
+
+class patchessForConsole
+{
+public:
+	static void WINAPI onGameConsoleCommandFromConsole();
+	static void WINAPI onGameConsoleCommandFromScript();
+
+	static int __fastcall OnReadLogonOrLogoff(int isLogonNow);
 };

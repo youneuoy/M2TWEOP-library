@@ -654,3 +654,46 @@ public:
 private:
 	LPVOID funcAddress;
 };
+
+
+
+class onGameConsoleCommandFromConsole
+	:public AATemplate
+{
+public:
+	onGameConsoleCommandFromConsole(MemWork* mem, LPVOID addr, int ver);
+	~onGameConsoleCommandFromConsole();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGameConsoleCommandFromScript
+	:public AATemplate
+{
+public:
+	onGameConsoleCommandFromScript(MemWork* mem, LPVOID addr, int ver);
+	~onGameConsoleCommandFromScript();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+
+
+class OnReadLogonOrLogoff
+	:public AATemplate
+{
+public:
+	OnReadLogonOrLogoff(MemWork* mem, LPVOID addr, int ver);
+	~OnReadLogonOrLogoff();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};

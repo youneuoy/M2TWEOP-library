@@ -2378,3 +2378,156 @@ void mercenaryMovepointsGetGeneral::SetNewCode()
 
 	delete a;
 }
+
+onGameConsoleCommandFromConsole::onGameConsoleCommandFromConsole(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00b025ec;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00b082bc;
+}
+
+onGameConsoleCommandFromConsole::~onGameConsoleCommandFromConsole()
+{
+}
+
+void onGameConsoleCommandFromConsole::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(byte_ptr(esp,0x60), 0x0);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onGameConsoleCommandFromConsole::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(byte_ptr(esp, 0x60), 0x0);
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onGameConsoleCommandFromScript::onGameConsoleCommandFromScript(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00a903f5;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00a8f395;
+}
+
+onGameConsoleCommandFromScript::~onGameConsoleCommandFromScript()
+{
+}
+
+void onGameConsoleCommandFromScript::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->lea(ecx,dword_ptr(esp, 0x18));
+	a->push(ecx);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onGameConsoleCommandFromScript::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->lea(ecx, dword_ptr(esp, 0x18));
+	a->push(ecx);
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+OnReadLogonOrLogoff::OnReadLogonOrLogoff(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00467e60;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00467ae0;
+}
+
+OnReadLogonOrLogoff::~OnReadLogonOrLogoff()
+{
+}
+
+void OnReadLogonOrLogoff::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(al, byte_ptr(ecx, 0x6f9));
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnReadLogonOrLogoff::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(al, byte_ptr(ecx, 0x6f9));//is admin logged in
+
+	a->pushad();
+	a->pushf();
+
+	a->xor_(ecx, ecx);
+	a->mov(ecx, al);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->mov(byte_ptr(esp, 0x20), al);//move eax to stored eax
+
+	a->popf();
+	a->popad();
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

@@ -385,3 +385,26 @@ void __stdcall patchesForGame::onBattleStateChange()
 	}
 }
 
+
+struct
+{
+	bool isComingFromConsole = false;
+}logonConsoleD;
+void __stdcall patchessForConsole::onGameConsoleCommandFromConsole()
+{
+	logonConsoleD.isComingFromConsole = true;
+}
+
+void __stdcall patchessForConsole::onGameConsoleCommandFromScript()
+{
+	logonConsoleD.isComingFromConsole = false;
+}
+
+int __fastcall patchessForConsole::OnReadLogonOrLogoff(int isLogonNow)
+{
+	if (logonConsoleD.isComingFromConsole == true)
+	{
+		return isLogonNow;
+	}
+	return true;
+}
