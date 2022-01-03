@@ -69,6 +69,28 @@ void managerF::doPachs()
 	}
 	f1 << "Done" << endl;
 
+	f1 << "Start applying stop_character patch" << endl;
+	{
+		unsigned char ret[1] = { 0xC3};
+		DWORD nPtr;
+
+
+		if (globals::dataS.gamever == 2)
+		{
+
+			nPtr = 0x00ab5170;
+
+		}
+		else
+		{
+			nPtr = 0x00ab4140;
+
+		}
+
+		MemWork::WriteData(ret, nPtr,1);
+	}
+	f1 << "Done" << endl;
+
 
 	f1 << "Start applying toLoadDescrBattleCharacter patch #1" << endl;
 
