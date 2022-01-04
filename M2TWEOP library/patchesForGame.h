@@ -8,6 +8,9 @@ public:
 	//select worldpkgdesc from db
 	static worldRecord* __fastcall selectWorldpkgdesc(char* database, worldRecord* selectedRecord);
 
+		
+	static void __fastcall OnLoadSettlementWorldpkgdesc(worldRecord* selectedRecord);
+
 
 	static general* __fastcall mercenaryMovepointsGetGeneral(stackStruct*army);
 

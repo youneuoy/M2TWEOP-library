@@ -388,6 +388,13 @@ void managerF::doPachs()
 	f1 << "Done" << endl;
 
 
+	f1 << "Start applying OnLoadSettlementWorldpkgdesc patch" << endl;
+	OnLoadSettlementWorldpkgdesc* loadWordSet = new OnLoadSettlementWorldpkgdesc(mem, (LPVOID)patchesForGame::OnLoadSettlementWorldpkgdesc, globals::dataS.gamever);
+	loadWordSet->SetNewCode();
+	loadWordSet->Enable();
+	f1 << "Done" << endl;
+
+
 
 	f1 << "End." << endl;
 

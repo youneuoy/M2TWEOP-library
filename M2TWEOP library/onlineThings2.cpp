@@ -256,6 +256,55 @@ namespace battleCreator
 		std::vector<shared_ptr<sideDataS>>sides;
 
 	}battleArmies;
+
+
+	struct fortDataS
+	{
+		bool isFort = false;
+		std::string worldRecord;
+
+	};
+	struct battleSettlementCreatorS
+	{
+		fortDataS fort;
+	}battleSett;
+
+	void to_json(jsn::json& j, const battleSettlementCreatorS& sett)
+	{
+		j = jsn::json();
+
+
+		if (sett.fort.isFort == false)
+		{
+			j["fort"] = 0;
+		}
+		else
+		{
+			jsn::json jFort = jsn::json();
+
+			jFort["worldRecord"] = sett.fort.worldRecord;
+
+
+			j["fort"] = jFort;
+		}
+	}
+
+	void from_json(const jsn::json& j, battleSettlementCreatorS& sett)
+	{
+		if (j.at("fort").is_number())
+		{
+			sett.fort.isFort = false;
+		}
+		else
+		{
+			sett.fort.isFort = true;
+			sett.fort.worldRecord = j.at("fort").at("worldRecord");
+		}
+	}
+
+
+
+
 	void to_json(jsn::json& j, const battleArmiesCreatorS& battle)
 	{
 		j = jsn::json::array();
@@ -361,6 +410,26 @@ namespace battleCreator
 		charactersParams.numOfArmy = 0;
 		ofstream f1(filePath);
 		jsn::json json = battleArmies;
+		f1 << setw(4) << json;
+		f1.close();
+	}
+
+	void writeSettlementJson(const std::string& filePath, const std::string& lastSettlementWorldRec)
+	{
+		battleDataS* battleData = smallFuncs::getGameDataAll()->battleHandler;
+		fortStruct* isFort = fastFuncts::findFort(battleData->xCoord, battleData->yCoord);
+		if (isFort == nullptr)
+		{
+			battleSett.fort.isFort = false;
+		}
+		else
+		{
+			battleSett.fort.isFort = true;
+			battleSett.fort.worldRecord = lastSettlementWorldRec;
+		}
+
+		ofstream f1(filePath);
+		jsn::json json = battleSett;
 		f1 << setw(4) << json;
 		f1.close();
 	}
@@ -605,4 +674,50 @@ namespace battleCreator
 			}
 		}
 	}
+	string onLoadSettlementWord(const std::filesystem::path& relativePath)
+	{
+		jsn::json json2;
+		try
+		{
+
+			std::ifstream f2(relativePath);
+
+			if (f2.is_open() == false)
+			{
+				return "";
+			}
+			f2 >> json2;
+
+			f2.close();
+		}
+		catch (jsn::json::parse_error& e)
+		{
+			MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
+
+
+		try
+		{
+			battleSett = json2;
+		}
+		catch (jsn::json::exception& e)
+		{
+			MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
+
+
+		if (battleSett.fort.isFort == false)
+		{
+			return "";
+		}
+
+		else
+		{
+			return battleSett.fort.worldRecord;
+		}
+	}
+
+
+
+
 };

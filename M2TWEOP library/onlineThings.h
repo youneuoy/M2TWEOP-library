@@ -37,6 +37,11 @@ namespace battleCreator
 
 
 	void addCharactersToCustomBattleArmy(stackStruct* army, const std::string& relativePath);
+	string selectWorldpkgdesc(const std::string &selectedRec, const std::string& selectedGroup);
+
+	void OnLoadSettlementWorldpkgdesc(const std::string &selectedRec, const std::string& selectedGroup);
+
+	string getWorldpkgDescFromBattleFile(const std::string& relativePath);
 };
 
 

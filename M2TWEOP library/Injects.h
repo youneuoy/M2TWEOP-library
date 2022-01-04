@@ -697,3 +697,18 @@ public:
 private:
 	LPVOID funcAddress;
 };
+
+
+
+class OnLoadSettlementWorldpkgdesc
+	:public AATemplate
+{
+public:
+	OnLoadSettlementWorldpkgdesc(MemWork* mem, LPVOID addr, int ver);
+	~OnLoadSettlementWorldpkgdesc();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};

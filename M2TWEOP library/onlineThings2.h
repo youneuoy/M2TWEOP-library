@@ -26,11 +26,16 @@ namespace battleCreator
 
 	void createResultsFile();
 	void writeCharactersJson(const std::string& filePath);
+	void writeSettlementJson(const std::string& filePath, const std::string& lastSettlementWorldRec);
 
 	bool transferResults(const std::string&resultsPath,int selectedWinner);
 	void transferResults2();
 
 	//create new characters here
 	void onLoadCharacter(stackStruct* army, const std::filesystem::path& relativePath);
+
+
+	//create settlement here
+	string onLoadSettlementWord(const std::filesystem::path& relativePath);
 };
 

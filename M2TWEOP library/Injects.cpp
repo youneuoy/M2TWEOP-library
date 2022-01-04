@@ -2531,3 +2531,57 @@ void OnReadLogonOrLogoff::SetNewCode()
 
 	delete a;
 }
+
+OnLoadSettlementWorldpkgdesc::OnLoadSettlementWorldpkgdesc(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x010b7ee5;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x010b76f5;
+}
+
+OnLoadSettlementWorldpkgdesc::~OnLoadSettlementWorldpkgdesc()
+{
+}
+
+void OnLoadSettlementWorldpkgdesc::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->sub(esp,  0x0C);
+	a->push(ebp);
+	a->push(esi);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnLoadSettlementWorldpkgdesc::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->sub(esp, 0x0C);
+	a->push(ebp);
+	a->push(esi);
+
+	a->pushad();
+	a->pushf();
+
+	//our record in ecx
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

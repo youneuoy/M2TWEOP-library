@@ -18,6 +18,8 @@ namespace battleCreator
 
 
 		bool isTransferResultsRunning = false;
+
+		std::string lastSettlementWorldRec;
 	}data;
 
 	void readParams()
@@ -132,6 +134,21 @@ namespace battleCreator
 			s.append(to_string(lev));
 		}
 		return s;
+	}
+	void writeFortInfo(vector<string>& fileStrings, fortStruct* fort)
+	{
+		fileStrings.push_back(";this is fort, placed by eop.");
+		fileStrings.push_back("settlement");
+		fileStrings.push_back("{");
+
+
+		fileStrings.push_back(string("	level ").append("village"));
+		fileStrings.push_back(string("	tile ").append(to_string(fort->xCoord).append(" ").append(to_string(fort->yCoord))));
+		fileStrings.push_back("	year_founded 0");
+		fileStrings.push_back("	population 999");
+		fileStrings.push_back("	plan_set default_set");
+
+		fileStrings.push_back("}");
 	}
 	void writeSettlementInfo(vector<string>& fileStrings, settlementStruct* sett)
 	{
@@ -314,6 +331,13 @@ namespace battleCreator
 					if (sett != nullptr)
 					{
 						writeSettlementInfo(fileStrings, sett);
+					}
+
+
+					fortStruct* fort = fastFuncts::findFort(army->gen->xCoord, army->gen->yCoord);
+					if (fort != nullptr)
+					{
+						writeFortInfo(fileStrings, fort);
 					}
 				}
 
@@ -596,6 +620,7 @@ namespace battleCreator
 
 		filesystem::create_directory(fPath);
 		writeCharactersJson(fPath + "\\m2tweopDescr1.json");
+		writeSettlementJson(fPath + "\\m2tweopDescr2.json", data.lastSettlementWorldRec);
 
 		fPath += "\\descr_battle.txt";
 		ofstream f1(fPath);
@@ -823,5 +848,39 @@ namespace battleCreator
 		std::filesystem::path charactersPath = relativePath;
 		charactersPath.replace_filename("m2tweopDescr1.json");
 		onLoadCharacter(army, charactersPath);
+	}
+	string selectWorldpkgdesc(const std::string& selectedRec, const std::string& selectedGroup)
+	{
+		if (selectedGroup != "settlement")
+		{
+			return "";
+		}
+
+
+		std::string relativePath = techFuncs::uniToANSI(smallFuncs::getGameDataAll()->campaignData->currentDescrFile);
+
+		if (relativePath.find("battle") != std::string::npos)//need load
+		{
+			return battleCreator::getWorldpkgDescFromBattleFile(relativePath);
+		}
+		else//need save
+		{
+			return "";
+		}
+
+	}
+	void OnLoadSettlementWorldpkgdesc(const std::string& selectedRec, const std::string& selectedGroup)
+	{
+		if (selectedGroup != "settlement")
+		{
+			return;
+		}
+		data.lastSettlementWorldRec = selectedRec;
+	}
+	string getWorldpkgDescFromBattleFile(const std::string& relativePath)
+	{
+		std::filesystem::path settPath = relativePath;
+		settPath.replace_filename("m2tweopDescr2.json");
+		return onLoadSettlementWord(settPath);
 	}
 };

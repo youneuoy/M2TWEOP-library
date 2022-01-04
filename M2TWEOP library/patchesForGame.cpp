@@ -67,8 +67,15 @@ worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, world
 	string selectedWorld= plugins::onSelectWorldpkgdesc(selectRecordS.c_str(), selectRecordG.c_str());
 	if (selectedWorld.empty()||selectedWorld == selectRecordS)
 	{
+		selectedWorld = battleCreator::selectWorldpkgdesc(selectRecordS, selectRecordG);
+	}
+
+	if (selectedWorld.empty() || selectedWorld == selectRecordS)
+	{
 		return nullptr;
 	}
+
+
 
 	string selectedWorldCPP = selectedWorld;
 	struct dataBaseS
@@ -96,6 +103,12 @@ worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, world
 	} while (currRecord!= db->recordsEnd);
 
 	return nullptr;
+}
+void __fastcall patchesForGame::OnLoadSettlementWorldpkgdesc(worldRecord* selectedRecord)
+{
+	string selectRecordS = getRecordName(selectedRecord);
+	string selectRecordG = getRecordGroup(selectedRecord);
+	battleCreator::OnLoadSettlementWorldpkgdesc(selectRecordS, selectRecordG);
 }
 general* __fastcall patchesForGame::mercenaryMovepointsGetGeneral(stackStruct* army)
 {
