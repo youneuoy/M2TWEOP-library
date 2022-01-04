@@ -138,11 +138,11 @@ namespace battleCreator
 	void writeFortInfo(vector<string>& fileStrings, fortStruct* fort)
 	{
 		fileStrings.push_back(";this is fort, placed by eop.");
-		fileStrings.push_back("settlement");
+		fileStrings.push_back("settlement castle");
 		fileStrings.push_back("{");
 
 
-		fileStrings.push_back(string("	level ").append("village"));
+		fileStrings.push_back(string("	level ").append("huge_city"));
 		fileStrings.push_back(string("	tile ").append(to_string(fort->xCoord).append(" ").append(to_string(fort->yCoord))));
 		fileStrings.push_back("	year_founded 0");
 		fileStrings.push_back("	population 999");
