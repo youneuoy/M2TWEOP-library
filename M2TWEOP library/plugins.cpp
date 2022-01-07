@@ -66,6 +66,7 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 		}
 	}
 
+
 	/*if (strcmp(event, "CharacterSelected") == 0)
 	{
 

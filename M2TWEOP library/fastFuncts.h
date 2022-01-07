@@ -57,6 +57,11 @@ namespace fastFuncts
 	//teleport character
 	NOINLINE EOP_EXPORT void  teleportCharacter(general* gen,int x, int y);
 
+	//add trait to character
+	NOINLINE EOP_EXPORT void addTrait(generalCharacterictics* character, const char* traitName,int traitLevel);
+	NOINLINE EOP_EXPORT void removeTrait(generalCharacterictics* character, const char* traitName);
+
+
 	//add anchillary to character
 	NOINLINE EOP_EXPORT int addAnchillary(generalCharacterictics* character, anchillary* anch);
 	//remove anchillary from character

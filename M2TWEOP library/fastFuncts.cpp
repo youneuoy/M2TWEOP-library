@@ -356,6 +356,125 @@ namespace fastFuncts
 		return;
 	}
 
+	NOINLINE EOP_EXPORT void addTrait(generalCharacterictics* character, const char* traitName, int traitLevel)
+	{
+
+		DWORD adrFunc =0;
+
+
+
+		//getTrait
+		if (globals::dataS.gamever == 2)//steam
+		{
+			adrFunc = 0x008b7070;
+		}
+		else
+		{
+			adrFunc = 0x008b6680;
+		}
+		char** cryptS = fastFunctsHelpers::makeCryptedString(traitName);
+
+
+		void* resTrait = nullptr;
+
+		auto oneArg = cryptS[0];
+		auto nextArg = cryptS[1];
+		_asm
+		{
+			push nextArg
+			push oneArg
+
+			mov eax, adrFunc
+			call eax
+
+			mov resTrait,eax
+			add esp,0x8
+		}
+		if (resTrait == nullptr)
+		{
+			return;
+		}
+
+		//set trait
+		if (globals::dataS.gamever == 2)//steam
+		{
+			adrFunc = 0x005a7bf0;
+		}
+		else
+		{
+			adrFunc = 0x005a7710;
+		}
+
+		_asm
+		{
+			push 1
+			push traitLevel
+			push resTrait
+			mov ecx, character
+
+			mov eax, adrFunc
+			call eax
+		}
+	}
+
+	NOINLINE EOP_EXPORT void removeTrait(generalCharacterictics* character, const char* traitName)
+	{
+		DWORD adrFunc = 0;
+
+
+
+		//getTrait
+		if (globals::dataS.gamever == 2)//steam
+		{
+			adrFunc = 0x008b7070;
+		}
+		else
+		{
+			adrFunc = 0x008b6680;
+		}
+		char** cryptS = fastFunctsHelpers::makeCryptedString(traitName);
+
+
+		void* resTrait = nullptr;
+
+		auto oneArg = cryptS[0];
+		auto nextArg = cryptS[1];
+		_asm
+		{
+			push nextArg
+			push oneArg
+
+			mov eax, adrFunc
+			call eax
+
+			mov resTrait, eax
+			add esp, 0x8
+		}
+		if (resTrait == nullptr)
+		{
+			return;
+		}
+
+		//set trait
+		if (globals::dataS.gamever == 2)//steam
+		{
+			adrFunc = 0x005a5880;
+		}
+		else
+		{
+			adrFunc = 0x005a53a0;
+		}
+
+		_asm
+		{
+			push resTrait
+			mov ecx, character
+
+			mov eax, adrFunc
+			call eax
+		}
+	}
+
 	EOP_EXPORT int addAnchillary(generalCharacterictics* character, anchillary* anch)
 	{
 		if (character == nullptr || anch == nullptr)return 0;
