@@ -712,3 +712,17 @@ public:
 private:
 	LPVOID funcAddress;
 };
+
+class LimitRecruitmentQueueToSlotsInj
+	:public AATemplate
+{
+public:
+	LimitRecruitmentQueueToSlotsInj(MemWork* mem, int* gameplaySettingAddr, int ver);
+	~LimitRecruitmentQueueToSlotsInj();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	int m_version;
+	int* settingAddr;
+};

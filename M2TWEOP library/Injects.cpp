@@ -2585,3 +2585,87 @@ void OnLoadSettlementWorldpkgdesc::SetNewCode()
 
 	delete a;
 }
+
+LimitRecruitmentQueueToSlotsInj::LimitRecruitmentQueueToSlotsInj(MemWork* mem, int* gameplaySettingAddr, int ver)
+	:AATemplate(mem)
+{
+	if (ver == 2) //steam
+		m_adress = 0x5E451F;
+	else if (ver == 1)
+		m_adress = 0x5E40AF;
+
+	m_version = ver;
+	settingAddr = gameplaySettingAddr;
+}
+LimitRecruitmentQueueToSlotsInj::~LimitRecruitmentQueueToSlotsInj(){}
+
+void LimitRecruitmentQueueToSlotsInj::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	if (m_version == 2)
+	{
+		a->call(0xb461);		
+	}
+	else if (m_version == 1)
+	{
+		a->call(0xb4e1);
+	}
+
+	a->ret();
+
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void LimitRecruitmentQueueToSlotsInj::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	Label noSlots = a->newLabel();
+	Label end = a->newLabel();
+	Label gameFunctionCall = a->newLabel();
+
+	a->push(eax);
+
+	a->mov(eax, (DWORD)settingAddr);
+	a->cmp(ptr(eax), 0);
+	a->jz(gameFunctionCall);
+
+	a->xor_(eax, eax);
+	a->mov(ax, ptr(esi, 0xF34)); //recruitmentSlots 
+	a->test(ax,ax);
+	a->jz(noSlots);
+	a->add(ax, ptr(esi, 0xF36)); //recruitmentSlots bonus
+	a->cmp(ax, ptr(esi, 0x320));
+	a->jle(noSlots);
+	a->mov(eax, ptr(esi, 0x170)); //settlement->faction
+	a->mov(eax, ptr(eax, 0xAEC)); //faction->treasury
+	a->push(edi);
+	a->movzx(edi, word_ptr(edi, 0x16));
+	a->cmp(eax, edi);
+	a->pop(edi);
+	a->jl(noSlots);
+
+	a->bind(gameFunctionCall);
+	a->pop(eax);
+	if (m_version == 2)
+		a->mov(eax, (DWORD)0x005EF980);
+	else
+		a->mov(eax, (DWORD)0x005EF590);
+
+	a->call(eax);
+	a->jmp(end);
+	a->bind(noSlots);
+	a->pop(eax);
+	a->pop(eax);
+	a->xor_(eax, eax);
+	a->bind(end);
+	a->ret();
+
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

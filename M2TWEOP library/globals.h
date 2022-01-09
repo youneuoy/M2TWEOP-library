@@ -72,6 +72,11 @@ public:
 			UINT32 siegeTowerCost = 65;
 		}limits;
 
+		struct
+		{
+			int32_t bLimitRecruitmentToSlotsAndByMoney = 0;
+		}eopGameplaySettings;
+
 
 
 
