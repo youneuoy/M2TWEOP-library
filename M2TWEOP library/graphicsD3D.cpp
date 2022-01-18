@@ -156,7 +156,9 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	{
 		drawType = 1;
 	}
-
+	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	fbxModels::draw(drawType, globals::dataS.gamever);
 
 

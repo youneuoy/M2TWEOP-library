@@ -659,7 +659,9 @@ struct soldierInBattle {
 struct unit {
 	undefined field_0x0[4];
 	struct trackedPointerUnit** trackedUnitPointerP;
-	undefined field_0x8[652];
+	undefined field_0x8[636];
+	struct stackStruct* army;
+	undefined field_0x288[12];
 	struct EduEntry* eduEntry;
 	undefined field_0x298[616];
 	int expScreen; /* screen expierence */
@@ -1053,7 +1055,7 @@ struct tradingResources {
 
 
 struct console_command { /* structure of console command */
-	bool(_stdcall**function)(const char*, char*);
+	bool(_stdcall** function)(const char*, char*);
 	char* name;
 	char* description;
 	int type;

@@ -73,6 +73,7 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT void setUnitParams(unit* un, int count, int exp, int armor, int weap);
 	NOINLINE EOP_EXPORT void setSoldiersCount(unit* un,int count);
 	NOINLINE EOP_EXPORT void setSoldiersCountAndExp(unit* un,int count, int exp);
+	NOINLINE EOP_EXPORT void setUnitMovepoints(unit* un,float movepoints);
 
 	//kills
 	NOINLINE EOP_EXPORT void killUnit(unit* un);

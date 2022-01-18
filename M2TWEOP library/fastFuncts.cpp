@@ -560,6 +560,60 @@ namespace fastFuncts
 		un->expScreen = exp;
 		setSoldiersCount(un, count);
 	}
+	NOINLINE EOP_EXPORT void setUnitMovepoints(unit* un, float movepoints)
+	{
+		un->movePoints = movepoints;
+
+
+		if (un->general == nullptr)
+		{
+			general* gen = un->army->gen;
+			if (gen != 0)
+			{
+				DWORD adrFunc = 0;
+				if (globals::dataS.gamever == 2)//steam
+				{
+					adrFunc = 0x00597c60;
+				}
+				else
+				{
+					adrFunc = 0x00597770;
+				}
+				_asm
+				{
+					mov ecx, gen
+
+					mov eax, adrFunc
+					call eax
+				}
+			}
+			return;
+		}
+		un->general->movepoints1 = movepoints;
+		un->general->movepoints2 = movepoints;
+
+
+		general* gen = un->general;
+		if (gen != 0)
+		{
+			DWORD adrFunc = 0;
+			if (globals::dataS.gamever == 2)//steam
+			{
+				adrFunc = 0x00597c60;
+			}
+			else
+			{
+				adrFunc = 0x00597770;
+			}
+			_asm
+			{
+				mov ecx, gen
+
+				mov eax, adrFunc
+				call eax
+			}
+		}
+	}
 	NOINLINE EOP_EXPORT void setSoldiersCount(unit* un, int count)
 	{
 		if (count == 0)
