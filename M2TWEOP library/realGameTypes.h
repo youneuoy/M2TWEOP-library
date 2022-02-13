@@ -155,7 +155,7 @@ struct campaign {
 	float timeAtStartBattle;
 	int daysInBattle;
 	float currentTimeInBattle; /* 24 max, so calc as daysInBattle*24+currentTimeInBattle */
-	undefined field_0x734[4128];
+	undefined field_0x734[4124];
 	struct factionDiplomacy dipArray[31][31];
 };
 struct gameDataAllStruct {
@@ -694,7 +694,9 @@ struct stackStruct { /* structure of stack */
 	int numOfUnits;
 	undefined field_0x60[56];
 	struct stackStruct* boardedArmy; /* if fleet, here army */
-	undefined field_0x9c[16];
+	undefined field_0x9c[4];
+	struct stackStruct* shipArmy; /* here fleet what contain our army */
+	undefined field_0xa4[8];
 	struct siegeS* siege;
 	struct portBuildingStruct* blockedPort; /* if port blocked by this army when it here */
 	undefined field_0xb4[32];
@@ -1024,7 +1026,9 @@ struct fortStruct {
 	UINT32 yCoord;
 	undefined field_0x14[48];
 	struct stackStruct* army;
-	undefined field_0x48[152];
+	undefined field_0x48[4];
+	struct siegeS* siege;
+	undefined field_0x50[144];
 	struct stratFortMod* stratModel;
 	undefined field_0xe4[4];
 	struct factionStruct* faction;

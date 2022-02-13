@@ -184,6 +184,10 @@ vector<string> techFuncs::loadGameLoadArchive(UNICODE_STRING**& savePath)
 	vector<string> archiveFiles;
 
     string relativePath = uniToANSI(savePath);
+    if (std::filesystem::exists(relativePath) == false)
+    {
+        return archiveFiles;
+    }
     string unpackPath = globals::dataS.modPatch;
 
 

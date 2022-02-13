@@ -272,8 +272,8 @@ namespace fastFuncts
 		DWORD adrFunc = codes::offsets.moveStratCameraSlowFunc;
 		_asm
 		{
-			push x
 			push y
+			push x
 
 			mov eax, adrFunc
 			call eax
@@ -293,8 +293,8 @@ namespace fastFuncts
 		DWORD adrFunc = codes::offsets.moveStratCameraFastFunc;
 		_asm
 		{
-			push x
 			push y
+			push x
 
 			mov eax, adrFunc
 			call eax

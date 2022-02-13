@@ -658,7 +658,10 @@ void plugins::onChangeTurnNum()
 void plugins::onLoadGame(UNICODE_STRING**& savePath)
 {
 	vector<string>files = techFuncs::loadGameLoadArchive(savePath);
-
+	if (files.size() == 0)
+	{
+		return;
+	}
 
 	for (plugin* pl : pluginsCfg.plugins)
 	{
