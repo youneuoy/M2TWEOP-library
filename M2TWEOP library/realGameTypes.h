@@ -10,6 +10,21 @@ typedef unsigned short    ushort;
 typedef struct stackStruct stackStruct, * PstackStruct;
 typedef struct settlementStruct settlementStruct, * PsettlementStruct;
 
+struct uiElement {
+	undefined field_0x0[16];
+	int xSize;
+	int ySize;
+	undefined field_0x18[4];
+	char* elementName; /* can be nullptr */
+	undefined field_0x20[32];
+	int xPos;
+	int yPos;
+	undefined field_0x48[4];
+	struct uiElement** subElements;
+	undefined field_0x50[4];
+	int subElementsNum;
+	undefined field_0x58[112];
+};
 struct tilesS {
 	undefined field_0x0[44];
 	int xBound;

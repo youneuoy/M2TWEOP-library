@@ -114,5 +114,7 @@ namespace fastFuncts
 
 
 	NOINLINE EOP_EXPORT bool useButton(const char* buttonName);
+	NOINLINE EOP_EXPORT uiElement* getUiElement(const char* elementName);
+	NOINLINE EOP_EXPORT void useUiElement(uiElement* element);
 };
 

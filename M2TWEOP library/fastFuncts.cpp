@@ -727,6 +727,32 @@ namespace fastFuncts
 		}
 		return true;
 	}
+	NOINLINE EOP_EXPORT uiElement* getUiElement(const char* elementName)
+	{
+		uiElement* resElement = nullptr;
+		char** cryptS = fastFunctsHelpers::makeCryptedString(elementName);
+		DWORD adrF = codes::offsets.getUiElementFunc;
+		_asm
+		{
+			push cryptS
+			mov eax, adrF
+			call eax
+			mov resElement, eax
+			add esp, 0x4
+		}
+
+		return resElement;
+	}
+	NOINLINE EOP_EXPORT void useUiElement(uiElement* element)
+	{
+		DWORD adrF = codes::offsets.useButtonFunc;
+		_asm
+		{
+			mov ecx, element
+			mov eax, adrF
+			call eax
+		}
+	}
 	NOINLINE EOP_EXPORT void autoResolve()
 	{
 		DWORD adrFunc = codes::offsets.autoResolveFunc;
