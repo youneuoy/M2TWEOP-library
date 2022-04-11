@@ -105,30 +105,6 @@ namespace modSettingsUI
 
 		ImGui::Checkbox("Hide launcher on startup", &dataG::data.modData.hideLauncherAtStart);
 
-		/*ImGui::NewLine();
-		ImGui::Separator();
-
-		if (ImGui::Checkbox("Play background music", &dataG::data.audio.bkgMusic.isMusicNeeded))
-		{
-			if (dataG::data.audio.bkgMusic.isMusicNeeded == false)
-			{
-				dataG::data.audio.bkgMusic.music.stop();
-			}
-			else
-			{
-				dataG::data.audio.bkgMusic.music.play();
-			}
-		}
-		if (ImGui::SliderInt("Music volume", &dataG::data.audio.bkgMusic.musicVolume, 0, 100))
-		{
-			dataG::data.audio.bkgMusic.music.setVolume(dataG::data.audio.bkgMusic.musicVolume);
-		}
-
-		ImGui::NewLine();
-		ImGui::Separator();
-		ImGui::Checkbox("Autogeneration of historical battles", &dataG::data.battlesData.isGenerationNeeded);
-		ImGui::Checkbox("Autogeneration of battle results files", &dataG::data.battlesData.isResultTransferNeeded);
-		*/
 	}
 
 	void drawLauncherSettigs()
