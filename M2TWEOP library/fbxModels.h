@@ -44,5 +44,8 @@ namespace fbxModels
 
 	NOINLINE EOP_EXPORT void setFbxObjectAnimState(void* object, bool isAnimate);
 	NOINLINE EOP_EXPORT bool getFbxObjectAnimState(void* object);
+
+	NOINLINE EOP_EXPORT int getFbxObjectDrawType(void* object);
+	NOINLINE EOP_EXPORT void setFbxObjectDrawType(void* object,int drawType);
 };
 

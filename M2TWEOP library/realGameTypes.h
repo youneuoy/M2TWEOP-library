@@ -156,7 +156,10 @@ struct campaign {
 	int ActiveFactions;
 	undefined field_0x400[12];
 	int lastrandomseed;
-	undefined field_0x410[748];
+	undefined field_0x410[744];
+	int8_t isAdminPasswordExist;
+	int8_t isHotseatLogon;
+	undefined field_0x6fa[2];
 	int8_t hotseatConsole;
 	int8_t hotseatConsole2;
 	undefined field_0x6fe[14];
@@ -170,7 +173,7 @@ struct campaign {
 	float timeAtStartBattle;
 	int daysInBattle;
 	float currentTimeInBattle; /* 24 max, so calc as daysInBattle*24+currentTimeInBattle */
-	undefined field_0x734[4124];
+	undefined field_0x734[4128];
 	struct factionDiplomacy dipArray[31][31];
 };
 struct gameDataAllStruct {

@@ -73,9 +73,6 @@
     <Filter Include="features\eduThings">
       <UniqueIdentifier>{bf155e05-95f7-4050-ab15-28d5f001fc7f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="features\fbxStrat">
-      <UniqueIdentifier>{775825f1-801f-474d-8bd8-c4f5f50e98e3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="features\onlineThings">
       <UniqueIdentifier>{2143ae68-fb3b-4946-8cb2-460523c5e8cd}</UniqueIdentifier>
     </Filter>
@@ -88,14 +85,17 @@
     <Filter Include="3rd\asmjit">
       <UniqueIdentifier>{0bd2d4be-0e4e-4039-8e7a-6f1df76ee557}</UniqueIdentifier>
     </Filter>
-    <Filter Include="features\fbxStrat\drawer">
-      <UniqueIdentifier>{0c17b9b4-015a-40d2-8a5d-89016df6410c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="3rd\Autodesk">
       <UniqueIdentifier>{64b742c9-2415-4e17-b0e5-3f6e66be6e1a}</UniqueIdentifier>
     </Filter>
     <Filter Include="3rd\Autodesk\fbx sdk">
       <UniqueIdentifier>{c7cb89e6-121d-426b-8b57-7cfb1d5bc41b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\fbxModels">
+      <UniqueIdentifier>{775825f1-801f-474d-8bd8-c4f5f50e98e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\fbxModels\drawer">
+      <UniqueIdentifier>{0c17b9b4-015a-40d2-8a5d-89016df6410c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -226,7 +226,7 @@
       <Filter>features\eduThings</Filter>
     </ClInclude>
     <ClInclude Include="fbxModels.h">
-      <Filter>features\fbxStrat</Filter>
+      <Filter>features\fbxModels</Filter>
     </ClInclude>
     <ClInclude Include="onlineThings2.h">
       <Filter>features\onlineThings</Filter>
@@ -325,16 +325,16 @@
       <Filter>Исходные файлы\data</Filter>
     </ClInclude>
     <ClInclude Include="SingleFbxMesh.h">
-      <Filter>features\fbxStrat\drawer</Filter>
+      <Filter>features\fbxModels\drawer</Filter>
     </ClInclude>
     <ClInclude Include="tAutodeskMemoryStream.h">
-      <Filter>features\fbxStrat\drawer</Filter>
+      <Filter>features\fbxModels\drawer</Filter>
     </ClInclude>
     <ClInclude Include="..\3rd\Autodesk\FBX\FBX SDK\2019.5\include\fbxsdk.h">
       <Filter>3rd\Autodesk\fbx sdk</Filter>
     </ClInclude>
     <ClInclude Include="fbxHelper.h">
-      <Filter>features\fbxStrat\drawer</Filter>
+      <Filter>features\fbxModels\drawer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -432,7 +432,7 @@
       <Filter>features\eduThings</Filter>
     </ClCompile>
     <ClCompile Include="fbxModels.cpp">
-      <Filter>features\fbxStrat</Filter>
+      <Filter>features\fbxModels</Filter>
     </ClCompile>
     <ClCompile Include="onlineThings2.cpp">
       <Filter>features\onlineThings</Filter>
@@ -513,13 +513,13 @@
       <Filter>Исходные файлы\data</Filter>
     </ClCompile>
     <ClCompile Include="SingleFbxMesh.cpp">
-      <Filter>features\fbxStrat\drawer</Filter>
+      <Filter>features\fbxModels\drawer</Filter>
     </ClCompile>
     <ClCompile Include="tAutodeskMemoryStream.cpp">
-      <Filter>features\fbxStrat\drawer</Filter>
+      <Filter>features\fbxModels\drawer</Filter>
     </ClCompile>
     <ClCompile Include="fbxHelper.cpp">
-      <Filter>features\fbxStrat\drawer</Filter>
+      <Filter>features\fbxModels\drawer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -301,8 +301,19 @@ namespace fbxModels
 		return currObject->getAnimate();
 	}
 
+	NOINLINE EOP_EXPORT int getFbxObjectDrawType(void* object)
+	{
+		fbxObject* currObject = reinterpret_cast<fbxObject*>(object);
+
+		return currObject->getType();
+	}
+	NOINLINE EOP_EXPORT void setFbxObjectDrawType(void* object, int drawType)
+	{
+		fbxObject* currObject = reinterpret_cast<fbxObject*>(object);
 
 
+		return currObject->setType(drawType);
+	}
 
 	fbxObject::fbxObject(SingleFbxMesh* model, int objectID)
 		:mesh(model)

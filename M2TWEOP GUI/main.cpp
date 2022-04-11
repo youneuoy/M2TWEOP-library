@@ -134,7 +134,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     int isExit = 0;
 
     bool done = false;
-    // Main loop
+
     if (!done)
     {
         SDL_Event event;
@@ -168,6 +168,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
                 }
             }
     }
+    // Main loop
     while (!done)
     {
         SDL_Event event;

@@ -12,7 +12,24 @@ namespace m2tweopMapManager
 
 	void draw()
 	{
-		return;
+		static bool isDrawNeeded = false;
+
+		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
+		campaign* campaign = gameDataAll->campaignData;
+		//if (campaign->isAdminPasswordExist == false||(campaign->isAdminPasswordExist==true&& campaign->isHotseatLogon==true))
+		//{
+			if ((ImGui::GetIO().KeysDownDuration[VK_CONTROL] > 0.f && ImGui::GetIO().KeysDownDuration['M'] > 0.f)
+				&& (ImGui::GetIO().KeysDownDurationPrev[VK_CONTROL] == 0.f|| ImGui::GetIO().KeysDownDuration['M'] == 0.f)
+				)
+			{
+				isDrawNeeded = !isDrawNeeded;
+			}
+		//}
+		if (isDrawNeeded == false)
+		{
+			return;
+		}
+
 		ImGui::SetNextWindowPos({ 0,0 }, ImGuiCond_Always);
 		if (managerData.isShowMap == true)
 		{
