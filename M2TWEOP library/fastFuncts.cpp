@@ -26,6 +26,31 @@ namespace fastFuncts
 
 		return nullptr;
 	}
+	NOINLINE EOP_EXPORT void setCharacterType(general* character, int typeID, int subFaction, int factionDipNum)
+	{
+		DWORD adrFunc = 0x0;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			adrFunc = 0x008b4200;
+		}
+		else
+		{
+			adrFunc = 0x008b3810;
+		}
+
+		genMod* retVal = nullptr;
+
+		__asm
+		{
+			push factionDipNum
+			push subFaction
+			push typeID
+			mov eax, adrFunc
+			call eax
+			mov retVal,eax
+		}
+		character->genType = retVal;
+	}
 	NOINLINE EOP_EXPORT UINT32 getTileRegionID(int x, int y)
 	{
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
