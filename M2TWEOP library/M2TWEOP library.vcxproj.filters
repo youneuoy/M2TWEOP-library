@@ -97,6 +97,9 @@
     <Filter Include="features\fbxModels\drawer">
       <UniqueIdentifier>{0c17b9b4-015a-40d2-8a5d-89016df6410c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\soundThings">
+      <UniqueIdentifier>{7f598697-dee4-4e10-a920-c292390fe5f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -336,6 +339,9 @@
     <ClInclude Include="fbxHelper.h">
       <Filter>features\fbxModels\drawer</Filter>
     </ClInclude>
+    <ClInclude Include="eopSounds.h">
+      <Filter>features\soundThings</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -520,6 +526,9 @@
     </ClCompile>
     <ClCompile Include="fbxHelper.cpp">
       <Filter>features\fbxModels\drawer</Filter>
+    </ClCompile>
+    <ClCompile Include="eopSounds.cpp">
+      <Filter>features\soundThings</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

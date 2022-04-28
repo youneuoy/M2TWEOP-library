@@ -161,6 +161,21 @@ bool gameStarter::initM2TWEOP()
 			exit(0);
 		}
 	}
+	path newopenal32S = system_complete("openal32.dll");
+	path openal32S = system_complete("..\\..\\openal32.dll");
+
+	string newopenalStr = newopenal32S.string();
+	string openal32Str = openal32S.string();
+	if (helpers::compareFiles(openal32Str, newopenalStr) == false)
+	{
+
+		if (CopyFileA(newopenalStr.c_str(), openal32Str.c_str(), FALSE) == false)
+		{
+			DWORD ERR = GetLastError();
+			MessageBoxA(NULL, "Cannot run M2TWEOP, openal32.dll replacing error! Try to delete openal32.dll in game folder or copy openal32.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
+			exit(0);
+		}
+	}
 
 	return true;
 }
