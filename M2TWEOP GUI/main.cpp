@@ -153,18 +153,18 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
         endRender();
     }
-
+    dataG::data.audio.bkgMusic.music = new sf::Music();
     if (dataG::data.modData.hideLauncherAtStart == false)
     {
-        dataG::data.audio.bkgMusic.musicLoaded=dataG::data.audio.bkgMusic.music.openFromFile("eopData/music/bkg.flac");
+        dataG::data.audio.bkgMusic.musicLoaded=dataG::data.audio.bkgMusic.music->openFromFile("eopData/music/bkg.flac");
 
             if (dataG::data.audio.bkgMusic.musicLoaded == true)
             {
-                dataG::data.audio.bkgMusic.music.setLoop(true);
-                dataG::data.audio.bkgMusic.music.setVolume(dataG::data.audio.bkgMusic.musicVolume);
+                dataG::data.audio.bkgMusic.music->setLoop(true);
+                dataG::data.audio.bkgMusic.music->setVolume(dataG::data.audio.bkgMusic.musicVolume);
                 if (dataG::data.audio.bkgMusic.isMusicNeeded == true)
                 {
-                    dataG::data.audio.bkgMusic.music.play();
+                    dataG::data.audio.bkgMusic.music->play();
                 }
             }
     }

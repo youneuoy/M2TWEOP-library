@@ -66,7 +66,7 @@ public:
 			struct
 			{
 				bool musicLoaded = false;
-				sf::Music music;
+				sf::Music* music;
 
 				bool isMusicNeeded = false;
 				int musicVolume = 20;

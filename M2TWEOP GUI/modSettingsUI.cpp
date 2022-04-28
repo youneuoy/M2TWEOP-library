@@ -113,16 +113,16 @@ namespace modSettingsUI
 		{
 			if (dataG::data.audio.bkgMusic.isMusicNeeded == false)
 			{
-				dataG::data.audio.bkgMusic.music.stop();
+				dataG::data.audio.bkgMusic.music->stop();
 			}
 			else
 			{
-				dataG::data.audio.bkgMusic.music.play();
+				dataG::data.audio.bkgMusic.music->play();
 			}
 		}
 		if (ImGui::SliderInt("Music volume", &dataG::data.audio.bkgMusic.musicVolume, 0, 100))
 		{
-			dataG::data.audio.bkgMusic.music.setVolume(dataG::data.audio.bkgMusic.musicVolume);
+			dataG::data.audio.bkgMusic.music->setVolume(dataG::data.audio.bkgMusic.musicVolume);
 		}
 	}
 
