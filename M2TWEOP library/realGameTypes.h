@@ -826,7 +826,7 @@ struct EduEntry {
 	uint32_t categoryClassCombinationForAI;
 	DWORD VoiceType;
 	char* Accent;
-	char accentHash;
+	uint32_t accentHash;
 	char* BannerFaction;
 	char pad_0058[4];
 	char* BannerUnit;

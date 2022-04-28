@@ -23,6 +23,7 @@ namespace fastFunctsHelpers
 				return i;
 			}
 		}
+
 		return -1;
 	}
 	EduEntry* getEDUEntry(const char* type)
