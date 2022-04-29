@@ -2669,3 +2669,67 @@ void LimitRecruitmentQueueToSlotsInj::SetNewCode()
 
 	delete a;
 }
+
+fortificationlevelS::fortificationlevelS(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005e3806;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005e3336;
+}
+
+fortificationlevelS::~fortificationlevelS()
+{
+}
+
+void fortificationlevelS::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(ecx, dword_ptr(ecx, 0x198));
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void fortificationlevelS::SetNewCode()
+{
+
+	Assembler* a = new Assembler();
+	Label override = a->newLabel();
+	Label standard = a->newLabel();
+	Label exLab = a->newLabel();
+
+	a->pushad();
+	a->pushf();
+
+
+	a->mov(ecx, ecx);//settlement
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->cmp(eax, -2);
+
+	a->jnz(override);
+
+	a->bind(standard);
+	a->popf();
+	a->popad();
+	a->mov(ecx, dword_ptr(ecx, 0x198));
+	a->jmp(exLab);
+
+	a->bind(override);
+	a->popf();
+	a->mov(dword_ptr(esp, 0x18), eax);//mov our eax to ecx
+	a->popad();
+
+	a->bind(exLab);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

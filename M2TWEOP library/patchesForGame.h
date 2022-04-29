@@ -10,6 +10,7 @@ public:
 
 		
 	static void __fastcall OnLoadSettlementWorldpkgdesc(worldRecord* selectedRecord);
+	static int __fastcall onfortificationlevelS(settlementStruct* settlement);
 
 
 	static general* __fastcall mercenaryMovepointsGetGeneral(stackStruct*army);

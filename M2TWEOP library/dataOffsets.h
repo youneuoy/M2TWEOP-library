@@ -21,8 +21,13 @@ public:
 		consoleCommands* consoleCommands = NULL;
 
 		DWORD guildDataStart = NULL;
+
+
+
+		//audio settings
+		bool* audioEnable = nullptr;
+		int* audioMaster_vol = nullptr;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);
 };
-

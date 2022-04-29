@@ -394,6 +394,12 @@ void managerF::doPachs()
 	loadWordSet->Enable();
 	f1 << "Done" << endl;
 
+	f1 << "Start applying fortificationlevelS patch" << endl;
+	fortificationlevelS* fortificationlevel = new fortificationlevelS(mem, (LPVOID)patchesForGame::onfortificationlevelS, globals::dataS.gamever);
+	fortificationlevel->SetNewCode();
+	fortificationlevel->Enable();
+	f1 << "Done" << endl;
+
 	f1 << "Start applying LimitRecruitmentQueueToSlots patch" << endl;
 	LimitRecruitmentQueueToSlotsInj* limitRecr = new LimitRecruitmentQueueToSlotsInj(mem, &globals::dataS.eopGameplaySettings.bLimitRecruitmentToSlotsAndByMoney, globals::dataS.gamever);
 	limitRecr->SetNewCode();

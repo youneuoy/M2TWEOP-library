@@ -578,7 +578,37 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 			unsigned char guildID = (((BYTE*)vTab)[8]);
 			(*(*pl->onGuildDestroyed))(sett, guildID);
 		}
-
+		else if (compareEvent(event, &pl->onBrotherAdopted.stringAdr, pl->onBrotherAdopted.strCmp))
+		{
+			generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
+			(*(*pl->onBrotherAdopted))(prs);
+		}
+		else if (compareEvent(event, &pl->onBirth.stringAdr, pl->onBirth.strCmp))
+		{
+			generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
+			(*(*pl->onBirth))(prs);
+		}
+		else if (compareEvent(event, &pl->onCharacterComesOfAge.stringAdr, pl->onCharacterComesOfAge.strCmp))
+		{
+			generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
+			(*(*pl->onCharacterComesOfAge))(prs);
+		}
+		else if (compareEvent(event, &pl->onCharacterMarries.stringAdr, pl->onCharacterMarries.strCmp))
+		{
+			generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
+			(*(*pl->onCharacterMarries))(prs);
+		}
+		else if (compareEvent(event, &pl->onCharacterBecomesAFather.stringAdr, pl->onCharacterBecomesAFather.strCmp))
+		{
+			generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
+			(*(*pl->onCharacterBecomesAFather))(prs);
+		}
+		else if (compareEvent(event, &pl->onNewAdmiralCreated.stringAdr, pl->onNewAdmiralCreated.strCmp))
+		{
+			generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
+			settlementStruct* sett = reinterpret_cast<settlementStruct*>(vTab[2]);
+			(*(*pl->onNewAdmiralCreated))(prs, sett);
+		}
 	}
 }
 
@@ -595,6 +625,24 @@ std::string plugins::onSelectWorldpkgdesc(const char* selectedRec, const char* s
 		retVal = *tmpVal;
 
 		delete tmpVal;
+	}
+
+	return retVal;
+}
+
+int plugins::onfortificationlevelS(settlementStruct* settlement)
+{
+	int retVal=-2;//magic value, mean not change anything
+
+
+	for (plugin* pl : pluginsCfg.plugins)
+	{
+		bool isChanged = false;
+		int tmpVal = (*(*pl->onfortificationlevelS))(settlement,&isChanged);
+		if (isChanged == true)
+		{
+			retVal = tmpVal;
+		}
 	}
 
 	return retVal;
@@ -669,12 +717,12 @@ void plugins::onLoadGame(UNICODE_STRING**& savePath)
 	}
 
 	techFuncs::deleteFiles(files);
-	
+
 }
 
 void plugins::onSaveGame(UNICODE_STRING**& savePath)
 {
-	
+
 	vector<string>files;
 
 	for (plugin* pl : pluginsCfg.plugins)
@@ -693,7 +741,7 @@ void plugins::onSaveGame(UNICODE_STRING**& savePath)
 
 
 	techFuncs::deleteFiles(files);
-	
+
 }
 
 void plugins::onReadGameDbsAtStart()
@@ -863,7 +911,13 @@ void plugins::initEvNames()
 		"AssassinCaughtAttackingPope",
 		"CollegeOfCardinalsPanelOpen",
 		"MultiTurnMove",
-		"UngarrisonedFort"
+		"UngarrisonedFort",
+		"BrotherAdopted",
+		"Birth",
+		"CharacterComesOfAge",
+		"CharacterMarries",
+		"CharacterBecomesAFather",
+		"NewAdmiralCreated"
 	};
 
 }
@@ -1304,7 +1358,35 @@ int plugin::init(string* nameP)
 	onGuildDestroyed.Load(&plPath, &fName);
 	onGuildDestroyed.strCmp = (*plugins::eventNames)[GuildDestroyedCode];
 
+	//onBrotherAdopted
+	fName = "onBrotherAdopted";
+	onBrotherAdopted.Load(&plPath, &fName);
+	onBrotherAdopted.strCmp = (*plugins::eventNames)[BrotherAdoptedCode];
 
+	//onBirth
+	fName = "onBirth";
+	onBirth.Load(&plPath, &fName);
+	onBirth.strCmp = (*plugins::eventNames)[BirthCode];
+
+	//onCharacterComesOfAge
+	fName = "onCharacterComesOfAge";
+	onCharacterComesOfAge.Load(&plPath, &fName);
+	onCharacterComesOfAge.strCmp = (*plugins::eventNames)[CharacterComesOfAgeCode];
+
+	//onCharacterMarries
+	fName = "onCharacterMarries";
+	onCharacterMarries.Load(&plPath, &fName);
+	onCharacterMarries.strCmp = (*plugins::eventNames)[CharacterMarriesCode];
+
+	//onCharacterBecomesAFather
+	fName = "onCharacterBecomesAFather";
+	onCharacterBecomesAFather.Load(&plPath, &fName);
+	onCharacterBecomesAFather.strCmp = (*plugins::eventNames)[CharacterBecomesAFatherCode];
+
+	//onNewAdmiralCreated
+	fName = "onNewAdmiralCreated";
+	onNewAdmiralCreated.Load(&plPath, &fName);
+	onNewAdmiralCreated.strCmp = (*plugins::eventNames)[NewAdmiralCreatedCode];
 
 
 
@@ -1350,6 +1432,10 @@ int plugin::init(string* nameP)
 	//onSelectWorldpkgdesc
 	fName = "onSelectWorldpkgdesc";
 	onSelectWorldpkgdesc.Load(&plPath, &fName);
+
+	//onfortificationlevelS
+	fName = "onfortificationlevelS";
+	onfortificationlevelS.Load(&plPath, &fName);
 
 
 	//onReadGameDbsAtStart

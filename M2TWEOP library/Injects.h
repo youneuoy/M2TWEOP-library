@@ -726,3 +726,16 @@ private:
 	int m_version;
 	int* settingAddr;
 };
+
+class fortificationlevelS
+	:public AATemplate
+{
+public:
+	fortificationlevelS(MemWork* mem, LPVOID addr, int ver);
+	~fortificationlevelS();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};

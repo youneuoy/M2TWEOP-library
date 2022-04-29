@@ -110,6 +110,12 @@ void __fastcall patchesForGame::OnLoadSettlementWorldpkgdesc(worldRecord* select
 	string selectRecordG = getRecordGroup(selectedRecord);
 	battleCreator::OnLoadSettlementWorldpkgdesc(selectRecordS, selectRecordG);
 }
+int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlement)
+{
+	int selectedLevel= plugins::onfortificationlevelS(settlement);
+
+	return selectedLevel;//use old thing
+}
 general* __fastcall patchesForGame::mercenaryMovepointsGetGeneral(stackStruct* army)
 {
 	general* gen = army->gen;

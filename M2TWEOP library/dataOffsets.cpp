@@ -20,6 +20,10 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.consoleCommands = reinterpret_cast<consoleCommands*>(0x02cbce50);
 
 		offsets.guildDataStart = 0x018FD958;
+
+
+		offsets.audioEnable = (bool*)0x016818cd;
+		offsets.audioMaster_vol = (int*)0x01681910;
 	}
 	else if (gameVer == 2)
 	{
@@ -39,5 +43,9 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.consoleCommands= reinterpret_cast<consoleCommands*>(0x02c73df8);
 
 		offsets.guildDataStart = 0x18B47E8;
+
+
+		offsets.audioEnable = (bool*)0x01639f1d;
+		offsets.audioMaster_vol = (int*)0x01639f60;
 	}
 }

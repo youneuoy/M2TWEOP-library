@@ -94,3 +94,9 @@
 #define CollegeOfCardinalsPanelOpenCode 91//!
 #define MultiTurnMoveCode 92//!
 #define UngarrisonedFortCode 93//!
+#define BrotherAdoptedCode 94//!
+#define BirthCode 95//!
+#define CharacterComesOfAgeCode 96//!
+#define CharacterMarriesCode 97//!
+#define CharacterBecomesAFatherCode 98//!
+#define NewAdmiralCreatedCode 99//!

@@ -70,14 +70,15 @@ class plugin
 {
 public:
 
-	ProcLoader<std::string*(__cdecl*)(const char*, const char*)> onSelectWorldpkgdesc;
+	ProcLoader<std::string* (__cdecl*)(const char*, const char*)> onSelectWorldpkgdesc;
+	ProcLoader<int(__cdecl*)(settlementStruct*, bool*)> onfortificationlevelS;
 
-	ProcLoader<void(__cdecl*)(int,int)> onClickAtTile;
+	ProcLoader<void(__cdecl*)(int, int)> onClickAtTile;
 
 	ProcLoader<void(__cdecl*)()> onCampaignMapLoaded;
 
 	ProcLoader<void(__cdecl*)()> onNewGameStart;
-	ProcLoader<vector<string>*(__cdecl*)(UNICODE_STRING**& savePath)> onSaveGamePl;
+	ProcLoader<vector<string>* (__cdecl*)(UNICODE_STRING**& savePath)> onSaveGamePl;
 	ProcLoader<void(__cdecl*)(vector<string>*)> onLoadGamePl;
 
 
@@ -195,8 +196,13 @@ public:
 	ProcLoader<void(__cdecl*)(settlementStruct*, const char*)> onGuildUpgraded;
 	ProcLoader<void(__cdecl*)(settlementStruct*, unsigned char)> onGuildDestroyed;
 
+	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onBrotherAdopted;
+	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onBirth;
+	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onCharacterComesOfAge;
+	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onCharacterMarries;
+	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onCharacterBecomesAFather;
 
-
+	ProcLoader<void(__cdecl*)(generalCharacterictics*, settlementStruct*)> onNewAdmiralCreated;
 
 	ProcLoader<void(__cdecl*)(LPDIRECT3DDEVICE9 pDevice)> drawOnEndScene;
 	ProcLoader<void(__cdecl*)(LPDIRECT3DDEVICE9 pDevice)> onReset;
@@ -207,8 +213,8 @@ public:
 	ProcLoader<LRESULT(__cdecl*)(HWND, UINT, WPARAM, LPARAM)> onWndProc;
 	ProcLoader<void(__cdecl*)()> onReadGameDbsAtStart;
 
-	ProcLoader<void(__cdecl*)(int,int)> onEndSiege;
-	ProcLoader<void(__cdecl*)(int,int)> onStartSiege;
+	ProcLoader<void(__cdecl*)(int, int)> onEndSiege;
+	ProcLoader<void(__cdecl*)(int, int)> onStartSiege;
 	int init(string* nameP);
 private:
 	string name;
@@ -231,12 +237,13 @@ public:
 
 	//from here calls all plugins
 
-	static std::string onSelectWorldpkgdesc(const char* selectedRec,const char* selectedGroup);
-	static void onClickAtTile(int x,int y);
+	static std::string onSelectWorldpkgdesc(const char* selectedRec, const char* selectedGroup);
+	static int onfortificationlevelS(settlementStruct*settlement);
+	static void onClickAtTile(int x, int y);
 	static void onCampaignMapLoaded();
 
-	static void onEndSiege(settlementStruct*sett);//settlement or fort!
-	static void onStartSiege(settlementStruct*sett);//settlement or fort!
+	static void onEndSiege(settlementStruct* sett);//settlement or fort!
+	static void onStartSiege(settlementStruct* sett);//settlement or fort!
 
 	static void onNewGameStart();
 	static void onChangeTurnNum();

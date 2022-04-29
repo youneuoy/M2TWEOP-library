@@ -24,13 +24,19 @@ NOINLINE EOP_EXPORT void eopSounds::deleteEOPSound(void* sound)
 
 NOINLINE EOP_EXPORT void eopSounds::playEOPSound(void* sound)
 {
+    if (*dataOffsets::offsets.audioEnable == false)
+    {
+        return;
+    }
     sf::Sound* snd = reinterpret_cast<sf::Sound*>(sound);
+    snd->setVolume((float)*dataOffsets::offsets.audioMaster_vol);
     snd->play();
 }
 
 NOINLINE EOP_EXPORT void eopSounds::setEOPSoundOffset(void* sound, unsigned int milliseconds)
 {
     sf::Sound* snd = reinterpret_cast<sf::Sound*>(sound);
+    snd->setVolume((float)*dataOffsets::offsets.audioMaster_vol);
     snd->setPlayingOffset(sf::milliseconds(milliseconds));
 }
 
