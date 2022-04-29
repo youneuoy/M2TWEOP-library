@@ -2726,7 +2726,7 @@ void fortificationlevelS::SetNewCode()
 	a->popf();
 	a->mov(dword_ptr(esp, 0x18), eax);//mov our eax to ecx
 	a->popad();
-
+	a->mov(al, 0x0);
 	a->bind(exLab);
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();
