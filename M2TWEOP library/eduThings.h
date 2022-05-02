@@ -20,8 +20,12 @@ namespace eduThings
 {
 	NOINLINE EOP_EXPORT EduEntry* addEopEduEntry(int baseIdx , int newIdx);
 	NOINLINE EOP_EXPORT EduEntry* getEopEduEntry(int idx);
+
+
+	NOINLINE EOP_EXPORT  char* getEopNameOfEduEntry(EduEntry*entryAdress);
 	//used for creatinon of new units, etc
 	NOINLINE EOP_EXPORT int getDataEopEdu(int idx);
+	NOINLINE EOP_EXPORT int* tryFindDataEopEdu(char* entryName);
 
 
 

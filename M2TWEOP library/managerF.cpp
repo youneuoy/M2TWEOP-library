@@ -406,6 +406,26 @@ void managerF::doPachs()
 	limitRecr->Enable();
 	f1 << "Done" << endl;
 
+
+	f1 << "Start applying OnSaveEDUStringS patch" << endl;
+	OnSaveEDUStringS* eduStringsSaveOn = new OnSaveEDUStringS(mem, (LPVOID)patchesForGame::onSaveEDUStringS, globals::dataS.gamever);
+	eduStringsSaveOn->SetNewCode();
+	eduStringsSaveOn->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying OnSaveEDUStringS2 patch" << endl;
+	OnSaveEDUStringS2* eduStringsSaveOn2 = new OnSaveEDUStringS2(mem, (LPVOID)patchesForGame::onSaveEDUStringS, globals::dataS.gamever);
+	eduStringsSaveOn2->SetNewCode();
+	eduStringsSaveOn2->Enable();
+	f1 << "Done" << endl;
+
+
+	f1 << "Start applying OnCreateUnit patch" << endl;
+	OnCreateUnit* onCreateUnit = new OnCreateUnit(mem, (LPVOID)patchesForGame::onCreateUnit, globals::dataS.gamever);
+	onCreateUnit->SetNewCode();
+	onCreateUnit->Enable();
+	f1 << "Done" << endl;
+
 	f1 << "End." << endl;
 
 	f1.close();

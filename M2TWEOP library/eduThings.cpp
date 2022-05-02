@@ -19,7 +19,11 @@ namespace eduThings
 			}
 			data.edu = *oldEn;
 			data.edu.Index = newIdx;
+
+			eopTypeName = "EOPT";
+			eopTypeName.append(data.edu.Type);
 		}
+		std::string eopTypeName;
 		struct
 		{
 			int fakeVtable = 0;
@@ -57,6 +61,17 @@ namespace eduThings
 		}
 		return nullptr;
 	}
+	NOINLINE EOP_EXPORT char* getEopNameOfEduEntry(EduEntry* entryAdress)
+	{
+		for (eopEduEntry& entry : data.eopEdu)
+		{
+			if (&entry.data.edu == entryAdress)
+			{
+				return (char*)entry.eopTypeName.c_str();
+			}
+		}
+		return nullptr;
+	}
 	NOINLINE EOP_EXPORT int getDataEopEdu(int idx)
 	{
 		for (eopEduEntry& entry : data.eopEdu)
@@ -67,6 +82,17 @@ namespace eduThings
 			}
 		}
 		return 0;
+	}
+	NOINLINE EOP_EXPORT int* tryFindDataEopEdu(char* entryName)
+	{
+		for (eopEduEntry& entry : data.eopEdu)
+		{
+			if (strcmp(entry.eopTypeName.c_str(), entryName)==0)
+			{
+				return (int*)&entry.data;
+			}
+		}
+		return nullptr;
 	}
 	NOINLINE EOP_EXPORT void setEntryUnitCardTga(int entryIdx, const char* newCard)
 	{

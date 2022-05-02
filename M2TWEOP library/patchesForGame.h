@@ -11,6 +11,8 @@ public:
 		
 	static void __fastcall OnLoadSettlementWorldpkgdesc(worldRecord* selectedRecord);
 	static int __fastcall onfortificationlevelS(settlementStruct* settlement);
+	static char* __fastcall onSaveEDUStringS(EduEntry* eduEntry);
+	static int __fastcall onCreateUnit(int* edbIndex, int** edb, char** entryName);
 
 
 	static general* __fastcall mercenaryMovepointsGetGeneral(stackStruct*army);

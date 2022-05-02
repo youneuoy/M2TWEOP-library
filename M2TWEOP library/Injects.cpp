@@ -2733,3 +2733,212 @@ void fortificationlevelS::SetNewCode()
 
 	delete a;
 }
+
+OnSaveEDUStringS::OnSaveEDUStringS(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00d47558;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00d4d1f8;
+}
+
+OnSaveEDUStringS::~OnSaveEDUStringS()
+{
+}
+
+void OnSaveEDUStringS::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(ecx, dword_ptr(edi));
+	a->test(ecx, ecx);
+	a->mov(dword_ptr(esp,0xC), 0);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnSaveEDUStringS::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(eax);
+	a->push(edx);
+	a->push(ebx);
+	a->push(ebp);
+	a->push(esi);
+	a->push(edi);
+
+	a->pushf();
+
+	a->mov(ecx,edi);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->mov(ecx, eax);//here must be pointer to char* string  - type for writing to save file
+
+	a->popf();
+
+	a->pop(edi);
+	a->pop(esi);
+	a->pop(ebp);
+	a->pop(ebx);
+	a->pop(edx);
+	a->pop(eax);
+
+	a->test(ecx, ecx);
+	a->mov(dword_ptr(esp, 0xC), 0);
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+OnSaveEDUStringS2::OnSaveEDUStringS2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00d475af;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00d4d24f;
+}
+
+OnSaveEDUStringS2::~OnSaveEDUStringS2()
+{
+}
+
+void OnSaveEDUStringS2::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(edx, dword_ptr(edi));
+	a->push(ecx);
+	a->push(edx);
+	a->mov(ecx, esi);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnSaveEDUStringS2::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(eax);
+	a->push(ecx);
+	a->push(ebx);
+	a->push(ebp);
+	a->push(esi);
+	a->push(edi);
+
+	a->pushf();
+
+	a->mov(ecx, edi);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->mov(edx, eax);//here must be pointer to char* string  - type for writing to save file
+
+	a->popf();
+
+	a->pop(edi);
+	a->pop(esi);
+	a->pop(ebp);
+	a->pop(ebx);
+	a->pop(ecx);
+	a->pop(eax);
+
+	a->push(ecx);
+	a->push(edx);
+	a->mov(ecx, esi);
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+OnCreateUnit::OnCreateUnit(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x008ee8e6;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x008ede66;
+}
+
+OnCreateUnit::~OnCreateUnit()
+{
+}
+
+void OnCreateUnit::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->test(eax, eax);
+//jz
+
+	a->push(edx);
+	a->mov(eax, dword_ptr(eax));
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnCreateUnit::SetNewCode()
+{
+	static int fakeEDBPointer;
+	Assembler* a = new Assembler();
+
+	a->push(edx);
+	a->push(ecx);
+	a->push(ebx);
+	a->push(ebp);
+	a->push(edi);
+
+	a->pushf();
+
+
+	a->mov(ecx,(int)&fakeEDBPointer);
+	a->mov(dword_ptr(ecx),esi);
+
+	a->mov(edx, ecx);//here pointer to edb
+	a->mov(ecx, eax);//here pointer to index in edb
+	a->push(edi);//entry name
+	a->mov(eax, (DWORD)funcAddress);//we must return index
+	a->call(eax);
+
+	//here in eax we must put -1 if not find
+	a->mov(esi, (int)&fakeEDBPointer);
+	a->mov(esi, dword_ptr(esi));
+	a->popf();
+
+	a->pop(edi);
+	a->pop(ebp);
+	a->pop(ebx);
+	a->pop(ecx);
+	a->pop(edx);
+
+
+
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

@@ -739,3 +739,41 @@ public:
 private:
 	LPVOID funcAddress;
 };
+
+class OnSaveEDUStringS
+	:public AATemplate
+{
+public:
+	OnSaveEDUStringS(MemWork* mem, LPVOID addr, int ver);
+	~OnSaveEDUStringS();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+class OnSaveEDUStringS2
+	:public AATemplate
+{
+public:
+	OnSaveEDUStringS2(MemWork* mem, LPVOID addr, int ver);
+	~OnSaveEDUStringS2();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class OnCreateUnit
+	:public AATemplate
+{
+public:
+	OnCreateUnit(MemWork* mem, LPVOID addr, int ver);
+	~OnCreateUnit();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};

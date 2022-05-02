@@ -7,7 +7,7 @@
 
 #include "onlineThings.h"
 
-
+#include "eduThings.h"
 
 string getRecordName(worldRecord* selectedRecord)
 {
@@ -115,6 +115,47 @@ int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlemen
 	int selectedLevel= plugins::onfortificationlevelS(settlement);
 
 	return selectedLevel;//use old thing
+}
+char* __fastcall patchesForGame::onSaveEDUStringS(EduEntry* eduEntry)
+{
+	char* retName = eduThings::getEopNameOfEduEntry(eduEntry);
+	if (retName==nullptr)
+	{
+		return eduEntry->Type;
+	}
+
+	return retName;
+}
+int __fastcall patchesForGame::onCreateUnit(int* edbIndex, int** edb, char** entryName)
+{
+
+
+	if (edbIndex == nullptr)
+	{
+		int* newEdu = eduThings::tryFindDataEopEdu(*entryName);
+
+		if (newEdu == nullptr)
+		{
+			return  -1;
+		}
+
+		*edb = newEdu;
+		return 0;
+	}
+	if (*edbIndex == 0|| *edbIndex == -1)
+	{
+		return -1;
+	}
+	if (*edbIndex != 0)
+	{
+		return *edbIndex;
+	}
+
+
+
+	
+
+	return -1;
 }
 general* __fastcall patchesForGame::mercenaryMovepointsGetGeneral(stackStruct* army)
 {
