@@ -373,12 +373,13 @@ struct building_data { /* SETTLEMENT_CONDITION_SETTLEMENT_FACTION */
 //building
 struct building { /* building structure */
 	undefined field_0x0[56];
-	struct building_data* bData; /* many info(type,name, etc) */
-	int level;
-	undefined field_0x40[24];
+	struct building_data* bData; /* many info(type,name, etc). exportDescrBuildingEntry */
+	int8_t level;
+	undefined field_0x3d[27];
 	int hp; /* health points of the building */
 	struct settlementStruct* settlement;
 };
+
 struct buildingInQueue { /* building in settlement queue */
 	int something;
 	struct building_data* buildingData;
