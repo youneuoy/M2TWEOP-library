@@ -1085,7 +1085,7 @@ struct traidingResource {
 	int trade_value;
 	char* icon;
 	int iconCrypt;
-	int null4;
+	int null4;//
 };
 struct tradingResources {
 	struct traidingResource resources[27];
