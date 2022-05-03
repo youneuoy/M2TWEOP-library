@@ -172,7 +172,7 @@ namespace battleCreator
 
 		factionStruct* facCreator = smallFuncs::getGameDataAll()->campaignData->factionsSortedByID[sett->fac_creatorModNum];
 		fileStrings.push_back(string("	faction_creator ").append(facCreator->factSmDescr->facName));
-		for (int bnum = 0; bnum < sett->buldingsNum; bnum++)
+		for (int bnum = 0; bnum < sett->buildingsNum; bnum++)
 		{
 			fileStrings.push_back("	building");
 
@@ -734,8 +734,8 @@ namespace battleCreator
 		}
 
 
-		ImGui::SetNextWindowSize({300,0}, ImGuiCond_Always);
-		if (ImGui::BeginPopupModal("Select winner##Online battles results transfering", &battleResultsMenuOpened, ImGuiWindowFlags_NoMove|ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize))
+		ImGui::SetNextWindowSize({ 300,0 }, ImGuiCond_Always);
+		if (ImGui::BeginPopupModal("Select winner##Online battles results transfering", &battleResultsMenuOpened, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize))
 		{
 			static int resolveVariant = 0;
 
@@ -747,13 +747,13 @@ namespace battleCreator
 
 
 
-			ImGui::RadioButton("attacker", &resolveVariant, 0); 
+			ImGui::RadioButton("attacker", &resolveVariant, 0);
 
-			ImGui::SameLine(ImGui::GetWindowWidth()/2- defenderButtonWidth/2);
-			ImGui::RadioButton("defender", &resolveVariant, 1); 
+			ImGui::SameLine(ImGui::GetWindowWidth() / 2 - defenderButtonWidth / 2);
+			ImGui::RadioButton("defender", &resolveVariant, 1);
 			defenderButtonWidth = ImGui::GetItemRectSize().x;
 
-			pos =drawButtonWidth + ItemSpacing;
+			pos = drawButtonWidth + ItemSpacing;
 			ImGui::SameLine(ImGui::GetWindowWidth() - pos);
 			ImGui::RadioButton("draw", &resolveVariant, 2);
 			drawButtonWidth = ImGui::GetItemRectSize().x;
@@ -791,7 +791,7 @@ namespace battleCreator
 				ImGui::NewLine();
 				if (ImGui::Button("Transfer results now", { -1.0f,0.0f }))
 				{
-					bool res=transferResults(selectedFile, resolveVariant);
+					bool res = transferResults(selectedFile, resolveVariant);
 					if (res == true)
 					{
 						data.isTransferResultsRunning = true;

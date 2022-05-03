@@ -453,7 +453,7 @@ struct settlementStruct {
 	struct buildingsQueue buildingsQueueArray;
 	undefined field_0x5ac[520];
 	struct building* buildings[128];
-	int buldingsNum; /* number of the buildings in the settlement */
+	int buildingsNum; /* number of the buildings in the settlement */
 	undefined field_0x9b8[1100];
 	uchar isProvokedRebellion;
 	uchar field_0xe05[3];
