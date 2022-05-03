@@ -52,6 +52,7 @@ public:
 
 		//create army
 		DWORD createArmyFunc = NULL;
+		DWORD createArmyInSettlementFunc = NULL;
 		DWORD createUnitFunc = NULL;
 		DWORD addUnitToArmyFunc = NULL;
 

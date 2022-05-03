@@ -90,6 +90,7 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT general* createCharacterWithoutSpawning(const char*type,factionStruct*fac,int age, const char*name, const char*name2,int subFaction, const char*portrait,int x,int y);
 
 	NOINLINE EOP_EXPORT stackStruct* createArmy(general*character);
+	NOINLINE EOP_EXPORT stackStruct* createArmyInSettlement(settlementStruct*sett);
 
 
 	//facNum - dipnum

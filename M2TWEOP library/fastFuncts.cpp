@@ -969,6 +969,23 @@ namespace fastFuncts
 		return stack;
 	}
 
+	NOINLINE EOP_EXPORT stackStruct* createArmyInSettlement(settlementStruct* sett)
+	{
+		stackStruct* stack = nullptr;
+
+		DWORD adrFunc = codes::offsets.createArmyInSettlementFunc;
+		_asm
+		{
+			mov ecx, sett
+			mov eax, createArmyInSettlementFunc
+			call eax
+			mov stack, eax
+		}
+
+
+		return stack;
+	}
+
 	NOINLINE EOP_EXPORT unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap)
 	{
 		int unitIndex = fastFunctsHelpers::getEDUIndex(type);
