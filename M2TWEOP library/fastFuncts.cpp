@@ -977,7 +977,7 @@ namespace fastFuncts
 		_asm
 		{
 			mov ecx, sett
-			mov eax, createArmyInSettlementFunc
+			mov eax, adrFunc
 			call eax
 			mov stack, eax
 		}
