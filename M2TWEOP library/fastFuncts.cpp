@@ -59,6 +59,12 @@ namespace fastFuncts
 
 		return redID;
 	}
+	NOINLINE EOP_EXPORT regionStruct* getRegionByID(UINT32 regionID)
+	{
+		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
+		return &gameDataAll->stratMap->regionsArr[regionID];
+	}
+
 	NOINLINE EOP_EXPORT factionStruct** getFactionsList()
 	{
 		factionStruct** list;
@@ -963,15 +969,15 @@ namespace fastFuncts
 		return stack;
 	}
 
-	NOINLINE EOP_EXPORT unit* createUnitN(const char* type, int facNum, int exp, int arm, int weap)
+	NOINLINE EOP_EXPORT unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap)
 	{
 		int unitIndex = fastFunctsHelpers::getEDUIndex(type);
 
 
-		return createUnitIdx(unitIndex, facNum, exp, arm, weap);
+		return createUnitIdx(unitIndex, regionID, facNum, exp, arm, weap);
 	}
 
-	NOINLINE EOP_EXPORT unit* createUnitIdx(int index, int facNum, int exp, int arm, int weap)
+	NOINLINE EOP_EXPORT unit* createUnitIdx(int index,int regionID, int facNum, int exp, int arm, int weap)
 	{
 		if (index == -1)return nullptr;
 
@@ -979,16 +985,18 @@ namespace fastFuncts
 
 		DWORD EDB = dataOffsets::offsets.unitTypesStart - 4;
 		DWORD adr = codes::offsets.createUnitFunc;
-		_asm {
-			mov ecx, EDB;
 
-			push weap
+		regionStruct* region = getRegionByID(regionID);
+		_asm {
+				mov ecx, EDB;
+
+				push weap
 				push arm
 				push - 1
 				push exp
 				push facNum
 				push index
-				push 0
+				push region
 
 				mov eax, [adr]
 				call eax
@@ -998,7 +1006,7 @@ namespace fastFuncts
 		return res;
 	}
 
-	NOINLINE EOP_EXPORT unit* createUnitEDB(int edb, int facNum, int exp, int arm, int weap)
+	NOINLINE EOP_EXPORT unit* createUnitEDB(int edb, int regionID, int facNum, int exp, int arm, int weap)
 	{
 		if (edb == 0)
 		{
@@ -1007,16 +1015,18 @@ namespace fastFuncts
 		unit* res = nullptr;
 
 		DWORD adr = codes::offsets.createUnitFunc;
-		_asm {
-			mov ecx, edb;
 
-			push weap
+		regionStruct* region = getRegionByID(regionID);
+		_asm {
+				mov ecx, edb;
+
+				push weap
 				push arm
 				push - 1
 				push exp
 				push facNum
 				push 0
-				push 0
+				push region
 
 				mov eax, [adr]
 				call eax

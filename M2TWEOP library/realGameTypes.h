@@ -10,6 +10,20 @@ typedef unsigned short    ushort;
 typedef struct stackStruct stackStruct, * PstackStruct;
 typedef struct settlementStruct settlementStruct, * PsettlementStruct;
 
+struct regionStruct {
+	char* regionName;
+	int regionNameHash;
+	char* settlementName; /* null for sea */
+	int settlementNameHash;
+	undefined field_0x10[12];
+	int regionID;
+	undefined field_0x20[368];
+	struct settlementStruct* settlement;
+	undefined field_0x194[92];
+	struct factionStruct* factionOwner;
+	undefined field_0x1f4[40];
+};
+
 struct uiElement {
 	undefined field_0x0[16];
 	int xSize;
@@ -32,6 +46,9 @@ struct tilesS {
 	undefined field_0x34[20];
 	struct oneTile* tilesArr;
 	undefined field_0x4c[4];
+	undefined field_0x50[44];
+	struct regionStruct regionsArr[200];
+	int regionsNum;
 };
 
 struct oneTile {
@@ -181,9 +198,10 @@ struct gameDataAllStruct {
 	struct campaign* campaignData;
 	undefined field_0x2c[8];
 	struct tilesS* stratMap;
-	undefined field_0x38[32];
+	struct campaign* field_0x38;
+	undefined field_0x3c[28];
 	struct battleDataS* battleHandler;
-	undefined field_0x60[164];
+	undefined field_0x5c[164];
 };
 struct armyAndCharacter { /* in battle leader and leader army */
 	struct stackStruct* army;
@@ -707,7 +725,7 @@ struct unit {
 struct stackStruct { /* structure of stack */
 	undefined field_0x0[76];
 	struct factionStruct* faction;
-	undefined field_0x50[4];
+	int regionID;
 	struct unit** units;
 	undefined field_0x58[4];
 	int numOfUnits;

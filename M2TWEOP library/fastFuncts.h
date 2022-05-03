@@ -14,6 +14,7 @@ namespace fastFuncts
 
 	NOINLINE EOP_EXPORT void setCharacterType(general*character, int typeID,int subFaction,int factionDipNum);
 	NOINLINE EOP_EXPORT UINT32 getTileRegionID(int x,int y);
+	NOINLINE EOP_EXPORT regionStruct* getRegionByID(UINT32 regionID);
 	NOINLINE EOP_EXPORT factionStruct* getRegionOwner(int regionID);
 
 	//season(0-summer,1-winter)
@@ -92,9 +93,9 @@ namespace fastFuncts
 
 
 	//facNum - dipnum
-	NOINLINE EOP_EXPORT unit* createUnitN(const char* type, int facNum, int exp, int arm, int weap);
-	NOINLINE EOP_EXPORT unit* createUnitIdx(int index, int facNum, int exp, int arm, int weap);
-	NOINLINE EOP_EXPORT unit* createUnitEDB(int edb, int facNum, int exp, int arm, int weap);
+	NOINLINE EOP_EXPORT unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap);
+	NOINLINE EOP_EXPORT unit* createUnitIdx(int index, int regionID, int facNum, int exp, int arm, int weap);
+	NOINLINE EOP_EXPORT unit* createUnitEDB(int edb, int regionID, int facNum, int exp, int arm, int weap);
 
 	NOINLINE EOP_EXPORT int addUnitToArmy(stackStruct* army, unit* un);
 	NOINLINE EOP_EXPORT void setBodyguard(general*gen,unit* un);
