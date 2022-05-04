@@ -15,13 +15,15 @@ struct regionStruct {
 	int regionNameHash;
 	char* settlementName; /* null for sea */
 	int settlementNameHash;
-	undefined field_0x10[12];
+	undefined field4_0x10[12];
 	int regionID;
-	undefined field_0x20[368];
+	undefined field6_0x20[148];
+	int* religionsARR;
+	undefined field8_0xb8[216];
 	struct settlementStruct* settlement;
-	undefined field_0x194[92];
+	undefined field10_0x194[92];
 	struct factionStruct* factionOwner;
-	undefined field_0x1f4[40];
+	undefined field12_0x1f4[40];
 };
 
 struct uiElement {
