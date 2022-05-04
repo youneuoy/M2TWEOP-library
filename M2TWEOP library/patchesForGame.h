@@ -10,7 +10,7 @@ public:
 
 		
 	static void __fastcall OnLoadSettlementWorldpkgdesc(worldRecord* selectedRecord);
-	static int __fastcall onfortificationlevelS(settlementStruct* settlement);
+	static int __fastcall onfortificationlevelS(settlementStruct* settlement,bool*isCastle);
 	static char* __fastcall onSaveEDUStringS(EduEntry* eduEntry);
 	static int __fastcall onCreateUnit(int* edbIndex, int** edb, char** entryName);
 

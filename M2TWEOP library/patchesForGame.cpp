@@ -110,10 +110,13 @@ void __fastcall patchesForGame::OnLoadSettlementWorldpkgdesc(worldRecord* select
 	string selectRecordG = getRecordGroup(selectedRecord);
 	battleCreator::OnLoadSettlementWorldpkgdesc(selectRecordS, selectRecordG);
 }
-int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlement)
+int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlement, bool* isCastle)
 {
-	int selectedLevel= plugins::onfortificationlevelS(settlement);
-
+	int selectedLevel= plugins::onfortificationlevelS(settlement, isCastle);
+	if (selectedLevel == -2)
+	{
+		*isCastle = settlement->isCastle;
+	}
 	return selectedLevel;//use old thing
 }
 char* __fastcall patchesForGame::onSaveEDUStringS(EduEntry* eduEntry)

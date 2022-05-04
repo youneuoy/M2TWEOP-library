@@ -71,7 +71,7 @@ class plugin
 public:
 
 	ProcLoader<std::string* (__cdecl*)(const char*, const char*)> onSelectWorldpkgdesc;
-	ProcLoader<int(__cdecl*)(settlementStruct*, bool*)> onfortificationlevelS;
+	ProcLoader<int(__cdecl*)(settlementStruct*, bool*, bool*)> onfortificationlevelS;
 
 	ProcLoader<void(__cdecl*)(int, int)> onClickAtTile;
 
@@ -238,7 +238,7 @@ public:
 	//from here calls all plugins
 
 	static std::string onSelectWorldpkgdesc(const char* selectedRec, const char* selectedGroup);
-	static int onfortificationlevelS(settlementStruct*settlement);
+	static int onfortificationlevelS(settlementStruct*settlement, bool* isCastle);
 	static void onClickAtTile(int x, int y);
 	static void onCampaignMapLoaded();
 

@@ -2699,6 +2699,7 @@ void fortificationlevelS::SetOriginialCode()
 
 void fortificationlevelS::SetNewCode()
 {
+	static bool fakeSettlementTypePointer;
 
 	Assembler* a = new Assembler();
 	Label override = a->newLabel();
@@ -2708,8 +2709,9 @@ void fortificationlevelS::SetNewCode()
 	a->pushad();
 	a->pushf();
 
+	a->mov(edx, (int)&fakeSettlementTypePointer);
 
-	a->mov(ecx, ecx);//settlement
+	//settlement in ecx now
 	a->mov(eax, (DWORD)funcAddress);
 	a->call(eax);
 	a->cmp(eax, -2);
@@ -2726,7 +2728,10 @@ void fortificationlevelS::SetNewCode()
 	a->popf();
 	a->mov(dword_ptr(esp, 0x18), eax);//mov our eax to ecx
 	a->popad();
-	a->mov(al, 0x0);
+
+	a->mov(eax, (int)&fakeSettlementTypePointer);
+	a->mov(al,byte_ptr(eax));
+	//a->mov(al, 0x0);
 	a->bind(exLab);
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();

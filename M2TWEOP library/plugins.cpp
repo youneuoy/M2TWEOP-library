@@ -630,7 +630,7 @@ std::string plugins::onSelectWorldpkgdesc(const char* selectedRec, const char* s
 	return retVal;
 }
 
-int plugins::onfortificationlevelS(settlementStruct* settlement)
+int plugins::onfortificationlevelS(settlementStruct* settlement, bool* isCastle)
 {
 	int retVal=-2;//magic value, mean not change anything
 
@@ -638,7 +638,7 @@ int plugins::onfortificationlevelS(settlementStruct* settlement)
 	for (plugin* pl : pluginsCfg.plugins)
 	{
 		bool isChanged = false;
-		int tmpVal = (*(*pl->onfortificationlevelS))(settlement,&isChanged);
+		int tmpVal = (*(*pl->onfortificationlevelS))(settlement, isCastle ,&isChanged);
 		if (isChanged == true)
 		{
 			retVal = tmpVal;
