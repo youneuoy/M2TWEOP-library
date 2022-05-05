@@ -18,7 +18,7 @@ struct regionStruct {
 	undefined field4_0x10[12];
 	int regionID;
 	undefined field6_0x20[148];
-	int* religionsARR;
+	float* religionsARR;
 	undefined field8_0xb8[216];
 	struct settlementStruct* settlement;
 	undefined field10_0x194[92];
