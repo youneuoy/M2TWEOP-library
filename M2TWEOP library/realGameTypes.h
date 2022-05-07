@@ -426,47 +426,45 @@ struct buildingsQueue {
 };
 //settlement
 struct settlementStruct {
-	undefined field_0x0[4];
-	struct general* gubernator; /* ruler of the city */
-	undefined field_0x8[4];
+	undefined field0_0x0[12];
 	UINT32 xCoord; /* x coordinate */
 	UINT32 yCoord; /* y coordinate */
-	undefined field_0x14[48];
+	undefined field3_0x14[48];
 	struct stackStruct* army; /* army on the settlement */
-	undefined field_0x48[4];
+	undefined field5_0x48[4];
 	struct siegeS* siege;
-	undefined field_0x50[252];
+	undefined field7_0x50[252];
 	struct settMod* model;
 	int descr_culturestxt;
-	undefined field_0x154[16];
+	undefined field10_0x154[16];
 	char* name; /* name  of the province */
 	int nameCrypt;
 	UNICODE_STRING** localizedName;
 	struct factionStruct* ownerFac; /* faction of the owner */
-	undefined field_0x174[36];
+	undefined field15_0x174[36];
 	int level; /* level of the settlement/castle */
 	int fac_creatorModNum;
-	undefined field_0x1a0[4];
+	undefined field18_0x1a0[4];
 	BYTE isCastle; /* castle or settlement */
-	undefined field_0x1a5[3];
+	undefined field20_0x1a5[3];
 	UINT32 regionNumber; /* number of region */
-	undefined field_0x1ac[644];
-	undefined field_0x430[4];
+	undefined field22_0x1ac[644];
+	undefined field23_0x430[4];
 	struct buildingsQueue buildingsQueueArray;
-	undefined field_0x5ac[520];
+	undefined field25_0x5ac[520];
 	struct building* buildings[128];
 	int buildingsNum; /* number of the buildings in the settlement */
-	undefined field_0x9b8[1100];
+	undefined field28_0x9b8[1100];
 	uchar isProvokedRebellion;
-	uchar field_0xe05[3];
-	undefined field_0xe08[60];
-	struct resStrat** resources; // 0xE44
-	undefined field_0xe48[4];
-	int resourcesNum; // 0x0E4C
-	undefined field_0xe50[2164];
-	intptr_t guildStandings; // 0x16C4
-	undefined field_0x16c8[404]; // 0x16C8
-	int populationSize; // 0x185C
+	uchar field30_0xe05[3];
+	undefined field31_0xe08[24];
+	struct general* governor;
+	undefined field33_0xe24[32];
+	struct resStrat** resources;
+	undefined field35_0xe48[4];
+	int resourcesNum;
+	undefined field37_0xe50[2572];
+	int populationSize;
 };
 
 struct guild
