@@ -167,7 +167,7 @@ general* __fastcall patchesForGame::mercenaryMovepointsGetGeneral(stackStruct* a
 	{
 		if (army->settlement != nullptr)
 		{
-			gen = army->settlement->gubernator;
+			gen = army->settlement->governor;
 		}
 		
 	}

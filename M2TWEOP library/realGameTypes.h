@@ -463,7 +463,9 @@ struct settlementStruct {
 	struct resStrat** resources;
 	undefined field35_0xe48[4];
 	int resourcesNum;
-	undefined field37_0xe50[2572];
+	undefined field37_0xe50[2164];
+	intptr_t guildStandings;
+	undefined field39_0x16c8[404];
 	int populationSize;
 };
 
