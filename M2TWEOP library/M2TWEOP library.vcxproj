@@ -244,6 +244,7 @@
     <ClInclude Include="headersMEM.h" />
     <ClInclude Include="headersSTD.h" />
     <ClInclude Include="Injects.h" />
+    <ClInclude Include="m2tweopConstData.h" />
     <ClInclude Include="m2tweopMap.h" />
     <ClInclude Include="m2tweopMapManager.h" />
     <ClInclude Include="m2tweopTile.h" />

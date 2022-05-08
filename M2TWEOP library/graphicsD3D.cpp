@@ -20,6 +20,8 @@ graphicsD3D::dataT graphicsD3D::dataS;
 #include "onlineThings.h"
 
 #include "m2tweopMapManager.h"
+
+#include "m2tweopConstData.h"
 template<typename T>
 T FnCast(uint32_t fnToCast, T pFnCastTo) {
 	(void)pFnCastTo;
@@ -198,7 +200,7 @@ void graphicsD3D::onDrawAllGameStuff()
 			ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
 			ImGui::Begin("eopInitTitle", nullptr, transparentF);
 
-			ImGui::Text("M2TWEOP 2.1 beta");
+			ImGui::Text(eopConstData::eopVersionName);
 
 			ImGui::End();
 		}

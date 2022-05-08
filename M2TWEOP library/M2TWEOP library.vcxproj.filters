@@ -342,6 +342,9 @@
     <ClInclude Include="eopSounds.h">
       <Filter>features\soundThings</Filter>
     </ClInclude>
+    <ClInclude Include="m2tweopConstData.h">
+      <Filter>Файлы ресурсов</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
