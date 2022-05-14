@@ -856,6 +856,15 @@ namespace battleCreator
 			return "";
 		}
 
+		auto gameData = smallFuncs::getGameDataAll();
+		if (gameData->campaignData == nullptr)
+		{
+			return "";
+		}
+		if (gameData->campaignData->currentDescrFile == nullptr)
+		{
+			return "";
+		}
 
 		std::string relativePath = techFuncs::uniToANSI(smallFuncs::getGameDataAll()->campaignData->currentDescrFile);
 
