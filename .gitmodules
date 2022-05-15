@@ -1,3 +1,4 @@
 [submodule "M2TWEOP-luaPlugin"]
 	path = M2TWEOP-luaPlugin
 	url = https://github.com/youneuoy/M2TWEOP-luaPlugin
+	master = master
