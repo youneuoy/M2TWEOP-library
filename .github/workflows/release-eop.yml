@@ -18,6 +18,7 @@ env:
 
 jobs:
   build-eop:
+   if: "startsWith(github.event.head_commit.message, 'Release')"
     permissions:
         contents: write
     runs-on: windows-latest
@@ -36,8 +37,7 @@ jobs:
     - name: Show checked out files
       run: ls -l
       shell: bash
-      # If the latest commit message starts with 'Release', issue a release on GitHub
-      if: "startsWith(github.event.head_commit.message, 'Release')"
+
     # Download and setup dependencies
     - name: Verify DirectX cache
       id:   dxsdk-cache
@@ -89,8 +89,8 @@ jobs:
     - name: Show generated files
       run: ls -l; ls documentationGenerator; ls documentationGenerator/EOPDocs; ls documentationGenerator/EOPDocs/build; ls documentationGenerator/EOPDocs/build/html;
       shell: bash
-
-
+      # If the latest commit message starts with 'Release', issue a release on GitHub
+      if: "startsWith(github.event.head_commit.message, 'Release')"
 
       # Read version number from source code
     - name: Read release version info from source
