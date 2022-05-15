@@ -18,7 +18,7 @@ env:
 
 jobs:
   build-eop:
-   if: "startsWith(github.event.head_commit.message, 'Release')"
+    if: "startsWith(github.event.head_commit.message, 'Release')"
     permissions:
         contents: write
     runs-on: windows-latest
