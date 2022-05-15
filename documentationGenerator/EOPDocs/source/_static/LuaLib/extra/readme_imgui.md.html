@@ -1,0 +1,1712 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>M2TW Engine Overhaul Project</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>M2TWEOP
+scripting</h1>
+
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Windows">Windows </a></li>
+<li><a href="#Child_Windows">Child Windows </a></li>
+<li><a href="#Windows_Utilities">Windows Utilities </a></li>
+<li><a href="#Content_Region">Content Region </a></li>
+<li><a href="#Windows_Scrolling">Windows Scrolling </a></li>
+<li><a href="#Parameters_Stacks__Shared_">Parameters Stacks (Shared) </a></li>
+<li><a href="#Parameter_Stacks__Current_Window_">Parameter Stacks (Current Window) </a></li>
+<li><a href="#Cursor___Layout">Cursor / Layout </a></li>
+<li><a href="#ID_Stack___Scopes">ID Stack / Scopes </a></li>
+<li><a href="#Widgets__Text">Widgets: Text </a></li>
+<li><a href="#Widgets__Main">Widgets: Main </a></li>
+<li><a href="#Widgets__Combo_Box">Widgets: Combo Box </a></li>
+<li><a href="#Widgets__Drags">Widgets: Drags </a></li>
+<li><a href="#Widgets__Sliders">Widgets: Sliders </a></li>
+<li><a href="#Widgets__Input_with_Keyboard">Widgets: Input with Keyboard </a></li>
+<li><a href="#Widgets__Color_Editor___Picker">Widgets: Color Editor / Picker </a></li>
+<li><a href="#Widgets__Trees">Widgets: Trees </a></li>
+<li><a href="#Widgets__Selectables">Widgets: Selectables </a></li>
+<li><a href="#Widgets__List_Boxes">Widgets: List Boxes </a></li>
+<li><a href="#Widgets__Value___Helpers">Widgets: Value() Helpers </a></li>
+<li><a href="#Widgets__Menus">Widgets: Menus </a></li>
+<li><a href="#Tooltips">Tooltips </a></li>
+<li><a href="#Popups__Modals">Popups, Modals </a></li>
+<li><a href="#Columns">Columns </a></li>
+<li><a href="#Tab_Bars__Tabs">Tab Bars, Tabs </a></li>
+<li><a href="#Docking">Docking </a></li>
+<li><a href="#Logging">Logging </a></li>
+<li><a href="#Clipping">Clipping </a></li>
+<li><a href="#Focus__Activation">Focus, Activation </a></li>
+<li><a href="#Item___Widgets_Utilities">Item / Widgets Utilities </a></li>
+<li><a href="#Miscellaneous_Utilities">Miscellaneous Utilities </a></li>
+<li><a href="#Text_Utilities">Text Utilities </a></li>
+<li><a href="#Color_Utilities">Color Utilities </a></li>
+<li><a href="#Inputs_Utilities__Keyboard">Inputs Utilities: Keyboard </a></li>
+<li><a href="#Inputs_Utilities__Mouse">Inputs Utilities: Mouse </a></li>
+<li><a href="#Clipboard_Utilities">Clipboard Utilities </a></li>
+</ul>
+
+
+<h2>Extra</h2>
+<ul class="nowrap">
+  <li><strong>LuaPlugin Gui docs</strong></li>
+</ul>
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../index.html">LuaPlugin</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+
+<h1>LuaPlugin Gui docs</h1>
+<h1><a href="./../../../index.html">Main page of M2TWEOP docs</a></h1>
+<p>Welcome to the LuaPlugin ImGui bindings. This bindings is being developed to support <a href="https://github.com/youneuoy/M2TWEOP-luaPlugin">M2TWEOP-luaPlugin</a></p>
+
+
+<p>Enjoy! </p>
+
+<h1>Notes</h1>
+
+<ul>
+    <li>ImGui lua binding is based on <a href="https://github.com/youneuoy/sol2_ImGui_Bindings">youneuoy`s fork</a> of <a href="https://github.com/MSeys/sol2_ImGui_Bindings">this</a> repository.  </li>
+    <li>This binding is adapted for the needs of the M2TW Engine Overhaul Project</li>
+</ul>
+
+
+<h1>Documentation</h1>
+<p>You can find all the supported functions and overloads below.</p>
+
+<p><a name="Windows"></a></p>
+<h2>Windows</h2>
+
+<pre>
+  <span class="comment">-- ImGui.Begin(...)
+</span>  <span class="comment">-- Parameters: text (name), bool (open) [O], ImGuiWindowFlags (flags) [O]
+</span>  <span class="comment">-- Returns A: bool (shouldDraw)
+</span>  <span class="comment">-- Returns B &amp; C: bool (open), bool (shouldDraw)
+</span>  <span class="comment">-- Overloads
+</span>  shouldDraw = ImGui.Begin(<span class="string">"Name"</span>)
+  open, shouldDraw = ImGui.Begin(<span class="string">"Name"</span>, open)
+  open, shouldDraw = ImGui.Begin(<span class="string">"Name"</span>, open, ImGuiWindowFlags.NoMove)
+
+  <span class="comment">-- ImGui.End()
+</span>  ImGui.End()
+</pre>
+
+
+<p><a name="Child_Windows"></a></p>
+<h2>Child Windows</h2>
+
+<pre>
+  <span class="comment">-- ImGui.BeginChild(...)
+</span>  <span class="comment">-- Parameters: text (name), float (size_x) [O], float (size_y) [O], ImGuiWindowFlags (flags) [O]
+</span>  <span class="comment">-- Returns: bool (shouldDraw)
+</span>  <span class="comment">-- Overloads
+</span>  shouldDraw = ImGui.BeginChild(<span class="string">"Name"</span>, <span class="number">100</span>)
+  shouldDraw = ImGui.BeginChild(<span class="string">"Name"</span>, <span class="number">100</span>)
+  shouldDraw = ImGui.BeginChild(<span class="string">"Name"</span>, <span class="number">100</span>, <span class="number">200</span>)
+  shouldDraw = ImGui.BeginChild(<span class="string">"Name"</span>, <span class="number">100</span>, <span class="number">200</span>, <span class="keyword">true</span>)
+  shouldDraw = ImGui.BeginChild(<span class="string">"Name"</span>, <span class="number">100</span>, <span class="number">200</span>, <span class="keyword">true</span>, ImGuiWindowFlags.NoMove)
+
+  <span class="comment">-- ImGui.EndChild()
+</span>  ImGui.EndChild()
+</pre>
+
+
+<p><a name="Windows_Utilities"></a></p>
+<h2>Windows Utilities</h2>
+
+<pre>
+  <span class="comment">-- ImGui.IsWindowAppearing()
+</span>  <span class="comment">-- Returns: bool (appearing)
+</span>  appearing = ImGui.IsWindowAppearing()
+
+  <span class="comment">-- ImGui.IsWindowCollapsed()
+</span>  <span class="comment">-- Returns: bool (collapsed)
+</span>  collapsed = ImGui.IsWindowCollapsed()
+
+  <span class="comment">-- ImGui.IsWindowFocused(...)
+</span>  <span class="comment">-- Parameters: ImGuiFocusedFlags (flags) [O]
+</span>  <span class="comment">-- Returns: bool (focused)
+</span>  <span class="comment">-- Overloads
+</span>  focused = ImGui.IsWindowFocused()
+  focused = ImGui.IsWindowFocused(ImGuiFocusedFlags.ChildWindows)
+
+  <span class="comment">-- ImGui.IsWindowHovered(...)
+</span>  <span class="comment">-- Parameters: ImGuiHoveredFlags (flags) [O]
+</span>  <span class="comment">-- Returns: bool (hovered)
+</span>  <span class="comment">-- Overloads
+</span>  hovered = ImGui.IswindowHovered()
+  hovered = ImGui.IsWindowHovered(ImGuiHoveredFlags.ChildWindows)
+
+  <span class="comment">-- ImGui.GetWindowDpiScale()
+</span>  <span class="comment">-- Returns: float (dpiScale)
+</span>  dpiScale = ImGui.GetWindowDpiScale()
+
+  <span class="comment">-- ImGui.GetWindowPos()
+</span>  <span class="comment">-- Returns: float (pos_x), float (pos_y)
+</span>  pos_x, pos_y = ImGui.GetWindowPos()
+
+  <span class="comment">-- ImGui.GetWindowSize()
+</span>  <span class="comment">-- Returns: float (size_x), float (size_y)
+</span>  size_x, size_y = ImGui.GetWindowSize()
+
+  <span class="comment">-- ImGui.GetWindowWidth()
+</span>  <span class="comment">-- Returns: float (width)
+</span>  width = ImGui.GetWindowWidth()
+
+  <span class="comment">-- ImGui.GetWindowHeight()
+</span>  <span class="comment">-- Returns: float (height)
+</span>  height = ImGui.GetWindowHeight()
+
+  <span class="comment">-- ImGui.SetNextWindowPos(...)
+</span>  <span class="comment">-- Parameters: float (pos_x), float (pos_y), ImGuiCond (cond) [O], float (pivot_x) [O], float (pivot_y) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SetNextWindowPos(<span class="number">100</span>, <span class="number">100</span>)
+  ImGui.SetNextWindowPos(<span class="number">100</span>, <span class="number">100</span>, ImGuiCond.Always)
+  ImGui.SetNextWindowPos(<span class="number">100</span>, <span class="number">100</span>, ImGuiCond.Always, <span class="number">0</span>, <span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.SetNextWindowSize(...)
+</span>  <span class="comment">-- Parameters: float (size_x), float (size_y), ImGuiCond (cond) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SetNextWindowSize(<span class="number">500</span>, <span class="number">500</span>)
+  ImGui.SetNextWindowSize(<span class="number">500</span>, <span class="number">500</span>, ImGuiCond.Appearing)
+
+  <span class="comment">-- ImGui.SetNextWindowSizeConstraints(...)
+</span>  <span class="comment">-- Parameters: float (min_x), float (min_y), float (max_x), float (max_y)
+</span>  ImGui.SetNextWindowSizeConstraints(<span class="number">100</span>, <span class="number">100</span>, <span class="number">500</span>, <span class="number">600</span>)
+
+  <span class="comment">-- ImGui.SetNextWindowContentSize(...)
+</span>  <span class="comment">-- Parameters: float (size_x), float (size_y)
+</span>  ImGui.SetNextWindowContentSize(<span class="number">200</span>, <span class="number">100</span>)
+
+  <span class="comment">-- ImGui.SetNextWindowCollapsed(...)
+</span>  <span class="comment">-- Parameters: bool (collapsed), ImGuiCond (cond) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SetNextWindowCollapsed(<span class="keyword">true</span>)
+  ImGui.SetNextWindowCollapsed(<span class="keyword">true</span>, ImGuiCond.Appearing)
+
+  <span class="comment">-- ImGui.SetNextWindowFocus()
+</span>  ImGui.SetNextWindowFocus()
+
+  <span class="comment">-- ImGui.SetNextWindowBgAlpha(...)
+</span>  <span class="comment">-- Parameters: float (alpha)
+</span>  ImGui.SetNextWindowBgAlpha(<span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.SetWindowPos(...)
+</span>  <span class="comment">-- Parameters: float (pos_x), float (pos_y), ImguiCond (cond) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SetWindowPos(<span class="number">100</span>, <span class="number">100</span>)
+  ImGui.SetWindowPos(<span class="number">100</span>, <span class="number">100</span>, ImGuiCond.Appearing)
+
+  <span class="comment">-- ImGui.SetWindowSize(...)
+</span>  <span class="comment">-- Parameters: float (size_x), float (size_y), ImguiCond (cond) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SetWindowSize(<span class="number">100</span>, <span class="number">300</span>)
+  ImGui.SetWindowSize(<span class="number">100</span>, <span class="number">300</span>, ImGuiCond.Appearing)
+
+  <span class="comment">-- ImGui.SetWindowCollapsed(...)
+</span>  <span class="comment">-- Parameters: bool (collapsed), ImguiCond (cond) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SetWindowCollapsed(<span class="keyword">false</span>)
+  ImGui.SetWindowCollapsed(<span class="keyword">true</span>, ImGuiCond.Appearing)
+
+  <span class="comment">-- ImGui.SetWindowFocus()
+</span>  ImGui.SetWindowFocus()
+
+  <span class="comment">-- ImGui.SetWindowFontScale(...)
+</span>  <span class="comment">-- Parameters: float (scale)
+</span>  ImGui.SetWindowFontScale(<span class="number">1.2</span>)
+
+  <span class="comment">-- ImGui.SetWindowPos(...)
+</span>  <span class="comment">-- Parameters: text (name), float (pos_x), float (pos_y), ImGuiCond (cond) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SetWindowPos(<span class="string">"WindowName"</span>, <span class="number">100</span>, <span class="number">100</span>)
+  ImGui.SetWindowPos(<span class="string">"WindowName"</span>, <span class="number">100</span>, <span class="number">100</span>, ImGuiCond.Always)
+
+  <span class="comment">-- ImGui.SetWindowSize(...)
+</span>  <span class="comment">-- Parameters: text (name), float (size_x), float (size_y), ImGuiCond (cond) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SetWindowSize(<span class="string">"WindowName"</span>, <span class="number">300</span>, <span class="number">400</span>)
+  ImGui.SetWindowSize(<span class="string">"WindowName"</span>, <span class="number">300</span>, <span class="number">400</span>, ImGuiCond.Always)
+
+  <span class="comment">-- ImGui.SetWindowCollapsed(...)
+</span>  <span class="comment">-- Parameters: text (name), bool (collapsed), ImGuiCond (cond) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SetWindowCollapsed(<span class="string">"WindowName"</span>, <span class="keyword">true</span>)
+  ImGui.SetWindowCollapsed(<span class="string">"WindowName"</span>, <span class="keyword">false</span>, ImGuiCond.Always)
+
+  <span class="comment">-- ImGui.SetWindowFocus(...)
+</span>  <span class="comment">-- Parameters: text (name)
+</span>  ImGui.SetWindowFocus(<span class="string">"WindowName"</span>)
+</pre>
+
+
+<p><a name="Content_Region"></a></p>
+<h2>Content Region</h2>
+
+<pre>
+  <span class="comment">-- ImGui.GetContentRegionMax()
+</span>  <span class="comment">-- Returns: float (x), float (y)
+</span>  x, y = ImGui.GetContentRegionMax()
+
+  <span class="comment">-- ImGui.GetContentRegionAvail()
+</span>  <span class="comment">-- Returns: float (x), float (y)
+</span>  x, y = ImGui.GetContentRegionAvail()
+
+  <span class="comment">-- ImGui.GetWindowContentRegionMin()
+</span>  <span class="comment">-- Returns: float (x), float (y)
+</span>  x, y = ImGui.GetWindowContentRegionMin()
+
+  <span class="comment">-- ImGui.GetWindowContentRegionMax()
+</span>  <span class="comment">-- Returns: float (x), float (y)
+</span>  x, y = ImGui.GetWindowContentRegionMax()
+
+  <span class="comment">-- ImGui.GetWindowContentRegionWidth()
+</span>  <span class="comment">-- Returns: float (width)
+</span>  width = ImGui.GetWindowContentRegionWidth()
+</pre>
+
+
+<p><a name="Windows_Scrolling"></a></p>
+<h2>Windows Scrolling</h2>
+
+<pre>
+  <span class="comment">-- ImGui.GetScrollX()
+</span>  <span class="comment">-- Returns: float (x)
+</span>  x = ImGui.GetScrollX()
+
+  <span class="comment">-- ImGui.GetScrollY()
+</span>  <span class="comment">-- Returns: float (y)
+</span>  y = ImGui.GetScrollY()
+
+  <span class="comment">-- ImGui.GetScrollMaxX()
+</span>  <span class="comment">-- Returns: float (x)
+</span>  x = ImGui.GetScrollMaxX()
+
+  <span class="comment">-- ImGui.GetScrollMaxY()
+</span>  <span class="comment">-- Returns: float (y)
+</span>  y = ImGui.GetScrollMaxY()
+
+  <span class="comment">-- ImGui.SetScrollX(...)
+</span>  <span class="comment">-- Parameters: float (scroll_x)
+</span>  ImGui.SetScrollX(<span class="number">0.7</span>)
+
+  <span class="comment">-- ImGui.SetScrollY(...)
+</span>  <span class="comment">-- Parameters: float (scroll_y)
+</span>  ImGui.SetScrollY(<span class="number">0.7</span>)
+
+  <span class="comment">-- ImGui.SetScrollHereX(...)
+</span>  <span class="comment">-- Parameters: float (center_x_ratio) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SetScrollHereX()
+  ImGui.SetScrollHereX(<span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.SetScrollHereY(...)
+</span>  <span class="comment">-- Parameters: float (center_y_ratio) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SetScrollHereY()
+  ImGui.SetScrollHereY(<span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.SetScrollFromPosX(...)
+</span>  <span class="comment">-- Parameters: float (local_x), float (center_x_ratio) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SetScrollFromPosX(<span class="number">10</span>)
+  ImGui.SetScrollFromPosX(<span class="number">10</span>, <span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.SetScrollFromPosY(...)
+</span>  <span class="comment">-- Parameters: float (local_y), float (center_y_ratio) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SetScrollFromPosY(<span class="number">10</span>)
+  ImGui.SetScrollFromPosY(<span class="number">10</span>, <span class="number">0.5</span>)
+</pre>
+
+
+<p><a name="Parameters_Stacks__Shared_"></a></p>
+<h2>Parameters Stacks (Shared)</h2>
+<p>Note: This binding does not give functions that can obtain an ImFont* from inside Lua (besides GetFont), You'll need to add your own.</p>
+
+<pre>
+  <span class="comment">-- ImGui.PushFont(...)
+</span>  <span class="comment">-- Parameters: ImFont* (font)
+</span>  ImGui.PushFont(font) <span class="comment">-- font is obtained from your own custom function
+</span>
+  <span class="comment">-- ImGui.PopFont()
+</span>  ImGui.PopFont()
+
+  <span class="comment">-- ImGui.PushStyleColor(...)
+</span>  <span class="comment">-- Parameters: ImGuiCol (idx), float (color_r), float (color_g), float (color_b), float (color_a)
+</span>  ImGui.PushStyleColor(ImGuiCol.Border, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>)
+
+  <span class="comment">-- ImGui.PopStyleColor(...)
+</span>  <span class="comment">-- Parameters: int (count) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.PopStyleColor()
+  ImGui.PopStyleColor(<span class="number">5</span>)
+
+  <span class="comment">-- ImGui.PushStyleVar(...)
+</span>  <span class="comment">-- Parameters A: ImGuiStyleVar (idx), float (value)
+</span>  <span class="comment">-- Parameters B: ImGuiStyleVar (idx), float (value_x), float (value_y)
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.PushStyleVar(ImGuiStyleVar.Alpha, <span class="number">0.5</span>)
+  ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, <span class="number">0.2</span>, <span class="number">0.1</span>)
+
+  <span class="comment">-- ImGui.PopStyleVar(...)
+</span>  <span class="comment">-- Parameters: int (count) [O]
+</span>  ImGui.PopStyleVar()
+  ImGui.PopStyleVar(<span class="number">2</span>)
+
+  <span class="comment">-- ImGui.GetStyleColorVec4(...)
+</span>  <span class="comment">-- Parameters: ImGuiCol (idx)
+</span>  <span class="comment">-- Returns: float (color_r), float (color_g), float (color_b), float (color_a)
+</span>  color_r, color_g, color_b, color_a = ImGui.GetStyleColorVec4(ImGuiCol.Text)
+
+  <span class="comment">-- ImGui.GetFont()
+</span>  <span class="comment">-- Returns: ImFont* (font) -- Only function in ImGui giving a font
+</span>  font = ImGui.GetFont()
+
+  <span class="comment">-- ImGui.GetFontSize()
+</span>  <span class="comment">-- Returns: float (fontSize)
+</span>  fontSize = ImGui.GetFontSize()
+
+  <span class="comment">-- ImGui.GetFontTexUvWhitePixel()
+</span>  <span class="comment">-- Returns: float (x), float (y)
+</span>  x, y = ImGui.GetFontTexUvWhitePixel()
+</pre>
+
+
+<p><a name="Parameter_Stacks__Current_Window_"></a></p>
+<h2>Parameter Stacks (Current Window)</h2>
+
+<pre>
+  <span class="comment">-- ImGui.PushItemWidth(...)
+</span>  <span class="comment">-- Parameters: float (width)
+</span>  ImGui.PushItemWidth(<span class="number">100</span>)
+
+  <span class="comment">-- ImGui.PopItemWidth()
+</span>  ImGui.PopItemWidth()
+
+  <span class="comment">-- ImGui.SetNextItemWidth(...)
+</span>  <span class="comment">-- Parameters: float (width)
+</span>  ImGui.SetNextItemWidth(<span class="number">100</span>)
+
+  <span class="comment">-- ImGui.CalcItemWidth()
+</span>  <span class="comment">-- Returns: float (width)
+</span>  width = ImGui.CalcItemWidth()
+
+  <span class="comment">-- ImGui.PushTextWrapPos(...)
+</span>  <span class="comment">-- Parameters: float (wrap_local_pos_x) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.PushTextWrapPos()
+  ImGui.PushTextWrapPos(<span class="number">50</span>)
+
+  <span class="comment">-- ImGui.PopTextWrapPos()
+</span>  ImGui.PopTextWrapPos()
+
+  <span class="comment">-- ImGui.PushAllowKeyboardFocus(...)
+</span>  <span class="comment">-- Parameters: bool (allow_keyboard_focus)
+</span>  ImGui.PushAllowKeyboardFocus(<span class="keyword">true</span>)
+
+  <span class="comment">-- ImGui.PopAllowKeyboardFocus()
+</span>  ImGui.PopAllowKeyboardFocus()
+
+  <span class="comment">-- ImGui.PushButtonRepeat(...)
+</span>  <span class="comment">-- Parameters: bool (repeat)
+</span>  ImGui.PushButtonRepeat(<span class="keyword">true</span>)
+
+  <span class="comment">-- ImGui.PopButtonRepeat()
+</span>  ImGui.PopButtonRepeat()
+</pre>
+
+
+<p><a name="Cursor___Layout"></a></p>
+<h2>Cursor / Layout</h2>
+
+<pre>
+  <span class="comment">-- ImGui.Separator()
+</span>  ImGui.Separator
+
+  <span class="comment">-- ImGui.SameLine(...)
+</span>  <span class="comment">-- Parameters: float (offset_from_start_x) [O], float (spacing) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SameLine()
+  ImGui.SameLine(<span class="number">100</span>)
+  ImGui.SameLine(<span class="number">100</span>, <span class="number">5</span>)
+
+  <span class="comment">-- ImGui.NewLine()
+</span>  ImGui.NewLine()
+
+  <span class="comment">-- ImGui.Spacing()
+</span>  ImGui.Spacing()
+
+  <span class="comment">-- ImGui.Dummy(...)
+</span>  <span class="comment">-- Parameters: float (size_x), float (size_y)
+</span>  ImGui.Dummy(<span class="number">100</span>, <span class="number">200</span>)
+
+  <span class="comment">-- ImGui.Indent(...)
+</span>  <span class="comment">-- Parameters: float (indent_w) [O]
+</span>  ImGui.Indent()
+  ImGui.Indent(<span class="number">10</span>)
+
+  <span class="comment">-- ImGui.Unindent(...)
+</span>  <span class="comment">-- Parameters: float (indent_w) [O]
+</span>  ImGui.Unindent()
+  ImGui.Unindent(-<span class="number">10</span>)
+
+  <span class="comment">-- ImGui.BeginGroup()
+</span>  ImGui.BeginGroup()
+
+  <span class="comment">-- ImGui.EndGroup()
+</span>  ImGui.EndGroup()
+
+  <span class="comment">-- ImGui.GetCursorPos()
+</span>  <span class="comment">-- Returns: float (x), float(y)
+</span>  x, y = ImGui.GetCursorPos()
+
+  <span class="comment">-- ImGui.GetCursorPosX()
+</span>  <span class="comment">-- Returns: float (x)
+</span>  x = ImGui.GetCursorPosX()
+
+  <span class="comment">-- ImGui.GetCursorPosY()
+</span>  <span class="comment">-- Returns: float (y)
+</span>  y = ImGui.GetCursorPosY()
+
+  <span class="comment">-- ImGui.SetCursorPos(...)
+</span>  <span class="comment">-- Parameters: float (x), float (y)
+</span>  ImGui.SetCursorPos(<span class="number">10</span>, <span class="number">10</span>)
+
+  <span class="comment">-- ImGui.SetCursorPosX(...)
+</span>  <span class="comment">-- Parameters: float (x)
+</span>  ImGui.SetCursorPosX(<span class="number">10</span>)
+
+  <span class="comment">-- ImGui.SetCursorPosY(...)
+</span>  <span class="comment">-- Parameters: float (y)
+</span>  ImGui.SetCursorPosY(<span class="number">10</span>)
+
+  <span class="comment">-- ImGui.GetCursorStartPos()
+</span>  <span class="comment">-- Returns: float (x), float(y)
+</span>  x, y = ImGui.GetCursorStartPos()
+
+  <span class="comment">-- ImGui.GetCursorScreenPos()
+</span>  <span class="comment">-- Returns: float (x), float(y)
+</span>  x, y = ImGui.GetCursorScreenPos()
+
+  <span class="comment">-- ImGui.SetCursorScreenPos(...)
+</span>  <span class="comment">-- Parameters: float (x), float (y)
+</span>  ImGui.SetCursorScreenPos(<span class="number">10</span>, <span class="number">10</span>)
+
+  <span class="comment">-- ImGui.AlignTextToFramePadding()
+</span>  ImGui.AlignTextToFramePadding()
+
+  <span class="comment">-- ImGui.GetTextLineHeight()
+</span>  <span class="comment">-- Returns: float (height)
+</span>  height = ImGui.GetTextLineHeight()
+
+  <span class="comment">-- ImGui.GetTextLineHeightWithSpacing()
+</span>  <span class="comment">-- Returns: float (height)
+</span>  height = ImGui.GetTextLineHeightWithSpacing()
+
+  <span class="comment">-- ImGui.GetFrameHeight()
+</span>  <span class="comment">-- Returns: float (height)
+</span>  height = ImGui.GetFrameHeight()
+
+  <span class="comment">-- ImGui.GetFrameHeightWithSpacing()
+</span>  <span class="comment">-- Returns: float (height)
+</span>  height = ImGui.GetFrameHeightWithSpacing()
+</pre>
+
+
+<p><a name="ID_Stack___Scopes"></a></p>
+<h2>ID Stack / Scopes</h2>
+
+<pre>
+  <span class="comment">-- ImGui.PushID(...)
+</span>  <span class="comment">-- Parameters A: text (str_id)
+</span>  <span class="comment">-- Parameters B: text (str_id_begin), text (str_id_end)
+</span>  <span class="comment">-- Parameters C: int (int_id)
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.PushID(<span class="string">"MyID"</span>)
+  ImGui.PushID(<span class="string">"MyID_Begin"</span>, <span class="string">"MyID_End"</span>)
+  ImGui.PushID(<span class="number">1</span>)
+
+  <span class="comment">-- ImGui.PopID()
+</span>  ImGui.PopID()
+
+  <span class="comment">-- ImGui.GetID(...)
+</span>  <span class="comment">-- Parameters A: text (str_id)
+</span>  <span class="comment">-- Parameters B: text (str_id_begin), text (str_id_end)
+</span>  <span class="comment">-- Returns: int (id)
+</span>  <span class="comment">-- Overloads
+</span>  id = ImGui.PushID(<span class="string">"MyID"</span>)
+  id = ImGui.PushID(<span class="string">"MyID_Begin"</span>, <span class="string">"MyID_End"</span>)
+</pre>
+
+
+<p><a name="Widgets__Text"></a></p>
+<h2>Widgets: Text</h2>
+
+<pre>
+  <span class="comment">-- ImGui.TextUnformatted(...)
+</span>  <span class="comment">-- Parameters: text (text), text (text_end) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.TextUnformatted(<span class="string">"I am Unformatted"</span>)
+  ImGui.TextUnformatted(<span class="string">"I am "</span>, <span class="string">"Unformatted"</span>)
+
+  <span class="comment">-- ImGui.Text(...)
+</span>  <span class="comment">-- Parameters: text (text)
+</span>  ImGui.Text(<span class="string">"Well hello there, General Kenobi"</span>)
+
+  <span class="comment">-- ImGui.TextColored(...)
+</span>  <span class="comment">-- Parameters: float (color_r), float (color_g), float (color_b), float (color_a), text (text)
+</span>  ImGui.TextColored(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="string">"Well hello there, General Kenobi"</span>)
+
+  <span class="comment">-- ImGui.TextDisabled(...)
+</span>  <span class="comment">-- Parameters: text (text)
+</span>  ImGui.TextDisabled(<span class="string">"Well hello there, General Kenobi"</span>)
+
+  <span class="comment">-- ImGui.TextWrapped(...)
+</span>  <span class="comment">-- Parameters: text (text)
+</span>  ImGui.TextWrapped(<span class="string">"Well hello there, General Kenobi"</span>)
+
+  <span class="comment">-- ImGui.LabelText(...)
+</span>  <span class="comment">-- Parameters: text (label), text (text)
+</span>  ImGui.LabelText(<span class="string">"Well hello there"</span>, <span class="string">"General Kenobi"</span>)
+
+  <span class="comment">-- ImGui.BulletText(...)
+</span>  <span class="comment">-- Parameters: text (text)
+</span>  ImGui.BulletText(<span class="string">"Well hello there, General Kenobi"</span>)
+</pre>
+
+
+<p><a name="Widgets__Main"></a></p>
+<h2>Widgets: Main</h2>
+
+<pre>
+  <span class="comment">-- ImGui.Image(...)
+</span>  <span class="comment">-- Parameters: texture (image), float (sizeX), float (sizeY)
+</span>  ImGui.Image(ourTexture,<span class="number">100</span>,<span class="number">50</span>)
+
+  <span class="comment">-- ImGui.Button(...)
+</span>  <span class="comment">-- Parameters: text (label), float (size_x) [O], float (size_y) [O]
+</span>  <span class="comment">-- Returns: bool (clicked)
+</span>  <span class="comment">-- Overloads
+</span>  clicked = ImGui.Button(<span class="string">"Label"</span>)
+  clicked = ImGui.Button(<span class="string">"Label"</span>, <span class="number">100</span>, <span class="number">50</span>)
+
+  <span class="comment">-- ImGui.ImageButton(...)
+</span>  <span class="comment">-- Parameters: texture (image), float (sizeX), float (sizeY)
+</span>  <span class="comment">-- Returns: bool (clicked)
+</span>  clicked = ImGui.ImageButton(ourTexture,<span class="number">100</span>,<span class="number">50</span>)
+
+  <span class="comment">-- ImGui.SmallButton(...)
+</span>  <span class="comment">-- Parameters: text (label)
+</span>  <span class="comment">-- Returns: bool (clicked)
+</span>  clicked = ImGui.SmallButton(<span class="string">"Label"</span>)
+
+  <span class="comment">-- ImGui.InvisibleButton(...)
+</span>  <span class="comment">-- Parameters: text (label), float (size_x), float (size_y)
+</span>  <span class="comment">-- Returns: bool (clicked)
+</span>  clicked = ImGui.InvisibleButton(<span class="string">"Label"</span>, <span class="number">100</span>, <span class="number">50</span>)
+
+  <span class="comment">-- ImGui.ArrowButton(...)
+</span>  <span class="comment">-- Parameters: text (str_id), ImGuiDir (dir)
+</span>  <span class="comment">-- Returns: bool (clicked)
+</span>  clicked = ImGui.ArrowButton(<span class="string">"I have an arrow"</span>, ImGuiDir.Down)
+
+  <span class="comment">-- ImGui.Checkbox(...)
+</span>  <span class="comment">-- Parameters: text (label), bool (value)
+</span>  <span class="comment">-- Returns: bool (value), bool (pressed)
+</span>  value, pressed = ImGui.Checkbox(<span class="string">"My Checkbox"</span>, value)
+
+  <span class="comment">-- ImGui.RadioButton(...)
+</span>  <span class="comment">-- Parameters A: text (label), bool (active)
+</span>  <span class="comment">-- Parameters B: text (label), int (value), int (v_button)
+</span>  <span class="comment">-- Returns A: bool (pressed)
+</span>  <span class="comment">-- Returns B: int (value), bool (pressed)
+</span>  <span class="comment">-- Overloads
+</span>  pressed = ImGui.RadioButton(<span class="string">"Click me"</span>, pressed == <span class="keyword">true</span>)
+  value, pressed = ImGui.RadioButton(<span class="string">"Click me too"</span>, value, <span class="number">2</span>)
+
+  <span class="comment">-- ImGui.ProgressBar(...)
+</span>  <span class="comment">-- Parameters: float (fraction), float (size_x) [O], float (size_y) [O], text (overlay) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.ProgressBar(<span class="number">0.5</span>)
+  ImGui.ProgressBar(<span class="number">0.5</span>, <span class="number">100</span>, <span class="number">25</span>)
+  ImGui.ProgressBar(<span class="number">0.5</span>, <span class="number">100</span>, <span class="number">25</span>, <span class="string">"Loading Failed. Sike. - 50%"</span>)
+
+  <span class="comment">-- ImGui.Bullet()
+</span>  ImGui.Bullet()
+</pre>
+
+
+<p><a name="Widgets__Combo_Box"></a></p>
+<h2>Widgets: Combo Box</h2>
+
+<pre>
+  <span class="comment">-- ImGui.BeginCombo(...)
+</span>  <span class="comment">-- Parameters: text (label), text (previewValue), ImGuiComboFlags (flags) [O]
+</span>  <span class="comment">-- Returns: bool (shouldDraw)
+</span>  <span class="comment">-- Overloads
+</span>  shouldDraw = ImGui.BeginCombo(<span class="string">"My Combo"</span>, <span class="string">"Preview"</span>)
+  shouldDraw = ImGui.BeginCombo(<span class="string">"My Combo"</span>, <span class="string">"Preview"</span>, ImGuiComboFlags.PopupAlignLeft)
+
+  <span class="comment">-- ImGui.EndCombo()
+</span>  ImGui.EndCombo()
+
+  <span class="comment">-- ImGui.Combo(...)
+</span>  <span class="comment">-- Parameters A: text (label), int (current_item), table (items), int (items_count), int (popup_max_height_in_items) [O]
+</span>  <span class="comment">-- Parameters B: text (label), int (current_item), text (items_separated_by_zeros), int (popup_max_height_in_items) [O]
+</span>  <span class="comment">-- Returns: int (current_item), bool (clicked)
+</span>  <span class="comment">-- Overloads
+</span>  current_item, clicked = ImGui.Combo(<span class="string">"Label"</span>, current_item, { <span class="string">"Option 1 "</span>, <span class="string">"Option 2"</span> }, <span class="number">2</span>)
+  current_item, clicked = ImGui.Combo(<span class="string">"Label"</span>, current_item, { <span class="string">"Option 1 "</span>, <span class="string">"Option 2"</span> }, <span class="number">2</span>, <span class="number">5</span>)
+  current_item, clicked = ImGui.Combo(<span class="string">"Label"</span>, current_item, <span class="string">"Option1\0Option2\0"</span>)
+  current_item, clicked = ImGui.Combo(<span class="string">"Label"</span>, current_item, <span class="string">"Option1\0Option2\0"</span>, <span class="number">5</span>)
+</pre>
+
+
+<p><a name="Widgets__Drags"></a></p>
+<h2>Widgets: Drags</h2>
+
+<pre>
+  <span class="comment">-- ImGui.DragFloat(...)
+</span>  <span class="comment">-- Parameters: text (label), float (value), float (value_speed) [O], float (value_min) [O], float (value_max) [O], text (format) [O], float (power) [O]
+</span>  <span class="comment">-- Returns: float (value), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  value, used = ImGui.DragFloat(<span class="string">"Label"</span>, value)
+  value, used = ImGui.DragFloat(<span class="string">"Label"</span>, value, <span class="number">0.01</span>)
+  value, used = ImGui.DragFloat(<span class="string">"Label"</span>, value, <span class="number">0.01</span>, -<span class="number">10</span>)
+  value, used = ImGui.DragFloat(<span class="string">"Label"</span>, value, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>)
+  value, used = ImGui.DragFloat(<span class="string">"Label"</span>, value, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>)
+  value, used = ImGui.DragFloat(<span class="string">"Label"</span>, value, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>, <span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.DragFloat2(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), float (value_speed) [O], float (value_min) [O], float (value_max) [O], text (format) [O], float (power) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.DragFloat2(<span class="string">"Label"</span>, values)
+  values, used = ImGui.DragFloat2(<span class="string">"Label"</span>, values, <span class="number">0.01</span>)
+  values, used = ImGui.DragFloat2(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>)
+  values, used = ImGui.DragFloat2(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>)
+  values, used = ImGui.DragFloat2(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>)
+  values, used = ImGui.DragFloat2(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>, <span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.DragFloat3(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), float (value_speed) [O], float (value_min) [O], float (value_max) [O], text (format) [O], float (power) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.DragFloat3(<span class="string">"Label"</span>, values)
+  values, used = ImGui.DragFloat3(<span class="string">"Label"</span>, values, <span class="number">0.01</span>)
+  values, used = ImGui.DragFloat3(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>)
+  values, used = ImGui.DragFloat3(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>)
+  values, used = ImGui.DragFloat3(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>)
+  values, used = ImGui.DragFloat3(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>, <span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.DragFloat4(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), float (value_speed) [O], float (value_min) [O], float (value_max) [O], text (format) [O], float (power) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.DragFloat4(<span class="string">"Label"</span>, values)
+  values, used = ImGui.DragFloat4(<span class="string">"Label"</span>, values, <span class="number">0.01</span>)
+  values, used = ImGui.DragFloat4(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>)
+  values, used = ImGui.DragFloat4(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>)
+  values, used = ImGui.DragFloat4(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>)
+  values, used = ImGui.DragFloat4(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>, <span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.DragInt(...)
+</span>  <span class="comment">-- Parameters: text (label), int (value), float (value_speed) [O], int (value_min) [O], int (value_max) [O], text (format) [O]
+</span>  <span class="comment">-- Returns: int (value), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  value, used = ImGui.DragInt(<span class="string">"Label"</span>, value)
+  value, used = ImGui.DragInt(<span class="string">"Label"</span>, value, <span class="number">0.01</span>)
+  value, used = ImGui.DragInt(<span class="string">"Label"</span>, value, <span class="number">0.01</span>, -<span class="number">10</span>)
+  value, used = ImGui.DragInt(<span class="string">"Label"</span>, value, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>)
+  value, used = ImGui.DragInt(<span class="string">"Label"</span>, value, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%d"</span>)
+
+  <span class="comment">-- ImGui.DragInt2(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), float (value_speed) [O], int (value_min) [O], int (value_max) [O], text (format) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.DragInt2(<span class="string">"Label"</span>, values)
+  values, used = ImGui.DragInt2(<span class="string">"Label"</span>, values, <span class="number">0.01</span>)
+  values, used = ImGui.DragInt2(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>)
+  values, used = ImGui.DragInt2(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>)
+  values, used = ImGui.DragInt2(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%d"</span>)
+
+  <span class="comment">-- ImGui.DragInt3(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), float (value_speed) [O], int (value_min) [O], int (value_max) [O], text (format) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.DragInt3(<span class="string">"Label"</span>, values)
+  values, used = ImGui.DragInt3(<span class="string">"Label"</span>, values, <span class="number">0.01</span>)
+  values, used = ImGui.DragInt3(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>)
+  values, used = ImGui.DragInt3(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>)
+  values, used = ImGui.DragInt3(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%d"</span>)
+
+  <span class="comment">-- ImGui.DragInt4(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), float (value_speed) [O], int (value_min) [O], int (value_max) [O], text (format) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.DragInt4(<span class="string">"Label"</span>, values)
+  values, used = ImGui.DragInt4(<span class="string">"Label"</span>, values, <span class="number">0.01</span>)
+  values, used = ImGui.DragInt4(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>)
+  values, used = ImGui.DragInt4(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>)
+  values, used = ImGui.DragInt4(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%d"</span>)
+</pre>
+
+
+<p><a name="Widgets__Sliders"></a></p>
+<h2>Widgets: Sliders</h2>
+
+<pre>
+  <span class="comment">-- ImGui.SliderFloat(...)
+</span>  <span class="comment">-- Parameters: text (label), float (value), float (value_min), float (value_max), text (format) [O], float (power) [O]
+</span>  <span class="comment">-- Returns: float (value), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  value, used = ImGui.SliderFloat(<span class="string">"Label"</span>, value, -<span class="number">10</span>, <span class="number">10</span>)
+  value, used = ImGui.SliderFloat(<span class="string">"Label"</span>, value, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>)
+  value, used = ImGui.SliderFloat(<span class="string">"Label"</span>, value, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>, <span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.SliderFloat2(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), float (value_min), float (value_max), text (format) [O], float (power) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.SliderFloat2(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>)
+  values, used = ImGui.SliderFloat2(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>)
+  values, used = ImGui.SliderFloat2(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>, <span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.SliderFloat3(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), float (value_min), float (value_max), text (format) [O], float (power) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.SliderFloat3(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>)
+  values, used = ImGui.SliderFloat3(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>)
+  values, used = ImGui.SliderFloat3(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>, <span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.SliderFloat4(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), float (value_min), float (value_max), text (format) [O], float (power) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.SliderFloat4(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>)
+  values, used = ImGui.SliderFloat4(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>)
+  values, used = ImGui.SliderFloat4(<span class="string">"Label"</span>, values, <span class="number">0.01</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>, <span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.SliderAngle(...)
+</span>  <span class="comment">-- Parameters: text (label), float (v_rad), float (v_degrees_min) [O], float (v_degrees_max) [O], text (format) [O]
+</span>  <span class="comment">-- Returns: float (v_rad), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  v_rad, used = ImGui.SliderAngle(<span class="string">"Label"</span>, v_rad)
+  v_rad, used = ImGui.SliderAngle(<span class="string">"Label"</span>, v_rad, -<span class="number">255</span>)
+  v_rad, used = ImGui.SliderAngle(<span class="string">"Label"</span>, v_rad, -<span class="number">255</span>, <span class="number">360</span>)
+  v_rad, used = ImGui.SliderAngle(<span class="string">"Label"</span>, v_rad, -<span class="number">255</span>, <span class="number">360</span>, <span class="string">"%.0f deg"</span>)
+
+  <span class="comment">-- ImGui.SliderInt(...)
+</span>  <span class="comment">-- Parameters: text (label), int (value), int (value_min), int (value_max), text (format) [O]
+</span>  <span class="comment">-- Returns: int (value), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  value, used = ImGui.SliderInt(<span class="string">"Label"</span>, value, -<span class="number">10</span>, <span class="number">10</span>)
+  value, used = ImGui.SliderInt(<span class="string">"Label"</span>, value, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%d"</span>)
+
+  <span class="comment">-- ImGui.SliderInt2(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), int (value_min), int (value_max), text (format) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.SliderInt2(<span class="string">"Label"</span>, values, -<span class="number">10</span>, <span class="number">10</span>)
+  values, used = ImGui.SliderInt2(<span class="string">"Label"</span>, values, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%d"</span>)
+
+  <span class="comment">-- ImGui.SliderInt3(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), int (value_min), int (value_max), text (format) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.SliderInt3(<span class="string">"Label"</span>, values, -<span class="number">10</span>, <span class="number">10</span>)
+  values, used = ImGui.SliderInt3(<span class="string">"Label"</span>, values, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%d"</span>)
+
+  <span class="comment">-- ImGui.SliderInt4(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), int (value_min), int (value_max), text (format) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.SliderInt4(<span class="string">"Label"</span>, values, -<span class="number">10</span>, <span class="number">10</span>)
+  values, used = ImGui.SliderInt4(<span class="string">"Label"</span>, values, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%d"</span>)
+
+  <span class="comment">-- ImGui.VSliderFloat(...)
+</span>  <span class="comment">-- Parameters: text (label), float (size_x), float (size_y), float (value), float (value_min), float (value_max), text (format) [O], float (power) [O]
+</span>  <span class="comment">-- Returns: float (value), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  value, used = ImGui.VSliderFloat(<span class="string">"Label"</span>, <span class="number">100</span>, <span class="number">25</span>, value, -<span class="number">10</span>, <span class="number">10</span>)
+  value, used = ImGui.VSliderFloat(<span class="string">"Label"</span>, <span class="number">100</span>, <span class="number">25</span>, value, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>)
+  value, used = ImGui.VSliderFloat(<span class="string">"Label"</span>, <span class="number">100</span>, <span class="number">25</span>, value, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>, <span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.VSliderInt(...)
+</span>  <span class="comment">-- Parameters: text (label), float (size_x), float (size_y), int (value), int (value_min), int (value_max), text (format) [O]
+</span>  <span class="comment">-- Returns: int (value), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  value, used = ImGui.VSliderInt(<span class="string">"Label"</span>, <span class="number">100</span>, <span class="number">25</span>, value, -<span class="number">10</span>, <span class="number">10</span>)
+  value, used = ImGui.VSliderInt(<span class="string">"Label"</span>, <span class="number">100</span>, <span class="number">25</span>, value, -<span class="number">10</span>, <span class="number">10</span>, <span class="string">"%d"</span>)
+</pre>
+
+
+<p><a name="Widgets__Input_with_Keyboard"></a></p>
+<h2>Widgets: Input with Keyboard</h2>
+
+<pre>
+  <span class="comment">-- ImGui.InputText(...)
+</span>  <span class="comment">-- Parameters: text (label), text (text), int (buf_size), ImGuiInputTextFlags (flags) [O]
+</span>  <span class="comment">-- Returns: text (text), bool (selected)
+</span>  <span class="comment">-- Overloads
+</span>  text, selected = ImGui.InputText(<span class="string">"Label"</span>, text, <span class="number">100</span>)
+  text, selected = ImGui.InputText(<span class="string">"Label"</span>, text, <span class="number">100</span>, ImGuiInputTextFlags.ReadOnly)
+
+  <span class="comment">-- ImGui.InputTextMultiline(...)
+</span>  <span class="comment">-- Parameters: text (label), text (text), int (buf_size), float (size_x) [O], float (size_y) [O], ImGuiInputTextFlags (flags) [O]
+</span>  <span class="comment">-- Returns: text (text), bool (selected)
+</span>  <span class="comment">-- Overloads
+</span>  text, selected = ImGui.InputTextMultiline(<span class="string">"Label"</span>, text, <span class="number">100</span>)
+  text, selected = ImGui.InputTextMultiline(<span class="string">"Label"</span>, text, <span class="number">100</span>, <span class="number">200</span>, <span class="number">35</span>)
+  text, selected = ImGui.InputTextMultiline(<span class="string">"Label"</span>, text, <span class="number">100</span>, <span class="number">200</span>, <span class="number">35</span>, ImGuiInputTextFlags.ReadOnly)
+
+  <span class="comment">-- ImGui.InputTextWithHint(...)
+</span>  <span class="comment">-- Parameters: text (label), text (hint), text (text), int (buf_size), ImGuiInputTextFlags (flags) [O]
+</span>  <span class="comment">-- Returns: text (text), bool (selected)
+</span>  <span class="comment">-- Overloads
+</span>  text, selected = ImGui.InputTextWithHint(<span class="string">"Label"</span>, <span class="string">"Hint"</span>, text, <span class="number">100</span>)
+  text, selected = ImGui.InputTextWithHint(<span class="string">"Label"</span>, <span class="string">"Hint"</span>, text, <span class="number">100</span>, ImGuiInputTextFlags.ReadOnly)
+
+  <span class="comment">-- ImGui.InputFloat(...)
+</span>  <span class="comment">-- Parameters: text (label), float (value), float (step) [O], float (step_fast) [O], text (format) [O], ImGuiInputTextFlags (flags) [O]
+</span>  <span class="comment">-- Returns: float (value), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  value, used = ImGui.InputFloat(<span class="string">"Label"</span>, value)
+  value, used = ImGui.InputFloat(<span class="string">"Label"</span>, value, <span class="number">1</span>)
+  value, used = ImGui.InputFloat(<span class="string">"Label"</span>, value, <span class="number">1</span>, <span class="number">10</span>)
+  value, used = ImGui.InputFloat(<span class="string">"Label"</span>, value, <span class="number">1</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>)
+  value, used = ImGui.InputFloat(<span class="string">"Label"</span>, value, <span class="number">1</span>, <span class="number">10</span>, <span class="string">"%.1f"</span>, ImGuiInputTextFlags.None)
+
+  <span class="comment">-- ImGui.InputFloat2(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), text (format) [O], ImGuiInputTextFlags (flags) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.InputFloat2(<span class="string">"Label"</span>, values)
+  values, used = ImGui.InputFloat2(<span class="string">"Label"</span>, values, <span class="string">"%.1f"</span>)
+  values, used = ImGui.InputFloat2(<span class="string">"Label"</span>, values, <span class="string">"%.1f"</span>, ImGuiInputTextFlags.None)
+
+  <span class="comment">-- ImGui.InputFloat3(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), text (format) [O], ImGuiInputTextFlags (flags) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.InputFloat3(<span class="string">"Label"</span>, values)
+  values, used = ImGui.InputFloat3(<span class="string">"Label"</span>, values, <span class="string">"%.1f"</span>)
+  values, used = ImGui.InputFloat3(<span class="string">"Label"</span>, values, <span class="string">"%.1f"</span>, ImGuiInputTextFlags.None)
+
+  <span class="comment">-- ImGui.InputFloat4(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), text (format) [O], ImGuiInputTextFlags (flags) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.InputFloat4(<span class="string">"Label"</span>, values)
+  values, used = ImGui.InputFloat4(<span class="string">"Label"</span>, values, <span class="string">"%.1f"</span>)
+  values, used = ImGui.InputFloat4(<span class="string">"Label"</span>, values, <span class="string">"%.1f"</span>, ImGuiInputTextFlags.None)
+
+  <span class="comment">-- ImGui.InputInt(...)
+</span>  <span class="comment">-- Parameters: text (label), int (value), int (step) [O], int (step_fast) [O], ImGuiInputTextFlags (flags) [O]
+</span>  <span class="comment">-- Returns: int (value), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  value, used = ImGui.InputInt(<span class="string">"Label"</span>, value)
+  value, used = ImGui.InputInt(<span class="string">"Label"</span>, value, <span class="number">1</span>)
+  value, used = ImGui.InputInt(<span class="string">"Label"</span>, value, <span class="number">1</span>, <span class="number">10</span>)
+  value, used = ImGui.InputInt(<span class="string">"Label"</span>, value, <span class="number">1</span>, <span class="number">10</span>, ImGuiInputTextFlags.None)
+
+  <span class="comment">-- ImGui.InputInt2(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), ImGuiInputTextFlags (flags) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.InputInt2(<span class="string">"Label"</span>, values)
+  values, used = ImGui.InputInt2(<span class="string">"Label"</span>, values, ImGuiInputTextFlags.None)
+
+  <span class="comment">-- ImGui.InputInt3(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), ImGuiInputTextFlags (flags) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.InputInt3(<span class="string">"Label"</span>, values)
+  values, used = ImGui.InputInt3(<span class="string">"Label"</span>, values, ImGuiInputTextFlags.None)
+
+  <span class="comment">-- ImGui.InputInt4(...)
+</span>  <span class="comment">-- Parameters: text (label), table (values), ImGuiInputTextFlags (flags) [O]
+</span>  <span class="comment">-- Returns: table (values), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  values, used = ImGui.InputInt4(<span class="string">"Label"</span>, values)
+  values, used = ImGui.InputInt4(<span class="string">"Label"</span>, values, ImGuiInputTextFlags.None)
+
+  <span class="comment">-- ImGui.InputDouble(...)
+</span>  <span class="comment">-- Parameters: text (label), double (value), double (step) [O], double (step_fast) [O], text (format) [O], ImGuiInputTextFlags (flags) [O]
+</span>  <span class="comment">-- Returns: double (value), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  value, used = ImGui.InputDouble(<span class="string">"Label"</span>, value)
+  value, used = ImGui.InputDouble(<span class="string">"Label"</span>, value, <span class="number">1</span>)
+  value, used = ImGui.InputDouble(<span class="string">"Label"</span>, value, <span class="number">1</span>, <span class="number">10</span>)
+  value, used = ImGui.InputDouble(<span class="string">"Label"</span>, value, <span class="number">1</span>, <span class="number">10</span>, <span class="string">"%.4f"</span>)
+  value, used = ImGui.InputDouble(<span class="string">"Label"</span>, value, <span class="number">1</span>, <span class="number">10</span>, <span class="string">"%.4f"</span>, ImGuiInputTextFlags.None)
+</pre>
+
+
+<p><a name="Widgets__Color_Editor___Picker"></a></p>
+<h2>Widgets: Color Editor / Picker</h2>
+
+<pre>
+  <span class="comment">-- ImGui.ColorEdit3(...)
+</span>  <span class="comment">-- Parameters: text (label), table (col), ImGuiColorEditFlags (flags) [O]
+</span>  <span class="comment">-- Returns: table (col), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  col, used = ImGui.ColorEdit3(<span class="string">"Label"</span>, col)
+  col, used = ImGui.ColorEdit3(<span class="string">"Label"</span>, col, ImGuiColorEditFlags.NoTooltip)
+
+  <span class="comment">-- ImGui.ColorEdit4(...)
+</span>  <span class="comment">-- Parameters: text (label), table (col), ImGuiColorEditFlags (flags) [O]
+</span>  <span class="comment">-- Returns: table (col), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  col, used = ImGui.ColorEdit4(<span class="string">"Label"</span>, col)
+  col, used = ImGui.ColorEdit4(<span class="string">"Label"</span>, col, ImGuiColorEditFlags.NoTooltip)
+
+  <span class="comment">-- ImGui.ColorPicker3(...)
+</span>  <span class="comment">-- Parameters: text (label), table (col), ImGuiColorEditFlags (flags) [O]
+</span>  <span class="comment">-- Returns: table (col), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  col, used = ImGui.ColorPicker3(<span class="string">"Label"</span>, col)
+  col, used = ImGui.ColorPicker3(<span class="string">"Label"</span>, col, ImGuiColorEditFlags.NoTooltip)
+
+  <span class="comment">-- ImGui.ColorPicker4(...)
+</span>  <span class="comment">-- Parameters: text (label), table (col), ImGuiColorEditFlags (flags) [O]
+</span>  <span class="comment">-- Returns: table (col), bool (used)
+</span>  <span class="comment">-- Overloads
+</span>  col, used = ImGui.ColorPicker4(<span class="string">"Label"</span>, col)
+  col, used = ImGui.ColorPicker4(<span class="string">"Label"</span>, col, ImGuiColorEditFlags.NoTooltip)
+
+  <span class="comment">-- ImGui.ColorButton(...)
+</span>  <span class="comment">-- Parameters: text (desc_id), table (col), ImGuiColorEditFlags (flags) [O], float (size_x) [O], float (size_y) [O]
+</span>  <span class="comment">-- Returns: bool (pressed)
+</span>  <span class="comment">-- Overloads
+</span>  pressed = ImGui.ColorButton(<span class="string">"Desc ID"</span>, { <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span> })
+  pressed = ImGui.ColorButton(<span class="string">"Desc ID"</span>, { <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span> }, ImGuiColorEditFlags.None)
+  pressed = ImGui.ColorButton(<span class="string">"Desc ID"</span>, { <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span> }, ImGuiColorEditFlags.None, <span class="number">100</span>, <span class="number">100</span>)
+
+  <span class="comment">-- ImGui.SetColorEditOptions(...)
+</span>  <span class="comment">-- Parameters: ImGuiColorEditFlags (flags)
+</span>  ImGui.SetColorEditOptions(ImGuiColorEditFlags.NoTooltip | ImGuiColorEditFlags_NoInputs)
+</pre>
+
+
+<p><a name="Widgets__Trees"></a></p>
+<h2>Widgets: Trees</h2>
+
+<pre>
+  <span class="comment">-- ImGui.TreeNode(...)
+</span>  <span class="comment">-- Parameters: text (label), text (fmt) [O]
+</span>  <span class="comment">-- Returns: bool (open)
+</span>  <span class="comment">-- Overloads
+</span>  open = ImGui.TreeNode(<span class="string">"Label"</span>)
+  open = ImGui.TreeNode(<span class="string">"Label"</span>, <span class="string">"Some Text"</span>)
+
+  <span class="comment">-- ImGui.TreeNodeEx(...)
+</span>  <span class="comment">-- Parameters: text (label), ImGuiTreeNodeFlags (flags) [O], text (fmt) [O]
+</span>  <span class="comment">-- Returns: bool (open)
+</span>  <span class="comment">-- Overloads
+</span>  open = ImGui.TreeNodeEx(<span class="string">"Label"</span>)
+  open = ImGui.TreeNodeEx(<span class="string">"Label"</span>, ImGuiTreeNodeFlags.Selected)
+  open = ImGui.TreeNodeEx(<span class="string">"Label"</span>, ImGuiTreeNodeFlags.Selected, <span class="string">"Some Text"</span>)
+
+  <span class="comment">-- ImGui.TreePush(...)
+</span>  <span class="comment">-- Parameters: text (str_id)
+</span>  ImGui.TreePush(<span class="string">"String ID"</span>)
+
+  <span class="comment">-- ImGui.TreePop()
+</span>  ImGui.TreePop()
+
+  <span class="comment">-- ImGui.GetTreeNodeToLabelSpacing()
+</span>  <span class="comment">-- Returns: float (spacing)
+</span>  spacing = ImGui.GetTreeNodeToLabelSpacing()
+
+  <span class="comment">-- ImGui.CollapsingHeader(...)
+</span>  <span class="comment">-- Parameters A: text (label), ImGuiTreeNodeFlags (flags) [O]
+</span>  <span class="comment">-- Parameters B: text (label), bool (open), ImGuiTreeNodeFlags (flags) [O]
+</span>  <span class="comment">-- Returns A: bool (notCollapsed)
+</span>  <span class="comment">-- Returns B: bool (open), bool (notCollapsed)
+</span>  <span class="comment">-- Overloads
+</span>  notCollapsed = ImGui.CollapsingHeader(<span class="string">"Label"</span>)
+  notCollapsed = ImGui.CollapsingHeader(<span class="string">"Label"</span>, ImGuiTreeNodeFlags.Selected)
+  open, notCollapsed = ImGui.CollapsingHeader(<span class="string">"Label"</span>, open)
+  open, notCollapsed = ImGui.CollapsingHeader(<span class="string">"Label"</span>, open, ImGuiTreeNodeFlags.Selected)
+
+  <span class="comment">-- ImGui.SetNextItemOpen(...)
+</span>  <span class="comment">-- Parameters: bool (open), ImGuiCond (cond) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SetNextItemOpen(<span class="keyword">true</span>)
+  ImGui.SetNextItemOpen(<span class="keyword">true</span>, ImGuiCond.Always)
+</pre>
+
+
+<p><a name="Widgets__Selectables"></a></p>
+<h2>Widgets: Selectables</h2>
+
+<pre>
+  <span class="comment">-- ImGui.Selectable(...)
+</span>  <span class="comment">-- Parameters: text (label), bool (selected) [O], ImGuiSelectableFlags (flags) [O], float (size_x) [O], float (size_y) [O]
+</span>  <span class="comment">-- Returns: bool (selected)
+</span>  <span class="comment">-- Overloads
+</span>  selected = ImGui.Selectable(<span class="string">"Label"</span>)
+  selected = ImGui.Selectable(<span class="string">"Label"</span>, selected)
+  selected = ImGui.Selectable(<span class="string">"Label"</span>, selected, ImGuiSelectableFlags.AllowDoubleClick)
+  selected = ImGui.Selectable(<span class="string">"Label"</span>, selected, ImGuiSelectableFlags.AllowDoubleClick, <span class="number">100</span>, <span class="number">100</span>)
+</pre>
+
+
+<p><a name="Widgets__List_Boxes"></a></p>
+<h2>Widgets: List Boxes</h2>
+
+<pre>
+  <span class="comment">-- ImGui.ListBox(...)
+</span>  <span class="comment">-- Parameters: text (label), int (current_item), table (items), int (items_count), int (height_in_items) [O]
+</span>  <span class="comment">-- Returns: int (current_item), bool (clicked)
+</span>  <span class="comment">-- Overloads
+</span>  current_item, clicked = ImGui.ListBox(<span class="string">"Label"</span>, current_item, { <span class="string">"Item 1"</span>, <span class="string">"Item 2"</span>, <span class="number">2</span> })
+  current_item, clicked = ImGui.ListBox(<span class="string">"Label"</span>, current_item, { <span class="string">"Item 1"</span>, <span class="string">"Item 2"</span>, <span class="number">2</span> }, <span class="number">5</span>)
+
+  <span class="comment">-- ImGui.ListBoxHeader(...)
+</span>  <span class="comment">-- Parameters A: text (label), float (size_x), float (size_y)
+</span>  <span class="comment">-- Parameters B: text (label), int (items_count), int (height_in_items) [0]
+</span>  <span class="comment">-- Returns: bool (open)
+</span>  <span class="comment">-- Overloads
+</span>  open = ImGui.ListBoxHeader(<span class="string">"Label"</span>, <span class="number">100.0</span>, <span class="number">100.0</span>) <span class="comment">-- size as params
+</span>  open = ImGui.ListBoxHeader(<span class="string">"Label"</span>, <span class="number">5</span>)
+  open = ImGui.ListBoxHeader(<span class="string">"Label"</span>, <span class="number">5</span>, <span class="number">5</span>)     <span class="comment">-- items count and height
+</span>
+  <span class="comment">-- ImGui.ListBoxFooter()
+</span>  ImGui.ListBoxFooter()
+</pre>
+
+
+<p><a name="Widgets__Value___Helpers"></a></p>
+<h2>Widgets: Value() Helpers</h2>
+
+<pre>
+  <span class="comment">-- ImGui.Value(...)
+</span>  <span class="comment">-- Parameters: text (prefix) bool/int/unsigned int/float (value), text (float_format) [O] -- format only available with float
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.Value(<span class="string">"Prefix"</span>, <span class="keyword">true</span>)
+  ImGui.Value(<span class="string">"Prefix"</span>, -<span class="number">5</span>)
+  ImGui.Value(<span class="string">"Prefix"</span>, <span class="number">5</span>)
+  ImGui.Value(<span class="string">"Prefix"</span>, <span class="number">5.0</span>)
+  ImGui.Value(<span class="string">"Prefix"</span>, <span class="number">5.0</span>, <span class="string">"%.2f"</span>)
+</pre>
+
+
+<p><a name="Widgets__Menus"></a></p>
+<h2>Widgets: Menus</h2>
+
+<pre>
+<span class="comment">-- ImGui.BeginMenuBar()
+</span><span class="comment">-- Returns: bool (shouldDraw)
+</span>shouldDraw = ImGui.BeginMenuBar()
+
+<span class="comment">-- ImGui.EndMenuBar()
+</span>ImGui.EndMenuBar()
+
+<span class="comment">-- ImGui.BeginMainMenuBar()
+</span><span class="comment">-- Returns: bool (shouldDraw)
+</span>shouldDraw = ImGui.BeginMainMenuBar()
+
+<span class="comment">-- ImGui.EndMainMenuBar()
+</span>ImGui.EndMainMenuBar()
+
+<span class="comment">-- ImGui.BeginMenu(...)
+</span><span class="comment">-- Parameters: text (label), bool (enabled) [O]
+</span><span class="comment">-- Returns: bool (shouldDraw)
+</span><span class="comment">-- Overloads
+</span>shouldDraw = ImGui.BeginMenu(<span class="string">"Label"</span>)
+shouldDraw = ImGui.BeginMenu(<span class="string">"Label"</span>, <span class="keyword">true</span>)
+
+<span class="comment">-- ImGui.EndMenu()
+</span>ImGui.EndMenu()
+
+<span class="comment">-- ImGui.MenuItem(...)
+</span><span class="comment">-- Parameters A: text (label), text (shortcut) [0]
+</span><span class="comment">-- Parameters B: text (label), text (shortcut), bool (selected)
+</span><span class="comment">-- Returns A: bool (activated)
+</span><span class="comment">-- returns B: bool (selected), bool (activated)
+</span><span class="comment">-- Overloads
+</span>activated = ImGui.MenuItem(<span class="string">"Label"</span>)
+activated = ImGui.MenuItem(<span class="string">"Label"</span>, <span class="string">"ALT+F4"</span>)
+selected, activated = ImGui.MenuItem(<span class="string">"Label"</span>, <span class="string">"ALT+F4"</span>, selected)
+selected, activated = ImGui.MenuItem(<span class="string">"Label"</span>, <span class="string">"ALT+F4"</span>, selected, <span class="keyword">true</span>)
+</pre>
+
+
+<p><a name="Tooltips"></a></p>
+<h2>Tooltips</h2>
+
+<pre>
+  <span class="comment">-- ImGui.BeginTooltip()
+</span>  ImGui.BeginTooltip()
+
+  <span class="comment">-- ImGui.EndTooltip()
+</span>  ImGui.EndTooltip()
+
+  <span class="comment">-- ImGui.SetTooltip(...)
+</span>  <span class="comment">-- Parameters: text (fmt)
+</span>  ImGui.SetTooltip(<span class="string">"Did you know that I have the high ground?"</span>)
+</pre>
+
+
+<p><a name="Popups__Modals"></a></p>
+<h2>Popups, Modals</h2>
+
+<pre>
+  <span class="comment">-- ImGui.BeginPopup(...)
+</span>  <span class="comment">-- Parameters: text (str_id), ImGuiWindowFlags (flags) [O]
+</span>  <span class="comment">-- Returns: bool (open)
+</span>  <span class="comment">-- Overloads
+</span>  open = ImGui.BeginPopup(<span class="string">"String ID"</span>)
+  open = ImGui.BeginPopup(<span class="string">"String ID"</span>, ImGuiWindowFlags.NoCollapse)
+
+  <span class="comment">-- ImGui.BeginPopupModal(...)
+</span>  <span class="comment">-- Parameters: text (name), bool (open) [O], ImGuiWindowFlags (flags) [O]
+</span>  <span class="comment">-- Returns: bool (open)
+</span>  <span class="comment">-- Overloads
+</span>  open = ImGui.BeginPopupModal(<span class="string">"Name"</span>)
+  open = ImGui.BeginPopupModal(<span class="string">"Name"</span>, open)
+  open = ImGui.BeginPopupModal(<span class="string">"Name"</span>, open, ImGuiWindowFlags.NoCollapse)
+
+  <span class="comment">-- ImGui.EndPopup()
+</span>  ImGui.EndPopup()
+
+  <span class="comment">-- ImGui.OpenPopup(...)
+</span>  <span class="comment">-- Parameters: text (str_id), ImGuiPopupFlags (popup_flags)
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.OpenPopup(<span class="string">"String ID"</span>)
+  ImGui.OpenPopup(<span class="string">"String ID"</span>, ImGuiPopupFlags.NoOpenOverExistingPopup)
+
+  <span class="comment">-- ImGui.OpenPopupContextItem(...)
+</span>  <span class="comment">-- Parameters: text (str_id), ImGuiPopupFlags (popup_flags)
+</span>  <span class="comment">-- Returns: bool (open)
+</span>  <span class="comment">-- Overloads
+</span>  open = ImGui.OpenPopupContextItem()
+  open = ImGui.OpenPopupContextItem(<span class="string">"String ID"</span>)
+  open = ImGui.OpenPopupContextItem(<span class="string">"String ID"</span>, ImGuiPopupFlags.NoOpenOverExistingPopup)
+
+  <span class="comment">-- ImGui.CloseCurrentPopup()
+</span>  ImGui.CloseCurrentPopup()
+
+  <span class="comment">-- ImGui.BeginPopupContextItem(...)
+</span>  <span class="comment">-- Parameters: text (str_id), ImGuiPopupFlags (popup_flags)
+</span>  <span class="comment">-- Returns: bool (open)
+</span>  <span class="comment">-- Overloads
+</span>  open = ImGui.BeginPopupContextItem()
+  open = ImGui.BeginPopupContextItem(<span class="string">"String ID"</span>)
+  open = ImGui.BeginPopupContextItem(<span class="string">"String ID"</span>, ImGuiPopupFlags.NoOpenOverExistingPopup)
+
+  <span class="comment">-- ImGui.BeginPopupContextWindow(...)
+</span>  <span class="comment">-- Parameters: text (str_id), ImGuiPopupFlags (popup_flags)
+</span>  <span class="comment">-- Returns: bool (open)
+</span>  <span class="comment">-- Overloads
+</span>  open = ImGui.BeginPopupContextWindow()
+  open = ImGui.BeginPopupContextWindow(<span class="string">"String ID"</span>)
+  open = ImGui.BeginPopupContextWindow(<span class="string">"String ID"</span>, ImGuiPopupFlags.NoOpenOverExistingPopup)
+
+  <span class="comment">-- ImGui.BeginPopupContextVoid(...)
+</span>  <span class="comment">-- Parameters: text (str_id), ImGuiPopupFlags (popup_flags)
+</span>  <span class="comment">-- Returns: bool (open)
+</span>  <span class="comment">-- Overloads
+</span>  open = ImGui.BeginPopupContextVoid()
+  open = ImGui.BeginPopupContextVoid(<span class="string">"String ID"</span>)
+  open = ImGui.BeginPopupContextVoid(<span class="string">"String ID"</span>, ImGuiPopupFlags.NoOpenOverExistingPopup)
+
+  <span class="comment">-- ImGui.IsPopupOpen(...)
+</span>  <span class="comment">-- Parameters: text (str_id), ImGuiPopupFlags (popup_flags)
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.IsPopupOpen(<span class="string">"String ID"</span>)
+  ImGui.IsPopupOpen(<span class="string">"String ID"</span>, ImGuiPopupFlags.NoOpenOverExistingPopup)
+</pre>
+
+
+<p><a name="Columns"></a></p>
+<h2>Columns</h2>
+
+<pre>
+  <span class="comment">-- ImGui.Columns(...)
+</span>  <span class="comment">-- Parameters: int (count) [O], text (id) [O], bool (border) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.Columns()
+  ImGui.Columns(<span class="number">2</span>)
+  ImGui.Columns(<span class="number">2</span>, <span class="string">"MyOtherColumn"</span>)
+  ImGui.Columns(<span class="number">3</span>, <span class="string">"MyColumnWithBorder"</span>, <span class="keyword">true</span>)
+
+  <span class="comment">-- ImGui.NextColumn()
+</span>  ImGui.NextColumn()
+
+  <span class="comment">-- ImGui.GetColumnIndex()
+</span>  <span class="comment">-- Returns: int (index)
+</span>  index = ImGui.GetColumnIndex()
+
+  <span class="comment">-- ImGui.GetColumnWidth(...)
+</span>  <span class="comment">-- Parameters: int (column_index) [O]
+</span>  <span class="comment">-- Returns: float (width)
+</span>  <span class="comment">-- Overloads
+</span>  width = ImGui.GetColumnWidth()
+  width = ImGui.getColumnWidth(<span class="number">2</span>)
+
+  <span class="comment">-- ImGui.SetColumnWidth(...)
+</span>  <span class="comment">-- Parameters: int (column_index), float (width)
+</span>  ImGui.SetColumnWidth(<span class="number">2</span>, <span class="number">100</span>)
+
+  <span class="comment">-- ImGui.GetColumnOffset(...)
+</span>  <span class="comment">-- Parameters: int (column_index) [O]
+</span>  <span class="comment">-- Returns: float (offset)
+</span>  <span class="comment">-- Overloads
+</span>  offset = ImGui.GetColumnOffset()
+  offset = ImGui.GetColumnOffset(<span class="number">2</span>)
+
+  <span class="comment">-- ImGui.SetColumnOffset(...)
+</span>  <span class="comment">-- Parameters: int (column_index), float (offset)
+</span>  ImGui.SetColumnOffset(<span class="number">2</span>, <span class="number">10</span>)
+
+  <span class="comment">-- ImGui.GetColumnsCount()
+</span>  <span class="comment">-- Returns: int (count)
+</span>  count = ImGui.GetColumnsCount()
+</pre>
+
+
+<p><a name="Tab_Bars__Tabs"></a></p>
+<h2>Tab Bars, Tabs</h2>
+
+<pre>
+  <span class="comment">-- ImGui.BeginTabBar(...)
+</span>  <span class="comment">-- Parameters: text (str_id), ImGuiTabBarFlags (flags)
+</span>  <span class="comment">-- Returns: bool (open)
+</span>  <span class="comment">-- Overloads
+</span>  open = ImGui.BeginTabBar(<span class="string">"String ID"</span>)
+  open = ImGui.BeginTabBar(<span class="string">"String ID"</span>, ImGuiTabBarFlags.Reorderable)
+
+  <span class="comment">-- ImGui.EndTabBar()
+</span>  ImGui.EndTabBar()
+
+  <span class="comment">-- ImGui.BeginTabItem()
+</span>  <span class="comment">-- Parameters A: text (label)
+</span>  <span class="comment">-- Parameters B: text (label), bool (open), ImGuiTabItemFlags (flags) [O]
+</span>  <span class="comment">-- Returns A: bool (selected)
+</span>  <span class="comment">-- Returns B: bool (open), bool (selected)
+</span>  <span class="comment">-- Overloads
+</span>  selected = ImGui.BeginTabItem(<span class="string">"Label"</span>)
+  open, selected = ImGui.BeginTabItem(<span class="string">"Label"</span>, open)
+  open, selected = ImGui.BeginTabItem(<span class="string">"Label"</span>, open, ImGuiTabItemFlags_NoTooltip)
+
+  <span class="comment">-- ImGui.EndTabItem()
+</span>  ImGui.EndTabItem()
+
+  <span class="comment">-- ImGui.SetTabItemClosed(...)
+</span>  <span class="comment">-- Parameters: text (tab_or_docked_window_label)
+</span>  ImGui.SetTabItemClosed(<span class="string">"MyDockedWindow"</span>)
+</pre>
+
+
+<p><a name="Docking"></a></p>
+<h2>Docking</h2>
+
+<pre>
+  <span class="comment">-- ImGui.DockSpace(...)
+</span>  <span class="comment">-- Parameters: unsigned int (id), float (size_x) [O], float (size_y) [O], ImGuiDockNodeFlags (flags) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.DockSpace(<span class="number">0</span>)
+  ImGui.DockSpace(<span class="number">1</span>, <span class="number">200</span>, <span class="number">300</span>)
+  ImGui.DockSpace(<span class="number">1</span>, <span class="number">200</span>, <span class="number">300</span>, ImGuiDockNodeFlags.NoDockingInCentralNode)
+
+  <span class="comment">-- ImGui.SetNextWindowDockID(...)
+</span>  <span class="comment">-- Parameters: unsigned int (dock_id), ImGuiCond (cond) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SetNextWindowDockID(<span class="number">0</span>)
+  ImGui.SetNextWindowDockID(<span class="number">0</span>, ImGuiCond.Always)
+
+  <span class="comment">-- ImGui.GetWindowDockID()
+</span>  <span class="comment">-- Returns: unsigned int (id)
+</span>  id = ImGui.GetWindowDockID()
+
+  <span class="comment">-- ImGui.IsWindowDocked()
+</span>  <span class="comment">-- Returns: bool (docked)
+</span>  docked = ImGui.IsWindowDocked()
+</pre>
+
+
+<p><a name="Logging"></a></p>
+<h2>Logging</h2>
+
+<pre>
+  <span class="comment">-- ImGui.LogToTTY(...)
+</span>  <span class="comment">-- Parameters: int (auto_open_depth) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.LogToTTY()
+  ImGui.LogToTTY(<span class="number">1</span>)
+
+  <span class="comment">-- ImGui.LogToFile(...)
+</span>  <span class="comment">-- Parameters: int (auto_open_depth) [O], text (fileName) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.LogToFile()
+  ImGui.LogToFile(<span class="number">1</span>)
+  ImGui.LogToFile(<span class="number">1</span>, <span class="string">"myfile.txt"</span>)
+
+  <span class="comment">-- ImGui.LogToClipboard(...)
+</span>  <span class="comment">-- Parameters: int (auto_open_depth) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.LogToClipboard()
+  ImGui.LogToClipboard(<span class="number">1</span>)
+
+  <span class="comment">-- ImGui.LogFinish()
+</span>  ImGui.LogFinish()
+
+  <span class="comment">-- ImGui.LogButtons()
+</span>  ImGui.LogButtons()
+
+  <span class="comment">-- ImGui.LogText(...)
+</span>  <span class="comment">-- Parameters: text (fmt)
+</span>  ImGui.LogText(<span class="string">"I want to log this, thanks."</span>)
+</pre>
+
+
+<p><a name="Clipping"></a></p>
+<h2>Clipping</h2>
+
+<pre>
+  <span class="comment">-- ImGui.PushClipRect(...)
+</span>  <span class="comment">-- Parameters: float (min_x), float (min_y), float (max_x), float (max_y), bool (intersect_current)
+</span>  ImGui.PushClipRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>, <span class="number">100</span>, <span class="keyword">false</span>)
+
+  <span class="comment">-- ImGui.PopClipRect()
+</span>  ImGui.PopClipRect()
+</pre>
+
+
+<p><a name="Focus__Activation"></a></p>
+<h2>Focus, Activation</h2>
+
+<pre>
+  <span class="comment">-- ImGui.SetItemDefaultFocus()
+</span>  ImGui.SetItemDefaultFocus()
+
+  <span class="comment">-- ImGui.SetKeyboardFocusHere(...)
+</span>  <span class="comment">-- Parameters: int (offset) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.SetItemDefaultFocus()
+  ImGui.SetItemDefaultFocus(<span class="number">5</span>)
+</pre>
+
+
+<p><a name="Item___Widgets_Utilities"></a></p>
+<h2>Item / Widgets Utilities</h2>
+
+<pre>
+  <span class="comment">-- ImGui.IsItemHovered(...)
+</span>  <span class="comment">-- Parameters: ImGuiHoveredFlags (flags) [O]
+</span>  <span class="comment">-- Returns: bool (hovered)
+</span>  <span class="comment">-- Overloads
+</span>  hovered = ImGui.IsItemHovered()
+  hovered = ImGui.IsItemHovered(ImGuiHoveredFlags.ChildWindows)
+
+  <span class="comment">-- ImGui.IsItemActive()
+</span>  <span class="comment">-- Returns: bool (active)
+</span>  active = ImGui.IsItemActive()
+
+  <span class="comment">-- ImGui.IsItemFocused()
+</span>  <span class="comment">-- Returns: bool (focused)
+</span>  focused = ImGui.IsItemFocused()
+
+  <span class="comment">-- ImGui.IsItemClicked(...)
+</span>  <span class="comment">-- Parameters: ImGuiMouseButton (mouse_button) [O]
+</span>  <span class="comment">-- Returns: bool (clicked)
+</span>  <span class="comment">-- Overloads
+</span>  clicked = ImGui.IsItemClicked()
+  clicked = ImGui.IsItemClicked(ImGuiMouseButton.Middle)
+
+  <span class="comment">-- ImGui.IsItemVisible()
+</span>  <span class="comment">-- Returns: bool (visible)
+</span>  visible = ImGui.IsItemVisible()
+
+  <span class="comment">-- ImGui.IsItemEdited()
+</span>  <span class="comment">-- Returns: bool (edited)
+</span>  edited = ImGui.IsItemEdited()
+
+  <span class="comment">-- ImGui.IsItemActivated()
+</span>  <span class="comment">-- Returns: bool (activated)
+</span>  activated = ImGui.IsItemActivated()
+
+  <span class="comment">-- ImGui.IsItemDeactivated()
+</span>  <span class="comment">-- Returns: bool (deactivated)
+</span>  deactivated = ImGui.IsItemDeactivated()
+
+  <span class="comment">-- ImGui.IsItemDeactivatedAfterEdit()
+</span>  <span class="comment">-- Returns: bool (deactivated_after_edit)
+</span>  deactivated_after_edit = ImGui.IsItemDeactivatedAfterEdit()
+
+  <span class="comment">-- ImGui.IsItemToggledOpen()
+</span>  <span class="comment">-- Returns: bool (toggled_open)
+</span>  toggled_open = ImGui.IsItemToggledOpen()
+
+  <span class="comment">-- ImGui.IsAnyItemHovered()
+</span>  <span class="comment">-- Returns: bool (any_item_hovered)
+</span>  any_item_hovered = ImGui.IsAnyItemHovered()
+
+   <span class="comment">-- ImGui.IsAnyItemActive()
+</span>  <span class="comment">-- Returns: bool (any_item_active)
+</span>  any_item_active = ImGui.IsAnyItemActive()
+
+  <span class="comment">-- ImGui.IsAnyItemFocused()
+</span>  <span class="comment">-- Returns: bool (any_item_focused)
+</span>  any_item_focused = ImGui.IsAnyItemFocused()
+
+  <span class="comment">-- ImGui.GetItemRectMin()
+</span>  <span class="comment">-- Returns: float (x), float (y)
+</span>  x, y = ImGui.GetItemRectMin()
+
+  <span class="comment">-- ImGui.GetItemRectMax()
+</span>  <span class="comment">-- Returns: float (x), float (y)
+</span>  x, y = ImGui.GetItemRectMax()
+
+  <span class="comment">-- ImGui.GetItemRectSize()
+</span>  <span class="comment">-- Returns: float (x), float (y)
+</span>  x, y = ImGui.GetItemRectSize()
+
+  <span class="comment">-- ImGui.SetItemAllowOverlap()
+</span>  ImGui.SetItemAllowOverlap()
+</pre>
+
+
+<p><a name="Miscellaneous_Utilities"></a></p>
+<h2>Miscellaneous Utilities</h2>
+
+<pre>
+  <span class="comment">-- ImGui.IsRectVisible(...)
+</span>  <span class="comment">-- Parameters A: float (size_x), float (size_y)
+</span>  <span class="comment">-- Parameters B: float(min_x), float (min_y), float (max_x), float (max_y)
+</span>  <span class="comment">-- Returns: bool (visible)
+</span>  <span class="comment">-- Overloads
+</span>  visible = ImGui.IsRectVisible(<span class="number">100</span>, <span class="number">100</span>)
+  visible = ImGui.IsRectVisible(<span class="number">50</span>, <span class="number">50</span>, <span class="number">200</span>, <span class="number">200</span>)
+
+  <span class="comment">-- ImGui.GetTime()
+</span>  <span class="comment">-- Returns double (time)
+</span>  time = ImGui.GetTime()
+
+  <span class="comment">-- ImGui.GetFrameCount()
+</span>  <span class="comment">-- Returns int (frame_count)
+</span>  frame_count = ImGui.GetFrameCount()
+
+  <span class="comment">-- ImGui.GetStyleColorName(...)
+</span>  <span class="comment">-- Parameters: ImGuiCol (idx)
+</span>  <span class="comment">-- Returns: text (style_color_name)
+</span>  style_color_name = ImGui.GetStyleColorName(ImGuiCol.Text)
+
+  <span class="comment">-- ImGui.BeginChildFrame(...)
+</span>  <span class="comment">-- Parameters: unsigned int (id), float (size_x), float (size_y), ImGuiWindowFlags (flags) [O]
+</span>  <span class="comment">-- Returns: bool (open)
+</span>  <span class="comment">-- Overloads
+</span>  open = ImGui.BeginChildFrame(<span class="number">0</span>, <span class="number">100</span>, <span class="number">100</span>)
+  open = ImGui.BeginChildFrame(<span class="number">0</span>, <span class="number">100</span>, <span class="number">100</span>, ImGuiWindowFlags.NoBackground)
+
+  <span class="comment">-- ImGui.EndChildFrame()
+</span>  ImGui.EndChildFrame()
+</pre>
+
+
+<p><a name="Text_Utilities"></a></p>
+<h2>Text Utilities</h2>
+
+<pre>
+  <span class="comment">-- ImGui.CalcTextSize(...)
+</span>  <span class="comment">-- Parameters: text (text), text (text_end) [O], bool (hide_text_after_double_hash) [O], float (wrap_width) [O]
+</span>  <span class="comment">-- Returns: float (x), float (y)
+</span>  <span class="comment">-- Overloads
+</span>  x, y = ImGui.CalcTextSize(<span class="string">"Calculate me"</span>)
+  x, y = ImGui.CalcTextSize(<span class="string">"Calculate me"</span>, <span class="string">" with an ending?"</span>)
+  x, y = ImGui.CalcTextSize(<span class="string">"Calculate me"</span>, <span class="string">" with an ending?"</span>, <span class="keyword">true</span>)
+  x, y = ImGui.CalcTextSize(<span class="string">"Calculate me"</span>, <span class="string">" with an ending?"</span>, <span class="keyword">true</span>, <span class="number">100</span>)
+</pre>
+
+
+<p><a name="Color_Utilities"></a></p>
+<h2>Color Utilities</h2>
+
+<pre>
+  <span class="comment">-- ImGui.ColorConvertRGBtoHSV(...)
+</span>  <span class="comment">-- Parameters: float (r), float (g), float (b)
+</span>  <span class="comment">-- Returns: float (h), float (s), float (v)
+</span>  h, s, v = ImGui.ColorConvertRGBtoHSV(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.ColorConvertHSVtoRGB(...)
+</span>  <span class="comment">-- Parameters: float (h), float (s), float (v)
+</span>  <span class="comment">-- Returns: float (r), float (g), float (b)
+</span>  r, g, b = ImGui.ColorConvertHSVtoRGB(<span class="number">1</span>, <span class="number">0</span>, <span class="number">0.5</span>)
+</pre>
+
+<p><a name="Inputs_Utilities__Keyboard"></a></p>
+<h2>Inputs Utilities: Keyboard</h2>
+
+<pre>
+  <span class="comment">-- ImGui.GetKeyIndex(...)
+</span>  <span class="comment">-- Parameters: ImGuiKey (key)
+</span>  <span class="comment">-- Returns: int (index)
+</span>  index = ImGui.GetKeyIndex(ImGuiKey.Tab)
+
+  <span class="comment">-- ImGui.IsKeyDown(...)
+</span>  <span class="comment">-- Parameters: int (key_index)
+</span>  <span class="comment">-- Returns: bool (down)
+</span>  down = ImGui.IsKeyDown(<span class="number">0</span>)
+
+  <span class="comment">-- ImGui.IsKeyPressed(...)
+</span>  <span class="comment">-- Parameters: int (key_index), bool (repeat) [O]
+</span>  <span class="comment">-- Returns: bool (pressed)
+</span>  <span class="comment">-- Overloads
+</span>  pressed = ImGui.IsKeyPressed(<span class="number">0</span>)
+  pressed = ImGui.IsKeyPressed(<span class="number">0</span>, <span class="keyword">true</span>)
+
+  <span class="comment">-- ImGui.IsKeyReleased(...)
+</span>  <span class="comment">-- Parameters: int (key_index)
+</span>  <span class="comment">-- Returns: bool (released)
+</span>  released = ImGui.IsKeyReleased(<span class="number">0</span>)
+
+  <span class="comment">-- ImGui.GetKeyPressedAmount(...)
+</span>  <span class="comment">-- Parameters: int (key_index), float (repeat_delay), float (rate)
+</span>  <span class="comment">-- Returns: int (pressed_amount)
+</span>  pressed_amount = ImGui.GetKeyPressedAmount(<span class="number">0</span>, <span class="number">0.5</span>, <span class="number">5</span>)
+
+  <span class="comment">-- ImGui.CaptureKeyboardFromApp(...)
+</span>  <span class="comment">-- Parameters: bool (want_capture_keyboard_value) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.CaptureKeyboardFromApp()
+  ImGui.CaptureKeyboardFromApp(<span class="keyword">false</span>)
+</pre>
+
+
+<p><a name="Inputs_Utilities__Mouse"></a></p>
+<h2>Inputs Utilities: Mouse</h2>
+
+<pre>
+  <span class="comment">-- ImGui.IsMouseDown(...)
+</span>  <span class="comment">-- Parameters: ImGuiMouseButton (button)
+</span>  <span class="comment">-- Returns: bool (down)
+</span>  down = ImGui.IsMouseDown(ImGuiMouseButton.Right)
+
+  <span class="comment">-- ImGui.IsMouseClicked(...)
+</span>  <span class="comment">-- Parameters: ImGuiMouseButton (button), bool (repeat) [O]
+</span>  <span class="comment">-- Returns: bool (clicked)
+</span>  <span class="comment">-- Overloads
+</span>  clicked = ImGui.IsMouseClicked(ImGuiMouseButton.Right)
+  clicked = ImGui.IsMouseClicked(ImGuiMouseButton.Right, <span class="keyword">false</span>)
+
+  <span class="comment">-- ImGui.IsMouseReleased(...)
+</span>  <span class="comment">-- Parameters: ImGuiMouseButton (button)
+</span>  <span class="comment">-- Returns: bool (released)
+</span>  released = ImGui.IsMouseReleased(ImGuiMouseButton.Right)
+
+  <span class="comment">-- ImGui.IsMouseDoubleClicked(...)
+</span>  <span class="comment">-- Parameters: ImGuiMouseButton (button)
+</span>  <span class="comment">-- Returns: bool (double_clicked)
+</span>  double_clicked = ImGui.IsMouseDoubleClicked(ImGuiMouseButton.Right)
+
+  <span class="comment">-- ImGui.IsMouseHoveringRect(...)
+</span>  <span class="comment">-- Parameters: float (min_x), float (min_y), float(max_x), float(max_y), bool (clip) [O]
+</span>  <span class="comment">-- Returns: bool (hovered)
+</span>  hovered = ImGui.IsMouseHoveringRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>, <span class="number">100</span>)
+  hovered = ImGui.IsMouseHoveringRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>, <span class="number">100</span>, <span class="keyword">true</span>)
+
+  <span class="comment">-- ImGui.IsAnyMouseDown()
+</span>  <span class="comment">-- Returns: bool (any_mouse_down)
+</span>  any_mouse_down = ImGui.IsAnyMouseDown()
+
+  <span class="comment">-- ImGui.GetMousePos()
+</span>  <span class="comment">-- Returns: float (x), float (y)
+</span>  x, y = ImGui.GetMousePos()
+
+  <span class="comment">-- ImGui.GetMousePosOnOpeningCurrentPopup()
+</span>  <span class="comment">-- Returns: float (x), float (y)
+</span>  x, y = ImGui.GetMousePosOnOpeningCurrentPopup()
+
+  <span class="comment">-- ImGui.IsMouseDragging(...)
+</span>  <span class="comment">-- Parameters: ImGuiMouseButton (button), float (lock_threshold) [O]
+</span>  <span class="comment">-- Returns: bool (dragging)
+</span>  <span class="comment">-- Overloads
+</span>  dragging = ImGui.IsMouseDragging(ImGuiMouseButton.Middle)
+  dragging = ImGui.IsMouseDragging(ImGuiMouseButton.Middle, <span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.GetMouseDragDelta(...)
+</span>  <span class="comment">-- Parameters: ImGuiMouseButton (button) [O], float (lock_threshold) [O]
+</span>  <span class="comment">-- Returns: float (x), float (y)
+</span>  <span class="comment">-- Overloads
+</span>  x, y = ImGui.GetMouseDragDelta()
+  x, y = ImGui.GetMouseDragDelta(ImGuiMouseButton.Middle)
+  x, y = ImGui.GetMouseDragDelta(ImGuiMouseButton.Middle, <span class="number">0.5</span>)
+
+  <span class="comment">-- ImGui.ResetMouseDragDelta(...)
+</span>  <span class="comment">-- Parameters: ImGuiMouseButton (button) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.ResetMouseDragDelta()
+  ImGui.ResetMouseDragDelta(ImGuiMouseButton.Middle)
+
+  <span class="comment">-- ImGui.GetMouseCursor()
+</span>  <span class="comment">-- Returns: ImGuiMouseCursor (cursor)
+</span>  cursor = ImGui.GetMouseCursor()
+
+  <span class="comment">-- ImGui.SetMouseCursor(...)
+</span>  <span class="comment">-- Parameters: ImGuiMouseCursor (cursor_type)
+</span>  ImGui.SetMouseCursor(ImGuiMouseCursor.Hand)
+
+  <span class="comment">-- ImGui.CaptureMouseFromApp()
+</span>  <span class="comment">-- Parameters: bool (want_capture_mouse_value) [O]
+</span>  <span class="comment">-- Overloads
+</span>  ImGui.CaptureMouseFromApp()
+  ImGui.CaptureMouseFromApp(<span class="keyword">true</span>)
+</pre>
+
+
+<p><a name="Clipboard_Utilities"></a></p>
+<h2>Clipboard Utilities</h2>
+
+<pre>
+  <span class="comment">-- ImGui.GetClipboardText()
+</span>  <span class="comment">-- Returns: text (text)
+</span>  text = ImGui.GetClipboardText()
+
+  <span class="comment">-- ImGui.SetClipboardText(...)
+</span>  <span class="comment">-- Parameters: text (text)
+</span>  ImGui.SetClipboardText(<span class="string">"I made it to the clipboard!"</span>)
+</pre>
+
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2022-05-15 03:32:14 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

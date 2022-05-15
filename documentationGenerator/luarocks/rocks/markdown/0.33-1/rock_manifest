@@ -1,0 +1,6 @@
+rock_manifest = {
+  lua={
+    ['markdown.lua']='f9a86d0f5b1ad19679f560bebf4e30e4'
+  },
+  ['markdown-0.33-1.rockspec']='73812cd9b358d8011480a02242ee4202'
+}
