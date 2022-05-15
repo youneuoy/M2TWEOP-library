@@ -13,6 +13,7 @@ public:
 	static int __fastcall onfortificationlevelS(settlementStruct* settlement,bool*isCastle);
 	static char* __fastcall onSaveEDUStringS(EduEntry* eduEntry);
 	static int __fastcall onCreateUnit(int* edbIndex, int** edb, char** entryName);
+	static const char* __fastcall onQuickSave();
 
 
 	static general* __fastcall mercenaryMovepointsGetGeneral(stackStruct*army);

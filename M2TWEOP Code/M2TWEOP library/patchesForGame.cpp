@@ -160,6 +160,70 @@ int __fastcall patchesForGame::onCreateUnit(int* edbIndex, int** edb, char** ent
 
 	return -1;
 }
+const char* __fastcall patchesForGame::onQuickSave()
+{
+	static std::vector<std::string> saveNames={ "%S_1.sav" ,"%S_2.sav", "%S_3.sav" };
+	jsn::json json;
+
+	std::string fPath = globals::dataS.modPatch;
+	fPath += "\\saves\\quickSavesM2TWEOP.json";
+
+
+
+
+	int currSaveID = 0;
+	int maxSaveID = 2;
+	try
+	{
+		std::ifstream f1(fPath);
+		if (f1.is_open())
+		{
+			f1 >> json;
+
+			f1.close();
+
+			json.at("saveID").get_to(currSaveID);
+
+			if (currSaveID + 1 > maxSaveID)
+			{
+				json["saveID"] = 0;
+			}
+			else
+			{
+				json["saveID"] = currSaveID + 1;
+			}
+			std::ofstream f2(fPath);
+
+			f2 << json;
+
+			f2.close();
+		}
+		else
+		{
+			currSaveID = 0;
+			json["saveID"] = 0;
+
+			std::ofstream f2(fPath);
+
+			f2 << json;
+
+			f2.close();
+		}
+	}
+	catch (jsn::json::type_error& e)
+	{
+		currSaveID = 0;
+		json["saveID"] = 0;
+
+		std::ofstream f2(fPath);
+
+		f2 << json;
+
+		f2.close();
+	}
+
+	return saveNames[currSaveID].c_str();
+}
 general* __fastcall patchesForGame::mercenaryMovepointsGetGeneral(stackStruct* army)
 {
 	general* gen = army->gen;

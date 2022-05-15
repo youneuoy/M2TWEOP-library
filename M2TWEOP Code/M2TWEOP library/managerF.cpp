@@ -426,6 +426,12 @@ void managerF::doPachs()
 	onCreateUnit->Enable();
 	f1 << "Done" << endl;
 
+	f1 << "Start applying OnQuickSave patch" << endl;
+	OnQuickSave* onQuickSave = new OnQuickSave(mem, (LPVOID)patchesForGame::onQuickSave, globals::dataS.gamever);
+	onQuickSave->SetNewCode();
+	onQuickSave->Enable();
+	f1 << "Done" << endl;
+
 	f1 << "End." << endl;
 
 	f1.close();

@@ -777,3 +777,16 @@ public:
 private:
 	LPVOID funcAddress;
 };
+
+class OnQuickSave
+	:public AATemplate
+{
+public:
+	OnQuickSave(MemWork* mem, LPVOID addr, int ver);
+	~OnQuickSave();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};

@@ -2947,3 +2947,54 @@ void OnCreateUnit::SetNewCode()
 
 	delete a;
 }
+
+OnQuickSave::OnQuickSave(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00c30a83;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00c366b3;
+}
+
+OnQuickSave::~OnQuickSave()
+{
+}
+
+void OnQuickSave::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	//push pointer to "%S.sav" string
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnQuickSave::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(ecx);
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->mov(byte_ptr(esp, 0x20), eax);//move eax to stored eax
+	a->popf();
+	a->popad();
+
+	a->push(eax);
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
