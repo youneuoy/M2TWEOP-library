@@ -126,5 +126,5 @@ jobs:
         artifacts: "${{ env.EOP_VERSION }}.zip"
         bodyFile: "./docs/releaseInfo/releaseDescription.md"
         token: ${{ secrets.GITHUB_TOKEN }}
-        commit: "test-eop-release"
+        commit: "testFeathures"
         allowUpdates: true
