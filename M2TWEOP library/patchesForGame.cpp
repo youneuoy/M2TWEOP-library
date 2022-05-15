@@ -416,7 +416,7 @@ void __fastcall patchesForGame::onEndSiege(settlementStruct* sett)
 
 void __fastcall patchesForGame::onStartSiege(settlementStruct* sett)
 {
-	if (sett->siege == nullptr)
+	if (sett->siegesNumber == 0)
 	{
 		return;
 	}

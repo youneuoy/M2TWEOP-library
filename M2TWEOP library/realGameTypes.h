@@ -424,6 +424,10 @@ struct buildingsQueue {
 	int buildingsInQueue;
 	int currentBuildingIndex;
 };
+struct oneSiege {
+	void* vtable;
+	struct siegeS* siege;
+};
 //settlement
 struct settlementStruct {
 	undefined field0_0x0[12];
@@ -431,9 +435,9 @@ struct settlementStruct {
 	UINT32 yCoord; /* y coordinate */
 	undefined field3_0x14[48];
 	struct stackStruct* army; /* army on the settlement */
-	undefined field5_0x48[4];
-	struct siegeS* siege;
-	undefined field7_0x50[252];
+	struct oneSiege sieges[8];
+	BYTE siegesNumber;
+	undefined field7_0x89[195];
 	struct settMod* model;
 	int descr_culturestxt;
 	undefined field10_0x154[16];
