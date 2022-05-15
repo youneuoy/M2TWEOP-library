@@ -39,7 +39,7 @@ Set-Location -Path $currentLoc
 Remove-item ./M2TWEOPGenerated -recurse -erroraction 'silentlycontinue'
 new-item ./M2TWEOPGenerated  -itemtype directory -erroraction 'silentlycontinue'
 
-Copy-Item -Path  "M2TWEOP-DataFiles\*" -Destination "./M2TWEOPGenerated" -recurse
+Copy-Item -Path  "M2TWEOP DataFiles\*" -Destination "./M2TWEOPGenerated" -recurse
 Copy-Item -Path  "documentationGenerator\EOPDocs\build\html\*" -Destination "./M2TWEOPGenerated/eopData/helpPages" -recurse -erroraction 'silentlycontinue'
 
 Copy-Item -Path  "M2TWEOP-luaPlugin\Release\luaPlugin.dll" -Destination "./M2TWEOPGenerated/youneuoy_Data/plugins"
