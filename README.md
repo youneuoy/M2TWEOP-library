@@ -35,13 +35,13 @@ The functionality of the program is divided into two parts
 ### Creators
 * **youneuoy** - project founder, main developer
 * **Jojo00182** - did a lot of great stuff and much more to come
+* **Medik** - building automation, help in creating documentation, etc
   
 ### Contributors
 * **Edmond** - project idea, first attempts to implement hotseats with online battles
 * **Xamax** - lots of ideas and testing
 * **Erken** - lots of ideas and testing
 * **DinarMayor** - ideas and testing
-* **Medik** - help in creating documentation
 * **Fynn** - testing
 
 ## Project composition
