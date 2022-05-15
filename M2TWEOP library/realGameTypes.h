@@ -133,66 +133,66 @@ struct worldRecord {
 };
 
 struct campaign {
-	undefined field_0x0[4];
-	undefined field_0x4[52];
+	undefined field0_0x0[4];
+	undefined field1_0x4[52];
 	int playerFactionId;
-	undefined field_0x3c[4];
+	undefined field3_0x3c[4];
 	int hotSeatPlayer2FactionId;
-	undefined field_0x44[232];
+	undefined field5_0x44[232];
 	int humanPlayers;
 	int factionIdPow; /* pow(2,factionId) */
 	int campaignDifficultyFaction[8];
-	undefined field_0x154[120];
+	undefined field9_0x154[120];
 	int battleDifficulty07;
-	undefined field_0x1d0[88];
+	undefined field11_0x1d0[88];
 	int battleDifficulty30;
 	struct factionStruct* factionsSortedByDescrStrat[31];
 	struct factionStruct* factionsSortedByID[31];
 	int numberOfFactionsWithSlave;
-	undefined field_0x328[28];
+	undefined field16_0x328[28];
 	struct factionStruct* currentFactionTurn;
-	int field_0x348; /* FactionTurn? */
+	int field18_0x348; /* FactionTurn? */
 	UNICODE_STRING** currentDescrFile; /* path to descr_battle.txt or to descr_strat.txt */
-	undefined field_0x350[28];
-	int field_0x36c; /* TickCount? */
+	undefined field20_0x350[28];
+	int field21_0x36c; /* TickCount? */
 	int MillisecondCount;
 	float SecondCount;
 	int TurnNumber;
-	int field_0x37c; /* PauseForBattleDialog? */
+	int field25_0x37c; /* PauseForBattleDialog? */
 	float TimeScale;
-	undefined field_0x384[4];
+	undefined field27_0x384[4];
 	struct settlementStruct* rome;
-	undefined field_0x38c[4];
+	undefined field29_0x38c[4];
 	struct settlementStruct* constantinople;
-	undefined field_0x394[60];
-	int8_t field_0x3d0;
-	int8_t field_0x3d1;
-	undefined field_0x3d2[26];
+	undefined field31_0x394[60];
+	int8_t field32_0x3d0;
+	int8_t field33_0x3d1;
+	undefined field34_0x3d2[26];
 	float BrigandSpawnValue;
 	float PirateSpawnValue;
-	undefined field_0x3f4[4];
+	undefined field37_0x3f4[4];
 	int FreeUpkeepForts;
 	int ActiveFactions;
-	undefined field_0x400[12];
+	undefined field40_0x400[12];
 	int lastrandomseed;
-	undefined field_0x410[744];
+	undefined field42_0x410[744];
 	int8_t isAdminPasswordExist;
 	int8_t isHotseatLogon;
-	undefined field_0x6fa[2];
+	undefined field45_0x6fa[2];
 	int8_t hotseatConsole;
 	int8_t hotseatConsole2;
-	undefined field_0x6fe[14];
+	undefined field48_0x6fe[14];
 	float currentDate;
 	int season; /* season(0-summer,1-winter) */
 	float startDate;
 	int startSeason;
 	float endDate;
 	int endSeason;
-	undefined field_0x724[4];
+	undefined field55_0x724[4];
 	float timeAtStartBattle;
 	int daysInBattle;
 	float currentTimeInBattle; /* 24 max, so calc as daysInBattle*24+currentTimeInBattle */
-	undefined field_0x734[4128];
+	undefined field59_0x734[4124];
 	struct factionDiplomacy dipArray[31][31];
 };
 struct gameDataAllStruct {
