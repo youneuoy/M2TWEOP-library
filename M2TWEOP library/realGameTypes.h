@@ -430,46 +430,47 @@ struct oneSiege {
 };
 //settlement
 struct settlementStruct {
-	undefined field0_0x0[12];
+	void* vTable;
+	undefined field1_0x4[8];
 	UINT32 xCoord; /* x coordinate */
 	UINT32 yCoord; /* y coordinate */
-	undefined field3_0x14[48];
+	undefined field4_0x14[48];
 	struct stackStruct* army; /* army on the settlement */
 	struct oneSiege sieges[8];
 	BYTE siegesNumber;
-	undefined field7_0x89[195];
+	undefined field8_0x89[195];
 	struct settMod* model;
 	int descr_culturestxt;
-	undefined field10_0x154[16];
+	undefined field11_0x154[16];
 	char* name; /* name  of the province */
 	int nameCrypt;
 	UNICODE_STRING** localizedName;
 	struct factionStruct* ownerFac; /* faction of the owner */
-	undefined field15_0x174[36];
+	undefined field16_0x174[36];
 	int level; /* level of the settlement/castle */
 	int fac_creatorModNum;
-	undefined field18_0x1a0[4];
+	undefined field19_0x1a0[4];
 	BYTE isCastle; /* castle or settlement */
-	undefined field20_0x1a5[3];
+	undefined field21_0x1a5[3];
 	UINT32 regionNumber; /* number of region */
-	undefined field22_0x1ac[644];
-	undefined field23_0x430[4];
+	undefined field23_0x1ac[644];
+	undefined field24_0x430[4];
 	struct buildingsQueue buildingsQueueArray;
-	undefined field25_0x5ac[520];
+	undefined field26_0x5ac[520];
 	struct building* buildings[128];
 	int buildingsNum; /* number of the buildings in the settlement */
-	undefined field28_0x9b8[1100];
+	undefined field29_0x9b8[1100];
 	uchar isProvokedRebellion;
-	uchar field30_0xe05[3];
-	undefined field31_0xe08[24];
+	uchar field31_0xe05[3];
+	undefined field32_0xe08[24];
 	struct general* governor;
-	undefined field33_0xe24[32];
+	undefined field34_0xe24[32];
 	struct resStrat** resources;
-	undefined field35_0xe48[4];
+	undefined field36_0xe48[4];
 	int resourcesNum;
-	undefined field37_0xe50[2164];
+	undefined field38_0xe50[2164];
 	intptr_t guildStandings;
-	undefined field39_0x16c8[404];
+	undefined field40_0x16c8[404];
 	int populationSize;
 };
 

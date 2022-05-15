@@ -26,6 +26,43 @@ namespace fastFuncts
 
 		return nullptr;
 	}
+	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct* sett, factionStruct newOwner)
+	{
+		DWORD adrFunc = 0x0;
+		int* vTableAdr = (int*)sett->vTable;
+		adrFunc = vTableAdr[39];
+
+		//give settlement
+		__asm
+		{
+			push 5
+			push newOwner
+			push 0
+			mov ecx, sett
+			mov eax, adrFunc
+			call eax
+		}
+
+		adrFunc = 0x0;
+
+		//release sieges
+		if (globals::dataS.gamever == 2)//steam
+		{
+			adrFunc = 0x004bf8d0;
+		}
+		else
+		{
+			adrFunc = 0x004bf340;
+		}
+		__asm
+		{
+			push 1
+			mov ecx, sett
+			mov eax, adrFunc
+			call eax
+		}
+
+	}
 	NOINLINE EOP_EXPORT void setCharacterType(general* character, int typeID, int subFaction, int factionDipNum)
 	{
 		DWORD adrFunc = 0x0;

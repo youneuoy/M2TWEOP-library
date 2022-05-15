@@ -10,6 +10,8 @@
 
 namespace fastFuncts
 {
+	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct*sett, factionStruct newOwner);
+
 
 
 	NOINLINE EOP_EXPORT void setCharacterType(general*character, int typeID,int subFaction,int factionDipNum);
