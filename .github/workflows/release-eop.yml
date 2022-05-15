@@ -24,6 +24,9 @@ jobs:
     steps:
     - uses: ilammy/msvc-dev-cmd@v1
 
+
+     # If the latest commit message starts with 'Release', issue a release on GitHub
+     if: "startsWith(github.event.head_commit.message, 'Release')"
     # Pull down latest source code and modules
     - name: "Checkout from latest commit: '${{ github.event.head_commit.message }}'"
       uses: actions/checkout@v3
@@ -89,8 +92,6 @@ jobs:
       run: ls -l; ls documentationGenerator; ls documentationGenerator/EOPDocs; ls documentationGenerator/EOPDocs/build; ls documentationGenerator/EOPDocs/build/html;
       shell: bash
 
-      # If the latest commit message starts with 'Release', issue a release on GitHub
-      if: "startsWith(github.event.head_commit.message, 'Release')"
 
       # Read version number from source code
     - name: Read release version info from source
