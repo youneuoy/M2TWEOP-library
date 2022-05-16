@@ -108,7 +108,7 @@ jobs:
     - name: Online docs -  Commit and push updates to docs folder
       uses: EndBug/add-and-commit@v9
       with:
-        add: 'docs/eopDocs/helpPages'
+        add: 'docs'
         message: "Updated EOP Docs for version: ${{ env.EOP_VERSION }}"
         push: true
 
