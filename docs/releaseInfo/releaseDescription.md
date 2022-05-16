@@ -6,19 +6,17 @@
 ## Release Notes
 
 ###  Library
-- Added Java plugin
+- Now save files created automatically (quick saves and autosaves) will be written to multiple save slots (like: quickSave-1.sav, quickSave-2.sav, etc).
 
 ### Lua Plugin
-- Faction limit now removed
-- Return flashing units button
-- Now write C++ code in Lua 😋
+- Unit table: added exp, armourLVL, weaponLVL fields
+- SettlementStruct: added changeOwner function
 
 ### Documentation
-- Added more docs by Callestonian
+- Updated
 
 ### Bugfixes
-- All bugs fixed
-- More bugs added
+- -
 
 ### Links
 * [EOP Documentation](https://youneuoy.github.io/M2TWEOP-library/)

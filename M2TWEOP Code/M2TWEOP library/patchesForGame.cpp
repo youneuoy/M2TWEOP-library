@@ -223,14 +223,16 @@ const char* __fastcall patchesForGame::onQuickSave()
 }
 const char* __fastcall patchesForGame::onAutoSave()
 {
-	static std::vector<std::string> saveNames={ u8"%s%S%s%S-1.sav" ,u8"%s%S%s%S-2.sav", u8"%s%S%s%S-3.sav" };
+	static std::vector<std::string> saveNames={ u8"%s%S%s%S-1.sav" ,u8"%s%S%s%S-2.sav", u8"%s%S%s%S-3.sav",
+		 u8"%s%S%s%S-4.sav" ,u8"%s%S%s%S-5.sav", u8"%s%S%s%S-6.sav"
+	};
 	jsn::json json;
 
 	std::string fPath = globals::dataS.modPatch;
 	fPath += "\\saves\\autoSavesM2TWEOP.json";
 
 	int currSaveID = 0;
-	int maxSaveID = 2;
+	int maxSaveID = 5;
 	try
 	{
 		std::ifstream f1(fPath);
