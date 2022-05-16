@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>What is M2TW Engine Overhaul Project? &#8212; M2TWEOP 2.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/EOPIcon.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="M2TWEOP’s Tutorials!" href="articles.html" />
+    <link rel="prev" title="Project info" href="mainInfo.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">M2TWEOP</a></h1>
+
+
+
+<p class="blurb">Designed to expand the capabilities of the game Medieval 2: Total War</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=youneuoy&repo=M2TWEOP-library&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="mainInfo.html">Project info</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">What is M2TW Engine Overhaul Project?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#project-composition">Project composition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build">Build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#support-the-project">Support the project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#disclaimer">Disclaimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgments">Acknowledgments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-history">Version History</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="articles.html">M2TWEOP’s Tutorials!</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="_static/LuaLib/index.html">M2TWEOP LUA plugin</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="mainInfo.html">Project info</a><ul>
+      <li>Previous: <a href="mainInfo.html" title="previous chapter">Project info</a></li>
+      <li>Next: <a href="articles.html" title="next chapter">M2TWEOP’s Tutorials!</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+<h3 class="donation">Donate/support</h3>
+
+
+
+<p>
+<a class="badge" href="https://www.patreon.com/m2tweop">
+<img src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3DM2TWEOP%26type%3Dpatrons&style=flat" alt="Donate">
+</a>
+</p>
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="what-is-m2tw-engine-overhaul-project">
+<h1>What is M2TW Engine Overhaul Project?<a class="headerlink" href="#what-is-m2tw-engine-overhaul-project" title="Permalink to this headline">¶</a></h1>
+<p>M2TW Engine Overhaul Project is designed to expand the capabilities of the game <em>Medieval 2: Total War</em>.</p>
+<p>The functionality of the program is divided into two parts</p>
+<ol class="arabic simple">
+<li><p>Making changes to the game code when starting MTW2 (changing various engine limits, finer tuning, etc.)</p></li>
+<li><p>Manipulations with the game after its launch.</p></li>
+</ol>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Hugely expanded scripting system</p></li>
+<li><p>Transfer your battles from the campaign map to online. This allows you to play out Hotseat battles online and transfer the results back to the campaign map.</p></li>
+<li><p>Allows you to set your own limits for the number of religions, ancillaries, block resizing units</p></li>
+<li><p>Set the boundaries of the number of soldiers in units, the size of the battle map and the cost of siege equipment (rams, ladders, siege towers)</p></li>
+<li><p>Make any characters immortal and change the way their age is displayed on the screen</p></li>
+<li><p>Fixed crash when using berserkers in battle</p></li>
+<li><p>Added ability to write your own add-ons in C ++. The library exports many different functions.</p></li>
+<li><p>and many many more</p></li>
+</ul>
+</section>
+<section id="creators">
+<h2>Creators<a class="headerlink" href="#creators" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><strong>youneuoy</strong> - project founder, main developer</p></li>
+<li><p><strong>Jojo00182</strong> - did a lot of great stuff and much more to come</p></li>
+</ul>
+</section>
+<section id="contributors">
+<h2>Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Edmond</strong> - project idea, first attempts to implement hotseats with online battles</p></li>
+<li><p><strong>Xamax</strong> - lots of ideas and testing</p></li>
+<li><p><strong>Erken</strong> - lots of ideas and testing</p></li>
+<li><p><strong>DinarMayor</strong> - ideas and testing</p></li>
+<li><p><strong>Medik</strong> - help in creating documentation</p></li>
+<li><p><strong>Fynn</strong> - testing</p></li>
+</ul>
+</section>
+</section>
+<section id="project-composition">
+<h1>Project composition<a class="headerlink" href="#project-composition" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/youneuoy/M2TWEOP-library">M2TWEOP Library</a> - main project</p></li>
+<li><p><a class="reference external" href="https://github.com/youneuoy/M2TWEOP-luaPlugin">M2TWEOP LUA plugin</a> - a plugin that adds the ability to script in the lua language (from game logic to extending the interface), add new console to the game and much more.</p></li>
+</ul>
+<section id="compatibility">
+<h2>Compatibility<a class="headerlink" href="#compatibility" title="Permalink to this headline">¶</a></h2>
+<p>This program works with game versions 1.5 (disk version) and 1.52 (steam version).</p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>All program settings are set in the config files and scripts and are applied when the game starts. You can read more about this on the <a class="reference external" href="https://www.twcenter.net/forums/showthread.php?803575-Download-links-important-information-and-instructions-for-the-program-in-pictures">forums</a>.
+All changes made work correctly in an ongoing campaign, nothing breaks during updates, it’s enough just not to activate new features.</p>
+<p>If you use an antivirus, add the program to the exceptions! There may be false positives.</p>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>The project uses the <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0.html">GPL-3.0 License</a>.</p>
+</section>
+</section>
+<section id="build">
+<h1>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h1>
+<p>M2TWEOP is developed in C++ and Assembly. You can get support for building/developing on the our <a class="reference external" href="https://discord.gg/Epqjm8u2WK">Discord</a> server.</p>
+</section>
+<section id="support-the-project">
+<h1>Support the project<a class="headerlink" href="#support-the-project" title="Permalink to this headline">¶</a></h1>
+<p>It would be nice if all interested people supported the project in an accessible way (for example, you can test various changes, participate in planning new game mechanics or discuss them, sponsor development with money, etc.).</p>
+<ul class="simple">
+<li><p>Come join the our <a class="reference external" href="https://discord.gg/Epqjm8u2WK">Discord</a> server if you have questions or suggestions.</p></li>
+<li><p><a class="reference external" href="https://www.patreon.com/m2tweop">Patreon</a></p></li>
+</ul>
+<p>With the help of this program, it will probably be possible someday to give modders the opportunity to change the MTW2 gameplay beyond recognition.</p>
+</section>
+<section id="disclaimer">
+<h1>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline">¶</a></h1>
+<p>Please do not include the program in your modifications without my permission (and I will allow, if you ask). I just want to have some usage statistics.</p>
+</section>
+<section id="acknowledgments">
+<h1>Acknowledgments<a class="headerlink" href="#acknowledgments" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>To all users participating in the discussion and improvement of the project.</p></li>
+<li><p>Users and administration of the forum <a class="reference external" href="https://gamehacklab.ru/">https://gamehacklab.ru/</a>. Without them, I would not have learned to do this kind of thing.</p></li>
+<li><p>d3d9.dll wrapper based on this repository: <a class="reference external" href="https://github.com/elishacloud/DirectX-Wrappers">https://github.com/elishacloud/DirectX-Wrappers</a></p></li>
+<li><p>Used multimedia library: <a class="reference external" href="https://www.sfml-dev.org/">https://www.sfml-dev.org/</a></p></li>
+<li><p>Used GUI library: <a class="reference external" href="https://github.com/ocornut/imgui">https://github.com/ocornut/imgui</a></p></li>
+<li><p>Used LUA binding: <a class="reference external" href="https://github.com/ThePhD/sol2">https://github.com/ThePhD/sol2</a></p></li>
+<li><p>ImGui lua binding is based on this repository:
+<a class="reference external" href="https://github.com/MSeys/sol2_ImGui_Bindings">https://github.com/MSeys/sol2_ImGui_Bindings</a></p></li>
+</ul>
+</section>
+<section id="version-history">
+<h1>Version History<a class="headerlink" href="#version-history" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><strong>v.2.0:</strong>
+A huge number of fixes and optimizations. Lots of new features in the lua plugin, as well as features exported for use in other plugins.</p></li>
+<li><p><strong>v.2.0 test2:</strong>
+Changed initializing way
+Added an option to hide the launcher at startup
+Added a window that will appear in case of some probable problems with the initialization of the game. The launcher will not freeze when launching the game.</p></li>
+<li><p><strong>v.2.0 test1:</strong>
+Added lua plugin and a huge number of functions for it.
+Fixed many crashes and issues.
+Optimization.</p></li>
+<li><p><strong>v.1.18:</strong>
+Completion of the diplomacy system, adding the ability to check vassal relationships using scripts
+The ability to make forts part of the eternal, and part - temporary
+The ability of change the heir
+The ability to automatically create historical battles
+The ability to automatically edit armies on a strategic map in accordance with the results of online battle
+Fixed incorrect display of the age of the characters on the disk version of the game
+Now you can run the program and the game using the .bat file (not all of the new launch methods worked correctly)</p></li>
+<li><p><strong>v.1.17:</strong>
+fixed crash if the character has no name in the game
+added ability to partially disable logging
+added the ability to use the console command “change faction” in a single player game
+improved scripting system
+added ability to make factions vassals of other factions
+Added the ability to strategically view the battle map (Z key during the battle)</p></li>
+<li><p><strong>v.1.16:</strong>
+added launch of the game from the program
+added ability to replace legio prefix for units
+improved scripting system
+added ability to change characters labels</p></li>
+<li><p><strong>v.1.15:</strong>
+fixed several bugs
+added the ability to upgrade guard of characters</p></li>
+<li><p><strong>v.1.14:</strong>
+Added the ability to set the cost of siege equipment (rams, ladders, siege towers).</p></li>
+<li><p><strong>v.1.13:</strong>
+Fixed crash when using berserkers in the game.
+Added the ability to quickly modify an additional file.</p></li>
+<li><p><strong>v.1.12:</strong>
+Improved editing descr_buildings (extended range of possible values)
+Added the ability to make immortal characters and change the display settings for age.</p></li>
+<li><p><strong>v.1.11:</strong>
+Added several patches that apply to the game when the program starts, as well as the ability to configure them in the config file.</p></li>
+<li><p><strong>v.1.10:</strong>
+parameters from the game were not always correctly read, fixed.</p></li>
+<li><p><strong>v.1.09:</strong>
+improved generation of descr_battle.txt. Added the conclusion of the battle season (winter or summer) and the time of the battle, as well as the portrait, model and special ability of the general.</p></li>
+<li><p><strong>v.1.08:</strong>
+improved generation of descr_battle.txt. Now coordinates of deployment of armies are displayed.</p></li>
+<li><p><strong>v.1.07:</strong>
+improved generation of descr_battle.txt.</p></li>
+<li><p><strong>v.1.06:</strong>
+now, when generating descr_battle.txt, a list of fractions, the year of the battle and a little more standard information is written.</p></li>
+<li><p><strong>v.1.05:</strong>
+Added display of coordinates of each of the fighting armies when generating descr_battle.txt</p></li>
+<li><p><strong>v1.04:</strong>
+The system of auto-calculation of losses has been changed, the units of the generals are removed at the same time, but the generals themselves can be considered live for a certain number of moves.
+This is done to avoid crashes.
+It is recommended that when manually killing generals, this is always done with a daw “mark if there is only one general in the stack.” Otherwise, departures during the campaign are possible.</p></li>
+<li><p><strong>v1.03:</strong>
+Now the program only works with the Steam version of MTW2.
+‘Temporarily’ ;) cut out the Russian language.</p></li>
+<li><p><strong>v1.02:</strong>
+Fixed crash during loss auto transfer.
+Fixed auto-accrual of losses, they could not be accrued to all units.</p></li>
+<li><p><strong>v1.01:</strong>
+Added general traits (including hidden traits) when generating descr_battle.txt.
+Added the ability to automatically transfer losses after an online battle.
+Improving the stability of the program.</p></li>
+<li><p><strong>v1.0:</strong>
+First release.</p></li>
+</ul>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2022, youneuoy.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/M2TWEOP.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
