@@ -14,6 +14,7 @@ public:
 	static char* __fastcall onSaveEDUStringS(EduEntry* eduEntry);
 	static int __fastcall onCreateUnit(int* edbIndex, int** edb, char** entryName);
 	static const char* __fastcall onQuickSave();
+	static const char* __fastcall onAutoSave();
 
 
 	static general* __fastcall mercenaryMovepointsGetGeneral(stackStruct*army);

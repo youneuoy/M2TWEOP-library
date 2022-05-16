@@ -790,3 +790,18 @@ public:
 private:
 	LPVOID funcAddress;
 };
+
+
+class OnAutoSave
+	:public AATemplate
+{
+public:
+	OnAutoSave(MemWork* mem, LPVOID addr, int ver);
+	~OnAutoSave();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+

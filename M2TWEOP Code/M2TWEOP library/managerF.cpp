@@ -432,6 +432,14 @@ void managerF::doPachs()
 	onQuickSave->Enable();
 	f1 << "Done" << endl;
 
+	
+	f1 << "Start applying OnAutoSave patch" << endl;
+	OnAutoSave* onAutoSave = new OnAutoSave(mem, (LPVOID)patchesForGame::onAutoSave, globals::dataS.gamever);
+	onAutoSave->SetNewCode();
+	onAutoSave->Enable();
+	f1 << "Done" << endl;
+
+
 	f1 << "End." << endl;
 
 	f1.close();

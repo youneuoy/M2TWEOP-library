@@ -162,14 +162,72 @@ int __fastcall patchesForGame::onCreateUnit(int* edbIndex, int** edb, char** ent
 }
 const char* __fastcall patchesForGame::onQuickSave()
 {
-	static std::vector<std::string> saveNames={ "%S_1.sav" ,"%S_2.sav", "%S_3.sav" };
+	static std::vector<std::string> saveNames={ u8"%S-1.sav" ,u8"%S-2.sav", u8"%S-3.sav" };
 	jsn::json json;
 
 	std::string fPath = globals::dataS.modPatch;
 	fPath += "\\saves\\quickSavesM2TWEOP.json";
 
+	int currSaveID = 0;
+	int maxSaveID = 2;
+	try
+	{
+		std::ifstream f1(fPath);
+		if (f1.is_open())
+		{
+			f1 >> json;
 
+			f1.close();
 
+			json.at("saveID").get_to(currSaveID);
+
+			if (currSaveID + 1 > maxSaveID)
+			{
+				json["saveID"] = 0;
+			}
+			else
+			{
+				json["saveID"] = currSaveID + 1;
+			}
+			std::ofstream f2(fPath);
+
+			f2 << json;
+
+			f2.close();
+		}
+		else
+		{
+			currSaveID = 0;
+			json["saveID"] = 0;
+
+			std::ofstream f2(fPath);
+
+			f2 << json;
+
+			f2.close();
+		}
+	}
+	catch (jsn::json::type_error& e)
+	{
+		currSaveID = 0;
+		json["saveID"] = 0;
+
+		std::ofstream f2(fPath);
+
+		f2 << json;
+
+		f2.close();
+	}
+
+	return saveNames[currSaveID].c_str();
+}
+const char* __fastcall patchesForGame::onAutoSave()
+{
+	static std::vector<std::string> saveNames={ u8"%s%S%s%S-1.sav" ,u8"%s%S%s%S-2.sav", u8"%s%S%s%S-3.sav" };
+	jsn::json json;
+
+	std::string fPath = globals::dataS.modPatch;
+	fPath += "\\saves\\autoSavesM2TWEOP.json";
 
 	int currSaveID = 0;
 	int maxSaveID = 2;
