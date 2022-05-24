@@ -440,11 +440,55 @@ void managerF::doPachs()
 	f1 << "Done" << endl;
 
 
+	if (globals::dataS.gameCfg.isBlockLaunchWithoutEop == true)
+	{
+
+		f1 << "Start applying isBlockLaunchWithoutEop patch" << endl;
+		blockLaunchWithoutEop* blockLaunch = new blockLaunchWithoutEop(mem, globals::dataS.gamever);
+		blockLaunch->SetNewCode();
+		blockLaunch->Enable();
+		f1 << "Done" << endl;
+	}
+
+
 	f1 << "End." << endl;
 
 	f1.close();
 }
 
+jsn::json loadJsonFromFile(const std::string& fpath)
+{
+	jsn::json json;
+
+
+	std::ifstream f1(fpath);
+	if (f1.is_open())
+	{
+		f1 >> json;
+	}
+	f1.close();
+
+	return std::move(json);
+}
+
+void loadJsonSettings()
+{
+	std::string fPath = globals::dataS.modPatch;
+	fPath += "\\eopData\\gameCfg.json";
+	jsn::json json = loadJsonFromFile(fPath);
+
+	try
+	{
+		if (json.contains("isBlockLaunchWithoutEop"))
+		{
+			getJson(globals::dataS.gameCfg.isBlockLaunchWithoutEop, "isBlockLaunchWithoutEop");
+		}
+	}
+	catch (jsn::json::type_error& e)
+	{
+		MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+	}
+}
 //#include "tests.h"
 void managerF::initThread()
 {
@@ -455,7 +499,7 @@ void managerF::initThread()
 
 
 
-
+	loadJsonSettings();
 	doPachs();
 
 	plugins::init();

@@ -18,19 +18,24 @@ namespace managerG
 		modSettingsUI::initSettingsUI();
 	}
 
-	void loadJsonSettings()
+	jsn::json loadJsonFromFile(const std::string&fpath)
 	{
 		jsn::json json;
 
-		std::string fPath = ".\\eopBattles\\battlesCfg.json";
 
-
-		std::ifstream f1(fPath);
-		if(f1.is_open())
-		{ 
-		f1 >> json;
+		std::ifstream f1(fpath);
+		if (f1.is_open())
+		{
+			f1 >> json;
 		}
 		f1.close();
+
+		return std::move(json);
+	}
+	void loadJsonSettings()
+	{
+		std::string fPath = ".\\eopBattles\\battlesCfg.json";
+		jsn::json json= loadJsonFromFile(fPath);
 
 		try
 		{
@@ -41,6 +46,21 @@ namespace managerG
 			if (json.contains("enableResultsTransfer"))
 			{
 				getJson(dataG::data.battlesData.isResultTransferNeeded, "enableResultsTransfer");
+			}
+		}
+		catch (jsn::json::type_error& e)
+		{
+			MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
+		
+		fPath = ".\\eopData\\gameCfg.json";
+		json= loadJsonFromFile(fPath);
+
+		try
+		{
+			if (json.contains("isBlockLaunchWithoutEop"))
+			{
+				getJson(dataG::data.gameData.isBlockLaunchWithoutEop, "isBlockLaunchWithoutEop");
 			}
 		}
 		catch (jsn::json::type_error& e)
@@ -93,16 +113,26 @@ namespace managerG
 
 		f1.close();
 	}
+	void writeJsonToFile(const std::string& fpath,const jsn::json& json)
+	{
+		ofstream f1(fpath);
+		f1 << setw(4) << json;
+		f1.close();
+	}
 	void saveJsonSettings()
 	{
 		std::string fPath = ".\\eopBattles\\battlesCfg.json";
-		ofstream f1(fPath);
+
 		jsn::json json;
 		setJson("enableAutoGeneration", dataG::data.battlesData.isGenerationNeeded);
 		setJson("enableResultsTransfer", dataG::data.battlesData.isResultTransferNeeded);
 
-		f1 << setw(4) << json;
-		f1.close();
+		writeJsonToFile(fPath, json);
+
+		json.clear();
+		fPath = ".\\eopData\\gameCfg.json";
+		setJson("isBlockLaunchWithoutEop", dataG::data.gameData.isBlockLaunchWithoutEop);
+		writeJsonToFile(fPath, json);
 	}
 	void saveSettings()
 	{

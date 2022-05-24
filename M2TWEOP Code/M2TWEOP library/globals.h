@@ -5,6 +5,12 @@ class globals
 public:
 	static struct dataGlob
 	{
+		struct
+		{
+			bool isBlockLaunchWithoutEop = false;
+		}gameCfg;
+
+
 		//steam =2, kingdoms=1
 		UINT32 gamever;
 		string modPatch;

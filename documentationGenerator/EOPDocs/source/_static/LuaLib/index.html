@@ -290,10 +290,6 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Unit table</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#unit:kill">unit:kill ()</a></td>
-	<td class="summary">Kill this unit</td>
-	</tr>
-	<tr>
 	<td class="name" nowrap><a href="#unit:setParams">unit:setParams (exp, armor, weapon)</a></td>
 	<td class="summary">Set unit basic parameters</td>
 	</tr>
@@ -448,6 +444,10 @@ M2TWEOP structures and functions.</p>
 	<tr>
 	<td class="name" nowrap><a href="#settlementStruct:createBuilding">settlementStruct:createBuilding (building_level_id)</a></td>
 	<td class="summary">Create building.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#settlementStruct:changeOwner">settlementStruct:changeOwner (newOwner)</a></td>
+	<td class="summary">Change owner faction of settlement.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#settlementStruct:getSiege">settlementStruct:getSiege (siegeIdx)</a></td>
@@ -2821,21 +2821,27 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
         </li>
         <li><span class="parameter">soldierCountStratMap</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         soldiers count. You can change it on stratmap and soldiers updated. Use <a href="index.html#unit:setParams">setParams</a> if you need change several parameters at once.
+        </li>
+        <li><span class="parameter">exp</span>
+            <span class="types"><span class="type">int</span></span>
+         soldiers expierence. You can change it on stratmap and soldiers updated. Use <a href="index.html#unit:setParams">setParams</a> if you need change several parameters at once.
+        </li>
+        <li><span class="parameter">armourLVL</span>
+            <span class="types"><span class="type">int</span></span>
+         soldiers armour. You can change it on stratmap and soldiers updated. Use <a href="index.html#unit:setParams">setParams</a> if you need change several parameters at once.
+        </li>
+        <li><span class="parameter">weaponLVL</span>
+            <span class="types"><span class="type">int</span></span>
+         soldiers weapon. You can change it on stratmap and soldiers updated. Use <a href="index.html#unit:setParams">setParams</a> if you need change several parameters at once.
         </li>
         <li><span class="parameter">soldierCountStratMapMax</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         better read only
         </li>
         <li><span class="parameter">soldierCountBattleMap</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         better read only
         </li>
         <li><span class="parameter">character</span>
             <span class="types"><a class="type" href="index.html#character">character</a></span>
@@ -2850,16 +2856,14 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
         </li>
         <li><span class="parameter">kill</span>
-            <span class="types"><a class="type" href="index.html#unit:kill">kill</a></span>
+            <span class="types"><a class="type" href="index.html#character:kill">kill</a></span>
 
 
 
         </li>
         <li><span class="parameter">setParams</span>
             <span class="types"><a class="type" href="index.html#unit:setParams">setParams</a></span>
-
-
-
+         change soldierCountStratMap, exp, armourLVL, weaponLVL at one time.
         </li>
         <li><span class="parameter">alias</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
@@ -2872,24 +2876,6 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 
 
-
-</dd>
-    <dt>
-    <a name = "unit:kill"></a>
-    <strong>unit:kill ()</strong>
-    </dt>
-    <dd>
-    Kill this unit
-
-
-
-
-
-
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example">unit:kill();</pre>
-    </ul>
 
 </dd>
     <dt>
@@ -3036,7 +3022,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
         </li>
         <li><span class="parameter">kill</span>
-            <span class="types"><a class="type" href="index.html#unit:kill">kill</a></span>
+            <span class="types"><a class="type" href="index.html#character:kill">kill</a></span>
 
 
 
@@ -4476,6 +4462,12 @@ ourSett = ourFac:getSettlement(<span class="number">0</span>);
 
 
         </li>
+        <li><span class="parameter">changeOwner</span>
+            <span class="types"><a class="type" href="index.html#settlementStruct:changeOwner">changeOwner</a></span>
+
+
+
+        </li>
         <li><span class="parameter">getSiege</span>
             <span class="types"><a class="type" href="index.html#settlementStruct:getSiege">getSiege</a></span>
 
@@ -4644,6 +4636,40 @@ ourSett = ourFac:getSettlement(<span class="number">0</span>);
     <h3>Usage:</h3>
     <ul>
         <pre class="example">settlementStruct:createBuilding(<span class="string">"some_build1"</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "settlementStruct:changeOwner"></a>
+    <strong>settlementStruct:changeOwner (newOwner)</strong>
+    </dt>
+    <dd>
+
+<p>Change owner faction of settlement. </p>
+<pre><code>All agents, armies, etc. leave settlement
+</code></pre>
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">newOwner</span>
+            <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
+<span class="keyword">local</span> fac1=campaign.factionsSortedByDescrStrat[<span class="number">1</span>];
+currSet:changeOwner(fac1);
+<span class="keyword">end</span></pre>
     </ul>
 
 </dd>
@@ -11436,7 +11462,7 @@ M2TWEOPSounds.stopEOPSound(ourNewSound);</pre>
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2022-05-15 03:32:14 </i>
+<i style="float:right;">Last updated 2022-05-24 22:39:49 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

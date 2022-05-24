@@ -26,6 +26,8 @@ public:
 			string gameArgs;
 
 			int gameVer = 0;
+
+			bool isBlockLaunchWithoutEop = false;
 		}gameData;
 
 		struct

@@ -805,3 +805,15 @@ private:
 	LPVOID funcAddress;
 };
 
+
+class blockLaunchWithoutEop
+	:public AATemplate
+{
+public:
+	blockLaunchWithoutEop(MemWork* mem, int ver);
+	~blockLaunchWithoutEop();
+
+	void SetOriginialCode();
+	void SetNewCode();
+};
+

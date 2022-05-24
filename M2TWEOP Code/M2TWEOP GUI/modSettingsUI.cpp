@@ -11,7 +11,8 @@ namespace modSettingsUI
 		selectedSettingsPage_general,
 		selectedSettingsPage_launcher,
 		selectedSettingsPage_hs,
-		selectedSettingsPage_rules
+		selectedSettingsPage_rules,
+		selectedSettingsPage_game,
 	};
 
 
@@ -55,6 +56,14 @@ namespace modSettingsUI
 			launcherPage.pageName = "Launcher";
 
 			settingsUIData.settingsPages.push_back(std::move(launcherPage));
+		}
+		//game page
+		{
+			settingsPage gamePage;
+			gamePage.pageId = selectedSettingsPage_game;
+			gamePage.pageName = "Game";
+
+			settingsUIData.settingsPages.push_back(std::move(gamePage));
 		}
 		//hs page
 		{
@@ -136,6 +145,11 @@ namespace modSettingsUI
 		ImGui::Checkbox("Autogeneration of historical battles", &dataG::data.battlesData.isGenerationNeeded);
 		ImGui::Checkbox("Autogeneration of battle results files", &dataG::data.battlesData.isResultTransferNeeded);
 	}
+
+	void drawGameSettings()
+	{
+		ImGui::Checkbox("Block modification launch without EOP", &dataG::data.gameData.isBlockLaunchWithoutEop);
+	}
 	void drawModSettingsUI(bool* isOpen)
 	{
 		ImGuiIO& io = ImGui::GetIO();
@@ -209,6 +223,10 @@ namespace modSettingsUI
 			else if (settingsUIData.selectedPage == selectedSettingsPage_hs)
 			{
 				drawHsSettings();
+			}
+			else if (settingsUIData.selectedPage == selectedSettingsPage_game)
+			{
+				drawGameSettings();
 			}
 
 			ImGui::EndChild();

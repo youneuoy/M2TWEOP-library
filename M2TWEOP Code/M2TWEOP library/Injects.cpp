@@ -3047,3 +3047,44 @@ void OnAutoSave::SetNewCode()
 
 	delete a;
 }
+
+blockLaunchWithoutEop::blockLaunchWithoutEop(MemWork* mem, int ver)
+	:AATemplate(mem)
+{
+	if (ver == 2)//steam
+		m_adress = 0x008efe32;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x008ef3b2;
+}
+
+blockLaunchWithoutEop::~blockLaunchWithoutEop()
+{
+}
+
+void blockLaunchWithoutEop::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	//push pointer to "type" string
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void blockLaunchWithoutEop::SetNewCode()
+{
+	static char newTypeString[] = "eopOnlyType";
+	Assembler* a = new Assembler();
+
+	a->mov(ecx, (int)newTypeString);
+	a->push(ecx);
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

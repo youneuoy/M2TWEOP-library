@@ -8,12 +8,14 @@
 ###  Library
 - Changed the progressbar in the launcher
 - New eop loading menu
+- New configuration menu in the launcher, "Game". The first parameter is setting the game to run only with m2tweop
 
 ### Lua Plugin
 - No
 
 ### Documentation
 - Updated
+- Added a new section, "FAQ"
 
 ### Bugfixes
 - Fixed a crash when hiring mercenaries in the fort

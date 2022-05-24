@@ -25,6 +25,7 @@ Welcome to M2TWEOP's documentation!
 	:maxdepth: 2
 
 	mainInfo
+	faq
 	articles
 
 	
