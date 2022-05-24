@@ -257,6 +257,11 @@ void graphicsD3D::onDrawAllGameStuff()
 		else
 		{
 			drawParams.drawEOPStartInfo = false;
+			ImGuiToast bMsg(ImGuiToastType_Success, 25000);
+
+			bMsg.set_title("Initializing M2TWEOP");
+			bMsg.set_content("Done");
+			ImGui::InsertNotification(bMsg);
 		}
 	}
 	battleCreator::draw(graphicsD3D::dataS.pDevice);
@@ -347,12 +352,6 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 	drawParams.drawInfoEndTime = (float)ImGui::GetTime()+20.0f;
 
 
-
-	ImGuiToast bMsg(ImGuiToastType_Success, 25000);
-
-	bMsg.set_title("Initializing M2TWEOP");
-	bMsg.set_content("Done");
-	ImGui::InsertNotification(bMsg);
 	return;
 }
 
