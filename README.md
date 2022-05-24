@@ -10,6 +10,10 @@
   </p>
 </div>
 
+![img](https://img.shields.io/github/downloads/youneuoy/M2TWEOP-library/latest/total?style=for-the-badge)
+![img](https://img.shields.io/github/v/release/youneuoy/M2TWEOP-library?style=for-the-badge)
+![img](https://img.shields.io/github/license/youneuoy/M2TWEOP-library?style=for-the-badge)
+
 ## What is M2TW Engine Overhaul Project?
 
 M2TW Engine Overhaul Project is designed to expand the capabilities of the game *Medieval 2: Total War*.
@@ -43,7 +47,7 @@ EOP uses C++ and Assembly to modify the game's code in-memory and exposes this t
 function onPluginLoad()
     M2TWEOP.unlockGameConsoleCommands();
     M2TWEOP.setAncillariesLimit(16);
-    M2TWEOP.setMaxBgSize(255);
+    M2TWEOP.setMaxBgSize(100);
     M2TWEOP.setReligionsLimit(50);
     M2TWEOP.setBuildingChainLimit(40);
     M2TWEOP.setGuildCooldown(3);
@@ -60,7 +64,7 @@ function onGeneralAssaultsGeneral(attacker, defender)
                 playSound(nazgulScream); 
                 -- Display some text 
                 showWindow("The Nazgul have arrived.");
-                -- Spawn a new unit from the EOP EDU
+                -- Spawn a new unit
                 spawnUnit('Gondor Infantry', 'Anorien' , 'Minas Tirith' ,3,4,1,1);
         end
     end
