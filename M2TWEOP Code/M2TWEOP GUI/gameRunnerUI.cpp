@@ -114,13 +114,13 @@ namespace gameRunnerUI
 
 		if (startProcess.isWindowTooSmall == false)
 		{
-			ImGui::ProgressBar(progress, ImVec2(-1.0f, 0.0f), "");
+			ImGui::ProgressBar(ImGui::GetTime() * -0.2f, ImVec2(-1.0f, 0.0f), "");
 			TextAtCenter(startProcess.loadingText.c_str());
 		}
 		else
 		{
 			ImGui::TextWrapped(startProcess.loadingText.c_str());
-			ImGui::ProgressBar(progress, ImVec2(-1.0f, 0.0f));
+			ImGui::ProgressBar(ImGui::GetTime() * -0.2f, ImVec2(-1.0f, 0.0f));
 		}
 
 		if (startProcess.isRunStarted == true&&
