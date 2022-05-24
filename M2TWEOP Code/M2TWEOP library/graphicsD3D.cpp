@@ -191,10 +191,19 @@ void graphicsD3D::onDrawAllGameStuff()
 	//graphicsD3D::Draw(pDevice);
 	if (drawParams.drawEOPStartInfo == true)
 	{
+		static IDirect3DTexture9* logoEOP = nullptr;
+		static int logoX = 0;
+		static int logoY = 0;
 		float currTime = (float)ImGui::GetTime();
 
 		if (currTime < drawParams.drawInfoEndTime)
 		{
+			if (logoEOP == nullptr)
+			{
+				logoEOP=graphicsExport::loadTexture(std::string(globals::dataS.modPatch+ "/eopData/images/logoAbout.png").c_str(),&logoX,&logoY);
+				ImGui::OpenPopup("M2TWEOP");
+			}
+
 			static ImGuiWindowFlags transparentF = ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove;
 
 			ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
@@ -203,6 +212,47 @@ void graphicsD3D::onDrawAllGameStuff()
 			ImGui::Text(eopConstData::eopVersionName);
 
 			ImGui::End();
+
+
+			if (logoEOP != nullptr)
+			{
+				ImVec2 logoPos = ImGui::GetMainViewport()->Size;
+				logoPos.x /= 2;
+				logoPos.y *= 0.1f;
+
+
+				ImGui::SetNextWindowPos(logoPos, ImGuiCond_Always, ImVec2(0.5f, 0.0f));
+				ImGui::SetNextWindowSize(ImVec2(logoPos.x, -1), ImGuiCond_Always);
+				if (ImGui::BeginPopupModal("M2TWEOP", nullptr, transparentF))
+				{
+
+					ImVec2 const csz = ImGui::GetContentRegionAvail();
+					ImVec2 logoSize = ImVec2((float)logoX, (float)logoY);
+					if (logoSize.x > csz.x) {
+						const float r = logoSize.y / logoSize.x;
+						logoSize.x = csz.x;
+						logoSize.y = csz.x * r;
+					}
+					ImGui::Image((void*)(intptr_t)logoEOP, logoSize);
+
+					ImGui::NewLine();
+					ImGui::NewLine();
+					ImGui::NewLine();
+					ImGui::SetCursorPosX((ImGui::GetWindowSize().x - logoPos.y * 2) * 0.5f);
+					ImGui::LoadingIndicatorCircle("##loadCircle1", logoPos.y, ImVec4(0.584, 0.270, 0.250, 1.0f), ImVec4(0.564, 0.250, 0.230, 1.0f), 15, 5);
+
+					ImGui::NewLine();
+					ImGui::NewLine();
+					ImGui::NewLine();
+
+					if (currTime >= drawParams.drawInfoEndTime)
+					{
+						ImGui::CloseCurrentPopup();
+						tempData.texturesForDeleting.push_back(logoEOP);
+					}
+					ImGui::EndPopup();
+				}
+			}
 		}
 		else
 		{
@@ -371,7 +421,10 @@ NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* p
 	HRESULT res = D3DXCreateTextureFromFileA(graphicsD3D::dataS.pDevice, path, &imageRet);
 	if (res != D3D_OK || imageRet == nullptr)
 	{
-		MessageBoxA(NULL, DXGetErrorStringA(res), "Loading texture err!", MB_OK | MB_ICONASTERISK);
+		std::string errMes = DXGetErrorStringA(res);
+		errMes += "\n";
+		errMes += path;
+		MessageBoxA(NULL, errMes.c_str(), "Loading texture err!", MB_OK | MB_ICONASTERISK);
 		return nullptr;
 	}
 

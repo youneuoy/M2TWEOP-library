@@ -6,11 +6,11 @@
 ## Release Notes
 
 ###  Library
-- Now save files created automatically (quick saves and autosaves) will be written to multiple save slots (like: quickSave-1.sav, quickSave-2.sav, etc).
+- Changed the progressbar in the launcher
+- New eop loading menu
 
 ### Lua Plugin
-- Unit table: added exp, armourLVL, weaponLVL fields
-- SettlementStruct: added changeOwner function
+- No
 
 ### Documentation
 - Updated
