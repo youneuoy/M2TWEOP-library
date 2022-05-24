@@ -16,7 +16,7 @@
 - Updated
 
 ### Bugfixes
-- No
+- Fixed a crash when hiring mercenaries in the fort
 
 ### Links
 * [EOP Documentation](https://youneuoy.github.io/M2TWEOP-library/)

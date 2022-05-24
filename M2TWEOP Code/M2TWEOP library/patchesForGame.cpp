@@ -291,7 +291,8 @@ general* __fastcall patchesForGame::mercenaryMovepointsGetGeneral(stackStruct* a
 	{
 		if (army->settlement != nullptr)
 		{
-			gen = army->settlement->governor;
+			fortStruct* ourFort = fastFuncts::findFort(army->settlement->xCoord, army->settlement->yCoord);
+			gen = ourFort->gubernator;
 		}
 		
 	}
