@@ -25,3 +25,5 @@ Copy-Item -Path "generatedLuaDocs/*" -Destination "EOPDocs/source/_static/LuaLib
 Start-Process -FilePath ".\EOPDocs\WPy32-3890\scripts\cmdEOPDOCS.bat" -Wait -NoNewWindow
 
 Write-Output "$color ======== 3.5) Success! Documentation built successfully.  ======== $endColor"
+
+pause
