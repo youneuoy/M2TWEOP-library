@@ -29,9 +29,9 @@ EOP uses C++ and Assembly to modify the game's code in-memory and exposes this t
 * New custom EDU system that allows the creation and modification of new units without the need to restart the game
 * Play out Hotseat battles online and transfer the results back to the campaign map
 * Set your own limits for the number of religions, ancillaries, bodyguard units, building chains, max unit size 
-* Set the boundaries of the number of soldiers in units, the size of the battle map and the cost of siege equipment (rams, ladders, siege towers)
-* Make any character immortal and change the way their age is displayed on the screen
+* Set the boundaries of the number of soldiers in units and the size of the battle map 
 * Fixed many engine bugs, crashes and oversights (e.g crashes when using berserkers in battle)
+* Edit worldpkgdesc for any settlement on the fly without the need to restart the game
 * Custom keybinding support
 * Added ability to write your own add-ons in C++. The library exports many different functions.
 * Many, many more
