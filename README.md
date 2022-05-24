@@ -76,8 +76,8 @@ For a full list of EOP Events, see [here](https://youneuoy.github.io/M2TWEOP-lib
 ### Contributors
 * **Edmond** - Project idea, first attempts to implement hotseats with online battles
 * **Xamax** - Video tutorials, testing and many great suggestions
-* **Erken** - Excellent IMGUI tutorials and Lua examples
-* **DinarMayor** - Testing and great suggestion
+* **Erken** - Excellent IMGUI tutorials, Lua examples and feedback
+* **DinarMayor** - Testing, great suggestions and examples
 * **Fynn** - Testing, early adopter and great suggestions
 
 ## Projects
