@@ -10,10 +10,11 @@
   </p>
 </div>
 
-![https://github.com/youneuoy/M2TWEOP-library/releases](https://img.shields.io/github/downloads/youneuoy/M2TWEOP-library/latest/total?style=for-the-badge)
-![https://github.com/youneuoy/M2TWEOP-library/releases](https://img.shields.io/github/v/release/youneuoy/M2TWEOP-library?style=for-the-badge)
-![https://github.com/youneuoy/M2TWEOP-library/blob/master/LICENSE](https://img.shields.io/github/license/youneuoy/M2TWEOP-library?style=for-the-badge)
-![https://discord.gg/G5HS9awM](https://img.shields.io/discord/713369537948549191?style=for-the-badge)
+[![Build Status](https://img.shields.io/github/downloads/youneuoy/M2TWEOP-library/total?style=for-the-badge)](https://github.com/youneuoy/M2TWEOP-library/releases)
+[![Build Status](https://img.shields.io/github/v/release/youneuoy/M2TWEOP-library?style=for-the-badge)](https://github.com/youneuoy/M2TWEOP-library/releases)
+[![Build Status](https://img.shields.io/github/license/youneuoy/M2TWEOP-library?style=for-the-badge)](https://github.com/youneuoy/M2TWEOP-library/blob/master/LICENSE)
+[![Build Status](https://img.shields.io/discord/713369537948549191?style=for-the-badge)](https://discord.gg/Epqjm8u2WK)
+
 
 ## What is M2TW Engine Overhaul Project?
 
