@@ -174,28 +174,25 @@ bool helpers::addModPathArg(string& args, int gameMode)
 	return true;
 }
 
-#define BOOST_DATE_TIME_NO_LIB 1
-#include <boost/interprocess/windows_shared_memory.hpp>
-#include <boost/interprocess/mapped_region.hpp>
+#define IPC_IMPLEMENTATION
+#include "ipc.h"
 bool helpers::doPipe(const string& message, int waitSeconds)
 {
-	namespace bip = boost::interprocess;
+	ipc_sharedmemory mem;
 
+	ipc_mem_init(&mem, (char*)"M2TWEOPStartMem1", 10000);
 
+	if (ipc_mem_create(&mem))
+	{
+		printf("Creating memory failed.\n");
+		return false;
+	}
+	memset(mem.data, 0, mem.size);
 
-	//Create a native windows shared memory object.
-	bip::windows_shared_memory shm(bip::create_only, "M2TWEOPStartMem1", bip::read_write, message.size() + 5);
-
-	//Map the whole shared memory in this process
-	bip::mapped_region region(shm, bip::read_write);
-	char* adr = reinterpret_cast<char*>(region.get_address());
 	for (int i = 0; i < message.size(); i++)
 	{
-		adr[i] = message[i];
+		mem.data[i] = message[i];
 	}
-	adr[message.size()] = 0;
-
-	adr = (char*)region.get_address();
 
 	ULONGLONG startTime = GetTickCount();
 	ULONGLONG endTime = startTime + 1000ull * waitSeconds;
@@ -203,11 +200,13 @@ bool helpers::doPipe(const string& message, int waitSeconds)
 	int responce = 1;
 	do
 	{
-		responce = *adr;
+		responce = *mem.data;
 
 		Sleep(1);
 	} while (responce != 0 && GetTickCount() < endTime);
 	Sleep(1000);
+
+	ipc_mem_close(&mem);
 	if (responce == 0)
 	{
 		return true;

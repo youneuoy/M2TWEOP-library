@@ -42,12 +42,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\3rd\M2TWEOPBoost;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\3rd\M2TWEOPBoost\boostLibs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\3rd\IPC;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\3rd\M2TWEOPBoost;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\3rd\M2TWEOPBoost\boostLibs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\3rd\IPC;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

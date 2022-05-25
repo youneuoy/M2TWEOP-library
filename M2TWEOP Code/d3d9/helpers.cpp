@@ -15,37 +15,27 @@ vector<std::string> helpers::splitString(const std::string& phrase, const std::s
 }
 
 
-
-#define BOOST_DATE_TIME_NO_LIB 1
-#include <boost/interprocess/windows_shared_memory.hpp>
-#include <boost/interprocess/mapped_region.hpp>
+#define IPC_IMPLEMENTATION
+#include "ipc.h"
 void helpers::doEOPPipe(std::string& result, int waitSeconds)
 {
     ULONGLONG startTime = GetTickCount64();
     ULONGLONG endTime = startTime + 1000ull * waitSeconds;
-    namespace bip = boost::interprocess;
+
+    ipc_sharedmemory mem;
+
+    ipc_mem_init(&mem, (char*)"M2TWEOPStartMem1", 10000);
 
     do {
-        //boost way ;(
-        try
+        if (ipc_mem_open_existing(&mem))
         {
-            //Open already created shared memory object.
-            bip::windows_shared_memory shm(bip::open_only, "M2TWEOPStartMem1", bip::read_write);
-
-            //Map the whole shared memory in this process
-            bip::mapped_region region(shm, bip::read_write);
-            char* mem = static_cast<char*>(region.get_address());
-            result = mem;
-
-            *mem = 0;
-
-            region.flush();
-        }
-        catch (...)
-        {
-
+            continue;//open failed
         }
 
-    } while (GetTickCount64() < endTime&& result.size()==0);
+        result = (char*)mem.data;
+        *mem.data = 0;
 
+    } while (GetTickCount64() < endTime && result.size() == 0);
+
+    ipc_mem_close(&mem);
 }
