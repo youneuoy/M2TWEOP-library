@@ -1,6 +1,7 @@
 #include "gameStarter.h"
 
 #include "gameRunnerUI.h"
+#include <filesystem>
 bool gameStarter::startGame()
 {
 	//SetCurrentDirectoryA("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Medieval II Total War\\mods\\teutonic");
@@ -16,7 +17,7 @@ bool gameStarter::startGame()
 		MessageBoxA(NULL, "Cannot select exe file! Need correct medieval2 or kingdoms", "Error!", NULL);
 		return false;
 	}
-	gameStartArgs += dataG::data.gameData.exeName + ' ';
+//	gameStartArgs += dataG::data.gameData.exeName + ' ';
 
 	// vanilla
 	if (dataG::data.gameData.gameMode == 1)
@@ -108,15 +109,15 @@ bool gameStarter::runGameExe()
 
 bool gameStarter::initM2TWEOP()
 {
-	using namespace boost::filesystem;
+	using namespace filesystem;
 	if (dataG::data.modData.useM2TWEOP == false)
 	{
 		return true;
 	}
 
-	path wrapd3dS = system_complete("d3d9.dll");
+	path wrapd3dS = absolute("d3d9.dll");
 
-	path d3dS = system_complete("..\\..\\d3d9.dll");
+	path d3dS = absolute("..\\..\\d3d9.dll");
 	string wrapd3dStr = wrapd3dS.string();
 	string d3dStr = d3dS.string();
 
@@ -131,8 +132,8 @@ bool gameStarter::initM2TWEOP()
 		}
 	}
 
-	path newFbxS = system_complete("libfbxsdk.dll");
-	path fbxS = system_complete("..\\..\\libfbxsdk.dll");
+	path newFbxS = absolute("libfbxsdk.dll");
+	path fbxS = absolute("..\\..\\libfbxsdk.dll");
 
 	string newFbxStr = newFbxS.string();
 	string fbxStr = fbxS.string();
@@ -146,8 +147,8 @@ bool gameStarter::initM2TWEOP()
 			exit(0);
 		}
 	}
-	path newLuaS = system_complete("lua5.1.dll");
-	path luaS = system_complete("..\\..\\lua5.1.dll");
+	path newLuaS = absolute("lua5.1.dll");
+	path luaS = absolute("..\\..\\lua5.1.dll");
 
 	string newLuaStr = newLuaS.string();
 	string luaStr = luaS.string();
@@ -161,8 +162,8 @@ bool gameStarter::initM2TWEOP()
 			exit(0);
 		}
 	}
-	path newopenal32S = system_complete("openal32.dll");
-	path openal32S = system_complete("..\\..\\openal32.dll");
+	path newopenal32S = absolute("openal32.dll");
+	path openal32S = absolute("..\\..\\openal32.dll");
 
 	string newopenalStr = newopenal32S.string();
 	string openal32Str = openal32S.string();

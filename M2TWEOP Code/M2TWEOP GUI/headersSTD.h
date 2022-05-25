@@ -30,7 +30,7 @@
 
 #include <SFML/Audio.hpp>
 using namespace std;
-#include <boost/filesystem.hpp>
+
 
 
 #include "json.hpp"

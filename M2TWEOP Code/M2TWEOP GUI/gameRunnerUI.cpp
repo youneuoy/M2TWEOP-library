@@ -1,4 +1,3 @@
-#include <boost/process.hpp>
 
 #include "gameRunnerUI.h"
 
@@ -21,7 +20,6 @@ namespace gameRunnerUI
 
 		ImGui::Text(text);
 	}
-	namespace bp = boost::process;
 	struct
 	{
 		string exePath;
@@ -67,19 +65,20 @@ namespace gameRunnerUI
 			}
 		}
 	}
+
 	void runGameThread(std::atomic_bool& isStarted, std::atomic_bool& isEnded, std::atomic_bool& isGetResponce, const string& exePath, const string& exeArgs, const string& eopArgs, bool isEopNeeded)
 	{
 
 		string startArgs = exeArgs;
 		startArgs.erase(0, 1);
 
-
-		bp::child gameProcess(
+		helpers::ExecuteProcess(helpers::get_wstring(dataG::data.gameData.gamePath), helpers::get_wstring(startArgs),20);
+		/*bp::child gameProcess(
 			dataG::data.gameData.gamePath,
 			bp::args(startArgs),
 			 bp::start_dir = "..\\.."
 		);
-		gameProcess.detach();
+		gameProcess.detach();*/
 		bool startResult =helpers::doPipe(eopArgs, 20);
 
 		
