@@ -10,9 +10,10 @@
   </p>
 </div>
 
-![img](https://img.shields.io/github/downloads/youneuoy/M2TWEOP-library/latest/total?style=for-the-badge)
-![img](https://img.shields.io/github/v/release/youneuoy/M2TWEOP-library?style=for-the-badge)
-![img](https://img.shields.io/github/license/youneuoy/M2TWEOP-library?style=for-the-badge)
+![https://github.com/youneuoy/M2TWEOP-library/releases](https://img.shields.io/github/downloads/youneuoy/M2TWEOP-library/latest/total?style=for-the-badge)
+![https://github.com/youneuoy/M2TWEOP-library/releases](https://img.shields.io/github/v/release/youneuoy/M2TWEOP-library?style=for-the-badge)
+![https://github.com/youneuoy/M2TWEOP-library/blob/master/LICENSE](https://img.shields.io/github/license/youneuoy/M2TWEOP-library?style=for-the-badge)
+![https://discord.gg/G5HS9awM](https://img.shields.io/discord/713369537948549191?style=for-the-badge)
 
 ## What is M2TW Engine Overhaul Project?
 
@@ -26,10 +27,9 @@ EOP uses C++ and Assembly to modify the game's code in-memory and exposes this t
 
 * Hugely expanded Lua scripting system that integrates seamlessly with existing campaign_script scripts, hot-reload, new custom console, debugger and much more
 * Place .fbx models anywhere on the strategy map with full animation and texture support 
-* Place .d3d textures anywhere on the screen
 * Play custom sounds or music with support for WAV, OGG/Vorbis and FLAC 
 * Unlocks all vanilla console commands
-* Create your own GUIs using the popular [ImgGui](https://github.com/ocornut/imgui)
+* Create your own GUIs and overlays using the popular [ImgGui](https://github.com/ocornut/imgui)
 * New custom EDU system that allows the creation and modification of new units without the need to restart the game
 * Play out Hotseat battles online and transfer the results back to the campaign map
 * Set your own limits for the number of religions, ancillaries, bodyguard units, building chains, max unit size 
