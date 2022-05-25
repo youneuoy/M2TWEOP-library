@@ -84,6 +84,7 @@ For a full list of EOP Events, see [here](https://youneuoy.github.io/M2TWEOP-lib
 * **Erken** - Excellent IMGUI tutorials, Lua examples and feedback
 * **DinarMayor** - Testing, great suggestions and examples
 * **Fynn** - Testing, early adopter and great suggestions
+* **Callistonian** - editing of documentation, lua examples and feedback
 
 ## Projects
 * [M2TWEOP Library](https://github.com/youneuoy/M2TWEOP-library) - Main project (C++ and Assembly)
