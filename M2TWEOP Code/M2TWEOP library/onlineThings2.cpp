@@ -524,7 +524,7 @@ namespace battleCreator
 		jsn::json json2;
 		try
 		{
-			std::ifstream f2(resultsPath);
+			std::ifstream f2(std::filesystem::u8path(resultsPath));
 
 
 			f2 >> json2;
