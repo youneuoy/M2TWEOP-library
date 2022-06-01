@@ -6,6 +6,13 @@ $currentLoc=(get-location).path
 $color = "`e[$(35)m"
 $endColor = "`e[0m`e[30;"
 
+function CopyFilesToFolder ($fromFolder, $toFolder) {
+    $childItems = Get-ChildItem $fromFolder
+    $childItems | ForEach-Object {
+         Copy-Item -Path $_.FullName -Destination $toFolder -Recurse -Force
+    }
+}
+
 Write-Output "$color======== 0) Pre Cleanup ======== $endColor"
 
 
@@ -39,11 +46,10 @@ Set-Location -Path $currentLoc
 Remove-item ./M2TWEOPGenerated -recurse -erroraction 'silentlycontinue'
 new-item ./M2TWEOPGenerated  -itemtype directory -erroraction 'silentlycontinue'
 
-Get-ChildItem -Path "M2TWEOP DataFiles"
 Copy-Item -Path  "M2TWEOP DataFiles\*" -Destination "./M2TWEOPGenerated" -recurse
-Get-ChildItem -Path "documentationGenerator\EOPDocs\build\html"
-Copy-Item -Path  "documentationGenerator\EOPDocs\build\html\*" -Destination "./M2TWEOPGenerated/eopData/helpPages" -recurse -erroraction 'silentlycontinue'
-Get-ChildItem -Path "./M2TWEOPGenerated/eopData/helpPages"
+
+Get-ChildItem -Path "documentationGenerator\EOPDocs\build\html\*" -erroraction 'continue'
+CopyFilesToFolder "documentationGenerator\EOPDocs\build\html" "./M2TWEOPGenerated/eopData/helpPages"
 
 Copy-Item -Path  "M2TWEOP-luaPlugin\Release\luaPlugin.dll" -Destination "./M2TWEOPGenerated/youneuoy_Data/plugins"
 Copy-Item -Path  "M2TWEOP Code\Release\d3d9.dll" -Destination "./M2TWEOPGenerated"

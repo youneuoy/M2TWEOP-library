@@ -18,8 +18,8 @@ env:
 
 jobs:
   build-eop:
-    # # If the latest commit message starts with 'Release', build project, update docs, issue a release on GitHub
-    # if: "startsWith(github.event.head_commit.message, 'Release')"
+    # If the latest commit message starts with 'Release', build project, update docs, issue a release on GitHub
+    if: "startsWith(github.event.head_commit.message, 'Release')"
     permissions:
         contents: write
     runs-on: windows-latest
@@ -110,25 +110,25 @@ jobs:
           cp -R "documentationGenerator/EOPDocs/build/html/." "docs"
       shell: bash
 
-    # - name: Online docs -  Commit and push updates to docs folder
-    #   uses: EndBug/add-and-commit@v9
-    #   with:
-    #     add: 'docs'
-    #     message: "Updated EOP Docs for version: ${{ env.EOP_VERSION }}"
-    #     push: true
+    - name: Online docs -  Commit and push updates to docs folder
+      uses: EndBug/add-and-commit@v9
+      with:
+        add: 'docs'
+        message: "Updated EOP Docs for version: ${{ env.EOP_VERSION }}"
+        push: true
 
     - name: Rename generated zip to match EOP_VERSION
       run: |
         cp "M2TWEOP.zip" "${{ env.EOP_VERSION }}.zip"
       shell: bash
 
-    # - name: Release new EOP version on GitHub - ${{ env.EOP_VERSION }}
-    #   uses: ncipollo/release-action@v1
-    #   with:
-    #     name: "${{ env.EOP_VERSION }}"
-    #     tag: "${{ env.EOP_VERSION }}"
-    #     artifacts: "${{ env.EOP_VERSION }}.zip"
-    #     bodyFile: "./docs/releaseInfo/releaseDescription.md"
-    #     token: ${{ secrets.GITHUB_TOKEN }}
-    #     commit: "testFeathures"
-    #     allowUpdates: true
+    - name: Release new EOP version on GitHub - ${{ env.EOP_VERSION }}
+      uses: ncipollo/release-action@v1
+      with:
+        name: "${{ env.EOP_VERSION }}"
+        tag: "${{ env.EOP_VERSION }}"
+        artifacts: "${{ env.EOP_VERSION }}.zip"
+        bodyFile: "./docs/releaseInfo/releaseDescription.md"
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit: "testFeathures"
+        allowUpdates: true
