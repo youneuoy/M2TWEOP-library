@@ -88,7 +88,12 @@ jobs:
         DXSDK_DIR: ${{ github.workspace }}\DXSDK\
 
     - name: Show generated files
-      run: ls -l; ls documentationGenerator; ls documentationGenerator/EOPDocs; ls documentationGenerator/EOPDocs/build; ls documentationGenerator/EOPDocs/build/html;
+      run: |
+        ls -l
+        ls documentationGenerator
+        ls documentationGenerator/EOPDocs
+        ls documentationGenerator/EOPDocs/build
+        ls documentationGenerator/EOPDocs/build/html
       shell: bash
 
       # Read version number from source code
@@ -102,9 +107,9 @@ jobs:
         echo "${Env:EOP_VERSION}"
     - name: Online docs - Copy generated documentation to docs folder
       run: |
-          cp -r "documentationGenerator/EOPDocs/build/html/." "docs"
+          cp -r "documentationGenerator/EOPDocs/build/html/*" "docs"
       shell: bash
-  
+
     - name: Online docs -  Commit and push updates to docs folder
       uses: EndBug/add-and-commit@v9
       with:
