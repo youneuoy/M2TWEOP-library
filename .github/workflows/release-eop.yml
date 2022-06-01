@@ -18,8 +18,6 @@ env:
 
 jobs:
   build-eop:
-    # If the latest commit message starts with 'Release', build project, update docs, issue a release on GitHub
-    if: "startsWith(github.event.head_commit.message, 'Release')"
     permissions:
         contents: write
     runs-on: windows-latest
@@ -108,7 +106,7 @@ jobs:
         echo "${Env:EOP_VERSION}"
     - name: Online docs - Copy generated documentation to docs folder
       run: |
-          cp -r "documentationGenerator/EOPDocs/build/html/*" "docs"
+          cp -R "documentationGenerator/EOPDocs/build/html/." "docs"
       shell: bash
 
     - name: Online docs -  Commit and push updates to docs folder
@@ -123,6 +121,8 @@ jobs:
         cp "M2TWEOP.zip" "${{ env.EOP_VERSION }}.zip"
       shell: bash
 
+    # If the latest commit message starts with 'Release', build project, update docs, issue a release on GitHub
+    if: "startsWith(github.event.head_commit.message, 'Release')"
     - name: Release new EOP version on GitHub - ${{ env.EOP_VERSION }}
       uses: ncipollo/release-action@v1
       with:
