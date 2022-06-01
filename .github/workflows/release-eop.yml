@@ -89,11 +89,12 @@ jobs:
 
     - name: Show generated files
       run: |
-        ls -l
-        ls documentationGenerator
-        ls documentationGenerator/EOPDocs
-        ls documentationGenerator/EOPDocs/build
-        ls documentationGenerator/EOPDocs/build/html
+        ls -l documentationGenerator/EOPDocs/build/html;
+        ls -l;
+        ls -l documentationGenerator;
+        ls -l documentationGenerator/EOPDocs;
+        ls -l documentationGenerator/EOPDocs/build;
+        ls -l documentationGenerator/EOPDocs/build/html;
       shell: bash
 
       # Read version number from source code
