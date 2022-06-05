@@ -89,7 +89,6 @@ jobs:
 
     - name: Show generated files
       run: |
-        ls -l documentationGenerator/EOPDocs/build/html;
         ls -l;
         ls -l documentationGenerator;
         ls -l documentationGenerator/EOPDocs;
@@ -108,7 +107,7 @@ jobs:
         echo "${Env:EOP_VERSION}"
     - name: Online docs - Copy generated documentation to docs folder
       run: |
-          cp -r "documentationGenerator/EOPDocs/build/html/*" "docs"
+          cp -R "documentationGenerator/EOPDocs/build/html/." "docs"
       shell: bash
 
     - name: Online docs -  Commit and push updates to docs folder
