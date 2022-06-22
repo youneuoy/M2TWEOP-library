@@ -143,19 +143,19 @@ void managerF::doPachs()
 	f1 << "Done" << endl;
 
 
-	f1 << "Start applying fort patch" << endl;
+	/*f1 << "Start applying fort patch" << endl;
 	toFortsDelCheck* frt = new toFortsDelCheck(mem, (LPVOID)patchesForGame::checkFort, globals::dataS.gamever);
 	frt->SetlFortsDelCode();
 	frt->Enable();
 
 	f1 << "Done" << endl;
 
-	/*f1 << "Start applying DiplomaticStanceFromFaction patch #1" << endl;
+	f1 << "Start applying DiplomaticStanceFromFaction patch #1" << endl;
 	toDSFromFacCh* dsff1 = new toDSFromFacCh(mem, (LPVOID)patchesForGame::checkDipString, globals::dataS.gamever);
 	dsff1->SetlDsFromFacCode();
 	dsff1->Enable();
 
-	f1 << "Done" << endl;*/
+	f1 << "Done" << endl;
 
 	/*f1 << "Start applying DiplomaticStanceFromFaction patch #2" << endl;
 	toDiplomaticStanceCheck* dsff2 = new toDiplomaticStanceCheck(mem, (LPVOID)patchesForGame::checkFacDip, globals::dataS.gamever);
