@@ -1,5 +1,5 @@
 #pragma once
 namespace eopConstData
 { 
-	const char eopVersionName[] = "1";
+	const char eopVersionName[] = "2";
 }
