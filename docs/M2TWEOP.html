@@ -51,7 +51,10 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="mainInfo.html">Project info</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">What is M2TW Engine Overhaul Project?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#project-composition">Project composition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-does-it-work">How does it work?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projects">Projects</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#build">Build</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#support-the-project">Support the project</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#disclaimer">Disclaimer</a></li>
@@ -118,48 +121,90 @@
   <section id="what-is-m2tw-engine-overhaul-project">
 <h1>What is M2TW Engine Overhaul Project?<a class="headerlink" href="#what-is-m2tw-engine-overhaul-project" title="Permalink to this headline">¶</a></h1>
 <p>M2TW Engine Overhaul Project is designed to expand the capabilities of the game <em>Medieval 2: Total War</em>.</p>
-<p>The functionality of the program is divided into two parts</p>
-<ol class="arabic simple">
-<li><p>Making changes to the game code when starting MTW2 (changing various engine limits, finer tuning, etc.)</p></li>
-<li><p>Manipulations with the game after its launch.</p></li>
-</ol>
+</section>
+<section id="how-does-it-work">
+<h1>How does it work?<a class="headerlink" href="#how-does-it-work" title="Permalink to this headline">¶</a></h1>
+<p>EOP uses C++ and Assembly to modify the game’s code in-memory and exposes this to the end user via Lua scripts and the <a class="reference external" href="https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html">EOP Lua Library</a></p>
+</section>
 <section id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<h1>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><p>Hugely expanded scripting system</p></li>
-<li><p>Transfer your battles from the campaign map to online. This allows you to play out Hotseat battles online and transfer the results back to the campaign map.</p></li>
-<li><p>Allows you to set your own limits for the number of religions, ancillaries, block resizing units</p></li>
-<li><p>Set the boundaries of the number of soldiers in units, the size of the battle map and the cost of siege equipment (rams, ladders, siege towers)</p></li>
-<li><p>Make any characters immortal and change the way their age is displayed on the screen</p></li>
-<li><p>Fixed crash when using berserkers in battle</p></li>
-<li><p>Added ability to write your own add-ons in C ++. The library exports many different functions.</p></li>
-<li><p>and many many more</p></li>
+<li><p>Hugely expanded Lua scripting system that integrates seamlessly with existing campaign_script scripts, hot-reload, new custom console, debugger and much more</p></li>
+<li><p>Place .fbx models anywhere on the strategy map with full animation and texture support</p></li>
+<li><p>Play custom sounds or music with support for WAV, OGG/Vorbis and FLAC</p></li>
+<li><p>Unlocks all vanilla console commands</p></li>
+<li><p>Create your own GUIs and overlays using the popular <a class="reference external" href="https://github.com/ocornut/imgui">ImgGui</a></p></li>
+<li><p>New custom EDU system that allows the creation and modification of new units without the need to restart the game</p></li>
+<li><p>Play out Hotseat battles online and transfer the results back to the campaign map</p></li>
+<li><p>Set your own limits for the number of religions, ancillaries, bodyguard units, building chains, max unit size</p></li>
+<li><p>Set the boundaries of the number of soldiers in units and the size of the battle map</p></li>
+<li><p>Fixed many engine bugs, crashes and oversights (e.g crashes when using berserkers in battle)</p></li>
+<li><p>Edit worldpkgdesc for any settlement on the fly without the need to restart the game</p></li>
+<li><p>Custom keybinding support</p></li>
+<li><p>Added ability to write your own add-ons in C++. The library exports many different functions.</p></li>
+<li><p>Many, many more</p></li>
 </ul>
+</section>
+<section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<section id="removing-engine-limits">
+<h2>Removing engine limits<a class="headerlink" href="#removing-engine-limits" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">onPluginLoad</span><span class="p">()</span>
+    <span class="n">M2TWEOP</span><span class="p">.</span><span class="n">unlockGameConsoleCommands</span><span class="p">();</span>
+    <span class="n">M2TWEOP</span><span class="p">.</span><span class="n">setAncillariesLimit</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
+    <span class="n">M2TWEOP</span><span class="p">.</span><span class="n">setMaxBgSize</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+    <span class="n">M2TWEOP</span><span class="p">.</span><span class="n">setReligionsLimit</span><span class="p">(</span><span class="mi">50</span><span class="p">);</span>
+    <span class="n">M2TWEOP</span><span class="p">.</span><span class="n">setBuildingChainLimit</span><span class="p">(</span><span class="mi">40</span><span class="p">);</span>
+    <span class="n">M2TWEOP</span><span class="p">.</span><span class="n">setGuildCooldown</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</section>
+<section id="playing-sounds-displaying-guis-and-spawning-units">
+<h2>Playing sounds, displaying GUIs and spawning units<a class="headerlink" href="#playing-sounds-displaying-guis-and-spawning-units" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- onGeneralAssaultsGeneral is a custom EOP event</span>
+<span class="kr">function</span> <span class="nf">onGeneralAssaultsGeneral</span><span class="p">(</span><span class="n">attacker</span><span class="p">,</span> <span class="n">defender</span><span class="p">)</span>
+        <span class="kr">if</span><span class="p">(</span><span class="n">isNotNull</span><span class="p">(</span><span class="n">attacker</span><span class="p">))</span> <span class="kr">then</span>
+            <span class="c1">-- Check if the character is a Nazgul</span>
+            <span class="kr">if</span><span class="p">(</span><span class="n">hasTrait</span><span class="p">(</span><span class="n">attacker</span><span class="p">,</span> <span class="s2">&quot;NazgulRace&quot;</span><span class="p">))</span> <span class="kr">then</span>
+                <span class="c1">-- Play a sound</span>
+                <span class="n">playSound</span><span class="p">(</span><span class="n">nazgulScream</span><span class="p">);</span>
+                <span class="c1">-- Display some text</span>
+                <span class="n">showWindow</span><span class="p">(</span><span class="s2">&quot;The Nazgul have arrived.&quot;</span><span class="p">);</span>
+                <span class="c1">-- Spawn a new unit</span>
+                <span class="n">spawnUnit</span><span class="p">(</span><span class="s1">&#39;Gondor Infantry&#39;</span><span class="p">,</span> <span class="s1">&#39;Anorien&#39;</span> <span class="p">,</span> <span class="s1">&#39;Minas Tirith&#39;</span> <span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+        <span class="kr">end</span>
+    <span class="kr">end</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>For a full list of EOP Events, see <a class="reference external" href="https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html">here</a></p>
 </section>
 <section id="creators">
 <h2>Creators<a class="headerlink" href="#creators" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p><strong>youneuoy</strong> - project founder, main developer</p></li>
-<li><p><strong>Jojo00182</strong> - did a lot of great stuff and much more to come</p></li>
+<li><p><strong>youneuoy</strong> - Project founder, Main Developer</p></li>
+<li><p><strong>Jojo00182</strong> - Great code contributions, engine bugfixes, reversing structs and much more</p></li>
+<li><p><strong>Medik</strong> - Creating documentation, setting up continous integration</p></li>
 </ul>
 </section>
 <section id="contributors">
 <h2>Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p><strong>Edmond</strong> - project idea, first attempts to implement hotseats with online battles</p></li>
-<li><p><strong>Xamax</strong> - lots of ideas and testing</p></li>
-<li><p><strong>Erken</strong> - lots of ideas and testing</p></li>
-<li><p><strong>DinarMayor</strong> - ideas and testing</p></li>
-<li><p><strong>Medik</strong> - help in creating documentation</p></li>
-<li><p><strong>Fynn</strong> - testing</p></li>
+<li><p><strong>Edmond</strong> - Project idea, first attempts to implement hotseats with online battles</p></li>
+<li><p><strong>Xamax</strong> - Video tutorials, testing and many great suggestions</p></li>
+<li><p><strong>Erken</strong> - Excellent IMGUI tutorials, Lua examples and feedback</p></li>
+<li><p><strong>DinarMayor</strong> - Testing, great suggestions and examples</p></li>
+<li><p><strong>Fynn</strong> - Testing, early adopter and great suggestions</p></li>
+<li><p><strong>Callistonian</strong> - editing of documentation, lua examples and feedback</p></li>
 </ul>
 </section>
 </section>
-<section id="project-composition">
-<h1>Project composition<a class="headerlink" href="#project-composition" title="Permalink to this headline">¶</a></h1>
+<section id="projects">
+<h1>Projects<a class="headerlink" href="#projects" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><p><a class="reference external" href="https://github.com/youneuoy/M2TWEOP-library">M2TWEOP Library</a> - main project</p></li>
-<li><p><a class="reference external" href="https://github.com/youneuoy/M2TWEOP-luaPlugin">M2TWEOP LUA plugin</a> - a plugin that adds the ability to script in the lua language (from game logic to extending the interface), add new console to the game and much more.</p></li>
+<li><p><a class="reference external" href="https://github.com/youneuoy/M2TWEOP-library">M2TWEOP Library</a> - Main project (C++ and Assembly)</p></li>
+<li><p><a class="reference external" href="https://github.com/youneuoy/M2TWEOP-luaPlugin">M2TWEOP LUA plugin</a> - Allows you to write custom scripts in the Lua programming using M2TWEOP-library</p></li>
 </ul>
 <section id="compatibility">
 <h2>Compatibility<a class="headerlink" href="#compatibility" title="Permalink to this headline">¶</a></h2>
@@ -167,8 +212,9 @@
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
-<p>All program settings are set in the config files and scripts and are applied when the game starts. You can read more about this on the <a class="reference external" href="https://www.twcenter.net/forums/showthread.php?803575-Download-links-important-information-and-instructions-for-the-program-in-pictures">forums</a>.
-All changes made work correctly in an ongoing campaign, nothing breaks during updates, it’s enough just not to activate new features.</p>
+<ul class="simple">
+<li><p>Check the <a class="reference external" href="https://youneuoy.github.io/M2TWEOP-library/faq.html#questions-and-answers">F.A.Q</a></p></li>
+</ul>
 <p>If you use an antivirus, add the program to the exceptions! There may be false positives.</p>
 </section>
 <section id="license">
@@ -178,14 +224,27 @@ All changes made work correctly in an ongoing campaign, nothing breaks during up
 </section>
 <section id="build">
 <h1>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h1>
-<p>M2TWEOP is developed in C++ and Assembly. You can get support for building/developing on the our <a class="reference external" href="https://discord.gg/Epqjm8u2WK">Discord</a> server.</p>
+<p><strong>Requirements</strong></p>
+<p>M2TWEOP is developed in C++ and Assembly.</p>
+<ul class="simple">
+<li><p>Microsoft Visual Studio 2019 (<a class="reference external" href="https://community.chocolatey.org/packages/visualstudio2019community">https://community.chocolatey.org/packages/visualstudio2019community</a>)</p></li>
+<li><p>DirectX SDK 2009 (<a class="reference external" href="https://community.chocolatey.org/packages/directx-sdk">https://community.chocolatey.org/packages/directx-sdk</a>)</p></li>
+</ul>
+<p>Use Choco (<a class="reference external" href="https://chocolatey.org/install">https://chocolatey.org/install</a>) for easy install.</p>
+<p><strong>How to build</strong></p>
+<ol class="arabic simple">
+<li><p>Clone or download the project and extract it to a folder</p></li>
+<li><p>Run Developer Powershell for Visual Studio 2019 in Admin mode</p></li>
+<li><p>Navigate to where you have cloned/extracted the project</p></li>
+<li><p>Run buildEOP.ps1</p></li>
+</ol>
+<p>You can get support for building/developing on our <a class="reference external" href="https://discord.gg/Epqjm8u2WK">Discord</a> server.</p>
 </section>
 <section id="support-the-project">
 <h1>Support the project<a class="headerlink" href="#support-the-project" title="Permalink to this headline">¶</a></h1>
 <p>It would be nice if all interested people supported the project in an accessible way (for example, you can test various changes, participate in planning new game mechanics or discuss them, sponsor development with money, etc.).</p>
 <ul class="simple">
 <li><p>Come join the our <a class="reference external" href="https://discord.gg/Epqjm8u2WK">Discord</a> server if you have questions or suggestions.</p></li>
-<li><p><a class="reference external" href="https://www.patreon.com/m2tweop">Patreon</a></p></li>
 </ul>
 <p>With the help of this program, it will probably be possible someday to give modders the opportunity to change the MTW2 gameplay beyond recognition.</p>
 </section>
@@ -199,7 +258,6 @@ All changes made work correctly in an ongoing campaign, nothing breaks during up
 <li><p>To all users participating in the discussion and improvement of the project.</p></li>
 <li><p>Users and administration of the forum <a class="reference external" href="https://gamehacklab.ru/">https://gamehacklab.ru/</a>. Without them, I would not have learned to do this kind of thing.</p></li>
 <li><p>d3d9.dll wrapper based on this repository: <a class="reference external" href="https://github.com/elishacloud/DirectX-Wrappers">https://github.com/elishacloud/DirectX-Wrappers</a></p></li>
-<li><p>Used multimedia library: <a class="reference external" href="https://www.sfml-dev.org/">https://www.sfml-dev.org/</a></p></li>
 <li><p>Used GUI library: <a class="reference external" href="https://github.com/ocornut/imgui">https://github.com/ocornut/imgui</a></p></li>
 <li><p>Used LUA binding: <a class="reference external" href="https://github.com/ThePhD/sol2">https://github.com/ThePhD/sol2</a></p></li>
 <li><p>ImGui lua binding is based on this repository:
@@ -209,6 +267,8 @@ All changes made work correctly in an ongoing campaign, nothing breaks during up
 <section id="version-history">
 <h1>Version History<a class="headerlink" href="#version-history" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
+<li><p><strong>v.2+</strong>
+<a class="reference external" href="https://github.com/youneuoy/M2TWEOP-library/releases">https://github.com/youneuoy/M2TWEOP-library/releases</a></p></li>
 <li><p><strong>v.2.0:</strong>
 A huge number of fixes and optimizations. Lots of new features in the lua plugin, as well as features exported for use in other plugins.</p></li>
 <li><p><strong>v.2.0 test2:</strong>
