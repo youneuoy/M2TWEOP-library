@@ -14,7 +14,6 @@ vector<std::string> helpers::splitString(const std::string& phrase, const std::s
     return list;
 }
 
-
 #define IPC_IMPLEMENTATION
 #include "ipc.h"
 void helpers::doEOPPipe(std::string& result, int waitSeconds)
