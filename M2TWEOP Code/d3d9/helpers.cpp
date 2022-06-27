@@ -23,7 +23,6 @@ void helpers::doEOPPipe(std::string& result, int waitSeconds)
     ULONGLONG endTime = startTime + 1000ull * waitSeconds;
 
     ipc_sharedmemory mem;
-
     ipc_mem_init(&mem, (char*)"M2TWEOPStartMem1", 10000);
 
     do {
