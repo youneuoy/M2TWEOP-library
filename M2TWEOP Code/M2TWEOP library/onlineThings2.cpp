@@ -9,6 +9,7 @@ namespace battleCreator
 		bool isCharacterDied = false;
 		std::string genName;
 		int age = 16;
+		int id = 0;
 		std::string faction;
 		int subfaction=0;
 		std::string portrait;
@@ -25,6 +26,7 @@ namespace battleCreator
 		std::string type;
 		int soldiersNumber = 0;
 		int exp = 0;
+		int id = 0;
 
 		genDataS gen;
 		bool isHaveCharacter = false;
@@ -42,7 +44,7 @@ namespace battleCreator
 		j.at("portrait").get_to(retGen.portrait);
 		j.at("battle_model").get_to(retGen.battle_model);
 		j.at("hero_ability").get_to(retGen.hero_ability);
-
+		j.at("index").get_to(retGen.id);
 		if (j.at("traits").is_number()==false)
 		{
 			j.at("traits").get_to(retGen.traits);
@@ -63,7 +65,7 @@ namespace battleCreator
 		j.at("type").get_to(unit.type);
 		j.at("soldiers").get_to(unit.soldiersNumber);
 		j.at("exp").get_to(unit.exp);
-
+		j.at("index").get_to(unit.id);
 		if (j.at("general").is_number())
 		{
 			unit.isHaveCharacter = false;
@@ -105,8 +107,9 @@ namespace battleCreator
 			genName=gen->genChar->fullName;
 		}
 		genJson["name"] = genName;
-
+		
 		int age = (gen->genChar->age >> 3) & 0x7f;
+		genJson["index"] = gen->genChar->index;
 		genJson["age"] = age;
 		genJson["faction"] = gen->genChar->faction->factSmDescr->facName;
 		genJson["subfaction"] = gen->genChar->subFaction;
@@ -198,6 +201,7 @@ namespace battleCreator
 			jsn::json unitJson;
 
 			unitJson["number in army"] = i;
+			unitJson["index"] = unit->ID;
 			unitJson["type"] = unit->eduEntry->Type;
 			if (unit->general != nullptr)
 			{
