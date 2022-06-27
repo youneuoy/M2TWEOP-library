@@ -125,7 +125,6 @@ NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 }
 NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 {
-
 	//plugins::onEndScene(pDevice);
 
 
