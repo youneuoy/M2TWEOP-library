@@ -868,7 +868,7 @@ namespace battleCreator
 
 		std::string relativePath = techFuncs::uniToANSI(smallFuncs::getGameDataAll()->campaignData->currentDescrFile);
 
-		if (relativePath.find("battle") != std::string::npos)//need load
+		if (relativePath.find("battle") != std::string::npos)//need load/
 		{
 			return battleCreator::getWorldpkgDescFromBattleFile(relativePath);
 		}
