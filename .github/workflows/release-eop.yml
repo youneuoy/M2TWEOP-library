@@ -116,6 +116,7 @@ jobs:
         add: 'docs'
         message: "Updated EOP Docs for version: ${{ env.EOP_VERSION }}"
         push: true
+        pull: '--rebase --autostash'
 
     - name: Rename generated zip to match EOP_VERSION
       run: |

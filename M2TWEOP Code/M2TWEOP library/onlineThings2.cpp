@@ -479,6 +479,8 @@ namespace battleCreator
 		if (battleArmies.sides.size() != battle->sidesNum)
 		{
 			MessageBoxA(NULL, "The number of sides in the results file and in the battle does not match.", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+			
+			clearStructs();
 			return false;
 		}
 
@@ -490,6 +492,7 @@ namespace battleCreator
 			{
 				MessageBoxA(NULL, "The number of armies in the results file and in the battle does not match.", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 
+				clearStructs();
 				return false;
 			}
 			for (size_t armyI = 0; armyI < side->armies.size(); armyI++)
@@ -500,6 +503,7 @@ namespace battleCreator
 				{
 					MessageBoxA(NULL, "The number of units in the results file and in the battle does not match.", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 
+					clearStructs();
 					return false;
 				}
 
@@ -512,12 +516,15 @@ namespace battleCreator
 					if (ourUnit == nullptr)
 					{
 						MessageBoxA(NULL, "M2TWEOP can`t find correct unit in json!", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+						
+						clearStructs();
 						return false;
 					}
 					if (strcmp(ourUnit->type.c_str(), gameUnit->eduEntry->Type) != 0)
 					{
 						MessageBoxA(NULL, "The unit types in the results file and in the battle does not match.", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 
+						clearStructs();
 						return false;
 					}
 					transferPairs.push_back({ ourUnit ,gameUnit });
@@ -541,6 +548,7 @@ namespace battleCreator
 		}
 		transferPairs.clear();
 
+		clearStructs();
 		return true;
 	}
 
@@ -740,6 +748,11 @@ namespace battleCreator
 		{
 			return battleSett.fort.worldRecord;
 		}
+	}
+
+	void clearStructs()
+	{
+		battleArmies.sides.clear();
 	}
 
 

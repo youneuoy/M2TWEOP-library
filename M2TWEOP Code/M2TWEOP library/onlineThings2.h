@@ -37,5 +37,7 @@ namespace battleCreator
 
 	//create settlement here
 	string onLoadSettlementWord(const std::filesystem::path& relativePath);
+
+	void clearStructs();
 };
 
