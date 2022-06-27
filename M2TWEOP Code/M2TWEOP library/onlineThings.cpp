@@ -657,7 +657,7 @@ namespace battleCreator
 		initStructsForResults();
 		createBattle();
 
-		clearStructs();
+		//clearStructs();
 		isStarted = false;
 	}
 	void startCreationThread()

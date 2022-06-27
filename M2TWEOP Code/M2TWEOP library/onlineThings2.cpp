@@ -9,7 +9,6 @@ namespace battleCreator
 		bool isCharacterDied = false;
 		std::string genName;
 		int age = 16;
-		int id = 0;
 		std::string faction;
 		int subfaction=0;
 		std::string portrait;
@@ -26,7 +25,6 @@ namespace battleCreator
 		std::string type;
 		int soldiersNumber = 0;
 		int exp = 0;
-		int id = 0;
 
 		genDataS gen;
 		bool isHaveCharacter = false;
@@ -44,7 +42,6 @@ namespace battleCreator
 		j.at("portrait").get_to(retGen.portrait);
 		j.at("battle_model").get_to(retGen.battle_model);
 		j.at("hero_ability").get_to(retGen.hero_ability);
-		j.at("index").get_to(retGen.id);
 		if (j.at("traits").is_number()==false)
 		{
 			j.at("traits").get_to(retGen.traits);
@@ -65,7 +62,6 @@ namespace battleCreator
 		j.at("type").get_to(unit.type);
 		j.at("soldiers").get_to(unit.soldiersNumber);
 		j.at("exp").get_to(unit.exp);
-		j.at("index").get_to(unit.id);
 		if (j.at("general").is_number())
 		{
 			unit.isHaveCharacter = false;
@@ -87,7 +83,7 @@ namespace battleCreator
 			shared_ptr<unitDataS> retUn = nullptr;
 			for (auto& un : unitsForTransfer)
 			{
-				if (un->id == id)
+				if (un->numberInArmy == id)
 				{
 					retUn = un;
 					break;
@@ -512,7 +508,7 @@ namespace battleCreator
 					auto& gameUnit = gameArmy.stack->units[unitI];
 
 
-					auto ourUnit = army->getUnitWithID(gameUnit->ID);
+					auto ourUnit = army->getUnitWithID(unitI);
 					if (ourUnit == nullptr)
 					{
 						MessageBoxA(NULL, "M2TWEOP can`t find correct unit in json!", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
@@ -660,7 +656,15 @@ namespace battleCreator
 						MessageBoxA(NULL, "M2TWEOP characters creating error!", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 						return;
 					}
+					if (army->units[0]->general != nullptr)
+					{
+						army->units[0]->general->genChar->index = armySide->unitsForTransfer[0]->numberInArmy;
+					}
 
+					for (int i = 0; i < army->numOfUnits; i++)
+					{
+						army->units[i]->ID = armySide->unitsForTransfer[i]->numberInArmy;
+					}
 					if (army->numOfUnits <= 1)
 					{
 						return;
@@ -690,7 +694,7 @@ namespace battleCreator
 							, newGen.genName.c_str(), newGen.genName.c_str(), newGen.subfaction
 							, portrait, 0,0);
 						fastFuncts::setBodyguard(newGeneral, army->units[i]);
-						newGeneral->genChar->index = newGen.id;
+						newGeneral->genChar->index = armySide->unitsForTransfer[i]->numberInArmy;
 						for (std::string& anc : newGen.ancillaries)
 						{
 							auto* resAnc=fastFuncts::findAnchillary((char*)anc.c_str());
