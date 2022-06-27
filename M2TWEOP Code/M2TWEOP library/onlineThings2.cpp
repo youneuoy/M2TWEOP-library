@@ -631,7 +631,16 @@ namespace battleCreator
 						MessageBoxA(NULL, "M2TWEOP characters creating error!", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 						return;
 					}
+					for (int i = 0; i < army->numOfUnits; i++)
+					{
+						if (strcmp(army->units[i]->eduEntry->Type, armySide->unitsForTransfer[i]->type.c_str()) != 0)
+						{
+							MessageBoxA(NULL, "M2TWEOP units indexes setting  error!", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+							return;
+						}
+						army->units[i]->ID = armySide->unitsForTransfer[i]->id;
 
+					}
 					if (army->numOfUnits <= 1)
 					{
 						return;
@@ -661,7 +670,7 @@ namespace battleCreator
 							, newGen.genName.c_str(), newGen.genName.c_str(), newGen.subfaction
 							, portrait, 0,0);
 						fastFuncts::setBodyguard(newGeneral, army->units[i]);
-
+						newGeneral->genChar->index = newGen.id;
 						for (std::string& anc : newGen.ancillaries)
 						{
 							auto* resAnc=fastFuncts::findAnchillary((char*)anc.c_str());
