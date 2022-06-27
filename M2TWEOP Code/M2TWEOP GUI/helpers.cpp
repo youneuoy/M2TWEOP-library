@@ -254,9 +254,12 @@ bool helpers::doPipe(const string& message, int waitSeconds)
 
 	for (int i = 0; i < message.size(); i++)
 	{
-		mem.data[i] = message[i];
+		mem.data[i + 4] = message[i];
 	}
-
+	mem.data[0] = 1;
+	mem.data[1] = 1;
+	mem.data[2] = 1;
+	mem.data[3] = 1;
 	ULONGLONG startTime = GetTickCount();
 	ULONGLONG endTime = startTime + 1000ull * waitSeconds;
 
