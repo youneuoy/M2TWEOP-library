@@ -512,7 +512,7 @@ namespace battleCreator
 					if (ourUnit == nullptr)
 					{
 						MessageBoxA(NULL, "M2TWEOP can`t find correct unit in json!", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
-						return;
+						return false;
 					}
 					if (strcmp(ourUnit->type.c_str(), gameUnit->eduEntry->Type) != 0)
 					{

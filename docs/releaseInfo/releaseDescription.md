@@ -15,7 +15,9 @@
 - Updated
 
 ### Bugfixes
-- results for hs battles from a folder containing non-english characters are now correctly loaded
+- forts with units but without characters no longer disappear
+- unit IDs are used to transfer losses and generate battles
+- eop intro now can be skipped with Esc key
 
 ### Links
 * [EOP Documentation](https://youneuoy.github.io/M2TWEOP-library/)
