@@ -81,6 +81,20 @@ namespace battleCreator
 		std::vector<unit*>units;
 
 		std::vector<shared_ptr<unitDataS>>unitsForTransfer;
+
+		shared_ptr<unitDataS> getUnitWithID(int id)
+		{
+			shared_ptr<unitDataS> retUn = nullptr;
+			for (auto& un : unitsForTransfer)
+			{
+				if (un->id == id)
+				{
+					retUn = un;
+					break;
+				}
+			}
+			return retUn;
+		}
 	};
 
 
@@ -491,16 +505,23 @@ namespace battleCreator
 
 				for (int unitI = 0; unitI < army->unitsForTransfer.size(); unitI++)
 				{
-					auto& unit = army->unitsForTransfer[unitI];
 					auto& gameUnit = gameArmy.stack->units[unitI];
-					if (strcmp(unit->type.c_str(), gameUnit->eduEntry->Type) != 0)
+
+
+					auto ourUnit = army->getUnitWithID(gameUnit->ID);
+					if (ourUnit == nullptr)
+					{
+						MessageBoxA(NULL, "M2TWEOP can`t find correct unit in json!", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+						return;
+					}
+					if (strcmp(ourUnit->type.c_str(), gameUnit->eduEntry->Type) != 0)
 					{
 						MessageBoxA(NULL, "The unit types in the results file and in the battle does not match.", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 
 						return false;
 					}
+					transferPairs.push_back({ ourUnit ,gameUnit });
 
-					transferPairs.push_back({ unit ,gameUnit });
 				}
 			}
 		}
@@ -631,16 +652,7 @@ namespace battleCreator
 						MessageBoxA(NULL, "M2TWEOP characters creating error!", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 						return;
 					}
-					for (int i = 0; i < army->numOfUnits; i++)
-					{
-						if (strcmp(army->units[i]->eduEntry->Type, armySide->unitsForTransfer[i]->type.c_str()) != 0)
-						{
-							MessageBoxA(NULL, "M2TWEOP units indexes setting  error!", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
-							return;
-						}
-						army->units[i]->ID = armySide->unitsForTransfer[i]->id;
 
-					}
 					if (army->numOfUnits <= 1)
 					{
 						return;

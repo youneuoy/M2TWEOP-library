@@ -703,29 +703,31 @@ struct soldierInBattle {
 struct unit {
 	undefined field0_0x0[4];
 	struct trackedPointerUnit** trackedUnitPointerP;
-	undefined field2_0x8[652];
+	undefined field2_0x8[636];
+	struct stackStruct* army;
+	undefined field4_0x288[12];
 	struct EduEntry* eduEntry;
 	int ID;
-	undefined field5_0x29c[612];
+	undefined field7_0x29c[612];
 	int expScreen; /* screen expierence */
 	struct general* general;
 	float movePoints;
 	int number; /* number of soldiers */
 	int numberTact; /* number of soldiers on tactical map */
 	int numberMax; /* max number of soldiers */
-	undefined field12_0x518[216];
+	undefined field14_0x518[216];
 	UINT32 stats; /* def/atk/etc */
 	struct soldierInBattle** soldiersBattleArr; /* array of soldiers battle data */
 	struct soldierData* soldiersArr; /* array of soldiers data */
-	undefined field16_0x5fc[6780];
+	undefined field18_0x5fc[6780];
 	UNICODE_STRING** alias; /* Legio string etc */
-	undefined field18_0x207c[44];
+	undefined field20_0x207c[44];
 	struct siegeEngine** siegeEngine;
-	undefined field20_0x20ac[4];
+	undefined field22_0x20ac[4];
 	int siegeEnNum; /* number of siege engines */
-	undefined field22_0x20b4[36];
+	undefined field24_0x20b4[36];
 	struct engineRecord* engineRec;
-	undefined field24_0x20dc[4];
+	undefined field26_0x20dc[4];
 };
 //army data
 struct stackStruct { /* structure of stack */
