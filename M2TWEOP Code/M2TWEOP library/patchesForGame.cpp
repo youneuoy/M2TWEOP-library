@@ -131,8 +131,6 @@ char* __fastcall patchesForGame::onSaveEDUStringS(EduEntry* eduEntry)
 }
 int __fastcall patchesForGame::onCreateUnit(int* edbIndex, int** edb, char** entryName)
 {
-
-
 	if (edbIndex == nullptr)
 	{
 		int* newEdu = eduThings::tryFindDataEopEdu(*entryName);
@@ -145,20 +143,8 @@ int __fastcall patchesForGame::onCreateUnit(int* edbIndex, int** edb, char** ent
 		*edb = newEdu;
 		return 0;
 	}
-	if (*edbIndex == 0|| *edbIndex == -1)
-	{
-		return -1;
-	}
-	if (*edbIndex != 0)
-	{
-		return *edbIndex;
-	}
 
-
-
-	
-
-	return -1;
+	return *edbIndex;
 }
 const char* __fastcall patchesForGame::onQuickSave()
 {
