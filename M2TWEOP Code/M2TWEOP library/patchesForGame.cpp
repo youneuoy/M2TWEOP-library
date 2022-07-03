@@ -144,7 +144,7 @@ int __fastcall patchesForGame::onCreateUnit(int* edbIndex, int** edb, char** ent
 		return 0;
 	}
 
-	return *edbIndex;
+	return *edbIndex; 
 }
 const char* __fastcall patchesForGame::onQuickSave()
 {
