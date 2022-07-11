@@ -39,8 +39,8 @@ void helpers::doEOPPipe(std::string& result, int waitSeconds)
         }
         if (mem.data[0] == mem.data[1] == mem.data[2] == mem.data[3] ==1)
         {
-            result = (char*)mem.data;
-            *mem.data = 0;
+            result = (char*)mem.data+4;
+            (*(int*)mem.data) = 0;
         }
 
     } while (GetTickCount64() < endTime && result.size() == 0);

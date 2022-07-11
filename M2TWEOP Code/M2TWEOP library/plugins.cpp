@@ -562,7 +562,7 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 		else if (compareEvent(event, &pl->onTransgression.stringAdr, pl->onTransgression.strCmp))
 		{
 			factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
-			char* str = reinterpret_cast<char*>(*vTab[2]);
+			char* str = reinterpret_cast<char*>(vTab[2]);
 			factionStruct* fac2 = reinterpret_cast<factionStruct*>(vTab[4]);
 			(*(*pl->onTransgression))(fac, str, fac2);
 		}
