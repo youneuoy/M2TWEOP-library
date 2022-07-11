@@ -17,9 +17,11 @@
 ### Bugfixes
 - forts with units but without characters no longer disappear
 - unit IDs are used to transfer losses and generate battles
-- eop intro now can be skipped with Esc key
+- eop intro disabled again
 - fix crash on creating/loading custom battles
 - fix error with creation of unit with index 0 in EDU
+- onTransgression event fix
+- fix of eop loading
 
 ### Links
 * [EOP Documentation](https://youneuoy.github.io/M2TWEOP-library/)

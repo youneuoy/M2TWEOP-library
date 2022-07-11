@@ -199,8 +199,8 @@ void graphicsD3D::onDrawAllGameStuff()
 		{
 			if (logoEOP == nullptr)
 			{
-				logoEOP=graphicsExport::loadTexture(std::string(globals::dataS.modPatch+ "/eopData/images/logoAbout.png").c_str(),&logoX,&logoY);
-				ImGui::OpenPopup("M2TWEOP");
+				//logoEOP=graphicsExport::loadTexture(std::string(globals::dataS.modPatch+ "/eopData/images/logoAbout.png").c_str(),&logoX,&logoY);
+				//ImGui::OpenPopup("M2TWEOP");
 			}
 
 			static ImGuiWindowFlags transparentF = ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove;
