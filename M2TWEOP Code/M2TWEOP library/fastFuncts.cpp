@@ -709,6 +709,7 @@ namespace fastFuncts
 				mov eax, adrFunc
 				call eax
 			}
+			un->number = count;
 		}
 		else
 		{
