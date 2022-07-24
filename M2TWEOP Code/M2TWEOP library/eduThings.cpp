@@ -24,6 +24,7 @@ namespace eduThings
 			eopTypeName.append(data.edu.Type);
 		}
 		std::string eopTypeName;
+		std::string eopSoldierString;
 		struct
 		{
 			int fakeVtable = 0;
@@ -50,6 +51,17 @@ namespace eduThings
 		return getEopEduEntry(newIdx);
 	}
 
+	eopEduEntry* getEopEduEntryInternal(int idx)
+	{
+		for (eopEduEntry& entry : data.eopEdu)
+		{
+			if (entry.data.edu.Index == idx)
+			{
+				return &entry;
+			}
+		}
+		return nullptr;
+	}
 	NOINLINE EOP_EXPORT EduEntry* getEopEduEntry(int idx)
 	{
 		for (eopEduEntry& entry : data.eopEdu)
@@ -111,7 +123,11 @@ namespace eduThings
 	{
 		EduEntry* entry = getEopEduEntry(entryIdx);
 
+		eopEduEntry* entryInternal = getEopEduEntryInternal(entryIdx);
+		entryInternal->eopTypeName = newModel;
+
 		entry->ModelDBEntry = fastFuncts::findBattleModel(newModel);
+		entry->Soldier = (char*)entryInternal->eopTypeName.c_str();
 	}
 
 	NOINLINE EOP_EXPORT void setEntryLocalizedName(int entryIdx, const char* newName)

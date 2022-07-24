@@ -9,14 +9,14 @@
 - No
 
 ### Lua Plugin
-- No
+- EduEntry: new fields
+- M2TWEOPDU: now setEntrySoldierModel works better
 
 ### Documentation
 - Updated
 
 ### Bugfixes
-- fix uiElementStruct fields
-- fix for increasing number of soldiers in unit(for example stack_unit.soldierCountStratMap = stack_unit.soldierCountStratMap + 12)
+- No
 
 ### Links
 * [EOP Documentation](https://youneuoy.github.io/M2TWEOP-library/)
