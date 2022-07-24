@@ -3,6 +3,8 @@
 
 # New beta version of M2TWEOP 2.1😋
 
+ [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D4DZTHG)
+
 ## Release Notes
 
 ###  Library
