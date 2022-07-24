@@ -81,7 +81,7 @@ html_theme_options = {
     'extra_nav_links': {
         'M2TWEOP LUA plugin': '_static/LuaLib/index.html',
     },
-    'donate_url':'https://www.patreon.com/m2tweop',
+    'donate_url':'https://ko-fi.com/D1D4DZTHG',
 
 }
 
