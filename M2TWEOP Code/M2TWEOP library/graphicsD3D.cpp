@@ -185,15 +185,7 @@ void graphicsD3D::onDrawAllGameStuff()
 	ImGui_ImplDX9_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
-	ImGui::Begin("SDSDS");
-	static int res = 555;
-	if (ImGui::Button("test button"))
-	{
-		EduEntry testEn;
-		res=eduFastFuncts::readEduFile("export_descr_unit1.txt",&testEn);
-	}
-	ImGui::Text("%d", res);
-	ImGui::End();
+
 
 	plugins::onEndScene(graphicsD3D::dataS.pDevice);
 	//graphicsD3D::Draw(pDevice);
