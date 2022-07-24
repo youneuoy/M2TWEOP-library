@@ -15,13 +15,8 @@
 - Updated
 
 ### Bugfixes
-- forts with units but without characters no longer disappear
-- unit IDs are used to transfer losses and generate battles
-- eop intro disabled again
-- fix crash on creating/loading custom battles
-- fix error with creation of unit with index 0 in EDU
-- onTransgression event fix
-- fix of eop loading
+- fix uiElementStruct fields
+- fix for increasing number of soldiers in unit(for example stack_unit.soldierCountStratMap = stack_unit.soldierCountStratMap + 12)
 
 ### Links
 * [EOP Documentation](https://youneuoy.github.io/M2TWEOP-library/)

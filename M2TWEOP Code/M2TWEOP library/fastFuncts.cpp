@@ -697,19 +697,19 @@ namespace fastFuncts
 		{
 			return;
 		}
+
 		int exp = un->expScreen;
 		if (diff > 0)
 		{
 			DWORD adrFunc = codes::offsets.replenishUnitFunc;
 			_asm
 			{
-				push diff
 				push exp
+				push diff
 				mov ecx, un
 				mov eax, adrFunc
 				call eax
 			}
-			un->number = count;
 		}
 		else
 		{
