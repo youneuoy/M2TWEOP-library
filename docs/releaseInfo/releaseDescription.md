@@ -6,11 +6,12 @@
 ## Release Notes
 
 ###  Library
-- No
+- Edu things: ability to create unit types from files
 
 ### Lua Plugin
-- EduEntry: new fields
-- M2TWEOPDU: now setEntrySoldierModel works better
+- EduEntry table: new fields
+- M2TWEOPDU table: now setEntrySoldierModel works better
+- namedCharacter table: removed localizedSaveName, localizedSaveName2, localizedSaveNickName
 
 ### Documentation
 - Updated

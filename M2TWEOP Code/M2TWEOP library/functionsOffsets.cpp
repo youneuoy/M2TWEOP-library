@@ -63,6 +63,9 @@ void codes::initCodes(int gameVer)
 
 		offsets.useButtonFunc = 0x00b0daf0;
 		offsets.getUiElementFunc = 0x00b4bff0;
+
+
+		offsets.readEDUEntryFunc = 0x008ef2d0;
 	}
 	else if (gameVer == 2)
 	{
@@ -124,5 +127,8 @@ void codes::initCodes(int gameVer)
 
 		offsets.useButtonFunc = 0x00b07e00;
 		offsets.getUiElementFunc = 0x00b46340;
+
+
+		offsets.readEDUEntryFunc = 0x008efd50;
 	}
 }

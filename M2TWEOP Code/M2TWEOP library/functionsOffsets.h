@@ -75,6 +75,11 @@ public:
 
 		DWORD useButtonFunc = NULL;
 		DWORD getUiElementFunc = NULL;
+
+
+
+
+		DWORD readEDUEntryFunc = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

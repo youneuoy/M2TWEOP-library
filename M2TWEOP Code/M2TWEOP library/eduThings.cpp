@@ -23,6 +23,23 @@ namespace eduThings
 			eopTypeName = "EOPT";
 			eopTypeName.append(data.edu.Type);
 		}
+		eopEduEntry(const char*fileName, int newIdx)
+		{
+			int isOk=eduFastFuncts::readEduFile(fileName, &data.edu);
+			if (isOk == 0)
+			{
+				std::string errS = "Can`t read edu file: ";
+				errS += fileName;
+				MessageBoxA(NULL, errS.c_str(), "ERROR!", NULL);
+				throw "not good";
+			}
+			data.edu.Index = newIdx;
+
+			eopTypeName = "EOPT";
+			eopTypeName.append(data.edu.Type);
+		}
+
+
 		std::string eopTypeName;
 		std::string eopSoldierString;
 		struct
@@ -35,6 +52,31 @@ namespace eduThings
 	{
 		vector<eopEduEntry>eopEdu;
 	}data;
+	NOINLINE EOP_EXPORT EduEntry* addEopEduEntryFromFile(const char* fileName, int newIdx)
+	{
+		if (getEopEduEntry(newIdx))
+		{
+			return nullptr;
+		}
+
+		try 
+		{
+			eopEduEntry newEntry(fileName, newIdx);
+
+			data.eopEdu.push_back(newEntry);
+		}
+		catch (...)
+		{
+			return nullptr;
+		}
+
+
+		eduEntryes* EDB = reinterpret_cast<eduEntryes*>(dataOffsets::offsets.unitTypesStart - 4);
+
+		--EDB->numberOfTupes;
+
+		return getEopEduEntry(newIdx);
+	}
 	NOINLINE EOP_EXPORT EduEntry* addEopEduEntry(int baseIdx , int newIdx)
 	{
 		if (getEopEduEntry(newIdx))
@@ -124,10 +166,10 @@ namespace eduThings
 		EduEntry* entry = getEopEduEntry(entryIdx);
 
 		eopEduEntry* entryInternal = getEopEduEntryInternal(entryIdx);
-		entryInternal->eopTypeName = newModel;
+		entryInternal->eopSoldierString = newModel;
 
 		entry->ModelDBEntry = fastFuncts::findBattleModel(newModel);
-		entry->Soldier = (char*)entryInternal->eopTypeName.c_str();
+		entry->Soldier = (char*)entryInternal->eopSoldierString.c_str();
 	}
 
 	NOINLINE EOP_EXPORT void setEntryLocalizedName(int entryIdx, const char* newName)

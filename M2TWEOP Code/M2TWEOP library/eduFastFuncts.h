@@ -9,5 +9,6 @@
 #include "globals.h"
 namespace eduFastFuncts
 {
+	int readEduFile(std::string fileName,EduEntry*entryForFilling);
 };
 

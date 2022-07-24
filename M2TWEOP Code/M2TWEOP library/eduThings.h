@@ -18,6 +18,7 @@ using namespace std;
 
 namespace eduThings
 {
+	NOINLINE EOP_EXPORT EduEntry* addEopEduEntryFromFile(const char*fileName, int newIdx);
 	NOINLINE EOP_EXPORT EduEntry* addEopEduEntry(int baseIdx , int newIdx);
 	NOINLINE EOP_EXPORT EduEntry* getEopEduEntry(int idx);
 
