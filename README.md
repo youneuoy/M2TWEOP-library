@@ -14,6 +14,7 @@
 [![Build Status](https://img.shields.io/github/v/release/youneuoy/M2TWEOP-library?style=for-the-badge)](https://github.com/youneuoy/M2TWEOP-library/releases)
 [![Build Status](https://img.shields.io/github/license/youneuoy/M2TWEOP-library?style=for-the-badge)](https://github.com/youneuoy/M2TWEOP-library/blob/master/LICENSE)
 [![Build Status](https://img.shields.io/discord/713369537948549191?style=for-the-badge)](https://discord.gg/Epqjm8u2WK)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D4DZTHG)
 
 
 ## What is M2TW Engine Overhaul Project?
