@@ -8,10 +8,12 @@
 ## Release Notes
 
 ###  Launcher
-- fixes
+- fixes for launch process
+- added M2TWEOP health checker(this will appear automatically if there are potential startup problems)
 
 ###  Library
 - Edu things: ability to create unit types from files
+- fixes for launch process
 
 ### Lua Plugin
 - EduEntry table: new fields
