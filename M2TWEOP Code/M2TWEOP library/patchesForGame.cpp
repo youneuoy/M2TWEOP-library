@@ -8,6 +8,7 @@
 #include "onlineThings.h"
 
 #include "eduThings.h"
+#include "fastFunctsHelpers.h"
 
 string getRecordName(worldRecord* selectedRecord)
 {
@@ -557,6 +558,22 @@ void __stdcall patchesForGame::onBattleStateChange()
 	{
 		battleCreator::onBattleResultsScreen();
 	}
+}
+
+int* __fastcall patchesForGame::ontryFindTypeIdInListRecruitPoolEDB(char* unitTypeString)
+{
+	return  eduThings::tryFindDataEopEduIndex(unitTypeString);
+}
+
+EduEntry* __fastcall patchesForGame::onrecruitPoolFillFromFile(int eduIndex)
+{
+	EduEntry*retEntry =	fastFunctsHelpers::getEDUEntryById(eduIndex);
+	if (retEntry != nullptr)
+	{
+		return retEntry;
+	}
+
+	return eduThings::getEopEduEntry(eduIndex);
 }
 
 

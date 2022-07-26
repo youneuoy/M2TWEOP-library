@@ -817,3 +817,44 @@ public:
 	void SetNewCode();
 };
 
+
+
+class OntryFindTypeIdInListRecruitPoolEDB
+	:public AATemplate
+{
+public:
+	OntryFindTypeIdInListRecruitPoolEDB(MemWork* mem, LPVOID addr, int ver);
+	~OntryFindTypeIdInListRecruitPoolEDB();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+
+class OnrecruitPoolFillFromFile
+	:public AATemplate
+{
+public:
+	OnrecruitPoolFillFromFile(MemWork* mem, LPVOID addr, int ver);
+	~OnrecruitPoolFillFromFile();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+class OnrecruitPoolFillFromFile2
+	:public AATemplate
+{
+public:
+	OnrecruitPoolFillFromFile2(MemWork* mem, LPVOID addr, int ver);
+	~OnrecruitPoolFillFromFile2();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+

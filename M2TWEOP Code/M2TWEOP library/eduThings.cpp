@@ -42,7 +42,7 @@ namespace eduThings
 
 		std::string eopTypeName;
 		std::string eopSoldierString;
-		struct
+		struct dataS
 		{
 			int fakeVtable = 0;
 			EduEntry edu;
@@ -144,6 +144,17 @@ namespace eduThings
 			if (strcmp(entry.eopTypeName.c_str(), entryName)==0)
 			{
 				return (int*)&entry.data;
+			}
+		}
+		return nullptr;
+	}
+	NOINLINE EOP_EXPORT int* tryFindDataEopEduIndex(char* entryName)
+	{
+		for (eopEduEntry& entry : data.eopEdu)
+		{
+			if (strcmp(entry.eopTypeName.c_str(), entryName) == 0)
+			{
+				return (int*)&entry.data.edu.Index;
 			}
 		}
 		return nullptr;

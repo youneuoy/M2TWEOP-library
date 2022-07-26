@@ -3088,3 +3088,165 @@ void blockLaunchWithoutEop::SetNewCode()
 
 	delete a;
 }
+
+
+OntryFindTypeIdInListRecruitPoolEDB::OntryFindTypeIdInListRecruitPoolEDB(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0046e0e8;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0046dd28;
+}
+
+OntryFindTypeIdInListRecruitPoolEDB::~OntryFindTypeIdInListRecruitPoolEDB()
+{
+}
+
+void OntryFindTypeIdInListRecruitPoolEDB::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->pop(edi);
+	a->pop(esi);
+	a->pop(ebp);
+	a->xor_(eax,eax);
+	//push pointer to "%S.sav" string
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OntryFindTypeIdInListRecruitPoolEDB::SetNewCode()
+{
+	Assembler* a = new Assembler();
+	a->pop(edi);
+	a->pop(esi);
+	a->pop(ebp);
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(ecx, ecx);//just to indicate - string pointer in ecx
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+	a->mov(dword_ptr(esp, 0x1c), eax);//move eax to stored eax
+	a->popad();
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+OnrecruitPoolFillFromFile::OnrecruitPoolFillFromFile(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x008a9ce5;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x008a9305;
+}
+
+OnrecruitPoolFillFromFile::~OnrecruitPoolFillFromFile()
+{
+}
+
+void OnrecruitPoolFillFromFile::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	//        008a9ce5 8d  0c  85       LEA        this ,[typeId *0x4  + eduEntries ] 
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnrecruitPoolFillFromFile::SetNewCode()
+{
+	Assembler* a = new Assembler();
+	a->pop(edi);
+	a->pop(esi);
+	a->pop(ebp);
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(ecx, edi);//just to indicate - string pointer in ecx
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+	a->mov(dword_ptr(esp, 0x18), eax);//move eax to stored ecx
+	a->popad();
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+OnrecruitPoolFillFromFile2::OnrecruitPoolFillFromFile2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x008a9c19;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x008a9239;
+}
+
+OnrecruitPoolFillFromFile2::~OnrecruitPoolFillFromFile2()
+{
+}
+
+void OnrecruitPoolFillFromFile2::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	//        008a9c19 8d  14  8d       LEA        EDX ,[this *0x4  + eduEntries ]
+
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnrecruitPoolFillFromFile2::SetNewCode()
+{
+	Assembler* a = new Assembler();
+	a->pop(edi);
+	a->pop(esi);
+	a->pop(ebp);
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(ecx, edi);//just to indicate - string pointer in ecx
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+	a->mov(dword_ptr(esp, 0x14), eax);//move eax to stored edx
+	a->popad();
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

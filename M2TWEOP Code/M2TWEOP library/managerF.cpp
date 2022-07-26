@@ -437,6 +437,24 @@ void managerF::doPachs()
 	OnAutoSave* onAutoSave = new OnAutoSave(mem, (LPVOID)patchesForGame::onAutoSave, globals::dataS.gamever);
 	onAutoSave->SetNewCode();
 	onAutoSave->Enable();
+	f1 << "Done" << endl;	
+
+
+	f1 << "Start applying OntryFindTypeIdInListRecruitPoolEDB patch" << endl;
+	OntryFindTypeIdInListRecruitPoolEDB* ontryFindTypeIdInListRecruitPoolEDB = new OntryFindTypeIdInListRecruitPoolEDB(mem, (LPVOID)patchesForGame::ontryFindTypeIdInListRecruitPoolEDB, globals::dataS.gamever);
+	ontryFindTypeIdInListRecruitPoolEDB->SetNewCode();
+	ontryFindTypeIdInListRecruitPoolEDB->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying OnrecruitPoolFillFromFile patch" << endl;
+	OnrecruitPoolFillFromFile* onrecruitPoolFillFromFile = new OnrecruitPoolFillFromFile(mem, (LPVOID)patchesForGame::onrecruitPoolFillFromFile, globals::dataS.gamever);
+	onrecruitPoolFillFromFile->SetNewCode();
+	onrecruitPoolFillFromFile->Enable();
+	f1 << "Done" << endl;
+	f1 << "Start applying OnrecruitPoolFillFromFile2 patch" << endl;
+	OnrecruitPoolFillFromFile2* onrecruitPoolFillFromFile2 = new OnrecruitPoolFillFromFile2(mem, (LPVOID)patchesForGame::onrecruitPoolFillFromFile, globals::dataS.gamever);
+	onrecruitPoolFillFromFile2->SetNewCode();
+	onrecruitPoolFillFromFile2->Enable();
 	f1 << "Done" << endl;
 
 

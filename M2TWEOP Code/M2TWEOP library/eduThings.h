@@ -28,6 +28,7 @@ namespace eduThings
 	NOINLINE EOP_EXPORT int getDataEopEdu(int idx);
 	NOINLINE EOP_EXPORT int* tryFindDataEopEdu(char* entryName);
 
+	NOINLINE EOP_EXPORT int* tryFindDataEopEduIndex(char* entryName);
 
 
 	NOINLINE EOP_EXPORT void setEntryUnitCardTga(int entryIdx,const char*newCard);
