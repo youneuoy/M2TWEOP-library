@@ -7,6 +7,9 @@
 
 ## Release Notes
 
+###  Launcher
+- fixes
+
 ###  Library
 - Edu things: ability to create unit types from files
 
