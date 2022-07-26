@@ -43,19 +43,6 @@ void helpers::doEOPPipe(std::string& result, int waitSeconds)
         {
 
         }
-        while (mem.data[0] != 1&& GetTickCount64() < endTime)
-        {
-            Sleep(5);
-        }
-        if (GetTickCount64() > endTime)
-        {
-            break;
-        }
-        if (mem.data[0] == mem.data[1] == mem.data[2] == mem.data[3] ==1)
-        {
-            result = (char*)mem.data+4;
-            (*(int*)mem.data) = 0;
-        }
 
     } while (GetTickCount64() < endTime&& result.size()==0);
 
