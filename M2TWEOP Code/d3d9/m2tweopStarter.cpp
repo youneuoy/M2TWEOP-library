@@ -64,7 +64,7 @@ namespace m2tweopStarter
 	void doM2TWEOP()
 	{
 		string resMsg;
-		helpers::doEOPPipe(resMsg,3);
+		helpers::doEOPPipe(resMsg, 5);
 		dataEOP.isEOPipe=parsePipeMessage(resMsg);
 
 		if (dataEOP.isEOPipe == false)

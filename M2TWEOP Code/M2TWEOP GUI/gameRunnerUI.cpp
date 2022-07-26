@@ -80,7 +80,7 @@ namespace gameRunnerUI
 			 bp::start_dir = "..\\.."
 		);
 		gameProcess.detach();
-		bool startResult =helpers::doPipe(eopArgs, 20);
+		bool startResult =helpers::doPipe(eopArgs, 200);
 
 		
 		if (startResult == false)
