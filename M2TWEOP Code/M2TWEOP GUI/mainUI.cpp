@@ -113,7 +113,11 @@ namespace mainUI
 		}		
 		if (ImGui::Button("Open M2TWEOP documentation", helpers::getScreen().centerXButton))
 		{
-			HINSTANCE res=ShellExecuteA(NULL, "open", "eopData\\helpPages\\index.html", NULL, NULL, SW_SHOWNORMAL);
+			ShellExecuteA(NULL, "open", "eopData\\helpPages\\index.html", NULL, NULL, SW_SHOWNORMAL);
+		}
+		if (ImGui::Button("Open M2TWEOP website", helpers::getScreen().centerXButton))
+		{
+			ShellExecuteA(NULL, "open", "https://youneuoy.github.io/M2TWEOP-library/ ", NULL, NULL, SW_SHOWNORMAL);
 		}
 		ImGui::End();
 
