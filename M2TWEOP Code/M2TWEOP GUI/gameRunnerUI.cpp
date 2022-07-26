@@ -160,7 +160,7 @@ namespace gameRunnerUI
 				, startProcess.isEopNeeded);
 			thrUrl.detach();
 
-			startProcess.sendingEndTime = ImGui::GetTime() + 4.5f;
+			startProcess.sendingEndTime = ImGui::GetTime() + 34.5f;
 
 		}
 
