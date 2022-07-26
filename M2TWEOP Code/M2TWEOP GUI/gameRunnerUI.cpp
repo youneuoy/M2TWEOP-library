@@ -143,10 +143,7 @@ namespace gameRunnerUI
 
 		}
 
-
 		ImGui::End();
-
-
 
 		if (startProcess.isRunStarted == false)
 		{
@@ -161,9 +158,7 @@ namespace gameRunnerUI
 			thrUrl.detach();
 
 			startProcess.sendingEndTime = ImGui::GetTime() + 34.5f;
-
 		}
-
 
 		if ((startProcess.isRunEnded == true&& startProcess.isGetResponce == true)|| *isOpen==false)
 		{
