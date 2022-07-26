@@ -105,7 +105,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>winmm.lib;imm32.lib;version.lib;Setupapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <EnableUAC>true</EnableUAC>
       <AdditionalOptions>/Force:Multiple %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -130,7 +130,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>winmm.lib;imm32.lib;version.lib;Setupapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <EnableUAC>true</EnableUAC>
       <AdditionalOptions>/Force:Multiple %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -148,6 +148,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -164,6 +165,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -190,6 +192,7 @@
     <ClCompile Include="managerGHelpers.cpp" />
     <ClCompile Include="markdownHelper.cpp" />
     <ClCompile Include="modSettingsUI.cpp" />
+    <ClCompile Include="redistUI.cpp" />
     <ClCompile Include="toolRoutine.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +216,7 @@
     <ClInclude Include="..\3rd\ImNotify\font_awesome_5.h" />
     <ClInclude Include="..\3rd\ImNotify\imgui_notify.h" />
     <ClInclude Include="..\3rd\nlohmann\json.hpp" />
+    <ClInclude Include="..\M2TWEOP library\m2tweopConstData.h" />
     <ClInclude Include="aboutUI.h" />
     <ClInclude Include="dataG.h" />
     <ClInclude Include="gameRunnerUI.h" />
@@ -225,6 +229,7 @@
     <ClInclude Include="managerGHelpers.h" />
     <ClInclude Include="markdownHelper.h" />
     <ClInclude Include="modSettingsUI.h" />
+    <ClInclude Include="redistUI.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="toolRoutine.h" />
   </ItemGroup>

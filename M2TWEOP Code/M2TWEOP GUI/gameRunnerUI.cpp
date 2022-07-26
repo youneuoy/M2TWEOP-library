@@ -108,9 +108,6 @@ namespace gameRunnerUI
 		ImGui::Begin("This window should close automatically", isOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
 		// Animate a simple progress bar
-		static float progress = 0.0f, progress_dir = 1.0f;
-
-		progress += progress_dir * 0.4f * ImGui::GetIO().DeltaTime;
 
 		if (startProcess.isWindowTooSmall == false)
 		{
@@ -151,7 +148,7 @@ namespace gameRunnerUI
 
 
 
-		if (progress > 1.0f && startProcess.isRunStarted == false)
+		if (startProcess.isRunStarted == false)
 		{
 			startProcess.isRunStarted = true;
 

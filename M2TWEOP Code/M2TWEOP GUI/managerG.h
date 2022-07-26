@@ -6,4 +6,6 @@ namespace managerG
 	void init();
 
 	void saveSettings();
+
+	bool isRedistsInstallNeeded();
 };

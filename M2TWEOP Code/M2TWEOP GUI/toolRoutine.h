@@ -3,5 +3,6 @@
 namespace toolRoutine
 {
 	void tryJustStartMod();
-	int drawTick(bool* isOpen);
+	int __stdcall drawTick(bool* isOpen);
+	int __stdcall drawRedistTick(bool* isOpen);
 };

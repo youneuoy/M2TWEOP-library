@@ -5,4 +5,5 @@ namespace managerG
 {
 	void loadTextures();
 	void loadFonts();
+	bool isLibraryLoadable(const string& path);
 };

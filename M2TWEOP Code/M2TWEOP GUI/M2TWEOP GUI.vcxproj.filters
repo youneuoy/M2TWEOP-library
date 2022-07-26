@@ -43,6 +43,9 @@
     <Filter Include="3rd\json">
       <UniqueIdentifier>{5e19e956-b8b1-4e68-b229-61ed171262cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\ui\redists">
+      <UniqueIdentifier>{ad2c4b91-ba09-485f-8602-acb5ad7cc75a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -116,6 +119,9 @@
     </ClCompile>
     <ClCompile Include="..\3rd\imguiDocking\eopImgui.cpp">
       <Filter>3rd\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="redistUI.cpp">
+      <Filter>Исходные файлы\ui\redists</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +226,12 @@
     </ClInclude>
     <ClInclude Include="..\3rd\nlohmann\json.hpp">
       <Filter>3rd\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\M2TWEOP library\m2tweopConstData.h">
+      <Filter>Файлы ресурсов</Filter>
+    </ClInclude>
+    <ClInclude Include="redistUI.h">
+      <Filter>Исходные файлы\ui\redists</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

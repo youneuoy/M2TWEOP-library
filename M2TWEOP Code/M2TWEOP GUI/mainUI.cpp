@@ -75,6 +75,7 @@ namespace mainUI
 			logoSize.x = csz.x;
 			logoSize.y = csz.x * r;
 		}
+		ImGui::SetCursorPosX((windowSize.x - logoSize.x) * 0.5f);
 		ImGui::Image((void*)(intptr_t)imgFinded->image, logoSize);
 
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.584, 0.270, 0.250, 1.0f));

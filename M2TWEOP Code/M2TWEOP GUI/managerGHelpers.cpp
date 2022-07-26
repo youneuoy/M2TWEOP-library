@@ -39,4 +39,18 @@ namespace managerG
 		loadFont(&dataG::data.fonts.markdownH2Font, "eopData/fonts/markdownH2Font.ttf", "markdownH2Font", 18.f);
 		loadFont(&dataG::data.fonts.markdownH3Font, "eopData/fonts/markdownH3Font.ttf", "markdownH3Font", 22.f);
 	}
+	bool isLibraryLoadable(const string& path)
+	{
+		bool retVal = true;
+		HMODULE hmod = LoadLibraryA(path.c_str());
+		if (hmod == NULL)
+		{
+			retVal = false;
+		}
+		else
+		{
+			FreeLibrary(hmod);
+		}
+		return retVal;
+	}
 };

@@ -119,6 +119,36 @@ void initRender()
 
 
 }
+typedef int __stdcall appTickFunc(bool*isOpen);
+void runApp(appTickFunc drawTick)
+{    
+    bool done = false;
+    bool isGUIOpen = true;
+    // Main loop
+    while (!done)
+    {
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            ImGui_ImplSDL2_ProcessEvent(&event);
+            if (event.type == SDL_QUIT)
+                done = true;
+            if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(mainData.window))
+                done = true;
+        }
+        beginRender();
+
+        drawTick(&isGUIOpen);
+
+        endRender();
+
+        if (isGUIOpen == false || done == true)
+        {
+            break;
+        }
+    }
+}
+
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {
     initRender();
@@ -134,6 +164,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     int isExit = 0;
 
     bool done = false;
+
+
+    bool isRedistsInstallNeeded = managerG::isRedistsInstallNeeded();
+    if (isRedistsInstallNeeded == true)
+    {
+        runApp(toolRoutine::drawRedistTick);
+    }
 
     if (!done)
     {
@@ -153,6 +190,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
         endRender();
     }
+
+
     dataG::data.audio.bkgMusic.music = new sf::Music();
     if (dataG::data.modData.hideLauncherAtStart == false)
     {
@@ -169,28 +208,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
             }
     }
     // Main loop
-    while (!done)
-    {
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
-            ImGui_ImplSDL2_ProcessEvent(&event);
-            if (event.type == SDL_QUIT)
-                done = true;
-            if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(mainData.window))
-                done = true;
-        }
-        beginRender();
-
-        isExit =toolRoutine::drawTick(&isOpen);
-
-        endRender();
-
-        if (isExit == 1|| done==true)
-        {
-            break;
-        }
-    }
+    runApp(toolRoutine::drawTick);
 
     // Cleanup
     ImGui_ImplOpenGL2_Shutdown();

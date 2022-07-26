@@ -314,7 +314,7 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 	ImGuiIO& io = ImGui::GetIO();
 	io.IniFilename = nullptr;
 	io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags &= ~ImGuiConfigFlags_NavEnableKeyboard;
 	io.MouseDrawCursor = false;
 	string f = globals::dataS.modPatch;
 	if (f.size() == 0)

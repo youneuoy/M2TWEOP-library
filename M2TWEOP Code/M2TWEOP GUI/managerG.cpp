@@ -156,4 +156,38 @@ namespace managerG
 
 		f1.close();
 	}
+	bool isRedistsInstallNeeded()
+	{
+		return (!isLibraryLoadable("M2TWEOPLibrary.dll") || !isLibraryLoadable("d3d9.dll"));
+
+
+		//variant 2
+		// 
+		// 
+		//std::string fileVerName;
+
+		//bool retVal = false;
+
+		//std::string fPath = "..\\..\\eopVer.json";
+		//jsn::json json = loadJsonFromFile(fPath);
+
+		//try
+		//{
+		//	if (json.contains("fileVerName"))
+		//	{
+		//		getJson(fileVerName, "fileVerName");
+		//	}
+		//	if (fileVerName != std::string(eopConstData::eopVersionName))
+		//	{
+		//		retVal = true;
+		//	}
+		//}
+		//catch (...)
+		//{
+		//	retVal = true;
+		//}
+		//
+	
+		//return retVal;
+	}
 };
