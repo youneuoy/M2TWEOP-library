@@ -128,84 +128,21 @@ ImFont* helpers::findFont(const char* name)
 	}
 	return findFont("mainFont");
 }
-std::wstring helpers::get_wstring(const std::string& str)
-{
-	const char* c = str.c_str();
-	const size_t cSize = str.size() + 1;
-	wchar_t* wc = new wchar_t[cSize];
-	mbstowcs(wc, c, cSize);
-	std::wstring w_string(wc);
-	delete[] wc;
-	return w_string;
-}
-size_t helpers::ExecuteProcess(std::wstring FullPathToExe, std::wstring Parameters, size_t SecondsToWait)
-{
-	size_t iMyCounter = 0, iReturnVal = 0, iPos = 0;
-	DWORD dwExitCode = 0;
-	std::wstring sTempStr = L"";
-
-	/* - NOTE - You should check here to see if the exe even exists */
-
-	/* Add a space to the beginning of the Parameters */
-	if (Parameters.size() != 0)
-	{
-		if (Parameters[0] != L' ')
-		{
-			Parameters.insert(0, L" ");
-		}
-	}
-
-	/* The first parameter needs to be the exe itself */
-	sTempStr = FullPathToExe;
-	iPos = sTempStr.find_last_of(L"\\");
-	sTempStr.erase(0, iPos + 1);
-	Parameters = sTempStr.append(Parameters);
-
-	/* CreateProcessW can modify Parameters thus we allocate needed memory */
-	wchar_t* pwszParam = new wchar_t[Parameters.size() + 1];
-	if (pwszParam == 0)
-	{
-		return 1;
-	}
-	const wchar_t* pchrTemp = Parameters.c_str();
-	wcscpy_s(pwszParam, Parameters.size() + 1, pchrTemp);
-
-	/* CreateProcess API initialization */
-	STARTUPINFOW siStartupInfo;
-	PROCESS_INFORMATION piProcessInfo;
-	memset(&siStartupInfo, 0, sizeof(siStartupInfo));
-	memset(&piProcessInfo, 0, sizeof(piProcessInfo));
-	siStartupInfo.cb = sizeof(siStartupInfo);
-
-	if (CreateProcessW(const_cast<LPCWSTR>(FullPathToExe.c_str()),
-		pwszParam, 0, 0, false,
-		CREATE_DEFAULT_ERROR_MODE, 0, L"..\\..",
-		&siStartupInfo, &piProcessInfo) != false)
-	{
-		/* Watch the process. */
-		dwExitCode = WaitForSingleObject(piProcessInfo.hProcess, (SecondsToWait * 1000));
-	}
-	else
-	{
-		/* CreateProcess failed */
-		iReturnVal = GetLastError();
-	}
-
-	/* Free memory */
-	delete[]pwszParam;
-	pwszParam = 0;
-
-	/* Release handles */
-	CloseHandle(piProcessInfo.hProcess);
-	CloseHandle(piProcessInfo.hThread);
-
-	return iReturnVal;
-}
+#include <boost/process.hpp>
 
 void helpers::runGame(const char* exeFile, const char* exeParam)
 {
-	helpers::ExecuteProcess(helpers::get_wstring(dataG::data.gameData.gamePath), helpers::get_wstring(exeParam), 20);
+	namespace bp = boost::process;
+	string line;
+	line+= "\"";
+	line += dataG::data.gameData.gamePath;
+	line += "\"";
 
+	line += exeParam;
+	bp::child c(bp::cmd(line)
+		, bp::start_dir = "..\\.."
+	);
+	c.wait();
 
 }
 

@@ -29,7 +29,7 @@
 #include <tchar.h>
 
 using namespace std;
-
+#include <boost/filesystem.hpp>
 struct fontS
 {
 	ImFont* font;

@@ -107,6 +107,8 @@ ImFont* helpers::findFont(const char* name)
 	}
 	return findFont("mainFont");
 }
+#include <boost/process.hpp>
+
 
 int makeFullPath(string& path)
 {

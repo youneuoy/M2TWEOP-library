@@ -1,5 +1,4 @@
 #include "filesGenerator.h"
-#include <thread>
 
 void filesGenerator::startConvertation(string excellPath, string destPath, atomic_bool& generationEnded)
 {

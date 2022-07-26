@@ -1,6 +1,5 @@
 #include "modelsFilesWorker.h"
 #include "helpers.h"
-#include <thread>
 
 void modelsFilesWorker::startConvertation(selectedFilesS& selectedFiles, atomic_bool& convertationEnded)
 {

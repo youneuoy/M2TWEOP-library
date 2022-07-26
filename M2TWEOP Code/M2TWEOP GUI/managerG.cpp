@@ -3,7 +3,6 @@
 
 #include "managerGHelpers.h"
 #include "modSettingsUI.h"
-#include <iomanip>
 namespace managerG
 {
 	void loadSettings();

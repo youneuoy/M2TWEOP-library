@@ -3,9 +3,6 @@
 class helpers
 {
 public:
-	static size_t ExecuteProcess(std::wstring FullPathToExe, std::wstring Parameters, size_t SecondsToWait);
-
-	static std::wstring get_wstring(const std::string& str);
 	//make formated string
 	static std::string makeFString(const char* fmt, ...);
 
