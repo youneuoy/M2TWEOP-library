@@ -20,6 +20,7 @@
 
 ### Documentation
 - Updated
+- Updated Erken's ImGUI tutorial to V3
 
 ### Bugfixes
 - fixes for launch process
