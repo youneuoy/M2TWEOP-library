@@ -53,7 +53,7 @@ namespace managerG
 		{
 			MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 		}
-		
+
 		fPath = ".\\eopData\\gameCfg.json";
 		json= loadJsonFromFile(fPath);
 
@@ -109,6 +109,15 @@ namespace managerG
 				getline(f1, s);
 				dataG::data.audio.bkgMusic.musicVolume = stoi(s);
 			}
+			else if (s == "Mod_title:")
+			{
+				getline(f1, dataG::data.gameData.modTitle);
+			}
+			else if (s == "Button_color:")
+			{
+				getline(f1, s);
+				dataG::data.gameData.buttonColor = stoi(s, 0, 16);
+			}
 		}
 
 
@@ -162,8 +171,8 @@ namespace managerG
 
 
 		//variant 2
-		// 
-		// 
+		//
+		//
 		//std::string fileVerName;
 
 		//bool retVal = false;
@@ -187,7 +196,7 @@ namespace managerG
 		//	retVal = true;
 		//}
 		//
-	
+
 		//return retVal;
 	}
 };

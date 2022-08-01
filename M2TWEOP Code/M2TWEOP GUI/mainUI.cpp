@@ -63,7 +63,23 @@ namespace mainUI
 
 		ImGui::SetNextWindowPos(helpers::getScreen().screenHalfSize, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
 		ImGui::SetNextWindowSize(ImVec2(windowSize.x, -1), ImGuiCond_Once);
-		ImGui::Begin("M2TWEOP", isOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+
+		// Set the title of the window and the main highlighted button to
+		// the name of the mod as defined in M2TWEOPGUI.cfg
+		string windowTitle;
+		string runTitle;
+		string modTitle = dataG::data.gameData.modTitle;
+
+		if(modTitle == "") {
+			windowTitle = "M2TWEOP";
+			runTitle = "Run mod";
+		}
+		else {
+			windowTitle = modTitle;
+			runTitle =  "Run " + modTitle;
+		}
+
+		ImGui::Begin(windowTitle.c_str(), isOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
 		const char logoName[] = "eopData/images/logoAbout.png";
 		GLImage* imgFinded = helpers::findImage("eopData/images/logoAbout.png", sizeof logoName-1);
@@ -78,13 +94,15 @@ namespace mainUI
 		ImGui::SetCursorPosX((windowSize.x - logoSize.x) * 0.5f);
 		ImGui::Image((void*)(intptr_t)imgFinded->image, logoSize);
 
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.584, 0.270, 0.250, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImColor(dataG::data.gameData.buttonColor));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.564, 0.250, 0.230, 1.0f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.804, 0.490, 0.470, 1.0f));
 		ImGuiContext& g = *GImGui;
 		const ImGuiStyle& style = g.Style;
-		const ImVec2 label_size = ImGui::CalcTextSize("Run mod", NULL, true);
-		if (ImGui::Button("Run mod", ImVec2(-1.0f,(label_size.y + style.FramePadding.y * 2.0f)*2)))
+
+		const ImVec2 label_size = ImGui::CalcTextSize(runTitle.c_str(), NULL, true);
+
+		if (ImGui::Button(runTitle.c_str(), ImVec2(-1.0f,(label_size.y + style.FramePadding.y * 2.0f)*2)))
 		{
 			dataG::data.gameData.gameMode = 7;
 			gameStarter::startGame();
@@ -101,7 +119,7 @@ namespace mainUI
 			childs.isModSettingsUIOpen = true;
 		}
 		ImGui::NewLine();
-		if (ImGui::Button("Run vanilla or dlc(no M2TWEOP capabilities)", helpers::getScreen().centerXButton))
+		if (ImGui::Button("Run vanilla or DLC without M2TWEOP", helpers::getScreen().centerXButton))
 		{
 			childs.isGameSTDMenuOpen = true;
 		}
@@ -110,7 +128,7 @@ namespace mainUI
 		if (ImGui::Button("About M2TWEOP", helpers::getScreen().centerXButton))
 		{
 			childs.isAboutOpen = true;
-		}		
+		}
 		if (ImGui::Button("Open M2TWEOP documentation", helpers::getScreen().centerXButton))
 		{
 			ShellExecuteA(NULL, "open", "eopData\\helpPages\\index.html", NULL, NULL, SW_SHOWNORMAL);

@@ -26,6 +26,10 @@ public:
 			string exeName;
 			string gameArgs;
 
+			// Customization Options
+			string modTitle;
+			ImU32 buttonColor;
+
 			int gameVer = 0;
 
 			bool isBlockLaunchWithoutEop = false;
