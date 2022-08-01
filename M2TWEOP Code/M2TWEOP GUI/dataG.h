@@ -29,6 +29,7 @@ public:
 			// Customization Options
 			string modTitle;
 			ImU32 buttonColor;
+			ImU32 buttonHoverColor;
 
 			int gameVer = 0;
 

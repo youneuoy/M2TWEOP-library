@@ -100,7 +100,12 @@ namespace mainUI
 			ImGui::PushStyleColor(ImGuiCol_Button, dataG::data.gameData.buttonColor);
 		}
 
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.564, 0.250, 0.230, 1.0f));
+		if(!dataG::data.gameData.buttonHoverColor) {
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.564, 0.250, 0.230, 1.0f));
+		} else {
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, dataG::data.gameData.buttonHoverColor);
+		}
+
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.804, 0.490, 0.470, 1.0f));
 		ImGuiContext& g = *GImGui;
 		const ImGuiStyle& style = g.Style;

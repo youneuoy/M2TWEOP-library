@@ -116,7 +116,26 @@ namespace managerG
 			else if (s == "Button_color:")
 			{
 				getline(f1, s);
-				dataG::data.gameData.buttonColor = stoi(s, 0, 16);
+				try
+				{
+					dataG::data.gameData.buttonColor = stoi(s, 0, 16);
+				}
+				catch (std::exception& e)
+				{
+					MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+				}
+			}
+			else if (s == "Button_hover_color:")
+			{
+				getline(f1, s);
+				try
+				{
+					dataG::data.gameData.buttonHoverColor = stoi(s, 0, 16);
+				}
+				catch (std::exception& e)
+				{
+					MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+				}
 			}
 		}
 

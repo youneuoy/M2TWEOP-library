@@ -8,7 +8,19 @@
 ## Release Notes
 
 ###  Launcher
-- added M2TWEOP health checker(this will appear automatically if there are potential startup problems)
+- Added M2TWEOP health checker (this will appear automatically if there are potential startup problems)
+- Added new launcher config options
+
+e.g
+
+```
+Mod_title:
+Divide and Conquer AGO
+Button_color:
+5c67ffe8
+Button_hover_color:
+5c67e8ff
+```
 
 ###  Library
 - Edu things: ability to create unit types from files
