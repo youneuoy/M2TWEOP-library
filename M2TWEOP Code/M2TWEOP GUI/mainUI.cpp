@@ -94,7 +94,12 @@ namespace mainUI
 		ImGui::SetCursorPosX((windowSize.x - logoSize.x) * 0.5f);
 		ImGui::Image((void*)(intptr_t)imgFinded->image, logoSize);
 
-		ImGui::PushStyleColor(ImGuiCol_Button, ImColor(dataG::data.gameData.buttonColor));
+		if(!dataG::data.gameData.buttonColor) {
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.584, 0.270, 0.250, 1.0f));
+		} else {
+			ImGui::PushStyleColor(ImGuiCol_Button, dataG::data.gameData.buttonColor);
+		}
+
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.564, 0.250, 0.230, 1.0f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.804, 0.490, 0.470, 1.0f));
 		ImGuiContext& g = *GImGui;

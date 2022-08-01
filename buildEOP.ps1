@@ -60,7 +60,7 @@ Copy-Item -Path  "M2TWEOP Code\Release\M2TWEOPLibrary.dll" -Destination "./M2TWE
 # 5) Generate Release ZIP
 Write-Output "$color======== 5) Generate Release ZIP ======== $endColor"
 Remove-item M2TWEOP.zip -erroraction 'silentlycontinue'
-Compress-Archive -Path "./M2TWEOPGenerated/*"  -DestinationPath "M2TWEOP.zip" -Force
+Compress-Archive -Path "./M2TWEOPGenerated/*"  -DestinationPath "M2TWEOP.zip"
 Remove-item ./M2TWEOPGenerated -recurse -erroraction 'silentlycontinue'
 
 # 6) Done
