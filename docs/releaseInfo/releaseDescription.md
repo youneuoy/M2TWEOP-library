@@ -9,7 +9,7 @@
 
 ###  Launcher
 - Added M2TWEOP health checker (this will appear automatically if there are potential startup problems)
-- Added new launcher config options
+- Added new launcher config options to set the window title, 'Run mod' message and button colors - Medik
 
 e.g
 
