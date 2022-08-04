@@ -84,12 +84,14 @@ namespace managerG
 	{
 		std::string fPath = ".\\eopData\\uiCfg.json";
 		jsn::json json = loadJsonFromFile(fPath);
+		std::string jsonStringValue;
 
 		try
 		{
 			if (json.contains("useVanillaCfg"))
 			{
-				getJson(dataG::data.modData.useVanillaConfig, "useVanillaCfg");
+				getJson(jsonStringValue, "useVanillaCfg");
+				dataG::data.modData.useVanillaConfig = stoi(jsonStringValue);
 			}
 			if(json.contains("modCfgFile"))
 			{
@@ -97,19 +99,23 @@ namespace managerG
 			}
 			if(json.contains("useM2TWEOP"))
 			{
-				getJson(dataG::data.modData.useM2TWEOP, "useM2TWEOP");
+				getJson(jsonStringValue, "useM2TWEOP");
+				dataG::data.modData.useM2TWEOP = stoi(jsonStringValue);
 			}
 			if(json.contains("hideLauncher"))
 			{
-				getJson(dataG::data.modData.hideLauncherAtStart, "hideLauncher");
+				getJson(jsonStringValue, "hideLauncher");
+				dataG::data.modData.hideLauncherAtStart = stoi(jsonStringValue);
 			}
 			if(json.contains("playBackgroundMusic"))
 			{
-				getJson(dataG::data.audio.bkgMusic.isMusicNeeded, "playBackgroundMusic");
+				getJson(jsonStringValue, "playBackgroundMusic");
+				dataG::data.audio.bkgMusic.isMusicNeeded = stoi(jsonStringValue);
 			}
 			if (json.contains("musicVolume"))
 			{
-				getJson(dataG::data.audio.bkgMusic.musicVolume, "musicVolume");
+				getJson(jsonStringValue, "musicVolume");
+				dataG::data.audio.bkgMusic.musicVolume = stoi(jsonStringValue);
 			}
 			if (json.contains("modTitle"))
 			{
@@ -117,11 +123,13 @@ namespace managerG
 			}
 			if (json.contains("runButtonColor"))
 			{
-				getJson(dataG::data.gameData.buttonColor, "buttonColor");
+				getJson(jsonStringValue, "buttonColor");
+				dataG::data.gameData.buttonColor = stoi(jsonStringValue, 0, 16); // Convert to hex
 			}
 			if (json.contains("runButtonHoverColor"))
 			{
-				getJson(dataG::data.gameData.buttonHoverColor, "runButtonHoverColor");
+				getJson(jsonStringValue, "runButtonHoverColor");
+				dataG::data.gameData.buttonHoverColor = stoi(jsonStringValue, 0, 16);  // Convert to hex
 			}
 		}
 		catch (jsn::json::type_error& e)
