@@ -32,12 +32,12 @@ namespace managerG
 			f1.close();
 			return std::move(json);
 		}
-		catch
+		catch (jsn::json::exception& e)
 		{
 			MessageBoxA(NULL, e.what(), "Could not load JSON from file!", MB_APPLMODAL | MB_SETFOREGROUND);
 		}
-
 	}
+
 
 	void loadBattleConfig()
 	{
@@ -64,8 +64,8 @@ namespace managerG
 	void loadGameConfig()
 	{
 
-		fPath = ".\\eopData\\gameCfg.json";
-		json= loadJsonFromFile(fPath);
+		std::string fPath = ".\\eopData\\gameCfg.json";
+		jsn::json json = loadJsonFromFile(fPath);
 
 		try
 		{
@@ -82,8 +82,8 @@ namespace managerG
 
 	void loadUIConfig()
 	{
-		fPath = ".\\eopData\\uiCfg.json";
-		json= loadJsonFromFile(fPath);
+		std::string fPath = ".\\eopData\\uiCfg.json";
+		jsn::json json = loadJsonFromFile(fPath);
 
 		try
 		{
@@ -111,33 +111,17 @@ namespace managerG
 			{
 				getJson(dataG::data.audio.bkgMusic.musicVolume, "musicVolume");
 			}
-			else if (s == "Mod_title:")
+			if (json.contains("modTitle"))
 			{
-				getline(f1, dataG::data.gameData.modTitle);
+				getJson(dataG::data.gameData.modTitle, "modTitle");
 			}
-			else if (s == "Button_color:")
+			if (json.contains("runButtonColor"))
 			{
-				getline(f1, s);
-				try
-				{
-					dataG::data.gameData.buttonColor = stoi(s, 0, 16);
-				}
-				catch (std::exception& e)
-				{
-					MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
-				}
+				getJson(dataG::data.gameData.buttonColor, "buttonColor");
 			}
-			else if (s == "Button_hover_color:")
+			if (json.contains("runButtonHoverColor"))
 			{
-				getline(f1, s);
-				try
-				{
-					dataG::data.gameData.buttonHoverColor = stoi(s, 0, 16);
-				}
-				catch (std::exception& e)
-				{
-					MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
-				}
+				getJson(dataG::data.gameData.buttonHoverColor, "runButtonHoverColor");
 			}
 		}
 		catch (jsn::json::type_error& e)
