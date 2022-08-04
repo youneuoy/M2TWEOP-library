@@ -5,7 +5,7 @@ namespace managerG
 	//load settings and init
 	void init();
 
-	void saveSettings();
+	void saveJsonSettings();
 
 	bool isRedistsInstallNeeded();
 };
