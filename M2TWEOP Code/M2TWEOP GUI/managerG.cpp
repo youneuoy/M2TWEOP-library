@@ -15,25 +15,31 @@ namespace managerG
 		loadFonts();
 		loadSettings();
 
-
 		modSettingsUI::initSettingsUI();
 	}
 
 	jsn::json loadJsonFromFile(const std::string&fpath)
 	{
-		jsn::json json;
-
-
-		std::ifstream f1(fpath);
-		if (f1.is_open())
+		try
 		{
-			f1 >> json;
-		}
-		f1.close();
+			jsn::json json;
 
-		return std::move(json);
+			std::ifstream f1(fpath);
+			if (f1.is_open())
+			{
+				f1 >> json;
+			}
+			f1.close();
+			return std::move(json);
+		}
+		catch
+		{
+			MessageBoxA(NULL, e.what(), "Could not load JSON from file!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
+
 	}
-	void loadJsonSettings()
+
+	void loadBattleConfig()
 	{
 		std::string fPath = ".\\eopBattles\\battlesCfg.json";
 		jsn::json json= loadJsonFromFile(fPath);
@@ -51,9 +57,13 @@ namespace managerG
 		}
 		catch (jsn::json::type_error& e)
 		{
-			MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+			MessageBoxA(NULL, e.what(), "Could not read JSON in battlesCfg.json!", MB_APPLMODAL | MB_SETFOREGROUND);
 		}
-		
+	}
+
+	void loadGameConfig()
+	{
+
 		fPath = ".\\eopData\\gameCfg.json";
 		json= loadJsonFromFile(fPath);
 
@@ -66,104 +76,99 @@ namespace managerG
 		}
 		catch (jsn::json::type_error& e)
 		{
-			MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+			MessageBoxA(NULL, e.what(), "Could not read JSON in gameCfg.json", MB_APPLMODAL | MB_SETFOREGROUND);
 		}
 	}
-	void loadSettings()
+
+	void loadUIConfig()
 	{
-		loadJsonSettings();
-		ifstream f1("M2TWEOPGUI.cfg");
+		fPath = ".\\eopData\\uiCfg.json";
+		json= loadJsonFromFile(fPath);
 
-
-		string s;
-		while (f1.good())
+		try
 		{
-			getline(f1, s);
-
-			if (s == "Use_vanilla_cfg:")
+			if (json.contains("useVanillaCfg"))
 			{
-				getline(f1, s);
-				dataG::data.modData.useVanillaConfig = stoi(s);
+				getJson(dataG::data.modData.useVanillaConfig, "useVanillaCfg");
 			}
-			else if (s == "Mod_cfg_file:")
+			if(json.contains("modCfgFile"))
 			{
-				getline(f1, dataG::data.modData.configName);
+				getJson(dataG::data.modData.configName, "modCfgFile");
 			}
-			else if (s == "Use_M2TWEOP:")
+			if(json.contains("useM2TWEOP"))
 			{
-				getline(f1, s);
-				dataG::data.modData.useM2TWEOP = stoi(s);
+				getJson(dataG::data.modData.useM2TWEOP, "useM2TWEOP");
 			}
-			else if (s == "Hide_launcher:")
+			if(json.contains("hideLauncher"))
 			{
-				getline(f1, s);
-				dataG::data.modData.hideLauncherAtStart = stoi(s);
+				getJson(dataG::data.modData.hideLauncherAtStart, "hideLauncher");
 			}
-			else if (s == "Play_background_music:")
+			if(json.contains("playBackgroundMusic"))
 			{
-				getline(f1, s);
-				dataG::data.audio.bkgMusic.isMusicNeeded = stoi(s);
+				getJson(dataG::data.audio.bkgMusic.isMusicNeeded, "playBackgroundMusic");
 			}
-			else if (s == "Music_volume:")
+			if (json.contains("musicVolume"))
 			{
-				getline(f1, s);
-				dataG::data.audio.bkgMusic.musicVolume = stoi(s);
+				getJson(dataG::data.audio.bkgMusic.musicVolume, "musicVolume");
 			}
 		}
-
-
-		f1.close();
+		catch (jsn::json::type_error& e)
+		{
+			MessageBoxA(NULL, e.what(), "Could not read JSON in uiCfg.json", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
 	}
+
+	void loadJsonSettings()
+	{
+		loadBattleConfig();
+		loadGameConfig();
+		loadUIConfig();
+	}
+
 	void writeJsonToFile(const std::string& fpath,const jsn::json& json)
 	{
 		ofstream f1(fpath);
 		f1 << setw(4) << json;
 		f1.close();
 	}
+
 	void saveJsonSettings()
 	{
-		std::string fPath = ".\\eopBattles\\battlesCfg.json";
-
 		jsn::json json;
+		std::string fPath;
+
+		// Save battle config
+		fPath = ".\\eopBattles\\battlesCfg.json";
 		setJson("enableAutoGeneration", dataG::data.battlesData.isGenerationNeeded);
 		setJson("enableResultsTransfer", dataG::data.battlesData.isResultTransferNeeded);
-
 		writeJsonToFile(fPath, json);
-
 		json.clear();
+
+		// Save game config
 		fPath = ".\\eopData\\gameCfg.json";
 		setJson("isBlockLaunchWithoutEop", dataG::data.gameData.isBlockLaunchWithoutEop);
 		writeJsonToFile(fPath, json);
+		json.clear();
+
+		// Save UI config
+		fPath = ".\\eopData\\uiCfg.json";
+		setJson("useVanillaCfg", dataG::data.modData.useVanillaConfig);
+		setJson("modCfgFile", dataG::data.modData.configName);
+		setJson("useM2TWEOP", dataG::data.modData.useM2TWEOP);
+		setJson("hideLauncher", dataG::data.modData.hideLauncherAtStart);
+		setJson("playBackgroundMusic", dataG::data.audio.bkgMusic.isMusicNeeded);
+		setJson("musicVolume", dataG::data.audio.bkgMusic.musicVolume);
+		writeJsonToFile(fPath, json);
+		json.clear();
 	}
-	void saveSettings()
-	{
-		saveJsonSettings();
-		ofstream f1("M2TWEOPGUI.cfg");
 
-		f1 << "Use_vanilla_cfg:" << endl;
-		f1 << dataG::data.modData.useVanillaConfig << endl;
-		f1 << "Mod_cfg_file:" << endl;
-		f1 << dataG::data.modData.configName << endl;
-		f1 << "Use_M2TWEOP:" << endl;
-		f1 << dataG::data.modData.useM2TWEOP << endl;
-		f1 << "Hide_launcher:" << endl;
-		f1 << dataG::data.modData.hideLauncherAtStart << endl;
-		f1 << "Play_background_music:" << endl;
-		f1 << dataG::data.audio.bkgMusic.isMusicNeeded << endl;
-		f1 << "Music_volume:" << endl;
-		f1 << dataG::data.audio.bkgMusic.musicVolume << endl;
-
-
-		f1.close();
-	}
 	bool isRedistsInstallNeeded()
 	{
 		return (!isLibraryLoadable("M2TWEOPLibrary.dll") || !isLibraryLoadable("d3d9.dll"));
 
-
 		//variant 2
-		// 
-		// 
+		//
+		//
 		//std::string fileVerName;
 
 		//bool retVal = false;
@@ -187,7 +192,7 @@ namespace managerG
 		//	retVal = true;
 		//}
 		//
-	
+
 		//return retVal;
 	}
 };
