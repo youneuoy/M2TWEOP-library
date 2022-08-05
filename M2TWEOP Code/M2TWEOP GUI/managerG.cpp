@@ -4,6 +4,7 @@
 #include "managerGHelpers.h"
 #include "modSettingsUI.h"
 #include <iomanip>
+#include <regex>
 
 namespace managerG
 {
@@ -84,6 +85,7 @@ namespace managerG
 	void loadUIConfig()
 	{
 		std::string fPath = ".\\eopData\\uiCfg.json";
+		std::regex regex{ R"([\,\s]+)" };
 		jsn::json json = loadJsonFromFile(fPath);
 		std::string jsonStringValue;
 		std:bool jsonBoolValue;
@@ -122,18 +124,26 @@ namespace managerG
 			{
 				getJson(dataG::data.gameData.modTitle, "modTitle");
 			}
-			//if (json.contains("runButtonColor"))
-			//{
-				// getJson(jsonStringValue, "buttonColor");
-				jsonStringValue = "f024b6";
-				dataG::data.gameData.buttonColor = stoi(jsonStringValue, NULL, 16); // Convert to hex
-		//	}
-			//if (json.contains("runButtonHoverColor"))
-			//{
-				// getJson(jsonStringValue, "runButtonHoverColor");
-				jsonStringValue = "cfbfe5";
-				dataG::data.gameData.buttonHoverColor = stoi(jsonStringValue, NULL, 16);  // Convert to hex
-			//}
+			if (json.contains("runButtonColor"))
+			{
+				getJson(dataG::data.gameData.buttonColorString, "runButtonColor");
+				std::sregex_token_iterator it{ dataG::data.gameData.buttonColorString.begin(), dataG::data.gameData.buttonColorString.end(), regex, -1};
+				std::vector<std::string> colorValues{ it, {}};
+				dataG::data.gameData.buttonColor.r = stoi(colorValues[0]);
+				dataG::data.gameData.buttonColor.g = stoi(colorValues[1]);
+				dataG::data.gameData.buttonColor.b = stoi(colorValues[2]);
+				dataG::data.gameData.buttonColor.a = stoi(colorValues[3]);
+			}
+			if (json.contains("runButtonHoverColor"))
+			{
+				getJson(dataG::data.gameData.buttonHoverColorString, "runButtonHoverColor");
+				std::sregex_token_iterator it_2{ dataG::data.gameData.buttonHoverColorString.begin(), dataG::data.gameData.buttonHoverColorString.end(), regex, -1 };
+				std::vector<std::string> hoverColorValues{ it_2, {} };
+				dataG::data.gameData.buttonHoverColor.r = stoi(hoverColorValues[0]);
+				dataG::data.gameData.buttonHoverColor.g = stoi(hoverColorValues[1]);
+				dataG::data.gameData.buttonHoverColor.b = stoi(hoverColorValues[2]);
+				dataG::data.gameData.buttonHoverColor.a = stoi(hoverColorValues[3]);
+			}
 		}
 		catch (jsn::json::type_error& e)
 		{
@@ -181,6 +191,9 @@ namespace managerG
 		setJson("hideLauncher", dataG::data.modData.hideLauncherAtStart);
 		setJson("playBackgroundMusic", dataG::data.audio.bkgMusic.isMusicNeeded);
 		setJson("musicVolume", dataG::data.audio.bkgMusic.musicVolume);
+		setJson("modTitle", dataG::data.gameData.modTitle);
+		setJson("runButtonColor", dataG::data.gameData.buttonColorString);
+		setJson("runButtonHoverColor", dataG::data.gameData.buttonHoverColorString);
 		writeJsonToFile(fPath, json);
 		json.clear();
 	}

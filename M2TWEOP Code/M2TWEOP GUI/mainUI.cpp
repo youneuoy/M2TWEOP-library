@@ -94,16 +94,26 @@ namespace mainUI
 		ImGui::SetCursorPosX((windowSize.x - logoSize.x) * 0.5f);
 		ImGui::Image((void*)(intptr_t)imgFinded->image, logoSize);
 
-		if(!dataG::data.gameData.buttonColor) {
+		if(dataG::data.gameData.buttonColorString == "") {
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.584, 0.270, 0.250, 1.0f));
 		} else {
-			ImGui::PushStyleColor(ImGuiCol_Button, dataG::data.gameData.buttonColor);
+			ImGui::PushStyleColor(ImGuiCol_Button, IM_COL32(
+				dataG::data.gameData.buttonColor.r,
+				dataG::data.gameData.buttonColor.g,
+				dataG::data.gameData.buttonColor.b,
+				dataG::data.gameData.buttonColor.a,
+			));
 		}
 
-		if(!dataG::data.gameData.buttonHoverColor) {
+		if(dataG::data.gameData.buttonHoverColorString == "") {
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.564, 0.250, 0.230, 1.0f));
 		} else {
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, dataG::data.gameData.buttonHoverColor);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, IM_COL32(
+				dataG::data.gameData.buttonHoverColor.r,
+				dataG::data.gameData.buttonHoverColor.g,
+				dataG::data.gameData.buttonHoverColor.b,
+				dataG::data.gameData.buttonHoverColor.a,
+			));
 		}
 
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.804, 0.490, 0.470, 1.0f));

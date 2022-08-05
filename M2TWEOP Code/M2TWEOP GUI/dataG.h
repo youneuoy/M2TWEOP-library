@@ -27,9 +27,26 @@ public:
 			string gameArgs;
 
 			// Customization Options
-			string modTitle;
-			ImU32 buttonColor;
-			ImU32 buttonHoverColor;
+			string modTitle = "";
+			string buttonColorString = "";
+			string buttonHoverColorString = "";
+
+			struct
+			{
+				int r = 0;
+				int g = 0;
+				int b = 0;
+				int a = 0;
+			}buttonColor;
+
+			struct
+			{
+				int r = 0;
+				int g = 0;
+				int b = 0;
+				int a = 0;
+			}buttonHoverColor;
+
 
 			int gameVer = 0;
 
