@@ -234,10 +234,9 @@ namespace modSettingsUI
 		if (ImGui::Button("Save", helpers::getScreen().centerXButton))
 		{
 
-			managerG::saveSettings();
+			managerG::saveJsonSettings();
 			*isOpen = false;
 		}
-
 
 		ImGui::End();
 	}

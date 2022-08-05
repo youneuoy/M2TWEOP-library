@@ -4,36 +4,44 @@
 #include "managerGHelpers.h"
 #include "modSettingsUI.h"
 #include <iomanip>
+#include <regex>
+
 namespace managerG
 {
-	void loadSettings();
+	void loadJsonConfig();
 
 	void init()
 	{
 		helpers::updateMetrics();
 		loadTextures();
 		loadFonts();
-		loadSettings();
-
+		loadJsonConfig();
 
 		modSettingsUI::initSettingsUI();
 	}
 
 	jsn::json loadJsonFromFile(const std::string&fpath)
 	{
-		jsn::json json;
-
-
-		std::ifstream f1(fpath);
-		if (f1.is_open())
+		try
 		{
-			f1 >> json;
-		}
-		f1.close();
+			jsn::json json;
 
-		return std::move(json);
+			std::ifstream f1(fpath);
+			if (f1.is_open())
+			{
+				f1 >> json;
+			}
+			f1.close();
+			return std::move(json);
+		}
+		catch (jsn::json::exception& e)
+		{
+			MessageBoxA(NULL, e.what(), "Could not load JSON from file!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
 	}
-	void loadJsonSettings()
+
+
+	void loadBattleConfig()
 	{
 		std::string fPath = ".\\eopBattles\\battlesCfg.json";
 		jsn::json json= loadJsonFromFile(fPath);
@@ -51,11 +59,15 @@ namespace managerG
 		}
 		catch (jsn::json::type_error& e)
 		{
-			MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+			MessageBoxA(NULL, e.what(), "Could not read JSON in battlesCfg.json!", MB_APPLMODAL | MB_SETFOREGROUND);
 		}
-		
-		fPath = ".\\eopData\\gameCfg.json";
-		json= loadJsonFromFile(fPath);
+	}
+
+	void loadGameConfig()
+	{
+
+		std::string fPath = ".\\eopData\\gameCfg.json";
+		jsn::json json = loadJsonFromFile(fPath);
 
 		try
 		{
@@ -66,104 +78,139 @@ namespace managerG
 		}
 		catch (jsn::json::type_error& e)
 		{
-			MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+			MessageBoxA(NULL, e.what(), "Could not read JSON in gameCfg.json", MB_APPLMODAL | MB_SETFOREGROUND);
 		}
 	}
-	void loadSettings()
+
+	void loadUIConfig()
 	{
-		loadJsonSettings();
-		ifstream f1("M2TWEOPGUI.cfg");
+		std::string fPath = ".\\eopData\\uiCfg.json";
+		std::regex regex{ R"([\,\s]+)" };
+		jsn::json json = loadJsonFromFile(fPath);
+		std::string jsonStringValue;
+		std:bool jsonBoolValue;
 
-
-		string s;
-		while (f1.good())
+		try
 		{
-			getline(f1, s);
+			if (json.contains("useVanillaCfg"))
+			{
+				getJson(jsonBoolValue, "useVanillaCfg");
+				dataG::data.modData.useVanillaConfig = jsonBoolValue;
+			}
+			if(json.contains("modCfgFile"))
+			{
+				getJson(dataG::data.modData.configName, "modCfgFile");
+			}
+			if(json.contains("useM2TWEOP"))
+			{
+				getJson(jsonBoolValue, "useM2TWEOP");
+				dataG::data.modData.useM2TWEOP = jsonBoolValue;
+			}
+			if(json.contains("hideLauncher"))
+			{
+				getJson(jsonBoolValue, "hideLauncher");
+				dataG::data.modData.hideLauncherAtStart = jsonBoolValue;
+			}
+			if(json.contains("playBackgroundMusic"))
+			{
+				getJson(jsonBoolValue, "playBackgroundMusic");
+				dataG::data.audio.bkgMusic.isMusicNeeded = jsonBoolValue;
+			}
+			if (json.contains("musicVolume"))
+			{
+				getJson(dataG::data.audio.bkgMusic.musicVolume, "musicVolume");
+			}
+			if (json.contains("modTitle"))
+			{
+				getJson(dataG::data.gameData.modTitle, "modTitle");
+			}
+			if (json.contains("runButtonColor"))
+			{
+				getJson(dataG::data.gameData.buttonColorString, "runButtonColor");
 
-			if (s == "Use_vanilla_cfg:")
-			{
-				getline(f1, s);
-				dataG::data.modData.useVanillaConfig = stoi(s);
+				if (dataG::data.gameData.buttonColorString != "") {
+					std::sregex_token_iterator it{ dataG::data.gameData.buttonColorString.begin(), dataG::data.gameData.buttonColorString.end(), regex, -1 };
+					std::vector<std::string> colorValues{ it, {} };
+					dataG::data.gameData.buttonColor.r = stoi(colorValues[0]);
+					dataG::data.gameData.buttonColor.g = stoi(colorValues[1]);
+					dataG::data.gameData.buttonColor.b = stoi(colorValues[2]);
+					dataG::data.gameData.buttonColor.a = stoi(colorValues[3]);
+				}
+			
 			}
-			else if (s == "Mod_cfg_file:")
+			if (json.contains("runButtonHoverColor"))
 			{
-				getline(f1, dataG::data.modData.configName);
-			}
-			else if (s == "Use_M2TWEOP:")
-			{
-				getline(f1, s);
-				dataG::data.modData.useM2TWEOP = stoi(s);
-			}
-			else if (s == "Hide_launcher:")
-			{
-				getline(f1, s);
-				dataG::data.modData.hideLauncherAtStart = stoi(s);
-			}
-			else if (s == "Play_background_music:")
-			{
-				getline(f1, s);
-				dataG::data.audio.bkgMusic.isMusicNeeded = stoi(s);
-			}
-			else if (s == "Music_volume:")
-			{
-				getline(f1, s);
-				dataG::data.audio.bkgMusic.musicVolume = stoi(s);
+				getJson(dataG::data.gameData.buttonHoverColorString, "runButtonHoverColor");
+				if (dataG::data.gameData.buttonHoverColorString != "") {
+					std::sregex_token_iterator it_2{ dataG::data.gameData.buttonHoverColorString.begin(), dataG::data.gameData.buttonHoverColorString.end(), regex, -1 };
+					std::vector<std::string> hoverColorValues{ it_2, {} };
+					dataG::data.gameData.buttonHoverColor.r = stoi(hoverColorValues[0]);
+					dataG::data.gameData.buttonHoverColor.g = stoi(hoverColorValues[1]);
+					dataG::data.gameData.buttonHoverColor.b = stoi(hoverColorValues[2]);
+					dataG::data.gameData.buttonHoverColor.a = stoi(hoverColorValues[3]);
+				}
 			}
 		}
-
-
-		f1.close();
+		catch (jsn::json::type_error& e)
+		{
+			MessageBoxA(NULL, e.what(), "Could not read JSON in uiCfg.json", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
 	}
+
+	void loadJsonConfig()
+	{
+		loadBattleConfig();
+		loadGameConfig();
+		loadUIConfig();
+	}
+
 	void writeJsonToFile(const std::string& fpath,const jsn::json& json)
 	{
 		ofstream f1(fpath);
 		f1 << setw(4) << json;
 		f1.close();
 	}
+
 	void saveJsonSettings()
 	{
-		std::string fPath = ".\\eopBattles\\battlesCfg.json";
-
 		jsn::json json;
+		std::string fPath;
+
+		// Save battle config
+		fPath = ".\\eopBattles\\battlesCfg.json";
 		setJson("enableAutoGeneration", dataG::data.battlesData.isGenerationNeeded);
 		setJson("enableResultsTransfer", dataG::data.battlesData.isResultTransferNeeded);
-
 		writeJsonToFile(fPath, json);
-
 		json.clear();
+
+		// Save game config
 		fPath = ".\\eopData\\gameCfg.json";
 		setJson("isBlockLaunchWithoutEop", dataG::data.gameData.isBlockLaunchWithoutEop);
 		writeJsonToFile(fPath, json);
+		json.clear();
+
+		// Save UI config
+		fPath = ".\\eopData\\uiCfg.json";
+		setJson("useVanillaCfg", dataG::data.modData.useVanillaConfig);
+		setJson("modCfgFile", dataG::data.modData.configName);
+		setJson("useM2TWEOP", dataG::data.modData.useM2TWEOP);
+		setJson("hideLauncher", dataG::data.modData.hideLauncherAtStart);
+		setJson("playBackgroundMusic", dataG::data.audio.bkgMusic.isMusicNeeded);
+		setJson("musicVolume", dataG::data.audio.bkgMusic.musicVolume);
+		setJson("modTitle", dataG::data.gameData.modTitle);
+		setJson("runButtonColor", dataG::data.gameData.buttonColorString);
+		setJson("runButtonHoverColor", dataG::data.gameData.buttonHoverColorString);
+		writeJsonToFile(fPath, json);
+		json.clear();
 	}
-	void saveSettings()
-	{
-		saveJsonSettings();
-		ofstream f1("M2TWEOPGUI.cfg");
 
-		f1 << "Use_vanilla_cfg:" << endl;
-		f1 << dataG::data.modData.useVanillaConfig << endl;
-		f1 << "Mod_cfg_file:" << endl;
-		f1 << dataG::data.modData.configName << endl;
-		f1 << "Use_M2TWEOP:" << endl;
-		f1 << dataG::data.modData.useM2TWEOP << endl;
-		f1 << "Hide_launcher:" << endl;
-		f1 << dataG::data.modData.hideLauncherAtStart << endl;
-		f1 << "Play_background_music:" << endl;
-		f1 << dataG::data.audio.bkgMusic.isMusicNeeded << endl;
-		f1 << "Music_volume:" << endl;
-		f1 << dataG::data.audio.bkgMusic.musicVolume << endl;
-
-
-		f1.close();
-	}
 	bool isRedistsInstallNeeded()
 	{
 		return (!isLibraryLoadable("M2TWEOPLibrary.dll") || !isLibraryLoadable("d3d9.dll"));
 
-
 		//variant 2
-		// 
-		// 
+		//
+		//
 		//std::string fileVerName;
 
 		//bool retVal = false;
@@ -187,7 +234,7 @@ namespace managerG
 		//	retVal = true;
 		//}
 		//
-	
+
 		//return retVal;
 	}
 };
