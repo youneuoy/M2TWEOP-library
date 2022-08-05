@@ -127,22 +127,28 @@ namespace managerG
 			if (json.contains("runButtonColor"))
 			{
 				getJson(dataG::data.gameData.buttonColorString, "runButtonColor");
-				std::sregex_token_iterator it{ dataG::data.gameData.buttonColorString.begin(), dataG::data.gameData.buttonColorString.end(), regex, -1};
-				std::vector<std::string> colorValues{ it, {}};
-				dataG::data.gameData.buttonColor.r = stoi(colorValues[0]);
-				dataG::data.gameData.buttonColor.g = stoi(colorValues[1]);
-				dataG::data.gameData.buttonColor.b = stoi(colorValues[2]);
-				dataG::data.gameData.buttonColor.a = stoi(colorValues[3]);
+
+				if (dataG::data.gameData.buttonColorString != "") {
+					std::sregex_token_iterator it{ dataG::data.gameData.buttonColorString.begin(), dataG::data.gameData.buttonColorString.end(), regex, -1 };
+					std::vector<std::string> colorValues{ it, {} };
+					dataG::data.gameData.buttonColor.r = stoi(colorValues[0]);
+					dataG::data.gameData.buttonColor.g = stoi(colorValues[1]);
+					dataG::data.gameData.buttonColor.b = stoi(colorValues[2]);
+					dataG::data.gameData.buttonColor.a = stoi(colorValues[3]);
+				}
+			
 			}
 			if (json.contains("runButtonHoverColor"))
 			{
 				getJson(dataG::data.gameData.buttonHoverColorString, "runButtonHoverColor");
-				std::sregex_token_iterator it_2{ dataG::data.gameData.buttonHoverColorString.begin(), dataG::data.gameData.buttonHoverColorString.end(), regex, -1 };
-				std::vector<std::string> hoverColorValues{ it_2, {} };
-				dataG::data.gameData.buttonHoverColor.r = stoi(hoverColorValues[0]);
-				dataG::data.gameData.buttonHoverColor.g = stoi(hoverColorValues[1]);
-				dataG::data.gameData.buttonHoverColor.b = stoi(hoverColorValues[2]);
-				dataG::data.gameData.buttonHoverColor.a = stoi(hoverColorValues[3]);
+				if (dataG::data.gameData.buttonHoverColorString != "") {
+					std::sregex_token_iterator it_2{ dataG::data.gameData.buttonHoverColorString.begin(), dataG::data.gameData.buttonHoverColorString.end(), regex, -1 };
+					std::vector<std::string> hoverColorValues{ it_2, {} };
+					dataG::data.gameData.buttonHoverColor.r = stoi(hoverColorValues[0]);
+					dataG::data.gameData.buttonHoverColor.g = stoi(hoverColorValues[1]);
+					dataG::data.gameData.buttonHoverColor.b = stoi(hoverColorValues[2]);
+					dataG::data.gameData.buttonHoverColor.a = stoi(hoverColorValues[3]);
+				}
 			}
 		}
 		catch (jsn::json::type_error& e)
