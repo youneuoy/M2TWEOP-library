@@ -58,7 +58,7 @@ namespace mainUI
 			gameRunnerUI::drawUI(&childs.isGameRunnerUIOpen);
 			return 0;
 		}
-		ImVec2 windowSize = ImGui::CalcTextSize("Run vanilla or dlc(no M2TWEOP capabilities)");
+		ImVec2 windowSize = ImGui::CalcTextSize("Run Vanilla or DLC without M2TWEOP");
 		windowSize.x *= 1.5;
 
 		ImGui::SetNextWindowPos(helpers::getScreen().screenHalfSize, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
@@ -129,7 +129,7 @@ namespace mainUI
 			childs.isModSettingsUIOpen = true;
 		}
 		ImGui::NewLine();
-		if (ImGui::Button("Run vanilla or DLC without M2TWEOP", helpers::getScreen().centerXButton))
+		if (ImGui::Button("Run Vanilla or DLC without M2TWEOP", helpers::getScreen().centerXButton))
 		{
 			childs.isGameSTDMenuOpen = true;
 		}

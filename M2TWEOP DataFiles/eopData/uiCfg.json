@@ -1,8 +1,11 @@
 {
-    "useVanillaCfg": true,
-    "modCfgFile": "",
-    "useM2TWEOP": true,
     "hideLauncher": false,
-    "playBackgroundMusic": true,
-    "musicVolume": 0.15
+    "modCfgFile": "",
+    "musicVolume": 15,
+    "playBackgroundMusic": false,
+    "useM2TWEOP": true,
+    "useVanillaCfg": true,
+    "modTitle": "Divide and Conquer: AGO",
+    "runButtonColor": "fcba03ff",
+    "runButtonHighlightColor": "fcba03ff"
 }

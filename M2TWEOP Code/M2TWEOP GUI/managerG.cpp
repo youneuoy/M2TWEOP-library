@@ -4,16 +4,17 @@
 #include "managerGHelpers.h"
 #include "modSettingsUI.h"
 #include <iomanip>
+
 namespace managerG
 {
-	void loadSettings();
+	void loadJsonConfig();
 
 	void init()
 	{
 		helpers::updateMetrics();
 		loadTextures();
 		loadFonts();
-		loadSettings();
+		loadJsonConfig();
 
 		modSettingsUI::initSettingsUI();
 	}
@@ -85,13 +86,14 @@ namespace managerG
 		std::string fPath = ".\\eopData\\uiCfg.json";
 		jsn::json json = loadJsonFromFile(fPath);
 		std::string jsonStringValue;
+		std:bool jsonBoolValue;
 
 		try
 		{
 			if (json.contains("useVanillaCfg"))
 			{
-				getJson(jsonStringValue, "useVanillaCfg");
-				dataG::data.modData.useVanillaConfig = stoi(jsonStringValue);
+				getJson(jsonBoolValue, "useVanillaCfg");
+				dataG::data.modData.useVanillaConfig = jsonBoolValue;
 			}
 			if(json.contains("modCfgFile"))
 			{
@@ -99,38 +101,39 @@ namespace managerG
 			}
 			if(json.contains("useM2TWEOP"))
 			{
-				getJson(jsonStringValue, "useM2TWEOP");
-				dataG::data.modData.useM2TWEOP = stoi(jsonStringValue);
+				getJson(jsonBoolValue, "useM2TWEOP");
+				dataG::data.modData.useM2TWEOP = jsonBoolValue;
 			}
 			if(json.contains("hideLauncher"))
 			{
-				getJson(jsonStringValue, "hideLauncher");
-				dataG::data.modData.hideLauncherAtStart = stoi(jsonStringValue);
+				getJson(jsonBoolValue, "hideLauncher");
+				dataG::data.modData.hideLauncherAtStart = jsonBoolValue;
 			}
 			if(json.contains("playBackgroundMusic"))
 			{
-				getJson(jsonStringValue, "playBackgroundMusic");
-				dataG::data.audio.bkgMusic.isMusicNeeded = stoi(jsonStringValue);
+				getJson(jsonBoolValue, "playBackgroundMusic");
+				dataG::data.audio.bkgMusic.isMusicNeeded = jsonBoolValue;
 			}
 			if (json.contains("musicVolume"))
 			{
-				getJson(jsonStringValue, "musicVolume");
-				dataG::data.audio.bkgMusic.musicVolume = stoi(jsonStringValue);
+				getJson(dataG::data.audio.bkgMusic.musicVolume, "musicVolume");
 			}
 			if (json.contains("modTitle"))
 			{
 				getJson(dataG::data.gameData.modTitle, "modTitle");
 			}
-			if (json.contains("runButtonColor"))
-			{
-				getJson(jsonStringValue, "buttonColor");
-				dataG::data.gameData.buttonColor = stoi(jsonStringValue, 0, 16); // Convert to hex
-			}
-			if (json.contains("runButtonHoverColor"))
-			{
-				getJson(jsonStringValue, "runButtonHoverColor");
-				dataG::data.gameData.buttonHoverColor = stoi(jsonStringValue, 0, 16);  // Convert to hex
-			}
+			//if (json.contains("runButtonColor"))
+			//{
+				// getJson(jsonStringValue, "buttonColor");
+				jsonStringValue = "f024b6";
+				dataG::data.gameData.buttonColor = stoi(jsonStringValue, NULL, 16); // Convert to hex
+		//	}
+			//if (json.contains("runButtonHoverColor"))
+			//{
+				// getJson(jsonStringValue, "runButtonHoverColor");
+				jsonStringValue = "cfbfe5";
+				dataG::data.gameData.buttonHoverColor = stoi(jsonStringValue, NULL, 16);  // Convert to hex
+			//}
 		}
 		catch (jsn::json::type_error& e)
 		{
@@ -138,7 +141,7 @@ namespace managerG
 		}
 	}
 
-	void loadJsonSettings()
+	void loadJsonConfig()
 	{
 		loadBattleConfig();
 		loadGameConfig();
