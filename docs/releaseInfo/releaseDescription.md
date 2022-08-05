@@ -1,5 +1,5 @@
 
-![Tux, the Linux mascot](https://i.imgur.com/jqzoYoQ.png)
+![EOP Logo](https://i.imgur.com/jqzoYoQ.png)
 
 # New beta version of M2TWEOP 2.1😋
 
@@ -9,18 +9,11 @@
 
 ###  Launcher
 - Added M2TWEOP health checker (this will appear automatically if there are potential startup problems)
-- Added new launcher config options to set the window title, 'Run mod' message and button colors - Medik
+- Removed M2TWEOPUI.cfg (this file is now obsolete, you may remove it) - Medik
+- Added new file `eopData/uiCfg.json` to configure the launcher  - Medik
+- Added new config options to change the launcher window title, "Run mod" message and button colors - Medik
+- [Added a new tutorial on configuring the launcher](https://youneuoy.github.io/M2TWEOP-library/M2TWEOP_LAUNCHER_SETTINGS.md) - Medik
 
-e.g
-
-```
-Mod_title:
-Divide and Conquer AGO
-Button_color:
-5c67ffe8
-Button_hover_color:
-5c67e8ff
-```
 
 ###  Library
 - Edu things: ability to create unit types from files

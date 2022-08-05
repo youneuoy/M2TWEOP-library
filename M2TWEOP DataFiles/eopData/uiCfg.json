@@ -2,10 +2,10 @@
     "hideLauncher": false,
     "modCfgFile": "",
     "musicVolume": 15,
-    "playBackgroundMusic": false,
+    "playBackgroundMusic": true,
     "useM2TWEOP": true,
     "useVanillaCfg": true,
-    "modTitle": "Divide and Conquer: AGO",
-    "runButtonColor": "fcba03ff",
-    "runButtonHighlightColor": "fcba03ff"
+    "modTitle": "",
+    "runButtonColor": "",
+    "runButtonHighlightColor": ""
 }
