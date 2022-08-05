@@ -12,6 +12,7 @@
 - Removed M2TWEOPUI.cfg (this file is now obsolete, you may remove it) - *Medik*
 - Added new file `eopData/uiCfg.json` to configure the launcher  - *Medik*
 - Added new config options to change the launcher window title, "Run mod" message and button colors - *Medik*
+- EOP is now enabled by default to speed up troubleshooting - *Medik*
 - [Added a new tutorial on configuring the launcher](https://youneuoy.github.io/M2TWEOP-library/M2TWEOP_LAUNCHER_SETTINGS.md) - *Medik*
 
 #### **Examples of the new launcher options**
