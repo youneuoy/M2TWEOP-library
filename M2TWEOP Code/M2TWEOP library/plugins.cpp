@@ -80,9 +80,9 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 			eduThings::setEntryUnitCardTga(1000,"#akavir_swordsmen.tga");
 			eduThings::setEntryInfoCardTga(1000,"akavir_swordsmen_info.tga");
 			eduThings::setEntrySoldierModel(1000,"Sword_and_Buckler_Men");
-			eduThings::setEntryLocalizedName(1000,u8"Тест");
-			eduThings::setEntryLocalizedDescr(1000, u8"Описание");
-			eduThings::setEntryLocalizedShortDescr(1000, u8"Короткое описание");
+			eduThings::setEntryLocalizedName(1000,u8"Test");
+			eduThings::setEntryLocalizedDescr(1000, u8"Description");
+			eduThings::setEntryLocalizedShortDescr(1000, u8"Short Description");
 
 			unit* res = nullptr;
 
@@ -609,6 +609,26 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 			settlementStruct* sett = reinterpret_cast<settlementStruct*>(vTab[2]);
 			(*(*pl->onNewAdmiralCreated))(prs, sett);
 		}
+		else if (compareEvent(event, &pl->onBecomesFactionLeader.stringAdr, pl->onBecomesFactionLeader.strCmp))
+		{
+			generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
+			(*(*pl->onBecomesFactionLeader))(prs);
+		}
+		else if (compareEvent(event, &pl->onBecomesFactionHeir.stringAdr, pl->onBecomesFactionHeir.strCmp))
+		{
+			generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
+			(*(*pl->onBecomesFactionHeir))(prs);
+		}
+		else if (compareEvent(event, &pl->onShortcutTriggered.stringAdr, pl->onShortcutTriggered.strCmp))
+		{
+			char* str = reinterpret_cast<char*>(vTab[1]);
+			(*(*pl->onShortcutTriggered))(str);
+		}
+		else if (compareEvent(event, &pl->onCharacterMarriesPrincess.stringAdr, pl->onCharacterMarriesPrincess.strCmp))
+		{
+			generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
+			(*(*pl->onCharacterMarriesPrincess))(prs);
+		}
 	}
 }
 
@@ -632,13 +652,13 @@ std::string plugins::onSelectWorldpkgdesc(const char* selectedRec, const char* s
 
 int plugins::onfortificationlevelS(settlementStruct* settlement, bool* isCastle)
 {
-	int retVal=-2;//magic value, mean not change anything
+	int retVal = -2;//magic value, mean not change anything
 
 
 	for (plugin* pl : pluginsCfg.plugins)
 	{
 		bool isChanged = false;
-		int tmpVal = (*(*pl->onfortificationlevelS))(settlement, isCastle ,&isChanged);
+		int tmpVal = (*(*pl->onfortificationlevelS))(settlement, isCastle, &isChanged);
 		if (isChanged == true)
 		{
 			retVal = tmpVal;
@@ -917,7 +937,11 @@ void plugins::initEvNames()
 		"CharacterComesOfAge",
 		"CharacterMarries",
 		"CharacterBecomesAFather",
-		"NewAdmiralCreated"
+		"NewAdmiralCreated",
+		"BecomesFactionLeader",
+		"BecomesFactionHeir",
+		"ShortcutTriggered",
+		"CharacterMarriesPrincess"
 	};
 
 }
@@ -1388,7 +1412,25 @@ int plugin::init(string* nameP)
 	onNewAdmiralCreated.Load(&plPath, &fName);
 	onNewAdmiralCreated.strCmp = (*plugins::eventNames)[NewAdmiralCreatedCode];
 
+	//onBecomesFactionLeader
+	fName = "onBecomesFactionLeader";
+	onBecomesFactionLeader.Load(&plPath, &fName);
+	onBecomesFactionLeader.strCmp = (*plugins::eventNames)[BecomesFactionLeaderCode];
 
+	//onBecomesFactionHeir
+	fName = "onBecomesFactionHeir";
+	onBecomesFactionHeir.Load(&plPath, &fName);
+	onBecomesFactionHeir.strCmp = (*plugins::eventNames)[BecomesFactionHeirCode];
+
+	//onShortcutTriggered
+	fName = "onShortcutTriggered";
+	onShortcutTriggered.Load(&plPath, &fName);
+	onShortcutTriggered.strCmp = (*plugins::eventNames)[ShortcutTriggeredCode];
+
+	//onCharacterMarriesPrincess
+	fName = "onCharacterMarriesPrincess";
+	onCharacterMarriesPrincess.Load(&plPath, &fName);
+	onCharacterMarriesPrincess.strCmp = (*plugins::eventNames)[CharacterMarriesPrincessCode];
 
 	//drawOnEndScene
 	fName = "drawOnEndScene";

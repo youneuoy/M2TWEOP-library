@@ -204,6 +204,13 @@ public:
 
 	ProcLoader<void(__cdecl*)(generalCharacterictics*, settlementStruct*)> onNewAdmiralCreated;
 
+	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onBecomesFactionLeader;
+	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onBecomesFactionHeir;
+
+	ProcLoader<void(__cdecl*)(const char*)> onShortcutTriggered;
+
+	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onCharacterMarriesPrincess;
+
 	ProcLoader<void(__cdecl*)(LPDIRECT3DDEVICE9 pDevice)> drawOnEndScene;
 	ProcLoader<void(__cdecl*)(LPDIRECT3DDEVICE9 pDevice)> onReset;
 
@@ -238,7 +245,7 @@ public:
 	//from here calls all plugins
 
 	static std::string onSelectWorldpkgdesc(const char* selectedRec, const char* selectedGroup);
-	static int onfortificationlevelS(settlementStruct*settlement, bool* isCastle);
+	static int onfortificationlevelS(settlementStruct* settlement, bool* isCastle);
 	static void onClickAtTile(int x, int y);
 	static void onCampaignMapLoaded();
 
@@ -267,4 +274,3 @@ private:
 	static void initEvNames();
 
 };
-

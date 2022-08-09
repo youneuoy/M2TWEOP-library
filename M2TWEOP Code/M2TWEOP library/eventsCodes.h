@@ -100,3 +100,7 @@
 #define CharacterMarriesCode 97//!
 #define CharacterBecomesAFatherCode 98//!
 #define NewAdmiralCreatedCode 99//!
+#define BecomesFactionLeaderCode 100//!
+#define BecomesFactionHeirCode 101//!
+#define ShortcutTriggeredCode 102//!
+#define CharacterMarriesPrincessCode 103//!

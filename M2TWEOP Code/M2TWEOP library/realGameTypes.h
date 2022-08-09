@@ -548,17 +548,17 @@ struct generalCharacterictics { /* many important info about character */
 	undefined field_0x38[4];
 	uchar status; /* 5-leader,2 - heir, 0 - ordinary man */
 	undefined field_0x3d[7];
-	int authority; /* authority of the general */
-	int influence;
-	int subterfuge;
-	int loyality; /* loyality of the general */
-	int charm;
-	int finance;
-	int piety; /* piety of the general */
-	int magic;
-	int nobility; /* nobility of the general */
-	int leaderAutority; /* autority of the leader */
-	int level;
+	int32_t authority; /* command */
+	int32_t influence;
+	int32_t subterfuge;
+	int32_t loyality;
+	int32_t charm;
+	int32_t finance;
+	int32_t piety;
+	int32_t magic;
+	int32_t nobility; /* chilvalry/dread */
+	int32_t leaderAutority; /* autority of leader */
+	int32_t level;
 	int32_t unorthodoxy; //0x0070
 	int32_t heresyImmunity; //0x0074
 	int32_t assassination; //0x0078
