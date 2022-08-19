@@ -30,13 +30,26 @@ T FnCast(uint32_t fnToCast, T pFnCastTo) {
 }
 NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+
 	plugins::onWindowProc(hWnd, uMsg, wParam, lParam);
 
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
 	{
 		return true;
 	}
-
+	switch (uMsg)
+	{
+	case WM_SETFOCUS:
+		RECT rect;
+		if (!GetWindowRect(hWnd, &rect)) {
+			break;
+		}
+		ClipCursor(&rect);
+		break;
+	case WM_KILLFOCUS:
+		ClipCursor(NULL);
+		break;
+	}
 	if (dataS.ifMouseOrKeyBoardAtImgui)
 	{
 		switch (uMsg)
