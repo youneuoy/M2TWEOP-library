@@ -345,10 +345,9 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 
-
-
-
-
 !documentationGenerator/luarocks/*
 !documentationGenerator/EOPDocs/*
 !/documentationGenerator/**/*
+
+*.cpython-38.pyc
+build
