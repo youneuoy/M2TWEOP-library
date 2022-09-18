@@ -37,7 +37,7 @@ void MemWork::InjectCode(void* ptr, DWORD target, DWORD cave, unsigned char* ori
 
 	DWORD jmp_address = 0 - (target - cave) - 5;
 	DWORD ret_address = 0 - (cave - target) - size + nops;
-	unsigned char buffer[5] = { 0xE9 };
+	unsigned char buffer[5] = { 0xE9, 0xE9, 0xE9, 0xE9, 0xE9 };
 	memcpy(buffer + 1, &ret_address, 4);
 
 	Write(ptr, cave, size);

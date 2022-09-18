@@ -451,6 +451,7 @@ void managerF::doPachs()
 	onrecruitPoolFillFromFile->SetNewCode();
 	onrecruitPoolFillFromFile->Enable();
 	f1 << "Done" << endl;
+
 	f1 << "Start applying OnrecruitPoolFillFromFile2 patch" << endl;
 	OnrecruitPoolFillFromFile2* onrecruitPoolFillFromFile2 = new OnrecruitPoolFillFromFile2(mem, (LPVOID)patchesForGame::onrecruitPoolFillFromFile, globals::dataS.gamever);
 	onrecruitPoolFillFromFile2->SetNewCode();
@@ -486,7 +487,7 @@ jsn::json loadJsonFromFile(const std::string& fpath)
 	}
 	f1.close();
 
-	return std::move(json);
+	return json;
 }
 
 void loadJsonSettings()

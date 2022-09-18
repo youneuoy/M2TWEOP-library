@@ -4,7 +4,10 @@ NOINLINE EOP_EXPORT void* eopSounds::createEOPSound(const char* path)
 {
     sf::SoundBuffer* buffer=new sf::SoundBuffer();
     if (!buffer->loadFromFile(path))
+    {
+        delete buffer;
         return nullptr;
+    }
 
     return new sf::Sound(*buffer);
 }

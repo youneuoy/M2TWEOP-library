@@ -3163,7 +3163,7 @@ OnrecruitPoolFillFromFile::~OnrecruitPoolFillFromFile()
 void OnrecruitPoolFillFromFile::SetOriginialCode()
 {
 	Assembler* a = new Assembler();
-
+	a->xor_(eax, eax);
 	//        008a9ce5 8d  0c  85       LEA        this ,[typeId *0x4  + eduEntries ] 
 
 	a->ret();
@@ -3176,9 +3176,6 @@ void OnrecruitPoolFillFromFile::SetOriginialCode()
 void OnrecruitPoolFillFromFile::SetNewCode()
 {
 	Assembler* a = new Assembler();
-	a->pop(edi);
-	a->pop(esi);
-	a->pop(ebp);
 
 	a->pushad();
 	a->pushf();
@@ -3217,7 +3214,7 @@ void OnrecruitPoolFillFromFile2::SetOriginialCode()
 	Assembler* a = new Assembler();
 
 	//        008a9c19 8d  14  8d       LEA        EDX ,[this *0x4  + eduEntries ]
-
+	a->xor_(eax, eax);
 
 	a->ret();
 	m_originalBytes = (unsigned char*)a->make();
@@ -3229,9 +3226,6 @@ void OnrecruitPoolFillFromFile2::SetOriginialCode()
 void OnrecruitPoolFillFromFile2::SetNewCode()
 {
 	Assembler* a = new Assembler();
-	a->pop(edi);
-	a->pop(esi);
-	a->pop(ebp);
 
 	a->pushad();
 	a->pushf();
