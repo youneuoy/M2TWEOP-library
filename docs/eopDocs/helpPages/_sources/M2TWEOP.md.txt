@@ -23,7 +23,7 @@ The functionality of the program is divided into two parts
 ### Creators
 * **youneuoy** - project founder, main developer
 * **Jojo00182** - did a lot of great stuff and much more to come
-  
+
 ### Contributors
 * **Edmond** - project idea, first attempts to implement hotseats with online battles
 * **Xamax** - lots of ideas and testing
@@ -47,7 +47,7 @@ All changes made work correctly in an ongoing campaign, nothing breaks during up
 
 If you use an antivirus, add the program to the exceptions! There may be false positives.
 
-### License 
+### License
 The project uses the [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.html).
 
 ## Build
@@ -57,7 +57,7 @@ M2TWEOP is developed in C++ and Assembly. You can get support for building/devel
 
 It would be nice if all interested people supported the project in an accessible way (for example, you can test various changes, participate in planning new game mechanics or discuss them, sponsor development with money, etc.).
 * Come join the our [Discord](https://discord.gg/Epqjm8u2WK) server if you have questions or suggestions.
-* [Patreon](https://www.patreon.com/m2tweop)
+* [Patreon](https://ko-fi.com/D1D4DZTHG)
 
 
 With the help of this program, it will probably be possible someday to give modders the opportunity to change the MTW2 gameplay beyond recognition.
