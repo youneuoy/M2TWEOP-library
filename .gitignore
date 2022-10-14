@@ -353,3 +353,4 @@ documentationGenerator/build
 documentationGenerator/source/_static
 documentationGenerator/generatedLuaDocs/*
 M2TWEOPGenerated/
+.DS_Store

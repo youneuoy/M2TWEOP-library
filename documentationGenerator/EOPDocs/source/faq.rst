@@ -22,7 +22,7 @@ Questions and answers
 		Run the modification using M2TWEOP GUI.exe. Select the menu item "Run mod" and wait for the launch.
 
 	*I heard that M2TWEOP allows you to write plugins in the lua programming language. How to do it?*
-		<iframe width="560" height="315" src="https://www.youtube.com/embed/hUvbcz8i7Wk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+		Read `M2TWEOP LUA plugin<../_static/LuaLib/index.html>`_ or watch a tutorial here: https://youtu.be/hUvbcz8i7Wk
 
 	*I made a great modification using M2TWEOP features. How can I make it possible to start the modification only with M2TWEOP (so that it is impossible to start it with standard means - via batch file, etc)?*
 		You should run the m2tweop launcher, set the "Block modification launch without EOP" parameter in the settings ("game" submenu) to the active state. Next, you should replace all "type" fields in your "export_descr_unit.txt" file with "eopOnlyType". After that, your modification will stop working with the game without m2tweop.
