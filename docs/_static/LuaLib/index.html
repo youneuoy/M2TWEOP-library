@@ -568,6 +568,10 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Basic M2TWEOPDU table.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#M2TWEOPDU.addEopEduEntryFromFile">M2TWEOPDU.addEopEduEntryFromFile (filepath, eopEnryIndex)</a></td>
+	<td class="summary">Create new M2TWEOPDU entry from type description</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.addEopEduEntryFromEDUID">M2TWEOPDU.addEopEduEntryFromEDUID (baseEnryIndex, eopEnryIndex)</a></td>
 	<td class="summary">Create new M2TWEOPDU entry</td>
 	</tr>
@@ -3262,31 +3266,15 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
         </li>
         <li><span class="parameter">shortName</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
+         technical one
         </li>
         <li><span class="parameter">fullName</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
+         technical one
         </li>
         <li><span class="parameter">localizedDisplayName</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         full display name
-        </li>
-        <li><span class="parameter">localizedSaveName</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         the first part of the name is saved to a file
-        </li>
-        <li><span class="parameter">localizedSaveName2</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         the second part of the name is saved to a file
-        </li>
-        <li><span class="parameter">localizedSaveNickName</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         name prefix, saved to file
+         localized name
         </li>
         <li><span class="parameter">label</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
@@ -3793,6 +3781,10 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
     <h3>Fields:</h3>
     <ul>
         <li><span class="parameter">Type</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         better not change!
+        </li>
+        <li><span class="parameter">Soldier</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
          better not change!
         </li>
@@ -4845,7 +4837,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
 
-<p>Get settlement religion value.  </p>
+<p>Get settlement religion value. </p>
 <pre><code>It is desirable that after your intervention, the sum of the influence of all religions does not exceed 1.
 </code></pre>
 
@@ -4880,7 +4872,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
 
-<p>Set settlement religion value.  </p>
+<p>Set settlement religion value. </p>
 <pre><code>It is desirable that after your intervention, the sum of the influence of all religions does not exceed 1.
 </code></pre>
 
@@ -5658,6 +5650,12 @@ ourChar:kill();</pre>
 
     <h3>Fields:</h3>
     <ul>
+        <li><span class="parameter">addEopEduEntryFromFile</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOPDU.addEopEduEntryFromFile">addEopEduEntryFromFile</a></span>
+
+
+
+        </li>
         <li><span class="parameter">addEopEduEntryFromEDUID</span>
             <span class="types"><a class="type" href="index.html#M2TWEOPDU.addEopEduEntryFromEDUID">addEopEduEntryFromEDUID</a></span>
 
@@ -5715,6 +5713,41 @@ ourChar:kill();</pre>
 
 
 
+
+</dd>
+    <dt>
+    <a name = "M2TWEOPDU.addEopEduEntryFromFile"></a>
+    <strong>M2TWEOPDU.addEopEduEntryFromFile (filepath, eopEnryIndex)</strong>
+    </dt>
+    <dd>
+    Create new M2TWEOPDU entry from type description
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">filepath</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         path to file with unit type description(like in export<em>descr</em>unit.txt, but only with one record and without comments)
+        </li>
+        <li><span class="parameter">eopEnryIndex</span>
+            <span class="types"><span class="type">int</span></span>
+         Entry index, which will be assigned to a new record in DU (recommend starting from 1000, so that there is no confusion with records from EDU).
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#eduEntry">eduEntry</a></span>
+        retEntry Usually you shouldn't use this value.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">M2TWEOPDU.addEopEduEntryFromFile(M2TWEOP.getModPath()..<span class="string">"/youneuoy_Data/unitTypes/myTestType.txt"</span>,<span class="number">1000</span>);</pre>
+    </ul>
 
 </dd>
     <dt>
@@ -11462,7 +11495,7 @@ M2TWEOPSounds.stopEOPSound(ourNewSound);</pre>
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2022-07-24 10:52:34 </i>
+<i style="float:right;">Last updated 2022-10-14 11:29:00 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

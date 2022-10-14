@@ -11,7 +11,6 @@ Questions and answers
 
 
 .. glossary::
-
 	*Where to download M2TWEOP?*
 		The latest version of m2tweop is located on the "Releases" tab of the M2TWEOP github, here: https://github.com/youneuoy/M2TWEOP-library/releases
 		You need to download the archive with the word "M2TWEOP" in the title and the extension .zip
