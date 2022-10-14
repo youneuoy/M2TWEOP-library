@@ -5,73 +5,64 @@
 <head>
     <title>M2TW Engine Overhaul Project</title>
     <link rel="stylesheet" href="ldoc.css" type="text/css" />
+
+    <!-- Menu -->
+    <meta property="og:title" content="M2TWEOP: Lua Documentation">
+    <meta property="og:description" content="LUA Scripting documentation for Medieval 2: Engine Overhaul Project">
+    <meta property="og:image" content="https://i.imgur.com/C0Fr8mZ.png">
+
 </head>
 <body>
 
 <div id="container">
 
-<div id="product">
-	<div id="product_logo"></div>
-	<div id="product_name"><big><b></b></big></div>
-	<div id="product_description"></div>
-</div> <!-- id="product" -->
-
-
 <div id="main">
-
 
 <!-- Menu -->
 
 <div id="navigation">
 <br/>
-<h1>M2TWEOP
-scripting</h1>
+<h1>M2TWEOP Lua</h1>
 
-
-<h2>Contents</h2>
+<h2>Tables</h2>
 <ul>
-<li><a href="#M2TWEOP_table_section">M2TWEOP table section </a></li>
-<li><a href="#gameSTDUI_table_section">gameSTDUI table section </a></li>
-<li><a href="#uiElementStruct_table_section">uiElementStruct table section </a></li>
-<li><a href="#Objects_table_section">Objects table section </a></li>
-<li><a href="#Camera_table_section">Camera table section </a></li>
-<li><a href="#Game_table_section">Game table section </a></li>
-<li><a href="#Stratmap_table_section">Stratmap table section </a></li>
-<li><a href="#Unit_table_section">Unit table section </a></li>
-<li><a href="#Character_table_section">Character table section </a></li>
-<li><a href="#NamedCharacter_table_section">NamedCharacter table section </a></li>
-<li><a href="#Ancillary_table_section">Ancillary table section </a></li>
-<li><a href="#traitContainer_table_section">traitContainer table section </a></li>
-<li><a href="#EduEntry_table_section">EduEntry table section </a></li>
-<li><a href="#FactionStruct_table_section">FactionStruct table section </a></li>
-<li><a href="#FortStruct_table_section">FortStruct table section </a></li>
-<li><a href="#SettlementStruct_table_section">SettlementStruct table section </a></li>
-<li><a href="#Guild_table_section">Guild table section </a></li>
-<li><a href="#ResStrat_table_section">ResStrat table section </a></li>
-<li><a href="#StackStruct_table_section">StackStruct table section </a></li>
-<li><a href="#siegeStruct_table_section">siegeStruct table section </a></li>
-<li><a href="#Building_table_section">Building table section </a></li>
-<li><a href="#M2TWEOPDU_table_section">M2TWEOPDU table section </a></li>
-<li><a href="#campaign_enums_section">campaign enums section </a></li>
-<li><a href="#campaign_table_section">campaign table section </a></li>
-<li><a href="#gameDataAll_table_section">gameDataAll table section </a></li>
-<li><a href="#battleStruct_table_section">battleStruct table section </a></li>
-<li><a href="#battleSide_table_section">battleSide table section </a></li>
-<li><a href="#trackedPointerArmy_table_section">trackedPointerArmy table section </a></li>
-<li><a href="#deploymentAreaS_table_section">deploymentAreaS table section </a></li>
-<li><a href="#EVENTS_TABLE_SECTION">EVENTS TABLE SECTION </a></li>
-<li><a href="#M2TWEOPFBX_table_section">M2TWEOPFBX table section </a></li>
-<li><a href="#M2TWEOPSounds_table_section">M2TWEOPSounds table section </a></li>
+<li><a href="#M2TWEOP_table_section">M2TWEOP</a></li>
+<li><a href="#EVENTS_TABLE_SECTION">M2TWEOP EVENTS</a></li>
+<li><a href="#M2TWEOPFBX_table_section">M2TWEOP FBX</a></li>
+<li><a href="#M2TWEOPSounds_table_section">M2TWEOP Sounds</a></li>
+<li><a href="#gameSTDUI_table_section">gameSTDUI</a></li>
+<li><a href="#uiElementStruct_table_section">uiElementStruct</a></li>
+<li><a href="#Objects_table_section">Objects</a></li>
+<li><a href="#Camera_table_section">Camera</a></li>
+<li><a href="#Game_table_section">Game</a></li>
+<li><a href="#Stratmap_table_section">Stratmap</a></li>
+<li><a href="#Unit_table_section">Unit</a></li>
+<li><a href="#Character_table_section">Character</a></li>
+<li><a href="#NamedCharacter_table_section">NamedCharacter</a></li>
+<li><a href="#Ancillary_table_section">Ancillary</a></li>
+<li><a href="#traitContainer_table_section">traitContainer</a></li>
+<li><a href="#EduEntry_table_section">EduEntry</a></li>
+<li><a href="#FactionStruct_table_section">FactionStruct</a></li>
+<li><a href="#FortStruct_table_section">FortStruct</a></li>
+<li><a href="#SettlementStruct_table_section">SettlementStruct</a></li>
+<li><a href="#Guild_table_section">Guild</a></li>
+<li><a href="#ResStrat_table_section">ResStrat</a></li>
+<li><a href="#StackStruct_table_section">StackStruct</a></li>
+<li><a href="#siegeStruct_table_section">siegeStruct</a></li>
+<li><a href="#Building_table_section">Building</a></li>
+<li><a href="#M2TWEOPDU_table_section">M2TWEOPDU</a></li>
+<li><a href="#campaign_table_section">Campaign</a></li>
+<li><a href="#campaign_enums_section">Campaign Enums</a></li>
+<li><a href="#gameDataAll_table_section">gameDataAll</a></li>
+<li><a href="#battleStruct_table_section">battleStruct</a></li>
+<li><a href="#battleSide_table_section">battleSide</a></li>
+<li><a href="#trackedPointerArmy_table_section">trackedPointerArmy</a></li>
+<li><a href="#deploymentAreaS_table_section">deploymentAreaS</a></li>
 </ul>
 
-
-<h2>Modules</h2>
-<ul class="nowrap">
-  <li><strong>LuaPlugin</strong></li>
-</ul>
 <h2>Extra</h2>
 <ul class="nowrap">
-  <li><a href="extra/readme_imgui.md.html">LuaPlugin Gui docs</a></li>
+  <li><a href="extra/readme_imgui.md.html">LuaPlugin GUI Docs</a></li>
 </ul>
 
 </div>
@@ -81,8 +72,8 @@ scripting</h1>
 <h1>Module <code>LuaPlugin</code></h1>
 <p>
 <h1><a href="./../../index.html">Main page of M2TWEOP docs</a></h1>
-<h1><a href="./../Introduction_to_ImGui_v3.pdf">Gui scripting basics by Erken, PDF file </a></h1>
-<h1><a href="./../Introduction_to_ImGui_v3.odt">Gui scripting basics by Erken, ODT file </a></h1>
+<h1><a href="./../Introduction_to_ImGui_v3.pdf">Gui scripting basics by Erken, PDF file</a></h1>
+<h1><a href="./../Introduction_to_ImGui_v3.odt">Gui scripting basics by Erken, ODT file</a></h1>
 <p><img src="../Lua.png" alt="Lua logo"/>
 M2TWEOP structures and functions.</p>
 </p>
@@ -94,7 +85,7 @@ M2TWEOP structures and functions.</p>
     </ul>
 
 
-<h2><a href="#M2TWEOP_table_section">M2TWEOP table section </a></h2>
+<h2><a href="#M2TWEOP_table_section">M2TWEOP</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP">M2TWEOP</a></td>
@@ -169,7 +160,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Get faction owner region with ID</td>
 	</tr>
 </table>
-<h2><a href="#gameSTDUI_table_section">gameSTDUI table section </a></h2>
+<h2><a href="#gameSTDUI_table_section">gameSTDUI</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#gameSTDUI">gameSTDUI</a></td>
@@ -180,7 +171,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Get standart game ui element.</td>
 	</tr>
 </table>
-<h2><a href="#uiElementStruct_table_section">uiElementStruct table section </a></h2>
+<h2><a href="#uiElementStruct_table_section">uiElementStruct</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#uiElementStruct">uiElementStruct</a></td>
@@ -195,7 +186,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Get element of ui element with index</td>
 	</tr>
 </table>
-<h2><a href="#Objects_table_section">Objects table section </a></h2>
+<h2><a href="#Objects_table_section">Objects</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#stratmap.objects">stratmap.objects</a></td>
@@ -214,7 +205,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Replace custom tile.</td>
 	</tr>
 </table>
-<h2><a href="#Camera_table_section">Camera table section </a></h2>
+<h2><a href="#Camera_table_section">Camera</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#stratmap.camera">stratmap.camera</a></td>
@@ -233,7 +224,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Set zoom of stratcamera</td>
 	</tr>
 </table>
-<h2><a href="#Game_table_section">Game table section </a></h2>
+<h2><a href="#Game_table_section">Game</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#stratmap.game">stratmap.game</a></td>
@@ -276,14 +267,14 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Set gamescript events counter value.</td>
 	</tr>
 </table>
-<h2><a href="#Stratmap_table_section">Stratmap table section </a></h2>
+<h2><a href="#Stratmap_table_section">Stratmap</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#stratmap">stratmap</a></td>
 	<td class="summary">Basic stratmap table</td>
 	</tr>
 </table>
-<h2><a href="#Unit_table_section">Unit table section </a></h2>
+<h2><a href="#Unit_table_section">Unit</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#unit">unit</a></td>
@@ -294,7 +285,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Set unit basic parameters</td>
 	</tr>
 </table>
-<h2><a href="#Character_table_section">Character table section </a></h2>
+<h2><a href="#Character_table_section">Character</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#character">character</a></td>
@@ -329,7 +320,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Set bodyguard.</td>
 	</tr>
 </table>
-<h2><a href="#NamedCharacter_table_section">NamedCharacter table section </a></h2>
+<h2><a href="#NamedCharacter_table_section">NamedCharacter</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#namedCharacter">namedCharacter</a></td>
@@ -368,28 +359,28 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Set character as heir of his faction</td>
 	</tr>
 </table>
-<h2><a href="#Ancillary_table_section">Ancillary table section </a></h2>
+<h2><a href="#Ancillary_table_section">Ancillary</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#ancillary">ancillary</a></td>
 	<td class="summary">Basic ancillary table</td>
 	</tr>
 </table>
-<h2><a href="#traitContainer_table_section">traitContainer table section </a></h2>
+<h2><a href="#traitContainer_table_section">traitContainer</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#traitContainer">traitContainer</a></td>
 	<td class="summary">Basic traits table</td>
 	</tr>
 </table>
-<h2><a href="#EduEntry_table_section">EduEntry table section </a></h2>
+<h2><a href="#EduEntry_table_section">EduEntry</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#eduEntry">eduEntry</a></td>
 	<td class="summary">Basic eduEntry table</td>
 	</tr>
 </table>
-<h2><a href="#FactionStruct_table_section">FactionStruct table section </a></h2>
+<h2><a href="#FactionStruct_table_section">FactionStruct</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#factionStruct">factionStruct</a></td>
@@ -424,14 +415,14 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Get fort with number</td>
 	</tr>
 </table>
-<h2><a href="#FortStruct_table_section">FortStruct table section </a></h2>
+<h2><a href="#FortStruct_table_section">FortStruct</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#fortStruct">fortStruct</a></td>
 	<td class="summary">Basic fortStruct table</td>
 	</tr>
 </table>
-<h2><a href="#SettlementStruct_table_section">SettlementStruct table section </a></h2>
+<h2><a href="#SettlementStruct_table_section">SettlementStruct</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#settlementStruct">settlementStruct</a></td>
@@ -478,14 +469,14 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Set settlement religion value.</td>
 	</tr>
 </table>
-<h2><a href="#Guild_table_section">Guild table section </a></h2>
+<h2><a href="#Guild_table_section">Guild</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#guild">guild</a></td>
 	<td class="summary">Basic guild table</td>
 	</tr>
 </table>
-<h2><a href="#ResStrat_table_section">ResStrat table section </a></h2>
+<h2><a href="#ResStrat_table_section">ResStrat</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#resStrat">resStrat</a></td>
@@ -496,7 +487,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Set resource strat.</td>
 	</tr>
 </table>
-<h2><a href="#StackStruct_table_section">StackStruct table section </a></h2>
+<h2><a href="#StackStruct_table_section">StackStruct</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#stackStruct">stackStruct</a></td>
@@ -539,14 +530,14 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Attack another army.</td>
 	</tr>
 </table>
-<h2><a href="#siegeStruct_table_section">siegeStruct table section </a></h2>
+<h2><a href="#siegeStruct_table_section">siegeStruct</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#siegeStruct">siegeStruct</a></td>
 	<td class="summary">Basic siegeStruct table</td>
 	</tr>
 </table>
-<h2><a href="#Building_table_section">Building table section </a></h2>
+<h2><a href="#Building_table_section">Building</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#building">building</a></td>
@@ -561,7 +552,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Get name of building</td>
 	</tr>
 </table>
-<h2><a href="#M2TWEOPDU_table_section">M2TWEOPDU table section </a></h2>
+<h2><a href="#M2TWEOPDU_table_section">M2TWEOPDU</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU">M2TWEOPDU</a></td>
@@ -604,14 +595,14 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Set localized short description for M2TWEOPDU entry.</td>
 	</tr>
 </table>
-<h2><a href="#campaign_enums_section">campaign enums section </a></h2>
+<h2><a href="#campaign_enums_section">campaign enums section</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#dipRelType">dipRelType</a></td>
 	<td class="summary">Enum with a list of types of diplomatic relations.</td>
 	</tr>
 </table>
-<h2><a href="#campaign_table_section">campaign table section </a></h2>
+<h2><a href="#campaign_table_section">campaign</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#gameDataAll.campaignStruct">gameDataAll.campaignStruct</a></td>
@@ -626,7 +617,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Set diplomatic relations between factions</td>
 	</tr>
 </table>
-<h2><a href="#gameDataAll_table_section">gameDataAll table section </a></h2>
+<h2><a href="#gameDataAll_table_section">gameDataAll</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#gameDataAll">gameDataAll</a></td>
@@ -637,14 +628,14 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Call it on start of your script, this is static object and pointer to it dont changed</td>
 	</tr>
 </table>
-<h2><a href="#battleStruct_table_section">battleStruct table section </a></h2>
+<h2><a href="#battleStruct_table_section">battleStruct</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#gameDataAll.battleStruct">gameDataAll.battleStruct</a></td>
 	<td class="summary">basic battleStruct table</td>
 	</tr>
 </table>
-<h2><a href="#battleSide_table_section">battleSide table section </a></h2>
+<h2><a href="#battleSide_table_section">battleSide</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#battleStruct.battleSide">battleStruct.battleSide</a></td>
@@ -655,14 +646,14 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Get win condition string, for example: destroy<em>or</em>rout_enemy</td>
 	</tr>
 </table>
-<h2><a href="#trackedPointerArmy_table_section">trackedPointerArmy table section </a></h2>
+<h2><a href="#trackedPointerArmy_table_section">trackedPointerArmy</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#battleSide.trackedPointerArmy">battleSide.trackedPointerArmy</a></td>
 	<td class="summary">basic trackedPointerArmy table</td>
 	</tr>
 </table>
-<h2><a href="#deploymentAreaS_table_section">deploymentAreaS table section </a></h2>
+<h2><a href="#deploymentAreaS_table_section">deploymentAreaS</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#trackedPointerArmy.deploymentAreaS">trackedPointerArmy.deploymentAreaS</a></td>
@@ -673,7 +664,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Get pair of coords with number</td>
 	</tr>
 </table>
-<h2><a href="#EVENTS_TABLE_SECTION">EVENTS TABLE SECTION </a></h2>
+<h2><a href="#EVENTS_TABLE_SECTION">EVENTS</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#EventsFunctionsList">EventsFunctionsList</a></td>
@@ -1196,7 +1187,7 @@ M2TWEOP structures and functions.</p>
 </td>
 	</tr>
 </table>
-<h2><a href="#M2TWEOPFBX_table_section">M2TWEOPFBX table section </a></h2>
+<h2><a href="#M2TWEOPFBX_table_section">M2TWEOPFBX</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX">M2TWEOPFBX</a></td>
@@ -1267,7 +1258,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Get fbx object draw type.</td>
 	</tr>
 </table>
-<h2><a href="#M2TWEOPSounds_table_section">M2TWEOPSounds table section </a></h2>
+<h2><a href="#M2TWEOPSounds_table_section">M2TWEOPSounds</a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPSounds">M2TWEOPSounds</a></td>
@@ -1307,7 +1298,7 @@ M2TWEOP structures and functions.</p>
 <br/>
 
 
-    <h2 class="section-header "><a name="M2TWEOP_table_section"></a>M2TWEOP table section </h2>
+    <h2 class="section-header "><a name="M2TWEOP_table_section"></a>M2TWEOP </h2>
 
     <dl class="function">
     <dt>
@@ -1881,7 +1872,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="gameSTDUI_table_section"></a>gameSTDUI table section </h2>
+    <h2 class="section-header "><a name="gameSTDUI_table_section"></a>gameSTDUI </h2>
 
     <dl class="function">
     <dt>
@@ -1941,7 +1932,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="uiElementStruct_table_section"></a>uiElementStruct table section </h2>
+    <h2 class="section-header "><a name="uiElementStruct_table_section"></a>uiElementStruct </h2>
 
     <dl class="function">
     <dt>
@@ -2055,7 +2046,7 @@ subElement1:execute();</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Objects_table_section"></a>Objects table section </h2>
+    <h2 class="section-header "><a name="Objects_table_section"></a>Objects </h2>
 
     <dl class="function">
     <dt>
@@ -2226,7 +2217,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Camera_table_section"></a>Camera table section </h2>
+    <h2 class="section-header "><a name="Camera_table_section"></a>Camera </h2>
 
     <dl class="function">
     <dt>
@@ -2358,7 +2349,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Game_table_section"></a>Game table section </h2>
+    <h2 class="section-header "><a name="Game_table_section"></a>Game </h2>
 
     <dl class="function">
     <dt>
@@ -2755,7 +2746,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Stratmap_table_section"></a>Stratmap table section </h2>
+    <h2 class="section-header "><a name="Stratmap_table_section"></a>Stratmap </h2>
 
     <dl class="function">
     <dt>
@@ -2794,7 +2785,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Unit_table_section"></a>Unit table section </h2>
+    <h2 class="section-header "><a name="Unit_table_section"></a>Unit </h2>
 
     <dl class="function">
     <dt>
@@ -2918,7 +2909,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Character_table_section"></a>Character table section </h2>
+    <h2 class="section-header "><a name="Character_table_section"></a>Character </h2>
 
     <dl class="function">
     <dt>
@@ -3235,7 +3226,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="NamedCharacter_table_section"></a>NamedCharacter table section </h2>
+    <h2 class="section-header "><a name="NamedCharacter_table_section"></a>NamedCharacter </h2>
 
     <dl class="function">
     <dt>
@@ -3695,7 +3686,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Ancillary_table_section"></a>Ancillary table section </h2>
+    <h2 class="section-header "><a name="Ancillary_table_section"></a>Ancillary </h2>
 
     <dl class="function">
     <dt>
@@ -3734,7 +3725,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="traitContainer_table_section"></a>traitContainer table section </h2>
+    <h2 class="section-header "><a name="traitContainer_table_section"></a>traitContainer </h2>
 
     <dl class="function">
     <dt>
@@ -3779,7 +3770,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="EduEntry_table_section"></a>EduEntry table section </h2>
+    <h2 class="section-header "><a name="EduEntry_table_section"></a>EduEntry </h2>
 
     <dl class="function">
     <dt>
@@ -3962,7 +3953,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="FactionStruct_table_section"></a>FactionStruct table section </h2>
+    <h2 class="section-header "><a name="FactionStruct_table_section"></a>FactionStruct </h2>
 
     <dl class="function">
     <dt>
@@ -4356,7 +4347,7 @@ ourSett = ourFac:getSettlement(<span class="number">0</span>);
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="FortStruct_table_section"></a>FortStruct table section </h2>
+    <h2 class="section-header "><a name="FortStruct_table_section"></a>FortStruct </h2>
 
     <dl class="function">
     <dt>
@@ -4413,7 +4404,7 @@ ourSett = ourFac:getSettlement(<span class="number">0</span>);
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="SettlementStruct_table_section"></a>SettlementStruct table section </h2>
+    <h2 class="section-header "><a name="SettlementStruct_table_section"></a>SettlementStruct </h2>
 
     <dl class="function">
     <dt>
@@ -4908,7 +4899,7 @@ currSet:changeOwner(fac1);
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Guild_table_section"></a>Guild table section </h2>
+    <h2 class="section-header "><a name="Guild_table_section"></a>Guild </h2>
 
     <dl class="function">
     <dt>
@@ -4959,7 +4950,7 @@ currSet:changeOwner(fac1);
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="ResStrat_table_section"></a>ResStrat table section </h2>
+    <h2 class="section-header "><a name="ResStrat_table_section"></a>ResStrat </h2>
 
     <dl class="function">
     <dt>
@@ -5031,7 +5022,7 @@ currSet:changeOwner(fac1);
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="StackStruct_table_section"></a>StackStruct table section </h2>
+    <h2 class="section-header "><a name="StackStruct_table_section"></a>StackStruct </h2>
 
     <dl class="function">
     <dt>
@@ -5499,7 +5490,7 @@ ourChar:kill();</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="siegeStruct_table_section"></a>siegeStruct table section </h2>
+    <h2 class="section-header "><a name="siegeStruct_table_section"></a>siegeStruct </h2>
 
     <dl class="function">
     <dt>
@@ -5538,7 +5529,7 @@ ourChar:kill();</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Building_table_section"></a>Building table section </h2>
+    <h2 class="section-header "><a name="Building_table_section"></a>Building </h2>
 
     <dl class="function">
     <dt>
@@ -5645,7 +5636,7 @@ ourChar:kill();</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="M2TWEOPDU_table_section"></a>M2TWEOPDU table section </h2>
+    <h2 class="section-header "><a name="M2TWEOPDU_table_section"></a>M2TWEOPDU </h2>
 
     <dl class="function">
     <dt>
@@ -6061,7 +6052,7 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="campaign_table_section"></a>campaign table section </h2>
+    <h2 class="section-header "><a name="campaign_table_section"></a>campaign </h2>
 
     <dl class="function">
     <dt>
@@ -6278,7 +6269,7 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="gameDataAll_table_section"></a>gameDataAll table section </h2>
+    <h2 class="section-header "><a name="gameDataAll_table_section"></a>gameDataAll </h2>
 
     <dl class="function">
     <dt>
@@ -6336,7 +6327,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="battleStruct_table_section"></a>battleStruct table section </h2>
+    <h2 class="section-header "><a name="battleStruct_table_section"></a>battleStruct </h2>
 
     <dl class="function">
     <dt>
@@ -6405,7 +6396,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="battleSide_table_section"></a>battleSide table section </h2>
+    <h2 class="section-header "><a name="battleSide_table_section"></a>battleSide </h2>
 
     <dl class="function">
     <dt>
@@ -6503,7 +6494,7 @@ side1=gameData.battleStruct.sides[<span class="number">1</span>];
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="trackedPointerArmy_table_section"></a>trackedPointerArmy table section </h2>
+    <h2 class="section-header "><a name="trackedPointerArmy_table_section"></a>trackedPointerArmy </h2>
 
     <dl class="function">
     <dt>
@@ -6536,7 +6527,7 @@ side1=gameData.battleStruct.sides[<span class="number">1</span>];
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="deploymentAreaS_table_section"></a>deploymentAreaS table section </h2>
+    <h2 class="section-header "><a name="deploymentAreaS_table_section"></a>deploymentAreaS </h2>
 
     <dl class="function">
     <dt>
@@ -6604,7 +6595,7 @@ deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="EVENTS_TABLE_SECTION"></a>EVENTS TABLE SECTION </h2>
+    <h2 class="section-header "><a name="EVENTS_TABLE_SECTION"></a>EVENTS </h2>
 
     <dl class="function">
     <dt>
@@ -10399,7 +10390,7 @@ newCapital=fac.capital();
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="M2TWEOPFBX_table_section"></a>M2TWEOPFBX table section </h2>
+    <h2 class="section-header "><a name="M2TWEOPFBX_table_section"></a>M2TWEOPFBX </h2>
 
     <dl class="function">
     <dt>
@@ -11184,7 +11175,7 @@ M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>)
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="M2TWEOPSounds_table_section"></a>M2TWEOPSounds table section </h2>
+    <h2 class="section-header "><a name="M2TWEOPSounds_table_section"></a>M2TWEOPSounds </h2>
 
     <dl class="function">
     <dt>

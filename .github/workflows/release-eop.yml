@@ -133,3 +133,4 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         commit: "master"
         allowUpdates: true
+        prerelease: true
