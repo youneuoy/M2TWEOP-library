@@ -131,6 +131,6 @@ jobs:
         artifacts: "${{ env.EOP_VERSION }}.zip"
         bodyFile: "./docs/releaseInfo/releaseDescription.md"
         token: ${{ secrets.GITHUB_TOKEN }}
-        commit: "master"
+        commit: "update-docs"
         allowUpdates: true
         prerelease: true
