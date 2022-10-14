@@ -344,14 +344,9 @@ healthchecksdb
 build
 documentationGenerator/EOPDocs/build/*
 
-documentationGenerator/EOPDocs/source/_static/LuaLib/index.html
-documentationGenerator/EOPDocs/source/_static/LuaLib/extra/readme_imgui.md.html
 logs
 M2TWEOP.zip
-documentationGenerator/EOPDocs/build/*
 documentationGenerator/build
-documentationGenerator/source/_static
-documentationGenerator/generatedLuaDocs/*
 M2TWEOPGenerated/
 .DS_Store
 generatedLuaDocs
