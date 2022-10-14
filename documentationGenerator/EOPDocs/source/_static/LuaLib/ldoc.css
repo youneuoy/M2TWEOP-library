@@ -6,6 +6,27 @@ body {
     background: #eff4ff;
 }
 
+#container{
+    width: 100%;
+}
+
+#homepageText {
+    font-size: 25px;
+    text-align: center;
+}
+
+#headerContainer {
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    font-size: 20px;
+}
+
+#headerContainer ul {
+    padding-right: 25px;
+    list-style: none;
+}
+
 .product {
     display: none;
 }
@@ -14,8 +35,8 @@ a:link { color: #008fee; }
 a:visited { color: #008fee; }
 a:hover { color: #22a7ff; }
 
-h1 { font-size:26px; font-weight: normal; }
-h2 { font-size:22px; font-weight: normal; }
+h1 { font-size:26px; font-weight: bold; }
+h2 { font-size:22px; font-weight: bold; }
 h3 { font-size:18px; font-weight: normal; }
 h4 { font-size:16px; font-weight: normal; }
 
@@ -56,10 +77,18 @@ p.name {
     background-color: white;
     border-right: 1px solid #d3dbec;
     border-bottom: 1px solid #d3dbec;
-
     width: 14em;
     vertical-align: top;
     overflow: visible;
+    width: 20vw;
+    height: 100vh;
+    align-content: left;
+    top: 0;
+    bottom:0;
+    position:fixed;
+    overflow-y:scroll;
+    overflow-x:hidden;
+    margin-bottom: 20px;
 }
 
 #navigation br {
@@ -80,10 +109,15 @@ p.name {
     border-bottom: 1px solid #d3dbec;
     padding-left: 15px;
     padding-right: 15px;
-    padding-top: 10px;
     padding-bottom: 10px;
-    margin-top: 30px;
     margin-bottom: 0px;
+}
+
+#content {
+    margin-left: 20vw;
+    /* width-max: 700px; */
+    width: 78vw;
+    overflow-x:hidden;
 }
 
 #content h1 {
@@ -150,6 +184,7 @@ table.index td { text-align: left; vertical-align: top; }
     font-size:1em;
     list-style-type: none;
     margin: 1px 1px 10px 1px;
+    padding-left: 7px;
 }
 
 #navigation li {
@@ -162,19 +197,15 @@ table.index td { text-align: left; vertical-align: top; }
     margin: 0px 3px 0px -1em;
 }
 
-#content {
-    margin-left: 14em;
-    width-max: 700px;
-}
 
 #content p {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 #content table {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
     background-color: white;
 }
 

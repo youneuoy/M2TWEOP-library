@@ -22,42 +22,45 @@
 
 <div id="navigation">
 <br/>
-<h1>M2TWEOP Lua</h1>
+<h1>M2TWEOP Lua Docs.</h1>
 
-<h2>Tables</h2>
+<h2>Globals</h2>
 <ul>
 <li><a href="#M2TWEOP_table_section">M2TWEOP</a></li>
-<li><a href="#EVENTS_TABLE_SECTION">M2TWEOP EVENTS</a></li>
+<li><a href="#M2TWEOPDU_table_section">M2TWEOP EDU</a></li>
+<li><a href="#EVENTS_TABLE_SECTION">M2TWEOP Events</a></li>
 <li><a href="#M2TWEOPFBX_table_section">M2TWEOP FBX</a></li>
 <li><a href="#M2TWEOPSounds_table_section">M2TWEOP Sounds</a></li>
-<li><a href="#gameSTDUI_table_section">gameSTDUI</a></li>
-<li><a href="#uiElementStruct_table_section">uiElementStruct</a></li>
-<li><a href="#Objects_table_section">Objects</a></li>
+<ul><a href="#Stratmap_table_section">Stratmap</a>
+    <li><a href="#Objects_table_section"> Objects</a></li>
+    <li><a href="#Game_table_section"> Game</a></li>
+    <li><a href="#Guild_table_section"> Guilds</a></li>
+</ul>
+<li><a href="#Building_table_section">Buildings</a></li>
 <li><a href="#Camera_table_section">Camera</a></li>
-<li><a href="#Game_table_section">Game</a></li>
-<li><a href="#Stratmap_table_section">Stratmap</a></li>
+<li><a href="#campaign_table_section">Campaign</a></li>
+<li><a href="#campaign_enums_section">Campaign Enums</a></li>
+<li><a href="#ResStrat_table_section">ResStrat</a></li>
 <li><a href="#Unit_table_section">Unit</a></li>
 <li><a href="#Character_table_section">Character</a></li>
 <li><a href="#NamedCharacter_table_section">NamedCharacter</a></li>
 <li><a href="#Ancillary_table_section">Ancillary</a></li>
 <li><a href="#traitContainer_table_section">traitContainer</a></li>
 <li><a href="#EduEntry_table_section">EduEntry</a></li>
-<li><a href="#FactionStruct_table_section">FactionStruct</a></li>
-<li><a href="#FortStruct_table_section">FortStruct</a></li>
+<li><a href="#gameSTDUI_table_section">gameSTDUI</a></li>
+<li><a href="#gameDataAll_table_section">gameDataAll</a></li>
+<li><a href="#battleSide_table_section">battleSide</a></li>
+<li><a href="#deploymentAreaS_table_section">deploymentAreaS</a></li>
+<li><a href="#trackedPointerArmy_table_section">trackedPointerArmy</a></li>
+<h2>Data Types</h2>
+<li><a href="#uiElementStruct_table_section">uiElementStruct</a></li>
 <li><a href="#SettlementStruct_table_section">SettlementStruct</a></li>
-<li><a href="#Guild_table_section">Guild</a></li>
-<li><a href="#ResStrat_table_section">ResStrat</a></li>
 <li><a href="#StackStruct_table_section">StackStruct</a></li>
 <li><a href="#siegeStruct_table_section">siegeStruct</a></li>
-<li><a href="#Building_table_section">Building</a></li>
-<li><a href="#M2TWEOPDU_table_section">M2TWEOPDU</a></li>
-<li><a href="#campaign_table_section">Campaign</a></li>
-<li><a href="#campaign_enums_section">Campaign Enums</a></li>
-<li><a href="#gameDataAll_table_section">gameDataAll</a></li>
 <li><a href="#battleStruct_table_section">battleStruct</a></li>
-<li><a href="#battleSide_table_section">battleSide</a></li>
-<li><a href="#trackedPointerArmy_table_section">trackedPointerArmy</a></li>
-<li><a href="#deploymentAreaS_table_section">deploymentAreaS</a></li>
+<li><a href="#FactionStruct_table_section">FactionStruct</a></li>
+<li><a href="#FortStruct_table_section">FortStruct</a></li>
+
 </ul>
 
 <h2>Extra</h2>
@@ -69,21 +72,22 @@
 
 <div id="content">
 
-<h1>Module <code>LuaPlugin</code></h1>
 <p>
-<h1><a href="./../../index.html">Main page of M2TWEOP docs</a></h1>
-<h1><a href="./../Introduction_to_ImGui_v3.pdf">Gui scripting basics by Erken, PDF file</a></h1>
-<h1><a href="./../Introduction_to_ImGui_v3.odt">Gui scripting basics by Erken, ODT file</a></h1>
-<p><img src="../Lua.png" alt="Lua logo"/>
-M2TWEOP structures and functions.</p>
-</p>
-<p> There are not many examples and descriptions here. Also note that the examples do not include many of the checks that would be required when creating modifications.</p>
-    <h3>Info:</h3>
+<p><img src="https://youneuoy.github.io/M2TWEOP-library/_static/M2TWEOP.png" alt="Lua logo"/>
+<h1 id="homepageText"><a href="./../../index.html">Medieval II: Total War - Engine Overhaul Project</a></h1>
+<!-- <h1><a href="./../Introduction_to_ImGui_v3.pdf">Gui scripting basics by Erken, PDF file</a></h1> -->
+<!-- <h1><a href="./../Introduction_to_ImGui_v3.odt">Gui scripting basics by Erken, ODT file</a></h1> -->
+<!-- <p><img src="../Lua.png" alt="Lua logo"/> -->
+<div id="headerContainer">
+    <p> Welcome to the Medieval 2: Engine Overhaul Project Lua Documentation!
+        <br>
+        <br>
+        Please note that some of the examples do not include many of the checks that would be required when creating modifications.</p>
     <ul>
         <li><strong>License</strong>: GPL-3.0</li>
         <li><strong>Author</strong>: youneuoy</li>
     </ul>
-
+</div>
 
 <h2><a href="#M2TWEOP_table_section">M2TWEOP</a></h2>
 <table class="function_list">

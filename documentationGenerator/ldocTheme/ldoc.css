@@ -1,4 +1,4 @@
-body { 
+body {
     color: #47555c;
     font-size: 16px;
     font-family: "Open Sans", sans-serif;
@@ -165,6 +165,7 @@ table.index td { text-align: left; vertical-align: top; }
 #content {
     margin-left: 14em;
     width-max: 700px;
+    margin-right: 0px;
 }
 
 #content p {
