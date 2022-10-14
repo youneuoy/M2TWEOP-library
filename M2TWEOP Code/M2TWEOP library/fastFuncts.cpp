@@ -249,9 +249,9 @@ namespace fastFuncts
 		{
 			for (int j = 0; j < listFac[i]->portBuildingsNum; j++)
 			{
-				if (listFac[i]->portBuildings[j]->x == x
+				if (listFac[i]->portBuildings[j]->xCoord == x
 					&&
-					listFac[i]->portBuildings[j]->y == y
+					listFac[i]->portBuildings[j]->yCoord == y
 					)
 				{
 					return listFac[i]->portBuildings[j];

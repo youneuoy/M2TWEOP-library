@@ -818,7 +818,7 @@ public:
 };
 
 
-
+/*
 class OntryFindTypeIdInListRecruitPoolEDB
 	:public AATemplate
 {
@@ -857,4 +857,4 @@ public:
 private:
 	LPVOID funcAddress;
 };
-
+*/

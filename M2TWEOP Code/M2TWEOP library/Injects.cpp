@@ -3089,7 +3089,7 @@ void blockLaunchWithoutEop::SetNewCode()
 	delete a;
 }
 
-
+/*
 OntryFindTypeIdInListRecruitPoolEDB::OntryFindTypeIdInListRecruitPoolEDB(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
@@ -3250,3 +3250,4 @@ void OnrecruitPoolFillFromFile2::SetNewCode()
 
 	delete a;
 }
+*/
