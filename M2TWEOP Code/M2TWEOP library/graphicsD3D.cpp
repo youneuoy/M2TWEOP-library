@@ -30,13 +30,27 @@ T FnCast(uint32_t fnToCast, T pFnCastTo) {
 }
 NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+
 	plugins::onWindowProc(hWnd, uMsg, wParam, lParam);
 
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
 	{
 		return true;
 	}
-
+	// TO-DO: Stop this code from crashing
+	// switch (uMsg)
+	// {
+	// case WM_SETFOCUS:
+	// 	RECT rect;
+	// 	if (!GetWindowRect(hWnd, &rect)) {
+	// 		break;
+	// 	}
+	// 	ClipCursor(&rect);
+	// 	break;
+	// case WM_KILLFOCUS:
+	// 	ClipCursor(NULL);
+	// 	break;
+	// }
 	if (dataS.ifMouseOrKeyBoardAtImgui)
 	{
 		switch (uMsg)
@@ -173,7 +187,7 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	// Restore the DX9 state
 	d3d9_state_block->Apply();
 	d3d9_state_block->Release();
-	
+
 }
 void graphicsD3D::onDrawAllGameStuff()
 {
@@ -269,7 +283,7 @@ void graphicsD3D::onDrawAllGameStuff()
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.f);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(43.f / 255.f, 43.f / 255.f, 43.f / 255.f, 100.f / 255.f));
 	ImGui::RenderNotifications();
-	ImGui::PopStyleVar(1); 
+	ImGui::PopStyleVar(1);
 	ImGui::PopStyleColor(1);
 
 
@@ -443,7 +457,7 @@ NOINLINE EOP_EXPORT void graphicsExport::unloadTexture(LPDIRECT3DTEXTURE9 textur
 }
 
 NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevice)
-{	
+{
 	graphicsD3D::dataS.pDevice = pDevice;
 
 	graphicsD3D::InitS();

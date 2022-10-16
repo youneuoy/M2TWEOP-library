@@ -23,6 +23,7 @@
 
 ### **Library**
 - Edu things: ability to create unit types from files
+- Now in windowed mode the mouse will not move out of the game window.
 
 ### **Lua Plugin**
 - EduEntry table: new fields
