@@ -559,7 +559,7 @@ void __stdcall patchesForGame::onBattleStateChange()
 		battleCreator::onBattleResultsScreen();
 	}
 }
-
+/*
 int* __fastcall patchesForGame::ontryFindTypeIdInListRecruitPoolEDB(char* unitTypeString)
 {
 	return  eduThings::tryFindDataEopEduIndex(unitTypeString);
@@ -575,7 +575,7 @@ EduEntry* __fastcall patchesForGame::onrecruitPoolFillFromFile(int eduIndex)
 
 	return eduThings::getEopEduEntry(eduIndex);
 }
-
+*/
 
 struct
 {

@@ -99,9 +99,10 @@ public:
 	//called not in all cases!
 	static void WINAPI onBattleStateChange();
 
-
+	/*
 	static int* __fastcall ontryFindTypeIdInListRecruitPoolEDB(char* unitTypeString);
 	static EduEntry* __fastcall onrecruitPoolFillFromFile(int eduIndex);
+	*/
 };
 
 class patchessForConsole
