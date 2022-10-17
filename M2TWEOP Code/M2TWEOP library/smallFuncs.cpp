@@ -430,5 +430,10 @@ namespace smallFuncs
 
 	}
 
+	NOINLINE EOP_EXPORT int GetUnitSize()
+	{
+		return *dataOffsets::offsets.gameUnit_size;
+	}
+
 
 };
