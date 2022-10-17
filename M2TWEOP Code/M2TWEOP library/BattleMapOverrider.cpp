@@ -10,9 +10,9 @@ bool BattleMapOverrider::Draw()
     bool isWork = true;
 
 	ImGui::SetNextWindowPos({ 0,0 }, ImGuiCond_Always);
-	ImGui::SetNextWindowSize({ 500,-1 }, ImGuiCond_Always);
+	ImGui::SetNextWindowSize({ 600,-1 }, ImGuiCond_Always);
 
-    ImGui::Begin("Map manager", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+    ImGui::Begin("Map overrider", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
 
 
     if (ImGui::Button("Close"))

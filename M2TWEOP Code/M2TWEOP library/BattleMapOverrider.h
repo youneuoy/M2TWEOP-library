@@ -20,7 +20,7 @@ private:
 
 
 		//size of one selectable
-		ImVec2 selectableSize{ 200,50 };
+		ImVec2 selectableSize{ 250,50 };
 		//size of selectables child
 		ImVec2 selectablesSize{};
 	}overidedSel;
