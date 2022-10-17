@@ -24,6 +24,7 @@
 ![](https://i.imgur.com/0ctfDQi.png)
 
 ### **Library**
+- Hosteat: select battle winner without casualties - *youneuoy*
 - DeveloperMode: activated by ctrl+2 - *youneuoy*
 - DeveloperMode: BattleMapOverrider, useful for custom maps testing. - *youneuoy*
 
