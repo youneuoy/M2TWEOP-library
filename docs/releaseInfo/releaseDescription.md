@@ -37,6 +37,7 @@
 - Added structures: `portStruct`, `watchtowerStruct`, `factionStratMap`, `buildingsQueue`, `buildingInQueue` - *Callistonian*
 - Renamed "`getResourceCode`" to "`getResourceID`" for uniformity :: WARNING: backwards incompatibility! - *Callistonian*
 - Added trade resource getters for `hasMine` and image (icon) - *Callistonian*
+- campaign table: GetUnitSize function - *youneuoy*
 
 ### **Documentation**
 - Updated Erken's ImGUI tutorial to V3 (Thanks again Erken!) - *Medik*
