@@ -65,7 +65,10 @@ void battlemapWorker::TryCreateRecodsList(dataBaseWorlds* worldsDB)
 	{
 		string recName = getRecordName(currRecord);
 		string recGroup = getRecordGroup(currRecord);
-
+		if (recGroup != "settlement")
+		{
+			continue;
+		}
 		if (worldRecords.count(recGroup)==0)
 		{
 			worldRecords[recGroup] = make_shared<worldWrappedRecords>();
