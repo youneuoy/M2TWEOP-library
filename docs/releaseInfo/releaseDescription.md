@@ -24,6 +24,8 @@
 ![](https://i.imgur.com/0ctfDQi.png)
 
 ### **Library**
+- DeveloperMode: activated by ctrl+2 - *youneuoy*
+- DeveloperMode: BattleMapOverrider, useful for custom maps testing. - *youneuoy*
 
 ### **Lua Plugin**
 - EduEntry table: new fields - *youneuoy*
