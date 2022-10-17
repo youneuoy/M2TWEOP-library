@@ -473,8 +473,6 @@ void managerF::doPachs()
 	f1 << "End." << endl;
 
 	f1.close();
-
-	MessageBoxA(NULL, "TEST", "TEST", NULL);
 }
 
 jsn::json loadJsonFromFile(const std::string& fpath)
