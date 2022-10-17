@@ -1,5 +1,11 @@
 #include "battlemapWorker.h"
 
+battlemapWorker::battlemapWorker()
+{
+	worldRecords["none"] = make_shared<worldWrappedRecords>();
+	worldRecords["none"]->emplace_back(make_shared<worldWrappedRec>("none", "none"));
+}
+
 string battlemapWorker::getRecordName(worldRecord* selectedRecord)
 {
 	int allocatedLen = selectedRecord->allocatedNameLen;
@@ -50,13 +56,21 @@ string battlemapWorker::getRecordGroup(worldRecord* selectedRecord)
 }
 void battlemapWorker::TryCreateRecodsList(dataBaseWorlds* worldsDB)
 {
+	if (worldRecords.size() > 1)
+	{
+		return;
+	}
 	worldRecord* currRecord = worldsDB->records;
 	do
 	{
 		string recName = getRecordName(currRecord);
 		string recGroup = getRecordGroup(currRecord);
 
-		worldRecords.emplace_back(worldWrappedRec{ recName ,recGroup });
+		if (worldRecords.count(recGroup)==0)
+		{
+			worldRecords[recGroup] = make_shared<worldWrappedRecords>();
+		}
+		worldRecords[recGroup]->emplace_back(make_shared<worldWrappedRec>( recName ,recGroup ));
 
 		currRecord++;
 	} while (currRecord != worldsDB->recordsEnd);

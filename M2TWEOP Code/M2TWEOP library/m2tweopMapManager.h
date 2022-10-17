@@ -18,6 +18,6 @@
 using namespace std;
 namespace m2tweopMapManager
 {
-	void draw();
+	bool draw();
 };
 

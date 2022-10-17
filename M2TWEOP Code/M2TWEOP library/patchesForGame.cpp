@@ -24,6 +24,10 @@ worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, world
 	if (selectedWorld.empty()||selectedWorld == selectRecordS)
 	{
 		selectedWorld = battleCreator::selectWorldpkgdesc(selectRecordS, selectRecordG);
+		if (selectedWorld.empty() || selectedWorld == selectRecordS)
+		{
+			selectedWorld = globals::dataS.Modules.developerMode.SelectWorldpkgdesc(selectRecordS, selectRecordG);
+		}
 	}
 
 	if (selectedWorld.empty() || selectedWorld == selectRecordS)

@@ -2,17 +2,24 @@
 #include"headersSTD.h"
 
 #include "battlemapWorker.h"
+#include "DeveloperMode.h"
 class globals
 {
 public:
 	static struct dataGlob
 	{
-		struct
+		struct developerS
+		{
+
+		};
+
+		struct 
 		{
 			bool isBlockLaunchWithoutEop = false;
 		}gameCfg;
 		struct modulesS
 		{
+			DeveloperMode developerMode;
 			battlemapWorker battlemapWorker;
 		}Modules;
 

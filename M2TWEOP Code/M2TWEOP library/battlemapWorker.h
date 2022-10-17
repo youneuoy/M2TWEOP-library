@@ -4,6 +4,7 @@
 class battlemapWorker
 {
 public:
+	battlemapWorker();
 	struct dataBaseWorlds
 	{
 		int something;
@@ -15,12 +16,21 @@ public:
 	string getRecordName(worldRecord* selectedRecord);
 	string getRecordGroup(worldRecord* selectedRecord);
 	void TryCreateRecodsList(dataBaseWorlds* worldsDB);
-private:
+
 	struct worldWrappedRec
 	{
+		worldWrappedRec(const string &rec, const string& gr)
+		{
+			record = rec;
+			group = gr;
+		}
 		string record;
 		string group;
 	};
-	vector<shared_ptr<worldWrappedRec>>worldRecords;
+	typedef vector<shared_ptr<worldWrappedRec>>worldWrappedRecords;
+	//by groups
+	map<string, shared_ptr <worldWrappedRecords>> worldRecords;
+private:
+
 };
 

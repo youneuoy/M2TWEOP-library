@@ -200,7 +200,8 @@ void graphicsD3D::onDrawAllGameStuff()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-
+	auto& developerMode = globals::dataS.Modules.developerMode;
+	developerMode.Update();
 	plugins::onEndScene(graphicsD3D::dataS.pDevice);
 	//graphicsD3D::Draw(pDevice);
 	if (drawParams.drawEOPStartInfo == true)
@@ -278,7 +279,10 @@ void graphicsD3D::onDrawAllGameStuff()
 			ImGui::InsertNotification(bMsg);
 		}
 	}
+
+
 	battleCreator::draw(graphicsD3D::dataS.pDevice);
+
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.f);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(43.f / 255.f, 43.f / 255.f, 43.f / 255.f, 100.f / 255.f));
@@ -286,9 +290,6 @@ void graphicsD3D::onDrawAllGameStuff()
 	ImGui::PopStyleVar(1);
 	ImGui::PopStyleColor(1);
 
-
-
-	m2tweopMapManager::draw();
 
 
 	ImGuiIO& io = ImGui::GetIO();

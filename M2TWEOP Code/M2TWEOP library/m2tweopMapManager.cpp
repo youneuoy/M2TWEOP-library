@@ -10,25 +10,17 @@ namespace m2tweopMapManager
 		bool isShowMap = false;
 	}managerData;
 
-	void draw()
+	bool draw()
 	{
-		static bool isDrawNeeded = false;
+		bool isWork = true;
 
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
 		campaign* campaign = gameDataAll->campaignData;
 		//if (campaign->isAdminPasswordExist == false||(campaign->isAdminPasswordExist==true&& campaign->isHotseatLogon==true))
 		//{
-			if ((ImGui::GetIO().KeysDownDuration[VK_CONTROL] > 0.f && ImGui::GetIO().KeysDownDuration['M'] > 0.f)
-				&& (ImGui::GetIO().KeysDownDurationPrev[VK_CONTROL] == 0.f|| ImGui::GetIO().KeysDownDuration['M'] == 0.f)
-				)
-			{
-				isDrawNeeded = !isDrawNeeded;
-			}
+
 		//}
-		if (isDrawNeeded == false)
-		{
-			return;
-		}
+
 
 		ImGui::SetNextWindowPos({ 0,0 }, ImGuiCond_Always);
 		if (managerData.isShowMap == true)
@@ -41,6 +33,11 @@ namespace m2tweopMapManager
 		}
 		ImGui::Begin("Map manager",nullptr, ImGuiWindowFlags_NoTitleBar| ImGuiWindowFlags_NoResize| ImGuiWindowFlags_NoMove);
 
+
+		if (ImGui::Button("Close"))
+		{
+			isWork = false;
+		}
 		if (managerData.isShowMap == false)
 		{
 			if (ImGui::Button("Open map manager"))
@@ -86,5 +83,6 @@ namespace m2tweopMapManager
 
 		ImGui::End();
 
+		return isWork;
 	}
 };

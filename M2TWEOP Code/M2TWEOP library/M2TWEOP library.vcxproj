@@ -226,8 +226,10 @@
     <ClInclude Include="..\3rd\nlohmann\json.hpp" />
     <ClInclude Include="actionsStrat.h" />
     <ClInclude Include="agePatch.h" />
+    <ClInclude Include="BattleMapOverrider.h" />
     <ClInclude Include="battlemapWorker.h" />
     <ClInclude Include="dataOffsets.h" />
+    <ClInclude Include="DeveloperMode.h" />
     <ClInclude Include="eduFastFuncts.h" />
     <ClInclude Include="eduThings.h" />
     <ClInclude Include="eopSounds.h" />
@@ -298,8 +300,10 @@
     <ClCompile Include="actionsStrat.cpp" />
     <ClCompile Include="actionsStratHelpers.cpp" />
     <ClCompile Include="agePatch.cpp" />
+    <ClCompile Include="BattleMapOverrider.cpp" />
     <ClCompile Include="battlemapWorker.cpp" />
     <ClCompile Include="dataOffsets.cpp" />
+    <ClCompile Include="DeveloperMode.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="eduFastFuncts.cpp" />
     <ClCompile Include="eduThings.cpp" />
