@@ -1,5 +1,7 @@
 #pragma once
 #include"headersSTD.h"
+
+#include "battlemapWorker.h"
 class globals
 {
 public:
@@ -9,7 +11,10 @@ public:
 		{
 			bool isBlockLaunchWithoutEop = false;
 		}gameCfg;
-
+		struct modulesS
+		{
+			battlemapWorker battlemapWorker;
+		}Modules;
 
 		//steam =2, kingdoms=1
 		UINT32 gamever;

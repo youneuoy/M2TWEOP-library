@@ -10,98 +10,16 @@
 #include "eduThings.h"
 #include "fastFunctsHelpers.h"
 
-string getRecordName(worldRecord* selectedRecord)
-{
-	int allocatedLen = selectedRecord->allocatedNameLen;
-	char* str = nullptr;
-	if (allocatedLen > 15)
-	{
-		str = *(char**)selectedRecord->recordName;
-	}
-	else
-	{
-		str = &selectedRecord->recordName[0];
-	}
-
-	int nameLen = selectedRecord->nameLen;
-
-	string retS;
-	for (int i = 0; i < nameLen; i++)
-	{
-		retS.push_back(str[i]);
-	}
-	retS[nameLen] = '\0';
-
-	return retS;
-}
-
-
-string getRecordGroup(worldRecord* selectedRecord)
-{
-	int allocatedLen = selectedRecord->allocatedGroupLen;
-	char* str = nullptr;
-	if (allocatedLen > 15)
-	{
-		str = *(char**)selectedRecord->recordGroup;
-	}
-	else
-	{
-		str = &selectedRecord->recordGroup[0];
-	}
-
-	int groupLen = selectedRecord->groupLen;
-
-	string retS;
-	for (int i = 0; i < groupLen; i++)
-	{
-		retS.push_back(str[i]);
-	}
-	retS[groupLen] = '\0';
-
-	return retS;
-}
-
-struct worldWrapRec
-{
-	string record;
-	string group;
-};
-
-
-
-
-
-void __fastcall testWorlds(char* database)
-{
-	struct dataBaseS
-	{
-		int something;
-		int something2;
-		worldRecord* records;
-		worldRecord* recordsEnd;
-	};
-	vector<worldWrapRec>wrapVec;
-	dataBaseS* db = (dataBaseS*)database;
-
-	worldRecord* currRecord = db->records;
-	do
-	{
-		string recName = getRecordName(currRecord);
-		string recGroup = getRecordGroup(currRecord);
-
-		wrapVec.emplace_back(worldWrapRec{ recName ,recGroup });
-
-		currRecord++;
-	} while (currRecord != db->recordsEnd);
-	int i = 0;
-}
-
 
 worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, worldRecord* selectedRecord)
 {
-	testWorlds(database);
-	string selectRecordS = getRecordName(selectedRecord);
-	string selectRecordG = getRecordGroup(selectedRecord);
+	auto& battlemapWorker = globals::dataS.Modules.battlemapWorker;
+
+
+	battlemapWorker.TryCreateRecodsList(reinterpret_cast<battlemapWorker::dataBaseWorlds*>(database));
+
+	string selectRecordS = battlemapWorker.getRecordName(selectedRecord);
+	string selectRecordG = battlemapWorker.getRecordGroup(selectedRecord);
 	string selectedWorld= plugins::onSelectWorldpkgdesc(selectRecordS.c_str(), selectRecordG.c_str());
 	if (selectedWorld.empty()||selectedWorld == selectRecordS)
 	{
@@ -129,8 +47,8 @@ worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, world
 	worldRecord* currRecord = db->records;
 	do
 	{
-		string recName = getRecordName(currRecord);
-		string recGroup=getRecordGroup(selectedRecord);
+		string recName = battlemapWorker.getRecordName(currRecord);
+		string recGroup= battlemapWorker.getRecordGroup(selectedRecord);
 		if (recName== selectedWorldCPP&& recGroup== selectRecordG)
 		{
 			return currRecord;
@@ -144,8 +62,10 @@ worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, world
 }
 void __fastcall patchesForGame::OnLoadSettlementWorldpkgdesc(worldRecord* selectedRecord)
 {
-	string selectRecordS = getRecordName(selectedRecord);
-	string selectRecordG = getRecordGroup(selectedRecord);
+	auto& battlemapWorker = globals::dataS.Modules.battlemapWorker;
+
+	string selectRecordS = battlemapWorker.getRecordName(selectedRecord);
+	string selectRecordG = battlemapWorker.getRecordGroup(selectedRecord);
 	battleCreator::OnLoadSettlementWorldpkgdesc(selectRecordS, selectRecordG);
 }
 int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlement, bool* isCastle)

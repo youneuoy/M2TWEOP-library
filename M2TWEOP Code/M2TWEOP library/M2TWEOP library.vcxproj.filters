@@ -100,6 +100,9 @@
     <Filter Include="features\soundThings">
       <UniqueIdentifier>{7f598697-dee4-4e10-a920-c292390fe5f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\battlemapWorker">
+      <UniqueIdentifier>{7bdfdc79-cdd0-4c39-8eb9-8e4937676dae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -345,6 +348,9 @@
     <ClInclude Include="m2tweopConstData.h">
       <Filter>Файлы ресурсов</Filter>
     </ClInclude>
+    <ClInclude Include="battlemapWorker.h">
+      <Filter>features\battlemapWorker</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -532,6 +538,9 @@
     </ClCompile>
     <ClCompile Include="eopSounds.cpp">
       <Filter>features\soundThings</Filter>
+    </ClCompile>
+    <ClCompile Include="battlemapWorker.cpp">
+      <Filter>features\battlemapWorker</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
