@@ -3,6 +3,12 @@
 
 void DeveloperMode::Update()
 {
+	gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
+	campaign* campaign = gameDataAll->campaignData;
+	if (campaign->humanPlayers > 1)
+	{
+		return;
+	}
 	if ((ImGui::GetIO().KeysDownDuration[VK_CONTROL] > 0.f && ImGui::GetIO().KeysDownDuration['2'] > 0.f)
 		&& (ImGui::GetIO().KeysDownDurationPrev[VK_CONTROL] == 0.f || ImGui::GetIO().KeysDownDurationPrev['2'] == 0.f)
 		)
