@@ -35,8 +35,8 @@ namespace eduThings
 			}
 			data.edu.Index = newIdx;
 
-			eopTypeName = "EOPT";
-			eopTypeName.append(data.edu.Type);
+			eopTypeName = data.edu.Type;
+			//eopTypeName.append(data.edu.Type);
 		}
 
 
@@ -48,7 +48,7 @@ namespace eduThings
 			EduEntry edu;
 		}data;
 	};
-	struct
+	struct eduThingsG
 	{
 		vector<eopEduEntry>eopEdu;
 	}data;

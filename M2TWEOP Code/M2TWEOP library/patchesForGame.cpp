@@ -61,8 +61,45 @@ string getRecordGroup(worldRecord* selectedRecord)
 	return retS;
 }
 
+struct worldWrapRec
+{
+	string record;
+	string group;
+};
+
+
+
+
+
+void __fastcall testWorlds(char* database)
+{
+	struct dataBaseS
+	{
+		int something;
+		int something2;
+		worldRecord* records;
+		worldRecord* recordsEnd;
+	};
+	vector<worldWrapRec>wrapVec;
+	dataBaseS* db = (dataBaseS*)database;
+
+	worldRecord* currRecord = db->records;
+	do
+	{
+		string recName = getRecordName(currRecord);
+		string recGroup = getRecordGroup(currRecord);
+
+		wrapVec.emplace_back(worldWrapRec{ recName ,recGroup });
+
+		currRecord++;
+	} while (currRecord != db->recordsEnd);
+	int i = 0;
+}
+
+
 worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, worldRecord* selectedRecord)
 {
+	testWorlds(database);
 	string selectRecordS = getRecordName(selectedRecord);
 	string selectRecordG = getRecordGroup(selectedRecord);
 	string selectedWorld= plugins::onSelectWorldpkgdesc(selectRecordS.c_str(), selectRecordG.c_str());
@@ -301,6 +338,7 @@ void __stdcall patchesForGame::onNewGameStart()
 //#define TESTPATCHES
 void __stdcall patchesForGame::afterEDUread()
 {
+	plugins::onReadGameDbsAtStart();
 #if defined TESTPATCHES
 	ofstream f1("logs\\TESTPATCHES.log", ios::app);
 
@@ -508,7 +546,7 @@ void __stdcall patchesForGame::battleLoaded()
 
 void __stdcall patchesForGame::toReadGameDbsAtStart()
 {
-	plugins::onReadGameDbsAtStart();
+//	plugins::onReadGameDbsAtStart();
 }
 
 void __stdcall patchesForGame::onDrawPartsOfStratObjects()
