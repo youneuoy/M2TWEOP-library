@@ -48,7 +48,7 @@ extensions = [
     # ...
     'alabaster',
     'm2r2',
-    'sphinxcontrib.pdfembed'  
+    'sphinxcontrib.pdfembed'
 ]
 # ...
 
@@ -95,8 +95,8 @@ html_static_path = ['_static']
 
 
 #<p>
-#<a class="badge" href="https://www.patreon.com/m2tweop">
-#<img src="https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3DM2TWEOP%26type%3Dpatrons&style=flat" alt="Donate">
+#<a class="badge" href="https://ko-fi.com/D1D4DZTHG">
+#<img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Donate">
 #</a>
 #</p>
 

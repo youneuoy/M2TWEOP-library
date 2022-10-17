@@ -204,6 +204,11 @@ public:
 
 	ProcLoader<void(__cdecl*)(generalCharacterictics*, settlementStruct*)> onNewAdmiralCreated;
 
+	ProcLoader<void(__cdecl*)(const char*)> onShortcutTriggered;
+	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onCharacterMarriesPrincess;
+	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onBecomesFactionLeader;
+	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onBecomesFactionHeir;
+
 	ProcLoader<void(__cdecl*)(LPDIRECT3DDEVICE9 pDevice)> drawOnEndScene;
 	ProcLoader<void(__cdecl*)(LPDIRECT3DDEVICE9 pDevice)> onReset;
 

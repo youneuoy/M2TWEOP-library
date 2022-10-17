@@ -609,6 +609,26 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 			settlementStruct* sett = reinterpret_cast<settlementStruct*>(vTab[2]);
 			(*(*pl->onNewAdmiralCreated))(prs, sett);
 		}
+		else if (compareEvent(event, &pl->onShortcutTriggered.stringAdr, pl->onShortcutTriggered.strCmp))
+		{
+			char* str = reinterpret_cast<char*>(vTab[1]);
+			(*(*pl->onShortcutTriggered))(str);
+		}
+		else if (compareEvent(event, &pl->onCharacterMarriesPrincess.stringAdr, pl->onCharacterMarriesPrincess.strCmp))
+		{
+			generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
+			(*(*pl->onCharacterMarriesPrincess))(prs);
+		}
+		else if (compareEvent(event, &pl->onBecomesFactionLeader.stringAdr, pl->onBecomesFactionLeader.strCmp))
+		{
+			generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
+			(*(*pl->onBecomesFactionLeader))(prs);
+		}
+		else if (compareEvent(event, &pl->onBecomesFactionHeir.stringAdr, pl->onBecomesFactionHeir.strCmp))
+		{
+			generalCharacterictics* prs = reinterpret_cast<generalCharacterictics*>(vTab[1]);
+			(*(*pl->onBecomesFactionHeir))(prs);
+		}
 	}
 }
 
@@ -917,7 +937,11 @@ void plugins::initEvNames()
 		"CharacterComesOfAge",
 		"CharacterMarries",
 		"CharacterBecomesAFather",
-		"NewAdmiralCreated"
+		"NewAdmiralCreated",
+		"ShortcutTriggered",
+		"CharacterMarriesPrincess",
+		"BecomesFactionLeader",
+		"BecomesFactionHeir"
 	};
 
 }
@@ -1388,7 +1412,25 @@ int plugin::init(string* nameP)
 	onNewAdmiralCreated.Load(&plPath, &fName);
 	onNewAdmiralCreated.strCmp = (*plugins::eventNames)[NewAdmiralCreatedCode];
 
+	//onShortcutTriggered
+	fName = "onShortcutTriggered";
+	onShortcutTriggered.Load(&plPath, &fName);
+	onShortcutTriggered.strCmp = (*plugins::eventNames)[ShortcutTriggeredCode];
 
+	//onCharacterMarriesPrincess
+	fName = "onCharacterMarriesPrincess";
+	onCharacterMarriesPrincess.Load(&plPath, &fName);
+	onCharacterMarriesPrincess.strCmp = (*plugins::eventNames)[CharacterMarriesPrincessCode];
+
+	//onBecomesFactionLeader
+	fName = "onBecomesFactionLeader";
+	onBecomesFactionLeader.Load(&plPath, &fName);
+	onBecomesFactionLeader.strCmp = (*plugins::eventNames)[BecomesFactionLeaderCode];
+	
+	//onBecomesFactionHeir
+	fName = "onBecomesFactionHeir";
+	onBecomesFactionHeir.Load(&plPath, &fName);
+	onBecomesFactionHeir.strCmp = (*plugins::eventNames)[BecomesFactionHeirCode];
 
 	//drawOnEndScene
 	fName = "drawOnEndScene";
