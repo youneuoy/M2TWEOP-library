@@ -759,10 +759,10 @@ namespace battleCreator
 			drawButtonWidth = ImGui::GetItemRectSize().x;
 
 
-
 			ImGui::NewLine();
 
 			static std::string selectedFile;
+			static bool noCasualities = false;
 
 			if (ImGui::Button("select results file", { -1.0f,0.0f }))
 			{
@@ -774,8 +774,10 @@ namespace battleCreator
 				}
 				ifd::FileDialog::Instance().Close();
 			}
+			ImGui::SameLine();
+			ImGui::Checkbox("no casualities", &noCasualities);
 
-			if (!selectedFile.empty())
+			if (!selectedFile.empty()|| noCasualities==true)
 			{
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
@@ -791,7 +793,7 @@ namespace battleCreator
 				ImGui::NewLine();
 				if (ImGui::Button("Transfer results now", { -1.0f,0.0f }))
 				{
-					bool res = transferResults(selectedFile, resolveVariant);
+					bool res = transferResults(selectedFile, resolveVariant, noCasualities);
 					if (res == true)
 					{
 						data.isTransferResultsRunning = true;
@@ -800,6 +802,7 @@ namespace battleCreator
 						ImGui::CloseCurrentPopup();
 						selectedFile.clear();
 						resolveVariant = 0;
+						noCasualities = false;
 					}
 				}
 			}

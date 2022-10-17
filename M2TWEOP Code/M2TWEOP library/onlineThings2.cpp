@@ -548,33 +548,40 @@ namespace battleCreator
 		return true;
 	}
 
-	bool transferResults(const std::string& resultsPath, int selectedWinner)
+	bool transferResults(const std::string& resultsPath, int selectedWinner, bool noCasualities)
 	{
-		jsn::json json2;
-		try
+		if (noCasualities==true)
 		{
-			std::ifstream f2(std::filesystem::u8path(resultsPath));
-
-
-			f2 >> json2;
-
-			f2.close();
+			initStructsForResults();
 		}
-		catch (jsn::json::parse_error& e)
+		else
 		{
-			MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
-			return false;
-		}
+			jsn::json json2;
+			try
+			{
+				std::ifstream f2(std::filesystem::u8path(resultsPath));
 
 
-		try
-		{
-			battleArmies = json2;
-		}
-		catch (jsn::json::exception& e)
-		{
-			MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
-			return false;
+				f2 >> json2;
+
+				f2.close();
+			}
+			catch (jsn::json::parse_error& e)
+			{
+				MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+				return false;
+			}
+
+
+			try
+			{
+				battleArmies = json2;
+			}
+			catch (jsn::json::exception& e)
+			{
+				MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+				return false;
+			}
 		}
 
 

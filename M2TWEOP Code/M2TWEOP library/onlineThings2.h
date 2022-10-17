@@ -28,7 +28,7 @@ namespace battleCreator
 	void writeCharactersJson(const std::string& filePath);
 	void writeSettlementJson(const std::string& filePath, const std::string& lastSettlementWorldRec);
 
-	bool transferResults(const std::string&resultsPath,int selectedWinner);
+	bool transferResults(const std::string&resultsPath,int selectedWinner, bool noCasualities);
 	void transferResults2();
 
 	//create new characters here
