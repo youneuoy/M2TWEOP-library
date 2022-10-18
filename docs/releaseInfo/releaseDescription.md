@@ -8,7 +8,7 @@
 ## **Release Notes**
 
 ### **Breaking Changes**
-- Renamed "`etResourceCode`" to "`getResourceID`" for uniformity :: WARNING: backwards incompatibility! - *Callistonian*
+- Renamed "`getResourceCode`" to "`getResourceID`" for uniformity :: WARNING: backwards incompatibility! - *Callistonian*
 
 ### **Launcher**
 - Added M2TWEOP health checker (this will appear automatically if there are potential startup problems) - *youneuoy*
@@ -26,6 +26,7 @@
 ### **Library**
 - Hotseat: select battle winner without casualties - *youneuoy*
 - DeveloperMode: activated by ctrl+2 - *youneuoy*
+-  ![](https://cdn.discordapp.com/attachments/744326498151825409/1032004917033975859/unknown.png)
 - DeveloperMode: BattleMapOverrider, useful for custom maps testing. - *youneuoy*
 
 ### **Lua Plugin**
