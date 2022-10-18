@@ -124,7 +124,7 @@ bool m2tweopTile::buildBorder(const shared_ptr<m2tweopTile>& leftTile, const sha
 
 bool m2tweopTile::IsSameCoords(shared_ptr<m2tweopTile> anotherTile)
 {
-	if (anotherTile->tileRegionID == tileRegionID)
+	if (anotherTile->tileRegionID != tileRegionID)
 	{
 		return false;
 	}
