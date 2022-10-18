@@ -38,7 +38,10 @@ namespace fastFuncts
 	//get guild by index
 	NOINLINE EOP_EXPORT guild* getGuild(unsigned char index);
 
-
+	//-1, -1 if not recognized
+	std::pair<int, int> getArmyCoords(stackStruct* army);
+	//find fort on coords
+	NOINLINE EOP_EXPORT stackStruct* findArmy(int x, int y);
 	//find fort on coords
 	NOINLINE EOP_EXPORT fortStruct* findFort(int x, int y);
 	//find port on coords

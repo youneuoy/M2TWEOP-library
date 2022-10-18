@@ -18,7 +18,9 @@ enum class tileContent:uint8_t
 {
 	nothing,
 	settlement,
-	army
+	army,
+	fort,
+	port
 };
 class m2tweopTile
 {
@@ -43,6 +45,10 @@ private:
 	int xTile = 0;
 	int yTile = 0;
 	void buildAsSettlementTile();
+	void buildAsFortTile();
+	void buildAsPortTile();
+	void buildAsArmyTile(stackStruct* army);
+
 	int tileRegionID = 0;
 	int ownerDipNum = 0;
 

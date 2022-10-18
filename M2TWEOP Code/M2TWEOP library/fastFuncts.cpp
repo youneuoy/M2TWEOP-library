@@ -219,6 +219,43 @@ namespace fastFuncts
 	}
 
 
+	std::pair<int, int> getArmyCoords(stackStruct* army)
+	{
+		if (army->gen != nullptr)
+		{
+			return { army->gen->xCoord, army->gen->yCoord };
+		}
+		if (army->settlement != nullptr)
+		{
+			return { army->settlement->xCoord, army->settlement->yCoord };
+
+		}
+		return {-1,-1};
+	}
+
+	NOINLINE EOP_EXPORT stackStruct* findArmy(int x, int y)
+	{
+		UINT32 numFac = fastFuncts::getFactionsCount();
+		factionStruct** listFac = fastFuncts::getFactionsList();
+
+		for (UINT32 i = 0; i < numFac; i++)
+		{
+			for (int j = 0; j < listFac[i]->stackNum; j++)
+			{
+				auto armyCoords = getArmyCoords(listFac[i]->stacks[j]);
+				if (armyCoords.first == x
+					&&
+					armyCoords.second == y
+					)
+				{
+					return listFac[i]->stacks[j];
+				}
+			}
+		}
+
+		return nullptr;
+	}
+
 	NOINLINE EOP_EXPORT fortStruct* findFort(int x, int y)
 	{
 		UINT32 numFac = fastFuncts::getFactionsCount();
