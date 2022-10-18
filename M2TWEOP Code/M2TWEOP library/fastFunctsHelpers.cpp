@@ -96,7 +96,7 @@ namespace fastFunctsHelpers
 
 	namespace fs = std::filesystem;
 
-	std::string readFile(fs::path path)
+	std::string readFile(const fs::path& path)
 	{
 		// Open the stream to 'lock' the file.
 		std::ifstream f(path, std::ios::in | std::ios::binary);
