@@ -50,7 +50,7 @@ bool m2tweopTile::drawTile(const ImVec2& tileSize, const ImVec2& coordsStart, ve
 
 	if (isSelectedNow)
 	{
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(255-tileColor.x, 255 - tileColor.y, 255 - tileColor.z, tileColor.w));
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.f-tileColor.x, 1.f - tileColor.y, 1.f - tileColor.z, tileColor.w));
 	}
 	else
 	{
