@@ -21,5 +21,8 @@ namespace fastFunctsHelpers
 
 	std::string wstrToANSIStr(const std::wstring& wstr);
 	std::wstring ANSIStrToWstr(const std::string& str);
+
+	jsn::json loadJsonFromFile(const std::string& fpath);
+	jsn::json loadJsonFromFile(const std::wstring& fpath);
 };
 

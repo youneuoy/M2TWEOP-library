@@ -90,5 +90,36 @@ namespace fastFunctsHelpers
 		MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
 		return wstrTo;
 	}
+
+
+	jsn::json loadJsonFromFile(const std::string& fpath)
+	{
+		jsn::json json;
+
+
+		std::ifstream f1(fpath);
+		if (f1.is_open())
+		{
+			f1 >> json;
+		}
+		f1.close();
+
+		return json;
+	}
+	jsn::json loadJsonFromFile(const std::wstring& fpath)
+	{
+		jsn::json json;
+
+
+		std::ifstream f1(fpath);
+		if (f1.is_open())
+		{
+			f1 >> json;
+		}
+		f1.close();
+
+		return json;
+	}
+
 }
 

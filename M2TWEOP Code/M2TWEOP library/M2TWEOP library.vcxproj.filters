@@ -109,6 +109,15 @@
     <Filter Include="features\DeveloperMode\BattleMapOverrider">
       <UniqueIdentifier>{b945e8ac-a8da-49d8-89e4-5e6f85564626}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\RecruitSystem">
+      <UniqueIdentifier>{3100ceb3-55db-429f-bda7-d86b5b34950b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\RecruitSystem\Core">
+      <UniqueIdentifier>{905ed2b0-68a6-484a-8cef-32abb7fa7604}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\RecruitSystem\Config">
+      <UniqueIdentifier>{30fa89e1-8565-4016-acf7-3eb032fb0c6e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -363,6 +372,15 @@
     <ClInclude Include="BattleMapOverrider.h">
       <Filter>features\DeveloperMode\BattleMapOverrider</Filter>
     </ClInclude>
+    <ClInclude Include="RecruitSystem.h">
+      <Filter>features\RecruitSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="RecruitPlace.h">
+      <Filter>features\RecruitSystem\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="RecruitSystemConfig.h">
+      <Filter>features\RecruitSystem\Config</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -559,6 +577,15 @@
     </ClCompile>
     <ClCompile Include="BattleMapOverrider.cpp">
       <Filter>features\DeveloperMode\BattleMapOverrider</Filter>
+    </ClCompile>
+    <ClCompile Include="RecruitSystem.cpp">
+      <Filter>features\RecruitSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="RecruitPlace.cpp">
+      <Filter>features\RecruitSystem\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="RecruitSystemConfig.cpp">
+      <Filter>features\RecruitSystem\Config</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

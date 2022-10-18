@@ -3,6 +3,7 @@
 
 #include "onlineThings.h"
 #include "settlementConversionLvlSetter.h"
+#include "fastFunctsHelpers.h"
 void managerF::init()
 {
 
@@ -475,26 +476,12 @@ void managerF::doPachs()
 	f1.close();
 }
 
-jsn::json loadJsonFromFile(const std::string& fpath)
-{
-	jsn::json json;
-
-
-	std::ifstream f1(fpath);
-	if (f1.is_open())
-	{
-		f1 >> json;
-	}
-	f1.close();
-
-	return json;
-}
 
 void loadJsonSettings()
 {
 	std::string fPath = globals::dataS.modPatch;
 	fPath += "\\eopData\\gameCfg.json";
-	jsn::json json = loadJsonFromFile(fPath);
+	jsn::json json = fastFunctsHelpers::loadJsonFromFile(fPath);
 
 	try
 	{

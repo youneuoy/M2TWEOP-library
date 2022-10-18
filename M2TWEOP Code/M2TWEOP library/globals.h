@@ -3,6 +3,7 @@
 
 #include "battlemapWorker.h"
 #include "DeveloperMode.h"
+#include "RecruitSystem.h"
 class globals
 {
 public:
@@ -21,6 +22,7 @@ public:
 		{
 			DeveloperMode developerMode;
 			battlemapWorker battlemapWorker;
+			RecruitSystem recruitSystem;
 		}Modules;
 
 		//steam =2, kingdoms=1
