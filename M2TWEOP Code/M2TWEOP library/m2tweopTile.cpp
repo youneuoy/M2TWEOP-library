@@ -31,7 +31,7 @@ void m2tweopTile::buildTile(int x, int y)
 	}
 }
 
-bool m2tweopTile::drawTile(const ImVec2& tileSize, const ImVec2& coordsStart, vector<ImVec2>* borders)
+bool m2tweopTile::drawTile(const ImVec2& tileSize, const ImVec2& coordsStart, vector<ImVec2>* borders, bool isSelectedNow)
 {
 	bool isSelected = false;
 
@@ -48,7 +48,14 @@ bool m2tweopTile::drawTile(const ImVec2& tileSize, const ImVec2& coordsStart, ve
 
 	ImVec2 butCoords= ImGui::GetCursorPos();
 
-	ImGui::PushStyleColor(ImGuiCol_Button, tileColor);
+	if (isSelectedNow)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(255-tileColor.x, 255 - tileColor.y, 255 - tileColor.z, tileColor.w));
+	}
+	else
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, tileColor);
+	}
 
 	isSelected = ImGui::Button("", tileSize);
 	if (ImGui::IsItemHovered())
@@ -113,6 +120,17 @@ bool m2tweopTile::buildBorder(const shared_ptr<m2tweopTile>& leftTile, const sha
 
 
 	return false;
+}
+
+bool m2tweopTile::IsSameCoords(shared_ptr<m2tweopTile> anotherTile)
+{
+	if (anotherTile->tileRegionID == tileRegionID)
+	{
+		return false;
+	}
+	int anX = anotherTile->xTile;
+	int anY = anotherTile->yTile;
+	return (anX == xTile && anY == yTile);
 }
 
 bool m2tweopTile::isNeighbor(shared_ptr<m2tweopTile> anotherTile)

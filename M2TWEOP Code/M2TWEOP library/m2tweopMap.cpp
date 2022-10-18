@@ -65,8 +65,9 @@ void m2tweopMap::drawMap(const ImVec2& tileSize)
 	{
 		for (int x = 0; x < xBound; x++)
 		{
-
-			if (true == tiles[x * yBound + y]->drawTile(tileSize, mapStartPos, &borders))
+			auto& currTile = tiles[x * yBound + y];
+			bool isSelected = selectedTile->IsSameCoords(currTile);
+			if (true == currTile->drawTile(tileSize, mapStartPos, &borders, isSelected))
 			{
 				selectedTile = tiles[x * yBound + y];
 			}
@@ -126,3 +127,4 @@ void m2tweopMap::drawInteract()
 	}
 
 }
+

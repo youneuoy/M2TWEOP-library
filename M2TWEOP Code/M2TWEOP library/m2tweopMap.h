@@ -23,6 +23,7 @@ public:
 	void buildMap();
 	void drawMap(const ImVec2& tileSize);
 	void drawInteract();
+
 private:
 	shared_ptr<m2tweopTile>selectedTile = nullptr;
 
