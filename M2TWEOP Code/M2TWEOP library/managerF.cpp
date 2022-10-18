@@ -522,7 +522,7 @@ NOINLINE EOP_EXPORT void managerExport::initEOP(const char* modPath, int gameVer
 	{
 		return;
 	}
-	
+
 	globals::dataS.gamever = gameVer;
 	globals::dataS.modPatch = modPath;
 
