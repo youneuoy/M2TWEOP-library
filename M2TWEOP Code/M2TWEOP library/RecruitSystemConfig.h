@@ -1,7 +1,6 @@
 #pragma once
 #include "realGameTypes.h"
 #include "headersSTD.h"
-#include "BattleMapOverrider.h"
 #include "RecruitPlace.h"
 #include <mutex>
 class RecruitSystemConfig
@@ -11,5 +10,8 @@ public:
 private:
 	wstring ourPath;
 	void LoadJsons();
+
+
+	recruitPlaces places;
 };
 

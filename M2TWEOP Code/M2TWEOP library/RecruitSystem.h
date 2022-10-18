@@ -12,7 +12,6 @@ public:
 private:
 	//callback
 	void AtInit(int status);
-	typedef vector<shared_ptr<RecruitPlace>>recruitPlaces;
 
 	struct
 	{

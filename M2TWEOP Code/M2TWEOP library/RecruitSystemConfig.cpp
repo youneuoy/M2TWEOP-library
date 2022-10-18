@@ -9,6 +9,7 @@ void RecruitSystemConfig::StartLoad(const std::wstring& path, std::function<void
 		{
 			LoadJsons();
 
+			//no errors, sucess only
 			callback(1);
 		}
 	);
@@ -16,17 +17,31 @@ void RecruitSystemConfig::StartLoad(const std::wstring& path, std::function<void
 
 void RecruitSystemConfig::LoadJsons()
 {
+	vector<wstring> descriptionsPaths;
 	jsn::json json = fastFunctsHelpers::loadJsonFromFile(ourPath+L"\\RecruitSystem.json");
 
 	try
 	{
-		if (json.contains("isBlockLaunchWithoutEop"))
+		for (auto it = json.begin(); it != json.end(); ++it)
 		{
-			getJson(globals::dataS.gameCfg.isBlockLaunchWithoutEop, "isBlockLaunchWithoutEop");
+			descriptionsPaths.push_back(it.value());
 		}
 	}
 	catch (jsn::json::type_error& e)
 	{
 		MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+	}
+
+
+	for (auto& descrPath : descriptionsPaths) 
+	{
+		try
+		{
+			places.push_back(make_shared<RecruitPlace>(ourPath, descrPath));
+		}
+		catch (exception& e)
+		{
+			MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
 	}
 }
