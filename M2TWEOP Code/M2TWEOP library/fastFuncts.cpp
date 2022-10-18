@@ -99,7 +99,6 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT regionStruct* getRegionByID(UINT32 regionID)
 	{
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
-		gameDataAll.field0_0x0._8_4_ + 0x3ce8;
 
 		return &gameDataAll->stratMap->regionsArr[regionID];
 	}
