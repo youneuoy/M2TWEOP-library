@@ -41,6 +41,7 @@ struct uiElement {
 	int subElementsNum;
 	undefined field_0x58[112];
 };
+
 struct tilesS {
 	undefined field_0x0[44];
 	int xBound;
@@ -58,17 +59,20 @@ struct oneTile {
 	int regionId;
 	undefined field_0x18[28];
 };
+
 struct UNICODE_STRING {
 	USHORT something;//idk
 	USHORT Length;//idk
 	USHORT something2;//idk
 	PWSTR Buffer;//y
 };
+
 struct siegeS {
 	undefined field_0x0[12];
 	struct settlementStruct* goal; /* settlement or fort */
 	struct stackStruct* army;
 };
+
 //diplomacy data of faction to another faction
 struct factionDiplomacy {
 	undefined field_0x0[16];
@@ -111,6 +115,7 @@ struct watchTowerModel {
 	undefined field_0x4[26];
 };
 
+//watchtower
 struct watchTowerStruct {
 	undefined field_0x0[12];
 	int xCoord;
@@ -118,7 +123,6 @@ struct watchTowerStruct {
 	undefined field_0x14[16];
 	struct watchTowerModel* model;
 };
-
 
 struct worldRecord {
 	undefined field_0x0[4];
@@ -139,7 +143,7 @@ struct campaign {
 	undefined field3_0x3c[4];
 	int hotSeatPlayer2FactionId;
 	undefined field5_0x44[232];
-	int humanPlayers;
+	int humanPlayers; /* number of player-controlled factions */
 	int factionIdPow; /* pow(2,factionId) */
 	int campaignDifficultyFaction[8];
 	undefined field9_0x154[120];
@@ -172,7 +176,7 @@ struct campaign {
 	float PirateSpawnValue;
 	undefined field37_0x3f4[4];
 	int FreeUpkeepForts;
-	int ActiveFactions;
+	int ActiveFactions;	/* number factions minus slave */
 	undefined field40_0x400[12];
 	int lastrandomseed;
 	undefined field42_0x410[744];
@@ -195,6 +199,7 @@ struct campaign {
 	undefined field59_0x734[4124];
 	struct factionDiplomacy dipArray[31][31];
 };
+
 struct gameDataAllStruct {
 	undefined field_0x0[40];
 	struct campaign* campaignData;
@@ -205,16 +210,19 @@ struct gameDataAllStruct {
 	struct battleDataS* battleHandler;
 	undefined field_0x5c[164];
 };
+
 struct armyAndCharacter { /* in battle leader and leader army */
 	struct stackStruct* army;
 	struct general* character;
 };
+
 struct deploymentAreaS {
 	undefined field_0x0[4];
 	float* coordsPairs;
 	undefined field_0x8[4];
 	int coordsNum;
 };
+
 struct trackedPointerArmy {
 	undefined field_0x0[4];
 	struct stackStruct* stack;
@@ -222,7 +230,6 @@ struct trackedPointerArmy {
 	struct deploymentAreaS* deploymentArea;
 	undefined field_0x38[40];
 };
-
 
 struct battleSide {
 	bool isDefender;
@@ -257,7 +264,6 @@ struct battleDataS {
 	int sidesNum;
 };
 
-
 struct stratPortModel {
 	struct model_Rigid* model_rigid;
 	undefined field_0x4[4];
@@ -265,18 +271,17 @@ struct stratPortModel {
 	int modelPathCrypt;
 };
 
-
+//dock (water tile)
 struct portDockStrat {
 	undefined field_0x0[12];
-	int x;
-	int y;
+	int xCoord;
+	int yCoord;
 	undefined field_0x14[28];
 	struct settlementStruct* settlement;
 	undefined field_0x34[64];
 	struct stratPortModel* dockStratModel;
 	struct portBuildingStruct* port;
 };
-
 
 struct custom_tile {
 	char* name;
@@ -326,12 +331,14 @@ struct stratResMod {
 	undefined field_0x18[4];
 	int hasMine;
 };
+
 /* rigid model(cas model for "static" objects - settlements, resources, etc) on stratmap! */
 struct model_Rigid { /* rigid model(cas model for "static" objects - settlements, resources, etc) on stratmap! */
 	undefined field_0x0[4];
 };
-/* traiding resource on stratmap */
-struct resStrat { /* traiding resource on stratmap */
+
+//traiding resource on stratmap
+struct resStrat {
 	undefined field_0x0[12];
 	int xCoord;
 	int yCoord;
@@ -340,6 +347,7 @@ struct resStrat { /* traiding resource on stratmap */
 	struct settlementStruct* settlement;
 	undefined field_0x2c[20];
 };
+
 //settlement model struct
 struct settMod {
 	struct model_Rigid* town;
@@ -347,53 +355,58 @@ struct settMod {
 	undefined field_0x8[924];
 };
 
-
-//models on the stratmap(settlements, resources, etc)
+//models on the stratmap (settlements, resources, etc)
 struct stratMod {
 	undefined field_0x0;
 	undefined field_0x1;
 	undefined field_0x2;
 	undefined field_0x3;
 };
+
+//port
 struct portBuildingStruct {
 	undefined field_0x0[8];
-	struct general* character; /* charactr on port(enemy or not, army or not) */
-	int x;
-	int y;
+	struct general* character; /* character on port (enemy or not, army or not) */
+	int xCoord;
+	int yCoord;
 	undefined field_0x14[28];
 	struct settlementStruct* settlement;
 	undefined field_0x34[20];
 	struct stackStruct* occupantsArmy; /* if port block by army then it here */
 	undefined field_0x4c[24];
-	struct factionStruct* fac;
+	struct factionStruct* fac; /* blockading faction becomes owner */
 	undefined field_0x68[12];
 	struct stratPortModel* portStratModel;
 	struct portDockStrat* portDock;
 	undefined field_0x7c[4];
 };
+
 //building draw info(pics, etc)
-struct buildingDrawInfo { /* name, tga`s, models, etc) */
+struct buildingDrawInfo { /* name, tga's, models, etc) */
 	char* name;
 	undefined field_0x4[616];
 };
+
 //siege engine
 struct siegeEngine {
 	undefined field_0x0[172];
 	int type; /* 2-RAM,4-ladder,1-tower */
 };
+
 //building data
 struct building_data { /* SETTLEMENT_CONDITION_SETTLEMENT_FACTION */
 	undefined field_0x0[98];
 	char isDestroyAllowed;
 	undefined field_0x63[29];
-	char* type; /* type of building(core_building,barracks)  */
+	char* type; /* type of building (core_building,barracks)  */
 	int typeHash;
-	struct buildingDrawInfo* drawInfo; /* name of building(stone_wall), tga`s, etc */
+	struct buildingDrawInfo* drawInfo; /* name of building(stone_wall), tga's, etc */
 };
+
 //building
 struct building { /* building structure */
 	undefined field_0x0[56];
-	struct building_data* bData; /* many info(type,name, etc). exportDescrBuildingEntry */
+	struct building_data* bData; /* many info (type, name, etc), exportDescrBuildingEntry */
 	int8_t level;
 	undefined field_0x3d[27];
 	int hp; /* health points of the building */
@@ -417,6 +430,7 @@ struct buildingInQueue { /* building in settlement queue */
 	int turnsToBuild2;
 	void* texture;
 };
+
 struct buildingsQueue {
 	struct buildingInQueue items[6];
 	int firstIndex;
@@ -424,10 +438,12 @@ struct buildingsQueue {
 	int buildingsInQueue;
 	int currentBuildingIndex;
 };
+
 struct oneSiege {
 	void* vtable;
 	struct siegeS* siege;
 };
+
 //settlement
 struct settlementStruct {
 	void* vTable;
@@ -442,7 +458,7 @@ struct settlementStruct {
 	struct settMod* model;
 	int descr_culturestxt;
 	undefined field11_0x154[16];
-	char* name; /* name  of the province */
+	char* name; /* internal name of settlement */
 	int nameCrypt;
 	UNICODE_STRING** localizedName;
 	struct factionStruct* ownerFac; /* faction of the owner */
@@ -489,7 +505,6 @@ struct guild
 	char pad_0024[40]; //0x0024
 }; //Size: 0x004C
 
-
 /* I_CompareCounter script command */
 struct CompareCounter { /* I_CompareCounter script command */
 	undefined field_0x0;
@@ -502,6 +517,7 @@ struct CompareCounter { /* I_CompareCounter script command */
 	int operandNameCrypt; /* maybe crypt of the counter name */
 	int checkedValue; /* value for check */
 };
+
 //main character data(coordinates, etc)
 struct general { /* character on the stratmap, who has a unit in a stack */
 	undefined field_0x0[4];
@@ -548,17 +564,17 @@ struct generalCharacterictics { /* many important info about character */
 	undefined field_0x38[4];
 	uchar status; /* 5-leader,2 - heir, 0 - ordinary man */
 	undefined field_0x3d[7];
-	int authority; /* authority of the general */
-	int influence;
-	int subterfuge;
-	int loyality; /* loyality of the general */
-	int charm;
-	int finance;
-	int piety; /* piety of the general */
-	int magic;
-	int nobility; /* nobility of the general */
-	int leaderAutority; /* autority of the leader */
-	int level;
+	int32_t authority; /* command */
+	int32_t influence;
+	int32_t subterfuge;
+	int32_t loyality;
+	int32_t charm;
+	int32_t finance;
+	int32_t piety;
+	int32_t magic;
+	int32_t nobility; /* chilvalry/dread */
+	int32_t leaderAutority; /* authority of leader */
+	int32_t level;
 	int32_t unorthodoxy; //0x0070
 	int32_t heresyImmunity; //0x0074
 	int32_t assassination; //0x0078
@@ -635,8 +651,9 @@ struct generalCharacterictics { /* many important info about character */
 	undefined field_0x268[4];
 	int age;
 };
-//anchillary of character
-struct anchillary { /* structure of anchillary */
+
+//ancillary of character
+struct anchillary { /* structure of ancillary */
 	UINT32 index;
 	undefined field_0x4;
 	undefined field_0x5;
@@ -661,6 +678,7 @@ struct anchillary { /* structure of anchillary */
 	undefined field_0x1e;
 	undefined field_0x1f;
 };
+
 struct trait { /* traits of the character */
 	struct sometNameStruct* nameS;
 	int* level; /* level of trait */
@@ -684,6 +702,7 @@ struct trackedPointerUnit {
 	struct unit* unit;
 	undefined field_0x8[88];
 };
+
 struct engineRecord {
 	undefined field_0x0[4];
 	char* type;
@@ -691,6 +710,7 @@ struct engineRecord {
 	int classID;
 	undefined field_0xb8[564];
 };
+
 struct soldierInBattle {
 	undefined field_0x0[24];
 	float xCoord;
@@ -729,6 +749,7 @@ struct unit {
 	struct engineRecord* engineRec;
 	undefined field26_0x20dc[4];
 };
+
 //army data
 struct stackStruct { /* structure of stack */
 	undefined field_0x0[76];
@@ -757,6 +778,8 @@ struct stackStruct { /* structure of stack */
 	float reform_point_x;
 	float reform_point_y;
 };
+
+//faction
 struct factionStruct {
 	undefined field_0x0[180];
 	int dipNum; /* number of faction in diplomatic array */
@@ -790,9 +813,9 @@ struct factionStruct {
 	struct fortStruct** forts;
 	undefined field_0x138[4];
 	int fortsNum;
-	struct watchTowerStruct** watchTowers;
+	struct watchTowerStruct** watchTowers; /* watchtowers */
 	undefined field_0x144[4];
-	uint wathtowersNum;
+	int wathtowersNum;
 	struct portBuildingStruct** portBuildings; /* port buildings */
 	undefined field_0x150[4];
 	int portBuildingsNum;
@@ -804,6 +827,7 @@ struct factionStruct {
 	undefined field_0xa50[156];
 	int money; /* money of the faction */
 };
+
 struct ModelDbEntry
 {
 public:
@@ -831,7 +855,8 @@ public:
 	float N0000085C; //0x0078
 	char pad_007C[4]; //0x007C
 }; //Size: 0x0080
-//tupe of unit from edu
+
+//type of unit from EDU
 struct EduEntry {
 	char* Type;
 	uint32_t typeHash;
@@ -1040,6 +1065,7 @@ struct eduEntryes { /* structure with all edu entries */
 	struct EduEntry unitTupes[500];
 	UINT32 numberOfTupes;
 };
+
 //string
 struct someFactNameStruct {
 	undefined field_0x0;
@@ -1048,10 +1074,12 @@ struct someFactNameStruct {
 	undefined field_0x3;
 	char* name;
 };
-//pointer to anchillary
-struct anchData { /* data of the anchillarie */
+
+//pointer to ancillary
+struct anchData { /* data of the ancillary */
 	struct anchillary* dataAnch;
 };
+
 //data of one soldier in unit
 #pragma pack(push,1)
 struct soldierData { /* one soldier in unit */
@@ -1095,13 +1123,12 @@ struct traidingResource {
 	int iconCrypt;
 	int null4;//
 };
+
 struct tradingResources {
 	struct traidingResource resources[27];
 	char* mine;
 	int mineCrypt;
 };
-
-
 
 struct console_command { /* structure of console command */
 	bool(_stdcall** function)(const char*, char*);
@@ -1116,6 +1143,5 @@ struct consoleCommands {
 	int reservedElements;
 	int size;
 };
-
 
 #pragma pack(pop)

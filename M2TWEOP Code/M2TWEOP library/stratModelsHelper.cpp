@@ -16,13 +16,12 @@ namespace stratModelsChange
 		if (resource->stratMod->model == modelP)return;
 		stratResMod* newMod = new stratResMod();
 		memcpy(newMod, resource->stratMod, sizeof(stratResMod));
-		newMod->resource_cost = 0;
-		newMod->hasMine = 0;
+		newMod->resource_cost = resource->stratMod->resource_cost;
+		newMod->hasMine = resource->stratMod->hasMine;
 		newMod->resource_num = resource->stratMod->resource_num;
 		newMod->model = modelP;
 		resource->stratMod = newMod;
 	}
-
 	void changeSettlementStratModel(settlementStruct* settlement, model_Rigid* modelP)
 	{
 		if (settlement->model->castle == modelP

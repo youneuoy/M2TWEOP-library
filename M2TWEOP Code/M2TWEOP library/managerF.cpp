@@ -439,7 +439,7 @@ void managerF::doPachs()
 	onAutoSave->Enable();
 	f1 << "Done" << endl;	
 
-
+	/*
 	f1 << "Start applying OntryFindTypeIdInListRecruitPoolEDB patch" << endl;
 	OntryFindTypeIdInListRecruitPoolEDB* ontryFindTypeIdInListRecruitPoolEDB = new OntryFindTypeIdInListRecruitPoolEDB(mem, (LPVOID)patchesForGame::ontryFindTypeIdInListRecruitPoolEDB, globals::dataS.gamever);
 	ontryFindTypeIdInListRecruitPoolEDB->SetNewCode();
@@ -457,7 +457,7 @@ void managerF::doPachs()
 	onrecruitPoolFillFromFile2->SetNewCode();
 	onrecruitPoolFillFromFile2->Enable();
 	f1 << "Done" << endl;
-
+	*/
 
 	if (globals::dataS.gameCfg.isBlockLaunchWithoutEop == true)
 	{

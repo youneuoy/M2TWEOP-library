@@ -99,6 +99,7 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT regionStruct* getRegionByID(UINT32 regionID)
 	{
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
+
 		return &gameDataAll->stratMap->regionsArr[regionID];
 	}
 
@@ -249,9 +250,9 @@ namespace fastFuncts
 		{
 			for (int j = 0; j < listFac[i]->portBuildingsNum; j++)
 			{
-				if (listFac[i]->portBuildings[j]->x == x
+				if (listFac[i]->portBuildings[j]->xCoord == x
 					&&
-					listFac[i]->portBuildings[j]->y == y
+					listFac[i]->portBuildings[j]->yCoord == y
 					)
 				{
 					return listFac[i]->portBuildings[j];

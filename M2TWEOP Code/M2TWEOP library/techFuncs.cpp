@@ -112,6 +112,10 @@ void techFuncs::zip(std::string const& zipFile, std::vector<std::string>& files,
 
 string techFuncs::uniToANSI(UNICODE_STRING**& uniStr)
 {
+    if (uniStr == nullptr || *uniStr == nullptr)
+    {
+        return "";
+    }
 	UNICODE_STRING* uniS = *uniStr;
 	wchar_t* wstr = (wchar_t*)&uniS->Buffer;
 

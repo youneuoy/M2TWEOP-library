@@ -35,5 +35,8 @@ namespace smallFuncs
 
 	NOINLINE EOP_EXPORT void setGuildCooldown(unsigned char turns);
 
+
+	NOINLINE EOP_EXPORT int GetUnitSize();
+
 };
 

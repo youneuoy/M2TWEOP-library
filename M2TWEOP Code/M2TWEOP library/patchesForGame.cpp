@@ -10,65 +10,24 @@
 #include "eduThings.h"
 #include "fastFunctsHelpers.h"
 
-string getRecordName(worldRecord* selectedRecord)
-{
-	int allocatedLen = selectedRecord->allocatedNameLen;
-	char* str = nullptr;
-	if (allocatedLen > 15)
-	{
-		str = *(char**)selectedRecord->recordName;
-	}
-	else
-	{
-		str = &selectedRecord->recordName[0];
-	}
-
-	int nameLen = selectedRecord->nameLen;
-
-	string retS;
-	for (int i = 0; i < nameLen; i++)
-	{
-		retS.push_back(str[i]);
-	}
-	retS[nameLen] = '\0';
-
-	return retS;
-}
-
-
-string getRecordGroup(worldRecord* selectedRecord)
-{
-	int allocatedLen = selectedRecord->allocatedGroupLen;
-	char* str = nullptr;
-	if (allocatedLen > 15)
-	{
-		str = *(char**)selectedRecord->recordGroup;
-	}
-	else
-	{
-		str = &selectedRecord->recordGroup[0];
-	}
-
-	int groupLen = selectedRecord->groupLen;
-
-	string retS;
-	for (int i = 0; i < groupLen; i++)
-	{
-		retS.push_back(str[i]);
-	}
-	retS[groupLen] = '\0';
-
-	return retS;
-}
 
 worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, worldRecord* selectedRecord)
 {
-	string selectRecordS = getRecordName(selectedRecord);
-	string selectRecordG = getRecordGroup(selectedRecord);
+	auto& battlemapWorker = globals::dataS.Modules.battlemapWorker;
+
+
+	battlemapWorker.TryCreateRecodsList(reinterpret_cast<battlemapWorker::dataBaseWorlds*>(database));
+
+	string selectRecordS = battlemapWorker.getRecordName(selectedRecord);
+	string selectRecordG = battlemapWorker.getRecordGroup(selectedRecord);
 	string selectedWorld= plugins::onSelectWorldpkgdesc(selectRecordS.c_str(), selectRecordG.c_str());
 	if (selectedWorld.empty()||selectedWorld == selectRecordS)
 	{
 		selectedWorld = battleCreator::selectWorldpkgdesc(selectRecordS, selectRecordG);
+		if (selectedWorld.empty() || selectedWorld == selectRecordS)
+		{
+			selectedWorld = globals::dataS.Modules.developerMode.SelectWorldpkgdesc(selectRecordS, selectRecordG);
+		}
 	}
 
 	if (selectedWorld.empty() || selectedWorld == selectRecordS)
@@ -92,8 +51,8 @@ worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, world
 	worldRecord* currRecord = db->records;
 	do
 	{
-		string recName = getRecordName(currRecord);
-		string recGroup=getRecordGroup(selectedRecord);
+		string recName = battlemapWorker.getRecordName(currRecord);
+		string recGroup= battlemapWorker.getRecordGroup(selectedRecord);
 		if (recName== selectedWorldCPP&& recGroup== selectRecordG)
 		{
 			return currRecord;
@@ -107,8 +66,10 @@ worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, world
 }
 void __fastcall patchesForGame::OnLoadSettlementWorldpkgdesc(worldRecord* selectedRecord)
 {
-	string selectRecordS = getRecordName(selectedRecord);
-	string selectRecordG = getRecordGroup(selectedRecord);
+	auto& battlemapWorker = globals::dataS.Modules.battlemapWorker;
+
+	string selectRecordS = battlemapWorker.getRecordName(selectedRecord);
+	string selectRecordG = battlemapWorker.getRecordGroup(selectedRecord);
 	battleCreator::OnLoadSettlementWorldpkgdesc(selectRecordS, selectRecordG);
 }
 int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlement, bool* isCastle)
@@ -301,6 +262,7 @@ void __stdcall patchesForGame::onNewGameStart()
 //#define TESTPATCHES
 void __stdcall patchesForGame::afterEDUread()
 {
+	plugins::onReadGameDbsAtStart();
 #if defined TESTPATCHES
 	ofstream f1("logs\\TESTPATCHES.log", ios::app);
 
@@ -508,7 +470,7 @@ void __stdcall patchesForGame::battleLoaded()
 
 void __stdcall patchesForGame::toReadGameDbsAtStart()
 {
-	plugins::onReadGameDbsAtStart();
+//	plugins::onReadGameDbsAtStart();
 }
 
 void __stdcall patchesForGame::onDrawPartsOfStratObjects()
@@ -559,7 +521,7 @@ void __stdcall patchesForGame::onBattleStateChange()
 		battleCreator::onBattleResultsScreen();
 	}
 }
-
+/*
 int* __fastcall patchesForGame::ontryFindTypeIdInListRecruitPoolEDB(char* unitTypeString)
 {
 	return  eduThings::tryFindDataEopEduIndex(unitTypeString);
@@ -575,7 +537,7 @@ EduEntry* __fastcall patchesForGame::onrecruitPoolFillFromFile(int eduIndex)
 
 	return eduThings::getEopEduEntry(eduIndex);
 }
-
+*/
 
 struct
 {

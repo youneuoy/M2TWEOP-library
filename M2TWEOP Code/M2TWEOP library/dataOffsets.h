@@ -27,6 +27,9 @@ public:
 		//audio settings
 		bool* audioEnable = nullptr;
 		int* audioMaster_vol = nullptr;
+
+		//game settings
+		int* gameUnit_size = nullptr;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);

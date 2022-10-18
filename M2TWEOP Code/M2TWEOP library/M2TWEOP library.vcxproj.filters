@@ -100,6 +100,15 @@
     <Filter Include="features\soundThings">
       <UniqueIdentifier>{7f598697-dee4-4e10-a920-c292390fe5f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\battlemapWorker">
+      <UniqueIdentifier>{7bdfdc79-cdd0-4c39-8eb9-8e4937676dae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\DeveloperMode">
+      <UniqueIdentifier>{aba6a7c0-3e99-43ce-8765-68fca30a88fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\DeveloperMode\BattleMapOverrider">
+      <UniqueIdentifier>{b945e8ac-a8da-49d8-89e4-5e6f85564626}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -345,6 +354,15 @@
     <ClInclude Include="m2tweopConstData.h">
       <Filter>Файлы ресурсов</Filter>
     </ClInclude>
+    <ClInclude Include="battlemapWorker.h">
+      <Filter>features\battlemapWorker</Filter>
+    </ClInclude>
+    <ClInclude Include="DeveloperMode.h">
+      <Filter>features\DeveloperMode</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleMapOverrider.h">
+      <Filter>features\DeveloperMode\BattleMapOverrider</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -532,6 +550,15 @@
     </ClCompile>
     <ClCompile Include="eopSounds.cpp">
       <Filter>features\soundThings</Filter>
+    </ClCompile>
+    <ClCompile Include="battlemapWorker.cpp">
+      <Filter>features\battlemapWorker</Filter>
+    </ClCompile>
+    <ClCompile Include="DeveloperMode.cpp">
+      <Filter>features\DeveloperMode</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleMapOverrider.cpp">
+      <Filter>features\DeveloperMode\BattleMapOverrider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

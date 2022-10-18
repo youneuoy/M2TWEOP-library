@@ -3089,7 +3089,7 @@ void blockLaunchWithoutEop::SetNewCode()
 	delete a;
 }
 
-
+/*
 OntryFindTypeIdInListRecruitPoolEDB::OntryFindTypeIdInListRecruitPoolEDB(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
@@ -3124,14 +3124,11 @@ void OntryFindTypeIdInListRecruitPoolEDB::SetOriginialCode()
 void OntryFindTypeIdInListRecruitPoolEDB::SetNewCode()
 {
 	Assembler* a = new Assembler();
-	a->pop(edi);
-	a->pop(esi);
-	a->pop(ebp);
 
 	a->pushad();
 	a->pushf();
 
-	a->mov(ecx, ecx);//just to indicate - string pointer in ecx
+	a->mov(ecx, ebp);//just to indicate - string pointer in ebp
 	a->mov(eax, (DWORD)funcAddress);
 	a->call(eax);
 
@@ -3139,6 +3136,9 @@ void OntryFindTypeIdInListRecruitPoolEDB::SetNewCode()
 	a->mov(dword_ptr(esp, 0x1c), eax);//move eax to stored eax
 	a->popad();
 
+	a->pop(edi);
+	a->pop(esi);
+	a->pop(ebp);
 
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();
@@ -3244,3 +3244,4 @@ void OnrecruitPoolFillFromFile2::SetNewCode()
 
 	delete a;
 }
+*/
