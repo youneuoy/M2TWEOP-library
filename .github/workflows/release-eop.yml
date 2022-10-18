@@ -65,7 +65,7 @@ jobs:
       id:   library-cache
       uses: actions/cache@v1
       with:
-       path: M2TWEOP-Library
+       path: M2TWEOP-library
        key:  library-cache
 
     - name: Verify M2TWEOP-luaPlugin cache
