@@ -22,9 +22,11 @@ jobs:
     if: "startsWith(github.event.head_commit.message, 'Release')"
     permissions:
         contents: write
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
     - uses: ilammy/msvc-dev-cmd@v1
+      with:
+          vsversion: "16.0"
 
     # Pull down latest source code and modules
     - name: "Checkout from latest commit: '${{ github.event.head_commit.message }}'"
@@ -55,8 +57,8 @@ jobs:
             rm -fR _DX*_ _DX*_.exe
       shell: bash
 
-    - name: Install Visual Studio 2019 Community with Chocolatey
-      run: choco install visualstudio2019community
+    # - name: Install Visual Studio 2019 Community with Chocolatey
+    #   run: choco install visualstudio2019community
 
     # Check cache for previously generated code
     - name: Verify M2TWEOP-Library cache
