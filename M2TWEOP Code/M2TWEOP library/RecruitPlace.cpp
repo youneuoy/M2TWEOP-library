@@ -2,4 +2,6 @@
 
 RecruitPlace::RecruitPlace(const std::wstring& ourPath, const std::wstring& myPath)
 {
+	wstring path = ourPath + L"\\";
+	path += myPath;
 }

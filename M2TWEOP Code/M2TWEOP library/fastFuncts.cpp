@@ -15,7 +15,7 @@ namespace fastFuncts
 		{
 			for (int j = 0; j < listFac[i]->regionsNum; j++)
 			{
-				if (regionID==listFac[i]->regionsID[j])
+				if (regionID == listFac[i]->regionsID[j])
 				{
 					return listFac[i];
 				}
@@ -84,14 +84,14 @@ namespace fastFuncts
 			push typeID
 			mov eax, adrFunc
 			call eax
-			mov retVal,eax
+			mov retVal, eax
 		}
 		character->genType = retVal;
 	}
 	NOINLINE EOP_EXPORT UINT32 getTileRegionID(int x, int y)
 	{
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
-		UINT32 redID = gameDataAll->stratMap->tilesArr[gameDataAll->stratMap->xBound*y+x].regionId;
+		UINT32 redID = gameDataAll->stratMap->tilesArr[gameDataAll->stratMap->xBound * y + x].regionId;
 
 
 		return redID;
@@ -187,11 +187,11 @@ namespace fastFuncts
 		UINT32 count = 0;
 		UINT32 maxCount = 0;
 		UINT8 currID = 0;
-		
-		do{
+
+		do {
 			techFuncs::Read(currentOffsett + 0x10, &count);
 			techFuncs::Read(currentOffsett + 0xC, &maxCount);
-			uintptr_t guilds = * (uintptr_t*) currentOffsett;
+			uintptr_t guilds = *(uintptr_t*)currentOffsett;
 
 			if (guilds == 0)
 			{
@@ -206,13 +206,13 @@ namespace fastFuncts
 				}
 				++currID;
 			}
-			
-			if (count < maxCount ||  *(uintptr_t*)(currentOffsett+0x4) == 0 )
+
+			if (count < maxCount || *(uintptr_t*)(currentOffsett + 0x4) == 0)
 			{
 				return nullptr;
 			}
 			currentOffsett = *(uintptr_t*)(currentOffsett + 0x4);
-			
+
 		} while (*(uintptr_t*)currentOffsett != 0);
 
 		return nullptr;
@@ -230,7 +230,7 @@ namespace fastFuncts
 			return { army->settlement->xCoord, army->settlement->yCoord };
 
 		}
-		return {-1,-1};
+		return { -1,-1 };
 	}
 
 	NOINLINE EOP_EXPORT stackStruct* findArmy(int x, int y)
@@ -465,7 +465,7 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT void addTrait(generalCharacterictics* character, const char* traitName, int traitLevel)
 	{
 
-		DWORD adrFunc =0;
+		DWORD adrFunc = 0;
 
 
 
@@ -493,8 +493,8 @@ namespace fastFuncts
 			mov eax, adrFunc
 			call eax
 
-			mov resTrait,eax
-			add esp,0x8
+			mov resTrait, eax
+			add esp, 0x8
 		}
 		if (resTrait == nullptr)
 		{
@@ -700,25 +700,24 @@ namespace fastFuncts
 
 
 		general* gen = un->general;
-		if (gen != 0)
-		{
-			DWORD adrFunc = 0;
-			if (globals::dataS.gamever == 2)//steam
-			{
-				adrFunc = 0x00597c60;
-			}
-			else
-			{
-				adrFunc = 0x00597770;
-			}
-			_asm
-			{
-				mov ecx, gen
 
-				mov eax, adrFunc
-				call eax
-			}
+		DWORD adrFunc = 0;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			adrFunc = 0x00597c60;
 		}
+		else
+		{
+			adrFunc = 0x00597770;
+		}
+		_asm
+		{
+			mov ecx, gen
+
+			mov eax, adrFunc
+			call eax
+		}
+
 	}
 	NOINLINE EOP_EXPORT void setSoldiersCount(unit* un, int count)
 	{
@@ -1070,7 +1069,7 @@ namespace fastFuncts
 		return createUnitIdx(unitIndex, regionID, facNum, exp, arm, weap);
 	}
 
-	NOINLINE EOP_EXPORT unit* createUnitIdx(int index,int regionID, int facNum, int exp, int arm, int weap)
+	NOINLINE EOP_EXPORT unit* createUnitIdx(int index, int regionID, int facNum, int exp, int arm, int weap)
 	{
 		if (index == -1)return nullptr;
 
@@ -1081,9 +1080,9 @@ namespace fastFuncts
 
 		regionStruct* region = getRegionByID(regionID);
 		_asm {
-				mov ecx, EDB;
+			mov ecx, EDB;
 
-				push weap
+			push weap
 				push arm
 				push - 1
 				push exp
@@ -1111,9 +1110,9 @@ namespace fastFuncts
 
 		regionStruct* region = getRegionByID(regionID);
 		_asm {
-				mov ecx, edb;
+			mov ecx, edb;
 
-				push weap
+			push weap
 				push arm
 				push - 1
 				push exp
