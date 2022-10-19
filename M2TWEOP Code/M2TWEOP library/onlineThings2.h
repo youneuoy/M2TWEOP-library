@@ -23,6 +23,7 @@ using namespace std;
 namespace battleCreator
 {
 	void initStructsForResults();
+	void fillStructsForResults();
 
 	void createResultsFile();
 	void writeCharactersJson(const std::string& filePath);

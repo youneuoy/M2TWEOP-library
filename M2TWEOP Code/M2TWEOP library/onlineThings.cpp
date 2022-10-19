@@ -774,7 +774,7 @@ namespace battleCreator
 				}
 				ifd::FileDialog::Instance().Close();
 			}
-			ImGui::SameLine();
+			//ImGui::SameLine();
 			ImGui::Checkbox("no casualities", &noCasualities);
 
 			if (!selectedFile.empty()|| noCasualities==true)

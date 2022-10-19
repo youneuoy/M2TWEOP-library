@@ -21,6 +21,17 @@ namespace battleCreator
 
 	struct unitDataS
 	{
+		unitDataS() {};
+		unitDataS(unit*un,int pnumberInArmy)
+		{
+			numberInArmy = pnumberInArmy;
+			type = un->eduEntry->Type;
+			soldiersNumber = un->number;
+			exp = un->expScreen;
+
+
+			isHaveCharacter = (un->general != nullptr);
+		}
 		size_t numberInArmy = 0;
 		std::string type;
 		int soldiersNumber = 0;
@@ -374,6 +385,22 @@ namespace battleCreator
 		}
 	}
 
+	void fillStructsForResults()
+	{
+		initStructsForResults();
+		for (auto& side : battleArmies.sides)
+		{
+			for (int i=0;i< side->armies.size();i++)
+			{
+				auto& army = side->armies[i];
+				for (int j = 0; j < army->units.size();j++)
+				{
+					army->unitsForTransfer.push_back(make_shared<unitDataS>(army->units[j], j));
+				}
+			}
+		}
+	}
+
 
 	void doResultsFileCreating()
 	{
@@ -552,7 +579,7 @@ namespace battleCreator
 	{
 		if (noCasualities==true)
 		{
-			initStructsForResults();
+			fillStructsForResults();
 		}
 		else
 		{
