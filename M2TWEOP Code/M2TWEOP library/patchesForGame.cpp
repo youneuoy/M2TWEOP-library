@@ -484,7 +484,7 @@ void __stdcall patchesForGame::onDrawAll()
 }
 
 void __fastcall patchesForGame::OnStopCharacter(general* character)
-{
+{ 
 	auto& campaign=smallFuncs::getGameDataAll()->campaignData;
 	if (campaign->humanPlayers<2)
 	{
