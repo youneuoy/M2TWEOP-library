@@ -858,3 +858,19 @@ private:
 	LPVOID funcAddress;
 };
 */
+
+
+
+//backspace patch
+class OnStopCharacter
+	:public AATemplate
+{
+public:
+	OnStopCharacter(MemWork* mem, LPVOID addr, int ver);
+	~OnStopCharacter();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};

@@ -483,6 +483,15 @@ void __stdcall patchesForGame::onDrawAll()
 	graphicsD3D::onDrawAllGameStuff();
 }
 
+void __fastcall patchesForGame::OnStopCharacter(general* character)
+{
+	auto& campaign=smallFuncs::getGameDataAll()->campaignData;
+	if (campaign->humanPlayers<2)
+	{
+		character->isStopCharacterNeeded = 1;
+	}
+}
+
 void __fastcall patchesForGame::onEndSiege(settlementStruct* sett)
 {
 	plugins::onEndSiege(sett);

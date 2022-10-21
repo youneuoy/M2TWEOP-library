@@ -28,6 +28,7 @@
 - DeveloperMode: activated by ctrl+2 - *youneuoy*
 -  ![](https://cdn.discordapp.com/attachments/744326498151825409/1032004917033975859/unknown.png)
 - DeveloperMode: BattleMapOverrider, useful for custom maps testing. - *youneuoy*
+- backspace(stop movement button)now work at campaign map(but only if human players<2, i.e. not in multiplayer hotseats).
 
 ### **Lua Plugin**
 - EduEntry table: new fields - *youneuoy*
@@ -39,6 +40,8 @@
 - Renamed "`getResourceCode`" to "`getResourceID`" for uniformity :: WARNING: backwards incompatibility! - *Callistonian*
 - Added trade resource getters for `hasMine` and image (icon) - *Callistonian*
 - campaign table: GetUnitSize function - *youneuoy*
+- new ugly console - *youneuoy*
+
 
 ### **Documentation**
 - Updated Erken's ImGUI tutorial to V3 (Thanks again Erken!) - *Medik*

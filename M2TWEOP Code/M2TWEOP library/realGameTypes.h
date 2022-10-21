@@ -520,30 +520,32 @@ struct CompareCounter { /* I_CompareCounter script command */
 
 //main character data(coordinates, etc)
 struct general { /* character on the stratmap, who has a unit in a stack */
-	undefined field_0x0[4];
+	undefined field0_0x0[4];
 	struct settlementStruct* settlement;
-	undefined field_0x8[4];
+	undefined field2_0x8[4];
 	int xCoord; /* number of x-coord of unit fosition */
 	int yCoord; /* number of y-coord of unit fosition */
-	undefined field_0x14[108];
+	undefined field5_0x14[108];
 	struct generalCharacterictics* genChar; /* many important info about character */
-	undefined field_0x84[4];
+	undefined field7_0x84[4];
 	struct genMod* genType;
-	undefined field_0x8c[24];
+	undefined field9_0x8c[24];
 	uchar ifMarkedToKill;
-	undefined field_0xa5[35];
+	undefined field11_0xa5[35];
 	float movepoints1;
-	undefined field_0xcc[52];
+	undefined field13_0xcc[4];
+	uchar isStopCharacterNeeded; /* set to 1 if character moving now and he stops */
+	undefined field15_0xd1[47];
 	struct stackStruct* armyLeaded; /* army of the general */
-	undefined field_0x104[4];
+	undefined field17_0x104[4];
 	struct unit* bodyguards; /* unit of general */
 	struct stackStruct* armyNotLeaded; /* army, if not leader */
-	undefined field_0x110[208];
-	undefined field_0x1e0[4];
+	undefined field20_0x110[208];
+	undefined field21_0x1e0[4];
 	float movepointsModifier;
 	float movepointsMax;
 	float movepoints2;
-	undefined field_0x1f0[64];
+	undefined field25_0x1f0[64];
 	char* ability; /* custom ability */
 };
 

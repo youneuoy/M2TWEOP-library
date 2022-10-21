@@ -91,6 +91,9 @@ public:
 	static void WINAPI onDrawAll();
 
 
+	static void __fastcall OnStopCharacter(general*character);
+
+
 	static void __fastcall onEndSiege(settlementStruct*sett);
 	static void __fastcall onStartSiege(settlementStruct*sett);
 	static void __fastcall onLoadDescrBattleCharacter(stackStruct*army,general*goalGen);

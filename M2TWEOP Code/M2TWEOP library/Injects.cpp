@@ -3245,3 +3245,52 @@ void OnrecruitPoolFillFromFile2::SetNewCode()
 	delete a;
 }
 */
+
+OnStopCharacter::OnStopCharacter(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00ab51a5;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00ab4175;
+}
+
+OnStopCharacter::~OnStopCharacter()
+{
+}
+
+void OnStopCharacter::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(byte_ptr(eax, 0xD0), 01);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnStopCharacter::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+
+	a->pushad();
+	a->pushf();
+
+	//character here
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
