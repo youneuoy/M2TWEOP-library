@@ -354,4 +354,4 @@ documentationGenerator/source/_static
 documentationGenerator/generatedLuaDocs
 M2TWEOPGenerated/
 .DS_Store
-documentationGenerator/EOPDocs/source/_static/LuaLib
+documentationGenerator/EOPDocs/source/_static/LuaLib/
