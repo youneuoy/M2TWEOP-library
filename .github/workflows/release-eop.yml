@@ -91,8 +91,8 @@ jobs:
         ls -l documentationGenerator/EOPDocs/build/html;
       shell: bash
 
-    # If the latest commit message starts with 'Release', build project, update docs, issue a release on GitHub
-    if: "startsWith(github.event.head_commit.message, 'Release')"
+      # If the latest commit message starts with 'Release', update docs and issue a release on GitHub
+      if: "startsWith(github.event.head_commit.message, 'Release')"
       # Read version number from source code
     - name: Read release version info from source
       run: |
