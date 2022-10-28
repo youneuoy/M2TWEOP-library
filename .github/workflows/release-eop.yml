@@ -11,8 +11,7 @@ env:
   COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
 
 jobs:
-  build-and-release-eop:
-
+  build-eop:
     # Use Windows 2019 as it has VS2019 pre-installed
     runs-on: windows-2019
 
@@ -58,7 +57,7 @@ jobs:
       id:   library-cache
       uses: actions/cache@v1
       with:
-       path: M2TWEOP-Library
+       path: M2TWEOP-library
        key:  library-cache
 
     - name: Verify M2TWEOP-luaPlugin cache
@@ -91,8 +90,13 @@ jobs:
         ls -l documentationGenerator/EOPDocs/build/html;
       shell: bash
 
-      # If the latest commit message starts with 'Release', update docs and issue a release on GitHub
-      if: "startsWith(github.event.head_commit.message, 'Release')"
+  release-eop:
+    # Use Windows 2019 as it has VS2019 pre-installed
+    runs-on: windows-2019
+
+    # If the latest commit message starts with 'Release', update docs and issue a release on GitHub
+    if: "startsWith(github.event.head_commit.message, 'Release')"
+    steps:
       # Read version number from source code
     - name: Read release version info from source
       run: |
