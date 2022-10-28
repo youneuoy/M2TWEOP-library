@@ -6,6 +6,9 @@ return [==[
 <head>
     <title>$(ldoc.title)</title>
     <link rel="stylesheet" href="$(ldoc.css)" type="text/css" />
+    <meta property="og:title" content=$(ldoc.title)">
+    <meta property="og:description" content="$(ldoc.description)">
+    <meta property="og:image" content="../../../logoAbout.png">
 # if ldoc.custom_css then -- add custom CSS file if configured.
     <link rel="stylesheet" href="$(ldoc.custom_css)" type="text/css" />
 # end
@@ -44,7 +47,7 @@ return [==[
 
 # --------- contents of module -------------
 # if module and not ldoc.no_summary and #module.items > 0 then
-<h2>Contents</h2>
+<h2>Data Types</h2>
 <ul>
 # for kind,items in module.kinds() do
 <li><a href="#$(no_spaces(kind))">$(kind)</a></li>
