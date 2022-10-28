@@ -12,7 +12,10 @@ env:
 
 jobs:
   build-and-release-eop:
+
+    # Use Windows 2019 as it has VS2019 pre-installed
     runs-on: windows-2019
+
     steps:
     - uses: ilammy/msvc-dev-cmd@v1
       with:
