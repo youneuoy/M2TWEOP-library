@@ -1,10 +1,4 @@
-# To-Do
-# Run action manually
-# Pass release description
-# Versioning
-
-
-name: Release EOP on GitHub
+name: Build and Release EOP on GitHub
 
 on: [push]
 
@@ -17,9 +11,7 @@ env:
   COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
 
 jobs:
-  build-eop:
-    permissions:
-        contents: write
+  build-and-release-eop:
     runs-on: windows-2019
     steps:
     - uses: ilammy/msvc-dev-cmd@v1
