@@ -227,7 +227,7 @@
     <ClInclude Include="..\3rd\nlohmann\json.hpp">
       <Filter>3rd\json</Filter>
     </ClInclude>
-    <ClInclude Include="..\M2TWEOP library\m2tweopConstData.h">
+    <ClInclude Include="..\M2TWEOP Common\m2tweopConstData.h">
       <Filter>Файлы ресурсов</Filter>
     </ClInclude>
     <ClInclude Include="redistUI.h">

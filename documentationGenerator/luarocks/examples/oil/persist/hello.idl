@@ -1,5 +1,0 @@
-interface Hello {
-	attribute boolean quiet;
-	readonly attribute long count;
-	string say_hello_to(in string name);
-};

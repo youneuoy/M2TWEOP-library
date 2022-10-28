@@ -10,50 +10,18 @@
 ## **Release Notes**
 
 ### **Breaking Changes**
-- Renamed "`getResourceCode`" to "`getResourceID`" for uniformity :: WARNING: backwards incompatibility! - *Callistonian*
 
 ### **Launcher**
-- Added M2TWEOP health checker (this will appear automatically if there are potential startup problems) - *youneuoy*
-- Removed `M2TWEOPUI.cfg` (this file is now obsolete, you may remove it) - *Medik*
-- Added new file `eopData/uiCfg.json` to configure the launcher  - *Medik*
-- Added new config options to change the launcher window title, "Run mod" message and button colors - *Medik*
-- EOP is now enabled by default in the launcher config options - *Medik*
-- [Added a new tutorial on configuring the launcher](https://youneuoy.github.io/M2TWEOP-library/M2TWEOP_LAUNCHER_SETTINGS.html) - *Medik*
-
-#### **Examples of the new launcher options**
-![](https://i.imgur.com/Zfr6M1k.png)
-![](https://i.imgur.com/LAiOigh.png)
-![](https://i.imgur.com/0ctfDQi.png)
+- Settings menu now shows the EOP version in use - *Medik*
 
 ### **Library**
-- Hotseat: select battle winner without casualties - *youneuoy*
-- DeveloperMode: activated by ctrl+2 - *youneuoy*
--  ![](https://cdn.discordapp.com/attachments/744326498151825409/1032004917033975859/unknown.png)
-- DeveloperMode: BattleMapOverrider, useful for custom maps testing. - *youneuoy*
-- backspace(stop movement button)now work at campaign map(but only if human players<2, i.e. not in multiplayer hotseats).
 
 ### **Lua Plugin**
-- EduEntry table: new fields - *youneuoy*
-- M2TWEOPDU table: now `setEntrySoldierModel` works better - *youneuoy*
-- namedCharacter table: removed `localizedSaveName`, `localizedSaveName2`, `localizedSaveNickName` - *youneuoy*
-- namedCharacter table: added rest of the attribute members - *Callistonian*
-- Added event functions: `onShortcutTriggered()`, `onCharacterMarriesPrincess()`, `onBecomesFactionLeader()`, `onBecomesFactionHeir()` - *Callistonian*
-- Added structures: `portStruct`, `watchtowerStruct`, `factionStratMap`, `buildingsQueue`, `buildingInQueue` - *Callistonian*
-- Renamed "`getResourceCode`" to "`getResourceID`" for uniformity :: WARNING: backwards incompatibility! - *Callistonian*
-- Added trade resource getters for `hasMine` and image (icon) - *Callistonian*
-- campaign table: GetUnitSize function - *youneuoy*
-- new ugly console - *youneuoy*
 
 
 ### **Documentation**
-- Updated Erken's ImGUI tutorial to V3 (Thanks again Erken!) - *Medik*
-- Lua documentation corrected and improved with many usage examples - *Callistonian*
 
 ### **Bugfixes**
-- Fixes for launch process
-- Iterating through sub elements from 0 to (subElementsnum-1) now returns the correct results - *Callistonian*
-- Setting resource strat models no longer sets their cost and hasMine fields to 0 - *Callistonian*
-- `soldierCountStratMapMax` and `soldierCountBattleMap` return the correct values - *Callistonian*
 
 ### **Links**
 * [EOP Documentation](https://youneuoy.github.io/M2TWEOP-library/)

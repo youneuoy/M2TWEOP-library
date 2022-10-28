@@ -1,10 +1,4 @@
-# To-Do
-# Run action manually
-# Pass release description
-# Versioning
-
-
-name: Release EOP on GitHub
+name: Build and Release EOP on GitHub
 
 on: [push]
 
@@ -18,11 +12,9 @@ env:
 
 jobs:
   build-eop:
-    # If the latest commit message starts with 'Release', build project, update docs, issue a release on GitHub
-    if: "startsWith(github.event.head_commit.message, 'Release')"
-    permissions:
-        contents: write
+    # Use Windows 2019 as it has VS2019 pre-installed
     runs-on: windows-2019
+
     steps:
     - uses: ilammy/msvc-dev-cmd@v1
       with:
@@ -61,12 +53,12 @@ jobs:
     #   run: choco install visualstudio2019community
 
     # Check cache for previously generated code
-    - name: Verify M2TWEOP-Library cache
-      id:   library-cache
+    - name: Verify M2TWEOP Code cache
+      id:   code-cache
       uses: actions/cache@v1
       with:
-       path: M2TWEOP-Library
-       key:  library-cache
+       path: M2TWEOP Code
+       key:  code-cache
 
     - name: Verify M2TWEOP-luaPlugin cache
       id:   luaPlugin-cache
@@ -98,10 +90,17 @@ jobs:
         ls -l documentationGenerator/EOPDocs/build/html;
       shell: bash
 
+  release-eop:
+    # Use Windows 2019 as it has VS2019 pre-installed
+    runs-on: windows-2019
+
+    # If the latest commit message starts with 'Release', update docs and issue a release on GitHub
+    if: "startsWith(github.event.head_commit.message, 'Release')"
+    steps:
       # Read version number from source code
     - name: Read release version info from source
       run: |
-          echo "EOP_VERSION=$(./getEOPVersionInfo.ps1 "./M2TWEOP Code/M2TWEOP library/m2tweopConstData.h")"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+          echo "EOP_VERSION=$(./getEOPVersionInfo.ps1 "./M2TWEOP Code/M2TWEOP Common/m2tweopConstData.h")"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
       shell: powershell
 
     - name: Output EOP_VERSION

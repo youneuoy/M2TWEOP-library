@@ -145,17 +145,17 @@ namespace mainUI
 		}
 
 		ImGui::NewLine();
-		if (ImGui::Button("About M2TWEOP", helpers::getScreen().centerXButton))
-		{
-			childs.isAboutOpen = true;
-		}
-		if (ImGui::Button("Open M2TWEOP documentation", helpers::getScreen().centerXButton))
+		if (ImGui::Button("M2TWEOP Documentation", helpers::getScreen().centerXButton))
 		{
 			ShellExecuteA(NULL, "open", "eopData\\helpPages\\index.html", NULL, NULL, SW_SHOWNORMAL);
 		}
-		if (ImGui::Button("Open M2TWEOP website", helpers::getScreen().centerXButton))
+		if (ImGui::Button("M2TWEOP Website", helpers::getScreen().centerXButton))
 		{
 			ShellExecuteA(NULL, "open", "https://youneuoy.github.io/M2TWEOP-library/ ", NULL, NULL, SW_SHOWNORMAL);
+		}
+		if (ImGui::Button("About M2TWEOP", helpers::getScreen().centerXButton))
+		{
+			childs.isAboutOpen = true;
 		}
 		ImGui::End();
 
