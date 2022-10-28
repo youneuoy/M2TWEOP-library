@@ -3,6 +3,7 @@
 #include "helpers.h"
 #include "dataG.h"
 #include "managerG.h"
+#include "../M2TWEOP Common/m2tweopConstData.h"
 
 namespace modSettingsUI
 {
@@ -157,7 +158,7 @@ namespace modSettingsUI
 
 		ImGui::SetNextWindowPos(helpers::getScreen().screenHalfSize, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
 		ImGui::SetNextWindowSize({800,-1}, ImGuiCond_Once);
-		ImGui::Begin("M2TWEOP settings", isOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+		ImGui::Begin(eopConstData::eopVersionName, isOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
 
 

@@ -21,7 +21,7 @@ graphicsD3D::dataT graphicsD3D::dataS;
 
 #include "m2tweopMapManager.h"
 
-#include "m2tweopConstData.h"
+#include "../../M2TWEOP Common/m2tweopConstData.h"
 #include "eduFastFuncts.h"
 template<typename T>
 T FnCast(uint32_t fnToCast, T pFnCastTo) {
