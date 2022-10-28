@@ -1,7 +1,0 @@
-#!/bin/sh
-
-echo "Starting demo"
-
-lua main.lua
-
-echo "Demo finished."
