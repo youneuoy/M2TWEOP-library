@@ -216,7 +216,7 @@
     <ClInclude Include="..\3rd\ImNotify\font_awesome_5.h" />
     <ClInclude Include="..\3rd\ImNotify\imgui_notify.h" />
     <ClInclude Include="..\3rd\nlohmann\json.hpp" />
-    <ClInclude Include="..\M2TWEOP library\m2tweopConstData.h" />
+    <ClInclude Include="..\M2TWEOP Common\m2tweopConstData.h" />
     <ClInclude Include="aboutUI.h" />
     <ClInclude Include="dataG.h" />
     <ClInclude Include="gameRunnerUI.h" />
