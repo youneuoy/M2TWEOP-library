@@ -3,7 +3,7 @@ body {
     font-size: 16px;
     font-family: 'Rubik', sans-serif;
     margin: 0;
-    background: #eff4ff;
+    background: #1c0303;
 }
 
 #container{
@@ -35,7 +35,7 @@ a:link { color: #eff1f9; border-bottom: 5px; }
 a:visited { color: #eff1f9; }
 a:hover { color: #f4ff64ad; }
 
-h1 { font-size:26px; font-weight: bold; }
+h1 {font-size:26px;font-weight: bold;}
 h2 { font-size:22px; font-weight: bold; }
 h3 { font-size:18px; font-weight: normal; }
 h4 { font-size:16px; font-weight: normal; }
@@ -79,10 +79,10 @@ font-family: 'Open Sans', sans-serif;
     background: #210000;
     border-right: 1px solid #d3dbec;
     border-bottom: 1px solid #d3dbec;
-    width: 14em;
+    width: 12em;
     vertical-align: top;
     overflow: visible;
-    width: 20vw;
+    width: 15vw;
     height: 100vh;
     align-content: left;
     top: 0;
@@ -91,6 +91,8 @@ font-family: 'Open Sans', sans-serif;
     overflow-y:scroll;
     overflow-x:hidden;
     margin-bottom: 20px;
+  text-underline-offset: 3px;
+
 }
 
 #navigation br {
@@ -128,16 +130,12 @@ font-family: 'Open Sans', sans-serif;
 }
 
 #content {
-    margin-left: 20vw;
-    /* width-max: 700px; */
-    width: 78vw;
-    overflow-x:hidden;
-}
+    color: #e0e0e0;
 
-#content {
-    margin-left: 20vw;
+    margin-left: 16vw;
+
     /* width-max: 700px; */
-    width: 78vw;
+    width: 82vw;
     overflow-x:hidden;
 }
 
@@ -201,8 +199,8 @@ table.index td { text-align: left; vertical-align: top; }
 {
     font-size:1em;
     list-style-type: none;
-    margin: 1px 1px 10px 1px;
-    padding-left: 7px;
+    margin: 1px 1px 1px 1px;
+    padding-left: 6px;
 }
 
 #navigation li {
