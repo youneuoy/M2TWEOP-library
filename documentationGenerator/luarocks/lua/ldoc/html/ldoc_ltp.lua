@@ -6,9 +6,10 @@ return [==[
 <head>
     <title>$(ldoc.title)</title>
     <link rel="stylesheet" href="$(ldoc.css)" type="text/css" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap" rel="stylesheet">
+
     <!-- Meta stuff -->
     <meta property="og:title" content=$(ldoc.title)">
     <meta property="og:description" content="$(ldoc.description)">
@@ -52,8 +53,6 @@ return [==[
 <h2>Data Types</h2>
 <ul>
 
-
-
 # for kind,items in module.kinds() do
 <details>
   <summary><a href="#$(no_spaces(kind))">$(kind)</a></summary>
@@ -66,30 +65,31 @@ return [==[
 # end
 </ul>
 # end
-
-
-
 </div>
 
 <div id="content">
-<div class="welcomeDiv">
-<h2 class="bannerText"></h2>
-<img class="bannerImage" src="../M2TWEOP.png"/>
-<h2 class="bannerText">Medieval 2: Total War - Engine Overhaul Project Lua Plugin Documentation</h2>
-<h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
-<br>
-<h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord and get some help!</h3>
-<img class="discordImage" alt="" href="https://discord.gg/Epqjm8u2WK" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
-<div class="quickLinks">
-<h2>Quick Links</h2>
-<ul>
-    <li><a href="../../articles.html">M2TWEOP Tutorials</li>
+    <div class="welcomeDiv">
+        <h2 class="bannerText"></h2>
+        <img class="bannerImage" src="../M2TWEOP.png"/>
+        <h2 class="bannerText">Medieval 2: Total War - Engine Overhaul Project Lua Plugin Documentation</h2>
+        <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
+        <br>
+        <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord and get some help!</h3>
+        <p class="lastUpdatedMessage">Last updated: $(ldoc.updatetime)</p>
+        <a href="https://discord.gg/Epqjm8u2WK">
+            <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
+        </a>
+        <br>
+    <div class="quickLinks">
+        <h2>Quick Links</h2>
     <ul>
-    <li><a href="https://www.youtube.com/watch?v=hUvbcz8i7Wk">Scripting Basics</li>
-    <li><a href="../../_static/Introduction_to_ImGui_v3.pdf">Introduction to ImGUI</li>
-    <li><a href="../../_static/LuaLib/extra/readme_imgui.md.html">EOP's ImGUI Bindings</li>
+        <li><a href="../../articles.html">M2TWEOP Tutorials</li>
     <ul>
-</ul>
+        <li><a href="https://www.youtube.com/watch?v=hUvbcz8i7Wk">Scripting Basics (Video Tutorial)</li>
+        <li><a href="../../_static/Introduction_to_ImGui_v3.pdf">Introduction to ImGUI</li>
+        <li><a href="../../_static/LuaLib/extra/readme_imgui.md.html">EOP's ImGUI Bindings</li>
+    <ul>
+    </ul>
 </div>
 
 # if ldoc.body then -- verbatim HTML as contents; 'non-code' entries
@@ -307,7 +307,6 @@ return [==[
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i style="float:right;">Last updated $(ldoc.updatetime) </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
