@@ -51,8 +51,18 @@ return [==[
 # if module and not ldoc.no_summary and #module.items > 0 then
 <h2>Data Types</h2>
 <ul>
+
+
+
 # for kind,items in module.kinds() do
-<li><a href="#$(no_spaces(kind))">$(kind)</a></li>
+<details>
+  <summary><a href="#$(no_spaces(kind))">$(kind)</a></summary>
+# for item in items() do
+    <li><a href="#$(item.name)">$(display_name(item))</a></li>
+# end
+</details>
+
+
 # end
 </ul>
 # end
