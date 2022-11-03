@@ -4,7 +4,7 @@
 
 #### ```eopData/uiCfg.json```
 
-```json
+```
 {
     "hideLauncher": false, // Hide the launcher completely and just load the mod directly
     "modCfgFile": "", // The default config file to use (e.g TATW.cfg)
@@ -22,7 +22,7 @@
 
 #### ```eopBattles/battlesCfg.json```
 
-```json
+```
 {
     "enableAutoGeneration": false, // Whether we should automatically generate the details of a battle to play online when we load into a battle
     "enableResultsTransfer": false // Whether we should automatically prompt the player to transfer the results of a battle to the campaign map
@@ -34,7 +34,7 @@
 
 #### ```eopData/gameCfg.json```
 
-```json
+```
 {
     "isBlockLaunchWithoutEop": false // Should we stop the mod running if EOP is not enabled
 }

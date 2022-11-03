@@ -195,6 +195,11 @@ table.index td { text-align: left; vertical-align: top; }
   padding-left: 25px;
 }
 
+#navigation li::before {
+  content: '•';
+  padding-right: 3px;
+}
+
 #navigation summary {
   color: white;
   margin-right: 0px;
@@ -237,7 +242,7 @@ table.module_list, table.function_list {
 }
 table.module_list, table.function_list a {
 text-underline-offset: 2px;
-text-decoration: solid underline #cfcfcfba;
+text-decoration: solid 0.5px underline #cfcfcfba;
 font-weight: bold;
 color: #d5d5d5;
 }
@@ -408,6 +413,7 @@ list-style: none;
 .discordImage {
   padding: 20px;
   padding-bottom: 0px;
+  padding-top: 10px;
   width: 250px;
   padding-left: 42%;
 }
@@ -469,4 +475,26 @@ details summary > * {
 
 details li {
 list-style: square;
+}
+
+.lastUpdatedMessage {
+  font-size: 16px;
+  font-style: italic;
+  text-align: center;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+}
+
+@keyframes effect {
+  50% {
+    border-color: transparent;
+  }
+}
+
+.typing-effect {
+  animation: typing 2s steps(22), effect .5s step-end infinite alternate;
 }
