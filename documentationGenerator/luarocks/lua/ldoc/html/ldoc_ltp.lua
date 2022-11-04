@@ -6,9 +6,19 @@ return [==[
 <head>
     <title>$(ldoc.title)</title>
     <link rel="stylesheet" href="$(ldoc.css)" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap" rel="stylesheet">
+
+    <!-- Meta stuff -->
     <meta property="og:title" content=$(ldoc.title)">
     <meta property="og:description" content="$(ldoc.description)">
     <meta property="og:image" content="../../../logoAbout.png">
+
+    <!-- Favicon-->
+   <link rel="icon" type="image/x-icon" href="../EOPIcon.png">
+
+
 # if ldoc.custom_css then -- add custom CSS file if configured.
     <link rel="stylesheet" href="$(ldoc.custom_css)" type="text/css" />
 # end
@@ -16,13 +26,6 @@ return [==[
 <body>
 
 <div id="container">
-
-<div id="product">
-	<div id="product_logo"></div>
-	<div id="product_name"><big><b></b></big></div>
-	<div id="product_description"></div>
-</div> <!-- id="product" -->
-
 
 <div id="main">
 
@@ -37,7 +40,7 @@ return [==[
 
 <div id="navigation">
 <br/>
-<h1>$(ldoc.project)</h1>
+<h1><a href="../../index.html">Home</a></h1>
 
 # if not ldoc.single and module then -- reference back to project index
 <ul>
@@ -49,50 +52,51 @@ return [==[
 # if module and not ldoc.no_summary and #module.items > 0 then
 <h2>Data Types</h2>
 <ul>
+
 # for kind,items in module.kinds() do
-<li><a href="#$(no_spaces(kind))">$(kind)</a></li>
-# end
-</ul>
-# end
-
-
-# if ldoc.no_summary and module and not ldoc.one then -- bang out the functions on the side
-# for kind, items in module.kinds() do
-<h2>$(kind)</h2>
-<ul class="nowrap">
+<details>
+  <summary><a href="#$(no_spaces(kind))">$(kind)</a></summary>
 # for item in items() do
     <li><a href="#$(item.name)">$(display_name(item))</a></li>
 # end
-</ul>
-# end
-# end
-# -------- contents of project ----------
-# local this_mod = module and module.name
-# for kind, mods, type in ldoc.kinds() do
-#  if ldoc.allowed_in_contents(type,module) then
-<h2>$(kind)</h2>
-<ul class="$(kind=='Topics' and '' or 'nowrap')">
-#  for mod in mods() do local name = display_name(mod)
-#   if mod.name == this_mod then
-  <li><strong>$(name)</strong></li>
-#   else
-  <li><a href="$(ldoc.ref_to_module(mod))">$(name)</a></li>
-#   end
-#  end
-# end
-</ul>
-# end
+</details>
 
+
+# end
+</ul>
+# end
 </div>
 
 <div id="content">
+    <div class="welcomeDiv">
+        <h2 class="bannerText"></h2>
+        <img class="bannerImage" src="../M2TWEOP.png"/>
+        <h2 class="bannerText">Medieval 2: Total War - Engine Overhaul Project Lua Plugin Documentation</h2>
+        <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
+        <br>
+        <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord and get some help!</h3>
+        <p class="lastUpdatedMessage">Last updated: $(ldoc.updatetime)</p>
+        <a href="https://discord.gg/Epqjm8u2WK">
+            <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
+        </a>
+        <br>
+    <div class="quickLinks">
+        <h2>Quick Links</h2>
+    <ul>
+        <li><a href="../../articles.html">M2TWEOP Tutorials</li>
+    <ul>
+        <li><a href="https://www.youtube.com/watch?v=hUvbcz8i7Wk">Scripting Basics (Video Tutorial)</li>
+        <li><a href="../../_static/Introduction_to_ImGui_v3.pdf">Introduction to ImGUI</li>
+        <li><a href="../../_static/LuaLib/extra/readme_imgui.md.html">EOP's ImGUI Bindings</li>
+    <ul>
+    </ul>
+</div>
 
 # if ldoc.body then -- verbatim HTML as contents; 'non-code' entries
     $(ldoc.body)
 # elseif module then -- module documentation
-<h1>$(ldoc.module_typename(module)) <code>$(module.name)</code></h1>
-<p>$(M(module.summary,module))</p>
-<p>$(M(module.description,module))</p>
+<p class="moduleSummary">$(M(module.summary,module))</p>
+<p class="moduleDescription">$(M(module.description,module))</p>
 #   if module.tags.include then
         $(M(ldoc.include_file(module.tags.include)))
 #   end
@@ -114,14 +118,7 @@ return [==[
 #     end -- for
     </ul>
 #   end -- if usage
-#   if module.info then
-    <h3>Info:</h3>
-    <ul>
-#     for tag, value in module.info:iter() do
-        <li><strong>$(tag)</strong>: $(M(value,module))</li>
-#     end
-    </ul>
-#   end -- if module.info
+</div>
 
 
 # if not ldoc.no_summary then
@@ -173,8 +170,9 @@ return [==[
 #  end
     </dt>
     <dd>
+    <div class="functionDescription">
     $(M(ldoc.descript(item),item))
-
+    </div>
 #   if ldoc.custom_tags then
 #    for custom in iter(ldoc.custom_tags) do
 #     local tag = item.tags[custom[1]]
@@ -309,8 +307,6 @@ return [==[
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
-<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc $(ldoc.version)</a></i>
-<i style="float:right;">Last updated $(ldoc.updatetime) </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>

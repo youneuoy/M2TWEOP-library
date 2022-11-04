@@ -18,8 +18,8 @@
 
 ### **Lua Plugin**
 
-
 ### **Documentation**
+- Restyled the LuaPlugin documentation to be easier to read and navigate
 
 ### **Bugfixes**
 
