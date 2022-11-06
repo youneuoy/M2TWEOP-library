@@ -1,0 +1,400 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Исходные файлы\technical">
+      <UniqueIdentifier>{abe5ce54-e636-4317-9071-e2a577e6da10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pluginCodes">
+      <UniqueIdentifier>{b04cb6b9-1c9e-4c82-9836-77509d031da4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pluginCodes\events">
+      <UniqueIdentifier>{6d6ed46d-5343-406a-81d0-d83df7ce0381}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pluginCodes\events\defines">
+      <UniqueIdentifier>{09958921-8ef2-418c-8e9c-9396f5aea71e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\technical\ImGui">
+      <UniqueIdentifier>{36483bff-3f40-4982-afce-6b723a145c40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua">
+      <UniqueIdentifier>{07b80e83-f622-4d58-88dc-aa8f63e5cc78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\pluginFuncs">
+      <UniqueIdentifier>{70fa15da-9f57-4cf0-a1bc-56c792963e6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\pluginFuncs\graphics">
+      <UniqueIdentifier>{b1286217-5a62-4d66-b4d7-dd2917cba39d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind">
+      <UniqueIdentifier>{b606360f-7b2b-4ee3-846b-5c1bc18ed243}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\pluginFuncs\seaBattle">
+      <UniqueIdentifier>{ed7ca528-5761-446b-8639-18aba068872a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers">
+      <UniqueIdentifier>{5e4075d4-bff7-4071-973c-3b6854122b3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\structHelpers">
+      <UniqueIdentifier>{79c02052-bdaf-4109-922a-e9537025ca16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\structHelpers\faction">
+      <UniqueIdentifier>{94cb3b75-f2bb-4618-9af5-048f085f03f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\structHelpers\resources">
+      <UniqueIdentifier>{9bddf84a-21c6-473e-99d0-a41d8045eb2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\structHelpers\stackStruct">
+      <UniqueIdentifier>{f1f249ef-3a0c-48eb-b4d1-8e1716d7c01d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\namespaceHelpers">
+      <UniqueIdentifier>{23fd0284-655d-440f-ad0b-d0613cbcac3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\namespaceHelpers\game">
+      <UniqueIdentifier>{feb064e2-aad1-46c5-8eae-dcec25197dab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\namespaceHelpers\generalHelpers">
+      <UniqueIdentifier>{e5269dca-d848-4933-abe3-398e186d1fb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\namespaceHelpers\unitHelpers">
+      <UniqueIdentifier>{0ea50778-bd0b-47ec-bfd3-e7e6711a825a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\namespaceHelpers\stratmap">
+      <UniqueIdentifier>{12267017-112a-4137-aad8-36d3d637231b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\namespaceHelpers\stratmap\objects">
+      <UniqueIdentifier>{4d669216-7bbc-49c5-902d-2f0a96c22824}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\namespaceHelpers\stratmap\camera">
+      <UniqueIdentifier>{ba79d163-f4bd-47f4-b1e3-e8cc7185c095}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\m2tweopHelpres">
+      <UniqueIdentifier>{582e2a69-e0f7-480f-ab53-e180097096a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\gameDataAllHelpers">
+      <UniqueIdentifier>{dad8c65e-6f56-487a-b637-892c39dbe6a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\gameDataAllHelpers\battleHelpers">
+      <UniqueIdentifier>{69807e60-4fc9-4a09-a1cc-755c0c364162}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\technicalHelpers">
+      <UniqueIdentifier>{211cefee-cf6e-426a-a92a-1e3f9a57ab1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\eopEduHelpers">
+      <UniqueIdentifier>{cd5e397a-d386-4f06-b465-e7db7996ca73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\structHelpers\settlement">
+      <UniqueIdentifier>{8049f164-137d-4e4e-b8b1-62dc94e979e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\structHelpers\settlement\buildings">
+      <UniqueIdentifier>{16761283-b53f-4427-bca3-c3c888c35bbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\structHelpers\guild">
+      <UniqueIdentifier>{c91fbb01-6a9e-4bef-9682-26eeb6f8f5fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\fbx">
+      <UniqueIdentifier>{91ab4047-1add-4be5-8e69-4cfeb15c5af5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\namespaceHelpers\stratmap\siege">
+      <UniqueIdentifier>{380a76b1-455b-42eb-a845-4595662cb77b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\gameSTDUIHelpers">
+      <UniqueIdentifier>{f788bd34-a808-4519-b676-12be637bc460}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\soundsHelpers">
+      <UniqueIdentifier>{aafd9dd4-cfc9-4f4a-a989-3b47c32be937}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="realGameTypes.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Исходные файлы\technical</Filter>
+    </ClInclude>
+    <ClInclude Include="basicEvents.h">
+      <Filter>pluginCodes\events\defines</Filter>
+    </ClInclude>
+    <ClInclude Include="otherEvents.h">
+      <Filter>pluginCodes\events\defines</Filter>
+    </ClInclude>
+    <ClInclude Include="religionEvents.h">
+      <Filter>pluginCodes\events\defines</Filter>
+    </ClInclude>
+    <ClInclude Include="uiEvents.h">
+      <Filter>pluginCodes\events\defines</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsEvents.h">
+      <Filter>pluginCodes\events\defines</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>Исходные файлы\technical\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>Исходные файлы\technical\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_dx9.h">
+      <Filter>Исходные файлы\technical\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_win32.h">
+      <Filter>Исходные файлы\technical\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>Исходные файлы\technical\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>Исходные файлы\technical\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>Исходные файлы\technical\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>Исходные файлы\technical\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="pluginM2TWEOP.h">
+      <Filter>Исходные файлы\pluginFuncs</Filter>
+    </ClInclude>
+    <ClInclude Include="luaGetSetFuncs.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="factionHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\structHelpers\faction</Filter>
+    </ClInclude>
+    <ClInclude Include="resourcesHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\structHelpers\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="settlementHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\structHelpers\settlement</Filter>
+    </ClInclude>
+    <ClInclude Include="stackStructHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\structHelpers\stackStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="buildingStructHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\structHelpers\settlement\buildings</Filter>
+    </ClInclude>
+    <ClInclude Include="objectsHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\namespaceHelpers\stratmap\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="gameHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\namespaceHelpers\game</Filter>
+    </ClInclude>
+    <ClInclude Include="generalHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\namespaceHelpers\generalHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="generalCharactericticsHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\namespaceHelpers\generalHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="unitHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\namespaceHelpers\unitHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="cameraHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\namespaceHelpers\stratmap\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_stdlib.h">
+      <Filter>Исходные файлы\technical\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="console.h">
+      <Filter>Исходные файлы\pluginFuncs\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="m2tweopHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\m2tweopHelpres</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\sol_ImGui.h">
+      <Filter>lua</Filter>
+    </ClInclude>
+    <ClInclude Include="gameDataAllHelper.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\gameDataAllHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="luaP.h">
+      <Filter>Исходные файлы\luaBind</Filter>
+    </ClInclude>
+    <ClInclude Include="battleHandlerHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\gameDataAllHelpers\battleHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="technicalHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\technicalHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="seaBattle.h">
+      <Filter>Исходные файлы\pluginFuncs\seaBattle</Filter>
+    </ClInclude>
+    <ClInclude Include="basicFuncs.h">
+      <Filter>Исходные файлы\pluginFuncs</Filter>
+    </ClInclude>
+    <ClInclude Include="plugData.h">
+      <Filter>Исходные файлы\pluginFuncs</Filter>
+    </ClInclude>
+    <ClInclude Include="eopEduHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\eopEduHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="guildHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\structHelpers\guild</Filter>
+    </ClInclude>
+    <ClInclude Include="eopFbxHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\fbx</Filter>
+    </ClInclude>
+    <ClInclude Include="siegeHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\namespaceHelpers\stratmap\siege</Filter>
+    </ClInclude>
+    <ClInclude Include="gameSTDUIHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\gameSTDUIHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="eopSoundHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\soundsHelpers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Исходные файлы\technical</Filter>
+    </ClCompile>
+    <ClCompile Include="plugData.cpp">
+      <Filter>Исходные файлы\technical</Filter>
+    </ClCompile>
+    <ClCompile Include="basicEvents.cpp">
+      <Filter>pluginCodes\events</Filter>
+    </ClCompile>
+    <ClCompile Include="uiEvents.cpp">
+      <Filter>pluginCodes\events</Filter>
+    </ClCompile>
+    <ClCompile Include="religionEvents.cpp">
+      <Filter>pluginCodes\events</Filter>
+    </ClCompile>
+    <ClCompile Include="otherEvents.cpp">
+      <Filter>pluginCodes\events</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>Исходные файлы\technical\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>Исходные файлы\technical\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_dx9.cpp">
+      <Filter>Исходные файлы\technical\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_win32.cpp">
+      <Filter>Исходные файлы\technical\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>Исходные файлы\technical\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="pluginM2TWEOP.cpp">
+      <Filter>Исходные файлы\pluginFuncs</Filter>
+    </ClCompile>
+    <ClCompile Include="luaGetSetFuncs.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="factionHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\structHelpers\faction</Filter>
+    </ClCompile>
+    <ClCompile Include="resourcesHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\structHelpers\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="settlementHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\structHelpers\settlement</Filter>
+    </ClCompile>
+    <ClCompile Include="stackStructHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\structHelpers\stackStruct</Filter>
+    </ClCompile>
+    <ClCompile Include="buildingStructHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\structHelpers\settlement\buildings</Filter>
+    </ClCompile>
+    <ClCompile Include="objectsHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\namespaceHelpers\stratmap\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="gameHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\namespaceHelpers\game</Filter>
+    </ClCompile>
+    <ClCompile Include="generalHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\namespaceHelpers\generalHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="generalCharactericticsHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\namespaceHelpers\generalHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="unitHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\namespaceHelpers\unitHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="cameraHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\namespaceHelpers\stratmap\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_stdlib.cpp">
+      <Filter>Исходные файлы\technical\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="graphicsEvents.cpp">
+      <Filter>Исходные файлы\pluginFuncs\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="console.cpp">
+      <Filter>Исходные файлы\pluginFuncs\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>Исходные файлы\technical\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="m2tweopHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\m2tweopHelpres</Filter>
+    </ClCompile>
+    <ClCompile Include="gameDataAllHelper.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\gameDataAllHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="luaP.cpp">
+      <Filter>Исходные файлы\luaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="luaP2.cpp">
+      <Filter>Исходные файлы\luaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="luaEvents.cpp">
+      <Filter>Исходные файлы\luaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="battleHandlerHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\gameDataAllHelpers\battleHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="luaTech.cpp">
+      <Filter>Исходные файлы\luaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="technicalHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\technicalHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="seaBattle.cpp">
+      <Filter>Исходные файлы\pluginFuncs\seaBattle</Filter>
+    </ClCompile>
+    <ClCompile Include="basicFuncs.cpp">
+      <Filter>Исходные файлы\pluginFuncs</Filter>
+    </ClCompile>
+    <ClCompile Include="luaEopEdu.cpp">
+      <Filter>Исходные файлы\luaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="eopEduHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\eopEduHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="guildHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\structHelpers\guild</Filter>
+    </ClCompile>
+    <ClCompile Include="luaFbx.cpp">
+      <Filter>Исходные файлы\luaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="eopFbxHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\fbx</Filter>
+    </ClCompile>
+    <ClCompile Include="siegeHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\namespaceHelpers\stratmap\siege</Filter>
+    </ClCompile>
+    <ClCompile Include="gameSTDUIHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\gameSTDUIHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="luaSounds.cpp">
+      <Filter>Исходные файлы\luaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="eopSoundHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\soundsHelpers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint">
+      <Filter>Исходные файлы\technical</Filter>
+    </None>
+  </ItemGroup>
+</Project>
