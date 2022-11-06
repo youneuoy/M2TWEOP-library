@@ -85,12 +85,7 @@ jobs:
         ls -l documentationGenerator/EOPDocs/build/html;
       shell: bash
 
-  update-docs:
-    # Use Windows 2019 as it has VS2019 pre-installed
-    runs-on: windows-2019
-
-    if: "startsWith(github.event.head_commit.message, 'Docs')"
-    steps:
+      if: "startsWith(github.event.head_commit.message, 'Docs')"
     - name: Online docs - Copy generated documentation to docs folder
       run: |
           cp -R "documentationGenerator/EOPDocs/build/html/." "docs"
