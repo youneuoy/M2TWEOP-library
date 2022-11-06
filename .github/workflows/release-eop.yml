@@ -85,6 +85,25 @@ jobs:
         ls -l documentationGenerator/EOPDocs/build/html;
       shell: bash
 
+  update-docs:
+    # Use Windows 2019 as it has VS2019 pre-installed
+    runs-on: windows-2019
+
+    if: "startsWith(github.event.head_commit.message, 'Docs')"
+    steps:
+    - name: Online docs - Copy generated documentation to docs folder
+      run: |
+          cp -R "documentationGenerator/EOPDocs/build/html/." "docs"
+      shell: bash
+
+    - name: Online docs -  Commit and push updates to docs folder
+      uses: EndBug/add-and-commit@v9
+      with:
+        add: 'docs'
+        message: "Updated EOP Docs for commit: ${{ github.event.head_commit.message }}"
+        push: true
+        pull: '--rebase --autostash'
+
   release-eop:
     # Use Windows 2019 as it has VS2019 pre-installed
     runs-on: windows-2019
