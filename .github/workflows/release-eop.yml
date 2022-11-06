@@ -78,7 +78,7 @@ jobs:
 
     - name: Show generated files
       run: |
-        ls -l;
+        ls -l M2TWEOPGenerated;
         ls -l documentationGenerator;
         ls -l documentationGenerator/EOPDocs;
         ls -l documentationGenerator/EOPDocs/build;
