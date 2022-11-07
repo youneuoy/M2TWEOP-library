@@ -20,7 +20,7 @@ runs:
         shell: bash
 
       # Add the .nojekyll files to the docs folder
-        name: Create .nojekyll files
+      - name: Create .nojekyll files
         run: |
             touch docs/.nojekyll
         shell: bash
