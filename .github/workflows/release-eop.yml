@@ -11,6 +11,8 @@ env:
   COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
 
 jobs:
+  # This job is used to build EOP
+  #
   build-eop:
     # Use Windows 2019 as it has VS2019 pre-installed
     runs-on: windows-2019
@@ -23,11 +25,6 @@ jobs:
     # Pull down latest source code and modules
     - name: "Checkout from latest commit: '${{ github.event.head_commit.message }}'"
       uses: actions/checkout@v3
-      with:
-        submodules: recursive
-
-    - name: Update submodules recursively
-      run: git submodule update --recursive --remote
 
     - name: Show checked out files
       run: ls -l
@@ -48,9 +45,6 @@ jobs:
             7z -y x _DX2010_.exe DXSDK
             rm -fR _DX*_ _DX*_.exe
       shell: bash
-
-    # - name: Install Visual Studio 2019 Community with Chocolatey
-    #   run: choco install visualstudio2019community
 
     # Check cache for previously generated code
     - name: Verify M2TWEOP Code cache
@@ -90,7 +84,35 @@ jobs:
         ls -l documentationGenerator/EOPDocs/build/html;
       shell: bash
 
+  # This job is used to update the online documentation
+  # It requires a commit message beginning with 'Docs' to run
+  update-docs:
+      # Only run when the build is finished
+      needs: build-eop
+      # Use Windows 2019 as it has VS2019 pre-installed
+      runs-on: windows-2019
+
+      if: "startsWith(github.event.head_commit.message, 'Docs')"
+      steps:
+      - name: Online docs - Copy generated documentation to docs folder
+        run: |
+            cp -R "documentationGenerator/EOPDocs/build/html/." "docs"
+        shell: bash
+
+      - name: Online docs -  Commit and push updates to docs folder
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: 'docs'
+          message: "Updated EOP Docs for commit: '${{ github.event.head_commit.message }}'"
+          push: true
+          pull: '--rebase --autostash'
+
+  # This job is used to release EOP to GitHub and update the documentation
+  # It requires a commit message beginning with 'Release' to run
   release-eop:
+    # Only run when the build is finished
+    needs: build-eop
+
     # Use Windows 2019 as it has VS2019 pre-installed
     runs-on: windows-2019
 
