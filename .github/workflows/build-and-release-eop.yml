@@ -83,7 +83,7 @@ jobs:
         name: "${{ env.EOP_VERSION }}"
         tag: "${{ env.EOP_VERSION }}"
         artifacts: "${{ env.EOP_VERSION }}.zip"
-        bodyFile: "./docs/releaseInfo/releaseDescription.md"
+        bodyFile: "./documentationGenerator/releaseInfo/releaseDescription.md"
         token: ${{ secrets.GITHUB_TOKEN }}
         commit: "master"
         allowUpdates: true

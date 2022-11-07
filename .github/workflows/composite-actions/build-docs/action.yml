@@ -7,10 +7,23 @@ inputs:
 runs:
   using: "composite"
   steps:
+      # Clear out docs folder before copying
+      - name: Delete everything in the docs folder
+        run: |
+           rm -rf docs && mkdir docs
+        shell: bash
+
       # Copy the docs
       - name: Online docs - Copy generated documentation to docs folder
         run: |
             cp -R "documentationGenerator/EOPDocs/build/html/." "docs"
+        shell: bash
+
+      # Add the .nojekyll files to the docs folder
+        name: Create .nojekyll files
+        run: |
+            touch docs/.nojekyll
+            touch docs/eopDocs/eopDocs/helpPages/.nojekyll
         shell: bash
 
       # Force push the new docs

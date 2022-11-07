@@ -13,7 +13,7 @@ return [==[
     <!-- Meta stuff -->
     <meta property="og:title" content="M2TWEOP LuaPlugin Documentation">
     <meta property="og:description" content="Documentation, tutorials and example code for M2TWEOP's LuaPlugin.">
-    <meta property="og:image" content="https://youneuoy.github.io/M2TWEOP-library/_static/M2TWEOP.png">
+    <meta property="og:image" content="https://i.imgur.com/mQIK1oo.png">
 
     <!-- Favicon-->
    <link rel="icon" type="image/x-icon" href="../EOPIcon.png">

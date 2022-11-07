@@ -37,13 +37,6 @@ runs:
        path: M2TWEOP Code
        key:  code-cache
 
-    - name: Verify M2TWEOP-luaPlugin cache
-      id:   luaPlugin-cache
-      uses: actions/cache@v1
-      with:
-       path: M2TWEOP-luaPlugin
-       key:  luaPlugin-cache
-
     # Run build script
     - name: Run buildEOP.ps1
       run: |
