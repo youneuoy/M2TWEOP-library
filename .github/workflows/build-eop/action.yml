@@ -9,10 +9,6 @@ runs:
       with:
           vsversion: "16.0"
 
-    # Pull down latest source code and modules
-    - name: "Checkout from latest commit: '${{ github.event.head_commit.message }}'"
-      uses: actions/checkout@v3
-
     - name: Show checked out files
       run: ls -l
       shell: bash

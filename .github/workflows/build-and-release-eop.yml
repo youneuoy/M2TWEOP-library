@@ -20,6 +20,10 @@ jobs:
 
     # Steps
     steps:
+       # Pull down latest source code and modules
+      - name: "Checkout from latest commit: '${{ github.event.head_commit.message }}'"
+        uses: actions/checkout@v3
+
         # Do a normal build
       - name: Build EOP
         uses: ./.github/workflows/build-eop
@@ -32,6 +36,10 @@ jobs:
 
       if: "startsWith(github.event.head_commit.message, 'Docs')"
       steps:
+      # Pull down latest source code and modules
+      - name: "Checkout from latest commit: '${{ github.event.head_commit.message }}'"
+        uses: actions/checkout@v3
+
       # Do a normal build
       - name: Build EOP
         uses: ./.github/workflows/build-eop
@@ -60,6 +68,10 @@ jobs:
     # If the latest commit message starts with 'Release', update docs and issue a release on GitHub
     if: "startsWith(github.event.head_commit.message, 'Release')"
     steps:
+    # Pull down latest source code and modules
+    - name: "Checkout from latest commit: '${{ github.event.head_commit.message }}'"
+      uses: actions/checkout@v3
+
     # Do a normal build
     - name: Build EOP
       uses: ./.github/workflows/build-eop
