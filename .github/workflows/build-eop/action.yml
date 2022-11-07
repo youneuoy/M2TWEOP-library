@@ -1,0 +1,72 @@
+# Reusable action for building EOP
+name: 'Build EOP'
+description: 'Builds the Project (Restores Cache, Setups Env and Builds Project)'
+runs:
+  using: "composite"
+  steps:
+    # Use msvc-dev  building
+    - uses: ilammy/msvc-dev-cmd@v1
+      with:
+          vsversion: "16.0"
+
+    # Pull down latest source code and modules
+    - name: "Checkout from latest commit: '${{ github.event.head_commit.message }}'"
+      uses: actions/checkout@v3
+
+    - name: Show checked out files
+      run: ls -l
+      shell: bash
+
+    # Download and setup dependencies
+    - name: Verify DirectX cache
+      id:   dxsdk-cache
+      uses: actions/cache@v1
+      with:
+       path: DXSDK
+       key:  dxsdk-cache
+
+    - name:  Download DirectX SDK if not cached
+      if:    steps.dxsdk-cache.outputs.cache-hit != 'true'
+      run:   |
+            curl -L https://download.microsoft.com/download/a/e/7/ae743f1f-632b-4809-87a9-aa1bb3458e31/DXSDK_Jun10.exe -o _DX2010_.exe
+            7z -y x _DX2010_.exe DXSDK
+            rm -fR _DX*_ _DX*_.exe
+      shell: bash
+
+    # Check cache for previously generated code
+    - name: Verify M2TWEOP Code cache
+      id:   code-cache
+      uses: actions/cache@v1
+      with:
+       path: M2TWEOP Code
+       key:  code-cache
+
+    - name: Verify M2TWEOP-luaPlugin cache
+      id:   luaPlugin-cache
+      uses: actions/cache@v1
+      with:
+       path: M2TWEOP-luaPlugin
+       key:  luaPlugin-cache
+
+    - name: Verify documentationGenerator cache
+      id:   documentationGenerator-cache
+      uses: actions/cache@v1
+      with:
+       path: documentationGenerator
+       key:  documentationGenerator-cache
+
+    # Run build script
+    - name: Run buildEOP.ps1
+      run: |
+        ./buildEOP.ps1
+      env:
+        DXSDK_DIR: ${{ github.workspace }}\DXSDK\
+
+    - name: Show generated files
+      run: |
+        ls -l;
+        ls -l documentationGenerator;
+        ls -l documentationGenerator/EOPDocs;
+        ls -l documentationGenerator/EOPDocs/build;
+        ls -l documentationGenerator/EOPDocs/build/html;
+      shell: bash
