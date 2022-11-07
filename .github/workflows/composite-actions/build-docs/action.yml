@@ -1,0 +1,22 @@
+# Reusable action for building the EOP docs
+name: 'Update EOP Online Documentation'
+description: 'Copies and commits generated documentation to the docs folder'
+inputs:
+  commit_message_string:
+    required: true
+runs:
+  using: "composite"
+  steps:
+      # Copy the docs
+      - name: Online docs - Copy generated documentation to docs folder
+        run: |
+            cp -R "documentationGenerator/EOPDocs/build/html/." "docs"
+        shell: bash
+
+      # Force push the new docs
+      - name: Online docs -  Commit and push updates to docs folder
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: 'docs --force'
+          message: "Updated EOP Docs for ${{ inputs.commit_message_string }}"
+          push: true

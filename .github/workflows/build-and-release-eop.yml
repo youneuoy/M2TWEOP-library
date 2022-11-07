@@ -15,68 +15,48 @@ jobs:
   # This job is used to build EOP
   # It runs on every commit pushed to GitHub
   build-eop:
-    # Use Windows 2019 as it has VS2019 pre-installed
     runs-on: windows-2019
 
     # Steps
     steps:
-       # Pull down latest source code and modules
       - name: "Checkout from latest commit: '${{ github.event.head_commit.message }}'"
         uses: actions/checkout@v3
 
-        # Do a normal build
       - name: Build EOP
-        uses: ./.github/workflows/build-eop
+        uses: ./.github/workflows/composite-actions/build-eop
 
   # This job is used to update the online documentation
   # It requires a commit message beginning with 'Docs' to run
   update-docs:
-      # Use Windows 2019 as it has VS2019 pre-installed
       runs-on: windows-2019
 
       if: "startsWith(github.event.head_commit.message, 'Docs')"
       steps:
-      # Pull down latest source code and modules
       - name: "Checkout from latest commit: '${{ github.event.head_commit.message }}'"
         uses: actions/checkout@v3
 
-      # Do a normal build
       - name: Build EOP
-        uses: ./.github/workflows/build-eop
+        uses: ./.github/workflows/composite-actions/build-eop
 
-      # Copy the docs
-      - name: Online docs - Copy generated documentation to docs folder
-        run: |
-            cp -R "documentationGenerator/EOPDocs/build/html/." "docs"
-        shell: bash
-
-      # Force push the new docs
-      - name: Online docs -  Commit and push updates to docs folder
-        uses: EndBug/add-and-commit@v9
+      - name: Update EOP Online Documentation
+        uses: ./.github/workflows/composite-actions/build-docs
         with:
-          add: 'docs --force'
-          message: "Updated EOP Docs for commit: '${{ github.event.head_commit.message }}'"
-          push: true
-          pull: '--rebase --autostash'
+          commit_message_string: 'commit: ${{ github.event.head_commit.message }}'
 
   # This job is used to release EOP to GitHub and update the documentation
   # It requires a commit message beginning with 'Release' to run
   release-eop:
-    # Use Windows 2019 as it has VS2019 pre-installed
     runs-on: windows-2019
 
     # If the latest commit message starts with 'Release', update docs and issue a release on GitHub
     if: "startsWith(github.event.head_commit.message, 'Release')"
     steps:
-    # Pull down latest source code and modules
     - name: "Checkout from latest commit: '${{ github.event.head_commit.message }}'"
       uses: actions/checkout@v3
 
-    # Do a normal build
     - name: Build EOP
-      uses: ./.github/workflows/build-eop
+      uses: ./.github/workflows/composite-actions/build-eop
 
-      # Read version number from source code
     - name: Read release version info from source
       run: |
           echo "EOP_VERSION=$(./getEOPVersionInfo.ps1 "./M2TWEOP Code/M2TWEOP Common/m2tweopConstData.h")"  | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
@@ -85,18 +65,12 @@ jobs:
     - name: Output EOP_VERSION
       run: |
         echo "${Env:EOP_VERSION}"
-    - name: Online docs - Copy generated documentation to docs folder
-      run: |
-          cp -R "documentationGenerator/EOPDocs/build/html/." "docs"
-      shell: bash
 
-    - name: Online docs -  Commit and push updates to docs folder
-      uses: EndBug/add-and-commit@v9
+    # Update the documentation
+    - name: Update EOP Online Documentation
+      uses: ./.github/workflows/composite-actions/build-docs
       with:
-        add: 'docs --force'
-        message: "Updated EOP Docs for version: ${{ env.EOP_VERSION }}"
-        push: true
-        pull: '--rebase --autostash'
+        commit_message_string: "version: ${{ env.EOP_VERSION }}"
 
     - name: Rename generated zip to match EOP_VERSION
       run: |
