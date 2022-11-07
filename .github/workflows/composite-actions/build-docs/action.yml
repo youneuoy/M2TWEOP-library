@@ -23,7 +23,6 @@ runs:
         name: Create .nojekyll files
         run: |
             touch docs/.nojekyll
-            touch docs/eopDocs/eopDocs/helpPages/.nojekyll
         shell: bash
 
       # Force push the new docs
