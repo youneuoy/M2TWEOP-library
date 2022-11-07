@@ -55,6 +55,7 @@ runs:
     - name: Run buildEOP.ps1
       run: |
         ./buildEOP.ps1
+      shell: pwsh
       env:
         DXSDK_DIR: ${{ github.workspace }}\DXSDK\
 
