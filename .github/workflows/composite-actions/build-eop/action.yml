@@ -44,13 +44,6 @@ runs:
        path: M2TWEOP-luaPlugin
        key:  luaPlugin-cache
 
-    # - name: Verify documentationGenerator cache
-    #   id:   documentationGenerator-cache
-    #   uses: actions/cache@v1
-    #   with:
-    #    path: documentationGenerator
-    #    key:  documentationGenerator-cache
-
     # Run build script
     - name: Run buildEOP.ps1
       run: |

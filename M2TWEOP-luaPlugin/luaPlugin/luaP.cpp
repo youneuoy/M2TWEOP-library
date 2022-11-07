@@ -905,7 +905,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	//@section namedCharacterTable
 
 	/***
-	all named characters have these fields including dead characters, wives, children, and off-map characters
+	All named characters have these fields including dead characters, wives, children, and off-map characters
 
 	@tfield int index
 	@tfield character character
