@@ -84,41 +84,27 @@ jobs:
         ls -l documentationGenerator/EOPDocs/build/html;
       shell: bash
 
-  # This job is used to update the online documentation
-  # It requires a commit message beginning with 'Docs' to run
-  update-docs:
-      # Only run when the build is finished
-      needs: build-eop
-      # Use Windows 2019 as it has VS2019 pre-installed
-      runs-on: windows-2019
 
+      # This job is used to update the online documentation
+      # It requires a commit message beginning with 'Docs' to run
       if: "startsWith(github.event.head_commit.message, 'Docs')"
-      steps:
-      - name: Online docs - Copy generated documentation to docs folder
-        run: |
-            cp -R "documentationGenerator/EOPDocs/build/html/." "docs"
-        shell: bash
+    - name: Online docs - Copy generated documentation to docs folder
+      run: |
+          cp -R "documentationGenerator/EOPDocs/build/html/." "docs"
+      shell: bash
 
-      - name: Online docs -  Commit and push updates to docs folder
-        uses: EndBug/add-and-commit@v9
-        with:
-          add: 'docs'
-          message: "Updated EOP Docs for commit: '${{ github.event.head_commit.message }}'"
-          push: true
-          pull: '--rebase --autostash'
+    - name: Online docs -  Commit and push updates to docs folder
+      uses: EndBug/add-and-commit@v9
+      with:
+        add: 'docs --force'
+        message: "Updated EOP Docs for commit: '${{ github.event.head_commit.message }}'"
+        push: true
+        pull: '--rebase --autostash'
 
-  # This job is used to release EOP to GitHub and update the documentation
-  # It requires a commit message beginning with 'Release' to run
-  release-eop:
-    # Only run when the build is finished
-    needs: build-eop
 
-    # Use Windows 2019 as it has VS2019 pre-installed
-    runs-on: windows-2019
-
-    # If the latest commit message starts with 'Release', update docs and issue a release on GitHub
-    if: "startsWith(github.event.head_commit.message, 'Release')"
-    steps:
+      # This job is used to release EOP to GitHub and update the documentation
+      # It requires a commit message beginning with 'Release' to run
+      if: "startsWith(github.event.head_commit.message, 'Release')"
       # Read version number from source code
     - name: Read release version info from source
       run: |
