@@ -12,7 +12,7 @@
     <!-- Meta stuff -->
     <meta property="og:title" content="M2TWEOP LuaPlugin Documentation">
     <meta property="og:description" content="Documentation, tutorials and example code for M2TWEOP's LuaPlugin.">
-    <meta property="og:image" content="https://youneuoy.github.io/M2TWEOP-library/_static/M2TWEOP.png">
+    <meta property="og:image" content="https://i.imgur.com/mQIK1oo.png">
 
     <!-- Favicon-->
    <link rel="icon" type="image/x-icon" href="../EOPIcon.png">
@@ -37,7 +37,7 @@
 <ul>
 
 <details>
-  <summary><a href="#M2TWEOP_table_section">M2TWEOP table section </a></summary>
+  <summary><a href="#M2TWEOP">M2TWEOP </a></summary>
     <li><a href="#M2TWEOP">M2TWEOP</a></li>
     <li><a href="#M2TWEOP.getModPath">M2TWEOP.getModPath ()</a></li>
     <li><a href="#M2TWEOP.getPluginPath">M2TWEOP.getPluginPath ()</a></li>
@@ -53,21 +53,21 @@
     <li><a href="#M2TWEOP.setGuildCooldown">M2TWEOP.setGuildCooldown (turns)</a></li>
     <li><a href="#M2TWEOP.toggleUnitsBMapHighlight">M2TWEOP.toggleUnitsBMapHighlight ()</a></li>
     <li><a href="#M2TWEOP.setReligionsLimit">M2TWEOP.setReligionsLimit (newLimit)</a></li>
-    <li><a href="#M2TWEOP.isTileFree">M2TWEOP.isTileFree (x, y)</a></li>
+    <li><a href="#M2TWEOP.isTileFree">M2TWEOP.isTileFree (X, Y)</a></li>
     <li><a href="#M2TWEOP.getTileRegionID">M2TWEOP.getTileRegionID (x, y)</a></li>
     <li><a href="#M2TWEOP.getRegionOwner">M2TWEOP.getRegionOwner (regionID)</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#gameSTDUI_table_section">gameSTDUI table section </a></summary>
+  <summary><a href="#gameSTDUITable">gameSTDUITable </a></summary>
     <li><a href="#gameSTDUI">gameSTDUI</a></li>
     <li><a href="#gameSTDUI.getUiElement">gameSTDUI.getUiElement (elementName)</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#uiElementStruct_table_section">uiElementStruct table section </a></summary>
+  <summary><a href="#uiElementStruct">uiElementStruct </a></summary>
     <li><a href="#uiElementStruct">uiElementStruct</a></li>
     <li><a href="#gameSTDUI.getSubElement">gameSTDUI.getSubElement (index)</a></li>
     <li><a href="#uiElementStruct:execute">uiElementStruct:execute ()</a></li>
@@ -75,7 +75,7 @@
 
 
 <details>
-  <summary><a href="#Objects_table_section">Objects table section </a></summary>
+  <summary><a href="#Strat_Map_Objects">Strat Map Objects </a></summary>
     <li><a href="#stratmap.objects">stratmap.objects</a></li>
     <li><a href="#objects.addModelToGame">objects.addModelToGame (modelPath, modelId)</a></li>
     <li><a href="#objects.setModel">objects.setModel (xCoord, yCoord, modelId, modelId2)</a></li>
@@ -84,7 +84,7 @@
 
 
 <details>
-  <summary><a href="#Camera_table_section">Camera table section </a></summary>
+  <summary><a href="#Camera">Camera </a></summary>
     <li><a href="#stratmap.camera">stratmap.camera</a></li>
     <li><a href="#camera.move">camera.move (xCoord, yCoord)</a></li>
     <li><a href="#camera.jump">camera.jump (xCoord, yCoord)</a></li>
@@ -93,7 +93,7 @@
 
 
 <details>
-  <summary><a href="#Game_table_section">Game table section </a></summary>
+  <summary><a href="#Game">Game </a></summary>
     <li><a href="#stratmap.game">stratmap.game</a></li>
     <li><a href="#game.callConsole">game.callConsole ()</a></li>
     <li><a href="#game.getFactionsCount">game.getFactionsCount ()</a></li>
@@ -108,13 +108,13 @@
 
 
 <details>
-  <summary><a href="#Stratmap_table_section">Stratmap table section </a></summary>
+  <summary><a href="#Stratmap">Stratmap </a></summary>
     <li><a href="#stratmap">stratmap</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#Unit_table_section">Unit table section </a></summary>
+  <summary><a href="#Unit">Unit </a></summary>
     <li><a href="#unit">unit</a></li>
     <li><a href="#unit:kill">unit:kill ()</a></li>
     <li><a href="#unit:setParams">unit:setParams (exp, armor, weapon)</a></li>
@@ -122,13 +122,13 @@
 
 
 <details>
-  <summary><a href="#EduEntry_table_section">EduEntry table section </a></summary>
+  <summary><a href="#EduEntry">EduEntry </a></summary>
     <li><a href="#eduEntry">eduEntry</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#Character_table_section">Character table section </a></summary>
+  <summary><a href="#Character">Character </a></summary>
     <li><a href="#character">character</a></li>
     <li><a href="#character:getTypeID">character:getTypeID ()</a></li>
     <li><a href="#character:setTypeID">character:setTypeID (typeId)</a></li>
@@ -140,7 +140,7 @@
 
 
 <details>
-  <summary><a href="#NamedCharacter_table_section">NamedCharacter table section </a></summary>
+  <summary><a href="#NamedCharacter">NamedCharacter </a></summary>
     <li><a href="#namedCharacter">namedCharacter</a></li>
     <li><a href="#namedCharacter:setAsHeir">namedCharacter:setAsHeir (onlyHeir)</a></li>
     <li><a href="#namedCharacter:isAlive">namedCharacter:isAlive ()</a></li>
@@ -154,19 +154,19 @@
 
 
 <details>
-  <summary><a href="#Ancillary_table_section">Ancillary table section </a></summary>
+  <summary><a href="#Ancillary">Ancillary </a></summary>
     <li><a href="#ancillary">ancillary</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#traitContainer_table_section">traitContainer table section </a></summary>
+  <summary><a href="#traitContainer">traitContainer </a></summary>
     <li><a href="#traitContainer">traitContainer</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#FactionStruct_table_section">FactionStruct table section </a></summary>
+  <summary><a href="#FactionStruct">FactionStruct </a></summary>
     <li><a href="#factionStruct">factionStruct</a></li>
     <li><a href="#factionStruct:getFactionName">factionStruct:getFactionName ()</a></li>
     <li><a href="#factionStruct:getNamedCharacter">factionStruct:getNamedCharacter (number)</a></li>
@@ -180,32 +180,37 @@
 
 
 <details>
-  <summary><a href="#FactionStratMapStruct_table_section">FactionStratMapStruct table section </a></summary>
+  <summary><a href="#FactionStratMapStruct">FactionStratMapStruct </a></summary>
     <li><a href="#factionStratMapStruct">factionStratMapStruct</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#WatchtowerStruct_table_section">WatchtowerStruct table section </a></summary>
+  <summary><a href="#WatchtowerStruct">WatchtowerStruct </a></summary>
     <li><a href="#watchtowerStruct">watchtowerStruct</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#FortStruct_table_section">FortStruct table section </a></summary>
+  <summary><a href="#FortStruct">FortStruct </a></summary>
     <li><a href="#fortStruct">fortStruct</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#PortStruct_table_section">PortStruct table section </a></summary>
+  <summary><a href="#PortStruct">PortStruct </a></summary>
     <li><a href="#portStruct">portStruct</a></li>
-    <li><a href="#portStruct:getDockCoords">portStruct:getDockCoords ()</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#SettlementStruct_table_section">SettlementStruct table section </a></summary>
+  <summary><a href="#DockStruct">DockStruct </a></summary>
+    <li><a href="#dockStruct">dockStruct</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#SettlementStruct">SettlementStruct </a></summary>
     <li><a href="#settlementStruct">settlementStruct</a></li>
     <li><a href="#settlementStruct:changeOwner">settlementStruct:changeOwner (newOwner)</a></li>
     <li><a href="#settlementStruct:getReligion">settlementStruct:getReligion (religionID)</a></li>
@@ -221,7 +226,7 @@
 
 
 <details>
-  <summary><a href="#Building_table_section">Building table section </a></summary>
+  <summary><a href="#Building">Building </a></summary>
     <li><a href="#building">building</a></li>
     <li><a href="#building:getType">building:getType ()</a></li>
     <li><a href="#building:getName">building:getName ()</a></li>
@@ -229,27 +234,28 @@
 
 
 <details>
-  <summary><a href="#BuildingsQueue_table_section">BuildingsQueue table section </a></summary>
+  <summary><a href="#BuildingsQueue">BuildingsQueue </a></summary>
     <li><a href="#buildingsQueue">buildingsQueue</a></li>
+    <li><a href="#buildingsQueue:getBuildingInQueue">buildingsQueue:getBuildingInQueue (position)</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#BuildingInQueue_table_section">BuildingInQueue table section </a></summary>
+  <summary><a href="#BuildingInQueue">BuildingInQueue </a></summary>
     <li><a href="#buildingInQueue">buildingInQueue</a></li>
-    <li><a href="#settlementStruct:getReligion">settlementStruct:getReligion (religionID)</a></li>
-    <li><a href="#settlementStruct:setReligion">settlementStruct:setReligion (religionID, religionValue)</a></li>
+    <li><a href="#building:getQueueBuildingType">building:getQueueBuildingType ()</a></li>
+    <li><a href="#building:getQueueBuildingName">building:getQueueBuildingName ()</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#Guild_table_section">Guild table section </a></summary>
+  <summary><a href="#Guild">Guild </a></summary>
     <li><a href="#guild">guild</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#TradeResource_table_section">TradeResource table section </a></summary>
+  <summary><a href="#TradeResource">TradeResource </a></summary>
     <li><a href="#tradeResource">tradeResource</a></li>
     <li><a href="#tradeResource:setStratModel">tradeResource:setStratModel (modelId)</a></li>
     <li><a href="#tradeResource:getResourceID">tradeResource:getResourceID ()</a></li>
@@ -260,7 +266,7 @@
 
 
 <details>
-  <summary><a href="#StackStruct_table_section">StackStruct table section </a></summary>
+  <summary><a href="#StackStruct">StackStruct </a></summary>
     <li><a href="#stackStruct">stackStruct</a></li>
     <li><a href="#stackStruct:getUnit">stackStruct:getUnit (number)</a></li>
     <li><a href="#stackStruct:getCharacter">stackStruct:getCharacter (number)</a></li>
@@ -275,13 +281,13 @@
 
 
 <details>
-  <summary><a href="#siegeStruct_table_section">siegeStruct table section </a></summary>
+  <summary><a href="#siegeStruct">siegeStruct </a></summary>
     <li><a href="#siegeStruct">siegeStruct</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#EVENTS_TABLE_SECTION">EVENTS TABLE SECTION </a></summary>
+  <summary><a href="#EOP_Events">EOP Events </a></summary>
     <li><a href="#EventsFunctionsList">EventsFunctionsList</a></li>
     <li><a href="#draw">draw (pDevice)</a></li>
     <li><a href="#onNewGameStart">onNewGameStart ()</a></li>
@@ -390,7 +396,7 @@
 
 
 <details>
-  <summary><a href="#M2TWEOPDU_table_section">M2TWEOPDU table section </a></summary>
+  <summary><a href="#M2TWEOPDU">M2TWEOPDU </a></summary>
     <li><a href="#M2TWEOPDU">M2TWEOPDU</a></li>
     <li><a href="#M2TWEOPDU.addEopEduEntryFromFile">M2TWEOPDU.addEopEduEntryFromFile (filepath, eopEnryIndex)</a></li>
     <li><a href="#M2TWEOPDU.addEopEduEntryFromEDUID">M2TWEOPDU.addEopEduEntryFromEDUID (baseEnryIndex, eopEnryIndex)</a></li>
@@ -406,54 +412,55 @@
 
 
 <details>
-  <summary><a href="#campaign_enums_section">campaign enums section </a></summary>
+  <summary><a href="#Campaign_Enums">Campaign Enums </a></summary>
     <li><a href="#dipRelType">dipRelType</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#campaign_table_section">campaign table section </a></summary>
+  <summary><a href="#Campaign">Campaign </a></summary>
     <li><a href="#gameDataAll.campaignStruct">gameDataAll.campaignStruct</a></li>
     <li><a href="#campaignStruct:checkDipStance">campaignStruct:checkDipStance (checkType, fac1, fac2)</a></li>
     <li><a href="#campaignStruct:setDipStance">campaignStruct:setDipStance (relType, fac1, fac2)</a></li>
+    <li><a href="#campaignStruct:GetUnitSize">campaignStruct:GetUnitSize ()</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#gameDataAll_table_section">gameDataAll table section </a></summary>
+  <summary><a href="#gameDataAll">gameDataAll </a></summary>
     <li><a href="#gameDataAll">gameDataAll</a></li>
     <li><a href="#gameDataAll.get">gameDataAll.get ()</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#battleStruct_table_section">battleStruct table section </a></summary>
+  <summary><a href="#battleStruct">battleStruct </a></summary>
     <li><a href="#gameDataAll.battleStruct">gameDataAll.battleStruct</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#battleSide_table_section">battleSide table section </a></summary>
+  <summary><a href="#battleSide">battleSide </a></summary>
     <li><a href="#battleStruct.battleSide">battleStruct.battleSide</a></li>
     <li><a href="#battleSide.getWinConditionString">battleSide.getWinConditionString (condition)</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#trackedPointerArmy_table_section">trackedPointerArmy table section </a></summary>
+  <summary><a href="#trackedPointerArmy">trackedPointerArmy </a></summary>
     <li><a href="#battleSide.trackedPointerArmy">battleSide.trackedPointerArmy</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#deploymentAreaS_table_section">deploymentAreaS table section </a></summary>
+  <summary><a href="#deploymentAreaS">deploymentAreaS </a></summary>
     <li><a href="#trackedPointerArmy.deploymentAreaS">trackedPointerArmy.deploymentAreaS</a></li>
     <li><a href="#deploymentAreaS:getCoordPair">deploymentAreaS:getCoordPair ()</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#M2TWEOPFBX_table_section">M2TWEOPFBX table section </a></summary>
+  <summary><a href="#M2TWEOPFBX">M2TWEOPFBX </a></summary>
     <li><a href="#M2TWEOPFBX">M2TWEOPFBX</a></li>
     <li><a href="#M2TWEOPFBX.addFbxModel">M2TWEOPFBX.addFbxModel (modelPath, texturePath, modelID)</a></li>
     <li><a href="#M2TWEOPFBX.deleteFbxModel">M2TWEOPFBX.deleteFbxModel (modelID)</a></li>
@@ -475,7 +482,7 @@
 
 
 <details>
-  <summary><a href="#M2TWEOPSounds_table_section">M2TWEOPSounds table section </a></summary>
+  <summary><a href="#M2TWEOPSounds">M2TWEOPSounds </a></summary>
     <li><a href="#M2TWEOPSounds">M2TWEOPSounds</a></li>
     <li><a href="#M2TWEOPSounds.createEOPSound">M2TWEOPSounds.createEOPSound (soundPath)</a></li>
     <li><a href="#M2TWEOPSounds.deleteEOPSound">M2TWEOPSounds.deleteEOPSound (soundID)</a></li>
@@ -498,7 +505,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord and get some help!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2022-11-07 18:52:49</p>
+        <p class="lastUpdatedMessage">Last updated: 2022-11-07 20:43:20</p>
         <a href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -516,17 +523,15 @@
 </div>
 
 <p class="moduleSummary">
-<h1><a href="./../../index.html">Main page of M2TWEOP docs</a></h1>
-<h1><a href="./../Introduction_to_ImGui_v3.pdf">Gui scripting basics by Erken, PDF file </a></h1>
-<h1><a href="./../Introduction_to_ImGui_v3.odt">Gui scripting basics by Erken, ODT file </a></h1>
-<p><img src="../Lua.png" alt="Lua logo"/>
-M2TWEOP structures and functions.</p>
+
 </p>
-<p class="moduleDescription"> There are not many examples and descriptions here. Also note that the examples do not include many of the checks that would be required when creating modifications.</p>
+<p class="moduleDescription">
+
+</p>
 </div>
 
 
-<h2><a href="#M2TWEOP_table_section">M2TWEOP table section </a></h2>
+<h2><a href="#M2TWEOP">M2TWEOP </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP">M2TWEOP</a></td>
@@ -534,11 +539,11 @@ M2TWEOP structures and functions.</p>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.getModPath">M2TWEOP.getModPath ()</a></td>
-	<td class="summary">Get mod path</td>
+	<td class="summary">Function to return the path to the mod folder, starts from the drive not the game folder.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.getPluginPath">M2TWEOP.getPluginPath ()</a></td>
-	<td class="summary">Get path of the plugin(your lua files here)</td>
+	<td class="summary">Function to return the path to the plugin (location of your LUA files).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.loadTexture">M2TWEOP.loadTexture (path)</a></td>
@@ -550,58 +555,58 @@ M2TWEOP structures and functions.</p>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.setAncillariesLimit">M2TWEOP.setAncillariesLimit (newLimit)</a></td>
-	<td class="summary">Set limit of ancillaries</td>
+	<td class="summary">Sets the limit of ancillaries per character on the stratmap.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.unlockGameConsoleCommands">M2TWEOP.unlockGameConsoleCommands ()</a></td>
-	<td class="summary">Unloc all console commands, also allow use change_faction console command</td>
+	<td class="summary">Unlocks all console commands, also allows the use of the 'control' command to change factions in singleplayer campaigns.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.setMaxBgSize">M2TWEOP.setMaxBgSize (newSize)</a></td>
-	<td class="summary">Set new max bodyguard size</td>
+	<td class="summary">Sets the maximum amount of soldiers a general's bodyguard unit can replenish to.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.setEDUUnitsSize">M2TWEOP.setEDUUnitsSize (minSize, maxSize)</a></td>
-	<td class="summary">Set new edu units size</td>
+	<td class="summary">Sets the new maximum soldier count.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.setBuildingChainLimit">M2TWEOP.setBuildingChainLimit (limit)</a></td>
-	<td class="summary">Set the new limit of building levels in a building chain</td>
+	<td class="summary">Sets the new maximum amount of building levels within a chain.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.setConversionLvlFromCastle">M2TWEOP.setConversionLvlFromCastle (castleLvl, convertToLvl)</a></td>
-	<td class="summary">Set which level of castle converts to which lvl of city</td>
+	<td class="summary">Sets which level of castle converts to which level of city.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.setConversionLvlFromCity">M2TWEOP.setConversionLvlFromCity (cityLvl, convertToLvl)</a></td>
-	<td class="summary">Set which level of city converts to which lvl of castle</td>
+	<td class="summary">Sets which level of city converts to which level of castle.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.setGuildCooldown">M2TWEOP.setGuildCooldown (turns)</a></td>
-	<td class="summary">Set min number turns until next guild offer after a rejection</td>
+	<td class="summary">Sets the minimum number of turns until the next guild offer after a rejection by the player.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.toggleUnitsBMapHighlight">M2TWEOP.toggleUnitsBMapHighlight ()</a></td>
-	<td class="summary">toggle the highlighting of units on the tactical map.</td>
+	<td class="summary">Toggle the highlighting of units on the tactical map (Currently broken!).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.setReligionsLimit">M2TWEOP.setReligionsLimit (newLimit)</a></td>
-	<td class="summary">Set limit of religions</td>
+	<td class="summary">Set the maximum number of religions in the mod (per descr_religions.txt)</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#M2TWEOP.isTileFree">M2TWEOP.isTileFree (x, y)</a></td>
-	<td class="summary">Check tile</td>
+	<td class="name" nowrap><a href="#M2TWEOP.isTileFree">M2TWEOP.isTileFree (X, Y)</a></td>
+	<td class="summary">Checks if a tile is free.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.getTileRegionID">M2TWEOP.getTileRegionID (x, y)</a></td>
-	<td class="summary">Get tile region ID</td>
+	<td class="summary">Get the RegionID of a tile.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.getRegionOwner">M2TWEOP.getRegionOwner (regionID)</a></td>
-	<td class="summary">Get faction owner region with ID</td>
+	<td class="summary">Get the owner of a region by RegionID.</td>
 	</tr>
 </table>
-<h2><a href="#gameSTDUI_table_section">gameSTDUI table section </a></h2>
+<h2><a href="#gameSTDUITable">gameSTDUITable </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#gameSTDUI">gameSTDUI</a></td>
@@ -609,10 +614,10 @@ M2TWEOP structures and functions.</p>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#gameSTDUI.getUiElement">gameSTDUI.getUiElement (elementName)</a></td>
-	<td class="summary">get standart game UI element, element must be opened</td>
+	<td class="summary">Get a game UI element, element must be opened.</td>
 	</tr>
 </table>
-<h2><a href="#uiElementStruct_table_section">uiElementStruct table section </a></h2>
+<h2><a href="#uiElementStruct">uiElementStruct </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#uiElementStruct">uiElementStruct</a></td>
@@ -620,14 +625,14 @@ M2TWEOP structures and functions.</p>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#gameSTDUI.getSubElement">gameSTDUI.getSubElement (index)</a></td>
-	<td class="summary">get subelement of UI element with index</td>
+	<td class="summary">Get a subelement of an UI element using the index.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#uiElementStruct:execute">uiElementStruct:execute ()</a></td>
 	<td class="summary">execute standard game UI element, use only for buttons</td>
 	</tr>
 </table>
-<h2><a href="#Objects_table_section">Objects table section </a></h2>
+<h2><a href="#Strat_Map_Objects">Strat Map Objects </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#stratmap.objects">stratmap.objects</a></td>
@@ -646,7 +651,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Replace custom tile.</td>
 	</tr>
 </table>
-<h2><a href="#Camera_table_section">Camera table section </a></h2>
+<h2><a href="#Camera">Camera </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#stratmap.camera">stratmap.camera</a></td>
@@ -654,18 +659,18 @@ M2TWEOP structures and functions.</p>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#camera.move">camera.move (xCoord, yCoord)</a></td>
-	<td class="summary">Slow move camera to tile</td>
+	<td class="summary">Slow move camera to a tile</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#camera.jump">camera.jump (xCoord, yCoord)</a></td>
-	<td class="summary">Fast move camera to tile</td>
+	<td class="summary">Fast move camera to a tile</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#camera.zoom">camera.zoom (distance)</a></td>
 	<td class="summary">Set zoom of stratcamera</td>
 	</tr>
 </table>
-<h2><a href="#Game_table_section">Game table section </a></h2>
+<h2><a href="#Game">Game </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#stratmap.game">stratmap.game</a></td>
@@ -708,14 +713,14 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Set event_counter value, does not work for counter, only event_counter</td>
 	</tr>
 </table>
-<h2><a href="#Stratmap_table_section">Stratmap table section </a></h2>
+<h2><a href="#Stratmap">Stratmap </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#stratmap">stratmap</a></td>
 	<td class="summary">Basic stratmap table</td>
 	</tr>
 </table>
-<h2><a href="#Unit_table_section">Unit table section </a></h2>
+<h2><a href="#Unit">Unit </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#unit">unit</a></td>
@@ -730,14 +735,14 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Set unit basic parameters</td>
 	</tr>
 </table>
-<h2><a href="#EduEntry_table_section">EduEntry table section </a></h2>
+<h2><a href="#EduEntry">EduEntry </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#eduEntry">eduEntry</a></td>
 	<td class="summary">Basic eduEntry table</td>
 	</tr>
 </table>
-<h2><a href="#Character_table_section">Character table section </a></h2>
+<h2><a href="#Character">Character </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#character">character</a></td>
@@ -768,11 +773,11 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Set bodyguard.</td>
 	</tr>
 </table>
-<h2><a href="#NamedCharacter_table_section">NamedCharacter table section </a></h2>
+<h2><a href="#NamedCharacter">NamedCharacter </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#namedCharacter">namedCharacter</a></td>
-	<td class="summary">all named characters have these fields including dead characters, wives, children, and off-map characters</td>
+	<td class="summary">All named characters have these fields including dead characters, wives, children, and off-map characters</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#namedCharacter:setAsHeir">namedCharacter:setAsHeir (onlyHeir)</a></td>
@@ -807,21 +812,21 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">remove ancillary</td>
 	</tr>
 </table>
-<h2><a href="#Ancillary_table_section">Ancillary table section </a></h2>
+<h2><a href="#Ancillary">Ancillary </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#ancillary">ancillary</a></td>
 	<td class="summary">Basic ancillary table</td>
 	</tr>
 </table>
-<h2><a href="#traitContainer_table_section">traitContainer table section </a></h2>
+<h2><a href="#traitContainer">traitContainer </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#traitContainer">traitContainer</a></td>
 	<td class="summary">Basic traits table</td>
 	</tr>
 </table>
-<h2><a href="#FactionStruct_table_section">FactionStruct table section </a></h2>
+<h2><a href="#FactionStruct">FactionStruct </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#factionStruct">factionStruct</a></td>
@@ -860,39 +865,42 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Get watchtower with number</td>
 	</tr>
 </table>
-<h2><a href="#FactionStratMapStruct_table_section">FactionStratMapStruct table section </a></h2>
+<h2><a href="#FactionStratMapStruct">FactionStratMapStruct </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#factionStratMapStruct">factionStratMapStruct</a></td>
 	<td class="summary">Basic factionStratMapStruct table</td>
 	</tr>
 </table>
-<h2><a href="#WatchtowerStruct_table_section">WatchtowerStruct table section </a></h2>
+<h2><a href="#WatchtowerStruct">WatchtowerStruct </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#watchtowerStruct">watchtowerStruct</a></td>
 	<td class="summary">Basic watchtowerStruct table</td>
 	</tr>
 </table>
-<h2><a href="#FortStruct_table_section">FortStruct table section </a></h2>
+<h2><a href="#FortStruct">FortStruct </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#fortStruct">fortStruct</a></td>
 	<td class="summary">Basic fortStruct table</td>
 	</tr>
 </table>
-<h2><a href="#PortStruct_table_section">PortStruct table section </a></h2>
+<h2><a href="#PortStruct">PortStruct </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#portStruct">portStruct</a></td>
 	<td class="summary">Basic portStruct table</td>
 	</tr>
+</table>
+<h2><a href="#DockStruct">DockStruct </a></h2>
+<table class="function_list">
 	<tr>
-	<td class="name" nowrap><a href="#portStruct:getDockCoords">portStruct:getDockCoords ()</a></td>
-	<td class="summary">Get dock coords</td>
+	<td class="name" nowrap><a href="#dockStruct">dockStruct</a></td>
+	<td class="summary">Basic dockStruct table</td>
 	</tr>
 </table>
-<h2><a href="#SettlementStruct_table_section">SettlementStruct table section </a></h2>
+<h2><a href="#SettlementStruct">SettlementStruct </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#settlementStruct">settlementStruct</a></td>
@@ -939,7 +947,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Get siege with index</td>
 	</tr>
 </table>
-<h2><a href="#Building_table_section">Building table section </a></h2>
+<h2><a href="#Building">Building </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#building">building</a></td>
@@ -954,36 +962,40 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Get name of building level</td>
 	</tr>
 </table>
-<h2><a href="#BuildingsQueue_table_section">BuildingsQueue table section </a></h2>
+<h2><a href="#BuildingsQueue">BuildingsQueue </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#buildingsQueue">buildingsQueue</a></td>
 	<td class="summary">Basic buildingsQueue table</td>
 	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#buildingsQueue:getBuildingInQueue">buildingsQueue:getBuildingInQueue (position)</a></td>
+	<td class="summary">Get building in queue by position</td>
+	</tr>
 </table>
-<h2><a href="#BuildingInQueue_table_section">BuildingInQueue table section </a></h2>
+<h2><a href="#BuildingInQueue">BuildingInQueue </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#buildingInQueue">buildingInQueue</a></td>
 	<td class="summary">Basic buildingInQueue table</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#settlementStruct:getReligion">settlementStruct:getReligion (religionID)</a></td>
-	<td class="summary">Get settlement religion value.</td>
+	<td class="name" nowrap><a href="#building:getQueueBuildingType">building:getQueueBuildingType ()</a></td>
+	<td class="summary">Get name of building in queue type (chain)</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#settlementStruct:setReligion">settlementStruct:setReligion (religionID, religionValue)</a></td>
-	<td class="summary">Set settlement religion value.</td>
+	<td class="name" nowrap><a href="#building:getQueueBuildingName">building:getQueueBuildingName ()</a></td>
+	<td class="summary">Get name of building in queue level</td>
 	</tr>
 </table>
-<h2><a href="#Guild_table_section">Guild table section </a></h2>
+<h2><a href="#Guild">Guild </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#guild">guild</a></td>
 	<td class="summary">Basic guild table</td>
 	</tr>
 </table>
-<h2><a href="#TradeResource_table_section">TradeResource table section </a></h2>
+<h2><a href="#TradeResource">TradeResource </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#tradeResource">tradeResource</a></td>
@@ -1010,7 +1022,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Get resource image (icon) relative path</td>
 	</tr>
 </table>
-<h2><a href="#StackStruct_table_section">StackStruct table section </a></h2>
+<h2><a href="#StackStruct">StackStruct </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#stackStruct">stackStruct</a></td>
@@ -1053,14 +1065,14 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Attack another army.</td>
 	</tr>
 </table>
-<h2><a href="#siegeStruct_table_section">siegeStruct table section </a></h2>
+<h2><a href="#siegeStruct">siegeStruct </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#siegeStruct">siegeStruct</a></td>
 	<td class="summary">Basic siegeStruct table</td>
 	</tr>
 </table>
-<h2><a href="#EVENTS_TABLE_SECTION">EVENTS TABLE SECTION </a></h2>
+<h2><a href="#EOP_Events">EOP Events </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#EventsFunctionsList">EventsFunctionsList</a></td>
@@ -1597,7 +1609,7 @@ M2TWEOP structures and functions.</p>
 </td>
 	</tr>
 </table>
-<h2><a href="#M2TWEOPDU_table_section">M2TWEOPDU table section </a></h2>
+<h2><a href="#M2TWEOPDU">M2TWEOPDU </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU">M2TWEOPDU</a></td>
@@ -1644,14 +1656,14 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Set localized short description for M2TWEOPDU entry.</td>
 	</tr>
 </table>
-<h2><a href="#campaign_enums_section">campaign enums section </a></h2>
+<h2><a href="#Campaign_Enums">Campaign Enums </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#dipRelType">dipRelType</a></td>
 	<td class="summary">Enum with a list of types of diplomatic relations.</td>
 	</tr>
 </table>
-<h2><a href="#campaign_table_section">campaign table section </a></h2>
+<h2><a href="#Campaign">Campaign </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#gameDataAll.campaignStruct">gameDataAll.campaignStruct</a></td>
@@ -1665,8 +1677,12 @@ M2TWEOP structures and functions.</p>
 	<td class="name" nowrap><a href="#campaignStruct:setDipStance">campaignStruct:setDipStance (relType, fac1, fac2)</a></td>
 	<td class="summary">Set diplomatic relations between factions</td>
 	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#campaignStruct:GetUnitSize">campaignStruct:GetUnitSize ()</a></td>
+	<td class="summary">Get size of unit(i.e.</td>
+	</tr>
 </table>
-<h2><a href="#gameDataAll_table_section">gameDataAll table section </a></h2>
+<h2><a href="#gameDataAll">gameDataAll </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#gameDataAll">gameDataAll</a></td>
@@ -1677,14 +1693,14 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Call at start of script, this is a static object and pointer to it doesn't change</td>
 	</tr>
 </table>
-<h2><a href="#battleStruct_table_section">battleStruct table section </a></h2>
+<h2><a href="#battleStruct">battleStruct </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#gameDataAll.battleStruct">gameDataAll.battleStruct</a></td>
 	<td class="summary">basic battleStruct table</td>
 	</tr>
 </table>
-<h2><a href="#battleSide_table_section">battleSide table section </a></h2>
+<h2><a href="#battleSide">battleSide </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#battleStruct.battleSide">battleStruct.battleSide</a></td>
@@ -1695,14 +1711,14 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Get win condition string, for example: destroy_or_rout_enemy</td>
 	</tr>
 </table>
-<h2><a href="#trackedPointerArmy_table_section">trackedPointerArmy table section </a></h2>
+<h2><a href="#trackedPointerArmy">trackedPointerArmy </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#battleSide.trackedPointerArmy">battleSide.trackedPointerArmy</a></td>
 	<td class="summary">basic trackedPointerArmy table</td>
 	</tr>
 </table>
-<h2><a href="#deploymentAreaS_table_section">deploymentAreaS table section </a></h2>
+<h2><a href="#deploymentAreaS">deploymentAreaS </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#trackedPointerArmy.deploymentAreaS">trackedPointerArmy.deploymentAreaS</a></td>
@@ -1713,7 +1729,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Get pair of coords with number</td>
 	</tr>
 </table>
-<h2><a href="#M2TWEOPFBX_table_section">M2TWEOPFBX table section </a></h2>
+<h2><a href="#M2TWEOPFBX">M2TWEOPFBX </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX">M2TWEOPFBX</a></td>
@@ -1784,7 +1800,7 @@ M2TWEOP structures and functions.</p>
 	<td class="summary">Get fbx object draw type.</td>
 	</tr>
 </table>
-<h2><a href="#M2TWEOPSounds_table_section">M2TWEOPSounds table section </a></h2>
+<h2><a href="#M2TWEOPSounds">M2TWEOPSounds </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPSounds">M2TWEOPSounds</a></td>
@@ -1824,7 +1840,7 @@ M2TWEOP structures and functions.</p>
 <br/>
 
 
-    <h2 class="section-header "><a name="M2TWEOP_table_section"></a>M2TWEOP table section </h2>
+    <h2 class="section-header "><a name="M2TWEOP"></a>M2TWEOP </h2>
 
     <dl class="function">
     <dt>
@@ -1929,7 +1945,7 @@ M2TWEOP structures and functions.</p>
     </dt>
     <dd>
     <div class="functionDescription">
-    Get mod path
+    Function to return the path to the mod folder, starts from the drive not the game folder.
     </div>
 
 
@@ -1955,7 +1971,7 @@ M2TWEOP structures and functions.</p>
     </dt>
     <dd>
     <div class="functionDescription">
-    Get path of the plugin(your lua files here)
+    Function to return the path to the plugin (location of your LUA files).
     </div>
 
 
@@ -2048,7 +2064,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Set limit of ancillaries
+    Sets the limit of ancillaries per character on the stratmap.
     </div>
 
     <h3>Parameters:</h3>
@@ -2074,7 +2090,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Unloc all console commands, also allow use change_faction console command
+    Unlocks all console commands, also allows the use of the 'control' command to change factions in singleplayer campaigns.
     </div>
 
 
@@ -2093,14 +2109,14 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Set new max bodyguard size
+    Sets the maximum amount of soldiers a general's bodyguard unit can replenish to.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">newSize</span>
             <span class="types"><span class="type">int</span></span>
-         maximum: 255
+         default: 77, maximum: 255 (Huge unit size).
         </li>
     </ul>
 
@@ -2119,7 +2135,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Set new edu units size
+    Sets the new maximum soldier count.
     </div>
 
     <h3>Parameters:</h3>
@@ -2149,7 +2165,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Set the new limit of building levels in a building chain
+    Sets the new maximum amount of building levels within a chain.
     </div>
 
     <h3>Parameters:</h3>
@@ -2175,7 +2191,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Set which level of castle converts to which lvl of city
+    Sets which level of castle converts to which level of city.
     </div>
 
     <h3>Parameters:</h3>
@@ -2205,7 +2221,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Set which level of city converts to which lvl of castle
+    Sets which level of city converts to which level of castle.
     </div>
 
     <h3>Parameters:</h3>
@@ -2235,7 +2251,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Set min number turns until next guild offer after a rejection
+    Sets the minimum number of turns until the next guild offer after a rejection by the player.
     </div>
 
     <h3>Parameters:</h3>
@@ -2261,7 +2277,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    toggle the highlighting of units on the tactical map.
+    Toggle the highlighting of units on the tactical map (Currently broken!).
     </div>
 
 
@@ -2280,7 +2296,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Set limit of religions
+    Set the maximum number of religions in the mod (per descr_religions.txt)
     </div>
 
     <h3>Parameters:</h3>
@@ -2302,34 +2318,29 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 </dd>
     <dt>
     <a name = "M2TWEOP.isTileFree"></a>
-    <strong>M2TWEOP.isTileFree (x, y)</strong>
+    <strong>M2TWEOP.isTileFree (X, Y)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
-    Check tile
+    Checks if a tile is free.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">x</span>
+        <li><span class="parameter">X</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         coordinate of the tile.
         </li>
-        <li><span class="parameter">y</span>
+        <li><span class="parameter">Y</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         coordinate of the tile.
         </li>
     </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">bool</span></span>
-        isFree
+        boolean isFree
     </ol>
 
 
@@ -2346,7 +2357,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Get tile region ID
+    Get the RegionID of a tile.
     </div>
 
     <h3>Parameters:</h3>
@@ -2386,7 +2397,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Get faction owner region with ID
+    Get the owner of a region by RegionID.
     </div>
 
     <h3>Parameters:</h3>
@@ -2416,7 +2427,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="gameSTDUI_table_section"></a>gameSTDUI table section </h2>
+    <h2 class="section-header "><a name="gameSTDUITable"></a>gameSTDUITable </h2>
 
     <dl class="function">
     <dt>
@@ -2449,7 +2460,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    get standart game UI element, element must be opened
+    Get a game UI element, element must be opened.
     </div>
 
     <h3>Parameters:</h3>
@@ -2486,7 +2497,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="uiElementStruct_table_section"></a>uiElementStruct table section </h2>
+    <h2 class="section-header "><a name="uiElementStruct"></a>uiElementStruct </h2>
 
     <dl class="function">
     <dt>
@@ -2561,14 +2572,14 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    get subelement of UI element with index
+    Get a subelement of an UI element using the index.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">index</span>
             <span class="types"><span class="type">int</span></span>
-         starting from 0
+         Starts from 0.
         </li>
     </ul>
 
@@ -2611,7 +2622,7 @@ subElement1:execute();</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Objects_table_section"></a>Objects table section </h2>
+    <h2 class="section-header "><a name="Strat_Map_Objects"></a>Strat Map Objects </h2>
 
     <dl class="function">
     <dt>
@@ -2620,7 +2631,11 @@ subElement1:execute();</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Basic stratmap.objects table
+
+<p>Basic stratmap.objects table </p>
+<pre><code>tables.objectsTable = luaState.create_table();
+</code></pre>
+
     </div>
 
     <h3>Fields:</h3>
@@ -2782,7 +2797,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Camera_table_section"></a>Camera table section </h2>
+    <h2 class="section-header "><a name="Camera"></a>Camera </h2>
 
     <dl class="function">
     <dt>
@@ -2827,7 +2842,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Slow move camera to tile
+    Slow move camera to a tile
     </div>
 
     <h3>Parameters:</h3>
@@ -2861,7 +2876,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Fast move camera to tile
+    Fast move camera to a tile
     </div>
 
     <h3>Parameters:</h3>
@@ -2918,7 +2933,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Game_table_section"></a>Game table section </h2>
+    <h2 class="section-header "><a name="Game"></a>Game </h2>
 
     <dl class="function">
     <dt>
@@ -3328,7 +3343,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Stratmap_table_section"></a>Stratmap table section </h2>
+    <h2 class="section-header "><a name="Stratmap"></a>Stratmap </h2>
 
     <dl class="function">
     <dt>
@@ -3368,7 +3383,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Unit_table_section"></a>Unit table section </h2>
+    <h2 class="section-header "><a name="Unit"></a>Unit </h2>
 
     <dl class="function">
     <dt>
@@ -3431,7 +3446,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
         </li>
         <li><span class="parameter">kill</span>
-            <span class="types"><a class="type" href="index.html#unit:kill">kill</a></span>
+            <span class="types"><a class="type" href="index.html#character:kill">kill</a></span>
 
 
 
@@ -3513,7 +3528,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="EduEntry_table_section"></a>EduEntry table section </h2>
+    <h2 class="section-header "><a name="EduEntry"></a>EduEntry </h2>
 
     <dl class="function">
     <dt>
@@ -3701,7 +3716,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Character_table_section"></a>Character table section </h2>
+    <h2 class="section-header "><a name="Character"></a>Character </h2>
 
     <dl class="function">
     <dt>
@@ -3796,7 +3811,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
         </li>
         <li><span class="parameter">kill</span>
-            <span class="types"><a class="type" href="index.html#unit:kill">kill</a></span>
+            <span class="types"><a class="type" href="index.html#character:kill">kill</a></span>
 
 
 
@@ -4015,7 +4030,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="NamedCharacter_table_section"></a>NamedCharacter table section </h2>
+    <h2 class="section-header "><a name="NamedCharacter"></a>NamedCharacter </h2>
 
     <dl class="function">
     <dt>
@@ -4024,7 +4039,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    all named characters have these fields including dead characters, wives, children, and off-map characters
+    All named characters have these fields including dead characters, wives, children, and off-map characters
     </div>
 
     <h3>Fields:</h3>
@@ -4790,7 +4805,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Ancillary_table_section"></a>Ancillary table section </h2>
+    <h2 class="section-header "><a name="Ancillary"></a>Ancillary </h2>
 
     <dl class="function">
     <dt>
@@ -4830,7 +4845,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="traitContainer_table_section"></a>traitContainer table section </h2>
+    <h2 class="section-header "><a name="traitContainer"></a>traitContainer </h2>
 
     <dl class="function">
     <dt>
@@ -4876,7 +4891,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="FactionStruct_table_section"></a>FactionStruct table section </h2>
+    <h2 class="section-header "><a name="FactionStruct"></a>FactionStruct </h2>
 
     <dl class="function">
     <dt>
@@ -5286,16 +5301,10 @@ ourFacName = ourFac:getFactionName();
         <pre class="example"><span class="keyword">local</span> thisFac, portList = gameDataAll.get().campaignStruct.currentFaction, <span class="string">"Ports:"</span>
 <span class="keyword">for</span> i = <span class="number">0</span>, thisFac.portsNum - <span class="number">1</span>, <span class="number">1</span> <span class="keyword">do</span>
 	<span class="keyword">local</span> thisPort = thisFac:getPort(i)
-	<span class="keyword">local</span> thisDock = thisPort:getDockCoords()
+	<span class="keyword">local</span> thisDock = thisPort.dock
 	portList = portList..<span class="string">"\n\t"</span>..i..<span class="string">" "</span>..thisPort.settlement.name..<span class="string">" ("</span>..thisPort.xCoord..<span class="string">", "</span>..thisPort.yCoord..<span class="string">") "</span>
 	<span class="keyword">if</span> thisDock <span class="keyword">then</span>
-		portList = portList..<span class="string">"\n\t\tDock: ("</span>..thisDock.x..<span class="string">", "</span>..thisDock.y..<span class="string">")"</span>
-	<span class="keyword">end</span>
-	<span class="keyword">if</span> thisPort.character <span class="keyword">then</span>
-		portList = portList..<span class="string">"\n\t\tCharacter: "</span>..thisPort.character.namedCharacter.fullName
-	<span class="keyword">end</span>
-	<span class="keyword">if</span> thisPort.blockadingArmy <span class="keyword">then</span>
-		portList = portList..<span class="string">"\n\t\tArmy Size: "</span>..thisPort.blockadingArmy.numOfUnits
+		portList = portList..<span class="string">"\n\t\tDock: ("</span>..thisDock.xCoord..<span class="string">", "</span>..thisDock.yCoord..<span class="string">")"</span>
 	<span class="keyword">end</span>
 <span class="keyword">end</span>
 <span class="global">print</span>(portList)</pre>
@@ -5342,7 +5351,7 @@ ourFacName = ourFac:getFactionName();
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="FactionStratMapStruct_table_section"></a>FactionStratMapStruct table section </h2>
+    <h2 class="section-header "><a name="FactionStratMapStruct"></a>FactionStratMapStruct </h2>
 
     <dl class="function">
     <dt>
@@ -5404,7 +5413,7 @@ ourFacName = ourFac:getFactionName();
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="WatchtowerStruct_table_section"></a>WatchtowerStruct table section </h2>
+    <h2 class="section-header "><a name="WatchtowerStruct"></a>WatchtowerStruct </h2>
 
     <dl class="function">
     <dt>
@@ -5438,7 +5447,7 @@ ourFacName = ourFac:getFactionName();
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="FortStruct_table_section"></a>FortStruct table section </h2>
+    <h2 class="section-header "><a name="FortStruct"></a>FortStruct </h2>
 
     <dl class="function">
     <dt>
@@ -5496,7 +5505,7 @@ ourFacName = ourFac:getFactionName();
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="PortStruct_table_section"></a>PortStruct table section </h2>
+    <h2 class="section-header "><a name="PortStruct"></a>PortStruct </h2>
 
     <dl class="function">
     <dt>
@@ -5536,9 +5545,9 @@ ourFacName = ourFac:getFactionName();
             <span class="types"><a class="type" href="index.html#stackStruct">stackStruct</a></span>
          enemy army blockading port by standing on tile, check for nil
         </li>
-        <li><span class="parameter">getDockCoords</span>
-            <span class="types"><a class="type" href="index.html#portStruct:getDockCoords">getDockCoords</a></span>
-         water tile, only upgraded ports have this
+        <li><span class="parameter">dock</span>
+            <span class="types"><a class="type" href="index.html#dockStruct">dockStruct</a></span>
+         water tile, only upgraded ports have this, check for nil
         </li>
     </ul>
 
@@ -5547,42 +5556,38 @@ ourFacName = ourFac:getFactionName();
 
 
 </dd>
+</dl>
+    <h2 class="section-header "><a name="DockStruct"></a>DockStruct </h2>
+
+    <dl class="function">
     <dt>
-    <a name = "portStruct:getDockCoords"></a>
-    <strong>portStruct:getDockCoords ()</strong>
+    <a name = "dockStruct"></a>
+    <strong>dockStruct</strong>
     </dt>
     <dd>
     <div class="functionDescription">
-    Get dock coords
+    Basic dockStruct table
     </div>
 
-
-    <h3>Returns:</h3>
-    <ol>
-        <li>
-           <span class="types"><span class="type">bool</span></span>
-        isExist only upgraded ports have docks</li>
-        <li>
-           <span class="types"><span class="type">int</span></span>
-        xCoord -1 if there is no dock</li>
-        <li>
-           <span class="types"><span class="type">int</span></span>
-        yCoord -1 if there is no dock</li>
-    </ol>
-
-
-
-    <h3>Usage:</h3>
+    <h3>Fields:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> ourDock = ourPort:getDockCoords()
-<span class="keyword">if</span> ourDock <span class="keyword">then</span>
-	<span class="global">print</span>(ourDock.x..<span class="string">", "</span>..ourDock.y)
-<span class="keyword">end</span></pre>
+        <li><span class="parameter">xCoord</span>
+            <span class="types"><span class="type">int</span></span>
+         water tile, note: setting only moves dock strat model
+        </li>
+        <li><span class="parameter">yCoord</span>
+            <span class="types"><span class="type">int</span></span>
+         water tile, note: setting only moves dock strat model
+        </li>
     </ul>
+
+
+
+
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="SettlementStruct_table_section"></a>SettlementStruct table section </h2>
+    <h2 class="section-header "><a name="SettlementStruct"></a>SettlementStruct </h2>
 
     <dl class="function">
     <dt>
@@ -5912,10 +5917,7 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">for</span> i = <span class="number">0</span>, currSet.siegesNum-<span class="number">1</span> <span class="keyword">do</span>
-   <span class="keyword">local</span> siege=currSet:getSiege(i);
-   <span class="comment">--etc
-</span><span class="keyword">end</span></pre>
+        <pre class="example">settlementStruct:setGuildStanding(<span class="number">0</span>, <span class="number">300</span>)</pre>
     </ul>
 
 </dd>
@@ -6087,7 +6089,7 @@ currSet:changeOwner(fac1);
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Building_table_section"></a>Building table section </h2>
+    <h2 class="section-header "><a name="Building"></a>Building </h2>
 
     <dl class="function">
     <dt>
@@ -6160,7 +6162,7 @@ currSet:changeOwner(fac1);
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><span class="keyword">if</span> building:getType() == <span class="string">"core_building"</span> <span class="keyword">then</span>
-	<span class="comment">--something
+	<span class="comment">--do stuff
 </span><span class="keyword">end</span></pre>
     </ul>
 
@@ -6187,13 +6189,13 @@ currSet:changeOwner(fac1);
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><span class="keyword">if</span> building:getName() == <span class="string">"large_stone_wall"</span> <span class="keyword">then</span>
-	<span class="comment">--something
+	<span class="comment">--do stuff
 </span><span class="keyword">end</span></pre>
     </ul>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="BuildingsQueue_table_section"></a>BuildingsQueue table section </h2>
+    <h2 class="section-header "><a name="BuildingsQueue"></a>BuildingsQueue </h2>
 
     <dl class="function">
     <dt>
@@ -6207,25 +6209,17 @@ currSet:changeOwner(fac1);
 
     <h3>Fields:</h3>
     <ul>
-        <li><span class="parameter">firstIndex</span>
+        <li><span class="parameter">currentlyBuilding</span>
             <span class="types"><span class="type">int</span></span>
-         index (0-5) of building in first position (currently under construction), not necessarily 0 as buildingsQueue uses a circular buffer
-        </li>
-        <li><span class="parameter">lastIndex</span>
-            <span class="types"><span class="type">int</span></span>
-         index (0-5) of last building in the queue
-        </li>
-        <li><span class="parameter">currentBuildingPosition</span>
-            <span class="types"><span class="type">int</span></span>
-         position in the queue (1-6) that is currently under construction, usually 1
+         position in queue of building currently under construction, usually 1
         </li>
         <li><span class="parameter">numBuildingsInQueue</span>
             <span class="types"><span class="type">int</span></span>
          maximum is 6
         </li>
-        <li><span class="parameter">buildingInQueue</span>
-            <span class="types"><a class="type" href="index.html#buildingInQueue">buildingInQueue[6]</a></span>
-         index+1 (1-6), see usage for getQueueName()
+        <li><span class="parameter">getBuildingInQueue</span>
+            <span class="types"><a class="type" href="index.html#buildingsQueue:getBuildingInQueue">getBuildingInQueue</a></span>
+         by position in queue (1-6)
         </li>
     </ul>
 
@@ -6234,8 +6228,49 @@ currSet:changeOwner(fac1);
 
 
 </dd>
+    <dt>
+    <a name = "buildingsQueue:getBuildingInQueue"></a>
+    <strong>buildingsQueue:getBuildingInQueue (position)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get building in queue by position
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">position</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#buildingInQueue">buildingInQueue</a></span>
+        buildingInQueue
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">if</span> ourQueue.numBuildingsInQueue &gt; <span class="number">0</span> <span class="keyword">then</span>
+	<span class="keyword">local</span> result = <span class="string">"ourQueue:\n\t"</span>
+	<span class="keyword">for</span> i = <span class="number">1</span>, ourQueue.numBuildingsInQueue, <span class="number">1</span> <span class="keyword">do</span>
+		<span class="keyword">local</span> ourQueueBuld = ourQueue:getBuildingInQueue(i)
+		result = result..i..<span class="string">" "</span>..ourQueueBuld:getQueueBuildingName()..<span class="string">"\n\t"</span>
+	<span class="keyword">end</span>
+	<span class="global">print</span>(result)
+<span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
 </dl>
-    <h2 class="section-header "><a name="BuildingInQueue_table_section"></a>BuildingInQueue table section </h2>
+    <h2 class="section-header "><a name="BuildingInQueue"></a>BuildingInQueue </h2>
 
     <dl class="function">
     <dt>
@@ -6295,14 +6330,14 @@ currSet:changeOwner(fac1);
 
 
         </li>
-        <li><span class="parameter">getQueueType</span>
-            <span class="types"><span class="type">getQueueType</span></span>
+        <li><span class="parameter">getQueueBuildingType</span>
+            <span class="types"><a class="type" href="index.html#building:getQueueBuildingType">getQueueBuildingType</a></span>
 
 
 
         </li>
-        <li><span class="parameter">getQueueName</span>
-            <span class="types"><span class="type">getQueueName</span></span>
+        <li><span class="parameter">getQueueBuildingName</span>
+            <span class="types"><a class="type" href="index.html#building:getQueueBuildingName">getQueueBuildingName</a></span>
 
 
 
@@ -6315,98 +6350,61 @@ currSet:changeOwner(fac1);
 
 </dd>
     <dt>
-    <a name = "settlementStruct:getReligion"></a>
-    <strong>settlementStruct:getReligion (religionID)</strong>
+    <a name = "building:getQueueBuildingType"></a>
+    <strong>building:getQueueBuildingType ()</strong>
     </dt>
     <dd>
     <div class="functionDescription">
-
-<p>Get settlement religion value. </p>
-<pre><code>It is desirable that after your intervention, the sum of the influence of all religions does not exceed 1.
-</code></pre>
-
+    Get name of building in queue type (chain)
     </div>
 
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">religionID</span>
-            <span class="types"><span class="type">int</span></span>
-         in order of descr_religions.txt, started from 0
-        </li>
-    </ul>
 
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">float</span></span>
-        religionValue from 0 to 1
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        buildingType (building chain name)
     </ol>
 
 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--see usage for getQueueName()</span></pre>
+        <pre class="example"><span class="keyword">if</span> ourQueueBld:getQueueBuildingType() = <span class="string">"core_building"</span> <span class="keyword">then</span>
+	<span class="comment">--do stuff
+</span><span class="keyword">end</span></pre>
     </ul>
 
 </dd>
     <dt>
-    <a name = "settlementStruct:setReligion"></a>
-    <strong>settlementStruct:setReligion (religionID, religionValue)</strong>
+    <a name = "building:getQueueBuildingName"></a>
+    <strong>building:getQueueBuildingName ()</strong>
     </dt>
     <dd>
     <div class="functionDescription">
-
-<p>Set settlement religion value. </p>
-<pre><code>It is desirable that after your intervention, the sum of the influence of all religions does not exceed 1.
-</code></pre>
-
+    Get name of building in queue level
     </div>
 
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">religionID</span>
-            <span class="types"><span class="type">int</span></span>
-         in order of descr_religions.txt, started from 0
-        </li>
-        <li><span class="parameter">religionValue</span>
-            <span class="types"><span class="type">float</span></span>
-         from 0 to 1
-        </li>
-    </ul>
 
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        buildingName
+    </ol>
 
 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> printBuildQueueInfo(i, j, sett, resultList)
-	<span class="keyword">local</span> thisBuilding = sett.buildingsQueue.buildingInQueue[i]
-	resultList = resultList..<span class="string">"\n\tBuilding Position: "</span>..j..<span class="string">" Index: "</span>..i..<span class="string">"\n\t\tBuilding: "</span>..thisBuilding:getQueueType()..<span class="string">" "</span>..thisBuilding:getQueueName()..<span class="string">"\n\t\tcurrentLevel: "</span>..thisBuilding.currentLevel..<span class="string">"\n\t\tpreviousLevel: "</span>..thisBuilding.previousLevel..<span class="string">"\n\t\tbuildCost: "</span>..thisBuilding.buildCost..<span class="string">"\n\t\tbuildTurnsRemaining: "</span>..thisBuilding.buildTurnsRemaining..<span class="string">"\n\t\tbuildTurnsPassed: "</span>..thisBuilding.buildTurnsPassed..<span class="string">"\n\t\tpercentBuilt: "</span>..thisBuilding.percentBuilt
-	<span class="keyword">if</span> thisBuilding.building ~= <span class="keyword">nil</span> <span class="keyword">then</span>
-		resultList = resultList..<span class="string">"\n\tBuilding upgraded from: "</span>..thisBuilding.building:getName()
-	<span class="keyword">end</span>
-	<span class="keyword">return</span> resultList
-<span class="keyword">end</span>
-
-<span class="keyword">function</span> onAddedToBuildingQueue(sett, buildName)
-	<span class="keyword">local</span> resultList, i, j = <span class="string">"Function: onAddedToBuildingQueue\n\tSettlement: "</span>..sett.name..<span class="string">"\n\tBuilding: "</span>..buildName..<span class="string">"\n\tBuilding Queue Data:\n\t\tfirstIndex: "</span>..sett.buildingsQueue.firstIndex..<span class="string">"\n\t\tlastIndex: "</span>..sett.buildingsQueue.lastIndex..<span class="string">"\n\t\tnumBuildingsInQueue: "</span>..sett.buildingsQueue.numBuildingsInQueue..<span class="string">"\n\t\tcurrentBuildingPosition: "</span>..sett.buildingsQueue.currentBuildingPosition, sett.buildingsQueue.firstIndex + <span class="number">1</span>, <span class="number">1</span>
-	<span class="keyword">if</span> sett.buildingsQueue.firstIndex == sett.buildingsQueue.lastIndex <span class="keyword">then</span>
-		resultList = printBuildQueueInfo(i, j, sett, resultList)
-	<span class="keyword">else</span>
-		<span class="keyword">repeat</span>
-			resultList = printBuildQueueInfo(i, j, sett, resultList)
-			j = j + <span class="number">1</span>; i = i + <span class="number">1</span>; <span class="keyword">if</span> i &gt; <span class="number">6</span> <span class="keyword">then</span> i = i - <span class="number">6</span> <span class="keyword">end</span>
-		<span class="keyword">until</span> i == sett.buildingsQueue.lastIndex + <span class="number">1</span>
-		resultList = printBuildQueueInfo(i, j, sett, resultList)
-	<span class="keyword">end</span>
-	<span class="global">print</span>(resultList)
-<span class="keyword">end</span></pre>
+        <pre class="example"><span class="keyword">if</span> ourQueueBld:getQueueBuildingName() = <span class="string">"wooden_pallisade"</span> <span class="keyword">then</span>
+	<span class="comment">--do stuff
+</span><span class="keyword">end</span></pre>
     </ul>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Guild_table_section"></a>Guild table section </h2>
+    <h2 class="section-header "><a name="Guild"></a>Guild </h2>
 
     <dl class="function">
     <dt>
@@ -6458,7 +6456,7 @@ currSet:changeOwner(fac1);
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="TradeResource_table_section"></a>TradeResource table section </h2>
+    <h2 class="section-header "><a name="TradeResource"></a>TradeResource </h2>
 
     <dl class="function">
     <dt>
@@ -6669,7 +6667,7 @@ currSet:changeOwner(fac1);
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="StackStruct_table_section"></a>StackStruct table section </h2>
+    <h2 class="section-header "><a name="StackStruct"></a>StackStruct </h2>
 
     <dl class="function">
     <dt>
@@ -7147,7 +7145,7 @@ ourChar:kill();</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="siegeStruct_table_section"></a>siegeStruct table section </h2>
+    <h2 class="section-header "><a name="siegeStruct"></a>siegeStruct </h2>
 
     <dl class="function">
     <dt>
@@ -7187,7 +7185,7 @@ ourChar:kill();</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="EVENTS_TABLE_SECTION"></a>EVENTS TABLE SECTION </h2>
+    <h2 class="section-header "><a name="EOP_Events"></a>EOP Events </h2>
 
     <dl class="function">
     <dt>
@@ -11226,7 +11224,7 @@ newCapital=fac.capital();
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="M2TWEOPDU_table_section"></a>M2TWEOPDU table section </h2>
+    <h2 class="section-header "><a name="M2TWEOPDU"></a>M2TWEOPDU </h2>
 
     <dl class="function">
     <dt>
@@ -11636,7 +11634,7 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="campaign_enums_section"></a>campaign enums section </h2>
+    <h2 class="section-header "><a name="Campaign_Enums"></a>Campaign Enums </h2>
 
     <dl class="function">
     <dt>
@@ -11695,7 +11693,7 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="campaign_table_section"></a>campaign table section </h2>
+    <h2 class="section-header "><a name="Campaign"></a>Campaign </h2>
 
     <dl class="function">
     <dt>
@@ -11813,6 +11811,12 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
 
 
         </li>
+        <li><span class="parameter">GetUnitSize</span>
+            <span class="types"><a class="type" href="index.html#campaignStruct:GetUnitSize">GetUnitSize</a></span>
+
+
+
+        </li>
     </ul>
 
 
@@ -11912,8 +11916,34 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
     </ul>
 
 </dd>
+    <dt>
+    <a name = "campaignStruct:GetUnitSize"></a>
+    <strong>campaignStruct:GetUnitSize ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get size of unit(i.e.  small or medium, etc). Numbers from 0 to 3
+    </div>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        unitSize
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
+<span class="keyword">local</span> unitSize=campaign:GetUnitSize();</pre>
+    </ul>
+
+</dd>
 </dl>
-    <h2 class="section-header "><a name="gameDataAll_table_section"></a>gameDataAll table section </h2>
+    <h2 class="section-header "><a name="gameDataAll"></a>gameDataAll </h2>
 
     <dl class="function">
     <dt>
@@ -11975,7 +12005,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="battleStruct_table_section"></a>battleStruct table section </h2>
+    <h2 class="section-header "><a name="battleStruct"></a>battleStruct </h2>
 
     <dl class="function">
     <dt>
@@ -12045,7 +12075,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="battleSide_table_section"></a>battleSide table section </h2>
+    <h2 class="section-header "><a name="battleSide"></a>battleSide </h2>
 
     <dl class="function">
     <dt>
@@ -12125,7 +12155,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
     <ol>
 
            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-        winCondition
+        winCondition destroy_or_rout_enemy, balance_of_strength_percent, destroy_enemy_strength_percent, capture_location, destroy_character, capture_major_settlement, capture_army_settlement, unknown_condition
     </ol>
 
 
@@ -12167,7 +12197,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="trackedPointerArmy_table_section"></a>trackedPointerArmy table section </h2>
+    <h2 class="section-header "><a name="trackedPointerArmy"></a>trackedPointerArmy </h2>
 
     <dl class="function">
     <dt>
@@ -12201,7 +12231,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="deploymentAreaS_table_section"></a>deploymentAreaS table section </h2>
+    <h2 class="section-header "><a name="deploymentAreaS"></a>deploymentAreaS </h2>
 
     <dl class="function">
     <dt>
@@ -12271,7 +12301,7 @@ deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="M2TWEOPFBX_table_section"></a>M2TWEOPFBX table section </h2>
+    <h2 class="section-header "><a name="M2TWEOPFBX"></a>M2TWEOPFBX </h2>
 
     <dl class="function">
     <dt>
@@ -13073,7 +13103,7 @@ M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>)
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="M2TWEOPSounds_table_section"></a>M2TWEOPSounds table section </h2>
+    <h2 class="section-header "><a name="M2TWEOPSounds"></a>M2TWEOPSounds </h2>
 
     <dl class="function">
     <dt>
