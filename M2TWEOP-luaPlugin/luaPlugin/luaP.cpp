@@ -504,7 +504,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.cameraTable = luaState.create_table();
 	/***
-	Slow move camera to tile
+	Slow move camera to a tile
 	@function camera.move
 	@tparam int xCoord
 	@tparam int yCoord
@@ -513,7 +513,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.cameraTable.set_function("move", &cameraHelpers::moveStratCamera);
 	/***
-	Fast move camera to tile
+	Fast move camera to a tile
 	@function camera.jump
 	@tparam int xCoord
 	@tparam int yCoord
