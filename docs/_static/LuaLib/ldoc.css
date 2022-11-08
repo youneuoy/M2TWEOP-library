@@ -261,7 +261,7 @@ table.module_list td, table.function_list td {
   border: solid 1px #1c0303;;
 }
 table.module_list td.name, table.function_list td.name {
-font-size: 14px;
+font-size: 16px;
 background-color: #3e0101;
 min-width: 200px;
 border-right-width: 0px;
