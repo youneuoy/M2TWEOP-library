@@ -16,7 +16,7 @@ return [==[
     <meta property="og:image" content="https://i.imgur.com/mQIK1oo.png">
 
     <!-- Favicon-->
-   <link rel="icon" type="image/x-icon" href="../EOPIcon.png">
+   <link rel="icon" type="image/x-icon" href="https://i.imgur.com/mQIK1oo.png">
 
 
 # if ldoc.custom_css then -- add custom CSS file if configured.
