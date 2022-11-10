@@ -39,6 +39,18 @@ guild* gameHelpers::getGuild(unsigned char index)
 
 general* gameHelpers::createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
 {
+	if (portrait!=nullptr&&strlen(portrait) == 0)
+	{
+		portrait = nullptr;
+	}
+	if (name !=nullptr&&strlen(name) == 0)
+	{
+		name = nullptr;
+	}
+	if (name2 !=nullptr&&strlen(name2) == 0)
+	{
+		name2 = nullptr;
+	}
 	return (*(*plugData::data.funcs.createCharacter))(type, fac, age, name, name2, subFaction, portrait, x, y);
 }
 
