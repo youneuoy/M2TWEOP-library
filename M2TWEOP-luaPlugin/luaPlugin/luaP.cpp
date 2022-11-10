@@ -68,8 +68,10 @@ bool luaP::checkVar(const char* gName, int variable)
 
 	return false;
 }
+
 sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 {
+	
 	struct
 	{
 		sol::table M2TWEOPTable;
@@ -787,6 +789,12 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.EduEntry.set("StatCost6", &EduEntry::StatCost6);
 	types.EduEntry.set("StatCost7", &EduEntry::StatCost7);
 	types.EduEntry.set("StatCost8", &EduEntry::StatCost8);
+	types.EduEntry.set("Morale", &EduEntry::Morale);
+	types.EduEntry.set("MoraleLocked", &EduEntry::MoraleLocked);
+	types.EduEntry.set("StatFood1", &EduEntry::StatFood1);
+	types.EduEntry.set("StatFood2", &EduEntry::StatFood2);
+	types.EduEntry.set("Ammunition", &EduEntry::Ammunition);
+
 
 
 	///Character
@@ -1533,6 +1541,55 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.settlementStruct.set("isCastle", &settlementStruct::isCastle);
 	types.settlementStruct.set("isProvokedRebellion", &settlementStruct::isProvokedRebellion);
 	types.settlementStruct.set("populationSize", &settlementStruct::populationSize);
+	types.settlementStruct.set("PopGrowthBaseFarm", &settlementStruct::PopGrowthBaseFarm);
+	types.settlementStruct.set("PopGrowthFarms", &settlementStruct::PopGrowthFarms);
+	types.settlementStruct.set("PopGrowthHealth", &settlementStruct::PopGrowthHealth);
+	types.settlementStruct.set("PopGrowthBuildings", &settlementStruct::PopGrowthBuildings);
+	types.settlementStruct.set("PopGrowthTaxBonus", &settlementStruct::PopGrowthTaxBonus);
+	types.settlementStruct.set("PopGrowthEntertainment", &settlementStruct::PopGrowthEntertainment);
+	types.settlementStruct.set("PopGrowthTrade", &settlementStruct::PopGrowthTrade);
+	types.settlementStruct.set("PopGrowthGovernorInfluence", &settlementStruct::PopGrowthGovernorInfluence);
+	types.settlementStruct.set("PopGrowthSqualor", &settlementStruct::PopGrowthSqualor);
+	types.settlementStruct.set("PopGrowthPlague", &settlementStruct::PopGrowthPlague);
+	types.settlementStruct.set("PopGrowthTaxPenalty", &settlementStruct::PopGrowthTaxPenalty);
+	types.settlementStruct.set("PublicOrderGarrison", &settlementStruct::PublicOrderGarrison);
+	types.settlementStruct.set("PublicOrderLaw", &settlementStruct::PublicOrderLaw);
+	types.settlementStruct.set("PublicOrderBuildingsEntertainment", &settlementStruct::PublicOrderBuildingsEntertainment);
+	types.settlementStruct.set("PublicOrderGovernorInfluence", &settlementStruct::PublicOrderGovernorInfluence);
+	types.settlementStruct.set("PublicOrderTaxBonus", &settlementStruct::PublicOrderTaxBonus);
+	types.settlementStruct.set("PublicOrderTriumph", &settlementStruct::PublicOrderTriumph);
+	types.settlementStruct.set("PublicOrderPopulationBoom", &settlementStruct::PublicOrderPopulationBoom);
+	types.settlementStruct.set("PublicOrderEntertainment", &settlementStruct::PublicOrderEntertainment);
+	types.settlementStruct.set("PublicOrderHealth", &settlementStruct::PublicOrderHealth);
+	types.settlementStruct.set("PublicOrderGarrisonTwo", &settlementStruct::PublicOrderGarrisonTwo);
+	types.settlementStruct.set("PublicOrderFear", &settlementStruct::PublicOrderFear);
+	types.settlementStruct.set("PublicOrderGlory", &settlementStruct::PublicOrderGlory);
+	types.settlementStruct.set("PublicOrderSqualor", &settlementStruct::PublicOrderSqualor);
+	types.settlementStruct.set("PublicOrderDistanceToCapital", &settlementStruct::PublicOrderDistanceToCapital);
+	types.settlementStruct.set("PublicOrderNoGovernance", &settlementStruct::PublicOrderNoGovernance);
+	types.settlementStruct.set("PublicOrderTaxPenalty", &settlementStruct::PublicOrderTaxPenalty);
+	types.settlementStruct.set("PublicOrderUnrest", &settlementStruct::PublicOrderUnrest);
+	types.settlementStruct.set("PublicOrderBesieged", &settlementStruct::PublicOrderBesieged);
+	types.settlementStruct.set("PublicOrderBlockaded", &settlementStruct::PublicOrderBlockaded);
+	types.settlementStruct.set("PublicOrderCulturalUnrest", &settlementStruct::PublicOrderCulturalUnrest);
+	types.settlementStruct.set("PublicOrderExcommunication", &settlementStruct::PublicOrderExcommunication);
+	types.settlementStruct.set("PublicOrder", &settlementStruct::PublicOrder);
+	types.settlementStruct.set("FarmsIncome", &settlementStruct::FarmsIncome);
+	types.settlementStruct.set("TaxesIncome", &settlementStruct::TaxesIncome);
+	types.settlementStruct.set("MiningIncome", &settlementStruct::MiningIncome);
+	types.settlementStruct.set("TradeIncome", &settlementStruct::TradeIncome);
+	types.settlementStruct.set("DiplomaticIncome", &settlementStruct::DiplomaticIncome);
+	types.settlementStruct.set("DemolitionIncome", &settlementStruct::DemolitionIncome);
+	types.settlementStruct.set("LootingIncome", &settlementStruct::LootingIncome);
+	types.settlementStruct.set("BuildingsIncome", &settlementStruct::BuildingsIncome);
+	types.settlementStruct.set("AdminIncome", &settlementStruct::AdminIncome);
+	types.settlementStruct.set("ConstructionExpense", &settlementStruct::ConstructionExpense);
+	types.settlementStruct.set("RecruitmentExpense", &settlementStruct::RecruitmentExpense);
+	types.settlementStruct.set("DiplomaticExpense", &settlementStruct::DiplomaticExpense);
+	types.settlementStruct.set("CorruptionExpense", &settlementStruct::CorruptionExpense);
+	types.settlementStruct.set("EntertainmentExpense", &settlementStruct::EntertainmentExpense);
+	types.settlementStruct.set("DevastationExpense", &settlementStruct::DevastationExpense);
+	types.settlementStruct.set("TotalIncomeWithoutAdmin", &settlementStruct::TotalIncomeWithoutAdmin);
 	/***
 	Get settlement religion value
 	@function settlementStruct:getReligion

@@ -215,12 +215,17 @@ public:
 	ProcLoader<EduEntry* (__cdecl*)(int, int)> addEopEduEntry;
 	ProcLoader<EduEntry* (__cdecl*)(const char*, int)> addEopEduEntryFromFile;
 	ProcLoader<EduEntry* (__cdecl*)(int)> getEopEduEntry;
+	ProcLoader<EduEntry* (__cdecl*)(int)> getEduEntry;
 	ProcLoader<int(__cdecl*)(int)> getDataEopEdu;
 
 
 	ProcLoader<void(__cdecl*)(int, const char*)> setEntryUnitCardTga;
 	ProcLoader<void(__cdecl*)(int, const char*)> setEntryInfoCardTga;
 	ProcLoader<void(__cdecl*)(int, const char*)> setEntrySoldierModel;
+	ProcLoader<void(__cdecl*)(int, int, int, int)> setEntryStatPriArmour;
+	ProcLoader<void(__cdecl*)(int, int, int)> setEntryAttackCharge;
+	ProcLoader<int(__cdecl*)(int)> GetEntryAttack;
+	ProcLoader<int(__cdecl*)(int)> GetEntryCharge;
 
 	ProcLoader<void(__cdecl*)(int, const char*)> setEntryLocalizedName;
 	ProcLoader<void(__cdecl*)(int, const char*)> setEntryLocalizedDescr;

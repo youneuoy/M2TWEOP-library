@@ -951,10 +951,7 @@ struct EduEntry {
 	float Mass;
 	float Width;
 	float Height;
-	int8_t HasPrimaryWeapon;
-	int8_t nothing3;
-	int8_t AttackValueBitshiftedleftby18;
-	int8_t ChargeBonusBitshiftedleftby24;
+	uint32_t StatPri;
 	DWORD Ammunition;
 	DWORD MissleRange;
 	float MissleRangeSquared;
@@ -999,8 +996,8 @@ struct EduEntry {
 	void* N000000ED;
 	DWORD OfficierCount;
 	char pad_0200[4];
-	void* ArmorUpgrade;
-	void* ArmorUpgrad1;
+	intptr_t ArmorUpgradeLevels;
+	intptr_t ArmorUpgradesEnd;
 	void* ArmorUpgrade2;
 	char pad_0210[4];
 	void* ArmorUpgrade3;

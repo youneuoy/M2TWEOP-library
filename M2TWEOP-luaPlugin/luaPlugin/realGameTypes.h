@@ -486,8 +486,64 @@ struct settlementStruct {
 	int resourcesNum;
 	undefined field38_0xe50[2164];
 	intptr_t guildStandings;
-	undefined field40_0x16c8[404];
-	int populationSize;
+	char pad_16C8[56]; //0x16C8
+	int32_t Turmoil; //0x1700
+	char pad_1704[116]; //0x1704
+	int32_t populationLastTurn; //0x1778
+	char pad_177C[180]; //0x177C
+	int32_t PopGrowthBaseFarm; //0x1830
+	int32_t PopGrowthFarms; //0x1834
+	int32_t PopGrowthHealth; //0x1838
+	int32_t PopGrowthBuildings; //0x183C
+	int32_t PopGrowthTaxBonus; //0x1840
+	int32_t PopGrowthEntertainment; //0x1844
+	int32_t PopGrowthTrade; //0x1848
+	int32_t PopGrowthGovernorInfluence; //0x184C
+	int32_t PopGrowthSqualor; //0x1850
+	int32_t PopGrowthPlague; //0x1854
+	int32_t PopGrowthTaxPenalty; //0x1858
+	int32_t populationSize; //0x185C
+	int32_t PublicOrderGarrison; //0x1860
+	int32_t PublicOrderLaw; //0x1864
+	int32_t PublicOrderBuildingsEntertainment; //0x1868
+	int32_t PublicOrderGovernorInfluence; //0x186C
+	int32_t PublicOrderTaxBonus; //0x1870
+	int32_t PublicOrderTriumph; //0x1874
+	int32_t PublicOrderPopulationBoom; //0x1878
+	int32_t PublicOrderEntertainment; //0x187C
+	int32_t PublicOrderHealth; //0x1880
+	int32_t PublicOrderGarrisonTwo; //0x1884
+	int32_t PublicOrderFear; //0x1888
+	int32_t PublicOrderGlory; //0x188C
+	int32_t PublicOrderSqualor; //0x1890
+	int32_t PublicOrderDistanceToCapital; //0x1894
+	int32_t PublicOrderNoGovernance; //0x1898
+	int32_t PublicOrderTaxPenalty; //0x189C
+	int32_t PublicOrderUnrest; //0x18A0
+	int32_t PublicOrderBesieged; //0x18A4
+	int32_t PublicOrderBlockaded; //0x18A8
+	int32_t PublicOrderCulturalUnrest; //0x18AC
+	int32_t PublicOrderExcommunication; //0x18B0
+	int32_t PublicOrder; //0x18B4
+	int32_t FarmsIncome; //0x18B8
+	int32_t TaxesIncome; //0x18BC
+	int32_t MiningIncome; //0x18C0
+	int32_t TradeIncome; //0x18C4
+	int32_t DiplomaticIncome; //0x18C8
+	int32_t DemolitionIncome; //0x18CC
+	int32_t LootingIncome; //0x18D0
+	int32_t BuildingsIncome; //0x18D4
+	int32_t AdminIncome; //0x18D8
+	char pad_18DC[4]; //0x18DC
+	int32_t N000025DE; //0x18E0
+	int32_t ConstructionExpense; //0x18E4
+	int32_t RecruitmentExpense; //0x18E8
+	int32_t DiplomaticExpense; //0x18EC
+	int32_t CorruptionExpense; //0x18F0
+	int32_t EntertainmentExpense; //0x18F4
+	int32_t DevastationExpense; //0x18F8
+	int32_t TotalIncomeWithoutAdmin; //0x18FC
+	char pad_1900[268]; //0x1900
 };
 
 struct guild
@@ -858,6 +914,21 @@ public:
 	char pad_007C[4]; //0x007C
 }; //Size: 0x0080
 
+
+struct ArmourUpgModels
+{
+public:
+	char* BaseModel; //0x0000
+	int32_t BaseModelHash; //0x0004
+	char* UpgradeOne; //0x0008
+	int32_t UpgradeOneHash; //0x000C
+	char* UpgradeTwo; //0x0010
+	int32_t UpgradeTwoHash; //0x0014
+	char* UpgradeThree; //0x0018
+	int32_t UpgradeThreeHash; //0x001C
+};
+
+
 //type of unit from EDU
 struct EduEntry {
 	char* Type;
@@ -951,10 +1022,7 @@ struct EduEntry {
 	float Mass;
 	float Width;
 	float Height;
-	int8_t HasPrimaryWeapon;
-	int8_t nothing3;
-	int8_t AttackValueBitshiftedleftby18;
-	int8_t ChargeBonusBitshiftedleftby24;
+	uint32_t StatPri;
 	DWORD Ammunition;
 	DWORD MissleRange;
 	float MissleRangeSquared;
@@ -999,13 +1067,13 @@ struct EduEntry {
 	void* N000000ED;
 	DWORD OfficierCount;
 	char pad_0200[4];
-	void* ArmorUpgrade;
-	void* ArmorUpgrad1;
-	void* ArmorUpgrade2;
+	int8_t* ArmorUpgradeLevels;
+	int8_t* ArmorUpgradesEnd;
+	int8_t* ArmorUpgrade2;
 	char pad_0210[4];
-	void* ArmorUpgrade3;
-	void* ArmorUpgrade4;
-	void* ArmorUpgrade5;
+	struct ArmourUpgModels* ArmorUpgradeModels;
+	int* ArmorUpgradeModelsEnd;
+	int* ArmorUpgrade5;
 	char pad_0220[4];
 	void* N000000F8;
 	char pad_0228[4];

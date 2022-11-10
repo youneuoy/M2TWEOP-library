@@ -165,6 +165,11 @@ namespace eduThings
 
 		fastFunctsHelpers::setCryptedString(&entry->UnitCardTga, newCard);
 	}
+	NOINLINE EOP_EXPORT EduEntry* getEduEntry(int Idx)
+	{
+		EduEntry* entry = fastFunctsHelpers::getEDUEntryById(Idx);
+		return entry;
+	}
 	NOINLINE EOP_EXPORT void setEntryInfoCardTga(int entryIdx, const char* newCard)
 	{
 		EduEntry* entry = getEopEduEntry(entryIdx);
@@ -181,6 +186,40 @@ namespace eduThings
 
 		entry->ModelDBEntry = fastFuncts::findBattleModel(newModel);
 		entry->Soldier = (char*)entryInternal->eopSoldierString.c_str();
+	}
+
+	NOINLINE EOP_EXPORT void setEntryStatPriArmour(int entryIdx, int armour, int defense, int shield)
+	{
+		EduEntry* entry = fastFunctsHelpers::getEDUEntryById(entryIdx);
+		int newnumber = (shield*8192)+(defense*128)+(armour*2-1);
+		entry->PriDefenseSkillAndShield = newnumber;
+	}
+
+	NOINLINE EOP_EXPORT void setEntryAttackCharge(int entryIdx, int attack, int charge)
+	{
+		EduEntry* entry = fastFunctsHelpers::getEDUEntryById(entryIdx);
+
+		uint32_t newstatpr =  (entry->StatPri & 262143) + (attack*262144) + (charge*16777216);
+
+		entry->StatPri = newstatpr;
+	}
+
+	NOINLINE EOP_EXPORT int GetEntryCharge(int entryIdx)
+	{
+		EduEntry* entry = fastFunctsHelpers::getEDUEntryById(entryIdx);
+
+		int charge = (entry->StatPri & 1056964608)/16777216;
+
+		return charge;
+	}
+
+	NOINLINE EOP_EXPORT int GetEntryAttack(int entryIdx)
+	{
+		EduEntry* entry = fastFunctsHelpers::getEDUEntryById(entryIdx);
+
+		int attack = (entry->StatPri & 16515072)/262144;
+
+		return attack;
 	}
 
 	NOINLINE EOP_EXPORT void setEntryLocalizedName(int entryIdx, const char* newName)
@@ -211,5 +250,4 @@ namespace eduThings
 		entry->localizedDescrShort = shDescrMem;
 		smallFuncs::createUniString(*entry->localizedDescrShort, newDecrShort);
 	}
-
 };

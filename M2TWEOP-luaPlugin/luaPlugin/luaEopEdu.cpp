@@ -6,6 +6,7 @@
 //@license GPL-3.0
 #include "luaP.h"
 #include "plugData.h"
+#include "eopEduHelpers.h"
 
 void luaP::initEopEdu()
 {
@@ -13,6 +14,27 @@ void luaP::initEopEdu()
 	{
 		sol::table M2TWEOPEDUTable;
 	}tables;
+	using namespace UnitEnums;
+	
+	luaState.new_enum(
+		"stat_pri_attr",
+		"spear", stat_pri_attr::spear,
+		"light_spear", stat_pri_attr::light_spear,
+		"prec", stat_pri_attr::prec,
+		"ap", stat_pri_attr::ap,
+		"bp", stat_pri_attr::bp,
+		"area", stat_pri_attr::area,
+		"fire", stat_pri_attr::fire,
+		"launching", stat_pri_attr::launching,
+		"thrown", stat_pri_attr::thrown,
+		"short_pike", stat_pri_attr::short_pike,
+		"long_pike", stat_pri_attr::long_pike,
+		"spear_bonus_12", stat_pri_attr::spear_bonus_12,
+		"spear_bonus_10", stat_pri_attr::spear_bonus_10,
+		"spear_bonus_8", stat_pri_attr::spear_bonus_8,
+		"spear_bonus_6", stat_pri_attr::spear_bonus_6,
+		"spear_bonus_4", stat_pri_attr::spear_bonus_4
+	);
 	///M2TWEOPDU
 	//@section M2TWEOPDUTable
 
@@ -70,6 +92,7 @@ void luaP::initEopEdu()
 	eduEntryOfEOPDU.Width=1.5;
 	*/
 	tables.M2TWEOPEDUTable.set_function("getEopEduEntryByID", &eopEduHelpers::getEopEduEntry);
+	tables.M2TWEOPEDUTable.set_function("getEduEntry", &eopEduHelpers::getEduEntry);
 
 
 	/***
@@ -113,6 +136,31 @@ void luaP::initEopEdu()
 	M2TWEOPDU.setEntrySoldierModel(1000,"Sword_and_Buckler_Men");
 	*/
 	tables.M2TWEOPEDUTable.set_function("setEntrySoldierModel", &eopEduHelpers::setEntrySoldierModel);
+
+
+	/***
+	Set armour stats for M2TWEOPDU entry.
+	@function M2TWEOPDU.setEntryStatPriArmour
+	@tparam int eopEnryIndex Entry index
+	@tparam int armour
+	@tparam int defense
+	@tparam int shield
+	@usage
+	M2TWEOPDU.setEntryStatPriArmour(1000,5,6,7);
+	*/
+	tables.M2TWEOPEDUTable.set_function("setEntryStatPriArmour", &eopEduHelpers::setEntryStatPriArmour);
+	tables.M2TWEOPEDUTable.set_function("setEntryAttackCharge", &eopEduHelpers::setEntryAttackCharge);
+	tables.M2TWEOPEDUTable.set_function("GetEntryAttack", &eopEduHelpers::GetEntryAttack);
+	tables.M2TWEOPEDUTable.set_function("GetEntryCharge", &eopEduHelpers::GetEntryCharge);
+	tables.M2TWEOPEDUTable.set_function("GetArmourUpgradeLevelsNum", &eopEduHelpers::GetArmourUpgradeLevelsNum);
+	tables.M2TWEOPEDUTable.set_function("SetArmourUpgradeLevelsNum", &eopEduHelpers::SetArmourUpgradeLevelsNum);
+	tables.M2TWEOPEDUTable.set_function("GetArmourUpgradeLevel", &eopEduHelpers::GetArmourUpgradeLevel);
+	tables.M2TWEOPEDUTable.set_function("SetArmourUpgradeLevel", &eopEduHelpers::SetArmourUpgradeLevel);
+	tables.M2TWEOPEDUTable.set_function("GetArmourUpgradeModelsNum", &eopEduHelpers::GetArmourUpgradeModelsNum);
+	tables.M2TWEOPEDUTable.set_function("SetArmourUpgradeModelsNum", &eopEduHelpers::SetArmourUpgradeModelsNum);
+	tables.M2TWEOPEDUTable.set_function("GetArmourUpgradeModel", &eopEduHelpers::GetArmourUpgradeModel);
+	tables.M2TWEOPEDUTable.set_function("SetArmourUpgradeModel", &eopEduHelpers::SetArmourUpgradeModel);
+	tables.M2TWEOPEDUTable.set_function("setEntryStatPriAttribute", &eopEduHelpers::setEntryStatPriAttribute);
 
 
 	/***
