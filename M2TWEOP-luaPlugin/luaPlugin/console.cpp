@@ -11,6 +11,8 @@ namespace console
 		std::string input;
 		
 		bool isDraw = false;
+		int keypressamount = 0;
+		int commandNum = 0;
 	}consoleData;
 
 	void applyCommand()
@@ -18,6 +20,7 @@ namespace console
 		if (consoleData.input.size() > 0)
 		{
 			plugData::data.luaAll.logS.push_back("Command: "+consoleData.input+'\n');
+			plugData::data.luaAll.logCommands.push_back(consoleData.input);
 		}
 		else
 		{
@@ -41,6 +44,7 @@ namespace console
 				//if (campaign->isAdminPasswordExist == false || (campaign->isAdminPasswordExist == true && campaign->isHotseatLogon == true))
 				//{
 					initLua();
+					consoleData.keypressamount = 0;
 					return;
 				//}
 			}
@@ -54,6 +58,7 @@ namespace console
 			//	if (campaign->isAdminPasswordExist == false || (campaign->isAdminPasswordExist == true && campaign->isHotseatLogon == true))
 			//	{
 					consoleData.isDraw = !consoleData.isDraw;
+					consoleData.keypressamount = 0;
 
 					if (plugData::data.luaAll.checkVar("enableConsole", 1) == false)
 					{
@@ -72,11 +77,27 @@ namespace console
 		ImGuiWindowFlags iwf = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollWithMouse;
 		ImGui::SetNextWindowSize(ImVec2(800, 400), ImGuiCond_Once);
 		ImGui::SetNextWindowPos(ImVec2(0.5f, 0.5f), ImGuiCond_Always, ImVec2(0.0f, 0.0f));
+		consoleData.commandNum = plugData::data.luaAll.logCommands.size();
 
 		ImGui::Begin("##consoleInWindow", NULL, iwf);
 		if (ImGui::Button("Run"))
 		{
 			applyCommand();
+			consoleData.keypressamount = 0;
+		}
+
+
+		if (ImGui::GetIO().KeysDownDuration[VK_UP] > 0.f && ImGui::GetIO().KeysDownDurationPrev[VK_UP] == 0.f && ((consoleData.commandNum - 1) - consoleData.keypressamount >= 0) )
+		{
+			consoleData.input = plugData::data.luaAll.logCommands[consoleData.commandNum - 1 - consoleData.keypressamount];
+			consoleData.keypressamount++;
+		}
+
+
+		if (ImGui::GetIO().KeysDownDuration[VK_DOWN] > 0.f && ImGui::GetIO().KeysDownDurationPrev[VK_DOWN] == 0.f && consoleData.keypressamount > 0)
+		{
+			consoleData.keypressamount--;
+			consoleData.input = plugData::data.luaAll.logCommands[consoleData.commandNum - 1 - consoleData.keypressamount];
 		}
 
 		ImGui::InputTextMultiline("##console", &consoleData.input, ImVec2(-FLT_MIN, -FLT_MIN), ImGuiInputTextFlags_AllowTabInput);
@@ -94,6 +115,7 @@ namespace console
 			outputs += str;
 			outputs += "\n";
 		}
+
 
 		ImGui::InputTextMultiline("##consoleLog", &outputs, ImVec2(-FLT_MIN, -FLT_MIN), ImGuiInputTextFlags_ReadOnly);
 

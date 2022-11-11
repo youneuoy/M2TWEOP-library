@@ -4,7 +4,7 @@
 #include "luaGetSetFuncs.h"
 namespace UnitEnums
 {
-    enum stat_pri_attr :int
+    enum attackAttr :int
     {
         spear = 1<<2,
         light_spear = 1<<3,
@@ -23,6 +23,14 @@ namespace UnitEnums
         spear_bonus_6 = 1<<16,
         spear_bonus_4 = 1<<17
     };
+    enum eduStat :int
+    {
+        armour = 1<<1,
+        defense = 1<<7,
+        shield = 1<<13,
+        attack = 1<<18,
+        charge = 1<<24
+    };
 };
 namespace eopEduHelpers
 {
@@ -30,6 +38,8 @@ namespace eopEduHelpers
 	EduEntry* addEopEduEntryFromFile(const char* fileName, int newIndex);
 	EduEntry* getEopEduEntry(int index);
 	EduEntry* getEduEntry(int index);
+	EduEntry* getEduEntryByType(const char* type);
+	int getEduIndexByType(const char* type);
 
 
 
@@ -39,19 +49,18 @@ namespace eopEduHelpers
 	void setEntryUnitCardTga(int index, const char* newCard);
 	void setEntryInfoCardTga(int index, const char* newCard);
 	void setEntrySoldierModel(int index, const char* newModel);
-	void setEntryStatPriArmour(int index, int armour, int defense, int shield);
-	void setEntryAttackCharge(int index, int attack, int charge);
-	int GetEntryAttack(int index);
-	int GetEntryCharge(int index);
-	int GetArmourUpgradeLevelsNum(int index);
-	void SetArmourUpgradeLevelsNum(int index, int amount);
-	int GetArmourUpgradeLevel(int idx, int levelidx);
-	void SetArmourUpgradeLevel(int idx, int levelidx, int8_t newlevel);
-	int GetArmourUpgradeModelsNum(int index);
-	void SetArmourUpgradeModelsNum(int index, int amount);
-	std::string GetArmourUpgradeModel(int index, int levelidx);
-	void SetArmourUpgradeModel(int index, int levelidx, std::string newModel);
-	void setEntryStatPriAttribute(int idx, UnitEnums::stat_pri_attr attribute, bool enable);
+	int getArmourUpgradeLevelsNum(int index);
+	void setArmourUpgradeLevelsNum(int index, int amount);
+	int getArmourUpgradeLevel(int idx, int levelidx);
+	void setArmourUpgradeLevel(int idx, int levelidx, int8_t newlevel);
+	int getArmourUpgradeModelsNum(int index);
+	void setArmourUpgradeModelsNum(int index, int amount);
+	std::string getArmourUpgradeModel(int index, int levelidx);
+	void setArmourUpgradeModel(int index, int levelidx, std::string newModel);
+	void setEntryAttackAttribute(int idx, UnitEnums::attackAttr attribute, bool enable, int sec);
+	bool getEntryAttackAttribute(int idx, UnitEnums::attackAttr attribute, int sec);
+	void setEntryStat(int idx, UnitEnums::eduStat stat, int value, int sec);
+	int getEntryStat(int idx, UnitEnums::eduStat stat, int sec);
 
 	void setEntryLocalizedName(int index, const char* newLocName);
 	void setEntryLocalizedDescr(int index, const char* newLocDescr);

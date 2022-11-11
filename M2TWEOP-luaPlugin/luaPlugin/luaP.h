@@ -61,6 +61,7 @@ class luaP
 {
 public:
 	static std::vector<std::string> logS;
+	static std::vector<std::string> logCommands;
 	std::string luaPath;
 	bool checkVar(const char* gName, int variable);
 

@@ -13,7 +13,7 @@ namespace fastFunctsHelpers
 			call eax
 		}
 	}
-	int getEDUIndex(const char* type)
+	int getEduIndex(const char* type)
 	{
 		eduEntryes* EDB = reinterpret_cast<eduEntryes*>(dataOffsets::offsets.unitTypesStart - 4);
 
@@ -28,7 +28,7 @@ namespace fastFunctsHelpers
 
 		return -1;
 	}
-	EduEntry* getEDUEntry(const char* type)
+	EduEntry* getEduEntryByName(const char* type)
 	{
 		eduEntryes* EDB = reinterpret_cast<eduEntryes*>(dataOffsets::offsets.unitTypesStart - 4);
 

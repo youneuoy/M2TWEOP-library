@@ -41,6 +41,7 @@ namespace eduThings
 
 
 		std::string eopTypeName;
+		std::string eopUnitLabel;
 		std::string eopSoldierString;
 		struct dataS
 		{
@@ -188,40 +189,6 @@ namespace eduThings
 		entry->Soldier = (char*)entryInternal->eopSoldierString.c_str();
 	}
 
-	NOINLINE EOP_EXPORT void setEntryStatPriArmour(int entryIdx, int armour, int defense, int shield)
-	{
-		EduEntry* entry = fastFunctsHelpers::getEDUEntryById(entryIdx);
-		int newnumber = (shield*8192)+(defense*128)+(armour*2-1);
-		entry->PriDefenseSkillAndShield = newnumber;
-	}
-
-	NOINLINE EOP_EXPORT void setEntryAttackCharge(int entryIdx, int attack, int charge)
-	{
-		EduEntry* entry = fastFunctsHelpers::getEDUEntryById(entryIdx);
-
-		uint32_t newstatpr =  (entry->StatPri & 262143) + (attack*262144) + (charge*16777216);
-
-		entry->StatPri = newstatpr;
-	}
-
-	NOINLINE EOP_EXPORT int GetEntryCharge(int entryIdx)
-	{
-		EduEntry* entry = fastFunctsHelpers::getEDUEntryById(entryIdx);
-
-		int charge = (entry->StatPri & 1056964608)/16777216;
-
-		return charge;
-	}
-
-	NOINLINE EOP_EXPORT int GetEntryAttack(int entryIdx)
-	{
-		EduEntry* entry = fastFunctsHelpers::getEDUEntryById(entryIdx);
-
-		int attack = (entry->StatPri & 16515072)/262144;
-
-		return attack;
-	}
-
 	NOINLINE EOP_EXPORT void setEntryLocalizedName(int entryIdx, const char* newName)
 	{
 		EduEntry* entry = getEopEduEntry(entryIdx);
@@ -249,5 +216,13 @@ namespace eduThings
 		UNICODE_STRING*** shDescrMem = new UNICODE_STRING * *[4];
 		entry->localizedDescrShort = shDescrMem;
 		smallFuncs::createUniString(*entry->localizedDescrShort, newDecrShort);
+	}
+	NOINLINE EOP_EXPORT int getEduIndexByType(const char* type)
+	{
+		return fastFunctsHelpers::getEduIndex(type);
+	}
+	NOINLINE EOP_EXPORT EduEntry* getEduEntryByType(const char* type)
+	{
+		return fastFunctsHelpers::getEduEntryByName(type);
 	}
 };

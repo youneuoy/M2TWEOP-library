@@ -5,6 +5,7 @@
 #include "luaP.h"
 #include "plugData.h"
 std::vector<std::string> luaP::logS;
+std::vector<std::string> luaP::logCommands;
 
 static int ourP(lua_State* L) {
 	int n = lua_gettop(L);  /* number of arguments */
@@ -1264,6 +1265,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct.set("isPlayerControlled", &factionStruct::isPlayerControlled);
 	types.factionStruct.set("religion", &factionStruct::religion);
 	types.factionStruct.set("money", &factionStruct::money);
+	types.factionStruct.set("KingsPurse", &factionStruct::KingsPurse);
 	types.factionStruct.set("facStrat", &factionStruct::factSmDescr);
 	types.factionStruct.set("numOfNamedCharacters", &factionStruct::numOfCharactersAll);
 	/***

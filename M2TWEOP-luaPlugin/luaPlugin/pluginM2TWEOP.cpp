@@ -225,6 +225,12 @@ int initPlugin(std::string* modPath)
      
     fName = "getEduEntry";
     plugData::data.funcsEopEdu.getEduEntry.Load(&plPath, &fName);    
+     
+    fName = "getEduEntryByType";
+    plugData::data.funcsEopEdu.getEduEntryByType.Load(&plPath, &fName);    
+     
+    fName = "getEduIndexByType";
+    plugData::data.funcsEopEdu.getEduIndexByType.Load(&plPath, &fName);    
     
     fName = "getDataEopEdu";
     plugData::data.funcsEopEdu.getDataEopEdu.Load(&plPath, &fName); 
@@ -238,18 +244,6 @@ int initPlugin(std::string* modPath)
 
     fName = "setEntrySoldierModel";
     plugData::data.funcsEopEdu.setEntrySoldierModel.Load(&plPath, &fName);
-
-    fName = "setEntryStatPriArmour";
-    plugData::data.funcsEopEdu.setEntryStatPriArmour.Load(&plPath, &fName);
-
-    fName = "setEntryAttackCharge";
-    plugData::data.funcsEopEdu.setEntryAttackCharge.Load(&plPath, &fName);
-
-    fName = "GetEntryAttack";
-    plugData::data.funcsEopEdu.GetEntryAttack.Load(&plPath, &fName);
-
-    fName = "GetEntryCharge";
-    plugData::data.funcsEopEdu.GetEntryCharge.Load(&plPath, &fName);
 
     fName = "setEntryLocalizedName";
     plugData::data.funcsEopEdu.setEntryLocalizedName.Load(&plPath, &fName);

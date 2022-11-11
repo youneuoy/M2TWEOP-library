@@ -884,6 +884,7 @@ struct factionStruct {
 	undefined field_0xa44[12];
 	undefined field_0xa50[156];
 	int money; /* money of the faction */
+	int KingsPurse; /* money of the faction */
 };
 
 struct ModelDbEntry
@@ -1026,7 +1027,7 @@ struct EduEntry {
 	DWORD Ammunition;
 	DWORD MissleRange;
 	float MissleRangeSquared;
-	DWORD Unknown4;
+	DWORD HasPrimary;
 	void* StatPriMissle;
 	DWORD WeaponType;
 	DWORD TechType;
@@ -1036,14 +1037,11 @@ struct EduEntry {
 	char pad_0154[4];
 	char WeaponShootEffect[20];
 	char pad_016C[4];
-	int8_t HasSecondaryWeapon;
-	int8_t nothing4;
-	int8_t SecAttackValueBitshiftedleftby18;
-	int8_t SecChargeBonusBitshiftedleftby24;
+	uint32_t StatSec;
 	DWORD SecAmmunition;
 	DWORD SecMissleRange;
 	float SecMissleRangeSquared;
-	DWORD Unknown2;
+	DWORD HasSecondary;
 	void* StatSecMissle;
 	DWORD SecWeaponType;
 	DWORD SecTechType;
@@ -1051,7 +1049,7 @@ struct EduEntry {
 	DWORD SecSoundType;
 	DWORD SecAttackMinDelay;
 	char pad_019C[28];
-	DWORD PriDefenseSkillAndShield;
+	uint32_t StatPriArmour;
 	char pad_01BC[4];
 	char* FirstOfficier;
 	void* N000000E0;

@@ -1063,7 +1063,7 @@ namespace fastFuncts
 
 	NOINLINE EOP_EXPORT unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap)
 	{
-		int unitIndex = fastFunctsHelpers::getEDUIndex(type);
+		int unitIndex = fastFunctsHelpers::getEduIndex(type);
 
 
 		return createUnitIdx(unitIndex, regionID, facNum, exp, arm, weap);

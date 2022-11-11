@@ -17,23 +17,32 @@ void luaP::initEopEdu()
 	using namespace UnitEnums;
 	
 	luaState.new_enum(
-		"stat_pri_attr",
-		"spear", stat_pri_attr::spear,
-		"light_spear", stat_pri_attr::light_spear,
-		"prec", stat_pri_attr::prec,
-		"ap", stat_pri_attr::ap,
-		"bp", stat_pri_attr::bp,
-		"area", stat_pri_attr::area,
-		"fire", stat_pri_attr::fire,
-		"launching", stat_pri_attr::launching,
-		"thrown", stat_pri_attr::thrown,
-		"short_pike", stat_pri_attr::short_pike,
-		"long_pike", stat_pri_attr::long_pike,
-		"spear_bonus_12", stat_pri_attr::spear_bonus_12,
-		"spear_bonus_10", stat_pri_attr::spear_bonus_10,
-		"spear_bonus_8", stat_pri_attr::spear_bonus_8,
-		"spear_bonus_6", stat_pri_attr::spear_bonus_6,
-		"spear_bonus_4", stat_pri_attr::spear_bonus_4
+		"attackAttr",
+		"spear", attackAttr::spear,
+		"light_spear", attackAttr::light_spear,
+		"prec", attackAttr::prec,
+		"ap", attackAttr::ap,
+		"bp", attackAttr::bp,
+		"area", attackAttr::area,
+		"fire", attackAttr::fire,
+		"launching", attackAttr::launching,
+		"thrown", attackAttr::thrown,
+		"short_pike", attackAttr::short_pike,
+		"long_pike", attackAttr::long_pike,
+		"spear_bonus_12", attackAttr::spear_bonus_12,
+		"spear_bonus_10", attackAttr::spear_bonus_10,
+		"spear_bonus_8", attackAttr::spear_bonus_8,
+		"spear_bonus_6", attackAttr::spear_bonus_6,
+		"spear_bonus_4", attackAttr::spear_bonus_4
+	);
+	
+	luaState.new_enum(
+		"eduStat",
+		"armour", eduStat::armour,
+		"defense", eduStat::defense,
+		"shield", eduStat::shield,
+		"attack", eduStat::attack,
+		"charge", eduStat::charge
 	);
 	///M2TWEOPDU
 	//@section M2TWEOPDUTable
@@ -92,7 +101,41 @@ void luaP::initEopEdu()
 	eduEntryOfEOPDU.Width=1.5;
 	*/
 	tables.M2TWEOPEDUTable.set_function("getEopEduEntryByID", &eopEduHelpers::getEopEduEntry);
+	
+	/***
+	Get eduEntry by index. Needed to change many parameters of the entry.
+	@function M2TWEOPDU.getEduEntry
+	@tparam int EnryIndex Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@treturn eduEntry retEntry
+	@usage
+	local eduEntry=M2TWEOPDU.getEduEntry(5);
+	eduEntry.SoldierCount=20;
+	eduEntry.Width=1.5;
+	*/
 	tables.M2TWEOPEDUTable.set_function("getEduEntry", &eopEduHelpers::getEduEntry);
+
+	/***
+	Get eduEntry by edu type name. Needed to change many parameters of the entry.
+	@function M2TWEOPDU.getEduEntryByType
+	@tparam string type Unit type as in export_descr_unit.
+	@treturn eduEntry retEntry
+	@usage
+	local eduEntry=M2TWEOPDU.getEduEntryByType("Peasants");
+	eduEntry.SoldierCount=20;
+	eduEntry.Width=1.5;
+	*/
+	tables.M2TWEOPEDUTable.set_function("getEduEntryByType", &eopEduHelpers::getEduEntryByType);
+	
+	/***
+	Get edu index by edu type name. Needed to use many edu functions.
+	@function M2TWEOPDU.getEduIndexByType
+	@tparam string type Unit type as in export_descr_unit.
+	@treturn int eduindex
+	@usage
+	local eduindex=M2TWEOPDU.getEduIndexByType("Peasants");
+	M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, 5, 1);
+	*/
+	tables.M2TWEOPEDUTable.set_function("getEduIndexByType", &eopEduHelpers::getEduIndexByType);
 
 
 	/***
@@ -137,30 +180,139 @@ void luaP::initEopEdu()
 	*/
 	tables.M2TWEOPEDUTable.set_function("setEntrySoldierModel", &eopEduHelpers::setEntrySoldierModel);
 
+	/***
+	Get the amount of numbers in the armour_upg_levels line in export_descr_unit.
+	@function M2TWEOPDU.getArmourUpgradeLevelsNum
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@treturn int ArmourUpgradeLevelsNum
+	@usage
+	M2TWEOPDU.getArmourUpgradeLevelsNum(1000);
+	*/
+	tables.M2TWEOPEDUTable.set_function("getArmourUpgradeLevelsNum", &eopEduHelpers::getArmourUpgradeLevelsNum);
+
 
 	/***
-	Set armour stats for M2TWEOPDU entry.
-	@function M2TWEOPDU.setEntryStatPriArmour
-	@tparam int eopEnryIndex Entry index
-	@tparam int armour
-	@tparam int defense
-	@tparam int shield
+	Set the amount of armour_upg_levels, if you increase the amount of levels the last number entry will be repeated.
+	@function M2TWEOPDU.setArmourUpgradeLevelsNum
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int amount
 	@usage
-	M2TWEOPDU.setEntryStatPriArmour(1000,5,6,7);
+	M2TWEOPDU.setArmourUpgradeLevelsNum(1000, 3);
 	*/
-	tables.M2TWEOPEDUTable.set_function("setEntryStatPriArmour", &eopEduHelpers::setEntryStatPriArmour);
-	tables.M2TWEOPEDUTable.set_function("setEntryAttackCharge", &eopEduHelpers::setEntryAttackCharge);
-	tables.M2TWEOPEDUTable.set_function("GetEntryAttack", &eopEduHelpers::GetEntryAttack);
-	tables.M2TWEOPEDUTable.set_function("GetEntryCharge", &eopEduHelpers::GetEntryCharge);
-	tables.M2TWEOPEDUTable.set_function("GetArmourUpgradeLevelsNum", &eopEduHelpers::GetArmourUpgradeLevelsNum);
-	tables.M2TWEOPEDUTable.set_function("SetArmourUpgradeLevelsNum", &eopEduHelpers::SetArmourUpgradeLevelsNum);
-	tables.M2TWEOPEDUTable.set_function("GetArmourUpgradeLevel", &eopEduHelpers::GetArmourUpgradeLevel);
-	tables.M2TWEOPEDUTable.set_function("SetArmourUpgradeLevel", &eopEduHelpers::SetArmourUpgradeLevel);
-	tables.M2TWEOPEDUTable.set_function("GetArmourUpgradeModelsNum", &eopEduHelpers::GetArmourUpgradeModelsNum);
-	tables.M2TWEOPEDUTable.set_function("SetArmourUpgradeModelsNum", &eopEduHelpers::SetArmourUpgradeModelsNum);
-	tables.M2TWEOPEDUTable.set_function("GetArmourUpgradeModel", &eopEduHelpers::GetArmourUpgradeModel);
-	tables.M2TWEOPEDUTable.set_function("SetArmourUpgradeModel", &eopEduHelpers::SetArmourUpgradeModel);
-	tables.M2TWEOPEDUTable.set_function("setEntryStatPriAttribute", &eopEduHelpers::setEntryStatPriAttribute);
+	tables.M2TWEOPEDUTable.set_function("setArmourUpgradeLevelsNum", &eopEduHelpers::setArmourUpgradeLevelsNum);
+
+
+	/***
+	Get armour upgrade level number at specified index.
+	@function M2TWEOPDU.getArmourUpgradeLevel
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int levelidx
+	@treturn int level
+	@usage
+	M2TWEOPDU.getArmourUpgradeLevel(1000, 0);
+	*/
+	tables.M2TWEOPEDUTable.set_function("getArmourUpgradeLevel", &eopEduHelpers::getArmourUpgradeLevel);
+
+	/***
+	Set armour upgrade level number at specified index.
+	@function M2TWEOPDU.setArmourUpgradeLevel
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int levelidx
+	@tparam int newlevel
+	@usage
+	M2TWEOPDU.setArmourUpgradeLevel(1000, 1, 4);
+	*/
+	tables.M2TWEOPEDUTable.set_function("setArmourUpgradeLevel", &eopEduHelpers::setArmourUpgradeLevel);
+
+	/***
+	Get the amount of models in the armour_upg_models line in export_descr_unit.
+	@function M2TWEOPDU.getArmourUpgradeLevelsNum
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@treturn int ArmourUpgradeLevelsNum
+	@usage
+	M2TWEOPDU.getArmourUpgradeModelsNum(1000);
+	*/
+	tables.M2TWEOPEDUTable.set_function("getArmourUpgradeModelsNum", &eopEduHelpers::getArmourUpgradeModelsNum);
+
+	/***
+	Set the amount of armour_upg_levels, if you increase the amount of models the last model entry will be repeated.
+	@function M2TWEOPDU.setArmourUpgradeModelsNum
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int amount Maximum: 4
+	@usage
+	M2TWEOPDU.setArmourUpgradeModelsNum(1000, 3);
+	*/
+	tables.M2TWEOPEDUTable.set_function("setArmourUpgradeModelsNum", &eopEduHelpers::setArmourUpgradeModelsNum);
+	
+	/***
+	Get armour upgrade level number at specified index.
+	@function M2TWEOPDU.getArmourUpgradeModel
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int levelidx
+	@treturn string modelName
+	@usage
+	M2TWEOPDU.getArmourUpgradeModel(1000, 0);
+	*/
+	tables.M2TWEOPEDUTable.set_function("getArmourUpgradeModel", &eopEduHelpers::getArmourUpgradeModel);
+	
+	/***
+	Set the unit model at specified index.
+	@function M2TWEOPDU.setArmourUpgradeModel
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int levelidx
+	@tparam string modelName
+	@usage
+	M2TWEOPDU.setArmourUpgradeModel(1000, 1, 4);
+	*/
+	tables.M2TWEOPEDUTable.set_function("setArmourUpgradeModel", &eopEduHelpers::setArmourUpgradeModel);
+	
+	/***
+	Set a primary or secondary attack attribute of an edu entry.
+	@function M2TWEOPDU.setEntryAttackAttribute
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int attribute Use the attackAttr enum: attackAttr.spear, attackAttr.light_spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short_pike, attackAttr.long_pike, attackAttr.spear_bonus_12, attackAttr.spear_bonus_10, attackAttr.spear_bonus_8, attackAttr.spear_bonus_6, attackAttr.spear_bonus_4.
+	@tparam boolean enable
+	@tparam int sec 1 = primary, 2 = secondary.
+	@usage
+	M2TWEOPDU.setEntryAttackAttribute(1000, attackAttr.ap, true, 1);
+	*/
+	tables.M2TWEOPEDUTable.set_function("setEntryAttackAttribute", &eopEduHelpers::setEntryAttackAttribute);
+	
+	/***
+	Get a primary or secondary attack attribute from an edu entry.
+	@function M2TWEOPDU.getEntryAttackAttribute
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int attribute Use the attackAttr enum: attackAttr.spear, attackAttr.light_spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short_pike, attackAttr.long_pike, attackAttr.spear_bonus_12, attackAttr.spear_bonus_10, attackAttr.spear_bonus_8, attackAttr.spear_bonus_6, attackAttr.spear_bonus_4.
+	@tparam int sec 1 = primary, 2 = secondary.
+	@treturn boolean hasAttackAttribute
+	@usage
+	M2TWEOPDU.getEntryAttackAttribute(1000, attackAttr.ap, 1);
+	*/
+	tables.M2TWEOPEDUTable.set_function("getEntryAttackAttribute", &eopEduHelpers::getEntryAttackAttribute);
+	
+	/***
+	Set any of the basic unit stats of an edu entry.
+	@function M2TWEOPDU.setEntryStat
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int eduStat Use the eduStat enum: eduStat.armour, eduStat.defense, eduStat.shield, eduStat.attack, eduStat.charge.
+	@tparam int value
+	@tparam int sec 1 = primary, 2 = secondary.
+	@usage
+	M2TWEOPDU.setEntryStat(1000, attackAttr.attack, 1);
+	*/
+	tables.M2TWEOPEDUTable.set_function("setEntryStat", &eopEduHelpers::setEntryStat);
+	
+	/***
+	Get any of the basic unit stats of an edu entry.
+	@function M2TWEOPDU.getEntryStat
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int eduStat Use the eduStat enum: eduStat.armour, eduStat.defense, eduStat.shield, eduStat.attack, eduStat.charge.
+	@tparam int sec 1 = primary, 2 = secondary.
+	@treturn int unitStat
+	@usage
+	M2TWEOPDU.getEntryStat(1000, attackAttr.attack, 1);
+	*/
+	tables.M2TWEOPEDUTable.set_function("getEntryStat", &eopEduHelpers::getEntryStat);
 
 
 	/***
