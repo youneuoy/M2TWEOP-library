@@ -143,7 +143,7 @@ struct campaign {
 	undefined field3_0x3c[4];
 	int hotSeatPlayer2FactionId;
 	undefined field5_0x44[232];
-	int humanPlayers; /* number of player-controlled factions */
+	int humanPlayers;
 	int factionIdPow; /* pow(2,factionId) */
 	int campaignDifficultyFaction[8];
 	undefined field9_0x154[120];
@@ -176,7 +176,7 @@ struct campaign {
 	float PirateSpawnValue;
 	undefined field37_0x3f4[4];
 	int FreeUpkeepForts;
-	int ActiveFactions;	/* number factions minus slave */
+	int ActiveFactions;
 	undefined field40_0x400[12];
 	int lastrandomseed;
 	undefined field42_0x410[744];
@@ -198,6 +198,16 @@ struct campaign {
 	float currentTimeInBattle; /* 24 max, so calc as daysInBattle*24+currentTimeInBattle */
 	undefined field59_0x734[4124];
 	struct factionDiplomacy dipArray[31][31];
+	undefined field61_0x215d8[48];
+	struct fortStruct** fortsArray;
+	undefined field63_0x2160c;
+	int fortsNum;
+	struct portBuildingStruct** portsBuildings;
+	undefined field66_0x21615;
+	int portsBuildingsNum;
+	struct watchTowerStruct** watchtowers;
+	undefined field69_0x2161e;
+	int watchtowersNum;
 };
 
 struct gameDataAllStruct {
