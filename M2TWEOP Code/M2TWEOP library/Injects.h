@@ -874,3 +874,16 @@ public:
 private:
 	LPVOID funcAddress;
 };
+//backspace patch
+class OnMoveRecruitQueue
+	:public AATemplate
+{
+public:
+	OnMoveRecruitQueue(MemWork* mem, LPVOID addr, int ver);
+	~OnMoveRecruitQueue();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};

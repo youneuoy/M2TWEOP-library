@@ -75,6 +75,11 @@ void managerF::doPachs()
 	OnStopCharacter* toStopCharacter = new OnStopCharacter(mem, (LPVOID)patchesForGame::OnStopCharacter, globals::dataS.gamever);
 	toStopCharacter->SetNewCode();
 	toStopCharacter->Enable();
+
+
+	OnMoveRecruitQueue* toMoveRecruitQueue = new OnMoveRecruitQueue(mem, (LPVOID)patchesForGame::OnStopCharacter, globals::dataS.gamever);
+	toMoveRecruitQueue->SetNewCode();
+	toMoveRecruitQueue->Enable();
     //old code, what just disable backspace
 	//{
 	//	unsigned char ret[1] = { 0xC3};

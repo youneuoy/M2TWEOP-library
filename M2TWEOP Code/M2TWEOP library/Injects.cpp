@@ -3294,3 +3294,53 @@ void OnStopCharacter::SetNewCode()
 
 	delete a;
 }
+
+OnMoveRecruitQueue::OnMoveRecruitQueue(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00ab4966;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00ab3936;
+}
+
+OnMoveRecruitQueue::~OnMoveRecruitQueue()
+{
+}
+
+void OnMoveRecruitQueue::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+	
+	a->mov(byte_ptr(eax, 0xD0), 01);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnMoveRecruitQueue::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+
+	a->pushad();
+	a->pushf();
+
+
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->mov(byte_ptr(esp, 0x20), eax);//move eax to stored eax
+
+	a->popf();
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

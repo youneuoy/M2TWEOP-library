@@ -492,6 +492,16 @@ void __fastcall patchesForGame::OnStopCharacter(general* character)
 	}
 }
 
+int __fastcall patchesForGame::OnMoveRecruitQueue(int magicVal)
+{
+	auto& campaign = smallFuncs::getGameDataAll()->campaignData;
+	if (campaign->humanPlayers < 2)
+	{
+		return magicVal;
+	}
+	return 0;
+}
+
 void __fastcall patchesForGame::onEndSiege(settlementStruct* sett)
 {
 	plugins::onEndSiege(sett);

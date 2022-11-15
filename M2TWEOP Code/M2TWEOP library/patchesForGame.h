@@ -92,6 +92,7 @@ public:
 
 
 	static void __fastcall OnStopCharacter(general*character);
+	static int __fastcall OnMoveRecruitQueue(int magicVal);
 
 
 	static void __fastcall onEndSiege(settlementStruct*sett);
