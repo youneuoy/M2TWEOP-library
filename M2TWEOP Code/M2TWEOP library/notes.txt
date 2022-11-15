@@ -1,0 +1,14 @@
+tactical map view
+0043cbb4
+
+0043c874
+			DWORD fadr = 0x00ac18c0;
+			int xC = sett->xCoord;
+			int yC = sett->yCoord;
+			_asm
+			{
+				push yC
+				push xC
+				mov eax, fadr
+				call eax
+			}
