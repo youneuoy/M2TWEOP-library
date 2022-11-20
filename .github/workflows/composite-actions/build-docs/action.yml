@@ -29,6 +29,13 @@ runs:
         run: |
             ls "documentationGenerator/EOPDocs/build/html/_static/LuaLib/"
             ls "documentationGenerator/EOPDocs/build/html/_static/LuaLib/extra"
+        shell: bash
+
+      - name: Run gs
+        run: |
+            git add .
+            git status
+        shell: bash
 
       # # Force push the new docs
       # - name: Online docs -  Commit and push updates to docs folder
