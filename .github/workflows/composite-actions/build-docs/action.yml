@@ -12,13 +12,13 @@ runs:
         run: |
            rm -rf docs
            mkdir docs
-           mkdir docs/_static/LuaLib/extra
         shell: bash
 
       # Copy the docs
       - name: Online docs - Copy generated documentation to docs folder
         run: |
             cp -R "documentationGenerator/EOPDocs/build/html/." "docs"
+            mkdir docs/_static/LuaLib/extra
         shell: bash
 
       # Add the .nojekyll files to the docs folder
