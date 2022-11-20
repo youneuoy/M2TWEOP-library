@@ -1,6 +1,6 @@
 .. M2TWEOP articles
 
-M2TWEOP's Tutorials!
+M2TWEOP's Tutorials
 ===================================
 
 .. toctree::

@@ -261,18 +261,21 @@ table.module_list td, table.function_list td {
 }
 table.module_list td.name, table.function_list td.name {
 font-size: 16px;
-background-color: #3e0101;
+background-color: #2e0a00;
 min-width: 200px;
 border-right-width: 0px;
 }
 table.module_list td.summary, table.function_list td.summary {
-  background-color: #4d1111; width: 100%; border-left-width: 0px;
+  background-color: #430f00; width: 100%; border-left-width: 0px;
   color: white;
 font-size: 16px;
 }
 
 span.types > a {
   color: #d7d7d7;
+}
+span.types > a:hover {
+  color: gold;
 }
 
 .type {
@@ -287,7 +290,7 @@ dl.function {
   border-bottom: solid 3px rgb(0 0 0);
   border-left: solid 3px rgb(11 15 22);
   border-right: solid 3px rgb(0 0 0);
-  background-color: #3b0d0d;
+  background-color: #210501;
   box-shadow: inset 0 0 6px rgb(42 42 42);
 }
 
@@ -413,7 +416,7 @@ text-align: center;
 
 .welcomeDiv {
 box-shadow: inset 0 0 6px rgb(0 0 0);
-background: #3e0101;
+background: #320b01;
 padding-bottom: 1px;
 list-style: none;
 }
