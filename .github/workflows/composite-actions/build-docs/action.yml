@@ -8,10 +8,12 @@ runs:
   using: "composite"
   steps:
       # # Clear out docs folder before copying
-      # - name: Delete everything in the docs folder
-      #   run: |
-      #      rm -rf docs && mkdir docs
-      #   shell: bash
+      - name: Delete everything in the docs folder
+        run: |
+           rm -rf docs
+           mkdir docs
+           mkdir docs/_static/LuaLib/extra
+        shell: bash
 
       # Copy the docs
       - name: Online docs - Copy generated documentation to docs folder
@@ -25,22 +27,15 @@ runs:
             touch docs/.nojekyll
         shell: bash
 
-      - name: Check for imgui docs
+      - name: Copy over ImGUI Docs
         run: |
-            ls "documentationGenerator/EOPDocs/build/html/_static/LuaLib/"
-            ls "documentationGenerator/EOPDocs/build/html/_static/LuaLib/extra"
+            cp "documentationGenerator/EOPDocs/build/html/_static/LuaLib/readme_imgui.md.html" "docs/_static/LuaLib/extra"
         shell: bash
 
-      - name: Run gs
-        run: |
-            git add .
-            git status
-        shell: bash
-
-      # # Force push the new docs
-      # - name: Online docs -  Commit and push updates to docs folder
-      #   uses: EndBug/add-and-commit@v9
-      #   with:
-      #     add: 'docs --force'
-      #     message: "Updated EOP Docs for ${{ inputs.commit_message_string }}"
-      #     push: true
+      # Force push the new docs
+      - name: Online docs -  Commit and push updates to docs folder
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: 'docs --force'
+          message: "Updated EOP Docs for ${{ inputs.commit_message_string }}"
+          push: true
