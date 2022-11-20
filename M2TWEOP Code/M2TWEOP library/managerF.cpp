@@ -132,26 +132,26 @@ void managerF::doPachs()
 	tcptc->Enable();
 	f1 << "Done" << endl;
 
-	f1 << "Start applying label script patch" << endl;
-	toCheckLabelResults* labResults = new toCheckLabelResults(mem, (LPVOID)patchesForGame::onGiveTrait, globals::dataS.gamever);
-	labResults->SetlCheckLabCode();
-	labResults->Enable();
+	//f1 << "Start applying label script patch" << endl;
+	//toCheckLabelResults* labResults = new toCheckLabelResults(mem, (LPVOID)patchesForGame::onGiveTrait, globals::dataS.gamever);
+	//labResults->SetlCheckLabCode();
+	//labResults->Enable();
 
-	f1 << "Done" << endl;
+	//f1 << "Done" << endl;
 
-	f1 << "Start applying start campaign and battle start patch" << endl;
-	toCreateMap* stCampaign = new toCreateMap(mem, (LPVOID)patchesForGame::afterLoadGameData, globals::dataS.gamever);
-	stCampaign->SetlCreateCode();
-	stCampaign->Enable();
+	//f1 << "Start applying start campaign and battle start patch" << endl;
+	//toCreateMap* stCampaign = new toCreateMap(mem, (LPVOID)patchesForGame::afterLoadGameData, globals::dataS.gamever);
+	//stCampaign->SetlCreateCode();
+	//stCampaign->Enable();
 
-	f1 << "Done" << endl;
+	//f1 << "Done" << endl;
 
-	f1 << "Start applying I_CompareCounter command patch" << endl;
-	toI_CompareCounter* iccmp = new toI_CompareCounter(mem, (LPVOID)patchesForGame::afterI_CompareCounter, globals::dataS.gamever);
-	iccmp->SetltoI_CompareCounterCode();
-	iccmp->Enable();
+	//f1 << "Start applying I_CompareCounter command patch" << endl;
+	//toI_CompareCounter* iccmp = new toI_CompareCounter(mem, (LPVOID)patchesForGame::afterI_CompareCounter, globals::dataS.gamever);
+	//iccmp->SetltoI_CompareCounterCode();
+	//iccmp->Enable();
 
-	f1 << "Done" << endl;
+	//f1 << "Done" << endl;
 
 
 	/*f1 << "Start applying fort patch" << endl;
@@ -176,27 +176,27 @@ void managerF::doPachs()
 	f1 << "Done" << endl;*/
 
 
-	f1 << "Start applying spawn_army coords patch" << endl;
-	toSpawnArmy* spwnArm = new toSpawnArmy(mem, (LPVOID)patchesForGame::spawnArmyCoords, globals::dataS.gamever);
-	spwnArm->SetlSpawnCode();
-	spwnArm->Enable();
+	//f1 << "Start applying spawn_army coords patch" << endl;
+	//toSpawnArmy* spwnArm = new toSpawnArmy(mem, (LPVOID)patchesForGame::spawnArmyCoords, globals::dataS.gamever);
+	//spwnArm->SetlSpawnCode();
+	//spwnArm->Enable();
 
-	f1 << "Done" << endl;
+	//f1 << "Done" << endl;
 
 
-	f1 << "Start applying spawn_army coords patch end" << endl;
-	toEndOfSpawnArmy* endSpwnArm = new toEndOfSpawnArmy(mem, (LPVOID)patchesForGame::spawnEndArmyCoords, globals::dataS.gamever);
-	endSpwnArm->SetlEndSpawnCode();
-	endSpwnArm->Enable();
+	//f1 << "Start applying spawn_army coords patch end" << endl;
+	//toEndOfSpawnArmy* endSpwnArm = new toEndOfSpawnArmy(mem, (LPVOID)patchesForGame::spawnEndArmyCoords, globals::dataS.gamever);
+	//endSpwnArm->SetlEndSpawnCode();
+	//endSpwnArm->Enable();
 
-	f1 << "Done" << endl;
+	//f1 << "Done" << endl;
 
-	f1 << "Start applying spawn_character coords patch" << endl;
-	toSpawnCharacter* spwnChar = new toSpawnCharacter(mem, (LPVOID)patchesForGame::spawnCharacterCoords, globals::dataS.gamever);
-	spwnChar->SetlSpawnCode();
-	spwnChar->Enable();
+	//f1 << "Start applying spawn_character coords patch" << endl;
+	//toSpawnCharacter* spwnChar = new toSpawnCharacter(mem, (LPVOID)patchesForGame::spawnCharacterCoords, globals::dataS.gamever);
+	//spwnChar->SetlSpawnCode();
+	//spwnChar->Enable();
 
-	f1 << "Done" << endl;
+	//f1 << "Done" << endl;
 
 
 	f1 << "Start applying battle_start patch" << endl;
@@ -245,12 +245,12 @@ void managerF::doPachs()
 
 	f1 << "Done" << endl;
 
-	f1 << "Start applying custom_tiles file patch" << endl;
-	toCustomTileFileRead* ctilesF = new toCustomTileFileRead(mem, (LPVOID)patchesForGame::readTilesFile, globals::dataS.gamever);
-	ctilesF->SetlTilesCode();
-	ctilesF->Enable();
+	//f1 << "Start applying custom_tiles file patch" << endl;
+	//toCustomTileFileRead* ctilesF = new toCustomTileFileRead(mem, (LPVOID)patchesForGame::readTilesFile, globals::dataS.gamever);
+	//ctilesF->SetlTilesCode();
+	//ctilesF->Enable();
 
-	f1 << "Done" << endl;
+	//f1 << "Done" << endl;
 
 
 	f1 << "Start applying start fort models patch" << endl;
@@ -317,12 +317,12 @@ void managerF::doPachs()
 	f1 << "Done" << endl;
 
 
-	f1 << "Start applying toReadGameDBsAtGameStart patch" << endl;
-	toReadGameDBsAtGameStart* toReadGameDbsAtStart = new toReadGameDBsAtGameStart(mem, (LPVOID)patchesForGame::toReadGameDbsAtStart, globals::dataS.gamever);
-	toReadGameDbsAtStart->SetlReadCode();
-	toReadGameDbsAtStart->Enable();
+	//f1 << "Start applying toReadGameDBsAtGameStart patch" << endl;
+	//toReadGameDBsAtGameStart* toReadGameDbsAtStart = new toReadGameDBsAtGameStart(mem, (LPVOID)patchesForGame::toReadGameDbsAtStart, globals::dataS.gamever);
+	//toReadGameDbsAtStart->SetlReadCode();
+	//toReadGameDbsAtStart->Enable();
 
-	f1 << "Done" << endl;
+	//f1 << "Done" << endl;
 	
 
 
