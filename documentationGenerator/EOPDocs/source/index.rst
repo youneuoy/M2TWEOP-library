@@ -64,7 +64,7 @@ M2TWEOP: Medieval 2 Engine Overhaul Project
 			<span class="c1">-- Play a sound</span>
 			<span class="n">playSound</span><span class="p">(</span><span class="m">nazgulScream</span><span class="p">);</span>
 			<span class="c1">-- Display some text</span>
-			<span class="n">showWindow</span><span class="p">(</span><span class="s2">"The Nazgul have arrived."</span>,<span class="s2">"Nazgul_Arrived.png"</span>,<span class="s2">"NAZGUL_ARRIVAL_TEXT"</span><span class="p">);</span>
+			<span class="n">showWindow</span><span class="p">(</span><span class="s2">"The Nazgul have arrived."</span>,<span class="s2">"Nazgul_Arrived.png"</span>,<span class="s2">NAZGUL_ARRIVAL_TEXT_BODY</span><span class="p">);</span>
 			<span class="c1">-- Spawn a new unit</span>
 			<span class="n">spawnUnit</span><span class="p">(</span><span class="s2">"Citadel Guard"</span><span class="p">,</span> <span class="s2">"Anorien"</span> <span class="p">,</span> <span class="s2">"Minas Tirith"</span> <span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
 		<span class="kr">end</span>
