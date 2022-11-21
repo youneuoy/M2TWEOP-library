@@ -449,8 +449,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield replaceTile  replaceTile
 
 	@table stratmap.objects
-	tables.objectsTable = luaState.create_table();
 	*/
+	tables.objectsTable = luaState.create_table();
 
 
 	/***
