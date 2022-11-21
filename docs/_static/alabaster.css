@@ -1,11 +1,11 @@
-@import url("basic.css");
+
+/* */@import url("basic.css");
 
 /* -- page layout ----------------------------------------------------------- */
 
 body {
     font-family: Georgia, serif;
     font-size: 17px;
-    background-color: #fff;
     color: #000;
     margin: 0;
     padding: 0;
@@ -13,8 +13,9 @@ body {
 
 
 div.document {
-    width: 940px;
-    margin: 30px auto 0 auto;
+    width: 90vw;
+    margin: 30px;
+    /* margin: 30px auto 0 auto; */
 }
 
 div.documentwrapper {
@@ -28,7 +29,7 @@ div.bodywrapper {
 
 div.sphinxsidebar {
     width: 220px;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.5;
 }
 
@@ -37,8 +38,8 @@ hr {
 }
 
 div.body {
-    background-color: #fff;
-    color: #3E4349;
+    /* background-colr: #fff; */
+    /* color: #3E4349; */
     padding: 0 30px 0 30px;
 }
 
@@ -77,10 +78,6 @@ div.sphinxsidebar a {
 
 div.sphinxsidebar a:hover {
     border-bottom: 1px solid #999;
-}
-
-div.sphinxsidebarwrapper {
-    padding: 18px 10px;
 }
 
 div.sphinxsidebarwrapper p.logo {
@@ -439,9 +436,6 @@ ul, ol {
 }
 
 pre {
-    background: #EEE;
-    padding: 7px 30px;
-    margin: 15px 0px;
     line-height: 1.3em;
 }
 
