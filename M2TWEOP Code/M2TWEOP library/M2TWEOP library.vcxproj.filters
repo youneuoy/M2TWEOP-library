@@ -605,4 +605,9 @@
       <Filter>3rd\asmjit</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="notes.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
+  </ItemGroup>
 </Project>
