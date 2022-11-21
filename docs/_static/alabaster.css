@@ -4,7 +4,6 @@
 /* -- page layout ----------------------------------------------------------- */
 
 body {
-    font-family: Georgia, serif;
     font-size: 17px;
     color: #000;
     margin: 0;
@@ -14,7 +13,7 @@ body {
 
 div.document {
     width: 90vw;
-    margin: 30px;
+    margin: 15px;
     /* margin: 30px auto 0 auto; */
 }
 
