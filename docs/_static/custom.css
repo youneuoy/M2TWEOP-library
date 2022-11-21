@@ -1,1 +1,225 @@
 /* This file intentionally left blank. */
+a, p, h1, h2, h3, h4, li, code, em {
+    color: white !important;
+	text-shadow: 20px black;
+}
+
+
+code {
+    background-color: #525252 !important;
+}
+
+a:hover {
+    color: gold !important;
+}
+
+.imageDiv img {
+    filter: invert(100%);
+	width: 10vw;
+	height: 7vh;
+}
+
+.imageDiv:hover {
+    color: gold;
+}
+
+.imageDiv a {
+	padding: 20px;
+}
+
+pre {
+	background: #222222;
+    border-radius: 3px;
+    font-size: 18px;
+    padding-left: 10px !important;
+    padding: 5px;
+}
+span.pre {
+    background-color: #242424;
+    padding: 4px;
+}
+
+h1 {
+    font-weight: bold;
+}
+
+h2 {
+    font-weight: italic;
+}
+
+/* styles for prettification of source */
+.mi { color: #ffe600 !important;}
+.o { color: #00d0ff !important;}
+
+body {
+	background: linear-gradient(10deg, #210801, #070000);
+}
+
+
+#m2tweop-faq {
+	font-size: 20px;
+}
+
+.footer {
+	display: none;
+}
+
+.body h1 {
+	padding: 10px;
+	font-size: 50px !important;
+}
+
+.eopBanner {
+	width: 55vw;
+    height: 180px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+#m2tweop-medieval-2-engine-overhaul-project {
+    font-family: "Andale Mono", monospace;
+}
+
+#m2tweop-medieval-2-engine-overhaul-project h1 {
+    text-align: center;
+}
+
+#m2tweop-medieval-2-engine-overhaul-project h1 {
+    text-align: center;
+}
+
+#m2tweop-medieval-2-engine-overhaul-project h2 {
+	font-size: 38px;
+	font-weight: bold;
+}
+
+#m2tweop-medieval-2-engine-overhaul-project li {
+	font-size: 20px;
+}
+
+#m2tweop-medieval-2-engine-overhaul-project .toctree-l1 {
+    display: none;
+}
+
+#m2tweop-medieval-2-engine-overhaul-project .toctree-l2 {
+    display: none;
+}
+
+#configure-the-ui .s1, .ow, .nb {
+    color: white !important;
+}
+
+#m2tweop-medieval-2-engine-overhaul-project p {
+    font-family: "Andale Mono", monospace;
+    font-size: 25px;
+  text-shadow: 2px 2px #000000;
+}
+
+.type .n {
+    font-family: "Andale Mono", monospace;
+	color: orange;
+}
+
+.type .p {
+    font-family: "Andale Mono", monospace;
+	color: white;
+}
+
+.type .f {
+	color: #e0af53;
+}
+
+.type .mi {
+    color: greenyellow;
+}
+
+.type .comment {
+    color: rgb(175, 175, 175);
+}
+
+.type .nf {
+    color: gold;
+}
+
+.type .s2 {
+    color: rgb(0, 149, 255);
+}
+
+.type .kr {
+    color: green;
+}
+
+.type .m {
+    color: rgb(178, 0, 113);
+}
+
+.type {
+    color: white;
+}
+
+.videoGallery {
+    display: inline;
+}
+
+.videoGallery > iframe {
+	width: 25vw;
+	height: 30vh;
+    padding-bottom: 20px;
+}
+
+.videoGallery img {
+	width: 25vw;
+	height: 30vh;
+    padding-bottom: 20px;
+}
+
+/* width */
+::-webkit-scrollbar {width: 15px;}
+
+/* Track */
+::-webkit-scrollbar-track {
+box-shadow: inset 0 0 6px rgb(0 0 0 / 30%);
+background: #5f5b5b;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+
+background: #282828;
+box-shadow: inset 0 0 6px rgb(0 0 0 / 30%);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: #311e00;
+}
+
+body {
+	background: linear-gradient(-45deg, #100400, #170000, #191919, #260000);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+	height: 100vh;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.sphinxsidebar h3 {
+	font-size: 26px !important;
+	font-weight: bold;
+	font-style: italic;
+	border-bottom: 0.01rem solid white;
+}
+
+
+.sphinxsidebar li {
+	font-size: 14px !important;
+}

@@ -2,6 +2,8 @@
 
 ### Configure the UI
 
+#### Note: Remember that JSON does not allow comments so do not copy these examples directly.
+
 #### ```eopData/uiCfg.json```
 
 ```
@@ -36,6 +38,6 @@
 
 ```
 {
-    "isBlockLaunchWithoutEop": false // Should we stop the mod running if EOP is not enabled
+    "isBlockLaunchWithoutEop": false // Should we stop the mod running if EOP is not enabled (Read more about this option in the FAQ)
 }
 ```
