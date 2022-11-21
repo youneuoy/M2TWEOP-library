@@ -83,7 +83,7 @@ return [==[
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
         <p class="lastUpdatedMessage">Last updated: $(ldoc.updatetime)</p>
-        <a href="https://discord.gg/Epqjm8u2WK">
+        <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
         <br>

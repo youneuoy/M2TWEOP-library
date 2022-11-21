@@ -2,18 +2,14 @@
 
 M2TWEOP FAQ
 =================================
-
 This is a list of Frequently Asked Questions about M2TWEOP. Feel free to
 suggest new entries in our discord!
 
-Questions and answers
 --------------------------------------------
-
 
 .. glossary::
 	*Where can I download M2TWEOP?*
-		The latest version of m2tweop is located on the "Releases" tab of the M2TWEOP github, here: https://github.com/youneuoy/M2TWEOP-library/releases
-		You need to download the archive with the word "M2TWEOP" in the title and the extension .zip
+		The latest version of M2TWEOP is located on the "Releases" tab of the M2TWEOP github, here: https://github.com/youneuoy/M2TWEOP-library/releases. You need to download the archive with the word "M2TWEOP" in the title and the extension '.zip' (e.g M2TWEOP-beta-2.14.zip)
 
 	*How do I install M2TWEOP?*
 		Just unpack the downloaded archive into the folder with your modification.

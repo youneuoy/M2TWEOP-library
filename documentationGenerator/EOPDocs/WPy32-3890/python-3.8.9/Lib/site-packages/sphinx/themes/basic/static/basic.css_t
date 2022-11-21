@@ -50,7 +50,12 @@ div.related li.right {
 /* -- sidebar --------------------------------------------------------------- */
 
 div.sphinxsidebarwrapper {
-    padding: 10px 5px 0 10px;
+    overflow-y: auto;
+    height: 100vh;
+    padding-left: 4px;
+    padding-top: 14px;
+    padding-right: 4px;
+    padding-bottom: 8px;
 }
 
 div.sphinxsidebar {

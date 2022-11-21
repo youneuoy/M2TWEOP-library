@@ -4,6 +4,52 @@ a, p, h1, h2, h3, h4, li, code, em {
 	text-shadow: 20px black;
 }
 
+h1, h2, h3, h4 {
+	font-family: Georgia, serif;
+}
+
+
+/* Fade In */
+.body {
+	animation: fadein 5s;
+	-moz-animation: fadein 5s; /* Firefox */
+	-webkit-animation: fadein 5s; /* Safari and Chrome */
+	-o-animation: fadein 5s; /* Opera */
+  }
+
+  @keyframes fadein {
+	from {
+		opacity:0;
+	}
+	to {
+		opacity:1;
+	}
+  }
+  @-moz-keyframes fadein { /* Firefox */
+	from {
+		opacity:0;
+	}
+	to {
+		opacity:1;
+	}
+  }
+  @-webkit-keyframes fadein { /* Safari and Chrome */
+	from {
+		opacity:0;
+	}
+	to {
+		opacity:1;
+	}
+  }
+  @-o-keyframes fadein { /* Opera */
+	from {
+		opacity:0;
+	}
+	to {
+		opacity: 1;
+	}
+  }
+
 
 code {
     background-color: #525252 !important;
@@ -149,7 +195,7 @@ body {
 }
 
 .type .m {
-    color: rgb(178, 0, 113);
+    color: rgb(0, 167, 197);
 }
 
 .type {
@@ -163,7 +209,8 @@ body {
 .videoGallery > iframe {
 	width: 25vw;
 	height: 30vh;
-    padding-bottom: 20px;
+	padding: 5px;
+	padding-bottom: 20px;
 }
 
 .videoGallery img {
@@ -190,15 +237,56 @@ box-shadow: inset 0 0 6px rgb(0 0 0 / 30%);
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-background: #311e00;
+background: gold;
 }
 
 body {
 	background: linear-gradient(-45deg, #100400, #170000, #191919, #260000);
 	background-size: 400% 400%;
-	animation: gradient 15s ease infinite;
+	animation: gradient 15s ease infinite;;
+	-moz-animation: gradient 15s ease infinite; /* Firefox */
+	-webkit-animation: gradient 15s ease infinite; /* Safari and Chrome */
+	-o-animation: gradient 15s ease infinite; /* Opera */
 	height: 100vh;
 }
+
+
+  @-webkit-keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+  @-o-keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+  @-moz-keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
 
 @keyframes gradient {
 	0% {
