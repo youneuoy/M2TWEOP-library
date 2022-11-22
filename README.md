@@ -42,9 +42,6 @@ EOP uses C++ and Assembly to modify the game's code in-memory and exposes this t
 * Added ability to write your own add-ons in C++. The library exports many different functions.
 * Many, many more
 
-## Getting Started
-[![M2TWEOP-Tutorials](https://i.imgur.com/ByebdSI.png)](https://youtu.be/hUvbcz8i7Wk)
-
 ## Examples
 
 ### Removing engine limits
@@ -76,6 +73,9 @@ function onGeneralAssaultsGeneral(attacker, defender)
 end
 ```
 For a full list of EOP Events, see [here](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html)
+
+## Getting Started
+[![M2TWEOP-Tutorials](https://i.imgur.com/ByebdSI.png)](https://youtu.be/hUvbcz8i7Wk)
 
 ### Creators
 * **youneuoy** - Project founder, Main Developer
