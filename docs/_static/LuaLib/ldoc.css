@@ -31,9 +31,9 @@ body {
   display: none;
 }
 
-a:link { color: #eff1f9; border-bottom: 5px; }
-a:visited { color: #eff1f9; }
-a:hover { color: #faf500c2; }
+a:link { color: #ffffff; border-bottom: 5px; }
+a:visited { color: #ffffff; }
+a:hover { color: gold; }
 
 h1 {font-size:24px;font-weight: bold;}
 h2 { font-size:20px; font-weight: bold; }
@@ -52,8 +52,7 @@ code, tt {
 }
 span.parameter {
   font-family: monospace;
-  font-weight: bold;
-  color: #efac3c;
+  color: #fffcf7;
 }
 span.parameter:after {
   content:":";
@@ -111,7 +110,6 @@ color: #f6d060;
 
 #content {
   color: #e0e0e0;
-
   margin-left: 21vw;
 
   /* width-max: 700px; */
@@ -241,16 +239,9 @@ table.module_list, table.function_list {
   border-collapse: collapse;
   margin-top: 0px;
 }
-table.module_list, table.function_list a {
-text-underline-offset: 2px;
-text-decoration: solid 0.5px underline #cfcfcfba;
-font-weight: bold;
-color: #d5d5d5;
-}
+table.module_list, table.function_list a {/* text-underline-offset: 2px; */text-decoration: solid 0.5px underline #cfcfcfba;font-weight: bold;color: #efefef;}
 
-table.module_list, table.function_list a:hover {
-color: #ffb844;
-}
+table.module_list, table.function_list a:hover {color: #ffb844;}
 
 table.module_list td, table.function_list td {
   border-width: 1px;
@@ -262,14 +253,25 @@ table.module_list td, table.function_list td {
 }
 table.module_list td.name, table.function_list td.name {
 font-size: 16px;
-background-color: #3e0101;
+background-color: #2e0a00;
 min-width: 200px;
 border-right-width: 0px;
 }
 table.module_list td.summary, table.function_list td.summary {
-  background-color: #4d1111; width: 100%; border-left-width: 0px;
+  background-color: #430f00; width: 100%; border-left-width: 0px;
   color: white;
 font-size: 16px;
+}
+
+span.types > a {
+  color: #d7d7d7;
+}
+span.types > a:hover {
+  color: gold;
+}
+
+.type {
+  color: #d7d7d7;
 }
 
 dl.function {
@@ -280,7 +282,7 @@ dl.function {
   border-bottom: solid 3px rgb(0 0 0);
   border-left: solid 3px rgb(11 15 22);
   border-right: solid 3px rgb(0 0 0);
-  background-color: #5c1717;
+  background-color: #210501;
   box-shadow: inset 0 0 6px rgb(42 42 42);
 }
 
@@ -406,7 +408,7 @@ text-align: center;
 
 .welcomeDiv {
 box-shadow: inset 0 0 6px rgb(0 0 0);
-background: #3e0101;
+background: #320b01;
 padding-bottom: 1px;
 list-style: none;
 }

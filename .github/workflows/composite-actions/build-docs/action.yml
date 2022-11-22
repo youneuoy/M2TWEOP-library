@@ -7,22 +7,29 @@ inputs:
 runs:
   using: "composite"
   steps:
-      # Clear out docs folder before copying
+      # # Clear out docs folder before copying
       - name: Delete everything in the docs folder
         run: |
-           rm -rf docs && mkdir docs
+           rm -rf docs
+           mkdir docs
         shell: bash
 
       # Copy the docs
       - name: Online docs - Copy generated documentation to docs folder
         run: |
             cp -R "documentationGenerator/EOPDocs/build/html/." "docs"
+            mkdir docs/_static/LuaLib/extra
         shell: bash
 
       # Add the .nojekyll files to the docs folder
       - name: Create .nojekyll files
         run: |
             touch docs/.nojekyll
+        shell: bash
+
+      - name: Copy over ImGUI Docs
+        run: |
+            cp "documentationGenerator/EOPDocs/build/html/_static/LuaLib/readme_imgui.md.html" "docs/_static/LuaLib/extra"
         shell: bash
 
       # Force push the new docs
