@@ -360,9 +360,6 @@
     <ClInclude Include="eopSounds.h">
       <Filter>features\soundThings</Filter>
     </ClInclude>
-    <ClInclude Include="m2tweopConstData.h">
-      <Filter>Файлы ресурсов</Filter>
-    </ClInclude>
     <ClInclude Include="battlemapWorker.h">
       <Filter>features\battlemapWorker</Filter>
     </ClInclude>
