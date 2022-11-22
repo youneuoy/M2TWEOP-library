@@ -43,7 +43,7 @@ EOP uses C++ and Assembly to modify the game's code in-memory and exposes this t
 * Many, many more
 
 ## Getting Started
-[![M2TWEOP-Tutorials](https://i.imgur.com/ixEuyev.png)](https://youtu.be/hUvbcz8i7Wk)
+[![M2TWEOP-Tutorials](https://i.imgur.com/ByebdSI.png)](https://youtu.be/hUvbcz8i7Wk)
 
 ## Examples
 
