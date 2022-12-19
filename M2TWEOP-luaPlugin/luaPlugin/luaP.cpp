@@ -271,7 +271,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	* Sets the new maximum amount of building levels within a chain.
 	* @function M2TWEOP.setBuildingChainLimit
-	* @tparam int limit default: 9
+	* @tparam int limit default: 9, maximum: 57
 	* @usage
 	* M2TWEOP.setBuildingChainLimit(12);
 	*/
@@ -1216,9 +1216,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int religion
 	@tfield int money
 	@tfield factionStratMapStruct facStrat
-	@tfield int numOfNamedCharacters
+	@tfield int numOfNamedCharacters includes literally all characters without distinction (so also wives, children, dead and those sent off map)
 	@tfield getNamedCharacter getNamedCharacter
-	@tfield int numOfCharacters
+	@tfield int numOfCharacters includes all the characters present on the strat map
 	@tfield getCharacter getCharacter
 	@tfield int stacksNum
 	@tfield getStack getStack
@@ -1517,7 +1517,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.settlementStruct.set("ownerFaction", &settlementStruct::ownerFac);
 	/***
 	Change owner faction of settlement.
-	All agents, armies, etc. leave settlement
+	All agents, armies, etc. leave settlement in the order the factions are built in the file, so not necessarily the one of the playable factions list
 	@function settlementStruct:changeOwner
 	@tparam factionStruct newOwner
 	@usage
@@ -1860,7 +1860,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getUnit getUnit
 	@tfield int numOfUnits
 	@tfield getCharacter getCharacter
-	@tfield int numOfCharacters
+	@tfield int numOfCharacters Includes Auxiliary generals and agents (i.e all characters excluding the leading general)
 	@tfield stackStruct boardedArmy army embarked on this fleet stack
 	@tfield stackStruct shipArmy fleet that this army stack is embarked on
 	@tfield portStruct blockedPort
