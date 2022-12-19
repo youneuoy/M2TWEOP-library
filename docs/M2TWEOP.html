@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>What is M2TW Engine Overhaul Project? &#8212; M2TWEOP 2.1 documentation</title>
+    <title>About M2TWEOP &#8212; M2TWEOP 2.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -40,14 +40,9 @@
 <p class="blurb">Designed to expand the capabilities of the game Medieval 2: Total War</p>
 
 
-
-
-<p>
-<iframe src="https://ghbtns.com/github-btn.html?user=youneuoy&repo=M2TWEOP-library&type=watch&count=true&size=large&v=2"
-  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
-</p>
-
-
+<a target="_blank" href="https://discord.gg/Epqjm8u2WK">
+  <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=ffffff&label=DISCORD&style=for-the-badge"/>
+</a>
 
 
 
@@ -55,22 +50,13 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="faq.html">M2TWEOP FAQ</a></li>
 <li class="toctree-l1"><a class="reference internal" href="articles.html">M2TWEOP’s Tutorials</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">What is M2TW Engine Overhaul Project?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#how-does-it-work">How does it work?</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#features">Features</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#examples">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#removing-engine-limits">Removing engine limits</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#playing-sounds-displaying-guis-and-spawning-units">Playing sounds, displaying GUIs and spawning units</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#creators">Creators</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#contributors">Contributors</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="#projects">Projects</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#compatibility">Compatibility</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">About M2TWEOP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#releases">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#creators">Creators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#compatibility">Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#license">License</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#build">Build</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#support-the-project">Support the project</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#disclaimer">Disclaimer</a></li>
@@ -116,6 +102,10 @@
 <img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Donate">
 </a>
 </p>
+<p>
+    <iframe src="https://ghbtns.com/github-btn.html?user=youneuoy&repo=M2TWEOP-library&type=star&count=true&size=large&v=2"
+      allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
 
 
 
@@ -129,70 +119,15 @@
 
           <div class="body" role="main">
             
-  <section id="what-is-m2tw-engine-overhaul-project">
-<h1>What is M2TW Engine Overhaul Project?<a class="headerlink" href="#what-is-m2tw-engine-overhaul-project" title="Permalink to this headline">¶</a></h1>
-<p>M2TW Engine Overhaul Project is designed to expand the capabilities of the game <em>Medieval 2: Total War</em>.</p>
+  <section id="about-m2tweop">
+<h1>About M2TWEOP<a class="headerlink" href="#about-m2tweop" title="Permalink to this headline">¶</a></h1>
 </section>
-<section id="how-does-it-work">
-<h1>How does it work?<a class="headerlink" href="#how-does-it-work" title="Permalink to this headline">¶</a></h1>
-<p>EOP uses C++ and Assembly to modify the game’s code in-memory and exposes this to the end user via Lua scripts and the <a class="reference external" href="https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html">EOP Lua Library</a></p>
-</section>
-<section id="features">
-<h1>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><p>Hugely expanded Lua scripting system that integrates seamlessly with existing campaign_script scripts, hot-reload, new custom console, debugger and much more</p></li>
-<li><p>Place .fbx models anywhere on the strategy map with full animation and texture support</p></li>
-<li><p>Play custom sounds or music with support for WAV, OGG/Vorbis and FLAC</p></li>
-<li><p>Unlocks all vanilla console commands</p></li>
-<li><p>Create your own GUIs and overlays using the popular <a class="reference external" href="https://github.com/ocornut/imgui">ImgGui</a></p></li>
-<li><p>New custom EDU system that allows the creation and modification of new units without the need to restart the game</p></li>
-<li><p>Play out Hotseat battles online and transfer the results back to the campaign map</p></li>
-<li><p>Set your own limits for the number of religions, ancillaries, bodyguard units, building chains, max unit size</p></li>
-<li><p>Set the boundaries of the number of soldiers in units and the size of the battle map</p></li>
-<li><p>Fixed many engine bugs, crashes and oversights (e.g crashes when using berserkers in battle)</p></li>
-<li><p>Edit worldpkgdesc for any settlement on the fly without the need to restart the game</p></li>
-<li><p>Custom keybinding support</p></li>
-<li><p>Added ability to write your own add-ons in C++. The library exports many different functions.</p></li>
-<li><p>Many, many more</p></li>
-</ul>
-</section>
-<section id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
-<section id="removing-engine-limits">
-<h2>Removing engine limits<a class="headerlink" href="#removing-engine-limits" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kr">function</span> <span class="nf">onPluginLoad</span><span class="p">()</span>
-    <span class="n">M2TWEOP</span><span class="p">.</span><span class="n">unlockGameConsoleCommands</span><span class="p">();</span>
-    <span class="n">M2TWEOP</span><span class="p">.</span><span class="n">setAncillariesLimit</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
-    <span class="n">M2TWEOP</span><span class="p">.</span><span class="n">setMaxBgSize</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
-    <span class="n">M2TWEOP</span><span class="p">.</span><span class="n">setReligionsLimit</span><span class="p">(</span><span class="mi">50</span><span class="p">);</span>
-    <span class="n">M2TWEOP</span><span class="p">.</span><span class="n">setBuildingChainLimit</span><span class="p">(</span><span class="mi">40</span><span class="p">);</span>
-    <span class="n">M2TWEOP</span><span class="p">.</span><span class="n">setGuildCooldown</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
-<span class="kr">end</span>
-</pre></div>
-</div>
-</section>
-<section id="playing-sounds-displaying-guis-and-spawning-units">
-<h2>Playing sounds, displaying GUIs and spawning units<a class="headerlink" href="#playing-sounds-displaying-guis-and-spawning-units" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="c1">-- onGeneralAssaultsGeneral is a custom EOP event</span>
-<span class="kr">function</span> <span class="nf">onGeneralAssaultsGeneral</span><span class="p">(</span><span class="n">attacker</span><span class="p">,</span> <span class="n">defender</span><span class="p">)</span>
-        <span class="kr">if</span><span class="p">(</span><span class="n">isNotNull</span><span class="p">(</span><span class="n">attacker</span><span class="p">))</span> <span class="kr">then</span>
-            <span class="c1">-- Check if the character is a Nazgul</span>
-            <span class="kr">if</span><span class="p">(</span><span class="n">hasTrait</span><span class="p">(</span><span class="n">attacker</span><span class="p">,</span> <span class="s2">&quot;NazgulRace&quot;</span><span class="p">))</span> <span class="kr">then</span>
-                <span class="c1">-- Play a sound</span>
-                <span class="n">playSound</span><span class="p">(</span><span class="n">nazgulScream</span><span class="p">);</span>
-                <span class="c1">-- Display some text</span>
-                <span class="n">showWindow</span><span class="p">(</span><span class="s2">&quot;The Nazgul have arrived.&quot;</span><span class="p">);</span>
-                <span class="c1">-- Spawn a new unit</span>
-                <span class="n">spawnUnit</span><span class="p">(</span><span class="s1">&#39;Gondor Infantry&#39;</span><span class="p">,</span> <span class="s1">&#39;Anorien&#39;</span> <span class="p">,</span> <span class="s1">&#39;Minas Tirith&#39;</span> <span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
-        <span class="kr">end</span>
-    <span class="kr">end</span>
-<span class="kr">end</span>
-</pre></div>
-</div>
-<p>For a full list of EOP Events, see <a class="reference external" href="https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html">here</a></p>
+<section id="releases">
+<h1>Releases<a class="headerlink" href="#releases" title="Permalink to this headline">¶</a></h1>
+<p>The latest version of M2TWEOP can be found at <a class="reference external" href="https://github.com/youneuoy/M2TWEOP-library/releases">https://github.com/youneuoy/M2TWEOP-library/releases</a>. For install instructions, please see the FAQ.</p>
 </section>
 <section id="creators">
-<h2>Creators<a class="headerlink" href="#creators" title="Permalink to this headline">¶</a></h2>
+<h1>Creators<a class="headerlink" href="#creators" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li><p><strong>youneuoy</strong> - Project founder, Main Developer</p></li>
 <li><p><strong>Jojo00182</strong> - Great code contributions, engine bugfixes, reversing structs and much more</p></li>
@@ -200,7 +135,7 @@
 </ul>
 </section>
 <section id="contributors">
-<h2>Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline">¶</a></h2>
+<h1>Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li><p><strong>Edmond</strong> - Project idea, first attempts to implement hotseats with online battles</p></li>
 <li><p><strong>Xamax</strong> - Video tutorials, testing and many great suggestions</p></li>
@@ -210,33 +145,25 @@
 <li><p><strong>Callistonian</strong> - editing of documentation, lua examples and feedback</p></li>
 </ul>
 </section>
-</section>
-<section id="projects">
-<h1>Projects<a class="headerlink" href="#projects" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><p><a class="reference external" href="https://github.com/youneuoy/M2TWEOP-library">M2TWEOP Library</a> - Main project (C++ and Assembly)</p></li>
-<li><p><a class="reference external" href="https://github.com/youneuoy/M2TWEOP-luaPlugin">M2TWEOP LUA plugin</a> - Allows you to write custom scripts in the Lua programming using M2TWEOP-library</p></li>
-</ul>
 <section id="compatibility">
-<h2>Compatibility<a class="headerlink" href="#compatibility" title="Permalink to this headline">¶</a></h2>
+<h1>Compatibility<a class="headerlink" href="#compatibility" title="Permalink to this headline">¶</a></h1>
 <p>This program works with game versions 1.5 (disk version) and 1.52 (steam version).</p>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li><p>Check the <a class="reference external" href="https://youneuoy.github.io/M2TWEOP-library/faq.html#questions-and-answers">F.A.Q</a></p></li>
 </ul>
 <p>If you use an antivirus, add the program to the exceptions! There may be false positives.</p>
 </section>
 <section id="license">
-<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<h1>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
 <p>The project uses the <a class="reference external" href="https://www.gnu.org/licenses/gpl-3.0.html">GPL-3.0 License</a>.</p>
-</section>
 </section>
 <section id="build">
 <h1>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h1>
 <p><strong>Requirements</strong></p>
-<p>M2TWEOP is developed in C++ and Assembly.</p>
+<p>M2TWEOP is developed with C++ and Assembly.</p>
 <ul class="simple">
 <li><p>Microsoft Visual Studio 2019 (<a class="reference external" href="https://community.chocolatey.org/packages/visualstudio2019community">https://community.chocolatey.org/packages/visualstudio2019community</a>)</p></li>
 <li><p>DirectX SDK 2009 (<a class="reference external" href="https://community.chocolatey.org/packages/directx-sdk">https://community.chocolatey.org/packages/directx-sdk</a>)</p></li>

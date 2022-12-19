@@ -507,8 +507,8 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2022-11-21 11:19:40</p>
-        <a href="https://discord.gg/Epqjm8u2WK">
+        <p class="lastUpdatedMessage">Last updated: 2022-12-19 17:24:23</p>
+        <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
         <br>
@@ -2175,7 +2175,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     <ul>
         <li><span class="parameter">limit</span>
             <span class="types"><span class="type">int</span></span>
-         default: 9
+         default: 9, maximum: 57
         </li>
     </ul>
 
@@ -4964,9 +4964,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
         </li>
         <li><span class="parameter">numOfNamedCharacters</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         includes literally all characters without distinction (so also wives, children, dead and those sent off map)
         </li>
         <li><span class="parameter">getNamedCharacter</span>
             <span class="types"><a class="type" href="index.html#factionStruct:getNamedCharacter">getNamedCharacter</a></span>
@@ -4976,9 +4974,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
         </li>
         <li><span class="parameter">numOfCharacters</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         includes all the characters present on the strat map
         </li>
         <li><span class="parameter">getCharacter</span>
             <span class="types"><a class="type" href="index.html#factionStruct:getCharacter">getCharacter</a></span>
@@ -5769,7 +5765,7 @@ ourFacName = ourFac:getFactionName();
     <div class="functionDescription">
 
 <p>Change owner faction of settlement. </p>
-<pre><code>All agents, armies, etc. leave settlement
+<pre><code>All agents, armies, etc. leave settlement in the order the factions are built in the file, so not necessarily the one of the playable factions list
 </code></pre>
 
     </div>
@@ -6706,9 +6702,7 @@ currSet:changeOwner(fac1);
         </li>
         <li><span class="parameter">numOfCharacters</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Includes Auxiliary generals and agents (i.e all characters excluding the leading general)
         </li>
         <li><span class="parameter">boardedArmy</span>
             <span class="types"><a class="type" href="index.html#stackStruct">stackStruct</a></span>
