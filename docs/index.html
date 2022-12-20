@@ -158,7 +158,11 @@ EOP uses C++ and Assembly to modify the game's code in-memory and exposes this t
 <h3>Breaking Engine Limits</h3>
 <pre class="type">
 <span class="comment">-- &lt;YOUR_MOD_FOLDER&gt;/youneuoyData/plugins/lua/luaPluginScript.lua</span>
+<<<<<<< HEAD
+<span class="kr">function</span><span class="p"> </span><span class="nf">onPluginLoad</span>
+=======
 <span class="kr">function</span><span class="p"> </span><span class="nf">onPluginLoad()</span>
+>>>>>>> 2e9ce8bfd0b776f58c9d52cffe720b527963a822
   <span class="n">M2TWEOP</span><span class="p">.</span><span class="f">unlockGameConsoleCommands</span><span class="p">();</span>
   <span class="n">M2TWEOP</span><span class="p">.</span><span class="f">setAncillariesLimit</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
   <span class="n">M2TWEOP</span><span class="p">.</span><span class="f">setMaxBgSize</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>

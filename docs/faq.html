@@ -133,7 +133,14 @@ suggest new entries in our discord!</p>
 </dd>
 <dt id="term-I-heard-that-M2TWEOP-allows-you-to-write-plugins-in-the-lua-programming-language.-How-to-do-it"><em>I heard that M2TWEOP allows you to write plugins in the lua programming language. How to do it?</em><a class="headerlink" href="#term-I-heard-that-M2TWEOP-allows-you-to-write-plugins-in-the-lua-programming-language.-How-to-do-it" title="Permalink to this term">¶</a></dt><dd><p>Read <a class="reference external" href="https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html">https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html</a> or watch a tutorial here: <a class="reference external" href="https://youtu.be/hUvbcz8i7Wk">https://youtu.be/hUvbcz8i7Wk</a></p>
 </dd>
-<dt id="term-I-made-a-great-modification-using-M2TWEOP-features.-How-can-I-make-it-possible-to-start-the-modification-only-with-M2TWEOP-so-that-it-is-impossible-to-start-it-with-standard-means-via-batch-file-etc"><em>I made a great modification using M2TWEOP features. How can I make it possible to start the modification only with M2TWEOP (so that it is impossible to start it with standard means - via batch file, etc)?</em><a class="headerlink" href="#term-I-made-a-great-modification-using-M2TWEOP-features.-How-can-I-make-it-possible-to-start-the-modification-only-with-M2TWEOP-so-that-it-is-impossible-to-start-it-with-standard-means-via-batch-file-etc" title="Permalink to this term">¶</a></dt><dd><p>You should run the M2TWEOP launcher, check the “Block modification launch without EOP” parameter in the settings (“game” submenu). Next, you should replace all “type” fields in your “export_descr_unit.txt” file with “eopOnlyType”. After that, your mod will not work unless the user launches it with EOP.</p>
+<dt id="term-How-can-I-prevent-users-from-running-my-mod-without-having-EOP-enabled"><em>How can I prevent users from running my mod without having EOP enabled?</em><a class="headerlink" href="#term-How-can-I-prevent-users-from-running-my-mod-without-having-EOP-enabled" title="Permalink to this term">¶</a></dt><dd><p>You should run the M2TWEOP launcher, check the “Block modification launch without EOP” parameter in the settings (“game” submenu). Next, you should replace all “type” fields in your “export_descr_unit.txt” file with “eopOnlyType”. After that, your mod will not work unless the user launches it with EOP.</p>
+</dd>
+<dt id="term-How-can-I-use-M2TWEOP-and-ReShade-together"><em>How can I use M2TWEOP and ReShade together?</em><a class="headerlink" href="#term-How-can-I-use-M2TWEOP-and-ReShade-together" title="Permalink to this term">¶</a></dt><dd><ol class="arabic simple">
+<li><p>Delete d3d9.dll in Medieval 2 folder if you have one there already</p></li>
+<li><p>Install ReShade like normal</p></li>
+<li><p>Rename d3d9.dll in Medieval 2 folder added by ReShade to dxgi.dll</p></li>
+<li><p>Run mod via M2TWEOP like normal</p></li>
+</ol>
 </dd>
 </dl>
 </section>
