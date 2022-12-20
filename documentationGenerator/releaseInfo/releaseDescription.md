@@ -15,6 +15,7 @@
 - Settings menu now shows the EOP version in use - *Medik*
 
 ### **Library**
+- Custom battles: now traits added to characters - *youneuoy*
 
 ### **Lua Plugin**
 

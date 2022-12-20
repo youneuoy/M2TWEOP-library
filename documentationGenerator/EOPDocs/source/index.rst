@@ -48,7 +48,7 @@ M2TWEOP: Medieval 2 Engine Overhaul Project
 	<h3>Breaking Engine Limits</h3>
 	<pre class="type">
 	<span class="comment">-- &lt;YOUR_MOD_FOLDER&gt;/youneuoyData/plugins/lua/luaPluginScript.lua</span>
-	<span class="kr">function</span><span class="p"> </span><span class="nf">onPluginLoad</span>
+	<span class="kr">function</span><span class="p"> </span><span class="nf">onPluginLoad()</span>
 	  <span class="n">M2TWEOP</span><span class="p">.</span><span class="f">unlockGameConsoleCommands</span><span class="p">();</span>
 	  <span class="n">M2TWEOP</span><span class="p">.</span><span class="f">setAncillariesLimit</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
 	  <span class="n">M2TWEOP</span><span class="p">.</span><span class="f">setMaxBgSize</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
