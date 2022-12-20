@@ -454,10 +454,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 
 	/***
-	Add a new .cas campaign strategy model to the game with a unique ID.
+	Add a new .cas campaign strategy model to the game with a unique ID. This should be called during onPluginLoad()
 	@function objects.addModelToGame
-	@param string relative path from the modfolder (starting with "data/").
-    @param modelId integer Unique ID to use the model later.
+	@tparam string path Relative path from the modfolder (starting with "data/").
+    @tparam int modelId  Unique ID to use the model later.
 	@usage
 	stratmap.objects.addModelToGame("data/models_strat/residences/invisible.CAS",1);
 	*/

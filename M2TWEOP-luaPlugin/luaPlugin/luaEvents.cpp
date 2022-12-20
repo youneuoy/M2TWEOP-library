@@ -329,7 +329,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onChangeTurnNumFunc);
 
 	/***
-	Called on select worldpkgdesc for battlemap. See https://wiki.twcenter.net/index.php?title=.worldpkgdesc-M2TW. M2TWEOP will ignore the return value if its group does not match the required group!
+	Called on select worldpkgdesc for battlemap. See https://wiki.twcenter.net/index.php?title=.worldpkgdesc_-_M2TW. M2TWEOP will ignore the return value if its group does not match the required group!
 
 	@function onSelectWorldpkgdesc
 	@tparam string selectedRecordName
