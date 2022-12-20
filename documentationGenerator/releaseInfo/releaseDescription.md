@@ -17,7 +17,7 @@
 <!-- ### **Lua Plugin** -->
 
 ### **Documentation**
-- Added Fynn's documentation and examples. Now pretty much every single function is documented! - *Fynn and Medik*
+- Added Fynn's documentation and examples. Now pretty much every single function is now documented! - *Fynn and Medik*
 
 <!-- ### **Bugfixes** -->
 
