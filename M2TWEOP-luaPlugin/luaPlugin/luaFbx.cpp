@@ -46,11 +46,11 @@ void luaP::initEopFbx()
 
 
 	/***
-	Load new fbx model
+	Load a new fbx model.
 	@function M2TWEOPFBX.addFbxModel
-	@tparam string modelPath path to .fbx file
-	@tparam string texturePath path to .dds file
-	@tparam int modelID id what be used for this model
+	@tparam string modelPath Path to .fbx file.
+	@tparam string texturePath Path to .dds file
+	@tparam int modelID ID to be used for this model.
 
 	@usage
 	M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath().."/eopData/testmodel.fbx",M2TWEOP.getModPath().."/eopData/testtexture.dds",1);
@@ -58,9 +58,9 @@ void luaP::initEopFbx()
 	tables.M2TWEOPFBXTable.set_function("addFbxModel", &eopFbxHelpers::addFbxModel);
 
 	/***
-	Delete fbx model
+	Delete a fbx model.
 	@function M2TWEOPFBX.deleteFbxModel
-	@tparam int modelID model id
+	@tparam int modelID Model's ID that was specified when calling addFbxModel()
 
 	@usage
 	--1 is id here
@@ -71,9 +71,9 @@ void luaP::initEopFbx()
 
 
 	/***
-	Get fbx model
+	Get an added fbx model by it's ID.
 	@function M2TWEOPFBX.getFbxModel
-	@tparam int modelID model id
+	@tparam int modelID Model's ID that was specified when calling addFbxModel()
 	@treturn fbxModel fbx model, not it`s ID!
 
 	@usage
@@ -84,11 +84,11 @@ void luaP::initEopFbx()
 	tables.M2TWEOPFBXTable.set_function("getFbxModel", &eopFbxHelpers::getFbxModel);
 
 	/***
-	Create new fbx object with model. We can place object on map, etc
+	Create new fbx object with our previously loaded model. It can be placed on map, etc.
 	@function M2TWEOPFBX.addFbxObject
-	@tparam int modelID model id
-	@tparam int objectID id what be used for this object
-	@treturn fbxObject fbx object, not it`s ID!
+	@tparam int modelID Model's ID that was specified when calling addFbxModel()
+	@tparam int objectID The ID that the object should use
+	@treturn fbxObject The newly created FBX object (not it's ID)
 
 	@usage
 	--1 is model id here
@@ -100,9 +100,9 @@ void luaP::initEopFbx()
 	tables.M2TWEOPFBXTable.set_function("addFbxObject", &eopFbxHelpers::addFbxObject);
 
 	/***
-	Delete fbx object
+	Delete an fbx object.
 	@function M2TWEOPFBX.deleteFbxObject
-	@tparam fbxObject object fbx object, not it`s ID!
+	@tparam fbxObject object The created FBX object (not it's ID)
 
 	@usage
 	--1 is model id here
@@ -115,10 +115,10 @@ void luaP::initEopFbx()
 	tables.M2TWEOPFBXTable.set_function("deleteFbxObject", &eopFbxHelpers::deleteFbxObject);
 
 	/***
-	Get fbx object by id
+	Get an fbx object by it's ID.
 	@function M2TWEOPFBX.getFbxObject
-	@tparam fbxObject object fbx object, not it`s ID!
-	@treturn fbxObject fbx object, not it`s ID!
+	@tparam objectID int The ID of the FBX object you wish to retrieve
+	@treturn fbxObject The created FBX object (not it's ID)
 
 	@usage
 	--1 is model id here
@@ -133,7 +133,7 @@ void luaP::initEopFbx()
 
 
 	/***
-	Set fbx object coordinates
+	Set an fbx object's coordinates.
 	@function M2TWEOPFBX.setFbxObjectCoords
 	@tparam fbxObject fbx object
 	@tparam float x coord
@@ -152,7 +152,7 @@ void luaP::initEopFbx()
 	tables.M2TWEOPFBXTable.set_function("setFbxObjectCoords", &eopFbxHelpers::setFbxObjectCoords);
 
 	/***
-	Get fbx object coordinates
+	Get an fbx object's coordinates.
 	@function M2TWEOPFBX.getFbxObjectCoords
 	@tparam fbxObject fbx object
 	@treturn float x coord
@@ -172,7 +172,7 @@ void luaP::initEopFbx()
 	tables.M2TWEOPFBXTable.set_function("getFbxObjectCoords", &eopFbxHelpers::getFbxObjectCoords);
 
 	/***
-	Set fbx object size modifier
+	Set an fbx object's size modifier.
 	@function M2TWEOPFBX.setFbxObjectSize
 	@tparam fbxObject fbx object
 	@tparam float sizeModifier object size modifier
@@ -193,7 +193,7 @@ void luaP::initEopFbx()
 	tables.M2TWEOPFBXTable.set_function("setFbxObjectSize", &eopFbxHelpers::setFbxObjectSize);
 
 	/***
-	Get fbx object size modifier
+	Get an fbx object's size modifier.
 	@function M2TWEOPFBX.getFbxObjectSize
 	@tparam fbxObject fbx object
 	@treturn float sizeModifier object size modifier
@@ -214,7 +214,7 @@ void luaP::initEopFbx()
 	tables.M2TWEOPFBXTable.set_function("getFbxObjectSize", &eopFbxHelpers::getFbxObjectSize);
 
 	/***
-	Set fbx object draw state
+	Set an fbx object's draw state.
 	@function M2TWEOPFBX.setFbxObjectDrawState
 	@tparam fbxObject fbx object
 	@tparam bool is draw needed
@@ -239,7 +239,7 @@ void luaP::initEopFbx()
 	tables.M2TWEOPFBXTable.set_function("setFbxObjectDrawState", &eopFbxHelpers::setFbxObjectDrawState);
 
 	/***
-	Get fbx object draw state
+	Get an fbx object's draw state.
 	@function M2TWEOPFBX.getFbxObjectDrawState
 	@tparam fbxObject fbx object
 	@treturn bool is draw needed
@@ -266,7 +266,7 @@ void luaP::initEopFbx()
 
 
 	/***
-	Set fbx object animation state
+	Set an fbx object's animation state.
 	@function M2TWEOPFBX.setFbxObjectAnimState
 	@tparam fbxObject fbx object
 	@tparam bool is animation needed
@@ -293,7 +293,7 @@ void luaP::initEopFbx()
 	tables.M2TWEOPFBXTable.set_function("setFbxObjectAnimState", &eopFbxHelpers::setFbxObjectAnimState);
 
 	/***
-	Get fbx object animation state
+	Get an fbx object's animation state.
 	@function M2TWEOPFBX.getFbxObjectAnimState
 	@tparam fbxObject fbx object
 	@treturn bool is animation needed
@@ -322,13 +322,13 @@ void luaP::initEopFbx()
 
 
 	/***
-	Set fbx object draw type. I.e. on what part of game it drawed
+	Set fbx object draw type, i.e. on what part of the game it is drawn.
 	Can be:
-	1 - stratmap
-	2 - tactmap
-	0 - both maps
-
+	1 - Strategy Map
+	2 - Tactical/Battle Map
+	0 - Both
 	Default value - 1
+
 	@function M2TWEOPFBX.setFbxObjectDrawType
 	@tparam fbxObject fbx object
 	@tparam int current draw type
@@ -363,13 +363,13 @@ void luaP::initEopFbx()
 	*/
 	tables.M2TWEOPFBXTable.set_function("setFbxObjectDrawType", &eopFbxHelpers::setFbxObjectDrawType);
 	/***
-	Get fbx object draw type. I.e. on what part of game it drawed
+	Get fbx object draw type, i.e. on what part of game it is drawn.
 	Can be:
-	1 - stratmap
-	2 - tactmap
-	0 - both maps
-
+	1 - Strategy Map
+	2 - Tactical/Battle Map
+	0 - Both
 	Default value - 1
+
 	@function M2TWEOPFBX.getFbxObjectDrawType
 	@tparam fbxObject fbx object
 	@treturn int current draw type
