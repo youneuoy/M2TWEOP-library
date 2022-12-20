@@ -247,7 +247,6 @@
     <ClInclude Include="headersMEM.h" />
     <ClInclude Include="headersSTD.h" />
     <ClInclude Include="Injects.h" />
-    <ClInclude Include="m2tweopConstData.h" />
     <ClInclude Include="m2tweopMap.h" />
     <ClInclude Include="m2tweopMapManager.h" />
     <ClInclude Include="m2tweopTile.h" />
@@ -355,6 +354,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\AsmJit\headers\Regenerate.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="notes.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

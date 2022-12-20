@@ -15,13 +15,15 @@
 - Settings menu now shows the EOP version in use - *Medik*
 
 ### **Library**
+- Custom battles: now traits added to characters - *youneuoy*
 
 ### **Lua Plugin**
 
 ### **Documentation**
-- Restyled the LuaPlugin documentation to be easier to read and navigate
+- Restyled the LuaPlugin documentation to be easier to read and navigate - *Medik*
 
 ### **Bugfixes**
+- M2TWEOP DU fix(if last version adding unit types eop removed vanilla unit types from the end of its list - *youneuoy*
 
 ### **Links**
 * [EOP Documentation](https://youneuoy.github.io/M2TWEOP-library/)

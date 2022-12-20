@@ -16,12 +16,18 @@
     <link rel="shortcut icon" href="_static/EOPIcon.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="mainInfo.html" />
     <link rel="prev" title="How to play hotseat battles online" href="BATTLE_RESULT_TUTORIAL.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
   
+  <!-- Meta stuff -->
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  <meta property="og:title" content="M2TWEOP: Medieval 2 Engine Overhaul Project">
+  <meta property="og:description" content="M2TW Engine Overhaul Project is designed to expand the capabilities of the game Medieval 2: Total War. It uses C++ and Assembly to modify the game's code in-memory and exposes this to the end user via Lua scripts and the EOP Lua Plugin.">
+  <meta property="og:image" content="https://i.imgur.com/Bgq1qPT.png">
+
 
   </head><body>
   <div class="document">
@@ -35,28 +41,34 @@
 <p class="blurb">Designed to expand the capabilities of the game Medieval 2: Total War</p>
 
 
-
-
-<p>
-<iframe src="https://ghbtns.com/github-btn.html?user=youneuoy&repo=M2TWEOP-library&type=watch&count=true&size=large&v=2"
-  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
-</p>
-
-
+<a target="_blank" href="https://discord.gg/Epqjm8u2WK">
+  <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=ffffff&label=DISCORD&style=for-the-badge"/>
+</a>
 
 
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="mainInfo.html">Project info</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">M2TWEOP FAQ</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="articles.html">M2TWEOP’s Tutorials!</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="articles.html">M2TWEOP’s Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="BATTLE_RESULT_TUTORIAL.html">How to play hotseat battles online</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Configuring the EOP launcher and settings</a></li>
 <li class="toctree-l2"><a class="reference external" href="_static/Introduction_to_ImGui_v3.pdf#http://">Gui scripting basics by Erken, PDF file</a></li>
 <li class="toctree-l2"><a class="reference external" href="_static/Introduction_to_ImGui_v3.odt#http://">Gui scripting basics by Erken, ODT file</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="M2TWEOP.html">About M2TWEOP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="M2TWEOP.html#releases">Releases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="M2TWEOP.html#creators">Creators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="M2TWEOP.html#contributors">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="M2TWEOP.html#compatibility">Compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="M2TWEOP.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="M2TWEOP.html#license">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="M2TWEOP.html#build">Build</a></li>
+<li class="toctree-l1"><a class="reference internal" href="M2TWEOP.html#support-the-project">Support the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="M2TWEOP.html#disclaimer">Disclaimer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="M2TWEOP.html#acknowledgments">Acknowledgments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="M2TWEOP.html#version-history">Version History</a></li>
 </ul>
 
 
@@ -70,8 +82,9 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="articles.html">M2TWEOP’s Tutorials!</a><ul>
+  <li><a href="articles.html">M2TWEOP’s Tutorials</a><ul>
       <li>Previous: <a href="BATTLE_RESULT_TUTORIAL.html" title="previous chapter">How to play hotseat battles online</a></li>
+      <li>Next: <a href="mainInfo.html" title="next chapter">&lt;no title&gt;</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -97,6 +110,10 @@
 <img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Donate">
 </a>
 </p>
+<p>
+    <iframe src="https://ghbtns.com/github-btn.html?user=youneuoy&repo=M2TWEOP-library&type=star&count=true&size=large&v=2"
+      allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
 
 
 
@@ -114,6 +131,9 @@
 <h1>Configuring the EOP launcher and settings<a class="headerlink" href="#configuring-the-eop-launcher-and-settings" title="Permalink to this headline">¶</a></h1>
 <section id="configure-the-ui">
 <h2>Configure the UI<a class="headerlink" href="#configure-the-ui" title="Permalink to this headline">¶</a></h2>
+<section id="note-remember-that-json-does-not-allow-comments-so-do-not-copy-these-examples-directly">
+<h3>Note: Remember that JSON does not allow comments so do not copy these examples directly.<a class="headerlink" href="#note-remember-that-json-does-not-allow-comments-so-do-not-copy-these-examples-directly" title="Permalink to this headline">¶</a></h3>
+</section>
 <section id="eopdata-uicfg-json">
 <h3><code class="docutils literal notranslate"><span class="pre">eopData/uiCfg.json</span></code><a class="headerlink" href="#eopdata-uicfg-json" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
@@ -148,7 +168,7 @@
 <section id="eopdata-gamecfg-json">
 <h3><code class="docutils literal notranslate"><span class="pre">eopData/gameCfg.json</span></code><a class="headerlink" href="#eopdata-gamecfg-json" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;isBlockLaunchWithoutEop&quot;</span><span class="p">:</span> <span class="n">false</span> <span class="o">//</span> <span class="n">Should</span> <span class="n">we</span> <span class="n">stop</span> <span class="n">the</span> <span class="n">mod</span> <span class="n">running</span> <span class="k">if</span> <span class="n">EOP</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">enabled</span>
+    <span class="s2">&quot;isBlockLaunchWithoutEop&quot;</span><span class="p">:</span> <span class="n">false</span> <span class="o">//</span> <span class="n">Should</span> <span class="n">we</span> <span class="n">stop</span> <span class="n">the</span> <span class="n">mod</span> <span class="n">running</span> <span class="k">if</span> <span class="n">EOP</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">enabled</span> <span class="p">(</span><span class="n">Read</span> <span class="n">more</span> <span class="n">about</span> <span class="n">this</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">FAQ</span><span class="p">)</span>
 <span class="p">}</span>
 </pre></div>
 </div>

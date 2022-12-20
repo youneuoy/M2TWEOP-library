@@ -737,6 +737,11 @@ namespace battleCreator
 								fastFuncts::addAnchillary(newGeneral->genChar, resAnc);
 							}
 						}
+
+						for (auto& trait : newGen.traits)
+						{
+							fastFuncts::addTrait(newGeneral->genChar, trait.first.c_str(), trait.second);
+						}
 					}
 
 
