@@ -318,7 +318,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 
 	/***
-	Set the maximum number of religions in the mod (per descr_religions.txt)
+	Set the maximum number of religions in the mod (per descr\_religions.txt)
 	@function M2TWEOP.setReligionsLimit
 	@tparam int newLimit maximum: 127
 	@usage
@@ -625,17 +625,17 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.gameTable.set_function("createArmyInSettlement", &gameHelpers::createArmyInSettlement);
 	/***
-	Get a script counter value, works for counters and for event_counters
+	Get a script counter value, works for counters and for event\_counters
 	@function game.getScriptCounter
 	@tparam string counterName The name of the counter
-	@treturn bool isExist Returns true if the counter exists i.e it has been used at least once in any way in the campaign_script
+	@treturn bool isExist Returns true if the counter exists i.e it has been used at least once in any way in the campaign\_script
 	@treturn int counterValue Returns the value of the counter
 	@usage
 	isExist, counterValue = stratmap.game.getScriptCounter("SomeCounter")
 	*/
 	tables.gameTable.set_function("getScriptCounter", &gameHelpers::getScriptCounter);
 	/***
-	Set an event_counter value, does not work for counters, only event_counters.
+	Set an event\_counter value, does not work for counters, only event\_counters.
 	@function game.setScriptCounter
 	@tparam string counterName
 	@tparam int value
@@ -806,7 +806,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield float movePointsMax
 	@tfield float movePointsModifier
 	@tfield float movePoints
-	@tfield string ability see descr_hero_abilities.xml
+	@tfield string ability see descr\_hero\_abilities.xml
 	@tfield getTypeID getTypeID
 	@tfield setTypeID setTypeID
 	@tfield moveToTile moveToTile
@@ -1055,7 +1055,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Add a trait to the character.
 	@function namedCharacter:addTrait
-	@tparam string traitName Trait's internal name per export_descr_character_traits.txt
+	@tparam string traitName Trait's internal name per export\_descr\_character\_traits.txt
 	@tparam int traitLevel Trait's level.
 	@usage
 	ourNamedCharacter:addTrait("GoodCommander", 2)
@@ -1064,7 +1064,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Remove a trait from the character.
 	@function namedCharacter:removeTrait
-	@tparam string traitName Trait's internal name per export_descr_character_traits.txt
+	@tparam string traitName Trait's internal name per export\_descr\_character\_traits.txt
 	@usage
 	ourNamedCharacter:removeTrait("GoodCommander");
 	*/
@@ -1080,7 +1080,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.namedCharacter.set_function("getAncillary", &generalCharactericticsHelpers::getAnchillary);
 	/***
-	Add an ancillary to the named character using the name per export_descr_ancillaries.txt.
+	Add an ancillary to the named character using the name per export\_descr\_ancillaries.txt.
 	@function namedCharacter:addAncillary
 	@tparam string ancillaryName
 	@usage
@@ -1537,7 +1537,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Get the settlement's specific regligion's value
 	@function settlementStruct:getReligion
-	@tparam int religionID In order of descr_religions.txt, starting from 0
+	@tparam int religionID In order of descr\_religions.txt, starting from 0
 	@treturn float religionValue from 0 to 1
 	@usage
 	local firstRelVal = settlementStruct:getReligion(0) --get float of religion with ID 0
@@ -1546,7 +1546,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Set the settlement's specific religion's value, make sure the sum of all religion values does not exceed 1.0!
 	@function settlementStruct:setReligion
-	@tparam int religionID in order of descr_religions.txt, starting from 0
+	@tparam int religionID in order of descr\_religions.txt, starting from 0
 	@tparam float religionValue from 0 to 1
 	@usage
 	settlementStruct:setReligion(0, 0.5) --set religion with ID 0 as 50%
@@ -1645,7 +1645,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.building.set("hp", &building::hp);
 	types.building.set("settlement", &building::settlement);
 	/***
-	Get the name of the building type (the building chain in export_descr_buildings.txt).
+	Get the name of the building type (the building chain in export\_descr\_buildings.txt).
 
 	@function building:getType
 	@treturn string buildingType (building chain name)
@@ -1656,7 +1656,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.building.set_function("getType", &buildingStructHelpers::getType);
 	/***
-	Get name of building level (as per export_descr_buildings.txt).
+	Get name of building level (as per export\_descr\_buildings.txt).
 
 	@function building:getName
 	@treturn string buildingName
@@ -1956,7 +1956,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.stackStruct.set_function("createEOPUnit", &stackStructHelpers::createEOPUnit);
 	/***
-	Create a unit in the army by type from export_descr_unit.txt
+	Create a unit in the army by type from export\_descr\_unit.txt
 	@function stackStruct:createUnit
 	@tparam string type
 	@tparam int exp Experience. Maximum: 9.
@@ -1969,9 +1969,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.stackStruct.set_function("createUnit", &stackStructHelpers::createUnit);
 
 	/***
-	Create a unit in the army by index from export_descr_unit.txt
+	Create a unit in the army by index from export\_descr\_unit.txt
 	@function stackStruct:createUnitByIDX
-	@tparam int index Index (order in export_descr_unit.txt)
+	@tparam int index Index (order in export\_descr\_unit.txt)
 	@tparam int exp Experience. Maximum: 9.
 	@tparam int armor Armour level.
 	@tparam int weapon Weapon upgrade. Maximum: 1.
