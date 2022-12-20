@@ -54,17 +54,17 @@ void luaP::initCampaign()
 	/***
 	Basic campaign table.
 
-	@tfield factionStruct[31] factionsSortedByDescrStrat indexing starts at 1
+	@tfield factionStruct[31] factionsSortedByDescrStrat Table of factionStruct[31], indexing starts at 1.
 	@tfield int numberOfFactions
-	@tfield int numberHumanFactions number of player-controlled factions
-	@tfield factionStruct currentFaction faction whose turn is at the moment, can be set
+	@tfield int numberHumanFactions Number of player-controlled factions.
+	@tfield factionStruct currentFaction Faction whose turn it is at the moment, can be set.
 	@tfield int passedTurnsNum
-	@tfield float timescale factor for number turns per year, see descr_strat.txt
+	@tfield float timescale Factor for number of turns per year, see descr\_strat.txt
 	@tfield settlementStruct romeSettlement
 	@tfield settlementStruct constantinopleSettlement
-	@tfield float BrigandSpawnValue lower values increase spawn rate
-	@tfield float PirateSpawnValue lower values increase spawn rate
-	@tfield int FreeUpkeepForts number units with free_upkeep_unit EDU attribute who can get free upkeep in forts
+	@tfield float BrigandSpawnValue Lower values increase spawn rate.
+	@tfield float PirateSpawnValue Lower values increase spawn rate.
+	@tfield int FreeUpkeepForts Number of units who get free upkeep in forts.
 	@tfield float currentDate
 	@tfield int currentseason season (0=summer, 1=winter)
 	@tfield float startDate
@@ -72,7 +72,7 @@ void luaP::initCampaign()
 	@tfield float endDate
 	@tfield int endSeason season (0=summer, 1=winter)
 	@tfield int daysInBattle
-	@tfield float currentTimeInBattle 24 max, so calc as daysInBattle*24+currentTimeInBattle
+	@tfield float currentTimeInBattle 24 max, so calculate as daysInBattle*24+currentTimeInBattle.
 	@tfield checkDipStance checkDipStance
 	@tfield setDipStance setDipStance
 	@tfield GetUnitSize GetUnitSize
@@ -107,11 +107,11 @@ void luaP::initCampaign()
 	typeAll.campaignTable.set("daysInBattle", &campaign::daysInBattle);
 	typeAll.campaignTable.set("currentTimeInBattle", &campaign::currentTimeInBattle);
 	/***
-	Check diplomatic relations between factions
+	Check if a diplomatic relation between two factions.
 	@function campaignStruct:checkDipStance
-	@tparam dipRelType checkType
-	@tparam factionStruct fac1
-	@tparam factionStruct fac2
+	@tparam dipRelType checkType Example: dipRelType.war
+	@tparam factionStruct fac1 A faction.
+	@tparam factionStruct fac2 Another faction.
 	@treturn bool checkResult
 	@usage
 	local campaign=gameDataAll.get().campaignStruct;
@@ -121,11 +121,11 @@ void luaP::initCampaign()
 	*/
 	typeAll.campaignTable.set_function("checkDipStance", &m2tweopHelpers::checkDipStance);
 	/***
-	Set diplomatic relations between factions
+	Set a diplomatic relation between two factions.
 	@function campaignStruct:setDipStance
-	@tparam dipRelType relType
-	@tparam factionStruct fac1
-	@tparam factionStruct fac2
+	@tparam dipRelType relType Example: dipRelType.war
+	@tparam factionStruct fac1 A faction.
+	@tparam factionStruct fac2 Another faction.
 	@usage
 	local campaign=gameDataAll.get().campaignStruct;
 	local fac1=campaign.factionsSortedByDescrStrat[1];
@@ -170,7 +170,7 @@ void luaP::initP2()
 	*/
 	typeAll.gameDataAllTable = luaState.new_usertype<gameDataAllStruct>("gameDataAll");
 	/***
-	Call at start of script, this is a static object and pointer to it doesn't change
+	Call at the start of the script, this is a static object and the pointer to it doesn't change.
 	@function gameDataAll.get
 	@treturn gameDataAllStruct gameDataAll
 	@usage
@@ -195,7 +195,7 @@ void luaP::initP2()
 	@tfield int attackerYCoord
 	@tfield int defenderXCoord
 	@tfield int defenderYCoord
-	@tfield int sidesNum
+	@tfield int sidesNum Returns a battleSide[8]. Maximum: 8.
 	@tfield battleSide[8] sides
 
 	@table gameDataAll.battleStruct
@@ -215,14 +215,14 @@ void luaP::initP2()
 	//@section battleSide
 
 	/***
-	basic battleSide table
+	Basic battleSide table
 
 	@tfield bool isDefender
 	@tfield bool isCanDeploy
-	@tfield int[4] winConditions
+	@tfield int[4] winConditions Returns an int index of a wincondition.
 	@tfield getWinConditionString getWinConditionString
 	@tfield int armiesNum
-	@tfield trackedPointerArmy[8] armies
+	@tfield trackedPointerArmy[8] Returns a table of trackedPointerArmy. Maximum: 8.
 
 
 
@@ -279,7 +279,7 @@ void luaP::initP2()
 	//@section trackedPointerArmy
 
 	/***
-	basic trackedPointerArmy table
+	Basic trackedPointerArmy table
 
 	@tfield stackStruct army
 	@tfield deploymentAreaS deploymentArea
@@ -296,7 +296,7 @@ void luaP::initP2()
 	//@section deploymentAreaS
 
 	/***
-	basic trackedPointerArmy table
+	Basic trackedPointerArmy table
 
 	@tfield int coordsNum
 	@tfield getCoordPair getCoordPair
@@ -308,10 +308,10 @@ void luaP::initP2()
 	typeAll.deploymentAreaTable = luaState.new_usertype<deploymentAreaS>("deploymentAreaS");
 	typeAll.deploymentAreaTable.set("coordsNum", &deploymentAreaS::coordsNum);
 	/***
-	Get pair of coords with number
+	Get pair of coords with index.
 	@function deploymentAreaS:getCoordPair
-	@treturn float xCoord x coordinate of area
-	@treturn float yCoord y coordinate of area
+	@treturn float xCoord X coordinate of the area.
+	@treturn float yCoord Y coordinate of the area.
 	@usage
 	gameData=gameDataAll.get();
 	battleS=gameData.battleStruct;
