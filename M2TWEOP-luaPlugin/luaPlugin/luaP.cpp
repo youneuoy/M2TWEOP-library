@@ -454,10 +454,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 
 	/***
-	Add new cas stratmodel to game
+	Add a new .cas campaign strategy model to the game with a unique ID.
 	@function objects.addModelToGame
-	@tparam string modelPath relative(to modfolder) path
-	@tparam int modelId model id
+	@param string relative path from the modfolder (starting with "data/").
+    @param modelId integer Unique ID to use the model later.
 	@usage
 	stratmap.objects.addModelToGame("data/models_strat/residences/invisible.CAS",1);
 	*/
@@ -476,14 +476,14 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.objectsTable.set_function("setModel", sol::overload(&objectsHelpers::setModel,
 		&objectsHelpers::setModelOneVar));
 	/***
-	Replace custom tile. Change custom battlefield for coordinates.
+    Replace a custom tile. Change the custom battlefield on the specified coordinates.
 	@function objects.replaceTile
-	@tparam string label
-	@tparam int xCoord
-	@tparam int yCoord
-	@tparam string filename
-	@tparam string weather
-	@tparam string dayTime
+	@tparam string label  Identifier.
+	@tparam int xCoord  X coordinate of tile.
+	@tparam int yCoord  Y coordinate of tile.
+	@tparam string filename  Just the name, not full path (.wfc)
+	@tparam string weather Weather on the battle map.
+	@tparam string dayTime Time of day.
 	@usage
 	stratmap.objects.replaceTile("Helms-Deep_Province",167,158,"hornburg_amb.wfc","clear","midday");
 	*/
@@ -504,7 +504,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.cameraTable = luaState.create_table();
 	/***
-	Slow move camera to a tile
+	Slowly move the camera to the specified tile.
 	@function camera.move
 	@tparam int xCoord
 	@tparam int yCoord
@@ -513,7 +513,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.cameraTable.set_function("move", &cameraHelpers::moveStratCamera);
 	/***
-	Fast move camera to a tile
+	Quickly move the camera to the specified tile.
 	@function camera.jump
 	@tparam int xCoord
 	@tparam int yCoord
@@ -522,7 +522,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.cameraTable.set_function("jump", &cameraHelpers::snapStratCamera);
 	/***
-	Set zoom of stratcamera
+	Set the zoom level of the camera.
 	@function camera.zoom
 	@tparam float distance
 	@usage
@@ -550,35 +550,37 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 */
 	tables.gameTable = luaState.create_table();
 	/***
-	Call m2tw console command
+	Execute a Medieval II console command.
 	@function game.callConsole
 	@treturn string error note: string can be empty but not nil
 	@usage
 	function onCharacterSelected(selectedChar)
 		local err = stratmap.game.callConsole("add_money", "2321")
+		local err2 = stratmap.game.callConsole("create_unit", "testcharacter 'Cool Unit' 4 1 1 1")
 		print(err)
+		print(err2)
 	end
 	*/
 	tables.gameTable.set_function("callConsole", &gameHelpers::callConsole);
 	/***
-	Get factions number
+	Get the amount of factions
 	@function game.getFactionsCount
-	@treturn int facNumber number of factions
+	@treturn int facNumber Amount of factions
 	@usage
 	local facNum=stratmap.game.getFactionsCount();
 	*/
 	tables.gameTable.set_function("getFactionsCount", &gameHelpers::getFactionsCount);
 	/***
-	Get faction with index
+	Get a faction by the index, commonly used when iterating over all factions using getFactionsCount()
 	@function game.getFaction
-	@tparam int index
+	@tparam int Index of the faction.
 	@treturn factionStruct faction
 	@usage
 	faction=stratmap.game.getFaction(2);
 	*/
 	tables.gameTable.set_function("getFaction", &gameHelpers::getFaction);
 	/***
-	Get guild with index
+	Get a guild by the index.
 	@function game.getGuild
 	@tparam int index
 	@treturn guild guild
@@ -588,33 +590,33 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.gameTable.set_function("getGuild", &gameHelpers::getGuild);
 
 	/***
-	Create character at coords
+	Create a new character at the specified coordinates.
 	@function game.createCharacterByString
-	@tparam string type
-	@tparam factionStruct faction
-	@tparam int age
-	@tparam string name
-	@tparam string name2
-	@tparam int subFaction
-	@tparam string portrait_custom cannot be nil
-	@tparam int xCoord
-	@tparam int yCoord
-	@treturn character newCharacter
+	@tparam string type Character type, for example "named character".
+	@tparam factionStruct Faction the new character belongs to.
+	@tparam int age The character's age
+	@tparam string name The short name of the character.
+	@tparam string name2 The full name of the character.
+	@tparam int subFaction Set to 31 to disable.
+	@tparam string portrait_custom cannot be nil Name of the folder inside 'data/ui/custom_portraits folder. Can not be nil!
+	@tparam int xCoord X coordinate of the new character
+	@tparam int yCoord Y coordinate of the new character
+	@treturn character newCharacter Returns a character class, not a named character class!
 	@usage
 	newCharacter=stratmap.game.createCharacterByString("named character",stratmap.game.getFaction(0),18,"Name1","Name2",31,"custom_portrait_name",character.character.xCoord+5,character.character.yCoord);
 	*/
 	tables.gameTable.set_function("createCharacterByString", &gameHelpers::createCharacter);
 	/***
-	Create army for character
+	Create an army for a character. Commonly used after spawning a new character to set it's bodyguard unit.
 	@function game.createArmy
-	@tparam character ourGeneral
+	@tparam character ourGeneral Character class, not named character class!
 	@treturn stackStruct army
 	@usage
 	army=stratmap.game.createArmy(gen);
 	*/
 	tables.gameTable.set_function("createArmy", &gameHelpers::createArmy);
 	/***
-	Create army in settlement (don't need character)
+	Create an army in a settlement (don't need a character). Used to add units to an empty settlement.
 	@function game.createArmyInSettlement
 	@tparam settlementStruct settlement
 	@treturn stackStruct army
@@ -623,17 +625,17 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.gameTable.set_function("createArmyInSettlement", &gameHelpers::createArmyInSettlement);
 	/***
-	Get script counter value, works for counter and event\_counter
+	Get a script counter value, works for counters and for event_counters
 	@function game.getScriptCounter
-	@tparam string counterName
-	@treturn bool isExist
-	@treturn int counterValue
+	@tparam string counterName The name of the counter
+	@treturn bool isExist Returns true if the counter exists i.e it has been used at least once in any way in the campaign_script
+	@treturn int counterValue Returns the value of the counter
 	@usage
 	isExist, counterValue = stratmap.game.getScriptCounter("SomeCounter")
 	*/
 	tables.gameTable.set_function("getScriptCounter", &gameHelpers::getScriptCounter);
 	/***
-	Set event\_counter value, does not work for counter, only event\_counter
+	Set an event_counter value, does not work for counters, only event_counters.
 	@function game.setScriptCounter
 	@tparam string counterName
 	@tparam int value
@@ -673,8 +675,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int exp soldiers expierence. You can change it on stratmap and soldiers updated. Use @{setParams} if you need change several parameters at once.
 	@tfield int armourLVL soldiers armour. You can change it on stratmap and soldiers updated. Use @{setParams} if you need change several parameters at once.
 	@tfield int weaponLVL soldiers weapon. You can change it on stratmap and soldiers updated. Use @{setParams} if you need change several parameters at once.
-	@tfield int soldierCountStratMapMax better read only
-	@tfield int soldierCountBattleMap better read only
+	@tfield int soldierCountStratMapMax Read only
+	@tfield int soldierCountBattleMap Read only
 	@tfield character character
 	@tfield stackStruct army
 	@tfield kill kill
@@ -705,9 +707,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Set unit basic parameters
 	@function unit:setParams
-	@tparam int exp
-	@tparam int armor
-	@tparam int weapon
+	@tparam int exp Experience. Maximum: 9
+	@tparam int armor Armour level.
+	@tparam int weapon Weapon Upgrade. Maximum: 1
 	@usage
 	unit:setParams(0,0,0);
 	*/
