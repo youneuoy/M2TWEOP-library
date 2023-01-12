@@ -18,6 +18,7 @@
 
 ### **Documentation**
 - Added Fynn's documentation and examples. Now pretty much every single function is now documented! - *Fynn and Medik*
+- `onPluginLoad` function is now included by default with some valid options commeneted out and `M2TWEOP.unlockConsoleCommands()` enabled by default - *Medik* 
 
 <!-- ### **Bugfixes** -->
 
