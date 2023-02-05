@@ -271,7 +271,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	* Sets the new maximum amount of building levels within a chain.
 	* @function M2TWEOP.setBuildingChainLimit
-	* @tparam int limit default: 9
+	* @tparam int limit default: 9, maximum: 57
 	* @usage
 	* M2TWEOP.setBuildingChainLimit(12);
 	*/
@@ -318,7 +318,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 
 	/***
-	Set the maximum number of religions in the mod (per descr_religions.txt)
+	Set the maximum number of religions in the mod (per descr\_religions.txt)
 	@function M2TWEOP.setReligionsLimit
 	@tparam int newLimit maximum: 127
 	@usage
@@ -454,10 +454,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 
 	/***
-	Add new cas stratmodel to game
+	Add a new .cas campaign strategy model to the game with a unique ID. This should be called during onPluginLoad()
 	@function objects.addModelToGame
-	@tparam string modelPath relative(to modfolder) path
-	@tparam int modelId model id
+	@tparam string path Relative path from the modfolder (starting with "data/").
+    @tparam int modelId  Unique ID to use the model later.
 	@usage
 	stratmap.objects.addModelToGame("data/models_strat/residences/invisible.CAS",1);
 	*/
@@ -476,14 +476,14 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.objectsTable.set_function("setModel", sol::overload(&objectsHelpers::setModel,
 		&objectsHelpers::setModelOneVar));
 	/***
-	Replace custom tile. Change custom battlefield for coordinates.
+    Replace a custom tile. Change the custom battlefield on the specified coordinates.
 	@function objects.replaceTile
-	@tparam string label
-	@tparam int xCoord
-	@tparam int yCoord
-	@tparam string filename
-	@tparam string weather
-	@tparam string dayTime
+	@tparam string label  Identifier.
+	@tparam int xCoord  X coordinate of tile.
+	@tparam int yCoord  Y coordinate of tile.
+	@tparam string filename  Just the name, not full path (.wfc)
+	@tparam string weather Weather on the battle map.
+	@tparam string dayTime Time of day.
 	@usage
 	stratmap.objects.replaceTile("Helms-Deep_Province",167,158,"hornburg_amb.wfc","clear","midday");
 	*/
@@ -504,7 +504,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.cameraTable = luaState.create_table();
 	/***
-	Slow move camera to a tile
+	Slowly move the camera to the specified tile.
 	@function camera.move
 	@tparam int xCoord
 	@tparam int yCoord
@@ -513,7 +513,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.cameraTable.set_function("move", &cameraHelpers::moveStratCamera);
 	/***
-	Fast move camera to a tile
+	Quickly move the camera to the specified tile.
 	@function camera.jump
 	@tparam int xCoord
 	@tparam int yCoord
@@ -522,7 +522,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.cameraTable.set_function("jump", &cameraHelpers::snapStratCamera);
 	/***
-	Set zoom of stratcamera
+	Set the zoom level of the camera.
 	@function camera.zoom
 	@tparam float distance
 	@usage
@@ -550,35 +550,37 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 */
 	tables.gameTable = luaState.create_table();
 	/***
-	Call m2tw console command
+	Execute a Medieval II console command.
 	@function game.callConsole
-	@treturn string error note: string can be empty but not nil
+	@treturn string error Note: string can be empty but not nil
 	@usage
 	function onCharacterSelected(selectedChar)
 		local err = stratmap.game.callConsole("add_money", "2321")
+		local err2 = stratmap.game.callConsole("create_unit", "testcharacter 'Cool Unit' 4 1 1 1")
 		print(err)
+		print(err2)
 	end
 	*/
 	tables.gameTable.set_function("callConsole", &gameHelpers::callConsole);
 	/***
-	Get factions number
+	Get the amount of factions
 	@function game.getFactionsCount
-	@treturn int facNumber number of factions
+	@treturn int facNumber Amount of factions
 	@usage
 	local facNum=stratmap.game.getFactionsCount();
 	*/
 	tables.gameTable.set_function("getFactionsCount", &gameHelpers::getFactionsCount);
 	/***
-	Get faction with index
+	Get a faction by the index, commonly used when iterating over all factions using getFactionsCount()
 	@function game.getFaction
-	@tparam int index
+	@tparam int Index of the faction.
 	@treturn factionStruct faction
 	@usage
 	faction=stratmap.game.getFaction(2);
 	*/
 	tables.gameTable.set_function("getFaction", &gameHelpers::getFaction);
 	/***
-	Get guild with index
+	Get a guild by the index.
 	@function game.getGuild
 	@tparam int index
 	@treturn guild guild
@@ -588,33 +590,33 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.gameTable.set_function("getGuild", &gameHelpers::getGuild);
 
 	/***
-	Create character at coords
+	Create a new character at the specified coordinates.
 	@function game.createCharacterByString
-	@tparam string type
-	@tparam factionStruct faction
-	@tparam int age
-	@tparam string name
-	@tparam string name2
-	@tparam int subFaction
-	@tparam string portrait_custom cannot be nil
-	@tparam int xCoord
-	@tparam int yCoord
-	@treturn character newCharacter
+	@tparam string type Character type, for example "named character".
+	@tparam factionStruct Faction the new character belongs to.
+	@tparam int age The character's age
+	@tparam string name The short name of the character.
+	@tparam string name2 The full name of the character.
+	@tparam int subFaction Set to 31 to disable.
+	@tparam string portrait_custom cannot be nil Name of the folder inside 'data/ui/custom_portraits folder. Can not be nil!
+	@tparam int xCoord X coordinate of the new character
+	@tparam int yCoord Y coordinate of the new character
+	@treturn character newCharacter Returns a character class, not a named character class!
 	@usage
 	newCharacter=stratmap.game.createCharacterByString("named character",stratmap.game.getFaction(0),18,"Name1","Name2",31,"custom_portrait_name",character.character.xCoord+5,character.character.yCoord);
 	*/
 	tables.gameTable.set_function("createCharacterByString", &gameHelpers::createCharacter);
 	/***
-	Create army for character
+	Create an army for a character. Commonly used after spawning a new character to set it's bodyguard unit.
 	@function game.createArmy
-	@tparam character ourGeneral
+	@tparam character ourGeneral Character class, not named character class!
 	@treturn stackStruct army
 	@usage
 	army=stratmap.game.createArmy(gen);
 	*/
 	tables.gameTable.set_function("createArmy", &gameHelpers::createArmy);
 	/***
-	Create army in settlement (don't need character)
+	Create an army in a settlement (don't need a character). Used to add units to an empty settlement.
 	@function game.createArmyInSettlement
 	@tparam settlementStruct settlement
 	@treturn stackStruct army
@@ -623,17 +625,17 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.gameTable.set_function("createArmyInSettlement", &gameHelpers::createArmyInSettlement);
 	/***
-	Get script counter value, works for counter and event\_counter
+	Get a script counter value, works for counters and for event\_counters
 	@function game.getScriptCounter
-	@tparam string counterName
-	@treturn bool isExist
-	@treturn int counterValue
+	@tparam string counterName The name of the counter
+	@treturn bool isExist Returns true if the counter exists i.e it has been used at least once in any way in the campaign\_script
+	@treturn int counterValue Returns the value of the counter
 	@usage
 	isExist, counterValue = stratmap.game.getScriptCounter("SomeCounter")
 	*/
 	tables.gameTable.set_function("getScriptCounter", &gameHelpers::getScriptCounter);
 	/***
-	Set event\_counter value, does not work for counter, only event\_counter
+	Set an event\_counter value, does not work for counters, only event\_counters.
 	@function game.setScriptCounter
 	@tparam string counterName
 	@tparam int value
@@ -673,8 +675,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int exp soldiers expierence. You can change it on stratmap and soldiers updated. Use @{setParams} if you need change several parameters at once.
 	@tfield int armourLVL soldiers armour. You can change it on stratmap and soldiers updated. Use @{setParams} if you need change several parameters at once.
 	@tfield int weaponLVL soldiers weapon. You can change it on stratmap and soldiers updated. Use @{setParams} if you need change several parameters at once.
-	@tfield int soldierCountStratMapMax better read only
-	@tfield int soldierCountBattleMap better read only
+	@tfield int soldierCountStratMapMax Read only
+	@tfield int soldierCountBattleMap Read only
 	@tfield character character
 	@tfield stackStruct army
 	@tfield kill kill
@@ -705,9 +707,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Set unit basic parameters
 	@function unit:setParams
-	@tparam int exp
-	@tparam int armor
-	@tparam int weapon
+	@tparam int exp Experience. Maximum: 9
+	@tparam int armor Armour level.
+	@tparam int weapon Weapon Upgrade. Maximum: 1
 	@usage
 	unit:setParams(0,0,0);
 	*/
@@ -804,7 +806,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield float movePointsMax
 	@tfield float movePointsModifier
 	@tfield float movePoints
-	@tfield string ability see descr_hero_abilities.xml
+	@tfield string ability see descr\_hero\_abilities.xml
 	@tfield getTypeID getTypeID
 	@tfield setTypeID setTypeID
 	@tfield moveToTile moveToTile
@@ -826,7 +828,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.character.set("movePoints", sol::property(&generalHelpers::getMovepoints, &generalHelpers::setMovepoints));
 	types.character.set("ability", sol::property(&luaGetSetFuncs::getStringPropertyGen<generalStruct_abilityID>, &luaGetSetFuncs::setStringPropertyGen<generalStruct_abilityID>));
 	/***
-	Get character type.
+	Get the character type. See hint below for the types.
 	0-spy
 	1-assassin
 	2-diplomat
@@ -847,7 +849,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.character.set_function("getTypeID", &generalHelpers::getTypeID);
 	/***
-	Set character type.
+	Set the character type. See hint below for the types.
 	0-spy
 	1-assassin
 	2-diplomat
@@ -867,7 +869,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	ourCharacter:setTypeID(2);
 	*/
 	types.character.set_function("setTypeID", &generalHelpers::setTypeID);	/***
-	Issue regular move command, character must have movePoints
+	Issue regular move command, character must have movement points.
 	@function character:moveToTile
 	@tparam int xCoord
 	@tparam int yCoord
@@ -876,7 +878,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.character.set_function("moveToTile", &generalHelpers::moveToTile);
 	/***
-	Instantly teleport character to coordinates
+	Instantly teleport character to the coordinates.
 	@function character:reposition
 	@tparam int xCoord
 	@tparam int yCoord
@@ -892,7 +894,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.character.set_function("kill", &generalHelpers::killGeneral);
 	/***
-	Set bodyguard. Do this only for characters without it (after creating,for example)
+	Set bodyguard. Do this only for characters without it, such as immediately after creating a character.
 	@function character:setBodyguardUnit
 	@tparam unit unit
 	@usage
@@ -905,24 +907,24 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	//@section namedCharacterTable
 
 	/***
-	All named characters have these fields including dead characters, wives, children, and off-map characters
+	Basic namedCharacter table. All named characters have these fields including dead characters, wives, children, and off-map characters.
 
 	@tfield int index
 	@tfield character character
-	@tfield string shortName internal name
-	@tfield string fullName internal name including surname
-	@tfield string localizedDisplayName display name, resets upon reload save
+	@tfield string shortName Internal name.
+	@tfield string fullName Internal name including surname.
+	@tfield string localizedDisplayName Display name, resets upon reloading a save.
 	@tfield string label
-	@tfield string portrait note: wives (who were never princesses) and children do not have anything for this field
-	@tfield string portrait2 note: wives (who were never princesses) and children do not have anything for this field
-	@tfield string portrait_custom note: wives (who were never princesses) and children do not have anything for this field
-	@tfield string modelName battle model
+	@tfield string portrait Wives (who have never been princesses) and children do not have anything for this field. Path to 'young' portrait used starting from 'mods' folder. Resets upon reloading a save.
+	@tfield string portrait2 Wives (who have never been princesses) and children do not have anything for this field. Path to 'old' portrait used starting from 'mods' folder. Resets upon reloading a save.
+	@tfield string portrait_custom Wives (who have never been princesses) and children do not have anything for this field. Folder name in ui/custom_portraits folder.
+	@tfield string modelName Battle model (needs battle_models.modeldb entry).
 	@tfield int status 5-leader,2 - heir, 0 - ordinary character, read only, do not set value
 	@tfield setAsHeir setAsHeir
 	@tfield isAlive isAlive
 	@tfield bool isMale
 	@tfield int age
-	@tfield float yearOfBirth e.g. with 4 turns per year, the yearOfBirth could be 1840.25
+	@tfield float yearOfBirth For example with 4 turns per year, the yearOfBirth could be 1840.25
 	@tfield factionStruct faction
 	@tfield int subFaction
 	@tfield namedCharacter parent
@@ -1013,15 +1015,15 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.namedCharacter.set("modelName", sol::property(&luaGetSetFuncs::getStringPropertyGenChar<generalCharactericticsStruct_modelName>, &luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_modelName>));
 	types.namedCharacter.set("status", &generalCharacterictics::status);
 	/***
-	set character as faction heir
+	Sets the named character as the faction heir.
 	@function namedCharacter:setAsHeir
-	@tparam bool onlyHeir true = this character will be the only heir, false = add another heir (faction can appear to have multiple heirs but only one will become leader)
+	@tparam bool onlyHeir True = this character will be the only heir, false = add another heir (faction can appear to have multiple heirs but only one will become leader).
 	@usage
 	ourcharacter:setAsHeir(true)
 	*/
 	types.namedCharacter.set_function("setAsHeir", &generalCharactericticsHelpers::setAsHeir);
 	/***
-	check if character is alive, read only, do not set value
+	Checks if character is alive, read only, do not set this value.
 	@function namedCharacter:isAlive
 	@treturn int liveStatus true = alive, false = dead
 	@usage
@@ -1039,9 +1041,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.namedCharacter.set("spouse", &generalCharacterictics::spouse);
 	types.namedCharacter.set("childs", sol::property([](generalCharacterictics& self) { return std::ref(self.childs); }));
 	/***
-	get pointer to traits container
+	Get the pointer to the character's traits container.
 	@function namedCharacter:getTraits
-	@treturn traitContainer traits
+	@treturn traitContainer The character's traits.
 	@usage
 	local thisTrait, traitsList, index = selectedChar:getTraits(), selectedChar.fullName.." traits:", 0
 	while thisTrait ~= nil do
@@ -1051,25 +1053,25 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.namedCharacter.set_function("getTraits", &generalCharactericticsHelpers::getTraits);
 	/***
-	add trait to character
+	Add a trait to the character.
 	@function namedCharacter:addTrait
-	@tparam string traitName
-	@tparam int traitLevel
+	@tparam string traitName Trait's internal name per export\_descr\_character\_traits.txt
+	@tparam int traitLevel Trait's level.
 	@usage
 	ourNamedCharacter:addTrait("GoodCommander", 2)
 	*/
 	types.namedCharacter.set_function("addTrait", &generalCharactericticsHelpers::addTrait);
 	/***
-	remove trait from character
+	Remove a trait from the character.
 	@function namedCharacter:removeTrait
-	@tparam string traitName
+	@tparam string traitName Trait's internal name per export\_descr\_character\_traits.txt
 	@usage
 	ourNamedCharacter:removeTrait("GoodCommander");
 	*/
 	types.namedCharacter.set_function("removeTrait", &generalCharactericticsHelpers::removeTrait);
 	types.namedCharacter.set("ancNum", &generalCharacterictics::anchNum);
 	/***
-	get pointer to ancillary with number
+	Get the pointer to the ancillary using it's index. You can iterate over a character's ancillaries for example by going from index 0 to ancNum - 1.
 	@function namedCharacter:getAncillary
 	@tparam int index
 	@treturn ancillary ancillary
@@ -1078,7 +1080,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.namedCharacter.set_function("getAncillary", &generalCharactericticsHelpers::getAnchillary);
 	/***
-	add ancillary to character
+	Add an ancillary to the named character using the name per export\_descr\_ancillaries.txt.
 	@function namedCharacter:addAncillary
 	@tparam string ancillaryName
 	@usage
@@ -1086,7 +1088,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.namedCharacter.set_function("addAncillary", &generalCharactericticsHelpers::addAnchillary);
 	/***
-	remove ancillary
+	Remove an ancillary from the named character using it's pointer. Use getAncillary function to get the specific ancillary.
 	@function namedCharacter:removeAncillary
 	@tparam ancillary ancillary
 	@usage
@@ -1216,9 +1218,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int religion
 	@tfield int money
 	@tfield factionStratMapStruct facStrat
-	@tfield int numOfNamedCharacters
+	@tfield int numOfNamedCharacters includes literally all characters without distinction (so also wives, children, dead and those sent off map)
 	@tfield getNamedCharacter getNamedCharacter
-	@tfield int numOfCharacters
+	@tfield int numOfCharacters includes all the characters present on the strat map
 	@tfield getCharacter getCharacter
 	@tfield int stacksNum
 	@tfield getStack getStack
@@ -1236,7 +1238,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct = luaState.new_usertype<factionStruct>("factionStruct");
 	types.factionStruct.set("dipNum", &factionStruct::dipNum);
 	/***
-	Get faction internal name
+	Get the faction's internal name
 	@function factionStruct:getFactionName
 	@treturn string facName
 	@usage
@@ -1259,7 +1261,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct.set("facStrat", &factionStruct::factSmDescr);
 	types.factionStruct.set("numOfNamedCharacters", &factionStruct::numOfCharactersAll);
 	/***
-	Get named character with number
+	Get named character using it's index.
 	@function factionStruct:getNamedCharacter
 	@tparam int number
 	@treturn namedCharacter retNamedCharacter
@@ -1272,7 +1274,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct.set_function("getNamedCharacter", &factionHelpers::getCharacterFromFullList);
 	types.factionStruct.set("numOfCharacters", &factionStruct::numOfCharacters);
 	/***
-	Get character with number
+	Get a character using it's index.
 	@function factionStruct:getCharacter
 	@tparam int number
 	@treturn character retCharacter
@@ -1285,7 +1287,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct.set_function("getCharacter", &factionHelpers::getCharacterFromGeneralsList);
 	types.factionStruct.set("stacksNum", &factionStruct::stackNum);
 	/***
-	Get army with number
+	Get an army using it's index.
 	@function factionStruct:getStack
 	@tparam int number
 	@treturn stackStruct army
@@ -1298,7 +1300,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct.set_function("getStack", &factionHelpers::getStack);
 	types.factionStruct.set("settlementsNum", &factionStruct::settlementsNum);
 	/***
-	Get settlement with number
+	Get a settlement using it's index.
 	@function factionStruct:getSettlement
 	@tparam int number
 	@treturn settlementStruct settlement
@@ -1311,7 +1313,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct.set_function("getSettlement", &factionHelpers::getSettlement);
 	types.factionStruct.set("fortsNum", &factionStruct::fortsNum);
 	/***
-	Get fort with number
+	Get a fort using it's index.
 	@function factionStruct:getFort
 	@tparam int number
 	@treturn fortStruct fort
@@ -1324,7 +1326,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct.set_function("getFort", &factionHelpers::getFort);
 	types.factionStruct.set("portsNum", &factionStruct::portBuildingsNum);
 	/***
-	Get port with number
+	Get a port using it's index.
 	@function factionStruct:getPort
 	@tparam int number
 	@treturn portStruct port
@@ -1343,7 +1345,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct.set_function("getPort", &factionHelpers::getPort);
 	types.factionStruct.set("watchtowersNum", &factionStruct::wathtowersNum);
 	/***
-	Get watchtower with number
+	Get a watchtower using it's index.
 	@function factionStruct:getWatchtower
 	@tparam int number
 	@treturn watchtowerStruct watchtower
@@ -1364,16 +1366,16 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Basic factionStratMapStruct table
 
-	@tfield int primaryColorRed warning: resets on reload
-	@tfield int primaryColorGreen warning: resets on reload
-	@tfield int primaryColorBlue warning: resets on reload
-	@tfield int secondaryColorRed warning: resets on reload
-	@tfield int secondaryColorGreen warning: resets on reload
-	@tfield int secondaryColorBlue warning: resets on reload
-	@tfield int triumphValue unkown use
-	@tfield int standardIndex warning: resets on reload
-	@tfield int logoIndex warning: resets on reload
-	@tfield int smallLogoIndex warning: resets on reload
+	@tfield int primaryColorRed Warning: resets on reload.
+	@tfield int primaryColorGreen Warning: resets on reload.
+	@tfield int primaryColorBlue Warning: resets on reload.
+	@tfield int secondaryColorRed Warning: resets on reload.
+	@tfield int secondaryColorGreen Warning: resets on reload.
+	@tfield int secondaryColorBlue Warning: resets on reload.
+	@tfield int triumphValue Usage unknown.
+	@tfield int standardIndex Warning: resets on reload.
+	@tfield int logoIndex Warning: resets on reload.
+	@tfield int smallLogoIndex Warning: resets on reload.
 
 	@table factionStratMapStruct
 	*/
@@ -1434,13 +1436,13 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Basic portStruct table
 
-	@tfield int xCoord land tile, note: setting only moves port strat model
-	@tfield int yCoord land tile, note: setting only moves port strat model
-	@tfield factionStruct ownerFaction note: port ownership changes to blockading faction (army on port)
+	@tfield int xCoord land tile, Note: setting this only moves port's strat model.
+	@tfield int yCoord land tile, Note: setting this only moves port's strat model.
+	@tfield factionStruct ownerFaction Note: port's ownership changes to blockading faction (army on port)
 	@tfield settlementStruct settlement
-	@tfield character character character on port tile, only the first one, check for nil
-	@tfield stackStruct blockadingArmy enemy army blockading port by standing on tile, check for nil
-	@tfield dockStruct dock water tile, only upgraded ports have this, check for nil
+	@tfield character character Character standing on the port tile, only the first one, check for nil.
+	@tfield stackStruct blockadingArmy Enemy army blockading the port, by standing on it's tile, check for nil.
+	@tfield dockStruct Dock water tile, only upgraded ports have this, check for nil.
 
 
 	@table portStruct
@@ -1461,8 +1463,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Basic dockStruct table
 
-	@tfield int xCoord water tile, note: setting only moves dock strat model
-	@tfield int yCoord water tile, note: setting only moves dock strat model
+	@tfield int xCoord water tile, Note: setting only moves dock strat model
+	@tfield int yCoord water tile, Note: setting only moves dock strat model
 
 	@table dockStruct
 	*/
@@ -1516,10 +1518,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		));
 	types.settlementStruct.set("ownerFaction", &settlementStruct::ownerFac);
 	/***
-	Change owner faction of settlement.
-	All agents, armies, etc. leave settlement
+	Change owner faction of settlement. All agents, armies etc. leave the settlement.
 	@function settlementStruct:changeOwner
-	@tparam factionStruct newOwner
+	@tparam factionStruct newOwner Faction to change ownership to.
 	@usage
 	local campaign=gameDataAll.get().campaignStruct;
 	local fac1=campaign.factionsSortedByDescrStrat[1];
@@ -1534,25 +1535,25 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.settlementStruct.set("isProvokedRebellion", &settlementStruct::isProvokedRebellion);
 	types.settlementStruct.set("populationSize", &settlementStruct::populationSize);
 	/***
-	Get settlement religion value
+	Get the settlement's specific regligion's value
 	@function settlementStruct:getReligion
-	@tparam int religionID in order of descr_religions.txt, starting from 0
+	@tparam int religionID In order of descr\_religions.txt, starting from 0
 	@treturn float religionValue from 0 to 1
 	@usage
 	local firstRelVal = settlementStruct:getReligion(0) --get float of religion with ID 0
 	*/
 	types.settlementStruct.set_function("getReligion", &settlementHelpers::getReligion);
 	/***
-	Set settlement religion value, make sure sum of all religion values does not exceed 1.0!
+	Set the settlement's specific religion's value, make sure the sum of all religion values does not exceed 1.0!
 	@function settlementStruct:setReligion
-	@tparam int religionID in order of descr_religions.txt, starting from 0
+	@tparam int religionID in order of descr\_religions.txt, starting from 0
 	@tparam float religionValue from 0 to 1
 	@usage
 	settlementStruct:setReligion(0, 0.5) --set religion with ID 0 as 50%
 	*/
 	types.settlementStruct.set_function("setReligion", &settlementHelpers::setReligion);
 	/***
-	Get guild standing by ID
+	Get a settlement's standing points with a specific guild by ID
 	@function settlementStruct:getGuildStanding
 	@tparam int guild_id
 	@usage
@@ -1560,7 +1561,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.settlementStruct.set_function("getGuildStanding", &settlementHelpers::getGuildStanding);
 	/***
-	Set settlement standing points with guild
+	Set the settlement's standing points with specific guild.
 	@function settlementStruct:setGuildStanding
 	@tparam int guild_id
 	@tparam int standing
@@ -1570,7 +1571,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.settlementStruct.set_function("setGuildStanding", &settlementHelpers::setGuildStanding);
 	types.settlementStruct.set("buildingsNum", &settlementStruct::buildingsNum);
 	/***
-	Get building with number
+	Get a specific building by it's index.
 	@function settlementStruct:getBuilding
 	@tparam int number
 	@treturn building build
@@ -1583,7 +1584,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.settlementStruct.set_function("getBuilding", &settlementHelpers::getBuilding);
 	/***
-	Create building.
+	Create a building in the settlement.
 	@function settlementStruct:createBuilding
 	@tparam string building_level_id
 	@usage
@@ -1591,10 +1592,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.settlementStruct.set_function("createBuilding", &settlementHelpers::createBuilding);
 	/***
-	Destroy building of type.
+	Destroy a building of a specified type in the settlement.
 	@function settlementStruct:destroyBuilding
-	@tparam string typeName type of building
-	@tparam bool isReturnMoney return money or not
+	@tparam string typeName Type of building.
+	@tparam bool isReturnMoney Should money be returned to the faction like with a manual desctruction.
 	@usage
 	settlementStruct:destroyBuilding("some_buildType",false);
 	*/
@@ -1602,7 +1603,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.settlementStruct.set("buildingsQueue", &settlementStruct::buildingsQueueArray);
 	types.settlementStruct.set("resourcesNum", &settlementStruct::resourcesNum);
 	/***
-	Get resource with number
+	Get a specific resource by it's index.
 	@function settlementStruct:getResource
 	@tparam int number
 	@treturn tradeResource resource
@@ -1612,7 +1613,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.settlementStruct.set_function("getResource", &settlementHelpers::getResource);
 	types.settlementStruct.set("siegesNum", &settlementStruct::siegesNumber);
 	/***
-	Get siege with index
+	Get a specific siege by it's index
 	@function settlementStruct:getSiege
 	@tparam int siegeIdx
 	@treturn siegeStruct siege
@@ -1644,7 +1645,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.building.set("hp", &building::hp);
 	types.building.set("settlement", &building::settlement);
 	/***
-	Get name of building type (chain)
+	Get the name of the building type (the building chain in export\_descr\_buildings.txt).
 
 	@function building:getType
 	@treturn string buildingType (building chain name)
@@ -1655,7 +1656,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.building.set_function("getType", &buildingStructHelpers::getType);
 	/***
-	Get name of building level
+	Get name of building level (as per export\_descr\_buildings.txt).
 
 	@function building:getName
 	@treturn string buildingName
@@ -1707,7 +1708,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Basic buildingInQueue table
 
-	@tfield building building nil if building doesn't exist yet
+	@tfield building building Is nil if building doesn't exist yet.
 	@tfield settlementStruct settlement
 	@tfield int currentLevel
 	@tfield int previousLevel
@@ -1797,15 +1798,15 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.tradeResource.set("yCoord", &resStrat::yCoord);
 	types.tradeResource.set("settlement", &resStrat::settlement);
 	/***
-	Set resource strat model
+	Set the resource's strat model.
 	@function tradeResource:setStratModel
-	@tparam int modelId
+	@tparam int modelId Added with stratmap.objects.addModelToGame
 	@usage
 	tradeResource:setStratModel(5);
 	*/
 	types.tradeResource.set_function("setStratModel", &resourcesHelpers::setModel);
 	/***
-	Get resource ID
+	Get the resource's ID.
 	@function tradeResource:getResourceID
 	@treturn int ID
 	@usage
@@ -1815,7 +1816,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.tradeResource.set_function("getResourceID", &resourcesHelpers::getResourceCode);
 	/***
-	Get resource trade value
+	Get the resource's trade value.
 	@function tradeResource:getResourceValue
 	@treturn int value
 	@usage
@@ -1825,7 +1826,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.tradeResource.set_function("getResourceValue", &resourcesHelpers::getResourceCost);
 	/***
-	Get resource mine value
+	Check if the resource has a mine.
 	@function tradeResource:getResourceHasMine
 	@treturn int hasMine 0=no mine, 1=mine
 	@usage
@@ -1835,7 +1836,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.tradeResource.set_function("getResourceHasMine", &resourcesHelpers::getResourceHasMine);
 	/***
-	Get resource image (icon) relative path
+	Get the resource's image (icon) relative path.
 	@function tradeResource:getResourceImage
 	@treturn string imagePath
 	@usage
@@ -1860,22 +1861,22 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getUnit getUnit
 	@tfield int numOfUnits
 	@tfield getCharacter getCharacter
-	@tfield int numOfCharacters
+	@tfield int numOfCharacters Includes Auxiliary generals and agents (i.e all characters excluding the leading general)
 	@tfield stackStruct boardedArmy army embarked on this fleet stack
 	@tfield stackStruct shipArmy fleet that this army stack is embarked on
 	@tfield portStruct blockedPort
-	@tfield character leader returns nil if stack is inside residence (fleet, settlement, fort)
+	@tfield character leader Returns nil if stack is inside residence (fleet, settlement, fort).
 	@tfield findInSettlement findInSettlement
 	@tfield findInFort findInFort
 	@tfield int totalStrength
-	@tfield float reform_point_x x coordinate to which the retreating units will go
-	@tfield float reform_point_y y coordinate to which the retreating units will go
+	@tfield float reform_point_x X coordinate to which the retreating units will go.
+	@tfield float reform_point_y Y coordinate to which the retreating units will go.
 	@tfield createEOPUnit createEOPUnit
 	@tfield createUnit createUnit
 	@tfield createUnitByIDX createUnitByIDX
-	@tfield siegeSettlement siegeSettlement call twice to initiate assault
+	@tfield siegeSettlement siegeSettlement Call it twice to initiate an assault.
 	@tfield attackArmy attackArmy
-	@tfield siegeStruct siege current siege
+	@tfield siegeStruct siege Current siege.
 
 
 	@table stackStruct
@@ -1883,7 +1884,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.stackStruct = luaState.new_usertype<stackStruct>("stackStruct");
 	types.stackStruct.set("faction", &stackStruct::faction);
 	/***
-	Get unit with number
+	Get a unit by it's index.
 	@function stackStruct:getUnit
 	@tparam int number
 	@treturn unit retUnit
@@ -1894,7 +1895,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.stackStruct.set_function("getUnit", &stackStructHelpers::getUnit);
 	types.stackStruct.set("numOfUnits", &stackStruct::numOfUnits);
 	/***
-	Get character(agent) with number
+	Get a character (agent or non-leading named character) by it's index.
 	@function stackStruct:getCharacter
 	@tparam int number
 	@treturn character retCharacter
@@ -1909,7 +1910,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.stackStruct.set("blockedPort", &stackStruct::blockedPort);
 	types.stackStruct.set("leader", &stackStruct::gen);
 	/***
-	Find the settlement in which the army is located
+	Find the settlement in which the army is located. Returns nil if the army is not in a settlement.
 
 	Returns nil if the army is not in the settlement.
 
@@ -1924,7 +1925,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.stackStruct.set_function("findInSettlement", &stackStructHelpers::findInSettlement);
 	/***
-	Find the fort in which the army is located
+	Find the fort in which the army is located. Returns nil if the army is not in a fort.
 
 	Returns nil if the army is not in the fort.
 
@@ -1943,7 +1944,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.stackStruct.set("reform_point_y", &stackStruct::reform_point_y);
 
 	/***
-	Create unit in army by type from M2TWEOP units DB(M2TWEOPDU, no have 500 types limit).
+ 	Create a unit in the army by index from M2TWEOP units DB (M2TWEOPDU).
 	@function stackStruct:createEOPUnit
 	@tparam int index
 	@tparam int exp
@@ -1955,12 +1956,12 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.stackStruct.set_function("createEOPUnit", &stackStructHelpers::createEOPUnit);
 	/***
-	Create unit in army by type from EDB.
+	Create a unit in the army by type from export\_descr\_unit.txt
 	@function stackStruct:createUnit
 	@tparam string type
-	@tparam int exp
-	@tparam int armor
-	@tparam int weapon
+	@tparam int exp Experience. Maximum: 9.
+	@tparam int armor Armour level.
+	@tparam int weapon Weapon upgrade. Maximum: 1.
 	@treturn unit newUnit
 	@usage
 	local newUnit=stackStruct:createUnit("Axemen of Lossarnach",1,1,1);
@@ -1968,12 +1969,12 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.stackStruct.set_function("createUnit", &stackStructHelpers::createUnit);
 
 	/***
-	Create unit in army by index from EDB.
+	Create a unit in the army by index from export\_descr\_unit.txt
 	@function stackStruct:createUnitByIDX
-	@tparam int index
-	@tparam int exp
-	@tparam int armor
-	@tparam int weapon
+	@tparam int index Index (order in export\_descr\_unit.txt)
+	@tparam int exp Experience. Maximum: 9.
+	@tparam int armor Armour level.
+	@tparam int weapon Weapon upgrade. Maximum: 1.
 	@treturn unit newUnit
 	@usage
 	local newUnit=stackStruct:createUnitByIDX(255,1,1,1);
@@ -1981,7 +1982,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.stackStruct.set_function("createUnitByIDX", &stackStructHelpers::createUnitByIDX);
 
 	/***
-	Siege settlement, or attack it if in siege. Need movePoints.
+	Besiege the specified settlement, or attack it if already besieging it. Requires movement points.
 	@function stackStruct:siegeSettlement
 	@tparam settlementStruct settlement
 	@usage
@@ -1989,11 +1990,11 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.stackStruct.set_function("siegeSettlement", &stackStructHelpers::siegeSettlement);
 	/***
-	Attack another army. Need movePoints.
+	Attack another army. Requires movement points.
 
 	@function stackStruct:attackArmy
 	@tparam stackStruct defender
-	@treturn  int  ifSucess
+	@treturn  int Success Failed = 0.
 	@usage
 	sucess=stackStruct:attackArmy(defenderArmy);
 	if(sucess~=0)

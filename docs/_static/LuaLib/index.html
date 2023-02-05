@@ -79,7 +79,7 @@
 <details>
   <summary><a href="#Strat_Map_Objects">Strat Map Objects </a></summary>
     <li><a href="#stratmap.objects">stratmap.objects</a></li>
-    <li><a href="#objects.addModelToGame">objects.addModelToGame (modelPath, modelId)</a></li>
+    <li><a href="#objects.addModelToGame">objects.addModelToGame (path, modelId)</a></li>
     <li><a href="#objects.setModel">objects.setModel (xCoord, yCoord, modelId, modelId2)</a></li>
     <li><a href="#objects.replaceTile">objects.replaceTile (label, xCoord, yCoord, filename, weather, dayTime)</a></li>
 </details>
@@ -99,9 +99,9 @@
     <li><a href="#stratmap.game">stratmap.game</a></li>
     <li><a href="#game.callConsole">game.callConsole ()</a></li>
     <li><a href="#game.getFactionsCount">game.getFactionsCount ()</a></li>
-    <li><a href="#game.getFaction">game.getFaction (index)</a></li>
+    <li><a href="#game.getFaction">game.getFaction (Index)</a></li>
     <li><a href="#game.getGuild">game.getGuild (index)</a></li>
-    <li><a href="#game.createCharacterByString">game.createCharacterByString (type, faction, age, name, name2, subFaction, portrait_custom, xCoord, yCoord)</a></li>
+    <li><a href="#game.createCharacterByString">game.createCharacterByString (type, Faction, age, name, name2, subFaction, portrait_custom, xCoord, yCoord)</a></li>
     <li><a href="#game.createArmy">game.createArmy (ourGeneral)</a></li>
     <li><a href="#game.createArmyInSettlement">game.createArmyInSettlement (settlement)</a></li>
     <li><a href="#game.getScriptCounter">game.getScriptCounter (counterName)</a></li>
@@ -469,7 +469,7 @@
     <li><a href="#M2TWEOPFBX.getFbxModel">M2TWEOPFBX.getFbxModel (modelID)</a></li>
     <li><a href="#M2TWEOPFBX.addFbxObject">M2TWEOPFBX.addFbxObject (modelID, objectID)</a></li>
     <li><a href="#M2TWEOPFBX.deleteFbxObject">M2TWEOPFBX.deleteFbxObject (object)</a></li>
-    <li><a href="#M2TWEOPFBX.getFbxObject">M2TWEOPFBX.getFbxObject (object)</a></li>
+    <li><a href="#M2TWEOPFBX.getFbxObject">M2TWEOPFBX.getFbxObject (int)</a></li>
     <li><a href="#M2TWEOPFBX.setFbxObjectCoords">M2TWEOPFBX.setFbxObjectCoords (fbx, x, y, z)</a></li>
     <li><a href="#M2TWEOPFBX.getFbxObjectCoords">M2TWEOPFBX.getFbxObjectCoords (fbx)</a></li>
     <li><a href="#M2TWEOPFBX.setFbxObjectSize">M2TWEOPFBX.setFbxObjectSize (fbx, sizeModifier)</a></li>
@@ -507,7 +507,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2022-11-21 22:14:39</p>
+        <p class="lastUpdatedMessage">Last updated: 2022-12-20 23:21:19</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -642,8 +642,8 @@
 	<td class="summary">Basic stratmap.objects table</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#objects.addModelToGame">objects.addModelToGame (modelPath, modelId)</a></td>
-	<td class="summary">Add new cas stratmodel to game</td>
+	<td class="name" nowrap><a href="#objects.addModelToGame">objects.addModelToGame (path, modelId)</a></td>
+	<td class="summary">Add a new .cas campaign strategy model to the game with a unique ID.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#objects.setModel">objects.setModel (xCoord, yCoord, modelId, modelId2)</a></td>
@@ -651,7 +651,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#objects.replaceTile">objects.replaceTile (label, xCoord, yCoord, filename, weather, dayTime)</a></td>
-	<td class="summary">Replace custom tile.</td>
+	<td class="summary">Replace a custom tile.</td>
 	</tr>
 </table>
 <h2><a href="#Camera">Camera </a></h2>
@@ -662,15 +662,15 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#camera.move">camera.move (xCoord, yCoord)</a></td>
-	<td class="summary">Slow move camera to a tile</td>
+	<td class="summary">Slowly move the camera to the specified tile.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#camera.jump">camera.jump (xCoord, yCoord)</a></td>
-	<td class="summary">Fast move camera to a tile</td>
+	<td class="summary">Quickly move the camera to the specified tile.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#camera.zoom">camera.zoom (distance)</a></td>
-	<td class="summary">Set zoom of stratcamera</td>
+	<td class="summary">Set the zoom level of the camera.</td>
 	</tr>
 </table>
 <h2><a href="#Game">Game </a></h2>
@@ -681,39 +681,39 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#game.callConsole">game.callConsole ()</a></td>
-	<td class="summary">Call m2tw console command</td>
+	<td class="summary">Execute a Medieval II console command.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#game.getFactionsCount">game.getFactionsCount ()</a></td>
-	<td class="summary">Get factions number</td>
+	<td class="summary">Get the amount of factions</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#game.getFaction">game.getFaction (index)</a></td>
-	<td class="summary">Get faction with index</td>
+	<td class="name" nowrap><a href="#game.getFaction">game.getFaction (Index)</a></td>
+	<td class="summary">Get a faction by the index, commonly used when iterating over all factions using getFactionsCount()</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#game.getGuild">game.getGuild (index)</a></td>
-	<td class="summary">Get guild with index</td>
+	<td class="summary">Get a guild by the index.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#game.createCharacterByString">game.createCharacterByString (type, faction, age, name, name2, subFaction, portrait_custom, xCoord, yCoord)</a></td>
-	<td class="summary">Create character at coords</td>
+	<td class="name" nowrap><a href="#game.createCharacterByString">game.createCharacterByString (type, Faction, age, name, name2, subFaction, portrait_custom, xCoord, yCoord)</a></td>
+	<td class="summary">Create a new character at the specified coordinates.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#game.createArmy">game.createArmy (ourGeneral)</a></td>
-	<td class="summary">Create army for character</td>
+	<td class="summary">Create an army for a character.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#game.createArmyInSettlement">game.createArmyInSettlement (settlement)</a></td>
-	<td class="summary">Create army in settlement (don't need character)</td>
+	<td class="summary">Create an army in a settlement (don't need a character).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#game.getScriptCounter">game.getScriptCounter (counterName)</a></td>
-	<td class="summary">Get script counter value, works for counter and event_counter</td>
+	<td class="summary">Get a script counter value, works for counters and for event_counters</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#game.setScriptCounter">game.setScriptCounter (counterName, value)</a></td>
-	<td class="summary">Set event_counter value, does not work for counter, only event_counter</td>
+	<td class="summary">Set an event_counter value, does not work for counters, only event_counters.</td>
 	</tr>
 </table>
 <h2><a href="#Stratmap">Stratmap </a></h2>
@@ -753,19 +753,19 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#character:getTypeID">character:getTypeID ()</a></td>
-	<td class="summary">Get character type.</td>
+	<td class="summary">Get the character type.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#character:setTypeID">character:setTypeID (typeId)</a></td>
-	<td class="summary">Set character type.</td>
+	<td class="summary">Set the character type.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#character:moveToTile">character:moveToTile (xCoord, yCoord)</a></td>
-	<td class="summary">Issue regular move command, character must have movePoints</td>
+	<td class="summary">Issue regular move command, character must have movement points.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#character:reposition">character:reposition (xCoord, yCoord)</a></td>
-	<td class="summary">Instantly teleport character to coordinates</td>
+	<td class="summary">Instantly teleport character to the coordinates.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#character:kill">character:kill ()</a></td>
@@ -780,39 +780,39 @@
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#namedCharacter">namedCharacter</a></td>
-	<td class="summary">All named characters have these fields including dead characters, wives, children, and off-map characters</td>
+	<td class="summary">Basic namedCharacter table.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#namedCharacter:setAsHeir">namedCharacter:setAsHeir (onlyHeir)</a></td>
-	<td class="summary">set character as faction heir</td>
+	<td class="summary">Sets the named character as the faction heir.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#namedCharacter:isAlive">namedCharacter:isAlive ()</a></td>
-	<td class="summary">check if character is alive, read only, do not set value</td>
+	<td class="summary">Checks if character is alive, read only, do not set this value.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#namedCharacter:getTraits">namedCharacter:getTraits ()</a></td>
-	<td class="summary">get pointer to traits container</td>
+	<td class="summary">Get the pointer to the character's traits container.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#namedCharacter:addTrait">namedCharacter:addTrait (traitName, traitLevel)</a></td>
-	<td class="summary">add trait to character</td>
+	<td class="summary">Add a trait to the character.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#namedCharacter:removeTrait">namedCharacter:removeTrait (traitName)</a></td>
-	<td class="summary">remove trait from character</td>
+	<td class="summary">Remove a trait from the character.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#namedCharacter:getAncillary">namedCharacter:getAncillary (index)</a></td>
-	<td class="summary">get pointer to ancillary with number</td>
+	<td class="summary">Get the pointer to the ancillary using it's index.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#namedCharacter:addAncillary">namedCharacter:addAncillary (ancillaryName)</a></td>
-	<td class="summary">add ancillary to character</td>
+	<td class="summary">Add an ancillary to the named character using the name per export_descr_ancillaries.txt.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#namedCharacter:removeAncillary">namedCharacter:removeAncillary (ancillary)</a></td>
-	<td class="summary">remove ancillary</td>
+	<td class="summary">Remove an ancillary from the named character using it's pointer.</td>
 	</tr>
 </table>
 <h2><a href="#Ancillary">Ancillary </a></h2>
@@ -837,35 +837,35 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#factionStruct:getFactionName">factionStruct:getFactionName ()</a></td>
-	<td class="summary">Get faction internal name</td>
+	<td class="summary">Get the faction's internal name</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#factionStruct:getNamedCharacter">factionStruct:getNamedCharacter (number)</a></td>
-	<td class="summary">Get named character with number</td>
+	<td class="summary">Get named character using it's index.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#factionStruct:getCharacter">factionStruct:getCharacter (number)</a></td>
-	<td class="summary">Get character with number</td>
+	<td class="summary">Get a character using it's index.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#factionStruct:getStack">factionStruct:getStack (number)</a></td>
-	<td class="summary">Get army with number</td>
+	<td class="summary">Get an army using it's index.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#factionStruct:getSettlement">factionStruct:getSettlement (number)</a></td>
-	<td class="summary">Get settlement with number</td>
+	<td class="summary">Get a settlement using it's index.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#factionStruct:getFort">factionStruct:getFort (number)</a></td>
-	<td class="summary">Get fort with number</td>
+	<td class="summary">Get a fort using it's index.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#factionStruct:getPort">factionStruct:getPort (number)</a></td>
-	<td class="summary">Get port with number</td>
+	<td class="summary">Get a port using it's index.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#factionStruct:getWatchtower">factionStruct:getWatchtower (number)</a></td>
-	<td class="summary">Get watchtower with number</td>
+	<td class="summary">Get a watchtower using it's index.</td>
 	</tr>
 </table>
 <h2><a href="#FactionStratMapStruct">FactionStratMapStruct </a></h2>
@@ -915,39 +915,39 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#settlementStruct:getReligion">settlementStruct:getReligion (religionID)</a></td>
-	<td class="summary">Get settlement religion value</td>
+	<td class="summary">Get the settlement's specific regligion's value</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#settlementStruct:setReligion">settlementStruct:setReligion (religionID, religionValue)</a></td>
-	<td class="summary">Set settlement religion value, make sure sum of all religion values does not exceed 1.0!</td>
+	<td class="summary">Set the settlement's specific religion's value, make sure the sum of all religion values does not exceed 1.0!</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#settlementStruct:getGuildStanding">settlementStruct:getGuildStanding (guild_id)</a></td>
-	<td class="summary">Get guild standing by ID</td>
+	<td class="summary">Get a settlement's standing points with a specific guild by ID</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#settlementStruct:setGuildStanding">settlementStruct:setGuildStanding (guild_id, standing)</a></td>
-	<td class="summary">Set settlement standing points with guild</td>
+	<td class="summary">Set the settlement's standing points with specific guild.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#settlementStruct:getBuilding">settlementStruct:getBuilding (number)</a></td>
-	<td class="summary">Get building with number</td>
+	<td class="summary">Get a specific building by it's index.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#settlementStruct:createBuilding">settlementStruct:createBuilding (building_level_id)</a></td>
-	<td class="summary">Create building.</td>
+	<td class="summary">Create a building in the settlement.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#settlementStruct:destroyBuilding">settlementStruct:destroyBuilding (typeName, isReturnMoney)</a></td>
-	<td class="summary">Destroy building of type.</td>
+	<td class="summary">Destroy a building of a specified type in the settlement.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#settlementStruct:getResource">settlementStruct:getResource (number)</a></td>
-	<td class="summary">Get resource with number</td>
+	<td class="summary">Get a specific resource by it's index.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#settlementStruct:getSiege">settlementStruct:getSiege (siegeIdx)</a></td>
-	<td class="summary">Get siege with index</td>
+	<td class="summary">Get a specific siege by it's index</td>
 	</tr>
 </table>
 <h2><a href="#Building">Building </a></h2>
@@ -958,11 +958,11 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#building:getType">building:getType ()</a></td>
-	<td class="summary">Get name of building type (chain)</td>
+	<td class="summary">Get the name of the building type (the building chain in export_descr_buildings.txt).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#building:getName">building:getName ()</a></td>
-	<td class="summary">Get name of building level</td>
+	<td class="summary">Get name of building level (as per export_descr_buildings.txt).</td>
 	</tr>
 </table>
 <h2><a href="#BuildingsQueue">BuildingsQueue </a></h2>
@@ -1006,23 +1006,23 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#tradeResource:setStratModel">tradeResource:setStratModel (modelId)</a></td>
-	<td class="summary">Set resource strat model</td>
+	<td class="summary">Set the resource's strat model.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#tradeResource:getResourceID">tradeResource:getResourceID ()</a></td>
-	<td class="summary">Get resource ID</td>
+	<td class="summary">Get the resource's ID.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#tradeResource:getResourceValue">tradeResource:getResourceValue ()</a></td>
-	<td class="summary">Get resource trade value</td>
+	<td class="summary">Get the resource's trade value.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#tradeResource:getResourceHasMine">tradeResource:getResourceHasMine ()</a></td>
-	<td class="summary">Get resource mine value</td>
+	<td class="summary">Check if the resource has a mine.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#tradeResource:getResourceImage">tradeResource:getResourceImage ()</a></td>
-	<td class="summary">Get resource image (icon) relative path</td>
+	<td class="summary">Get the resource's image (icon) relative path.</td>
 	</tr>
 </table>
 <h2><a href="#StackStruct">StackStruct </a></h2>
@@ -1033,35 +1033,35 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#stackStruct:getUnit">stackStruct:getUnit (number)</a></td>
-	<td class="summary">Get unit with number</td>
+	<td class="summary">Get a unit by it's index.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#stackStruct:getCharacter">stackStruct:getCharacter (number)</a></td>
-	<td class="summary">Get character(agent) with number</td>
+	<td class="summary">Get a character (agent or non-leading named character) by it's index.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#stackStruct:findInSettlement">stackStruct:findInSettlement ()</a></td>
-	<td class="summary">Find the settlement in which the army is located</td>
+	<td class="summary">Find the settlement in which the army is located.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#stackStruct:findInFort">stackStruct:findInFort ()</a></td>
-	<td class="summary">Find the fort in which the army is located</td>
+	<td class="summary">Find the fort in which the army is located.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#stackStruct:createEOPUnit">stackStruct:createEOPUnit (index, exp, armor, weapon)</a></td>
-	<td class="summary">Create unit in army by type from M2TWEOP units DB(M2TWEOPDU, no have 500 types limit).</td>
+	<td class="summary">Create a unit in the army by index from M2TWEOP units DB (M2TWEOPDU).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#stackStruct:createUnit">stackStruct:createUnit (type, exp, armor, weapon)</a></td>
-	<td class="summary">Create unit in army by type from EDB.</td>
+	<td class="summary">Create a unit in the army by type from export_descr_unit.txt</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#stackStruct:createUnitByIDX">stackStruct:createUnitByIDX (index, exp, armor, weapon)</a></td>
-	<td class="summary">Create unit in army by index from EDB.</td>
+	<td class="summary">Create a unit in the army by index from export_descr_unit.txt</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#stackStruct:siegeSettlement">stackStruct:siegeSettlement (settlement)</a></td>
-	<td class="summary">Siege settlement, or attack it if in siege.</td>
+	<td class="summary">Besiege the specified settlement, or attack it if already besieging it.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#stackStruct:attackArmy">stackStruct:attackArmy (defender)</a></td>
@@ -1087,7 +1087,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onNewGameStart">onNewGameStart ()</a></td>
-	<td class="summary">Called when a new campaign is started from the menu</td>
+	<td class="summary">Called when a new campaign is started from the menu.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onReadGameDbsAtStart">onReadGameDbsAtStart ()</a></td>
@@ -1095,7 +1095,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onClickAtTile">onClickAtTile (x, y)</a></td>
-	<td class="summary">Called on clicking the stratmap, use ONLY in the same way as the usage example!!</td>
+	<td class="summary">Called on clicking the stratmap.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onCampaignMapLoaded">onCampaignMapLoaded ()</a></td>
@@ -1103,19 +1103,19 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onPluginLoad">onPluginLoad ()</a></td>
-	<td class="summary">Called on plugin load (at game start)</td>
+	<td class="summary">Called on plugin load (at game start).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onCreateSaveFile">onCreateSaveFile ()</a></td>
-	<td class="summary">Called on creating save file</td>
+	<td class="summary">Called on creating a new save file.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onLoadSaveFile">onLoadSaveFile ()</a></td>
-	<td class="summary">Called on loading save file</td>
+	<td class="summary">Called on loading a save file.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onChangeTurnNum">onChangeTurnNum (turnNumber)</a></td>
-	<td class="summary">Called at start of new turn</td>
+	<td class="summary">Called at the start of a new turn.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onSelectWorldpkgdesc">onSelectWorldpkgdesc (selectedRecordName, selectedRecordGroup)</a></td>
@@ -1123,7 +1123,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onfortificationlevelS">onfortificationlevelS (siegedSettlement)</a></td>
-	<td class="summary">Called on select fortificationlevel in siege of settlement</td>
+	<td class="summary">Called on specified fortificationlevel in a siege of a settlement.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onEndSiege">onEndSiege (xCoord, yCoord)</a></td>
@@ -1135,481 +1135,363 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onCharacterSelected">onCharacterSelected (selectedChar)</a></td>
-	<td class="summary">a character has been selected by any means (including through the UI)</td>
+	<td class="summary">A character has been selected by any means (including through the UI).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onPreFactionTurnStart">onPreFactionTurnStart (faction)</a></td>
-	<td class="summary">Called before faction turn start</td>
+	<td class="summary">Called before the faction's turn starts.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onFactionTurnStart">onFactionTurnStart (faction)</a></td>
-	<td class="summary">Called at faction turn start</td>
+	<td class="summary">Called at a faction's turn start.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onFactionTurnEnd">onFactionTurnEnd (faction)</a></td>
-	<td class="summary">Called at faction turn end</td>
+	<td class="summary">Called at a faction's turn end.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onFactionNewCapital">onFactionNewCapital (faction)</a></td>
-	<td class="summary">Called after faction has new capital</td>
+	<td class="summary">Called after faction changes to a new capital.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onFactionWarDeclared">onFactionWarDeclared (faction, targetFaction)</a></td>
-	<td class="summary">Called after declaring war</td>
+	<td class="summary">Called after a faction declares a war.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onFactionAllianceDeclared">onFactionAllianceDeclared (faction, targetFaction)</a></td>
-	<td class="summary">Called after declaring alliance</td>
+	<td class="summary">Called after a faction declares an alliance.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onFactionTradeAgreementMade">onFactionTradeAgreementMade (faction, targetFaction)</a></td>
-	<td class="summary">Called after declaring trade agreement</td>
+	<td class="summary">Called after a faction makes a trade agreement.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onFactionBreakAlliance">onFactionBreakAlliance (faction, targetFaction)</a></td>
-	<td class="summary">Called after break alliance</td>
+	<td class="summary">Called after a faction breaks an alliance.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onGiveMoney">onGiveMoney (faction, targetFaction, amount)</a></td>
-	<td class="summary">Called after giving money</td>
+	<td class="summary">Called after a faction gives money to another faction.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onUpdateAttitude">onUpdateAttitude (faction, targetFaction)</a></td>
-	<td class="summary">Called after update attitude</td>
+	<td class="summary">Called after a faction updates it's attitude towards another faction.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onDemeanour">onDemeanour (faction, targetFaction, amount)</a></td>
-	<td class="summary">A demeanour response has occured in diplomacy talks</td>
+	<td class="summary">A demeanour response has occured in diplomacy talks.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onGeneralAssaultsGeneral">onGeneralAssaultsGeneral (attacker, defender)</a></td>
-	<td class="summary">A general has attacked another general</td>
+	<td class="summary">A general has attacked another general.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onGeneralAssaultsResidence">onGeneralAssaultsResidence (attacker, settlement, fort)</a></td>
-	<td class="summary">An assault has taken place</td>
+	<td class="summary">An assault has taken place.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onGeneralCaptureSettlement">onGeneralCaptureSettlement (attacker, settlement)</a></td>
-	<td class="summary">Settlement captured</td>
+	<td class="summary">A General has captured a settlement.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onGeneralCaptureResidence">onGeneralCaptureResidence (attacker)</a></td>
-	<td class="summary">A General has captured a residence(fort, watchtower, check it yourself)</td>
+	<td class="summary">A General has captured a residence such as a fort or watchtower.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onSiegeEquipmentCompleted">onSiegeEquipmentCompleted (settlement, fort)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">Siege equipment has been completed by one of the sieging armies at this residence.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onPostBattle">onPostBattle (character)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">When a battle has finished.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onMultiTurnMove">onMultiTurnMove (character)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has attempted to move a character beyond that character's given movement range for that turn.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onSettlementSelected">onSettlementSelected (settlement)</a></td>
-	<td class="summary">a settlement has been selected by any means (including through the UI)</td>
+	<td class="summary">A settlement has been selected by any means (including through the UI).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onSettlementUpgraded">onSettlementUpgraded (settlement)</a></td>
-	<td class="summary">settlement level increased</td>
+	<td class="summary">A settlement's level has been increased.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onSettlementConverted">onSettlementConverted (settlement)</a></td>
-	<td class="summary">settlement converted between city and castle</td>
+	<td class="summary">A settlement converted between city and castle and vice-versa.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onCityRiots">onCityRiots (settlement)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A settlement has rioted.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onUngarrisonedSettlement">onUngarrisonedSettlement (settlement)</a></td>
-	<td class="summary">the last unit has been removed from a settlement, agents do not count</td>
+	<td class="summary">The last unit has been removed from a settlement, agents do not count.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onUngarrisonedFort">onUngarrisonedFort (fort)</a></td>
-	<td class="summary">the last unit has been removed from a fort, agents do not count</td>
+	<td class="summary">The last unit has been removed from a fort, agents do not count.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onGiveSettlement">onGiveSettlement (settlement, fac1, fac2)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A settlement has been given to another faction.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onOccupySettlement">onOccupySettlement (character, targetFaction)</a></td>
-	<td class="summary">general has captured a settlement and the occupy option has been accepted</td>
+	<td class="summary">A general has captured a settlement and the occupy option has been chosen</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onExterminatePopulation">onExterminatePopulation (character, targetFaction)</a></td>
-	<td class="summary">general has captured a settlement and the exterminate option has been accepted</td>
+	<td class="summary">A general has captured a settlement and the exterminate option has been chosen.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onSackSettlement">onSackSettlement (character, targetFaction)</a></td>
-	<td class="summary">general has captured a settlement and the sack option has been accepted</td>
+	<td class="summary">A general has captured a settlement and the sack option has been chosen.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onAddedToBuildingQueue">onAddedToBuildingQueue (settlement, buildNme)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A building has been added to the construction queue.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onBuildingDestroyed">onBuildingDestroyed (settlement, buildNme)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A building has been destroyed.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onBuildingCompleted">onBuildingCompleted (fac, settlement)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A building has been completed.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onEventCounter">onEventCounter (counter)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">An event counter has changed it's value.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onFactionExcommunicated">onFactionExcommunicated (fac)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">When a faction is excommunicated by the Pope.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onDisaster">onDisaster (eventType)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">When a particular disaster has just happened.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onHordeFormed">onHordeFormed (fac)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A Faction has formed a horde.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onAddedToTrainingQueue">onAddedToTrainingQueue (sett, unitName)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A unit has been added to the training queue.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onUnitDisbanded">onUnitDisbanded (fac, unit)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A unit has been disbanded.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onUnitTrained">onUnitTrained (fac, sett, unit)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A unit has been trained.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onAgentCreated">onAgentCreated (character, agentType, sett)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">An agent has been trained.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onObjSeen">onObjSeen (fac, targetFac, xCoord, yCoord)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">An object of the target faction has been seen by the faction.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onTileSeen">onTileSeen (fac, xCoord, yCoord)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The tile has been seen by the faction.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onGameReloaded">onGameReloaded (something)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The game has been reloaded while on the strategy map.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onTransgression">onTransgression (fac, description, targetFac)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A faction to faction transgression has occurred.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onPopeAcceptsCrusadeTarget">onPopeAcceptsCrusadeTarget (crusade, target)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The Pope has accepted the player's crusade target.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onCrusadeCalled">onCrusadeCalled (crusade, target)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A Crusade or Jihad has been called.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onCrusadeEnds">onCrusadeEnds (crusade, target)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A Crusade or Jihad has ended.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onPopeRejectsCrusadeTarget">onPopeRejectsCrusadeTarget (crusade, target)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The Pope has rejected the player's crusade target.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onArmyTakesCrusadeTarget">onArmyTakesCrusadeTarget (crusade, target, army)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">An army has taken a crusade or jihad target settlement.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onUnitsDesertCrusade">onUnitsDesertCrusade (crusade, target, fac)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">Units have deserted a crusade or jihad.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onPopeElected">onPopeElected (fac, fac2)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A new pope has been elected.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onVotedForPope">onVotedForPope (fac)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A Faction has voted for the new pope.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onAssassinCaughtAttackingPope">onAssassinCaughtAttackingPope (fac)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">An assassination mission against the pope has failed and the assassin is executed.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onInquisitorAppointed">onInquisitorAppointed (fac, sett)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">An inquisitor has been dispatched to a region.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onSettlementPanelOpen">onSettlementPanelOpen (sett)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has opened the panel for the selected settlement.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onFinancesPanelOpen">onFinancesPanelOpen (fac)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has opened the finances panel.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onFactionSummaryPanelOpen">onFactionSummaryPanelOpen (fac)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has opened the faction summary panel.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onFamilyTreePanelOpenFunc">onFamilyTreePanelOpenFunc (fac)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has opened the family tree panel.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onDiplomaticStandingPanelOpen">onDiplomaticStandingPanelOpen (fac)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has opened the diplomatic standing panel.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onDiplomacyPanelOpen">onDiplomacyPanelOpen (fac)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has opened a diplomacy panel.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onPreBattlePanelOpen">onPreBattlePanelOpen (fac)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has attacked an army or settlement.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onNavalAutoResolvePanelOpen">onNavalAutoResolvePanelOpen ()</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The naval auto resolve panel has opened.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onCharacterPanelOpen">onCharacterPanelOpen (selectedChar)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has opened the panel for the selected character.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onTradePanelOpen">onTradePanelOpen (sett)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has opened a trade panel.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onRequestBuildingAdvice">onRequestBuildingAdvice (sett)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has requested building advice.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onRequestTrainingAdvice">onRequestTrainingAdvice (sett, recommendedUnitEntry)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has requested training advice.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onMessageOpen">onMessageOpen (fac, msgType)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has opened a message.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onIncomingMessage">onIncomingMessage (fac, msgType)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has recieved a message.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onMessageClosed">onMessageClosed (msgType)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has closed a message.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onButtonPressed">onButtonPressed (buttonName)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has clicked on a button.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onScrollClosed">onScrollClosed (scrollName)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player closed a scroll.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onScrollOpened">onScrollOpened (scrollName)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player opened a scroll.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onUIElementVisible">onUIElementVisible (elementName)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A special UI Element is visible.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onScrollAdviceRequested">onScrollAdviceRequested (scrollName)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has requested advice on a scroll.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onSettlementScrollAdviceRequested">onSettlementScrollAdviceRequested (sett, scrollName)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has requested advice on the settlement scroll.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onPreBattleScrollAdviceRequested">onPreBattleScrollAdviceRequested ()</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has requested advice on the prebattle scroll.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onNavalPreBattleScrollAdviceRequested">onNavalPreBattleScrollAdviceRequested ()</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has requested advice on the naval prebattle scroll.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onCollegeOfCardinalsPanelOpen">onCollegeOfCardinalsPanelOpen (college)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The player has opened the college of cardinals panel.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onGuildUpgraded">onGuildUpgraded (sett, guildName)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A guild has been created or upgraded.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onGuildDestroyed">onGuildDestroyed (sett, guildID)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A guild has been destroyed.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onBrotherAdopted">onBrotherAdopted (character)</a></td>
-	<td class="summary">a character in the family tree has received a brother by adoption</td>
+	<td class="summary">A character in the family tree has received a brother by adoption.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onBirth">onBirth (child)</a></td>
-	<td class="summary">a child has been born</td>
+	<td class="summary">A child has been born.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onCharacterComesOfAge">onCharacterComesOfAge (character)</a></td>
-	<td class="summary">a character has come of age</td>
+	<td class="summary">A character has come of age.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onCharacterMarries">onCharacterMarries (husband)</a></td>
-	<td class="summary">a character has married (someone who isn't a princess)</td>
+	<td class="summary">A character has married (someone who isn't a princess).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onCharacterMarriesPrincess">onCharacterMarriesPrincess (husband)</a></td>
-	<td class="summary">a character has married a princess agent</td>
+	<td class="summary">A character has married a princess agent.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onCharacterBecomesAFather">onCharacterBecomesAFather (father)</a></td>
-	<td class="summary">a child has been born</td>
+	<td class="summary">A child has been born.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onNewAdmiralCreated">onNewAdmiralCreated (admiral, sett)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">A new admiral has been created for a new ship.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onShortcutTriggered">onShortcutTriggered (shortcut)</a></td>
-	<td class="summary">a shortcut has been used</td>
+	<td class="summary">The player triggered a keyboard shortcut.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onBecomesFactionLeader">onBecomesFactionLeader (leader)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The character has been made the faction leader.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onBecomesFactionHeir">onBecomesFactionHeir (heir)</a></td>
-	<td class="summary">
-
-</td>
+	<td class="summary">The character has been made a faction heir.</td>
 	</tr>
 </table>
 <h2><a href="#M2TWEOPDU">M2TWEOPDU </a></h2>
@@ -1620,23 +1502,23 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.addEopEduEntryFromFile">M2TWEOPDU.addEopEduEntryFromFile (filepath, eopEnryIndex)</a></td>
-	<td class="summary">Create new M2TWEOPDU entry from type description</td>
+	<td class="summary">Create new M2TWEOPDU entry from a file describing it.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.addEopEduEntryFromEDUID">M2TWEOPDU.addEopEduEntryFromEDUID (baseEnryIndex, eopEnryIndex)</a></td>
-	<td class="summary">Create new M2TWEOPDU entry</td>
+	<td class="summary">Create new M2TWEOPDU entry.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.getEopEduEntryByID">M2TWEOPDU.getEopEduEntryByID (eopEnryIndex)</a></td>
-	<td class="summary">Get eduEntry of M2TWEOPDU entry.</td>
+	<td class="summary">Get eduEntry of a M2TWEOPDU entry.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.getDataEopDu">M2TWEOPDU.getDataEopDu (eopEnryIndex)</a></td>
-	<td class="summary">Get data of M2TWEOPDU entry.</td>
+	<td class="summary">Get data of a M2TWEOPDU entry.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.setEntryUnitCardTga">M2TWEOPDU.setEntryUnitCardTga (eopEnryIndex, newCardTga)</a></td>
-	<td class="summary">Set unit card for M2TWEOPDU entry.</td>
+	<td class="summary">Set unit card for a M2TWEOPDU entry.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.setEntryInfoCardTga">M2TWEOPDU.setEntryInfoCardTga (eopEnryIndex, newInfoCardTga)</a></td>
@@ -1644,11 +1526,11 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.setEntrySoldierModel">M2TWEOPDU.setEntrySoldierModel (eopEnryIndex, newSoldierModel)</a></td>
-	<td class="summary">Set soldier model for M2TWEOPDU entry.</td>
+	<td class="summary">Set unit info card for a M2TWEOPDU entry.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.setEntryLocalizedName">M2TWEOPDU.setEntryLocalizedName (eopEnryIndex, newLocalizedName)</a></td>
-	<td class="summary">Set localized name for M2TWEOPDU entry.</td>
+	<td class="summary">Set localized name for a M2TWEOPDU entry.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.setEntryLocalizedDescr">M2TWEOPDU.setEntryLocalizedDescr (eopEnryIndex, newLocalizedDescr)</a></td>
@@ -1674,11 +1556,11 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#campaignStruct:checkDipStance">campaignStruct:checkDipStance (checkType, fac1, fac2)</a></td>
-	<td class="summary">Check diplomatic relations between factions</td>
+	<td class="summary">Check if a diplomatic relation between two factions.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#campaignStruct:setDipStance">campaignStruct:setDipStance (relType, fac1, fac2)</a></td>
-	<td class="summary">Set diplomatic relations between factions</td>
+	<td class="summary">Set a diplomatic relation between two factions.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#campaignStruct:GetUnitSize">campaignStruct:GetUnitSize ()</a></td>
@@ -1693,7 +1575,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#gameDataAll.get">gameDataAll.get ()</a></td>
-	<td class="summary">Call at start of script, this is a static object and pointer to it doesn't change</td>
+	<td class="summary">Call at the start of the script, this is a static object and the pointer to it doesn't change.</td>
 	</tr>
 </table>
 <h2><a href="#battleStruct">battleStruct </a></h2>
@@ -1707,7 +1589,7 @@
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#battleStruct.battleSide">battleStruct.battleSide</a></td>
-	<td class="summary">basic battleSide table</td>
+	<td class="summary">Basic battleSide table</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#battleSide.getWinConditionString">battleSide.getWinConditionString (condition)</a></td>
@@ -1718,18 +1600,18 @@
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#battleSide.trackedPointerArmy">battleSide.trackedPointerArmy</a></td>
-	<td class="summary">basic trackedPointerArmy table</td>
+	<td class="summary">Basic trackedPointerArmy table</td>
 	</tr>
 </table>
 <h2><a href="#deploymentAreaS">deploymentAreaS </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#trackedPointerArmy.deploymentAreaS">trackedPointerArmy.deploymentAreaS</a></td>
-	<td class="summary">basic trackedPointerArmy table</td>
+	<td class="summary">Basic trackedPointerArmy table</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#deploymentAreaS:getCoordPair">deploymentAreaS:getCoordPair ()</a></td>
-	<td class="summary">Get pair of coords with number</td>
+	<td class="summary">Get pair of coords with index.</td>
 	</tr>
 </table>
 <h2><a href="#M2TWEOPFBX">M2TWEOPFBX </a></h2>
@@ -1740,67 +1622,67 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX.addFbxModel">M2TWEOPFBX.addFbxModel (modelPath, texturePath, modelID)</a></td>
-	<td class="summary">Load new fbx model</td>
+	<td class="summary">Load a new fbx model.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX.deleteFbxModel">M2TWEOPFBX.deleteFbxModel (modelID)</a></td>
-	<td class="summary">Delete fbx model</td>
+	<td class="summary">Delete a fbx model.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX.getFbxModel">M2TWEOPFBX.getFbxModel (modelID)</a></td>
-	<td class="summary">Get fbx model</td>
+	<td class="summary">Get an added fbx model by it's ID.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX.addFbxObject">M2TWEOPFBX.addFbxObject (modelID, objectID)</a></td>
-	<td class="summary">Create new fbx object with model.</td>
+	<td class="summary">Create new fbx object with our previously loaded model.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX.deleteFbxObject">M2TWEOPFBX.deleteFbxObject (object)</a></td>
-	<td class="summary">Delete fbx object</td>
+	<td class="summary">Delete an fbx object.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#M2TWEOPFBX.getFbxObject">M2TWEOPFBX.getFbxObject (object)</a></td>
-	<td class="summary">Get fbx object by id</td>
+	<td class="name" nowrap><a href="#M2TWEOPFBX.getFbxObject">M2TWEOPFBX.getFbxObject (int)</a></td>
+	<td class="summary">Get an fbx object by it's ID.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX.setFbxObjectCoords">M2TWEOPFBX.setFbxObjectCoords (fbx, x, y, z)</a></td>
-	<td class="summary">Set fbx object coordinates</td>
+	<td class="summary">Set an fbx object's coordinates.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX.getFbxObjectCoords">M2TWEOPFBX.getFbxObjectCoords (fbx)</a></td>
-	<td class="summary">Get fbx object coordinates</td>
+	<td class="summary">Get an fbx object's coordinates.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX.setFbxObjectSize">M2TWEOPFBX.setFbxObjectSize (fbx, sizeModifier)</a></td>
-	<td class="summary">Set fbx object size modifier</td>
+	<td class="summary">Set an fbx object's size modifier.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX.getFbxObjectSize">M2TWEOPFBX.getFbxObjectSize (fbx)</a></td>
-	<td class="summary">Get fbx object size modifier</td>
+	<td class="summary">Get an fbx object's size modifier.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX.setFbxObjectDrawState">M2TWEOPFBX.setFbxObjectDrawState (fbx, is)</a></td>
-	<td class="summary">Set fbx object draw state</td>
+	<td class="summary">Set an fbx object's draw state.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX.getFbxObjectDrawState">M2TWEOPFBX.getFbxObjectDrawState (fbx)</a></td>
-	<td class="summary">Get fbx object draw state</td>
+	<td class="summary">Get an fbx object's draw state.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX.setFbxObjectAnimState">M2TWEOPFBX.setFbxObjectAnimState (fbx, is)</a></td>
-	<td class="summary">Set fbx object animation state</td>
+	<td class="summary">Set an fbx object's animation state.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX.getFbxObjectAnimState">M2TWEOPFBX.getFbxObjectAnimState (fbx)</a></td>
-	<td class="summary">Get fbx object animation state</td>
+	<td class="summary">Get an fbx object's animation state.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX.setFbxObjectDrawType">M2TWEOPFBX.setFbxObjectDrawType (fbx, current)</a></td>
-	<td class="summary">Set fbx object draw type.</td>
+	<td class="summary">Set fbx object draw type, i.e.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX.getFbxObjectDrawType">M2TWEOPFBX.getFbxObjectDrawType (fbx)</a></td>
-	<td class="summary">Get fbx object draw type.</td>
+	<td class="summary">Get fbx object draw type, i.e.</td>
 	</tr>
 </table>
 <h2><a href="#M2TWEOPSounds">M2TWEOPSounds </a></h2>
@@ -1811,31 +1693,31 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPSounds.createEOPSound">M2TWEOPSounds.createEOPSound (soundPath)</a></td>
-	<td class="summary">Create(and load) new sound</td>
+	<td class="summary">Create (and load) a new sound.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPSounds.deleteEOPSound">M2TWEOPSounds.deleteEOPSound (soundID)</a></td>
-	<td class="summary">Delete sound</td>
+	<td class="summary">Delete a sound</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPSounds.playEOPSound">M2TWEOPSounds.playEOPSound (soundID)</a></td>
-	<td class="summary">Play sound</td>
+	<td class="summary">Play a sound.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPSounds.setEOPSoundOffset">M2TWEOPSounds.setEOPSoundOffset (soundID, millisecondsOffset)</a></td>
-	<td class="summary">Set sound playing offset</td>
+	<td class="summary">Set a sound's playing offset.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPSounds.getEOPSoundOffset">M2TWEOPSounds.getEOPSoundOffset (soundID)</a></td>
-	<td class="summary">Get sound playing offset</td>
+	<td class="summary">Get a sound's playing offset.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPSounds.pauseEOPSound">M2TWEOPSounds.pauseEOPSound (soundID)</a></td>
-	<td class="summary">Pause sound</td>
+	<td class="summary">Pause a sound that is playing.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPSounds.stopEOPSound">M2TWEOPSounds.stopEOPSound (soundID)</a></td>
-	<td class="summary">Stop sound playing</td>
+	<td class="summary">Stop a sound that is playing.</td>
 	</tr>
 </table>
 
@@ -2175,7 +2057,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     <ul>
         <li><span class="parameter">limit</span>
             <span class="types"><span class="type">int</span></span>
-         default: 9
+         default: 9, maximum: 57
         </li>
     </ul>
 
@@ -2666,22 +2548,22 @@ subElement1:execute();</pre>
 </dd>
     <dt>
     <a name = "objects.addModelToGame"></a>
-    <strong>objects.addModelToGame (modelPath, modelId)</strong>
+    <strong>objects.addModelToGame (path, modelId)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
-    Add new cas stratmodel to game
+    Add a new .cas campaign strategy model to the game with a unique ID.  This should be called during onPluginLoad()
     </div>
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">modelPath</span>
+        <li><span class="parameter">path</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         relative(to modfolder) path
+         Relative path from the modfolder (starting with "data/").
         </li>
         <li><span class="parameter">modelId</span>
             <span class="types"><span class="type">int</span></span>
-         model id
+          Unique ID to use the model later.
         </li>
     </ul>
 
@@ -2743,46 +2625,34 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Replace custom tile.  Change custom battlefield for coordinates.
+    Replace a custom tile.  Change the custom battlefield on the specified coordinates.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">label</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
+          Identifier.
         </li>
         <li><span class="parameter">xCoord</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+          X coordinate of tile.
         </li>
         <li><span class="parameter">yCoord</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+          Y coordinate of tile.
         </li>
         <li><span class="parameter">filename</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
+          Just the name, not full path (.wfc)
         </li>
         <li><span class="parameter">weather</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
+         Weather on the battle map.
         </li>
         <li><span class="parameter">dayTime</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
+         Time of day.
         </li>
     </ul>
 
@@ -2841,7 +2711,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Slow move camera to a tile
+    Slowly move the camera to the specified tile.
     </div>
 
     <h3>Parameters:</h3>
@@ -2875,7 +2745,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Fast move camera to a tile
+    Quickly move the camera to the specified tile.
     </div>
 
     <h3>Parameters:</h3>
@@ -2909,7 +2779,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Set zoom of stratcamera
+    Set the zoom level of the camera.
     </div>
 
     <h3>Parameters:</h3>
@@ -3007,7 +2877,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Call m2tw console command
+    Execute a Medieval II console command.
     </div>
 
 
@@ -3015,7 +2885,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     <ol>
 
            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-        error note: string can be empty but not nil
+        error Note: string can be empty but not nil
     </ol>
 
 
@@ -3024,7 +2894,9 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     <ul>
         <pre class="example"><span class="keyword">function</span> onCharacterSelected(selectedChar)
 	<span class="keyword">local</span> err = stratmap.game.callConsole(<span class="string">"add_money"</span>, <span class="string">"2321"</span>)
+	<span class="keyword">local</span> err2 = stratmap.game.callConsole(<span class="string">"create_unit"</span>, <span class="string">"testcharacter 'Cool Unit' 4 1 1 1"</span>)
 	<span class="global">print</span>(err)
+	<span class="global">print</span>(err2)
 <span class="keyword">end</span></pre>
     </ul>
 
@@ -3035,7 +2907,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Get factions number
+    Get the amount of factions
     </div>
 
 
@@ -3043,7 +2915,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     <ol>
 
            <span class="types"><span class="type">int</span></span>
-        facNumber number of factions
+        facNumber Amount of factions
     </ol>
 
 
@@ -3056,20 +2928,18 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 </dd>
     <dt>
     <a name = "game.getFaction"></a>
-    <strong>game.getFaction (index)</strong>
+    <strong>game.getFaction (Index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
-    Get faction with index
+    Get a faction by the index, commonly used when iterating over all factions using getFactionsCount()
     </div>
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">index</span>
+        <li><span class="parameter">Index</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         of the faction.
         </li>
     </ul>
 
@@ -3094,7 +2964,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Get guild with index
+    Get a guild by the index.
     </div>
 
     <h3>Parameters:</h3>
@@ -3124,66 +2994,50 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 </dd>
     <dt>
     <a name = "game.createCharacterByString"></a>
-    <strong>game.createCharacterByString (type, faction, age, name, name2, subFaction, portrait_custom, xCoord, yCoord)</strong>
+    <strong>game.createCharacterByString (type, Faction, age, name, name2, subFaction, portrait_custom, xCoord, yCoord)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
-    Create character at coords
+    Create a new character at the specified coordinates.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">type</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
+         Character type, for example "named character".
         </li>
-        <li><span class="parameter">faction</span>
+        <li><span class="parameter">Faction</span>
             <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
-
-
-
+         the new character belongs to.
         </li>
         <li><span class="parameter">age</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         The character's age
         </li>
         <li><span class="parameter">name</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
+         The short name of the character.
         </li>
         <li><span class="parameter">name2</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
+         The full name of the character.
         </li>
         <li><span class="parameter">subFaction</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Set to 31 to disable.
         </li>
         <li><span class="parameter">portrait_custom</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         cannot be nil
+         cannot be nil Name of the folder inside 'data/ui/custom_portraits folder. Can not be nil!
         </li>
         <li><span class="parameter">xCoord</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         X coordinate of the new character
         </li>
         <li><span class="parameter">yCoord</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Y coordinate of the new character
         </li>
     </ul>
 
@@ -3191,7 +3045,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     <ol>
 
            <span class="types"><a class="type" href="index.html#character">character</a></span>
-        newCharacter
+        newCharacter Returns a character class, not a named character class!
     </ol>
 
 
@@ -3208,16 +3062,14 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Create army for character
+    Create an army for a character.  Commonly used after spawning a new character to set it's bodyguard unit.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">ourGeneral</span>
             <span class="types"><a class="type" href="index.html#character">character</a></span>
-
-
-
+         Character class, not named character class!
         </li>
     </ul>
 
@@ -3242,7 +3094,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Create army in settlement (don't need character)
+    Create an army in a settlement (don't need a character).  Used to add units to an empty settlement.
     </div>
 
     <h3>Parameters:</h3>
@@ -3276,16 +3128,14 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Get script counter value, works for counter and event_counter
+    Get a script counter value, works for counters and for event_counters
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">counterName</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
+         The name of the counter
         </li>
     </ul>
 
@@ -3293,10 +3143,10 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     <ol>
         <li>
            <span class="types"><span class="type">bool</span></span>
-        isExist</li>
+        isExist Returns true if the counter exists i.e it has been used at least once in any way in the campaign_script</li>
         <li>
            <span class="types"><span class="type">int</span></span>
-        counterValue</li>
+        counterValue Returns the value of the counter</li>
     </ol>
 
 
@@ -3313,7 +3163,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Set event_counter value, does not work for counter, only event_counter
+    Set an event_counter value, does not work for counters, only event_counters.
     </div>
 
     <h3>Parameters:</h3>
@@ -3426,11 +3276,11 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
         </li>
         <li><span class="parameter">soldierCountStratMapMax</span>
             <span class="types"><span class="type">int</span></span>
-         better read only
+         Read only
         </li>
         <li><span class="parameter">soldierCountBattleMap</span>
             <span class="types"><span class="type">int</span></span>
-         better read only
+         Read only
         </li>
         <li><span class="parameter">character</span>
             <span class="types"><a class="type" href="index.html#character">character</a></span>
@@ -3499,21 +3349,15 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     <ul>
         <li><span class="parameter">exp</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Experience. Maximum: 9
         </li>
         <li><span class="parameter">armor</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Armour level.
         </li>
         <li><span class="parameter">weapon</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Weapon Upgrade. Maximum: 1
         </li>
     </ul>
 
@@ -3783,7 +3627,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
         </li>
         <li><span class="parameter">ability</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         see descr<em>hero</em>abilities.xml
+         see descr_hero_abilities.xml
         </li>
         <li><span class="parameter">getTypeID</span>
             <span class="types"><a class="type" href="index.html#character:getTypeID">getTypeID</a></span>
@@ -3835,7 +3679,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     <dd>
     <div class="functionDescription">
 
-<p>Get character type. </p>
+<p>Get the character type.  See hint below for the types.</p>
 <pre><code>0-spy
 1-assassin
 2-diplomat
@@ -3876,7 +3720,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     <dd>
     <div class="functionDescription">
 
-<p>Set character type. </p>
+<p>Set the character type.  See hint below for the types.</p>
 <pre><code>0-spy
 1-assassin
 2-diplomat
@@ -3919,7 +3763,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Issue regular move command, character must have movePoints
+    Issue regular move command, character must have movement points.
     </div>
 
     <h3>Parameters:</h3>
@@ -3953,7 +3797,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Instantly teleport character to coordinates
+    Instantly teleport character to the coordinates.
     </div>
 
     <h3>Parameters:</h3>
@@ -4006,7 +3850,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Set bodyguard.  Do this only for characters without it (after creating,for example)
+    Set bodyguard.  Do this only for characters without it, such as immediately after creating a character.
     </div>
 
     <h3>Parameters:</h3>
@@ -4038,7 +3882,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    All named characters have these fields including dead characters, wives, children, and off-map characters
+    Basic namedCharacter table.  All named characters have these fields including dead characters, wives, children, and off-map characters.
     </div>
 
     <h3>Fields:</h3>
@@ -4057,15 +3901,15 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
         </li>
         <li><span class="parameter">shortName</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         internal name
+         Internal name.
         </li>
         <li><span class="parameter">fullName</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         internal name including surname
+         Internal name including surname.
         </li>
         <li><span class="parameter">localizedDisplayName</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         display name, resets upon reload save
+         Display name, resets upon reloading a save.
         </li>
         <li><span class="parameter">label</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
@@ -4075,19 +3919,19 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
         </li>
         <li><span class="parameter">portrait</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         note: wives (who were never princesses) and children do not have anything for this field
+         Wives (who have never been princesses) and children do not have anything for this field. Path to 'young' portrait used starting from 'mods' folder. Resets upon reloading a save.
         </li>
         <li><span class="parameter">portrait2</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         note: wives (who were never princesses) and children do not have anything for this field
+         Wives (who have never been princesses) and children do not have anything for this field. Path to 'old' portrait used starting from 'mods' folder. Resets upon reloading a save.
         </li>
         <li><span class="parameter">portrait_custom</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         note: wives (who were never princesses) and children do not have anything for this field
+         Wives (who have never been princesses) and children do not have anything for this field. Folder name in ui/custom_portraits folder.
         </li>
         <li><span class="parameter">modelName</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         battle model
+         Battle model (needs battle_models.modeldb entry).
         </li>
         <li><span class="parameter">status</span>
             <span class="types"><span class="type">int</span></span>
@@ -4119,7 +3963,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
         </li>
         <li><span class="parameter">yearOfBirth</span>
             <span class="types"><span class="type">float</span></span>
-         e.g. with 4 turns per year, the yearOfBirth could be 1840.25
+         For example with 4 turns per year, the yearOfBirth could be 1840.25
         </li>
         <li><span class="parameter">faction</span>
             <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
@@ -4574,14 +4418,14 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    set character as faction heir
+    Sets the named character as the faction heir.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">onlyHeir</span>
             <span class="types"><span class="type">bool</span></span>
-         true = this character will be the only heir, false = add another heir (faction can appear to have multiple heirs but only one will become leader)
+         True = this character will be the only heir, false = add another heir (faction can appear to have multiple heirs but only one will become leader).
         </li>
     </ul>
 
@@ -4600,7 +4444,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    check if character is alive, read only, do not set value
+    Checks if character is alive, read only, do not set this value.
     </div>
 
 
@@ -4627,7 +4471,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    get pointer to traits container
+    Get the pointer to the character's traits container.
     </div>
 
 
@@ -4635,7 +4479,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     <ol>
 
            <span class="types"><a class="type" href="index.html#traitContainer">traitContainer</a></span>
-        traits
+        The character's traits.
     </ol>
 
 
@@ -4656,22 +4500,18 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    add trait to character
+    Add a trait to the character.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">traitName</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
+         Trait's internal name per export_descr_character_traits.txt
         </li>
         <li><span class="parameter">traitLevel</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Trait's level.
         </li>
     </ul>
 
@@ -4690,16 +4530,14 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    remove trait from character
+    Remove a trait from the character.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">traitName</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
+         Trait's internal name per export_descr_character_traits.txt
         </li>
     </ul>
 
@@ -4718,7 +4556,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    get pointer to ancillary with number
+    Get the pointer to the ancillary using it's index.  You can iterate over a character's ancillaries for example by going from index 0 to ancNum - 1.
     </div>
 
     <h3>Parameters:</h3>
@@ -4752,7 +4590,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    add ancillary to character
+    Add an ancillary to the named character using the name per export_descr_ancillaries.txt.
     </div>
 
     <h3>Parameters:</h3>
@@ -4780,7 +4618,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    remove ancillary
+    Remove an ancillary from the named character using it's pointer.  Use getAncillary function to get the specific ancillary.
     </div>
 
     <h3>Parameters:</h3>
@@ -4964,9 +4802,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
         </li>
         <li><span class="parameter">numOfNamedCharacters</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         includes literally all characters without distinction (so also wives, children, dead and those sent off map)
         </li>
         <li><span class="parameter">getNamedCharacter</span>
             <span class="types"><a class="type" href="index.html#factionStruct:getNamedCharacter">getNamedCharacter</a></span>
@@ -4976,9 +4812,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
         </li>
         <li><span class="parameter">numOfCharacters</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         includes all the characters present on the strat map
         </li>
         <li><span class="parameter">getCharacter</span>
             <span class="types"><a class="type" href="index.html#factionStruct:getCharacter">getCharacter</a></span>
@@ -5059,7 +4893,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Get faction internal name
+    Get the faction's internal name
     </div>
 
 
@@ -5088,7 +4922,7 @@ ourFacName = ourFac:getFactionName();
     </dt>
     <dd>
     <div class="functionDescription">
-    Get named character with number
+    Get named character using it's index.
     </div>
 
     <h3>Parameters:</h3>
@@ -5125,7 +4959,7 @@ ourFacName = ourFac:getFactionName();
     </dt>
     <dd>
     <div class="functionDescription">
-    Get character with number
+    Get a character using it's index.
     </div>
 
     <h3>Parameters:</h3>
@@ -5162,7 +4996,7 @@ ourFacName = ourFac:getFactionName();
     </dt>
     <dd>
     <div class="functionDescription">
-    Get army with number
+    Get an army using it's index.
     </div>
 
     <h3>Parameters:</h3>
@@ -5199,7 +5033,7 @@ ourFacName = ourFac:getFactionName();
     </dt>
     <dd>
     <div class="functionDescription">
-    Get settlement with number
+    Get a settlement using it's index.
     </div>
 
     <h3>Parameters:</h3>
@@ -5236,7 +5070,7 @@ ourFacName = ourFac:getFactionName();
     </dt>
     <dd>
     <div class="functionDescription">
-    Get fort with number
+    Get a fort using it's index.
     </div>
 
     <h3>Parameters:</h3>
@@ -5273,7 +5107,7 @@ ourFacName = ourFac:getFactionName();
     </dt>
     <dd>
     <div class="functionDescription">
-    Get port with number
+    Get a port using it's index.
     </div>
 
     <h3>Parameters:</h3>
@@ -5316,7 +5150,7 @@ ourFacName = ourFac:getFactionName();
     </dt>
     <dd>
     <div class="functionDescription">
-    Get watchtower with number
+    Get a watchtower using it's index.
     </div>
 
     <h3>Parameters:</h3>
@@ -5366,43 +5200,43 @@ ourFacName = ourFac:getFactionName();
     <ul>
         <li><span class="parameter">primaryColorRed</span>
             <span class="types"><span class="type">int</span></span>
-         warning: resets on reload
+         Warning: resets on reload.
         </li>
         <li><span class="parameter">primaryColorGreen</span>
             <span class="types"><span class="type">int</span></span>
-         warning: resets on reload
+         Warning: resets on reload.
         </li>
         <li><span class="parameter">primaryColorBlue</span>
             <span class="types"><span class="type">int</span></span>
-         warning: resets on reload
+         Warning: resets on reload.
         </li>
         <li><span class="parameter">secondaryColorRed</span>
             <span class="types"><span class="type">int</span></span>
-         warning: resets on reload
+         Warning: resets on reload.
         </li>
         <li><span class="parameter">secondaryColorGreen</span>
             <span class="types"><span class="type">int</span></span>
-         warning: resets on reload
+         Warning: resets on reload.
         </li>
         <li><span class="parameter">secondaryColorBlue</span>
             <span class="types"><span class="type">int</span></span>
-         warning: resets on reload
+         Warning: resets on reload.
         </li>
         <li><span class="parameter">triumphValue</span>
             <span class="types"><span class="type">int</span></span>
-         unkown use
+         Usage unknown.
         </li>
         <li><span class="parameter">standardIndex</span>
             <span class="types"><span class="type">int</span></span>
-         warning: resets on reload
+         Warning: resets on reload.
         </li>
         <li><span class="parameter">logoIndex</span>
             <span class="types"><span class="type">int</span></span>
-         warning: resets on reload
+         Warning: resets on reload.
         </li>
         <li><span class="parameter">smallLogoIndex</span>
             <span class="types"><span class="type">int</span></span>
-         warning: resets on reload
+         Warning: resets on reload.
         </li>
     </ul>
 
@@ -5520,15 +5354,15 @@ ourFacName = ourFac:getFactionName();
     <ul>
         <li><span class="parameter">xCoord</span>
             <span class="types"><span class="type">int</span></span>
-         land tile, note: setting only moves port strat model
+         land tile, Note: setting this only moves port's strat model.
         </li>
         <li><span class="parameter">yCoord</span>
             <span class="types"><span class="type">int</span></span>
-         land tile, note: setting only moves port strat model
+         land tile, Note: setting this only moves port's strat model.
         </li>
         <li><span class="parameter">ownerFaction</span>
             <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
-         note: port ownership changes to blockading faction (army on port)
+         Note: port's ownership changes to blockading faction (army on port)
         </li>
         <li><span class="parameter">settlement</span>
             <span class="types"><a class="type" href="index.html#settlementStruct">settlementStruct</a></span>
@@ -5538,15 +5372,15 @@ ourFacName = ourFac:getFactionName();
         </li>
         <li><span class="parameter">character</span>
             <span class="types"><a class="type" href="index.html#character">character</a></span>
-         character on port tile, only the first one, check for nil
+         Character standing on the port tile, only the first one, check for nil.
         </li>
         <li><span class="parameter">blockadingArmy</span>
             <span class="types"><a class="type" href="index.html#stackStruct">stackStruct</a></span>
-         enemy army blockading port by standing on tile, check for nil
+         Enemy army blockading the port, by standing on it's tile, check for nil.
         </li>
-        <li><span class="parameter">dock</span>
+        <li><span class="parameter">Dock</span>
             <span class="types"><a class="type" href="index.html#dockStruct">dockStruct</a></span>
-         water tile, only upgraded ports have this, check for nil
+         water tile, only upgraded ports have this, check for nil.
         </li>
     </ul>
 
@@ -5572,11 +5406,11 @@ ourFacName = ourFac:getFactionName();
     <ul>
         <li><span class="parameter">xCoord</span>
             <span class="types"><span class="type">int</span></span>
-         water tile, note: setting only moves dock strat model
+         water tile, Note: setting only moves dock strat model
         </li>
         <li><span class="parameter">yCoord</span>
             <span class="types"><span class="type">int</span></span>
-         water tile, note: setting only moves dock strat model
+         water tile, Note: setting only moves dock strat model
         </li>
     </ul>
 
@@ -5767,20 +5601,14 @@ ourFacName = ourFac:getFactionName();
     </dt>
     <dd>
     <div class="functionDescription">
-
-<p>Change owner faction of settlement. </p>
-<pre><code>All agents, armies, etc. leave settlement
-</code></pre>
-
+    Change owner faction of settlement.  All agents, armies etc. leave the settlement.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">newOwner</span>
             <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
-
-
-
+         Faction to change ownership to.
         </li>
     </ul>
 
@@ -5802,14 +5630,14 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Get settlement religion value
+    Get the settlement's specific regligion's value
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">religionID</span>
             <span class="types"><span class="type">int</span></span>
-         in order of descr_religions.txt, starting from 0
+         In order of descr_religions.txt, starting from 0
         </li>
     </ul>
 
@@ -5834,7 +5662,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Set settlement religion value, make sure sum of all religion values does not exceed 1.0!
+    Set the settlement's specific religion's value, make sure the sum of all religion values does not exceed 1.0!
     </div>
 
     <h3>Parameters:</h3>
@@ -5864,7 +5692,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Get guild standing by ID
+    Get a settlement's standing points with a specific guild by ID
     </div>
 
     <h3>Parameters:</h3>
@@ -5892,7 +5720,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Set settlement standing points with guild
+    Set the settlement's standing points with specific guild.
     </div>
 
     <h3>Parameters:</h3>
@@ -5926,7 +5754,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Get building with number
+    Get a specific building by it's index.
     </div>
 
     <h3>Parameters:</h3>
@@ -5964,7 +5792,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Create building.
+    Create a building in the settlement.
     </div>
 
     <h3>Parameters:</h3>
@@ -5992,18 +5820,18 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Destroy building of type.
+    Destroy a building of a specified type in the settlement.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">typeName</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         type of building
+         Type of building.
         </li>
         <li><span class="parameter">isReturnMoney</span>
             <span class="types"><span class="type">bool</span></span>
-         return money or not
+         Should money be returned to the faction like with a manual desctruction.
         </li>
     </ul>
 
@@ -6022,7 +5850,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Get resource with number
+    Get a specific resource by it's index.
     </div>
 
     <h3>Parameters:</h3>
@@ -6056,7 +5884,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Get siege with index
+    Get a specific siege by it's index
     </div>
 
     <h3>Parameters:</h3>
@@ -6145,7 +5973,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Get name of building type (chain)
+    Get the name of the building type (the building chain in export_descr_buildings.txt).
     </div>
 
 
@@ -6172,7 +6000,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Get name of building level
+    Get name of building level (as per export_descr_buildings.txt).
     </div>
 
 
@@ -6285,7 +6113,7 @@ currSet:changeOwner(fac1);
     <ul>
         <li><span class="parameter">building</span>
             <span class="types"><a class="type" href="index.html#building">building</a></span>
-         nil if building doesn't exist yet
+         Is nil if building doesn't exist yet.
         </li>
         <li><span class="parameter">settlement</span>
             <span class="types"><a class="type" href="index.html#settlementStruct">settlementStruct</a></span>
@@ -6530,16 +6358,14 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Set resource strat model
+    Set the resource's strat model.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">modelId</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Added with stratmap.objects.addModelToGame
         </li>
     </ul>
 
@@ -6558,7 +6384,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Get resource ID
+    Get the resource's ID.
     </div>
 
 
@@ -6585,7 +6411,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Get resource trade value
+    Get the resource's trade value.
     </div>
 
 
@@ -6612,7 +6438,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Get resource mine value
+    Check if the resource has a mine.
     </div>
 
 
@@ -6639,7 +6465,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Get resource image (icon) relative path
+    Get the resource's image (icon) relative path.
     </div>
 
 
@@ -6706,9 +6532,7 @@ currSet:changeOwner(fac1);
         </li>
         <li><span class="parameter">numOfCharacters</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Includes Auxiliary generals and agents (i.e all characters excluding the leading general)
         </li>
         <li><span class="parameter">boardedArmy</span>
             <span class="types"><a class="type" href="index.html#stackStruct">stackStruct</a></span>
@@ -6726,7 +6550,7 @@ currSet:changeOwner(fac1);
         </li>
         <li><span class="parameter">leader</span>
             <span class="types"><a class="type" href="index.html#character">character</a></span>
-         returns nil if stack is inside residence (fleet, settlement, fort)
+         Returns nil if stack is inside residence (fleet, settlement, fort).
         </li>
         <li><span class="parameter">findInSettlement</span>
             <span class="types"><a class="type" href="index.html#stackStruct:findInSettlement">findInSettlement</a></span>
@@ -6748,11 +6572,11 @@ currSet:changeOwner(fac1);
         </li>
         <li><span class="parameter">reform_point_x</span>
             <span class="types"><span class="type">float</span></span>
-         x coordinate to which the retreating units will go
+         X coordinate to which the retreating units will go.
         </li>
         <li><span class="parameter">reform_point_y</span>
             <span class="types"><span class="type">float</span></span>
-         y coordinate to which the retreating units will go
+         Y coordinate to which the retreating units will go.
         </li>
         <li><span class="parameter">createEOPUnit</span>
             <span class="types"><a class="type" href="index.html#stackStruct:createEOPUnit">createEOPUnit</a></span>
@@ -6774,7 +6598,7 @@ currSet:changeOwner(fac1);
         </li>
         <li><span class="parameter">siegeSettlement</span>
             <span class="types"><a class="type" href="index.html#stackStruct:siegeSettlement">siegeSettlement</a></span>
-         call twice to initiate assault
+         Call it twice to initiate an assault.
         </li>
         <li><span class="parameter">attackArmy</span>
             <span class="types"><a class="type" href="index.html#stackStruct:attackArmy">attackArmy</a></span>
@@ -6784,7 +6608,7 @@ currSet:changeOwner(fac1);
         </li>
         <li><span class="parameter">siege</span>
             <span class="types"><a class="type" href="index.html#siegeStruct">siegeStruct</a></span>
-         current siege
+         Current siege.
         </li>
     </ul>
 
@@ -6799,7 +6623,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Get unit with number
+    Get a unit by it's index.
     </div>
 
     <h3>Parameters:</h3>
@@ -6834,7 +6658,7 @@ ourUnit:kill();</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Get character(agent) with number
+    Get a character (agent or non-leading named character) by it's index.
     </div>
 
     <h3>Parameters:</h3>
@@ -6869,7 +6693,13 @@ ourChar:kill();</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Find the settlement in which the army is located    Returns nil if the army is not in the settlement.
+
+<p>Find the settlement in which the army is located.  Returns nil if the army is not in a settlement.</p>
+
+<pre><code>Returns nil if the army is not in the settlement.
+</code></pre>
+
+
     </div>
 
 
@@ -6898,7 +6728,13 @@ ourChar:kill();</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Find the fort in which the army is located  Returns nil if the army is not in the fort.
+
+<p>Find the fort in which the army is located.  Returns nil if the army is not in a fort.</p>
+
+<pre><code>Returns nil if the army is not in the fort.
+</code></pre>
+
+
     </div>
 
 
@@ -6927,7 +6763,7 @@ ourChar:kill();</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Create unit in army by type from M2TWEOP units DB(M2TWEOPDU, no have 500 types limit).
+    Create a unit in the army by index from M2TWEOP units DB (M2TWEOPDU).
     </div>
 
     <h3>Parameters:</h3>
@@ -6979,7 +6815,7 @@ ourChar:kill();</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Create unit in army by type from EDB.
+    Create a unit in the army by type from export_descr_unit.txt
     </div>
 
     <h3>Parameters:</h3>
@@ -6992,21 +6828,15 @@ ourChar:kill();</pre>
         </li>
         <li><span class="parameter">exp</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Experience. Maximum: 9.
         </li>
         <li><span class="parameter">armor</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Armour level.
         </li>
         <li><span class="parameter">weapon</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Weapon upgrade. Maximum: 1.
         </li>
     </ul>
 
@@ -7031,34 +6861,26 @@ ourChar:kill();</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Create unit in army by index from EDB.
+    Create a unit in the army by index from export_descr_unit.txt
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">index</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Index (order in export_descr_unit.txt)
         </li>
         <li><span class="parameter">exp</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Experience. Maximum: 9.
         </li>
         <li><span class="parameter">armor</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Armour level.
         </li>
         <li><span class="parameter">weapon</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Weapon upgrade. Maximum: 1.
         </li>
     </ul>
 
@@ -7083,7 +6905,7 @@ ourChar:kill();</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Siege settlement, or attack it if in siege.  Need movePoints.
+    Besiege the specified settlement, or attack it if already besieging it.  Requires movement points.
     </div>
 
     <h3>Parameters:</h3>
@@ -7111,7 +6933,7 @@ ourChar:kill();</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Attack another army.  Need movePoints.
+    Attack another army.  Requires movement points.
     </div>
 
     <h3>Parameters:</h3>
@@ -7128,7 +6950,7 @@ ourChar:kill();</pre>
     <ol>
 
            <span class="types"><span class="type">int</span></span>
-        ifSucess
+        Success Failed = 0.
     </ol>
 
 
@@ -7862,7 +7684,7 @@ ourChar:kill();</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Called when a new campaign is started from the menu
+    Called when a new campaign is started from the menu.
     </div>
 
 
@@ -7904,7 +7726,7 @@ ourChar:kill();</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Called on clicking the stratmap, use ONLY in the same way as the usage example!!
+    Called on clicking the stratmap.
     </div>
 
     <h3>Parameters:</h3>
@@ -7975,7 +7797,7 @@ ourChar:kill();</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Called on plugin load (at game start)
+    Called on plugin load (at game start).
     </div>
 
 
@@ -8010,7 +7832,7 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
     </dt>
     <dd>
     <div class="functionDescription">
-    Called on creating save file
+    Called on creating a new save file.
     </div>
 
 
@@ -8038,7 +7860,7 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
     </dt>
     <dd>
     <div class="functionDescription">
-    Called on loading save file
+    Called on loading a save file.
     </div>
 
 
@@ -8078,7 +7900,7 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
     </dt>
     <dd>
     <div class="functionDescription">
-    Called at start of new turn
+    Called at the start of a new turn.
     </div>
 
     <h3>Parameters:</h3>
@@ -8152,7 +7974,7 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
     </dt>
     <dd>
     <div class="functionDescription">
-    Called on select fortificationlevel in siege of settlement
+    Called on specified fortificationlevel in a siege of a settlement.
     </div>
 
     <h3>Parameters:</h3>
@@ -8258,7 +8080,7 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
     </dt>
     <dd>
     <div class="functionDescription">
-    a character has been selected by any means (including through the UI)
+    A character has been selected by any means (including through the UI).
     </div>
 
     <h3>Parameters:</h3>
@@ -8288,7 +8110,7 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
     </dt>
     <dd>
     <div class="functionDescription">
-    Called before faction turn start
+    Called before the faction's turn starts.
     </div>
 
     <h3>Parameters:</h3>
@@ -8318,7 +8140,7 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
     </dt>
     <dd>
     <div class="functionDescription">
-    Called at faction turn start
+    Called at a faction's turn start.
     </div>
 
     <h3>Parameters:</h3>
@@ -8348,7 +8170,7 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
     </dt>
     <dd>
     <div class="functionDescription">
-    Called at faction turn end
+    Called at a faction's turn end.
     </div>
 
     <h3>Parameters:</h3>
@@ -8378,7 +8200,7 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
     </dt>
     <dd>
     <div class="functionDescription">
-    Called after faction has new capital
+    Called after faction changes to a new capital.
     </div>
 
     <h3>Parameters:</h3>
@@ -8408,7 +8230,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    Called after declaring war
+    Called after a faction declares a war.
     </div>
 
     <h3>Parameters:</h3>
@@ -8444,7 +8266,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    Called after declaring alliance
+    Called after a faction declares an alliance.
     </div>
 
     <h3>Parameters:</h3>
@@ -8480,7 +8302,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    Called after declaring trade agreement
+    Called after a faction makes a trade agreement.
     </div>
 
     <h3>Parameters:</h3>
@@ -8516,7 +8338,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    Called after break alliance
+    Called after a faction breaks an alliance.
     </div>
 
     <h3>Parameters:</h3>
@@ -8552,7 +8374,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    Called after giving money
+    Called after a faction gives money to another faction.
     </div>
 
     <h3>Parameters:</h3>
@@ -8594,7 +8416,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    Called after update attitude
+    Called after a faction updates it's attitude towards another faction.
     </div>
 
     <h3>Parameters:</h3>
@@ -8630,7 +8452,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    A demeanour response has occured in diplomacy talks
+    A demeanour response has occured in diplomacy talks.
     </div>
 
     <h3>Parameters:</h3>
@@ -8672,7 +8494,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    A general has attacked another general
+    A general has attacked another general.
     </div>
 
     <h3>Parameters:</h3>
@@ -8708,7 +8530,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    An assault has taken place
+    An assault has taken place.
     </div>
 
     <h3>Parameters:</h3>
@@ -8752,7 +8574,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    Settlement captured
+    A General has captured a settlement.
     </div>
 
     <h3>Parameters:</h3>
@@ -8788,7 +8610,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    A General has captured a residence(fort, watchtower, check it yourself)
+    A General has captured a residence such as a fort or watchtower.
     </div>
 
     <h3>Parameters:</h3>
@@ -8818,9 +8640,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    Siege equipment has been completed by one of the sieging armies at this residence.
     </div>
 
     <h3>Parameters:</h3>
@@ -8850,9 +8670,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    When a battle has finished.
     </div>
 
     <h3>Parameters:</h3>
@@ -8880,9 +8698,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has attempted to move a character beyond that character's given movement range for that turn.
     </div>
 
     <h3>Parameters:</h3>
@@ -8910,7 +8726,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    a settlement has been selected by any means (including through the UI)
+    A settlement has been selected by any means (including through the UI).
     </div>
 
     <h3>Parameters:</h3>
@@ -8940,7 +8756,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    settlement level increased
+    A settlement's level has been increased.
     </div>
 
     <h3>Parameters:</h3>
@@ -8970,7 +8786,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    settlement converted between city and castle
+    A settlement converted between city and castle and vice-versa.
     </div>
 
     <h3>Parameters:</h3>
@@ -9002,9 +8818,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A settlement has rioted.
     </div>
 
     <h3>Parameters:</h3>
@@ -9032,7 +8846,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    the last unit has been removed from a settlement, agents do not count
+    The last unit has been removed from a settlement, agents do not count.
     </div>
 
     <h3>Parameters:</h3>
@@ -9060,7 +8874,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    the last unit has been removed from a fort, agents do not count
+    The last unit has been removed from a fort, agents do not count.
     </div>
 
     <h3>Parameters:</h3>
@@ -9088,9 +8902,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A settlement has been given to another faction.
     </div>
 
     <h3>Parameters:</h3>
@@ -9130,7 +8942,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    general has captured a settlement and the occupy option has been accepted
+    A general has captured a settlement and the occupy option has been chosen
     </div>
 
     <h3>Parameters:</h3>
@@ -9162,7 +8974,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    general has captured a settlement and the exterminate option has been accepted
+    A general has captured a settlement and the exterminate option has been chosen.
     </div>
 
     <h3>Parameters:</h3>
@@ -9194,7 +9006,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    general has captured a settlement and the sack option has been accepted
+    A general has captured a settlement and the sack option has been chosen.
     </div>
 
     <h3>Parameters:</h3>
@@ -9226,9 +9038,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A building has been added to the construction queue.
     </div>
 
     <h3>Parameters:</h3>
@@ -9260,9 +9070,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A building has been destroyed.
     </div>
 
     <h3>Parameters:</h3>
@@ -9294,9 +9102,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A building has been completed.
     </div>
 
     <h3>Parameters:</h3>
@@ -9330,9 +9136,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    An event counter has changed it's value.
     </div>
 
     <h3>Parameters:</h3>
@@ -9360,9 +9164,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    When a faction is excommunicated by the Pope.
     </div>
 
     <h3>Parameters:</h3>
@@ -9390,18 +9192,14 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    When a particular disaster has just happened.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">eventType</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         (earthquake, flood, horde, fire, riot, storm, volcano), Don't know enum order!
         </li>
     </ul>
 
@@ -9420,9 +9218,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A Faction has formed a horde.
     </div>
 
     <h3>Parameters:</h3>
@@ -9450,9 +9246,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A unit has been added to the training queue.
     </div>
 
     <h3>Parameters:</h3>
@@ -9486,9 +9280,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A unit has been disbanded.
     </div>
 
     <h3>Parameters:</h3>
@@ -9522,9 +9314,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A unit has been trained.
     </div>
 
     <h3>Parameters:</h3>
@@ -9564,9 +9354,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    An agent has been trained.
     </div>
 
     <h3>Parameters:</h3>
@@ -9604,20 +9392,18 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    An object of the target faction has been seen by the faction.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">fac</span>
             <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
-         faction that saw the object
+         Faction that saw the object.
         </li>
         <li><span class="parameter">targetFac</span>
             <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
-         faction that owns the object
+         Faction that owns the object.
         </li>
         <li><span class="parameter">xCoord</span>
             <span class="types"><span class="type">int</span></span>
@@ -9648,9 +9434,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The tile has been seen by the faction.
     </div>
 
     <h3>Parameters:</h3>
@@ -9690,9 +9474,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The game has been reloaded while on the strategy map.
     </div>
 
     <h3>Parameters:</h3>
@@ -9720,9 +9502,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A faction to faction transgression has occurred.
     </div>
 
     <h3>Parameters:</h3>
@@ -9762,9 +9542,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The Pope has accepted the player's crusade target.  Deus Vult!
     </div>
 
     <h3>Parameters:</h3>
@@ -9798,9 +9576,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A Crusade or Jihad has been called.
     </div>
 
     <h3>Parameters:</h3>
@@ -9834,9 +9610,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A Crusade or Jihad has ended.
     </div>
 
     <h3>Parameters:</h3>
@@ -9870,9 +9644,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The Pope has rejected the player's crusade target.
     </div>
 
     <h3>Parameters:</h3>
@@ -9906,9 +9678,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    An army has taken a crusade or jihad target settlement.
     </div>
 
     <h3>Parameters:</h3>
@@ -9948,9 +9718,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    Units have deserted a crusade or jihad.
     </div>
 
     <h3>Parameters:</h3>
@@ -9990,9 +9758,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A new pope has been elected.
     </div>
 
     <h3>Parameters:</h3>
@@ -10026,9 +9792,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A Faction has voted for the new pope.
     </div>
 
     <h3>Parameters:</h3>
@@ -10056,9 +9820,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    An assassination mission against the pope has failed and the assassin is executed.
     </div>
 
     <h3>Parameters:</h3>
@@ -10086,9 +9848,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    An inquisitor has been dispatched to a region.
     </div>
 
     <h3>Parameters:</h3>
@@ -10122,9 +9882,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has opened the panel for the selected settlement.
     </div>
 
     <h3>Parameters:</h3>
@@ -10152,9 +9910,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has opened the finances panel.
     </div>
 
     <h3>Parameters:</h3>
@@ -10182,9 +9938,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has opened the faction summary panel.
     </div>
 
     <h3>Parameters:</h3>
@@ -10212,9 +9966,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has opened the family tree panel.
     </div>
 
     <h3>Parameters:</h3>
@@ -10242,9 +9994,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has opened the diplomatic standing panel.
     </div>
 
     <h3>Parameters:</h3>
@@ -10272,9 +10022,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has opened a diplomacy panel.
     </div>
 
     <h3>Parameters:</h3>
@@ -10302,9 +10050,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has attacked an army or settlement.  The decision panel is now open.
     </div>
 
     <h3>Parameters:</h3>
@@ -10332,9 +10078,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The naval auto resolve panel has opened.
     </div>
 
 
@@ -10353,9 +10097,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has opened the panel for the selected character.
     </div>
 
     <h3>Parameters:</h3>
@@ -10383,9 +10125,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has opened a trade panel.
     </div>
 
     <h3>Parameters:</h3>
@@ -10413,9 +10153,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has requested building advice.
     </div>
 
     <h3>Parameters:</h3>
@@ -10443,9 +10181,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has requested training advice.
     </div>
 
     <h3>Parameters:</h3>
@@ -10479,9 +10215,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has opened a message.
     </div>
 
     <h3>Parameters:</h3>
@@ -10515,9 +10249,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has recieved a message.
     </div>
 
     <h3>Parameters:</h3>
@@ -10551,9 +10283,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has closed a message.
     </div>
 
     <h3>Parameters:</h3>
@@ -10581,9 +10311,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has clicked on a button.
     </div>
 
     <h3>Parameters:</h3>
@@ -10611,9 +10339,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player closed a scroll.
     </div>
 
     <h3>Parameters:</h3>
@@ -10641,9 +10367,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player opened a scroll.
     </div>
 
     <h3>Parameters:</h3>
@@ -10671,9 +10395,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A special UI Element is visible.
     </div>
 
     <h3>Parameters:</h3>
@@ -10701,9 +10423,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has requested advice on a scroll.
     </div>
 
     <h3>Parameters:</h3>
@@ -10731,9 +10451,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has requested advice on the settlement scroll.
     </div>
 
     <h3>Parameters:</h3>
@@ -10767,9 +10485,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has requested advice on the prebattle scroll.
     </div>
 
 
@@ -10788,9 +10504,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has requested advice on the naval prebattle scroll.
     </div>
 
 
@@ -10809,9 +10523,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The player has opened the college of cardinals panel.
     </div>
 
     <h3>Parameters:</h3>
@@ -10839,9 +10551,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A guild has been created or upgraded.
     </div>
 
     <h3>Parameters:</h3>
@@ -10877,9 +10587,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A guild has been destroyed.
     </div>
 
     <h3>Parameters:</h3>
@@ -10915,14 +10623,14 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    a character in the family tree has received a brother by adoption
+    A character in the family tree has received a brother by adoption.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">character</span>
             <span class="types"><a class="type" href="index.html#namedCharacter">namedCharacter</a></span>
-         this is the original child, not the newly adopted character
+         This is the original child, not the newly adopted character.
         </li>
     </ul>
 
@@ -10943,7 +10651,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    a child has been born
+    A child has been born.
     </div>
 
     <h3>Parameters:</h3>
@@ -10973,14 +10681,14 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    a character has come of age
+    A character has come of age.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">character</span>
             <span class="types"><a class="type" href="index.html#namedCharacter">namedCharacter</a></span>
-         character's age is equal to age_of_manhood in descr_campaign_db.xml
+         Character's age is equal to age_of_manhood in descr_campaign_db.xml.
         </li>
     </ul>
 
@@ -11001,7 +10709,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    a character has married (someone who isn't a princess)
+    A character has married (someone who isn't a princess).
     </div>
 
     <h3>Parameters:</h3>
@@ -11031,7 +10739,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    a character has married a princess agent
+    A character has married a princess agent.
     </div>
 
     <h3>Parameters:</h3>
@@ -11061,14 +10769,14 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    a child has been born
+    A child has been born.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">father</span>
             <span class="types"><a class="type" href="index.html#namedCharacter">namedCharacter</a></span>
-         note: this event fires for all child births for this father, not just the first one
+         Note: this event fires for all child births for this father, not just the first one.
         </li>
     </ul>
 
@@ -11094,9 +10802,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    A new admiral has been created for a new ship.
     </div>
 
     <h3>Parameters:</h3>
@@ -11132,7 +10838,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    a shortcut has been used
+    The player triggered a keyboard shortcut.
     </div>
 
     <h3>Parameters:</h3>
@@ -11164,9 +10870,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The character has been made the faction leader.
     </div>
 
     <h3>Parameters:</h3>
@@ -11196,9 +10900,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-
-
-
+    The character has been made a faction heir.
     </div>
 
     <h3>Parameters:</h3>
@@ -11232,7 +10934,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    Basic M2TWEOPDU table.  Contains descriptions of m2tweop unit types.
+    Basic M2TWEOPDU table.  Contains descriptions of M2TWEOP unit types.
     </div>
 
     <h3>Fields:</h3>
@@ -11308,14 +11010,14 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    Create new M2TWEOPDU entry from type description
+    Create new M2TWEOPDU entry from a file describing it.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">filepath</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         path to file with unit type description(like in export<em>descr</em>unit.txt, but only with one record and without comments)
+         path to file with unit type description(like in export_descr_unit.txt, but only with one record and without comments)
         </li>
         <li><span class="parameter">eopEnryIndex</span>
             <span class="types"><span class="type">int</span></span>
@@ -11344,7 +11046,7 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    Create new M2TWEOPDU entry
+    Create new M2TWEOPDU entry.
     </div>
 
     <h3>Parameters:</h3>
@@ -11380,14 +11082,14 @@ newCapital=fac.capital();
     </dt>
     <dd>
     <div class="functionDescription">
-    Get eduEntry of M2TWEOPDU entry.  Needed for change many parameters of entry.
+    Get eduEntry of a M2TWEOPDU entry.  Needed to change many parameters of the entry.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">eopEnryIndex</span>
             <span class="types"><span class="type">int</span></span>
-         Entry index
+         Entry index in M2TWEOPDU.
         </li>
     </ul>
 
@@ -11414,14 +11116,14 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Get data of M2TWEOPDU entry.  You usually won't need this.
+    Get data of a M2TWEOPDU entry.  You usually won't need this.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">eopEnryIndex</span>
             <span class="types"><span class="type">int</span></span>
-         Entry index
+         Entry index in M2TWEOPDU.
         </li>
     </ul>
 
@@ -11446,14 +11148,14 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Set unit card for M2TWEOPDU entry.  Requirements for the location and parameters of the image are unchanged in relation to the game.
+    Set unit card for a M2TWEOPDU entry.  Requirements for the location and parameters of the image are unchanged in relation to the game.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">eopEnryIndex</span>
             <span class="types"><span class="type">int</span></span>
-         Entry index
+         Entry index in M2TWEOPDU.
         </li>
         <li><span class="parameter">newCardTga</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
@@ -11485,7 +11187,7 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
     <ul>
         <li><span class="parameter">eopEnryIndex</span>
             <span class="types"><span class="type">int</span></span>
-         Entry index
+         Entry index in M2TWEOPDU.
         </li>
         <li><span class="parameter">newInfoCardTga</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
@@ -11510,14 +11212,14 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Set soldier model for M2TWEOPDU entry.  The required entry must be correctly recorded in game files.
+    Set unit info card for a M2TWEOPDU entry.  Requirements for the location and parameters of the image are unchanged in relation to the game.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">eopEnryIndex</span>
             <span class="types"><span class="type">int</span></span>
-         Entry index
+         Entry index in M2TWEOPDU.
         </li>
         <li><span class="parameter">newSoldierModel</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
@@ -11542,14 +11244,14 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Set localized name for M2TWEOPDU entry.  This does not require any entries in the text folder.
+    Set localized name for a M2TWEOPDU entry.  This does not require any entries in the text folder.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">eopEnryIndex</span>
             <span class="types"><span class="type">int</span></span>
-         Entry index
+         Entry index in M2TWEOPDU.
         </li>
         <li><span class="parameter">newLocalizedName</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
@@ -11581,7 +11283,7 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
     <ul>
         <li><span class="parameter">eopEnryIndex</span>
             <span class="types"><span class="type">int</span></span>
-         Entry index
+         Entry index in M2TWEOPDU.
         </li>
         <li><span class="parameter">newLocalizedDescr</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
@@ -11613,7 +11315,7 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
     <ul>
         <li><span class="parameter">eopEnryIndex</span>
             <span class="types"><span class="type">int</span></span>
-         Entry index
+         Entry index in M2TWEOPDU.
         </li>
         <li><span class="parameter">newLocalizedShortDescr</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
@@ -11708,7 +11410,7 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
     <ul>
         <li><span class="parameter">factionsSortedByDescrStrat</span>
             <span class="types"><a class="type" href="index.html#factionStruct">factionStruct[31]</a></span>
-         indexing starts at 1
+         Table of factionStruct[31], indexing starts at 1.
         </li>
         <li><span class="parameter">numberOfFactions</span>
             <span class="types"><span class="type">int</span></span>
@@ -11718,11 +11420,11 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
         </li>
         <li><span class="parameter">numberHumanFactions</span>
             <span class="types"><span class="type">int</span></span>
-         number of player-controlled factions
+         Number of player-controlled factions.
         </li>
         <li><span class="parameter">currentFaction</span>
             <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
-         faction whose turn is at the moment, can be set
+         Faction whose turn it is at the moment, can be set.
         </li>
         <li><span class="parameter">passedTurnsNum</span>
             <span class="types"><span class="type">int</span></span>
@@ -11732,7 +11434,7 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
         </li>
         <li><span class="parameter">timescale</span>
             <span class="types"><span class="type">float</span></span>
-         factor for number turns per year, see descr_strat.txt
+         Factor for number of turns per year, see descr_strat.txt
         </li>
         <li><span class="parameter">romeSettlement</span>
             <span class="types"><a class="type" href="index.html#settlementStruct">settlementStruct</a></span>
@@ -11748,15 +11450,15 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
         </li>
         <li><span class="parameter">BrigandSpawnValue</span>
             <span class="types"><span class="type">float</span></span>
-         lower values increase spawn rate
+         Lower values increase spawn rate.
         </li>
         <li><span class="parameter">PirateSpawnValue</span>
             <span class="types"><span class="type">float</span></span>
-         lower values increase spawn rate
+         Lower values increase spawn rate.
         </li>
         <li><span class="parameter">FreeUpkeepForts</span>
             <span class="types"><span class="type">int</span></span>
-         number units with free<em>upkeep</em>unit EDU attribute who can get free upkeep in forts
+         Number of units who get free upkeep in forts.
         </li>
         <li><span class="parameter">currentDate</span>
             <span class="types"><span class="type">float</span></span>
@@ -11796,7 +11498,7 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
         </li>
         <li><span class="parameter">currentTimeInBattle</span>
             <span class="types"><span class="type">float</span></span>
-         24 max, so calc as daysInBattle*24+currentTimeInBattle
+         24 max, so calculate as daysInBattle*24+currentTimeInBattle.
         </li>
         <li><span class="parameter">checkDipStance</span>
             <span class="types"><a class="type" href="index.html#campaignStruct:checkDipStance">checkDipStance</a></span>
@@ -11829,28 +11531,22 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Check diplomatic relations between factions
+    Check if a diplomatic relation between two factions.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">checkType</span>
             <span class="types"><a class="type" href="index.html#dipRelType">dipRelType</a></span>
-
-
-
+         Example: dipRelType.war
         </li>
         <li><span class="parameter">fac1</span>
             <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
-
-
-
+         A faction.
         </li>
         <li><span class="parameter">fac2</span>
             <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
-
-
-
+         Another faction.
         </li>
     </ul>
 
@@ -11878,28 +11574,22 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Set diplomatic relations between factions
+    Set a diplomatic relation between two factions.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">relType</span>
             <span class="types"><a class="type" href="index.html#dipRelType">dipRelType</a></span>
-
-
-
+         Example: dipRelType.war
         </li>
         <li><span class="parameter">fac1</span>
             <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
-
-
-
+         A faction.
         </li>
         <li><span class="parameter">fac2</span>
             <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
-
-
-
+         Another faction.
         </li>
     </ul>
 
@@ -11983,7 +11673,7 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Call at start of script, this is a static object and pointer to it doesn't change
+    Call at the start of the script, this is a static object and the pointer to it doesn't change.
     </div>
 
 
@@ -12056,9 +11746,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
         </li>
         <li><span class="parameter">sidesNum</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Returns a battleSide[8]. Maximum: 8.
         </li>
         <li><span class="parameter">sides</span>
             <span class="types"><a class="type" href="index.html#battleStruct.battleSide">battleSide[8]</a></span>
@@ -12083,7 +11771,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    basic battleSide table
+    Basic battleSide table
     </div>
 
     <h3>Fields:</h3>
@@ -12102,9 +11790,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
         </li>
         <li><span class="parameter">winConditions</span>
             <span class="types"><span class="type">int[4]</span></span>
-
-
-
+         Returns an int index of a wincondition.
         </li>
         <li><span class="parameter">getWinConditionString</span>
             <span class="types"><a class="type" href="index.html#battleSide.getWinConditionString">getWinConditionString</a></span>
@@ -12118,11 +11804,9 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 
 
         </li>
-        <li><span class="parameter">armies</span>
+        <li><span class="parameter">Returns</span>
             <span class="types"><a class="type" href="index.html#battleSide.trackedPointerArmy">trackedPointerArmy[8]</a></span>
-
-
-
+         a table of trackedPointerArmy. Maximum: 8.
         </li>
     </ul>
 
@@ -12205,7 +11889,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    basic trackedPointerArmy table
+    Basic trackedPointerArmy table
     </div>
 
     <h3>Fields:</h3>
@@ -12239,7 +11923,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    basic trackedPointerArmy table
+    Basic trackedPointerArmy table
     </div>
 
     <h3>Fields:</h3>
@@ -12269,7 +11953,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Get pair of coords with number
+    Get pair of coords with index.
     </div>
 
 
@@ -12277,10 +11961,10 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
     <ol>
         <li>
            <span class="types"><span class="type">float</span></span>
-        xCoord x coordinate of area</li>
+        xCoord X coordinate of the area.</li>
         <li>
            <span class="types"><span class="type">float</span></span>
-        yCoord y coordinate of area</li>
+        yCoord Y coordinate of the area.</li>
     </ol>
 
 
@@ -12423,22 +12107,22 @@ deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
     </dt>
     <dd>
     <div class="functionDescription">
-    Load new fbx model
+    Load a new fbx model.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">modelPath</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         path to .fbx file
+         Path to .fbx file.
         </li>
         <li><span class="parameter">texturePath</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         path to .dds file
+         Path to .dds file
         </li>
         <li><span class="parameter">modelID</span>
             <span class="types"><span class="type">int</span></span>
-         id what be used for this model
+         ID to be used for this model.
         </li>
     </ul>
 
@@ -12457,14 +12141,14 @@ deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
     </dt>
     <dd>
     <div class="functionDescription">
-    Delete fbx model
+    Delete a fbx model.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">modelID</span>
             <span class="types"><span class="type">int</span></span>
-         model id
+         Model's ID that was specified when calling addFbxModel()
         </li>
     </ul>
 
@@ -12485,14 +12169,14 @@ M2TWEOPFBX.deleteFbxModel(<span class="number">1</span>);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Get fbx model
+    Get an added fbx model by it's ID.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">modelID</span>
             <span class="types"><span class="type">int</span></span>
-         model id
+         Model's ID that was specified when calling addFbxModel()
         </li>
     </ul>
 
@@ -12519,18 +12203,18 @@ M2TWEOPFBX.deleteFbxModel(<span class="number">1</span>);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Create new fbx object with model.  We can place object on map, etc
+    Create new fbx object with our previously loaded model.  It can be placed on map, etc.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">modelID</span>
             <span class="types"><span class="type">int</span></span>
-         model id
+         Model's ID that was specified when calling addFbxModel()
         </li>
         <li><span class="parameter">objectID</span>
             <span class="types"><span class="type">int</span></span>
-         id what be used for this object
+         The ID that the object should use
         </li>
     </ul>
 
@@ -12538,7 +12222,7 @@ M2TWEOPFBX.deleteFbxModel(<span class="number">1</span>);</pre>
     <ol>
 
            <span class="types"><span class="type">fbxObject</span></span>
-        fbx object, not it`s ID!
+        The newly created FBX object (not it's ID)
     </ol>
 
 
@@ -12559,14 +12243,14 @@ M2TWEOPFBX.deleteFbxModel(<span class="number">1</span>);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Delete fbx object
+    Delete an fbx object.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">object</span>
             <span class="types"><span class="type">fbxObject</span></span>
-         fbx object, not it`s ID!
+         The created FBX object (not it's ID)
         </li>
     </ul>
 
@@ -12586,18 +12270,18 @@ M2TWEOPFBX.deleteFbxObject(ourNewObject);</pre>
 </dd>
     <dt>
     <a name = "M2TWEOPFBX.getFbxObject"></a>
-    <strong>M2TWEOPFBX.getFbxObject (object)</strong>
+    <strong>M2TWEOPFBX.getFbxObject (int)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
-    Get fbx object by id
+    Get an fbx object by it's ID.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">object</span>
-            <span class="types"><span class="type">fbxObject</span></span>
-         fbx object, not it`s ID!
+        <li><span class="parameter">int</span>
+            <span class="types"><span class="type">objectID</span></span>
+         The ID of the FBX object you wish to retrieve
         </li>
     </ul>
 
@@ -12605,7 +12289,7 @@ M2TWEOPFBX.deleteFbxObject(ourNewObject);</pre>
     <ol>
 
            <span class="types"><span class="type">fbxObject</span></span>
-        fbx object, not it`s ID!
+        The created FBX object (not it's ID)
     </ol>
 
 
@@ -12627,7 +12311,7 @@ M2TWEOPFBX.deleteFbxObject(ourNewObject);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Set fbx object coordinates
+    Set an fbx object's coordinates.
     </div>
 
     <h3>Parameters:</h3>
@@ -12671,7 +12355,7 @@ M2TWEOPFBX.setFbxObjectCoords(ourNewObject,<span class="number">1.2</span>,<span
     </dt>
     <dd>
     <div class="functionDescription">
-    Get fbx object coordinates
+    Get an fbx object's coordinates.
     </div>
 
     <h3>Parameters:</h3>
@@ -12716,7 +12400,7 @@ M2TWEOPFBX.setFbxObjectCoords(ourNewObject,<span class="number">1.2</span>,<span
     </dt>
     <dd>
     <div class="functionDescription">
-    Set fbx object size modifier
+    Set an fbx object's size modifier.
     </div>
 
     <h3>Parameters:</h3>
@@ -12756,7 +12440,7 @@ M2TWEOPFBX.setFbxObjectSize(ourNewObject,<span class="number">25.2</span>);</pre
     </dt>
     <dd>
     <div class="functionDescription">
-    Get fbx object size modifier
+    Get an fbx object's size modifier.
     </div>
 
     <h3>Parameters:</h3>
@@ -12799,7 +12483,7 @@ M2TWEOPFBX.setFbxObjectSize(ourNewObject,<span class="number">25.2</span>);
     </dt>
     <dd>
     <div class="functionDescription">
-    Set fbx object draw state
+    Set an fbx object's draw state.
     </div>
 
     <h3>Parameters:</h3>
@@ -12843,7 +12527,7 @@ M2TWEOPFBX.setFbxObjectDrawState(ourNewObject,<span class="keyword">true</span>)
     </dt>
     <dd>
     <div class="functionDescription">
-    Get fbx object draw state
+    Get an fbx object's draw state.
     </div>
 
     <h3>Parameters:</h3>
@@ -12890,7 +12574,7 @@ M2TWEOPFBX.setFbxObjectDrawState(ourNewObject,<span class="keyword">true</span>)
     </dt>
     <dd>
     <div class="functionDescription">
-    Set fbx object animation state
+    Set an fbx object's animation state.
     </div>
 
     <h3>Parameters:</h3>
@@ -12936,7 +12620,7 @@ M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>)
     </dt>
     <dd>
     <div class="functionDescription">
-    Get fbx object animation state
+    Get an fbx object's animation state.
     </div>
 
     <h3>Parameters:</h3>
@@ -12986,14 +12670,14 @@ M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>)
     <dd>
     <div class="functionDescription">
 
-<p>Set fbx object draw type.  I.e. on what part of game it drawed</p>
+<p>Set fbx object draw type, i.e.  on what part of the game it is drawn.</p>
 <pre><code>Can be:
-1 - stratmap
-2 - tactmap
-0 - both maps
-
+1 - Strategy Map
+2 - Tactical/Battle Map
+0 - Both
 Default value - 1
 </code></pre>
+
 
     </div>
 
@@ -13050,14 +12734,14 @@ M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>)
     <dd>
     <div class="functionDescription">
 
-<p>Get fbx object draw type.  I.e. on what part of game it drawed</p>
+<p>Get fbx object draw type, i.e.  on what part of game it is drawn.</p>
 <pre><code>Can be:
-1 - stratmap
-2 - tactmap
-0 - both maps
-
+1 - Strategy Map
+2 - Tactical/Battle Map
+0 - Both
 Default value - 1
 </code></pre>
+
 
     </div>
 
@@ -13112,11 +12796,15 @@ M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>)
     <dd>
     <div class="functionDescription">
 
-<p>Basic M2TWEOPSounds table.  Contains descriptions of m2tweop sounds feathures.</p>
+<p>Basic M2TWEOPSounds table.  Contains descriptions of M2TWEOP sound features.</p>
 <pre><code>Attention! You can use 256 sounds max.
-Support the audio file formats WAV, OGG/Vorbis and FLAC.
+It supports the following audio formats:
+ - WAV
+ - OGG/Vorbis
+ - FLAC
+
 You can play many sounds at the same time.
-It should be used for small sounds that can fit in memory and should suffer no lag when they are played(i.e.not music).
+It should be used for small sounds that can fit in memory. It's not recommended to use this for playing larger sounds like music.
 </code></pre>
 
 
@@ -13179,14 +12867,14 @@ It should be used for small sounds that can fit in memory and should suffer no l
     </dt>
     <dd>
     <div class="functionDescription">
-    Create(and load) new sound
+    Create (and load) a new sound.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">soundPath</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-         path to sound file
+         Path to sound file
         </li>
     </ul>
 
@@ -13194,7 +12882,7 @@ It should be used for small sounds that can fit in memory and should suffer no l
     <ol>
 
            <span class="types"><span class="type">int</span></span>
-        soundID id what be used for this model. Return nil if can`t load.
+        soundID ID that will be used by this sound. Returns nil if the sound can't load..
     </ol>
 
 
@@ -13211,14 +12899,14 @@ It should be used for small sounds that can fit in memory and should suffer no l
     </dt>
     <dd>
     <div class="functionDescription">
-    Delete sound
+    Delete a sound
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">soundID</span>
             <span class="types"><span class="type">int</span></span>
-         id of sound what you want delete
+         ID of the sound that you want to delete.
         </li>
     </ul>
 
@@ -13238,14 +12926,14 @@ M2TWEOPSounds.deleteEOPSound(ourNewSound);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Play sound
+    Play a sound.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">soundID</span>
             <span class="types"><span class="type">int</span></span>
-         id of sound
+         ID of the sound that you want to play.
         </li>
     </ul>
 
@@ -13265,18 +12953,18 @@ M2TWEOPSounds.playEOPSound(ourNewSound);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Set sound playing offset
+    Set a sound's playing offset.  i.e Skip a certain number of milliseconds of the beginning of the sound.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">soundID</span>
             <span class="types"><span class="type">int</span></span>
-         id of sound
+         ID of the sound.
         </li>
         <li><span class="parameter">millisecondsOffset</span>
             <span class="types"><span class="type">int</span></span>
-         new playing position, from the beginning of the sound
+         New playing position, from the beginning of the sound.
         </li>
     </ul>
 
@@ -13297,14 +12985,14 @@ M2TWEOPSounds.playSound(ourNewSound);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Get sound playing offset
+    Get a sound's playing offset.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">soundID</span>
             <span class="types"><span class="type">int</span></span>
-         id of sound
+         ID of the sound.
         </li>
     </ul>
 
@@ -13312,7 +13000,7 @@ M2TWEOPSounds.playSound(ourNewSound);</pre>
     <ol>
 
            <span class="types"><span class="type">int</span></span>
-        millisecondsOffset new playing position, from the beginning of the sound
+        millisecondsOffset Playing position, from the beginning of the sound.
     </ol>
 
 
@@ -13331,14 +13019,14 @@ M2TWEOPSounds.playSound(ourNewSound);
     </dt>
     <dd>
     <div class="functionDescription">
-    Pause sound
+    Pause a sound that is playing.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">soundID</span>
             <span class="types"><span class="type">int</span></span>
-         id of sound
+         ID of the sound that you want to pause.
         </li>
     </ul>
 
@@ -13359,14 +13047,14 @@ M2TWEOPSounds.pauseEOPSound(ourNewSound);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Stop sound playing
+    Stop a sound that is playing.
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">soundID</span>
             <span class="types"><span class="type">int</span></span>
-         id of sound
+         ID of the sound that you want to stop.
         </li>
     </ul>
 
