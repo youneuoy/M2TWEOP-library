@@ -2860,12 +2860,22 @@ namespace sol_ImGui
 #pragma endregion Clipboard Utilities
 
 
-
+#pragma region IO
+		ImGui.set_function("PushFont", PushFont);
+		ImGui.set_function("PopFont", PopFont);
 		ImGui.set_function("GetIO", GetIO);
 
+		sol::usertype<ImFont> Font = lua.new_usertype<ImFont>("ImFont");
+
+		sol::usertype<ImFontAtlas> FontAtlas = lua.new_usertype<ImFontAtlas>("ImFontAtlas");
+		FontAtlas.set_function("AddFontFromFileTTF", &ImFontAtlas::AddFontFromFileTTF);
+
 		sol::usertype<ImGuiIO>IO = lua.new_usertype<ImGuiIO>("ImGuiIO");
-#pragma region IO
 		IO["KeysDownDuration"]= sol::property([](ImGuiIO* self) { return std::ref(self->KeysDownDuration); });
+
+
+
+		IO.set("Fonts", &ImGuiIO::Fonts);
 
 #pragma endregion IO
 	}
