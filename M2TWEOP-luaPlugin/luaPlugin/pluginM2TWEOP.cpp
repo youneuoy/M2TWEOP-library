@@ -354,12 +354,13 @@ void initLua()
     plugData::data.luaAll.initEopFbx();
     plugData::data.luaAll.initEopSounds();
     plugData::data.luaAll.initTech();
+    sol_ImGui::Init(*luaState);
+
     plugData::data.luaAll.onPluginLoadF();
     if (luaState==nullptr)
     {
         MessageBoxA(NULL, "LUA loading error!", "Error!", NULL);
         exit(0);
     }
-    sol_ImGui::Init(*luaState);
 }
 
