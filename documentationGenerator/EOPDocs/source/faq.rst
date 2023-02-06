@@ -28,3 +28,8 @@ suggest new entries in our discord!
 		2. Install ReShade like normal
 		3. Rename d3d9.dll in Medieval 2 folder added by ReShade to dxgi.dll
 		4. Run mod via M2TWEOP like normal
+
+	*How can I open the M2TWEOP Console, Reload the Script or use the Map Viewer?*
+		* CTRL+1 = Open Console
+		* CTRL+9+1 = Reloads `luaPluginScript.lua`
+		* CTRL+2 = Open EOP Map Viewer
