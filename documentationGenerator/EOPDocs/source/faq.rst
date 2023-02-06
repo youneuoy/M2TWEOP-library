@@ -33,3 +33,9 @@ suggest new entries in our discord!
 		* CTRL+1 = Open Console
 		* CTRL+9+1 = Reloads `luaPluginScript.lua`
 		* CTRL+2 = Open EOP Map Viewer
+
+	*How can I convert a non-EOP save to an EOP save?*
+		1. Make a copy of your save
+		2. Rename the copy to **M2TWEOPTEMPgameSaveDONTTOUCHTHISFILE.sav** (Make sure it ends in .sav and the file type is .sav)
+		3. Compress it into a .zip archive
+ 		4. Rename the .zip archive to something like *Bree.sav* (Make sure it ends in .sav and the file type is .sav)
