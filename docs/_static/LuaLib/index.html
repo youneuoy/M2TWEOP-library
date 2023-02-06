@@ -292,6 +292,7 @@
   <summary><a href="#EOP_Events">EOP Events </a></summary>
     <li><a href="#EventsFunctionsList">EventsFunctionsList</a></li>
     <li><a href="#draw">draw (pDevice)</a></li>
+    <li><a href="#onLoadingFonts">onLoadingFonts ()</a></li>
     <li><a href="#onNewGameStart">onNewGameStart ()</a></li>
     <li><a href="#onReadGameDbsAtStart">onReadGameDbsAtStart ()</a></li>
     <li><a href="#onClickAtTile">onClickAtTile (x, y)</a></li>
@@ -507,7 +508,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2022-12-20 23:21:19</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-02-06 12:32:17</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -1084,6 +1085,10 @@
 	<tr>
 	<td class="name" nowrap><a href="#draw">draw (pDevice)</a></td>
 	<td class="summary">Called every time an image is rendered for display</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#onLoadingFonts">onLoadingFonts ()</a></td>
+	<td class="summary">Called when ImGui backend reload fonts</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onNewGameStart">onNewGameStart ()</a></td>
@@ -7031,6 +7036,12 @@ ourChar:kill();</pre>
 
 
         </li>
+        <li><span class="parameter">onLoadingFonts</span>
+            <span class="types"><a class="type" href="index.html#onLoadingFonts">onLoadingFonts</a></span>
+
+
+
+        </li>
         <li><span class="parameter">onReadGameDbsAtStart</span>
             <span class="types"><a class="type" href="index.html#onReadGameDbsAtStart">onReadGameDbsAtStart</a></span>
 
@@ -7675,6 +7686,27 @@ ourChar:kill();</pre>
 
 	ImGui.End();
 <span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "onLoadingFonts"></a>
+    <strong>onLoadingFonts ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Called when ImGui backend reload fonts
+    </div>
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">function</span> onLoadingFonts()
+<span class="comment">--something here
+</span><span class="keyword">end</span></pre>
     </ul>
 
 </dd>
