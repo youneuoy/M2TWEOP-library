@@ -2198,6 +2198,16 @@ namespace sol_ImGui
 															));
 #pragma endregion Windows Scrolling
 		
+		ImGui.set_function("PushStyleVar", sol::overload(
+			sol::resolve<void(int,float)>(PushStyleVar),
+			sol::resolve<void(int,float,float)>(PushStyleVar)
+		));				
+
+		ImGui.set_function("PopStyleVar", sol::overload(
+			sol::resolve<void()>(PopStyleVar),
+			sol::resolve<void(int)>(PopStyleVar)
+		));
+
 #pragma region Parameters stacks (shared)
 		ImGui.set_function("PushFont"						, PushFont);
 		ImGui.set_function("PopFont"						, PopFont);
