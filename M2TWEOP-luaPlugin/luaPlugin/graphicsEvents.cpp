@@ -46,10 +46,17 @@ void onReset(LPDIRECT3DDEVICE9 pDevice)
 		tryLua((*plugData::data.luaAll.resetDXFunc)(pDevice));
 	}
 }
+void onLoadingFonts(LPDIRECT3DDEVICE9 pDevice)
+{
+	if (plugData::data.luaAll.onLoadingFonts != nullptr)
+	{
+		tryLua((*plugData::data.luaAll.onLoadingFonts)(pDevice));
+	}
+}
 
 
 
-void onChangeImGuiContext(ImGuiContext* imCtx)
+void onChangeImGuiContext(ImGuiContext* imCtx, ImGuiMemAllocFunc alloc_func, ImGuiMemFreeFunc free_func, void* user_data)
 {
 	if (plugData::data.luaAll.initDXFunc != nullptr)
 	{
@@ -58,7 +65,7 @@ void onChangeImGuiContext(ImGuiContext* imCtx)
 
 	//do not delete this line!!!!!!!!!
 	ImGui::SetCurrentContext(imCtx);
-
+	ImGui::SetAllocatorFunctions(alloc_func, free_func, user_data);
 	drawParams.drawEOPStartInfo = true;
 	drawParams.drawInfoEndTime = (float)ImGui::GetTime() + 20.0f;
 }

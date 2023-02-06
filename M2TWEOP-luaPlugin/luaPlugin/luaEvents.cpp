@@ -16,6 +16,7 @@ void luaP::onPluginLoadF()
 	Just list, use it without EventsFunctionsList.!!!
 
 	@tfield draw draw
+	@tfield onLoadingFonts onLoadingFonts
 	@tfield onReadGameDbsAtStart onReadGameDbsAtStart
 	@tfield onClickAtTile onClickAtTile
 	@tfield onNewGameStart onNewGameStart
@@ -144,6 +145,19 @@ void luaP::onPluginLoadF()
 	*/
 	drawLuaFunc = new sol::function(luaState["draw"]);
 	checkLuaFunc(&drawLuaFunc);
+
+	/***
+	Called when ImGui backend reload fonts
+
+	@function onLoadingFonts
+
+	@usage
+	function onLoadingFonts()
+	--something here
+	end
+	*/
+	onLoadingFonts = new sol::function(luaState["onLoadingFonts"]);
+	checkLuaFunc(&onLoadingFonts);
 
 	resetDXFunc = new sol::function(luaState["deinitDX"]);
 	checkLuaFunc(&resetDXFunc);

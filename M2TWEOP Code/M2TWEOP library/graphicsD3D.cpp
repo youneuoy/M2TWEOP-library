@@ -358,6 +358,8 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 	{
 		io.Fonts->AddFontDefault(&font_config);
 	}
+
+	plugins::onLoadingFonts(pDevice);
 	//init imnotify
 	ImGui::MergeIconsWithLatestFont(16.f, false);
 
@@ -374,7 +376,12 @@ bool graphicsD3D::init()
 {
 	IMGUI_CHECKVERSION();
 	ImGuiContext* imCtx = ImGui::CreateContext();
-	plugins::onChangeImGuiCtx(imCtx);
+
+	ImGuiMemAllocFunc allocF;
+	ImGuiMemFreeFunc freeF;
+	void* userD;
+	ImGui::GetAllocatorFunctions(&allocF,&freeF,&userD);
+	plugins::onChangeImGuiCtx(imCtx, allocF, freeF, userD);
 
 
 	while (dataS.Window == nullptr)
