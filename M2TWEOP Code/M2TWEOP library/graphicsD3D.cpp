@@ -14,6 +14,7 @@
 
 
 #include <ImFileDialog.h>
+#include <Winuser.h>
 //#include "discord.h"
 graphicsD3D::dataT graphicsD3D::dataS;
 
@@ -23,6 +24,7 @@ graphicsD3D::dataT graphicsD3D::dataS;
 
 #include "../../M2TWEOP Common/m2tweopConstData.h"
 #include "eduFastFuncts.h"
+#include <windowsx.h>
 template<typename T>
 T FnCast(uint32_t fnToCast, T pFnCastTo) {
 	(void)pFnCastTo;
@@ -30,7 +32,6 @@ T FnCast(uint32_t fnToCast, T pFnCastTo) {
 }
 NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-
 	plugins::onWindowProc(hWnd, uMsg, wParam, lParam);
 
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
@@ -76,13 +77,27 @@ NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM w
 
 	}
 
+	switch (uMsg)
+	{
+	case WM_MOUSEMOVE:
+		//globals::dataS.Modules.mmbMover.Update(lParam);
+		break;
+
+	case WM_MBUTTONDOWN:
+		//globals::dataS.Modules.mmbMover.Start(lParam);
+		break;
+	case WM_MBUTTONUP:
+		//globals::dataS.Modules.mmbMover.Stop();
+		break;
+	}
+
 	return CallWindowProc(dataS.hookD.onewGameWndProc, hWnd, uMsg, wParam, lParam);
 }
 
 struct
 {
 	float drawInfoEndTime = 0;
-	bool drawEOPStartInfo=false;
+	bool drawEOPStartInfo = false;
 
 	ImVec2 beginCoords{ 0.f,0.f };
 }drawParams;
@@ -97,45 +112,45 @@ struct
 }tempData;
 NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 {
-//	DiscordState.core->RunCallbacks();
+	//	DiscordState.core->RunCallbacks();
 
 
-	/*MEMORYSTATUSEX statex;
+		/*MEMORYSTATUSEX statex;
 
-	statex.dwLength = sizeof(statex);
+		statex.dwLength = sizeof(statex);
 
-	GlobalMemoryStatusEx(&statex);
-	ImGui::Begin("Ram test");
-	ImGui::Text("There are %I64d total MB of virtual memory.\n",
-		statex.ullTotalVirtual / 1048576);
-	ImGui::Text("There are %I64d free  MB of virtual memory.\n",
-		statex.ullAvailVirtual / 1048576);
+		GlobalMemoryStatusEx(&statex);
+		ImGui::Begin("Ram test");
+		ImGui::Text("There are %I64d total MB of virtual memory.\n",
+			statex.ullTotalVirtual / 1048576);
+		ImGui::Text("There are %I64d free  MB of virtual memory.\n",
+			statex.ullAvailVirtual / 1048576);
 
-	static float progress = 0.0f, progress_dir = 1.0f;
-
-
-	float prop =1.0f- (double)statex.ullAvailVirtual / (double)statex.ullTotalVirtual;
-
-	ImGui::Text("Memory usage:");
-	ImGui::ProgressBar(prop, ImVec2(-1.0f, 0.0f));
-
-	ImGui::End();*/
+		static float progress = 0.0f, progress_dir = 1.0f;
 
 
-	/*ImGui::Begin("test");
+		float prop =1.0f- (double)statex.ullAvailVirtual / (double)statex.ullTotalVirtual;
 
-	if (ImGui::Button("fight"))
-	{
-		_asm
+		ImGui::Text("Memory usage:");
+		ImGui::ProgressBar(prop, ImVec2(-1.0f, 0.0f));
+
+		ImGui::End();*/
+
+
+		/*ImGui::Begin("test");
+
+		if (ImGui::Button("fight"))
 		{
-			push 1
-			mov ecx, 0x02BF8550
-			mov eax,0x0044edb0
-			call eax
-			add esp, 4
+			_asm
+			{
+				push 1
+				mov ecx, 0x02BF8550
+				mov eax,0x0044edb0
+				call eax
+				add esp, 4
+			}
 		}
-	}
-	ImGui::End();*/
+		ImGui::End();*/
 	return;
 }
 NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
@@ -366,7 +381,7 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 	dataS.ImInitialized = true;
 
 	drawParams.drawEOPStartInfo = true;
-	drawParams.drawInfoEndTime = (float)ImGui::GetTime()+20.0f;
+	drawParams.drawInfoEndTime = (float)ImGui::GetTime() + 20.0f;
 
 
 	return;
@@ -380,7 +395,7 @@ bool graphicsD3D::init()
 	ImGuiMemAllocFunc allocF;
 	ImGuiMemFreeFunc freeF;
 	void* userD;
-	ImGui::GetAllocatorFunctions(&allocF,&freeF,&userD);
+	ImGui::GetAllocatorFunctions(&allocF, &freeF, &userD);
 	plugins::onChangeImGuiCtx(imCtx, allocF, freeF, userD);
 
 

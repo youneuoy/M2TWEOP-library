@@ -118,6 +118,9 @@
     <Filter Include="features\RecruitSystem\Config">
       <UniqueIdentifier>{30fa89e1-8565-4016-acf7-3eb032fb0c6e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\mmbMover">
+      <UniqueIdentifier>{c4bd76eb-28c5-4b73-9553-9ab43b44e19c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -384,6 +387,9 @@
     <ClInclude Include="RecruitConditionDescription.h">
       <Filter>features\RecruitSystem\Core</Filter>
     </ClInclude>
+    <ClInclude Include="MmbMover.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -595,6 +601,9 @@
     </ClCompile>
     <ClCompile Include="RecruitConditionDescription.cpp">
       <Filter>features\RecruitSystem\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="MmbMover.cpp">
+      <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

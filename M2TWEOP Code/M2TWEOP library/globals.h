@@ -4,6 +4,8 @@
 #include "battlemapWorker.h"
 #include "DeveloperMode.h"
 #include "RecruitSystem.h"
+#include "MmbMover.h"
+
 class globals
 {
 public:
@@ -23,6 +25,7 @@ public:
 			DeveloperMode developerMode;
 			battlemapWorker battlemapWorker;
 			RecruitSystem recruitSystem;
+			MmbMover mmbMover;
 		}Modules;
 
 		//steam =2, kingdoms=1

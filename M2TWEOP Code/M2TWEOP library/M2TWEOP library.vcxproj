@@ -252,6 +252,7 @@
     <ClInclude Include="m2tweopTile.h" />
     <ClInclude Include="managerF.h" />
     <ClInclude Include="MemWork.h" />
+    <ClInclude Include="MmbMover.h" />
     <ClInclude Include="onlineThings.h" />
     <ClInclude Include="onlineThings2.h" />
     <ClInclude Include="patchesForGame.h" />
@@ -325,6 +326,7 @@
     <ClCompile Include="m2tweopTile.cpp" />
     <ClCompile Include="managerF.cpp" />
     <ClCompile Include="MemWork.cpp" />
+    <ClCompile Include="MmbMover.cpp" />
     <ClCompile Include="onlineThings.cpp" />
     <ClCompile Include="onlineThings2.cpp" />
     <ClCompile Include="patchesForGame.cpp" />
