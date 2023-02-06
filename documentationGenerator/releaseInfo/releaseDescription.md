@@ -18,6 +18,8 @@
 
 ### **Documentation**
 - Added Fynn's documentation and examples. Now pretty much every single function is now documented! - *Fynn and Medik*
+- New event `onLoadingFonts`. Use it for loading fonts for useing in IMGUI, like ` font = ImGui.GetIO().Fonts:AddFontFromFileTTF(M2TWEOP.getModPath().."/eopData/fonts/mainFont.ttf", 55,nil,nil);`  - *youneuoy*
+- Imgui: added `ImGui.PushFont(font);`, `ImGui.PopFont();`. Use it in your draw function to change fonts. - *youneuoy*
 - `onPluginLoad` function is now included by default with some valid options commeneted out and `M2TWEOP.unlockConsoleCommands()` enabled by default - *Medik* 
 
 <!-- ### **Bugfixes** -->
