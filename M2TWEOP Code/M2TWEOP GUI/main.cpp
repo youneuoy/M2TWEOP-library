@@ -148,9 +148,11 @@ void runApp(appTickFunc drawTick)
         }
     }
 }
-
+#include <filesystem>
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {
+
+
     initRender();
 
     /*dataG::data.screen.programIcon[0].pixels= stbi_load("eopData/EOPIcon.png", 

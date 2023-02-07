@@ -4,20 +4,25 @@
 #include "onlineThings.h"
 #include "settlementConversionLvlSetter.h"
 #include "fastFunctsHelpers.h"
+
 void managerF::init()
 {
 
 	initThread();
 }
 
+void managerF::debug()
+{
+	
+}
+
 
 //apply code injects
 void managerF::doPachs()
 {
-	MemWork* mem;
 	ofstream f1("logs\\applyingPatches.youneuoylog");
 	f1 << "Log:" << endl;
-	mem = new MemWork();
+	MemWork* mem = new MemWork();
 
 	//f1 << "Start applying age patch" << endl;
 /*	f1 << "first step" << endl;
@@ -450,6 +455,9 @@ void managerF::doPachs()
 	onAutoSave->Enable();
 	f1 << "Done" << endl;	
 
+	OnPathCasheCrashPlace* onPathCasheCrashPlace= new OnPathCasheCrashPlace(mem, (LPVOID)&TacticalMapViewer::GetPathCashe, globals::dataS.gamever, (LPVOID)&globals::dataS.Modules.tacticalMapVeiwer);
+	onPathCasheCrashPlace->SetNewCode();
+	onAutoSave->Enable();
 	/*
 	f1 << "Start applying OntryFindTypeIdInListRecruitPoolEDB patch" << endl;
 	OntryFindTypeIdInListRecruitPoolEDB* ontryFindTypeIdInListRecruitPoolEDB = new OntryFindTypeIdInListRecruitPoolEDB(mem, (LPVOID)patchesForGame::ontryFindTypeIdInListRecruitPoolEDB, globals::dataS.gamever);
@@ -521,6 +529,9 @@ void managerF::initThread()
 	plugins::init();
 
 	battleCreator::readParams();
+
+	globals::dataS.Modules.tacticalMapVeiwer.Init(globals::dataS.gamever);
+
 	//stratResTest::test();
 }
 

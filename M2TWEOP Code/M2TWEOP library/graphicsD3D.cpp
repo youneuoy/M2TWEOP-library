@@ -217,6 +217,8 @@ void graphicsD3D::onDrawAllGameStuff()
 
 	auto& developerMode = globals::dataS.Modules.developerMode;
 	developerMode.Update();
+
+	globals::dataS.Modules.tacticalMapVeiwer.Draw();
 	plugins::onEndScene(graphicsD3D::dataS.pDevice);
 	//graphicsD3D::Draw(pDevice);
 	if (drawParams.drawEOPStartInfo == true)

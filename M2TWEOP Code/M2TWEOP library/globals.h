@@ -1,11 +1,11 @@
 #pragma once
-#include"headersSTD.h"
+#include "headersSTD.h"
 
 #include "battlemapWorker.h"
 #include "DeveloperMode.h"
 #include "RecruitSystem.h"
 #include "MmbMover.h"
-
+#include "TacticalMapVeiwer.h"
 class globals
 {
 public:
@@ -22,6 +22,7 @@ public:
 		}gameCfg;
 		struct modulesS
 		{
+			TacticalMapViewer tacticalMapVeiwer;
 			DeveloperMode developerMode;
 			battlemapWorker battlemapWorker;
 			RecruitSystem recruitSystem;

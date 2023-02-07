@@ -887,3 +887,19 @@ public:
 private:
 	LPVOID funcAddress;
 };
+
+
+//PathCashe crash fix
+class OnPathCasheCrashPlace
+	:public AATemplate
+{
+public:
+	OnPathCasheCrashPlace(MemWork* mem, LPVOID addr, int ver, LPVOID cbObj);
+	~OnPathCasheCrashPlace();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+	LPVOID callbackObject;
+};

@@ -5,6 +5,21 @@
 #include <filesystem>
 #include "globals.h"
 #include "smallFuncs.h"
+void techFuncs::WriteData(void* ptr, DWORD to, size_t size)
+{
+    HANDLE h = GetCurrentProcess();
+    DWORD oldMemProtect = 0;
+    VirtualProtectEx(h, (LPVOID)to, size, PAGE_EXECUTE_READWRITE, &oldMemProtect);
+    WriteProcessMemory(h, (LPVOID)to, ptr, size, NULL);
+    VirtualProtectEx(h, (LPVOID)to, size, oldMemProtect, &oldMemProtect);
+
+    CloseHandle(h);
+}
+void techFuncs::NopBytes(DWORD address, size_t size)
+{
+    std::vector<uint8_t> nops(size, 0x90);
+    WriteData(nops.data(), address, size);
+}
 std::vector<std::string>techFuncs::unzip(std::string const& zipFile, std::string const& path)
 {
     filesystem::path fPath = path;
@@ -131,6 +146,7 @@ string techFuncs::uniToANSI(UNICODE_STRING**& uniStr)
 
 	return strTo;
 }
+
 
 void techFuncs::deleteFiles(vector<string>& files)
 {

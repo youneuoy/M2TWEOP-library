@@ -121,6 +121,9 @@
     <Filter Include="features\mmbMover">
       <UniqueIdentifier>{c4bd76eb-28c5-4b73-9553-9ab43b44e19c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\tacticalMapVeiwer">
+      <UniqueIdentifier>{f1f7cc32-6085-4426-8f2f-a3422d1df5fa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -336,9 +339,6 @@
     <ClInclude Include="..\3rd\AsmJit\headers\Util_p.h">
       <Filter>3rd\asmjit</Filter>
     </ClInclude>
-    <ClInclude Include="Injects.h">
-      <Filter>technical</Filter>
-    </ClInclude>
     <ClInclude Include="MemWork.h">
       <Filter>technical</Filter>
     </ClInclude>
@@ -388,7 +388,13 @@
       <Filter>features\RecruitSystem\Core</Filter>
     </ClInclude>
     <ClInclude Include="MmbMover.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>features\mmbMover</Filter>
+    </ClInclude>
+    <ClInclude Include="TacticalMapVeiwer.h">
+      <Filter>features\tacticalMapVeiwer</Filter>
+    </ClInclude>
+    <ClInclude Include="Injects.h">
+      <Filter>Исходные файлы\patches</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -554,9 +560,6 @@
     <ClCompile Include="..\3rd\AsmJit\headers\Util.cpp">
       <Filter>3rd\asmjit</Filter>
     </ClCompile>
-    <ClCompile Include="Injects.cpp">
-      <Filter>technical</Filter>
-    </ClCompile>
     <ClCompile Include="MemWork.cpp">
       <Filter>technical</Filter>
     </ClCompile>
@@ -603,7 +606,13 @@
       <Filter>features\RecruitSystem\Core</Filter>
     </ClCompile>
     <ClCompile Include="MmbMover.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>features\mmbMover</Filter>
+    </ClCompile>
+    <ClCompile Include="TacticalMapVeiwer.cpp">
+      <Filter>features\tacticalMapVeiwer</Filter>
+    </ClCompile>
+    <ClCompile Include="Injects.cpp">
+      <Filter>Исходные файлы\patches</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -269,6 +269,7 @@
     <ClInclude Include="smallFuncs.h" />
     <ClInclude Include="stratModelsChange.h" />
     <ClInclude Include="stratModelsOptimise.h" />
+    <ClInclude Include="TacticalMapVeiwer.h" />
     <ClInclude Include="tAutodeskMemoryStream.h" />
     <ClInclude Include="techFuncs.h" />
     <ClInclude Include="technicalStringsFuncs.h" />
@@ -348,6 +349,7 @@
     <ClCompile Include="stratModelsChange.cpp" />
     <ClCompile Include="stratModelsHelper.cpp" />
     <ClCompile Include="stratModelsOptimise.cpp" />
+    <ClCompile Include="TacticalMapVeiwer.cpp" />
     <ClCompile Include="tAutodeskMemoryStream.cpp" />
     <ClCompile Include="techFuncs.cpp" />
     <ClCompile Include="technicalStringsFuncs.cpp" />

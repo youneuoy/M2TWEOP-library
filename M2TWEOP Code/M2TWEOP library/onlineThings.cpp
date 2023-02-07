@@ -7,6 +7,7 @@
 #include <imgui_internal.h>
 namespace battleCreator
 {
+
 	struct
 	{
 		bool isGenerationNeeded = true;
@@ -21,6 +22,16 @@ namespace battleCreator
 
 		std::string lastSettlementWorldRec;
 	}data;
+
+	void setCreationNeeded(bool isNeeded)
+	{
+		data.isGenerationNeeded = isNeeded;
+	}
+
+	bool GetIsGenerationNeeded()
+	{
+		return data.isGenerationNeeded;
+	}
 
 	void readParams()
 	{
@@ -47,10 +58,6 @@ namespace battleCreator
 		}
 	}
 
-	void setCreationNeeded(bool isNeeded)
-	{
-		data.isGenerationNeeded = isNeeded;
-	}
 
 	string makeWeatherString()
 	{

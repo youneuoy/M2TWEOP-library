@@ -4,9 +4,13 @@
 #include <string>
 
 #include "realGameTypes.h"
-
 namespace techFuncs
 {
+	void WriteData(void* ptr, DWORD to, size_t size);
+
+	void NopBytes(DWORD address, size_t size);
+
+
 	template <typename  data>
 	void Read(DWORD from, data* p, size_t size = 4)
 	{
@@ -18,7 +22,6 @@ namespace techFuncs
 	void zip(std::string const& zipFile, std::vector<std::string>& files,std::string saveFile,std::string nameOfSaveFile);
 
 	std::string uniToANSI(UNICODE_STRING**& uniStr);
-
 
 	void deleteFiles(std::vector<std::string>& files);
 

@@ -678,6 +678,7 @@ void plugins::onClickAtTile(int x, int y)
 
 void plugins::onCampaignMapLoaded()
 {
+	globals::dataS.Modules.tacticalMapVeiwer.UnView();
 	for (plugin* pl : pluginsCfg.plugins)
 	{
 		(*(*pl->onCampaignMapLoaded))();

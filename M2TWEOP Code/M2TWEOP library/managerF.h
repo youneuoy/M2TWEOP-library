@@ -14,6 +14,8 @@ class managerF
 {
 public:
 	static void init();
+
+	static void debug();
 private:
 	static void doPachs();
 
