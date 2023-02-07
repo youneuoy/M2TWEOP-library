@@ -11,8 +11,10 @@
 <!-- ### **Breaking Changes** -->
 
 <!-- ### **Launcher** -->
+- New eop gameplay settings - *youneuoy*
 
 <!-- ### **Library** -->
+- Added Rtw-like Tactical Map Viewer. Works for any tile type, not only settlements. To activate click middle mouse button on any tile. - *youneuoy*
 
 <!-- ### **Lua Plugin** -->
 
