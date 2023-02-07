@@ -124,6 +124,9 @@
     <Filter Include="features\tacticalMapVeiwer">
       <UniqueIdentifier>{f1f7cc32-6085-4426-8f2f-a3422d1df5fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\ContextMenuStrat">
+      <UniqueIdentifier>{7d6566ee-6f3f-4aad-b9a2-aa303e3c0c1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -396,6 +399,9 @@
     <ClInclude Include="Injects.h">
       <Filter>Исходные файлы\patches</Filter>
     </ClInclude>
+    <ClInclude Include="ContextMenuStrat.h">
+      <Filter>features\ContextMenuStrat</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -613,6 +619,9 @@
     </ClCompile>
     <ClCompile Include="Injects.cpp">
       <Filter>Исходные файлы\patches</Filter>
+    </ClCompile>
+    <ClCompile Include="ContextMenuStrat.cpp">
+      <Filter>features\ContextMenuStrat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

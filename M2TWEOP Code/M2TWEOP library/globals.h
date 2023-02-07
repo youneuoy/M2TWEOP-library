@@ -6,6 +6,7 @@
 #include "RecruitSystem.h"
 #include "MmbMover.h"
 #include "TacticalMapVeiwer.h"
+#include "ContextMenuStrat.h"
 class globals
 {
 public:
@@ -27,6 +28,7 @@ public:
 			battlemapWorker battlemapWorker;
 			RecruitSystem recruitSystem;
 			MmbMover mmbMover;
+			ContextMenuStrat contextMenuStrat;
 		}Modules;
 
 		//steam =2, kingdoms=1

@@ -155,6 +155,16 @@ NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 }
 NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 {
+	int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
+
+	//1-stratmap
+	//2-tactmap
+	int drawType = 2;
+	if (battleState == 0)
+	{
+		drawType = 1;
+	}
+
 	//plugins::onEndScene(pDevice);
 
 
@@ -178,15 +188,6 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 
 
 
-	int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
-
-	//1-stratmap
-	//2-tactmap
-	int drawType = 2;
-	if (battleState == 0)
-	{
-		drawType = 1;
-	}
 	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
@@ -218,8 +219,25 @@ void graphicsD3D::onDrawAllGameStuff()
 	auto& developerMode = globals::dataS.Modules.developerMode;
 	developerMode.Update();
 
-	globals::dataS.Modules.tacticalMapVeiwer.Draw();
 	plugins::onEndScene(graphicsD3D::dataS.pDevice);
+
+
+	int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
+
+	//1-stratmap
+	//2-tactmap
+	int drawType = 2;
+	if (battleState == 0)
+	{
+		drawType = 1;
+	}
+
+	if (drawType == 1)
+	{
+		//globals::dataS.Modules.tacticalMapVeiwer.Draw();
+		globals::dataS.Modules.contextMenuStrat.Draw();
+	}
+
 	//graphicsD3D::Draw(pDevice);
 	if (drawParams.drawEOPStartInfo == true)
 	{

@@ -228,6 +228,7 @@
     <ClInclude Include="agePatch.h" />
     <ClInclude Include="BattleMapOverrider.h" />
     <ClInclude Include="battlemapWorker.h" />
+    <ClInclude Include="ContextMenuStrat.h" />
     <ClInclude Include="dataOffsets.h" />
     <ClInclude Include="DeveloperMode.h" />
     <ClInclude Include="eduFastFuncts.h" />
@@ -308,6 +309,7 @@
     <ClCompile Include="agePatch.cpp" />
     <ClCompile Include="BattleMapOverrider.cpp" />
     <ClCompile Include="battlemapWorker.cpp" />
+    <ClCompile Include="ContextMenuStrat.cpp" />
     <ClCompile Include="dataOffsets.cpp" />
     <ClCompile Include="DeveloperMode.cpp" />
     <ClCompile Include="dllmain.cpp" />

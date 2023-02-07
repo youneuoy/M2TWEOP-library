@@ -12,6 +12,10 @@ namespace fastFuncts
 {
 	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct*sett, factionStruct newOwner);
 
+	NOINLINE EOP_EXPORT void GetGameTileCoordsWithCursor(int&x,int&y);
+	NOINLINE EOP_EXPORT void ViewTacticalMap(int x,int y);
+	NOINLINE EOP_EXPORT bool IsStratMap();
+
 
 
 	NOINLINE EOP_EXPORT void setCharacterType(general*character, int typeID,int subFaction,int factionDipNum);
