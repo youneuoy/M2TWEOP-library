@@ -3,6 +3,7 @@
 class ContextMenuStrat
 {
 public:
+	bool isContextMenuNeeded = true;
 	void Draw();
 private:
 	ImVec2 ctxPos = { 0,0 };

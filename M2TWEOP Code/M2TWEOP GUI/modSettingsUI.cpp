@@ -13,7 +13,7 @@ namespace modSettingsUI
 		selectedSettingsPage_launcher,
 		selectedSettingsPage_hs,
 		selectedSettingsPage_rules,
-		selectedSettingsPage_game,
+		selectedSettingsPage_game
 	};
 
 
@@ -58,6 +58,7 @@ namespace modSettingsUI
 
 			settingsUIData.settingsPages.push_back(std::move(launcherPage));
 		}
+
 		//game page
 		{
 			settingsPage gamePage;
@@ -149,6 +150,9 @@ namespace modSettingsUI
 
 	void drawGameSettings()
 	{
+		ImGui::Checkbox("Stratmap context menu", &dataG::data.modulesData.isContextMenuNeeded);
+		ImGui::Checkbox("Tactical map viewer", &dataG::data.modulesData.isTacticalMapViewerNeeded);
+		ImGui::Checkbox("M2TWEOP developer mode", &dataG::data.modulesData.isDeveloperModeNeeded);
 		ImGui::Checkbox("Block modification launch without EOP", &dataG::data.gameData.isBlockLaunchWithoutEop);
 	}
 	void drawModSettingsUI(bool* isOpen)

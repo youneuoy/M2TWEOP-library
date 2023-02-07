@@ -3,6 +3,10 @@
 
 void ContextMenuStrat::Draw()
 {
+	if (isContextMenuNeeded == false)
+	{
+		return;
+	}
 	if (fastFuncts::IsStratMap() == false)
 	{
 		return;

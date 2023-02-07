@@ -503,6 +503,18 @@ void loadJsonSettings()
 
 	try
 	{
+		if (json.contains("isContextMenuNeeded"))
+		{
+			getJson(globals::dataS.Modules.contextMenuStrat.isContextMenuNeeded, "isContextMenuNeeded");
+		}
+		if (json.contains("isTacticalMapViewerNeeded"))
+		{
+			getJson(globals::dataS.Modules.tacticalMapVeiwer.isTacticalMapViewerNeeded, "isTacticalMapViewerNeeded");
+		}
+		if (json.contains("isDeveloperModeNeeded"))
+		{
+			getJson(globals::dataS.Modules.developerMode.isDeveloperModeNeeded, "isDeveloperModeNeeded");
+		}
 		if (json.contains("isBlockLaunchWithoutEop"))
 		{
 			getJson(globals::dataS.gameCfg.isBlockLaunchWithoutEop, "isBlockLaunchWithoutEop");

@@ -8,7 +8,6 @@
 
 void TacticalMapViewer::Init(int gameVer)
 {
-
 	if (gameVer == 2)//steam
 	{
 		functions.startTransitionToMapView = reinterpret_cast<StartTransitionToMapView>(0x00ac18c0);
@@ -32,6 +31,10 @@ void TacticalMapViewer::Init(int gameVer)
 
 void TacticalMapViewer::View(int x, int y)
 {
+	if (isTacticalMapViewerNeeded == false)
+	{
+		return;
+	}
 	state.IsBattleGeneratorWorking = battleCreator::GetIsGenerationNeeded();
 	battleCreator::setCreationNeeded(false);
 

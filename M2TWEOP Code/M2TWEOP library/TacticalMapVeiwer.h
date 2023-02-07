@@ -3,7 +3,7 @@
 class TacticalMapViewer
 {
 public:
-
+	bool isTacticalMapViewerNeeded = true;
 	void Init(int gameVer);
 
 	void View(int x, int y);

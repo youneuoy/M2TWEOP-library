@@ -71,6 +71,18 @@ namespace managerG
 
 		try
 		{
+			if (json.contains("isContextMenuNeeded"))
+			{
+				getJson(dataG::data.modulesData.isContextMenuNeeded, "isContextMenuNeeded");
+			}
+			if (json.contains("isTacticalMapViewerNeeded"))
+			{
+				getJson(dataG::data.modulesData.isTacticalMapViewerNeeded, "isTacticalMapViewerNeeded");
+			}
+			if (json.contains("isDeveloperModeNeeded"))
+			{
+				getJson(dataG::data.modulesData.isDeveloperModeNeeded, "isDeveloperModeNeeded");
+			}
 			if (json.contains("isBlockLaunchWithoutEop"))
 			{
 				getJson(dataG::data.gameData.isBlockLaunchWithoutEop, "isBlockLaunchWithoutEop");
@@ -185,6 +197,9 @@ namespace managerG
 
 		// Save game config
 		fPath = ".\\eopData\\gameCfg.json";
+		setJson("isContextMenuNeeded", dataG::data.modulesData.isContextMenuNeeded);
+		setJson("isTacticalMapViewerNeeded", dataG::data.modulesData.isTacticalMapViewerNeeded);
+		setJson("isDeveloperModeNeeded", dataG::data.modulesData.isDeveloperModeNeeded);
 		setJson("isBlockLaunchWithoutEop", dataG::data.gameData.isBlockLaunchWithoutEop);
 		writeJsonToFile(fPath, json);
 		json.clear();
