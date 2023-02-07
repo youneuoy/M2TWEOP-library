@@ -14,6 +14,8 @@ void ContextMenuStrat::Draw()
 		isWork = !isWork;
 
 		ctxPos = ImGui::GetMousePos();
+
+		fastFuncts::GetGameTileCoordsWithCursor(posAtMap[0], posAtMap[1]);
 	}
 
 	if (isWork == false)
@@ -25,10 +27,7 @@ void ContextMenuStrat::Draw()
 	ImGui::Begin("##ContextMenuTactical", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
 	if (ImGui::Button("View tactical map"))
 	{
-		int x = 0;
-		int y = 0;
-		fastFuncts::GetGameTileCoordsWithCursor(x,y);
-		fastFuncts::ViewTacticalMap(x, y);
+		fastFuncts::ViewTacticalMap(posAtMap[0], posAtMap[1]);
 
 		isWork = false;
 	}
