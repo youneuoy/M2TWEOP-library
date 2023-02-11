@@ -2120,7 +2120,7 @@ namespace sol_ImGui
 		));
 
 		/***
-		Begin window
+		End window
 		@function ImGui.End
 		@usage
 		ImGui.Begin("SampleWindow");
