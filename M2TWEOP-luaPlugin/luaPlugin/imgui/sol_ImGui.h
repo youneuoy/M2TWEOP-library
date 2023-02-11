@@ -2871,6 +2871,33 @@ namespace sol_ImGui
 
 
 #pragma region IO
+		ImGui.set_function("GetStyle", ImGui::GetStyle);
+		sol::usertype<ImVec4> imvec4 = lua.new_usertype<ImVec4>("ImVec4");
+		imvec4.set("x", &ImVec4::x);
+		imvec4.set("y", &ImVec4::y);
+		imvec4.set("z", &ImVec4::z);
+		imvec4.set("w", &ImVec4::w);
+		sol::usertype<ImVec2> imvec2 = lua.new_usertype<ImVec2>("ImVec2");
+		imvec2.set("x", &ImVec2::x);
+		imvec2.set("y", &ImVec2::y);
+
+		sol::usertype<ImGuiStyle> imguiStyle = lua.new_usertype<ImGuiStyle>("ImGuiStyle");
+		imguiStyle.set("Colors", sol::property([](ImGuiStyle& self) { return std::ref(self.Colors); }));
+		imguiStyle.set("PopupRounding", &ImGuiStyle::PopupRounding);
+		imguiStyle.set("WindowPadding", &ImGuiStyle::WindowPadding);
+		imguiStyle.set("FramePadding", &ImGuiStyle::FramePadding);
+		imguiStyle.set("ItemSpacing", &ImGuiStyle::ItemSpacing);
+		imguiStyle.set("ScrollbarSize", &ImGuiStyle::ScrollbarSize);
+		imguiStyle.set("WindowBorderSize", &ImGuiStyle::WindowBorderSize);
+		imguiStyle.set("ChildBorderSize", &ImGuiStyle::ChildBorderSize);
+		imguiStyle.set("PopupBorderSize", &ImGuiStyle::PopupBorderSize);
+		imguiStyle.set("FrameBorderSize", &ImGuiStyle::FrameBorderSize);
+		imguiStyle.set("WindowRounding", &ImGuiStyle::WindowRounding);
+		imguiStyle.set("ChildRounding", &ImGuiStyle::ChildRounding);
+		imguiStyle.set("FrameRounding", &ImGuiStyle::FrameRounding);
+		imguiStyle.set("ScrollbarRounding", &ImGuiStyle::ScrollbarRounding);
+		imguiStyle.set("GrabRounding", &ImGuiStyle::GrabRounding);
+
 		ImGui.set_function("PushFont", PushFont);
 		ImGui.set_function("PopFont", PopFont);
 		ImGui.set_function("GetIO", GetIO);
