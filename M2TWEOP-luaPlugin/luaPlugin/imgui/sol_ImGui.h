@@ -2370,7 +2370,6 @@ namespace sol_ImGui
 		));
 		ImGui.set_function("Bullet", Bullet);
 
-
 		ImGui.set_function("ImageButton", ImageButton);
 		ImGui.set_function("Image", Image);
 #pragma endregion Widgets: Main

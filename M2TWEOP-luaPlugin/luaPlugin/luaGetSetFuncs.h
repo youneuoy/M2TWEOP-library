@@ -12,6 +12,8 @@
 
 #define EduEntryStruct_Type 1
 #define EduEntryStruct_Soldier 2
+#define EduEntryStruct_UnitCardTga 3
+#define EduEntryStruct_InfoCardTga 4
 
 
 #define anchillaryStruct_name 1
@@ -220,6 +222,14 @@ namespace luaGetSetFuncs
 		{
 			retS = eduEn->Soldier;
 		}
+		else if (fieldIndex == EduEntryStruct_UnitCardTga)
+		{
+			retS = eduEn->UnitCardTga;
+		}
+		else if (fieldIndex == EduEntryStruct_InfoCardTga)
+		{
+			retS = eduEn->InfoCardTga;
+		}
 
 		if (retS != nullptr)
 		{
@@ -244,6 +254,16 @@ namespace luaGetSetFuncs
 		{
 
 			arg = reinterpret_cast<char*>(&eduEn->Soldier);
+		}
+		else if (fieldIndex == EduEntryStruct_UnitCardTga)
+		{
+
+			arg = reinterpret_cast<char*>(&eduEn->UnitCardTga);
+		}
+		else if (fieldIndex == EduEntryStruct_InfoCardTga)
+		{
+
+			arg = reinterpret_cast<char*>(&eduEn->InfoCardTga);
 		}
 		setGameString(arg, newS.c_str());
 	}

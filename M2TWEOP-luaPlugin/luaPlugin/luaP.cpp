@@ -725,6 +725,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	@tfield string Type do not set!
 	@tfield string Soldier no not set!
+	@tfield string UnitCardTga no not set!
+	@tfield string InfoCardTga no not set!
 	@tfield int Index do not set!
 	@tfield int UnitCreatedCounter do not set!
 	@tfield int SoldierCount
@@ -761,6 +763,12 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		));
 	types.EduEntry.set("Soldier", sol::property(
 		&luaGetSetFuncs::getStringPropertyEDU<EduEntryStruct_Soldier>, &luaGetSetFuncs::setStringPropertyEDU<EduEntryStruct_Soldier>
+		));
+	types.EduEntry.set("UnitCardTga", sol::property(
+		&luaGetSetFuncs::getStringPropertyEDU<EduEntryStruct_UnitCardTga>, &luaGetSetFuncs::setStringPropertyEDU<EduEntryStruct_UnitCardTga>
+		));
+	types.EduEntry.set("InfoCardTga", sol::property(
+		&luaGetSetFuncs::getStringPropertyEDU<EduEntryStruct_InfoCardTga>, &luaGetSetFuncs::setStringPropertyEDU<EduEntryStruct_InfoCardTga>
 		));
 	types.EduEntry.set("Index", &EduEntry::Index);
 	types.EduEntry.set("UnitCreatedCounter", &EduEntry::UnitCreatedCounter);
