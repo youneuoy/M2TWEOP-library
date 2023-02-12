@@ -175,6 +175,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield toggleUnitsBMapHighlight toggleUnitsBMapHighlight
 	@tfield setReligionsLimit setReligionsLimit
 	@tfield isTileFree isTileFree
+	@tfield getGameTileCoordsWithCursor getGameTileCoordsWithCursor
 	@tfield getTileRegionID getTileRegionID
 	@tfield getRegionOwner getRegionOwner
 	@tfield setEDUUnitsSize setEDUUnitsSize
@@ -336,6 +337,15 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	M2TWEOP.isTileFree(55,25);
 	*/
 	tables.M2TWEOPTable.set_function("isTileFree", &m2tweopHelpers::isTileFree);
+	/***
+	Get the selected tile coords.
+	@function M2TWEOP.getGameTileCoordsWithCursor
+	@treturn int x
+	@treturn int y
+	@usage
+	local x,y=M2TWEOP.getGameTileCoordsWithCursor();
+	*/
+	tables.M2TWEOPTable.set_function("getGameTileCoordsWithCursor", &m2tweopHelpers::getGameTileCoordsWithCursor);
 	/***
 	Get the RegionID of a tile.
 	@function M2TWEOP.getTileRegionID

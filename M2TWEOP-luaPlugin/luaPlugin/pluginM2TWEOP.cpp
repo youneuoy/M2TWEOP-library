@@ -26,6 +26,9 @@ int initPlugin(std::string* modPath)
     plugData::data.funcs.isTileFree.Load(&plPath, &fName);
 
 
+    fName = "GetGameTileCoordsWithCursor";
+    plugData::data.funcs.getGameTileCoordsWithCursor.Load(&plPath, &fName);
+
     fName = "getTileRegionID";
     plugData::data.funcs.getTileRegionID.Load(&plPath, &fName);
 

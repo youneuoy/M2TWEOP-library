@@ -109,6 +109,7 @@ public:
 
 
 	ProcLoader<bool(__cdecl*)(int*)> isTileFree;
+	ProcLoader<void(__cdecl*)(int &x, int &y)> getGameTileCoordsWithCursor;
 	ProcLoader<UINT32(__cdecl*)(int x, int y)> getTileRegionID;
 	ProcLoader<regionStruct* (__cdecl*)(UINT32)> getRegionByID;
 
