@@ -56,6 +56,7 @@
     <li><a href="#M2TWEOP.toggleUnitsBMapHighlight">M2TWEOP.toggleUnitsBMapHighlight ()</a></li>
     <li><a href="#M2TWEOP.setReligionsLimit">M2TWEOP.setReligionsLimit (newLimit)</a></li>
     <li><a href="#M2TWEOP.isTileFree">M2TWEOP.isTileFree (X, Y)</a></li>
+    <li><a href="#M2TWEOP.getGameTileCoordsWithCursor">M2TWEOP.getGameTileCoordsWithCursor ()</a></li>
     <li><a href="#M2TWEOP.getTileRegionID">M2TWEOP.getTileRegionID (x, y)</a></li>
     <li><a href="#M2TWEOP.getRegionOwner">M2TWEOP.getRegionOwner (regionID)</a></li>
 </details>
@@ -508,7 +509,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-02-06 12:32:17</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-02-16 19:43:44</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -600,6 +601,10 @@
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.isTileFree">M2TWEOP.isTileFree (X, Y)</a></td>
 	<td class="summary">Checks if a tile is free.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP.getGameTileCoordsWithCursor">M2TWEOP.getGameTileCoordsWithCursor ()</a></td>
+	<td class="summary">Get the selected tile coords.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.getTileRegionID">M2TWEOP.getTileRegionID (x, y)</a></td>
@@ -1804,6 +1809,12 @@
 
 
         </li>
+        <li><span class="parameter">getGameTileCoordsWithCursor</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.getGameTileCoordsWithCursor">getGameTileCoordsWithCursor</a></span>
+
+
+
+        </li>
         <li><span class="parameter">getTileRegionID</span>
             <span class="types"><a class="type" href="index.html#M2TWEOP.getTileRegionID">getTileRegionID</a></span>
 
@@ -2238,6 +2249,34 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     <h3>Usage:</h3>
     <ul>
         <pre class="example">M2TWEOP.isTileFree(<span class="number">55</span>,<span class="number">25</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP.getGameTileCoordsWithCursor"></a>
+    <strong>M2TWEOP.getGameTileCoordsWithCursor ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get the selected tile coords.
+    </div>
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">int</span></span>
+        x</li>
+        <li>
+           <span class="types"><span class="type">int</span></span>
+        y</li>
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> x,y=M2TWEOP.getGameTileCoordsWithCursor();</pre>
     </ul>
 
 </dd>
@@ -3395,6 +3434,14 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
          do not set!
         </li>
         <li><span class="parameter">Soldier</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         no not set!
+        </li>
+        <li><span class="parameter">UnitCardTga</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         no not set!
+        </li>
+        <li><span class="parameter">InfoCardTga</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
          no not set!
         </li>
@@ -6458,7 +6505,35 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">if</span> tradeResource:getResourceHasMine() == <span class="number">1</span> <span class="keyword">then</span>
+        <pre class="example"><span class="number">0</span>   = <span class="string">"gold"</span>;
+<span class="number">1</span>   = <span class="string">"silver"</span>;
+<span class="number">2</span>   = <span class="string">"fish"</span>;
+<span class="number">3</span>   = <span class="string">"furs"</span>;
+<span class="number">4</span>   = <span class="string">"grain"</span>;
+<span class="number">5</span>   = <span class="string">"timber"</span>;
+<span class="number">6</span>   = <span class="string">"iron"</span>;
+<span class="number">7</span>   = <span class="string">"ivory"</span>;
+<span class="number">8</span>   = <span class="string">"wine"</span>;
+<span class="number">9</span>   = <span class="string">"slaves"</span>;
+<span class="number">10</span>  = <span class="string">"chocolate"</span>;
+<span class="number">11</span>  = <span class="string">"marble"</span>;
+<span class="number">12</span>  = <span class="string">"textiles"</span>;
+<span class="number">13</span>  = <span class="string">"dyes"</span>;
+<span class="number">14</span>  = <span class="string">"tobacco"</span>;
+<span class="number">15</span>  = <span class="string">"silk"</span>;
+<span class="number">16</span>  = <span class="string">"sugar"</span>;
+<span class="number">17</span>  = <span class="string">"sulfur"</span>;
+<span class="number">18</span>  = <span class="string">"tin"</span>;
+<span class="number">19</span>  = <span class="string">"spices"</span>;
+<span class="number">20</span>  = <span class="string">"cotton"</span>;
+<span class="number">21</span>  = <span class="string">"amber"</span>;
+<span class="number">22</span>  = <span class="string">"coal"</span>;
+<span class="number">23</span>  = <span class="string">"wool"</span>;
+<span class="number">24</span>  = <span class="string">"elephants"</span>;
+<span class="number">25</span>  = <span class="string">"camels"</span>;
+<span class="number">26</span>  = <span class="string">"dogs"</span>;
+<span class="number">27</span>  = <span class="string">"generic"</span>;
+<span class="keyword">if</span> tradeResource:getResourceHasMine() == <span class="number">1</span> <span class="keyword">then</span>
 	<span class="comment">--do stuff
 </span><span class="keyword">end</span></pre>
     </ul>
