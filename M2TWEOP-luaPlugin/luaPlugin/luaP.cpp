@@ -1848,6 +1848,34 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@function tradeResource:getResourceHasMine
 	@treturn int hasMine 0=no mine, 1=mine
 	@usage
+	0   = "gold";
+	1   = "silver";
+	2   = "fish";
+	3   = "furs";
+	4   = "grain";
+	5   = "timber";
+	6   = "iron";
+	7   = "ivory";
+	8   = "wine";
+	9   = "slaves";
+	10  = "chocolate";
+	11  = "marble";
+	12  = "textiles";
+	13  = "dyes";
+	14  = "tobacco";
+	15  = "silk";
+	16  = "sugar";
+	17  = "sulfur";
+	18  = "tin";
+	19  = "spices";
+	20  = "cotton";
+	21  = "amber";
+	22  = "coal";
+	23  = "wool";
+	24  = "elephants";
+	25  = "camels";
+	26  = "dogs";
+	27  = "generic";
 	if tradeResource:getResourceHasMine() == 1 then
 		--do stuff
 	end
