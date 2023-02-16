@@ -1828,26 +1828,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@function tradeResource:getResourceID
 	@treturn int ID
 	@usage
-	if tradeResource:getResourceID() == 23 then --wool
-		--do stuff
-	end
-	*/
-	types.tradeResource.set_function("getResourceID", &resourcesHelpers::getResourceCode);
-	/***
-	Get the resource's trade value.
-	@function tradeResource:getResourceValue
-	@treturn int value
-	@usage
-	if tradeResource:getResourceValue() == 5 then
-		--do stuff
-	end
-	*/
-	types.tradeResource.set_function("getResourceValue", &resourcesHelpers::getResourceCost);
-	/***
-	Check if the resource has a mine.
-	@function tradeResource:getResourceHasMine
-	@treturn int hasMine 0=no mine, 1=mine
-	@usage
+	-- ID -> Internal Name
 	0   = "gold";
 	1   = "silver";
 	2   = "fish";
@@ -1876,6 +1857,27 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	25  = "camels";
 	26  = "dogs";
 	27  = "generic";
+	--
+	if tradeResource:getResourceID() == 23 then --wool
+		--do stuff
+	end
+	*/
+	types.tradeResource.set_function("getResourceID", &resourcesHelpers::getResourceCode);
+	/***
+	Get the resource's trade value.
+	@function tradeResource:getResourceValue
+	@treturn int value
+	@usage
+	if tradeResource:getResourceValue() == 5 then
+		--do stuff
+	end
+	*/
+	types.tradeResource.set_function("getResourceValue", &resourcesHelpers::getResourceCost);
+	/***
+	Check if the resource has a mine.
+	@function tradeResource:getResourceHasMine
+	@treturn int hasMine 0=no mine, 1=mine
+	@usage
 	if tradeResource:getResourceHasMine() == 1 then
 		--do stuff
 	end
