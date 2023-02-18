@@ -28,7 +28,7 @@ EOP uses C++ and Assembly to modify the game's code in-memory and exposes this t
 ## Features
 
 * Hugely expanded Lua scripting system that integrates seamlessly with existing campaign_script scripts, hot-reload, new custom console, debugger and much more
-* Place .fbx models anywhere on the strategy map with full animation and texture support
+* Place .fbx models anywhere on the strategy or battle map with full animation and texture support
 * Play custom sounds or music with support for WAV, OGG/Vorbis and FLAC
 * Unlocks all vanilla console commands
 * Create your own GUIs and overlays using the popular [ImgGui](https://github.com/ocornut/imgui)
