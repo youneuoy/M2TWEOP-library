@@ -509,7 +509,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-02-16 19:43:44</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-02-18 20:30:17</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -6451,7 +6451,37 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">if</span> tradeResource:getResourceID() == <span class="number">23</span> <span class="keyword">then</span> <span class="comment">--wool
+        <pre class="example"><span class="comment">-- ID -&gt; Internal Name
+</span><span class="number">0</span>   = <span class="string">"gold"</span>;
+<span class="number">1</span>   = <span class="string">"silver"</span>;
+<span class="number">2</span>   = <span class="string">"fish"</span>;
+<span class="number">3</span>   = <span class="string">"furs"</span>;
+<span class="number">4</span>   = <span class="string">"grain"</span>;
+<span class="number">5</span>   = <span class="string">"timber"</span>;
+<span class="number">6</span>   = <span class="string">"iron"</span>;
+<span class="number">7</span>   = <span class="string">"ivory"</span>;
+<span class="number">8</span>   = <span class="string">"wine"</span>;
+<span class="number">9</span>   = <span class="string">"slaves"</span>;
+<span class="number">10</span>  = <span class="string">"chocolate"</span>;
+<span class="number">11</span>  = <span class="string">"marble"</span>;
+<span class="number">12</span>  = <span class="string">"textiles"</span>;
+<span class="number">13</span>  = <span class="string">"dyes"</span>;
+<span class="number">14</span>  = <span class="string">"tobacco"</span>;
+<span class="number">15</span>  = <span class="string">"silk"</span>;
+<span class="number">16</span>  = <span class="string">"sugar"</span>;
+<span class="number">17</span>  = <span class="string">"sulfur"</span>;
+<span class="number">18</span>  = <span class="string">"tin"</span>;
+<span class="number">19</span>  = <span class="string">"spices"</span>;
+<span class="number">20</span>  = <span class="string">"cotton"</span>;
+<span class="number">21</span>  = <span class="string">"amber"</span>;
+<span class="number">22</span>  = <span class="string">"coal"</span>;
+<span class="number">23</span>  = <span class="string">"wool"</span>;
+<span class="number">24</span>  = <span class="string">"elephants"</span>;
+<span class="number">25</span>  = <span class="string">"camels"</span>;
+<span class="number">26</span>  = <span class="string">"dogs"</span>;
+<span class="number">27</span>  = <span class="string">"generic"</span>;
+<span class="comment">--
+</span><span class="keyword">if</span> tradeResource:getResourceID() == <span class="number">23</span> <span class="keyword">then</span> <span class="comment">--wool
 </span>	<span class="comment">--do stuff
 </span><span class="keyword">end</span></pre>
     </ul>
@@ -6505,35 +6535,7 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="number">0</span>   = <span class="string">"gold"</span>;
-<span class="number">1</span>   = <span class="string">"silver"</span>;
-<span class="number">2</span>   = <span class="string">"fish"</span>;
-<span class="number">3</span>   = <span class="string">"furs"</span>;
-<span class="number">4</span>   = <span class="string">"grain"</span>;
-<span class="number">5</span>   = <span class="string">"timber"</span>;
-<span class="number">6</span>   = <span class="string">"iron"</span>;
-<span class="number">7</span>   = <span class="string">"ivory"</span>;
-<span class="number">8</span>   = <span class="string">"wine"</span>;
-<span class="number">9</span>   = <span class="string">"slaves"</span>;
-<span class="number">10</span>  = <span class="string">"chocolate"</span>;
-<span class="number">11</span>  = <span class="string">"marble"</span>;
-<span class="number">12</span>  = <span class="string">"textiles"</span>;
-<span class="number">13</span>  = <span class="string">"dyes"</span>;
-<span class="number">14</span>  = <span class="string">"tobacco"</span>;
-<span class="number">15</span>  = <span class="string">"silk"</span>;
-<span class="number">16</span>  = <span class="string">"sugar"</span>;
-<span class="number">17</span>  = <span class="string">"sulfur"</span>;
-<span class="number">18</span>  = <span class="string">"tin"</span>;
-<span class="number">19</span>  = <span class="string">"spices"</span>;
-<span class="number">20</span>  = <span class="string">"cotton"</span>;
-<span class="number">21</span>  = <span class="string">"amber"</span>;
-<span class="number">22</span>  = <span class="string">"coal"</span>;
-<span class="number">23</span>  = <span class="string">"wool"</span>;
-<span class="number">24</span>  = <span class="string">"elephants"</span>;
-<span class="number">25</span>  = <span class="string">"camels"</span>;
-<span class="number">26</span>  = <span class="string">"dogs"</span>;
-<span class="number">27</span>  = <span class="string">"generic"</span>;
-<span class="keyword">if</span> tradeResource:getResourceHasMine() == <span class="number">1</span> <span class="keyword">then</span>
+        <pre class="example"><span class="keyword">if</span> tradeResource:getResourceHasMine() == <span class="number">1</span> <span class="keyword">then</span>
 	<span class="comment">--do stuff
 </span><span class="keyword">end</span></pre>
     </ul>

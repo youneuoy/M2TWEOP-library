@@ -28,7 +28,7 @@ M2TWEOP: Medieval 2 Engine Overhaul Project
 	<h2>Features</h2>
 	<ul>
 		<li>Hugely expanded Lua scripting system that integrates seamlessly with existing campaign_script scripts, hot-reload, new custom console, debugger and much more</li>
-		<li>Place .fbx models anywhere on the battle or strategy map with full animation and texture support</li>
+		<li>Place .fbx models anywhere on the strategy or battle map with full animation and texture support</li>
 		<li>Swap out .cas models based on any kind of condition you can imagine</li>
 		<li>Play custom sounds or music with support for WAV, OGG/Vorbis and FLAC</li>
 		<li>Unlocks all vanilla console commands</li>
