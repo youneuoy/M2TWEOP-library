@@ -15,6 +15,14 @@ namespace m2tweopHelpers
 		int xy[2]{x,y};
 		return (*(*plugData::data.funcs.isTileFree))(xy);
 	}
+	std::tuple<int, int> getGameTileCoordsWithCursor()
+	{
+		int x = 0;
+		int y = 0;
+		(*(*plugData::data.funcs.getGameTileCoordsWithCursor))(x, y);
+
+		return std::make_tuple(x, y);
+	}
 	int getTileRegionID(int x, int y)
 	{
 		return (*(*plugData::data.funcs.getTileRegionID))(x,y);

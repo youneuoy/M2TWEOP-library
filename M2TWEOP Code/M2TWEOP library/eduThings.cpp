@@ -74,7 +74,7 @@ namespace eduThings
 
 		eduEntryes* EDB = reinterpret_cast<eduEntryes*>(dataOffsets::offsets.unitTypesStart - 4);
 
-		--EDB->numberOfTupes;
+		//--EDB->numberOfTupes;
 
 		return getEopEduEntry(newIdx);
 	}

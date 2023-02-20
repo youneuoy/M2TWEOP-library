@@ -3294,3 +3294,103 @@ void OnStopCharacter::SetNewCode()
 
 	delete a;
 }
+
+OnMoveRecruitQueue::OnMoveRecruitQueue(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00ab4966;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00ab3936;
+}
+
+OnMoveRecruitQueue::~OnMoveRecruitQueue()
+{
+}
+
+void OnMoveRecruitQueue::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+	
+	a->mov(byte_ptr(eax, 0xD0), 01);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnMoveRecruitQueue::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+
+	a->pushad();
+	a->pushf();
+
+
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->mov(byte_ptr(esp, 0x20), eax);//move eax to stored eax
+
+	a->popf();
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+OnPathCasheCrashPlace::OnPathCasheCrashPlace(MemWork* mem, LPVOID addr, int ver, LPVOID cbObj)
+	:AATemplate(mem), funcAddress(addr),callbackObject(cbObj)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0043cbae;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0043c86e;
+}
+
+OnPathCasheCrashPlace::~OnPathCasheCrashPlace()
+{
+}
+
+void OnPathCasheCrashPlace::SetOriginalCode()
+{
+	return;
+	Assembler* a = new Assembler();
+	//filler, not work!
+	a->mov(ecx,ecx);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnPathCasheCrashPlace::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(ecx, (int)callbackObject);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+	a->mov(dword_ptr(esp, 0x18), eax);//move eax to stored ecx
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}

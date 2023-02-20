@@ -6,6 +6,7 @@ class DeveloperMode
 {
 public:
 	void Update();
+	bool isDeveloperModeNeeded = true;
 
 	string SelectWorldpkgdesc(const std::string& selectedRec, const std::string& selectedGroup);
 private:

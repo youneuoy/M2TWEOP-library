@@ -11,6 +11,13 @@ public:
 	{
 		struct
 		{
+			bool isContextMenuNeeded = true;
+			bool isTacticalMapViewerNeeded = true;
+			bool isDeveloperModeNeeded = true;
+
+		}modulesData;
+		struct
+		{
 			bool isGenerationNeeded = false;
 			bool isResultTransferNeeded = false;
 		}battlesData;

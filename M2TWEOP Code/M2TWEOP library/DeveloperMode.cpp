@@ -3,6 +3,10 @@
 
 void DeveloperMode::Update()
 {
+	if (isDeveloperModeNeeded == false)
+	{
+		return;
+	}
 	gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
 	campaign* campaign = gameDataAll->campaignData;
 	if (campaign->humanPlayers > 1)

@@ -21,7 +21,9 @@
 using namespace std;
 namespace battleCreator
 {
+	bool GetIsGenerationNeeded();
 	void setCreationNeeded(bool isNeeded = false);
+
 	void readParams();
 	//for creation of battles and battles results
 	//not threadsafe, but looks stable

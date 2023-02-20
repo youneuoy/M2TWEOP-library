@@ -40,7 +40,14 @@ return [==[
 
 <div id="navigation">
 <br/>
-<h1><a href="../../index.html">Home</a></h1>
+
+# if ldoc.body then -- verbatim HTML as contents; 'non-code' entries
+    <h1><a href="../../../index.html">Home</a></h1>
+    <h1><a href="../index.html">Back</a></h1>
+# elseif module then
+    <h1><a href="../../index.html">Home</a></h1>
+# end
+
 
 # if not ldoc.single and module then -- reference back to project index
 <ul>
@@ -70,19 +77,29 @@ return [==[
 <div id="content">
     <div class="welcomeDiv">
         <h2 class="bannerText"></h2>
-        <img class="bannerImage" src="../M2TWEOP.png"/>
+
         <h2 class="bannerText">Medieval 2: Total War - Engine Overhaul Project Lua Plugin Documentation</h2>
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
-        <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord and get some help!</h3>
+        <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
         <p class="lastUpdatedMessage">Last updated: $(ldoc.updatetime)</p>
-        <a href="https://discord.gg/Epqjm8u2WK">
+        <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
         <br>
     <div class="quickLinks">
         <h2>Quick Links</h2>
+
+# if ldoc.body then
     <ul>
+        <li><a href="../../../articles.html">M2TWEOP Tutorials</li>
+    <ul>
+        <li><a href="https://www.youtube.com/watch?v=hUvbcz8i7Wk">Scripting Basics (Video Tutorial)</li>
+        <li><a href="../../../_static/Introduction_to_ImGui_v3.pdf">Introduction to ImGUI</a></li>
+    <ul>
+    </ul>
+# elseif module then
+       <ul>
         <li><a href="../../articles.html">M2TWEOP Tutorials</li>
     <ul>
         <li><a href="https://www.youtube.com/watch?v=hUvbcz8i7Wk">Scripting Basics (Video Tutorial)</li>
@@ -90,6 +107,7 @@ return [==[
         <li><a href="../../_static/LuaLib/extra/readme_imgui.md.html">EOP's ImGUI Bindings</li>
     <ul>
     </ul>
+# end
 </div>
 
 # if ldoc.body then -- verbatim HTML as contents; 'non-code' entries

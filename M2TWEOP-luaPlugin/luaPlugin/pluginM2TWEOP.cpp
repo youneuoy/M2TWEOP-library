@@ -26,6 +26,9 @@ int initPlugin(std::string* modPath)
     plugData::data.funcs.isTileFree.Load(&plPath, &fName);
 
 
+    fName = "GetGameTileCoordsWithCursor";
+    plugData::data.funcs.getGameTileCoordsWithCursor.Load(&plPath, &fName);
+
     fName = "getTileRegionID";
     plugData::data.funcs.getTileRegionID.Load(&plPath, &fName);
 
@@ -363,12 +366,13 @@ void initLua()
     plugData::data.luaAll.initEopFbx();
     plugData::data.luaAll.initEopSounds();
     plugData::data.luaAll.initTech();
+    sol_ImGui::Init(*luaState);
+
     plugData::data.luaAll.onPluginLoadF();
     if (luaState==nullptr)
     {
         MessageBoxA(NULL, "LUA loading error!", "Error!", NULL);
         exit(0);
     }
-    sol_ImGui::Init(*luaState);
 }
 

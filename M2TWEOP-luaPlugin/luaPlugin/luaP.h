@@ -181,6 +181,7 @@ public:
 
 	sol::function* drawLuaFunc = nullptr;
 	sol::function* resetDXFunc = nullptr;
+	sol::function* onLoadingFonts = nullptr;
 	sol::function* initDXFunc = nullptr;
 
 

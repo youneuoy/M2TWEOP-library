@@ -22,11 +22,15 @@ void luaP::initEopSounds()
 	//@section M2TWEOPSounds
 
 	/***
-	Basic M2TWEOPSounds table. Contains descriptions of m2tweop sounds feathures.
+	Basic M2TWEOPSounds table. Contains descriptions of M2TWEOP sound features.
 	Attention! You can use 256 sounds max.
-	Support the audio file formats WAV, OGG/Vorbis and FLAC.
+	It supports the following audio formats:
+	 - WAV
+	 - OGG/Vorbis
+	 - FLAC
+
 	You can play many sounds at the same time.
-	It should be used for small sounds that can fit in memory and should suffer no lag when they are played(i.e.not music).
+	It should be used for small sounds that can fit in memory. It's not recommended to use this for playing larger sounds like music.
 
 	@tfield createEOPSound createEOPSound
 	@tfield deleteEOPSound deleteEOPSound
@@ -42,19 +46,19 @@ void luaP::initEopSounds()
 	tables.M2TWEOPSoundsTable = luaState.create_table("M2TWEOPSounds");
 
 	/***
-	Create(and load) new sound
+	Create (and load) a new sound.
 	@function M2TWEOPSounds.createEOPSound
-	@tparam string soundPath path to sound file
-	@treturn int soundID id what be used for this model. Return nil if can`t load.
+	@tparam string soundPath Path to sound file
+	@treturn int soundID ID that will be used by this sound. Returns nil if the sound can't load..
 
 	@usage
 	local ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath().."/eopData/testsound.wav");
 	*/
 	tables.M2TWEOPSoundsTable.set_function("createEOPSound", &eopSoundHelpers::createEOPSound);
 	/***
-	Delete sound
+	Delete a sound
 	@function M2TWEOPSounds.deleteEOPSound
-	@tparam int soundID id of sound what you want delete
+	@tparam int soundID ID of the sound that you want to delete.
 
 	@usage
 	local ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath().."/eopData/testsound.wav");
@@ -62,9 +66,9 @@ void luaP::initEopSounds()
 	*/
 	tables.M2TWEOPSoundsTable.set_function("deleteEOPSound", &eopSoundHelpers::deleteEOPSound);
 	/***
-	Play sound
+	Play a sound.
 	@function M2TWEOPSounds.playEOPSound
-	@tparam int soundID id of sound
+	@tparam int soundID ID of the sound that you want to play.
 
 	@usage
 	local ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath().."/eopData/testsound.wav");
@@ -72,10 +76,10 @@ void luaP::initEopSounds()
 	*/
 	tables.M2TWEOPSoundsTable.set_function("playEOPSound", &eopSoundHelpers::playEOPSound);
 	/***
-	Set sound playing offset
+	Set a sound's playing offset. i.e Skip a certain number of milliseconds of the beginning of the sound.
 	@function M2TWEOPSounds.setEOPSoundOffset
-	@tparam int soundID id of sound
-	@tparam int millisecondsOffset new playing position, from the beginning of the sound
+	@tparam int soundID ID of the sound.
+	@tparam int millisecondsOffset New playing position, from the beginning of the sound.
 
 	@usage
 	local ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath().."/eopData/testsound.wav");
@@ -84,10 +88,10 @@ void luaP::initEopSounds()
 	*/
 	tables.M2TWEOPSoundsTable.set_function("setEOPSoundOffset", &eopSoundHelpers::setEOPSoundOffset);
 	/***
-	Get sound playing offset
+	Get a sound's playing offset.
 	@function M2TWEOPSounds.getEOPSoundOffset
-	@tparam int soundID id of sound
-	@treturn int millisecondsOffset new playing position, from the beginning of the sound
+	@tparam int soundID ID of the sound.
+	@treturn int millisecondsOffset Playing position, from the beginning of the sound.
 
 	@usage
 	local ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath().."/eopData/testsound.wav");
@@ -96,9 +100,9 @@ void luaP::initEopSounds()
 	*/
 	tables.M2TWEOPSoundsTable.set_function("getEOPSoundOffset", &eopSoundHelpers::getEOPSoundOffset);
 	/***
-	Pause sound
+	Pause a sound that is playing.
 	@function M2TWEOPSounds.pauseEOPSound
-	@tparam int soundID id of sound
+	@tparam int soundID ID of the sound that you want to pause.
 
 	@usage
 	local ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath().."/eopData/testsound.wav");
@@ -107,9 +111,9 @@ void luaP::initEopSounds()
 	*/
 	tables.M2TWEOPSoundsTable.set_function("pauseEOPSound", &eopSoundHelpers::pauseEOPSound);
 	/***
-	Stop sound playing
+	Stop a sound that is playing.
 	@function M2TWEOPSounds.stopEOPSound
-	@tparam int soundID id of sound
+	@tparam int soundID ID of the sound that you want to stop.
 
 	@usage
 	local ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath().."/eopData/testsound.wav");

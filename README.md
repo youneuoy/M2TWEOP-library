@@ -23,12 +23,12 @@ M2TW Engine Overhaul Project is designed to expand the capabilities of the game 
 
 ## How does it work?
 
-EOP uses C++ and Assembly to modify the game's code in-memory and exposes this to the end user via Lua scripts and the [EOP Lua Library](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html)
+EOP uses C++ and Assembly to modify the game's code in-memory and exposes this to the end user via Lua scripts and the [EOP Lua Library](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html).
 
 ## Features
 
 * Hugely expanded Lua scripting system that integrates seamlessly with existing campaign_script scripts, hot-reload, new custom console, debugger and much more
-* Place .fbx models anywhere on the strategy map with full animation and texture support
+* Place .fbx models anywhere on the strategy or battle map with full animation and texture support
 * Play custom sounds or music with support for WAV, OGG/Vorbis and FLAC
 * Unlocks all vanilla console commands
 * Create your own GUIs and overlays using the popular [ImgGui](https://github.com/ocornut/imgui)
@@ -41,9 +41,6 @@ EOP uses C++ and Assembly to modify the game's code in-memory and exposes this t
 * Custom keybinding support
 * Added ability to write your own add-ons in C++. The library exports many different functions.
 * Many, many more
-
-## Getting Started
-[![M2TWEOP-Tutorials](https://i.imgur.com/ixEuyev.png)](https://youtu.be/hUvbcz8i7Wk)
 
 ## Examples
 
@@ -76,6 +73,9 @@ function onGeneralAssaultsGeneral(attacker, defender)
 end
 ```
 For a full list of EOP Events, see [here](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html)
+
+## Getting Started
+[![M2TWEOP-Tutorials](https://i.imgur.com/ByebdSI.png)](https://youtu.be/hUvbcz8i7Wk)
 
 ### Creators
 * **youneuoy** - Project founder, Main Developer

@@ -34,6 +34,7 @@ namespace m2tweopHelpers
 	std::string getLuaPath();
 
 	bool isTileFree(int x, int y);
+	std::tuple<int, int> getGameTileCoordsWithCursor();
 	int getTileRegionID(int x, int y);
 	factionStruct* getRegionOwner(int regionID);
 

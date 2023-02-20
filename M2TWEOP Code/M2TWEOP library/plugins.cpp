@@ -678,6 +678,7 @@ void plugins::onClickAtTile(int x, int y)
 
 void plugins::onCampaignMapLoaded()
 {
+	globals::dataS.Modules.tacticalMapVeiwer.UnView();
 	for (plugin* pl : pluginsCfg.plugins)
 	{
 		(*(*pl->onCampaignMapLoaded))();
@@ -797,11 +798,19 @@ void plugins::onReset(LPDIRECT3DDEVICE9 pDevice)
 	}
 }
 
-void plugins::onChangeImGuiCtx(ImGuiContext* imCtx)
+void plugins::onLoadingFonts(LPDIRECT3DDEVICE9 pDevice)
 {
 	for (plugin* pl : pluginsCfg.plugins)
 	{
-		(*(*pl->onChangeImGuiContext))(imCtx);
+		(*(*pl->onLoadingFonts))(pDevice);
+	}
+}
+
+void plugins::onChangeImGuiCtx(ImGuiContext* imCtx, ImGuiMemAllocFunc alloc_func, ImGuiMemFreeFunc free_func, void* user_data)
+{
+	for (plugin* pl : pluginsCfg.plugins)
+	{
+		(*(*pl->onChangeImGuiContext))(imCtx, alloc_func, free_func, user_data);
 	}
 }
 
@@ -1439,6 +1448,10 @@ int plugin::init(string* nameP)
 	//onReset
 	fName = "onReset";
 	onReset.Load(&plPath, &fName);
+
+	//onLoadingFonts
+	fName = "onLoadingFonts";
+	onLoadingFonts.Load(&plPath, &fName);
 
 
 	//onChangeImGuiContext

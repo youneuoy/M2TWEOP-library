@@ -1,66 +1,14 @@
-## What is M2TW Engine Overhaul Project?
+## About M2TWEOP
 
-M2TW Engine Overhaul Project is designed to expand the capabilities of the game *Medieval 2: Total War*.
+## Releases
+The latest version of M2TWEOP can be found at https://github.com/youneuoy/M2TWEOP-library/releases. For install instructions, please see the FAQ.
 
-## How does it work?
-
-EOP uses C++ and Assembly to modify the game's code in-memory and exposes this to the end user via Lua scripts and the [EOP Lua Library](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html)
-
-## Features
-
-* Hugely expanded Lua scripting system that integrates seamlessly with existing campaign_script scripts, hot-reload, new custom console, debugger and much more
-* Place .fbx models anywhere on the strategy map with full animation and texture support 
-* Play custom sounds or music with support for WAV, OGG/Vorbis and FLAC 
-* Unlocks all vanilla console commands
-* Create your own GUIs and overlays using the popular [ImgGui](https://github.com/ocornut/imgui)
-* New custom EDU system that allows the creation and modification of new units without the need to restart the game
-* Play out Hotseat battles online and transfer the results back to the campaign map
-* Set your own limits for the number of religions, ancillaries, bodyguard units, building chains, max unit size 
-* Set the boundaries of the number of soldiers in units and the size of the battle map 
-* Fixed many engine bugs, crashes and oversights (e.g crashes when using berserkers in battle)
-* Edit worldpkgdesc for any settlement on the fly without the need to restart the game
-* Custom keybinding support
-* Added ability to write your own add-ons in C++. The library exports many different functions.
-* Many, many more
-
-## Examples
-
-### Removing engine limits
-```lua
-function onPluginLoad()
-    M2TWEOP.unlockGameConsoleCommands();
-    M2TWEOP.setAncillariesLimit(16);
-    M2TWEOP.setMaxBgSize(100);
-    M2TWEOP.setReligionsLimit(50);
-    M2TWEOP.setBuildingChainLimit(40);
-    M2TWEOP.setGuildCooldown(3);
-end
-```
-### Playing sounds, displaying GUIs and spawning units
-```lua
--- onGeneralAssaultsGeneral is a custom EOP event
-function onGeneralAssaultsGeneral(attacker, defender)
-        if(isNotNull(attacker)) then
-            -- Check if the character is a Nazgul
-            if(hasTrait(attacker, "NazgulRace")) then
-                -- Play a sound
-                playSound(nazgulScream); 
-                -- Display some text 
-                showWindow("The Nazgul have arrived.");
-                -- Spawn a new unit
-                spawnUnit('Gondor Infantry', 'Anorien' , 'Minas Tirith' ,3,4,1,1);
-        end
-    end
-end
-```
-For a full list of EOP Events, see [here](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html)
-
-### Creators
+## Creators
 * **youneuoy** - Project founder, Main Developer
 * **Jojo00182** - Great code contributions, engine bugfixes, reversing structs and much more
 * **Medik** - Creating documentation, setting up continous integration
-  
-### Contributors
+
+## Contributors
 * **Edmond** - Project idea, first attempts to implement hotseats with online battles
 * **Xamax** - Video tutorials, testing and many great suggestions
 * **Erken** - Excellent IMGUI tutorials, Lua examples and feedback
@@ -68,27 +16,22 @@ For a full list of EOP Events, see [here](https://youneuoy.github.io/M2TWEOP-lib
 * **Fynn** - Testing, early adopter and great suggestions
 * **Callistonian** - editing of documentation, lua examples and feedback
 
-## Projects
-* [M2TWEOP Library](https://github.com/youneuoy/M2TWEOP-library) - Main project (C++ and Assembly)
-* [M2TWEOP LUA plugin](https://github.com/youneuoy/M2TWEOP-luaPlugin) - Allows you to write custom scripts in the Lua programming using M2TWEOP-library
-
-### Compatibility
-
+## Compatibility
 This program works with game versions 1.5 (disk version) and 1.52 (steam version).
 
-### Usage
+## Usage
 * Check the [F.A.Q](https://youneuoy.github.io/M2TWEOP-library/faq.html#questions-and-answers)
 
 If you use an antivirus, add the program to the exceptions! There may be false positives.
 
-### License 
+## License
 The project uses the [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.html).
 
 ## Build
 
 **Requirements**
 
-M2TWEOP is developed in C++ and Assembly. 
+M2TWEOP is developed with C++ and Assembly.
 
 * Microsoft Visual Studio 2019 (https://community.chocolatey.org/packages/visualstudio2019community)
 * DirectX SDK 2009 (https://community.chocolatey.org/packages/directx-sdk)
@@ -96,10 +39,10 @@ M2TWEOP is developed in C++ and Assembly.
 Use Choco (https://chocolatey.org/install) for easy install.
 
 **How to build**
-1. Clone or download the project and extract it to a folder 
+1. Clone or download the project and extract it to a folder
 2. Run Developer Powershell for Visual Studio 2019 in Admin mode
 3. Navigate to where you have cloned/extracted the project
-4. Run buildEOP.ps1 
+4. Run buildEOP.ps1
 
 You can get support for building/developing on our [Discord](https://discord.gg/Epqjm8u2WK) server.
 

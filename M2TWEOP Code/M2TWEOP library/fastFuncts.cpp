@@ -63,6 +63,37 @@ namespace fastFuncts
 		}
 
 	}
+	NOINLINE EOP_EXPORT void GetGameTileCoordsWithCursor(int& x, int& y)
+	{
+		int* mouseOffset = 0x0;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			mouseOffset = (int*)0x02c3da48;
+		}
+		else
+		{
+			mouseOffset = (int*)0x02c86c28;
+		}
+		x = mouseOffset[0];
+		y = mouseOffset[1];
+	}
+
+	NOINLINE EOP_EXPORT void ViewTacticalMap(int x, int y)
+	{
+		globals::dataS.Modules.tacticalMapVeiwer.View(x,y);
+	}
+
+	NOINLINE EOP_EXPORT bool IsStratMap()
+	{
+		int* isStratMap = reinterpret_cast<int*>(dataOffsets::offsets.someStratmapPointer);
+		if (isStratMap == 0)
+			return false;
+		if (*isStratMap == 0)
+			return false;
+
+		return true;
+	}
+
 	NOINLINE EOP_EXPORT void setCharacterType(general* character, int typeID, int subFaction, int factionDipNum)
 	{
 		DWORD adrFunc = 0x0;

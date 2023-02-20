@@ -13,6 +13,7 @@ Write-Output "$color ======== 3.2) Generate documentation config ======== $endCo
 
 # Using LuaRocks, call ldoc.lua and pass in the config file
 .\luarocks\lua.exe ./luarocks/rocks/ldoc/1.4.6-2/bin/ldoc.lua . -c config.ld
+Start-Process -FilePath ".\makeLuaDocs.bat" -Wait -NoNewWindow
 
 Write-Output "$color ======== 3.3) Remove old files ======== $endColor"
 

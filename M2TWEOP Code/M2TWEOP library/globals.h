@@ -1,9 +1,12 @@
 #pragma once
-#include"headersSTD.h"
+#include "headersSTD.h"
 
 #include "battlemapWorker.h"
 #include "DeveloperMode.h"
 #include "RecruitSystem.h"
+#include "MmbMover.h"
+#include "TacticalMapVeiwer.h"
+#include "ContextMenuStrat.h"
 class globals
 {
 public:
@@ -20,9 +23,12 @@ public:
 		}gameCfg;
 		struct modulesS
 		{
+			TacticalMapViewer tacticalMapVeiwer;
 			DeveloperMode developerMode;
 			battlemapWorker battlemapWorker;
 			RecruitSystem recruitSystem;
+			MmbMover mmbMover;
+			ContextMenuStrat contextMenuStrat;
 		}Modules;
 
 		//steam =2, kingdoms=1

@@ -211,9 +211,10 @@ public:
 
 	ProcLoader<void(__cdecl*)(LPDIRECT3DDEVICE9 pDevice)> drawOnEndScene;
 	ProcLoader<void(__cdecl*)(LPDIRECT3DDEVICE9 pDevice)> onReset;
+	ProcLoader<void(__cdecl*)(LPDIRECT3DDEVICE9 pDevice)> onLoadingFonts;
 
 
-	ProcLoader<void(__cdecl*)(ImGuiContext*)> onChangeImGuiContext;
+	ProcLoader<void(__cdecl*)(ImGuiContext*, ImGuiMemAllocFunc alloc_func, ImGuiMemFreeFunc free_func, void* user_data)> onChangeImGuiContext;
 
 	ProcLoader<LRESULT(__cdecl*)(HWND, UINT, WPARAM, LPARAM)> onWndProc;
 	ProcLoader<void(__cdecl*)()> onReadGameDbsAtStart;
@@ -260,8 +261,9 @@ public:
 	static void onWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	static void onEndScene(LPDIRECT3DDEVICE9 pDevice);
 	static void onReset(LPDIRECT3DDEVICE9 pDevice);
+	static void onLoadingFonts(LPDIRECT3DDEVICE9 pDevice);
 
-	static void onChangeImGuiCtx(ImGuiContext* imCtx);
+	static void onChangeImGuiCtx(ImGuiContext* imCtx,ImGuiMemAllocFunc alloc_func, ImGuiMemFreeFunc free_func, void* user_data);
 
 	static vector<const char*>* eventNames;
 private:

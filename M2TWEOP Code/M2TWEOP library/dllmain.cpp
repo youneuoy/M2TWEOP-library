@@ -40,7 +40,8 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     {
 
     case DLL_PROCESS_ATTACH:
-
+        managerF::debug();
+        break;
 
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:

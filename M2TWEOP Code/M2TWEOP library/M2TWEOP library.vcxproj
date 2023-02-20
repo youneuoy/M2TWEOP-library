@@ -228,6 +228,7 @@
     <ClInclude Include="agePatch.h" />
     <ClInclude Include="BattleMapOverrider.h" />
     <ClInclude Include="battlemapWorker.h" />
+    <ClInclude Include="ContextMenuStrat.h" />
     <ClInclude Include="dataOffsets.h" />
     <ClInclude Include="DeveloperMode.h" />
     <ClInclude Include="eduFastFuncts.h" />
@@ -247,12 +248,12 @@
     <ClInclude Include="headersMEM.h" />
     <ClInclude Include="headersSTD.h" />
     <ClInclude Include="Injects.h" />
-    <ClInclude Include="m2tweopConstData.h" />
     <ClInclude Include="m2tweopMap.h" />
     <ClInclude Include="m2tweopMapManager.h" />
     <ClInclude Include="m2tweopTile.h" />
     <ClInclude Include="managerF.h" />
     <ClInclude Include="MemWork.h" />
+    <ClInclude Include="MmbMover.h" />
     <ClInclude Include="onlineThings.h" />
     <ClInclude Include="onlineThings2.h" />
     <ClInclude Include="patchesForGame.h" />
@@ -269,6 +270,7 @@
     <ClInclude Include="smallFuncs.h" />
     <ClInclude Include="stratModelsChange.h" />
     <ClInclude Include="stratModelsOptimise.h" />
+    <ClInclude Include="TacticalMapVeiwer.h" />
     <ClInclude Include="tAutodeskMemoryStream.h" />
     <ClInclude Include="techFuncs.h" />
     <ClInclude Include="technicalStringsFuncs.h" />
@@ -307,6 +309,7 @@
     <ClCompile Include="agePatch.cpp" />
     <ClCompile Include="BattleMapOverrider.cpp" />
     <ClCompile Include="battlemapWorker.cpp" />
+    <ClCompile Include="ContextMenuStrat.cpp" />
     <ClCompile Include="dataOffsets.cpp" />
     <ClCompile Include="DeveloperMode.cpp" />
     <ClCompile Include="dllmain.cpp" />
@@ -326,6 +329,7 @@
     <ClCompile Include="m2tweopTile.cpp" />
     <ClCompile Include="managerF.cpp" />
     <ClCompile Include="MemWork.cpp" />
+    <ClCompile Include="MmbMover.cpp" />
     <ClCompile Include="onlineThings.cpp" />
     <ClCompile Include="onlineThings2.cpp" />
     <ClCompile Include="patchesForGame.cpp" />
@@ -347,6 +351,7 @@
     <ClCompile Include="stratModelsChange.cpp" />
     <ClCompile Include="stratModelsHelper.cpp" />
     <ClCompile Include="stratModelsOptimise.cpp" />
+    <ClCompile Include="TacticalMapVeiwer.cpp" />
     <ClCompile Include="tAutodeskMemoryStream.cpp" />
     <ClCompile Include="techFuncs.cpp" />
     <ClCompile Include="technicalStringsFuncs.cpp" />
@@ -355,6 +360,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\AsmJit\headers\Regenerate.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="notes.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

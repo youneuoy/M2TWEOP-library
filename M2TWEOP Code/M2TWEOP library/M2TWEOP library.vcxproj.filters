@@ -118,6 +118,15 @@
     <Filter Include="features\RecruitSystem\Config">
       <UniqueIdentifier>{30fa89e1-8565-4016-acf7-3eb032fb0c6e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\mmbMover">
+      <UniqueIdentifier>{c4bd76eb-28c5-4b73-9553-9ab43b44e19c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\tacticalMapVeiwer">
+      <UniqueIdentifier>{f1f7cc32-6085-4426-8f2f-a3422d1df5fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\ContextMenuStrat">
+      <UniqueIdentifier>{7d6566ee-6f3f-4aad-b9a2-aa303e3c0c1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -333,9 +342,6 @@
     <ClInclude Include="..\3rd\AsmJit\headers\Util_p.h">
       <Filter>3rd\asmjit</Filter>
     </ClInclude>
-    <ClInclude Include="Injects.h">
-      <Filter>technical</Filter>
-    </ClInclude>
     <ClInclude Include="MemWork.h">
       <Filter>technical</Filter>
     </ClInclude>
@@ -360,9 +366,6 @@
     <ClInclude Include="eopSounds.h">
       <Filter>features\soundThings</Filter>
     </ClInclude>
-    <ClInclude Include="m2tweopConstData.h">
-      <Filter>Файлы ресурсов</Filter>
-    </ClInclude>
     <ClInclude Include="battlemapWorker.h">
       <Filter>features\battlemapWorker</Filter>
     </ClInclude>
@@ -386,6 +389,18 @@
     </ClInclude>
     <ClInclude Include="RecruitConditionDescription.h">
       <Filter>features\RecruitSystem\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="MmbMover.h">
+      <Filter>features\mmbMover</Filter>
+    </ClInclude>
+    <ClInclude Include="TacticalMapVeiwer.h">
+      <Filter>features\tacticalMapVeiwer</Filter>
+    </ClInclude>
+    <ClInclude Include="Injects.h">
+      <Filter>Исходные файлы\patches</Filter>
+    </ClInclude>
+    <ClInclude Include="ContextMenuStrat.h">
+      <Filter>features\ContextMenuStrat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -551,9 +566,6 @@
     <ClCompile Include="..\3rd\AsmJit\headers\Util.cpp">
       <Filter>3rd\asmjit</Filter>
     </ClCompile>
-    <ClCompile Include="Injects.cpp">
-      <Filter>technical</Filter>
-    </ClCompile>
     <ClCompile Include="MemWork.cpp">
       <Filter>technical</Filter>
     </ClCompile>
@@ -599,10 +611,27 @@
     <ClCompile Include="RecruitConditionDescription.cpp">
       <Filter>features\RecruitSystem\Core</Filter>
     </ClCompile>
+    <ClCompile Include="MmbMover.cpp">
+      <Filter>features\mmbMover</Filter>
+    </ClCompile>
+    <ClCompile Include="TacticalMapVeiwer.cpp">
+      <Filter>features\tacticalMapVeiwer</Filter>
+    </ClCompile>
+    <ClCompile Include="Injects.cpp">
+      <Filter>Исходные файлы\patches</Filter>
+    </ClCompile>
+    <ClCompile Include="ContextMenuStrat.cpp">
+      <Filter>features\ContextMenuStrat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\AsmJit\headers\Regenerate.py">
       <Filter>3rd\asmjit</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="notes.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
   </ItemGroup>
 </Project>

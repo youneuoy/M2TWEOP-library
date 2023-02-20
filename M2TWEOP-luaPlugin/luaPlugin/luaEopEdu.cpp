@@ -48,7 +48,7 @@ void luaP::initEopEdu()
 	//@section M2TWEOPDUTable
 
 	/***
-	Basic M2TWEOPDU table. Contains descriptions of m2tweop unit types.
+	Basic M2TWEOPDU table. Contains descriptions of M2TWEOP unit types.
 
 	@tfield addEopEduEntryFromFile addEopEduEntryFromFile
 	@tfield addEopEduEntryFromEDUID addEopEduEntryFromEDUID
@@ -69,9 +69,9 @@ void luaP::initEopEdu()
 
 
 	/***
-	Create new M2TWEOPDU entry from type description
+	Create new M2TWEOPDU entry from a file describing it.
 	@function M2TWEOPDU.addEopEduEntryFromFile
-	@tparam string filepath path to file with unit type description(like in export_descr_unit.txt, but only with one record and without comments)
+	@tparam string filepath path to file with unit type description(like in export\_descr\_unit.txt, but only with one record and without comments)
 	@tparam int eopEnryIndex Entry index, which will be assigned to a new record in DU (recommend starting from 1000, so that there is no confusion with records from EDU).
 	@treturn eduEntry retEntry Usually you shouldn't use this value.
 	@usage
@@ -80,7 +80,7 @@ void luaP::initEopEdu()
 	tables.M2TWEOPEDUTable.set_function("addEopEduEntryFromFile", &eopEduHelpers::addEopEduEntryFromFile);
 
 	/***
-	Create new M2TWEOPDU entry
+	Create new M2TWEOPDU entry.
 	@function M2TWEOPDU.addEopEduEntryFromEDUID
 	@tparam int baseEnryIndex Entry index number, which will be taken as the base for this DU record.
 	@tparam int eopEnryIndex Entry index, which will be assigned to a new record in DU (recommend starting from 1000, so that there is no confusion with records from EDU).
@@ -91,9 +91,9 @@ void luaP::initEopEdu()
 	tables.M2TWEOPEDUTable.set_function("addEopEduEntryFromEDUID", &eopEduHelpers::addEopEduEntry);
 
 	/***
-	Get eduEntry of M2TWEOPDU entry. Needed for change many parameters of entry.
+	Get eduEntry of a M2TWEOPDU entry. Needed to change many parameters of the entry.
 	@function M2TWEOPDU.getEopEduEntryByID
-	@tparam int eopEnryIndex Entry index
+	@tparam int eopEnryIndex Entry index in M2TWEOPDU.
 	@treturn eduEntry retEntry
 	@usage
 	local eduEntryOfEOPDU=M2TWEOPDU.getEopEduEntryByID(1000);
@@ -139,9 +139,9 @@ void luaP::initEopEdu()
 
 
 	/***
-	Get data of M2TWEOPDU entry. You usually won't need this.
+	Get data of a M2TWEOPDU entry. You usually won't need this.
 	@function M2TWEOPDU.getDataEopDu
-	@tparam int eopEnryIndex Entry index
+	@tparam int eopEnryIndex Entry index in M2TWEOPDU.
 	@treturn eopDuEntry retEntry Usually you shouldn't use this value.
 	@usage
 	local eopDUEntry=M2TWEOPDU.getDataEopDu(1000);
@@ -150,9 +150,9 @@ void luaP::initEopEdu()
 
 
 	/***
-	Set unit card for M2TWEOPDU entry. Requirements for the location and parameters of the image are unchanged in relation to the game.
+	Set unit card for a M2TWEOPDU entry. Requirements for the location and parameters of the image are unchanged in relation to the game.
 	@function M2TWEOPDU.setEntryUnitCardTga
-	@tparam int eopEnryIndex Entry index
+	@tparam int eopEnryIndex Entry index in M2TWEOPDU.
 	@tparam string newCardTga
 	@usage
 	M2TWEOPDU.setEntryUnitCardTga(1000,"#akavir_swordsmen.tga");
@@ -162,7 +162,7 @@ void luaP::initEopEdu()
 	/***
 	Set unit info card for M2TWEOPDU entry. Requirements for the location and parameters of the image are unchanged in relation to the game.
 	@function M2TWEOPDU.setEntryInfoCardTga
-	@tparam int eopEnryIndex Entry index
+	@tparam int eopEnryIndex Entry index in M2TWEOPDU.
 	@tparam string newInfoCardTga
 	@usage
 	M2TWEOPDU.setEntryInfoCardTga(1000,"akavir_swordsmen_info.tga");
@@ -171,9 +171,9 @@ void luaP::initEopEdu()
 
 
 	/***
-	Set soldier model for M2TWEOPDU entry. The required entry must be correctly recorded in game files.
+	Set unit info card for a M2TWEOPDU entry. Requirements for the location and parameters of the image are unchanged in relation to the game.
 	@function M2TWEOPDU.setEntrySoldierModel
-	@tparam int eopEnryIndex Entry index
+	@tparam int eopEnryIndex Entry index in M2TWEOPDU.
 	@tparam string newSoldierModel
 	@usage
 	M2TWEOPDU.setEntrySoldierModel(1000,"Sword_and_Buckler_Men");
@@ -316,9 +316,9 @@ void luaP::initEopEdu()
 
 
 	/***
-	Set localized name for M2TWEOPDU entry. This does not require any entries in the text folder.
+	Set localized name for a M2TWEOPDU entry. This does not require any entries in the text folder.
 	@function M2TWEOPDU.setEntryLocalizedName
-	@tparam int eopEnryIndex Entry index
+	@tparam int eopEnryIndex Entry index in M2TWEOPDU.
 	@tparam string newLocalizedName
 	@usage
 	M2TWEOPDU.setEntryLocalizedName(1000,"Test unit");
@@ -329,7 +329,7 @@ void luaP::initEopEdu()
 	/***
 	Set localized description for M2TWEOPDU entry. This does not require any entries in the text folder.
 	@function M2TWEOPDU.setEntryLocalizedDescr
-	@tparam int eopEnryIndex Entry index
+	@tparam int eopEnryIndex Entry index in M2TWEOPDU.
 	@tparam string newLocalizedDescr
 	@usage
 	M2TWEOPDU.setEntryLocalizedDescr(1000,"This is test unit description\n123321\nCreated with m2tweop");
@@ -339,14 +339,10 @@ void luaP::initEopEdu()
 	/***
 	Set localized short description for M2TWEOPDU entry. This does not require any entries in the text folder.
 	@function M2TWEOPDU.setEntryLocalizedShortDescr
-	@tparam int eopEnryIndex Entry index
+	@tparam int eopEnryIndex Entry index in M2TWEOPDU.
 	@tparam string newLocalizedShortDescr
 	@usage
 	M2TWEOPDU.setEntryLocalizedShortDescr(1000,"This is test unit short description\n123321\nCreated with m2tweop");
 	*/
 	tables.M2TWEOPEDUTable.set_function("setEntryLocalizedShortDescr", &eopEduHelpers::setEntryLocalizedShortDescr);
-
-
-
-
 }

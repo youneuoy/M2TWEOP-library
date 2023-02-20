@@ -16,6 +16,7 @@ void luaP::onPluginLoadF()
 	Just list, use it without EventsFunctionsList.!!!
 
 	@tfield draw draw
+	@tfield onLoadingFonts onLoadingFonts
 	@tfield onReadGameDbsAtStart onReadGameDbsAtStart
 	@tfield onClickAtTile onClickAtTile
 	@tfield onNewGameStart onNewGameStart
@@ -145,6 +146,19 @@ void luaP::onPluginLoadF()
 	drawLuaFunc = new sol::function(luaState["draw"]);
 	checkLuaFunc(&drawLuaFunc);
 
+	/***
+	Called when ImGui backend reload fonts
+
+	@function onLoadingFonts
+
+	@usage
+	function onLoadingFonts()
+	--something here
+	end
+	*/
+	onLoadingFonts = new sol::function(luaState["onLoadingFonts"]);
+	checkLuaFunc(&onLoadingFonts);
+
 	resetDXFunc = new sol::function(luaState["deinitDX"]);
 	checkLuaFunc(&resetDXFunc);
 
@@ -152,7 +166,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&initDXFunc);
 
 	/***
-	Called when a new campaign is started from the menu
+	Called when a new campaign is started from the menu.
 
 	@function onNewGameStart
 
@@ -184,7 +198,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onReadGameDbsAtStart);
 
 	/***
-	Called on clicking the stratmap, use ONLY in the same way as the usage example!!
+	Called on clicking the stratmap.
 
 	@function onClickAtTile
 	@tparam int x
@@ -231,7 +245,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onCampaignMapLoaded);
 
 	/***
-	Called on plugin load (at game start)
+	Called on plugin load (at game start).
 
 	@function onPluginLoad
 
@@ -262,7 +276,7 @@ void luaP::onPluginLoadF()
 
 
 	/***
-	Called on creating save file
+	Called on creating a new save file.
 
 	@function onCreateSaveFile
 
@@ -282,7 +296,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onCreateSaveFile);
 
 	/***
-	Called on loading save file
+	Called on loading a save file.
 
 	@function onLoadSaveFile
 
@@ -315,7 +329,7 @@ void luaP::onPluginLoadF()
 
 
 	/***
-	Called at start of new turn
+	Called at the start of a new turn.
 
 	@function onChangeTurnNum
 	@tparam int turnNumber
@@ -346,7 +360,7 @@ void luaP::onPluginLoadF()
 	onSelectWorldpkgdesc = new sol::function(luaState["onSelectWorldpkgdesc"]);
 	checkLuaFunc(&onSelectWorldpkgdesc);
 	/***
-	Called on select fortificationlevel in siege of settlement
+	Called on specified fortificationlevel in a siege of a settlement.
 
 	@function onfortificationlevelS
 	@tparam settlementStruct siegedSettlement
@@ -393,7 +407,7 @@ void luaP::onPluginLoadF()
 	onStartSiege = new sol::function(luaState["onStartSiege"]);
 	checkLuaFunc(&onStartSiege);
 	/***
-	a character has been selected by any means (including through the UI)
+	A character has been selected by any means (including through the UI).
 
 	@function onCharacterSelected
 	@tparam namedCharacter selectedChar
@@ -407,7 +421,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onCharacterSelectedFunc);
 
 	/***
-	Called before faction turn start
+	Called before the faction's turn starts.
 
 	@function onPreFactionTurnStart
 	@tparam factionStruct faction
@@ -421,7 +435,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onPreFactionTurnStartFunc);
 
 	/***
-	Called at faction turn start
+	Called at a faction's turn start.
 
 	@function onFactionTurnStart
 	@tparam factionStruct faction
@@ -435,7 +449,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onFactionTurnStartFunc);
 
 	/***
-	Called at faction turn end
+	Called at a faction's turn end.
 
 	@function onFactionTurnEnd
 	@tparam factionStruct faction
@@ -449,7 +463,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onFactionTurnEndFunc);
 
 	/***
-	Called after faction has new capital
+	Called after faction changes to a new capital.
 
 	@function onFactionNewCapital
 	@tparam factionStruct faction
@@ -463,7 +477,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onFactionNewCapitalFunc);
 
 	/***
-	Called after declaring war
+	Called after a faction declares a war.
 
 	@function onFactionWarDeclared
 	@tparam factionStruct faction
@@ -478,7 +492,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onFactionWarDeclaredFunc);
 
 	/***
-	Called after declaring alliance
+	Called after a faction declares an alliance.
 
 	@function onFactionAllianceDeclared
 	@tparam factionStruct faction
@@ -494,7 +508,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onFactionAllianceDeclaredFunc);
 
 	/***
-	Called after declaring trade agreement
+	Called after a faction makes a trade agreement.
 
 	@function onFactionTradeAgreementMade
 	@tparam factionStruct faction
@@ -510,7 +524,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onFactionTradeAgreementMadeFunc);
 
 	/***
-	Called after break alliance
+	Called after a faction breaks an alliance.
 
 	@function onFactionBreakAlliance
 	@tparam factionStruct faction
@@ -528,7 +542,7 @@ void luaP::onPluginLoadF()
 
 
 	/***
-	Called after giving money
+	Called after a faction gives money to another faction.
 
 	@function onGiveMoney
 	@tparam factionStruct faction
@@ -547,7 +561,7 @@ void luaP::onPluginLoadF()
 
 
 	/***
-	Called after update attitude
+	Called after a faction updates it's attitude towards another faction.
 
 	@function onUpdateAttitude
 	@tparam factionStruct faction
@@ -563,7 +577,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onUpdateAttitudeFunc);
 
 	/***
-	A demeanour response has occured in diplomacy talks
+	A demeanour response has occured in diplomacy talks.
 
 	@function onDemeanour
 	@tparam factionStruct faction
@@ -580,7 +594,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onDemeanourFunc);
 
 	/***
-	A general has attacked another general
+	A general has attacked another general.
 
 	@function onGeneralAssaultsGeneral
 	@tparam namedCharacter attacker
@@ -596,7 +610,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onGeneralAssaultsGeneralFunc);
 
 	/***
-	An assault has taken place
+	An assault has taken place.
 
 	@function onGeneralAssaultsResidence
 	@tparam namedCharacter attacker
@@ -619,7 +633,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onGeneralAssaultsResidenceFunc);
 
 	/***
-	Settlement captured
+	A General has captured a settlement.
 
 	@function onGeneralCaptureSettlement
 	@tparam namedCharacter attacker
@@ -635,7 +649,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onGeneralCaptureSettlementFunc);
 
 	/***
-	A General has captured a residence(fort, watchtower, check it yourself)
+	A General has captured a residence such as a fort or watchtower.
 
 	@function onGeneralCaptureResidence
 	@tparam namedCharacter attacker
@@ -650,6 +664,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onGeneralCaptureResidenceFunc);
 
 	/***
+	Siege equipment has been completed by one of the sieging armies at this residence.
+
 	@function onSiegeEquipmentCompleted
 	@tparam settlementStruct settlement nil if it is fort
 	@tparam fortStruct fort nil if it is settlement
@@ -662,6 +678,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onSiegeEquipmentCompletedFunc);
 
 	/***
+	When a battle has finished.
+
 	@function onPostBattle
 	@tparam namedCharacter character
 
@@ -673,6 +691,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onPostBattleFunc);
 
 	/***
+	The player has attempted to move a character beyond that character's given movement range for that turn.
+
 	@function onMultiTurnMove
 	@tparam namedCharacter character
 
@@ -684,7 +704,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onMultiTurnMoveFunc);
 
 	/***
-	a settlement has been selected by any means (including through the UI)
+	A settlement has been selected by any means (including through the UI).
 
 	@function onSettlementSelected
 	@tparam settlementStruct settlement
@@ -699,7 +719,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onSettlementSelectedFunc);
 
 	/***
-	settlement level increased
+	A settlement's level has been increased.
 
 	@function onSettlementUpgraded
 	@tparam settlementStruct settlement
@@ -714,7 +734,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onSettlementUpgradedFunc);
 
 	/***
-	settlement converted between city and castle
+	A settlement converted between city and castle and vice-versa.
 
 	@function onSettlementConverted
 	@tparam settlementStruct settlement
@@ -731,6 +751,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onSettlementConvertedFunc);
 
 	/***
+	A settlement has rioted.
+
 	@function onCityRiots
 	@tparam settlementStruct settlement
 
@@ -742,7 +764,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onCityRiotsFunc);
 
 	/***
-	the last unit has been removed from a settlement, agents do not count
+	The last unit has been removed from a settlement, agents do not count.
 
 	@function onUngarrisonedSettlement
 	@tparam settlementStruct settlement
@@ -755,7 +777,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onUngarrisonedSettlementFunc);
 
 	/***
-	the last unit has been removed from a fort, agents do not count
+	The last unit has been removed from a fort, agents do not count.
 
 	@function onUngarrisonedFort
 	@tparam fortStruct fort
@@ -768,6 +790,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onUngarrisonedFortFunc);
 
 	/***
+	A settlement has been given to another faction.
+
 	@function onGiveSettlement
 	@tparam settlementStruct settlement
 	@tparam factionStruct fac1
@@ -782,7 +806,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onGiveSettlementFunc);
 
 	/***
-	general has captured a settlement and the occupy option has been accepted
+	A general has captured a settlement and the occupy option has been chosen
 
 	@function onOccupySettlement
 	@tparam namedCharacter character only generals, event does not fire for captains
@@ -796,7 +820,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onOccupySettlementFunc);
 
 	/***
-	general has captured a settlement and the exterminate option has been accepted
+	A general has captured a settlement and the exterminate option has been chosen.
 
 	@function onExterminatePopulation
 	@tparam namedCharacter character only generals, event does not fire for captains
@@ -811,7 +835,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onExterminatePopulationFunc);
 
 	/***
-	general has captured a settlement and the sack option has been accepted
+	A general has captured a settlement and the sack option has been chosen.
 
 	@function onSackSettlement
 	@tparam namedCharacter character only generals, event does not fire for captains
@@ -826,6 +850,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onSackSettlementFunc);
 
 	/***
+	A building has been added to the construction queue.
+
 	@function onAddedToBuildingQueue
 	@tparam settlementStruct settlement
 	@tparam string buildNme level name
@@ -839,6 +865,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onAddedToBuildingQueueFunc);
 
 	/***
+	A building has been destroyed.
+
 	@function onBuildingDestroyed
 	@tparam settlementStruct settlement
 	@tparam string buildNme level name
@@ -852,6 +880,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onBuildingDestroyedFunc);
 
 	/***
+	A building has been completed.
+
 	@function onBuildingCompleted
 	@tparam factionStruct fac
 	@tparam settlementStruct settlement
@@ -864,6 +894,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onBuildingCompletedFunc);
 
 	/***
+	An event counter has changed it's value.
+
 	@function onEventCounter
 	@tparam string counter
 
@@ -875,6 +907,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onEventCounterFunc);
 
 	/***
+	When a faction is excommunicated by the Pope.
+
 	@function onFactionExcommunicated
 	@tparam factionStruct fac
 
@@ -886,8 +920,10 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onFactionExcommunicatedFunc);
 
 	/***
+	When a particular disaster has just happened.
+
 	@function onDisaster
-	@tparam int eventType
+	@tparam int eventType (earthquake, flood, horde, fire, riot, storm, volcano), Don't know enum order!
 
 	@usage
 	--something
@@ -897,6 +933,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onDisasterFunc);
 
 	/***
+	A Faction has formed a horde.
+
 	@function onHordeFormed
 	@tparam factionStruct fac
 
@@ -908,6 +946,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onHordeFormedFunc);
 
 	/***
+	A unit has been added to the training queue.
+
 	@function onAddedToTrainingQueue
 	@tparam settlementStruct sett
 	@tparam string unitName
@@ -920,6 +960,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onAddedToTrainingQueueFunc);
 
 	/***
+	A unit has been disbanded.
+
 	@function onUnitDisbanded
 	@tparam factionStruct fac
 	@tparam unit unit
@@ -932,6 +974,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onUnitDisbandedFunc);
 
 	/***
+	A unit has been trained.
+
 	@function onUnitTrained
 	@tparam factionStruct fac
 	@tparam settlementStruct sett
@@ -945,6 +989,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onUnitTrainedFunc);
 
 	/***
+	An agent has been trained.
+
 	@function onAgentCreated
 	@tparam namedCharacter character
 	@tparam int agentType see @{character:setTypeID} for list of type integers
@@ -958,9 +1004,11 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onAgentCreatedFunc);
 
 	/***
+	An object of the target faction has been seen by the faction.
+
 	@function onObjSeen
-	@tparam factionStruct fac faction that saw the object
-	@tparam factionStruct targetFac faction that owns the object
+	@tparam factionStruct fac Faction that saw the object.
+	@tparam factionStruct targetFac Faction that owns the object.
 	@tparam int xCoord
 	@tparam int yCoord
 
@@ -972,6 +1020,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onObjSeenFunc);
 
 	/***
+	The tile has been seen by the faction.
+
 	@function onTileSeen
 	@tparam factionStruct fac
 	@tparam int xCoord
@@ -985,6 +1035,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onTileSeenFunc);
 
 	/***
+	The game has been reloaded while on the strategy map.
+
 	@function onGameReloaded
 	@tparam int something
 
@@ -996,6 +1048,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onGameReloadedFunc);
 
 	/***
+	A faction to faction transgression has occurred.
+
 	@function onTransgression
 	@tparam factionStruct fac
 	@tparam string description
@@ -1009,6 +1063,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onTransgressionFunc);
 
 	/***
+	The Pope has accepted the player's crusade target. Deus Vult!
+
 	@function onPopeAcceptsCrusadeTarget
 	@tparam crusadeStruct crusade
 	@tparam settlementStruct target
@@ -1021,6 +1077,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onPopeAcceptsCrusadeTargetFunc);
 
 	/***
+	A Crusade or Jihad has been called.
+
 	@function onCrusadeCalled
 	@tparam crusadeStruct crusade
 	@tparam settlementStruct target
@@ -1033,6 +1091,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onCrusadeCalledFunc);
 
 	/***
+	A Crusade or Jihad has ended.
+
 	@function onCrusadeEnds
 	@tparam crusadeStruct crusade
 	@tparam settlementStruct target
@@ -1045,6 +1105,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onCrusadeEndsFunc);
 
 	/***
+	The Pope has rejected the player's crusade target.
+
 	@function onPopeRejectsCrusadeTarget
 	@tparam crusadeStruct crusade
 	@tparam settlementStruct target
@@ -1057,6 +1119,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onPopeRejectsCrusadeTargetFunc);
 
 	/***
+	An army has taken a crusade or jihad target settlement.
+
 	@function onArmyTakesCrusadeTarget
 	@tparam crusadeStruct crusade
 	@tparam settlementStruct target
@@ -1070,6 +1134,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onArmyTakesCrusadeTargetFunc);
 
 	/***
+	Units have deserted a crusade or jihad.
+
 	@function onUnitsDesertCrusade
 	@tparam crusadeStruct crusade
 	@tparam settlementStruct target
@@ -1083,6 +1149,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onUnitsDesertCrusadeFunc);
 
 	/***
+	A new pope has been elected.
+
 	@function onPopeElected
 	@tparam factionStruct fac
 	@tparam factionStruct fac2
@@ -1095,6 +1163,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onPopeElectedFunc);
 
 	/***
+	A Faction has voted for the new pope.
+
 	@function onVotedForPope
 	@tparam factionStruct fac
 
@@ -1106,6 +1176,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onVotedForPopeFunc);
 
 	/***
+	An assassination mission against the pope has failed and the assassin is executed.
+
 	@function onAssassinCaughtAttackingPope
 	@tparam factionStruct fac
 
@@ -1117,6 +1189,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onAssassinCaughtAttackingPopeFunc);
 
 	/***
+	An inquisitor has been dispatched to a region.
+
 	@function onInquisitorAppointed
 	@tparam factionStruct fac
 	@tparam settlementStruct sett
@@ -1129,6 +1203,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onInquisitorAppointedFunc);
 
 	/***
+	The player has opened the panel for the selected settlement.
+
 	@function onSettlementPanelOpen
 	@tparam settlementStruct sett
 
@@ -1140,6 +1216,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onSettlementPanelOpenFunc);
 
 	/***
+	The player has opened the finances panel.
+
 	@function onFinancesPanelOpen
 	@tparam factionStruct fac
 
@@ -1151,6 +1229,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onFinancesPanelOpenFunc);
 
 	/***
+	The player has opened the faction summary panel.
+
 	@function onFactionSummaryPanelOpen
 	@tparam factionStruct fac
 
@@ -1162,6 +1242,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onFactionSummaryPanelOpenFunc);
 
 	/***
+	The player has opened the family tree panel.
+
 	@function onFamilyTreePanelOpenFunc
 	@tparam factionStruct fac
 
@@ -1173,6 +1255,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onFamilyTreePanelOpenFunc);
 
 	/***
+	The player has opened the diplomatic standing panel.
+
 	@function onDiplomaticStandingPanelOpen
 	@tparam factionStruct fac
 
@@ -1184,6 +1268,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onDiplomaticStandingPanelOpenFunc);
 
 	/***
+	The player has opened a diplomacy panel.
+
 	@function onDiplomacyPanelOpen
 	@tparam factionStruct fac
 
@@ -1195,6 +1281,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onDiplomacyPanelOpenFunc);
 
 	/***
+	The player has attacked an army or settlement. The decision panel is now open.
+
 	@function onPreBattlePanelOpen
 	@tparam factionStruct fac
 
@@ -1206,6 +1294,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onPreBattlePanelOpenFunc);
 
 	/***
+	The naval auto resolve panel has opened.
+
 	@function onNavalAutoResolvePanelOpen
 
 	@usage
@@ -1216,6 +1306,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onNavalAutoResolvePanelOpenFunc);
 
 	/***
+	The player has opened the panel for the selected character.
+
 	@function onCharacterPanelOpen
 	@tparam namedCharacter selectedChar
 
@@ -1227,6 +1319,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onCharacterPanelOpenFunc);
 
 	/***
+	The player has opened a trade panel.
+
 	@function onTradePanelOpen
 	@tparam settlementStruct sett
 
@@ -1238,6 +1332,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onTradePanelOpenFunc);
 
 	/***
+	The player has requested building advice.
+
 	@function onRequestBuildingAdvice
 	@tparam settlementStruct sett
 
@@ -1249,6 +1345,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onRequestBuildingAdviceFunc);
 
 	/***
+	The player has requested training advice.
+
 	@function onRequestTrainingAdvice
 	@tparam settlementStruct sett
 	@tparam eduEntry recommendedUnitEntry
@@ -1261,6 +1359,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onRequestTrainingAdviceFunc);
 
 	/***
+	The player has opened a message.
+
 	@function onMessageOpen
 	@tparam factionStruct fac
 	@tparam int msgType
@@ -1273,6 +1373,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onMessageOpenFunc);
 
 	/***
+	The player has recieved a message.
+
 	@function onIncomingMessage
 	@tparam factionStruct fac
 	@tparam int msgType
@@ -1285,6 +1387,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onIncomingMessageFunc);
 
 	/***
+	The player has closed a message.
+
 	@function onMessageClosed
 	@tparam int msgType
 
@@ -1296,6 +1400,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onMessageClosedFunc);
 
 	/***
+	The player has clicked on a button.
+
 	@function onButtonPressed
 	@tparam string buttonName
 
@@ -1307,6 +1413,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onButtonPressedFunc);
 
 	/***
+	The player closed a scroll.
+
 	@function onScrollClosed
 	@tparam string scrollName
 
@@ -1318,6 +1426,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onScrollClosedFunc);
 
 	/***
+	The player opened a scroll.
+
 	@function onScrollOpened
 	@tparam string scrollName
 
@@ -1329,6 +1439,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onScrollOpenedFunc);
 
 	/***
+	A special UI Element is visible.
+
 	@function onUIElementVisible
 	@tparam string elementName
 
@@ -1340,6 +1452,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onUIElementVisibleFunc);
 
 	/***
+	The player has requested advice on a scroll.
+
 	@function onScrollAdviceRequested
 	@tparam string scrollName
 
@@ -1351,6 +1465,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onScrollAdviceRequestedFunc);
 
 	/***
+	The player has requested advice on the settlement scroll.
+
 	@function onSettlementScrollAdviceRequested
 	@tparam settlementStruct sett
 	@tparam string scrollName
@@ -1363,6 +1479,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onSettlementScrollAdviceRequestedFunc);
 
 	/***
+	The player has requested advice on the prebattle scroll.
+
 	@function onPreBattleScrollAdviceRequested
 
 	@usage
@@ -1373,6 +1491,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onPreBattleScrollAdviceRequestedFunc);
 
 	/***
+	The player has requested advice on the naval prebattle scroll.
+
 	@function onNavalPreBattleScrollAdviceRequested
 
 	@usage
@@ -1383,6 +1503,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onNavalPreBattleScrollAdviceRequestedFunc);
 
 	/***
+	The player has opened the college of cardinals panel.
+
 	@function onCollegeOfCardinalsPanelOpen
 	@tparam collegeCardinalsStruct college
 
@@ -1394,6 +1516,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onCollegeOfCardinalsPanelOpenFunc);
 
 	/***
+	A guild has been created or upgraded.
+
 	@function onGuildUpgraded
 	@tparam settlementStruct sett
 	@tparam string guildName
@@ -1408,6 +1532,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onGuildUpgradedFunc);
 
 	/***
+	A guild has been destroyed.
+
 	@function onGuildDestroyed
 	@tparam settlementStruct sett
 	@tparam int guildID
@@ -1422,10 +1548,10 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onGuildDestroyedFunc);
 
 	/***
-	a character in the family tree has received a brother by adoption
+	A character in the family tree has received a brother by adoption.
 
 	@function onBrotherAdopted
-	@tparam namedCharacter character this is the original child, not the newly adopted character
+	@tparam namedCharacter character This is the original child, not the newly adopted character.
 
 	@usage
 	function onBrotherAdopted(character)
@@ -1437,7 +1563,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onBrotherAdoptedFunc);
 
 	/***
-	a child has been born
+	A child has been born.
 
 	@function onBirth
 	@tparam namedCharacter child
@@ -1452,10 +1578,10 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onBirthFunc);
 
 	/***
-	a character has come of age
+	A character has come of age.
 
 	@function onCharacterComesOfAge
-	@tparam namedCharacter character character's age is equal to age\_of\_manhood in descr\_campaign\_db.xml
+	@tparam namedCharacter character Character's age is equal to age\_of\_manhood in descr\_campaign\_db.xml.
 
 	@usage
 	function onCharacterComesOfAge(character)
@@ -1467,7 +1593,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onCharacterComesOfAgeFunc);
 
 	/***
-	a character has married (someone who isn't a princess)
+	A character has married (someone who isn't a princess).
 
 	@function onCharacterMarries
 	@tparam namedCharacter husband
@@ -1482,7 +1608,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onCharacterMarriesFunc);
 
 	/***
-	a character has married a princess agent
+	A character has married a princess agent.
 
 	@function onCharacterMarriesPrincess
 	@tparam namedCharacter husband
@@ -1497,10 +1623,10 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onCharacterMarriesPrincessFunc);
 
 	/***
-	a child has been born
+	A child has been born.
 
 	@function onCharacterBecomesAFather
-	@tparam namedCharacter father note: this event fires for all child births for this father, not just the first one
+	@tparam namedCharacter father Note: this event fires for all child births for this father, not just the first one.
 
 	@usage
 	function onCharacterBecomesAFather(father)
@@ -1517,6 +1643,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onCharacterBecomesAFatherFunc);
 
 	/***
+	A new admiral has been created for a new ship.
+
 	@function onNewAdmiralCreated
 	@tparam namedCharacter admiral
 	@tparam settlementStruct sett
@@ -1531,7 +1659,7 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onNewAdmiralCreatedFunc);
 
 	/***
-	a shortcut has been used
+	The player triggered a keyboard shortcut.
 
 	@function onShortcutTriggered
 	@tparam string shortcut
@@ -1548,6 +1676,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onShortcutTriggeredFunc);
 
 	/***
+	The character has been made the faction leader.
+
 	@function onBecomesFactionLeader
 	@tparam namedCharacter leader
 
@@ -1561,6 +1691,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onBecomesFactionLeaderFunc);
 
 	/***
+	The character has been made a faction heir.
+
 	@function onBecomesFactionHeir
 	@tparam namedCharacter heir
 
