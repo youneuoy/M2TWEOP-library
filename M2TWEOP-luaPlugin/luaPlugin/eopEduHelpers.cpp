@@ -99,20 +99,22 @@ int eopEduHelpers::getArmourUpgradeLevelsNum(int idx)
 
 void eopEduHelpers::setArmourUpgradeLevelsNum(int idx, int amount)
 {
-    if (amount > 0)
+    if (amount <= 0)
     {
-        EduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
-        int curramount = getArmourUpgradeLevelsNum(idx);
-        eduEn->ArmorUpgradesEnd = eduEn->ArmorUpgradeLevels + amount;
-        eduEn->ArmorUpgrade2 = eduEn->ArmorUpgradeLevels + amount;
-        if (amount > curramount)
-        {
-            int8_t last_upgrade = *(int8_t*)((eduEn->ArmorUpgradeLevels) + (curramount-1));
-            for (int i = 0; i < amount - curramount;i++)
-            {
-                *(int8_t*)((eduEn->ArmorUpgradeLevels) + curramount + i) = last_upgrade;
-            }
-        }
+        return;
+    }
+    EduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
+    int curramount = getArmourUpgradeLevelsNum(idx);
+    eduEn->ArmorUpgradesEnd = eduEn->ArmorUpgradeLevels + amount;
+    eduEn->ArmorUpgrade2 = eduEn->ArmorUpgradeLevels + amount;
+    if (amount <= curramount)
+    {
+        return;
+    }
+    int8_t last_upgrade = eduEn->ArmorUpgradeLevels[curramount-1];
+    for (int i = 0; i < amount - curramount;i++)
+    {
+        eduEn->ArmorUpgradeLevels[curramount + i] = last_upgrade;
     }
 }
 
@@ -122,11 +124,11 @@ int eopEduHelpers::getArmourUpgradeLevel(int idx, int levelidx)
 
     int LevelsNum = eopEduHelpers::getArmourUpgradeLevelsNum(idx);
 
-    if (levelidx < LevelsNum)
+    if (levelidx >= LevelsNum)
     {
-        return *(int8_t*)((eduEn->ArmorUpgradeLevels) + levelidx);
+        return -1;
     }
-
+    return (int8_t)eduEn->ArmorUpgradeLevels[levelidx];
 }
 
 void eopEduHelpers::setArmourUpgradeLevel(int idx, int levelidx, int8_t newlevel)
@@ -134,12 +136,11 @@ void eopEduHelpers::setArmourUpgradeLevel(int idx, int levelidx, int8_t newlevel
     EduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
 
     int LevelsNum = eopEduHelpers::getArmourUpgradeLevelsNum(idx);
-
-    if (levelidx < LevelsNum)
+    if (levelidx >= LevelsNum)
     {
-        *(int8_t*)((eduEn->ArmorUpgradeLevels) + levelidx) = newlevel;
+        return;
     }
-
+    eduEn->ArmorUpgradeLevels[levelidx] = newlevel;
 }
 
 int eopEduHelpers::getArmourUpgradeModelsNum(int idx)
@@ -150,21 +151,23 @@ int eopEduHelpers::getArmourUpgradeModelsNum(int idx)
 
 void eopEduHelpers::setArmourUpgradeModelsNum(int idx, int amount)
 {
-    if (amount > 0 && amount < 5)
+    if (amount <= 0 || amount >= 5)
     {
-        amount = amount*2;
-        EduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
-        int curramount = getArmourUpgradeModelsNum(idx);
-        eduEn->ArmorUpgradeModelsEnd = (int*)eduEn->ArmorUpgradeModels + (amount);
-        eduEn->ArmorUpgrade5 = (int*)eduEn->ArmorUpgradeModels + (amount);
-        if (amount > (curramount*2))
-        {
-            std::string last_upgrade = getArmourUpgradeModel(idx, (curramount-1));
-            for (int i = 0; i < amount/2 - curramount;i++)
-            {
-                setArmourUpgradeModel(idx, (curramount)+i, last_upgrade);
-            }
-        }
+        return;
+    }
+    amount = amount*2;
+    EduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
+    int curramount = getArmourUpgradeModelsNum(idx);
+    eduEn->ArmorUpgradeModelsEnd = (int*)eduEn->ArmorUpgradeModels + (amount);
+    eduEn->ArmorUpgrade5 = (int*)eduEn->ArmorUpgradeModels + (amount);
+    if (amount <= (curramount*2))
+    {
+        return;
+    }
+    const std::string& last_upgrade = getArmourUpgradeModel(idx, (curramount-1));
+    for (int i = 0; i < amount/2 - curramount;i++)
+    {
+        setArmourUpgradeModel(idx, (curramount)+i, last_upgrade);
     }
 }
 
@@ -191,9 +194,10 @@ std::string eopEduHelpers::getArmourUpgradeModel(int idx, int levelidx)
     {
         return std::string(modelname);
     }
+    return "";  
 }
 
-void eopEduHelpers::setArmourUpgradeModel(int idx, int levelidx, std::string newModel)
+void eopEduHelpers::setArmourUpgradeModel(int idx, int levelidx, const std::string& newModel)
 {
     
     EduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
@@ -261,24 +265,30 @@ bool eopEduHelpers::getEntryAttackAttribute(int idx, UnitEnums::attackAttr attri
     }
 }
 
+int eopEduHelpers::multiplexor(int n1, int n2, int sel)
+{
+    return (((~sel) & n1) | (n2 & sel));
+}
+
 void eopEduHelpers::setEntryStat(int idx, UnitEnums::eduStat stat, int value, int sec)
 {   
 	using namespace UnitEnums;
     EduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
-
+    int newStat = value*stat;
     if (stat < UnitEnums::attack)
     {
-        eduEn->StatPriArmour = eduEn->StatPriArmour - (eduEn->StatPriArmour & (stat*63)) | value*stat;
+        eduEn->StatPriArmour = (eopEduHelpers::multiplexor(eduEn->StatPriArmour, newStat, stat*63));
     }
     else
     {
         if ( sec == 1)
         {
-            eduEn->StatPri = eduEn->StatPri - (eduEn->StatPri & (stat*63)) | value*stat;
+
+            eduEn->StatPri = eopEduHelpers::multiplexor(eduEn->StatPri, newStat, stat*63);
         }
         else
         {
-            eduEn->StatSec = eduEn->StatSec - (eduEn->StatSec & (stat*63)) | value*stat;
+            eduEn->StatSec = eopEduHelpers::multiplexor(eduEn->StatSec, newStat, stat*63);
         }
     }
 }
@@ -290,7 +300,7 @@ int eopEduHelpers::getEntryStat(int idx, UnitEnums::eduStat stat, int sec)
 
     if (stat < UnitEnums::attack)
     {
-        return (eduEn->StatPriArmour & (stat*63))/stat ;
+        return (eduEn->StatPriArmour & (stat*63))/stat;
     }
     else
     {
@@ -303,5 +313,72 @@ int eopEduHelpers::getEntryStat(int idx, UnitEnums::eduStat stat, int sec)
             return (eduEn->StatSec & (stat*63))/stat;
         }
     }
+}
+
+//pretty much ignore this
+void eopEduHelpers::addUnitToRQ(int idx, settlementStruct* sett)
+{   
+    int startIndexRQ = sett->startIndexRQ;
+    int endIndexRQ = sett->endIndexRQ;
+    if (startIndexRQ == 0 && endIndexRQ == 9)
+    {
+        return;
+    }
+    EduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
+    unitRQ* newUnit = new unitRQ;
+    int unitsize = m2tweopHelpers::GetUnitSize();
+    float unitModifier = 1;
+    switch(unitsize)
+    {
+        case 3:
+            unitModifier = 2.5;
+            break;
+        case 2:
+            unitModifier = 1.88;
+            break;
+        case 1:
+            unitModifier = 1.25;
+            break;
+        case 0:
+            unitModifier = 1;
+            break;
+    }
+    newUnit->eduEntry = eduEn;
+    newUnit->FourtySeven = 47;
+    newUnit->settlement = sett;
+    newUnit->N0001082F = 0;
+    newUnit->threeIfRetrainingFourIfBoth = 0;
+    newUnit->experience = 0;
+    newUnit->N00010830 = 0;
+    newUnit->Minus1 = -1;
+    newUnit->turnsTrainedAlready = 0;
+    newUnit->procentFinished = 0;
+    newUnit->turnsToTrain = eduEn->StatCost1;
+    newUnit->cost = eduEn->StatCost2;
+    newUnit->unitCount = (int)(eduEn->SoldierCount*unitModifier);
+    newUnit->N00010833 = 0;
+    newUnit->isNotFrozen = 1;
+    newUnit->recruitmentPoolSizeBeforeOrRetrainingNumbersBefore = 1;
+    newUnit->isRetraining = 0;
+    int newIndex = 0;
+    if (sett->countRQ == 0)
+    {
+        newIndex = 0;
+    }
+    else
+    {
+        if (startIndexRQ > 0)
+        {
+            newIndex = startIndexRQ-1;
+            sett->startIndexRQ--;
+        }
+        else
+        {
+            newIndex = endIndexRQ+1;
+            sett->endIndexRQ++;
+        }
+    }
+    sett->countRQ++;
+    sett->unitQueue[newIndex] = *newUnit;
 }
 

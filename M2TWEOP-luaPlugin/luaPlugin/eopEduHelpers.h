@@ -6,6 +6,7 @@ namespace UnitEnums
 {
     enum attackAttr :int
     {
+		nothing = 0,
         spear = 1<<2,
         light_spear = 1<<3,
         prec = 1<<4,
@@ -25,6 +26,7 @@ namespace UnitEnums
     };
     enum eduStat :int
     {
+		none = 0,
         armour = 1<<1,
         defense = 1<<7,
         shield = 1<<13,
@@ -56,11 +58,13 @@ namespace eopEduHelpers
 	int getArmourUpgradeModelsNum(int index);
 	void setArmourUpgradeModelsNum(int index, int amount);
 	std::string getArmourUpgradeModel(int index, int levelidx);
-	void setArmourUpgradeModel(int index, int levelidx, std::string newModel);
+	void setArmourUpgradeModel(int index, int levelidx, const std::string& newModel);
 	void setEntryAttackAttribute(int idx, UnitEnums::attackAttr attribute, bool enable, int sec);
 	bool getEntryAttackAttribute(int idx, UnitEnums::attackAttr attribute, int sec);
 	void setEntryStat(int idx, UnitEnums::eduStat stat, int value, int sec);
 	int getEntryStat(int idx, UnitEnums::eduStat stat, int sec);
+	void addUnitToRQ(int idx, settlementStruct* sett);
+	int multiplexor(int n1, int n2, int sel);
 
 	void setEntryLocalizedName(int index, const char* newLocName);
 	void setEntryLocalizedDescr(int index, const char* newLocDescr);

@@ -16,8 +16,6 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT void ViewTacticalMap(int x,int y);
 	NOINLINE EOP_EXPORT bool IsStratMap();
 
-
-
 	NOINLINE EOP_EXPORT void setCharacterType(general*character, int typeID,int subFaction,int factionDipNum);
 	NOINLINE EOP_EXPORT UINT32 getTileRegionID(int x,int y);
 	NOINLINE EOP_EXPORT regionStruct* getRegionByID(UINT32 regionID);
@@ -56,6 +54,9 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT settlementStruct* findSettlement(int x, int y);
 	//find watchtower on coords
 	NOINLINE EOP_EXPORT watchTowerStruct* findWatchTower(int x, int y);
+	NOINLINE EOP_EXPORT void deleteFort(const factionStruct* fac, fortStruct* fort);
+	NOINLINE EOP_EXPORT void createFortXY(const factionStruct* fac, int x, int y);
+	NOINLINE EOP_EXPORT void createFort(const general* gen);
 
 	//move stratmap camera slow
 	NOINLINE EOP_EXPORT void moveStratCameraSlow(int x, int y);

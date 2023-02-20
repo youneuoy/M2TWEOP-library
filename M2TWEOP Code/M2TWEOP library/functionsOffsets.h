@@ -80,6 +80,10 @@ public:
 
 
 		DWORD readEDUEntryFunc = NULL;
+		DWORD deleteFortFuncOne = NULL;
+		DWORD deleteFortFuncTwo = NULL;
+		DWORD createFortFunc = NULL;
+		DWORD mercEOPValue = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

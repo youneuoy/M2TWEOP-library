@@ -1,5 +1,9 @@
 #include "gameHelpers.h"
+#include "gameDataAllHelper.h"
 #include "plugData.h"
+#include <vector>
+
+using namespace std;
 
 UINT32 gameHelpers::getFactionsCount()
 {
@@ -77,3 +81,150 @@ void gameHelpers::setScriptCounter(const char* type, int value)
 {
 	(*(*plugData::data.funcs.setScriptCounter))(type, value);
 }
+
+regionStruct* gameHelpers::getRegion(int index)
+{
+	gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+	stratMap* map = gameDataAll->stratMap;
+	return &map->regions[index];
+}
+
+neighbourRegion* gameHelpers::getNeighbour(regionStruct* region, int index)
+{
+	neighbourRegion* nregion = ((region->neighbourRegions) + (0x58 * index));
+	return nregion;
+}
+
+void gameHelpers::changeRegionName(regionStruct* region, const char* newName)
+{
+	(*(*plugData::data.funcs.changeRegionName))(region, newName);
+}
+
+void gameHelpers::changeRebelsName(regionStruct* region, const char* newName)
+{
+	(*(*plugData::data.funcs.changeRebelsName))(region, newName);
+}
+
+int gameHelpers::getMercUnitNum(mercPool* mercPool)
+{
+	mercPoolUnitsPtr* unitptr = &mercPool->firstUnits;
+	int units = 0;
+	int addunits = 0;
+	while (unitptr != nullptr)
+	{
+		addunits = unitptr->currentPool;
+		units = units + addunits;
+		unitptr = unitptr->nextUnitsPtr;
+	}
+	return units;
+}
+
+mercPoolUnit* gameHelpers::addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, int startyear, int endyear, int crusading)
+{
+	mercPoolUnit* newMerc = new mercPoolUnit;
+	*newMerc = mercPool->firstUnits.mercPoolUnits->mercPoolUnit[0];
+	int mercUnitNum = gameHelpers::getMercUnitNum(mercPool);
+	EduEntry* entry = eopEduHelpers::getEduEntry(idx);
+	newMerc->eduEntry = entry;
+	newMerc->experience = exp;
+	newMerc->cost = cost;
+	newMerc->replenishMin = repmin;
+	newMerc->replenishMax = repmax;
+	newMerc->maxUnits = maxunits;
+	newMerc->currentPool = startpool;
+	newMerc->startYear = startyear;
+	newMerc->endYear = endyear;
+	newMerc->religionsList = nullptr;
+	newMerc->religionsListEnd = nullptr;
+	newMerc->religionsListEnd2 = nullptr;
+	newMerc->eventsList = nullptr;
+	newMerc->eventsListEnd = nullptr;
+	newMerc->eventsListEnd2 = nullptr;
+	newMerc->crusading = crusading;
+	newMerc->mercPoolUnitIndex = (int16_t)mercUnitNum;
+	newMerc->mercPool = mercPool;
+	mercPoolUnitsPtr* unitptr = &mercPool->firstUnits;
+	int currunits = unitptr->currentPool;
+	int maxunitsP = unitptr->Maxpool;
+	while ((maxunitsP - currunits) == 0)
+	{
+		if (unitptr->nextUnitsPtr == nullptr)
+		{
+			mercPoolUnitsPtr* newPtr = new mercPoolUnitsPtr;
+			newPtr->Maxpool = (unitptr->Maxpool)*2;
+			newPtr->currentPool = 0;
+			newPtr->prevPoolUnits = unitptr->mercPoolUnits;
+			unitptr->nextUnitsPtr = newPtr;
+		}
+		unitptr = unitptr->nextUnitsPtr;
+		currunits = unitptr->currentPool;
+		maxunitsP = unitptr->Maxpool;
+	}
+	unitptr->mercPoolUnits->mercPoolUnit[currunits] = *newMerc;
+	unitptr->currentPool++;
+	return &unitptr->mercPoolUnits->mercPoolUnit[currunits];
+}
+
+mercPoolUnit* gameHelpers::getMercUnit(mercPool* pool, int index)
+{
+	mercPoolUnitsPtr* unitptr = &pool->firstUnits;
+	int currunits = 0;
+	while (unitptr != nullptr)
+	{
+		currunits = unitptr->currentPool;
+		for (int i = 0; i < currunits; i++)
+		{
+			if (unitptr->mercPoolUnits->mercPoolUnit[i].eduEntry->Index == index)
+			{
+				return &unitptr->mercPoolUnits->mercPoolUnit[i];
+			}
+		}
+		unitptr = unitptr->nextUnitsPtr;
+	}
+	return nullptr;
+}
+
+
+void gameHelpers::setMercReligion(mercPoolUnit* unit, int religion, bool set)
+{
+	vector<int>religions;
+	bool relFound = false;
+	int mercRelNum = (unit->religionsListEnd - unit->religionsList);
+	for (int i = 0; i < mercRelNum; i++)
+	{
+		if (unit->religionsList[i] == religion)
+		{
+			if (set)
+			{
+				return;
+			}
+			else
+			{
+				relFound = true;
+			}
+		}
+		else
+		{
+			religions.push_back(unit->religionsList[i]);
+		}
+	}
+	if (relFound == false && set == false) { return; }
+	if (set)
+	{
+		religions.push_back(religion);
+		mercRelNum++;
+	}
+	else
+	{
+		mercRelNum--;
+	}
+	int* newList = new int[mercRelNum];
+	unit->religionsList = newList;
+	for (int i = 0; i < mercRelNum; i++)
+	{
+		unit->religionsList[i] = religions[i];
+	}
+	unit->religionsListEnd = &unit->religionsList[mercRelNum];
+	unit->religionsListEnd2 = &unit->religionsList[mercRelNum];
+}
+

@@ -5,6 +5,7 @@
 #include "luaGetSetFuncs.h"
 namespace settlementHelpers
 {
+
 	siegeS* getSiege(const settlementStruct* sett, int index);
 	void changeOwner(settlementStruct* sett, factionStruct*newOwner);
 
@@ -17,6 +18,8 @@ namespace settlementHelpers
 	void createBuilding(settlementStruct* sett, const char* building_level_id);
 	int getGuildStanding(settlementStruct* sett, int index);
 	void setGuildStanding(settlementStruct* sett, int index, int amount);
+	void changeSettlementName(settlementStruct* sett, const char* newName);
+	
 
 	//settlement
 	template <char fieldIndex>

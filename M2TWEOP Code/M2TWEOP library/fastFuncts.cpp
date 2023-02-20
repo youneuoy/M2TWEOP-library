@@ -63,6 +63,7 @@ namespace fastFuncts
 		}
 
 	}
+
 	NOINLINE EOP_EXPORT void GetGameTileCoordsWithCursor(int& x, int& y)
 	{
 		int* mouseOffset = 0x0;
@@ -77,12 +78,10 @@ namespace fastFuncts
 		x = mouseOffset[0];
 		y = mouseOffset[1];
 	}
-
 	NOINLINE EOP_EXPORT void ViewTacticalMap(int x, int y)
 	{
 		globals::dataS.Modules.tacticalMapVeiwer.View(x,y);
 	}
-
 	NOINLINE EOP_EXPORT bool IsStratMap()
 	{
 		int* isStratMap = reinterpret_cast<int*>(dataOffsets::offsets.someStratmapPointer);
@@ -90,10 +89,9 @@ namespace fastFuncts
 			return false;
 		if (*isStratMap == 0)
 			return false;
-
 		return true;
 	}
-
+	
 	NOINLINE EOP_EXPORT void setCharacterType(general* character, int typeID, int subFaction, int factionDipNum)
 	{
 		DWORD adrFunc = 0x0;
@@ -122,7 +120,7 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT UINT32 getTileRegionID(int x, int y)
 	{
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
-		UINT32 redID = gameDataAll->stratMap->tilesArr[gameDataAll->stratMap->xBound * y + x].regionId;
+		UINT32 redID = gameDataAll->stratMap->tilesArr[gameDataAll->stratMap->mapWidth * y + x].regionId;
 
 
 		return redID;
@@ -131,7 +129,7 @@ namespace fastFuncts
 	{
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
 
-		return &gameDataAll->stratMap->regionsArr[regionID];
+		return &gameDataAll->stratMap->regions[regionID];
 	}
 
 	NOINLINE EOP_EXPORT factionStruct** getFactionsList()
@@ -1222,6 +1220,60 @@ namespace fastFuncts
 
 
 		return res;
+	}
+
+	NOINLINE EOP_EXPORT void deleteFort(const factionStruct* fac, fortStruct* fort)
+	{
+		DWORD delFort = (DWORD)fort;
+		DWORD delFaction = (DWORD)fac;
+		DWORD funcB = codes::offsets.deleteFortFuncOne;
+		DWORD funcC = codes::offsets.deleteFortFuncTwo;
+		DWORD facOffset = dataOffsets::offsets.factionOffsetsStart + 0x4;
+		_asm
+		{
+			mov edi, delFort
+			mov esi, delFaction
+			push edi
+			mov eax, funcB
+			call eax
+			push edi
+			push ebp
+			mov ebp, facOffset
+			lea ecx, [ebp+0x21608]
+			pop ebp
+			mov eax, funcC
+			call eax
+		}
+	}
+
+	NOINLINE EOP_EXPORT void createFortXY(const factionStruct* fac, int x, int y)
+	{
+		factionStruct* faction = (factionStruct*)fac;
+		general* newgen = fastFuncts::createCharacterWithoutSpawning("named character", faction, 30, "fort", "fort", 31, "default", x, y);
+		stackStruct* newarmy = fastFuncts::createArmy(newgen);
+		DWORD adrFunc = codes::offsets.createFortFunc;
+		_asm
+		{
+			mov ecx, newarmy
+			mov eax, adrFunc
+			call eax
+		}
+		killCharacter(newgen);
+	}
+
+	NOINLINE EOP_EXPORT void createFort(const general* gen)
+	{
+		stackStruct* newarmy = gen->armyLeaded;
+		if (newarmy == nullptr) {
+			return;
+		}
+		DWORD adrFunc = codes::offsets.createFortFunc;
+		_asm
+		{
+			mov ecx, newarmy
+			mov eax, adrFunc
+			call eax
+		}
 	}
 
 	NOINLINE EOP_EXPORT void setUnitParams(unit* un, int count, int exp, int armor, int weap)

@@ -2,6 +2,7 @@
 #include <string>
 #include "realGameTypes.h"
 #include "luaGetSetFuncs.h"
+#include <vector>
 
 #include "lua/sol.hpp"
 namespace gameHelpers
@@ -18,5 +19,14 @@ namespace gameHelpers
 
 	std::tuple<bool, int> getScriptCounter(const char* type);
 	void setScriptCounter(const char* type,int value);
+	regionStruct* getRegion(int index);
+	neighbourRegion* getNeighbour(regionStruct* region, int index);
+	void changeRegionName(regionStruct* region, const char* newName);
+	void changeRebelsName(regionStruct* region, const char* newName);
+
+	int getMercUnitNum(mercPool* mercPool);
+	mercPoolUnit* getMercUnit(mercPool* pool, int index);
+	void setMercReligion(mercPoolUnit* unit, int religion, bool set);
+	mercPoolUnit* addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, int startyear, int endyear, int crusading);
 };
 

@@ -10,21 +10,144 @@ typedef unsigned short    ushort;
 typedef struct stackStruct stackStruct, * PstackStruct;
 typedef struct settlementStruct settlementStruct, * PsettlementStruct;
 
-struct regionStruct {
-	char* regionName;
-	int regionNameHash;
-	char* settlementName; /* null for sea */
-	int settlementNameHash;
-	undefined field4_0x10[12];
-	int regionID;
-	undefined field6_0x20[148];
-	float* religionsARR;
-	undefined field8_0xb8[216];
-	struct settlementStruct* settlement;
-	undefined field10_0x194[92];
-	struct factionStruct* factionOwner;
-	undefined field12_0x1f4[40];
+
+struct UNICODE_STRING {
+	USHORT something;//idk
+	USHORT Length;//idk
+	USHORT something2;//idk
+	PWSTR Buffer;//y
 };
+struct regionStruct {
+	char* regionName;//0x0000
+	int regionNameHash;//0x0004
+	char* settlementName; /* null for sea *///0x0008
+	int settlementNameHash;//0x000C
+	char* legioName; /* null for sea *///0x0010
+	int legioNameHash;//0x0014
+	undefined field4_0x10[4];//0x0018
+	int regionID;//0x001C
+	char pad_0020[12]; //0x0020
+	struct stackStruct** armies; //0x002C
+	int32_t armyCountArraySize; //0x0030
+	int32_t stacksNum; //0x0034
+	struct fortStruct** forts; //0x0038
+	int32_t fortCountArraySize; //0x003C
+	int32_t fortsNum; //0x0040
+	struct watchTowerStruct** watchtowers; //0x0044
+	int32_t watchtowerCountArraySize; //0x0048
+	int32_t watchtowersNum; //0x004C
+	int8_t isSea; //0x0050
+	int8_t hasLake; //0x0051	
+	char pad_0052[58]; //0x0052
+	struct mercPool* mercPool;//0x008C
+	undefined field6_0x90[36];//0x0090
+	float* religionsARR;//0x00B4
+	int* religionsEnd; //0x00B8
+	undefined field8_0xbc[212];//0x00BC
+	struct settlementStruct* settlement;//0x0190
+	char pad_0194[8]; //0x0194
+	int32_t tileCount; //0x019C
+	char pad_0177[12]; //0x0194
+	struct neighbourRegion* neighbourRegions;//0x01AC
+	int32_t neighbourRegionsCountArraySize; //0x01B0
+	int32_t neighbourRegionsNum; //0x01B4
+	struct resStrat* resources;//0x01B8
+	int32_t resourceCountArrayZie; //0x01BC
+	int32_t resourcesNum; //0x01C0
+	char pad_01C4[12]; //0x01C4
+	uint32_t hiddenResources1; //0x01D0
+	uint32_t hiddenResources2; //0x01D4
+	char pad_01D8[4]; //0x01D8
+	int32_t settlementXCoord; //0x01DC
+	int32_t settlementYCoord; //0x01E0
+	int32_t portEntranceXCoord; //0x01E4
+	int32_t portEntranceYCoord; //0x01E8
+	char pad_01EC[4]; //0x01EC
+	struct factionStruct* factionOwner;//0x01F0
+	char pad_01F4[4]; //0x01F4
+	UNICODE_STRING** localizedRegionName; //0x01F8
+	UNICODE_STRING** localizedSettlementName; //0x01FC
+	UNICODE_STRING** localizedRebelsName; //0x0200
+	char* rebelType; //0x0204
+	int32_t rebelTypeHash; //0x0208
+	int32_t getsCopiedToSettlementAtRebelEndTurn; //0x020C
+	int32_t triumphValue; //0x0210
+	char pad_0214[8]; //0x0214
+};//Size: 0x021C
+
+struct neighbourRegion
+{
+public:
+	struct regionStruct* region; //0x0000
+	int32_t regionID; //0x0004
+	float distance; //0x0008
+	char pad_000C[4]; //0x000C
+	void* tileStuff; //0x0010
+	char pad_0014[68]; //0x0014
+}; //Size: 0x0058
+
+struct stratMap {
+	undefined field_0x0[44];
+	int mapWidth;
+	int mapHeight;
+	undefined field_0x34[20];
+	struct oneTile* tilesArr;
+	undefined field_0x4c[4];
+	undefined field_0x50[44];
+	struct regionStruct regions[200];
+	int regionsNum;
+};
+struct 	mercPoolUnit
+{
+public:
+	struct EduEntry* eduEntry; //0x0000
+	int32_t experience; //0x0004
+	int32_t cost; //0x0008
+	float replenishMin; //0x000C
+	float replenishMax; //0x0010
+	int32_t maxUnits; //0x0014
+	float currentPool; //0x0018
+	int32_t startYear; //0x001C
+	int32_t endYear; //0x0020
+	char pad_0024[4]; //0x0024
+	int* religionsList; //0x0028
+	int* religionsListEnd; //0x002C
+	int* religionsListEnd2; //0x0030
+	int32_t crusading; //0x0034
+	char pad_0038[4]; //0x0038
+	int* eventsList; //0x003C
+	int* eventsListEnd; //0x0040
+	int* eventsListEnd2; //0x0044
+	int16_t poolIndex; //0x0048
+	int16_t mercPoolUnitIndex; //0x004A
+	struct mercPool* mercPool; //0x004C
+}; //Size: 0x0050
+
+struct mercPoolUnits
+{
+public:
+	struct mercPoolUnit mercPoolUnit[64]; //0x0000
+};
+
+struct mercPoolUnitsPtr
+{
+public:
+	struct mercPoolUnits* mercPoolUnits;
+	struct mercPoolUnitsPtr* nextUnitsPtr;
+	struct mercPoolUnits* prevPoolUnits;
+	int Maxpool;
+	int currentPool;
+};
+
+struct mercPool
+{
+public:
+	char* name; //0x0000
+	char pad_0004[4]; //0x0004
+	struct regionStruct* regions; //0x008
+	char pad_000C[16]; //0x000C
+	struct mercPoolUnitsPtr firstUnits; //0x001C
+}; //Size: 0x0180
 
 struct uiElement {
 	undefined field_0x0[16];
@@ -42,29 +165,27 @@ struct uiElement {
 	undefined field_0x58[112];
 };
 
-struct tilesS {
-	undefined field_0x0[44];
-	int xBound;
-	int yBound;
-	undefined field_0x34[20];
-	struct oneTile* tilesArr;
-	undefined field_0x4c[4];
-	undefined field_0x50[44];
-	struct regionStruct regionsArr[200];
-	int regionsNum;
-};
-
 struct oneTile {
-	undefined field_0x0[20];
+	void* object;
+	undefined field_0x4[6];
+	int8_t isLand;
+	undefined field_0xB[1];
+	int8_t terrainModel;
+	int8_t ModelIsHills;
+	undefined field_0xE[2];
+	int groundType;
 	int regionId;
-	undefined field_0x18[28];
-};
-
-struct UNICODE_STRING {
-	USHORT something;//idk
-	USHORT Length;//idk
-	USHORT something2;//idk
-	PWSTR Buffer;//y
+	undefined field_0x18[4];
+	int8_t factionId;
+	int8_t borderingRiver;
+	int8_t borderingSettlement;
+	undefined field_0x1F[1];
+	int8_t hasRoad;
+	int8_t border;
+	undefined field_0x22[2];
+	int8_t objectTypes;
+	int8_t passable;
+	undefined field_0x26[14];
 };
 
 struct siegeS {
@@ -143,7 +264,7 @@ struct campaign {
 	undefined field3_0x3c[4];
 	int hotSeatPlayer2FactionId;
 	undefined field5_0x44[232];
-	int humanPlayers;
+	int humanPlayers; /* number of player-controlled factions */
 	int factionIdPow; /* pow(2,factionId) */
 	int campaignDifficultyFaction[8];
 	undefined field9_0x154[120];
@@ -176,7 +297,7 @@ struct campaign {
 	float PirateSpawnValue;
 	undefined field37_0x3f4[4];
 	int FreeUpkeepForts;
-	int ActiveFactions;
+	int ActiveFactions;	/* number factions minus slave */
 	undefined field40_0x400[12];
 	int lastrandomseed;
 	undefined field42_0x410[744];
@@ -214,11 +335,11 @@ struct gameDataAllStruct {
 	undefined field_0x0[40];
 	struct campaign* campaignData;
 	undefined field_0x2c[8];
-	struct tilesS* stratMap;
+	struct stratMap* stratMap;
 	struct campaign* field_0x38;
 	undefined field_0x3c[28];
 	struct battleDataS* battleHandler;
-	undefined field_0x5c[164];
+	undefined field_0x5c[8];
 };
 
 struct armyAndCharacter { /* in battle leader and leader army */
@@ -355,7 +476,9 @@ struct resStrat {
 	undefined field_0x14[16];
 	struct stratResMod* stratMod;
 	struct settlementStruct* settlement;
-	undefined field_0x2c[20];
+	int regionID;
+	int resourceID;
+	undefined field_0x2c[12];
 };
 
 //settlement model struct
@@ -391,11 +514,72 @@ struct portBuildingStruct {
 	undefined field_0x7c[4];
 };
 
+
+struct BuildingPicEntry
+{
+public:
+	char* buildingPicPath; //0x0000
+	char pad_0004[4]; //0x0004
+}; //Size: 0x0008
+
 //building draw info(pics, etc)
-struct buildingDrawInfo { /* name, tga's, models, etc) */
+struct buildingLevel { /* (name, tga's, models, etc) */
 	char* name;
-	undefined field_0x4[616];
+	int32_t buildingLevelNameHash; //0x0004
+	UNICODE_STRING*** buildingName[31]; //0x0008
+	UNICODE_STRING*** buildingDescr[31]; //0x0084
+	UNICODE_STRING*** buildingDescrShort[31]; //0x0100
+	struct BuildingPicEntry buildingPic[7]; //0x017C
+	char* GenericBuildingPic; //0x01B4
+	int32_t GenericBuildingPicHash; //0x01B8
+	struct BuildingPicEntry buildingPicConstructed[7]; //0x01BC
+	char* GenericbuildingPicConstructed; //0x01F4
+	int32_t GenericbuildingPicConstructedHash; //0x01F8
+	struct BuildingPicEntry buildingPicConstruction[7]; //0x01FC
+	char* GenericbuildingPicConstruction; //0x0234
+	int32_t GenericbuildingPicConstructionHash; //0x0238
+	void* buildingLevelCondition; //0x023C
+	int16_t buildCost; //0x0240
+	uint8_t buildTime; //0x0242
+	char pad_0243[1]; //0x0243
+	uint32_t settlementMinLvl; //0x0244
+	int8_t cityOneCastleMinusOne; //0x0248
+	char pad_0249[19]; //0x0249
+	struct BuildingLvlCapability* capabilities; //0x025C
+	struct recruitPool* recruitPools; //0x0260
+	int32_t factionCapabilities; //0x0264
+	void* upgrades; //0x0268
 };
+
+
+struct BuildingLvlCapability
+{
+public:
+	int32_t capabilityType; //0x0000
+	int16_t capabilityLvl; //0x0004
+	int16_t bonus; //0x0006
+	int32_t capabilityID; //0x0008
+	DWORD funcPointer;
+	struct buildingLevel* buildingLevel;
+	DWORD EDBpointer;
+	void* buildingLevelCondition; //0x0018
+	struct BuildingLvlCapability* nextCapability; //0x001C
+}; //Size: 0x0020
+
+
+struct recruitPool
+{
+public:
+	int32_t capabilityType; //0x0000
+	int32_t capabilityLvlorExp; //0x0004
+	int32_t unitID; //0x0006
+	float initialSize;
+	float gainPerTurn;
+	float maxSize;
+	void* buildingLevelCondition; //0x0018
+	struct recruitPool* nextPool; //0x001C
+}; //Size: 0x0020
+
 
 //siege engine
 struct siegeEngine {
@@ -404,19 +588,34 @@ struct siegeEngine {
 };
 
 //building data
-struct building_data { /* SETTLEMENT_CONDITION_SETTLEMENT_FACTION */
-	undefined field_0x0[98];
-	char isDestroyAllowed;
-	undefined field_0x63[29];
+struct edbEntry { /* SETTLEMENT_CONDITION_SETTLEMENT_FACTION */
+	char pad_0000[20]; //0x0000
+	int32_t buildingID; //0x0014
+	int32_t classification; //0x0018
+	char pad_001C[68]; //0x001C
+	int8_t isCoreBuilding; //0x0060
+	int8_t isPort; //0x0061
+	int8_t isCoreBuilding2; //0x0062
+	int8_t hasReligion; //0x0063
+	int32_t religionID; //0x0064
+	int8_t isHinterland; //0x0068
+	int8_t isFarm; //0x0069
+	char pad_006A[6]; //0x006A
+	UNICODE_STRING** localizedName;
+	void* convertTo; //0x0074
+	char pad_0078[8]; //0x0078
 	char* type; /* type of building (core_building,barracks)  */
 	int typeHash;
-	struct buildingDrawInfo* drawInfo; /* name of building(stone_wall), tga's, etc */
+	struct buildingLevel* buildingLevel; /* name of building(stone_wall), tga's, etc */
+	char pad_008C[4]; //0x008C
+	int32_t buildingLevelCount; //0x0090
+	char pad_0094[8]; //0x0094
 };
 
 //building
 struct building { /* building structure */
 	undefined field_0x0[56];
-	struct building_data* bData; /* many info (type, name, etc), exportDescrBuildingEntry */
+	struct edbEntry* edbEntry; /* many info (type, name, etc), exportDescrBuildingEntry */
 	int8_t level;
 	undefined field_0x3d[27];
 	int hp; /* health points of the building */
@@ -425,7 +624,7 @@ struct building { /* building structure */
 
 struct buildingInQueue { /* building in settlement queue */
 	int something;
-	struct building_data* buildingData;
+	struct edbEntry* edbEntry;
 	struct building* existsBuilding; /* 0 if building dont exist yet */
 	struct settlementStruct* settlement;
 	int currentLevel;
@@ -449,10 +648,73 @@ struct buildingsQueue {
 	int currentBuildingIndex;
 };
 
+struct hiddenResource
+{
+public:
+	char* hiddenResName; //0x0000
+	int32_t hiddenResNameHash; //0x0004
+}; //Size: 0x0008
+
+struct buildingsArray
+{
+public:
+	struct edbEntry buildings[64]; //0x0000
+};
+
+struct buildingListPointer
+{
+public:
+	struct buildingsArray* buildingsArray; //0x0000
+	struct buildingListPointer* nextBuildingsListPointer; //0x0004
+	struct buildingListPointer* prevBuildingsListPointer; //0x0008
+	int32_t arraySize; //0x000C
+	int32_t arrayCount; //0x0010
+}; //Size: 0x0014
+
+struct exportDescrBuildings
+{
+public:
+	struct hiddenResource hiddenResources[64]; //0x0000
+	int32_t hiddenResourceCount; //0x0200
+	char pad_0204[68]; //0x0204
+	struct edbEntry* cityPort; //0x0248
+	struct edbEntry* castlePort; //0x024C
+	struct edbEntry* coreCityBuilding; //0x0250
+	struct edbEntry* coreCastleBuilding; //0x0254
+	char pad_0258[40]; //0x0258
+	struct buildingListPointer buildingsList; //0x0280
+	char pad_0294[188]; //0x0294
+}; //Size: 0x0350
+
+
 struct oneSiege {
 	void* vtable;
 	struct siegeS* siege;
 };
+
+struct unitRQ {
+public:
+	struct EduEntry* eduEntry; //0x0000
+	int32_t FourtySeven; //0x0004
+	struct settlementStruct* settlement; //0x0008
+	int8_t N0001082F; //0x000C
+	int8_t threeIfRetrainingFourIfBoth; //0x000D
+	int8_t experience; //0x000E
+	char pad_000F[1]; //0x000F
+	int8_t N00010830; //0x0010
+	int8_t Minus1; //0x0011
+	int8_t turnsTrainedAlready; //0x0012
+	int8_t procentFinished; //0x0013
+	int16_t turnsToTrain; //0x0014
+	int16_t cost; //0x0016
+	int32_t unitCount; //0x0018
+	int8_t N00010833; //0x001C
+	int8_t isNotFrozen; //0x001D
+	int16_t recruitmentPoolSizeBeforeOrRetrainingNumbersBefore; //0x001E
+	int8_t isRetraining; //0x0020
+	char pad_0021[3]; //0x0021
+}; //Size: 0x0024
+
 
 //settlement
 struct settlementStruct {
@@ -464,7 +726,14 @@ struct settlementStruct {
 	struct stackStruct* army; /* army on the settlement */
 	struct oneSiege sieges[8];
 	BYTE siegesNumber;
-	undefined field8_0x89[195];
+	undefined pad_3[3];
+	int siegeHoldoutTurns;
+	int turnsSieged;
+	int N00001EF5;
+	int populationSiegeStart;
+	undefined pad_8[8];
+	BYTE plagued;
+	undefined field8_0xA5[167];
 	struct settMod* model;
 	int descr_culturestxt;
 	undefined field11_0x154[16];
@@ -479,8 +748,14 @@ struct settlementStruct {
 	BYTE isCastle; /* castle or settlement */
 	undefined field21_0x1a5[3];
 	UINT32 regionNumber; /* number of region */
-	undefined field23_0x1ac[644];
-	undefined field24_0x430[4];
+	undefined field_0x1ac[12];
+	int priceOfUnitsInRecruitmentSlots;
+	undefined field24_0xBC[24];
+	struct unitRQ unitQueue[9];
+	int startIndexRQ;
+	int endIndexRQ;
+	int countRQ;
+	undefined field24_0x324[272];
 	struct buildingsQueue buildingsQueueArray;
 	undefined field26_0x5ac[520];
 	struct building* buildings[128];
@@ -847,11 +1122,16 @@ struct stackStruct { /* structure of stack */
 	float reform_point_y;
 };
 
+struct coords {
+	int xCoord;
+	int yCoord;
+};
+
 //faction
 struct factionStruct {
 	undefined field_0x0[180];
 	int dipNum; /* number of faction in diplomatic array */
-	undefined field_0xb8[4];
+	int cultureID;
 	char* ai_label; /* ai_label of faction */
 	undefined field_0xc0[4];
 	struct settlementStruct* capital; /* capital of the faction */
@@ -891,8 +1171,10 @@ struct factionStruct {
 	int someForSpawnCharacter;
 	undefined field_0x1a0[2208];
 	UINT32 religion; /* number of religion */
-	undefined field_0xa44[12];
-	undefined field_0xa50[156];
+	undefined field_0xa44[84];
+	UNICODE_STRING** someString;
+	UNICODE_STRING** localizedName;
+	undefined field_0xaa0[76];
 	int money; /* money of the faction */
 	int KingsPurse; /* money of the faction */
 };
@@ -1170,6 +1452,7 @@ struct soldierData { /* one soldier in unit */
 
 //fort
 struct fortStruct {
+public:
 	undefined field_0x0[4];
 	struct general* gubernator;
 	undefined field_0x8[4];
@@ -1181,7 +1464,7 @@ struct fortStruct {
 	struct siegeS* siege;
 	undefined field_0x50[144];
 	struct stratFortMod* stratModel;
-	undefined field_0xe4[4];
+	int regionID;
 	struct factionStruct* faction;
 	undefined field_0xec[12];
 	char* fortType;

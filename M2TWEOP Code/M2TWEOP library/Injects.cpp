@@ -2948,6 +2948,115 @@ void OnCreateUnit::SetNewCode()
 	delete a;
 }
 
+//need to overwrite some code so it passes check with non standard edu index, and this way also flags it as eop unit for later
+OnCreateMercUnitCheck::OnCreateMercUnitCheck(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0060D54B;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0060D1AB;
+}
+
+OnCreateMercUnitCheck::~OnCreateMercUnitCheck()
+{
+}
+
+void OnCreateMercUnitCheck::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(eax, ecx);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+//dont ask me what this does exactly been too long
+void OnCreateMercUnitCheck::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+
+	a->pushad();
+	a->lea(ecx, dword_ptr(esp, 0x60));
+	a->mov(edx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->mov(ecx, -1);
+	a->cmp(eax, ecx);
+	a->popad();
+	a->lea(ecx, dword_ptr(esp, 0x40));
+
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+OnCreateMercUnit::OnCreateMercUnit(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0060D568;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0060D1C8;
+}
+
+OnCreateMercUnit::~OnCreateMercUnit()
+{
+}
+
+void OnCreateMercUnit::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnCreateMercUnit::SetNewCode()
+{
+	DWORD otherFunc; //different funcs dependant on disk/steam version
+	if (m_adress = 0x0060D568)
+	{
+		otherFunc = 0x00D45D40;
+	}
+	else
+	{
+		otherFunc = 0x00D4B9E0;
+	}
+	Assembler* a = new Assembler();
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->mov(dword_ptr(edi), eax);
+
+	a->popf();
+	a->popad();
+	a->mov(eax, otherFunc);
+	a->call(eax);
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
 OnQuickSave::OnQuickSave(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
@@ -3300,20 +3409,95 @@ OnMoveRecruitQueue::OnMoveRecruitQueue(MemWork* mem, LPVOID addr, int ver)
 {
 	if (ver == 2)//steam
 		m_adress = 0x00ab4966;
-
 	else if (ver == 1)//kingdoms
 		m_adress = 0x00ab3936;
 }
-
 OnMoveRecruitQueue::~OnMoveRecruitQueue()
 {
 }
-
 void OnMoveRecruitQueue::SetOriginialCode()
 {
 	Assembler* a = new Assembler();
 	
 	a->mov(byte_ptr(eax, 0xD0), 01);
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+	delete a;
+}
+void OnMoveRecruitQueue::SetNewCode()
+{
+	Assembler* a = new Assembler();
+	a->pushad();
+	a->pushf();
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->mov(byte_ptr(esp, 0x20), eax);//move eax to stored eax
+	a->popf();
+	a->popad();
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+	delete a;
+}
+OnPathCasheCrashPlace::OnPathCasheCrashPlace(MemWork* mem, LPVOID addr, int ver, LPVOID cbObj)
+	:AATemplate(mem), funcAddress(addr),callbackObject(cbObj)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0043cbae;
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0043c86e;
+}
+OnPathCasheCrashPlace::~OnPathCasheCrashPlace()
+{
+}
+void OnPathCasheCrashPlace::SetOriginalCode()
+{
+	return;
+	Assembler* a = new Assembler();
+	//filler, not work!
+	a->mov(ecx,ecx);
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+	delete a;
+}
+void OnPathCasheCrashPlace::SetNewCode()
+{
+	Assembler* a = new Assembler();
+	a->pushad();
+	a->pushf();
+	a->mov(ecx, (int)callbackObject);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->popf();
+	a->mov(dword_ptr(esp, 0x18), eax);//move eax to stored ecx
+	a->popad();
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+	delete a;
+}
+
+//this function allows recruiting eop unit in rq but it is not really functional, as it doesnt work with saving, will not be bound to lua, leaving it here for future maybe
+recruitEOPunit::recruitEOPunit(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005EEEA0;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EEAC1;
+}
+
+recruitEOPunit::~recruitEOPunit()
+{
+}
+
+void recruitEOPunit::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->call(m_adress);
 
 	a->ret();
 	m_originalBytes = (unsigned char*)a->make();
@@ -3322,22 +3506,12 @@ void OnMoveRecruitQueue::SetOriginialCode()
 	delete a;
 }
 
-void OnMoveRecruitQueue::SetNewCode()
+void recruitEOPunit::SetNewCode()
 {
 	Assembler* a = new Assembler();
 
-
-	a->pushad();
-	a->pushf();
-
-
-	a->mov(ecx, eax);
 	a->mov(eax, (DWORD)funcAddress);
 	a->call(eax);
-	a->mov(byte_ptr(esp, 0x20), eax);//move eax to stored eax
-
-	a->popf();
-	a->popad();
 
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();
@@ -3345,26 +3519,25 @@ void OnMoveRecruitQueue::SetNewCode()
 	delete a;
 }
 
-OnPathCasheCrashPlace::OnPathCasheCrashPlace(MemWork* mem, LPVOID addr, int ver, LPVOID cbObj)
-	:AATemplate(mem), funcAddress(addr),callbackObject(cbObj)
+recruitEOPMercunit::recruitEOPMercunit(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
 {
 	if (ver == 2)//steam
-		m_adress = 0x0043cbae;
+		m_adress = 0x0060BC67;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x0043c86e;
+		m_adress = 0x0060BC67;
 }
 
-OnPathCasheCrashPlace::~OnPathCasheCrashPlace()
+recruitEOPMercunit::~recruitEOPMercunit()
 {
 }
 
-void OnPathCasheCrashPlace::SetOriginalCode()
+void recruitEOPMercunit::SetOriginialCode()
 {
-	return;
 	Assembler* a = new Assembler();
-	//filler, not work!
-	a->mov(ecx,ecx);
+
+	a->call(m_adress);
 
 	a->ret();
 	m_originalBytes = (unsigned char*)a->make();
@@ -3373,23 +3546,16 @@ void OnPathCasheCrashPlace::SetOriginalCode()
 	delete a;
 }
 
-void OnPathCasheCrashPlace::SetNewCode()
-{
+void recruitEOPMercunit::SetNewCode()
+{	
 	Assembler* a = new Assembler();
 
-
-	a->pushad();
-	a->pushf();
-
-	a->mov(ecx, (int)callbackObject);
 	a->mov(eax, (DWORD)funcAddress);
 	a->call(eax);
-
-	a->popf();
-	a->mov(dword_ptr(esp, 0x18), eax);//move eax to stored ecx
-	a->popad();
+	a->add(esp, 0x4);
 
 	a->ret();
+
 	m_cheatBytes = (unsigned char*)a->make();
 
 	delete a;

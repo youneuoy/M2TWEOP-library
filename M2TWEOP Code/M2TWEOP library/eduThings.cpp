@@ -22,6 +22,7 @@ namespace eduThings
 
 			eopTypeName = "EOPT";
 			eopTypeName.append(data.edu.Type);
+			eopTypeName.append(to_string(newIdx));//added to make typename unique
 		}
 		eopEduEntry(const char*fileName, int newIdx)
 		{

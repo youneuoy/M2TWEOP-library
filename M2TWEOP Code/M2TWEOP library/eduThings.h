@@ -25,7 +25,7 @@ namespace eduThings
 
 
 	NOINLINE EOP_EXPORT  char* getEopNameOfEduEntry(EduEntry*entryAdress);
-	//used for creatinon of new units, etc
+	//used for creation of new units, etc
 	NOINLINE EOP_EXPORT int getDataEopEdu(int idx);
 	NOINLINE EOP_EXPORT int* tryFindDataEopEdu(char* entryName);
 

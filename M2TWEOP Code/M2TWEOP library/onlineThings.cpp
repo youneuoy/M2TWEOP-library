@@ -7,7 +7,6 @@
 #include <imgui_internal.h>
 namespace battleCreator
 {
-
 	struct
 	{
 		bool isGenerationNeeded = true;
@@ -57,7 +56,6 @@ namespace battleCreator
 			MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 		}
 	}
-
 
 	string makeWeatherString()
 	{
@@ -183,8 +181,9 @@ namespace battleCreator
 		{
 			fileStrings.push_back("	building");
 
-			string buildType = sett->buildings[bnum]->bData->type;
-			string buildName = sett->buildings[bnum]->bData->drawInfo[sett->buildings[bnum]->level].name;
+			string buildType = sett->buildings[bnum]->edbEntry->type;
+			buildingLevel level = sett->buildings[bnum]->edbEntry->buildingLevel[sett->buildings[bnum]->level];
+			string buildName = level.name;
 			fileStrings.push_back("	{");
 
 			tempS = "		type ";

@@ -17,7 +17,10 @@ namespace smallFuncs
 	std::string getWinConditionS(DWORD condObject);
 
 	NOINLINE EOP_EXPORT void createUniString(UNICODE_STRING**& newUniStringPointer,const char*nonUniStr);
-
+	NOINLINE EOP_EXPORT void changeSettlementName(settlementStruct* sett, const char* newName);
+	NOINLINE EOP_EXPORT void changeFactionName(factionStruct* fac, const char* newName);
+	NOINLINE EOP_EXPORT void changeRegionName(regionStruct* region, const char* newName);
+	NOINLINE EOP_EXPORT void changeRebelsName(regionStruct* region, const char* newName);
 
 	NOINLINE EOP_EXPORT gameDataAllStruct* getGameDataAll();
 

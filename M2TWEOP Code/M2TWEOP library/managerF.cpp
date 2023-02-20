@@ -13,7 +13,7 @@ void managerF::init()
 
 void managerF::debug()
 {
-	
+
 }
 
 
@@ -81,10 +81,11 @@ void managerF::doPachs()
 	toStopCharacter->SetNewCode();
 	toStopCharacter->Enable();
 
-
+	
 	OnMoveRecruitQueue* toMoveRecruitQueue = new OnMoveRecruitQueue(mem, (LPVOID)patchesForGame::OnMoveRecruitQueue, globals::dataS.gamever);
 	toMoveRecruitQueue->SetNewCode();
 	toMoveRecruitQueue->Enable();
+
     //old code, what just disable backspace
 	//{
 	//	unsigned char ret[1] = { 0xC3};
@@ -105,6 +106,18 @@ void managerF::doPachs()
 
 	//	MemWork::WriteData(ret, nPtr,1);
 	//}
+	f1 << "Done" << endl;
+
+	f1 << "Start applying recruit eop unit patch" << endl;
+	recruitEOPunit* toRecruitEOPunit = new recruitEOPunit(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	toRecruitEOPunit->SetNewCode();
+	toRecruitEOPunit->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying recruit merc eop unit patch" << endl;
+	recruitEOPMercunit* torecruitEOPMercunit = new recruitEOPMercunit(mem, (LPVOID)patchesForGame::recruitEOPMercunit, globals::dataS.gamever);
+	torecruitEOPMercunit->SetNewCode();
+	torecruitEOPMercunit->Enable();
 	f1 << "Done" << endl;
 
 
@@ -141,21 +154,21 @@ void managerF::doPachs()
 	//toCheckLabelResults* labResults = new toCheckLabelResults(mem, (LPVOID)patchesForGame::onGiveTrait, globals::dataS.gamever);
 	//labResults->SetlCheckLabCode();
 	//labResults->Enable();
-
+//
 	//f1 << "Done" << endl;
-
+//
 	//f1 << "Start applying start campaign and battle start patch" << endl;
 	//toCreateMap* stCampaign = new toCreateMap(mem, (LPVOID)patchesForGame::afterLoadGameData, globals::dataS.gamever);
 	//stCampaign->SetlCreateCode();
 	//stCampaign->Enable();
-
+//
 	//f1 << "Done" << endl;
-
+//
 	//f1 << "Start applying I_CompareCounter command patch" << endl;
 	//toI_CompareCounter* iccmp = new toI_CompareCounter(mem, (LPVOID)patchesForGame::afterI_CompareCounter, globals::dataS.gamever);
 	//iccmp->SetltoI_CompareCounterCode();
 	//iccmp->Enable();
-
+//
 	//f1 << "Done" << endl;
 
 
@@ -181,27 +194,27 @@ void managerF::doPachs()
 	f1 << "Done" << endl;*/
 
 
-	//f1 << "Start applying spawn_army coords patch" << endl;
-	//toSpawnArmy* spwnArm = new toSpawnArmy(mem, (LPVOID)patchesForGame::spawnArmyCoords, globals::dataS.gamever);
-	//spwnArm->SetlSpawnCode();
-	//spwnArm->Enable();
+	f1 << "Start applying spawn_army coords patch" << endl;
+	toSpawnArmy* spwnArm = new toSpawnArmy(mem, (LPVOID)patchesForGame::spawnArmyCoords, globals::dataS.gamever);
+	spwnArm->SetlSpawnCode();
+	spwnArm->Enable();
 
-	//f1 << "Done" << endl;
+	f1 << "Done" << endl;
 
 
-	//f1 << "Start applying spawn_army coords patch end" << endl;
-	//toEndOfSpawnArmy* endSpwnArm = new toEndOfSpawnArmy(mem, (LPVOID)patchesForGame::spawnEndArmyCoords, globals::dataS.gamever);
-	//endSpwnArm->SetlEndSpawnCode();
-	//endSpwnArm->Enable();
+	f1 << "Start applying spawn_army coords patch end" << endl;
+	toEndOfSpawnArmy* endSpwnArm = new toEndOfSpawnArmy(mem, (LPVOID)patchesForGame::spawnEndArmyCoords, globals::dataS.gamever);
+	endSpwnArm->SetlEndSpawnCode();
+	endSpwnArm->Enable();
 
-	//f1 << "Done" << endl;
+	f1 << "Done" << endl;
 
-	//f1 << "Start applying spawn_character coords patch" << endl;
-	//toSpawnCharacter* spwnChar = new toSpawnCharacter(mem, (LPVOID)patchesForGame::spawnCharacterCoords, globals::dataS.gamever);
-	//spwnChar->SetlSpawnCode();
-	//spwnChar->Enable();
+	f1 << "Start applying spawn_character coords patch" << endl;
+	toSpawnCharacter* spwnChar = new toSpawnCharacter(mem, (LPVOID)patchesForGame::spawnCharacterCoords, globals::dataS.gamever);
+	spwnChar->SetlSpawnCode();
+	spwnChar->Enable();
 
-	//f1 << "Done" << endl;
+	f1 << "Done" << endl;
 
 
 	f1 << "Start applying battle_start patch" << endl;
@@ -243,19 +256,19 @@ void managerF::doPachs()
 
 	f1 << "Done" << endl;
 
-	f1 << "Start applying custom_tiles patch" << endl;
-	toCustomTileSelection* ctiles = new toCustomTileSelection(mem, (LPVOID)patchesForGame::onTileCheck, globals::dataS.gamever);
-	ctiles->SetlTilesCode();
-	ctiles->Enable();
+	//f1 << "Start applying custom_tiles patch" << endl;
+	//toCustomTileSelection* ctiles = new toCustomTileSelection(mem, (LPVOID)patchesForGame::onTileCheck, globals::dataS.gamever);
+	//ctiles->SetlTilesCode();
+	//ctiles->Enable();
+//
+	//f1 << "Done" << endl;
+
+	f1 << "Start applying custom_tiles file patch" << endl;
+	toCustomTileFileRead* ctilesF = new toCustomTileFileRead(mem, (LPVOID)patchesForGame::readTilesFile, globals::dataS.gamever);
+	ctilesF->SetlTilesCode();
+	ctilesF->Enable();
 
 	f1 << "Done" << endl;
-
-	//f1 << "Start applying custom_tiles file patch" << endl;
-	//toCustomTileFileRead* ctilesF = new toCustomTileFileRead(mem, (LPVOID)patchesForGame::readTilesFile, globals::dataS.gamever);
-	//ctilesF->SetlTilesCode();
-	//ctilesF->Enable();
-
-	//f1 << "Done" << endl;
 
 
 	f1 << "Start applying start fort models patch" << endl;
@@ -321,7 +334,6 @@ void managerF::doPachs()
 
 	f1 << "Done" << endl;
 
-
 	//f1 << "Start applying toReadGameDBsAtGameStart patch" << endl;
 	//toReadGameDBsAtGameStart* toReadGameDbsAtStart = new toReadGameDBsAtGameStart(mem, (LPVOID)patchesForGame::toReadGameDbsAtStart, globals::dataS.gamever);
 	//toReadGameDbsAtStart->SetlReadCode();
@@ -329,7 +341,6 @@ void managerF::doPachs()
 
 	//f1 << "Done" << endl;
 	
-
 
 	f1 << "Start applying toDrawPartsOfStratObjects patch" << endl;
 	toDrawPartsOfStratObjects* toDrawPartsOfStratO = new toDrawPartsOfStratObjects(mem, (LPVOID)patchesForGame::onDrawPartsOfStratObjects, globals::dataS.gamever);
@@ -442,6 +453,20 @@ void managerF::doPachs()
 	onCreateUnit->Enable();
 	f1 << "Done" << endl;
 
+
+	f1 << "Start applying toCreateMercUnit patch" << endl;
+	OnCreateMercUnit* toCreateMercUnit = new OnCreateMercUnit(mem, (LPVOID)patchesForGame::OnCreateMercUnit, globals::dataS.gamever);
+	toCreateMercUnit->SetNewCode();
+	toCreateMercUnit->Enable();
+	f1 << "Done" << endl;
+
+
+	f1 << "Start applying toCreateMercUnitCheck patch" << endl;
+	OnCreateMercUnitCheck* toCreateMercUnitCheck = new OnCreateMercUnitCheck(mem, (LPVOID)patchesForGame::OnCreateMercUnitCheck, globals::dataS.gamever);
+	toCreateMercUnitCheck->SetNewCode();
+	toCreateMercUnitCheck->Enable();
+	f1 << "Done" << endl;
+
 	f1 << "Start applying OnQuickSave patch" << endl;
 	OnQuickSave* onQuickSave = new OnQuickSave(mem, (LPVOID)patchesForGame::onQuickSave, globals::dataS.gamever);
 	onQuickSave->SetNewCode();
@@ -455,9 +480,11 @@ void managerF::doPachs()
 	onAutoSave->Enable();
 	f1 << "Done" << endl;	
 
+	
 	OnPathCasheCrashPlace* onPathCasheCrashPlace= new OnPathCasheCrashPlace(mem, (LPVOID)&TacticalMapViewer::GetPathCashe, globals::dataS.gamever, (LPVOID)&globals::dataS.Modules.tacticalMapVeiwer);
 	onPathCasheCrashPlace->SetNewCode();
 	onAutoSave->Enable();
+
 	/*
 	f1 << "Start applying OntryFindTypeIdInListRecruitPoolEDB patch" << endl;
 	OntryFindTypeIdInListRecruitPoolEDB* ontryFindTypeIdInListRecruitPoolEDB = new OntryFindTypeIdInListRecruitPoolEDB(mem, (LPVOID)patchesForGame::ontryFindTypeIdInListRecruitPoolEDB, globals::dataS.gamever);
@@ -543,7 +570,6 @@ void managerF::initThread()
 	battleCreator::readParams();
 
 	globals::dataS.Modules.tacticalMapVeiwer.Init(globals::dataS.gamever);
-
 	//stratResTest::test();
 }
 

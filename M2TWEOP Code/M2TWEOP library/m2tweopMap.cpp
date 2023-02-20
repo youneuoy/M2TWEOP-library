@@ -7,13 +7,13 @@ void m2tweopMap::buildMap()
 	borders.clear();
 
 	gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
-	tilesS* tilesMap = gameDataAll->stratMap;
-	xBound = tilesMap->xBound;
-	yBound = tilesMap->yBound;
+	stratMap* tilesMap = gameDataAll->stratMap;
+	mapWidth = tilesMap->mapWidth;
+	mapHeight = tilesMap->mapHeight;
 
-	for (int x = 0; x < xBound; x++)
+	for (int x = 0; x < mapWidth; x++)
 	{
-		for (int y = 0; y < yBound; y++)
+		for (int y = 0; y < mapHeight; y++)
 		{
 			shared_ptr< m2tweopTile >newTile = std::shared_ptr<m2tweopTile>(new m2tweopTile);
 
@@ -25,21 +25,21 @@ void m2tweopMap::buildMap()
 	}
 
 
-	for (int x = 1; x < xBound - 1; x++)
+	for (int x = 1; x < mapWidth - 1; x++)
 	{
-		for (int y = 1; y < yBound - 1; y++)
+		for (int y = 1; y < mapHeight - 1; y++)
 		{
-			auto currTile = tiles[x * yBound + y];
+			auto currTile = tiles[x * mapHeight + y];
 
-			auto leftTile = tiles[(x - 1) * yBound + y];
-			auto rightTile = tiles[(x + 1) * yBound + y];
-			auto upTile = tiles[x * yBound + y + 1];
-			auto lowTile = tiles[x * yBound + y - 1];
+			auto leftTile = tiles[(x - 1) * mapHeight + y];
+			auto rightTile = tiles[(x + 1) * mapHeight + y];
+			auto upTile = tiles[x * mapHeight + y + 1];
+			auto lowTile = tiles[x * mapHeight + y - 1];
 			currTile->buildBorder(
-				tiles[(x - 1) * yBound + y],
-				tiles[(x + 1) * yBound + y],
-				tiles[x * yBound + y + 1],
-				tiles[x * yBound + y - 1]
+				tiles[(x - 1) * mapHeight + y],
+				tiles[(x + 1) * mapHeight + y],
+				tiles[x * mapHeight + y + 1],
+				tiles[x * mapHeight + y - 1]
 			);
 		}
 	}
@@ -61,15 +61,15 @@ void m2tweopMap::drawMap(const ImVec2& tileSize)
 	mapStartPos.y -= ImGui::GetScrollY();
 
 
-	for (int y = yBound - 1; y >= 0; y--)
+	for (int y = mapHeight - 1; y >= 0; y--)
 	{
-		for (int x = 0; x < xBound; x++)
+		for (int x = 0; x < mapWidth; x++)
 		{
-			auto& currTile = tiles[x * yBound + y];
+			auto& currTile = tiles[x * mapHeight + y];
 			bool isSelected = (selectedTile!=nullptr&&selectedTile->IsSameCoords(currTile));
 			if (true == currTile->drawTile(tileSize, mapStartPos, &borders, isSelected))
 			{
-				selectedTile = tiles[x * yBound + y];
+				selectedTile = tiles[x * mapHeight + y];
 			}
 
 			ImGui::SameLine();
