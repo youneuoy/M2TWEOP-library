@@ -1,7 +1,5 @@
 ![EOP Logo](https://i.imgur.com/jqzoYoQ.png)
 
-# New beta version of M2TWEOP 2.1😋
-
  [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D4DZTHG)
  [![Discord Link](https://img.shields.io/discord/713369537948549191?color=red&label=Discord&style=for-the-badge)](https://discord.gg/Epqjm8u2WK)
  [![Build Status](https://img.shields.io/github/v/release/youneuoy/M2TWEOP-library?label=Download&style=for-the-badge)](#download)
@@ -9,14 +7,17 @@
 ## **Release Notes**
 
 ### **Launcher**
-- New eop gameplay settings - *youneuoy*
-
+- Added options in the launcher to enable/disable the following - *youneuoy*
+    - `M2TWEOP developer mode` (CTRL + 2)
+    - `Tactical map viewer`
+    - `Stratmap context menu`
+ 
 ### **Library**
 - Added Rome: Total War like Tactical Map Viewer. Works for any tile type, not only settlements. To activate click 'Middle Mouse Button' on any tile. You can preview it [here!](https://www.youtube.com/watch?v=RrGi4zxr7bU) - *youneuoy*
 - New EOP buildings feature allowing making unique copies of buildings which you can change entirely. - *Fynn*
 
 ### **Lua Plugin**
-- Add EOP buildings. - *Fynn*
+- Added new EOP buildings system. - *Fynn*
 - Add and remove capabilities and recruitment pools from buildings, change their names, descriptions and pics. - *Fynn*
 - Get EDB entry of a building by name. - *Fynn*
 - Create and delete forts at will. - *Fynn*
@@ -26,7 +27,7 @@
 - Expanded EOPDU with ability to change all primary stats, morale and upgrade models. - *Fynn*
 - Added function to find edu entry by name or index. - *Fynn*
 - Added removing and adding mercenaries to pools, and change the religion requirements. - *Fynn*
-- Add function to get region so you can iterate over them. - *Fynn*
+- Added function to get region so you can iterate over them. - *Fynn*
 - Added function to merge 2 armies. - *Fynn*
 
 ### **ImGUI**
@@ -44,7 +45,7 @@ end
 
 ### **Documentation**
 - Added Fynn's documentation and examples. Now pretty much every single function is now documented! - *Fynn and Medik*
-- `onPluginLoad` function is now included by default with some valid options commeneted out and `M2TWEOP.unlockConsoleCommands()` enabled by default - *Medik*
+- `onPluginLoad` function is now included by default to `luaPluginScript.lua` with some valid options commented out and `M2TWEOP.unlockConsoleCommands()` enabled by default - *Medik*
 
 ### **Bugfixes**
 - Fixed Battlemap highlight causing crashes. - *Fynn*
