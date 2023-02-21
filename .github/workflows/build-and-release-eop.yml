@@ -86,4 +86,4 @@ jobs:
         bodyFile: "./documentationGenerator/releaseInfo/releaseDescription.md"
         token: ${{ secrets.GITHUB_TOKEN }}
         commit: "master"
-        allowUpdates: true
+        allowUpdates: false
