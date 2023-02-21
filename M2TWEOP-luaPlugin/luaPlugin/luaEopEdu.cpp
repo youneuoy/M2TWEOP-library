@@ -6,13 +6,55 @@
 //@license GPL-3.0
 #include "luaP.h"
 #include "plugData.h"
+#include "eopEduHelpers.h"
+#include "buildingStructHelpers.h"
 
 void luaP::initEopEdu()
 {
 	struct
 	{
 		sol::table M2TWEOPEDUTable;
+		sol::table EDB;
 	}tables;
+	
+	struct
+	{
+		sol::usertype<edbEntry>edbEntry;
+		sol::usertype<BuildingLvlCapability>capability;
+		sol::usertype<recruitPool>recruitpool;
+	}types;
+	using namespace UnitEnums;
+	
+	luaState.new_enum(
+		"attackAttr",
+		"", attackAttr::nothing,
+		"spear", attackAttr::spear,
+		"light_spear", attackAttr::light_spear,
+		"prec", attackAttr::prec,
+		"ap", attackAttr::ap,
+		"bp", attackAttr::bp,
+		"area", attackAttr::area,
+		"fire", attackAttr::fire,
+		"launching", attackAttr::launching,
+		"thrown", attackAttr::thrown,
+		"short_pike", attackAttr::short_pike,
+		"long_pike", attackAttr::long_pike,
+		"spear_bonus_12", attackAttr::spear_bonus_12,
+		"spear_bonus_10", attackAttr::spear_bonus_10,
+		"spear_bonus_8", attackAttr::spear_bonus_8,
+		"spear_bonus_6", attackAttr::spear_bonus_6,
+		"spear_bonus_4", attackAttr::spear_bonus_4
+	);
+	
+	luaState.new_enum(
+		"eduStat",
+		"", eduStat::none,
+		"armour", eduStat::armour,
+		"defense", eduStat::defense,
+		"shield", eduStat::shield,
+		"attack", eduStat::attack,
+		"charge", eduStat::charge
+	);
 	///M2TWEOPDU
 	//@section M2TWEOPDUTable
 
@@ -70,6 +112,41 @@ void luaP::initEopEdu()
 	eduEntryOfEOPDU.Width=1.5;
 	*/
 	tables.M2TWEOPEDUTable.set_function("getEopEduEntryByID", &eopEduHelpers::getEopEduEntry);
+	
+	/***
+	Get eduEntry by index. Needed to change many parameters of the entry.
+	@function M2TWEOPDU.getEduEntry
+	@tparam int EnryIndex Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@treturn eduEntry retEntry
+	@usage
+	local eduEntry=M2TWEOPDU.getEduEntry(5);
+	eduEntry.SoldierCount=20;
+	eduEntry.Width=1.5;
+	*/
+	tables.M2TWEOPEDUTable.set_function("getEduEntry", &eopEduHelpers::getEduEntry);
+
+	/***
+	Get eduEntry by edu type name. Needed to change many parameters of the entry.
+	@function M2TWEOPDU.getEduEntryByType
+	@tparam string type Unit type as in export_descr_unit.
+	@treturn eduEntry retEntry
+	@usage
+	local eduEntry=M2TWEOPDU.getEduEntryByType("Peasants");
+	eduEntry.SoldierCount=20;
+	eduEntry.Width=1.5;
+	*/
+	tables.M2TWEOPEDUTable.set_function("getEduEntryByType", &eopEduHelpers::getEduEntryByType);
+	
+	/***
+	Get edu index by edu type name. Needed to use many edu functions.
+	@function M2TWEOPDU.getEduIndexByType
+	@tparam string type Unit type as in export_descr_unit.
+	@treturn int eduindex
+	@usage
+	local eduindex=M2TWEOPDU.getEduIndexByType("Peasants");
+	M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, 5, 1);
+	*/
+	tables.M2TWEOPEDUTable.set_function("getEduIndexByType", &eopEduHelpers::getEduIndexByType);
 
 
 	/***
@@ -114,6 +191,140 @@ void luaP::initEopEdu()
 	*/
 	tables.M2TWEOPEDUTable.set_function("setEntrySoldierModel", &eopEduHelpers::setEntrySoldierModel);
 
+	/***
+	Get the amount of numbers in the armour_upg_levels line in export_descr_unit.
+	@function M2TWEOPDU.getArmourUpgradeLevelsNum
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@treturn int ArmourUpgradeLevelsNum
+	@usage
+	M2TWEOPDU.getArmourUpgradeLevelsNum(1000);
+	*/
+	tables.M2TWEOPEDUTable.set_function("getArmourUpgradeLevelsNum", &eopEduHelpers::getArmourUpgradeLevelsNum);
+
+
+	/***
+	Set the amount of armour_upg_levels, if you increase the amount of levels the last number entry will be repeated.
+	@function M2TWEOPDU.setArmourUpgradeLevelsNum
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int amount
+	@usage
+	M2TWEOPDU.setArmourUpgradeLevelsNum(1000, 3);
+	*/
+	tables.M2TWEOPEDUTable.set_function("setArmourUpgradeLevelsNum", &eopEduHelpers::setArmourUpgradeLevelsNum);
+
+
+	/***
+	Get armour upgrade level number at specified index.
+	@function M2TWEOPDU.getArmourUpgradeLevel
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int levelidx
+	@treturn int level
+	@usage
+	M2TWEOPDU.getArmourUpgradeLevel(1000, 0);
+	*/
+	tables.M2TWEOPEDUTable.set_function("getArmourUpgradeLevel", &eopEduHelpers::getArmourUpgradeLevel);
+
+	/***
+	Set armour upgrade level number at specified index.
+	@function M2TWEOPDU.setArmourUpgradeLevel
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int levelidx
+	@tparam int newlevel
+	@usage
+	M2TWEOPDU.setArmourUpgradeLevel(1000, 1, 4);
+	*/
+	tables.M2TWEOPEDUTable.set_function("setArmourUpgradeLevel", &eopEduHelpers::setArmourUpgradeLevel);
+
+	/***
+	Get the amount of models in the armour_upg_models line in export_descr_unit.
+	@function M2TWEOPDU.getArmourUpgradeLevelsNum
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@treturn int ArmourUpgradeLevelsNum
+	@usage
+	M2TWEOPDU.getArmourUpgradeModelsNum(1000);
+	*/
+	tables.M2TWEOPEDUTable.set_function("getArmourUpgradeModelsNum", &eopEduHelpers::getArmourUpgradeModelsNum);
+
+	/***
+	Set the amount of armour_upg_levels, if you increase the amount of models the last model entry will be repeated.
+	@function M2TWEOPDU.setArmourUpgradeModelsNum
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int amount Maximum: 4
+	@usage
+	M2TWEOPDU.setArmourUpgradeModelsNum(1000, 3);
+	*/
+	tables.M2TWEOPEDUTable.set_function("setArmourUpgradeModelsNum", &eopEduHelpers::setArmourUpgradeModelsNum);
+	
+	/***
+	Get armour upgrade level number at specified index.
+	@function M2TWEOPDU.getArmourUpgradeModel
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int levelidx
+	@treturn string modelName
+	@usage
+	M2TWEOPDU.getArmourUpgradeModel(1000, 0);
+	*/
+	tables.M2TWEOPEDUTable.set_function("getArmourUpgradeModel", &eopEduHelpers::getArmourUpgradeModel);
+	
+	/***
+	Set the unit model at specified index.
+	@function M2TWEOPDU.setArmourUpgradeModel
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int levelidx
+	@tparam string modelName
+	@usage
+	M2TWEOPDU.setArmourUpgradeModel(1000, 1, 4);
+	*/
+	tables.M2TWEOPEDUTable.set_function("setArmourUpgradeModel", &eopEduHelpers::setArmourUpgradeModel);
+	
+	/***
+	Set a primary or secondary attack attribute of an edu entry.
+	@function M2TWEOPDU.setEntryAttackAttribute
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int attribute Use the attackAttr enum: attackAttr.spear, attackAttr.light_spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short_pike, attackAttr.long_pike, attackAttr.spear_bonus_12, attackAttr.spear_bonus_10, attackAttr.spear_bonus_8, attackAttr.spear_bonus_6, attackAttr.spear_bonus_4.
+	@tparam boolean enable
+	@tparam int sec 1 = primary, 2 = secondary.
+	@usage
+	M2TWEOPDU.setEntryAttackAttribute(1000, attackAttr.ap, true, 1);
+	*/
+	tables.M2TWEOPEDUTable.set_function("setEntryAttackAttribute", &eopEduHelpers::setEntryAttackAttribute);
+	
+	/***
+	Get a primary or secondary attack attribute from an edu entry.
+	@function M2TWEOPDU.getEntryAttackAttribute
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int attribute Use the attackAttr enum: attackAttr.spear, attackAttr.light_spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short_pike, attackAttr.long_pike, attackAttr.spear_bonus_12, attackAttr.spear_bonus_10, attackAttr.spear_bonus_8, attackAttr.spear_bonus_6, attackAttr.spear_bonus_4.
+	@tparam int sec 1 = primary, 2 = secondary.
+	@treturn boolean hasAttackAttribute
+	@usage
+	M2TWEOPDU.getEntryAttackAttribute(1000, attackAttr.ap, 1);
+	*/
+	tables.M2TWEOPEDUTable.set_function("getEntryAttackAttribute", &eopEduHelpers::getEntryAttackAttribute);
+	
+	/***
+	Set any of the basic unit stats of an edu entry.
+	@function M2TWEOPDU.setEntryStat
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int eduStat Use the eduStat enum: eduStat.armour, eduStat.defense, eduStat.shield, eduStat.attack, eduStat.charge.
+	@tparam int value
+	@tparam int sec 1 = primary, 2 = secondary.
+	@usage
+	M2TWEOPDU.setEntryStat(1000, attackAttr.attack, 1);
+	*/
+	tables.M2TWEOPEDUTable.set_function("setEntryStat", &eopEduHelpers::setEntryStat);
+	
+	/***
+	Get any of the basic unit stats of an edu entry.
+	@function M2TWEOPDU.getEntryStat
+	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+	@tparam int eduStat Use the eduStat enum: eduStat.armour, eduStat.defense, eduStat.shield, eduStat.attack, eduStat.charge.
+	@tparam int sec 1 = primary, 2 = secondary.
+	@treturn int unitStat
+	@usage
+	M2TWEOPDU.getEntryStat(1000, attackAttr.attack, 1);
+	*/
+	tables.M2TWEOPEDUTable.set_function("getEntryStat", &eopEduHelpers::getEntryStat);
+
 
 	/***
 	Set localized name for a M2TWEOPDU entry. This does not require any entries in the text folder.
@@ -124,6 +335,7 @@ void luaP::initEopEdu()
 	M2TWEOPDU.setEntryLocalizedName(1000,"Test unit");
 	*/
 	tables.M2TWEOPEDUTable.set_function("setEntryLocalizedName", &eopEduHelpers::setEntryLocalizedName);
+	//tables.M2TWEOPEDUTable.set_function("addUnitToRQ", &eopEduHelpers::addUnitToRQ); comment out not good implementation
 
 
 	/***
@@ -145,4 +357,333 @@ void luaP::initEopEdu()
 	M2TWEOPDU.setEntryLocalizedShortDescr(1000,"This is test unit short description\n123321\nCreated with m2tweop");
 	*/
 	tables.M2TWEOPEDUTable.set_function("setEntryLocalizedShortDescr", &eopEduHelpers::setEntryLocalizedShortDescr);
+
+
+	///edbEntry
+	//@section edbEntry Table
+
+	/***
+	Basic edbEntry table.
+
+	@tfield int buildingID
+	@tfield int classification
+	@tfield int isCoreBuilding
+	@tfield int isPort
+	@tfield int isCoreBuilding2
+	@tfield int hasReligion
+	@tfield int religionID
+	@tfield int isHinterland
+	@tfield int isFarm
+	@tfield int buildingLevelCount
+
+	@table edbEntry
+	*/
+
+	types.edbEntry = luaState.new_usertype<edbEntry>("edbEntry");
+	types.edbEntry.set("buildingID", &edbEntry::buildingID);
+	types.edbEntry.set("classification", &edbEntry::classification);
+	types.edbEntry.set("isCoreBuilding", &edbEntry::isCoreBuilding);
+	types.edbEntry.set("isPort", &edbEntry::isPort);
+	types.edbEntry.set("isCoreBuilding2", &edbEntry::isCoreBuilding2);
+	types.edbEntry.set("hasReligion", &edbEntry::hasReligion);
+	types.edbEntry.set("religionID", &edbEntry::religionID);
+	types.edbEntry.set("isHinterland", &edbEntry::isHinterland);
+	types.edbEntry.set("isFarm", &edbEntry::isFarm);
+	types.edbEntry.set("buildingLevelCount", &edbEntry::buildingLevelCount);
+
+	///capability
+	//@section capability Table
+
+	/***
+	Basic capability table.
+
+	@tfield int capabilityType
+	@tfield int capabilityLvl
+	@tfield int bonus
+	@tfield int capabilityID
+
+	@table capability
+	*/
+	types.capability = luaState.new_usertype<BuildingLvlCapability>("capability");
+	types.capability.set("capabilityType", &BuildingLvlCapability::capabilityType);
+	types.capability.set("capabilityLvl", &BuildingLvlCapability::capabilityLvl);
+	types.capability.set("bonus", &BuildingLvlCapability::bonus);
+	types.capability.set("capabilityID", &BuildingLvlCapability::capabilityID);
+
+	///recruitpool
+	//@section recruitpool Table
+
+	/***
+	Basic recruitpool table.
+
+	@tfield int capabilityType
+	@tfield int capabilityLvlorExp
+	@tfield int unitID
+	@tfield float initialSize
+	@tfield float initialSize
+	@tfield float gainPerTurn
+	@tfield float maxSize
+
+	@table recruitpool
+	*/
+	types.recruitpool = luaState.new_usertype<recruitPool>("recruitpool");
+	types.recruitpool.set("capabilityType", &recruitPool::capabilityType);
+	types.recruitpool.set("capabilityLvlorExp", &recruitPool::capabilityLvlorExp);
+	types.recruitpool.set("unitID", &recruitPool::unitID);
+	types.recruitpool.set("initialSize", &recruitPool::initialSize);
+	types.recruitpool.set("gainPerTurn", &recruitPool::gainPerTurn);
+	types.recruitpool.set("maxSize", &recruitPool::maxSize);
+
+	///EDB
+	//@section EDB Table
+
+	/***
+	Basic EDB table.
+
+	@tfield addEopBuildEntry addEopBuildEntry
+	@tfield getEopBuildEntry getEopBuildEntry
+	@tfield setBuildingPic setBuildingPic
+	@tfield setBuildingPicConstructed setBuildingPicConstructed
+	@tfield setBuildingPicConstruction setBuildingPicConstruction
+	@tfield setBuildingLocalizedName setBuildingLocalizedName
+	@tfield setBuildingLocalizedDescr setBuildingLocalizedDescr
+	@tfield setBuildingLocalizedDescrShort setBuildingLocalizedDescrShort
+	@tfield addBuildingCapability addBuildingCapability
+	@tfield removeBuildingCapability removeBuildingCapability
+	@tfield getBuildingCapability getBuildingCapability
+	@tfield getBuildingCapabilityNum getBuildingCapabilityNum
+	@tfield addBuildingPool addBuildingPool
+	@tfield removeBuildingPool removeBuildingPool
+	@tfield getBuildingPool getBuildingPool
+	@tfield getBuildingPoolNum getBuildingPoolNum
+	@tfield createEOPBuilding createEOPBuilding
+	@tfield getBuildingByName getBuildingByName
+
+	@table EDB
+	*/
+	tables.EDB = luaState.create_table("EDB");
+
+	/***
+	Create new EOP Building entry
+	@function EDB.addEopBuildEntry
+	@tparam edbEntry edbEntry Old entry.
+	@tparam int newIndex New index of new entry.
+	@treturn edbEntry eopentry.
+	@usage
+	oldBuilding = EDB.getBuildingByName("market")
+	newBuilding = EDB.addEopBuildEntry(myBuilding,150);
+	*/
+	tables.EDB.set_function("addEopBuildEntry", &buildingStructHelpers::addEopBuildEntry);
+
+	/***
+	Get EOP Building entry.
+	@function EDB.getEopBuildEntry
+	@tparam int index Index of eop entry.
+	@treturn edbEntry eopentry.
+	@usage
+	building = EDB.getEopBuildEntry(150);
+	*/
+	tables.EDB.set_function("getEopBuildEntry", &buildingStructHelpers::getEopBuildEntry);
+
+	/***
+	Set picture of building.
+	@function EDB.setBuildingPic
+	@tparam edbEntry edbEntry Entry to set.
+	@tparam string newPic Path to new pic.
+	@tparam int level Building level to set pic for.
+	@tparam int culture ID of the culture to set the pic for.
+	@usage
+	building = EDB.getBuildingByName("market")
+	EDB.setBuildingPic(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
+	*/
+	tables.EDB.set_function("setBuildingPic", &buildingStructHelpers::setBuildingPic);
+
+	/***
+	Set constructed picture of building.
+	@function EDB.setBuildingPicConstructed
+	@tparam edbEntry edbEntry Entry to set.
+	@tparam string newPic Path to new pic.
+	@tparam int level Building level to set pic for.
+	@tparam int culture ID of the culture to set the pic for.
+	@usage
+	building = EDB.getBuildingByName("market")
+	EDB.setBuildingPicConstructed(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
+	*/
+	tables.EDB.set_function("setBuildingPicConstructed", &buildingStructHelpers::setBuildingPicConstructed);
+
+	/***
+	Set construction picture of building.
+	@function EDB.setBuildingPicConstruction
+	@tparam edbEntry edbEntry Entry to set.
+	@tparam string newPic Path to new pic.
+	@tparam int level Building level to set pic for.
+	@tparam int culture ID of the culture to set the pic for.
+	@usage
+	building = EDB.getBuildingByName("market")
+	EDB.setBuildingPicConstruction(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
+	*/
+	tables.EDB.set_function("setBuildingPicConstruction", &buildingStructHelpers::setBuildingPicConstruction);
+
+	/***
+	Set name of a building.
+	@function EDB.setBuildingLocalizedName
+	@tparam edbEntry edbEntry Entry to set.
+	@tparam string newName New name.
+	@tparam int level Building level.
+	@tparam int facnum Faction ID of the faction to set it for (dipNum).
+	@usage
+	building = EDB.getBuildingByName("market")
+	EDB.setBuildingLocalizedName(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
+	*/
+	tables.EDB.set_function("setBuildingLocalizedName", &buildingStructHelpers::setBuildingLocalizedName);
+
+	/***
+	Set description of a building.
+	@function EDB.setBuildingLocalizedDescr
+	@tparam edbEntry edbEntry Entry to set.
+	@tparam string newName New description.
+	@tparam int level Building level.
+	@tparam int facnum Faction ID of the faction to set it for (dipNum).
+	@usage
+	building = EDB.getBuildingByName("market")
+	EDB.setBuildingLocalizedDescr(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
+	*/
+	tables.EDB.set_function("setBuildingLocalizedDescr", &buildingStructHelpers::setBuildingLocalizedDescr);
+
+	/***
+	Set short description of a building.
+	@function EDB.setBuildingLocalizedDescrShort
+	@tparam edbEntry edbEntry Entry to set.
+	@tparam string newName New short description.
+	@tparam int level Building level.
+	@tparam int facnum Faction ID of the faction to set it for (dipNum).
+	@usage
+	building = EDB.getBuildingByName("market")
+	EDB.setBuildingLocalizedDescrShort(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
+	*/
+	tables.EDB.set_function("setBuildingLocalizedDescrShort", &buildingStructHelpers::setBuildingLocalizedDescrShort);
+
+	/***
+	Add a capability to a building.
+	@function EDB.addBuildingCapability
+	@tparam edbEntry edbEntry Entry to set.
+	@tparam int level Building level.
+	@tparam int capability ID of capability to set.
+	@tparam int value Value to set.
+	@tparam bool bonus Is it bonus or not.
+	@usage
+	building = EDB.getBuildingByName("market")
+	EDB.addBuildingCapability(building, 0, 55, 200, true);
+	*/
+	tables.EDB.set_function("addBuildingCapability", &buildingStructHelpers::addBuildingCapability);
+	
+	/***
+	Remove a capability from a building.
+	@function EDB.removeBuildingCapability
+	@tparam edbEntry edbEntry Entry to set.
+	@tparam int level Building level.
+	@tparam int index Which capability to remove (In order of iterating).
+	@usage
+	building = EDB.getBuildingByName("market")
+	EDB.removeBuildingCapability(building, 0, 3);
+	*/
+	tables.EDB.set_function("removeBuildingCapability", &buildingStructHelpers::removeBuildingCapability);
+
+	/***
+	
+	Get capability from a building at an index.
+	@function EDB.getBuildingCapability
+	@tparam edbEntry edbEntry Entry to set.
+	@tparam int level Building level.
+	@tparam int index.
+	@treturn capability capability.
+	@usage
+	building = EDB.getBuildingByName("market")
+	cap = EDB.getBuildingCapability(building, 0, 3);
+	*/
+	tables.EDB.set_function("getBuildingCapability", &buildingStructHelpers::getBuildingCapability);
+
+
+	/***
+
+	Get capability amount from a building.
+	@function EDB.getBuildingCapabilityNum
+	@tparam edbEntry edbEntry Entry to set.
+	@tparam int level Building level.
+	@treturn int capabilityNum.
+	@usage
+	building = EDB.getBuildingByName("market")
+	EDB.getBuildingCapabilityNum(building, 0);
+	*/
+	tables.EDB.set_function("getBuildingCapabilityNum", &buildingStructHelpers::getBuildingCapabilityNum);
+
+	/***
+	Add a recruitment pool to a building.
+	@function EDB.addBuildingPool
+	@tparam edbEntry edbEntry Entry to set.
+	@tparam int level Building level.
+	@tparam int eduIndex edu index of unit to add (EOP units not supported!).
+	@tparam float initialSize Initial pool.
+	@tparam float gainPerTurn Replenishment per turn.
+	@tparam float maxSize Maximum size.
+	@tparam int exp Initial experience.
+	@usage
+	building = EDB.getBuildingByName("market")
+	EDB.addBuildingPool(building, 0, 55, 1, 0.1, 2, 0);
+	*/
+	tables.EDB.set_function("addBuildingPool", &buildingStructHelpers::addBuildingPool);
+
+
+	/***
+	Remove a recruitment pool from a building.
+	@function EDB.removeBuildingPool
+	@tparam edbEntry edbEntry Entry to set.
+	@tparam int level Building level.
+	@tparam int index Which pool to remove (In order of iterating).
+	@usage
+	building = EDB.getBuildingByName("market")
+	EDB.removeBuildingPool(building, 0, 3);
+	*/
+	tables.EDB.set_function("removeBuildingPool", &buildingStructHelpers::removeBuildingPool);
+
+
+	/***
+	Get a recruitment pool from a building by index.
+	@function EDB.getBuildingPool
+	@tparam edbEntry edbEntry Entry to set.
+	@tparam int level Building level.
+	@tparam int index Which pool to get (In order of iterating).
+	@treturn recruitpool pool.
+	@usage
+	building = EDB.getBuildingByName("market")
+	EDB.getBuildingPool(building, 0, 3);
+	*/
+	tables.EDB.set_function("getBuildingPool", &buildingStructHelpers::getBuildingPool);
+
+
+	/***
+	Get a recruitment pool count.
+	@function EDB.getBuildingPoolNum
+	@tparam edbEntry edbEntry Entry to set.
+	@tparam int level Building level.
+	@treturn int poolNum.
+	@usage
+	building = EDB.getBuildingByName("market")
+	EDB.getBuildingPoolNum(building, 0);
+	*/
+	tables.EDB.set_function("getBuildingPoolNum", &buildingStructHelpers::getBuildingPoolNum);
+
+
+	//tables.EDB.set_function("createEOPBuilding", &buildingStructHelpers::createEOPBuilding);
+
+
+	/***
+	Get a building edb entry by name.
+	@function EDB.getBuildingPoolNum
+	@tparam string buildingname
+	@treturn edbEntry entry
+	@usage
+	building = EDB.getBuildingByName("market")
+	*/
+	tables.EDB.set_function("getBuildingByName", &buildingStructHelpers::getBuildingByName);
 }

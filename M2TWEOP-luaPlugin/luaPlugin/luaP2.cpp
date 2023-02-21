@@ -16,6 +16,10 @@ void luaP::initCampaign()
 	struct
 	{
 		sol::usertype<campaign> campaignTable;
+		sol::usertype<stratMap> stratMap;
+		sol::usertype<regionStruct> region;
+		sol::usertype<mercPool> mercPool;
+		sol::usertype<mercPoolUnit> mercPoolUnit;
 	}typeAll;
 	using namespace campaignEnums;
 
@@ -142,6 +146,240 @@ void luaP::initCampaign()
 	local unitSize=campaign:GetUnitSize();
 	*/
 	typeAll.campaignTable.set_function("GetUnitSize", &m2tweopHelpers::GetUnitSize);
+	
+	/// Strat Map
+	//@section stratMap
+
+	/***
+	Basic strat map table.
+
+	@tfield int mapWidth
+	@tfield int mapHeight
+	@tfield int regionsNum
+	@tfield getRegion getRegion
+
+	@table gameDataAll.stratMap
+	*/
+	typeAll.stratMap = luaState.new_usertype<stratMap>("stratMap");
+	typeAll.stratMap.set("mapWidth", &stratMap::mapWidth);
+	typeAll.stratMap.set("mapHeight", &stratMap::mapHeight);
+	typeAll.stratMap.set("regionsNum", &stratMap::regionsNum);
+
+	/***
+	Get a specific region by index.
+	@function stratMap.getRegion
+	@tparam int index
+	@treturn region region
+	@usage
+	local stratmap = gameDataAll.get().stratMap;
+	local region = stratMap.getRegion(2);
+	*/
+	typeAll.stratMap.set_function("getRegion", &gameHelpers::getRegion);
+
+	///Region
+	//@section Region
+
+	/***
+	Basic region table.
+
+	@tfield string regionName
+	@tfield string settlementName
+	@tfield string legioName
+	@tfield int regionID
+	@tfield int stacksNum
+	@tfield int fortsNum
+	@tfield int watchtowersNum
+	@tfield int isSea
+	@tfield int hasLake (fully enclosed by region)
+	@tfield mercPool mercPool
+	@tfield settlementStruct settlement
+	@tfield int tileCount
+	@tfield int neighbourRegionsNum
+	@tfield int resourcesNum
+	@tfield int hiddenResources1
+	@tfield int hiddenResources2
+	@tfield int settlementXCoord
+	@tfield int settlementYCoord
+	@tfield int portEntranceXCoord
+	@tfield int portEntranceYCoord
+	@tfield factionStruct faction
+	@tfield string rebelType
+	@tfield int triumphValue
+	@tfield changeRegionName changeRegionName
+	@tfield changeRebelsName changeRebelsName
+
+	@table region
+	*/
+	typeAll.region = luaState.new_usertype<regionStruct>("region");
+	typeAll.region.set("regionName", &regionStruct::regionName);
+	typeAll.region.set("settlementName", &regionStruct::settlementName);
+	typeAll.region.set("legioName", &regionStruct::legioName);
+	typeAll.region.set("regionID", &regionStruct::regionID);
+	typeAll.region.set("stacksNum", &regionStruct::stacksNum);
+	typeAll.region.set("fortsNum", &regionStruct::fortsNum);
+	typeAll.region.set("watchtowersNum", &regionStruct::watchtowersNum);
+	typeAll.region.set("isSea", &regionStruct::isSea);
+	typeAll.region.set("hasLake", &regionStruct::hasLake);
+	typeAll.region.set("mercPool", &regionStruct::mercPool);
+	typeAll.region.set("settlement", &regionStruct::settlement);
+	typeAll.region.set("tileCount", &regionStruct::tileCount);
+	typeAll.region.set("neighbourRegionsNum", &regionStruct::neighbourRegionsNum);
+	typeAll.region.set("resourcesNum", &regionStruct::resourcesNum);
+	typeAll.region.set("hiddenResources1", &regionStruct::hiddenResources1);
+	typeAll.region.set("hiddenResources2", &regionStruct::hiddenResources2);
+	typeAll.region.set("settlementXCoord", &regionStruct::settlementXCoord);
+	typeAll.region.set("settlementYCoord", &regionStruct::settlementYCoord);
+	typeAll.region.set("portEntranceXCoord", &regionStruct::portEntranceXCoord);
+	typeAll.region.set("portEntranceYCoord", &regionStruct::portEntranceYCoord);
+	typeAll.region.set("faction", &regionStruct::factionOwner);
+	typeAll.region.set("rebelType", &regionStruct::rebelType);
+	typeAll.region.set("triumphValue", &regionStruct::triumphValue);
+
+	/***
+	Change region name (reset on reload).
+	@function region:changeRegionName
+	@tparam string newName
+	@usage
+	local stratmap = gameDataAll.get().stratMap;
+	local region = stratMap.getRegion(2);
+	region:changeRegionName("Macedonia")
+	*/
+	typeAll.region.set_function("changeRegionName", &gameHelpers::changeRegionName);
+
+	/***
+	Change rebels name (reset on reload).
+	@function region:changeRebelsName
+	@tparam string newName
+	@usage
+	local stratmap = gameDataAll.get().stratMap;
+	local region = stratMap.getRegion(2);
+	region:changeRebelsName("Macedonian Rebels")
+	*/
+	typeAll.region.set_function("changeRebelsName", &gameHelpers::changeRebelsName);
+
+	///Merc Pools
+	//@section mercPool
+
+	/***
+	Basic mercenary pool table.
+
+	@tfield string name
+	@tfield getMercUnitNum getMercUnitNum
+	@tfield addMercUnit addMercUnit
+	@tfield getMercUnit getMercUnit
+
+	@table mercPool
+	*/
+	typeAll.mercPool = luaState.new_usertype<mercPool>("mercPool");
+	typeAll.mercPool.set("name", &mercPool::name);
+
+	/***
+	Get amount of mercenary units a region has.
+	@function mercPool:getMercUnitNum
+	@treturn int mercUnitNum
+	@usage
+	local stratmap = gameDataAll.get().stratMap;
+	local region = stratMap.getRegion(2);
+	local mercpool = region.mercPool;
+	local mercNum = mercPool:getMercUnitNum();
+	*/
+	typeAll.mercPool.set_function("getMercUnitNum", &gameHelpers::getMercUnitNum);
+
+	/***
+	Add a new mercenary unit to a pool.
+	@function mercPool:addMercUnit
+	@tparam int idx EDU index, supports EOP units.
+	@tparam int exp Starting experience.
+	@tparam int cost 
+	@tparam float repmin Minimum replenishment rate.
+	@tparam float repmax Maximum replenishment rate.
+	@tparam int maxunits Maximum Pool.
+	@tparam float startpool Starting pool.
+	@tparam int startyear
+	@tparam int endyear
+	@tparam int crusading
+	@treturn mercPoolUnit mercunit
+	@usage
+	local stratmap = gameDataAll.get().stratMap;
+	local region = stratMap.getRegion(2);
+	local mercpool = region.mercPool;
+	local mercUnit = mercPool:addMercUnit();
+	*/
+	typeAll.mercPool.set_function("addMercUnit", &gameHelpers::addMercUnit);
+
+	/***
+	Get a mercenary unit from a pool by index.
+	@function mercPool:getMercUnit
+	@tparam int idx
+	@treturn mercPoolUnit mercUnit
+	@usage
+	local stratmap = gameDataAll.get().stratMap;
+	local region = stratMap.getRegion(2);
+	local mercpool = region.mercPool;
+	local mercNum = mercPool:getMercUnitNum();
+	for i = 0, mercNum-1 do
+		local mercUnit = mercPool:getMercUnit(i);
+	end
+	*/
+	typeAll.mercPool.set_function("getMercUnit", &gameHelpers::getMercUnit);
+
+
+	///Mercenary units
+	//@section mercPoolUnit
+
+	/***
+	Basic mercenary unit table.
+
+	@tfield EduEntry eduEntry
+	@tfield int experience
+	@tfield int cost
+	@tfield float replenishMin
+	@tfield float replenishMax
+	@tfield int maxUnits
+	@tfield float currentPool
+	@tfield int startYear
+	@tfield int endYear
+	@tfield int crusading
+	@tfield int poolIndex
+	@tfield int mercPoolUnitIndex
+	@tfield mercPool mercPool
+	@tfield setMercReligion setMercReligion
+
+	@table mercPoolUnit
+	*/
+	typeAll.mercPoolUnit = luaState.new_usertype<mercPoolUnit>("mercPoolUnit");
+	typeAll.mercPoolUnit.set("eduEntry", &mercPoolUnit::eduEntry);
+	typeAll.mercPoolUnit.set("experience", &mercPoolUnit::experience);
+	typeAll.mercPoolUnit.set("cost", &mercPoolUnit::cost);
+	typeAll.mercPoolUnit.set("replenishMin", &mercPoolUnit::replenishMin);
+	typeAll.mercPoolUnit.set("replenishMax", &mercPoolUnit::replenishMax);
+	typeAll.mercPoolUnit.set("maxUnits", &mercPoolUnit::maxUnits);
+	typeAll.mercPoolUnit.set("currentPool", &mercPoolUnit::currentPool);
+	typeAll.mercPoolUnit.set("startYear", &mercPoolUnit::startYear);
+	typeAll.mercPoolUnit.set("endYear", &mercPoolUnit::endYear);
+	typeAll.mercPoolUnit.set("crusading", &mercPoolUnit::crusading);
+	typeAll.mercPoolUnit.set("poolIndex", &mercPoolUnit::poolIndex);
+	typeAll.mercPoolUnit.set("mercPoolUnitIndex", &mercPoolUnit::mercPoolUnitIndex);
+	typeAll.mercPoolUnit.set("mercPool", &mercPoolUnit::mercPool);
+
+	/***
+	Set or remove a religion requirement for a mercenary unit.
+	@function mercPoolUnit:setMercReligion
+	@tparam int religion
+	@tparam bool set True means enable this religion requirement, False means disable.
+	@usage
+	local stratmap = gameDataAll.get().stratMap;
+	local region = stratMap.getRegion(2);
+	local mercpool = region.mercPool;
+	local mercNum = mercPool:getMercUnitNum();
+	for i = 0, mercNum-1 do
+		local mercUnit = mercPool:getMercUnit(i);
+		mercUnit:setMercReligion(3, true)
+	end
+	*/
+	typeAll.mercPoolUnit.set_function("setMercReligion", &gameHelpers::setMercReligion);
+
+
 }
 void luaP::initP2()
 {
@@ -180,6 +418,7 @@ void luaP::initP2()
 	typeAll.gameDataAllTable.set_function("get", &gameDataAllHelper::get);
 	typeAll.gameDataAllTable.set("battleStruct", &gameDataAllStruct::battleHandler);
 	typeAll.gameDataAllTable.set("campaignStruct", &gameDataAllStruct::campaignData);
+	typeAll.gameDataAllTable.set("stratMap", &gameDataAllStruct::stratMap);
 
 
 
@@ -209,8 +448,6 @@ void luaP::initP2()
 	typeAll.battleTable.set("defenderYCoord", &battleDataS::defenderYCoord);
 	typeAll.battleTable.set("sidesNum", &battleDataS::sidesNum);
 	typeAll.battleTable.set("sides", sol::property([](battleDataS& self) { return std::ref(self.sides); }));
-
-
 	///battleSide
 	//@section battleSide
 

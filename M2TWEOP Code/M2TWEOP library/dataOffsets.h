@@ -22,6 +22,8 @@ public:
 
 		DWORD guildDataStart = NULL;
 
+		DWORD edbDataStart = NULL;
+
 
 
 		//audio settings

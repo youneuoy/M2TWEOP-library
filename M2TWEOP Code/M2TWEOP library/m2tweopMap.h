@@ -33,8 +33,8 @@ private:
 	vector<shared_ptr<m2tweopTile>>tiles;
 	ImVec2 tileSize = { 4.f,4.f };
 
-	int xBound = 0;
-	int yBound = 0;
+	int mapWidth = 0;
+	int mapHeight = 0;
 
 };
 

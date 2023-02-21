@@ -15,8 +15,22 @@
 
 <!-- ### **Library** -->
 - Added Rtw-like Tactical Map Viewer. Works for any tile type, not only settlements. To activate click middle mouse button on any tile. - *youneuoy*
+- Fix for eopdu units so they always get unique internal ID - *Fynn*
+- New EOP buildings feature allowing making unique copies of buildings which you can change entirely. - *Fynn*
 
 <!-- ### **Lua Plugin** -->
+- Add EOP buildings. - *Fynn*
+- Add and remove capabilities and recruitment pools from buildings, change their names, descriptions and pics. - *Fynn*
+- Get EDB entry of a building by name. - *Fynn*
+- Create and delete forts at will. - *Fynn*
+- Added region struct, expanded a lot of other structs including mercenaries, buildings, stratmap. - *Fynn*
+- Added culture ID and kings purse to faction struct. - *Fynn*
+- Added ability to change faction name, settlement name, region name, region's rebel type name. - *Fynn*
+- Expanded EOPDU with ability to change all primary stats, morale and upgrade models. - *Fynn*
+- Added function to find edu entry by name or index. - *Fynn*
+- Added removing and adding mercenaries to pools, and change the religion requirements. - *Fynn*
+- Add function to get region so you can iterate over them. - *Fynn*
+- Added function to merge 2 armies. - *Fynn*
 
 ### **Documentation**
 - Added Fynn's documentation and examples. Now pretty much every single function is now documented! - *Fynn and Medik*
@@ -26,6 +40,7 @@
 - `onPluginLoad` function is now included by default with some valid options commeneted out and `M2TWEOP.unlockConsoleCommands()` enabled by default - *Medik* 
 
 <!-- ### **Bugfixes** -->
+- Fixed battlemap highlight causing crashes. - *Fynn*
 
 ### **Links**
 * [EOP Documentation](https://youneuoy.github.io/M2TWEOP-library/)

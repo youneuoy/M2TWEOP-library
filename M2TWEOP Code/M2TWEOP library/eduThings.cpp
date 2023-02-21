@@ -22,6 +22,7 @@ namespace eduThings
 
 			eopTypeName = "EOPT";
 			eopTypeName.append(data.edu.Type);
+			eopTypeName.append(to_string(newIdx));//added to make typename unique
 		}
 		eopEduEntry(const char*fileName, int newIdx)
 		{
@@ -41,6 +42,7 @@ namespace eduThings
 
 
 		std::string eopTypeName;
+		std::string eopUnitLabel;
 		std::string eopSoldierString;
 		struct dataS
 		{
@@ -165,6 +167,11 @@ namespace eduThings
 
 		fastFunctsHelpers::setCryptedString(&entry->UnitCardTga, newCard);
 	}
+	NOINLINE EOP_EXPORT EduEntry* getEduEntry(int Idx)
+	{
+		EduEntry* entry = fastFunctsHelpers::getEDUEntryById(Idx);
+		return entry;
+	}
 	NOINLINE EOP_EXPORT void setEntryInfoCardTga(int entryIdx, const char* newCard)
 	{
 		EduEntry* entry = getEopEduEntry(entryIdx);
@@ -211,5 +218,12 @@ namespace eduThings
 		entry->localizedDescrShort = shDescrMem;
 		smallFuncs::createUniString(*entry->localizedDescrShort, newDecrShort);
 	}
-
+	NOINLINE EOP_EXPORT int getEduIndexByType(const char* type)
+	{
+		return fastFunctsHelpers::getEduIndex(type);
+	}
+	NOINLINE EOP_EXPORT EduEntry* getEduEntryByType(const char* type)
+	{
+		return fastFunctsHelpers::getEduEntryByName(type);
+	}
 };

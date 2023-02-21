@@ -21,6 +21,9 @@ void dataOffsets::initDataOffsets(int gameVer)
 
 		offsets.guildDataStart = 0x018FD958;
 
+		//gets used in adding building capabilities function for some reason just following what game does
+		offsets.edbDataStart = 0x018940C0;
+
 
 		offsets.audioEnable = (bool*)0x016818cd;
 		offsets.audioMaster_vol = (int*)0x01681910;
@@ -45,6 +48,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 
 		offsets.guildDataStart = 0x18B47E8;
 
+		//gets used in adding building capabilities function for some reason just following what game does
+		offsets.edbDataStart = 0x01861438;
 
 		offsets.audioEnable = (bool*)0x01639f1d;
 		offsets.audioMaster_vol = (int*)0x01639f60;

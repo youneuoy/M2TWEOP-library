@@ -41,6 +41,15 @@ int initPlugin(std::string* modPath)
     fName = "findSettlement";
     plugData::data.funcs.findSettlement.Load(&plPath, &fName);
 
+    fName = "deleteFort";
+    plugData::data.funcs.deleteFort.Load(&plPath, &fName);
+
+    fName = "createFortXY";
+    plugData::data.funcs.createFortXY.Load(&plPath, &fName);
+
+    fName = "createFort";
+    plugData::data.funcs.createFort.Load(&plPath, &fName);
+
     fName = "getRegionOwner";
     plugData::data.funcs.getRegionOwner.Load(&plPath, &fName);
 
@@ -62,6 +71,18 @@ int initPlugin(std::string* modPath)
 
     fName = "setScriptCounter";
     plugData::data.funcs.setScriptCounter.Load(&plPath, &fName);
+
+    fName = "changeSettlementName";
+    plugData::data.funcs.changeSettlementName.Load(&plPath, &fName);
+
+    fName = "changeFactionName";
+    plugData::data.funcs.changeFactionName.Load(&plPath, &fName);
+
+    fName = "changeRegionName";
+    plugData::data.funcs.changeRegionName.Load(&plPath, &fName);
+
+    fName = "changeRebelsName";
+    plugData::data.funcs.changeRebelsName.Load(&plPath, &fName);
 
 
     fName = "createUniString";
@@ -225,6 +246,15 @@ int initPlugin(std::string* modPath)
      
     fName = "getEopEduEntry";
     plugData::data.funcsEopEdu.getEopEduEntry.Load(&plPath, &fName);    
+     
+    fName = "getEduEntry";
+    plugData::data.funcsEopEdu.getEduEntry.Load(&plPath, &fName);    
+     
+    fName = "getEduEntryByType";
+    plugData::data.funcsEopEdu.getEduEntryByType.Load(&plPath, &fName);    
+     
+    fName = "getEduIndexByType";
+    plugData::data.funcsEopEdu.getEduIndexByType.Load(&plPath, &fName);    
     
     fName = "getDataEopEdu";
     plugData::data.funcsEopEdu.getDataEopEdu.Load(&plPath, &fName); 
@@ -260,7 +290,61 @@ int initPlugin(std::string* modPath)
     fName = "GetUnitSize";
     plugData::data.funcs.GetUnitSize.Load(&plPath, &fName);
 
+    //eop build functions
 
+    fName = "addEopBuildEntry";
+    plugData::data.funcs.addEopBuildEntry.Load(&plPath, &fName);
+
+    fName = "getEopBuildEntry";
+    plugData::data.funcs.getEopBuildEntry.Load(&plPath, &fName);
+
+    fName = "setBuildingPic";
+    plugData::data.funcs.setBuildingPic.Load(&plPath, &fName);
+
+    fName = "setBuildingPicConstructed";
+    plugData::data.funcs.setBuildingPicConstructed.Load(&plPath, &fName);
+
+    fName = "setBuildingPicConstruction";
+    plugData::data.funcs.setBuildingPicConstruction.Load(&plPath, &fName);
+
+    fName = "setBuildingLocalizedName";
+    plugData::data.funcs.setBuildingLocalizedName.Load(&plPath, &fName);
+
+    fName = "setBuildingLocalizedDescr";
+    plugData::data.funcs.setBuildingLocalizedDescr.Load(&plPath, &fName);
+
+    fName = "setBuildingLocalizedDescrShort";
+    plugData::data.funcs.setBuildingLocalizedDescrShort.Load(&plPath, &fName);
+
+    fName = "addBuildingCapability";
+    plugData::data.funcs.addBuildingCapability.Load(&plPath, &fName);
+
+    fName = "removeBuildingCapability";
+    plugData::data.funcs.removeBuildingCapability.Load(&plPath, &fName);
+
+    fName = "getBuildingCapability";
+    plugData::data.funcs.getBuildingCapability.Load(&plPath, &fName);
+
+    fName = "getBuildingCapabilityNum";
+    plugData::data.funcs.getBuildingCapabilityNum.Load(&plPath, &fName);
+
+    fName = "addBuildingPool";
+    plugData::data.funcs.addBuildingPool.Load(&plPath, &fName);
+
+    fName = "removeBuildingPool";
+    plugData::data.funcs.removeBuildingPool.Load(&plPath, &fName);
+
+    fName = "getBuildingPool";
+    plugData::data.funcs.getBuildingPool.Load(&plPath, &fName);
+
+    fName = "getBuildingPoolNum";
+    plugData::data.funcs.getBuildingPoolNum.Load(&plPath, &fName);
+
+    fName = "createEOPBuilding";
+    plugData::data.funcs.createEOPBuilding.Load(&plPath, &fName);
+
+    fName = "getBuildingByName";
+    plugData::data.funcs.getBuildingByName.Load(&plPath, &fName);
 
     //fbx
     fName = "addFbxModel";

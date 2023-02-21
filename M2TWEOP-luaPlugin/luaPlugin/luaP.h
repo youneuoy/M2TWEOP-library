@@ -61,6 +61,7 @@ class luaP
 {
 public:
 	static std::vector<std::string> logS;
+	static std::vector<std::string> logCommands;
 	std::string luaPath;
 	bool checkVar(const char* gName, int variable);
 
@@ -158,8 +159,8 @@ public:
 		sol::usertype<stackStruct>stackStruct;
 		sol::usertype<building>building;
 		sol::usertype<siegeS>siege;
-		sol::usertype<building_data>building_data;
-		sol::usertype<buildingDrawInfo>buildingDrawInfo;
+		sol::usertype<edbEntry>edbEntry;
+		sol::usertype<buildingLevel>buildingLevel;
 
 	}types;
 	*/

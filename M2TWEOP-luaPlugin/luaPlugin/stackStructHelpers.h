@@ -14,5 +14,6 @@ namespace stackStructHelpers
 	unit* createUnit(stackStruct* army, const char* type, int exp, int arm, int weap);
 	unit* createUnitByIDX(stackStruct* army,int typeIDX, int exp, int arm, int weap);
 	unit* createEOPUnit(stackStruct* army,int typeIDX, int exp, int arm, int weap);
+	void mergeArmies(stackStruct* army, stackStruct* targetArmy);
 };
 

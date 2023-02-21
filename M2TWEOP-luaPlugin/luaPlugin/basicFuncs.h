@@ -98,6 +98,7 @@ class technicalFuncs
 public:
 	ProcLoader<void(__cdecl*)(UNICODE_STRING**&, const char*)> createUniString;
 };
+
 class basicFuncs
 {
 public:
@@ -117,6 +118,13 @@ public:
 	ProcLoader<fortStruct* (__cdecl*)(int x, int y)> findFort;
 
 	ProcLoader<factionStruct* (__cdecl*)(int regionID)> getRegionOwner;
+	ProcLoader<void (__cdecl*)(settlementStruct* sett, const char* newName)> changeSettlementName;
+	ProcLoader<void (__cdecl*)(factionStruct* fac, const char* newName)> changeFactionName;
+	ProcLoader<void (__cdecl*)(regionStruct* region, const char* newName)> changeRegionName;
+	ProcLoader<void (__cdecl*)(regionStruct* region, const char* newName)> changeRebelsName;
+	ProcLoader<void(__cdecl*)(const factionStruct* fac, fortStruct* fort)> deleteFort;
+	ProcLoader<void(__cdecl*)(const factionStruct* fac, int x, int y)> createFortXY;
+	ProcLoader<void(__cdecl*)(const general* gen)> createFort;
 	ProcLoader<gameDataAllStruct* (__cdecl*)()> getGameDataAll;
 
 
@@ -205,6 +213,26 @@ public:
 
 
 	ProcLoader<int (_cdecl*)()> GetUnitSize;
+	
+	//build functions
+	ProcLoader<edbEntry* (__cdecl*)(edbEntry*, int)>addEopBuildEntry;
+	ProcLoader<edbEntry* (__cdecl*)(int)>getEopBuildEntry;
+	ProcLoader<void (__cdecl*)(edbEntry*, const char*, int, int)>setBuildingPic;
+	ProcLoader<void (__cdecl*)(edbEntry*, const char*, int, int)>setBuildingPicConstructed;
+	ProcLoader<void (__cdecl*)(edbEntry*, const char*, int, int)>setBuildingPicConstruction;
+	ProcLoader<void (__cdecl*)(edbEntry*, const char*, int, int)>setBuildingLocalizedName;
+	ProcLoader<void (__cdecl*)(edbEntry*, const char*, int, int)>setBuildingLocalizedDescr;
+	ProcLoader<void (__cdecl*)(edbEntry*, const char*, int, int)>setBuildingLocalizedDescrShort;
+	ProcLoader<void (__cdecl*)(edbEntry*, int, int, int16_t, bool)>addBuildingCapability;
+	ProcLoader<void (__cdecl*)(edbEntry*, int, int)>removeBuildingCapability;
+	ProcLoader<BuildingLvlCapability* (__cdecl*)(edbEntry*, int, int)>getBuildingCapability;
+	ProcLoader<int (__cdecl*)(edbEntry*, int)>getBuildingCapabilityNum;
+	ProcLoader<void (__cdecl*)(edbEntry*, int, int, float, float, float, int32_t)>addBuildingPool;
+	ProcLoader<void (__cdecl*)(edbEntry*, int, int)>removeBuildingPool;
+	ProcLoader<recruitPool* (__cdecl*)(edbEntry*, int, int)>getBuildingPool;
+	ProcLoader<int (__cdecl*)(edbEntry*, int)>getBuildingPoolNum;
+	ProcLoader<void (__cdecl*)(settlementStruct* , int, int)>createEOPBuilding;
+	ProcLoader<edbEntry* (__cdecl*)(const char*)>getBuildingByName;
 
 };
 
@@ -216,6 +244,9 @@ public:
 	ProcLoader<EduEntry* (__cdecl*)(int, int)> addEopEduEntry;
 	ProcLoader<EduEntry* (__cdecl*)(const char*, int)> addEopEduEntryFromFile;
 	ProcLoader<EduEntry* (__cdecl*)(int)> getEopEduEntry;
+	ProcLoader<EduEntry* (__cdecl*)(int)> getEduEntry;
+	ProcLoader<EduEntry* (__cdecl*)(const char*)> getEduEntryByType;
+	ProcLoader<int (__cdecl*)(const char*)> getEduIndexByType;
 	ProcLoader<int(__cdecl*)(int)> getDataEopEdu;
 
 
@@ -227,6 +258,7 @@ public:
 	ProcLoader<void(__cdecl*)(int, const char*)> setEntryLocalizedDescr;
 	ProcLoader<void(__cdecl*)(int, const char*)> setEntryLocalizedShortDescr;
 };
+
 
 class eopFbxFuncs
 {

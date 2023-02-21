@@ -13,8 +13,8 @@ namespace fastFunctsHelpers
 	//copy crypt to next 4 bytes after pointer
 	NOINLINE EOP_EXPORT void setCryptedString(char** targetS, const char* newS);
 
-	int getEDUIndex(const char* type);
-	EduEntry* getEDUEntry(const char* type);
+	int getEduIndex(const char* type);
+	EduEntry* getEduEntryByName(const char* type);
 	EduEntry* getEDUEntryById(int id);
 
 	char** makeCryptedString(const char* string);

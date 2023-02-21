@@ -21,10 +21,11 @@ namespace eduThings
 	NOINLINE EOP_EXPORT EduEntry* addEopEduEntryFromFile(const char*fileName, int newIdx);
 	NOINLINE EOP_EXPORT EduEntry* addEopEduEntry(int baseIdx , int newIdx);
 	NOINLINE EOP_EXPORT EduEntry* getEopEduEntry(int idx);
+	NOINLINE EOP_EXPORT EduEntry* getEduEntry(int idx);
 
 
 	NOINLINE EOP_EXPORT  char* getEopNameOfEduEntry(EduEntry*entryAdress);
-	//used for creatinon of new units, etc
+	//used for creation of new units, etc
 	NOINLINE EOP_EXPORT int getDataEopEdu(int idx);
 	NOINLINE EOP_EXPORT int* tryFindDataEopEdu(char* entryName);
 
@@ -37,5 +38,7 @@ namespace eduThings
 	NOINLINE EOP_EXPORT void setEntryLocalizedName(int entryIdx,const char*newName);
 	NOINLINE EOP_EXPORT void setEntryLocalizedDescr(int entryIdx,const char*newDesr);
 	NOINLINE EOP_EXPORT void setEntryLocalizedShortDescr(int entryIdx,const char*newDecrShort);
+	NOINLINE EOP_EXPORT int getEduIndexByType(const char* type);
+	NOINLINE EOP_EXPORT EduEntry* getEduEntryByType(const char* type);
 };
 

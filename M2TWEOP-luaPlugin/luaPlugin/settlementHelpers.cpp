@@ -45,6 +45,10 @@ void settlementHelpers::createBuilding(settlementStruct* sett, const char* build
 {
 	(*(*plugData::data.funcs.createBuilding))(sett, building_level_id);
 }
+void settlementHelpers::changeSettlementName(settlementStruct* sett, const char* newName)
+{
+	(*(*plugData::data.funcs.changeSettlementName))(sett, newName);
+}
 
 int settlementHelpers::getGuildStanding(settlementStruct* sett, int index)
 {

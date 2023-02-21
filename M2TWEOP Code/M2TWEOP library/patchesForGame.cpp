@@ -108,6 +108,35 @@ int __fastcall patchesForGame::onCreateUnit(int* edbIndex, int** edb, char** ent
 
 	return *edbIndex; 
 }
+int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduindex)
+{
+	if (eduindex == -1)
+	{
+		int* newEdu = eduThings::tryFindDataEopEdu(*entryName);
+
+		if (newEdu == nullptr)
+		{
+			return  -1;
+		}
+
+		return 0;
+	}
+
+	return eduindex;
+}
+EduEntry* __fastcall patchesForGame::OnCreateMercUnit(char** entryName, EduEntry* entry)
+{
+	DWORD entryAddr = (DWORD)entry;
+	DWORD mercEOPValue = codes::offsets.mercEOPValue;//this is some weird address made by subtracting a value from edu start or something I dont really remember but its necesarry 
+	if (entryAddr == mercEOPValue)
+	{
+		int* eduindex = eduThings::tryFindDataEopEduIndex(*entryName);
+		EduEntry* eopentry = eduThings::getEopEduEntry(*eduindex);
+		return eopentry;
+	}
+
+	return entry;
+}
 const char* __fastcall patchesForGame::onQuickSave()
 {
 	static std::vector<std::string> saveNames={ u8"%S-1.sav" ,u8"%S-2.sav", u8"%S-3.sav" };
@@ -489,6 +518,34 @@ void __fastcall patchesForGame::OnStopCharacter(general* character)
 	if (campaign->humanPlayers<2)
 	{
 		character->isStopCharacterNeeded = 1;
+	}
+}
+
+void __fastcall patchesForGame::recruitEOPunit(DWORD eduoffset, DWORD pad, regionStruct* region, int eduindex, int factionid, int exp, int minusone, int armlvl, int wplvl)
+{ 
+	int regionID = region->regionID;
+	if (eduindex > 499)
+	{	
+		int eopIDX = eduThings::getDataEopEdu(eduindex);
+		fastFuncts::createUnitEDB(eopIDX, regionID, factionid, exp, armlvl, wplvl);
+	}
+	else
+	{
+		fastFuncts::createUnitIdx(eduindex, regionID, factionid, exp, armlvl, wplvl);
+	}
+}
+
+void __fastcall patchesForGame::recruitEOPMercunit(DWORD pad, DWORD pad2, regionStruct* region, int eduindex, int factionid, int exp)
+{ 
+	int regionID = region->regionID;
+	if (eduindex > 499)
+	{	
+		int eopIDX = eduThings::getDataEopEdu(eduindex);
+		fastFuncts::createUnitEDB(eopIDX, regionID, factionid, exp, 0, 0);
+	}
+	else
+	{
+		fastFuncts::createUnitIdx(eduindex, regionID, factionid, exp, 0, 0);
 	}
 }
 

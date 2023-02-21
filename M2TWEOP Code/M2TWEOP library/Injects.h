@@ -778,6 +778,32 @@ private:
 	LPVOID funcAddress;
 };
 
+class OnCreateMercUnit
+	:public AATemplate
+{
+public:
+	OnCreateMercUnit(MemWork* mem, LPVOID addr, int ver);
+	~OnCreateMercUnit();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class OnCreateMercUnitCheck
+	:public AATemplate
+{
+public:
+	OnCreateMercUnitCheck(MemWork* mem, LPVOID addr, int ver);
+	~OnCreateMercUnitCheck();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class OnQuickSave
 	:public AATemplate
 {
@@ -874,20 +900,18 @@ public:
 private:
 	LPVOID funcAddress;
 };
-//backspace patch
+
 class OnMoveRecruitQueue
 	:public AATemplate
 {
 public:
 	OnMoveRecruitQueue(MemWork* mem, LPVOID addr, int ver);
 	~OnMoveRecruitQueue();
-
 	void SetOriginialCode();
 	void SetNewCode();
 private:
 	LPVOID funcAddress;
 };
-
 
 //PathCashe crash fix
 class OnPathCasheCrashPlace
@@ -896,10 +920,37 @@ class OnPathCasheCrashPlace
 public:
 	OnPathCasheCrashPlace(MemWork* mem, LPVOID addr, int ver, LPVOID cbObj);
 	~OnPathCasheCrashPlace();
-
 	void SetOriginalCode();
 	void SetNewCode();
 private:
 	LPVOID funcAddress;
 	LPVOID callbackObject;
+};
+
+//create eop unit
+class recruitEOPunit
+	:public AATemplate
+{
+public:
+	recruitEOPunit(MemWork* mem, LPVOID addr, int ver);
+	~recruitEOPunit();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+//create eop unit
+class recruitEOPMercunit
+	:public AATemplate
+{
+public:
+	recruitEOPMercunit(MemWork* mem, LPVOID addr, int ver);
+	~recruitEOPMercunit();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
 };

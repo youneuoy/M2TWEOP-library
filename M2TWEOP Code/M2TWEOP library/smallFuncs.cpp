@@ -220,6 +220,41 @@ namespace smallFuncs
 		return retStruct;
 	}
 
+	NOINLINE EOP_EXPORT void changeSettlementName(settlementStruct* sett, const char* newName)
+	{
+
+		UNICODE_STRING** nameMem = new UNICODE_STRING*;
+		sett->localizedName = nameMem;
+
+		smallFuncs::createUniString(sett->localizedName, newName);
+	}
+
+	NOINLINE EOP_EXPORT void changeFactionName(factionStruct* fac, const char* newName)
+	{
+
+		UNICODE_STRING** nameMem = new UNICODE_STRING*;
+		fac->localizedName = nameMem;
+
+		smallFuncs::createUniString(fac->localizedName, newName);
+	}
+
+	NOINLINE EOP_EXPORT void changeRegionName(regionStruct* region, const char* newName)
+	{
+
+		UNICODE_STRING** nameMem = new UNICODE_STRING*;
+		region->localizedRegionName = nameMem;
+
+		smallFuncs::createUniString(region->localizedRegionName, newName);
+	}
+
+	NOINLINE EOP_EXPORT void changeRebelsName(regionStruct* region, const char* newName)
+	{
+
+		UNICODE_STRING** nameMem = new UNICODE_STRING*;
+		region->localizedRebelsName = nameMem;
+
+		smallFuncs::createUniString(region->localizedRebelsName, newName);
+	}
 
 	bool highlightOn = false;
 	NOINLINE EOP_EXPORT void swUnBMapHighlight()
@@ -230,11 +265,11 @@ namespace smallFuncs
 		DWORD codeAdr = 0;
 		if (globals::dataS.gamever == 2)//steam
 		{
-			codeAdr = 0x009e0ec4;
+			codeAdr = 0x009e1a64;
 		}
 		else
 		{
-			codeAdr = 0x009e1a64;
+			codeAdr = 0x009e0ec4;
 		}
 
 		if (!highlightOn)

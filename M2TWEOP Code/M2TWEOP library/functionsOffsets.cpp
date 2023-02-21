@@ -66,6 +66,10 @@ void codes::initCodes(int gameVer)
 
 
 		offsets.readEDUEntryFunc = 0x008ef2d0;
+		offsets.deleteFortFuncOne = 0x00BB5B80;
+		offsets.deleteFortFuncTwo = 0x004BCA80;
+		offsets.createFortFunc = 0x00714760;
+		offsets.mercEOPValue = 0x0190B928;
 	}
 	else if (gameVer == 2)
 	{
@@ -130,5 +134,9 @@ void codes::initCodes(int gameVer)
 
 
 		offsets.readEDUEntryFunc = 0x008efd50;
+		offsets.deleteFortFuncOne = 0x00bafef0;
+		offsets.deleteFortFuncTwo = 0x004bd010;
+		offsets.createFortFunc = 0x00714E60;
+		offsets.mercEOPValue = 0x018C27C8;
 	}
 }
