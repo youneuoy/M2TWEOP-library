@@ -1,5 +1,5 @@
 #include "buildingStructHelpers.h"
-
+#include "plugData.h"
 namespace buildingStructHelpers
 {
 	std::string getType(building* build)

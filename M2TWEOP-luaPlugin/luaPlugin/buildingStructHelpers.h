@@ -3,7 +3,6 @@
 #include "realGameTypes.h"
 #include "luaGetSetFuncs.h"
 #include "lua/sol.hpp"
-#include "plugData.h"
 
 #define edbEntryStruct_type 1
 #define buildingLevelStruct_name 1
