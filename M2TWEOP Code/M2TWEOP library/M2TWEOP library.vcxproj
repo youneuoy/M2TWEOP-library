@@ -233,6 +233,7 @@
     <ClInclude Include="DeveloperMode.h" />
     <ClInclude Include="eduFastFuncts.h" />
     <ClInclude Include="eduThings.h" />
+    <ClInclude Include="eopBuildings.h" />
     <ClInclude Include="eopSounds.h" />
     <ClInclude Include="eventsCodes.h" />
     <ClInclude Include="exportHeader.h" />
@@ -315,6 +316,7 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="eduFastFuncts.cpp" />
     <ClCompile Include="eduThings.cpp" />
+    <ClCompile Include="eopBuildings.cpp" />
     <ClCompile Include="eopSounds.cpp" />
     <ClCompile Include="fastFuncts.cpp" />
     <ClCompile Include="fastFunctsHelpers.cpp" />
