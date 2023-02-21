@@ -8,17 +8,16 @@
 
 ## **Release Notes**
 
-<!-- ### **Breaking Changes** -->
 
-<!-- ### **Launcher** -->
+
+### **Launcher**
 - New eop gameplay settings - *youneuoy*
 
-<!-- ### **Library** -->
-- Added Rtw-like Tactical Map Viewer. Works for any tile type, not only settlements. To activate click middle mouse button on any tile. - *youneuoy*
-- Fix for eopdu units so they always get unique internal ID - *Fynn*
+### **Library**
+- Added Rome: Total War like Tactical Map Viewer. Works for any tile type, not only settlements. To activate click 'Middle Mouse Button' on any tile. You can preview it [here!](https://www.youtube.com/watch?v=RrGi4zxr7bU) - *youneuoy*
 - New EOP buildings feature allowing making unique copies of buildings which you can change entirely. - *Fynn*
 
-<!-- ### **Lua Plugin** -->
+### **Lua Plugin**
 - Add EOP buildings. - *Fynn*
 - Add and remove capabilities and recruitment pools from buildings, change their names, descriptions and pics. - *Fynn*
 - Get EDB entry of a building by name. - *Fynn*
@@ -32,19 +31,27 @@
 - Add function to get region so you can iterate over them. - *Fynn*
 - Added function to merge 2 armies. - *Fynn*
 
+### **ImGUI**
+- New event `onLoadingFonts`. Use it for loading fonts for useing in IMGUI - *youneuoy*
+```lua
+function onLoadingFonts()
+    myCustomFont = ImGui.GetIO().Fonts:AddFontFromFileTTF(M2TWEOP.getModPath().."/eopData/fonts/customFont.ttf", 55, nil, nil);
+end
+```
+- Added `ImGui.GetStyle();` and style settings (undocumented for now!) - *youneuoy*
+- Added `ImGui.PushFont(font);`, `ImGui.PopFont();`. Use it in your draw function to change fonts. - *youneuoy*
+
 ### **Documentation**
 - Added Fynn's documentation and examples. Now pretty much every single function is now documented! - *Fynn and Medik*
-- New event `onLoadingFonts`. Use it for loading fonts for useing in IMGUI, like ` font = ImGui.GetIO().Fonts:AddFontFromFileTTF(M2TWEOP.getModPath().."/eopData/fonts/mainFont.ttf", 55,nil,nil);`  - *youneuoy*
-- Imgui: added `ImGui.GetStyle();` and style settings(undocumented now!) - *youneuoy*
-- Imgui: added `ImGui.PushFont(font);`, `ImGui.PopFont();`. Use it in your draw function to change fonts. - *youneuoy*
-- `onPluginLoad` function is now included by default with some valid options commeneted out and `M2TWEOP.unlockConsoleCommands()` enabled by default - *Medik* 
+- `onPluginLoad` function is now included by default with some valid options commeneted out and `M2TWEOP.unlockConsoleCommands()` enabled by default - *Medik*
 
-<!-- ### **Bugfixes** -->
-- Fixed battlemap highlight causing crashes. - *Fynn*
+### **Bugfixes**
+- Fixed Battlemap highlight causing crashes. - *Fynn*
+- Fix for EOPDU units so they always get unique internal ID - *Fynn*
 
 ### **Links**
 * [EOP Documentation](https://youneuoy.github.io/M2TWEOP-library/)
 * [EOP Discord](https://discord.gg/cG2Paep9)
 
-# Download
+### **Download**
 <a id="download"></a>
