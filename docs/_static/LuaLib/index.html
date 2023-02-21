@@ -138,6 +138,7 @@
     <li><a href="#character:moveToTile">character:moveToTile (xCoord, yCoord)</a></li>
     <li><a href="#character:reposition">character:reposition (xCoord, yCoord)</a></li>
     <li><a href="#character:kill">character:kill ()</a></li>
+    <li><a href="#character:createFort">character:createFort ()</a></li>
     <li><a href="#character:setBodyguardUnit">character:setBodyguardUnit (unit)</a></li>
 </details>
 
@@ -179,6 +180,9 @@
     <li><a href="#factionStruct:getFort">factionStruct:getFort (number)</a></li>
     <li><a href="#factionStruct:getPort">factionStruct:getPort (number)</a></li>
     <li><a href="#factionStruct:getWatchtower">factionStruct:getWatchtower (number)</a></li>
+    <li><a href="#factionStruct:deleteFort">factionStruct:deleteFort (fort)</a></li>
+    <li><a href="#factionStruct:createFortXY">factionStruct:createFortXY (X, Y)</a></li>
+    <li><a href="#factionStruct:changeFactionName">factionStruct:changeFactionName (name)</a></li>
 </details>
 
 
@@ -225,6 +229,7 @@
     <li><a href="#settlementStruct:destroyBuilding">settlementStruct:destroyBuilding (typeName, isReturnMoney)</a></li>
     <li><a href="#settlementStruct:getResource">settlementStruct:getResource (number)</a></li>
     <li><a href="#settlementStruct:getSiege">settlementStruct:getSiege (siegeIdx)</a></li>
+    <li><a href="#settlementStruct:changeSettlementName">settlementStruct:changeSettlementName (name)</a></li>
 </details>
 
 
@@ -278,6 +283,7 @@
     <li><a href="#stackStruct:createEOPUnit">stackStruct:createEOPUnit (index, exp, armor, weapon)</a></li>
     <li><a href="#stackStruct:createUnit">stackStruct:createUnit (type, exp, armor, weapon)</a></li>
     <li><a href="#stackStruct:createUnitByIDX">stackStruct:createUnitByIDX (index, exp, armor, weapon)</a></li>
+    <li><a href="#stackStruct:mergeArmies">stackStruct:mergeArmies (targetArmy)</a></li>
     <li><a href="#stackStruct:siegeSettlement">stackStruct:siegeSettlement (settlement)</a></li>
     <li><a href="#stackStruct:attackArmy">stackStruct:attackArmy (defender)</a></li>
 </details>
@@ -405,13 +411,69 @@
     <li><a href="#M2TWEOPDU.addEopEduEntryFromFile">M2TWEOPDU.addEopEduEntryFromFile (filepath, eopEnryIndex)</a></li>
     <li><a href="#M2TWEOPDU.addEopEduEntryFromEDUID">M2TWEOPDU.addEopEduEntryFromEDUID (baseEnryIndex, eopEnryIndex)</a></li>
     <li><a href="#M2TWEOPDU.getEopEduEntryByID">M2TWEOPDU.getEopEduEntryByID (eopEnryIndex)</a></li>
+    <li><a href="#M2TWEOPDU.getEduEntry">M2TWEOPDU.getEduEntry (EnryIndex)</a></li>
+    <li><a href="#M2TWEOPDU.getEduEntryByType">M2TWEOPDU.getEduEntryByType (type)</a></li>
+    <li><a href="#M2TWEOPDU.getEduIndexByType">M2TWEOPDU.getEduIndexByType (type)</a></li>
     <li><a href="#M2TWEOPDU.getDataEopDu">M2TWEOPDU.getDataEopDu (eopEnryIndex)</a></li>
     <li><a href="#M2TWEOPDU.setEntryUnitCardTga">M2TWEOPDU.setEntryUnitCardTga (eopEnryIndex, newCardTga)</a></li>
     <li><a href="#M2TWEOPDU.setEntryInfoCardTga">M2TWEOPDU.setEntryInfoCardTga (eopEnryIndex, newInfoCardTga)</a></li>
     <li><a href="#M2TWEOPDU.setEntrySoldierModel">M2TWEOPDU.setEntrySoldierModel (eopEnryIndex, newSoldierModel)</a></li>
+    <li><a href="#M2TWEOPDU.getArmourUpgradeLevelsNum">M2TWEOPDU.getArmourUpgradeLevelsNum (index)</a></li>
+    <li><a href="#M2TWEOPDU.setArmourUpgradeLevelsNum">M2TWEOPDU.setArmourUpgradeLevelsNum (index, amount)</a></li>
+    <li><a href="#M2TWEOPDU.getArmourUpgradeLevel">M2TWEOPDU.getArmourUpgradeLevel (index, levelidx)</a></li>
+    <li><a href="#M2TWEOPDU.setArmourUpgradeLevel">M2TWEOPDU.setArmourUpgradeLevel (index, levelidx, newlevel)</a></li>
+    <li><a href="#M2TWEOPDU.getArmourUpgradeLevelsNum">M2TWEOPDU.getArmourUpgradeLevelsNum (index)</a></li>
+    <li><a href="#M2TWEOPDU.setArmourUpgradeModelsNum">M2TWEOPDU.setArmourUpgradeModelsNum (index, amount)</a></li>
+    <li><a href="#M2TWEOPDU.getArmourUpgradeModel">M2TWEOPDU.getArmourUpgradeModel (index, levelidx)</a></li>
+    <li><a href="#M2TWEOPDU.setArmourUpgradeModel">M2TWEOPDU.setArmourUpgradeModel (index, levelidx, modelName)</a></li>
+    <li><a href="#M2TWEOPDU.setEntryAttackAttribute">M2TWEOPDU.setEntryAttackAttribute (index, attribute, enable, sec)</a></li>
+    <li><a href="#M2TWEOPDU.getEntryAttackAttribute">M2TWEOPDU.getEntryAttackAttribute (index, attribute, sec)</a></li>
+    <li><a href="#M2TWEOPDU.setEntryStat">M2TWEOPDU.setEntryStat (index, eduStat, value, sec)</a></li>
+    <li><a href="#M2TWEOPDU.getEntryStat">M2TWEOPDU.getEntryStat (index, eduStat, sec)</a></li>
     <li><a href="#M2TWEOPDU.setEntryLocalizedName">M2TWEOPDU.setEntryLocalizedName (eopEnryIndex, newLocalizedName)</a></li>
     <li><a href="#M2TWEOPDU.setEntryLocalizedDescr">M2TWEOPDU.setEntryLocalizedDescr (eopEnryIndex, newLocalizedDescr)</a></li>
     <li><a href="#M2TWEOPDU.setEntryLocalizedShortDescr">M2TWEOPDU.setEntryLocalizedShortDescr (eopEnryIndex, newLocalizedShortDescr)</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#edbEntry">edbEntry </a></summary>
+    <li><a href="#edbEntry">edbEntry</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#capability">capability </a></summary>
+    <li><a href="#capability">capability</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#recruitpool">recruitpool </a></summary>
+    <li><a href="#recruitpool">recruitpool</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#EDB">EDB </a></summary>
+    <li><a href="#EDB">EDB</a></li>
+    <li><a href="#EDB.addEopBuildEntry">EDB.addEopBuildEntry (edbEntry, newIndex)</a></li>
+    <li><a href="#EDB.getEopBuildEntry">EDB.getEopBuildEntry (index)</a></li>
+    <li><a href="#EDB.setBuildingPic">EDB.setBuildingPic (edbEntry, newPic, level, culture)</a></li>
+    <li><a href="#EDB.setBuildingPicConstructed">EDB.setBuildingPicConstructed (edbEntry, newPic, level, culture)</a></li>
+    <li><a href="#EDB.setBuildingPicConstruction">EDB.setBuildingPicConstruction (edbEntry, newPic, level, culture)</a></li>
+    <li><a href="#EDB.setBuildingLocalizedName">EDB.setBuildingLocalizedName (edbEntry, newName, level, facnum)</a></li>
+    <li><a href="#EDB.setBuildingLocalizedDescr">EDB.setBuildingLocalizedDescr (edbEntry, newName, level, facnum)</a></li>
+    <li><a href="#EDB.setBuildingLocalizedDescrShort">EDB.setBuildingLocalizedDescrShort (edbEntry, newName, level, facnum)</a></li>
+    <li><a href="#EDB.addBuildingCapability">EDB.addBuildingCapability (edbEntry, level, capability, value, bonus)</a></li>
+    <li><a href="#EDB.removeBuildingCapability">EDB.removeBuildingCapability (edbEntry, level, index)</a></li>
+    <li><a href="#EDB.getBuildingCapability">EDB.getBuildingCapability (edbEntry, level, index.)</a></li>
+    <li><a href="#EDB.getBuildingCapabilityNum">EDB.getBuildingCapabilityNum (edbEntry, level)</a></li>
+    <li><a href="#EDB.addBuildingPool">EDB.addBuildingPool (edbEntry, level, eduIndex, initialSize, gainPerTurn, maxSize, exp)</a></li>
+    <li><a href="#EDB.removeBuildingPool">EDB.removeBuildingPool (edbEntry, level, index)</a></li>
+    <li><a href="#EDB.getBuildingPool">EDB.getBuildingPool (edbEntry, level, index)</a></li>
+    <li><a href="#EDB.getBuildingPoolNum">EDB.getBuildingPoolNum (edbEntry, level)</a></li>
+    <li><a href="#EDB.getBuildingPoolNum">EDB.getBuildingPoolNum (buildingname)</a></li>
 </details>
 
 
@@ -427,6 +489,37 @@
     <li><a href="#campaignStruct:checkDipStance">campaignStruct:checkDipStance (checkType, fac1, fac2)</a></li>
     <li><a href="#campaignStruct:setDipStance">campaignStruct:setDipStance (relType, fac1, fac2)</a></li>
     <li><a href="#campaignStruct:GetUnitSize">campaignStruct:GetUnitSize ()</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#Strat_Map">Strat Map </a></summary>
+    <li><a href="#gameDataAll.stratMap">gameDataAll.stratMap</a></li>
+    <li><a href="#stratMap.getRegion">stratMap.getRegion (index)</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#Region">Region </a></summary>
+    <li><a href="#region">region</a></li>
+    <li><a href="#region:changeRegionName">region:changeRegionName (newName)</a></li>
+    <li><a href="#region:changeRebelsName">region:changeRebelsName (newName)</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#Merc_Pools">Merc Pools </a></summary>
+    <li><a href="#mercPool">mercPool</a></li>
+    <li><a href="#mercPool:getMercUnitNum">mercPool:getMercUnitNum ()</a></li>
+    <li><a href="#mercPool:addMercUnit">mercPool:addMercUnit (idx, exp, cost, repmin, repmax, maxunits, startpool, startyear, endyear, crusading)</a></li>
+    <li><a href="#mercPool:getMercUnit">mercPool:getMercUnit (idx)</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#Mercenary_units">Mercenary units </a></summary>
+    <li><a href="#mercPoolUnit">mercPoolUnit</a></li>
+    <li><a href="#mercPoolUnit:setMercReligion">mercPoolUnit:setMercReligion (religion, set)</a></li>
 </details>
 
 
@@ -509,7 +602,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-02-18 20:30:17</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-02-21 17:16:20</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -778,6 +871,10 @@
 	<td class="summary">Delete this character</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#character:createFort">character:createFort ()</a></td>
+	<td class="summary">Create a fort at the character's coordinates</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#character:setBodyguardUnit">character:setBodyguardUnit (unit)</a></td>
 	<td class="summary">Set bodyguard.</td>
 	</tr>
@@ -873,6 +970,18 @@
 	<td class="name" nowrap><a href="#factionStruct:getWatchtower">factionStruct:getWatchtower (number)</a></td>
 	<td class="summary">Get a watchtower using it's index.</td>
 	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#factionStruct:deleteFort">factionStruct:deleteFort (fort)</a></td>
+	<td class="summary">Delete a specific fort.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#factionStruct:createFortXY">factionStruct:createFortXY (X, Y)</a></td>
+	<td class="summary">Create a fort at the specified coordinates.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#factionStruct:changeFactionName">factionStruct:changeFactionName (name)</a></td>
+	<td class="summary">Change the faction's localized (in-game) name.</td>
+	</tr>
 </table>
 <h2><a href="#FactionStratMapStruct">FactionStratMapStruct </a></h2>
 <table class="function_list">
@@ -954,6 +1063,10 @@
 	<tr>
 	<td class="name" nowrap><a href="#settlementStruct:getSiege">settlementStruct:getSiege (siegeIdx)</a></td>
 	<td class="summary">Get a specific siege by it's index</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#settlementStruct:changeSettlementName">settlementStruct:changeSettlementName (name)</a></td>
+	<td class="summary">Change the settlement's localized (in-game) name.</td>
 	</tr>
 </table>
 <h2><a href="#Building">Building </a></h2>
@@ -1064,6 +1177,10 @@
 	<tr>
 	<td class="name" nowrap><a href="#stackStruct:createUnitByIDX">stackStruct:createUnitByIDX (index, exp, armor, weapon)</a></td>
 	<td class="summary">Create a unit in the army by index from export_descr_unit.txt</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#stackStruct:mergeArmies">stackStruct:mergeArmies (targetArmy)</a></td>
+	<td class="summary">Merge 2 armies on the strat map.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#stackStruct:siegeSettlement">stackStruct:siegeSettlement (settlement)</a></td>
@@ -1523,6 +1640,18 @@
 	<td class="summary">Get eduEntry of a M2TWEOPDU entry.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#M2TWEOPDU.getEduEntry">M2TWEOPDU.getEduEntry (EnryIndex)</a></td>
+	<td class="summary">Get eduEntry by index.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOPDU.getEduEntryByType">M2TWEOPDU.getEduEntryByType (type)</a></td>
+	<td class="summary">Get eduEntry by edu type name.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOPDU.getEduIndexByType">M2TWEOPDU.getEduIndexByType (type)</a></td>
+	<td class="summary">Get edu index by edu type name.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.getDataEopDu">M2TWEOPDU.getDataEopDu (eopEnryIndex)</a></td>
 	<td class="summary">Get data of a M2TWEOPDU entry.</td>
 	</tr>
@@ -1539,6 +1668,54 @@
 	<td class="summary">Set unit info card for a M2TWEOPDU entry.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#M2TWEOPDU.getArmourUpgradeLevelsNum">M2TWEOPDU.getArmourUpgradeLevelsNum (index)</a></td>
+	<td class="summary">Get the amount of numbers in the armour<em>upg</em>levels line in export<em>descr</em>unit.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOPDU.setArmourUpgradeLevelsNum">M2TWEOPDU.setArmourUpgradeLevelsNum (index, amount)</a></td>
+	<td class="summary">Set the amount of armour<em>upg</em>levels, if you increase the amount of levels the last number entry will be repeated.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOPDU.getArmourUpgradeLevel">M2TWEOPDU.getArmourUpgradeLevel (index, levelidx)</a></td>
+	<td class="summary">Get armour upgrade level number at specified index.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOPDU.setArmourUpgradeLevel">M2TWEOPDU.setArmourUpgradeLevel (index, levelidx, newlevel)</a></td>
+	<td class="summary">Set armour upgrade level number at specified index.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOPDU.getArmourUpgradeLevelsNum">M2TWEOPDU.getArmourUpgradeLevelsNum (index)</a></td>
+	<td class="summary">Get the amount of models in the armour<em>upg</em>models line in export<em>descr</em>unit.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOPDU.setArmourUpgradeModelsNum">M2TWEOPDU.setArmourUpgradeModelsNum (index, amount)</a></td>
+	<td class="summary">Set the amount of armour<em>upg</em>levels, if you increase the amount of models the last model entry will be repeated.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOPDU.getArmourUpgradeModel">M2TWEOPDU.getArmourUpgradeModel (index, levelidx)</a></td>
+	<td class="summary">Get armour upgrade level number at specified index.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOPDU.setArmourUpgradeModel">M2TWEOPDU.setArmourUpgradeModel (index, levelidx, modelName)</a></td>
+	<td class="summary">Set the unit model at specified index.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOPDU.setEntryAttackAttribute">M2TWEOPDU.setEntryAttackAttribute (index, attribute, enable, sec)</a></td>
+	<td class="summary">Set a primary or secondary attack attribute of an edu entry.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOPDU.getEntryAttackAttribute">M2TWEOPDU.getEntryAttackAttribute (index, attribute, sec)</a></td>
+	<td class="summary">Get a primary or secondary attack attribute from an edu entry.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOPDU.setEntryStat">M2TWEOPDU.setEntryStat (index, eduStat, value, sec)</a></td>
+	<td class="summary">Set any of the basic unit stats of an edu entry.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOPDU.getEntryStat">M2TWEOPDU.getEntryStat (index, eduStat, sec)</a></td>
+	<td class="summary">Get any of the basic unit stats of an edu entry.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.setEntryLocalizedName">M2TWEOPDU.setEntryLocalizedName (eopEnryIndex, newLocalizedName)</a></td>
 	<td class="summary">Set localized name for a M2TWEOPDU entry.</td>
 	</tr>
@@ -1549,6 +1726,104 @@
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.setEntryLocalizedShortDescr">M2TWEOPDU.setEntryLocalizedShortDescr (eopEnryIndex, newLocalizedShortDescr)</a></td>
 	<td class="summary">Set localized short description for M2TWEOPDU entry.</td>
+	</tr>
+</table>
+<h2><a href="#edbEntry">edbEntry </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#edbEntry">edbEntry</a></td>
+	<td class="summary">Basic edbEntry table.</td>
+	</tr>
+</table>
+<h2><a href="#capability">capability </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#capability">capability</a></td>
+	<td class="summary">Basic capability table.</td>
+	</tr>
+</table>
+<h2><a href="#recruitpool">recruitpool </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#recruitpool">recruitpool</a></td>
+	<td class="summary">Basic recruitpool table.</td>
+	</tr>
+</table>
+<h2><a href="#EDB">EDB </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#EDB">EDB</a></td>
+	<td class="summary">Basic EDB table.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.addEopBuildEntry">EDB.addEopBuildEntry (edbEntry, newIndex)</a></td>
+	<td class="summary">Create new EOP Building entry</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.getEopBuildEntry">EDB.getEopBuildEntry (index)</a></td>
+	<td class="summary">Get EOP Building entry.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.setBuildingPic">EDB.setBuildingPic (edbEntry, newPic, level, culture)</a></td>
+	<td class="summary">Set picture of building.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.setBuildingPicConstructed">EDB.setBuildingPicConstructed (edbEntry, newPic, level, culture)</a></td>
+	<td class="summary">Set constructed picture of building.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.setBuildingPicConstruction">EDB.setBuildingPicConstruction (edbEntry, newPic, level, culture)</a></td>
+	<td class="summary">Set construction picture of building.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.setBuildingLocalizedName">EDB.setBuildingLocalizedName (edbEntry, newName, level, facnum)</a></td>
+	<td class="summary">Set name of a building.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.setBuildingLocalizedDescr">EDB.setBuildingLocalizedDescr (edbEntry, newName, level, facnum)</a></td>
+	<td class="summary">Set description of a building.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.setBuildingLocalizedDescrShort">EDB.setBuildingLocalizedDescrShort (edbEntry, newName, level, facnum)</a></td>
+	<td class="summary">Set short description of a building.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.addBuildingCapability">EDB.addBuildingCapability (edbEntry, level, capability, value, bonus)</a></td>
+	<td class="summary">Add a capability to a building.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.removeBuildingCapability">EDB.removeBuildingCapability (edbEntry, level, index)</a></td>
+	<td class="summary">Remove a capability from a building.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.getBuildingCapability">EDB.getBuildingCapability (edbEntry, level, index.)</a></td>
+	<td class="summary">Get capability from a building at an index.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.getBuildingCapabilityNum">EDB.getBuildingCapabilityNum (edbEntry, level)</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.addBuildingPool">EDB.addBuildingPool (edbEntry, level, eduIndex, initialSize, gainPerTurn, maxSize, exp)</a></td>
+	<td class="summary">Add a recruitment pool to a building.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.removeBuildingPool">EDB.removeBuildingPool (edbEntry, level, index)</a></td>
+	<td class="summary">Remove a recruitment pool from a building.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.getBuildingPool">EDB.getBuildingPool (edbEntry, level, index)</a></td>
+	<td class="summary">Get a recruitment pool from a building by index.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.getBuildingPoolNum">EDB.getBuildingPoolNum (edbEntry, level)</a></td>
+	<td class="summary">Get a recruitment pool count.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#EDB.getBuildingPoolNum">EDB.getBuildingPoolNum (buildingname)</a></td>
+	<td class="summary">Get a building edb entry by name.</td>
 	</tr>
 </table>
 <h2><a href="#Campaign_Enums">Campaign Enums </a></h2>
@@ -1575,6 +1850,62 @@
 	<tr>
 	<td class="name" nowrap><a href="#campaignStruct:GetUnitSize">campaignStruct:GetUnitSize ()</a></td>
 	<td class="summary">Get size of unit(i.e.</td>
+	</tr>
+</table>
+<h2><a href="#Strat_Map">Strat Map </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#gameDataAll.stratMap">gameDataAll.stratMap</a></td>
+	<td class="summary">Basic strat map table.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#stratMap.getRegion">stratMap.getRegion (index)</a></td>
+	<td class="summary">Get a specific region by index.</td>
+	</tr>
+</table>
+<h2><a href="#Region">Region </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#region">region</a></td>
+	<td class="summary">Basic region table.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#region:changeRegionName">region:changeRegionName (newName)</a></td>
+	<td class="summary">Change region name (reset on reload).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#region:changeRebelsName">region:changeRebelsName (newName)</a></td>
+	<td class="summary">Change rebels name (reset on reload).</td>
+	</tr>
+</table>
+<h2><a href="#Merc_Pools">Merc Pools </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#mercPool">mercPool</a></td>
+	<td class="summary">Basic mercenary pool table.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mercPool:getMercUnitNum">mercPool:getMercUnitNum ()</a></td>
+	<td class="summary">Get amount of mercenary units a region has.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mercPool:addMercUnit">mercPool:addMercUnit (idx, exp, cost, repmin, repmax, maxunits, startpool, startyear, endyear, crusading)</a></td>
+	<td class="summary">Add a new mercenary unit to a pool.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mercPool:getMercUnit">mercPool:getMercUnit (idx)</a></td>
+	<td class="summary">Get a mercenary unit from a pool by index.</td>
+	</tr>
+</table>
+<h2><a href="#Mercenary_units">Mercenary units </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#mercPoolUnit">mercPoolUnit</a></td>
+	<td class="summary">Basic mercenary unit table.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mercPoolUnit:setMercReligion">mercPoolUnit:setMercReligion (religion, set)</a></td>
+	<td class="summary">Set or remove a religion requirement for a mercenary unit.</td>
 	</tr>
 </table>
 <h2><a href="#gameDataAll">gameDataAll </a></h2>
@@ -3339,7 +3670,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
         </li>
         <li><span class="parameter">kill</span>
-            <span class="types"><a class="type" href="index.html#character:kill">kill</a></span>
+            <span class="types"><a class="type" href="index.html#unit:kill">kill</a></span>
 
 
 
@@ -3706,7 +4037,13 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
         </li>
         <li><span class="parameter">kill</span>
-            <span class="types"><a class="type" href="index.html#character:kill">kill</a></span>
+            <span class="types"><a class="type" href="index.html#unit:kill">kill</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">createFort</span>
+            <span class="types"><a class="type" href="index.html#character:createFort">createFort</a></span>
 
 
 
@@ -3893,6 +4230,25 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     <h3>Usage:</h3>
     <ul>
         <pre class="example">ourCharacter:kill();</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "character:createFort"></a>
+    <strong>character:createFort ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Create a fort at the character's coordinates
+    </div>
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">ourCharacter:createFort();</pre>
     </ul>
 
 </dd>
@@ -4806,6 +5162,12 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
 
 
         </li>
+        <li><span class="parameter">cultureID</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
         <li><span class="parameter">ai_label</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
 
@@ -4846,6 +5208,12 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
 
 
         </li>
+        <li><span class="parameter">kingsPurse</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
         <li><span class="parameter">facStrat</span>
             <span class="types"><a class="type" href="index.html#factionStratMapStruct">factionStratMapStruct</a></span>
 
@@ -4867,7 +5235,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
          includes all the characters present on the strat map
         </li>
         <li><span class="parameter">getCharacter</span>
-            <span class="types"><a class="type" href="index.html#factionStruct:getCharacter">getCharacter</a></span>
+            <span class="types"><a class="type" href="index.html#stackStruct:getCharacter">getCharacter</a></span>
 
 
 
@@ -4928,6 +5296,24 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
         </li>
         <li><span class="parameter">getWatchtower</span>
             <span class="types"><a class="type" href="index.html#factionStruct:getWatchtower">getWatchtower</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">deleteFort</span>
+            <span class="types"><a class="type" href="index.html#factionStruct:deleteFort">deleteFort</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">createFortXY</span>
+            <span class="types"><a class="type" href="index.html#factionStruct:createFortXY">createFortXY</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">changeFactionName</span>
+            <span class="types"><a class="type" href="index.html#factionStruct:changeFactionName">changeFactionName</a></span>
 
 
 
@@ -5232,6 +5618,96 @@ ourFacName = ourFac:getFactionName();
 	watchtowerList = watchtowerList..<span class="string">"\n\t"</span>..i..<span class="string">" ("</span>..thisTower.xCoord..<span class="string">", "</span>..thisTower.yCoord..<span class="string">") "</span>
 <span class="keyword">end</span>
 <span class="global">print</span>(watchtowerList)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "factionStruct:deleteFort"></a>
+    <strong>factionStruct:deleteFort (fort)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Delete a specific fort.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fort</span>
+            <span class="types"><a class="type" href="index.html#fortStruct">fortStruct</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">fac:deleteFort(someFort)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "factionStruct:createFortXY"></a>
+    <strong>factionStruct:createFortXY (X, Y)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Create a fort at the specified coordinates.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">X</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">Y</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">fac:createFortXY(<span class="number">193</span>, <span class="number">283</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "factionStruct:changeFactionName"></a>
+    <strong>factionStruct:changeFactionName (name)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Change the faction's localized (in-game) name.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">fac:changeFactionName(<span class="string">"Byzantium"</span>)</pre>
     </ul>
 
 </dd>
@@ -5967,6 +6443,34 @@ currSet:changeOwner(fac1);
     </ul>
 
 </dd>
+    <dt>
+    <a name = "settlementStruct:changeSettlementName"></a>
+    <strong>settlementStruct:changeSettlementName (name)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Change the settlement's localized (in-game) name.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">sett:changeSettlementName(<span class="string">"Constantinople"</span>)</pre>
+    </ul>
+
+</dd>
 </dl>
     <h2 class="section-header "><a name="Building"></a>Building </h2>
 
@@ -5996,6 +6500,12 @@ currSet:changeOwner(fac1);
         </li>
         <li><span class="parameter">settlement</span>
             <span class="types"><a class="type" href="index.html#settlementStruct">settlementStruct</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">edbEntry</span>
+            <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
 
 
 
@@ -6607,7 +7117,7 @@ currSet:changeOwner(fac1);
 
         </li>
         <li><span class="parameter">getCharacter</span>
-            <span class="types"><a class="type" href="index.html#factionStruct:getCharacter">getCharacter</a></span>
+            <span class="types"><a class="type" href="index.html#stackStruct:getCharacter">getCharacter</a></span>
 
 
 
@@ -6668,6 +7178,12 @@ currSet:changeOwner(fac1);
         </li>
         <li><span class="parameter">createUnit</span>
             <span class="types"><a class="type" href="index.html#stackStruct:createUnit">createUnit</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">mergeArmies</span>
+            <span class="types"><a class="type" href="index.html#stackStruct:mergeArmies">mergeArmies</a></span>
 
 
 
@@ -6978,6 +7494,34 @@ ourChar:kill();</pre>
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><span class="keyword">local</span> newUnit=stackStruct:createUnitByIDX(<span class="number">255</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "stackStruct:mergeArmies"></a>
+    <strong>stackStruct:mergeArmies (targetArmy)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Merge 2 armies on the strat map.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">targetArmy</span>
+            <span class="types"><a class="type" href="index.html#stackStruct">stackStruct</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">army:mergeArmies(anotherArmy);</pre>
     </ul>
 
 </dd>
@@ -11220,6 +11764,107 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
 
 </dd>
     <dt>
+    <a name = "M2TWEOPDU.getEduEntry"></a>
+    <strong>M2TWEOPDU.getEduEntry (EnryIndex)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get eduEntry by index.  Needed to change many parameters of the entry.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">EnryIndex</span>
+            <span class="types"><span class="type">int</span></span>
+         Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#eduEntry">eduEntry</a></span>
+        retEntry
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> eduEntry=M2TWEOPDU.getEduEntry(<span class="number">5</span>);
+eduEntry.SoldierCount=<span class="number">20</span>;
+eduEntry.Width=<span class="number">1.5</span>;</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOPDU.getEduEntryByType"></a>
+    <strong>M2TWEOPDU.getEduEntryByType (type)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get eduEntry by edu type name.  Needed to change many parameters of the entry.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">type</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Unit type as in export<em>descr</em>unit.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#eduEntry">eduEntry</a></span>
+        retEntry
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> eduEntry=M2TWEOPDU.getEduEntryByType(<span class="string">"Peasants"</span>);
+eduEntry.SoldierCount=<span class="number">20</span>;
+eduEntry.Width=<span class="number">1.5</span>;</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOPDU.getEduIndexByType"></a>
+    <strong>M2TWEOPDU.getEduIndexByType (type)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get edu index by edu type name.  Needed to use many edu functions.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">type</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Unit type as in export<em>descr</em>unit.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        eduindex
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> eduindex=M2TWEOPDU.getEduIndexByType(<span class="string">"Peasants"</span>);
+M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, <span class="number">1</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
     <a name = "M2TWEOPDU.getDataEopDu"></a>
     <strong>M2TWEOPDU.getDataEopDu (eopEnryIndex)</strong>
     </dt>
@@ -11348,6 +11993,444 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
 
 </dd>
     <dt>
+    <a name = "M2TWEOPDU.getArmourUpgradeLevelsNum"></a>
+    <strong>M2TWEOPDU.getArmourUpgradeLevelsNum (index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get the amount of numbers in the armour<em>upg</em>levels line in export<em>descr</em>unit.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+         Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        ArmourUpgradeLevelsNum
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">M2TWEOPDU.getArmourUpgradeLevelsNum(<span class="number">1000</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOPDU.setArmourUpgradeLevelsNum"></a>
+    <strong>M2TWEOPDU.setArmourUpgradeLevelsNum (index, amount)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set the amount of armour<em>upg</em>levels, if you increase the amount of levels the last number entry will be repeated.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+         Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+        </li>
+        <li><span class="parameter">amount</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">M2TWEOPDU.setArmourUpgradeLevelsNum(<span class="number">1000</span>, <span class="number">3</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOPDU.getArmourUpgradeLevel"></a>
+    <strong>M2TWEOPDU.getArmourUpgradeLevel (index, levelidx)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get armour upgrade level number at specified index.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+         Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+        </li>
+        <li><span class="parameter">levelidx</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        level
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">M2TWEOPDU.getArmourUpgradeLevel(<span class="number">1000</span>, <span class="number">0</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOPDU.setArmourUpgradeLevel"></a>
+    <strong>M2TWEOPDU.setArmourUpgradeLevel (index, levelidx, newlevel)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set armour upgrade level number at specified index.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+         Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+        </li>
+        <li><span class="parameter">levelidx</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">newlevel</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">M2TWEOPDU.setArmourUpgradeLevel(<span class="number">1000</span>, <span class="number">1</span>, <span class="number">4</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOPDU.getArmourUpgradeLevelsNum"></a>
+    <strong>M2TWEOPDU.getArmourUpgradeLevelsNum (index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get the amount of models in the armour<em>upg</em>models line in export<em>descr</em>unit.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+         Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        ArmourUpgradeLevelsNum
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">M2TWEOPDU.getArmourUpgradeModelsNum(<span class="number">1000</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOPDU.setArmourUpgradeModelsNum"></a>
+    <strong>M2TWEOPDU.setArmourUpgradeModelsNum (index, amount)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set the amount of armour<em>upg</em>levels, if you increase the amount of models the last model entry will be repeated.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+         Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+        </li>
+        <li><span class="parameter">amount</span>
+            <span class="types"><span class="type">int</span></span>
+         Maximum: 4
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">M2TWEOPDU.setArmourUpgradeModelsNum(<span class="number">1000</span>, <span class="number">3</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOPDU.getArmourUpgradeModel"></a>
+    <strong>M2TWEOPDU.getArmourUpgradeModel (index, levelidx)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get armour upgrade level number at specified index.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+         Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+        </li>
+        <li><span class="parameter">levelidx</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        modelName
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">M2TWEOPDU.getArmourUpgradeModel(<span class="number">1000</span>, <span class="number">0</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOPDU.setArmourUpgradeModel"></a>
+    <strong>M2TWEOPDU.setArmourUpgradeModel (index, levelidx, modelName)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set the unit model at specified index.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+         Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+        </li>
+        <li><span class="parameter">levelidx</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">modelName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">M2TWEOPDU.setArmourUpgradeModel(<span class="number">1000</span>, <span class="number">1</span>, <span class="number">4</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOPDU.setEntryAttackAttribute"></a>
+    <strong>M2TWEOPDU.setEntryAttackAttribute (index, attribute, enable, sec)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set a primary or secondary attack attribute of an edu entry.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+         Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+        </li>
+        <li><span class="parameter">attribute</span>
+            <span class="types"><span class="type">int</span></span>
+         Use the attackAttr enum: attackAttr.spear, attackAttr.light<em>spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short</em>pike, attackAttr.long<em>pike, attackAttr.spear</em>bonus<em>12, attackAttr.spear</em>bonus<em>10, attackAttr.spear</em>bonus<em>8, attackAttr.spear</em>bonus<em>6, attackAttr.spear</em>bonus_4.
+        </li>
+        <li><span class="parameter">enable</span>
+            <span class="types"><span class="type">boolean</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">sec</span>
+            <span class="types"><span class="type">int</span></span>
+         1 = primary, 2 = secondary.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">M2TWEOPDU.setEntryAttackAttribute(<span class="number">1000</span>, attackAttr.ap, <span class="keyword">true</span>, <span class="number">1</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOPDU.getEntryAttackAttribute"></a>
+    <strong>M2TWEOPDU.getEntryAttackAttribute (index, attribute, sec)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a primary or secondary attack attribute from an edu entry.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+         Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+        </li>
+        <li><span class="parameter">attribute</span>
+            <span class="types"><span class="type">int</span></span>
+         Use the attackAttr enum: attackAttr.spear, attackAttr.light<em>spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short</em>pike, attackAttr.long<em>pike, attackAttr.spear</em>bonus<em>12, attackAttr.spear</em>bonus<em>10, attackAttr.spear</em>bonus<em>8, attackAttr.spear</em>bonus<em>6, attackAttr.spear</em>bonus_4.
+        </li>
+        <li><span class="parameter">sec</span>
+            <span class="types"><span class="type">int</span></span>
+         1 = primary, 2 = secondary.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        hasAttackAttribute
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">M2TWEOPDU.getEntryAttackAttribute(<span class="number">1000</span>, attackAttr.ap, <span class="number">1</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOPDU.setEntryStat"></a>
+    <strong>M2TWEOPDU.setEntryStat (index, eduStat, value, sec)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set any of the basic unit stats of an edu entry.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+         Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+        </li>
+        <li><span class="parameter">eduStat</span>
+            <span class="types"><span class="type">int</span></span>
+         Use the eduStat enum: eduStat.armour, eduStat.defense, eduStat.shield, eduStat.attack, eduStat.charge.
+        </li>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">sec</span>
+            <span class="types"><span class="type">int</span></span>
+         1 = primary, 2 = secondary.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">M2TWEOPDU.setEntryStat(<span class="number">1000</span>, attackAttr.attack, <span class="number">1</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOPDU.getEntryStat"></a>
+    <strong>M2TWEOPDU.getEntryStat (index, eduStat, sec)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get any of the basic unit stats of an edu entry.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+         Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+        </li>
+        <li><span class="parameter">eduStat</span>
+            <span class="types"><span class="type">int</span></span>
+         Use the eduStat enum: eduStat.armour, eduStat.defense, eduStat.shield, eduStat.attack, eduStat.charge.
+        </li>
+        <li><span class="parameter">sec</span>
+            <span class="types"><span class="type">int</span></span>
+         1 = primary, 2 = secondary.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        unitStat
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">M2TWEOPDU.getEntryStat(<span class="number">1000</span>, attackAttr.attack, <span class="number">1</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
     <a name = "M2TWEOPDU.setEntryLocalizedName"></a>
     <strong>M2TWEOPDU.setEntryLocalizedName (eopEnryIndex, newLocalizedName)</strong>
     </dt>
@@ -11440,6 +12523,1002 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
     <h3>Usage:</h3>
     <ul>
         <pre class="example">M2TWEOPDU.setEntryLocalizedShortDescr(<span class="number">1000</span>,<span class="string">"This is test unit short description\n123321\nCreated with m2tweop"</span>);</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="edbEntry"></a>edbEntry </h2>
+
+          <div class="section-description">
+           Table
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "edbEntry"></a>
+    <strong>edbEntry</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic edbEntry table.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">buildingID</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">classification</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">isCoreBuilding</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">isPort</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">isCoreBuilding2</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">hasReligion</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">religionID</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">isHinterland</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">isFarm</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">buildingLevelCount</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="capability"></a>capability </h2>
+
+          <div class="section-description">
+           Table
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "capability"></a>
+    <strong>capability</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic capability table.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">capabilityType</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">capabilityLvl</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">capabilityID</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="recruitpool"></a>recruitpool </h2>
+
+          <div class="section-description">
+           Table
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "recruitpool"></a>
+    <strong>recruitpool</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic recruitpool table.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">capabilityType</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">capabilityLvlorExp</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">unitID</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">initialSize</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">initialSize</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">gainPerTurn</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">maxSize</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="EDB"></a>EDB </h2>
+
+          <div class="section-description">
+           Table
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "EDB"></a>
+    <strong>EDB</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic EDB table.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">addEopBuildEntry</span>
+            <span class="types"><a class="type" href="index.html#EDB.addEopBuildEntry">addEopBuildEntry</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getEopBuildEntry</span>
+            <span class="types"><a class="type" href="index.html#EDB.getEopBuildEntry">getEopBuildEntry</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setBuildingPic</span>
+            <span class="types"><a class="type" href="index.html#EDB.setBuildingPic">setBuildingPic</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setBuildingPicConstructed</span>
+            <span class="types"><a class="type" href="index.html#EDB.setBuildingPicConstructed">setBuildingPicConstructed</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setBuildingPicConstruction</span>
+            <span class="types"><a class="type" href="index.html#EDB.setBuildingPicConstruction">setBuildingPicConstruction</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setBuildingLocalizedName</span>
+            <span class="types"><a class="type" href="index.html#EDB.setBuildingLocalizedName">setBuildingLocalizedName</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setBuildingLocalizedDescr</span>
+            <span class="types"><a class="type" href="index.html#EDB.setBuildingLocalizedDescr">setBuildingLocalizedDescr</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setBuildingLocalizedDescrShort</span>
+            <span class="types"><a class="type" href="index.html#EDB.setBuildingLocalizedDescrShort">setBuildingLocalizedDescrShort</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">addBuildingCapability</span>
+            <span class="types"><a class="type" href="index.html#EDB.addBuildingCapability">addBuildingCapability</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">removeBuildingCapability</span>
+            <span class="types"><a class="type" href="index.html#EDB.removeBuildingCapability">removeBuildingCapability</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getBuildingCapability</span>
+            <span class="types"><a class="type" href="index.html#EDB.getBuildingCapability">getBuildingCapability</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getBuildingCapabilityNum</span>
+            <span class="types"><a class="type" href="index.html#EDB.getBuildingCapabilityNum">getBuildingCapabilityNum</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">addBuildingPool</span>
+            <span class="types"><a class="type" href="index.html#EDB.addBuildingPool">addBuildingPool</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">removeBuildingPool</span>
+            <span class="types"><a class="type" href="index.html#EDB.removeBuildingPool">removeBuildingPool</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getBuildingPool</span>
+            <span class="types"><a class="type" href="index.html#EDB.getBuildingPool">getBuildingPool</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getBuildingPoolNum</span>
+            <span class="types"><a class="type" href="index.html#EDB.getBuildingPoolNum">getBuildingPoolNum</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">createEOPBuilding</span>
+            <span class="types"><span class="type">createEOPBuilding</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">getBuildingByName</span>
+            <span class="types"><span class="type">getBuildingByName</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "EDB.addEopBuildEntry"></a>
+    <strong>EDB.addEopBuildEntry (edbEntry, newIndex)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Create new EOP Building entry
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">edbEntry</span>
+            <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+         Old entry.
+        </li>
+        <li><span class="parameter">newIndex</span>
+            <span class="types"><span class="type">int</span></span>
+         New index of new entry.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+        eopentry.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">oldBuilding = EDB.getBuildingByName(<span class="string">"market"</span>)
+newBuilding = EDB.addEopBuildEntry(myBuilding,<span class="number">150</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "EDB.getEopBuildEntry"></a>
+    <strong>EDB.getEopBuildEntry (index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get EOP Building entry.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+         Index of eop entry.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+        eopentry.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">building = EDB.getEopBuildEntry(<span class="number">150</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "EDB.setBuildingPic"></a>
+    <strong>EDB.setBuildingPic (edbEntry, newPic, level, culture)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set picture of building.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">edbEntry</span>
+            <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+         Entry to set.
+        </li>
+        <li><span class="parameter">newPic</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Path to new pic.
+        </li>
+        <li><span class="parameter">level</span>
+            <span class="types"><span class="type">int</span></span>
+         Building level to set pic for.
+        </li>
+        <li><span class="parameter">culture</span>
+            <span class="types"><span class="type">int</span></span>
+         ID of the culture to set the pic for.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.setBuildingPic(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "EDB.setBuildingPicConstructed"></a>
+    <strong>EDB.setBuildingPicConstructed (edbEntry, newPic, level, culture)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set constructed picture of building.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">edbEntry</span>
+            <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+         Entry to set.
+        </li>
+        <li><span class="parameter">newPic</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Path to new pic.
+        </li>
+        <li><span class="parameter">level</span>
+            <span class="types"><span class="type">int</span></span>
+         Building level to set pic for.
+        </li>
+        <li><span class="parameter">culture</span>
+            <span class="types"><span class="type">int</span></span>
+         ID of the culture to set the pic for.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.setBuildingPicConstructed(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "EDB.setBuildingPicConstruction"></a>
+    <strong>EDB.setBuildingPicConstruction (edbEntry, newPic, level, culture)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set construction picture of building.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">edbEntry</span>
+            <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+         Entry to set.
+        </li>
+        <li><span class="parameter">newPic</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Path to new pic.
+        </li>
+        <li><span class="parameter">level</span>
+            <span class="types"><span class="type">int</span></span>
+         Building level to set pic for.
+        </li>
+        <li><span class="parameter">culture</span>
+            <span class="types"><span class="type">int</span></span>
+         ID of the culture to set the pic for.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.setBuildingPicConstruction(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "EDB.setBuildingLocalizedName"></a>
+    <strong>EDB.setBuildingLocalizedName (edbEntry, newName, level, facnum)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set name of a building.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">edbEntry</span>
+            <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+         Entry to set.
+        </li>
+        <li><span class="parameter">newName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         New name.
+        </li>
+        <li><span class="parameter">level</span>
+            <span class="types"><span class="type">int</span></span>
+         Building level.
+        </li>
+        <li><span class="parameter">facnum</span>
+            <span class="types"><span class="type">int</span></span>
+         Faction ID of the faction to set it for (dipNum).
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.setBuildingLocalizedName(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "EDB.setBuildingLocalizedDescr"></a>
+    <strong>EDB.setBuildingLocalizedDescr (edbEntry, newName, level, facnum)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set description of a building.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">edbEntry</span>
+            <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+         Entry to set.
+        </li>
+        <li><span class="parameter">newName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         New description.
+        </li>
+        <li><span class="parameter">level</span>
+            <span class="types"><span class="type">int</span></span>
+         Building level.
+        </li>
+        <li><span class="parameter">facnum</span>
+            <span class="types"><span class="type">int</span></span>
+         Faction ID of the faction to set it for (dipNum).
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.setBuildingLocalizedDescr(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "EDB.setBuildingLocalizedDescrShort"></a>
+    <strong>EDB.setBuildingLocalizedDescrShort (edbEntry, newName, level, facnum)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set short description of a building.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">edbEntry</span>
+            <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+         Entry to set.
+        </li>
+        <li><span class="parameter">newName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         New short description.
+        </li>
+        <li><span class="parameter">level</span>
+            <span class="types"><span class="type">int</span></span>
+         Building level.
+        </li>
+        <li><span class="parameter">facnum</span>
+            <span class="types"><span class="type">int</span></span>
+         Faction ID of the faction to set it for (dipNum).
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.setBuildingLocalizedDescrShort(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "EDB.addBuildingCapability"></a>
+    <strong>EDB.addBuildingCapability (edbEntry, level, capability, value, bonus)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Add a capability to a building.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">edbEntry</span>
+            <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+         Entry to set.
+        </li>
+        <li><span class="parameter">level</span>
+            <span class="types"><span class="type">int</span></span>
+         Building level.
+        </li>
+        <li><span class="parameter">capability</span>
+            <span class="types"><span class="type">int</span></span>
+         ID of capability to set.
+        </li>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">int</span></span>
+         Value to set.
+        </li>
+        <li><span class="parameter">bonus</span>
+            <span class="types"><span class="type">bool</span></span>
+         Is it bonus or not.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.addBuildingCapability(building, <span class="number">0</span>, <span class="number">55</span>, <span class="number">200</span>, <span class="keyword">true</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "EDB.removeBuildingCapability"></a>
+    <strong>EDB.removeBuildingCapability (edbEntry, level, index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Remove a capability from a building.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">edbEntry</span>
+            <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+         Entry to set.
+        </li>
+        <li><span class="parameter">level</span>
+            <span class="types"><span class="type">int</span></span>
+         Building level.
+        </li>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+         Which capability to remove (In order of iterating).
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.removeBuildingCapability(building, <span class="number">0</span>, <span class="number">3</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "EDB.getBuildingCapability"></a>
+    <strong>EDB.getBuildingCapability (edbEntry, level, index.)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get capability from a building at an index.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">edbEntry</span>
+            <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+         Entry to set.
+        </li>
+        <li><span class="parameter">level</span>
+            <span class="types"><span class="type">int</span></span>
+         Building level.
+        </li>
+        <li><span class="parameter">index.</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#capability">capability</a></span>
+        capability.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
+cap = EDB.getBuildingCapability(building, <span class="number">0</span>, <span class="number">3</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "EDB.getBuildingCapabilityNum"></a>
+    <strong>EDB.getBuildingCapabilityNum (edbEntry, level)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+
+<pre><code>Get capability amount from a building.
+</code></pre>
+
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">edbEntry</span>
+            <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+         Entry to set.
+        </li>
+        <li><span class="parameter">level</span>
+            <span class="types"><span class="type">int</span></span>
+         Building level.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        capabilityNum.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.getBuildingCapabilityNum(building, <span class="number">0</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "EDB.addBuildingPool"></a>
+    <strong>EDB.addBuildingPool (edbEntry, level, eduIndex, initialSize, gainPerTurn, maxSize, exp)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Add a recruitment pool to a building.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">edbEntry</span>
+            <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+         Entry to set.
+        </li>
+        <li><span class="parameter">level</span>
+            <span class="types"><span class="type">int</span></span>
+         Building level.
+        </li>
+        <li><span class="parameter">eduIndex</span>
+            <span class="types"><span class="type">int</span></span>
+         edu index of unit to add (EOP units not supported!).
+        </li>
+        <li><span class="parameter">initialSize</span>
+            <span class="types"><span class="type">float</span></span>
+         Initial pool.
+        </li>
+        <li><span class="parameter">gainPerTurn</span>
+            <span class="types"><span class="type">float</span></span>
+         Replenishment per turn.
+        </li>
+        <li><span class="parameter">maxSize</span>
+            <span class="types"><span class="type">float</span></span>
+         Maximum size.
+        </li>
+        <li><span class="parameter">exp</span>
+            <span class="types"><span class="type">int</span></span>
+         Initial experience.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.addBuildingPool(building, <span class="number">0</span>, <span class="number">55</span>, <span class="number">1</span>, <span class="number">0.1</span>, <span class="number">2</span>, <span class="number">0</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "EDB.removeBuildingPool"></a>
+    <strong>EDB.removeBuildingPool (edbEntry, level, index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Remove a recruitment pool from a building.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">edbEntry</span>
+            <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+         Entry to set.
+        </li>
+        <li><span class="parameter">level</span>
+            <span class="types"><span class="type">int</span></span>
+         Building level.
+        </li>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+         Which pool to remove (In order of iterating).
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.removeBuildingPool(building, <span class="number">0</span>, <span class="number">3</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "EDB.getBuildingPool"></a>
+    <strong>EDB.getBuildingPool (edbEntry, level, index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a recruitment pool from a building by index.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">edbEntry</span>
+            <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+         Entry to set.
+        </li>
+        <li><span class="parameter">level</span>
+            <span class="types"><span class="type">int</span></span>
+         Building level.
+        </li>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+         Which pool to get (In order of iterating).
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#recruitpool">recruitpool</a></span>
+        pool.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.getBuildingPool(building, <span class="number">0</span>, <span class="number">3</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "EDB.getBuildingPoolNum"></a>
+    <strong>EDB.getBuildingPoolNum (edbEntry, level)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a recruitment pool count.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">edbEntry</span>
+            <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+         Entry to set.
+        </li>
+        <li><span class="parameter">level</span>
+            <span class="types"><span class="type">int</span></span>
+         Building level.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        poolNum.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.getBuildingPoolNum(building, <span class="number">0</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "EDB.getBuildingPoolNum"></a>
+    <strong>EDB.getBuildingPoolNum (buildingname)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a building edb entry by name.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">buildingname</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#edbEntry">edbEntry</a></span>
+        entry
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)</pre>
     </ul>
 
 </dd>
@@ -11737,6 +13816,655 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
     <ul>
         <pre class="example"><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
 <span class="keyword">local</span> unitSize=campaign:GetUnitSize();</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Strat_Map"></a>Strat Map </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "gameDataAll.stratMap"></a>
+    <strong>gameDataAll.stratMap</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic strat map table.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">mapWidth</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">mapHeight</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">regionsNum</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">getRegion</span>
+            <span class="types"><a class="type" href="index.html#stratMap.getRegion">getRegion</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "stratMap.getRegion"></a>
+    <strong>stratMap.getRegion (index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a specific region by index.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#region">region</a></span>
+        region
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> stratmap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = stratMap.getRegion(<span class="number">2</span>);</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Region"></a>Region </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "region"></a>
+    <strong>region</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic region table.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">regionName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">settlementName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">legioName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">regionID</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">stacksNum</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">fortsNum</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">watchtowersNum</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">isSea</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">hasLake</span>
+            <span class="types"><span class="type">int</span></span>
+         (fully enclosed by region)
+        </li>
+        <li><span class="parameter">mercPool</span>
+            <span class="types"><a class="type" href="index.html#mercPool">mercPool</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">settlement</span>
+            <span class="types"><a class="type" href="index.html#settlementStruct">settlementStruct</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">tileCount</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">neighbourRegionsNum</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">resourcesNum</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">hiddenResources1</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">hiddenResources2</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">settlementXCoord</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">settlementYCoord</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">portEntranceXCoord</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">portEntranceYCoord</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">faction</span>
+            <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">rebelType</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">triumphValue</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">changeRegionName</span>
+            <span class="types"><a class="type" href="index.html#region:changeRegionName">changeRegionName</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">changeRebelsName</span>
+            <span class="types"><a class="type" href="index.html#region:changeRebelsName">changeRebelsName</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "region:changeRegionName"></a>
+    <strong>region:changeRegionName (newName)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Change region name (reset on reload).
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">newName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> stratmap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = stratMap.getRegion(<span class="number">2</span>);
+region:changeRegionName(<span class="string">"Macedonia"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "region:changeRebelsName"></a>
+    <strong>region:changeRebelsName (newName)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Change rebels name (reset on reload).
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">newName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> stratmap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = stratMap.getRegion(<span class="number">2</span>);
+region:changeRebelsName(<span class="string">"Macedonian Rebels"</span>)</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Merc_Pools"></a>Merc Pools </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "mercPool"></a>
+    <strong>mercPool</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic mercenary pool table.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getMercUnitNum</span>
+            <span class="types"><a class="type" href="index.html#mercPool:getMercUnitNum">getMercUnitNum</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">addMercUnit</span>
+            <span class="types"><a class="type" href="index.html#mercPool:addMercUnit">addMercUnit</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getMercUnit</span>
+            <span class="types"><a class="type" href="index.html#mercPool:getMercUnit">getMercUnit</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "mercPool:getMercUnitNum"></a>
+    <strong>mercPool:getMercUnitNum ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get amount of mercenary units a region has.
+    </div>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        mercUnitNum
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> stratmap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = stratMap.getRegion(<span class="number">2</span>);
+<span class="keyword">local</span> mercpool = region.mercPool;
+<span class="keyword">local</span> mercNum = mercPool:getMercUnitNum();</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "mercPool:addMercUnit"></a>
+    <strong>mercPool:addMercUnit (idx, exp, cost, repmin, repmax, maxunits, startpool, startyear, endyear, crusading)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Add a new mercenary unit to a pool.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">idx</span>
+            <span class="types"><span class="type">int</span></span>
+         EDU index, supports EOP units.
+        </li>
+        <li><span class="parameter">exp</span>
+            <span class="types"><span class="type">int</span></span>
+         Starting experience.
+        </li>
+        <li><span class="parameter">cost</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">repmin</span>
+            <span class="types"><span class="type">float</span></span>
+         Minimum replenishment rate.
+        </li>
+        <li><span class="parameter">repmax</span>
+            <span class="types"><span class="type">float</span></span>
+         Maximum replenishment rate.
+        </li>
+        <li><span class="parameter">maxunits</span>
+            <span class="types"><span class="type">int</span></span>
+         Maximum Pool.
+        </li>
+        <li><span class="parameter">startpool</span>
+            <span class="types"><span class="type">float</span></span>
+         Starting pool.
+        </li>
+        <li><span class="parameter">startyear</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">endyear</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">crusading</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#mercPoolUnit">mercPoolUnit</a></span>
+        mercunit
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> stratmap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = stratMap.getRegion(<span class="number">2</span>);
+<span class="keyword">local</span> mercpool = region.mercPool;
+<span class="keyword">local</span> mercUnit = mercPool:addMercUnit();</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "mercPool:getMercUnit"></a>
+    <strong>mercPool:getMercUnit (idx)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a mercenary unit from a pool by index.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">idx</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#mercPoolUnit">mercPoolUnit</a></span>
+        mercUnit
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> stratmap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = stratMap.getRegion(<span class="number">2</span>);
+<span class="keyword">local</span> mercpool = region.mercPool;
+<span class="keyword">local</span> mercNum = mercPool:getMercUnitNum();
+<span class="keyword">for</span> i = <span class="number">0</span>, mercNum-<span class="number">1</span> <span class="keyword">do</span>
+	<span class="keyword">local</span> mercUnit = mercPool:getMercUnit(i);
+<span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Mercenary_units"></a>Mercenary units </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "mercPoolUnit"></a>
+    <strong>mercPoolUnit</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic mercenary unit table.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">eduEntry</span>
+            <span class="types"><span class="type">EduEntry</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">experience</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">cost</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">replenishMin</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">replenishMax</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">maxUnits</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">currentPool</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">startYear</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">endYear</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">crusading</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">poolIndex</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">mercPoolUnitIndex</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">mercPool</span>
+            <span class="types"><a class="type" href="index.html#mercPool">mercPool</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setMercReligion</span>
+            <span class="types"><a class="type" href="index.html#mercPoolUnit:setMercReligion">setMercReligion</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "mercPoolUnit:setMercReligion"></a>
+    <strong>mercPoolUnit:setMercReligion (religion, set)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set or remove a religion requirement for a mercenary unit.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">religion</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">set</span>
+            <span class="types"><span class="type">bool</span></span>
+         True means enable this religion requirement, False means disable.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> stratmap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = stratMap.getRegion(<span class="number">2</span>);
+<span class="keyword">local</span> mercpool = region.mercPool;
+<span class="keyword">local</span> mercNum = mercPool:getMercUnitNum();
+<span class="keyword">for</span> i = <span class="number">0</span>, mercNum-<span class="number">1</span> <span class="keyword">do</span>
+	<span class="keyword">local</span> mercUnit = mercPool:getMercUnit(i);
+	mercUnit:setMercReligion(<span class="number">3</span>, <span class="keyword">true</span>)
+<span class="keyword">end</span></pre>
     </ul>
 
 </dd>
