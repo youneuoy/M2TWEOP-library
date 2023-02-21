@@ -53,3 +53,8 @@ runs:
         ls -l documentationGenerator/EOPDocs/build;
         ls -l documentationGenerator/EOPDocs/build/html;
       shell: bash
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: M2TWEOP-latest-build.zip
+        path: M2TWEOP.zip
