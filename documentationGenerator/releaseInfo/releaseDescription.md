@@ -8,8 +8,6 @@
 
 ## **Release Notes**
 
-
-
 ### **Launcher**
 - New eop gameplay settings - *youneuoy*
 
@@ -40,6 +38,9 @@ end
 ```
 - Added `ImGui.GetStyle();` and style settings (undocumented for now!) - *youneuoy*
 - Added `ImGui.PushFont(font);`, `ImGui.PopFont();`. Use it in your draw function to change fonts. - *youneuoy*
+
+![Screenshot 2023-02-21 at 14 05 23](https://user-images.githubusercontent.com/22448079/220367433-a825bd36-02a7-484f-a523-a58e4524f651.png)
+
 
 ### **Documentation**
 - Added Fynn's documentation and examples. Now pretty much every single function is now documented! - *Fynn and Medik*
