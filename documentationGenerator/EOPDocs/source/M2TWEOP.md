@@ -3,18 +3,18 @@
 ## Releases
 The latest version of M2TWEOP can be found at https://github.com/youneuoy/M2TWEOP-library/releases. For install instructions, please see the FAQ.
 
-## Creators
+### Developers
 * **youneuoy** - Project founder, Main Developer
 * **Jojo00182** - Great code contributions, engine bugfixes, reversing structs and much more
-* **Medik** - Creating documentation, setting up continous integration
+* **Medik** - Creating documentation and website, setting up continuous integration
+* **Fynn** - Testing, early adopter, great suggestions and many new events/documentation added
+* **Callistonian** - Editing of documentation, Lua examples, feedback and new events
 
 ## Contributors
 * **Edmond** - Project idea, first attempts to implement hotseats with online battles
 * **Xamax** - Video tutorials, testing and many great suggestions
 * **Erken** - Excellent IMGUI tutorials, Lua examples and feedback
 * **DinarMayor** - Testing, great suggestions and examples
-* **Fynn** - Testing, early adopter and great suggestions
-* **Callistonian** - editing of documentation, lua examples and feedback
 
 ## Compatibility
 This program works with game versions 1.5 (disk version) and 1.52 (steam version).

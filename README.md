@@ -77,18 +77,18 @@ For a full list of EOP Events, see [here](https://youneuoy.github.io/M2TWEOP-lib
 ## Getting Started
 [![M2TWEOP-Tutorials](https://i.imgur.com/ByebdSI.png)](https://youtu.be/hUvbcz8i7Wk)
 
-### Creators
+### Developers
 * **youneuoy** - Project founder, Main Developer
 * **Jojo00182** - Great code contributions, engine bugfixes, reversing structs and much more
-* **Medik** - Creating documentation, setting up continous integration
+* **Medik** - Creating documentation and website, setting up continuous integration
+* **Fynn** - Testing, early adopter, great suggestions and many new events/documentation added
+* **Callistonian** - Editing of documentation, Lua examples, feedback and new events
 
 ### Contributors
 * **Edmond** - Project idea, first attempts to implement hotseats with online battles
 * **Xamax** - Video tutorials, testing and many great suggestions
 * **Erken** - Excellent IMGUI tutorials, Lua examples and feedback
 * **DinarMayor** - Testing, great suggestions and examples
-* **Fynn** - Testing, early adopter and great suggestions
-* **Callistonian** - editing of documentation, lua examples and feedback
 
 ## Projects
 * [M2TWEOP Library](https://github.com/youneuoy/M2TWEOP-library) - Main project (C++ and Assembly)
