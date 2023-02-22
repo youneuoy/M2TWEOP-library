@@ -473,7 +473,7 @@
     <li><a href="#EDB.removeBuildingPool">EDB.removeBuildingPool (edbEntry, level, index)</a></li>
     <li><a href="#EDB.getBuildingPool">EDB.getBuildingPool (edbEntry, level, index)</a></li>
     <li><a href="#EDB.getBuildingPoolNum">EDB.getBuildingPoolNum (edbEntry, level)</a></li>
-    <li><a href="#EDB.getBuildingPoolNum">EDB.getBuildingPoolNum (buildingname)</a></li>
+    <li><a href="#EDB.getBuildingByName">EDB.getBuildingByName (buildingname)</a></li>
 </details>
 
 
@@ -602,7 +602,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-02-22 17:31:25</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-02-22 20:33:52</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -1822,7 +1822,7 @@
 	<td class="summary">Get a recruitment pool count.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#EDB.getBuildingPoolNum">EDB.getBuildingPoolNum (buildingname)</a></td>
+	<td class="name" nowrap><a href="#EDB.getBuildingByName">EDB.getBuildingByName (buildingname)</a></td>
 	<td class="summary">Get a building edb entry by name.</td>
 	</tr>
 </table>
@@ -12287,7 +12287,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
         </li>
         <li><span class="parameter">attribute</span>
             <span class="types"><span class="type">int</span></span>
-         Use the attackAttr enum: attackAttr.spear, attackAttr.light<em>spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short</em>pike, attackAttr.long<em>pike, attackAttr.spear</em>bonus<em>12, attackAttr.spear</em>bonus<em>10, attackAttr.spear</em>bonus<em>8, attackAttr.spear</em>bonus<em>6, attackAttr.spear</em>bonus_4.
+         Use the attackAttr enum: attackAttr.spear, attackAttr.light_spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short_pike, attackAttr.long_pike, attackAttr.spear_bonus_12, attackAttr.spear_bonus_10, attackAttr.spear_bonus_8, attackAttr.spear_bonus_6, attackAttr.spear_bonus_4.
         </li>
         <li><span class="parameter">enable</span>
             <span class="types"><span class="type">boolean</span></span>
@@ -12327,7 +12327,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
         </li>
         <li><span class="parameter">attribute</span>
             <span class="types"><span class="type">int</span></span>
-         Use the attackAttr enum: attackAttr.spear, attackAttr.light<em>spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short</em>pike, attackAttr.long<em>pike, attackAttr.spear</em>bonus<em>12, attackAttr.spear</em>bonus<em>10, attackAttr.spear</em>bonus<em>8, attackAttr.spear</em>bonus<em>6, attackAttr.spear</em>bonus_4.
+         Use the attackAttr enum: attackAttr.spear, attackAttr.light_spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short_pike, attackAttr.long_pike, attackAttr.spear_bonus_12, attackAttr.spear_bonus_10, attackAttr.spear_bonus_8, attackAttr.spear_bonus_6, attackAttr.spear_bonus_4.
         </li>
         <li><span class="parameter">sec</span>
             <span class="types"><span class="type">int</span></span>
@@ -12686,18 +12686,10 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
         </li>
         <li><span class="parameter">capabilityLvlorExp</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         Difference is for agents
         </li>
         <li><span class="parameter">unitID</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
-        </li>
-        <li><span class="parameter">initialSize</span>
-            <span class="types"><span class="type">float</span></span>
 
 
 
@@ -12841,14 +12833,8 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
 
         </li>
-        <li><span class="parameter">createEOPBuilding</span>
-            <span class="types"><span class="type">createEOPBuilding</span></span>
-
-
-
-        </li>
         <li><span class="parameter">getBuildingByName</span>
-            <span class="types"><span class="type">getBuildingByName</span></span>
+            <span class="types"><a class="type" href="index.html#EDB.getBuildingByName">getBuildingByName</a></span>
 
 
 
@@ -13489,8 +13475,8 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</pre>
 
 </dd>
     <dt>
-    <a name = "EDB.getBuildingPoolNum"></a>
-    <strong>EDB.getBuildingPoolNum (buildingname)</strong>
+    <a name = "EDB.getBuildingByName"></a>
+    <strong>EDB.getBuildingByName (buildingname)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -13999,15 +13985,11 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
         </li>
         <li><span class="parameter">hiddenResources1</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         (bitmap with 32 first hidden resources), needs to be converted to binary and then use bitwise operators from lua.
         </li>
         <li><span class="parameter">hiddenResources2</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         (bitmap last 32 first hidden resources), needs to be converted to binary and then use bitwise operators from lua.
         </li>
         <li><span class="parameter">settlementXCoord</span>
             <span class="types"><span class="type">int</span></span>
@@ -14247,15 +14229,11 @@ region:changeRebelsName(<span class="string">"Macedonian Rebels"</span>)</pre>
         </li>
         <li><span class="parameter">startyear</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         (0 to disable) Use 0 if the startyear is before the year you introduce the merc, not an earlier startyear!
         </li>
         <li><span class="parameter">endyear</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         (0 to disable)
         </li>
         <li><span class="parameter">crusading</span>
             <span class="types"><span class="type">int</span></span>
@@ -14279,7 +14257,7 @@ region:changeRebelsName(<span class="string">"Macedonian Rebels"</span>)</pre>
         <pre class="example"><span class="keyword">local</span> stratmap = gameDataAll.get().stratMap;
 <span class="keyword">local</span> region = stratMap.getRegion(<span class="number">2</span>);
 <span class="keyword">local</span> mercpool = region.mercPool;
-<span class="keyword">local</span> mercUnit = mercPool:addMercUnit();</pre>
+<span class="keyword">local</span> mercUnit = mercPool:addMercUnit(<span class="number">1907</span>, <span class="number">0</span>, <span class="number">570</span>, <span class="number">0.15</span>, <span class="number">0.35</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</pre>
     </ul>
 
 </dd>

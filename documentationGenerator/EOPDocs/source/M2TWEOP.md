@@ -7,7 +7,7 @@ The latest version of M2TWEOP can be found at https://github.com/youneuoy/M2TWEO
 * **youneuoy** - Project founder, Main Developer
 * **Jojo00182** - Great code contributions, engine bugfixes, reversing structs and much more
 * **Medik** - Creating documentation and website, setting up continuous integration
-* **Fynn** - Testing, early adopter, great suggestions and many new events/documentation added
+* **Fynn** - Testing, early adopter, great suggestions, reversing structs and many new events/documentation added
 * **Callistonian** - Editing of documentation, Lua examples, feedback and new events
 
 ## Contributors
@@ -22,7 +22,7 @@ This program works with game versions 1.5 (disk version) and 1.52 (steam version
 ## Usage
 * Check the [F.A.Q](https://youneuoy.github.io/M2TWEOP-library/faq.html#questions-and-answers)
 
-If you use an antivirus, add the program to the exceptions! There may be false positives.
+If you use an antivirus, add an exception to the Medieval II folder! There may be false positives.
 
 ## License
 The project uses the [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.html).
