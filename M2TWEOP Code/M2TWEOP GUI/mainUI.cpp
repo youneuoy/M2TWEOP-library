@@ -65,7 +65,7 @@ namespace mainUI
 		ImGui::SetNextWindowSize(ImVec2(windowSize.x, -1), ImGuiCond_Once);
 
 		// Set the title of the window and the main highlighted button to
-		// the name of the mod as defined in M2TWEOPGUI.cfg
+		// the name of the mod as defined in uiCfg.json
 		string windowTitle;
 		string runTitle;
 		string modTitle = dataG::data.gameData.modTitle;

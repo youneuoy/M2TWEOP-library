@@ -39,3 +39,4 @@ runs:
           add: 'docs --force'
           message: "Updated EOP Docs for ${{ inputs.commit_message_string }}"
           push: true
+          allowUpdates: true

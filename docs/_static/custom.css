@@ -65,8 +65,8 @@ a:hover {
 	height: 7vh;
 }
 
-.imageDiv:hover {
-    color: gold;
+.imageDiv img:hover {
+    transform: scale(1.2);
 }
 
 .imageDiv a {
@@ -98,7 +98,7 @@ h2 {
 .o { color: #00d0ff !important;}
 
 body {
-	background: linear-gradient(10deg, #210801, #070000);
+	background: linear-gradient(180deg, #de380a, #8c8c8c);
 }
 
 
@@ -120,6 +120,11 @@ body {
 	min-width: 1000px;
     height: 180px;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.imGuiImage {
+	max-width: 40%;
+	box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
 #m2tweop-medieval-2-engine-overhaul-project {
@@ -220,6 +225,10 @@ body {
     padding-bottom: 20px;
 }
 
+.imGuiImage:hover {
+	transform: scale(1.2);
+}
+
 /* width */
 ::-webkit-scrollbar {width: 15px;}
 
@@ -242,7 +251,7 @@ background: gold;
 }
 
 body {
-	background: linear-gradient(-45deg, #100400, #170000, #191919, #260000);
+	background: linear-gradient(-45deg, #000000, #320000, #000000, #4b0000);
 	background-size: 400% 400%;
 	animation: gradient 15s ease infinite;;
 	-moz-animation: gradient 15s ease infinite; /* Firefox */

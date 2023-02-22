@@ -25,6 +25,11 @@ jobs:
       - name: Build EOP
         uses: ./.github/workflows/composite-actions/build-eop
 
+      - uses: actions/upload-artifact@v3
+        with:
+          name: M2TWEOP-latest-build
+          path: M2TWEOP.zip
+
   # This job is used to update the online documentation
   # It requires a commit message beginning with 'Docs' to run
   update-docs:
@@ -86,4 +91,4 @@ jobs:
         bodyFile: "./documentationGenerator/releaseInfo/releaseDescription.md"
         token: ${{ secrets.GITHUB_TOKEN }}
         commit: "master"
-        allowUpdates: true
+        allowUpdates: false
