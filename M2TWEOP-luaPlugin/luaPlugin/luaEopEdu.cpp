@@ -281,7 +281,7 @@ void luaP::initEopEdu()
 	Set a primary or secondary attack attribute of an edu entry.
 	@function M2TWEOPDU.setEntryAttackAttribute
 	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
-	@tparam int attribute Use the attackAttr enum: attackAttr.spear, attackAttr.light_spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short_pike, attackAttr.long_pike, attackAttr.spear_bonus_12, attackAttr.spear_bonus_10, attackAttr.spear_bonus_8, attackAttr.spear_bonus_6, attackAttr.spear_bonus_4.
+	@tparam int attribute Use the attackAttr enum: attackAttr.spear, attackAttr.light\_spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short\_pike, attackAttr.long\_pike, attackAttr.spear\_bonus\_12, attackAttr.spear\_bonus\_10, attackAttr.spear\_bonus_8, attackAttr.spear\_bonus\_6, attackAttr.spear\_bonus\_4.
 	@tparam boolean enable
 	@tparam int sec 1 = primary, 2 = secondary.
 	@usage
@@ -293,7 +293,7 @@ void luaP::initEopEdu()
 	Get a primary or secondary attack attribute from an edu entry.
 	@function M2TWEOPDU.getEntryAttackAttribute
 	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
-	@tparam int attribute Use the attackAttr enum: attackAttr.spear, attackAttr.light_spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short_pike, attackAttr.long_pike, attackAttr.spear_bonus_12, attackAttr.spear_bonus_10, attackAttr.spear_bonus_8, attackAttr.spear_bonus_6, attackAttr.spear_bonus_4.
+	@tparam int attribute Use the attackAttr enum: attackAttr.spear, attackAttr.light\_spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short\_pike, attackAttr.long\_pike, attackAttr.spear\_bonus\_12, attackAttr.spear\_bonus\_10, attackAttr.spear\_bonus\_8, attackAttr.spear\_bonus\_6, attackAttr.spear\_bonus\_4.
 	@tparam int sec 1 = primary, 2 = secondary.
 	@treturn boolean hasAttackAttribute
 	@usage
@@ -417,9 +417,8 @@ void luaP::initEopEdu()
 	Basic recruitpool table.
 
 	@tfield int capabilityType
-	@tfield int capabilityLvlorExp
+	@tfield int capabilityLvlorExp Difference is for agents
 	@tfield int unitID
-	@tfield float initialSize
 	@tfield float initialSize
 	@tfield float gainPerTurn
 	@tfield float maxSize
@@ -456,7 +455,6 @@ void luaP::initEopEdu()
 	@tfield removeBuildingPool removeBuildingPool
 	@tfield getBuildingPool getBuildingPool
 	@tfield getBuildingPoolNum getBuildingPoolNum
-	@tfield createEOPBuilding createEOPBuilding
 	@tfield getBuildingByName getBuildingByName
 
 	@table EDB
@@ -679,7 +677,7 @@ void luaP::initEopEdu()
 
 	/***
 	Get a building edb entry by name.
-	@function EDB.getBuildingPoolNum
+	@function EDB.getBuildingByName
 	@tparam string buildingname
 	@treturn edbEntry entry
 	@usage

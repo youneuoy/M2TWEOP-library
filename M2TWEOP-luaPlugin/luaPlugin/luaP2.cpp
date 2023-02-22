@@ -196,8 +196,8 @@ void luaP::initCampaign()
 	@tfield int tileCount
 	@tfield int neighbourRegionsNum
 	@tfield int resourcesNum
-	@tfield int hiddenResources1
-	@tfield int hiddenResources2
+	@tfield int hiddenResources1 (bitmap with 32 first hidden resources), needs to be converted to binary and then use bitwise operators from lua.
+	@tfield int hiddenResources2 (bitmap last 32 first hidden resources), needs to be converted to binary and then use bitwise operators from lua.
 	@tfield int settlementXCoord
 	@tfield int settlementYCoord
 	@tfield int portEntranceXCoord
@@ -295,15 +295,15 @@ void luaP::initCampaign()
 	@tparam float repmax Maximum replenishment rate.
 	@tparam int maxunits Maximum Pool.
 	@tparam float startpool Starting pool.
-	@tparam int startyear
-	@tparam int endyear
+	@tparam int startyear (0 to disable) Use 0 if the startyear is before the year you introduce the merc, not an earlier startyear!
+	@tparam int endyear (0 to disable)
 	@tparam int crusading
 	@treturn mercPoolUnit mercunit
 	@usage
 	local stratmap = gameDataAll.get().stratMap;
 	local region = stratMap.getRegion(2);
 	local mercpool = region.mercPool;
-	local mercUnit = mercPool:addMercUnit();
+	local mercUnit = mercPool:addMercUnit(1907, 0, 570, 0.15, 0.35, 3, 3, 0, 0, 0);
 	*/
 	typeAll.mercPool.set_function("addMercUnit", &gameHelpers::addMercUnit);
 

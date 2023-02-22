@@ -3526,7 +3526,7 @@ recruitEOPMercunit::recruitEOPMercunit(MemWork* mem, LPVOID addr, int ver)
 		m_adress = 0x0060BC67;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x0060BC67;
+		m_adress = 0x0060BB57;
 }
 
 recruitEOPMercunit::~recruitEOPMercunit()
