@@ -22,7 +22,7 @@ This program works with game versions 1.5 (disk version) and 1.52 (steam version
 ## Usage
 * Check the [F.A.Q](https://youneuoy.github.io/M2TWEOP-library/faq.html#questions-and-answers)
 
-If you use an antivirus, add the program to the exceptions! There may be false positives.
+If you use an antivirus, add an exception to the Medieval II folder! There may be false positives.
 
 ## License
 The project uses the [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.html).
