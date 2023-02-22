@@ -65,8 +65,8 @@ a:hover {
 	height: 7vh;
 }
 
-.imageDiv:hover {
-    color: gold;
+.imageDiv img:hover {
+    transform: scale(1.2);
 }
 
 .imageDiv a {
@@ -98,7 +98,7 @@ h2 {
 .o { color: #00d0ff !important;}
 
 body {
-	background: linear-gradient(10deg, #210801, #070000);
+	background: linear-gradient(180deg, #de380a, #8c8c8c);
 }
 
 
@@ -225,6 +225,10 @@ body {
     padding-bottom: 20px;
 }
 
+.imGuiImage:hover {
+	transform: scale(1.2);
+}
+
 /* width */
 ::-webkit-scrollbar {width: 15px;}
 
@@ -247,7 +251,7 @@ background: gold;
 }
 
 body {
-	background: linear-gradient(-45deg, #100400, #170000, #191919, #260000);
+	background: linear-gradient(-45deg, #282200, #4c0101, #2a2400, #6d0000);
 	background-size: 400% 400%;
 	animation: gradient 15s ease infinite;;
 	-moz-animation: gradient 15s ease infinite; /* Firefox */

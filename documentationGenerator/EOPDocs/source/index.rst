@@ -75,8 +75,8 @@ M2TWEOP: Medieval 2 Engine Overhaul Project
 	</pre>
 
 	<h3>Creating custom UI's with M2TWEOP's ImGUI Lua Plugin</h3>
-	<img class="imGuiImage" src="https://cdn.discordapp.com/attachments/939640870343426059/1075868416470155364/image.png">
-	<img class="imGuiImage" src="https://cdn.discordapp.com/attachments/943211834947829800/1077682337166393344/options.jpg">
+	<a target="_blank" href="https://cdn.discordapp.com/attachments/939640870343426059/1075868416470155364/image.png"><img class="imGuiImage" src="https://cdn.discordapp.com/attachments/939640870343426059/1075868416470155364/image.png"></a>
+	<a target="_blank" href="https://cdn.discordapp.com/attachments/943211834947829800/1077682337166393344/options.jpg"><img class="imGuiImage" src="https://cdn.discordapp.com/attachments/943211834947829800/1077682337166393344/options.jpg"></a>
 
 	<h2>Videos</h2>
 	<div class="videoGallery">
