@@ -11,7 +11,7 @@
     - `M2TWEOP developer mode` (CTRL + 2)
     - `Tactical map viewer`
     - `Stratmap context menu`
- 
+
 ### **Library**
 - Added Rome: Total War like Tactical Map Viewer. Works for any tile type, not only settlements. To activate click 'Middle Mouse Button' on any tile. You can preview it [here!](https://www.youtube.com/watch?v=RrGi4zxr7bU) - *youneuoy*
 - New EOP buildings feature allowing making unique copies of buildings which you can change entirely. - *Fynn*
@@ -53,7 +53,7 @@ end
 
 ### **Links**
 * [EOP Documentation](https://youneuoy.github.io/M2TWEOP-library/)
-* [EOP Discord](https://discord.gg/cG2Paep9)
+* [EOP Discord](https://discord.gg/Epqjm8u2WK)
 
 ### **Download**
 <a id="download"></a>
