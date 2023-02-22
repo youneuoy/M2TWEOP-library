@@ -7,7 +7,7 @@ The latest version of M2TWEOP can be found at https://github.com/youneuoy/M2TWEO
 * **youneuoy** - Project founder, Main Developer
 * **Jojo00182** - Great code contributions, engine bugfixes, reversing structs and much more
 * **Medik** - Creating documentation and website, setting up continuous integration
-* **Fynn** - Testing, early adopter, great suggestions and many new events/documentation added
+* **Fynn** - Testing, early adopter, great suggestions, reversing structs and many new events/documentation added
 * **Callistonian** - Editing of documentation, Lua examples, feedback and new events
 
 ## Contributors
