@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Injects.h"
 
+
 Injects::Injects(MemWork* mem)
 	:AATemplate(mem)
 {
