@@ -92,7 +92,7 @@ class battleFuncs
 public:
 	ProcLoader<int(__cdecl*)(DWORD)> getBattleCondCode;
 	ProcLoader<void(__cdecl*)()> swUnBMapHighlight;
-	ProcLoader<void(__cdecl*)(signed short maxZoom)> changeBattlemapCameraDistance;
+	ProcLoader<void(__cdecl*)(int maxZoom)> changeBattlemapCameraDistance;
 };
 class technicalFuncs
 {

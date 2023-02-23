@@ -174,7 +174,7 @@ namespace m2tweopHelpers
 	{
 		(*(*plugData::data.funcsBattle.swUnBMapHighlight))();
 	}
-	void changeBattlemapCameraDistance(signed short maxZoom)
+	void changeBattlemapCameraDistance(int maxZoom)
 	{
 		(*(*plugData::data.funcsBattle.changeBattlemapCameraDistance))(maxZoom);
 	}
