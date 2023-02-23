@@ -149,7 +149,7 @@ void gameHelpers::setHiddenResource(regionStruct* region, int index, bool enable
 		}
 		else
 		{
-			region->hiddenResources1 = region->hiddenResources1 & (496 - set);
+			region->hiddenResources1 = region->hiddenResources1 & (0b1111111111111111 - set);
 		}
 	}
 	else if (index < 64) {
