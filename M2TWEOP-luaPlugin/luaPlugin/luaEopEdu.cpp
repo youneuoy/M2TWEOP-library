@@ -281,7 +281,7 @@ void luaP::initEopEdu()
 	Set a primary or secondary attack attribute of an edu entry.
 	@function M2TWEOPDU.setEntryAttackAttribute
 	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
-	@tparam int attribute Use the attackAttr enum: attackAttr.spear, attackAttr.light\_spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short\_pike, attackAttr.long\_pike, attackAttr.spear\_bonus\_12, attackAttr.spear\_bonus\_10, attackAttr.spear\_bonus_8, attackAttr.spear\_bonus\_6, attackAttr.spear\_bonus\_4.
+	@tparam int attribute Use the attackAttr enum: attackAttr.spear, attackAttr.light\_spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short\_pike, attackAttr.long\_pike, attackAttr.spear\_bonus\_12, attackAttr.spear\_bonus\_10, attackAttr.spear\_bonus\_8, attackAttr.spear\_bonus\_6, attackAttr.spear\_bonus\_4.
 	@tparam boolean enable
 	@tparam int sec 1 = primary, 2 = secondary.
 	@usage

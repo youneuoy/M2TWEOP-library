@@ -89,10 +89,80 @@ regionStruct* gameHelpers::getRegion(int index)
 	return &map->regions[index];
 }
 
-neighbourRegion* gameHelpers::getNeighbour(regionStruct* region, int index)
+oneTile* gameHelpers::getTile(int x, int y)
 {
-	neighbourRegion* nregion = ((region->neighbourRegions) + (0x58 * index));
-	return nregion;
+	gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+	stratMap* map = gameDataAll->stratMap;
+	return &map->tilesArr[gameDataAll->stratMap->mapWidth * y + x];
+}
+
+stackStruct* gameHelpers::getStack(const regionStruct* region, int index)
+{
+	return region->armies[index];
+}
+
+fortStruct* gameHelpers::getFort(const regionStruct* region, int index)
+{
+	return region->forts[index];
+}
+
+watchTowerStruct* gameHelpers::getWatchtower(const regionStruct* region, int index)
+{
+	return region->watchtowers[index];
+}
+
+resStrat* gameHelpers::getResource(const regionStruct* region, int index)
+{
+	return region->resources[index];
+}
+
+regionStruct* gameHelpers::getNeighbour(regionStruct* region, int index)
+{
+	return region->neighbourRegions[index]->region;
+}
+
+bool gameHelpers::getHiddenResource(regionStruct* region, int index)
+{
+	int resources;
+	int set = 1 << index;
+	if (index < 32)
+	{
+		resources = region->hiddenResources1;
+	}
+	else if (index < 64) {
+		index = index - 32;
+		resources = region->hiddenResources2;
+	} else {
+		return false;
+	}
+	return ((resources & set) != 0);
+}
+
+void gameHelpers::setHiddenResource(regionStruct* region, int index, bool enable)
+{
+	int set = 1 << index;
+	if (index < 32)
+	{
+		if (enable == true)
+		{
+			region->hiddenResources1 = region->hiddenResources1 | set;
+		}
+		else
+		{
+			region->hiddenResources1 = region->hiddenResources1 & (496 - set);
+		}
+	}
+	else if (index < 64) {
+		index = index - 32;
+		if (enable == true)
+		{
+			region->hiddenResources2 = region->hiddenResources2 | set;
+		}
+		else
+		{
+			region->hiddenResources2 = region->hiddenResources2 & (0b1111111111111111 - set);
+		}
+	}
 }
 
 void gameHelpers::changeRegionName(regionStruct* region, const char* newName)

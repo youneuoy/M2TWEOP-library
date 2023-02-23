@@ -20,7 +20,14 @@ namespace gameHelpers
 	std::tuple<bool, int> getScriptCounter(const char* type);
 	void setScriptCounter(const char* type,int value);
 	regionStruct* getRegion(int index);
-	neighbourRegion* getNeighbour(regionStruct* region, int index);
+	oneTile* getTile(int x, int y);
+	stackStruct* getStack(const regionStruct* region, int index);
+	fortStruct* getFort(const regionStruct* region, int index);
+	watchTowerStruct* getWatchtower(const regionStruct* region, int index);
+	resStrat* getResource(const regionStruct* region, int index);
+	regionStruct* getNeighbour(regionStruct* region, int index);
+	bool getHiddenResource(regionStruct* region, int index);
+	void setHiddenResource(regionStruct* region, int index, bool enable);
 	void changeRegionName(regionStruct* region, const char* newName);
 	void changeRebelsName(regionStruct* region, const char* newName);
 
