@@ -286,6 +286,8 @@ namespace smallFuncs
 
 		return;
 	}
+
+	int battleFarCamera = 0;
 	NOINLINE EOP_EXPORT void changeBattlemapCameraDistance(signed short maxZoom)
 	{
 		struct camCoords
