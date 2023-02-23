@@ -388,11 +388,13 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Zoom out the camera
 	@function M2TWEOP.zoomOutBmapCamera
-	@tparam int maxZoom The max amount to zoom out the camera on the battle map
+	@tparam int x X co-ordinate of the battlemap camera
+	@tparam int y Y co-ordinate of the battlemap camera
+	@tparam int z Z co-ordinate of the battlemap camera
 	@usage
-	M2TWEOP.zoomOutBmapCamera(500);
+	M2TWEOP.setCurrentBattleCamCoords(0,0,500);
 	*/
-	tables.M2TWEOPTable.set_function("zoomOutBmapCamera", &m2tweopHelpers::changeBattlemapCameraDistance);
+	tables.M2TWEOPTable.set_function("setCurrentBattleCamCoords", &m2tweopHelpers::setCurrentBattleCamCoords);
 
 	/***
 	Set the maximum number of religions in the mod (per descr\_religions.txt)

@@ -233,8 +233,8 @@ int initPlugin(std::string* modPath)
     fName = "swUnBMapHighlight";
     plugData::data.funcsBattle.swUnBMapHighlight.Load(&plPath, &fName);
 
-    fName = "changeBattlemapCameraDistance";
-    plugData::data.funcsBattle.changeBattlemapCameraDistance.Load(&plPath, &fName);
+    fName = "setCurrentBattleCamCoords";
+    plugData::data.funcsBattle.setCurrentBattleCamCoords.Load(&plPath, &fName);
 
     //eop edu functions
     fName = "addEopEduEntry";

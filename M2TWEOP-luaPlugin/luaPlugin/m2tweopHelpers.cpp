@@ -174,9 +174,9 @@ namespace m2tweopHelpers
 	{
 		(*(*plugData::data.funcsBattle.swUnBMapHighlight))();
 	}
-	void changeBattlemapCameraDistance(int maxZoom)
+	void setCurrentBattleCamCoords(int x, int y, int z)
 	{
-		(*(*plugData::data.funcsBattle.changeBattlemapCameraDistance))(maxZoom);
+		(*(*plugData::data.funcsBattle.setCurrentBattleCamCoords))(x, y, z);
 	}
 
 	void setConversionLvlFromCastle(int castleLvl, int convertToLvl)
