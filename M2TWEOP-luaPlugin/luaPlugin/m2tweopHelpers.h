@@ -55,6 +55,7 @@ namespace m2tweopHelpers
 
 	void toggleUnitsBMapHighlight();
 	void setCurrentBattleCamCoords(int x, int y, int z);
+	std::tuple<int, int, int> getCurrentBattleCamCoords();
 
 	void setConversionLvlFromCastle(int castleLvl, int convertToLvl);
 	void setConversionLvlFromCity(int cityLvl, int convertToLvl);

@@ -386,8 +386,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.M2TWEOPTable.set_function("toggleUnitsBMapHighlight", &m2tweopHelpers::toggleUnitsBMapHighlight);
 
 	/***
-	Zoom out the camera
-	@function M2TWEOP.zoomOutBmapCamera
+	Set the position of the battlemap camera
+	@function M2TWEOP.setCurrentBattleCamCoords
 	@tparam int x X co-ordinate of the battlemap camera
 	@tparam int y Y co-ordinate of the battlemap camera
 	@tparam int z Z co-ordinate of the battlemap camera
@@ -395,6 +395,14 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	M2TWEOP.setCurrentBattleCamCoords(0,0,500);
 	*/
 	tables.M2TWEOPTable.set_function("setCurrentBattleCamCoords", &m2tweopHelpers::setCurrentBattleCamCoords);
+
+	/***
+	Get the position of the battlemap camera
+	@function M2TWEOP.getCurrentBattleCamCoords
+	@usage
+	local x,y,z = M2TWEOP.getCurrentBattleCamCoords();
+	*/
+	tables.M2TWEOPTable.set_function("getCurrentBattleCamCoords", &m2tweopHelpers::getCurrentBattleCamCoords);
 
 	/***
 	Set the maximum number of religions in the mod (per descr\_religions.txt)

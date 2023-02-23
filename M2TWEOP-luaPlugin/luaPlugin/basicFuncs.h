@@ -93,6 +93,7 @@ public:
 	ProcLoader<int(__cdecl*)(DWORD)> getBattleCondCode;
 	ProcLoader<void(__cdecl*)()> swUnBMapHighlight;
 	ProcLoader<void(__cdecl*)(int x, int y, int z)> setCurrentBattleCamCoords;
+	ProcLoader<void(__cdecl*)()> getCurrentBattleCamCoords;
 };
 class technicalFuncs
 {

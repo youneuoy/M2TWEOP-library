@@ -6,7 +6,7 @@ typedef unsigned char   undefined;
 typedef unsigned int    uint;
 typedef unsigned char    uchar;
 typedef unsigned short    ushort;
-#pragma pack(push,1) 
+#pragma pack(push,1)
 typedef struct stackStruct stackStruct, * PstackStruct;
 typedef struct settlementStruct settlementStruct, * PsettlementStruct;
 
@@ -37,7 +37,7 @@ struct regionStruct {
 	int32_t watchtowerCountArraySize; //0x0048
 	int32_t watchtowersNum; //0x004C
 	int8_t isSea; //0x0050
-	int8_t hasLake; //0x0051	
+	int8_t hasLake; //0x0051
 	char pad_0052[58]; //0x0052
 	struct mercPool* mercPool;//0x008C
 	undefined field6_0x90[36];//0x0090
@@ -1503,6 +1503,12 @@ struct consoleCommands {
 	struct console_command** commands;
 	int reservedElements;
 	int size;
+};
+
+struct cameraCoords {
+	int: x;
+	int: y;
+	int z;
 };
 
 #pragma pack(pop)

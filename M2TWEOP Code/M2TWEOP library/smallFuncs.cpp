@@ -311,6 +311,38 @@ namespace smallFuncs
 		MemWork::WriteData(&y,cameraOffsetStart + 0x8,4);
 		MemWork::WriteData(&z,cameraOffsetStart + 0x20,4);
 	}
+	NOINLINE EOP_EXPORT void getCurrentBattleCamCoords()
+	{
+		struct camCoords
+		{
+			float x;
+			float y;
+			float z;
+		} battleCamcoords;
+
+		DWORD battleStacksOffsetStart = 0;
+		DWORD cameraOffsetStart = 0;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			battleStacksOffsetStart = 0x01B63C44;
+			cameraOffsetStart = 0x0193f34c;
+		}
+		else
+		{
+			battleStacksOffsetStart = 0x1BACCFC;
+			cameraOffsetStart = 0x0198848c;
+		}
+
+		UINT32 battleState;
+		MemWork::ReadData(battleStacksOffsetStart+0x4, &battleState);
+		if (!battleState)   return;
+
+		MemWork::ReadData(cameraOffsetStart, &battleCamcoords.y);
+		MemWork::ReadData(cameraOffsetStart+0x8, &battleCamcoords.x);
+		MemWork::ReadData(cameraOffsetStart+0x20, &battleCamcoords.z);
+
+		return battleCamcoords
+	}
 	NOINLINE EOP_EXPORT void setReligionsLimit(unsigned char limit)
 	{
 		DWORD codeAdr = 0;

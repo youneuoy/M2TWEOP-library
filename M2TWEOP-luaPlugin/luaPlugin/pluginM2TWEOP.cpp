@@ -236,6 +236,9 @@ int initPlugin(std::string* modPath)
     fName = "setCurrentBattleCamCoords";
     plugData::data.funcsBattle.setCurrentBattleCamCoords.Load(&plPath, &fName);
 
+    fName = "getCurrentBattleCamCoords";
+    plugData::data.funcsBattle.getCurrentBattleCamCoords.Load(&plPath, &fName);
+
     //eop edu functions
     fName = "addEopEduEntry";
     plugData::data.funcsEopEdu.addEopEduEntry.Load(&plPath, &fName);
