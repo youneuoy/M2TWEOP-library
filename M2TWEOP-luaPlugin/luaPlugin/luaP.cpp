@@ -72,10 +72,10 @@ bool luaP::checkVar(const char* gName, int variable)
 
 sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 {
-	
 
-	
-	
+
+
+
 	struct
 	{
 		sol::table M2TWEOPTable;
@@ -164,7 +164,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		return nullptr;
 	}
 
-	
+
 	//luaState.new_enum(
 	//	"buildingCap",
     //    "population_growth_bonus", buildingStructHelpers::buildingCap::population_growth_bonus,
@@ -377,7 +377,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 
 	/***
-	Toggle the highlighting of units on the tactical map (Currently broken!).
+	Toggle the highlighting of units on the tactical map.
 	@function M2TWEOP.toggleUnitsBMapHighlight
 	@usage
 	M2TWEOP.toggleUnitsBMapHighlight();
@@ -1821,7 +1821,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.settlementStruct.set_function("changeSettlementName", &settlementHelpers::changeSettlementName);
 
-	
+
 
 
 	///Building
