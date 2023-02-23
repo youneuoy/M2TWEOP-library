@@ -13,7 +13,7 @@ public:
 		stackStruct* army;
 
 
-		//condition destroy_or_rout_enemy 
+		//condition destroy_or_rout_enemy
 		UINT32 condDest;
 		//condition capture settlement
 		UINT32 condSetl;
@@ -92,6 +92,7 @@ class battleFuncs
 public:
 	ProcLoader<int(__cdecl*)(DWORD)> getBattleCondCode;
 	ProcLoader<void(__cdecl*)()> swUnBMapHighlight;
+	ProcLoader<void(__cdecl*)(signed short maxZoom)> changeBattlemapCameraDistance;
 };
 class technicalFuncs
 {
@@ -213,7 +214,7 @@ public:
 
 
 	ProcLoader<int (_cdecl*)()> GetUnitSize;
-	
+
 	//build functions
 	ProcLoader<edbEntry* (__cdecl*)(edbEntry*, int)>addEopBuildEntry;
 	ProcLoader<edbEntry* (__cdecl*)(int)>getEopBuildEntry;

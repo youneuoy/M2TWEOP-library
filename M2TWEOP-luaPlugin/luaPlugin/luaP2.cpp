@@ -146,7 +146,7 @@ void luaP::initCampaign()
 	local unitSize=campaign:GetUnitSize();
 	*/
 	typeAll.campaignTable.set_function("GetUnitSize", &m2tweopHelpers::GetUnitSize);
-	
+
 	/// Strat Map
 	//@section stratMap
 
@@ -290,7 +290,7 @@ void luaP::initCampaign()
 	@function mercPool:addMercUnit
 	@tparam int idx EDU index, supports EOP units.
 	@tparam int exp Starting experience.
-	@tparam int cost 
+	@tparam int cost
 	@tparam float repmin Minimum replenishment rate.
 	@tparam float repmax Maximum replenishment rate.
 	@tparam int maxunits Maximum Pool.

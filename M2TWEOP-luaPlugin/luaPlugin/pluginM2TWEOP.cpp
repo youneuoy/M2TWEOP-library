@@ -128,9 +128,9 @@ int initPlugin(std::string* modPath)
 
     fName = "removeTrait";
     plugData::data.funcs.removeTrait.Load(&plPath, &fName);
-    
+
     fName = "replaceTile";
-    plugData::data.funcs.replaceTile.Load(&plPath, &fName);    
+    plugData::data.funcs.replaceTile.Load(&plPath, &fName);
 
     fName = "moveStratCameraSlow";
     plugData::data.funcs.moveStratCameraSlow.Load(&plPath, &fName);
@@ -152,7 +152,7 @@ int initPlugin(std::string* modPath)
 
     fName = "setUnitParams";
     plugData::data.funcs.setUnitParams.Load(&plPath, &fName);
-    
+
 
     fName = "setUnitMovepoints";
     plugData::data.funcs.setUnitMovepoints.Load(&plPath, &fName);
@@ -185,9 +185,9 @@ int initPlugin(std::string* modPath)
 
     fName = "setBodyguard";
     plugData::data.funcs.setBodyguard.Load(&plPath, &fName);
-    
+
     fName = "attackCharacter";
-    plugData::data.funcs.attackCharacter.Load(&plPath, &fName);    
+    plugData::data.funcs.attackCharacter.Load(&plPath, &fName);
 
 
     fName = "loadTexture";
@@ -225,39 +225,38 @@ int initPlugin(std::string* modPath)
 
     fName = "setCharacterType";
     plugData::data.funcs.setCharacterType.Load(&plPath, &fName);
-    
-
-
 
     //battle functions
     fName = "getBattleCondCode";
-    plugData::data.funcsBattle.getBattleCondCode.Load(&plPath, &fName);   
-    
+    plugData::data.funcsBattle.getBattleCondCode.Load(&plPath, &fName);
+
     fName = "swUnBMapHighlight";
     plugData::data.funcsBattle.swUnBMapHighlight.Load(&plPath, &fName);
 
+    fName = "changeBattlemapCameraDistance";
+    plugData::data.funcsBattle.changeBattlemapCameraDistance.Load(&plPath, &fName);
 
     //eop edu functions
     fName = "addEopEduEntry";
-    plugData::data.funcsEopEdu.addEopEduEntry.Load(&plPath, &fName);  
+    plugData::data.funcsEopEdu.addEopEduEntry.Load(&plPath, &fName);
 
     fName = "addEopEduEntryFromFile";
     plugData::data.funcsEopEdu.addEopEduEntryFromFile.Load(&plPath, &fName);
-     
+
     fName = "getEopEduEntry";
-    plugData::data.funcsEopEdu.getEopEduEntry.Load(&plPath, &fName);    
-     
+    plugData::data.funcsEopEdu.getEopEduEntry.Load(&plPath, &fName);
+
     fName = "getEduEntry";
-    plugData::data.funcsEopEdu.getEduEntry.Load(&plPath, &fName);    
-     
+    plugData::data.funcsEopEdu.getEduEntry.Load(&plPath, &fName);
+
     fName = "getEduEntryByType";
-    plugData::data.funcsEopEdu.getEduEntryByType.Load(&plPath, &fName);    
-     
+    plugData::data.funcsEopEdu.getEduEntryByType.Load(&plPath, &fName);
+
     fName = "getEduIndexByType";
-    plugData::data.funcsEopEdu.getEduIndexByType.Load(&plPath, &fName);    
-    
+    plugData::data.funcsEopEdu.getEduIndexByType.Load(&plPath, &fName);
+
     fName = "getDataEopEdu";
-    plugData::data.funcsEopEdu.getDataEopEdu.Load(&plPath, &fName); 
+    plugData::data.funcsEopEdu.getDataEopEdu.Load(&plPath, &fName);
 
 
     fName = "setEntryUnitCardTga";

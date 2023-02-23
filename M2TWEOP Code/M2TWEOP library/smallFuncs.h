@@ -8,7 +8,7 @@
 #include "exportHeader.h"
 #include "globals.h"
 namespace smallFuncs
-{	
+{
 	NOINLINE EOP_EXPORT void setAncLimit(unsigned char limit);
 	NOINLINE EOP_EXPORT void setEDUUnitsSize(signed short min,signed short max);
 	NOINLINE EOP_EXPORT void setMaxBgSize(unsigned char size);
@@ -26,6 +26,8 @@ namespace smallFuncs
 
 	//toggle the highlighting of units on the tactical map.
 	NOINLINE EOP_EXPORT void swUnBMapHighlight();
+	// Zoom out the camera beyond the normal limit
+	NOINLINE EOP_EXPORT void changeBattlemapCameraDistance(signed short maxZoom);
 
 	NOINLINE EOP_EXPORT void setReligionsLimit(unsigned char limit);
 

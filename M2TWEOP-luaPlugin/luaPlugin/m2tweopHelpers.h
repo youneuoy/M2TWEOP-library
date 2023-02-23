@@ -54,6 +54,7 @@ namespace m2tweopHelpers
 	void unloadTextureFromGame(void* texture);
 
 	void toggleUnitsBMapHighlight();
+	void changeBattlemapCameraDistance(signed short maxZoom);
 
 	void setConversionLvlFromCastle(int castleLvl, int convertToLvl);
 	void setConversionLvlFromCity(int cityLvl, int convertToLvl);

@@ -240,6 +240,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield unlockGameConsoleCommands unlockGameConsoleCommands
 	@tfield setMaxBgSize setMaxBgSize
 	@tfield toggleUnitsBMapHighlight toggleUnitsBMapHighlight
+	@tfield zoomOutCamera zoomOutCamera
 	@tfield setReligionsLimit setReligionsLimit
 	@tfield isTileFree isTileFree
 	@tfield getGameTileCoordsWithCursor getGameTileCoordsWithCursor
@@ -384,6 +385,14 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.M2TWEOPTable.set_function("toggleUnitsBMapHighlight", &m2tweopHelpers::toggleUnitsBMapHighlight);
 
+	/***
+	Zoom out the camera
+	@function M2TWEOP.zoomOutBmapCamera
+	@tparam int maxZoom The max amount to zoom out the camera on the battle map
+	@usage
+	M2TWEOP.zoomOutBmapCamera(500);
+	*/
+	tables.M2TWEOPTable.set_function("zoomOutBmapCamera", &m2tweopHelpers::changeBattlemapCameraDistance);
 
 	/***
 	Set the maximum number of religions in the mod (per descr\_religions.txt)

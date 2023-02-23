@@ -91,7 +91,7 @@ namespace smallFuncs
 		}
 
 
-		//unlock change_faction 
+		//unlock change_faction
 		uchar nops1[6] = { 0x90,0x90,0x90,0x90,0x90,0x90 };
 		if (globals::dataS.gamever == 2)//steam
 		{
@@ -286,6 +286,56 @@ namespace smallFuncs
 
 		return;
 	}
+	NOINLINE EOP_EXPORT void changeBattlemapCameraDistance(signed short maxZoom)
+	{
+		struct camCoords
+		{
+			float x;
+			float y;
+			float z;
+		} battleCamcoords;
+
+		struct camFarCoords
+		{
+			float x = 0;
+			float y = 0;
+			float z = maxZoom;
+		} battleFarCamcoords;
+
+		DWORD battleStacksOffsetStart = 0;
+		DWORD cameraOffsetStart = 0;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			battleStacksOffsetStart = 0x01B63C44;
+			cameraOffsetStart = 0x0193f34c;
+		}
+		else
+		{
+			battleStacksOffsetStart = 0x1BACCFC;
+			cameraOffsetStart = 0x0198848c;
+		}
+
+		UINT32 battleState;
+		MemWork::ReadData(battleStacksOffsetStart+0x4, &battleState);
+		if (!battleState)   return;
+
+		battleFarCamera=!battleFarCamera;
+		if (battleFarCamera)
+		{
+			MemWork::ReadData(cameraOffsetStart, &battleCamcoords.y);
+			MemWork::ReadData(cameraOffsetStart+0x8, &battleCamcoords.x);
+			MemWork::ReadData(cameraOffsetStart+0x20, &battleCamcoords.z);
+
+			MemWork::WriteData(&battleFarCamcoords.y,cameraOffsetStart,4);
+			MemWork::WriteData(&battleFarCamcoords.x,cameraOffsetStart + 0x8,4);
+			MemWork::WriteData(&battleFarCamcoords.z,cameraOffsetStart + 0x20,4);
+		}
+		else {
+			MemWork::WriteData(&battleCamcoords.y, cameraOffsetStart, 4);
+			MemWork::WriteData(&battleCamcoords.x, cameraOffsetStart + 0x8, 4);
+			MemWork::WriteData(&battleCamcoords.z, cameraOffsetStart + 0x20, 4);
+		}
+	}
 	NOINLINE EOP_EXPORT void setReligionsLimit(unsigned char limit)
 	{
 		DWORD codeAdr = 0;
@@ -380,7 +430,7 @@ namespace smallFuncs
 		{
 
 			if (retS != nullptr)
-			{			
+			{
 				if (retS->nameCrypt == (int)cryptS[1])
 				{
 					isFinded = true;
