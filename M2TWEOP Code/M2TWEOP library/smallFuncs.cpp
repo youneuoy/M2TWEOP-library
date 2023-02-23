@@ -301,8 +301,11 @@ namespace smallFuncs
 		{
 			float x = 0;
 			float y = 0;
-			float z = maxZoom;
+			float z = 0;
 		} battleFarCamcoords;
+
+
+		battleFarCamcoords.z = maxZoom;
 
 		DWORD battleStacksOffsetStart = 0;
 		DWORD cameraOffsetStart = 0;
