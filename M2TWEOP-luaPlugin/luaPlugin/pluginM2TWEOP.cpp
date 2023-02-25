@@ -84,6 +84,14 @@ int initPlugin(std::string* modPath)
     fName = "changeRebelsName";
     plugData::data.funcs.changeRebelsName.Load(&plPath, &fName);
 
+    fName = "getGameVersion";
+    plugData::data.funcs.getGameVersion.Load(&plPath, &fName);
+
+    fName = "saveGame";
+    plugData::data.funcs.saveGame.Load(&plPath, &fName);
+
+    fName = "mergeArmies";
+    plugData::data.funcs.mergeArmies.Load(&plPath, &fName);
 
     fName = "createUniString";
     plugData::data.funcsTech.createUniString.Load(&plPath, &fName);

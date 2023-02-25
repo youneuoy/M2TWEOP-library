@@ -158,6 +158,10 @@ void eopEduHelpers::setArmourUpgradeModelsNum(int idx, int amount)
     amount = amount*2;
     EduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
     int curramount = getArmourUpgradeModelsNum(idx);
+    ArmourUpgModels* newModels = new ArmourUpgModels;
+    ArmourUpgModels* oldModels = eduEn->ArmorUpgradeModels;
+    *newModels = *oldModels;
+    eduEn->ArmorUpgradeModels = newModels;
     eduEn->ArmorUpgradeModelsEnd = (int*)eduEn->ArmorUpgradeModels + (amount);
     eduEn->ArmorUpgrade5 = (int*)eduEn->ArmorUpgradeModels + (amount);
     if (amount <= (curramount*2))
@@ -201,6 +205,13 @@ void eopEduHelpers::setArmourUpgradeModel(int idx, int levelidx, const std::stri
 {
     
     EduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
+    int modelsNum = getArmourUpgradeModelsNum(idx);
+    ArmourUpgModels* newModels = new ArmourUpgModels;
+    ArmourUpgModels* oldModels = eduEn->ArmorUpgradeModels;
+    *newModels = *oldModels;
+    eduEn->ArmorUpgradeModels = newModels;
+    eduEn->ArmorUpgradeModelsEnd = (int*)eduEn->ArmorUpgradeModels + (modelsNum * 2);
+    eduEn->ArmorUpgrade5 = (int*)eduEn->ArmorUpgradeModels + (modelsNum * 2);
     char* modelname = nullptr;
     switch(levelidx)
     {

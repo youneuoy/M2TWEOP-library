@@ -35,5 +35,6 @@ namespace gameHelpers
 	mercPoolUnit* getMercUnit(mercPool* pool, int index);
 	void setMercReligion(mercPoolUnit* unit, int religion, bool set);
 	mercPoolUnit* addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, int startyear, int endyear, int crusading);
+	void saveGame(const char* path);
 };
 

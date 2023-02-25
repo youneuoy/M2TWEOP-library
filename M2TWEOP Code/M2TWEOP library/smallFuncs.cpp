@@ -24,6 +24,73 @@ namespace smallFuncs
 		MemWork::WriteData(&limit, ancillariesOffset, 1);
 	}
 
+	NOINLINE EOP_EXPORT int getGameVersion()
+	{
+
+		if (globals::dataS.gamever == 2)//steam
+		{
+			return 2;
+		}
+		else
+		{
+			return 1;
+		}
+
+	}
+
+	NOINLINE EOP_EXPORT void saveGame(const char* path)
+	{
+		DWORD codeOffset = 0;
+		DWORD codeOffset2 = 0;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			codeOffset = 0x004350e0;
+			codeOffset2 = 0x02C1B904;
+		}
+		else
+		{
+			codeOffset = 0x00434da0;
+			codeOffset2 = 0x02C649BC;
+		}
+
+		UNICODE_STRING** uni = new UNICODE_STRING*;
+
+		smallFuncs::createUniString(uni, path);
+
+		UNICODE_STRING*** puni = &uni;
+
+		_asm
+		{
+			push 0
+			push puni
+			mov ecx, codeOffset2
+			mov eax, codeOffset
+			call eax
+		}
+
+	};
+
+
+	NOINLINE EOP_EXPORT void mergeArmies(stackStruct* army, stackStruct* targetArmy)
+	{
+		DWORD codeOffset = 0;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			codeOffset = 0x007155F0;
+		}
+		else
+		{
+			codeOffset = 0x00714EF0;
+		}
+		_asm
+		{
+			push army
+			mov ecx, targetArmy
+			mov eax, codeOffset
+			call eax
+		}
+	}
+
 	NOINLINE EOP_EXPORT void setEDUUnitsSize(signed short min, signed short max)
 	{
 		DWORD codeOffset = 0;

@@ -298,3 +298,7 @@ void gameHelpers::setMercReligion(mercPoolUnit* unit, int religion, bool set)
 	unit->religionsListEnd2 = &unit->religionsList[mercRelNum];
 }
 
+void gameHelpers::saveGame(const char* path)
+{
+	(*(*plugData::data.funcs.saveGame))(path);
+};

@@ -233,6 +233,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Basic M2TWEOP table
 
 	@tfield getModPath getModPath
+	@tfield saveGame saveGame
+	@tfield getGameVersion getGameVersion
 	@tfield getPluginPath  getPluginPath
 	@tfield loadTexture loadTexture
 	@tfield unloadTexture unloadTexture
@@ -267,6 +269,28 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 
 	tables.M2TWEOPTable.set_function("getModPath", &m2tweopHelpers::getModPath);
+	/***
+	Save the game.
+	@function M2TWEOP.saveGame
+	@tparam string path
+
+	@usage
+	M2TWEOP.saveGame(M2TWEOP.getModPath()../saves/newsave.sav);
+	print(mPath);
+	*/
+
+	tables.M2TWEOPTable.set_function("saveGame", &gameHelpers::saveGame);
+	/***
+	Function to get the game version.
+	@function M2TWEOP.getGameVersion
+	@treturn int gamever (1 = disk 2 = steam)
+
+	@usage
+	M2TWEOP.getGameVersion();
+	print(mPath);
+	*/
+
+	tables.M2TWEOPTable.set_function("getGameVersion", &m2tweopHelpers::saveGame);
 	/***
 	Function to return the path to the plugin (location of your LUA files).
 	@function M2TWEOP.getPluginPath

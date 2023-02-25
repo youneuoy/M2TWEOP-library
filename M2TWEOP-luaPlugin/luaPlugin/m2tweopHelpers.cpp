@@ -196,4 +196,9 @@ namespace m2tweopHelpers
 		(*(*plugData::data.funcs.setGuildCooldown))(turns);
 	}
 
+	void getGameVersion()
+	{
+		return (*(*plugData::data.funcs.getGameVersion))();
+	}
+
 }

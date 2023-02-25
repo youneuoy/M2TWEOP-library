@@ -48,5 +48,6 @@ namespace technicalHelpers
 	void namedCharSetLocalizedNameForSave(generalCharacterictics* genChar, const char* str);
 	void namedCharSetLocalizedNextNameForSave(generalCharacterictics* genChar, const char* str);
 	void namedCharSetLocalizedNicknameForSave(generalCharacterictics* genChar, const char* str);
+	void createUniString(UNICODE_STRING**& newUniStringPointer, const char* nonUniStr);
 }; 
 
