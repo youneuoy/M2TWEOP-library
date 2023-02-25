@@ -276,7 +276,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	@usage
 	M2TWEOP.saveGame(M2TWEOP.getModPath()../saves/newsave.sav);
-	print(mPath);
 	*/
 
 	tables.M2TWEOPTable.set_function("saveGame", &gameHelpers::saveGame);
@@ -287,7 +286,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	@usage
 	M2TWEOP.getGameVersion();
-	print(mPath);
 	*/
 
 	tables.M2TWEOPTable.set_function("getGameVersion", &m2tweopHelpers::saveGame);
