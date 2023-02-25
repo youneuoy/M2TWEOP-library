@@ -272,10 +272,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Save the game.
 	@function M2TWEOP.saveGame
-	@tparam string path
+	@tparam string path (start from mods)
 
 	@usage
-	M2TWEOP.saveGame(M2TWEOP.getModPath()../saves/newsave.sav);
+	M2TWEOP.saveGame(mods/bare_geomod/saves/newsave.sav);
 	*/
 
 	tables.M2TWEOPTable.set_function("saveGame", &gameHelpers::saveGame);
