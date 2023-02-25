@@ -288,7 +288,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	M2TWEOP.getGameVersion();
 	*/
 
-	tables.M2TWEOPTable.set_function("getGameVersion", &m2tweopHelpers::saveGame);
+	tables.M2TWEOPTable.set_function("getGameVersion", &m2tweopHelpers::getGameVersion);
 	/***
 	Function to return the path to the plugin (location of your LUA files).
 	@function M2TWEOP.getPluginPath
