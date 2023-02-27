@@ -192,7 +192,7 @@ int gameHelpers::getMercUnitNum(mercPool* mercPool)
 mercPoolUnit* gameHelpers::addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, int startyear, int endyear, int crusading)
 {
 	mercPoolUnit* newMerc = new mercPoolUnit;
-	*newMerc = mercPool->firstUnits.mercPoolUnits->mercPoolUnit[0];
+	*newMerc = mercPool->firstUnits.mercPoolUnits[0];
 	int mercUnitNum = gameHelpers::getMercUnitNum(mercPool);
 	EduEntry* entry = eopEduHelpers::getEduEntry(idx);
 	newMerc->eduEntry = entry;
@@ -230,27 +230,19 @@ mercPoolUnit* gameHelpers::addMercUnit(mercPool* mercPool, int idx, int exp, int
 		currunits = unitptr->currentPool;
 		maxunitsP = unitptr->Maxpool;
 	}
-	unitptr->mercPoolUnits->mercPoolUnit[currunits] = *newMerc;
+	unitptr->mercPoolUnits[currunits] = *newMerc;
 	unitptr->currentPool++;
-	return &unitptr->mercPoolUnits->mercPoolUnit[currunits];
+	return &unitptr->mercPoolUnits[currunits];
 }
 
 mercPoolUnit* gameHelpers::getMercUnit(mercPool* pool, int index)
 {
 	mercPoolUnitsPtr* unitptr = &pool->firstUnits;
-	int currunits = 0;
-	while (unitptr != nullptr)
+	if (&unitptr->mercPoolUnits[index] != nullptr)
 	{
-		currunits = unitptr->currentPool;
-		for (int i = 0; i < currunits; i++)
-		{
-			if (unitptr->mercPoolUnits->mercPoolUnit[i].eduEntry->Index == index)
-			{
-				return &unitptr->mercPoolUnits->mercPoolUnit[i];
-			}
-		}
-		unitptr = unitptr->nextUnitsPtr;
+		return &unitptr->mercPoolUnits[index];
 	}
+
 	return nullptr;
 }
 

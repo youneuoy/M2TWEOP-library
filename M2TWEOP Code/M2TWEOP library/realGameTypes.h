@@ -132,9 +132,9 @@ public:
 struct mercPoolUnitsPtr
 {
 public:
-	struct mercPoolUnits* mercPoolUnits;
+	struct mercPoolUnit* mercPoolUnits;
 	struct mercPoolUnitsPtr* nextUnitsPtr;
-	struct mercPoolUnits* prevPoolUnits;
+	struct mercPoolUnit* prevPoolUnits;
 	int Maxpool;
 	int currentPool;
 };
