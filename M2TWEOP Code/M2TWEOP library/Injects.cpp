@@ -2983,11 +2983,13 @@ void OnCreateMercUnitCheck::SetNewCode()
 
 
 	a->pushad();
-	a->lea(ecx, dword_ptr(esp, 0x60));
+	a->pushf();
+	a->lea(ecx, dword_ptr(esp, 0x64));
 	a->mov(edx, eax);
 	a->mov(eax, (DWORD)funcAddress);
 	a->call(eax);
 	a->mov(ecx, -1);
+	a->popf();
 	a->cmp(eax, ecx);
 	a->popad();
 	a->lea(ecx, dword_ptr(esp, 0x40));

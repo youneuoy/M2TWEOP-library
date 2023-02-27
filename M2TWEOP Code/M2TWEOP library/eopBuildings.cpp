@@ -242,7 +242,7 @@ namespace eopBuildings
 			i++;
 			prevcap = cap;
 			cap = cap->nextCapability;
-			if(index = i)
+			if(index == i)
 			{
 				if (cap->nextCapability != nullptr)
 				{
@@ -283,7 +283,7 @@ namespace eopBuildings
 			i++;
 			prevpool = pool;
 			pool = pool->nextPool;
-			if(index = i)
+			if(index == i)
 			{
 				if (pool->nextPool != nullptr)
 				{
@@ -318,7 +318,7 @@ namespace eopBuildings
 		{
 				cap = cap->nextCapability;
 				i++;
-				if(index = i)
+				if(index == i)
 				{
 					return cap;
 				}
@@ -344,7 +344,7 @@ namespace eopBuildings
 		{
 				pool = pool->nextPool;
 				i++;
-				if(index = i)
+				if(index == i)
 				{
 					return pool;
 				}
@@ -399,6 +399,7 @@ namespace eopBuildings
 	}
 	
 	//not sure how useful this function is, basically just combines creating a building with switching its entry to eop building
+	//not in lua
 	NOINLINE EOP_EXPORT void createEOPBuilding(settlementStruct* sett, int edbIdx, int level)
 	{
 		edbEntry* entry = getEopBuildEntry(edbIdx);
