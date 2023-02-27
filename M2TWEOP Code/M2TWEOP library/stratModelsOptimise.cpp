@@ -56,8 +56,8 @@ namespace stratModelsOptimise
 
 	model_Rigid* _fastcall loadCasProc()
 	{
-		char* fileName;
-		int param_2, param_3,  param_4,  param_5,  param_6;
+		//char* fileName;
+		//int param_2, param_3,  param_4,  param_5,  param_6;
 
 		model_Rigid* modelP = constructObject();
 		someCasS* someCas = createSomeCas();

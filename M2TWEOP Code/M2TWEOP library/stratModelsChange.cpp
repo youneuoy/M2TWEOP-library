@@ -40,7 +40,7 @@ namespace stratModelsChange
 			&& fastFuncts::findResource(x, y) == nullptr
 			) return;
 */
-		for (int i = 0; i < stratModelChangeList.size(); i++)
+		for (UINT32 i = 0; i < stratModelChangeList.size(); i++)
 		{
 			if (stratModelChangeList[i]->x == x
 				&& stratModelChangeList[i]->y == y

@@ -136,7 +136,7 @@ namespace ifd {
 			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, ImGui::GetStyle().ItemSpacing.y));
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
 			bool isFirstElement = true;
-			for (int i = 0; i < btnList.size(); i++) {
+			for (size_t i = 0; i < btnList.size(); i++) {
 				if (totalWidth > size.x - 30 && i != btnList.size() - 1) { // trim some buttons if there's not enough space
 					float elSize = ImGui::CalcTextSize(btnList[i].c_str()).x + style.FramePadding.x * 2.0f + GUI_ELEMENT_SIZE;
 					totalWidth -= elSize;
@@ -155,7 +155,7 @@ namespace ifd {
 #else
 					std::string newPath = "/";
 #endif
-					for (int j = 0; j <= i; j++) {
+					for (size_t j = 0; j <= i; j++) {
 						newPath += btnList[j];
 #ifdef _WIN32
 						if (j != i)
@@ -331,7 +331,7 @@ namespace ifd {
 		std::error_code ec;
 		Path = path;
 		IsDirectory = std::filesystem::is_directory(path, ec);
-		Size = std::filesystem::file_size(path, ec);
+		Size = (size_t)std::filesystem::file_size(path, ec);
 
 		struct stat attr;
 		stat(path.u8string().c_str(), &attr);
@@ -541,7 +541,7 @@ namespace ifd {
 		// remove from sidebar
 		for (auto& p : m_treeCache)
 			if (p->Path == "Quick Access") {
-				for (int i = 0; i < p->Children.size(); i++)
+				for (size_t i = 0; i < p->Children.size(); i++)
 					if (p->Children[i]->Path == path) {
 						p->Children.erase(p->Children.begin() + i);
 						break;
@@ -633,7 +633,7 @@ namespace ifd {
 			
 			if (m_type == IFD_DIALOG_SAVE) {
 				// add the extension
-				if (m_filterSelection < m_filterExtensions.size() && m_filterExtensions[m_filterSelection].size() > 0) {
+				if ((size_t)m_filterSelection < m_filterExtensions.size() && m_filterExtensions[m_filterSelection].size() > 0) {
 					if (!m_result.back().has_extension()) {
 						std::string extAdd = m_filterExtensions[m_filterSelection][0];
 						m_result.back().replace_extension(extAdd);
@@ -659,7 +659,7 @@ namespace ifd {
 
 		int lastSplit = 0, lastExt = 0;
 		bool inExtList = false;
-		for (int i = 0; i < filter.size(); i++) {
+		for (size_t i = 0; i < filter.size(); i++) {
 			if (filter[i] == ',') {
 				if (!inExtList)
 					lastSplit = i + 1;
@@ -718,7 +718,7 @@ namespace ifd {
 
 		SHFILEINFOW fileInfo = { 0 };
 		std::wstring pathW = path.wstring();
-		for (int i = 0; i < pathW.size(); i++)
+		for (size_t i = 0; i < pathW.size(); i++)
 			if (pathW[i] == '/')
 				pathW[i] = '\\';
 		SHGetFileInfoW(pathW.c_str(), attrs, &fileInfo, sizeof(SHFILEINFOW), flags);
@@ -873,7 +873,7 @@ namespace ifd {
 	}
 	void FileDialog::m_loadPreview()
 	{
-		for (int i = 0; m_previewLoaderRunning && i < m_content.size(); i++) {
+		for (size_t i = 0; m_previewLoaderRunning && i < m_content.size(); i++) {
 			auto& data = m_content[i];
 
 			if (data.HasIconPreview)
@@ -975,7 +975,7 @@ namespace ifd {
 
 					// check if extension matches
 					if (!info.IsDirectory && m_type != IFD_DIALOG_DIRECTORY) {
-						if (m_filterSelection < m_filterExtensions.size()) {
+						if ((size_t)m_filterSelection < m_filterExtensions.size()) {
 							const auto& exts = m_filterExtensions[m_filterSelection];
 							if (exts.size() > 0) {
 								std::string extension = info.Path.extension().u8string();
@@ -1007,7 +1007,7 @@ namespace ifd {
 
 		if (m_content.size() > 0) {
 			// find where the file list starts
-			int fileIndex = 0;
+			size_t fileIndex = 0;
 			for (; fileIndex < m_content.size(); fileIndex++)
 				if (!m_content[fileIndex].IsDirectory)
 					break;
@@ -1215,7 +1215,7 @@ namespace ifd {
 		if (openNewDirectoryDlg)
 			ImGui::OpenPopup("Enter directory name##newdir");
 		if (ImGui::BeginPopupModal("Are you sure?##delete")) {
-			if (m_selectedFileItem >= m_content.size() || m_content.size() == 0)
+			if ((size_t)m_selectedFileItem >= m_content.size() || m_content.size() == 0)
 				ImGui::CloseCurrentPopup();
 			else {
 				const FileData& data = m_content[m_selectedFileItem];

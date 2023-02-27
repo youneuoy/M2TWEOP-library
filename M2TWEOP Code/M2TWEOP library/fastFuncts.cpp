@@ -172,7 +172,7 @@ namespace fastFuncts
 		factionStruct* fac = gen->faction;
 		if (isJustSet == true)
 		{
-			for (UINT32 i = 0; i < fac->numOfCharacters; i++)
+			for (int i = 0; i < fac->numOfCharacters; i++)
 			{
 				if (fac->characters[i]->genChar->status & 2)
 				{
@@ -213,7 +213,7 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT guild* getGuild(unsigned char index)
 	{
 		uintptr_t currentOffsett = dataOffsets::offsets.guildDataStart;
-		UINT32 count = 0;
+		int count = 0;
 		UINT32 maxCount = 0;
 		UINT8 currID = 0;
 
@@ -236,7 +236,7 @@ namespace fastFuncts
 				++currID;
 			}
 
-			if (count < maxCount || *(uintptr_t*)(currentOffsett + 0x4) == 0)
+			if (count < (int)maxCount || *(uintptr_t*)(currentOffsett + 0x4) == 0)
 			{
 				return nullptr;
 			}

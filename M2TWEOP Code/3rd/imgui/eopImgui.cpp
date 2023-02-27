@@ -98,7 +98,7 @@ void ImGui::LoadingIndicatorCircle(const char* label, const float indicator_radi
 	if (!ItemAdd(bb, id)) {
 		return;
 	}
-	const float t = g.Time;
+	const float t = (float)g.Time;
 	const auto degree_offset = 2.0f * IM_PI / circle_count;
 	for (int i = 0; i < circle_count; ++i) {
 		const auto x = indicator_radius * std::sin(degree_offset * i);

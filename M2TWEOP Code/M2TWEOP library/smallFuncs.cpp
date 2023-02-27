@@ -267,12 +267,12 @@ namespace smallFuncs
 		// do whatever with wstr
 		delete[] wstr;
 
-		(*newUniStringPointer)->Length = utf16line.size();
-		(*newUniStringPointer)->something2 = utf16line.size();
+		(*newUniStringPointer)->Length = (USHORT)utf16line.size();
+		(*newUniStringPointer)->something2 = (USHORT)utf16line.size();
 
 		unsigned short* ptr = (unsigned short*)&(*newUniStringPointer)->Buffer;
 
-		for (int i = 0; i < utf16line.size(); i++)
+		for (UINT32 i = 0; i < utf16line.size(); i++)
 		{
 
 			*(ptr+i) = utf16line[i];

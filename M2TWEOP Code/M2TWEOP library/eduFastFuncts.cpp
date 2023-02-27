@@ -42,8 +42,8 @@ namespace eduFastFuncts
 		entryForFilling->mountEffectClass3 = 0x3;
 
 		entryForFilling->Mass = 1;
-		entryForFilling->Width = 0.400000006;
-		entryForFilling->Height = 1.700000048;
+		entryForFilling->Width = (float)0.400000006;
+		entryForFilling->Height = (float)1.700000048;
 
 
 		entryForFilling->WeaponType = 0x5;

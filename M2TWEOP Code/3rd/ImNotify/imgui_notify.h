@@ -240,7 +240,7 @@ namespace ImGui
 
 		float height = 0.f;
 
-		for (auto i = 0; i < notifications.size(); i++)
+		for (size_t i = 0; i < notifications.size(); i++)
 		{
 			auto* current_toast = &notifications[i];
 
