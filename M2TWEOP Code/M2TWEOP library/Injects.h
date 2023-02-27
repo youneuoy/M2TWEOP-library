@@ -789,6 +789,7 @@ public:
 	void SetNewCode();
 private:
 	LPVOID funcAddress;
+	DWORD otherFunc;
 };
 
 class OnCreateMercUnitCheck
