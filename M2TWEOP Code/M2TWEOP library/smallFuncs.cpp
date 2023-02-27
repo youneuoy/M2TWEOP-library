@@ -350,7 +350,6 @@ namespace smallFuncs
 			highlightOn = false;
 		}
 
-
 		return;
 	}
 
@@ -372,7 +371,6 @@ namespace smallFuncs
 		}
 
 		UINT32 battleState;
-		MemWork::ReadData(battleStacksOffsetStart+0x4, &battleState);
 		if (!battleState) return;
 
 		return cameraOffset;
