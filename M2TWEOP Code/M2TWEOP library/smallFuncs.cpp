@@ -354,7 +354,7 @@ namespace smallFuncs
 		return;
 	}
 
-	NOINLINE EOP_EXPORT battleCameraStruct* void getBattleCamCoords()
+	NOINLINE EOP_EXPORT battleCameraStruct* getBattleCamCoords()
 	{
 		battleCameraStruct* cameraOffset;
 
@@ -373,7 +373,7 @@ namespace smallFuncs
 
 		UINT32 battleState;
 		MemWork::ReadData(battleStacksOffsetStart+0x4, &battleState);
-		if (!battleState)   return;
+		if (!battleState) return;
 
 		return cameraOffset;
 	}
