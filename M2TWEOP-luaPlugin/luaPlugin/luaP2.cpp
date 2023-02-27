@@ -173,20 +173,20 @@ void luaP::initCampaign()
 	@tparam int index
 	@treturn region region
 	@usage
-	local stratmap = gameDataAll.get().stratMap;
-	local region = stratMap.getRegion(2);
+	local sMap = gameDataAll.get().stratMap;
+	local region = sMap.getRegion(2);
 	*/
 	typeAll.stratMap.set_function("getRegion", &gameHelpers::getRegion);
 
 	/***
 	Get a specific tile by it's coordinates.
-	@function stratMap.getRegion
+	@function stratMap.getTile
 	@tparam int x
 	@tparam int y
 	@treturn tileStruct tile
 	@usage
-	local stratmap = gameDataAll.get().stratMap;
-	local tile = stratMap.getTile(182, 243);
+	local sMap = gameDataAll.get().stratMap;
+	local tile = sMap.getTile(182, 243);
 	*/
 	typeAll.stratMap.set_function("getTile", &gameHelpers::getTile);
 	///Tile

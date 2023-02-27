@@ -48,7 +48,7 @@ struct regionStruct {
 	char pad_0194[8]; //0x0194
 	int32_t tileCount; //0x019C
 	char pad_0177[12]; //0x0194
-	struct neighbourRegion** neighbourRegions;//0x01AC
+	struct neighbourRegion* neighbourRegions;//0x01AC
 	int32_t neighbourRegionsCountArraySize; //0x01B0
 	int32_t neighbourRegionsNum; //0x01B4
 	struct resStrat** resources;//0x01B8

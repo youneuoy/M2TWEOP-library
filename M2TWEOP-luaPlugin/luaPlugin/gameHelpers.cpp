@@ -118,7 +118,8 @@ resStrat* gameHelpers::getResource(const regionStruct* region, int index)
 
 regionStruct* gameHelpers::getNeighbour(regionStruct* region, int index)
 {
-	return region->neighbourRegions[index]->region;
+	neighbourRegion* nregion = region->neighbourRegions + (index);
+	return nregion->region;
 }
 
 bool gameHelpers::getHiddenResource(regionStruct* region, int index)
@@ -238,9 +239,18 @@ mercPoolUnit* gameHelpers::addMercUnit(mercPool* mercPool, int idx, int exp, int
 mercPoolUnit* gameHelpers::getMercUnit(mercPool* pool, int index)
 {
 	mercPoolUnitsPtr* unitptr = &pool->firstUnits;
-	if (&unitptr->mercPoolUnits[index] != nullptr)
+	int currunits = 0;
+	while (unitptr != nullptr)
 	{
-		return &unitptr->mercPoolUnits[index];
+		currunits = unitptr->currentPool;
+		for (int i = 0; i < currunits; i++)
+		{
+			if (&unitptr->mercPoolUnits[i] != nullptr && unitptr->mercPoolUnits[0].mercPoolUnitIndex == index)
+			{
+				return &unitptr->mercPoolUnits[i];
+			}
+		}
+		unitptr = unitptr->nextUnitsPtr;
 	}
 
 	return nullptr;
