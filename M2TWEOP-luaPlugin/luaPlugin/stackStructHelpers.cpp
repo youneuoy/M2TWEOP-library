@@ -103,14 +103,6 @@ namespace stackStructHelpers
 	}
 	void mergeArmies(stackStruct* army, stackStruct* targetArmy)
 	{
-		DWORD funcAdress = 0x007155F0;
-		//DISK OFFSET: 00714EF0 
-		_asm
-		{
-			push army
-			mov ecx, targetArmy
-			mov eax, funcAdress
-			call eax
-		}
+		(*(*plugData::data.funcs.mergeArmies))(army, targetArmy);
 	}
 }

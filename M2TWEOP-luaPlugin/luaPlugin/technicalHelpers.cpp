@@ -47,6 +47,10 @@ namespace technicalHelpers
 	{
 		(*(*plugData::data.funcsTech.createUniString))(genChar->localizedNicknameForSave, str);
 	}
+	void createUniString(UNICODE_STRING** &newUniStringPointer, const char* nonUniStr)
+	{
+		(*(*plugData::data.funcsTech.createUniString))(newUniStringPointer, nonUniStr);
+	}
 
 };
 

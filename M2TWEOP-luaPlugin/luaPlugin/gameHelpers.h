@@ -20,13 +20,21 @@ namespace gameHelpers
 	std::tuple<bool, int> getScriptCounter(const char* type);
 	void setScriptCounter(const char* type,int value);
 	regionStruct* getRegion(int index);
-	neighbourRegion* getNeighbour(regionStruct* region, int index);
+	oneTile* getTile(int x, int y);
+	stackStruct* getStack(const regionStruct* region, int index);
+	fortStruct* getFort(const regionStruct* region, int index);
+	watchTowerStruct* getWatchtower(const regionStruct* region, int index);
+	resStrat* getResource(const regionStruct* region, int index);
+	regionStruct* getNeighbour(regionStruct* region, int index);
+	bool getHiddenResource(regionStruct* region, int index);
+	void setHiddenResource(regionStruct* region, int index, bool enable);
 	void changeRegionName(regionStruct* region, const char* newName);
 	void changeRebelsName(regionStruct* region, const char* newName);
 
 	int getMercUnitNum(mercPool* mercPool);
 	mercPoolUnit* getMercUnit(mercPool* pool, int index);
 	void setMercReligion(mercPoolUnit* unit, int religion, bool set);
-	mercPoolUnit* addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, int startyear, int endyear, int crusading);
+	mercPoolUnit* addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, float startyear, float endyear, int crusading);
+	void saveGame(const char* path);
 };
 

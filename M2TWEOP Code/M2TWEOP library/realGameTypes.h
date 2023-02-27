@@ -107,8 +107,8 @@ public:
 	float replenishMax; //0x0010
 	int32_t maxUnits; //0x0014
 	float currentPool; //0x0018
-	int32_t startYear; //0x001C
-	int32_t endYear; //0x0020
+	float startYear; //0x001C
+	float endYear; //0x0020
 	char pad_0024[4]; //0x0024
 	int* religionsList; //0x0028
 	int* religionsListEnd; //0x002C
@@ -132,9 +132,9 @@ public:
 struct mercPoolUnitsPtr
 {
 public:
-	struct mercPoolUnits* mercPoolUnits;
+	struct mercPoolUnit* mercPoolUnits;
 	struct mercPoolUnitsPtr* nextUnitsPtr;
-	struct mercPoolUnits* prevPoolUnits;
+	struct mercPoolUnit* prevPoolUnits;
 	int Maxpool;
 	int currentPool;
 };

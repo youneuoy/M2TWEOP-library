@@ -89,10 +89,80 @@ regionStruct* gameHelpers::getRegion(int index)
 	return &map->regions[index];
 }
 
-neighbourRegion* gameHelpers::getNeighbour(regionStruct* region, int index)
+oneTile* gameHelpers::getTile(int x, int y)
 {
-	neighbourRegion* nregion = ((region->neighbourRegions) + (0x58 * index));
-	return nregion;
+	gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+	stratMap* map = gameDataAll->stratMap;
+	return &map->tilesArr[gameDataAll->stratMap->mapWidth * y + x];
+}
+
+stackStruct* gameHelpers::getStack(const regionStruct* region, int index)
+{
+	return region->armies[index];
+}
+
+fortStruct* gameHelpers::getFort(const regionStruct* region, int index)
+{
+	return region->forts[index];
+}
+
+watchTowerStruct* gameHelpers::getWatchtower(const regionStruct* region, int index)
+{
+	return region->watchtowers[index];
+}
+
+resStrat* gameHelpers::getResource(const regionStruct* region, int index)
+{
+	return region->resources[index];
+}
+
+regionStruct* gameHelpers::getNeighbour(regionStruct* region, int index)
+{
+	return region->neighbourRegions[index]->region;
+}
+
+bool gameHelpers::getHiddenResource(regionStruct* region, int index)
+{
+	int resources;
+	int set = 1 << index;
+	if (index < 32)
+	{
+		resources = region->hiddenResources1;
+	}
+	else if (index < 64) {
+		index = index - 32;
+		resources = region->hiddenResources2;
+	} else {
+		return false;
+	}
+	return ((resources & set) != 0);
+}
+
+void gameHelpers::setHiddenResource(regionStruct* region, int index, bool enable)
+{
+	int set = 1 << index;
+	if (index < 32)
+	{
+		if (enable == true)
+		{
+			region->hiddenResources1 = region->hiddenResources1 | set;
+		}
+		else
+		{
+			region->hiddenResources1 = region->hiddenResources1 & (0b1111111111111111 - set);
+		}
+	}
+	else if (index < 64) {
+		index = index - 32;
+		if (enable == true)
+		{
+			region->hiddenResources2 = region->hiddenResources2 | set;
+		}
+		else
+		{
+			region->hiddenResources2 = region->hiddenResources2 & (0b1111111111111111 - set);
+		}
+	}
 }
 
 void gameHelpers::changeRegionName(regionStruct* region, const char* newName)
@@ -119,10 +189,10 @@ int gameHelpers::getMercUnitNum(mercPool* mercPool)
 	return units;
 }
 
-mercPoolUnit* gameHelpers::addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, int startyear, int endyear, int crusading)
+mercPoolUnit* gameHelpers::addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, float startyear, float endyear, int crusading)
 {
 	mercPoolUnit* newMerc = new mercPoolUnit;
-	*newMerc = mercPool->firstUnits.mercPoolUnits->mercPoolUnit[0];
+	*newMerc = mercPool->firstUnits.mercPoolUnits[0];
 	int mercUnitNum = gameHelpers::getMercUnitNum(mercPool);
 	EduEntry* entry = eopEduHelpers::getEduEntry(idx);
 	newMerc->eduEntry = entry;
@@ -160,27 +230,19 @@ mercPoolUnit* gameHelpers::addMercUnit(mercPool* mercPool, int idx, int exp, int
 		currunits = unitptr->currentPool;
 		maxunitsP = unitptr->Maxpool;
 	}
-	unitptr->mercPoolUnits->mercPoolUnit[currunits] = *newMerc;
+	unitptr->mercPoolUnits[currunits] = *newMerc;
 	unitptr->currentPool++;
-	return &unitptr->mercPoolUnits->mercPoolUnit[currunits];
+	return &unitptr->mercPoolUnits[currunits];
 }
 
 mercPoolUnit* gameHelpers::getMercUnit(mercPool* pool, int index)
 {
 	mercPoolUnitsPtr* unitptr = &pool->firstUnits;
-	int currunits = 0;
-	while (unitptr != nullptr)
+	if (&unitptr->mercPoolUnits[index] != nullptr)
 	{
-		currunits = unitptr->currentPool;
-		for (int i = 0; i < currunits; i++)
-		{
-			if (unitptr->mercPoolUnits->mercPoolUnit[i].eduEntry->Index == index)
-			{
-				return &unitptr->mercPoolUnits->mercPoolUnit[i];
-			}
-		}
-		unitptr = unitptr->nextUnitsPtr;
+		return &unitptr->mercPoolUnits[index];
 	}
+
 	return nullptr;
 }
 
@@ -228,3 +290,7 @@ void gameHelpers::setMercReligion(mercPoolUnit* unit, int religion, bool set)
 	unit->religionsListEnd2 = &unit->religionsList[mercRelNum];
 }
 
+void gameHelpers::saveGame(const char* path)
+{
+	(*(*plugData::data.funcs.saveGame))(path);
+};

@@ -48,6 +48,7 @@ namespace m2tweopHelpers
 	void unlockGameConsoleCommands();
 
 	void setEDUUnitsSize(signed short min, signed short max);
+	void getGameVersion();
 
 
 	std::tuple<int, int, void*>  loadTextureToGame(const std::string& path);

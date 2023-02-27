@@ -48,10 +48,10 @@ struct regionStruct {
 	char pad_0194[8]; //0x0194
 	int32_t tileCount; //0x019C
 	char pad_0177[12]; //0x0194
-	struct neighbourRegion* neighbourRegions;//0x01AC
+	struct neighbourRegion** neighbourRegions;//0x01AC
 	int32_t neighbourRegionsCountArraySize; //0x01B0
 	int32_t neighbourRegionsNum; //0x01B4
-	struct resStrat* resources;//0x01B8
+	struct resStrat** resources;//0x01B8
 	int32_t resourceCountArrayZie; //0x01BC
 	int32_t resourcesNum; //0x01C0
 	char pad_01C4[12]; //0x01C4
@@ -107,8 +107,8 @@ public:
 	float replenishMax; //0x0010
 	int32_t maxUnits; //0x0014
 	float currentPool; //0x0018
-	int32_t startYear; //0x001C
-	int32_t endYear; //0x0020
+	float startYear; //0x001C
+	float endYear; //0x0020
 	char pad_0024[4]; //0x0024
 	int* religionsList; //0x0028
 	int* religionsListEnd; //0x002C
@@ -132,9 +132,9 @@ public:
 struct mercPoolUnitsPtr
 {
 public:
-	struct mercPoolUnits* mercPoolUnits;
+	struct mercPoolUnit* mercPoolUnits;
 	struct mercPoolUnitsPtr* nextUnitsPtr;
-	struct mercPoolUnits* prevPoolUnits;
+	struct mercPoolUnit* prevPoolUnits;
 	int Maxpool;
 	int currentPool;
 };

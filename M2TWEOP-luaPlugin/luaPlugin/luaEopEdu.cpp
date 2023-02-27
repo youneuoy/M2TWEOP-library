@@ -65,9 +65,24 @@ void luaP::initEopEdu()
 	@tfield addEopEduEntryFromEDUID addEopEduEntryFromEDUID
 	@tfield getEopEduEntryByID getEopEduEntryByID Needed for change many parameters of entry.
 	@tfield getDataEopDu getDataEopDu
-	@tfield setEntryUnitCardTga setEntryUnitCardTga
-	@tfield setEntryInfoCardTga setEntryInfoCardTga
+	@tfield getEduEntry getEduEntry
+	@tfield getEduEntryByType getEduEntryByType
+	@tfield getEduIndexByType getEduIndexByType
+	@tfield setEntryUnitCardTga setEntryUnitCardTga (only for eopdu units added by file!)
+	@tfield setEntryInfoCardTga setEntryInfoCardTga (only for eopdu units added by file!)
 	@tfield setEntrySoldierModel setEntrySoldierModel
+	@tfield getArmourUpgradeLevelsNum getArmourUpgradeLevelsNum
+	@tfield setArmourUpgradeLevelsNum setArmourUpgradeLevelsNum (only for eopdu units added by file!)
+	@tfield getArmourUpgradeLevel getArmourUpgradeLevel
+	@tfield setArmourUpgradeLevel setArmourUpgradeLevel (only for eopdu units added by file!)
+	@tfield getArmourUpgradeModelsNum getArmourUpgradeModelsNum
+	@tfield setArmourUpgradeModelsNum setArmourUpgradeModelsNum (only for eopdu units added by file!)
+	@tfield getArmourUpgradeModel getArmourUpgradeModel
+	@tfield setArmourUpgradeModel setArmourUpgradeModel (only for eopdu units added by file!)
+	@tfield setEntryAttackAttribute setEntryAttackAttribute
+	@tfield getEntryAttackAttribute getEntryAttackAttribute
+	@tfield setEntryStat setEntryStat
+	@tfield getEntryStat getEntryStat
 	@tfield setEntryLocalizedName setEntryLocalizedName
 	@tfield setEntryLocalizedDescr setEntryLocalizedDescr
 	@tfield setEntryLocalizedShortDescr setEntryLocalizedShortDescr
@@ -161,7 +176,7 @@ void luaP::initEopEdu()
 
 
 	/***
-	Set unit card for a M2TWEOPDU entry. Requirements for the location and parameters of the image are unchanged in relation to the game.
+	Set unit card for a M2TWEOPDU entry. Requirements for the location and parameters of the image are unchanged in relation to the game (only for eopdu units added by file!).
 	@function M2TWEOPDU.setEntryUnitCardTga
 	@tparam int eopEnryIndex Entry index in M2TWEOPDU.
 	@tparam string newCardTga
@@ -171,7 +186,7 @@ void luaP::initEopEdu()
 	tables.M2TWEOPEDUTable.set_function("setEntryUnitCardTga", &eopEduHelpers::setEntryUnitCardTga);
 
 	/***
-	Set unit info card for M2TWEOPDU entry. Requirements for the location and parameters of the image are unchanged in relation to the game.
+	Set unit info card for M2TWEOPDU entry. Requirements for the location and parameters of the image are unchanged in relation to the game (only for eopdu units added by file!).
 	@function M2TWEOPDU.setEntryInfoCardTga
 	@tparam int eopEnryIndex Entry index in M2TWEOPDU.
 	@tparam string newInfoCardTga
@@ -203,7 +218,7 @@ void luaP::initEopEdu()
 
 
 	/***
-	Set the amount of armour_upg_levels, if you increase the amount of levels the last number entry will be repeated.
+	Set the amount of armour_upg_levels, if you increase the amount of levels the last number entry will be repeated (only for eopdu units added by file!).
 	@function M2TWEOPDU.setArmourUpgradeLevelsNum
 	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
 	@tparam int amount
@@ -225,7 +240,7 @@ void luaP::initEopEdu()
 	tables.M2TWEOPEDUTable.set_function("getArmourUpgradeLevel", &eopEduHelpers::getArmourUpgradeLevel);
 
 	/***
-	Set armour upgrade level number at specified index.
+	Set armour upgrade level number at specified index (only for eopdu units added by file!).
 	@function M2TWEOPDU.setArmourUpgradeLevel
 	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
 	@tparam int levelidx
@@ -246,7 +261,7 @@ void luaP::initEopEdu()
 	tables.M2TWEOPEDUTable.set_function("getArmourUpgradeModelsNum", &eopEduHelpers::getArmourUpgradeModelsNum);
 
 	/***
-	Set the amount of armour_upg_levels, if you increase the amount of models the last model entry will be repeated.
+	Set the amount of armour_upg_levels, if you increase the amount of models the last model entry will be repeated (only for eopdu units added by file!).
 	@function M2TWEOPDU.setArmourUpgradeModelsNum
 	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
 	@tparam int amount Maximum: 4
@@ -267,7 +282,7 @@ void luaP::initEopEdu()
 	tables.M2TWEOPEDUTable.set_function("getArmourUpgradeModel", &eopEduHelpers::getArmourUpgradeModel);
 	
 	/***
-	Set the unit model at specified index.
+	Set the unit model at specified index (only for eopdu units added by file!).
 	@function M2TWEOPDU.setArmourUpgradeModel
 	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
 	@tparam int levelidx
@@ -281,7 +296,7 @@ void luaP::initEopEdu()
 	Set a primary or secondary attack attribute of an edu entry.
 	@function M2TWEOPDU.setEntryAttackAttribute
 	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
-	@tparam int attribute Use the attackAttr enum: attackAttr.spear, attackAttr.light\_spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short\_pike, attackAttr.long\_pike, attackAttr.spear\_bonus\_12, attackAttr.spear\_bonus\_10, attackAttr.spear\_bonus_8, attackAttr.spear\_bonus\_6, attackAttr.spear\_bonus\_4.
+	@tparam int attribute Use the attackAttr enum: attackAttr.spear, attackAttr.light\_spear, attackAttr.prec, attackAttr.ap, attackAttr.bp, attackAttr.area, attackAttr.fire, attackAttr.launching, attackAttr.thrown, attackAttr.short\_pike, attackAttr.long\_pike, attackAttr.spear\_bonus\_12, attackAttr.spear\_bonus\_10, attackAttr.spear\_bonus\_8, attackAttr.spear\_bonus\_6, attackAttr.spear\_bonus\_4.
 	@tparam boolean enable
 	@tparam int sec 1 = primary, 2 = secondary.
 	@usage

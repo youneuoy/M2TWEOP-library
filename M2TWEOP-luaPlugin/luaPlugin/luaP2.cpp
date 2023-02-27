@@ -17,6 +17,7 @@ void luaP::initCampaign()
 	{
 		sol::usertype<campaign> campaignTable;
 		sol::usertype<stratMap> stratMap;
+		sol::usertype<oneTile> tileStruct;
 		sol::usertype<regionStruct> region;
 		sol::usertype<mercPool> mercPool;
 		sol::usertype<mercPoolUnit> mercPoolUnit;
@@ -174,6 +175,7 @@ void luaP::initCampaign()
 	@tfield int mapHeight
 	@tfield int regionsNum
 	@tfield getRegion getRegion
+	@tfield getTile getTile
 
 	@table gameDataAll.stratMap
 	*/
@@ -192,6 +194,42 @@ void luaP::initCampaign()
 	local region = stratMap.getRegion(2);
 	*/
 	typeAll.stratMap.set_function("getRegion", &gameHelpers::getRegion);
+
+	/***
+	Get a specific tile by it's coordinates.
+	@function stratMap.getRegion
+	@tparam int x
+	@tparam int y
+	@treturn tileStruct tile
+	@usage
+	local stratmap = gameDataAll.get().stratMap;
+	local tile = stratMap.getTile(182, 243);
+	*/
+	typeAll.stratMap.set_function("getTile", &gameHelpers::getTile);
+	///Tile
+	//@section tileStruct
+
+	/***
+	Basic tile table, not everything very known and understood yet, you can research with these fields.
+
+	@tfield int isLand (1 = land, 0 = sea)
+	@tfield int groundType
+	@tfield int regionID
+	@tfield int factionID (Doesn't work if tile is river).
+	@tfield int borderingSettlement Not 0 means bordering settlement.
+	@tfield int hasRoad Not 0 means it has a road.
+	@tfield int border Not 0 means it is on border of region.
+
+	@table tileStruct
+	*/
+	typeAll.tileStruct = luaState.new_usertype<oneTile>("tileStruct");
+	typeAll.tileStruct.set("isLand", &oneTile::isLand);
+	typeAll.tileStruct.set("groundType", &oneTile::groundType);
+	typeAll.tileStruct.set("regionID", &oneTile::regionId);
+	typeAll.tileStruct.set("factionID", &oneTile::factionId);
+	typeAll.tileStruct.set("borderingSettlement", &oneTile::borderingSettlement);
+	typeAll.tileStruct.set("hasRoad", &oneTile::hasRoad);
+	typeAll.tileStruct.set("border", &oneTile::border);
 
 	///Region
 	//@section Region
@@ -222,8 +260,15 @@ void luaP::initCampaign()
 	@tfield factionStruct faction
 	@tfield string rebelType
 	@tfield int triumphValue
+	@tfield getStack getStack
+	@tfield getFort getFort
+	@tfield getWatchtower getWatchtower
+	@tfield getResource getResource
 	@tfield changeRegionName changeRegionName
 	@tfield changeRebelsName changeRebelsName
+	@tfield getNeighbour getNeighbour
+	@tfield getHiddenResource getHiddenResource
+	@tfield setHiddenResource setHiddenResource
 
 	@table region
 	*/
@@ -253,12 +298,60 @@ void luaP::initCampaign()
 	typeAll.region.set("triumphValue", &regionStruct::triumphValue);
 
 	/***
+	Get an army by it's index.
+	@function region:getStack
+	@tparam int index
+	@treturn stackStruct army
+	@usage
+	local sMap = gameDataAll.get().stratMap;
+	local region = sMap.getRegion(2);
+	local army = region:getStack(0)
+	*/
+	typeAll.region.set_function("getStack", &gameHelpers::getStack);
+
+	/***
+	Get a fort by it's index.
+	@function region:getFort
+	@tparam int index
+	@treturn fortStruct fort
+	@usage
+	local sMap = gameDataAll.get().stratMap;
+	local region = sMap.getRegion(2);
+	local fort = region:getFort(0)
+	*/
+	typeAll.region.set_function("getFort", &gameHelpers::getFort);
+
+	/***
+	Get a watchtower by it's index.
+	@function region:getWatchtower
+	@tparam int index
+	@treturn watchtowerStruct watchtower
+	@usage
+	local sMap = gameDataAll.get().stratMap;
+	local region = sMap.getRegion(2);
+	local watch = region:getWatchtower(0)
+	*/
+	typeAll.region.set_function("getWatchtower", &gameHelpers::getWatchtower);
+
+	/***
+	Get a resource by it's index.
+	@function region:getResource
+	@tparam int index
+	@treturn tradeResource resource
+	@usage
+	local sMap = gameDataAll.get().stratMap;
+	local region = sMap.getRegion(2);
+	local res = region:getResource(0)
+	*/
+	typeAll.region.set_function("getResource", &gameHelpers::getResource);
+
+	/***
 	Change region name (reset on reload).
 	@function region:changeRegionName
 	@tparam string newName
 	@usage
-	local stratmap = gameDataAll.get().stratMap;
-	local region = stratMap.getRegion(2);
+	local sMap = gameDataAll.get().stratMap;
+	local region = sMap.getRegion(2);
 	region:changeRegionName("Macedonia")
 	*/
 	typeAll.region.set_function("changeRegionName", &gameHelpers::changeRegionName);
@@ -268,11 +361,47 @@ void luaP::initCampaign()
 	@function region:changeRebelsName
 	@tparam string newName
 	@usage
-	local stratmap = gameDataAll.get().stratMap;
-	local region = stratMap.getRegion(2);
+	local sMap = gameDataAll.get().stratMap;
+	local region = sMap.getRegion(2);
 	region:changeRebelsName("Macedonian Rebels")
 	*/
 	typeAll.region.set_function("changeRebelsName", &gameHelpers::changeRebelsName);
+
+	/***
+	Get a neighbour region by it's index.
+	@function region:getNeighbour
+	@tparam int index
+	@treturn region nRegion
+	@usage
+	local sMap = gameDataAll.get().stratMap;
+	local region = sMap.getRegion(2);
+	region:getNeighbour(0)
+	*/
+	typeAll.region.set_function("getNeighbour", &gameHelpers::getNeighbour);
+
+	/***
+	Check if a region has a hidden resource.
+	@function region:getHiddenResource
+	@tparam int index
+	@treturn bool hr
+	@usage
+	local sMap = gameDataAll.get().stratMap;
+	local region = sMap.getRegion(2);
+	region:getHiddenResource(0)
+	*/
+	typeAll.region.set_function("getHiddenResource", &gameHelpers::getHiddenResource);
+
+	/***
+	Set a region's hidden resource (reset on game restart).
+	@function region:setHiddenResource
+	@tparam int index
+	@tparam bool enable
+	@usage
+	local sMap = gameDataAll.get().stratMap;
+	local region = sMap.getRegion(2);
+	region:setHiddenResource(0, false)
+	*/
+	typeAll.region.set_function("setHiddenResource", &gameHelpers::setHiddenResource);
 
 	///Merc Pools
 	//@section mercPool
@@ -295,10 +424,10 @@ void luaP::initCampaign()
 	@function mercPool:getMercUnitNum
 	@treturn int mercUnitNum
 	@usage
-	local stratmap = gameDataAll.get().stratMap;
-	local region = stratMap.getRegion(2);
+	local sMap = gameDataAll.get().stratMap;
+	local region = sMap.getRegion(2);
 	local mercpool = region.mercPool;
-	local mercNum = mercPool:getMercUnitNum();
+	local mercNum = mercpool:getMercUnitNum();
 	*/
 	typeAll.mercPool.set_function("getMercUnitNum", &gameHelpers::getMercUnitNum);
 
@@ -317,10 +446,10 @@ void luaP::initCampaign()
 	@tparam int crusading
 	@treturn mercPoolUnit mercunit
 	@usage
-	local stratmap = gameDataAll.get().stratMap;
-	local region = stratMap.getRegion(2);
+	local sMap = gameDataAll.get().stratMap;
+	local region = sMap.getRegion(2);
 	local mercpool = region.mercPool;
-	local mercUnit = mercPool:addMercUnit(1907, 0, 570, 0.15, 0.35, 3, 3, 0, 0, 0);
+	local mercUnit = mercpool:addMercUnit(1907, 0, 570, 0.15, 0.35, 3, 3, 0, 0, 0);
 	*/
 	typeAll.mercPool.set_function("addMercUnit", &gameHelpers::addMercUnit);
 
@@ -330,12 +459,12 @@ void luaP::initCampaign()
 	@tparam int idx
 	@treturn mercPoolUnit mercUnit
 	@usage
-	local stratmap = gameDataAll.get().stratMap;
-	local region = stratMap.getRegion(2);
+	local sMap = gameDataAll.get().stratMap;
+	local region = sMap.getRegion(2);
 	local mercpool = region.mercPool;
 	local mercNum = mercPool:getMercUnitNum();
 	for i = 0, mercNum-1 do
-		local mercUnit = mercPool:getMercUnit(i);
+		local mercUnit = mercpool:getMercUnit(i);
 	end
 	*/
 	typeAll.mercPool.set_function("getMercUnit", &gameHelpers::getMercUnit);
