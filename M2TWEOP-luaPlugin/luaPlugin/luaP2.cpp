@@ -24,22 +24,18 @@ void luaP::initCampaign()
 	}typeAll;
 	using namespace campaignEnums;
 
-	///cameraCoords
-	//@section cameraCoords
+	/// cameraCoords
+	//@section Battle Camera Struct
 
 	/***
-	Basic cameraCoords table.
+	Basic battleCamera table.
 
- 	@tfield int x
-	@tfield int y
-	@tfield int z
+ 	@tfield int xCoord
+	@tfield int yCoord
+	@tfield int zCoord
 
-	@table cameraCoords
+	@table battleCamera
 	*/
-	typeAll.cameraCoords = luaState.new_usertype<cameraCoords>("cameraCoords")
-	typeAll.cameraCoords.set("x", &cameraCoords::x)
-	typeAll.cameraCoords.set("y", &cameraCoords::y)
-	typeAll.cameraCoords.set("z", &cameraCoords::z)
 
 	/// Campaign Enums
 	//@section campaignEnums
