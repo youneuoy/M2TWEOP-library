@@ -287,7 +287,7 @@ namespace smallFuncs
 		return;
 	}
 
-	battleCameraStruct* void getBattleCamCoords()
+	NOINLINE EOP_EXPORT battleCameraStruct* void getBattleCamCoords()
 	{
 		battleCameraStruct* cameraOffset;
 
