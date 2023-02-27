@@ -189,7 +189,7 @@ int gameHelpers::getMercUnitNum(mercPool* mercPool)
 	return units;
 }
 
-mercPoolUnit* gameHelpers::addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, int startyear, int endyear, int crusading)
+mercPoolUnit* gameHelpers::addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, float startyear, float endyear, int crusading)
 {
 	mercPoolUnit* newMerc = new mercPoolUnit;
 	*newMerc = mercPool->firstUnits.mercPoolUnits[0];
