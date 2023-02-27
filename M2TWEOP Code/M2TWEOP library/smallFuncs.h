@@ -26,8 +26,7 @@ namespace smallFuncs
 
 	//toggle the highlighting of units on the tactical map.
 	NOINLINE EOP_EXPORT void swUnBMapHighlight();
-	NOINLINE EOP_EXPORT void setCurrentBattleCamCoords(int x, int y, int z);
-	NOINLINE EOP_EXPORT void getCurrentBattleCamCoords();
+	NOINLINE EOP_EXPORT void getBattleCamCoords();
 
 	NOINLINE EOP_EXPORT void setReligionsLimit(unsigned char limit);
 

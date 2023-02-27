@@ -174,13 +174,9 @@ namespace m2tweopHelpers
 	{
 		(*(*plugData::data.funcsBattle.swUnBMapHighlight))();
 	}
-	void setCurrentBattleCamCoords(int x, int y, int z)
+	battleCameraStruct* getBattleCamCoords()
 	{
-		(*(*plugData::data.funcsBattle.setCurrentBattleCamCoords))(x, y, z);
-	}
-	std::tuple<int, int, int> getCurrentBattleCamCoords()
-	{
-		return (*(*plugData::data.funcsBattle.getCurrentBattleCamCoords))();
+		return (*(*plugData::data.funcsBattle.getBattleCamCoords))();
 	}
 	void setConversionLvlFromCastle(int castleLvl, int convertToLvl)
 	{
