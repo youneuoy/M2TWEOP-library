@@ -60,7 +60,7 @@ namespace actionsStrat {
 			mov eax, somethingWithTrackedPointerAttackFunc
 			call eax
 		}
-		finalizeAction(mem, attacker);
+		//finalizeAction(mem, attacker);
 
 
 	}
