@@ -42,6 +42,8 @@
   <summary><a href="#M2TWEOP">M2TWEOP </a></summary>
     <li><a href="#M2TWEOP">M2TWEOP</a></li>
     <li><a href="#M2TWEOP.getModPath">M2TWEOP.getModPath ()</a></li>
+    <li><a href="#M2TWEOP.saveGame">M2TWEOP.saveGame (path)</a></li>
+    <li><a href="#M2TWEOP.getGameVersion">M2TWEOP.getGameVersion ()</a></li>
     <li><a href="#M2TWEOP.getPluginPath">M2TWEOP.getPluginPath ()</a></li>
     <li><a href="#M2TWEOP.loadTexture">M2TWEOP.loadTexture (path)</a></li>
     <li><a href="#M2TWEOP.unloadTexture">M2TWEOP.unloadTexture (id)</a></li>
@@ -496,14 +498,28 @@
   <summary><a href="#Strat_Map">Strat Map </a></summary>
     <li><a href="#gameDataAll.stratMap">gameDataAll.stratMap</a></li>
     <li><a href="#stratMap.getRegion">stratMap.getRegion (index)</a></li>
+    <li><a href="#stratMap.getTile">stratMap.getTile (x, y)</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#Tile">Tile </a></summary>
+    <li><a href="#tileStruct">tileStruct</a></li>
 </details>
 
 
 <details>
   <summary><a href="#Region">Region </a></summary>
     <li><a href="#region">region</a></li>
+    <li><a href="#region:getStack">region:getStack (index)</a></li>
+    <li><a href="#region:getFort">region:getFort (index)</a></li>
+    <li><a href="#region:getWatchtower">region:getWatchtower (index)</a></li>
+    <li><a href="#region:getResource">region:getResource (index)</a></li>
     <li><a href="#region:changeRegionName">region:changeRegionName (newName)</a></li>
     <li><a href="#region:changeRebelsName">region:changeRebelsName (newName)</a></li>
+    <li><a href="#region:getNeighbour">region:getNeighbour (index)</a></li>
+    <li><a href="#region:getHiddenResource">region:getHiddenResource (index)</a></li>
+    <li><a href="#region:setHiddenResource">region:setHiddenResource (index, enable)</a></li>
 </details>
 
 
@@ -602,7 +618,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-02-23 17:43:55</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-02-28 15:27:43</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -638,6 +654,14 @@
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.getModPath">M2TWEOP.getModPath ()</a></td>
 	<td class="summary">Function to return the path to the mod folder, starts from the drive not the game folder.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP.saveGame">M2TWEOP.saveGame (path)</a></td>
+	<td class="summary">Save the game.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP.getGameVersion">M2TWEOP.getGameVersion ()</a></td>
+	<td class="summary">Function to get the game version.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.getPluginPath">M2TWEOP.getPluginPath ()</a></td>
@@ -1673,7 +1697,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.setArmourUpgradeLevelsNum">M2TWEOPDU.setArmourUpgradeLevelsNum (index, amount)</a></td>
-	<td class="summary">Set the amount of armour<em>upg</em>levels, if you increase the amount of levels the last number entry will be repeated.</td>
+	<td class="summary">Set the amount of armour<em>upg</em>levels, if you increase the amount of levels the last number entry will be repeated (only for eopdu units added by file!).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.getArmourUpgradeLevel">M2TWEOPDU.getArmourUpgradeLevel (index, levelidx)</a></td>
@@ -1681,7 +1705,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.setArmourUpgradeLevel">M2TWEOPDU.setArmourUpgradeLevel (index, levelidx, newlevel)</a></td>
-	<td class="summary">Set armour upgrade level number at specified index.</td>
+	<td class="summary">Set armour upgrade level number at specified index (only for eopdu units added by file!).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.getArmourUpgradeLevelsNum">M2TWEOPDU.getArmourUpgradeLevelsNum (index)</a></td>
@@ -1689,7 +1713,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.setArmourUpgradeModelsNum">M2TWEOPDU.setArmourUpgradeModelsNum (index, amount)</a></td>
-	<td class="summary">Set the amount of armour<em>upg</em>levels, if you increase the amount of models the last model entry will be repeated.</td>
+	<td class="summary">Set the amount of armour<em>upg</em>levels, if you increase the amount of models the last model entry will be repeated (only for eopdu units added by file!).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.getArmourUpgradeModel">M2TWEOPDU.getArmourUpgradeModel (index, levelidx)</a></td>
@@ -1697,7 +1721,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.setArmourUpgradeModel">M2TWEOPDU.setArmourUpgradeModel (index, levelidx, modelName)</a></td>
-	<td class="summary">Set the unit model at specified index.</td>
+	<td class="summary">Set the unit model at specified index (only for eopdu units added by file!).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPDU.setEntryAttackAttribute">M2TWEOPDU.setEntryAttackAttribute (index, attribute, enable, sec)</a></td>
@@ -1862,6 +1886,17 @@
 	<td class="name" nowrap><a href="#stratMap.getRegion">stratMap.getRegion (index)</a></td>
 	<td class="summary">Get a specific region by index.</td>
 	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#stratMap.getTile">stratMap.getTile (x, y)</a></td>
+	<td class="summary">Get a specific tile by it's coordinates.</td>
+	</tr>
+</table>
+<h2><a href="#Tile">Tile </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#tileStruct">tileStruct</a></td>
+	<td class="summary">Basic tile table, not everything very known and understood yet, you can research with these fields.</td>
+	</tr>
 </table>
 <h2><a href="#Region">Region </a></h2>
 <table class="function_list">
@@ -1870,12 +1905,40 @@
 	<td class="summary">Basic region table.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#region:getStack">region:getStack (index)</a></td>
+	<td class="summary">Get an army by it's index.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#region:getFort">region:getFort (index)</a></td>
+	<td class="summary">Get a fort by it's index.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#region:getWatchtower">region:getWatchtower (index)</a></td>
+	<td class="summary">Get a watchtower by it's index.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#region:getResource">region:getResource (index)</a></td>
+	<td class="summary">Get a resource by it's index.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#region:changeRegionName">region:changeRegionName (newName)</a></td>
 	<td class="summary">Change region name (reset on reload).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#region:changeRebelsName">region:changeRebelsName (newName)</a></td>
 	<td class="summary">Change rebels name (reset on reload).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#region:getNeighbour">region:getNeighbour (index)</a></td>
+	<td class="summary">Get a neighbour region by it's index.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#region:getHiddenResource">region:getHiddenResource (index)</a></td>
+	<td class="summary">Check if a region has a hidden resource.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#region:setHiddenResource">region:setHiddenResource (index, enable)</a></td>
+	<td class="summary">Set a region's hidden resource (reset on game restart).</td>
 	</tr>
 </table>
 <h2><a href="#Merc_Pools">Merc Pools </a></h2>
@@ -2086,6 +2149,18 @@
 
 
         </li>
+        <li><span class="parameter">saveGame</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.saveGame">saveGame</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getGameVersion</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.getGameVersion">getGameVersion</a></span>
+
+
+
+        </li>
         <li><span class="parameter">getPluginPath</span>
             <span class="types"><a class="type" href="index.html#M2TWEOP.getPluginPath">getPluginPath</a></span>
 
@@ -2194,6 +2269,57 @@
     <ul>
         <pre class="example">mPath=M2TWEOP.getModPath();
 <span class="global">print</span>(mPath);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP.saveGame"></a>
+    <strong>M2TWEOP.saveGame (path)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Save the game.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         (start from mods)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">M2TWEOP.saveGame(mods/bare_geomod/saves/newsave.sav);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP.getGameVersion"></a>
+    <strong>M2TWEOP.getGameVersion ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Function to get the game version.
+    </div>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        gamever (1 = disk 2 = steam)
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">M2TWEOP.getGameVersion();</pre>
     </ul>
 
 </dd>
@@ -5295,7 +5421,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
 
         </li>
         <li><span class="parameter">getWatchtower</span>
-            <span class="types"><a class="type" href="index.html#factionStruct:getWatchtower">getWatchtower</a></span>
+            <span class="types"><a class="type" href="index.html#region:getWatchtower">getWatchtower</a></span>
 
 
 
@@ -11614,20 +11740,98 @@ newCapital=fac.capital();
 
 
         </li>
+        <li><span class="parameter">getEduEntry</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOPDU.getEduEntry">getEduEntry</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getEduEntryByType</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOPDU.getEduEntryByType">getEduEntryByType</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getEduIndexByType</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOPDU.getEduIndexByType">getEduIndexByType</a></span>
+
+
+
+        </li>
         <li><span class="parameter">setEntryUnitCardTga</span>
             <span class="types"><a class="type" href="index.html#M2TWEOPDU.setEntryUnitCardTga">setEntryUnitCardTga</a></span>
-
-
-
+         (only for eopdu units added by file!)
         </li>
         <li><span class="parameter">setEntryInfoCardTga</span>
             <span class="types"><a class="type" href="index.html#M2TWEOPDU.setEntryInfoCardTga">setEntryInfoCardTga</a></span>
+         (only for eopdu units added by file!)
+        </li>
+        <li><span class="parameter">setEntrySoldierModel</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOPDU.setEntrySoldierModel">setEntrySoldierModel</a></span>
 
 
 
         </li>
-        <li><span class="parameter">setEntrySoldierModel</span>
-            <span class="types"><a class="type" href="index.html#M2TWEOPDU.setEntrySoldierModel">setEntrySoldierModel</a></span>
+        <li><span class="parameter">getArmourUpgradeLevelsNum</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOPDU.getArmourUpgradeLevelsNum">getArmourUpgradeLevelsNum</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setArmourUpgradeLevelsNum</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOPDU.setArmourUpgradeLevelsNum">setArmourUpgradeLevelsNum</a></span>
+         (only for eopdu units added by file!)
+        </li>
+        <li><span class="parameter">getArmourUpgradeLevel</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOPDU.getArmourUpgradeLevel">getArmourUpgradeLevel</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setArmourUpgradeLevel</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOPDU.setArmourUpgradeLevel">setArmourUpgradeLevel</a></span>
+         (only for eopdu units added by file!)
+        </li>
+        <li><span class="parameter">getArmourUpgradeModelsNum</span>
+            <span class="types"><span class="type">getArmourUpgradeModelsNum</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">setArmourUpgradeModelsNum</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOPDU.setArmourUpgradeModelsNum">setArmourUpgradeModelsNum</a></span>
+         (only for eopdu units added by file!)
+        </li>
+        <li><span class="parameter">getArmourUpgradeModel</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOPDU.getArmourUpgradeModel">getArmourUpgradeModel</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setArmourUpgradeModel</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOPDU.setArmourUpgradeModel">setArmourUpgradeModel</a></span>
+         (only for eopdu units added by file!)
+        </li>
+        <li><span class="parameter">setEntryAttackAttribute</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOPDU.setEntryAttackAttribute">setEntryAttackAttribute</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getEntryAttackAttribute</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOPDU.getEntryAttackAttribute">getEntryAttackAttribute</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setEntryStat</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOPDU.setEntryStat">setEntryStat</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getEntryStat</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOPDU.getEntryStat">getEntryStat</a></span>
 
 
 
@@ -11902,7 +12106,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
     </dt>
     <dd>
     <div class="functionDescription">
-    Set unit card for a M2TWEOPDU entry.  Requirements for the location and parameters of the image are unchanged in relation to the game.
+    Set unit card for a M2TWEOPDU entry.  Requirements for the location and parameters of the image are unchanged in relation to the game (only for eopdu units added by file!).
     </div>
 
     <h3>Parameters:</h3>
@@ -11934,7 +12138,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
     </dt>
     <dd>
     <div class="functionDescription">
-    Set unit info card for M2TWEOPDU entry.  Requirements for the location and parameters of the image are unchanged in relation to the game.
+    Set unit info card for M2TWEOPDU entry.  Requirements for the location and parameters of the image are unchanged in relation to the game (only for eopdu units added by file!).
     </div>
 
     <h3>Parameters:</h3>
@@ -12030,7 +12234,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
     </dt>
     <dd>
     <div class="functionDescription">
-    Set the amount of armour<em>upg</em>levels, if you increase the amount of levels the last number entry will be repeated.
+    Set the amount of armour<em>upg</em>levels, if you increase the amount of levels the last number entry will be repeated (only for eopdu units added by file!).
     </div>
 
     <h3>Parameters:</h3>
@@ -12100,7 +12304,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
     </dt>
     <dd>
     <div class="functionDescription">
-    Set armour upgrade level number at specified index.
+    Set armour upgrade level number at specified index (only for eopdu units added by file!).
     </div>
 
     <h3>Parameters:</h3>
@@ -12170,7 +12374,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
     </dt>
     <dd>
     <div class="functionDescription">
-    Set the amount of armour<em>upg</em>levels, if you increase the amount of models the last model entry will be repeated.
+    Set the amount of armour<em>upg</em>levels, if you increase the amount of models the last model entry will be repeated (only for eopdu units added by file!).
     </div>
 
     <h3>Parameters:</h3>
@@ -12238,7 +12442,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
     </dt>
     <dd>
     <div class="functionDescription">
-    Set the unit model at specified index.
+    Set the unit model at specified index (only for eopdu units added by file!).
     </div>
 
     <h3>Parameters:</h3>
@@ -13844,6 +14048,12 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
 
 
         </li>
+        <li><span class="parameter">getTile</span>
+            <span class="types"><a class="type" href="index.html#stratMap.getTile">getTile</a></span>
+
+
+
+        </li>
     </ul>
 
 
@@ -13881,9 +14091,104 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> stratmap = gameDataAll.get().stratMap;
-<span class="keyword">local</span> region = stratMap.getRegion(<span class="number">2</span>);</pre>
+        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);</pre>
     </ul>
+
+</dd>
+    <dt>
+    <a name = "stratMap.getTile"></a>
+    <strong>stratMap.getTile (x, y)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a specific tile by it's coordinates.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#tileStruct">tileStruct</a></span>
+        tile
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> tile = sMap.getTile(<span class="number">182</span>, <span class="number">243</span>);</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tile"></a>Tile </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "tileStruct"></a>
+    <strong>tileStruct</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic tile table, not everything very known and understood yet, you can research with these fields.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">isLand</span>
+            <span class="types"><span class="type">int</span></span>
+         (1 = land, 0 = sea)
+        </li>
+        <li><span class="parameter">groundType</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">regionID</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">factionID</span>
+            <span class="types"><span class="type">int</span></span>
+         (Doesn't work if tile is river).
+        </li>
+        <li><span class="parameter">borderingSettlement</span>
+            <span class="types"><span class="type">int</span></span>
+         Not 0 means bordering settlement.
+        </li>
+        <li><span class="parameter">hasRoad</span>
+            <span class="types"><span class="type">int</span></span>
+         Not 0 means it has a road.
+        </li>
+        <li><span class="parameter">border</span>
+            <span class="types"><span class="type">int</span></span>
+         Not 0 means it is on border of region.
+        </li>
+    </ul>
+
+
+
+
 
 </dd>
 </dl>
@@ -14033,6 +14338,30 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
 
 
         </li>
+        <li><span class="parameter">getStack</span>
+            <span class="types"><a class="type" href="index.html#factionStruct:getStack">getStack</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getFort</span>
+            <span class="types"><a class="type" href="index.html#factionStruct:getFort">getFort</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getWatchtower</span>
+            <span class="types"><a class="type" href="index.html#region:getWatchtower">getWatchtower</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getResource</span>
+            <span class="types"><a class="type" href="index.html#settlementStruct:getResource">getResource</a></span>
+
+
+
+        </li>
         <li><span class="parameter">changeRegionName</span>
             <span class="types"><a class="type" href="index.html#region:changeRegionName">changeRegionName</a></span>
 
@@ -14045,11 +14374,173 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
 
 
         </li>
+        <li><span class="parameter">getNeighbour</span>
+            <span class="types"><a class="type" href="index.html#region:getNeighbour">getNeighbour</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getHiddenResource</span>
+            <span class="types"><a class="type" href="index.html#region:getHiddenResource">getHiddenResource</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setHiddenResource</span>
+            <span class="types"><a class="type" href="index.html#region:setHiddenResource">setHiddenResource</a></span>
+
+
+
+        </li>
     </ul>
 
 
 
 
+
+</dd>
+    <dt>
+    <a name = "region:getStack"></a>
+    <strong>region:getStack (index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get an army by it's index.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#stackStruct">stackStruct</a></span>
+        army
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
+<span class="keyword">local</span> army = region:getStack(<span class="number">0</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "region:getFort"></a>
+    <strong>region:getFort (index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a fort by it's index.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#fortStruct">fortStruct</a></span>
+        fort
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
+<span class="keyword">local</span> fort = region:getFort(<span class="number">0</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "region:getWatchtower"></a>
+    <strong>region:getWatchtower (index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a watchtower by it's index.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#watchtowerStruct">watchtowerStruct</a></span>
+        watchtower
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
+<span class="keyword">local</span> watch = region:getWatchtower(<span class="number">0</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "region:getResource"></a>
+    <strong>region:getResource (index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a resource by it's index.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#tradeResource">tradeResource</a></span>
+        resource
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
+<span class="keyword">local</span> res = region:getResource(<span class="number">0</span>)</pre>
+    </ul>
 
 </dd>
     <dt>
@@ -14076,8 +14567,8 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> stratmap = gameDataAll.get().stratMap;
-<span class="keyword">local</span> region = stratMap.getRegion(<span class="number">2</span>);
+        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
 region:changeRegionName(<span class="string">"Macedonia"</span>)</pre>
     </ul>
 
@@ -14106,9 +14597,117 @@ region:changeRegionName(<span class="string">"Macedonia"</span>)</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> stratmap = gameDataAll.get().stratMap;
-<span class="keyword">local</span> region = stratMap.getRegion(<span class="number">2</span>);
+        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
 region:changeRebelsName(<span class="string">"Macedonian Rebels"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "region:getNeighbour"></a>
+    <strong>region:getNeighbour (index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a neighbour region by it's index.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#region">region</a></span>
+        nRegion
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
+region:getNeighbour(<span class="number">0</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "region:getHiddenResource"></a>
+    <strong>region:getHiddenResource (index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Check if a region has a hidden resource.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        hr
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
+region:getHiddenResource(<span class="number">0</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "region:setHiddenResource"></a>
+    <strong>region:setHiddenResource (index, enable)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set a region's hidden resource (reset on game restart).
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">enable</span>
+            <span class="types"><span class="type">bool</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
+region:setHiddenResource(<span class="number">0</span>, <span class="keyword">false</span>)</pre>
     </ul>
 
 </dd>
@@ -14179,10 +14778,10 @@ region:changeRebelsName(<span class="string">"Macedonian Rebels"</span>)</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> stratmap = gameDataAll.get().stratMap;
-<span class="keyword">local</span> region = stratMap.getRegion(<span class="number">2</span>);
+        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
 <span class="keyword">local</span> mercpool = region.mercPool;
-<span class="keyword">local</span> mercNum = mercPool:getMercUnitNum();</pre>
+<span class="keyword">local</span> mercNum = mercpool:getMercUnitNum();</pre>
     </ul>
 
 </dd>
@@ -14254,10 +14853,10 @@ region:changeRebelsName(<span class="string">"Macedonian Rebels"</span>)</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> stratmap = gameDataAll.get().stratMap;
-<span class="keyword">local</span> region = stratMap.getRegion(<span class="number">2</span>);
+        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
 <span class="keyword">local</span> mercpool = region.mercPool;
-<span class="keyword">local</span> mercUnit = mercPool:addMercUnit(<span class="number">1907</span>, <span class="number">0</span>, <span class="number">570</span>, <span class="number">0.15</span>, <span class="number">0.35</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</pre>
+<span class="keyword">local</span> mercUnit = mercpool:addMercUnit(<span class="number">1907</span>, <span class="number">0</span>, <span class="number">570</span>, <span class="number">0.15</span>, <span class="number">0.35</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</pre>
     </ul>
 
 </dd>
@@ -14291,12 +14890,12 @@ region:changeRebelsName(<span class="string">"Macedonian Rebels"</span>)</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> stratmap = gameDataAll.get().stratMap;
-<span class="keyword">local</span> region = stratMap.getRegion(<span class="number">2</span>);
+        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
 <span class="keyword">local</span> mercpool = region.mercPool;
 <span class="keyword">local</span> mercNum = mercPool:getMercUnitNum();
 <span class="keyword">for</span> i = <span class="number">0</span>, mercNum-<span class="number">1</span> <span class="keyword">do</span>
-	<span class="keyword">local</span> mercUnit = mercPool:getMercUnit(i);
+	<span class="keyword">local</span> mercUnit = mercpool:getMercUnit(i);
 <span class="keyword">end</span></pre>
     </ul>
 
