@@ -13,7 +13,7 @@ void managerF::init()
 
 void managerF::debug()
 {
-
+	//MessageBoxA(NULL, "TEST", "TEST", NULL);
 }
 
 

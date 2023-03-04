@@ -40,7 +40,6 @@ void TacticalMapViewer::View(int x, int y)
 
 
 	if (fastFuncts::findSettlement(x, y) == nullptr
-		&& fastFuncts::findFort(x, y) == nullptr
 		)
 	{
 		DWORD startAdr = (DWORD)functions.startTransitionToMapView;
