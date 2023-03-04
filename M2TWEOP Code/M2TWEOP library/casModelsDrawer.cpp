@@ -32,12 +32,12 @@ namespace casModelsDrawer
 		vector<unique_ptr<casModelRecS>>objects;
 	}data;
 
-	NOINLINE EOP_EXPORT void addModelToDrawList(UINT32 modelId, int x, int y, float sizeMultiplier)
+	NOINLINE EOP_EXPORT void addCasModelToDrawList(UINT32 modelId, int x, int y, float sizeMultiplier)
 	{
 		data.objects[modelId] = std::make_unique<casModelRecS>(modelId, x, y, sizeMultiplier);
 	}
 
-	EOP_EXPORT void removeModelFromDrawList(UINT32 modelId)
+	EOP_EXPORT void removeCasModelFromDrawList(UINT32 modelId)
 	{
 		for (UINT32 i = 0; i < data.objects.size(); i++)
 		{

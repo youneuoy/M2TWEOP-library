@@ -26,6 +26,20 @@ int initPlugin(std::string* modPath)
     plugData::data.funcs.isTileFree.Load(&plPath, &fName);
 
 
+
+    fName = "setModel";
+    plugData::data.funcs.setModel.Load(&plPath, &fName);
+
+    fName = "addModelToGame";
+    plugData::data.funcs.addModelToGame.Load(&plPath, &fName);
+    fName = "addCasModelToDrawList";
+    plugData::data.funcs.addCasModelToDrawList.Load(&plPath, &fName);
+    fName = "removeCasModelFromDrawList";
+    plugData::data.funcs.removeCasModelFromDrawList.Load(&plPath, &fName);
+
+
+
+
     fName = "GetGameTileCoordsWithCursor";
     plugData::data.funcs.getGameTileCoordsWithCursor.Load(&plPath, &fName);
 
@@ -103,12 +117,6 @@ int initPlugin(std::string* modPath)
 
     fName = "setReligionsLimit";
     plugData::data.funcs.setReligionsLimit.Load(&plPath, &fName);
-
-    fName = "setModel";
-    plugData::data.funcs.setModel.Load(&plPath, &fName);
-
-    fName = "addModelToGame";
-    plugData::data.funcs.addModelToGame.Load(&plPath, &fName);
 
     fName = "getFactionsCount";
     plugData::data.funcs.getFactionsCount.Load(&plPath, &fName);

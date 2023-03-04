@@ -102,6 +102,11 @@ public:
 class basicFuncs
 {
 public:
+	ProcLoader<void(__cdecl*)(const char*, UINT32)> addModelToGame;
+	ProcLoader<void(__cdecl*)(int, int, UINT32, UINT32)> setModel;
+	ProcLoader<void(__cdecl*)(UINT32, int,int,float)> addCasModelToDrawList;
+	ProcLoader<void(__cdecl*)(UINT32)> removeCasModelFromDrawList;
+
 	ProcLoader<bool(__cdecl*)(const char*, const char*, char*)> callGameConsoleCommand;
 
 
@@ -144,8 +149,7 @@ public:
 	//get current game year
 	ProcLoader<UINT32(__cdecl*)()> getYear;
 	ProcLoader<void(__cdecl*)(char*, const char*)> setCryptedString;
-	ProcLoader<void(__cdecl*)(int, int, UINT32, UINT32)> setModel;
-	ProcLoader<void(__cdecl*)(const char*, UINT32)> addModelToGame;
+
 	ProcLoader<UINT32(__cdecl*)()> getFactionsCount;
 	ProcLoader<factionStruct** (__cdecl*)()> getFactionsList;
 

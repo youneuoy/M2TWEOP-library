@@ -1,5 +1,13 @@
 #include "objectsHelpers.h"
 #include "plugData.h"
+void objectsHelpers::startDrawModelAt(UINT32 modelId, int x, int y, float size)
+{
+	(*(*plugData::data.funcs.addCasModelToDrawList))(modelId, x, y, size);
+}
+void objectsHelpers::stopDrawModel(UINT32 modelId)
+{
+	(*(*plugData::data.funcs.removeCasModelFromDrawList))(modelId);
+}
 void objectsHelpers::setModel(int x, int y, UINT32 modelId, UINT32 modelId2)
 {
 	(*(*plugData::data.funcs.setModel))(x, y, modelId, modelId2);
