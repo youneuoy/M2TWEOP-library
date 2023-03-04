@@ -1420,9 +1420,23 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int number
 	@treturn stackStruct army
 	@usage
-	ourArmy = stratmap.game.getFaction(0):getCharacter(0)
-	if ourArmy.totalStrength > 1500 then
-		ourFac.money = ourFac.money - ourArmy.totalStrength
+	function FindArmy(x,y)
+		local factionsNum = stratmap.game.getFactionsCount();
+		for i = 0, factionsNum - 1 do
+			local faction = stratmap.game.getFaction(i);
+			if not faction then
+				return nil;
+			end
+
+			local armiesNum = faction.stacksNum;
+			for j = 0, armiesNum - 1 do
+				local army = faction:getStack(j);
+				if (army.xCoord == x and army.yCoord == y) then
+					return army;
+				end
+			end
+		end
+		return nil
 	end
 	*/
 	types.factionStruct.set_function("getStack", &factionHelpers::getStack);
