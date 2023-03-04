@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <shared_mutex>
 #include <windows.h>
 #include "FastFuncts.h" 
 #include "globals.h"
@@ -29,16 +30,19 @@ namespace casModelsDrawer
 
 	struct casModelsDrawerS
 	{
+		std::shared_mutex mutex;
 		vector<unique_ptr<casModelRecS>>objects;
 	}data;
 
 	NOINLINE EOP_EXPORT void addCasModelToDrawList(UINT32 modelId, int x, int y, float sizeMultiplier)
 	{
+		std::unique_lock<shared_mutex> lock(mutex);
 		data.objects.emplace_back(std::make_unique<casModelRecS>(modelId, x, y, sizeMultiplier));
 	}
 
 	EOP_EXPORT void removeCasModelFromDrawList(UINT32 modelId)
 	{
+		std::unique_lock<shared_mutex> lock(mutex);
 		for (UINT32 i = 0; i < data.objects.size(); i++)
 		{
 			if (data.objects[i]->ModelId == modelId)
@@ -89,6 +93,7 @@ namespace casModelsDrawer
 
 	void __stdcall drawModels()
 	{
+		std::shared_lock<shared_mutex> lock(mutex);
 		for (const unique_ptr<casModelRecS>& casModel : data.objects)
 		{
 			drawModel(casModel);

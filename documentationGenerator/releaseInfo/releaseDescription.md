@@ -9,19 +9,19 @@
 ### **Launcher**
 
 ### **Library**
+- new internal thing: casModelsDrawer - *youneuoy*
 
 ### **Lua Plugin**
-- Added getstack, getwatchtower, getneighbour, getresource, getfort to regionstruct - *Fynn*
-- Added savegame and getgameversion functions - *Fynn*
-- Added get hiddenresource and set hiddenresource to regionstruct - *Fynn*
+- stratmap.objects: added functions for start/stop draw any CAS model at any tile, etc(stratmap.objects.startDrawModelAt/stratmap.objects.stopDrawModel - *youneuoy*
 
 ### **ImGUI**
 
-
 ### **Documentation**
+- updated
+- little fixes
 
 ### **Bugfixes**
-- Fixed bugs with mercenaries, especially on disk
+- fixed crash then moving units in recruit queue - *youneuoy*
 
 ### **Links**
 * [EOP Documentation](https://youneuoy.github.io/M2TWEOP-library/)
