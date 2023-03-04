@@ -3563,3 +3563,53 @@ void recruitEOPMercunit::SetNewCode()
 
 	delete a;
 }
+
+toSelectForDrawPortsCas::toSelectForDrawPortsCas(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0046c471;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0046c0b1;
+}
+
+toSelectForDrawPortsCas::~toSelectForDrawPortsCas()
+{
+}
+
+void toSelectForDrawPortsCas::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(esi);
+	a->mov(ebx,ecx);
+	a->xor_(esi,esi);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toSelectForDrawPortsCas::SetNewCode()
+{
+	Assembler* a = new Assembler();
+	a->push(esi);
+	a->mov(ebx, ecx);
+	a->xor_(esi, esi);
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+	delete a;
+}

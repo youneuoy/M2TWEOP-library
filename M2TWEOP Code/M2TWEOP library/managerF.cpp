@@ -5,6 +5,7 @@
 #include "settlementConversionLvlSetter.h"
 #include "fastFunctsHelpers.h"
 
+#include "casModelsDrawer.h"
 void managerF::init()
 {
 
@@ -483,7 +484,11 @@ void managerF::doPachs()
 	
 	OnPathCasheCrashPlace* onPathCasheCrashPlace= new OnPathCasheCrashPlace(mem, (LPVOID)&TacticalMapViewer::GetPathCashe, globals::dataS.gamever, (LPVOID)&globals::dataS.Modules.tacticalMapVeiwer);
 	onPathCasheCrashPlace->SetNewCode();
-	onAutoSave->Enable();
+	onAutoSave->Enable();	
+
+	toSelectForDrawPortsCas* onSelectForDrawPortsCas = new toSelectForDrawPortsCas(mem, (LPVOID)casModelsDrawer::drawModels, globals::dataS.gamever);
+	onSelectForDrawPortsCas->SetNewCode();
+	onSelectForDrawPortsCas->Enable();
 
 	/*
 	f1 << "Start applying OntryFindTypeIdInListRecruitPoolEDB patch" << endl;

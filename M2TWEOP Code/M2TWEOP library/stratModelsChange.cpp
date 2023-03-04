@@ -1,4 +1,8 @@
 #include "stratModelsChange.h"
+
+#include "fastFuncts.h"
+#include "functionsOffsets.h"
+#include "dataOffsets.h"
 namespace stratModelsChange
 {
 	struct stratModelRecord
@@ -8,7 +12,7 @@ namespace stratModelsChange
 		model_Rigid* modelP = nullptr;
 	};
 
-	vector<stratModelRecord*>stratModels;
+	map<UINT32, stratModelRecord*>stratModels;
 
 	NOINLINE EOP_EXPORT void addModelToGame(const char* path, UINT32 modelId)
 	{
@@ -16,11 +20,9 @@ namespace stratModelsChange
 		modRec->path = path;
 		modRec->modelId = modelId;
 
-		stratModels.push_back(modRec);
+		stratModels[modelId] = modRec;
 		return;
 	}
-
-
 
 	struct stratModelChangeRecord
 	{
@@ -57,17 +59,36 @@ namespace stratModelsChange
 		rec->x = x;
 		rec->y = y;
 
-
 		stratModelChangeList.push_back(rec);
 	}
 
+
 	stratModelRecord* findStratModel(UINT32 modelId)
 	{
-		for (stratModelRecord* modRec : stratModels)
+		try 
 		{
-			if (modRec->modelId == modelId)
-				return modRec;
+			return stratModels.at(modelId);
 		}
+		catch (...) 
+		{
+			return nullptr;
+		}
+
+
+		return nullptr;
+	}
+
+	model_Rigid* getModel(UINT32 modelId)
+	{
+		try
+		{
+			return stratModels.at(modelId)->modelP;
+		}
+		catch (...)
+		{
+			return nullptr;
+		}
+
 
 		return nullptr;
 	}
@@ -103,11 +124,9 @@ namespace stratModelsChange
 	{
 		if (modelsLoaded == true)return;
 
-
-		for (stratModelRecord* modRec : stratModels)
+		for (auto& modRec : stratModels)
 		{
-			modRec->modelP = nullptr;
-			modRec->modelP = loadModel(modRec->path.c_str());
+			modRec.second->modelP = loadModel(modRec.second->path.c_str());
 		}
 		modelsLoaded = true;
 	}

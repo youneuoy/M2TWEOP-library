@@ -1,6 +1,13 @@
 #pragma once
 #include "realGameTypes.h"
 #include "headersSTD.h"
+struct RecruitPlaceData
+{
+	int x;
+	int y;
+
+};
+
 class RecruitSystem
 {
 public:

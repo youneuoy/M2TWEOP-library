@@ -121,6 +121,9 @@
     <Filter Include="features\ContextMenuStrat">
       <UniqueIdentifier>{7d6566ee-6f3f-4aad-b9a2-aa303e3c0c1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\casModelsDrawer">
+      <UniqueIdentifier>{3557e8a0-e12e-4a5c-8190-50b45fcf2a1c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -390,6 +393,9 @@
     <ClInclude Include="RSExport.h">
       <Filter>features\RecruitSystem</Filter>
     </ClInclude>
+    <ClInclude Include="casModelsDrawer.h">
+      <Filter>features\casModelsDrawer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -604,6 +610,9 @@
     </ClCompile>
     <ClCompile Include="RSExport.cpp">
       <Filter>features\RecruitSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="casModelsDrawer.cpp">
+      <Filter>features\casModelsDrawer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
