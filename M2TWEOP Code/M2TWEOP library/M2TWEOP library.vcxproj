@@ -261,11 +261,8 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="plugins.h" />
     <ClInclude Include="realGameTypes.h" />
-    <ClInclude Include="RecruitConditionDescription.h" />
-    <ClInclude Include="RecruitPlace.h" />
     <ClInclude Include="RecruitSystem.h" />
-    <ClInclude Include="RecruitSystemConfig.h" />
-    <ClInclude Include="RecruitUnitDescription.h" />
+    <ClInclude Include="RSExport.h" />
     <ClInclude Include="settlementConversionLvlSetter.h" />
     <ClInclude Include="SingleFbxMesh.h" />
     <ClInclude Include="smallFuncs.h" />
@@ -342,11 +339,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="plugins.cpp" />
-    <ClCompile Include="RecruitConditionDescription.cpp" />
-    <ClCompile Include="RecruitPlace.cpp" />
     <ClCompile Include="RecruitSystem.cpp" />
-    <ClCompile Include="RecruitSystemConfig.cpp" />
-    <ClCompile Include="RecruitUnitDescription.cpp" />
+    <ClCompile Include="RSExport.cpp" />
     <ClCompile Include="settlementConversionLvlSetter.cpp" />
     <ClCompile Include="SingleFbxMesh.cpp" />
     <ClCompile Include="smallFuncs.cpp" />

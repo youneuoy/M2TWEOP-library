@@ -112,12 +112,6 @@
     <Filter Include="features\RecruitSystem">
       <UniqueIdentifier>{3100ceb3-55db-429f-bda7-d86b5b34950b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="features\RecruitSystem\Core">
-      <UniqueIdentifier>{905ed2b0-68a6-484a-8cef-32abb7fa7604}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="features\RecruitSystem\Config">
-      <UniqueIdentifier>{30fa89e1-8565-4016-acf7-3eb032fb0c6e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="features\mmbMover">
       <UniqueIdentifier>{c4bd76eb-28c5-4b73-9553-9ab43b44e19c}</UniqueIdentifier>
     </Filter>
@@ -378,18 +372,6 @@
     <ClInclude Include="RecruitSystem.h">
       <Filter>features\RecruitSystem</Filter>
     </ClInclude>
-    <ClInclude Include="RecruitPlace.h">
-      <Filter>features\RecruitSystem\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="RecruitSystemConfig.h">
-      <Filter>features\RecruitSystem\Config</Filter>
-    </ClInclude>
-    <ClInclude Include="RecruitUnitDescription.h">
-      <Filter>features\RecruitSystem\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="RecruitConditionDescription.h">
-      <Filter>features\RecruitSystem\Core</Filter>
-    </ClInclude>
     <ClInclude Include="MmbMover.h">
       <Filter>features\mmbMover</Filter>
     </ClInclude>
@@ -401,6 +383,12 @@
     </ClInclude>
     <ClInclude Include="ContextMenuStrat.h">
       <Filter>features\ContextMenuStrat</Filter>
+    </ClInclude>
+    <ClInclude Include="eopBuildings.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="RSExport.h">
+      <Filter>features\RecruitSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -599,18 +587,6 @@
     <ClCompile Include="RecruitSystem.cpp">
       <Filter>features\RecruitSystem</Filter>
     </ClCompile>
-    <ClCompile Include="RecruitPlace.cpp">
-      <Filter>features\RecruitSystem\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="RecruitSystemConfig.cpp">
-      <Filter>features\RecruitSystem\Config</Filter>
-    </ClCompile>
-    <ClCompile Include="RecruitUnitDescription.cpp">
-      <Filter>features\RecruitSystem\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="RecruitConditionDescription.cpp">
-      <Filter>features\RecruitSystem\Core</Filter>
-    </ClCompile>
     <ClCompile Include="MmbMover.cpp">
       <Filter>features\mmbMover</Filter>
     </ClCompile>
@@ -622,6 +598,12 @@
     </ClCompile>
     <ClCompile Include="ContextMenuStrat.cpp">
       <Filter>features\ContextMenuStrat</Filter>
+    </ClCompile>
+    <ClCompile Include="eopBuildings.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="RSExport.cpp">
+      <Filter>features\RecruitSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
