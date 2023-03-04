@@ -508,9 +508,6 @@ NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevic
 
 
 	graphicsD3D::initImgGui(pDevice);
-
-	stratModelsChange::addModelToGame("data/models_strat/resource_silver2.CAS", 5);
-	stratModelsChange::addModelToGame("data/models_strat/residences/elven_huge_city.CAS", 7);
 	/*discord::Core* core{};
 	auto response = discord::Core::Create(879470336565981186, DiscordCreateFlags_Default, &core);
 	DiscordState.core.reset(core);
