@@ -87,7 +87,10 @@ namespace casModelsDrawer
 		matrix[15] = 1;
 
 		auto* modelCasP = stratModelsChange::getModel(model->ModelId);
-
+		if (modelCasP == nullptr)
+		{
+			return;
+		}
 		float coords[3]{ 0 };
 		doSomeWithCoordsGetZ(coords, model->X + 0.2f, model->Y + 0.2f, 1, 1, 0);
 		matrix[13] = coords[1];
