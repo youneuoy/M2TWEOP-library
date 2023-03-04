@@ -30,19 +30,21 @@ namespace casModelsDrawer
 
 	struct casModelsDrawerS
 	{
-		std::shared_mutex mutex;
+		std::shared_mutex casMutex;
 		vector<unique_ptr<casModelRecS>>objects;
 	}data;
 
-	NOINLINE EOP_EXPORT void addCasModelToDrawList(UINT32 modelId, int x, int y, float sizeMultiplier)
+	NOINLINE EOP_EXPORT void addCasModelToDrawList(UINT32 modelId, int x, int y, float sizeMultiplier) noexcept(true)
 	{
-		std::unique_lock<shared_mutex> lock(mutex);
+		std::unique_lock<std::shared_mutex> lock(data.casMutex);
 		data.objects.emplace_back(std::make_unique<casModelRecS>(modelId, x, y, sizeMultiplier));
+
+		return;
 	}
 
-	EOP_EXPORT void removeCasModelFromDrawList(UINT32 modelId)
+	EOP_EXPORT void removeCasModelFromDrawList(UINT32 modelId) noexcept(true)
 	{
-		std::unique_lock<shared_mutex> lock(mutex);
+		std::unique_lock<std::shared_mutex> lock(data.casMutex);
 		for (UINT32 i = 0; i < data.objects.size(); i++)
 		{
 			if (data.objects[i]->ModelId == modelId)
@@ -51,6 +53,8 @@ namespace casModelsDrawer
 				i--;
 			}
 		}
+
+		return;
 	}
 
 	void drawModel(const unique_ptr<casModelRecS>& model)
@@ -93,7 +97,7 @@ namespace casModelsDrawer
 
 	void __stdcall drawModels()
 	{
-		std::shared_lock<shared_mutex> lock(mutex);
+		std::shared_lock<std::shared_mutex> lock(data.casMutex);
 		for (const unique_ptr<casModelRecS>& casModel : data.objects)
 		{
 			drawModel(casModel);
