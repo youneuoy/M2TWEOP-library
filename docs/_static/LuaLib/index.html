@@ -82,6 +82,8 @@
 <details>
   <summary><a href="#Strat_Map_Objects">Strat Map Objects </a></summary>
     <li><a href="#stratmap.objects">stratmap.objects</a></li>
+    <li><a href="#objects.startDrawModelAt">objects.startDrawModelAt (modelId, x, y, sizeMultiplier)</a></li>
+    <li><a href="#objects.stopDrawModel">objects.stopDrawModel (modelId)</a></li>
     <li><a href="#objects.addModelToGame">objects.addModelToGame (path, modelId)</a></li>
     <li><a href="#objects.setModel">objects.setModel (xCoord, yCoord, modelId, modelId2)</a></li>
     <li><a href="#objects.replaceTile">objects.replaceTile (label, xCoord, yCoord, filename, weather, dayTime)</a></li>
@@ -618,7 +620,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-02-28 15:27:43</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-03-04 17:23:01</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -763,6 +765,14 @@
 	<tr>
 	<td class="name" nowrap><a href="#stratmap.objects">stratmap.objects</a></td>
 	<td class="summary">Basic stratmap.objects table</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#objects.startDrawModelAt">objects.startDrawModelAt (modelId, x, y, sizeMultiplier)</a></td>
+	<td class="summary">Start drawing .cas campaign strategy model with a unique ID in some coords.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#objects.stopDrawModel">objects.stopDrawModel (modelId)</a></td>
+	<td class="summary">Stop drawing .cas campaign strategy model with a unique ID.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#objects.addModelToGame">objects.addModelToGame (path, modelId)</a></td>
@@ -3040,11 +3050,94 @@ subElement1:execute();</pre>
 
 
         </li>
+        <li><span class="parameter">startDrawModelAt</span>
+            <span class="types"><a class="type" href="index.html#objects.startDrawModelAt">startDrawModelAt</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">stopDrawModel</span>
+            <span class="types"><a class="type" href="index.html#objects.stopDrawModel">stopDrawModel</a></span>
+
+
+
+        </li>
     </ul>
 
 
 
 
+
+</dd>
+    <dt>
+    <a name = "objects.startDrawModelAt"></a>
+    <strong>objects.startDrawModelAt (modelId, x, y, sizeMultiplier)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Start drawing .cas campaign strategy model with a unique ID in some coords.  Can be used at any time.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">modelId</span>
+            <span class="types"><span class="type">int</span></span>
+         Unique ID
+        </li>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">sizeMultiplier</span>
+            <span class="types"><span class="type">int</span></span>
+         1 is value with what it draw as same size as game objects
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">stratmap.objects.addModelToGame(<span class="string">"data/models_strat/residences/invisible.CAS"</span>, <span class="number">1</span>);
+stratmap.objects.startDrawModelAt(<span class="number">1</span>, <span class="number">50</span>, <span class="number">150</span>, <span class="number">2.25</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "objects.stopDrawModel"></a>
+    <strong>objects.stopDrawModel (modelId)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Stop drawing .cas campaign strategy model with a unique ID.  Can be used at any time.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">modelId</span>
+            <span class="types"><span class="type">int</span></span>
+         Unique ID
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">stratmap.objects.addModelToGame(<span class="string">"data/models_strat/residences/invisible.CAS"</span>, <span class="number">1</span>);
+stratmap.objects.startDrawModelAt(<span class="number">1</span>, <span class="number">50</span>, <span class="number">150</span>, <span class="number">2.25</span>);
+stratmap.objects.stopDrawModel(<span class="number">1</span>);</pre>
+    </ul>
 
 </dd>
     <dt>
@@ -5584,9 +5677,23 @@ ourFacName = ourFac:getFactionName();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourArmy = stratmap.game.getFaction(<span class="number">0</span>):getCharacter(<span class="number">0</span>)
-<span class="keyword">if</span> ourArmy.totalStrength &gt; <span class="number">1500</span> <span class="keyword">then</span>
-	ourFac.money = ourFac.money - ourArmy.totalStrength
+        <pre class="example"><span class="keyword">function</span> FindArmy(x,y)
+	<span class="keyword">local</span> factionsNum = stratmap.game.getFactionsCount();
+	<span class="keyword">for</span> i = <span class="number">0</span>, factionsNum - <span class="number">1</span> <span class="keyword">do</span>
+		<span class="keyword">local</span> faction = stratmap.game.getFaction(i);
+		<span class="keyword">if</span> <span class="keyword">not</span> faction <span class="keyword">then</span>
+			<span class="keyword">return</span> <span class="keyword">nil</span>;
+		<span class="keyword">end</span>
+
+		<span class="keyword">local</span> armiesNum = faction.stacksNum;
+		<span class="keyword">for</span> j = <span class="number">0</span>, armiesNum - <span class="number">1</span> <span class="keyword">do</span>
+			<span class="keyword">local</span> army = faction:getStack(j);
+			<span class="keyword">if</span> (army.xCoord == x <span class="keyword">and</span> army.yCoord == y) <span class="keyword">then</span>
+				<span class="keyword">return</span> army;
+			<span class="keyword">end</span>
+		<span class="keyword">end</span>
+	<span class="keyword">end</span>
+	<span class="keyword">return</span> <span class="keyword">nil</span>
 <span class="keyword">end</span></pre>
     </ul>
 
