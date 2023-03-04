@@ -101,7 +101,7 @@ namespace casModelsDrawer
 	void __stdcall drawModels()
 	{
 		std::shared_lock<std::shared_mutex> lock(data.casMutex);
-		for (const unique_ptr<casModelRecS>& casModel : data.objects)
+		for (const unique_ptr<casModelRecS>& casModel :  data.objects)
 		{
 			drawModel(casModel);
 		}
