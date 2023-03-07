@@ -9,19 +9,15 @@
 ### **Launcher**
 
 ### **Library**
-- new internal thing: casModelsDrawer - *youneuoy*
 
 ### **Lua Plugin**
-- stratmap.objects: added functions for start/stop draw any CAS model at any tile, etc(stratmap.objects.startDrawModelAt/stratmap.objects.stopDrawModel - *youneuoy*
+- new config variable - terminateAtLuaException. Set to 1 if you want the game to crash on an error in your script (Lua exception). You will still receive a message detailing the error, but closing it will also close the game.  - *youneuoy*
 
 ### **ImGUI**
 
 ### **Documentation**
-- updated
-- little fixes
 
 ### **Bugfixes**
-- fixed crash then moving units in recruit queue - *youneuoy*
 
 ### **Links**
 * [EOP Documentation](https://youneuoy.github.io/M2TWEOP-library/)
