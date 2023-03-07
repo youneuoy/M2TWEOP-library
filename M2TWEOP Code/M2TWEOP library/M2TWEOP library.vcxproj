@@ -225,7 +225,6 @@
     <ClInclude Include="..\3rd\miniz\miniz.h" />
     <ClInclude Include="..\3rd\nlohmann\json.hpp" />
     <ClInclude Include="actionsStrat.h" />
-    <ClInclude Include="agePatch.h" />
     <ClInclude Include="BattleMapOverrider.h" />
     <ClInclude Include="battlemapWorker.h" />
     <ClInclude Include="casModelsDrawer.h" />
@@ -305,7 +304,6 @@
     <ClCompile Include="..\3rd\miniz\miniz.c" />
     <ClCompile Include="actionsStrat.cpp" />
     <ClCompile Include="actionsStratHelpers.cpp" />
-    <ClCompile Include="agePatch.cpp" />
     <ClCompile Include="BattleMapOverrider.cpp" />
     <ClCompile Include="battlemapWorker.cpp" />
     <ClCompile Include="casModelsDrawer.cpp" />
