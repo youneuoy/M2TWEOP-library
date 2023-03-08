@@ -1703,6 +1703,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getResource getResource
 	@tfield int siegesNum
 	@tfield getSiege getSiege
+	@tfield changeSettlementName changeSettlementName
 
 	@table settlementStruct
 	*/
