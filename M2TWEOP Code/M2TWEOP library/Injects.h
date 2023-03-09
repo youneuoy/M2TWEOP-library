@@ -317,6 +317,20 @@ private:
 	LPVOID funcAdress;
 };
 
+//on the  reading resources models function
+class toCharReadModels
+	:public AATemplate
+{
+public:
+	toCharReadModels(MemWork* mem, LPVOID adr, int ver);
+	~toCharReadModels();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAdress;
+};
+
 
 
 class sizeOfBattleField :
@@ -789,7 +803,6 @@ public:
 	void SetNewCode();
 private:
 	LPVOID funcAddress;
-	DWORD otherFunc;
 };
 
 class OnCreateMercUnitCheck
@@ -949,19 +962,6 @@ class recruitEOPMercunit
 public:
 	recruitEOPMercunit(MemWork* mem, LPVOID addr, int ver);
 	~recruitEOPMercunit();
-
-	void SetOriginialCode();
-	void SetNewCode();
-private:
-	LPVOID funcAddress;
-};
-
-class toSelectForDrawPortsCas
-	:public AATemplate
-{
-public:
-	toSelectForDrawPortsCas(MemWork* mem, LPVOID addr, int ver);
-	~toSelectForDrawPortsCas();
 
 	void SetOriginialCode();
 	void SetNewCode();

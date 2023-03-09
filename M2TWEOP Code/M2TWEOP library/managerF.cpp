@@ -5,7 +5,6 @@
 #include "settlementConversionLvlSetter.h"
 #include "fastFunctsHelpers.h"
 
-#include "casModelsDrawer.h"
 void managerF::init()
 {
 
@@ -14,7 +13,7 @@ void managerF::init()
 
 void managerF::debug()
 {
-	//MessageBoxA(NULL, "TEST", "TEST", NULL);
+
 }
 
 
@@ -82,12 +81,12 @@ void managerF::doPachs()
 	toStopCharacter->SetNewCode();
 	toStopCharacter->Enable();
 
-	
+
 	OnMoveRecruitQueue* toMoveRecruitQueue = new OnMoveRecruitQueue(mem, (LPVOID)patchesForGame::OnMoveRecruitQueue, globals::dataS.gamever);
 	toMoveRecruitQueue->SetNewCode();
 	toMoveRecruitQueue->Enable();
 
-    //old code, what just disable backspace
+	//old code, what just disable backspace
 	//{
 	//	unsigned char ret[1] = { 0xC3};
 	//	DWORD nPtr;
@@ -250,6 +249,14 @@ void managerF::doPachs()
 
 	f1 << "Done" << endl;
 
+
+	f1 << "Start applying char strat models patch" << endl;
+	toCharReadModels* CharReadModels = new toCharReadModels(mem, (LPVOID)patchesForGame::loadCharStratModels, globals::dataS.gamever);
+	CharReadModels->SetNewCode();
+	CharReadModels->Enable();
+
+	f1 << "Done" << endl;
+
 	f1 << "Start applying onEvents patch" << endl;
 	toEvents* evnts = new toEvents(mem, (LPVOID)patchesForGame::onEvent, globals::dataS.gamever);
 	evnts->SetlEventsCode();
@@ -341,7 +348,7 @@ void managerF::doPachs()
 	//toReadGameDbsAtStart->Enable();
 
 	//f1 << "Done" << endl;
-	
+
 
 	f1 << "Start applying toDrawPartsOfStratObjects patch" << endl;
 	toDrawPartsOfStratObjects* toDrawPartsOfStratO = new toDrawPartsOfStratObjects(mem, (LPVOID)patchesForGame::onDrawPartsOfStratObjects, globals::dataS.gamever);
@@ -352,12 +359,12 @@ void managerF::doPachs()
 	toGameFormDrawImage* toDrawAllSt = new toGameFormDrawImage(mem, (LPVOID)patchesForGame::onDrawAll, globals::dataS.gamever);
 	toDrawAllSt->SetlDrawCode();
 	toDrawAllSt->Enable();
-	
+
 
 	f1 << "Start applying toEndSettlementSiege patch" << endl;
 	toEndSettlementSiege* toEndSiegSett = new toEndSettlementSiege(mem, (LPVOID)patchesForGame::onEndSiege, globals::dataS.gamever);
 	toEndSiegSett->SetlSiegeCode();
-	toEndSiegSett->Enable();	
+	toEndSiegSett->Enable();
 
 	f1 << "Start applying toStartSettlementSiege patch" << endl;
 	toStartSettlementSiege* toStartSiegSett = new toStartSettlementSiege(mem, (LPVOID)patchesForGame::onStartSiege, globals::dataS.gamever);
@@ -400,13 +407,13 @@ void managerF::doPachs()
 	cons1->SetNewCode();
 	cons1->Enable();
 	f1 << "Done" << endl;
-	
+
 
 	f1 << "Start applying onGameConsoleCommandFromScript patch" << endl;
 	onGameConsoleCommandFromScript* cons2 = new onGameConsoleCommandFromScript(mem, (LPVOID)patchessForConsole::onGameConsoleCommandFromScript, globals::dataS.gamever);
 	cons2->SetNewCode();
 	cons2->Enable();
-	f1 << "Done" << endl;	
+	f1 << "Done" << endl;
 
 
 	f1 << "Start applying onGameConsoleCommandFromScript patch" << endl;
@@ -474,21 +481,24 @@ void managerF::doPachs()
 	onQuickSave->Enable();
 	f1 << "Done" << endl;
 
-	
+
 	f1 << "Start applying OnAutoSave patch" << endl;
 	OnAutoSave* onAutoSave = new OnAutoSave(mem, (LPVOID)patchesForGame::onAutoSave, globals::dataS.gamever);
 	onAutoSave->SetNewCode();
 	onAutoSave->Enable();
-	f1 << "Done" << endl;	
+	f1 << "Done" << endl;
 
-	
-	OnPathCasheCrashPlace* onPathCasheCrashPlace= new OnPathCasheCrashPlace(mem, (LPVOID)&TacticalMapViewer::GetPathCashe, globals::dataS.gamever, (LPVOID)&globals::dataS.Modules.tacticalMapVeiwer);
+
+	OnPathCasheCrashPlace* onPathCasheCrashPlace = new OnPathCasheCrashPlace(mem, (LPVOID)&TacticalMapViewer::GetPathCashe, globals::dataS.gamever, (LPVOID)&globals::dataS.Modules.tacticalMapVeiwer);
 	onPathCasheCrashPlace->SetNewCode();
-	onAutoSave->Enable();	
+	onAutoSave->Enable();
+<<<<<<< Updated upstream
+=======
 
 	toSelectForDrawPortsCas* onSelectForDrawPortsCas = new toSelectForDrawPortsCas(mem, (LPVOID)casModelsDrawer::drawModels, globals::dataS.gamever);
 	onSelectForDrawPortsCas->SetNewCode();
 	onSelectForDrawPortsCas->Enable();
+>>>>>>> Stashed changes
 
 	/*
 	f1 << "Start applying OntryFindTypeIdInListRecruitPoolEDB patch" << endl;

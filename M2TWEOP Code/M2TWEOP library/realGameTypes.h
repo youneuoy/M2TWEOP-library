@@ -6,7 +6,7 @@ typedef unsigned char   undefined;
 typedef unsigned int    uint;
 typedef unsigned char    uchar;
 typedef unsigned short    ushort;
-#pragma pack(push,1) 
+#pragma pack(push,1)
 typedef struct stackStruct stackStruct, * PstackStruct;
 typedef struct settlementStruct settlementStruct, * PsettlementStruct;
 
@@ -37,7 +37,7 @@ struct regionStruct {
 	int32_t watchtowerCountArraySize; //0x0048
 	int32_t watchtowersNum; //0x004C
 	int8_t isSea; //0x0050
-	int8_t hasLake; //0x0051	
+	int8_t hasLake; //0x0051
 	char pad_0052[58]; //0x0052
 	struct mercPool* mercPool;//0x008C
 	undefined field6_0x90[36];//0x0090
@@ -51,7 +51,7 @@ struct regionStruct {
 	struct neighbourRegion* neighbourRegions;//0x01AC
 	int32_t neighbourRegionsCountArraySize; //0x01B0
 	int32_t neighbourRegionsNum; //0x01B4
-	struct resStrat* resources;//0x01B8
+	struct resStrat** resources;//0x01B8
 	int32_t resourceCountArrayZie; //0x01BC
 	int32_t resourcesNum; //0x01C0
 	char pad_01C4[12]; //0x01C4
@@ -107,8 +107,8 @@ public:
 	float replenishMax; //0x0010
 	int32_t maxUnits; //0x0014
 	float currentPool; //0x0018
-	float startYear; //0x001C
-	float endYear; //0x0020
+	int32_t startYear; //0x001C
+	int32_t endYear; //0x0020
 	char pad_0024[4]; //0x0024
 	int* religionsList; //0x0028
 	int* religionsListEnd; //0x002C
@@ -132,9 +132,9 @@ public:
 struct mercPoolUnitsPtr
 {
 public:
-	struct mercPoolUnit* mercPoolUnits;
+	struct mercPoolUnits* mercPoolUnits;
 	struct mercPoolUnitsPtr* nextUnitsPtr;
-	struct mercPoolUnit* prevPoolUnits;
+	struct mercPoolUnits* prevPoolUnits;
 	int Maxpool;
 	int currentPool;
 };
@@ -425,10 +425,69 @@ struct custom_tile {
 	int timeCode;
 };
 
+struct modelFlexiMixed
+{
+	char structsize[0x12c];
+};
+
+struct modelFlexi
+{
+	char structsize[0x11c];
+};
+
+struct casTextures
+{
+	int textureIndex;
+	int glossTextureIndex;
+};
+
+struct stratModelArrayEntry
+{
+public:
+	DWORD model_flexi_m; //0x0000
+	int32_t zeropoint; //0x0004
+	int32_t zeroarray[6]; //0x0008
+	float lodRange; //0x0020
+	int32_t zeroarray2[9]; //0x0024
+	struct casTextures modelTexturesFactionArray[31]; //0x0048
+	int32_t somearray[33]; //0x0140
+	int32_t somearray2[3]; //0x01C4
+	float lod2; //0x01D0
+	DWORD skeleton; //0x01D4
+	float scale; //0x01D8
+	int32_t modelCountNotShadow; //0x01DC
+	float indevRangeSquared; //0x01E0
+	DWORD shadow_model_flexi; //0x01E4
+	int32_t zeroarray3[7]; //0x01E8
+	float lod3; //0x0204
+	int32_t zeroarray4[7]; //0x0208
+	int32_t modelCountShadow; //0x0224
+	int32_t zeroint; //0x0228
+	char* typeName; //0x022C
+	int32_t N54788969; //0x0230
+
+}; //Size: 0x0234
+
+struct stratModelListEntry
+{
+public:
+	char* modelName; //0x0000
+	int32_t crypt; //0x0004
+	struct stratModelArrayEntry* stratModelEntry; //0x0008
+}; //Size: 0x000C
+
+struct descrCharacterStratModelArray
+{
+public:
+	struct stratModelListEntry stratModelsArray[16]; //0x0000
+}; //Size: 0x00C0
+
+
 struct genMod {
 	int type; /* 0-spy, 2 - diplomat, etc */
-	int stratInfo;
-	undefined field_0x8[8];
+	struct descrCharacterStratModelArray* stratInfo;
+	int modelCountArrayMax;
+	int modelCount;
 	char* card;
 	undefined field_0x14[5];
 	char* portrait;
@@ -467,6 +526,33 @@ struct stratResMod {
 struct model_Rigid { /* rigid model(cas model for "static" objects - settlements, resources, etc) on stratmap! */
 	undefined field_0x0[4];
 };
+
+struct descrCharacterEntry
+{
+public:
+	char* type; //0x0000
+	char pad_0004[4]; //0x0004
+	int32_t dictionary; //0x0008
+	struct genMod* ptrsToDescrCharacterFactionEntries[31]; //0x000C
+	struct genMod factionEntries[31]; //0x0088
+	int32_t factionCount; //0x0750
+	int8_t hasAction[40]; //0x0754
+	int32_t wageBase; //0x077C
+	float startingActionPoints; //0x0780
+}; //Size: 0x0784
+
+struct descrCharacterArray
+{
+public:
+	int32_t entryCount; //0x0000
+	char pad_0004[4]; //0x0004
+	int32_t defaultStartingActionPoints; //0x0008
+	char pad_000C[8]; //0x000C
+	int16_t N0000416D; //0x0014
+	char pad_0016[2]; //0x0016
+	struct descrCharacterEntry entries[12]; //0x0018
+}; //Size: 0x5A48
+
 
 //traiding resource on stratmap
 struct resStrat {
@@ -652,7 +738,7 @@ struct hiddenResource
 {
 public:
 	char* hiddenResName; //0x0000
-	int32_t hiddenResNameHash ; //0x0004
+	int32_t hiddenResNameHash; //0x0004
 }; //Size: 0x0008
 
 struct buildingsArray

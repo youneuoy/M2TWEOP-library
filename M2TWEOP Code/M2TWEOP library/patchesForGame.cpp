@@ -20,8 +20,8 @@ worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, world
 
 	string selectRecordS = battlemapWorker.getRecordName(selectedRecord);
 	string selectRecordG = battlemapWorker.getRecordGroup(selectedRecord);
-	string selectedWorld= plugins::onSelectWorldpkgdesc(selectRecordS.c_str(), selectRecordG.c_str());
-	if (selectedWorld.empty()||selectedWorld == selectRecordS)
+	string selectedWorld = plugins::onSelectWorldpkgdesc(selectRecordS.c_str(), selectRecordG.c_str());
+	if (selectedWorld.empty() || selectedWorld == selectRecordS)
 	{
 		selectedWorld = battleCreator::selectWorldpkgdesc(selectRecordS, selectRecordG);
 		if (selectedWorld.empty() || selectedWorld == selectRecordS)
@@ -52,15 +52,15 @@ worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, world
 	do
 	{
 		string recName = battlemapWorker.getRecordName(currRecord);
-		string recGroup= battlemapWorker.getRecordGroup(selectedRecord);
-		if (recName== selectedWorldCPP&& recGroup== selectRecordG)
+		string recGroup = battlemapWorker.getRecordGroup(selectedRecord);
+		if (recName == selectedWorldCPP && recGroup == selectRecordG)
 		{
 			return currRecord;
 		}
 
 
 		currRecord++;
-	} while (currRecord!= db->recordsEnd);
+	} while (currRecord != db->recordsEnd);
 
 	return nullptr;
 }
@@ -74,7 +74,7 @@ void __fastcall patchesForGame::OnLoadSettlementWorldpkgdesc(worldRecord* select
 }
 int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlement, bool* isCastle)
 {
-	int selectedLevel= plugins::onfortificationlevelS(settlement, isCastle);
+	int selectedLevel = plugins::onfortificationlevelS(settlement, isCastle);
 	if (selectedLevel == -2)
 	{
 		*isCastle = settlement->isCastle;
@@ -84,7 +84,7 @@ int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlemen
 char* __fastcall patchesForGame::onSaveEDUStringS(EduEntry* eduEntry)
 {
 	char* retName = eduThings::getEopNameOfEduEntry(eduEntry);
-	if (retName==nullptr)
+	if (retName == nullptr)
 	{
 		return eduEntry->Type;
 	}
@@ -106,7 +106,7 @@ int __fastcall patchesForGame::onCreateUnit(int* edbIndex, int** edb, char** ent
 		return 0;
 	}
 
-	return *edbIndex; 
+	return *edbIndex;
 }
 int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduindex)
 {
@@ -127,7 +127,7 @@ int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduin
 EduEntry* __fastcall patchesForGame::OnCreateMercUnit(char** entryName, EduEntry* entry)
 {
 	DWORD entryAddr = (DWORD)entry;
-	DWORD mercEOPValue = codes::offsets.mercEOPValue;//this is some weird address made by subtracting a value from edu start or something I dont really remember but its necesarry 
+	DWORD mercEOPValue = codes::offsets.mercEOPValue;//this is some weird address made by subtracting a value from edu start or something I dont really remember but its necesarry
 	if (entryAddr == mercEOPValue)
 	{
 		int* eduindex = eduThings::tryFindDataEopEduIndex(*entryName);
@@ -139,7 +139,7 @@ EduEntry* __fastcall patchesForGame::OnCreateMercUnit(char** entryName, EduEntry
 }
 const char* __fastcall patchesForGame::onQuickSave()
 {
-	static std::vector<std::string> saveNames={ u8"%S-1.sav" ,u8"%S-2.sav", u8"%S-3.sav" };
+	static std::vector<std::string> saveNames = { u8"%S-1.sav" ,u8"%S-2.sav", u8"%S-3.sav" };
 	jsn::json json;
 
 	std::string fPath = globals::dataS.modPatch;
@@ -200,7 +200,7 @@ const char* __fastcall patchesForGame::onQuickSave()
 }
 const char* __fastcall patchesForGame::onAutoSave()
 {
-	static std::vector<std::string> saveNames={ u8"%s%S%s%S-1.sav" ,u8"%s%S%s%S-2.sav", u8"%s%S%s%S-3.sav",
+	static std::vector<std::string> saveNames = { u8"%s%S%s%S-1.sav" ,u8"%s%S%s%S-2.sav", u8"%s%S%s%S-3.sav",
 		 u8"%s%S%s%S-4.sav" ,u8"%s%S%s%S-5.sav", u8"%s%S%s%S-6.sav"
 	};
 	jsn::json json;
@@ -271,13 +271,13 @@ general* __fastcall patchesForGame::mercenaryMovepointsGetGeneral(stackStruct* a
 			fortStruct* ourFort = fastFuncts::findFort(army->settlement->xCoord, army->settlement->yCoord);
 			gen = ourFort->gubernator;
 		}
-		
+
 	}
 	return gen;
 }
 void __fastcall patchesForGame::clickAtTile(int* xy)
 {
-	plugins::onClickAtTile(xy[0],xy[1]);
+	plugins::onClickAtTile(xy[0], xy[1]);
 }
 void __stdcall patchesForGame::afterCampaignMapLoaded()
 {
@@ -480,6 +480,17 @@ void __stdcall patchesForGame::unicalStratModsRead()
 	stratModelsChange::loadModels();
 }
 
+void __stdcall patchesForGame::loadCharStratModels()
+{
+#if defined TESTPATCHES
+	ofstream f1("logs\\TESTPATCHES.log", ios::app);
+
+	f1 << "loadCharStratModels" << endl;
+	f1.close();
+#endif
+	stratModelsChange::loadCharModels();
+}
+
 
 void __stdcall patchesForGame::checkAndChangeModels()
 {
@@ -499,7 +510,7 @@ void __stdcall patchesForGame::battleLoaded()
 
 void __stdcall patchesForGame::toReadGameDbsAtStart()
 {
-//	plugins::onReadGameDbsAtStart();
+	//	plugins::onReadGameDbsAtStart();
 }
 
 void __stdcall patchesForGame::onDrawPartsOfStratObjects()
@@ -513,19 +524,19 @@ void __stdcall patchesForGame::onDrawAll()
 }
 
 void __fastcall patchesForGame::OnStopCharacter(general* character)
-{ 
-	auto& campaign=smallFuncs::getGameDataAll()->campaignData;
-	if (campaign->humanPlayers<2)
+{
+	auto& campaign = smallFuncs::getGameDataAll()->campaignData;
+	if (campaign->humanPlayers < 2)
 	{
 		character->isStopCharacterNeeded = 1;
 	}
 }
 
 void __fastcall patchesForGame::recruitEOPunit(DWORD eduoffset, DWORD pad, regionStruct* region, int eduindex, int factionid, int exp, int minusone, int armlvl, int wplvl)
-{ 
+{
 	int regionID = region->regionID;
 	if (eduindex > 499)
-	{	
+	{
 		int eopIDX = eduThings::getDataEopEdu(eduindex);
 		fastFuncts::createUnitEDB(eopIDX, regionID, factionid, exp, armlvl, wplvl);
 	}
@@ -536,10 +547,10 @@ void __fastcall patchesForGame::recruitEOPunit(DWORD eduoffset, DWORD pad, regio
 }
 
 void __fastcall patchesForGame::recruitEOPMercunit(DWORD pad, DWORD pad2, regionStruct* region, int eduindex, int factionid, int exp)
-{ 
+{
 	int regionID = region->regionID;
 	if (eduindex > 499)
-	{	
+	{
 		int eopIDX = eduThings::getDataEopEdu(eduindex);
 		fastFuncts::createUnitEDB(eopIDX, regionID, factionid, exp, 0, 0);
 	}
@@ -549,16 +560,20 @@ void __fastcall patchesForGame::recruitEOPMercunit(DWORD pad, DWORD pad2, region
 	}
 }
 
-void WINAPI patchesForGame::OnMoveRecruitQueue()
+int __fastcall patchesForGame::OnMoveRecruitQueue(int magicVal)
 {
 	auto& campaign = smallFuncs::getGameDataAll()->campaignData;
 	if (campaign->humanPlayers < 2)
 	{
-		return;
+		return magicVal;
 	}
-	
+<<<<<<< Updated upstream
+	return 0;
+=======
+
 	MessageBoxA(NULL, "Moving queue disabled in hotseat mode. EXIT NOW!!!!!", "ATTENTION!", NULL);
 	std::terminate();
+>>>>>>> Stashed changes
 }
 
 void __fastcall patchesForGame::onEndSiege(settlementStruct* sett)

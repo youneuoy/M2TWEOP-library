@@ -6,7 +6,7 @@ namespace generalHelpers
 
 	void moveToTile(general* gen, int x, int y)
 	{
-		(*(*plugData::data.funcs.moveNormal))(gen,x, y);
+		(*(*plugData::data.funcs.moveNormal))(gen, x, y);
 	}
 
 	void reposition(general* gen, int x, int y)
@@ -60,7 +60,17 @@ namespace generalHelpers
 
 	void setTypeID(general* gen, int newType)
 	{
-		(*(*plugData::data.funcs.setCharacterType))(gen, newType,gen->genChar->subFaction,gen->genChar->faction->dipNum);
+		(*(*plugData::data.funcs.setCharacterType))(gen, newType, gen->genChar->subFaction, gen->genChar->faction->dipNum);
+	}
+
+	void setCharacterModel(general* gen, const char* model)
+	{
+		(*(*plugData::data.funcs.setCharacterModel))(gen, model);
+	}
+
+	void addCharacterCas(const char* skeletonname, const char* caspath, const char* shadowcaspath, const char* typeName, const char* texturepath)
+	{
+		return (*(*plugData::data.funcs.addCharacterCas))(skeletonname, caspath, shadowcaspath, typeName, texturepath);
 	}
 
 }

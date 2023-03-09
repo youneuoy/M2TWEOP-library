@@ -13,7 +13,7 @@ public:
 		stackStruct* army;
 
 
-		//condition destroy_or_rout_enemy 
+		//condition destroy_or_rout_enemy
 		UINT32 condDest;
 		//condition capture settlement
 		UINT32 condSetl;
@@ -102,11 +102,14 @@ public:
 class basicFuncs
 {
 public:
+<<<<<<< Updated upstream
+=======
 	ProcLoader<void(__cdecl*)(const char*, UINT32)> addModelToGame;
 	ProcLoader<void(__cdecl*)(int, int, UINT32, UINT32)> setModel;
-	ProcLoader<void(__cdecl*)(UINT32, int,int,float)> addCasModelToDrawList;
+	ProcLoader<void(__cdecl*)(UINT32, int, int, float)> addCasModelToDrawList;
 	ProcLoader<void(__cdecl*)(UINT32)> removeCasModelFromDrawList;
 
+>>>>>>> Stashed changes
 	ProcLoader<bool(__cdecl*)(const char*, const char*, char*)> callGameConsoleCommand;
 
 
@@ -115,7 +118,7 @@ public:
 
 
 	ProcLoader<bool(__cdecl*)(int*)> isTileFree;
-	ProcLoader<void(__cdecl*)(int &x, int &y)> getGameTileCoordsWithCursor;
+	ProcLoader<void(__cdecl*)(int& x, int& y)> getGameTileCoordsWithCursor;
 	ProcLoader<UINT32(__cdecl*)(int x, int y)> getTileRegionID;
 	ProcLoader<regionStruct* (__cdecl*)(UINT32)> getRegionByID;
 
@@ -123,10 +126,10 @@ public:
 	ProcLoader<fortStruct* (__cdecl*)(int x, int y)> findFort;
 
 	ProcLoader<factionStruct* (__cdecl*)(int regionID)> getRegionOwner;
-	ProcLoader<void (__cdecl*)(settlementStruct* sett, const char* newName)> changeSettlementName;
-	ProcLoader<void (__cdecl*)(factionStruct* fac, const char* newName)> changeFactionName;
-	ProcLoader<void (__cdecl*)(regionStruct* region, const char* newName)> changeRegionName;
-	ProcLoader<void (__cdecl*)(regionStruct* region, const char* newName)> changeRebelsName;
+	ProcLoader<void(__cdecl*)(settlementStruct* sett, const char* newName)> changeSettlementName;
+	ProcLoader<void(__cdecl*)(factionStruct* fac, const char* newName)> changeFactionName;
+	ProcLoader<void(__cdecl*)(regionStruct* region, const char* newName)> changeRegionName;
+	ProcLoader<void(__cdecl*)(regionStruct* region, const char* newName)> changeRebelsName;
 	ProcLoader<void(__cdecl*)(const factionStruct* fac, fortStruct* fort)> deleteFort;
 	ProcLoader<void(__cdecl*)(const factionStruct* fac, int x, int y)> createFortXY;
 	ProcLoader<void(__cdecl*)(const general* gen)> createFort;
@@ -149,7 +152,8 @@ public:
 	//get current game year
 	ProcLoader<UINT32(__cdecl*)()> getYear;
 	ProcLoader<void(__cdecl*)(char*, const char*)> setCryptedString;
-
+	ProcLoader<void(__cdecl*)(int, int, UINT32, UINT32)> setModel;
+	ProcLoader<void(__cdecl*)(const char*, UINT32)> addModelToGame;
 	ProcLoader<UINT32(__cdecl*)()> getFactionsCount;
 	ProcLoader<factionStruct** (__cdecl*)()> getFactionsList;
 
@@ -181,6 +185,8 @@ public:
 
 	ProcLoader<void(__cdecl*)(unit*)> killUnit;
 	ProcLoader<void(__cdecl*)(general*)> killCharacter;
+	ProcLoader<void(__cdecl*)(general*, const char*)> setCharacterModel;
+	ProcLoader<void(__cdecl*)(const char*, const char*, const char*, const char*, const char*)> addCharacterCas;
 
 	ProcLoader<void(__cdecl*)(unit*, int)> setSoldiersCount;
 	ProcLoader<void(__cdecl*)(unit*, int, int, int, int)> setUnitParams;
@@ -203,10 +209,6 @@ public:
 
 	ProcLoader<void(__cdecl*)(general*, int, int, int)> setCharacterType;
 
-	ProcLoader<void(__cdecl*)()> getGameVersion;
-	ProcLoader<void(__cdecl*)(const char*)> saveGame;
-	ProcLoader<void(__cdecl*)(stackStruct*, stackStruct*)> mergeArmies;
-
 
 
 
@@ -220,26 +222,26 @@ public:
 	ProcLoader<guild* (_cdecl*)(unsigned char)> getGuild;
 
 
-	ProcLoader<int (_cdecl*)()> GetUnitSize;
-	
+	ProcLoader<int(_cdecl*)()> GetUnitSize;
+
 	//build functions
 	ProcLoader<edbEntry* (__cdecl*)(edbEntry*, int)>addEopBuildEntry;
 	ProcLoader<edbEntry* (__cdecl*)(int)>getEopBuildEntry;
-	ProcLoader<void (__cdecl*)(edbEntry*, const char*, int, int)>setBuildingPic;
-	ProcLoader<void (__cdecl*)(edbEntry*, const char*, int, int)>setBuildingPicConstructed;
-	ProcLoader<void (__cdecl*)(edbEntry*, const char*, int, int)>setBuildingPicConstruction;
-	ProcLoader<void (__cdecl*)(edbEntry*, const char*, int, int)>setBuildingLocalizedName;
-	ProcLoader<void (__cdecl*)(edbEntry*, const char*, int, int)>setBuildingLocalizedDescr;
-	ProcLoader<void (__cdecl*)(edbEntry*, const char*, int, int)>setBuildingLocalizedDescrShort;
-	ProcLoader<void (__cdecl*)(edbEntry*, int, int, int16_t, bool)>addBuildingCapability;
-	ProcLoader<void (__cdecl*)(edbEntry*, int, int)>removeBuildingCapability;
+	ProcLoader<void(__cdecl*)(edbEntry*, const char*, int, int)>setBuildingPic;
+	ProcLoader<void(__cdecl*)(edbEntry*, const char*, int, int)>setBuildingPicConstructed;
+	ProcLoader<void(__cdecl*)(edbEntry*, const char*, int, int)>setBuildingPicConstruction;
+	ProcLoader<void(__cdecl*)(edbEntry*, const char*, int, int)>setBuildingLocalizedName;
+	ProcLoader<void(__cdecl*)(edbEntry*, const char*, int, int)>setBuildingLocalizedDescr;
+	ProcLoader<void(__cdecl*)(edbEntry*, const char*, int, int)>setBuildingLocalizedDescrShort;
+	ProcLoader<void(__cdecl*)(edbEntry*, int, int, int16_t, bool)>addBuildingCapability;
+	ProcLoader<void(__cdecl*)(edbEntry*, int, int)>removeBuildingCapability;
 	ProcLoader<BuildingLvlCapability* (__cdecl*)(edbEntry*, int, int)>getBuildingCapability;
-	ProcLoader<int (__cdecl*)(edbEntry*, int)>getBuildingCapabilityNum;
-	ProcLoader<void (__cdecl*)(edbEntry*, int, int, float, float, float, int32_t)>addBuildingPool;
-	ProcLoader<void (__cdecl*)(edbEntry*, int, int)>removeBuildingPool;
+	ProcLoader<int(__cdecl*)(edbEntry*, int)>getBuildingCapabilityNum;
+	ProcLoader<void(__cdecl*)(edbEntry*, int, int, float, float, float, int32_t)>addBuildingPool;
+	ProcLoader<void(__cdecl*)(edbEntry*, int, int)>removeBuildingPool;
 	ProcLoader<recruitPool* (__cdecl*)(edbEntry*, int, int)>getBuildingPool;
-	ProcLoader<int (__cdecl*)(edbEntry*, int)>getBuildingPoolNum;
-	ProcLoader<void (__cdecl*)(settlementStruct* , int, int)>createEOPBuilding;
+	ProcLoader<int(__cdecl*)(edbEntry*, int)>getBuildingPoolNum;
+	ProcLoader<void(__cdecl*)(settlementStruct*, int, int)>createEOPBuilding;
 	ProcLoader<edbEntry* (__cdecl*)(const char*)>getBuildingByName;
 
 };
@@ -254,7 +256,7 @@ public:
 	ProcLoader<EduEntry* (__cdecl*)(int)> getEopEduEntry;
 	ProcLoader<EduEntry* (__cdecl*)(int)> getEduEntry;
 	ProcLoader<EduEntry* (__cdecl*)(const char*)> getEduEntryByType;
-	ProcLoader<int (__cdecl*)(const char*)> getEduIndexByType;
+	ProcLoader<int(__cdecl*)(const char*)> getEduIndexByType;
 	ProcLoader<int(__cdecl*)(int)> getDataEopEdu;
 
 
