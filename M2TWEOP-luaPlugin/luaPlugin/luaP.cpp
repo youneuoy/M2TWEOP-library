@@ -847,12 +847,12 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Basic eduEntry table
 
-	@tfield string Type do not set!
-	@tfield string Soldier no not set!
-	@tfield string UnitCardTga no not set!
-	@tfield string InfoCardTga no not set!
-	@tfield int Index do not set!
-	@tfield int UnitCreatedCounter do not set!
+	@tfield string Type - (Get only)
+	@tfield string Soldier - (Get only)
+	@tfield string UnitCardTga - (Get only)
+	@tfield string InfoCardTga - (Get only)
+	@tfield int Index - (Get only)
+	@tfield int UnitCreatedCounter - (Get only)
 	@tfield int SoldierCount
 	@tfield float Mass
 	@tfield float Width
@@ -1690,55 +1690,55 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int isCastle
 	@tfield int isProvokedRebellion
 	@tfield int populationSize
-	@tfield int PopGrowthBaseFarm
-	@tfield int PopGrowthFarms
-	@tfield int PopGrowthHealth
-	@tfield int PopGrowthBuildings
-	@tfield int PopGrowthTaxBonus
-	@tfield int PopGrowthEntertainment
-	@tfield int PopGrowthTrade
-	@tfield int PopGrowthGovernorInfluence
-	@tfield int PopGrowthSqualor
-	@tfield int PopGrowthPlague
-	@tfield int PopGrowthTaxPenalty
-	@tfield int PublicOrderGarrison
-	@tfield int PublicOrderLaw
-	@tfield int PublicOrderBuildingsEntertainment
-	@tfield int PublicOrderGovernorInfluence
-	@tfield int PublicOrderTaxBonus
-	@tfield int PublicOrderTriumph
-	@tfield int PublicOrderPopulationBoom,
-	@tfield int PublicOrderEntertainment
-	@tfield int PublicOrderHealth
-	@tfield int PublicOrderGarrisonTwo
-	@tfield int PublicOrderFear
-	@tfield int PublicOrderGlory
-	@tfield int PublicOrderSqualor
-	@tfield int PublicOrderDistanceToCapital
-	@tfield int PublicOrderNoGovernance
-	@tfield int PublicOrderTaxPenalty
-	@tfield int PublicOrderUnrest,
-	@tfield int PublicOrderBesieged,
-	@tfield int PublicOrderBlockaded,
-	@tfield int PublicOrderCulturalUnrest,
-	@tfield int PublicOrderExcommunication
-	@tfield int PublicOrder
-	@tfield int FarmsIncome
-	@tfield int TaxesIncome
-	@tfield int MiningIncome
-	@tfield int TradeIncome
-	@tfield int DiplomaticIncome
-	@tfield int DemolitionIncome
-	@tfield int LootingIncome
-	@tfield int BuildingsIncome
-	@tfield int AdminIncome
-	@tfield int ConstructionExpense
-	@tfield int RecruitmentExpense
-	@tfield int DiplomaticExpense
-	@tfield int CorruptionExpense
-	@tfield int EntertainmentExpense
-	@tfield int DevastationExpense
-	@tfield int TotalIncomeWithoutAdmin
+	@tfield int PopGrowthBaseFarm - (Get only)
+	@tfield int PopGrowthFarms - (Get only)
+	@tfield int PopGrowthHealth - (Get only)
+	@tfield int PopGrowthBuildings - (Get only)
+	@tfield int PopGrowthTaxBonus - (Get only)
+	@tfield int PopGrowthEntertainment - (Get only)
+	@tfield int PopGrowthTrade - (Get only)
+	@tfield int PopGrowthGovernorInfluence - (Get only)
+	@tfield int PopGrowthSqualor - (Get only)
+	@tfield int PopGrowthPlague - (Get only)
+	@tfield int PopGrowthTaxPenalty - (Get only)
+	@tfield int PublicOrderGarrison - (Get only)
+	@tfield int PublicOrderLaw - (Get only)
+	@tfield int PublicOrderBuildingsEntertainment - (Get only)
+	@tfield int PublicOrderGovernorInfluence - (Get only)
+	@tfield int PublicOrderTaxBonus - (Get only)
+	@tfield int PublicOrderTriumph - (Get only)
+	@tfield int PublicOrderPopulationBoom - (Get only)
+	@tfield int PublicOrderEntertainment - (Get only)
+	@tfield int PublicOrderHealth - (Get only)
+	@tfield int PublicOrderGarrisonTwo - (Get only)
+	@tfield int PublicOrderFear - (Get only)
+	@tfield int PublicOrderGlory - (Get only)
+	@tfield int PublicOrderSqualor - (Get only)
+	@tfield int PublicOrderDistanceToCapital - (Get only)
+	@tfield int PublicOrderNoGovernance - (Get only)
+	@tfield int PublicOrderTaxPenalty - (Get only)
+	@tfield int PublicOrderUnrest - (Get only)
+	@tfield int PublicOrderBesieged - (Get only)
+	@tfield int PublicOrderBlockaded - (Get only)
+	@tfield int PublicOrderCulturalUnrest - (Get only)
+	@tfield int PublicOrderExcommunication - (Get only)
+	@tfield int PublicOrder - (Get only)
+	@tfield int FarmsIncome - (Get only)
+	@tfield int TaxesIncome - (Get only)
+	@tfield int MiningIncome - (Get only)
+	@tfield int TradeIncome - (Get only)
+	@tfield int DiplomaticIncome - (Get only)
+	@tfield int DemolitionIncome - (Get only)
+	@tfield int LootingIncome - (Get only)
+	@tfield int BuildingsIncome - (Get only)
+	@tfield int AdminIncome - (Get only)
+	@tfield int ConstructionExpense - (Get only)
+	@tfield int RecruitmentExpense - (Get only)
+	@tfield int DiplomaticExpense - (Get only)
+	@tfield int CorruptionExpense - (Get only)
+	@tfield int EntertainmentExpense - (Get only)
+	@tfield int DevastationExpense - (Get only)
+	@tfield int TotalIncomeWithoutAdmin - (Get only)
 	@tfield getReligion getReligion
 	@tfield setReligion setReligion
 	@tfield getGuildStanding getGuildStanding
