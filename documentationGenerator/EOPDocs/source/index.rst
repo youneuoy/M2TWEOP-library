@@ -22,7 +22,7 @@ M2TWEOP: Medieval 2 Engine Overhaul Project
 	  </div>
 	<p>M2TW Engine Overhaul Project is designed to expand the capabilities of the game Medieval 2: Total War.
 	<br>
-	EOP uses C++ and Assembly to modify the game's code in-memory and exposes this to the end user via Lua scripts and the <a href="./_static/LuaLib/index.html">EOP Lua Plugin</a></p>
+	EOP uses C++ and Assembly to modify the game's code in-memory and exposes this to the end user via a Lua API and the <a href="./_static/LuaLib/index.html">EOP Lua Plugin</a></p>
 	</div>
 
 	<h2>Features</h2>
