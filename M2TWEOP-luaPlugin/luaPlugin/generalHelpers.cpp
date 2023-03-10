@@ -70,7 +70,7 @@ namespace generalHelpers
 
 	void addCharacterCas(const char* skeletonname, const char* caspath, const char* shadowcaspath, const char* typeName, const char* texturepath)
 	{
-		return (*(*plugData::data.funcs.addCharacterCas))(skeletonname, caspath, shadowcaspath, typeName, texturepath);
+		(*(*plugData::data.funcs.addCharacterCas))(skeletonname, caspath, shadowcaspath, typeName, texturepath);
 	}
 
 }

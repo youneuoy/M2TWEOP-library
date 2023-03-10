@@ -1277,7 +1277,7 @@ toCharReadModels::toCharReadModels(MemWork* mem, LPVOID adr, int ver)
 		m_adress = 0x008B3D7F;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x008e38a9;
+		m_adress = 0x008B338F;
 }
 
 toCharReadModels::~toCharReadModels()

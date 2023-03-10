@@ -165,7 +165,6 @@ namespace stratModelsChange
 		for (stratModelCharacterRecord* modRec : characterStratModels)
 		{
 			*modRec->entry = *buildCharacterCas(modRec->skeletonname, modRec->caspath, modRec->shadowcaspath, modRec->modelId, modRec->texturepath);
-
 		}
 	}
 
@@ -299,6 +298,7 @@ namespace stratModelsChange
 
 	DWORD createModelFlexi(bool shadow) //create new empty model flexi using game's allocation function
 	{
+		DWORD assignfunc = codes::offsets.allocMemFunc;
 		DWORD newModelFlexi = 0;
 		DWORD createModelFlexi = codes::offsets.createModelFlexi;
 		DWORD memsize = 0x12c;
@@ -308,11 +308,13 @@ namespace stratModelsChange
 			createModelFlexi = codes::offsets.createModelFlexiShadow;
 		}
 
-		DWORD gameMem = fastFuncts::allocateGameMem(memsize);
-
 		_asm
 		{
-			mov ecx, gameMem
+			push memsize
+			mov eax, assignfunc
+			call eax
+			add esp, 0x4
+			mov ecx, eax
 			mov eax, createModelFlexi
 			call eax
 			mov newModelFlexi, eax
@@ -347,23 +349,39 @@ namespace stratModelsChange
 		}
 	}
 
-	DWORD loadStratCAS(const char* caspath) //load the cas
+	DWORD loadStratCAS(const char* caspath, bool shadow) //load the cas
 	{
 		int count = strlen(caspath);
 		int zero = 0;
 		int* zeropointer = &zero;
 		DWORD loadFunc = codes::offsets.loadStratCharModel;
 		DWORD stratModel = 0;
-		_asm
-		{
-			push count
-			push caspath
-			mov ecx, zeropointer
-			mov eax, loadFunc
-			call eax
-			test al, al
-			mov eax, [esp + 0xF4]
-			mov stratModel, eax
+		DWORD stackOffset = 0x178;
+		if (shadow) {
+			_asm
+			{
+				push count
+				push caspath
+				mov ecx, zeropointer
+				mov eax, loadFunc
+				call eax
+				test al, al
+				mov eax, [esp + 0x174]
+				mov stratModel, eax
+			}
+		}
+		else {
+			_asm
+			{
+				push count
+				push caspath
+				mov ecx, zeropointer
+				mov eax, loadFunc
+				call eax
+				test al, al
+				mov eax, [esp + 0x178]
+				mov stratModel, eax
+			}
 		}
 
 		return stratModel;
@@ -398,15 +416,19 @@ namespace stratModelsChange
 	stratModelArrayEntry* buildCharacterCas(const char* skeletonname, const char* caspath, const char* shadowcaspath, const char* typeName, const char* texturepath)
 	{
 		//build new cas file
-		std::string texturepathString = texturepath;
 		int stringsize = strlen(typeName);
 		DWORD skeleton = getCasAnimSet(skeletonname);
 		DWORD newModelFlexi = createModelFlexi(false);
 		DWORD newModelFlexiShadow = createModelFlexi(true);
-		DWORD stratmodel = loadStratCAS(caspath);
-		DWORD stratmodelShadow = loadStratCAS(shadowcaspath);
+		DWORD stratmodel = loadStratCAS(caspath, false);//this is very fickle with the stack position the data gets pulled from, watch out!
+		DWORD stratmodelShadow = loadStratCAS(shadowcaspath, true);
+		std::string texturepathString = texturepath;
 		size_t pos = texturepathString.find_last_of("\\/") + 1;
 		texturepathString = texturepathString.substr(0, pos);
+		pos = texturepathString.find_first_of("\\/") + 1;
+		texturepathString = texturepathString.substr(pos);
+		pos = texturepathString.find_first_of("\\/") + 1;
+		texturepathString = texturepathString.substr(pos);
 		fixModelFlexi(false, stratmodel, newModelFlexi, texturepathString.c_str(), skeleton);
 		fixModelFlexi(true, stratmodelShadow, newModelFlexiShadow, texturepathString.c_str(), skeleton);
 		int textureindex = readTGAfile(texturepath);
