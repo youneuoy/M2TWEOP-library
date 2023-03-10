@@ -1651,6 +1651,55 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int isCastle
 	@tfield int isProvokedRebellion
 	@tfield int populationSize
+	@tfield int PopGrowthBaseFarm
+	@tfield int PopGrowthFarms
+	@tfield int PopGrowthHealth
+	@tfield int PopGrowthBuildings
+	@tfield int PopGrowthTaxBonus
+	@tfield int PopGrowthEntertainment
+	@tfield int PopGrowthTrade
+	@tfield int PopGrowthGovernorInfluence
+	@tfield int PopGrowthSqualor
+	@tfield int PopGrowthPlague
+	@tfield int PopGrowthTaxPenalty
+	@tfield int PublicOrderGarrison
+	@tfield int PublicOrderLaw
+	@tfield int PublicOrderBuildingsEntertainment
+	@tfield int PublicOrderGovernorInfluence
+	@tfield int PublicOrderTaxBonus
+	@tfield int PublicOrderTriumph
+	@tfield int PublicOrderPopulationBoom,
+	@tfield int PublicOrderEntertainment
+	@tfield int PublicOrderHealth
+	@tfield int PublicOrderGarrisonTwo
+	@tfield int PublicOrderFear
+	@tfield int PublicOrderGlory
+	@tfield int PublicOrderSqualor
+	@tfield int PublicOrderDistanceToCapital
+	@tfield int PublicOrderNoGovernance
+	@tfield int PublicOrderTaxPenalty
+	@tfield int PublicOrderUnrest,
+	@tfield int PublicOrderBesieged,
+	@tfield int PublicOrderBlockaded,
+	@tfield int PublicOrderCulturalUnrest,
+	@tfield int PublicOrderExcommunication
+	@tfield int PublicOrder
+	@tfield int FarmsIncome
+	@tfield int TaxesIncome
+	@tfield int MiningIncome
+	@tfield int TradeIncome
+	@tfield int DiplomaticIncome
+	@tfield int DemolitionIncome
+	@tfield int LootingIncome
+	@tfield int BuildingsIncome
+	@tfield int AdminIncome
+	@tfield int ConstructionExpense
+	@tfield int RecruitmentExpense
+	@tfield int DiplomaticExpense
+	@tfield int CorruptionExpense
+	@tfield int EntertainmentExpense
+	@tfield int DevastationExpense
+	@tfield int TotalIncomeWithoutAdmin
 	@tfield getReligion getReligion
 	@tfield setReligion setReligion
 	@tfield getGuildStanding getGuildStanding
