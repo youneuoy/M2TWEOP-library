@@ -35,6 +35,10 @@ int initPlugin(std::string* modPath)
 	plugData::data.funcs.addCasModelToDrawList.Load(&plPath, &fName);
 	fName = "removeCasModelFromDrawList";
 	plugData::data.funcs.removeCasModelFromDrawList.Load(&plPath, &fName);
+	fName = "setCharacterModel";
+	plugData::data.funcs.setCharacterModel.Load(&plPath, &fName);
+	fName = "addCharacterCas";
+	plugData::data.funcs.addCharacterCas.Load(&plPath, &fName);
 
 
 
