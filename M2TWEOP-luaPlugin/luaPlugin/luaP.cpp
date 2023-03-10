@@ -233,6 +233,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Basic M2TWEOP table
 
 	@tfield getModPath getModPath
+	@tfield saveGame saveGame
+	@tfield getGameVersion getGameVersion
 	@tfield getPluginPath  getPluginPath
 	@tfield loadTexture loadTexture
 	@tfield unloadTexture unloadTexture
@@ -267,6 +269,23 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 
 	tables.M2TWEOPTable.set_function("getModPath", &m2tweopHelpers::getModPath);
+	/***
+	Save the game.
+	@function M2TWEOP.saveGame
+	@tparam string path (start from mods)
+	@usage
+	M2TWEOP.saveGame(mods/bare_geomod/saves/newsave.sav);
+	*/
+	tables.M2TWEOPTable.set_function("saveGame", &gameHelpers::saveGame);
+	/***
+	Function to get the game version.
+	@function M2TWEOP.getGameVersion
+	@treturn int gamever (1 = disk 2 = steam)
+	@usage
+	M2TWEOP.getGameVersion();
+	*/
+	tables.M2TWEOPTable.set_function("getGameVersion", &m2tweopHelpers::getGameVersion);
+	/***
 	/***
 	Function to return the path to the plugin (location of your LUA files).
 	@function M2TWEOP.getPluginPath
@@ -377,7 +396,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 
 	/***
-	Toggle the highlighting of units on the tactical map (Currently broken!).
+	Toggle the highlighting of units on the tactical map.
 	@function M2TWEOP.toggleUnitsBMapHighlight
 	@usage
 	M2TWEOP.toggleUnitsBMapHighlight();
@@ -532,7 +551,28 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.objectsTable = luaState.create_table();
 
-
+	/***
+	Start drawing .cas campaign strategy model with a unique ID in some coords. Can be used at any time.
+	@function objects.startDrawModelAt
+	@tparam int modelId Unique ID
+	@tparam int x
+	@tparam int y
+	@tparam int sizeMultiplier 1 is value with what it draw as same size as game objects
+	@usage
+	stratmap.objects.addModelToGame("data/models_strat/residences/invisible.CAS", 1);
+	stratmap.objects.startDrawModelAt(1, 50, 150, 2.25);
+	*/
+	tables.objectsTable.set_function("startDrawModelAt", &objectsHelpers::startDrawModelAt);
+	/***
+	Stop drawing .cas campaign strategy model with a unique ID. Can be used at any time.
+	@function objects.stopDrawModel
+	@tparam int modelId Unique ID
+	@usage
+	stratmap.objects.addModelToGame("data/models_strat/residences/invisible.CAS", 1);
+	stratmap.objects.startDrawModelAt(1, 50, 150, 2.25);
+	stratmap.objects.stopDrawModel(1);
+	*/
+	tables.objectsTable.set_function("stopDrawModel", &objectsHelpers::stopDrawModel);
 	/***
 	Add a new .cas campaign strategy model to the game with a unique ID. This should be called during onPluginLoad()
 	@function objects.addModelToGame
@@ -580,28 +620,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	stratmap.objects.replaceTile("Helms-Deep_Province",167,158,"hornburg_amb.wfc","clear","midday");
 	*/
 	tables.objectsTable.set_function("replaceTile", &objectsHelpers::replaceTile);
-	/***
-	Start drawing .cas campaign strategy model with a unique ID in some coords. Can be used at any time.
-	@function objects.startDrawModelAt
-	@tparam int modelId Unique ID
-	@tparam int x
-	@tparam int y
-	@tparam int sizeMultiplier 1 is value with what it draw as same size as game objects
-	@usage
-	stratmap.objects.addModelToGame("data/models_strat/residences/invisible.CAS", 1);
-	stratmap.objects.startDrawModelAt(1, 50, 150, 2.25);
-	*/
-	tables.objectsTable.set_function("startDrawModelAt", &objectsHelpers::startDrawModelAt);
-	/***
-	Stop drawing .cas campaign strategy model with a unique ID. Can be used at any time.
-	@function objects.stopDrawModel
-	@tparam int modelId Unique ID
-	@usage
-	stratmap.objects.addModelToGame("data/models_strat/residences/invisible.CAS", 1);
-	stratmap.objects.startDrawModelAt(1, 50, 150, 2.25);
-	stratmap.objects.stopDrawModel(1);
-	*/
-	tables.objectsTable.set_function("stopDrawModel", &objectsHelpers::stopDrawModel);
 
 	///Camera
 	//@section cameraTable
@@ -1707,6 +1725,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getResource getResource
 	@tfield int siegesNum
 	@tfield getSiege getSiege
+	@tfield changeSettlementName changeSettlementName
 
 	@table settlementStruct
 	*/
