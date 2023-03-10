@@ -25,6 +25,7 @@ graphicsD3D::dataT graphicsD3D::dataS;
 #include "../../M2TWEOP Common/m2tweopConstData.h"
 #include "eduFastFuncts.h"
 #include <windowsx.h>
+#include "stratModelsChange.h"
 template<typename T>
 T FnCast(uint32_t fnToCast, T pFnCastTo) {
 	(void)pFnCastTo;
@@ -507,8 +508,6 @@ NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevic
 
 
 	graphicsD3D::initImgGui(pDevice);
-
-
 	/*discord::Core* core{};
 	auto response = discord::Core::Create(879470336565981186, DiscordCreateFlags_Default, &core);
 	DiscordState.core.reset(core);

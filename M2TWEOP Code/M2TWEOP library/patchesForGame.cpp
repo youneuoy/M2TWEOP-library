@@ -549,14 +549,16 @@ void __fastcall patchesForGame::recruitEOPMercunit(DWORD pad, DWORD pad2, region
 	}
 }
 
-int __fastcall patchesForGame::OnMoveRecruitQueue(int magicVal)
+void WINAPI patchesForGame::OnMoveRecruitQueue()
 {
 	auto& campaign = smallFuncs::getGameDataAll()->campaignData;
 	if (campaign->humanPlayers < 2)
 	{
-		return magicVal;
+		return;
 	}
-	return 0;
+	
+	MessageBoxA(NULL, "Moving queue disabled in hotseat mode. EXIT NOW!!!!!", "ATTENTION!", NULL);
+	std::terminate();
 }
 
 void __fastcall patchesForGame::onEndSiege(settlementStruct* sett)

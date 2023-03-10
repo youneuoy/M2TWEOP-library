@@ -11,17 +11,13 @@
 ### **Library**
 
 ### **Lua Plugin**
-- Added getstack, getwatchtower, getneighbour, getresource, getfort to regionstruct - *Fynn*
-- Added savegame and getgameversion functions - *Fynn*
-- Added get hiddenresource and set hiddenresource to regionstruct - *Fynn*
+- new config variable - terminateAtLuaException. Set to 1 if you want the game to crash on an error in your script (Lua exception). You will still receive a message detailing the error, but closing it will also close the game.  - *youneuoy*
 
 ### **ImGUI**
-
 
 ### **Documentation**
 
 ### **Bugfixes**
-- Fixed bugs with mercenaries, especially on disk
 
 ### **Links**
 * [EOP Documentation](https://youneuoy.github.io/M2TWEOP-library/)

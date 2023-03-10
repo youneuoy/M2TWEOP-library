@@ -167,64 +167,64 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	//luaState.new_enum(
 	//	"buildingCap",
-    //    "population_growth_bonus", buildingStructHelpers::buildingCap::population_growth_bonus,
-    //    "population_loyalty_bonus", buildingStructHelpers::buildingCap::population_loyalty_bonus,
-    //    "population_health_bonus", buildingStructHelpers::buildingCap::population_health_bonus,
-    //    "trade_base_income_bonus", buildingStructHelpers::buildingCap::trade_base_income_bonus,
-    //    "trade_level_bonus", buildingStructHelpers::buildingCap::trade_level_bonus,
-    //    "trade_fleet", buildingStructHelpers::buildingCap::trade_fleet,
-    //    "taxable_income_bonus", buildingStructHelpers::buildingCap::taxable_income_bonus,
-    //    "mine_resource", buildingStructHelpers::buildingCap::mine_resource,
-    //    "farming_level", buildingStructHelpers::buildingCap::farming_level,
-    //    "road_level", buildingStructHelpers::buildingCap::road_level,
-    //    "gate_strength", buildingStructHelpers::buildingCap::gate_strength,
-    //    "gate_defences", buildingStructHelpers::buildingCap::gate_defences,
-    //    "wall_level", buildingStructHelpers::buildingCap::wall_level,
-    //    "tower_level", buildingStructHelpers::buildingCap::tower_level,
-    //    "armour", buildingStructHelpers::buildingCap::armour,
-    //    "stage_games", buildingStructHelpers::buildingCap::stage_games,
-    //    "stage_races", buildingStructHelpers::buildingCap::stage_races,
-    //    "fire_risk", buildingStructHelpers::buildingCap::fire_risk,
-    //    "weapon_melee_simple", buildingStructHelpers::buildingCap::weapon_melee_simple,
-    //    "weapon_melee_blade", buildingStructHelpers::buildingCap::weapon_melee_blade,
-    //    "weapon_missile_mechanical", buildingStructHelpers::buildingCap::weapon_missile_mechanical,
-    //    "weapon_missile_gunpowder", buildingStructHelpers::buildingCap::weapon_missile_gunpowder,
-    //    "weapon_artillery_mechanical", buildingStructHelpers::buildingCap::weapon_artillery_mechanical,
-    //    "weapon_artillery_gunpowder", buildingStructHelpers::buildingCap::weapon_artillery_gunpowder,
-    //    "weapon_naval_gunpowder", buildingStructHelpers::buildingCap::weapon_naval_gunpowder,
-    //    "upgrade_bodyguard", buildingStructHelpers::buildingCap::upgrade_bodyguard,
-    //    "recruits_morale_bonus", buildingStructHelpers::buildingCap::recruits_morale_bonus,
-    //    "recruits_exp_bonus", buildingStructHelpers::buildingCap::recruits_exp_bonus,
-    //    "happiness_bonus", buildingStructHelpers::buildingCap::happiness_bonus,
-    //    "law_bonus", buildingStructHelpers::buildingCap::law_bonus,
-    //    "construction_cost_bonus_military", buildingStructHelpers::buildingCap::construction_cost_bonus_military,
-    //    "construction_cost_bonus_religious", buildingStructHelpers::buildingCap::construction_cost_bonus_religious,
-    //    "construction_cost_bonus_defensive", buildingStructHelpers::buildingCap::construction_cost_bonus_defensive,
-    //    "construction_cost_bonus_other", buildingStructHelpers::buildingCap::construction_cost_bonus_other,
-    //    "construction_time_bonus_military", buildingStructHelpers::buildingCap::construction_time_bonus_military,
-    //    "construction_time_bonus_religious", buildingStructHelpers::buildingCap::construction_time_bonus_religious,
-    //    "construction_time_bonus_defensive", buildingStructHelpers::buildingCap::construction_time_bonus_defensive,
-    //    "construction_time_bonus_other", buildingStructHelpers::buildingCap::construction_time_bonus_other,
-    //    "construction_cost_bonus_wooden", buildingStructHelpers::buildingCap::construction_cost_bonus_wooden,
-    //    "construction_cost_bonus_stone", buildingStructHelpers::buildingCap::construction_cost_bonus_stone,
-    //    "construction_time_bonus_wooden", buildingStructHelpers::buildingCap::construction_time_bonus_wooden,
-    //    "construction_time_bonus_stone", buildingStructHelpers::buildingCap::construction_time_bonus_stone,
-    //    "free_upkeep", buildingStructHelpers::buildingCap::free_upkeep,
-    //    "pope_approval", buildingStructHelpers::buildingCap::pope_approval,
-    //    "pope_disapproval", buildingStructHelpers::buildingCap::pope_disapproval,
-    //    "religion_level", buildingStructHelpers::buildingCap::religion_level,
-    //    "amplify_religion_level", buildingStructHelpers::buildingCap::amplify_religion_level,
-    //    "archer_bonus", buildingStructHelpers::buildingCap::archer_bonus,
-    //    "cavalry_bonus", buildingStructHelpers::buildingCap::cavalry_bonus,
-    //    "heavy_cavalry_bonus", buildingStructHelpers::buildingCap::heavy_cavalry_bonus,
-    //    "gun_bonus", buildingStructHelpers::buildingCap::gun_bonus,
-    //    "navy_bonus", buildingStructHelpers::buildingCap::navy_bonus,
-    //    "recruitment_cost_bonus_naval", buildingStructHelpers::buildingCap::recruitment_cost_bonus_naval,
-    //    "retrain_cost_bonus", buildingStructHelpers::buildingCap::retrain_cost_bonus,
-    //    "weapon_projectile", buildingStructHelpers::buildingCap::weapon_projectile,
-    //    "income_bonus", buildingStructHelpers::buildingCap::income_bonus,
-    //    "recruitment_slots", buildingStructHelpers::buildingCap::recruitment_slots
-    //);
+	//    "population_growth_bonus", buildingStructHelpers::buildingCap::population_growth_bonus,
+	//    "population_loyalty_bonus", buildingStructHelpers::buildingCap::population_loyalty_bonus,
+	//    "population_health_bonus", buildingStructHelpers::buildingCap::population_health_bonus,
+	//    "trade_base_income_bonus", buildingStructHelpers::buildingCap::trade_base_income_bonus,
+	//    "trade_level_bonus", buildingStructHelpers::buildingCap::trade_level_bonus,
+	//    "trade_fleet", buildingStructHelpers::buildingCap::trade_fleet,
+	//    "taxable_income_bonus", buildingStructHelpers::buildingCap::taxable_income_bonus,
+	//    "mine_resource", buildingStructHelpers::buildingCap::mine_resource,
+	//    "farming_level", buildingStructHelpers::buildingCap::farming_level,
+	//    "road_level", buildingStructHelpers::buildingCap::road_level,
+	//    "gate_strength", buildingStructHelpers::buildingCap::gate_strength,
+	//    "gate_defences", buildingStructHelpers::buildingCap::gate_defences,
+	//    "wall_level", buildingStructHelpers::buildingCap::wall_level,
+	//    "tower_level", buildingStructHelpers::buildingCap::tower_level,
+	//    "armour", buildingStructHelpers::buildingCap::armour,
+	//    "stage_games", buildingStructHelpers::buildingCap::stage_games,
+	//    "stage_races", buildingStructHelpers::buildingCap::stage_races,
+	//    "fire_risk", buildingStructHelpers::buildingCap::fire_risk,
+	//    "weapon_melee_simple", buildingStructHelpers::buildingCap::weapon_melee_simple,
+	//    "weapon_melee_blade", buildingStructHelpers::buildingCap::weapon_melee_blade,
+	//    "weapon_missile_mechanical", buildingStructHelpers::buildingCap::weapon_missile_mechanical,
+	//    "weapon_missile_gunpowder", buildingStructHelpers::buildingCap::weapon_missile_gunpowder,
+	//    "weapon_artillery_mechanical", buildingStructHelpers::buildingCap::weapon_artillery_mechanical,
+	//    "weapon_artillery_gunpowder", buildingStructHelpers::buildingCap::weapon_artillery_gunpowder,
+	//    "weapon_naval_gunpowder", buildingStructHelpers::buildingCap::weapon_naval_gunpowder,
+	//    "upgrade_bodyguard", buildingStructHelpers::buildingCap::upgrade_bodyguard,
+	//    "recruits_morale_bonus", buildingStructHelpers::buildingCap::recruits_morale_bonus,
+	//    "recruits_exp_bonus", buildingStructHelpers::buildingCap::recruits_exp_bonus,
+	//    "happiness_bonus", buildingStructHelpers::buildingCap::happiness_bonus,
+	//    "law_bonus", buildingStructHelpers::buildingCap::law_bonus,
+	//    "construction_cost_bonus_military", buildingStructHelpers::buildingCap::construction_cost_bonus_military,
+	//    "construction_cost_bonus_religious", buildingStructHelpers::buildingCap::construction_cost_bonus_religious,
+	//    "construction_cost_bonus_defensive", buildingStructHelpers::buildingCap::construction_cost_bonus_defensive,
+	//    "construction_cost_bonus_other", buildingStructHelpers::buildingCap::construction_cost_bonus_other,
+	//    "construction_time_bonus_military", buildingStructHelpers::buildingCap::construction_time_bonus_military,
+	//    "construction_time_bonus_religious", buildingStructHelpers::buildingCap::construction_time_bonus_religious,
+	//    "construction_time_bonus_defensive", buildingStructHelpers::buildingCap::construction_time_bonus_defensive,
+	//    "construction_time_bonus_other", buildingStructHelpers::buildingCap::construction_time_bonus_other,
+	//    "construction_cost_bonus_wooden", buildingStructHelpers::buildingCap::construction_cost_bonus_wooden,
+	//    "construction_cost_bonus_stone", buildingStructHelpers::buildingCap::construction_cost_bonus_stone,
+	//    "construction_time_bonus_wooden", buildingStructHelpers::buildingCap::construction_time_bonus_wooden,
+	//    "construction_time_bonus_stone", buildingStructHelpers::buildingCap::construction_time_bonus_stone,
+	//    "free_upkeep", buildingStructHelpers::buildingCap::free_upkeep,
+	//    "pope_approval", buildingStructHelpers::buildingCap::pope_approval,
+	//    "pope_disapproval", buildingStructHelpers::buildingCap::pope_disapproval,
+	//    "religion_level", buildingStructHelpers::buildingCap::religion_level,
+	//    "amplify_religion_level", buildingStructHelpers::buildingCap::amplify_religion_level,
+	//    "archer_bonus", buildingStructHelpers::buildingCap::archer_bonus,
+	//    "cavalry_bonus", buildingStructHelpers::buildingCap::cavalry_bonus,
+	//    "heavy_cavalry_bonus", buildingStructHelpers::buildingCap::heavy_cavalry_bonus,
+	//    "gun_bonus", buildingStructHelpers::buildingCap::gun_bonus,
+	//    "navy_bonus", buildingStructHelpers::buildingCap::navy_bonus,
+	//    "recruitment_cost_bonus_naval", buildingStructHelpers::buildingCap::recruitment_cost_bonus_naval,
+	//    "retrain_cost_bonus", buildingStructHelpers::buildingCap::retrain_cost_bonus,
+	//    "weapon_projectile", buildingStructHelpers::buildingCap::weapon_projectile,
+	//    "income_bonus", buildingStructHelpers::buildingCap::income_bonus,
+	//    "recruitment_slots", buildingStructHelpers::buildingCap::recruitment_slots
+	//);
 
 	///M2TWEOP
 	//@section m2tweopTable
@@ -419,9 +419,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Checks if a tile is free.
 	@function M2TWEOP.isTileFree
-   	@tparam int X coordinate of the tile.
-   	@tparam int Y coordinate of the tile.
-   	@return boolean isFree
+	@tparam int X coordinate of the tile.
+	@tparam int Y coordinate of the tile.
+	@return boolean isFree
 	@usage
 	M2TWEOP.isTileFree(55,25);
 	*/
@@ -544,13 +544,38 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Basic stratmap.objects table
 
 	@tfield addModelToGame addModelToGame
-	@tfield setModel  setModel
-	@tfield replaceTile  replaceTile
+	@tfield setModel setModel
+	@tfield replaceTile replaceTile
+	@tfield startDrawModelAt startDrawModelAt
+	@tfield stopDrawModel stopDrawModel
 
 	@table stratmap.objects
 	*/
 	tables.objectsTable = luaState.create_table();
 
+
+	/***
+	Start drawing .cas campaign strategy model with a unique ID in some coords. Can be used at any time.
+	@function objects.startDrawModelAt
+	@tparam int modelId Unique ID
+	@tparam int x
+	@tparam int y
+	@tparam int sizeMultiplier 1 is value with what it draw as same size as game objects
+	@usage
+	stratmap.objects.addModelToGame("data/models_strat/residences/invisible.CAS", 1);
+	stratmap.objects.startDrawModelAt(1, 50, 150, 2.25);
+	*/
+	tables.objectsTable.set_function("startDrawModelAt", &objectsHelpers::startDrawModelAt);
+	/***
+	Stop drawing .cas campaign strategy model with a unique ID. Can be used at any time.
+	@function objects.stopDrawModel
+	@tparam int modelId Unique ID
+	@usage
+	stratmap.objects.addModelToGame("data/models_strat/residences/invisible.CAS", 1);
+	stratmap.objects.startDrawModelAt(1, 50, 150, 2.25);
+	stratmap.objects.stopDrawModel(1);
+	*/
+	tables.objectsTable.set_function("stopDrawModel", &objectsHelpers::stopDrawModel);
 
 	/***
 	Add a new .cas campaign strategy model to the game with a unique ID. This should be called during onPluginLoad()
@@ -575,7 +600,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.objectsTable.set_function("setModel", sol::overload(&objectsHelpers::setModel,
 		&objectsHelpers::setModelOneVar));
 	/***
-    Replace a custom tile. Change the custom battlefield on the specified coordinates.
+	Replace a custom tile. Change the custom battlefield on the specified coordinates.
 	@function objects.replaceTile
 	@tparam string label  Identifier.
 	@tparam int xCoord  X coordinate of tile.
@@ -1420,9 +1445,23 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int number
 	@treturn stackStruct army
 	@usage
-	ourArmy = stratmap.game.getFaction(0):getCharacter(0)
-	if ourArmy.totalStrength > 1500 then
-		ourFac.money = ourFac.money - ourArmy.totalStrength
+	function FindArmy(x,y)
+		local factionsNum = stratmap.game.getFactionsCount();
+		for i = 0, factionsNum - 1 do
+			local faction = stratmap.game.getFaction(i);
+			if not faction then
+				return nil;
+			end
+
+			local armiesNum = faction.stacksNum;
+			for j = 0, armiesNum - 1 do
+				local army = faction:getStack(j);
+				if (army.xCoord == x and army.yCoord == y) then
+					return army;
+				end
+			end
+		end
+		return nil
 	end
 	*/
 	types.factionStruct.set_function("getStack", &factionHelpers::getStack);
@@ -1713,6 +1752,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getResource getResource
 	@tfield int siegesNum
 	@tfield getSiege getSiege
+	@tfield changeSettlementName changeSettlementName
 
 	@table settlementStruct
 	*/
@@ -2248,7 +2288,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.stackStruct.set("reform_point_y", &stackStruct::reform_point_y);
 
 	/***
- 	Create a unit in the army by index from M2TWEOP units DB (M2TWEOPDU).
+	Create a unit in the army by index from M2TWEOP units DB (M2TWEOPDU).
 	@function stackStruct:createEOPUnit
 	@tparam int index
 	@tparam int exp

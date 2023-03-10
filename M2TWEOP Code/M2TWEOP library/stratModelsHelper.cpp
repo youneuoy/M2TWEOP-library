@@ -1,4 +1,7 @@
 #include "stratModelsChange.h"
+#include "fastFuncts.h"
+#include "functionsOffsets.h"
+#include "dataOffsets.h"
 namespace stratModelsChange
 {
 	void changeWatchTowerStratModel(watchTowerStruct* tower, model_Rigid* modelP)
