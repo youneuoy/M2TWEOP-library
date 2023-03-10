@@ -151,26 +151,6 @@ int eopEduHelpers::getArmourUpgradeModelsNum(int idx)
 
 void eopEduHelpers::setArmourUpgradeModelsNum(int idx, int amount)
 {
-<<<<<<< Updated upstream
-    if (amount <= 0 || amount >= 5)
-    {
-        return;
-    }
-    amount = amount*2;
-    EduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
-    int curramount = getArmourUpgradeModelsNum(idx);
-    eduEn->ArmorUpgradeModelsEnd = (int*)eduEn->ArmorUpgradeModels + (amount);
-    eduEn->ArmorUpgrade5 = (int*)eduEn->ArmorUpgradeModels + (amount);
-    if (amount <= (curramount*2))
-    {
-        return;
-    }
-    const std::string& last_upgrade = getArmourUpgradeModel(idx, (curramount-1));
-    for (int i = 0; i < amount/2 - curramount;i++)
-    {
-        setArmourUpgradeModel(idx, (curramount)+i, last_upgrade);
-    }
-=======
 	if (amount <= 0 || amount >= 5)
 	{
 		return;
@@ -193,7 +173,6 @@ void eopEduHelpers::setArmourUpgradeModelsNum(int idx, int amount)
 	{
 		setArmourUpgradeModel(idx, (curramount)+i, last_upgrade);
 	}
->>>>>>> Stashed changes
 }
 
 std::string eopEduHelpers::getArmourUpgradeModel(int idx, int levelidx)
@@ -224,30 +203,6 @@ std::string eopEduHelpers::getArmourUpgradeModel(int idx, int levelidx)
 
 void eopEduHelpers::setArmourUpgradeModel(int idx, int levelidx, const std::string& newModel)
 {
-<<<<<<< Updated upstream
-    
-    EduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
-    char* modelname = nullptr;
-    switch(levelidx)
-    {
-        case 3:
-            modelname = reinterpret_cast<char*>(&eduEn->ArmorUpgradeModels->UpgradeThree);
-            break;
-        case 2:
-            modelname = reinterpret_cast<char*>(&eduEn->ArmorUpgradeModels->UpgradeTwo);
-            break;
-        case 1:
-            modelname = reinterpret_cast<char*>(&eduEn->ArmorUpgradeModels->UpgradeOne);
-            break;
-        case 0:
-            modelname = reinterpret_cast<char*>(&eduEn->ArmorUpgradeModels->BaseModel);
-            break;
-    }
-    if (modelname != nullptr)
-    {
-        luaGetSetFuncs::setGameString(modelname, newModel.c_str());
-    }
-=======
 
 	EduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
 	int modelsNum = getArmourUpgradeModelsNum(idx);
@@ -277,7 +232,6 @@ void eopEduHelpers::setArmourUpgradeModel(int idx, int levelidx, const std::stri
 	{
 		luaGetSetFuncs::setGameString(modelname, newModel.c_str());
 	}
->>>>>>> Stashed changes
 }
 
 void eopEduHelpers::setEntryAttackAttribute(int idx, UnitEnums::attackAttr attribute, bool enable, int sec)
@@ -438,4 +392,3 @@ void eopEduHelpers::addUnitToRQ(int idx, settlementStruct* sett)
 	sett->countRQ++;
 	sett->unitQueue[newIndex] = *newUnit;
 }
-

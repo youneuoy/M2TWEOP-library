@@ -94,13 +94,8 @@ public:
 	static void WINAPI onDrawAll();
 
 
-<<<<<<< Updated upstream
-	static void __fastcall OnStopCharacter(general*character);
-	static int __fastcall OnMoveRecruitQueue(int magicVal);
-=======
 	static void __fastcall OnStopCharacter(general* character);
 	static void WINAPI OnMoveRecruitQueue();
->>>>>>> Stashed changes
 	static void __fastcall recruitEOPunit(DWORD eduoffset, DWORD pad, regionStruct* region, int eduindex, int factionid, int exp, int minusone, int armlvl, int wplvl);
 	static void __fastcall recruitEOPMercunit(DWORD pad, DWORD pad2, regionStruct* region, int eduindex, int factionid, int exp);
 

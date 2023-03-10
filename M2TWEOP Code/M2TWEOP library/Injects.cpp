@@ -3146,7 +3146,7 @@ void OnQuickSave::SetNewCode()
 	a->mov(eax, (DWORD)funcAddress);
 	a->call(eax);
 
-	a->mov(byte_ptr(esp, 0x20), eax);//move eax to stored eax
+	a->mov(dword_ptr(esp, 0x20), eax);//move eax to stored eax
 	a->popf();
 	a->popad();
 
@@ -3196,7 +3196,7 @@ void OnAutoSave::SetNewCode()
 	a->mov(eax, (DWORD)funcAddress);
 	a->call(eax);
 
-	a->mov(byte_ptr(esp, 0x20), eax);//move eax to stored eax
+	a->mov(dword_ptr(esp, 0x20), eax);//move eax to stored eax
 	a->popf();
 	a->popad();
 
@@ -3459,9 +3459,9 @@ OnMoveRecruitQueue::OnMoveRecruitQueue(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
 	if (ver == 2)//steam
-		m_adress = 0x00ab4966;
+		m_adress = 0x00ab495f;
 	else if (ver == 1)//kingdoms
-		m_adress = 0x00ab3936;
+		m_adress = 0x00ab392f;
 }
 OnMoveRecruitQueue::~OnMoveRecruitQueue()
 {
@@ -3469,14 +3469,9 @@ OnMoveRecruitQueue::~OnMoveRecruitQueue()
 void OnMoveRecruitQueue::SetOriginialCode()
 {
 	Assembler* a = new Assembler();
-<<<<<<< Updated upstream
-	
-	a->mov(byte_ptr(eax, 0xD0), 01);
-=======
 
 	a->lea(edx, dword_ptr(esp, 0xC));
 	a->push(edx);
->>>>>>> Stashed changes
 	a->ret();
 	m_originalBytes = (unsigned char*)a->make();
 	m_originalSize = m_memory->GetASMSize(m_originalBytes);
@@ -3485,14 +3480,18 @@ void OnMoveRecruitQueue::SetOriginialCode()
 void OnMoveRecruitQueue::SetNewCode()
 {
 	Assembler* a = new Assembler();
+
+	a->lea(edx, dword_ptr(esp, 0xC));
+	a->push(edx);
+
 	a->pushad();
 	a->pushf();
-	a->mov(ecx, eax);
+
 	a->mov(eax, (DWORD)funcAddress);
 	a->call(eax);
-	a->mov(byte_ptr(esp, 0x20), eax);//move eax to stored eax
 	a->popf();
 	a->popad();
+
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();
 	delete a;
@@ -3617,8 +3616,6 @@ void recruitEOPMercunit::SetNewCode()
 
 	delete a;
 }
-<<<<<<< Updated upstream
-=======
 
 toSelectForDrawPortsCas::toSelectForDrawPortsCas(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
@@ -3669,4 +3666,3 @@ void toSelectForDrawPortsCas::SetNewCode()
 	m_cheatBytes = (unsigned char*)a->make();
 	delete a;
 }
->>>>>>> Stashed changes

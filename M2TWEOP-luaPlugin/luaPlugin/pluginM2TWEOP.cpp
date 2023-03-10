@@ -26,11 +26,6 @@ int initPlugin(std::string* modPath)
 	plugData::data.funcs.isTileFree.Load(&plPath, &fName);
 
 
-<<<<<<< Updated upstream
-    fName = "GetGameTileCoordsWithCursor";
-    plugData::data.funcs.getGameTileCoordsWithCursor.Load(&plPath, &fName);
-=======
-
 	fName = "setModel";
 	plugData::data.funcs.setModel.Load(&plPath, &fName);
 
@@ -40,17 +35,12 @@ int initPlugin(std::string* modPath)
 	plugData::data.funcs.addCasModelToDrawList.Load(&plPath, &fName);
 	fName = "removeCasModelFromDrawList";
 	plugData::data.funcs.removeCasModelFromDrawList.Load(&plPath, &fName);
-	fName = "setCharacterModel";
-	plugData::data.funcs.setCharacterModel.Load(&plPath, &fName);
-	fName = "addCharacterCas";
-	plugData::data.funcs.addCharacterCas.Load(&plPath, &fName);
 
 
 
 
 	fName = "GetGameTileCoordsWithCursor";
 	plugData::data.funcs.getGameTileCoordsWithCursor.Load(&plPath, &fName);
->>>>>>> Stashed changes
 
 	fName = "getTileRegionID";
 	plugData::data.funcs.getTileRegionID.Load(&plPath, &fName);
@@ -107,8 +97,6 @@ int initPlugin(std::string* modPath)
 	fName = "changeRebelsName";
 	plugData::data.funcs.changeRebelsName.Load(&plPath, &fName);
 
-<<<<<<< Updated upstream
-=======
 	fName = "getGameVersion";
 	plugData::data.funcs.getGameVersion.Load(&plPath, &fName);
 
@@ -117,7 +105,6 @@ int initPlugin(std::string* modPath)
 
 	fName = "mergeArmies";
 	plugData::data.funcs.mergeArmies.Load(&plPath, &fName);
->>>>>>> Stashed changes
 
 	fName = "createUniString";
 	plugData::data.funcsTech.createUniString.Load(&plPath, &fName);
@@ -130,19 +117,8 @@ int initPlugin(std::string* modPath)
 	fName = "setReligionsLimit";
 	plugData::data.funcs.setReligionsLimit.Load(&plPath, &fName);
 
-<<<<<<< Updated upstream
-    fName = "setModel";
-    plugData::data.funcs.setModel.Load(&plPath, &fName);
-
-    fName = "addModelToGame";
-    plugData::data.funcs.addModelToGame.Load(&plPath, &fName);
-
-    fName = "getFactionsCount";
-    plugData::data.funcs.getFactionsCount.Load(&plPath, &fName);
-=======
 	fName = "getFactionsCount";
 	plugData::data.funcs.getFactionsCount.Load(&plPath, &fName);
->>>>>>> Stashed changes
 
 	fName = "getFactionsList";
 	plugData::data.funcs.getFactionsList.Load(&plPath, &fName);
