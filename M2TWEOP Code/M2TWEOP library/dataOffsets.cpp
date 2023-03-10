@@ -3,9 +3,9 @@
 dataOffsets::offsetsT dataOffsets::offsets;
 void dataOffsets::initDataOffsets(int gameVer)
 {
-	if (gameVer == 1)
+	if (gameVer == 1) //kingdoms
 	{
-		offsets.factionOffsetsStart= 0x02c00140;
+		offsets.factionOffsetsStart = 0x02c00140;
 		offsets.statStratModelsListOffset = 0x01b5e708;
 
 		offsets.unitTypesStart = 0x0190bd0c;
@@ -14,6 +14,12 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.stratMapAllOffsetStart = 0x02c74ff4;
 
 		offsets.someStratmapPointer = 0x019b3134;
+
+		offsets.skeletonDatabase = 0x01B59B08;
+
+		offsets.tgaDataBase = 0x019875E8;
+
+		offsets.stratModelArray = 0x01B617D8;
 
 		offsets.gameDataAllOffset = reinterpret_cast<gameDataAllStruct*>(0x02c74f90);
 
@@ -29,9 +35,9 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.audioMaster_vol = (int*)0x01681910;
 		offsets.gameUnit_size = (int*)0x0016818fc;
 	}
-	else if (gameVer == 2)
+	else if (gameVer == 2) //steam
 	{
-		offsets.factionOffsetsStart= 0x02bb7088;
+		offsets.factionOffsetsStart = 0x02bb7088;
 		offsets.statStratModelsListOffset = 0x01b155d8;
 
 		offsets.unitTypesStart = 0x18C2BAC;
@@ -41,10 +47,15 @@ void dataOffsets::initDataOffsets(int gameVer)
 
 		offsets.someStratmapPointer = 0x0196a004;
 
+		offsets.skeletonDatabase = 0x01B109D8;
+
+		offsets.tgaDataBase = 0x0193E498;
+
+		offsets.stratModelArray = 0x01B186A8;
 
 		offsets.gameDataAllOffset = reinterpret_cast<gameDataAllStruct*>(0x02c2bed8);
 
-		offsets.consoleCommands= reinterpret_cast<consoleCommands*>(0x02c73df8);
+		offsets.consoleCommands = reinterpret_cast<consoleCommands*>(0x02c73df8);
 
 		offsets.guildDataStart = 0x18B47E8;
 

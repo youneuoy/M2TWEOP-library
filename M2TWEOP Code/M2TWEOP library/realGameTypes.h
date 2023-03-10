@@ -107,8 +107,8 @@ public:
 	float replenishMax; //0x0010
 	int32_t maxUnits; //0x0014
 	float currentPool; //0x0018
-	int32_t startYear; //0x001C
-	int32_t endYear; //0x0020
+	float startYear; //0x001C
+	float endYear; //0x0020
 	char pad_0024[4]; //0x0024
 	int* religionsList; //0x0028
 	int* religionsListEnd; //0x002C
@@ -132,9 +132,9 @@ public:
 struct mercPoolUnitsPtr
 {
 public:
-	struct mercPoolUnits* mercPoolUnits;
+	struct mercPoolUnit* mercPoolUnits;
 	struct mercPoolUnitsPtr* nextUnitsPtr;
-	struct mercPoolUnits* prevPoolUnits;
+	struct mercPoolUnit* prevPoolUnits;
 	int Maxpool;
 	int currentPool;
 };
@@ -554,7 +554,7 @@ public:
 }; //Size: 0x5A48
 
 
-//traiding resource on stratmap
+//trading resource on stratmap
 struct resStrat {
 	undefined field_0x0[12];
 	int xCoord;
@@ -950,8 +950,8 @@ struct general { /* character on the stratmap, who has a unit in a stack */
 	undefined field0_0x0[4];
 	struct settlementStruct* settlement;
 	undefined field2_0x8[4];
-	int xCoord; /* number of x-coord of unit fosition */
-	int yCoord; /* number of y-coord of unit fosition */
+	int xCoord; /* number of x-coord of unit position */
+	int yCoord; /* number of y-coord of unit position */
 	undefined field5_0x14[108];
 	struct generalCharacterictics* genChar; /* many important info about character */
 	undefined field7_0x84[4];
@@ -1001,7 +1001,7 @@ struct generalCharacterictics { /* many important info about character */
 	int32_t finance;
 	int32_t piety;
 	int32_t magic;
-	int32_t nobility; /* chilvalry/dread */
+	int32_t nobility; /* chivalry/dread */
 	int32_t leaderAutority; /* authority of leader */
 	int32_t level;
 	int32_t unorthodoxy; //0x0070
@@ -1058,9 +1058,9 @@ struct generalCharacterictics { /* many important info about character */
 	int32_t battleSurgery; //0x01E0
 	struct traitContainer* traits; /* names at [item number] -0x4-here. Not have number, read it in while(traits != 0){this->m_memory->Read(traits + 0x08, 4).toINT32();} */
 	undefined field_0x1e8[4];
-	struct anchData** anchillaries; /* pointers to character anchillaries, names at  [item number] -0-0c-here) */
+	struct anchData** anchillaries; /* pointers to character ancillaries, names at  [item number] -0-0c-here) */
 	undefined field_0x1f0[4];
-	UINT32 anchNum; /* number of character  anchillaries */
+	UINT32 anchNum; /* number of character  ancillaries */
 	struct general* gen; /* on stratmap */
 	undefined field_0x1fc[8];
 	float yearOfBirth; /* yearOfBirth */
@@ -1070,7 +1070,7 @@ struct generalCharacterictics { /* many important info about character */
 	undefined field_0x220[4];
 	struct generalCharacterictics* parent; /* father */
 	struct generalCharacterictics* spouse;
-	struct generalCharacterictics* childs[4]; /* childs, womens wont have childs */
+	struct generalCharacterictics* childs[4]; /* children, womens wont have children */
 	undefined field_0x23c[20];
 	char* portrait;
 	undefined field_0x254[4];
@@ -1158,7 +1158,7 @@ struct unit {
 	struct EduEntry* eduEntry;
 	int ID;
 	undefined field7_0x29c[612];
-	int expScreen; /* screen expierence */
+	int expScreen; /* screen experience */
 	struct general* general;
 	float movePoints;
 	int number; /* number of soldiers */
@@ -1229,9 +1229,9 @@ struct factionStruct {
 	undefined field_0xdc[20];
 	UINT32 holdRegions;
 	undefined field_0xf4[4];
-	struct generalCharacterictics** charactersAll; /* all characrters, died, alive, etc */
+	struct generalCharacterictics** charactersAll; /* all characters, died, alive, etc */
 	undefined field_0xfc[4];
-	int numOfCharactersAll; /* all characrters, died, alive, etc */
+	int numOfCharactersAll; /* all characters, died, alive, etc */
 	struct general** characters; /* characters on stratmap */
 	undefined field_0x108[4];
 	int numOfCharacters; /* characters on stratmap */

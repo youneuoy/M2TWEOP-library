@@ -8,9 +8,6 @@ namespace stratModelsChange
 		model_Rigid* modelP = nullptr;
 	};
 
-<<<<<<< Updated upstream
-	vector<stratModelRecord*>stratModels;
-=======
 	struct stratModelCharacterRecord
 	{
 		const char* modelId;
@@ -23,7 +20,6 @@ namespace stratModelsChange
 
 	map<UINT32, stratModelRecord*>stratModels;
 	vector<stratModelCharacterRecord*>characterStratModels;
->>>>>>> Stashed changes
 
 	NOINLINE EOP_EXPORT void addModelToGame(const char* path, UINT32 modelId)
 	{
@@ -86,18 +82,11 @@ namespace stratModelsChange
 
 	stratModelRecord* findStratModel(UINT32 modelId)
 	{
-<<<<<<< Updated upstream
-		for (stratModelRecord* modRec : stratModels)
-=======
-		try
->>>>>>> Stashed changes
+		try 
 		{
-			if (modRec->modelId == modelId)
-				return modRec;
+			return stratModels.at(modelId);
 		}
-<<<<<<< Updated upstream
-=======
-		catch (...)
+		catch (...) 
 		{
 			return nullptr;
 		}
@@ -105,6 +94,7 @@ namespace stratModelsChange
 
 		return nullptr;
 	}
+
 
 	model_Rigid* getModel(UINT32 modelId)
 	{
@@ -117,10 +107,10 @@ namespace stratModelsChange
 			return nullptr;
 		}
 
->>>>>>> Stashed changes
 
 		return nullptr;
 	}
+
 
 	void checkAndChangeStratModels()
 	{
@@ -280,6 +270,7 @@ namespace stratModelsChange
 		gen->genType = characterFacEntry; //assign new array to general
 	}
 
+
 	stratModelArrayEntry* findCharacterStratModel(const char* modelId)
 	{
 		for (stratModelCharacterRecord* newRec : characterStratModels)
@@ -294,7 +285,7 @@ namespace stratModelsChange
 
 	stratModelArrayEntry* getStratModelEntry(const char* name)
 	{
-		stratModelArrayEntry* array = (stratModelArrayEntry*)0x01B186A8;
+		stratModelArrayEntry* array = (stratModelArrayEntry*)dataOffsets::offsets.stratModelArray;
 		for (int i = 0; i < 255; i++)
 		{
 			if (&array[i] != nullptr)
@@ -310,10 +301,10 @@ namespace stratModelsChange
 
 	DWORD getCasAnimSet(const char* name)
 	{
-		DWORD getSkelFunc = 0x0740B40;
+		DWORD getSkelFunc = codes::offsets.getSkeleton;
 		const char** stringpointer = &name;
 		DWORD skeleton = 0;
-		DWORD skeletonDatabasePointer = 0x01B109D8;
+		DWORD skeletonDatabasePointer = dataOffsets::offsets.skeletonDatabase;
 
 		_asm
 		{
@@ -331,23 +322,20 @@ namespace stratModelsChange
 
 	DWORD createModelFlexi(bool shadow)
 	{
-		DWORD assignfunc = 0x011D318A;
 		DWORD newModelFlexi = 0;
-		DWORD createModelFlexi = 0x0093B610;
+		DWORD createModelFlexi = codes::offsets.createModelFlexi;
 		DWORD memsize = 0x12c;
 
 		if (shadow == true) {
 			memsize = 0x11c;
-			createModelFlexi = 0x00937220;
+			createModelFlexi = codes::offsets.createModelFlexiShadow;
 		}
+
+		DWORD gameMem = fastFuncts::allocateGameMem(memsize);
 
 		_asm
 		{
-			push memsize
-			mov eax, assignfunc
-			call eax
-			add esp, 0x4
-			mov ecx, eax
+			mov ecx, gameMem
 			mov eax, createModelFlexi
 			call eax
 			mov newModelFlexi, eax
@@ -358,11 +346,10 @@ namespace stratModelsChange
 
 	void fixModelFlexi(bool shadow, DWORD stratmodel, DWORD modelflexi, const char* texturepath, DWORD skeleton)
 	{
-		DWORD funcAddr = 0x0093BCB0;
-		//const char** stringpointer = &texturepath;
+		DWORD funcAddr = codes::offsets.assignCasToFlexi;
 		if (shadow == true)
 		{
-			funcAddr = 0x00934A10;
+			funcAddr = codes::offsets.assignShadowCasToFlexi;
 			texturepath = nullptr;
 		}
 		float scale = 1.0;
@@ -385,11 +372,10 @@ namespace stratModelsChange
 
 	DWORD loadStratCAS(const char* caspath)
 	{
-		//const char** stringpointer = &caspath;
 		int count = strlen(caspath);
 		int zero = 0;
 		int* zeropointer = &zero;
-		DWORD loadFunc = 0x00D4BDA0;
+		DWORD loadFunc = codes::offsets.loadStratCharModel;
 		DWORD stratModel = 0;
 		_asm
 		{
@@ -484,8 +470,8 @@ namespace stratModelsChange
 
 	int readTGAfile(const char* path)
 	{
-		DWORD funcAddr = 0x00900210;
-		DWORD tgaDataBase = 0x0193E498;
+		DWORD funcAddr = codes::offsets.readTgaFile;
+		DWORD tgaDataBase = dataOffsets::offsets.tgaDataBase;
 		int dbIndex = 0;
 		_asm
 		{

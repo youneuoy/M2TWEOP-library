@@ -242,11 +242,7 @@ namespace eopBuildings
 			i++;
 			prevcap = cap;
 			cap = cap->nextCapability;
-<<<<<<< Updated upstream
-			if(index = i)
-=======
-			if (index == i)
->>>>>>> Stashed changes
+			if(index == i)
 			{
 				if (cap->nextCapability != nullptr)
 				{
@@ -287,11 +283,7 @@ namespace eopBuildings
 			i++;
 			prevpool = pool;
 			pool = pool->nextPool;
-<<<<<<< Updated upstream
-			if(index = i)
-=======
 			if (index == i)
->>>>>>> Stashed changes
 			{
 				if (pool->nextPool != nullptr)
 				{
@@ -324,21 +316,12 @@ namespace eopBuildings
 		int i = 0;
 		while (cap != nullptr)
 		{
-<<<<<<< Updated upstream
-				cap = cap->nextCapability;
-				i++;
-				if(index = i)
-				{
-					return cap;
-				}
-=======
 			cap = cap->nextCapability;
 			i++;
 			if (index == i)
 			{
 				return cap;
 			}
->>>>>>> Stashed changes
 		}
 		return nullptr;
 	}
@@ -359,21 +342,12 @@ namespace eopBuildings
 		int i = 0;
 		while (pool != nullptr)
 		{
-<<<<<<< Updated upstream
-				pool = pool->nextPool;
-				i++;
-				if(index = i)
-				{
-					return pool;
-				}
-=======
 			pool = pool->nextPool;
 			i++;
 			if (index == i)
 			{
 				return pool;
 			}
->>>>>>> Stashed changes
 		}
 		return nullptr;
 	}
