@@ -969,10 +969,10 @@ void toSpawnCharacter::SetlSpawnCode()
 	a->mov(eax, (DWORD)funcAdress);
 	a->call(eax);
 
-		a->test(eax, eax);
+	a->test(eax, eax);
 
-		//if 0, when standard coords, else not
-		a->jnz(overrideCoords);
+	//if 0, when standard coords, else not
+	a->jnz(overrideCoords);
 
 	a->bind(standardCoords);
 
@@ -1270,6 +1270,57 @@ void toResourcesReadModels::SetlResModelsCode()
 	delete a;
 }
 
+toCharReadModels::toCharReadModels(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAdress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x008B3D7F;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x008B338F;
+}
+
+toCharReadModels::~toCharReadModels()
+{
+}
+
+void toCharReadModels::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(ebx);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toCharReadModels::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAdress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+	a->push(ebx);
+	a->push(ebp);
+	a->push(esi);
+	a->push(edi);
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
 
 sizeOfBattleField::sizeOfBattleField(MemWork* mem, UINT32 gamever, float sizeX, float sizeY)
 	:AATemplate(mem), sizeX(sizeX), sizeY(sizeY)
@@ -1482,7 +1533,7 @@ void toStratModelsSelect::SetOriginalStratModelsCode()
 {
 	Assembler* a = new Assembler();
 
-	a->mov(byte_ptr(eax,0x740), 0x0);
+	a->mov(byte_ptr(eax, 0x740), 0x0);
 
 	a->ret();
 	m_originalBytes = (unsigned char*)a->make();
@@ -1725,7 +1776,7 @@ void toClickAtCoords::SetOriginalClickCode()
 {
 	Assembler* a = new Assembler();
 
-	a->lea(eax,dword_ptr(esp,0x4));
+	a->lea(eax, dword_ptr(esp, 0x4));
 	a->mov(esi, ecx);
 
 	a->ret();
@@ -1778,7 +1829,7 @@ void toSelectWorldFromDB::SetOriginalSelectCode()
 	Assembler* a = new Assembler();
 
 	a->push(esi);
-	a->lea(ecx, dword_ptr(esp,0x18));
+	a->lea(ecx, dword_ptr(esp, 0x18));
 
 	a->ret();
 	m_originalBytes = (unsigned char*)a->make();
@@ -1803,10 +1854,10 @@ void toSelectWorldFromDB::SetlSelectCode()
 	a->mov(eax, (DWORD)funcAdress);
 	a->call(eax);
 
-		a->test(eax, eax);
+	a->test(eax, eax);
 
-		//if 0, when standard world, else not
-		a->jnz(overrideWorld);
+	//if 0, when standard world, else not
+	a->jnz(overrideWorld);
 
 	a->bind(standardWorld);
 	a->popf();
@@ -1897,7 +1948,7 @@ void toReadGameDBsAtGameStart::SetOriginalReadCode()
 {
 	Assembler* a = new Assembler();
 
-	a->add(esp,0xdc);
+	a->add(esp, 0xdc);
 
 	a->ret();
 	m_originalBytes = (unsigned char*)a->make();
@@ -2095,7 +2146,7 @@ void toLoadDescrBattleCharacter::SetOriginalBattleCode()
 
 	Assembler* a = new Assembler();
 
-	a->mov(eax,dword_ptr(ecx,0x4));
+	a->mov(eax, dword_ptr(ecx, 0x4));
 	a->push(eax);
 	a->mov(ecx, esi);
 
@@ -2110,7 +2161,7 @@ void toLoadDescrBattleCharacter::SetOriginalBattleCode()
 void toLoadDescrBattleCharacter::SetlBattleCode()
 {
 	unsigned char nops[5] = { 0x90, 0x90, 0x90, 0x90, 0x90 };
-	MemWork::WriteData(nops, m_adress+6, 5);
+	MemWork::WriteData(nops, m_adress + 6, 5);
 
 	Assembler* a = new Assembler();
 
@@ -2202,7 +2253,7 @@ void toGameFormDrawImage::SetOriginalDrawCode()
 {
 	Assembler* a = new Assembler();
 
-	a->mov(byte_ptr(esp,0x18),0x0);
+	a->mov(byte_ptr(esp, 0x18), 0x0);
 
 
 	a->ret();
@@ -2368,7 +2419,7 @@ void mercenaryMovepointsGetGeneral::SetNewCode()
 	a->mov(eax, (DWORD)funcAddress);//here we must specify general or 0
 	a->call(eax);
 	//return general
-	a->mov(dword_ptr(esp,0x20),eax);//move eax to stored eax
+	a->mov(dword_ptr(esp, 0x20), eax);//move eax to stored eax
 
 	a->popf();
 	a->popad();
@@ -2397,7 +2448,7 @@ void onGameConsoleCommandFromConsole::SetOriginalCode()
 {
 	Assembler* a = new Assembler();
 
-	a->mov(byte_ptr(esp,0x60), 0x0);
+	a->mov(byte_ptr(esp, 0x60), 0x0);
 
 	a->ret();
 	m_originalBytes = (unsigned char*)a->make();
@@ -2446,7 +2497,7 @@ void onGameConsoleCommandFromScript::SetOriginalCode()
 {
 	Assembler* a = new Assembler();
 
-	a->lea(ecx,dword_ptr(esp, 0x18));
+	a->lea(ecx, dword_ptr(esp, 0x18));
 	a->push(ecx);
 
 	a->ret();
@@ -2550,7 +2601,7 @@ void OnLoadSettlementWorldpkgdesc::SetOriginalCode()
 {
 	Assembler* a = new Assembler();
 
-	a->sub(esp,  0x0C);
+	a->sub(esp, 0x0C);
 	a->push(ebp);
 	a->push(esi);
 
@@ -2597,7 +2648,7 @@ LimitRecruitmentQueueToSlotsInj::LimitRecruitmentQueueToSlotsInj(MemWork* mem, i
 	m_version = ver;
 	settingAddr = gameplaySettingAddr;
 }
-LimitRecruitmentQueueToSlotsInj::~LimitRecruitmentQueueToSlotsInj(){}
+LimitRecruitmentQueueToSlotsInj::~LimitRecruitmentQueueToSlotsInj() {}
 
 void LimitRecruitmentQueueToSlotsInj::SetOriginialCode()
 {
@@ -2605,7 +2656,7 @@ void LimitRecruitmentQueueToSlotsInj::SetOriginialCode()
 
 	if (m_version == 2)
 	{
-		a->call(0xb461);		
+		a->call(0xb461);
 	}
 	else if (m_version == 1)
 	{
@@ -2635,8 +2686,8 @@ void LimitRecruitmentQueueToSlotsInj::SetNewCode()
 	a->jz(gameFunctionCall);
 
 	a->xor_(eax, eax);
-	a->mov(ax, ptr(esi, 0xF34)); //recruitmentSlots 
-	a->test(ax,ax);
+	a->mov(ax, ptr(esi, 0xF34)); //recruitmentSlots
+	a->test(ax, ax);
 	a->jz(noSlots);
 	a->add(ax, ptr(esi, 0xF36)); //recruitmentSlots bonus
 	a->cmp(ax, ptr(esi, 0x320));
@@ -2730,7 +2781,7 @@ void fortificationlevelS::SetNewCode()
 	a->popad();
 
 	a->mov(eax, (int)&fakeSettlementTypePointer);
-	a->mov(al,byte_ptr(eax));
+	a->mov(al, byte_ptr(eax));
 	//a->mov(al, 0x0);
 	a->bind(exLab);
 	a->ret();
@@ -2759,7 +2810,7 @@ void OnSaveEDUStringS::SetOriginialCode()
 
 	a->mov(ecx, dword_ptr(edi));
 	a->test(ecx, ecx);
-	a->mov(dword_ptr(esp,0xC), 0);
+	a->mov(dword_ptr(esp, 0xC), 0);
 
 	a->ret();
 	m_originalBytes = (unsigned char*)a->make();
@@ -2781,7 +2832,7 @@ void OnSaveEDUStringS::SetNewCode()
 
 	a->pushf();
 
-	a->mov(ecx,edi);
+	a->mov(ecx, edi);
 	a->mov(eax, (DWORD)funcAddress);
 	a->call(eax);
 	a->mov(ecx, eax);//here must be pointer to char* string  - type for writing to save file
@@ -2892,7 +2943,7 @@ void OnCreateUnit::SetOriginialCode()
 	Assembler* a = new Assembler();
 
 	a->test(eax, eax);
-//jz
+	//jz
 
 	a->push(edx);
 	a->mov(eax, dword_ptr(eax));
@@ -2918,8 +2969,8 @@ void OnCreateUnit::SetNewCode()
 	a->pushf();
 
 
-	a->mov(ecx,(int)&fakeEDBPointer);
-	a->mov(dword_ptr(ecx),esi);
+	a->mov(ecx, (int)&fakeEDBPointer);
+	a->mov(dword_ptr(ecx), esi);
 
 	a->mov(edx, ecx);//here pointer to edb
 	a->mov(ecx, eax);//here pointer to index in edb
@@ -2983,13 +3034,11 @@ void OnCreateMercUnitCheck::SetNewCode()
 
 
 	a->pushad();
-	a->pushf();
-	a->lea(ecx, dword_ptr(esp, 0x64));
+	a->lea(ecx, dword_ptr(esp, 0x60));
 	a->mov(edx, eax);
 	a->mov(eax, (DWORD)funcAddress);
 	a->call(eax);
 	a->mov(ecx, -1);
-	a->popf();
 	a->cmp(eax, ecx);
 	a->popad();
 	a->lea(ecx, dword_ptr(esp, 0x40));
@@ -3271,7 +3320,7 @@ void OnrecruitPoolFillFromFile::SetOriginialCode()
 {
 	Assembler* a = new Assembler();
 	a->xor_(eax, eax);
-	//        008a9ce5 8d  0c  85       LEA        this ,[typeId *0x4  + eduEntries ] 
+	//        008a9ce5 8d  0c  85       LEA        this ,[typeId *0x4  + eduEntries ]
 
 	a->ret();
 	m_originalBytes = (unsigned char*)a->make();
@@ -3416,8 +3465,8 @@ OnMoveRecruitQueue::~OnMoveRecruitQueue()
 void OnMoveRecruitQueue::SetOriginialCode()
 {
 	Assembler* a = new Assembler();
-	
-	a->lea(edx,dword_ptr(esp, 0xC));
+
+	a->lea(edx, dword_ptr(esp, 0xC));
 	a->push(edx);
 	a->ret();
 	m_originalBytes = (unsigned char*)a->make();
@@ -3444,7 +3493,7 @@ void OnMoveRecruitQueue::SetNewCode()
 	delete a;
 }
 OnPathCasheCrashPlace::OnPathCasheCrashPlace(MemWork* mem, LPVOID addr, int ver, LPVOID cbObj)
-	:AATemplate(mem), funcAddress(addr),callbackObject(cbObj)
+	:AATemplate(mem), funcAddress(addr), callbackObject(cbObj)
 {
 	if (ver == 2)//steam
 		m_adress = 0x0043cbae;
@@ -3459,7 +3508,7 @@ void OnPathCasheCrashPlace::SetOriginalCode()
 	return;
 	Assembler* a = new Assembler();
 	//filler, not work!
-	a->mov(ecx,ecx);
+	a->mov(ecx, ecx);
 	a->ret();
 	m_originalBytes = (unsigned char*)a->make();
 	m_originalSize = m_memory->GetASMSize(m_originalBytes);
@@ -3550,7 +3599,7 @@ void recruitEOPMercunit::SetOriginialCode()
 }
 
 void recruitEOPMercunit::SetNewCode()
-{	
+{
 	Assembler* a = new Assembler();
 
 	a->mov(eax, (DWORD)funcAddress);
@@ -3583,8 +3632,8 @@ void toSelectForDrawPortsCas::SetOriginialCode()
 	Assembler* a = new Assembler();
 
 	a->push(esi);
-	a->mov(ebx,ecx);
-	a->xor_(esi,esi);
+	a->mov(ebx, ecx);
+	a->xor_(esi, esi);
 
 	a->ret();
 	m_originalBytes = (unsigned char*)a->make();

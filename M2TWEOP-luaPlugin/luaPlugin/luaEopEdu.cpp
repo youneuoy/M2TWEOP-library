@@ -16,7 +16,7 @@ void luaP::initEopEdu()
 		sol::table M2TWEOPEDUTable;
 		sol::table EDB;
 	}tables;
-	
+
 	struct
 	{
 		sol::usertype<edbEntry>edbEntry;
@@ -24,7 +24,7 @@ void luaP::initEopEdu()
 		sol::usertype<recruitPool>recruitpool;
 	}types;
 	using namespace UnitEnums;
-	
+
 	luaState.new_enum(
 		"attackAttr",
 		"", attackAttr::nothing,
@@ -45,7 +45,7 @@ void luaP::initEopEdu()
 		"spear_bonus_6", attackAttr::spear_bonus_6,
 		"spear_bonus_4", attackAttr::spear_bonus_4
 	);
-	
+
 	luaState.new_enum(
 		"eduStat",
 		"", eduStat::none,
@@ -127,7 +127,7 @@ void luaP::initEopEdu()
 	eduEntryOfEOPDU.Width=1.5;
 	*/
 	tables.M2TWEOPEDUTable.set_function("getEopEduEntryByID", &eopEduHelpers::getEopEduEntry);
-	
+
 	/***
 	Get eduEntry by index. Needed to change many parameters of the entry.
 	@function M2TWEOPDU.getEduEntry
@@ -151,7 +151,7 @@ void luaP::initEopEdu()
 	eduEntry.Width=1.5;
 	*/
 	tables.M2TWEOPEDUTable.set_function("getEduEntryByType", &eopEduHelpers::getEduEntryByType);
-	
+
 	/***
 	Get edu index by edu type name. Needed to use many edu functions.
 	@function M2TWEOPDU.getEduIndexByType
@@ -269,7 +269,7 @@ void luaP::initEopEdu()
 	M2TWEOPDU.setArmourUpgradeModelsNum(1000, 3);
 	*/
 	tables.M2TWEOPEDUTable.set_function("setArmourUpgradeModelsNum", &eopEduHelpers::setArmourUpgradeModelsNum);
-	
+
 	/***
 	Get armour upgrade level number at specified index.
 	@function M2TWEOPDU.getArmourUpgradeModel
@@ -280,7 +280,7 @@ void luaP::initEopEdu()
 	M2TWEOPDU.getArmourUpgradeModel(1000, 0);
 	*/
 	tables.M2TWEOPEDUTable.set_function("getArmourUpgradeModel", &eopEduHelpers::getArmourUpgradeModel);
-	
+
 	/***
 	Set the unit model at specified index (only for eopdu units added by file!).
 	@function M2TWEOPDU.setArmourUpgradeModel
@@ -291,7 +291,7 @@ void luaP::initEopEdu()
 	M2TWEOPDU.setArmourUpgradeModel(1000, 1, 4);
 	*/
 	tables.M2TWEOPEDUTable.set_function("setArmourUpgradeModel", &eopEduHelpers::setArmourUpgradeModel);
-	
+
 	/***
 	Set a primary or secondary attack attribute of an edu entry.
 	@function M2TWEOPDU.setEntryAttackAttribute
@@ -303,7 +303,7 @@ void luaP::initEopEdu()
 	M2TWEOPDU.setEntryAttackAttribute(1000, attackAttr.ap, true, 1);
 	*/
 	tables.M2TWEOPEDUTable.set_function("setEntryAttackAttribute", &eopEduHelpers::setEntryAttackAttribute);
-	
+
 	/***
 	Get a primary or secondary attack attribute from an edu entry.
 	@function M2TWEOPDU.getEntryAttackAttribute
@@ -315,7 +315,7 @@ void luaP::initEopEdu()
 	M2TWEOPDU.getEntryAttackAttribute(1000, attackAttr.ap, 1);
 	*/
 	tables.M2TWEOPEDUTable.set_function("getEntryAttackAttribute", &eopEduHelpers::getEntryAttackAttribute);
-	
+
 	/***
 	Set any of the basic unit stats of an edu entry.
 	@function M2TWEOPDU.setEntryStat
@@ -327,7 +327,7 @@ void luaP::initEopEdu()
 	M2TWEOPDU.setEntryStat(1000, attackAttr.attack, 1);
 	*/
 	tables.M2TWEOPEDUTable.set_function("setEntryStat", &eopEduHelpers::setEntryStat);
-	
+
 	/***
 	Get any of the basic unit stats of an edu entry.
 	@function M2TWEOPDU.getEntryStat
@@ -589,7 +589,7 @@ void luaP::initEopEdu()
 	EDB.addBuildingCapability(building, 0, 55, 200, true);
 	*/
 	tables.EDB.set_function("addBuildingCapability", &buildingStructHelpers::addBuildingCapability);
-	
+
 	/***
 	Remove a capability from a building.
 	@function EDB.removeBuildingCapability
@@ -603,7 +603,7 @@ void luaP::initEopEdu()
 	tables.EDB.set_function("removeBuildingCapability", &buildingStructHelpers::removeBuildingCapability);
 
 	/***
-	
+
 	Get capability from a building at an index.
 	@function EDB.getBuildingCapability
 	@tparam edbEntry edbEntry Entry to set.

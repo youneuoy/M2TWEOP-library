@@ -17,6 +17,10 @@ public:
 		//if on stratmap then not 0
 		DWORD someStratmapPointer = NULL;
 
+		DWORD skeletonDatabase = NULL;
+		DWORD tgaDataBase = NULL;
+		DWORD stratModelArray = NULL;
+
 		gameDataAllStruct* gameDataAllOffset = NULL;
 		consoleCommands* consoleCommands = NULL;
 

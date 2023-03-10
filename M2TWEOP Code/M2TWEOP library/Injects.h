@@ -317,6 +317,20 @@ private:
 	LPVOID funcAdress;
 };
 
+//on the  reading resources models function
+class toCharReadModels
+	:public AATemplate
+{
+public:
+	toCharReadModels(MemWork* mem, LPVOID adr, int ver);
+	~toCharReadModels();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAdress;
+};
+
 
 
 class sizeOfBattleField :

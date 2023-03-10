@@ -273,21 +273,17 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Save the game.
 	@function M2TWEOP.saveGame
 	@tparam string path (start from mods)
-
 	@usage
 	M2TWEOP.saveGame(mods/bare_geomod/saves/newsave.sav);
 	*/
-
 	tables.M2TWEOPTable.set_function("saveGame", &gameHelpers::saveGame);
 	/***
 	Function to get the game version.
 	@function M2TWEOP.getGameVersion
 	@treturn int gamever (1 = disk 2 = steam)
-
 	@usage
 	M2TWEOP.getGameVersion();
 	*/
-
 	tables.M2TWEOPTable.set_function("getGameVersion", &m2tweopHelpers::getGameVersion);
 	/***
 	Function to return the path to the plugin (location of your LUA files).
@@ -297,8 +293,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	plPath=M2TWEOP.getPluginPath();
 	print(plPath);
 	*/
-
-
 	tables.M2TWEOPTable.set_function("getPluginPath", &m2tweopHelpers::getLuaPath);
 
 	/***
@@ -544,6 +538,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Basic stratmap.objects table
 
 	@tfield addModelToGame addModelToGame
+	@tfield addCharacterCas addCharacterCas
 	@tfield setModel setModel
 	@tfield replaceTile replaceTile
 	@tfield startDrawModelAt startDrawModelAt
@@ -552,7 +547,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@table stratmap.objects
 	*/
 	tables.objectsTable = luaState.create_table();
-
 
 	/***
 	Start drawing .cas campaign strategy model with a unique ID in some coords. Can be used at any time.
@@ -576,7 +570,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	stratmap.objects.stopDrawModel(1);
 	*/
 	tables.objectsTable.set_function("stopDrawModel", &objectsHelpers::stopDrawModel);
-
 	/***
 	Add a new .cas campaign strategy model to the game with a unique ID. This should be called during onPluginLoad()
 	@function objects.addModelToGame
@@ -586,6 +579,18 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	stratmap.objects.addModelToGame("data/models_strat/residences/invisible.CAS",1);
 	*/
 	tables.objectsTable.set_function("addModelToGame", &objectsHelpers::addModelToGame);
+	/***
+	Add a new .cas character strategy model to the game with a unique name.
+	@function objects.addCharacterCas
+	@tparam string skeleton name of skeleton used.
+	@tparam string caspath Relative path from the mods folder (starting with "mods/").
+	@tparam string shadowcaspath Relative path from the mods folder (starting with "mods/").
+	@tparam string typename Name of the new model used to assign.
+	@tparam string texturepath Relative path from the mods folder (starting with "mods/").
+	@usage
+	stratmap.objects.addCharacterCas("strat_named_with_army","mods/Bare_Geomod/data/models_strat/islamic_general2.cas","mods/Bare_Geomod/data/models_strat/shadow_sword2.cas","islamic_general2","mods/Bare_Geomod/data/models_strat/textures/islamic_general_turks.tga");
+	*/
+	tables.objectsTable.set_function("addCharacterCas", &generalHelpers::addCharacterCas);
 	/***
 	Set the strategy model for object at specified coordinates, works only for supported object types
 	@function objects.setModel
@@ -878,6 +883,11 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int StatCost6
 	@tfield int StatCost7
 	@tfield int StatCost8
+	@tfield int Morale
+	@tfield int MoraleLocked
+	@tfield int StatFood1
+	@tfield int StatFood2
+	@tfield int Ammunition
 
 	@table eduEntry
 	*/
@@ -952,6 +962,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield kill kill
 	@tfield createFort createFort
 	@tfield setBodyguardUnit setBodyguardUnit
+	@tfield setCharacterModel setCharacterModel
 
 	@table character
 	*/
@@ -1047,6 +1058,15 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	ourCharacter:setBodyguardUnit(unit);
 	*/
 	types.character.set_function("setBodyguardUnit", &generalHelpers::setBodyguard);
+	/***
+	Set a character's model to a new one.
+	@function character:setCharacterModel
+	@tparam string model
+	@usage
+	ourCharacter:setCharacterModel("saruman");
+	*/
+	types.character.set_function("setCharacterModel", &generalHelpers::setCharacterModel);
+
 
 
 	///NamedCharacter
@@ -1452,7 +1472,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 			if not faction then
 				return nil;
 			end
-
 			local armiesNum = faction.stacksNum;
 			for j = 0, armiesNum - 1 do
 				local army = faction:getStack(j);

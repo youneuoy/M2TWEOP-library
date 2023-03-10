@@ -76,8 +76,13 @@ public:
 		DWORD useButtonFunc = NULL;
 		DWORD getUiElementFunc = NULL;
 
-
-
+		DWORD getSkeleton = NULL;
+		DWORD createModelFlexi = NULL;
+		DWORD createModelFlexiShadow = NULL;
+		DWORD assignCasToFlexi = NULL;
+		DWORD assignShadowCasToFlexi = NULL;
+		DWORD loadStratCharModel = NULL;
+		DWORD readTgaFile = NULL;
 
 		DWORD readEDUEntryFunc = NULL;
 		DWORD deleteFortFuncOne = NULL;
