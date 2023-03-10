@@ -3055,10 +3055,15 @@ OnCreateMercUnit::OnCreateMercUnit(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
 	if (ver == 2)//steam
+	{
 		m_adress = 0x0060D568;
-
+		otherFunc = 0x00D45D40;
+	}
 	else if (ver == 1)//kingdoms
+	{
 		m_adress = 0x0060D1C8;
+		otherFunc = 0x00D4B9E0;
+	}
 }
 
 OnCreateMercUnit::~OnCreateMercUnit()
@@ -3078,15 +3083,6 @@ void OnCreateMercUnit::SetOriginialCode()
 
 void OnCreateMercUnit::SetNewCode()
 {
-	DWORD otherFunc; //different funcs dependant on disk/steam version
-	if (m_adress = 0x0060D568)
-	{
-		otherFunc = 0x00D45D40;
-	}
-	else
-	{
-		otherFunc = 0x00D4B9E0;
-	}
 	Assembler* a = new Assembler();
 
 	a->pushad();
