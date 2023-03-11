@@ -158,7 +158,7 @@ namespace smallFuncs
 		}
 
 
-		//unlock change_faction 
+		//unlock change_faction
 		uchar nops1[6] = { 0x90,0x90,0x90,0x90,0x90,0x90 };
 		if (globals::dataS.gamever == 2)//steam
 		{
@@ -225,7 +225,7 @@ namespace smallFuncs
 		default: return "unknown_condition"; break;
 		}
 	}
-	NOINLINE EOP_EXPORT void createUniString(UNICODE_STRING** &newUniStringPointer, const char* nonUniStr)
+	NOINLINE EOP_EXPORT void createUniString(UNICODE_STRING**& newUniStringPointer, const char* nonUniStr)
 	{
 		DWORD funcAdr = 0;
 		if (globals::dataS.gamever == 2)//steam
@@ -242,7 +242,7 @@ namespace smallFuncs
 		size_t lenS = strlen(nonUniStr);
 
 
-		newUniStringPointer = (UNICODE_STRING**)new char[(lenS + 6+4) * 2];
+		newUniStringPointer = (UNICODE_STRING**)new char[(lenS + 6 + 4) * 2];
 
 		UNICODE_STRING** uniStr = newUniStringPointer;
 		_asm {
@@ -275,7 +275,7 @@ namespace smallFuncs
 		for (UINT32 i = 0; i < utf16line.size(); i++)
 		{
 
-			*(ptr+i) = utf16line[i];
+			*(ptr + i) = utf16line[i];
 		}
 		*(ptr + utf16line.size()) = (unsigned short)0;
 	}
@@ -303,6 +303,29 @@ namespace smallFuncs
 		fac->localizedName = nameMem;
 
 		smallFuncs::createUniString(fac->localizedName, newName);
+	}
+
+	NOINLINE EOP_EXPORT UNICODE_STRING** getFactionName(factionStruct* fac)
+	{
+
+		std::string facname = fac->factSmDescr->facName;
+		std::transform(facname.begin(), facname.end(), facname.begin(), ::toupper);
+		UNICODE_STRING** nameMem = new UNICODE_STRING*;
+		smallFuncs::createUniString(nameMem, facname.c_str());
+		UNICODE_STRING*** nameMem2 = &nameMem;
+		DWORD funcAddr = codes::offsets.getStringFromTable;
+		DWORD stringTable = dataOffsets::offsets.stringTable;
+		_asm
+		{
+			push nameMem2
+			mov ecx, stringTable
+			mov ecx, [ecx]
+			mov eax, funcAddr
+			call eax
+			mov nameMem2, eax
+		}
+
+		return *nameMem2;
 	}
 
 	NOINLINE EOP_EXPORT void changeRegionName(regionStruct* region, const char* newName)
@@ -386,7 +409,7 @@ namespace smallFuncs
 			push xy
 			mov eax, funcAdr
 			call eax
-			mov retZ,al
+			mov retZ, al
 		}
 
 		return retZ;
@@ -412,11 +435,11 @@ namespace smallFuncs
 		int retValue = 0;
 		if (globals::dataS.gamever == 2)//steam
 		{
-			eventsObject = (countersObjectS * )0x016A7A58;
+			eventsObject = (countersObjectS*)0x016A7A58;
 		}
 		else
 		{
-			eventsObject = (countersObjectS * )0x016F0BF0;
+			eventsObject = (countersObjectS*)0x016F0BF0;
 		}
 		DWORD funcAdr = 0;
 
@@ -447,7 +470,7 @@ namespace smallFuncs
 		{
 
 			if (retS != nullptr)
-			{			
+			{
 				if (retS->nameCrypt == (int)cryptS[1])
 				{
 					isFinded = true;

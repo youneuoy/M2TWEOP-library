@@ -7,10 +7,10 @@ namespace settlementHelpers
 {
 
 	siegeS* getSiege(const settlementStruct* sett, int index);
-	void changeOwner(settlementStruct* sett, factionStruct*newOwner);
+	void changeOwner(settlementStruct* sett, factionStruct* newOwner);
 
 	float getReligion(const settlementStruct* sett, int index);
-	void setReligion(const settlementStruct* sett, int index,float value);
+	void setReligion(const settlementStruct* sett, int index, float value);
 
 	resStrat* getResource(const settlementStruct* sett, int index);
 	building* getBuilding(const settlementStruct* sett, int index);
@@ -19,7 +19,9 @@ namespace settlementHelpers
 	int getGuildStanding(settlementStruct* sett, int index);
 	void setGuildStanding(settlementStruct* sett, int index, int amount);
 	void changeSettlementName(settlementStruct* sett, const char* newName);
-	
+
+	std::string getSettlementName(settlementStruct* sett);
+
 
 	//settlement
 	template <char fieldIndex>

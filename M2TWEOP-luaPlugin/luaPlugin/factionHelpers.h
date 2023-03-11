@@ -1,5 +1,6 @@
 #pragma once
 #define factionStruct_ai_label 1
+#define factionStruct_name 2
 #include <string>
 #include "realGameTypes.h"
 #include "luaGetSetFuncs.h"
@@ -19,6 +20,8 @@ namespace factionHelpers
 	void createFort(const general* gen);
 	void changeFactionName(factionStruct* fac, const char* newName);
 
+	std::string getLocalizedFactionName(factionStruct* fac);
+
 	//faction
 	template <char fieldIndex>
 	std::string getStringProperty(const factionStruct* fac)
@@ -27,6 +30,10 @@ namespace factionHelpers
 		if (fieldIndex == factionStruct_ai_label)
 		{
 			retS = fac->ai_label;
+		}
+		if (fieldIndex == factionStruct_name)
+		{
+			retS = fac->factSmDescr->facName;
 		}
 
 		if (retS != nullptr)
@@ -47,6 +54,10 @@ namespace factionHelpers
 		{
 
 			arg = reinterpret_cast<char*>(&fac->ai_label);
+		}
+		if (fieldIndex == factionStruct_name)
+		{
+			arg = reinterpret_cast<char*>(&fac->factSmDescr->facName);
 		}
 		luaGetSetFuncs::setGameString(arg, newS.c_str());
 	}

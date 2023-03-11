@@ -10,8 +10,9 @@ void dataOffsets::initDataOffsets(int gameVer)
 
 		offsets.unitTypesStart = 0x0190bd0c;
 
-
 		offsets.stratMapAllOffsetStart = 0x02c74ff4;
+
+		offsets.stringTable = 0x02CB97E8;
 
 		offsets.someStratmapPointer = 0x019b3134;
 
@@ -42,8 +43,9 @@ void dataOffsets::initDataOffsets(int gameVer)
 
 		offsets.unitTypesStart = 0x18C2BAC;
 
-
 		offsets.stratMapAllOffsetStart = 0x02c2bf3c;
+
+		offsets.stringTable = 0x02C70760;
 
 		offsets.someStratmapPointer = 0x0196a004;
 

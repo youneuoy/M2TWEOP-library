@@ -92,6 +92,9 @@ int initPlugin(std::string* modPath)
 	fName = "changeSettlementName";
 	plugData::data.funcs.changeSettlementName.Load(&plPath, &fName);
 
+	fName = "getFactionName";
+	plugData::data.funcs.getFactionName.Load(&plPath, &fName);
+
 	fName = "changeFactionName";
 	plugData::data.funcs.changeFactionName.Load(&plPath, &fName);
 

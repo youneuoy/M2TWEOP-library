@@ -11,6 +11,7 @@ public:
 
 
 		DWORD stratMapAllOffsetStart = NULL;
+		DWORD stringTable = NULL;
 
 
 		DWORD unitTypesStart = NULL;

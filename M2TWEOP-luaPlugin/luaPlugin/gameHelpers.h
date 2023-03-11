@@ -29,7 +29,10 @@ namespace gameHelpers
 	bool getHiddenResource(regionStruct* region, int index);
 	void setHiddenResource(regionStruct* region, int index, bool enable);
 	void changeRegionName(regionStruct* region, const char* newName);
+	std::string getRegionName(regionStruct* region);
 	void changeRebelsName(regionStruct* region, const char* newName);
+
+	std::string getRebelsName(regionStruct* region);
 
 	int getMercUnitNum(mercPool* mercPool);
 	mercPoolUnit* getMercUnit(mercPool* pool, int index);

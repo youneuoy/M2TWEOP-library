@@ -174,9 +174,19 @@ namespace gameHelpers
 		(*(*plugData::data.funcs.changeRegionName))(region, newName);
 	}
 
+	std::string gameHelpers::getRegionName(regionStruct* region)
+	{
+		return technicalHelpers::uniStringToStr(region->localizedRegionName);
+	}
+
 	void gameHelpers::changeRebelsName(regionStruct* region, const char* newName)
 	{
 		(*(*plugData::data.funcs.changeRebelsName))(region, newName);
+	}
+
+	std::string gameHelpers::getRebelsName(regionStruct* region)
+	{
+		return technicalHelpers::uniStringToStr(region->localizedRebelsName);
 	}
 
 	int gameHelpers::getMercUnitNum(mercPool* mercPool)
@@ -236,7 +246,7 @@ namespace gameHelpers
 			unitptr->nextUnitsPtr = newPtr;
 			unitptr = unitptr->nextUnitsPtr;
 			currunits = 0;
-		}  
+		}
 		mercPoolUnit* newArray = new mercPoolUnit[currunits + 1];
 		for (int i = 0; i < currunits; i++) {
 			newArray[i] = unitptr->mercPoolUnits[i];

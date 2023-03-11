@@ -9,7 +9,7 @@ namespace eduThings
 	{
 		eopEduEntry(int baseIdx, int newIdx)
 		{
-			EduEntry*oldEn=fastFunctsHelpers::getEDUEntryById(baseIdx);
+			EduEntry* oldEn = fastFunctsHelpers::getEDUEntryById(baseIdx);
 			if (oldEn == nullptr)
 			{
 				string errs = "Can`t create eop`s unit entry:\n";
@@ -24,9 +24,9 @@ namespace eduThings
 			eopTypeName.append(data.edu.Type);
 			eopTypeName.append(to_string(newIdx));//added to make typename unique
 		}
-		eopEduEntry(const char*fileName, int newIdx)
+		eopEduEntry(const char* fileName, int newIdx)
 		{
-			int isOk=eduFastFuncts::readEduFile(fileName, &data.edu);
+			int isOk = eduFastFuncts::readEduFile(fileName, &data.edu);
 			if (isOk == 0)
 			{
 				std::string errS = "Can`t read edu file: ";
@@ -61,7 +61,7 @@ namespace eduThings
 			return nullptr;
 		}
 
-		try 
+		try
 		{
 			eopEduEntry newEntry(fileName, newIdx);
 
@@ -79,7 +79,7 @@ namespace eduThings
 
 		return getEopEduEntry(newIdx);
 	}
-	NOINLINE EOP_EXPORT EduEntry* addEopEduEntry(int baseIdx , int newIdx)
+	NOINLINE EOP_EXPORT EduEntry* addEopEduEntry(int baseIdx, int newIdx)
 	{
 		if (getEopEduEntry(newIdx))
 		{
@@ -143,7 +143,7 @@ namespace eduThings
 	{
 		for (eopEduEntry& entry : data.eopEdu)
 		{
-			if (strcmp(entry.eopTypeName.c_str(), entryName)==0)
+			if (strcmp(entry.eopTypeName.c_str(), entryName) == 0)
 			{
 				return (int*)&entry.data;
 			}
@@ -163,7 +163,7 @@ namespace eduThings
 	}
 	NOINLINE EOP_EXPORT void setEntryUnitCardTga(int entryIdx, const char* newCard)
 	{
-		EduEntry* entry=getEopEduEntry(entryIdx);
+		EduEntry* entry = getEopEduEntry(entryIdx);
 
 		fastFunctsHelpers::setCryptedString(&entry->UnitCardTga, newCard);
 	}
@@ -195,7 +195,7 @@ namespace eduThings
 		EduEntry* entry = getEopEduEntry(entryIdx);
 
 		UNICODE_STRING*** nameMem = new UNICODE_STRING**;
-		entry->localizedName =nameMem;
+		entry->localizedName = nameMem;
 
 
 		smallFuncs::createUniString(*entry->localizedName, newName);

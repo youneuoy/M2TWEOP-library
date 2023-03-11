@@ -125,6 +125,7 @@ public:
 	ProcLoader<factionStruct* (__cdecl*)(int regionID)> getRegionOwner;
 	ProcLoader<void(__cdecl*)(settlementStruct* sett, const char* newName)> changeSettlementName;
 	ProcLoader<void(__cdecl*)(factionStruct* fac, const char* newName)> changeFactionName;
+	ProcLoader<UNICODE_STRING** (__cdecl*)(factionStruct* fac)> getFactionName;
 	ProcLoader<void(__cdecl*)(regionStruct* region, const char* newName)> changeRegionName;
 	ProcLoader<void(__cdecl*)(regionStruct* region, const char* newName)> changeRebelsName;
 	ProcLoader<void(__cdecl*)(const factionStruct* fac, fortStruct* fort)> deleteFort;

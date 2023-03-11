@@ -147,7 +147,7 @@ void luaP::initCampaign()
 	local unitSize=campaign:GetUnitSize();
 	*/
 	typeAll.campaignTable.set_function("GetUnitSize", &m2tweopHelpers::GetUnitSize);
-	
+
 	/// Strat Map
 	//@section stratMap
 
@@ -221,6 +221,7 @@ void luaP::initCampaign()
 	Basic region table.
 
 	@tfield string regionName
+	@tfield string localizedName
 	@tfield string settlementName
 	@tfield string legioName
 	@tfield int regionID
@@ -242,13 +243,12 @@ void luaP::initCampaign()
 	@tfield int portEntranceYCoord
 	@tfield factionStruct faction
 	@tfield string rebelType
+	@tfield string localizedRebelsName
 	@tfield int triumphValue
 	@tfield getStack getStack
 	@tfield getFort getFort
 	@tfield getWatchtower getWatchtower
 	@tfield getResource getResource
-	@tfield changeRegionName changeRegionName
-	@tfield changeRebelsName changeRebelsName
 	@tfield getNeighbour getNeighbour
 	@tfield getHiddenResource getHiddenResource
 	@tfield setHiddenResource setHiddenResource
@@ -258,6 +258,9 @@ void luaP::initCampaign()
 	typeAll.region = luaState.new_usertype<regionStruct>("region");
 	typeAll.region.set("regionName", &regionStruct::regionName);
 	typeAll.region.set("settlementName", &regionStruct::settlementName);
+	typeAll.region.set("localizedName", sol::property(
+		&gameHelpers::getRegionName, &gameHelpers::changeRegionName
+		));
 	typeAll.region.set("legioName", &regionStruct::legioName);
 	typeAll.region.set("regionID", &regionStruct::regionID);
 	typeAll.region.set("stacksNum", &regionStruct::stacksNum);
@@ -278,6 +281,9 @@ void luaP::initCampaign()
 	typeAll.region.set("portEntranceYCoord", &regionStruct::portEntranceYCoord);
 	typeAll.region.set("faction", &regionStruct::factionOwner);
 	typeAll.region.set("rebelType", &regionStruct::rebelType);
+	typeAll.region.set("localizedRebelsName", sol::property(
+		&gameHelpers::getRebelsName, &gameHelpers::changeRebelsName
+		));
 	typeAll.region.set("triumphValue", &regionStruct::triumphValue);
 
 	/***
@@ -327,28 +333,6 @@ void luaP::initCampaign()
 	local res = region:getResource(0)
 	*/
 	typeAll.region.set_function("getResource", &gameHelpers::getResource);
-
-	/***
-	Change region name (reset on reload).
-	@function region:changeRegionName
-	@tparam string newName
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	region:changeRegionName("Macedonia")
-	*/
-	typeAll.region.set_function("changeRegionName", &gameHelpers::changeRegionName);
-
-	/***
-	Change rebels name (reset on reload).
-	@function region:changeRebelsName
-	@tparam string newName
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	region:changeRebelsName("Macedonian Rebels")
-	*/
-	typeAll.region.set_function("changeRebelsName", &gameHelpers::changeRebelsName);
 
 	/***
 	Get a neighbour region by it's index.
@@ -419,7 +403,7 @@ void luaP::initCampaign()
 	@function mercPool:addMercUnit
 	@tparam int idx EDU index, supports EOP units.
 	@tparam int exp Starting experience.
-	@tparam int cost 
+	@tparam int cost
 	@tparam float repmin Minimum replenishment rate.
 	@tparam float repmax Maximum replenishment rate.
 	@tparam int maxunits Maximum Pool.

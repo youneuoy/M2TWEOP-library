@@ -1378,6 +1378,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getFactionName getFactionName
 	@tfield int cultureID
 	@tfield string ai_label
+	@tfield string name
+	@tfield string localizedName
 	@tfield settlementStruct capital
 	@tfield namedCharacter leader
 	@tfield namedCharacter heir
@@ -1423,6 +1425,12 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct.set("cultureID", &factionStruct::cultureID);
 	types.factionStruct.set("ai_label", sol::property(
 		&factionHelpers::getStringProperty<factionStruct_ai_label>, &factionHelpers::setStringProperty<factionStruct_ai_label>
+		));
+	types.factionStruct.set("name", sol::property(
+		&factionHelpers::getStringProperty<factionStruct_name>, &factionHelpers::setStringProperty<factionStruct_name>
+		));
+	types.factionStruct.set("localizedName", sol::property(
+		&factionHelpers::getLocalizedFactionName, &factionHelpers::changeFactionName
 		));
 	types.factionStruct.set("capital", &factionStruct::capital);
 	types.factionStruct.set("leader", &factionStruct::leader);
@@ -1565,15 +1573,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.factionStruct.set_function("createFortXY", &factionHelpers::createFortXY);
 
-	/***
-	Change the faction's localized (in-game) name.
-	@function factionStruct:changeFactionName
-	@tparam string name
-	@usage
-	fac:changeFactionName("Byzantium")
-	*/
-	types.factionStruct.set_function("changeFactionName", &factionHelpers::changeFactionName);
-
 
 	///FactionStratMapStruct
 	//@section factionStratMapStructTable
@@ -1701,6 +1700,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield character governor
 	@tfield stackStruct army
 	@tfield string name internal name of settlement
+	@tfield string localizedName
 	@tfield factionStruct ownerFaction
 	@tfield changeOwner changeOwner
 	@tfield int fac_creatorNum
@@ -1771,7 +1771,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getResource getResource
 	@tfield int siegesNum
 	@tfield getSiege getSiege
-	@tfield changeSettlementName changeSettlementName
 
 	@table settlementStruct
 	*/
@@ -1782,6 +1781,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.settlementStruct.set("army", &settlementStruct::army);
 	types.settlementStruct.set("name", sol::property(
 		&settlementHelpers::getStringProperty<settlementStruct_name>, &settlementHelpers::setStringProperty<settlementStruct_name>
+		));
+	types.settlementStruct.set("localizedName", sol::property(
+		&settlementHelpers::getSettlementName, &settlementHelpers::changeSettlementName
 		));
 	types.settlementStruct.set("ownerFaction", &settlementStruct::ownerFac);
 	/***
@@ -1940,16 +1942,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	end
 	*/
 	types.settlementStruct.set_function("getSiege", &settlementHelpers::getSiege);
-
-
-	/***
-	Change the settlement's localized (in-game) name.
-	@function settlementStruct:changeSettlementName
-	@tparam string name
-	@usage
-	sett:changeSettlementName("Constantinople")
-	*/
-	types.settlementStruct.set_function("changeSettlementName", &settlementHelpers::changeSettlementName);
 
 
 
