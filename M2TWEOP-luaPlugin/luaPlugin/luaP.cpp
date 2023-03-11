@@ -580,7 +580,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.objectsTable.set_function("addModelToGame", &objectsHelpers::addModelToGame);
 	/***
-	Add a new .cas character strategy model to the game with a unique name.
+	Add a new .cas character strategy model to the game with a unique name. Only add it after loading to campaign map!
 	@function objects.addCharacterCas
 	@tparam string skeleton name of skeleton used.
 	@tparam string caspath Relative path from the mods folder (starting with "mods/").
