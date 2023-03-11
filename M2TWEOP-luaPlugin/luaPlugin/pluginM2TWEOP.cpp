@@ -95,6 +95,9 @@ int initPlugin(std::string* modPath)
 	fName = "getFactionName";
 	plugData::data.funcs.getFactionName.Load(&plPath, &fName);
 
+	fName = "historicEvent";
+	plugData::data.funcs.historicEvent.Load(&plPath, &fName);
+
 	fName = "changeFactionName";
 	plugData::data.funcs.changeFactionName.Load(&plPath, &fName);
 

@@ -58,6 +58,7 @@ void codes::initCodes(int gameVer)
 		offsets.createBuildingFunc = 0x00d32cd0;
 
 		offsets.autoWinFunc = 0x00d2dcf0;
+		offsets.historicEventFunc = 0x00C5BD50;
 
 		offsets.autoResolveFunc = 0x00aa6bc0;
 
@@ -134,6 +135,7 @@ void codes::initCodes(int gameVer)
 
 
 		offsets.autoWinFunc = 0x00d28070;
+		offsets.historicEventFunc = 0x0C56150;
 
 
 		offsets.autoResolveFunc = 0x00aa7bf0;

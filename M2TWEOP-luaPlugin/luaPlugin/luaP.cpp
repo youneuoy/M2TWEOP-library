@@ -673,6 +673,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield createArmyInSettlement createArmyInSettlement
 	@tfield getScriptCounter getScriptCounter
 	@tfield setScriptCounter setScriptCounter
+	@tfield historicEvent historicEvent
 	@tfield callConsole callConsole
 
 	@table stratmap.game
@@ -772,6 +773,16 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	stratmap.game.setScriptCounter("SomeCounter", 25)
 	*/
 	tables.gameTable.set_function("setScriptCounter", &gameHelpers::setScriptCounter);
+	/***
+	Fire a game event message. Picture needs to be provided in the ui folders as default.
+	@function game.historicEvent
+	@tparam string eventName
+	@tparam string title
+	@tparam string body
+	@usage
+	stratmap.game.historicEvent("my_event", "my title", "my description")
+	*/
+	tables.gameTable.set_function("historicEvent", &gameHelpers::historicEvent);
 	///Stratmap
 	//@section stratmapTable
 

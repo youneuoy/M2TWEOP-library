@@ -328,6 +328,36 @@ namespace smallFuncs
 		return *nameMem2;
 	}
 
+	NOINLINE EOP_EXPORT void historicEvent(const char* name, const char* title, const char* description)
+	{
+		DWORD funcAddr = codes::offsets.historicEventFunc;
+
+		UNICODE_STRING** titleUni = new UNICODE_STRING*;
+		smallFuncs::createUniString(titleUni, title);
+
+		UNICODE_STRING** bodyUni = new UNICODE_STRING*;
+		smallFuncs::createUniString(bodyUni, description);
+
+		UNICODE_STRING*** titleUnip = &titleUni;
+		UNICODE_STRING*** bodyUnip = &bodyUni;
+
+
+		_asm
+		{
+			push 0x3FFFFFFF
+			push 0x0
+			push 0x0
+			push 0xFFFFFFFF
+			push 0xFFFFFFFF
+			push name
+			push bodyUnip
+			push titleUnip
+			mov eax, funcAddr
+			call eax
+		}
+
+	}
+
 	NOINLINE EOP_EXPORT void changeRegionName(regionStruct* region, const char* newName)
 	{
 

@@ -68,6 +68,7 @@ public:
 		//create building
 		DWORD createBuildingFunc = NULL;
 		DWORD autoWinFunc = NULL;
+		DWORD historicEventFunc = NULL;
 		DWORD getStringFromTable = NULL;
 
 
