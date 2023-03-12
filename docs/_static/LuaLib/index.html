@@ -85,6 +85,7 @@
     <li><a href="#objects.startDrawModelAt">objects.startDrawModelAt (modelId, x, y, sizeMultiplier)</a></li>
     <li><a href="#objects.stopDrawModel">objects.stopDrawModel (modelId)</a></li>
     <li><a href="#objects.addModelToGame">objects.addModelToGame (path, modelId)</a></li>
+    <li><a href="#objects.addCharacterCas">objects.addCharacterCas (skeleton, caspath, shadowcaspath, typename, texturepath)</a></li>
     <li><a href="#objects.setModel">objects.setModel (xCoord, yCoord, modelId, modelId2)</a></li>
     <li><a href="#objects.replaceTile">objects.replaceTile (label, xCoord, yCoord, filename, weather, dayTime)</a></li>
 </details>
@@ -111,6 +112,8 @@
     <li><a href="#game.createArmyInSettlement">game.createArmyInSettlement (settlement)</a></li>
     <li><a href="#game.getScriptCounter">game.getScriptCounter (counterName)</a></li>
     <li><a href="#game.setScriptCounter">game.setScriptCounter (counterName, value)</a></li>
+    <li><a href="#game.historicEvent">game.historicEvent (eventName, title, body)</a></li>
+    <li><a href="#game.scriptCommand">game.scriptCommand (command, args)</a></li>
 </details>
 
 
@@ -144,6 +147,7 @@
     <li><a href="#character:kill">character:kill ()</a></li>
     <li><a href="#character:createFort">character:createFort ()</a></li>
     <li><a href="#character:setBodyguardUnit">character:setBodyguardUnit (unit)</a></li>
+    <li><a href="#character:setCharacterModel">character:setCharacterModel (model)</a></li>
 </details>
 
 
@@ -186,7 +190,6 @@
     <li><a href="#factionStruct:getWatchtower">factionStruct:getWatchtower (number)</a></li>
     <li><a href="#factionStruct:deleteFort">factionStruct:deleteFort (fort)</a></li>
     <li><a href="#factionStruct:createFortXY">factionStruct:createFortXY (X, Y)</a></li>
-    <li><a href="#factionStruct:changeFactionName">factionStruct:changeFactionName (name)</a></li>
 </details>
 
 
@@ -233,7 +236,6 @@
     <li><a href="#settlementStruct:destroyBuilding">settlementStruct:destroyBuilding (typeName, isReturnMoney)</a></li>
     <li><a href="#settlementStruct:getResource">settlementStruct:getResource (number)</a></li>
     <li><a href="#settlementStruct:getSiege">settlementStruct:getSiege (siegeIdx)</a></li>
-    <li><a href="#settlementStruct:changeSettlementName">settlementStruct:changeSettlementName (name)</a></li>
 </details>
 
 
@@ -319,6 +321,7 @@
     <li><a href="#onCharacterSelected">onCharacterSelected (selectedChar)</a></li>
     <li><a href="#onPreFactionTurnStart">onPreFactionTurnStart (faction)</a></li>
     <li><a href="#onFactionTurnStart">onFactionTurnStart (faction)</a></li>
+    <li><a href="#onGeneralDevastatesTile">onGeneralDevastatesTile (gen)</a></li>
     <li><a href="#onFactionTurnEnd">onFactionTurnEnd (faction)</a></li>
     <li><a href="#onFactionNewCapital">onFactionNewCapital (faction)</a></li>
     <li><a href="#onFactionWarDeclared">onFactionWarDeclared (faction, targetFaction)</a></li>
@@ -517,8 +520,6 @@
     <li><a href="#region:getFort">region:getFort (index)</a></li>
     <li><a href="#region:getWatchtower">region:getWatchtower (index)</a></li>
     <li><a href="#region:getResource">region:getResource (index)</a></li>
-    <li><a href="#region:changeRegionName">region:changeRegionName (newName)</a></li>
-    <li><a href="#region:changeRebelsName">region:changeRebelsName (newName)</a></li>
     <li><a href="#region:getNeighbour">region:getNeighbour (index)</a></li>
     <li><a href="#region:getHiddenResource">region:getHiddenResource (index)</a></li>
     <li><a href="#region:setHiddenResource">region:setHiddenResource (index, enable)</a></li>
@@ -558,6 +559,7 @@
   <summary><a href="#battleSide">battleSide </a></summary>
     <li><a href="#battleStruct.battleSide">battleStruct.battleSide</a></li>
     <li><a href="#battleSide.getWinConditionString">battleSide.getWinConditionString (condition)</a></li>
+    <li><a href="#getBattleArmy">getBattleArmy (side, index)</a></li>
 </details>
 
 
@@ -571,6 +573,25 @@
   <summary><a href="#deploymentAreaS">deploymentAreaS </a></summary>
     <li><a href="#trackedPointerArmy.deploymentAreaS">trackedPointerArmy.deploymentAreaS</a></li>
     <li><a href="#deploymentAreaS:getCoordPair">deploymentAreaS:getCoordPair ()</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#battleAI">battleAI </a></summary>
+    <li><a href="#battleAI">battleAI</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#battleArmy">battleArmy </a></summary>
+    <li><a href="#battleArmy">battleArmy</a></li>
+    <li><a href="#getBattleUnit">getBattleUnit (army, index)</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#battleUnit">battleUnit </a></summary>
+    <li><a href="#battleUnit">battleUnit</a></li>
 </details>
 
 
@@ -620,7 +641,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-03-10 14:15:07</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-03-12 23:05:25</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -779,6 +800,10 @@
 	<td class="summary">Add a new .cas campaign strategy model to the game with a unique ID.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#objects.addCharacterCas">objects.addCharacterCas (skeleton, caspath, shadowcaspath, typename, texturepath)</a></td>
+	<td class="summary">Add a new .cas character strategy model to the game with a unique name.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#objects.setModel">objects.setModel (xCoord, yCoord, modelId, modelId2)</a></td>
 	<td class="summary">Set the strategy model for object at specified coordinates, works only for supported object types</td>
 	</tr>
@@ -848,6 +873,14 @@
 	<td class="name" nowrap><a href="#game.setScriptCounter">game.setScriptCounter (counterName, value)</a></td>
 	<td class="summary">Set an event_counter value, does not work for counters, only event_counters.</td>
 	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#game.historicEvent">game.historicEvent (eventName, title, body)</a></td>
+	<td class="summary">Fire a game event message.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#game.scriptCommand">game.scriptCommand (command, args)</a></td>
+	<td class="summary">Fire any script command available from the game.</td>
+	</tr>
 </table>
 <h2><a href="#Stratmap">Stratmap </a></h2>
 <table class="function_list">
@@ -911,6 +944,10 @@
 	<tr>
 	<td class="name" nowrap><a href="#character:setBodyguardUnit">character:setBodyguardUnit (unit)</a></td>
 	<td class="summary">Set bodyguard.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#character:setCharacterModel">character:setCharacterModel (model)</a></td>
+	<td class="summary">Set a character's model to a new one.</td>
 	</tr>
 </table>
 <h2><a href="#NamedCharacter">NamedCharacter </a></h2>
@@ -1012,10 +1049,6 @@
 	<td class="name" nowrap><a href="#factionStruct:createFortXY">factionStruct:createFortXY (X, Y)</a></td>
 	<td class="summary">Create a fort at the specified coordinates.</td>
 	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#factionStruct:changeFactionName">factionStruct:changeFactionName (name)</a></td>
-	<td class="summary">Change the faction's localized (in-game) name.</td>
-	</tr>
 </table>
 <h2><a href="#FactionStratMapStruct">FactionStratMapStruct </a></h2>
 <table class="function_list">
@@ -1097,10 +1130,6 @@
 	<tr>
 	<td class="name" nowrap><a href="#settlementStruct:getSiege">settlementStruct:getSiege (siegeIdx)</a></td>
 	<td class="summary">Get a specific siege by it's index</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#settlementStruct:changeSettlementName">settlementStruct:changeSettlementName (name)</a></td>
-	<td class="summary">Change the settlement's localized (in-game) name.</td>
 	</tr>
 </table>
 <h2><a href="#Building">Building </a></h2>
@@ -1305,6 +1334,10 @@
 	<tr>
 	<td class="name" nowrap><a href="#onFactionTurnStart">onFactionTurnStart (faction)</a></td>
 	<td class="summary">Called at a faction's turn start.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#onGeneralDevastatesTile">onGeneralDevastatesTile (gen)</a></td>
+	<td class="summary">Called when a general devastates a tile.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onFactionTurnEnd">onFactionTurnEnd (faction)</a></td>
@@ -1831,7 +1864,9 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#EDB.getBuildingCapability">EDB.getBuildingCapability (edbEntry, level, index.)</a></td>
-	<td class="summary">Get capability from a building at an index.</td>
+	<td class="summary">
+
+</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#EDB.getBuildingCapabilityNum">EDB.getBuildingCapabilityNum (edbEntry, level)</a></td>
@@ -1931,14 +1966,6 @@
 	<td class="summary">Get a resource by it's index.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:changeRegionName">region:changeRegionName (newName)</a></td>
-	<td class="summary">Change region name (reset on reload).</td>
-	</tr>
-	<tr>
-	<td class="name" nowrap><a href="#region:changeRebelsName">region:changeRebelsName (newName)</a></td>
-	<td class="summary">Change rebels name (reset on reload).</td>
-	</tr>
-	<tr>
 	<td class="name" nowrap><a href="#region:getNeighbour">region:getNeighbour (index)</a></td>
 	<td class="summary">Get a neighbour region by it's index.</td>
 	</tr>
@@ -2009,6 +2036,10 @@
 	<td class="name" nowrap><a href="#battleSide.getWinConditionString">battleSide.getWinConditionString (condition)</a></td>
 	<td class="summary">Get win condition string, for example: destroy_or_rout_enemy</td>
 	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getBattleArmy">getBattleArmy (side, index)</a></td>
+	<td class="summary">Get a battle army by it's index.</td>
+	</tr>
 </table>
 <h2><a href="#trackedPointerArmy">trackedPointerArmy </a></h2>
 <table class="function_list">
@@ -2026,6 +2057,31 @@
 	<tr>
 	<td class="name" nowrap><a href="#deploymentAreaS:getCoordPair">deploymentAreaS:getCoordPair ()</a></td>
 	<td class="summary">Get pair of coords with index.</td>
+	</tr>
+</table>
+<h2><a href="#battleAI">battleAI </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#battleAI">battleAI</a></td>
+	<td class="summary">Basic Battle AI table</td>
+	</tr>
+</table>
+<h2><a href="#battleArmy">battleArmy </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#battleArmy">battleArmy</a></td>
+	<td class="summary">Basic battleArmy table</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getBattleUnit">getBattleUnit (army, index)</a></td>
+	<td class="summary">Get a battle unit by it's index.</td>
+	</tr>
+</table>
+<h2><a href="#battleUnit">battleUnit </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#battleUnit">battleUnit</a></td>
+	<td class="summary">Basic battleUnit table</td>
 	</tr>
 </table>
 <h2><a href="#M2TWEOPFBX">M2TWEOPFBX </a></h2>
@@ -3038,6 +3094,12 @@ subElement1:execute();</pre>
 
 
         </li>
+        <li><span class="parameter">addCharacterCas</span>
+            <span class="types"><a class="type" href="index.html#objects.addCharacterCas">addCharacterCas</a></span>
+
+
+
+        </li>
         <li><span class="parameter">setModel</span>
             <span class="types"><a class="type" href="index.html#objects.setModel">setModel</a></span>
 
@@ -3167,6 +3229,48 @@ stratmap.objects.stopDrawModel(<span class="number">1</span>);</pre>
     <h3>Usage:</h3>
     <ul>
         <pre class="example">stratmap.objects.addModelToGame(<span class="string">"data/models_strat/residences/invisible.CAS"</span>,<span class="number">1</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "objects.addCharacterCas"></a>
+    <strong>objects.addCharacterCas (skeleton, caspath, shadowcaspath, typename, texturepath)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Add a new .cas character strategy model to the game with a unique name.  Only add it after loading to campaign map!
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">skeleton</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         name of skeleton used.
+        </li>
+        <li><span class="parameter">caspath</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Relative path from the mods folder (starting with "mods/").
+        </li>
+        <li><span class="parameter">shadowcaspath</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Relative path from the mods folder (starting with "mods/").
+        </li>
+        <li><span class="parameter">typename</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Name of the new model used to assign.
+        </li>
+        <li><span class="parameter">texturepath</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Relative path from the mods folder (starting with "mods/").
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">stratmap.objects.addCharacterCas(<span class="string">"strat_named_with_army"</span>,<span class="string">"mods/Bare_Geomod/data/models_strat/islamic_general2.cas"</span>,<span class="string">"mods/Bare_Geomod/data/models_strat/shadow_sword2.cas"</span>,<span class="string">"islamic_general2"</span>,<span class="string">"mods/Bare_Geomod/data/models_strat/textures/islamic_general_turks.tga"</span>);</pre>
     </ul>
 
 </dd>
@@ -3448,6 +3552,18 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
         </li>
         <li><span class="parameter">setScriptCounter</span>
             <span class="types"><a class="type" href="index.html#game.setScriptCounter">setScriptCounter</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">historicEvent</span>
+            <span class="types"><a class="type" href="index.html#game.historicEvent">historicEvent</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">scriptCommand</span>
+            <span class="types"><a class="type" href="index.html#game.scriptCommand">scriptCommand</a></span>
 
 
 
@@ -3782,6 +3898,81 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     <h3>Usage:</h3>
     <ul>
         <pre class="example">stratmap.game.setScriptCounter(<span class="string">"SomeCounter"</span>, <span class="number">25</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "game.historicEvent"></a>
+    <strong>game.historicEvent (eventName, title, body)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Fire a game event message.  Picture needs to be provided in the ui folders as default.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">eventName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">title</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">body</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">stratmap.game.historicEvent(<span class="string">"my_event"</span>, <span class="string">"my title"</span>, <span class="string">"my description"</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "game.scriptCommand"></a>
+    <strong>game.scriptCommand (command, args)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Fire any script command available from the game.  It is always just 2 parameters in the function, the command name and all the arguments as 1 string in the second parameter.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">command</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">args</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">stratmap.game.scriptCommand(<span class="string">"give_everything_to_faction"</span>, <span class="string">"france england false"</span>)
+stratmap.game.scriptCommand(<span class="string">"send_character_off_map"</span>, <span class="string">"Rufus"</span>)</pre>
     </ul>
 
 </dd>
@@ -4177,6 +4368,36 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 
         </li>
+        <li><span class="parameter">Morale</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">MoraleLocked</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">StatFood1</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">StatFood2</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">Ammunition</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
     </ul>
 
 
@@ -4293,6 +4514,12 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
         </li>
         <li><span class="parameter">setBodyguardUnit</span>
             <span class="types"><a class="type" href="index.html#character:setBodyguardUnit">setBodyguardUnit</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setCharacterModel</span>
+            <span class="types"><a class="type" href="index.html#character:setCharacterModel">setCharacterModel</a></span>
 
 
 
@@ -4520,6 +4747,34 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     <h3>Usage:</h3>
     <ul>
         <pre class="example">ourCharacter:setBodyguardUnit(unit);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "character:setCharacterModel"></a>
+    <strong>character:setCharacterModel (model)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set a character's model to a new one.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">model</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">ourCharacter:setCharacterModel(<span class="string">"saruman"</span>);</pre>
     </ul>
 
 </dd>
@@ -5417,6 +5672,18 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
 
 
         </li>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">localizedName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
         <li><span class="parameter">capital</span>
             <span class="types"><a class="type" href="index.html#settlementStruct">settlementStruct</a></span>
 
@@ -5556,7 +5823,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
 
         </li>
         <li><span class="parameter">changeFactionName</span>
-            <span class="types"><a class="type" href="index.html#factionStruct:changeFactionName">changeFactionName</a></span>
+            <span class="types"><span class="type">changeFactionName</span></span>
 
 
 
@@ -5708,7 +5975,6 @@ ourFacName = ourFac:getFactionName();
 		<span class="keyword">if</span> <span class="keyword">not</span> faction <span class="keyword">then</span>
 			<span class="keyword">return</span> <span class="keyword">nil</span>;
 		<span class="keyword">end</span>
-
 		<span class="keyword">local</span> armiesNum = faction.stacksNum;
 		<span class="keyword">for</span> j = <span class="number">0</span>, armiesNum - <span class="number">1</span> <span class="keyword">do</span>
 			<span class="keyword">local</span> army = faction:getStack(j);
@@ -5937,34 +6203,6 @@ ourFacName = ourFac:getFactionName();
     <h3>Usage:</h3>
     <ul>
         <pre class="example">fac:createFortXY(<span class="number">193</span>, <span class="number">283</span>)</pre>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "factionStruct:changeFactionName"></a>
-    <strong>factionStruct:changeFactionName (name)</strong>
-    </dt>
-    <dd>
-    <div class="functionDescription">
-    Change the faction's localized (in-game) name.
-    </div>
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">name</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
-        </li>
-    </ul>
-
-
-
-
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example">fac:changeFactionName(<span class="string">"Byzantium"</span>)</pre>
     </ul>
 
 </dd>
@@ -6246,6 +6484,12 @@ ourFacName = ourFac:getFactionName();
         <li><span class="parameter">name</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
          internal name of settlement
+        </li>
+        <li><span class="parameter">localizedName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
         </li>
         <li><span class="parameter">ownerFaction</span>
             <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
@@ -6765,12 +7009,6 @@ ourFacName = ourFac:getFactionName();
 
 
         </li>
-        <li><span class="parameter">changeSettlementName</span>
-            <span class="types"><a class="type" href="index.html#settlementStruct:changeSettlementName">changeSettlementName</a></span>
-
-
-
-        </li>
     </ul>
 
 
@@ -7095,34 +7333,6 @@ currSet:changeOwner(fac1);
    <span class="keyword">local</span> siege=currSet:getSiege(i);
    <span class="comment">--etc
 </span><span class="keyword">end</span></pre>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "settlementStruct:changeSettlementName"></a>
-    <strong>settlementStruct:changeSettlementName (name)</strong>
-    </dt>
-    <dd>
-    <div class="functionDescription">
-    Change the settlement's localized (in-game) name.
-    </div>
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">name</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
-        </li>
-    </ul>
-
-
-
-
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example">sett:changeSettlementName(<span class="string">"Constantinople"</span>)</pre>
     </ul>
 
 </dd>
@@ -8924,6 +9134,12 @@ ourChar:kill();</pre>
 
 
         </li>
+        <li><span class="parameter">onGeneralDevastatesTile</span>
+            <span class="types"><a class="type" href="index.html#onGeneralDevastatesTile">onGeneralDevastatesTile</a></span>
+
+
+
+        </li>
     </ul>
 
 
@@ -9467,6 +9683,36 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><span class="keyword">function</span> onFactionTurnStart(fac)
+<span class="comment">--something here
+</span><span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "onGeneralDevastatesTile"></a>
+    <strong>onGeneralDevastatesTile (gen)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Called when a general devastates a tile.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">gen</span>
+            <span class="types"><a class="type" href="index.html#namedCharacter">namedCharacter</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">function</span> onGeneralDevastatesTile(gen)
 <span class="comment">--something here
 </span><span class="keyword">end</span></pre>
     </ul>
@@ -13966,7 +14212,10 @@ EDB.removeBuildingCapability(building, <span class="number">0</span>, <span clas
     </dt>
     <dd>
     <div class="functionDescription">
-    Get capability from a building at an index.
+
+<pre><code>Get capability from a building at an index.
+</code></pre>
+
     </div>
 
     <h3>Parameters:</h3>
@@ -14741,6 +14990,12 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
 
 
         </li>
+        <li><span class="parameter">localizedName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
         <li><span class="parameter">settlementName</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
 
@@ -14861,6 +15116,12 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
 
 
         </li>
+        <li><span class="parameter">localizedRebelsName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
         <li><span class="parameter">triumphValue</span>
             <span class="types"><span class="type">int</span></span>
 
@@ -14887,18 +15148,6 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
         </li>
         <li><span class="parameter">getResource</span>
             <span class="types"><a class="type" href="index.html#settlementStruct:getResource">getResource</a></span>
-
-
-
-        </li>
-        <li><span class="parameter">changeRegionName</span>
-            <span class="types"><a class="type" href="index.html#region:changeRegionName">changeRegionName</a></span>
-
-
-
-        </li>
-        <li><span class="parameter">changeRebelsName</span>
-            <span class="types"><a class="type" href="index.html#region:changeRebelsName">changeRebelsName</a></span>
 
 
 
@@ -15069,66 +15318,6 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
         <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
 <span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
 <span class="keyword">local</span> res = region:getResource(<span class="number">0</span>)</pre>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "region:changeRegionName"></a>
-    <strong>region:changeRegionName (newName)</strong>
-    </dt>
-    <dd>
-    <div class="functionDescription">
-    Change region name (reset on reload).
-    </div>
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">newName</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
-        </li>
-    </ul>
-
-
-
-
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
-<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
-region:changeRegionName(<span class="string">"Macedonia"</span>)</pre>
-    </ul>
-
-</dd>
-    <dt>
-    <a name = "region:changeRebelsName"></a>
-    <strong>region:changeRebelsName (newName)</strong>
-    </dt>
-    <dd>
-    <div class="functionDescription">
-    Change rebels name (reset on reload).
-    </div>
-
-    <h3>Parameters:</h3>
-    <ul>
-        <li><span class="parameter">newName</span>
-            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
-        </li>
-    </ul>
-
-
-
-
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
-<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
-region:changeRebelsName(<span class="string">"Macedonian Rebels"</span>)</pre>
     </ul>
 
 </dd>
@@ -15651,6 +15840,20 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 
     <h3>Fields:</h3>
     <ul>
+        <li><span class="parameter">battleState</span>
+            <span class="types"><span class="type">int</span></span>
+         0-not in battle,5-active battle,9-results screen,etc
+        </li>
+        <li><span class="parameter">battleType</span>
+            <span class="types"><span class="type">int</span></span>
+         3 = siege, 4 = sally out, rest unknown for now, you can experiment.
+        </li>
+        <li><span class="parameter">isNightBattle</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
         <li><span class="parameter">xCoord</span>
             <span class="types"><span class="type">int</span></span>
 
@@ -15687,6 +15890,24 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 
 
         </li>
+        <li><span class="parameter">paused</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">battleSpeed</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">secondsPassed</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
         <li><span class="parameter">sidesNum</span>
             <span class="types"><span class="type">int</span></span>
          Returns a battleSide[8]. Maximum: 8.
@@ -15696,6 +15917,10 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 
 
 
+        </li>
+        <li><span class="parameter">faction</span>
+            <span class="types"><span class="type">factionSide[31]</span></span>
+         alliance array, -1 if not in battle
         </li>
     </ul>
 
@@ -15731,6 +15956,14 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 
 
         </li>
+        <li><span class="parameter">wonBattle</span>
+            <span class="types"><span class="type">int</span></span>
+         0 = lose, 1 = draw, 2 = win
+        </li>
+        <li><span class="parameter">battleSuccess</span>
+            <span class="types"><span class="type">int</span></span>
+         0 = close, 1 = average, 2 = clear, 3 = crushing
+        </li>
         <li><span class="parameter">winConditions</span>
             <span class="types"><span class="type">int[4]</span></span>
          Returns an int index of a wincondition.
@@ -15743,6 +15976,36 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
         </li>
         <li><span class="parameter">armiesNum</span>
             <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">alliance</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">soldierCount</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">totalStrenght</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">battleAIPlan</span>
+            <span class="types"><a class="type" href="index.html#battleAI">battleAI</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getBattleArmy</span>
+            <span class="types"><a class="type" href="index.html#getBattleArmy">getBattleArmy</a></span>
 
 
 
@@ -15819,6 +16082,46 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 	<span class="keyword">end</span>
 	<span class="global">print</span>(battleList)
 <span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "getBattleArmy"></a>
+    <strong>getBattleArmy (side, index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a battle army by it's index.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">side</span>
+            <span class="types"><span class="type">battleSideTable</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#battleArmy">battleArmy</a></span>
+        army
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">unit = side:getBattleArmy(<span class="number">0</span>)</pre>
     </ul>
 
 </dd>
@@ -15924,6 +16227,208 @@ deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
 	<span class="global">print</span>(xCoord,yCoord);
 <span class="keyword">end</span></pre>
     </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="battleAI"></a>battleAI </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "battleAI"></a>
+    <strong>battleAI</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic Battle AI table
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">gtaPlan</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">unitCount</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">enemyUnitCount</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="battleArmy"></a>battleArmy </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "battleArmy"></a>
+    <strong>battleArmy</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic battleArmy table
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">army</span>
+            <span class="types"><a class="type" href="index.html#stackStruct">stackStruct</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">character</span>
+            <span class="types"><a class="type" href="index.html#character">character</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">generalNumKillsBattle</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">generalHPRatioLost</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">battleOdds</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">numKilledGenerals</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">unitCount</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">getBattleUnit</span>
+            <span class="types"><a class="type" href="index.html#getBattleUnit">getBattleUnit</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getBattleUnit"></a>
+    <strong>getBattleUnit (army, index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a battle unit by it's index.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">army</span>
+            <span class="types"><a class="type" href="index.html#battleArmy">battleArmy</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#battleUnit">battleUnit</a></span>
+        unit
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">unit = battleArmy:getBattleUnit(<span class="number">0</span>)</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="battleUnit"></a>battleUnit </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "battleUnit"></a>
+    <strong>battleUnit</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic battleUnit table
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">unit</span>
+            <span class="types"><a class="type" href="index.html#unit">unit</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">soldiersLost</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">soldiersStart</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">unitsRouted</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">hasRouted</span>
+            <span class="types"><span class="type">boolean</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
 
 </dd>
 </dl>
