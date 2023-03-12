@@ -342,10 +342,39 @@ struct gameDataAllStruct {
 	undefined field_0x5c[8];
 };
 
+struct battleUnit
+{
+public:
+	struct unit* unit; //0x0000
+	struct UNICODE_STRING** localizedName; //0x0004
+	float someFloat; //0x0008
+	int32_t soldiersLost; //0x000C
+	char pad_0010[12]; //0x0010
+	int32_t soldiersStart; //0x001C
+	uint32_t unitsRouted; //0x0020
+	char pad_0024[20]; //0x0024
+	int8_t hasRouted; //0x0038
+	char pad_0039[15]; //0x0039
+}; //Size: 0x0048
+
+
 struct armyAndCharacter { /* in battle leader and leader army */
-	struct stackStruct* army;
-	struct general* character;
-};
+	struct stackStruct* army;//0x0000
+	struct general* character;//0x0004
+	int32_t generalNumKillsBattle; //0x0008
+	float generalHPRatioLost; //0x000C
+	float someFloat; //0x0010
+	float battleOdds; //0x0014
+	char pad_0018[20]; //0x0018
+	int32_t numKilledGenerals; //0x002C
+	char pad_0030[36]; //0x0030
+	DWORD N0001FC50; //0x0054
+	char pad_0058[68]; //0x0058
+	struct battleUnit** units; //0x009C
+	int32_t unitArraySize; //0x00A0
+	int32_t unitCount; //0x00A4
+	char pad_00A8[20]; //0x00A8
+};//Size: 0x00BC
 
 struct deploymentAreaS {
 	undefined field_0x0[4];
@@ -362,38 +391,167 @@ struct trackedPointerArmy {
 	undefined field_0x38[40];
 };
 
+struct aiDetachmentUnit
+{
+public:
+	struct unit* unit; //0x0000
+	DWORD objective; //0x0004
+	char pad_0008[4]; //0x0008
+}; //Size: 0x000C
+
+
+struct aiDetachment
+{
+public:
+	char pad_0000[4]; //0x0000
+	struct AIBattleObjectiveBase* aiObjective; //0x0004
+	struct aiDetachmentUnit** aiDetachUnits; //0x0008
+	int32_t aiDetachUnitsSize; //0x000C
+	int32_t aiDetachUnitsCount; //0x0010
+	char pad_0014[8]; //0x0014
+	DWORD objPhases; //0x001C
+	int32_t objPhasesSize; //0x0020
+	int32_t objPhasesCount; //0x0024
+}; //Size: 0x0028
+
+
+struct AIBattleObjectiveBase
+{
+public:
+	char pad_0000[8]; //0x0000
+	struct aiDetachment** aiDetachments; //0x0008
+	int32_t aiDetachmentsSize; //0x000C
+	int32_t aiDetachmentsCount; //0x0010
+	struct unit** aiUnits; //0x0014
+	int32_t aiUnitsSize; //0x0018
+	int32_t aiUnitsCount; //0x001C
+	char pad_0020[12]; //0x0020
+	int32_t priority; //0x002C
+	char pad_0030[24]; //0x0030
+	DWORD battleFieldNode; //0x0048
+	char pad_004C[20]; //0x004C
+	struct aiDetachment** activeDetachments; //0x0060
+	uint32_t activeDetachmentsEnd; //0x0064
+	uint32_t activeDetachmentsEnd2; //0x0068
+	char pad_006C[12]; //0x006C
+}; //Size: 0x0078
+
+struct aiObjectiveArrayBattle
+{
+public:
+	struct AIBattleObjectiveBase* aIBattleObjective[50]; //0x0000
+	char pad_00C8[16]; //0x00C8
+}; //Size: 0x00D8
+
+struct battleAI
+{
+public:
+	char pad_0000[4]; //0x0000
+	uint8_t newPlan; //0x0004
+	char pad_0005[3]; //0x0005
+	uint32_t currentAIPlan; //0x0008
+	char pad_000C[8]; //0x000C
+	char pad_0014[8]; //0x0014
+	int32_t somethingHasUnitsagain; //0x001C
+	char pad_0020[8]; //0x0020
+	struct unit** aiUnitArray; //0x0028
+	int32_t aiUnitMax; //0x002C
+	int32_t aiUnitCount; //0x0030
+	char pad_0034[4]; //0x0034
+	struct unit** aiUnitArrayReversed; //0x0038
+	int32_t aiUnitMaxReversed; //0x003C
+	int32_t aiUnitCountReversed; //0x0040
+	char pad_0044[340]; //0x0044
+	struct unit** enemyUnitArray; //0x0198
+	int32_t enemyUnitArraySize; //0x019C
+	int32_t enemyUnitCount; //0x01A0
+	char pad_01A4[4]; //0x01A4
+	struct unit** enemyUnitArrayReversed; //0x01A8
+	int32_t enemyUnitArraySizeReversed; //0x01AC
+	int32_t enemyUnitCountReversed; //0x01B0
+	char pad_01B4[1420]; //0x01B4
+	struct unit** units; //0x0740
+	int32_t unitArraySize; //0x0744
+	int32_t unitCount; //0x0748
+	char pad_074C[12]; //0x074C
+	struct aiObjectiveArrayBattle* aiObjectives; //0x0758
+	int32_t aiObjectivesSize; //0x075C
+	int32_t aiObjectivesCount; //0x0760
+	char pad_0764[4]; //0x0764
+	struct aiObjectiveArrayBattle* aiObjectives2; //0x0768
+	char pad_076C[4]; //0x076C
+	uint32_t objectiveCount; //0x0770
+	char pad_0774[44]; //0x0774
+	DWORD aiAnalysers; //0x07A0
+	char pad_07A4[96]; //0x07A4
+}; //Size: 0x0804
+
 struct battleSide {
-	bool isDefender;
-	uchar field_0x1;
-	bool isCanDeploy;
-	undefined field_0x3[8];
-	undefined field_0xb;
-	DWORD winConditions[4];
-	undefined field_0x1c[20];
-	struct armyAndCharacter* forces;
-	undefined field_0x34[4];
-	int armiesNum;
-	undefined field_0x3c[28];
-	struct trackedPointerArmy armies[8];
-	undefined field_0x358[5588];
+	bool isDefender;//0x0000
+	uchar field_0x1;//0x0001
+	bool isCanDeploy;//0x0002
+	undefined field_0x3[9];//0x0003
+	DWORD winConditions[4];//0x000C
+	int32_t winConditionCount; //0x001C
+	char pad_0020[4]; //0x0020
+	int32_t wonBattle; //0x0024 2 means won, 0 means lost, 1 is draw maybe
+	int32_t battleSuccess; //0x0028 0 = close, 1 = average, 2 = clear, 3 = crushing
+	char pad_002C[4]; //0x002C
+	struct armyAndCharacter* forces;//0x0030
+	int32_t armyArraySize; //0x0034
+	int armiesNum;//0x0038
+	char pad_003C[12]; //0x003C
+	int32_t alliance; //0x0048
+	struct battleAI* battleAIPlan; //0x004C
+	char pad_0050[8]; //0x0050
+	struct trackedPointerArmy armies[64];//0x0058
+	int32_t armyAICount; //0x1858
+	struct factionStruct** factions; //0x185C
+	int32_t factionCount; //0x187C
+	char pad_1880[4]; //0x1880
+	DWORD someArray; //0x1884
+	int32_t someArraySize; //0x1888
+	int32_t someArrayCount; //0x188C
+	DWORD someArray2; //0x1890
+	int32_t someArraySize2; //0x1894
+	int32_t someArrayCount2; //0x1898
+	char pad_189C[104]; //0x189C
+	int32_t totalStrenght; //0x1904
+	int32_t autoResolveStrenghtMaybe; //0x1908
+	char pad_190C[4]; //0x190C
+	int32_t totalStrenght2; //0x1910
+	int32_t totalStrenght3; //0x1914
+	int32_t soldierCount; //0x1918
+	float battleOdds; //0x191C
+	float battleOdds2; //0x1920
+	float someFloat; //0x1924
+	char pad_1928[4]; //0x1928
 };
 
 struct battleDataS {
-	undefined field_0x0[4];
-	int battleState; /* 0-not in battle,5-active battle,9-results screen,etc */
-	undefined field_0xc[16];
-	int xCoord;
-	int yCoord;
-	undefined somethingRelatedToBattleType[16];
-	int attackerXCoord;
-	int attackerYCoord;
-	int defenderXCoord;
-	int defenderYCoord;
-	undefined field_0x40[92];
-	struct battleSide sides[8];
-	undefined field_0xc9fc[124];
-	int sidesNum;
-};
+	undefined field_0x0[4];//0x0000
+	int battleState; /* 0-not in battle,5-active battle,9-results screen,etc 0x0004 */
+	uint32_t battleType; //0x0008
+	int32_t isNightBattle; //0x000C
+	char pad_0010[8]; //0x0010
+	int xCoord;//0x0018
+	int yCoord;//0x001C
+	undefined somethingRelatedToBattleType[16];//0x0020
+	int attackerXCoord;//0x0030
+	int attackerYCoord;//0x0034
+	int defenderXCoord;//0x0038
+	int defenderYCoord;//0x003C
+	char pad_0040[20]; //0x0040
+	int32_t paused; //0x0054
+	float speed; //0x0058
+	char pad_005C[8]; //0x005C
+	float secondsPassed; //0x0064
+	char pad_0068[48]; //0x0068
+	struct UNICODE_STRING** someUniString; //0x0098
+	struct battleSide sides[8]; //0x009C
+	int32_t factionSide[31]; //0xC9FC
+	int sidesNum;//0xCA78
+};//Size: 0xCA7C
 
 struct stratPortModel {
 	struct model_Rigid* model_rigid;

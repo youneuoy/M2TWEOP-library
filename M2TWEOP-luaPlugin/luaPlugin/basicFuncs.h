@@ -140,6 +140,7 @@ public:
 
 	ProcLoader<void(__cdecl*)(unsigned char)> setAncLimit;
 	ProcLoader<void(__cdecl*)(const char*, const char*, const char*)> historicEvent;
+	ProcLoader<void(__cdecl*)(const char*, const char*)> scriptCommand;
 	ProcLoader<void(__cdecl*)(unsigned char)> setReligionsLimit;
 	ProcLoader<void(__cdecl*)(unsigned char)> setMaxBgSize;
 	ProcLoader<void(__cdecl*)()> unlockConsoleCommands;

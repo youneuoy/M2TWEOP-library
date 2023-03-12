@@ -324,9 +324,14 @@ namespace gameHelpers
 	void gameHelpers::saveGame(const char* path)
 	{
 		(*(*plugData::data.funcs.saveGame))(path);
-	};
+	}
 
-	void historicEvent(const char* name, const char* title, const char* description)
+	void gameHelpers::scriptCommand(const char* command, const char* args)
+	{
+		(*(*plugData::data.funcs.scriptCommand))(command, args);
+	}
+
+	void gameHelpers::historicEvent(const char* name, const char* title, const char* description)
 	{
 		(*(*plugData::data.funcs.historicEvent))(name, title, description);
 	}

@@ -674,6 +674,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getScriptCounter getScriptCounter
 	@tfield setScriptCounter setScriptCounter
 	@tfield historicEvent historicEvent
+	@tfield scriptCommand scriptCommand
 	@tfield callConsole callConsole
 
 	@table stratmap.game
@@ -783,6 +784,17 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	stratmap.game.historicEvent("my_event", "my title", "my description")
 	*/
 	tables.gameTable.set_function("historicEvent", &gameHelpers::historicEvent);
+
+	/***
+	Fire any script command available from the game. It is always just 2 parameters in the function, the command name and all the arguments as 1 string in the second parameter.
+	@function game.scriptCommand
+	@tparam string command
+	@tparam string args
+	@usage
+	stratmap.game.scriptCommand("give_everything_to_faction", "france england false")
+	stratmap.game.scriptCommand("send_character_off_map", "Rufus")
+	*/
+	tables.gameTable.set_function("scriptCommand", &gameHelpers::scriptCommand);
 	///Stratmap
 	//@section stratmapTable
 
@@ -2444,6 +2456,14 @@ void luaP::onFactionTurnStart(factionStruct* fac)
 	if (onFactionTurnStartFunc != nullptr)
 	{
 		tryLua((*onFactionTurnStartFunc)(fac));
+	}
+}
+
+void luaP::onGeneralDevastatesTile(generalCharacterictics* gen)
+{
+	if (onGeneralDevastatesTileFunc != nullptr)
+	{
+		tryLua((*onGeneralDevastatesTileFunc)(gen));
 	}
 }
 

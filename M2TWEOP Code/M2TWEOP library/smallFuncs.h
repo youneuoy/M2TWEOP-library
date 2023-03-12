@@ -24,6 +24,8 @@ namespace smallFuncs
 	NOINLINE EOP_EXPORT void changeFactionName(factionStruct* fac, const char* newName);
 	NOINLINE EOP_EXPORT UNICODE_STRING** getFactionName(factionStruct* fac);
 	NOINLINE EOP_EXPORT void historicEvent(const char* name, const char* title, const char* description);
+	DWORD getScriptCommandByName(const char* cmdName);
+	NOINLINE EOP_EXPORT void scriptCommand(const char* command, const char* args);
 	NOINLINE EOP_EXPORT void changeRegionName(regionStruct* region, const char* newName);
 	NOINLINE EOP_EXPORT void changeRebelsName(regionStruct* region, const char* newName);
 

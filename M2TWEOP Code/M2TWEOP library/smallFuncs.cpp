@@ -358,6 +358,84 @@ namespace smallFuncs
 
 	}
 
+	DWORD getScriptCommandByName(const char* cmdName)
+	{
+		DWORD func1 = codes::offsets.scriptCommandOne;
+		DWORD func2 = codes::offsets.scriptCommandTwo;
+		DWORD result = 0x0;
+		DWORD cmdNamePtr = (DWORD)&cmdName;
+
+		_asm {
+			mov eax, func1
+			call eax
+			mov ecx, eax
+			push cmdNamePtr
+			mov eax, func2
+			call eax
+			mov result, eax
+		}
+		return result;
+	}
+
+	struct fakeTextInput
+	{
+	public:
+		char* textBuffer; //0x0000
+		uint32_t byteSize; //0x0004
+		char* endString; //0x0008
+		struct UNICODE_STRING** unicodePointerPointer; //0x000C
+		char* currRead; //0x0010
+		char* currLine; //0x0014
+		uint32_t lineNumber; //0x0018
+		int32_t N1814981889; //0x001C
+		int32_t N0; //0x0020
+		DWORD classPointer; //0x0024
+	}; //Size: 0x0028
+
+	NOINLINE EOP_EXPORT void scriptCommand(const char* command, const char* args)
+	{
+		DWORD scriptClass = getScriptCommandByName(command);
+		char* fullCommand = new char[strlen(command) + strlen(args) + 2];
+		strcpy(fullCommand, command);
+		strcat(fullCommand, " ");
+		strcat(fullCommand, args);
+		fakeTextInput* fakeText = new fakeTextInput;
+		std::string scriptPath = "data/world/maps/campaign/imperial_campaign/campaign_script.txt";
+		fakeText->unicodePointerPointer = new UNICODE_STRING*;
+		smallFuncs::createUniString(fakeText->unicodePointerPointer, scriptPath.c_str());
+		fakeText->textBuffer = fullCommand;
+		fakeText->byteSize = strlen(command) + (int8_t)0x4;
+		size_t len = strlen(fullCommand);
+		char* endAddress = fullCommand + len;
+		fakeText->endString = endAddress;
+		fakeText->currRead = fullCommand;
+		fakeText->currLine = fullCommand;
+		fakeText->lineNumber = 1;
+		fakeText->N1814981889 = 1814981889;
+		fakeText->N0 = 0;
+		DWORD classPointer = 0x0;
+		_asm
+		{
+			mov eax, scriptClass
+			mov eax, [eax]
+			mov classPointer, eax
+		}
+		fakeText->classPointer = classPointer;
+		DWORD funcAddr = scriptClass + (int8_t)0x4;
+		_asm
+		{
+			push fakeText
+			mov eax, funcAddr
+			mov eax, [eax]
+			call eax
+			add esp, 0x4
+			mov ecx, eax
+			mov eax, [eax]
+			mov eax, [eax]
+			call eax
+		}
+	}
+
 	NOINLINE EOP_EXPORT void changeRegionName(regionStruct* region, const char* newName)
 	{
 

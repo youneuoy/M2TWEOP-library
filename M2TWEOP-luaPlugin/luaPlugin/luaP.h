@@ -90,6 +90,7 @@ public:
 	void onCharacterSelected(generalCharacterictics* gen);
 	void onPreFactionTurnStart(factionStruct* fac);
 	void onFactionTurnStart(factionStruct* fac);
+	void onGeneralDevastatesTile(generalCharacterictics* gen);
 	void onFactionTurnEnd(factionStruct* fac);
 	void onFactionNewCapital(factionStruct* fac);
 	void onFactionWarDeclared(factionStruct* fac, factionStruct* fac2);
@@ -196,6 +197,7 @@ public:
 	sol::function* onChangeTurnNumFunc = nullptr;
 	sol::function* onCharacterSelectedFunc = nullptr;
 	sol::function* onPreFactionTurnStartFunc = nullptr;
+	sol::function* onGeneralDevastatesTileFunc = nullptr;
 	sol::function* onFactionTurnStartFunc = nullptr;
 	sol::function* onFactionTurnEndFunc = nullptr;
 	sol::function* onFactionNewCapitalFunc = nullptr;

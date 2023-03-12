@@ -2,8 +2,8 @@
 #include <string>
 #include <vector>
 #include <windows.h>
-#include "FastFuncts.h" 
-#include "eventsCodes.h" 
+#include "FastFuncts.h"
+#include "eventsCodes.h"
 #include "globals.h"
 
 #include "techFuncs.h"
@@ -87,6 +87,7 @@ public:
 
 	ProcLoader<void(__cdecl*)(factionStruct*)> onPreFactionTurnStart;
 	ProcLoader<void(__cdecl*)(factionStruct*)> onFactionTurnStart;
+	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onGeneralDevastatesTile;
 	ProcLoader<void(__cdecl*)(factionStruct*)> onFactionTurnEnd;
 	ProcLoader<void(__cdecl*)(factionStruct*)> onFactionNewCapital;
 	ProcLoader<void(__cdecl*)(factionStruct*, factionStruct*)> onFactionWarDeclared;
@@ -244,7 +245,7 @@ public:
 	//from here calls all plugins
 
 	static std::string onSelectWorldpkgdesc(const char* selectedRec, const char* selectedGroup);
-	static int onfortificationlevelS(settlementStruct*settlement, bool* isCastle);
+	static int onfortificationlevelS(settlementStruct* settlement, bool* isCastle);
 	static void onClickAtTile(int x, int y);
 	static void onCampaignMapLoaded();
 
@@ -263,7 +264,7 @@ public:
 	static void onReset(LPDIRECT3DDEVICE9 pDevice);
 	static void onLoadingFonts(LPDIRECT3DDEVICE9 pDevice);
 
-	static void onChangeImGuiCtx(ImGuiContext* imCtx,ImGuiMemAllocFunc alloc_func, ImGuiMemFreeFunc free_func, void* user_data);
+	static void onChangeImGuiCtx(ImGuiContext* imCtx, ImGuiMemAllocFunc alloc_func, ImGuiMemFreeFunc free_func, void* user_data);
 
 	static vector<const char*>* eventNames;
 private:

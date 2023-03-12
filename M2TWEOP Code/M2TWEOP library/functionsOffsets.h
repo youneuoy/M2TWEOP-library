@@ -70,6 +70,8 @@ public:
 		DWORD autoWinFunc = NULL;
 		DWORD historicEventFunc = NULL;
 		DWORD getStringFromTable = NULL;
+		DWORD scriptCommandOne = NULL;
+		DWORD scriptCommandTwo = NULL;
 
 
 		DWORD autoResolveFunc = NULL;

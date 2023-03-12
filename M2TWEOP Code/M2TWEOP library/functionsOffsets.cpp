@@ -59,6 +59,8 @@ void codes::initCodes(int gameVer)
 
 		offsets.autoWinFunc = 0x00d2dcf0;
 		offsets.historicEventFunc = 0x00C5BD50;
+		offsets.scriptCommandOne = 0x00A945F0;
+		offsets.scriptCommandTwo = 0x00A93570;
 
 		offsets.autoResolveFunc = 0x00aa6bc0;
 
@@ -136,6 +138,8 @@ void codes::initCodes(int gameVer)
 
 		offsets.autoWinFunc = 0x00d28070;
 		offsets.historicEventFunc = 0x0C56150;
+		offsets.scriptCommandOne = 0x00A95650;
+		offsets.scriptCommandTwo = 0x00A945D0;
 
 
 		offsets.autoResolveFunc = 0x00aa7bf0;
