@@ -11,11 +11,11 @@
 #include <d3dx9.h>
 
 #include "fbxModels.h"
+#include "discord.h"
 
 
 #include <ImFileDialog.h>
 #include <Winuser.h>
-//#include "discord.h"
 graphicsD3D::dataT graphicsD3D::dataS;
 
 #include "onlineThings.h"
@@ -104,7 +104,7 @@ struct
 }drawParams;
 
 struct {
-	//std::unique_ptr<discord::Core> core;
+	// std::unique_ptr<discord::Core> core;
 }DiscordState;
 
 struct
@@ -113,45 +113,8 @@ struct
 }tempData;
 NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 {
-	//	DiscordState.core->RunCallbacks();
 
-
-		/*MEMORYSTATUSEX statex;
-
-		statex.dwLength = sizeof(statex);
-
-		GlobalMemoryStatusEx(&statex);
-		ImGui::Begin("Ram test");
-		ImGui::Text("There are %I64d total MB of virtual memory.\n",
-			statex.ullTotalVirtual / 1048576);
-		ImGui::Text("There are %I64d free  MB of virtual memory.\n",
-			statex.ullAvailVirtual / 1048576);
-
-		static float progress = 0.0f, progress_dir = 1.0f;
-
-
-		float prop =1.0f- (double)statex.ullAvailVirtual / (double)statex.ullTotalVirtual;
-
-		ImGui::Text("Memory usage:");
-		ImGui::ProgressBar(prop, ImVec2(-1.0f, 0.0f));
-
-		ImGui::End();*/
-
-
-		/*ImGui::Begin("test");
-
-		if (ImGui::Button("fight"))
-		{
-			_asm
-			{
-				push 1
-				mov ecx, 0x02BF8550
-				mov eax,0x0044edb0
-				call eax
-				add esp, 4
-			}
-		}
-		ImGui::End();*/
+	// core.RunCallbacks()
 	return;
 }
 NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
@@ -356,7 +319,6 @@ NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc(HWND hWnd, UINT uMsg, WPARAM wP
 	return CallWindowProc(dataS.hookD.oWndProc, hWnd, uMsg, wParam, lParam);
 }
 
-
 NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 {
 
@@ -434,8 +396,6 @@ bool graphicsD3D::init()
 	return true;
 }
 
-
-
 DWORD __stdcall graphicsD3D::InitS()
 {
 	/* Initialize MinHook.
@@ -470,7 +430,6 @@ DWORD __stdcall graphicsD3D::InitS()
 
 	return 1;
 }
-
 
 NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* path, int* x, int* y)
 {
@@ -508,23 +467,29 @@ NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevic
 
 
 	graphicsD3D::initImgGui(pDevice);
+
+
+	// Discord Rich Presence
+	// discord::Core* core{};
+	// auto response = discord::Core::Create(1084531097561464913, DiscordCreateFlags_Default, &core);
+	// DiscordState.core.reset(core);
+
+	// if (!DiscordState.core) {
+	// 	std::exit(-1);
+	// }
+
+	// discord::Activity activity{};
+
+	// activity.SetDetails("M2TWEOP: Discord Rich presence");
+	// activity.SetState("M2TWEOP");
+	// activity.GetAssets().SetSmallImage("test.png");
+	// activity.GetAssets().SetSmallText("123321");
+	// activity.GetAssets().SetLargeImage("test.png");
+	// activity.GetAssets().SetLargeText("321123");
+	// activity.SetType(discord::ActivityType::Playing);
 	/*discord::Core* core{};
 	auto response = discord::Core::Create(879470336565981186, DiscordCreateFlags_Default, &core);
-	DiscordState.core.reset(core);
 
-	if (!DiscordState.core) {
-	//	std::cout << "Failed to instantiate Discord!";
-		std::exit(-1);
-	}
-
-	discord::Activity activity{};
-	activity.SetDetails("Medieval II total war");
-	activity.SetState("M2TWEOP");
-	activity.GetAssets().SetSmallImage("test.png");
-	activity.GetAssets().SetSmallText("123321");
-	activity.GetAssets().SetLargeImage("test.png");
-	activity.GetAssets().SetLargeText("321123");
-	activity.SetType(discord::ActivityType::Playing);
 	DiscordState.core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {
 	//	std::cout << ((result == discord::Result::Ok) ? "Succeeded" : "Failed")
 		//	<< " updating activity!\n";

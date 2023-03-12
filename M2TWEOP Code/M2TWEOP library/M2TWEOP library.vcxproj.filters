@@ -124,6 +124,9 @@
     <Filter Include="Исходные файлы\injections">
       <UniqueIdentifier>{1cf21b73-d1af-4f3d-817a-f5fdd38476b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rd\discord">
+      <UniqueIdentifier>{92d88ef8-2df2-49eb-9c8d-3a534dc208f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -393,6 +396,57 @@
     <ClInclude Include="eopBuildings.h">
       <Filter>features\eopBuildings</Filter>
     </ClInclude>
+    <ClInclude Include="..\3rd\discord\achievement_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\activity_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\application_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\core.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\discord.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\event.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\ffi.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\image_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\lobby_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\network_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\overlay_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\relationship_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\storage_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\store_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\types.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\user_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\voice_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -607,6 +661,48 @@
     </ClCompile>
     <ClCompile Include="eopBuildings.cpp">
       <Filter>features\eopBuildings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\achievement_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\activity_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\application_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\core.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\image_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\lobby_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\network_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\overlay_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\relationship_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\storage_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\store_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\types.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\user_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\voice_manager.cpp">
+      <Filter>3rd\discord</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

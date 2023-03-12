@@ -13,8 +13,7 @@ namespace discord {
 
 class StoreEvents final {
 public:
-    static void DISCORD_CALLBACK OnEntitlementCreate(void* callbackData,
-                                                     DiscordEntitlement* entitlement)
+    static void OnEntitlementCreate(void* callbackData, DiscordEntitlement* entitlement)
     {
         auto* core = reinterpret_cast<Core*>(callbackData);
         if (!core) {
@@ -25,8 +24,7 @@ public:
         module.OnEntitlementCreate(*reinterpret_cast<Entitlement const*>(entitlement));
     }
 
-    static void DISCORD_CALLBACK OnEntitlementDelete(void* callbackData,
-                                                     DiscordEntitlement* entitlement)
+    static void OnEntitlementDelete(void* callbackData, DiscordEntitlement* entitlement)
     {
         auto* core = reinterpret_cast<Core*>(callbackData);
         if (!core) {
