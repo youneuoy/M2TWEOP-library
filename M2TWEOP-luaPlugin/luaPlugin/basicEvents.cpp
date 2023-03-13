@@ -177,7 +177,7 @@ void onFactionWarDeclared(factionStruct* fac, factionStruct* fac2)
 
 void onFactionAllianceDeclared(factionStruct* fac, factionStruct* fac2)
 {
-	plugData::data.luaAll.onFactionWarDeclared(fac, fac2);
+	plugData::data.luaAll.onFactionAllianceDeclared(fac, fac2);
 }
 
 void onFactionTradeAgreementMade(factionStruct* fac, factionStruct* fac2)
