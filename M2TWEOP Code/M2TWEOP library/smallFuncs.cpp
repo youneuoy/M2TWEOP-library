@@ -395,6 +395,10 @@ namespace smallFuncs
 	NOINLINE EOP_EXPORT void scriptCommand(const char* command, const char* args)
 	{
 		DWORD scriptClass = getScriptCommandByName(command);
+		if (scriptClass == 0x0)
+		{
+			return;
+		}
 		char* fullCommand = new char[strlen(command) + strlen(args) + 2];
 		strcpy(fullCommand, command);
 		strcat(fullCommand, " ");
@@ -422,15 +426,26 @@ namespace smallFuncs
 		}
 		fakeText->classPointer = classPointer;
 		DWORD funcAddr = scriptClass + (int8_t)0x4;
+		DWORD scriptObject = 0x0;
 		_asm
 		{
 			push fakeText
 			mov eax, funcAddr
 			mov eax, [eax]
 			call eax
+			mov scriptObject, eax
 			add esp, 0x4
-			mov ecx, eax
-			mov eax, [eax]
+		}
+
+		if (scriptObject == 0x0)
+		{
+			return;
+		}
+
+		_asm
+		{
+			mov ecx, scriptObject
+			mov eax, [ecx]
 			mov eax, [eax]
 			call eax
 		}

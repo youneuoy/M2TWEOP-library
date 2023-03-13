@@ -384,10 +384,10 @@ struct deploymentAreaS {
 };
 
 struct trackedPointerArmy {
-	undefined field_0x0[4];
-	struct stackStruct* stack;
-	undefined field_0x8[44];
-	struct deploymentAreaS* deploymentArea;
+	undefined field_0x0[4];//0x0000
+	struct stackStruct* stack;//0x0004
+	undefined field_0x8[44];//0x0008
+	struct deploymentAreaS* deploymentArea;//0x0048
 	undefined field_0x38[40];
 };
 
@@ -506,7 +506,7 @@ struct battleSide {
 	char pad_0050[8]; //0x0050
 	struct trackedPointerArmy armies[64];//0x0058
 	int32_t armyAICount; //0x1858
-	struct factionStruct** factions; //0x185C
+	struct factionStruct* factions[8]; //0x185C
 	int32_t factionCount; //0x187C
 	char pad_1880[4]; //0x1880
 	DWORD someArray; //0x1884

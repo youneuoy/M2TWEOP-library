@@ -787,6 +787,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	/***
 	Fire any script command available from the game. It is always just 2 parameters in the function, the command name and all the arguments as 1 string in the second parameter.
+	Do not use inc_counter, set_counter, declare_counter! they crash!
 	@function game.scriptCommand
 	@tparam string command
 	@tparam string args
