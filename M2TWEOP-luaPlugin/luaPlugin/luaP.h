@@ -40,7 +40,7 @@ if (!funcResult.valid())\
 {\
 	sol::error luaError = funcResult;\
 	MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);\
-	if (plugData::data.luaAll.checkVar("terminateAtLuaException", 1) == false)\
+	if (plugData::data.luaAll.checkVar("terminateAtLuaException", 1) == true)\
 	{\
 		terminate();\
 	}\
@@ -53,7 +53,7 @@ if (!funcResult.valid())\
 {\
 	sol::error luaError = funcResult;\
 	MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);\
-	if (plugData::data.luaAll.checkVar("terminateAtLuaException", 1) == false)\
+	if (plugData::data.luaAll.checkVar("terminateAtLuaException", 1) == true)\
 	{\
 		terminate();\
 	}\
