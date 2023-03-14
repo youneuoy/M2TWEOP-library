@@ -104,7 +104,7 @@ struct
 }drawParams;
 
 struct {
-	// std::unique_ptr<discord::Core> core;
+	std::unique_ptr<discord::Core> core;
 }DiscordState;
 
 struct
@@ -470,23 +470,23 @@ NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevic
 
 
 	// Discord Rich Presence
-	// discord::Core* core{};
-	// auto response = discord::Core::Create(1084531097561464913, DiscordCreateFlags_Default, &core);
-	// DiscordState.core.reset(core);
+	discord::Core* core{};
+	auto response = discord::Core::Create(1084531097561464913, DiscordCreateFlags_Default, &core);
+	DiscordState.core.reset(core);
 
-	// if (!DiscordState.core) {
-	// 	std::exit(-1);
-	// }
+	if (!DiscordState.core) {
+		std::exit(-1);
+	}
 
-	// discord::Activity activity{};
+	discord::Activity activity{};
 
-	// activity.SetDetails("M2TWEOP: Discord Rich presence");
-	// activity.SetState("M2TWEOP");
+	activity.SetDetails("M2TWEOP: Discord Rich presence");
+	activity.SetState("M2TWEOP");
 	// activity.GetAssets().SetSmallImage("test.png");
 	// activity.GetAssets().SetSmallText("123321");
 	// activity.GetAssets().SetLargeImage("test.png");
 	// activity.GetAssets().SetLargeText("321123");
-	// activity.SetType(discord::ActivityType::Playing);
+	activity.SetType(discord::ActivityType::Playing);
 	/*discord::Core* core{};
 	auto response = discord::Core::Create(879470336565981186, DiscordCreateFlags_Default, &core);
 
