@@ -27,10 +27,155 @@ graphicsD3D::dataT graphicsD3D::dataS;
 #include <windowsx.h>
 #include "stratModelsChange.h"
 template<typename T>
+
+
+
+
+
+
+
 T FnCast(uint32_t fnToCast, T pFnCastTo) {
 	(void)pFnCastTo;
 	return (T)fnToCast;
 }
+
+namespace testD3d3d
+{
+	LPD3DXMESH          g_pMesh = NULL; // Our mesh object in sysmem
+	D3DMATERIAL9* g_pMeshMaterials = NULL; // Materials for our mesh
+	LPDIRECT3DTEXTURE9* g_pMeshTextures = NULL; // Textures for our mesh
+	DWORD               g_dwNumMaterials = 0L;   // Number of mesh materials
+
+	LPD3DXFONT					m_font = NULL;
+
+
+	LPD3DXMESH TextMesh = NULL;
+	void DrawMessage(LPD3DXFONT font, unsigned int x, unsigned int y, int alpha, unsigned char r, unsigned char g, unsigned char b, LPCSTR Message)
+	{	// Create a colour for the text
+		D3DCOLOR fontColor = D3DCOLOR_ARGB(alpha, r, g, b);
+		RECT rct; //Font
+		rct.left = x;
+		rct.right = 1680;
+		rct.top = y;
+		rct.bottom = rct.top + 200;
+
+		font->DrawTextA(NULL, Message, -1, &rct, 0, fontColor);
+	}
+
+	void ScaleMesh(LPD3DXMESH mesh, float scale)
+	{
+		D3DXVECTOR3* data = NULL;
+		DWORD vSize = mesh->GetNumBytesPerVertex();
+		DWORD vCount = mesh->GetNumVertices();
+		mesh->LockVertexBuffer(0, (void**)&data);
+
+		for (DWORD i = 0; i < vCount; ++i)
+		{
+			*data *= scale;
+			data = (D3DXVECTOR3*)((BYTE*)data + vSize);
+		}
+
+		mesh->UnlockVertexBuffer();
+	}
+	void CalcSize(LPD3DXMESH mesh)
+	{
+		D3DXVECTOR3* vertices;
+		if (SUCCEEDED(mesh->LockVertexBuffer(D3DLOCK_READONLY, (void**)&vertices)))
+		{
+			//D3DXComputeBoundingBox(vertices, mesh->GetNumVertices(), D3DXGetFVFVertexSize(mesh->GetFVF()), &m_box->min, &m_box->max);
+			//D3DXComputeBoundingSphere(vertices, mesh->GetNumVertices(), D3DXGetFVFVertexSize(mesh->GetFVF()), &m_sphere->centre, &m_sphere->radius);
+			mesh->UnlockVertexBuffer();
+		}
+	}
+	HRESULT InitGeometry(LPDIRECT3DDEVICE9 dev)
+	{
+		HDC hdc = CreateCompatibleDC(0);
+
+		HFONT hFont;      // Дискриптор создаваемого шрифта
+		HFONT hFontOld; // Дескриптор старого шрифта
+
+		hFont = CreateFont(0, 0, 0, 0, FW_NORMAL, 1, false, false, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
+			TEXT("Times New Roman"));
+		hFontOld = (HFONT)SelectObject(hdc, hFont);
+		D3DXCreateTextW(dev, hdc, L"M2TWEOP\n\nyouneuoy\nMedik\nFynn\nJojo00182", 0.001f, 0.4f, &TextMesh, NULL, NULL);
+		SelectObject(hdc, hFontOld);
+		DeleteObject(hFont);
+		DeleteDC(hdc);
+		ScaleMesh(TextMesh, 0.3);
+
+		D3DXCreateFont(dev, 17, 0, FW_BOLD, 0, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE, TEXT("Arial"), &m_font);
+		LPD3DXBUFFER pD3DXMtrlBuffer;
+
+		// Load the mesh from the specified file
+		if (FAILED(D3DXLoadMeshFromX(L"Tiger.x", D3DXMESH_SYSTEMMEM,
+			dev, NULL,
+			&pD3DXMtrlBuffer, NULL, &g_dwNumMaterials,
+			&g_pMesh)))
+		{
+			// If model is not in current folder, try parent folder
+			if (FAILED(D3DXLoadMeshFromX(L"..\\Tiger.x", D3DXMESH_SYSTEMMEM,
+				dev, NULL,
+				&pD3DXMtrlBuffer, NULL, &g_dwNumMaterials,
+				&g_pMesh)))
+			{
+				MessageBox(NULL, L"Could not find tiger.x", L"Meshes.exe", MB_OK);
+				return E_FAIL;
+			}
+		}
+
+		// We need to extract the material properties and texture names from the 
+		// pD3DXMtrlBuffer
+		D3DXMATERIAL* d3dxMaterials = (D3DXMATERIAL*)pD3DXMtrlBuffer->GetBufferPointer();
+		g_pMeshMaterials = new D3DMATERIAL9[g_dwNumMaterials];
+		if (g_pMeshMaterials == NULL)
+			return E_OUTOFMEMORY;
+		g_pMeshTextures = new LPDIRECT3DTEXTURE9[g_dwNumMaterials];
+		if (g_pMeshTextures == NULL)
+			return E_OUTOFMEMORY;
+
+		for (DWORD i = 0; i < g_dwNumMaterials; i++)
+		{
+			// Copy the material
+			g_pMeshMaterials[i] = d3dxMaterials[i].MatD3D;
+
+			// Set the ambient color for the material (D3DX does not do this)
+			g_pMeshMaterials[i].Ambient = g_pMeshMaterials[i].Diffuse;
+
+			g_pMeshTextures[i] = NULL;
+			if (d3dxMaterials[i].pTextureFilename != NULL &&
+				lstrlenA(d3dxMaterials[i].pTextureFilename) > 0)
+			{
+				// Create the texture
+				if (FAILED(D3DXCreateTextureFromFileA(dev,
+					d3dxMaterials[i].pTextureFilename,
+					&g_pMeshTextures[i])))
+				{
+					// If texture is not in current folder, try parent folder
+					const CHAR* strPrefix = "..\\";
+					CHAR strTexture[MAX_PATH];
+					strcpy_s(strTexture, MAX_PATH, strPrefix);
+					strcat_s(strTexture, MAX_PATH, d3dxMaterials[i].pTextureFilename);
+					// If texture is not in current folder, try parent folder
+					if (FAILED(D3DXCreateTextureFromFileA(dev,
+						strTexture,
+						&g_pMeshTextures[i])))
+					{
+						MessageBox(NULL, L"Could not find texture map", L"Meshes.exe", MB_OK);
+					}
+				}
+			}
+		}
+
+		// Done with the material buffer
+		pD3DXMtrlBuffer->Release();
+
+		return S_OK;
+	}
+
+
+
+};
+
 NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	plugins::onWindowProc(hWnd, uMsg, wParam, lParam);
@@ -154,6 +299,32 @@ NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 		ImGui::End();*/
 	return;
 }
+
+static void DrawCircle(int x, int y, int r, int num, D3DCOLOR color, IDirect3DDevice9* pDevice)
+{
+	ID3DXLine* m_Line;
+	D3DXCreateLine(pDevice, &m_Line);
+	D3DXVECTOR2 Line[128];
+
+	float Step = D3DX_PI * 2.0 / num;
+	int Count = 0;
+	for (float a = 0; a < D3DX_PI * 2.0; a += Step)
+	{
+		float X1 = r * cos(a) + x;
+		float Y1 = r * sin(a) + y;
+		float X2 = r * cos(a + Step) + x;
+		float Y2 = r * sin(a + Step) + y;
+		Line[Count].x = X1;
+		Line[Count].y = Y1;
+		Line[Count + 1].x = X2;
+		Line[Count + 1].y = Y2;
+		Count += 2;
+	}
+	m_Line->Begin();
+	m_Line->Draw(Line, Count, color);
+	m_Line->End();
+	m_Line->Release();
+}
 NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 {
 	int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
@@ -179,7 +350,7 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 		return;
 	}
 	// Backup the DX9 transform (DX9 documentation suggests that it is included in the StateBlock but it doesn't appear to)
-	D3DMATRIX last_world, last_view, last_projection;
+	D3DXMATRIX last_world, last_view, last_projection;
 	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_WORLD, &last_world);
 	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_VIEW, &last_view);
 	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_PROJECTION, &last_projection);
@@ -193,10 +364,144 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	fbxModels::draw(drawType, globals::dataS.gamever);
+#define D3DVERIFY(expr) (expr)
+
+	D3DVERIFY(graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_LIGHTING, FALSE)); // Disable Lighting
+	D3DVERIFY(graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE/*/D3DCULL_CW/**/)); // Turn on Culling (nice speed boost)
+
+
+	D3DVERIFY(graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_LOCALVIEWER, FALSE));
+	D3DVERIFY(graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_ZENABLE, FALSE)); // Disable Z-Buffer
+
+	D3DVERIFY(graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE));
+	D3DVERIFY(graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA));
+	D3DVERIFY(graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA));
+	D3DVERIFY(graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE));
+
+	D3DVERIFY(graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE));
+	D3DVERIFY(graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_CURRENT));
+	D3DVERIFY(graphicsD3D::dataS.pDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_MODULATE));
+	D3DVERIFY(graphicsD3D::dataS.pDevice->SetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_TEXTURE));
+	D3DVERIFY(graphicsD3D::dataS.pDevice->SetTextureStageState(1, D3DTSS_COLORARG2, D3DTA_CURRENT));
+
+	D3DVERIFY(graphicsD3D::dataS.pDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT));
+	D3DVERIFY(graphicsD3D::dataS.pDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT));
+	D3DVERIFY(graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT3));
+
+	// Set up world matrix
+	D3DXMATRIXA16 matWorld;
+	//D3DXMatrixRotationY(&matWorld, 1);
+	D3DXMatrixIdentity(&matWorld);
+
+
+	D3DXMATRIXA16 matView;
+
+	if (globals::dataS.gamever == 2)//steam
+	{
+		techFuncs::Read(0x0193D604, &matView, 16 * 4);
+	}
+	else
+	{
+		techFuncs::Read(0x01986754, &matView, 16 * 4);
+	}
+	D3DXMATRIXA16 matProj;
+	//D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.0f);
+	if (globals::dataS.gamever == 2)//steam
+	{
+		techFuncs::Read(0x02C9E0F8, &matProj, 16 * 4);
+
+	}
+	else
+	{
+		techFuncs::Read(0x02ce7098, &matProj, 16 * 4);
+	}
+	D3DXMATRIXA16 worldViewProj;
+
+	D3DXMATRIX matScale;
+
+	float scalex = 1;
+	float scaley =0.2;
+	float scalez = 1;
+	D3DXMatrixScaling(&matScale, scalex, scaley, scalez);
+
+	float coords[3] = { -1.5,0.2 ,0.5  };
+
+	//model moving
+	/*float xCoord = coords[0];
+	if (xCoord > 50)
+	{
+		xCoord = 0;
+	}
+	else
+	{
+		xCoord += 0.01;
+	}
+	coords[0] = xCoord;*/
+	matWorld[12] = coords[0];
+	matWorld[13] = coords[1];
+	matWorld[14] = coords[2];
+
+	worldViewProj = matScale * matWorld * matView * matProj;
+
+	D3DXMATRIX mat_rotate;
+	double x = D3DXToRadian(1 );
+	double y = D3DXToRadian(80 );
+	double z = D3DXToRadian(1);
+	D3DXMatrixRotationYawPitchRoll(&mat_rotate, (float)x, (float)y, (float)z);
+
+	D3DXMATRIX ws = (mat_rotate * matScale* matWorld);
+	D3DXMATRIX ws2 = (matView );
+	D3DXMATRIX ws23 = (matProj );
+	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_WORLD, &ws);
+	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_VIEW, &ws2);
+	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_PROJECTION, &ws23);
+
+	DrawCircle(10, 10, 50000, 1, D3DCOLOR_ARGB(15, 0, 15, 70), graphicsD3D::dataS.pDevice);
+
+	// Meshes are divided into subsets, one for each material. Render them in
+// a loop
+	//for (DWORD i = 0; i < testD3d3d::g_dwNumMaterials; i++)
+	//{
+	//	// Set the material and texture for this subset
+	//	graphicsD3D::dataS.pDevice->SetMaterial(&testD3d3d::g_pMeshMaterials[i]);
+	//	graphicsD3D::dataS.pDevice->SetTexture(0, testD3d3d::g_pMeshTextures[i]);
+
+	//	// Draw the mesh subset
+	//	testD3d3d::g_pMesh->DrawSubset(i);
+	//}
 
 
 
+
+	D3DXVECTOR3 coords2(3, 0, 1);
+	D3DVIEWPORT9 m_Viewport = { 0 };
+	D3DXVECTOR3 m_Transform = { 0, 0, 0 };
+	graphicsD3D::dataS.pDevice->GetViewport(&m_Viewport);
+
+	D3DXMATRIX identity;
+	D3DXMatrixIdentity(&identity);
+	D3DXVec3Project(&m_Transform, &coords2, &m_Viewport, &matProj, &matView, &identity);
+	if (false==(m_Transform.x < (FLOAT)m_Viewport.X || m_Transform.x >(FLOAT)(m_Viewport.X + m_Viewport.Width)) || (m_Transform.y < (FLOAT)m_Viewport.Y || m_Transform.y >(FLOAT)(m_Viewport.Y + m_Viewport.Height)))
+	{
+		if (m_Transform.z <= 1)
+		{
+			D3DXVECTOR2 Output;
+			Output = D3DXVECTOR2(m_Transform.x, m_Transform.y);
+
+			//testD3d3d::DrawMessage(testD3d3d::m_font, Output.x, Output.y, 255, 255, 0, 255, "12343123213");
+
+		}
+	}
+	graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
+	graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
+	graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_CONSTANT);
+	graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_CONSTANT);
+	graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_CONSTANT, 0xFFFFFFFF);
+
+
+	testD3d3d::TextMesh->DrawSubset(0);
 	// Restore the DX9 transform
+
 	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_WORLD, &last_world);
 	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_VIEW, &last_view);
 	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_PROJECTION, &last_projection);
@@ -404,7 +709,7 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 	drawParams.drawEOPStartInfo = true;
 	drawParams.drawInfoEndTime = (float)ImGui::GetTime() + 20.0f;
 
-
+	testD3d3d::InitGeometry(graphicsD3D::dataS.pDevice);
 	return;
 }
 
