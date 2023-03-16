@@ -265,6 +265,8 @@ namespace stratModelsChange
 			}
 		}
 		gen->genType = characterFacEntry; //assign new array to general
+
+		changeModelsNeededNow = true;
 	}
 
 
