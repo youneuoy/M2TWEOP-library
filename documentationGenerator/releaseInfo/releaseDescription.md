@@ -8,7 +8,8 @@
 
 ;### **Launcher**
 
-;### **Library**
+### **Library**
+- fixed online battle generator(it always work and ignore config in last 2 versions of eop) - *youneuoy*
 
 ### **Lua Plugin**
 - stratmap.objects.replaceTile: fixed(it stop working in beta 35 and work again now)  - *youneuoy*
