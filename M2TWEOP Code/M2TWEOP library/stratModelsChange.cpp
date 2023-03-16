@@ -125,10 +125,6 @@ namespace stratModelsChange
 		{
 			return;
 		}
-		if (changeModelsNeededNow == true)
-		{
-			checkAndChangeStratModels();
-		}
 
 		changeModelsNeededNow = false;
 
