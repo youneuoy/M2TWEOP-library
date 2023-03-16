@@ -274,6 +274,7 @@
     <ClInclude Include="technicalStringsFuncs.h" />
     <ClInclude Include="TemplateCh.h" />
     <ClInclude Include="tests.h" />
+    <ClInclude Include="TexturesManager.h" />
     <ClInclude Include="tilesChange.h" />
   </ItemGroup>
   <ItemGroup>
@@ -352,6 +353,7 @@
     <ClCompile Include="techFuncs.cpp" />
     <ClCompile Include="technicalStringsFuncs.cpp" />
     <ClCompile Include="TemplateCh.cpp" />
+    <ClCompile Include="TexturesManager.cpp" />
     <ClCompile Include="tilesChange.cpp" />
   </ItemGroup>
   <ItemGroup>

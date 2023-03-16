@@ -5,7 +5,7 @@
 #include "fastFuncts.h"
 #include "techFuncs.h"
 
-
+#include "TexturesManager.h"
 void TacticalMapViewer::Init(int gameVer)
 {
 	state.IsBattleGeneratorWorking = battleCreator::GetIsGenerationNeeded();
@@ -63,7 +63,7 @@ void TacticalMapViewer::UnView()
 
 void TacticalMapViewer::Draw()
 {
-	ImGui::Begin("TacticalMapViewer");
+	ImGui::Begin("TacticalMapViewer", nullptr, ImGuiWindowFlags_NoDecoration);
 
 	ImGui::InputInt2("Coords", state.cords);
 

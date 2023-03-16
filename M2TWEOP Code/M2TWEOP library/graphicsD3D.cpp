@@ -497,6 +497,10 @@ NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* p
 
 NOINLINE EOP_EXPORT void graphicsExport::unloadTexture(LPDIRECT3DTEXTURE9 texture)
 {
+	if (texture == nullptr)
+	{
+		return;
+	}
 	tempData.texturesForDeleting.push_back(texture);
 }
 

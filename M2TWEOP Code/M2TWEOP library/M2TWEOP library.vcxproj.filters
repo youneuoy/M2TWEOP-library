@@ -124,6 +124,12 @@
     <Filter Include="Исходные файлы\injections">
       <UniqueIdentifier>{1cf21b73-d1af-4f3d-817a-f5fdd38476b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="technical\texturesManager">
+      <UniqueIdentifier>{1e9bf360-6ae5-4c5e-9da9-79d3ed955d61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{85ce923a-ea0a-4436-86ee-6a9a40fa6bf0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -393,6 +399,9 @@
     <ClInclude Include="eopBuildings.h">
       <Filter>features\eopBuildings</Filter>
     </ClInclude>
+    <ClInclude Include="TexturesManager.h">
+      <Filter>technical\texturesManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -607,6 +616,9 @@
     </ClCompile>
     <ClCompile Include="eopBuildings.cpp">
       <Filter>features\eopBuildings</Filter>
+    </ClCompile>
+    <ClCompile Include="TexturesManager.cpp">
+      <Filter>technical\texturesManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

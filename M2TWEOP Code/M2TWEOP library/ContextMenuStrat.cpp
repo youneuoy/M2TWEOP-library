@@ -1,5 +1,6 @@
 #include "ContextMenuStrat.h"
 #include "fastFuncts.h"
+#include "TexturesManager.h"
 
 void ContextMenuStrat::Draw()
 {
@@ -28,13 +29,32 @@ void ContextMenuStrat::Draw()
 	}
 
 	ImGui::SetNextWindowPos(ctxPos, ImGuiCond_Always);
-	ImGui::Begin("##ContextMenuTactical", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
+	ImGui::Begin("##ContextMenuTactical", nullptr, ImGuiWindowFlags_NoDecoration| ImGuiWindowFlags_NoScrollWithMouse);
+
+
+	auto image = TexturesManager::GetImage(99);
+	if (image == nullptr)
+	{
+		TexturesManager::LoadTexture(99, "/eopData/images/SMALL_SCROLL_BACKGROUND.png");
+	}
+	else
+	{
+		auto currPos = ImGui::GetCursorPos();
+
+
+		ImGui::Image(image, ctxSize);
+
+		ImGui::SetCursorPos(currPos);
+	}
+
+
 	if (ImGui::Button("View tactical map"))
 	{
 		fastFuncts::ViewTacticalMap(posAtMap[0], posAtMap[1]);
 
 		isWork = false;
 	}
-
+	ctxSize = ImGui::GetItemRectSize();
 	ImGui::End();
+
 }
