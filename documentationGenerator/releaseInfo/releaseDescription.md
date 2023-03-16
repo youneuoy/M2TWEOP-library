@@ -21,8 +21,14 @@
 ;### **Bugfixes**
 
 ### **Links**
-* [EOP Documentation](https://youneuoy.github.io/M2TWEOP-library/)
-* [EOP Discord](https://discord.gg/Epqjm8u2WK)
+* [Website](https://youneuoy.github.io/M2TWEOP-library/)
+* [FAQ](https://youneuoy.github.io/M2TWEOP-library/faq.html)
+* [Lua Documentation](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html)
+* [ImGUI Documentation](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/extra/readme_imgui.md.html)
+* [Discord](https://discord.gg/Epqjm8u2WK)
+* [Installation Video](https://youtu.be/caOiB0NaGGI?t=67)
+* [M2TWEOP Tutorials](https://www.youtube.com/playlist?list=PLi6V3nVH22N7ZfjfOuivGKHnNRAlBaTQd)
+* [M2TWEOP Features](https://www.youtube.com/playlist?list=PLi6V3nVH22N6R7IGupVDwfyiPm6-d6rlU)
 
 ### **Download**
 <a id="download"></a>
