@@ -498,6 +498,10 @@ void managerF::doPachs()
 	onSelectForDrawPortsCas->SetNewCode();
 	onSelectForDrawPortsCas->Enable();
 
+	toStartOfDrawFunction* onStartOfDrawFunction = new toStartOfDrawFunction(mem, (LPVOID)patchesForGame::onStartOfDrawFunction, globals::dataS.gamever);
+	onStartOfDrawFunction->SetNewCode();
+	onStartOfDrawFunction->Enable();
+
 	/*
 	f1 << "Start applying OntryFindTypeIdInListRecruitPoolEDB patch" << endl;
 	OntryFindTypeIdInListRecruitPoolEDB* ontryFindTypeIdInListRecruitPoolEDB = new OntryFindTypeIdInListRecruitPoolEDB(mem, (LPVOID)patchesForGame::ontryFindTypeIdInListRecruitPoolEDB, globals::dataS.gamever);

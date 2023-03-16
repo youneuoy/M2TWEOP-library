@@ -3662,3 +3662,53 @@ void toSelectForDrawPortsCas::SetNewCode()
 	m_cheatBytes = (unsigned char*)a->make();
 	delete a;
 }
+
+toStartOfDrawFunction::toStartOfDrawFunction(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x008fb3c0;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x008fa930;
+}
+
+toStartOfDrawFunction::~toStartOfDrawFunction()
+{
+}
+
+void toStartOfDrawFunction::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->sub(esp,0x18);
+	a->push(ebx);
+	a->push(ebp);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toStartOfDrawFunction::SetNewCode()
+{
+	Assembler* a = new Assembler();
+	a->sub(esp, 0x18);
+	a->push(ebx);
+	a->push(ebp);
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+	delete a;
+}

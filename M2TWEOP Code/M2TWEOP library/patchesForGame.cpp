@@ -523,6 +523,10 @@ void __stdcall patchesForGame::onDrawAll()
 	graphicsD3D::onDrawAllGameStuff();
 }
 
+void __stdcall patchesForGame::onStartOfDrawFunction()
+{
+}
+
 void __fastcall patchesForGame::OnStopCharacter(general* character)
 {
 	auto& campaign = smallFuncs::getGameDataAll()->campaignData;

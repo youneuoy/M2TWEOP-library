@@ -982,3 +982,16 @@ public:
 private:
 	LPVOID funcAddress;
 };
+
+class toStartOfDrawFunction
+	:public AATemplate
+{
+public:
+	toStartOfDrawFunction(MemWork* mem, LPVOID addr, int ver);
+	~toStartOfDrawFunction();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
