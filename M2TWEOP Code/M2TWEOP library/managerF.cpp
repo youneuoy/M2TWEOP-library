@@ -265,12 +265,12 @@ void managerF::doPachs()
 
 	f1 << "Done" << endl;
 
-	//f1 << "Start applying custom_tiles patch" << endl;
-	//toCustomTileSelection* ctiles = new toCustomTileSelection(mem, (LPVOID)patchesForGame::onTileCheck, globals::dataS.gamever);
-	//ctiles->SetlTilesCode();
-	//ctiles->Enable();
-//
-	//f1 << "Done" << endl;
+	f1 << "Start applying custom_tiles patch" << endl;
+	toCustomTileSelection* ctiles = new toCustomTileSelection(mem, (LPVOID)patchesForGame::onTileCheck, globals::dataS.gamever);
+	ctiles->SetlTilesCode();
+	ctiles->Enable();
+
+	f1 << "Done" << endl;
 
 	f1 << "Start applying custom_tiles file patch" << endl;
 	toCustomTileFileRead* ctilesF = new toCustomTileFileRead(mem, (LPVOID)patchesForGame::readTilesFile, globals::dataS.gamever);
