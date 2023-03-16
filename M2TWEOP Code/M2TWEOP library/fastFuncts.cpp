@@ -125,6 +125,11 @@ namespace fastFuncts
 
 		return redID;
 	}
+	NOINLINE EOP_EXPORT oneTile* getTileStruct(int x, int y)
+	{
+		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
+		return &(gameDataAll->stratMap->tilesArr[gameDataAll->stratMap->mapWidth * y + x]);
+	}
 	NOINLINE EOP_EXPORT regionStruct* getRegionByID(UINT32 regionID)
 	{
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);

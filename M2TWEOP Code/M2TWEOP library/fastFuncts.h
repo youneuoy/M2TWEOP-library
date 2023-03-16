@@ -18,6 +18,7 @@ namespace fastFuncts
 
 	NOINLINE EOP_EXPORT void setCharacterType(general*character, int typeID,int subFaction,int factionDipNum);
 	NOINLINE EOP_EXPORT UINT32 getTileRegionID(int x,int y);
+	NOINLINE EOP_EXPORT oneTile* getTileStruct(int x,int y);
 	NOINLINE EOP_EXPORT regionStruct* getRegionByID(UINT32 regionID);
 	NOINLINE EOP_EXPORT factionStruct* getRegionOwner(int regionID);
 
