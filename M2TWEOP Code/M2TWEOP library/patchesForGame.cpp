@@ -525,6 +525,7 @@ void __stdcall patchesForGame::onDrawAll()
 
 void __stdcall patchesForGame::onStartOfDrawFunction()
 {
+	stratModelsChange::update();
 }
 
 void __fastcall patchesForGame::OnStopCharacter(general* character)

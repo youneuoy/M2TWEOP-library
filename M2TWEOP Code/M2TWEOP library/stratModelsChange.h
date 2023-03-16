@@ -10,6 +10,7 @@ namespace stratModelsChange
 {
 	model_Rigid* getModel(UINT32 modelId);
 	void checkAndChangeStratModels();
+	void update();
 	void loadModels();
 	model_Rigid* loadModel(const char* path);
 

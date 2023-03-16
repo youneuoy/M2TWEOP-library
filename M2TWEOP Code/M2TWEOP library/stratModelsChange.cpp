@@ -4,6 +4,8 @@
 #include "dataOffsets.h"
 namespace stratModelsChange
 {
+	bool changeModelsNeededNow = false;
+
 	struct stratModelRecord
 	{
 		UINT32 modelId = 0;
@@ -81,6 +83,8 @@ namespace stratModelsChange
 
 
 		stratModelChangeList.push_back(rec);
+
+		changeModelsNeededNow = true;
 	}
 
 	stratModelRecord* findStratModel(UINT32 modelId)
@@ -117,9 +121,19 @@ namespace stratModelsChange
 	//Change only when render queue is happening to avoid crashes
 	void checkAndChangeStratModels()
 	{
+		if (changeModelsNeededNow == false)
+		{
+			return;
+		}
+		if (changeModelsNeededNow == true)
+		{
+			checkAndChangeStratModels();
+		}
+
+		changeModelsNeededNow = false;
+
 		for (stratModelChangeRecord* changeMod : stratModelChangeList) //static models
 		{
-
 			stratModelRecord* mod1 = findStratModel(changeMod->modelId);
 			if (mod1 == nullptr)continue;
 
@@ -142,6 +156,10 @@ namespace stratModelsChange
 		}
 	}
 
+	void update()
+	{
+	}
+
 	bool modelsLoaded = false;
 	void __stdcall disableChecker()
 	{
@@ -156,6 +174,7 @@ namespace stratModelsChange
 			modRec.second->modelP = loadModel(modRec.second->path.c_str());
 		}
 		modelsLoaded = true;
+		changeModelsNeededNow = true;
 	}
 
 	void loadCharModels() //rebuild character CAS entries to be sure no pointers were cleaned up
@@ -213,6 +232,8 @@ namespace stratModelsChange
 		strcpy(modelNameCopy, model);
 		rec->modelId = modelNameCopy;
 		stratModelCharacterChangeList.push_back(rec);
+
+		changeModelsNeededNow = true;
 	}
 
 	void changeStratModel(general* gen, const char* model)
