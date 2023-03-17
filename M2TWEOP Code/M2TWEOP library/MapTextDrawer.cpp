@@ -69,7 +69,7 @@ namespace MapTextDrawer
 		{
 			DrawTextDrawable(*it);
 
-			if (!(*it)->isDrawOnce==true)
+			if ((*it)->isDrawOnce==true)
 			{
 				it = data.textForDrawing.erase(it);
 			}
@@ -125,7 +125,7 @@ namespace MapTextDrawer
 			return nullptr;
 		}
 		std::wstring utf16Text = techFuncs::ConvertUtf8ToWide(utf8Text);
-
+		MessageBoxA(NULL, "TEST", "TEST", NULL);
 
 		Text3DDrawable* newText = new Text3DDrawable();
 		ChangeTextColor(newText, 255, 255, 255, 255);
@@ -136,7 +136,7 @@ namespace MapTextDrawer
 		HFONT hFontOld;
 		hFont = reinterpret_cast<HFONT>(fontID);
 		hFontOld = (HFONT)SelectObject(hdc, hFont);
-		D3DXCreateTextW(graphicsExport::GetDevice(), hdc, utf16Text.c_str(), 0.001f, 0.4f, &newText->textMesh, NULL, NULL);
+		HRESULT res = D3DXCreateTextW(graphicsExport::GetDevice(), hdc, utf16Text.c_str(), 0.001f, 0.4f, &newText->textMesh, NULL, NULL);
 
 		SelectObject(hdc, hFontOld);
 		DeleteDC(hdc);

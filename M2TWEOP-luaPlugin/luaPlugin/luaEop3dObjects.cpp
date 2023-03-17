@@ -23,7 +23,7 @@ void luaP::initEop3dObjects()
 	//@section M2TWEOP3dObjectsTable
 
 	/***
-	Basic M2TWEOP3dObjects table. Contains descriptions of m2tweop simple 3d objects feathures.
+	Basic M2TWEOP3dObjects table. Contains descriptions of m2tweop simple 3d objects feathures. Not call this functions onPluginLoad(graphics system not initialized here yet). 
 
 	@tfield MakeTextFont MakeTextFont
 	@tfield MakeTextFont DeleteTextFont
@@ -73,7 +73,7 @@ void luaP::initEop3dObjects()
 	//@section Eop3dText
 
 	/***
-	3d text object
+	3d text object. Not use it onPluginLoad(graphics system not initialized here yet).  
 	@tfield Scale Scale
 	@tfield ChangeColor ChangeColor
 	@tfield SetCoords SetCoords
