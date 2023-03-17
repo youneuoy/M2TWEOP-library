@@ -108,7 +108,7 @@ void luaP::initEop3dObjects()
 	newText = M2TWEOP3dObjectsTable.Make3dText(newFont, "Some text");
 	newText:ChangeColor(255,0,255,177);
 	*/
-	tables.text3dDrawable.set_function("ChangeColor", &eop3dObjectsHelpers:ChangeColorText);
+	tables.text3dDrawable.set_function("ChangeColor", &eop3dObjectsHelpers::ChangeColorText);
 	/***
 	Set 3d text coords.
 	@function Eop3dText:SetCoords
@@ -120,7 +120,7 @@ void luaP::initEop3dObjects()
 	newText = M2TWEOP3dObjectsTable.Make3dText(newFont, "Some text");
 	newText:SetCoords(10,20,0.2);
 	*/
-	tables.text3dDrawable.set_function("SetCoords", &eop3dObjectsHelpers:SetCoordsText);
+	tables.text3dDrawable.set_function("SetCoords", &eop3dObjectsHelpers::SetCoordsText);
 	/***
 	Start draw text. Text go on display until stop function called
 	@function Eop3dText:StartDrawing
@@ -130,7 +130,7 @@ void luaP::initEop3dObjects()
 	newText:SetCoords(10,20,0.2);
 	newText:StartDrawing();
 	*/
-	tables.text3dDrawable.set_function("StartDrawing", &eop3dObjectsHelpers:StartDrawingText);
+	tables.text3dDrawable.set_function("StartDrawing", &eop3dObjectsHelpers::StartDrawingText);
 	/***
 	Stop draw text.
 	@function Eop3dText:StopDrawing
@@ -142,7 +142,7 @@ void luaP::initEop3dObjects()
 	--some time we draw
 	newText:StopDrawing();
 	*/
-	tables.text3dDrawable.set_function("StopDrawing", &eop3dObjectsHelpers:StopDrawingText);
+	tables.text3dDrawable.set_function("StopDrawing", &eop3dObjectsHelpers::StopDrawingText);
 	/***
 	Draw text once(at one frame only). Can be called in draw loop. Not need call stop after it.
 	@function Eop3dText:DrawOnce
@@ -152,5 +152,5 @@ void luaP::initEop3dObjects()
 	newText:SetCoords(10,20,0.2);
 	newText:DrawOnce();
 	*/
-	tables.text3dDrawable.set_function("DrawOnce", &eop3dObjectsHelpers:DrawOnceText);
+	tables.text3dDrawable.set_function("DrawOnce", &eop3dObjectsHelpers::DrawOnceText);
 }
