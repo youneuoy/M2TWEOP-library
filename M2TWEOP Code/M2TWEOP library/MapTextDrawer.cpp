@@ -125,7 +125,6 @@ namespace MapTextDrawer
 			return nullptr;
 		}
 		std::wstring utf16Text = techFuncs::ConvertUtf8ToWide(utf8Text);
-		MessageBoxA(NULL, "TEST", "TEST", NULL);
 
 		Text3DDrawable* newText = new Text3DDrawable();
 		ChangeTextColor(newText, 255, 255, 255, 255);
