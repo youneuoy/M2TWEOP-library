@@ -100,12 +100,18 @@ namespace MapTextDrawer
 		std::wstring fontWname = techFuncs::ConvertUtf8ToWide(fontName);
 		HFONT hFont;
 
-		hFont = CreateFontW(0, 0, 0, 0, FW_NORMAL, 1, false, false, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
+		hFont = CreateFontW(0, 0, 0, 0, FW_NORMAL, 1, NULL, NULL, NULL, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
 			fontWname.c_str());
 		//L"Times New Roman");
 
 
 		return hFont;
+	}
+
+	NOINLINE EOP_EXPORT void DeleteTextFont(void* fontID)
+	{
+		HFONT hFont = reinterpret_cast<HFONT>(fontID);
+		DeleteObject(hFont);
 	}
 
 	NOINLINE EOP_EXPORT Text3DDrawable* MakeText(void* fontID, const char* utf8Text)
@@ -133,7 +139,6 @@ namespace MapTextDrawer
 		D3DXCreateTextW(graphicsExport::GetDevice(), hdc, utf16Text.c_str(), 0.001f, 0.4f, &newText->textMesh, NULL, NULL);
 
 		SelectObject(hdc, hFontOld);
-		DeleteObject(hFont);
 		DeleteDC(hdc);
 
 		if (newText->textMesh == nullptr)
@@ -191,6 +196,10 @@ namespace MapTextDrawer
 	{
 		text->isDrawOnce = false;
 		data.textForDrawing.push_back(text);
+	}
+	NOINLINE EOP_EXPORT void StopDrawingText(Text3DDrawable* text)
+	{
+		data.textForDrawing.remove(text);
 	}
 	NOINLINE EOP_EXPORT void DrawingTextOnce(Text3DDrawable* text)
 	{

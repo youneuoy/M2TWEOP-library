@@ -29,6 +29,25 @@ int initPlugin(std::string* modPath)
 	fName = "setModel";
 	plugData::data.funcs.setModel.Load(&plPath, &fName);
 
+	fName = "MakeTextFont";
+	plugData::data.funcs.MakeTextFont.Load(&plPath, &fName);
+	fName = "DeleteTextFont";
+	plugData::data.funcs.DeleteTextFont.Load(&plPath, &fName);
+	fName = "MakeText";
+	plugData::data.funcs.MakeText.Load(&plPath, &fName);
+	fName = "ScaleText";
+	plugData::data.funcs.ScaleText.Load(&plPath, &fName);
+	fName = "ChangeTextColor";
+	plugData::data.funcs.ChangeTextColor.Load(&plPath, &fName);
+	fName = "SetTextDrawingCoords";
+	plugData::data.funcs.SetTextDrawingCoords.Load(&plPath, &fName);
+	fName = "StartDrawingText";
+	plugData::data.funcs.StartDrawingText.Load(&plPath, &fName);
+	fName = "StopDrawingText";
+	plugData::data.funcs.StopDrawingText.Load(&plPath, &fName);
+	fName = "DrawingTextOnce";
+	plugData::data.funcs.DrawingTextOnce.Load(&plPath, &fName);
+
 	fName = "addModelToGame";
 	plugData::data.funcs.addModelToGame.Load(&plPath, &fName);
 	fName = "addCasModelToDrawList";

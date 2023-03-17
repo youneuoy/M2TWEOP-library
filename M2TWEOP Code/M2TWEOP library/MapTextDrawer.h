@@ -18,6 +18,7 @@ namespace MapTextDrawer
 
 	//returns "id" of font, which is pointer to object
 	NOINLINE EOP_EXPORT void* MakeTextFont(const char* fontName);
+	NOINLINE EOP_EXPORT void DeleteTextFont(void*  fontID);
 
 	//returns "id" of text, which is pointer to object
 	NOINLINE EOP_EXPORT Text3DDrawable* MakeText(void* fontID,const char* utf8Text);
@@ -29,6 +30,7 @@ namespace MapTextDrawer
 	NOINLINE EOP_EXPORT void SetTextDrawingCoords(Text3DDrawable* text,float x, float y, float z);
 
 	NOINLINE EOP_EXPORT void StartDrawingText(Text3DDrawable* text);
+	NOINLINE EOP_EXPORT void StopDrawingText(Text3DDrawable* text);
 	NOINLINE EOP_EXPORT void DrawingTextOnce(Text3DDrawable* text);
 };
 

@@ -102,6 +102,18 @@ public:
 class basicFuncs
 {
 public:
+
+	ProcLoader<void*(__cdecl*)(const char* fontname)> MakeTextFont;
+	ProcLoader<void(__cdecl*)(void* fontID)> DeleteTextFont;
+	ProcLoader<Text3DDrawable*(__cdecl*)(void* fontID, const char* utf8Text)> MakeText;
+	ProcLoader<void(__cdecl*)(Text3DDrawable* text, float scale)> ScaleText;
+	ProcLoader<void(__cdecl*)(Text3DDrawable* text, unsigned char a, unsigned char r, unsigned char g, unsigned char b)> ChangeTextColor;
+	ProcLoader<void(__cdecl*)(Text3DDrawable* text, float x, float y, float z)> SetTextDrawingCoords;
+	ProcLoader<void(__cdecl*)(Text3DDrawable* text)> StartDrawingText;
+	ProcLoader<void(__cdecl*)(Text3DDrawable* text)> StopDrawingText;
+	ProcLoader<void(__cdecl*)(Text3DDrawable* text)> DrawingTextOnce;
+
+
 	ProcLoader<void(__cdecl*)(const char*, UINT32)> addModelToGame;
 	ProcLoader<void(__cdecl*)(int, int, UINT32, UINT32)> setModel;
 	ProcLoader<void(__cdecl*)(UINT32, int, int, float)> addCasModelToDrawList;

@@ -81,6 +81,7 @@ public:
 	void initTech();
 	void initEopEdu();
 	void initEopFbx();
+	void initEop3dObjects();
 	void initEopSounds();
 	void runScriptS(std::string* script);
 
