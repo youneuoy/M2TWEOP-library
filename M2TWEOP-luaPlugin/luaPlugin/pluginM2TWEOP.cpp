@@ -485,6 +485,7 @@ void initLua()
 	plugData::data.luaAll.initP2();
 	plugData::data.luaAll.initEopEdu();
 	plugData::data.luaAll.initEopFbx();
+	plugData::data.luaAll.initEop3dObjects();
 	plugData::data.luaAll.initEopSounds();
 	plugData::data.luaAll.initTech();
 	sol_ImGui::Init(*luaState);
