@@ -8,13 +8,17 @@
 
 <!-- ### **Launcher** -->
 
-<!-- ### **Library** -->
+### **Library**
+- draw M2TWEOP title at left bottom corner of stratmap - *youneuoy*
 
-<!-- ### **Lua Plugin** -->
+### **Lua Plugin**
+- new table: M2TWEOP3dObjectsTable - used for creating simple 3d objects - *youneuoy*
+- new type: Eop3dText - used for drawing 3d text at game map - *youneuoy*
 
 <!-- ### **ImGUI** -->
 
-<!-- ### **Documentation** -->
+### **Documentation**
+- updated - *youneuoy*
 
 ### **Bugfixes**
 - `stratmap.objects.replaceTile` now works correcly (Broken since M2TWEOP.2.1.beta-35) Closes: https://github.com/youneuoy/M2TWEOP-library/issues/39 - *youneuoy*
