@@ -27,13 +27,6 @@ graphicsD3D::dataT graphicsD3D::dataS;
 #include <windowsx.h>
 #include "stratModelsChange.h"
 template<typename T>
-
-
-
-
-
-
-
 T FnCast(uint32_t fnToCast, T pFnCastTo) {
 	(void)pFnCastTo;
 	return (T)fnToCast;
