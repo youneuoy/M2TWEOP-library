@@ -130,6 +130,9 @@
     <Filter Include="GUI">
       <UniqueIdentifier>{85ce923a-ea0a-4436-86ee-6a9a40fa6bf0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\mapTextDrawer">
+      <UniqueIdentifier>{38fdd23f-f1b6-4765-98e0-008bf6cf426e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -402,6 +405,9 @@
     <ClInclude Include="TexturesManager.h">
       <Filter>technical\texturesManager</Filter>
     </ClInclude>
+    <ClInclude Include="MapTextDrawer.h">
+      <Filter>features\mapTextDrawer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -619,6 +625,9 @@
     </ClCompile>
     <ClCompile Include="TexturesManager.cpp">
       <Filter>technical\texturesManager</Filter>
+    </ClCompile>
+    <ClCompile Include="MapTextDrawer.cpp">
+      <Filter>features\mapTextDrawer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

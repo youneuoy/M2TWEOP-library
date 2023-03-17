@@ -94,8 +94,8 @@ namespace testD3d3d
 		HFONT hFont;      // Дискриптор создаваемого шрифта
 		HFONT hFontOld; // Дескриптор старого шрифта
 
-		hFont = CreateFont(0, 0, 0, 0, FW_NORMAL, 1, false, false, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
-			TEXT("Times New Roman"));
+		hFont = CreateFontW(0, 0, 0, 0, FW_NORMAL, 1, false, false, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
+			L"Times New Roman");
 		hFontOld = (HFONT)SelectObject(hdc, hFont);
 		D3DXCreateTextW(dev, hdc, L"M2TWEOP\n\nyouneuoy\nMedik\nFynn\nJojo00182", 0.001f, 0.4f, &TextMesh, NULL, NULL);
 		SelectObject(hdc, hFontOld);
@@ -327,6 +327,10 @@ static void DrawCircle(int x, int y, int r, int num, D3DCOLOR color, IDirect3DDe
 }
 NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 {
+	for (auto& f : graphicsD3D::dataS.stratmapDrawCallbacks)
+	{
+		f();
+	}
 	int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
 
 	//1-stratmap
@@ -364,142 +368,119 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	fbxModels::draw(drawType, globals::dataS.gamever);
-#define D3DVERIFY(expr) (expr)
 
-	D3DVERIFY(graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_LIGHTING, FALSE)); // Disable Lighting
-	D3DVERIFY(graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE/*/D3DCULL_CW/**/)); // Turn on Culling (nice speed boost)
-
-
-	D3DVERIFY(graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_LOCALVIEWER, FALSE));
-	D3DVERIFY(graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_ZENABLE, FALSE)); // Disable Z-Buffer
-
-	D3DVERIFY(graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE));
-	D3DVERIFY(graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA));
-	D3DVERIFY(graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA));
-	D3DVERIFY(graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE));
-
-	D3DVERIFY(graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE));
-	D3DVERIFY(graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_CURRENT));
-	D3DVERIFY(graphicsD3D::dataS.pDevice->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_MODULATE));
-	D3DVERIFY(graphicsD3D::dataS.pDevice->SetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_TEXTURE));
-	D3DVERIFY(graphicsD3D::dataS.pDevice->SetTextureStageState(1, D3DTSS_COLORARG2, D3DTA_CURRENT));
-
-	D3DVERIFY(graphicsD3D::dataS.pDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT));
-	D3DVERIFY(graphicsD3D::dataS.pDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT));
-	D3DVERIFY(graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT3));
-
-	// Set up world matrix
-	D3DXMATRIXA16 matWorld;
-	//D3DXMatrixRotationY(&matWorld, 1);
-	D3DXMatrixIdentity(&matWorld);
-
-
-	D3DXMATRIXA16 matView;
-
-	if (globals::dataS.gamever == 2)//steam
-	{
-		techFuncs::Read(0x0193D604, &matView, 16 * 4);
-	}
-	else
-	{
-		techFuncs::Read(0x01986754, &matView, 16 * 4);
-	}
-	D3DXMATRIXA16 matProj;
-	//D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.0f);
-	if (globals::dataS.gamever == 2)//steam
-	{
-		techFuncs::Read(0x02C9E0F8, &matProj, 16 * 4);
-
-	}
-	else
-	{
-		techFuncs::Read(0x02ce7098, &matProj, 16 * 4);
-	}
-	D3DXMATRIXA16 worldViewProj;
-
-	D3DXMATRIX matScale;
-
-	float scalex = 1;
-	float scaley =0.2;
-	float scalez = 1;
-	D3DXMatrixScaling(&matScale, scalex, scaley, scalez);
-
-	float coords[3] = { -1.5,0.2 ,0.5  };
-
-	//model moving
-	/*float xCoord = coords[0];
-	if (xCoord > 50)
-	{
-		xCoord = 0;
-	}
-	else
-	{
-		xCoord += 0.01;
-	}
-	coords[0] = xCoord;*/
-	matWorld[12] = coords[0];
-	matWorld[13] = coords[1];
-	matWorld[14] = coords[2];
-
-	worldViewProj = matScale * matWorld * matView * matProj;
-
-	D3DXMATRIX mat_rotate;
-	double x = D3DXToRadian(1 );
-	double y = D3DXToRadian(80 );
-	double z = D3DXToRadian(1);
-	D3DXMatrixRotationYawPitchRoll(&mat_rotate, (float)x, (float)y, (float)z);
-
-	D3DXMATRIX ws = (mat_rotate * matScale* matWorld);
-	D3DXMATRIX ws2 = (matView );
-	D3DXMATRIX ws23 = (matProj );
-	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_WORLD, &ws);
-	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_VIEW, &ws2);
-	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_PROJECTION, &ws23);
-
-	DrawCircle(10, 10, 50000, 1, D3DCOLOR_ARGB(15, 0, 15, 70), graphicsD3D::dataS.pDevice);
-
-	// Meshes are divided into subsets, one for each material. Render them in
-// a loop
-	//for (DWORD i = 0; i < testD3d3d::g_dwNumMaterials; i++)
-	//{
-	//	// Set the material and texture for this subset
-	//	graphicsD3D::dataS.pDevice->SetMaterial(&testD3d3d::g_pMeshMaterials[i]);
-	//	graphicsD3D::dataS.pDevice->SetTexture(0, testD3d3d::g_pMeshTextures[i]);
-
-	//	// Draw the mesh subset
-	//	testD3d3d::g_pMesh->DrawSubset(i);
-	//}
-
-
-
-
-	D3DXVECTOR3 coords2(3, 0, 1);
-	D3DVIEWPORT9 m_Viewport = { 0 };
-	D3DXVECTOR3 m_Transform = { 0, 0, 0 };
-	graphicsD3D::dataS.pDevice->GetViewport(&m_Viewport);
-
-	D3DXMATRIX identity;
-	D3DXMatrixIdentity(&identity);
-	D3DXVec3Project(&m_Transform, &coords2, &m_Viewport, &matProj, &matView, &identity);
-	if (false==(m_Transform.x < (FLOAT)m_Viewport.X || m_Transform.x >(FLOAT)(m_Viewport.X + m_Viewport.Width)) || (m_Transform.y < (FLOAT)m_Viewport.Y || m_Transform.y >(FLOAT)(m_Viewport.Y + m_Viewport.Height)))
-	{
-		if (m_Transform.z <= 1)
-		{
-			D3DXVECTOR2 Output;
-			Output = D3DXVECTOR2(m_Transform.x, m_Transform.y);
-
-			//testD3d3d::DrawMessage(testD3d3d::m_font, Output.x, Output.y, 255, 255, 0, 255, "12343123213");
-
-		}
-	}
-	graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
-	graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
-	graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_CONSTANT);
-	graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_CONSTANT);
-	graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_CONSTANT, 0xFFFFFFFF);
-
-
-	testD3d3d::TextMesh->DrawSubset(0);
+//	// Set up world matrix
+//	D3DXMATRIXA16 matWorld;
+//	//D3DXMatrixRotationY(&matWorld, 1);
+//	D3DXMatrixIdentity(&matWorld);
+//
+//
+//	D3DXMATRIXA16 matView;
+//
+//	if (globals::dataS.gamever == 2)//steam
+//	{
+//		techFuncs::Read(0x0193D604, &matView, 16 * 4);
+//	}
+//	else
+//	{
+//		techFuncs::Read(0x01986754, &matView, 16 * 4);
+//	}
+//	D3DXMATRIXA16 matProj;
+//	//D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.0f);
+//	if (globals::dataS.gamever == 2)//steam
+//	{
+//		techFuncs::Read(0x02C9E0F8, &matProj, 16 * 4);
+//
+//	}
+//	else
+//	{
+//		techFuncs::Read(0x02ce7098, &matProj, 16 * 4);
+//	}
+//	D3DXMATRIXA16 worldViewProj;
+//
+//	D3DXMATRIX matScale;
+//
+//	float scalex = 1;
+//	float scaley =0.2;
+//	float scalez = 1;
+//	D3DXMatrixScaling(&matScale, scalex, scaley, scalez);
+//
+//	float coords[3] = { -1.5,0.2 ,0.5  };
+//
+//	//model moving
+//	/*float xCoord = coords[0];
+//	if (xCoord > 50)
+//	{
+//		xCoord = 0;
+//	}
+//	else
+//	{
+//		xCoord += 0.01;
+//	}
+//	coords[0] = xCoord;*/
+//	matWorld[12] = coords[0];
+//	matWorld[13] = coords[1];
+//	matWorld[14] = coords[2];
+//
+//	worldViewProj = matScale * matWorld * matView * matProj;
+//
+//	D3DXMATRIX mat_rotate;
+//	double x = D3DXToRadian(1 );
+//	double y = D3DXToRadian(80 );
+//	double z = D3DXToRadian(1);
+//	D3DXMatrixRotationYawPitchRoll(&mat_rotate, (float)x, (float)y, (float)z);
+//
+//	D3DXMATRIX ws = (mat_rotate * matScale* matWorld);
+//	D3DXMATRIX ws2 = (matView );
+//	D3DXMATRIX ws23 = (matProj );
+//	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_WORLD, &ws);
+//	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_VIEW, &ws2);
+//	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_PROJECTION, &ws23);
+//
+//	DrawCircle(10, 10, 50000, 1, D3DCOLOR_ARGB(15, 0, 15, 70), graphicsD3D::dataS.pDevice);
+//
+//	// Meshes are divided into subsets, one for each material. Render them in
+//// a loop
+//	//for (DWORD i = 0; i < testD3d3d::g_dwNumMaterials; i++)
+//	//{
+//	//	// Set the material and texture for this subset
+//	//	graphicsD3D::dataS.pDevice->SetMaterial(&testD3d3d::g_pMeshMaterials[i]);
+//	//	graphicsD3D::dataS.pDevice->SetTexture(0, testD3d3d::g_pMeshTextures[i]);
+//
+//	//	// Draw the mesh subset
+//	//	testD3d3d::g_pMesh->DrawSubset(i);
+//	//}
+//
+//
+//
+//
+//	D3DXVECTOR3 coords2(3, 0, 1);
+//	D3DVIEWPORT9 m_Viewport = { 0 };
+//	D3DXVECTOR3 m_Transform = { 0, 0, 0 };
+//	graphicsD3D::dataS.pDevice->GetViewport(&m_Viewport);
+//
+//	D3DXMATRIX identity;
+//	D3DXMatrixIdentity(&identity);
+//	D3DXVec3Project(&m_Transform, &coords2, &m_Viewport, &matProj, &matView, &identity);
+//	if (false==(m_Transform.x < (FLOAT)m_Viewport.X || m_Transform.x >(FLOAT)(m_Viewport.X + m_Viewport.Width)) || (m_Transform.y < (FLOAT)m_Viewport.Y || m_Transform.y >(FLOAT)(m_Viewport.Y + m_Viewport.Height)))
+//	{
+//		if (m_Transform.z <= 1)
+//		{
+//			D3DXVECTOR2 Output;
+//			Output = D3DXVECTOR2(m_Transform.x, m_Transform.y);
+//
+//			//testD3d3d::DrawMessage(testD3d3d::m_font, Output.x, Output.y, 255, 255, 0, 255, "12343123213");
+//
+//		}
+//	}
+//	graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
+//	graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
+//	graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_CONSTANT);
+//	graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_CONSTANT);
+//	graphicsD3D::dataS.pDevice->SetTextureStageState(0, D3DTSS_CONSTANT, 0xFFFFFFFF);
+//
+//
+//	testD3d3d::TextMesh->DrawSubset(0);
 	// Restore the DX9 transform
 
 	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_WORLD, &last_world);
@@ -776,6 +757,83 @@ DWORD __stdcall graphicsD3D::InitS()
 	return 1;
 }
 
+
+NOINLINE EOP_EXPORT  graphicsExport::D3dState graphicsExport::GetD3dState()
+{
+	graphicsExport::D3dState retState;
+
+	graphicsD3D::dataS.pDevice->CreateStateBlock(D3DSBT_ALL, &retState.d3d9_state_block);
+	if (retState.d3d9_state_block->Capture() < 0)
+	{
+		retState.d3d9_state_block->Release();
+	}
+	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_WORLD, &retState.world);
+	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_VIEW, &retState.view);
+	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_PROJECTION, &retState.projection);
+
+	return retState;
+}
+
+NOINLINE EOP_EXPORT void graphicsExport::AddStratmapDrawCallback(EOPDrawCallback callFunk)
+{
+	graphicsD3D::dataS.stratmapDrawCallbacks.push_back(callFunk);
+}
+
+NOINLINE EOP_EXPORT void graphicsExport::SetClearD3dState()
+{
+	graphicsD3D::dataS.clearStateBlock->Apply();
+}
+
+NOINLINE EOP_EXPORT void graphicsExport::SetD3dState(graphicsExport::D3dState& state)
+{
+	state.d3d9_state_block->Apply();
+
+	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_WORLD, &state.world);
+	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_VIEW, &state.view);
+	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_PROJECTION, &state.projection);
+}
+
+NOINLINE EOP_EXPORT void graphicsExport::ReleaseD3dState(graphicsExport::D3dState& state)
+{
+	state.d3d9_state_block->Release();
+}
+
+NOINLINE EOP_EXPORT const D3DXMATRIXA16* graphicsExport::GetMatView()
+{
+	D3DXMATRIXA16* matView = nullptr;;
+
+	if (globals::dataS.gamever == 2)//steam
+	{
+		matView = reinterpret_cast<D3DXMATRIXA16*>(0x0193D604);
+	}
+	else
+	{
+		matView = reinterpret_cast<D3DXMATRIXA16*>(0x01986754);
+	}
+
+	return matView;
+}
+
+NOINLINE EOP_EXPORT const D3DXMATRIXA16* graphicsExport::GetMatProj()
+{
+	D3DXMATRIXA16* matProj = nullptr;;
+
+	if (globals::dataS.gamever == 2)//steam
+	{
+		matProj = reinterpret_cast<D3DXMATRIXA16*>(0x02C9E0F8);
+	}
+	else
+	{
+		matProj = reinterpret_cast<D3DXMATRIXA16*>(0x02ce7098);
+	}
+
+	return matProj;
+}
+
+NOINLINE EOP_EXPORT IDirect3DDevice9* graphicsExport::GetDevice()
+{
+	return graphicsD3D::dataS.pDevice;
+}
 
 NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* path, int* x, int* y)
 {
