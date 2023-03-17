@@ -22,7 +22,7 @@ public:
 
 	//strings for compare
 	char* stringAdr = nullptr;
-	const char* strCmp;
+	const char* strCmp; 
 
 	ProcLoader() {};
 
