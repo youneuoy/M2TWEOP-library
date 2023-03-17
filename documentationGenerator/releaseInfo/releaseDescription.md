@@ -8,8 +8,7 @@
 
 <!-- ### **Launcher** -->
 
-### **Library**
-- draw M2TWEOP title at left bottom corner of stratmap - *youneuoy*
+<!-- ### **Library** -->
 
 ### **Lua Plugin**
 - new table: M2TWEOP3dObjectsTable - used for creating simple 3d objects - *youneuoy*
