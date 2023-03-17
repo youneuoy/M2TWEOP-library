@@ -149,6 +149,13 @@ namespace MapTextDrawer
 
 		return newText;
 	}
+	NOINLINE EOP_EXPORT void Delete3dText(Text3DDrawable* text)
+	{
+		text->isDeleteNeeded = true;
+		data.textForDrawing.remove(text);
+		text->textMesh->Release();
+		delete text;
+	}
 	NOINLINE EOP_EXPORT void ScaleText(Text3DDrawable* text, float scale)
 	{
 		if (text == nullptr)

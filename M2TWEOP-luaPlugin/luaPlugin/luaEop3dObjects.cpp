@@ -80,6 +80,7 @@ void luaP::initEop3dObjects()
 	@tfield StartDrawing StartDrawing
 	@tfield StopDrawing StopDrawing
 	@tfield DrawOnce DrawOnce
+	@tfield Delete Delete
 
 	@table Eop3dText
 	*/
@@ -153,4 +154,15 @@ void luaP::initEop3dObjects()
 	newText:DrawOnce();
 	*/
 	tables.text3dDrawable.set_function("DrawOnce", &eop3dObjectsHelpers::DrawOnceText);
+	/***
+	Delete text. Not use after it!
+	@function Eop3dText:Delete
+	@usage
+	newFont = M2TWEOP3dObjectsTable.MakeTextFont("Times New Roman");
+	newText = M2TWEOP3dObjectsTable.Make3dText(newFont, "Some text");
+	newText:SetCoords(10,20,0.2);
+	newText:DrawOnce();
+	newText:Delete();
+	*/
+	tables.text3dDrawable.set_function("Delete", &eop3dObjectsHelpers::DeleteText);
 }

@@ -9,4 +9,5 @@ struct Text3DDrawable
 	float yCoord;
 	float zCoord;
 	bool isDrawOnce;
+	bool isDeleteNeeded;
 };

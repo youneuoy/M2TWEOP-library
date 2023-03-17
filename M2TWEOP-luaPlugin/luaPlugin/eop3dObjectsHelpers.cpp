@@ -44,3 +44,8 @@ void eop3dObjectsHelpers::DrawOnceText(Text3DDrawable* text)
 {
     (*(*plugData::data.funcs.DrawingTextOnce))(text);
 }
+
+void eop3dObjectsHelpers::DeleteText(Text3DDrawable* text)
+{
+    (*(*plugData::data.funcs.Delete3dText))(text);
+}

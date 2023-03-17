@@ -35,6 +35,8 @@ int initPlugin(std::string* modPath)
 	plugData::data.funcs.DeleteTextFont.Load(&plPath, &fName);
 	fName = "MakeText";
 	plugData::data.funcs.MakeText.Load(&plPath, &fName);
+	fName = "Delete3dText";
+	plugData::data.funcs.Delete3dText.Load(&plPath, &fName);
 	fName = "ScaleText";
 	plugData::data.funcs.ScaleText.Load(&plPath, &fName);
 	fName = "ChangeTextColor";

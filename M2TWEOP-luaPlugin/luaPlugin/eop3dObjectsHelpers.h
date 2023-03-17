@@ -21,5 +21,6 @@ namespace eop3dObjectsHelpers
 	void StartDrawingText(Text3DDrawable* text);
 	void StopDrawingText(Text3DDrawable* text);
 	void DrawOnceText(Text3DDrawable* text);
+	void DeleteText(Text3DDrawable* text);
 };
 

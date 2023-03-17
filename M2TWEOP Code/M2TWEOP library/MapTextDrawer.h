@@ -13,6 +13,7 @@ namespace MapTextDrawer
 		float yCoord;
 		float zCoord;
 		bool isDrawOnce;
+		bool isDeleteNeeded;
 	};
 	void DrawTexts();
 
@@ -22,6 +23,7 @@ namespace MapTextDrawer
 
 	//returns "id" of text, which is pointer to object
 	NOINLINE EOP_EXPORT Text3DDrawable* MakeText(void* fontID,const char* utf8Text);
+	NOINLINE EOP_EXPORT void Delete3dText(Text3DDrawable*text);
 
 	NOINLINE EOP_EXPORT void ScaleText(Text3DDrawable* text,float scale);
 	NOINLINE EOP_EXPORT void ChangeTextColor(Text3DDrawable* text, unsigned char a, unsigned char r, unsigned char g, unsigned char b);

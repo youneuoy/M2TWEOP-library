@@ -112,6 +112,7 @@ public:
 	ProcLoader<void(__cdecl*)(Text3DDrawable* text)> StartDrawingText;
 	ProcLoader<void(__cdecl*)(Text3DDrawable* text)> StopDrawingText;
 	ProcLoader<void(__cdecl*)(Text3DDrawable* text)> DrawingTextOnce;
+	ProcLoader<void(__cdecl*)(Text3DDrawable* text)> Delete3dText;
 
 
 	ProcLoader<void(__cdecl*)(const char*, UINT32)> addModelToGame;
