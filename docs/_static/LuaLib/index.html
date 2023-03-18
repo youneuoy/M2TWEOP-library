@@ -618,6 +618,28 @@
 
 
 <details>
+  <summary><a href="#M2TWEOP3dObjects">M2TWEOP3dObjects </a></summary>
+    <li><a href="#M2TWEOP3dObjects">M2TWEOP3dObjects</a></li>
+    <li><a href="#M2TWEOP3dObjectsTable.MakeTextFont">M2TWEOP3dObjectsTable.MakeTextFont (fontName)</a></li>
+    <li><a href="#M2TWEOP3dObjectsTable.DeleteTextFont">M2TWEOP3dObjectsTable.DeleteTextFont (fondID)</a></li>
+    <li><a href="#M2TWEOP3dObjectsTable.Make3dText">M2TWEOP3dObjectsTable.Make3dText (fondID, text)</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#3dText">3dText </a></summary>
+    <li><a href="#Eop3dText">Eop3dText</a></li>
+    <li><a href="#Eop3dText:Scale">Eop3dText:Scale (sizeMultiplier)</a></li>
+    <li><a href="#Eop3dText:ChangeColor">Eop3dText:ChangeColor (a, r, g, b)</a></li>
+    <li><a href="#Eop3dText:SetCoords">Eop3dText:SetCoords (x, y, z)</a></li>
+    <li><a href="#Eop3dText:StartDrawing">Eop3dText:StartDrawing ()</a></li>
+    <li><a href="#Eop3dText:StopDrawing">Eop3dText:StopDrawing ()</a></li>
+    <li><a href="#Eop3dText:DrawOnce">Eop3dText:DrawOnce ()</a></li>
+    <li><a href="#Eop3dText:Delete">Eop3dText:Delete ()</a></li>
+</details>
+
+
+<details>
   <summary><a href="#M2TWEOPSounds">M2TWEOPSounds </a></summary>
     <li><a href="#M2TWEOPSounds">M2TWEOPSounds</a></li>
     <li><a href="#M2TWEOPSounds.createEOPSound">M2TWEOPSounds.createEOPSound (soundPath)</a></li>
@@ -641,7 +663,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-03-13 15:50:56</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-03-17 21:39:32</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -2153,6 +2175,60 @@
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOPFBX.getFbxObjectDrawType">M2TWEOPFBX.getFbxObjectDrawType (fbx)</a></td>
 	<td class="summary">Get fbx object draw type, i.e.</td>
+	</tr>
+</table>
+<h2><a href="#M2TWEOP3dObjects">M2TWEOP3dObjects </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP3dObjects">M2TWEOP3dObjects</a></td>
+	<td class="summary">Basic M2TWEOP3dObjects table.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP3dObjectsTable.MakeTextFont">M2TWEOP3dObjectsTable.MakeTextFont (fontName)</a></td>
+	<td class="summary">Create new 3d text font.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP3dObjectsTable.DeleteTextFont">M2TWEOP3dObjectsTable.DeleteTextFont (fondID)</a></td>
+	<td class="summary">Delete 3d text font.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP3dObjectsTable.Make3dText">M2TWEOP3dObjectsTable.Make3dText (fondID, text)</a></td>
+	<td class="summary">Create line of 3d text.</td>
+	</tr>
+</table>
+<h2><a href="#3dText">3dText </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#Eop3dText">Eop3dText</a></td>
+	<td class="summary">3d text object.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Eop3dText:Scale">Eop3dText:Scale (sizeMultiplier)</a></td>
+	<td class="summary">Scale 3d text.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Eop3dText:ChangeColor">Eop3dText:ChangeColor (a, r, g, b)</a></td>
+	<td class="summary">Set 3d text color.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Eop3dText:SetCoords">Eop3dText:SetCoords (x, y, z)</a></td>
+	<td class="summary">Set 3d text coords.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Eop3dText:StartDrawing">Eop3dText:StartDrawing ()</a></td>
+	<td class="summary">Start draw text.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Eop3dText:StopDrawing">Eop3dText:StopDrawing ()</a></td>
+	<td class="summary">Stop draw text.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Eop3dText:DrawOnce">Eop3dText:DrawOnce ()</a></td>
+	<td class="summary">Draw text once(at one frame only).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Eop3dText:Delete">Eop3dText:Delete ()</a></td>
+	<td class="summary">Delete text.</td>
 	</tr>
 </table>
 <h2><a href="#M2TWEOPSounds">M2TWEOPSounds </a></h2>
@@ -17234,6 +17310,419 @@ M2TWEOPFBX.setFbxObjectDrawState(ourNewObject,<span class="keyword">true</span>)
 <span class="keyword">local</span> isDrawed=M2TWEOPFBX.getFbxObjectDrawState(ourNewObject);
 M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>);
 <span class="keyword">local</span> whereWeDrawObject=M2TWEOPFBX.getFbxObjectDrawType(ourNewObject);</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="M2TWEOP3dObjects"></a>M2TWEOP3dObjects </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "M2TWEOP3dObjects"></a>
+    <strong>M2TWEOP3dObjects</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic M2TWEOP3dObjects table.  Contains descriptions of m2tweop simple 3d objects feathures. Not call this functions onPluginLoad(graphics system not initialized here yet).
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">MakeTextFont</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP3dObjectsTable.MakeTextFont">MakeTextFont</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">DeleteTextFont</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP3dObjectsTable.MakeTextFont">MakeTextFont</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">Make3dText</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP3dObjectsTable.Make3dText">Make3dText</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP3dObjectsTable.MakeTextFont"></a>
+    <strong>M2TWEOP3dObjectsTable.MakeTextFont (fontName)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Create new 3d text font.  Fonts using for creating text(you not need font after it)
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fontName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         name of font
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        fondID ID of created font.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP3dObjectsTable.DeleteTextFont"></a>
+    <strong>M2TWEOP3dObjectsTable.DeleteTextFont (fondID)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Delete 3d text font.  Do it where not need anymore
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fondID</span>
+            <span class="types"><span class="type">int</span></span>
+         ID of created font.
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
+	newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
+M2TWEOP3dObjectsTable.DeleteTextFont(newFont);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP3dObjectsTable.Make3dText"></a>
+    <strong>M2TWEOP3dObjectsTable.Make3dText (fondID, text)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Create line of 3d text.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fondID</span>
+            <span class="types"><span class="type">int</span></span>
+         ID of created font.
+        </li>
+        <li><span class="parameter">text</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         utf8 string with text.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#Eop3dText">Eop3dText</a></span>
+        text utf8 string with text.
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
+newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
+M2TWEOP3dObjectsTable.DeleteTextFont(newFont);</pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="3dText"></a>3dText </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "Eop3dText"></a>
+    <strong>Eop3dText</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    3d text object.  Not use it onPluginLoad(graphics system not initialized here yet).
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">Scale</span>
+            <span class="types"><a class="type" href="index.html#Eop3dText:Scale">Scale</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">ChangeColor</span>
+            <span class="types"><a class="type" href="index.html#Eop3dText:ChangeColor">ChangeColor</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">SetCoords</span>
+            <span class="types"><a class="type" href="index.html#Eop3dText:SetCoords">SetCoords</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">StartDrawing</span>
+            <span class="types"><a class="type" href="index.html#Eop3dText:StartDrawing">StartDrawing</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">StopDrawing</span>
+            <span class="types"><a class="type" href="index.html#Eop3dText:StopDrawing">StopDrawing</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">DrawOnce</span>
+            <span class="types"><a class="type" href="index.html#Eop3dText:DrawOnce">DrawOnce</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">Delete</span>
+            <span class="types"><a class="type" href="index.html#Eop3dText:Delete">Delete</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "Eop3dText:Scale"></a>
+    <strong>Eop3dText:Scale (sizeMultiplier)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Scale 3d text.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">sizeMultiplier</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
+newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
+newText:Scale(<span class="number">0.3</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Eop3dText:ChangeColor"></a>
+    <strong>Eop3dText:ChangeColor (a, r, g, b)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set 3d text color.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">a</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">r</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">g</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">b</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
+newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
+newText:ChangeColor(<span class="number">255</span>,<span class="number">0</span>,<span class="number">255</span>,<span class="number">177</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Eop3dText:SetCoords"></a>
+    <strong>Eop3dText:SetCoords (x, y, z)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set 3d text coords.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">z</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
+newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
+newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,<span class="number">0.2</span>);</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Eop3dText:StartDrawing"></a>
+    <strong>Eop3dText:StartDrawing ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Start draw text.  Text go on display until stop function called
+    </div>
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
+newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
+newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,<span class="number">0.2</span>);
+newText:StartDrawing();</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Eop3dText:StopDrawing"></a>
+    <strong>Eop3dText:StopDrawing ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Stop draw text.
+    </div>
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
+newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
+newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,<span class="number">0.2</span>);
+newText:StartDrawing();
+<span class="comment">--some time we draw
+</span>newText:StopDrawing();</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Eop3dText:DrawOnce"></a>
+    <strong>Eop3dText:DrawOnce ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Draw text once(at one frame only).  Can be called in draw loop. Not need call stop after it.
+    </div>
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
+newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
+newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,<span class="number">0.2</span>);
+newText:DrawOnce();</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Eop3dText:Delete"></a>
+    <strong>Eop3dText:Delete ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Delete text.  Not use after it!
+    </div>
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
+newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
+newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,<span class="number">0.2</span>);
+newText:DrawOnce();
+newText:Delete();</pre>
     </ul>
 
 </dd>
