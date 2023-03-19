@@ -23,6 +23,7 @@
 - `stratmap.objects.replaceTile` now works correcly (Broken since M2TWEOP.2.1.beta-35) Closes: https://github.com/youneuoy/M2TWEOP-library/issues/39 - *youneuoy*
 - Online battle generator now reads the config correctly (Broken since M2TWEOP.2.1.37) - *youneuoy*
 - fixed work with utf8-utf16 convertation(the display of some text was broken because of this eop bug) - *youneuoy*
+- fix broken function `settlement:changeOwner(faction)` - *youneuoy*
 
 
 ### **Links**
