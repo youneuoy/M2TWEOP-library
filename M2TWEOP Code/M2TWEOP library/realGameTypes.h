@@ -1412,7 +1412,7 @@ struct factionStruct {
 	undefined field_0x150[4];
 	int portBuildingsNum;
 	undefined field_0x158[68];
-	int someForSpawnCharacter;
+	void* tilesFac;
 	undefined field_0x1a0[2208];
 	UINT32 religion; /* number of religion */
 	undefined field_0xa44[84];

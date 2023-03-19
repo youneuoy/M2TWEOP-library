@@ -26,13 +26,13 @@ namespace fastFuncts
 
 		return nullptr;
 	}
-	NOINLINE EOP_EXPORT void revealTile(int coords[2])
+	NOINLINE EOP_EXPORT void revealTile(factionStruct* faction, int coords[2])
 	{
 		if (IsStratMap() == false)
 		{
 			return;
 		}
-		typedef int*(__stdcall* RevealTileF)(int* xy, int some, float some2);
+		typedef int*(__thiscall* RevealTileF)(void* tilesFac,int* xy, int some, float some2);
 
 		RevealTileF revealTileF = nullptr;
 		if (globals::dataS.gamever == 2)//steam
@@ -44,7 +44,27 @@ namespace fastFuncts
 			revealTileF = (RevealTileF)0x004ba910;
 		}
 
-		revealTileF(coords,2,-1.0);
+		revealTileF(faction->tilesFac,coords,2,-1.0);
+	}
+	NOINLINE EOP_EXPORT void hideRevealedTile(factionStruct* faction, int coords[2])
+	{
+		if (IsStratMap() == false)
+		{
+			return;
+		}
+		typedef int* (__thiscall* UnRevealTileF)(void* tilesFac, int* xy, unsigned char some);
+
+		UnRevealTileF unrevealTileF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			unrevealTileF = (UnRevealTileF)0x004baf80;
+		}
+		else
+		{
+			unrevealTileF = (UnRevealTileF)0x004ba9f0;
+		}
+
+		unrevealTileF(faction->tilesFac, coords, 1);
 	}
 	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner)
 	{
@@ -1065,7 +1085,7 @@ namespace fastFuncts
 		}
 
 		adrFunc = codes::offsets.doSomeWithCharacterFunc;
-		DWORD some = fac->someForSpawnCharacter;
+		DWORD some = fac->tilesFac;
 		_asm
 		{
 			push 0
