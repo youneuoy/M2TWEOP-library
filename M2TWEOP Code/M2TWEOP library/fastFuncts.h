@@ -10,10 +10,10 @@
 
 namespace fastFuncts
 {
-	NOINLINE EOP_EXPORT void revealTile(factionStruct* faction, int coords[2]);
-	NOINLINE EOP_EXPORT void revealTileForEveryone(int coords[2]);
-	NOINLINE EOP_EXPORT void hideRevealedTile(factionStruct* faction, int coords[2]);
-	NOINLINE EOP_EXPORT void hideRevealedTileForEveryone(int coords[2]);
+	NOINLINE EOP_EXPORT void revealTile(factionStruct* faction, int x, int y);
+	NOINLINE EOP_EXPORT void revealTileForEveryone(int x, int y);
+	NOINLINE EOP_EXPORT void hideRevealedTile(factionStruct* faction, int x, int y);
+	NOINLINE EOP_EXPORT void hideRevealedTileForEveryone(int x,int y);
 
 
 

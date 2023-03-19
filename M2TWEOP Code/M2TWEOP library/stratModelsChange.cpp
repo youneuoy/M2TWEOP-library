@@ -4,7 +4,13 @@
 #include "dataOffsets.h"
 namespace stratModelsChange
 {
-	bool changeModelsNeededNow = false;
+	enum class modelsChangeStatus
+	{
+		changed=0,
+		needFixHiding=1,
+		needChange=2
+	};
+	modelsChangeStatus changeModelsNeededNow = modelsChangeStatus::changed;
 
 	struct stratModelRecord
 	{
@@ -84,7 +90,7 @@ namespace stratModelsChange
 
 		stratModelChangeList.push_back(rec);
 
-		changeModelsNeededNow = true;
+		changeModelsNeededNow = modelsChangeStatus::needChange;
 	}
 
 	stratModelRecord* findStratModel(UINT32 modelId)
@@ -121,12 +127,20 @@ namespace stratModelsChange
 	//Change only when render queue is happening to avoid crashes
 	void checkAndChangeStratModels()
 	{
-		if (changeModelsNeededNow == false)
+		if (changeModelsNeededNow == modelsChangeStatus::needFixHiding)
 		{
+			for (stratModelChangeRecord* changeMod : stratModelChangeList) //static models
+			{
+				fastFuncts::hideRevealedTileForEveryone(changeMod->x, changeMod->y);
+				changeModelsNeededNow = modelsChangeStatus::changed;
+			}
 			return;
 		}
-
-		changeModelsNeededNow = false;
+		if (changeModelsNeededNow == modelsChangeStatus::changed)
+		{
+			changeModelsNeededNow = modelsChangeStatus::needFixHiding;
+			return;
+		}
 
 		for (stratModelChangeRecord* changeMod : stratModelChangeList) //static models
 		{
@@ -137,7 +151,10 @@ namespace stratModelsChange
 
 			mod2 = findStratModel(changeMod->modelId2);
 
-			changeModel(changeMod->x, changeMod->y, mod1->modelP, mod2->modelP);
+			if (changeModel(changeMod->x, changeMod->y, mod1->modelP, mod2->modelP) == true)
+			{
+				fastFuncts::revealTileForEveryone(changeMod->x, changeMod->y);
+			}
 		}
 		for (stratModelCharacterRecordChange* changeMod : stratModelCharacterChangeList) //character models
 		{
@@ -150,6 +167,8 @@ namespace stratModelsChange
 			stratModelCharacterChangeList.erase(stratModelCharacterChangeList.begin() + i);
 			i--;
 		}
+
+		changeModelsNeededNow = modelsChangeStatus::changed;
 	}
 
 	void update()
@@ -170,7 +189,7 @@ namespace stratModelsChange
 			modRec.second->modelP = loadModel(modRec.second->path.c_str());
 		}
 		modelsLoaded = true;
-		changeModelsNeededNow = true;
+		changeModelsNeededNow = modelsChangeStatus::needChange;
 	}
 
 	void loadCharModels() //rebuild character CAS entries to be sure no pointers were cleaned up
@@ -229,7 +248,7 @@ namespace stratModelsChange
 		rec->modelId = modelNameCopy;
 		stratModelCharacterChangeList.push_back(rec);
 
-		changeModelsNeededNow = true;
+		changeModelsNeededNow = modelsChangeStatus::needChange;
 	}
 
 	void changeStratModel(general* gen, const char* model)
@@ -262,7 +281,7 @@ namespace stratModelsChange
 		}
 		gen->genType = characterFacEntry; //assign new array to general
 
-		changeModelsNeededNow = true;
+		changeModelsNeededNow = modelsChangeStatus::needChange;
 	}
 
 

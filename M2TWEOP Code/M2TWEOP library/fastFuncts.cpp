@@ -26,13 +26,13 @@ namespace fastFuncts
 
 		return nullptr;
 	}
-	NOINLINE EOP_EXPORT void revealTile(factionStruct* faction, int coords[2])
+	NOINLINE EOP_EXPORT void revealTile(factionStruct* faction, int x, int y)
 	{
 		if (IsStratMap() == false)
 		{
 			return;
 		}
-		typedef int*(__thiscall* RevealTileF)(void* tilesFac,int* xy, int some, float some2);
+		typedef int* (__thiscall* RevealTileF)(void* tilesFac, int* xy, int some, float some2);
 
 		RevealTileF revealTileF = nullptr;
 		if (globals::dataS.gamever == 2)//steam
@@ -44,25 +44,33 @@ namespace fastFuncts
 			revealTileF = (RevealTileF)0x004ba910;
 		}
 
-		revealTileF(faction->tilesFac,coords,2,-1.0);
+		int coords[2] = { x,y };
+		revealTileF(faction->tilesFac, coords, 2, -1.0);
 	}
-	NOINLINE EOP_EXPORT void revealTileForEveryone(int coords[2])
+	NOINLINE EOP_EXPORT void revealTileForEveryone(int x, int y)
 	{
 		UINT32 numFac = fastFuncts::getFactionsCount();
 		factionStruct** listFac = fastFuncts::getFactionsList();
 
 		for (UINT32 i = 0; i < numFac; i++)
 		{
-			revealTile(listFac[i], coords);
+			revealTile(listFac[i], x, y);
 		}
 	}
-	NOINLINE EOP_EXPORT void hideRevealedTile(factionStruct* faction, int coords[2])
+	NOINLINE EOP_EXPORT void hideRevealedTile(factionStruct* faction, int x, int y)
 	{
 		if (IsStratMap() == false)
 		{
 			return;
 		}
-		typedef int* (__thiscall* UnRevealTileF)(void* tilesFac, int* xy, unsigned char isDeleteXYArray);
+		struct SomeArgForHiding
+		{
+			int x;
+			int y;
+			int some = 2;
+			float some2 = -1;
+		};
+		typedef int* (__thiscall* UnRevealTileF)(void* tilesFac, SomeArgForHiding* someArgForHiding, unsigned char isDeleteXYArray);
 
 		UnRevealTileF unrevealTileF = nullptr;
 		if (globals::dataS.gamever == 2)//steam
@@ -74,16 +82,30 @@ namespace fastFuncts
 			unrevealTileF = (UnRevealTileF)0x004ba9f0;
 		}
 
-		unrevealTileF(faction->tilesFac, coords, 0);
+		SomeArgForHiding someArg;
+		someArg.x = x;
+		someArg.y = y;
+
+		void** revealedTiles = (void**)faction->tilesFac;
+		SomeArgForHiding** tilesArr = (SomeArgForHiding**)revealedTiles[10];
+		int num = (int)revealedTiles[12];
+		for (int i = 0; i < num; i++)
+		{
+			if (tilesArr[i]->x == x && tilesArr[i]->y == y)
+			{
+				unrevealTileF(faction->tilesFac, tilesArr[i], 1);
+				return;
+			}
+		}
 	}
-	NOINLINE EOP_EXPORT void hideRevealedTileForEveryone(int coords[2])
+	NOINLINE EOP_EXPORT void hideRevealedTileForEveryone(int x, int y)
 	{
 		UINT32 numFac = fastFuncts::getFactionsCount();
 		factionStruct** listFac = fastFuncts::getFactionsList();
 
 		for (UINT32 i = 0; i < numFac; i++)
 		{
-			hideRevealedTile(listFac[i], coords);
+			hideRevealedTile(listFac[i], x, y);
 		}
 	}
 	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner)
@@ -140,7 +162,7 @@ namespace fastFuncts
 	}
 	NOINLINE EOP_EXPORT void ViewTacticalMap(int x, int y)
 	{
-		globals::dataS.Modules.tacticalMapVeiwer.View(x,y);
+		globals::dataS.Modules.tacticalMapVeiwer.View(x, y);
 	}
 	NOINLINE EOP_EXPORT bool IsStratMap()
 	{
@@ -151,7 +173,7 @@ namespace fastFuncts
 			return false;
 		return true;
 	}
-	
+
 	NOINLINE EOP_EXPORT void setCharacterType(general* character, int typeID, int subFaction, int factionDipNum)
 	{
 		DWORD adrFunc = 0x0;
@@ -1105,7 +1127,7 @@ namespace fastFuncts
 		}
 
 		adrFunc = codes::offsets.doSomeWithCharacterFunc;
-		DWORD some = fac->tilesFac;
+		void* some = fac->tilesFac;
 		_asm
 		{
 			push 0
@@ -1304,7 +1326,7 @@ namespace fastFuncts
 			push edi
 			push ebp
 			mov ebp, facOffset
-			lea ecx, [ebp+0x21608]
+			lea ecx, [ebp + 0x21608]
 			pop ebp
 			mov eax, funcC
 			call eax

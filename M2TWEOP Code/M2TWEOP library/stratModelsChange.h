@@ -32,6 +32,6 @@ namespace stratModelsChange
 	int readTGAfile(const char* path);
 	void loadCharModels();
 	//for internal use only
-	void changeModel(int x, int y, model_Rigid* modelP, model_Rigid* modelP2);
+	bool changeModel(int x, int y, model_Rigid* modelP, model_Rigid* modelP2);
 	void WINAPI disableChecker();
 };
