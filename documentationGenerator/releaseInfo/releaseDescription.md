@@ -27,6 +27,7 @@ Release with many serious bugfixes and some improvements for 3d graphics stuff.
 - Online battle generator now reads the config correctly (Broken since M2TWEOP.2.1.37) - *youneuoy*
 - fixed work with utf8-utf16 convertation(the display of some text was broken because of this eop bug) - *youneuoy*
 - fix broken function `settlement:changeOwner(faction)` - *youneuoy*
+- fixed crash on returning from tactical map view - *youneuoy*
 
 
 ### **Links**
