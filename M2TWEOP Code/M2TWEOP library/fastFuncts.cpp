@@ -62,7 +62,7 @@ namespace fastFuncts
 		{
 			return;
 		}
-		typedef int* (__thiscall* UnRevealTileF)(void* tilesFac, int* xy, unsigned char some);
+		typedef int* (__thiscall* UnRevealTileF)(void* tilesFac, int* xy, unsigned char isDeleteXYArray);
 
 		UnRevealTileF unrevealTileF = nullptr;
 		if (globals::dataS.gamever == 2)//steam
@@ -74,7 +74,7 @@ namespace fastFuncts
 			unrevealTileF = (UnRevealTileF)0x004ba9f0;
 		}
 
-		unrevealTileF(faction->tilesFac, coords, 1);
+		unrevealTileF(faction->tilesFac, coords, 0);
 	}
 	NOINLINE EOP_EXPORT void hideRevealedTileForEveryone(int coords[2])
 	{
