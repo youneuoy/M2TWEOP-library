@@ -28,6 +28,10 @@ namespace fastFuncts
 	}
 	NOINLINE EOP_EXPORT void revealTile(int coords[2])
 	{
+		if (IsStratMap() == false)
+		{
+			return;
+		}
 		typedef int*(__stdcall* RevealTileF)(int* xy, int some, float some2);
 
 		RevealTileF revealTileF = nullptr;
@@ -42,7 +46,7 @@ namespace fastFuncts
 
 		revealTileF(coords,2,-1.0);
 	}
-	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct* sett, factionStruct newOwner)
+	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner)
 	{
 		DWORD adrFunc = 0x0;
 		int* vTableAdr = (int*)sett->vTable;
