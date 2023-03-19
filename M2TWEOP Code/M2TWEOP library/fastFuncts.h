@@ -10,6 +10,7 @@
 
 namespace fastFuncts
 {
+	NOINLINE EOP_EXPORT void revealTile(int coords[2]);
 	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct*sett, factionStruct newOwner);
 
 	NOINLINE EOP_EXPORT void GetGameTileCoordsWithCursor(int&x,int&y);

@@ -26,6 +26,22 @@ namespace fastFuncts
 
 		return nullptr;
 	}
+	NOINLINE EOP_EXPORT void revealTile(int coords[2])
+	{
+		typedef int*(__stdcall* RevealTileF)(int* xy, int some, float some2);
+
+		RevealTileF revealTileF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			revealTileF = (RevealTileF)0x004baea0;
+		}
+		else
+		{
+			revealTileF = (RevealTileF)0x004ba910;
+		}
+
+		revealTileF(coords,2,-1.0);
+	}
 	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct* sett, factionStruct newOwner)
 	{
 		DWORD adrFunc = 0x0;
