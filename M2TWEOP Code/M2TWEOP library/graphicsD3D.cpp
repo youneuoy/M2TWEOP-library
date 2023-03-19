@@ -157,31 +157,6 @@ NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 	return;
 }
 
-static void DrawCircle(int x, int y, int r, int num, D3DCOLOR color, IDirect3DDevice9* pDevice)
-{
-	ID3DXLine* m_Line;
-	D3DXCreateLine(pDevice, &m_Line);
-	D3DXVECTOR2 Line[128];
-
-	float Step = D3DX_PI * 2.0 / num;
-	int Count = 0;
-	for (float a = 0; a < D3DX_PI * 2.0; a += Step)
-	{
-		float X1 = r * cos(a) + x;
-		float Y1 = r * sin(a) + y;
-		float X2 = r * cos(a + Step) + x;
-		float Y2 = r * sin(a + Step) + y;
-		Line[Count].x = X1;
-		Line[Count].y = Y1;
-		Line[Count + 1].x = X2;
-		Line[Count + 1].y = Y2;
-		Count += 2;
-	}
-	m_Line->Begin();
-	m_Line->Draw(Line, Count, color);
-	m_Line->End();
-	m_Line->Release();
-}
 NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 {
 	for (auto& f : graphicsD3D::dataS.stratmapDrawCallbacks)
