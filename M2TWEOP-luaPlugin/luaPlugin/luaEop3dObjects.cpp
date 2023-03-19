@@ -20,7 +20,7 @@ void luaP::initEop3dObjects()
 	}tables;
 
 	///M2TWEOP3dObjects
-	//@section M2TWEOP3dObjectsTable
+	//@section M2TWEOP3dObjects
 
 	/***
 	Basic M2TWEOP3dObjects table. Contains descriptions of m2tweop simple 3d objects feathures. Not call this functions onPluginLoad(graphics system not initialized here yet). 
@@ -32,40 +32,40 @@ void luaP::initEop3dObjects()
 	@table M2TWEOP3dObjects
 	*/
 
-	tables.M2TWEOP3dObjectsTable = luaState.create_table("M2TWEOP3dObjectsTable");
+	tables.M2TWEOP3dObjectsTable = luaState.create_table("M2TWEOP3dObjects");
 
 	/***
 	Create new 3d text font. Fonts using for creating text(you not need font after it)
-	@function M2TWEOP3dObjectsTable.MakeTextFont
+	@function M2TWEOP3dObjects.MakeTextFont
 	@tparam string fontName name of font
 	@treturn int fondID ID of created font.
 
 	@usage
-	newFont = M2TWEOP3dObjectsTable.MakeTextFont("Times New Roman");
+	newFont = M2TWEOP3dObjects.MakeTextFont("Times New Roman");
 	*/
 	tables.M2TWEOP3dObjectsTable.set_function("MakeTextFont", &eop3dObjectsHelpers::MakeTextFont);
 	/***
 	Delete 3d text font. Do it where not need anymore
-	@function M2TWEOP3dObjectsTable.DeleteTextFont
+	@function M2TWEOP3dObjects.DeleteTextFont
 	@tparam int fondID ID of created font.
 
 	@usage
-	newFont = M2TWEOP3dObjectsTable.MakeTextFont("Times New Roman");
-		newText = M2TWEOP3dObjectsTable.Make3dText(newFont, "Some text");
-	M2TWEOP3dObjectsTable.DeleteTextFont(newFont);
+	newFont = M2TWEOP3dObjects.MakeTextFont("Times New Roman");
+		newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
+	M2TWEOP3dObjects.DeleteTextFont(newFont);
 	*/
 	tables.M2TWEOP3dObjectsTable.set_function("DeleteTextFont", &eop3dObjectsHelpers::DeleteTextFont);
 	/***
 	Create line of 3d text.
-	@function M2TWEOP3dObjectsTable.Make3dText
+	@function M2TWEOP3dObjects.Make3dText
 	@tparam int fondID ID of created font.
 	@tparam string text utf8 string with text.
 	@treturn Eop3dText text utf8 string with text.
 
 	@usage
-	newFont = M2TWEOP3dObjectsTable.MakeTextFont("Times New Roman");
-	newText = M2TWEOP3dObjectsTable.Make3dText(newFont, "Some text");
-	M2TWEOP3dObjectsTable.DeleteTextFont(newFont);
+	newFont = M2TWEOP3dObjects.MakeTextFont("Times New Roman");
+	newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
+	M2TWEOP3dObjects.DeleteTextFont(newFont);
 	*/
 	tables.M2TWEOP3dObjectsTable.set_function("Make3dText", &eop3dObjectsHelpers::MakeText);
 
@@ -92,8 +92,8 @@ void luaP::initEop3dObjects()
 	@function Eop3dText:Scale
 	@tparam float sizeMultiplier
 	@usage
-	newFont = M2TWEOP3dObjectsTable.MakeTextFont("Times New Roman");
-	newText = M2TWEOP3dObjectsTable.Make3dText(newFont, "Some text");
+	newFont = M2TWEOP3dObjects.MakeTextFont("Times New Roman");
+	newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
 	newText:Scale(0.3);
 	*/
 	tables.text3dDrawable.set_function("Scale", &eop3dObjectsHelpers::ScaleText);
@@ -105,8 +105,8 @@ void luaP::initEop3dObjects()
 	@tparam int g
 	@tparam int b
 	@usage
-	newFont = M2TWEOP3dObjectsTable.MakeTextFont("Times New Roman");
-	newText = M2TWEOP3dObjectsTable.Make3dText(newFont, "Some text");
+	newFont = M2TWEOP3dObjects.MakeTextFont("Times New Roman");
+	newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
 	newText:ChangeColor(255,0,255,177);
 	*/
 	tables.text3dDrawable.set_function("ChangeColor", &eop3dObjectsHelpers::ChangeColorText);
@@ -117,8 +117,8 @@ void luaP::initEop3dObjects()
 	@tparam float y
 	@tparam float z
 	@usage
-	newFont = M2TWEOP3dObjectsTable.MakeTextFont("Times New Roman");
-	newText = M2TWEOP3dObjectsTable.Make3dText(newFont, "Some text");
+	newFont = M2TWEOP3dObjects.MakeTextFont("Times New Roman");
+	newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
 	newText:SetCoords(10,20,0.2);
 	*/
 	tables.text3dDrawable.set_function("SetCoords", &eop3dObjectsHelpers::SetCoordsText);
@@ -126,8 +126,8 @@ void luaP::initEop3dObjects()
 	Start draw text. Text go on display until stop function called
 	@function Eop3dText:StartDrawing
 	@usage
-	newFont = M2TWEOP3dObjectsTable.MakeTextFont("Times New Roman");
-	newText = M2TWEOP3dObjectsTable.Make3dText(newFont, "Some text");
+	newFont = M2TWEOP3dObjects.MakeTextFont("Times New Roman");
+	newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
 	newText:SetCoords(10,20,0.2);
 	newText:StartDrawing();
 	*/
@@ -136,8 +136,8 @@ void luaP::initEop3dObjects()
 	Stop draw text.
 	@function Eop3dText:StopDrawing
 	@usage
-	newFont = M2TWEOP3dObjectsTable.MakeTextFont("Times New Roman");
-	newText = M2TWEOP3dObjectsTable.Make3dText(newFont, "Some text");
+	newFont = M2TWEOP3dObjects.MakeTextFont("Times New Roman");
+	newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
 	newText:SetCoords(10,20,0.2);
 	newText:StartDrawing();
 	--some time we draw
@@ -148,8 +148,8 @@ void luaP::initEop3dObjects()
 	Draw text once(at one frame only). Can be called in draw loop. Not need call stop after it.
 	@function Eop3dText:DrawOnce
 	@usage
-	newFont = M2TWEOP3dObjectsTable.MakeTextFont("Times New Roman");
-	newText = M2TWEOP3dObjectsTable.Make3dText(newFont, "Some text");
+	newFont = M2TWEOP3dObjects.MakeTextFont("Times New Roman");
+	newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
 	newText:SetCoords(10,20,0.2);
 	newText:DrawOnce();
 	*/
@@ -158,8 +158,8 @@ void luaP::initEop3dObjects()
 	Delete text. Not use after it!
 	@function Eop3dText:Delete
 	@usage
-	newFont = M2TWEOP3dObjectsTable.MakeTextFont("Times New Roman");
-	newText = M2TWEOP3dObjectsTable.Make3dText(newFont, "Some text");
+	newFont = M2TWEOP3dObjects.MakeTextFont("Times New Roman");
+	newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
 	newText:SetCoords(10,20,0.2);
 	newText:DrawOnce();
 	newText:Delete();
