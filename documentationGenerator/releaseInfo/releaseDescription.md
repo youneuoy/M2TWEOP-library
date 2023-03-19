@@ -4,7 +4,8 @@
  [![Discord Link](https://img.shields.io/discord/713369537948549191?color=red&label=Discord&style=for-the-badge)](https://discord.gg/Epqjm8u2WK)
  [![Build Status](https://img.shields.io/github/v/release/youneuoy/M2TWEOP-library?label=Download&style=for-the-badge)](#download)
 
-<!-- ## **Release Notes** -->
+## **Release Notes**
+Release with many serious bugfixes and some improvements for 3d graphics stuff.
 
 <!-- ### **Launcher** -->
 
@@ -20,7 +21,9 @@
 - updated - *youneuoy*
 
 ### **Bugfixes**
+- `stratmap.objects.setModel` now works correcly for forts(Broken since very old versions, give crash when go back from battle and replaced fort apper in scren) Closes: https://github.com/youneuoy/M2TWEOP-library/issues/39 - *youneuoy*
 - `stratmap.objects.replaceTile` now works correcly (Broken since M2TWEOP.2.1.beta-35) Closes: https://github.com/youneuoy/M2TWEOP-library/issues/39 - *youneuoy*
+- `stratmap.objects.setModel` now works good with fog of war(In old versions if you not clear see replaced model, then old one displayed) - *youneuoy*
 - Online battle generator now reads the config correctly (Broken since M2TWEOP.2.1.37) - *youneuoy*
 - fixed work with utf8-utf16 convertation(the display of some text was broken because of this eop bug) - *youneuoy*
 - fix broken function `settlement:changeOwner(faction)` - *youneuoy*
