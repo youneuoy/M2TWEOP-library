@@ -81,7 +81,7 @@ int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlemen
 	}
 	return selectedLevel;//use old thing
 }
-char* __fastcall patchesForGame::onSaveEDUStringS(EduEntry* eduEntry)
+char* __fastcall patchesForGame::onSaveEDUStringS(eduEntry* eduEntry)
 {
 	char* retName = eduThings::getEopNameOfEduEntry(eduEntry);
 	if (retName == nullptr)
@@ -124,14 +124,14 @@ int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduin
 
 	return eduindex;
 }
-EduEntry* __fastcall patchesForGame::OnCreateMercUnit(char** entryName, EduEntry* entry)
+eduEntry* __fastcall patchesForGame::OnCreateMercUnit(char** entryName, eduEntry* entry)
 {
 	DWORD entryAddr = (DWORD)entry;
 	DWORD mercEOPValue = codes::offsets.mercEOPValue;//this is some weird address made by subtracting a value from edu start or something I dont really remember but its necesarry
 	if (entryAddr == mercEOPValue)
 	{
 		int* eduindex = eduThings::tryFindDataEopEduIndex(*entryName);
-		EduEntry* eopentry = eduThings::getEopEduEntry(*eduindex);
+		eduEntry* eopentry = eduThings::getEopEduEntry(*eduindex);
 		return eopentry;
 	}
 
@@ -421,7 +421,7 @@ void __stdcall patchesForGame::onBattleStratScreen()
 
 }
 
-void __fastcall patchesForGame::onEvent(DWORD** vTab)
+void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 {
 #if defined TESTPATCHES
 	ofstream f1("logs\\TESTPATCHES.log", ios::app);
@@ -429,7 +429,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab)
 	f1 << "onEvent" << endl;
 	f1.close();
 #endif
-	plugins::onEvent(vTab);
+	plugins::onEvent(vTab, arg2);
 }
 
 void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)

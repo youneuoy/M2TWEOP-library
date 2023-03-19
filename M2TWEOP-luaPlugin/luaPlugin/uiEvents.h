@@ -8,11 +8,11 @@ extern "C" PLUGINM2TWEOP_API void onDiplomaticStandingPanelOpen();
 extern "C" PLUGINM2TWEOP_API void onDiplomacyPanelOpen(factionStruct * fac);
 extern "C" PLUGINM2TWEOP_API void onPreBattlePanelOpen(factionStruct * fac);
 extern "C" PLUGINM2TWEOP_API void onNavalAutoResolvePanelOpen();
-extern "C" PLUGINM2TWEOP_API void onCharacterPanelOpen(generalCharacterictics * pers);
+extern "C" PLUGINM2TWEOP_API void onCharacterPanelOpen(namedCharacter * pers);
 extern "C" PLUGINM2TWEOP_API void onTradePanelOpen(settlementStruct * sett);
 extern "C" PLUGINM2TWEOP_API void onRequestBuildingAdvice(settlementStruct * sett);
-extern "C" PLUGINM2TWEOP_API void onRequestTrainingAdvice(settlementStruct * sett, EduEntry * recommend);
-extern "C" PLUGINM2TWEOP_API void onRequestTrainingAdvice(settlementStruct * sett, EduEntry * recommend);
+extern "C" PLUGINM2TWEOP_API void onRequestTrainingAdvice(settlementStruct * sett, eduEntry * recommend);
+extern "C" PLUGINM2TWEOP_API void onRequestTrainingAdvice(settlementStruct * sett, eduEntry * recommend);
 
 extern "C" PLUGINM2TWEOP_API void onMessageOpen(factionStruct * fac, int type);
 extern "C" PLUGINM2TWEOP_API void onIncomingMessage(factionStruct * fac, int type);

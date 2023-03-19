@@ -4,24 +4,28 @@
 #include "luaGetSetFuncs.h"
 namespace generalCharactericticsHelpers
 {
-	traitContainer* getTraits(generalCharacterictics* character);
-	anchillary* getAnchillary(generalCharacterictics* character, int index);
-	int addAnchillary(generalCharacterictics* character, std::string anchName);
+	traitContainer* getTraits(namedCharacter* character);
+	anchillary* getAnchillary(namedCharacter* character, int index);
+	int addAnchillary(namedCharacter* character, std::string anchName);
 
-	void removeAnchillary(generalCharacterictics* character, anchillary* anch);
-
-
-	void addTrait(generalCharacterictics* character, const char* traitName,int traitLevel);
-	void removeTrait(generalCharacterictics* character, const char* traitName);
+	void removeAnchillary(namedCharacter* character, anchillary* anch);
 
 
-	int getAge(generalCharacterictics* character);
-	void setAge(generalCharacterictics* character,int age);
+	void addTrait(namedCharacter* character, const char* traitName, int traitLevel);
+	void removeTrait(namedCharacter* character, const char* traitName);
 
-	bool getIsMale(generalCharacterictics* character);
-	void setIsMale(generalCharacterictics* character, bool isMale);
 
-	bool isAlive(generalCharacterictics* character);
-	void setAsHeir(generalCharacterictics* character,bool isJustSet);
+	int getAge(namedCharacter* character);
+	void setAge(namedCharacter* character, int age);
+
+	bool getIsMale(namedCharacter* character);
+	void setIsMale(namedCharacter* character, bool isMale);
+
+	bool isAlive(namedCharacter* character);
+	void setAsHeir(namedCharacter* character, bool isJustSet);
+	int getCapturedUnitNum(capturedFactionInfo* capInfo);
+	int getCapturedCharacterNum(capturedFactionInfo* capInfo);
+	capturedUnit* getCapturedUnit(const capturedFactionInfo* capInfo, const int index);
+	capturedCharacter* getCapturedCharacter(const capturedFactionInfo* capInfo, const int index);
 };
 

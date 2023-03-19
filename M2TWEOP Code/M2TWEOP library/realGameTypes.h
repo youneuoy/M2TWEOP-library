@@ -100,7 +100,7 @@ struct stratMap {
 struct 	mercPoolUnit
 {
 public:
-	struct EduEntry* eduEntry; //0x0000
+	struct eduEntry* eduEntry; //0x0000
 	int32_t experience; //0x0004
 	int32_t cost; //0x0008
 	float replenishMin; //0x000C
@@ -349,10 +349,15 @@ public:
 	struct UNICODE_STRING** localizedName; //0x0004
 	float someFloat; //0x0008
 	int32_t soldiersLost; //0x000C
-	char pad_0010[12]; //0x0010
+	int32_t soldiersKilled; //0x0010
+	int32_t takenPrisoner; //0x0014
+	int32_t prisonersCaught; //0x0018
 	int32_t soldiersStart; //0x001C
 	uint32_t unitsRouted; //0x0020
-	char pad_0024[20]; //0x0024
+	int32_t soldiersHealed; //0x0024
+	char pad_0028[4]; //0x0028
+	int32_t soldiersEnd; //0x002C
+	char pad_0030[8]; //0x0030
 	int8_t hasRouted; //0x0038
 	char pad_0039[15]; //0x0039
 }; //Size: 0x0048
@@ -938,7 +943,7 @@ struct oneSiege {
 
 struct unitRQ {
 public:
-	struct EduEntry* eduEntry; //0x0000
+	struct eduEntry* eduEntry; //0x0000
 	int32_t FourtySeven; //0x0004
 	struct settlementStruct* settlement; //0x0008
 	int8_t N0001082F; //0x000C
@@ -984,7 +989,7 @@ struct settlementStruct {
 	char* name; /* internal name of settlement */
 	int nameCrypt;
 	UNICODE_STRING** localizedName;
-	struct factionStruct* ownerFac; /* faction of the owner */
+	struct factionStruct* faction; /* faction of the owner */
 	undefined field16_0x174[36];
 	int level; /* level of the settlement/castle */
 	int fac_creatorModNum;
@@ -1111,7 +1116,7 @@ struct general { /* character on the stratmap, who has a unit in a stack */
 	int xCoord; /* number of x-coord of unit position */
 	int yCoord; /* number of y-coord of unit position */
 	undefined field5_0x14[108];
-	struct generalCharacterictics* genChar; /* many important info about character */
+	struct namedCharacter* genChar; /* many important info about character */
 	undefined field7_0x84[4];
 	struct genMod* genType;
 	undefined field9_0x8c[24];
@@ -1135,7 +1140,7 @@ struct general { /* character on the stratmap, who has a unit in a stack */
 };
 
 //additional character data(name,label,traits, etc)
-struct generalCharacterictics { /* many important info about character */
+struct namedCharacter { /* many important info about character */
 	UINT32 index; /* index of character */
 	UNICODE_STRING** localizedFullName; /* displaying name */
 	UNICODE_STRING** localizedNameForSave; /* saved to save file */
@@ -1216,7 +1221,7 @@ struct generalCharacterictics { /* many important info about character */
 	int32_t battleSurgery; //0x01E0
 	struct traitContainer* traits; /* names at [item number] -0x4-here. Not have number, read it in while(traits != 0){this->m_memory->Read(traits + 0x08, 4).toINT32();} */
 	undefined field_0x1e8[4];
-	struct anchData** anchillaries; /* pointers to character ancillaries, names at  [item number] -0-0c-here) */
+	struct ancData** anchillaries; /* pointers to character ancillaries, names at  [item number] -0-0c-here) */
 	undefined field_0x1f0[4];
 	UINT32 anchNum; /* number of character  ancillaries */
 	struct general* gen; /* on stratmap */
@@ -1226,9 +1231,9 @@ struct generalCharacterictics { /* many important info about character */
 	struct factionStruct* faction;
 	int subFaction;
 	undefined field_0x220[4];
-	struct generalCharacterictics* parent; /* father */
-	struct generalCharacterictics* spouse;
-	struct generalCharacterictics* childs[4]; /* children, womens wont have children */
+	struct namedCharacter* parent; /* father */
+	struct namedCharacter* spouse;
+	struct namedCharacter* childs[4]; /* children, womens wont have children */
 	undefined field_0x23c[20];
 	char* portrait;
 	undefined field_0x254[4];
@@ -1313,7 +1318,7 @@ struct unit {
 	undefined field2_0x8[636];
 	struct stackStruct* army;
 	undefined field4_0x288[12];
-	struct EduEntry* eduEntry;
+	struct eduEntry* eduEntry;
 	int ID;
 	undefined field7_0x29c[612];
 	int expScreen; /* screen experience */
@@ -1379,15 +1384,15 @@ struct factionStruct {
 	char* ai_label; /* ai_label of faction */
 	undefined field_0xc0[4];
 	struct settlementStruct* capital; /* capital of the faction */
-	struct generalCharacterictics* leader; /* faction leader */
-	struct generalCharacterictics* heir; /* faction heir */
+	struct namedCharacter* leader; /* faction leader */
+	struct namedCharacter* heir; /* faction heir */
 	struct factionStratMapDescrS* factSmDescr;
 	int isPlayerControlled; /* is faction a controlled by player */
 	UINT32* ai_assistant;
 	undefined field_0xdc[20];
 	UINT32 holdRegions;
 	undefined field_0xf4[4];
-	struct generalCharacterictics** charactersAll; /* all characters, died, alive, etc */
+	struct namedCharacter** charactersAll; /* all characters, died, alive, etc */
 	undefined field_0xfc[4];
 	int numOfCharactersAll; /* all characters, died, alive, etc */
 	struct general** characters; /* characters on stratmap */
@@ -1467,7 +1472,7 @@ public:
 
 
 //type of unit from EDU
-struct EduEntry {
+struct eduEntry {
 	char* Type;
 	uint32_t typeHash;
 	DWORD Index;
@@ -1666,7 +1671,7 @@ struct EduEntry {
 
 struct eduEntryes { /* structure with all edu entries */
 	UINT32 qq;
-	struct EduEntry unitTupes[500];
+	struct eduEntry unitTupes[500];
 	UINT32 numberOfTupes;
 };
 
@@ -1680,7 +1685,7 @@ struct someFactNameStruct {
 };
 
 //pointer to ancillary
-struct anchData { /* data of the ancillary */
+struct ancData { /* data of the ancillary */
 	struct anchillary* dataAnch;
 };
 

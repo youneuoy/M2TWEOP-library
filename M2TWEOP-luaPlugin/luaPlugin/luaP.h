@@ -87,32 +87,17 @@ public:
 	//lua functions and events controllers
 	void onPluginLoadF();
 	void onChangeTurnNum(int num);
-	void onCharacterSelected(generalCharacterictics* gen);
-	void onPreFactionTurnStart(factionStruct* fac);
-	void onFactionTurnStart(factionStruct* fac);
-	void onGeneralDevastatesTile(generalCharacterictics* gen);
-	void onFactionTurnEnd(factionStruct* fac);
-	void onFactionNewCapital(factionStruct* fac);
-	void onFactionWarDeclared(factionStruct* fac, factionStruct* fac2);
-	void onFactionAllianceDeclared(factionStruct* fac, factionStruct* fac2);
-	void onFactionTradeAgreementMade(factionStruct* fac, factionStruct* fac2);
-	void onFactionBreakAlliance(factionStruct* fac, factionStruct* fac2);
+	void onCharacterSelected(namedCharacter* gen);
+	void onGeneralDevastatesTile(namedCharacter* gen);
 
-	void onGiveMoney(factionStruct* fac, factionStruct* fac2, float amount);
 	void onUpdateAttitude(factionStruct* fac, factionStruct* fac2);
 	void onDemeanour(factionStruct* fac, factionStruct* fac2, float amount);
 
-	void onGeneralAssaultsGeneral(generalCharacterictics* gen, generalCharacterictics* gen2);
-	void onGeneralAssaultsResidence(generalCharacterictics* gen, settlementStruct* sett, fortStruct* frt);
-	void onGeneralCaptureSettlement(generalCharacterictics* gen, settlementStruct* sett);
-
-	void onGeneralCaptureResidence(generalCharacterictics* gen);
 	void onSiegeEquipmentCompleted(settlementStruct* sett, fortStruct* frt);
-	void onPostBattle(generalCharacterictics* gen);
 
 
 
-	void onMultiTurnMove(generalCharacterictics* gen);
+	void onMultiTurnMove(namedCharacter* gen);
 	void onSettlementSelected(settlementStruct* sett);
 	void onSettlementUpgraded(settlementStruct* sett);
 	void onSettlementConverted(settlementStruct* sett);
@@ -155,7 +140,7 @@ public:
 	{
 		sol::usertype<unit>unit;
 		sol::usertype<general>character;
-		sol::usertype<generalCharacterictics>namedCharacter;
+		sol::usertype<namedCharacter>namedCharacter;
 		sol::usertype<anchillary>ancillary;
 		sol::usertype<traitContainer>traitContainerT;
 		sol::usertype<EduEntry>EduEntry;
@@ -193,30 +178,9 @@ public:
 	sol::function* onLoadingFonts = nullptr;
 	sol::function* initDXFunc = nullptr;
 
-
 	sol::function* onChangeTurnNumFunc = nullptr;
 	sol::function* onCharacterSelectedFunc = nullptr;
-	sol::function* onPreFactionTurnStartFunc = nullptr;
-	sol::function* onGeneralDevastatesTileFunc = nullptr;
-	sol::function* onFactionTurnStartFunc = nullptr;
-	sol::function* onFactionTurnEndFunc = nullptr;
-	sol::function* onFactionNewCapitalFunc = nullptr;
-	sol::function* onFactionWarDeclaredFunc = nullptr;
-	sol::function* onFactionAllianceDeclaredFunc = nullptr;
-	sol::function* onFactionTradeAgreementMadeFunc = nullptr;
-	sol::function* onFactionBreakAllianceFunc = nullptr;
-
-	sol::function* onGiveMoneyFunc = nullptr;
-	sol::function* onUpdateAttitudeFunc = nullptr;
-	sol::function* onDemeanourFunc = nullptr;
-
-	sol::function* onGeneralAssaultsGeneralFunc = nullptr;
-	sol::function* onGeneralAssaultsResidenceFunc = nullptr;
-	sol::function* onGeneralCaptureSettlementFunc = nullptr;
-
-	sol::function* onGeneralCaptureResidenceFunc = nullptr;
 	sol::function* onSiegeEquipmentCompletedFunc = nullptr;
-	sol::function* onPostBattleFunc = nullptr;
 
 
 	sol::function* onMultiTurnMoveFunc = nullptr;
@@ -226,7 +190,6 @@ public:
 	sol::function* onCityRiotsFunc = nullptr;
 	sol::function* onUngarrisonedSettlementFunc = nullptr;
 
-	sol::function* onUngarrisonedFortFunc = nullptr;
 	sol::function* onGiveSettlementFunc = nullptr;
 	sol::function* onOccupySettlementFunc = nullptr;
 	sol::function* onExterminatePopulationFunc = nullptr;
@@ -235,34 +198,12 @@ public:
 	sol::function* onAddedToBuildingQueueFunc = nullptr;
 	sol::function* onBuildingDestroyedFunc = nullptr;
 	sol::function* onBuildingCompletedFunc = nullptr;
-	sol::function* onEventCounterFunc = nullptr;
 
-	sol::function* onFactionExcommunicatedFunc = nullptr;
-	sol::function* onDisasterFunc = nullptr;
-	sol::function* onHordeFormedFunc = nullptr;
 	sol::function* onAddedToTrainingQueueFunc = nullptr;
 
-	sol::function* onUnitDisbandedFunc = nullptr;
 	sol::function* onUnitTrainedFunc = nullptr;
 	sol::function* onAgentCreatedFunc = nullptr;
-
-	sol::function* onObjSeenFunc = nullptr;
-	sol::function* onTileSeenFunc = nullptr;
-	sol::function* onGameReloadedFunc = nullptr;
-	sol::function* onTransgressionFunc = nullptr;
-
-
-	sol::function* onPopeAcceptsCrusadeTargetFunc = nullptr;
-	sol::function* onCrusadeCalledFunc = nullptr;
-	sol::function* onCrusadeEndsFunc = nullptr;
-	sol::function* onPopeRejectsCrusadeTargetFunc = nullptr;
-	sol::function* onArmyTakesCrusadeTargetFunc = nullptr;
-
-	sol::function* onUnitsDesertCrusadeFunc = nullptr;
-	sol::function* onPopeElectedFunc = nullptr;
-	sol::function* onVotedForPopeFunc = nullptr;
 	sol::function* onAssassinCaughtAttackingPopeFunc = nullptr;
-	sol::function* onInquisitorAppointedFunc = nullptr;
 
 
 
@@ -296,24 +237,14 @@ public:
 	sol::function* onGuildUpgradedFunc = nullptr;
 	sol::function* onGuildDestroyedFunc = nullptr;
 
-	sol::function* onBrotherAdoptedFunc = nullptr;
-	sol::function* onBirthFunc = nullptr;
-	sol::function* onCharacterComesOfAgeFunc = nullptr;
-	sol::function* onCharacterMarriesFunc = nullptr;
-	sol::function* onCharacterMarriesPrincessFunc = nullptr;
-	sol::function* onCharacterBecomesAFatherFunc = nullptr;
-
 	sol::function* onNewAdmiralCreatedFunc = nullptr;
 
 	sol::function* onShortcutTriggeredFunc = nullptr;
-
-	sol::function* onBecomesFactionLeaderFunc = nullptr;
-	sol::function* onBecomesFactionHeirFunc = nullptr;
+	void checkLuaFunc(sol::function** lRef);
 
 
 
 private:
-	void checkLuaFunc(sol::function** lRef);
 
 };
 

@@ -41,5 +41,6 @@ namespace gameHelpers
 	void saveGame(const char* path);
 	void historicEvent(const char* name, const char* title, const char* description);
 	void scriptCommand(const char* command, const char* args);
+	const char* getReligionName(const int index);
 };
 

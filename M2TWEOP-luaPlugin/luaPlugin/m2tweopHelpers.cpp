@@ -12,7 +12,7 @@ namespace m2tweopHelpers
 	}
 	bool isTileFree(int x, int y)
 	{
-		int xy[2]{x,y};
+		int xy[2]{ x,y };
 		return (*(*plugData::data.funcs.isTileFree))(xy);
 	}
 	std::tuple<int, int> getGameTileCoordsWithCursor()
@@ -25,7 +25,7 @@ namespace m2tweopHelpers
 	}
 	int getTileRegionID(int x, int y)
 	{
-		return (*(*plugData::data.funcs.getTileRegionID))(x,y);
+		return (*(*plugData::data.funcs.getTileRegionID))(x, y);
 	}
 	factionStruct* getRegionOwner(int regionID)
 	{
@@ -150,9 +150,9 @@ namespace m2tweopHelpers
 	}
 	void setEDUUnitsSize(signed short min, signed short max)
 	{
-		(*(*plugData::data.funcs.setEDUUnitsSize))(min,max);
+		(*(*plugData::data.funcs.setEDUUnitsSize))(min, max);
 	}
-	std::tuple<int,int,void*> loadTextureToGame(const std::string& path)
+	std::tuple<int, int, void*> loadTextureToGame(const std::string& path)
 	{
 		int x = 0;
 		int y = 0;
@@ -162,7 +162,7 @@ namespace m2tweopHelpers
 			x, y
 		});
 
-		return std::make_tuple(x,y, reinterpret_cast<void*>(retTexture));
+		return std::make_tuple(x, y, reinterpret_cast<void*>(retTexture));
 	}
 	void unloadTextureFromGame(void* texture)
 	{
@@ -196,7 +196,7 @@ namespace m2tweopHelpers
 		(*(*plugData::data.funcs.setGuildCooldown))(turns);
 	}
 
-	void getGameVersion()
+	int getGameVersion()
 	{
 		return (*(*plugData::data.funcs.getGameVersion))();
 	}

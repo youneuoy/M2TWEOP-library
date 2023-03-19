@@ -42,8 +42,10 @@ public:
 		}
 		if (!(m_pProc = (T)::GetProcAddress((HMODULE)hModule, m_strNameProcedure.c_str())))
 		{
+			std::stringstream error2;
+			error2 << "Can't load function: " << m_strNameProcedure.c_str();
 			m_pProc = (T)emptyProc;
-			MessageBoxA(NULL, "Can`t load function", "Attention", NULL);
+			MessageBoxA(NULL, error2.str().c_str(), "Attention", NULL);
 			return FALSE;
 		}
 		return TRUE;
@@ -84,32 +86,12 @@ public:
 
 	ProcLoader<void(__cdecl*)(int)> onChangeTurnNum;
 
+	ProcLoader<void(__cdecl*)(DWORD*, DWORD**, DWORD)> onEventWrapper;
 
-	ProcLoader<void(__cdecl*)(factionStruct*)> onPreFactionTurnStart;
-	ProcLoader<void(__cdecl*)(factionStruct*)> onFactionTurnStart;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onGeneralDevastatesTile;
-	ProcLoader<void(__cdecl*)(factionStruct*)> onFactionTurnEnd;
-	ProcLoader<void(__cdecl*)(factionStruct*)> onFactionNewCapital;
-	ProcLoader<void(__cdecl*)(factionStruct*, factionStruct*)> onFactionWarDeclared;
-	ProcLoader<void(__cdecl*)(factionStruct*, factionStruct*)> onFactionAllianceDeclared;
-	ProcLoader<void(__cdecl*)(factionStruct*, factionStruct*)> onFactionTradeAgreementMade;
-	ProcLoader<void(__cdecl*)(factionStruct*, factionStruct*)> onFactionBreakAlliance;
-
-
-	ProcLoader<void(__cdecl*)(factionStruct*, factionStruct*, float)> onGiveMoney;
-	ProcLoader<void(__cdecl*)(factionStruct*, factionStruct*)> onUpdateAttitude;
-	ProcLoader<void(__cdecl*)(factionStruct*, factionStruct*, float)> onDemeanour;
-
-	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onCharacterSelected;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onMultiTurnMove;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*, generalCharacterictics*)> onGeneralAssaultsGeneral;
-
-	ProcLoader<void(__cdecl*)(generalCharacterictics*, settlementStruct*, fortStruct*)> onGeneralAssaultsResidence;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*, settlementStruct*)> onGeneralCaptureSettlement;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onGeneralCaptureResidence;
+	ProcLoader<void(__cdecl*)(namedCharacter*)> onCharacterSelected;
+	ProcLoader<void(__cdecl*)(namedCharacter*)> onMultiTurnMove;
 
 	ProcLoader<void(__cdecl*)(settlementStruct*, fortStruct*)> onSiegeEquipmentCompleted;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onPostBattle;
 
 	ProcLoader<void(__cdecl*)(settlementStruct*)> onSettlementSelected;
 	ProcLoader<void(__cdecl*)(settlementStruct*)> onSettlementUpgraded;
@@ -118,45 +100,24 @@ public:
 	ProcLoader<void(__cdecl*)(settlementStruct*)> onCityRiots;
 
 	ProcLoader<void(__cdecl*)(settlementStruct*)> onUngarrisonedSettlement;
-	ProcLoader<void(__cdecl*)(fortStruct*)> onUngarrisonedFort;
 
 	ProcLoader<void(__cdecl*)(settlementStruct*, factionStruct*, factionStruct*)> onGiveSettlement;
 
-	ProcLoader<void(__cdecl*)(generalCharacterictics*, factionStruct*)> onOccupySettlement;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*, factionStruct*)> onExterminatePopulation;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*, factionStruct*)> onSackSettlement;
+	ProcLoader<void(__cdecl*)(namedCharacter*, factionStruct*)> onOccupySettlement;
+	ProcLoader<void(__cdecl*)(namedCharacter*, factionStruct*)> onExterminatePopulation;
+	ProcLoader<void(__cdecl*)(namedCharacter*, factionStruct*)> onSackSettlement;
 
 
 	ProcLoader<void(__cdecl*)(settlementStruct*, const char*)> onAddedToBuildingQueue;
 	ProcLoader<void(__cdecl*)(settlementStruct*, const char*)> onBuildingDestroyed;
 	ProcLoader<void(__cdecl*)(factionStruct*, settlementStruct*)> onBuildingCompleted;
-
-	ProcLoader<void(__cdecl*)(const char*)> onEventCounter;
-	ProcLoader<void(__cdecl*)(void*, settlementStruct*)> onPopeAcceptsCrusadeTarget;
-	ProcLoader<void(__cdecl*)(void*, settlementStruct*)> onCrusadeCalled;
-	ProcLoader<void(__cdecl*)(void*, settlementStruct*)> onCrusadeEnds;
-	ProcLoader<void(__cdecl*)(void*, settlementStruct*)> onPopeRejectsCrusadeTarget;
-	ProcLoader<void(__cdecl*)(void*, settlementStruct*, stackStruct*)> onArmyTakesCrusadeTarget;
-	ProcLoader<void(__cdecl*)(void*, settlementStruct*, factionStruct*)> onUnitsDesertCrusade;
-
-	ProcLoader<void(__cdecl*)(factionStruct*)> onFactionExcommunicated;
-
-	ProcLoader<void(__cdecl*)(int)> onDisaster;
-
-	ProcLoader<void(__cdecl*)(factionStruct*)> onHordeFormed;
-	ProcLoader<void(__cdecl*)(factionStruct*, factionStruct*)> onPopeElected;
-	ProcLoader<void(__cdecl*)(factionStruct*)> onVotedForPope;
 	ProcLoader<void(__cdecl*)(factionStruct*)> onAssassinCaughtAttackingPope;
 	ProcLoader<void(__cdecl*)(factionStruct*, settlementStruct*)> onInquisitorAppointed;
 
 
 	ProcLoader<void(__cdecl*)(settlementStruct*, const char*)> onAddedToTrainingQueue;
-	ProcLoader<void(__cdecl*)(factionStruct*, unit*)> onUnitDisbanded;
 	ProcLoader<void(__cdecl*)(factionStruct*, settlementStruct*, unit*)> onUnitTrained;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*, int, settlementStruct*)> onAgentCreated;
-
-	ProcLoader<void(__cdecl*)(factionStruct*, factionStruct*, int, int)> onObjSeen;
-	ProcLoader<void(__cdecl*)(factionStruct*, int, int)> onTileSeen;
+	ProcLoader<void(__cdecl*)(namedCharacter*, int, settlementStruct*)> onAgentCreated;
 
 
 	ProcLoader<void(__cdecl*)(settlementStruct*)> onSettlementPanelOpen;
@@ -168,10 +129,10 @@ public:
 	ProcLoader<void(__cdecl*)(factionStruct*)> onPreBattlePanelOpen;
 	ProcLoader<void(__cdecl*)()> onNavalAutoResolvePanelOpen;
 
-	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onCharacterPanelOpen;
+	ProcLoader<void(__cdecl*)(namedCharacter*)> onCharacterPanelOpen;
 	ProcLoader<void(__cdecl*)(settlementStruct*)> onTradePanelOpen;
 	ProcLoader<void(__cdecl*)(settlementStruct*)> onRequestBuildingAdvice;
-	ProcLoader<void(__cdecl*)(settlementStruct*, EduEntry*)> onRequestTrainingAdvice;
+	ProcLoader<void(__cdecl*)(settlementStruct*, eduEntry*)> onRequestTrainingAdvice;
 
 	ProcLoader<void(__cdecl*)(factionStruct*, int)> onMessageOpen;
 	ProcLoader<void(__cdecl*)(factionStruct*, int)> onIncomingMessage;
@@ -189,26 +150,12 @@ public:
 	ProcLoader<void(__cdecl*)()> onNavalPreBattleScrollAdviceRequested;
 	ProcLoader<void(__cdecl*)(void*)> onCollegeOfCardinalsPanelOpen;
 
-
-	ProcLoader<void(__cdecl*)(int)> onGameReloaded;
-
-	ProcLoader<void(__cdecl*)(factionStruct*, const char*, factionStruct*)> onTransgression;
-
 	ProcLoader<void(__cdecl*)(settlementStruct*, const char*)> onGuildUpgraded;
 	ProcLoader<void(__cdecl*)(settlementStruct*, unsigned char)> onGuildDestroyed;
 
-	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onBrotherAdopted;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onBirth;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onCharacterComesOfAge;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onCharacterMarries;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onCharacterBecomesAFather;
-
-	ProcLoader<void(__cdecl*)(generalCharacterictics*, settlementStruct*)> onNewAdmiralCreated;
+	ProcLoader<void(__cdecl*)(namedCharacter*, settlementStruct*)> onNewAdmiralCreated;
 
 	ProcLoader<void(__cdecl*)(const char*)> onShortcutTriggered;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onCharacterMarriesPrincess;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onBecomesFactionLeader;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*)> onBecomesFactionHeir;
 
 	ProcLoader<void(__cdecl*)(LPDIRECT3DDEVICE9 pDevice)> drawOnEndScene;
 	ProcLoader<void(__cdecl*)(LPDIRECT3DDEVICE9 pDevice)> onReset;
@@ -240,7 +187,7 @@ public:
 
 	static void init();
 
-	static void __fastcall onEvent(DWORD** vTab);
+	static void __fastcall onEvent(DWORD** vTab, DWORD arg2);
 
 	//from here calls all plugins
 

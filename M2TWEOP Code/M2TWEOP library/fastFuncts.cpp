@@ -80,7 +80,7 @@ namespace fastFuncts
 	}
 	NOINLINE EOP_EXPORT void ViewTacticalMap(int x, int y)
 	{
-		globals::dataS.Modules.tacticalMapVeiwer.View(x,y);
+		globals::dataS.Modules.tacticalMapVeiwer.View(x, y);
 	}
 	NOINLINE EOP_EXPORT bool IsStratMap()
 	{
@@ -91,7 +91,7 @@ namespace fastFuncts
 			return false;
 		return true;
 	}
-	
+
 	NOINLINE EOP_EXPORT void setCharacterType(general* character, int typeID, int subFaction, int factionDipNum)
 	{
 		DWORD adrFunc = 0x0;
@@ -167,7 +167,7 @@ namespace fastFuncts
 		return year;
 	}
 
-	NOINLINE EOP_EXPORT void setHeir(generalCharacterictics* gen, bool isJustSet)
+	NOINLINE EOP_EXPORT void setHeir(namedCharacter* gen, bool isJustSet)
 	{
 		factionStruct* fac = gen->faction;
 		if (isJustSet == true)
@@ -491,7 +491,7 @@ namespace fastFuncts
 		return;
 	}
 
-	NOINLINE EOP_EXPORT void addTrait(generalCharacterictics* character, const char* traitName, int traitLevel)
+	NOINLINE EOP_EXPORT void addTrait(namedCharacter* character, const char* traitName, int traitLevel)
 	{
 
 		DWORD adrFunc = 0;
@@ -552,7 +552,7 @@ namespace fastFuncts
 		}
 	}
 
-	NOINLINE EOP_EXPORT void removeTrait(generalCharacterictics* character, const char* traitName)
+	NOINLINE EOP_EXPORT void removeTrait(namedCharacter* character, const char* traitName)
 	{
 		DWORD adrFunc = 0;
 
@@ -610,7 +610,7 @@ namespace fastFuncts
 		}
 	}
 
-	EOP_EXPORT int addAnchillary(generalCharacterictics* character, anchillary* anch)
+	EOP_EXPORT int addAnchillary(namedCharacter* character, anchillary* anch)
 	{
 		if (character == nullptr || anch == nullptr)return 0;
 
@@ -637,7 +637,7 @@ namespace fastFuncts
 		return retr;
 	}
 
-	EOP_EXPORT void removeAnchillary(generalCharacterictics* character, anchillary* anch)
+	EOP_EXPORT void removeAnchillary(namedCharacter* character, anchillary* anch)
 	{
 		if (character == nullptr || anch == nullptr)return;
 
@@ -1239,7 +1239,7 @@ namespace fastFuncts
 			push edi
 			push ebp
 			mov ebp, facOffset
-			lea ecx, [ebp+0x21608]
+			lea ecx, [ebp + 0x21608]
 			pop ebp
 			mov eax, funcC
 			call eax

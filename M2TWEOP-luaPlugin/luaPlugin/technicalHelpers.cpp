@@ -28,26 +28,26 @@ namespace technicalHelpers
 		return strTo;
 	}
 
-	void namedCharSetLocalizedFullName(generalCharacterictics* genChar, const char* str)
+	void namedCharSetLocalizedFullName(namedCharacter* genChar, const char* str)
 	{
 		(*(*plugData::data.funcsTech.createUniString))(genChar->localizedFullName, str);
 	}
 
-	void namedCharSetLocalizedNameForSave(generalCharacterictics* genChar, const char* str)
+	void namedCharSetLocalizedNameForSave(namedCharacter* genChar, const char* str)
 	{
 		(*(*plugData::data.funcsTech.createUniString))(genChar->localizedNameForSave, str);
 	}
 
-	void namedCharSetLocalizedNextNameForSave(generalCharacterictics* genChar, const char* str)
+	void namedCharSetLocalizedNextNameForSave(namedCharacter* genChar, const char* str)
 	{
 		(*(*plugData::data.funcsTech.createUniString))(genChar->localizedNextNameForSave, str);
 	}
 
-	void namedCharSetLocalizedNicknameForSave(generalCharacterictics* genChar, const char* str)
+	void namedCharSetLocalizedNicknameForSave(namedCharacter* genChar, const char* str)
 	{
 		(*(*plugData::data.funcsTech.createUniString))(genChar->localizedNicknameForSave, str);
 	}
-	void createUniString(UNICODE_STRING** &newUniStringPointer, const char* nonUniStr)
+	void createUniString(UNICODE_STRING**& newUniStringPointer, const char* nonUniStr)
 	{
 		(*(*plugData::data.funcsTech.createUniString))(newUniStringPointer, nonUniStr);
 	}

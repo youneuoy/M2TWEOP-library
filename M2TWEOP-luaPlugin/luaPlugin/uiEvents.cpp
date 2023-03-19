@@ -65,7 +65,7 @@ void onNavalAutoResolvePanelOpen()
 	}
 }
 
-void onCharacterPanelOpen(generalCharacterictics* pers)
+void onCharacterPanelOpen(namedCharacter* pers)
 {
 	if (plugData::data.luaAll.onCharacterPanelOpenFunc != nullptr)
 	{
@@ -89,7 +89,7 @@ void onRequestBuildingAdvice(settlementStruct* sett)
 	}
 }
 
-void onRequestTrainingAdvice(settlementStruct* sett, EduEntry* recommend)
+void onRequestTrainingAdvice(settlementStruct* sett, eduEntry* recommend)
 {
 	if (plugData::data.luaAll.onRequestTrainingAdviceFunc != nullptr)
 	{
@@ -165,7 +165,7 @@ void onSettlementScrollAdviceRequested(settlementStruct* sett, const char* scrNa
 {
 	if (plugData::data.luaAll.onSettlementScrollAdviceRequestedFunc != nullptr)
 	{
-		tryLua((*plugData::data.luaAll.onSettlementScrollAdviceRequestedFunc)(sett,scrName));
+		tryLua((*plugData::data.luaAll.onSettlementScrollAdviceRequestedFunc)(sett, scrName));
 	}
 }
 

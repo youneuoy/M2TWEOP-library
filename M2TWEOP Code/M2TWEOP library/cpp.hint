@@ -1,0 +1,3 @@
+#define NOINLINE __declspec(noinline)
+#define EOP_EXPORT extern "C" __declspec(dllexport)
+#define EOP_EXPORT extern "C" __declspec(dllimport)
