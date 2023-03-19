@@ -46,6 +46,16 @@ namespace fastFuncts
 
 		revealTileF(faction->tilesFac,coords,2,-1.0);
 	}
+	NOINLINE EOP_EXPORT void revealTileForEveryone(int coords[2])
+	{
+		UINT32 numFac = fastFuncts::getFactionsCount();
+		factionStruct** listFac = fastFuncts::getFactionsList();
+
+		for (UINT32 i = 0; i < numFac; i++)
+		{
+			revealTile(listFac[i], coords);
+		}
+	}
 	NOINLINE EOP_EXPORT void hideRevealedTile(factionStruct* faction, int coords[2])
 	{
 		if (IsStratMap() == false)
@@ -65,6 +75,16 @@ namespace fastFuncts
 		}
 
 		unrevealTileF(faction->tilesFac, coords, 1);
+	}
+	NOINLINE EOP_EXPORT void hideRevealedTileForEveryone(int coords[2])
+	{
+		UINT32 numFac = fastFuncts::getFactionsCount();
+		factionStruct** listFac = fastFuncts::getFactionsList();
+
+		for (UINT32 i = 0; i < numFac; i++)
+		{
+			hideRevealedTile(listFac[i], coords);
+		}
 	}
 	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner)
 	{
