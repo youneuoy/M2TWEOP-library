@@ -136,15 +136,11 @@ namespace stratModelsChange
 		int8_t Vis = 0;
 	};
 	vector<visibilityCrashFixS> crashFixAr;
-	//Change only when render queue is happening to avoid crashes
+
 	void checkAndChangeStratModels()
 	{
 		if (changeModelsNeededNow == modelsChangeStatus::needFixHiding)
 		{
-			//for (stratModelChangeRecord* changeMod : stratModelChangeList) //static models
-			//{
-			//	fastFuncts::hideRevealedTileForEveryone(changeMod->x, changeMod->y);
-			//}
 			for (auto& visFix : crashFixAr)
 			{
 				fastFuncts::setTileVisibility(visFix.Fac, visFix.X, visFix.Y, visFix.Vis);
@@ -185,7 +181,6 @@ namespace stratModelsChange
 					fastFuncts::setTileVisibility(listFac[i], changeMod->x, changeMod->y, 1);
 				}
 
-				//fastFuncts::revealTileForEveryone(changeMod->x, changeMod->y);
 			}
 		}
 		for (stratModelCharacterRecordChange* changeMod : stratModelCharacterChangeList) //character models
