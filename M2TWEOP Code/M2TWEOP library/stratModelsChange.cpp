@@ -6,9 +6,9 @@ namespace stratModelsChange
 {
 	enum class modelsChangeStatus
 	{
-		changed=0,
-		needFixHiding=1,
-		needChange=2
+		changed = 0,
+		needFixHiding = 1,
+		needChange = 2
 	};
 	modelsChangeStatus changeModelsNeededNow = modelsChangeStatus::changed;
 
@@ -123,25 +123,42 @@ namespace stratModelsChange
 
 		return nullptr;
 	}
+	struct visibilityCrashFixS
+	{
+		visibilityCrashFixS(int x, int y, factionStruct* fac, int8_t vis)
+			:X(x), Y(y), Fac(fac), Vis(vis)
+		{
 
+		}
+		int X;
+		int Y;
+		factionStruct* Fac = nullptr;
+		int8_t Vis = 0;
+	};
+	vector<visibilityCrashFixS> crashFixAr;
 	//Change only when render queue is happening to avoid crashes
 	void checkAndChangeStratModels()
 	{
 		if (changeModelsNeededNow == modelsChangeStatus::needFixHiding)
 		{
-			for (stratModelChangeRecord* changeMod : stratModelChangeList) //static models
+			//for (stratModelChangeRecord* changeMod : stratModelChangeList) //static models
+			//{
+			//	fastFuncts::hideRevealedTileForEveryone(changeMod->x, changeMod->y);
+			//}
+			for (auto& visFix : crashFixAr)
 			{
-				fastFuncts::hideRevealedTileForEveryone(changeMod->x, changeMod->y);
-				changeModelsNeededNow = modelsChangeStatus::changed;
+				fastFuncts::setTileVisibility(visFix.Fac, visFix.X, visFix.Y, visFix.Vis);
 			}
+			crashFixAr.clear();
+			changeModelsNeededNow = modelsChangeStatus::changed;
 			return;
 		}
 		if (changeModelsNeededNow == modelsChangeStatus::changed)
 		{
-			changeModelsNeededNow = modelsChangeStatus::needFixHiding;
 			return;
 		}
 
+		crashFixAr.reserve(stratModelChangeList.size());
 		for (stratModelChangeRecord* changeMod : stratModelChangeList) //static models
 		{
 			stratModelRecord* mod1 = findStratModel(changeMod->modelId);
@@ -153,7 +170,22 @@ namespace stratModelsChange
 
 			if (changeModel(changeMod->x, changeMod->y, mod1->modelP, mod2->modelP) == true)
 			{
-				fastFuncts::revealTileForEveryone(changeMod->x, changeMod->y);
+				UINT32 numFac = fastFuncts::getFactionsCount();
+				factionStruct** listFac = fastFuncts::getFactionsList();
+
+				for (UINT32 i = 0; i < numFac; i++)
+				{
+					auto vis = fastFuncts::getTileVisibility(listFac[i], changeMod->x, changeMod->y);
+					if (vis == 0)
+					{
+						continue;
+					}
+
+					crashFixAr.emplace_back(changeMod->x, changeMod->y, listFac[i], vis);
+					fastFuncts::setTileVisibility(listFac[i], changeMod->x, changeMod->y, 1);
+				}
+
+				//fastFuncts::revealTileForEveryone(changeMod->x, changeMod->y);
 			}
 		}
 		for (stratModelCharacterRecordChange* changeMod : stratModelCharacterChangeList) //character models
@@ -168,7 +200,7 @@ namespace stratModelsChange
 			i--;
 		}
 
-		changeModelsNeededNow = modelsChangeStatus::changed;
+		changeModelsNeededNow = modelsChangeStatus::needFixHiding;
 	}
 
 	void update()

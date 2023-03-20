@@ -1371,6 +1371,16 @@ struct coords {
 	int yCoord;
 };
 
+struct factionTileStruct {
+	int8_t* tilesVisiblity;
+	int tilesXBound;
+	int tilesYBound;
+	undefined field3_0xc[28];
+	void* revealedTiles;
+	int revealedTilesContainerAllocatedSize;
+	int revealedTilesNumber;
+	undefined field7_0x34[24];
+};
 //faction
 struct factionStruct {
 	undefined field_0x0[180];
@@ -1412,7 +1422,7 @@ struct factionStruct {
 	undefined field_0x150[4];
 	int portBuildingsNum;
 	undefined field_0x158[68];
-	void* tilesFac;
+	factionTileStruct* tilesFac;
 	undefined field_0x1a0[2208];
 	UINT32 religion; /* number of religion */
 	undefined field_0xa44[84];

@@ -26,88 +26,15 @@ namespace fastFuncts
 
 		return nullptr;
 	}
-	NOINLINE EOP_EXPORT void revealTile(factionStruct* faction, int x, int y)
+	NOINLINE EOP_EXPORT int8_t getTileVisibility(factionStruct* faction, int x, int y)
 	{
-		if (IsStratMap() == false)
-		{
-			return;
-		}
-		typedef int* (__thiscall* RevealTileF)(void* tilesFac, int* xy, int some, float some2);
-
-		RevealTileF revealTileF = nullptr;
-		if (globals::dataS.gamever == 2)//steam
-		{
-			revealTileF = (RevealTileF)0x004baea0;
-		}
-		else
-		{
-			revealTileF = (RevealTileF)0x004ba910;
-		}
-
-		int coords[2] = { x,y };
-		revealTileF(faction->tilesFac, coords, 2, -1.0);
+		return faction->tilesFac->tilesVisiblity[faction->tilesFac->tilesXBound * (y)+x];
 	}
-	NOINLINE EOP_EXPORT void revealTileForEveryone(int x, int y)
+	NOINLINE EOP_EXPORT void setTileVisibility(factionStruct* faction, int x, int y, int8_t vis)
 	{
-		UINT32 numFac = fastFuncts::getFactionsCount();
-		factionStruct** listFac = fastFuncts::getFactionsList();
-
-		for (UINT32 i = 0; i < numFac; i++)
-		{
-			revealTile(listFac[i], x, y);
-		}
+		faction->tilesFac->tilesVisiblity[faction->tilesFac->tilesXBound * (y)+x] = vis;
 	}
-	NOINLINE EOP_EXPORT void hideRevealedTile(factionStruct* faction, int x, int y)
-	{
-		if (IsStratMap() == false)
-		{
-			return;
-		}
-		struct SomeArgForHiding
-		{
-			int x;
-			int y;
-			int some = 2;
-			float some2 = -1;
-		};
-		typedef int* (__thiscall* UnRevealTileF)(void* tilesFac, SomeArgForHiding* someArgForHiding, unsigned char isDeleteXYArray);
 
-		UnRevealTileF unrevealTileF = nullptr;
-		if (globals::dataS.gamever == 2)//steam
-		{
-			unrevealTileF = (UnRevealTileF)0x004baf80;
-		}
-		else
-		{
-			unrevealTileF = (UnRevealTileF)0x004ba9f0;
-		}
-
-		SomeArgForHiding someArg;
-		someArg.x = x;
-		someArg.y = y;
-
-		void** revealedTiles = (void**)faction->tilesFac;
-		SomeArgForHiding** tilesArr = (SomeArgForHiding**)revealedTiles[10];
-		int num = (int)revealedTiles[12];
-		for (int i = 0; i < num; i++)
-		{
-			if (tilesArr[i]->x == x && tilesArr[i]->y == y)
-			{
-				unrevealTileF(faction->tilesFac, tilesArr[i], 1);
-				return;
-			}
-		}
-	}
-	NOINLINE EOP_EXPORT void hideRevealedTileForEveryone(int x, int y)
-	{
-		UINT32 numFac = fastFuncts::getFactionsCount();
-		factionStruct** listFac = fastFuncts::getFactionsList();
-
-		for (UINT32 i = 0; i < numFac; i++)
-		{
-			hideRevealedTile(listFac[i], x, y);
-		}
-	}
 	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner)
 	{
 		DWORD adrFunc = 0x0;
