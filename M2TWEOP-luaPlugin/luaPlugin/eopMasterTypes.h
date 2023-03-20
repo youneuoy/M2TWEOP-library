@@ -8,6 +8,12 @@ struct Text3DDrawable
 	float xCoord;
 	float yCoord;
 	float zCoord;
+	float xSize = 1;
+	float ySize = 1;
+	float zSize = 1;
+	float xRoll = 1;
+	float yRoll = 90;
+	float zRoll = 1;
 	bool isDrawOnce;
 	bool isDeleteNeeded;
 };

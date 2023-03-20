@@ -113,6 +113,8 @@ public:
 	ProcLoader<void(__cdecl*)(Text3DDrawable* text)> StopDrawingText;
 	ProcLoader<void(__cdecl*)(Text3DDrawable* text)> DrawingTextOnce;
 	ProcLoader<void(__cdecl*)(Text3DDrawable* text)> Delete3dText;
+	ProcLoader<void(__cdecl*)(Text3DDrawable* text, float scaleX, float scaleY, float scaleZ)> SetDimensionsTextXYZ;
+	ProcLoader<void(__cdecl*)(Text3DDrawable* text, float rotX, float rotY, float rotZ)> SetRotationTextXYZ;
 
 
 	ProcLoader<void(__cdecl*)(const char*, UINT32)> addModelToGame;

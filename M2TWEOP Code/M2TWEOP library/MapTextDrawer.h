@@ -12,6 +12,12 @@ namespace MapTextDrawer
 		float xCoord;
 		float yCoord;
 		float zCoord;
+		float xSize=1;
+		float ySize=0.2;
+		float zSize=1;
+		float xRoll=1;
+		float yRoll=90;
+		float zRoll=1;
 		bool isDrawOnce;
 		bool isDeleteNeeded;
 	};
@@ -26,6 +32,8 @@ namespace MapTextDrawer
 	NOINLINE EOP_EXPORT void Delete3dText(Text3DDrawable*text);
 
 	NOINLINE EOP_EXPORT void ScaleText(Text3DDrawable* text,float scale);
+	NOINLINE EOP_EXPORT void SetDimensionsTextXYZ(Text3DDrawable* text,float scaleX, float scaleY, float scaleZ);
+	NOINLINE EOP_EXPORT void SetRotationTextXYZ(Text3DDrawable* text,float rotX, float rotY, float rotZ);
 	NOINLINE EOP_EXPORT void ChangeTextColor(Text3DDrawable* text, unsigned char a, unsigned char r, unsigned char g, unsigned char b);
 
 

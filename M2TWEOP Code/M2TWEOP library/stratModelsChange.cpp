@@ -178,7 +178,7 @@ namespace stratModelsChange
 					}
 
 					crashFixAr.emplace_back(changeMod->x, changeMod->y, listFac[i], vis);
-					fastFuncts::setTileVisibility(listFac[i], changeMod->x, changeMod->y, 1);
+					fastFuncts::setTileVisibility(listFac[i], changeMod->x, changeMod->y, 0);
 				}
 
 			}

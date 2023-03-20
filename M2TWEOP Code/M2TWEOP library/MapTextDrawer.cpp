@@ -16,17 +16,14 @@ namespace MapTextDrawer
 		auto device = graphicsExport::GetDevice();
 
 		D3DXMATRIX matRotate;
-		float xR = D3DXToRadian(1);
-		float yR = D3DXToRadian(90);
-		float zR = D3DXToRadian(1);
+		float xR = D3DXToRadian(text->xRoll);
+		float yR = D3DXToRadian(text->yRoll);
+		float zR = D3DXToRadian(text->zRoll);
 		D3DXMatrixRotationYawPitchRoll(&matRotate, xR, yR, zR);
 
 		D3DXMATRIX matScale;
 
-		float scalex = 1;
-		float scaley = 0.2;
-		float scalez = 1;
-		D3DXMatrixScaling(&matScale, scalex, scaley, scalez);
+		D3DXMatrixScaling(&matScale, text->xSize, text->ySize, text->zSize);
 
 
 
@@ -175,6 +172,28 @@ namespace MapTextDrawer
 		}
 
 		TextMesh->UnlockVertexBuffer();
+	}
+	NOINLINE EOP_EXPORT void SetDimensionsTextXYZ(Text3DDrawable* text, float scaleX, float scaleY, float scaleZ)
+	{
+		if (text == nullptr)
+		{
+			return;
+		}
+
+		text->xSize = scaleX;
+		text->ySize = scaleY;
+		text->zSize = scaleZ;
+	}
+	NOINLINE EOP_EXPORT void SetRotationTextXYZ(Text3DDrawable* text, float rotX, float rotY, float rotZ)
+	{
+		if (text == nullptr)
+		{
+			return;
+		}
+
+		text->xRoll = rotX;
+		text->xRoll = rotY;
+		text->zRoll = rotZ;
 	}
 	NOINLINE EOP_EXPORT void ChangeTextColor(Text3DDrawable* text, unsigned char a, unsigned char r, unsigned char g, unsigned char b)
 	{

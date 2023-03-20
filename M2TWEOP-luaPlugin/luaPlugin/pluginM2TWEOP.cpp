@@ -49,6 +49,10 @@ int initPlugin(std::string* modPath)
 	plugData::data.funcs.StopDrawingText.Load(&plPath, &fName);
 	fName = "DrawingTextOnce";
 	plugData::data.funcs.DrawingTextOnce.Load(&plPath, &fName);
+	fName = "SetDimensionsTextXYZ";
+	plugData::data.funcs.SetDimensionsTextXYZ.Load(&plPath, &fName);
+	fName = "SetRotationTextXYZ";
+	plugData::data.funcs.SetRotationTextXYZ.Load(&plPath, &fName);
 
 	fName = "addModelToGame";
 	plugData::data.funcs.addModelToGame.Load(&plPath, &fName);

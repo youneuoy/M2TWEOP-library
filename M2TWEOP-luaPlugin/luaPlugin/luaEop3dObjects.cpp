@@ -74,6 +74,15 @@ void luaP::initEop3dObjects()
 
 	/***
 	3d text object. Not use it onPluginLoad(graphics system not initialized here yet).  
+	@tfield float xSize default value 1
+	@tfield float ySize default value 0.2
+	@tfield float zSize	default value 1
+	@tfield float xRoll default value 1
+	@tfield float yRoll default value 90
+	@tfield float zRoll default value 1
+	@tfield float xCoord
+	@tfield float yCoord
+	@tfield float zCoord
 	@tfield Scale Scale
 	@tfield ChangeColor ChangeColor
 	@tfield SetCoords SetCoords
@@ -87,6 +96,17 @@ void luaP::initEop3dObjects()
 
 	tables.text3dDrawable = luaState.new_usertype<Text3DDrawable>("Eop3dText");
 
+	tables.text3dDrawable.set("xSize", &Text3DDrawable::xSize);
+	tables.text3dDrawable.set("ySize", &Text3DDrawable::ySize);
+	tables.text3dDrawable.set("zSize", &Text3DDrawable::zSize);
+
+	tables.text3dDrawable.set("xRoll", &Text3DDrawable::xRoll);
+	tables.text3dDrawable.set("yRoll", &Text3DDrawable::yRoll);
+	tables.text3dDrawable.set("zRoll", &Text3DDrawable::zRoll);
+
+	tables.text3dDrawable.set("xCoord", &Text3DDrawable::xCoord);
+	tables.text3dDrawable.set("yCoord", &Text3DDrawable::yCoord);
+	tables.text3dDrawable.set("zCoord", &Text3DDrawable::zCoord);
 	/***
 	Scale 3d text.
 	@function Eop3dText:Scale
@@ -97,6 +117,7 @@ void luaP::initEop3dObjects()
 	newText:Scale(0.3);
 	*/
 	tables.text3dDrawable.set_function("Scale", &eop3dObjectsHelpers::ScaleText);
+
 	/***
 	Set 3d text color.
 	@function Eop3dText:ChangeColor
