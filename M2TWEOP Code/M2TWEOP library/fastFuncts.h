@@ -10,6 +10,9 @@
 
 namespace fastFuncts
 {
+	NOINLINE EOP_EXPORT void revealTile(factionStruct* faction, int x, int y);
+	NOINLINE EOP_EXPORT void hideRevealedTile(factionStruct* faction, int x, int y);
+
 	NOINLINE EOP_EXPORT int8_t getTileVisibility(factionStruct* faction, int x, int y);
 	NOINLINE EOP_EXPORT void setTileVisibility(factionStruct* faction, int x, int y, int8_t vis);
 

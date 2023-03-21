@@ -143,7 +143,7 @@ namespace stratModelsChange
 		{
 			for (auto& visFix : crashFixAr)
 			{
-				fastFuncts::setTileVisibility(visFix.Fac, visFix.X, visFix.Y, visFix.Vis);
+				fastFuncts::hideRevealedTile(visFix.Fac, visFix.X, visFix.Y);
 			}
 			crashFixAr.clear();
 			changeModelsNeededNow = modelsChangeStatus::changed;
@@ -178,7 +178,11 @@ namespace stratModelsChange
 					}
 
 					crashFixAr.emplace_back(changeMod->x, changeMod->y, listFac[i], vis);
-					fastFuncts::setTileVisibility(listFac[i], changeMod->x, changeMod->y, 0);
+
+					fastFuncts::revealTile(listFac[i], changeMod->x, changeMod->y);
+
+
+					//fastFuncts::setTileVisibility(listFac[i], changeMod->x, changeMod->y, 5);
 				}
 
 			}
