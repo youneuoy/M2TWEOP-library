@@ -620,9 +620,9 @@
 <details>
   <summary><a href="#M2TWEOP3dObjects">M2TWEOP3dObjects </a></summary>
     <li><a href="#M2TWEOP3dObjects">M2TWEOP3dObjects</a></li>
-    <li><a href="#M2TWEOP3dObjectsTable.MakeTextFont">M2TWEOP3dObjectsTable.MakeTextFont (fontName)</a></li>
-    <li><a href="#M2TWEOP3dObjectsTable.DeleteTextFont">M2TWEOP3dObjectsTable.DeleteTextFont (fondID)</a></li>
-    <li><a href="#M2TWEOP3dObjectsTable.Make3dText">M2TWEOP3dObjectsTable.Make3dText (fondID, text)</a></li>
+    <li><a href="#M2TWEOP3dObjects.MakeTextFont">M2TWEOP3dObjects.MakeTextFont (fontName)</a></li>
+    <li><a href="#M2TWEOP3dObjects.DeleteTextFont">M2TWEOP3dObjects.DeleteTextFont (fondID)</a></li>
+    <li><a href="#M2TWEOP3dObjects.Make3dText">M2TWEOP3dObjects.Make3dText (fondID, text)</a></li>
 </details>
 
 
@@ -663,7 +663,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-03-17 21:39:32</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-03-20 12:33:40</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -2184,15 +2184,15 @@
 	<td class="summary">Basic M2TWEOP3dObjects table.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#M2TWEOP3dObjectsTable.MakeTextFont">M2TWEOP3dObjectsTable.MakeTextFont (fontName)</a></td>
+	<td class="name" nowrap><a href="#M2TWEOP3dObjects.MakeTextFont">M2TWEOP3dObjects.MakeTextFont (fontName)</a></td>
 	<td class="summary">Create new 3d text font.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#M2TWEOP3dObjectsTable.DeleteTextFont">M2TWEOP3dObjectsTable.DeleteTextFont (fondID)</a></td>
+	<td class="name" nowrap><a href="#M2TWEOP3dObjects.DeleteTextFont">M2TWEOP3dObjects.DeleteTextFont (fondID)</a></td>
 	<td class="summary">Delete 3d text font.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#M2TWEOP3dObjectsTable.Make3dText">M2TWEOP3dObjectsTable.Make3dText (fondID, text)</a></td>
+	<td class="name" nowrap><a href="#M2TWEOP3dObjects.Make3dText">M2TWEOP3dObjects.Make3dText (fondID, text)</a></td>
 	<td class="summary">Create line of 3d text.</td>
 	</tr>
 </table>
@@ -17329,19 +17329,19 @@ M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>)
     <h3>Fields:</h3>
     <ul>
         <li><span class="parameter">MakeTextFont</span>
-            <span class="types"><a class="type" href="index.html#M2TWEOP3dObjectsTable.MakeTextFont">MakeTextFont</a></span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP3dObjects.MakeTextFont">MakeTextFont</a></span>
 
 
 
         </li>
         <li><span class="parameter">DeleteTextFont</span>
-            <span class="types"><a class="type" href="index.html#M2TWEOP3dObjectsTable.MakeTextFont">MakeTextFont</a></span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP3dObjects.MakeTextFont">MakeTextFont</a></span>
 
 
 
         </li>
         <li><span class="parameter">Make3dText</span>
-            <span class="types"><a class="type" href="index.html#M2TWEOP3dObjectsTable.Make3dText">Make3dText</a></span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP3dObjects.Make3dText">Make3dText</a></span>
 
 
 
@@ -17354,8 +17354,8 @@ M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>)
 
 </dd>
     <dt>
-    <a name = "M2TWEOP3dObjectsTable.MakeTextFont"></a>
-    <strong>M2TWEOP3dObjectsTable.MakeTextFont (fontName)</strong>
+    <a name = "M2TWEOP3dObjects.MakeTextFont"></a>
+    <strong>M2TWEOP3dObjects.MakeTextFont (fontName)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -17381,13 +17381,13 @@ M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>)
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);</pre>
+        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);</pre>
     </ul>
 
 </dd>
     <dt>
-    <a name = "M2TWEOP3dObjectsTable.DeleteTextFont"></a>
-    <strong>M2TWEOP3dObjectsTable.DeleteTextFont (fondID)</strong>
+    <a name = "M2TWEOP3dObjects.DeleteTextFont"></a>
+    <strong>M2TWEOP3dObjects.DeleteTextFont (fondID)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -17407,15 +17407,15 @@ M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>)
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
-	newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
-M2TWEOP3dObjectsTable.DeleteTextFont(newFont);</pre>
+        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+	newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
+M2TWEOP3dObjects.DeleteTextFont(newFont);</pre>
     </ul>
 
 </dd>
     <dt>
-    <a name = "M2TWEOP3dObjectsTable.Make3dText"></a>
-    <strong>M2TWEOP3dObjectsTable.Make3dText (fondID, text)</strong>
+    <a name = "M2TWEOP3dObjects.Make3dText"></a>
+    <strong>M2TWEOP3dObjects.Make3dText (fondID, text)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -17445,9 +17445,9 @@ M2TWEOP3dObjectsTable.DeleteTextFont(newFont);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
-newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
-M2TWEOP3dObjectsTable.DeleteTextFont(newFont);</pre>
+        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
+M2TWEOP3dObjects.DeleteTextFont(newFont);</pre>
     </ul>
 
 </dd>
@@ -17466,6 +17466,51 @@ M2TWEOP3dObjectsTable.DeleteTextFont(newFont);</pre>
 
     <h3>Fields:</h3>
     <ul>
+        <li><span class="parameter">xSize</span>
+            <span class="types"><span class="type">float</span></span>
+         default value 1
+        </li>
+        <li><span class="parameter">ySize</span>
+            <span class="types"><span class="type">float</span></span>
+         default value 0.2
+        </li>
+        <li><span class="parameter">zSize</span>
+            <span class="types"><span class="type">float</span></span>
+
+<pre><code>default value 1
+</code></pre>
+
+        </li>
+        <li><span class="parameter">xRoll</span>
+            <span class="types"><span class="type">float</span></span>
+         default value 1
+        </li>
+        <li><span class="parameter">yRoll</span>
+            <span class="types"><span class="type">float</span></span>
+         default value 90
+        </li>
+        <li><span class="parameter">zRoll</span>
+            <span class="types"><span class="type">float</span></span>
+         default value 1
+        </li>
+        <li><span class="parameter">xCoord</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">yCoord</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">zCoord</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
         <li><span class="parameter">Scale</span>
             <span class="types"><a class="type" href="index.html#Eop3dText:Scale">Scale</a></span>
 
@@ -17539,8 +17584,8 @@ M2TWEOP3dObjectsTable.DeleteTextFont(newFont);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
-newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
+        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
 newText:Scale(<span class="number">0.3</span>);</pre>
     </ul>
 
@@ -17587,8 +17632,8 @@ newText:Scale(<span class="number">0.3</span>);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
-newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
+        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
 newText:ChangeColor(<span class="number">255</span>,<span class="number">0</span>,<span class="number">255</span>,<span class="number">177</span>);</pre>
     </ul>
 
@@ -17629,8 +17674,8 @@ newText:ChangeColor(<span class="number">255</span>,<span class="number">0</span
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
-newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
+        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
 newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,<span class="number">0.2</span>);</pre>
     </ul>
 
@@ -17650,8 +17695,8 @@ newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
-newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
+        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
 newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,<span class="number">0.2</span>);
 newText:StartDrawing();</pre>
     </ul>
@@ -17672,8 +17717,8 @@ newText:StartDrawing();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
-newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
+        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
 newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,<span class="number">0.2</span>);
 newText:StartDrawing();
 <span class="comment">--some time we draw
@@ -17696,8 +17741,8 @@ newText:StartDrawing();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
-newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
+        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
 newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,<span class="number">0.2</span>);
 newText:DrawOnce();</pre>
     </ul>
@@ -17718,8 +17763,8 @@ newText:DrawOnce();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjectsTable.MakeTextFont(<span class="string">"Times New Roman"</span>);
-newText = M2TWEOP3dObjectsTable.Make3dText(newFont, <span class="string">"Some text"</span>);
+        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
 newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,<span class="number">0.2</span>);
 newText:DrawOnce();
 newText:Delete();</pre>
