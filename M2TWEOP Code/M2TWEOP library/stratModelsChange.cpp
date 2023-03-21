@@ -161,7 +161,7 @@ namespace stratModelsChange
 			if (mod1 == nullptr)continue;
 
 			stratModelRecord* mod2 = nullptr;
-
+			 
 			mod2 = findStratModel(changeMod->modelId2);
 
 			if (changeModel(changeMod->x, changeMod->y, mod1->modelP, mod2->modelP) == true)
