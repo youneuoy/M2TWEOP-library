@@ -11,6 +11,7 @@ namespace battleCreator
 	{
 		bool isGenerationNeeded = true;
 		bool isResultTransferNeeded = true;
+		bool isPlannedRetreatRoute = true;
 
 		atomic_bool isRunStarted{ false };
 		atomic_bool isRunEnded{ false };
@@ -50,6 +51,7 @@ namespace battleCreator
 		{
 			json.at("enableAutoGeneration").get_to(data.isGenerationNeeded);
 			json.at("enableResultsTransfer").get_to(data.isResultTransferNeeded);
+			json.at("isPlannedRetreatRoute").get_to(data.isPlannedRetreatRoute);
 		}
 		catch (jsn::json::type_error& e)
 		{
