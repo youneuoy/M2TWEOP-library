@@ -7,59 +7,75 @@ namespace PathFinder
 {
 	PathMap::PathMap(int xCenter, int yCenter, int radius)
 	{
+		Pather = new MicroPather(this, (radius * radius), radius);
 
-		Pather = new MicroPather(this, radius);
-		Diameter = radius * 2;
 		if (IsCoordsValid(xCenter, yCenter) == false)
 		{
 			return;
 		}
-		StateMap[(yCenter) * Diameter + xCenter] = PathNode(xCenter, yCenter, 1);
-		int coordsMod = 1;
-		do
+		XCenter = xCenter - radius;
+		YCenter = yCenter - radius;
+		//StateMap[(yCenter) * Diameter + xCenter] = PathNode(xCenter, yCenter, 1);
+
+		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
+		Diameter = radius * 2;
+		StateMap.resize(Diameter* Diameter + Diameter+1);
+		for (int x = 0; x <= Diameter; ++x)
 		{
-			int xMin = xCenter - coordsMod;
-			int xMax = xCenter + coordsMod;
-			int yMin = yCenter - coordsMod;
-			int yMax = yCenter + coordsMod;
-
-
-			for (int yDest = yMin, xDest = xMin; yDest < yMax; ++yDest)
+			for (int y = 0; y <= Diameter; ++y)
 			{
-				if (IsCoordsValid(xDest, yDest))
+				if (IsCoordsValid(x + xCenter, y + yCenter))
 				{
-					StateMap[yDest * Diameter + xDest] = PathNode(xDest, yDest, 1);
+					StateMap[x * Diameter + y] = PathNode(x + XCenter, y + YCenter, 1);
 				}
 			}
+		}
 
-			for (int yDest = yMin, xDest = xMax; yDest <= yMax; ++yDest)
-			{
-				if (IsCoordsValid(xDest, yDest))
-				{
-					StateMap[yDest * Diameter + xDest] = PathNode(xDest, yDest, 1);
-				}
-			}
-
-
-			for (int xDest = xMin+1, yDest = yMin; xDest < xMax; ++xDest)
-			{
-				if (IsCoordsValid(xDest, yDest))
-				{
-					StateMap[yDest * Diameter + xDest] = PathNode(xDest, yDest, 1);
-				}
-			}
-
-			for (int xDest = xMin, yDest = yMax; xDest < xMax; ++xDest)
-			{
-				if (IsCoordsValid(xDest, yDest))
-				{
-					StateMap[yDest * Diameter + xDest] = PathNode(xDest, yDest, 1);
-				}
-			}
+		//int coordsMod = 1;
+		//do
+		//{
+		//	int xMin = xCenter - coordsMod;
+		//	int xMax = xCenter + coordsMod;
+		//	int yMin = yCenter - coordsMod;
+		//	int yMax = yCenter + coordsMod;
 
 
-			++coordsMod;
-		} while (coordsMod <= radius);
+		//	for (int yDest = yMin, xDest = xMin; yDest < yMax; ++yDest)
+		//	{
+		//		if (IsCoordsValid(xDest, yDest))
+		//		{
+		//			StateMap[yDest * Diameter + xDest] = PathNode(xDest, yDest, 1);
+		//		}
+		//	}
+
+		//	for (int yDest = yMin, xDest = xMax; yDest <= yMax; ++yDest)
+		//	{
+		//		if (IsCoordsValid(xDest, yDest))
+		//		{
+		//			StateMap[yDest * Diameter + xDest] = PathNode(xDest, yDest, 1);
+		//		}
+		//	}
+
+
+		//	for (int xDest = xMin+1, yDest = yMin; xDest < xMax; ++xDest)
+		//	{
+		//		if (IsCoordsValid(xDest, yDest))
+		//		{
+		//			StateMap[yDest * Diameter + xDest] = PathNode(xDest, yDest, 1);
+		//		}
+		//	}
+
+		//	for (int xDest = xMin, yDest = yMax; xDest < xMax; ++xDest)
+		//	{
+		//		if (IsCoordsValid(xDest, yDest))
+		//		{
+		//			StateMap[yDest * Diameter + xDest] = PathNode(xDest, yDest, 1);
+		//		}
+		//	}
+
+
+		//	++coordsMod;
+		//} while (coordsMod <= radius);
 	}
 	float PathMap::CalculateDistance(int x, int y, int destX, int destY)
 	{
@@ -76,28 +92,50 @@ namespace PathFinder
 	}
 	void* PathMap::GetState(int x, int y)
 	{
-		return (void*)(y * Diameter + x);
-		/*int res;
-		auto f = StateMap.find(y * Diameter + x);
-		if (f == StateMap.end())
+		int idx = (x - XCenter) * Diameter + y - YCenter;
+		if (idx >= StateMap.size())
 		{
-			res = -1;
-		}
-		else
-		{
-			res = f->first;
+			return (void*)-1;
 		}
 
-		return (void*)res;*/
+		return (void*)idx;
+		//return (void*)(y * Diameter + x);
+		int res;
+		//auto f = StateMap.find(idx);
+		//if (f == StateMap.end())
+		//{
+		//	res = -1;
+		//}
+		//else
+		//{
+		//	res = f->first;
+		//}
+
+		//return (void*)res;
 	}
 
 	float PathMap::LeastCostEstimate(void* stateStart, void* stateEnd)
 	{
-		//do it later
-		return 99999.f;
+		return 99999999;
+	}
+
+	void PathMap::AdjOne(int x, int y, int currX, int currY, MP_VECTOR<micropather::StateCost>*& adjacent)
+	{
+		if (IsCoordsValid(currX, currY) && IsSameTypeOfGround(x, y, currX, currY))
+		{
+			void* statEn = GetState(currX, currY);
+			if ((int)statEn == -1)
+			{
+				return;
+			}
+			float distance = fastFuncts::GetMovepointsForReachNearTile(x, y, currX, currY);
+			StateCost nodeCost = { statEn, distance };
+			adjacent->push_back(nodeCost);
+		}
 	}
 	void PathMap::AdjacentCost(void* state, MP_VECTOR<micropather::StateCost>* adjacent)
 	{
+
 		if ((int)state == -1)
 		{
 			return;
@@ -106,54 +144,16 @@ namespace PathFinder
 		int x = statenode.X;
 		int y = statenode.Y;
 
-		int coordsMod = 1;
+		AdjOne(x, y, x - 1, y - 1, adjacent);
+		AdjOne(x, y, x, y - 1, adjacent);
+		AdjOne(x, y, x + 1, y - 1, adjacent);
 
-		int xMin = x - coordsMod;
-		int xMax = x + coordsMod;
-		int yMin = y - coordsMod;
-		int yMax = y + coordsMod;
+		AdjOne(x, y, x - 1, y + 1, adjacent);
+		AdjOne(x, y, x, y + 1, adjacent);
+		AdjOne(x, y, x + 1, y + 1, adjacent);
 
-
-		for (int yDest = yMin, xDest = xMin; yDest < yMax; ++yDest)
-		{
-			if (IsCoordsValid(xDest, yDest) && IsSameTypeOfGround(x, y, xDest, yDest))
-			{
-				float distance = fastFuncts::GetMovepointsForReachNearTile(x, y, xDest, yDest);
-				StateCost nodeCost = { GetState(xDest, yDest), distance };
-				adjacent->push_back(nodeCost);
-			}
-		}
-
-		for (int yDest = yMin, xDest = xMax; yDest <= yMax; ++yDest)
-		{
-			if (IsCoordsValid(xDest, yDest) && IsSameTypeOfGround(x, y, xDest, yDest))
-			{
-				float distance = fastFuncts::GetMovepointsForReachNearTile(x, y, xDest, yDest);
-				StateCost nodeCost = { GetState(xDest, yDest), distance };
-				adjacent->push_back(nodeCost);
-			}
-		}
-
-
-		for (int xDest = xMin + 1, yDest = yMin; xDest < xMax; ++xDest)
-		{
-			if (IsCoordsValid(xDest, yDest) && IsSameTypeOfGround(x, y, xDest, yDest))
-			{
-				float distance = fastFuncts::GetMovepointsForReachNearTile(x, y, xDest, yDest);
-				StateCost nodeCost = { GetState(xDest, yDest), distance };
-				adjacent->push_back(nodeCost);
-			}
-		}
-
-		for (int xDest = xMin, yDest = yMax; xDest < xMax; ++xDest)
-		{
-			if (IsCoordsValid(xDest, yDest) && IsSameTypeOfGround(x, y, xDest, yDest))
-			{
-				float distance = fastFuncts::GetMovepointsForReachNearTile(x, y, xDest, yDest);
-				StateCost nodeCost = { GetState(xDest, yDest), distance };
-				adjacent->push_back(nodeCost);
-			}
-		}
+		AdjOne(x, y, x - 1, y, adjacent);
+		AdjOne(x, y, x + 1, y, adjacent);
 	}
 	void PathMap::PrintStateInfo(void* state)
 	{
@@ -162,11 +162,11 @@ namespace PathFinder
 	bool PathMap::IsCoordsValid(int x, int y)
 	{
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
-		if (x > gameDataAll->stratMap->mapWidth)
+		if (x >= gameDataAll->stratMap->mapWidth)
 		{
 			return false;
 		}
-		if (y > gameDataAll->stratMap->mapHeight)
+		if (y >= gameDataAll->stratMap->mapHeight)
 		{
 			return false;
 		}

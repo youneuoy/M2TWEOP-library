@@ -47,14 +47,17 @@ namespace PathFinder
 	private:
 		MicroPather* Pather;
 		size_t Diameter = 0;
+		int XCenter=0;
+		int YCenter=0;
 		void* GetState(int x, int y);
 
 
-		std::unordered_map<int, PathNode, Hasher, EqualFn>StateMap;
+		std::vector<PathNode>StateMap;
 
 
 		float LeastCostEstimate(void* stateStart, void* stateEnd) override;
 		void AdjacentCost(void* state, MP_VECTOR< micropather::StateCost >* adjacent) override;
+		void AdjOne(int x, int y, int currX, int currY, MP_VECTOR<micropather::StateCost>*& adjacent);
 		void PrintStateInfo(void* state) override;
 
 
