@@ -104,7 +104,7 @@ namespace managerG
 		std::regex regex{ R"([\,\s]+)" };
 		jsn::json json = loadJsonFromFile(fPath);
 		std::string jsonStringValue;
-		std:bool jsonBoolValue;
+		bool jsonBoolValue;
 
 		try
 		{

@@ -683,5 +683,40 @@ namespace smallFuncs
 		return *dataOffsets::offsets.gameUnit_size;
 	}
 
+	float GetMinimumPossibleMovepointsForArmy(stackStruct* army)
+	{
+		if (army == nullptr)
+		{
+			return 0;
+		}
+
+		typedef float (__thiscall* GetUnitFullMovePointsF)(unit* un);
+
+		GetUnitFullMovePointsF getUnitFullMovePointsF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			getUnitFullMovePointsF = (GetUnitFullMovePointsF)0x00742b10;
+		}
+		else
+		{
+			getUnitFullMovePointsF = (GetUnitFullMovePointsF)0x00742380;
+		}
+		if (army->numOfUnits < 1)
+		{
+			return 0;
+		}
+		float minMp = getUnitFullMovePointsF(army->units[0]);
+
+		for (int i = 1; i < army->numOfUnits; ++i)
+		{
+			float unitFullMp = getUnitFullMovePointsF(army->units[i]);
+			if (unitFullMp < minMp)
+			{
+				minMp = unitFullMp;
+			}
+		}
+		return minMp;
+	}
+
 
 };

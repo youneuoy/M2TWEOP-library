@@ -1,7 +1,7 @@
 #include "ContextMenuStrat.h"
 #include "fastFuncts.h"
 #include "TexturesManager.h"
-
+#include "PlannedRetreatRoute.h"
 void ContextMenuStrat::Draw()
 {
 	if (isContextMenuNeeded == false)
@@ -21,6 +21,12 @@ void ContextMenuStrat::Draw()
 		ctxPos = ImGui::GetMousePos();
 
 		fastFuncts::GetGameTileCoordsWithCursor(posAtMap[0], posAtMap[1]);
+
+		customState.reset();
+		if (isWork == true)
+		{
+			customState.updateState(posAtMap);
+		}
 	}
 
 	if (isWork == false)
@@ -29,7 +35,7 @@ void ContextMenuStrat::Draw()
 	}
 
 	ImGui::SetNextWindowPos(ctxPos, ImGuiCond_Always);
-	ImGui::Begin("##ContextMenuTactical", nullptr, ImGuiWindowFlags_NoDecoration| ImGuiWindowFlags_NoScrollWithMouse);
+	ImGui::Begin("##ContextMenuTactical", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse);
 
 
 	auto image = TexturesManager::GetImage(99);
@@ -54,7 +60,25 @@ void ContextMenuStrat::Draw()
 
 		isWork = false;
 	}
-	ctxSize = ImGui::GetItemRectSize();
+	if (customState.isPlannedRetreatModeAcceptableGeneral == true)
+	{
+		if (ImGui::Button("Set planned retreat route"))
+		{
+			PlannedRetreatRoute::StartWork(posAtMap[0], posAtMap[1]);
+
+			isWork = false;
+		}
+	}
+
+	ctxSize = ImGui::GetWindowSize();
 	ImGui::End();
 
+}
+
+void ContextMenuStrat::customStateS::updateState(int posAtMap[2])
+{
+	if (fastFuncts::findArmy(posAtMap[0], posAtMap[1]) != nullptr)
+	{
+		isPlannedRetreatModeAcceptableGeneral = true;
+	}
 }

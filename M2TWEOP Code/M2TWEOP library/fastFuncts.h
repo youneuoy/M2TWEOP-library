@@ -10,6 +10,8 @@
 
 namespace fastFuncts
 {
+	NOINLINE EOP_EXPORT float GetMovepointsForReachNearTile(int x, int y, int destX, int destY);
+
 	NOINLINE EOP_EXPORT void revealTile(factionStruct* faction, int x, int y);
 	NOINLINE EOP_EXPORT void hideRevealedTile(factionStruct* faction, int x, int y);
 

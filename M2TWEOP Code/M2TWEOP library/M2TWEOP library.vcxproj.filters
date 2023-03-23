@@ -133,6 +133,15 @@
     <Filter Include="features\mapTextDrawer">
       <UniqueIdentifier>{38fdd23f-f1b6-4765-98e0-008bf6cf426e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\PlannedRetreatRoute">
+      <UniqueIdentifier>{cef8ae60-a2c4-45e9-9a08-90473e600e52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\shortestPath">
+      <UniqueIdentifier>{ea658fbd-38fc-49d1-bbf5-1f128c840c4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\pathFinding">
+      <UniqueIdentifier>{fab3b7b8-2966-414f-99e5-580a83697feb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -408,6 +417,15 @@
     <ClInclude Include="MapTextDrawer.h">
       <Filter>features\mapTextDrawer</Filter>
     </ClInclude>
+    <ClInclude Include="PlannedRetreatRoute.h">
+      <Filter>features\PlannedRetreatRoute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\shortestPath\micropather.h">
+      <Filter>3rd\shortestPath</Filter>
+    </ClInclude>
+    <ClInclude Include="PathMap.h">
+      <Filter>features\pathFinding</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -628,6 +646,15 @@
     </ClCompile>
     <ClCompile Include="MapTextDrawer.cpp">
       <Filter>features\mapTextDrawer</Filter>
+    </ClCompile>
+    <ClCompile Include="PlannedRetreatRoute.cpp">
+      <Filter>features\PlannedRetreatRoute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\shortestPath\micropather.cpp">
+      <Filter>3rd\shortestPath</Filter>
+    </ClCompile>
+    <ClCompile Include="PathMap.cpp">
+      <Filter>features\pathFinding</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

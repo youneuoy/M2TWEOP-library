@@ -48,5 +48,7 @@ namespace smallFuncs
 
 	NOINLINE EOP_EXPORT int GetUnitSize();
 
+	float GetMinimumPossibleMovepointsForArmy(stackStruct* army);
+
 };
 

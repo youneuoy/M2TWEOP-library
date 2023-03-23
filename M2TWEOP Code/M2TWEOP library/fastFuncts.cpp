@@ -26,6 +26,42 @@ namespace fastFuncts
 
 		return nullptr;
 	}
+	NOINLINE EOP_EXPORT float GetMovepointsForReachNearTile(int x, int y, int destX, int destY)
+	{
+		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
+		if (x > gameDataAll->stratMap->mapWidth)
+		{
+			return 0;
+		}
+		if (y > gameDataAll->stratMap->mapHeight)
+		{
+			return 0;
+		}
+		if (x < 0)
+		{
+			return 0;
+		}
+		if (y < 0)
+		{
+			return 0;
+		}
+		typedef float(__stdcall* GetMovepointsForReachTileF)(int* xy, int* destxy);
+
+		GetMovepointsForReachTileF getMovepointsForReachTileF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			getMovepointsForReachTileF = (GetMovepointsForReachTileF)0x004c7bd0;
+		}
+		else
+		{
+			getMovepointsForReachTileF = (GetMovepointsForReachTileF)0x004c7620;
+		}
+
+		int xy[2] = { x,y };
+		int destxy[2] = { destX, destY };
+
+		return getMovepointsForReachTileF(xy, destxy);
+	}
 	NOINLINE EOP_EXPORT void revealTile(factionStruct* faction, int x, int y)
 	{
 		if (IsStratMap() == false)

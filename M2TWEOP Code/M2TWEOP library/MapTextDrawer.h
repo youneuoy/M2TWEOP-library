@@ -13,7 +13,7 @@ namespace MapTextDrawer
 		float yCoord;
 		float zCoord;
 		float xSize=1;
-		float ySize=0.2;
+		float ySize=0.2f;
 		float zSize=1;
 		float xRoll=1;
 		float yRoll=90;

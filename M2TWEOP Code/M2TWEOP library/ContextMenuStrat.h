@@ -10,5 +10,15 @@ private:
 	ImVec2 ctxSize = { 0,0 };
 	int posAtMap[2]{};
 	bool isWork = false;
+
+	struct customStateS
+	{
+		void reset()
+		{
+			isPlannedRetreatModeAcceptableGeneral = false;
+		}
+		void updateState(int posAtMap[2]);
+		bool isPlannedRetreatModeAcceptableGeneral = false;
+	}customState;
 };
 

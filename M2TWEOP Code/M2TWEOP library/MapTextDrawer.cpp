@@ -147,6 +147,10 @@ namespace MapTextDrawer
 	}
 	NOINLINE EOP_EXPORT void Delete3dText(Text3DDrawable* text)
 	{
+		if (text == nullptr)
+		{
+			return;
+		}
 		text->isDeleteNeeded = true;
 		data.textForDrawing.remove(text);
 		text->textMesh->Release();
