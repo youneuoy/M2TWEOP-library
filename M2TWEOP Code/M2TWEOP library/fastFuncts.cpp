@@ -31,19 +31,19 @@ namespace fastFuncts
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
 		if (x > gameDataAll->stratMap->mapWidth)
 		{
-			return 0;
+			return -1;
 		}
 		if (y > gameDataAll->stratMap->mapHeight)
 		{
-			return 0;
+			return -1;
 		}
 		if (x < 0)
 		{
-			return 0;
+			return -1;
 		}
 		if (y < 0)
 		{
-			return 0;
+			return -1;
 		}
 		typedef float(__stdcall* GetMovepointsForReachTileF)(int* xy, int* destxy);
 

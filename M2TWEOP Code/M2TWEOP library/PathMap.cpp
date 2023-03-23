@@ -87,12 +87,19 @@ namespace PathFinder
 		{
 			totalCost = -1.f;
 		}
+		else
+		{
 
+		}
 		return totalCost;
 	}
 	void* PathMap::GetState(int x, int y)
 	{
-		if (x < 0 && y < 0)
+		if (x < 0 || y < 0)
+		{
+			return (void*)-1;
+		}
+		if (x - XCenter < 0 || y - YCenter < 0)
 		{
 			return (void*)-1;
 		}
@@ -133,8 +140,11 @@ namespace PathFinder
 				return;
 			}
 			float distance = fastFuncts::GetMovepointsForReachNearTile(x, y, currX, currY);
-			StateCost nodeCost = { statEn, distance };
-			adjacent->push_back(nodeCost);
+			if (distance >= 0)
+			{
+				StateCost nodeCost = { statEn, distance };
+				adjacent->push_back(nodeCost);
+			}
 		}
 	}
 	void PathMap::AdjacentCost(void* state, MP_VECTOR<micropather::StateCost>* adjacent)
