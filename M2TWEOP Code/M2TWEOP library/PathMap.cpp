@@ -24,7 +24,7 @@ namespace PathFinder
 		{
 			for (int y = 0; y <= Diameter; ++y)
 			{
-				if (IsCoordsValid(x + xCenter, y + yCenter))
+				if (IsCoordsValid(x + XCenter, y + YCenter))
 				{
 					StateMap[x * Diameter + y] = PathNode(x + XCenter, y + YCenter, 1);
 				}
@@ -92,6 +92,10 @@ namespace PathFinder
 	}
 	void* PathMap::GetState(int x, int y)
 	{
+		if (x < 0 && y < 0)
+		{
+			return (void*)-1;
+		}
 		int idx = (x - XCenter) * Diameter + y - YCenter;
 		if (idx >= StateMap.size())
 		{
@@ -116,7 +120,7 @@ namespace PathFinder
 
 	float PathMap::LeastCostEstimate(void* stateStart, void* stateEnd)
 	{
-		return 99999999;
+		return 0;
 	}
 
 	void PathMap::AdjOne(int x, int y, int currX, int currY, MP_VECTOR<micropather::StateCost>*& adjacent)

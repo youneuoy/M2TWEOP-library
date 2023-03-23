@@ -11,8 +11,9 @@ namespace PathFinder
 {
 	class PathNode {
 	public:
-		int X, Y;
-		float W;
+		int X = 0;
+		int Y = 0;
+		float W=0;
 		PathNode() = default;
 		PathNode(int x, int y, float w) : X(x), Y(y), W(w) {}
 	};
