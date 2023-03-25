@@ -39,6 +39,8 @@ void ContextMenuStrat::Draw()
 
 
 	auto image = TexturesManager::GetImage(99);
+
+	auto currPos = ImGui::GetCursorPos();
 	if (image == nullptr)
 	{
 		TexturesManager::LoadTexture(99, "/eopData/images/SMALL_SCROLL_BACKGROUND.png");
@@ -46,11 +48,6 @@ void ContextMenuStrat::Draw()
 	else
 	{
 		auto currPos = ImGui::GetCursorPos();
-
-
-		ImGui::Image(image, ctxSize);
-
-		ImGui::SetCursorPos(currPos);
 	}
 
 
@@ -71,6 +68,10 @@ void ContextMenuStrat::Draw()
 	}
 
 	ctxSize = ImGui::GetWindowSize();
+
+	ImGui::SetCursorPos(currPos);
+	ImGui::Image(image, ctxSize);
+
 	ImGui::End();
 
 }
