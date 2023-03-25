@@ -177,11 +177,11 @@ namespace PlannedRetreatRoute
 		float possibleMP = smallFuncs::GetMinimumPossibleMovepointsForArmy(army)*0.9;
 
 
-		int coordsMod = 1;
+		int coordsMod = 2;
 
 		void* cashe = PathFinder::CreateCasheForDistances(x, y, 50);
 
-		state.possibleCoords.emplace_back(x, y, nullptr);
+		//state.possibleCoords.emplace_back(x, y, nullptr);
 
 		do
 		{
