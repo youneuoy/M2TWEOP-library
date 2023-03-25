@@ -426,6 +426,9 @@
     <ClInclude Include="PathMap.h">
       <Filter>features\pathFinding</Filter>
     </ClInclude>
+    <ClInclude Include="RetreatRoutes.h">
+      <Filter>features\PlannedRetreatRoute</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

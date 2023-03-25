@@ -1,5 +1,6 @@
 #include "PlannedRetreatRoute.h"
 #include "graphicsD3D.h"
+#include <iomanip>
 #include <mutex>
 #include "fastFuncts.h"
 #include "smallFuncs.h"
@@ -7,8 +8,16 @@
 
 #include "PathMap.h"
 #include "imgui_notify.h"
+
+#include <filesystem>
+#include "RetreatRoutes.h"
 namespace PlannedRetreatRoute
 {
+	struct
+	{
+		vector<RetreatRoute>data;
+	}routes;
+
 
 	struct coordsVText
 	{
@@ -26,6 +35,8 @@ namespace PlannedRetreatRoute
 		int X = 0;
 		int Y = 0;
 	};
+
+
 	struct stateS
 	{
 		bool workingNow = false;
@@ -34,6 +45,9 @@ namespace PlannedRetreatRoute
 		int maxPathLenInTiles = 9;
 
 		coordsVText selectedCoord{ 0,0,nullptr };
+
+		int StartX = 0;
+		int StartY = 0;
 	}state;
 
 	static void Draw()
@@ -60,7 +74,7 @@ namespace PlannedRetreatRoute
 			&& (ImGui::GetIO().MouseDownDurationPrev[0] == 0.f)
 			)
 		{
-			auto result1 = std::find_if(begin(state.possibleCoords), end(state.possibleCoords), [&](coordsVText& txt)
+			auto routeSelected = std::find_if(begin(state.possibleCoords), end(state.possibleCoords), [&](coordsVText& txt)
 				{
 					if (txt.X == cursorX && txt.Y == cursorY)
 					{
@@ -68,13 +82,27 @@ namespace PlannedRetreatRoute
 					}
 					return false;
 				});
-			if (result1 != end(state.possibleCoords))
+			if (routeSelected != std::end(state.possibleCoords))
 			{
-				ImGuiToast bMsg(ImGuiToastType_Success, 25000);
+				try
+				{
+					RetreatRoute route(state.StartX, state.StartY, cursorX, cursorY);
 
-				bMsg.set_title("Retreat route");
-				bMsg.set_content("Added route %d, %d", cursorX, cursorY);
-				ImGui::InsertNotification(bMsg);
+					routes.data.emplace_back(route);
+					ImGuiToast bMsg(ImGuiToastType_Success, 25000);
+
+					bMsg.set_title("Retreat route");
+					bMsg.set_content("Added route %d, %d", cursorX, cursorY);
+					ImGui::InsertNotification(bMsg);
+				}
+				catch (std::exception& ex)
+				{
+					ImGuiToast bMsg(ImGuiToastType_Warning, 25000);
+
+					bMsg.set_title("Retreat route");
+					bMsg.set_content("Stop plan route, reason: %s", ex.what());
+					ImGui::InsertNotification(bMsg);
+				}
 			}
 			else
 			{
@@ -140,6 +168,8 @@ namespace PlannedRetreatRoute
 		{
 			return;
 		}
+		state.StartX = x;
+		state.StartY = y;
 
 		state.possibleCoords.clear();
 		state.possibleCoords.reserve(state.maxPathLenInTiles * state.maxPathLenInTiles);
@@ -211,5 +241,93 @@ namespace PlannedRetreatRoute
 		MakeTexts(state);
 
 		state.workingNow = true;
+	}
+	void OnNewGameStart()
+	{
+		state.possibleCoords.clear();
+		routes.data.clear();
+	}
+	void OnFactionTurnStart(factionStruct* fac)
+	{
+		if (fac == nullptr)
+		{
+			return;
+		}
+
+		routes.data.erase(std::remove_if(routes.data.begin(), routes.data.end(), [&](RetreatRoute& route)
+			{
+				if (route.FactionID == fac->dipNum)
+				{
+					return true;
+				}
+				//just in case, remove too old ones
+				if (route.TurnNum > fastFuncts::getPassedTurnsNum() + 2)
+				{
+					return true;
+				}
+
+				return false;
+			}), routes.data.end());
+	}
+	std::string OnGameSave()
+	{
+		std::string fPath = fastFuncts::GetModPath();
+
+
+		fPath += "\\eopData\\Temp_PlannedRetreatRoute";
+		filesystem::remove_all(fPath);
+		filesystem::create_directory(fPath);
+
+		std::string outFile = fPath;
+		outFile += "\\RetreatRoutes.json";
+
+
+		ofstream f1(outFile);
+		jsn::json json = routes.data;
+		f1 << setw(4) << json;
+		f1.close();
+
+
+		return outFile;
+	}
+	void OnGameLoad(const std::vector<std::string>& filePathes)
+	{
+		for (auto& path : filePathes)
+		{
+			if (path.find("RetreatRoutes.json") != string::npos)
+			{
+				jsn::json json2;
+				try
+				{
+
+					std::ifstream f2(path);
+
+					if (f2.is_open() == false)
+					{
+					}
+					f2 >> json2;
+
+					f2.close();
+				}
+				catch (jsn::json::parse_error& e)
+				{
+					MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+				}
+
+
+				try
+				{
+					routes.data = json2.get<vector<RetreatRoute>>();
+				}
+				catch (jsn::json::exception& e)
+				{
+					MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+				}
+
+
+
+				return;
+			}
+		}
 	}
 }

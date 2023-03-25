@@ -718,5 +718,4 @@ namespace smallFuncs
 		return minMp;
 	}
 
-
 };

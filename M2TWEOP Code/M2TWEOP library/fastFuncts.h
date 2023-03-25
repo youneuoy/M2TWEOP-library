@@ -10,6 +10,9 @@
 
 namespace fastFuncts
 {
+	factionStruct* GetCurrentFaction();
+	std::string GetModPath();
+
 	NOINLINE EOP_EXPORT float GetMovepointsForReachNearTile(int x, int y, int destX, int destY);
 
 	NOINLINE EOP_EXPORT void revealTile(factionStruct* faction, int x, int y);
@@ -96,6 +99,7 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT void setSoldiersCount(unit* un,int count);
 	NOINLINE EOP_EXPORT void setSoldiersCountAndExp(unit* un,int count, int exp);
 	NOINLINE EOP_EXPORT void setUnitMovepoints(unit* un,float movepoints);
+	void NuullifyMovepoints(stackStruct* army);
 
 	//kills
 	NOINLINE EOP_EXPORT void killUnit(unit* un);

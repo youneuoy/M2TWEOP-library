@@ -9,6 +9,7 @@
 
 #include "eduThings.h"
 #include "fastFunctsHelpers.h"
+#include "PlannedRetreatRoute.h"
 
 
 worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, worldRecord* selectedRecord)
@@ -286,6 +287,10 @@ void __stdcall patchesForGame::afterCampaignMapLoaded()
 void __stdcall patchesForGame::onNewGameStart()
 {
 	plugins::onNewGameStart();
+
+
+	PlannedRetreatRoute::OnNewGameStart();
+
 
 }
 //#define TESTPATCHES

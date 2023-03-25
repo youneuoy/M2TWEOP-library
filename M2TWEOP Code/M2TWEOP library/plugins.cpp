@@ -7,6 +7,8 @@
 
 #include "eduThings.h"
 #include "onlineThings.h"
+
+#include "PlannedRetreatRoute.h"
 plugins::configT plugins::pluginsCfg;
 vector<const char*>* plugins::eventNames;
 
@@ -64,6 +66,11 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 		{
 			battleCreator::onHotseatScreen();
 		}
+	}
+	else if (strcmp(event, "FactionTurnStart") == 0)
+	{
+		factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
+		PlannedRetreatRoute::OnFactionTurnStart(fac);
 	}
 
 
@@ -741,6 +748,7 @@ void plugins::onLoadGame(UNICODE_STRING**& savePath)
 	{
 		(*(*pl->onLoadGamePl))(&files);
 	}
+	PlannedRetreatRoute::OnGameLoad(files);
 
 	techFuncs::deleteFiles(files);
 
@@ -762,7 +770,11 @@ void plugins::onSaveGame(UNICODE_STRING**& savePath)
 
 		delete plugFiles;
 	}
-
+	std::string retreatsFile = PlannedRetreatRoute::OnGameSave();
+	if (!retreatsFile.empty())
+	{
+		files.push_back(retreatsFile);
+	}
 	techFuncs::saveGameMakeArchive(savePath, files);
 
 

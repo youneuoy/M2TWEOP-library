@@ -26,6 +26,24 @@ namespace fastFuncts
 
 		return nullptr;
 	}
+	factionStruct* GetCurrentFaction()
+	{
+		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
+		if (gameDataAll == nullptr)
+		{
+			return nullptr;
+		}
+		if (gameDataAll->campaignData == nullptr)
+		{
+			return nullptr;
+		}
+
+		return gameDataAll->campaignData->currentFactionTurn;
+	}
+	std::string GetModPath()
+	{
+		return globals::dataS.modPatch;
+	}
 	NOINLINE EOP_EXPORT float GetMovepointsForReachNearTile(int x, int y, int destX, int destY)
 	{
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
@@ -860,6 +878,19 @@ namespace fastFuncts
 		}
 
 	}
+	void NuullifyMovepoints(stackStruct* army)
+	{
+		if (army == nullptr)
+		{
+			return;
+		}
+
+		for (int i = 0; i < army->numOfUnits; ++i)
+		{
+			setUnitMovepoints(army->units[i], 0);
+		}
+	}
+
 	NOINLINE EOP_EXPORT void setSoldiersCount(unit* un, int count)
 	{
 		if (count == 0)

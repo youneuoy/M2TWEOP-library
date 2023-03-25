@@ -266,6 +266,7 @@
     <ClInclude Include="plugins.h" />
     <ClInclude Include="realGameTypes.h" />
     <ClInclude Include="RecruitSystem.h" />
+    <ClInclude Include="RetreatRoutes.h" />
     <ClInclude Include="RSExport.h" />
     <ClInclude Include="settlementConversionLvlSetter.h" />
     <ClInclude Include="SingleFbxMesh.h" />
