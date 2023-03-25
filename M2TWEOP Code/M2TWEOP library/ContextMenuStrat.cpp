@@ -35,7 +35,7 @@ void ContextMenuStrat::Draw()
 	}
 
 	ImGui::SetNextWindowPos(ctxPos, ImGuiCond_Always);
-	ImGui::Begin("##ContextMenuTactical", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse);
+	ImGui::Begin("##ContextMenuTactical", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse| ImGuiWindowFlags_AlwaysAutoResize);
 
 
 	auto image = TexturesManager::GetImage(99);
@@ -43,11 +43,16 @@ void ContextMenuStrat::Draw()
 	auto currPos = ImGui::GetCursorPos();
 	if (image == nullptr)
 	{
-		TexturesManager::LoadTexture(99, "/eopData/images/SMALL_SCROLL_BACKGROUND.png");
+		//TexturesManager::LoadTexture(99, "/eopData/images/SMALL_SCROLL_BACKGROUND.png");
 	}
 	else
 	{
 		auto currPos = ImGui::GetCursorPos();
+
+
+		ImGui::Image(image, ctxSize);
+
+		ImGui::SetCursorPos(currPos);
 	}
 
 
@@ -68,10 +73,6 @@ void ContextMenuStrat::Draw()
 	}
 
 	ctxSize = ImGui::GetWindowSize();
-
-	ImGui::SetCursorPos(currPos);
-	ImGui::Image(image, ctxSize);
-
 	ImGui::End();
 
 }
