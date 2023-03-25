@@ -6,7 +6,7 @@
 #include "MapTextDrawer.h"
 
 #include "PathMap.h"
-
+#include "imgui_notify.h"
 namespace PlannedRetreatRoute
 {
 
@@ -28,15 +28,65 @@ namespace PlannedRetreatRoute
 	};
 	struct stateS
 	{
+		bool workingNow = false;
+
 		vector<coordsVText>possibleCoords;
 		int maxPathLenInTiles = 9;
+
+		coordsVText selectedCoord{ 0,0,nullptr };
 	}state;
 
 	static void Draw()
 	{
+		if (state.workingNow == false)
+		{
+			return;
+		}
+		int cursorX = 0;
+		int cursorY = 0;
+		fastFuncts::GetGameTileCoordsWithCursor(cursorX, cursorY);
 		for (auto& txt : state.possibleCoords)
 		{
 			MapTextDrawer::DrawingTextOnce(txt.PointText);
+		}
+
+		state.selectedCoord.PointText->xCoord = cursorX;
+		state.selectedCoord.PointText->yCoord = cursorY;
+		state.selectedCoord.PointText->zCoord = 0.2f;
+		MapTextDrawer::DrawingTextOnce(state.selectedCoord.PointText);
+
+
+		if ((ImGui::GetIO().MouseDownDuration[0] > 0.f)
+			&& (ImGui::GetIO().MouseDownDurationPrev[0] == 0.f)
+			)
+		{
+			auto result1 = std::find_if(begin(state.possibleCoords), end(state.possibleCoords), [&](coordsVText& txt)
+				{
+					if (txt.X == cursorX && txt.Y == cursorY)
+					{
+						return true;
+					}
+					return false;
+				});
+			if (result1 != end(state.possibleCoords))
+			{
+				ImGuiToast bMsg(ImGuiToastType_Success, 25000);
+
+				bMsg.set_title("Retreat route");
+				bMsg.set_content("Added route %d, %d", cursorX, cursorY);
+				ImGui::InsertNotification(bMsg);
+			}
+			else
+			{
+				ImGuiToast bMsg(ImGuiToastType_Warning, 25000);
+
+				bMsg.set_title("Retreat route");
+				bMsg.set_content("Stop plan route");
+				ImGui::InsertNotification(bMsg);
+			}
+
+			state.possibleCoords.clear();
+			state.workingNow = false;
 		}
 	}
 	static void MakeTexts(stateS& st)
@@ -65,7 +115,19 @@ namespace PlannedRetreatRoute
 	}
 	static void TryInit()
 	{
-		graphicsExport::AddStratmapDrawCallback(Draw);
+		graphicsExport::AddImGuiDrawCallback(Draw);
+
+
+		void* font = MapTextDrawer::MakeTextFont("Times New Roman");
+		if (font == nullptr)
+		{
+			MessageBoxA(NULL, "Cannot create text font for PlannedRetreatRoute selectedCoord", "ATTENTION! Exit now!", NULL);
+			std::terminate();
+		}
+
+		state.selectedCoord.PointText = MapTextDrawer::MakeText(font, "+");
+		MapTextDrawer::ChangeTextColor(state.selectedCoord.PointText, 255, 255, 0, 0);
+		MapTextDrawer::DeleteTextFont(font);
 	}
 
 	void StartWork(int x, int y)
@@ -147,5 +209,7 @@ namespace PlannedRetreatRoute
 
 		PathFinder::DeleteCasheForDistances(cashe);
 		MakeTexts(state);
+
+		state.workingNow = true;
 	}
 }

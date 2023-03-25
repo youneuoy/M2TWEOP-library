@@ -321,6 +321,11 @@ void graphicsD3D::onDrawAllGameStuff()
 
 	battleCreator::draw(graphicsD3D::dataS.pDevice);
 
+	for (auto& f : graphicsD3D::dataS.imguiDrawCallbacks)
+	{
+		f();
+	}
+
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.f);
 	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(43.f / 255.f, 43.f / 255.f, 43.f / 255.f, 100.f / 255.f));
@@ -491,6 +496,11 @@ NOINLINE EOP_EXPORT  graphicsExport::D3dState graphicsExport::GetD3dState()
 NOINLINE EOP_EXPORT void graphicsExport::AddStratmapDrawCallback(EOPDrawCallback callFunk)
 {
 	graphicsD3D::dataS.stratmapDrawCallbacks.push_back(callFunk);
+}
+
+NOINLINE EOP_EXPORT void graphicsExport::AddImGuiDrawCallback(EOPDrawCallback callFunk)
+{
+	graphicsD3D::dataS.imguiDrawCallbacks.push_back(callFunk);
 }
 
 NOINLINE EOP_EXPORT void graphicsExport::SetClearD3dState()

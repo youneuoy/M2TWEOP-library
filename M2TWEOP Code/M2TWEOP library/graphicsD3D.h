@@ -33,6 +33,7 @@ public:
 		}hookD;
 
 		vector<EOPDrawCallback> stratmapDrawCallbacks;
+		vector<EOPDrawCallback> imguiDrawCallbacks;
 	}dataS;
 	static NOINLINE void APIENTRY Draw(LPDIRECT3DDEVICE9 pDevice);
 
@@ -64,6 +65,7 @@ namespace graphicsExport
 	NOINLINE EOP_EXPORT D3dState GetD3dState();
 
 	NOINLINE EOP_EXPORT void AddStratmapDrawCallback(EOPDrawCallback callFunk);
+	NOINLINE EOP_EXPORT void AddImGuiDrawCallback(EOPDrawCallback callFunk);
 
 	NOINLINE EOP_EXPORT void SetClearD3dState();
 	NOINLINE EOP_EXPORT void SetD3dState(D3dState& state);

@@ -127,7 +127,20 @@ namespace PathFinder
 
 	float PathMap::LeastCostEstimate(void* stateStart, void* stateEnd)
 	{
-		return 0;
+		if ((int)stateStart == -1)
+		{
+			return 9999999.f;
+		}
+		if ((int)stateEnd == -1)
+		{
+			return 9999999.f;
+		}
+		auto& statenodeF = StateMap[(int)stateStart];
+		auto& statenodeE = StateMap[(int)stateEnd];
+
+		int dx = statenodeF.X - statenodeE.X;
+		int dy = statenodeF.Y - statenodeF.Y;
+		return (float)sqrt((double)(dx * dx) + (double)(dy * dy));
 	}
 
 	void PathMap::AdjOne(int x, int y, int currX, int currY, MP_VECTOR<micropather::StateCost>*& adjacent)
