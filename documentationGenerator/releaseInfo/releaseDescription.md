@@ -1,44 +1,38 @@
 ![EOP Logo](https://i.imgur.com/jqzoYoQ.png)
 
- [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D4DZTHG)
- [![Discord Link](https://img.shields.io/discord/713369537948549191?color=red&label=Discord&style=for-the-badge)](https://discord.gg/Epqjm8u2WK)
- [![Build Status](https://img.shields.io/github/v/release/youneuoy/M2TWEOP-library?label=Download&style=for-the-badge)](#download)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D1D4DZTHG)
+[![Discord Link](https://img.shields.io/discord/713369537948549191?color=red&label=Discord&style=for-the-badge)](https://discord.gg/Epqjm8u2WK)
+[![Build Status](https://img.shields.io/github/v/release/youneuoy/M2TWEOP-library?label=Download&style=for-the-badge)](#download)
 
 ## **Release Notes**
-Release with many serious bugfixes and some improvements for 3d graphics stuff.
 
-<!-- ### **Launcher** -->
+### **Launcher**
+
+- Removed `M2TWEOP tools.exe` from the release package - *Medik*
 
 <!-- ### **Library** -->
 
-### **Lua Plugin**
-- new table: M2TWEOP3dObjectsTable - used for creating simple 3d objects - *youneuoy*
-- new type: Eop3dText - used for drawing 3d text at game map - *youneuoy*
+<!-- ### **Lua Plugin** -->
 
 <!-- ### **ImGUI** -->
 
 ### **Documentation**
-- updated - *youneuoy*
+
+- Added example code for calculating the window size and drawing centered text and image buttons - *Medik*
 
 ### **Bugfixes**
-- `stratmap.objects.setModel` now works correcly for forts(Broken since very old versions, give crash when go back from battle and replaced fort apper in scren) Closes: https://github.com/youneuoy/M2TWEOP-library/issues/39 - *youneuoy*
-- `stratmap.objects.replaceTile` now works correcly (Broken since M2TWEOP.2.1.beta-35) Closes: https://github.com/youneuoy/M2TWEOP-library/issues/39 - *youneuoy*
-- `stratmap.objects.setModel` now works good with fog of war(In old versions if you not clear see replaced model, then old one displayed) - *youneuoy*
-- Online battle generator now reads the config correctly (Broken since M2TWEOP.2.1.37) - *youneuoy*
-- fixed work with utf8-utf16 convertation(the display of some text was broken because of this eop bug) - *youneuoy*
-- fix broken function `settlement:changeOwner(faction)` - *youneuoy*
-- fixed crash on returning from tactical map view - *youneuoy*
-
 
 ### **Links**
-* [Website](https://youneuoy.github.io/M2TWEOP-library/)
-* [FAQ](https://youneuoy.github.io/M2TWEOP-library/faq.html)
-* [Lua Documentation](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html)
-* [ImGUI Documentation](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/extra/readme_imgui.md.html)
-* [Discord](https://discord.gg/Epqjm8u2WK)
-* [Installation Video](https://youtu.be/caOiB0NaGGI?t=67)
-* [M2TWEOP Tutorials](https://www.youtube.com/playlist?list=PLi6V3nVH22N7ZfjfOuivGKHnNRAlBaTQd)
-* [M2TWEOP Features](https://www.youtube.com/playlist?list=PLi6V3nVH22N6R7IGupVDwfyiPm6-d6rlU)
+
+- [Website](https://youneuoy.github.io/M2TWEOP-library/)
+- [FAQ](https://youneuoy.github.io/M2TWEOP-library/faq.html)
+- [Lua Documentation](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html)
+- [ImGUI Documentation](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/extra/readme_imgui.md.html)
+- [Discord](https://discord.gg/Epqjm8u2WK)
+- [Installation Video](https://youtu.be/caOiB0NaGGI?t=67)
+- [M2TWEOP Tutorials](https://www.youtube.com/playlist?list=PLi6V3nVH22N7ZfjfOuivGKHnNRAlBaTQd)
+- [M2TWEOP Features](https://www.youtube.com/playlist?list=PLi6V3nVH22N6R7IGupVDwfyiPm6-d6rlU)
 
 ### **Download**
+
 <a id="download"></a>
