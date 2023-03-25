@@ -2,6 +2,60 @@
 #include "fastFuncts.h"
 #include "TexturesManager.h"
 #include "PlannedRetreatRoute.h"
+ContextMenuStrat::ContextMenuStrat()
+{
+	ctxItems.insert(std::make_pair("TacticMapView", ContextMenuItem(
+		[]()
+		{
+			if (ImGui::Button("View tactical map"))
+			{
+				int posAtMap[2]{};
+
+				fastFuncts::GetGameTileCoordsWithCursor(posAtMap[0], posAtMap[1]);
+				fastFuncts::ViewTacticalMap(posAtMap[0], posAtMap[1]);
+
+				return true;
+			}
+
+			return false;
+		},
+		[](int posAtMap[2])
+		{
+			return true;
+		}
+		)));
+
+
+
+	ctxItems.insert(std::make_pair("RetreatPlanner", ContextMenuItem(
+		[]()
+		{
+			if (ImGui::Button("Set planned retreat route"))
+			{
+				int posAtMap[2]{};
+
+				fastFuncts::GetGameTileCoordsWithCursor(posAtMap[0], posAtMap[1]);
+				PlannedRetreatRoute::StartWork(posAtMap[0], posAtMap[1]);
+
+				return true;
+			}
+
+			return false;
+		},
+		[](int posAtMap[2])
+		{
+			if (fastFuncts::findArmy(posAtMap[0], posAtMap[1]) != nullptr)
+			{
+				return true;
+			}
+
+			return false;
+		}
+		)));
+
+
+
+}
 void ContextMenuStrat::Draw()
 {
 	if (isContextMenuNeeded == false)
@@ -20,12 +74,23 @@ void ContextMenuStrat::Draw()
 
 		ctxPos = ImGui::GetMousePos();
 
-		fastFuncts::GetGameTileCoordsWithCursor(posAtMap[0], posAtMap[1]);
 
-		customState.reset();
 		if (isWork == true)
 		{
-			customState.updateState(posAtMap);
+			int posAtMap[2]{};
+			fastFuncts::GetGameTileCoordsWithCursor(posAtMap[0], posAtMap[1]);
+			for (auto& item : ctxItems)
+			{
+				auto& ctx = item.second;
+				if (ctx.NeedWork(posAtMap) == true)
+				{
+					ctx.Active = true;
+				}
+				else
+				{
+					ctx.Active = false;
+				}
+			}
 		}
 	}
 
@@ -36,6 +101,21 @@ void ContextMenuStrat::Draw()
 
 	ImGui::SetNextWindowPos(ctxPos, ImGuiCond_Always);
 	ImGui::Begin("##ContextMenuTactical", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse| ImGuiWindowFlags_AlwaysAutoResize);
+
+
+
+	for (auto& item : ctxItems)
+	{
+		auto& ctx = item.second;
+		if (ctx.Active == false)
+		{
+			continue;
+		}
+		if (ctx.Work()==true)
+		{
+			isWork = false;
+		}
+	}
 
 
 	auto image = TexturesManager::GetImage(99);
@@ -55,32 +135,14 @@ void ContextMenuStrat::Draw()
 		ImGui::SetCursorPos(currPos);
 	}
 
-
-	if (ImGui::Button("View tactical map"))
-	{
-		fastFuncts::ViewTacticalMap(posAtMap[0], posAtMap[1]);
-
-		isWork = false;
-	}
-	if (customState.isPlannedRetreatModeAcceptableGeneral == true)
-	{
-		if (ImGui::Button("Set planned retreat route"))
-		{
-			PlannedRetreatRoute::StartWork(posAtMap[0], posAtMap[1]);
-
-			isWork = false;
-		}
-	}
-
 	ctxSize = ImGui::GetWindowSize();
 	ImGui::End();
 
 }
 
-void ContextMenuStrat::customStateS::updateState(int posAtMap[2])
+
+ContextMenuItem::ContextMenuItem(ContextMenuItemWork work, ContextMenuItemNeedWork needWork)
 {
-	if (fastFuncts::findArmy(posAtMap[0], posAtMap[1]) != nullptr)
-	{
-		isPlannedRetreatModeAcceptableGeneral = true;
-	}
+	Work = work;
+	NeedWork = needWork;
 }
