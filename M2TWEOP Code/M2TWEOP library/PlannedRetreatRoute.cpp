@@ -174,7 +174,7 @@ namespace PlannedRetreatRoute
 		state.possibleCoords.clear();
 		state.possibleCoords.reserve(state.maxPathLenInTiles * state.maxPathLenInTiles);
 
-		float possibleMP = smallFuncs::GetMinimumPossibleMovepointsForArmy(army);
+		float possibleMP = smallFuncs::GetMinimumPossibleMovepointsForArmy(army)*0.9;
 
 
 		int coordsMod = 1;
