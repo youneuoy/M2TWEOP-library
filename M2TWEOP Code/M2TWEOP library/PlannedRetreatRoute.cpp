@@ -181,7 +181,13 @@ namespace PlannedRetreatRoute
 
 		void* cashe = PathFinder::CreateCasheForDistances(x, y, 50);
 
-		//state.possibleCoords.emplace_back(x, y, nullptr);
+		if (army->siege != nullptr)
+		{
+			if (army->siege->goal != nullptr)
+			{
+				state.possibleCoords.emplace_back(x, y, nullptr);
+			}
+		}
 
 		do
 		{
