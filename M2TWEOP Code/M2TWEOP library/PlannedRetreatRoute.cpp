@@ -42,7 +42,7 @@ namespace PlannedRetreatRoute
 		bool workingNow = false;
 
 		vector<coordsVText>possibleCoords;
-		int maxPathLenInTiles = 9;
+		int maxPathLenInTiles = 15;
 
 		coordsVText selectedCoord{ 0,0,nullptr };
 
@@ -231,6 +231,10 @@ namespace PlannedRetreatRoute
 
 
 			if (state.possibleCoords.size() == posSize)
+			{
+				break;
+			}
+			if (state.maxPathLenInTiles < coordsMod)
 			{
 				break;
 			}
