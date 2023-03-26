@@ -104,6 +104,10 @@ namespace PathFinder
 
 		auto isAcceptableTile = [&](int xDest, int yDest)
 		{
+			if (xDest == xCenter && yDest == yCenter)
+			{
+				return true;
+			}
 			auto* destDile = fastFuncts::getTileStruct(xDest, yDest);
 
 			if (destDile->isLand != isAtLand)
