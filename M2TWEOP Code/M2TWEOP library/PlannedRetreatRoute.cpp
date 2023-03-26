@@ -68,54 +68,6 @@ namespace PlannedRetreatRoute
 		state.selectedCoord.PointText->yCoord = cursorY;
 		state.selectedCoord.PointText->zCoord = 0.2f;
 		MapTextDrawer::DrawingTextOnce(state.selectedCoord.PointText);
-
-
-		if ((ImGui::GetIO().MouseDownDuration[0] > 0.f)
-			&& (ImGui::GetIO().MouseDownDurationPrev[0] == 0.f)
-			)
-		{
-			auto routeSelected = std::find_if(begin(state.possibleCoords), end(state.possibleCoords), [&](coordsVText& txt)
-				{
-					if (txt.X == cursorX && txt.Y == cursorY)
-					{
-						return true;
-					}
-					return false;
-				});
-			if (routeSelected != std::end(state.possibleCoords))
-			{
-				try
-				{
-					RetreatRoute route(state.StartX, state.StartY, cursorX, cursorY);
-
-					routes.data.emplace_back(route);
-					ImGuiToast bMsg(ImGuiToastType_Success, 25000);
-
-					bMsg.set_title("Retreat route");
-					bMsg.set_content("Added route %d, %d", cursorX, cursorY);
-					ImGui::InsertNotification(bMsg);
-				}
-				catch (std::exception& ex)
-				{
-					ImGuiToast bMsg(ImGuiToastType_Warning, 25000);
-
-					bMsg.set_title("Retreat route");
-					bMsg.set_content("Stop plan route, reason: %s", ex.what());
-					ImGui::InsertNotification(bMsg);
-				}
-			}
-			else
-			{
-				ImGuiToast bMsg(ImGuiToastType_Warning, 25000);
-
-				bMsg.set_title("Retreat route");
-				bMsg.set_content("Stop plan route");
-				ImGui::InsertNotification(bMsg);
-			}
-
-			state.possibleCoords.clear();
-			state.workingNow = false;
-		}
 	}
 	static void MakeTexts(stateS& st)
 	{
@@ -174,7 +126,7 @@ namespace PlannedRetreatRoute
 		state.possibleCoords.clear();
 		state.possibleCoords.reserve(state.maxPathLenInTiles * state.maxPathLenInTiles);
 
-		float possibleMP = smallFuncs::GetMinimumPossibleMovepointsForArmy(army)*0.9;
+		float possibleMP = smallFuncs::GetMinimumPossibleMovepointsForArmy(army) * 0.9;
 
 
 		int coordsMod = 1;
@@ -339,5 +291,54 @@ namespace PlannedRetreatRoute
 				return;
 			}
 		}
+	}
+	void OnClickAtTile(int x, int y)
+	{
+		if (state.workingNow == false)
+		{
+			return;
+		}
+		auto routeSelected = std::find_if(begin(state.possibleCoords), end(state.possibleCoords), [&](coordsVText& txt)
+			{
+				if (txt.X == x && txt.Y == y)
+				{
+					return true;
+				}
+				return false;
+			});
+		if (routeSelected != std::end(state.possibleCoords))
+		{
+			try
+			{
+				RetreatRoute route(state.StartX, state.StartY, x, y);
+
+				routes.data.emplace_back(route);
+				ImGuiToast bMsg(ImGuiToastType_Success, 25000);
+
+				bMsg.set_title("Retreat route");
+				bMsg.set_content("Added route %d, %d", x, y);
+				ImGui::InsertNotification(bMsg);
+			}
+			catch (std::exception& ex)
+			{
+				ImGuiToast bMsg(ImGuiToastType_Warning, 25000);
+
+				bMsg.set_title("Retreat route");
+				bMsg.set_content("Stop plan route, reason: %s", ex.what());
+				ImGui::InsertNotification(bMsg);
+			}
+		}
+		else
+		{
+			ImGuiToast bMsg(ImGuiToastType_Warning, 25000);
+
+			bMsg.set_title("Retreat route");
+			bMsg.set_content("Stop plan route");
+			ImGui::InsertNotification(bMsg);
+		}
+
+		state.possibleCoords.clear();
+		state.workingNow = false;
+
 	}
 }

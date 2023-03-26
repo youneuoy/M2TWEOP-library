@@ -686,6 +686,8 @@ void plugins::onClickAtTile(int x, int y)
 	{
 		(*(*pl->onClickAtTile))(x, y);
 	}
+
+	PlannedRetreatRoute::OnClickAtTile(x, y);
 }
 
 void plugins::onCampaignMapLoaded()
