@@ -27,7 +27,7 @@ namespace PathFinder
 			{
 				if (IsCoordsValid(x + XCenter, y + YCenter))
 				{
-					StateMap[x * Diameter + y] = PathNode(x + XCenter, y + YCenter, 1);
+					StateMap[x * Diameter + y] = PathNode(x + XCenter, y + YCenter, 1, true);
 				}
 			}
 		}
@@ -126,17 +126,60 @@ namespace PathFinder
 					Settlement = 0x1D,
 					Fort = 0x1E,
 					Port = 0x1F,
-
+					Character = 0x1C
 				};
 
 				ObjectType objT = CallVFunc<4, ObjectType>(destDile->object);
 
+				auto prohibitNeigbourTiles = [&]()
+				{
+					auto prohibitTile = [&](int x, int y)
+					{
+						int idx = (int)GetState(x, y);
+						if (idx == -1)
+						{
+							return;
+						}
 
+						StateMap[idx] = PathNode(0, 0, 0, true);
+					};
+					prohibitTile(xDest - 1, yDest - 1);
+					prohibitTile(xDest, yDest - 1);
+					prohibitTile(xDest + 1, yDest - 1);
+
+					prohibitTile(xDest - 1, yDest + 1);
+					prohibitTile(xDest, yDest + 1);
+					prohibitTile(xDest + 1, yDest + 1);
+
+					prohibitTile(xDest - 1, yDest);
+					prohibitTile(xDest + 1, yDest);
+				};
 				switch (objT)
 				{
 				case ObjectType::FloatingGeneral:
 				{
+					prohibitNeigbourTiles();
 					return false;
+					break;
+				}
+				case ObjectType::Character:
+				{
+					general* gen = (general*)destDile->object;
+					if (gen->genChar->faction->dipNum == army->faction->dipNum)
+					{
+						return false;
+					}
+					else
+					{
+						if (gen->genType->type == 6 || gen->genType->type == 7 || gen->genType->type == 3)
+						{
+							prohibitNeigbourTiles();
+						}
+						else
+						{
+							return false;
+						}
+					}
 					break;
 				}
 				case ObjectType::Settlement:
@@ -149,6 +192,7 @@ namespace PathFinder
 					}
 					else
 					{
+						prohibitNeigbourTiles();
 						return false;
 					}
 					break;
@@ -163,6 +207,7 @@ namespace PathFinder
 					}
 					else
 					{
+						prohibitNeigbourTiles();
 						return false;
 					}
 					break;
@@ -192,12 +237,34 @@ namespace PathFinder
 		{
 			for (int y = 0; y <= Diameter; ++y)
 			{
-				if (IsCoordsValid(x + XCenter, y + YCenter) && isAcceptableTile(x + XCenter, y + YCenter))
+				if (x + XCenter == 170 && y + YCenter == 266)
 				{
-					StateMap[x * Diameter + y] = PathNode(x + XCenter, y + YCenter, 1);
+					int i = 0;
+				}
+				if (IsCoordsValid(x + XCenter, y + YCenter) == false)
+				{
+					continue;
+				}
+				if (StateMap[x * Diameter + y].Inited == true)
+				{
+					continue;
+				}
+
+				if (isAcceptableTile(x + XCenter, y + YCenter))
+				{
+					StateMap[x * Diameter + y] = PathNode(x + XCenter, y + YCenter, 1, true);
 				}
 			}
 		}
+
+
+		int idx = (int)GetState(170, 266);
+		if (idx == -1)
+		{
+			return;
+		}
+		auto& testV = StateMap[idx];
+		int i = 0;
 	}
 	float PathMap::CalculateDistance(int x, int y, int destX, int destY)
 	{

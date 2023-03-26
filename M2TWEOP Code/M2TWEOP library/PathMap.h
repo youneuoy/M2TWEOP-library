@@ -21,9 +21,10 @@ namespace PathFinder
 		int X = 0;
 		int Y = 0;
 		float W = 0;
+		bool Inited = false;
 
 		PathNode() = default;
-		PathNode(int x, int y, float w) : X(x), Y(y), W(w) {}
+		PathNode(int x, int y, float w, bool inited) : X(x), Y(y), W(w), Inited(inited) {}
 	};
 	class Hasher
 	{
