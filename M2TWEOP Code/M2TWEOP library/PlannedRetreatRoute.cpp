@@ -256,6 +256,15 @@ namespace PlannedRetreatRoute
 			{
 				RetreatRoute route(state.StartX, state.StartY, x, y);
 
+				routes.data.erase(std::remove_if(routes.data.begin(), routes.data.end(), [&](RetreatRoute& route)
+					{
+						if (route.RouteStart.X == state.StartX&& route.RouteStart.Y == state.StartY)
+						{
+							return true;
+						}
+
+						return false;
+					}), routes.data.end());
 				routes.data.emplace_back(route);
 				ImGuiToast bMsg(ImGuiToastType_Success, 25000);
 
