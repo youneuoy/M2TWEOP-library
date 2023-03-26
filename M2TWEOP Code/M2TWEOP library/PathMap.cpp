@@ -3,7 +3,7 @@
 #include "dataOffsets.h"
 #include "fastFuncts.h"
 #include "smallFuncs.h"
-
+#include <map>
 namespace PathFinder
 {
 	PathMap::PathMap(int xCenter, int yCenter, int radius)
@@ -17,7 +17,6 @@ namespace PathFinder
 		}
 		XCenter = xCenter - radius;
 		YCenter = yCenter - radius;
-		//StateMap[(yCenter) * Diameter + xCenter] = PathNode(xCenter, yCenter, 1);
 
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
 
@@ -32,10 +31,39 @@ namespace PathFinder
 				}
 			}
 		}
-
 	}
 	PathMap::PathMap(int xCenter, int yCenter, int radius, stackStruct* army)
 	{
+		Diameter = radius * 2;
+		Pather = new MicroPather(this, (Diameter * Diameter), Diameter);
+
+		if (IsCoordsValid(xCenter, yCenter) == false)
+		{
+			return;
+		}
+		std::map<int, bool> pathableGround;
+
+
+		auto isAcceptableTile = [](int xDest, int yDest) 
+		{
+			return true;
+		};
+		XCenter = xCenter - radius;
+		YCenter = yCenter - radius;
+
+		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
+
+		StateMap.resize(Diameter * Diameter + Diameter + 1);
+		for (int x = 0; x <= Diameter; ++x)
+		{
+			for (int y = 0; y <= Diameter; ++y)
+			{
+				if (IsCoordsValid(x + XCenter, y + YCenter) && isAcceptableTile(x + XCenter, y + YCenter))
+				{
+					StateMap[x * Diameter + y] = PathNode(x + XCenter, y + YCenter, 1);
+				}
+			}
+		}
 	}
 	float PathMap::CalculateDistance(int x, int y, int destX, int destY)
 	{

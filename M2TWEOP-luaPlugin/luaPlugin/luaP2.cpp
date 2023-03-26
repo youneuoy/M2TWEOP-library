@@ -196,7 +196,21 @@ void luaP::initCampaign()
 	Basic tile table, not everything very known and understood yet, you can research with these fields.
 
 	@tfield int isLand (1 = land, 0 = sea)
-	@tfield int groundType
+	@tfield int groundType 
+	0 low fertility
+	1 medium fertility
+	2 high fertility
+	3 wilderness
+	4 high moutains
+	5 low moutains
+	6 hills
+	7 dense forest
+	8 woodland
+	9 swamp
+	10 ocean
+	11 deep sea
+	12 shallow sea
+	13 coast (beach)
 	@tfield int regionID
 	@tfield int factionID (Doesn't work if tile is river).
 	@tfield int borderingSettlement Not 0 means bordering settlement.
