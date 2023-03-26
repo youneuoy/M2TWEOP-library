@@ -135,7 +135,10 @@ namespace PathFinder
 				switch (objT)
 				{
 				case ObjectType::FloatingGeneral:
+				{
+					return false;
 					break;
+				}
 				case ObjectType::Settlement:
 				{
 					settlementStruct* set = (settlementStruct*)destDile->object;
@@ -143,6 +146,10 @@ namespace PathFinder
 					if (set->ownerFac->dipNum == army->faction->dipNum)
 					{
 						return true;
+					}
+					else
+					{
+						return false;
 					}
 					break;
 				}
@@ -153,6 +160,10 @@ namespace PathFinder
 					if (fort->faction->dipNum == army->faction->dipNum)
 					{
 						return true;
+					}
+					else
+					{
+						return false;
 					}
 					break;
 				}
