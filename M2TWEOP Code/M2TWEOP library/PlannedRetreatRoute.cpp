@@ -131,8 +131,23 @@ namespace PlannedRetreatRoute
 
 		int coordsMod = 1;
 
-		void* cashe = PathFinder::CreateCasheForDistances(x, y, 50);
+		void* cashe = PathFinder::CreateCasheForDistances(x, y, 25);
 
+
+		std::unordered_set<std::pair<int, int>, PathFinder::pathPairHash> testCoords;
+		PathFinder::GetPossibleTilesForArmyFromCashe(cashe, x, y, testCoords);
+		PathFinder::DeleteCasheForDistances(cashe);
+
+		for (auto& coord : testCoords)
+		{
+			state.possibleCoords.emplace_back(coord.first, coord.second, nullptr);
+		}
+		MakeTexts(state);
+
+		state.workingNow = true;
+		return;
+
+		cashe = PathFinder::CreateCasheForDistances(x, y, 50);
 		if (army->siege != nullptr)
 		{
 			if (army->siege->goal != nullptr)

@@ -1,5 +1,6 @@
 #pragma once
 #include <unordered_map>
+#include <unordered_set>
 #include "micropather.h"
 #include "exportHeader.h"
 #include "headersMEM.h"
@@ -9,11 +10,18 @@ using namespace micropather;
 
 namespace PathFinder
 {
+	struct pathPairHash {
+		inline std::size_t operator()(const std::pair<int, int>& v) const {
+			return v.first * 31 + v.second;
+		}
+	};
+
+
 	class PathNode {
 	public:
 		int X = 0;
 		int Y = 0;
-		float W=0;
+		float W = 0;
 
 		PathNode() = default;
 		PathNode(int x, int y, float w) : X(x), Y(y), W(w) {}
@@ -46,11 +54,14 @@ namespace PathFinder
 		}
 
 		float CalculateDistance(int x, int y, int destX, int destY);
+		float CalculateDistance(int x, int y, int destX, int destY, std::vector<std::pair<int, int>>& path);
+		void GetPossibleTilesForArmy(int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords);
+		void GetPossibleTilesForArmy2(int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords);
 	private:
 		MicroPather* Pather;
 		size_t Diameter = 0;
-		int XCenter=0;
-		int YCenter=0;
+		int XCenter = 0;
+		int YCenter = 0;
 		void* GetState(int x, int y);
 
 
@@ -66,9 +77,9 @@ namespace PathFinder
 		bool IsCoordsValid(int x, int y);
 		bool IsSameTypeOfGround(int x, int y, int destX, int destY);
 	};
-
+	void GetPossibleTilesForArmyFromCashe(void* cashe, int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords);
 
 	NOINLINE EOP_EXPORT void* CreateCasheForDistances(int x, int y, int radius);
-	NOINLINE EOP_EXPORT void DeleteCasheForDistances(void* cashe);
+	NOINLINE EOP_EXPORT void DeleteCasheForDistances(void* cashe); 
 	NOINLINE EOP_EXPORT float GetMovepointsForReachTileFromCashe(void* cashe, int x, int y, int destX, int destY);
 };
