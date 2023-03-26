@@ -32,26 +32,92 @@ namespace PathFinder
 			}
 		}
 	}
-	PathMap::PathMap(int xCenter, int yCenter, int radius, stackStruct* army)
+	PathMap::PathMap(stackStruct* army, int radius)
 	{
 		Diameter = radius * 2;
 		Pather = new MicroPather(this, (Diameter * Diameter), Diameter);
+
+
+		if (army == nullptr)
+		{
+			return;
+		}
+		int xCenter = -1;
+		int yCenter = -1;
+		if (army->gen != nullptr)
+		{
+			xCenter = army->gen->xCoord;
+			yCenter = army->gen->yCoord;
+		}
+		if (army->settlement != nullptr)
+		{
+			xCenter = army->settlement->xCoord;
+			yCenter = army->settlement->yCoord;
+		}
 
 		if (IsCoordsValid(xCenter, yCenter) == false)
 		{
 			return;
 		}
-		enum class Grounds
+		enum class GroundType
 		{
-			lowFertility=0,
-
+			low_fertility = 0,
+			medium_fertility = 1,
+			high_fertility = 2,
+			wilderness = 3,
+			high_moutains = 4,
+			low_moutains = 5,
+			hills = 6,
+			dense_forest = 7,
+			woodland = 8,
+			swamp = 9,
+			ocean = 10,
+			deep_sea = 11,
+			shallow_sea = 12,
+			coast = 13,
+			impassable_land = 14,
+			impassable_sea = 15,
 		};
-		std::map<int, bool> pathableGround;
+		bool isAtLand = fastFuncts::getTileStruct(xCenter, yCenter)->isLand;
 
 
-		auto isAcceptableTile = [](int xDest, int yDest) 
+		std::map<GroundType, bool> pathableGround = {
+			{GroundType::low_fertility, isAtLand == true},
+			{GroundType::medium_fertility, isAtLand == true},
+			{GroundType::high_fertility, isAtLand == true},
+			{GroundType::wilderness, isAtLand == true},
+			{GroundType::high_moutains, false},
+			{GroundType::low_moutains, false},
+			{GroundType::hills, isAtLand == true},
+			{GroundType::dense_forest, false},
+			{GroundType::woodland,  isAtLand == true},
+			{GroundType::swamp,  isAtLand == true},
+			{GroundType::ocean,  isAtLand == false},
+			{GroundType::deep_sea,  isAtLand == false},
+			{GroundType::shallow_sea,  isAtLand == false},
+			{GroundType::coast,  isAtLand == false},
+			{GroundType::impassable_land, false},
+			{GroundType::impassable_sea, false}
+		};
+
+
+
+		auto isAcceptableTile = [&](int xDest, int yDest)
 		{
-			return true;
+			auto* destDile = fastFuncts::getTileStruct(xDest, yDest);
+
+			if (destDile->isLand != isAtLand)
+			{
+				return false;
+			}
+
+			GroundType currGround = GroundType(destDile->groundType);
+			if (pathableGround[currGround] == true)
+			{
+				return true;
+			}
+
+			return false;
 		};
 		XCenter = xCenter - radius;
 		YCenter = yCenter - radius;
@@ -249,7 +315,7 @@ namespace PathFinder
 					break;
 				}
 				++currCoordsMod;
-			} while (currCoordsMod <= coordsMod*2);
+			} while (currCoordsMod <= coordsMod * 2);
 
 
 			coordsMod = coordsMod / 2;
@@ -320,8 +386,8 @@ namespace PathFinder
 				return;
 			}
 			void* statStTest = GetState(x, y);
-			float testV = LeastCostEstimate(statStTest,statEn);
-			if (testV>5)
+			float testV = LeastCostEstimate(statStTest, statEn);
+			if (testV > 5)
 			{
 				int i = 0;
 			}
@@ -392,6 +458,12 @@ namespace PathFinder
 		PathMap* pathMap = reinterpret_cast<PathMap*>(cashe);
 
 		pathMap->GetPossibleTilesForArmy(x, y, possibleCoords);
+	}
+	NOINLINE EOP_EXPORT void* CreateCasheForArmy(stackStruct* army, int radius)
+	{
+		PathMap* pathMap = new PathMap(army, radius);
+
+		return pathMap;
 	}
 	NOINLINE EOP_EXPORT void* CreateCasheForDistances(int x, int y, int radius)
 	{

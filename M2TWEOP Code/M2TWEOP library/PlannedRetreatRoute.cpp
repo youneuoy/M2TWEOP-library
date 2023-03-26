@@ -131,7 +131,8 @@ namespace PlannedRetreatRoute
 
 		int coordsMod = 1;
 
-		void* cashe = PathFinder::CreateCasheForDistances(x, y, 50);
+		//void* cashe = PathFinder::CreateCasheForDistances(x, y, 50);
+		void* cashe = PathFinder::CreateCasheForArmy(army, 50);
 
 
 		std::unordered_set<std::pair<int, int>, PathFinder::pathPairHash> testCoords;

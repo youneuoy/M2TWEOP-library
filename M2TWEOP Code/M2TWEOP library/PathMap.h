@@ -4,7 +4,7 @@
 #include "exportHeader.h"
 #include "headersMEM.h"
 
-
+#include "realGameTypes.h"
 using namespace micropather;
 
 namespace PathFinder
@@ -50,7 +50,7 @@ namespace PathFinder
 		PathMap(int xCenter, int yCenter, int radius);
 		//build map with army specific
 		//for example for sea one we add only sea tiles, etc
-		PathMap(int xCenter, int yCenter, int radius, stackStruct* army);
+		PathMap(stackStruct* army, int radius);
 		virtual ~PathMap() {
 			delete Pather;
 		}
@@ -78,8 +78,10 @@ namespace PathFinder
 		bool IsCoordsValid(int x, int y);
 		bool IsSameTypeOfGround(int x, int y, int destX, int destY);
 	};
+
 	void GetPossibleTilesForArmyFromCashe(void* cashe, int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords);
 
+	NOINLINE EOP_EXPORT void* CreateCasheForArmy(stackStruct* army, int radius);
 	NOINLINE EOP_EXPORT void* CreateCasheForDistances(int x, int y, int radius);
 	NOINLINE EOP_EXPORT void DeleteCasheForDistances(void* cashe); 
 	NOINLINE EOP_EXPORT float GetMovepointsForReachTileFromCashe(void* cashe, int x, int y, int destX, int destY);
