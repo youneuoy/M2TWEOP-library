@@ -172,8 +172,18 @@ struct uiElement {
 	undefined field_0x58[112];
 };
 
+struct STRATEGY_MAP_OBJECT
+{
+	enum class vFuncs
+	{
+		unknown,
+		unknown,
+		unknown,
+		GetObjectTypeID
+	};
+};
 struct oneTile {
-	void* object;
+	STRATEGY_MAP_OBJECT* object;
 	undefined field_0x4[6];
 	int8_t isLand;
 	undefined field_0xB[1];

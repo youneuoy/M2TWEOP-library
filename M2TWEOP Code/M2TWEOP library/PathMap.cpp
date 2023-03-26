@@ -104,10 +104,6 @@ namespace PathFinder
 
 		auto isAcceptableTile = [&](int xDest, int yDest)
 		{
-			if (xDest == 235 && yDest == 194)
-			{
-				int i = 0;
-			}
 			auto* destDile = fastFuncts::getTileStruct(xDest, yDest);
 
 			if (destDile->isLand != isAtLand)
@@ -115,7 +111,7 @@ namespace PathFinder
 				return false;
 			}
 			//river
-			if (destDile->factionId>0&&destDile->factionId & 64)
+			if (destDile->factionId > 0 && destDile->factionId & 64)
 			{
 				return false;
 			}
@@ -124,15 +120,49 @@ namespace PathFinder
 
 			if (destDile->object != nullptr)
 			{
-				int objT = CallVFunc<4,int>(destDile->object);
-				int i = 0;
-				//typedef int(__thiscall* GetObjectTypeF)(void* obj);
+				enum class ObjectType :int
+				{
+					FloatingGeneral = 0x23,
+					Settlement = 0x1D,
+					Fort = 0x1E,
+					Port = 0x1F,
 
-				//GetObjectTypeF getObjectTypeF = nullptr;
-				//getObjectTypeF = (GetObjectTypeF)(((int*)(*(int*)destDile->object))[0x4]);
+				};
 
-				//int objT = getObjectTypeF(destDile->object);
-				//int i = 0;
+				ObjectType objT = CallVFunc<4, ObjectType>(destDile->object);
+
+
+				switch (objT)
+				{
+				case ObjectType::FloatingGeneral:
+					break;
+				case ObjectType::Settlement:
+				{
+					settlementStruct* set = (settlementStruct*)destDile->object;
+
+					if (set->ownerFac->dipNum == army->faction->dipNum)
+					{
+						return true;
+					}
+					break;
+				}
+				case ObjectType::Fort:
+				{
+					fortStruct* fort = (fortStruct*)destDile->object;
+
+					if (fort->faction->dipNum == army->faction->dipNum)
+					{
+						return true;
+					}
+					break;
+				}
+				//for port and also for port dock
+				//need check ground type etc
+				case ObjectType::Port:
+					break;
+				default:
+					break;
+				}
 			}
 			if (pathableGround[currGround] == true)
 			{
