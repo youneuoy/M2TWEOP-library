@@ -104,14 +104,36 @@ namespace PathFinder
 
 		auto isAcceptableTile = [&](int xDest, int yDest)
 		{
+			if (xDest == 235 && yDest == 194)
+			{
+				int i = 0;
+			}
 			auto* destDile = fastFuncts::getTileStruct(xDest, yDest);
 
 			if (destDile->isLand != isAtLand)
 			{
 				return false;
 			}
-
+			//river
+			if (destDile->factionId>0&&destDile->factionId & 64)
+			{
+				return false;
+			}
 			GroundType currGround = GroundType(destDile->groundType);
+
+
+			if (destDile->object != nullptr)
+			{
+				int objT = CallVFunc<4,int>(destDile->object);
+				int i = 0;
+				//typedef int(__thiscall* GetObjectTypeF)(void* obj);
+
+				//GetObjectTypeF getObjectTypeF = nullptr;
+				//getObjectTypeF = (GetObjectTypeF)(((int*)(*(int*)destDile->object))[0x4]);
+
+				//int objT = getObjectTypeF(destDile->object);
+				//int i = 0;
+			}
 			if (pathableGround[currGround] == true)
 			{
 				return true;
@@ -382,6 +404,10 @@ namespace PathFinder
 		{
 			void* statEn = GetState(currX, currY);
 			if ((int)statEn == -1)
+			{
+				return;
+			}
+			if (StateMap[(int)statEn].W == 0)
 			{
 				return;
 			}

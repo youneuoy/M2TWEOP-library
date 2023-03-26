@@ -1,4 +1,11 @@
 #pragma once
+template<unsigned int IIdx, typename TRet, typename ... TArgs>
+TRet CallVFunc(void* thisptr, TArgs ... argList)
+{
+	using Fn = TRet(__thiscall*)(void*, decltype(argList)...);
+	return (*static_cast<Fn**>(thisptr))[IIdx](thisptr, argList...);
+}
+
 #include <cstdint>
 #include <windows.h>
 #include <basetsd.h>
