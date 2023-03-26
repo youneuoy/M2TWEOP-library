@@ -41,6 +41,11 @@ namespace PathFinder
 		{
 			return;
 		}
+		enum class Grounds
+		{
+			lowFertility=0,
+
+		};
 		std::map<int, bool> pathableGround;
 
 

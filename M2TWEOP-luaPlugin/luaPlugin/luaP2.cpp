@@ -211,6 +211,8 @@ void luaP::initCampaign()
 	11 deep sea
 	12 shallow sea
 	13 coast (beach)
+	14 impassable_land
+	15 impassable_sea
 	@tfield int regionID
 	@tfield int factionID (Doesn't work if tile is river).
 	@tfield int borderingSettlement Not 0 means bordering settlement.
