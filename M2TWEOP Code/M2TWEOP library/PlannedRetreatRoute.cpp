@@ -131,7 +131,7 @@ namespace PlannedRetreatRoute
 
 		int coordsMod = 1;
 
-		void* cashe = PathFinder::CreateCasheForDistances(x, y, 25);
+		void* cashe = PathFinder::CreateCasheForDistances(x, y, 50);
 
 
 		std::unordered_set<std::pair<int, int>, PathFinder::pathPairHash> testCoords;
@@ -146,78 +146,6 @@ namespace PlannedRetreatRoute
 
 		state.workingNow = true;
 		return;
-
-		cashe = PathFinder::CreateCasheForDistances(x, y, 50);
-		if (army->siege != nullptr)
-		{
-			if (army->siege->goal != nullptr)
-			{
-				state.possibleCoords.emplace_back(x, y, nullptr);
-			}
-		}
-
-		do
-		{
-			size_t posSize = state.possibleCoords.size();
-			int xMin = x - coordsMod;
-			int xMax = x + coordsMod;
-			int yMin = y - coordsMod;
-			int yMax = y + coordsMod;
-
-
-			for (int yDest = yMin, xDest = xMin; yDest < yMax; ++yDest)
-			{
-				float distance = PathFinder::GetMovepointsForReachTileFromCashe(cashe, x, y, xDest, yDest);
-				if (distance >= 0 && distance < possibleMP)
-				{
-					state.possibleCoords.emplace_back(xDest, yDest, nullptr);
-				}
-			}
-
-			for (int yDest = yMin, xDest = xMax; yDest <= yMax; ++yDest)
-			{
-				float distance = PathFinder::GetMovepointsForReachTileFromCashe(cashe, x, y, xDest, yDest);
-				if (distance >= 0 && distance < possibleMP)
-				{
-					state.possibleCoords.emplace_back(xDest, yDest, nullptr);
-				}
-			}
-
-
-			for (int xDest = xMin + 1, yDest = yMin; xDest < xMax; ++xDest)
-			{
-				float distance = PathFinder::GetMovepointsForReachTileFromCashe(cashe, x, y, xDest, yDest);
-				if (distance >= 0 && distance < possibleMP)
-				{
-					state.possibleCoords.emplace_back(xDest, yDest, nullptr);
-				}
-			}
-
-			for (int xDest = xMin, yDest = yMax; xDest < xMax; ++xDest)
-			{
-				float distance = PathFinder::GetMovepointsForReachTileFromCashe(cashe, x, y, xDest, yDest);
-				if (distance >= 0 && distance < possibleMP)
-				{
-					state.possibleCoords.emplace_back(xDest, yDest, nullptr);
-				}
-			}
-
-
-			if (state.possibleCoords.size() == posSize)
-			{
-				break;
-			}
-			if (state.maxPathLenInTiles < coordsMod)
-			{
-				break;
-			}
-			++coordsMod;
-		} while (true);
-
-		PathFinder::DeleteCasheForDistances(cashe);
-		MakeTexts(state);
-
-		state.workingNow = true;
 	}
 	void OnNewGameStart()
 	{

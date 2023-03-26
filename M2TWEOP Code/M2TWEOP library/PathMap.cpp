@@ -33,51 +33,9 @@ namespace PathFinder
 			}
 		}
 
-		//int coordsMod = 1;
-		//do
-		//{
-		//	int xMin = xCenter - coordsMod;
-		//	int xMax = xCenter + coordsMod;
-		//	int yMin = yCenter - coordsMod;
-		//	int yMax = yCenter + coordsMod;
-
-
-		//	for (int yDest = yMin, xDest = xMin; yDest < yMax; ++yDest)
-		//	{
-		//		if (IsCoordsValid(xDest, yDest))
-		//		{
-		//			StateMap[yDest * Diameter + xDest] = PathNode(xDest, yDest, 1);
-		//		}
-		//	}
-
-		//	for (int yDest = yMin, xDest = xMax; yDest <= yMax; ++yDest)
-		//	{
-		//		if (IsCoordsValid(xDest, yDest))
-		//		{
-		//			StateMap[yDest * Diameter + xDest] = PathNode(xDest, yDest, 1);
-		//		}
-		//	}
-
-
-		//	for (int xDest = xMin+1, yDest = yMin; xDest < xMax; ++xDest)
-		//	{
-		//		if (IsCoordsValid(xDest, yDest))
-		//		{
-		//			StateMap[yDest * Diameter + xDest] = PathNode(xDest, yDest, 1);
-		//		}
-		//	}
-
-		//	for (int xDest = xMin, yDest = yMax; xDest < xMax; ++xDest)
-		//	{
-		//		if (IsCoordsValid(xDest, yDest))
-		//		{
-		//			StateMap[yDest * Diameter + xDest] = PathNode(xDest, yDest, 1);
-		//		}
-		//	}
-
-
-		//	++coordsMod;
-		//} while (coordsMod <= radius);
+	}
+	PathMap::PathMap(int xCenter, int yCenter, int radius, stackStruct* army)
+	{
 	}
 	float PathMap::CalculateDistance(int x, int y, int destX, int destY)
 	{
@@ -97,6 +55,10 @@ namespace PathFinder
 	}
 	float PathMap::CalculateDistance(int x, int y, int destX, int destY, std::vector<std::pair<int, int>>& path)
 	{
+		if (destX == 203 && destY == 276)
+		{
+			int i = 0;
+		}
 		MPVector<void*> gpath;
 
 		float totalCost;
@@ -132,6 +94,13 @@ namespace PathFinder
 		visited.resize(StateMap.size(), false);
 		auto checkDone = [&](int xDest, int yDest)
 		{
+			//enabling this give very very little performance win
+			//but give wrong result - we skipped some tiles with high cost
+			return false;
+			if (xDest == 406 && yDest == 245)
+			{
+				int i = 0;
+			}
 			int idx = (int)GetState(xDest, yDest);
 			if (idx == -1)
 			{
@@ -247,79 +216,19 @@ namespace PathFinder
 					break;
 				}
 				++currCoordsMod;
-			} while (currCoordsMod < coordsMod*2);
+			} while (currCoordsMod <= coordsMod*2);
 
 
 			coordsMod = coordsMod / 2;
 		} while (coordsMod != 0);
 	}
-	void PathMap::GetPossibleTilesForArmy2(int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords)
-	{
-		auto* army = fastFuncts::findArmy(x, y);
-		if (army == nullptr)
-		{
-			return;
-		}
 
-		float possibleMP = smallFuncs::GetMinimumPossibleMovepointsForArmy(army);
-
-		int coordsMod = Diameter / 2;
-		do
-		{
-			int currCoordsMod = coordsMod;
-			do
-			{
-				int xMin = x - currCoordsMod;
-				int xMax = x + currCoordsMod;
-				int yMin = y - currCoordsMod;
-				int yMax = y + currCoordsMod;
-
-				for (int yDest = yMin, xDest = xMin; yDest < yMax; ++yDest)
-				{
-					float distance = CalculateDistance(x, y, xDest, yDest);
-					if (distance >= 0 && distance < possibleMP)
-					{
-						possibleCoords.emplace(xDest, yDest);
-					}
-				}
-
-				for (int yDest = yMin, xDest = xMax; yDest <= yMax; ++yDest)
-				{
-					float distance = CalculateDistance(x, y, xDest, yDest);
-					if (distance >= 0 && distance < possibleMP)
-					{
-						possibleCoords.emplace(xDest, yDest);
-					}
-				}
-
-
-				for (int xDest = xMin + 1, yDest = yMin; xDest < xMax; ++xDest)
-				{
-					float distance = CalculateDistance(x, y, xDest, yDest);
-					if (distance >= 0 && distance < possibleMP)
-					{
-						possibleCoords.emplace(xDest, yDest);
-					}
-				}
-
-				for (int xDest = xMin, yDest = yMax; xDest < xMax; ++xDest)
-				{
-					float distance = CalculateDistance(x, y, xDest, yDest);
-					if (distance >= 0 && distance < possibleMP)
-					{
-						possibleCoords.emplace(xDest, yDest);
-					}
-				}
-
-				++currCoordsMod;
-			} while (currCoordsMod < coordsMod);
-
-
-			coordsMod = coordsMod / 2;
-		} while (coordsMod != 0);
-	}
 	void* PathMap::GetState(int x, int y)
 	{
+		if (x == 203 && y == 276)
+		{
+			int i = 0;
+		}
 		if (x < 0 || y < 0)
 		{
 			return (void*)-1;
@@ -376,6 +285,12 @@ namespace PathFinder
 			if ((int)statEn == -1)
 			{
 				return;
+			}
+			void* statStTest = GetState(x, y);
+			float testV = LeastCostEstimate(statStTest,statEn);
+			if (testV>5)
+			{
+				int i = 0;
 			}
 			float distance = fastFuncts::GetMovepointsForReachNearTile(x, y, currX, currY);
 			if (distance >= 0)

@@ -49,6 +49,9 @@ namespace PathFinder
 	{
 	public:
 		PathMap(int xCenter, int yCenter, int radius);
+		//build map with army specific
+		//for example for sea one we add only sea tiles, etc
+		PathMap(int xCenter, int yCenter, int radius, stackStruct* army);
 		virtual ~PathMap() {
 			delete Pather;
 		}
@@ -56,7 +59,6 @@ namespace PathFinder
 		float CalculateDistance(int x, int y, int destX, int destY);
 		float CalculateDistance(int x, int y, int destX, int destY, std::vector<std::pair<int, int>>& path);
 		void GetPossibleTilesForArmy(int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords);
-		void GetPossibleTilesForArmy2(int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords);
 	private:
 		MicroPather* Pather;
 		size_t Diameter = 0;
