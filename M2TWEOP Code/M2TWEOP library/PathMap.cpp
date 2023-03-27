@@ -259,14 +259,13 @@ namespace PathFinder
 			}
 		}
 
-
-		int idx = (int)GetState(170, 266);
+		StateMap[XCenter * Diameter + YCenter] = PathNode(xCenter, yCenter, 1, true);
+		int idx = (int)GetState(xCenter, yCenter);
 		if (idx == -1)
 		{
 			return;
 		}
-		auto& testV = StateMap[idx];
-		int i = 0;
+		StateMap[idx] = PathNode(xCenter, yCenter, 1, true);
 	}
 	float PathMap::CalculateDistance(int x, int y, int destX, int destY)
 	{
