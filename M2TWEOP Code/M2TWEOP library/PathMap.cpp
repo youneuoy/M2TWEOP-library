@@ -176,6 +176,7 @@ namespace PathFinder
 						if (gen->genType->type == 6 || gen->genType->type == 7 || gen->genType->type == 3)
 						{
 							prohibitNeigbourTiles();
+							return false;
 						}
 						else
 						{
