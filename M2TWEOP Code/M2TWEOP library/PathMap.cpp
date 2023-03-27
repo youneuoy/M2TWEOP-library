@@ -181,7 +181,7 @@ namespace PathFinder
 						}
 						else
 						{
-							return false;
+							return true;
 						}
 					}
 					break;
