@@ -1,4 +1,11 @@
 #pragma once
+template<unsigned int IIdx, typename TRet, typename ... TArgs>
+TRet CallVFunc(void* thisptr, TArgs ... argList)
+{
+	using Fn = TRet(__thiscall*)(void*, decltype(argList)...);
+	return (*static_cast<Fn**>(thisptr))[IIdx](thisptr, argList...);
+}
+
 #include <cstdint>
 #include <windows.h>
 #include <basetsd.h>
@@ -9,8 +16,15 @@ typedef unsigned short    ushort;
 #pragma pack(push,1)
 typedef struct stackStruct stackStruct, * PstackStruct;
 typedef struct settlementStruct settlementStruct, * PsettlementStruct;
-
-
+enum class StartMapObjectType :int
+{
+	FloatingGeneral = 0x23,
+	Settlement = 0x1D,
+	Fort = 0x1E,
+	Port = 0x1F,
+	Character = 0x1C,
+	RallyPointSundry = 0x22
+};
 struct UNICODE_STRING {
 	USHORT something;//idk
 	USHORT Length;//idk
@@ -960,6 +974,14 @@ public:
 }; //Size: 0x0024
 
 
+struct RallyPointSundry {
+	undefined field0_0x0[4];
+	void* object;
+	undefined field2_0x8[56];
+	void* object2;
+	undefined field4_0x44[16];
+};
+
 //settlement
 struct settlementStruct {
 	void* vTable;
@@ -1371,6 +1393,16 @@ struct coords {
 	int yCoord;
 };
 
+struct factionTileStruct {
+	int8_t* tilesVisiblity;
+	int tilesXBound;
+	int tilesYBound;
+	undefined field3_0xc[28];
+	void* revealedTiles;
+	int revealedTilesContainerAllocatedSize;
+	int revealedTilesNumber;
+	undefined field7_0x34[24];
+};
 //faction
 struct factionStruct {
 	undefined field_0x0[180];
@@ -1412,7 +1444,7 @@ struct factionStruct {
 	undefined field_0x150[4];
 	int portBuildingsNum;
 	undefined field_0x158[68];
-	int someForSpawnCharacter;
+	factionTileStruct* tilesFac;
 	undefined field_0x1a0[2208];
 	UINT32 religion; /* number of religion */
 	undefined field_0xa44[84];

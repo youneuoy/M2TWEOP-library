@@ -108,6 +108,30 @@ namespace PathFinder
 			{
 				return true;
 			}
+			auto prohibitNeigbourTiles = [&]()
+			{
+				auto prohibitTile = [&](int x, int y)
+				{
+					int idx = (int)GetState(x, y);
+					if (idx == -1)
+					{
+						return;
+					}
+
+					StateMap[idx] = PathNode(0, 0, 0, true);
+				};
+				prohibitTile(xDest - 1, yDest - 1);
+				prohibitTile(xDest, yDest - 1);
+				prohibitTile(xDest + 1, yDest - 1);
+
+				prohibitTile(xDest - 1, yDest + 1);
+				prohibitTile(xDest, yDest + 1);
+				prohibitTile(xDest + 1, yDest + 1);
+
+				prohibitTile(xDest - 1, yDest);
+				prohibitTile(xDest + 1, yDest);
+			};
+
 			if (xDest == 277 && yDest == 206)
 			{
 				int i = 0;
@@ -128,55 +152,24 @@ namespace PathFinder
 
 			if (destDile->object != nullptr)
 			{
-				enum class ObjectType :int
-				{
-					FloatingGeneral = 0x23,
-					Settlement = 0x1D,
-					Fort = 0x1E,
-					Port = 0x1F,
-					Character = 0x1C,
-					RallyPointSundry = 0x22
-				};
 
-				ObjectType objT = CallVFunc<4, ObjectType>(destDile->object);
+				void* endObj = smallFuncs::GetMainStratObject(destDile->object);
 
-				auto prohibitNeigbourTiles = [&]()
-				{
-					auto prohibitTile = [&](int x, int y)
-					{
-						int idx = (int)GetState(x, y);
-						if (idx == -1)
-						{
-							return;
-						}
-
-						StateMap[idx] = PathNode(0, 0, 0, true);
-					};
-					prohibitTile(xDest - 1, yDest - 1);
-					prohibitTile(xDest, yDest - 1);
-					prohibitTile(xDest + 1, yDest - 1);
-
-					prohibitTile(xDest - 1, yDest + 1);
-					prohibitTile(xDest, yDest + 1);
-					prohibitTile(xDest + 1, yDest + 1);
-
-					prohibitTile(xDest - 1, yDest);
-					prohibitTile(xDest + 1, yDest);
-				};
+				StartMapObjectType objT = CallVFunc<4, StartMapObjectType>(endObj);
 				switch (objT)
 				{
-				case ObjectType::FloatingGeneral:
+				case StartMapObjectType::FloatingGeneral:
 				{
 					prohibitNeigbourTiles();
 					return false;
 					break;
 				}
-				case ObjectType::Character:
+				case StartMapObjectType::Character:
 				{
-					general* gen = (general*)destDile->object;
+					general* gen = (general*)endObj;
 					if (gen->genChar->faction->dipNum == army->faction->dipNum)
 					{
-						return false;
+						return true;
 					}
 					else
 					{
@@ -191,9 +184,9 @@ namespace PathFinder
 					}
 					break;
 				}
-				case ObjectType::Settlement:
+				case StartMapObjectType::Settlement:
 				{
-					settlementStruct* set = (settlementStruct*)destDile->object;
+					settlementStruct* set = (settlementStruct*)endObj;
 
 					if (set->ownerFac->dipNum == army->faction->dipNum)
 					{
@@ -206,9 +199,9 @@ namespace PathFinder
 					}
 					break;
 				}
-				case ObjectType::Fort:
+				case StartMapObjectType::Fort:
 				{
-					fortStruct* fort = (fortStruct*)destDile->object;
+					fortStruct* fort = (fortStruct*)endObj;
 
 					if (fort->faction->dipNum == army->faction->dipNum)
 					{
@@ -223,7 +216,7 @@ namespace PathFinder
 				}
 				//for port and also for port dock
 				//need check ground type etc
-				case ObjectType::Port:
+				case StartMapObjectType::Port:
 					break;
 				default:
 					break;

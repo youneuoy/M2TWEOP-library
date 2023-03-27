@@ -16,8 +16,15 @@ typedef unsigned short    ushort;
 #pragma pack(push,1)
 typedef struct stackStruct stackStruct, * PstackStruct;
 typedef struct settlementStruct settlementStruct, * PsettlementStruct;
-
-
+enum class StartMapObjectType :int
+{
+	FloatingGeneral = 0x23,
+	Settlement = 0x1D,
+	Fort = 0x1E,
+	Port = 0x1F,
+	Character = 0x1C,
+	RallyPointSundry = 0x22
+};
 struct UNICODE_STRING {
 	USHORT something;//idk
 	USHORT Length;//idk
@@ -966,6 +973,14 @@ public:
 	char pad_0021[3]; //0x0021
 }; //Size: 0x0024
 
+
+struct RallyPointSundry {
+	undefined field0_0x0[4];
+	void* object;
+	undefined field2_0x8[56];
+	void* object2;
+	undefined field4_0x44[16];
+};
 
 //settlement
 struct settlementStruct {

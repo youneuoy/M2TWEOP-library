@@ -9,6 +9,7 @@
 #include "globals.h"
 namespace smallFuncs
 {
+	void* GetMainStratObject(void*baseObj);
 	NOINLINE EOP_EXPORT void setAncLimit(unsigned char limit);
 	NOINLINE EOP_EXPORT void setEDUUnitsSize(signed short min, signed short max);
 	NOINLINE EOP_EXPORT void setMaxBgSize(unsigned char size);

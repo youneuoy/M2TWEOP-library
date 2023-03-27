@@ -7,7 +7,42 @@
 
 namespace smallFuncs
 {
+	void* GetMainStratObject(void* baseObj)
+	{
+		if (baseObj == nullptr)
+		{
+			return baseObj;
+		}
 
+		StartMapObjectType objT = CallVFunc<4, StartMapObjectType>(baseObj);
+		switch (objT)
+		{
+		case StartMapObjectType::FloatingGeneral:
+			break;
+		case StartMapObjectType::Settlement:
+			break;
+		case StartMapObjectType::Fort:
+			break;
+		case StartMapObjectType::Port:
+			break;
+		case StartMapObjectType::Character:
+			break;
+		case StartMapObjectType::RallyPointSundry:
+		{
+			RallyPointSundry* ral = (RallyPointSundry*)baseObj;
+			if (ral->object == nullptr)
+			{
+				break;
+			}
+			return GetMainStratObject(ral->object);
+
+			break;
+		}
+		default:
+			break;
+		}
+		return baseObj;
+	}
 	NOINLINE EOP_EXPORT void setAncLimit(unsigned char limit)
 	{
 
