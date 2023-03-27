@@ -294,4 +294,13 @@ namespace PlannedRetreatRoute
 		state.workingNow = false;
 
 	}
+	void OnRetreat()
+	{
+		battleDataS* battle = smallFuncs::getGameDataAll()->battleHandler;
+		for (int i = 0; i, battle->sidesNum; ++i)
+		{
+			int j=battle->sides[i].wonBattle;
+			int t = 0;
+		}
+	}
 }

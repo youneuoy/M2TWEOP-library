@@ -533,6 +533,11 @@ void __stdcall patchesForGame::onStartOfDrawFunction()
 	stratModelsChange::update();
 }
 
+void __stdcall patchesForGame::onRetreat()
+{
+	PlannedRetreatRoute::OnRetreat();
+}
+
 void __fastcall patchesForGame::OnStopCharacter(general* character)
 {
 	auto& campaign = smallFuncs::getGameDataAll()->campaignData;

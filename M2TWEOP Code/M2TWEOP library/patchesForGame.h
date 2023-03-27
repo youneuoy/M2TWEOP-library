@@ -93,6 +93,7 @@ public:
 	static void WINAPI onDrawPartsOfStratObjects();
 	static void WINAPI onDrawAll();
 	static void WINAPI onStartOfDrawFunction();
+	static void WINAPI onRetreat();
 
 
 	static void __fastcall OnStopCharacter(general* character);

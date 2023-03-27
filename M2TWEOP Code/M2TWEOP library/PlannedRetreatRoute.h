@@ -14,5 +14,6 @@ namespace PlannedRetreatRoute
 	void OnGameLoad(const std::vector<std::string>& filePathes);
 
 	void OnClickAtTile(int x, int y);
+	void OnRetreat();
 };
 

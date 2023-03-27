@@ -3712,3 +3712,56 @@ void toStartOfDrawFunction::SetNewCode()
 	m_cheatBytes = (unsigned char*)a->make();
 	delete a;
 }
+
+toRetreat::toRetreat(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005a0c20;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005a0740;
+}
+
+toRetreat::~toRetreat()
+{
+}
+
+void toRetreat::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	//retreat logic
+	a->nop();
+	a->nop();
+	a->nop();
+	a->nop();
+	a->nop();
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toRetreat::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->popf();
+	a->popad();
+
+
+	a->ret(0xC);
+	a->ret();
+
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
