@@ -1,0 +1,37 @@
+name: Provision/Start M2TWEOP Server
+on:
+  workflow_dispatch:
+    inputs:
+      ec2-name:
+        description: The Medieval 2 Engine Overhaul Project Server
+        required: true
+        default: 'M2TWEOP Server'
+        type: string
+jobs:
+  provision-ec2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: '${{ secrets.TF_USER_AWS_KEY }}'
+          aws-secret-access-key: '${{ secrets.TF_USER_AWS_SECRET }}'
+          aws-region: eu-west-1
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+      - name: Terraform Apply
+        id:   apply
+        env:
+          TF_VAR_ec2_name:  "${{ github.event.inputs.ec2-name }}"
+        run: |
+          cd "M2TWEOP Server/terraform"
+          terraform init
+          terraform validate
+          terraform plan
+          terraform apply -auto-approve
