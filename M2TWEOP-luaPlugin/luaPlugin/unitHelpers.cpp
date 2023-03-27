@@ -36,23 +36,23 @@ namespace unitHelpers
 		{
 		case 0:
 		{
-			sizeMul = 1.f;
+			mul = 1.f;
 			break;
 		}
 		case 1:
 		{			
-			sizeMul = 1.25f;
+			mul = 1.25f;
 			break;
 		}
 		case 2:
 		{
-			sizeMul = 1.875f;
+			mul = 1.875f;
 			break;
 		}
 		default:
 			break;
 		}
-		return un->eduEntry->SoldierCount* sizeMul;
+		return un->eduEntry->SoldierCount* mul;
 	}
 	void setMovepoints(unit* un, float movepoints)
 	{
