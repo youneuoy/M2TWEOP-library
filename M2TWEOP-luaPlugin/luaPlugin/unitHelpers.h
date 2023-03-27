@@ -11,6 +11,8 @@ namespace unitHelpers
 	int getweaponLVL(unit* un);
 	void setweaponLVL(unit* un,int lvl);
 
+	int getMaxSoldiersCount(unit* un);
+
 	void setMovepoints(unit* un,float movepoints);
 	void setSoldiersCount(unit* un,int number);
 	void killUnit(unit* un);

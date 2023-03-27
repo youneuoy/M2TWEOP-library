@@ -134,7 +134,8 @@ namespace PathFinder
 					Settlement = 0x1D,
 					Fort = 0x1E,
 					Port = 0x1F,
-					Character = 0x1C
+					Character = 0x1C,
+					RallyPointSundry = 0x22
 				};
 
 				ObjectType objT = CallVFunc<4, ObjectType>(destDile->object);
