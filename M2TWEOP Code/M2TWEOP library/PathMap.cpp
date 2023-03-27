@@ -108,6 +108,10 @@ namespace PathFinder
 			{
 				return true;
 			}
+			if (xDest == 277 && yDest == 206)
+			{
+				int i = 0;
+			}
 			auto* destDile = fastFuncts::getTileStruct(xDest, yDest);
 
 			if (destDile->isLand != isAtLand)
@@ -115,7 +119,7 @@ namespace PathFinder
 				return false;
 			}
 			//river
-			if (destDile->factionId > 0 && destDile->factionId & 64)
+			if (destDile->factionId > 0 && destDile->factionId & 0x60)
 			{
 				return false;
 			}
