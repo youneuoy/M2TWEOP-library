@@ -22,6 +22,8 @@
 
 ### **Bugfixes**
 
+- fixed unit.soldierCountStratMapMax - *youneuoy*
+
 ### **Links**
 
 - [Website](https://youneuoy.github.io/M2TWEOP-library/)
