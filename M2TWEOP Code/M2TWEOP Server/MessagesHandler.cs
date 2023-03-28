@@ -17,7 +17,7 @@ namespace M2TWEOPServer
         private bool MessageReceived(byte[] message, out byte[] response)
         {
             response = message.ToArray();
-            return false;
+            return true;
         }
     }
 }

@@ -50,7 +50,7 @@ namespace EServer
 
         private void CheckTimeOuts()
         {
-            var expired = Clients.Where(client => client.Value < DateTime.Now.AddSeconds(10)).Select(client => client.Key).ToList();
+            var expired = Clients.Where(client => client.Value > DateTime.Now.AddSeconds(10)).Select(client => client.Key).ToList();
 
             expired.ForEach(ex =>
             {

@@ -15,6 +15,7 @@ namespace M2TWEOPServer
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             Serilog.Log.Information("Service started");
+            MessagesHandler.Run();
             try
             {
                 using (ApplicationContext db = new ApplicationContext(Configuration.GetConnectionString("eopdb") ?? ""))
@@ -33,7 +34,7 @@ namespace M2TWEOPServer
                 Serilog.Log.Error(ex.ToString());
             }
 
-            MessagesHandler.Run();
+           // MessagesHandler.Run();
             while (!stoppingToken.IsCancellationRequested)
             {
                 Tick();
