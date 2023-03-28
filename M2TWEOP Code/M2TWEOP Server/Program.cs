@@ -1,55 +1,32 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Serilog;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-
+using Microsoft.Extensions.Configuration;
 namespace M2TWEOPServer
 {
     internal class Program
     {
         static async Task Main(string[] args)
         {
-            IHost host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices(services =>
-    {
-        services.AddHostedService<Worker>();
-    })
-    .Build();
+            Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.File("log/EopServer.log", fileSizeLimitBytes: 1 * 1024 * 1024, rollingInterval: RollingInterval.Day)
+            .CreateLogger();
 
-            try
+            var host = new HostBuilder()
+            .ConfigureAppConfiguration((hostContext, config) =>
             {
-                await host.RunAsync();
-            }
-            catch (Exception ex)
+                config.AddJsonFile("appsettings.json", optional: false);
+            })
+            .ConfigureLogging((hostContext, logging) =>
             {
-
-            }
-
-        }
-    }
-
-    public class Worker : BackgroundService
-    {
-        private readonly ILogger<Worker> _logger;
-
-        public Worker(ILogger<Worker> logger)
-        {
-            _logger = logger;
-        }
-
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            _logger.LogInformation("");
-
-            stoppingToken.Register(() => _logger.LogDebug(""));
-
-            while (!stoppingToken.IsCancellationRequested)
+                logging.AddSerilog(dispose: true);
+            })
+            .ConfigureServices((hostContext, services) =>
             {
-                _logger.LogInformation("");
-
-
-                await Task.Delay(5000, stoppingToken);
-            }
+                services.AddHostedService<EOPService>();
+            }).Build();
+            await host.RunAsync();
         }
     }
 }
