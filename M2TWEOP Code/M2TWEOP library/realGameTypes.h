@@ -16,15 +16,6 @@ typedef unsigned short    ushort;
 #pragma pack(push,1)
 typedef struct stackStruct stackStruct, * PstackStruct;
 typedef struct settlementStruct settlementStruct, * PsettlementStruct;
-enum class StartMapObjectType :int
-{
-	FloatingGeneral = 0x23,
-	Settlement = 0x1D,
-	Fort = 0x1E,
-	Port = 0x1F,
-	Character = 0x1C,
-	RallyPointSundry = 0x22
-};
 struct UNICODE_STRING {
 	USHORT something;//idk
 	USHORT Length;//idk

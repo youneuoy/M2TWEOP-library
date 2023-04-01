@@ -255,6 +255,7 @@
     <ClInclude Include="m2tweopTile.h" />
     <ClInclude Include="managerF.h" />
     <ClInclude Include="MapTextDrawer.h" />
+    <ClInclude Include="MasterDefines.h" />
     <ClInclude Include="MemWork.h" />
     <ClInclude Include="MmbMover.h" />
     <ClInclude Include="onlineThings.h" />

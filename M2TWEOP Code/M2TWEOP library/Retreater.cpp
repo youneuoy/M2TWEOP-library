@@ -1,5 +1,6 @@
 #include "Retreater.h"
 #include "PlannedRetreatRoute.h"
+#include "PathMap.h"
 
 
 void Retreater::RetreatArmy(armyAndCharacter& army)
@@ -9,10 +10,17 @@ void Retreater::RetreatArmy(armyAndCharacter& army)
 		return;
 	}
 
+	//if route planned
 	if (PlannedRetreatRoute::TryRetreatArmyWithRoute(army)==true)
 	{
 		return;
 	}
+
+	void* cashe = PathFinder::CreateCasheForArmy(army.army, 15);
+	auto coord = PathFinder::GetSafestTileForArmyFromCashe(cashe, army.army);
+	PathFinder::DeleteCasheForDistances(cashe);
+
+	fastFuncts::teleportCharacter(army.character, coord.first, coord.second);
 }
 
 void Retreater::RetreatSide(battleSide& bside)

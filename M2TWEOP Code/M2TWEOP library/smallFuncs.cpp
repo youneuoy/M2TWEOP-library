@@ -3,6 +3,7 @@
 #include "dataOffsets.h"
 
 #include "fastFunctsHelpers.h"
+#include "MasterDefines.h"
 
 
 namespace smallFuncs

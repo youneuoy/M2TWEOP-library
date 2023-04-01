@@ -438,6 +438,9 @@
     <ClInclude Include="Retreater.h">
       <Filter>features\Retreats\Retreater</Filter>
     </ClInclude>
+    <ClInclude Include="MasterDefines.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

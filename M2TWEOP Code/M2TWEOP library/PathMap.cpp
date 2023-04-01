@@ -3,10 +3,18 @@
 #include "dataOffsets.h"
 #include "fastFuncts.h"
 #include "smallFuncs.h"
+#include "MasterDefines.h"
 #include <map>
+
+#include <mutex>
 namespace PathFinder
 {
-	PathMap::PathMap(int xCenter, int yCenter, int radius)
+	PathMap::PathMap()
+	{
+		Pather = nullptr;
+	}
+
+	PathMap::PathMap(int xCenter, int yCenter, int radius):PathMap()
 	{
 		Diameter = radius * 2;
 		Pather = new MicroPather(this, (Diameter * Diameter), Diameter);
@@ -32,7 +40,7 @@ namespace PathFinder
 			}
 		}
 	}
-	PathMap::PathMap(stackStruct* army, int radius)
+	PathMap::PathMap(stackStruct* army, int radius) :PathMap()
 	{
 		Diameter = radius * 2;
 		Pather = new MicroPather(this, (Diameter * Diameter), Diameter);
@@ -59,25 +67,7 @@ namespace PathFinder
 		{
 			return;
 		}
-		enum class GroundType
-		{
-			low_fertility = 0,
-			medium_fertility = 1,
-			high_fertility = 2,
-			wilderness = 3,
-			high_moutains = 4,
-			low_moutains = 5,
-			hills = 6,
-			dense_forest = 7,
-			woodland = 8,
-			swamp = 9,
-			ocean = 10,
-			deep_sea = 11,
-			shallow_sea = 12,
-			coast = 13,
-			impassable_land = 14,
-			impassable_sea = 15,
-		};
+
 		bool isAtLand = fastFuncts::getTileStruct(xCenter, yCenter)->isLand;
 
 
@@ -256,7 +246,7 @@ namespace PathFinder
 			}
 		}
 
-		StateMap[XCenter * Diameter + YCenter] = PathNode(xCenter, yCenter, 1, true);
+
 		int idx = (int)GetState(xCenter, yCenter);
 		if (idx == -1)
 		{
@@ -451,16 +441,171 @@ namespace PathFinder
 		std::unordered_set<std::pair<int, int>, PathFinder::pathPairHash> possibleCoords;
 		GetPossibleTilesForArmy(x, y, possibleCoords);
 
-		std::pair<int, int> res = std::make_pair(x,y);
+		std::pair<int, int> res = std::make_pair(x, y);
 
 		float minResDistance = FLT_MAX;
 		for (auto& coord : possibleCoords)
 		{
-			if (smallFuncs::GetDistanceInTiles(destx, desty, coord.first, coord.second) < minResDistance)
+			float dist = smallFuncs::GetDistanceInTiles(destx, desty, coord.first, coord.second);
+			if (dist < minResDistance)
 			{
 				res = coord;
+				minResDistance = dist;
 			}
 		}
+		return res;
+	}
+
+	std::pair<int, int> PathMap::GetSafestTileForArmy(stackStruct* army)
+	{
+
+		int x = 0;
+		int y = 0;
+		if (army->gen != nullptr)
+		{
+			x = army->gen->xCoord;
+			y = army->gen->yCoord;
+		}
+		else if (army->settlement != nullptr)
+		{
+			x = army->settlement->xCoord;
+			y = army->settlement->yCoord;
+		}
+		else
+		{
+			MessageBoxA(NULL, "GetSafestTileForArmy error", "ERROR", NULL);
+		}
+		auto evaluateSafety = [&](int evX, int evY)
+		{
+			int safetyCost = 0;
+			auto* destDile = fastFuncts::getTileStruct(evX, evY);
+
+			GroundType currGround = GroundType(destDile->groundType);
+
+			if (destDile->object != nullptr)
+			{
+				void* endObj = smallFuncs::GetMainStratObject(destDile->object);
+
+				StartMapObjectType objT = CallVFunc<4, StartMapObjectType>(endObj);
+
+				switch (objT)
+				{
+				case StartMapObjectType::FloatingGeneral:
+					break;
+				case StartMapObjectType::Settlement:
+				{
+					settlementStruct* set = (settlementStruct*)endObj;
+
+					if (set->ownerFac->dipNum == army->faction->dipNum)
+					{
+						if (set->army == nullptr)
+						{
+							safetyCost += 999;
+						}
+						else
+						{
+							if (set->army->numOfUnits + army->numOfUnits <= 20)
+							{
+								//means we can retreat to this settlement, it fits our army
+								//need implementation!!!!!!!!!!!!!!!!!!!!!!!!!!
+								//safetyCost += 599;
+							}
+						}
+					}
+					break;
+				}
+				case StartMapObjectType::Fort:
+				{
+					fortStruct* fort = (fortStruct*)endObj;
+
+					if (fort->faction->dipNum == army->faction->dipNum)
+					{
+						if (fort->army == nullptr)
+						{
+							safetyCost += 899;
+						}
+						else
+						{
+							if (fort->army->numOfUnits + army->numOfUnits <= 20)
+							{
+								//means we can retreat to this settlement, it fits our army
+								//need implementation!!!!!!!!!!!!!!!!!!!!!!!!!!
+								//safetyCost += 499;
+							}
+						}
+					}
+					break;
+				}
+				case StartMapObjectType::Port:
+					break;
+				case StartMapObjectType::Character:
+					break;
+				case StartMapObjectType::RallyPointSundry:
+					break;
+				default:
+					break;
+				}
+			}
+			switch (currGround)
+			{
+			case GroundType::low_fertility:
+				break;
+			case GroundType::medium_fertility:
+				break;
+			case GroundType::high_fertility:
+				break;
+			case GroundType::wilderness:
+				break;
+			case GroundType::high_moutains:
+				break;
+			case GroundType::low_moutains:
+				break;
+			case GroundType::hills:
+				break;
+			case GroundType::dense_forest:
+				break;
+			case GroundType::woodland:
+			{
+				//we can hide army here
+				safetyCost += 199;
+				break;
+			}
+
+			case GroundType::swamp:
+				break;
+			case GroundType::ocean:
+				break;
+			case GroundType::deep_sea:
+				break;
+			case GroundType::shallow_sea:
+				break;
+			case GroundType::coast:
+				break;
+			case GroundType::impassable_land:
+				break;
+			case GroundType::impassable_sea:
+				break;
+			default:
+				break;
+			}
+
+			//prefer long distances
+			safetyCost += smallFuncs::GetDistanceInTiles(x, y, evX, evY);
+			return safetyCost;
+		};
+
+
+		std::unordered_set<std::pair<int, int>, PathFinder::pathPairHash> possibleCoords;
+		GetPossibleTilesForArmy(x, y, possibleCoords);
+		std::pair<int, int> res = std::make_pair(x, y);
+		int currSafety = -1;
+
+		for (auto& coord : possibleCoords)
+		{
+			int safety = evaluateSafety(coord.first, coord.second);
+
+		}
+
 		return res;
 	}
 
@@ -598,7 +743,13 @@ namespace PathFinder
 	{
 		PathMap* pathMap = reinterpret_cast<PathMap*>(cashe);
 
-		return pathMap->GetNearestTileForArmy(x,y, destx, desty);
+		return pathMap->GetNearestTileForArmy(x, y, destx, desty);
+	}
+	std::pair<int, int> GetSafestTileForArmyFromCashe(void* cashe, stackStruct* army)
+	{
+		PathMap* pathMap = reinterpret_cast<PathMap*>(cashe);
+
+		return pathMap->GetSafestTileForArmy(army);
 	}
 	NOINLINE EOP_EXPORT void* CreateCasheForArmy(stackStruct* army, int radius)
 	{

@@ -5,6 +5,8 @@
 #include "headersMEM.h"
 
 #include "realGameTypes.h"
+
+#include <random>
 using namespace micropather;
 
 namespace PathFinder
@@ -60,13 +62,14 @@ namespace PathFinder
 		float CalculateDistance(int x, int y, int destX, int destY, std::vector<std::pair<int, int>>& path);
 		void GetPossibleTilesForArmy(int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords);
 		std::pair<int, int> GetNearestTileForArmy(int x, int y, int destx, int desty);
+		std::pair<int, int> GetSafestTileForArmy(stackStruct* army);
 	private:
+		PathMap();
 		MicroPather* Pather;
 		size_t Diameter = 0;
 		int XCenter = 0;
 		int YCenter = 0;
 		void* GetState(int x, int y);
-
 
 		std::vector<PathNode>StateMap;
 
@@ -83,6 +86,9 @@ namespace PathFinder
 
 	void GetPossibleTilesForArmyFromCashe(void* cashe, int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords);
 	std::pair<int, int> GetNearestTileForArmyFromCashe(void* cashe, int x, int y, int destx, int desty);
+
+	//for retreats, etc
+	std::pair<int, int> GetSafestTileForArmyFromCashe(void* cashe, stackStruct* army);
 
 	NOINLINE EOP_EXPORT void* CreateCasheForArmy(stackStruct* army, int radius);
 	NOINLINE EOP_EXPORT void* CreateCasheForDistances(int x, int y, int radius);
