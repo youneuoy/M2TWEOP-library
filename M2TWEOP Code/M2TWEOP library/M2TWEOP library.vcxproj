@@ -266,6 +266,7 @@
     <ClInclude Include="plugins.h" />
     <ClInclude Include="realGameTypes.h" />
     <ClInclude Include="RecruitSystem.h" />
+    <ClInclude Include="Retreater.h" />
     <ClInclude Include="RetreatRoutes.h" />
     <ClInclude Include="RSExport.h" />
     <ClInclude Include="settlementConversionLvlSetter.h" />
@@ -350,6 +351,7 @@
     <ClCompile Include="PlannedRetreatRoute.cpp" />
     <ClCompile Include="plugins.cpp" />
     <ClCompile Include="RecruitSystem.cpp" />
+    <ClCompile Include="Retreater.cpp" />
     <ClCompile Include="RSExport.cpp" />
     <ClCompile Include="settlementConversionLvlSetter.cpp" />
     <ClCompile Include="SingleFbxMesh.cpp" />

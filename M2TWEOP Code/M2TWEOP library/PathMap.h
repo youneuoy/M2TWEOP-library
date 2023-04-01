@@ -59,6 +59,7 @@ namespace PathFinder
 		float CalculateDistance(int x, int y, int destX, int destY);
 		float CalculateDistance(int x, int y, int destX, int destY, std::vector<std::pair<int, int>>& path);
 		void GetPossibleTilesForArmy(int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords);
+		std::pair<int, int> GetNearestTileForArmy(int x, int y, int destx, int desty);
 	private:
 		MicroPather* Pather;
 		size_t Diameter = 0;
@@ -81,6 +82,7 @@ namespace PathFinder
 	};
 
 	void GetPossibleTilesForArmyFromCashe(void* cashe, int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords);
+	std::pair<int, int> GetNearestTileForArmyFromCashe(void* cashe, int x, int y, int destx, int desty);
 
 	NOINLINE EOP_EXPORT void* CreateCasheForArmy(stackStruct* army, int radius);
 	NOINLINE EOP_EXPORT void* CreateCasheForDistances(int x, int y, int radius);

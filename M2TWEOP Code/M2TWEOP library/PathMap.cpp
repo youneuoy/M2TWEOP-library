@@ -446,6 +446,24 @@ namespace PathFinder
 		} while (coordsMod != 0);
 	}
 
+	std::pair<int, int> PathMap::GetNearestTileForArmy(int x, int y, int destx, int desty)
+	{
+		std::unordered_set<std::pair<int, int>, PathFinder::pathPairHash> possibleCoords;
+		GetPossibleTilesForArmy(x, y, possibleCoords);
+
+		std::pair<int, int> res = std::make_pair(x,y);
+
+		float minResDistance = FLT_MAX;
+		for (auto& coord : possibleCoords)
+		{
+			if (smallFuncs::GetDistanceInTiles(destx, desty, coord.first, coord.second) < minResDistance)
+			{
+				res = coord;
+			}
+		}
+		return res;
+	}
+
 	void* PathMap::GetState(int x, int y)
 	{
 		if (x < 0 || y < 0)
@@ -488,12 +506,10 @@ namespace PathFinder
 		{
 			return 9999999.f;
 		}
+
 		auto& statenodeF = StateMap[(int)stateStart];
 		auto& statenodeE = StateMap[(int)stateEnd];
-
-		int dx = statenodeF.X - statenodeE.X;
-		int dy = statenodeF.Y - statenodeF.Y;
-		return (float)sqrt((double)(dx * dx) + (double)(dy * dy));
+		return smallFuncs::GetDistanceInTiles(statenodeF.X, statenodeF.Y, statenodeE.X, statenodeE.Y);
 	}
 
 	void PathMap::AdjOne(int x, int y, int currX, int currY, MP_VECTOR<micropather::StateCost>*& adjacent)
@@ -577,6 +593,12 @@ namespace PathFinder
 		PathMap* pathMap = reinterpret_cast<PathMap*>(cashe);
 
 		pathMap->GetPossibleTilesForArmy(x, y, possibleCoords);
+	}
+	std::pair<int, int> GetNearestTileForArmyFromCashe(void* cashe, int x, int y, int destx, int desty)
+	{
+		PathMap* pathMap = reinterpret_cast<PathMap*>(cashe);
+
+		return pathMap->GetNearestTileForArmy(x,y, destx, desty);
 	}
 	NOINLINE EOP_EXPORT void* CreateCasheForArmy(stackStruct* army, int radius)
 	{

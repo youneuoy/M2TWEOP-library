@@ -133,14 +133,20 @@
     <Filter Include="features\mapTextDrawer">
       <UniqueIdentifier>{38fdd23f-f1b6-4765-98e0-008bf6cf426e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="features\PlannedRetreatRoute">
-      <UniqueIdentifier>{cef8ae60-a2c4-45e9-9a08-90473e600e52}</UniqueIdentifier>
-    </Filter>
     <Filter Include="3rd\shortestPath">
       <UniqueIdentifier>{ea658fbd-38fc-49d1-bbf5-1f128c840c4f}</UniqueIdentifier>
     </Filter>
     <Filter Include="features\pathFinding">
       <UniqueIdentifier>{fab3b7b8-2966-414f-99e5-580a83697feb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\Retreats">
+      <UniqueIdentifier>{7ec86ca8-e0b5-490e-a9ba-fd8b83087f91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\Retreats\PlannedRetreatRoute">
+      <UniqueIdentifier>{cef8ae60-a2c4-45e9-9a08-90473e600e52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\Retreats\Retreater">
+      <UniqueIdentifier>{0ff40f1f-f3d3-4e1a-82ad-deec565c667b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -418,7 +424,7 @@
       <Filter>features\mapTextDrawer</Filter>
     </ClInclude>
     <ClInclude Include="PlannedRetreatRoute.h">
-      <Filter>features\PlannedRetreatRoute</Filter>
+      <Filter>features\Retreats\PlannedRetreatRoute</Filter>
     </ClInclude>
     <ClInclude Include="..\3rd\shortestPath\micropather.h">
       <Filter>3rd\shortestPath</Filter>
@@ -427,7 +433,10 @@
       <Filter>features\pathFinding</Filter>
     </ClInclude>
     <ClInclude Include="RetreatRoutes.h">
-      <Filter>features\PlannedRetreatRoute</Filter>
+      <Filter>features\Retreats\PlannedRetreatRoute</Filter>
+    </ClInclude>
+    <ClInclude Include="Retreater.h">
+      <Filter>features\Retreats\Retreater</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -651,13 +660,16 @@
       <Filter>features\mapTextDrawer</Filter>
     </ClCompile>
     <ClCompile Include="PlannedRetreatRoute.cpp">
-      <Filter>features\PlannedRetreatRoute</Filter>
+      <Filter>features\Retreats\PlannedRetreatRoute</Filter>
     </ClCompile>
     <ClCompile Include="..\3rd\shortestPath\micropather.cpp">
       <Filter>3rd\shortestPath</Filter>
     </ClCompile>
     <ClCompile Include="PathMap.cpp">
       <Filter>features\pathFinding</Filter>
+    </ClCompile>
+    <ClCompile Include="Retreater.cpp">
+      <Filter>features\Retreats\Retreater</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

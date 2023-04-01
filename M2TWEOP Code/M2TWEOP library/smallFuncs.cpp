@@ -753,4 +753,11 @@ namespace smallFuncs
 		return minMp;
 	}
 
+	float GetDistanceInTiles(int x, int y, int destX, int destY)
+	{
+		int dx = x - destX;
+		int dy = y - destY;
+		return (float)sqrt((double)(dx * dx) + (double)(dy * dy));
+	}
+
 };
