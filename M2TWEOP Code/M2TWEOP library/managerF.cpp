@@ -504,9 +504,9 @@ void managerF::doPachs()
 
 
 
-	//toRetreat* onRetreat = new toRetreat(mem, (LPVOID)patchesForGame::onRetreat, globals::dataS.gamever);
-	//onRetreat->SetNewCode();
-	//onRetreat->Enable();
+	toRetreat* onRetreat = new toRetreat(mem, (LPVOID)patchesForGame::onRetreat, globals::dataS.gamever);
+	onRetreat->SetNewCode();
+	onRetreat->Enable();
 
 	/*
 	f1 << "Start applying OntryFindTypeIdInListRecruitPoolEDB patch" << endl;
