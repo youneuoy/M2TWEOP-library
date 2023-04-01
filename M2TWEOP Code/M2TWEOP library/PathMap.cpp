@@ -15,7 +15,7 @@ namespace PathFinder
 		Pather = nullptr;
 	}
 
-	PathMap::PathMap(int xCenter, int yCenter, int radius):PathMap()
+	PathMap::PathMap(int xCenter, int yCenter, int radius) :PathMap()
 	{
 		Diameter = radius * 2;
 		Pather = new MicroPather(this, (Diameter * Diameter), Diameter);
@@ -610,8 +610,8 @@ namespace PathFinder
 
 		if (bestOnes.size() > 0)
 		{
-			int rnd = std::rand() % bestOnes.size() + 1;
-			res=bestOnes.at(rnd);
+			int rnd = std::rand() % bestOnes.size();
+			res = bestOnes.at(rnd);
 		}
 
 		return res;

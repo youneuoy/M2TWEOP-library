@@ -35,6 +35,7 @@ void Retreater::RetreatArmy(armyAndCharacter& army)
 	if (destDile->object == nullptr)
 	{
 		fastFuncts::teleportCharacter(army.character, x, y);
+		army.character->ambushState = 10;
 		return;
 	}
 
