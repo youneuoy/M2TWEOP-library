@@ -132,10 +132,6 @@ namespace PathFinder
 				prohibitTile(xDest + 1, yDest);
 			};
 
-			if (xDest == 277 && yDest == 206)
-			{
-				int i = 0;
-			}
 			auto* destDile = fastFuncts::getTileStruct(xDest, yDest);
 
 			if (destDile->isLand != isAtLand)
@@ -456,10 +452,6 @@ namespace PathFinder
 
 	void* PathMap::GetState(int x, int y)
 	{
-		if (x == 203 && y == 276)
-		{
-			int i = 0;
-		}
 		if (x < 0 || y < 0)
 		{
 			return (void*)-1;
@@ -521,12 +513,7 @@ namespace PathFinder
 			{
 				return;
 			}
-			void* statStTest = GetState(x, y);
-			float testV = LeastCostEstimate(statStTest, statEn);
-			if (testV > 5)
-			{
-				int i = 0;
-			}
+
 			float distance = fastFuncts::GetMovepointsForReachNearTile(x, y, currX, currY);
 			if (distance >= 0)
 			{
