@@ -122,6 +122,9 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT unit* createUnitIdx(int index, int regionID, int facNum, int exp, int arm, int weap);
 	NOINLINE EOP_EXPORT unit* createUnitEDB(int edb, int regionID, int facNum, int exp, int arm, int weap);
 
+	//returns true if we have siege before
+	NOINLINE EOP_EXPORT bool StopSiege(stackStruct* army);
+	NOINLINE EOP_EXPORT bool StopBlockPort(stackStruct* army);
 	NOINLINE EOP_EXPORT int addUnitToArmy(stackStruct* army, unit* un);
 	NOINLINE EOP_EXPORT void setBodyguard(general*gen,unit* un);
 

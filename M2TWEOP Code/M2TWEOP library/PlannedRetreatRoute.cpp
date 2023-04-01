@@ -11,6 +11,7 @@
 
 #include <filesystem>
 #include "Retreater.h"
+#include "actionsStrat.h"
 namespace PlannedRetreatRoute
 {
 	struct

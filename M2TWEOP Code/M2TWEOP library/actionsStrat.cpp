@@ -1,6 +1,14 @@
 #include "actionsStrat.h"
 namespace actionsStrat {
+	NOINLINE EOP_EXPORT void Idle(general* gen)
+	{
+		DWORD mem = fastFuncts::allocateGameMem(0x301C);
+		if (mem == 0)return;
 
+		mem = getReadyIdleAction(mem);
+		getReadySiegeActionChar(mem, gen);
+		finalizeAction(mem, gen);
+	}
 	NOINLINE EOP_EXPORT void siegeSettlement(general* gen, settlementStruct* sett)
 	{
 		DWORD mem = fastFuncts::allocateGameMem(0x3024);

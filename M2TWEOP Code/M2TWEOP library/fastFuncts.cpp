@@ -592,6 +592,12 @@ namespace fastFuncts
 
 	NOINLINE EOP_EXPORT void teleportCharacter(general* gen, int x, int y)
 	{
+		if (gen->armyLeaded!=nullptr)
+		{
+			fastFuncts::StopSiege(gen->armyLeaded);
+			fastFuncts::StopBlockPort(gen->armyLeaded);
+		}
+
 		DWORD adrFunc = codes::offsets.teleportCharacterFunc;
 		_asm
 		{
@@ -1298,6 +1304,48 @@ namespace fastFuncts
 		}
 
 		return res;
+	}
+
+	NOINLINE EOP_EXPORT bool StopSiege(stackStruct* army)
+	{
+		bool retVal = (army->siege == nullptr);
+
+		typedef void(__thiscall* StopSiegeF)(stackStruct* army, int some);
+
+		StopSiegeF stopSiegeF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			stopSiegeF = (StopSiegeF)0x00711830;
+		}
+		else
+		{
+			stopSiegeF = (StopSiegeF)0x007110f0;
+		}
+
+		stopSiegeF(army, 1);
+
+		return retVal;
+	}
+
+	NOINLINE EOP_EXPORT bool StopBlockPort(stackStruct* army)
+	{
+		bool retVal = (army->blockedPort == nullptr);
+
+		typedef void(__thiscall* StopBlockPortF)(stackStruct* army);
+
+		StopBlockPortF stopBlockPortF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			stopBlockPortF = (StopBlockPortF)0x00711a50;
+		}
+		else
+		{
+			stopBlockPortF = (StopBlockPortF)0x00711310;
+		}
+
+		stopBlockPortF(army);
+
+		return retVal;
 	}
 
 	NOINLINE EOP_EXPORT int addUnitToArmy(stackStruct* army, unit* un)
