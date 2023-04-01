@@ -24,6 +24,7 @@
 ### **Bugfixes**
 
 - fixed unit.soldierCountStratMapMax - *youneuoy*
+- fixed(again) utf16->utf8 strings convertation - *youneuoy*
 
 ### **Links**
 
