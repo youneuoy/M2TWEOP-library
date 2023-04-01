@@ -12,7 +12,8 @@
 
 <!-- ### **Library** -->
 
-<!-- ### **Lua Plugin** -->
+### **Lua Plugin**
+- character:reposition now stop siege and port blocking, if army, leaded by character, do this - *youneuoy*
 
 <!-- ### **ImGUI** -->
 
