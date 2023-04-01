@@ -18,7 +18,6 @@ namespace smallFuncs
 	std::string getWinConditionS(DWORD condObject);
 	NOINLINE EOP_EXPORT int getGameVersion();
 	NOINLINE EOP_EXPORT void saveGame(const char* path);
-	NOINLINE EOP_EXPORT void mergeArmies(stackStruct* army, stackStruct* targetArmy);
 
 	NOINLINE EOP_EXPORT void createUniString(UNICODE_STRING**& newUniStringPointer, const char* nonUniStr);
 	NOINLINE EOP_EXPORT void changeSettlementName(settlementStruct* sett, const char* newName);

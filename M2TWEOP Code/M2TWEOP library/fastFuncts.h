@@ -129,6 +129,13 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT void setBodyguard(general*gen,unit* un);
 
 
+	NOINLINE EOP_EXPORT void AddToSettlement(stackStruct*army,settlementStruct* set);
+	NOINLINE EOP_EXPORT void AddToFort(stackStruct*army,fortStruct* fort);
+
+
+	NOINLINE EOP_EXPORT void UngarisonSetOrFort(void* setOrFort);
+
+
 	NOINLINE EOP_EXPORT ModelDbEntry* findBattleModel(const char* modelName);
 
 	//allocate mem for game class/etc
@@ -146,5 +153,8 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT bool useButton(const char* buttonName);
 	NOINLINE EOP_EXPORT uiElement* getUiElement(const char* elementName);
 	NOINLINE EOP_EXPORT void useUiElement(uiElement* element);
+
+
+	NOINLINE EOP_EXPORT void mergeArmies(stackStruct* army, stackStruct* targetArmy);
 };
 

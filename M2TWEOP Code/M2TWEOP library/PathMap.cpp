@@ -7,6 +7,7 @@
 #include <map>
 
 #include <mutex>
+#include "ring_buffer.h"
 namespace PathFinder
 {
 	PathMap::PathMap()
@@ -506,9 +507,7 @@ namespace PathFinder
 						{
 							if (set->army->numOfUnits + army->numOfUnits <= 20)
 							{
-								//means we can retreat to this settlement, it fits our army
-								//need implementation!!!!!!!!!!!!!!!!!!!!!!!!!!
-								//safetyCost += 599;
+								safetyCost += 599;
 							}
 						}
 					}
@@ -528,9 +527,7 @@ namespace PathFinder
 						{
 							if (fort->army->numOfUnits + army->numOfUnits <= 20)
 							{
-								//means we can retreat to this settlement, it fits our army
-								//need implementation!!!!!!!!!!!!!!!!!!!!!!!!!!
-								//safetyCost += 499;
+								safetyCost += 499;
 							}
 						}
 					}
@@ -600,10 +597,21 @@ namespace PathFinder
 		std::pair<int, int> res = std::make_pair(x, y);
 		int currSafety = -1;
 
+		ring_buffer<std::pair<int, int>> bestOnes(5);
 		for (auto& coord : possibleCoords)
 		{
 			int safety = evaluateSafety(coord.first, coord.second);
+			if (safety > currSafety)
+			{
+				bestOnes.push_back(coord);
+				currSafety = safety;
+			}
+		}
 
+		if (bestOnes.size() > 0)
+		{
+			int rnd = std::rand() % bestOnes.size() + 1;
+			res=bestOnes.at(rnd);
 		}
 
 		return res;

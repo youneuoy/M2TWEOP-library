@@ -107,26 +107,6 @@ namespace smallFuncs
 	};
 
 
-	NOINLINE EOP_EXPORT void mergeArmies(stackStruct* army, stackStruct* targetArmy)
-	{
-		DWORD codeOffset = 0;
-		if (globals::dataS.gamever == 2)//steam
-		{
-			codeOffset = 0x007155F0;
-		}
-		else
-		{
-			codeOffset = 0x00714EF0;
-		}
-		_asm
-		{
-			push army
-			mov ecx, targetArmy
-			mov eax, codeOffset
-			call eax
-		}
-	}
-
 	NOINLINE EOP_EXPORT void setEDUUnitsSize(signed short min, signed short max)
 	{
 		DWORD codeOffset = 0;

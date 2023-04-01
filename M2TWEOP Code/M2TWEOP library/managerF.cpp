@@ -578,6 +578,8 @@ void loadJsonSettings()
 //#include "tests.h"
 void managerF::initThread()
 {
+	std::srand(std::time(0));
+
 	//read_modConfig();
 	codes::initCodes(globals::dataS.gamever);
 	dataOffsets::initDataOffsets(globals::dataS.gamever);

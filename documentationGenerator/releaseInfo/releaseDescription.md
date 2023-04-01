@@ -14,7 +14,7 @@
 
 ### **Lua Plugin**
 - character:reposition now stop siege and port blocking, if army, leaded by character, do this - *youneuoy*
-
+- army:mergeArmies(anotherArmy) now not work if units in result army>20 after merging - *youneuoy*
 <!-- ### **ImGUI** -->
 
 ### **Documentation**

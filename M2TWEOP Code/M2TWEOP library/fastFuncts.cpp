@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "fastFuncts.h"
+#include "smallFuncs.h"
 
 #include "fastFunctsHelpers.h"
 namespace fastFuncts
@@ -1376,6 +1377,87 @@ namespace fastFuncts
 		return;
 	}
 
+	NOINLINE EOP_EXPORT void AddToSettlement(stackStruct* army, settlementStruct* set)
+	{
+		if (army->settlement != nullptr)
+		{
+			UngarisonSetOrFort(army->settlement);
+		}
+
+		if (set->army != nullptr)
+		{
+			mergeArmies(army, set->army);
+			return;
+		}
+
+		typedef void(__thiscall* AddToSettlementF)(settlementStruct* set, general* gen);
+
+		AddToSettlementF addToSettlementF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			addToSettlementF = (AddToSettlementF)0x005e1dc0;
+		}
+		else
+		{
+			addToSettlementF = (AddToSettlementF)0x005e18f0;
+		}
+		if (army->gen==nullptr)
+		{
+			MessageBoxA(NULL, "AddToSettlement error", "ERROR", NULL);
+			return;
+		}
+		addToSettlementF(set, army->gen);
+	}
+
+	NOINLINE EOP_EXPORT void AddToFort(stackStruct* army, fortStruct* fort)
+	{
+		if (army->settlement != nullptr)
+		{
+			UngarisonSetOrFort(army->settlement);
+		}
+
+		if (fort->army != nullptr)
+		{
+			mergeArmies(army, fort->army);
+			return;
+		}
+
+		typedef void(__thiscall* AddToFortF)(fortStruct* fort, general* gen);
+
+		AddToFortF addToFortF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			addToFortF = (AddToFortF)0x004bcc20;
+		}
+		else
+		{
+			addToFortF = (AddToFortF)0x004bc690;
+		}
+		if (army->gen == nullptr)
+		{
+			MessageBoxA(NULL, "AddToFort error", "ERROR", NULL);
+			return;
+		}
+		addToFortF(fort, army->gen);
+	}
+
+	NOINLINE EOP_EXPORT void UngarisonSetOrFort(void* setOrFort)
+	{
+		typedef void(__thiscall* UngarisonSetOrFortF)(void* setOrFort);
+
+		UngarisonSetOrFortF ungarisonSetOrFortF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			ungarisonSetOrFortF = (UngarisonSetOrFortF)0x004bff50;
+		}
+		else
+		{
+			ungarisonSetOrFortF = (UngarisonSetOrFortF)0x004bf9c0;
+		}
+
+		ungarisonSetOrFortF(setOrFort);
+	}
+
 	NOINLINE EOP_EXPORT ModelDbEntry* findBattleModel(const char* modelName)
 	{
 
@@ -1510,5 +1592,27 @@ namespace fastFuncts
 
 		return retMem;
 	}
-
+	NOINLINE EOP_EXPORT void mergeArmies(stackStruct* army, stackStruct* targetArmy)
+	{
+		if (army->numOfUnits + targetArmy->numOfUnits > 20)
+		{
+			return;
+		}
+		DWORD codeOffset = 0;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			codeOffset = 0x007155F0;
+		}
+		else
+		{
+			codeOffset = 0x00714EF0;
+		}
+		_asm
+		{
+			push army
+			mov ecx, targetArmy
+			mov eax, codeOffset
+			call eax
+		}
+	}
 }
