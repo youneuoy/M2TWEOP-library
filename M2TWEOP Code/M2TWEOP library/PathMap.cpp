@@ -282,10 +282,6 @@ namespace PathFinder
 	}
 	float PathMap::CalculateDistance(int x, int y, int destX, int destY, std::vector<std::pair<int, int>>& path)
 	{
-		if (destX == 203 && destY == 276)
-		{
-			int i = 0;
-		}
 		MPVector<void*> gpath;
 
 		float totalCost;
