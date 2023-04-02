@@ -17,7 +17,7 @@ namespace PlannedRetreatRoute
 
 	void OnClickAtTile(int x, int y);
 
-	bool TryRetreatArmyWithRoute(armyAndCharacter& army);
+	bool TryRetreatArmyWithRoute(armyAndCharacter& army, std::pair<int, int>&resCoords);
 	void OnRetreat();
 };
 

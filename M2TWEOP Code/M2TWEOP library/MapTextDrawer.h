@@ -5,6 +5,7 @@
 
 namespace MapTextDrawer
 {
+
 	struct Text3DDrawable
 	{
 		LPD3DXMESH textMesh;
@@ -42,5 +43,28 @@ namespace MapTextDrawer
 	NOINLINE EOP_EXPORT void StartDrawingText(Text3DDrawable* text);
 	NOINLINE EOP_EXPORT void StopDrawingText(Text3DDrawable* text);
 	NOINLINE EOP_EXPORT void DrawingTextOnce(Text3DDrawable* text);
+
+	struct coordsVText
+	{
+	public:
+		coordsVText() = delete;
+		coordsVText(int x, int y, MapTextDrawer::Text3DDrawable* pointText);
+		~coordsVText();
+		MapTextDrawer::Text3DDrawable* PointText = nullptr;
+		int X = 0;
+		int Y = 0;
+
+		//it self-delete then
+		void SetTileToLive(float seconds);
+
+		static void TryInit();
+		static void Draw();
+	private:
+		static struct dataS{
+			float CurrTime = 0;
+			std::list<std::shared_ptr<coordsVText>> SelfControlled;
+		}Data;
+		float LiveTimeEnd=0;
+	};
 };
 

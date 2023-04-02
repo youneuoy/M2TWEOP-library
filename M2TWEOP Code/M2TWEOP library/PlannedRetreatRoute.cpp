@@ -12,6 +12,8 @@
 #include <filesystem>
 #include "Retreater.h"
 #include "actionsStrat.h"
+
+using namespace MapTextDrawer;
 namespace PlannedRetreatRoute
 {
 	struct
@@ -19,23 +21,6 @@ namespace PlannedRetreatRoute
 		vector<RetreatRoute>data;
 	}routes;
 
-
-	struct coordsVText
-	{
-		coordsVText() = delete;
-		coordsVText(int x, int y, MapTextDrawer::Text3DDrawable* pointText)
-			:PointText(pointText), X(x), Y(y)
-		{
-
-		}
-		~coordsVText()
-		{
-			MapTextDrawer::Delete3dText(PointText);
-		}
-		MapTextDrawer::Text3DDrawable* PointText = nullptr;
-		int X = 0;
-		int Y = 0;
-	};
 
 
 	struct stateS
@@ -320,7 +305,7 @@ namespace PlannedRetreatRoute
 		state.workingNow = false;
 	}
 
-	bool TryRetreatArmyWithRoute(armyAndCharacter& army)
+	bool TryRetreatArmyWithRoute(armyAndCharacter& army, std::pair<int, int>& resCoords)
 	{
 		auto* route = GetRouteWithCoords(army.character->xCoord, army.character->yCoord);
 		if (route == nullptr)
@@ -344,6 +329,7 @@ namespace PlannedRetreatRoute
 			PathFinder::DeleteCasheForDistances(cashe);
 		}
 
+		resCoords = { route->RouteEnd.X ,route->RouteEnd.Y };
 		RemoveRoutesWithCoords(route->RouteStart.X, route->RouteStart.Y);
 		return true;
 	}
