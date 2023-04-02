@@ -162,7 +162,7 @@ namespace PathFinder
 					{
 						if (gen->genType->type == 6 || gen->genType->type == 7 || gen->genType->type == 3)
 						{
-							prohibitNeigbourTiles();
+							//prohibitNeigbourTiles();
 							return false;
 						}
 						else
@@ -182,7 +182,7 @@ namespace PathFinder
 					}
 					else
 					{
-						prohibitNeigbourTiles();
+						//prohibitNeigbourTiles();
 						return false;
 					}
 					break;
@@ -197,7 +197,7 @@ namespace PathFinder
 					}
 					else
 					{
-						prohibitNeigbourTiles();
+						//prohibitNeigbourTiles();
 						return false;
 					}
 					break;
