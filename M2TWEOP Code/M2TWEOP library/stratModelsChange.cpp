@@ -289,7 +289,7 @@ namespace stratModelsChange
 		}
 		stratModelArrayEntry* modelentry = findCharacterStratModel(model); //get eop strat model from vector
 		if (modelentry == nullptr) {
-			stratModelArrayEntry* modelentry = getStratModelEntry(model); //get vanilla strat model from 255 array
+			modelentry = getStratModelEntry(model); //get vanilla strat model from 255 array
 		}
 		if (modelentry == nullptr) {
 			return;
