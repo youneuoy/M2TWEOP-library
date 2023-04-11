@@ -685,12 +685,23 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@function game.callConsole
 	@treturn string error Note: string can be empty but not nil
 	@usage
+	-- Creating units, adding money
 	function onCharacterSelected(selectedChar)
 		local err = stratmap.game.callConsole("add_money", "2321")
 		local err2 = stratmap.game.callConsole("create_unit", "testcharacter 'Cool Unit' 4 1 1 1")
 		print(err)
 		print(err2)
 	end
+
+	-- Multiline commands and using variables in command strings
+	local facName="hre"
+	stratmap.game.scriptCommand("set_faction_banner", string.format([[
+
+		faction england
+
+		banner %s
+
+	end_set_faction_banner]], facName))
 	*/
 	tables.gameTable.set_function("callConsole", &gameHelpers::callConsole);
 	/***
