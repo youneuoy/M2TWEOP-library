@@ -2362,7 +2362,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 
 	/***
-	Merge 2 armies on the strat map.
+	Merge 2 armies on the strat map. Does nothing if the total size of the new army exceeds 20 units.
 	@function stackStruct:mergeArmies
 	@tparam stackStruct targetArmy
 	@usage
