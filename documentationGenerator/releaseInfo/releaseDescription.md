@@ -25,7 +25,7 @@
 
 - fixed unit.soldierCountStratMapMax - *youneuoy*
 - fixed(again) utf16->utf8 strings convertation - *youneuoy*
-
+- fix battle creating crash when faction not exist - *youneuoy*
 ### **Links**
 
 - [Website](https://youneuoy.github.io/M2TWEOP-library/)
