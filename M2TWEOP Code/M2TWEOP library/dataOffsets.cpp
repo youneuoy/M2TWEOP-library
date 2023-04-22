@@ -35,6 +35,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.audioEnable = (bool*)0x016818cd;
 		offsets.audioMaster_vol = (int*)0x01681910;
 		offsets.gameUnit_size = (int*)0x0016818fc;
+
+		offsets.descr_sm_factionslist = reinterpret_cast<descr_sm_factions_list*>(0x01667288);
 	}
 	else if (gameVer == 2) //steam
 	{
@@ -67,5 +69,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.audioEnable = (bool*)0x01639f1d;
 		offsets.audioMaster_vol = (int*)0x01639f60;
 		offsets.gameUnit_size = (int*)0x01639f4c;
+
+		offsets.descr_sm_factionslist = reinterpret_cast<descr_sm_factions_list*>(0x0161f3b0);
 	}
 }

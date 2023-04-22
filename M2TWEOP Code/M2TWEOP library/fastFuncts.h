@@ -78,7 +78,7 @@ namespace fastFuncts
 	//zoom stratmap camera
 	NOINLINE EOP_EXPORT void zoomStratCamera(float zoom);
 
-
+	factionStratMapDescrS* GetFactSmDescrById(int id);
 	//teleport character
 	NOINLINE EOP_EXPORT void  teleportCharacter(general* gen,int x, int y);
 

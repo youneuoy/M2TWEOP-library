@@ -1774,4 +1774,10 @@ struct consoleCommands {
 	int size;
 };
 
+struct descr_sm_factions_list {
+	struct factionStratMapDescrS* facDescrs;
+	int capacity;
+	int size;
+};
+
 #pragma pack(pop)
