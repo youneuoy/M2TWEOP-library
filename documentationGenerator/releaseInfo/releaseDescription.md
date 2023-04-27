@@ -12,8 +12,9 @@
 
 <!-- ### **Library** -->
 
-<!-- ### **Lua Plugin** -->
-
+### **Lua Plugin**
+- character:reposition now stop siege and port blocking, if army, leaded by character, do this - *youneuoy*
+- army:mergeArmies(anotherArmy) now not work if units in result army>20 after merging - *youneuoy*
 <!-- ### **ImGUI** -->
 
 ### **Documentation**
@@ -23,7 +24,8 @@
 ### **Bugfixes**
 
 - fixed unit.soldierCountStratMapMax - *youneuoy*
-
+- fixed(again) utf16->utf8 strings convertation - *youneuoy*
+- fix battle creating crash when faction not exist - *youneuoy*
 ### **Links**
 
 - [Website](https://youneuoy.github.io/M2TWEOP-library/)

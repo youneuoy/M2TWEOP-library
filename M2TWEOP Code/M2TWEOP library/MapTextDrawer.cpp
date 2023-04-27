@@ -2,8 +2,12 @@
 #include "techFuncs.h"
 
 #include "graphicsD3D.h"
+
+#include <mutex>
 namespace MapTextDrawer
 {
+	coordsVText::dataS coordsVText::Data;
+
 	struct
 	{
 		std::list<Text3DDrawable*> textForDrawing;
@@ -234,5 +238,43 @@ namespace MapTextDrawer
 	{
 		text->isDrawOnce = true;
 		data.textForDrawing.push_back(text);
+	}
+	coordsVText::coordsVText(int x, int y, MapTextDrawer::Text3DDrawable* pointText)
+		:PointText(pointText), X(x), Y(y)
+	{
+		static std::once_flag initFLAG;
+		std::call_once(initFLAG, TryInit);
+	}
+	coordsVText::~coordsVText()
+	{
+		MapTextDrawer::Delete3dText(PointText);
+	}
+	void coordsVText::SetTileToLive(float seconds)
+	{
+		LiveTimeEnd = Data.CurrTime + seconds;
+		Data.SelfControlled.emplace_back(this);
+	}
+	void coordsVText::TryInit()
+	{
+		graphicsExport::AddImGuiDrawCallback(Draw);
+	}
+	void coordsVText::Draw()
+	{
+		Data.CurrTime = ImGui::GetTime();
+
+		auto it = Data.SelfControlled.begin();
+		while (it != Data.SelfControlled.end())
+		{
+			DrawingTextOnce((*it)->PointText);
+
+			if ((*it)->LiveTimeEnd < Data.CurrTime)
+			{
+				it = Data.SelfControlled.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
 	}
 };

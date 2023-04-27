@@ -10,7 +10,10 @@
 #include "imgui_notify.h"
 
 #include <filesystem>
-#include "RetreatRoutes.h"
+#include "Retreater.h"
+#include "actionsStrat.h"
+
+using namespace MapTextDrawer;
 namespace PlannedRetreatRoute
 {
 	struct
@@ -18,23 +21,6 @@ namespace PlannedRetreatRoute
 		vector<RetreatRoute>data;
 	}routes;
 
-
-	struct coordsVText
-	{
-		coordsVText() = delete;
-		coordsVText(int x, int y, MapTextDrawer::Text3DDrawable* pointText)
-			:PointText(pointText), X(x), Y(y)
-		{
-
-		}
-		~coordsVText()
-		{
-			MapTextDrawer::Delete3dText(PointText);
-		}
-		MapTextDrawer::Text3DDrawable* PointText = nullptr;
-		int X = 0;
-		int Y = 0;
-	};
 
 
 	struct stateS
@@ -236,6 +222,38 @@ namespace PlannedRetreatRoute
 			}
 		}
 	}
+
+	void RemoveRoutesWithCoords(int x, int y)
+	{
+		routes.data.erase(std::remove_if(routes.data.begin(), routes.data.end(), [&](RetreatRoute& route)
+			{
+				if (route.RouteStart.X == x && route.RouteStart.Y == y)
+				{
+					return true;
+				}
+
+				return false;
+			}), routes.data.end());
+	}
+
+	RetreatRoute* GetRouteWithCoords(int x, int y)
+	{
+		auto res = std::find_if(routes.data.begin(), routes.data.end(), [&](RetreatRoute& route)
+			{
+				if (route.RouteStart.X == x && route.RouteStart.Y == y)
+				{
+					return true;
+				}
+
+				return false;
+			});
+
+		if (res == routes.data.end())
+		{
+			return nullptr;
+		}
+		return &(*res);
+	}
 	void OnClickAtTile(int x, int y)
 	{
 		if (state.workingNow == false)
@@ -256,15 +274,8 @@ namespace PlannedRetreatRoute
 			{
 				RetreatRoute route(state.StartX, state.StartY, x, y);
 
-				routes.data.erase(std::remove_if(routes.data.begin(), routes.data.end(), [&](RetreatRoute& route)
-					{
-						if (route.RouteStart.X == state.StartX&& route.RouteStart.Y == state.StartY)
-						{
-							return true;
-						}
+				RemoveRoutesWithCoords(state.StartX, state.StartY);
 
-						return false;
-					}), routes.data.end());
 				routes.data.emplace_back(route);
 				ImGuiToast bMsg(ImGuiToastType_Success, 25000);
 
@@ -292,15 +303,48 @@ namespace PlannedRetreatRoute
 
 		state.possibleCoords.clear();
 		state.workingNow = false;
-
 	}
+
+	bool TryRetreatArmyWithRoute(armyAndCharacter& army, std::pair<int, int>& resCoords)
+	{
+		auto* route = GetRouteWithCoords(army.character->xCoord, army.character->yCoord);
+		if (route == nullptr)
+		{
+			return false;
+		}
+		int x = route->RouteStart.X;
+		int y = route->RouteStart.Y;
+
+		int destx = route->RouteEnd.X;
+		int desty = route->RouteEnd.Y;
+		float dist = smallFuncs::GetDistanceInTiles(x, y, destx, desty);
+
+		float mp = smallFuncs::GetMinimumPossibleMovepointsForArmy(army.army);
+		int maneurDistance = 3;
+		{
+			void* cashe = PathFinder::CreateCasheForArmy(army.army, dist + maneurDistance);
+			auto resCoords = PathFinder::GetNearestTileForArmyFromCashe(cashe,x,y, destx, desty);
+			fastFuncts::teleportCharacter(army.character, resCoords.first, resCoords.second);
+
+			PathFinder::DeleteCasheForDistances(cashe);
+		}
+
+		resCoords = { route->RouteEnd.X ,route->RouteEnd.Y };
+		RemoveRoutesWithCoords(route->RouteStart.X, route->RouteStart.Y);
+		return true;
+	}
+
+
+
 	void OnRetreat()
 	{
 		battleDataS* battle = smallFuncs::getGameDataAll()->battleHandler;
-		for (int i = 0; i, battle->sidesNum; ++i)
+		if (battle == nullptr)
 		{
-			int j=battle->sides[i].wonBattle;
-			int t = 0;
+			return;
 		}
+
+		Retreater retreater(battle);
+		retreater.Retreat();
 	}
 }

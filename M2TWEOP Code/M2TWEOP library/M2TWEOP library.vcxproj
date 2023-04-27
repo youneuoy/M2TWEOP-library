@@ -23,7 +23,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{a2353bf6-5423-46e0-91eb-608bb5acbff8}</ProjectGuid>
     <RootNamespace>M2TWEOPlibrary</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -114,7 +114,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -138,7 +138,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CCppSupport>Cpp17Support</CCppSupport>
     </ClCompile>
     <Link>
@@ -255,6 +255,7 @@
     <ClInclude Include="m2tweopTile.h" />
     <ClInclude Include="managerF.h" />
     <ClInclude Include="MapTextDrawer.h" />
+    <ClInclude Include="MasterDefines.h" />
     <ClInclude Include="MemWork.h" />
     <ClInclude Include="MmbMover.h" />
     <ClInclude Include="onlineThings.h" />
@@ -266,6 +267,7 @@
     <ClInclude Include="plugins.h" />
     <ClInclude Include="realGameTypes.h" />
     <ClInclude Include="RecruitSystem.h" />
+    <ClInclude Include="Retreater.h" />
     <ClInclude Include="RetreatRoutes.h" />
     <ClInclude Include="RSExport.h" />
     <ClInclude Include="settlementConversionLvlSetter.h" />
@@ -350,6 +352,7 @@
     <ClCompile Include="PlannedRetreatRoute.cpp" />
     <ClCompile Include="plugins.cpp" />
     <ClCompile Include="RecruitSystem.cpp" />
+    <ClCompile Include="Retreater.cpp" />
     <ClCompile Include="RSExport.cpp" />
     <ClCompile Include="settlementConversionLvlSetter.cpp" />
     <ClCompile Include="SingleFbxMesh.cpp" />

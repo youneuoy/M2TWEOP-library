@@ -37,6 +37,8 @@ public:
 
 		//game settings
 		int* gameUnit_size = nullptr;
+
+		descr_sm_factions_list* descr_sm_factionslist = nullptr;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);

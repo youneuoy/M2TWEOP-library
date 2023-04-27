@@ -78,7 +78,7 @@ namespace fastFuncts
 	//zoom stratmap camera
 	NOINLINE EOP_EXPORT void zoomStratCamera(float zoom);
 
-
+	factionStratMapDescrS* GetFactSmDescrById(int id);
 	//teleport character
 	NOINLINE EOP_EXPORT void  teleportCharacter(general* gen,int x, int y);
 
@@ -122,8 +122,18 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT unit* createUnitIdx(int index, int regionID, int facNum, int exp, int arm, int weap);
 	NOINLINE EOP_EXPORT unit* createUnitEDB(int edb, int regionID, int facNum, int exp, int arm, int weap);
 
+	//returns true if we have siege before
+	NOINLINE EOP_EXPORT bool StopSiege(stackStruct* army);
+	NOINLINE EOP_EXPORT bool StopBlockPort(stackStruct* army);
 	NOINLINE EOP_EXPORT int addUnitToArmy(stackStruct* army, unit* un);
 	NOINLINE EOP_EXPORT void setBodyguard(general*gen,unit* un);
+
+
+	NOINLINE EOP_EXPORT void AddToSettlement(stackStruct*army,settlementStruct* set);
+	NOINLINE EOP_EXPORT void AddToFort(stackStruct*army,fortStruct* fort);
+
+
+	NOINLINE EOP_EXPORT void UngarisonSetOrFort(void* setOrFort);
 
 
 	NOINLINE EOP_EXPORT ModelDbEntry* findBattleModel(const char* modelName);
@@ -143,5 +153,8 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT bool useButton(const char* buttonName);
 	NOINLINE EOP_EXPORT uiElement* getUiElement(const char* elementName);
 	NOINLINE EOP_EXPORT void useUiElement(uiElement* element);
+
+
+	NOINLINE EOP_EXPORT void mergeArmies(stackStruct* army, stackStruct* targetArmy);
 };
 

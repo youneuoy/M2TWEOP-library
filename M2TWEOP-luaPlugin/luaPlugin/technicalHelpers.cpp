@@ -25,7 +25,7 @@ namespace technicalHelpers
 		}
 		char* szTo = new char[wchars_num];
 		szTo[wchars_num-1] = '\0';
-		WideCharToMultiByte(CP_UTF8, 0, wstr, -1, szTo, (int)uniS->Length, NULL, NULL);
+		WideCharToMultiByte(CP_UTF8, 0, wstr, -1, szTo, wchars_num, NULL, NULL);
 
 		strTo = szTo;
 		delete[] szTo;

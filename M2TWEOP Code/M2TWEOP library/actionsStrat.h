@@ -7,6 +7,8 @@
 #include "dataOffsets.h"
 namespace actionsStrat
 {
+	DWORD getReadyIdleAction(DWORD allocatedMem);
+
 	//Siege helpers
 	DWORD getReadySiegeActionSett(DWORD allocatedMem, settlementStruct* sett);
 	void getReadySiegeActionChar(DWORD allocatedMem, general* gen);
@@ -18,6 +20,7 @@ namespace actionsStrat
 	//helpers
 	void finalizeAction(DWORD allocatedMem, general* gen);
 
+	NOINLINE EOP_EXPORT void Idle(general* gen);
 	NOINLINE EOP_EXPORT void siegeSettlement(general* gen, settlementStruct* sett);
 	NOINLINE EOP_EXPORT void moveNormal(general* gen, int x,int y);
 	NOINLINE EOP_EXPORT void attackCharacter(general* attacker, general* defender);

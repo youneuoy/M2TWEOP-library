@@ -504,9 +504,9 @@ void managerF::doPachs()
 
 
 
-	toRetreat* onRetreat = new toRetreat(mem, (LPVOID)patchesForGame::onRetreat, globals::dataS.gamever);
-	onRetreat->SetNewCode();
-	onRetreat->Enable();
+	//toRetreat* onRetreat = new toRetreat(mem, (LPVOID)patchesForGame::onRetreat, globals::dataS.gamever);
+	//onRetreat->SetNewCode();
+	//onRetreat->Enable();
 
 	/*
 	f1 << "Start applying OntryFindTypeIdInListRecruitPoolEDB patch" << endl;
@@ -578,6 +578,8 @@ void loadJsonSettings()
 //#include "tests.h"
 void managerF::initThread()
 {
+	std::srand(std::time(0));
+
 	//read_modConfig();
 	codes::initCodes(globals::dataS.gamever);
 	dataOffsets::initDataOffsets(globals::dataS.gamever);

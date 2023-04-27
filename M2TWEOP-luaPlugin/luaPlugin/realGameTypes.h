@@ -16,15 +16,6 @@ typedef unsigned short    ushort;
 #pragma pack(push,1)
 typedef struct stackStruct stackStruct, * PstackStruct;
 typedef struct settlementStruct settlementStruct, * PsettlementStruct;
-enum class StartMapObjectType :int
-{
-	FloatingGeneral = 0x23,
-	Settlement = 0x1D,
-	Fort = 0x1E,
-	Port = 0x1F,
-	Character = 0x1C,
-	RallyPointSundry = 0x22
-};
 struct UNICODE_STRING {
 	USHORT something;//idk
 	USHORT Length;//idk
@@ -1130,29 +1121,31 @@ struct general { /* character on the stratmap, who has a unit in a stack */
 	undefined field0_0x0[4];
 	struct settlementStruct* settlement;
 	undefined field2_0x8[4];
-	int xCoord; /* number of x-coord of unit position */
-	int yCoord; /* number of y-coord of unit position */
+	int xCoord; /* number of x-coord of unit fosition */
+	int yCoord; /* number of y-coord of unit fosition */
 	undefined field5_0x14[108];
 	struct generalCharacterictics* genChar; /* many important info about character */
 	undefined field7_0x84[4];
 	struct genMod* genType;
 	undefined field9_0x8c[24];
 	uchar ifMarkedToKill;
-	undefined field11_0xa5[35];
+	undefined field11_0xa5[19];
+	int ambushState;
+	undefined field13_0xbc[12];
 	float movepoints1;
-	undefined field13_0xcc[4];
+	undefined field15_0xcc[4];
 	uchar isStopCharacterNeeded; /* set to 1 if character moving now and he stops */
-	undefined field15_0xd1[47];
+	undefined field17_0xd1[47];
 	struct stackStruct* armyLeaded; /* army of the general */
-	undefined field17_0x104[4];
+	undefined field19_0x104[4];
 	struct unit* bodyguards; /* unit of general */
 	struct stackStruct* armyNotLeaded; /* army, if not leader */
-	undefined field20_0x110[208];
-	undefined field21_0x1e0[4];
+	undefined field22_0x110[208];
+	undefined field23_0x1e0[4];
 	float movepointsModifier;
 	float movepointsMax;
 	float movepoints2;
-	undefined field25_0x1f0[64];
+	undefined field27_0x1f0[64];
 	char* ability; /* custom ability */
 };
 
@@ -1778,6 +1771,12 @@ struct console_command { /* structure of console command */
 struct consoleCommands {
 	struct console_command** commands;
 	int reservedElements;
+	int size;
+};
+
+struct descr_sm_factions_list {
+	struct factionStratMapDescrS* facDescrs;
+	int capacity;
 	int size;
 };
 
