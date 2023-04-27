@@ -550,6 +550,24 @@ a:hover tt, a:hover code {
 
 @media screen and (max-width: 875px) {
 
+    .eopBanner {
+        min-width: 100px !important;
+        height: 100px !important;
+    }
+
+    .videoGallery img {
+	    width: 80vw !important;
+    }
+
+    .videoGallery > iframe {
+	    width: 80vw !important;
+    }
+
+    .imageDiv img {
+        filter: invert(100%);
+        width: 60vw !important;
+    }
+
     body {
         margin: 0;
         padding: 20px 30px;
@@ -557,7 +575,6 @@ a:hover tt, a:hover code {
 
     div.documentwrapper {
         float: none;
-        background: #fff;
     }
 
     div.sphinxsidebar {
