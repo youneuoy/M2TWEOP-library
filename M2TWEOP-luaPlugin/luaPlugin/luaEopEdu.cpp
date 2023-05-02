@@ -483,8 +483,30 @@ void luaP::initEopEdu()
 	@tparam int newIndex New index of new entry.
 	@treturn edbEntry eopentry.
 	@usage
+	-- Basic Example
 	oldBuilding = EDB.getBuildingByName("market")
-	newBuilding = EDB.addEopBuildEntry(myBuilding,150);
+	newBuilding = EDB.addEopBuildEntry(oldBuilding,150);
+
+	-- Full example
+	local oldentry = EDB.getBuildingByName("market");
+	EDB.addEopBuildEntry(oldentry, 0);
+	local eopentry = EDB.getEopBuildEntry(0);
+	--now for example set pics and names, descriptions
+	for c = 0, 6 do --every culture
+		EDB.setBuildingPic(eopentry, 'some path to pic', 0, c)
+		EDB.setBuildingPicConstructed(eopentry,'some path to pic', 0, c)
+	end
+	for f = 0, 30 do --every faction
+		EDB.setBuildingLocalizedName(eopentry, 'some name', 0, f)
+		EDB.setBuildingLocalizedDescr(eopentry, 'some description', 0, f)
+	end
+	EDB.addBuildingCapability(eopentry, 0, 55, 500, true) --add 500 income bonus
+	EDB.addBuildingPool(eopentry, 0, 55, 1, 0.1, 2, 0); --add recruit pool
+
+	--apply in some settlement
+	sett:createBuilding("market");; --just assuming you have got a sett with some loop or function
+	local build = sett:getBuilding(5) --or whatever index the new building is at
+	build.edbEntry = eopentry --here is how you make it eop building
 	*/
 	tables.EDB.set_function("addEopBuildEntry", &buildingStructHelpers::addEopBuildEntry);
 
@@ -585,8 +607,69 @@ void luaP::initEopEdu()
 	@tparam int value Value to set.
 	@tparam bool bonus Is it bonus or not.
 	@usage
+	population_growth_bonus = 0,
+    population_loyalty_bonus = 1,
+    population_health_bonus = 2,
+    trade_base_income_bonus = 3,
+    trade_level_bonus = 4,
+    trade_fleet = 5,
+    taxable_income_bonus = 6,
+    mine_resource = 7,
+    farming_level = 8,
+    road_level = 9,
+    gate_strength = 10,
+    gate_defences = 11,
+    wall_level = 12,
+    tower_level = 13,
+    armour = 14,
+    stage_games = 15,
+    stage_races = 16,
+    fire_risk = 17,
+    weapon_melee_simple = 18,
+    weapon_melee_blade = 19,
+    weapon_missile_mechanical = 20,
+    weapon_missile_gunpowder = 21,
+    weapon_artillery_mechanical = 22,
+    weapon_artillery_gunpowder = 23,
+    weapon_naval_gunpowder = 24,
+    upgrade_bodyguard = 25,
+    recruits_morale_bonus = 26,
+    recruits_exp_bonus = 27,
+    happiness_bonus = 28,
+    law_bonus = 29,
+    construction_cost_bonus_military = 30,
+    construction_cost_bonus_religious = 31,
+    construction_cost_bonus_defensive = 32,
+    construction_cost_bonus_other = 33,
+    construction_time_bonus_military = 34,
+    construction_time_bonus_religious = 35,
+    construction_time_bonus_defensive = 36,
+    construction_time_bonus_other = 37,
+    construction_cost_bonus_wooden = 38,
+    construction_cost_bonus_stone = 39,
+    construction_time_bonus_wooden = 40,
+    construction_time_bonus_stone = 41,
+    free_upkeep = 42,
+    pope_approval = 43,
+    pope_disapproval = 44,
+    religion_level = 45,
+    amplify_religion_level = 46,
+    archer_bonus = 47,
+    cavalry_bonus = 48,
+    heavy_cavalry_bonus = 49,
+    gun_bonus = 50,
+    navy_bonus = 51,
+    recruitment_cost_bonus_naval = 52,
+    retrain_cost_bonus = 53,
+    weapon_projectile = 54,
+    income_bonus = 55,
+    recruitment_slots = 56
+
 	building = EDB.getBuildingByName("market")
+	-- Add a population growth bonus to the market building
 	EDB.addBuildingCapability(building, 0, 55, 200, true);
+	-- Add a 500 income bonus to the market building
+	EDB.addBuildingCapability(building, 0, 55, 500, true)
 	*/
 	tables.EDB.set_function("addBuildingCapability", &buildingStructHelpers::addBuildingCapability);
 
