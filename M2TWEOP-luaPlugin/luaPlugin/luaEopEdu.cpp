@@ -488,25 +488,32 @@ void luaP::initEopEdu()
 	newBuilding = EDB.addEopBuildEntry(oldBuilding,150);
 
 	-- Full example
-	local oldentry = EDB.getBuildingByName("market");
-	EDB.addEopBuildEntry(oldentry, 0);
-	local eopentry = EDB.getEopBuildEntry(0);
-	--now for example set pics and names, descriptions
+	local oldBuilding = EDB.getBuildingByName("market");
+	EDB.addEopBuildEntry(oldBuilding, 0);
+	local eopBuilding = EDB.getEopBuildEntry(0);
+
+	-- Set pictures, names and descriptions by culture and faction
 	for c = 0, 6 do --every culture
-		EDB.setBuildingPic(eopentry, 'some path to pic', 0, c)
-		EDB.setBuildingPicConstructed(eopentry,'some path to pic', 0, c)
+		EDB.setBuildingPic(eopBuilding, 'some path to pic', 0, c)
+		EDB.setBuildingPicConstructed(eopBuilding,'some path to pic', 0, c)
 	end
 	for f = 0, 30 do --every faction
-		EDB.setBuildingLocalizedName(eopentry, 'some name', 0, f)
-		EDB.setBuildingLocalizedDescr(eopentry, 'some description', 0, f)
+		EDB.setBuildingLocalizedName(eopBuilding, 'some name', 0, f)
+		EDB.setBuildingLocalizedDescr(eopBuilding, 'some description', 0, f)
 	end
-	EDB.addBuildingCapability(eopentry, 0, 55, 500, true) --add 500 income bonus
-	EDB.addBuildingPool(eopentry, 0, 55, 1, 0.1, 2, 0); --add recruit pool
 
-	--apply in some settlement
+	-- Add in an income bonus of 500
+	EDB.addBuildingCapability(eopBuilding, 0, 55, 500, true)
+
+	-- Add a recruit pool
+	EDB.addBuildingPool(eopBuilding, 0, 55, 1, 0.1, 2, 0);
+
+	-- Create a dummy building and get it
 	sett:createBuilding("market");; --just assuming you have got a sett with some loop or function
-	local build = sett:getBuilding(5) --or whatever index the new building is at
-	build.edbEntry = eopentry --here is how you make it eop building
+
+	-- Set the existing building in the settlement to be the EOP building we just created
+	local dummyBuilding = sett:getBuilding(5)
+	dummyBuilding.edbEntry = eopentry
 	*/
 	tables.EDB.set_function("addEopBuildEntry", &buildingStructHelpers::addEopBuildEntry);
 
@@ -667,8 +674,10 @@ void luaP::initEopEdu()
     recruitment_slots = 56
 
 	building = EDB.getBuildingByName("market")
+
 	-- Add a population growth bonus to the market building
-	EDB.addBuildingCapability(building, 0, 55, 200, true);
+	EDB.addBuildingCapability(building, 0, 0, 5, true);
+
 	-- Add a 500 income bonus to the market building
 	EDB.addBuildingCapability(building, 0, 55, 500, true)
 	*/
