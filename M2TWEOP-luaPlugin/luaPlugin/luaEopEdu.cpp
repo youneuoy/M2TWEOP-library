@@ -513,7 +513,7 @@ void luaP::initEopEdu()
 
 	-- Set the existing building in the settlement to be the EOP building we just created
 	local dummyBuilding = sett:getBuilding(5)
-	dummyBuilding.edbEntry = eopentry
+	dummyBuilding.edbEntry = eopBuilding
 	*/
 	tables.EDB.set_function("addEopBuildEntry", &buildingStructHelpers::addEopBuildEntry);
 
