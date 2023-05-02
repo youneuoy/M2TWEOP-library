@@ -34,7 +34,7 @@ void luaP::initCampaign()
 	@tfield int peace
 	@tfield int alliance
 	@tfield int suzerain
-	@tfield int trade
+	@tfield int trade (Doesn't work with trade rights agreements set at game start)
 
 	@usage
 	local campaign=gameDataAll.get().campaignStruct;
@@ -196,7 +196,7 @@ void luaP::initCampaign()
 	Basic tile table, not everything very known and understood yet, you can research with these fields.
 
 	@tfield int isLand (1 = land, 0 = sea)
-	@tfield int groundType 
+	@tfield int groundType
 	0 low fertility
 	1 medium fertility
 	2 high fertility
