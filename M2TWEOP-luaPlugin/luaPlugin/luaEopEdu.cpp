@@ -607,6 +607,7 @@ void luaP::initEopEdu()
 	@tparam int value Value to set.
 	@tparam bool bonus Is it bonus or not.
 	@usage
+	-- Building Capability Enums
 	population_growth_bonus = 0,
     population_loyalty_bonus = 1,
     population_health_bonus = 2,
