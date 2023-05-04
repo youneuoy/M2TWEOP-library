@@ -267,7 +267,6 @@ function spaceChars(size)
     return string
 end
 
--- Returns an string of space characters for a given size
 -- Returns a string of characters for a given size
 ---@param size string Number of space characters
 ---@param char string Character to generate the string from
@@ -494,6 +493,22 @@ function getRandomFreeTileInArea(xMin, xMax, yMin, yMax, regionList)
     return tile
 end
 
+---@param x integer X coordinate
+---@param y integer Y coordinate
+---@return boolean isRiverCrossing is the tile a river crossing
+function isRiverCrossing(x, y)
+    if (gameDataAll.get().stratMap.getTile(x, y).factionID < 0) then return true end
+    return false
+end
+
+---@param x integer X coordinate
+---@param y integer Y coordinate
+---@return boolean isRiverCrossing is the tile a bridge
+function isBridge(x, y)
+    if (isRiverCrossing(x, y) and gameDataAll.get().stratMap.getTile(x, y).hasRoad ~= 0) then return true end
+    return false
+end
+
 ------------------------------------------------------------------------------------------------------
 ------------------------------------ DIPLOMACY -------------------------------------------------------
 ------------------------------------------------------------------------------------------------------
@@ -709,6 +724,23 @@ end
 ------------------------------------------------------------------------------------------------------
 ------------------------------------ CHARACTERS ------------------------------------------------------
 ------------------------------------------------------------------------------------------------------
+-- Gets a character by their name (localized or short name)
+---@param name string name of the character
+---@return namedCharacter|nil namedChar character that is found
+function getCharacterByName(name)
+    local factionsNum = stratmap.game.getFactionsCount();
+    for i = 0, factionsNum - 1 do
+        local fac = stratmap.game.getFaction(i);
+        for i = 0, fac.numOfNamedCharacters - 1 do
+            local namedchar = fac:getNamedCharacter(i)
+            if namedchar.localizedDisplayName == (name) or namedchar.shortName == (name) and namedchar.character ~= nil then
+                print('Found character with name: '..name)
+                return namedchar;
+            end
+        end
+    end
+    return nil;
+end
 
 -- Gets a character by their label
 ---@param label string label of the character
@@ -771,6 +803,52 @@ function isCharacterOnTile(character, xCoord, yCoord)
     else
         return false
     end
+end
+
+-- Sets a characters bodyguard
+---@param characterName string name of the character to set
+---@param newBodyguardType string bodyguard EDU type to set
+---@param expLvl integer experience level of new BG unit
+---@param armourLvl integer armour level of new BG unit
+---@param weaponLvl integer weapon level of new BG unit
+---@param bgAlias string alias of new BG unit
+function setBodyguard(characterName, newBodyguardType, expLvl, armourLvl, weaponLvl, bgAlias)
+    local character = getCharacterByName(characterName)
+
+    if not character then log('Character was not found. Double check the name.') return end
+    if not newBodyguardType then log('newBodyguardType was not found. Double check the type entry.') return end
+
+    log('\nSetting new bodyguard '..newBodyguardType..' for '..characterName)
+    local expLvl = expLvl or 0;
+    local armourLvl = armourLvl or 0;
+    local weaponLvl = weaponLvl or 0;
+    local originalBodyguard = character.bodyguards;
+    --  does the stack have space for a new unit?
+    if originalBodyguard.army.numOfUnits < 20 then
+        newBodyguard = originalBodyguard.army:createUnit(newBodyguardType, expLvl, armourLvl, weaponLvl);
+        if bgAlias then newBodyguard.alias = bgAlias end
+        character:setBodyguardUnit(newBodyguard);
+        originalBodyguard:kill();
+    else
+        local tempBodyguard = nil;
+        for i = 0, originalBodyguard.army.numOfUnits1, 1 do
+            unit = originalBodyguard.army:getUnit(i);
+            if bgAlias then newBodyguard.alias = bgAlias end
+            if unit.character == nil then
+                tempBodyguard = unit;
+                break
+            end
+        end
+        -- if this is nil, your stack is full of generals (for some reason)
+        if tempBodyguard then
+            character:setBodyguardUnit(tempBodyguard);
+            originalBodyguard:kill();
+            newBodyguard = tempBodyguard.army:createUnit(newBodyguardType, expLvl, armourLvl, weaponLvl);
+            if bgAlias then newBodyguard.alias = bgAlias end
+            character:setBodyguardUnit(newBodyguard);
+        end
+    end
+    log('New bodyguard set successfully!')
 end
 
 ------------------------------------------------------------------------------------------------------
@@ -949,6 +1027,217 @@ function hasAncillary(namedCharacter, ancillaryName)
 end
 
 ------------------------------------------------------------------------------------------------------
+------------------------------------ BATTLE ----------------------------------------------------------
+------------------------------------------------------------------------------------------------------
+
+--- Get the side and army of the character in battle
+---@param namedCharacter namedCharacter
+---@return battleStruct.battleSide|nil side
+---@return battleArmy|nil army
+function getCharacterBattleData(namedCharacter)
+    ---@type gameDataAll.battleStruct
+    battleData = gameDataAll.get().battleStruct;
+    local char = namedCharacter.character
+    for i = 1, battleData.sidesNum do
+        ---@type battleStruct.battleSide
+        local side = battleData.sides[i]
+        for j = 0, side.armiesNum - 1 do
+            local battleArmy = side:getBattleArmy(j);
+            if battleArmy.character == char then
+                return side, battleArmy
+            end
+        end
+    end
+end
+
+--- Get the side of the character's enemy in battle
+---@param namedCharacter namedCharacter
+---@return battleStruct.battleSide|nil side
+function getCharacterEnemyBattleSide(namedCharacter)
+    ---@type gameDataAll.battleStruct
+    battleData = gameDataAll.get().battleStruct;
+    local char = namedCharacter.character
+    local charSide = 0
+    for i = 1, battleData.sidesNum do
+        ---@type battleStruct.battleSide
+        local side = battleData.sides[i]
+        for j = 0, side.armiesNum - 1 do
+            local battleArmy = side:getBattleArmy(j);
+            if battleArmy.character == char then
+                charSide = i
+            end
+        end
+    end
+    if charSide == 0 then
+        return nil
+    end
+    if charSide == 1 then
+        enemySide = 2
+    elseif charSide == 2 then
+        enemySide = 1
+    end
+    return battleData.sides[enemySide]
+end
+
+--- Check if the character won a battle
+---@param namedCharacter namedCharacter
+---@return boolean|nil wonBattle
+function wonBattle(namedCharacter)
+    local side, battleArmy = getCharacterBattleData(namedCharacter)
+    if not side or not battleArmy then
+        return nil
+    end
+    if side.wonBattle == 2 then
+        return true
+    end
+    return false
+end
+
+--- Get the percentage of hp lost by the general in battle
+---@param namedCharacter namedCharacter
+---@return number|nil hpLost
+function GeneralHPLostRatioinBattle(namedCharacter)
+    local side, battleArmy = getCharacterBattleData(namedCharacter)
+    if not side or not battleArmy then
+        return nil
+    end
+    return battleArmy.generalHPRatioLost
+end
+
+--- Get the number of kills the general has in battle
+---@param namedCharacter namedCharacter
+---@return integer|nil kills
+function GeneralNumKillsInBattle(namedCharacter)
+    local side, battleArmy = getCharacterBattleData(namedCharacter)
+    if not side or not battleArmy then
+        return nil
+    end
+    return battleArmy.generalNumKillsBattle
+end
+
+--- Check if general fought in battle
+---@param namedCharacter namedCharacter
+---@return boolean|nil fought
+function GeneralFoughtInCombat(namedCharacter)
+    local side, battleArmy = getCharacterBattleData(namedCharacter)
+    if not side or not battleArmy then
+        return nil
+    end
+    if battleArmy.generalHPRatioLost > 0 or battleArmy.generalNumKillsBattle > 0 then
+        return true
+    end
+    return false
+end
+
+--- Get the percentage of the army killed in battle
+---@param namedCharacter namedCharacter
+---@return number|nil percentKilled
+function PercentageOfArmyKilled(namedCharacter)
+    local side, battleArmy = getCharacterBattleData(namedCharacter)
+    if not side or not battleArmy then
+        return nil
+    end
+    local unitsStart, unitsLost = 0, 0
+    for i = 0, battleArmy.unitCount - 1 do
+        local unit = battleArmy:getBattleUnit(i)
+        unitsStart = unitsStart + unit.soldiersStart
+        unitsLost = unitsLost + unit.soldiersLost
+    end
+    if unitsStart == 0 then
+        return 0
+    end
+    return (unitsLost / unitsStart) * 100
+end
+
+
+--- Get the percentage of the enemy army killed in battle
+---@param namedCharacter namedCharacter
+---@return number|nil percentKilled
+function PercentageOfEnemyKilled(namedCharacter)
+    local side = getCharacterEnemyBattleSide(namedCharacter)
+    if not side then
+        return nil
+    end
+    local unitsStart, unitsLost = 0, 0
+    for k = 0, side.armiesNum - 1 do
+        local battleArmy = side:getBattleArmy(k);
+        for i = 0, battleArmy.unitCount - 1 do
+            local unit = battleArmy:getBattleUnit(i)
+            unitsStart = unitsStart + unit.soldiersStart
+            if unit.soldiersLost > 0 then
+                unitsLost = unitsLost + unit.soldiersLost
+            end
+        end
+    end
+    if unitsStart == 0 then
+        return 0
+    end
+    return (unitsLost / unitsStart) * 100
+end
+
+--- Get the percentage of the bodyguard killed in battle
+---@param namedCharacter namedCharacter
+---@return number|nil percentKilled
+function PercentageBodyguardKilled(namedCharacter)
+    local side, battleArmy = getCharacterBattleData(namedCharacter)
+    if not side or not battleArmy then
+        return nil
+    end
+    local bgUnit = namedCharacter.character.bodyguards
+    for i = 0, battleArmy.unitCount - 1 do
+        local unit = battleArmy:getBattleUnit(i)
+        if bgUnit == unit.unit then
+            return (unit.soldiersLost / unit.soldiersStart) * 100
+        end
+    end
+    return nil
+end
+
+--- Get the percentage of the army routed in battle
+---@param namedCharacter namedCharacter
+---@return number|nil percentRouted
+function PercentageRoutedOffField(namedCharacter)
+    local side, battleArmy = getCharacterBattleData(namedCharacter)
+    if not side or not battleArmy then
+        return nil
+    end
+    local unitsStart, unitsRouted = 0, 0
+    for i = 0, battleArmy.unitCount - 1 do
+        local unit = battleArmy:getBattleUnit(i)
+        unitsStart = unitsStart + unit.soldiersStart
+        if unit.unitsRouted > 0 then
+            unitsRouted = unitsRouted + unit.unitsRouted
+        end
+    end
+    if unitsStart == 0 then
+        return 0
+    end
+    return (unitsRouted / unitsStart) * 100
+end
+
+--- Get the last battle's success level
+---@param namedCharacter namedCharacter
+---@return integer|nil success
+function BattleSuccess(namedCharacter)
+    local side, battleArmy = getCharacterBattleData(namedCharacter)
+    if not side or not battleArmy then
+        return nil
+    end
+    return side.battleSuccess
+end
+
+--- Get the last battle's odds
+---@param namedCharacter namedCharacter
+---@return number|nil odds
+function battleOdds(namedCharacter)
+    local side, battleArmy = getCharacterBattleData(namedCharacter)
+    if not side or not battleArmy then
+        return nil
+    end
+    return battleArmy.battleOdds
+end
+
+------------------------------------------------------------------------------------------------------
 ------------------------------------ MISC ------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------
 -- Execute some system operation such as running a .bat file
@@ -960,23 +1249,4 @@ function exec_silent(command)
     print(result)
     p:close()
     return result
-end
-
-function getDispositionString(disposition)
-    if not disposition then return "N/A" end
-    if disposition > 0 and disposition < 20 then
-        return "Disgusted"
-    elseif disposition >= 20 and disposition < 30 then
-        return "Suspicious"
-    elseif disposition >= 30 and disposition < 50 then
-        return "Offended"
-    elseif disposition >= 30 and disposition < 40 then
-        return "Unsure"
-    elseif disposition >= 40 and disposition < 60 then
-        return "Undecided"
-    elseif disposition >= 60 and disposition < 80 then
-        return "Friendly"
-    elseif disposition >= 80 and disposition < 100 then
-        return "Bonded"
-    end
 end
