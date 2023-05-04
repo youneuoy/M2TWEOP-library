@@ -1131,91 +1131,94 @@ function GeneralFoughtInCombat(namedCharacter)
     return false
 end
 
---- Get the percentage of the army killed in battle
----@param namedCharacter namedCharacter
----@return number|nil percentKilled
-function PercentageOfArmyKilled(namedCharacter)
-    local side, battleArmy = getCharacterBattleData(namedCharacter)
-    if not side or not battleArmy then
-        return nil
-    end
-    local unitsStart, unitsLost = 0, 0
-    for i = 0, battleArmy.unitCount - 1 do
-        local unit = battleArmy:getBattleUnit(i)
-        unitsStart = unitsStart + unit.soldiersStart
-        unitsLost = unitsLost + unit.soldiersLost
-    end
-    if unitsStart == 0 then
-        return 0
-    end
-    return (unitsLost / unitsStart) * 100
-end
+-- REMOVED UNTIL https://github.com/youneuoy/M2TWEOP-library/issues/50 IS FIXED
+-- --- Get the percentage of the army killed in battle
+-- ---@param namedCharacter namedCharacter
+-- ---@return number|nil percentKilled
+-- function PercentageOfArmyKilled(namedCharacter)
+--     local side, battleArmy = getCharacterBattleData(namedCharacter)
+--     if not side or not battleArmy then
+--         return nil
+--     end
+--     local unitsStart, unitsLost = 0, 0
+--     for i = 0, battleArmy.unitCount - 1 do
+--         local unit = battleArmy:getBattleUnit(i)
+--         unitsStart = unitsStart + unit.soldiersStart
+--         unitsLost = unitsLost + unit.soldiersLost
+--     end
+--     if unitsStart == 0 then
+--         return 0
+--     end
+--     return (unitsLost / unitsStart) * 100
+-- end
 
-
+-- REMOVED UNTIL https://github.com/youneuoy/M2TWEOP-library/issues/50 IS FIXED
 --- Get the percentage of the enemy army killed in battle
----@param namedCharacter namedCharacter
----@return number|nil percentKilled
-function PercentageOfEnemyKilled(namedCharacter)
-    local side = getCharacterEnemyBattleSide(namedCharacter)
-    if not side then
-        return nil
-    end
-    local unitsStart, unitsLost = 0, 0
-    for k = 0, side.armiesNum - 1 do
-        local battleArmy = side:getBattleArmy(k);
-        for i = 0, battleArmy.unitCount - 1 do
-            local unit = battleArmy:getBattleUnit(i)
-            unitsStart = unitsStart + unit.soldiersStart
-            if unit.soldiersLost > 0 then
-                unitsLost = unitsLost + unit.soldiersLost
-            end
-        end
-    end
-    if unitsStart == 0 then
-        return 0
-    end
-    return (unitsLost / unitsStart) * 100
-end
+-- ---@param namedCharacter namedCharacter
+-- ---@return number|nil percentKilled
+-- function PercentageOfEnemyKilled(namedCharacter)
+--     local side = getCharacterEnemyBattleSide(namedCharacter)
+--     if not side then
+--         return nil
+--     end
+--     local unitsStart, unitsLost = 0, 0
+--     for k = 0, side.armiesNum - 1 do
+--         local battleArmy = side:getBattleArmy(k);
+--         for i = 0, battleArmy.unitCount - 1 do
+--             local unit = battleArmy:getBattleUnit(i)
+--             unitsStart = unitsStart + unit.soldiersStart
+--             if unit.soldiersLost > 0 then
+--                 unitsLost = unitsLost + unit.soldiersLost
+--             end
+--         end
+--     end
+--     if unitsStart == 0 then
+--         return 0
+--     end
+--     return (unitsLost / unitsStart) * 100
+-- end
 
---- Get the percentage of the bodyguard killed in battle
----@param namedCharacter namedCharacter
----@return number|nil percentKilled
-function PercentageBodyguardKilled(namedCharacter)
-    local side, battleArmy = getCharacterBattleData(namedCharacter)
-    if not side or not battleArmy then
-        return nil
-    end
-    local bgUnit = namedCharacter.character.bodyguards
-    for i = 0, battleArmy.unitCount - 1 do
-        local unit = battleArmy:getBattleUnit(i)
-        if bgUnit == unit.unit then
-            return (unit.soldiersLost / unit.soldiersStart) * 100
-        end
-    end
-    return nil
-end
+-- REMOVED UNTIL https://github.com/youneuoy/M2TWEOP-library/issues/50 IS FIXED
+-- --- Get the percentage of the bodyguard killed in battle
+-- ---@param namedCharacter namedCharacter
+-- ---@return number|nil percentKilled
+-- function PercentageBodyguardKilled(namedCharacter)
+--     local side, battleArmy = getCharacterBattleData(namedCharacter)
+--     if not side or not battleArmy then
+--         return nil
+--     end
+--     local bgUnit = namedCharacter.character.bodyguards
+--     for i = 0, battleArmy.unitCount - 1 do
+--         local unit = battleArmy:getBattleUnit(i)
+--         if bgUnit == unit.unit then
+--             return (unit.soldiersLost / unit.soldiersStart) * 100
+--         end
+--     end
+--     return nil
+-- end
 
---- Get the percentage of the army routed in battle
----@param namedCharacter namedCharacter
----@return number|nil percentRouted
-function PercentageRoutedOffField(namedCharacter)
-    local side, battleArmy = getCharacterBattleData(namedCharacter)
-    if not side or not battleArmy then
-        return nil
-    end
-    local unitsStart, unitsRouted = 0, 0
-    for i = 0, battleArmy.unitCount - 1 do
-        local unit = battleArmy:getBattleUnit(i)
-        unitsStart = unitsStart + unit.soldiersStart
-        if unit.unitsRouted > 0 then
-            unitsRouted = unitsRouted + unit.unitsRouted
-        end
-    end
-    if unitsStart == 0 then
-        return 0
-    end
-    return (unitsRouted / unitsStart) * 100
-end
+-- REMOVED UNTIL https://github.com/youneuoy/M2TWEOP-library/issues/50 IS FIXED
+-- --- Get the percentage of the army routed in battle
+-- ---@param namedCharacter namedCharacter
+-- ---@return number|nil percentRouted
+-- function PercentageRoutedOffField(namedCharacter)
+--     local side, battleArmy = getCharacterBattleData(namedCharacter)
+--     if not side or not battleArmy then
+--         return nil
+--     end
+--     local unitsStart, unitsRouted = 0, 0
+--     for i = 0, battleArmy.unitCount - 1 do
+--         local unit = battleArmy:getBattleUnit(i)
+--         unitsStart = unitsStart + unit.soldiersStart
+--         if unit.unitsRouted > 0 then
+--             unitsRouted = unitsRouted + unit.unitsRouted
+--         end
+--     end
+--     if unitsStart == 0 then
+--         return 0
+--     end
+--     return (unitsRouted / unitsStart) * 100
+-- end
 
 --- Get the last battle's success level
 ---@param namedCharacter namedCharacter
