@@ -492,7 +492,7 @@ function getRandomFreeTileInArea(xMin, xMax, yMin, yMax, regionList)
         end
     until (validTileFound)
 
-    return tile
+    return tileData
 end
 
 ---@param x integer X coordinate
