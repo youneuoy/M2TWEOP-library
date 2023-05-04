@@ -1,15 +1,17 @@
 	require('myconfigs')
-    --helper for saveing and loading tables
+    -- Helper for managing persistence of tables across save/load
 	require('helpers/tableSave')
 
-	--uncomment to use external debugger
-	--require('helpers/mobdebug').start()
+    -- Uncomment to use EOP Helper functions
+	-- require('helpers/EopLuaHelpers')
+
+	-- Uncomment to use external debugger
+	-- require('helpers/mobdebug').start()
 
     --our campaign config table.
     campaignConfig={["someConfigValue"]=5};
 
-
-    --load save file
+    -- Fires when loading a save file
     function onLoadSaveFile(paths)
         campaignPopup=true;
 
@@ -24,7 +26,8 @@
         end
     end
 
-    --event on create save file. Return to m2tweop list of saved files.
+    -- Fires when creating a save file
+    -- Returns a list of M2TWEOP save files
     function onCreateSaveFile()
         local savefiles = {};
         currentPath=M2TWEOP.getPluginPath();
@@ -36,6 +39,7 @@
         return savefiles;
     end
 
+    -- Fires when the plugin is first loaded at game start or reloded with CTRL+9+1
     function onPluginLoad()
         M2TWEOP.unlockGameConsoleCommands();
         -- M2TWEOP.setAncillariesLimit(8);
