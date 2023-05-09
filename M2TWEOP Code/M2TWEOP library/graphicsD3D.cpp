@@ -562,9 +562,8 @@ NOINLINE EOP_EXPORT IDirect3DDevice9* graphicsExport::GetDevice()
 NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* path, int* x, int* y)
 {
 	LPDIRECT3DTEXTURE9 imageRet = nullptr;
-	// https://stackoverflow.com/questions/1460579/i-thought-dds-files-were-meant-to-be-quick-to-load
 	// https://learn.microsoft.com/en-us/windows/win32/direct3d9/d3dxcreatetexturefromfileex
-	HRESULT res =  D3DXCreateTextureFromFileEx(
+	HRESULT res =  D3DXCreateTextureFromFileExA(
 		graphicsD3D::dataS.pDevice, // device
 		path,
 		D3DX_DEFAULT_NONPOW2, // width
@@ -578,10 +577,9 @@ NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* p
 		0, // Color Key
 		NULL, // D3DXIMAGE_INFO
 		NULL, // PALETTEENTRY
-		&imageRet // returned image/textrure
-	)
+		&imageRet // returned image/texture
+	);
 
-	// HRESULT res = D3DXCreateTextureFromFileA(graphicsD3D::dataS.pDevice, path, &imageRet);
 	if (res != D3D_OK || imageRet == nullptr)
 	{
 		std::string errMes = DXGetErrorStringA(res);
