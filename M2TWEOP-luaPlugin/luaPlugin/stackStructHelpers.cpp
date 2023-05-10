@@ -58,15 +58,22 @@ namespace stackStructHelpers
 	stackStruct *sortStack(const stackStruct *army)
 	{
 		// Get the size of the stack
-		int N = sizeof(army->units) / sizeof(army->units[0]);
+		// int N = sizeof(army->units) / sizeof(army->units[0]);
 
 		// Sort the stack
 		// https://en.cppreference.com/w/cpp/algorithm/sort
-		std:sort(
-			army->units, // First
-			army->units + N, // Last
-			[](army->units) {return a > b; } // Comparitor Lambda
-		);
+		// std:sort(
+		// 	army->units.begin(), // Start of list
+		// 	army->units.end(), // End of list
+		// );
+
+		std::sort(
+			army->units.begin(),
+			army->units.end(),
+			[](const army->units& unitA, const army->units& unitB)
+		{
+			return unitA.eduEntry->ID < unitB.eduEntry->ID;
+		});
 
 		// Return the sorted stack
 		return army;

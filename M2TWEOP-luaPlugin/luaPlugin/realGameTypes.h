@@ -1350,6 +1350,12 @@ struct unit {
 	undefined field24_0x20b4[36];
 	struct engineRecord* engineRec;
 	undefined field26_0x20dc[4];
+
+	// Sorting Operator for stack sort
+	// bool operator < (const unit& unit) const
+    // {
+    //     return (unit->eduEntry->ID < unit->eduEntry->ID);
+    // }
 };
 
 //army data
@@ -1379,6 +1385,8 @@ struct stackStruct { /* structure of stack */
 	int totalStrength;
 	float reform_point_x;
 	float reform_point_y;
+
+
 };
 
 struct coords {
