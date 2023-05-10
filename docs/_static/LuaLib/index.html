@@ -663,7 +663,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-03-26 19:16:11</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-05-02 14:51:32</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -3678,12 +3678,23 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onCharacterSelected(selectedChar)
+        <pre class="example"><span class="comment">-- Creating units, adding money
+</span><span class="keyword">function</span> onCharacterSelected(selectedChar)
 	<span class="keyword">local</span> err = stratmap.game.callConsole(<span class="string">"add_money"</span>, <span class="string">"2321"</span>)
 	<span class="keyword">local</span> err2 = stratmap.game.callConsole(<span class="string">"create_unit"</span>, <span class="string">"testcharacter 'Cool Unit' 4 1 1 1"</span>)
 	<span class="global">print</span>(err)
 	<span class="global">print</span>(err2)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span>
+
+<span class="comment">-- Multiline commands and using variables in command strings
+</span><span class="keyword">local</span> facName=<span class="string">"hre"</span>
+stratmap.game.scriptCommand(<span class="string">"set_faction_banner"</span>, <span class="global">string</span>.format(<span class="string">[[
+
+	faction england
+
+	banner %s
+
+end_set_faction_banner]]</span>, facName))</pre>
     </ul>
 
 </dd>
@@ -13937,8 +13948,30 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">oldBuilding = EDB.getBuildingByName(<span class="string">"market"</span>)
-newBuilding = EDB.addEopBuildEntry(myBuilding,<span class="number">150</span>);</pre>
+        <pre class="example"><span class="comment">-- Basic Example
+</span>oldBuilding = EDB.getBuildingByName(<span class="string">"market"</span>)
+newBuilding = EDB.addEopBuildEntry(oldBuilding,<span class="number">150</span>);
+
+<span class="comment">-- Full example
+</span><span class="keyword">local</span> oldentry = EDB.getBuildingByName(<span class="string">"market"</span>);
+EDB.addEopBuildEntry(oldentry, <span class="number">0</span>);
+<span class="keyword">local</span> eopentry = EDB.getEopBuildEntry(<span class="number">0</span>);
+<span class="comment">--now for example set pics and names, descriptions
+</span><span class="keyword">for</span> c = <span class="number">0</span>, <span class="number">6</span> <span class="keyword">do</span> <span class="comment">--every culture
+</span>	EDB.setBuildingPic(eopentry, <span class="string">'some path to pic'</span>, <span class="number">0</span>, c)
+	EDB.setBuildingPicConstructed(eopentry,<span class="string">'some path to pic'</span>, <span class="number">0</span>, c)
+<span class="keyword">end</span>
+<span class="keyword">for</span> f = <span class="number">0</span>, <span class="number">30</span> <span class="keyword">do</span> <span class="comment">--every faction
+</span>	EDB.setBuildingLocalizedName(eopentry, <span class="string">'some name'</span>, <span class="number">0</span>, f)
+	EDB.setBuildingLocalizedDescr(eopentry, <span class="string">'some description'</span>, <span class="number">0</span>, f)
+<span class="keyword">end</span>
+EDB.addBuildingCapability(eopentry, <span class="number">0</span>, <span class="number">55</span>, <span class="number">500</span>, <span class="keyword">true</span>) <span class="comment">--add 500 income bonus
+</span>EDB.addBuildingPool(eopentry, <span class="number">0</span>, <span class="number">55</span>, <span class="number">1</span>, <span class="number">0.1</span>, <span class="number">2</span>, <span class="number">0</span>); <span class="comment">--add recruit pool
+</span>
+<span class="comment">--apply in some settlement
+</span>sett:createBuilding(<span class="string">"market"</span>);; <span class="comment">--just assuming you have got a sett with some loop or function
+</span><span class="keyword">local</span> build = sett:getBuilding(<span class="number">5</span>) <span class="comment">--or whatever index the new building is at
+</span>build.edbEntry = eopentry <span class="comment">--here is how you make it eop building</span></pre>
     </ul>
 
 </dd>
@@ -14246,8 +14279,70 @@ EDB.setBuildingLocalizedDescrShort(building, modPath .. mp_path_mods .. <span cl
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
-EDB.addBuildingCapability(building, <span class="number">0</span>, <span class="number">55</span>, <span class="number">200</span>, <span class="keyword">true</span>);</pre>
+        <pre class="example"><span class="comment">-- Building Capability Enums
+</span>population_growth_bonus = <span class="number">0</span>,
+   population_loyalty_bonus = <span class="number">1</span>,
+   population_health_bonus = <span class="number">2</span>,
+   trade_base_income_bonus = <span class="number">3</span>,
+   trade_level_bonus = <span class="number">4</span>,
+   trade_fleet = <span class="number">5</span>,
+   taxable_income_bonus = <span class="number">6</span>,
+   mine_resource = <span class="number">7</span>,
+   farming_level = <span class="number">8</span>,
+   road_level = <span class="number">9</span>,
+   gate_strength = <span class="number">10</span>,
+   gate_defences = <span class="number">11</span>,
+   wall_level = <span class="number">12</span>,
+   tower_level = <span class="number">13</span>,
+   armour = <span class="number">14</span>,
+   stage_games = <span class="number">15</span>,
+   stage_races = <span class="number">16</span>,
+   fire_risk = <span class="number">17</span>,
+   weapon_melee_simple = <span class="number">18</span>,
+   weapon_melee_blade = <span class="number">19</span>,
+   weapon_missile_mechanical = <span class="number">20</span>,
+   weapon_missile_gunpowder = <span class="number">21</span>,
+   weapon_artillery_mechanical = <span class="number">22</span>,
+   weapon_artillery_gunpowder = <span class="number">23</span>,
+   weapon_naval_gunpowder = <span class="number">24</span>,
+   upgrade_bodyguard = <span class="number">25</span>,
+   recruits_morale_bonus = <span class="number">26</span>,
+   recruits_exp_bonus = <span class="number">27</span>,
+   happiness_bonus = <span class="number">28</span>,
+   law_bonus = <span class="number">29</span>,
+   construction_cost_bonus_military = <span class="number">30</span>,
+   construction_cost_bonus_religious = <span class="number">31</span>,
+   construction_cost_bonus_defensive = <span class="number">32</span>,
+   construction_cost_bonus_other = <span class="number">33</span>,
+   construction_time_bonus_military = <span class="number">34</span>,
+   construction_time_bonus_religious = <span class="number">35</span>,
+   construction_time_bonus_defensive = <span class="number">36</span>,
+   construction_time_bonus_other = <span class="number">37</span>,
+   construction_cost_bonus_wooden = <span class="number">38</span>,
+   construction_cost_bonus_stone = <span class="number">39</span>,
+   construction_time_bonus_wooden = <span class="number">40</span>,
+   construction_time_bonus_stone = <span class="number">41</span>,
+   free_upkeep = <span class="number">42</span>,
+   pope_approval = <span class="number">43</span>,
+   pope_disapproval = <span class="number">44</span>,
+   religion_level = <span class="number">45</span>,
+   amplify_religion_level = <span class="number">46</span>,
+   archer_bonus = <span class="number">47</span>,
+   cavalry_bonus = <span class="number">48</span>,
+   heavy_cavalry_bonus = <span class="number">49</span>,
+   gun_bonus = <span class="number">50</span>,
+   navy_bonus = <span class="number">51</span>,
+   recruitment_cost_bonus_naval = <span class="number">52</span>,
+   retrain_cost_bonus = <span class="number">53</span>,
+   weapon_projectile = <span class="number">54</span>,
+   income_bonus = <span class="number">55</span>,
+   recruitment_slots = <span class="number">56</span>
+
+building = EDB.getBuildingByName(<span class="string">"market"</span>)
+<span class="comment">-- Add a population growth bonus to the market building
+</span>EDB.addBuildingCapability(building, <span class="number">0</span>, <span class="number">55</span>, <span class="number">200</span>, <span class="keyword">true</span>);
+<span class="comment">-- Add a 500 income bonus to the market building
+</span>EDB.addBuildingCapability(building, <span class="number">0</span>, <span class="number">55</span>, <span class="number">500</span>, <span class="keyword">true</span>)</pre>
     </ul>
 
 </dd>
@@ -14611,9 +14706,7 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</pre>
         </li>
         <li><span class="parameter">trade</span>
             <span class="types"><span class="type">int</span></span>
-
-
-
+         (Doesn't work with trade rights agreements set at game start)
         </li>
     </ul>
 
@@ -15017,7 +15110,7 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
         <li><span class="parameter">groundType</span>
             <span class="types"><span class="type">int</span></span>
 
-<p> </p>
+
 <pre><code>0 low fertility
 1 medium fertility
 2 high fertility

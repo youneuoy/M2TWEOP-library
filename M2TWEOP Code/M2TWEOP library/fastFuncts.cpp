@@ -591,6 +591,24 @@ namespace fastFuncts
 		return;
 	}
 
+	factionStratMapDescrS* GetFactSmDescrById(int id)
+	{
+		if (dataOffsets::offsets.descr_sm_factionslist == nullptr)
+		{
+			return nullptr;
+		}
+		int facsNum = dataOffsets::offsets.descr_sm_factionslist->size;
+
+		for (int i = 0; i < facsNum; ++i)
+		{
+			if (dataOffsets::offsets.descr_sm_factionslist->facDescrs[i].id==id)
+			{
+				return &dataOffsets::offsets.descr_sm_factionslist->facDescrs[i];
+			}
+		}
+		return nullptr;
+	}
+
 	NOINLINE EOP_EXPORT void teleportCharacter(general* gen, int x, int y)
 	{
 		if (gen->armyLeaded!=nullptr)
