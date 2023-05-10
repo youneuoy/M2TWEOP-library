@@ -562,7 +562,24 @@ NOINLINE EOP_EXPORT IDirect3DDevice9* graphicsExport::GetDevice()
 NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* path, int* x, int* y)
 {
 	LPDIRECT3DTEXTURE9 imageRet = nullptr;
-	HRESULT res = D3DXCreateTextureFromFileA(graphicsD3D::dataS.pDevice, path, &imageRet);
+	// https://learn.microsoft.com/en-us/windows/win32/direct3d9/d3dxcreatetexturefromfileex
+	HRESULT res =  D3DXCreateTextureFromFileExA(
+		graphicsD3D::dataS.pDevice, // device
+		path,
+		D3DX_DEFAULT_NONPOW2, // width
+		D3DX_DEFAULT_NONPOW2, // height
+		D3DX_FROM_FILE, // MipLevels
+		0, // Usage
+		D3DFMT_FROM_FILE, // Format
+		D3DPOOL_MANAGED,  // Pool
+		D3DX_FILTER_NONE, // Filter
+		D3DX_FILTER_NONE,  // Mip Filter
+		0, // Color Key
+		NULL, // D3DXIMAGE_INFO
+		NULL, // PALETTEENTRY
+		&imageRet // returned image/texture
+	);
+
 	if (res != D3D_OK || imageRet == nullptr)
 	{
 		std::string errMes = DXGetErrorStringA(res);
