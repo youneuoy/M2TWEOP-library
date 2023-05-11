@@ -663,7 +663,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-05-02 14:51:32</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-05-11 10:31:49</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -3684,17 +3684,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 	<span class="keyword">local</span> err2 = stratmap.game.callConsole(<span class="string">"create_unit"</span>, <span class="string">"testcharacter 'Cool Unit' 4 1 1 1"</span>)
 	<span class="global">print</span>(err)
 	<span class="global">print</span>(err2)
-<span class="keyword">end</span>
-
-<span class="comment">-- Multiline commands and using variables in command strings
-</span><span class="keyword">local</span> facName=<span class="string">"hre"</span>
-stratmap.game.scriptCommand(<span class="string">"set_faction_banner"</span>, <span class="global">string</span>.format(<span class="string">[[
-
-	faction england
-
-	banner %s
-
-end_set_faction_banner]]</span>, facName))</pre>
+<span class="keyword">end</span></pre>
     </ul>
 
 </dd>
@@ -4063,7 +4053,17 @@ end_set_faction_banner]]</span>, facName))</pre>
     <h3>Usage:</h3>
     <ul>
         <pre class="example">stratmap.game.scriptCommand(<span class="string">"give_everything_to_faction"</span>, <span class="string">"france england false"</span>)
-stratmap.game.scriptCommand(<span class="string">"send_character_off_map"</span>, <span class="string">"Rufus"</span>)</pre>
+stratmap.game.scriptCommand(<span class="string">"send_character_off_map"</span>, <span class="string">"Rufus"</span>)
+
+<span class="comment">-- Multiline commands and using variables in command strings
+</span><span class="keyword">local</span> facName=<span class="string">"hre"</span>
+stratmap.game.scriptCommand(<span class="string">"set_faction_banner"</span>, <span class="global">string</span>.format(<span class="string">[[
+
+	faction england
+
+	banner %s
+
+end_set_faction_banner]]</span>, facName))</pre>
     </ul>
 
 </dd>
@@ -13953,25 +13953,32 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 newBuilding = EDB.addEopBuildEntry(oldBuilding,<span class="number">150</span>);
 
 <span class="comment">-- Full example
-</span><span class="keyword">local</span> oldentry = EDB.getBuildingByName(<span class="string">"market"</span>);
-EDB.addEopBuildEntry(oldentry, <span class="number">0</span>);
-<span class="keyword">local</span> eopentry = EDB.getEopBuildEntry(<span class="number">0</span>);
-<span class="comment">--now for example set pics and names, descriptions
+</span><span class="keyword">local</span> oldBuilding = EDB.getBuildingByName(<span class="string">"market"</span>);
+EDB.addEopBuildEntry(oldBuilding, <span class="number">0</span>);
+<span class="keyword">local</span> eopBuilding = EDB.getEopBuildEntry(<span class="number">0</span>);
+
+<span class="comment">-- Set pictures, names and descriptions by culture and faction
 </span><span class="keyword">for</span> c = <span class="number">0</span>, <span class="number">6</span> <span class="keyword">do</span> <span class="comment">--every culture
-</span>	EDB.setBuildingPic(eopentry, <span class="string">'some path to pic'</span>, <span class="number">0</span>, c)
-	EDB.setBuildingPicConstructed(eopentry,<span class="string">'some path to pic'</span>, <span class="number">0</span>, c)
+</span>	EDB.setBuildingPic(eopBuilding, <span class="string">'some path to pic'</span>, <span class="number">0</span>, c)
+	EDB.setBuildingPicConstructed(eopBuilding,<span class="string">'some path to pic'</span>, <span class="number">0</span>, c)
 <span class="keyword">end</span>
 <span class="keyword">for</span> f = <span class="number">0</span>, <span class="number">30</span> <span class="keyword">do</span> <span class="comment">--every faction
-</span>	EDB.setBuildingLocalizedName(eopentry, <span class="string">'some name'</span>, <span class="number">0</span>, f)
-	EDB.setBuildingLocalizedDescr(eopentry, <span class="string">'some description'</span>, <span class="number">0</span>, f)
+</span>	EDB.setBuildingLocalizedName(eopBuilding, <span class="string">'some name'</span>, <span class="number">0</span>, f)
+	EDB.setBuildingLocalizedDescr(eopBuilding, <span class="string">'some description'</span>, <span class="number">0</span>, f)
 <span class="keyword">end</span>
-EDB.addBuildingCapability(eopentry, <span class="number">0</span>, <span class="number">55</span>, <span class="number">500</span>, <span class="keyword">true</span>) <span class="comment">--add 500 income bonus
-</span>EDB.addBuildingPool(eopentry, <span class="number">0</span>, <span class="number">55</span>, <span class="number">1</span>, <span class="number">0.1</span>, <span class="number">2</span>, <span class="number">0</span>); <span class="comment">--add recruit pool
-</span>
-<span class="comment">--apply in some settlement
+
+<span class="comment">-- Add in an income bonus of 500
+</span>EDB.addBuildingCapability(eopBuilding, <span class="number">0</span>, <span class="number">55</span>, <span class="number">500</span>, <span class="keyword">true</span>)
+
+<span class="comment">-- Add a recruit pool
+</span>EDB.addBuildingPool(eopBuilding, <span class="number">0</span>, <span class="number">55</span>, <span class="number">1</span>, <span class="number">0.1</span>, <span class="number">2</span>, <span class="number">0</span>);
+
+<span class="comment">-- Create a dummy building and get it
 </span>sett:createBuilding(<span class="string">"market"</span>);; <span class="comment">--just assuming you have got a sett with some loop or function
-</span><span class="keyword">local</span> build = sett:getBuilding(<span class="number">5</span>) <span class="comment">--or whatever index the new building is at
-</span>build.edbEntry = eopentry <span class="comment">--here is how you make it eop building</span></pre>
+</span>
+<span class="comment">-- Set the existing building in the settlement to be the EOP building we just created
+</span><span class="keyword">local</span> dummyBuilding = sett:getBuilding(<span class="number">5</span>)
+dummyBuilding.edbEntry = eopBuilding</pre>
     </ul>
 
 </dd>
@@ -14339,8 +14346,10 @@ EDB.setBuildingLocalizedDescrShort(building, modPath .. mp_path_mods .. <span cl
    recruitment_slots = <span class="number">56</span>
 
 building = EDB.getBuildingByName(<span class="string">"market"</span>)
+
 <span class="comment">-- Add a population growth bonus to the market building
-</span>EDB.addBuildingCapability(building, <span class="number">0</span>, <span class="number">55</span>, <span class="number">200</span>, <span class="keyword">true</span>);
+</span>EDB.addBuildingCapability(building, <span class="number">0</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="keyword">true</span>);
+
 <span class="comment">-- Add a 500 income bonus to the market building
 </span>EDB.addBuildingCapability(building, <span class="number">0</span>, <span class="number">55</span>, <span class="number">500</span>, <span class="keyword">true</span>)</pre>
     </ul>
