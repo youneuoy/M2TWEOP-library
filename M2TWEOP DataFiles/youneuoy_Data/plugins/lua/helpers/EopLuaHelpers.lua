@@ -3,6 +3,7 @@
 ----------------- https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html ------------------
 -- The following helper functions were created by the M2TWEOP Community for use with the EOP Lua Plugin
 -- Many thanks to Fynn, DinarMayor, RainehDaze, Erken, Callistonian and many others for their great code
+-- Please report any bugs in our Discord or open an Issue on our GitHub page
 -- TABLE OF CONTENTS
 --      RANDOMIZATION
 --      STRING MANIPULATION
@@ -269,6 +270,7 @@ function spaceChars(size)
     return string
 end
 
+-- Returns an string of space characters for a given size
 -- Returns a string of characters for a given size
 ---@param size string Number of space characters
 ---@param char string Character to generate the string from
@@ -330,40 +332,44 @@ end
 ---@param namedCharacter namedCharacter Character to compare against capital
 ---@return integer distance Distance from character to capital
 function distanceFromCapital(namedCharacter)
-  local xCapital, yCapital = namedCharacter.faction.capital.xCoord, namedCharacter.faction.capital.yCoord
-  local distance = distanceFromPoint(namedCharacter, xCapital, yCapital)
-  return distance
+    local xCapital, yCapital = namedCharacter.faction.capital.xCoord, namedCharacter.faction.capital.yCoord
+    local distance = distanceFromPoint(namedCharacter, xCapital, yCapital)
+    return distance
 end
 
 -- Checks if a character is near a provinicial border
 ---@param namedCharacter namedCharacter Character to check
 ---@return boolean nearAProvincialBorder Is the character near a provinicial border
 function nearAProvincialBorder(namedCharacter)
-  local xChar, yChar = namedCharacter.character.xCoord, namedCharacter.character.yCoord
-  local regChar = M2TWEOP.getTileRegionID(xChar, yChar)
-  local xAdjTileTab, yAdjTileTab = {xChar-1, xChar-1, xChar-1, xChar, xChar, xChar+1, xChar+1, xChar+1}, {yChar, yChar+1, yChar-1, yChar+1, yChar-1, yChar, yChar-1, yChar+1}
-  for i = 1, #xAdjTileTab do
-    local xAdjTile, yAdjTile = xAdjTileTab[i], yAdjTileTab[i]
-    local regAdj = M2TWEOP.getTileRegionID(xAdjTile, yAdjTile)
-      if (regChar ~= regAdj and regAdj ~= 0) then return true end -- 0 = sea and so excluded
-  end
-  return false
+    local xChar, yChar = namedCharacter.character.xCoord, namedCharacter.character.yCoord
+    local regChar = M2TWEOP.getTileRegionID(xChar, yChar)
+    local xAdjTileTab, yAdjTileTab = { xChar - 1, xChar - 1, xChar - 1, xChar, xChar, xChar + 1, xChar + 1, xChar + 1 },
+        { yChar, yChar + 1, yChar - 1, yChar + 1, yChar - 1, yChar, yChar - 1, yChar + 1 }
+    for i = 1, #xAdjTileTab do
+        local xAdjTile, yAdjTile = xAdjTileTab[i], yAdjTileTab[i]
+        local regAdj = M2TWEOP.getTileRegionID(xAdjTile, yAdjTile)
+        if (regChar ~= regAdj and regAdj ~= 0) then return true end -- 0 = sea and so excluded
+    end
+    return false
 end
 
 -- Checks if a character is near a territorial border
 ---@param namedCharacter namedCharacter Character to check
 ---@return boolean nearATerritorialBorder Is the character near a provinicial border
 function nearATerritorialBorder(namedCharacter)
-  local xChar, yChar = namedCharacter.character.xCoord, namedCharacter.character.yCoord
-  local regChar = M2TWEOP.getTileRegionID(xChar, yChar)
+    local xChar, yChar = namedCharacter.character.xCoord, namedCharacter.character.yCoord
+    local regChar = M2TWEOP.getTileRegionID(xChar, yChar)
     if (regChar ~= 0) then -- excludes characters at sea
-      local ownerReg = M2TWEOP.getRegionOwner(regChar)
-      local xAdjTileTab, yAdjTileTab = {xChar-1, xChar-1, xChar-1, xChar, xChar, xChar+1, xChar+1, xChar+1}, {yChar, yChar+1, yChar-1, yChar+1, yChar-1, yChar, yChar-1, yChar+1}
-      for i = 1, #xAdjTileTab do
-        local xAdjTile, yAdjTile = xAdjTileTab[i], yAdjTileTab[i]
-    local regAdj = M2TWEOP.getTileRegionID(xAdjTile, yAdjTile)
-    local ownerAdj = M2TWEOP.getRegionOwner(regAdj)
-    if (regChar ~= regAdj and regAdj ~= 0 and ownerReg ~= ownerAdj) then return true end            end
+        local ownerReg = M2TWEOP.getRegionOwner(regChar)
+        local xAdjTileTab, yAdjTileTab =
+            { xChar - 1, xChar - 1, xChar - 1, xChar, xChar, xChar + 1, xChar + 1, xChar + 1 },
+            { yChar, yChar + 1, yChar - 1, yChar + 1, yChar - 1, yChar, yChar - 1, yChar + 1 }
+        for i = 1, #xAdjTileTab do
+            local xAdjTile, yAdjTile = xAdjTileTab[i], yAdjTileTab[i]
+            local regAdj = M2TWEOP.getTileRegionID(xAdjTile, yAdjTile)
+            local ownerAdj = M2TWEOP.getRegionOwner(regAdj)
+            if (regChar ~= regAdj and regAdj ~= 0 and ownerReg ~= ownerAdj) then return true end
+        end
     end
     return false
 end
@@ -372,34 +378,38 @@ end
 ---@param namedCharacter namedCharacter Character to check
 ---@return boolean nearATerritorialBorder Is the character near the shore
 function onShore(namedCharacter)
-  local xChar, yChar = namedCharacter.character.xCoord, namedCharacter.character.yCoord
-  local regChar = M2TWEOP.getTileRegionID(xChar, yChar)
-  if (regChar ~= 0) then -- excludes characters at sea
-    local xAdjTileTab, yAdjTileTab = {xChar-1, xChar-1, xChar-1, xChar, xChar, xChar+1, xChar+1, xChar+1}, {yChar, yChar+1, yChar-1, yChar+1, yChar-1, yChar, yChar-1, yChar+1}
-    for i = 1, #xAdjTileTab do
-      local xAdjTile, yAdjTile = xAdjTileTab[i], yAdjTileTab[i]
-      local regAdj = M2TWEOP.getTileRegionID(xAdjTile, yAdjTile)
-      if (regChar ~= regAdj and regAdj == 0) then return true end
+    local xChar, yChar = namedCharacter.character.xCoord, namedCharacter.character.yCoord
+    local regChar = M2TWEOP.getTileRegionID(xChar, yChar)
+    if (regChar ~= 0) then -- excludes characters at sea
+        local xAdjTileTab, yAdjTileTab =
+            { xChar - 1, xChar - 1, xChar - 1, xChar, xChar, xChar + 1, xChar + 1, xChar + 1 },
+            { yChar, yChar + 1, yChar - 1, yChar + 1, yChar - 1, yChar, yChar - 1, yChar + 1 }
+        for i = 1, #xAdjTileTab do
+            local xAdjTile, yAdjTile = xAdjTileTab[i], yAdjTileTab[i]
+            local regAdj = M2TWEOP.getTileRegionID(xAdjTile, yAdjTile)
+            if (regChar ~= regAdj and regAdj == 0) then return true end
+        end
     end
-  end
-  return false
+    return false
 end
 
 -- Checks if a character is near land (warning: doesn't work with smallest islands // works for fleets as well as for boarded characters)
 ---@param namedCharacter namedCharacter Character to check
 ---@return boolean nearLand Is the character near land
 function nearLand(namedCharacter)
-  local xChar, yChar = namedCharacter.character.xCoord, namedCharacter.character.yCoord
-  local regChar = M2TWEOP.getTileRegionID(xChar, yChar)
-  if (regChar == 0) then
-    local xAdjTileTab, yAdjTileTab = {xChar-1, xChar-1, xChar-1, xChar, xChar, xChar+1, xChar+1, xChar+1}, {yChar, yChar+1, yChar-1, yChar+1, yChar-1, yChar, yChar-1, yChar+1}
-    for i = 1, #xAdjTileTab do
-      local xAdjTile, yAdjTile = xAdjTileTab[i], yAdjTileTab[i]
-      local regAdj = M2TWEOP.getTileRegionID(xAdjTile, yAdjTile)
-      if (regAdj > 0) then return true end
+    local xChar, yChar = namedCharacter.character.xCoord, namedCharacter.character.yCoord
+    local regChar = M2TWEOP.getTileRegionID(xChar, yChar)
+    if (regChar == 0) then
+        local xAdjTileTab, yAdjTileTab =
+            { xChar - 1, xChar - 1, xChar - 1, xChar, xChar, xChar + 1, xChar + 1, xChar + 1 },
+            { yChar, yChar + 1, yChar - 1, yChar + 1, yChar - 1, yChar, yChar - 1, yChar + 1 }
+        for i = 1, #xAdjTileTab do
+            local xAdjTile, yAdjTile = xAdjTileTab[i], yAdjTileTab[i]
+            local regAdj = M2TWEOP.getTileRegionID(xAdjTile, yAdjTile)
+            if (regAdj > 0) then return true end
+        end
     end
- end
-  return false
+    return false
 end
 
 -- Gets a valid tile in an area around a given x,y coordinate using isTileFree()
@@ -458,13 +468,15 @@ end
 ---@param yMin integer Y min coordinate
 ---@param yMax integer Y max coordinate
 ---@param regionList table List of region numbers to search in
----@return tileStruct tile Valid tile
+---@return tileData table Valid tile object (X, Y, regionId)
+---@return tileStruct tileData Valid tileStruct
 function getRandomFreeTileInArea(xMin, xMax, yMin, yMax, regionList)
     local tile = {
-        x = "",
-        y = "",
-        regionId = ""
+        x = 0,
+        y = 0,
+        regionId = 0
     }
+    local tileData = nil
 
     local validTileFound = false
 
@@ -472,15 +484,15 @@ function getRandomFreeTileInArea(xMin, xMax, yMin, yMax, regionList)
         -- Pick a random tile within this rectangle until we find one that's both within the list of regions and is free
         local tileX = randomNumber(xMin, xMax)
         local tileY = randomNumber(yMin, yMax)
+        tileData = gameDataAll.get().stratMap.getTile(tileX, tileY)
 
         local isTileFree = M2TWEOP.isTileFree(tileX, tileY)
-        local tileData = gameDataAll.get().stratMap.getTile(tileX, tileY)
         local tileRegionID = tileData.regionID
         local groundType = tileData.groundType
         log('Ground Type: ' .. groundType)
 
         -- Check if the tile is in one of the regions, isn't the ocean and is a freeTile
-        if isTileFree and tileData.isLand and tileRegionID ~= 0 and groundType ~= 8 and setContains(regionList, tileRegionID) then
+        if isTileFree and tileData.isLand and tileRegionID ~= 0 and groundType ~= 8 and tableContains(regionList, tileRegionID) then
             log("Checking if random tile " ..
                 tileX ..
                 " , " .. tileY .. " found in tileRegionID " .. tileRegionID)
@@ -488,11 +500,19 @@ function getRandomFreeTileInArea(xMin, xMax, yMin, yMax, regionList)
             tile.x = tileX
             tile.y = tileY
             tile.regionId = tileRegionID
+
             validTileFound = true
         end
     until (validTileFound)
 
-    return tileData
+    return tile, tileData
+end
+
+-- Reveal a tile on the map
+---@param xCoord integer x Coord
+---@param yCoord integer y Coord
+function revealTile(xCoord, yCoord)
+    stratmap.game.scriptCommand("reveal_tile", string.format([[ %s, %s ]], xCoord, yCoord))
 end
 
 ---@param x integer X coordinate
@@ -591,23 +611,24 @@ function spawnArmy(fac, age, name, sub_fac, portrait, x, y, battle_model, strat_
         log('Adding bodyguard...')
         local newUnit = newBG:createUnit(bgunit, exp, armlvl, wpnlvl)
 
+        if bgAlias and newUnit then
+            newUnit.alias = bgAlias
+            log('Created BG unit with alias...' .. bgAlias)
+            newCharacter:setBodyguardUnit(newUnit);
+        end
+
         if units then
             for i = 1, #units do
                 log("Adding unit " .. units[i] .. " to stack")
                 local newUnit = newBG:createUnit(units[i], randomNumber(1, 9), randomNumber(1, 2), 1)
-                if not newUnit then
-                    log('Failed to create unit in spawnArmy: ' .. bgunit)
-                    return
+                if bgAlias and newUnit then
+                    newUnit.alias = bgAlias
                 end
-                if newUnit then newUnit.alias = bgAlias end
+                if not newUnit then
+                    log('Failed to create unit in spawnArmy: ' .. units[i])
+                end
             end
         end
-
-        if bgAlias then
-            newUnit.alias = bgAlias
-            log('Created BG unit with alias...' .. bgAlias)
-        end
-        newCharacter:setBodyguardUnit(newUnit);
 
         if strat_model then
             log('Setting character model to ' .. strat_model)
@@ -736,7 +757,7 @@ function getCharacterByName(name)
         for i = 0, fac.numOfNamedCharacters - 1 do
             local namedchar = fac:getNamedCharacter(i)
             if namedchar.localizedDisplayName == (name) or namedchar.shortName == (name) and namedchar.character ~= nil then
-                print('Found character with name: '..name)
+                print('Found character with name: ' .. name)
                 return namedchar;
             end
         end
@@ -795,11 +816,19 @@ function isCharacterAlive(label, facname)
 end
 
 -- Checks if a character is standing on a specific tile
----@param character character label of the character
+---@param character character character struct (not named)
 ---@param xCoord integer xCoord
 ---@param yCoord integer yCoord
 ---@return boolean isCharacterOnTile is the character on the tile or not
 function isCharacterOnTile(character, xCoord, yCoord)
+    if not character then
+        log('isCharacterOnTile(): No character')
+    else
+        log('isCharacterOnTile(): Checking if character' ..
+            character.localizedDisplayName)
+    end
+    if not xCoord then log('isCharacterOnTile(): No xCoord') else log('isCharacterOnTile(): Checking if xCoord' .. xCoord) end
+    if not yCoord then log('isCharacterOnTile(): No yCoord') else log('isCharacterOnTile(): Checking if yCoord' .. yCoord) end
     if character.xCoord == xCoord and character.yCoord == yCoord then
         return true
     else
@@ -817,10 +846,16 @@ end
 function setBodyguard(characterName, newBodyguardType, expLvl, armourLvl, weaponLvl, bgAlias)
     local character = getCharacterByName(characterName)
 
-    if not character then log('Character was not found. Double check the name.') return end
-    if not newBodyguardType then log('newBodyguardType was not found. Double check the type entry.') return end
+    if not character then
+        log('Character was not found. Double check the name.')
+        return
+    end
+    if not newBodyguardType then
+        log('newBodyguardType was not found. Double check the type entry.')
+        return
+    end
 
-    log('\nSetting new bodyguard '..newBodyguardType..' for '..characterName)
+    log('\nSetting new bodyguard ' .. newBodyguardType .. ' for ' .. characterName)
     local expLvl = expLvl or 0;
     local armourLvl = armourLvl or 0;
     local weaponLvl = weaponLvl or 0;
@@ -936,13 +971,35 @@ end
 ---@param table table table to check
 ---@param element any element to check
 ---@return boolean doesContain Does the table contain the element
-function tableContains(table, element)
+function tableContainsElement(table, element)
     for _, value in pairs(table) do
         if value == element then
             return true
         end
     end
     return false
+end
+
+-- Checks if a table contains a key
+---@param table table table to add to
+---@param key string key to add to the table
+---@return any|nil result Nil if the table does not contain the key, the element otherwise
+function tableContainsKey(table, key)
+    return table[key] ~= nil
+end
+
+-- Adds a key to a table
+---@param table table table to add to
+---@param key string key to add to the table
+function addToTable(table, key)
+    table[key] = true
+end
+
+-- Removes a element from a table using the key
+---@param table table table to add to
+---@param key string key to remove from the table
+function removeFromTable(table, key)
+    table[key] = nil
 end
 
 -- Returns a random element from the table
@@ -972,13 +1029,17 @@ end
 function isBuildingPresent(settlement, buildingName)
     if type(settlement) ~= "userdata" then
         do
-            error("ERROR: function isBuildingPresent() supplied with invalid argument of type "..type(settlement).." Could not find settlement structure.", 2)
+            error(
+                "ERROR: function isBuildingPresent() supplied with invalid argument of type " ..
+                type(settlement) .. " Could not find settlement structure.", 2)
             return false
         end
     end
     if type(buildingName) ~= "string" then
         do
-            error("ERROR: function isBuildingPresent() supplied with invalid argument of type "..type(buildingName).." Could not find building.", 2)
+            error(
+                "ERROR: function isBuildingPresent() supplied with invalid argument of type " ..
+                type(buildingName) .. " Could not find building.", 2)
             return false
         end
     end
@@ -1005,14 +1066,14 @@ end
 ---@param traitName string trait to check
 ---@return boolean hasTrait Does the character have the trait or not
 function hasTrait(namedCharacter, traitName)
-        local chaTraits = namedCharacter:getTraits();
-        while chaTraits ~= nil do
-            if chaTraits.name == traitName then
-                return true
-            end
-            chaTraits = chaTraits.nextTrait;
+    local chaTraits = namedCharacter:getTraits();
+    while chaTraits ~= nil do
+        if chaTraits.name == traitName then
+            return true
         end
-        return false
+        chaTraits = chaTraits.nextTrait;
+    end
+    return false
 end
 
 -- Checks if a character has an ancillary
@@ -1020,12 +1081,53 @@ end
 ---@param ancillaryName string ancillary to check
 ---@return boolean hasAncillary Does the character have the ancillary or not
 function hasAncillary(namedCharacter, ancillaryName)
-    for i = 0, namedCharacter.ancNum-1, 1 do
+    for i = 0, namedCharacter.ancNum - 1, 1 do
         if namedCharacter:getAncillary(i).name == ancillaryName then
             return true
         end
     end
     return false
+end
+
+function addAncillaryChecked(ancname, namedChar)
+    if namedChar == nil then
+        log('Tried to add ancillary but namedchar is nil! ' .. ancname)
+        return false
+    end
+    local ancsNum = namedChar.ancNum;
+    if ancsNum > 15 then
+        local lastanc = namedChar:getAncillary(ancsNum - 1)
+        removeAncillary(lastanc.name, namedChar)
+    end
+    namedChar:addAncillary(ancname)
+    log('Ancillary given to: ' .. ancname .. " " .. namedChar.shortName)
+    return true
+end
+
+---Check if an ancillary exists on the strat map. Optionally remove the ancillary from an off-map character if it has it and return false.
+---@param ancname string Internal name of the ancillary.
+---@param remove_off_map? boolean Default: true.
+---@return namedCharacter|false namedchar Character that has the ancillary.
+---@return ancillary|false anc The ancillary.
+---@return factionStruct|false faction Faction that has the ancillary.
+function WorldwideAncillaryExists(ancname, remove_off_map)
+    remove_off_map = remove_off_map or true
+    local factionsNum = stratmap.game.getFactionsCount();
+    for i = 0, factionsNum - 1 do
+        local faction = stratmap.game.getFaction(i);
+        local namedchar, anc = FactionAncillaryExists(ancname, faction, remove_off_map)
+        if namedchar and anc then
+            if namedchar.character == nil and remove_off_map then
+                namedchar:removeAncillary(anc)
+                log('WorldwideAncillaryExists false ' .. ancname)
+                return false, false, false
+            end
+            log('WorldwideAncillaryExists true ' .. ancname)
+            return namedchar, anc, faction
+        end
+    end
+    log('WorldwideAncillaryExists false ' .. ancname)
+    return false, false, false
 end
 
 ------------------------------------------------------------------------------------------------------
@@ -1254,4 +1356,29 @@ function exec_silent(command)
     print(result)
     p:close()
     return result
+end
+
+-- Draws some text with a black outline for readability
+---@param text string text to draw
+---@param font string font to draw the text with (needs to be installed on the local computer)
+---@param xCoord integer x coordinate to draw the text at
+---@param yCoord integer y coordinate to draw the text at
+---@param scale integer scale at which to draw the text
+---@param color table Color object for text { a = 0, r = 100, g = 120, b = 150 }
+function drawShadowedText(text, font, xCoord, yCoord, scale, color)
+    x = xCoord
+    y = yCoord
+    newFont = M2TWEOP3dObjects.MakeTextFont(font);
+    newText = M2TWEOP3dObjects.Make3dText(newFont, text);
+    newText:SetCoords(x, y, 0.2);
+    newText:StartDrawing();
+    newText:ChangeColor(0, 0, 0, 0);
+    newText:Scale(scale + 0.1);
+
+    newFont = M2TWEOP3dObjects.MakeTextFont(font);
+    newText = M2TWEOP3dObjects.Make3dText(newFont, text);
+    newText:SetCoords(x, y, 0.3);
+    newText:StartDrawing();
+    newText:ChangeColor(color.a, color.r, color.g, color.b);
+    newText:Scale(scale);
 end
