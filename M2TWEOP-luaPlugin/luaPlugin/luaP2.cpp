@@ -34,7 +34,7 @@ void luaP::initCampaign()
 	@tfield int peace
 	@tfield int alliance
 	@tfield int suzerain
-	@tfield int trade
+	@tfield int trade (Doesn't work with trade rights agreements set at game start)
 
 	@usage
 	local campaign=gameDataAll.get().campaignStruct;
@@ -196,7 +196,7 @@ void luaP::initCampaign()
 	Basic tile table, not everything very known and understood yet, you can research with these fields.
 
 	@tfield int isLand (1 = land, 0 = sea)
-	@tfield int groundType 
+	@tfield int groundType
 	0 low fertility
 	1 medium fertility
 	2 high fertility
@@ -560,8 +560,25 @@ void luaP::initP2()
 	/***
 	basic battleStruct table
 
-	@tfield int battleState 0-not in battle,5-active battle,9-results screen,etc
-	@tfield int battleType 3 = siege, 4 = sally out, rest unknown for now, you can experiment.
+	@tfield int battleState
+		0 not in battle
+		1 prebattle scroll
+		2 delay (also for preconflict phase of successful ambushes)
+		3 deployment
+		4
+		5 conflict (also for pause)
+		6 victory scroll
+		7 pursuit
+		8
+		9 postbattle scroll (not for autoresolved battles)
+	@tfield int battleType
+		0 succesful ambush
+		1 failed ambush
+		2 normal
+		3 siege
+		4 sally besieger
+		5 naval
+		6 withdrawal?
 	@tfield int isNightBattle
 	@tfield int xCoord
 	@tfield int yCoord
@@ -740,6 +757,17 @@ void luaP::initP2()
 	Basic Battle AI table
 
 	@tfield int gtaPlan
+		0 = "DO_NOTHING"
+		1 = "ATTACK_ALL"
+		2 = "DEFEND"
+		3 = "DEFEND_FEATURE"
+		4 = "HIDE"
+		5 = "AMBUSH"
+		6 = "SCOUT"
+		7 = "WITHDRAW"
+		8 = "ATTACK_SETTLEMENT"
+		9 = "DEFEND_SETTLEMENT"
+		10 = "SALLY_OUT"
 	@tfield int unitCount
 	@tfield int enemyUnitCount
 

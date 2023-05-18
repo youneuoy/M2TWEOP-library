@@ -303,7 +303,11 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@treturn int y size of the image
 	@treturn int id of the image
 	@usage
-	local testImage={x=0,y=0,img=nil};
+	-- This function supports the following file formats: .bmp, .dds, .dib, .hdr, .jpg, .pfm, .png, .ppm, and .tga.
+	-- Recommended to use .dds for best performance
+	-- Note: Doing image scaling and format conversion at load time can be slow. Store images in the format and resolution they will be used.
+	-- More info: https://learn.microsoft.com/en-us/windows/win32/direct3d9/d3dxcreatetexturefromfileex
+	local testImage = { x = 0, y = 0, img = nil};
 	testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath().."/youneuoy_textures/test.dds");
 	*/
 
@@ -313,7 +317,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@function M2TWEOP.unloadTexture
 	@tparam int id of the image
 	@usage
-	local testImage={x=0,y=0,img=nil};
+	local testImage = { x = 0, y = 0, img = nil};
 	testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath().."/youneuoy_textures/test.dds");
 	M2TWEOP.unloadTexture(testImage.img);
 	*/
@@ -693,16 +697,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		print(err)
 		print(err2)
 	end
-
-	-- Multiline commands and using variables in command strings
-	local facName="hre"
-	stratmap.game.scriptCommand("set_faction_banner", string.format([[
-
-		faction england
-
-		banner %s
-
-	end_set_faction_banner]], facName))
 	*/
 	tables.gameTable.set_function("callConsole", &gameHelpers::callConsole);
 	/***
@@ -806,6 +800,16 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	stratmap.game.scriptCommand("give_everything_to_faction", "france england false")
 	stratmap.game.scriptCommand("send_character_off_map", "Rufus")
+
+	-- Multiline commands and using variables in command strings
+	local facName="hre"
+	stratmap.game.scriptCommand("set_faction_banner", string.format([[
+
+		faction england
+
+		banner %s
+
+	end_set_faction_banner]], facName))
 	*/
 	tables.gameTable.set_function("scriptCommand", &gameHelpers::scriptCommand);
 	///Stratmap
