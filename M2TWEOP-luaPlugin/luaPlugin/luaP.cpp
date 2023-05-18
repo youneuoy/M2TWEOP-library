@@ -696,16 +696,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		print(err)
 		print(err2)
 	end
-
-	-- Multiline commands and using variables in command strings
-	local facName="hre"
-	stratmap.game.scriptCommand("set_faction_banner", string.format([[
-
-		faction england
-
-		banner %s
-
-	end_set_faction_banner]], facName))
 	*/
 	tables.gameTable.set_function("callConsole", &gameHelpers::callConsole);
 	/***
@@ -809,6 +799,16 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	stratmap.game.scriptCommand("give_everything_to_faction", "france england false")
 	stratmap.game.scriptCommand("send_character_off_map", "Rufus")
+
+	-- Multiline commands and using variables in command strings
+	local facName="hre"
+	stratmap.game.scriptCommand("set_faction_banner", string.format([[
+
+		faction england
+
+		banner %s
+
+	end_set_faction_banner]], facName))
 	*/
 	tables.gameTable.set_function("scriptCommand", &gameHelpers::scriptCommand);
 	///Stratmap

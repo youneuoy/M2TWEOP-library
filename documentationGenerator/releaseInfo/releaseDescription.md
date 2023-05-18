@@ -14,9 +14,11 @@
 
 ### **Lua Plugin**
 
-- character:reposition now stop siege and port blocking, if army, leaded by character, do this - *youneuoy*
-- army:mergeArmies(anotherArmy) now not work if units in result army>20 after merging - *youneuoy*
-- Added a new file `EopLuaHelpers.lua` which includes 50+ community made helper functions - *Medik*
+- character:reposition will now cause the character to stop sieging/blockading ports - *youneuoy*
+- army:mergeArmies(anotherArmy) will now not work if the number of units in the resulting army is >20 - *youneuoy*
+- Added a new file `helpers/EopLuaHelpers.lua` which includes 50+ community made helper functions - *Medik*
+- Added performance optimizations for `loadTexture()` - *Medik*
+
 <!-- ### **ImGUI** -->
 
 ### **Documentation**
@@ -25,9 +27,9 @@
 
 ### **Bugfixes**
 
-- fixed unit.soldierCountStratMapMax - *youneuoy*
-- fixed(again) utf16->utf8 strings convertation - *youneuoy*
-- fix battle creating crash when faction not exist - *youneuoy*
+- Fixed `unit.soldierCountStratMapMax` - *youneuoy*
+- Fixed (again) `utf16` -> `utf8` strings conversion - *youneuoy*
+- Fix an online battle generation crash when the faction who created the settlement does not exist - *youneuoy*
 
 ### **Links**
 
