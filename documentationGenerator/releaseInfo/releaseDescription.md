@@ -14,8 +14,8 @@
 
 ### **Lua Plugin**
 
-- character:reposition will now cause the character to stop sieging/blockading ports - *youneuoy*
-- army:mergeArmies(anotherArmy) will now not work if the number of units in the resulting army is >20 - *youneuoy*
+- `character:reposition` will now cause the character to stop sieging/blockading ports - *youneuoy*
+- `army:mergeArmies(anotherArmy)` will now not work if the number of units in the resulting army is >20 - *youneuoy*
 - Added a new file `helpers/EopLuaHelpers.lua` which includes 50+ community made helper functions - *Medik*
 - Added performance optimizations for `loadTexture()` - *Medik*
 
