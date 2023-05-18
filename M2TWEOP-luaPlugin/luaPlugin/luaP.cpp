@@ -334,11 +334,12 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.M2TWEOPTable.set_function("unlockGameConsoleCommands", &m2tweopHelpers::unlockGameConsoleCommands);
 	/***
-	Sets the maximum amount of soldiers a general's bodyguard unit can replenish to.
+	Sets the maximum amount of soldiers a general's bodyguard unit can replenish to. The value is multiplied by the unit size modifiers (e.g Huge = 2.5 multiplier)
 	@function M2TWEOP.setMaxBgSize
-	@tparam int newSize default: 77, maximum: 255 (Huge unit size).
+	@tparam int newSize
 	@usage
-	M2TWEOP.setMaxBgSize(222);
+	M2TWEOP.setMaxBgSize(100) -- On huge unit size, 100/2.5 = 250 max bodyguard size
+	M2TWEOP.setMaxBgSize(150) -- On huge unit size, 150/2.5 = 300 max bodyguard size
 	*/
 	tables.M2TWEOPTable.set_function("setMaxBgSize", &m2tweopHelpers::setMaxBgSize);
 
