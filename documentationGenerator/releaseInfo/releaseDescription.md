@@ -6,30 +6,18 @@
 
 ## **Release Notes**
 
-### **Launcher**
-
-- Removed `M2TWEOP tools.exe` from the release package - *Medik*
+<!-- ### **Launcher** -->
 
 <!-- ### **Library** -->
 
 ### **Lua Plugin**
-
-- `character:reposition` will now cause the character to stop sieging/blockading ports - *youneuoy*
-- `army:mergeArmies(anotherArmy)` will now not work if the number of units in the resulting army is >20 - *youneuoy*
-- Added a new file `helpers/EopLuaHelpers.lua` which includes 50+ community made helper functions - *Medik*
-- Added performance optimizations for `loadTexture()` - *Medik*
+- New function `M2TWEOP.getBattleCamCoords()`. Allows movement of the camera along the X, Y and Z axis beyond the default, max range
 
 <!-- ### **ImGUI** -->
 
-### **Documentation**
+<!-- ### **Documentation** -->
 
-- Added example code for calculating the window size and drawing centered text and image buttons - *Medik*
-
-### **Bugfixes**
-
-- Fixed `unit.soldierCountStratMapMax` - *youneuoy*
-- Fixed (again) `utf16` -> `utf8` strings conversion - *youneuoy*
-- Fix an online battle generation crash when the faction who created the settlement does not exist - *youneuoy*
+<!-- ### **Bugfixes** -->
 
 ### **Links**
 
