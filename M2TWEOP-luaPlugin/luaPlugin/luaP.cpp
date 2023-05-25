@@ -1445,7 +1445,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getWatchtower getWatchtower
 	@tfield deleteFort deleteFort
 	@tfield createFortXY createFortXY
-	@tfield changeFactionName changeFactionName
 
 	@table factionStruct
 	*/
