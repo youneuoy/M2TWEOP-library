@@ -181,12 +181,6 @@ int initPlugin(std::string* modPath)
 	fName = "addTrait";
 	plugData::data.funcs.addTrait.Load(&plPath, &fName);
 
-	fName = "removeTrait";
-	plugData::data.funcs.removeTrait.Load(&plPath, &fName);
-
-    fName = "setUnitParams";
-    plugData::data.funcs.setUnitParams.Load(&plPath, &fName);
-
 	fName = "replaceTile";
 	plugData::data.funcs.replaceTile.Load(&plPath, &fName);
 
@@ -258,40 +252,8 @@ int initPlugin(std::string* modPath)
 	fName = "setAncLimit";
 	plugData::data.funcs.setAncLimit.Load(&plPath, &fName);
 
-    fName = "setCharacterType";
-    plugData::data.funcs.setCharacterType.Load(&plPath, &fName);
-
-    //battle functions
-    fName = "getBattleCondCode";
-    plugData::data.funcsBattle.getBattleCondCode.Load(&plPath, &fName);
-
-    fName = "swUnBMapHighlight";
-    plugData::data.funcsBattle.swUnBMapHighlight.Load(&plPath, &fName);
-
     fName = "getBattleCamCoords";
     plugData::data.funcsBattle.getBattleCamCoords.Load(&plPath, &fName);
-
-    //eop edu functions
-    fName = "addEopEduEntry";
-    plugData::data.funcsEopEdu.addEopEduEntry.Load(&plPath, &fName);
-
-    fName = "addEopEduEntryFromFile";
-    plugData::data.funcsEopEdu.addEopEduEntryFromFile.Load(&plPath, &fName);
-
-    fName = "getEopEduEntry";
-    plugData::data.funcsEopEdu.getEopEduEntry.Load(&plPath, &fName);
-
-    fName = "getEduEntry";
-    plugData::data.funcsEopEdu.getEduEntry.Load(&plPath, &fName);
-
-    fName = "getEduEntryByType";
-    plugData::data.funcsEopEdu.getEduEntryByType.Load(&plPath, &fName);
-
-    fName = "getEduIndexByType";
-    plugData::data.funcsEopEdu.getEduIndexByType.Load(&plPath, &fName);
-
-    fName = "getDataEopEdu";
-    plugData::data.funcsEopEdu.getDataEopEdu.Load(&plPath, &fName);
 
 	fName = "unlockConsoleCommands";
 	plugData::data.funcs.unlockConsoleCommands.Load(&plPath, &fName);
