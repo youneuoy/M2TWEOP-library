@@ -241,13 +241,11 @@ int initPlugin(std::string* modPath)
 	fName = "attackCharacter";
 	plugData::data.funcs.attackCharacter.Load(&plPath, &fName);
 
-
 	fName = "loadTexture";
 	plugData::data.funcs.loadTexture.Load(&plPath, &fName);
 
 	fName = "unloadTexture";
 	plugData::data.funcs.unloadTexture.Load(&plPath, &fName);
-
 
 	fName = "setAncLimit";
 	plugData::data.funcs.setAncLimit.Load(&plPath, &fName);
@@ -279,9 +277,6 @@ int initPlugin(std::string* modPath)
 
 	fName = "setCharacterType";
 	plugData::data.funcs.setCharacterType.Load(&plPath, &fName);
-
-
-
 
 	//battle functions
 	fName = "getBattleCondCode";
