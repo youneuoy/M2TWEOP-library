@@ -242,7 +242,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield unlockGameConsoleCommands unlockGameConsoleCommands
 	@tfield setMaxBgSize setMaxBgSize
 	@tfield toggleUnitsBMapHighlight toggleUnitsBMapHighlight
-	@tfield zoomOutCamera zoomOutCamera
+	@tfield getBattleCamCoords getBattleCamCoords
 	@tfield setReligionsLimit setReligionsLimit
 	@tfield isTileFree isTileFree
 	@tfield getGameTileCoordsWithCursor getGameTileCoordsWithCursor
@@ -408,12 +408,12 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.M2TWEOPTable.set_function("toggleUnitsBMapHighlight", &m2tweopHelpers::toggleUnitsBMapHighlight);
 
 	/***
-	Get the position of the battlemap camera
+	Get the current x, y and z coords of the battlemap camera
 	@function M2TWEOP.getBattleCamCoords
 	@treturn cameraStruct Camera struct
 	@usage
 	local cameraCoords = M2TWEOP.getBattleCamCoords();
-	-- Zoom out the camera
+	-- Zoom out the camera beyond it's normal range
 	cameraCoords.z = 500;
 	*/
 	tables.M2TWEOPTable.set_function("getBattleCamCoords", &m2tweopHelpers::getBattleCamCoords);
