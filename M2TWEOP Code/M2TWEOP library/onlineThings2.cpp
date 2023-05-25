@@ -390,10 +390,10 @@ namespace battleCreator
 		initStructsForResults();
 		for (auto& side : battleArmies.sides)
 		{
-			for (int i=0;i< side->armies.size();i++)
+			for (size_t i=0;i< side->armies.size();i++)
 			{
 				auto& army = side->armies[i];
-				for (int j = 0; j < army->units.size();j++)
+				for (size_t j = 0; j < army->units.size();j++)
 				{
 					army->unitsForTransfer.push_back(make_shared<unitDataS>(army->units[j], j));
 				}
@@ -530,7 +530,7 @@ namespace battleCreator
 					return false;
 				}
 
-				for (int unitI = 0; unitI < army->unitsForTransfer.size(); unitI++)
+				for (size_t unitI = 0; unitI < army->unitsForTransfer.size(); unitI++)
 				{
 					auto& gameUnit = gameArmy.stack->units[unitI];
 

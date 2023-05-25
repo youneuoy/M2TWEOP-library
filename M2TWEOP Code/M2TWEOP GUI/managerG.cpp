@@ -56,6 +56,10 @@ namespace managerG
 			{
 				getJson(dataG::data.battlesData.isResultTransferNeeded, "enableResultsTransfer");
 			}
+			if (json.contains("isPlannedRetreatRoute"))
+			{
+				getJson(dataG::data.battlesData.isPlannedRetreatRoute, "isPlannedRetreatRoute");
+			}
 		}
 		catch (jsn::json::type_error& e)
 		{
@@ -100,7 +104,7 @@ namespace managerG
 		std::regex regex{ R"([\,\s]+)" };
 		jsn::json json = loadJsonFromFile(fPath);
 		std::string jsonStringValue;
-		std:bool jsonBoolValue;
+		bool jsonBoolValue;
 
 		try
 		{
@@ -192,6 +196,7 @@ namespace managerG
 		fPath = ".\\eopBattles\\battlesCfg.json";
 		setJson("enableAutoGeneration", dataG::data.battlesData.isGenerationNeeded);
 		setJson("enableResultsTransfer", dataG::data.battlesData.isResultTransferNeeded);
+		setJson("isPlannedRetreatRoute", dataG::data.battlesData.isPlannedRetreatRoute);
 		writeJsonToFile(fPath, json);
 		json.clear();
 

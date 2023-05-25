@@ -25,11 +25,14 @@ graphicsD3D::dataT graphicsD3D::dataS;
 #include "../../M2TWEOP Common/m2tweopConstData.h"
 #include "eduFastFuncts.h"
 #include <windowsx.h>
+#include "stratModelsChange.h"
 template<typename T>
 T FnCast(uint32_t fnToCast, T pFnCastTo) {
 	(void)pFnCastTo;
 	return (T)fnToCast;
 }
+
+
 NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	plugins::onWindowProc(hWnd, uMsg, wParam, lParam);
@@ -153,8 +156,13 @@ NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 		ImGui::End();*/
 	return;
 }
+
 NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 {
+	for (auto& f : graphicsD3D::dataS.stratmapDrawCallbacks)
+	{
+		f();
+	}
 	int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
 
 	//1-stratmap
@@ -164,8 +172,6 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	{
 		drawType = 1;
 	}
-
-	//plugins::onEndScene(pDevice);
 
 
 	//Backup the DX9 state
@@ -178,7 +184,7 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 		return;
 	}
 	// Backup the DX9 transform (DX9 documentation suggests that it is included in the StateBlock but it doesn't appear to)
-	D3DMATRIX last_world, last_view, last_projection;
+	D3DXMATRIX last_world, last_view, last_projection;
 	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_WORLD, &last_world);
 	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_VIEW, &last_view);
 	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_PROJECTION, &last_projection);
@@ -192,10 +198,8 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	fbxModels::draw(drawType, globals::dataS.gamever);
-
-
-
 	// Restore the DX9 transform
+
 	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_WORLD, &last_world);
 	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_VIEW, &last_view);
 	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_PROJECTION, &last_projection);
@@ -234,7 +238,6 @@ void graphicsD3D::onDrawAllGameStuff()
 
 	if (drawType == 1)
 	{
-		//globals::dataS.Modules.tacticalMapVeiwer.Draw();
 		globals::dataS.Modules.contextMenuStrat.Draw();
 	}
 
@@ -317,6 +320,11 @@ void graphicsD3D::onDrawAllGameStuff()
 
 
 	battleCreator::draw(graphicsD3D::dataS.pDevice);
+
+	for (auto& f : graphicsD3D::dataS.imguiDrawCallbacks)
+	{
+		f();
+	}
 
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 5.f);
@@ -402,8 +410,6 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 
 	drawParams.drawEOPStartInfo = true;
 	drawParams.drawInfoEndTime = (float)ImGui::GetTime() + 20.0f;
-
-
 	return;
 }
 
@@ -471,10 +477,109 @@ DWORD __stdcall graphicsD3D::InitS()
 }
 
 
+NOINLINE EOP_EXPORT  graphicsExport::D3dState graphicsExport::GetD3dState()
+{
+	graphicsExport::D3dState retState;
+
+	graphicsD3D::dataS.pDevice->CreateStateBlock(D3DSBT_ALL, &retState.d3d9_state_block);
+	if (retState.d3d9_state_block->Capture() < 0)
+	{
+		retState.d3d9_state_block->Release();
+	}
+	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_WORLD, &retState.world);
+	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_VIEW, &retState.view);
+	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_PROJECTION, &retState.projection);
+
+	return retState;
+}
+
+NOINLINE EOP_EXPORT void graphicsExport::AddStratmapDrawCallback(EOPDrawCallback callFunk)
+{
+	graphicsD3D::dataS.stratmapDrawCallbacks.push_back(callFunk);
+}
+
+NOINLINE EOP_EXPORT void graphicsExport::AddImGuiDrawCallback(EOPDrawCallback callFunk)
+{
+	graphicsD3D::dataS.imguiDrawCallbacks.push_back(callFunk);
+}
+
+NOINLINE EOP_EXPORT void graphicsExport::SetClearD3dState()
+{
+	graphicsD3D::dataS.clearStateBlock->Apply();
+}
+
+NOINLINE EOP_EXPORT void graphicsExport::SetD3dState(graphicsExport::D3dState& state)
+{
+	state.d3d9_state_block->Apply();
+
+	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_WORLD, &state.world);
+	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_VIEW, &state.view);
+	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_PROJECTION, &state.projection);
+}
+
+NOINLINE EOP_EXPORT void graphicsExport::ReleaseD3dState(graphicsExport::D3dState& state)
+{
+	state.d3d9_state_block->Release();
+}
+
+NOINLINE EOP_EXPORT const D3DXMATRIXA16* graphicsExport::GetMatView()
+{
+	D3DXMATRIXA16* matView = nullptr;;
+
+	if (globals::dataS.gamever == 2)//steam
+	{
+		matView = reinterpret_cast<D3DXMATRIXA16*>(0x0193D604);
+	}
+	else
+	{
+		matView = reinterpret_cast<D3DXMATRIXA16*>(0x01986754);
+	}
+
+	return matView;
+}
+
+NOINLINE EOP_EXPORT const D3DXMATRIXA16* graphicsExport::GetMatProj()
+{
+	D3DXMATRIXA16* matProj = nullptr;;
+
+	if (globals::dataS.gamever == 2)//steam
+	{
+		matProj = reinterpret_cast<D3DXMATRIXA16*>(0x02C9E0F8);
+	}
+	else
+	{
+		matProj = reinterpret_cast<D3DXMATRIXA16*>(0x02ce7098);
+	}
+
+	return matProj;
+}
+
+NOINLINE EOP_EXPORT IDirect3DDevice9* graphicsExport::GetDevice()
+{
+	return graphicsD3D::dataS.pDevice;
+}
+
 NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* path, int* x, int* y)
 {
 	LPDIRECT3DTEXTURE9 imageRet = nullptr;
-	HRESULT res = D3DXCreateTextureFromFileA(graphicsD3D::dataS.pDevice, path, &imageRet);
+	// https://learn.microsoft.com/en-us/windows/win32/direct3d9/d3dxcreatetexturefromfileex
+	HRESULT res =  D3DXCreateTextureFromFileExA(
+		graphicsD3D::dataS.pDevice, // device
+		path,
+		D3DX_DEFAULT_NONPOW2, // width
+		D3DX_DEFAULT_NONPOW2, // height
+		D3DX_FROM_FILE, // MipLevels
+		0, // Usage
+		D3DFMT_FROM_FILE, // Format
+		D3DPOOL_MANAGED,  // Pool
+		D3DX_FILTER_NONE, // Filter
+		D3DX_FILTER_NONE,  // Mip Filter
+		0, // Color Key
+		NULL, // D3DXIMAGE_INFO
+		NULL, // PALETTEENTRY
+		&imageRet // returned image/texture
+	);
+
 	if (res != D3D_OK || imageRet == nullptr)
 	{
 		std::string errMes = DXGetErrorStringA(res);
@@ -496,6 +601,10 @@ NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* p
 
 NOINLINE EOP_EXPORT void graphicsExport::unloadTexture(LPDIRECT3DTEXTURE9 texture)
 {
+	if (texture == nullptr)
+	{
+		return;
+	}
 	tempData.texturesForDeleting.push_back(texture);
 }
 
@@ -507,31 +616,6 @@ NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevic
 
 
 	graphicsD3D::initImgGui(pDevice);
-
-
-	/*discord::Core* core{};
-	auto response = discord::Core::Create(879470336565981186, DiscordCreateFlags_Default, &core);
-	DiscordState.core.reset(core);
-
-	if (!DiscordState.core) {
-	//	std::cout << "Failed to instantiate Discord!";
-		std::exit(-1);
-	}
-
-	discord::Activity activity{};
-	activity.SetDetails("Medieval II total war");
-	activity.SetState("M2TWEOP");
-	activity.GetAssets().SetSmallImage("test.png");
-	activity.GetAssets().SetSmallText("123321");
-	activity.GetAssets().SetLargeImage("test.png");
-	activity.GetAssets().SetLargeText("321123");
-	activity.SetType(discord::ActivityType::Playing);
-	DiscordState.core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {
-	//	std::cout << ((result == discord::Result::Ok) ? "Succeeded" : "Failed")
-		//	<< " updating activity!\n";
-		});
-	*/
-
 
 	fbxModels::set3dDevice(pDevice);
 

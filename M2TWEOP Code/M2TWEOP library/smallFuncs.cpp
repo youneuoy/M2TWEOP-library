@@ -3,11 +3,47 @@
 #include "dataOffsets.h"
 
 #include "fastFunctsHelpers.h"
+#include "MasterDefines.h"
 
 
 namespace smallFuncs
 {
+	void* GetMainStratObject(void* baseObj)
+	{
+		if (baseObj == nullptr)
+		{
+			return baseObj;
+		}
 
+		StartMapObjectType objT = CallVFunc<4, StartMapObjectType>(baseObj);
+		switch (objT)
+		{
+		case StartMapObjectType::FloatingGeneral:
+			break;
+		case StartMapObjectType::Settlement:
+			break;
+		case StartMapObjectType::Fort:
+			break;
+		case StartMapObjectType::Port:
+			break;
+		case StartMapObjectType::Character:
+			break;
+		case StartMapObjectType::RallyPointSundry:
+		{
+			RallyPointSundry* ral = (RallyPointSundry*)baseObj;
+			if (ral->object == nullptr)
+			{
+				break;
+			}
+			return GetMainStratObject(ral->object);
+
+			break;
+		}
+		default:
+			break;
+		}
+		return baseObj;
+	}
 	NOINLINE EOP_EXPORT void setAncLimit(unsigned char limit)
 	{
 
@@ -70,26 +106,6 @@ namespace smallFuncs
 
 	};
 
-
-	NOINLINE EOP_EXPORT void mergeArmies(stackStruct* army, stackStruct* targetArmy)
-	{
-		DWORD codeOffset = 0;
-		if (globals::dataS.gamever == 2)//steam
-		{
-			codeOffset = 0x007155F0;
-		}
-		else
-		{
-			codeOffset = 0x00714EF0;
-		}
-		_asm
-		{
-			push army
-			mov ecx, targetArmy
-			mov eax, codeOffset
-			call eax
-		}
-	}
 
 	NOINLINE EOP_EXPORT void setEDUUnitsSize(signed short min, signed short max)
 	{
@@ -225,7 +241,7 @@ namespace smallFuncs
 		default: return "unknown_condition"; break;
 		}
 	}
-	NOINLINE EOP_EXPORT void createUniString(UNICODE_STRING** &newUniStringPointer, const char* nonUniStr)
+	NOINLINE EOP_EXPORT void createUniString(UNICODE_STRING**& newUniStringPointer, const char* nonUniStr)
 	{
 		DWORD funcAdr = 0;
 		if (globals::dataS.gamever == 2)//steam
@@ -242,7 +258,7 @@ namespace smallFuncs
 		size_t lenS = strlen(nonUniStr);
 
 
-		newUniStringPointer = (UNICODE_STRING**)new char[(lenS + 6+4) * 2];
+		newUniStringPointer = (UNICODE_STRING**)new char[(lenS + 6 + 4) * 2];
 
 		UNICODE_STRING** uniStr = newUniStringPointer;
 		_asm {
@@ -267,15 +283,15 @@ namespace smallFuncs
 		// do whatever with wstr
 		delete[] wstr;
 
-		(*newUniStringPointer)->Length = utf16line.size();
-		(*newUniStringPointer)->something2 = utf16line.size();
+		(*newUniStringPointer)->Length = (USHORT)utf16line.size();
+		(*newUniStringPointer)->something2 = (USHORT)utf16line.size();
 
 		unsigned short* ptr = (unsigned short*)&(*newUniStringPointer)->Buffer;
 
-		for (int i = 0; i < utf16line.size(); i++)
+		for (UINT32 i = 0; i < utf16line.size(); i++)
 		{
 
-			*(ptr+i) = utf16line[i];
+			*(ptr + i) = utf16line[i];
 		}
 		*(ptr + utf16line.size()) = (unsigned short)0;
 	}
@@ -303,6 +319,152 @@ namespace smallFuncs
 		fac->localizedName = nameMem;
 
 		smallFuncs::createUniString(fac->localizedName, newName);
+	}
+
+	NOINLINE EOP_EXPORT UNICODE_STRING** getFactionName(factionStruct* fac)
+	{
+
+		std::string facname = fac->factSmDescr->facName;
+		std::transform(facname.begin(), facname.end(), facname.begin(), ::toupper);
+		UNICODE_STRING** nameMem = new UNICODE_STRING*;
+		smallFuncs::createUniString(nameMem, facname.c_str());
+		UNICODE_STRING*** nameMem2 = &nameMem;
+		DWORD funcAddr = codes::offsets.getStringFromTable;
+		DWORD stringTable = dataOffsets::offsets.stringTable;
+		_asm
+		{
+			push nameMem2
+			mov ecx, stringTable
+			mov ecx, [ecx]
+			mov eax, funcAddr
+			call eax
+			mov nameMem2, eax
+		}
+
+		return *nameMem2;
+	}
+
+	NOINLINE EOP_EXPORT void historicEvent(const char* name, const char* title, const char* description)
+	{
+		DWORD funcAddr = codes::offsets.historicEventFunc;
+
+		UNICODE_STRING** titleUni = new UNICODE_STRING*;
+		smallFuncs::createUniString(titleUni, title);
+
+		UNICODE_STRING** bodyUni = new UNICODE_STRING*;
+		smallFuncs::createUniString(bodyUni, description);
+
+		UNICODE_STRING*** titleUnip = &titleUni;
+		UNICODE_STRING*** bodyUnip = &bodyUni;
+
+
+		_asm
+		{
+			push 0x3FFFFFFF
+			push 0x0
+			push 0x0
+			push 0xFFFFFFFF
+			push 0xFFFFFFFF
+			push name
+			push bodyUnip
+			push titleUnip
+			mov eax, funcAddr
+			call eax
+		}
+
+	}
+
+	DWORD getScriptCommandByName(const char* cmdName)
+	{
+		DWORD func1 = codes::offsets.scriptCommandOne;
+		DWORD func2 = codes::offsets.scriptCommandTwo;
+		DWORD result = 0x0;
+		DWORD cmdNamePtr = (DWORD)&cmdName;
+
+		_asm {
+			mov eax, func1
+			call eax
+			mov ecx, eax
+			push cmdNamePtr
+			mov eax, func2
+			call eax
+			mov result, eax
+		}
+		return result;
+	}
+
+	struct fakeTextInput
+	{
+	public:
+		char* textBuffer; //0x0000
+		uint32_t byteSize; //0x0004
+		char* endString; //0x0008
+		struct UNICODE_STRING** unicodePointerPointer; //0x000C
+		char* currRead; //0x0010
+		char* currLine; //0x0014
+		uint32_t lineNumber; //0x0018
+		int32_t N1814981889; //0x001C
+		int32_t N0; //0x0020
+		DWORD classPointer; //0x0024
+	}; //Size: 0x0028
+
+	NOINLINE EOP_EXPORT void scriptCommand(const char* command, const char* args)
+	{
+		DWORD scriptClass = getScriptCommandByName(command);
+		if (scriptClass == 0x0)
+		{
+			return;
+		}
+		char* fullCommand = new char[strlen(command) + strlen(args) + 2];
+		strcpy(fullCommand, command);
+		strcat(fullCommand, " ");
+		strcat(fullCommand, args);
+		fakeTextInput* fakeText = new fakeTextInput;
+		std::string scriptPath = "data/world/maps/campaign/imperial_campaign/campaign_script.txt";
+		fakeText->unicodePointerPointer = new UNICODE_STRING*;
+		smallFuncs::createUniString(fakeText->unicodePointerPointer, scriptPath.c_str());
+		fakeText->textBuffer = fullCommand;
+		fakeText->byteSize = strlen(command) + (int8_t)0x4;
+		size_t len = strlen(fullCommand);
+		char* endAddress = fullCommand + len;
+		fakeText->endString = endAddress;
+		fakeText->currRead = fullCommand;
+		fakeText->currLine = fullCommand;
+		fakeText->lineNumber = 1;
+		fakeText->N1814981889 = 1814981889;
+		fakeText->N0 = 0;
+		DWORD classPointer = 0x0;
+		_asm
+		{
+			mov eax, scriptClass
+			mov eax, [eax]
+			mov classPointer, eax
+		}
+		fakeText->classPointer = classPointer;
+		DWORD funcAddr = scriptClass + (int8_t)0x4;
+		DWORD scriptObject = 0x0;
+		_asm
+		{
+			push fakeText
+			mov eax, funcAddr
+			mov eax, [eax]
+			call eax
+			mov scriptObject, eax
+			add esp, 0x4
+		}
+
+		if (scriptObject == 0x0)
+		{
+			return;
+		}
+
+		_asm
+		{
+			mov ecx, scriptObject
+			mov eax, [ecx]
+			mov eax, [eax]
+			call eax
+		}
 	}
 
 	NOINLINE EOP_EXPORT void changeRegionName(regionStruct* region, const char* newName)
@@ -409,7 +571,7 @@ namespace smallFuncs
 			push xy
 			mov eax, funcAdr
 			call eax
-			mov retZ,al
+			mov retZ, al
 		}
 
 		return retZ;
@@ -435,11 +597,11 @@ namespace smallFuncs
 		int retValue = 0;
 		if (globals::dataS.gamever == 2)//steam
 		{
-			eventsObject = (countersObjectS * )0x016A7A58;
+			eventsObject = (countersObjectS*)0x016A7A58;
 		}
 		else
 		{
-			eventsObject = (countersObjectS * )0x016F0BF0;
+			eventsObject = (countersObjectS*)0x016F0BF0;
 		}
 		DWORD funcAdr = 0;
 
@@ -560,5 +722,46 @@ namespace smallFuncs
 		return *dataOffsets::offsets.gameUnit_size;
 	}
 
+	float GetMinimumPossibleMovepointsForArmy(stackStruct* army)
+	{
+		if (army == nullptr)
+		{
+			return 0;
+		}
+
+		typedef float (__thiscall* GetUnitFullMovePointsF)(unit* un);
+
+		GetUnitFullMovePointsF getUnitFullMovePointsF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			getUnitFullMovePointsF = (GetUnitFullMovePointsF)0x00742b10;
+		}
+		else
+		{
+			getUnitFullMovePointsF = (GetUnitFullMovePointsF)0x00742380;
+		}
+		if (army->numOfUnits < 1)
+		{
+			return 0;
+		}
+		float minMp = getUnitFullMovePointsF(army->units[0]);
+
+		for (int i = 1; i < army->numOfUnits; ++i)
+		{
+			float unitFullMp = getUnitFullMovePointsF(army->units[i]);
+			if (unitFullMp < minMp)
+			{
+				minMp = unitFullMp;
+			}
+		}
+		return minMp;
+	}
+
+	float GetDistanceInTiles(int x, int y, int destX, int destY)
+	{
+		int dx = x - destX;
+		int dy = y - destY;
+		return (float)sqrt((double)(dx * dx) + (double)(dy * dy));
+	}
 
 };

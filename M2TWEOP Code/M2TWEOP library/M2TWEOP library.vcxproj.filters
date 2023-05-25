@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Исходные файлы\patches">
-      <UniqueIdentifier>{1cf21b73-d1af-4f3d-817a-f5fdd38476b0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Исходные файлы\patches\age">
-      <UniqueIdentifier>{07cb20c7-182b-4ca1-abea-d0dbad39b1f0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Исходные файлы\functions">
       <UniqueIdentifier>{d903120e-49a3-49db-a7e1-a77675c88a12}</UniqueIdentifier>
     </Filter>
@@ -31,17 +25,11 @@
     <Filter Include="3rd">
       <UniqueIdentifier>{0870bfe6-27b0-4971-95bf-ba78b5f8bb45}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Исходные файлы\patches\stratModels">
-      <UniqueIdentifier>{163579f2-3b06-44da-a4c2-c5c503d2a458}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Исходные файлы\test">
       <UniqueIdentifier>{0b7b204c-6c52-411c-94ec-821c09dd0b5d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Исходные файлы\functions\stratActions">
       <UniqueIdentifier>{8ef46b92-8ece-4f87-991a-ea1a258343de}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Исходные файлы\patches\customTiles">
-      <UniqueIdentifier>{1aadcecd-f914-4bad-bb50-518337da8fc7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Исходные файлы\functions\helpers">
       <UniqueIdentifier>{c677d152-1df7-4e3a-8261-58aa8474622d}</UniqueIdentifier>
@@ -112,12 +100,6 @@
     <Filter Include="features\RecruitSystem">
       <UniqueIdentifier>{3100ceb3-55db-429f-bda7-d86b5b34950b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="features\RecruitSystem\Core">
-      <UniqueIdentifier>{905ed2b0-68a6-484a-8cef-32abb7fa7604}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="features\RecruitSystem\Config">
-      <UniqueIdentifier>{30fa89e1-8565-4016-acf7-3eb032fb0c6e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="features\mmbMover">
       <UniqueIdentifier>{c4bd76eb-28c5-4b73-9553-9ab43b44e19c}</UniqueIdentifier>
     </Filter>
@@ -126,6 +108,45 @@
     </Filter>
     <Filter Include="features\ContextMenuStrat">
       <UniqueIdentifier>{7d6566ee-6f3f-4aad-b9a2-aa303e3c0c1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\casModelsDrawer">
+      <UniqueIdentifier>{3557e8a0-e12e-4a5c-8190-50b45fcf2a1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\stratModels">
+      <UniqueIdentifier>{163579f2-3b06-44da-a4c2-c5c503d2a458}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\customTiles">
+      <UniqueIdentifier>{1aadcecd-f914-4bad-bb50-518337da8fc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\eopBuildings">
+      <UniqueIdentifier>{c41121f6-aa4f-4187-ab9b-e7414e060814}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\injections">
+      <UniqueIdentifier>{1cf21b73-d1af-4f3d-817a-f5fdd38476b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="technical\texturesManager">
+      <UniqueIdentifier>{1e9bf360-6ae5-4c5e-9da9-79d3ed955d61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{85ce923a-ea0a-4436-86ee-6a9a40fa6bf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\mapTextDrawer">
+      <UniqueIdentifier>{38fdd23f-f1b6-4765-98e0-008bf6cf426e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd\shortestPath">
+      <UniqueIdentifier>{ea658fbd-38fc-49d1-bbf5-1f128c840c4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\pathFinding">
+      <UniqueIdentifier>{fab3b7b8-2966-414f-99e5-580a83697feb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\Retreats">
+      <UniqueIdentifier>{7ec86ca8-e0b5-490e-a9ba-fd8b83087f91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\Retreats\PlannedRetreatRoute">
+      <UniqueIdentifier>{cef8ae60-a2c4-45e9-9a08-90473e600e52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\Retreats\Retreater">
+      <UniqueIdentifier>{0ff40f1f-f3d3-4e1a-82ad-deec565c667b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -137,9 +158,6 @@
     </ClInclude>
     <ClInclude Include="managerF.h">
       <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="agePatch.h">
-      <Filter>Исходные файлы\patches\age</Filter>
     </ClInclude>
     <ClInclude Include="patchesForGame.h">
       <Filter>Файлы заголовков</Filter>
@@ -163,7 +181,7 @@
       <Filter>Исходные файлы\functions</Filter>
     </ClInclude>
     <ClInclude Include="stratModelsChange.h">
-      <Filter>Исходные файлы\patches\stratModels</Filter>
+      <Filter>features\stratModels</Filter>
     </ClInclude>
     <ClInclude Include="tests.h">
       <Filter>Исходные файлы\test</Filter>
@@ -172,7 +190,7 @@
       <Filter>Исходные файлы\functions\stratActions</Filter>
     </ClInclude>
     <ClInclude Include="tilesChange.h">
-      <Filter>Исходные файлы\patches\customTiles</Filter>
+      <Filter>features\customTiles</Filter>
     </ClInclude>
     <ClInclude Include="fastFunctsHelpers.h">
       <Filter>Исходные файлы\functions\helpers</Filter>
@@ -229,7 +247,7 @@
       <Filter>3rd\miniz</Filter>
     </ClInclude>
     <ClInclude Include="stratModelsOptimise.h">
-      <Filter>Исходные файлы\patches\stratModels</Filter>
+      <Filter>features\stratModels</Filter>
     </ClInclude>
     <ClInclude Include="realGameTypes.h">
       <Filter>Файлы ресурсов</Filter>
@@ -378,18 +396,6 @@
     <ClInclude Include="RecruitSystem.h">
       <Filter>features\RecruitSystem</Filter>
     </ClInclude>
-    <ClInclude Include="RecruitPlace.h">
-      <Filter>features\RecruitSystem\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="RecruitSystemConfig.h">
-      <Filter>features\RecruitSystem\Config</Filter>
-    </ClInclude>
-    <ClInclude Include="RecruitUnitDescription.h">
-      <Filter>features\RecruitSystem\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="RecruitConditionDescription.h">
-      <Filter>features\RecruitSystem\Core</Filter>
-    </ClInclude>
     <ClInclude Include="MmbMover.h">
       <Filter>features\mmbMover</Filter>
     </ClInclude>
@@ -397,10 +403,43 @@
       <Filter>features\tacticalMapVeiwer</Filter>
     </ClInclude>
     <ClInclude Include="Injects.h">
-      <Filter>Исходные файлы\patches</Filter>
+      <Filter>Исходные файлы\injections</Filter>
     </ClInclude>
     <ClInclude Include="ContextMenuStrat.h">
       <Filter>features\ContextMenuStrat</Filter>
+    </ClInclude>
+    <ClInclude Include="RSExport.h">
+      <Filter>features\RecruitSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="casModelsDrawer.h">
+      <Filter>features\casModelsDrawer</Filter>
+    </ClInclude>
+    <ClInclude Include="eopBuildings.h">
+      <Filter>features\eopBuildings</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturesManager.h">
+      <Filter>technical\texturesManager</Filter>
+    </ClInclude>
+    <ClInclude Include="MapTextDrawer.h">
+      <Filter>features\mapTextDrawer</Filter>
+    </ClInclude>
+    <ClInclude Include="PlannedRetreatRoute.h">
+      <Filter>features\Retreats\PlannedRetreatRoute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\shortestPath\micropather.h">
+      <Filter>3rd\shortestPath</Filter>
+    </ClInclude>
+    <ClInclude Include="PathMap.h">
+      <Filter>features\pathFinding</Filter>
+    </ClInclude>
+    <ClInclude Include="RetreatRoutes.h">
+      <Filter>features\Retreats\PlannedRetreatRoute</Filter>
+    </ClInclude>
+    <ClInclude Include="Retreater.h">
+      <Filter>features\Retreats\Retreater</Filter>
+    </ClInclude>
+    <ClInclude Include="MasterDefines.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -412,9 +451,6 @@
     </ClCompile>
     <ClCompile Include="managerF.cpp">
       <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="agePatch.cpp">
-      <Filter>Исходные файлы\patches\age</Filter>
     </ClCompile>
     <ClCompile Include="patchesForGame.cpp">
       <Filter>Исходные файлы</Filter>
@@ -435,10 +471,10 @@
       <Filter>Исходные файлы\functions</Filter>
     </ClCompile>
     <ClCompile Include="stratModelsChange.cpp">
-      <Filter>Исходные файлы\patches\stratModels</Filter>
+      <Filter>features\stratModels</Filter>
     </ClCompile>
     <ClCompile Include="stratModelsHelper.cpp">
-      <Filter>Исходные файлы\patches\stratModels</Filter>
+      <Filter>features\stratModels</Filter>
     </ClCompile>
     <ClCompile Include="actionsStrat.cpp">
       <Filter>Исходные файлы\functions\stratActions</Filter>
@@ -447,7 +483,7 @@
       <Filter>Исходные файлы\functions\stratActions</Filter>
     </ClCompile>
     <ClCompile Include="tilesChange.cpp">
-      <Filter>Исходные файлы\patches\customTiles</Filter>
+      <Filter>features\customTiles</Filter>
     </ClCompile>
     <ClCompile Include="fastFunctsHelpers.cpp">
       <Filter>Исходные файлы\functions\helpers</Filter>
@@ -486,7 +522,7 @@
       <Filter>3rd\miniz</Filter>
     </ClCompile>
     <ClCompile Include="stratModelsOptimise.cpp">
-      <Filter>Исходные файлы\patches\stratModels</Filter>
+      <Filter>features\stratModels</Filter>
     </ClCompile>
     <ClCompile Include="onlineThings.cpp">
       <Filter>features\onlineThings</Filter>
@@ -599,18 +635,6 @@
     <ClCompile Include="RecruitSystem.cpp">
       <Filter>features\RecruitSystem</Filter>
     </ClCompile>
-    <ClCompile Include="RecruitPlace.cpp">
-      <Filter>features\RecruitSystem\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="RecruitSystemConfig.cpp">
-      <Filter>features\RecruitSystem\Config</Filter>
-    </ClCompile>
-    <ClCompile Include="RecruitUnitDescription.cpp">
-      <Filter>features\RecruitSystem\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="RecruitConditionDescription.cpp">
-      <Filter>features\RecruitSystem\Core</Filter>
-    </ClCompile>
     <ClCompile Include="MmbMover.cpp">
       <Filter>features\mmbMover</Filter>
     </ClCompile>
@@ -618,10 +642,37 @@
       <Filter>features\tacticalMapVeiwer</Filter>
     </ClCompile>
     <ClCompile Include="Injects.cpp">
-      <Filter>Исходные файлы\patches</Filter>
+      <Filter>Исходные файлы\injections</Filter>
     </ClCompile>
     <ClCompile Include="ContextMenuStrat.cpp">
       <Filter>features\ContextMenuStrat</Filter>
+    </ClCompile>
+    <ClCompile Include="RSExport.cpp">
+      <Filter>features\RecruitSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="casModelsDrawer.cpp">
+      <Filter>features\casModelsDrawer</Filter>
+    </ClCompile>
+    <ClCompile Include="eopBuildings.cpp">
+      <Filter>features\eopBuildings</Filter>
+    </ClCompile>
+    <ClCompile Include="TexturesManager.cpp">
+      <Filter>technical\texturesManager</Filter>
+    </ClCompile>
+    <ClCompile Include="MapTextDrawer.cpp">
+      <Filter>features\mapTextDrawer</Filter>
+    </ClCompile>
+    <ClCompile Include="PlannedRetreatRoute.cpp">
+      <Filter>features\Retreats\PlannedRetreatRoute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\shortestPath\micropather.cpp">
+      <Filter>3rd\shortestPath</Filter>
+    </ClCompile>
+    <ClCompile Include="PathMap.cpp">
+      <Filter>features\pathFinding</Filter>
+    </ClCompile>
+    <ClCompile Include="Retreater.cpp">
+      <Filter>features\Retreats\Retreater</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -30,7 +30,7 @@ private:
 	{
 		std::vector<uint8_t> backupedData = {};
 
-		bool IsBattleGeneratorWorking = false;
+		bool IsBattleGeneratorWorking = true;
 		int cords[2]{};
 	}state;
 

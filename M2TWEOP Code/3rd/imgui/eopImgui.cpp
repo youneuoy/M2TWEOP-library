@@ -31,7 +31,7 @@ void ImGui::StyleGrey()
 	colors[ImGuiCol_SliderGrabActive] = ImVec4(0.64f, 0.64f, 0.64f, 1.00f);
 	colors[ImGuiCol_Button] = ImVec4(0.54f, 0.54f, 0.54f, 0.35f);
 	colors[ImGuiCol_ButtonHovered] = ImVec4(0.52f, 0.52f, 0.52f, 0.59f);
-	colors[ImGuiCol_ButtonActive] = ImVec4(0.76f, 0.76f, 0.76f, 1.00f);
+	colors[ImGuiCol_ButtonActive] = ImVec4(0.76f, 0.76f, 0.76f, 0.80f);
 	colors[ImGuiCol_Header] = ImVec4(0.38f, 0.38f, 0.38f, 1.00f);
 	colors[ImGuiCol_HeaderHovered] = ImVec4(0.47f, 0.47f, 0.47f, 1.00f);
 	colors[ImGuiCol_HeaderActive] = ImVec4(0.76f, 0.76f, 0.76f, 0.77f);
@@ -98,7 +98,7 @@ void ImGui::LoadingIndicatorCircle(const char* label, const float indicator_radi
 	if (!ItemAdd(bb, id)) {
 		return;
 	}
-	const float t = g.Time;
+	const float t = (float)g.Time;
 	const auto degree_offset = 2.0f * IM_PI / circle_count;
 	for (int i = 0; i < circle_count; ++i) {
 		const auto x = indicator_radius * std::sin(degree_offset * i);

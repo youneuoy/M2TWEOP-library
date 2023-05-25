@@ -1,6 +1,6 @@
 style='./EOP-Theme'
 dir='./generatedLuaDocs'
-file = {'../M2TWEOP-luaPlugin/luaPlugin/luaP.cpp','../M2TWEOP-luaPlugin/luaPlugin/luaEvents.cpp','../M2TWEOP-luaPlugin/luaPlugin/luaEopEdu.cpp','../M2TWEOP-luaPlugin/luaPlugin/luaP2.cpp','../M2TWEOP-luaPlugin/luaPlugin/luaFbx.cpp','../M2TWEOP-luaPlugin/luaPlugin/luaSounds.cpp'}
+file = {'../M2TWEOP-luaPlugin/luaPlugin/luaP.cpp','../M2TWEOP-luaPlugin/luaPlugin/luaEvents.cpp','../M2TWEOP-luaPlugin/luaPlugin/luaEopEdu.cpp','../M2TWEOP-luaPlugin/luaPlugin/luaP2.cpp','../M2TWEOP-luaPlugin/luaPlugin/luaFbx.cpp','../M2TWEOP-luaPlugin/luaPlugin/luaEop3dObjects.cpp','../M2TWEOP-luaPlugin/luaPlugin/luaSounds.cpp'}
 merge=true
 format ='markdown'
 project = 'EOP Lua Plugin'

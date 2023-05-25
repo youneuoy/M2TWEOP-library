@@ -11,6 +11,7 @@ namespace battleCreator
 	{
 		bool isGenerationNeeded = true;
 		bool isResultTransferNeeded = true;
+		bool isPlannedRetreatRoute = true;
 
 		atomic_bool isRunStarted{ false };
 		atomic_bool isRunEnded{ false };
@@ -50,6 +51,7 @@ namespace battleCreator
 		{
 			json.at("enableAutoGeneration").get_to(data.isGenerationNeeded);
 			json.at("enableResultsTransfer").get_to(data.isResultTransferNeeded);
+			json.at("isPlannedRetreatRoute").get_to(data.isPlannedRetreatRoute);
 		}
 		catch (jsn::json::type_error& e)
 		{
@@ -175,8 +177,12 @@ namespace battleCreator
 		fileStrings.push_back("	population 999");
 		fileStrings.push_back("	plan_set default_set");
 
-		factionStruct* facCreator = smallFuncs::getGameDataAll()->campaignData->factionsSortedByID[sett->fac_creatorModNum];
-		fileStrings.push_back(string("	faction_creator ").append(facCreator->factSmDescr->facName));
+
+		auto* facCreator = fastFuncts::GetFactSmDescrById(sett->fac_creatorModNum);
+		if (facCreator != nullptr)
+		{
+			fileStrings.push_back(string("	faction_creator ").append(facCreator->facName));
+		}
 		for (int bnum = 0; bnum < sett->buildingsNum; bnum++)
 		{
 			fileStrings.push_back("	building");

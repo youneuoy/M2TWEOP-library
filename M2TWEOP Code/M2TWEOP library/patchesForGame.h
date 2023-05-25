@@ -8,9 +8,9 @@ public:
 	//select worldpkgdesc from db
 	static worldRecord* __fastcall selectWorldpkgdesc(char* database, worldRecord* selectedRecord);
 
-		
+
 	static void __fastcall OnLoadSettlementWorldpkgdesc(worldRecord* selectedRecord);
-	static int __fastcall onfortificationlevelS(settlementStruct* settlement,bool*isCastle);
+	static int __fastcall onfortificationlevelS(settlementStruct* settlement, bool* isCastle);
 	static char* __fastcall onSaveEDUStringS(EduEntry* eduEntry);
 	static int __fastcall onCreateUnit(int* edbIndex, int** edb, char** entryName);
 	static int __fastcall OnCreateMercUnitCheck(char** entryName, int eduindex);
@@ -19,7 +19,7 @@ public:
 	static const char* __fastcall onAutoSave();
 
 
-	static general* __fastcall mercenaryMovepointsGetGeneral(stackStruct*army);
+	static general* __fastcall mercenaryMovepointsGetGeneral(stackStruct* army);
 
 	//click at tile
 	static void __fastcall clickAtTile(int* xy);
@@ -79,6 +79,7 @@ public:
 
 	//read and load all startmap models
 	static void WINAPI unicalStratModsRead();
+	static void WINAPI loadCharStratModels();
 	//moment before game start select stratmap models for drawing
 	//replace models for the settlements, forts, ports, etc here without craches
 	static void WINAPI checkAndChangeModels();
@@ -91,17 +92,19 @@ public:
 
 	static void WINAPI onDrawPartsOfStratObjects();
 	static void WINAPI onDrawAll();
+	static void WINAPI onStartOfDrawFunction();
+	static void WINAPI onRetreat();
 
 
-	static void __fastcall OnStopCharacter(general*character);
-	static int __fastcall OnMoveRecruitQueue(int magicVal);
+	static void __fastcall OnStopCharacter(general* character);
+	static void WINAPI OnMoveRecruitQueue();
 	static void __fastcall recruitEOPunit(DWORD eduoffset, DWORD pad, regionStruct* region, int eduindex, int factionid, int exp, int minusone, int armlvl, int wplvl);
 	static void __fastcall recruitEOPMercunit(DWORD pad, DWORD pad2, regionStruct* region, int eduindex, int factionid, int exp);
 
 
-	static void __fastcall onEndSiege(settlementStruct*sett);
-	static void __fastcall onStartSiege(settlementStruct*sett);
-	static void __fastcall onLoadDescrBattleCharacter(stackStruct*army,general*goalGen);
+	static void __fastcall onEndSiege(settlementStruct* sett);
+	static void __fastcall onStartSiege(settlementStruct* sett);
+	static void __fastcall onLoadDescrBattleCharacter(stackStruct* army, general* goalGen);
 
 
 	//called not in all cases!

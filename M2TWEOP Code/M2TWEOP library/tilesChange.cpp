@@ -87,9 +87,9 @@ namespace tilesChange
 	{
 		string ret;
 		size_t pos = path.find("/mods/", 0);
-		for (int i = 0; i < path.size(); i++)
+		for (UINT32 i = 0; i < path.size(); i++)
 		{
-			if (i > pos)
+			if (i > (UINT32)pos)
 			{
 				ret.push_back(path[i]);
 			}

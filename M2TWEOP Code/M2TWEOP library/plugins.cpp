@@ -7,6 +7,8 @@
 
 #include "eduThings.h"
 #include "onlineThings.h"
+
+#include "PlannedRetreatRoute.h"
 plugins::configT plugins::pluginsCfg;
 vector<const char*>* plugins::eventNames;
 
@@ -65,6 +67,11 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 			battleCreator::onHotseatScreen();
 		}
 	}
+	else if (strcmp(event, "FactionTurnStart") == 0)
+	{
+		factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
+		PlannedRetreatRoute::OnFactionTurnStart(fac);
+	}
 
 
 	/*if (strcmp(event, "CharacterSelected") == 0)
@@ -112,6 +119,11 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 		{
 			factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
 			(*(*pl->onFactionTurnStart))(fac);
+		}
+		else if (compareEvent(event, &pl->onGeneralDevastatesTile.stringAdr, pl->onGeneralDevastatesTile.strCmp))
+		{
+			generalCharacterictics* gen = reinterpret_cast<generalCharacterictics*>(vTab[1]);
+			(*(*pl->onGeneralDevastatesTile))(gen);
 		}
 		else if (compareEvent(event, &pl->onPreFactionTurnStart.stringAdr, pl->onPreFactionTurnStart.strCmp))
 		{
@@ -652,13 +664,13 @@ std::string plugins::onSelectWorldpkgdesc(const char* selectedRec, const char* s
 
 int plugins::onfortificationlevelS(settlementStruct* settlement, bool* isCastle)
 {
-	int retVal=-2;//magic value, mean not change anything
+	int retVal = -2;//magic value, mean not change anything
 
 
 	for (plugin* pl : pluginsCfg.plugins)
 	{
 		bool isChanged = false;
-		int tmpVal = (*(*pl->onfortificationlevelS))(settlement, isCastle ,&isChanged);
+		int tmpVal = (*(*pl->onfortificationlevelS))(settlement, isCastle, &isChanged);
 		if (isChanged == true)
 		{
 			retVal = tmpVal;
@@ -674,6 +686,8 @@ void plugins::onClickAtTile(int x, int y)
 	{
 		(*(*pl->onClickAtTile))(x, y);
 	}
+
+	PlannedRetreatRoute::OnClickAtTile(x, y);
 }
 
 void plugins::onCampaignMapLoaded()
@@ -736,6 +750,7 @@ void plugins::onLoadGame(UNICODE_STRING**& savePath)
 	{
 		(*(*pl->onLoadGamePl))(&files);
 	}
+	PlannedRetreatRoute::OnGameLoad(files);
 
 	techFuncs::deleteFiles(files);
 
@@ -757,7 +772,11 @@ void plugins::onSaveGame(UNICODE_STRING**& savePath)
 
 		delete plugFiles;
 	}
-
+	std::string retreatsFile = PlannedRetreatRoute::OnGameSave();
+	if (!retreatsFile.empty())
+	{
+		files.push_back(retreatsFile);
+	}
 	techFuncs::saveGameMakeArchive(savePath, files);
 
 
@@ -950,7 +969,8 @@ void plugins::initEvNames()
 		"ShortcutTriggered",
 		"CharacterMarriesPrincess",
 		"BecomesFactionLeader",
-		"BecomesFactionHeir"
+		"BecomesFactionHeir",
+		"GeneralDevastatesTile"
 	};
 
 }
@@ -985,6 +1005,11 @@ int plugin::init(string* nameP)
 	fName = "onFactionTurnStart";
 	onFactionTurnStart.Load(&plPath, &fName);
 	onFactionTurnStart.strCmp = (*plugins::eventNames)[FactionTurnStartCode];
+
+	//onGeneralDevastatesTile
+	fName = "onGeneralDevastatesTile";
+	onGeneralDevastatesTile.Load(&plPath, &fName);
+	onGeneralDevastatesTile.strCmp = (*plugins::eventNames)[GeneralDevastatesTileCode];
 
 	//onFactionTurnEnd
 	fName = "onFactionTurnEnd";
@@ -1435,7 +1460,7 @@ int plugin::init(string* nameP)
 	fName = "onBecomesFactionLeader";
 	onBecomesFactionLeader.Load(&plPath, &fName);
 	onBecomesFactionLeader.strCmp = (*plugins::eventNames)[BecomesFactionLeaderCode];
-	
+
 	//onBecomesFactionHeir
 	fName = "onBecomesFactionHeir";
 	onBecomesFactionHeir.Load(&plPath, &fName);

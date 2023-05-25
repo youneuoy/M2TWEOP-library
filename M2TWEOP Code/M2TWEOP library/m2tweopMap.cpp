@@ -110,6 +110,7 @@ void m2tweopMap::drawInteract()
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 
+				ImGui::Text("Tile pointer:%p", fastFuncts::getTileStruct(selectedTile->xTile, selectedTile->yTile));
 				ImGui::InputScalar("X coordinate", ImGuiDataType_U32, &selectedTile->xTile, 0, NULL, "%u");
 				ImGui::InputScalar("Y coordinate", ImGuiDataType_U32, &selectedTile->yTile, 0, NULL, "%u");
 				ImGui::InputScalar("Region ID", ImGuiDataType_U32, &selectedTile->tileRegionID, 0, NULL, "%u");

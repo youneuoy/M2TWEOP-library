@@ -167,64 +167,64 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	//luaState.new_enum(
 	//	"buildingCap",
-    //    "population_growth_bonus", buildingStructHelpers::buildingCap::population_growth_bonus,
-    //    "population_loyalty_bonus", buildingStructHelpers::buildingCap::population_loyalty_bonus,
-    //    "population_health_bonus", buildingStructHelpers::buildingCap::population_health_bonus,
-    //    "trade_base_income_bonus", buildingStructHelpers::buildingCap::trade_base_income_bonus,
-    //    "trade_level_bonus", buildingStructHelpers::buildingCap::trade_level_bonus,
-    //    "trade_fleet", buildingStructHelpers::buildingCap::trade_fleet,
-    //    "taxable_income_bonus", buildingStructHelpers::buildingCap::taxable_income_bonus,
-    //    "mine_resource", buildingStructHelpers::buildingCap::mine_resource,
-    //    "farming_level", buildingStructHelpers::buildingCap::farming_level,
-    //    "road_level", buildingStructHelpers::buildingCap::road_level,
-    //    "gate_strength", buildingStructHelpers::buildingCap::gate_strength,
-    //    "gate_defences", buildingStructHelpers::buildingCap::gate_defences,
-    //    "wall_level", buildingStructHelpers::buildingCap::wall_level,
-    //    "tower_level", buildingStructHelpers::buildingCap::tower_level,
-    //    "armour", buildingStructHelpers::buildingCap::armour,
-    //    "stage_games", buildingStructHelpers::buildingCap::stage_games,
-    //    "stage_races", buildingStructHelpers::buildingCap::stage_races,
-    //    "fire_risk", buildingStructHelpers::buildingCap::fire_risk,
-    //    "weapon_melee_simple", buildingStructHelpers::buildingCap::weapon_melee_simple,
-    //    "weapon_melee_blade", buildingStructHelpers::buildingCap::weapon_melee_blade,
-    //    "weapon_missile_mechanical", buildingStructHelpers::buildingCap::weapon_missile_mechanical,
-    //    "weapon_missile_gunpowder", buildingStructHelpers::buildingCap::weapon_missile_gunpowder,
-    //    "weapon_artillery_mechanical", buildingStructHelpers::buildingCap::weapon_artillery_mechanical,
-    //    "weapon_artillery_gunpowder", buildingStructHelpers::buildingCap::weapon_artillery_gunpowder,
-    //    "weapon_naval_gunpowder", buildingStructHelpers::buildingCap::weapon_naval_gunpowder,
-    //    "upgrade_bodyguard", buildingStructHelpers::buildingCap::upgrade_bodyguard,
-    //    "recruits_morale_bonus", buildingStructHelpers::buildingCap::recruits_morale_bonus,
-    //    "recruits_exp_bonus", buildingStructHelpers::buildingCap::recruits_exp_bonus,
-    //    "happiness_bonus", buildingStructHelpers::buildingCap::happiness_bonus,
-    //    "law_bonus", buildingStructHelpers::buildingCap::law_bonus,
-    //    "construction_cost_bonus_military", buildingStructHelpers::buildingCap::construction_cost_bonus_military,
-    //    "construction_cost_bonus_religious", buildingStructHelpers::buildingCap::construction_cost_bonus_religious,
-    //    "construction_cost_bonus_defensive", buildingStructHelpers::buildingCap::construction_cost_bonus_defensive,
-    //    "construction_cost_bonus_other", buildingStructHelpers::buildingCap::construction_cost_bonus_other,
-    //    "construction_time_bonus_military", buildingStructHelpers::buildingCap::construction_time_bonus_military,
-    //    "construction_time_bonus_religious", buildingStructHelpers::buildingCap::construction_time_bonus_religious,
-    //    "construction_time_bonus_defensive", buildingStructHelpers::buildingCap::construction_time_bonus_defensive,
-    //    "construction_time_bonus_other", buildingStructHelpers::buildingCap::construction_time_bonus_other,
-    //    "construction_cost_bonus_wooden", buildingStructHelpers::buildingCap::construction_cost_bonus_wooden,
-    //    "construction_cost_bonus_stone", buildingStructHelpers::buildingCap::construction_cost_bonus_stone,
-    //    "construction_time_bonus_wooden", buildingStructHelpers::buildingCap::construction_time_bonus_wooden,
-    //    "construction_time_bonus_stone", buildingStructHelpers::buildingCap::construction_time_bonus_stone,
-    //    "free_upkeep", buildingStructHelpers::buildingCap::free_upkeep,
-    //    "pope_approval", buildingStructHelpers::buildingCap::pope_approval,
-    //    "pope_disapproval", buildingStructHelpers::buildingCap::pope_disapproval,
-    //    "religion_level", buildingStructHelpers::buildingCap::religion_level,
-    //    "amplify_religion_level", buildingStructHelpers::buildingCap::amplify_religion_level,
-    //    "archer_bonus", buildingStructHelpers::buildingCap::archer_bonus,
-    //    "cavalry_bonus", buildingStructHelpers::buildingCap::cavalry_bonus,
-    //    "heavy_cavalry_bonus", buildingStructHelpers::buildingCap::heavy_cavalry_bonus,
-    //    "gun_bonus", buildingStructHelpers::buildingCap::gun_bonus,
-    //    "navy_bonus", buildingStructHelpers::buildingCap::navy_bonus,
-    //    "recruitment_cost_bonus_naval", buildingStructHelpers::buildingCap::recruitment_cost_bonus_naval,
-    //    "retrain_cost_bonus", buildingStructHelpers::buildingCap::retrain_cost_bonus,
-    //    "weapon_projectile", buildingStructHelpers::buildingCap::weapon_projectile,
-    //    "income_bonus", buildingStructHelpers::buildingCap::income_bonus,
-    //    "recruitment_slots", buildingStructHelpers::buildingCap::recruitment_slots
-    //);
+	//    "population_growth_bonus", buildingStructHelpers::buildingCap::population_growth_bonus,
+	//    "population_loyalty_bonus", buildingStructHelpers::buildingCap::population_loyalty_bonus,
+	//    "population_health_bonus", buildingStructHelpers::buildingCap::population_health_bonus,
+	//    "trade_base_income_bonus", buildingStructHelpers::buildingCap::trade_base_income_bonus,
+	//    "trade_level_bonus", buildingStructHelpers::buildingCap::trade_level_bonus,
+	//    "trade_fleet", buildingStructHelpers::buildingCap::trade_fleet,
+	//    "taxable_income_bonus", buildingStructHelpers::buildingCap::taxable_income_bonus,
+	//    "mine_resource", buildingStructHelpers::buildingCap::mine_resource,
+	//    "farming_level", buildingStructHelpers::buildingCap::farming_level,
+	//    "road_level", buildingStructHelpers::buildingCap::road_level,
+	//    "gate_strength", buildingStructHelpers::buildingCap::gate_strength,
+	//    "gate_defences", buildingStructHelpers::buildingCap::gate_defences,
+	//    "wall_level", buildingStructHelpers::buildingCap::wall_level,
+	//    "tower_level", buildingStructHelpers::buildingCap::tower_level,
+	//    "armour", buildingStructHelpers::buildingCap::armour,
+	//    "stage_games", buildingStructHelpers::buildingCap::stage_games,
+	//    "stage_races", buildingStructHelpers::buildingCap::stage_races,
+	//    "fire_risk", buildingStructHelpers::buildingCap::fire_risk,
+	//    "weapon_melee_simple", buildingStructHelpers::buildingCap::weapon_melee_simple,
+	//    "weapon_melee_blade", buildingStructHelpers::buildingCap::weapon_melee_blade,
+	//    "weapon_missile_mechanical", buildingStructHelpers::buildingCap::weapon_missile_mechanical,
+	//    "weapon_missile_gunpowder", buildingStructHelpers::buildingCap::weapon_missile_gunpowder,
+	//    "weapon_artillery_mechanical", buildingStructHelpers::buildingCap::weapon_artillery_mechanical,
+	//    "weapon_artillery_gunpowder", buildingStructHelpers::buildingCap::weapon_artillery_gunpowder,
+	//    "weapon_naval_gunpowder", buildingStructHelpers::buildingCap::weapon_naval_gunpowder,
+	//    "upgrade_bodyguard", buildingStructHelpers::buildingCap::upgrade_bodyguard,
+	//    "recruits_morale_bonus", buildingStructHelpers::buildingCap::recruits_morale_bonus,
+	//    "recruits_exp_bonus", buildingStructHelpers::buildingCap::recruits_exp_bonus,
+	//    "happiness_bonus", buildingStructHelpers::buildingCap::happiness_bonus,
+	//    "law_bonus", buildingStructHelpers::buildingCap::law_bonus,
+	//    "construction_cost_bonus_military", buildingStructHelpers::buildingCap::construction_cost_bonus_military,
+	//    "construction_cost_bonus_religious", buildingStructHelpers::buildingCap::construction_cost_bonus_religious,
+	//    "construction_cost_bonus_defensive", buildingStructHelpers::buildingCap::construction_cost_bonus_defensive,
+	//    "construction_cost_bonus_other", buildingStructHelpers::buildingCap::construction_cost_bonus_other,
+	//    "construction_time_bonus_military", buildingStructHelpers::buildingCap::construction_time_bonus_military,
+	//    "construction_time_bonus_religious", buildingStructHelpers::buildingCap::construction_time_bonus_religious,
+	//    "construction_time_bonus_defensive", buildingStructHelpers::buildingCap::construction_time_bonus_defensive,
+	//    "construction_time_bonus_other", buildingStructHelpers::buildingCap::construction_time_bonus_other,
+	//    "construction_cost_bonus_wooden", buildingStructHelpers::buildingCap::construction_cost_bonus_wooden,
+	//    "construction_cost_bonus_stone", buildingStructHelpers::buildingCap::construction_cost_bonus_stone,
+	//    "construction_time_bonus_wooden", buildingStructHelpers::buildingCap::construction_time_bonus_wooden,
+	//    "construction_time_bonus_stone", buildingStructHelpers::buildingCap::construction_time_bonus_stone,
+	//    "free_upkeep", buildingStructHelpers::buildingCap::free_upkeep,
+	//    "pope_approval", buildingStructHelpers::buildingCap::pope_approval,
+	//    "pope_disapproval", buildingStructHelpers::buildingCap::pope_disapproval,
+	//    "religion_level", buildingStructHelpers::buildingCap::religion_level,
+	//    "amplify_religion_level", buildingStructHelpers::buildingCap::amplify_religion_level,
+	//    "archer_bonus", buildingStructHelpers::buildingCap::archer_bonus,
+	//    "cavalry_bonus", buildingStructHelpers::buildingCap::cavalry_bonus,
+	//    "heavy_cavalry_bonus", buildingStructHelpers::buildingCap::heavy_cavalry_bonus,
+	//    "gun_bonus", buildingStructHelpers::buildingCap::gun_bonus,
+	//    "navy_bonus", buildingStructHelpers::buildingCap::navy_bonus,
+	//    "recruitment_cost_bonus_naval", buildingStructHelpers::buildingCap::recruitment_cost_bonus_naval,
+	//    "retrain_cost_bonus", buildingStructHelpers::buildingCap::retrain_cost_bonus,
+	//    "weapon_projectile", buildingStructHelpers::buildingCap::weapon_projectile,
+	//    "income_bonus", buildingStructHelpers::buildingCap::income_bonus,
+	//    "recruitment_slots", buildingStructHelpers::buildingCap::recruitment_slots
+	//);
 
 	///M2TWEOP
 	//@section m2tweopTable
@@ -274,21 +274,17 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Save the game.
 	@function M2TWEOP.saveGame
 	@tparam string path (start from mods)
-
 	@usage
 	M2TWEOP.saveGame(mods/bare_geomod/saves/newsave.sav);
 	*/
-
 	tables.M2TWEOPTable.set_function("saveGame", &gameHelpers::saveGame);
 	/***
 	Function to get the game version.
 	@function M2TWEOP.getGameVersion
 	@treturn int gamever (1 = disk 2 = steam)
-
 	@usage
 	M2TWEOP.getGameVersion();
 	*/
-
 	tables.M2TWEOPTable.set_function("getGameVersion", &m2tweopHelpers::getGameVersion);
 	/***
 	Function to return the path to the plugin (location of your LUA files).
@@ -298,8 +294,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	plPath=M2TWEOP.getPluginPath();
 	print(plPath);
 	*/
-
-
 	tables.M2TWEOPTable.set_function("getPluginPath", &m2tweopHelpers::getLuaPath);
 
 	/***
@@ -310,7 +304,11 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@treturn int y size of the image
 	@treturn int id of the image
 	@usage
-	local testImage={x=0,y=0,img=nil};
+	-- This function supports the following file formats: .bmp, .dds, .dib, .hdr, .jpg, .pfm, .png, .ppm, and .tga.
+	-- Recommended to use .dds for best performance
+	-- Note: Doing image scaling and format conversion at load time can be slow. Store images in the format and resolution they will be used.
+	-- More info: https://learn.microsoft.com/en-us/windows/win32/direct3d9/d3dxcreatetexturefromfileex
+	local testImage = { x = 0, y = 0, img = nil};
 	testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath().."/youneuoy_textures/test.dds");
 	*/
 
@@ -320,7 +318,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@function M2TWEOP.unloadTexture
 	@tparam int id of the image
 	@usage
-	local testImage={x=0,y=0,img=nil};
+	local testImage = { x = 0, y = 0, img = nil};
 	testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath().."/youneuoy_textures/test.dds");
 	M2TWEOP.unloadTexture(testImage.img);
 	*/
@@ -341,11 +339,13 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.M2TWEOPTable.set_function("unlockGameConsoleCommands", &m2tweopHelpers::unlockGameConsoleCommands);
 	/***
-	Sets the maximum amount of soldiers a general's bodyguard unit can replenish to.
+	Sets the maximum amount of soldiers a general's bodyguard unit can replenish to. The value is multiplied by the unit size modifiers (e.g Huge = 2.5 multiplier)
 	@function M2TWEOP.setMaxBgSize
-	@tparam int newSize default: 77, maximum: 255 (Huge unit size).
+	@tparam int newSize
 	@usage
-	M2TWEOP.setMaxBgSize(222);
+	M2TWEOP.setMaxBgSize(100) -- On huge unit size, 100/2.5 = 250 max bodyguard size
+	M2TWEOP.setMaxBgSize(150) -- On huge unit size, 150/2.5 = 300 max bodyguard size
+	M2TWEOP.setMaxBgSize(50)  -- On huge unit size, 50/2.5 = 125 max bodyguard size
 	*/
 	tables.M2TWEOPTable.set_function("setMaxBgSize", &m2tweopHelpers::setMaxBgSize);
 
@@ -430,9 +430,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Checks if a tile is free.
 	@function M2TWEOP.isTileFree
-   	@tparam int X coordinate of the tile.
-   	@tparam int Y coordinate of the tile.
-   	@return boolean isFree
+	@tparam int X coordinate of the tile.
+	@tparam int Y coordinate of the tile.
+	@return boolean isFree
 	@usage
 	M2TWEOP.isTileFree(55,25);
 	*/
@@ -555,14 +555,38 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Basic stratmap.objects table
 
 	@tfield addModelToGame addModelToGame
-	@tfield setModel  setModel
-	@tfield replaceTile  replaceTile
+	@tfield addCharacterCas addCharacterCas
+	@tfield setModel setModel
+	@tfield replaceTile replaceTile
+	@tfield startDrawModelAt startDrawModelAt
+	@tfield stopDrawModel stopDrawModel
 
 	@table stratmap.objects
 	*/
 	tables.objectsTable = luaState.create_table();
 
-
+	/***
+	Start drawing .cas campaign strategy model with a unique ID in some coords. Can be used at any time.
+	@function objects.startDrawModelAt
+	@tparam int modelId Unique ID
+	@tparam int x
+	@tparam int y
+	@tparam int sizeMultiplier 1 is value with what it draw as same size as game objects
+	@usage
+	stratmap.objects.addModelToGame("data/models_strat/residences/invisible.CAS", 1);
+	stratmap.objects.startDrawModelAt(1, 50, 150, 2.25);
+	*/
+	tables.objectsTable.set_function("startDrawModelAt", &objectsHelpers::startDrawModelAt);
+	/***
+	Stop drawing .cas campaign strategy model with a unique ID. Can be used at any time.
+	@function objects.stopDrawModel
+	@tparam int modelId Unique ID
+	@usage
+	stratmap.objects.addModelToGame("data/models_strat/residences/invisible.CAS", 1);
+	stratmap.objects.startDrawModelAt(1, 50, 150, 2.25);
+	stratmap.objects.stopDrawModel(1);
+	*/
+	tables.objectsTable.set_function("stopDrawModel", &objectsHelpers::stopDrawModel);
 	/***
 	Add a new .cas campaign strategy model to the game with a unique ID. This should be called during onPluginLoad()
 	@function objects.addModelToGame
@@ -572,6 +596,18 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	stratmap.objects.addModelToGame("data/models_strat/residences/invisible.CAS",1);
 	*/
 	tables.objectsTable.set_function("addModelToGame", &objectsHelpers::addModelToGame);
+	/***
+	Add a new .cas character strategy model to the game with a unique name. Only add it after loading to campaign map!
+	@function objects.addCharacterCas
+	@tparam string skeleton name of skeleton used.
+	@tparam string caspath Relative path from the mods folder (starting with "mods/").
+	@tparam string shadowcaspath Relative path from the mods folder (starting with "mods/").
+	@tparam string typename Name of the new model used to assign.
+	@tparam string texturepath Relative path from the mods folder (starting with "mods/").
+	@usage
+	stratmap.objects.addCharacterCas("strat_named_with_army","mods/Bare_Geomod/data/models_strat/islamic_general2.cas","mods/Bare_Geomod/data/models_strat/shadow_sword2.cas","islamic_general2","mods/Bare_Geomod/data/models_strat/textures/islamic_general_turks.tga");
+	*/
+	tables.objectsTable.set_function("addCharacterCas", &generalHelpers::addCharacterCas);
 	/***
 	Set the strategy model for object at specified coordinates, works only for supported object types
 	@function objects.setModel
@@ -586,7 +622,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.objectsTable.set_function("setModel", sol::overload(&objectsHelpers::setModel,
 		&objectsHelpers::setModelOneVar));
 	/***
-    Replace a custom tile. Change the custom battlefield on the specified coordinates.
+	Replace a custom tile. Change the custom battlefield on the specified coordinates.
 	@function objects.replaceTile
 	@tparam string label  Identifier.
 	@tparam int xCoord  X coordinate of tile.
@@ -654,6 +690,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield createArmyInSettlement createArmyInSettlement
 	@tfield getScriptCounter getScriptCounter
 	@tfield setScriptCounter setScriptCounter
+	@tfield historicEvent historicEvent
+	@tfield scriptCommand scriptCommand
 	@tfield callConsole callConsole
 
 	@table stratmap.game
@@ -664,6 +702,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@function game.callConsole
 	@treturn string error Note: string can be empty but not nil
 	@usage
+	-- Creating units, adding money
 	function onCharacterSelected(selectedChar)
 		local err = stratmap.game.callConsole("add_money", "2321")
 		local err2 = stratmap.game.callConsole("create_unit", "testcharacter 'Cool Unit' 4 1 1 1")
@@ -753,6 +792,38 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	stratmap.game.setScriptCounter("SomeCounter", 25)
 	*/
 	tables.gameTable.set_function("setScriptCounter", &gameHelpers::setScriptCounter);
+	/***
+	Fire a game event message. Picture needs to be provided in the ui folders as default.
+	@function game.historicEvent
+	@tparam string eventName
+	@tparam string title
+	@tparam string body
+	@usage
+	stratmap.game.historicEvent("my_event", "my title", "my description")
+	*/
+	tables.gameTable.set_function("historicEvent", &gameHelpers::historicEvent);
+
+	/***
+	Fire any script command available from the game. It is always just 2 parameters in the function, the command name and all the arguments as 1 string in the second parameter.
+	Do not use inc_counter, set_counter, declare_counter! they crash!
+	@function game.scriptCommand
+	@tparam string command
+	@tparam string args
+	@usage
+	stratmap.game.scriptCommand("give_everything_to_faction", "france england false")
+	stratmap.game.scriptCommand("send_character_off_map", "Rufus")
+
+	-- Multiline commands and using variables in command strings
+	local facName="hre"
+	stratmap.game.scriptCommand("set_faction_banner", string.format([[
+
+		faction england
+
+		banner %s
+
+	end_set_faction_banner]], facName))
+	*/
+	tables.gameTable.set_function("scriptCommand", &gameHelpers::scriptCommand);
 	///Stratmap
 	//@section stratmapTable
 
@@ -803,7 +874,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.unit.set("exp", sol::property(&unitHelpers::getExp, &unitHelpers::setExp));
 	types.unit.set("armourLVL", sol::property(&unitHelpers::getarmourLVL, &unitHelpers::setarmourLVL));
 	types.unit.set("weaponLVL", sol::property(&unitHelpers::getweaponLVL, &unitHelpers::setweaponLVL));
-	types.unit.set("soldierCountStratMapMax", &unit::numberMax);
+	types.unit.set("soldierCountStratMapMax", sol::property(&unitHelpers::getMaxSoldiersCount));
 	types.unit.set("soldierCountBattleMap", &unit::numberTact);
 	types.unit.set("character", &unit::general);
 	types.unit.set("army", &unit::army);
@@ -833,12 +904,12 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Basic eduEntry table
 
-	@tfield string Type do not set!
-	@tfield string Soldier no not set!
-	@tfield string UnitCardTga no not set!
-	@tfield string InfoCardTga no not set!
-	@tfield int Index do not set!
-	@tfield int UnitCreatedCounter do not set!
+	@tfield string Type - Get only
+	@tfield string Soldier - Get only
+	@tfield string UnitCardTga - Get only
+	@tfield string InfoCardTga - Get only
+	@tfield int Index - Get only
+	@tfield int UnitCreatedCounter - Get only
 	@tfield int SoldierCount
 	@tfield float Mass
 	@tfield float Width
@@ -864,6 +935,11 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int StatCost6
 	@tfield int StatCost7
 	@tfield int StatCost8
+	@tfield int Morale
+	@tfield int MoraleLocked
+	@tfield int StatFood1
+	@tfield int StatFood2
+	@tfield int Ammunition
 
 	@table eduEntry
 	*/
@@ -938,6 +1014,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield kill kill
 	@tfield createFort createFort
 	@tfield setBodyguardUnit setBodyguardUnit
+	@tfield setCharacterModel setCharacterModel
 
 	@table character
 	*/
@@ -1033,6 +1110,15 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	ourCharacter:setBodyguardUnit(unit);
 	*/
 	types.character.set_function("setBodyguardUnit", &generalHelpers::setBodyguard);
+	/***
+	Set a character's model to a new one.
+	@function character:setCharacterModel
+	@tparam string model
+	@usage
+	ourCharacter:setCharacterModel("saruman");
+	*/
+	types.character.set_function("setCharacterModel", &generalHelpers::setCharacterModel);
+
 
 
 	///NamedCharacter
@@ -1344,6 +1430,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getFactionName getFactionName
 	@tfield int cultureID
 	@tfield string ai_label
+	@tfield string name
+	@tfield string localizedName
 	@tfield settlementStruct capital
 	@tfield namedCharacter leader
 	@tfield namedCharacter heir
@@ -1390,6 +1478,12 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct.set("ai_label", sol::property(
 		&factionHelpers::getStringProperty<factionStruct_ai_label>, &factionHelpers::setStringProperty<factionStruct_ai_label>
 		));
+	types.factionStruct.set("name", sol::property(
+		&factionHelpers::getStringProperty<factionStruct_name>, &factionHelpers::setStringProperty<factionStruct_name>
+		));
+	types.factionStruct.set("localizedName", sol::property(
+		&factionHelpers::getLocalizedFactionName, &factionHelpers::changeFactionName
+		));
 	types.factionStruct.set("capital", &factionStruct::capital);
 	types.factionStruct.set("leader", &factionStruct::leader);
 	types.factionStruct.set("heir", &factionStruct::heir);
@@ -1431,9 +1525,22 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int number
 	@treturn stackStruct army
 	@usage
-	ourArmy = stratmap.game.getFaction(0):getCharacter(0)
-	if ourArmy.totalStrength > 1500 then
-		ourFac.money = ourFac.money - ourArmy.totalStrength
+	function FindArmy(x,y)
+		local factionsNum = stratmap.game.getFactionsCount();
+		for i = 0, factionsNum - 1 do
+			local faction = stratmap.game.getFaction(i);
+			if not faction then
+				return nil;
+			end
+			local armiesNum = faction.stacksNum;
+			for j = 0, armiesNum - 1 do
+				local army = faction:getStack(j);
+				if (army.xCoord == x and army.yCoord == y) then
+					return army;
+				end
+			end
+		end
+		return nil
 	end
 	*/
 	types.factionStruct.set_function("getStack", &factionHelpers::getStack);
@@ -1517,15 +1624,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	fac:createFortXY(193, 283)
 	*/
 	types.factionStruct.set_function("createFortXY", &factionHelpers::createFortXY);
-
-	/***
-	Change the faction's localized (in-game) name.
-	@function factionStruct:changeFactionName
-	@tparam string name
-	@usage
-	fac:changeFactionName("Byzantium")
-	*/
-	types.factionStruct.set_function("changeFactionName", &factionHelpers::changeFactionName);
 
 
 	///FactionStratMapStruct
@@ -1654,6 +1752,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield character governor
 	@tfield stackStruct army
 	@tfield string name internal name of settlement
+	@tfield string localizedName
 	@tfield factionStruct ownerFaction
 	@tfield changeOwner changeOwner
 	@tfield int fac_creatorNum
@@ -1662,6 +1761,55 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int isCastle
 	@tfield int isProvokedRebellion
 	@tfield int populationSize
+	@tfield int PopGrowthBaseFarm - Get only
+	@tfield int PopGrowthFarms - Get only
+	@tfield int PopGrowthHealth - Get only
+	@tfield int PopGrowthBuildings - Get only
+	@tfield int PopGrowthTaxBonus - Get only
+	@tfield int PopGrowthEntertainment - Get only
+	@tfield int PopGrowthTrade - Get only
+	@tfield int PopGrowthGovernorInfluence - Get only
+	@tfield int PopGrowthSqualor - Get only
+	@tfield int PopGrowthPlague - Get only
+	@tfield int PopGrowthTaxPenalty - Get only
+	@tfield int PublicOrderGarrison - Get only
+	@tfield int PublicOrderLaw - Get only
+	@tfield int PublicOrderBuildingsEntertainment - Get only
+	@tfield int PublicOrderGovernorInfluence - Get only
+	@tfield int PublicOrderTaxBonus - Get only
+	@tfield int PublicOrderTriumph - Get only
+	@tfield int PublicOrderPopulationBoom - Get only
+	@tfield int PublicOrderEntertainment - Get only
+	@tfield int PublicOrderHealth - Get only
+	@tfield int PublicOrderGarrisonTwo - Get only
+	@tfield int PublicOrderFear - Get only
+	@tfield int PublicOrderGlory - Get only
+	@tfield int PublicOrderSqualor - Get only
+	@tfield int PublicOrderDistanceToCapital - Get only
+	@tfield int PublicOrderNoGovernance - Get only
+	@tfield int PublicOrderTaxPenalty - Get only
+	@tfield int PublicOrderUnrest - Get only
+	@tfield int PublicOrderBesieged - Get only
+	@tfield int PublicOrderBlockaded - Get only
+	@tfield int PublicOrderCulturalUnrest - Get only
+	@tfield int PublicOrderExcommunication - Get only
+	@tfield int PublicOrder - Get only
+	@tfield int FarmsIncome - Get only
+	@tfield int TaxesIncome - Get only
+	@tfield int MiningIncome - Get only
+	@tfield int TradeIncome - Get only
+	@tfield int DiplomaticIncome - Get only
+	@tfield int DemolitionIncome - Get only
+	@tfield int LootingIncome - Get only
+	@tfield int BuildingsIncome - Get only
+	@tfield int AdminIncome - Get only
+	@tfield int ConstructionExpense - Get only
+	@tfield int RecruitmentExpense - Get only
+	@tfield int DiplomaticExpense - Get only
+	@tfield int CorruptionExpense - Get only
+	@tfield int EntertainmentExpense - Get only
+	@tfield int DevastationExpense - Get only
+	@tfield int TotalIncomeWithoutAdmin - Get only
 	@tfield getReligion getReligion
 	@tfield setReligion setReligion
 	@tfield getGuildStanding getGuildStanding
@@ -1685,6 +1833,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.settlementStruct.set("army", &settlementStruct::army);
 	types.settlementStruct.set("name", sol::property(
 		&settlementHelpers::getStringProperty<settlementStruct_name>, &settlementHelpers::setStringProperty<settlementStruct_name>
+		));
+	types.settlementStruct.set("localizedName", sol::property(
+		&settlementHelpers::getSettlementName, &settlementHelpers::changeSettlementName
 		));
 	types.settlementStruct.set("ownerFaction", &settlementStruct::ownerFac);
 	/***
@@ -1843,16 +1994,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	end
 	*/
 	types.settlementStruct.set_function("getSiege", &settlementHelpers::getSiege);
-
-
-	/***
-	Change the settlement's localized (in-game) name.
-	@function settlementStruct:changeSettlementName
-	@tparam string name
-	@usage
-	sett:changeSettlementName("Constantinople")
-	*/
-	types.settlementStruct.set_function("changeSettlementName", &settlementHelpers::changeSettlementName);
 
 
 
@@ -2210,7 +2351,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.stackStruct.set("reform_point_y", &stackStruct::reform_point_y);
 
 	/***
- 	Create a unit in the army by index from M2TWEOP units DB (M2TWEOPDU).
+	Create a unit in the army by index from M2TWEOP units DB (M2TWEOPDU).
 	@function stackStruct:createEOPUnit
 	@tparam int index
 	@tparam int exp
@@ -2344,6 +2485,14 @@ void luaP::onFactionTurnStart(factionStruct* fac)
 	if (onFactionTurnStartFunc != nullptr)
 	{
 		tryLua((*onFactionTurnStartFunc)(fac));
+	}
+}
+
+void luaP::onGeneralDevastatesTile(generalCharacterictics* gen)
+{
+	if (onGeneralDevastatesTileFunc != nullptr)
+	{
+		tryLua((*onGeneralDevastatesTileFunc)(gen));
 	}
 }
 

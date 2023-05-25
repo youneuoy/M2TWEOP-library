@@ -26,6 +26,6 @@ private:
 
 namespace managerExport
 {
-	NOINLINE EOP_EXPORT void initEOP(const char*modPath,int gameVer);
+	NOINLINE EOP_EXPORT void initEOP(const char* modPath, int gameVer);
 
 }

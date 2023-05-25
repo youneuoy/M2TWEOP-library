@@ -3,7 +3,7 @@
 codes::offsetsT codes::offsets;
 void codes::initCodes(int gameVer)
 {
-	if (gameVer == 1)
+	if (gameVer == 1) //kingdoms
 	{
 		offsets.stringCryptFunc = 0x00d4cfd0;
 		offsets.loadStratCasModelFunc = 0x00a04380;
@@ -13,11 +13,14 @@ void codes::initCodes(int gameVer)
 		offsets.getReadySiegeCharacterGarrisonedFunc = 0x005a18e0;
 		offsets.finalyzeActionStratmapFunc = 0x0059e790;
 
+		offsets.createIdleActionFunc = 0x005aff40;
+
 
 		offsets.getReadyForMovingFunc = 0x005b0060;
 		offsets.getReadyForMoving2Func = 0x005a0870;
 		offsets.getGeneralReadyForMovingFunc = 0x004cd460;
 
+		offsets.getStringFromTable = 0x00CDE400;
 
 		offsets.makeTrackedPointerToAttackFunc = 0x004e6000;
 		offsets.makeCadAttackFunc = 0x005b5420;
@@ -57,6 +60,9 @@ void codes::initCodes(int gameVer)
 		offsets.createBuildingFunc = 0x00d32cd0;
 
 		offsets.autoWinFunc = 0x00d2dcf0;
+		offsets.historicEventFunc = 0x00C5BD50;
+		offsets.scriptCommandOne = 0x00A945F0;
+		offsets.scriptCommandTwo = 0x00A93570;
 
 		offsets.autoResolveFunc = 0x00aa6bc0;
 
@@ -64,6 +70,13 @@ void codes::initCodes(int gameVer)
 		offsets.useButtonFunc = 0x00b0daf0;
 		offsets.getUiElementFunc = 0x00b4bff0;
 
+		offsets.getSkeleton = 0x007403B0;
+		offsets.createModelFlexi = 0x0093AB40;
+		offsets.createModelFlexiShadow = 0x00936750;
+		offsets.assignCasToFlexi = 0x0093B1E0;
+		offsets.assignShadowCasToFlexi = 0x00933F40;
+		offsets.loadStratCharModel = 0x00D51A40;
+		offsets.readTgaFile = 0x008FF780;
 
 		offsets.readEDUEntryFunc = 0x008ef2d0;
 		offsets.deleteFortFuncOne = 0x00BB5B80;
@@ -71,7 +84,7 @@ void codes::initCodes(int gameVer)
 		offsets.createFortFunc = 0x00714760;
 		offsets.mercEOPValue = 0x0190B928;
 	}
-	else if (gameVer == 2)
+	else if (gameVer == 2) //steam
 	{
 		offsets.stringCryptFunc = 0x00d47330;
 		offsets.loadStratCasModelFunc = 0x00a04f00;
@@ -81,11 +94,15 @@ void codes::initCodes(int gameVer)
 		offsets.getReadySiegeCharacterGarrisonedFunc = 0x005a1dc0;
 		offsets.finalyzeActionStratmapFunc = 0x0059ec70;
 
+		offsets.createIdleActionFunc = 0x005b0420;
+
 
 
 		offsets.getReadyForMovingFunc = 0x005b0540;
 		offsets.getReadyForMoving2Func = 0x005a0d50;
 		offsets.getGeneralReadyForMovingFunc = 0x004cda20;
+
+		offsets.getStringFromTable = 0x00CD87D0;
 
 
 		offsets.makeTrackedPointerToAttackFunc = 0x004e6600;
@@ -124,6 +141,9 @@ void codes::initCodes(int gameVer)
 
 
 		offsets.autoWinFunc = 0x00d28070;
+		offsets.historicEventFunc = 0x0C56150;
+		offsets.scriptCommandOne = 0x00A95650;
+		offsets.scriptCommandTwo = 0x00A945D0;
 
 
 		offsets.autoResolveFunc = 0x00aa7bf0;
@@ -131,6 +151,14 @@ void codes::initCodes(int gameVer)
 
 		offsets.useButtonFunc = 0x00b07e00;
 		offsets.getUiElementFunc = 0x00b46340;
+
+		offsets.getSkeleton = 0x0740B40;
+		offsets.createModelFlexi = 0x0093B610;
+		offsets.createModelFlexiShadow = 0x00937220;
+		offsets.assignCasToFlexi = 0x0093BCB0;
+		offsets.assignShadowCasToFlexi = 0x00934A10;
+		offsets.loadStratCharModel = 0x00D4BDA0;
+		offsets.readTgaFile = 0x00900210;
 
 
 		offsets.readEDUEntryFunc = 0x008efd50;

@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 //indecses for events
 #define PreFactionTurnStartNumCode 0//!
 #define FactionTurnStartCode 1//!
@@ -104,3 +104,4 @@
 #define CharacterMarriesPrincessCode 101//!
 #define BecomesFactionLeaderCode 102//!
 #define BecomesFactionHeirCode 103//!
+#define GeneralDevastatesTileCode 104//!

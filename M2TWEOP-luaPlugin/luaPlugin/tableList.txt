@@ -81,3 +81,4 @@
 	@tfield onPreBattleScrollAdviceRequested onPreBattleScrollAdviceRequested
 	@tfield onNavalPreBattleScrollAdviceRequested onNavalPreBattleScrollAdviceRequested
 	@tfield onCollegeOfCardinalsPanelOpen onCollegeOfCardinalsPanelOpen
+	@tfield onGeneralDevastatesTile onGeneralDevastatesTile

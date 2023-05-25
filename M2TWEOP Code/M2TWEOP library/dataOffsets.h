@@ -11,11 +11,16 @@ public:
 
 
 		DWORD stratMapAllOffsetStart = NULL;
+		DWORD stringTable = NULL;
 
 
 		DWORD unitTypesStart = NULL;
 		//if on stratmap then not 0
 		DWORD someStratmapPointer = NULL;
+
+		DWORD skeletonDatabase = NULL;
+		DWORD tgaDataBase = NULL;
+		DWORD stratModelArray = NULL;
 
 		gameDataAllStruct* gameDataAllOffset = NULL;
 		consoleCommands* consoleCommands = NULL;
@@ -32,6 +37,8 @@ public:
 
 		//game settings
 		int* gameUnit_size = nullptr;
+
+		descr_sm_factions_list* descr_sm_factionslist = nullptr;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);

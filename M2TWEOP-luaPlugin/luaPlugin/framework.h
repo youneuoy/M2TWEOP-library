@@ -8,3 +8,4 @@
 #include <string>
 #include <vector>
 #include "realGameTypes.h"
+#include "eopMasterTypes.h"

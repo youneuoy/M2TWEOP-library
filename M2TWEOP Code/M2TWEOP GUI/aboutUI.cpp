@@ -17,7 +17,7 @@ M2TW Engine Overhaul Project is designed to expand the capabilities of the game 
 
 ## How does it work?
 
-EOP uses C++ and Assembly to modify the game's code in-memory and exposes this to the end user via Lua scripts and the [EOP Lua Library](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html)
+EOP uses C++ and Assembly to modify the game's code in-memory and exposes this to the end user via a Lua API and the [EOP Lua Library](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html)
 
 ## Features
 

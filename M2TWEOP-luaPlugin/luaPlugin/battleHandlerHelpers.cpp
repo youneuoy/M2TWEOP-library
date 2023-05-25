@@ -4,7 +4,7 @@ namespace battleHandlerHelpers
 {
 	std::string getWinConditionS(DWORD condition)
 	{
-		int condCode= (*(*plugData::data.funcsBattle.getBattleCondCode))(condition);
+		int condCode = (*(*plugData::data.funcsBattle.getBattleCondCode))(condition);
 
 		switch (condCode)
 		{
@@ -15,7 +15,17 @@ namespace battleHandlerHelpers
 		case 4: return "destroy_character"; break;
 		case 5: return "capture_major_settlement"; break;
 		case 6: return "capture_army_settlement"; break;
-		default: return "unknown_condition"; break;			
+		default: return "unknown_condition"; break;
 		}
+	}
+
+	armyAndCharacter* getBattleArmy(const battleSide* side, int index)
+	{
+		return side->forces + (sizeof(armyAndCharacter) * index);
+	}
+
+	battleUnit* getBattleUnit(const armyAndCharacter* battleArmy, int index)
+	{
+		return battleArmy->units + (sizeof(battleUnit) * index);
 	}
 };

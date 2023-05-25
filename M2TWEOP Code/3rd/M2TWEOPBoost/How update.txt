@@ -1,0 +1,13 @@
+Extracting, building and integrating selected boost libs for m2tweop:
+1)download boost 1.76
+2)unpack
+3)open cmd.exe in unpacked lib
+4)run this commands:
+b2 -j 8 tools\bcp
+mkdir M2TWEOPBoost
+.\dist\bin\bcp process interprocess filesystem type_index fusion atomic bind type_traits build M2TWEOPBoost
+cd M2TWEOPBoost
+.\bootstrap.bat
+.\b2 --build-dir=libs threading=multi  address-model=32
+5)copy M2TWEOPBoost/boost from builded boost to M2TWEOP Code\3rd\M2TWEOPBoost\boost
+6)copy M2TWEOPBoost/stage/ib from builded boost to M2TWEOP Code\3rd\M2TWEOPBoost\boostLibs \

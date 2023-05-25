@@ -14,7 +14,7 @@ void settlementHelpers::changeOwner(settlementStruct* sett, factionStruct* newOw
 
 float settlementHelpers::getReligion(const settlementStruct* sett, int index)
 {
-	regionStruct*currRegion= (*(*plugData::data.funcs.getRegionByID))(sett->regionNumber);
+	regionStruct* currRegion = (*(*plugData::data.funcs.getRegionByID))(sett->regionNumber);
 	if (currRegion == nullptr)
 	{
 		return 0.0f;
@@ -49,7 +49,10 @@ void settlementHelpers::changeSettlementName(settlementStruct* sett, const char*
 {
 	(*(*plugData::data.funcs.changeSettlementName))(sett, newName);
 }
-
+std::string settlementHelpers::getSettlementName(settlementStruct* sett)
+{
+	return technicalHelpers::uniStringToStr(sett->localizedName);
+}
 int settlementHelpers::getGuildStanding(settlementStruct* sett, int index)
 {
 	return *(int*)((sett->guildStandings) + 0x4 * index);

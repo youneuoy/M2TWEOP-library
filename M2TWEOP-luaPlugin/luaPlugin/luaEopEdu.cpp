@@ -16,7 +16,7 @@ void luaP::initEopEdu()
 		sol::table M2TWEOPEDUTable;
 		sol::table EDB;
 	}tables;
-	
+
 	struct
 	{
 		sol::usertype<edbEntry>edbEntry;
@@ -24,7 +24,7 @@ void luaP::initEopEdu()
 		sol::usertype<recruitPool>recruitpool;
 	}types;
 	using namespace UnitEnums;
-	
+
 	luaState.new_enum(
 		"attackAttr",
 		"", attackAttr::nothing,
@@ -45,7 +45,7 @@ void luaP::initEopEdu()
 		"spear_bonus_6", attackAttr::spear_bonus_6,
 		"spear_bonus_4", attackAttr::spear_bonus_4
 	);
-	
+
 	luaState.new_enum(
 		"eduStat",
 		"", eduStat::none,
@@ -127,7 +127,7 @@ void luaP::initEopEdu()
 	eduEntryOfEOPDU.Width=1.5;
 	*/
 	tables.M2TWEOPEDUTable.set_function("getEopEduEntryByID", &eopEduHelpers::getEopEduEntry);
-	
+
 	/***
 	Get eduEntry by index. Needed to change many parameters of the entry.
 	@function M2TWEOPDU.getEduEntry
@@ -151,7 +151,7 @@ void luaP::initEopEdu()
 	eduEntry.Width=1.5;
 	*/
 	tables.M2TWEOPEDUTable.set_function("getEduEntryByType", &eopEduHelpers::getEduEntryByType);
-	
+
 	/***
 	Get edu index by edu type name. Needed to use many edu functions.
 	@function M2TWEOPDU.getEduIndexByType
@@ -269,7 +269,7 @@ void luaP::initEopEdu()
 	M2TWEOPDU.setArmourUpgradeModelsNum(1000, 3);
 	*/
 	tables.M2TWEOPEDUTable.set_function("setArmourUpgradeModelsNum", &eopEduHelpers::setArmourUpgradeModelsNum);
-	
+
 	/***
 	Get armour upgrade level number at specified index.
 	@function M2TWEOPDU.getArmourUpgradeModel
@@ -280,7 +280,7 @@ void luaP::initEopEdu()
 	M2TWEOPDU.getArmourUpgradeModel(1000, 0);
 	*/
 	tables.M2TWEOPEDUTable.set_function("getArmourUpgradeModel", &eopEduHelpers::getArmourUpgradeModel);
-	
+
 	/***
 	Set the unit model at specified index (only for eopdu units added by file!).
 	@function M2TWEOPDU.setArmourUpgradeModel
@@ -291,7 +291,7 @@ void luaP::initEopEdu()
 	M2TWEOPDU.setArmourUpgradeModel(1000, 1, 4);
 	*/
 	tables.M2TWEOPEDUTable.set_function("setArmourUpgradeModel", &eopEduHelpers::setArmourUpgradeModel);
-	
+
 	/***
 	Set a primary or secondary attack attribute of an edu entry.
 	@function M2TWEOPDU.setEntryAttackAttribute
@@ -303,7 +303,7 @@ void luaP::initEopEdu()
 	M2TWEOPDU.setEntryAttackAttribute(1000, attackAttr.ap, true, 1);
 	*/
 	tables.M2TWEOPEDUTable.set_function("setEntryAttackAttribute", &eopEduHelpers::setEntryAttackAttribute);
-	
+
 	/***
 	Get a primary or secondary attack attribute from an edu entry.
 	@function M2TWEOPDU.getEntryAttackAttribute
@@ -315,7 +315,7 @@ void luaP::initEopEdu()
 	M2TWEOPDU.getEntryAttackAttribute(1000, attackAttr.ap, 1);
 	*/
 	tables.M2TWEOPEDUTable.set_function("getEntryAttackAttribute", &eopEduHelpers::getEntryAttackAttribute);
-	
+
 	/***
 	Set any of the basic unit stats of an edu entry.
 	@function M2TWEOPDU.setEntryStat
@@ -327,7 +327,7 @@ void luaP::initEopEdu()
 	M2TWEOPDU.setEntryStat(1000, attackAttr.attack, 1);
 	*/
 	tables.M2TWEOPEDUTable.set_function("setEntryStat", &eopEduHelpers::setEntryStat);
-	
+
 	/***
 	Get any of the basic unit stats of an edu entry.
 	@function M2TWEOPDU.getEntryStat
@@ -483,8 +483,37 @@ void luaP::initEopEdu()
 	@tparam int newIndex New index of new entry.
 	@treturn edbEntry eopentry.
 	@usage
+	-- Basic Example
 	oldBuilding = EDB.getBuildingByName("market")
-	newBuilding = EDB.addEopBuildEntry(myBuilding,150);
+	newBuilding = EDB.addEopBuildEntry(oldBuilding,150);
+
+	-- Full example
+	local oldBuilding = EDB.getBuildingByName("market");
+	EDB.addEopBuildEntry(oldBuilding, 0);
+	local eopBuilding = EDB.getEopBuildEntry(0);
+
+	-- Set pictures, names and descriptions by culture and faction
+	for c = 0, 6 do --every culture
+		EDB.setBuildingPic(eopBuilding, 'some path to pic', 0, c)
+		EDB.setBuildingPicConstructed(eopBuilding,'some path to pic', 0, c)
+	end
+	for f = 0, 30 do --every faction
+		EDB.setBuildingLocalizedName(eopBuilding, 'some name', 0, f)
+		EDB.setBuildingLocalizedDescr(eopBuilding, 'some description', 0, f)
+	end
+
+	-- Add in an income bonus of 500
+	EDB.addBuildingCapability(eopBuilding, 0, 55, 500, true)
+
+	-- Add a recruit pool
+	EDB.addBuildingPool(eopBuilding, 0, 55, 1, 0.1, 2, 0);
+
+	-- Create a dummy building and get it
+	sett:createBuilding("market");; --just assuming you have got a sett with some loop or function
+
+	-- Set the existing building in the settlement to be the EOP building we just created
+	local dummyBuilding = sett:getBuilding(5)
+	dummyBuilding.edbEntry = eopBuilding
 	*/
 	tables.EDB.set_function("addEopBuildEntry", &buildingStructHelpers::addEopBuildEntry);
 
@@ -585,11 +614,75 @@ void luaP::initEopEdu()
 	@tparam int value Value to set.
 	@tparam bool bonus Is it bonus or not.
 	@usage
+	-- Building Capability Enums
+	population_growth_bonus = 0,
+    population_loyalty_bonus = 1,
+    population_health_bonus = 2,
+    trade_base_income_bonus = 3,
+    trade_level_bonus = 4,
+    trade_fleet = 5,
+    taxable_income_bonus = 6,
+    mine_resource = 7,
+    farming_level = 8,
+    road_level = 9,
+    gate_strength = 10,
+    gate_defences = 11,
+    wall_level = 12,
+    tower_level = 13,
+    armour = 14,
+    stage_games = 15,
+    stage_races = 16,
+    fire_risk = 17,
+    weapon_melee_simple = 18,
+    weapon_melee_blade = 19,
+    weapon_missile_mechanical = 20,
+    weapon_missile_gunpowder = 21,
+    weapon_artillery_mechanical = 22,
+    weapon_artillery_gunpowder = 23,
+    weapon_naval_gunpowder = 24,
+    upgrade_bodyguard = 25,
+    recruits_morale_bonus = 26,
+    recruits_exp_bonus = 27,
+    happiness_bonus = 28,
+    law_bonus = 29,
+    construction_cost_bonus_military = 30,
+    construction_cost_bonus_religious = 31,
+    construction_cost_bonus_defensive = 32,
+    construction_cost_bonus_other = 33,
+    construction_time_bonus_military = 34,
+    construction_time_bonus_religious = 35,
+    construction_time_bonus_defensive = 36,
+    construction_time_bonus_other = 37,
+    construction_cost_bonus_wooden = 38,
+    construction_cost_bonus_stone = 39,
+    construction_time_bonus_wooden = 40,
+    construction_time_bonus_stone = 41,
+    free_upkeep = 42,
+    pope_approval = 43,
+    pope_disapproval = 44,
+    religion_level = 45,
+    amplify_religion_level = 46,
+    archer_bonus = 47,
+    cavalry_bonus = 48,
+    heavy_cavalry_bonus = 49,
+    gun_bonus = 50,
+    navy_bonus = 51,
+    recruitment_cost_bonus_naval = 52,
+    retrain_cost_bonus = 53,
+    weapon_projectile = 54,
+    income_bonus = 55,
+    recruitment_slots = 56
+
 	building = EDB.getBuildingByName("market")
-	EDB.addBuildingCapability(building, 0, 55, 200, true);
+
+	-- Add a population growth bonus to the market building
+	EDB.addBuildingCapability(building, 0, 0, 5, true);
+
+	-- Add a 500 income bonus to the market building
+	EDB.addBuildingCapability(building, 0, 55, 500, true)
 	*/
 	tables.EDB.set_function("addBuildingCapability", &buildingStructHelpers::addBuildingCapability);
-	
+
 	/***
 	Remove a capability from a building.
 	@function EDB.removeBuildingCapability
@@ -603,7 +696,7 @@ void luaP::initEopEdu()
 	tables.EDB.set_function("removeBuildingCapability", &buildingStructHelpers::removeBuildingCapability);
 
 	/***
-	
+
 	Get capability from a building at an index.
 	@function EDB.getBuildingCapability
 	@tparam edbEntry edbEntry Entry to set.

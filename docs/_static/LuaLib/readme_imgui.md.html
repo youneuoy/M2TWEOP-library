@@ -70,6 +70,12 @@
 
 
 <details>
+  <summary><a href="#Calculating_Window_Size_and_Drawing_a_Centered_Window">Calculating Window Size and Drawing a Centered Window </a></summary>
+    <li><a href="#dumbo">dumbo ()</a></li>
+</details>
+
+
+<details>
   <summary><a href="#Parameters_Stacks__Shared_">Parameters Stacks (Shared) </a></summary>
     <li><a href="#dumbo">dumbo ()</a></li>
 </details>
@@ -266,7 +272,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-02-23 17:43:55</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-05-18 19:18:32</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -552,6 +558,71 @@ You can find all the supported functions and overloads below.
 </pre>
 
 
+<p><a name="Calculating_Window_Size_and_Drawing_a_Centered_Window"></a></p>
+<h2>Calculating Window Size and Drawing a Centered Window</h2>
+
+<pre>
+
+<span class="comment">-- Imports
+</span><span class="comment">-- https://luajit.org/ext_ffi.html
+</span><span class="keyword">local</span> ffi = <span class="global">require</span>(<span class="string">"ffi"</span>)
+
+<span class="comment">-- Constructor for an object that stores data about the current Window size
+</span>ffi.cdef <span class="string">[[
+typedef long LONG;
+typedef void* HANDLE;
+typedef HANDLE HWND;
+  typedef struct RECT {
+    LONG left;
+    LONG top;
+    LONG right;
+    LONG bottom;
+  } RECT;
+  typedef int                 BOOL;
+  typedef RECT *LPRECT;
+   BOOL GetWindowRect(HWND  hWnd,LPRECT lpRect);
+       HWND GetActiveWindow(void);
+
+   typedef const char* LPCSTR;
+    typedef unsigned UINT;
+   int MessageBoxA(HWND, LPCSTR, LPCSTR, UINT);
+]]</span>
+
+<span class="comment">-- Window Size
+</span>window = ffi.C.GetActiveWindow()
+rect = ffi.new(<span class="string">"RECT"</span>)
+ffi.C.GetWindowRect(window, rect)
+
+<span class="comment">-- Drawing a centered scroll with a background image
+</span>GUI_OPEN = <span class="keyword">false</span>
+
+<span class="comment">-- Calculate some window sizes and window positions
+</span><span class="keyword">local</span> backgroundWindowPosRight = rect.right / <span class="number">4.65</span>
+<span class="keyword">local</span> backgroundWindowPosBottom = rect.bottom / (rect.bottom / <span class="number">20</span>) - <span class="number">20</span>
+<span class="keyword">local</span> backgroundWindowSizeRight = rect.right / <span class="number">1.7</span>
+<span class="keyword">local</span> backgroundWindowSizeBottom = rect.bottom / <span class="number">1</span>
+
+<span class="comment">-- Set the next window position and size
+</span>ImGui.SetNextWindowPos(backgroundWindowPosRight, backgroundWindowPosBottom, ImGuiCond.Appearing)
+ImGui.SetNextWindowSize(backgroundWindowSizeRight, backgroundWindowSizeBottom)
+
+<span class="comment">-- Start drawing the centered window
+</span>GUI_OPEN, shouldDraw = ImGui.Begin(<span class="string">"BACKGROUND_SCROLL"</span>, GUI_OPEN, ImGuiWindowFlags.NoDecoration)
+
+<span class="comment">-- Calculate some image sizes
+</span><span class="keyword">local</span> scrollBackgroundWidth = rect.right / <span class="number">1.71</span>
+<span class="keyword">local</span> scrollBackgroundHeight = rect.bottom / <span class="number">1.325</span>
+
+<span class="comment">-- Load the image
+</span>BANNER_IMAGE = { x = <span class="number">0</span>, y = <span class="number">0</span>, img = <span class="keyword">nil</span> }
+BANNER_IMAGE.x, BANNER_IMAGE.y, BANNER_IMAGE.img = M2TWEOP.loadTexture(M2TWEOP.getModPath()..<span class="string">"eopData/images/gui/BACKGROUND_SCROLL.png"</span>)
+
+<span class="comment">-- Draw the image in our centered window
+</span>ImGui.Image(image, scrollBackgroundWidth, scrollBackgroundHeight)
+</pre>
+
+<p><img src="https://cdn.discordapp.com/attachments/939640870343426059/1075868416470155364/image.png" alt=""/></p>
+
 <p><a name="Parameters_Stacks__Shared_"></a></p>
 <h2>Parameters Stacks (Shared)</h2>
 <p>Note: This binding does not give functions that can obtain an ImFont* from inside Lua (besides GetFont), You'll need to add your own.</p>
@@ -805,6 +876,53 @@ You can find all the supported functions and overloads below.
   <span class="comment">-- ImGui.BulletText(...)
 </span>  <span class="comment">-- Parameters: text (text)
 </span>  ImGui.BulletText(<span class="string">"Well hello there, General Kenobi"</span>)
+
+  <span class="comment">-- Helper functions
+</span>  <span class="comment">-- Centered Text
+</span>  <span class="keyword">function</span> centeredText(text, minIndentation)
+      <span class="keyword">if</span> ~text <span class="keyword">then</span> <span class="global">print</span>(<span class="string">'centeredText: Text not found'</span>) <span class="keyword">return</span> <span class="keyword">end</span>;
+      <span class="keyword">if</span> ~minIndentation <span class="keyword">then</span> minIndentation = <span class="number">20.0</span> <span class="keyword">end</span>;
+
+      <span class="keyword">local</span> textWidth, textHeight = ImGui.CalcTextSize(text);
+      <span class="keyword">local</span> windowWidth           = ImGui.GetWindowWidth()
+
+      <span class="keyword">local</span> textIndentation = (windowWidth - textWidth) * <span class="number">0.5</span>;
+
+      <span class="keyword">if</span> textIndentation &lt;= minIndentation <span class="keyword">then</span>
+          textIndentation = minIndentation
+      <span class="keyword">end</span>
+
+      ImGui.SameLine(textIndentation);
+      ImGui.PushTextWrapPos(windowWidth - textIndentation);
+
+      ImGui.TextWrapped(text)
+      ImGui.PopTextWrapPos()
+  <span class="keyword">end</span>
+
+  <span class="comment">-- Usage
+</span>  centeredText(<span class="string">"This text is centered in whatever window it resides in"</span>)
+  centeredText(<span class="string">"____________________________"</span>)
+
+  <span class="comment">-- Centered Image Buttons
+</span>  <span class="keyword">function</span> centeredImageButton(image, x, y, offset)
+      <span class="keyword">local</span> offset = offset <span class="keyword">or</span> <span class="number">0</span>
+
+      <span class="comment">-- Obtain width of window
+</span>      <span class="keyword">local</span> windowWidth = ImGui.GetWindowWidth()
+
+      <span class="comment">-- Calculate correct position for the button
+</span>      <span class="keyword">local</span> centre_position_for_button = (windowWidth - x) / <span class="number">2</span>;
+
+      <span class="comment">-- Tell Dear ImGui to render the button at the current y pos, but with the new x pos
+</span>      ImGui.SetCursorPosX(centre_position_for_button+offset);
+
+      clicked = ImGui.ImageButton(image, x, y);
+      <span class="keyword">return</span> clicked
+  <span class="keyword">end</span>
+
+  <span class="comment">-- Usage
+</span>  yesClicked = centeredImageButton(YES_BUTTON.img, <span class="number">50</span>, <span class="number">50</span>, -<span class="number">50</span>)
+  noClicked = centeredImageButton(NO_BUTTON.img, <span class="number">50</span>, <span class="number">50</span>, <span class="number">50</span>)
 </pre>
 
 
