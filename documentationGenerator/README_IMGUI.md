@@ -295,19 +295,21 @@ local backgroundWindowSizeBottom = rect.bottom / 1
 ImGui.SetNextWindowPos(backgroundWindowPosRight, backgroundWindowPosBottom, ImGuiCond.Appearing)
 ImGui.SetNextWindowSize(backgroundWindowSizeRight, backgroundWindowSizeBottom)
 
--- Start drawing the centered window
+-- Start drawing the centered window (anything before ImGui.End() below will be drawn in this window )
 GUI_OPEN, shouldDraw = ImGui.Begin("BACKGROUND_SCROLL", GUI_OPEN, ImGuiWindowFlags.NoDecoration)
 
--- Calculate some image sizes
-local scrollBackgroundWidth = rect.right / 1.71
-local scrollBackgroundHeight = rect.bottom / 1.325
+  -- Calculate some image sizes
+  local scrollBackgroundWidth = rect.right / 1.71
+  local scrollBackgroundHeight = rect.bottom / 1.325
 
--- Load the image
-BANNER_IMAGE = { x = 0, y = 0, img = nil }
-BANNER_IMAGE.x, BANNER_IMAGE.y, BANNER_IMAGE.img = M2TWEOP.loadTexture(M2TWEOP.getModPath().."eopData/images/gui/BACKGROUND_SCROLL.png")
+  -- Load the image
+  BANNER_IMAGE = { x = 0, y = 0, img = nil }
+  BANNER_IMAGE.x, BANNER_IMAGE.y, BANNER_IMAGE.img = M2TWEOP.loadTexture(M2TWEOP.getModPath().."eopData/images/gui/BACKGROUND_SCROLL.png")
 
--- Draw the image in our centered window
-ImGui.Image(image, scrollBackgroundWidth, scrollBackgroundHeight)
+  -- Draw the image in our centered window
+  ImGui.Image(image, scrollBackgroundWidth, scrollBackgroundHeight)
+
+ImGui.End() -- End window area
 ```
 ![](https://cdn.discordapp.com/attachments/939640870343426059/1075868416470155364/image.png)
 
