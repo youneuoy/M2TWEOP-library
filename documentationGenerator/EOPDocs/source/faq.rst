@@ -39,3 +39,11 @@ suggest new entries in our discord!
 		2. Rename the copy to **M2TWEOPTEMPgameSaveDONTTOUCHTHISFILE.sav** (Make sure it ends in .sav and the file type is .sav)
 		3. Compress it into a .zip archive
  		4. Rename the .zip archive to something like *Bree.sav* (Make sure it ends in .sav and the file type is .sav)
+	
+	*Do the mod increase the faction limit?*
+		No for now it doesn't. Like other things that the mod add in future might be possible but is very hard since faction limit is not just a simple variable to change
+		
+	*How can i code and debug coding changes?*
+		We suggest you use visual studio code because it enable linter and other feature as debugger with simple plugins.
+		https://code.visualstudio.com/ 
+		https://marketplace.visualstudio.com/items?itemName=sumneko.lua	
