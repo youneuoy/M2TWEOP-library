@@ -28,7 +28,7 @@ You can find all the supported functions and overloads below.
   shouldDraw = ImGui.Begin("Name")
   open, shouldDraw = ImGui.Begin("Name", open)
   open, shouldDraw = ImGui.Begin("Name", open, ImGuiWindowFlags.NoMove)
-  open, shouldDraw = ImGui.Begin("Name", open, bit.bor(ImGuiWindowFlags.NoDecoration, ImGuiWindowFlags.NoMove, ImGuiWindowFlags.AlwaysVerticalScrollbar)
+  open, shouldDraw = ImGui.Begin("Name", open, bit.bor(ImGuiWindowFlags.NoDecoration, ImGuiWindowFlags.NoMove, ImGuiWindowFlags.AlwaysVerticalScrollbar))
 
   -- ImGui.End()
   ImGui.End()
