@@ -55,6 +55,30 @@ NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM w
 	// 	ClipCursor(NULL);
 	// 	break;
 	// }
+	static bool isLastAtImgui = false;
+	static HCURSOR lastGameCursor = NULL;
+
+	if (ImGui::GetIO().WantCaptureMouse)
+	{
+		isLastAtImgui = true;
+		HCURSOR retCur = SetCursor(NULL);
+		if (retCur != NULL)
+		{
+			lastGameCursor = retCur;
+		}
+		ImGuiIO& io = ImGui::GetIO();
+		io.MouseDrawCursor = true;
+	}
+	else
+	{
+		if (lastGameCursor != NULL)
+		{
+			SetCursor(lastGameCursor);
+			lastGameCursor = NULL;
+		}
+		ImGuiIO& io = ImGui::GetIO();
+		io.MouseDrawCursor = false;
+	}
 	if (dataS.ifMouseOrKeyBoardAtImgui)
 	{
 		switch (uMsg)
@@ -79,7 +103,6 @@ NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM w
 		}
 
 	}
-
 	switch (uMsg)
 	{
 	case WM_MOUSEMOVE:
