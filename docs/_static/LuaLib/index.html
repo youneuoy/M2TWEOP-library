@@ -663,7 +663,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-05-11 10:31:49</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-05-28 14:08:00</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -2525,7 +2525,11 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> testImage={x=<span class="number">0</span>,y=<span class="number">0</span>,img=<span class="keyword">nil</span>};
+        <pre class="example"><span class="comment">-- This function supports the following file formats: .bmp, .dds, .dib, .hdr, .jpg, .pfm, .png, .ppm, and .tga.
+</span><span class="comment">-- Recommended to use .dds for best performance
+</span><span class="comment">-- Note: Doing image scaling and format conversion at load time can be slow. Store images in the format and resolution they will be used.
+</span><span class="comment">-- More info: https://learn.microsoft.com/en-us/windows/win32/direct3d9/d3dxcreatetexturefromfileex
+</span><span class="keyword">local</span> testImage = { x = <span class="number">0</span>, y = <span class="number">0</span>, img = <span class="keyword">nil</span>};
 testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath()..<span class="string">"/youneuoy_textures/test.dds"</span>);</pre>
     </ul>
 
@@ -2552,7 +2556,7 @@ testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath()
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> testImage={x=<span class="number">0</span>,y=<span class="number">0</span>,img=<span class="keyword">nil</span>};
+        <pre class="example"><span class="keyword">local</span> testImage = { x = <span class="number">0</span>, y = <span class="number">0</span>, img = <span class="keyword">nil</span>};
 testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath()..<span class="string">"/youneuoy_textures/test.dds"</span>);
 M2TWEOP.unloadTexture(testImage.img);</pre>
     </ul>
@@ -2609,14 +2613,16 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Sets the maximum amount of soldiers a general's bodyguard unit can replenish to.
+    Sets the maximum amount of soldiers a general's bodyguard unit can replenish to.  The value is multiplied by the unit size modifiers (e.g Huge = 2.5 multiplier)
     </div>
 
     <h3>Parameters:</h3>
     <ul>
         <li><span class="parameter">newSize</span>
             <span class="types"><span class="type">int</span></span>
-         default: 77, maximum: 255 (Huge unit size).
+
+
+
         </li>
     </ul>
 
@@ -2625,7 +2631,9 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOP.setMaxBgSize(<span class="number">222</span>);</pre>
+        <pre class="example">M2TWEOP.setMaxBgSize(<span class="number">100</span>) <span class="comment">-- On huge unit size, 100/2.5 = 250 max bodyguard size
+</span>M2TWEOP.setMaxBgSize(<span class="number">150</span>) <span class="comment">-- On huge unit size, 150/2.5 = 300 max bodyguard size
+</span>M2TWEOP.setMaxBgSize(<span class="number">50</span>)  <span class="comment">-- On huge unit size, 50/2.5 = 125 max bodyguard size</span></pre>
     </ul>
 
 </dd>
@@ -5909,12 +5917,6 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
         </li>
         <li><span class="parameter">createFortXY</span>
             <span class="types"><a class="type" href="index.html#factionStruct:createFortXY">createFortXY</a></span>
-
-
-
-        </li>
-        <li><span class="parameter">changeFactionName</span>
-            <span class="types"><span class="type">changeFactionName</span></span>
 
 
 
@@ -16041,11 +16043,34 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
     <ul>
         <li><span class="parameter">battleState</span>
             <span class="types"><span class="type">int</span></span>
-         0-not in battle,5-active battle,9-results screen,etc
+
+
+<pre><code>    0 not in battle
+    1 prebattle scroll
+    2 delay (also for preconflict phase of successful ambushes)
+    3 deployment
+    4
+    5 conflict (also for pause)
+    6 victory scroll
+    7 pursuit
+    8
+    9 postbattle scroll (not for autoresolved battles)
+</code></pre>
+
         </li>
         <li><span class="parameter">battleType</span>
             <span class="types"><span class="type">int</span></span>
-         3 = siege, 4 = sally out, rest unknown for now, you can experiment.
+
+
+<pre><code>    0 succesful ambush
+    1 failed ambush
+    2 normal
+    3 siege
+    4 sally besieger
+    5 naval
+    6 withdrawal?
+</code></pre>
+
         </li>
         <li><span class="parameter">isNightBattle</span>
             <span class="types"><span class="type">int</span></span>
@@ -16447,6 +16472,18 @@ deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
             <span class="types"><span class="type">int</span></span>
 
 
+<pre><code>    0 = "DO_NOTHING"
+    1 = "ATTACK_ALL"
+    2 = "DEFEND"
+    3 = "DEFEND_FEATURE"
+    4 = "HIDE"
+    5 = "AMBUSH"
+    6 = "SCOUT"
+    7 = "WITHDRAW"
+    8 = "ATTACK_SETTLEMENT"
+    9 = "DEFEND_SETTLEMENT"
+    10 = "SALLY_OUT"
+</code></pre>
 
         </li>
         <li><span class="parameter">unitCount</span>

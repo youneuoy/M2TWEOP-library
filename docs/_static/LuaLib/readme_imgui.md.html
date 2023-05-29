@@ -272,7 +272,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-05-11 10:31:49</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-05-28 14:08:00</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -324,6 +324,7 @@ You can find all the supported functions and overloads below.
 </span>  shouldDraw = ImGui.Begin(<span class="string">"Name"</span>)
   open, shouldDraw = ImGui.Begin(<span class="string">"Name"</span>, open)
   open, shouldDraw = ImGui.Begin(<span class="string">"Name"</span>, open, ImGuiWindowFlags.NoMove)
+  open, shouldDraw = ImGui.Begin(<span class="string">"Name"</span>, open, bit.bor(ImGuiWindowFlags.NoDecoration, ImGuiWindowFlags.NoMove, ImGuiWindowFlags.AlwaysVerticalScrollbar))
 
   <span class="comment">-- ImGui.End()
 </span>  ImGui.End()
@@ -606,19 +607,21 @@ ffi.C.GetWindowRect(window, rect)
 </span>ImGui.SetNextWindowPos(backgroundWindowPosRight, backgroundWindowPosBottom, ImGuiCond.Appearing)
 ImGui.SetNextWindowSize(backgroundWindowSizeRight, backgroundWindowSizeBottom)
 
-<span class="comment">-- Start drawing the centered window
+<span class="comment">-- Start drawing the centered window (anything before ImGui.End() below will be drawn in this window )
 </span>GUI_OPEN, shouldDraw = ImGui.Begin(<span class="string">"BACKGROUND_SCROLL"</span>, GUI_OPEN, ImGuiWindowFlags.NoDecoration)
 
-<span class="comment">-- Calculate some image sizes
-</span><span class="keyword">local</span> scrollBackgroundWidth = rect.right / <span class="number">1.71</span>
-<span class="keyword">local</span> scrollBackgroundHeight = rect.bottom / <span class="number">1.325</span>
+  <span class="comment">-- Calculate some image sizes
+</span>  <span class="keyword">local</span> scrollBackgroundWidth = rect.right / <span class="number">1.71</span>
+  <span class="keyword">local</span> scrollBackgroundHeight = rect.bottom / <span class="number">1.325</span>
 
-<span class="comment">-- Load the image
-</span>BANNER_IMAGE = { x = <span class="number">0</span>, y = <span class="number">0</span>, img = <span class="keyword">nil</span> }
-BANNER_IMAGE.x, BANNER_IMAGE.y, BANNER_IMAGE.img = M2TWEOP.loadTexture(M2TWEOP.getModPath()..<span class="string">"eopData/images/gui/BACKGROUND_SCROLL.png"</span>)
+  <span class="comment">-- Load the image
+</span>  BANNER_IMAGE = { x = <span class="number">0</span>, y = <span class="number">0</span>, img = <span class="keyword">nil</span> }
+  BANNER_IMAGE.x, BANNER_IMAGE.y, BANNER_IMAGE.img = M2TWEOP.loadTexture(M2TWEOP.getModPath()..<span class="string">"eopData/images/gui/BACKGROUND_SCROLL.png"</span>)
 
-<span class="comment">-- Draw the image in our centered window
-</span>ImGui.Image(image, scrollBackgroundWidth, scrollBackgroundHeight)
+  <span class="comment">-- Draw the image in our centered window
+</span>  ImGui.Image(image, scrollBackgroundWidth, scrollBackgroundHeight)
+
+ImGui.End() <span class="comment">-- End window area</span>
 </pre>
 
 <p><img src="https://cdn.discordapp.com/attachments/939640870343426059/1075868416470155364/image.png" alt=""/></p>
