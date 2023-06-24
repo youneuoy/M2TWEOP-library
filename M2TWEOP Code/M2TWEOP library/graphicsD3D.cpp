@@ -11,7 +11,7 @@
 #include <d3dx9.h>
 
 #include "fbxModels.h"
-#include "discord.h"
+
 
 
 #include <ImFileDialog.h>
@@ -128,9 +128,9 @@ struct
 	ImVec2 beginCoords{ 0.f,0.f };
 }drawParams;
 
-struct {
-	std::unique_ptr<discord::Core> core;
-}DiscordState;
+// struct {
+// 	std::unique_ptr<discord::Core> core;
+// }DiscordState;
 
 struct
 {
@@ -599,31 +599,6 @@ NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevic
 
 
 	graphicsD3D::initImgGui(pDevice);
-
-
-	// Discord Rich Presence
-	discord::Core* core{};
-	auto response = discord::Core::Create(1084531097561464913, DiscordCreateFlags_Default, &core);
-	DiscordState.core.reset(core);
-
-	if (!DiscordState.core) {
-		std::exit(-1);
-	}
-
-	discord::Activity activity{};
-
-	activity.SetDetails("M2TWEOP: Discord Rich presence");
-	activity.SetState("M2TWEOP");
-	// activity.GetAssets().SetSmallImage("test.png");
-	// activity.GetAssets().SetSmallText("123321");
-	// activity.GetAssets().SetLargeImage("test.png");
-	// activity.GetAssets().SetLargeText("321123");
-	activity.SetType(discord::ActivityType::Playing);
-
-	DiscordState.core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {
-	//	std::cout << ((result == discord::Result::Ok) ? "Succeeded" : "Failed")
-		//	<< " updating activity!\n";
-		});
 
 
 	fbxModels::set3dDevice(pDevice);
