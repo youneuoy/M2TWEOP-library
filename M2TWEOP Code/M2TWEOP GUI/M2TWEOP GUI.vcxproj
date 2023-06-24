@@ -72,13 +72,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\M2TWEOPBoost;$(SolutionDir)\3rd\sdl\include;$(SolutionDir)\3rd\ImNotify;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\IPC</IncludePath>
-    <LibraryPath>$(SolutionDir)\3rd\sfml\lib;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)\3rd\M2TWEOPBoost\boostLibs;$(SolutionDir)\3rd\sdl\libs</LibraryPath>
+    <IncludePath>$(SolutionDir)\3rd\discord;$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\M2TWEOPBoost;$(SolutionDir)\3rd\sdl\include;$(SolutionDir)\3rd\ImNotify;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\IPC</IncludePath>
+    <LibraryPath>$(SolutionDir)\3rd\discord\lib;$(SolutionDir)\3rd\sfml\lib;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)\3rd\M2TWEOPBoost\boostLibs;$(SolutionDir)\3rd\sdl\libs</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\M2TWEOPBoost;$(SolutionDir)\3rd\sdl\include;$(SolutionDir)\3rd\ImNotify;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\IPC</IncludePath>
-    <LibraryPath>$(SolutionDir)\3rd\sfml\lib;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)\3rd\M2TWEOPBoost\boostLibs;$(SolutionDir)\3rd\sdl\libs</LibraryPath>
+    <IncludePath>$(SolutionDir)\3rd\discord;$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\M2TWEOPBoost;$(SolutionDir)\3rd\sdl\include;$(SolutionDir)\3rd\ImNotify;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\IPC</IncludePath>
+    <LibraryPath>$(SolutionDir)\3rd\discord\lib;$(SolutionDir)\3rd\sfml\lib;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)\3rd\M2TWEOPBoost\boostLibs;$(SolutionDir)\3rd\sdl\libs</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -104,7 +104,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>winmm.lib;imm32.lib;version.lib;Setupapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;imm32.lib;version.lib;Setupapi.lib;discord_game_sdk.dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <EnableUAC>true</EnableUAC>
       <AdditionalOptions>/Force:Multiple %(AdditionalOptions)</AdditionalOptions>
@@ -180,6 +180,20 @@
     <ClCompile Include="..\3rd\imguiDocking\imgui_tables.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\imgui_widgets.cpp" />
     <ClCompile Include="..\3rd\imguiDocking\md4c.c" />
+    <ClCompile Include="..\3rd\discord\achievement_manager.cpp" />
+    <ClCompile Include="..\3rd\discord\activity_manager.cpp" />
+    <ClCompile Include="..\3rd\discord\application_manager.cpp" />
+    <ClCompile Include="..\3rd\discord\core.cpp" />
+    <ClCompile Include="..\3rd\discord\image_manager.cpp" />
+    <ClCompile Include="..\3rd\discord\lobby_manager.cpp" />
+    <ClCompile Include="..\3rd\discord\network_manager.cpp" />
+    <ClCompile Include="..\3rd\discord\overlay_manager.cpp" />
+    <ClCompile Include="..\3rd\discord\relationship_manager.cpp" />
+    <ClCompile Include="..\3rd\discord\storage_manager.cpp" />
+    <ClCompile Include="..\3rd\discord\store_manager.cpp" />
+    <ClCompile Include="..\3rd\discord\types.cpp" />
+    <ClCompile Include="..\3rd\discord\user_manager.cpp" />
+    <ClCompile Include="..\3rd\discord\voice_manager.cpp" />
     <ClCompile Include="aboutUI.cpp" />
     <ClCompile Include="dataG.cpp" />
     <ClCompile Include="gameRunnerUI.cpp" />
@@ -216,6 +230,23 @@
     <ClInclude Include="..\3rd\ImNotify\font_awesome_5.h" />
     <ClInclude Include="..\3rd\ImNotify\imgui_notify.h" />
     <ClInclude Include="..\3rd\nlohmann\json.hpp" />
+    <ClInclude Include="..\3rd\discord\achievement_manager.h" />
+    <ClInclude Include="..\3rd\discord\activity_manager.h" />
+    <ClInclude Include="..\3rd\discord\application_manager.h" />
+    <ClInclude Include="..\3rd\discord\core.h" />
+    <ClInclude Include="..\3rd\discord\discord.h" />
+    <ClInclude Include="..\3rd\discord\event.h" />
+    <ClInclude Include="..\3rd\discord\ffi.h" />
+    <ClInclude Include="..\3rd\discord\image_manager.h" />
+    <ClInclude Include="..\3rd\discord\lobby_manager.h" />
+    <ClInclude Include="..\3rd\discord\network_manager.h" />
+    <ClInclude Include="..\3rd\discord\overlay_manager.h" />
+    <ClInclude Include="..\3rd\discord\relationship_manager.h" />
+    <ClInclude Include="..\3rd\discord\storage_manager.h" />
+    <ClInclude Include="..\3rd\discord\store_manager.h" />
+    <ClInclude Include="..\3rd\discord\types.h" />
+    <ClInclude Include="..\3rd\discord\user_manager.h" />
+    <ClInclude Include="..\3rd\discord\voice_manager.h" />
     <ClInclude Include="..\M2TWEOP Common\m2tweopConstData.h" />
     <ClInclude Include="aboutUI.h" />
     <ClInclude Include="dataG.h" />
