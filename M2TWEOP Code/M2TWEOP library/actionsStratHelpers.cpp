@@ -7,6 +7,21 @@
 #include "actionsStrat.h"
 namespace actionsStrat 
 {
+	DWORD getReadyIdleAction(DWORD allocatedMem)
+	{
+		DWORD adrFunc = codes::offsets.createIdleActionFunc;
+		_asm
+		{
+			push 0x0
+			mov ecx, allocatedMem
+			mov eax, adrFunc
+			call eax
+
+			mov allocatedMem, eax
+		}
+
+		return allocatedMem;
+	}
 	DWORD getReadySiegeActionSett(DWORD allocatedMem,settlementStruct* sett)
 	{
 		DWORD adrFunc = codes::offsets.createSiegeSettlementGarrisonedFunc;

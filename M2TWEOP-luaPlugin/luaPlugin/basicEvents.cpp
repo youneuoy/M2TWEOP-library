@@ -12,7 +12,7 @@ void onEndSiege(int x, int y)
 {
 	if (plugData::data.luaAll.onEndSiege != nullptr)
 	{
-		tryLua((*plugData::data.luaAll.onEndSiege)(x,y));
+		tryLua((*plugData::data.luaAll.onEndSiege)(x, y));
 	}
 }
 
@@ -28,7 +28,7 @@ void onClickAtTile(int x, int y)
 {
 	if (plugData::data.luaAll.onClickAtTile != nullptr)
 	{
-		tryLua((*plugData::data.luaAll.onClickAtTile)(x,y));
+		tryLua((*plugData::data.luaAll.onClickAtTile)(x, y));
 	}
 }
 
@@ -38,21 +38,21 @@ std::string* onSelectWorldpkgdesc(const char* selectedRec, const char* selectedG
 	if (plugData::data.luaAll.onSelectWorldpkgdesc != nullptr)
 	{
 
-			auto funcResult = (*plugData::data.luaAll.onSelectWorldpkgdesc)(selectedRec, selectedGroup); 
-			if (!funcResult.valid())
+		auto funcResult = (*plugData::data.luaAll.onSelectWorldpkgdesc)(selectedRec, selectedGroup);
+		if (!funcResult.valid())
+		{
+
+			sol::error luaError = funcResult;
+			MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);
+		}
+		else
+		{
+			sol::optional<std::string>s = funcResult;
+			if (s)
 			{
-				
-				sol::error luaError = funcResult; 
-				MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL); 
+				tmpS = s.value();
 			}
-			else
-			{
-				sol::optional<std::string>s = funcResult;
-				if (s)
-				{
-					tmpS = s.value();
-				}
-			}
+		}
 
 	}
 
@@ -82,7 +82,7 @@ int onfortificationlevelS(settlementStruct* settlement, bool* isCastle, bool* is
 
 				std::tuple<int, bool>retValN = retVal.value();
 
-				*isCastle=std::get<1>(retValN);
+				*isCastle = std::get<1>(retValN);
 				return std::get<0>(retValN);
 			}
 		}
@@ -115,7 +115,7 @@ void onCampaignMapLoaded()
 
 void onLoadGamePl(std::vector<std::string>* saveFiles)
 {
-	
+
 	if (plugData::data.luaAll.onLoadSaveFile != nullptr)
 	{
 		sol::as_table_t<std::vector<std::string>> wrapped_vec = *saveFiles;
@@ -128,16 +128,16 @@ std::vector<std::string>* onSaveGamePl(UNICODE_STRING**& savePath)
 	sol::as_table_t<std::vector<std::string>> wrapped_vec;
 	if (plugData::data.luaAll.onCreateSaveFile != nullptr)
 	{
-			auto funcResult = (*plugData::data.luaAll.onCreateSaveFile)();
-			if (!funcResult.valid())
-			{
-				sol::error luaError = funcResult; 
-				MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL); \
-			}
-			else
-			{
-				wrapped_vec = funcResult;
-			}
+		auto funcResult = (*plugData::data.luaAll.onCreateSaveFile)();
+		if (!funcResult.valid())
+		{
+			sol::error luaError = funcResult;
+			MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL); \
+		}
+		else
+		{
+			wrapped_vec = funcResult;
+		}
 	}
 	std::vector<std::string>* retVec = new std::vector<std::string>();
 	*retVec = wrapped_vec.value();
@@ -155,6 +155,11 @@ void onFactionTurnStart(factionStruct* fac)
 	plugData::data.luaAll.onFactionTurnStart(fac);
 }
 
+void onGeneralDevastatesTile(generalCharacterictics* gen)
+{
+	plugData::data.luaAll.onGeneralDevastatesTile(gen);
+}
+
 void onFactionTurnEnd(factionStruct* fac)
 {
 	plugData::data.luaAll.onFactionTurnEnd(fac);
@@ -167,12 +172,12 @@ void onFactionNewCapital(factionStruct* fac)
 
 void onFactionWarDeclared(factionStruct* fac, factionStruct* fac2)
 {
-	plugData::data.luaAll.onFactionWarDeclared(fac,fac2);
+	plugData::data.luaAll.onFactionWarDeclared(fac, fac2);
 }
 
 void onFactionAllianceDeclared(factionStruct* fac, factionStruct* fac2)
 {
-	plugData::data.luaAll.onFactionWarDeclared(fac, fac2);
+	plugData::data.luaAll.onFactionAllianceDeclared(fac, fac2);
 }
 
 void onFactionTradeAgreementMade(factionStruct* fac, factionStruct* fac2)
@@ -214,7 +219,7 @@ void onGeneralAssaultsGeneral(generalCharacterictics* gen, generalCharacterictic
 
 void onGeneralAssaultsResidence(generalCharacterictics* gen, settlementStruct* sett, fortStruct* frt)
 {
-	plugData::data.luaAll.onGeneralAssaultsResidence(gen, sett,frt);
+	plugData::data.luaAll.onGeneralAssaultsResidence(gen, sett, frt);
 }
 
 void onGeneralCaptureSettlement(generalCharacterictics* gen, settlementStruct* sett)
@@ -229,7 +234,7 @@ void onGeneralCaptureResidence(generalCharacterictics* gen)
 
 void onSiegeEquipmentCompleted(settlementStruct* sett, fortStruct* frt)
 {
-	plugData::data.luaAll.onSiegeEquipmentCompleted(sett,frt);
+	plugData::data.luaAll.onSiegeEquipmentCompleted(sett, frt);
 }
 
 void onPostBattle(generalCharacterictics* gen)

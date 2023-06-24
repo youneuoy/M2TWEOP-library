@@ -23,7 +23,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{a2353bf6-5423-46e0-91eb-608bb5acbff8}</ProjectGuid>
     <RootNamespace>M2TWEOPlibrary</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -75,13 +75,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(SolutionDir)\3rd\discord\lib;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x86\release;$(SolutionDir)\3rd\sfml\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\shortestPath;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(SolutionDir)\3rd\discord\lib;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x86\release;$(SolutionDir)\3rd\sfml\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR)\include;$(SolutionDir)\3rd\shortestPath;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -114,7 +114,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -138,7 +138,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CCppSupport>Cpp17Support</CCppSupport>
     </ClCompile>
     <Link>
@@ -241,6 +241,7 @@
     <ClInclude Include="..\3rd\ImNotify\imgui_notify.h" />
     <ClInclude Include="..\3rd\miniz\miniz.h" />
     <ClInclude Include="..\3rd\nlohmann\json.hpp" />
+    <ClInclude Include="..\3rd\shortestPath\micropather.h" />
     <ClInclude Include="actionsStrat.h" />
     <ClInclude Include="BattleMapOverrider.h" />
     <ClInclude Include="battlemapWorker.h" />
@@ -270,15 +271,21 @@
     <ClInclude Include="m2tweopMapManager.h" />
     <ClInclude Include="m2tweopTile.h" />
     <ClInclude Include="managerF.h" />
+    <ClInclude Include="MapTextDrawer.h" />
+    <ClInclude Include="MasterDefines.h" />
     <ClInclude Include="MemWork.h" />
     <ClInclude Include="MmbMover.h" />
     <ClInclude Include="onlineThings.h" />
     <ClInclude Include="onlineThings2.h" />
     <ClInclude Include="patchesForGame.h" />
+    <ClInclude Include="PathMap.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PlannedRetreatRoute.h" />
     <ClInclude Include="plugins.h" />
     <ClInclude Include="realGameTypes.h" />
     <ClInclude Include="RecruitSystem.h" />
+    <ClInclude Include="Retreater.h" />
+    <ClInclude Include="RetreatRoutes.h" />
     <ClInclude Include="RSExport.h" />
     <ClInclude Include="settlementConversionLvlSetter.h" />
     <ClInclude Include="SingleFbxMesh.h" />
@@ -291,6 +298,7 @@
     <ClInclude Include="technicalStringsFuncs.h" />
     <ClInclude Include="TemplateCh.h" />
     <ClInclude Include="tests.h" />
+    <ClInclude Include="TexturesManager.h" />
     <ClInclude Include="tilesChange.h" />
   </ItemGroup>
   <ItemGroup>
@@ -333,6 +341,7 @@
     <ClCompile Include="..\3rd\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\3rd\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\3rd\miniz\miniz.c" />
+    <ClCompile Include="..\3rd\shortestPath\micropather.cpp" />
     <ClCompile Include="actionsStrat.cpp" />
     <ClCompile Include="actionsStratHelpers.cpp" />
     <ClCompile Include="BattleMapOverrider.cpp" />
@@ -358,19 +367,23 @@
     <ClCompile Include="m2tweopMapManager.cpp" />
     <ClCompile Include="m2tweopTile.cpp" />
     <ClCompile Include="managerF.cpp" />
+    <ClCompile Include="MapTextDrawer.cpp" />
     <ClCompile Include="MemWork.cpp" />
     <ClCompile Include="MmbMover.cpp" />
     <ClCompile Include="onlineThings.cpp" />
     <ClCompile Include="onlineThings2.cpp" />
     <ClCompile Include="patchesForGame.cpp" />
+    <ClCompile Include="PathMap.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PlannedRetreatRoute.cpp" />
     <ClCompile Include="plugins.cpp" />
     <ClCompile Include="RecruitSystem.cpp" />
+    <ClCompile Include="Retreater.cpp" />
     <ClCompile Include="RSExport.cpp" />
     <ClCompile Include="settlementConversionLvlSetter.cpp" />
     <ClCompile Include="SingleFbxMesh.cpp" />
@@ -383,6 +396,7 @@
     <ClCompile Include="techFuncs.cpp" />
     <ClCompile Include="technicalStringsFuncs.cpp" />
     <ClCompile Include="TemplateCh.cpp" />
+    <ClCompile Include="TexturesManager.cpp" />
     <ClCompile Include="tilesChange.cpp" />
   </ItemGroup>
   <ItemGroup>

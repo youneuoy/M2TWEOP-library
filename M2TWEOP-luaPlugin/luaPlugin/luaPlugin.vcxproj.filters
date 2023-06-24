@@ -111,6 +111,9 @@
     <Filter Include="Исходные файлы\luaBind\luaHelpers\soundsHelpers">
       <UniqueIdentifier>{aafd9dd4-cfc9-4f4a-a989-3b47c32be937}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\luaBind\luaHelpers\eop3dObjectsHelpers">
+      <UniqueIdentifier>{6a236f9d-e64a-45bc-9212-8b5ed991bc3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="realGameTypes.h">
@@ -247,6 +250,15 @@
     </ClInclude>
     <ClInclude Include="eopSoundHelpers.h">
       <Filter>Исходные файлы\luaBind\luaHelpers\soundsHelpers</Filter>
+    </ClInclude>
+    <ClInclude Include="eopMasterTypes.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="eop3dObjectsHelpers.h">
+      <Filter>Исходные файлы\luaBind\luaHelpers\eop3dObjectsHelpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -391,10 +403,19 @@
     <ClCompile Include="eopSoundHelpers.cpp">
       <Filter>Исходные файлы\luaBind\luaHelpers\soundsHelpers</Filter>
     </ClCompile>
+    <ClCompile Include="luaEop3dObjects.cpp">
+      <Filter>Исходные файлы\luaBind</Filter>
+    </ClCompile>
+    <ClCompile Include="eop3dObjectsHelpers.cpp">
+      <Filter>Исходные файлы\luaBind\luaHelpers\eop3dObjectsHelpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint">
       <Filter>Исходные файлы\technical</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="luaPlugin.rc" />
   </ItemGroup>
 </Project>

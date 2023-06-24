@@ -28,6 +28,7 @@ You can find all the supported functions and overloads below.
   shouldDraw = ImGui.Begin("Name")
   open, shouldDraw = ImGui.Begin("Name", open)
   open, shouldDraw = ImGui.Begin("Name", open, ImGuiWindowFlags.NoMove)
+  open, shouldDraw = ImGui.Begin("Name", open, bit.bor(ImGuiWindowFlags.NoDecoration, ImGuiWindowFlags.NoMove, ImGuiWindowFlags.AlwaysVerticalScrollbar))
 
   -- ImGui.End()
   ImGui.End()
@@ -248,6 +249,70 @@ You can find all the supported functions and overloads below.
   ImGui.SetScrollFromPosY(10)
   ImGui.SetScrollFromPosY(10, 0.5)
 ```
+
+## Calculating Window Size and Drawing a Centered Window
+```lua
+
+-- Imports
+-- https://luajit.org/ext_ffi.html
+local ffi = require("ffi")
+
+-- Constructor for an object that stores data about the current Window size
+ffi.cdef [[
+typedef long LONG;
+typedef void* HANDLE;
+typedef HANDLE HWND;
+  typedef struct RECT {
+    LONG left;
+    LONG top;
+    LONG right;
+    LONG bottom;
+  } RECT;
+  typedef int                 BOOL;
+  typedef RECT *LPRECT;
+   BOOL GetWindowRect(HWND  hWnd,LPRECT lpRect);
+       HWND GetActiveWindow(void);
+
+   typedef const char* LPCSTR;
+    typedef unsigned UINT;
+   int MessageBoxA(HWND, LPCSTR, LPCSTR, UINT);
+]]
+
+-- Window Size
+window = ffi.C.GetActiveWindow()
+rect = ffi.new("RECT")
+ffi.C.GetWindowRect(window, rect)
+
+-- Drawing a centered scroll with a background image
+GUI_OPEN = false
+
+-- Calculate some window sizes and window positions
+local backgroundWindowPosRight = rect.right / 4.65
+local backgroundWindowPosBottom = rect.bottom / (rect.bottom / 20) - 20
+local backgroundWindowSizeRight = rect.right / 1.7
+local backgroundWindowSizeBottom = rect.bottom / 1
+
+-- Set the next window position and size
+ImGui.SetNextWindowPos(backgroundWindowPosRight, backgroundWindowPosBottom, ImGuiCond.Appearing)
+ImGui.SetNextWindowSize(backgroundWindowSizeRight, backgroundWindowSizeBottom)
+
+-- Start drawing the centered window (anything before ImGui.End() below will be drawn in this window )
+GUI_OPEN, shouldDraw = ImGui.Begin("BACKGROUND_SCROLL", GUI_OPEN, ImGuiWindowFlags.NoDecoration)
+
+  -- Calculate some image sizes
+  local scrollBackgroundWidth = rect.right / 1.71
+  local scrollBackgroundHeight = rect.bottom / 1.325
+
+  -- Load the image
+  BANNER_IMAGE = { x = 0, y = 0, img = nil }
+  BANNER_IMAGE.x, BANNER_IMAGE.y, BANNER_IMAGE.img = M2TWEOP.loadTexture(M2TWEOP.getModPath().."eopData/images/gui/BACKGROUND_SCROLL.png")
+
+  -- Draw the image in our centered window
+  ImGui.Image(image, scrollBackgroundWidth, scrollBackgroundHeight)
+
+ImGui.End() -- End window area
+```
+![](https://cdn.discordapp.com/attachments/939640870343426059/1075868416470155364/image.png)
 
 ## Parameters Stacks (Shared)
 Note: This binding does not give functions that can obtain an ImFont* from inside Lua (besides GetFont), You'll need to add your own.
@@ -488,6 +553,53 @@ Note: This binding does not give functions that can obtain an ImFont* from insid
   -- ImGui.BulletText(...)
   -- Parameters: text (text)
   ImGui.BulletText("Well hello there, General Kenobi")
+
+  -- Helper functions
+  -- Centered Text
+  function centeredText(text, minIndentation)
+      if ~text then print('centeredText: Text not found') return end;
+      if ~minIndentation then minIndentation = 20.0 end;
+
+      local textWidth, textHeight = ImGui.CalcTextSize(text);
+      local windowWidth           = ImGui.GetWindowWidth()
+
+      local textIndentation = (windowWidth - textWidth) * 0.5;
+
+      if textIndentation <= minIndentation then
+          textIndentation = minIndentation
+      end
+
+      ImGui.SameLine(textIndentation);
+      ImGui.PushTextWrapPos(windowWidth - textIndentation);
+
+      ImGui.TextWrapped(text)
+      ImGui.PopTextWrapPos()
+  end
+
+  -- Usage
+  centeredText("This text is centered in whatever window it resides in")
+  centeredText("____________________________")
+
+  -- Centered Image Buttons
+  function centeredImageButton(image, x, y, offset)
+      local offset = offset or 0
+
+      -- Obtain width of window
+      local windowWidth = ImGui.GetWindowWidth()
+
+      -- Calculate correct position for the button
+      local centre_position_for_button = (windowWidth - x) / 2;
+
+      -- Tell Dear ImGui to render the button at the current y pos, but with the new x pos
+      ImGui.SetCursorPosX(centre_position_for_button+offset);
+
+      clicked = ImGui.ImageButton(image, x, y);
+      return clicked
+  end
+
+  -- Usage
+  yesClicked = centeredImageButton(YES_BUTTON.img, 50, 50, -50)
+  noClicked = centeredImageButton(NO_BUTTON.img, 50, 50, 50)
 ```
 
 ## Widgets: Main

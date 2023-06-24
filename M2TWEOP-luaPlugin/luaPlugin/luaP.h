@@ -40,7 +40,7 @@ if (!funcResult.valid())\
 {\
 	sol::error luaError = funcResult;\
 	MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);\
-	if (plugData::data.luaAll.checkVar("terminateAtLuaException", 1) == false)\
+	if (plugData::data.luaAll.checkVar("terminateAtLuaException", 1) == true)\
 	{\
 		terminate();\
 	}\
@@ -53,7 +53,7 @@ if (!funcResult.valid())\
 {\
 	sol::error luaError = funcResult;\
 	MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);\
-	if (plugData::data.luaAll.checkVar("terminateAtLuaException", 1) == false)\
+	if (plugData::data.luaAll.checkVar("terminateAtLuaException", 1) == true)\
 	{\
 		terminate();\
 	}\
@@ -81,6 +81,7 @@ public:
 	void initTech();
 	void initEopEdu();
 	void initEopFbx();
+	void initEop3dObjects();
 	void initEopSounds();
 	void runScriptS(std::string* script);
 
@@ -90,6 +91,7 @@ public:
 	void onCharacterSelected(generalCharacterictics* gen);
 	void onPreFactionTurnStart(factionStruct* fac);
 	void onFactionTurnStart(factionStruct* fac);
+	void onGeneralDevastatesTile(generalCharacterictics* gen);
 	void onFactionTurnEnd(factionStruct* fac);
 	void onFactionNewCapital(factionStruct* fac);
 	void onFactionWarDeclared(factionStruct* fac, factionStruct* fac2);
@@ -196,6 +198,7 @@ public:
 	sol::function* onChangeTurnNumFunc = nullptr;
 	sol::function* onCharacterSelectedFunc = nullptr;
 	sol::function* onPreFactionTurnStartFunc = nullptr;
+	sol::function* onGeneralDevastatesTileFunc = nullptr;
 	sol::function* onFactionTurnStartFunc = nullptr;
 	sol::function* onFactionTurnEndFunc = nullptr;
 	sol::function* onFactionNewCapitalFunc = nullptr;

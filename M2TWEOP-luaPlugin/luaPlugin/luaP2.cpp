@@ -34,7 +34,7 @@ void luaP::initCampaign()
 	@tfield int peace
 	@tfield int alliance
 	@tfield int suzerain
-	@tfield int trade
+	@tfield int trade (Doesn't work with trade rights agreements set at game start)
 
 	@usage
 	local campaign=gameDataAll.get().campaignStruct;
@@ -197,6 +197,22 @@ void luaP::initCampaign()
 
 	@tfield int isLand (1 = land, 0 = sea)
 	@tfield int groundType
+	0 low fertility
+	1 medium fertility
+	2 high fertility
+	3 wilderness
+	4 high moutains
+	5 low moutains
+	6 hills
+	7 dense forest
+	8 woodland
+	9 swamp
+	10 ocean
+	11 deep sea
+	12 shallow sea
+	13 coast (beach)
+	14 impassable_land
+	15 impassable_sea
 	@tfield int regionID
 	@tfield int factionID (Doesn't work if tile is river).
 	@tfield int borderingSettlement Not 0 means bordering settlement.
@@ -505,6 +521,9 @@ void luaP::initP2()
 		sol::usertype<battleSide> battleSideTable;
 		sol::usertype<trackedPointerArmy> trackedPointerArmyTable;
 		sol::usertype<deploymentAreaS> deploymentAreaTable;
+		sol::usertype<battleAI> battleAI;
+		sol::usertype<armyAndCharacter> battleArmy;
+		sol::usertype<battleUnit> battleUnit;
 
 	}typeAll;
 	///gameDataAll
@@ -541,26 +560,57 @@ void luaP::initP2()
 	/***
 	basic battleStruct table
 
+	@tfield int battleState
+		0 not in battle
+		1 prebattle scroll
+		2 delay (also for preconflict phase of successful ambushes)
+		3 deployment
+		4
+		5 conflict (also for pause)
+		6 victory scroll
+		7 pursuit
+		8
+		9 postbattle scroll (not for autoresolved battles)
+	@tfield int battleType
+		0 succesful ambush
+		1 failed ambush
+		2 normal
+		3 siege
+		4 sally besieger
+		5 naval
+		6 withdrawal?
+	@tfield int isNightBattle
 	@tfield int xCoord
 	@tfield int yCoord
 	@tfield int attackerXCoord
 	@tfield int attackerYCoord
 	@tfield int defenderXCoord
 	@tfield int defenderYCoord
+	@tfield int paused
+	@tfield float battleSpeed
+	@tfield float secondsPassed
 	@tfield int sidesNum Returns a battleSide[8]. Maximum: 8.
 	@tfield battleSide[8] sides
+	@tfield factionSide[31] faction alliance array, -1 if not in battle
 
 	@table gameDataAll.battleStruct
 	*/
 	typeAll.battleTable = luaState.new_usertype<battleDataS>("battleStruct");
+	typeAll.battleTable.set("battleState", &battleDataS::battleState);
+	typeAll.battleTable.set("battleType", &battleDataS::battleType);
+	typeAll.battleTable.set("isNightBattle", &battleDataS::isNightBattle);
 	typeAll.battleTable.set("xCoord", &battleDataS::xCoord);
 	typeAll.battleTable.set("yCoord", &battleDataS::yCoord);
 	typeAll.battleTable.set("attackerXCoord", &battleDataS::attackerXCoord);
 	typeAll.battleTable.set("attackerYCoord", &battleDataS::attackerYCoord);
 	typeAll.battleTable.set("defenderXCoord", &battleDataS::defenderXCoord);
 	typeAll.battleTable.set("defenderYCoord", &battleDataS::defenderYCoord);
+	typeAll.battleTable.set("paused", &battleDataS::paused);
+	typeAll.battleTable.set("battleSpeed", &battleDataS::speed);
+	typeAll.battleTable.set("secondsPassed", &battleDataS::secondsPassed);
 	typeAll.battleTable.set("sidesNum", &battleDataS::sidesNum);
 	typeAll.battleTable.set("sides", sol::property([](battleDataS& self) { return std::ref(self.sides); }));
+	typeAll.battleTable.set("factionSide", sol::property([](battleDataS& self) { return std::ref(self.factionSide); }));
 	///battleSide
 	//@section battleSide
 
@@ -569,9 +619,16 @@ void luaP::initP2()
 
 	@tfield bool isDefender
 	@tfield bool isCanDeploy
+	@tfield int wonBattle 0 = lose, 1 = draw, 2 = win
+	@tfield int battleSuccess 0 = close, 1 = average, 2 = clear, 3 = crushing
 	@tfield int[4] winConditions Returns an int index of a wincondition.
 	@tfield getWinConditionString getWinConditionString
 	@tfield int armiesNum
+	@tfield int alliance
+	@tfield int soldierCount
+	@tfield int totalStrenght
+	@tfield battleAI battleAIPlan
+	@tfield getBattleArmy getBattleArmy
 	@tfield trackedPointerArmy[8] Returns a table of trackedPointerArmy. Maximum: 8.
 
 
@@ -581,6 +638,12 @@ void luaP::initP2()
 	typeAll.battleSideTable = luaState.new_usertype<battleSide>("battleSide");
 	typeAll.battleSideTable.set("isDefender", &battleSide::isDefender);
 	typeAll.battleSideTable.set("isCanDeploy", &battleSide::isCanDeploy);
+	typeAll.battleSideTable.set("wonBattle", &battleSide::wonBattle);
+	typeAll.battleSideTable.set("battleSuccess", &battleSide::battleSuccess);
+	typeAll.battleSideTable.set("alliance", &battleSide::alliance);
+	typeAll.battleSideTable.set("soldierCount", &battleSide::soldierCount);
+	typeAll.battleSideTable.set("totalStrenght", &battleSide::totalStrenght);
+	typeAll.battleSideTable.set("battleAIPlan", &battleSide::battleAIPlan);
 	typeAll.battleSideTable.set("winConditions", sol::property([](battleSide& self) { return std::ref(self.winConditions); }));
 	/***
 	Get win condition string, for example: destroy\_or\_rout_enemy
@@ -623,6 +686,18 @@ void luaP::initP2()
 	typeAll.battleSideTable.set_function("getWinConditionString", &battleHandlerHelpers::getWinConditionS);
 	typeAll.battleSideTable.set("armiesNum", &battleSide::armiesNum);
 	typeAll.battleSideTable.set("armies", sol::property([](battleSide& self) { return std::ref(self.armies); }));
+	/***
+	Get a battle army by it's index.
+	@function getBattleArmy
+	@tparam battleSideTable side
+	@tparam int index
+	@treturn battleArmy army
+	@usage
+
+		unit = side:getBattleArmy(0)
+
+	*/
+	typeAll.battleSideTable.set_function("getBattleArmy", &battleHandlerHelpers::getBattleArmy);
 
 
 	///trackedPointerArmy
@@ -674,4 +749,89 @@ void luaP::initP2()
 	end
 	*/
 	typeAll.deploymentAreaTable.set("getCoordPair", [](deploymentAreaS& self, int pairNum) { return std::make_tuple(self.coordsPairs[0 + pairNum], self.coordsPairs[1 + pairNum]); });
+
+	///battleAI
+	//@section battleAI
+
+	/***
+	Basic Battle AI table
+
+	@tfield int gtaPlan
+		0 = "DO_NOTHING"
+		1 = "ATTACK_ALL"
+		2 = "DEFEND"
+		3 = "DEFEND_FEATURE"
+		4 = "HIDE"
+		5 = "AMBUSH"
+		6 = "SCOUT"
+		7 = "WITHDRAW"
+		8 = "ATTACK_SETTLEMENT"
+		9 = "DEFEND_SETTLEMENT"
+		10 = "SALLY_OUT"
+	@tfield int unitCount
+	@tfield int enemyUnitCount
+
+	@table battleAI
+	*/
+	typeAll.battleAI = luaState.new_usertype<battleAI>("battleAI");
+	typeAll.battleAI.set("gtaPlan", &battleAI::currentAIPlan);
+	typeAll.battleAI.set("unitCount", &battleAI::unitCount);
+	typeAll.battleAI.set("enemyUnitCount", &battleAI::enemyUnitCount);
+	///battleArmy
+	//@section battleArmy
+
+	/***
+	Basic battleArmy table
+
+	@tfield stackStruct army
+	@tfield character character
+	@tfield int generalNumKillsBattle
+	@tfield float generalHPRatioLost
+	@tfield float battleOdds
+	@tfield int numKilledGenerals
+	@tfield int unitCount
+	@tfield getBattleUnit getBattleUnit
+
+	@table battleArmy
+	*/
+	typeAll.battleArmy = luaState.new_usertype<armyAndCharacter>("battleArmy");
+	typeAll.battleArmy.set("army", &armyAndCharacter::army);
+	typeAll.battleArmy.set("character", &armyAndCharacter::character);
+	typeAll.battleArmy.set("generalNumKillsBattle", &armyAndCharacter::generalNumKillsBattle);
+	typeAll.battleArmy.set("generalHPRatioLost", &armyAndCharacter::generalHPRatioLost);
+	typeAll.battleArmy.set("battleOdds", &armyAndCharacter::battleOdds);
+	typeAll.battleArmy.set("numKilledGenerals", &armyAndCharacter::numKilledGenerals);
+	typeAll.battleArmy.set("unitCount", &armyAndCharacter::unitCount);
+	/***
+	Get a battle unit by it's index.
+	@function getBattleUnit
+	@tparam battleArmy army
+	@tparam int index
+	@treturn battleUnit unit
+	@usage
+
+		unit = battleArmy:getBattleUnit(0)
+
+	*/
+	typeAll.battleArmy.set_function("getBattleUnit", &battleHandlerHelpers::getBattleUnit);
+	///battleUnit
+	//@section battleUnit
+
+	/***
+	Basic battleUnit table
+
+	@tfield unit unit
+	@tfield int soldiersLost
+	@tfield int soldiersStart
+	@tfield int unitsRouted
+	@tfield boolean hasRouted
+
+	@table battleUnit
+	*/
+	typeAll.battleUnit = luaState.new_usertype<battleUnit>("battleUnit");
+	typeAll.battleUnit.set("unit", &battleUnit::unit);
+	typeAll.battleUnit.set("soldiersLost", &battleUnit::soldiersLost);
+	typeAll.battleUnit.set("soldiersStart", &battleUnit::soldiersStart);
+	typeAll.battleUnit.set("unitsRouted", &battleUnit::unitsRouted);
+	typeAll.battleUnit.set("hasRouted", &battleUnit::hasRouted);
 }

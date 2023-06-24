@@ -118,6 +118,7 @@ void luaP::onPluginLoadF()
 	@tfield onShortcutTriggered onShortcutTriggered
 	@tfield onBecomesFactionLeader onBecomesFactionLeader
 	@tfield onBecomesFactionHeir onBecomesFactionHeir
+	@tfield onGeneralDevastatesTile onGeneralDevastatesTile
 
 
 
@@ -447,6 +448,20 @@ void luaP::onPluginLoadF()
 	*/
 	onFactionTurnStartFunc = new sol::function(luaState["onFactionTurnStart"]);
 	checkLuaFunc(&onFactionTurnStartFunc);
+
+	/***
+	Called when a general devastates a tile.
+
+	@function onGeneralDevastatesTile
+	@tparam namedCharacter gen
+
+	@usage
+	function onGeneralDevastatesTile(gen)
+	--something here
+	end
+	*/
+	onGeneralDevastatesTileFunc = new sol::function(luaState["onGeneralDevastatesTile"]);
+	checkLuaFunc(&onGeneralDevastatesTileFunc);
 
 	/***
 	Called at a faction's turn end.

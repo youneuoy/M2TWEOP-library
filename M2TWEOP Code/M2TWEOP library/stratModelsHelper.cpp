@@ -99,9 +99,9 @@ namespace stratModelsChange
 		port->portDock->dockStratModel = newDockMod;
 
 	}
-	void stratModelsChange::changeModel(int x, int y, model_Rigid* modelP, model_Rigid* modelP2)
+	bool stratModelsChange::changeModel(int x, int y, model_Rigid* modelP, model_Rigid* modelP2)
 	{
-		if (modelP == nullptr)return;
+		if (modelP == nullptr)return false;
 
 		fortStruct* fort = nullptr;
 		portBuildingStruct* port = nullptr;
@@ -115,7 +115,7 @@ namespace stratModelsChange
 			if (fort != nullptr)
 			{
 				changeFortStratModel(fort, modelP, modelP2);
-				return;
+				return true;
 			}
 
 
@@ -124,7 +124,7 @@ namespace stratModelsChange
 			{
 
 				changePortStratModel(port, modelP, modelP2);
-				return;
+				return true;
 			}
 		}
 
@@ -132,22 +132,22 @@ namespace stratModelsChange
 		if (resource != nullptr)
 		{
 			changeResourceStratModel(resource, modelP);
-			return;
+			return true;
 		}
 		settlement= fastFuncts::findSettlement(x, y);
 		if (settlement != nullptr)
 		{
 			changeSettlementStratModel(settlement, modelP);
-			return;
+			return true;
 		}
 		tower = fastFuncts::findWatchTower(x, y);
 		if (tower != nullptr)
 		{
 			changeWatchTowerStratModel(tower, modelP);
-			return;
+			return true;
 		}
 
-		return;
+		return false;
 	}
 
 }

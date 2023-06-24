@@ -13,6 +13,8 @@ void codes::initCodes(int gameVer)
 		offsets.getReadySiegeCharacterGarrisonedFunc = 0x005a18e0;
 		offsets.finalyzeActionStratmapFunc = 0x0059e790;
 
+		offsets.createIdleActionFunc = 0x005aff40;
+
 
 		offsets.getReadyForMovingFunc = 0x005b0060;
 		offsets.getReadyForMoving2Func = 0x005a0870;
@@ -59,6 +61,8 @@ void codes::initCodes(int gameVer)
 
 		offsets.autoWinFunc = 0x00d2dcf0;
 		offsets.historicEventFunc = 0x00C5BD50;
+		offsets.scriptCommandOne = 0x00A945F0;
+		offsets.scriptCommandTwo = 0x00A93570;
 
 		offsets.autoResolveFunc = 0x00aa6bc0;
 
@@ -89,6 +93,8 @@ void codes::initCodes(int gameVer)
 		offsets.createSiegeSettlementGarrisonedFunc = 0x005b5ba0;
 		offsets.getReadySiegeCharacterGarrisonedFunc = 0x005a1dc0;
 		offsets.finalyzeActionStratmapFunc = 0x0059ec70;
+
+		offsets.createIdleActionFunc = 0x005b0420;
 
 
 
@@ -136,6 +142,8 @@ void codes::initCodes(int gameVer)
 
 		offsets.autoWinFunc = 0x00d28070;
 		offsets.historicEventFunc = 0x0C56150;
+		offsets.scriptCommandOne = 0x00A95650;
+		offsets.scriptCommandTwo = 0x00A945D0;
 
 
 		offsets.autoResolveFunc = 0x00aa7bf0;

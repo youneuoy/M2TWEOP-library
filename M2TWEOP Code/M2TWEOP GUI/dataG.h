@@ -20,6 +20,7 @@ public:
 		{
 			bool isGenerationNeeded = false;
 			bool isResultTransferNeeded = false;
+			bool isPlannedRetreatRoute = false;
 		}battlesData;
 
 

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "fastFuncts.h"
+#include "smallFuncs.h"
 
 #include "fastFunctsHelpers.h"
 namespace fastFuncts
@@ -26,7 +27,132 @@ namespace fastFuncts
 
 		return nullptr;
 	}
-	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct* sett, factionStruct newOwner)
+	factionStruct* GetCurrentFaction()
+	{
+		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
+		if (gameDataAll == nullptr)
+		{
+			return nullptr;
+		}
+		if (gameDataAll->campaignData == nullptr)
+		{
+			return nullptr;
+		}
+
+		return gameDataAll->campaignData->currentFactionTurn;
+	}
+	std::string GetModPath()
+	{
+		return globals::dataS.modPatch;
+	}
+	NOINLINE EOP_EXPORT float GetMovepointsForReachNearTile(int x, int y, int destX, int destY)
+	{
+		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
+		if (x > gameDataAll->stratMap->mapWidth)
+		{
+			return -1;
+		}
+		if (y > gameDataAll->stratMap->mapHeight)
+		{
+			return -1;
+		}
+		if (x < 0)
+		{
+			return -1;
+		}
+		if (y < 0)
+		{
+			return -1;
+		}
+		typedef float(__stdcall* GetMovepointsForReachTileF)(int* xy, int* destxy);
+
+		GetMovepointsForReachTileF getMovepointsForReachTileF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			getMovepointsForReachTileF = (GetMovepointsForReachTileF)0x004c7bd0;
+		}
+		else
+		{
+			getMovepointsForReachTileF = (GetMovepointsForReachTileF)0x004c7620;
+		}
+
+		int xy[2] = { x,y };
+		int destxy[2] = { destX, destY };
+
+		return getMovepointsForReachTileF(xy, destxy);
+	}
+	NOINLINE EOP_EXPORT void revealTile(factionStruct* faction, int x, int y)
+	{
+		if (IsStratMap() == false)
+		{
+			return;
+		}
+		typedef int* (__thiscall* RevealTileF)(void* tilesFac, int* xy, int some, float some2);
+
+		RevealTileF revealTileF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			revealTileF = (RevealTileF)0x004baea0;
+		}
+		else
+		{
+			revealTileF = (RevealTileF)0x004ba910;
+		}
+
+		int coords[2] = { x,y };
+		revealTileF(faction->tilesFac, coords, 1, -1.0);
+	}
+	NOINLINE EOP_EXPORT void hideRevealedTile(factionStruct* faction, int x, int y)
+	{
+		if (IsStratMap() == false)
+		{
+			return;
+		}
+		struct SomeArgForHiding
+		{
+			int x;
+			int y;
+			int some = 2;
+			float some2 = -1;
+		};
+		typedef int* (__thiscall* UnRevealTileF)(void* tilesFac, SomeArgForHiding* someArgForHiding, unsigned char isDeleteXYArray);
+
+		UnRevealTileF unrevealTileF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			unrevealTileF = (UnRevealTileF)0x004baf80;
+		}
+		else
+		{
+			unrevealTileF = (UnRevealTileF)0x004ba9f0;
+		}
+
+		SomeArgForHiding someArg;
+		someArg.x = x;
+		someArg.y = y;
+
+		void** revealedTiles = (void**)faction->tilesFac;
+		SomeArgForHiding** tilesArr = (SomeArgForHiding**)revealedTiles[10];
+		int num = (int)revealedTiles[12];
+		for (int i = 0; i < num; i++)
+		{
+			if (tilesArr[i]->x == x && tilesArr[i]->y == y)
+			{
+				unrevealTileF(faction->tilesFac, tilesArr[i], 1);
+				return;
+			}
+		}
+	}
+	NOINLINE EOP_EXPORT int8_t getTileVisibility(factionStruct* faction, int x, int y)
+	{
+		return faction->tilesFac->tilesVisiblity[faction->tilesFac->tilesXBound * (y)+x];
+	}
+	NOINLINE EOP_EXPORT void setTileVisibility(factionStruct* faction, int x, int y, int8_t vis)
+	{
+		faction->tilesFac->tilesVisiblity[faction->tilesFac->tilesXBound * (y)+x] = vis;
+	}
+
+	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner)
 	{
 		DWORD adrFunc = 0x0;
 		int* vTableAdr = (int*)sett->vTable;
@@ -80,7 +206,7 @@ namespace fastFuncts
 	}
 	NOINLINE EOP_EXPORT void ViewTacticalMap(int x, int y)
 	{
-		globals::dataS.Modules.tacticalMapVeiwer.View(x,y);
+		globals::dataS.Modules.tacticalMapVeiwer.View(x, y);
 	}
 	NOINLINE EOP_EXPORT bool IsStratMap()
 	{
@@ -91,7 +217,7 @@ namespace fastFuncts
 			return false;
 		return true;
 	}
-	
+
 	NOINLINE EOP_EXPORT void setCharacterType(general* character, int typeID, int subFaction, int factionDipNum)
 	{
 		DWORD adrFunc = 0x0;
@@ -124,6 +250,11 @@ namespace fastFuncts
 
 
 		return redID;
+	}
+	NOINLINE EOP_EXPORT oneTile* getTileStruct(int x, int y)
+	{
+		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
+		return &(gameDataAll->stratMap->tilesArr[gameDataAll->stratMap->mapWidth * y + x]);
 	}
 	NOINLINE EOP_EXPORT regionStruct* getRegionByID(UINT32 regionID)
 	{
@@ -460,8 +591,32 @@ namespace fastFuncts
 		return;
 	}
 
+	factionStratMapDescrS* GetFactSmDescrById(int id)
+	{
+		if (dataOffsets::offsets.descr_sm_factionslist == nullptr)
+		{
+			return nullptr;
+		}
+		int facsNum = dataOffsets::offsets.descr_sm_factionslist->size;
+
+		for (int i = 0; i < facsNum; ++i)
+		{
+			if (dataOffsets::offsets.descr_sm_factionslist->facDescrs[i].id==id)
+			{
+				return &dataOffsets::offsets.descr_sm_factionslist->facDescrs[i];
+			}
+		}
+		return nullptr;
+	}
+
 	NOINLINE EOP_EXPORT void teleportCharacter(general* gen, int x, int y)
 	{
+		if (gen->armyLeaded!=nullptr)
+		{
+			fastFuncts::StopSiege(gen->armyLeaded);
+			fastFuncts::StopBlockPort(gen->armyLeaded);
+		}
+
 		DWORD adrFunc = codes::offsets.teleportCharacterFunc;
 		_asm
 		{
@@ -748,6 +903,19 @@ namespace fastFuncts
 		}
 
 	}
+	void NuullifyMovepoints(stackStruct* army)
+	{
+		if (army == nullptr)
+		{
+			return;
+		}
+
+		for (int i = 0; i < army->numOfUnits; ++i)
+		{
+			setUnitMovepoints(army->units[i], 0);
+		}
+	}
+
 	NOINLINE EOP_EXPORT void setSoldiersCount(unit* un, int count)
 	{
 		if (count == 0)
@@ -1040,7 +1208,7 @@ namespace fastFuncts
 		}
 
 		adrFunc = codes::offsets.doSomeWithCharacterFunc;
-		DWORD some = fac->someForSpawnCharacter;
+		void* some = fac->tilesFac;
 		_asm
 		{
 			push 0
@@ -1157,6 +1325,48 @@ namespace fastFuncts
 		return res;
 	}
 
+	NOINLINE EOP_EXPORT bool StopSiege(stackStruct* army)
+	{
+		bool retVal = (army->siege == nullptr);
+
+		typedef void(__thiscall* StopSiegeF)(stackStruct* army, int some);
+
+		StopSiegeF stopSiegeF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			stopSiegeF = (StopSiegeF)0x00711830;
+		}
+		else
+		{
+			stopSiegeF = (StopSiegeF)0x007110f0;
+		}
+
+		stopSiegeF(army, 1);
+
+		return retVal;
+	}
+
+	NOINLINE EOP_EXPORT bool StopBlockPort(stackStruct* army)
+	{
+		bool retVal = (army->blockedPort == nullptr);
+
+		typedef void(__thiscall* StopBlockPortF)(stackStruct* army);
+
+		StopBlockPortF stopBlockPortF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			stopBlockPortF = (StopBlockPortF)0x00711a50;
+		}
+		else
+		{
+			stopBlockPortF = (StopBlockPortF)0x00711310;
+		}
+
+		stopBlockPortF(army);
+
+		return retVal;
+	}
+
 	NOINLINE EOP_EXPORT int addUnitToArmy(stackStruct* army, unit* un)
 	{
 		if (army->numOfUnits == 20)return 0;
@@ -1183,6 +1393,87 @@ namespace fastFuncts
 		}
 
 		return;
+	}
+
+	NOINLINE EOP_EXPORT void AddToSettlement(stackStruct* army, settlementStruct* set)
+	{
+		if (army->settlement != nullptr)
+		{
+			UngarisonSetOrFort(army->settlement);
+		}
+
+		if (set->army != nullptr)
+		{
+			mergeArmies(army, set->army);
+			return;
+		}
+
+		typedef void(__thiscall* AddToSettlementF)(settlementStruct* set, general* gen);
+
+		AddToSettlementF addToSettlementF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			addToSettlementF = (AddToSettlementF)0x005e1dc0;
+		}
+		else
+		{
+			addToSettlementF = (AddToSettlementF)0x005e18f0;
+		}
+		if (army->gen==nullptr)
+		{
+			MessageBoxA(NULL, "AddToSettlement error", "ERROR", NULL);
+			return;
+		}
+		addToSettlementF(set, army->gen);
+	}
+
+	NOINLINE EOP_EXPORT void AddToFort(stackStruct* army, fortStruct* fort)
+	{
+		if (army->settlement != nullptr)
+		{
+			UngarisonSetOrFort(army->settlement);
+		}
+
+		if (fort->army != nullptr)
+		{
+			mergeArmies(army, fort->army);
+			return;
+		}
+
+		typedef void(__thiscall* AddToFortF)(fortStruct* fort, general* gen);
+
+		AddToFortF addToFortF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			addToFortF = (AddToFortF)0x004bcc20;
+		}
+		else
+		{
+			addToFortF = (AddToFortF)0x004bc690;
+		}
+		if (army->gen == nullptr)
+		{
+			MessageBoxA(NULL, "AddToFort error", "ERROR", NULL);
+			return;
+		}
+		addToFortF(fort, army->gen);
+	}
+
+	NOINLINE EOP_EXPORT void UngarisonSetOrFort(void* setOrFort)
+	{
+		typedef void(__thiscall* UngarisonSetOrFortF)(void* setOrFort);
+
+		UngarisonSetOrFortF ungarisonSetOrFortF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			ungarisonSetOrFortF = (UngarisonSetOrFortF)0x004bff50;
+		}
+		else
+		{
+			ungarisonSetOrFortF = (UngarisonSetOrFortF)0x004bf9c0;
+		}
+
+		ungarisonSetOrFortF(setOrFort);
 	}
 
 	NOINLINE EOP_EXPORT ModelDbEntry* findBattleModel(const char* modelName)
@@ -1239,7 +1530,7 @@ namespace fastFuncts
 			push edi
 			push ebp
 			mov ebp, facOffset
-			lea ecx, [ebp+0x21608]
+			lea ecx, [ebp + 0x21608]
 			pop ebp
 			mov eax, funcC
 			call eax
@@ -1319,5 +1610,27 @@ namespace fastFuncts
 
 		return retMem;
 	}
-
+	NOINLINE EOP_EXPORT void mergeArmies(stackStruct* army, stackStruct* targetArmy)
+	{
+		if (army->numOfUnits + targetArmy->numOfUnits > 20)
+		{
+			return;
+		}
+		DWORD codeOffset = 0;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			codeOffset = 0x007155F0;
+		}
+		else
+		{
+			codeOffset = 0x00714EF0;
+		}
+		_asm
+		{
+			push army
+			mov ecx, targetArmy
+			mov eax, codeOffset
+			call eax
+		}
+	}
 }

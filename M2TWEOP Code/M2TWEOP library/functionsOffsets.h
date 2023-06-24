@@ -13,6 +13,9 @@ public:
 
 
 
+		DWORD createIdleActionFunc = NULL;
+
+
 		DWORD createSiegeSettlementGarrisonedFunc = NULL;
 		DWORD getReadySiegeCharacterGarrisonedFunc = NULL;
 		DWORD finalyzeActionStratmapFunc = NULL;
@@ -70,6 +73,8 @@ public:
 		DWORD autoWinFunc = NULL;
 		DWORD historicEventFunc = NULL;
 		DWORD getStringFromTable = NULL;
+		DWORD scriptCommandOne = NULL;
+		DWORD scriptCommandTwo = NULL;
 
 
 		DWORD autoResolveFunc = NULL;

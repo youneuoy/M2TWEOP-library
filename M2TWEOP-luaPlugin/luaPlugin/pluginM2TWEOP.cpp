@@ -29,6 +29,31 @@ int initPlugin(std::string* modPath)
 	fName = "setModel";
 	plugData::data.funcs.setModel.Load(&plPath, &fName);
 
+	fName = "MakeTextFont";
+	plugData::data.funcs.MakeTextFont.Load(&plPath, &fName);
+	fName = "DeleteTextFont";
+	plugData::data.funcs.DeleteTextFont.Load(&plPath, &fName);
+	fName = "MakeText";
+	plugData::data.funcs.MakeText.Load(&plPath, &fName);
+	fName = "Delete3dText";
+	plugData::data.funcs.Delete3dText.Load(&plPath, &fName);
+	fName = "ScaleText";
+	plugData::data.funcs.ScaleText.Load(&plPath, &fName);
+	fName = "ChangeTextColor";
+	plugData::data.funcs.ChangeTextColor.Load(&plPath, &fName);
+	fName = "SetTextDrawingCoords";
+	plugData::data.funcs.SetTextDrawingCoords.Load(&plPath, &fName);
+	fName = "StartDrawingText";
+	plugData::data.funcs.StartDrawingText.Load(&plPath, &fName);
+	fName = "StopDrawingText";
+	plugData::data.funcs.StopDrawingText.Load(&plPath, &fName);
+	fName = "DrawingTextOnce";
+	plugData::data.funcs.DrawingTextOnce.Load(&plPath, &fName);
+	fName = "SetDimensionsTextXYZ";
+	plugData::data.funcs.SetDimensionsTextXYZ.Load(&plPath, &fName);
+	fName = "SetRotationTextXYZ";
+	plugData::data.funcs.SetRotationTextXYZ.Load(&plPath, &fName);
+
 	fName = "addModelToGame";
 	plugData::data.funcs.addModelToGame.Load(&plPath, &fName);
 	fName = "addCasModelToDrawList";
@@ -82,6 +107,8 @@ int initPlugin(std::string* modPath)
 	fName = "callGameConsoleCommand";
 	plugData::data.funcs.callGameConsoleCommand.Load(&plPath, &fName);
 
+	fName = "scriptCommand";
+	plugData::data.funcs.scriptCommand.Load(&plPath, &fName);
 
 	fName = "getScriptCounter";
 	plugData::data.funcs.getScriptCounter.Load(&plPath, &fName);
@@ -464,6 +491,7 @@ void initLua()
 	plugData::data.luaAll.initP2();
 	plugData::data.luaAll.initEopEdu();
 	plugData::data.luaAll.initEopFbx();
+	plugData::data.luaAll.initEop3dObjects();
 	plugData::data.luaAll.initEopSounds();
 	plugData::data.luaAll.initTech();
 	sol_ImGui::Init(*luaState);
