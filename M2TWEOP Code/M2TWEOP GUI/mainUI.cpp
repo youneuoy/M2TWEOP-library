@@ -11,6 +11,9 @@
 
 #include <shellapi.h>
 
+#include "discord.h"
+discord::Core* core{};
+
 namespace mainUI
 {
 	struct
@@ -38,6 +41,8 @@ namespace mainUI
 
 	int draw(bool* isOpen)
 	{
+		::core->RunCallbacks();
+
 		if (childs.isAboutOpen == true)
 		{
 			aboutUI::drawAboutUi(&childs.isAboutOpen);

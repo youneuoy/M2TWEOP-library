@@ -6,6 +6,9 @@
 #include <iomanip>
 #include <regex>
 
+#include "discord.h"
+discord::Core* core{};
+
 namespace managerG
 {
 	void loadJsonConfig();
@@ -152,7 +155,7 @@ namespace managerG
 					dataG::data.gameData.buttonColor.b = stoi(colorValues[2]);
 					dataG::data.gameData.buttonColor.a = stoi(colorValues[3]);
 				}
-			
+
 			}
 			if (json.contains("runButtonHoverColor"))
 			{
@@ -223,6 +226,30 @@ namespace managerG
 		writeJsonToFile(fPath, json);
 		json.clear();
 	}
+
+auto getModAppID()
+{
+	if (dataG::data.gameData.modFolder.find("Divide") != string::npos) {
+	return 1122246166642425857;
+	}
+	if (dataG::data.gameData.modFolder.find("Tsar") != string::npos) {
+		return 1122265309357817967;
+	}
+	return 1122246166642425857;
+}
+
+void initDiscordRichPresence()
+{
+	auto discordAppId = getModAppID();
+	auto response = discord::Core::Create(discordAppId, DiscordCreateFlags_Default, &core);
+
+	discord::Activity activity{};
+	activity.SetState("On the Campaign Map");
+	activity.SetDetails("Playing Rohan: Turn 5");
+	core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {
+	});
+}
+
 
 	bool isRedistsInstallNeeded()
 	{

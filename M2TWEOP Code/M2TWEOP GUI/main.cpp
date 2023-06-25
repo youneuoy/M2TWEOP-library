@@ -13,6 +13,7 @@
 #pragma comment(lib,"openal32.lib")
 #pragma comment(lib,"ogg.lib")
 #pragma comment(lib,"flac.lib")
+#pragma comment(lib,"discord_game_sdk.dll.lib")
 
 #include "headersSTD.h"
 
@@ -47,7 +48,7 @@ void endRender()
     static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     // Rendering
     ImGui::Render();
-    ImGuiIO& io = ImGui::GetIO(); 
+    ImGuiIO& io = ImGui::GetIO();
     glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
     glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -121,7 +122,7 @@ void initRender()
 }
 typedef int __stdcall appTickFunc(bool*isOpen);
 void runApp(appTickFunc drawTick)
-{    
+{
     bool done = false;
     bool isGUIOpen = true;
     // Main loop
@@ -155,13 +156,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     initRender();
 
-    /*dataG::data.screen.programIcon[0].pixels= stbi_load("eopData/EOPIcon.png", 
-        &dataG::data.screen.programIcon[0].width,
-        &dataG::data.screen.programIcon[0].height, 0, 4);
-        */
-
+    /*dataG::data.screen.programIcon[0].pixels= stbi_load("eopData/EOPIcon.png",
+    &dataG::data.screen.programIcon[0].width,
+    &dataG::data.screen.programIcon[0].height, 0, 4);
+    */
 
     managerG::init();
+    managerG::initDiscordRichPresence();
     bool isOpen = true;
     int isExit = 0;
 

@@ -6,6 +6,7 @@ namespace managerG
 	void init();
 
 	void saveJsonSettings();
+	void initDiscordRichPresence();
 
 	bool isRedistsInstallNeeded();
 };
