@@ -84,6 +84,9 @@
     <ClCompile Include="toolRoutine.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="discordManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
     <ClCompile Include="managerG.cpp">
       <Filter>Исходные файлы\manager</Filter>
     </ClCompile>
@@ -216,6 +219,9 @@
       <Filter>Исходные файлы\ui</Filter>
     </ClInclude>
     <ClInclude Include="toolRoutine.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="discordManager.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="managerGHelpers.h">

@@ -128,18 +128,12 @@ struct
 	ImVec2 beginCoords{ 0.f,0.f };
 }drawParams;
 
-// struct {
-// 	std::unique_ptr<discord::Core> core;
-// }DiscordState;
-
 struct
 {
 	std::vector<IDirect3DTexture9*>texturesForDeleting;
 }tempData;
 NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 {
-
-	// core.RunCallbacks()
 	return;
 }
 

@@ -7,5 +7,6 @@
     "useVanillaCfg": true,
     "modTitle": "",
     "runButtonColor": "",
-    "runButtonHoverColor": ""
+    "runButtonHoverColor": "",
+    "discordRichPresence": true
 }

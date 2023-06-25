@@ -208,6 +208,7 @@
     <ClCompile Include="modSettingsUI.cpp" />
     <ClCompile Include="redistUI.cpp" />
     <ClCompile Include="toolRoutine.cpp" />
+    <ClCompile Include="discordManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\3rd\imguiDocking\eopImgui.h" />
@@ -263,6 +264,7 @@
     <ClInclude Include="redistUI.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="toolRoutine.h" />
+    <ClInclude Include="discordManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="M2TWEOP GUI.rc" />

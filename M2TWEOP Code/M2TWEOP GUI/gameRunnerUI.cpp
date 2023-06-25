@@ -82,7 +82,6 @@ namespace gameRunnerUI
 		gameProcess.detach();
 		bool startResult =helpers::doPipe(eopArgs, 200);
 
-		
 		if (startResult == false)
 		{
 			helpers::closeGame(dataG::data.gameData.exeName);
@@ -124,7 +123,6 @@ namespace gameRunnerUI
 				( ImGui::GetTime()> startProcess.sendingEndTime
 					|| (startProcess.isRunEnded == true && startProcess.isGetResponce == false)
 				)
-			
 			)
 		{
 			const std::string badMSG = R"(
@@ -166,7 +164,15 @@ namespace gameRunnerUI
 			{
 				helpers::closeGame(dataG::data.gameData.exeName);
 			}
-			exit(0);
+			// exit(0);
 		}
 	}
+
+	// void drawDiscordUI(bool* isOpen){
+	// 	ImGui::SetNextWindowPos(helpers::getScreen().screenUpperPos, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
+	// 	ImGui::Begin("Discord Rich Presence", isOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+	// 	ImGui::ProgressBar(ImGui::GetTime() * -0.2f, ImVec2(-1.0f, 0.0f), "");
+	// 	TextAtCenter("Discord Rich Presence");
+	// 	ImGui::End();
+	// }
 }

@@ -27,7 +27,7 @@
 
 #include <stb_image.h>
 
-
+#include "discordManager.h"
 
 struct {
     SDL_Window* window;
@@ -162,7 +162,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     */
 
     managerG::init();
-    managerG::initDiscordRichPresence();
+    if (dataG::data.gameData.discordRichPresence == true){
+        discordManager::initDiscordRichPresence();
+    }
     bool isOpen = true;
     int isExit = 0;
 

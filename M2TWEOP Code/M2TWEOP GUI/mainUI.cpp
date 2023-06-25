@@ -8,11 +8,10 @@
 #include "modSettingsUI.h"
 #include "gameStarter.h"
 #include "gameRunnerUI.h"
+#include "discordManager.h"
 
 #include <shellapi.h>
 
-#include "discord.h"
-discord::Core* core{};
 
 namespace mainUI
 {
@@ -41,7 +40,9 @@ namespace mainUI
 
 	int draw(bool* isOpen)
 	{
-		::core->RunCallbacks();
+		if (dataG::data.gameData.discordRichPresence == true){
+			discordManager::updatePresence();
+		}
 
 		if (childs.isAboutOpen == true)
 		{
