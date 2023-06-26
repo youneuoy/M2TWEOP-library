@@ -1,10 +1,62 @@
 #include "helpers.h"
+#include <regex>
 
 #include "discord.h"
+#include "managerG.h"
+#include <chrono>
+#include <thread>
+
 discord::Core *core{};
+
+
+struct
+{
+    discord::Activity activity{};
+    string status = "In Battle";
+    string factionName = "Dorwinion";
+    string turnNum = "5";
+    bool needsUpdate = false;
+    time_t last;
+
+} discordData;
 
 namespace discordManager
 {
+
+    template <typename... Args>
+    std::string string_format(const std::string &format, Args... args)
+    {
+        int size_s = std::snprintf(nullptr, 0, format.c_str(), args...) + 1; // Extra space for '\0'
+        if (size_s <= 0)
+        {
+            throw std::runtime_error("Error during formatting.");
+        }
+        auto size = static_cast<size_t>(size_s);
+        std::unique_ptr<char[]> buf(new char[size]);
+        std::snprintf(buf.get(), size, format.c_str(), args...);
+        return std::string(buf.get(), buf.get() + size - 1); // We don't want the '\0' inside
+    }
+
+    jsn::json loadJsonFromFile(const std::string &fpath)
+    {
+        try
+        {
+            jsn::json json;
+
+            std::ifstream f1(fpath);
+            if (f1.is_open())
+            {
+                f1 >> json;
+            }
+            f1.close();
+            return std::move(json);
+        }
+        catch (jsn::json::exception &e)
+        {
+            MessageBoxA(NULL, e.what(), "Could not load JSON from file!", MB_APPLMODAL | MB_SETFOREGROUND);
+        }
+    }
+
     auto getModAppID()
     {
         string currentPath;
@@ -21,47 +73,101 @@ namespace discordManager
         }
     }
 
-    auto getModActivityDetails()
+    auto setModActivityDetails()
     {
         string currentPath;
         helpers::getCurrentPath(currentPath);
 
-        discord::Activity activity{};
-        activity.SetDetails("At the main menu");
+        discordData.activity.SetDetails("At the main menu");
 
         // Divide and Conquer
         if (currentPath.find("Divide") != string::npos)
         {
-            activity.GetAssets().SetLargeText("Divide and Conquer");
+            discordData.activity.GetAssets().SetLargeText("Divide and Conquer");
         }
         // Tsardoms 2.2
         if (currentPath.find("Tsar") != string::npos)
         {
-            activity.GetAssets().SetLargeText("Tsardoms: Total War");
+            discordData.activity.GetAssets().SetLargeText("Tsardoms: Total War");
         }
 
-        activity.GetAssets().SetSmallText("Engine Overhaul Project");
-        activity.GetAssets().SetLargeImage("large");
-        activity.GetAssets().SetSmallImage("small");
+        discordData.activity.GetAssets().SetSmallText("Engine Overhaul Project");
+        discordData.activity.GetAssets().SetLargeImage("large");
+        discordData.activity.GetAssets().SetSmallImage("small");
 
-        activity.SetType(discord::ActivityType::Playing);
-
-        return activity;
+        discordData.activity.SetType(discord::ActivityType::Playing);
     }
 
+    void readPresenceDetailsFromFile()
+    {
+        try
+        {
+            // Read the campaign data from the file (written by M2TWEOP Library)
+            std::string fPath = ".\\youneuoy_Data\\m2tweop_temp\\discordRichPresenceData.json";
+            jsn::json json = loadJsonFromFile(fPath);
+            std::string jsonStringValue;
+            if (json.contains("factionName"))
+            {
+                getJson(discordData.factionName, "factionName");
+            }
+            if (json.contains("turnNum"))
+            {
+                getJson(discordData.turnNum, "turnNum");
+            }
+            if (json.contains("status"))
+            {
+                getJson(discordData.status, "status");
+            }
+        }
+        catch (jsn::json::exception &e)
+        {
+            MessageBoxA(NULL, e.what(), "Could not read presence details from file!", MB_APPLMODAL | MB_SETFOREGROUND);
+        }
+
+        try
+        {
+            // Create a formatted string with the campaign details
+            std::string details = string_format(
+                "Playing as: %s",
+                discordData.factionName.c_str());
+
+            // Update the state and details of the Rich Presence with details from the file
+            discordData.activity.SetState(discordData.status.c_str());
+            discordData.activity.SetDetails(details.c_str());
+        }
+        catch (const std::exception &e)
+        {
+            MessageBoxA(NULL, e.what(), "Could not update activity details from file!", MB_APPLMODAL | MB_SETFOREGROUND);
+        }
+    }
+    void updateActivity()
+    {
+        core->ActivityManager().UpdateActivity(discordData.activity, [](discord::Result result) {});
+    }
     void initDiscordRichPresence()
     {
         auto discordAppId = getModAppID();
         auto response = discord::Core::Create(discordAppId, DiscordCreateFlags_Default, &core);
+        setModActivityDetails();
+        // readPresenceDetailsFromFile();
 
-        auto activity = getModActivityDetails();
-
-        core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {});
+        updateActivity();
     }
 
     void updatePresence()
     {
-        // Every 30 seconds, read a file containing the state the game and update the presence
+        // If it's been 30 seconds since the last update, do another update
+        if((difftime(discordData.last, std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())) == 3)) {
+            discordData.needsUpdate == true;
+        }
+
+        if (discordData.needsUpdate == true)
+        {
+            readPresenceDetailsFromFile();
+            updateActivity();
+            discordData.needsUpdate = false;
+            discordData.last == std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        }
         ::core->RunCallbacks();
     }
 }
