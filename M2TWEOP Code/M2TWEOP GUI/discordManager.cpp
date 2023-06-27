@@ -5,7 +5,7 @@
 #include "managerG.h"
 #include <thread>
 
-discord::Core *core{};
+discord::Core *discordCore{};
 
 struct
 {
@@ -139,12 +139,12 @@ namespace discordManager
     }
     void updateActivity()
     {
-        core->ActivityManager().UpdateActivity(discordData.activity, [](discord::Result result) {});
+        discordCore->ActivityManager().UpdateActivity(discordData.activity, [](discord::Result result) {});
     }
     void initDiscordRichPresence()
     {
         auto discordAppId = getModAppID();
-        auto response = discord::Core::Create(discordAppId, DiscordCreateFlags_Default, &core);
+        auto response = discord::Core::Create(discordAppId, DiscordCreateFlags_Default, &discordCore);
         setModActivityDetails();
         // readPresenceDetailsFromFile();
 
@@ -165,6 +165,6 @@ void updatePresence()
        readPresenceDetailsFromFile();
        updateActivity();
        discordData.last = currentTime;
-       ::core->RunCallbacks();
+       discordCore->RunCallbacks();
     }
 }

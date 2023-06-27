@@ -278,9 +278,6 @@
     <ClInclude Include="..\3rd\nlohmann\json.hpp">
       <Filter>3rd\json</Filter>
     </ClInclude>
-    <ClInclude Include="..\3rd\filewatch\filewatch.hpp">
-      <Filter>3rd\filewatch</Filter>
-    </ClInclude>
     <ClInclude Include="..\M2TWEOP Common\m2tweopConstData.h">
       <Filter>Файлы ресурсов</Filter>
     </ClInclude>
