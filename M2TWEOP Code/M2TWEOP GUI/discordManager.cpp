@@ -157,7 +157,7 @@ namespace discordManager
     void updatePresence()
     {
         // If it's been 30 seconds since the last update, do another update
-        if((difftime(discordData.last, std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())) == 3)) {
+        if((difftime(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()), discordData.last) == 3)) {
             discordData.needsUpdate == true;
         }
 
