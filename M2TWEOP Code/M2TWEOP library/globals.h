@@ -20,7 +20,7 @@ public:
 		struct
 		{
 			bool isBlockLaunchWithoutEop = false;
-			bool isDiscordRichPresenceEnabled = false;
+			bool isDiscordRichPresenceEnabled = true;
 		}gameCfg;
 		struct modulesS
 		{

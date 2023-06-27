@@ -4,6 +4,7 @@
 
 #include "smallFuncs.h"
 #include "techFuncs.h"
+#include "discordManager.h"
 
 #include "eduThings.h"
 #include "onlineThings.h"

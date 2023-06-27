@@ -63,16 +63,21 @@ namespace discordManager
         string currentPath;
         helpers::getCurrentPath(currentPath);
 
+        // Divide and Conquer
         if (currentPath.find("Divide") != string::npos)
         {
             return 1122246166642425857;
         }
-        // Tsardoms 2.2
+        // Tsardoms
         if (currentPath.find("Tsar") != string::npos)
         {
-            return 1122246166642425857;
+            return 1122265309357817967;
         }
-        return 1122246166642425857;
+        // AGO
+        if (currentPath.find("AGO") != string::npos)
+        {
+            return 1123366117088432259;
+        }
     }
 
     auto setModActivityDetails()
@@ -86,15 +91,23 @@ namespace discordManager
         if (currentPath.find("Divide") != string::npos)
         {
             discordData.activity.GetAssets().SetLargeText("Divide and Conquer");
+            discordData.activity.GetAssets().SetLargeImage("large");
         }
-        // Tsardoms 2.2
+        // Tsardoms
         if (currentPath.find("Tsar") != string::npos)
         {
             discordData.activity.GetAssets().SetLargeText("Tsardoms: Total War");
+            discordData.activity.GetAssets().SetLargeImage("large");
+        }
+
+        // AGO
+        if (currentPath.find("AGO") != string::npos)
+        {
+            discordData.activity.GetAssets().SetLargeText("Divide and Conquer: AGO");
+            discordData.activity.GetAssets().SetLargeImage("large");
         }
 
         discordData.activity.GetAssets().SetSmallText("Engine Overhaul Project");
-        discordData.activity.GetAssets().SetLargeImage("large");
         discordData.activity.GetAssets().SetSmallImage("small");
 
         discordData.activity.SetType(discord::ActivityType::Playing);

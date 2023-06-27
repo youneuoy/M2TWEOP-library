@@ -279,6 +279,9 @@
     <ClInclude Include="discordManager.h">
       <Filter>features\eduThings</Filter>
     </ClInclude>
+    <ClInclude Include="jsonManager.h">
+      <Filter>features\eduThings</Filter>
+    </ClInclude>
     <ClInclude Include="fbxModels.h">
       <Filter>features\fbxModels</Filter>
     </ClInclude>
