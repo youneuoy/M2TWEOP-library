@@ -3,11 +3,9 @@
 
 #include "discord.h"
 #include "managerG.h"
-#include <chrono>
 #include <thread>
 
 discord::Core *core{};
-
 
 struct
 {
@@ -16,8 +14,7 @@ struct
     string factionName = "Dorwinion";
     string turnNum = "5";
     bool needsUpdate = false;
-    time_t last;
-
+    time_t last = system_clock::to_time_t(system_clock::now());
 } discordData;
 
 namespace discordManager
@@ -154,20 +151,20 @@ namespace discordManager
         updateActivity();
     }
 
-    void updatePresence()
+void updatePresence()
     {
-        // If it's been 30 seconds since the last update, do another update
-        if((difftime(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()), discordData.last) == 3)) {
-            discordData.needsUpdate == true;
+        using namespace  std::chrono;
+        using namespace std::literals::chrono_literals;
+        time_t currentTime =  system_clock::to_time_t(system_clock::now();
+
+        if(discordData.last+30s> currentTime )) {
+            return;
         }
 
-        if (discordData.needsUpdate == true)
-        {
-            readPresenceDetailsFromFile();
-            updateActivity();
-            discordData.needsUpdate = false;
-            discordData.last == std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-        }
-        ::core->RunCallbacks();
+        // If it's been 30 seconds since the last update, do another update
+       readPresenceDetailsFromFile();
+       updateActivity();
+       discordData.last = currentTime;
+       ::core->RunCallbacks();
     }
 }
