@@ -2,7 +2,7 @@
     "hideLauncher": false,
     "modCfgFile": "",
     "musicVolume": 15,
-    "playBackgroundMusic": true,
+    "playBackgroundMusic": false,
     "useM2TWEOP": true,
     "useVanillaCfg": true,
     "modTitle": "",
