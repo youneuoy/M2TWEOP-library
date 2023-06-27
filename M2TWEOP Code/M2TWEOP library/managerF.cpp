@@ -569,7 +569,7 @@ void loadJsonSettings()
 		{
 			getJson(globals::dataS.gameCfg.isBlockLaunchWithoutEop, "isBlockLaunchWithoutEop");
 		}
-		setDataFromJSON(".\\youneuoy_Data\\m2tweop_temp\\discordRichPresenceData.json", "discordRichPresence", globals::dataS.gameCfg.isDiscordRichPresenceEnabled)
+		setDataFromJSON("\\youneuoy_Data\\m2tweop_temp\\discordRichPresenceData.json", "discordRichPresence", globals::dataS.gameCfg.isDiscordRichPresenceEnabled)
 	}
 	catch (jsn::json::type_error& e)
 	{

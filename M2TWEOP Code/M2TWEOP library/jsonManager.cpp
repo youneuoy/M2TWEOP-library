@@ -44,7 +44,9 @@ namespace jsonManager
 	{
 		jsn::json json;
 
-		std::ifstream f1(fpath);
+        std::string modPath = globals::dataS.modPatch;
+
+		std::ifstream f1(modPath+=fpath);
 
 		f1 >> json;
 
