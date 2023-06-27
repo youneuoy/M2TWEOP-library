@@ -169,7 +169,7 @@ namespace managerG
 			if (json.contains("discordRichPresence"))
 			{
 				getJson(jsonBoolValue, "discordRichPresence");
-				dataG::data.gameData.discordRichPresence = jsonBoolValue;
+				dataG::data.gameData.discordRichPresenceEnabled = jsonBoolValue;
 			}
 		}
 		catch (jsn::json::type_error& e)
@@ -222,7 +222,7 @@ namespace managerG
 		setJson("hideLauncher", dataG::data.modData.hideLauncherAtStart);
 		setJson("playBackgroundMusic", dataG::data.audio.bkgMusic.isMusicNeeded);
 		setJson("musicVolume", dataG::data.audio.bkgMusic.musicVolume);
-		setJson("discordRichPresence", dataG::data.gameData.discordRichPresence);
+		setJson("discordRichPresence", dataG::data.gameData.discordRichPresenceEnabled);
 		setJson("modTitle", dataG::data.gameData.modTitle);
 		setJson("runButtonColor", dataG::data.gameData.buttonColorString);
 		setJson("runButtonHoverColor", dataG::data.gameData.buttonHoverColorString);

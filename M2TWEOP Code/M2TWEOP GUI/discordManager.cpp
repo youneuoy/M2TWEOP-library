@@ -5,6 +5,9 @@
 #include "managerG.h"
 #include <thread>
 
+using namespace std::chrono;
+using namespace std::literals::chrono_literals;
+
 discord::Core *discordCore{};
 
 struct
@@ -14,7 +17,8 @@ struct
     string factionName = "Dorwinion";
     string turnNum = "5";
     bool needsUpdate = false;
-    time_t last = system_clock::to_time_t(system_clock::now());
+    time_t last;
+    time_t now;
 } discordData;
 
 namespace discordManager
@@ -68,6 +72,7 @@ namespace discordManager
         {
             return 1122246166642425857;
         }
+        return 1122246166642425857;
     }
 
     auto setModActivityDetails()
@@ -137,34 +142,28 @@ namespace discordManager
             MessageBoxA(NULL, e.what(), "Could not update activity details from file!", MB_APPLMODAL | MB_SETFOREGROUND);
         }
     }
-    void updateActivity()
-    {
-        discordCore->ActivityManager().UpdateActivity(discordData.activity, [](discord::Result result) {});
-    }
+
     void initDiscordRichPresence()
     {
+        discordData.last = system_clock::to_time_t(system_clock::now());
         auto discordAppId = getModAppID();
         auto response = discord::Core::Create(discordAppId, DiscordCreateFlags_Default, &discordCore);
         setModActivityDetails();
         // readPresenceDetailsFromFile();
-
-        updateActivity();
+        discordCore->ActivityManager().UpdateActivity(discordData.activity, [](discord::Result result) {});
+        ::discordCore->RunCallbacks();
     }
 
-void updatePresence()
+    void updatePresence()
     {
-        using namespace  std::chrono;
-        using namespace std::literals::chrono_literals;
-        time_t currentTime =  system_clock::to_time_t(system_clock::now());
+        if (difftime(time(&discordData.now), discordData.last) > 5)
+        {
+            // If it's been 30 seconds since the last update, do another update
+            readPresenceDetailsFromFile();
+            discordCore->ActivityManager().UpdateActivity(discordData.activity, [](discord::Result result) {});
 
-        if(discordData.last+30s> currentTime ) {
-            return;
+            discordData.last = time(&discordData.now);
         }
-
-        // If it's been 30 seconds since the last update, do another update
-       readPresenceDetailsFromFile();
-       updateActivity();
-       discordData.last = currentTime;
-       discordCore->RunCallbacks();
+        ::discordCore->RunCallbacks();
     }
 }

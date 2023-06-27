@@ -131,7 +131,7 @@ namespace modSettingsUI
 				dataG::data.audio.bkgMusic.music->play();
 			}
 		}
-		ImGui::Checkbox("Discord Rich Presence", &dataG::data.gameData.discordRichPresence);
+		ImGui::Checkbox("Discord Rich Presence", &dataG::data.gameData.discordRichPresenceEnabled);
 
 		if (ImGui::SliderInt("Music volume", &dataG::data.audio.bkgMusic.musicVolume, 0, 100))
 		{

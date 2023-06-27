@@ -152,17 +152,11 @@ void runApp(appTickFunc drawTick)
 #include <filesystem>
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
 {
-
-
     initRender();
 
-    /*dataG::data.screen.programIcon[0].pixels= stbi_load("eopData/EOPIcon.png",
-    &dataG::data.screen.programIcon[0].width,
-    &dataG::data.screen.programIcon[0].height, 0, 4);
-    */
-
     managerG::init();
-    if (dataG::data.gameData.discordRichPresence == true){
+
+    if (dataG::data.gameData.discordRichPresenceEnabled == true){
         discordManager::initDiscordRichPresence();
     }
     bool isOpen = true;
