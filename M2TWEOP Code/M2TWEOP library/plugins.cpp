@@ -70,6 +70,8 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 	else if (strcmp(event, "FactionTurnStart") == 0)
 	{
 		factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
+
+		discordManager::OnFactionTurnStart(fac);
 		PlannedRetreatRoute::OnFactionTurnStart(fac);
 	}
 
@@ -87,9 +89,9 @@ void __fastcall plugins::onEvent(DWORD** vTab)
 			eduThings::setEntryUnitCardTga(1000,"#akavir_swordsmen.tga");
 			eduThings::setEntryInfoCardTga(1000,"akavir_swordsmen_info.tga");
 			eduThings::setEntrySoldierModel(1000,"Sword_and_Buckler_Men");
-			eduThings::setEntryLocalizedName(1000,u8"Тест");
-			eduThings::setEntryLocalizedDescr(1000, u8"Описание");
-			eduThings::setEntryLocalizedShortDescr(1000, u8"Короткое описание");
+			eduThings::setEntryLocalizedName(1000,u8"пїЅпїЅпїЅпїЅ");
+			eduThings::setEntryLocalizedDescr(1000, u8"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+			eduThings::setEntryLocalizedShortDescr(1000, u8"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 
 			unit* res = nullptr;
 

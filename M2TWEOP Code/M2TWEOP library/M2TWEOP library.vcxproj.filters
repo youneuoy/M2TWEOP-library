@@ -276,6 +276,9 @@
     <ClInclude Include="eduFastFuncts.h">
       <Filter>features\eduThings</Filter>
     </ClInclude>
+    <ClInclude Include="discordManager.h">
+      <Filter>features\eduThings</Filter>
+    </ClInclude>
     <ClInclude Include="fbxModels.h">
       <Filter>features\fbxModels</Filter>
     </ClInclude>
@@ -531,6 +534,12 @@
       <Filter>features\stratModels</Filter>
     </ClCompile>
     <ClCompile Include="actionsStrat.cpp">
+      <Filter>Исходные файлы\functions\stratActions</Filter>
+    </ClCompile>
+    <ClCompile Include="discordManager.cpp">
+      <Filter>Исходные файлы\functions\stratActions</Filter>
+    </ClCompile>
+    <ClCompile Include="jsonManager.cpp">
       <Filter>Исходные файлы\functions\stratActions</Filter>
     </ClCompile>
     <ClCompile Include="actionsStratHelpers.cpp">
