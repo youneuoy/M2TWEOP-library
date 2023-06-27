@@ -155,9 +155,9 @@ void updatePresence()
     {
         using namespace  std::chrono;
         using namespace std::literals::chrono_literals;
-        time_t currentTime =  system_clock::to_time_t(system_clock::now();
+        time_t currentTime =  system_clock::to_time_t(system_clock::now());
 
-        if(discordData.last+30s> currentTime )) {
+        if(discordData.last+30s> currentTime ) {
             return;
         }
 
