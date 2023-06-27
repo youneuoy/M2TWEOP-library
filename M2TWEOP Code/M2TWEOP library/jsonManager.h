@@ -1,8 +1,9 @@
 #pragma once
-#include "realGameTypes.h"
 #include "headersSTD.h"
+#include "fastFunctsHelpers.h"
 
 namespace jsonManager
 {
-	void OnFactionTurnStart(factionStruct*fac);
+    void setJSONInFile(const std::string &fpath, const std::string &jsonKey, const std::string &jsonValue);
+	void setDataFromJSON(const std::string &fpath, const std::string &jsonKey, const std::string variableToSet);
 }

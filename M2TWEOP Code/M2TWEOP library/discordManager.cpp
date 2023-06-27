@@ -1,4 +1,5 @@
 #include "discordManager.h"
+#include "jsonManager.h"
 
 namespace discordManager
 {
