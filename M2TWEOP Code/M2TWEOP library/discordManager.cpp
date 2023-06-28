@@ -33,7 +33,7 @@ namespace discordManager
 				jsonManager::setJSONInFile(
 				"\\youneuoy_Data\\m2tweop_temp\\discordRichPresenceData.json",
 				"turnNum",
-				num.c_str()
+				num.str()
 				);
 		}
 	}
