@@ -735,6 +735,8 @@ void plugins::onNewGameStart()
 void plugins::onChangeTurnNum()
 {
 	int num = fastFuncts::getPassedTurnsNum();
+	discordManager::OnChangeTurnNum(num);
+
 	for (plugin* pl : pluginsCfg.plugins)
 	{
 		(*(*pl->onChangeTurnNum))(num);

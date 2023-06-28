@@ -25,6 +25,21 @@ namespace discordManager
 		return strTo;
 	}
 
+	void OnChangeTurnNum(int num)
+	{
+		if (num == nullptr)
+		{
+			return;
+		}
+		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true)
+		{
+				jsonManager::setJSONInFile(
+				"\\youneuoy_Data\\m2tweop_temp\\discordRichPresenceData.json",
+				"turnNum",
+				turnNum.c_str());
+		}
+	}
+
 	void OnFactionTurnStart(factionStruct *fac)
 	{
 		if (fac == nullptr)

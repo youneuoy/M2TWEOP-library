@@ -5,4 +5,5 @@
 namespace discordManager
 {
 	void OnFactionTurnStart(factionStruct*fac);
+	void OnChangeTurnNum(int num);
 }
