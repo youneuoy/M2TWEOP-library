@@ -63,20 +63,20 @@ namespace discordManager
         string currentPath;
         helpers::getCurrentPath(currentPath);
 
-        // Divide and Conquer
-        if (currentPath.find("Divide") != string::npos)
-        {
-            return 1122246166642425857;
-        }
         // Tsardoms
         if (currentPath.find("Tsar") != string::npos)
         {
             return 1122265309357817967;
         }
         // AGO
-        if (currentPath.find("AGO") != string::npos)
+        else if (currentPath.find("ago") != string::npos)
         {
             return 1123366117088432259;
+        }
+        // Divide and Conquer
+        else if (currentPath.find("divide") != string::npos)
+        {
+            return 1122246166642425857;
         }
     }
 
@@ -88,23 +88,22 @@ namespace discordManager
         discordData.activity.GetTimestamps().SetStart(system_clock::to_time_t(system_clock::now()));
         discordData.activity.SetDetails("At the main menu");
 
+        // AGO
+        if (currentPath.find("ago") != string::npos)
+        {
+            discordData.activity.GetAssets().SetLargeText("Divide and Conquer: AGO");
+            discordData.activity.GetAssets().SetLargeImage("large");
+        }
         // Divide and Conquer
-        if (currentPath.find("Divide") != string::npos)
+        else if (currentPath.find("Divide") != string::npos)
         {
             discordData.activity.GetAssets().SetLargeText("Divide and Conquer");
             discordData.activity.GetAssets().SetLargeImage("large");
         }
         // Tsardoms
-        if (currentPath.find("Tsar") != string::npos)
+        else if (currentPath.find("Tsar") != string::npos)
         {
             discordData.activity.GetAssets().SetLargeText("Tsardoms: Total War");
-            discordData.activity.GetAssets().SetLargeImage("large");
-        }
-
-        // AGO
-        if (currentPath.find("AGO") != string::npos)
-        {
-            discordData.activity.GetAssets().SetLargeText("Divide and Conquer: AGO");
             discordData.activity.GetAssets().SetLargeImage("large");
         }
 
@@ -162,9 +161,8 @@ namespace discordManager
     {
         discordData.last = system_clock::to_time_t(system_clock::now());
         auto discordAppId = getModAppID();
-        auto response = discord::Core::Create(discordAppId, DiscordCreateFlags_Default, &discordCore);
+        discord::Core::Create(discordAppId, DiscordCreateFlags_Default, &discordCore);
         setModActivityDetails();
-        // readPresenceDetailsFromFile();
         discordCore->ActivityManager().UpdateActivity(discordData.activity, [](discord::Result result) {});
         ::discordCore->RunCallbacks();
     }
