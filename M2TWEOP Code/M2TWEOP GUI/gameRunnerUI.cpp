@@ -167,12 +167,4 @@ namespace gameRunnerUI
 			// exit(0);
 		}
 	}
-
-	// void drawDiscordUI(bool* isOpen){
-	// 	ImGui::SetNextWindowPos(helpers::getScreen().screenUpperPos, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
-	// 	ImGui::Begin("Discord Rich Presence", isOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
-	// 	ImGui::ProgressBar(ImGui::GetTime() * -0.2f, ImVec2(-1.0f, 0.0f), "");
-	// 	TextAtCenter("Discord Rich Presence");
-	// 	ImGui::End();
-	// }
 }

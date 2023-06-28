@@ -24,6 +24,17 @@ struct
 namespace discordManager
 {
 
+    /// Try to find in the Haystack the Needle - ignore case
+    bool findString(const std::string &strHaystack, const std::string &strNeedle)
+    {
+        auto it = std::search(
+            strHaystack.begin(), strHaystack.end(),
+            strNeedle.begin(), strNeedle.end(),
+            [](unsigned char ch1, unsigned char ch2)
+            { return std::toupper(ch1) == std::toupper(ch2); });
+        return (it != strHaystack.end());
+    }
+
     template <typename... Args>
     std::string string_format(const std::string &format, Args... args)
     {
@@ -58,10 +69,11 @@ namespace discordManager
         }
     }
 
-    int getModActivityDetails()
+    auto getModActivityDetails()
     {
         string currentPath;
         helpers::getCurrentPath(currentPath);
+        discordData.activity.GetTimestamps().SetStart(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
         discordData.activity.SetDetails("At the main menu");
         discordData.activity.GetAssets().SetSmallText("Engine Overhaul Project");
         discordData.activity.GetAssets().SetSmallImage("small");
@@ -69,25 +81,25 @@ namespace discordManager
         discordData.activity.SetType(discord::ActivityType::Playing);
 
         // Divide and Conquer
-        if (std::tolower(currentPath).find("divide_and_conquer_ago") != string::npos || std::tolower(dataG::data.gameData.modTitle).find("ago") != string::npos)
+        if (findString(currentPath, "divide_and_conquer_ago") || findString(dataG::data.gameData.modTitle, "ago") == true)
         {
             discordData.activity.GetAssets().SetLargeText("Divide and Conquer: AGO");
             discordData.activity.GetAssets().SetLargeImage("large");
-            return 1122246166642425857;
+            return 1123366117088432259;
         }
         // Tsardoms
-        if (std::tolower(currentPath).find("tsardoms") != string::npos || std::tolower(dataG::data.gameData.modTitle).find("tsardoms") != string::npos)
+        if (findString(currentPath, "tsardoms") || findString(dataG::data.gameData.modTitle, "tsardoms") == true)
         {
             discordData.activity.GetAssets().SetLargeText("Tsardoms: Total War");
             discordData.activity.GetAssets().SetLargeImage("large");
             return 1122265309357817967;
         }
         // AGO
-        if (std::tolower(currentPath).find("divide_and_conquer") != string::npos || std::tolower(dataG::data.gameData.modTitle).find("divide and conquer") != string::npos)
+        if (findString(currentPath, "divide_and_conquer") || findString(dataG::data.gameData.modTitle, "divide_and_conquer") == true)
         {
             discordData.activity.GetAssets().SetLargeText("Divide and Conquer");
             discordData.activity.GetAssets().SetLargeImage("large");
-            return 1123366117088432259;
+            return 1122246166642425857;
         }
     }
 
