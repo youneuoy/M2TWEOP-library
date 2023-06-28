@@ -58,59 +58,37 @@ namespace discordManager
         }
     }
 
-    auto getModAppID()
+    int getModActivityDetails()
     {
         string currentPath;
         helpers::getCurrentPath(currentPath);
-
-        // Divide and Conquer
-        if (currentPath.find("Divide") != string::npos)
-        {
-            return 1122246166642425857;
-        }
-        // Tsardoms
-        if (currentPath.find("Tsar") != string::npos)
-        {
-            return 1122265309357817967;
-        }
-        // AGO
-        if (currentPath.find("AGO") != string::npos)
-        {
-            return 1123366117088432259;
-        }
-    }
-
-    auto setModActivityDetails()
-    {
-        string currentPath;
-        helpers::getCurrentPath(currentPath);
-
         discordData.activity.SetDetails("At the main menu");
-
-        // Divide and Conquer
-        if (currentPath.find("Divide") != string::npos)
-        {
-            discordData.activity.GetAssets().SetLargeText("Divide and Conquer");
-            discordData.activity.GetAssets().SetLargeImage("large");
-        }
-        // Tsardoms
-        if (currentPath.find("Tsar") != string::npos)
-        {
-            discordData.activity.GetAssets().SetLargeText("Tsardoms: Total War");
-            discordData.activity.GetAssets().SetLargeImage("large");
-        }
-
-        // AGO
-        if (currentPath.find("AGO") != string::npos)
-        {
-            discordData.activity.GetAssets().SetLargeText("Divide and Conquer: AGO");
-            discordData.activity.GetAssets().SetLargeImage("large");
-        }
-
         discordData.activity.GetAssets().SetSmallText("Engine Overhaul Project");
         discordData.activity.GetAssets().SetSmallImage("small");
 
         discordData.activity.SetType(discord::ActivityType::Playing);
+
+        // Divide and Conquer
+        if (std::tolower(currentPath).find("divide_and_conquer_ago") != string::npos || std::tolower(dataG::data.gameData.modTitle).find("ago") != string::npos)
+        {
+            discordData.activity.GetAssets().SetLargeText("Divide and Conquer: AGO");
+            discordData.activity.GetAssets().SetLargeImage("large");
+            return 1122246166642425857;
+        }
+        // Tsardoms
+        if (std::tolower(currentPath).find("tsardoms") != string::npos || std::tolower(dataG::data.gameData.modTitle).find("tsardoms") != string::npos)
+        {
+            discordData.activity.GetAssets().SetLargeText("Tsardoms: Total War");
+            discordData.activity.GetAssets().SetLargeImage("large");
+            return 1122265309357817967;
+        }
+        // AGO
+        if (std::tolower(currentPath).find("divide_and_conquer") != string::npos || std::tolower(dataG::data.gameData.modTitle).find("divide and conquer") != string::npos)
+        {
+            discordData.activity.GetAssets().SetLargeText("Divide and Conquer");
+            discordData.activity.GetAssets().SetLargeImage("large");
+            return 1123366117088432259;
+        }
     }
 
     void readPresenceDetailsFromFile()
@@ -159,9 +137,8 @@ namespace discordManager
     void initDiscordRichPresence()
     {
         discordData.last = system_clock::to_time_t(system_clock::now());
-        auto discordAppId = getModAppID();
+        auto discordAppId = getModActivityDetails();
         auto response = discord::Core::Create(discordAppId, DiscordCreateFlags_Default, &discordCore);
-        setModActivityDetails();
         // readPresenceDetailsFromFile();
         discordCore->ActivityManager().UpdateActivity(discordData.activity, [](discord::Result result) {});
         ::discordCore->RunCallbacks();
