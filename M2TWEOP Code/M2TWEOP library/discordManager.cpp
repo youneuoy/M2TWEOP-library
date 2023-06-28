@@ -1,6 +1,7 @@
 #include "discordManager.h"
 #include "jsonManager.h"
 #include "techFuncs.h"
+#include "smallFuncs.h"
 
 namespace discordManager
 {
@@ -27,16 +28,13 @@ namespace discordManager
 
 	void OnChangeTurnNum(int num)
 	{
-		if (num == nullptr)
-		{
-			return;
-		}
 		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true)
 		{
 				jsonManager::setJSONInFile(
 				"\\youneuoy_Data\\m2tweop_temp\\discordRichPresenceData.json",
 				"turnNum",
-				turnNum.c_str());
+				num.c_str()
+				);
 		}
 	}
 
@@ -47,7 +45,7 @@ namespace discordManager
 			return;
 		}
 
-		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true && fac->isPlayerControlled == true && factionName.length() > 0)
+		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true && fac->isPlayerControlled == true)
 		{
 			UNICODE_STRING **factionName = fac->localizedName;
 			UNICODE_STRING *name = *factionName;
