@@ -695,6 +695,8 @@ void plugins::onClickAtTile(int x, int y)
 
 void plugins::onCampaignMapLoaded()
 {
+	discordManager::onCampaignMapLoaded();
+
 	globals::dataS.Modules.tacticalMapVeiwer.UnView();
 	for (plugin* pl : pluginsCfg.plugins)
 	{
