@@ -85,6 +85,7 @@ namespace discordManager
         string currentPath;
         helpers::getCurrentPath(currentPath);
 
+        discordData.activity.GetTimestamps().SetStart(system_clock::to_time_t(system_clock::now()));
         discordData.activity.SetDetails("At the main menu");
 
         // Divide and Conquer
@@ -143,8 +144,9 @@ namespace discordManager
         {
             // Create a formatted string with the campaign details
             std::string details = string_format(
-                "Playing as: %s",
-                discordData.factionName.c_str());
+                "Playing as '%s' on Turn %s",
+                discordData.factionName.c_str(),
+                discordData.turnNum.c_str());
 
             // Update the state and details of the Rich Presence with details from the file
             discordData.activity.SetState(discordData.status.c_str());
