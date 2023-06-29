@@ -35,7 +35,7 @@ public:
 			string gameArgs;
 
 			// Discord Rich Presence
-			bool discordRichPresenceEnabled = true;
+			bool isDiscordRichPresenceEnabled = true;
 
 			// Customization Options
 			string modTitle = "";

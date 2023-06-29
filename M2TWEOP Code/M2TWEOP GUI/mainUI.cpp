@@ -40,7 +40,7 @@ namespace mainUI
 
 	int draw(bool* isOpen)
 	{
-		if (dataG::data.gameData.discordRichPresenceEnabled == true){
+		if (dataG::data.gameData.isDiscordRichPresenceEnabled == true){
 			discordManager::updatePresence();
 		}
 

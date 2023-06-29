@@ -156,7 +156,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
     managerG::init();
 
-    if (dataG::data.gameData.discordRichPresenceEnabled == true){
+    if (dataG::data.gameData.isDiscordRichPresenceEnabled == true){
         discordManager::initDiscordRichPresence();
     }
     bool isOpen = true;

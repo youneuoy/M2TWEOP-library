@@ -571,7 +571,10 @@ void loadJsonSettings()
 		{
 			getJson(globals::dataS.gameCfg.isBlockLaunchWithoutEop, "isBlockLaunchWithoutEop");
 		}
-		// jsonManager::setDataFromJSON("\\youneuoy_Data\\m2tweop_temp\\discordRichPresenceData.json", "discordRichPresence", globals::dataS.gameCfg.isDiscordRichPresenceEnabled);
+		if (json.contains("isDiscordRichPresenceEnabled"))
+		{
+			getJson(globals::dataS.gameCfg.isDiscordRichPresenceEnabled, "isDiscordRichPresenceEnabled");
+		}
 	}
 	catch (jsn::json::type_error& e)
 	{

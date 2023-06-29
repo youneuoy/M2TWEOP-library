@@ -45,7 +45,7 @@ namespace discordManager
 		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true)
 		{
 			jsonManager::setJSONInFile(
-				"\\youneuoy_Data\\m2tweop_temp\\discordRichPresenceData.json",
+				"\\eopData\\discordRichPresenceCfg.json",
 				"status",
 				"Fighting a battle ⚔️");
 		}
@@ -56,7 +56,7 @@ namespace discordManager
 		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true)
 		{
 			jsonManager::setJSONInFile(
-				"\\youneuoy_Data\\m2tweop_temp\\discordRichPresenceData.json",
+				"\\eopData\\discordRichPresenceCfg.json",
 				"status",
 				"On the campaign map 🗺️");
 		}
@@ -67,7 +67,7 @@ namespace discordManager
 		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true)
 		{
 			jsonManager::setJSONInFile(
-				"\\youneuoy_Data\\m2tweop_temp\\discordRichPresenceData.json",
+				"\\eopData\\discordRichPresenceCfg.json",
 				"turnNum",
 				std::to_string(num));
 		}
@@ -90,7 +90,7 @@ namespace discordManager
 			}
 
 			jsonManager::setJSONInFile(
-				"\\youneuoy_Data\\m2tweop_temp\\discordRichPresenceData.json",
+				"\\eopData\\discordRichPresenceCfg.json",
 				"factionName",
 				uniStringToStr(factionName));
 		}

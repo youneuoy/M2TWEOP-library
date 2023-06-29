@@ -13,9 +13,9 @@ discord::Core *discordCore{};
 struct
 {
     discord::Activity activity{};
-    string status = "In Battle";
-    string factionName = "Dorwinion";
-    string turnNum = "5";
+    string status = "At the main menu";
+    string factionName = "";
+    string turnNum = "";
     bool needsUpdate = false;
     time_t last;
     time_t now;
@@ -108,7 +108,7 @@ namespace discordManager
         try
         {
             // Read the campaign data from the file (written by M2TWEOP Library)
-            std::string fPath = ".\\youneuoy_Data\\m2tweop_temp\\discordRichPresenceData.json";
+            std::string fPath = ".\\eopData\\discordRichPresenceCfg.json";
             jsn::json json = loadJsonFromFile(fPath);
             std::string jsonStringValue;
             if (json.contains("factionName"))

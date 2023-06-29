@@ -1,3 +1,4 @@
 {
-    "isBlockLaunchWithoutEop": false
+    "isBlockLaunchWithoutEop": false,
+    "isDiscordRichPresenceEnabled": true
 }
