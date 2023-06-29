@@ -151,25 +151,25 @@ namespace discordManager
             return 1123942808609374270;
         }
         // Stainless Steel
-        else if (findString(currentPath, "SS6.3") || findString(dataG::data.gameData.modTitle, "stainless steel") == true)
+        else if (findString(currentPath, "ss6.3") || findString(dataG::data.gameData.modTitle, "stainless steel") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Stainless Steel");
             return 1123943657477779538;
         }
         // Game of Thrones: Total War
-        else if (findString(currentPath, "GoT") || findString(dataG::data.gameData.modTitle, "game of thrones") == true)
+        else if (findString(currentPath, "got") || findString(dataG::data.gameData.modTitle, "game of thrones") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Game of Thrones: Total War");
             return 1123943733470179488;
         }
         // Warcraft: Total War
-        else if (findString(currentPath, "WTW") || findString(dataG::data.gameData.modTitle, "warcraft") == true)
+        else if (findString(currentPath, "wtw") || findString(dataG::data.gameData.modTitle, "warcraft") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
-            discordData.activity.GetAssets().SetLargeText("Westeros: Total War");
-            return 1123943733470179488;
+            discordData.activity.GetAssets().SetLargeText("Warcraft: Total War");
+            return 1124054222720208947;
         }
         // Europa Barbarorum II
         else if (findString(currentPath, "ebii") || findString(dataG::data.gameData.modTitle, "europa") == true)
@@ -177,6 +177,27 @@ namespace discordManager
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Europa Barbarorum II");
             return 1123960787040469012;
+        }
+        // Rusichi: Total War
+        else if (findString(currentPath, "rusichi") || findString(dataG::data.gameData.modTitle, "rusichi") == true)
+        {
+            discordData.activity.GetAssets().SetLargeImage("large");
+            discordData.activity.GetAssets().SetLargeText("Rusichi: Total War");
+            return 1123991624096161955;
+        }
+        // De Bello Mundi
+        else if (findString(currentPath, "dbm") || findString(dataG::data.gameData.modTitle, "mundi") == true)
+        {
+            discordData.activity.GetAssets().SetLargeImage("large");
+            discordData.activity.GetAssets().SetLargeText("De Bello Mundi: Total War");
+            return 1124055063518789722;
+        }
+        // Chivalry II: The Sicilian Vespers
+        else if (findString(currentPath, "sicilianvespers") || findString(dataG::data.gameData.modTitle, "vespers") == true)
+        {
+            discordData.activity.GetAssets().SetLargeImage("large");
+            discordData.activity.GetAssets().SetLargeText("Chivalry II: The Sicilian Vespers");
+            return 1124057160662405231;
         }
         // Default Medieval II
         else
