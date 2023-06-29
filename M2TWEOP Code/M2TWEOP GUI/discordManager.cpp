@@ -80,14 +80,14 @@ namespace discordManager
 
         discordData.activity.SetType(discord::ActivityType::Playing);
 
-        // Divide and Conquer
+        // Divide and Conquer (AGO)
         if (findString(currentPath, "divide_and_conquer_ago") || findString(dataG::data.gameData.modTitle, "ago") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Divide and Conquer: AGO");
             return 1123366117088432259;
         }
-        // Reforged
+        // Third Age: Reforged
         else if (findString(currentPath, "reforged") || findString(dataG::data.gameData.modTitle, "reforged") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
@@ -115,7 +115,7 @@ namespace discordManager
             discordData.activity.GetAssets().SetLargeText("Tsardoms: Total War");
             return 1122265309357817967;
         }
-        // AGO
+        // Divide and Conquer (Vanilla)
         else if (findString(currentPath, "divide_and_conquer") || findString(dataG::data.gameData.modTitle, "divide and conquer") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
@@ -136,14 +136,14 @@ namespace discordManager
             discordData.activity.GetAssets().SetLargeText("The Elder Scrolls: Total War");
             return 1123941440939102300;
         }
-        // BOTET
+        // Call of Warhammer: Beginning of The End Times
         else if (findString(currentPath, "botet") || findString(dataG::data.gameData.modTitle, "call of warhammer") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Call of Warhammer: Beginning of The End Times");
             return 1123941826789900288;
         }
-        // TATW 4.0
+        // Third Age: Total War Extended (4.0)
         else if (findString(currentPath, "third_age_4") || findString(dataG::data.gameData.modTitle, "third age 4") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
@@ -171,14 +171,14 @@ namespace discordManager
             discordData.activity.GetAssets().SetLargeText("Westeros: Total War");
             return 1123943733470179488;
         }
-        // EB2
+        // Europa Barbarorum II
         else if (findString(currentPath, "ebii") || findString(dataG::data.gameData.modTitle, "europa") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Europa Barbarorum II");
             return 1123960787040469012;
         }
-        // Default Medieval II with Rich Presence
+        // Default Medieval II
         else
         {
             discordData.activity.GetAssets().SetLargeImage("large");
