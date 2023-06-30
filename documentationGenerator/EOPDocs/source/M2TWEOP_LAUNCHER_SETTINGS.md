@@ -37,7 +37,8 @@
 
 ```
 {
-    "isBlockLaunchWithoutEop": false // Should we stop the mod running if EOP is not enabled (Read more about this option in the FAQ)
+    "isBlockLaunchWithoutEop": false, // Should we stop the mod running if EOP is not enabled (Read more about this option in the FAQ)
+    "isDiscordRichPresenceEnabled": true // Should we enable Discord Rich Presence
 }
 ```
 

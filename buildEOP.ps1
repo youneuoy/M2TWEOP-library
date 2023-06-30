@@ -29,15 +29,15 @@ devenv  "M2TWEOP Code\M2TWEOP library.sln" /build "Release|x86" /project "M2TWEO
 devenv  "M2TWEOP Code\M2TWEOP library.sln" /build "Release|x86" /project "d3d9"  /out "logs\d3d9.log"
 
 # 2) Build M2TWEOP-LuaPlugin
-# Write-Output "$color======== 2) Build M2TWEOP-LuaPlugin ======== $endColor"
+Write-Output "$color======== 2) Build M2TWEOP-LuaPlugin ======== $endColor"
 
-# devenv  "M2TWEOP-luaPlugin\luaPlugin.sln" /build "Release|x86" /project "luaPlugin"  /out "logs\luaPlugin.log"
+devenv  "M2TWEOP-luaPlugin\luaPlugin.sln" /build "Release|x86" /project "luaPlugin"  /out "logs\luaPlugin.log"
 
 # 3) Build Documentation
-# Write-Output "$color======== 3) Build M2TWEOP-Documentation ======== $endColor"
+Write-Output "$color======== 3) Build M2TWEOP-Documentation ======== $endColor"
 
-# cd "documentationGenerator"
-# &".\generateDocs.ps1"   -Wait -NoNewWindow | Write-Verbose
+cd "documentationGenerator"
+&".\generateDocs.ps1"   -Wait -NoNewWindow | Write-Verbose
 
 # 4) Copy built files
 Write-Output "$color======== 4) Copy all created files ======== $endColor"
@@ -48,20 +48,20 @@ new-item ./M2TWEOPGenerated  -itemtype directory -erroraction 'silentlycontinue'
 
 Copy-Item -Path  "M2TWEOP DataFiles\*" -Destination "./M2TWEOPGenerated" -recurse
 
-# Get-ChildItem -Path "documentationGenerator\EOPDocs\build\html\*" -erroraction 'continue'
-# CopyFilesToFolder "documentationGenerator\EOPDocs\build\html" "./M2TWEOPGenerated/eopData/helpPages"
+Get-ChildItem -Path "documentationGenerator\EOPDocs\build\html\*" -erroraction 'continue'
+CopyFilesToFolder "documentationGenerator\EOPDocs\build\html" "./M2TWEOPGenerated/eopData/helpPages"
 
-# Copy-Item -Path  "M2TWEOP-luaPlugin\Release\luaPlugin.dll" -Destination "./M2TWEOPGenerated/youneuoy_Data/plugins"
+Copy-Item -Path  "M2TWEOP-luaPlugin\Release\luaPlugin.dll" -Destination "./M2TWEOPGenerated/youneuoy_Data/plugins"
 Copy-Item -Path  "M2TWEOP Code\Release\d3d9.dll" -Destination "./M2TWEOPGenerated"
 Copy-Item -Path  "M2TWEOP Code\Release\M2TWEOP GUI.exe" -Destination "./M2TWEOPGenerated"
 # Copy-Item -Path  "M2TWEOP Code\Release\M2TWEOP tools.exe" -Destination "./M2TWEOPGenerated"
 Copy-Item -Path  "M2TWEOP Code\Release\M2TWEOPLibrary.dll" -Destination "./M2TWEOPGenerated"
 
 # 5) Generate Release ZIP
-# Write-Output "$color======== 5) Generate Release ZIP ======== $endColor"
-# Remove-item M2TWEOP.zip -erroraction 'silentlycontinue'
-# Compress-Archive  --Force -Path "./M2TWEOPGenerated/*"  -DestinationPath "M2TWEOP.zip"
-# Remove-item ./M2TWEOPGenerated -recurse -erroraction 'silentlycontinue'
+Write-Output "$color======== 5) Generate Release ZIP ======== $endColor"
+Remove-item M2TWEOP.zip -erroraction 'silentlycontinue'
+Compress-Archive -Path "./M2TWEOPGenerated/*"  -DestinationPath "M2TWEOP.zip"
+Remove-item ./M2TWEOPGenerated -recurse -erroraction 'silentlycontinue'
 
 # 6) Done
 Write-Output "$color======== 6) Success! EOP Built Successfully! ======== $endColor"
