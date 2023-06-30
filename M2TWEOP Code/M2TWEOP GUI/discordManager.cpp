@@ -81,123 +81,172 @@ namespace discordManager
         discordData.activity.SetType(discord::ActivityType::Playing);
 
         // Divide and Conquer (AGO)
-        if (findString(currentPath, "divide_and_conquer_ago") || findString(dataG::data.gameData.modTitle, "ago") == true)
+        if (findString(dataG::data.gameData.modTitle, "Divide and Conquer ago") || findString(currentPath, "divide_and_conquer_ago") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Divide and Conquer: AGO");
             return 1123366117088432259;
         }
         // Third Age: Reforged
-        else if (findString(currentPath, "reforged") || findString(dataG::data.gameData.modTitle, "reforged") == true)
+        else if (findString(dataG::data.gameData.modTitle, "reforged") || findString(currentPath, "reforged")  == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Third Age: Reforged");
             return 1123946532085969009;
         }
+        // Third Age: Total War Extended (4.0)
+        else if ( findString(dataG::data.gameData.modTitle, "third age extended")  || findString(currentPath, "third_age_4") == true)
+        {
+            discordData.activity.GetAssets().SetLargeImage("large");
+            discordData.activity.GetAssets().SetLargeText("Third Age: Total War Extended (4.0)");
+            return 1123942808609374270;
+        }
         // Third Age: Total War (Vanilla)
-        else if (findString(currentPath, "tatw") || findString(dataG::data.gameData.modTitle, "third age") == true)
+        else if (findString(dataG::data.gameData.modTitle, "third age") || findString(currentPath, "tatw") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Third Age: Total War");
             return 1123960645092651009;
         }
         // DCI: Last Alliance
-        else if (findString(currentPath, "reforged") || findString(dataG::data.gameData.modTitle, "reforged") == true)
+        else if (findString(dataG::data.gameData.modTitle, "dci") || findString(currentPath, "dci") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("DCI: Last Alliance");
             return 1123960587660038214;
         }
         // Tsardoms
-        else if (findString(currentPath, "tsardoms") || findString(dataG::data.gameData.modTitle, "tsardoms") == true)
+        else if (findString(dataG::data.gameData.modTitle, "tsardoms") || findString(currentPath, "tsardoms") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Tsardoms: Total War");
             return 1122265309357817967;
         }
         // Divide and Conquer (Vanilla)
-        else if (findString(currentPath, "divide_and_conquer") || findString(dataG::data.gameData.modTitle, "divide and conquer") == true)
+        else if (findString(dataG::data.gameData.modTitle, "divide and conquer") || findString(currentPath, "divide_and_conquer")  == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Divide and Conquer");
             return 1122246166642425857;
         }
         // Insularis Draco
-        else if (findString(currentPath, "insularis") || findString(dataG::data.gameData.modTitle, "insularis") == true)
+        else if (findString(dataG::data.gameData.modTitle, "insularis")  || findString(currentPath, "insularis") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Insularis Draco");
             return 1123941224819200000;
         }
         // Elder Scrolls TW
-        else if (findString(currentPath, "elder_scrolls") || findString(dataG::data.gameData.modTitle, "elder scrolls") == true)
+        else if (findString(dataG::data.gameData.modTitle, "elder scrolls")  || findString(currentPath, "elder_scrolls") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("The Elder Scrolls: Total War");
             return 1123941440939102300;
         }
         // Call of Warhammer: Beginning of The End Times
-        else if (findString(currentPath, "botet") || findString(dataG::data.gameData.modTitle, "call of warhammer") == true)
+        else if (findString(dataG::data.gameData.modTitle, "warhammer") || findString(currentPath, "botet") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Call of Warhammer: Beginning of The End Times");
             return 1123941826789900288;
         }
-        // Third Age: Total War Extended (4.0)
-        else if (findString(currentPath, "third_age_4") || findString(dataG::data.gameData.modTitle, "third age 4") == true)
-        {
-            discordData.activity.GetAssets().SetLargeImage("large");
-            discordData.activity.GetAssets().SetLargeText("Third Age: Total War Extended (4.0)");
-            return 1123942808609374270;
-        }
         // Stainless Steel
-        else if (findString(currentPath, "ss6.3") || findString(dataG::data.gameData.modTitle, "stainless steel") == true)
+        else if (findString(dataG::data.gameData.modTitle, "stainless steel") || findString(currentPath, "ss6.3")  == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Stainless Steel");
             return 1123943657477779538;
         }
         // Game of Thrones: Total War
-        else if (findString(currentPath, "got") || findString(dataG::data.gameData.modTitle, "game of thrones") == true)
+        else if ( findString(dataG::data.gameData.modTitle, "game of thrones")  || findString(currentPath, "got") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Game of Thrones: Total War");
             return 1123943733470179488;
         }
         // Warcraft: Total War
-        else if (findString(currentPath, "wtw") || findString(dataG::data.gameData.modTitle, "warcraft") == true)
+        else if (findString(dataG::data.gameData.modTitle, "warcraft") || findString(currentPath, "wtw") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Warcraft: Total War");
             return 1124054222720208947;
         }
         // Europa Barbarorum II
-        else if (findString(currentPath, "ebii") || findString(dataG::data.gameData.modTitle, "europa") == true)
+        else if (findString(dataG::data.gameData.modTitle, "europa")  || findString(currentPath, "ebii") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Europa Barbarorum II");
             return 1123960787040469012;
         }
         // Rusichi: Total War
-        else if (findString(currentPath, "rusichi") || findString(dataG::data.gameData.modTitle, "rusichi") == true)
+        else if (findString(dataG::data.gameData.modTitle, "rusichi") || findString(currentPath, "rusichi") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Rusichi: Total War");
             return 1123991624096161955;
         }
         // De Bello Mundi
-        else if (findString(currentPath, "dbm") || findString(dataG::data.gameData.modTitle, "mundi") == true)
+        else if (findString(dataG::data.gameData.modTitle, "mundi")  || findString(currentPath, "dbm") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("De Bello Mundi: Total War");
             return 1124055063518789722;
         }
         // Chivalry II: The Sicilian Vespers
-        else if (findString(currentPath, "sicilianvespers") || findString(dataG::data.gameData.modTitle, "vespers") == true)
+        else if (findString(dataG::data.gameData.modTitle, "vespers") || findString(currentPath, "sicilianvespers") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Chivalry II: The Sicilian Vespers");
             return 1124057160662405231;
+        }
+        // Divide and Conquer: AGO (SuS)
+        else if (findString(dataG::data.gameData.modTitle, "SuS") || findString(currentPath, "SuS") == true)
+        {
+            discordData.activity.GetAssets().SetLargeImage("large");
+            discordData.activity.GetAssets().SetLargeText("Divide and Conquer: SUS");
+            return 1123978207302004806;
+        }
+        // Medieval 2: DenMod
+        else if (findString(dataG::data.gameData.modTitle, "DenMod") || findString(currentPath, "DenMod") == true)
+        {
+            discordData.activity.GetAssets().SetLargeImage("large");
+            discordData.activity.GetAssets().SetLargeText("Medieval 2: Total War (DenMod)");
+            return 1123977758335320134;
+        }
+        // Rise of Three Kingdoms
+        else if (findString(dataG::data.gameData.modTitle, "Three Kingdoms") || findString(currentPath, "rotk") == true)
+        {
+            discordData.activity.GetAssets().SetLargeImage("large");
+            discordData.activity.GetAssets().SetLargeText("Rise of Three Kingdoms: Total War");
+            return 1123977966544764960;
+        }
+        // Dragon Age: Total War
+        else if (findString(dataG::data.gameData.modTitle, "Dragon Age") || findString(currentPath, "dragon_age") == true)
+        {
+            discordData.activity.GetAssets().SetLargeImage("large");
+            discordData.activity.GetAssets().SetLargeText("Dragon Age: Total War");
+            return 1123981386727051405;
+        }
+        // Broken Crescent
+        else if (findString(dataG::data.gameData.modTitle, "Broken Crescent") || findString(currentPath, "broken_crescent") == true)
+        {
+            discordData.activity.GetAssets().SetLargeImage("large");
+            discordData.activity.GetAssets().SetLargeText("Broken Crescent");
+            return 1123991572472676362;
+        }
+        // Silmarillion: Total War
+        else if (findString(dataG::data.gameData.modTitle, "Silmarillion") || findString(currentPath, "Silmarillion") == true)
+        {
+            discordData.activity.GetAssets().SetLargeImage("large");
+            discordData.activity.GetAssets().SetLargeText("Silmarillion: Total War");
+            return 1123978014082990140;
+        }
+        // The Great Conflicts
+        else if (findString(dataG::data.gameData.modTitle, "Great Conflicts") || findString(currentPath, "tgc ") == true)
+        {
+            discordData.activity.GetAssets().SetLargeImage("large");
+            discordData.activity.GetAssets().SetLargeText("The Great Conflicts");
+            return 1124058190682791997;
         }
         // Default Medieval II
         else
@@ -257,6 +306,7 @@ namespace discordManager
         discordData.last = system_clock::to_time_t(system_clock::now());
         auto discordAppId = getModActivityDetails();
         auto response = discord::Core::Create(discordAppId, DiscordCreateFlags_Default, &discordCore);
+        readPresenceDetailsFromFile();
         discordCore->ActivityManager().UpdateActivity(discordData.activity, [](discord::Result result) {});
         ::discordCore->RunCallbacks();
     }
