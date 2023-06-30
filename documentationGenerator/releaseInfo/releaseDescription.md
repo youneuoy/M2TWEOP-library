@@ -10,6 +10,10 @@
 
 - Added Discord Rich Presence support for 30+ mods. Enabled by default. - *Medik*
 
+![](https://cdn.discordapp.com/attachments/830763277332119574/1123624572491661312/image.png)
+Rich Presence is enabled for the following mods. If your mod is not on this list and you would like an integration, please reach out!
+![](https://cdn.discordapp.com/attachments/713369537948549194/1124290437734223912/image.png)
+
 <!-- ### **Library** -->
 
 <!-- ### **Lua Plugin** -->
