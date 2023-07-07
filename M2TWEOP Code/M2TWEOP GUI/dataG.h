@@ -34,6 +34,9 @@ public:
 			string exeName;
 			string gameArgs;
 
+			// Discord Rich Presence
+			bool isDiscordRichPresenceEnabled = true;
+
 			// Customization Options
 			string modTitle = "";
 			string buttonColorString = "";

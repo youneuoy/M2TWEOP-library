@@ -91,6 +91,10 @@ namespace managerG
 			{
 				getJson(dataG::data.gameData.isBlockLaunchWithoutEop, "isBlockLaunchWithoutEop");
 			}
+			if (json.contains("isDiscordRichPresenceEnabled"))
+			{
+				getJson(dataG::data.gameData.isDiscordRichPresenceEnabled, "isDiscordRichPresenceEnabled");
+			}
 		}
 		catch (jsn::json::type_error& e)
 		{
@@ -152,7 +156,7 @@ namespace managerG
 					dataG::data.gameData.buttonColor.b = stoi(colorValues[2]);
 					dataG::data.gameData.buttonColor.a = stoi(colorValues[3]);
 				}
-			
+
 			}
 			if (json.contains("runButtonHoverColor"))
 			{
@@ -206,6 +210,7 @@ namespace managerG
 		setJson("isTacticalMapViewerNeeded", dataG::data.modulesData.isTacticalMapViewerNeeded);
 		setJson("isDeveloperModeNeeded", dataG::data.modulesData.isDeveloperModeNeeded);
 		setJson("isBlockLaunchWithoutEop", dataG::data.gameData.isBlockLaunchWithoutEop);
+		setJson("isDiscordRichPresenceEnabled", dataG::data.gameData.isDiscordRichPresenceEnabled);
 		writeJsonToFile(fPath, json);
 		json.clear();
 

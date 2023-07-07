@@ -13,9 +13,9 @@
 #include "fbxModels.h"
 
 
+
 #include <ImFileDialog.h>
 #include <Winuser.h>
-//#include "discord.h"
 graphicsD3D::dataT graphicsD3D::dataS;
 
 #include "onlineThings.h"
@@ -128,55 +128,12 @@ struct
 	ImVec2 beginCoords{ 0.f,0.f };
 }drawParams;
 
-struct {
-	//std::unique_ptr<discord::Core> core;
-}DiscordState;
-
 struct
 {
 	std::vector<IDirect3DTexture9*>texturesForDeleting;
 }tempData;
 NOINLINE void graphicsD3D::Draw(LPDIRECT3DDEVICE9 pDevice)
 {
-	//	DiscordState.core->RunCallbacks();
-
-
-		/*MEMORYSTATUSEX statex;
-
-		statex.dwLength = sizeof(statex);
-
-		GlobalMemoryStatusEx(&statex);
-		ImGui::Begin("Ram test");
-		ImGui::Text("There are %I64d total MB of virtual memory.\n",
-			statex.ullTotalVirtual / 1048576);
-		ImGui::Text("There are %I64d free  MB of virtual memory.\n",
-			statex.ullAvailVirtual / 1048576);
-
-		static float progress = 0.0f, progress_dir = 1.0f;
-
-
-		float prop =1.0f- (double)statex.ullAvailVirtual / (double)statex.ullTotalVirtual;
-
-		ImGui::Text("Memory usage:");
-		ImGui::ProgressBar(prop, ImVec2(-1.0f, 0.0f));
-
-		ImGui::End();*/
-
-
-		/*ImGui::Begin("test");
-
-		if (ImGui::Button("fight"))
-		{
-			_asm
-			{
-				push 1
-				mov ecx, 0x02BF8550
-				mov eax,0x0044edb0
-				call eax
-				add esp, 4
-			}
-		}
-		ImGui::End();*/
 	return;
 }
 
@@ -386,7 +343,6 @@ NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc(HWND hWnd, UINT uMsg, WPARAM wP
 	return CallWindowProc(dataS.hookD.oWndProc, hWnd, uMsg, wParam, lParam);
 }
 
-
 NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 {
 
@@ -461,8 +417,6 @@ bool graphicsD3D::init()
 
 	return true;
 }
-
-
 
 DWORD __stdcall graphicsD3D::InitS()
 {
@@ -639,6 +593,7 @@ NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevic
 
 
 	graphicsD3D::initImgGui(pDevice);
+
 
 	fbxModels::set3dDevice(pDevice);
 

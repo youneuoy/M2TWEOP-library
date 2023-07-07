@@ -24,5 +24,6 @@ namespace fastFunctsHelpers
 
 	jsn::json loadJsonFromFile(const std::string& fpath);
 	jsn::json loadJsonFromFile(const std::wstring& fpath);
+	void writeJsonToFile(const std::string& fpath,const jsn::json& json);
 };
 

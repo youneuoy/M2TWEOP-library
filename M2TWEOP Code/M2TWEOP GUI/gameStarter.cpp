@@ -114,6 +114,7 @@ bool gameStarter::initM2TWEOP()
 		return true;
 	}
 
+	// D3D9.dll
 	path wrapd3dS = system_complete("d3d9.dll");
 
 	path d3dS = system_complete("..\\..\\d3d9.dll");
@@ -131,6 +132,7 @@ bool gameStarter::initM2TWEOP()
 		}
 	}
 
+	// FBX SDK
 	path newFbxS = system_complete("libfbxsdk.dll");
 	path fbxS = system_complete("..\\..\\libfbxsdk.dll");
 
@@ -146,6 +148,8 @@ bool gameStarter::initM2TWEOP()
 			exit(0);
 		}
 	}
+
+	// Lua Dll
 	path newLuaS = system_complete("lua5.1.dll");
 	path luaS = system_complete("..\\..\\lua5.1.dll");
 
@@ -161,6 +165,8 @@ bool gameStarter::initM2TWEOP()
 			exit(0);
 		}
 	}
+
+	// OpenAl Dll
 	path newopenal32S = system_complete("openal32.dll");
 	path openal32S = system_complete("..\\..\\openal32.dll");
 
@@ -173,6 +179,22 @@ bool gameStarter::initM2TWEOP()
 		{
 			DWORD ERR = GetLastError();
 			MessageBoxA(NULL, "Cannot run M2TWEOP, openal32.dll replacing error! Try to delete openal32.dll in game folder or copy openal32.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
+			exit(0);
+		}
+	}
+
+	// Discord Game SDK
+	path new_discord_game_sdk = system_complete("discord_game_sdk.dll");
+	path discord_game_sdk = system_complete("..\\..\\discord_game_sdk.dll");
+
+	string new_discord_game_sdk_str = new_discord_game_sdk.string();
+	string discord_game_sdk_str = discord_game_sdk.string();
+	if (helpers::compareFiles(discord_game_sdk_str, new_discord_game_sdk_str) == false)
+	{
+		if (CopyFileA(new_discord_game_sdk_str.c_str(), discord_game_sdk_str.c_str(), FALSE) == false)
+		{
+			DWORD ERR = GetLastError();
+			MessageBoxA(NULL, "Cannot run M2TWEOP, discord_game_sdk.dll replacing error! Try to delete discord_game_sdk.dll in game folder or copy discord_game_sdk.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
 			exit(0);
 		}
 	}
