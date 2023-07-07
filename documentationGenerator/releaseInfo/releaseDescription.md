@@ -8,11 +8,38 @@
 
 ### **Launcher**
 
-- Added Discord Rich Presence support for 30+ mods. Enabled by default. - *Medik*
+- Added Discord Rich Presence support for 30+ mods. Enabled by default. You can toggle it off in the launcher settings. - *Medik*
 
 ![](https://cdn.discordapp.com/attachments/830763277332119574/1123624572491661312/image.png)
-Rich Presence is enabled for the following mods. If your mod is not on this list and you would like an integration, please reach out!
+Rich Presence is enabled for the following mods. If your mod is not [on this list](https://github.com/youneuoy/M2TWEOP-library/blob/master/M2TWEOP%20Code/M2TWEOP%20GUI/discordManager.cpp#L84) and you would like an integration, please reach out! Note: Make sure to set `modTitle` correctly in `eopData/uiCfg.json` or your mod may not be detected.
+
+**Supported Mods**
+
 ![](https://cdn.discordapp.com/attachments/713369537948549194/1124290437734223912/image.png)
+
+- Divide and Conquer
+- Divide and Conquer: AGO
+- Divide and Conquer: AGO (SUS)
+- Third Age: Reforged
+- Third Age: Total War Extended (4.0)
+- Third Age: Total War (Vanilla)
+- Silmarillion: Total War
+- DCI: Last Alliance
+- Tsardoms: Total War
+- Insularis Draco
+- Elder Scrolls: Total War
+- Call of Warhammer: Beginning of The End Times
+- Stainless Steel (6.4/SSHIP)
+- Game of Thrones: Total War
+- Warcraft: Total War
+- Rusichi: Total War
+- De Bello Mundi
+- Chivalry II: The Sicial Vespers
+- Medieval 2: Total War (DenMod)
+- The Great Conflicts
+
+If the mod is not on the list, you will still get some Rich Presence, albeit without a custom title and image. It will simply say `Medieval II: Total War`
+
 
 <!-- ### **Library** -->
 
