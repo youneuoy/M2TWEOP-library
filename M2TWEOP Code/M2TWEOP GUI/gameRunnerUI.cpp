@@ -92,7 +92,8 @@ namespace gameRunnerUI
 
 	void drawDiscordUI(bool *isOpen)
 	{
-		std:string info = "If you disable Discord Rich Presence, this window will no longer appear.";
+	std:
+		string info = "If you disable Discord Rich Presence, this window will no longer appear.";
 
 		ImGui::SetNextWindowPos(helpers::getScreen().screenUpperPos, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
 		if (startProcess.isWindowTooSmall == false)
@@ -188,7 +189,8 @@ namespace gameRunnerUI
 			{
 				exit(0);
 			}
-			else {
+			else
+			{
 				*isOpen = false;
 				return 2;
 			}
