@@ -81,7 +81,7 @@ namespace discordManager
         discordData.activity.SetType(discord::ActivityType::Playing);
 
         // Divide and Conquer (AGO)
-        if (findString(dataG::data.gameData.modTitle, "Divide and Conquer ago") || findString(currentPath, "divide_and_conquer_ago") == true)
+        if (findString(dataG::data.gameData.modTitle, "Divide and Conquer: AGO") || findString(currentPath, "divide_and_conquer_ago") == true)
         {
             discordData.activity.GetAssets().SetLargeImage("large");
             discordData.activity.GetAssets().SetLargeText("Divide and Conquer: AGO");
