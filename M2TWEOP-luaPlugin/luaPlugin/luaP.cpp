@@ -458,7 +458,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local faction = stratmap.game.getFaction(2);
 	local isVisible = tile:getTileVisibility(faction)
 	*/
-	typeAll.M2TWEOPTable.set_function("getTileVisibility", &m2tweopHelpers::getTileVisibility);
+	tables.M2TWEOPTable.set_function("getTileVisibility", &m2tweopHelpers::getTileVisibility);
 	/***
 	Get the owner of a region by RegionID.
 	@function M2TWEOP.getRegionOwner

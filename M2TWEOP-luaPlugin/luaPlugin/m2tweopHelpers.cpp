@@ -27,7 +27,7 @@ namespace m2tweopHelpers
 	{
 		return (*(*plugData::data.funcs.getTileRegionID))(x,y);
 	}
-	bool getTileVisiblity(factionStruct* faction, int x, int y)
+	bool getTileVisibility(factionStruct* faction, int x, int y)
 	{
 		auto vis = faction->tilesFac->tilesVisiblity[faction->tilesFac->tilesXBound * (y)+x];
 		// If the tile is not visible
