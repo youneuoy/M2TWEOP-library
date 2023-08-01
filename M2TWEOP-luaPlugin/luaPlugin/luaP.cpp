@@ -246,6 +246,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield isTileFree isTileFree
 	@tfield getGameTileCoordsWithCursor getGameTileCoordsWithCursor
 	@tfield getTileRegionID getTileRegionID
+	@tfield getTileVisibility getTileVisibility
 	@tfield getRegionOwner getRegionOwner
 	@tfield setEDUUnitsSize setEDUUnitsSize
 	@table M2TWEOP
@@ -445,6 +446,19 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local regionID=M2TWEOP.getTileRegionID(55,25);
 	*/
 	tables.M2TWEOPTable.set_function("getTileRegionID", &m2tweopHelpers::getTileRegionID);
+		/***
+	Get a specific tile's visibility according to faction
+	@function stratMap.getTileVisibility
+	@tparam factionStruct faction
+	@tparam xCoord x coord of the tile
+	@tparam yCoord y coord of the tile
+	@treturn isVisible 0 = not visible, 1 = visible
+	@usage
+	local tile = sMap.getTile(182, 243);
+	local faction = stratmap.game.getFaction(2);
+	local isVisible = tile:getTileVisibility(faction)
+	*/
+	typeAll.M2TWEOPTable.set_function("getTileVisibility", &m2tweopHelpers::getTileVisibility);
 	/***
 	Get the owner of a region by RegionID.
 	@function M2TWEOP.getRegionOwner
