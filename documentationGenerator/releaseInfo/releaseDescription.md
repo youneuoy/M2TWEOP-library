@@ -12,6 +12,7 @@
 - Added error handling around loading of FBX models to aid in debugging
 - `objects.addCharacterCas()` now uses a scale of 0.7 instead of 1.0 by default
 - Disabled the Discord Rich Presence integration by default as it throws errors for some users who don't have Discord already installed
+- Added new function `M2TWEOP.getTileVisibility(faction, xCoord, yCoord)`. Allows you to check if a faction has seen a tile, similar to onTileSeen()
 
 <!-- ### **Lua Plugin** -->
 

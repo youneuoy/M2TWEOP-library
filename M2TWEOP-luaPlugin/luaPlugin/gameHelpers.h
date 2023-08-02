@@ -21,7 +21,6 @@ namespace gameHelpers
 	void setScriptCounter(const char* type, int value);
 	regionStruct* getRegion(int index);
 	oneTile* getTile(int x, int y);
-	bool getTileVisiblity(const oneTile* tile, factionStruct* fac);
 	stackStruct* getStack(const regionStruct* region, int index);
 	fortStruct* getFort(const regionStruct* region, int index);
 	watchTowerStruct* getWatchtower(const regionStruct* region, int index);
