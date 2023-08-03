@@ -8,7 +8,12 @@
 
 <!-- ### **Launcher** -->
 
-<!-- ### **Library** -->
+### **Library**
+- Added error handling around loading of FBX models to aid in debugging
+- `objects.addCharacterCas()` now uses a scale of 0.7 instead of 1.0 by default
+- Disabled the Discord Rich Presence integration by default as it throws errors for some users who don't have Discord already installed
+
+<!-- ### **Lua Plugin** -->
 
 ### **Lua Plugin**
 - New function `M2TWEOP.getBattleCamCoords()`. Allows movement of the camera along the X, Y and Z axis beyond the default, max range
@@ -17,7 +22,9 @@
 
 <!-- ### **Documentation** -->
 
+
 <!-- ### **Bugfixes** -->
+
 
 ### **Links**
 

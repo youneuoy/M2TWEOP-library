@@ -10,6 +10,7 @@
 #include "eduThings.h"
 #include "fastFunctsHelpers.h"
 #include "PlannedRetreatRoute.h"
+#include "discordManager.h"
 
 
 worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, worldRecord* selectedRecord)
@@ -510,6 +511,7 @@ void __stdcall patchesForGame::checkAndChangeModels()
 
 void __stdcall patchesForGame::battleLoaded()
 {
+	discordManager::battleLoaded();
 	battleCreator::startCreationThread();
 }
 

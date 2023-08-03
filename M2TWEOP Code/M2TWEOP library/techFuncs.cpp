@@ -143,11 +143,11 @@ string techFuncs::uniToANSI(UNICODE_STRING**& uniStr)
 	wchar_t* wstr = (wchar_t*)&uniS->Buffer;
 
 	std::string strTo;
-    int size_needed = WideCharToMultiByte(CP_ACP, 0, wstr, -1, NULL, 0, NULL, NULL);
+    int size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL);
 
 	char* szTo = new char[size_needed];
 
-	WideCharToMultiByte(CP_ACP, 0, wstr, -1, szTo, size_needed, NULL, NULL);
+	WideCharToMultiByte(CP_UTF8, 0, wstr, -1, szTo, size_needed, NULL, NULL);
     szTo[uniS->Length] = '\0';
 	strTo = szTo;
 	delete[] szTo;

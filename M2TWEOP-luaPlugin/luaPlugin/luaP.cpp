@@ -343,9 +343,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@function M2TWEOP.setMaxBgSize
 	@tparam int newSize
 	@usage
-	M2TWEOP.setMaxBgSize(100) -- On huge unit size, 100/2.5 = 250 max bodyguard size
-	M2TWEOP.setMaxBgSize(150) -- On huge unit size, 150/2.5 = 300 max bodyguard size
-	M2TWEOP.setMaxBgSize(50)  -- On huge unit size, 50/2.5 = 125 max bodyguard size
+	M2TWEOP.setMaxBgSize(100) -- On huge unit size, 100*2.5 = 250 max bodyguard size
+	M2TWEOP.setMaxBgSize(150) -- On huge unit size, 150*2.5 = 300 max bodyguard size
+	M2TWEOP.setMaxBgSize(50)  -- On huge unit size, 50*2.5 = 125 max bodyguard size
 	*/
 	tables.M2TWEOPTable.set_function("setMaxBgSize", &m2tweopHelpers::setMaxBgSize);
 
@@ -1456,7 +1456,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getWatchtower getWatchtower
 	@tfield deleteFort deleteFort
 	@tfield createFortXY createFortXY
-	@tfield changeFactionName changeFactionName
 
 	@table factionStruct
 	*/
