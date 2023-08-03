@@ -46,6 +46,9 @@
     <Filter Include="Исходные файлы\ui\redists">
       <UniqueIdentifier>{ad2c4b91-ba09-485f-8602-acb5ad7cc75a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rd\discord">
+      <UniqueIdentifier>{92d88ef8-2df2-49eb-9c8d-3a534dc208f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -79,6 +82,9 @@
       <Filter>Исходные файлы\ui</Filter>
     </ClCompile>
     <ClCompile Include="toolRoutine.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="discordManager.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="managerG.cpp">
@@ -122,6 +128,48 @@
     </ClCompile>
     <ClCompile Include="redistUI.cpp">
       <Filter>Исходные файлы\ui\redists</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\achievement_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\activity_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\application_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\core.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\image_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\lobby_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\network_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\overlay_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\relationship_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\storage_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\store_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\types.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\user_manager.cpp">
+      <Filter>3rd\discord</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd\discord\voice_manager.cpp">
+      <Filter>3rd\discord</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +219,9 @@
       <Filter>Исходные файлы\ui</Filter>
     </ClInclude>
     <ClInclude Include="toolRoutine.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="discordManager.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="managerGHelpers.h">
@@ -232,6 +283,57 @@
     </ClInclude>
     <ClInclude Include="redistUI.h">
       <Filter>Исходные файлы\ui\redists</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\achievement_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\activity_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\application_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\core.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\discord.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\event.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\ffi.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\image_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\lobby_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\network_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\overlay_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\relationship_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\storage_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\store_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\types.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\user_manager.h">
+      <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\discord\voice_manager.h">
+      <Filter>3rd\discord</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

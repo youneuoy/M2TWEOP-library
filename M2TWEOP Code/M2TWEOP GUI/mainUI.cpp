@@ -8,8 +8,10 @@
 #include "modSettingsUI.h"
 #include "gameStarter.h"
 #include "gameRunnerUI.h"
+#include "discordManager.h"
 
 #include <shellapi.h>
+
 
 namespace mainUI
 {
@@ -21,7 +23,9 @@ namespace mainUI
 		bool isModSettingsUIOpen = false;
 
 		bool isGameRunnerUIOpen = false;
-	}childs;
+		bool isDiscordUIOpen = false;
+	} childs;
+
 	void tryJustStartMod()
 	{
 		if (dataG::data.modData.hideLauncherAtStart == false)
@@ -38,6 +42,10 @@ namespace mainUI
 
 	int draw(bool* isOpen)
 	{
+		if (dataG::data.gameData.isDiscordRichPresenceEnabled == true){
+			discordManager::updatePresence();
+		}
+
 		if (childs.isAboutOpen == true)
 		{
 			aboutUI::drawAboutUi(&childs.isAboutOpen);
@@ -55,7 +63,15 @@ namespace mainUI
 		}
 		else if (childs.isGameRunnerUIOpen == true)
 		{
-			gameRunnerUI::drawUI(&childs.isGameRunnerUIOpen);
+			int openStatus = gameRunnerUI::drawUI(&childs.isGameRunnerUIOpen);
+			if (openStatus == 2) {
+				childs.isDiscordUIOpen = true;
+			}
+			return 0;
+		}
+		else if (childs.isDiscordUIOpen == true)
+		{
+			gameRunnerUI::drawDiscordUI(&childs.isDiscordUIOpen);
 			return 0;
 		}
 		ImVec2 windowSize = ImGui::CalcTextSize("Run Vanilla or DLC without M2TWEOP");

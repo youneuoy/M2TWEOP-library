@@ -6,27 +6,24 @@
 
 ## **Release Notes**
 
-### **Launcher**
+<!-- ### **Launcher** -->
 
-- Removed `M2TWEOP tools.exe` from the release package - *Medik*
+### **Library**
+- Added error handling around loading of FBX models to aid in debugging
+- `objects.addCharacterCas()` now uses a scale of 0.7 instead of 1.0 by default
+- Disabled the Discord Rich Presence integration by default as it throws errors for some users who don't have Discord already installed
 
-<!-- ### **Library** -->
+<!-- ### **Lua Plugin** -->
 
-### **Lua Plugin**
-- character:reposition now stop siege and port blocking, if army, leaded by character, do this - *youneuoy*
-- army:mergeArmies(anotherArmy) now not work if units in result army>20 after merging - *youneuoy*
-- Added performance optimizations for `loadTexture()` - *Medik*
+
 <!-- ### **ImGUI** -->
 
-### **Documentation**
+<!-- ### **Documentation** -->
 
-- Added example code for calculating the window size and drawing centered text and image buttons - *Medik*
 
-### **Bugfixes**
+<!-- ### **Bugfixes** -->
 
-- fixed unit.soldierCountStratMapMax - *youneuoy*
-- fixed(again) utf16->utf8 strings convertation - *youneuoy*
-- fix battle creating crash when faction not exist - *youneuoy*
+
 ### **Links**
 
 - [Website](https://youneuoy.github.io/M2TWEOP-library/)

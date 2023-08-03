@@ -5,6 +5,8 @@
 #include "settlementConversionLvlSetter.h"
 #include "fastFunctsHelpers.h"
 
+#include "jsonManager.h"
+
 #include "casModelsDrawer.h"
 void managerF::init()
 {
@@ -568,6 +570,10 @@ void loadJsonSettings()
 		if (json.contains("isBlockLaunchWithoutEop"))
 		{
 			getJson(globals::dataS.gameCfg.isBlockLaunchWithoutEop, "isBlockLaunchWithoutEop");
+		}
+		if (json.contains("isDiscordRichPresenceEnabled"))
+		{
+			getJson(globals::dataS.gameCfg.isDiscordRichPresenceEnabled, "isDiscordRichPresenceEnabled");
 		}
 	}
 	catch (jsn::json::type_error& e)

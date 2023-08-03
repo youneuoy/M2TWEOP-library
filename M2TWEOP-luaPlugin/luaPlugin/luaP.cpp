@@ -303,7 +303,11 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@treturn int y size of the image
 	@treturn int id of the image
 	@usage
-	local testImage={x=0,y=0,img=nil};
+	-- This function supports the following file formats: .bmp, .dds, .dib, .hdr, .jpg, .pfm, .png, .ppm, and .tga.
+	-- Recommended to use .dds for best performance
+	-- Note: Doing image scaling and format conversion at load time can be slow. Store images in the format and resolution they will be used.
+	-- More info: https://learn.microsoft.com/en-us/windows/win32/direct3d9/d3dxcreatetexturefromfileex
+	local testImage = { x = 0, y = 0, img = nil};
 	testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath().."/youneuoy_textures/test.dds");
 	*/
 
@@ -313,7 +317,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@function M2TWEOP.unloadTexture
 	@tparam int id of the image
 	@usage
-	local testImage={x=0,y=0,img=nil};
+	local testImage = { x = 0, y = 0, img = nil};
 	testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath().."/youneuoy_textures/test.dds");
 	M2TWEOP.unloadTexture(testImage.img);
 	*/
@@ -334,11 +338,13 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.M2TWEOPTable.set_function("unlockGameConsoleCommands", &m2tweopHelpers::unlockGameConsoleCommands);
 	/***
-	Sets the maximum amount of soldiers a general's bodyguard unit can replenish to.
+	Sets the maximum amount of soldiers a general's bodyguard unit can replenish to. The value is multiplied by the unit size modifiers (e.g Huge = 2.5 multiplier)
 	@function M2TWEOP.setMaxBgSize
-	@tparam int newSize default: 77, maximum: 255 (Huge unit size).
+	@tparam int newSize
 	@usage
-	M2TWEOP.setMaxBgSize(222);
+	M2TWEOP.setMaxBgSize(100) -- On huge unit size, 100*2.5 = 250 max bodyguard size
+	M2TWEOP.setMaxBgSize(150) -- On huge unit size, 150*2.5 = 300 max bodyguard size
+	M2TWEOP.setMaxBgSize(50)  -- On huge unit size, 50*2.5 = 125 max bodyguard size
 	*/
 	tables.M2TWEOPTable.set_function("setMaxBgSize", &m2tweopHelpers::setMaxBgSize);
 
@@ -1439,7 +1445,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getWatchtower getWatchtower
 	@tfield deleteFort deleteFort
 	@tfield createFortXY createFortXY
-	@tfield changeFactionName changeFactionName
 
 	@table factionStruct
 	*/

@@ -82,17 +82,63 @@ void SingleFbxMesh::load(
     m_boneMatrixVectorSize = boneMatrixVectorSize;
 
     // This is safe to do before we have the device created.
-    _loadModel();
+    try
+    {
+        _loadModel();
+    }
+    catch(const std::exception& e)
+    {
+        MessageBoxA(NULL, e.what(), "Error loading FBX model!", MB_APPLMODAL | MB_SETFOREGROUND);
+    }
+    
 
     // This can't be called until the device is created.
-    _loadMeshBuffers();
+    try
+    {
+        _loadMeshBuffers();
+    }
+    catch(const std::exception& e)
+    {
+        MessageBoxA(NULL, e.what(), "Error loading FBX mesh buffers!", MB_APPLMODAL | MB_SETFOREGROUND);
+    }
 
-    // We just need the duration of the first animation track.
-    m_initialAnimationDurationInMs = _getAnimationDuration();
+    try
+    {
+        // We just need the duration of the first animation track.
+        m_initialAnimationDurationInMs = _getAnimationDuration();
+    }
+    catch(const std::exception& e)
+    {
+        MessageBoxA(NULL, e.what(), "Error loading FBX animation!", MB_APPLMODAL | MB_SETFOREGROUND);
+    }
+    
+    try
+    {
+        _loadModelTexture();
 
-    _loadModelTexture();
-    _loadModelEffect();
-    _loadverticeVectorVertexDeclaration();
+    }
+    catch(const std::exception& e)
+    {
+        MessageBoxA(NULL, e.what(), "Error loading FBX texture!", MB_APPLMODAL | MB_SETFOREGROUND);
+    }
+    
+    try
+    {
+         _loadModelEffect();
+    }
+    catch(const std::exception& e)
+    {
+        MessageBoxA(NULL, e.what(), "Error loading FBX model effect!", MB_APPLMODAL | MB_SETFOREGROUND);
+    }
+
+    try
+    {
+       _loadverticeVectorVertexDeclaration();
+    }
+    catch(const std::exception& e)
+    {
+        MessageBoxA(NULL, e.what(), "Error loading FBX vertice vector vertex decleration!", MB_APPLMODAL | MB_SETFOREGROUND);
+    }
 }
 
 void SingleFbxMesh::release()
@@ -224,7 +270,7 @@ void SingleFbxMesh::_loadModelEffect()
 
         MessageBoxA(
             nullptr,
-            (const char*)pCompileErrors, "Compile Error",
+            (const char*)pCompileErrors, "D3DXCreateEffectFromFileA Texture Compile Error",
             MB_OK | MB_ICONEXCLAMATION);
 
         assert(0);
@@ -1359,6 +1405,10 @@ unsigned long long SingleFbxMesh::_getAnimationDuration()
     int animStackNameArraySize = animStackNameArray.GetCount();
 
     // We are only animating the first animation track, and there had better be at least one.
+    if(animStackNameArraySize <= 0){
+        MessageBoxA(NULL, "ANIMATION ERROR", "No animation found in FBX model!", MB_APPLMODAL | MB_SETFOREGROUND);
+    };
+
     assert(animStackNameArraySize >= 1);
 
     FbxTakeInfo* currentTakeInfoPtr = m_scenePtr->GetTakeInfo(*animStackNameArray[0]);
