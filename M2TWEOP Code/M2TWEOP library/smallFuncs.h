@@ -1,7 +1,7 @@
 #pragma once
 #include "functionsOffsets.h"
 #include "dataOffsets.h"
-#include"headersSTD.h"
+#include "headersSTD.h"
 #include "headersMEM.h"
 #include "realGameTypes.h"
 
@@ -51,6 +51,5 @@ namespace smallFuncs
 
 	float GetMinimumPossibleMovepointsForArmy(stackStruct* army);
 	float GetDistanceInTiles(int x, int y, int destX, int destY);
-
 };
 

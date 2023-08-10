@@ -526,6 +526,7 @@ namespace smallFuncs
 
 		DWORD battleStacksOffsetStart = 0;
 		DWORD cameraOffsetStart = 0;
+
 		if (globals::dataS.gamever == 2)//steam
 		{
 			battleStacksOffsetStart = 0x01B63C44;
@@ -536,7 +537,6 @@ namespace smallFuncs
 			battleStacksOffsetStart = 0x1BACCFC;
 			cameraOffset = 0x0198848c;
 		}
-
 
 		return cameraOffset;
 	}
