@@ -308,8 +308,8 @@ namespace discordManager
 
         // Check if Discord is running, if it isn't just turn off the Rich Presence
         auto response = discord::Core::Create(discordAppId, DiscordCreateFlags_NoRequireDiscord, &discordCore);
-        if (response == nullptr){
-            dataG::data.gameData.isDiscordRichPresenceEnabled == false
+        if (&discordCore == nullptr){
+            dataG::data.gameData.isDiscordRichPresenceEnabled == false;
             return;
         }
 
