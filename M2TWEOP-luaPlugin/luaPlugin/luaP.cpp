@@ -247,6 +247,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield isTileFree isTileFree
 	@tfield getGameTileCoordsWithCursor getGameTileCoordsWithCursor
 	@tfield getTileRegionID getTileRegionID
+	@tfield getTileVisibility getTileVisibility
 	@tfield getRegionOwner getRegionOwner
 	@tfield setEDUUnitsSize setEDUUnitsSize
 	@table M2TWEOP
@@ -456,6 +457,24 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local regionID=M2TWEOP.getTileRegionID(55,25);
 	*/
 	tables.M2TWEOPTable.set_function("getTileRegionID", &m2tweopHelpers::getTileRegionID);
+		/***
+	Get a specific tile's visibility according to faction (i.e can a faction see a tile)
+	Note: Once the tile has been seen by a faction, it will always return true. e.g If you have spotted a settlement but it is now outside of the fog of war, it will still be classed as visible. 
+	@function M2TWEOP.getTileVisibility
+	@tparam factionStruct faction Faction to check
+	@tparam xCoord x coord of the tile
+	@tparam yCoord y coord of the tile
+	@treturn isVisible true = visible, false = not visible
+	@usage
+	local faction = stratmap.game.getFaction(2);
+	local isVisible = M2TWEOP.getTileVisibility(faction, xCoord, yCoord)
+	if isVisible == true then 
+		print("Tile is visible to faction "..faction:getFactionName())
+	else
+		print("Tile is not visible to faction "..faction:getFactionName())
+	end
+	*/
+	tables.M2TWEOPTable.set_function("getTileVisibility", &m2tweopHelpers::getTileVisibility);
 	/***
 	Get the owner of a region by RegionID.
 	@function M2TWEOP.getRegionOwner
