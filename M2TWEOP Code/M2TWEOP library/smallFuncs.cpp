@@ -517,6 +517,11 @@ namespace smallFuncs
 
 	NOINLINE EOP_EXPORT battleCameraStruct* getBattleCamCoords()
 	{
+		int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
+
+		// If we aren't in a battle
+		if (battleState == 0) return;
+
 		battleCameraStruct* cameraOffset;
 
 		DWORD battleStacksOffsetStart = 0;
@@ -532,8 +537,6 @@ namespace smallFuncs
 			cameraOffset = 0x0198848c;
 		}
 
-		UINT32 battleState;
-		if (!battleState) return;
 
 		return cameraOffset;
 	}
