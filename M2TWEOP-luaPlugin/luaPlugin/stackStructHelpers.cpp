@@ -55,10 +55,10 @@ namespace stackStructHelpers
 	// 	// }
 	// }
 
-	stackStruct *sortStack(const stackStruct *army)
+	void sortStack(stackStruct *stack)
 	{
 		// Get the size of the stack
-		int N = sizeof(army->units) / sizeof(army->units[0]);
+		int N = sizeof(stack->units) / sizeof(stack->units[0]);
 
 		// Sort the stack
 		// https://en.cppreference.com/w/cpp/algorithm/sort
@@ -67,16 +67,17 @@ namespace stackStructHelpers
 		// 	army->units.end(), // End of list
 		// );
 
-		std::sort(
-			army->units, // First
-			army->units + N, // Last
-			[](const army->units& unitA, const army->units& unitB)
-		{
-			return unitA.eduEntry->ID < unitB.eduEntry->ID;
-		});
+		auto first = stack->units;
+		auto last = stack->units + N;
 
+		// Lambda function to compare unit objects based on name
+		auto compareByEduTypeName = [](const unit& unitA, const unit& unitB) {
+			return unitA.eduEntry->Type < unitB.eduEntry->Type;
+		};
+		
+		std::sort(stack->units, stack->units + N, compareByEduTypeName);
 		// Return the sorted stack
-		return army;
+		// return army;
 	}
 
 	unit *getUnit(const stackStruct *army, int index)

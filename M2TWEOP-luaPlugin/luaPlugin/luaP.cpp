@@ -2297,6 +2297,18 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.stackStruct = luaState.new_usertype<stackStruct>("stackStruct");
 	types.stackStruct.set("faction", &stackStruct::faction);
+
+	/***
+	Sort units in a stack.
+	@function stackStruct:getUnit
+	@tparam int number
+	@treturn unit retUnit
+	@usage
+	ourUnit=stackStruct:getUnit(0);
+	ourUnit:kill();
+	*/
+	types.stackStruct.set_function("sortStack", &stackStructHelpers::sortStack);
+
 	/***
 	Get a unit by it's index.
 	@function stackStruct:getUnit
