@@ -305,7 +305,15 @@ namespace discordManager
     {
         discordData.last = system_clock::to_time_t(system_clock::now());
         auto discordAppId = getModActivityDetails();
+
+        // Check if Discord is running, if it isn't just turn off the Rich Presence
         auto response = discord::Core::Create(discordAppId, DiscordCreateFlags_NoRequireDiscord, &discordCore);
+        if (response == nullptr){
+            dataG::data.gameData.isDiscordRichPresenceEnabled == false
+            return;
+        }
+
+        // If Discord is running, start doing Rich Presence stuff
         readPresenceDetailsFromFile();
         discordCore->ActivityManager().UpdateActivity(discordData.activity, [](discord::Result result) {});
         ::discordCore->RunCallbacks();
