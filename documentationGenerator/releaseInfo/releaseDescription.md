@@ -11,18 +11,15 @@
 ### **Library**
 - Added error handling around loading of FBX models to aid in debugging
 - `objects.addCharacterCas()` now uses a scale of 0.7 instead of 1.0 by default
-- Disabled the Discord Rich Presence integration by default as it throws errors for some users who don't have Discord already installed
 
 <!-- ### **Lua Plugin** -->
-
 
 <!-- ### **ImGUI** -->
 
 <!-- ### **Documentation** -->
 
-
-<!-- ### **Bugfixes** -->
-
+### **Bugfixes**
+- The launcher should no longer throw an error if Discord isn't open/installed
 
 ### **Links**
 

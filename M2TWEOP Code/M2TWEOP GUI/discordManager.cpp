@@ -305,7 +305,7 @@ namespace discordManager
     {
         discordData.last = system_clock::to_time_t(system_clock::now());
         auto discordAppId = getModActivityDetails();
-        auto response = discord::Core::Create(discordAppId, DiscordCreateFlags_Default, &discordCore);
+        auto response = discord::Core::Create(discordAppId, DiscordCreateFlags_NoRequireDiscord, &discordCore);
         readPresenceDetailsFromFile();
         discordCore->ActivityManager().UpdateActivity(discordData.activity, [](discord::Result result) {});
         ::discordCore->RunCallbacks();
