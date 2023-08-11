@@ -2,82 +2,50 @@
 #include "plugData.h"
 namespace stackStructHelpers
 {
-	// stackStruct *sortStack(const stackStruct *army)
-	// {
-	// 	// // Unsorted List
-	// 	// string units[] = {
-	// 	// 	"Pelargir Marines",
-	// 	// 	"Fountain Guard",
-	// 	// 	"Sellswords",
-	// 	// 	"Gondor Militia",
-	// 	// 	"Fountain Guard",
-	// 	// 	"Gondor Militia",
-	// 	// 	"Sellswords",
-	// 	// 	"Fountain Guard",
-	// 	// 	"Archer Militia",
-	// 	// 	"Archer Militia"
-	// 	// 	"Sellswords",
-	// 	// 	"Sellswords",
-	// 	// };
-
-	// 	int N = sizeof(units) / sizeof(units[0]);
-
-	// 	sort(units, units + N);
-
-	// 	// Loop through the units in the stack
-	// 	// for (int i = 0; i < army->numOfUnits; i++)
-	// 	// {
-	// 	// 	// Get the unit
-	// 	// 	unit *unit = army->units[i]->eduEntry->Type
-	// 	// }
-
-	// 	// Get the array size
-	// 	// int N = sizeof(units) / sizeof(units[0]);
-
-	// 	// Return the sorted stack
-	// 	return army;
-
-	// 	// Unsorted list
-	// 	// cout << "== Unsorted Units ==" << endl;
-	// 	// for (int i = 0; i < N; i++)
-	// 	// {
-	// 	// 	cout << units[i] << endl;
-	// 	// }
-
-	// 	// Sort the array alphabetically
-	// 	// sort(units, units + N);
-
-	// 	// Sorted list
-	// 	// cout << "== Sorted Units ==" << endl;
-	// 	// for (int i = 0; i < N; i++)
-	// 	// {
-	// 	// 	cout << units[i] << endl;
-	// 	// }
-	// }
-
-	void sortStack(stackStruct *stack)
+	void sortStack(stackStruct *stack, int sortType)
 	{
-		// Get the size of the stack
-		int N = sizeof(stack->units) / sizeof(stack->units[0]);
-
-		// Sort the stack
-		// https://en.cppreference.com/w/cpp/algorithm/sort
-		// std:sort(
-		// 	army->units.begin(), // Start of list
-		// 	army->units.end(), // End of list
-		// );
-
-		auto first = stack->units;
-		auto last = stack->units + N;
+		int N = stack->numOfUnits;
 
 		// Lambda function to compare unit objects based on name
-		auto compareByEduTypeName = [](const unit& unitA, const unit& unitB) {
-			return unitA.eduEntry->Type < unitB.eduEntry->Type;
+		auto compareByEduTypeName = [sortType](const unit *unitA, const unit *unitB)
+		{	
+			// Ensuring Generals stay at the front/start of the stack
+			if (unitA->general && !unitB->general) {
+				return true; 
+			}
+			if (!unitA->general && unitB->general) {
+				return false;
+			}
+
+			// Sorting Options
+			// By EDU Type
+			if (sortType == 1)
+			{
+				return std::string(unitA->eduEntry->Type) > std::string(unitB->eduEntry->Type);
+			}
+			// By Category
+			else if (sortType == 2)
+			{
+				return unitA->eduEntry->Category > unitB->eduEntry->Category;
+			}
+			// By Class
+			else if (sortType == 3)
+			{
+				return unitA->eduEntry->Class > unitB->eduEntry->Class;
+			}
+			// Soldier Count
+			else if (sortType == 4)
+			{
+				return unitA->number > unitB->number;
+			}
+			// Experience
+			else if (sortType == 5)
+			{
+				return unitA->expScreen > unitB->expScreen;
+			}
 		};
-		
+		// Sort the units (?)
 		std::sort(stack->units, stack->units + N, compareByEduTypeName);
-		// Return the sorted stack
-		// return army;
 	}
 
 	unit *getUnit(const stackStruct *army, int index)
