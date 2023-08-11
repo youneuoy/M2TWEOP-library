@@ -2308,6 +2308,59 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.stackStruct = luaState.new_usertype<stackStruct>("stackStruct");
 	types.stackStruct.set("faction", &stackStruct::faction);
+
+	/***
+	Sort units in a stack.
+	@function stackStruct:sortStack
+	@tparam int sort mode
+	@usage
+	-- Note: Generals will always remain at the start of the stack
+	-- 1 = EDU Type
+	-- 2 = Category
+	-- 3 = Class
+	-- 4 = Soldier Count
+	-- 5 = Experience
+
+	function onFactionTurnStart(faction)
+    -- If it's not the players turn, don't sort
+    if faction.isPlayerControlled == 0 then return end;
+
+    -- Sort all the stacks on the map right before the turn starts
+    local factionsNum = stratmap.game.getFactionsCount();
+    for i = 0, factionsNum - 1 do
+        local faction = stratmap.game.getFaction(i);
+        for j = 0, faction.stacksNum - 1 do
+            local stack = faction:getStack(j);
+            if stack then
+                -- Debug Info
+                -- print("\n\n")
+                -- print("-- Unsorted Stack --")
+                -- for k = 0, stack.numOfUnits - 1 do
+                --     local unit = stack:getUnit(k);
+                --     if unit.eduEntry.Type then
+                --         print(unit.eduEntry.Type)
+                --     end
+                -- end
+
+                -- Sort the stack by EDU type
+                stack:sortStack(1)
+
+                -- print("\n\n")
+                -- print("-- Sorted Stack --")
+                -- for k = 0, stack.numOfUnits - 1 do
+                --     local unit = stack:getUnit(k);
+                --     if unit.eduEntry.Type then
+                --         print(unit.eduEntry.Type)
+                --     end
+                -- end
+            end
+        end
+    end
+end
+
+	*/
+	types.stackStruct.set_function("sortStack", &stackStructHelpers::sortStack);
+
 	/***
 	Get a unit by it's index.
 	@function stackStruct:getUnit
@@ -2408,7 +2461,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 
 	/***
-	Merge 2 armies on the strat map.
+	Merge 2 armies on the strat map. Does nothing if the total size of the new army exceeds 20 units.
 	@function stackStruct:mergeArmies
 	@tparam stackStruct targetArmy
 	@usage

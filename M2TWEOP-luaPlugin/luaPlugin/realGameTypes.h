@@ -1379,6 +1379,8 @@ struct stackStruct { /* structure of stack */
 	int totalStrength;
 	float reform_point_x;
 	float reform_point_y;
+
+
 };
 
 struct coords {
