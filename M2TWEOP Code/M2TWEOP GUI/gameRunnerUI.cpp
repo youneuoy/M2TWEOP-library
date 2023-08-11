@@ -55,14 +55,14 @@ namespace gameRunnerUI
 		startProcess.xWindowSize = ImGui::CalcTextSize(startProcess.loadingText.c_str()).x + 100.f;
 		if (helpers::getScreen().screenSize.x < startProcess.xWindowSize)
 		{
-			startProcess.xWindowSize = ImGui::CalcTextSize("Have problems? Run the program with administrator rights").x + 100.f;
+			startProcess.xWindowSize = ImGui::CalcTextSize("Having problems? Run the program with administrator rights").x + 100.f;
 			if (helpers::getScreen().screenSize.x < startProcess.xWindowSize)
 			{
 				startProcess.isWindowTooSmall = true;
 			}
 			else
 			{
-				startProcess.loadingText = "Have problems? Run the program with administrator rights";
+				startProcess.loadingText = "Having problems? Run the program with administrator rights";
 			}
 		}
 	}
@@ -102,10 +102,10 @@ namespace gameRunnerUI
 		}
 		else
 		{
-			ImGui::SetNextWindowSize(ImVec2(helpers::getScreen().screenSize.x * 0.5f, -1));
+			ImGui::SetNextWindowSize(ImVec2(helpers::getScreen().screenSize.x * 0.3f, -1));
 		}
 
-		ImGui::Begin("EOP: Discord Rich Presence", isOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+		ImGui::Begin("EOP: Discord Rich Presence", isOpen, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus);
 
 		// Animate a simple progress bar
 		if (startProcess.isWindowTooSmall == false)
