@@ -287,7 +287,7 @@ namespace discordManager
         {
             // Create a formatted string with the campaign details
             std::string details = string_format(
-                "Playing as '%s' on Turn %s",
+                "%s - Turn %s",
                 discordData.factionName.c_str(),
                 discordData.turnNum.c_str());
 
@@ -307,20 +307,21 @@ namespace discordManager
         auto discordAppId = getModActivityDetails();
 
         // Check if Discord is running, if it isn't just turn off the Rich Presence
-        auto response = discord::Core::Create(discordAppId, DiscordCreateFlags_NoRequireDiscord, &discordCore);
-        if (&discordCore == nullptr){
-            dataG::data.gameData.isDiscordRichPresenceEnabled == false;
-            return;
-        }
-
+        discord::Result response = discord::Core::Create(discordAppId, DiscordCreateFlags_NoRequireDiscord, &discordCore);
         // If Discord is running, start doing Rich Presence stuff
-        readPresenceDetailsFromFile();
-        discordCore->ActivityManager().UpdateActivity(discordData.activity, [](discord::Result result) {});
-        ::discordCore->RunCallbacks();
+        if (discordCore) {
+            readPresenceDetailsFromFile();
+            discordCore->ActivityManager().UpdateActivity(discordData.activity, [](discord::Result result) {});
+            ::discordCore->RunCallbacks();
+        }    
     }
 
     void updatePresence()
     {
+        if (!discordCore) {
+            return;
+        }
+
         if (difftime(time(&discordData.now), discordData.last) > 5)
         {
             // If it's been 30 seconds since the last update, do another update
