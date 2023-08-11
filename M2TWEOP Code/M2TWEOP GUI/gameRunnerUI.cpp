@@ -102,10 +102,10 @@ namespace gameRunnerUI
 		}
 		else
 		{
-			ImGui::SetNextWindowSize(ImVec2(helpers::getScreen().screenSize.x * 0.5f, -1));
+			ImGui::SetNextWindowSize(ImVec2(helpers::getScreen().screenSize.x * 0.7f, -1));
 		}
 
-		ImGui::Begin("EOP: Discord Rich Presence", isOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+		ImGui::Begin("EOP: Discord Rich Presence", isOpen, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus);
 
 		// Animate a simple progress bar
 		if (startProcess.isWindowTooSmall == false)
