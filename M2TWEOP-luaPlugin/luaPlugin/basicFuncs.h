@@ -14,6 +14,7 @@ public:
 
 
 		//condition destroy_or_rout_enemy
+		//condition destroy_or_rout_enemy
 		UINT32 condDest;
 		//condition capture settlement
 		UINT32 condSetl;
@@ -92,6 +93,7 @@ class battleFuncs
 public:
 	ProcLoader<int(__cdecl*)(DWORD)> getBattleCondCode;
 	ProcLoader<void(__cdecl*)()> swUnBMapHighlight;
+	ProcLoader<battleCameraStruct*(__cdecl*)()> getBattleCamCoords;
 };
 class technicalFuncs
 {

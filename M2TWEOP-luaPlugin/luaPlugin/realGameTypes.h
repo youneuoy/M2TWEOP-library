@@ -1776,6 +1776,16 @@ struct consoleCommands {
 	int size;
 };
 
+struct battleCameraStruct
+{
+	public:
+		float xCoord; //0x0000
+		char pad_0004[4]; //0x0004
+		float yCoord; //0x0008
+		char pad_000C[20]; //0x000C
+		float zCoord; //0x0020
+}; //Size: 0x0024
+
 struct descr_sm_factions_list {
 	struct factionStratMapDescrS* facDescrs;
 	int capacity;

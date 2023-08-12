@@ -118,6 +118,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<buildingInQueue>buildingInQueue;
 		sol::usertype<siegeS>siege;
 		sol::usertype<buildingLevel>buildingLevel;
+		sol::usertype<battleCameraStruct>battleCameraStruct;
 	}types;
 	luaState = {};
 	luaPath = modPath + "\\youneuoy_Data\\plugins\\lua";
@@ -242,6 +243,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield unlockGameConsoleCommands unlockGameConsoleCommands
 	@tfield setMaxBgSize setMaxBgSize
 	@tfield toggleUnitsBMapHighlight toggleUnitsBMapHighlight
+	@tfield getBattleCamCoords getBattleCamCoords
 	@tfield setReligionsLimit setReligionsLimit
 	@tfield isTileFree isTileFree
 	@tfield getGameTileCoordsWithCursor getGameTileCoordsWithCursor
@@ -407,6 +409,20 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.M2TWEOPTable.set_function("toggleUnitsBMapHighlight", &m2tweopHelpers::toggleUnitsBMapHighlight);
 
+	/***
+	Get the current x, y and z coords of the battlemap camera
+	@function M2TWEOP.getBattleCamCoords
+	@treturn cameraStruct Camera struct
+	@usage
+	local cameraCoords = M2TWEOP.getBattleCamCoords();
+	-- Zoom out the camera beyond it's normal range
+	cameraCoords.zCoord = 500;
+	*/
+	tables.M2TWEOPTable.set_function("getBattleCamCoords", &m2tweopHelpers::getBattleCamCoords);
+	types.battleCameraStruct = luaState.new_usertype<battleCameraStruct>("battleCameraStruct");
+	types.battleCameraStruct.set("xCoord", &battleCameraStruct::xCoord);
+	types.battleCameraStruct.set("yCoord", &battleCameraStruct::yCoord);
+	types.battleCameraStruct.set("zCoord", &battleCameraStruct::zCoord);
 
 	/***
 	Set the maximum number of religions in the mod (per descr\_religions.txt)

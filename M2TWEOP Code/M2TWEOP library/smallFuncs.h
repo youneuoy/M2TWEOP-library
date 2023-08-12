@@ -1,7 +1,7 @@
 #pragma once
 #include "functionsOffsets.h"
 #include "dataOffsets.h"
-#include"headersSTD.h"
+#include "headersSTD.h"
 #include "headersMEM.h"
 #include "realGameTypes.h"
 
@@ -33,6 +33,7 @@ namespace smallFuncs
 
 	//toggle the highlighting of units on the tactical map.
 	NOINLINE EOP_EXPORT void swUnBMapHighlight();
+	NOINLINE EOP_EXPORT battleCameraStruct* getBattleCamCoords();
 
 	NOINLINE EOP_EXPORT void setReligionsLimit(unsigned char limit);
 
@@ -50,6 +51,5 @@ namespace smallFuncs
 
 	float GetMinimumPossibleMovepointsForArmy(stackStruct* army);
 	float GetDistanceInTiles(int x, int y, int destX, int destY);
-
 };
 

@@ -160,6 +160,9 @@ int initPlugin(std::string* modPath)
 	fName = "getFactionsList";
 	plugData::data.funcs.getFactionsList.Load(&plPath, &fName);
 
+    fName = "removeTrait";
+    plugData::data.funcs.removeTrait.Load(&plPath, &fName);
+
 	fName = "moveNormal";
 	plugData::data.funcs.moveNormal.Load(&plPath, &fName);
 
@@ -177,9 +180,6 @@ int initPlugin(std::string* modPath)
 
 	fName = "addTrait";
 	plugData::data.funcs.addTrait.Load(&plPath, &fName);
-
-	fName = "removeTrait";
-	plugData::data.funcs.removeTrait.Load(&plPath, &fName);
 
 	fName = "replaceTile";
 	plugData::data.funcs.replaceTile.Load(&plPath, &fName);
@@ -241,17 +241,17 @@ int initPlugin(std::string* modPath)
 	fName = "attackCharacter";
 	plugData::data.funcs.attackCharacter.Load(&plPath, &fName);
 
-
 	fName = "loadTexture";
 	plugData::data.funcs.loadTexture.Load(&plPath, &fName);
 
 	fName = "unloadTexture";
 	plugData::data.funcs.unloadTexture.Load(&plPath, &fName);
 
-
 	fName = "setAncLimit";
 	plugData::data.funcs.setAncLimit.Load(&plPath, &fName);
 
+    fName = "getBattleCamCoords";
+    plugData::data.funcsBattle.getBattleCamCoords.Load(&plPath, &fName);
 
 	fName = "unlockConsoleCommands";
 	plugData::data.funcs.unlockConsoleCommands.Load(&plPath, &fName);
@@ -277,9 +277,6 @@ int initPlugin(std::string* modPath)
 
 	fName = "setCharacterType";
 	plugData::data.funcs.setCharacterType.Load(&plPath, &fName);
-
-
-
 
 	//battle functions
 	fName = "getBattleCondCode";

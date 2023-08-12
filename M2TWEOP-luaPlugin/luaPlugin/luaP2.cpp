@@ -24,6 +24,19 @@ void luaP::initCampaign()
 	}typeAll;
 	using namespace campaignEnums;
 
+	/// cameraCoords
+	//@section Battle Camera Struct
+
+	/***
+	Basic battleCamera table.
+
+ 	@tfield int xCoord
+	@tfield int yCoord
+	@tfield int zCoord
+
+	@table battleCamera
+	*/
+
 	/// Campaign Enums
 	//@section campaignEnums
 

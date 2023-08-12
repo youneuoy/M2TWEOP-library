@@ -512,9 +512,33 @@ namespace smallFuncs
 			highlightOn = false;
 		}
 
-
 		return;
 	}
+
+	NOINLINE EOP_EXPORT battleCameraStruct* getBattleCamCoords()
+	{
+		int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
+
+		// If we aren't in a battle
+		if (battleState == 0)
+			return nullptr;
+
+		DWORD battleCameraAddress = 0;
+
+		if (globals::dataS.gamever == 2) //steam
+		{
+			battleCameraAddress = 0x0193f34c;
+		}
+		else // disk
+		{
+			battleCameraAddress = 0x0193f34c;
+		}
+
+		battleCameraStruct* battleCamData = reinterpret_cast<battleCameraStruct*>(battleCameraAddress);
+
+		return battleCamData;
+	}
+
 	NOINLINE EOP_EXPORT void setReligionsLimit(unsigned char limit)
 	{
 		DWORD codeAdr = 0;
