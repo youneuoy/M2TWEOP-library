@@ -10,11 +10,11 @@
 
 ### **Library**
 - Added error handling around loading of FBX models to aid in debugging
-- `objects.addCharacterCas()` now uses a scale of 0.7 instead of 1.0 by default
+- `objects.addCharacterCas()` now uses a scale of 0.7 instead of 1.0 by default. Most mods seem to use 0.7 and the default of 1 was causing oversized .cas models. If passing in the scale is important you, please let us know and we can take a look.
 
 ### **Lua Plugin**
 - Added new function `M2TWEOP.getTileVisibility(faction, xCoord, yCoord)`. Allows you to check if a faction has seen a tile, similar to onTileSeen()
-- Added new function `stackStruct.sortStack(sortType)`. Allows the sorting of units in a stack based on a variety of options (EDU Type, Experience, Number of Soldiers, etc.)
+- Added new function `stackStruct.sortStack(sortType)`. Allows the sorting of units in a stack (Player and AI) based on a variety of options (EDU Type, Experience, Number of Soldiers, etc.)
 
 ### **Lua Plugin**
 - New function `M2TWEOP.getBattleCamCoords()`. Allows movement of the camera along the X, Y and Z axis beyond the default, max range

@@ -520,25 +520,23 @@ namespace smallFuncs
 		int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
 
 		// If we aren't in a battle
-		if (battleState == 0) return;
+		if (battleState == 0)
+			return nullptr;
 
-		battleCameraStruct* cameraOffset;
+		DWORD battleCameraAddress = 0;
 
-		DWORD battleStacksOffsetStart = 0;
-		DWORD cameraOffsetStart = 0;
-
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gamever == 2) //steam
 		{
-			battleStacksOffsetStart = 0x01B63C44;
-			cameraOffset = 0x0193f34c;
+			battleCameraAddress = 0x0193f34c;
 		}
 		else // disk
 		{
-			battleStacksOffsetStart = 0x1BACCFC;
-			cameraOffset = 0x0198848c;
+			battleCameraAddress = 0x0193f34c;
 		}
 
-		return cameraOffset;
+		battleCameraStruct* battleCamData = reinterpret_cast<battleCameraStruct*>(battleCameraAddress);
+
+		return battleCamData;
 	}
 
 	NOINLINE EOP_EXPORT void setReligionsLimit(unsigned char limit)

@@ -118,6 +118,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<buildingInQueue>buildingInQueue;
 		sol::usertype<siegeS>siege;
 		sol::usertype<buildingLevel>buildingLevel;
+		sol::usertype<battleCameraStruct>battleCameraStruct;
 	}types;
 	luaState = {};
 	luaPath = modPath + "\\youneuoy_Data\\plugins\\lua";
@@ -415,9 +416,13 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	local cameraCoords = M2TWEOP.getBattleCamCoords();
 	-- Zoom out the camera beyond it's normal range
-	cameraCoords.z = 500;
+	cameraCoords.zCoord = 500;
 	*/
 	tables.M2TWEOPTable.set_function("getBattleCamCoords", &m2tweopHelpers::getBattleCamCoords);
+	types.battleCameraStruct = luaState.new_usertype<battleCameraStruct>("battleCameraStruct");
+	types.battleCameraStruct.set("xCoord", &battleCameraStruct::xCoord);
+	types.battleCameraStruct.set("yCoord", &battleCameraStruct::yCoord);
+	types.battleCameraStruct.set("zCoord", &battleCameraStruct::zCoord);
 
 	/***
 	Set the maximum number of religions in the mod (per descr\_religions.txt)

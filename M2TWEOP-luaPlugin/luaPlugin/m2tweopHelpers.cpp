@@ -187,7 +187,8 @@ namespace m2tweopHelpers
 	}
 	battleCameraStruct* getBattleCamCoords()
 	{
-		return (*(*plugData::data.funcsBattle.getBattleCamCoords))();
+		battleCameraStruct* battleCamStruct =  (*(*plugData::data.funcsBattle.getBattleCamCoords))();
+		return battleCamStruct;
 	}
 	void setConversionLvlFromCastle(int castleLvl, int convertToLvl)
 	{
