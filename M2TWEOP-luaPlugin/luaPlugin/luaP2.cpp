@@ -24,20 +24,7 @@ void luaP::initCampaign()
 	}typeAll;
 	using namespace campaignEnums;
 
-	/// cameraCoords
-	//@section Battle Camera Struct
-
-	/***
-	Basic battleCamera table.
-
- 	@tfield int xCoord
-	@tfield int yCoord
-	@tfield int zCoord
-
-	@table battleCamera
-	*/
-
-	/// Campaign Enums
+	/// CampaignEnums
 	//@section campaignEnums
 
 	/***
@@ -399,7 +386,7 @@ void luaP::initCampaign()
 	*/
 	typeAll.region.set_function("setHiddenResource", &gameHelpers::setHiddenResource);
 
-	///Merc Pools
+	///MercPools
 	//@section mercPool
 
 	/***
@@ -466,7 +453,7 @@ void luaP::initCampaign()
 	typeAll.mercPool.set_function("getMercUnit", &gameHelpers::getMercUnit);
 
 
-	///Mercenary units
+	///MercenaryUnits
 	//@section mercPoolUnit
 
 	/***
@@ -539,7 +526,7 @@ void luaP::initP2()
 		sol::usertype<battleUnit> battleUnit;
 
 	}typeAll;
-	///gameDataAll
+	///GameDataAll
 	//@section gameDataAll
 
 	/***
@@ -567,7 +554,7 @@ void luaP::initP2()
 
 
 
-	///battleStruct
+	///BattleStruct
 	//@section battleStruct
 
 	/***
@@ -624,7 +611,7 @@ void luaP::initP2()
 	typeAll.battleTable.set("sidesNum", &battleDataS::sidesNum);
 	typeAll.battleTable.set("sides", sol::property([](battleDataS& self) { return std::ref(self.sides); }));
 	typeAll.battleTable.set("factionSide", sol::property([](battleDataS& self) { return std::ref(self.factionSide); }));
-	///battleSide
+	///BattleSide
 	//@section battleSide
 
 	/***
@@ -713,7 +700,7 @@ void luaP::initP2()
 	typeAll.battleSideTable.set_function("getBattleArmy", &battleHandlerHelpers::getBattleArmy);
 
 
-	///trackedPointerArmy
+	///TrackedPointerArmy
 	//@section trackedPointerArmy
 
 	/***
@@ -730,7 +717,7 @@ void luaP::initP2()
 	typeAll.trackedPointerArmyTable.set("army", &trackedPointerArmy::stack);
 	typeAll.trackedPointerArmyTable.set("deploymentArea", &trackedPointerArmy::deploymentArea);
 
-	///deploymentAreaS
+	///DeploymentAreaS
 	//@section deploymentAreaS
 
 	/***
@@ -763,7 +750,7 @@ void luaP::initP2()
 	*/
 	typeAll.deploymentAreaTable.set("getCoordPair", [](deploymentAreaS& self, int pairNum) { return std::make_tuple(self.coordsPairs[0 + pairNum], self.coordsPairs[1 + pairNum]); });
 
-	///battleAI
+	///BattleAI
 	//@section battleAI
 
 	/***
@@ -790,7 +777,7 @@ void luaP::initP2()
 	typeAll.battleAI.set("gtaPlan", &battleAI::currentAIPlan);
 	typeAll.battleAI.set("unitCount", &battleAI::unitCount);
 	typeAll.battleAI.set("enemyUnitCount", &battleAI::enemyUnitCount);
-	///battleArmy
+	///BattleArmy
 	//@section battleArmy
 
 	/***
@@ -827,7 +814,7 @@ void luaP::initP2()
 
 	*/
 	typeAll.battleArmy.set_function("getBattleUnit", &battleHandlerHelpers::getBattleUnit);
-	///battleUnit
+	///BattleUnit
 	//@section battleUnit
 
 	/***

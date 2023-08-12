@@ -374,8 +374,8 @@ void luaP::initEopEdu()
 	tables.M2TWEOPEDUTable.set_function("setEntryLocalizedShortDescr", &eopEduHelpers::setEntryLocalizedShortDescr);
 
 
-	///edbEntry
-	//@section edbEntry Table
+	///EdbEntry
+	//@section edbEntry
 
 	/***
 	Basic edbEntry table.
@@ -406,8 +406,8 @@ void luaP::initEopEdu()
 	types.edbEntry.set("isFarm", &edbEntry::isFarm);
 	types.edbEntry.set("buildingLevelCount", &edbEntry::buildingLevelCount);
 
-	///capability
-	//@section capability Table
+	///Capability
+	//@section capability 
 
 	/***
 	Basic capability table.
@@ -425,8 +425,8 @@ void luaP::initEopEdu()
 	types.capability.set("bonus", &BuildingLvlCapability::bonus);
 	types.capability.set("capabilityID", &BuildingLvlCapability::capabilityID);
 
-	///recruitpool
-	//@section recruitpool Table
+	///RecruitPool
+	//@section recruitpool 
 
 	/***
 	Basic recruitpool table.
@@ -449,7 +449,7 @@ void luaP::initEopEdu()
 	types.recruitpool.set("maxSize", &recruitPool::maxSize);
 
 	///EDB
-	//@section EDB Table
+	//@section EDB 
 
 	/***
 	Basic EDB table.

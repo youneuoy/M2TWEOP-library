@@ -9,6 +9,8 @@ return [==[
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../prism.css" type="text/css" />
+    <script src="../prism.js"></script>
 
     <!-- Meta stuff -->
     <meta property="og:title" content="M2TWEOP LuaPlugin Documentation">
@@ -289,7 +291,7 @@ return [==[
     <h3>Usage:</h3>
     <ul>
 #     for usage in iter(item.usage) do
-        $(li)<pre class="example">$(ldoc.prettify(usage))</pre>$(il)
+        $(li)<pre class="example"><code class="language-lua" >$(ldoc.prettify(usage))</code></pre>$(il)
 #     end -- for
     </ul>
 #   end -- if usage
