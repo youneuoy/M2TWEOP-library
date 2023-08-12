@@ -20,11 +20,17 @@
 ### **Lua Plugin**
 - New function `M2TWEOP.getBattleCamCoords()`. Allows movement of the camera along the X, Y and Z axis beyond the default, max range  - *Medik*
 
+![image](https://github.com/youneuoy/M2TWEOP-library/assets/22448079/99194af1-1ca3-44b9-9382-a5dd0a080b3b)
+
+
 <!-- ### **ImGUI** -->
 
 ### **Documentation**
 - Added a new 'Copy to clipboard button' above code snippets  - *Medik*
 - Added a customized version of Prism.js to manage the syntax highlighting of code snippets  - *Medik*
+
+![image](https://github.com/youneuoy/M2TWEOP-library/assets/22448079/ea6c89c5-8d30-4284-8288-3bafafc56361)
+
 
 ### **Links**
 
