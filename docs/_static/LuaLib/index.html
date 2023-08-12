@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../prism.css" type="text/css" />
+    <script src="../prism.js"></script>
 
     <!-- Meta stuff -->
     <meta property="og:title" content="M2TWEOP LuaPlugin Documentation">
@@ -56,23 +58,31 @@
     <li><a href="#M2TWEOP.setConversionLvlFromCity">M2TWEOP.setConversionLvlFromCity (cityLvl, convertToLvl)</a></li>
     <li><a href="#M2TWEOP.setGuildCooldown">M2TWEOP.setGuildCooldown (turns)</a></li>
     <li><a href="#M2TWEOP.toggleUnitsBMapHighlight">M2TWEOP.toggleUnitsBMapHighlight ()</a></li>
+    <li><a href="#M2TWEOP.getBattleCamCoords">M2TWEOP.getBattleCamCoords ()</a></li>
     <li><a href="#M2TWEOP.setReligionsLimit">M2TWEOP.setReligionsLimit (newLimit)</a></li>
     <li><a href="#M2TWEOP.isTileFree">M2TWEOP.isTileFree (X, Y)</a></li>
     <li><a href="#M2TWEOP.getGameTileCoordsWithCursor">M2TWEOP.getGameTileCoordsWithCursor ()</a></li>
     <li><a href="#M2TWEOP.getTileRegionID">M2TWEOP.getTileRegionID (x, y)</a></li>
+    <li><a href="#M2TWEOP.getTileVisibility">M2TWEOP.getTileVisibility (faction, x, y)</a></li>
     <li><a href="#M2TWEOP.getRegionOwner">M2TWEOP.getRegionOwner (regionID)</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#gameSTDUITable">gameSTDUITable </a></summary>
+  <summary><a href="#BattleCamera">BattleCamera </a></summary>
+    <li><a href="#battleCameraStruct">battleCameraStruct</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#GameUI">GameUI </a></summary>
     <li><a href="#gameSTDUI">gameSTDUI</a></li>
     <li><a href="#gameSTDUI.getUiElement">gameSTDUI.getUiElement (elementName)</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#uiElementStruct">uiElementStruct </a></summary>
+  <summary><a href="#UIElement">UIElement </a></summary>
     <li><a href="#uiElementStruct">uiElementStruct</a></li>
     <li><a href="#gameSTDUI.getSubElement">gameSTDUI.getSubElement (index)</a></li>
     <li><a href="#uiElementStruct:execute">uiElementStruct:execute ()</a></li>
@@ -80,7 +90,7 @@
 
 
 <details>
-  <summary><a href="#Strat_Map_Objects">Strat Map Objects </a></summary>
+  <summary><a href="#StratmapObjects">StratmapObjects </a></summary>
     <li><a href="#stratmap.objects">stratmap.objects</a></li>
     <li><a href="#objects.startDrawModelAt">objects.startDrawModelAt (modelId, x, y, sizeMultiplier)</a></li>
     <li><a href="#objects.stopDrawModel">objects.stopDrawModel (modelId)</a></li>
@@ -172,7 +182,7 @@
 
 
 <details>
-  <summary><a href="#traitContainer">traitContainer </a></summary>
+  <summary><a href="#Trait_Container">Trait Container </a></summary>
     <li><a href="#traitContainer">traitContainer</a></li>
 </details>
 
@@ -282,6 +292,7 @@
 <details>
   <summary><a href="#StackStruct">StackStruct </a></summary>
     <li><a href="#stackStruct">stackStruct</a></li>
+    <li><a href="#stackStruct:sortStack">stackStruct:sortStack (sort)</a></li>
     <li><a href="#stackStruct:getUnit">stackStruct:getUnit (number)</a></li>
     <li><a href="#stackStruct:getCharacter">stackStruct:getCharacter (number)</a></li>
     <li><a href="#stackStruct:findInSettlement">stackStruct:findInSettlement ()</a></li>
@@ -296,7 +307,7 @@
 
 
 <details>
-  <summary><a href="#siegeStruct">siegeStruct </a></summary>
+  <summary><a href="#SiegeStruct">SiegeStruct </a></summary>
     <li><a href="#siegeStruct">siegeStruct</a></li>
 </details>
 
@@ -444,19 +455,19 @@
 
 
 <details>
-  <summary><a href="#edbEntry">edbEntry </a></summary>
+  <summary><a href="#EdbEntry">EdbEntry </a></summary>
     <li><a href="#edbEntry">edbEntry</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#capability">capability </a></summary>
+  <summary><a href="#Capability">Capability </a></summary>
     <li><a href="#capability">capability</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#recruitpool">recruitpool </a></summary>
+  <summary><a href="#RecruitPool">RecruitPool </a></summary>
     <li><a href="#recruitpool">recruitpool</a></li>
 </details>
 
@@ -485,7 +496,7 @@
 
 
 <details>
-  <summary><a href="#Campaign_Enums">Campaign Enums </a></summary>
+  <summary><a href="#CampaignEnums">CampaignEnums </a></summary>
     <li><a href="#dipRelType">dipRelType</a></li>
 </details>
 
@@ -527,7 +538,7 @@
 
 
 <details>
-  <summary><a href="#Merc_Pools">Merc Pools </a></summary>
+  <summary><a href="#MercPools">MercPools </a></summary>
     <li><a href="#mercPool">mercPool</a></li>
     <li><a href="#mercPool:getMercUnitNum">mercPool:getMercUnitNum ()</a></li>
     <li><a href="#mercPool:addMercUnit">mercPool:addMercUnit (idx, exp, cost, repmin, repmax, maxunits, startpool, startyear, endyear, crusading)</a></li>
@@ -536,27 +547,27 @@
 
 
 <details>
-  <summary><a href="#Mercenary_units">Mercenary units </a></summary>
+  <summary><a href="#MercenaryUnits">MercenaryUnits </a></summary>
     <li><a href="#mercPoolUnit">mercPoolUnit</a></li>
     <li><a href="#mercPoolUnit:setMercReligion">mercPoolUnit:setMercReligion (religion, set)</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#gameDataAll">gameDataAll </a></summary>
+  <summary><a href="#GameDataAll">GameDataAll </a></summary>
     <li><a href="#gameDataAll">gameDataAll</a></li>
     <li><a href="#gameDataAll.get">gameDataAll.get ()</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#battleStruct">battleStruct </a></summary>
+  <summary><a href="#BattleStruct">BattleStruct </a></summary>
     <li><a href="#gameDataAll.battleStruct">gameDataAll.battleStruct</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#battleSide">battleSide </a></summary>
+  <summary><a href="#BattleSide">BattleSide </a></summary>
     <li><a href="#battleStruct.battleSide">battleStruct.battleSide</a></li>
     <li><a href="#battleSide.getWinConditionString">battleSide.getWinConditionString (condition)</a></li>
     <li><a href="#getBattleArmy">getBattleArmy (side, index)</a></li>
@@ -564,33 +575,33 @@
 
 
 <details>
-  <summary><a href="#trackedPointerArmy">trackedPointerArmy </a></summary>
+  <summary><a href="#TrackedPointerArmy">TrackedPointerArmy </a></summary>
     <li><a href="#battleSide.trackedPointerArmy">battleSide.trackedPointerArmy</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#deploymentAreaS">deploymentAreaS </a></summary>
+  <summary><a href="#DeploymentAreaS">DeploymentAreaS </a></summary>
     <li><a href="#trackedPointerArmy.deploymentAreaS">trackedPointerArmy.deploymentAreaS</a></li>
     <li><a href="#deploymentAreaS:getCoordPair">deploymentAreaS:getCoordPair ()</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#battleAI">battleAI </a></summary>
+  <summary><a href="#BattleAI">BattleAI </a></summary>
     <li><a href="#battleAI">battleAI</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#battleArmy">battleArmy </a></summary>
+  <summary><a href="#BattleArmy">BattleArmy </a></summary>
     <li><a href="#battleArmy">battleArmy</a></li>
     <li><a href="#getBattleUnit">getBattleUnit (army, index)</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#battleUnit">battleUnit </a></summary>
+  <summary><a href="#BattleUnit">BattleUnit </a></summary>
     <li><a href="#battleUnit">battleUnit</a></li>
 </details>
 
@@ -663,7 +674,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-07-18 20:33:30</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-08-12 19:42:39</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -757,6 +768,10 @@
 	<td class="summary">Toggle the highlighting of units on the tactical map.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP.getBattleCamCoords">M2TWEOP.getBattleCamCoords ()</a></td>
+	<td class="summary">Get the current x, y and z coords of the battlemap camera</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.setReligionsLimit">M2TWEOP.setReligionsLimit (newLimit)</a></td>
 	<td class="summary">Set the maximum number of religions in the mod (per descr_religions.txt)</td>
 	</tr>
@@ -773,11 +788,22 @@
 	<td class="summary">Get the RegionID of a tile.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP.getTileVisibility">M2TWEOP.getTileVisibility (faction, x, y)</a></td>
+	<td class="summary">Get a specific tile's visibility according to faction (i.e can a faction see a tile) Note: Once the tile has been seen by a faction, it will always return true.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.getRegionOwner">M2TWEOP.getRegionOwner (regionID)</a></td>
 	<td class="summary">Get the owner of a region by RegionID.</td>
 	</tr>
 </table>
-<h2><a href="#gameSTDUITable">gameSTDUITable </a></h2>
+<h2><a href="#BattleCamera">BattleCamera </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#battleCameraStruct">battleCameraStruct</a></td>
+	<td class="summary">Get information about the camera in a battle</td>
+	</tr>
+</table>
+<h2><a href="#GameUI">GameUI </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#gameSTDUI">gameSTDUI</a></td>
@@ -788,7 +814,7 @@
 	<td class="summary">Get a game UI element, element must be opened.</td>
 	</tr>
 </table>
-<h2><a href="#uiElementStruct">uiElementStruct </a></h2>
+<h2><a href="#UIElement">UIElement </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#uiElementStruct">uiElementStruct</a></td>
@@ -803,7 +829,7 @@
 	<td class="summary">execute standard game UI element, use only for buttons</td>
 	</tr>
 </table>
-<h2><a href="#Strat_Map_Objects">Strat Map Objects </a></h2>
+<h2><a href="#StratmapObjects">StratmapObjects </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#stratmap.objects">stratmap.objects</a></td>
@@ -1018,7 +1044,7 @@
 	<td class="summary">Basic ancillary table</td>
 	</tr>
 </table>
-<h2><a href="#traitContainer">traitContainer </a></h2>
+<h2><a href="#Trait_Container">Trait Container </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#traitContainer">traitContainer</a></td>
@@ -1236,6 +1262,10 @@
 	<td class="summary">Basic stackStruct table</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#stackStruct:sortStack">stackStruct:sortStack (sort)</a></td>
+	<td class="summary">Sort units in a stack.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#stackStruct:getUnit">stackStruct:getUnit (number)</a></td>
 	<td class="summary">Get a unit by it's index.</td>
 	</tr>
@@ -1276,7 +1306,7 @@
 	<td class="summary">Attack another army.</td>
 	</tr>
 </table>
-<h2><a href="#siegeStruct">siegeStruct </a></h2>
+<h2><a href="#SiegeStruct">SiegeStruct </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#siegeStruct">siegeStruct</a></td>
@@ -1817,21 +1847,21 @@
 	<td class="summary">Set localized short description for M2TWEOPDU entry.</td>
 	</tr>
 </table>
-<h2><a href="#edbEntry">edbEntry </a></h2>
+<h2><a href="#EdbEntry">EdbEntry </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#edbEntry">edbEntry</a></td>
 	<td class="summary">Basic edbEntry table.</td>
 	</tr>
 </table>
-<h2><a href="#capability">capability </a></h2>
+<h2><a href="#Capability">Capability </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#capability">capability</a></td>
 	<td class="summary">Basic capability table.</td>
 	</tr>
 </table>
-<h2><a href="#recruitpool">recruitpool </a></h2>
+<h2><a href="#RecruitPool">RecruitPool </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#recruitpool">recruitpool</a></td>
@@ -1917,7 +1947,7 @@
 	<td class="summary">Get a building edb entry by name.</td>
 	</tr>
 </table>
-<h2><a href="#Campaign_Enums">Campaign Enums </a></h2>
+<h2><a href="#CampaignEnums">CampaignEnums </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#dipRelType">dipRelType</a></td>
@@ -2000,7 +2030,7 @@
 	<td class="summary">Set a region's hidden resource (reset on game restart).</td>
 	</tr>
 </table>
-<h2><a href="#Merc_Pools">Merc Pools </a></h2>
+<h2><a href="#MercPools">MercPools </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#mercPool">mercPool</a></td>
@@ -2019,7 +2049,7 @@
 	<td class="summary">Get a mercenary unit from a pool by index.</td>
 	</tr>
 </table>
-<h2><a href="#Mercenary_units">Mercenary units </a></h2>
+<h2><a href="#MercenaryUnits">MercenaryUnits </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#mercPoolUnit">mercPoolUnit</a></td>
@@ -2030,7 +2060,7 @@
 	<td class="summary">Set or remove a religion requirement for a mercenary unit.</td>
 	</tr>
 </table>
-<h2><a href="#gameDataAll">gameDataAll </a></h2>
+<h2><a href="#GameDataAll">GameDataAll </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#gameDataAll">gameDataAll</a></td>
@@ -2041,14 +2071,14 @@
 	<td class="summary">Call at the start of the script, this is a static object and the pointer to it doesn't change.</td>
 	</tr>
 </table>
-<h2><a href="#battleStruct">battleStruct </a></h2>
+<h2><a href="#BattleStruct">BattleStruct </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#gameDataAll.battleStruct">gameDataAll.battleStruct</a></td>
 	<td class="summary">basic battleStruct table</td>
 	</tr>
 </table>
-<h2><a href="#battleSide">battleSide </a></h2>
+<h2><a href="#BattleSide">BattleSide </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#battleStruct.battleSide">battleStruct.battleSide</a></td>
@@ -2063,14 +2093,14 @@
 	<td class="summary">Get a battle army by it's index.</td>
 	</tr>
 </table>
-<h2><a href="#trackedPointerArmy">trackedPointerArmy </a></h2>
+<h2><a href="#TrackedPointerArmy">TrackedPointerArmy </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#battleSide.trackedPointerArmy">battleSide.trackedPointerArmy</a></td>
 	<td class="summary">Basic trackedPointerArmy table</td>
 	</tr>
 </table>
-<h2><a href="#deploymentAreaS">deploymentAreaS </a></h2>
+<h2><a href="#DeploymentAreaS">DeploymentAreaS </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#trackedPointerArmy.deploymentAreaS">trackedPointerArmy.deploymentAreaS</a></td>
@@ -2081,14 +2111,14 @@
 	<td class="summary">Get pair of coords with index.</td>
 	</tr>
 </table>
-<h2><a href="#battleAI">battleAI </a></h2>
+<h2><a href="#BattleAI">BattleAI </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#battleAI">battleAI</a></td>
 	<td class="summary">Basic Battle AI table</td>
 	</tr>
 </table>
-<h2><a href="#battleArmy">battleArmy </a></h2>
+<h2><a href="#BattleArmy">BattleArmy </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#battleArmy">battleArmy</a></td>
@@ -2099,7 +2129,7 @@
 	<td class="summary">Get a battle unit by it's index.</td>
 	</tr>
 </table>
-<h2><a href="#battleUnit">battleUnit </a></h2>
+<h2><a href="#BattleUnit">BattleUnit </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#battleUnit">battleUnit</a></td>
@@ -2345,6 +2375,12 @@
 
 
         </li>
+        <li><span class="parameter">getBattleCamCoords</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.getBattleCamCoords">getBattleCamCoords</a></span>
+
+
+
+        </li>
         <li><span class="parameter">setReligionsLimit</span>
             <span class="types"><a class="type" href="index.html#M2TWEOP.setReligionsLimit">setReligionsLimit</a></span>
 
@@ -2365,6 +2401,12 @@
         </li>
         <li><span class="parameter">getTileRegionID</span>
             <span class="types"><a class="type" href="index.html#M2TWEOP.getTileRegionID">getTileRegionID</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getTileVisibility</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.getTileVisibility">getTileVisibility</a></span>
 
 
 
@@ -2409,8 +2451,8 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">mPath=M2TWEOP.getModPath();
-<span class="global">print</span>(mPath);</pre>
+        <pre class="example"><code class="language-lua" >mPath=M2TWEOP.getModPath();
+<span class="global">print</span>(mPath);</code></pre>
     </ul>
 
 </dd>
@@ -2436,7 +2478,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOP.saveGame(mods/bare_geomod/saves/newsave.sav);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOP.saveGame(mods/bare_geomod/saves/newsave.sav);</code></pre>
     </ul>
 
 </dd>
@@ -2461,7 +2503,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOP.getGameVersion();</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOP.getGameVersion();</code></pre>
     </ul>
 
 </dd>
@@ -2486,8 +2528,8 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">plPath=M2TWEOP.getPluginPath();
-<span class="global">print</span>(plPath);</pre>
+        <pre class="example"><code class="language-lua" >plPath=M2TWEOP.getPluginPath();
+<span class="global">print</span>(plPath);</code></pre>
     </ul>
 
 </dd>
@@ -2525,12 +2567,12 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">-- This function supports the following file formats: .bmp, .dds, .dib, .hdr, .jpg, .pfm, .png, .ppm, and .tga.
+        <pre class="example"><code class="language-lua" ><span class="comment">-- This function supports the following file formats: .bmp, .dds, .dib, .hdr, .jpg, .pfm, .png, .ppm, and .tga.
 </span><span class="comment">-- Recommended to use .dds for best performance
 </span><span class="comment">-- Note: Doing image scaling and format conversion at load time can be slow. Store images in the format and resolution they will be used.
 </span><span class="comment">-- More info: https://learn.microsoft.com/en-us/windows/win32/direct3d9/d3dxcreatetexturefromfileex
 </span><span class="keyword">local</span> testImage = { x = <span class="number">0</span>, y = <span class="number">0</span>, img = <span class="keyword">nil</span>};
-testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath()..<span class="string">"/youneuoy_textures/test.dds"</span>);</pre>
+testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath()..<span class="string">"/youneuoy_textures/test.dds"</span>);</code></pre>
     </ul>
 
 </dd>
@@ -2556,9 +2598,9 @@ testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath()
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> testImage = { x = <span class="number">0</span>, y = <span class="number">0</span>, img = <span class="keyword">nil</span>};
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> testImage = { x = <span class="number">0</span>, y = <span class="number">0</span>, img = <span class="keyword">nil</span>};
 testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath()..<span class="string">"/youneuoy_textures/test.dds"</span>);
-M2TWEOP.unloadTexture(testImage.img);</pre>
+M2TWEOP.unloadTexture(testImage.img);</code></pre>
     </ul>
 
 </dd>
@@ -2584,7 +2626,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOP.setAncillariesLimit(<span class="number">15</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOP.setAncillariesLimit(<span class="number">15</span>);</code></pre>
     </ul>
 
 </dd>
@@ -2603,7 +2645,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOP.unlockGameConsoleCommands();</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOP.unlockGameConsoleCommands();</code></pre>
     </ul>
 
 </dd>
@@ -2631,9 +2673,9 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOP.setMaxBgSize(<span class="number">100</span>) <span class="comment">-- On huge unit size, 100*2.5 = 250 max bodyguard size
+        <pre class="example"><code class="language-lua" >M2TWEOP.setMaxBgSize(<span class="number">100</span>) <span class="comment">-- On huge unit size, 100*2.5 = 250 max bodyguard size
 </span>M2TWEOP.setMaxBgSize(<span class="number">150</span>) <span class="comment">-- On huge unit size, 150*2.5 = 300 max bodyguard size
-</span>M2TWEOP.setMaxBgSize(<span class="number">50</span>)  <span class="comment">-- On huge unit size, 50*2.5 = 125 max bodyguard size</span></pre>
+</span>M2TWEOP.setMaxBgSize(<span class="number">50</span>)  <span class="comment">-- On huge unit size, 50*2.5 = 125 max bodyguard size</span></code></pre>
     </ul>
 
 </dd>
@@ -2663,7 +2705,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOP.setEDUUnitsSize(<span class="number">1</span>,<span class="number">300</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOP.setEDUUnitsSize(<span class="number">1</span>,<span class="number">300</span>);</code></pre>
     </ul>
 
 </dd>
@@ -2689,7 +2731,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOP.setBuildingChainLimit(<span class="number">12</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOP.setBuildingChainLimit(<span class="number">12</span>);</code></pre>
     </ul>
 
 </dd>
@@ -2719,7 +2761,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOP.setConversionLvlFromCastle(<span class="number">3</span>,<span class="number">3</span>)</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOP.setConversionLvlFromCastle(<span class="number">3</span>,<span class="number">3</span>)</code></pre>
     </ul>
 
 </dd>
@@ -2749,7 +2791,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOP.setConversionLvlFromCity(<span class="number">3</span>,<span class="number">3</span>)</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOP.setConversionLvlFromCity(<span class="number">3</span>,<span class="number">3</span>)</code></pre>
     </ul>
 
 </dd>
@@ -2775,7 +2817,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOP.setGuildCooldown(<span class="number">5</span>)</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOP.setGuildCooldown(<span class="number">5</span>)</code></pre>
     </ul>
 
 </dd>
@@ -2794,7 +2836,34 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOP.toggleUnitsBMapHighlight();</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOP.toggleUnitsBMapHighlight();</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP.getBattleCamCoords"></a>
+    <strong>M2TWEOP.getBattleCamCoords ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get the current x, y and z coords of the battlemap camera
+    </div>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#battleCameraStruct">battleCameraStruct</a></span>
+        Camera struct
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> cameraCoords = M2TWEOP.getBattleCamCoords();
+<span class="comment">-- Zoom out the camera beyond it's normal range
+</span>cameraCoords.zCoord = <span class="number">500</span>;</code></pre>
     </ul>
 
 </dd>
@@ -2820,7 +2889,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOP.setReligionsLimit(<span class="number">25</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOP.setReligionsLimit(<span class="number">25</span>);</code></pre>
     </ul>
 
 </dd>
@@ -2855,7 +2924,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOP.isTileFree(<span class="number">55</span>,<span class="number">25</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOP.isTileFree(<span class="number">55</span>,<span class="number">25</span>);</code></pre>
     </ul>
 
 </dd>
@@ -2883,7 +2952,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> x,y=M2TWEOP.getGameTileCoordsWithCursor();</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> x,y=M2TWEOP.getGameTileCoordsWithCursor();</code></pre>
     </ul>
 
 </dd>
@@ -2923,7 +2992,53 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> regionID=M2TWEOP.getTileRegionID(<span class="number">55</span>,<span class="number">25</span>);</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> regionID=M2TWEOP.getTileRegionID(<span class="number">55</span>,<span class="number">25</span>);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP.getTileVisibility"></a>
+    <strong>M2TWEOP.getTileVisibility (faction, x, y)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a specific tile's visibility according to faction (i.e can a faction see a tile) Note: Once the tile has been seen by a faction, it will always return true.  e.g If you have spotted a settlement but it is now outside of the fog of war, it will still be classed as visible. 
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">faction</span>
+            <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
+         Faction to check
+        </li>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">xCoord</span></span>
+         coord of the tile
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">yCoord</span></span>
+         coord of the tile
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">isVisible</span></span>
+        true = visible, false = not visible
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> faction = stratmap.game.getFaction(<span class="number">2</span>);
+<span class="keyword">local</span> isVisible = M2TWEOP.getTileVisibility(faction, xCoord, yCoord)
+<span class="keyword">if</span> isVisible == <span class="keyword">true</span> <span class="keyword">then</span>
+	<span class="global">print</span>(<span class="string">"Tile is visible to faction "</span>..faction:getFactionName())
+<span class="keyword">else</span>
+	<span class="global">print</span>(<span class="string">"Tile is not visible to faction "</span>..faction:getFactionName())
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -2957,13 +3072,53 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> regionID=M2TWEOP.getTileRegionID(<span class="number">55</span>,<span class="number">25</span>);
-<span class="keyword">local</span> ownerFac=M2TWEOP.getRegionOwner(regionID);</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> regionID=M2TWEOP.getTileRegionID(<span class="number">55</span>,<span class="number">25</span>);
+<span class="keyword">local</span> ownerFac=M2TWEOP.getRegionOwner(regionID);</code></pre>
     </ul>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="gameSTDUITable"></a>gameSTDUITable </h2>
+    <h2 class="section-header "><a name="BattleCamera"></a>BattleCamera </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "battleCameraStruct"></a>
+    <strong>battleCameraStruct</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get information about the camera in a battle
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">xCoord</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">yCoord</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">zCoord</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="GameUI"></a>GameUI </h2>
 
     <dl class="function">
     <dt>
@@ -3020,7 +3175,7 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> analyzeScroll(scrollName)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> analyzeScroll(scrollName)
 	<span class="keyword">local</span> scroll, uiList = gameSTDUI.getUiElement(scrollName), <span class="string">"UI elements of scroll: "</span>..scrollName
 	<span class="keyword">if</span> scroll ~= <span class="keyword">nil</span> <span class="keyword">then</span>
 		<span class="keyword">for</span> i = <span class="number">0</span>, scroll.subElementsNum - <span class="number">1</span>, <span class="number">1</span> <span class="keyword">do</span>
@@ -3028,12 +3183,12 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 		<span class="keyword">end</span>
 		<span class="global">print</span>(uiList)
 	<span class="keyword">end</span>
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="uiElementStruct"></a>uiElementStruct </h2>
+    <h2 class="section-header "><a name="UIElement"></a>UIElement </h2>
 
     <dl class="function">
     <dt>
@@ -3130,8 +3285,8 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> financeScroll = gameSTDUI.getUiElement(<span class="string">"finance_scroll"</span>);
-<span class="keyword">local</span> subElement1 = financeScroll:getSubElement(<span class="number">5</span>);</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> financeScroll = gameSTDUI.getUiElement(<span class="string">"finance_scroll"</span>);
+<span class="keyword">local</span> subElement1 = financeScroll:getSubElement(<span class="number">5</span>);</code></pre>
     </ul>
 
 </dd>
@@ -3150,15 +3305,15 @@ M2TWEOP.unloadTexture(testImage.img);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> financeScroll = gameSTDUI.getUiElement(<span class="string">"finance_scroll"</span>);
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> financeScroll = gameSTDUI.getUiElement(<span class="string">"finance_scroll"</span>);
 <span class="comment">--at index 5 we have faction_listviews_button
 </span><span class="keyword">local</span> subElement1 = financeScroll:getSubElement(<span class="number">5</span>);
-subElement1:execute();</pre>
+subElement1:execute();</code></pre>
     </ul>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Strat_Map_Objects"></a>Strat Map Objects </h2>
+    <h2 class="section-header "><a name="StratmapObjects"></a>StratmapObjects </h2>
 
     <dl class="function">
     <dt>
@@ -3253,8 +3408,8 @@ subElement1:execute();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">stratmap.objects.addModelToGame(<span class="string">"data/models_strat/residences/invisible.CAS"</span>, <span class="number">1</span>);
-stratmap.objects.startDrawModelAt(<span class="number">1</span>, <span class="number">50</span>, <span class="number">150</span>, <span class="number">2.25</span>);</pre>
+        <pre class="example"><code class="language-lua" >stratmap.objects.addModelToGame(<span class="string">"data/models_strat/residences/invisible.CAS"</span>, <span class="number">1</span>);
+stratmap.objects.startDrawModelAt(<span class="number">1</span>, <span class="number">50</span>, <span class="number">150</span>, <span class="number">2.25</span>);</code></pre>
     </ul>
 
 </dd>
@@ -3280,9 +3435,9 @@ stratmap.objects.startDrawModelAt(<span class="number">1</span>, <span class="nu
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">stratmap.objects.addModelToGame(<span class="string">"data/models_strat/residences/invisible.CAS"</span>, <span class="number">1</span>);
+        <pre class="example"><code class="language-lua" >stratmap.objects.addModelToGame(<span class="string">"data/models_strat/residences/invisible.CAS"</span>, <span class="number">1</span>);
 stratmap.objects.startDrawModelAt(<span class="number">1</span>, <span class="number">50</span>, <span class="number">150</span>, <span class="number">2.25</span>);
-stratmap.objects.stopDrawModel(<span class="number">1</span>);</pre>
+stratmap.objects.stopDrawModel(<span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -3312,7 +3467,7 @@ stratmap.objects.stopDrawModel(<span class="number">1</span>);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">stratmap.objects.addModelToGame(<span class="string">"data/models_strat/residences/invisible.CAS"</span>,<span class="number">1</span>);</pre>
+        <pre class="example"><code class="language-lua" >stratmap.objects.addModelToGame(<span class="string">"data/models_strat/residences/invisible.CAS"</span>,<span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -3354,7 +3509,13 @@ stratmap.objects.stopDrawModel(<span class="number">1</span>);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">stratmap.objects.addCharacterCas(<span class="string">"strat_named_with_army"</span>,<span class="string">"mods/Bare_Geomod/data/models_strat/islamic_general2.cas"</span>,<span class="string">"mods/Bare_Geomod/data/models_strat/shadow_sword2.cas"</span>,<span class="string">"islamic_general2"</span>,<span class="string">"mods/Bare_Geomod/data/models_strat/textures/islamic_general_turks.tga"</span>);</pre>
+        <pre class="example"><code class="language-lua" >stratmap.objects.addCharacterCas(
+	<span class="string">"strat_named_with_army"</span>,
+	<span class="string">"mods/Bare_Geomod/data/models_strat/islamic_general2.cas"</span>,
+	<span class="string">"mods/Bare_Geomod/data/models_strat/shadow_sword2.cas"</span>,
+	<span class="string">"islamic_general2"</span>,
+	<span class="string">"mods/Bare_Geomod/data/models_strat/textures/islamic_general_turks.tga"</span>
+);</code></pre>
     </ul>
 
 </dd>
@@ -3396,8 +3557,8 @@ stratmap.objects.stopDrawModel(<span class="number">1</span>);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">stratmap.objects.addModelToGame(<span class="string">"data/models_strat/residences/invisible.CAS"</span>,<span class="number">1</span>);
-stratmap.objects.setModel(<span class="number">288</span>,<span class="number">257</span>,<span class="number">1</span>,<span class="number">1</span>);</pre>
+        <pre class="example"><code class="language-lua" >stratmap.objects.addModelToGame(<span class="string">"data/models_strat/residences/invisible.CAS"</span>,<span class="number">1</span>);
+stratmap.objects.setModel(<span class="number">288</span>,<span class="number">257</span>,<span class="number">1</span>,<span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -3443,7 +3604,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">stratmap.objects.replaceTile(<span class="string">"Helms-Deep_Province"</span>,<span class="number">167</span>,<span class="number">158</span>,<span class="string">"hornburg_amb.wfc"</span>,<span class="string">"clear"</span>,<span class="string">"midday"</span>);</pre>
+        <pre class="example"><code class="language-lua" >stratmap.objects.replaceTile(<span class="string">"Helms-Deep_Province"</span>,<span class="number">167</span>,<span class="number">158</span>,<span class="string">"hornburg_amb.wfc"</span>,<span class="string">"clear"</span>,<span class="string">"midday"</span>);</code></pre>
     </ul>
 
 </dd>
@@ -3517,7 +3678,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">stratmap.camera.move(<span class="number">1</span>,<span class="number">2</span>);</pre>
+        <pre class="example"><code class="language-lua" >stratmap.camera.move(<span class="number">1</span>,<span class="number">2</span>);</code></pre>
     </ul>
 
 </dd>
@@ -3551,7 +3712,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">stratmap.camera.jump(<span class="number">1</span>,<span class="number">2</span>);</pre>
+        <pre class="example"><code class="language-lua" >stratmap.camera.jump(<span class="number">1</span>,<span class="number">2</span>);</code></pre>
     </ul>
 
 </dd>
@@ -3579,7 +3740,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">stratmap.camera.zoom(<span class="number">0.12</span>);</pre>
+        <pre class="example"><code class="language-lua" >stratmap.camera.zoom(<span class="number">0.12</span>);</code></pre>
     </ul>
 
 </dd>
@@ -3686,13 +3847,13 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">-- Creating units, adding money
+        <pre class="example"><code class="language-lua" ><span class="comment">-- Creating units, adding money
 </span><span class="keyword">function</span> onCharacterSelected(selectedChar)
 	<span class="keyword">local</span> err = stratmap.game.callConsole(<span class="string">"add_money"</span>, <span class="string">"2321"</span>)
 	<span class="keyword">local</span> err2 = stratmap.game.callConsole(<span class="string">"create_unit"</span>, <span class="string">"testcharacter 'Cool Unit' 4 1 1 1"</span>)
 	<span class="global">print</span>(err)
 	<span class="global">print</span>(err2)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -3717,7 +3878,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> facNum=stratmap.game.getFactionsCount();</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> facNum=stratmap.game.getFactionsCount();</code></pre>
     </ul>
 
 </dd>
@@ -3749,7 +3910,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">faction=stratmap.game.getFaction(<span class="number">2</span>);</pre>
+        <pre class="example"><code class="language-lua" >faction=stratmap.game.getFaction(<span class="number">2</span>);</code></pre>
     </ul>
 
 </dd>
@@ -3783,7 +3944,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourGuild=stratmap.game.getGuild(<span class="number">1</span>);</pre>
+        <pre class="example"><code class="language-lua" >ourGuild=stratmap.game.getGuild(<span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -3847,7 +4008,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newCharacter=stratmap.game.createCharacterByString(<span class="string">"named character"</span>,stratmap.game.getFaction(<span class="number">0</span>),<span class="number">18</span>,<span class="string">"Name1"</span>,<span class="string">"Name2"</span>,<span class="number">31</span>,<span class="string">"custom_portrait_name"</span>,character.character.xCoord+<span class="number">5</span>,character.character.yCoord);</pre>
+        <pre class="example"><code class="language-lua" >newCharacter=stratmap.game.createCharacterByString(<span class="string">"named character"</span>,stratmap.game.getFaction(<span class="number">0</span>),<span class="number">18</span>,<span class="string">"Name1"</span>,<span class="string">"Name2"</span>,<span class="number">31</span>,<span class="string">"custom_portrait_name"</span>,character.character.xCoord+<span class="number">5</span>,character.character.yCoord);</code></pre>
     </ul>
 
 </dd>
@@ -3879,7 +4040,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">army=stratmap.game.createArmy(gen);</pre>
+        <pre class="example"><code class="language-lua" >army=stratmap.game.createArmy(gen);</code></pre>
     </ul>
 
 </dd>
@@ -3913,7 +4074,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">army=stratmap.game.createArmyInSettlement(sett);</pre>
+        <pre class="example"><code class="language-lua" >army=stratmap.game.createArmyInSettlement(sett);</code></pre>
     </ul>
 
 </dd>
@@ -3948,7 +4109,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">isExist, counterValue = stratmap.game.getScriptCounter(<span class="string">"SomeCounter"</span>)</pre>
+        <pre class="example"><code class="language-lua" >isExist, counterValue = stratmap.game.getScriptCounter(<span class="string">"SomeCounter"</span>)</code></pre>
     </ul>
 
 </dd>
@@ -3982,7 +4143,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">stratmap.game.setScriptCounter(<span class="string">"SomeCounter"</span>, <span class="number">25</span>)</pre>
+        <pre class="example"><code class="language-lua" >stratmap.game.setScriptCounter(<span class="string">"SomeCounter"</span>, <span class="number">25</span>)</code></pre>
     </ul>
 
 </dd>
@@ -4022,7 +4183,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">stratmap.game.historicEvent(<span class="string">"my_event"</span>, <span class="string">"my title"</span>, <span class="string">"my description"</span>)</pre>
+        <pre class="example"><code class="language-lua" >stratmap.game.historicEvent(<span class="string">"my_event"</span>, <span class="string">"my title"</span>, <span class="string">"my description"</span>)</code></pre>
     </ul>
 
 </dd>
@@ -4060,7 +4221,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">stratmap.game.scriptCommand(<span class="string">"give_everything_to_faction"</span>, <span class="string">"france england false"</span>)
+        <pre class="example"><code class="language-lua" >stratmap.game.scriptCommand(<span class="string">"give_everything_to_faction"</span>, <span class="string">"france england false"</span>)
 stratmap.game.scriptCommand(<span class="string">"send_character_off_map"</span>, <span class="string">"Rufus"</span>)
 
 <span class="comment">-- Multiline commands and using variables in command strings
@@ -4071,7 +4232,7 @@ stratmap.game.scriptCommand(<span class="string">"set_faction_banner"</span>, <s
 
 	banner %s
 
-end_set_faction_banner]]</span>, facName))</pre>
+end_set_faction_banner]]</span>, facName))</code></pre>
     </ul>
 
 </dd>
@@ -4216,7 +4377,7 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">unit:kill();</pre>
+        <pre class="example"><code class="language-lua" >unit:kill();</code></pre>
     </ul>
 
 </dd>
@@ -4250,7 +4411,7 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">unit:setParams(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</pre>
+        <pre class="example"><code class="language-lua" >unit:setParams(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</code></pre>
     </ul>
 
 </dd>
@@ -4667,7 +4828,7 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> ourType=ourCharacter:getTypeID();</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> ourType=ourCharacter:getTypeID();</code></pre>
     </ul>
 
 </dd>
@@ -4711,7 +4872,7 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourCharacter:setTypeID(<span class="number">2</span>);</pre>
+        <pre class="example"><code class="language-lua" >ourCharacter:setTypeID(<span class="number">2</span>);</code></pre>
     </ul>
 
 </dd>
@@ -4745,7 +4906,7 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourCharacter:moveToTile(<span class="number">11</span>,<span class="number">25</span>);</pre>
+        <pre class="example"><code class="language-lua" >ourCharacter:moveToTile(<span class="number">11</span>,<span class="number">25</span>);</code></pre>
     </ul>
 
 </dd>
@@ -4779,7 +4940,7 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourCharacter:reposition(<span class="number">11</span>,<span class="number">25</span>);</pre>
+        <pre class="example"><code class="language-lua" >ourCharacter:reposition(<span class="number">11</span>,<span class="number">25</span>);</code></pre>
     </ul>
 
 </dd>
@@ -4798,7 +4959,7 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourCharacter:kill();</pre>
+        <pre class="example"><code class="language-lua" >ourCharacter:kill();</code></pre>
     </ul>
 
 </dd>
@@ -4817,7 +4978,7 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourCharacter:createFort();</pre>
+        <pre class="example"><code class="language-lua" >ourCharacter:createFort();</code></pre>
     </ul>
 
 </dd>
@@ -4845,7 +5006,7 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourCharacter:setBodyguardUnit(unit);</pre>
+        <pre class="example"><code class="language-lua" >ourCharacter:setBodyguardUnit(unit);</code></pre>
     </ul>
 
 </dd>
@@ -4873,7 +5034,7 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourCharacter:setCharacterModel(<span class="string">"saruman"</span>);</pre>
+        <pre class="example"><code class="language-lua" >ourCharacter:setCharacterModel(<span class="string">"saruman"</span>);</code></pre>
     </ul>
 
 </dd>
@@ -5439,7 +5600,7 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourcharacter:setAsHeir(<span class="keyword">true</span>)</pre>
+        <pre class="example"><code class="language-lua" >ourcharacter:setAsHeir(<span class="keyword">true</span>)</code></pre>
     </ul>
 
 </dd>
@@ -5464,9 +5625,9 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">if</span> ourcharacter:isAlive() == <span class="keyword">true</span> <span class="keyword">then</span>
+        <pre class="example"><code class="language-lua" ><span class="keyword">if</span> ourcharacter:isAlive() == <span class="keyword">true</span> <span class="keyword">then</span>
 	ourcharacter.character:kill()
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -5491,11 +5652,11 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> thisTrait, traitsList, index = selectedChar:getTraits(), selectedChar.fullName..<span class="string">" traits:"</span>, <span class="number">0</span>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> thisTrait, traitsList, index = selectedChar:getTraits(), selectedChar.fullName..<span class="string">" traits:"</span>, <span class="number">0</span>
 <span class="keyword">while</span> thisTrait ~= <span class="keyword">nil</span> <span class="keyword">do</span>
 	traitsList, thisTrait, index = traitsList..<span class="string">"\n\tTrait "</span>..index..<span class="string">" - Name: "</span>..thisTrait.name..<span class="string">" - Level: "</span>..thisTrait.level, thisTrait.nextTrait, index + <span class="number">1</span>
 <span class="keyword">end</span>
-<span class="global">print</span>(traitsList)</pre>
+<span class="global">print</span>(traitsList)</code></pre>
     </ul>
 
 </dd>
@@ -5525,7 +5686,7 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourNamedCharacter:addTrait(<span class="string">"GoodCommander"</span>, <span class="number">2</span>)</pre>
+        <pre class="example"><code class="language-lua" >ourNamedCharacter:addTrait(<span class="string">"GoodCommander"</span>, <span class="number">2</span>)</code></pre>
     </ul>
 
 </dd>
@@ -5551,7 +5712,7 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourNamedCharacter:removeTrait(<span class="string">"GoodCommander"</span>);</pre>
+        <pre class="example"><code class="language-lua" >ourNamedCharacter:removeTrait(<span class="string">"GoodCommander"</span>);</code></pre>
     </ul>
 
 </dd>
@@ -5585,7 +5746,7 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ancillary = ourNamedCharacter:getAncillary(<span class="number">2</span>)</pre>
+        <pre class="example"><code class="language-lua" >ancillary = ourNamedCharacter:getAncillary(<span class="number">2</span>)</code></pre>
     </ul>
 
 </dd>
@@ -5613,7 +5774,7 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourNamedCharacter:addAncillary(<span class="string">"VeryVeryGoodMan"</span>);</pre>
+        <pre class="example"><code class="language-lua" >ourNamedCharacter:addAncillary(<span class="string">"VeryVeryGoodMan"</span>);</code></pre>
     </ul>
 
 </dd>
@@ -5641,8 +5802,8 @@ end_set_faction_banner]]</span>, facName))</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourAnc=ourNamedCharacter:getAncillary(<span class="number">2</span>);
-ourNamedCharacter:removeAncillary(ourAnc);</pre>
+        <pre class="example"><code class="language-lua" >ourAnc=ourNamedCharacter:getAncillary(<span class="number">2</span>);
+ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
     </ul>
 
 </dd>
@@ -5687,7 +5848,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="traitContainer"></a>traitContainer </h2>
+    <h2 class="section-header "><a name="Trait_Container"></a>Trait Container </h2>
 
     <dl class="function">
     <dt>
@@ -5949,11 +6110,11 @@ ourNamedCharacter:removeAncillary(ourAnc);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourFac = stratmap.game.getFaction(<span class="number">0</span>);
+        <pre class="example"><code class="language-lua" >ourFac = stratmap.game.getFaction(<span class="number">0</span>);
 ourFacName = ourFac:getFactionName();
 <span class="keyword">if</span> ourFacName == <span class="string">"england"</span> <span class="keyword">then</span>
 	ourFac.money = ourFac.money + (ourFac.fortsNum * <span class="number">500</span>)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -5987,10 +6148,10 @@ ourFacName = ourFac:getFactionName();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourNamedCharacter = stratmap.game.getFaction(<span class="number">0</span>):getNamedCharacter(<span class="number">0</span>)
+        <pre class="example"><code class="language-lua" >ourNamedCharacter = stratmap.game.getFaction(<span class="number">0</span>):getNamedCharacter(<span class="number">0</span>)
 <span class="keyword">if</span> ourNamedCharacter.command &gt; <span class="number">5</span> <span class="keyword">then</span>
 	ourFac.money = ourFac.money - (ourNamedCharacter.command * <span class="number">10</span>)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -6024,10 +6185,10 @@ ourFacName = ourFac:getFactionName();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourCharacter = stratmap.game.getFaction(<span class="number">0</span>):getCharacter(<span class="number">0</span>)
+        <pre class="example"><code class="language-lua" >ourCharacter = stratmap.game.getFaction(<span class="number">0</span>):getCharacter(<span class="number">0</span>)
 <span class="keyword">if</span> ourCharacter.xCoord &gt; <span class="number">150</span> <span class="keyword">and</span> ourCharacter.movePoints &lt; <span class="number">10</span> <span class="keyword">then</span>
 	ourCharacter:kill()
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -6061,7 +6222,7 @@ ourFacName = ourFac:getFactionName();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> FindArmy(x,y)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> FindArmy(x,y)
 	<span class="keyword">local</span> factionsNum = stratmap.game.getFactionsCount();
 	<span class="keyword">for</span> i = <span class="number">0</span>, factionsNum - <span class="number">1</span> <span class="keyword">do</span>
 		<span class="keyword">local</span> faction = stratmap.game.getFaction(i);
@@ -6077,7 +6238,7 @@ ourFacName = ourFac:getFactionName();
 		<span class="keyword">end</span>
 	<span class="keyword">end</span>
 	<span class="keyword">return</span> <span class="keyword">nil</span>
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -6111,10 +6272,10 @@ ourFacName = ourFac:getFactionName();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourSett = stratmap.game.getFaction(<span class="number">0</span>):getSettlement(<span class="number">0</span>)
+        <pre class="example"><code class="language-lua" >ourSett = stratmap.game.getFaction(<span class="number">0</span>):getSettlement(<span class="number">0</span>)
 <span class="keyword">if</span> ourSett.isProvokedRebellion ~= <span class="number">0</span> <span class="keyword">then</span>
 	ourFac.money = ourFac.money - (ourSett.level*<span class="number">5000</span>)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -6148,10 +6309,10 @@ ourFacName = ourFac:getFactionName();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourFort = stratmap.game.getFaction(<span class="number">0</span>):getFort(<span class="number">0</span>)
+        <pre class="example"><code class="language-lua" >ourFort = stratmap.game.getFaction(<span class="number">0</span>):getFort(<span class="number">0</span>)
 <span class="keyword">if</span> ourFort <span class="keyword">then</span>
 	<span class="global">print</span>(ourFort.xCoord..<span class="string">", "</span>..ourFort.yCoord)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -6185,7 +6346,7 @@ ourFacName = ourFac:getFactionName();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> thisFac, portList = gameDataAll.get().campaignStruct.currentFaction, <span class="string">"Ports:"</span>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> thisFac, portList = gameDataAll.get().campaignStruct.currentFaction, <span class="string">"Ports:"</span>
 <span class="keyword">for</span> i = <span class="number">0</span>, thisFac.portsNum - <span class="number">1</span>, <span class="number">1</span> <span class="keyword">do</span>
 	<span class="keyword">local</span> thisPort = thisFac:getPort(i)
 	<span class="keyword">local</span> thisDock = thisPort.dock
@@ -6194,7 +6355,7 @@ ourFacName = ourFac:getFactionName();
 		portList = portList..<span class="string">"\n\t\tDock: ("</span>..thisDock.xCoord..<span class="string">", "</span>..thisDock.yCoord..<span class="string">")"</span>
 	<span class="keyword">end</span>
 <span class="keyword">end</span>
-<span class="global">print</span>(portList)</pre>
+<span class="global">print</span>(portList)</code></pre>
     </ul>
 
 </dd>
@@ -6228,12 +6389,12 @@ ourFacName = ourFac:getFactionName();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> thisFac, watchtowerList = gameDataAll.get().campaignStruct.currentFaction, <span class="string">"Watchtowers:"</span>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> thisFac, watchtowerList = gameDataAll.get().campaignStruct.currentFaction, <span class="string">"Watchtowers:"</span>
 <span class="keyword">for</span> i = <span class="number">0</span>, thisFac.watchtowersNum - <span class="number">1</span>, <span class="number">1</span> <span class="keyword">do</span>
 	<span class="keyword">local</span> thisTower = thisFac:getWatchtower(i)
 	watchtowerList = watchtowerList..<span class="string">"\n\t"</span>..i..<span class="string">" ("</span>..thisTower.xCoord..<span class="string">", "</span>..thisTower.yCoord..<span class="string">") "</span>
 <span class="keyword">end</span>
-<span class="global">print</span>(watchtowerList)</pre>
+<span class="global">print</span>(watchtowerList)</code></pre>
     </ul>
 
 </dd>
@@ -6261,7 +6422,7 @@ ourFacName = ourFac:getFactionName();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">fac:deleteFort(someFort)</pre>
+        <pre class="example"><code class="language-lua" >fac:deleteFort(someFort)</code></pre>
     </ul>
 
 </dd>
@@ -6295,7 +6456,7 @@ ourFacName = ourFac:getFactionName();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">fac:createFortXY(<span class="number">193</span>, <span class="number">283</span>)</pre>
+        <pre class="example"><code class="language-lua" >fac:createFortXY(<span class="number">193</span>, <span class="number">283</span>)</code></pre>
     </ul>
 
 </dd>
@@ -7131,10 +7292,10 @@ ourFacName = ourFac:getFactionName();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
 <span class="keyword">local</span> fac1=campaign.factionsSortedByDescrStrat[<span class="number">1</span>];
 currSet:changeOwner(fac1);
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -7166,7 +7327,7 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> firstRelVal = settlementStruct:getReligion(<span class="number">0</span>) <span class="comment">--get float of religion with ID 0</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> firstRelVal = settlementStruct:getReligion(<span class="number">0</span>) <span class="comment">--get float of religion with ID 0</span></code></pre>
     </ul>
 
 </dd>
@@ -7196,7 +7357,7 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">settlementStruct:setReligion(<span class="number">0</span>, <span class="number">0.5</span>) <span class="comment">--set religion with ID 0 as 50%</span></pre>
+        <pre class="example"><code class="language-lua" >settlementStruct:setReligion(<span class="number">0</span>, <span class="number">0.5</span>) <span class="comment">--set religion with ID 0 as 50%</span></code></pre>
     </ul>
 
 </dd>
@@ -7224,7 +7385,7 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourGuildStanding = settlementStruct:getGuildStanding(<span class="number">0</span>)</pre>
+        <pre class="example"><code class="language-lua" >ourGuildStanding = settlementStruct:getGuildStanding(<span class="number">0</span>)</code></pre>
     </ul>
 
 </dd>
@@ -7258,7 +7419,7 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">settlementStruct:setGuildStanding(<span class="number">0</span>, <span class="number">300</span>)</pre>
+        <pre class="example"><code class="language-lua" >settlementStruct:setGuildStanding(<span class="number">0</span>, <span class="number">300</span>)</code></pre>
     </ul>
 
 </dd>
@@ -7292,11 +7453,11 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourBuilding=settlementStruct:getBuilding(<span class="number">0</span>);
+        <pre class="example"><code class="language-lua" >ourBuilding=settlementStruct:getBuilding(<span class="number">0</span>);
 <span class="keyword">if</span>(ourBuilding.level&gt;<span class="number">1</span>)
 <span class="keyword">then</span>
 	<span class="global">print</span>(<span class="string">"test"</span>);
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -7324,7 +7485,7 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">settlementStruct:createBuilding(<span class="string">"some_build1"</span>);</pre>
+        <pre class="example"><code class="language-lua" >settlementStruct:createBuilding(<span class="string">"some_build1"</span>);</code></pre>
     </ul>
 
 </dd>
@@ -7354,7 +7515,7 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">settlementStruct:destroyBuilding(<span class="string">"some_buildType"</span>,<span class="keyword">false</span>);</pre>
+        <pre class="example"><code class="language-lua" >settlementStruct:destroyBuilding(<span class="string">"some_buildType"</span>,<span class="keyword">false</span>);</code></pre>
     </ul>
 
 </dd>
@@ -7388,7 +7549,7 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourResource = settlementStruct:getResource(<span class="number">0</span>)</pre>
+        <pre class="example"><code class="language-lua" >ourResource = settlementStruct:getResource(<span class="number">0</span>)</code></pre>
     </ul>
 
 </dd>
@@ -7422,10 +7583,10 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">for</span> i = <span class="number">0</span>, currSet.siegesNum-<span class="number">1</span> <span class="keyword">do</span>
+        <pre class="example"><code class="language-lua" ><span class="keyword">for</span> i = <span class="number">0</span>, currSet.siegesNum-<span class="number">1</span> <span class="keyword">do</span>
    <span class="keyword">local</span> siege=currSet:getSiege(i);
    <span class="comment">--etc
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -7508,9 +7669,9 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">if</span> building:getType() == <span class="string">"core_building"</span> <span class="keyword">then</span>
+        <pre class="example"><code class="language-lua" ><span class="keyword">if</span> building:getType() == <span class="string">"core_building"</span> <span class="keyword">then</span>
 	<span class="comment">--do stuff
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -7535,9 +7696,9 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">if</span> building:getName() == <span class="string">"large_stone_wall"</span> <span class="keyword">then</span>
+        <pre class="example"><code class="language-lua" ><span class="keyword">if</span> building:getName() == <span class="string">"large_stone_wall"</span> <span class="keyword">then</span>
 	<span class="comment">--do stuff
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -7605,14 +7766,14 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">if</span> ourQueue.numBuildingsInQueue &gt; <span class="number">0</span> <span class="keyword">then</span>
+        <pre class="example"><code class="language-lua" ><span class="keyword">if</span> ourQueue.numBuildingsInQueue &gt; <span class="number">0</span> <span class="keyword">then</span>
 	<span class="keyword">local</span> result = <span class="string">"ourQueue:\n\t"</span>
 	<span class="keyword">for</span> i = <span class="number">1</span>, ourQueue.numBuildingsInQueue, <span class="number">1</span> <span class="keyword">do</span>
 		<span class="keyword">local</span> ourQueueBuld = ourQueue:getBuildingInQueue(i)
 		result = result..i..<span class="string">" "</span>..ourQueueBuld:getQueueBuildingName()..<span class="string">"\n\t"</span>
 	<span class="keyword">end</span>
 	<span class="global">print</span>(result)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -7717,9 +7878,9 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">if</span> ourQueueBld:getQueueBuildingType() = <span class="string">"core_building"</span> <span class="keyword">then</span>
+        <pre class="example"><code class="language-lua" ><span class="keyword">if</span> ourQueueBld:getQueueBuildingType() = <span class="string">"core_building"</span> <span class="keyword">then</span>
 	<span class="comment">--do stuff
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -7744,9 +7905,9 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">if</span> ourQueueBld:getQueueBuildingName() = <span class="string">"wooden_pallisade"</span> <span class="keyword">then</span>
+        <pre class="example"><code class="language-lua" ><span class="keyword">if</span> ourQueueBld:getQueueBuildingName() = <span class="string">"wooden_pallisade"</span> <span class="keyword">then</span>
 	<span class="comment">--do stuff
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -7894,7 +8055,7 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">tradeResource:setStratModel(<span class="number">5</span>);</pre>
+        <pre class="example"><code class="language-lua" >tradeResource:setStratModel(<span class="number">5</span>);</code></pre>
     </ul>
 
 </dd>
@@ -7919,7 +8080,7 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">-- ID -&gt; Internal Name
+        <pre class="example"><code class="language-lua" ><span class="comment">-- ID -&gt; Internal Name
 </span><span class="number">0</span>   = <span class="string">"gold"</span>;
 <span class="number">1</span>   = <span class="string">"silver"</span>;
 <span class="number">2</span>   = <span class="string">"fish"</span>;
@@ -7951,7 +8112,7 @@ currSet:changeOwner(fac1);
 <span class="comment">--
 </span><span class="keyword">if</span> tradeResource:getResourceID() == <span class="number">23</span> <span class="keyword">then</span> <span class="comment">--wool
 </span>	<span class="comment">--do stuff
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -7976,9 +8137,9 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">if</span> tradeResource:getResourceValue() == <span class="number">5</span> <span class="keyword">then</span>
+        <pre class="example"><code class="language-lua" ><span class="keyword">if</span> tradeResource:getResourceValue() == <span class="number">5</span> <span class="keyword">then</span>
 	<span class="comment">--do stuff
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -8003,9 +8164,9 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">if</span> tradeResource:getResourceHasMine() == <span class="number">1</span> <span class="keyword">then</span>
+        <pre class="example"><code class="language-lua" ><span class="keyword">if</span> tradeResource:getResourceHasMine() == <span class="number">1</span> <span class="keyword">then</span>
 	<span class="comment">--do stuff
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -8030,14 +8191,14 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onSettlementSelected(selectedSett)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onSettlementSelected(selectedSett)
 	<span class="keyword">local</span> resList = <span class="string">""</span>
 	<span class="keyword">for</span> i = <span class="number">0</span>, selectedSett.resourcesNum - <span class="number">1</span>, <span class="number">1</span> <span class="keyword">do</span>
 		<span class="keyword">local</span> thisRes = selectedSett:getResource(i)
 		resList = resList..<span class="string">"Resource ID: "</span>..thisRes:getResourceID()..<span class="string">"\n\t("</span>..thisRes.xCoord..<span class="string">", "</span>..thisRes.yCoord..<span class="string">")\n\tTrade Value: "</span>..thisRes:getResourceValue()..<span class="string">"\n\thasMine: "</span>..thisRes:getResourceHasMine()..<span class="string">"\n\timage: "</span>..thisRes:getResourceImage()..<span class="string">"\n\n"</span>
 	<span class="keyword">end</span>
 	<span class="global">print</span>(selectedSett.name..<span class="string">" resource list\n\n"</span>..resList)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -8174,6 +8335,74 @@ currSet:changeOwner(fac1);
 
 </dd>
     <dt>
+    <a name = "stackStruct:sortStack"></a>
+    <strong>stackStruct:sortStack (sort)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Sort units in a stack.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">sort</span>
+            <span class="types"><span class="type">int</span></span>
+         mode
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="comment">-- Note: Generals will always remain at the start of the stack
+</span><span class="comment">-- 1 = EDU Type
+</span><span class="comment">-- 2 = Category
+</span><span class="comment">-- 3 = Class
+</span><span class="comment">-- 4 = Soldier Count
+</span><span class="comment">-- 5 = Experience
+</span>
+<span class="keyword">function</span> onFactionTurnStart(faction)
+   <span class="comment">-- If it's not the players turn, don't sort
+</span>   <span class="keyword">if</span> faction.isPlayerControlled == <span class="number">0</span> <span class="keyword">then</span> <span class="keyword">return</span> <span class="keyword">end</span>;
+
+   <span class="comment">-- Sort all the stacks on the map right before the turn starts
+</span>   <span class="keyword">local</span> factionsNum = stratmap.game.getFactionsCount();
+   <span class="keyword">for</span> i = <span class="number">0</span>, factionsNum - <span class="number">1</span> <span class="keyword">do</span>
+       <span class="keyword">local</span> faction = stratmap.game.getFaction(i);
+       <span class="keyword">for</span> j = <span class="number">0</span>, faction.stacksNum - <span class="number">1</span> <span class="keyword">do</span>
+           <span class="keyword">local</span> stack = faction:getStack(j);
+           <span class="keyword">if</span> stack <span class="keyword">then</span>
+               <span class="comment">-- Debug Info
+</span>               <span class="comment">-- print("\n\n")
+</span>               <span class="comment">-- print("-- Unsorted Stack --")
+</span>               <span class="comment">-- for k = 0, stack.numOfUnits - 1 do
+</span>               <span class="comment">--     local unit = stack:getUnit(k);
+</span>               <span class="comment">--     if unit.eduEntry.Type then
+</span>               <span class="comment">--         print(unit.eduEntry.Type)
+</span>               <span class="comment">--     end
+</span>               <span class="comment">-- end
+</span>
+               <span class="comment">-- Sort the stack by EDU type
+</span>               stack:sortStack(<span class="number">1</span>)
+
+               <span class="comment">-- print("\n\n")
+</span>               <span class="comment">-- print("-- Sorted Stack --")
+</span>               <span class="comment">-- for k = 0, stack.numOfUnits - 1 do
+</span>               <span class="comment">--     local unit = stack:getUnit(k);
+</span>               <span class="comment">--     if unit.eduEntry.Type then
+</span>               <span class="comment">--         print(unit.eduEntry.Type)
+</span>               <span class="comment">--     end
+</span>               <span class="comment">-- end
+</span>           <span class="keyword">end</span>
+       	<span class="keyword">end</span>
+   	<span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+    </ul>
+
+</dd>
+    <dt>
     <a name = "stackStruct:getUnit"></a>
     <strong>stackStruct:getUnit (number)</strong>
     </dt>
@@ -8203,8 +8432,8 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourUnit=stackStruct:getUnit(<span class="number">0</span>);
-ourUnit:kill();</pre>
+        <pre class="example"><code class="language-lua" >ourUnit=stackStruct:getUnit(<span class="number">0</span>);
+ourUnit:kill();</code></pre>
     </ul>
 
 </dd>
@@ -8238,8 +8467,8 @@ ourUnit:kill();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourChar=stackStruct:getCharacter(<span class="number">0</span>);
-ourChar:kill();</pre>
+        <pre class="example"><code class="language-lua" >ourChar=stackStruct:getCharacter(<span class="number">0</span>);
+ourChar:kill();</code></pre>
     </ul>
 
 </dd>
@@ -8270,11 +8499,11 @@ ourChar:kill();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourSett=stackStruct:findInSettlement();
+        <pre class="example"><code class="language-lua" >ourSett=stackStruct:findInSettlement();
 <span class="keyword">if</span>(ourSett~=<span class="keyword">nil</span>)
 <span class="keyword">then</span>
 	<span class="comment">--something
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -8305,11 +8534,11 @@ ourChar:kill();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">ourFort=stackStruct:findInFort();
+        <pre class="example"><code class="language-lua" >ourFort=stackStruct:findInFort();
 <span class="keyword">if</span>(ourFort~=<span class="keyword">nil</span>)
 <span class="keyword">then</span>
 	<span class="comment">--something
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -8361,7 +8590,7 @@ ourChar:kill();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> newUnit=stackStruct:createEOPUnit(<span class="number">1000</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>);</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> newUnit=stackStruct:createEOPUnit(<span class="number">1000</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -8407,7 +8636,7 @@ ourChar:kill();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> newUnit=stackStruct:createUnit(<span class="string">"Axemen of Lossarnach"</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>);</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> newUnit=stackStruct:createUnit(<span class="string">"Axemen of Lossarnach"</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -8451,7 +8680,7 @@ ourChar:kill();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> newUnit=stackStruct:createUnitByIDX(<span class="number">255</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>);</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> newUnit=stackStruct:createUnitByIDX(<span class="number">255</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -8461,7 +8690,7 @@ ourChar:kill();</pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Merge 2 armies on the strat map.
+    Merge 2 armies on the strat map.  Does nothing if the total size of the new army exceeds 20 units.
     </div>
 
     <h3>Parameters:</h3>
@@ -8479,7 +8708,7 @@ ourChar:kill();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">army:mergeArmies(anotherArmy);</pre>
+        <pre class="example"><code class="language-lua" >army:mergeArmies(anotherArmy);</code></pre>
     </ul>
 
 </dd>
@@ -8507,7 +8736,7 @@ ourChar:kill();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">stackStruct:siegeSettlement(settlement);</pre>
+        <pre class="example"><code class="language-lua" >stackStruct:siegeSettlement(settlement);</code></pre>
     </ul>
 
 </dd>
@@ -8541,16 +8770,16 @@ ourChar:kill();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">sucess=stackStruct:attackArmy(defenderArmy);
+        <pre class="example"><code class="language-lua" >sucess=stackStruct:attackArmy(defenderArmy);
 <span class="keyword">if</span>(sucess~=<span class="number">0</span>)
 <span class="keyword">then</span>
 	<span class="comment">--something
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="siegeStruct"></a>siegeStruct </h2>
+    <h2 class="section-header "><a name="SiegeStruct"></a>SiegeStruct </h2>
 
     <dl class="function">
     <dt>
@@ -9264,13 +9493,13 @@ ourChar:kill();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> draw(device)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> draw(device)
 	ImGui.Begin(<span class="string">"test"</span>);
 
 	ImGui.Text(<span class="string">"Some test text"</span>)
 
 	ImGui.End();
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9289,9 +9518,9 @@ ourChar:kill();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onLoadingFonts()
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onLoadingFonts()
 <span class="comment">--something here
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9310,9 +9539,9 @@ ourChar:kill();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onNewGameStart()
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onNewGameStart()
 <span class="comment">--something here
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9331,9 +9560,9 @@ ourChar:kill();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onReadGameDbsAtStart()
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onReadGameDbsAtStart()
 <span class="comment">--something here
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9367,7 +9596,7 @@ ourChar:kill();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">clickAtMap={[<span class="string">"isClicked"</span>]=<span class="keyword">false</span>,[<span class="string">"xTile"</span>]=<span class="number">0</span>,[<span class="string">"yTile"</span>]=<span class="number">0</span>}
+        <pre class="example"><code class="language-lua" >clickAtMap={[<span class="string">"isClicked"</span>]=<span class="keyword">false</span>,[<span class="string">"xTile"</span>]=<span class="number">0</span>,[<span class="string">"yTile"</span>]=<span class="number">0</span>}
 <span class="keyword">function</span> draw(device)
 	<span class="keyword">if</span>(clickAtMap.isClicked==<span class="keyword">true</span>)
 	<span class="keyword">then</span>
@@ -9383,7 +9612,7 @@ ourChar:kill();</pre>
 	clickAtMap.isClicked=<span class="keyword">true</span>;
 	clickAtMap.xTile=x;
 	clickAtMap.yTile=y;
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9402,9 +9631,9 @@ ourChar:kill();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onCampaignMapLoaded()
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onCampaignMapLoaded()
 <span class="comment">--something here
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9423,7 +9652,7 @@ ourChar:kill();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--An example of using this event to perform actions at the beginning of a campaign once:
+        <pre class="example"><code class="language-lua" ><span class="comment">--An example of using this event to perform actions at the beginning of a campaign once:
 </span>
 isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 <span class="keyword">function</span> onNewGameStart()
@@ -9439,7 +9668,7 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 
   <span class="comment">--here we do our stuff, what works only one time for each campaign
 </span>  isCampaignLoadedFirstTime=<span class="keyword">false</span>;
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9458,7 +9687,7 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onCreateSaveFile()
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onCreateSaveFile()
 	<span class="keyword">local</span> savefiles, currentPath = {}, M2TWEOP.getPluginPath()
 	savefiles[<span class="number">1</span>] = currentPath..<span class="string">"\\testSaveFile1.ourSave"</span>
 	savefiles[<span class="number">2</span>] = currentPath..<span class="string">"\\testSaveFile2.ourSave"</span>
@@ -9467,7 +9696,7 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 	file2 = <span class="global">io</span>.open(savefiles[<span class="number">2</span>], <span class="string">"w"</span>); file2:write(<span class="string">"This is save file 2!!!"</span>); file2:close()
 
 	<span class="keyword">return</span> savefiles
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9486,7 +9715,7 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onLoadSaveFile(paths)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onLoadSaveFile(paths)
 	lastSaveFiles={};
 	<span class="keyword">for</span> key, value <span class="keyword">in</span> <span class="global">pairs</span>(paths) <span class="keyword">do</span>
 
@@ -9507,7 +9736,7 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 	<span class="keyword">local</span> content = file:read <span class="string">"*a"</span>;
 	file:close();
 	<span class="keyword">return</span> content;
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9535,9 +9764,9 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onChangeTurnNum(turnNum)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onChangeTurnNum(turnNum)
 <span class="comment">--something here
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9577,11 +9806,11 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onSelectWorldpkgdesc(selectedRecord,selectedRecordGroup)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onSelectWorldpkgdesc(selectedRecord,selectedRecordGroup)
 <span class="comment">--something here
 </span>
 	<span class="keyword">return</span> selectedRecord;
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9618,12 +9847,12 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onfortificationlevelS(settlement)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onfortificationlevelS(settlement)
 	<span class="keyword">if</span> settlement.xCoord == <span class="number">10</span> <span class="keyword">and</span> settlement.yCoord == <span class="number">25</span> <span class="keyword">then</span>
 		<span class="keyword">return</span> <span class="number">3</span>, <span class="keyword">false</span> <span class="comment">--override settlement under siege at these coordinates to level 3 city
 </span>	<span class="keyword">end</span>
 	<span class="keyword">return</span> <span class="keyword">nil</span> <span class="comment">--else, do not override
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9653,9 +9882,9 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onEndSiege(x,y)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onEndSiege(x,y)
 <span class="comment">--something here
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9685,9 +9914,9 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onStartSiege(x,y)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onStartSiege(x,y)
 <span class="comment">--something here
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9715,9 +9944,9 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onCharacterSelected(selectedChar)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onCharacterSelected(selectedChar)
 <span class="comment">--something here
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9745,9 +9974,9 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onPreFactionTurnStart(fac)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onPreFactionTurnStart(fac)
 <span class="comment">--something here
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9775,9 +10004,9 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onFactionTurnStart(fac)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onFactionTurnStart(fac)
 <span class="comment">--something here
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9805,9 +10034,9 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onGeneralDevastatesTile(gen)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onGeneralDevastatesTile(gen)
 <span class="comment">--something here
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9835,9 +10064,9 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onFactionTurnEnd(fac)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onFactionTurnEnd(fac)
 <span class="comment">--something here
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9865,9 +10094,9 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onFactionNewCapital(fac)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onFactionNewCapital(fac)
 newCapital=fac.capital();
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9901,9 +10130,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onFactionWarDeclared(faction,targetFaction)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onFactionWarDeclared(faction,targetFaction)
 <span class="comment">--something
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9937,9 +10166,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onFactionAllianceDeclared(faction,targetFaction)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onFactionAllianceDeclared(faction,targetFaction)
 <span class="comment">--something
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -9973,9 +10202,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onFactionTradeAgreementMade(faction,targetFaction)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onFactionTradeAgreementMade(faction,targetFaction)
 <span class="comment">--something
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -10009,9 +10238,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onFactionBreakAlliance(faction,targetFaction)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onFactionBreakAlliance(faction,targetFaction)
 <span class="comment">--something
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -10051,9 +10280,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onGiveMoney(faction,targetFaction,amount)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onGiveMoney(faction,targetFaction,amount)
 <span class="comment">--something
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -10087,9 +10316,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onUpdateAttitude(faction,targetFaction)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onUpdateAttitude(faction,targetFaction)
 <span class="comment">--something
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -10129,9 +10358,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onDemeanour(faction,targetFaction,amount)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onDemeanour(faction,targetFaction,amount)
 <span class="comment">--something
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -10165,9 +10394,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onGeneralAssaultsGeneral(attacker,defender)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onGeneralAssaultsGeneral(attacker,defender)
 <span class="comment">--something
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -10203,7 +10432,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onGeneralAssaultsResidence(attacker,settlement,fort)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onGeneralAssaultsResidence(attacker,settlement,fort)
 	<span class="keyword">if</span>(settlement~=<span class="keyword">nil</span>)
 	<span class="keyword">then</span>
 		-settlement
@@ -10211,7 +10440,7 @@ newCapital=fac.capital();
 		-fort
 	<span class="keyword">end</span>
 
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -10245,9 +10474,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onGeneralCaptureSettlement(attacker,settlement)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onGeneralCaptureSettlement(attacker,settlement)
 <span class="comment">--something
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -10275,9 +10504,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onGeneralCaptureResidence(attacker)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onGeneralCaptureResidence(attacker)
 <span class="comment">--something
-</span><span class="keyword">end</span></pre>
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -10307,7 +10536,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10335,7 +10564,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10363,7 +10592,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10391,9 +10620,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onSettlementSelected(settlement)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onSettlementSelected(settlement)
 	<span class="global">print</span>(<span class="string">"Function: onSettlementSelected()\n\tSettlement: "</span>..settlement.name)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -10421,9 +10650,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onSettlementUpgraded(settlement)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onSettlementUpgraded(settlement)
 	<span class="global">print</span>(<span class="string">"Function: onSettlementUpgraded()\n\tSettlement Level: "</span>..settlement.level)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -10451,11 +10680,11 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onSettlementConverted(settlement)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onSettlementConverted(settlement)
 	<span class="keyword">if</span> settlement.isCastle == <span class="number">1</span> <span class="keyword">then</span>
 		<span class="comment">--do stuff
 </span>	<span class="keyword">end</span>
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -10483,7 +10712,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10511,7 +10740,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10539,7 +10768,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10579,7 +10808,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10611,7 +10840,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10643,7 +10872,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10675,7 +10904,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10707,7 +10936,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10739,7 +10968,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10773,7 +11002,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10801,7 +11030,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10829,7 +11058,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10855,7 +11084,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10883,7 +11112,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10917,7 +11146,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10951,7 +11180,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -10991,7 +11220,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11029,7 +11258,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11071,7 +11300,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11111,7 +11340,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11139,7 +11368,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11179,7 +11408,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11213,7 +11442,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11247,7 +11476,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11281,7 +11510,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11315,7 +11544,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11355,7 +11584,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11395,7 +11624,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11429,7 +11658,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11457,7 +11686,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11485,7 +11714,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11519,7 +11748,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11547,7 +11776,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11575,7 +11804,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11603,7 +11832,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11631,7 +11860,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11659,7 +11888,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11687,7 +11916,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11715,7 +11944,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11734,7 +11963,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11762,7 +11991,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11790,7 +12019,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11818,7 +12047,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11852,7 +12081,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11886,7 +12115,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11920,7 +12149,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11948,7 +12177,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -11976,7 +12205,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -12004,7 +12233,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -12032,7 +12261,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -12060,7 +12289,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -12088,7 +12317,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -12122,7 +12351,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -12141,7 +12370,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -12160,7 +12389,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -12188,7 +12417,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--something</span></pre>
+        <pre class="example"><code class="language-lua" ><span class="comment">--something</span></code></pre>
     </ul>
 
 </dd>
@@ -12222,9 +12451,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onGuildUpgraded(sett, guildName)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onGuildUpgraded(sett, guildName)
 	<span class="global">print</span>(<span class="string">"Function: onGuildUpgraded()\n\tSettlement: "</span>..sett.name..<span class="string">"\n\tGuild: "</span>..guildName)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -12258,9 +12487,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onGuildDestroyed(sett, guildID)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onGuildDestroyed(sett, guildID)
 	<span class="global">print</span>(<span class="string">"Function: onGuildDestroyed()\n\tSettlement: "</span>..sett.name..<span class="string">"\n\tID: "</span>..guildID)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -12286,9 +12515,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onBrotherAdopted(character)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onBrotherAdopted(character)
 	<span class="global">print</span>(<span class="string">"Function: onBrotherAdopted()\n\tName: "</span>..character.fullName..<span class="string">"\n\tParent: "</span>..character.parent.fullName..<span class="string">"\n\tFaction: "</span>..character.faction:getFactionName())
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -12316,9 +12545,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onBirth(child)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onBirth(child)
 	<span class="global">print</span>(<span class="string">"Function: onBirth()\n\tChild Name: "</span>..child.fullName..<span class="string">"\n\tParent: "</span>..child.parent.fullName..<span class="string">"\n\tFaction: "</span>..child.faction:getFactionName())
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -12344,9 +12573,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onCharacterComesOfAge(character)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onCharacterComesOfAge(character)
 	<span class="global">print</span>(<span class="string">"Function: onCharacterComesOfAge()\n\tName: "</span>..character.fullName..<span class="string">"\n\tParent: "</span>..character.parent.fullName..<span class="string">"\n\tFaction: "</span>..character.faction:getFactionName())
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -12374,9 +12603,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onCharacterMarries(husband)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onCharacterMarries(husband)
 	<span class="global">print</span>(<span class="string">"Function: onCharacterMarries()\n\tName: "</span>..husband.fullName..<span class="string">"\n\tSpouse: "</span>..husband.spouse.fullName..<span class="string">"\n\tFaction: "</span>..husband.faction:getFactionName())
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -12404,9 +12633,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onCharacterMarriesPrincess(husband)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onCharacterMarriesPrincess(husband)
 	<span class="global">print</span>(<span class="string">"Function: onCharacterMarriesPrincess()\n\tName: "</span>..husband.fullName..<span class="string">"\n\tSpouse: "</span>..husband.spouse.fullName..<span class="string">"\n\tFaction: "</span>..husband.faction:getFactionName())
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -12432,14 +12661,14 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onCharacterBecomesAFather(father)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onCharacterBecomesAFather(father)
 	<span class="keyword">local</span> i, children = <span class="number">1</span>, <span class="string">""</span>
 	<span class="keyword">while</span> father.childs[i] ~= <span class="keyword">nil</span> <span class="keyword">do</span>
 		children, i = children..<span class="string">" "</span>..father.childs[i].fullName..<span class="string">","</span>, i + <span class="number">1</span>
 	<span class="keyword">end</span>
 	children = children:gsub(<span class="string">",$"</span>, <span class="string">""</span>)
 	<span class="global">print</span>(<span class="string">"Function: onCharacterBecomesAFather()\n\tName: "</span>..father.fullName..<span class="string">"\n\tChildren:"</span>..children..<span class="string">"\n\tFaction: "</span>..father.faction:getFactionName())
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -12473,9 +12702,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onNewAdmiralCreated(admiral, sett)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onNewAdmiralCreated(admiral, sett)
 	<span class="global">print</span>(<span class="string">"Function: onNewAdmiralCreated()\n\tAdmiral: "</span>..admiral.fullName..<span class="string">"\n\tSettlement: "</span>..sett.name)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -12503,11 +12732,11 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onShortcutTriggered(shortcut)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onShortcutTriggered(shortcut)
 	<span class="keyword">if</span> shortcut == <span class="string">"strat_ui::mission_button"</span> <span class="keyword">then</span>
 		<span class="comment">--do stuff
 </span>	<span class="keyword">end</span>
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -12535,9 +12764,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onBecomesFactionLeader(leader)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onBecomesFactionLeader(leader)
 	<span class="global">print</span>(<span class="string">"Function: onBecomesFactionLeader()\n\tLeader: "</span>..leader.fullName)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -12565,9 +12794,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onBecomesFactionHeir(heir)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onBecomesFactionHeir(heir)
 	<span class="global">print</span>(<span class="string">"Function: onBecomesFactionHeir()\n\tHeir: "</span>..heir.fullName)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -12761,7 +12990,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.addEopEduEntryFromFile(M2TWEOP.getModPath()..<span class="string">"/youneuoy_Data/unitTypes/myTestType.txt"</span>,<span class="number">1000</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.addEopEduEntryFromFile(M2TWEOP.getModPath()..<span class="string">"/youneuoy_Data/unitTypes/myTestType.txt"</span>,<span class="number">1000</span>);</code></pre>
     </ul>
 
 </dd>
@@ -12797,7 +13026,7 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.addEopEduEntryFromEDUID(<span class="number">1</span>,<span class="number">1000</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.addEopEduEntryFromEDUID(<span class="number">1</span>,<span class="number">1000</span>);</code></pre>
     </ul>
 
 </dd>
@@ -12829,9 +13058,9 @@ newCapital=fac.capital();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> eduEntryOfEOPDU=M2TWEOPDU.getEopEduEntryByID(<span class="number">1000</span>);
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> eduEntryOfEOPDU=M2TWEOPDU.getEopEduEntryByID(<span class="number">1000</span>);
 eduEntryOfEOPDU.SoldierCount=<span class="number">20</span>;
-eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
+eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</code></pre>
     </ul>
 
 </dd>
@@ -12863,9 +13092,9 @@ eduEntryOfEOPDU.Width=<span class="number">1.5</span>;</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> eduEntry=M2TWEOPDU.getEduEntry(<span class="number">5</span>);
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> eduEntry=M2TWEOPDU.getEduEntry(<span class="number">5</span>);
 eduEntry.SoldierCount=<span class="number">20</span>;
-eduEntry.Width=<span class="number">1.5</span>;</pre>
+eduEntry.Width=<span class="number">1.5</span>;</code></pre>
     </ul>
 
 </dd>
@@ -12897,9 +13126,9 @@ eduEntry.Width=<span class="number">1.5</span>;</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> eduEntry=M2TWEOPDU.getEduEntryByType(<span class="string">"Peasants"</span>);
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> eduEntry=M2TWEOPDU.getEduEntryByType(<span class="string">"Peasants"</span>);
 eduEntry.SoldierCount=<span class="number">20</span>;
-eduEntry.Width=<span class="number">1.5</span>;</pre>
+eduEntry.Width=<span class="number">1.5</span>;</code></pre>
     </ul>
 
 </dd>
@@ -12931,8 +13160,8 @@ eduEntry.Width=<span class="number">1.5</span>;</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> eduindex=M2TWEOPDU.getEduIndexByType(<span class="string">"Peasants"</span>);
-M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, <span class="number">1</span>);</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> eduindex=M2TWEOPDU.getEduIndexByType(<span class="string">"Peasants"</span>);
+M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, <span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -12964,7 +13193,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> eopDUEntry=M2TWEOPDU.getDataEopDu(<span class="number">1000</span>);</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> eopDUEntry=M2TWEOPDU.getDataEopDu(<span class="number">1000</span>);</code></pre>
     </ul>
 
 </dd>
@@ -12996,7 +13225,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.setEntryUnitCardTga(<span class="number">1000</span>,<span class="string">"#akavir_swordsmen.tga"</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.setEntryUnitCardTga(<span class="number">1000</span>,<span class="string">"#akavir_swordsmen.tga"</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13028,7 +13257,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.setEntryInfoCardTga(<span class="number">1000</span>,<span class="string">"akavir_swordsmen_info.tga"</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.setEntryInfoCardTga(<span class="number">1000</span>,<span class="string">"akavir_swordsmen_info.tga"</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13060,7 +13289,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.setEntrySoldierModel(<span class="number">1000</span>,<span class="string">"Sword_and_Buckler_Men"</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.setEntrySoldierModel(<span class="number">1000</span>,<span class="string">"Sword_and_Buckler_Men"</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13092,7 +13321,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.getArmourUpgradeLevelsNum(<span class="number">1000</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.getArmourUpgradeLevelsNum(<span class="number">1000</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13124,7 +13353,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.setArmourUpgradeLevelsNum(<span class="number">1000</span>, <span class="number">3</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.setArmourUpgradeLevelsNum(<span class="number">1000</span>, <span class="number">3</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13162,7 +13391,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.getArmourUpgradeLevel(<span class="number">1000</span>, <span class="number">0</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.getArmourUpgradeLevel(<span class="number">1000</span>, <span class="number">0</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13200,7 +13429,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.setArmourUpgradeLevel(<span class="number">1000</span>, <span class="number">1</span>, <span class="number">4</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.setArmourUpgradeLevel(<span class="number">1000</span>, <span class="number">1</span>, <span class="number">4</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13232,7 +13461,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.getArmourUpgradeModelsNum(<span class="number">1000</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.getArmourUpgradeModelsNum(<span class="number">1000</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13262,7 +13491,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.setArmourUpgradeModelsNum(<span class="number">1000</span>, <span class="number">3</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.setArmourUpgradeModelsNum(<span class="number">1000</span>, <span class="number">3</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13300,7 +13529,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.getArmourUpgradeModel(<span class="number">1000</span>, <span class="number">0</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.getArmourUpgradeModel(<span class="number">1000</span>, <span class="number">0</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13338,7 +13567,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.setArmourUpgradeModel(<span class="number">1000</span>, <span class="number">1</span>, <span class="number">4</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.setArmourUpgradeModel(<span class="number">1000</span>, <span class="number">1</span>, <span class="number">4</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13378,7 +13607,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.setEntryAttackAttribute(<span class="number">1000</span>, attackAttr.ap, <span class="keyword">true</span>, <span class="number">1</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.setEntryAttackAttribute(<span class="number">1000</span>, attackAttr.ap, <span class="keyword">true</span>, <span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13418,7 +13647,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.getEntryAttackAttribute(<span class="number">1000</span>, attackAttr.ap, <span class="number">1</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.getEntryAttackAttribute(<span class="number">1000</span>, attackAttr.ap, <span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13458,7 +13687,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.setEntryStat(<span class="number">1000</span>, attackAttr.attack, <span class="number">1</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.setEntryStat(<span class="number">1000</span>, attackAttr.attack, <span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13498,7 +13727,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.getEntryStat(<span class="number">1000</span>, attackAttr.attack, <span class="number">1</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.getEntryStat(<span class="number">1000</span>, attackAttr.attack, <span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13530,7 +13759,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.setEntryLocalizedName(<span class="number">1000</span>,<span class="string">"Test unit"</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.setEntryLocalizedName(<span class="number">1000</span>,<span class="string">"Test unit"</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13562,7 +13791,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.setEntryLocalizedDescr(<span class="number">1000</span>,<span class="string">"This is test unit description\n123321\nCreated with m2tweop"</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.setEntryLocalizedDescr(<span class="number">1000</span>,<span class="string">"This is test unit description\n123321\nCreated with m2tweop"</span>);</code></pre>
     </ul>
 
 </dd>
@@ -13594,16 +13823,13 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPDU.setEntryLocalizedShortDescr(<span class="number">1000</span>,<span class="string">"This is test unit short description\n123321\nCreated with m2tweop"</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPDU.setEntryLocalizedShortDescr(<span class="number">1000</span>,<span class="string">"This is test unit short description\n123321\nCreated with m2tweop"</span>);</code></pre>
     </ul>
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="edbEntry"></a>edbEntry </h2>
+    <h2 class="section-header "><a name="EdbEntry"></a>EdbEntry </h2>
 
-          <div class="section-description">
-           Table
-          </div>
     <dl class="function">
     <dt>
     <a name = "edbEntry"></a>
@@ -13684,11 +13910,8 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="capability"></a>capability </h2>
+    <h2 class="section-header "><a name="Capability"></a>Capability </h2>
 
-          <div class="section-description">
-           Table
-          </div>
     <dl class="function">
     <dt>
     <a name = "capability"></a>
@@ -13733,11 +13956,8 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="recruitpool"></a>recruitpool </h2>
+    <h2 class="section-header "><a name="RecruitPool"></a>RecruitPool </h2>
 
-          <div class="section-description">
-           Table
-          </div>
     <dl class="function">
     <dt>
     <a name = "recruitpool"></a>
@@ -13792,11 +14012,8 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
 </dd>
 </dl>
-    <h2 class="section-header has-description"><a name="EDB"></a>EDB </h2>
+    <h2 class="section-header "><a name="EDB"></a>EDB </h2>
 
-          <div class="section-description">
-           Table
-          </div>
     <dl class="function">
     <dt>
     <a name = "EDB"></a>
@@ -13950,7 +14167,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">-- Basic Example
+        <pre class="example"><code class="language-lua" ><span class="comment">-- Basic Example
 </span>oldBuilding = EDB.getBuildingByName(<span class="string">"market"</span>)
 newBuilding = EDB.addEopBuildEntry(oldBuilding,<span class="number">150</span>);
 
@@ -13980,7 +14197,7 @@ EDB.addEopBuildEntry(oldBuilding, <span class="number">0</span>);
 </span>
 <span class="comment">-- Set the existing building in the settlement to be the EOP building we just created
 </span><span class="keyword">local</span> dummyBuilding = sett:getBuilding(<span class="number">5</span>)
-dummyBuilding.edbEntry = eopBuilding</pre>
+dummyBuilding.edbEntry = eopBuilding</code></pre>
     </ul>
 
 </dd>
@@ -14012,7 +14229,7 @@ dummyBuilding.edbEntry = eopBuilding</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">building = EDB.getEopBuildEntry(<span class="number">150</span>);</pre>
+        <pre class="example"><code class="language-lua" >building = EDB.getEopBuildEntry(<span class="number">150</span>);</code></pre>
     </ul>
 
 </dd>
@@ -14050,8 +14267,8 @@ dummyBuilding.edbEntry = eopBuilding</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
-EDB.setBuildingPic(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</pre>
+        <pre class="example"><code class="language-lua" >building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.setBuildingPic(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</code></pre>
     </ul>
 
 </dd>
@@ -14089,8 +14306,8 @@ EDB.setBuildingPic(building, modPath .. mp_path_mods .. <span class="string">"da
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
-EDB.setBuildingPicConstructed(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</pre>
+        <pre class="example"><code class="language-lua" >building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.setBuildingPicConstructed(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</code></pre>
     </ul>
 
 </dd>
@@ -14128,8 +14345,8 @@ EDB.setBuildingPicConstructed(building, modPath .. mp_path_mods .. <span class="
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
-EDB.setBuildingPicConstruction(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</pre>
+        <pre class="example"><code class="language-lua" >building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.setBuildingPicConstruction(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</code></pre>
     </ul>
 
 </dd>
@@ -14167,8 +14384,8 @@ EDB.setBuildingPicConstruction(building, modPath .. mp_path_mods .. <span class=
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
-EDB.setBuildingLocalizedName(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</pre>
+        <pre class="example"><code class="language-lua" >building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.setBuildingLocalizedName(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</code></pre>
     </ul>
 
 </dd>
@@ -14206,8 +14423,8 @@ EDB.setBuildingLocalizedName(building, modPath .. mp_path_mods .. <span class="s
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
-EDB.setBuildingLocalizedDescr(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</pre>
+        <pre class="example"><code class="language-lua" >building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.setBuildingLocalizedDescr(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</code></pre>
     </ul>
 
 </dd>
@@ -14245,8 +14462,8 @@ EDB.setBuildingLocalizedDescr(building, modPath .. mp_path_mods .. <span class="
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
-EDB.setBuildingLocalizedDescrShort(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</pre>
+        <pre class="example"><code class="language-lua" >building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.setBuildingLocalizedDescrShort(building, modPath .. mp_path_mods .. <span class="string">"data/ui/northern_european/buildings/#northern_european_vintner.tga"</span>, <span class="number">0</span>, <span class="number">4</span>);</code></pre>
     </ul>
 
 </dd>
@@ -14288,7 +14505,7 @@ EDB.setBuildingLocalizedDescrShort(building, modPath .. mp_path_mods .. <span cl
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">-- Building Capability Enums
+        <pre class="example"><code class="language-lua" ><span class="comment">-- Building Capability Enums
 </span>population_growth_bonus = <span class="number">0</span>,
    population_loyalty_bonus = <span class="number">1</span>,
    population_health_bonus = <span class="number">2</span>,
@@ -14353,7 +14570,7 @@ building = EDB.getBuildingByName(<span class="string">"market"</span>)
 </span>EDB.addBuildingCapability(building, <span class="number">0</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="keyword">true</span>);
 
 <span class="comment">-- Add a 500 income bonus to the market building
-</span>EDB.addBuildingCapability(building, <span class="number">0</span>, <span class="number">55</span>, <span class="number">500</span>, <span class="keyword">true</span>)</pre>
+</span>EDB.addBuildingCapability(building, <span class="number">0</span>, <span class="number">55</span>, <span class="number">500</span>, <span class="keyword">true</span>)</code></pre>
     </ul>
 
 </dd>
@@ -14387,8 +14604,8 @@ building = EDB.getBuildingByName(<span class="string">"market"</span>)
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
-EDB.removeBuildingCapability(building, <span class="number">0</span>, <span class="number">3</span>);</pre>
+        <pre class="example"><code class="language-lua" >building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.removeBuildingCapability(building, <span class="number">0</span>, <span class="number">3</span>);</code></pre>
     </ul>
 
 </dd>
@@ -14433,8 +14650,8 @@ EDB.removeBuildingCapability(building, <span class="number">0</span>, <span clas
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
-cap = EDB.getBuildingCapability(building, <span class="number">0</span>, <span class="number">3</span>);</pre>
+        <pre class="example"><code class="language-lua" >building = EDB.getBuildingByName(<span class="string">"market"</span>)
+cap = EDB.getBuildingCapability(building, <span class="number">0</span>, <span class="number">3</span>);</code></pre>
     </ul>
 
 </dd>
@@ -14473,8 +14690,8 @@ cap = EDB.getBuildingCapability(building, <span class="number">0</span>, <span c
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
-EDB.getBuildingCapabilityNum(building, <span class="number">0</span>);</pre>
+        <pre class="example"><code class="language-lua" >building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.getBuildingCapabilityNum(building, <span class="number">0</span>);</code></pre>
     </ul>
 
 </dd>
@@ -14524,8 +14741,8 @@ EDB.getBuildingCapabilityNum(building, <span class="number">0</span>);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
-EDB.addBuildingPool(building, <span class="number">0</span>, <span class="number">55</span>, <span class="number">1</span>, <span class="number">0.1</span>, <span class="number">2</span>, <span class="number">0</span>);</pre>
+        <pre class="example"><code class="language-lua" >building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.addBuildingPool(building, <span class="number">0</span>, <span class="number">55</span>, <span class="number">1</span>, <span class="number">0.1</span>, <span class="number">2</span>, <span class="number">0</span>);</code></pre>
     </ul>
 
 </dd>
@@ -14559,8 +14776,8 @@ EDB.addBuildingPool(building, <span class="number">0</span>, <span class="number
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
-EDB.removeBuildingPool(building, <span class="number">0</span>, <span class="number">3</span>);</pre>
+        <pre class="example"><code class="language-lua" >building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.removeBuildingPool(building, <span class="number">0</span>, <span class="number">3</span>);</code></pre>
     </ul>
 
 </dd>
@@ -14600,8 +14817,8 @@ EDB.removeBuildingPool(building, <span class="number">0</span>, <span class="num
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
-EDB.getBuildingPool(building, <span class="number">0</span>, <span class="number">3</span>);</pre>
+        <pre class="example"><code class="language-lua" >building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.getBuildingPool(building, <span class="number">0</span>, <span class="number">3</span>);</code></pre>
     </ul>
 
 </dd>
@@ -14637,8 +14854,8 @@ EDB.getBuildingPool(building, <span class="number">0</span>, <span class="number
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)
-EDB.getBuildingPoolNum(building, <span class="number">0</span>);</pre>
+        <pre class="example"><code class="language-lua" >building = EDB.getBuildingByName(<span class="string">"market"</span>)
+EDB.getBuildingPoolNum(building, <span class="number">0</span>);</code></pre>
     </ul>
 
 </dd>
@@ -14672,12 +14889,12 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">building = EDB.getBuildingByName(<span class="string">"market"</span>)</pre>
+        <pre class="example"><code class="language-lua" >building = EDB.getBuildingByName(<span class="string">"market"</span>)</code></pre>
     </ul>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Campaign_Enums"></a>Campaign Enums </h2>
+    <h2 class="section-header "><a name="CampaignEnums"></a>CampaignEnums </h2>
 
     <dl class="function">
     <dt>
@@ -14726,10 +14943,10 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
 <span class="keyword">local</span> fac1=campaign.factionsSortedByDescrStrat[<span class="number">1</span>];
 <span class="keyword">local</span> fac2=campaign.factionsSortedByDescrStrat[<span class="number">2</span>];
-<span class="keyword">local</span> isInWar=campaign:checkDipStance(dipRelType.war,fac1,fac2);</pre>
+<span class="keyword">local</span> isInWar=campaign:checkDipStance(dipRelType.war,fac1,fac2);</code></pre>
     </ul>
 
 </dd>
@@ -14901,10 +15118,10 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
 <span class="keyword">local</span> fac1=campaign.factionsSortedByDescrStrat[<span class="number">1</span>];
 <span class="keyword">local</span> fac2=campaign.factionsSortedByDescrStrat[<span class="number">2</span>];
-<span class="keyword">local</span> isInWar=campaign:checkDipStance(dipRelType.war,fac1,fac2);</pre>
+<span class="keyword">local</span> isInWar=campaign:checkDipStance(dipRelType.war,fac1,fac2);</code></pre>
     </ul>
 
 </dd>
@@ -14938,10 +15155,10 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
 <span class="keyword">local</span> fac1=campaign.factionsSortedByDescrStrat[<span class="number">1</span>];
 <span class="keyword">local</span> fac2=campaign.factionsSortedByDescrStrat[<span class="number">2</span>];
-campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
+campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
     </ul>
 
 </dd>
@@ -14966,8 +15183,8 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
-<span class="keyword">local</span> unitSize=campaign:GetUnitSize();</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
+<span class="keyword">local</span> unitSize=campaign:GetUnitSize();</code></pre>
     </ul>
 
 </dd>
@@ -15053,8 +15270,8 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
-<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);</code></pre>
     </ul>
 
 </dd>
@@ -15094,8 +15311,8 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
-<span class="keyword">local</span> tile = sMap.getTile(<span class="number">182</span>, <span class="number">243</span>);</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+<span class="keyword">local</span> tile = sMap.getTile(<span class="number">182</span>, <span class="number">243</span>);</code></pre>
     </ul>
 
 </dd>
@@ -15408,9 +15625,9 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
 <span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
-<span class="keyword">local</span> army = region:getStack(<span class="number">0</span>)</pre>
+<span class="keyword">local</span> army = region:getStack(<span class="number">0</span>)</code></pre>
     </ul>
 
 </dd>
@@ -15444,9 +15661,9 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
 <span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
-<span class="keyword">local</span> fort = region:getFort(<span class="number">0</span>)</pre>
+<span class="keyword">local</span> fort = region:getFort(<span class="number">0</span>)</code></pre>
     </ul>
 
 </dd>
@@ -15480,9 +15697,9 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
 <span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
-<span class="keyword">local</span> watch = region:getWatchtower(<span class="number">0</span>)</pre>
+<span class="keyword">local</span> watch = region:getWatchtower(<span class="number">0</span>)</code></pre>
     </ul>
 
 </dd>
@@ -15516,9 +15733,9 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
 <span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
-<span class="keyword">local</span> res = region:getResource(<span class="number">0</span>)</pre>
+<span class="keyword">local</span> res = region:getResource(<span class="number">0</span>)</code></pre>
     </ul>
 
 </dd>
@@ -15552,9 +15769,9 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
 <span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
-region:getNeighbour(<span class="number">0</span>)</pre>
+region:getNeighbour(<span class="number">0</span>)</code></pre>
     </ul>
 
 </dd>
@@ -15588,9 +15805,9 @@ region:getNeighbour(<span class="number">0</span>)</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
 <span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
-region:getHiddenResource(<span class="number">0</span>)</pre>
+region:getHiddenResource(<span class="number">0</span>)</code></pre>
     </ul>
 
 </dd>
@@ -15624,14 +15841,14 @@ region:getHiddenResource(<span class="number">0</span>)</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
 <span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
-region:setHiddenResource(<span class="number">0</span>, <span class="keyword">false</span>)</pre>
+region:setHiddenResource(<span class="number">0</span>, <span class="keyword">false</span>)</code></pre>
     </ul>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Merc_Pools"></a>Merc Pools </h2>
+    <h2 class="section-header "><a name="MercPools"></a>MercPools </h2>
 
     <dl class="function">
     <dt>
@@ -15697,10 +15914,10 @@ region:setHiddenResource(<span class="number">0</span>, <span class="keyword">fa
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
 <span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
 <span class="keyword">local</span> mercpool = region.mercPool;
-<span class="keyword">local</span> mercNum = mercpool:getMercUnitNum();</pre>
+<span class="keyword">local</span> mercNum = mercpool:getMercUnitNum();</code></pre>
     </ul>
 
 </dd>
@@ -15772,10 +15989,10 @@ region:setHiddenResource(<span class="number">0</span>, <span class="keyword">fa
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
 <span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
 <span class="keyword">local</span> mercpool = region.mercPool;
-<span class="keyword">local</span> mercUnit = mercpool:addMercUnit(<span class="number">1907</span>, <span class="number">0</span>, <span class="number">570</span>, <span class="number">0.15</span>, <span class="number">0.35</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</pre>
+<span class="keyword">local</span> mercUnit = mercpool:addMercUnit(<span class="number">1907</span>, <span class="number">0</span>, <span class="number">570</span>, <span class="number">0.15</span>, <span class="number">0.35</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</code></pre>
     </ul>
 
 </dd>
@@ -15809,18 +16026,18 @@ region:setHiddenResource(<span class="number">0</span>, <span class="keyword">fa
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
 <span class="keyword">local</span> region = sMap.getRegion(<span class="number">2</span>);
 <span class="keyword">local</span> mercpool = region.mercPool;
 <span class="keyword">local</span> mercNum = mercPool:getMercUnitNum();
 <span class="keyword">for</span> i = <span class="number">0</span>, mercNum-<span class="number">1</span> <span class="keyword">do</span>
 	<span class="keyword">local</span> mercUnit = mercpool:getMercUnit(i);
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="Mercenary_units"></a>Mercenary units </h2>
+    <h2 class="section-header "><a name="MercenaryUnits"></a>MercenaryUnits </h2>
 
     <dl class="function">
     <dt>
@@ -15953,19 +16170,19 @@ region:setHiddenResource(<span class="number">0</span>, <span class="keyword">fa
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> stratmap = gameDataAll.get().stratMap;
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> stratmap = gameDataAll.get().stratMap;
 <span class="keyword">local</span> region = stratMap.getRegion(<span class="number">2</span>);
 <span class="keyword">local</span> mercpool = region.mercPool;
 <span class="keyword">local</span> mercNum = mercPool:getMercUnitNum();
 <span class="keyword">for</span> i = <span class="number">0</span>, mercNum-<span class="number">1</span> <span class="keyword">do</span>
 	<span class="keyword">local</span> mercUnit = mercPool:getMercUnit(i);
 	mercUnit:setMercReligion(<span class="number">3</span>, <span class="keyword">true</span>)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="gameDataAll"></a>gameDataAll </h2>
+    <h2 class="section-header "><a name="GameDataAll"></a>GameDataAll </h2>
 
     <dl class="function">
     <dt>
@@ -16021,13 +16238,13 @@ region:setHiddenResource(<span class="number">0</span>, <span class="keyword">fa
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">gameData=gameDataAll.get();
-battleXCoord=gameData.battleStruct.xCoord;</pre>
+        <pre class="example"><code class="language-lua" >gameData=gameDataAll.get();
+battleXCoord=gameData.battleStruct.xCoord;</code></pre>
     </ul>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="battleStruct"></a>battleStruct </h2>
+    <h2 class="section-header "><a name="BattleStruct"></a>BattleStruct </h2>
 
     <dl class="function">
     <dt>
@@ -16154,7 +16371,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="battleSide"></a>battleSide </h2>
+    <h2 class="section-header "><a name="BattleSide"></a>BattleSide </h2>
 
     <dl class="function">
     <dt>
@@ -16275,7 +16492,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">function</span> onPostBattle(character)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onPostBattle(character)
 	getBattleData()
 <span class="keyword">end</span>
 
@@ -16305,7 +16522,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 		<span class="keyword">end</span>
 	<span class="keyword">end</span>
 	<span class="global">print</span>(battleList)
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -16345,12 +16562,12 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">unit = side:getBattleArmy(<span class="number">0</span>)</pre>
+        <pre class="example"><code class="language-lua" >unit = side:getBattleArmy(<span class="number">0</span>)</code></pre>
     </ul>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="trackedPointerArmy"></a>trackedPointerArmy </h2>
+    <h2 class="section-header "><a name="TrackedPointerArmy"></a>TrackedPointerArmy </h2>
 
     <dl class="function">
     <dt>
@@ -16384,7 +16601,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="deploymentAreaS"></a>deploymentAreaS </h2>
+    <h2 class="section-header "><a name="DeploymentAreaS"></a>DeploymentAreaS </h2>
 
     <dl class="function">
     <dt>
@@ -16441,7 +16658,7 @@ battleXCoord=gameData.battleStruct.xCoord;</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">gameData=gameDataAll.get();
+        <pre class="example"><code class="language-lua" >gameData=gameDataAll.get();
 battleS=gameData.battleStruct;
 side1=gameData.battleStruct.sides[<span class="number">1</span>];
 deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
@@ -16449,12 +16666,12 @@ deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
 <span class="keyword">for</span> i = <span class="number">0</span>, deployArea1.coordsNum-<span class="number">1</span> <span class="keyword">do</span>
 	xCoord,yCoord=side1.armies[<span class="number">1</span>].deploymentArea:getCoordPair(i);
 	<span class="global">print</span>(xCoord,yCoord);
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="battleAI"></a>battleAI </h2>
+    <h2 class="section-header "><a name="BattleAI"></a>BattleAI </h2>
 
     <dl class="function">
     <dt>
@@ -16506,7 +16723,7 @@ deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="battleArmy"></a>battleArmy </h2>
+    <h2 class="section-header "><a name="BattleArmy"></a>BattleArmy </h2>
 
     <dl class="function">
     <dt>
@@ -16611,12 +16828,12 @@ deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">unit = battleArmy:getBattleUnit(<span class="number">0</span>)</pre>
+        <pre class="example"><code class="language-lua" >unit = battleArmy:getBattleUnit(<span class="number">0</span>)</code></pre>
     </ul>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="battleUnit"></a>battleUnit </h2>
+    <h2 class="section-header "><a name="BattleUnit"></a>BattleUnit </h2>
 
     <dl class="function">
     <dt>
@@ -16815,7 +17032,7 @@ deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);</pre>
+        <pre class="example"><code class="language-lua" >M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -16841,9 +17058,9 @@ deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--1 is id here
+        <pre class="example"><code class="language-lua" ><span class="comment">--1 is id here
 </span>M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);
-M2TWEOPFBX.deleteFbxModel(<span class="number">1</span>);</pre>
+M2TWEOPFBX.deleteFbxModel(<span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -16875,9 +17092,9 @@ M2TWEOPFBX.deleteFbxModel(<span class="number">1</span>);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--1 is id here
+        <pre class="example"><code class="language-lua" ><span class="comment">--1 is id here
 </span>M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);
-<span class="keyword">local</span> ourNewModel=M2TWEOPFBX.getFbxModel(<span class="number">1</span>);</pre>
+<span class="keyword">local</span> ourNewModel=M2TWEOPFBX.getFbxModel(<span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -16913,11 +17130,11 @@ M2TWEOPFBX.deleteFbxModel(<span class="number">1</span>);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--1 is model id here
+        <pre class="example"><code class="language-lua" ><span class="comment">--1 is model id here
 </span>M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);
 <span class="keyword">local</span> ourNewModel=M2TWEOPFBX.getFbxModel(<span class="number">1</span>);
 <span class="comment">--2 is object id here
-</span><span class="keyword">local</span> ourNewObject=M2TWEOPFBX.addFbxObject(<span class="number">1</span>,<span class="number">2</span>);</pre>
+</span><span class="keyword">local</span> ourNewObject=M2TWEOPFBX.addFbxObject(<span class="number">1</span>,<span class="number">2</span>);</code></pre>
     </ul>
 
 </dd>
@@ -16943,12 +17160,12 @@ M2TWEOPFBX.deleteFbxModel(<span class="number">1</span>);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--1 is model id here
+        <pre class="example"><code class="language-lua" ><span class="comment">--1 is model id here
 </span>M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);
 <span class="keyword">local</span> ourNewModel=M2TWEOPFBX.getFbxModel(<span class="number">1</span>);
 <span class="comment">--2 is object id here
 </span><span class="keyword">local</span> ourNewObject=M2TWEOPFBX.addFbxObject(<span class="number">1</span>,<span class="number">2</span>);
-M2TWEOPFBX.deleteFbxObject(ourNewObject);</pre>
+M2TWEOPFBX.deleteFbxObject(ourNewObject);</code></pre>
     </ul>
 
 </dd>
@@ -16980,12 +17197,12 @@ M2TWEOPFBX.deleteFbxObject(ourNewObject);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--1 is model id here
+        <pre class="example"><code class="language-lua" ><span class="comment">--1 is model id here
 </span>M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);
 <span class="keyword">local</span> ourNewModel=M2TWEOPFBX.getFbxModel(<span class="number">1</span>);
 <span class="comment">--2 is object id here
 </span>M2TWEOPFBX.addFbxObject(<span class="number">1</span>,<span class="number">2</span>);
-<span class="keyword">local</span> ourNewObject=M2TWEOPFBX.getFbxObject(<span class="number">2</span>);</pre>
+<span class="keyword">local</span> ourNewObject=M2TWEOPFBX.getFbxObject(<span class="number">2</span>);</code></pre>
     </ul>
 
 </dd>
@@ -17023,13 +17240,13 @@ M2TWEOPFBX.deleteFbxObject(ourNewObject);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--1 is model id here
+        <pre class="example"><code class="language-lua" ><span class="comment">--1 is model id here
 </span>M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);
 <span class="keyword">local</span> ourNewModel=M2TWEOPFBX.getFbxModel(<span class="number">1</span>);
 <span class="comment">--2 is object id here
 </span>M2TWEOPFBX.addFbxObject(<span class="number">1</span>,<span class="number">2</span>);
 <span class="keyword">local</span> ourNewObject=M2TWEOPFBX.getFbxObject(<span class="number">2</span>);
-M2TWEOPFBX.setFbxObjectCoords(ourNewObject,<span class="number">1.2</span>,<span class="number">123.95</span>,<span class="number">1</span>);</pre>
+M2TWEOPFBX.setFbxObjectCoords(ourNewObject,<span class="number">1.2</span>,<span class="number">123.95</span>,<span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -17067,14 +17284,14 @@ M2TWEOPFBX.setFbxObjectCoords(ourNewObject,<span class="number">1.2</span>,<span
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--1 is model id here
+        <pre class="example"><code class="language-lua" ><span class="comment">--1 is model id here
 </span>M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);
 <span class="keyword">local</span> ourNewModel=M2TWEOPFBX.getFbxModel(<span class="number">1</span>);
 <span class="comment">--2 is object id here
 </span>M2TWEOPFBX.addFbxObject(<span class="number">1</span>,<span class="number">2</span>);
 <span class="keyword">local</span> ourNewObject=M2TWEOPFBX.getFbxObject(<span class="number">2</span>);
 M2TWEOPFBX.setFbxObjectCoords(ourNewObject,<span class="number">1.2</span>,<span class="number">123.95</span>,<span class="number">1</span>);
-<span class="keyword">local</span> x,y,z=M2TWEOPFBX.getFbxObjectCoords(ourNewObject);</pre>
+<span class="keyword">local</span> x,y,z=M2TWEOPFBX.getFbxObjectCoords(ourNewObject);</code></pre>
     </ul>
 
 </dd>
@@ -17104,7 +17321,7 @@ M2TWEOPFBX.setFbxObjectCoords(ourNewObject,<span class="number">1.2</span>,<span
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--1 is model id here
+        <pre class="example"><code class="language-lua" ><span class="comment">--1 is model id here
 </span>M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);
 <span class="keyword">local</span> ourNewModel=M2TWEOPFBX.getFbxModel(<span class="number">1</span>);
 <span class="comment">--2 is object id here
@@ -17114,7 +17331,7 @@ M2TWEOPFBX.setFbxObjectCoords(ourNewObject,<span class="number">1.2</span>,<span
 <span class="keyword">local</span> x,y,z=M2TWEOPFBX.getFbxObjectCoords(ourNewObject);
 
 
-M2TWEOPFBX.setFbxObjectSize(ourNewObject,<span class="number">25.2</span>);</pre>
+M2TWEOPFBX.setFbxObjectSize(ourNewObject,<span class="number">25.2</span>);</code></pre>
     </ul>
 
 </dd>
@@ -17146,7 +17363,7 @@ M2TWEOPFBX.setFbxObjectSize(ourNewObject,<span class="number">25.2</span>);</pre
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--1 is model id here
+        <pre class="example"><code class="language-lua" ><span class="comment">--1 is model id here
 </span>M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);
 <span class="keyword">local</span> ourNewModel=M2TWEOPFBX.getFbxModel(<span class="number">1</span>);
 <span class="comment">--2 is object id here
@@ -17157,7 +17374,7 @@ M2TWEOPFBX.setFbxObjectCoords(ourNewObject,<span class="number">1.2</span>,<span
 
 
 M2TWEOPFBX.setFbxObjectSize(ourNewObject,<span class="number">25.2</span>);
-<span class="keyword">local</span> size=M2TWEOPFBX.getFbxObjectSize(ourNewObject);</pre>
+<span class="keyword">local</span> size=M2TWEOPFBX.getFbxObjectSize(ourNewObject);</code></pre>
     </ul>
 
 </dd>
@@ -17187,7 +17404,7 @@ M2TWEOPFBX.setFbxObjectSize(ourNewObject,<span class="number">25.2</span>);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--1 is model id here
+        <pre class="example"><code class="language-lua" ><span class="comment">--1 is model id here
 </span>M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);
 <span class="keyword">local</span> ourNewModel=M2TWEOPFBX.getFbxModel(<span class="number">1</span>);
 <span class="comment">--2 is object id here
@@ -17201,7 +17418,7 @@ M2TWEOPFBX.setFbxObjectSize(ourNewObject,<span class="number">25.2</span>);
 <span class="keyword">local</span> size=M2TWEOPFBX.getFbxObjectSize(ourNewObject);
 
 
-M2TWEOPFBX.setFbxObjectDrawState(ourNewObject,<span class="keyword">true</span>);</pre>
+M2TWEOPFBX.setFbxObjectDrawState(ourNewObject,<span class="keyword">true</span>);</code></pre>
     </ul>
 
 </dd>
@@ -17233,7 +17450,7 @@ M2TWEOPFBX.setFbxObjectDrawState(ourNewObject,<span class="keyword">true</span>)
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--1 is model id here
+        <pre class="example"><code class="language-lua" ><span class="comment">--1 is model id here
 </span>M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);
 <span class="keyword">local</span> ourNewModel=M2TWEOPFBX.getFbxModel(<span class="number">1</span>);
 <span class="comment">--2 is object id here
@@ -17248,7 +17465,7 @@ M2TWEOPFBX.setFbxObjectSize(ourNewObject,<span class="number">25.2</span>);
 
 
 M2TWEOPFBX.setFbxObjectDrawState(ourNewObject,<span class="keyword">true</span>);
-<span class="keyword">local</span> isDrawed=M2TWEOPFBX.getFbxObjectDrawState(ourNewObject);</pre>
+<span class="keyword">local</span> isDrawed=M2TWEOPFBX.getFbxObjectDrawState(ourNewObject);</code></pre>
     </ul>
 
 </dd>
@@ -17278,7 +17495,7 @@ M2TWEOPFBX.setFbxObjectDrawState(ourNewObject,<span class="keyword">true</span>)
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--1 is model id here
+        <pre class="example"><code class="language-lua" ><span class="comment">--1 is model id here
 </span>M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);
 <span class="keyword">local</span> ourNewModel=M2TWEOPFBX.getFbxModel(<span class="number">1</span>);
 <span class="comment">--2 is object id here
@@ -17294,7 +17511,7 @@ M2TWEOPFBX.setFbxObjectSize(ourNewObject,<span class="number">25.2</span>);
 
 M2TWEOPFBX.setFbxObjectDrawState(ourNewObject,<span class="keyword">true</span>);
 <span class="keyword">local</span> isDrawed=M2TWEOPFBX.getFbxObjectDrawState(ourNewObject);
-M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>);</pre>
+M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>);</code></pre>
     </ul>
 
 </dd>
@@ -17326,7 +17543,7 @@ M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>)
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--1 is model id here
+        <pre class="example"><code class="language-lua" ><span class="comment">--1 is model id here
 </span>M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);
 <span class="keyword">local</span> ourNewModel=M2TWEOPFBX.getFbxModel(<span class="number">1</span>);
 <span class="comment">--2 is object id here
@@ -17343,7 +17560,7 @@ M2TWEOPFBX.setFbxObjectSize(ourNewObject,<span class="number">25.2</span>);
 M2TWEOPFBX.setFbxObjectDrawState(ourNewObject,<span class="keyword">true</span>);
 <span class="keyword">local</span> isDrawed=M2TWEOPFBX.getFbxObjectDrawState(ourNewObject);
 M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>);
-<span class="keyword">local</span> isAnimationPlayed=M2TWEOPFBX.getFbxObjectAnimState(ourNewObject);</pre>
+<span class="keyword">local</span> isAnimationPlayed=M2TWEOPFBX.getFbxObjectAnimState(ourNewObject);</code></pre>
     </ul>
 
 </dd>
@@ -17382,7 +17599,7 @@ Default value - 1
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--1 is model id here
+        <pre class="example"><code class="language-lua" ><span class="comment">--1 is model id here
 </span>M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);
 <span class="keyword">local</span> ourNewModel=M2TWEOPFBX.getFbxModel(<span class="number">1</span>);
 <span class="comment">--2 is object id here
@@ -17407,7 +17624,7 @@ M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>)
 <span class="keyword">then</span>
 	<span class="comment">--change drawing type to battle map
 </span>	M2TWEOPFBX.setFbxObjectDrawType(ourNewObject,<span class="number">2</span>);
-<span class="keyword">end</span></pre>
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -17448,7 +17665,7 @@ Default value - 1
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="comment">--1 is model id here
+        <pre class="example"><code class="language-lua" ><span class="comment">--1 is model id here
 </span>M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath()..<span class="string">"/eopData/testmodel.fbx"</span>,M2TWEOP.getModPath()..<span class="string">"/eopData/testtexture.dds"</span>,<span class="number">1</span>);
 <span class="keyword">local</span> ourNewModel=M2TWEOPFBX.getFbxModel(<span class="number">1</span>);
 <span class="comment">--2 is object id here
@@ -17465,7 +17682,7 @@ M2TWEOPFBX.setFbxObjectSize(ourNewObject,<span class="number">25.2</span>);
 M2TWEOPFBX.setFbxObjectDrawState(ourNewObject,<span class="keyword">true</span>);
 <span class="keyword">local</span> isDrawed=M2TWEOPFBX.getFbxObjectDrawState(ourNewObject);
 M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>);
-<span class="keyword">local</span> whereWeDrawObject=M2TWEOPFBX.getFbxObjectDrawType(ourNewObject);</pre>
+<span class="keyword">local</span> whereWeDrawObject=M2TWEOPFBX.getFbxObjectDrawType(ourNewObject);</code></pre>
     </ul>
 
 </dd>
@@ -17537,7 +17754,7 @@ M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>)
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);</pre>
+        <pre class="example"><code class="language-lua" >newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);</code></pre>
     </ul>
 
 </dd>
@@ -17563,9 +17780,9 @@ M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>)
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+        <pre class="example"><code class="language-lua" >newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
 	newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
-M2TWEOP3dObjects.DeleteTextFont(newFont);</pre>
+M2TWEOP3dObjects.DeleteTextFont(newFont);</code></pre>
     </ul>
 
 </dd>
@@ -17601,9 +17818,9 @@ M2TWEOP3dObjects.DeleteTextFont(newFont);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+        <pre class="example"><code class="language-lua" >newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
 newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
-M2TWEOP3dObjects.DeleteTextFont(newFont);</pre>
+M2TWEOP3dObjects.DeleteTextFont(newFont);</code></pre>
     </ul>
 
 </dd>
@@ -17740,9 +17957,9 @@ M2TWEOP3dObjects.DeleteTextFont(newFont);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+        <pre class="example"><code class="language-lua" >newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
 newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
-newText:Scale(<span class="number">0.3</span>);</pre>
+newText:Scale(<span class="number">0.3</span>);</code></pre>
     </ul>
 
 </dd>
@@ -17788,9 +18005,9 @@ newText:Scale(<span class="number">0.3</span>);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+        <pre class="example"><code class="language-lua" >newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
 newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
-newText:ChangeColor(<span class="number">255</span>,<span class="number">0</span>,<span class="number">255</span>,<span class="number">177</span>);</pre>
+newText:ChangeColor(<span class="number">255</span>,<span class="number">0</span>,<span class="number">255</span>,<span class="number">177</span>);</code></pre>
     </ul>
 
 </dd>
@@ -17830,9 +18047,9 @@ newText:ChangeColor(<span class="number">255</span>,<span class="number">0</span
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+        <pre class="example"><code class="language-lua" >newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
 newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
-newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,<span class="number">0.2</span>);</pre>
+newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,<span class="number">0.2</span>);</code></pre>
     </ul>
 
 </dd>
@@ -17851,10 +18068,10 @@ newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+        <pre class="example"><code class="language-lua" >newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
 newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
 newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,<span class="number">0.2</span>);
-newText:StartDrawing();</pre>
+newText:StartDrawing();</code></pre>
     </ul>
 
 </dd>
@@ -17873,12 +18090,12 @@ newText:StartDrawing();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+        <pre class="example"><code class="language-lua" >newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
 newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
 newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,<span class="number">0.2</span>);
 newText:StartDrawing();
 <span class="comment">--some time we draw
-</span>newText:StopDrawing();</pre>
+</span>newText:StopDrawing();</code></pre>
     </ul>
 
 </dd>
@@ -17897,10 +18114,10 @@ newText:StartDrawing();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+        <pre class="example"><code class="language-lua" >newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
 newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
 newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,<span class="number">0.2</span>);
-newText:DrawOnce();</pre>
+newText:DrawOnce();</code></pre>
     </ul>
 
 </dd>
@@ -17919,11 +18136,11 @@ newText:DrawOnce();</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
+        <pre class="example"><code class="language-lua" >newFont = M2TWEOP3dObjects.MakeTextFont(<span class="string">"Times New Roman"</span>);
 newText = M2TWEOP3dObjects.Make3dText(newFont, <span class="string">"Some text"</span>);
 newText:SetCoords(<span class="number">10</span>,<span class="number">20</span>,<span class="number">0.2</span>);
 newText:DrawOnce();
-newText:Delete();</pre>
+newText:Delete();</code></pre>
     </ul>
 
 </dd>
@@ -18031,7 +18248,7 @@ It should be used for small sounds that can fit in memory. It's not recommended 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath()..<span class="string">"/eopData/testsound.wav"</span>);</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath()..<span class="string">"/eopData/testsound.wav"</span>);</code></pre>
     </ul>
 
 </dd>
@@ -18057,8 +18274,8 @@ It should be used for small sounds that can fit in memory. It's not recommended 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath()..<span class="string">"/eopData/testsound.wav"</span>);
-M2TWEOPSounds.deleteEOPSound(ourNewSound);</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath()..<span class="string">"/eopData/testsound.wav"</span>);
+M2TWEOPSounds.deleteEOPSound(ourNewSound);</code></pre>
     </ul>
 
 </dd>
@@ -18084,8 +18301,8 @@ M2TWEOPSounds.deleteEOPSound(ourNewSound);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath()..<span class="string">"/eopData/testsound.wav"</span>);
-M2TWEOPSounds.playEOPSound(ourNewSound);</pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath()..<span class="string">"/eopData/testsound.wav"</span>);
+M2TWEOPSounds.playEOPSound(ourNewSound);</code></pre>
     </ul>
 
 </dd>
@@ -18115,9 +18332,9 @@ M2TWEOPSounds.playEOPSound(ourNewSound);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath()..<span class="string">"/eopData/testsound.wav"</span>);
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath()..<span class="string">"/eopData/testsound.wav"</span>);
 M2TWEOPSounds.setEOPSoundOffset(ourNewSound,<span class="number">1000</span>);
-M2TWEOPSounds.playSound(ourNewSound);</pre>
+M2TWEOPSounds.playSound(ourNewSound);</code></pre>
     </ul>
 
 </dd>
@@ -18149,9 +18366,9 @@ M2TWEOPSounds.playSound(ourNewSound);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath()..<span class="string">"/eopData/testsound.wav"</span>);
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath()..<span class="string">"/eopData/testsound.wav"</span>);
 M2TWEOPSounds.playSound(ourNewSound);
-<span class="keyword">local</span> currentPlayPosition=M2TWEOPSounds.getEOPSoundOffset(ourNewSound);</pre>
+<span class="keyword">local</span> currentPlayPosition=M2TWEOPSounds.getEOPSoundOffset(ourNewSound);</code></pre>
     </ul>
 
 </dd>
@@ -18177,9 +18394,9 @@ M2TWEOPSounds.playSound(ourNewSound);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath()..<span class="string">"/eopData/testsound.wav"</span>);
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath()..<span class="string">"/eopData/testsound.wav"</span>);
 M2TWEOPSounds.playSound(ourNewSound);
-M2TWEOPSounds.pauseEOPSound(ourNewSound);</pre>
+M2TWEOPSounds.pauseEOPSound(ourNewSound);</code></pre>
     </ul>
 
 </dd>
@@ -18205,9 +18422,9 @@ M2TWEOPSounds.pauseEOPSound(ourNewSound);</pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath()..<span class="string">"/eopData/testsound.wav"</span>);
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath()..<span class="string">"/eopData/testsound.wav"</span>);
 M2TWEOPSounds.playSound(ourNewSound);
-M2TWEOPSounds.stopEOPSound(ourNewSound);</pre>
+M2TWEOPSounds.stopEOPSound(ourNewSound);</code></pre>
     </ul>
 
 </dd>
