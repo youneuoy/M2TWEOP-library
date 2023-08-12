@@ -146,22 +146,20 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	if (!funcResult.valid())
 	{
 		sol::error luaError = funcResult;
-		MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);
+		MessageBoxA(NULL, luaError.what(), "Lua package error!", NULL);
 		return nullptr;
 	}
-
-
 
 	sol::load_result fileRes = luaState.load_file(luaFilePath);
 	if (!fileRes.valid()) { // This checks the syntax of your script, but does not execute it
 		sol::error luaError = fileRes;
-		MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);
+		MessageBoxA(NULL, luaError.what(), "Lua syntax error!", NULL);
 		return nullptr;
 	}
 	sol::protected_function_result result1 = fileRes(); // this causes the script to execute
 	if (!result1.valid()) {
 		sol::error luaError = result1;
-		MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);
+		MessageBoxA(NULL, luaError.what(), "Lua execution error!", NULL);
 		return nullptr;
 	}
 
