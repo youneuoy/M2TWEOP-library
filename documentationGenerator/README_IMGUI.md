@@ -305,10 +305,10 @@ GUI_OPEN, shouldDraw = ImGui.Begin("BACKGROUND_SCROLL", GUI_OPEN, ImGuiWindowFla
 
   -- Load the image
   BANNER_IMAGE = { x = 0, y = 0, img = nil }
-  BANNER_IMAGE.x, BANNER_IMAGE.y, BANNER_IMAGE.img = M2TWEOP.loadTexture(M2TWEOP.getModPath().."eopData/images/gui/BACKGROUND_SCROLL.png")
+  BANNER_IMAGE.x, BANNER_IMAGE.y, BANNER_IMAGE.img = M2TWEOP.loadTexture(M2TWEOP.getModPath()..'\\eopData\\images\\SCROLL_BACKGROUND.png')
 
   -- Draw the image in our centered window
-  ImGui.Image(image, scrollBackgroundWidth, scrollBackgroundHeight)
+  ImGui.Image(BANNER_IMAGE.img, scrollBackgroundWidth, scrollBackgroundHeight)
 
 ImGui.End() -- End window area
 ```

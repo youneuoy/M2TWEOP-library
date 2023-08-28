@@ -97,7 +97,7 @@ return [==[
         <li><a href="../../../articles.html">M2TWEOP Tutorials</li>
     <ul>
         <li><a href="https://www.youtube.com/watch?v=hUvbcz8i7Wk">Scripting Basics (Video Tutorial)</li>
-        <li><a href="../../../_static/Introduction_to_ImGui_v3.pdf">Introduction to ImGUI</a></li>
+        <li><a href="../../../_static/Introduction_to_ImGui_v4.pdf">Introduction to EOP ImGUI V4 by Erken (PDF)</a></li>
     <ul>
     </ul>
 # elseif module then
@@ -105,7 +105,7 @@ return [==[
         <li><a href="../../articles.html">M2TWEOP Tutorials</li>
     <ul>
         <li><a href="https://www.youtube.com/watch?v=hUvbcz8i7Wk">Scripting Basics (Video Tutorial)</li>
-        <li><a href="../../_static/Introduction_to_ImGui_v3.pdf">Introduction to ImGUI</li>
+        <li><a href="../../_static/Introduction_to_ImGui_v4.pdf">Introduction to EOP ImGUI V4 by Erken (PDF)</li>
         <li><a href="../../_static/LuaLib/extra/readme_imgui.md.html">EOP's ImGUI Bindings</li>
     <ul>
     </ul>
