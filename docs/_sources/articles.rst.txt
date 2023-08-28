@@ -8,5 +8,5 @@ M2TWEOP's Tutorials
 
 	BATTLE_RESULT_TUTORIAL.md
 	M2TWEOP_LAUNCHER_SETTINGS.md
-	Gui scripting basics by Erken, PDF file <_static/Introduction_to_ImGui_v3.pdf#http://>
-	Gui scripting basics by Erken, ODT file <_static/Introduction_to_ImGui_v3.odt#http://>
+	Gui scripting basics by Erken, PDF file <_static/Introduction_to_ImGui_v4.pdf#http://>
+	Gui scripting basics by Erken, ODT file <_static/Introduction_to_ImGui_v4.odt#http://>
