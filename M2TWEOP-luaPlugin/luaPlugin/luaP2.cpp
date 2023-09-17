@@ -111,6 +111,9 @@ void luaP::initCampaign()
 
 	typeAll.campaignTable.set("daysInBattle", &campaign::daysInBattle);
 	typeAll.campaignTable.set("currentTimeInBattle", &campaign::currentTimeInBattle);
+
+	typeAll.campaignTable.set("campaignDifficulty", &campaign::campaignDifficultyFaction);
+	typeAll.campaignTable.set("battleDifficulty", &campaign::battleDifficulty07);
 	/***
 	Check if a diplomatic relation between two factions.
 	@function campaignStruct:checkDipStance

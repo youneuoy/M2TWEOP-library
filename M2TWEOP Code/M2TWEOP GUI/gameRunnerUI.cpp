@@ -32,7 +32,8 @@ namespace gameRunnerUI
 
 		atomic_bool isRunStarted{false};
 		atomic_bool isRunEnded{false};
-		atomic_bool isGetResponce{false};
+		atomic_bool isGameRunning{false};
+
 		bool isRunProcessInitiated = false;
 
 		float xWindowSize = 500.f;
@@ -66,9 +67,8 @@ namespace gameRunnerUI
 			}
 		}
 	}
-	void runGameThread(std::atomic_bool &isStarted, std::atomic_bool &isEnded, std::atomic_bool &isGetResponce, const string &exePath, const string &exeArgs, const string &eopArgs, bool isEopNeeded)
+	void runGameThread(std::atomic_bool &isStarted, std::atomic_bool &isEnded, std::atomic_bool &isGameRunning, const string &exePath, const string &exeArgs, const string &eopArgs, bool isEopNeeded)
 	{
-
 		string startArgs = exeArgs;
 		startArgs.erase(0, 1);
 
@@ -81,14 +81,22 @@ namespace gameRunnerUI
 
 		if (startResult == false)
 		{
-			helpers::closeGame(dataG::data.gameData.exeName);
+			helpers::closeProcess(dataG::data.gameData.exeName);
 
-			isGetResponce = false;
+			isGameRunning = false;
+		}
+
+		// Periodically check if the game process is still running
+		while (!gameProcess.running())
+		{
+			std::this_thread::sleep_for(std::chrono::seconds(1)); // Adjust the interval as needed
+			
 		}
 
 		isEnded = true;
-		isGetResponce = true;
+		isGameRunning = true;
 	}
+
 
 	void drawDiscordUI(bool *isOpen)
 	{
@@ -149,7 +157,7 @@ namespace gameRunnerUI
 		}
 
 		if (startProcess.isRunStarted == true &&
-			(ImGui::GetTime() > startProcess.sendingEndTime || (startProcess.isRunEnded == true && startProcess.isGetResponce == false)))
+			(ImGui::GetTime() > startProcess.sendingEndTime || (startProcess.isRunEnded == true && startProcess.isGameRunning == false)))
 		{
 			const std::string badMSG = R"(
 ![badLogo](eopData/images/deathDance.png)
@@ -173,15 +181,20 @@ namespace gameRunnerUI
 			startProcess.isRunStarted = true;
 
 			std::thread thrUrl(
-				runGameThread, std::ref(startProcess.isRunStarted), std::ref(startProcess.isRunEnded), std::ref(startProcess.isGetResponce), std::ref(startProcess.exePath), std::ref(startProcess.exeArgs), std::ref(startProcess.eopArgs), startProcess.isEopNeeded);
+				runGameThread, std::ref(startProcess.isRunStarted), std::ref(startProcess.isRunEnded), std::ref(startProcess.isGameRunning), std::ref(startProcess.exePath), std::ref(startProcess.exeArgs), std::ref(startProcess.eopArgs), startProcess.isEopNeeded);
 			thrUrl.detach();
 
 			startProcess.sendingEndTime = ImGui::GetTime() + 34.5f;
 		}
 
-		if ((startProcess.isRunEnded == true && startProcess.isGetResponce == true) || *isOpen == false)
+		if ((startProcess.isRunEnded == true && startProcess.isGameRunning == true) || *isOpen == false)
 		{
-			if (startProcess.isGetResponce == false)
+			if (startProcess.isGameRunning == false)
+			{
+				helpers::closeProcess(dataG::data.gameData.exeName);
+			}
+			// If the game launched and Discord Rich Presence is enabled, watch the game thread
+			if (startProcess.isGameRunning == true && dataG::data.gameData.isDiscordRichPresenceEnabled == true)
 			{
 				helpers::closeGame(dataG::data.gameData.exeName);
 			}

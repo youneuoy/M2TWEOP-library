@@ -32,6 +32,7 @@ public:
 			string modFolder;
 
 			string exeName;
+			string guiExeName = "M2TWEOP GUI.exe";
 			string gameArgs;
 
 			// Discord Rich Presence
