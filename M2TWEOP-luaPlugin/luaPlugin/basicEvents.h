@@ -716,7 +716,7 @@ namespace gameEvents
 				bool isFort = false;
 				if ((DWORD)(*settlement).vTable != 0x012FCF34 && (DWORD)(*settlement).vTable != 0x01341F54)
 				{
-					fort = (*(*plugData::data.funcs.findFort))(settlement->xCoord, settlement->yCoord)
+					fort = (*(*plugData::data.funcs.findFort))(settlement->xCoord, settlement->yCoord);
 					isFort = true;
 					faction = fort->faction;
 					region = gameHelpers::getRegion(fort->regionID);
@@ -846,10 +846,10 @@ namespace gameEvents
 				factionStruct* faction = settlement->faction;
 				regionStruct* region = gameHelpers::getRegion(settlement->regionID);
 				const char* religion = getReligion(faction->religion);
-				auto guild = reinterpret_cast<guild*>(vTab[2]);
+				auto guild_handler = reinterpret_cast< guild* >(vTab[2]);
 				if (&(*funk) != nullptr) {
 
-					(*funk)(settlement, faction, region, religion, guild);
+					(*funk)(settlement, faction, region, religion, guild_handler);
 
 				}
 				return 49;
@@ -958,7 +958,6 @@ sol::function* onCeasedFactionHeir = nullptr;
 sol::function* onUngarrisonedFort = nullptr;
 sol::function* onTileSeen = nullptr;
 sol::function* onObjSeen = nullptr;
-sol::function* onObjSeen = nullptr;
 sol::function* onUnitsDesertCrusade = nullptr;
 sol::function* onArmyTakesCrusadeTarget = nullptr;
 sol::function* onTransgression = nullptr;
@@ -1015,7 +1014,6 @@ sol::function* onDiplomacyMission = nullptr;
 sol::function* onLeaderOrderedDiplomacy = nullptr;
 sol::function* onLeaderMissionSuccess = nullptr;
 sol::function* onLeaderMissionFailed = nullptr;
-sol::function* onForgiveness = nullptr;
 sol::function* onSettlementTurnStart = nullptr;
 sol::function* onNewAdmiralCreated = nullptr;
 sol::function* onUnitTrained = nullptr;

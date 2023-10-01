@@ -153,6 +153,7 @@ public:
 	sol::function* onStartSiege = nullptr;
 	sol::function* onSelectWorldpkgdesc = nullptr;
 	sol::function* onfortificationlevelS = nullptr;
+	sol::function* onChangeTurnNumFunc = nullptr;
 	sol::function* onClickAtTile = nullptr;
 	sol::function* onNewGameStart = nullptr;
 	sol::function* onPluginLoad = nullptr;

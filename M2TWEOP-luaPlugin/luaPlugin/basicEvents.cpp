@@ -476,7 +476,6 @@ namespace gameEvents
 
 		//diplomacyEvents
 		newCode[0] = 0x0136958C; newCode[1] = 0x01324564;
-		newCode[0] = 0x0136958C; newCode[1] = 0x01324564;
 		addEvent<EventType::diplomacyEvent>(newCode[gv], "onFactionWarDeclared");
 
 		newCode[0] = 0x0136965C; newCode[1] = 0x01324634;
@@ -692,10 +691,6 @@ void checkLuaFunc(sol::function** lRef)
 	}
 };
 
-void onCharacterSelected(namedCharacter* gen)
-{
-	plugData::data.luaAll.onCharacterSelected(gen);
-}
 void onReadGameDbsAtStart()
 {
 	gameEvents::initEvents();

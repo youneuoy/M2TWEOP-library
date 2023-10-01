@@ -16,8 +16,7 @@ void plugins::init()
 	pluginsCfg.pluginsPath = pluginsCfg.pluginsPath + "\\youneuoy_Data\\plugins";
 	vector<string>plList = getAllPlPachs(&pluginsCfg.pluginsPath);
 	if (plList.size() < 1)return;
-
-	initEvNames();
+	
 	for (string s : plList)
 	{
 		if (s == "M2TWEOPLibrary.dll"
