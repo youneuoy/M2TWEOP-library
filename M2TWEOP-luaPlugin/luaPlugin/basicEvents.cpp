@@ -170,6 +170,12 @@ namespace gameEvents
 		newCode[0] = 0x01370474; newCode[1] = 0x0132B44C;
 		addEvent<EventType::namedCharacterEvent>(newCode[gv], "onEnemyCharacterSelected");
 
+		newCode[0] = 0x0137060C; newCode[1] = 0x0132B5E4;
+		addEvent<EventType::namedCharacterEvent>(newCode[gv], "onMultiTurnMove");
+
+		newCode[0] = 0x013714F4; newCode[1] = 0x0132C4CC;
+		addEvent<EventType::namedCharacterEvent>(newCode[gv], "onCharacterPanelOpen");
+
 		//ransomEvent
 		newCode[0] = 0x0136C8EC; newCode[1] = 0x013278C4;
 		addEvent<EventType::ransomEvent>(newCode[gv], "onGeneralPrisonersRansomedCaptor");
@@ -289,6 +295,18 @@ namespace gameEvents
 		addEvent<EventType::settlementEvent>(newCode[gv], "onSiegeEquipmentCompleted");
 		newCode[0] = 0x0136FADC; newCode[1] = 0x0132AAB4;
 		addEvent<EventType::settlementEvent>(newCode[gv], "onSettlementTurnEnd");
+		newCode[0] = 0x01370544; newCode[1] = 0x0132B51C;
+		addEvent<EventType::settlementEvent>(newCode[gv], "onSettlementSelected");
+		newCode[0] = 0x013706EC; newCode[1] = 0x0132B6C4;
+		addEvent<EventType::settlementEvent>(newCode[gv], "onSettlementPanelOpen");
+		newCode[0] = 0x01370C04; newCode[1] = 0x0132BBDC;
+		addEvent<EventType::settlementEvent>(newCode[gv], "onRecruitmentPanelOpen");
+		newCode[0] = 0x0132BCAC; newCode[1] = 0x0132BBDC;
+		addEvent<EventType::settlementEvent>(newCode[gv], "onConstructionPanelOpen");
+		newCode[0] = 0x01370D9C; newCode[1] = 0x0132BD74;
+		addEvent<EventType::settlementEvent>(newCode[gv], "onTradePanelOpen");
+		newCode[0] = 0x01371264; newCode[1] = 0x0132C23C;
+		addEvent<EventType::settlementEvent>(newCode[gv], "onSettlementScrollAdviceRequested");
 
 		//guildEvents
 		newCode[0] = 0x0136F88C; newCode[1] = 0x0132A864;
@@ -339,6 +357,24 @@ namespace gameEvents
 
 		newCode[0] = 0x01368E5C; newCode[1] = 0x01323E34;
 		addEvent<EventType::gameEvent>(newCode[gv], "onBattleArmyHalfDestroyed");
+
+		newCode[0] = 0x0139622C; newCode[1] = 0x013511FC;
+		addEvent<EventType::gameEvent>(newCode[gv], "onEscPressed");
+
+		newCode[0] = 0x0139552C; newCode[1] = 0x013504FC;
+		addEvent<EventType::gameEvent>(newCode[gv], "onScriptedAdvice");
+
+		newCode[0] = 0x013DB05C; newCode[1] = 0x01395DF4;
+		addEvent<EventType::gameEvent>(newCode[gv], "onNavalPreBattleScrollAdviceRequested");
+
+		newCode[0] = 0x013DB114; newCode[1] = 0x01395EAC;
+		addEvent<EventType::gameEvent>(newCode[gv], "onPreBattleScrollAdviceRequested");
+
+		newCode[0] = 0x013D9004; newCode[1] = 0x01393D9C;
+		addEvent<EventType::gameEvent>(newCode[gv], "onCollegeOfCardinalsPanelOpen");
+
+		newCode[0] = 0x013D2074; newCode[1] = 0x0138CE0C;
+		addEvent<EventType::gameEvent>(newCode[gv], "onDiplomaticStandingPanelOpen");
 
 		//crusadeEvents
 		newCode[0] = 0x013321D4; newCode[1] = 0x012ED1B4;
@@ -411,6 +447,33 @@ namespace gameEvents
 		newCode[0] = 0x0136D0BC; newCode[1] = 0x01328094;
 		addEvent<EventType::factionEvent>(newCode[gv], "onAssassinCaughtAttackingPope");
 
+		newCode[0] = 0x013707BC; newCode[1] = 0x0132B794;
+		addEvent<EventType::factionEvent>(newCode[gv], "onFinancesPanelOpen");
+
+		newCode[0] = 0x0137088C; newCode[1] = 0x0132B864;
+		addEvent<EventType::factionEvent>(newCode[gv], "onFactionSummaryPanelOpen");
+
+		newCode[0] = 0x0137095C; newCode[1] = 0x0132B934;
+		addEvent<EventType::factionEvent>(newCode[gv], "onFamilyTreePanelOpen");
+
+		newCode[0] = 0x01370A64; newCode[1] = 0x0132BA3C;
+		addEvent<EventType::factionEvent>(newCode[gv], "onDiplomacyPanelOpen");
+
+		newCode[0] = 0x01370B34; newCode[1] = 0x0132BB0C;
+		addEvent<EventType::factionEvent>(newCode[gv], "onPreBattlePanelOpen");
+
+		newCode[0] = 0x01370E9C; newCode[1] = 0x0132BE74;
+		addEvent<EventType::factionEvent>(newCode[gv], "onIncomingMessage");
+
+		newCode[0] = 0x01370F64; newCode[1] = 0x0132BF3C;
+		addEvent<EventType::factionEvent>(newCode[gv], "onMessageOpen");
+
+		newCode[0] = 0x0137102C; newCode[1] = 0x0132C004;
+		addEvent<EventType::factionEvent>(newCode[gv], "onMessageClosed");
+
+		newCode[0] = 0x01371364; newCode[1] = 0x0132C33C;
+		addEvent<EventType::factionEvent>(newCode[gv], "onDeclineAutomatedSettlementManagement");
+
 		//diplomacyEvents
 		newCode[0] = 0x0136958C; newCode[1] = 0x01324564;
 		newCode[0] = 0x0136958C; newCode[1] = 0x01324564;
@@ -448,6 +511,9 @@ namespace gameEvents
 		newCode[0] = 0x0136886C; newCode[1] = 0x01323844;
 		addEvent<EventType::armyEvent>(newCode[gv], "onBattleReinforcementsArrive");
 
+		newCode[0] = 0x0137171C; newCode[1] = 0x0132C6F4;
+		addEvent<EventType::armyEvent>(newCode[gv], "onRequestMercenariesAdvice");
+
 		//characterEvent
 		newCode[0] = 0x013687B4; newCode[1] = 0x0132378C;
 		addEvent<EventType::characterEvent>(newCode[gv], "onBattleGeneralRouted");
@@ -483,6 +549,12 @@ namespace gameEvents
 
 		newCode[0] = 0x0136FBB4; newCode[1] = 0x0132AB8C;
 		addEvent<EventType::buildingEvent>(newCode[gv], "onBuildingCompleted");
+
+		newCode[0] = 0x013715AC; newCode[1] = 0x0132C584;
+		addEvent<EventType::buildingEvent>(newCode[gv], "onRequestBuildingAdvice");
+
+		newCode[0] = 0x01371664; newCode[1] = 0x0132C63C;
+		addEvent<EventType::buildingEvent>(newCode[gv], "onRequestTrainingAdvice");
 
 		//agentCreatedEvent
 		newCode[0] = 0x0136E874; newCode[1] = 0x0132984C;
@@ -572,6 +644,22 @@ namespace gameEvents
 		//fortEvents
 		newCode[0] = 0x0136AC04; newCode[1] = 0x01325BDC;
 		addEvent<EventType::fortEvent>(newCode[gv], "onUngarrisonedFort");
+
+		//uiEvents
+		newCode[0] = 0x013717D4; newCode[1] = 0x0132C7AC;
+		addEvent<EventType::uiEvent>(newCode[gv], "onButtonPressed");
+		newCode[0] = 0x0137188C; newCode[1] = 0x0132C864;
+		addEvent<EventType::uiEvent>(newCode[gv], "onShortcutTriggered");
+		newCode[0] = 0x01371944; newCode[1] = 0x0132C91C;
+		addEvent<EventType::uiEvent>(newCode[gv], "onUIElementVisible");
+		newCode[0] = 0x013719FC; newCode[1] = 0x0132C9D4;
+		addEvent<EventType::uiEvent>(newCode[gv], "onScrollOpened");
+		newCode[0] = 0x01371AB4; newCode[1] = 0x0132CA8C;
+		addEvent<EventType::uiEvent>(newCode[gv], "onScrollClosed");
+		newCode[0] = 0x01371B6C; newCode[1] = 0x0132CB44;
+		addEvent<EventType::uiEvent>(newCode[gv], "onScrollAdviceRequested");
+		newCode[0] = 0x01371144; newCode[1] = 0x0132C11C;
+		addEvent<EventType::uiEvent>(newCode[gv], "onAdviceSupressed");
 
 		//tileEvents
 		newCode[0] = 0x0136ACCC; newCode[1] = 0x01325CA4;

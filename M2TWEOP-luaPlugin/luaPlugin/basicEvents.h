@@ -117,7 +117,8 @@ namespace gameEvents
 		targetSettlementEvent = 46,
 		namedCharacterRiotEvents = 47,
 		settOccupationEvent = 48,
-		guildEvent = 49
+		guildEvent = 49,
+		uiEvent = 50
 	};
 
 	class EventBase
@@ -709,18 +710,27 @@ namespace gameEvents
 			else if (EvType == EventType::settlementEvent)
 			{
 				auto settlement = reinterpret_cast<settlementStruct*>(vTab[1]);
-				factionStruct* faction;
-				if ((DWORD)(*settlement).vTable != 0x012FCF34 && (DWORD)(*settlement).vTable != 0x01341F54)
-				{
-					settlement = reinterpret_cast<fortStruct*>(vTab[1]);
-				}
+				fortStruct* fort;
 				factionStruct* faction = settlement->faction;
 				regionStruct* region = gameHelpers::getRegion(settlement->regionID);
+				bool isFort = false;
+				if ((DWORD)(*settlement).vTable != 0x012FCF34 && (DWORD)(*settlement).vTable != 0x01341F54)
+				{
+					fort = (*(*plugData::data.funcs.findFort))(settlement->xCoord, settlement->yCoord)
+					isFort = true;
+					faction = fort->faction;
+					region = gameHelpers::getRegion(fort->regionID);
+				}
 				const char* religion = getReligion(faction->religion);
 				if (&(*funk) != nullptr) {
-
-					(*funk)(settlement, faction, region, religion);
-
+					if (!isFort)
+					{
+						(*funk)(settlement, faction, region, religion);
+					}
+					else
+					{
+						(*funk)(fort, faction, region, religion);
+					}
 				}
 				return 40;
 			}
@@ -843,7 +853,17 @@ namespace gameEvents
 
 				}
 				return 49;
+			}
+			else if (EvType == EventType::uiEvent)
+			{
+				auto name = reinterpret_cast<char*>(vTab[1]);
+				if (&(*funk) != nullptr) {
+
+					(*funk)(name);
+
 				}
+				return 50;
+			}
 			else
 			{
 				return 0;
@@ -1028,6 +1048,37 @@ sol::function* onSettlementTurnEnd = nullptr;
 sol::function* onBuildingCompleted = nullptr;
 sol::function* onCharacterSelected = nullptr;
 sol::function* onEnemyCharacterSelected = nullptr;
-
-extern "C" PLUGINM2TWEOP_API void onCharacterSelected(namedCharacter * gen);
+sol::function* onSettlementSelected = nullptr;
+sol::function* onMultiTurnMove = nullptr;
+sol::function* onSettlementPanelOpen = nullptr;
+sol::function* onFinancesPanelOpen = nullptr;
+sol::function* onFactionSummaryPanelOpen = nullptr;
+sol::function* onFamilyTreePanelOpen = nullptr;
+sol::function* onDiplomacyPanelOpen = nullptr;
+sol::function* onPreBattlePanelOpen = nullptr;
+sol::function* onRecruitmentPanelOpen = nullptr;
+sol::function* onConstructionPanelOpen = nullptr;
+sol::function* onTradePanelOpen = nullptr;
+sol::function* onIncomingMessage = nullptr;
+sol::function* onMessageOpen = nullptr;
+sol::function* onMessageClosed = nullptr;
+sol::function* onAdviceSupressed = nullptr;
+sol::function* onSettlementScrollAdviceRequested = nullptr;
+sol::function* onDeclineAutomatedSettlementManagement = nullptr;
+sol::function* onCharacterPanelOpen = nullptr;
+sol::function* onRequestBuildingAdvice = nullptr;
+sol::function* onRequestTrainingAdvice = nullptr;
+sol::function* onRequestMercenariesAdvice = nullptr;
+sol::function* onButtonPressed = nullptr;
+sol::function* onShortcutTriggered = nullptr;
+sol::function* onUIElementVisible = nullptr;
+sol::function* onScrollOpened = nullptr;
+sol::function* onScrollClosed = nullptr;
+sol::function* onScrollAdviceRequested = nullptr;
+sol::function* onEscPressed = nullptr;
+sol::function* onScriptedAdvice = nullptr;
+sol::function* onNavalPreBattleScrollAdviceRequested = nullptr;
+sol::function* onPreBattleScrollAdviceRequested = nullptr;
+sol::function* onCollegeOfCardinalsPanelOpen = nullptr;
+sol::function* onDiplomaticStandingPanelOpen = nullptr;
 

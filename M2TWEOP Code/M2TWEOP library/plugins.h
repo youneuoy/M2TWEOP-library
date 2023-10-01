@@ -88,44 +88,6 @@ public:
 
 	ProcLoader<void(__cdecl*)(DWORD*, DWORD**, DWORD)> onEventWrapper;
 
-	ProcLoader<void(__cdecl*)(namedCharacter*)> onCharacterSelected;
-	ProcLoader<void(__cdecl*)(namedCharacter*)> onMultiTurnMove;
-
-	ProcLoader<void(__cdecl*)(settlementStruct*)> onSettlementSelected;
-
-
-	ProcLoader<void(__cdecl*)(settlementStruct*)> onSettlementPanelOpen;
-	ProcLoader<void(__cdecl*)(factionStruct*)> onFinancesPanelOpen;
-	ProcLoader<void(__cdecl*)(factionStruct*)> onFactionSummaryPanelOpen;
-	ProcLoader<void(__cdecl*)(factionStruct*)> onFamilyTreePanelOpen;
-	ProcLoader<void(__cdecl*)()> onDiplomaticStandingPanelOpen;
-	ProcLoader<void(__cdecl*)(factionStruct*)> onDiplomacyPanelOpen;
-	ProcLoader<void(__cdecl*)(factionStruct*)> onPreBattlePanelOpen;
-	ProcLoader<void(__cdecl*)()> onNavalAutoResolvePanelOpen;
-
-	ProcLoader<void(__cdecl*)(namedCharacter*)> onCharacterPanelOpen;
-	ProcLoader<void(__cdecl*)(settlementStruct*)> onTradePanelOpen;
-	ProcLoader<void(__cdecl*)(settlementStruct*)> onRequestBuildingAdvice;
-	ProcLoader<void(__cdecl*)(settlementStruct*, eduEntry*)> onRequestTrainingAdvice;
-
-	ProcLoader<void(__cdecl*)(factionStruct*, int)> onMessageOpen;
-	ProcLoader<void(__cdecl*)(factionStruct*, int)> onIncomingMessage;
-	ProcLoader<void(__cdecl*)(int)> onMessageClosed;
-
-	ProcLoader<void(__cdecl*)(const char*)> onButtonPressed;
-	ProcLoader<void(__cdecl*)(const char*)> onScrollClosed;
-	ProcLoader<void(__cdecl*)(const char*)> onScrollOpened;
-	ProcLoader<void(__cdecl*)(const char*)> onUIElementVisible;
-	ProcLoader<void(__cdecl*)(const char*)> onScrollAdviceRequested;
-
-	ProcLoader<void(__cdecl*)(settlementStruct*, const char*)> onSettlementScrollAdviceRequested;
-
-	ProcLoader<void(__cdecl*)()> onPreBattleScrollAdviceRequested;
-	ProcLoader<void(__cdecl*)()> onNavalPreBattleScrollAdviceRequested;
-	ProcLoader<void(__cdecl*)(void*)> onCollegeOfCardinalsPanelOpen;
-
-	ProcLoader<void(__cdecl*)(const char*)> onShortcutTriggered;
-
 	ProcLoader<void(__cdecl*)(LPDIRECT3DDEVICE9 pDevice)> drawOnEndScene;
 	ProcLoader<void(__cdecl*)(LPDIRECT3DDEVICE9 pDevice)> onReset;
 	ProcLoader<void(__cdecl*)(LPDIRECT3DDEVICE9 pDevice)> onLoadingFonts;
@@ -181,8 +143,6 @@ public:
 	static void onLoadingFonts(LPDIRECT3DDEVICE9 pDevice);
 
 	static void onChangeImGuiCtx(ImGuiContext* imCtx, ImGuiMemAllocFunc alloc_func, ImGuiMemFreeFunc free_func, void* user_data);
-
-	static vector<const char*>* eventNames;
 private:
 	static int compareEvent(const char* event, char** adr1, const char* adr2);
 

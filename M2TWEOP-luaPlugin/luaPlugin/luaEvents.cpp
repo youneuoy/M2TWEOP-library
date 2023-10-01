@@ -15,60 +15,195 @@ void luaP::onPluginLoadF()
 	Events functions list.
 	Just list, use it without EventsFunctionsList.!!!
 
-	@tfield draw draw
-	@tfield onLoadingFonts onLoadingFonts
-	@tfield onReadGameDbsAtStart onReadGameDbsAtStart
-	@tfield onClickAtTile onClickAtTile
-	@tfield onNewGameStart onNewGameStart
-	@tfield onCampaignMapLoaded onCampaignMapLoaded
-	@tfield onCreateSaveFile onCreateSaveFile
-	@tfield onLoadSaveFile onLoadSaveFile
-	@tfield onPluginLoad onPluginLoad
-	@tfield onEndSiege onEndSiege
-	@tfield onStartSiege onStartSiege
-	@tfield onSelectWorldpkgdesc onSelectWorldpkgdesc
-	@tfield onChangeTurnNum onChangeTurnNum
-
 	@tfield onCharacterTurnStart onCharacterTurnStart
 	@tfield onCapturedCharacterRansomed onCapturedCharacterRansomed
 	@tfield onCapturedCharacterReleased onCapturedCharacterReleased
+	@tfield onFatherDiesNatural onFatherDiesNatural
 	@tfield onPreBattleWithdrawal onPreBattleWithdrawal
+	@tfield onPostBattle onPostBattle
 	@tfield onHireMercenaries onHireMercenaries
+	@tfield onGeneralCaptureResidence onGeneralCaptureResidence
+	@tfield onLeaderDestroyedFaction onLeaderDestroyedFaction
 	@tfield onOfferedForAdoption onOfferedForAdoption
 	@tfield onLesserGeneralOfferedForAdoption onLesserGeneralOfferedForAdoption
 	@tfield onOfferedForMarriage onOfferedForMarriage
+	@tfield onBrotherAdopted onBrotherAdopted
+	@tfield onBirth onBirth
+	@tfield onCharacterComesOfAge onCharacterComesOfAge
+	@tfield onCharacterMarries onCharacterMarries
+	@tfield onCharacterMarriesPrincess onCharacterMarriesPrincess
+	@tfield onMarriageAlliancePossible onMarriageAlliancePossible
+	@tfield onMarriageAllianceOffered onMarriageAllianceOffered
+	@tfield onPriestBecomesHeretic onPriestBecomesHeretic
+	@tfield onCharacterNearHeretic onCharacterNearHeretic
+	@tfield onCharacterNearWitch onCharacterNearWitch
+	@tfield onCardinalPromoted onCardinalPromoted
+	@tfield onCharacterBecomesAFather onCharacterBecomesAFather
+	@tfield onGeneralDevastatesTile onGeneralDevastatesTile
+	@tfield onExecutesASpyOnAMission onExecutesASpyOnAMission
+	@tfield onExecutesAnAssassinOnAMission onExecutesAnAssassinOnAMission
+	@tfield onSufferAssassinationAttempt onSufferAssassinationAttempt
+	@tfield onSufferAcquisitionAttempt onSufferAcquisitionAttempt
+	@tfield onSufferMarriageAttempt onSufferMarriageAttempt
+	@tfield onSufferDenouncementAttempt onSufferDenouncementAttempt
+	@tfield onLeaderOrderedSabotage onLeaderOrderedSabotage
+	@tfield onAcceptBribe onAcceptBribe
+	@tfield onRefuseBribe onRefuseBribe
+	@tfield onInsurrection onInsurrection
+	@tfield onLeaderOrderedDiplomacy onLeaderOrderedDiplomacy
+	@tfield onNewAdmiralCreated onNewAdmiralCreated
+	@tfield onGovernorBuildingDestroyed onGovernorBuildingDestroyed
+	@tfield onGovernorThrowGames onGovernorThrowGames
+	@tfield onGovernorThrowRaces onGovernorThrowRaces
+	@tfield onCharacterSelected onCharacterSelected
+	@tfield onEnemyCharacterSelected onEnemyCharacterSelected
+	@tfield onMultiTurnMove onMultiTurnMove
+	@tfield onCharacterPanelOpen onCharacterPanelOpen
+	@tfield onLeaderMissionSuccess onLeaderMissionSuccess
+	@tfield onLeaderMissionFailed onLeaderMissionFailed
+	@tfield onGeneralJoinCrusade onGeneralJoinCrusade
+	@tfield onGeneralAbandonCrusade onGeneralAbandonCrusade
+	@tfield onGeneralArrivesCrusadeTargetRegion onGeneralArrivesCrusadeTargetRegion
+	@tfield onGeneralTakesCrusadeTarget onGeneralTakesCrusadeTarget
+	@tfield onCharacterTurnEnd onCharacterTurnEnd
+	@tfield onCharacterTurnEndInSettlement onCharacterTurnEndInSettlement
+	@tfield onBecomesFactionLeader onBecomesFactionLeader
+	@tfield onCeasedFactionLeader onCeasedFactionLeader
+	@tfield onBecomesFactionHeir onBecomesFactionHeir
+	@tfield onCeasedFactionHeir onCeasedFactionHeir
 	@tfield onCharacterDamagedByDisaster onCharacterDamagedByDisaster
+	@tfield onGeneralCaptureSettlement onGeneralCaptureSettlement
+	@tfield onGeneralAssaultsResidence onGeneralAssaultsResidence
+	@tfield onGeneralAssaultsGeneral onGeneralAssaultsGeneral
+	@tfield onCharacterAttacksCrusadingGeneral onCharacterAttacksCrusadingGeneral
+	@tfield onGeneralPrisonersRansomedCaptor onGeneralPrisonersRansomedCaptor
+	@tfield onGeneralPrisonersRansomedCaptive onGeneralPrisonersRansomedCaptive
+	@tfield onFactionLeaderPrisonersRansomedCaptor onFactionLeaderPrisonersRansomedCaptor
+	@tfield onFactionLeaderPrisonersRansomedCaptive onFactionLeaderPrisonersRansomedCaptive
+	@tfield onSpyMission onSpyMission
+	@tfield onAssassinationMission onAssassinationMission
+	@tfield onAcquisitionMission onAcquisitionMission
+	@tfield onMarriageMission onMarriageMission
+	@tfield onDenouncementMission onDenouncementMission
+	@tfield onSabotageMission onSabotageMission
+	@tfield onBriberyMission onBriberyMission
+	@tfield onDiplomacyMission onDiplomacyMission
+	@tfield onLeaderOrderedSpyingMission onLeaderOrderedSpyingMission
+	@tfield onLeaderOrderedAssassination onLeaderOrderedAssassination
+	@tfield onLeaderOrderedBribery onLeaderOrderedBribery
+	@tfield onSettlementTurnStart onSettlementTurnStart
+	@tfield onUngarrisonedSettlement onUngarrisonedSettlement
+	@tfield onSettlementUpgraded onSettlementUpgraded
+	@tfield onSettlementConverted onSettlementConverted
+	@tfield onSiegeEquipmentCompleted onSiegeEquipmentCompleted
+	@tfield onSettlementTurnEnd onSettlementTurnEnd
+	@tfield onSettlementSelected onSettlementSelected
+	@tfield onSettlementPanelOpen onSettlementPanelOpen
+	@tfield onRecruitmentPanelOpen onRecruitmentPanelOpen
+	@tfield onConstructionPanelOpen onConstructionPanelOpen
+	@tfield onTradePanelOpen onTradePanelOpen
+	@tfield onSettlementScrollAdviceRequested onSettlementScrollAdviceRequested
+	@tfield onGuildUpgraded onGuildUpgraded
+	@tfield onGuildDestroyed onGuildDestroyed
+	@tfield onOccupySettlement onOccupySettlement
+	@tfield onSackSettlement onSackSettlement
+	@tfield onExterminatePopulation onExterminatePopulation
+	@tfield onCityRiots onCityRiots
+	@tfield onGiveSettlement onGiveSettlement
+	@tfield onCityRebels onCityRebels
+	@tfield onCitySacked onCitySacked
+	@tfield onGovernorCityRiots onGovernorCityRiots
+	@tfield onGovernorCityRebels onGovernorCityRebels
 	@tfield onAbandonShowMe onAbandonShowMe
+	@tfield onGameReloaded onGameReloaded
 	@tfield onBattleWinningPlaza onBattleWinningPlaza
 	@tfield onBattleStopsWinningPlaza onBattleStopsWinningPlaza
 	@tfield onBattleDominatingPlaza onBattleDominatingPlaza
 	@tfield onBattngineUnmanned onBattngineUnmanned
 	@tfield onBattlePlayerArmyHalfDestroyed onBattlePlayerArmyHalfDestroyed
 	@tfield onBattnemyArmyHalfDestroyed onBattnemyArmyHalfDestroyed
-	@tfield onBattleTideofBattle onBattleTideofBattle
 	@tfield onBattleFinished onBattleFinished
 	@tfield onBattleArmyHalfDestroyed onBattleArmyHalfDestroyed
-	@tfield onBattleAiCommenced onBattleAiCommenced
-	@tfield onBattleDelayPhaseCommenced onBattleDelayPhaseCommenced
-	@tfield onBattleDeploymentPhaseCommenced onBattleDeploymentPhaseCommenced
-	@tfield onBattleConflictPhaseCommenced onBattleConflictPhaseCommenced
-	@tfield onInterFactionMarriage onInterFactionMarriage
-	@tfield onBattleArmyRouted onBattleArmyRouted
-	@tfield onBattleReinforcementsArrive onBattleReinforcementsArrive
-	@tfield onBattleGeneralRouted onBattleGeneralRouted
-	@tfield onBattleGeneralKilled onBattleGeneralKilled
+	@tfield onEscPressed onEscPressed
+	@tfield onScriptedAdvice onScriptedAdvice
+	@tfield onNavalPreBattleScrollAdviceRequested onNavalPreBattleScrollAdviceRequested
+	@tfield onPreBattleScrollAdviceRequested onPreBattleScrollAdviceRequested
+	@tfield onCollegeOfCardinalsPanelOpen onCollegeOfCardinalsPanelOpen
+	@tfield onDiplomaticStandingPanelOpen onDiplomaticStandingPanelOpen
+	@tfield onBattlePlayerUnderAttackIdle onBattlePlayerUnderAttackIdle
+	@tfield onBattleWinningCombat onBattleWinningCombat
+	@tfield onBattleArmyTired onBattleArmyTired
+	@tfield onBattleTideofBattle onBattleTideofBattle
 	@tfield onBattleUnitGoesBerserk onBattleUnitGoesBerserk
 	@tfield onBattleSiegeEngineDestroyed onBattleSiegeEngineDestroyed
 	@tfield onBattleSiegeEngineDocksWall onBattleSiegeEngineDocksWall
 	@tfield onBattleGatesAttackedByEngine onBattleGatesAttackedByEngine
 	@tfield onBattleGatesDestroyedByEngine onBattleGatesDestroyedByEngine
 	@tfield onBattleWallsBreachedByEngine onBattleWallsBreachedByEngine
-	@tfield onBattleUnitRouts onBattleUnitRouts
 	@tfield onBattleWallsCaptured onBattleWallsCaptured
-	@tfield onBattlePlayerUnderAttackIdle onBattlePlayerUnderAttackIdle
-	@tfield onBattleWinningCombat onBattleWinningCombat
-	@tfield onBattleArmyTired onBattleArmyTired
+	@tfield onBattleUnitRouts onBattleUnitRouts
+	@tfield onUnitDisbanded onUnitDisbanded
+	@tfield onUnitTrained onUnitTrained
+	@tfield onGovernorUnitTrained onGovernorUnitTrained
+	@tfield onGovernorBuildingCompleted onGovernorBuildingCompleted
+	@tfield onAgentCreated onAgentCreated
+	@tfield onGovernorAgentCreated onGovernorAgentCreated
+	@tfield onBuildingDestroyed onBuildingDestroyed
+	@tfield onAddedToBuildingQueue onAddedToBuildingQueue
+	@tfield onBuildingCompleted onBuildingCompleted
+	@tfield onRequestBuildingAdvice onRequestBuildingAdvice
+	@tfield onRequestTrainingAdvice onRequestTrainingAdvice
+	@tfield onAddedToTrainingQueue onAddedToTrainingQueue
+	@tfield onBattleArmyRouted onBattleArmyRouted
+	@tfield onBattleReinforcementsArrive onBattleReinforcementsArrive
+	@tfield onRequestMercenariesAdvice onRequestMercenariesAdvice
+	@tfield onButtonPressed onButtonPressed
+	@tfield onShortcutTriggered onShortcutTriggered
+	@tfield onUIElementVisible onUIElementVisible
+	@tfield onScrollOpened onScrollOpened
+	@tfield onScrollClosed onScrollClosed
+	@tfield onScrollAdviceRequested onScrollAdviceRequested
+	@tfield onAdviceSupressed onAdviceSupressed
+	@tfield onBattleGeneralRouted onBattleGeneralRouted
+	@tfield onBattleGeneralKilled onBattleGeneralKilled
+	@tfield onCrusadeCalled onCrusadeCalled
+	@tfield onPopeAcceptsCrusadeTarget onPopeAcceptsCrusadeTarget
+	@tfield onPopeRejectsCrusadeTarget onPopeRejectsCrusadeTarget
+	@tfield onCrusadeEnds onCrusadeEnds
+	@tfield onPreFactionTurnStart onPreFactionTurnStart
+	@tfield onFactionTurnStart onFactionTurnStart
+	@tfield onFactionNewCapital onFactionNewCapital
+	@tfield onFactionTurnEnd onFactionTurnEnd
+	@tfield onVotedForPope onVotedForPope
+	@tfield onFactionExcommunicated onFactionExcommunicated
+	@tfield onHordeFormed onHordeFormed
+	@tfield onCardinalRemoved onCardinalRemoved
+	@tfield onInquisitorAppointed onInquisitorAppointed
+	@tfield onAssassinCaughtAttackingPope onAssassinCaughtAttackingPope
+	@tfield onFinancesPanelOpen onFinancesPanelOpen
+	@tfield onFactionSummaryPanelOpen onFactionSummaryPanelOpen
+	@tfield onFamilyTreePanelOpen onFamilyTreePanelOpen
+	@tfield onDiplomacyPanelOpen onDiplomacyPanelOpen
+	@tfield onPreBattlePanelOpen onPreBattlePanelOpen
+	@tfield onIncomingMessage onIncomingMessage
+	@tfield onMessageOpen onMessageOpen
+	@tfield onMessageClosed onMessageClosed
+	@tfield onDeclineAutomatedSettlementManagement onDeclineAutomatedSettlementManagement
+	@tfield onBattleAiCommenced onBattleAiCommenced
+	@tfield onBattleDelayPhaseCommenced onBattleDelayPhaseCommenced
+	@tfield onBattleDeploymentPhaseCommenced onBattleDeploymentPhaseCommenced
+	@tfield onBattleConflictPhaseCommenced onBattleConflictPhaseCommenced
+	@tfield onFactionWarDeclared onFactionWarDeclared
+	@tfield onFactionAllianceDeclared onFactionAllianceDeclared
+	@tfield onInterFactionMarriage onInterFactionMarriage
+	@tfield onFactionTradeAgreementMade onFactionTradeAgreementMade
+	@tfield onPopeElected onPopeElected
+	@tfield onFactionBreakAlliance onFactionBreakAlliance
+	@tfield onUpdateAttitude onUpdateAttitude
+	@tfield onDemeanour onDemeanour
+	@tfield onGiveMoney onGiveMoney
 	@tfield onBattlePlayerUnitAttacksEnemyUnit onBattlePlayerUnitAttacksEnemyUnit
+	@tfield onBattleEnemyUnitAttacksPlayerUnit onBattleEnemyUnitAttacksPlayerUnit
 	@tfield onBattlePlayerUnitGoesBerserk onBattlePlayerUnitGoesBerserk
 	@tfield onBattlePlayerUnitRouts onBattlePlayerUnitRouts
 	@tfield onBattlePlayerSiegeEngineDestroyed onBattlePlayerSiegeEngineDestroyed
@@ -79,99 +214,27 @@ void luaP::onPluginLoadF()
 	@tfield onBattleGatesAttackedByEnemyEngine onBattleGatesAttackedByEnemyEngine
 	@tfield onDisaster onDisaster
 	@tfield onEventCounter onEventCounter
-	@tfield onFatherDiesNatural onFatherDiesNatural
-
-	@tfield onCharacterSelected onCharacterSelected
-	@tfield onPreFactionTurnStart onPreFactionTurnStart
-	@tfield onFactionTurnStart onFactionTurnStart
-	@tfield onFactionTurnEnd onFactionTurnEnd
-	@tfield onFactionNewCapital onFactionNewCapital
-	@tfield onFactionWarDeclared onFactionWarDeclared
-	@tfield onFactionAllianceDeclared onFactionAllianceDeclared
-	@tfield onFactionTradeAgreementMade onFactionTradeAgreementMade
-	@tfield onFactionBreakAlliance onFactionBreakAlliance
-	@tfield onGiveMoney onGiveMoney
-	@tfield onUpdateAttitude onUpdateAttitude
-	@tfield onDemeanour onDemeanour
-	@tfield onGeneralAssaultsGeneral onGeneralAssaultsGeneral
-	@tfield onGeneralAssaultsResidence onGeneralAssaultsResidence
-	@tfield onGeneralCaptureSettlement onGeneralCaptureSettlement
-	@tfield onGeneralCaptureResidence onGeneralCaptureResidence
-	@tfield onSiegeEquipmentCompleted onSiegeEquipmentCompleted
-	@tfield onPostBattle onPostBattle
-	@tfield onMultiTurnMove onMultiTurnMove
-	@tfield onSettlementSelected onSettlementSelected
-	@tfield onSettlementUpgraded onSettlementUpgraded
-	@tfield onSettlementConverted onSettlementConverted
-	@tfield onCityRiots onCityRiots
-	@tfield onUngarrisonedSettlement onUngarrisonedSettlement
 	@tfield onUngarrisonedFort onUngarrisonedFort
-	@tfield onGiveSettlement onGiveSettlement
-	@tfield onOccupySettlement onOccupySettlement
-	@tfield onExterminatePopulation onExterminatePopulation
-	@tfield onSackSettlement onSackSettlement
-	@tfield onAddedToBuildingQueue onAddedToBuildingQueue
-	@tfield onBuildingDestroyed onBuildingDestroyed
-	@tfield onBuildingCompleted onBuildingCompleted
-	@tfield onEventCounter onEventCounter
-	@tfield onFactionExcommunicated onFactionExcommunicated
-	@tfield onDisaster onDisaster
-	@tfield onHordeFormed onHordeFormed
-	@tfield onAddedToTrainingQueue onAddedToTrainingQueue
-	@tfield onUnitDisbanded onUnitDisbanded
-	@tfield onUnitTrained onUnitTrained
-	@tfield onAgentCreated onAgentCreated
 	@tfield onObjSeen onObjSeen
 	@tfield onTileSeen onTileSeen
-	@tfield onGameReloaded onGameReloaded
 	@tfield onTransgression onTransgression
-	@tfield onPopeAcceptsCrusadeTarget onPopeAcceptsCrusadeTarget
-	@tfield onCrusadeCalled onCrusadeCalled
-	@tfield onCrusadeEnds onCrusadeEnds
-	@tfield onPopeRejectsCrusadeTarget onPopeRejectsCrusadeTarget
+	@tfield onForgiveness onForgiveness
 	@tfield onArmyTakesCrusadeTarget onArmyTakesCrusadeTarget
 	@tfield onUnitsDesertCrusade onUnitsDesertCrusade
-	@tfield onPopeElected onPopeElected
-	@tfield onVotedForPope onVotedForPope
-	@tfield onAssassinCaughtAttackingPope onAssassinCaughtAttackingPope
-	@tfield onInquisitorAppointed onInquisitorAppointed
-	@tfield onSettlementPanelOpen onSettlementPanelOpen
-	@tfield onFinancesPanelOpen onFinancesPanelOpen
-	@tfield onFactionSummaryPanelOpen onFactionSummaryPanelOpen
-	@tfield onFamilyTreePanelOpenFunc onFamilyTreePanelOpenFunc
-	@tfield onDiplomaticStandingPanelOpen onDiplomaticStandingPanelOpen
-	@tfield onDiplomacyPanelOpen onDiplomacyPanelOpen
-	@tfield onPreBattlePanelOpen onPreBattlePanelOpen
-	@tfield onNavalAutoResolvePanelOpen onNavalAutoResolvePanelOpen
-	@tfield onCharacterPanelOpen onCharacterPanelOpen
-	@tfield onTradePanelOpen onTradePanelOpen
-	@tfield onRequestBuildingAdvice onRequestBuildingAdvice
-	@tfield onRequestTrainingAdvice onRequestTrainingAdvice
-	@tfield onMessageOpen onMessageOpen
-	@tfield onIncomingMessage onIncomingMessage
-	@tfield onMessageClosed onMessageClosed
-	@tfield onButtonPressed onButtonPressed
-	@tfield onScrollClosed onScrollClosed
-	@tfield onScrollOpened onScrollOpened
-	@tfield onUIElementVisible onUIElementVisible
-	@tfield onScrollAdviceRequested onScrollAdviceRequested
-	@tfield onSettlementScrollAdviceRequested onSettlementScrollAdviceRequested
-	@tfield onPreBattleScrollAdviceRequested onPreBattleScrollAdviceRequested
-	@tfield onNavalPreBattleScrollAdviceRequested onNavalPreBattleScrollAdviceRequested
-	@tfield onCollegeOfCardinalsPanelOpen onCollegeOfCardinalsPanelOpen
-	@tfield onGuildUpgraded onGuildUpgraded
-	@tfield onGuildDestroyed onGuildDestroyed
-	@tfield onBrotherAdopted onBrotherAdopted
-	@tfield onBirth onBirth
-	@tfield onCharacterComesOfAge onCharacterComesOfAge
-	@tfield onCharacterMarries onCharacterMarries
-	@tfield onCharacterMarriesPrincess onCharacterMarriesPrincess
-	@tfield onCharacterBecomesAFather onCharacterBecomesAFather
-	@tfield onNewAdmiralCreated onNewAdmiralCreated
-	@tfield onShortcutTriggered onShortcutTriggered
-	@tfield onBecomesFactionLeader onBecomesFactionLeader
-	@tfield onBecomesFactionHeir onBecomesFactionHeir
-	@tfield onGeneralDevastatesTile onGeneralDevastatesTile
+	@tfield draw draw
+	@tfield onLoadingFonts onLoadingFonts
+	@tfield onNewGameStart onNewGameStart
+	@tfield onReadGameDbsAtStart onReadGameDbsAtStart
+	@tfield onClickAtTile onClickAtTile
+	@tfield onCampaignMapLoaded onCampaignMapLoaded
+	@tfield onCreateSaveFile onCreateSaveFile
+	@tfield onLoadSaveFile onLoadSaveFile
+	@tfield onChangeTurnNum onChangeTurnNum
+	@tfield onSelectWorldpkgdesc onSelectWorldpkgdesc
+	@tfield onfortificationlevelS onfortificationlevelS
+	@tfield onEndSiege onEndSiege
+	@tfield onStartSiege onStartSiege
+	@tfield onPluginLoad onPluginLoad
 
 
 
@@ -407,7 +470,7 @@ void luaP::onPluginLoadF()
 	/***
 	A character has come of age.
 
-	@function CharacterComesOfAge
+	@function onCharacterComesOfAge
 	@tparam namedCharacter namedChar
 	@tparam factionStruct faction
 	@tparam regionStruct|nil region
@@ -415,7 +478,7 @@ void luaP::onPluginLoadF()
 	@tparam string religion
 
 	@usage
-	function CharacterComesOfAge(namedChar, faction, region, characterType, religion)
+	function onCharacterComesOfAge(namedChar, faction, region, characterType, religion)
 	--something
 	end
 	*/
@@ -848,6 +911,38 @@ void luaP::onPluginLoadF()
 
 	@usage
 	function onEnemyCharacterSelected(namedChar, faction, region, characterType, religion)
+	--something
+	end
+	*/
+
+	/***
+	The player has selected a position beyond the character's extents.
+
+	@function onMultiTurnMove
+	@tparam namedCharacter namedChar
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string characterType
+	@tparam string religion
+
+	@usage
+	function onMultiTurnMove(namedChar, faction, region, characterType, religion)
+	--something
+	end
+	*/
+
+	/***
+	The player has opened the panel for the selected character.
+
+	@function onCharacterPanelOpen
+	@tparam namedCharacter namedChar
+	@tparam factionStruct faction
+	@tparam regionStruct|nil region
+	@tparam string characterType
+	@tparam string religion
+
+	@usage
+	function onCharacterPanelOpen(namedChar, faction, region, characterType, religion)
 	--something
 	end
 	*/
@@ -1531,6 +1626,96 @@ void luaP::onPluginLoadF()
 	*/
 
 	/***
+	The player has selected a settlement.
+
+	@function onSettlementSelected
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+
+	@usage
+	function onSettlementSelected(settlement, faction, region, religion)
+	--something
+	end
+	*/
+
+	/***
+	The player has opened the panel for the selected settlement.
+
+	@function onSettlementPanelOpen
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+
+	@usage
+	function onSettlementPanelOpen(settlement, faction, region, religion)
+	--something
+	end
+	*/
+
+	/***
+	The player has opened a recruitment panel.
+
+	@function onRecruitmentPanelOpen
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+
+	@usage
+	function onRecruitmentPanelOpen(settlement, faction, region, religion)
+	--something
+	end
+	*/
+
+	/***
+	The player has opened a construction panel.
+
+	@function onConstructionPanelOpen
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+
+	@usage
+	function onConstructionPanelOpen(settlement, faction, region, religion)
+	--something
+	end
+	*/
+
+	/***
+	The player has opened a trade panel.
+
+	@function onTradePanelOpen
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+
+	@usage
+	function onTradePanelOpen(settlement, faction, region, religion)
+	--something
+	end
+	*/
+
+	/***
+	The player has requested advice on the settlement scroll.
+
+	@function onSettlementScrollAdviceRequested
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+
+	@usage
+	function onSettlementScrollAdviceRequested(settlement, faction, region, religion)
+	--something
+	end
+	*/
+
+	/***
 	A guild has been created/upgraded.
 
 	@function onGuildUpgraded
@@ -1828,6 +2013,72 @@ void luaP::onPluginLoadF()
 	*/
 
 	/***
+	The escape key has been pressed. This trigger will only fire if the command StealEscKey has been used.
+
+	@function onEscPressed
+
+	@usage
+	function onEscPressed()
+	--something here
+	end
+	*/
+
+	/***
+	The escape key has been pressed. This trigger will only fire if the command StealEscKey has been used.
+
+	@function onScriptedAdvice
+
+	@usage
+	function onScriptedAdvice()
+	--something here
+	end
+	*/
+
+	/***
+	The player has requested advice on the naval prebattle scroll.
+
+	@function onNavalPreBattleScrollAdviceRequested
+
+	@usage
+	function onNavalPreBattleScrollAdviceRequested()
+	--something here
+	end
+	*/
+
+	/***
+	The player has requested advice on the prebattle scroll.
+
+	@function onPreBattleScrollAdviceRequested
+
+	@usage
+	function onPreBattleScrollAdviceRequested()
+	--something here
+	end
+	*/
+
+	/***
+	The player has opened the college of cardinals panel.
+
+	@function onCollegeOfCardinalsPanelOpen
+
+	@usage
+	function onCollegeOfCardinalsPanelOpen()
+	--something here
+	end
+	*/
+
+	/***
+	The player has opened the diplomatic standing panel.
+
+	@function onDiplomaticStandingPanelOpen
+
+	@usage
+	function onDiplomaticStandingPanelOpen()
+	--something here
+	end
+	*/
+
+	/***
 	An idle unit is under missile fire.
 
 	@function onBattlePlayerUnderAttackIdle
@@ -2024,7 +2275,7 @@ void luaP::onPluginLoadF()
 	/***
 	A building has been completed.
 
-	@function GovernorBuildingCompleted
+	@function onGovernorBuildingCompleted
 	@tparam namedCharacter namedChar
 	@tparam factionStruct faction
 	@tparam settlementStruct settlement
@@ -2034,7 +2285,7 @@ void luaP::onPluginLoadF()
 	@tparam string religion
 
 	@usage
-	function GovernorBuildingCompleted(namedChar, faction, settlement, building, region, characterType, religion)
+	function onGovernorBuildingCompleted(namedChar, faction, settlement, building, region, characterType, religion)
 	--something here
 	end
 	*/
@@ -2122,9 +2373,41 @@ void luaP::onPluginLoadF()
 	*/
 
 	/***
+	The player has requested building advice.
+
+	@function onRequestBuildingAdvice
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam string buildingName
+	@tparam regionStruct region
+	@tparam string religion
+
+	@usage
+	function onRequestBuildingAdvice(settlement, faction, buildingName, region, religion)
+	--something here
+	end
+	*/
+
+	/***
+	The player has requested training advice.
+
+	@function onRequestTrainingAdvice
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam string resource
+	@tparam regionStruct region
+	@tparam string religion
+
+	@usage
+	function onRequestTrainingAdvice(settlement, faction, resource, region, religion)
+	--something here
+	end
+	*/
+
+	/***
 	A unit has been added to the training queue.
 
-	@function onAddedToBuildingQueue
+	@function onAddedToTrainingQueue
 	@tparam settlementStruct settlement
 	@tparam factionStruct faction
 	@tparam string unitName
@@ -2132,7 +2415,7 @@ void luaP::onPluginLoadF()
 	@tparam string religion
 
 	@usage
-	function onAddedToBuildingQueue(settlement, faction, unitName, region, religion)
+	function onAddedToTrainingQueue(settlement, faction, unitName, region, religion)
 	--something here
 	end
 	*/
@@ -2157,6 +2440,102 @@ void luaP::onPluginLoadF()
 
 	@usage
 	function onBattleReinforcementsArrive(army)
+	--something here
+	end
+	*/
+
+	/***
+	The player has requested mercenaries advice.
+
+	@function onRequestMercenariesAdvice
+	@tparam stackStruct army
+
+	@usage
+	function onRequestMercenariesAdvice(army)
+	--something here
+	end
+	*/
+
+	/***
+	The player has clicked on a button.
+
+	@function onButtonPressed
+	@tparam string name
+
+	@usage
+	function onButtonPressed(name)
+	--something here
+	end
+	*/
+
+	/***
+	The player triggered a keyboard shortcut.
+
+	@function onShortcutTriggered
+	@tparam string name
+
+	@usage
+	function onShortcutTriggered(name)
+	--something here
+	end
+	*/
+
+	/***
+	A special UI Element is visible.
+
+	@function onUIElementVisible
+	@tparam string name
+
+	@usage
+	function onUIElementVisible(name)
+	--something here
+	end
+	*/
+
+	/***
+	The player opened a scroll.
+
+	@function onScrollOpened
+	@tparam string name
+
+	@usage
+	function onScrollOpened(name)
+	--something here
+	end
+	*/
+
+	/***
+	The player closed a scroll.
+
+	@function onScrollClosed
+	@tparam string name
+
+	@usage
+	function onScrollClosed(name)
+	--something here
+	end
+	*/
+
+	/***
+	The player has requested advice on a scroll.
+
+	@function onScrollAdviceRequested
+	@tparam string name
+
+	@usage
+	function onScrollAdviceRequested(name)
+	--something here
+	end
+	*/
+
+	/***
+	The player has suppressed a piece of advice.
+
+	@function onAdviceSupressed
+	@tparam string name
+
+	@usage
+	function onAdviceSupressed(name)
 	--something here
 	end
 	*/
@@ -2371,6 +2750,123 @@ void luaP::onPluginLoadF()
 
 	@usage
 	function onAssassinCaughtAttackingPope(faction, religion)
+	--something here
+	end
+	*/
+
+	/***
+	The player has opened his finances panel.
+
+	@function onFinancesPanelOpen
+	@tparam factionStruct faction
+	@tparam string religion
+
+	@usage
+	function onFinancesPanelOpen(faction, religion)
+	--something here
+	end
+	*/
+
+	/***
+	The player has opened the faction summary panel.
+
+	@function onFactionSummaryPanelOpen
+	@tparam factionStruct faction
+	@tparam string religion
+
+	@usage
+	function onFactionSummaryPanelOpen(faction, religion)
+	--something here
+	end
+	*/
+
+	/***
+	The player has opened the family tree panel.
+
+	@function onFamilyTreePanelOpen
+	@tparam factionStruct faction
+	@tparam string religion
+
+	@usage
+	function onFamilyTreePanelOpen(faction, religion)
+	--something here
+	end
+	*/
+
+	/***
+	The player has opened the diplomatic standing panel.
+
+	@function onDiplomacyPanelOpen
+	@tparam factionStruct faction
+	@tparam string religion
+
+	@usage
+	function onDiplomacyPanelOpen(faction, religion)
+	--something here
+	end
+	*/
+
+	/***
+	The player has attacked an army or settlement. The decision panel is now open.
+
+	@function onPreBattlePanelOpen
+	@tparam factionStruct faction
+	@tparam string religion
+
+	@usage
+	function onPreBattlePanelOpen(faction, religion)
+	--something here
+	end
+	*/
+
+	/***
+	A message has arrived for the player.
+
+	@function onIncomingMessage
+	@tparam factionStruct faction
+	@tparam string religion
+
+	@usage
+	function onIncomingMessage(faction, religion)
+	--something here
+	end
+	*/
+
+	/***
+	The player has opened a message.
+
+	@function onMessageOpen
+	@tparam factionStruct faction
+	@tparam string religion
+
+	@usage
+	function onMessageOpen(faction, religion)
+	--something here
+	end
+	*/
+
+	/***
+	The player has closed a message.
+
+	@function onMessageClosed
+	@tparam factionStruct faction
+	@tparam string religion
+
+	@usage
+	function onMessageClosed(faction, religion)
+	--something here
+	end
+	*/
+
+	/***
+	The player has declined automated settlement management.
+
+	@function onDeclineAutomatedSettlementManagement
+	@tparam factionStruct faction
+	@tparam string religion
+
+	@usage
+	function onDeclineAutomatedSettlementManagement(faction, religion)
 	--something here
 	end
 	*/
@@ -3112,378 +3608,6 @@ void luaP::onPluginLoadF()
 	*/
 	onStartSiege = new sol::function(luaState["onStartSiege"]);
 	checkLuaFunc(&onStartSiege);
-	/***
-	A character has been selected by any means (including through the UI).
-
-	@function onCharacterSelected
-	@tparam namedCharacter selectedChar
-
-	@usage
-	function onCharacterSelected(selectedChar)
-	--something here
-	end
-	*/
-	onCharacterSelectedFunc = new sol::function(luaState["onCharacterSelected"]);
-	checkLuaFunc(&onCharacterSelectedFunc);
-
-
-	/***
-	The player has attempted to move a character beyond that character's given movement range for that turn.
-
-	@function onMultiTurnMove
-	@tparam namedCharacter character
-
-	@usage
-	--something
-	*/
-
-	onMultiTurnMoveFunc = new sol::function(luaState["onMultiTurnMove"]);
-	checkLuaFunc(&onMultiTurnMoveFunc);
-
-	/***
-	A settlement has been selected by any means (including through the UI).
-
-	@function onSettlementSelected
-	@tparam settlementStruct settlement
-
-	@usage
-	function onSettlementSelected(settlement)
-		print("Function: onSettlementSelected()\n\tSettlement: "..settlement.name)
-	end
-	*/
-
-	onSettlementSelectedFunc = new sol::function(luaState["onSettlementSelected"]);
-	checkLuaFunc(&onSettlementSelectedFunc);
-
-	/***
-	The player has opened the panel for the selected settlement.
-
-	@function onSettlementPanelOpen
-	@tparam settlementStruct sett
-
-	@usage
-	--something
-	*/
-
-	onSettlementPanelOpenFunc = new sol::function(luaState["onSettlementPanelOpen"]);
-	checkLuaFunc(&onSettlementPanelOpenFunc);
-
-	/***
-	The player has opened the finances panel.
-
-	@function onFinancesPanelOpen
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onFinancesPanelOpenFunc = new sol::function(luaState["onFinancesPanelOpen"]);
-	checkLuaFunc(&onFinancesPanelOpenFunc);
-
-	/***
-	The player has opened the faction summary panel.
-
-	@function onFactionSummaryPanelOpen
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onFactionSummaryPanelOpenFunc = new sol::function(luaState["onFactionSummaryPanelOpen"]);
-	checkLuaFunc(&onFactionSummaryPanelOpenFunc);
-
-	/***
-	The player has opened the family tree panel.
-
-	@function onFamilyTreePanelOpenFunc
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onFamilyTreePanelOpenFunc = new sol::function(luaState["onFamilyTreePanelOpenFunc"]);
-	checkLuaFunc(&onFamilyTreePanelOpenFunc);
-
-	/***
-	The player has opened the diplomatic standing panel.
-
-	@function onDiplomaticStandingPanelOpen
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onDiplomaticStandingPanelOpenFunc = new sol::function(luaState["onDiplomaticStandingPanelOpen"]);
-	checkLuaFunc(&onDiplomaticStandingPanelOpenFunc);
-
-	/***
-	The player has opened a diplomacy panel.
-
-	@function onDiplomacyPanelOpen
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onDiplomacyPanelOpenFunc = new sol::function(luaState["onDiplomacyPanelOpen"]);
-	checkLuaFunc(&onDiplomacyPanelOpenFunc);
-
-	/***
-	The player has attacked an army or settlement. The decision panel is now open.
-
-	@function onPreBattlePanelOpen
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onPreBattlePanelOpenFunc = new sol::function(luaState["onPreBattlePanelOpen"]);
-	checkLuaFunc(&onPreBattlePanelOpenFunc);
-
-	/***
-	The naval auto resolve panel has opened.
-
-	@function onNavalAutoResolvePanelOpen
-
-	@usage
-	--something
-	*/
-
-	onNavalAutoResolvePanelOpenFunc = new sol::function(luaState["onNavalAutoResolvePanelOpen"]);
-	checkLuaFunc(&onNavalAutoResolvePanelOpenFunc);
-
-	/***
-	The player has opened the panel for the selected character.
-
-	@function onCharacterPanelOpen
-	@tparam namedCharacter selectedChar
-
-	@usage
-	--something
-	*/
-
-	onCharacterPanelOpenFunc = new sol::function(luaState["onCharacterPanelOpen"]);
-	checkLuaFunc(&onCharacterPanelOpenFunc);
-
-	/***
-	The player has opened a trade panel.
-
-	@function onTradePanelOpen
-	@tparam settlementStruct sett
-
-	@usage
-	--something
-	*/
-
-	onTradePanelOpenFunc = new sol::function(luaState["onTradePanelOpen"]);
-	checkLuaFunc(&onTradePanelOpenFunc);
-
-	/***
-	The player has requested building advice.
-
-	@function onRequestBuildingAdvice
-	@tparam settlementStruct sett
-
-	@usage
-	--something
-	*/
-
-	onRequestBuildingAdviceFunc = new sol::function(luaState["onRequestBuildingAdvice"]);
-	checkLuaFunc(&onRequestBuildingAdviceFunc);
-
-	/***
-	The player has requested training advice.
-
-	@function onRequestTrainingAdvice
-	@tparam settlementStruct sett
-	@tparam eduEntry recommendedUnitEntry
-
-	@usage
-	--something
-	*/
-
-	onRequestTrainingAdviceFunc = new sol::function(luaState["onRequestTrainingAdvice"]);
-	checkLuaFunc(&onRequestTrainingAdviceFunc);
-
-	/***
-	The player has opened a message.
-
-	@function onMessageOpen
-	@tparam factionStruct fac
-	@tparam int msgType
-
-	@usage
-	--something
-	*/
-
-	onMessageOpenFunc = new sol::function(luaState["onMessageOpen"]);
-	checkLuaFunc(&onMessageOpenFunc);
-
-	/***
-	The player has recieved a message.
-
-	@function onIncomingMessage
-	@tparam factionStruct fac
-	@tparam int msgType
-
-	@usage
-	--something
-	*/
-
-	onIncomingMessageFunc = new sol::function(luaState["onIncomingMessage"]);
-	checkLuaFunc(&onIncomingMessageFunc);
-
-	/***
-	The player has closed a message.
-
-	@function onMessageClosed
-	@tparam int msgType
-
-	@usage
-	--something
-	*/
-
-	onMessageClosedFunc = new sol::function(luaState["onMessageClosed"]);
-	checkLuaFunc(&onMessageClosedFunc);
-
-	/***
-	The player has clicked on a button.
-
-	@function onButtonPressed
-	@tparam string buttonName
-
-	@usage
-	--something
-	*/
-
-	onButtonPressedFunc = new sol::function(luaState["onButtonPressed"]);
-	checkLuaFunc(&onButtonPressedFunc);
-
-	/***
-	The player closed a scroll.
-
-	@function onScrollClosed
-	@tparam string scrollName
-
-	@usage
-	--something
-	*/
-
-	onScrollClosedFunc = new sol::function(luaState["onScrollClosed"]);
-	checkLuaFunc(&onScrollClosedFunc);
-
-	/***
-	The player opened a scroll.
-
-	@function onScrollOpened
-	@tparam string scrollName
-
-	@usage
-	--something
-	*/
-
-	onScrollOpenedFunc = new sol::function(luaState["onScrollOpened"]);
-	checkLuaFunc(&onScrollOpenedFunc);
-
-	/***
-	A special UI Element is visible.
-
-	@function onUIElementVisible
-	@tparam string elementName
-
-	@usage
-	--something
-	*/
-
-	onUIElementVisibleFunc = new sol::function(luaState["onUIElementVisible"]);
-	checkLuaFunc(&onUIElementVisibleFunc);
-
-	/***
-	The player has requested advice on a scroll.
-
-	@function onScrollAdviceRequested
-	@tparam string scrollName
-
-	@usage
-	--something
-	*/
-
-	onScrollAdviceRequestedFunc = new sol::function(luaState["onScrollAdviceRequested"]);
-	checkLuaFunc(&onScrollAdviceRequestedFunc);
-
-	/***
-	The player has requested advice on the settlement scroll.
-
-	@function onSettlementScrollAdviceRequested
-	@tparam settlementStruct sett
-	@tparam string scrollName
-
-	@usage
-	--something
-	*/
-
-	onSettlementScrollAdviceRequestedFunc = new sol::function(luaState["onSettlementScrollAdviceRequested"]);
-	checkLuaFunc(&onSettlementScrollAdviceRequestedFunc);
-
-	/***
-	The player has requested advice on the prebattle scroll.
-
-	@function onPreBattleScrollAdviceRequested
-
-	@usage
-	--something
-	*/
-
-	onPreBattleScrollAdviceRequestedFunc = new sol::function(luaState["onPreBattleScrollAdviceRequested"]);
-	checkLuaFunc(&onPreBattleScrollAdviceRequestedFunc);
-
-	/***
-	The player has requested advice on the naval prebattle scroll.
-
-	@function onNavalPreBattleScrollAdviceRequested
-
-	@usage
-	--something
-	*/
-
-	onNavalPreBattleScrollAdviceRequestedFunc = new sol::function(luaState["onNavalPreBattleScrollAdviceRequested"]);
-	checkLuaFunc(&onNavalPreBattleScrollAdviceRequestedFunc);
-
-	/***
-	The player has opened the college of cardinals panel.
-
-	@function onCollegeOfCardinalsPanelOpen
-	@tparam collegeCardinalsStruct college
-
-	@usage
-	--something
-	*/
-
-	onCollegeOfCardinalsPanelOpenFunc = new sol::function(luaState["onCollegeOfCardinalsPanelOpen"]);
-	checkLuaFunc(&onCollegeOfCardinalsPanelOpenFunc);
-
-	/***
-	The player triggered a keyboard shortcut.
-
-	@function onShortcutTriggered
-	@tparam string shortcut
-
-	@usage
-	function onShortcutTriggered(shortcut)
-		if shortcut == "strat_ui::mission_button" then
-			--do stuff
-		end
-	end
-	*/
-
-	onShortcutTriggeredFunc = new sol::function(luaState["onShortcutTriggered"]);
-	checkLuaFunc(&onShortcutTriggeredFunc);
 
 
 	if (onPluginLoad != nullptr)

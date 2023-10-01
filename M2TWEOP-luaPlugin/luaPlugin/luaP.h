@@ -87,10 +87,6 @@ public:
 	//lua functions and events controllers
 	void onPluginLoadF();
 	void onChangeTurnNum(int num);
-	void onCharacterSelected(namedCharacter* gen);
-
-	void onMultiTurnMove(namedCharacter* gen);
-	void onSettlementSelected(settlementStruct* sett);
 
 	sol::state luaState;
 
@@ -167,44 +163,6 @@ public:
 	sol::function* resetDXFunc = nullptr;
 	sol::function* onLoadingFonts = nullptr;
 	sol::function* initDXFunc = nullptr;
-
-	sol::function* onChangeTurnNumFunc = nullptr;
-	sol::function* onCharacterSelectedFunc = nullptr;
-
-
-	sol::function* onMultiTurnMoveFunc = nullptr;
-	sol::function* onSettlementSelectedFunc = nullptr;
-
-
-
-	sol::function* onSettlementPanelOpenFunc = nullptr;
-	sol::function* onFinancesPanelOpenFunc = nullptr;
-	sol::function* onFactionSummaryPanelOpenFunc = nullptr;
-	sol::function* onFamilyTreePanelOpenFunc = nullptr;
-	sol::function* onDiplomaticStandingPanelOpenFunc = nullptr;
-	sol::function* onDiplomacyPanelOpenFunc = nullptr;
-	sol::function* onPreBattlePanelOpenFunc = nullptr;
-	sol::function* onNavalAutoResolvePanelOpenFunc = nullptr;
-
-	sol::function* onCharacterPanelOpenFunc = nullptr;
-	sol::function* onTradePanelOpenFunc = nullptr;
-	sol::function* onRequestBuildingAdviceFunc = nullptr;
-	sol::function* onRequestTrainingAdviceFunc = nullptr;
-	sol::function* onMessageOpenFunc = nullptr;
-	sol::function* onIncomingMessageFunc = nullptr;
-	sol::function* onMessageClosedFunc = nullptr;
-
-	sol::function* onButtonPressedFunc = nullptr;
-	sol::function* onScrollClosedFunc = nullptr;
-	sol::function* onScrollOpenedFunc = nullptr;
-	sol::function* onUIElementVisibleFunc = nullptr;
-	sol::function* onScrollAdviceRequestedFunc = nullptr;
-	sol::function* onSettlementScrollAdviceRequestedFunc = nullptr;
-	sol::function* onPreBattleScrollAdviceRequestedFunc = nullptr;
-	sol::function* onNavalPreBattleScrollAdviceRequestedFunc = nullptr;
-	sol::function* onCollegeOfCardinalsPanelOpenFunc = nullptr;
-
-	sol::function* onShortcutTriggeredFunc = nullptr;
 	void checkLuaFunc(sol::function** lRef);
 
 

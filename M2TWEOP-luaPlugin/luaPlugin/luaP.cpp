@@ -2516,35 +2516,3 @@ void luaP::onChangeTurnNum(int num)
 		tryLua((*onChangeTurnNumFunc)(num));
 	}
 }
-
-void luaP::onCharacterSelected(namedCharacter* gen)
-{
-	if (onCharacterSelectedFunc != nullptr)
-	{
-		tryLua((*onCharacterSelectedFunc)(gen));
-	}
-}
-
-void luaP::onSiegeEquipmentCompleted(settlementStruct* sett, fortStruct* frt)
-{
-	if (onSiegeEquipmentCompletedFunc != nullptr)
-	{
-		tryLua((*onSiegeEquipmentCompletedFunc)(sett, frt));
-	}
-}
-
-void luaP::onMultiTurnMove(namedCharacter* gen)
-{
-	if (onMultiTurnMoveFunc != nullptr)
-	{
-		tryLua((*onMultiTurnMoveFunc)(gen));
-	}
-}
-
-void luaP::onSettlementSelected(settlementStruct* sett)
-{
-	if (onSettlementSelectedFunc != nullptr)
-	{
-		tryLua((*onSettlementSelectedFunc)(sett));
-	}
-}
