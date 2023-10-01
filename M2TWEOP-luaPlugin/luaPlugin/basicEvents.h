@@ -113,7 +113,11 @@ namespace gameEvents
 		characterUnitSettEvent = 42,
 		characterBuildingEvent = 43,
 		agentCreatedEvent = 44,
-		buildingEvent = 45
+		buildingEvent = 45,
+		targetSettlementEvent = 46,
+		namedCharacterRiotEvents = 47,
+		settOccupationEvent = 48,
+		guildEvent = 49
 	};
 
 	class EventBase
@@ -190,7 +194,7 @@ namespace gameEvents
 			{
 				auto targetSettlement = reinterpret_cast<settlementStruct*>(vTab[2]);
 				factionStruct* targetFaction = targetSettlement->faction;
-				regionStruct* targetRegion = gameHelpers::getRegion(targetSettlement->regionNumber);
+				regionStruct* targetRegion = gameHelpers::getRegion(targetSettlement->regionID);
 				const char* targetReligion = getReligion(targetFaction->religion);
 				if (&(*funk) != nullptr) {
 					(*funk)(targetSettlement, targetFaction, targetRegion, targetReligion);
@@ -200,7 +204,7 @@ namespace gameEvents
 			else if (EvType == EventType::crusadeEventEnds)
 			{
 				auto targetSettlement = reinterpret_cast<settlementStruct*>(vTab[2]);
-				regionStruct* targetRegion = gameHelpers::getRegion(targetSettlement->regionNumber);
+				regionStruct* targetRegion = gameHelpers::getRegion(targetSettlement->regionID);
 				if (&(*funk) != nullptr) {
 					(*funk)(targetSettlement, targetRegion);
 				}
@@ -343,13 +347,13 @@ namespace gameEvents
 				fortStruct* fort = nullptr;
 				factionStruct* faction = character->faction;
 				factionStruct* targetFaction = settlement->faction;
-				if ((DWORD)(*settlement).vTable != 0x012FCF34)
+				if ((DWORD)(*settlement).vTable != 0x012FCF34 && (DWORD)(*settlement).vTable != 0x01341F54)
 				{
 					fort = reinterpret_cast<fortStruct*>(vTab[2]);
 					targetFaction = fort->faction;
 				}
 				const char* characterType = getType(character);
-				regionStruct* region = gameHelpers::getRegion(settlement->regionNumber);
+				regionStruct* region = gameHelpers::getRegion(settlement->regionID);
 				const char* religion = getReligion(faction->religion);
 				const char* targetReligion = getReligion(targetFaction->religion);
 				if (&(*funk) != nullptr) {
@@ -458,7 +462,7 @@ namespace gameEvents
 				auto targetSettlement = reinterpret_cast<settlementStruct*>(vTab[2]);
 				auto faction = reinterpret_cast<factionStruct*>(vTab[3]);
 				factionStruct* targetFaction = targetSettlement->faction;
-				regionStruct* targetRegion = gameHelpers::getRegion(targetSettlement->regionNumber);
+				regionStruct* targetRegion = gameHelpers::getRegion(targetSettlement->regionID);
 				const char* religion = getReligion(faction->religion);
 				const char* targetReligion = getReligion(targetFaction->religion);
 				if (&(*funk) != nullptr) {
@@ -472,7 +476,7 @@ namespace gameEvents
 				auto army = reinterpret_cast<stackStruct*>(vTab[3]);
 				factionStruct* faction = army->faction;
 				factionStruct* targetFaction = targetSettlement->faction;
-				regionStruct* targetRegion = gameHelpers::getRegion(targetSettlement->regionNumber);
+				regionStruct* targetRegion = gameHelpers::getRegion(targetSettlement->regionID);
 				const char* religion = getReligion(faction->religion);
 				const char* targetReligion = getReligion(targetFaction->religion);
 				if (&(*funk) != nullptr) {
@@ -512,7 +516,7 @@ namespace gameEvents
 				regionStruct* region;
 				if (settlement)
 				{
-					region = gameHelpers::getRegion(settlement->regionNumber);
+					region = gameHelpers::getRegion(settlement->regionID);
 				}
 				else
 				{
@@ -530,7 +534,7 @@ namespace gameEvents
 				factionStruct* faction = character->faction;
 				auto targetSettlement = reinterpret_cast<settlementStruct*>(vTab[2] + 0x3C);
 				factionStruct* targetFaction = targetSettlement->faction;
-				regionStruct* targetRegion = gameHelpers::getRegion(targetSettlement->regionNumber);
+				regionStruct* targetRegion = gameHelpers::getRegion(targetSettlement->regionID);
 				const char* characterType = getType(character);
 				const char* religion = getReligion(faction->religion);
 				const char* targetReligion = getReligion(targetFaction->religion);
@@ -573,7 +577,7 @@ namespace gameEvents
 				if (vTab[5] != nullptr)
 				{
 					targetSettlement = reinterpret_cast<settlementStruct*>(vTab[5]);
-					if ((DWORD)(*targetSettlement).vTable != 0x012FCF34)
+					if ((DWORD)(*targetSettlement).vTable != 0x012FCF34 && (DWORD)(*targetSettlement).vTable != 0x01341F54)
 					{
 						targetFort = reinterpret_cast<fortStruct*>(vTab[5]);
 					}
@@ -608,7 +612,7 @@ namespace gameEvents
 				if (vTab[4] != nullptr)
 				{
 					targetSettlement = reinterpret_cast<settlementStruct*>(vTab[4]);
-					if ((DWORD)(*targetSettlement).vTable != 0x012FCF34)
+					if ((DWORD)(*targetSettlement).vTable != 0x012FCF34 && (DWORD)(*targetSettlement).vTable != 0x01341F54)
 					{
 						targetFort = reinterpret_cast<fortStruct*>(vTab[4]);
 					}
@@ -705,8 +709,13 @@ namespace gameEvents
 			else if (EvType == EventType::settlementEvent)
 			{
 				auto settlement = reinterpret_cast<settlementStruct*>(vTab[1]);
+				factionStruct* faction;
+				if ((DWORD)(*settlement).vTable != 0x012FCF34 && (DWORD)(*settlement).vTable != 0x01341F54)
+				{
+					settlement = reinterpret_cast<fortStruct*>(vTab[1]);
+				}
 				factionStruct* faction = settlement->faction;
-				regionStruct* region = gameHelpers::getRegion(settlement->regionNumber);
+				regionStruct* region = gameHelpers::getRegion(settlement->regionID);
 				const char* religion = getReligion(faction->religion);
 				if (&(*funk) != nullptr) {
 
@@ -762,7 +771,7 @@ namespace gameEvents
 				factionStruct* faction = character->faction;
 				auto settlement = reinterpret_cast<settlementStruct*>(vTab[3]);
 				const char* characterType = reinterpret_cast<char*>(vTab[2]);
-				regionStruct* region = gameHelpers::getRegion(settlement->regionNumber);
+				regionStruct* region = gameHelpers::getRegion(settlement->regionID);
 				const char* religion = getReligion(faction->religion);
 				if (&(*funk) != nullptr) {
 					(*funk)(character, faction, settlement, region, characterType, religion);
@@ -773,7 +782,7 @@ namespace gameEvents
 			{
 				auto settlement = reinterpret_cast<settlementStruct*>(vTab[1]);
 				factionStruct* faction = settlement->faction;
-				regionStruct* region = gameHelpers::getRegion(settlement->regionNumber);
+				regionStruct* region = gameHelpers::getRegion(settlement->regionID);
 				const char* build = reinterpret_cast<char*>(vTab[2]);
 				const char* religion = getReligion(faction->religion);
 				if (&(*funk) != nullptr) {
@@ -781,6 +790,60 @@ namespace gameEvents
 				}
 				return 45;
 			}
+			else if (EvType == EventType::targetSettlementEvent)
+			{
+				auto settlement = reinterpret_cast<settlementStruct*>(vTab[1]);
+				factionStruct* faction = settlement->faction;
+				factionStruct* targetFaction = reinterpret_cast<factionStruct*>(vTab[2]);
+				regionStruct* region = gameHelpers::getRegion(settlement->regionID);
+				const char* religion = getReligion(faction->religion);
+				const char* targetReligion = getReligion(targetFaction->religion);
+				if (&(*funk) != nullptr) {
+					(*funk)(settlement, faction, region, religion, targetFaction, targetReligion);
+				}
+				return 46;
+			}
+			else if (EvType == EventType::namedCharacterRiotEvents)
+			{
+				auto character = reinterpret_cast<namedCharacter*>(vTab[1]);
+				factionStruct* faction = character->faction;
+				auto settlement = reinterpret_cast<settlementStruct*>(vTab[2]);
+				regionStruct* region = gameHelpers::getRegion(settlement->regionID);
+				const char* religion = getReligion(faction->religion);
+				factionStruct* targetFaction = reinterpret_cast<factionStruct*>(vTab[3]);
+				const char* targetReligion = getReligion(targetFaction->religion);
+				if (&(*funk) != nullptr) {
+					(*funk)(character, faction, settlement, region, religion, targetFaction, targetReligion);
+				}
+				return 47;
+			}
+			else if (EvType == EventType::settOccupationEvent)
+			{
+				auto character = reinterpret_cast<namedCharacter*>(vTab[1]);
+				factionStruct* faction = character->faction;
+				const regionStruct* region = getRegion(character);
+				const char* religion = getReligion(faction->religion);
+				factionStruct* targetFaction = reinterpret_cast<factionStruct*>(vTab[2]);
+				const char* targetReligion = getReligion(targetFaction->religion);
+				if (&(*funk) != nullptr) {
+					(*funk)(character, faction, region, religion, targetFaction, targetReligion);
+				}
+				return 48;
+			}
+			else if (EvType == EventType::guildEvent)
+			{
+				auto settlement = reinterpret_cast<settlementStruct*>(vTab[1]);
+				factionStruct* faction = settlement->faction;
+				regionStruct* region = gameHelpers::getRegion(settlement->regionID);
+				const char* religion = getReligion(faction->religion);
+				auto guild = reinterpret_cast<guild*>(vTab[2]);
+				if (&(*funk) != nullptr) {
+
+					(*funk)(settlement, faction, region, religion, guild);
+
+				}
+				return 49;
+				}
 			else
 			{
 				return 0;
@@ -875,12 +938,96 @@ sol::function* onCeasedFactionHeir = nullptr;
 sol::function* onUngarrisonedFort = nullptr;
 sol::function* onTileSeen = nullptr;
 sol::function* onObjSeen = nullptr;
+sol::function* onObjSeen = nullptr;
 sol::function* onUnitsDesertCrusade = nullptr;
 sol::function* onArmyTakesCrusadeTarget = nullptr;
 sol::function* onTransgression = nullptr;
 sol::function* onForgiveness = nullptr;
+sol::function* onUpdateAttitude = nullptr;
+sol::function* onDemeanour = nullptr;
+sol::function* onBirth = nullptr;
+sol::function* onCharacterComesOfAge = nullptr;
+sol::function* onCharacterMarries = nullptr;
+sol::function* onCharacterMarriesPrincess = nullptr;
+sol::function* onMarriageAlliancePossible = nullptr;
+sol::function* onMarriageAllianceOffered = nullptr;
+sol::function* onPriestBecomesHeretic = nullptr;
+sol::function* onCharacterNearHeretic = nullptr;
+sol::function* onCharacterNearWitch = nullptr;
+sol::function* onCardinalPromoted = nullptr;
+sol::function* onCardinalRemoved = nullptr;
+sol::function* onInquisitorAppointed = nullptr;
+sol::function* onCharacterBecomesAFather = nullptr;
+sol::function* onCharacterTurnEnd = nullptr;
+sol::function* onCharacterTurnEndInSettlement = nullptr;
+sol::function* onGeneralDevastatesTile = nullptr;
+sol::function* onGeneralJoinCrusade = nullptr;
+sol::function* onGeneralAbandonCrusade = nullptr;
+sol::function* onGeneralArrivesCrusadeTargetRegion = nullptr;
+sol::function* onGeneralTakesCrusadeTarget = nullptr;
+sol::function* onCharacterAttacksCrusadingGeneral = nullptr;
+sol::function* onGeneralPrisonersRansomedCaptor = nullptr;
+sol::function* onGeneralPrisonersRansomedCaptive = nullptr;
+sol::function* onFactionLeaderPrisonersRansomedCaptor = nullptr;
+sol::function* onFactionLeaderPrisonersRansomedCaptive = nullptr;
+sol::function* onSpyMission = nullptr;
+sol::function* onExecutesASpyOnAMission = nullptr;
+sol::function* onLeaderOrderedSpyingMission = nullptr;
+sol::function* onAssassinationMission = nullptr;
+sol::function* onExecutesAnAssassinOnAMission = nullptr;
+sol::function* onAssassinCaughtAttackingPope = nullptr;
+sol::function* onLeaderOrderedAssassination = nullptr;
+sol::function* onSufferAssassinationAttempt = nullptr;
+sol::function* onAcquisitionMission = nullptr;
+sol::function* onSufferAcquisitionAttempt = nullptr;
+sol::function* onMarriageMission = nullptr;
+sol::function* onSufferMarriageAttempt = nullptr;
+sol::function* onDenouncementMission = nullptr;
+sol::function* onSufferDenouncementAttempt = nullptr;
+sol::function* onSabotageMission = nullptr;
+sol::function* onLeaderOrderedSabotage = nullptr;
+sol::function* onBriberyMission = nullptr;
+sol::function* onLeaderOrderedBribery = nullptr;
+sol::function* onAcceptBribe = nullptr;
+sol::function* onRefuseBribe = nullptr;
+sol::function* onInsurrection = nullptr;
+sol::function* onDiplomacyMission = nullptr;
+sol::function* onLeaderOrderedDiplomacy = nullptr;
+sol::function* onLeaderMissionSuccess = nullptr;
+sol::function* onLeaderMissionFailed = nullptr;
+sol::function* onForgiveness = nullptr;
+sol::function* onSettlementTurnStart = nullptr;
+sol::function* onNewAdmiralCreated = nullptr;
+sol::function* onUnitTrained = nullptr;
+sol::function* onGovernorUnitTrained = nullptr;
+sol::function* onGovernorBuildingCompleted = nullptr;
+sol::function* onAgentCreated = nullptr;
+sol::function* onGovernorAgentCreated = nullptr;
+sol::function* onBuildingDestroyed = nullptr;
+sol::function* onAddedToBuildingQueue = nullptr;
+sol::function* onAddedToTrainingQueue = nullptr;
+sol::function* onGovernorBuildingDestroyed = nullptr;
+sol::function* onCityRiots = nullptr;
+sol::function* onGiveSettlement = nullptr;
+sol::function* onGovernorCityRiots = nullptr;
+sol::function* onCityRebels = nullptr;
+sol::function* onGovernorCityRebels = nullptr;
+sol::function* onGovernorThrowGames = nullptr;
+sol::function* onGovernorThrowRaces = nullptr;
+sol::function* onUngarrisonedSettlement = nullptr;
+sol::function* onOccupySettlement = nullptr;
+sol::function* onSackSettlement = nullptr;
+sol::function* onExterminatePopulation = nullptr;
+sol::function* onCitySacked = nullptr;
+sol::function* onSettlementUpgraded = nullptr;
+sol::function* onSettlementConverted = nullptr;
+sol::function* onGuildUpgraded = nullptr;
+sol::function* onGuildDestroyed = nullptr;
+sol::function* onSiegeEquipmentCompleted = nullptr;
+sol::function* onSettlementTurnEnd = nullptr;
+sol::function* onBuildingCompleted = nullptr;
+sol::function* onCharacterSelected = nullptr;
+sol::function* onEnemyCharacterSelected = nullptr;
 
 extern "C" PLUGINM2TWEOP_API void onCharacterSelected(namedCharacter * gen);
-//if sett==null, then you need use frt, else use sett
-extern "C" PLUGINM2TWEOP_API void onSiegeEquipmentCompleted(settlementStruct * sett, fortStruct * frt);
 

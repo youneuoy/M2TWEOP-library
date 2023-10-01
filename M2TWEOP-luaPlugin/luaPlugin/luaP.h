@@ -88,19 +88,9 @@ public:
 	void onPluginLoadF();
 	void onChangeTurnNum(int num);
 	void onCharacterSelected(namedCharacter* gen);
-	void onGeneralDevastatesTile(namedCharacter* gen);
-
-	void onUpdateAttitude(factionStruct* fac, factionStruct* fac2);
-	void onDemeanour(factionStruct* fac, factionStruct* fac2, float amount);
-
-	void onSiegeEquipmentCompleted(settlementStruct* sett, fortStruct* frt);
-
-
 
 	void onMultiTurnMove(namedCharacter* gen);
 	void onSettlementSelected(settlementStruct* sett);
-	void onSettlementUpgraded(settlementStruct* sett);
-	void onSettlementConverted(settlementStruct* sett);
 
 	sol::state luaState;
 
@@ -180,30 +170,10 @@ public:
 
 	sol::function* onChangeTurnNumFunc = nullptr;
 	sol::function* onCharacterSelectedFunc = nullptr;
-	sol::function* onSiegeEquipmentCompletedFunc = nullptr;
 
 
 	sol::function* onMultiTurnMoveFunc = nullptr;
 	sol::function* onSettlementSelectedFunc = nullptr;
-	sol::function* onSettlementUpgradedFunc = nullptr;
-	sol::function* onSettlementConvertedFunc = nullptr;
-	sol::function* onCityRiotsFunc = nullptr;
-	sol::function* onUngarrisonedSettlementFunc = nullptr;
-
-	sol::function* onGiveSettlementFunc = nullptr;
-	sol::function* onOccupySettlementFunc = nullptr;
-	sol::function* onExterminatePopulationFunc = nullptr;
-
-	sol::function* onSackSettlementFunc = nullptr;
-	sol::function* onAddedToBuildingQueueFunc = nullptr;
-	sol::function* onBuildingDestroyedFunc = nullptr;
-	sol::function* onBuildingCompletedFunc = nullptr;
-
-	sol::function* onAddedToTrainingQueueFunc = nullptr;
-
-	sol::function* onUnitTrainedFunc = nullptr;
-	sol::function* onAgentCreatedFunc = nullptr;
-	sol::function* onAssassinCaughtAttackingPopeFunc = nullptr;
 
 
 
@@ -233,11 +203,6 @@ public:
 	sol::function* onPreBattleScrollAdviceRequestedFunc = nullptr;
 	sol::function* onNavalPreBattleScrollAdviceRequestedFunc = nullptr;
 	sol::function* onCollegeOfCardinalsPanelOpenFunc = nullptr;
-
-	sol::function* onGuildUpgradedFunc = nullptr;
-	sol::function* onGuildDestroyedFunc = nullptr;
-
-	sol::function* onNewAdmiralCreatedFunc = nullptr;
 
 	sol::function* onShortcutTriggeredFunc = nullptr;
 	void checkLuaFunc(sol::function** lRef);

@@ -123,108 +123,11 @@ void __fastcall plugins::onEvent(DWORD** vTab, DWORD arg2)
 
 
 		}
-		else if (compareEvent(event, &pl->onSiegeEquipmentCompleted.stringAdr, pl->onSiegeEquipmentCompleted.strCmp))
-		{
-			settlementStruct* setl = reinterpret_cast<settlementStruct*>(vTab[1]);
-			fortStruct* frt = fastFuncts::findFort(setl->xCoord, setl->yCoord);
-
-			if (frt != nullptr)setl = nullptr;
-			(*(*pl->onSiegeEquipmentCompleted))(setl, frt);
-		}
 		else if (compareEvent(event, &pl->onSettlementSelected.stringAdr, pl->onSettlementSelected.strCmp))
 		{
 			settlementStruct* setl = reinterpret_cast<settlementStruct*>(vTab[1]);
 
 			(*(*pl->onSettlementSelected))(setl);
-		}
-		else if (compareEvent(event, &pl->onSettlementUpgraded.stringAdr, pl->onSettlementUpgraded.strCmp))
-		{
-			settlementStruct* setl = reinterpret_cast<settlementStruct*>(vTab[1]);
-			(*(*pl->onSettlementUpgraded))(setl);
-		}
-		else if (compareEvent(event, &pl->onSettlementConverted.stringAdr, pl->onSettlementConverted.strCmp))
-		{
-			settlementStruct* setl = reinterpret_cast<settlementStruct*>(vTab[1]);
-			(*(*pl->onSettlementConverted))(setl);
-		}
-		else if (compareEvent(event, &pl->onCityRiots.stringAdr, pl->onCityRiots.strCmp))
-		{
-			settlementStruct* setl = reinterpret_cast<settlementStruct*>(vTab[1]);
-			(*(*pl->onCityRiots))(setl);
-		}
-		else if (compareEvent(event, &pl->onUngarrisonedSettlement.stringAdr, pl->onUngarrisonedSettlement.strCmp))
-		{
-			settlementStruct* setl = reinterpret_cast<settlementStruct*>(vTab[1]);
-			(*(*pl->onUngarrisonedSettlement))(setl);
-		}
-		else if (compareEvent(event, &pl->onGiveSettlement.stringAdr, pl->onGiveSettlement.strCmp))
-		{
-			settlementStruct* setl = reinterpret_cast<settlementStruct*>(vTab[1]);
-			factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[2]);
-			factionStruct* fac2 = reinterpret_cast<factionStruct*>(vTab[3]);
-			(*(*pl->onGiveSettlement))(setl, fac, fac2);
-		}
-		else if (compareEvent(event, &pl->onOccupySettlement.stringAdr, pl->onOccupySettlement.strCmp))
-		{
-			namedCharacter* prs = reinterpret_cast<namedCharacter*>(vTab[1]);
-			factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[2]);
-			(*(*pl->onOccupySettlement))(prs, fac);
-		}
-		else if (compareEvent(event, &pl->onExterminatePopulation.stringAdr, pl->onExterminatePopulation.strCmp))
-		{
-			namedCharacter* prs = reinterpret_cast<namedCharacter*>(vTab[1]);
-			factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[2]);
-			(*(*pl->onExterminatePopulation))(prs, fac);
-		}
-		else if (compareEvent(event, &pl->onSackSettlement.stringAdr, pl->onSackSettlement.strCmp))
-		{
-			namedCharacter* prs = reinterpret_cast<namedCharacter*>(vTab[1]);
-			factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[2]);
-			(*(*pl->onSackSettlement))(prs, fac);
-		}
-		else if (compareEvent(event, &pl->onAddedToBuildingQueue.stringAdr, pl->onAddedToBuildingQueue.strCmp))
-		{
-			settlementStruct* sett = reinterpret_cast<settlementStruct*>(vTab[1]);
-			char* str = reinterpret_cast<char*>(vTab[2]);
-			(*(*pl->onAddedToBuildingQueue))(sett, str);
-		}
-		else if (compareEvent(event, &pl->onBuildingDestroyed.stringAdr, pl->onBuildingDestroyed.strCmp))
-		{
-			settlementStruct* sett = reinterpret_cast<settlementStruct*>(vTab[1]);
-			char* str = reinterpret_cast<char*>(vTab[2]);
-			(*(*pl->onBuildingDestroyed))(sett, str);
-		}
-		else if (compareEvent(event, &pl->onBuildingCompleted.stringAdr, pl->onBuildingCompleted.strCmp))
-		{
-			factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
-			settlementStruct* sett = reinterpret_cast<settlementStruct*>(vTab[2]);
-			(*(*pl->onBuildingCompleted))(fac, sett);
-		}
-		else if (compareEvent(event, &pl->onAssassinCaughtAttackingPope.stringAdr, pl->onAssassinCaughtAttackingPope.strCmp))
-		{
-			factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
-			(*(*pl->onAssassinCaughtAttackingPope))(fac);
-		}
-		else if (compareEvent(event, &pl->onAddedToTrainingQueue.stringAdr, pl->onAddedToTrainingQueue.strCmp))
-		{
-			settlementStruct* sett = reinterpret_cast<settlementStruct*>(vTab[1]);
-			char* str = reinterpret_cast<char*>(vTab[2]);
-			if (*str == 0)str = nullptr;
-			(*(*pl->onAddedToTrainingQueue))(sett, str);
-		}
-		else if (compareEvent(event, &pl->onUnitTrained.stringAdr, pl->onUnitTrained.strCmp))
-		{
-			factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
-			settlementStruct* sett = reinterpret_cast<settlementStruct*>(vTab[2]);
-			unit* un = reinterpret_cast<unit*>(vTab[3]);
-			(*(*pl->onUnitTrained))(fac, sett, un);
-		}
-		else if (compareEvent(event, &pl->onAgentCreated.stringAdr, pl->onAgentCreated.strCmp))
-		{
-			namedCharacter* prs = reinterpret_cast<namedCharacter*>(vTab[1]);
-			int prsType = (int)vTab[2];
-			settlementStruct* sett = reinterpret_cast<settlementStruct*>(vTab[3]);
-			(*(*pl->onAgentCreated))(prs, prsType, sett);
 		}
 		else if (compareEvent(event, &pl->onSettlementPanelOpen.stringAdr, pl->onSettlementPanelOpen.strCmp))
 		{
@@ -358,24 +261,6 @@ void __fastcall plugins::onEvent(DWORD** vTab, DWORD arg2)
 		{
 			void* colleg = reinterpret_cast<void*>(vTab[1]);
 			(*(*pl->onCollegeOfCardinalsPanelOpen))(colleg);
-		}
-		else if (compareEvent(event, &pl->onGuildUpgraded.stringAdr, pl->onGuildUpgraded.strCmp))
-		{
-			settlementStruct* sett = reinterpret_cast<settlementStruct*>(vTab[1]);
-			char* str = reinterpret_cast<char*>(vTab[2]);
-			(*(*pl->onGuildUpgraded))(sett, str);
-		}
-		else if (compareEvent(event, &pl->onGuildDestroyed.stringAdr, pl->onGuildDestroyed.strCmp))
-		{
-			settlementStruct* sett = reinterpret_cast<settlementStruct*>(vTab[1]);
-			unsigned char guildID = (((BYTE*)vTab)[8]);
-			(*(*pl->onGuildDestroyed))(sett, guildID);
-		}
-		else if (compareEvent(event, &pl->onNewAdmiralCreated.stringAdr, pl->onNewAdmiralCreated.strCmp))
-		{
-			namedCharacter* prs = reinterpret_cast<namedCharacter*>(vTab[1]);
-			settlementStruct* sett = reinterpret_cast<settlementStruct*>(vTab[2]);
-			(*(*pl->onNewAdmiralCreated))(prs, sett);
 		}
 		else if (compareEvent(event, &pl->onShortcutTriggered.stringAdr, pl->onShortcutTriggered.strCmp))
 		{
@@ -739,98 +624,10 @@ int plugin::init(string* nameP)
 	onCharacterSelected.Load(&plPath, &fName);
 	onCharacterSelected.strCmp = (*plugins::eventNames)[CharacterSelectedCode];
 
-
-	//onSiegeEquipmentCompleted
-	fName = "onSiegeEquipmentCompleted";
-	onSiegeEquipmentCompleted.Load(&plPath, &fName);
-	onSiegeEquipmentCompleted.strCmp = (*plugins::eventNames)[SiegeEquipmentCompletedCode];
-
-
 	//onSettlementSelected
 	fName = "onSettlementSelected";
 	onSettlementSelected.Load(&plPath, &fName);
 	onSettlementSelected.strCmp = (*plugins::eventNames)[SettlementSelectedCode];
-
-
-	//onSettlementUpgraded
-	fName = "onSettlementUpgraded";
-	onSettlementUpgraded.Load(&plPath, &fName);
-	onSettlementUpgraded.strCmp = (*plugins::eventNames)[SettlementUpgradedCode];
-
-
-	//onSettlementConverted
-	fName = "onSettlementConverted";
-	onSettlementConverted.Load(&plPath, &fName);
-	onSettlementConverted.strCmp = (*plugins::eventNames)[SettlementConvertedCode];
-
-
-	//onCityRiots
-	fName = "onCityRiots";
-	onCityRiots.Load(&plPath, &fName);
-	onCityRiots.strCmp = (*plugins::eventNames)[CityRiotsCode];
-
-	//onUngarrisonedSettlement
-	fName = "onUngarrisonedSettlement";
-	onUngarrisonedSettlement.Load(&plPath, &fName);
-	onUngarrisonedSettlement.strCmp = (*plugins::eventNames)[UngarrisonedSettlementCode];
-
-	//onGiveSettlement
-	fName = "onGiveSettlement";
-	onGiveSettlement.Load(&plPath, &fName);
-	onGiveSettlement.strCmp = (*plugins::eventNames)[GiveSettlementCode];
-
-
-	//onOccupySettlement
-	fName = "onOccupySettlement";
-	onOccupySettlement.Load(&plPath, &fName);
-	onOccupySettlement.strCmp = (*plugins::eventNames)[OccupySettlementCode];
-
-	//onExterminatePopulation
-	fName = "onExterminatePopulation";
-	onExterminatePopulation.Load(&plPath, &fName);
-	onExterminatePopulation.strCmp = (*plugins::eventNames)[ExterminatePopulationCode];
-
-
-	//onSackSettlement
-	fName = "onSackSettlement";
-	onSackSettlement.Load(&plPath, &fName);
-	onSackSettlement.strCmp = (*plugins::eventNames)[SackSettlementCode];
-
-	//onAddedToBuildingQueue
-	fName = "onAddedToBuildingQueue";
-	onAddedToBuildingQueue.Load(&plPath, &fName);
-	onAddedToBuildingQueue.strCmp = (*plugins::eventNames)[AddedToBuildingQueueCode];
-
-	//onBuildingDestroyed
-	fName = "onBuildingDestroyed";
-	onBuildingDestroyed.Load(&plPath, &fName);
-	onBuildingDestroyed.strCmp = (*plugins::eventNames)[BuildingDestroyedCode];
-
-	//onBuildingCompleted
-	fName = "onBuildingCompleted";
-	onBuildingCompleted.Load(&plPath, &fName);
-	onBuildingCompleted.strCmp = (*plugins::eventNames)[BuildingCompletedCode];
-
-	//onAssassinCaughtAttackingPope
-	fName = "onAssassinCaughtAttackingPope";
-	onAssassinCaughtAttackingPope.Load(&plPath, &fName);
-	onAssassinCaughtAttackingPope.strCmp = (*plugins::eventNames)[AssassinCaughtAttackingPopeCode];
-
-	//onAddedToTrainingQueue
-	fName = "onAddedToTrainingQueue";
-	onAddedToTrainingQueue.Load(&plPath, &fName);
-	onAddedToTrainingQueue.strCmp = (*plugins::eventNames)[AddedToTrainingQueueCode];
-
-	//onUnitTrained
-	fName = "onUnitTrained";
-	onUnitTrained.Load(&plPath, &fName);
-	onUnitTrained.strCmp = (*plugins::eventNames)[UnitTrainedCode];
-
-
-	//onAgentCreated
-	fName = "onAgentCreated";
-	onAgentCreated.Load(&plPath, &fName);
-	onAgentCreated.strCmp = (*plugins::eventNames)[AgentCreatedCode];
 
 	//onSettlementPanelOpen
 	fName = "onSettlementPanelOpen";
@@ -956,21 +753,6 @@ int plugin::init(string* nameP)
 	fName = "onCollegeOfCardinalsPanelOpen";
 	onCollegeOfCardinalsPanelOpen.Load(&plPath, &fName);
 	onCollegeOfCardinalsPanelOpen.strCmp = (*plugins::eventNames)[CollegeOfCardinalsPanelOpenCode];
-
-	//onGuildUpgraded
-	fName = "onGuildUpgraded";
-	onGuildUpgraded.Load(&plPath, &fName);
-	onGuildUpgraded.strCmp = (*plugins::eventNames)[GuildUpgradedCode];
-
-	//onGuildDestroyed
-	fName = "onGuildDestroyed";
-	onGuildDestroyed.Load(&plPath, &fName);
-	onGuildDestroyed.strCmp = (*plugins::eventNames)[GuildDestroyedCode];
-
-	//onNewAdmiralCreated
-	fName = "onNewAdmiralCreated";
-	onNewAdmiralCreated.Load(&plPath, &fName);
-	onNewAdmiralCreated.strCmp = (*plugins::eventNames)[NewAdmiralCreatedCode];
 
 	//onShortcutTriggered
 	fName = "onShortcutTriggered";

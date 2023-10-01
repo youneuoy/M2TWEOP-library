@@ -762,7 +762,7 @@ void luaP::onPluginLoadF()
 	@function onNewAdmiralCreated
 	@tparam namedCharacter namedChar
 	@tparam factionStruct faction
-	@tparam regionStruct|nil region
+	@tparam regionStruct region
 	@tparam string characterType
 	@tparam string religion
 
@@ -778,12 +778,76 @@ void luaP::onPluginLoadF()
 	@function onGovernorBuildingDestroyed
 	@tparam namedCharacter namedChar
 	@tparam factionStruct faction
-	@tparam regionStruct|nil region
+	@tparam regionStruct region
 	@tparam string characterType
 	@tparam string religion
 
 	@usage
 	function onGovernorBuildingDestroyed(namedChar, faction, region, characterType, religion)
+	--something
+	end
+	*/
+
+	/***
+	Games have been thrown.
+
+	@function onGovernorThrowGames
+	@tparam namedCharacter namedChar
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string characterType
+	@tparam string religion
+
+	@usage
+	function onGovernorThrowGames(namedChar, faction, region, characterType, religion)
+	--something
+	end
+	*/
+
+	/***
+	Races have been thrown.
+
+	@function onGovernorThrowRaces
+	@tparam namedCharacter namedChar
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string characterType
+	@tparam string religion
+
+	@usage
+	function onGovernorThrowRaces(namedChar, faction, region, characterType, religion)
+	--something
+	end
+	*/
+
+	/***
+	The player has selected a character.
+
+	@function onCharacterSelected
+	@tparam namedCharacter namedChar
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string characterType
+	@tparam string religion
+
+	@usage
+	function onCharacterSelected(namedChar, faction, region, characterType, religion)
+	--something
+	end
+	*/
+
+	/***
+	The player has selected an enemy character.
+
+	@function onEnemyCharacterSelected
+	@tparam namedCharacter namedChar
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string characterType
+	@tparam string religion
+
+	@usage
+	function onEnemyCharacterSelected(namedChar, faction, region, characterType, religion)
 	--something
 	end
 	*/
@@ -1392,6 +1456,268 @@ void luaP::onPluginLoadF()
 	*/
 
 	/***
+	A settlement is no longer garrisoned.
+
+	@function onUngarrisonedSettlement
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+
+	@usage
+	function onUngarrisonedSettlement(settlement, faction, region, religion)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has been upgraded.
+
+	@function onSettlementUpgraded
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+
+	@usage
+	function onSettlementUpgraded(settlement, faction, region, religion)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has been converted.
+
+	@function onSettlementConverted
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+
+	@usage
+	function onSettlementConverted(settlement, faction, region, religion)
+	--something
+	end
+	*/
+
+	/***
+	Siege equipment has been completed by one of the besieging armies.
+
+	@function onSiegeEquipmentCompleted
+	@tparam settlementStruct|fortStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+
+	@usage
+	function onSiegeEquipmentCompleted(settlement, faction, region, religion)
+	--something
+	end
+	*/
+
+	/***
+	A Settlement is being processed for the end of its faction's turn.
+
+	@function onSettlementTurnEnd
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+
+	@usage
+	function onSettlementTurnEnd(settlement, faction, region, religion)
+	--something
+	end
+	*/
+
+	/***
+	A guild has been created/upgraded.
+
+	@function onGuildUpgraded
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+	@tparam guild guild
+
+	@usage
+	function onGuildUpgraded(settlement, faction, region, religion, guild)
+	--something
+	end
+	*/
+
+	/***
+	A guild has been destroyed.
+
+	@function onGuildDestroyed
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+	@tparam guild guild
+
+	@usage
+	function onGuildDestroyed(settlement, faction, region, religion, guild)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has been captured and occupied.
+
+	@function onOccupySettlement
+	@tparam namedCharacter namedChar
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+	@tparam factionStruct targetFaction
+	@tparam string targetReligion
+
+	@usage
+	function onOccupySettlement(namedChar, faction, region, religion, targetFaction, targetReligion)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has been captured and sacked.
+
+	@function onSackSettlement
+	@tparam namedCharacter namedChar
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+	@tparam factionStruct targetFaction
+	@tparam string targetReligion
+
+	@usage
+	function onSackSettlement(namedChar, faction, region, religion, targetFaction, targetReligion)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has been captured and some of its population has been decimated.
+
+	@function onExterminatePopulation
+	@tparam namedCharacter namedChar
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+	@tparam factionStruct targetFaction
+	@tparam string targetReligion
+
+	@usage
+	function onExterminatePopulation(namedChar, faction, region, religion, targetFaction, targetReligion)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has rioted.
+
+	@function onCityRiots
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+	@tparam factionStruct targetFaction
+	@tparam string targetReligion
+
+	@usage
+	function onCityRiots(settlement, faction, region, religion, targetFaction, targetReligion)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has been given to another faction.
+
+	@function onGiveSettlement
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+	@tparam factionStruct targetFaction
+	@tparam string targetReligion
+
+	@usage
+	function onGiveSettlement(settlement, faction, region, religion, targetFaction, targetReligion)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has rebelled.
+
+	@function onCityRebels
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+	@tparam factionStruct targetFaction
+	@tparam string targetReligion
+
+	@usage
+	function onCityRebels(settlement, faction, region, religion, targetFaction, targetReligion)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has been razed.
+
+	@function onCitySacked
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam regionStruct region
+	@tparam string religion
+	@tparam factionStruct targetFaction
+	@tparam string targetReligion
+
+	@usage
+	function onCitySacked(settlement, faction, region, religion, targetFaction, targetReligion)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has rioted.
+
+	@function onGovernorCityRiots
+	@tparam namedCharacter namedChar
+	@tparam factionStruct faction
+	@tparam settlementStruct settlement
+	@tparam regionStruct region
+	@tparam string religion
+	@tparam factionStruct targetFaction
+	@tparam string targetReligion
+
+	@usage
+	function onGovernorCityRiots(namedChar, faction, settlement, region, religion, targetFaction, targetReligion)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has rebelled.
+
+	@function onGovernorCityRebels
+	@tparam namedCharacter namedChar
+	@tparam factionStruct faction
+	@tparam settlementStruct settlement
+	@tparam regionStruct region
+	@tparam string religion
+	@tparam factionStruct targetFaction
+	@tparam string targetReligion
+
+	@usage
+	function onGovernorCityRebels(namedChar, faction, settlement, region, religion, targetFaction, targetReligion)
+	--something
+	end
+	*/
+
+	/***
 	The player has abandoned a show me scipt.
 
 	@function onAbandonShowMe
@@ -1775,6 +2101,22 @@ void luaP::onPluginLoadF()
 
 	@usage
 	function onAddedToBuildingQueue(settlement, faction, buildingName, region, religion)
+	--something here
+	end
+	*/
+
+	/***
+	A building has been completed.
+
+	@function onBuildingCompleted
+	@tparam settlementStruct settlement
+	@tparam factionStruct faction
+	@tparam string buildingName
+	@tparam regionStruct region
+	@tparam string religion
+
+	@usage
+	function onBuildingCompleted(settlement, faction, buildingName, region, religion)
 	--something here
 	end
 	*/
@@ -2784,20 +3126,6 @@ void luaP::onPluginLoadF()
 	onCharacterSelectedFunc = new sol::function(luaState["onCharacterSelected"]);
 	checkLuaFunc(&onCharacterSelectedFunc);
 
-	/***
-	Siege equipment has been completed by one of the sieging armies at this residence.
-
-	@function onSiegeEquipmentCompleted
-	@tparam settlementStruct settlement nil if it is fort
-	@tparam fortStruct fort nil if it is settlement
-
-	@usage
-	--something
-	*/
-
-	onSiegeEquipmentCompletedFunc = new sol::function(luaState["onSiegeEquipmentCompleted"]);
-	checkLuaFunc(&onSiegeEquipmentCompletedFunc);
-
 
 	/***
 	The player has attempted to move a character beyond that character's given movement range for that turn.
@@ -2826,227 +3154,6 @@ void luaP::onPluginLoadF()
 
 	onSettlementSelectedFunc = new sol::function(luaState["onSettlementSelected"]);
 	checkLuaFunc(&onSettlementSelectedFunc);
-
-	/***
-	A settlement's level has been increased.
-
-	@function onSettlementUpgraded
-	@tparam settlementStruct settlement
-
-	@usage
-	function onSettlementUpgraded(settlement)
-		print("Function: onSettlementUpgraded()\n\tSettlement Level: "..settlement.level)
-	end
-	*/
-
-	onSettlementUpgradedFunc = new sol::function(luaState["onSettlementUpgraded"]);
-	checkLuaFunc(&onSettlementUpgradedFunc);
-
-	/***
-	A settlement converted between city and castle and vice-versa.
-
-	@function onSettlementConverted
-	@tparam settlementStruct settlement
-
-	@usage
-	function onSettlementConverted(settlement)
-		if settlement.isCastle == 1 then
-			--do stuff
-		end
-	end
-	*/
-
-	onSettlementConvertedFunc = new sol::function(luaState["onSettlementConverted"]);
-	checkLuaFunc(&onSettlementConvertedFunc);
-
-	/***
-	A settlement has rioted.
-
-	@function onCityRiots
-	@tparam settlementStruct settlement
-
-	@usage
-	--something
-	*/
-
-	onCityRiotsFunc = new sol::function(luaState["onCityRiots"]);
-	checkLuaFunc(&onCityRiotsFunc);
-
-	/***
-	The last unit has been removed from a settlement, agents do not count.
-
-	@function onUngarrisonedSettlement
-	@tparam settlementStruct settlement
-
-	@usage
-	--something
-	*/
-
-	onUngarrisonedSettlementFunc = new sol::function(luaState["onUngarrisonedSettlement"]);
-	checkLuaFunc(&onUngarrisonedSettlementFunc);
-
-
-	/***
-	A settlement has been given to another faction.
-
-	@function onGiveSettlement
-	@tparam settlementStruct settlement
-	@tparam factionStruct fac1
-	@tparam factionStruct fac2
-
-
-	@usage
-	--something
-	*/
-
-	onGiveSettlementFunc = new sol::function(luaState["onGiveSettlement"]);
-	checkLuaFunc(&onGiveSettlementFunc);
-
-	/***
-	A general has captured a settlement and the occupy option has been chosen
-
-	@function onOccupySettlement
-	@tparam namedCharacter character only generals, event does not fire for captains
-	@tparam factionStruct targetFaction
-
-	@usage
-	--something
-	*/
-
-	onOccupySettlementFunc = new sol::function(luaState["onOccupySettlement"]);
-	checkLuaFunc(&onOccupySettlementFunc);
-
-	/***
-	A general has captured a settlement and the exterminate option has been chosen.
-
-	@function onExterminatePopulation
-	@tparam namedCharacter character only generals, event does not fire for captains
-	@tparam factionStruct targetFaction
-
-
-	@usage
-	--something
-	*/
-
-	onExterminatePopulationFunc = new sol::function(luaState["onExterminatePopulation"]);
-	checkLuaFunc(&onExterminatePopulationFunc);
-
-	/***
-	A general has captured a settlement and the sack option has been chosen.
-
-	@function onSackSettlement
-	@tparam namedCharacter character only generals, event does not fire for captains
-	@tparam factionStruct targetFaction
-
-
-	@usage
-	--something
-	*/
-
-	onSackSettlementFunc = new sol::function(luaState["onSackSettlement"]);
-	checkLuaFunc(&onSackSettlementFunc);
-
-	/***
-	A building has been added to the construction queue.
-
-	@function onAddedToBuildingQueue
-	@tparam settlementStruct settlement
-	@tparam string buildNme level name
-
-
-	@usage
-	--something
-	*/
-
-	onAddedToBuildingQueueFunc = new sol::function(luaState["onAddedToBuildingQueue"]);
-	checkLuaFunc(&onAddedToBuildingQueueFunc);
-
-	/***
-	A building has been destroyed.
-
-	@function onBuildingDestroyed
-	@tparam settlementStruct settlement
-	@tparam string buildNme level name
-
-
-	@usage
-	--something
-	*/
-
-	onBuildingDestroyedFunc = new sol::function(luaState["onBuildingDestroyed"]);
-	checkLuaFunc(&onBuildingDestroyedFunc);
-
-	/***
-	A building has been completed.
-
-	@function onBuildingCompleted
-	@tparam factionStruct fac
-	@tparam settlementStruct settlement
-
-	@usage
-	--something
-	*/
-
-	onBuildingCompletedFunc = new sol::function(luaState["onBuildingCompleted"]);
-	checkLuaFunc(&onBuildingCompletedFunc);
-
-
-	/***
-	A unit has been added to the training queue.
-
-	@function onAddedToTrainingQueue
-	@tparam settlementStruct sett
-	@tparam string unitName
-
-	@usage
-	--something
-	*/
-
-	onAddedToTrainingQueueFunc = new sol::function(luaState["onAddedToTrainingQueue"]);
-	checkLuaFunc(&onAddedToTrainingQueueFunc);
-
-	/***
-	A unit has been trained.
-
-	@function onUnitTrained
-	@tparam factionStruct fac
-	@tparam settlementStruct sett
-	@tparam unit unit
-
-	@usage
-	--something
-	*/
-
-	onUnitTrainedFunc = new sol::function(luaState["onUnitTrained"]);
-	checkLuaFunc(&onUnitTrainedFunc);
-
-	/***
-	An agent has been trained.
-
-	@function onAgentCreated
-	@tparam namedCharacter character
-	@tparam int agentType see @{character:setTypeID} for list of type integers
-	@tparam settlementStruct sett
-
-	@usage
-	--something
-	*/
-
-	onAgentCreatedFunc = new sol::function(luaState["onAgentCreated"]);
-	checkLuaFunc(&onAgentCreatedFunc);
-
-	/***
-	An assassination mission against the pope has failed and the assassin is executed.
-
-	@function onAssassinCaughtAttackingPope
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onAssassinCaughtAttackingPopeFunc = new sol::function(luaState["onAssassinCaughtAttackingPope"]);
-	checkLuaFunc(&onAssassinCaughtAttackingPopeFunc);
 
 	/***
 	The player has opened the panel for the selected settlement.
@@ -3360,54 +3467,6 @@ void luaP::onPluginLoadF()
 
 	onCollegeOfCardinalsPanelOpenFunc = new sol::function(luaState["onCollegeOfCardinalsPanelOpen"]);
 	checkLuaFunc(&onCollegeOfCardinalsPanelOpenFunc);
-
-	/***
-	A guild has been created or upgraded.
-
-	@function onGuildUpgraded
-	@tparam settlementStruct sett
-	@tparam string guildName
-
-	@usage
-	function onGuildUpgraded(sett, guildName)
-		print("Function: onGuildUpgraded()\n\tSettlement: "..sett.name.."\n\tGuild: "..guildName)
-	end
-	*/
-
-	onGuildUpgradedFunc = new sol::function(luaState["onGuildUpgraded"]);
-	checkLuaFunc(&onGuildUpgradedFunc);
-
-	/***
-	A guild has been destroyed.
-
-	@function onGuildDestroyed
-	@tparam settlementStruct sett
-	@tparam int guildID
-
-	@usage
-	function onGuildDestroyed(sett, guildID)
-		print("Function: onGuildDestroyed()\n\tSettlement: "..sett.name.."\n\tID: "..guildID)
-	end
-	*/
-
-	onGuildDestroyedFunc = new sol::function(luaState["onGuildDestroyed"]);
-	checkLuaFunc(&onGuildDestroyedFunc);
-
-	/***
-	A new admiral has been created for a new ship.
-
-	@function onNewAdmiralCreated
-	@tparam namedCharacter admiral
-	@tparam settlementStruct sett
-
-	@usage
-	function onNewAdmiralCreated(admiral, sett)
-		print("Function: onNewAdmiralCreated()\n\tAdmiral: "..admiral.fullName.."\n\tSettlement: "..sett.name)
-	end
-	*/
-
-	onNewAdmiralCreatedFunc = new sol::function(luaState["onNewAdmiralCreated"]);
-	checkLuaFunc(&onNewAdmiralCreatedFunc);
 
 	/***
 	The player triggered a keyboard shortcut.

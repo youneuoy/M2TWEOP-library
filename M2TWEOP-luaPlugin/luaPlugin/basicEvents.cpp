@@ -158,6 +158,18 @@ namespace gameEvents
 		newCode[0] = 0x0136EC8C; newCode[1] = 0x01329C64;
 		addEvent<EventType::namedCharacterEvent>(newCode[gv], "onGovernorBuildingDestroyed");
 
+		newCode[0] = 0x0136F154; newCode[1] = 0x0132A12C;
+		addEvent<EventType::namedCharacterEvent>(newCode[gv], "onGovernorThrowGames");
+
+		newCode[0] = 0x0136F224; newCode[1] = 0x0132A1FC;
+		addEvent<EventType::namedCharacterEvent>(newCode[gv], "onGovernorThrowRaces");
+
+		newCode[0] = 0x013703A4; newCode[1] = 0x0132B37C;
+		addEvent<EventType::namedCharacterEvent>(newCode[gv], "onCharacterSelected");
+
+		newCode[0] = 0x01370474; newCode[1] = 0x0132B44C;
+		addEvent<EventType::namedCharacterEvent>(newCode[gv], "onEnemyCharacterSelected");
+
 		//ransomEvent
 		newCode[0] = 0x0136C8EC; newCode[1] = 0x013278C4;
 		addEvent<EventType::ransomEvent>(newCode[gv], "onGeneralPrisonersRansomedCaptor");
@@ -240,10 +252,23 @@ namespace gameEvents
 		newCode[0] = 0x0136A3E4; newCode[1] = 0x013253BC;
 		addEvent<EventType::namedCharacterTargetSettEvent>(newCode[gv], "onGeneralAssaultsResidence");
 
+		//settOccupationEvent
+		newCode[0] = 0x0136F3C4; newCode[1] = 0x0132A39C;
+		addEvent<EventType::settOccupationEvent>(newCode[gv], "onOccupySettlement");
+		newCode[0] = 0x0136F48C; newCode[1] = 0x0132A464;
+		addEvent<EventType::settOccupationEvent>(newCode[gv], "onSackSettlement");
+		newCode[0] = 0x0136F55C; newCode[1] = 0x0132A534;
+		addEvent<EventType::settOccupationEvent>(newCode[gv], "onExterminatePopulation");
+
+		//namedCharacterRiotEvents
+		newCode[0] = 0x0136EEEC; newCode[1] = 0x01329EC4;
+		addEvent<EventType::namedCharacterRiotEvents>(newCode[gv], "onGovernorCityRiots");
+		newCode[0] = 0x0136F084; newCode[1] = 0x0132A05C;
+		addEvent<EventType::namedCharacterRiotEvents>(newCode[gv], "onGovernorCityRebels");
+
 		//namedCharacterTargetCharEvents
 		newCode[0] = 0x0136A4B4; newCode[1] = 0x0132548C;
 		addEvent<EventType::namedCharacterTargetCharEvent>(newCode[gv], "onGeneralAssaultsGeneral");
-
 		newCode[0] = 0x0136C75C; newCode[1] = 0x01327734;
 		addEvent<EventType::namedCharacterTargetCharEvent>(newCode[gv], "onCharacterAttacksCrusadingGeneral");
 
@@ -254,6 +279,32 @@ namespace gameEvents
 		//settlementEvents
 		newCode[0] = 0x0136E2B4; newCode[1] = 0x0132928C;
 		addEvent<EventType::settlementEvent>(newCode[gv], "onSettlementTurnStart");
+		newCode[0] = 0x0136F2F4; newCode[1] = 0x0132A2CC;
+		addEvent<EventType::settlementEvent>(newCode[gv], "onUngarrisonedSettlement");
+		newCode[0] = 0x0136F6F4; newCode[1] = 0x0132A6CC;
+		addEvent<EventType::settlementEvent>(newCode[gv], "onSettlementUpgraded");
+		newCode[0] = 0x0136F7C4; newCode[1] = 0x0132A79C;
+		addEvent<EventType::settlementEvent>(newCode[gv], "onSettlementConverted");
+		newCode[0] = 0x0136FA24; newCode[1] = 0x0132A9FC;
+		addEvent<EventType::settlementEvent>(newCode[gv], "onSiegeEquipmentCompleted");
+		newCode[0] = 0x0136FADC; newCode[1] = 0x0132AAB4;
+		addEvent<EventType::settlementEvent>(newCode[gv], "onSettlementTurnEnd");
+
+		//guildEvents
+		newCode[0] = 0x0136F88C; newCode[1] = 0x0132A864;
+		addEvent<EventType::guildEvent>(newCode[gv], "onGuildUpgraded");
+		newCode[0] = 0x0136F954; newCode[1] = 0x0132A92C;
+		addEvent<EventType::guildEvent>(newCode[gv], "onGuildDestroyed");
+
+		//targetSettlementEvents
+		newCode[0] = 0x0136ED54; newCode[1] = 0x01329D2C;
+		addEvent<EventType::targetSettlementEvent>(newCode[gv], "onCityRiots");
+		newCode[0] = 0x0136EE1C; newCode[1] = 0x01329DF4;
+		addEvent<EventType::targetSettlementEvent>(newCode[gv], "onGiveSettlement");
+		newCode[0] = 0x0136EFB4; newCode[1] = 0x01329F8C;
+		addEvent<EventType::targetSettlementEvent>(newCode[gv], "onCityRebels");
+		newCode[0] = 0x0136F624; newCode[1] = 0x0132A5FC;
+		addEvent<EventType::targetSettlementEvent>(newCode[gv], "onCitySacked");
 
 		//gameEvents
 		newCode[0] = 0x0135E30C; newCode[1] = 0x013192E4;
@@ -362,6 +413,7 @@ namespace gameEvents
 
 		//diplomacyEvents
 		newCode[0] = 0x0136958C; newCode[1] = 0x01324564;
+		newCode[0] = 0x0136958C; newCode[1] = 0x01324564;
 		addEvent<EventType::diplomacyEvent>(newCode[gv], "onFactionWarDeclared");
 
 		newCode[0] = 0x0136965C; newCode[1] = 0x01324634;
@@ -428,6 +480,9 @@ namespace gameEvents
 
 		newCode[0] = 0x0136EBB4; newCode[1] = 0x01329B8C;
 		addEvent<EventType::buildingEvent>(newCode[gv], "onAddedToTrainingQueue");
+
+		newCode[0] = 0x0136FBB4; newCode[1] = 0x0132AB8C;
+		addEvent<EventType::buildingEvent>(newCode[gv], "onBuildingCompleted");
 
 		//agentCreatedEvent
 		newCode[0] = 0x0136E874; newCode[1] = 0x0132984C;
@@ -552,11 +607,6 @@ void checkLuaFunc(sol::function** lRef)
 void onCharacterSelected(namedCharacter* gen)
 {
 	plugData::data.luaAll.onCharacterSelected(gen);
-}
-
-void onSiegeEquipmentCompleted(settlementStruct* sett, fortStruct* frt)
-{
-	plugData::data.luaAll.onSiegeEquipmentCompleted(sett, frt);
 }
 void onReadGameDbsAtStart()
 {

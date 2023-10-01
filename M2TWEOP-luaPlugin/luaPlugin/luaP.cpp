@@ -1809,7 +1809,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield factionStruct ownerFaction
 	@tfield changeOwner changeOwner
 	@tfield int fac_creatorNum
-	@tfield int regionNumber
+	@tfield int regionID
 	@tfield int level
 	@tfield int isCastle
 	@tfield int isProvokedRebellion
@@ -1903,7 +1903,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.settlementStruct.set_function("changeOwner", &settlementHelpers::changeOwner);
 	types.settlementStruct.set("fac_creatorNum", &settlementStruct::fac_creatorModNum);
-	types.settlementStruct.set("regionNumber", &settlementStruct::regionNumber);
+	types.settlementStruct.set("regionID", &settlementStruct::regionID);
 	types.settlementStruct.set("level", &settlementStruct::level);
 	types.settlementStruct.set("isCastle", &settlementStruct::isCastle);
 	types.settlementStruct.set("isProvokedRebellion", &settlementStruct::isProvokedRebellion);
@@ -2546,21 +2546,5 @@ void luaP::onSettlementSelected(settlementStruct* sett)
 	if (onSettlementSelectedFunc != nullptr)
 	{
 		tryLua((*onSettlementSelectedFunc)(sett));
-	}
-}
-
-void luaP::onSettlementUpgraded(settlementStruct* sett)
-{
-	if (onSettlementUpgradedFunc != nullptr)
-	{
-		tryLua((*onSettlementUpgradedFunc)(sett));
-	}
-}
-
-void luaP::onSettlementConverted(settlementStruct* sett)
-{
-	if (onSettlementConvertedFunc != nullptr)
-	{
-		tryLua((*onSettlementConvertedFunc)(sett));
 	}
 }

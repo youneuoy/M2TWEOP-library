@@ -91,33 +91,7 @@ public:
 	ProcLoader<void(__cdecl*)(namedCharacter*)> onCharacterSelected;
 	ProcLoader<void(__cdecl*)(namedCharacter*)> onMultiTurnMove;
 
-	ProcLoader<void(__cdecl*)(settlementStruct*, fortStruct*)> onSiegeEquipmentCompleted;
-
 	ProcLoader<void(__cdecl*)(settlementStruct*)> onSettlementSelected;
-	ProcLoader<void(__cdecl*)(settlementStruct*)> onSettlementUpgraded;
-	ProcLoader<void(__cdecl*)(settlementStruct*)> onSettlementConverted;
-
-	ProcLoader<void(__cdecl*)(settlementStruct*)> onCityRiots;
-
-	ProcLoader<void(__cdecl*)(settlementStruct*)> onUngarrisonedSettlement;
-
-	ProcLoader<void(__cdecl*)(settlementStruct*, factionStruct*, factionStruct*)> onGiveSettlement;
-
-	ProcLoader<void(__cdecl*)(namedCharacter*, factionStruct*)> onOccupySettlement;
-	ProcLoader<void(__cdecl*)(namedCharacter*, factionStruct*)> onExterminatePopulation;
-	ProcLoader<void(__cdecl*)(namedCharacter*, factionStruct*)> onSackSettlement;
-
-
-	ProcLoader<void(__cdecl*)(settlementStruct*, const char*)> onAddedToBuildingQueue;
-	ProcLoader<void(__cdecl*)(settlementStruct*, const char*)> onBuildingDestroyed;
-	ProcLoader<void(__cdecl*)(factionStruct*, settlementStruct*)> onBuildingCompleted;
-	ProcLoader<void(__cdecl*)(factionStruct*)> onAssassinCaughtAttackingPope;
-	ProcLoader<void(__cdecl*)(factionStruct*, settlementStruct*)> onInquisitorAppointed;
-
-
-	ProcLoader<void(__cdecl*)(settlementStruct*, const char*)> onAddedToTrainingQueue;
-	ProcLoader<void(__cdecl*)(factionStruct*, settlementStruct*, unit*)> onUnitTrained;
-	ProcLoader<void(__cdecl*)(namedCharacter*, int, settlementStruct*)> onAgentCreated;
 
 
 	ProcLoader<void(__cdecl*)(settlementStruct*)> onSettlementPanelOpen;
@@ -149,11 +123,6 @@ public:
 	ProcLoader<void(__cdecl*)()> onPreBattleScrollAdviceRequested;
 	ProcLoader<void(__cdecl*)()> onNavalPreBattleScrollAdviceRequested;
 	ProcLoader<void(__cdecl*)(void*)> onCollegeOfCardinalsPanelOpen;
-
-	ProcLoader<void(__cdecl*)(settlementStruct*, const char*)> onGuildUpgraded;
-	ProcLoader<void(__cdecl*)(settlementStruct*, unsigned char)> onGuildDestroyed;
-
-	ProcLoader<void(__cdecl*)(namedCharacter*, settlementStruct*)> onNewAdmiralCreated;
 
 	ProcLoader<void(__cdecl*)(const char*)> onShortcutTriggered;
 

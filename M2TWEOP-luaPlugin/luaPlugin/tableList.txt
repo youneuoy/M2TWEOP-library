@@ -12,11 +12,6 @@
 	@tfield onFactionAllianceDeclared onFactionAllianceDeclared
 	@tfield onFactionTradeAgreementMade onFactionTradeAgreementMade
 	@tfield onFactionBreakAlliance onFactionBreakAlliance
-	@tfield onGiveMoney onGiveMoney
-	@tfield onUpdateAttitude onUpdateAttitude
-	@tfield onDemeanour onDemeanour
-	@tfield onGeneralAssaultsGeneral onGeneralAssaultsGeneral
-	@tfield onGeneralAssaultsResidence onGeneralAssaultsResidence
 	@tfield onGeneralCaptureSettlement onGeneralCaptureSettlement
 	@tfield onGeneralCaptureResidence onGeneralCaptureResidence
 	@tfield onSiegeEquipmentCompleted onSiegeEquipmentCompleted
@@ -25,26 +20,10 @@
 	@tfield onSettlementSelected onSettlementSelected
 	@tfield onSettlementUpgraded onSettlementUpgraded
 	@tfield onSettlementConverted onSettlementConverted
-	@tfield onCityRiots onCityRiots
-	@tfield onUngarrisonedSettlement onUngarrisonedSettlement
 	@tfield onUngarrisonedFort onUngarrisonedFort
-	@tfield onGiveSettlement onGiveSettlement
-	@tfield onOccupySettlement onOccupySettlement
-	@tfield onExterminatePopulation onExterminatePopulation
-	@tfield onSackSettlement onSackSettlement
-	@tfield onAddedToBuildingQueue onAddedToBuildingQueue
-	@tfield onBuildingDestroyed onBuildingDestroyed
-	@tfield onBuildingCompleted onBuildingCompleted
-	@tfield onEventCounter onEventCounter
 	@tfield onFactionExcommunicated onFactionExcommunicated
-	@tfield onDisaster onDisaster
 	@tfield onHordeFormed onHordeFormed
-	@tfield onAddedToTrainingQueue onAddedToTrainingQueue
 	@tfield onUnitDisbanded onUnitDisbanded
-	@tfield onUnitTrained onUnitTrained
-	@tfield onAgentCreated onAgentCreated
-	@tfield onObjSeen onObjSeen
-	@tfield onTileSeen onTileSeen
 	@tfield onGameReloaded onGameReloaded
 	@tfield onTransgression onTransgression
 	@tfield onPopeAcceptsCrusadeTarget onPopeAcceptsCrusadeTarget

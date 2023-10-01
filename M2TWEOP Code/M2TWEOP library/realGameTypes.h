@@ -996,7 +996,7 @@ struct settlementStruct {
 	undefined field19_0x1a0[4];
 	BYTE isCastle; /* castle or settlement */
 	undefined field21_0x1a5[3];
-	UINT32 regionNumber; /* number of region */
+	UINT32 regionID; /* number of region */
 	undefined field_0x1ac[12];
 	int priceOfUnitsInRecruitmentSlots;
 	undefined field24_0xBC[24];
