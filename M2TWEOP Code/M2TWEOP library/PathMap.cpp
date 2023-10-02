@@ -176,7 +176,7 @@ namespace PathFinder
 				{
 					settlementStruct* set = (settlementStruct*)endObj;
 
-					if (set->ownerFac->dipNum == army->faction->dipNum)
+					if (set->faction->dipNum == army->faction->dipNum)
 					{
 						return true;
 					}
@@ -497,7 +497,7 @@ namespace PathFinder
 				{
 					settlementStruct* set = (settlementStruct*)endObj;
 
-					if (set->ownerFac->dipNum == army->faction->dipNum)
+					if (set->faction->dipNum == army->faction->dipNum)
 					{
 						if (set->army == nullptr)
 						{
