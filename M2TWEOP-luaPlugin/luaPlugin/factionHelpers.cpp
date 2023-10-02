@@ -7,7 +7,7 @@ std::string factionHelpers::getFactionName(const factionStruct* fac)
 	return std::string(fac->factSmDescr->facName);
 }
 
-generalCharacterictics* factionHelpers::getCharacterFromFullList(const factionStruct* fac, int index)
+namedCharacter* factionHelpers::getCharacterFromFullList(const factionStruct* fac, int index)
 {
 	return fac->charactersAll[index];
 }

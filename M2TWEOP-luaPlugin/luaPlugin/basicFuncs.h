@@ -38,14 +38,14 @@ template <class T>
 class ProcLoader
 {
 public:
-	T			 m_pProc;
-	std::string			m_strNameProcedure;
+	T  m_pProc;
+	std::string	 m_strNameProcedure;
 
 	//strings for compare
 	char* stringAdr = nullptr;
 	const char* strCmp;
 
-	ProcLoader() {};
+	ProcLoader() {}
 
 	BOOL Load(std::string* pczNameLibrary, std::string* pczNameProcedure, char* sCmp = nullptr)
 	{
@@ -85,7 +85,7 @@ private:
 	ProcLoader& operator = (ProcLoader&)
 	{
 		return *this;
-	};
+	}
 };
 
 class battleFuncs
@@ -152,7 +152,7 @@ public:
 
 
 	ProcLoader<void(__cdecl*)(signed short, signed short)> setEDUUnitsSize;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*, bool)> setHeir;
+	ProcLoader<void(__cdecl*)(namedCharacter*, bool)> setHeir;
 
 
 	ProcLoader<void(__cdecl*)(unsigned char)> setAncLimit;
@@ -177,12 +177,12 @@ public:
 	ProcLoader<void(__cdecl*)(general*, general*)> attackCharacter;
 
 
-	ProcLoader<int(__cdecl*)(generalCharacterictics*, anchillary*)> addAnchillary;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*, anchillary*)> removeAnchillary;
+	ProcLoader<int(__cdecl*)(namedCharacter*, anchillary*)> addAnchillary;
+	ProcLoader<void(__cdecl*)(namedCharacter*, anchillary*)> removeAnchillary;
 	ProcLoader<anchillary* (__cdecl*)(char*)> findAnchillary;
 
-	ProcLoader<void(__cdecl*)(generalCharacterictics*, const char*, int)> addTrait;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*, const char*)> removeTrait;
+	ProcLoader<void(__cdecl*)(namedCharacter*, const char*, int)> addTrait;
+	ProcLoader<void(__cdecl*)(namedCharacter*, const char*)> removeTrait;
 
 
 
@@ -224,7 +224,7 @@ public:
 
 	ProcLoader<void(__cdecl*)(general*, int, int, int)> setCharacterType;
 
-	ProcLoader<void(__cdecl*)()> getGameVersion;
+	ProcLoader<int(__cdecl*)()> getGameVersion;
 	ProcLoader<void(__cdecl*)(const char*)> saveGame;
 	ProcLoader<void(__cdecl*)(stackStruct*, stackStruct*)> mergeArmies;
 
@@ -267,11 +267,11 @@ class eopEduFuncs
 {
 public:
 	//edu functions
-	ProcLoader<EduEntry* (__cdecl*)(int, int)> addEopEduEntry;
-	ProcLoader<EduEntry* (__cdecl*)(const char*, int)> addEopEduEntryFromFile;
-	ProcLoader<EduEntry* (__cdecl*)(int)> getEopEduEntry;
-	ProcLoader<EduEntry* (__cdecl*)(int)> getEduEntry;
-	ProcLoader<EduEntry* (__cdecl*)(const char*)> getEduEntryByType;
+	ProcLoader<eduEntry* (__cdecl*)(int, int)> addEopEduEntry;
+	ProcLoader<eduEntry* (__cdecl*)(const char*, int)> addEopEduEntryFromFile;
+	ProcLoader<eduEntry* (__cdecl*)(int)> getEopEduEntry;
+	ProcLoader<eduEntry* (__cdecl*)(int)> getEduEntry;
+	ProcLoader<eduEntry* (__cdecl*)(const char*)> getEduEntryByType;
 	ProcLoader<int(__cdecl*)(const char*)> getEduIndexByType;
 	ProcLoader<int(__cdecl*)(int)> getDataEopEdu;
 

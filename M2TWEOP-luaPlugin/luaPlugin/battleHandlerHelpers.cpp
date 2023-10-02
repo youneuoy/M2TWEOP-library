@@ -21,11 +21,11 @@ namespace battleHandlerHelpers
 
 	armyAndCharacter* getBattleArmy(const battleSide* side, int index)
 	{
-		return side->forces + (sizeof(armyAndCharacter) * index);
+		return &side->forces[index];
 	}
 
 	battleUnit* getBattleUnit(const armyAndCharacter* battleArmy, int index)
 	{
-		return battleArmy->units + (sizeof(battleUnit) * index);
+		return &battleArmy->units[index];
 	}
 };

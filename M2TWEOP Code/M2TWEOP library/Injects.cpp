@@ -1393,9 +1393,10 @@ void toEvents::SetlEventsCode()
 {
 	Assembler* a = new Assembler();
 
-	a->mov(eax, dword_ptr(esp, 0x4));
 	a->pushad();
 	a->pushf();
+	a->mov(eax, dword_ptr(esp, 0x28));
+	a->mov(edx, dword_ptr(esp, 0x2C));
 
 	a->mov(ecx, eax);
 	a->mov(eax, (DWORD)funcAdress);

@@ -12,7 +12,7 @@ namespace gameHelpers
 		return (*(*plugData::data.funcs.getFactionsCount))();
 	}
 
-	std::string gameHelpers::callConsole(std::string cmdName, sol::variadic_args va)
+	std::string gameHelpers::callConsole(const std::string cmdName, sol::variadic_args va)
 	{
 		char buffer[100]{};
 		buffer[0] = '\0';
@@ -33,17 +33,17 @@ namespace gameHelpers
 		return buffer;;
 	}
 
-	factionStruct* gameHelpers::getFaction(int index)
+	factionStruct* gameHelpers::getFaction(const int index)
 	{
 		return (*(*plugData::data.funcs.getFactionsList))()[index];
 	}
 
-	guild* gameHelpers::getGuild(unsigned char index)
+	guild* gameHelpers::getGuild(const unsigned char index)
 	{
 		return (*(*plugData::data.funcs.getGuild))(index);
 	}
 
-	general* gameHelpers::createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
+	general* gameHelpers::createCharacter(const char* type, factionStruct* fac, const int age, const char* name, const char* name2, const int subFaction, const char* portrait, const int x, const int y)
 	{
 		if (portrait != nullptr && strlen(portrait) == 0)
 		{
@@ -79,46 +79,46 @@ namespace gameHelpers
 		return std::make_tuple(isExist, counterValue);
 	}
 
-	void gameHelpers::setScriptCounter(const char* type, int value)
+	void gameHelpers::setScriptCounter(const char* type, const int value)
 	{
 		(*(*plugData::data.funcs.setScriptCounter))(type, value);
 	}
 
-	regionStruct* gameHelpers::getRegion(int index)
+	regionStruct* gameHelpers::getRegion(const int index)
 	{
 		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
 		stratMap* map = gameDataAll->stratMap;
 		return &map->regions[index];
 	}
 
-	oneTile* gameHelpers::getTile(int x, int y)
+	oneTile* gameHelpers::getTile(const int x, const int y)
 	{
 		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
 		stratMap* map = gameDataAll->stratMap;
 		return &map->tilesArr[gameDataAll->stratMap->mapWidth * y + x];
 	}
 
-	stackStruct* gameHelpers::getStack(const regionStruct* region, int index)
+	stackStruct* gameHelpers::getStack(const regionStruct* region, const int index)
 	{
 		return region->armies[index];
 	}
 
-	fortStruct* gameHelpers::getFort(const regionStruct* region, int index)
+	fortStruct* gameHelpers::getFort(const regionStruct* region, const int index)
 	{
 		return region->forts[index];
 	}
 
-	watchTowerStruct* gameHelpers::getWatchtower(const regionStruct* region, int index)
+	watchTowerStruct* gameHelpers::getWatchtower(const regionStruct* region, const int index)
 	{
 		return region->watchtowers[index];
 	}
 
-	resStrat* gameHelpers::getResource(const regionStruct* region, int index)
+	resStrat* gameHelpers::getResource(const regionStruct* region, const int index)
 	{
 		return region->resources[index];
 	}
 
-	regionStruct* gameHelpers::getNeighbour(regionStruct* region, int index)
+	regionStruct* gameHelpers::getNeighbour(regionStruct* region, const int index)
 	{
 		neighbourRegion* nregion = &region->neighbourRegions[index];
 		return nregion->region;
@@ -142,7 +142,7 @@ namespace gameHelpers
 		return ((resources & set) != 0);
 	}
 
-	void gameHelpers::setHiddenResource(regionStruct* region, int index, bool enable)
+	void gameHelpers::setHiddenResource(regionStruct* region, int index, const bool enable)
 	{
 		int set = 1 << index;
 		if (index < 32)
@@ -203,12 +203,12 @@ namespace gameHelpers
 		return units;
 	}
 
-	mercPoolUnit* gameHelpers::addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, float startyear, float endyear, int crusading)
+	mercPoolUnit* gameHelpers::addMercUnit(mercPool* mercPool, const int idx, const int exp, const int cost, const float repmin, const float repmax, const int maxunits, const float startpool, const float startyear, const float endyear, const int crusading)
 	{
-		mercPoolUnit* newMerc = new mercPoolUnit;
+		auto* newMerc = new mercPoolUnit;
 		*newMerc = mercPool->firstUnits.mercPoolUnits[0];
 		int mercUnitNum = gameHelpers::getMercUnitNum(mercPool);
-		EduEntry* entry = eopEduHelpers::getEduEntry(idx);
+		eduEntry* entry = eopEduHelpers::getEduEntry(idx);
 		newMerc->eduEntry = entry;
 		newMerc->experience = exp;
 		newMerc->cost = cost;
@@ -238,7 +238,7 @@ namespace gameHelpers
 		}
 		if ((maxunitsP - currunits) == 0)
 		{
-			mercPoolUnitsPtr* newPtr = new mercPoolUnitsPtr;
+			auto* newPtr = new mercPoolUnitsPtr;
 			newPtr->Maxpool = (unitptr->Maxpool) * 2;
 			newPtr->currentPool = 0;
 			newPtr->nextUnitsPtr = nullptr;
@@ -247,7 +247,7 @@ namespace gameHelpers
 			unitptr = unitptr->nextUnitsPtr;
 			currunits = 0;
 		}
-		mercPoolUnit* newArray = new mercPoolUnit[currunits + 1];
+		auto* newArray = new mercPoolUnit[currunits + 1];
 		for (int i = 0; i < currunits; i++) {
 			newArray[i] = unitptr->mercPoolUnits[i];
 		}
@@ -257,7 +257,7 @@ namespace gameHelpers
 		return &unitptr->mercPoolUnits[currunits];
 	}
 
-	mercPoolUnit* gameHelpers::getMercUnit(mercPool* pool, int index)
+	mercPoolUnit* gameHelpers::getMercUnit(mercPool* pool, const int index)
 	{
 		mercPoolUnitsPtr* unitptr = &pool->firstUnits;
 		int currunits = 0;
@@ -278,7 +278,7 @@ namespace gameHelpers
 	}
 
 
-	void gameHelpers::setMercReligion(mercPoolUnit* unit, int religion, bool set)
+	void gameHelpers::setMercReligion(mercPoolUnit* unit, const int religion, const bool set)
 	{
 		vector<int>religions;
 		bool relFound = false;
@@ -334,5 +334,27 @@ namespace gameHelpers
 	void gameHelpers::historicEvent(const char* name, const char* title, const char* description)
 	{
 		(*(*plugData::data.funcs.historicEvent))(name, title, description);
+	}
+
+
+	const char* getReligionName(const int index)
+	{
+		const auto* religionDb = *reinterpret_cast <religionDatabase**>(0x016A0B90);
+		const wchar_t* name = religionDb->religionNames[index]->string;
+		// Determine the size of the required buffer
+		const int size = WideCharToMultiByte(CP_UTF8, 0, name, -1, nullptr, 0, nullptr, nullptr);
+		if (size == 0) {
+			return nullptr;
+		}
+		// Allocate a buffer for the converted string
+		const auto buffer = new char[size];
+		if (buffer == nullptr) {
+			// Allocation failed
+			return nullptr;
+		}
+		// Convert the string
+		WideCharToMultiByte(CP_UTF8, 0, name, -1, buffer, size, nullptr, nullptr);
+		// Return the converted string
+		return buffer;
 	}
 }

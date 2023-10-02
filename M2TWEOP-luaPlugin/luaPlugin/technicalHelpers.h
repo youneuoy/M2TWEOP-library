@@ -11,14 +11,14 @@
 
 namespace technicalHelpers
 {
-	std::string unitUniStringToStr(unit*unit);
+	std::string unitUniStringToStr(unit* unit);
 	void setUnitUniStr(unit* unit, const char* str);
 
 	std::string uniStringToStr(UNICODE_STRING**& uniString);
 
 
 	template <char fieldIndex>
-	std::string namedCharUniStringToStr(generalCharacterictics* genChar)
+	std::string namedCharUniStringToStr(namedCharacter* genChar)
 	{
 		if (fieldIndex == namedChar_localizedFullName)
 		{
@@ -44,10 +44,10 @@ namespace technicalHelpers
 	}
 
 
-	void namedCharSetLocalizedFullName(generalCharacterictics* genChar, const char* str);
-	void namedCharSetLocalizedNameForSave(generalCharacterictics* genChar, const char* str);
-	void namedCharSetLocalizedNextNameForSave(generalCharacterictics* genChar, const char* str);
-	void namedCharSetLocalizedNicknameForSave(generalCharacterictics* genChar, const char* str);
+	void namedCharSetLocalizedFullName(namedCharacter* genChar, const char* str);
+	void namedCharSetLocalizedNameForSave(namedCharacter* genChar, const char* str);
+	void namedCharSetLocalizedNextNameForSave(namedCharacter* genChar, const char* str);
+	void namedCharSetLocalizedNicknameForSave(namedCharacter* genChar, const char* str);
 	void createUniString(UNICODE_STRING**& newUniStringPointer, const char* nonUniStr);
-}; 
+};
 

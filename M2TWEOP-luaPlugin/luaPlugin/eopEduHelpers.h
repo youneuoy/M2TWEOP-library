@@ -36,11 +36,11 @@ namespace UnitEnums
 };
 namespace eopEduHelpers
 {
-	EduEntry* addEopEduEntry(int baseIndex, int newIndex);
-	EduEntry* addEopEduEntryFromFile(const char* fileName, int newIndex);
-	EduEntry* getEopEduEntry(int index);
-	EduEntry* getEduEntry(int index);
-	EduEntry* getEduEntryByType(const char* type);
+	eduEntry* addEopEduEntry(int baseIndex, int newIndex);
+	eduEntry* addEopEduEntryFromFile(const char* fileName, int newIndex);
+	eduEntry* getEopEduEntry(int index);
+	eduEntry* getEduEntry(int index);
+	eduEntry* getEduEntryByType(const char* type);
 	int getEduIndexByType(const char* type);
 
 
@@ -72,8 +72,8 @@ namespace eopEduHelpers
 
 
 	//edu things
-	bool haveAttributeLegioGet(EduEntry* eduEn);
-	void haveAttributeLegioSet(EduEntry* eduEn, bool isHaveLegio);
+	bool haveAttributeLegioGet(eduEntry* eduEn);
+	void haveAttributeLegioSet(eduEntry* eduEn, bool isHaveLegio);
 };
 
 

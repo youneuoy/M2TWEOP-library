@@ -24,8 +24,8 @@ namespace fastFuncts
 
 	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct*sett, factionStruct* newOwner);
 
-	NOINLINE EOP_EXPORT void GetGameTileCoordsWithCursor(int&x,int&y);
-	NOINLINE EOP_EXPORT void ViewTacticalMap(int x,int y);
+	NOINLINE EOP_EXPORT void GetGameTileCoordsWithCursor(int& x, int& y);
+	NOINLINE EOP_EXPORT void ViewTacticalMap(int x, int y);
 	NOINLINE EOP_EXPORT bool IsStratMap();
 
 	NOINLINE EOP_EXPORT void setCharacterType(general*character, int typeID,int subFaction,int factionDipNum);
@@ -39,7 +39,7 @@ namespace fastFuncts
 
 	NOINLINE EOP_EXPORT UINT32 getYear();
 	//set character as heir
-	NOINLINE EOP_EXPORT void setHeir(generalCharacterictics* gen,bool isJustSet);
+	NOINLINE EOP_EXPORT void setHeir(namedCharacter* gen, bool isJustSet);
 
 	//count of factions in game
 	NOINLINE EOP_EXPORT UINT32 getFactionsCount();
@@ -80,17 +80,17 @@ namespace fastFuncts
 
 	factionStratMapDescrS* GetFactSmDescrById(int id);
 	//teleport character
-	NOINLINE EOP_EXPORT void  teleportCharacter(general* gen,int x, int y);
+	NOINLINE EOP_EXPORT void  teleportCharacter(general* gen, int x, int y);
 
 	//add trait to character
-	NOINLINE EOP_EXPORT void addTrait(generalCharacterictics* character, const char* traitName,int traitLevel);
-	NOINLINE EOP_EXPORT void removeTrait(generalCharacterictics* character, const char* traitName);
+	NOINLINE EOP_EXPORT void addTrait(namedCharacter* character, const char* traitName, int traitLevel);
+	NOINLINE EOP_EXPORT void removeTrait(namedCharacter* character, const char* traitName);
 
 
 	//add anchillary to character
-	NOINLINE EOP_EXPORT int addAnchillary(generalCharacterictics* character, anchillary* anch);
+	NOINLINE EOP_EXPORT int addAnchillary(namedCharacter* character, anchillary* anch);
 	//remove anchillary from character
-	NOINLINE EOP_EXPORT void removeAnchillary(generalCharacterictics* character, anchillary* anch);
+	NOINLINE EOP_EXPORT void removeAnchillary(namedCharacter* character, anchillary* anch);
 	//find anchillary in anch list
 	NOINLINE EOP_EXPORT anchillary* findAnchillary(char* anchName);
 
@@ -108,13 +108,13 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT void destroyBuilding(settlementStruct* sett, const char* typeName, bool isReturnMoney);
 	NOINLINE EOP_EXPORT void createBuilding(settlementStruct* sett, const char* building_level_id);
 
-	NOINLINE EOP_EXPORT general* createCharacter(const char*type,factionStruct*fac,int age, const char*name, const char*name2,int subFaction, const char*portrait,int x,int y);
-	
-	//very very technical func 
-	NOINLINE EOP_EXPORT general* createCharacterWithoutSpawning(const char*type,factionStruct*fac,int age, const char*name, const char*name2,int subFaction, const char*portrait,int x,int y);
+	NOINLINE EOP_EXPORT general* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y);
 
-	NOINLINE EOP_EXPORT stackStruct* createArmy(general*character);
-	NOINLINE EOP_EXPORT stackStruct* createArmyInSettlement(settlementStruct*sett);
+	//very very technical func 
+	NOINLINE EOP_EXPORT general* createCharacterWithoutSpawning(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y);
+
+	NOINLINE EOP_EXPORT stackStruct* createArmy(general* character);
+	NOINLINE EOP_EXPORT stackStruct* createArmyInSettlement(settlementStruct* sett);
 
 
 	//facNum - dipnum
@@ -126,7 +126,7 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT bool StopSiege(stackStruct* army);
 	NOINLINE EOP_EXPORT bool StopBlockPort(stackStruct* army);
 	NOINLINE EOP_EXPORT int addUnitToArmy(stackStruct* army, unit* un);
-	NOINLINE EOP_EXPORT void setBodyguard(general*gen,unit* un);
+	NOINLINE EOP_EXPORT void setBodyguard(general* gen, unit* un);
 
 
 	NOINLINE EOP_EXPORT void AddToSettlement(stackStruct*army,settlementStruct* set);
@@ -147,7 +147,7 @@ namespace fastFuncts
 
 	NOINLINE EOP_EXPORT void autoResolve();
 
-	NOINLINE EOP_EXPORT bool callGameConsoleCommand(const char* name, const char*  arg,char*errorBuffer);
+	NOINLINE EOP_EXPORT bool callGameConsoleCommand(const char* name, const char* arg, char* errorBuffer);
 
 
 	NOINLINE EOP_EXPORT bool useButton(const char* buttonName);

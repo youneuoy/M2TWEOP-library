@@ -298,7 +298,7 @@ namespace fastFuncts
 		return year;
 	}
 
-	NOINLINE EOP_EXPORT void setHeir(generalCharacterictics* gen, bool isJustSet)
+	NOINLINE EOP_EXPORT void setHeir(namedCharacter* gen, bool isJustSet)
 	{
 		factionStruct* fac = gen->faction;
 		if (isJustSet == true)
@@ -646,7 +646,7 @@ namespace fastFuncts
 		return;
 	}
 
-	NOINLINE EOP_EXPORT void addTrait(generalCharacterictics* character, const char* traitName, int traitLevel)
+	NOINLINE EOP_EXPORT void addTrait(namedCharacter* character, const char* traitName, int traitLevel)
 	{
 
 		DWORD adrFunc = 0;
@@ -707,7 +707,7 @@ namespace fastFuncts
 		}
 	}
 
-	NOINLINE EOP_EXPORT void removeTrait(generalCharacterictics* character, const char* traitName)
+	NOINLINE EOP_EXPORT void removeTrait(namedCharacter* character, const char* traitName)
 	{
 		DWORD adrFunc = 0;
 
@@ -765,7 +765,7 @@ namespace fastFuncts
 		}
 	}
 
-	EOP_EXPORT int addAnchillary(generalCharacterictics* character, anchillary* anch)
+	EOP_EXPORT int addAnchillary(namedCharacter* character, anchillary* anch)
 	{
 		if (character == nullptr || anch == nullptr)return 0;
 
@@ -792,7 +792,7 @@ namespace fastFuncts
 		return retr;
 	}
 
-	EOP_EXPORT void removeAnchillary(generalCharacterictics* character, anchillary* anch)
+	EOP_EXPORT void removeAnchillary(namedCharacter* character, anchillary* anch)
 	{
 		if (character == nullptr || anch == nullptr)return;
 

@@ -11,10 +11,10 @@ public:
 
 	static void __fastcall OnLoadSettlementWorldpkgdesc(worldRecord* selectedRecord);
 	static int __fastcall onfortificationlevelS(settlementStruct* settlement, bool* isCastle);
-	static char* __fastcall onSaveEDUStringS(EduEntry* eduEntry);
+	static char* __fastcall onSaveEDUStringS(eduEntry* eduEntry);
 	static int __fastcall onCreateUnit(int* edbIndex, int** edb, char** entryName);
 	static int __fastcall OnCreateMercUnitCheck(char** entryName, int eduindex);
-	static EduEntry* __fastcall OnCreateMercUnit(char** entryName, EduEntry* entry);
+	static eduEntry* __fastcall OnCreateMercUnit(char** entryName, eduEntry* entry);
 	static const char* __fastcall onQuickSave();
 	static const char* __fastcall onAutoSave();
 
@@ -64,7 +64,7 @@ public:
 
 
 	//parse events in this functions
-	static void __fastcall onEvent(DWORD** vTab);
+	static void __fastcall onEvent(DWORD** vTab, DWORD arg2);
 
 	//load game
 	static void __fastcall onLoadSaveFile(UNICODE_STRING**& savePath);
