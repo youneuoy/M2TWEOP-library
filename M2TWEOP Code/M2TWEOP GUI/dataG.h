@@ -20,6 +20,7 @@ public:
 		{
 			bool isGenerationNeeded = false;
 			bool isResultTransferNeeded = false;
+			bool isPlannedRetreatRoute = false;
 		}battlesData;
 
 
@@ -32,6 +33,9 @@ public:
 
 			string exeName;
 			string gameArgs;
+
+			// Discord Rich Presence
+			bool isDiscordRichPresenceEnabled = true;
 
 			// Customization Options
 			string modTitle = "";

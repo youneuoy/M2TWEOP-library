@@ -30,6 +30,31 @@ int initPlugin(std::string* modPath)
 	fName = "setModel";
 	plugData::data.funcs.setModel.Load(&plPath, &fName);
 
+	fName = "MakeTextFont";
+	plugData::data.funcs.MakeTextFont.Load(&plPath, &fName);
+	fName = "DeleteTextFont";
+	plugData::data.funcs.DeleteTextFont.Load(&plPath, &fName);
+	fName = "MakeText";
+	plugData::data.funcs.MakeText.Load(&plPath, &fName);
+	fName = "Delete3dText";
+	plugData::data.funcs.Delete3dText.Load(&plPath, &fName);
+	fName = "ScaleText";
+	plugData::data.funcs.ScaleText.Load(&plPath, &fName);
+	fName = "ChangeTextColor";
+	plugData::data.funcs.ChangeTextColor.Load(&plPath, &fName);
+	fName = "SetTextDrawingCoords";
+	plugData::data.funcs.SetTextDrawingCoords.Load(&plPath, &fName);
+	fName = "StartDrawingText";
+	plugData::data.funcs.StartDrawingText.Load(&plPath, &fName);
+	fName = "StopDrawingText";
+	plugData::data.funcs.StopDrawingText.Load(&plPath, &fName);
+	fName = "DrawingTextOnce";
+	plugData::data.funcs.DrawingTextOnce.Load(&plPath, &fName);
+	fName = "SetDimensionsTextXYZ";
+	plugData::data.funcs.SetDimensionsTextXYZ.Load(&plPath, &fName);
+	fName = "SetRotationTextXYZ";
+	plugData::data.funcs.SetRotationTextXYZ.Load(&plPath, &fName);
+
 	fName = "addModelToGame";
 	plugData::data.funcs.addModelToGame.Load(&plPath, &fName);
 	fName = "addCasModelToDrawList";
@@ -136,6 +161,9 @@ int initPlugin(std::string* modPath)
 	fName = "getFactionsList";
 	plugData::data.funcs.getFactionsList.Load(&plPath, &fName);
 
+    fName = "removeTrait";
+    plugData::data.funcs.removeTrait.Load(&plPath, &fName);
+
 	fName = "moveNormal";
 	plugData::data.funcs.moveNormal.Load(&plPath, &fName);
 
@@ -153,9 +181,6 @@ int initPlugin(std::string* modPath)
 
 	fName = "addTrait";
 	plugData::data.funcs.addTrait.Load(&plPath, &fName);
-
-	fName = "removeTrait";
-	plugData::data.funcs.removeTrait.Load(&plPath, &fName);
 
 	fName = "replaceTile";
 	plugData::data.funcs.replaceTile.Load(&plPath, &fName);
@@ -217,17 +242,17 @@ int initPlugin(std::string* modPath)
 	fName = "attackCharacter";
 	plugData::data.funcs.attackCharacter.Load(&plPath, &fName);
 
-
 	fName = "loadTexture";
 	plugData::data.funcs.loadTexture.Load(&plPath, &fName);
 
 	fName = "unloadTexture";
 	plugData::data.funcs.unloadTexture.Load(&plPath, &fName);
 
-
 	fName = "setAncLimit";
 	plugData::data.funcs.setAncLimit.Load(&plPath, &fName);
 
+    fName = "getBattleCamCoords";
+    plugData::data.funcsBattle.getBattleCamCoords.Load(&plPath, &fName);
 
 	fName = "unlockConsoleCommands";
 	plugData::data.funcs.unlockConsoleCommands.Load(&plPath, &fName);
@@ -253,9 +278,6 @@ int initPlugin(std::string* modPath)
 
 	fName = "setCharacterType";
 	plugData::data.funcs.setCharacterType.Load(&plPath, &fName);
-
-
-
 
 	//battle functions
 	fName = "getBattleCondCode";
@@ -467,6 +489,7 @@ void initLua()
 	plugData::data.luaAll.initP2();
 	plugData::data.luaAll.initEopEdu();
 	plugData::data.luaAll.initEopFbx();
+	plugData::data.luaAll.initEop3dObjects();
 	plugData::data.luaAll.initEopSounds();
 	plugData::data.luaAll.initTech();
 	sol_ImGui::Init(*luaState);

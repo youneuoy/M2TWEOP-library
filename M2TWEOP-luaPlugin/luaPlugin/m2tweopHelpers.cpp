@@ -27,6 +27,17 @@ namespace m2tweopHelpers
 	{
 		return (*(*plugData::data.funcs.getTileRegionID))(x, y);
 	}
+	bool getTileVisibility(factionStruct* faction, int x, int y)
+	{
+		auto vis = faction->tilesFac->tilesVisiblity[faction->tilesFac->tilesXBound * (y)+x];
+		// If the tile is not visible
+		if (vis == 0)
+		{
+			return false;
+		}
+		// If the tile is visible
+		return true;
+	}
 	factionStruct* getRegionOwner(int regionID)
 	{
 		return (*(*plugData::data.funcs.getRegionOwner))(regionID);
@@ -174,8 +185,11 @@ namespace m2tweopHelpers
 	{
 		(*(*plugData::data.funcsBattle.swUnBMapHighlight))();
 	}
-
-
+	battleCameraStruct* getBattleCamCoords()
+	{
+		battleCameraStruct* battleCamStruct =  (*(*plugData::data.funcsBattle.getBattleCamCoords))();
+		return battleCamStruct;
+	}
 	void setConversionLvlFromCastle(int castleLvl, int convertToLvl)
 	{
 		(*(*plugData::data.funcs.setConversionLvlFromCastle))(castleLvl, convertToLvl);

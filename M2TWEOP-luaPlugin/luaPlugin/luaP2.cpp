@@ -24,7 +24,7 @@ void luaP::initCampaign()
 	}typeAll;
 	using namespace campaignEnums;
 
-	/// Campaign Enums
+	/// CampaignEnums
 	//@section campaignEnums
 
 	/***
@@ -34,7 +34,7 @@ void luaP::initCampaign()
 	@tfield int peace
 	@tfield int alliance
 	@tfield int suzerain
-	@tfield int trade
+	@tfield int trade (Doesn't work with trade rights agreements set at game start)
 
 	@usage
 	local campaign=gameDataAll.get().campaignStruct;
@@ -197,6 +197,22 @@ void luaP::initCampaign()
 
 	@tfield int isLand (1 = land, 0 = sea)
 	@tfield int groundType
+	0 low fertility
+	1 medium fertility
+	2 high fertility
+	3 wilderness
+	4 high moutains
+	5 low moutains
+	6 hills
+	7 dense forest
+	8 woodland
+	9 swamp
+	10 ocean
+	11 deep sea
+	12 shallow sea
+	13 coast (beach)
+	14 impassable_land
+	15 impassable_sea
 	@tfield int regionID
 	@tfield int factionID (Doesn't work if tile is river).
 	@tfield int borderingSettlement Not 0 means bordering settlement.
@@ -370,7 +386,7 @@ void luaP::initCampaign()
 	*/
 	typeAll.region.set_function("setHiddenResource", &gameHelpers::setHiddenResource);
 
-	///Merc Pools
+	///MercPools
 	//@section mercPool
 
 	/***
@@ -437,7 +453,7 @@ void luaP::initCampaign()
 	typeAll.mercPool.set_function("getMercUnit", &gameHelpers::getMercUnit);
 
 
-	///Mercenary units
+	///MercenaryUnits
 	//@section mercPoolUnit
 
 	/***
@@ -510,7 +526,7 @@ void luaP::initP2()
 		sol::usertype<battleUnit> battleUnit;
 
 	}typeAll;
-	///gameDataAll
+	///GameDataAll
 	//@section gameDataAll
 
 	/***
@@ -538,14 +554,31 @@ void luaP::initP2()
 
 
 
-	///battleStruct
+	///BattleStruct
 	//@section battleStruct
 
 	/***
 	basic battleStruct table
 
-	@tfield int battleState 0-not in battle,5-active battle,9-results screen,etc
-	@tfield int battleType 3 = siege, 4 = sally out, rest unknown for now, you can experiment.
+	@tfield int battleState
+		0 not in battle
+		1 prebattle scroll
+		2 delay (also for preconflict phase of successful ambushes)
+		3 deployment
+		4
+		5 conflict (also for pause)
+		6 victory scroll
+		7 pursuit
+		8
+		9 postbattle scroll (not for autoresolved battles)
+	@tfield int battleType
+		0 succesful ambush
+		1 failed ambush
+		2 normal
+		3 siege
+		4 sally besieger
+		5 naval
+		6 withdrawal?
 	@tfield int isNightBattle
 	@tfield int xCoord
 	@tfield int yCoord
@@ -578,7 +611,7 @@ void luaP::initP2()
 	typeAll.battleTable.set("sidesNum", &battleDataS::sidesNum);
 	typeAll.battleTable.set("sides", sol::property([](battleDataS& self) { return std::ref(self.sides); }));
 	typeAll.battleTable.set("factionSide", sol::property([](battleDataS& self) { return std::ref(self.factionSide); }));
-	///battleSide
+	///BattleSide
 	//@section battleSide
 
 	/***
@@ -667,7 +700,7 @@ void luaP::initP2()
 	typeAll.battleSideTable.set_function("getBattleArmy", &battleHandlerHelpers::getBattleArmy);
 
 
-	///trackedPointerArmy
+	///TrackedPointerArmy
 	//@section trackedPointerArmy
 
 	/***
@@ -684,7 +717,7 @@ void luaP::initP2()
 	typeAll.trackedPointerArmyTable.set("army", &trackedPointerArmy::stack);
 	typeAll.trackedPointerArmyTable.set("deploymentArea", &trackedPointerArmy::deploymentArea);
 
-	///deploymentAreaS
+	///DeploymentAreaS
 	//@section deploymentAreaS
 
 	/***
@@ -717,13 +750,24 @@ void luaP::initP2()
 	*/
 	typeAll.deploymentAreaTable.set("getCoordPair", [](deploymentAreaS& self, int pairNum) { return std::make_tuple(self.coordsPairs[0 + pairNum], self.coordsPairs[1 + pairNum]); });
 
-	///battleAI
+	///BattleAI
 	//@section battleAI
 
 	/***
 	Basic Battle AI table
 
 	@tfield int gtaPlan
+		0 = "DO_NOTHING"
+		1 = "ATTACK_ALL"
+		2 = "DEFEND"
+		3 = "DEFEND_FEATURE"
+		4 = "HIDE"
+		5 = "AMBUSH"
+		6 = "SCOUT"
+		7 = "WITHDRAW"
+		8 = "ATTACK_SETTLEMENT"
+		9 = "DEFEND_SETTLEMENT"
+		10 = "SALLY_OUT"
 	@tfield int unitCount
 	@tfield int enemyUnitCount
 
@@ -733,7 +777,7 @@ void luaP::initP2()
 	typeAll.battleAI.set("gtaPlan", &battleAI::currentAIPlan);
 	typeAll.battleAI.set("unitCount", &battleAI::unitCount);
 	typeAll.battleAI.set("enemyUnitCount", &battleAI::enemyUnitCount);
-	///battleArmy
+	///BattleArmy
 	//@section battleArmy
 
 	/***
@@ -770,7 +814,7 @@ void luaP::initP2()
 
 	*/
 	typeAll.battleArmy.set_function("getBattleUnit", &battleHandlerHelpers::getBattleUnit);
-	///battleUnit
+	///BattleUnit
 	//@section battleUnit
 
 	/***

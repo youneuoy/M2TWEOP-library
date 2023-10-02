@@ -9,6 +9,8 @@
 
 #include "eduThings.h"
 #include "fastFunctsHelpers.h"
+#include "PlannedRetreatRoute.h"
+#include "discordManager.h"
 
 
 worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, worldRecord* selectedRecord)
@@ -287,6 +289,10 @@ void __stdcall patchesForGame::onNewGameStart()
 {
 	plugins::onNewGameStart();
 
+
+	PlannedRetreatRoute::OnNewGameStart();
+
+
 }
 //#define TESTPATCHES
 void __stdcall patchesForGame::afterEDUread()
@@ -505,6 +511,7 @@ void __stdcall patchesForGame::checkAndChangeModels()
 
 void __stdcall patchesForGame::battleLoaded()
 {
+	discordManager::battleLoaded();
 	battleCreator::startCreationThread();
 }
 
@@ -521,6 +528,16 @@ void __stdcall patchesForGame::onDrawPartsOfStratObjects()
 void __stdcall patchesForGame::onDrawAll()
 {
 	graphicsD3D::onDrawAllGameStuff();
+}
+
+void __stdcall patchesForGame::onStartOfDrawFunction()
+{
+	stratModelsChange::update();
+}
+
+void __stdcall patchesForGame::onRetreat()
+{
+	PlannedRetreatRoute::OnRetreat();
 }
 
 void __fastcall patchesForGame::OnStopCharacter(general* character)

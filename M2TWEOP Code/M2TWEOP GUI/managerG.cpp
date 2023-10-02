@@ -56,6 +56,10 @@ namespace managerG
 			{
 				getJson(dataG::data.battlesData.isResultTransferNeeded, "enableResultsTransfer");
 			}
+			if (json.contains("isPlannedRetreatRoute"))
+			{
+				getJson(dataG::data.battlesData.isPlannedRetreatRoute, "isPlannedRetreatRoute");
+			}
 		}
 		catch (jsn::json::type_error& e)
 		{
@@ -87,6 +91,10 @@ namespace managerG
 			{
 				getJson(dataG::data.gameData.isBlockLaunchWithoutEop, "isBlockLaunchWithoutEop");
 			}
+			if (json.contains("isDiscordRichPresenceEnabled"))
+			{
+				getJson(dataG::data.gameData.isDiscordRichPresenceEnabled, "isDiscordRichPresenceEnabled");
+			}
 		}
 		catch (jsn::json::type_error& e)
 		{
@@ -100,7 +108,7 @@ namespace managerG
 		std::regex regex{ R"([\,\s]+)" };
 		jsn::json json = loadJsonFromFile(fPath);
 		std::string jsonStringValue;
-		std:bool jsonBoolValue;
+		bool jsonBoolValue;
 
 		try
 		{
@@ -148,7 +156,7 @@ namespace managerG
 					dataG::data.gameData.buttonColor.b = stoi(colorValues[2]);
 					dataG::data.gameData.buttonColor.a = stoi(colorValues[3]);
 				}
-			
+
 			}
 			if (json.contains("runButtonHoverColor"))
 			{
@@ -192,6 +200,7 @@ namespace managerG
 		fPath = ".\\eopBattles\\battlesCfg.json";
 		setJson("enableAutoGeneration", dataG::data.battlesData.isGenerationNeeded);
 		setJson("enableResultsTransfer", dataG::data.battlesData.isResultTransferNeeded);
+		setJson("isPlannedRetreatRoute", dataG::data.battlesData.isPlannedRetreatRoute);
 		writeJsonToFile(fPath, json);
 		json.clear();
 
@@ -201,6 +210,7 @@ namespace managerG
 		setJson("isTacticalMapViewerNeeded", dataG::data.modulesData.isTacticalMapViewerNeeded);
 		setJson("isDeveloperModeNeeded", dataG::data.modulesData.isDeveloperModeNeeded);
 		setJson("isBlockLaunchWithoutEop", dataG::data.gameData.isBlockLaunchWithoutEop);
+		setJson("isDiscordRichPresenceEnabled", dataG::data.gameData.isDiscordRichPresenceEnabled);
 		writeJsonToFile(fPath, json);
 		json.clear();
 

@@ -4,9 +4,12 @@
 
 #include "smallFuncs.h"
 #include "techFuncs.h"
+#include "discordManager.h"
 
 #include "eduThings.h"
 #include "onlineThings.h"
+
+#include "PlannedRetreatRoute.h"
 plugins::configT plugins::pluginsCfg;
 
 void plugins::init()
@@ -114,10 +117,14 @@ void plugins::onClickAtTile(int x, int y)
 	{
 		(*(*pl->onClickAtTile))(x, y);
 	}
+
+	PlannedRetreatRoute::OnClickAtTile(x, y);
 }
 
 void plugins::onCampaignMapLoaded()
 {
+	discordManager::onCampaignMapLoaded();
+
 	globals::dataS.Modules.tacticalMapVeiwer.UnView();
 	for (plugin* pl : pluginsCfg.plugins)
 	{
@@ -158,6 +165,8 @@ void plugins::onNewGameStart()
 void plugins::onChangeTurnNum()
 {
 	int num = fastFuncts::getPassedTurnsNum();
+	discordManager::OnChangeTurnNum(num);
+
 	for (plugin* pl : pluginsCfg.plugins)
 	{
 		(*(*pl->onChangeTurnNum))(num);
@@ -176,6 +185,7 @@ void plugins::onLoadGame(UNICODE_STRING**& savePath)
 	{
 		(*(*pl->onLoadGamePl))(&files);
 	}
+	PlannedRetreatRoute::OnGameLoad(files);
 
 	techFuncs::deleteFiles(files);
 
@@ -197,7 +207,11 @@ void plugins::onSaveGame(UNICODE_STRING**& savePath)
 
 		delete plugFiles;
 	}
-
+	std::string retreatsFile = PlannedRetreatRoute::OnGameSave();
+	if (!retreatsFile.empty())
+	{
+		files.push_back(retreatsFile);
+	}
 	techFuncs::saveGameMakeArchive(savePath, files);
 
 

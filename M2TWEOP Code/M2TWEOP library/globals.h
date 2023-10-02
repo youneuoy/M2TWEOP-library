@@ -17,9 +17,10 @@ public:
 
 		};
 
-		struct 
+		struct
 		{
 			bool isBlockLaunchWithoutEop = false;
+			bool isDiscordRichPresenceEnabled = true;
 		}gameCfg;
 		struct modulesS
 		{
@@ -72,7 +73,7 @@ public:
 		}modConfig;
 
 
-		struct 
+		struct
 		{
 			//religions limit
 			int religionLimit = 10;

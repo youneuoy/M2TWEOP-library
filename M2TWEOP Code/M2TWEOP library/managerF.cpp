@@ -5,6 +5,8 @@
 #include "settlementConversionLvlSetter.h"
 #include "fastFunctsHelpers.h"
 
+#include "jsonManager.h"
+
 #include "casModelsDrawer.h"
 void managerF::init()
 {
@@ -265,12 +267,12 @@ void managerF::doPachs()
 
 	f1 << "Done" << endl;
 
-	//f1 << "Start applying custom_tiles patch" << endl;
-	//toCustomTileSelection* ctiles = new toCustomTileSelection(mem, (LPVOID)patchesForGame::onTileCheck, globals::dataS.gamever);
-	//ctiles->SetlTilesCode();
-	//ctiles->Enable();
-//
-	//f1 << "Done" << endl;
+	f1 << "Start applying custom_tiles patch" << endl;
+	toCustomTileSelection* ctiles = new toCustomTileSelection(mem, (LPVOID)patchesForGame::onTileCheck, globals::dataS.gamever);
+	ctiles->SetlTilesCode();
+	ctiles->Enable();
+
+	f1 << "Done" << endl;
 
 	f1 << "Start applying custom_tiles file patch" << endl;
 	toCustomTileFileRead* ctilesF = new toCustomTileFileRead(mem, (LPVOID)patchesForGame::readTilesFile, globals::dataS.gamever);
@@ -492,11 +494,21 @@ void managerF::doPachs()
 
 	OnPathCasheCrashPlace* onPathCasheCrashPlace = new OnPathCasheCrashPlace(mem, (LPVOID)&TacticalMapViewer::GetPathCashe, globals::dataS.gamever, (LPVOID)&globals::dataS.Modules.tacticalMapVeiwer);
 	onPathCasheCrashPlace->SetNewCode();
-	onAutoSave->Enable();
+	onPathCasheCrashPlace->Enable();
 
 	toSelectForDrawPortsCas* onSelectForDrawPortsCas = new toSelectForDrawPortsCas(mem, (LPVOID)casModelsDrawer::drawModels, globals::dataS.gamever);
 	onSelectForDrawPortsCas->SetNewCode();
 	onSelectForDrawPortsCas->Enable();
+
+	toStartOfDrawFunction* onStartOfDrawFunction = new toStartOfDrawFunction(mem, (LPVOID)patchesForGame::onStartOfDrawFunction, globals::dataS.gamever);
+	onStartOfDrawFunction->SetNewCode();
+	onStartOfDrawFunction->Enable();
+
+
+
+	//toRetreat* onRetreat = new toRetreat(mem, (LPVOID)patchesForGame::onRetreat, globals::dataS.gamever);
+	//onRetreat->SetNewCode();
+	//onRetreat->Enable();
 
 	/*
 	f1 << "Start applying OntryFindTypeIdInListRecruitPoolEDB patch" << endl;
@@ -559,6 +571,10 @@ void loadJsonSettings()
 		{
 			getJson(globals::dataS.gameCfg.isBlockLaunchWithoutEop, "isBlockLaunchWithoutEop");
 		}
+		if (json.contains("isDiscordRichPresenceEnabled"))
+		{
+			getJson(globals::dataS.gameCfg.isDiscordRichPresenceEnabled, "isDiscordRichPresenceEnabled");
+		}
 	}
 	catch (jsn::json::type_error& e)
 	{
@@ -568,6 +584,8 @@ void loadJsonSettings()
 //#include "tests.h"
 void managerF::initThread()
 {
+	std::srand(std::time(0));
+
 	//read_modConfig();
 	codes::initCodes(globals::dataS.gamever);
 	dataOffsets::initDataOffsets(globals::dataS.gamever);

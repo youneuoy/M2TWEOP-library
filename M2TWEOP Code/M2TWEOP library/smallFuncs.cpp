@@ -3,11 +3,47 @@
 #include "dataOffsets.h"
 
 #include "fastFunctsHelpers.h"
+#include "MasterDefines.h"
 
 
 namespace smallFuncs
 {
+	void* GetMainStratObject(void* baseObj)
+	{
+		if (baseObj == nullptr)
+		{
+			return baseObj;
+		}
 
+		StartMapObjectType objT = CallVFunc<4, StartMapObjectType>(baseObj);
+		switch (objT)
+		{
+		case StartMapObjectType::FloatingGeneral:
+			break;
+		case StartMapObjectType::Settlement:
+			break;
+		case StartMapObjectType::Fort:
+			break;
+		case StartMapObjectType::Port:
+			break;
+		case StartMapObjectType::Character:
+			break;
+		case StartMapObjectType::RallyPointSundry:
+		{
+			RallyPointSundry* ral = (RallyPointSundry*)baseObj;
+			if (ral->object == nullptr)
+			{
+				break;
+			}
+			return GetMainStratObject(ral->object);
+
+			break;
+		}
+		default:
+			break;
+		}
+		return baseObj;
+	}
 	NOINLINE EOP_EXPORT void setAncLimit(unsigned char limit)
 	{
 
@@ -70,26 +106,6 @@ namespace smallFuncs
 
 	};
 
-
-	NOINLINE EOP_EXPORT void mergeArmies(stackStruct* army, stackStruct* targetArmy)
-	{
-		DWORD codeOffset = 0;
-		if (globals::dataS.gamever == 2)//steam
-		{
-			codeOffset = 0x007155F0;
-		}
-		else
-		{
-			codeOffset = 0x00714EF0;
-		}
-		_asm
-		{
-			push army
-			mov ecx, targetArmy
-			mov eax, codeOffset
-			call eax
-		}
-	}
 
 	NOINLINE EOP_EXPORT void setEDUUnitsSize(signed short min, signed short max)
 	{
@@ -496,9 +512,33 @@ namespace smallFuncs
 			highlightOn = false;
 		}
 
-
 		return;
 	}
+
+	NOINLINE EOP_EXPORT battleCameraStruct* getBattleCamCoords()
+	{
+		int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
+
+		// If we aren't in a battle
+		if (battleState == 0)
+			return nullptr;
+
+		DWORD battleCameraAddress = 0;
+
+		if (globals::dataS.gamever == 2) //steam
+		{
+			battleCameraAddress = 0x0193f34c;
+		}
+		else // disk
+		{
+			battleCameraAddress = 0x0193f34c;
+		}
+
+		battleCameraStruct* battleCamData = reinterpret_cast<battleCameraStruct*>(battleCameraAddress);
+
+		return battleCamData;
+	}
+
 	NOINLINE EOP_EXPORT void setReligionsLimit(unsigned char limit)
 	{
 		DWORD codeAdr = 0;
@@ -683,5 +723,46 @@ namespace smallFuncs
 		return *dataOffsets::offsets.gameUnit_size;
 	}
 
+	float GetMinimumPossibleMovepointsForArmy(stackStruct* army)
+	{
+		if (army == nullptr)
+		{
+			return 0;
+		}
+
+		typedef float (__thiscall* GetUnitFullMovePointsF)(unit* un);
+
+		GetUnitFullMovePointsF getUnitFullMovePointsF = nullptr;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			getUnitFullMovePointsF = (GetUnitFullMovePointsF)0x00742b10;
+		}
+		else
+		{
+			getUnitFullMovePointsF = (GetUnitFullMovePointsF)0x00742380;
+		}
+		if (army->numOfUnits < 1)
+		{
+			return 0;
+		}
+		float minMp = getUnitFullMovePointsF(army->units[0]);
+
+		for (int i = 1; i < army->numOfUnits; ++i)
+		{
+			float unitFullMp = getUnitFullMovePointsF(army->units[i]);
+			if (unitFullMp < minMp)
+			{
+				minMp = unitFullMp;
+			}
+		}
+		return minMp;
+	}
+
+	float GetDistanceInTiles(int x, int y, int destX, int destY)
+	{
+		int dx = x - destX;
+		int dy = y - destY;
+		return (float)sqrt((double)(dx * dx) + (double)(dy * dy));
+	}
 
 };

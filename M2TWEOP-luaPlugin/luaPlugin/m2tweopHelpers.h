@@ -36,6 +36,7 @@ namespace m2tweopHelpers
 	bool isTileFree(int x, int y);
 	std::tuple<int, int> getGameTileCoordsWithCursor();
 	int getTileRegionID(int x, int y);
+	bool getTileVisibility(factionStruct* faction, int x, int y);
 	factionStruct* getRegionOwner(int regionID);
 
 	bool checkDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2);
@@ -55,6 +56,7 @@ namespace m2tweopHelpers
 	void unloadTextureFromGame(void* texture);
 
 	void toggleUnitsBMapHighlight();
+	battleCameraStruct* getBattleCamCoords();
 
 	void setConversionLvlFromCastle(int castleLvl, int convertToLvl);
 	void setConversionLvlFromCity(int cityLvl, int convertToLvl);

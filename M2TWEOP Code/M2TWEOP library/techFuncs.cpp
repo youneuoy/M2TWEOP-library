@@ -124,6 +124,14 @@ void techFuncs::zip(std::string const& zipFile, std::vector<std::string>& files,
     }
 }
 
+std::wstring techFuncs::ConvertUtf8ToWide(const std::string& str)
+{
+    int count = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), NULL, 0);
+    std::wstring wstr(count, 0);
+    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), &wstr[0], count);
+    return wstr;
+}
+
 
 string techFuncs::uniToANSI(UNICODE_STRING**& uniStr)
 {
@@ -135,11 +143,11 @@ string techFuncs::uniToANSI(UNICODE_STRING**& uniStr)
 	wchar_t* wstr = (wchar_t*)&uniS->Buffer;
 
 	std::string strTo;
-    int size_needed = WideCharToMultiByte(CP_ACP, 0, wstr, -1, NULL, 0, NULL, NULL);
+    int size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL);
 
 	char* szTo = new char[size_needed];
 
-	WideCharToMultiByte(CP_ACP, 0, wstr, -1, szTo, size_needed, NULL, NULL);
+	WideCharToMultiByte(CP_UTF8, 0, wstr, -1, szTo, size_needed, NULL, NULL);
     szTo[uniS->Length] = '\0';
 	strTo = szTo;
 	delete[] szTo;

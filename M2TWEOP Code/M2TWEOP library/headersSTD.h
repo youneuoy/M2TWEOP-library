@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
+#include <unordered_map>
 #include <fstream>
 #include <vector>
+#include <list>
 
 #include <d3d9.h>
 #include <d3dx9.h>

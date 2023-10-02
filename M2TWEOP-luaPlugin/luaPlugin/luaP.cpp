@@ -120,6 +120,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<buildingInQueue>buildingInQueue;
 		sol::usertype<siegeS>siege;
 		sol::usertype<buildingLevel>buildingLevel;
+		sol::usertype<battleCameraStruct>battleCameraStruct;
 	}types;
 	luaState = {};
 	luaPath = modPath + "\\youneuoy_Data\\plugins\\lua";
@@ -147,22 +148,20 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	if (!funcResult.valid())
 	{
 		sol::error luaError = funcResult;
-		MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);
+		MessageBoxA(NULL, luaError.what(), "Lua package error!", NULL);
 		return nullptr;
 	}
-
-
 
 	sol::load_result fileRes = luaState.load_file(luaFilePath);
 	if (!fileRes.valid()) { // This checks the syntax of your script, but does not execute it
 		sol::error luaError = fileRes;
-		MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);
+		MessageBoxA(NULL, luaError.what(), "Lua syntax error!", NULL);
 		return nullptr;
 	}
 	sol::protected_function_result result1 = fileRes(); // this causes the script to execute
 	if (!result1.valid()) {
 		sol::error luaError = result1;
-		MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);
+		MessageBoxA(NULL, luaError.what(), "Lua execution error!", NULL);
 		return nullptr;
 	}
 
@@ -244,10 +243,12 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield unlockGameConsoleCommands unlockGameConsoleCommands
 	@tfield setMaxBgSize setMaxBgSize
 	@tfield toggleUnitsBMapHighlight toggleUnitsBMapHighlight
+	@tfield getBattleCamCoords getBattleCamCoords
 	@tfield setReligionsLimit setReligionsLimit
 	@tfield isTileFree isTileFree
 	@tfield getGameTileCoordsWithCursor getGameTileCoordsWithCursor
 	@tfield getTileRegionID getTileRegionID
+	@tfield getTileVisibility getTileVisibility
 	@tfield getRegionOwner getRegionOwner
 	@tfield setEDUUnitsSize setEDUUnitsSize
 	@table M2TWEOP
@@ -305,7 +306,11 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@treturn int y size of the image
 	@treturn int id of the image
 	@usage
-	local testImage={x=0,y=0,img=nil};
+	-- This function supports the following file formats: .bmp, .dds, .dib, .hdr, .jpg, .pfm, .png, .ppm, and .tga.
+	-- Recommended to use .dds for best performance
+	-- Note: Doing image scaling and format conversion at load time can be slow. Store images in the format and resolution they will be used.
+	-- More info: https://learn.microsoft.com/en-us/windows/win32/direct3d9/d3dxcreatetexturefromfileex
+	local testImage = { x = 0, y = 0, img = nil};
 	testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath().."/youneuoy_textures/test.dds");
 	*/
 
@@ -315,7 +320,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@function M2TWEOP.unloadTexture
 	@tparam int id of the image
 	@usage
-	local testImage={x=0,y=0,img=nil};
+	local testImage = { x = 0, y = 0, img = nil};
 	testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath().."/youneuoy_textures/test.dds");
 	M2TWEOP.unloadTexture(testImage.img);
 	*/
@@ -336,11 +341,13 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.M2TWEOPTable.set_function("unlockGameConsoleCommands", &m2tweopHelpers::unlockGameConsoleCommands);
 	/***
-	Sets the maximum amount of soldiers a general's bodyguard unit can replenish to.
+	Sets the maximum amount of soldiers a general's bodyguard unit can replenish to. The value is multiplied by the unit size modifiers (e.g Huge = 2.5 multiplier)
 	@function M2TWEOP.setMaxBgSize
-	@tparam int newSize default: 77, maximum: 255 (Huge unit size).
+	@tparam int newSize
 	@usage
-	M2TWEOP.setMaxBgSize(222);
+	M2TWEOP.setMaxBgSize(100) -- On huge unit size, 100*2.5 = 250 max bodyguard size
+	M2TWEOP.setMaxBgSize(150) -- On huge unit size, 150*2.5 = 300 max bodyguard size
+	M2TWEOP.setMaxBgSize(50)  -- On huge unit size, 50*2.5 = 125 max bodyguard size
 	*/
 	tables.M2TWEOPTable.set_function("setMaxBgSize", &m2tweopHelpers::setMaxBgSize);
 
@@ -356,6 +363,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	/***
 	* Sets the new maximum amount of building levels within a chain.
+	* WARNING: This function may be bugged -> https://github.com/youneuoy/M2TWEOP-library/issues/58
 	* @function M2TWEOP.setBuildingChainLimit
 	* @tparam int limit default: 9, maximum: 57
 	* @usage
@@ -402,6 +410,16 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.M2TWEOPTable.set_function("toggleUnitsBMapHighlight", &m2tweopHelpers::toggleUnitsBMapHighlight);
 
+	/***
+	Get the current x, y and z coords of the battlemap camera
+	@function M2TWEOP.getBattleCamCoords
+	@treturn battleCameraStruct Camera struct
+	@usage
+	local cameraCoords = M2TWEOP.getBattleCamCoords();
+	-- Zoom out the camera beyond it's normal range
+	cameraCoords.zCoord = 500;
+	*/
+	tables.M2TWEOPTable.set_function("getBattleCamCoords", &m2tweopHelpers::getBattleCamCoords);
 
 	/***
 	Set the maximum number of religions in the mod (per descr\_religions.txt)
@@ -442,6 +460,23 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.M2TWEOPTable.set_function("getTileRegionID", &m2tweopHelpers::getTileRegionID);
 	/***
+	Get a specific tile's visibility according to faction (i.e can a faction see a tile) Note: Once the tile has been seen by a faction, it will always return true. e.g If you have spotted a settlement but it is now outside of the fog of war, it will still be classed as visible. 
+	@function M2TWEOP.getTileVisibility
+	@tparam factionStruct faction Faction to check
+	@tparam xCoord x coord of the tile
+	@tparam yCoord y coord of the tile
+	@treturn isVisible true = visible, false = not visible
+	@usage
+	local faction = stratmap.game.getFaction(2);
+	local isVisible = M2TWEOP.getTileVisibility(faction, xCoord, yCoord)
+	if isVisible == true then 
+		print("Tile is visible to faction "..faction:getFactionName())
+	else
+		print("Tile is not visible to faction "..faction:getFactionName())
+	end
+	*/
+	tables.M2TWEOPTable.set_function("getTileVisibility", &m2tweopHelpers::getTileVisibility);
+	/***
 	Get the owner of a region by RegionID.
 	@function M2TWEOP.getRegionOwner
 	@tparam int regionID
@@ -452,7 +487,25 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.M2TWEOPTable.set_function("getRegionOwner", &m2tweopHelpers::getRegionOwner);
 
-	/// gameSTDUITable
+
+
+	/// BattleCamera
+	//@section gameSTDUITable
+
+	/***
+	Get information about the camera in a battle
+	@table battleCameraStruct
+	@tfield float xCoord 
+	@tfield float yCoord 
+	@tfield float zCoord 
+	*/
+	types.battleCameraStruct = luaState.new_usertype<battleCameraStruct>("battleCameraStruct");
+	types.battleCameraStruct.set("xCoord", &battleCameraStruct::xCoord);
+	types.battleCameraStruct.set("yCoord", &battleCameraStruct::yCoord);
+	types.battleCameraStruct.set("zCoord", &battleCameraStruct::zCoord);
+
+
+	/// GameUI
 	//@section gameSTDUITable
 
 	/***
@@ -485,7 +538,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	tables.gameUITable.set_function("getUiElement", &gameSTDUIHelpers::getUiElement);
 
-	///uiElementStruct
+	/// UIElement
 	//@section uiElementStructTable
 
 	/***
@@ -532,7 +585,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.uiElement.set("execute", &gameSTDUIHelpers::useUiElement);
 
 
-	///Strat Map Objects
+	///StratmapObjects
 	//@section objectsTable
 
 
@@ -590,7 +643,13 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam string typename Name of the new model used to assign.
 	@tparam string texturepath Relative path from the mods folder (starting with "mods/").
 	@usage
-	stratmap.objects.addCharacterCas("strat_named_with_army","mods/Bare_Geomod/data/models_strat/islamic_general2.cas","mods/Bare_Geomod/data/models_strat/shadow_sword2.cas","islamic_general2","mods/Bare_Geomod/data/models_strat/textures/islamic_general_turks.tga");
+	stratmap.objects.addCharacterCas(
+		"strat_named_with_army",
+		"mods/Bare_Geomod/data/models_strat/islamic_general2.cas",
+		"mods/Bare_Geomod/data/models_strat/shadow_sword2.cas",
+		"islamic_general2",
+		"mods/Bare_Geomod/data/models_strat/textures/islamic_general_turks.tga"
+	);
 	*/
 	tables.objectsTable.set_function("addCharacterCas", &generalHelpers::addCharacterCas);
 	/***
@@ -687,6 +746,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@function game.callConsole
 	@treturn string error Note: string can be empty but not nil
 	@usage
+	-- Creating units, adding money
 	function onCharacterSelected(selectedChar)
 		local err = stratmap.game.callConsole("add_money", "2321")
 		local err2 = stratmap.game.callConsole("create_unit", "testcharacter 'Cool Unit' 4 1 1 1")
@@ -796,6 +856,16 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	stratmap.game.scriptCommand("give_everything_to_faction", "france england false")
 	stratmap.game.scriptCommand("send_character_off_map", "Rufus")
+
+	-- Multiline commands and using variables in command strings
+	local facName="hre"
+	stratmap.game.scriptCommand("set_faction_banner", string.format([[
+
+		faction england
+
+		banner %s
+
+	end_set_faction_banner]], facName))
 	*/
 	tables.gameTable.set_function("scriptCommand", &gameHelpers::scriptCommand);
 	///Stratmap
@@ -848,7 +918,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.unit.set("exp", sol::property(&unitHelpers::getExp, &unitHelpers::setExp));
 	types.unit.set("armourLVL", sol::property(&unitHelpers::getarmourLVL, &unitHelpers::setarmourLVL));
 	types.unit.set("weaponLVL", sol::property(&unitHelpers::getweaponLVL, &unitHelpers::setweaponLVL));
-	types.unit.set("soldierCountStratMapMax", &unit::numberMax);
+	types.unit.set("soldierCountStratMapMax", sol::property(&unitHelpers::getMaxSoldiersCount));
 	types.unit.set("soldierCountBattleMap", &unit::numberTact);
 	types.unit.set("character", &unit::general);
 	types.unit.set("army", &unit::army);
@@ -1453,7 +1523,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		));
 
 
-	///traitContainer
+	/// Trait Container
 	//@section traitsTable
 
 	/***
@@ -1509,7 +1579,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getWatchtower getWatchtower
 	@tfield deleteFort deleteFort
 	@tfield createFortXY createFortXY
-	@tfield changeFactionName changeFactionName
 
 	@table factionStruct
 	*/
@@ -2343,6 +2412,59 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.stackStruct = luaState.new_usertype<stackStruct>("stackStruct");
 	types.stackStruct.set("faction", &stackStruct::faction);
+
+	/***
+	Sort units in a stack.
+	@function stackStruct:sortStack
+	@tparam int sort mode
+	@usage
+	-- Note: Generals will always remain at the start of the stack
+	-- 1 = EDU Type
+	-- 2 = Category
+	-- 3 = Class
+	-- 4 = Soldier Count
+	-- 5 = Experience
+
+	function onFactionTurnStart(faction)
+    -- If it's not the players turn, don't sort
+    if faction.isPlayerControlled == 0 then return end;
+
+    -- Sort all the stacks on the map right before the turn starts
+    local factionsNum = stratmap.game.getFactionsCount();
+    for i = 0, factionsNum - 1 do
+        local faction = stratmap.game.getFaction(i);
+        for j = 0, faction.stacksNum - 1 do
+            local stack = faction:getStack(j);
+            if stack then
+                -- Debug Info
+                -- print("\n\n")
+                -- print("-- Unsorted Stack --")
+                -- for k = 0, stack.numOfUnits - 1 do
+                --     local unit = stack:getUnit(k);
+                --     if unit.eduEntry.Type then
+                --         print(unit.eduEntry.Type)
+                --     end
+                -- end
+
+                -- Sort the stack by EDU type
+                stack:sortStack(1)
+
+                -- print("\n\n")
+                -- print("-- Sorted Stack --")
+                -- for k = 0, stack.numOfUnits - 1 do
+                --     local unit = stack:getUnit(k);
+                --     if unit.eduEntry.Type then
+                --         print(unit.eduEntry.Type)
+                --     end
+                -- end
+            end
+        	end
+    	end
+	end
+
+	*/
+	types.stackStruct.set_function("sortStack", &stackStructHelpers::sortStack);
+
 	/***
 	Get a unit by it's index.
 	@function stackStruct:getUnit
@@ -2443,7 +2565,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 
 	/***
-	Merge 2 armies on the strat map.
+	Merge 2 armies on the strat map. Does nothing if the total size of the new army exceeds 20 units.
 	@function stackStruct:mergeArmies
 	@tparam stackStruct targetArmy
 	@usage
@@ -2475,7 +2597,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.stackStruct.set_function("attackArmy", &stackStructHelpers::attackArmy);
 
 	types.stackStruct.set("siege", &stackStruct::siege);
-	///siegeStruct
+	///SiegeStruct
 	//@section siegeStruct
 
 	/***

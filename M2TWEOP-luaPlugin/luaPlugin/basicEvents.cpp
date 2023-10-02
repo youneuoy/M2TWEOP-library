@@ -738,7 +738,7 @@ std::string* onSelectWorldpkgdesc(const char* selectedRec, const char* selectedG
 		{
 
 			sol::error luaError = funcResult;
-			MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);
+			MessageBoxA(NULL, luaError.what(), "Lua exception in onSelectWorldpkgdesc() call!", NULL);
 		}
 		else
 		{
@@ -766,7 +766,7 @@ int onfortificationlevelS(settlementStruct* settlement, bool* isCastle, bool* is
 		{
 
 			sol::error luaError = funcResult;
-			MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);
+			MessageBoxA(NULL, luaError.what(), "Lua exception in onfortificationlevelS() call!", NULL);
 		}
 		else
 		{
@@ -827,7 +827,7 @@ std::vector<std::string>* onSaveGamePl(UNICODE_STRING**& savePath)
 		if (!funcResult.valid())
 		{
 			sol::error luaError = funcResult;
-			MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL); \
+			MessageBoxA(NULL, luaError.what(), "Lua exception in onSaveGamePl()!", NULL); \
 		}
 		else
 		{

@@ -9,6 +9,8 @@ return [==[
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../prism.css" type="text/css" />
+    <script src="../prism.js"></script>
 
     <!-- Meta stuff -->
     <meta property="og:title" content="M2TWEOP LuaPlugin Documentation">
@@ -95,7 +97,7 @@ return [==[
         <li><a href="../../../articles.html">M2TWEOP Tutorials</li>
     <ul>
         <li><a href="https://www.youtube.com/watch?v=hUvbcz8i7Wk">Scripting Basics (Video Tutorial)</li>
-        <li><a href="../../../_static/Introduction_to_ImGui_v3.pdf">Introduction to ImGUI</a></li>
+        <li><a href="../../../_static/Introduction_to_ImGui_v4.pdf">Introduction to EOP ImGUI V4 by Erken (PDF)</a></li>
     <ul>
     </ul>
 # elseif module then
@@ -103,7 +105,7 @@ return [==[
         <li><a href="../../articles.html">M2TWEOP Tutorials</li>
     <ul>
         <li><a href="https://www.youtube.com/watch?v=hUvbcz8i7Wk">Scripting Basics (Video Tutorial)</li>
-        <li><a href="../../_static/Introduction_to_ImGui_v3.pdf">Introduction to ImGUI</li>
+        <li><a href="../../_static/Introduction_to_ImGui_v4.pdf">Introduction to EOP ImGUI V4 by Erken (PDF)</li>
         <li><a href="../../_static/LuaLib/extra/readme_imgui.md.html">EOP's ImGUI Bindings</li>
     <ul>
     </ul>
@@ -289,7 +291,7 @@ return [==[
     <h3>Usage:</h3>
     <ul>
 #     for usage in iter(item.usage) do
-        $(li)<pre class="example">$(ldoc.prettify(usage))</pre>$(il)
+        $(li)<pre class="example"><code class="language-lua" >$(ldoc.prettify(usage))</code></pre>$(il)
 #     end -- for
     </ul>
 #   end -- if usage

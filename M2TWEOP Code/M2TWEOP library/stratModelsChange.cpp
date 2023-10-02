@@ -7,6 +7,14 @@
 #include "dataOffsets.h"
 namespace stratModelsChange
 {
+	enum class modelsChangeStatus
+	{
+		changed = 0,
+		needFixHiding = 1,
+		needChange = 2
+	};
+	modelsChangeStatus changeModelsNeededNow = modelsChangeStatus::changed;
+
 	struct stratModelRecord
 	{
 		UINT32 modelId = 0;
@@ -79,6 +87,8 @@ namespace stratModelsChange
 
 
 		stratModelChangeList.push_back(rec);
+
+		changeModelsNeededNow = modelsChangeStatus::needChange;
 	}
 
 	stratModelRecord* findStratModel(const UINT32 modelId)
@@ -105,18 +115,69 @@ namespace stratModelsChange
 			return nullptr;
 		}
 	}
+	struct visibilityCrashFixS
+	{
+		visibilityCrashFixS(int x, int y, factionStruct* fac, int8_t vis)
+			:X(x), Y(y), Fac(fac), Vis(vis)
+		{
 
-	//Change only when render queue is happening to avoid crashes
+		}
+		int X;
+		int Y;
+		factionStruct* Fac = nullptr;
+		int8_t Vis = 0;
+	};
+	vector<visibilityCrashFixS> crashFixAr;
+
 	void checkAndChangeStratModels()
 	{
-		for (const stratModelChangeRecord* changeMod : stratModelChangeList) //static models
+		if (changeModelsNeededNow == modelsChangeStatus::needFixHiding)
 		{
-			const stratModelRecord* mod1 = findStratModel(changeMod->modelId);
+			for (auto& visFix : crashFixAr)
+			{
+				fastFuncts::hideRevealedTile(visFix.Fac, visFix.X, visFix.Y);
+			}
+			crashFixAr.clear();
+			changeModelsNeededNow = modelsChangeStatus::changed;
+			return;
+		}
+		if (changeModelsNeededNow == modelsChangeStatus::changed)
+		{
+			return;
+		}
+
+		crashFixAr.reserve(stratModelChangeList.size());
+		for (stratModelChangeRecord* changeMod : stratModelChangeList) //static models
+		{
+			stratModelRecord* mod1 = findStratModel(changeMod->modelId);
 			if (mod1 == nullptr)continue;
 
-			const stratModelRecord* mod2 = findStratModel(changeMod->modelId2);
+			stratModelRecord* mod2 = nullptr;
+			 
+			mod2 = findStratModel(changeMod->modelId2);
 
-			changeModel(changeMod->x, changeMod->y, mod1->modelP, mod2->modelP);
+			if (changeModel(changeMod->x, changeMod->y, mod1->modelP, mod2->modelP) == true)
+			{
+				UINT32 numFac = fastFuncts::getFactionsCount();
+				factionStruct** listFac = fastFuncts::getFactionsList();
+
+				for (UINT32 i = 0; i < numFac; i++)
+				{
+					auto vis = fastFuncts::getTileVisibility(listFac[i], changeMod->x, changeMod->y);
+					if (vis == 0)
+					{
+						continue;
+					}
+
+					crashFixAr.emplace_back(changeMod->x, changeMod->y, listFac[i], vis);
+
+					fastFuncts::revealTile(listFac[i], changeMod->x, changeMod->y);
+
+
+					//fastFuncts::setTileVisibility(listFac[i], changeMod->x, changeMod->y, 5);
+				}
+
+			}
 		}
 		for (const stratModelCharacterRecordChange* changeMod : stratModelCharacterChangeList) //character models
 		{
@@ -129,6 +190,12 @@ namespace stratModelsChange
 			stratModelCharacterChangeList.erase(stratModelCharacterChangeList.begin() + i);
 			i--;
 		}
+
+		changeModelsNeededNow = modelsChangeStatus::needFixHiding;
+	}
+
+	void update()
+	{
 	}
 
 	bool modelsLoaded = false;
@@ -145,6 +212,7 @@ namespace stratModelsChange
 			snd->modelP = loadModel(snd->path.c_str());
 		}
 		modelsLoaded = true;
+		changeModelsNeededNow = modelsChangeStatus::needChange;
 	}
 
 	void loadCharModels() //rebuild character CAS entries to be sure no pointers were cleaned up
@@ -202,11 +270,29 @@ namespace stratModelsChange
 		strcpy(modelNameCopy, model);
 		rec->modelId = modelNameCopy;
 		stratModelCharacterChangeList.push_back(rec);
+
+		changeModelsNeededNow = modelsChangeStatus::needChange;
 	}
 
 	void changeStratModel(general* gen, const char* model)
 	{
-		if (gen != nullptr)
+		if (gen == nullptr) { //maybe captain dont exist anymore
+			return;
+		}
+		stratModelArrayEntry* modelentry = findCharacterStratModel(model); //get eop strat model from vector
+		if (modelentry == nullptr) {
+			modelentry = getStratModelEntry(model); //get vanilla strat model from 255 array
+		}
+		if (modelentry == nullptr) {
+			return;
+		}
+		int stringsize = strlen(model);
+		genMod* characterFacEntry = new genMod; //make new descr character faction entry
+		*characterFacEntry = *gen->genType; //get data of old entry and copy it in
+		descrCharacterStratModelArray* modelArray = new descrCharacterStratModelArray; //make new model array
+		*modelArray = *gen->genType->stratInfo; //get data of old model array
+		characterFacEntry->stratInfo = modelArray; //assign new model array to new descr character faction entry
+		for (int i = 0; i < characterFacEntry->modelCount; i++) //change all models to new one in this array
 		{
 			stratModelArrayEntry* modelentry = findCharacterStratModel(model); //get eop strat model from vector
 			if (!modelentry)
@@ -239,6 +325,9 @@ namespace stratModelsChange
 
 			gen->genType = characterFacEntry; //assign new array to general
 		}
+		gen->genType = characterFacEntry; //assign new array to general
+
+		changeModelsNeededNow = modelsChangeStatus::needChange;
 	}
 
 
@@ -321,7 +410,7 @@ namespace stratModelsChange
 			funcAddr = codes::offsets.assignShadowCasToFlexi;
 			texturepath = nullptr;
 		}
-		float scale = 1.0;
+		float scale = 0.7;
 		_asm
 		{
 			push 1

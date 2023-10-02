@@ -187,8 +187,10 @@
     <ClInclude Include="buildingStructHelpers.h" />
     <ClInclude Include="cameraHelpers.h" />
     <ClInclude Include="console.h" />
+    <ClInclude Include="eop3dObjectsHelpers.h" />
     <ClInclude Include="eopEduHelpers.h" />
     <ClInclude Include="eopFbxHelpers.h" />
+    <ClInclude Include="eopMasterTypes.h" />
     <ClInclude Include="eopSoundHelpers.h" />
     <ClInclude Include="factionHelpers.h" />
     <ClInclude Include="framework.h" />
@@ -218,6 +220,7 @@
     <ClInclude Include="pluginM2TWEOP.h" />
     <ClInclude Include="realGameTypes.h" />
     <ClInclude Include="religionEvents.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="resourcesHelpers.h" />
     <ClInclude Include="seaBattle.h" />
     <ClInclude Include="settlementHelpers.h" />
@@ -235,6 +238,8 @@
     <ClCompile Include="cameraHelpers.cpp" />
     <ClCompile Include="console.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="eop3dObjectsHelpers.cpp" />
+    <ClCompile Include="luaEop3dObjects.cpp" />
     <ClCompile Include="eopEduHelpers.cpp" />
     <ClCompile Include="eopFbxHelpers.cpp" />
     <ClCompile Include="eopSoundHelpers.cpp" />
@@ -275,6 +280,9 @@
     <ClCompile Include="technicalHelpers.cpp" />
     <ClCompile Include="uiEvents.cpp" />
     <ClCompile Include="unitHelpers.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="luaPlugin.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

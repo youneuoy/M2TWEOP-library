@@ -8,7 +8,7 @@
 #include "exportHeader.h"
 #include "imgui_notify.h"
 
-
+typedef void (*EOPDrawCallback)();
 class graphicsD3D
 {
 public:
@@ -25,12 +25,15 @@ public:
 		//if imgui initialized
 		bool ImInitialized = false;
 		bool ifMouseOrKeyBoardAtImgui = false;
-		struct 
+		struct
 		{
 			WNDPROC oWndProc = NULL;
 			// Originals
 			WNDPROC onewGameWndProc = NULL;
 		}hookD;
+
+		vector<EOPDrawCallback> stratmapDrawCallbacks;
+		vector<EOPDrawCallback> imguiDrawCallbacks;
 	}dataS;
 	static NOINLINE void APIENTRY Draw(LPDIRECT3DDEVICE9 pDevice);
 
@@ -52,7 +55,28 @@ public:
 
 namespace graphicsExport
 {
-	NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 loadTexture(const char*path, int* x, int* y);
+	struct D3dState
+	{
+		IDirect3DStateBlock9* d3d9_state_block;
+		D3DXMATRIX world;
+		D3DXMATRIX view;
+		D3DXMATRIX projection;
+	};
+	NOINLINE EOP_EXPORT D3dState GetD3dState();
+
+	NOINLINE EOP_EXPORT void AddStratmapDrawCallback(EOPDrawCallback callFunk);
+	NOINLINE EOP_EXPORT void AddImGuiDrawCallback(EOPDrawCallback callFunk);
+
+	NOINLINE EOP_EXPORT void SetClearD3dState();
+	NOINLINE EOP_EXPORT void SetD3dState(D3dState& state);
+	NOINLINE EOP_EXPORT void ReleaseD3dState(D3dState& state);
+
+
+	NOINLINE EOP_EXPORT const D3DXMATRIXA16* GetMatView();
+	NOINLINE EOP_EXPORT const D3DXMATRIXA16* GetMatProj();
+
+	NOINLINE EOP_EXPORT IDirect3DDevice9* GetDevice();
+	NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 loadTexture(const char* path, int* x, int* y);
 	NOINLINE EOP_EXPORT void unloadTexture(LPDIRECT3DTEXTURE9 texture);
 
 

@@ -13,6 +13,9 @@ public:
 
 
 
+		DWORD createIdleActionFunc = NULL;
+
+
 		DWORD createSiegeSettlementGarrisonedFunc = NULL;
 		DWORD getReadySiegeCharacterGarrisonedFunc = NULL;
 		DWORD finalyzeActionStratmapFunc = NULL;

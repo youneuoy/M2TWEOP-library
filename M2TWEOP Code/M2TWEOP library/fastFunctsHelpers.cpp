@@ -141,5 +141,11 @@ namespace fastFunctsHelpers
 		return json;
 	}
 
+	void writeJsonToFile(const std::string& fpath,const jsn::json& json)
+	{
+		ofstream f1(fpath);
+		f1 << setw(4) << json;
+		f1.close();
+	}
 }
 

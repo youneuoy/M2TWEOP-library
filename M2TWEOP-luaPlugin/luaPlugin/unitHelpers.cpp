@@ -26,6 +26,34 @@ namespace unitHelpers
 	{
 		(*(*plugData::data.funcs.setUnitParams))(un, un->number, un->expScreen, getarmourLVL(un), lvl);
 	}
+	int getMaxSoldiersCount(unit* un)
+	{
+
+		int sizeMul=m2tweopHelpers::GetUnitSize();
+
+		float mul = 2.5f;
+		switch (sizeMul)
+		{
+		case 0:
+		{
+			mul = 1.f;
+			break;
+		}
+		case 1:
+		{			
+			mul = 1.25f;
+			break;
+		}
+		case 2:
+		{
+			mul = 1.875f;
+			break;
+		}
+		default:
+			break;
+		}
+		return un->eduEntry->SoldierCount* mul;
+	}
 	void setMovepoints(unit* un, float movepoints)
 	{
 		(*(*plugData::data.funcs.setUnitMovepoints))(un, movepoints);
