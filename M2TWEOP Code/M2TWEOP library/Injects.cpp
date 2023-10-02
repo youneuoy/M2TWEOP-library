@@ -3114,7 +3114,7 @@ OnCreateUnitWrapper::OnCreateUnitWrapper(MemWork* mem, LPVOID addr, int ver)
 	}
 	else if (ver == 1)//kingdoms
 	{
-		m_adress = 0x008EC39F;
+		m_adress = 0x008EB91F;
 	}
 }
 
