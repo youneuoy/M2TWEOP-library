@@ -118,7 +118,10 @@ namespace gameEvents
 		namedCharacterRiotEvents = 47,
 		settOccupationEvent = 48,
 		guildEvent = 49,
-		uiEvent = 50
+		uiEvent = 50,
+		factionUiEvent = 51,
+		buildingCompletedEvent = 52,
+		closeMessageEvent = 53
 	};
 
 	class EventBase
@@ -146,6 +149,15 @@ namespace gameEvents
 				{
 					return charType->second;
 				}
+			}
+			return "unknown";
+		}
+		static const char* getTypeInteger(int type)
+		{
+			const auto charType = characterTypes.find(type);
+			if (charType != characterTypes.end())
+			{
+				return charType->second;
 			}
 			return "unknown";
 		}
@@ -766,12 +778,12 @@ namespace gameEvents
 				auto character = reinterpret_cast<namedCharacter*>(vTab[1]);
 				factionStruct* faction = character->faction;
 				auto settlement = reinterpret_cast<settlementStruct*>(vTab[2]);
-				auto build = reinterpret_cast<building*>(vTab[3]);
+				building* building = settlement->buildings[settlement->buildingsNum - 1];
 				const regionStruct* region = getRegion(character);
 				const char* characterType = getType(character);
 				const char* religion = getReligion(faction->religion);
 				if (&(*funk) != nullptr) {
-					(*funk)(character, faction, settlement, build, region, characterType, religion);
+					(*funk)(character, faction, settlement, building, region, characterType, religion);
 				}
 				return 43;
 			}
@@ -780,7 +792,7 @@ namespace gameEvents
 				auto character = reinterpret_cast<namedCharacter*>(vTab[1]);
 				factionStruct* faction = character->faction;
 				auto settlement = reinterpret_cast<settlementStruct*>(vTab[3]);
-				const char* characterType = reinterpret_cast<char*>(vTab[2]);
+				const char* characterType = getTypeInteger(reinterpret_cast<int>(vTab[2]));
 				regionStruct* region = gameHelpers::getRegion(settlement->regionID);
 				const char* religion = getReligion(faction->religion);
 				if (&(*funk) != nullptr) {
@@ -863,6 +875,36 @@ namespace gameEvents
 
 				}
 				return 50;
+			}
+			else if (EvType == EventType::factionUiEvent)
+			{
+				auto faction = reinterpret_cast<factionStruct*>(vTab[1]);
+				int name = reinterpret_cast<int>(vTab[2]);
+				const char* religion = getReligion(faction->religion);
+				if (&(*funk) != nullptr) {
+					(*funk)(faction, religion, name);
+				}
+				return 51;
+			}
+			else if (EvType == EventType::buildingCompletedEvent)
+			{
+				auto faction = reinterpret_cast<factionStruct*>(vTab[1]);
+				auto settlement = reinterpret_cast<settlementStruct*>(vTab[2]);
+				regionStruct* region = gameHelpers::getRegion(settlement->regionID);
+				building* building = settlement->buildings[settlement->buildingsNum - 1];
+				const char* religion = getReligion(faction->religion);
+				if (&(*funk) != nullptr) {
+					(*funk)(settlement, faction, building, region, religion);
+				}
+				return 52;
+			}
+			else if (EvType == EventType::closeMessageEvent)
+			{
+				int name = reinterpret_cast<int>(vTab[1]);
+				if (&(*funk) != nullptr) {
+					(*funk)(name);
+				}
+				return 53;
 			}
 			else
 			{

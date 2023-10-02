@@ -462,15 +462,6 @@ namespace gameEvents
 		newCode[0] = 0x01370B34; newCode[1] = 0x0132BB0C;
 		addEvent<EventType::factionEvent>(newCode[gv], "onPreBattlePanelOpen");
 
-		newCode[0] = 0x01370E9C; newCode[1] = 0x0132BE74;
-		addEvent<EventType::factionEvent>(newCode[gv], "onIncomingMessage");
-
-		newCode[0] = 0x01370F64; newCode[1] = 0x0132BF3C;
-		addEvent<EventType::factionEvent>(newCode[gv], "onMessageOpen");
-
-		newCode[0] = 0x0137102C; newCode[1] = 0x0132C004;
-		addEvent<EventType::factionEvent>(newCode[gv], "onMessageClosed");
-
 		newCode[0] = 0x01371364; newCode[1] = 0x0132C33C;
 		addEvent<EventType::factionEvent>(newCode[gv], "onDeclineAutomatedSettlementManagement");
 
@@ -546,14 +537,16 @@ namespace gameEvents
 		newCode[0] = 0x0136EBB4; newCode[1] = 0x01329B8C;
 		addEvent<EventType::buildingEvent>(newCode[gv], "onAddedToTrainingQueue");
 
-		newCode[0] = 0x0136FBB4; newCode[1] = 0x0132AB8C;
-		addEvent<EventType::buildingEvent>(newCode[gv], "onBuildingCompleted");
-
 		newCode[0] = 0x013715AC; newCode[1] = 0x0132C584;
 		addEvent<EventType::buildingEvent>(newCode[gv], "onRequestBuildingAdvice");
 
 		newCode[0] = 0x01371664; newCode[1] = 0x0132C63C;
 		addEvent<EventType::buildingEvent>(newCode[gv], "onRequestTrainingAdvice");
+
+		
+		//buildingCompletedEvents
+		newCode[0] = 0x0136FBB4; newCode[1] = 0x0132AB8C;
+		addEvent<EventType::buildingCompletedEvent>(newCode[gv], "onBuildingCompleted");
 
 		//agentCreatedEvent
 		newCode[0] = 0x0136E874; newCode[1] = 0x0132984C;
@@ -659,6 +652,16 @@ namespace gameEvents
 		addEvent<EventType::uiEvent>(newCode[gv], "onScrollAdviceRequested");
 		newCode[0] = 0x01371144; newCode[1] = 0x0132C11C;
 		addEvent<EventType::uiEvent>(newCode[gv], "onAdviceSupressed");
+
+		//closeMessageEvents
+		newCode[0] = 0x0137102C; newCode[1] = 0x0132C004;
+		addEvent<EventType::closeMessageEvent>(newCode[gv], "onMessageClosed");
+
+		//factionUiEvents
+		newCode[0] = 0x01370E9C; newCode[1] = 0x0132BE74;
+		addEvent<EventType::factionUiEvent>(newCode[gv], "onIncomingMessage");
+		newCode[0] = 0x01370F64; newCode[1] = 0x0132BF3C;
+		addEvent<EventType::factionUiEvent>(newCode[gv], "onMessageOpen");
 
 		//tileEvents
 		newCode[0] = 0x0136ACCC; newCode[1] = 0x01325CA4;

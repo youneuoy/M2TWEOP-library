@@ -491,7 +491,7 @@ void luaP::onPluginLoadF()
 	@tparam factionStruct faction
 	@tparam regionStruct|nil region
 	@tparam string characterType
-	@tparam string religions
+	@tparam string religion
 
 	@usage
 	function onCharacterMarries(namedChar, faction, region, characterType, religion)
@@ -2362,7 +2362,7 @@ void luaP::onPluginLoadF()
 	@function onBuildingCompleted
 	@tparam settlementStruct settlement
 	@tparam factionStruct faction
-	@tparam string buildingName
+	@tparam building building
 	@tparam regionStruct region
 	@tparam string religion
 
@@ -2825,9 +2825,10 @@ void luaP::onPluginLoadF()
 	@function onIncomingMessage
 	@tparam factionStruct faction
 	@tparam string religion
+	@tparam int eventid
 
 	@usage
-	function onIncomingMessage(faction, religion)
+	function onIncomingMessage(faction, religion, eventid)
 	--something here
 	end
 	*/
@@ -2838,9 +2839,10 @@ void luaP::onPluginLoadF()
 	@function onMessageOpen
 	@tparam factionStruct faction
 	@tparam string religion
+	@tparam int eventid
 
 	@usage
-	function onMessageOpen(faction, religion)
+	function onMessageOpen(faction, religion, eventid)
 	--something here
 	end
 	*/
@@ -2849,11 +2851,10 @@ void luaP::onPluginLoadF()
 	The player has closed a message.
 
 	@function onMessageClosed
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam int eventid
 
 	@usage
-	function onMessageClosed(faction, religion)
+	function onMessageClosed(eventid)
 	--something here
 	end
 	*/
