@@ -51,7 +51,7 @@ namespace battleCreator
 		{
 			json.at("enableAutoGeneration").get_to(data.isGenerationNeeded);
 			json.at("enableResultsTransfer").get_to(data.isResultTransferNeeded);
-			json.at("isPlannedRetreatRoute").get_to(data.isPlannedRetreatRoute);
+			//json.at("isPlannedRetreatRoute").get_to(data.isPlannedRetreatRoute);
 		}
 		catch (jsn::json::type_error& e)
 		{

@@ -139,6 +139,17 @@ eduEntry* __fastcall patchesForGame::OnCreateMercUnit(char** entryName, eduEntry
 
 	return entry;
 }
+
+eduEntry* __fastcall patchesForGame::OnCreateUnitWrapper(int eduindexBase, int removeValue)
+{
+	int eduindex = eduindexBase - (removeValue * 8);
+	eduEntry* entry = eduThings::getEduEntry(eduindex);
+	if (entry == nullptr)
+	{
+		entry = eduThings::getEopEduEntry(eduindex);
+	}
+	return entry;
+}
 const char* __fastcall patchesForGame::onQuickSave()
 {
 	static std::vector<std::string> saveNames = { u8"%S-1.sav" ,u8"%S-2.sav", u8"%S-3.sav" };

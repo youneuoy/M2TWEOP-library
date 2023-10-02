@@ -15,6 +15,7 @@ public:
 	static int __fastcall onCreateUnit(int* edbIndex, int** edb, char** entryName);
 	static int __fastcall OnCreateMercUnitCheck(char** entryName, int eduindex);
 	static eduEntry* __fastcall OnCreateMercUnit(char** entryName, eduEntry* entry);
+	static eduEntry* __fastcall OnCreateUnitWrapper(int eduindexBase, int removeValue);
 	static const char* __fastcall onQuickSave();
 	static const char* __fastcall onAutoSave();
 

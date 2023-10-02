@@ -471,6 +471,12 @@ void managerF::doPachs()
 	toCreateMercUnit->Enable();
 	f1 << "Done" << endl;
 
+	f1 << "Start applying OnCreateUnitWrapper patch" << endl;
+	OnCreateUnitWrapper* toCreateUnitWrapper = new OnCreateUnitWrapper(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gamever);
+	toCreateUnitWrapper->SetNewCode();
+	toCreateUnitWrapper->Enable();
+	f1 << "Done" << endl;
+
 
 	f1 << "Start applying toCreateMercUnitCheck patch" << endl;
 	OnCreateMercUnitCheck* toCreateMercUnitCheck = new OnCreateMercUnitCheck(mem, (LPVOID)patchesForGame::OnCreateMercUnitCheck, globals::dataS.gamever);

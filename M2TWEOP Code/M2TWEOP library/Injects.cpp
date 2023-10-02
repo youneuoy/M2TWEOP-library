@@ -3105,6 +3105,80 @@ void OnCreateMercUnit::SetNewCode()
 	delete a;
 }
 
+OnCreateUnitWrapper::OnCreateUnitWrapper(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x008EC39F;
+	}
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x008EC39F;
+	}
+}
+
+OnCreateUnitWrapper::~OnCreateUnitWrapper()
+{
+}
+
+void OnCreateUnitWrapper::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnCreateUnitWrapper::SetNewCode()
+{
+	Assembler* a = new Assembler();
+	auto skip = a->newLabel();
+	auto skip2 = a->newLabel();
+
+	a->push(edx);
+	a->push(ecx);
+	a->push(ebx);
+	a->push(ebp);
+	a->push(edi);
+
+	a->pushf();
+
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->lea(esi, dword_ptr(eax));
+
+	a->popf();
+
+	a->pop(edi);
+	a->pop(ebp);
+	a->pop(ebx);
+	a->pop(ecx);
+	a->pop(edx);
+
+	a->pushf();
+	a->cmp(esi, 0);
+	a->je(skip);
+	
+	a->mov(eax, dword_ptr(esi, 0x3C));
+
+	a->bind(skip);
+	a->cmp(esi, 0);
+	a->jne(skip2);
+	a->mov(eax, 0x10);
+
+	a->bind(skip2);
+	a->popf();
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
 OnQuickSave::OnQuickSave(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

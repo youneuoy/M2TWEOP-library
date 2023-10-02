@@ -806,6 +806,19 @@ private:
 	DWORD otherFunc;
 };
 
+class OnCreateUnitWrapper
+	:public AATemplate
+{
+public:
+	OnCreateUnitWrapper(MemWork* mem, LPVOID addr, int ver);
+	~OnCreateUnitWrapper();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class OnCreateMercUnitCheck
 	:public AATemplate
 {

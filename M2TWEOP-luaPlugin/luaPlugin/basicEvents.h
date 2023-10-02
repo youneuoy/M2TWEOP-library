@@ -61,6 +61,14 @@ std::unordered_map<int, const char*> missionSuccessLvl = {
 };
 std::unordered_map<int, const char*> religionNames = {
 };
+
+struct crusade
+{
+public:
+	char pad_0x0000[60]; //0x0000
+	settlementStruct* targetSettlement; //0x003C
+};
+
 void checkLuaFunc(sol::function** lRef);
 void initReligionNames();
 namespace gameEvents
@@ -545,7 +553,8 @@ namespace gameEvents
 			{
 				auto character = reinterpret_cast<namedCharacter*>(vTab[1]);
 				factionStruct* faction = character->faction;
-				auto targetSettlement = reinterpret_cast<settlementStruct*>(vTab[2] + 0x3C);
+				auto crusadeActive = reinterpret_cast<crusade*>(vTab[2]);
+				auto targetSettlement = crusadeActive->targetSettlement;
 				factionStruct* targetFaction = targetSettlement->faction;
 				regionStruct* targetRegion = gameHelpers::getRegion(targetSettlement->regionID);
 				const char* characterType = getType(character);
