@@ -363,7 +363,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	/***
 	* Sets the new maximum amount of building levels within a chain.
-	* WARNING: This function may be bugged -> https://github.com/youneuoy/M2TWEOP-library/issues/58
 	* @function M2TWEOP.setBuildingChainLimit
 	* @tparam int limit default: 9, maximum: 57
 	* @usage

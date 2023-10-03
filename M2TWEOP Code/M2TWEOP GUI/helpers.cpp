@@ -446,17 +446,28 @@ bool helpers::verifyModPath(const std::string& modPath)
 	if (currentPathDirs.size() < 2)
 		return false;
 
+	std::string modPathCheck = modPath + "";
+
+	size_t pos = modPathCheck.find("#");
+	if (pos != std::string::npos)
+	{
+		modPathCheck = modPathCheck.substr(0, pos);
+	}
+	pos = modPathCheck.find(";");
+	if (pos != std::string::npos)
+	{
+		modPathCheck = modPathCheck.substr(0, pos);
+	}
+
 	std::string lastDir = currentPathDirs[currentPathDirs.size() - 1];
 	std::string secondLastDir = currentPathDirs[currentPathDirs.size() - 2];
 	std::string expectedPath = secondLastDir + "\\" + lastDir;
 	std::replace(expectedPath.begin(), expectedPath.end(), '/', '\\');
-	std::replace(expectedPath.begin(), expectedPath.end(), ' ', '');
-	std::replace(modPath.begin(), modPath.end(), '/', '\\');
-	std::replace(modPath.begin(), modPath.end(), ' ', '');
+	std::replace(modPathCheck.begin(), modPathCheck.end(), '/', '\\');
 	std::transform(expectedPath.begin(), expectedPath.end(), expectedPath.begin(), ::tolower);
-	std::transform(modPath.begin(), modPath.end(), modPath.begin(), ::tolower);
+	std::transform(modPathCheck.begin(), modPathCheck.end(), modPathCheck.begin(), ::tolower);
 
-	return modPath == expectedPath;
+	return modPathCheck == expectedPath;
 }
 
 std::string helpers::extractModPathFromLine(const std::string& line)
