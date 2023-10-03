@@ -376,6 +376,12 @@ namespace gameEvents
 		newCode[0] = 0x013D2074; newCode[1] = 0x0138CE0C;
 		addEvent<EventType::gameEvent>(newCode[gv], "onDiplomaticStandingPanelOpen");
 
+		newCode[0] = 0x01368FCC; newCode[1] = 0x0132355C;
+		addEvent<EventType::gameEvent>(newCode[gv], "onBattleWinningCombat");
+
+		newCode[0] = 0x01368F14; newCode[1] = 0x01323EEC;
+		addEvent<EventType::gameEvent>(newCode[gv], "onBattleArmyTired");
+
 		//crusadeEvents
 		newCode[0] = 0x013321D4; newCode[1] = 0x012ED1B4;
 		addEvent<EventType::crusadeEvent>(newCode[gv], "onCrusadeCalled");
@@ -584,14 +590,6 @@ namespace gameEvents
 		//battlePlayerArmyUnitEvent
 		newCode[0] = 0x013684A4; newCode[1] = 0x0132347C;
 		addEvent<EventType::battlePlayerArmyUnitEvent>(newCode[gv], "onBattlePlayerUnderAttackIdle");
-
-		//battleArmyFromUnitEvent
-		newCode[0] = 0x01368FCC; newCode[1] = 0x0132355C;
-		addEvent<EventType::battleArmyFromUnitEvent>(newCode[gv], "onBattleWinningCombat");
-
-		//battleArmyFromUnitEvent2
-		newCode[0] = 0x01368F14; newCode[1] = 0x01323EEC;
-		addEvent<EventType::battleArmyFromUnitEvent2>(newCode[gv], "onBattleArmyTired");
 
 		//battlePlayerUnitEvents
 		newCode[0] = 0x0136718C; newCode[1] = 0x01322164;

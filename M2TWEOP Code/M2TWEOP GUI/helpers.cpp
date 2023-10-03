@@ -449,6 +449,12 @@ bool helpers::verifyModPath(const std::string& modPath)
 	std::string lastDir = currentPathDirs[currentPathDirs.size() - 1];
 	std::string secondLastDir = currentPathDirs[currentPathDirs.size() - 2];
 	std::string expectedPath = secondLastDir + "\\" + lastDir;
+	std::replace(expectedPath.begin(), expectedPath.end(), '/', '\\');
+	std::replace(expectedPath.begin(), expectedPath.end(), ' ', '');
+	std::replace(modPath.begin(), modPath.end(), '/', '\\');
+	std::replace(modPath.begin(), modPath.end(), ' ', '');
+	std::transform(expectedPath.begin(), expectedPath.end(), expectedPath.begin(), ::tolower);
+	std::transform(modPath.begin(), modPath.end(), modPath.begin(), ::tolower);
 
 	return modPath == expectedPath;
 }

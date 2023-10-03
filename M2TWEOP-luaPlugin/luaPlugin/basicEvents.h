@@ -87,49 +87,47 @@ namespace gameEvents
 		battlePlayerUnitEvent = 8,
 		battleAiUnitEvent = 9,
 		battlePlayerArmyUnitEvent = 10,
-		battleArmyFromUnitEvent = 11,
-		battleArmyFromUnitEvent2 = 12,
-		battleUnitEvent = 13,
-		armyEvent = 14,
-		characterEvent = 15,
-		battleUnitEvent2 = 16,
-		diplomacyEvent = 17,
-		diplomacyMoneyEvent = 18,
-		namedCharacterTargetSettEvent = 19,
-		disasterEvent = 20,
-		namedCharacterDisasterEvent = 21,
-		eventCounterEvent = 22,
-		namedCharacterTargetCharEvent = 23,
-		fortEvent = 24,
-		tileEvent = 25,
-		objEvent = 26,
-		factionCrusadeEvent = 27,
-		crusadeTargetEvent = 28,
-		transgressionEvent = 29,
-		stratUnitEvent = 30,
-		namedCharacterSettEvent = 31,
-		namedCharacterCrusadeEvent = 32,
-		ransomEvent = 33,
-		spyMissionEvent = 34,
-		orderSpyMissionEvent = 35,
-		agentMissionEvent = 36,
-		orderKillMissionEvent = 37,
-		diplomacyMissionEvent = 38,
-		missionEvent = 39,
-		settlementEvent = 40,
-		stratUnitSettEvent = 41,
-		characterUnitSettEvent = 42,
-		characterBuildingEvent = 43,
-		agentCreatedEvent = 44,
-		buildingEvent = 45,
-		targetSettlementEvent = 46,
-		namedCharacterRiotEvents = 47,
-		settOccupationEvent = 48,
-		guildEvent = 49,
-		uiEvent = 50,
-		factionUiEvent = 51,
-		buildingCompletedEvent = 52,
-		closeMessageEvent = 53
+		battleUnitEvent = 11,
+		armyEvent = 12,
+		characterEvent = 13,
+		battleUnitEvent2 = 14,
+		diplomacyEvent = 15,
+		diplomacyMoneyEvent = 16,
+		namedCharacterTargetSettEvent = 17,
+		disasterEvent = 18,
+		namedCharacterDisasterEvent = 19,
+		eventCounterEvent = 20,
+		namedCharacterTargetCharEvent = 21,
+		fortEvent = 22,
+		tileEvent = 23,
+		objEvent = 24,
+		factionCrusadeEvent = 25,
+		crusadeTargetEvent = 26,
+		transgressionEvent = 27,
+		stratUnitEvent = 28,
+		namedCharacterSettEvent = 29,
+		namedCharacterCrusadeEvent = 30,
+		ransomEvent = 31,
+		spyMissionEvent = 32,
+		orderSpyMissionEvent = 33,
+		agentMissionEvent = 34,
+		orderKillMissionEvent = 35,
+		diplomacyMissionEvent = 36,
+		missionEvent = 37,
+		settlementEvent = 38,
+		stratUnitSettEvent = 39,
+		characterUnitSettEvent = 40,
+		characterBuildingEvent = 41,
+		agentCreatedEvent = 42,
+		buildingEvent = 43,
+		targetSettlementEvent = 44,
+		namedCharacterRiotEvents = 45,
+		settOccupationEvent = 46,
+		guildEvent = 47,
+		uiEvent = 48,
+		factionUiEvent = 49,
+		buildingCompletedEvent = 50,
+		closeMessageEvent = 51
 	};
 
 	class EventBase
@@ -287,31 +285,13 @@ namespace gameEvents
 				}
 				return 10;
 			}
-			else if (EvType == EventType::battleArmyFromUnitEvent)
-			{
-				auto playerUnit = reinterpret_cast<unit*>(vTab[1]);
-				stackStruct* army = playerUnit->army;
-				if (&(*funk) != nullptr) {
-					(*funk)(army);
-				}
-				return 11;
-			}
-			else if (EvType == EventType::battleArmyFromUnitEvent2)
-			{
-				auto playerUnit = reinterpret_cast<unit*>(vTab[2]);
-				stackStruct* army = playerUnit->army;
-				if (&(*funk) != nullptr) {
-					(*funk)(army);
-				}
-				return 12;
-			}
 			else if (EvType == EventType::battleUnitEvent)
 			{
 				auto playerUnit = reinterpret_cast<unit*>(vTab[1]);
 				if (&(*funk) != nullptr) {
 					(*funk)(playerUnit);
 				}
-				return 13;
+				return 11;
 			}
 			else if (EvType == EventType::armyEvent)
 			{
@@ -319,7 +299,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(army);
 				}
-				return 14;
+				return 12;
 			}
 			else if (EvType == EventType::characterEvent)
 			{
@@ -328,7 +308,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(gen, namedChar);
 				}
-				return 15;
+				return 13;
 			}
 			else if (EvType == EventType::battleUnitEvent2)
 			{
@@ -336,7 +316,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(playerUnit);
 				}
-				return 16;
+				return 14;
 			}
 			else if (EvType == EventType::diplomacyEvent)
 			{
@@ -347,7 +327,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(faction, religion, targetFaction, targetReligion);
 				}
-				return 17;
+				return 15;
 			}
 			else if (EvType == EventType::diplomacyMoneyEvent)
 			{
@@ -359,7 +339,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(faction, religion, targetFaction, targetReligion, amount);
 				}
-				return 18;
+				return 16;
 			}
 			else if (EvType == EventType::namedCharacterTargetSettEvent)
 			{
@@ -387,7 +367,7 @@ namespace gameEvents
 						(*funk)(character, fort, faction, targetFaction, region, characterType, religion, targetReligion, true);
 					}
 				}
-				return 19;
+				return 17;
 			}
 			else if (EvType == EventType::disasterEvent)
 			{
@@ -398,7 +378,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(eventType);
 				}
-				return 20;
+				return 18;
 			}
 			else if (EvType == EventType::namedCharacterDisasterEvent)
 			{
@@ -414,7 +394,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(eventType, character, faction, region, characterType, religion);
 				}
-				return 21;
+				return 19;
 			}
 			else if (EvType == EventType::eventCounterEvent)
 			{
@@ -423,7 +403,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(counter);
 				}
-				return 22;
+				return 20;
 			}
 			else if (EvType == EventType::namedCharacterTargetCharEvent)
 			{
@@ -440,7 +420,7 @@ namespace gameEvents
 
 					(*funk)(character, targetCharacter, faction, targetFaction, region, characterType, targetCharacterType, religion, targetReligion);
 				}
-				return 23;
+				return 21;
 			}
 			else if (EvType == EventType::fortEvent)
 			{
@@ -451,7 +431,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(fort, faction, region, religion);
 				}
-				return 24;
+				return 22;
 			}
 			else if (EvType == EventType::tileEvent)
 			{
@@ -463,7 +443,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(faction, x, y, region, religion);
 				}
-				return 25;
+				return 23;
 			}
 			else if (EvType == EventType::objEvent)
 			{
@@ -476,7 +456,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(faction, targetFaction, x, y, region, religion);
 				}
-				return 26;
+				return 24;
 			}
 			else if (EvType == EventType::factionCrusadeEvent)
 			{
@@ -489,7 +469,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(targetSettlement, faction, targetFaction, targetRegion, religion, targetReligion);
 				}
-				return 27;
+				return 25;
 			}
 			else if (EvType == EventType::factionCrusadeEvent)
 			{
@@ -503,7 +483,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(targetSettlement, army, faction, targetFaction, targetRegion, religion, targetReligion);
 				}
-				return 28;
+				return 26;
 			}
 			else if (EvType == EventType::transgressionEvent)
 			{
@@ -515,7 +495,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(faction, targetFaction, transgression, religion, targetReligion);
 				}
-				return 29;
+				return 27;
 			}
 			else if (EvType == EventType::stratUnitEvent)
 			{
@@ -526,7 +506,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(faction, playerUnit, edu, religion);
 				}
-				return 30;
+				return 28;
 			}
 			else if (EvType == EventType::namedCharacterSettEvent)
 			{
@@ -547,7 +527,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(character, settlement, faction, region, characterType, religion);
 				}
-				return 31;
+				return 29;
 			}
 			else if (EvType == EventType::namedCharacterCrusadeEvent)
 			{
@@ -563,7 +543,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(character, faction, targetSettlement, targetFaction, targetRegion, characterType, religion, targetReligion);
 				}
-				return 32;
+				return 30;
 			}
 			else if (EvType == EventType::ransomEvent)
 			{
@@ -582,7 +562,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(character, capInfo, ransomType, faction, targetFaction, region, characterType, religion, targetReligion);
 				}
-				return 33;
+				return 31;
 			}
 			else if (EvType == EventType::spyMissionEvent)
 			{
@@ -618,7 +598,7 @@ namespace gameEvents
 						(*funk)(character, missionSuccess, missionProbability, targetFort, faction, targetFaction, region, characterType, religion, targetReligion);
 					}
 				}
-				return 34;
+				return 32;
 			}
 			else if (EvType == EventType::orderSpyMissionEvent)
 			{
@@ -653,7 +633,7 @@ namespace gameEvents
 						(*funk)(character, missionSuccess, targetFort, faction, targetFaction, region, characterType, religion, targetReligion);
 					}
 				}
-				return 35;
+				return 33;
 			}
 			else if (EvType == EventType::agentMissionEvent)
 			{
@@ -672,7 +652,7 @@ namespace gameEvents
 					(*funk)(character, missionSuccess, missionProbability, faction, region, characterType, religion);
 
 				}
-				return 36;
+				return 34;
 			}
 			else if (EvType == EventType::orderKillMissionEvent)
 			{
@@ -691,7 +671,7 @@ namespace gameEvents
 					(*funk)(character, missionSuccess, targetCharacter, faction, region, characterType, religion);
 
 				}
-				return 37;
+				return 35;
 			}
 			else if (EvType == EventType::diplomacyMissionEvent)
 			{
@@ -711,7 +691,7 @@ namespace gameEvents
 					(*funk)(character, missionSuccess, faction, targetFaction, region, characterType, religion, targetReligion);
 
 				}
-				return 38;
+				return 36;
 			}
 			else if (EvType == EventType::missionEvent)
 			{
@@ -726,7 +706,7 @@ namespace gameEvents
 					(*funk)(character, faction, missionName, region, characterType, religion);
 
 				}
-				return 39;
+				return 37;
 			}
 			else if (EvType == EventType::settlementEvent)
 			{
@@ -753,7 +733,7 @@ namespace gameEvents
 						(*funk)(fort, faction, region, religion);
 					}
 				}
-				return 40;
+				return 38;
 			}
 			else if (EvType == EventType::stratUnitSettEvent)
 			{
@@ -765,7 +745,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(faction, settlement, playerUnit, edu, religion);
 				}
-				return 41;
+				return 39;
 			}
 			else if (EvType == EventType::characterUnitSettEvent)
 			{
@@ -780,7 +760,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(character, faction, settlement, playerUnit, edu, region, characterType, religion);
 				}
-				return 42;
+				return 40;
 			}
 			else if (EvType == EventType::characterBuildingEvent)
 			{
@@ -794,7 +774,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(character, faction, settlement, building, region, characterType, religion);
 				}
-				return 43;
+				return 41;
 			}
 			else if (EvType == EventType::agentCreatedEvent)
 			{
@@ -807,7 +787,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(character, faction, settlement, region, characterType, religion);
 				}
-				return 44;
+				return 42;
 			}
 			else if (EvType == EventType::buildingEvent)
 			{
@@ -819,7 +799,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(settlement, faction, build, region, religion);
 				}
-				return 45;
+				return 43;
 			}
 			else if (EvType == EventType::targetSettlementEvent)
 			{
@@ -832,7 +812,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(settlement, faction, region, religion, targetFaction, targetReligion);
 				}
-				return 46;
+				return 44;
 			}
 			else if (EvType == EventType::namedCharacterRiotEvents)
 			{
@@ -846,7 +826,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(character, faction, settlement, region, religion, targetFaction, targetReligion);
 				}
-				return 47;
+				return 45;
 			}
 			else if (EvType == EventType::settOccupationEvent)
 			{
@@ -859,7 +839,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(character, faction, region, religion, targetFaction, targetReligion);
 				}
-				return 48;
+				return 46;
 			}
 			else if (EvType == EventType::guildEvent)
 			{
@@ -873,7 +853,7 @@ namespace gameEvents
 					(*funk)(settlement, faction, region, religion, guild_handler);
 
 				}
-				return 49;
+				return 47;
 			}
 			else if (EvType == EventType::uiEvent)
 			{
@@ -883,7 +863,7 @@ namespace gameEvents
 					(*funk)(name);
 
 				}
-				return 50;
+				return 48;
 			}
 			else if (EvType == EventType::factionUiEvent)
 			{
@@ -893,7 +873,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(faction, religion, name);
 				}
-				return 51;
+				return 49;
 			}
 			else if (EvType == EventType::buildingCompletedEvent)
 			{
@@ -905,7 +885,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(settlement, faction, building, region, religion);
 				}
-				return 52;
+				return 50;
 			}
 			else if (EvType == EventType::closeMessageEvent)
 			{
@@ -913,7 +893,7 @@ namespace gameEvents
 				if (&(*funk) != nullptr) {
 					(*funk)(name);
 				}
-				return 53;
+				return 51;
 			}
 			else
 			{

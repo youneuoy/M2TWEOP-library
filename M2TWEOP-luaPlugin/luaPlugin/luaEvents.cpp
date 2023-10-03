@@ -2095,10 +2095,9 @@ void luaP::onPluginLoadF()
 	A team has gained the advantage in combat.
 
 	@function onBattleWinningCombat
-	@tparam stackStruct army
 
 	@usage
-	function onBattleWinningCombat(army)
+	function onBattleWinningCombat()
 	--something here
 	end
 	*/
@@ -2107,10 +2106,9 @@ void luaP::onPluginLoadF()
 	The whole army is tired.
 
 	@function onBattleArmyTired
-	@tparam stackStruct army
 
 	@usage
-	function onBattleArmyTired(army)
+	function onBattleArmyTired()
 	--something here
 	end
 	*/
