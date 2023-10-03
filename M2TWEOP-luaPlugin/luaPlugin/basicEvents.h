@@ -207,7 +207,7 @@ namespace gameEvents
 			else if (EvType == EventType::gameEvent)
 			{
 				if (&(*funk) != nullptr) {
-					return (*funk)();
+					(*funk)();
 				}
 				return 2;
 			}
