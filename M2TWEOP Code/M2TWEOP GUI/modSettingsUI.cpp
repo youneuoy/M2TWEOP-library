@@ -34,13 +34,11 @@ namespace modSettingsUI
 		ImVec2 selectablesSize{};
 	}settingsUIData;
 
-
-
+	
 
 	void initSettingsUI()
 	{
 		settingsUIData.settingsPages.clear();
-
 
 		//main page
 		{
@@ -92,15 +90,56 @@ namespace modSettingsUI
 
 	void drawGeneralSettings()
 	{
+
+		//ImGui::InputText("Config file name", &dataG::data.modData.configName);
+
+		std::vector<std::string> cfgFiles = helpers::getCfgFilesInFolder();
+		std::vector<const char*> items;
+		for (const auto& file : cfgFiles) {
+			items.push_back(file.c_str());
+		}
+		string path;
+		helpers::getCurrentPath(path);
+		static int selectedItem = -1;
+		if (items.size() == 0)
+		{
+			dataG::data.modData.useVanillaConfig = true;
+		}
+		else
+		{
+			if (dataG::data.modData.configName == "")
+			{
+				dataG::data.modData.configName = items[0];
+				dataG::data.modData.useVanillaConfig = false;
+				selectedItem = 0;
+			}
+			else
+			{
+				for (const auto& file : items) {
+					if (file == dataG::data.modData.configName)
+					{
+						selectedItem = std::distance(items.begin(), std::find(items.begin(), items.end(), file));
+						dataG::data.modData.configName = items[selectedItem];
+						dataG::data.modData.useVanillaConfig = false;
+						break;
+					}
+				}
+			}
+		}
 		if (dataG::data.modData.useVanillaConfig == true)
 		{
 			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 		}
-
 		ImVec2 textSize = ImGui::CalcTextSize("Readme Teutonic");
 		ImGui::PushItemWidth(textSize.x);
-		ImGui::InputText("Config file name", &dataG::data.modData.configName);
+		ImGui::Combo("Config Files", &selectedItem, &items[0], items.size());
+
+		if (selectedItem != -1)
+		{
+			dataG::data.modData.configName = items[selectedItem];
+			dataG::data.modData.useVanillaConfig = false;
+		}
 
 		if (dataG::data.modData.useVanillaConfig == true)
 		{
@@ -112,6 +151,15 @@ namespace modSettingsUI
 
 		ImGui::Checkbox("Use standard config", &dataG::data.modData.useVanillaConfig);
 		ImGui::NewLine();
+
+		if (!helpers::verifyModPath(helpers::checkCfgFileForMod(path + "\\" + dataG::data.modData.configName)))
+		{
+			// Warn the user
+			if (dataG::data.modData.useVanillaConfig == false)
+			{
+				ImGui::Text("Warning: Mod path in %s does not match the current directory.", dataG::data.modData.configName.c_str());
+			}
+		}
 		ImGui::Checkbox("Use M2TWEOP", &dataG::data.modData.useM2TWEOP);
 
 		ImGui::Checkbox("Hide launcher on startup", &dataG::data.modData.hideLauncherAtStart);

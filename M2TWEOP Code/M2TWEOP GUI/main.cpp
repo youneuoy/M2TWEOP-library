@@ -206,6 +206,19 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
                 }
             }
     }
+
+
+    std::vector<std::string> cfgFiles = helpers::getCfgFilesInFolder();
+    std::vector<const char*> items;
+    for (const auto& file : cfgFiles) {
+        items.push_back(file.c_str());
+    }
+    if (dataG::data.modData.configName == "" && items.size() > 0)
+    {
+        dataG::data.modData.configName = items[0];
+        dataG::data.modData.useVanillaConfig = false;
+        managerG::saveJsonSettings();
+    }
     // Main loop
     runApp(toolRoutine::drawTick);
 
