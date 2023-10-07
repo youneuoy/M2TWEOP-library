@@ -21,6 +21,9 @@ void luaP::initCampaign()
 		sol::usertype<regionStruct> region;
 		sol::usertype<mercPool> mercPool;
 		sol::usertype<mercPoolUnit> mercPoolUnit;
+		sol::usertype<collegeOfCardinals> collegeOfCardinals;
+		sol::usertype<crusade> crusadeStruct;
+		sol::usertype<jihad> jihadStruct;
 	}typeAll;
 	using namespace campaignEnums;
 
@@ -59,16 +62,29 @@ void luaP::initCampaign()
 	/***
 	Basic campaign table.
 
+	@tfield int playerFactionId
+	@tfield int[31] campaignDifficultyFaction Indexing starts at 1, so add 1 to faction ID.
+	@tfield int[31] battleDifficultyFaction Indexing starts at 1, so add 1 to faction ID.
 	@tfield factionStruct[31] factionsSortedByDescrStrat Table of factionStruct[31], indexing starts at 1.
+	@tfield factionStruct[31] factionsSortedByID Table of factionStruct[31], indexing starts at 1, so add 1 to faction ID.
 	@tfield int numberOfFactions
 	@tfield int numberHumanFactions Number of player-controlled factions.
 	@tfield factionStruct currentFaction Faction whose turn it is at the moment, can be set.
+	@tfield collegeOfCardinals collegeOfCardinals
+	@tfield factionStruct papalFaction
+	@tfield int tickCount
+	@tfield int millisecondCount
+	@tfield float secondCount
 	@tfield int passedTurnsNum
 	@tfield float timescale Factor for number of turns per year, see descr\_strat.txt
 	@tfield settlementStruct romeSettlement
 	@tfield settlementStruct constantinopleSettlement
+	@tfield crusadeStruct crusade
+	@tfield jihadStruct jihad
 	@tfield float BrigandSpawnValue Lower values increase spawn rate.
 	@tfield float PirateSpawnValue Lower values increase spawn rate.
+	@tfield bool restrictAutoResolve
+	@tfield bool saveEnabled
 	@tfield int FreeUpkeepForts Number of units who get free upkeep in forts.
 	@tfield float currentDate
 	@tfield int currentseason season (0=summer, 1=winter)
@@ -78,19 +94,36 @@ void luaP::initCampaign()
 	@tfield int endSeason season (0=summer, 1=winter)
 	@tfield int daysInBattle
 	@tfield float currentTimeInBattle 24 max, so calculate as daysInBattle*24+currentTimeInBattle.
+	@tfield int fortsNum
+	@tfield int portsBuildingsNum
+	@tfield int watchTowerNum
 	@tfield checkDipStance checkDipStance
 	@tfield setDipStance setDipStance
 	@tfield GetUnitSize GetUnitSize
+	@tfield getFort getFort
+	@tfield getPort getPort
+	@tfield getWatchTower getWatchTower
+	@tfield getSettlementByName getSettlementByName
 
 	@table gameDataAll.campaignStruct
 	*/
 	typeAll.campaignTable = luaState.new_usertype<campaign>("campaignStruct");
+	typeAll.campaignTable.set("playerFactionId", &campaign::playerFactionId);
+	typeAll.campaignTable.set("campaignDifficultyFaction", sol::property([](campaign& self) { return std::ref(self.campaignDifficultyFaction); }));
+	typeAll.campaignTable.set("battleDifficultyFaction", sol::property([](campaign& self) { return std::ref(self.battleDifficultyFaction); }));
 	typeAll.campaignTable.set("factionsSortedByDescrStrat", sol::property([](campaign& self) { return std::ref(self.factionsSortedByDescrStrat); }));
+	typeAll.campaignTable.set("factionsSortedByID", sol::property([](campaign& self) { return std::ref(self.factionsSortedByID); }));
 	typeAll.campaignTable.set("numberOfFactions", &campaign::numberOfFactionsWithSlave);
+	typeAll.campaignTable.set("papalFaction", &campaign::papalFaction);
 	typeAll.campaignTable.set("numberHumanFactions", &campaign::humanPlayers);
+	typeAll.campaignTable.set("collegeOfCardinals", &campaign::collegeOfCardinals);
 	typeAll.campaignTable.set("currentFaction", &campaign::currentFactionTurn);
-
+	typeAll.campaignTable.set("tickCount", &campaign::tickCount);
+	typeAll.campaignTable.set("millisecondCount", &campaign::millisecondCount);
+	typeAll.campaignTable.set("secondCount", &campaign::secondCount);
 	typeAll.campaignTable.set("passedTurnsNum", &campaign::TurnNumber);
+	typeAll.campaignTable.set("crusade", &campaign::crusade);
+	typeAll.campaignTable.set("jihad", &campaign::jihad);
 
 	typeAll.campaignTable.set("timescale", &campaign::TimeScale);
 	typeAll.campaignTable.set("romeSettlement", &campaign::rome);
@@ -98,6 +131,8 @@ void luaP::initCampaign()
 
 	typeAll.campaignTable.set("BrigandSpawnValue", &campaign::BrigandSpawnValue);
 	typeAll.campaignTable.set("BrigandSpawnValue", &campaign::PirateSpawnValue);
+	typeAll.campaignTable.set("restrictAutoResolve", &campaign::restrictAutoResolve);
+	typeAll.campaignTable.set("saveEnabled", &campaign::saveEnabled);
 	typeAll.campaignTable.set("FreeUpkeepForts", &campaign::FreeUpkeepForts);
 
 	typeAll.campaignTable.set("currentDate", &campaign::currentDate);
@@ -111,6 +146,9 @@ void luaP::initCampaign()
 
 	typeAll.campaignTable.set("daysInBattle", &campaign::daysInBattle);
 	typeAll.campaignTable.set("currentTimeInBattle", &campaign::currentTimeInBattle);
+	typeAll.campaignTable.set("fortsNum", &campaign::fortsNum);
+	typeAll.campaignTable.set("portsBuildingsNum", &campaign::portsBuildingsNum);
+	typeAll.campaignTable.set("watchtowersNum", &campaign::watchtowersNum);
 	/***
 	Check if a diplomatic relation between two factions.
 	@function campaignStruct:checkDipStance
@@ -147,6 +185,113 @@ void luaP::initCampaign()
 	local unitSize=campaign:GetUnitSize();
 	*/
 	typeAll.campaignTable.set_function("GetUnitSize", &m2tweopHelpers::GetUnitSize);
+	/***
+	Get fort by index.
+	@function campaignStruct:getFort
+	@tparam int index
+	@treturn fortStruct fort
+	@usage
+	local campaign=gameDataAll.get().campaignStruct;
+	local fort=campaign:getFort(0);
+	*/
+	typeAll.campaignTable.set_function("getFort", &gameHelpers::getFortAll);
+	/***
+	Get port by index.
+	@function campaignStruct:getPort
+	@tparam int index
+	@treturn portBuildingStruct port
+	@usage
+	local campaign=gameDataAll.get().campaignStruct;
+	local port=campaign:getPort(0);
+	*/
+	typeAll.campaignTable.set_function("getPort", &gameHelpers::getPortAll);
+	/***
+	Get watchtower by index.
+	@function campaignStruct:getWatchTower
+	@tparam int index
+	@treturn watchTowerStruct watchtower
+	@usage
+	local campaign=gameDataAll.get().campaignStruct;
+	local watchtower=campaign:getWatchTower(0);
+	*/
+	typeAll.campaignTable.set_function("getWatchTower", &gameHelpers::getWatchTowerAll);
+	/***
+	Get settlement by internal name.
+	@function campaignStruct:getSettlementByName
+	@tparam string name
+	@treturn settlementStruct settlement
+	@usage
+	local campaign=gameDataAll.get().campaignStruct;
+	local sett=campaign:getSettlementByName("London");
+	*/
+	typeAll.campaignTable.set_function("getSettlementByName", &gameHelpers::getSettlementByName);
+
+	/// College of Cardinals
+	//@section collegeOfCardinals
+	/***
+	Basic College of Cardinals table.
+	@tfield namedCharacter pope
+	@tfield int cardinalNum
+	@tfield getCardinal getCardinal
+
+	@table collegeOfCardinals
+	*/
+	typeAll.collegeOfCardinals = luaState.new_usertype<collegeOfCardinals>("collegeOfCardinals");
+	typeAll.collegeOfCardinals.set("pope", &collegeOfCardinals::pope);
+	typeAll.collegeOfCardinals.set("cardinalNum", &collegeOfCardinals::cardinalNum);
+
+	/***
+	Get a specific cardinal by index.
+	@function collegeOfCardinals:getCardinal
+	@tparam int index
+	@treturn character cardinal
+	@usage
+	local college = campaign.collegeOfCardinals;
+	local cardinal = college:getCardinal(2);
+	*/
+	typeAll.collegeOfCardinals.set_function("getCardinal", &gameHelpers::getCardinal);
+
+	/// Crusade
+	//@section crusade
+
+	/***
+	Basic crusade table.
+
+	@tfield int startTurn
+	@tfield int endTurn
+	@tfield settlementStruct targetSettlement
+	@tfield int length
+	@tfield int outcome
+
+	@table crusadeStruct
+	*/
+	typeAll.crusadeStruct = luaState.new_usertype<crusade>("crusadeStruct");
+	typeAll.crusadeStruct.set("startTurn", &crusade::startTurn);
+	typeAll.crusadeStruct.set("endTurn", &crusade::endTurn);
+	typeAll.crusadeStruct.set("targetSettlement", &crusade::targetSettlement);
+	typeAll.crusadeStruct.set("length", &crusade::length);
+	typeAll.crusadeStruct.set("outcome", &crusade::outcome);
+
+	/// Jihad
+	//@section jihad
+
+	/***
+	Basic jihad table.
+
+	@tfield int startTurn
+	@tfield int endTurn
+	@tfield settlementStruct targetSettlement
+	@tfield int length
+	@tfield int outcome
+
+	@table jihadStruct
+	*/
+	typeAll.jihadStruct = luaState.new_usertype<jihad>("jihadStruct");
+	typeAll.jihadStruct.set("startTurn", &jihad::startTurn);
+	typeAll.jihadStruct.set("endTurn", &jihad::endTurn);
+	typeAll.jihadStruct.set("targetSettlement", &jihad::targetSettlement);
+	typeAll.jihadStruct.set("length", &jihad::length);
+	typeAll.jihadStruct.set("outcome", &jihad::outcome);
 
 	/// Strat Map
 	//@section stratMap

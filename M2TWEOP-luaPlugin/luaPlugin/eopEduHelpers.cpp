@@ -91,6 +91,20 @@ void eopEduHelpers::haveAttributeLegioSet(eduEntry* eduEn, bool isHaveLegio)
 	}
 }
 
+bool eopEduHelpers::hasAttribute(unit* unit, const char* attributeName)
+{
+	const auto entry = unit->eduEntry;
+	const int attributesNum = (reinterpret_cast<DWORD>(entry->EndOfAttributes) - reinterpret_cast<DWORD>(entry->Attributes)) / 8;
+	for (int i = 0; i < attributesNum; i+= 2)
+	{
+		if (strcmp(reinterpret_cast<const char*>(entry->Attributes[i]), attributeName) == 0)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 int eopEduHelpers::getArmourUpgradeLevelsNum(int idx)
 {
 	eduEntry* eduEn = eopEduHelpers::getEduEntry(idx);

@@ -121,6 +121,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<siegeS>siege;
 		sol::usertype<buildingLevel>buildingLevel;
 		sol::usertype<battleCameraStruct>battleCameraStruct;
+		sol::usertype<unitPositionData>unitPositionData;
 	}types;
 	luaState = {};
 	luaPath = modPath + "\\youneuoy_Data\\plugins\\lua";
@@ -165,6 +166,12 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		return nullptr;
 	}
 
+	luaState.new_enum(
+		"unitBattleProperties",
+		"guardMode", unitHelpers::guardMode,
+		"fireAtWill", unitHelpers::fireAtWill,
+		"skirmish", unitHelpers::skirmish
+	);
 
 	//luaState.new_enum(
 	//	"buildingCap",
@@ -251,6 +258,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getTileVisibility getTileVisibility
 	@tfield getRegionOwner getRegionOwner
 	@tfield setEDUUnitsSize setEDUUnitsSize
+	@tfield getReligionName getReligionName
 	@table M2TWEOP
 	*/
 
@@ -485,6 +493,15 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local ownerFac=M2TWEOP.getRegionOwner(regionID);
 	*/
 	tables.M2TWEOPTable.set_function("getRegionOwner", &m2tweopHelpers::getRegionOwner);
+	/***
+	Get religion name by index.
+	@function M2TWEOP.getReligionName
+	@tparam int index
+	@treturn string name
+	@usage
+	local religionName =M2TWEOP.getReligionName(1);
+	*/
+	tables.M2TWEOPTable.set_function("getReligionName", &gameHelpers::getReligionName);
 
 
 
@@ -895,31 +912,58 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	@tfield eduEntry eduEntry
 	@tfield float movePoints
+	@tfield int aiActiveSet  0 means inactive, 1 means active, 2 means labelled unit (for Battle)
 	@tfield int soldierCountStratMap soldiers count. You can change it on stratmap and soldiers updated. Use @{setParams} if you need change several parameters at once.
 	@tfield int exp soldiers expierence. You can change it on stratmap and soldiers updated. Use @{setParams} if you need change several parameters at once.
 	@tfield int armourLVL soldiers armour. You can change it on stratmap and soldiers updated. Use @{setParams} if you need change several parameters at once.
 	@tfield int weaponLVL soldiers weapon. You can change it on stratmap and soldiers updated. Use @{setParams} if you need change several parameters at once.
 	@tfield int soldierCountStratMapMax Read only
 	@tfield int soldierCountBattleMap Read only
+	@tfield int moraleLevel (6 means routing)
+	@tfield int isCloseFormation
+	@tfield int fatigue (battle)
+	@tfield int maxAmmo (battle)
+	@tfield int currentAmmo (battle)
+	@tfield float battlePosX 2d position on battlemap useful for getting distance etc (battle)
+	@tfield float battlePosY 2d position on battlemap useful for getting distance etc (battle)
 	@tfield character character
 	@tfield stackStruct army
+	@tfield siegeEngineNum siegeEngineNum
 	@tfield kill kill
 	@tfield setParams setParams change soldierCountStratMap, exp, armourLVL, weaponLVL at one time.
+	@tfield hasAttribute hasAttribute Check if unit has edu attribute.
 	@tfield string alias
+	@tfield hasBattleProperty hasBattleProperty
+	@tfield setBattleProperty setBattleProperty
+	@tfield getActionStatus getActionStatus
+	@tfield isMovingFastSet isMovingFastSet
+	@tfield setMovingFastSet setMovingFastSet
+	@tfield isOnWalls isOnWalls
+	@tfield isEngaged isEngaged
+	@tfield isUnderFire isUnderFire
 
 
 	@table unit
 	*/
 	types.unit = luaState.new_usertype<unit>("unit");
 	types.unit.set("eduEntry", &unit::eduEntry);
+	types.unit.set("aiActiveSet", &unit::aiActiveSet);
 	types.unit.set("movePoints", sol::property(&unitHelpers::getMovepoints, &unitHelpers::setMovepoints));
 	types.unit.set("soldierCountStratMap", sol::property(&unitHelpers::getsoldierCountStratMap, &unitHelpers::setSoldiersCount));
 	types.unit.set("exp", sol::property(&unitHelpers::getExp, &unitHelpers::setExp));
 	types.unit.set("armourLVL", sol::property(&unitHelpers::getarmourLVL, &unitHelpers::setarmourLVL));
 	types.unit.set("weaponLVL", sol::property(&unitHelpers::getweaponLVL, &unitHelpers::setweaponLVL));
 	types.unit.set("soldierCountStratMapMax", sol::property(&unitHelpers::getMaxSoldiersCount));
-	types.unit.set("soldierCountBattleMap", &unit::numberTact);
+	types.unit.set("soldierCountBattleMap", &unit::SoldierCountBattlemap);
 	types.unit.set("character", &unit::general);
+	types.unit.set("isCloseFormation", &unit::isCloseFormation);
+	types.unit.set("moraleLevel", &unit::moraleLevel);
+	types.unit.set("battlePosX", &unit::positionX);
+	types.unit.set("battlePosY", &unit::positionY);
+	types.unit.set("fatigue", &unit::fatigue);
+	types.unit.set("maxAmmo", &unit::maxAmmo);
+	types.unit.set("currentAmmo", &unit::currentAmmo);
+	types.unit.set("siegeEngineNum", &unit::siegeEnNum);
 	types.unit.set("army", &unit::army);
 	/***
 	Kill this unit
@@ -939,6 +983,149 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.unit.set_function("setParams", &unitHelpers::setUnitParams);
 	types.unit.set("alias", sol::property(&technicalHelpers::unitUniStringToStr, &technicalHelpers::setUnitUniStr));
+	/***
+	Check if unit has edu attribute.
+	@function unit:hasAttribute
+	@usage
+	local hasAttr = unit:hasAttribute("sea_faring");
+	*/
+	types.unit.set_function("hasAttribute", &eopEduHelpers::hasAttribute);
+	/***
+	Check if unit has guard mode, skirmish or fire at will on.
+	@function unit:hasBattleProperty
+	@tparam int property use enum: unitBattleProperties.guardMode, unitBattleProperties.skirmish, unitBattleProperties.fireAtWill
+	@treturn bool hasProperty
+	@usage
+	local hasProp = unit:hasBattleProperty(unitBattleProperties.guardMode);
+	*/
+	types.unit.set_function("hasBattleProperty", &unitHelpers::hasBattleProperty);
+	/***
+	Set a unit battle property (guard mode, skirmish or fire at will).
+	@function unit:setBattleProperty
+	@tparam int property use enum: unitBattleProperties.guardMode, unitBattleProperties.skirmish, unitBattleProperties.fireAtWill
+	@tparam bool value
+	@usage
+	unit:setBattleProperty(unitBattleProperties.skirmish);
+	*/
+	types.unit.set_function("setBattleProperty", &unitHelpers::setBattleProperty);
+	/***
+	Get unit action status in battle ( idling, hiding, ready, reforming, moving, withdrawing, missiles_firing, missiles_reloading, charging, fighting, pursuing, routing, fighting_backs_to_the_walls, running_amok, rallying, dead, leaving_battle, entering_battle, left_battle, go_berserk, taunting, bracing, infighting).
+	@function unit:getActionStatus
+	@treturn string actionStatus
+	@usage
+	local status = unit:getActionStatus();
+	*/
+	types.unit.set_function("getActionStatus", &unitHelpers::getActionStatus);
+	/***
+	Is unit set to run?
+	@function unit:isMovingFastSet
+	@treturn bool movingFastSet
+	@usage
+	local isRunning = unit:isMovingFastSet();
+	*/
+	types.unit.set_function("isMovingFastSet", &unitHelpers::isMovingFastSet);
+	/***
+	Toggle unit running.
+	@function unit:setMovingFastSet
+	@tparam bool movingFastSet
+	@usage
+	unit:setMovingFastSet(true);
+	*/
+	types.unit.set_function("setMovingFastSet", &unitHelpers::setMovingFastSet);
+	/***
+	Is unit on walls?
+	@function unit:isOnWalls
+	@treturn bool isOnWalls
+	@usage
+	local isOnWalls = unit:isOnWalls();
+	*/
+	types.unit.set_function("isOnWalls", &unitHelpers::isOnWalls);
+	/***
+	Is unit engaged in melee?
+	@function unit:isEngaged
+	@treturn bool isEngaged
+	@usage
+	local isEngaged = unit:isEngaged();
+	*/
+	types.unit.set_function("isEngaged", &unitHelpers::isEngaged);
+	/***
+	Is unit under fire?
+	@function unit:isUnderFire
+	@treturn bool isUnderFire
+	@usage
+	local isUnderFire = unit:isUnderFire();
+	*/
+	types.unit.set_function("isUnderFire", &unitHelpers::isUnderFire);
+
+	///Unit Position Data
+	//@section unitPositionData
+
+	/***
+
+	@tfield int engagedUnitsNum
+	@tfield unit unit
+	@tfield int isOnWallsCount (amount of walls
+	@tfield int isInTowerCount (amount of towers)
+	@tfield int isInGateHouseCount (amount of gatehouses)
+	@tfield int targetsDone dont set
+	@tfield int additionalTargetsOverOne dont set
+	@tfield int targetsToGo dont set
+	@tfield int hasTargets dont set
+	@tfield int isHalted
+	@tfield float lastTargetCoord1 dont set
+	@tfield float lastTargetCoord2 dont set
+	@tfield int towersUnderFireFromCount
+	@tfield int unitsUnderFireFromCount
+	@tfield getUnitUnderFireFrom getUnitUnderFireFrom
+	@tfield getEngagedUnit getEngagedUnit
+	@tfield getTargetUnit getTargetUnit
+
+	@table unitPositionData
+	*/
+	types.unitPositionData = luaState.new_usertype<unitPositionData>("unitPositionData");
+	types.unitPositionData.set("engagedUnitsNum", &unitPositionData::engagedUnitsNum);
+	types.unitPositionData.set("unit", &unitPositionData::unit);
+	types.unitPositionData.set("isOnWallsCount", &unitPositionData::isOnWallsCount);
+	types.unitPositionData.set("isInTowerCount", &unitPositionData::isInTowerCount);
+	types.unitPositionData.set("isInGateHouseCount", &unitPositionData::isInGateHouseCount);
+	types.unitPositionData.set("targetsDone", &unitPositionData::targetsDone);
+	types.unitPositionData.set("additionalTargetsOverOne", &unitPositionData::additionalTargetsOverOne);
+	types.unitPositionData.set("targetsToGo", &unitPositionData::targetsToGo);
+	types.unitPositionData.set("hasTargets", &unitPositionData::hasTargets);
+	types.unitPositionData.set("isHalted", &unitPositionData::isHalted);
+	types.unitPositionData.set("lastTargetCoord1", &unitPositionData::lastTargetCoord1);
+	types.unitPositionData.set("lastTargetCoord2", &unitPositionData::lastTargetCoord2);
+	types.unitPositionData.set("towersUnderFireFromCount", &unitPositionData::towersUnderFireFromCount);
+	types.unitPositionData.set("unitsUnderFireFromCount", &unitPositionData::unitsUnderFireFromCount);
+
+	/***
+	Get unit that is firing at this unit.
+	@function unitPositionData:getUnitUnderFireFrom
+	@tparam int index
+	@treturn unit unit
+	@usage
+	local enemyUnit = unit.unitPositionData:getUnitUnderFireFrom(0);
+	*/
+	types.unitPositionData.set_function("getUnitUnderFireFrom", &unitHelpers::getUnitUnderFireFrom);
+
+	/***
+	Get unit that is fighting this unit in melee.
+	@function unitPositionData:getEngagedUnit
+	@tparam int index
+	@treturn unit unit
+	@usage
+	local enemyUnit = unit.unitPositionData:getEngagedUnit(0);
+	*/
+	types.unitPositionData.set_function("getEngagedUnit", &unitHelpers::getEngagedUnit);
+
+	/***
+	Get the unit this unit is currently targeting.
+	@function unitPositionData:getTargetUnit
+	@treturn unit unit
+	@usage
+	local enemyUnit = unit.unitPositionData:getTargetUnit();
+	*/
+	types.unitPositionData.set_function("getTargetUnit", &unitHelpers::getTargetUnit);
 
 
 	///EduEntry
@@ -1578,6 +1765,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getWatchtower getWatchtower
 	@tfield deleteFort deleteFort
 	@tfield createFortXY createFortXY
+	@tfield hasMilitaryAccess hasMilitaryAccess
+	@tfield setMilitaryAccess setMilitaryAccess
+	@tfield getFactionStanding getFactionStanding
+	@tfield setFactionStanding setFactionStanding
 
 	@table factionStruct
 	*/
@@ -1745,6 +1936,46 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	fac:createFortXY(193, 283)
 	*/
 	types.factionStruct.set_function("createFortXY", &factionHelpers::createFortXY);
+
+	/***
+	Check if a faction has military access to another faction.
+	@function factionStruct:hasMilitaryAccess
+	@tparam factionStruct targetFaction
+	@treturn bool hasMilitaryAccess
+	@usage
+	local hasAccess = fac:hasMilitaryAccess(targetFac)
+	*/
+	types.factionStruct.set_function("hasMilitaryAccess", &factionHelpers::hasMilitaryAccess);
+
+	/***
+	Set if a faction has military access to another faction.
+	@function factionStruct:setMilitaryAccess
+	@tparam factionStruct targetFaction
+	@tparam bool hasMilitaryAccess
+	@usage
+	fac:setMilitaryAccess(targetFac, true)
+	*/
+	types.factionStruct.set_function("setMilitaryAccess", &factionHelpers::setMilitaryAccess);
+
+	/***
+	Get the faction standing between 2 factions (a faction with itself returns global standing).
+	@function factionStruct:getFactionStanding
+	@tparam factionStruct targetFaction
+	@treturn float factionStanding
+	@usage
+	local standing = fac:getFactionStanding(targetFac)
+	*/
+	types.factionStruct.set_function("getFactionStanding", &factionHelpers::getFactionStanding);
+	/***
+	Set the faction standing between 2 factions (a faction with itself sets global standing).
+	@function factionStruct:setFactionStanding
+	@tparam factionStruct targetFaction
+	@tparam float factionStanding
+	@usage
+	fac:setFactionStanding(targetFac, 0.5)
+	*/
+	types.factionStruct.set_function("setFactionStanding", &factionHelpers::setFactionStanding);
+	
 
 
 	///FactionStratMapStruct

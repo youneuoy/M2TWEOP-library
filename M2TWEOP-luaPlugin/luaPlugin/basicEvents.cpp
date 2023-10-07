@@ -15,6 +15,10 @@ void onEventWrapper(const DWORD eventAddr, DWORD** vTab, DWORD arg2)
 void initReligionNames()
 {
 	const auto* religionDb = *reinterpret_cast <religionDatabase**>(0x016A0B90);
+	if (m2tweopHelpers::getGameVersion() == 1)
+	{
+		religionDb = *reinterpret_cast <religionDatabase**>(0x016E9DC0);
+	}
 	for (int i = 0; i < religionDb->religionCount; i++)
 	{
 		religionNames[i] = gameHelpers::getReligionName(i);

@@ -2,6 +2,8 @@
 #include "plugData.h"
 #include <windows.h>
 
+#include "gameDataAllHelper.h"
+
 std::string factionHelpers::getFactionName(const factionStruct* fac)
 {
 	return std::string(fac->factSmDescr->facName);
@@ -45,6 +47,43 @@ watchTowerStruct* factionHelpers::getWatchtower(const factionStruct* fac, int in
 void factionHelpers::deleteFort(const factionStruct* fac, fortStruct* fort)
 {
 	(*(*plugData::data.funcs.deleteFort))(fac, fort);
+}
+
+bool factionHelpers::hasMilitaryAccess(const factionStruct* fac1, const factionStruct* fac2)
+{
+	const auto gameData = gameDataAllHelper::get();
+	const auto campaign = gameData->campaignData;
+	const auto agreements = campaign->diplomaticStandings[fac1->dipNum][fac2->dipNum].trade;
+	return agreements & static_cast<int8_t>(0x2);
+}
+
+void factionHelpers::setMilitaryAccess(const factionStruct* fac1, const factionStruct* fac2, bool set)
+{
+	const auto gameData = gameDataAllHelper::get();
+	const auto campaign = gameData->campaignData;
+	const auto agreements = campaign->diplomaticStandings[fac1->dipNum][fac2->dipNum].trade;
+	if (set)
+	{
+		campaign->diplomaticStandings[fac1->dipNum][fac2->dipNum].trade = agreements | static_cast<int8_t>(0x2);
+	}
+	else
+	{
+		campaign->diplomaticStandings[fac1->dipNum][fac2->dipNum].trade = agreements & static_cast<int8_t>(~0x2);
+	}
+}
+
+float factionHelpers::getFactionStanding(const factionStruct* fac1, const factionStruct* fac2)
+{
+	const auto gameData = gameDataAllHelper::get();
+	const auto campaign = gameData->campaignData;
+	return campaign->diplomaticStandings[fac1->dipNum][fac2->dipNum].factionStanding;
+}
+
+void factionHelpers::setFactionStanding(const factionStruct* fac1, const factionStruct* fac2, float standing)
+{
+	const auto gameData = gameDataAllHelper::get();
+	const auto campaign = gameData->campaignData;
+	campaign->diplomaticStandings[fac1->dipNum][fac2->dipNum].factionStanding = standing;
 }
 
 void factionHelpers::createFortXY(const factionStruct* fac, int x, int y)

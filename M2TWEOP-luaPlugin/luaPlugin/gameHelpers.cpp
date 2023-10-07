@@ -336,10 +336,53 @@ namespace gameHelpers
 		(*(*plugData::data.funcs.historicEvent))(name, title, description);
 	}
 
+	general* gameHelpers::getCardinal(const collegeOfCardinals* college, const int index)
+	{
+		return college->cardinalsArray[index].trackedCharacter->character;
+	}
+
+	fortStruct* gameHelpers::getFortAll(const campaign* campaign, const int index)
+	{
+		return campaign->fortsArray[index];
+	}
+
+	portBuildingStruct* gameHelpers::getPortAll(const campaign* campaign, const int index)
+	{
+		return campaign->portsBuildings[index];
+	}
+
+	watchTowerStruct* gameHelpers::getWatchTowerAll(const campaign* campaign, const int index)
+	{
+		return campaign->watchtowers[index];
+	}
+
+	settlementStruct* getSettlementByName(campaign* campaign, const char* name)
+	{
+		settlementList* settlementList = &campaign->settlementList;
+		int settNum = 0;
+		while (settlementList != nullptr)
+		{
+			settNum = settlementList->settlementsNum;
+			for (int i = 0; i < settNum; i++)
+			{
+				if (strcmp(settlementList->settlements[i]->name, name) == 0)
+				{
+					return settlementList->settlements[i];
+				}
+			}
+			settlementList = settlementList->nextSettlements;
+		}
+		return nullptr;
+	}
 
 	const char* getReligionName(const int index)
 	{
+
 		const auto* religionDb = *reinterpret_cast <religionDatabase**>(0x016A0B90);
+		if (m2tweopHelpers::getGameVersion() == 1)
+		{
+			religionDb = *reinterpret_cast <religionDatabase**>(0x016E9DC0);
+		}
 		const wchar_t* name = religionDb->religionNames[index]->string;
 		// Determine the size of the required buffer
 		const int size = WideCharToMultiByte(CP_UTF8, 0, name, -1, nullptr, 0, nullptr, nullptr);

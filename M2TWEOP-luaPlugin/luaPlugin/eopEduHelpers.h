@@ -65,6 +65,7 @@ namespace eopEduHelpers
 	int getEntryStat(int idx, UnitEnums::eduStat stat, int sec);
 	void addUnitToRQ(int idx, settlementStruct* sett);
 	int multiplexor(int n1, int n2, int sel);
+	bool hasAttribute(unit* unit, const char* attributeName);
 
 	void setEntryLocalizedName(int index, const char* newLocName);
 	void setEntryLocalizedDescr(int index, const char* newLocDescr);

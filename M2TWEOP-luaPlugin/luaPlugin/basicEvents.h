@@ -7,6 +7,8 @@ using namespace std;
 extern "C" PLUGINM2TWEOP_API void onReadGameDbsAtStart();
 extern "C" PLUGINM2TWEOP_API void onEndSiege(int x, int y);
 extern "C" PLUGINM2TWEOP_API void onStartSiege(int x, int y);
+std::unordered_map<int, const char*> religionNames = {
+};
 
 
 extern "C" PLUGINM2TWEOP_API void onClickAtTile(int x, int y);
@@ -58,15 +60,6 @@ std::unordered_map<int, const char*> missionSuccessLvl = {
 	{1,"slightly_successful"},
 	{2,"partly_successful"},
 	{3,"highly_successful"}
-};
-std::unordered_map<int, const char*> religionNames = {
-};
-
-struct crusade
-{
-public:
-	char pad_0x0000[60]; //0x0000
-	settlementStruct* targetSettlement; //0x003C
 };
 
 void checkLuaFunc(sol::function** lRef);

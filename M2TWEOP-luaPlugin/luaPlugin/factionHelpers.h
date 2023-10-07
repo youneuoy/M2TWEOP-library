@@ -19,7 +19,10 @@ namespace factionHelpers
 	void createFortXY(const factionStruct* fac, int x, int y);
 	void createFort(const general* gen);
 	void changeFactionName(factionStruct* fac, const char* newName);
-
+	bool hasMilitaryAccess(const factionStruct* fac1, const factionStruct* fac2);
+	float getFactionStanding(const factionStruct* fac1, const factionStruct* fac2);
+	void setFactionStanding(const factionStruct* fac1, const factionStruct* fac2, float standing);
+	void setMilitaryAccess(const factionStruct* fac1, const factionStruct* fac2, bool set);
 	std::string getLocalizedFactionName(factionStruct* fac);
 
 	//faction

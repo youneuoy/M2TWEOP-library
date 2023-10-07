@@ -31,7 +31,11 @@ namespace gameHelpers
 	void changeRegionName(regionStruct* region, const char* newName);
 	std::string getRegionName(regionStruct* region);
 	void changeRebelsName(regionStruct* region, const char* newName);
-
+	general* getCardinal(const collegeOfCardinals* college, const int index);
+	fortStruct* getFortAll(const campaign* campaign, const int index);
+	portBuildingStruct* getPortAll(const campaign* campaign, const int index);
+	watchTowerStruct* getWatchTowerAll(const campaign* campaign, const int index);
+	settlementStruct* getSettlementByName(campaign* campaign, const char* name);
 	std::string getRebelsName(regionStruct* region);
 
 	int getMercUnitNum(mercPool* mercPool);
