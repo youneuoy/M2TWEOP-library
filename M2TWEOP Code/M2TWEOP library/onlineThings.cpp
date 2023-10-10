@@ -370,7 +370,7 @@ namespace battleCreator
 					unit* un = army->units[k];
 					tempS = "unit		";
 					tempS.append(un->eduEntry->Type);
-					tempS.append("				soldiers ").append(to_string(un->number));
+					tempS.append("				soldiers ").append(to_string(un->SoldierCountStrat));
 					tempS.append(" exp ").append(to_string(un->expScreen));
 					tempS.append(" armour ").append(to_string(un->stats >> 0xd & 0x1f));
 					tempS.append(" weapon_lvl ").append(to_string(un->stats >> 0x8 & 0x1f));

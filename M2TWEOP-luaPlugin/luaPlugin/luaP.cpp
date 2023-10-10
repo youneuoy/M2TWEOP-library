@@ -122,6 +122,13 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<buildingLevel>buildingLevel;
 		sol::usertype<battleCameraStruct>battleCameraStruct;
 		sol::usertype<unitPositionData>unitPositionData;
+		sol::usertype<factionEconomy>factionEconomy;
+		sol::usertype<factionRanking>factionRanking;
+		sol::usertype<holdRegionsWinCondition>holdRegionsWinCondition;
+		sol::usertype<settlementCapability>settlementCapability;
+		sol::usertype<recruitmentCapability>recruitmentCapability;
+		sol::usertype<settlementRecruitmentPool>settlementRecruitmentPool;
+		sol::usertype<battleFactionCounter>battleFactionCounter;
 	}types;
 	luaState = {};
 	luaPath = modPath + "\\youneuoy_Data\\plugins\\lua";
@@ -502,7 +509,22 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local religionName =M2TWEOP.getReligionName(1);
 	*/
 	tables.M2TWEOPTable.set_function("getReligionName", &gameHelpers::getReligionName);
-
+	/***
+	Get some game options.
+	@function M2TWEOP.getOptions1
+	@treturn options1 options
+	@usage
+	local options =M2TWEOP.getOptions1();
+	*/
+	tables.M2TWEOPTable.set_function("getOptions1", &m2tweopHelpers::getOptions1);
+	/***
+	Get some game options.
+	@function M2TWEOP.getOptions2
+	@treturn options1 options
+	@usage
+	local options =M2TWEOP.getOptions2();
+	*/
+	tables.M2TWEOPTable.set_function("getOptions2", &m2tweopHelpers::getOptions2);
 
 
 	/// BattleCamera
@@ -927,6 +949,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield float battlePosX 2d position on battlemap useful for getting distance etc (battle)
 	@tfield float battlePosY 2d position on battlemap useful for getting distance etc (battle)
 	@tfield character character
+	@tfield unitPositionData unitPositionData
 	@tfield stackStruct army
 	@tfield siegeEngineNum siegeEngineNum
 	@tfield kill kill
@@ -955,6 +978,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.unit.set("weaponLVL", sol::property(&unitHelpers::getweaponLVL, &unitHelpers::setweaponLVL));
 	types.unit.set("soldierCountStratMapMax", sol::property(&unitHelpers::getMaxSoldiersCount));
 	types.unit.set("soldierCountBattleMap", &unit::SoldierCountBattlemap);
+	types.unit.set("unitPositionData", &unit::unitPositionData);
 	types.unit.set("character", &unit::general);
 	types.unit.set("isCloseFormation", &unit::isCloseFormation);
 	types.unit.set("moraleLevel", &unit::moraleLevel);
@@ -1233,11 +1257,23 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield unit bodyguards
 	@tfield stackStruct armyLeaded
 	@tfield stackStruct armyNotLeaded in the stack but not leading it
-	@tfield float movePointsMax
+	@tfield int inEnemyZOC
+	@tfield int ambushState
+	@tfield int doNotSpendMovePoints
+	@tfield float movePointsCharacter
 	@tfield float movePointsModifier
-	@tfield float movePoints
+	@tfield float movePointsMaxCharacter
+	@tfield float movePointsMaxArmy
+	@tfield float movePointsArmy
+	@tfield int turnJoinedCrusade
+	@tfield int numTurnsIdle
+	@tfield float percentCharacterReligionInRegion 0 to 1
+	@tfield float popConvertedThisTurn
+	@tfield int timeInRegion
+	@tfield int timeWithArmy for auxiliary generals, not leading general
 	@tfield string ability see descr\_hero\_abilities.xml
 	@tfield getTypeID getTypeID
+	@tfield getTypeName getTypeName
 	@tfield setTypeID setTypeID
 	@tfield moveToTile moveToTile
 	@tfield reposition reposition
@@ -1255,9 +1291,20 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.character.set("bodyguards", &general::bodyguards);
 	types.character.set("armyLeaded", &general::armyLeaded);
 	types.character.set("armyNotLeaded", &general::armyNotLeaded);
-	types.character.set("movePointsMax", &general::movepointsMax);
-	types.character.set("movePointsModifier", &general::movepointsModifier);
-	types.character.set("movePoints", sol::property(&generalHelpers::getMovepoints, &generalHelpers::setMovepoints));
+	types.character.set("inEnemyZOC", &general::inEnemyZOC);
+	types.character.set("ambushState", &general::ambushState);
+	types.character.set("doNotSpendMovePoints", &general::doNotSpendMovePoints);
+	types.character.set("turnJoinedCrusade", &general::turnJoinedCrusade);
+	types.character.set("numTurnsIdle", &general::numTurnsIdle);
+	types.character.set("percentCharacterReligionInRegion", &general::percentCharacterReligionInRegion);
+	types.character.set("popConvertedThisTurn", &general::popConvertedThisTurn);
+	types.character.set("timeInRegion", &general::timeInRegion);
+	types.character.set("timeWithArmy", &general::timeWithArmy);
+	types.character.set("movePointsCharacter", &general::movePointsCharacter);
+	types.character.set("movePointsModifier", &general::movePointsModifier);
+	types.character.set("movePointsMaxArmy", &general::movePointsMaxArmy);
+	types.character.set("movePointsMaxCharacter", &general::movePointsMax);
+	types.character.set("movePointsArmy", sol::property(&generalHelpers::getMovepoints, &generalHelpers::setMovepoints));
 	types.character.set("ability", sol::property(&luaGetSetFuncs::getStringPropertyGen<generalStruct_abilityID>, &luaGetSetFuncs::setStringPropertyGen<generalStruct_abilityID>));
 	/***
 	Get the character type. See hint below for the types.
@@ -1280,6 +1327,27 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local ourType=ourCharacter:getTypeID();
 	*/
 	types.character.set_function("getTypeID", &generalHelpers::getTypeID);
+	/***
+	Get the character type. See hint below for the types.
+	0-spy
+	1-assassin
+	2-diplomat
+	3-admiral
+	4-merchant
+	5-priest
+	6-general
+	7-named character
+	8-princess
+	9-heretic
+	10-witch
+	11-inquisitor
+	13-pope
+	@function character:getTypeName
+	@treturn string type
+	@usage
+	local ourType=ourCharacter:getTypeName();
+	*/
+	types.character.set_function("getTypeName", &generalHelpers::getTypeName);
 	/***
 	Set the character type. See hint below for the types.
 	0-spy
@@ -1738,6 +1806,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int dipNum
 	@tfield getFactionName getFactionName
 	@tfield int cultureID
+	@tfield int AIPersonalityType
+	@tfield int AIPersonalityName
 	@tfield string ai_label
 	@tfield string name
 	@tfield string localizedName
@@ -1745,7 +1815,18 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield namedCharacter leader
 	@tfield namedCharacter heir
 	@tfield int isPlayerControlled 0=AI, 1=player
+	@tfield int neighBourFactionsBitmap
 	@tfield int religion
+	@tfield int isUndiscovered
+	@tfield int missionCount
+	@tfield int freezeFactionAI
+	@tfield int treasuryTurnStart
+	@tfield int incomeDoubled
+	@tfield int battlesWon
+	@tfield int battlesLost
+	@tfield int settlementsCaptured
+	@tfield int settlementsLost
+	@tfield int otherFactionCount
 	@tfield int money
 	@tfield int kingsPurse
 	@tfield factionStratMapStruct facStrat
@@ -1763,17 +1844,24 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getPort getPort
 	@tfield int watchtowersNum
 	@tfield getWatchtower getWatchtower
+	@tfield int neighBourRegionsNum
 	@tfield deleteFort deleteFort
 	@tfield createFortXY createFortXY
 	@tfield hasMilitaryAccess hasMilitaryAccess
 	@tfield setMilitaryAccess setMilitaryAccess
 	@tfield getFactionStanding getFactionStanding
 	@tfield setFactionStanding setFactionStanding
+	@tfield getFactionRanking getFactionRanking
+	@tfield getFactionEconomy getFactionEconomy
+	@tfield getNeighbourRegionID getNeighbourRegionID
+	@tfield getBattleVsFactionStats getBattleVsFactionStats
 
 	@table factionStruct
 	*/
 	types.factionStruct = luaState.new_usertype<factionStruct>("factionStruct");
 	types.factionStruct.set("dipNum", &factionStruct::dipNum);
+	types.factionStruct.set("AIPersonalityType", &factionStruct::AIPersonalityType);
+	types.factionStruct.set("AIPersonalityName", &factionStruct::AIPersonalityName);
 	/***
 	Get the faction's internal name
 	@function factionStruct:getFactionName
@@ -1801,9 +1889,21 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct.set("heir", &factionStruct::heir);
 	types.factionStruct.set("isPlayerControlled", &factionStruct::isPlayerControlled);
 	types.factionStruct.set("religion", &factionStruct::religion);
+	types.factionStruct.set("missionCount", &factionStruct::missionCount);
+	types.factionStruct.set("isUndiscovered", &factionStruct::isUndiscovered);
+	types.factionStruct.set("neighBourRegionsNum", &factionStruct::neighBourRegionsNum);
+	types.factionStruct.set("factionRankings", &factionStruct::factionRankings);
 	types.factionStruct.set("money", &factionStruct::money);
 	types.factionStruct.set("kingsPurse", &factionStruct::KingsPurse);
 	types.factionStruct.set("facStrat", &factionStruct::factSmDescr);
+	types.factionStruct.set("freezeFactionAI", &factionStruct::freezeFactionAI);
+	types.factionStruct.set("treasuryTurnStart", &factionStruct::treasuryTurnStart);
+	types.factionStruct.set("incomeDoubled", &factionStruct::incomeDoubled);
+	types.factionStruct.set("battlesWon", &factionStruct::battlesWon);
+	types.factionStruct.set("battlesLost", &factionStruct::battlesLost);
+	types.factionStruct.set("settlementsCaptured", &factionStruct::settlementsCaptured);
+	types.factionStruct.set("settlementsLost", &factionStruct::settlementsLost);
+	types.factionStruct.set("otherFactionCount", &factionStruct::otherFactionCount);
 	types.factionStruct.set("numOfNamedCharacters", &factionStruct::numOfCharactersAll);
 	/***
 	Get named character using it's index.
@@ -1975,8 +2075,191 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	fac:setFactionStanding(targetFac, 0.5)
 	*/
 	types.factionStruct.set_function("setFactionStanding", &factionHelpers::setFactionStanding);
-	
 
+	/***
+	Get the faction ranking scores.
+	@function factionStruct:getFactionRanking
+	@tparam int turnNumber
+	@treturn factionRanking factionRanking
+	@usage
+	local rankings = fac:getFactionRanking(30)
+	*/
+	types.factionStruct.set_function("getFactionRanking", &factionHelpers::getFactionRanking);
+
+	/***
+	Get the faction ecomomy table, specified number of turns ago (max 10).
+	@function factionStruct:getFactionEconomy
+	@tparam int turnsAgo
+	@treturn factionEconomy factionEconomy
+	@usage
+	local economyTable = fac:getFactionEconomy(0)
+	*/
+	types.factionStruct.set_function("getFactionEconomy", &factionHelpers::getFactionEconomy);
+
+	/***
+	Check if 2 factions are neighbours.
+	@function factionStruct:isNeighbourFaction
+	@tparam factionStruct targetFaction
+	@treturn bool isNeighbour
+	@usage
+	local isNeighbour = fac:isNeighbourFaction(targetFac)
+	*/
+	types.factionStruct.set_function("isNeighbourFaction", &factionHelpers::isNeighbourFaction);
+
+	/***
+	Get a region ID of a neighbouring region by index.
+	@function factionStruct:getNeighbourRegionID
+	@tparam int index
+	@treturn int nRegionID
+	@usage
+	local nRegionID = fac:getNeighbourRegionID(0)
+	*/
+	types.factionStruct.set_function("getNeighbourRegionID", &factionHelpers::getNeighbourRegionID);
+
+	/***
+	Get stats versus a specific other faction.
+	@function factionStruct:getBattleVsFactionStats
+	@tparam int targetFactionID
+	@treturn battleFactionCounter battleStats
+	@usage
+	local battleStats = fac:getBattleVsFactionStats(2)
+	*/
+	types.factionStruct.set_function("getBattleVsFactionStats", &factionHelpers::getBattleVsFactionStats);
+
+	///battleFactionCounter
+	//@section battleFactionCounter
+
+	/***
+	Basic battleFactionCounter table
+
+	@tfield int battlesWon
+	@tfield int battlesLost
+
+	@table battleFactionCounter
+	*/
+	types.battleFactionCounter = luaState.new_usertype<battleFactionCounter>("battleFactionCounter");
+	types.battleFactionCounter.set("battlesWon", &battleFactionCounter::battlesWon);
+	types.battleFactionCounter.set("battlesLost", &battleFactionCounter::battlesLost);
+
+	///holdRegionsWinCondition
+	//@section holdRegionsWinCondition
+
+	/***
+	Basic holdRegionsWinCondition table
+
+	@tfield int regionsToHoldCount
+	@tfield int numberOfRegions
+	@tfield getRegionToHoldName getRegionToHoldName
+	@tfield getRegionToHoldLength getRegionToHoldLength
+	
+	@table holdRegionsWinCondition
+	*/
+	types.holdRegionsWinCondition = luaState.new_usertype<holdRegionsWinCondition>("holdRegionsWinCondition");
+	types.holdRegionsWinCondition.set("regionsToHoldCount", &holdRegionsWinCondition::regionsToHoldCount);
+	types.holdRegionsWinCondition.set("numberOfRegions", &holdRegionsWinCondition::numberOfRegions);
+
+	/***
+	Get the name of the region that has to be held to win the campaign.
+	@function holdRegionsWinCondition:getRegionToHoldName
+	@tparam int index
+	@treturn string regionName
+	@usage
+	local regionName = fac.winCondition:getRegionToHoldName(0)
+	*/
+	types.holdRegionsWinCondition.set_function("getRegionToHoldName", &factionHelpers::getRegionToHoldName);
+
+	/***
+	Get the number of turns the region has to be held to win the campaign.
+	@function holdRegionsWinCondition:getRegionToHoldLength
+	@tparam int index
+	@treturn int turnsToHold
+	@usage
+	local turnsToHold = fac.winCondition:getRegionToHoldLength(0)
+	*/
+	types.holdRegionsWinCondition.set_function("getRegionToHoldLength", &factionHelpers::getRegionToHoldLength);
+
+
+	///FactionEconomy
+	//@section factionEconomy
+
+	/***
+	Basic factionEconomy table
+
+	@tfield int farmingIncome
+	@tfield int taxesIncome
+	@tfield int miningIncome
+	@tfield int tradeIncome
+	@tfield int merchantIncome
+	@tfield int constructionIncome
+	@tfield int otherIncome1
+	@tfield int otherIncome2
+	@tfield int diplomacyIncome
+	@tfield int tributesIncome
+	@tfield int adminIncome
+	@tfield int kingsPurseIncome
+	@tfield int wagesExpense
+	@tfield int upkeepExpense
+	@tfield int constructionExpenseBuildings
+	@tfield int constructionExpenseField
+	@tfield int recruitmentExpenseBuildings
+	@tfield int recruitmentExpenseMercs
+	@tfield int corruptionExpense
+	@tfield int diplomacyExpense
+	@tfield int tributesExpense
+	@tfield int otherExpense1
+	@tfield int otherExpense2
+	@tfield int devastationExpense
+
+	@table factionEconomy
+	*/
+	types.factionEconomy = luaState.new_usertype<factionEconomy>("factionEconomy");
+	types.factionEconomy.set("farmingIncome", &factionEconomy::farmingIncome);
+	types.factionEconomy.set("taxesIncome", &factionEconomy::taxesIncome);
+	types.factionEconomy.set("miningIncome", &factionEconomy::miningIncome);
+	types.factionEconomy.set("tradeIncome", &factionEconomy::tradeIncome);
+	types.factionEconomy.set("merchantIncome", &factionEconomy::merchantIncome);
+	types.factionEconomy.set("constructionIncome", &factionEconomy::constructionIncome);
+	types.factionEconomy.set("otherIncome1", &factionEconomy::otherIncome1);
+	types.factionEconomy.set("otherIncome2", &factionEconomy::otherIncome2);
+	types.factionEconomy.set("diplomacyIncome", &factionEconomy::diplomacyIncome);
+	types.factionEconomy.set("tributesIncome", &factionEconomy::tributesIncome);
+	types.factionEconomy.set("adminIncome", &factionEconomy::adminIncome);
+	types.factionEconomy.set("kingsPurseIncome", &factionEconomy::kingsPurseIncome);
+	types.factionEconomy.set("wagesExpense", &factionEconomy::wagesExpense);
+	types.factionEconomy.set("upkeepExpense", &factionEconomy::upkeepExpense);
+	types.factionEconomy.set("constructionExpenseBuildings", &factionEconomy::constructionExpenseBuildings);
+	types.factionEconomy.set("constructionExpenseField", &factionEconomy::constructionExpenseField);
+	types.factionEconomy.set("recruitmentExpenseBuildings", &factionEconomy::recruitmentExpenseBuildings);
+	types.factionEconomy.set("recruitmentExpenseMercs", &factionEconomy::recruitmentExpenseMercs);
+	types.factionEconomy.set("corruptionExpense", &factionEconomy::corruptionExpense);
+	types.factionEconomy.set("diplomacyExpense", &factionEconomy::diplomacyExpense);
+	types.factionEconomy.set("tributesExpense", &factionEconomy::tributesExpense);
+	types.factionEconomy.set("otherExpense1", &factionEconomy::otherExpense1);
+	types.factionEconomy.set("otherExpense2", &factionEconomy::otherExpense2);
+	types.factionEconomy.set("devastationExpense", &factionEconomy::devastationExpense);
+
+	///FactionRankings
+	//@section factionRanking
+
+	/***
+	Basic factionRanking table
+
+	@tfield float totalRankingScore
+	@tfield float militaryRankingScore
+	@tfield float productionRankingScore
+	@tfield float territoryRankingScore
+	@tfield float FinancialRankingScore
+	@tfield float populationRankingScore
+
+	@table factionRanking
+	*/
+	types.factionRanking = luaState.new_usertype<factionRanking>("factionRanking");
+	types.factionRanking.set("totalRankingScore", &factionRanking::totalRanking);
+	types.factionRanking.set("militaryRankingScore", &factionRanking::militaryRanking);
+	types.factionRanking.set("productionRankingScore", &factionRanking::productionRanking);
+	types.factionRanking.set("territoryRankingScore", &factionRanking::territoryRanking);
+	types.factionRanking.set("FinancialRankingScore", &factionRanking::FinancialRanking);
+	types.factionRanking.set("populationRankingScore", &factionRanking::populationRanking);
 
 	///FactionStratMapStruct
 	//@section factionStratMapStructTable
@@ -1991,9 +2274,21 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int secondaryColorGreen Warning: resets on reload.
 	@tfield int secondaryColorBlue Warning: resets on reload.
 	@tfield int triumphValue Usage unknown.
+	@tfield int religionID.
 	@tfield int standardIndex Warning: resets on reload.
 	@tfield int logoIndex Warning: resets on reload.
 	@tfield int smallLogoIndex Warning: resets on reload.
+	@tfield int hordeMaxUnits
+	@tfield int customBattleAvailability
+	@tfield int periodsUnavailableInCustomBattle
+	@tfield int canSap shouldnt do anything in med 2, but could potentially use flag to store some other info about this faction
+	@tfield int prefersNavalInvasions
+	@tfield int canHavePrincess
+	@tfield int hasFamilyTree
+	@tfield int teutonic
+	@tfield int disbandToPools
+	@tfield int canBuildSiegeTowers
+	@tfield int canTransmitPlague
 
 	@table factionStratMapStruct
 	*/
@@ -2008,6 +2303,18 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStratMapStruct.set("standardIndex", &factionStratMapDescrS::standard_index);
 	types.factionStratMapStruct.set("logoIndex", &factionStratMapDescrS::logo_index);
 	types.factionStratMapStruct.set("smallLogoIndex", &factionStratMapDescrS::small_logo_index);
+	types.factionStratMapStruct.set("religionID", &factionStratMapDescrS::religionID);
+	types.factionStratMapStruct.set("hordeMaxUnits", &factionStratMapDescrS::hordeMaxUnits);
+	types.factionStratMapStruct.set("customBattleAvailability", &factionStratMapDescrS::customBattleAvailability);
+	types.factionStratMapStruct.set("periodsUnavailableInCustomBattle", &factionStratMapDescrS::periodsUnavailableInCustomBattle);
+	types.factionStratMapStruct.set("canSap", &factionStratMapDescrS::canSap);
+	types.factionStratMapStruct.set("prefersNavalInvasions", &factionStratMapDescrS::prefersNavalInvasions);
+	types.factionStratMapStruct.set("canHavePrincess", &factionStratMapDescrS::canHavePrincess);
+	types.factionStratMapStruct.set("hasFamilyTree", &factionStratMapDescrS::hasFamilyTree);
+	types.factionStratMapStruct.set("teutonic", &factionStratMapDescrS::teutonic);
+	types.factionStratMapStruct.set("disbandToPools", &factionStratMapDescrS::disbandToPools);
+	types.factionStratMapStruct.set("canBuildSiegeTowers", &factionStratMapDescrS::canBuildSiegeTowers);
+	types.factionStratMapStruct.set("canTransmitPlague", &factionStratMapDescrS::canTransmitPlague);
 
 
 	///WatchtowerStruct
@@ -2111,6 +2418,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int regionID
 	@tfield int level
 	@tfield int isCastle
+	@tfield int settlementTaxLevel
 	@tfield int isProvokedRebellion
 	@tfield int populationSize
 	@tfield int PopGrowthBaseFarm - Get only
@@ -2175,6 +2483,11 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getResource getResource
 	@tfield int siegesNum
 	@tfield getSiege getSiege
+	@tfield getSettlementCapability getSettlementCapability
+	@tfield getAgentCapability getAgentCapability
+	@tfield getAgentLimitCapability getAgentLimitCapability
+	@tfield getRecruitmentCapability getRecruitmentCapability
+	@tfield getSettlementRecruitmentPool getSettlementRecruitmentPool
 
 	@table settlementStruct
 	*/
@@ -2205,8 +2518,19 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.settlementStruct.set("regionID", &settlementStruct::regionID);
 	types.settlementStruct.set("level", &settlementStruct::level);
 	types.settlementStruct.set("isCastle", &settlementStruct::isCastle);
+	types.settlementStruct.set("settlementTaxLevel", &settlementStruct::settlementTaxLevel);
 	types.settlementStruct.set("isProvokedRebellion", &settlementStruct::isProvokedRebellion);
 	types.settlementStruct.set("populationSize", &settlementStruct::populationSize);
+	types.settlementStruct.set("recruitPoolCapabilityCount", &settlementStruct::recruitPoolCapabilityCount);
+	types.settlementStruct.set("recruitmentPoolCount", &settlementStruct::recruitmentPoolCount);
+	types.settlementStruct.set("freezeRecruitmentPool", &settlementStruct::freezeRecruitmentPool);
+	types.settlementStruct.set("spiesInRecruitmentQueue", &settlementStruct::spiesInRecruitmentQueue);
+	types.settlementStruct.set("assassinsInRecruitmentQueue", &settlementStruct::assassinsInRecruitmentQueue);
+	types.settlementStruct.set("diplomatsInRecruitmentQueue", &settlementStruct::diplomatsInRecruitmentQueue);
+	types.settlementStruct.set("admiralsInRecruitmentQueue", &settlementStruct::admiralsInRecruitmentQueue);
+	types.settlementStruct.set("merchantsInRecruitmentQueue", &settlementStruct::merchantsInRecruitmentQueue);
+	types.settlementStruct.set("priestsInRecruitmentQueue", &settlementStruct::priestsInRecruitmentQueue);
+	types.settlementStruct.set("turmoil", &settlementStruct::turmoil);
 	types.settlementStruct.set("PopGrowthBaseFarm", &settlementStruct::PopGrowthBaseFarm);
 	types.settlementStruct.set("PopGrowthFarms", &settlementStruct::PopGrowthFarms);
 	types.settlementStruct.set("PopGrowthHealth", &settlementStruct::PopGrowthHealth);
@@ -2346,8 +2670,102 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	end
 	*/
 	types.settlementStruct.set_function("getSiege", &settlementHelpers::getSiege);
+	/***
+	Get a capability by capability type.
+	@function settlementStruct:getSettlementCapability
+	@tparam int capabilityType
+	@treturn settlementCapability capability
+	@usage
+	local incomeBonus = settlementStruct:getSettlementCapability(55)
+	*/
+	types.settlementStruct.set_function("getSettlementCapability", &settlementHelpers::getSettlementCapability);
+	/***
+	Get an agent capability by agent type (only recruitable agents) 0 = spy, 1 = assassin, 2 = diplomat, 3 = princess, 4 = merchant, 5 = priest.
+	@function settlementStruct:getAgentCapability
+	@tparam int agentType
+	@treturn settlementCapability capability
+	@usage
+	local spyCap = settlementStruct:getAgentCapability(0)
+	*/
+	types.settlementStruct.set_function("getAgentCapability", &settlementHelpers::getAgentCapability);
+	/***
+	Get an agent limit capability by agent type (only recruitable agents) 0 = spy, 1 = assassin, 2 = diplomat, 3 = princess, 4 = merchant, 5 = priest.
+	@function settlementStruct:getAgentLimitCapability
+	@tparam int agentType
+	@treturn settlementCapability capability
+	@usage
+	local spyCapLimit = settlementStruct:getAgentLimitCapability(0)
+	*/
+	types.settlementStruct.set_function("getAgentLimitCapability", &settlementHelpers::getAgentCapability);
+	/***
+	Get a recruitment capability by index (max 64!).
+	@function settlementStruct:getRecruitmentCapability
+	@tparam int index
+	@treturn recruitmentCapability capability
+	@usage
+	local capability = settlementStruct:getRecruitmentCapability(0)
+	*/
+	types.settlementStruct.set_function("getRecruitmentCapability", &settlementHelpers::getRecruitmentCapability);
+	/***
+	Get a recruitment pool by index.
+	@function settlementStruct:getSettlementRecruitmentPool
+	@tparam int index
+	@treturn settlementRecruitmentPool pool
+	@usage
+	local pool = settlementStruct:getSettlementRecruitmentPool(0)
+	*/
+	types.settlementStruct.set_function("getSettlementRecruitmentPool", &settlementHelpers::getSettlementRecruitmentPool);
 
+	///settlementCapability
+	//@section settlementCapability
 
+	/***
+	Basic settlementCapability table
+
+	@tfield int value
+	@tfield int bonus
+
+	@table settlementCapability
+	*/
+	types.settlementCapability = luaState.new_usertype<settlementCapability>("settlementCapability");
+	types.settlementCapability.set("value", &settlementCapability::value);
+	types.settlementCapability.set("bonus", &settlementCapability::bonus);
+
+	///recruitmentCapability
+	//@section recruitmentCapability
+
+	/***
+	Basic recruitmentCapability table
+
+	@tfield int eduIndex
+	@tfield int xp
+	@tfield float initialSize
+	@tfield float replenishRate
+	@tfield float maxSize
+
+	@table recruitmentCapability
+	*/
+	types.recruitmentCapability = luaState.new_usertype<recruitmentCapability>("recruitmentCapability");
+	types.recruitmentCapability.set("eduIndex", &recruitmentCapability::eduIndex);
+	types.recruitmentCapability.set("xp", &recruitmentCapability::xp);
+	types.recruitmentCapability.set("initialSize", &recruitmentCapability::initialSize);
+	types.recruitmentCapability.set("replenishRate", &recruitmentCapability::replenishRate);
+	types.recruitmentCapability.set("maxSize", &recruitmentCapability::maxSize);
+
+	///settlementRecruitmentPool
+	//@section settlementRecruitmentPool
+
+	/***
+	Basic settlementRecruitmentPool table
+
+	@tfield int eduIndex
+	@tfield float availablePool
+
+	@table settlementRecruitmentPool
+	*/
+	types.settlementRecruitmentPool = luaState.new_usertype<settlementRecruitmentPool>("settlementRecruitmentPool");
+	types.settlementRecruitmentPool.set("eduIndex", &settlementRecruitmentPool::eduIndex);
+	types.settlementRecruitmentPool.set("availablePool", &settlementRecruitmentPool::availablePool);
 
 
 	///Building
@@ -2618,6 +3036,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield factionStruct faction
 	@tfield getUnit getUnit
 	@tfield int numOfUnits
+	@tfield int isBoarded
+	@tfield int ladders
+	@tfield int rams
+	@tfield int towers
 	@tfield getCharacter getCharacter
 	@tfield int numOfCharacters Includes Auxiliary generals and agents (i.e all characters excluding the leading general)
 	@tfield stackStruct boardedArmy army embarked on this fleet stack
@@ -2642,6 +3064,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.stackStruct = luaState.new_usertype<stackStruct>("stackStruct");
 	types.stackStruct.set("faction", &stackStruct::faction);
+	types.stackStruct.set("isBoarded", &stackStruct::isBoarded);
+	types.stackStruct.set("ladders", &stackStruct::ladders);
+	types.stackStruct.set("rams", &stackStruct::rams);
+	types.stackStruct.set("towers", &stackStruct::towers);
 
 	/***
 	Sort units in a stack.

@@ -61,3 +61,23 @@ void settlementHelpers::setGuildStanding(settlementStruct* sett, int index, int 
 {
 	*(int*)((sett->guildStandings) + 0x4 * index) = amount;
 }
+settlementCapability* settlementHelpers::getSettlementCapability(settlementStruct* sett, int capabilityType)
+{
+	return &sett->settlementCapabilities[capabilityType];
+}
+settlementCapability* settlementHelpers::getAgentCapability(settlementStruct* sett, int agentType)
+{
+	return &sett->settlementCapabilitiesAgent[agentType];
+}
+settlementCapability* settlementHelpers::getAgentLimitCapability(settlementStruct* sett, int agentType)
+{
+	return &sett->settlementCapabilitiesAgentLimit[agentType];
+}
+recruitmentCapability* settlementHelpers::getRecruitmentCapability(settlementStruct* sett, int index)
+{
+	return &sett->recruitmentCapabilities[index];
+}
+settlementRecruitmentPool* settlementHelpers::getSettlementRecruitmentPool(settlementStruct* sett, int index)
+{
+	return &sett->recruitmentPools[index];
+}

@@ -50,6 +50,8 @@ namespace m2tweopHelpers
 
 	void setEDUUnitsSize(signed short min, signed short max);
 	int getGameVersion();
+	options1* getOptions1();
+	options2* getOptions2();
 
 
 	std::tuple<int, int, void*>  loadTextureToGame(const std::string& path);

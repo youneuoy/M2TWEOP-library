@@ -118,10 +118,9 @@ namespace gameHelpers
 		return region->resources[index];
 	}
 
-	regionStruct* gameHelpers::getNeighbour(regionStruct* region, const int index)
+	neighbourRegion* gameHelpers::getNeighbour(regionStruct* region, const int index)
 	{
-		neighbourRegion* nregion = &region->neighbourRegions[index];
-		return nregion->region;
+		return &region->neighbourRegions[index];
 	}
 
 	bool gameHelpers::getHiddenResource(regionStruct* region, int index)
@@ -356,6 +355,130 @@ namespace gameHelpers
 		return campaign->watchtowers[index];
 	}
 
+	unit* gameHelpers::getSelectedUnitCard(const uiCardManager* cardManager, const int index)
+	{
+		return cardManager->selectedUnitCards[index]->unit;
+	}
+
+	unit* gameHelpers::getUnitCard(const uiCardManager* cardManager, const int index)
+	{
+		return cardManager->unitCards[index]->unit;
+	}
+
+	coordPair* getVolcanoCoords(const stratMap* map, const int index)
+	{
+		return &map->volcanoes[index];
+	}
+
+	coordPair* getLandConnection(const stratMap* map, const int index)
+	{
+		return &map->landMassConnections[index];
+	}
+
+	landMass* getLandMass(stratMap* map, const int index)
+	{
+		return &map->landMass[index];
+	}
+
+	int getRegionID(const landMass* landMass, const int index)
+	{
+		return landMass->regions[index];
+	}
+
+	coordPair* getRoadCoord(const roadStruct* road, const int index)
+	{
+		return &road->coords[index];
+	}
+
+	int getTileFactionID(const oneTile* tile)
+	{
+		return tile->factionId & 0b00111111;
+	}
+
+	bool tileHasRiver(const oneTile* tile)
+	{
+		return tile->factionId & 0b01000000;
+	}
+
+	bool tileHasCrossing(const oneTile* tile)
+	{
+		return tile->factionId & 0b10000000;
+	}
+
+	int tileBorderType(const oneTile* tile)
+	{
+		return tile->border / 4;
+	}
+
+	bool tileHasCharacter(const oneTile* tile)
+	{
+		return tile->objectTypes & (1 << 6);
+	}
+
+	bool tileHasShip(const oneTile* tile)
+	{
+		return tile->objectTypes & (1 << 5);
+	}
+
+	bool tileHasWatchtower(const oneTile* tile)
+	{
+		return tile->objectTypes & (1 << 4);
+	}
+
+	bool tileHasPort(const oneTile* tile)
+	{
+		return tile->objectTypes & (1 << 3);
+	}
+
+	bool tileHasFort(const oneTile* tile)
+	{
+		return tile->objectTypes & (1 << 1);
+	}
+
+	bool tileHasSettlement(const oneTile* tile)
+	{
+		return tile->objectTypes & (1 << 0);
+	}
+
+	bool factionHasArmyNearTile(const oneTile* tile, int factionID)
+	{
+		return tile->armiesNearTile & (1 << factionID);
+	}
+
+	bool factionHasCharacterOnTile(const oneTile* tile, int factionID)
+	{
+		return tile->charactersOnTile & (1 << factionID);
+	}
+
+	coordPair* convertTileCoords(DWORD arrayIndex)
+	{
+		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		stratMap* map = gameDataAll->stratMap;
+		bool found = false;
+		int x = 0;
+		int y = 0;
+		int index = arrayIndex;
+		for (y = 0;y < map->mapHeight;y++)
+		{
+			x = index - y * map->mapWidth;
+			if (x >= 0 && x < map->mapWidth)
+			{
+				auto coords = new coordPair;
+				coords->xCoord = x;
+				coords->yCoord = y;
+				return coords;
+			}
+		}
+		return nullptr;
+	}
+
+	coordPair* getTileCoords(const oneTile* tile)
+	{
+		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		stratMap* map = gameDataAll->stratMap;
+		return convertTileCoords(tile - map->tilesArr);
+	}
+
 	settlementStruct* getSettlementByName(campaign* campaign, const char* name)
 	{
 		settlementList* settlementList = &campaign->settlementList;
@@ -400,4 +523,92 @@ namespace gameHelpers
 		// Return the converted string
 		return buffer;
 	}
+
+	seaConnectedRegion* getSeaConnectedRegion(const regionStruct* region, const int index)
+	{
+		return &region->seaConnectedRegions[index];
+	}
+
+	seaConnectedRegion* getSeaImportRegion(const regionStruct* region, const int index)
+	{
+		return region->seaImportRegions[index];
+	}
+
+	oneTile* getRegionSeaEdge(const regionStruct* region, const int index)
+	{
+		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		stratMap* map = gameDataAll->stratMap;
+
+		return &map->tilesArr[region->regionSeaEdges[index]];
+	}
+
+	float getReligionHistory(const regionStruct* region, const int religionID, int turnsAgo)
+	{
+		if (turnsAgo > 19)
+		{
+			return 0.0f;
+		}
+		if (turnsAgo == 0)
+		{
+			return region->religionsARR[religionID];
+		}
+		return region->religionHistory[turnsAgo][religionID];
+	}
+
+	oneTile* getTileBorderingEdgeOfMap(const regionStruct* region, const int index)
+	{
+		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		stratMap* map = gameDataAll->stratMap;
+
+		return &map->tilesArr[region->tilesBorderingEdgeOfMap[index]];
+	}
+
+	oneTile* getTileRegion(const regionStruct* region, const int index)
+	{
+		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		stratMap* map = gameDataAll->stratMap;
+
+		return &map->tilesArr[region->tiles[index]];
+	}
+
+	oneTile* getFertileTile(const regionStruct* region, const int index)
+	{
+		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		stratMap* map = gameDataAll->stratMap;
+
+		return &map->tilesArr[region->fertileTiles[index]];
+	}
+
+	oneTile* getBorderTile(const neighbourRegion* region, const int index)
+	{
+		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		stratMap* map = gameDataAll->stratMap;
+
+		return &map->tilesArr[region->bordertiles[index]];
+	}
+
+	oneTile* getReachableTile(const seaConnectedRegion* region, int index)
+	{
+		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		stratMap* map = gameDataAll->stratMap;
+		if (!&region->tilesReachable[index])
+		{
+			return nullptr;
+		}
+		auto tile = region->tilesReachable[index].tileId;
+		return &map->tilesArr[tile];
+	}
+
+	coordPair* getTradeLaneCoord(const seaConnectedRegion* region, int index)
+	{
+		return &region->seaTradeLanePath[index];
+	}
+
+	bool hasResourceType(const regionStruct* region, const int resourceType)
+	{
+		return region->resourceTypesBitMap & (1 << resourceType);
+	}
+
+
+
 }

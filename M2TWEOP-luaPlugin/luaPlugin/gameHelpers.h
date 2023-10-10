@@ -25,7 +25,8 @@ namespace gameHelpers
 	fortStruct* getFort(const regionStruct* region, int index);
 	watchTowerStruct* getWatchtower(const regionStruct* region, int index);
 	resStrat* getResource(const regionStruct* region, int index);
-	regionStruct* getNeighbour(regionStruct* region, int index);
+	neighbourRegion* getNeighbour(regionStruct* region, const int index);
+	oneTile* getBorderTile(const neighbourRegion* region, const int index);
 	bool getHiddenResource(regionStruct* region, int index);
 	void setHiddenResource(regionStruct* region, int index, bool enable);
 	void changeRegionName(regionStruct* region, const char* newName);
@@ -37,6 +38,35 @@ namespace gameHelpers
 	watchTowerStruct* getWatchTowerAll(const campaign* campaign, const int index);
 	settlementStruct* getSettlementByName(campaign* campaign, const char* name);
 	std::string getRebelsName(regionStruct* region);
+	coordPair* getVolcanoCoords(const stratMap* map, const int index);
+	coordPair* getLandConnection(const stratMap* map, const int index);
+	landMass* getLandMass(stratMap* map, const int index);
+	int getRegionID(const landMass* landMass, const int index);
+	coordPair* getRoadCoord(const roadStruct* road, const int index);
+	int getTileFactionID(const oneTile* tile);
+	bool tileHasRiver(const oneTile* tile);
+	bool tileHasCrossing(const oneTile* tile);
+	int tileBorderType(const oneTile* tile);
+	bool tileHasCharacter(const oneTile* tile);
+	bool tileHasShip(const oneTile* tile);
+	bool tileHasWatchtower(const oneTile* tile);
+	bool tileHasPort(const oneTile* tile);
+	bool tileHasFort(const oneTile* tile);
+	bool tileHasSettlement(const oneTile* tile);
+	bool factionHasArmyNearTile(const oneTile* tile, int factionID);
+	bool factionHasCharacterOnTile(const oneTile* tile, int factionID);
+	coordPair* convertTileCoords(DWORD arrayIndex);
+	coordPair* getTileCoords(const oneTile* tile);
+	seaConnectedRegion* getSeaConnectedRegion(const regionStruct* region, const int index);
+	seaConnectedRegion* getSeaImportRegion(const regionStruct* region, const int index);
+	oneTile* getRegionSeaEdge(const regionStruct* region, const int index);
+	float getReligionHistory(const regionStruct* region, const int religionID, int turnsAgo);
+	oneTile* getTileBorderingEdgeOfMap(const regionStruct* region, const int index);
+	oneTile* getTileRegion(const regionStruct* region, const int index);
+	oneTile* getFertileTile(const regionStruct* region, const int index);
+	bool hasResourceType(const regionStruct* region, const int resourceType);
+	oneTile* getReachableTile(const seaConnectedRegion* region, int index);
+	coordPair* getTradeLaneCoord(const seaConnectedRegion* region, int index);
 
 	int getMercUnitNum(mercPool* mercPool);
 	mercPoolUnit* getMercUnit(mercPool* pool, int index);
@@ -46,5 +76,7 @@ namespace gameHelpers
 	void historicEvent(const char* name, const char* title, const char* description);
 	void scriptCommand(const char* command, const char* args);
 	const char* getReligionName(const int index);
+	unit* getSelectedUnitCard(const uiCardManager* cardManager, const int index);
+	unit* getUnitCard(const uiCardManager* cardManager, const int index);
 };
 

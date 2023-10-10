@@ -24,7 +24,13 @@ namespace factionHelpers
 	void setFactionStanding(const factionStruct* fac1, const factionStruct* fac2, float standing);
 	void setMilitaryAccess(const factionStruct* fac1, const factionStruct* fac2, bool set);
 	std::string getLocalizedFactionName(factionStruct* fac);
-
+	const char* getRegionToHoldName(const holdRegionsWinCondition* condition, int index);
+	int getRegionToHoldLength(const holdRegionsWinCondition* condition, int index);
+	factionRanking* getFactionRanking(const factionStruct* fac, int turnNum);
+	factionEconomy* getFactionEconomy(factionStruct* fac, int turnsAgo);
+	bool isNeighbourFaction(const factionStruct* fac1, const factionStruct* fac2);
+	int getNeighbourRegionID(const factionStruct* fac, int index);
+	battleFactionCounter* getBattleVsFactionStats(factionStruct* fac, int targetFactionID);
 	//faction
 	template <char fieldIndex>
 	std::string getStringProperty(const factionStruct* fac)

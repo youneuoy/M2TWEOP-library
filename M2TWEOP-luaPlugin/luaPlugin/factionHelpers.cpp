@@ -39,6 +39,11 @@ portBuildingStruct* factionHelpers::getPort(const factionStruct* fac, int index)
 	return fac->portBuildings[index];
 }
 
+int factionHelpers::getNeighbourRegionID(const factionStruct* fac, int index)
+{
+	return fac->neighBourRegions[index];
+}
+
 watchTowerStruct* factionHelpers::getWatchtower(const factionStruct* fac, int index)
 {
 	return fac->watchTowers[index];
@@ -47,6 +52,11 @@ watchTowerStruct* factionHelpers::getWatchtower(const factionStruct* fac, int in
 void factionHelpers::deleteFort(const factionStruct* fac, fortStruct* fort)
 {
 	(*(*plugData::data.funcs.deleteFort))(fac, fort);
+}
+
+battleFactionCounter* factionHelpers::getBattleVsFactionStats(factionStruct* fac, int targetFactionID)
+{
+	return fac->battlesWonVsFaction[targetFactionID];
 }
 
 bool factionHelpers::hasMilitaryAccess(const factionStruct* fac1, const factionStruct* fac2)
@@ -79,6 +89,11 @@ float factionHelpers::getFactionStanding(const factionStruct* fac1, const factio
 	return campaign->diplomaticStandings[fac1->dipNum][fac2->dipNum].factionStanding;
 }
 
+bool factionHelpers::isNeighbourFaction(const factionStruct* fac1, const factionStruct* fac2)
+{
+	return fac1->neighBourFactionsBitmap & (1 << fac2->dipNum);
+}
+
 void factionHelpers::setFactionStanding(const factionStruct* fac1, const factionStruct* fac2, float standing)
 {
 	const auto gameData = gameDataAllHelper::get();
@@ -99,6 +114,35 @@ void factionHelpers::createFort(const general* gen)
 void factionHelpers::changeFactionName(factionStruct* fac, const char* newName)
 {
 	(*(*plugData::data.funcs.changeFactionName))(fac, newName);
+}
+
+factionRanking* factionHelpers::getFactionRanking(const factionStruct* fac, int turnNum)
+{
+	return &fac->factionRankings[turnNum];
+}
+
+factionEconomy* factionHelpers::getFactionEconomy(factionStruct* fac, int turnsAgo)
+{
+	int turnIndex = fac->counterEconomy - turnsAgo;
+	if (turnIndex < 0)
+	{
+		turnIndex += fac->maxTurnsTillReset;
+	}
+	return &fac->factionEconomy[turnIndex];
+}
+
+const char* factionHelpers::getRegionToHoldName(const holdRegionsWinCondition* condition, int index)
+{
+	return condition->regionsToHold[index].name;
+}
+
+int factionHelpers::getRegionToHoldLength(const holdRegionsWinCondition* condition, int index)
+{
+	if (index < condition->holdRegionLengthsCount)
+	{
+		return condition->holdRegionLengths[index];
+	}
+	return 0;
 }
 
 std::string factionHelpers::getLocalizedFactionName(factionStruct* fac)

@@ -26,7 +26,7 @@ namespace battleCreator
 		{
 			numberInArmy = pnumberInArmy;
 			type = un->eduEntry->Type;
-			soldiersNumber = un->number;
+			soldiersNumber = un->SoldierCountStrat;
 			exp = un->expScreen;
 
 
@@ -232,7 +232,7 @@ namespace battleCreator
 			{
 				unitJson["general"] = 0;
 			}
-			unitJson["soldiers"] = unit->number;
+			unitJson["soldiers"] = unit->SoldierCountStrat;
 			unitJson["exp"] = unit->expScreen;
 
 			j.push_back(unitJson);

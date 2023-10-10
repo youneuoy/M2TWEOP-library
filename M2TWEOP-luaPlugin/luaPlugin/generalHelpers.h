@@ -7,7 +7,7 @@ namespace generalHelpers
 	void moveToTile(general* gen, int x, int y);
 	void reposition(general* gen, int x, int y);
 
-
+	const char* getTypeName(const general* gen);
 	void killGeneral(general* gen);
 	void setBodyguard(general* gen, unit* un);
 	void setMovepoints(general* gen, float movepoints);

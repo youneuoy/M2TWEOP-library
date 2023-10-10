@@ -879,8 +879,8 @@ namespace fastFuncts
 			}
 			return;
 		}
-		un->general->movepoints1 = movepoints;
-		un->general->movepoints2 = movepoints;
+		un->general->movePointsCharacter = movepoints;
+		un->general->movePointsArmy = movepoints;
 
 
 		general* gen = un->general;
@@ -926,7 +926,7 @@ namespace fastFuncts
 
 
 
-		int diff = count - un->number;
+		int diff = count - un->SoldierCountStrat;
 		if (diff == 0)
 		{
 			return;
@@ -947,7 +947,7 @@ namespace fastFuncts
 		}
 		else
 		{
-			un->number = count;
+			un->SoldierCountStrat = count;
 		}
 
 

@@ -171,9 +171,9 @@ namespace unitHelpers
 		{
 			return nullptr;
 		}
-		if (posData->targetArray[posData->targetsToGo].targetUnit)
+		if (posData->targetArray[posData->targetsDone].targetUnit)
 		{
-			return posData->targetArray[posData->targetsToGo].targetUnit->target;
+			return posData->targetArray[posData->targetsDone].targetUnit->target;
 		}
 		return nullptr;
 	}

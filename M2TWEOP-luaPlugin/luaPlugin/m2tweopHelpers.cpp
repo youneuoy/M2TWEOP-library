@@ -215,4 +215,22 @@ namespace m2tweopHelpers
 		return (*(*plugData::data.funcs.getGameVersion))();
 	}
 
+	options1* getOptions1()
+	{
+		if (getGameVersion() == 1)
+		{
+			return reinterpret_cast<options1*>(0x02CB693C);
+		}
+		return reinterpret_cast<options1*>(0x02C6D804);
+	}
+
+	options2* getOptions2()
+	{
+		if (getGameVersion() == 1)
+		{
+			return reinterpret_cast<options2*>(0x016818A0);
+		}
+		return reinterpret_cast<options2*>(0x01639EF0);
+	}
+
 }
