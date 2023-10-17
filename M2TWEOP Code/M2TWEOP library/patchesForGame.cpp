@@ -93,23 +93,40 @@ char* __fastcall patchesForGame::onSaveEDUStringS(eduEntry* eduEntry)
 
 	return retName;
 }
-int __fastcall patchesForGame::onCreateUnit(int* edbIndex, int** edb, char** entryName)
+int __fastcall patchesForGame::onCreateUnit(char** entryName, int* edbIndex)
 {
 	if (edbIndex == nullptr)
 	{
-		int* newEdu = eduThings::tryFindDataEopEdu(*entryName);
+		int* newEdu = eduThings::tryFindDataEopEduIndex(*entryName);
 
 		if (newEdu == nullptr)
 		{
 			return  -1;
 		}
 
-		*edb = newEdu;
-		return 0;
+		return *newEdu;
 	}
 
 	return *edbIndex;
 }
+
+int __fastcall patchesForGame::onFindUnit(char* entryName, int* edbIndex)
+{
+	if (edbIndex == nullptr)
+	{
+		int* newEdu = eduThings::tryFindDataEopEduIndex(entryName);
+
+		if (newEdu == nullptr)
+		{
+			return  -1;
+		}
+
+		return *newEdu;
+	}
+
+	return *edbIndex;
+}
+
 int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduindex)
 {
 	if (eduindex == -1)
@@ -150,6 +167,17 @@ eduEntry* __fastcall patchesForGame::OnCreateUnitWrapper(int eduindexBase, int r
 	}
 	return entry;
 }
+
+eduEntry* __fastcall patchesForGame::OnGetRecruitPoolUnitEntry(int eduIndex)
+{
+	eduEntry* entry = eduThings::getEduEntry(eduIndex);
+	if (entry == nullptr)
+	{
+		entry = eduThings::getEopEduEntry(eduIndex);
+	}
+	return entry;
+}
+
 const char* __fastcall patchesForGame::onQuickSave()
 {
 	static std::vector<std::string> saveNames = { u8"%S-1.sav" ,u8"%S-2.sav", u8"%S-3.sav" };
@@ -315,6 +343,11 @@ void __stdcall patchesForGame::afterEDUread()
 	f1 << "afterEDUread" << endl;
 	f1.close();
 #endif
+}
+
+void __stdcall patchesForGame::onGameInit()
+{
+	plugins::onGameInit();
 }
 
 void __stdcall patchesForGame::onChangeTurnNum()
@@ -560,17 +593,26 @@ void __fastcall patchesForGame::OnStopCharacter(general* character)
 	}
 }
 
-void __fastcall patchesForGame::recruitEOPunit(DWORD eduoffset, DWORD pad, regionStruct* region, int eduindex, int factionid, int exp, int minusone, int armlvl, int wplvl)
+eduEntry* __fastcall patchesForGame::recruitEOPunit(int eduIndex)
 {
-	int regionID = region->regionID;
-	if (eduindex > 499)
+	eduEntry* entry = eduThings::getEduEntry(eduIndex);
+	if (entry == nullptr)
 	{
-		int eopIDX = eduThings::getDataEopEdu(eduindex);
-		fastFuncts::createUnitEDB(eopIDX, regionID, factionid, exp, armlvl, wplvl);
+		entry = eduThings::getEopEduEntry(eduIndex);
 	}
-	else
+	return entry;
+}
+
+void __fastcall patchesForGame::recruitEOPunit2(int eduIndex)
+{
+	eduEntry* entry = eduThings::getEduEntry(eduIndex);
+	if (entry == nullptr)
 	{
-		fastFuncts::createUnitIdx(eduindex, regionID, factionid, exp, armlvl, wplvl);
+		entry = eduThings::getEopEduEntry(eduIndex);
+	}
+	if (entry)
+	{
+		entry->UnitCreatedCounter++;
 	}
 }
 

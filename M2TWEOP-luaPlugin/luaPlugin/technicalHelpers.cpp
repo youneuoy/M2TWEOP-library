@@ -57,5 +57,10 @@ namespace technicalHelpers
 		(*(*plugData::data.funcsTech.createUniString))(newUniStringPointer, nonUniStr);
 	}
 
+	DWORD allocateGameMem(size_t amount)
+	{
+		return (*(*plugData::data.funcs.allocateGameMem))(amount);
+	}
+
 };
 

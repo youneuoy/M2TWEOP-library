@@ -28,7 +28,7 @@ namespace eopBuildings
     NOINLINE EOP_EXPORT void setBuildingLocalizedDescr(edbEntry* entry, const char* newName, int level, int facnum);
     NOINLINE EOP_EXPORT void setBuildingLocalizedDescrShort(edbEntry* entry, const char* newName, int level, int facnum);
     NOINLINE EOP_EXPORT void addBuildingCapability(edbEntry* entry, int level, int capability, int16_t value, bool bonus);
-    NOINLINE EOP_EXPORT void addBuildingPool(edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp);
+    NOINLINE EOP_EXPORT void addBuildingPool(edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp, const char* condition);
     NOINLINE EOP_EXPORT void removeBuildingCapability(edbEntry* entry, int level, int index);
     NOINLINE EOP_EXPORT void removeBuildingPool(edbEntry* entry, int level, int index);
     NOINLINE EOP_EXPORT BuildingLvlCapability* getBuildingCapability(edbEntry* entry, int level, int index);

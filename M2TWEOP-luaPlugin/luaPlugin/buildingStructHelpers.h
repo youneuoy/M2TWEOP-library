@@ -87,7 +87,7 @@ namespace buildingStructHelpers
 	void removeBuildingCapability(edbEntry* entry, int level, int index);
 	BuildingLvlCapability* getBuildingCapability(edbEntry* entry, int level, int index);
 	int getBuildingCapabilityNum(edbEntry* entry, int level);
-	void addBuildingPool(edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp);
+	void addBuildingPool(edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp, const char* condition);
 	void removeBuildingPool(edbEntry* entry, int level, int index);
 	recruitPool* getBuildingPool(edbEntry* entry, int level, int index);
 	int getBuildingPoolNum(edbEntry* entry, int level);

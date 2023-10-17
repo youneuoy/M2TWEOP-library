@@ -225,6 +225,7 @@ void luaP::onPluginLoadF()
 	@tfield onLoadingFonts onLoadingFonts
 	@tfield onNewGameStart onNewGameStart
 	@tfield onReadGameDbsAtStart onReadGameDbsAtStart
+	@tfield onGameInit onGameInit
 	@tfield onClickAtTile onClickAtTile
 	@tfield onCampaignMapLoaded onCampaignMapLoaded
 	@tfield onCreateSaveFile onCreateSaveFile
@@ -245,727 +246,592 @@ void luaP::onPluginLoadF()
 
 	/***
 	Called at a character's turn start.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onCharacterTurnStart
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCharacterTurnStart(namedChar, faction, region, characterType, religion)
+	function onCharacterTurnStart(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A captured character has been successfully ransomed back from the enemy.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onCapturedCharacterRansomed
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCapturedCharacterRansomed(namedChar, faction, region, characterType, religion)
+	function onCapturedCharacterRansomed(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A captured character has been released by the enemy.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onCapturedCharacterReleased
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCapturedCharacterReleased(namedChar, faction, region, characterType, religion)
+	function onCapturedCharacterReleased(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A character father died of natural causes.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onFatherDiesNatural
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onFatherDiesNatural(namedChar, faction, region, characterType, religion)
+	function onFatherDiesNatural(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	When a battle is about to start but one of the armies withdraws.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onPreBattleWithdrawal
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onPreBattleWithdrawal(namedChar, faction, region, characterType, religion)
+	function onPreBattleWithdrawal(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	When a battle has finished.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onPostBattle
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onPostBattle(namedChar, faction, region, characterType, religion)
+	function onPostBattle(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A General has hired some mercenaries.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onHireMercenaries
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onHireMercenaries(namedChar, faction, region, characterType, religion)
+	function onHireMercenaries(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A General has captured a residence such as a fort or watchtower.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onGeneralCaptureResidence
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGeneralCaptureResidence(namedChar, faction, region, characterType, religion)
+	function onGeneralCaptureResidence(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A faction has been destroyed.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onLeaderDestroyedFaction
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onLeaderDestroyedFaction(namedChar, faction, region, characterType, religion)
+	function onLeaderDestroyedFaction(eventData)
 	--something
 	end
 	*/
 
 	/***
 	An adoption has been proposed.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onOfferedForAdoption
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onOfferedForAdoption(namedChar, faction, region, characterType, religion)
+	function onOfferedForAdoption(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A lesser general adoption has been proposed (man of the hour event).
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onLesserGeneralOfferedForAdoption
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onLesserGeneralOfferedForAdoption(namedChar, faction, region, characterType, religion)
+	function onLesserGeneralOfferedForAdoption(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A marriage offer has been proposed.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onOfferedForMarriage
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onOfferedForMarriage(namedChar, faction, region, characterType, religion)
+	function onOfferedForMarriage(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A brother has been adopted.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onBrotherAdopted
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBrotherAdopted(namedChar, faction, region, characterType, religion)
+	function onBrotherAdopted(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A child is born to the faction leader.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onBirth
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBirth(namedChar, faction, region, characterType, religion)
+	function onBirth(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A character has come of age.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onCharacterComesOfAge
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCharacterComesOfAge(namedChar, faction, region, characterType, religion)
+	function onCharacterComesOfAge(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A character has married.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onCharacterMarries
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCharacterMarries(namedChar, faction, region, characterType, religion)
+	function onCharacterMarries(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A character has married a princess.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onCharacterMarriesPrincess
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCharacterMarriesPrincess(namedChar, faction, region, characterType, religion)
+	function onCharacterMarriesPrincess(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A marriage alliance is possible.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onMarriageAlliancePossible
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onMarriageAlliancePossible(namedChar, faction, region, characterType, religion)
+	function onMarriageAlliancePossible(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A marriage alliance has been offered.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onMarriageAllianceOffered
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onMarriageAllianceOffered(namedChar, faction, region, characterType, religion)
+	function onMarriageAllianceOffered(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A priest has gone mad.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onPriestBecomesHeretic
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onPriestBecomesHeretic(namedChar, faction, region, characterType, religion)
+	function onPriestBecomesHeretic(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A character is adjacent to a heretic.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onCharacterNearHeretic
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCharacterNearHeretic(namedChar, faction, region, characterType, religion)
+	function onCharacterNearHeretic(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A character is adjacent to a witch.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onCharacterNearWitch
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCharacterNearWitch(namedChar, faction, region, characterType, religion)
+	function onCharacterNearWitch(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A character has been promoted to a cardinal.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onCardinalPromoted
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCardinalPromoted(namedChar, faction, region, characterType, religion)
+	function onCardinalPromoted(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A character has become a father.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onCharacterBecomesAFather
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCharacterBecomesAFather(namedChar, faction, region, characterType, religion)
+	function onCharacterBecomesAFather(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A General and his army has devastated an enemy's fertile land.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onGeneralDevastatesTile
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGeneralDevastatesTile(namedChar, faction, region, characterType, religion)
+	function onGeneralDevastatesTile(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A spying mission has failed and the spy is executed by the target.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onExecutesASpyOnAMission
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onExecutesASpyOnAMission(namedChar, faction, region, characterType, religion)
+	function onExecutesASpyOnAMission(eventData)
 	--something
 	end
 	*/
 
 	/***
 	An assassination mission has failed and the assassin is executed by the target.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onExecutesAnAssassinOnAMission
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onExecutesAnAssassinOnAMission(namedChar, faction, region, characterType, religion)
+	function onExecutesAnAssassinOnAMission(eventData)
 	--something
 	end
 	*/
 
 	/***
 	Someone has had an attempt on their life.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onSufferAssassinationAttempt
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onSufferAssassinationAttempt(namedChar, faction, region, characterType, religion)
+	function onSufferAssassinationAttempt(eventData)
 	--something
 	end
 	*/
 
 	/***
 	Someone has had an attempt on their assets.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onSufferAcquisitionAttempt
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onSufferAcquisitionAttempt(namedChar, faction, region, characterType, religion)
+	function onSufferAcquisitionAttempt(eventData)
 	--something
 	end
 	*/
 
 	/***
 	Someone has had an attempt on their bachelorhood.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onSufferMarriageAttempt
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onSufferMarriageAttempt(namedChar, faction, region, characterType, religion)
+	function onSufferMarriageAttempt(eventData)
 	--something
 	end
 	*/
 
 	/***
 	Someone has had a denouncement attempt.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onSufferDenouncementAttempt
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onSufferDenouncementAttempt(namedChar, faction, region, characterType, religion)
+	function onSufferDenouncementAttempt(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A Faction leader has ordered a sabotage mission.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onLeaderOrderedSabotage
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onLeaderOrderedSabotage(namedChar, faction, region, characterType, religion)
+	function onLeaderOrderedSabotage(eventData)
 	--something
 	end
 	*/
 
 	/***
 	Someone has been bribed.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onAcceptBribe
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onAcceptBribe(namedChar, faction, region, characterType, religion)
+	function onAcceptBribe(eventData)
 	--something
 	end
 	*/
 
 	/***
 	Someone has refused a bribe.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onRefuseBribe
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onRefuseBribe(namedChar, faction, region, characterType, religion)
+	function onRefuseBribe(eventData)
 	--something
 	end
 	*/
 
 	/***
 	Insurgence has been provoked.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onInsurrection
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onInsurrection(namedChar, faction, region, characterType, religion)
+	function onInsurrection(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A Faction leader has ordered a diplomacy mission.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onLeaderOrderedDiplomacy
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onLeaderOrderedDiplomacy(namedChar, faction, region, characterType, religion)
+	function onLeaderOrderedDiplomacy(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A new admiral has been created for a new ship.
+	Exports: stratCharacter, character, faction, regionID, characterType, religion
 
 	@function onNewAdmiralCreated
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onNewAdmiralCreated(namedChar, faction, region, characterType, religion)
+	function onNewAdmiralCreated(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A building has been destroyed.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onGovernorBuildingDestroyed
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGovernorBuildingDestroyed(namedChar, faction, region, characterType, religion)
+	function onGovernorBuildingDestroyed(eventData)
 	--something
 	end
 	*/
 
 	/***
 	Games have been thrown.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onGovernorThrowGames
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGovernorThrowGames(namedChar, faction, region, characterType, religion)
+	function onGovernorThrowGames(eventData)
 	--something
 	end
 	*/
 
 	/***
 	Races have been thrown.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onGovernorThrowRaces
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGovernorThrowRaces(namedChar, faction, region, characterType, religion)
+	function onGovernorThrowRaces(eventData)
 	--something
 	end
 	*/
 
 	/***
 	The player has selected a character.
+	Exports: character, targetSettlement, faction, regionID, characterType, religion
 
 	@function onCharacterSelected
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCharacterSelected(namedChar, faction, region, characterType, religion)
+	function onCharacterSelected(eventData)
 	--something
 	end
 	*/
 
 	/***
 	The player has selected an enemy character.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onEnemyCharacterSelected
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onEnemyCharacterSelected(namedChar, faction, region, characterType, religion)
+	function onEnemyCharacterSelected(eventData)
 	--something
 	end
 	*/
 
 	/***
 	The player has selected a position beyond the character's extents.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onMultiTurnMove
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onMultiTurnMove(namedChar, faction, region, characterType, religion)
+	function onMultiTurnMove(eventData)
 	--something
 	end
 	*/
 
 	/***
 	The player has opened the panel for the selected character.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onCharacterPanelOpen
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCharacterPanelOpen(namedChar, faction, region, characterType, religion)
+	function onCharacterPanelOpen(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A mission has been completed.
+	Exports: character, faction, regionID, characterType, missionDetails, religion
 
 	@function onLeaderMissionSuccess
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam string missionName
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onLeaderMissionSuccess(namedChar, faction, missionName, region, characterType, religion)
+	function onLeaderMissionSuccess(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A mission has failed.
+	Exports: character, faction, regionID, characterType, missionDetails, religion
 
 	@function onLeaderMissionFailed
 	@tparam namedCharacter namedChar
@@ -983,921 +849,690 @@ void luaP::onPluginLoadF()
 
 	/***
 	A General has been sent on Crusade/Jihad.
+	Exports: character, targetSettlement, faction, targetFaction, regionID, targetRegionID, characterType, religion, targetReligion, crusade
 
 	@function onGeneralJoinCrusade
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam settlementStruct targetSettlement
-	@tparam factionStruct targetFaction
-	@tparam regionStruct targetRegion
-	@tparam string characterType
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGeneralJoinCrusade(namedChar, faction, targetSettlement, targetFaction, targetRegion, characterType, religion, targetReligion)
+	function onGeneralJoinCrusade(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A General has left a Crusade/Jihad.
+	Exports: character, targetSettlement, faction, targetFaction, regionID, targetRegionID, characterType, religion, targetReligion, crusade
 
 	@function onGeneralAbandonCrusade
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam settlementStruct targetSettlement
-	@tparam factionStruct targetFaction
-	@tparam regionStruct targetRegion
-	@tparam string characterType
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGeneralAbandonCrusade(namedChar, faction, targetSettlement, targetFaction, targetRegion, characterType, religion, targetReligion)
+	function onGeneralAbandonCrusade(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A General has arrived in the Crusade/Jihad target region.
+	Exports: character, targetSettlement, faction, targetFaction, army, regionID, targetRegionID, characterType, religion, targetReligion, crusade
 
 	@function onGeneralArrivesCrusadeTargetRegion
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam settlementStruct targetSettlement
-	@tparam factionStruct targetFaction
-	@tparam regionStruct targetRegion
-	@tparam string characterType
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGeneralArrivesCrusadeTargetRegion(namedChar, faction, targetSettlement, targetFaction, targetRegion, characterType, religion, targetReligion)
+	function onGeneralArrivesCrusadeTargetRegion(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A General has taken the Crusade/Jihad target settlement.
+	Exports: character, targetSettlement, faction, targetFaction, regionID, targetRegionID, characterType, religion, targetReligion, crusade
 
 	@function onGeneralTakesCrusadeTarget
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam settlementStruct targetSettlement
-	@tparam factionStruct targetFaction
-	@tparam regionStruct targetRegion
-	@tparam string characterType
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGeneralTakesCrusadeTarget(namedChar, faction, targetSettlement, targetFaction, targetRegion, characterType, religion, targetReligion)
+	function onGeneralTakesCrusadeTarget(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A Character has finished its turn.
+	Exports: character, settlement, faction, regionID, characterType, religion
 
 	@function onCharacterTurnEnd
-	@tparam namedCharacter namedChar
-	@tparam settlementStruct|nil settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCharacterTurnEnd(namedChar, faction, region, characterType, religion)
+	function onCharacterTurnEnd(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A Character has finished its turn in a settlement.
+	Exports: character, settlement, faction, regionID, characterType, religion
 
 	@function onCharacterTurnEndInSettlement
-	@tparam namedCharacter namedChar
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCharacterTurnEndInSettlement(namedChar, settlement, faction, region, characterType, religion)
+	function onCharacterTurnEndInSettlement(eventData)
 	--something
 	end
 	*/
 
 	/***
 	The character has been made the faction leader.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onBecomesFactionLeader
-	@tparam namedCharacter leader
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBecomesFactionLeader(leader, faction, region, characterType, religion)
-		print("Function: onBecomesFactionLeader()\n\tLeader: "..leader.fullName)
+	function onBecomesFactionLeader(eventData)
+		print("Function: onBecomesFactionLeader()\n\tLeader: ".. eventData.character.fullName)
 	end
 	*/
 
 	/***
 	The character is no longer faction leader.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onCeasedFactionLeader
-	@tparam namedCharacter leader
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCeasedFactionLeader(leader, faction, region, characterType, religion)
+	function onCeasedFactionLeader(eventData)
 		--something
 	end
 	*/
 
 	/***
 	The character has been made a faction heir.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onBecomesFactionHeir
-	@tparam namedCharacter heir
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBecomesFactionHeir(heir, faction, region, characterType, religion)
-		print("Function: onBecomesFactionHeir()\n\tHeir: "..heir.fullName)
+	function onBecomesFactionHeir(eventData)
+		print("Function: onBecomesFactionHeir()\n\tHeir: ".. eventData.character.fullName)
 	end
 	*/
 
 	/***
 	The character is no longer faction heir.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onCeasedFactionHeir
-	@tparam namedCharacter heir
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCeasedFactionHeir(heir, faction, region, characterType, religion)
-		print("Function: onCeasedFactionHeir()\n\tHeir: "..heir.fullName)
+	function onCeasedFactionHeir(eventData)
+		print("Function: onCeasedFactionHeir()\n\tHeir: "..  eventData.character.fullName)
 	end
 	*/
 
 	/***
 	A character has been injured by a disaster.
+	Exports: character, faction, regionID, disasterType, characterType, religion
+	disasterTypes = earthquake, flood, horde, storm, volcano, dustbowl, locusts, famine, plague, riot, fire
 
 	@function onCharacterDamagedByDisaster
-	@tparam string eventType (earthquake, flood, horde, storm, volcano, dustbowl, locusts, famine, plague, riot, fire)
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCharacterDamagedByDisaster(eventType, namedChar, faction, region, characterType, religion)
+	function onCharacterDamagedByDisaster(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A General has captured a settlement.
+	Exports: character, settlement, targetSettlement, faction, targetFaction, regionID, characterType, religion
 
 	@function onGeneralCaptureSettlement
-	@tparam namedCharacter namedChar
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam regionStruct region
-	@tparam string characterType
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGeneralCaptureSettlement(namedChar, settlement, faction, targetFaction, region, characterType, religion, targetReligion)
+	function onGeneralCaptureSettlement(eventData)
 	--something
 	end
 	*/
 
 	/***
 	An assault has taken place.
+	Exports: character, faction, targetFaction, regionID, targetRegionID, characterType, religion, targetReligion
 
 	@function onGeneralAssaultsResidence
-	@tparam namedCharacter namedChar
-	@tparam settlementStruct|fortStruct residence
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam regionStruct region
-	@tparam string characterType
-	@tparam string religion
-	@tparam string targetReligion
-	@tparam bool isFort
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGeneralAssaultsResidence(namedChar, residence, faction, targetFaction, region, characterType, religion, targetReligion, isFort)
+	function onGeneralAssaultsResidence(eventData)
 	--something
 	end
 	*/
 
 	/***
 	An assault has taken place.
+	Exports: character, targetCharacter, faction, targetFaction, regionID, characterType, targetCharacterType, religion, targetReligion
 
 	@function onGeneralAssaultsGeneral
-	@tparam namedCharacter namedChar
-	@tparam namedCharacter targetNamedChar
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string targetCharacterType
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGeneralAssaultsGeneral(namedChar, targetNamedChar, faction, targetFaction, region, characterType, targetCharacterType, religion, targetReligion)
+	function onGeneralAssaultsGeneral(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A general on crusade/jihad has been attacked by other character (it includes crusading generals attacked in a residence or on navy and generals attacked by spotted and killed assassin).
+	Exports: character, targetCharacter, faction, targetFaction, regionID, characterType, targetCharacterType, religion, targetReligion
 
 	@function onCharacterAttacksCrusadingGeneral
-	@tparam namedCharacter namedChar
-	@tparam namedCharacter targetNamedChar
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string targetCharacterType
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCharacterAttacksCrusadingGeneral(namedChar, targetNamedChar, faction, targetFaction, region, characterType, targetCharacterType, religion, targetReligion)
+	function onCharacterAttacksCrusadingGeneral(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A General of a captor faction has made a ransom decision.
+	Exports: character, faction, targetFaction, regionID, characterType, religion, targetReligion, captureInfo, ransomType
 
 	@function onGeneralPrisonersRansomedCaptor
-	@tparam namedCharacter namedChar
-	@tparam capturedFactionInfo capInfo
-	@tparam string ransomType
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGeneralPrisonersRansomedCaptor(character, capInfo, ransomType, faction, targetFaction, region, characterType, religion, targetReligion)
+	function onGeneralPrisonersRansomedCaptor(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A General of a captive faction has made a ransom decision.
+	Exports: character, faction, targetFaction, regionID, characterType, religion, targetReligion, captureInfo, ransomType
 
 	@function onGeneralPrisonersRansomedCaptive
-	@tparam namedCharacter namedChar
-	@tparam capturedFactionInfo capInfo
-	@tparam string ransomType
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGeneralPrisonersRansomedCaptive(character, capInfo, ransomType, faction, targetFaction, region, characterType, religion, targetReligion)
+	function onGeneralPrisonersRansomedCaptive(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A captor faction has made a ransom decision.
+	Exports: character, faction, targetFaction, regionID, characterType, religion, targetReligion, captureInfo, ransomType
 
 	@function onFactionLeaderPrisonersRansomedCaptor
-	@tparam namedCharacter namedChar
-	@tparam capturedFactionInfo capInfo
-	@tparam string ransomType
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onFactionLeaderPrisonersRansomedCaptor(character, capInfo, ransomType, faction, targetFaction, region, characterType, religion, targetReligion)
+	function onFactionLeaderPrisonersRansomedCaptor(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A captive faction has made a ransom decision.
+	Exports: character, faction, targetFaction, regionID, characterType, religion, targetReligion, captureInfo, ransomType
 
 	@function onFactionLeaderPrisonersRansomedCaptive
-	@tparam namedCharacter namedChar
-	@tparam capturedFactionInfo capInfo
-	@tparam string ransomType
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onFactionLeaderPrisonersRansomedCaptive(character, capInfo, ransomType, faction, targetFaction, region, characterType, religion, targetReligion)
+	function onFactionLeaderPrisonersRansomedCaptive(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A spy mission has completed. May also export fort or settlement if target was a garrison residence.
+	Exports: character, settlement, fort, faction, targetFaction, regionID, characterType, missionSuccessLevel, missionProbability, religion, targetReligion
 
 	@function onSpyMission
-	@tparam namedCharacter namedChar
-	@tparam string missionSuccess
-	@tparam int missionProbability
-	@tparam settlementStruct|fortStruct|nil targetResidence
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onSpyMission(namedChar, missionSuccess, missionProbability, targetResidence, faction, targetFaction, region, characterType, religion, targetReligion)
+	function onSpyMission(eventData)
 	--something
 	end
 	*/
 
 	/***
 	An assassination mission has completed.
+	Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
 
 	@function onAssassinationMission
-	@tparam namedCharacter namedChar
-	@tparam string missionSuccess
-	@tparam int missionProbability
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onAssassinationMission(namedChar, missionSuccess, missionProbability, faction, region, characterType, religion)
+	function onAssassinationMission(eventData)
 	--something
 	end
 	*/
 
 	/***
 	An acquisition mission has completed.
+	Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
 
 	@function onAcquisitionMission
-	@tparam namedCharacter namedChar
-	@tparam string missionSuccess
-	@tparam int missionProbability
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onAcquisitionMission(namedChar, missionSuccess, missionProbability, faction, region, characterType, religion)
+	function onAcquisitionMission(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A marriage mission has completed.
+	Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
 
 	@function onMarriageMission
-	@tparam namedCharacter namedChar
-	@tparam string missionSuccess
-	@tparam int missionProbability
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onMarriageMission(namedChar, missionSuccess, missionProbability, faction, region, characterType, religion)
+	function onMarriageMission(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A denouncement mission has completed.
+	Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
 
 	@function onDenouncementMission
-	@tparam namedCharacter namedChar
-	@tparam string missionSuccess
-	@tparam int missionProbability
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onDenouncementMission(namedChar, missionSuccess, missionProbability, faction, region, characterType, religion)
+	function onDenouncementMission(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A sabotage mission has completed.
+	Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
 
 	@function onSabotageMission
-	@tparam namedCharacter namedChar
-	@tparam string missionSuccess
-	@tparam int missionProbability
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onSabotageMission(namedChar, missionSuccess, missionProbability, faction, region, characterType, religion)
+	function onSabotageMission(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A bribery mission has completed.
+	Exports: character, faction, targetFaction, regionID, characterType, missionSuccessLevel, religion, targetReligion
 
 	@function onBriberyMission
-	@tparam namedCharacter namedChar
-	@tparam string missionSuccess
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBriberyMission(namedChar, missionSuccess, faction, targetFaction, region, characterType, religion, targetReligion)
+	function onBriberyMission(eventData)
 	--something
 	end
 	*/
 
 	/***
-	A bribery mission has completed.
+	A diplomacy mission has completed.
+	Exports: character, faction, targetFaction, regionID, characterType, missionSuccessLevel, religion, targetReligion
 
 	@function onDiplomacyMission
-	@tparam namedCharacter namedChar
-	@tparam string missionSuccess
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onDiplomacyMission(namedChar, missionSuccess, faction, targetFaction, region, characterType, religion, targetReligion)
+	function onDiplomacyMission(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A Faction leader has ordered a spying mission.
+	Exports: character, settlement, fort, faction, targetFaction, regionID, characterType, missionSuccessLevel, religion, targetReligion
 
 	@function onLeaderOrderedSpyingMission
-	@tparam namedCharacter namedChar
-	@tparam string missionSuccess
-	@tparam settlementStruct|fortStruct|nil targetResidence
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onLeaderOrderedSpyingMission(namedChar, missionSuccess, targetResidence, faction, targetFaction, region, characterType, religion, targetReligion)
+	function onLeaderOrderedSpyingMission(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A Faction leader has ordered an assassination mission.
+	Exports: character, targetCharacter, faction, regionID, characterType, missionSuccessLevel, religion
 
 	@function onLeaderOrderedAssassination
-	@tparam namedCharacter namedChar
-	@tparam string missionSuccess
-	@tparam namedCharacter targetCharacter
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onLeaderOrderedAssassination(namedChar, missionSuccess, targetCharacter, faction, region, characterType, religion)
+	function onLeaderOrderedAssassination(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A Faction leader has ordered a bribery mission.
+	Exports: character, faction, regionID, characterType, religion
 
 	@function onLeaderOrderedBribery
-	@tparam namedCharacter namedChar
-	@tparam namedCharacter targetCharacter
-	@tparam factionStruct faction
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onLeaderOrderedBribery(namedChar, missionSuccess, targetCharacter, faction, region, characterType, religion)
+	function onLeaderOrderedBribery(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A settlement is being processed for the start of its faction's turn.
+	Exports: settlement, faction, regionID, religion
 
 	@function onSettlementTurnStart
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onSettlementTurnStart(settlement, faction, region, religion)
+	function onSettlementTurnStart(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A settlement is no longer garrisoned.
+	Exports: settlement, faction, regionID, religion
 
 	@function onUngarrisonedSettlement
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onUngarrisonedSettlement(settlement, faction, region, religion)
+	function onUngarrisonedSettlement(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A settlement has been upgraded.
+	Exports: settlement, faction, regionID, religion
 
 	@function onSettlementUpgraded
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onSettlementUpgraded(settlement, faction, region, religion)
+	function onSettlementUpgraded(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A settlement has been converted.
+	Exports: settlement, faction, regionID, religion
 
 	@function onSettlementConverted
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onSettlementConverted(settlement, faction, region, religion)
+	function onSettlementConverted(eventData)
 	--something
 	end
 	*/
 
 	/***
 	Siege equipment has been completed by one of the besieging armies.
+	Exports: settlement, faction, regionID, religion
 
 	@function onSiegeEquipmentCompleted
-	@tparam settlementStruct|fortStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onSiegeEquipmentCompleted(settlement, faction, region, religion)
+	function onSiegeEquipmentCompleted(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A Settlement is being processed for the end of its faction's turn.
+	Exports: settlement, faction, regionID, religion
 
 	@function onSettlementTurnEnd
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onSettlementTurnEnd(settlement, faction, region, religion)
+	function onSettlementTurnEnd(eventData)
 	--something
 	end
 	*/
 
 	/***
 	The player has selected a settlement.
+	Exports: settlement, faction, regionID, religion
 
 	@function onSettlementSelected
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onSettlementSelected(settlement, faction, region, religion)
+	function onSettlementSelected(eventData)
 	--something
 	end
 	*/
 
 	/***
 	The player has opened the panel for the selected settlement.
+	Exports: settlement, faction, regionID, religion
 
 	@function onSettlementPanelOpen
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onSettlementPanelOpen(settlement, faction, region, religion)
+	function onSettlementPanelOpen(eventData)
 	--something
 	end
 	*/
 
 	/***
 	The player has opened a recruitment panel.
+	Exports: settlement, faction, regionID, religion
 
 	@function onRecruitmentPanelOpen
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onRecruitmentPanelOpen(settlement, faction, region, religion)
+	function onRecruitmentPanelOpen(eventData)
 	--something
 	end
 	*/
 
 	/***
 	The player has opened a construction panel.
+	Exports: settlement, faction, regionID, religion
 
 	@function onConstructionPanelOpen
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onConstructionPanelOpen(settlement, faction, region, religion)
+	function onConstructionPanelOpen(eventData)
 	--something
 	end
 	*/
 
 	/***
 	The player has opened a trade panel.
+	Exports: settlement, faction, regionID, religion
 
 	@function onTradePanelOpen
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onTradePanelOpen(settlement, faction, region, religion)
+	function onTradePanelOpen(eventData)
 	--something
 	end
 	*/
 
 	/***
 	The player has requested advice on the settlement scroll.
+	Exports: settlement, faction, regionID, resourceDescription, religion
 
 	@function onSettlementScrollAdviceRequested
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onSettlementScrollAdviceRequested(settlement, faction, region, religion)
+	function onSettlementScrollAdviceRequested(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A guild has been created/upgraded.
+	Exports: settlement, faction, regionID, resourceDescription, guild, religion
 
 	@function onGuildUpgraded
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
-	@tparam guild guild
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGuildUpgraded(settlement, faction, region, religion, guild)
+	function onGuildUpgraded(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A guild has been destroyed.
+	Exports: settlement, faction, regionID, guild, religion
 
 	@function onGuildDestroyed
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
-	@tparam guild guild
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGuildDestroyed(settlement, faction, region, religion, guild)
+	function onGuildDestroyed(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A settlement has been captured and occupied.
+	Exports: character, faction, targetFaction, regionID, characterType, religion, targetReligion
 
 	@function onOccupySettlement
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onOccupySettlement(namedChar, faction, region, religion, targetFaction, targetReligion)
+	function onOccupySettlement(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A settlement has been captured and sacked.
+	Exports: character, faction, targetFaction, regionID, characterType, religion, targetReligion
 
 	@function onSackSettlement
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onSackSettlement(namedChar, faction, region, religion, targetFaction, targetReligion)
+	function onSackSettlement(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A settlement has been captured and some of its population has been decimated.
+	Exports: character, faction, targetFaction, regionID, characterType, religion, targetReligion
 
 	@function onExterminatePopulation
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
-
+	@tparam eventTrigger eventData
+	
 	@usage
-	function onExterminatePopulation(namedChar, faction, region, religion, targetFaction, targetReligion)
+	function onExterminatePopulation(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A settlement has rioted.
+	Exports: settlement, faction, targetFaction, regionID, religion, targetReligion
 
 	@function onCityRiots
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCityRiots(settlement, faction, region, religion, targetFaction, targetReligion)
+	function onCityRiots(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A settlement has been given to another faction.
+	Exports: settlement, faction, targetFaction, regionID, religion, targetReligion
 
 	@function onGiveSettlement
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGiveSettlement(settlement, faction, region, religion, targetFaction, targetReligion)
+	function onGiveSettlement(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A settlement has rebelled.
+	Exports: settlement, faction, targetFaction, regionID, religion, targetReligion
 
 	@function onCityRebels
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCityRebels(settlement, faction, region, religion, targetFaction, targetReligion)
+	function onCityRebels(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A settlement has been razed.
+	Exports: settlement, faction, targetFaction, regionID, religion, targetReligion
 
 	@function onCitySacked
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCitySacked(settlement, faction, region, religion, targetFaction, targetReligion)
+	function onCitySacked(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A settlement has rioted.
+	Exports: character, settlement, faction, targetFaction, regionID, characterType, religion, targetReligion
 
 	@function onGovernorCityRiots
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam settlementStruct settlement
-	@tparam regionStruct region
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGovernorCityRiots(namedChar, faction, settlement, region, religion, targetFaction, targetReligion)
+	function onGovernorCityRiots(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A settlement has rebelled.
+	Exports: character, settlement, faction, targetFaction, regionID, characterType, religion, targetReligion
 
 	@function onGovernorCityRebels
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam settlementStruct settlement
-	@tparam regionStruct region
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGovernorCityRebels(namedChar, faction, settlement, region, religion, targetFaction, targetReligion)
+	function onGovernorCityRebels(eventData)
 	--something
 	end
 	*/
@@ -1906,9 +1541,10 @@ void luaP::onPluginLoadF()
 	The player has abandoned a show me scipt.
 
 	@function onAbandonShowMe
+	@tparam eventTrigger eventData
 
 	@usage
-	function onAbandonShowMe()
+	function onAbandonShowMe(eventData)
 	--something here
 	end
 	*/
@@ -1917,9 +1553,10 @@ void luaP::onPluginLoadF()
 	A strat map game has been reloaded.
 
 	@function onGameReloaded
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGameReloaded()
+	function onGameReloaded(eventData)
 	--something here
 	end
 	*/
@@ -1928,9 +1565,10 @@ void luaP::onPluginLoadF()
 	The plaza is being captured.
 
 	@function onBattleWinningPlaza
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleWinningPlaza()
+	function onBattleWinningPlaza(eventData)
 	--something here
 	end
 	*/
@@ -1939,9 +1577,10 @@ void luaP::onPluginLoadF()
 	The plaza capture has been stopped.
 
 	@function onBattleStopsWinningPlaza
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleStopsWinningPlaza()
+	function onBattleStopsWinningPlaza(eventData)
 	--something here
 	end
 	*/
@@ -1950,9 +1589,10 @@ void luaP::onPluginLoadF()
 	The enemy will have captured the plaza in 30s.
 
 	@function onBattleDominatingPlaza
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleDominatingPlaza()
+	function onBattleDominatingPlaza(eventData)
 	--something here
 	end
 	*/
@@ -1961,9 +1601,10 @@ void luaP::onPluginLoadF()
 	A siege engine is now unmanned.
 
 	@function onBattngineUnmanned
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattngineUnmanned()
+	function onBattngineUnmanned(eventData)
 	--something here
 	end
 	*/
@@ -1972,9 +1613,10 @@ void luaP::onPluginLoadF()
 	Half of the player's army has been destroyed.
 
 	@function onBattlePlayerArmyHalfDestroyed
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattlePlayerArmyHalfDestroyed()
+	function onBattlePlayerArmyHalfDestroyed(eventData)
 	--something here
 	end
 	*/
@@ -1983,9 +1625,10 @@ void luaP::onPluginLoadF()
 	Half of the enemy's army has been destroyed.
 
 	@function onBattnemyArmyHalfDestroyed
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattnemyArmyHalfDestroyed()
+	function onBattnemyArmyHalfDestroyed(eventData)
 	--something here
 	end
 	*/
@@ -1994,9 +1637,10 @@ void luaP::onPluginLoadF()
 	The battle has finished.
 
 	@function onBattleFinished
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleFinished()
+	function onBattleFinished(eventData)
 	--something here
 	end
 	*/
@@ -2005,9 +1649,10 @@ void luaP::onPluginLoadF()
 	Half of an army has been destroyed.
 
 	@function onBattleArmyHalfDestroyed
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleArmyHalfDestroyed()
+	function onBattleArmyHalfDestroyed(eventData)
 	--something here
 	end
 	*/
@@ -2016,20 +1661,22 @@ void luaP::onPluginLoadF()
 	The escape key has been pressed. This trigger will only fire if the command StealEscKey has been used.
 
 	@function onEscPressed
+	@tparam eventTrigger eventData
 
 	@usage
-	function onEscPressed()
+	function onEscPressed(eventData)
 	--something here
 	end
 	*/
 
 	/***
-	The escape key has been pressed. This trigger will only fire if the command StealEscKey has been used.
+	The player has been issued with advice by a script.
 
 	@function onScriptedAdvice
+	@tparam eventTrigger eventData
 
 	@usage
-	function onScriptedAdvice()
+	function onScriptedAdvice(eventData)
 	--something here
 	end
 	*/
@@ -2038,9 +1685,10 @@ void luaP::onPluginLoadF()
 	The player has requested advice on the naval prebattle scroll.
 
 	@function onNavalPreBattleScrollAdviceRequested
+	@tparam eventTrigger eventData
 
 	@usage
-	function onNavalPreBattleScrollAdviceRequested()
+	function onNavalPreBattleScrollAdviceRequested(eventData)
 	--something here
 	end
 	*/
@@ -2049,9 +1697,10 @@ void luaP::onPluginLoadF()
 	The player has requested advice on the prebattle scroll.
 
 	@function onPreBattleScrollAdviceRequested
+	@tparam eventTrigger eventData
 
 	@usage
-	function onPreBattleScrollAdviceRequested()
+	function onPreBattleScrollAdviceRequested(eventData)
 	--something here
 	end
 	*/
@@ -2060,9 +1709,10 @@ void luaP::onPluginLoadF()
 	The player has opened the college of cardinals panel.
 
 	@function onCollegeOfCardinalsPanelOpen
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCollegeOfCardinalsPanelOpen()
+	function onCollegeOfCardinalsPanelOpen(eventData)
 	--something here
 	end
 	*/
@@ -2071,9 +1721,10 @@ void luaP::onPluginLoadF()
 	The player has opened the diplomatic standing panel.
 
 	@function onDiplomaticStandingPanelOpen
+	@tparam eventTrigger eventData
 
 	@usage
-	function onDiplomaticStandingPanelOpen()
+	function onDiplomaticStandingPanelOpen(eventData)
 	--something here
 	end
 	*/
@@ -2082,11 +1733,10 @@ void luaP::onPluginLoadF()
 	An idle unit is under missile fire.
 
 	@function onBattlePlayerUnderAttackIdle
-	@tparam stackStruct army
-	@tparam unit playerUnit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattlePlayerUnderAttackIdle(army, playerUnit)
+	function onBattlePlayerUnderAttackIdle(eventData)
 	--something here
 	end
 	*/
@@ -2095,9 +1745,10 @@ void luaP::onPluginLoadF()
 	A team has gained the advantage in combat.
 
 	@function onBattleWinningCombat
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleWinningCombat()
+	function onBattleWinningCombat(eventData)
 	--something here
 	end
 	*/
@@ -2106,9 +1757,10 @@ void luaP::onPluginLoadF()
 	The whole army is tired.
 
 	@function onBattleArmyTired
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleArmyTired()
+	function onBattleArmyTired(eventData)
 	--something here
 	end
 	*/
@@ -2117,1083 +1769,1038 @@ void luaP::onPluginLoadF()
 	A different team is now the strongest.
 
 	@function onBattleTideofBattle
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleTideofBattle()
+	function onBattleTideofBattle(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A unit has gone berserk.
+	Exports: unit
 
 	@function onBattleUnitGoesBerserk
-	@tparam unit unit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleUnitGoesBerserk(unit)
+	function onBattleUnitGoesBerserk(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A siege engine has been destroyed.
+	Exports: unit
 
 	@function onBattleSiegeEngineDestroyed
-	@tparam unit unit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleSiegeEngineDestroyed(unit)
+	function onBattleSiegeEngineDestroyed(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A siege engine has docked with a wall.
+	Exports: unit
 
 	@function onBattleSiegeEngineDocksWall
-	@tparam unit unit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleSiegeEngineDocksWall(unit)
+	function onBattleSiegeEngineDocksWall(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	An engine has started attacking a gate.
+	Exports: unit
 
 	@function onBattleGatesAttackedByEngine
-	@tparam unit unit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleGatesAttackedByEngine(unit)
+	function onBattleGatesAttackedByEngine(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	An engine has destroyed a gate.
+	Exports: unit
 
 	@function onBattleGatesDestroyedByEngine
-	@tparam unit unit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleGatesDestroyedByEngine(unit)
+	function onBattleGatesDestroyedByEngine(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A siege engine has knocked down a wall.
+	Exports: unit
 
 	@function onBattleWallsBreachedByEngine
-	@tparam unit unit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleWallsBreachedByEngine(unit)
+	function onBattleWallsBreachedByEngine(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A wall has been captured.
+	Exports: unit
 
 	@function onBattleWallsCaptured
-	@tparam unit unit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleWallsCaptured(unit)
+	function onBattleWallsCaptured(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A unit has routed.
+	Exports: unit
 
 	@function onBattleUnitRouts
-	@tparam unit unit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleUnitRouts(unit)
+	function onBattleUnitRouts(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A unit has been disbanded.
+	Exports: faction, playerUnit, eduEntry, religion
 
 	@function onUnitDisbanded
-	@tparam factionStruct faction
-	@tparam unit unit
-	@tparam eduEntry entry
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onUnitDisbanded(faction, unit, entry, religion)
+	function onUnitDisbanded(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A unit has been trained.
+	Exports: settlement, faction, playerUnit, eduEntry, religion
 
 	@function onUnitTrained
-	@tparam factionStruct faction
-	@tparam settlementStruct settlement
-	@tparam unit unit
-	@tparam eduEntry entry
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onUnitTrained(faction, settlement, unit, entry, religion)
+	function onUnitTrained(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A unit has been trained.
+	Exports: character, settlement, faction, regionID, playerUnit, eduEntry, characterType, religion
 
 	@function onGovernorUnitTrained
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam settlementStruct settlement
-	@tparam unit unit
-	@tparam eduEntry entry
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGovernorUnitTrained(namedChar, faction, settlement, unit, entry, region, characterType, religion)
+	function onGovernorUnitTrained(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A building has been completed.
+	Exports: character, settlement, faction, regionID, priorBuild, characterType, religion
 
 	@function onGovernorBuildingCompleted
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam settlementStruct settlement
-	@tparam building building
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGovernorBuildingCompleted(namedChar, faction, settlement, building, region, characterType, religion)
+	function onGovernorBuildingCompleted(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	An agent has been trained.
+	Exports: character, settlement, faction, regionID, characterType, religion
 
 	@function onAgentCreated
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam settlementStruct settlement
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onAgentCreated(namedChar, faction, settlement, region, characterType, religion)
+	function onAgentCreated(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	An agent has been trained.
+	Exports: character, settlement, faction, regionID, characterType, religion
 
 	@function onGovernorAgentCreated
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam settlementStruct settlement
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGovernorAgentCreated(namedChar, faction, settlement, building, region, characterType, religion)
+	function onGovernorAgentCreated(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A building has been destroyed.
+	Exports: settlement, faction, regionID, resourceDescription, religion
 
 	@function onBuildingDestroyed
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam string buildingName
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBuildingDestroyed(settlement, faction, buildingName, region, religion)
+	function onBuildingDestroyed(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A building has been added to the construction queue.
+	Exports: settlement, faction, regionID, resourceDescription, religion
 
 	@function onAddedToBuildingQueue
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam string buildingName
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onAddedToBuildingQueue(settlement, faction, buildingName, region, religion)
+	function onAddedToBuildingQueue(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A building has been completed.
+	Exports: settlement, faction, priorBuild, religion
 
 	@function onBuildingCompleted
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam building building
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBuildingCompleted(settlement, faction, buildingName, region, religion)
+	function onBuildingCompleted(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player has requested building advice.
+	Exports: settlement, faction, regionID, religion
 
 	@function onRequestBuildingAdvice
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam string buildingName
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onRequestBuildingAdvice(settlement, faction, buildingName, region, religion)
+	function onRequestBuildingAdvice(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player has requested training advice.
+	Exports: settlement, faction, regionID, religion
 
 	@function onRequestTrainingAdvice
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam string resource
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onRequestTrainingAdvice(settlement, faction, resource, region, religion)
+	function onRequestTrainingAdvice(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A unit has been added to the training queue.
+	Exports: settlement, faction, regionID, resourceDescription, religion
 
 	@function onAddedToTrainingQueue
-	@tparam settlementStruct settlement
-	@tparam factionStruct faction
-	@tparam string unitName
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onAddedToTrainingQueue(settlement, faction, unitName, region, religion)
+	function onAddedToTrainingQueue(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	An army has been entirely routed.
+	Exports: army
 
 	@function onBattleArmyRouted
-	@tparam stackStruct army
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleArmyRouted(army)
+	function onBattleArmyRouted(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A reinforcing army has arrived on the battlefield.
+	Exports: army
 
 	@function onBattleReinforcementsArrive
-	@tparam stackStruct army
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleReinforcementsArrive(army)
+	function onBattleReinforcementsArrive(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player has requested mercenaries advice.
+	Exports: army
 
 	@function onRequestMercenariesAdvice
-	@tparam stackStruct army
+	@tparam eventTrigger eventData
 
 	@usage
-	function onRequestMercenariesAdvice(army)
+	function onRequestMercenariesAdvice(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player has clicked on a button.
+	Exports: resourceDescription
 
 	@function onButtonPressed
-	@tparam string name
+	@tparam eventTrigger eventData
 
 	@usage
-	function onButtonPressed(name)
+	function onButtonPressed(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player triggered a keyboard shortcut.
+	Exports: resourceDescription
 
 	@function onShortcutTriggered
-	@tparam string name
+	@tparam eventTrigger eventData
 
 	@usage
-	function onShortcutTriggered(name)
+	function onShortcutTriggered(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A special UI Element is visible.
+	Exports: resourceDescription
 
 	@function onUIElementVisible
-	@tparam string name
+	@tparam eventTrigger eventData
 
 	@usage
-	function onUIElementVisible(name)
+	function onUIElementVisible(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player opened a scroll.
+	Exports: resourceDescription
 
 	@function onScrollOpened
-	@tparam string name
+	@tparam string eventData
 
 	@usage
-	function onScrollOpened(name)
+	function onScrollOpened(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player closed a scroll.
+	Exports: resourceDescription
 
 	@function onScrollClosed
-	@tparam string name
+	@tparam eventTrigger eventData
 
 	@usage
-	function onScrollClosed(name)
+	function onScrollClosed(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player has requested advice on a scroll.
+	Exports: resourceDescription
 
 	@function onScrollAdviceRequested
-	@tparam string name
+	@tparam eventTrigger eventData
 
 	@usage
-	function onScrollAdviceRequested(name)
+	function onScrollAdviceRequested(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player has suppressed a piece of advice.
+	Exports: resourceDescription
 
 	@function onAdviceSupressed
-	@tparam string name
+	@tparam eventTrigger eventData
 
 	@usage
-	function onAdviceSupressed(name)
+	function onAdviceSupressed(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A general has been routed.
+	Exports: stratCharacter, character
 
 	@function onBattleGeneralRouted
-	@tparam character general
-	@tparam namedCharacter namedChar
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleGeneralRouted(general, namedChar)
+	function onBattleGeneralRouted(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A general has been killed.
+	Exports: stratCharacter
 
 	@function onBattleGeneralKilled
-	@tparam character general
-	@tparam namedCharacter namedChar
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleGeneralKilled(general, namedChar)
+	function onBattleGeneralKilled(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A Crusade/Jihad has been called.
+	Exports: targetSettlement, targetFaction, targetRegionID, targetReligion, crusade
 
 	@function onCrusadeCalled
-	@tparam settlementStruct targetSettlement
-	@tparam factionStruct targetFaction
-	@tparam regionStruct targetRegion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCrusadeCalled(targetSettlement, targetFaction, targetRegion, targetReligion)
+	function onCrusadeCalled(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The Pope has accepted the player's crusade target.
+	Exports: targetSettlement, targetFaction, targetRegionID, targetReligion, crusade
 
 	@function onPopeAcceptsCrusadeTarget
-	@tparam settlementStruct targetSettlement
-	@tparam factionStruct targetFaction
-	@tparam regionStruct targetRegion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onPopeAcceptsCrusadeTarget(targetSettlement, targetFaction, targetRegion, targetReligion)
+	function onPopeAcceptsCrusadeTarget(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The Pope has rejected the player's crusade target.
+	Exports: targetSettlement, targetFaction, targetRegionID, targetReligion, crusade
 
 	@function onPopeRejectsCrusadeTarget
-	@tparam settlementStruct targetSettlement
-	@tparam factionStruct targetFaction
-	@tparam regionStruct targetRegion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onPopeRejectsCrusadeTarget(targetSettlement, targetFaction, targetRegion, targetReligion)
+	function onPopeRejectsCrusadeTarget(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A Crusade/Jihad has ended.
+	Exports: targetSettlement, targetRegionID, crusade
 
 	@function onCrusadeEnds
-	@tparam settlementStruct targetSettlement
-	@tparam regionStruct targetRegion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCrusadeEnds(targetSettlement, targetRegion)
+	function onCrusadeEnds(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	Called before the faction's turn starts.
+	Exports: faction, religion
 
 	@function onPreFactionTurnStart
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onPreFactionTurnStart(faction, religion)
+	function onPreFactionTurnStart(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	Called at a faction's turn start.
+	Exports: faction, religion
 
 	@function onFactionTurnStart
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onFactionTurnStart(faction, religion)
+	function onFactionTurnStart(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	Called after faction changes to a new capital.
+	Exports: faction, religion
 
 	@function onFactionNewCapital
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onFactionNewCapital(faction, religion)
+	function onFactionNewCapital(eventData)
 	newCapital=fac.capital();
 	end
 	*/
 
 	/***
 	Called at a faction's turn end.
+	Exports: faction, religion
 
 	@function onFactionTurnEnd
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onFactionTurnEnd(faction, religion)
+	function onFactionTurnEnd(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A Faction has voted for the new pope.
+	Exports: faction, religion
 
 	@function onVotedForPope
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onVotedForPope(faction, religion)
+	function onVotedForPope(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A Faction has been excommunicated.
+	Exports: faction, religion
 
 	@function onFactionExcommunicated
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onFactionExcommunicated(faction, religion)
+	function onFactionExcommunicated(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A Faction has formed a horde.
+	Exports: faction, religion
 
 	@function onHordeFormed
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onHordeFormed(faction, religion)
+	function onHordeFormed(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A cardinal has been removed from the game.
+	Exports: faction, religion
 
 	@function onCardinalRemoved
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onCardinalRemoved(faction, religion)
+	function onCardinalRemoved(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	An inquisitor has been dispatched to a region.
+	Exports: faction, religion
 
 	@function onInquisitorAppointed
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onInquisitorAppointed(faction, religion)
+	function onInquisitorAppointed(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	An assassination mission against the pope has failed and the assassin is executed.
+	Exports: faction, religion
 
 	@function onAssassinCaughtAttackingPope
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onAssassinCaughtAttackingPope(faction, religion)
+	function onAssassinCaughtAttackingPope(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player has opened his finances panel.
+	Exports: faction, religion
 
 	@function onFinancesPanelOpen
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onFinancesPanelOpen(faction, religion)
+	function onFinancesPanelOpen(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player has opened the faction summary panel.
+	Exports: faction, religion
 
 	@function onFactionSummaryPanelOpen
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onFactionSummaryPanelOpen(faction, religion)
+	function onFactionSummaryPanelOpen(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player has opened the family tree panel.
+	Exports: faction, religion
 
 	@function onFamilyTreePanelOpen
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onFamilyTreePanelOpen(faction, religion)
+	function onFamilyTreePanelOpen(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player has opened the diplomatic standing panel.
+	Exports: faction, religion
 
 	@function onDiplomacyPanelOpen
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onDiplomacyPanelOpen(faction, religion)
+	function onDiplomacyPanelOpen(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player has attacked an army or settlement. The decision panel is now open.
+	Exports: faction, religion
 
 	@function onPreBattlePanelOpen
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onPreBattlePanelOpen(faction, religion)
+	function onPreBattlePanelOpen(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A message has arrived for the player.
+	Exports: faction, eventID, religion
 
 	@function onIncomingMessage
-	@tparam factionStruct faction
-	@tparam string religion
-	@tparam int eventid
+	@tparam eventTrigger eventData
 
 	@usage
-	function onIncomingMessage(faction, religion, eventid)
+	function onIncomingMessage(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player has opened a message.
+	Exports: faction, eventID, religion
 
 	@function onMessageOpen
-	@tparam factionStruct faction
-	@tparam string religion
-	@tparam int eventid
+	@tparam eventTrigger eventData
 
 	@usage
-	function onMessageOpen(faction, religion, eventid)
+	function onMessageOpen(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player has closed a message.
+	Exports: eventID
 
 	@function onMessageClosed
-	@tparam int eventid
+	@tparam eventTrigger eventData
 
 	@usage
-	function onMessageClosed(eventid)
+	function onMessageClosed(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The player has declined automated settlement management.
+	Exports: faction, religion
 
 	@function onDeclineAutomatedSettlementManagement
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onDeclineAutomatedSettlementManagement(faction, religion)
+	function onDeclineAutomatedSettlementManagement(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The battle AI has begun processing.
+	Exports: faction, religion
 
 	@function onBattleAiCommenced
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleAiCommenced(faction, religion)
+	function onBattleAiCommenced(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The delay phase has begun.
+	Exports: faction, religion
 
 	@function onBattleDelayPhaseCommenced
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleDelayPhaseCommenced(faction, religion)
+	function onBattleDelayPhaseCommenced(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The deployment phase has begun.
+	Exports: faction, religion
 
 	@function onBattleDeploymentPhaseCommenced
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleDeploymentPhaseCommenced(faction, religion)
+	function onBattleDeploymentPhaseCommenced(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	The conflict phase has begun.
+	Exports: faction, religion
 
 	@function onBattleConflictPhaseCommenced
-	@tparam factionStruct faction
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleConflictPhaseCommenced(faction, religion)
+	function onBattleConflictPhaseCommenced(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	Called after a faction declares a war.
+	Exports: faction, targetFaction, religion, targetReligion
 
 	@function onFactionWarDeclared
-	@tparam factionStruct faction
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onFactionWarDeclared(faction, religion, targetFaction, targetReligion)
+	function onFactionWarDeclared(eventData)
 	--something
 	end
 	*/
 
 	/***
 	Called after a faction declares an alliance.
+	Exports: faction, targetFaction, religion, targetReligion
 
 	@function onFactionAllianceDeclared
-	@tparam factionStruct faction
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onFactionAllianceDeclared(faction, religion, targetFaction, targetReligion)
+	function onFactionAllianceDeclared(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A marriage has occured between two factions. gets fired for both factions involved.
+	Exports: faction, targetFaction, religion, targetReligion
 
 	@function onInterFactionMarriage
-	@tparam factionStruct faction
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onInterFactionMarriage(faction, religion, targetFaction, targetReligion)
+	function onInterFactionMarriage(eventData)
 	--something
 	end
 	*/
 
 	/***
 	Called after a faction makes a trade agreement.
+	Exports: faction, targetFaction, religion, targetReligion
 
 	@function onFactionTradeAgreementMade
-	@tparam factionStruct faction
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onFactionTradeAgreementMade(faction, religion, targetFaction, targetReligion)
+	function onFactionTradeAgreementMade(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A new pope has been elected.
+	Exports: faction, targetFaction, religion, targetReligion
 
 	@function onPopeElected
-	@tparam factionStruct faction
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onPopeElected(faction, religion, targetFaction, targetReligion)
+	function onPopeElected(eventData)
 	--something
 	end
 	*/
 
 	/***
 	Called after a faction breaks an alliance.
+	Exports: faction, targetFaction, religion, targetReligion
 
 	@function onFactionBreakAlliance
-	@tparam factionStruct faction
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onFactionBreakAlliance(faction, religion, targetFaction, targetReligion)
+	function onFactionBreakAlliance(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A faction to faction attitude update has occurred (once every round).
+	Exports: faction, targetFaction, religion
 
 	@function onUpdateAttitude
-	@tparam factionStruct faction
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onUpdateAttitude(faction, religion, targetFaction, targetReligion)
+	function onUpdateAttitude(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A demeanour response has occured in diplomacy talks.
+	Exports: faction, targetFaction, religion, targetReligion, amount
 
 	@function onDemeanour
-	@tparam factionStruct faction
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
-	@tparam float amountChange
+	@tparam eventTrigger eventData
 
 	@usage
-	function onDemeanour(faction, religion, targetFaction, targetReligion, amountChange)
+	function onDemeanour(eventData)
 	--something
 	end
 	*/
 
 	/***
 	Called after a faction gives money to another faction.
+	Exports: faction, targetFaction, religion, targetReligion, amount
 
 	@function onGiveMoney
-	@tparam factionStruct faction
-	@tparam string religion
-	@tparam factionStruct targetFaction
-	@tparam string targetReligion
-	@tparam int amount
+	@tparam eventTrigger eventData
 
 	@usage
-	function onGiveMoney(faction, religion, targetFaction, targetReligion, amount)
+	function onGiveMoney(eventData)
 	--something
 	end
 	*/
 
 	/***
 	A player unit has attacked one of the enemies units.
+	Exports: attackingUnit, defendingUnit, playerUnit, enemyUnit
 
 	@function onBattlePlayerUnitAttacksEnemyUnit
-	@tparam unit attackingUnit
-	@tparam unit defendingUnit
-	@tparam unit playerUnit
-	@tparam unit enemyUnit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattlePlayerUnitAttacksEnemyUnit(attackingUnit, defendingUnit, playerUnit, enemyUnit)
+	function onBattlePlayerUnitAttacksEnemyUnit(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	An enemy unit has attacked one of the players units.
+	Exports: attackingUnit, defendingUnit, playerUnit, enemyUnit
 
 	@function onBattleEnemyUnitAttacksPlayerUnit
-	@tparam unit attackingUnit
-	@tparam unit defendingUnit
-	@tparam unit playerUnit
-	@tparam unit enemyUnit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleEnemyUnitAttacksPlayerUnit(attackingUnit, defendingUnit, playerUnit, enemyUnit)
+	function onBattleEnemyUnitAttacksPlayerUnit(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	One of the player's units has gone berserk.
+	Exports: playerUnit
 
 	@function onBattlePlayerUnitGoesBerserk
-	@tparam unit playerUnit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattlePlayerUnitGoesBerserk(playerUnit)
+	function onBattlePlayerUnitGoesBerserk(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	One of the player's units has routed.
+	Exports: playerUnit
 
 	@function onBattlePlayerUnitRouts
-	@tparam unit playerUnit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattlePlayerUnitRouts(playerUnit)
+	function onBattlePlayerUnitRouts(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A siege engine belonging to the player has been destroyed.
+	Exports: playerUnit
 
 	@function onBattlePlayerSiegeEngineDestroyed
-	@tparam unit playerUnit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattlePlayerSiegeEngineDestroyed(playerUnit)
+	function onBattlePlayerSiegeEngineDestroyed(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A player's engine has started attacking a gate.
+	Exports: playerUnit
 
 	@function onBattleGatesAttackedByPlayerEngine
-	@tparam unit playerUnit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleGatesAttackedByPlayerEngine(playerUnit)
+	function onBattleGatesAttackedByPlayerEngine(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	One of the enemy's units has gone berserk.
+	Exports: enemyUnit
 
 	@function onBattleEnemyUnitGoesBerserk
-	@tparam unit enemyUnit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleEnemyUnitGoesBerserk(enemyUnit)
+	function onBattleEnemyUnitGoesBerserk(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	One of the enemy's units has routed.
+	Exports: enemyUnit
 
 	@function onBattnemyUnitRouts
-	@tparam unit enemyUnit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattnemyUnitRouts(enemyUnit)
+	function onBattnemyUnitRouts(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	A siege engine belonging to the enemy has been destroyed.
+	Exports: enemyUnit
 
 	@function onBattnemySiegeEngineDestroyed
-	@tparam unit enemyUnit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattnemySiegeEngineDestroyed(enemyUnit)
+	function onBattnemySiegeEngineDestroyed(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	An enemy's engine has started attacking a gate.
+	Exports: enemyUnit
 
 	@function onBattleGatesAttackedByEnemyEngine
-	@tparam unit enemyUnit
+	@tparam eventTrigger eventData
 
 	@usage
-	function onBattleGatesAttackedByEnemyEngine(enemyUnit)
+	function onBattleGatesAttackedByEnemyEngine(eventData)
 	--something here
 	end
 	*/
 
 	/***
 	When a particular disaster has just happened.
+	Exports: resourceDescription
 
 	@function onDisaster
-	@tparam string eventType (earthquake, flood, storm, volcano, plague)
+	@tparam eventTrigger eventData
 
 	@usage
-	function onDisaster(eventType)
-		if eventType == "earthquake" then
+	function onDisaster(eventData)
+		if eventData.resourceDescription == "earthquake" then
 			--something here
 		end
 	end
@@ -3201,13 +2808,14 @@ void luaP::onPluginLoadF()
 
 	/***
 	An event counter has changed it's value.
+	Exports: eventCounter
 
 	@function onEventCounter
-	@tparam string counter
+	@tparam eventTrigger eventData
 
 	@usage
-	function onEventCounter(counter)
-		if counter == "my_event_counter" then
+	function onEventCounter(eventData)
+		if eventData.eventCounter == "my_event_counter" then
 			--something here
 		end
 	end
@@ -3215,113 +2823,93 @@ void luaP::onPluginLoadF()
 
 	/***
 	The last unit has been removed from a fort, agents do not count.
+	Exports: fort, faction, regionID, religion
 
 	@function onUngarrisonedFort
-	@tparam fortStruct fort
-	@tparam factionStruct faction
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onUngarrisonedFort(fort, faction, region, religion)
+	function onUngarrisonedFort(eventData)
 		--something here
 	end
 	*/
 
 	/***
 	An object of the target faction has been seen by the faction.
+	Exports: faction, targetFaction, regionID, coords, religion
 
 	@function onObjSeen
-	@tparam factionStruct fac Faction that saw the object.
-	@tparam factionStruct targetFac Faction that owns the object.
-	@tparam int xCoord
-	@tparam int yCoord
+	@tparam eventTrigger eventData
 
 	@usage
-	function onObjSeen(faction, targetFaction, x, y, region, religion)
+	function onObjSeen(eventData)
 		--something here
 	end
 	*/
 
 	/***
 	The tile has been seen by the faction.
+	Exports: faction, regionID, coords, religion
 
 	@function onTileSeen
-	@tparam factionStruct faction
-	@tparam int xCoord
-	@tparam int yCoord
-	@tparam regionStruct region
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onTileSeen(faction, x, y, region, religion)
+	function onTileSeen(eventData)
 		--something here
 	end
 	*/
 
 	/***
 	A faction to faction transgression has occurred.
+	Exports: faction, targetFaction, resourceDescription, religion, targetReligion
+	transgressions: TC_THREATEN_WAR, TC_DECLARED_WAR, TC_MINOR_ASSASSINATION_ATTEMPT, TC_BROKE_TREATY_TERMS, TC_BROKE_ALLIANCE, TC_INVASION
 
 	@function onTransgression
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam string transgression (TC_THREATEN_WAR, TC_DECLARED_WAR, TC_MINOR_ASSASSINATION_ATTEMPT, TC_BROKE_TREATY_TERMS, TC_BROKE_ALLIANCE, TC_INVASION)
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onTransgression(faction, targetFaction, transgression, religion, targetReligion)
+	function onTransgression(eventData)
 		--something here
 	end
 	*/
 
 	/***
 	A faction to faction forgiveness has occurred.
+	Exports: faction, targetFaction, resourceDescription, religion
+	forgiveness: FC_MILITARY_ASSISTANCE, FC_OBVIOUS_BRIBE
 
 	@function onForgiveness
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam string forgiveness (not sure what this could be)
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onForgiveness(faction, targetFaction, forgiveness, religion, targetReligion)
+	function onForgiveness(eventData)
 		--something here
 	end
 	*/
 
 	/***
 	An army has taken a crusade or jihad target settlement.
+	Exports: targetSettlement, faction, targetFaction, army, regionID, targetRegionID, coords, religion, targetReligion, crusade
 
 	@function onArmyTakesCrusadeTarget
-	@tparam settlementStruct targetSettlement
-	@tparam stackStruct army
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam regionStruct targetRegion
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onArmyTakesCrusadeTarget(targetSettlement, army, faction, targetFaction, targetRegion, religion, targetReligion)
+	function onArmyTakesCrusadeTarget(eventData)
 		--something here
 	end
 	*/
 
 	/***
 	Units have deserted a crusade or jihad.
+	Exports: targetSettlement, faction, targetFaction, targetRegionID, religion, targetReligion, crusade
 
 	@function onUnitsDesertCrusade
-	@tparam settlementStruct targetSettlement
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam regionStruct targetRegion
-	@tparam string religion
-	@tparam string targetReligion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onUnitsDesertCrusade(targetSettlement, faction, targetFaction, targetRegion, religion, targetReligion)
+	function onUnitsDesertCrusade(eventData)
 		--something here
 	end
 	*/
@@ -3397,6 +2985,22 @@ void luaP::onPluginLoadF()
 
 	onReadGameDbsAtStart = new sol::function(luaState["onReadGameDbsAtStart"]);
 	checkLuaFunc(&onReadGameDbsAtStart);
+
+	/***
+	Called after the game loads various db`s (edu, etc) at startup.
+
+	@function onGameInit
+
+	@usage
+	function onGameInit()
+	--something here
+	end
+	*/
+
+
+
+	onGameInit = new sol::function(luaState["onGameInit"]);
+	checkLuaFunc(&onGameInit);
 
 	/***
 	Called on clicking the stratmap.

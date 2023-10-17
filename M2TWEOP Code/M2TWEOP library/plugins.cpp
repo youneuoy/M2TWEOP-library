@@ -227,6 +227,14 @@ void plugins::onReadGameDbsAtStart()
 	}
 }
 
+void plugins::onGameInit()
+{
+	for (plugin* pl : pluginsCfg.plugins)
+	{
+		(*(*pl->onGameInit))();
+	}
+}
+
 void plugins::onWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	for (plugin* pl : pluginsCfg.plugins)
@@ -373,6 +381,10 @@ int plugin::init(string* nameP)
 	fName = "onfortificationlevelS";
 	onfortificationlevelS.Load(&plPath, &fName);
 
+
+	//onReadGameDbsAtStart
+	fName = "onGameInit";
+	onGameInit.Load(&plPath, &fName);
 
 	//onReadGameDbsAtStart
 	fName = "onReadGameDbsAtStart";

@@ -506,7 +506,7 @@ void luaP::initEopEdu()
 	EDB.addBuildingCapability(eopBuilding, 0, 55, 500, true)
 
 	-- Add a recruit pool
-	EDB.addBuildingPool(eopBuilding, 0, 55, 1, 0.1, 2, 0);
+	EDB.addBuildingPool(eopBuilding, 0, 55, 1, 0.1, 2, 0, "");
 
 	-- Create a dummy building and get it
 	sett:createBuilding("market");; --just assuming you have got a sett with some loop or function
@@ -733,9 +733,10 @@ void luaP::initEopEdu()
 	@tparam float gainPerTurn Replenishment per turn.
 	@tparam float maxSize Maximum size.
 	@tparam int exp Initial experience.
+	@tparam string condition Like in export_descr_buildings but without "requires".
 	@usage
 	building = EDB.getBuildingByName("market")
-	EDB.addBuildingPool(building, 0, 55, 1, 0.1, 2, 0);
+	EDB.addBuildingPool(building, 0, 55, 1, 0.1, 2, 0, "region_religion catholic 34");
 	*/
 	tables.EDB.set_function("addBuildingPool", &buildingStructHelpers::addBuildingPool);
 

@@ -123,6 +123,271 @@ namespace gameHelpers
 		return &region->neighbourRegions[index];
 	}
 
+	//1 never impelemnted
+
+	unit* getEventAttackingUnit(eventTrigger* eventData)
+	{
+		return CallVFunc<2, unit*>(eventData);
+	}
+
+	unit* getEventDefendingUnit(eventTrigger* eventData)
+	{
+		return CallVFunc<3, unit*>(eventData);
+	}
+
+	general* getEventCharacter(eventTrigger* eventData)
+	{
+		return CallVFunc<4, general*>(eventData);
+	}
+
+	namedCharacter* getEventNamedCharacter(eventTrigger* eventData)
+	{
+		return CallVFunc<5, namedCharacter*>(eventData);
+	}
+
+	namedCharacter* getEventNamedCharacter2(eventTrigger* eventData)
+	{
+		return CallVFunc<6, namedCharacter*>(eventData);
+	}
+
+	//7 status thing
+
+	namedCharacter* getEventTargetNamedCharacter(eventTrigger* eventData)
+	{
+		return CallVFunc<8, namedCharacter*>(eventData);
+	}
+
+	settlementStruct* getEventSettlement(eventTrigger* eventData)
+	{
+		return CallVFunc<9, settlementStruct*>(eventData);
+	}
+
+	settlementStruct* getEventTargetSettlement(eventTrigger* eventData)
+	{
+		return CallVFunc<10, settlementStruct*>(eventData);
+	}
+
+	fortStruct* getEventFort(eventTrigger* eventData)
+	{
+		return CallVFunc<11, fortStruct*>(eventData);
+	}
+
+	factionStruct* getEventFaction(eventTrigger* eventData)
+	{
+		return CallVFunc<12, factionStruct*>(eventData);
+	}
+
+	factionStruct* getEventTargetFaction(eventTrigger* eventData)
+	{
+		return CallVFunc<13, factionStruct*>(eventData);
+	}
+
+	stackStruct* getEventArmy(eventTrigger* eventData)
+	{
+		return CallVFunc<14, stackStruct*>(eventData);
+	}
+
+	int getEventRegion(eventTrigger* eventData)
+	{
+		return CallVFunc<15, int>(eventData);
+	}
+
+	int getEventTargetRegion(eventTrigger* eventData)
+	{
+		return CallVFunc<16, int>(eventData);
+	}
+
+	unit* getEventPlayerUnit(eventTrigger* eventData)
+	{
+		return CallVFunc<17, unit*>(eventData);
+	}
+
+	unit* getEventEnemyUnit(eventTrigger* eventData)
+	{
+		return CallVFunc<18, unit*>(eventData);
+	}
+
+	//19 building_battle
+	buildingBattle* getBuildingBattle(eventTrigger* eventData)
+	{
+		return CallVFunc<19, buildingBattle*>(eventData);
+	}
+
+	//20 prior_build
+	buildingInQueue* getPriorBuild(eventTrigger* eventData)
+	{
+		return CallVFunc<20, buildingInQueue*>(eventData);
+	}
+
+	//21 advised_build
+
+	//22 best_finance_option
+
+	//23 resource_description
+	const char* getResourceDescription(eventTrigger* eventData)
+	{
+		return CallVFunc<23, const char*>(eventData);
+	}
+
+	eduEntry* getEduEntry(eventTrigger* eventData)
+	{
+		return CallVFunc<23, eduEntry*>(eventData);
+	}
+
+	int getEventCharacterType(eventTrigger* eventData)
+	{
+		return CallVFunc<24, int>(eventData);
+	}
+
+	int getEventTargetCharacterType(eventTrigger* eventData)
+	{
+		return CallVFunc<25, int>(eventData);
+	}
+
+	std::unordered_map<int, const char*> disasterTypes = {
+		{0,"earthquake"},
+		{1,"flood"},
+		{2,"horde"},
+		{3,"storm"},
+		{4,"volcano"},
+		{5,"dustbowl"},
+		{6,"locusts"},
+		{7,"famine"},
+		{8,"plague"},
+		{9,"riot"},
+		{10,"fire"}
+	};
+	std::unordered_map<int, const char*> ransomTypes = {
+		{0,"ransom"},
+		{1,"execute"},
+		{2,"release"},
+		{3,"cannot_pay_ransom"}
+	};
+	std::unordered_map<int, const char*> missionSuccessLvl = {
+		{0,"not_successful"},
+		{1,"slightly_successful"},
+		{2,"partly_successful"},
+		{3,"highly_successful"}
+	};
+
+	const char* getEventType(eventTrigger* eventData)
+	{
+		auto eventType = "unknown";
+		auto eventNumber = CallVFunc<26, int>(eventData);
+		if (disasterTypes.find(eventNumber) != disasterTypes.end()) {
+			eventType = disasterTypes.at(eventNumber);
+		}
+		return eventType;
+	}
+
+	const char* getMissionSuccessLevel(eventTrigger* eventData)
+	{
+		auto level = "unknown";
+		auto levelNumber = CallVFunc<27, int>(eventData);
+		if (disasterTypes.find(levelNumber) != disasterTypes.end()) {
+			level = disasterTypes.at(levelNumber);
+		}
+		return level;
+	}
+
+	int getMissionProbability(eventTrigger* eventData)
+	{
+		return CallVFunc<28, int>(eventData);;
+	}
+
+	//29 mission_details
+	const char* getMissionDetails(eventTrigger* eventData)
+	{
+		return CallVFunc<29, const char*>(eventData);
+	}
+
+	//30 character_action_advice
+
+	//31 event
+	int getEventID(eventTrigger* eventData)
+	{
+		return CallVFunc<31, int>(eventData);;
+	}
+
+	//32 unk
+
+	//33 unk2
+
+	//34 guild handler
+	guild* getEventGuild(eventTrigger* eventData)
+	{
+		return CallVFunc<34, guild*>(eventData);
+	}
+
+	//35 event_counter
+	const char* getEventCounter(eventTrigger* eventData)
+	{
+		return CallVFunc<35, const char*>(eventData);
+	}
+
+	//36 sm_position
+	coordPair* getPosition(eventTrigger* eventData)
+	{
+		return CallVFunc<36, coordPair*>(eventData);
+	}
+
+	//37 get religion
+	int getReligion(eventTrigger* eventData)
+	{
+		return CallVFunc<37, int>(eventData);;
+	}
+
+	//38 get target religion
+	int getTargetReligion(eventTrigger* eventData)
+	{
+		return CallVFunc<38, int>(eventData);;
+	}
+
+	//39 amount
+	float getAmount(eventTrigger* eventData)
+	{
+		return CallVFunc<39, float>(eventData);;
+	}
+
+	//40 crusade
+	crusade* getCrusade(eventTrigger* eventData)
+	{
+		return CallVFunc<40, crusade*>(eventData);;
+	}
+
+	//41 captured faction info
+	capturedFactionInfo* getCapturedFactionInfo(eventTrigger* eventData)
+	{
+		return CallVFunc<41, capturedFactionInfo*>(eventData);;
+	}
+
+	//42 ransom type
+	const char* getRansomType(eventTrigger* eventData)
+	{
+		auto ransomType = "unknown";
+		auto ransom = CallVFunc<42, int>(eventData);
+		if (ransomTypes.find(ransom) != ransomTypes.end()) {
+			ransomType = ransomTypes.at(ransom);
+		}
+		return ransomType;
+	}
+
+	//43 unk
+
+	//44 unk
+
+	//45 unit
+	unit* getUnit(eventTrigger* eventData)
+	{
+		return CallVFunc<45, unit*>(eventData);;
+	}
+	
+	bool condition(const char* condition, const eventTrigger* eventData)
+	{
+		return (*(*plugData::data.funcs.condition))(condition, eventData);
+	}
+
+
 	bool gameHelpers::getHiddenResource(regionStruct* region, int index)
 	{
 		int resources;
@@ -204,7 +469,7 @@ namespace gameHelpers
 
 	mercPoolUnit* gameHelpers::addMercUnit(mercPool* mercPool, const int idx, const int exp, const int cost, const float repmin, const float repmax, const int maxunits, const float startpool, const float startyear, const float endyear, const int crusading)
 	{
-		auto* newMerc = new mercPoolUnit;
+		auto* newMerc = reinterpret_cast<mercPoolUnit*>(technicalHelpers::allocateGameMem(sizeof(mercPoolUnit)));
 		*newMerc = mercPool->firstUnits.mercPoolUnits[0];
 		int mercUnitNum = gameHelpers::getMercUnitNum(mercPool);
 		eduEntry* entry = eopEduHelpers::getEduEntry(idx);
@@ -224,7 +489,7 @@ namespace gameHelpers
 		newMerc->eventsListEnd = nullptr;
 		newMerc->eventsListEnd2 = nullptr;
 		newMerc->crusading = crusading;
-		newMerc->mercPoolUnitIndex = (int16_t)mercUnitNum;
+		newMerc->mercPoolUnitIndex = static_cast<int16_t>(mercUnitNum);
 		newMerc->mercPool = mercPool;
 		mercPoolUnitsPtr* unitptr = &mercPool->firstUnits;
 		int currunits = unitptr->currentPool;
@@ -237,8 +502,8 @@ namespace gameHelpers
 		}
 		if ((maxunitsP - currunits) == 0)
 		{
-			auto* newPtr = new mercPoolUnitsPtr;
-			newPtr->Maxpool = (unitptr->Maxpool) * 2;
+			const auto newPtr = reinterpret_cast<mercPoolUnitsPtr*>(technicalHelpers::allocateGameMem(sizeof(mercPoolUnitsPtr)));
+			newPtr->Maxpool = unitptr->Maxpool * 2;
 			newPtr->currentPool = 0;
 			newPtr->nextUnitsPtr = nullptr;
 			newPtr->prevPoolUnits = unitptr->mercPoolUnits;
@@ -246,7 +511,7 @@ namespace gameHelpers
 			unitptr = unitptr->nextUnitsPtr;
 			currunits = 0;
 		}
-		auto* newArray = new mercPoolUnit[currunits + 1];
+		const auto newArray = reinterpret_cast<mercPoolUnit*>(technicalHelpers::allocateGameMem(sizeof(mercPoolUnitsPtr) * unitptr->Maxpool));
 		for (int i = 0; i < currunits; i++) {
 			newArray[i] = unitptr->mercPoolUnits[i];
 		}

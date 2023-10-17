@@ -144,9 +144,11 @@ public:
 	ProcLoader<void(__cdecl*)(factionStruct* fac, const char* newName)> changeFactionName;
 	ProcLoader<UNICODE_STRING** (__cdecl*)(factionStruct* fac)> getFactionName;
 	ProcLoader<void(__cdecl*)(regionStruct* region, const char* newName)> changeRegionName;
+	ProcLoader<bool(__cdecl*)(const char* condition, const eventTrigger* eventData)> condition;
 	ProcLoader<void(__cdecl*)(regionStruct* region, const char* newName)> changeRebelsName;
 	ProcLoader<void(__cdecl*)(const factionStruct* fac, fortStruct* fort)> deleteFort;
 	ProcLoader<void(__cdecl*)(const factionStruct* fac, int x, int y)> createFortXY;
+	ProcLoader<DWORD(__cdecl*)(size_t amount)> allocateGameMem;
 	ProcLoader<void(__cdecl*)(const general* gen)> createFort;
 	ProcLoader<gameDataAllStruct* (__cdecl*)()> getGameDataAll;
 
@@ -253,7 +255,7 @@ public:
 	ProcLoader<void(__cdecl*)(edbEntry*, int, int)>removeBuildingCapability;
 	ProcLoader<BuildingLvlCapability* (__cdecl*)(edbEntry*, int, int)>getBuildingCapability;
 	ProcLoader<int(__cdecl*)(edbEntry*, int)>getBuildingCapabilityNum;
-	ProcLoader<void(__cdecl*)(edbEntry*, int, int, float, float, float, int32_t)>addBuildingPool;
+	ProcLoader<void(__cdecl*)(edbEntry*, int, int, float, float, float, int32_t, const char*)>addBuildingPool;
 	ProcLoader<void(__cdecl*)(edbEntry*, int, int)>removeBuildingPool;
 	ProcLoader<recruitPool* (__cdecl*)(edbEntry*, int, int)>getBuildingPool;
 	ProcLoader<int(__cdecl*)(edbEntry*, int)>getBuildingPoolNum;

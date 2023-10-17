@@ -132,6 +132,12 @@ int initPlugin(std::string* modPath)
 	fName = "changeRegionName";
 	plugData::data.funcs.changeRegionName.Load(&plPath, &fName);
 
+	fName = "condition";
+	plugData::data.funcs.condition.Load(&plPath, &fName);
+
+	fName = "allocateGameMem";
+	plugData::data.funcs.allocateGameMem.Load(&plPath, &fName);
+
 	fName = "changeRebelsName";
 	plugData::data.funcs.changeRebelsName.Load(&plPath, &fName);
 

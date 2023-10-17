@@ -96,6 +96,7 @@ public:
 		DWORD deleteFortFuncTwo = NULL;
 		DWORD createFortFunc = NULL;
 		DWORD mercEOPValue = NULL;
+		DWORD makeConditionFunc = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

@@ -2480,6 +2480,54 @@ void onGameConsoleCommandFromConsole::SetNewCode()
 	delete a;
 }
 
+onGameInitialized::onGameInitialized(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00414E08;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00414C08;
+}
+
+onGameInitialized::~onGameInitialized()
+{
+}
+
+void onGameInitialized::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->add(esp, 0x4);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onGameInitialized::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+	a->add(esp, 0x4);
+	a->push(0x1);
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
 onGameConsoleCommandFromScript::onGameConsoleCommandFromScript(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
@@ -2966,30 +3014,95 @@ void OnCreateUnit::SetNewCode()
 	a->push(ebx);
 	a->push(ebp);
 	a->push(edi);
+	a->push(esi);
 
 	a->pushf();
 
-
-	a->mov(ecx, (int)&fakeEDBPointer);
-	a->mov(dword_ptr(ecx), esi);
-
-	a->mov(edx, ecx);//here pointer to edb
-	a->mov(ecx, eax);//here pointer to index in edb
-	a->push(edi);//entry name
-	a->mov(eax, (DWORD)funcAddress);//we must return index
+	a->mov(edx, eax);
+	a->mov(ecx, edi);
+	a->mov(eax, (DWORD)funcAddress);
 	a->call(eax);
 
-	//here in eax we must put -1 if not find
-	a->mov(esi, (int)&fakeEDBPointer);
-	a->mov(esi, dword_ptr(esi));
 	a->popf();
-
+	
+	a->pop(esi);
 	a->pop(edi);
 	a->pop(ebp);
 	a->pop(ebx);
 	a->pop(ecx);
 	a->pop(edx);
 
+
+
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+
+
+OnFindUnit::OnFindUnit(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0047543A;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0047504A;
+}
+
+OnFindUnit::~OnFindUnit()
+{
+}
+
+void OnFindUnit::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->test(eax, eax);
+	//jz
+
+	a->push(edx);
+	a->mov(eax, dword_ptr(eax));
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnFindUnit::SetNewCode()
+{
+	static int fakeEDBPointer;
+	Assembler* a = new Assembler();
+
+	a->push(ecx);
+	//a->mov(ecx, dword_ptr(esp, 0x8));
+
+	a->push(edx);
+	a->push(ebx);
+	a->push(ebp);
+	a->push(edi);
+	a->push(esi);
+
+	a->pushf();
+
+	a->mov(edx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+
+	a->pop(esi);
+	a->pop(edi);
+	a->pop(ebp);
+	a->pop(ebx);
+	a->pop(edx);
+	a->pop(ecx);
 
 
 
@@ -3098,6 +3211,353 @@ void OnCreateMercUnit::SetNewCode()
 	a->mov(eax, otherFunc);
 	a->call(eax);
 
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+OnGetRecruitPoolUnitEntry::OnGetRecruitPoolUnitEntry(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x005E61A6;
+	}
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x005E5D46;
+	}
+}
+
+OnGetRecruitPoolUnitEntry::~OnGetRecruitPoolUnitEntry()
+{
+}
+
+void OnGetRecruitPoolUnitEntry::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+void OnGetRecruitPoolUnitEntry::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(edx);
+	a->push(ecx);
+	a->push(ebx);
+	a->push(ebp);
+	a->push(edi);
+
+	a->pushf();
+
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->lea(esi, dword_ptr(eax));
+
+	a->popf();
+
+	a->pop(edi);
+	a->pop(ebp);
+	a->pop(ebx);
+	a->pop(ecx);
+	a->pop(edx);
+
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+
+
+loadRecruitQueue::loadRecruitQueue(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x005D82F5;
+	}
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x005D7E65;
+	}
+}
+
+loadRecruitQueue::~loadRecruitQueue()
+{
+}
+
+void loadRecruitQueue::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+void loadRecruitQueue::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(edx);
+	a->push(ecx);
+	a->push(ebx);
+	a->push(ebp);
+	a->push(edi);
+	a->push(esi);
+
+	a->pushf();
+
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+
+	a->pop(esi);
+	a->pop(edi);
+	a->pop(ebp);
+	a->pop(ebx);
+	a->pop(ecx);
+	a->pop(edx);
+
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+
+loadRecruitQueue2::loadRecruitQueue2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x005D835D;
+	}
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x005D7ECD;
+	}
+}
+
+loadRecruitQueue2::~loadRecruitQueue2()
+{
+}
+
+void loadRecruitQueue2::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+void loadRecruitQueue2::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(edx);
+	a->push(ecx);
+	a->push(ebx);
+	a->push(ebp);
+	a->push(edi);
+	a->push(esi);
+
+	a->pushf();
+
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+
+	a->pop(esi);
+	a->pop(edi);
+	a->pop(ebp);
+	a->pop(ebx);
+	a->pop(ecx);
+	a->pop(edx);
+
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+OnGetRecruitPoolUnitEntry2::OnGetRecruitPoolUnitEntry2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x00AB92A8;
+	}
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x00AB8278;
+	}
+}
+
+OnGetRecruitPoolUnitEntry2::~OnGetRecruitPoolUnitEntry2()
+{
+}
+
+void OnGetRecruitPoolUnitEntry2::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+void OnGetRecruitPoolUnitEntry2::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(edx);
+	a->push(ecx);
+	a->push(ebx);
+	a->push(ebp);
+	a->push(edi);
+
+	a->pushf();
+
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+
+	a->pop(edi);
+	a->pop(ebp);
+	a->pop(ebx);
+	a->pop(ecx);
+	a->pop(edx);
+
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+OnFindUnitStrings::OnFindUnitStrings(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x005F6412;
+	}
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x005F6022;
+	}
+}
+
+OnFindUnitStrings::~OnFindUnitStrings()
+{
+}
+
+
+void OnFindUnitStrings::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnFindUnitStrings::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(esi);
+	a->push(ecx);
+	a->push(ebx);
+	a->push(ebp);
+	a->push(edi);
+
+	a->pushf();
+
+	a->mov(edx, ecx);
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->mov(edx, dword_ptr(eax, 0x30));
+
+	a->popf();
+
+	a->pop(edi);
+	a->pop(ebp);
+	a->pop(ebx);
+	a->pop(ecx);
+	a->pop(esi);
+
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+OnFindUnitStrings2::OnFindUnitStrings2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x005F6419;
+	}
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x005F6029;
+	}
+}
+
+OnFindUnitStrings2::~OnFindUnitStrings2()
+{
+}
+
+
+void OnFindUnitStrings2::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->ret();
+	
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnFindUnitStrings2::SetNewCode()
+{
+	Assembler* a = new Assembler();
 
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();
@@ -3605,15 +4065,14 @@ void OnPathCasheCrashPlace::SetNewCode()
 	delete a;
 }
 
-//this function allows recruiting eop unit in rq but it is not really functional, as it doesnt work with saving, will not be bound to lua, leaving it here for future maybe
 recruitEOPunit::recruitEOPunit(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
 	if (ver == 2)//steam
-		m_adress = 0x005EEEA0;
+		m_adress = 0x008ECFFE;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EEAC1;
+		m_adress = 0x008EC57E;
 }
 
 recruitEOPunit::~recruitEOPunit()
@@ -3637,8 +4096,91 @@ void recruitEOPunit::SetNewCode()
 {
 	Assembler* a = new Assembler();
 
+
+	a->push(edx);
+	a->push(ebx);
+	a->push(ebp);
+	a->push(edi);
+
+	a->pushf();
+
+	a->push(ecx);
+	a->mov(ecx, ebp);
 	a->mov(eax, (DWORD)funcAddress);
 	a->call(eax);
+	a->lea(esi, dword_ptr(eax));
+	a->pop(ecx);
+	a->mov(dword_ptr(esp, 0x20), ecx);
+
+	a->popf();
+
+	a->pop(edi);
+	a->pop(ebp);
+	a->pop(ebx);
+	a->pop(edx);
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+
+recruitEOPunit2::recruitEOPunit2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x008ECFF2;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x008EC572;
+}
+
+recruitEOPunit2::~recruitEOPunit2()
+{
+}
+
+void recruitEOPunit2::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->call(m_adress);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void recruitEOPunit2::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+
+	a->push(esi);
+	a->push(edx);
+	a->push(ecx);
+	a->push(ebx);
+	a->push(ebp);
+	a->push(edi);
+	a->push(eax);
+
+	a->pushf();
+
+	a->mov(ecx, ebp);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+
+	a->pop(eax);
+	a->pop(edi);
+	a->pop(ebp);
+	a->pop(ebx);
+	a->pop(ecx);
+	a->pop(edx);
+	a->pop(esi);
 
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();

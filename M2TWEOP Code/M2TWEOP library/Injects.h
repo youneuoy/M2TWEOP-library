@@ -514,7 +514,6 @@ private:
 
 
 
-//select worldpkgdesc from db
 class toReadGameDBsAtGameStart
 	:public AATemplate
 {
@@ -527,6 +526,8 @@ public:
 private:
 	LPVOID funcAdress;
 };
+
+
 
 
 
@@ -670,6 +671,18 @@ private:
 };
 
 
+class onGameInitialized
+	:public AATemplate
+{
+public:
+	onGameInitialized(MemWork* mem, LPVOID adr, int ver);
+	~onGameInitialized();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
 
 class onGameConsoleCommandFromConsole
 	:public AATemplate
@@ -792,6 +805,19 @@ private:
 	LPVOID funcAddress;
 };
 
+class OnFindUnit
+	:public AATemplate
+{
+public:
+	OnFindUnit(MemWork* mem, LPVOID addr, int ver);
+	~OnFindUnit();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class OnCreateMercUnit
 	:public AATemplate
 {
@@ -812,6 +838,58 @@ class OnCreateUnitWrapper
 public:
 	OnCreateUnitWrapper(MemWork* mem, LPVOID addr, int ver);
 	~OnCreateUnitWrapper();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class OnGetRecruitPoolUnitEntry
+	:public AATemplate
+{
+public:
+	OnGetRecruitPoolUnitEntry(MemWork* mem, LPVOID addr, int ver);
+	~OnGetRecruitPoolUnitEntry();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class OnGetRecruitPoolUnitEntry2
+	:public AATemplate
+{
+public:
+	OnGetRecruitPoolUnitEntry2(MemWork* mem, LPVOID addr, int ver);
+	~OnGetRecruitPoolUnitEntry2();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class OnFindUnitStrings
+	:public AATemplate
+{
+public:
+	OnFindUnitStrings(MemWork* mem, LPVOID addr, int ver);
+	~OnFindUnitStrings();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class OnFindUnitStrings2
+	:public AATemplate
+{
+public:
+	OnFindUnitStrings2(MemWork* mem, LPVOID addr, int ver);
+	~OnFindUnitStrings2();
 
 	void SetOriginialCode();
 	void SetNewCode();
@@ -962,6 +1040,48 @@ class recruitEOPunit
 public:
 	recruitEOPunit(MemWork* mem, LPVOID addr, int ver);
 	~recruitEOPunit();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+//create eop unit
+class recruitEOPunit2
+	:public AATemplate
+{
+public:
+	recruitEOPunit2(MemWork* mem, LPVOID addr, int ver);
+	~recruitEOPunit2();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+//create eop unit
+class loadRecruitQueue
+	:public AATemplate
+{
+public:
+	loadRecruitQueue(MemWork* mem, LPVOID addr, int ver);
+	~loadRecruitQueue();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+//create eop unit
+class loadRecruitQueue2
+	:public AATemplate
+{
+public:
+	loadRecruitQueue2(MemWork* mem, LPVOID addr, int ver);
+	~loadRecruitQueue2();
 
 	void SetOriginialCode();
 	void SetNewCode();

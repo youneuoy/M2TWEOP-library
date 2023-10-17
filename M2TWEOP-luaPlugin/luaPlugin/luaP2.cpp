@@ -32,6 +32,7 @@ void luaP::initCampaign()
 		sol::usertype<roadStruct> roadStruct;
 		sol::usertype<seaConnectedRegion> seaConnectedRegion;
 		sol::usertype<neighbourRegion> neighbourRegion;
+		sol::usertype<eventTrigger> eventTrigger;
 	}typeAll;
 	using namespace campaignEnums;
 
@@ -295,6 +296,91 @@ void luaP::initCampaign()
 	typeAll.options2.set("unitSizeMultiplierLow", &options2::unitSizeMultiplierLow);
 	typeAll.options2.set("unitSizeMultiplierMedium", &options2::unitSizeMultiplierMedium);
 	typeAll.options2.set("unitSizeMultiplierLarge", &options2::unitSizeMultiplierLarge);
+
+	///eventTrigger
+	//@section eventTrigger
+
+	/***
+	Basic eventTrigger table
+
+	@tfield unit attackingUnit
+	@tfield unit defendingUnit
+	@tfield character stratCharacter
+	@tfield namedCharacter character
+	@tfield namedCharacter targetCharacter
+	@tfield settlementStruct settlement
+	@tfield settlementStruct targetSettlement
+	@tfield fortStruct fort
+	@tfield factionStruct faction
+	@tfield factionStruct targetFaction
+	@tfield stackStruct army
+	@tfield int regionID
+	@tfield int targetRegionID
+	@tfield unit playerUnit
+	@tfield unit enemyUnit
+	@tfield buildingBattle battleBuilding
+	@tfield buildingInQueue priorBuild
+	@tfield string resourceDescription
+	@tfield eduEntry eduEntry
+	@tfield int characterType
+	@tfield int targetCharacterType
+	@tfield string disasterType
+	@tfield string missionSuccessLevel
+	@tfield int missionProbability
+	@tfield string missionDetails
+	@tfield int eventID
+	@tfield guild guild
+	@tfield string eventCounter
+	@tfield coordPair coords
+	@tfield int religion
+	@tfield int targetReligion
+	@tfield float amount
+	@tfield crusadeStruct crusade
+	@tfield capturedFactionInfo captureInfo
+	@tfield string ransomType
+	@tfield unit unit
+	
+	
+	@table eventTrigger
+	*/
+	typeAll.eventTrigger = luaState.new_usertype<eventTrigger>("eventTrigger");
+	typeAll.eventTrigger.set("attackingUnit", sol::property(gameHelpers::getEventAttackingUnit));
+	typeAll.eventTrigger.set("defendingUnit", sol::property(gameHelpers::getEventDefendingUnit));
+	typeAll.eventTrigger.set("character", sol::property(gameHelpers::getEventNamedCharacter));
+	typeAll.eventTrigger.set("targetCharacter", sol::property(gameHelpers::getEventTargetNamedCharacter));
+	typeAll.eventTrigger.set("settlement", sol::property(gameHelpers::getEventSettlement));
+	typeAll.eventTrigger.set("targetSettlement", sol::property(gameHelpers::getEventTargetSettlement));
+	typeAll.eventTrigger.set("fort", sol::property(gameHelpers::getEventFort));
+	typeAll.eventTrigger.set("faction", sol::property(gameHelpers::getEventFaction));
+	typeAll.eventTrigger.set("targetFaction", sol::property(gameHelpers::getEventTargetFaction));
+	typeAll.eventTrigger.set("army", sol::property(gameHelpers::getEventArmy));
+	typeAll.eventTrigger.set("regionID", sol::property(gameHelpers::getEventRegion));
+	typeAll.eventTrigger.set("targetRegionID", sol::property(gameHelpers::getEventTargetRegion));
+	typeAll.eventTrigger.set("playerUnit", sol::property(gameHelpers::getEventPlayerUnit));
+	typeAll.eventTrigger.set("enemyUnit", sol::property(gameHelpers::getEventEnemyUnit));
+	typeAll.eventTrigger.set("battleBuilding", sol::property(gameHelpers::getBuildingBattle));
+	typeAll.eventTrigger.set("priorBuild", sol::property(gameHelpers::getPriorBuild));
+	typeAll.eventTrigger.set("resourceDescription", sol::property(gameHelpers::getResourceDescription));
+	typeAll.eventTrigger.set("eduEntry", sol::property(gameHelpers::getEduEntry));
+	typeAll.eventTrigger.set("characterType", sol::property(gameHelpers::getEventCharacterType));
+	typeAll.eventTrigger.set("targetCharacterType", sol::property(gameHelpers::getEventTargetCharacterType));
+	typeAll.eventTrigger.set("disasterType", sol::property(gameHelpers::getEventType));
+	typeAll.eventTrigger.set("missionSuccessLevel", sol::property(gameHelpers::getMissionSuccessLevel));
+	typeAll.eventTrigger.set("missionProbability", sol::property(gameHelpers::getMissionProbability));
+	typeAll.eventTrigger.set("missionDetails", sol::property(gameHelpers::getMissionDetails));
+	typeAll.eventTrigger.set("eventID", sol::property(gameHelpers::getEventID));
+	typeAll.eventTrigger.set("guild", sol::property(gameHelpers::getEventGuild));
+	typeAll.eventTrigger.set("eventCounter", sol::property(gameHelpers::getEventCounter));
+	typeAll.eventTrigger.set("coords", sol::property(gameHelpers::getPosition));
+	typeAll.eventTrigger.set("religion", sol::property(gameHelpers::getReligion));
+	typeAll.eventTrigger.set("targetReligion", sol::property(gameHelpers::getTargetReligion));
+	typeAll.eventTrigger.set("amount", sol::property(gameHelpers::getAmount));
+	typeAll.eventTrigger.set("crusade", sol::property(gameHelpers::getCrusade));
+	typeAll.eventTrigger.set("captureInfo", sol::property(gameHelpers::getCapturedFactionInfo));
+	typeAll.eventTrigger.set("ransomType", sol::property(gameHelpers::getRansomType));
+	typeAll.eventTrigger.set("unit", sol::property(gameHelpers::getUnit));
+
+
 
 	///uiCardManager
 	//@section uiCardManager

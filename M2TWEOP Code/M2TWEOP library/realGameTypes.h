@@ -40,6 +40,59 @@ public:
 	struct soldierInBattle* generalBgMount; //0x0004
 }; //Size: 0x0008
 
+struct legioString
+{
+public:
+	char* name; //0x0000
+	int32_t nameHash; //0x0004
+	struct UNICODE_STRING** localizedLegoName; //0x0008
+	int32_t recruitCount; //0x000C
+	char pad_0010[4]; //0x0010
+}; //Size: 0x0014
+
+struct cultureModels
+{
+public:
+	char pad_0000[5584]; //0x0000
+}; //Size: 0x15D0
+
+struct cultureAgent
+{
+public:
+	char* cardName; //0x0000
+	int32_t cardNameHash; //0x0004
+	char* infoCardName; //0x0008
+	int32_t infoCardNameHash; //0x000C
+	char* cardName2; //0x0010
+	int32_t cardName2Hash; //0x0014
+	int16_t index1; //0x0018
+	char pad_001A[2]; //0x001A
+	int16_t index2; //0x001C
+	char pad_001E[2]; //0x001E
+	int16_t cost; //0x0020
+	int16_t time; //0x0022
+	int16_t popCost; //0x0024
+	int16_t someOtherRomeShit; //0x0026
+	char pad_0028[4]; //0x0028
+}; //Size: 0x002C
+
+
+
+struct culture
+{
+public:
+	int32_t cultureID; //0x0000
+	char* cultureName; //0x0004
+	int32_t cultureNameHash; //0x0008
+	char pad_000C[1072]; //0x000C
+	int32_t fortCost; //0x043C
+	int32_t watchTowerCost; //0x0440
+	char pad_0444[24]; //0x0444
+	struct cultureModels cultureModelCrap; //0x045C
+	struct cultureAgent cultureAgents[6]; //0x1A2C
+	char pad_1B34[4]; //0x1B34
+}; //Size: 0x1B38
+
 struct coordPair
 {
 public:
@@ -56,7 +109,33 @@ public:
 }; //Size: 0x000C
 
 
-class religionDatabase
+struct eventTrigger
+{
+	void* eventTrigger_vtbl; //0x0000
+	char pad_0004[28]; //0x0004
+};
+
+struct buildingBattle
+{
+public:
+	char pad_0000[24]; //0x0000
+	int32_t type; //0x0018
+	char pad_001C[8]; //0x001C
+	float posX; //0x0024
+	float posZ; //0x0028
+	float posY; //0x002C
+	char pad_0030[4]; //0x0030
+	int32_t endHealth; //0x0034
+	int32_t currentHealth; //0x0038
+	int32_t startHealth; //0x003C
+	char pad_0040[4]; //0x0040
+	int32_t isDefenderControlled; //0x0044
+	char pad_0048[8]; //0x0048
+}; //Size: 0x0050
+
+
+
+struct religionDatabase
 {
 public:
 	void* religionDatabase_vtbl;//0x0000
@@ -307,6 +386,16 @@ public:
 	struct mercPoolUnitsPtr firstUnits; //0x001C
 }; //Size: 0x0180
 
+struct mercPoolList
+{
+public:
+	struct mercPool* mercPools; //0x0000
+	struct mercPoolList* nextMercPools; //0x0004
+	struct mercPoolList* previousMercPools; //0x0008
+	int32_t currentSize; //0x000C
+	int32_t currentCount; //0x0010
+}; //Size: 0x0014
+
 struct uiElement {
 	undefined field_0x0[16];
 	int xSize;
@@ -491,11 +580,25 @@ struct watchTowerModel {
 
 //watchtower
 struct watchTowerStruct {
-	undefined field_0x0[12];
+	void* watchTowerVtable; //0x0000
+	char pad_0004[4]; //0x0004
+	struct character* character; //0x0008
 	int xCoord;
 	int yCoord;
-	undefined field_0x14[16];
+	char pad_0014[4]; //0x0014
+	int8_t N000021C7; //0x0018
+	char pad_0019[3]; //0x0019
+	float N000021C8; //0x001C
+	int8_t N000021C9; //0x0020
+	char pad_0021[3]; //0x0021
 	struct watchTowerModel* model;
+	int32_t regionID; //0x0028
+	struct factionStruct* faction; //0x002C
+	struct settlementStruct* settlement; //0x0030
+	void* trackedPointerArmyVtable; //0x0034
+	struct stackStruct* blockingArmy; //0x0038
+	int32_t factionID; //0x003C
+	char pad_0040[8]; //0x0040
 };
 
 struct worldRecord {
@@ -597,7 +700,11 @@ public:
 
 struct campaign {
 	undefined field0_0x0[4];
-	undefined field1_0x4[52];
+	undefined field1_0x4[36];
+	int32_t type; //0x0024
+	char pad_0028[4]; //0x0028
+	uint32_t playableFactionsBitmap; //0x002C
+	char pad_0030[4]; //0x0030
 	int playerFactionId;
 	undefined field3_0x3c[4];
 	int hotSeatPlayer2FactionId;
@@ -609,7 +716,8 @@ struct campaign {
 	struct factionStruct* factionsSortedByDescrStrat[31];
 	struct factionStruct* factionsSortedByID[31];
 	int numberOfFactionsWithSlave;
-	char pad_0328[20]; //0x0328
+	uint32_t existingFactionsBitMap; //0x0324
+	char pad_032A[16]; //0x032A
 	struct collegeOfCardinals* collegeOfCardinals; //0x033C
 	struct factionStruct* papalFaction; //0x0340
 	struct factionStruct* currentFactionTurn;
@@ -627,14 +735,33 @@ struct campaign {
 	struct settlementStruct* rome;
 	undefined field29_0x38c[4];
 	struct settlementStruct* constantinople;
-	undefined field31_0x394[60];
-	int8_t field32_0x3d0;
-	int8_t field33_0x3d1;
-	undefined field34_0x3d2[26];
+	char pad_0390[12]; //0x0390
+	void* unkArray1; //0x039C
+	int32_t unkArray1Size; //0x03A0
+	int32_t unkArray1Count; //0x03A4
+	void* unkArray2; //0x03A8
+	int32_t unkArray2Size; //0x03AC
+	int32_t unkArray2Count; //0x03B0
+	void* script; //0x03B4
+	void* scriptEnd; //0x03B8
+	char pad_03BC[8]; //0x03BC
+	void* pointerToScript; //0x03C4
+	void* pointerToScriptEnd; //0x03C8
+	int8_t N00001208; //0x03CC
+	int8_t forceAllowManageAllSetts; //0x03CD
+	char pad_03CE[18]; //0x03CE
+	int8_t marianReformsActive; //0x03E0
+	int8_t marianReformsDisabled; //0x03E1
+	int8_t rebellingCharactersActive; //0x03E2
+	int8_t gladiatorUprisingDisabled; //0x03E3
+	int8_t nightBattlesEnabled; //0x03E4
+	int8_t N00038FC9; //0x03E5
+	int8_t N00038FCC; //0x03E6
+	char pad_03E7[1]; //0x03E7
 	float BrigandSpawnValue;
 	float PirateSpawnValue;
 	int8_t N00001211; //0x03F4
-	int8_t smthingDateTurnDisplay; //0x03F5
+	int8_t showDateAsTurns; //0x03F5
 	int8_t restrictAutoResolve; //0x03F6
 	char pad_03F7[1]; //0x03F7
 	int FreeUpkeepForts;
@@ -677,6 +804,10 @@ struct campaign {
 	struct watchTowerStruct** watchtowers;
 	int32_t watchtowersSize; //0x21628
 	int32_t watchtowersNum; //0x2162C
+	char pad[16]; //0x21638
+	struct mercPoolList allMercPools; //0x2163C
+	void* unk3; //0x21650
+	void* unk4; //0x21654
 };
 
 struct uiUnitCard
@@ -739,7 +870,10 @@ public:
 	int32_t expStart; //0x0034
 	int32_t expGained; //0x0038
 	int8_t isGeneral; //0x003C
-	char pad_003D[11]; //0x003D
+	int8_t hasWithdrawn; //0x003D
+	uint16_t N000400D6; //0x003E
+	int32_t N0001FD2C; //0x0040
+	int32_t N0001FDB3; //0x0044
 }; //Size: 0x0048
 
 struct options1
@@ -2007,14 +2141,10 @@ struct anchillary { /* structure of ancillary */
 	undefined field_0x12;
 	undefined field_0x13;
 	char* patchToAnchImage;
-	undefined field_0x18;
-	undefined field_0x19;
-	undefined field_0x1a;
-	undefined field_0x1b;
-	undefined field_0x1c;
-	undefined field_0x1d;
-	undefined field_0x1e;
-	undefined field_0x1f;
+	char pad_0018[4]; //0x0018
+	int8_t isUnique; //0x001C
+	char pad_001D[23]; //0x001D
+	uint32_t excludedCultures; //0x0034
 };
 
 struct trait { /* traits of the character */
@@ -2931,22 +3061,42 @@ struct soldierData { /* one soldier in unit */
 //fort
 struct fortStruct {
 public:
-	undefined field_0x0[4];
+	void* fortVtable;
 	struct general* gubernator;
 	undefined field_0x8[4];
 	UINT32 xCoord;
 	UINT32 yCoord;
 	undefined field_0x14[48];
 	struct stackStruct* army;
-	undefined field_0x48[4];
-	struct siegeS* siege;
-	undefined field_0x50[144];
+	struct oneSiege sieges[8];
+	int8_t siegeNum; //0x0088
+	char pad_0089[3]; //0x0089
+	int32_t N000106CC; //0x008C
+	int32_t N000106CD; //0x0090
+	int32_t N000106CE; //0x0094
+	int32_t N000106CF; //0x0098
+	int32_t N000106D0; //0x009C
+	int32_t N000106D1; //0x00A0
+	int8_t N000106D2; //0x00A4
+	int8_t setZeroAfterInvaded; //0x00A5
+	int8_t N000393C1; //0x00A6
+	int8_t N000393BF; //0x00A7
+	int32_t N000106D3; //0x00A8
+	struct descrRebelEntry* descrRebel; //0x00AC
+	int32_t subFactionID; //0x00B0
+	void* spyingInfoBase; //0x00B4
+	int8_t spyingInfoFactions[31]; //0x00B8
+	char pad_00D7[9]; //0x00D7
 	struct stratFortMod* stratModel;
 	int regionID;
 	struct factionStruct* faction;
-	undefined field_0xec[12];
+	int32_t factionID; //0x00EC
+	int32_t cultureID; //0x00F0
+	void* localString; //0x00F4
 	char* fortType;
-	undefined field_0xfc[28];
+	char pad_00FC[4]; //0x00FC
+	int32_t fortFortificationLevel; //0x0100
+	char pad_0104[20]; //0x0104
 };
 
 struct traidingResource {

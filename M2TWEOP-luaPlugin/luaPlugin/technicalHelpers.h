@@ -13,6 +13,7 @@ namespace technicalHelpers
 {
 	std::string unitUniStringToStr(unit* unit);
 	void setUnitUniStr(unit* unit, const char* str);
+	DWORD allocateGameMem(size_t amount);
 
 	std::string uniStringToStr(UNICODE_STRING**& uniString);
 

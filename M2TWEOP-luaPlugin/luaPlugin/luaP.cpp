@@ -129,6 +129,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<recruitmentCapability>recruitmentCapability;
 		sol::usertype<settlementRecruitmentPool>settlementRecruitmentPool;
 		sol::usertype<battleFactionCounter>battleFactionCounter;
+		sol::usertype<eventTrigger> eventTrigger;
 	}types;
 	luaState = {};
 	luaPath = modPath + "\\youneuoy_Data\\plugins\\lua";
@@ -266,6 +267,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getRegionOwner getRegionOwner
 	@tfield setEDUUnitsSize setEDUUnitsSize
 	@tfield getReligionName getReligionName
+	@tfield condition condition
 	@table M2TWEOP
 	*/
 
@@ -525,6 +527,16 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local options =M2TWEOP.getOptions2();
 	*/
 	tables.M2TWEOPTable.set_function("getOptions2", &m2tweopHelpers::getOptions2);
+	/***
+	Check game condition.
+	@function M2TWEOP.condition
+	@tparam string condition
+	@tparam eventTrigger eventData
+	@treturn bool isTrue
+	@usage
+	local options =M2TWEOP.condition();
+	*/
+	tables.M2TWEOPTable.set_function("condition", &gameHelpers::condition);
 
 
 	/// BattleCamera
@@ -2353,7 +2365,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.fortStruct.set("governor", &fortStruct::gubernator);
 	types.fortStruct.set("army", &fortStruct::army);
 	types.fortStruct.set("ownerFaction", &fortStruct::faction);
-	types.fortStruct.set("siege", &fortStruct::siege);
 
 
 
