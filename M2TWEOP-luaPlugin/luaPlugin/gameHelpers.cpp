@@ -801,10 +801,59 @@ namespace gameHelpers
 
 	oneTile* getRegionSeaEdge(const regionStruct* region, const int index)
 	{
+		if (index >= region->regionSeaEdgesCount)
+			return nullptr;
 		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
 		stratMap* map = gameDataAll->stratMap;
 
 		return &map->tilesArr[region->regionSeaEdges[index]];
+	}
+
+	oneTile* getDevastatedTile(const regionStruct* region, const int index)
+	{
+		if (index >= region->devastatedTilesCount)
+			return nullptr;
+		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		stratMap* map = gameDataAll->stratMap;
+
+		return &map->tilesArr[region->devastatedTiles[index]];
+	}
+
+	int getHostileArmiesStrength(const regionStruct* region, const int factionID)
+	{
+		return region->armiesHostileToArrayIndexIDStrength[factionID];
+	}
+
+	bool isDevastated(const oneTile* tile)
+	{
+		return tile->hasRoad & 1;
+	}
+
+	oneTileDouble* tileToDoubleTile(const oneTile* tile)
+	{
+		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		stratMap* map = gameDataAll->stratMap;
+		int mapWidth = map->mapWidth * 2 + 1;
+		auto coords = getTileCoords(tile);
+		return &map->climateTileArray[(coords->yCoord * 2) * mapWidth + (coords->xCoord * 2)];
+	}
+
+	float getTileHeight(const oneTile* tile)
+	{
+		return tileToDoubleTile(tile)->height;
+	}
+
+	int getTileClimate(const oneTile* tile)
+	{
+		return tileToDoubleTile(tile)->climate;
+	}
+
+	int getTileHeatValue(const oneTile* tile)
+	{
+		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		stratMap* map = gameDataAll->stratMap;
+		auto climate = tileToDoubleTile(tile)->climate;
+		return map->climates->climateArray[climate].heatValue;
 	}
 
 	float getReligionHistory(const regionStruct* region, const int religionID, int turnsAgo)
@@ -873,6 +922,68 @@ namespace gameHelpers
 	{
 		return region->resourceTypesBitMap & (1 << resourceType);
 	}
+
+	/*
+		strategy map object types
+		0 -> 27 = resource ID
+		28 = character
+		29 = settlement
+		30 = fort
+		31 = port
+		32 = watchTower
+		33 = sundry
+		34 = rally point
+		35 = floatingGeneral
+		36 = battleSiteMarker
+	*/
+
+	DWORD* getTileObject(const oneTile* tile, int type)
+	{
+		DWORD* object = tile->object;
+
+		while (object)
+		{
+			int objectType = CallVFunc<4, int>(object);
+			if (objectType == type || (type == 0 && objectType < 28))
+				return object;
+			object = reinterpret_cast<DWORD*>(*(object + 1));
+		}
+
+		return nullptr;
+	}
+
+	resStrat* getTileResource(const oneTile* tile)
+	{
+		return reinterpret_cast<resStrat*>(getTileObject(tile, 0));
+	}
+
+	general* getTileCharacter(const oneTile* tile)
+	{
+		return reinterpret_cast<general*>(getTileObject(tile, 28));
+	}
+
+	settlementStruct* getTileSettlement(const oneTile* tile)
+	{
+		return reinterpret_cast<settlementStruct*>(getTileObject(tile, 29));
+	}
+
+	fortStruct* getTileFort(const oneTile* tile)
+	{
+		return reinterpret_cast<fortStruct*>(getTileObject(tile, 30));
+	}
+
+	portBuildingStruct* getTilePort(const oneTile* tile)
+	{
+		return reinterpret_cast<portBuildingStruct*>(getTileObject(tile, 31));
+	}
+
+	watchTowerStruct* getTileWatchtower(const oneTile* tile)
+	{
+		return reinterpret_cast<watchTowerStruct*>(getTileObject(tile, 32));
+	}
+
+
+
 
 
 

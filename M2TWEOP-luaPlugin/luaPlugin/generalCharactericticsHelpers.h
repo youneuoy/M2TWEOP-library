@@ -5,10 +5,10 @@
 namespace generalCharactericticsHelpers
 {
 	traitContainer* getTraits(namedCharacter* character);
-	anchillary* getAnchillary(namedCharacter* character, int index);
-	int addAnchillary(namedCharacter* character, std::string anchName);
+	ancillary* getAncillary(namedCharacter* character, int index);
+	int addAncillary(namedCharacter* character, std::string ancName);
 
-	void removeAnchillary(namedCharacter* character, anchillary* anch);
+	void removeAncillary(namedCharacter* character, ancillary* anc);
 
 
 	void addTrait(namedCharacter* character, const char* traitName, int traitLevel);

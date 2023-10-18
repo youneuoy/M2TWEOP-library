@@ -6,21 +6,21 @@ namespace generalCharactericticsHelpers
 	{
 		return character->traits;
 	}
-	anchillary* getAnchillary(namedCharacter* character, int index)
+	ancillary* getAncillary(namedCharacter* character, int index)
 	{
-		return character->anchillaries[index]->dataAnch;
+		return character->ancillaries[index]->dataAnc;
 
 	}
-	int addAnchillary(namedCharacter* character, std::string anchName)
+	int addAncillary(namedCharacter* character, std::string ancName)
 	{
-		anchillary* anch = (*(*plugData::data.funcs.findAnchillary))((char*)anchName.c_str());
-		if (anch == nullptr)return 0;
+		ancillary* anc = (*(*plugData::data.funcs.findAncillary))((char*)ancName.c_str());
+		if (anc == nullptr)return 0;
 
-		return (*(*plugData::data.funcs.addAnchillary))(character, anch);
+		return (*(*plugData::data.funcs.addAncillary))(character, anc);
 	}
-	void removeAnchillary(namedCharacter* character, anchillary* anch)
+	void removeAncillary(namedCharacter* character, ancillary* anc)
 	{
-		(*(*plugData::data.funcs.removeAnchillary))(character, anch);
+		(*(*plugData::data.funcs.removeAncillary))(character, anc);
 	}
 	void addTrait(namedCharacter* character, const char* traitName, int traitLevel)
 	{

@@ -802,6 +802,7 @@ void luaP::initCampaign()
 	@tfield int regionIdStart
 	@tfield int regionIdEnd
 	@tfield getCoord getCoord
+	@tfield int tradeValue --only counts from 1 side (importer)
 
 	@table roadStruct
 	*/
@@ -809,6 +810,7 @@ void luaP::initCampaign()
 	typeAll.roadStruct.set("coordsNum", &roadStruct::coordsNum);
 	typeAll.roadStruct.set("regionIdStart", &roadStruct::regionIdStart);
 	typeAll.roadStruct.set("regionIdEnd", &roadStruct::regionIdEnd);
+	typeAll.roadStruct.set("tradeValue", &roadStruct::tradeValue);
 
 	/***
 	Get a road coord by index.
@@ -846,17 +848,27 @@ void luaP::initCampaign()
 	14 impassable_land
 	15 impassable_sea
 	@tfield int regionID
+	@tfield tradeResource|nil resource
+	@tfield character|nil character
+	@tfield settlement|nil settlement
+	@tfield fortStruct|nil fort
+	@tfield portStruct|nil port
+	@tfield watchTowerStruct|nil watchtower
+	@tfield int height
+	@tfield int climate
+	@tfield int heatValue
 	@tfield int factionID
 	@tfield coordPair coords
 	@tfield int objectTypes bitfield, from left to right: unknown, character, ship, watchtower, port, unknown, fort, settlement.
 	@tfield bool hasRiver
 	@tfield bool hasCrossing
-	@tfield bool tileHasCharacter
-	@tfield bool tileHasShip
-	@tfield bool tileHasWatchtower
-	@tfield bool tileHasPort
-	@tfield bool tileHasFort
-	@tfield bool tileHasSettlement
+	@tfield bool hasCharacter
+	@tfield bool hasShip
+	@tfield bool hasWatchtower
+	@tfield bool hasPort
+	@tfield bool hasFort
+	@tfield bool hasSettlement
+	@tfield bool isDevastated
 	@tfield int borderingSettlement 1 = bordering 2 = settlement.
 	@tfield int border 1 = border, 2 = seaBorder, 3 = sea edge border (point where the region border both another land region and sea).
 	@tfield int armiesNearTile bitfield of faction id's (counts both tile and the 8 tiles around it, if you want only on tile combine with charactersOnTile).
@@ -879,12 +891,22 @@ void luaP::initCampaign()
 	typeAll.tileStruct.set("hasRiver", sol::property(gameHelpers::tileHasRiver));
 	typeAll.tileStruct.set("hasCrossing", sol::property(gameHelpers::tileHasCrossing));
 	typeAll.tileStruct.set("border", sol::property(gameHelpers::tileBorderType));
-	typeAll.tileStruct.set("tileHasCharacter", sol::property(gameHelpers::tileHasCharacter));
-	typeAll.tileStruct.set("tileHasShip", sol::property(gameHelpers::tileHasShip));
-	typeAll.tileStruct.set("tileHasWatchtower", sol::property(gameHelpers::tileHasWatchtower));
-	typeAll.tileStruct.set("tileHasPort", sol::property(gameHelpers::tileHasPort));
-	typeAll.tileStruct.set("tileHasFort", sol::property(gameHelpers::tileHasFort));
-	typeAll.tileStruct.set("tileHasSettlement", sol::property(gameHelpers::tileHasSettlement));
+	typeAll.tileStruct.set("hasCharacter", sol::property(gameHelpers::tileHasCharacter));
+	typeAll.tileStruct.set("hasShip", sol::property(gameHelpers::tileHasShip));
+	typeAll.tileStruct.set("hasWatchtower", sol::property(gameHelpers::tileHasWatchtower));
+	typeAll.tileStruct.set("hasPort", sol::property(gameHelpers::tileHasPort));
+	typeAll.tileStruct.set("hasFort", sol::property(gameHelpers::tileHasFort));
+	typeAll.tileStruct.set("hasSettlement", sol::property(gameHelpers::tileHasSettlement));
+	typeAll.tileStruct.set("isDevastated", sol::property(gameHelpers::isDevastated));
+	typeAll.tileStruct.set("height", sol::property(gameHelpers::getTileHeight));
+	typeAll.tileStruct.set("climate", sol::property(gameHelpers::getTileClimate));
+	typeAll.tileStruct.set("heatValue", sol::property(gameHelpers::getTileHeatValue));
+	typeAll.tileStruct.set("resource", sol::property(gameHelpers::getTileResource));
+	typeAll.tileStruct.set("character", sol::property(gameHelpers::getTileCharacter));
+	typeAll.tileStruct.set("settlement", sol::property(gameHelpers::getTileSettlement));
+	typeAll.tileStruct.set("fort", sol::property(gameHelpers::getTileFort));
+	typeAll.tileStruct.set("port", sol::property(gameHelpers::getTilePort));
+	typeAll.tileStruct.set("watchtower", sol::property(gameHelpers::getTileWatchtower));
 	typeAll.tileStruct.set("armiesNearTile", &oneTile::armiesNearTile);
 	typeAll.tileStruct.set("charactersOnTile", &oneTile::charactersOnTile);
 	typeAll.tileStruct.set("mpModifier", &oneTile::mpModifier);
@@ -920,6 +942,11 @@ void luaP::initCampaign()
 	@tfield string settlementName
 	@tfield string legioName
 	@tfield int regionID
+	@tfield int roadLevel as set in descr_strat
+	@tfield int farmingLevel as set in descr_strat
+	@tfield int famineThreat
+	@tfield int harvestSuccess
+	@tfield int totalSeaTradeValue
 	@tfield int stacksNum
 	@tfield int fortsNum
 	@tfield int watchtowersNum
@@ -931,9 +958,9 @@ void luaP::initCampaign()
 	@tfield int loyaltyFactionID
 	@tfield seaConnectedRegion seaExportRegion
 	@tfield int seaImportRegionsCount
-	@tfield int canSeaTrade
 	@tfield int regionSeaEdgesCount (point where the region border both another land region and sea).
 	@tfield int tilesBorderingEdgeOfMapCount
+	@tfield int devastatedTilesCount
 	@tfield settlementStruct settlement
 	@tfield int tileCount
 	@tfield int fertileTilesCount
@@ -964,6 +991,8 @@ void luaP::initCampaign()
 	@tfield getTileBorderingEdgeOfMap getTileBorderingEdgeOfMap
 	@tfield getTile getTile
 	@tfield getFertileTile getFertileTile
+	@tfield getDevastatedTile getDevastatedTile
+	@tfield getHostileArmiesStrength getHostileArmiesStrength
 	@tfield hasResourceType hasResourceType
 
 	@table region
@@ -976,9 +1005,13 @@ void luaP::initCampaign()
 		));
 	typeAll.region.set("legioName", &regionStruct::legioName);
 	typeAll.region.set("regionID", &regionStruct::regionID);
+	typeAll.region.set("roadLevel", &regionStruct::roadLevel);
+	typeAll.region.set("farmingLevel", &regionStruct::farmingLevel);
+	typeAll.region.set("famineThreat", &regionStruct::famineThreat);
+	typeAll.region.set("harvestSuccess", &regionStruct::harvestSuccess);
+	typeAll.region.set("totalSeaTradeValue", &regionStruct::totalSeaTradeValue);
 	typeAll.region.set("seaConnectedRegionsCount", &regionStruct::seaConnectedRegionsCount);
 	typeAll.region.set("seaImportRegionsCount", &regionStruct::seaImportRegionsCount);
-	typeAll.region.set("canSeaTrade", &regionStruct::canSeaTrade);
 	typeAll.region.set("landMass", &regionStruct::landMass);
 	typeAll.region.set("roadToPort", &regionStruct::roadToPort);
 	typeAll.region.set("seaExportRegion", &regionStruct::seaExportRegion);
@@ -1130,6 +1163,18 @@ void luaP::initCampaign()
 	typeAll.region.set_function("getRegionSeaEdge", &gameHelpers::getRegionSeaEdge);
 
 	/***
+	Get a devastated tile.
+	@function region:getDevastatedTile
+	@tparam int index
+	@treturn tileStruct tile
+	@usage
+	local sMap = gameDataAll.get().stratMap;
+	local region = sMap.getRegion(2);
+	local tile = region:getDevastatedTile(0)
+	*/
+	typeAll.region.set_function("getDevastatedTile", &gameHelpers::getDevastatedTile);
+
+	/***
 	Get a tile that borders the edge of the map.
 	@function region:getTileBorderingEdgeOfMap
 	@tparam int index
@@ -1190,6 +1235,18 @@ void luaP::initCampaign()
 	*/
 	typeAll.region.set_function("hasResourceType", &gameHelpers::hasResourceType);
 
+	/***
+	Get the strength total of all armies in this region that are hostile to a specific faction.
+	@function region:getHostileArmiesStrength
+	@tparam int factionID
+	@treturn int totalStrength
+	@usage
+	local sMap = gameDataAll.get().stratMap;
+	local region = sMap.getRegion(2);
+	local totalStrength = region:getHostileArmiesStrength(myFac.dipNum)
+	*/
+	typeAll.region.set_function("getHostileArmiesStrength", &gameHelpers::getHostileArmiesStrength);
+
 	///neighbourRegion
 	//@section neighbourRegion
 
@@ -1199,6 +1256,7 @@ void luaP::initCampaign()
 	@tfield int regionID
 	@tfield regionStruct region
 	@tfield int tradeValue
+	@tfield bool alliedRegion
 	@tfield int borderTilesCount
 	@tfield roadStruct connectingRoad
 	@tfield getBorderTile getBorderTile
@@ -1212,6 +1270,7 @@ void luaP::initCampaign()
 	typeAll.neighbourRegion.set("region", &neighbourRegion::region);
 	typeAll.neighbourRegion.set("borderTilesCount", &neighbourRegion::borderTilesCount);
 	typeAll.neighbourRegion.set("connectingRoad", &neighbourRegion::connectingRoad);
+	typeAll.neighbourRegion.set("alliedRegion", &neighbourRegion::alliedRegion);
 
 	/***
 	Get a border tile by index.

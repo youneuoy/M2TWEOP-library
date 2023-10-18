@@ -128,7 +128,7 @@ public:
 		sol::usertype<unit>unit;
 		sol::usertype<general>character;
 		sol::usertype<namedCharacter>namedCharacter;
-		sol::usertype<anchillary>ancillary;
+		sol::usertype<ancillary>ancillary;
 		sol::usertype<traitContainer>traitContainerT;
 		sol::usertype<EduEntry>EduEntry;
 		sol::usertype<factionStruct>factionStruct;

@@ -179,9 +179,9 @@ public:
 	ProcLoader<void(__cdecl*)(general*, general*)> attackCharacter;
 
 
-	ProcLoader<int(__cdecl*)(namedCharacter*, anchillary*)> addAnchillary;
-	ProcLoader<void(__cdecl*)(namedCharacter*, anchillary*)> removeAnchillary;
-	ProcLoader<anchillary* (__cdecl*)(char*)> findAnchillary;
+	ProcLoader<int(__cdecl*)(namedCharacter*, ancillary*)> addAncillary;
+	ProcLoader<void(__cdecl*)(namedCharacter*, ancillary*)> removeAncillary;
+	ProcLoader<ancillary* (__cdecl*)(char*)> findAncillary;
 
 	ProcLoader<void(__cdecl*)(namedCharacter*, const char*, int)> addTrait;
 	ProcLoader<void(__cdecl*)(namedCharacter*, const char*)> removeTrait;

@@ -102,7 +102,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<capturedFactionInfo>capturedFactionInfo;
 		sol::usertype<capturedUnit>capturedUnit;
 		sol::usertype<capturedCharacter>capturedCharacter;
-		sol::usertype<anchillary>ancillary;
+		sol::usertype<ancillary>ancillary;
 		sol::usertype<traitContainer>traitContainerT;
 		sol::usertype<eduEntry>EduEntry;
 		sol::usertype<factionStruct>factionStruct;
@@ -1597,7 +1597,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	ourNamedCharacter:removeTrait("GoodCommander");
 	*/
 	types.namedCharacter.set_function("removeTrait", &generalCharactericticsHelpers::removeTrait);
-	types.namedCharacter.set("ancNum", &namedCharacter::anchNum);
+	types.namedCharacter.set("ancNum", &namedCharacter::ancNum);
 	/***
 	Get the pointer to the ancillary using it's index. You can iterate over a character's ancillaries for example by going from index 0 to ancNum - 1.
 	@function namedCharacter:getAncillary
@@ -1606,7 +1606,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ancillary = ourNamedCharacter:getAncillary(2)
 	*/
-	types.namedCharacter.set_function("getAncillary", &generalCharactericticsHelpers::getAnchillary);
+	types.namedCharacter.set_function("getAncillary", &generalCharactericticsHelpers::getAncillary);
 	/***
 	Add an ancillary to the named character using the name per export\_descr\_ancillaries.txt.
 	@function namedCharacter:addAncillary
@@ -1614,7 +1614,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourNamedCharacter:addAncillary("VeryVeryGoodMan");
 	*/
-	types.namedCharacter.set_function("addAncillary", &generalCharactericticsHelpers::addAnchillary);
+	types.namedCharacter.set_function("addAncillary", &generalCharactericticsHelpers::addAncillary);
 	/***
 	Remove an ancillary from the named character using it's pointer. Use getAncillary function to get the specific ancillary.
 	@function namedCharacter:removeAncillary
@@ -1623,7 +1623,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	ourAnc=ourNamedCharacter:getAncillary(2);
 	ourNamedCharacter:removeAncillary(ourAnc);
 	*/
-	types.namedCharacter.set_function("removeAncillary", &generalCharactericticsHelpers::removeAnchillary);
+	types.namedCharacter.set_function("removeAncillary", &generalCharactericticsHelpers::removeAncillary);
 	types.namedCharacter.set("level", &namedCharacter::level);
 	types.namedCharacter.set("authority", &namedCharacter::leaderAutority);
 	types.namedCharacter.set("command", &namedCharacter::authority);
@@ -1779,13 +1779,13 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	@table ancillary
 	*/
-	types.ancillary = luaState.new_usertype<anchillary>("ancillary");
-	types.ancillary.set("index", &anchillary::index);
+	types.ancillary = luaState.new_usertype<ancillary>("ancillary");
+	types.ancillary.set("index", &ancillary::index);
 	types.ancillary.set("name", sol::property(
-		&luaGetSetFuncs::getStringPropertyAnc<anchillaryStruct_name>, &luaGetSetFuncs::setStringPropertyAnc<anchillaryStruct_name>
+		&luaGetSetFuncs::getStringPropertyAnc<ancillaryStruct_name>, &luaGetSetFuncs::setStringPropertyAnc<ancillaryStruct_name>
 		));
 	types.ancillary.set("imagePath", sol::property(
-		&luaGetSetFuncs::getStringPropertyAnc<anchillaryStruct_imagePath>, &luaGetSetFuncs::setStringPropertyAnc<anchillaryStruct_imagePath>
+		&luaGetSetFuncs::getStringPropertyAnc<ancillaryStruct_imagePath>, &luaGetSetFuncs::setStringPropertyAnc<ancillaryStruct_imagePath>
 		));
 
 
@@ -2013,7 +2013,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	print(portList)
 	*/
 	types.factionStruct.set_function("getPort", &factionHelpers::getPort);
-	types.factionStruct.set("watchtowersNum", &factionStruct::wathtowersNum);
+	types.factionStruct.set("watchtowersNum", &factionStruct::watchtowersNum);
 	/***
 	Get a watchtower using it's index.
 	@function factionStruct:getWatchtower
@@ -2532,7 +2532,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.settlementStruct.set("settlementTaxLevel", &settlementStruct::settlementTaxLevel);
 	types.settlementStruct.set("isProvokedRebellion", &settlementStruct::isProvokedRebellion);
 	types.settlementStruct.set("populationSize", &settlementStruct::populationSize);
-	types.settlementStruct.set("recruitPoolCapabilityCount", &settlementStruct::recruitPoolCapabilityCount);
 	types.settlementStruct.set("recruitmentPoolCount", &settlementStruct::recruitmentPoolCount);
 	types.settlementStruct.set("freezeRecruitmentPool", &settlementStruct::freezeRecruitmentPool);
 	types.settlementStruct.set("spiesInRecruitmentQueue", &settlementStruct::spiesInRecruitmentQueue);

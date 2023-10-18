@@ -176,14 +176,14 @@ int initPlugin(std::string* modPath)
 	fName = "siegeSettlement";
 	plugData::data.funcs.siegeSettlement.Load(&plPath, &fName);
 
-	fName = "addAnchillary";
-	plugData::data.funcs.addAnchillary.Load(&plPath, &fName);
+	fName = "addAncillary";
+	plugData::data.funcs.addAncillary.Load(&plPath, &fName);
 
-	fName = "removeAnchillary";
-	plugData::data.funcs.removeAnchillary.Load(&plPath, &fName);
+	fName = "removeAncillary";
+	plugData::data.funcs.removeAncillary.Load(&plPath, &fName);
 
-	fName = "findAnchillary";
-	plugData::data.funcs.findAnchillary.Load(&plPath, &fName);
+	fName = "findAncillary";
+	plugData::data.funcs.findAncillary.Load(&plPath, &fName);
 
 	fName = "addTrait";
 	plugData::data.funcs.addTrait.Load(&plPath, &fName);

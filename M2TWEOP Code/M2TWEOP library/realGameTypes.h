@@ -753,7 +753,17 @@ public:
 	int trade; /* trade rights(0 or 1) */
 	int protectorate; /* protectorate or not(15 or 6) */
 	float factionStanding; //0x0010
-	char pad_0014[116]; //0x0014
+	char pad_0014[4]; //0x0014
+	int32_t numTurnsAllied; //0x0018
+	int32_t numTurnsWar; //0x001C
+	int32_t numTurnsPeace; //0x0020
+	int32_t numTurnsTrade; //0x0024
+	int32_t numTurnsAccess; //0x0028
+	char pad_002C[72]; //0x002C
+	int32_t turnsSinceMapInfoGiven; //0x0074 -no start at 0 but like 10 on campaign start
+	char pad_0078[8]; //0x0078
+	int32_t turnsSinceMapInfoTaken; //0x0080 -no start at 0 but like 10 on campaign start
+	int32_t numTurnsCeasefire; //0x0084
 }; //Size: 0x0088
 
 struct trackedCharacter
@@ -2875,6 +2885,49 @@ public:
 struct recruitRome
 {
 	char pad[8];
+};
+
+
+struct militaryValuesLTGD
+{
+	int32_t totalPopulation; //0x0000
+	int32_t tileCount; //0x0004
+	int32_t averagePopulation; //0x0008
+	int32_t productionValue; //0x000C
+	int32_t nonAlliedBorderLength; //0x0010
+	int32_t enemyBorderLength; //0x0014
+	int32_t fleetCount; //0x0018
+	int32_t navalPowerPerFleet; //0x001C
+	int32_t navalStrength; //0x0020
+	int32_t armyCount; //0x0024
+	int32_t strengthPerArmy; //0x0028
+	int32_t totalStrength; //0x002C
+	int32_t freeStrength; //0x0030
+	int32_t neighbourEnemyNum; //0x0034
+	int32_t enemyStrength; //0x0038
+	int32_t protectorateOf; //0x003C
+};
+
+struct strategyValuesLTGD
+{
+	int32_t borderTiles; //0x0000
+	int32_t frontLineBalance; //0x0004
+	int8_t hasAllianceAgainst; //0x0008
+	int8_t isStrongestNeighbour; //0x0009
+	int8_t isWeakestNeighbour; //0x000A
+	char pad_000B[1]; //0x000B
+
+};
+
+struct dataLTGD
+{
+public:
+	struct factionStruct *currentFaction; //0x0000
+	char pad_0004[8]; //0x0004
+	uint32_t N00024EDA; //0x000C
+	char pad_0010[4]; //0x0010
+	struct militaryValuesLTGD militaryValuesLTGD[31]; //0x0014
+	struct strategyValuesLTGD strategyValuesLTGD[31][31]; //0x07D4
 };
 
 

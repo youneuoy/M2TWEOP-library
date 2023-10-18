@@ -92,11 +92,13 @@ namespace gameHelpers
 	bool tileHasSettlement(const oneTile* tile);
 	bool factionHasArmyNearTile(const oneTile* tile, int factionID);
 	bool factionHasCharacterOnTile(const oneTile* tile, int factionID);
+	int getHostileArmiesStrength(const regionStruct* region, const int factionID);
 	coordPair* convertTileCoords(DWORD arrayIndex);
 	coordPair* getTileCoords(const oneTile* tile);
 	seaConnectedRegion* getSeaConnectedRegion(const regionStruct* region, const int index);
 	seaConnectedRegion* getSeaImportRegion(const regionStruct* region, const int index);
 	oneTile* getRegionSeaEdge(const regionStruct* region, const int index);
+	oneTile* getDevastatedTile(const regionStruct* region, const int index);
 	float getReligionHistory(const regionStruct* region, const int religionID, int turnsAgo);
 	oneTile* getTileBorderingEdgeOfMap(const regionStruct* region, const int index);
 	oneTile* getTileRegion(const regionStruct* region, const int index);
@@ -104,6 +106,18 @@ namespace gameHelpers
 	bool hasResourceType(const regionStruct* region, const int resourceType);
 	oneTile* getReachableTile(const seaConnectedRegion* region, int index);
 	coordPair* getTradeLaneCoord(const seaConnectedRegion* region, int index);
+	bool isDevastated(const oneTile* tile);
+	oneTileDouble* tileToDoubleTile(const oneTile* tile);
+	float getTileHeight(const oneTile* tile);
+	int getTileClimate(const oneTile* tile);
+	int getTileHeatValue(const oneTile* tile);
+	DWORD* getTileObject(const oneTile* tile, int type);
+	resStrat* getTileResource(const oneTile* tile);
+	general* getTileCharacter(const oneTile* tile);
+	settlementStruct* getTileSettlement(const oneTile* tile);
+	fortStruct* getTileFort(const oneTile* tile);
+	portBuildingStruct* getTilePort(const oneTile* tile);
+	watchTowerStruct* getTileWatchtower(const oneTile* tile);
 
 	int getMercUnitNum(mercPool* mercPool);
 	mercPoolUnit* getMercUnit(mercPool* pool, int index);
