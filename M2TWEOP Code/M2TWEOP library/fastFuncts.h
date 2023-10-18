@@ -88,11 +88,11 @@ namespace fastFuncts
 
 
 	//add anchillary to character
-	NOINLINE EOP_EXPORT int addAnchillary(namedCharacter* character, anchillary* anch);
+	NOINLINE EOP_EXPORT int addAnchillary(namedCharacter* character, ancillary* anch);
 	//remove anchillary from character
-	NOINLINE EOP_EXPORT void removeAnchillary(namedCharacter* character, anchillary* anch);
+	NOINLINE EOP_EXPORT void removeAnchillary(namedCharacter* character, ancillary* anch);
 	//find anchillary in anch list
-	NOINLINE EOP_EXPORT anchillary* findAnchillary(char* anchName);
+	NOINLINE EOP_EXPORT ancillary* findAnchillary(char* anchName);
 
 	//edit unit characteristics
 	NOINLINE EOP_EXPORT void setUnitParams(unit* un, int count, int exp, int armor, int weap);

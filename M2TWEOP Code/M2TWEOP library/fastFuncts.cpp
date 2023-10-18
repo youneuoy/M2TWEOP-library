@@ -515,7 +515,7 @@ namespace fastFuncts
 
 		for (UINT32 i = 0; i < numFac; i++)
 		{
-			for (int j = 0; j < listFac[i]->wathtowersNum; j++)
+			for (int j = 0; j < listFac[i]->watchtowersNum; j++)
 			{
 				watchTowerStruct* towS = listFac[i]->watchTowers[j];
 				if (towS->xCoord == x && towS->yCoord == y)
@@ -765,7 +765,7 @@ namespace fastFuncts
 		}
 	}
 
-	EOP_EXPORT int addAnchillary(namedCharacter* character, anchillary* anch)
+	EOP_EXPORT int addAnchillary(namedCharacter* character, ancillary* anch)
 	{
 		if (character == nullptr || anch == nullptr)return 0;
 
@@ -792,7 +792,7 @@ namespace fastFuncts
 		return retr;
 	}
 
-	EOP_EXPORT void removeAnchillary(namedCharacter* character, anchillary* anch)
+	EOP_EXPORT void removeAnchillary(namedCharacter* character, ancillary* anch)
 	{
 		if (character == nullptr || anch == nullptr)return;
 
@@ -817,12 +817,12 @@ namespace fastFuncts
 		return;
 	}
 
-	EOP_EXPORT anchillary* findAnchillary(char* anchName)
+	EOP_EXPORT ancillary* findAnchillary(char* anchName)
 	{
 		if (anchName == nullptr)return 0;
 
 		DWORD adr = 0;
-		anchillary* retr = nullptr;
+		ancillary* retr = nullptr;
 		if (globals::dataS.gamever == 2)//steam
 		{
 			adr = 0x008b1d30;

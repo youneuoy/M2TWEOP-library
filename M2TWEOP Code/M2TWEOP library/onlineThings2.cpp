@@ -191,14 +191,14 @@ namespace battleCreator
 		}
 
 
-		if (gen->genChar->anchNum != 0)
+		if (gen->genChar->ancNum != 0)
 		{
 			jsn::json jAncs= jsn::json::array();
 
-			UINT32 anchNum = gen->genChar->anchNum;
+			UINT32 anchNum = gen->genChar->ancNum;
 			for (UINT32 i = 0; i < anchNum; i++)
 			{
-				jAncs.push_back(gen->genChar->anchillaries[i]->dataAnch->anchName);
+				jAncs.push_back(gen->genChar->ancillaries[i]->dataAnch->ancName);
 			}
 
 			genJson["ancillaries"] = jAncs;

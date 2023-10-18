@@ -263,13 +263,13 @@ namespace battleCreator
 			fileStrings.push_back(tempS);
 		}
 
-		if (gen->genChar->anchNum != 0)
+		if (gen->genChar->ancNum != 0)
 		{
 			tempS = "ancillaries";
-			UINT32 anchNum = gen->genChar->anchNum;
+			UINT32 anchNum = gen->genChar->ancNum;
 			for (UINT32 i = 0; i < anchNum; i++)
 			{
-				tempS.append(" ").append(gen->genChar->anchillaries[i]->dataAnch->anchName).append(" ,");
+				tempS.append(" ").append(gen->genChar->ancillaries[i]->dataAnch->ancName).append(" ,");
 			}
 			fileStrings.push_back(tempS);
 		}
