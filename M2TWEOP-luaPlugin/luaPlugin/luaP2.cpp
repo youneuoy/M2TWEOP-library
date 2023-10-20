@@ -18,7 +18,7 @@ void luaP::initCampaign()
 		sol::usertype<campaign> campaignTable;
 		sol::usertype<stratMap> stratMap;
 		sol::usertype<oneTile> tileStruct;
-		sol::usertype<regionStruct> region;
+		sol::usertype<regionStruct> regionStruct;
 		sol::usertype<mercPool> mercPool;
 		sol::usertype<mercPoolUnit> mercPoolUnit;
 		sol::usertype<collegeOfCardinals> collegeOfCardinals;
@@ -36,8 +36,8 @@ void luaP::initCampaign()
 	}typeAll;
 	using namespace campaignEnums;
 
-	/// CampaignEnums
-	//@section campaignEnums
+	///CampaignEnums
+	//@section dipRelType
 
 	/***
 	Enum with a list of types of diplomatic relations.
@@ -63,6 +63,377 @@ void luaP::initCampaign()
 		"alliance", dipRelEnum::alliance,
 		"suzerain", dipRelEnum::suzerain,
 		"trade", dipRelEnum::trade
+	);
+
+	//@section unitBattleProperties
+	/***
+	Enum with a list of types of unit battle properties.
+
+	@tfield int guardMode
+	@tfield int fireAtWill
+	@tfield int skirmish
+
+	@table unitBattleProperties
+	*/
+	luaState.new_enum(
+		"unitBattleProperties",
+		"guardMode", unitHelpers::guardMode,
+		"fireAtWill", unitHelpers::fireAtWill,
+		"skirmish", unitHelpers::skirmish
+	);
+
+	//@section buildingCapability
+	/***
+	Enum with a list of types of building capabilities.
+
+	@tfield int population_growth_bonus
+	@tfield int population_loyalty_bonus
+	@tfield int population_health_bonus
+	@tfield int trade_base_income_bonus
+	@tfield int trade_level_bonus
+	@tfield int trade_fleet
+	@tfield int taxable_income_bonus
+	@tfield int mine_resource
+	@tfield int farming_level
+	@tfield int road_level
+	@tfield int gate_strength
+	@tfield int gate_defences
+	@tfield int wall_level
+	@tfield int tower_level
+	@tfield int armour
+	@tfield int stage_games
+	@tfield int stage_races
+	@tfield int fire_risk
+	@tfield int weapon_melee_simple
+	@tfield int weapon_melee_blade
+	@tfield int weapon_missile_mechanical
+	@tfield int weapon_missile_gunpowder
+	@tfield int weapon_artillery_mechanical
+	@tfield int weapon_artillery_gunpowder
+	@tfield int weapon_naval_gunpowder
+	@tfield int upgrade_bodyguard
+	@tfield int recruits_morale_bonus
+	@tfield int recruits_exp_bonus
+	@tfield int happiness_bonus
+	@tfield int law_bonus
+	@tfield int construction_cost_bonus_military
+	@tfield int construction_cost_bonus_religious
+	@tfield int construction_cost_bonus_defensive
+	@tfield int construction_cost_bonus_other
+	@tfield int construction_time_bonus_military
+	@tfield int construction_time_bonus_religious
+	@tfield int construction_time_bonus_defensive
+	@tfield int construction_time_bonus_other
+	@tfield int construction_cost_bonus_wooden
+	@tfield int construction_cost_bonus_stone
+	@tfield int construction_time_bonus_wooden
+	@tfield int construction_time_bonus_stone
+	@tfield int free_upkeep
+	@tfield int pope_approval
+	@tfield int pope_disapproval
+	@tfield int religion_level
+	@tfield int amplify_religion_level
+	@tfield int archer_bonus
+	@tfield int cavalry_bonus
+	@tfield int heavy_cavalry_bonus
+	@tfield int gun_bonus
+	@tfield int navy_bonus
+	@tfield int recruitment_cost_bonus_naval
+	@tfield int retrain_cost_bonus
+	@tfield int weapon_projectile
+	@tfield int income_bonus
+	@tfield int recruitment_slots
+
+	@table buildingCapability
+	*/
+	luaState.new_enum(
+		"buildingCapability",
+		"population_growth_bonus", 0,
+		"population_loyalty_bonus", 1,
+		"population_health_bonus", 2,
+		"trade_base_income_bonus", 3,
+		"trade_level_bonus", 4,
+		"trade_fleet", 5,
+		"taxable_income_bonus", 6,
+		"mine_resource", 7,
+		"farming_level", 8,
+		"road_level", 9,
+		"gate_strength", 10,
+		"gate_defences", 11,
+		"wall_level", 12,
+		"tower_level", 13,
+		"armour", 14,
+		"stage_games", 15,
+		"stage_races", 16,
+		"fire_risk", 17,
+		"weapon_melee_simple", 18,
+		"weapon_melee_blade", 19,
+		"weapon_missile_mechanical", 20,
+		"weapon_missile_gunpowder", 21,
+		"weapon_artillery_mechanical", 22,
+		"weapon_artillery_gunpowder", 23,
+		"weapon_naval_gunpowder", 24,
+		"upgrade_bodyguard", 25,
+		"recruits_morale_bonus", 26,
+		"recruits_exp_bonus", 27,
+		"happiness_bonus", 28,
+		"law_bonus", 29,
+		"construction_cost_bonus_military", 30,
+		"construction_cost_bonus_religious", 31,
+		"construction_cost_bonus_defensive", 32,
+		"construction_cost_bonus_other", 33,
+		"construction_time_bonus_military", 34,
+		"construction_time_bonus_religious", 35,
+		"construction_time_bonus_defensive", 36,
+		"construction_time_bonus_other", 37,
+		"construction_cost_bonus_wooden", 38,
+		"construction_cost_bonus_stone", 39,
+		"construction_time_bonus_wooden", 40,
+		"construction_time_bonus_stone", 41,
+		"free_upkeep", 42,
+		"pope_approval", 43,
+		"pope_disapproval", 44,
+		"religion_level", 45,
+		"amplify_religion_level", 46,
+		"archer_bonus", 47,
+		"cavalry_bonus", 48,
+		"heavy_cavalry_bonus", 49,
+		"gun_bonus", 50,
+		"navy_bonus", 51,
+		"recruitment_cost_bonus_naval", 52,
+		"retrain_cost_bonus", 53,
+		"weapon_projectile", 54,
+		"income_bonus", 55,
+		"recruitment_slots", 56
+	);
+
+	//@section characterType
+	/***
+	Enum with a list of character types.
+
+	@tfield int spy
+	@tfield int assassin
+	@tfield int diplomat
+	@tfield int admiral
+	@tfield int merchant
+	@tfield int priest
+	@tfield int general
+	@tfield int named_character
+	@tfield int princess
+	@tfield int heretic
+	@tfield int witch
+	@tfield int inquisitor
+	@tfield int pope
+
+	@table characterType
+	*/
+	luaState.new_enum(
+		"characterType",
+		"spy", 0,
+		"assassin", 1,
+		"diplomat", 2,
+		"admiral", 3,
+		"merchant", 4,
+		"priest", 5,
+		"general", 6,
+		"named_character", 7,
+		"princess", 8,
+		"heretic", 9,
+		"witch", 10,
+		"inquisitor", 11,
+		"pope", 13
+	);
+
+	//@section resourceType
+	/***
+	Enum with a list of resources.
+
+	@tfield int gold
+	@tfield int silver
+	@tfield int fish
+	@tfield int furs
+	@tfield int grain
+	@tfield int timber
+	@tfield int iron
+	@tfield int ivory
+	@tfield int wine
+	@tfield int slaves
+	@tfield int chocolate
+	@tfield int marble
+	@tfield int textiles
+	@tfield int dyes
+	@tfield int tobacco
+	@tfield int silk
+	@tfield int sugar
+	@tfield int sulfur
+	@tfield int tin
+	@tfield int spices
+	@tfield int cotton
+	@tfield int amber
+	@tfield int coal
+	@tfield int wool
+	@tfield int elephants
+	@tfield int camels
+	@tfield int dogs
+	@tfield int generic
+
+	@table resourceType
+	*/
+	luaState.new_enum(
+		"resourceType",
+		"gold", 0,
+		"silver", 1,
+		"fish", 2,
+		"furs", 3,
+		"grain", 4,
+		"timber", 5,
+		"iron", 6,
+		"ivory", 7,
+		"wine", 8,
+		"slaves", 9,
+		"chocolate", 10,
+		"marble", 11,
+		"textiles", 12,
+		"dyes", 13,
+		"tobacco", 14,
+		"silk", 15,
+		"sugar", 16,
+		"sulfur", 17,
+		"tin", 18,
+		"spices", 19,
+		"cotton", 20,
+		"amber", 21,
+		"coal", 22,
+		"wool", 23,
+		"elephants", 24,
+		"camels", 25,
+		"dogs", 26,
+		"generic", 27
+	);
+
+	//@section moraleStatus
+	/***
+	Enum of unit morale status.
+
+	@tfield int berserk
+	@tfield int impetuous
+	@tfield int high
+	@tfield int firm
+	@tfield int shaken
+	@tfield int wavering
+	@tfield int routing
+
+	@table moraleStatus
+	*/
+	luaState.new_enum(
+		"moraleStatus",
+		"berserk", 0,
+		"impetuous", 1,
+		"high", 2,
+		"firm", 3,
+		"shaken", 4,
+		"wavering", 5,
+		"routing", 6
+	);
+
+	//@section combatStatus
+	/***
+	Enum of unit combat status.
+
+	@tfield int notInCombat
+	@tfield int victoryCertain
+	@tfield int victoryAlmostCertain
+	@tfield int victoryDistinct
+	@tfield int balanced
+	@tfield int defeatDistinct
+	@tfield int defeatAlmostCertain
+	@tfield int defeatCertain
+
+	@table combatStatus
+	*/
+	luaState.new_enum(
+		"combatStatus",
+		"notInCombat", 0,
+		"victoryCertain", 1,
+		"victoryAlmostCertain", 2,
+		"victoryDistinct", 3,
+		"balanced", 4,
+		"defeatDistinct", 5,
+		"defeatAlmostCertain", 6,
+		"defeatCertain", 7
+	);
+
+	//@section battleSuccess
+	/***
+	Enum of unit combat status.
+
+	@tfield int close
+	@tfield int average
+	@tfield int clear
+	@tfield int crushing
+
+	@table battleSuccess
+	*/
+	luaState.new_enum(
+		"battleSuccess",
+		"close", 0,
+		"average", 1,
+		"clear", 2,
+		"crushing", 3
+	);
+
+	//@section battleType
+	/***
+	Enum of battle types.
+
+	@tfield int ambushSuccess
+	@tfield int ambushFail
+	@tfield int open
+	@tfield int siege
+	@tfield int sally
+	@tfield int naval
+	@tfield int withdrawal
+	@tfield int meetEnemy
+
+	@table battleType
+	*/
+	luaState.new_enum(
+		"battleType",
+		"ambushSuccess", 0,
+		"ambushFail", 1,
+		"open", 2,
+		"siege", 3,
+		"sally", 4,
+		"naval", 5,
+		"withdrawal", 6,
+		"meetEnemy", 7
+	);
+
+	//@section battleState
+	/***
+	Enum of battle states.
+
+	@tfield int ambushSuccess
+	@tfield int ambushFail
+	@tfield int open
+	@tfield int siege
+	@tfield int sally
+	@tfield int naval
+	@tfield int withdrawal
+	@tfield int meetEnemy
+
+	@table battleState
+	*/
+	luaState.new_enum(
+		"battleState",
+		"notInBattle", 0,
+		"preBattle", 1,
+		"delay", 2,
+		"deployment", 3,
+		"deploymentPlayer2", 4,
+		"conflict", 5,
+		"victoryScroll", 6,
+		"pursuit", 7
 	);
 
 	///options1
@@ -476,7 +847,7 @@ void luaP::initCampaign()
 	@tfield getWatchTower getWatchTower
 	@tfield getSettlementByName getSettlementByName
 
-	@table gameDataAll.campaignStruct
+	@table campaignStruct
 	*/
 	typeAll.campaignTable = luaState.new_usertype<campaign>("campaignStruct");
 	typeAll.campaignTable.set("playerFactionId", &campaign::playerFactionId);
@@ -700,7 +1071,7 @@ void luaP::initCampaign()
 	@tfield getLandConnection getLandConnection
 	@tfield getLandMass getLandMass
 
-	@table gameDataAll.stratMap
+	@table stratMap
 	*/
 	typeAll.stratMap = luaState.new_usertype<stratMap>("stratMap");
 	typeAll.stratMap.set("mapWidth", &stratMap::mapWidth);
@@ -714,7 +1085,7 @@ void luaP::initCampaign()
 	Get a specific region by index.
 	@function stratMap.getRegion
 	@tparam int index
-	@treturn region region
+	@treturn regionStruct region
 	@usage
 	local sMap = gameDataAll.get().stratMap;
 	local region = sMap.getRegion(2);
@@ -931,11 +1302,11 @@ void luaP::initCampaign()
 	*/
 	typeAll.roadStruct.set_function("factionHasCharacterOnTile", &gameHelpers::factionHasCharacterOnTile);
 
-	///Region
-	//@section Region
+	///RegionStruct
+	//@section RegionStruct
 
 	/***
-	Basic region table.
+	Basic regionStruct table.
 
 	@tfield string regionName
 	@tfield string localizedName
@@ -995,52 +1366,52 @@ void luaP::initCampaign()
 	@tfield getHostileArmiesStrength getHostileArmiesStrength
 	@tfield hasResourceType hasResourceType
 
-	@table region
+	@table regionStruct
 	*/
-	typeAll.region = luaState.new_usertype<regionStruct>("region");
-	typeAll.region.set("regionName", &regionStruct::regionName);
-	typeAll.region.set("settlementName", &regionStruct::settlementName);
-	typeAll.region.set("localizedName", sol::property(
+	typeAll.regionStruct = luaState.new_usertype<regionStruct>("regionStruct");
+	typeAll.regionStruct.set("regionName", &regionStruct::regionName);
+	typeAll.regionStruct.set("settlementName", &regionStruct::settlementName);
+	typeAll.regionStruct.set("localizedName", sol::property(
 		&gameHelpers::getRegionName, &gameHelpers::changeRegionName
 		));
-	typeAll.region.set("legioName", &regionStruct::legioName);
-	typeAll.region.set("regionID", &regionStruct::regionID);
-	typeAll.region.set("roadLevel", &regionStruct::roadLevel);
-	typeAll.region.set("farmingLevel", &regionStruct::farmingLevel);
-	typeAll.region.set("famineThreat", &regionStruct::famineThreat);
-	typeAll.region.set("harvestSuccess", &regionStruct::harvestSuccess);
-	typeAll.region.set("totalSeaTradeValue", &regionStruct::totalSeaTradeValue);
-	typeAll.region.set("seaConnectedRegionsCount", &regionStruct::seaConnectedRegionsCount);
-	typeAll.region.set("seaImportRegionsCount", &regionStruct::seaImportRegionsCount);
-	typeAll.region.set("landMass", &regionStruct::landMass);
-	typeAll.region.set("roadToPort", &regionStruct::roadToPort);
-	typeAll.region.set("seaExportRegion", &regionStruct::seaExportRegion);
-	typeAll.region.set("regionSeaEdgesCount", &regionStruct::regionSeaEdgesCount);
-	typeAll.region.set("tilesBorderingEdgeOfMapCount", &regionStruct::tilesBorderingEdgeOfMapCount);
-	typeAll.region.set("fertileTilesCount", &regionStruct::fertileTilesCount);
-	typeAll.region.set("resourceTypesBitMap", &regionStruct::resourceTypesBitMap);
-	typeAll.region.set("stacksNum", &regionStruct::stacksNum);
-	typeAll.region.set("fortsNum", &regionStruct::fortsNum);
-	typeAll.region.set("watchtowersNum", &regionStruct::watchtowersNum);
-	typeAll.region.set("isSea", &regionStruct::isSea);
-	typeAll.region.set("hasLake", &regionStruct::hasLake);
-	typeAll.region.set("mercPool", &regionStruct::mercPool);
-	typeAll.region.set("settlement", &regionStruct::settlement);
-	typeAll.region.set("tileCount", &regionStruct::tileCount);
-	typeAll.region.set("neighbourRegionsNum", &regionStruct::neighbourRegionsNum);
-	typeAll.region.set("resourcesNum", &regionStruct::resourcesNum);
-	typeAll.region.set("hiddenResources1", &regionStruct::hiddenResources1);
-	typeAll.region.set("hiddenResources2", &regionStruct::hiddenResources2);
-	typeAll.region.set("settlementXCoord", &regionStruct::settlementXCoord);
-	typeAll.region.set("settlementYCoord", &regionStruct::settlementYCoord);
-	typeAll.region.set("portEntranceXCoord", &regionStruct::portEntranceXCoord);
-	typeAll.region.set("portEntranceYCoord", &regionStruct::portEntranceYCoord);
-	typeAll.region.set("faction", &regionStruct::factionOwner);
-	typeAll.region.set("rebelType", &regionStruct::rebelType);
-	typeAll.region.set("localizedRebelsName", sol::property(
+	typeAll.regionStruct.set("legioName", &regionStruct::legioName);
+	typeAll.regionStruct.set("regionID", &regionStruct::regionID);
+	typeAll.regionStruct.set("roadLevel", &regionStruct::roadLevel);
+	typeAll.regionStruct.set("farmingLevel", &regionStruct::farmingLevel);
+	typeAll.regionStruct.set("famineThreat", &regionStruct::famineThreat);
+	typeAll.regionStruct.set("harvestSuccess", &regionStruct::harvestSuccess);
+	typeAll.regionStruct.set("totalSeaTradeValue", &regionStruct::totalSeaTradeValue);
+	typeAll.regionStruct.set("seaConnectedRegionsCount", &regionStruct::seaConnectedRegionsCount);
+	typeAll.regionStruct.set("seaImportRegionsCount", &regionStruct::seaImportRegionsCount);
+	typeAll.regionStruct.set("landMass", &regionStruct::landMass);
+	typeAll.regionStruct.set("roadToPort", &regionStruct::roadToPort);
+	typeAll.regionStruct.set("seaExportRegion", &regionStruct::seaExportRegion);
+	typeAll.regionStruct.set("regionSeaEdgesCount", &regionStruct::regionSeaEdgesCount);
+	typeAll.regionStruct.set("tilesBorderingEdgeOfMapCount", &regionStruct::tilesBorderingEdgeOfMapCount);
+	typeAll.regionStruct.set("fertileTilesCount", &regionStruct::fertileTilesCount);
+	typeAll.regionStruct.set("resourceTypesBitMap", &regionStruct::resourceTypesBitMap);
+	typeAll.regionStruct.set("stacksNum", &regionStruct::stacksNum);
+	typeAll.regionStruct.set("fortsNum", &regionStruct::fortsNum);
+	typeAll.regionStruct.set("watchtowersNum", &regionStruct::watchtowersNum);
+	typeAll.regionStruct.set("isSea", &regionStruct::isSea);
+	typeAll.regionStruct.set("hasLake", &regionStruct::hasLake);
+	typeAll.regionStruct.set("mercPool", &regionStruct::mercPool);
+	typeAll.regionStruct.set("settlement", &regionStruct::settlement);
+	typeAll.regionStruct.set("tileCount", &regionStruct::tileCount);
+	typeAll.regionStruct.set("neighbourRegionsNum", &regionStruct::neighbourRegionsNum);
+	typeAll.regionStruct.set("resourcesNum", &regionStruct::resourcesNum);
+	typeAll.regionStruct.set("hiddenResources1", &regionStruct::hiddenResources1);
+	typeAll.regionStruct.set("hiddenResources2", &regionStruct::hiddenResources2);
+	typeAll.regionStruct.set("settlementXCoord", &regionStruct::settlementXCoord);
+	typeAll.regionStruct.set("settlementYCoord", &regionStruct::settlementYCoord);
+	typeAll.regionStruct.set("portEntranceXCoord", &regionStruct::portEntranceXCoord);
+	typeAll.regionStruct.set("portEntranceYCoord", &regionStruct::portEntranceYCoord);
+	typeAll.regionStruct.set("faction", &regionStruct::factionOwner);
+	typeAll.regionStruct.set("rebelType", &regionStruct::rebelType);
+	typeAll.regionStruct.set("localizedRebelsName", sol::property(
 		&gameHelpers::getRebelsName, &gameHelpers::changeRebelsName
 		));
-	typeAll.region.set("triumphValue", &regionStruct::triumphValue);
+	typeAll.regionStruct.set("triumphValue", &regionStruct::triumphValue);
 
 	/***
 	Get an army by it's index.
@@ -1052,7 +1423,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	local army = region:getStack(0)
 	*/
-	typeAll.region.set_function("getStack", &gameHelpers::getStack);
+	typeAll.regionStruct.set_function("getStack", &gameHelpers::getStack);
 
 	/***
 	Get a fort by it's index.
@@ -1064,7 +1435,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	local fort = region:getFort(0)
 	*/
-	typeAll.region.set_function("getFort", &gameHelpers::getFort);
+	typeAll.regionStruct.set_function("getFort", &gameHelpers::getFort);
 
 	/***
 	Get a watchtower by it's index.
@@ -1076,7 +1447,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	local watch = region:getWatchtower(0)
 	*/
-	typeAll.region.set_function("getWatchtower", &gameHelpers::getWatchtower);
+	typeAll.regionStruct.set_function("getWatchtower", &gameHelpers::getWatchtower);
 
 	/***
 	Get a resource by it's index.
@@ -1088,7 +1459,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	local res = region:getResource(0)
 	*/
-	typeAll.region.set_function("getResource", &gameHelpers::getResource);
+	typeAll.regionStruct.set_function("getResource", &gameHelpers::getResource);
 
 	/***
 	Get a neighbour region by it's index.
@@ -1100,7 +1471,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	local nRegion = region:getNeighbour(0)
 	*/
-	typeAll.region.set_function("getNeighbour", &gameHelpers::getNeighbour);
+	typeAll.regionStruct.set_function("getNeighbour", &gameHelpers::getNeighbour);
 
 	/***
 	Check if a region has a hidden resource.
@@ -1112,7 +1483,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	localhr = region:getHiddenResource(0)
 	*/
-	typeAll.region.set_function("getHiddenResource", &gameHelpers::getHiddenResource);
+	typeAll.regionStruct.set_function("getHiddenResource", &gameHelpers::getHiddenResource);
 
 	/***
 	Set a region's hidden resource (reset on game restart).
@@ -1124,7 +1495,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	region:setHiddenResource(0, false)
 	*/
-	typeAll.region.set_function("setHiddenResource", &gameHelpers::setHiddenResource);
+	typeAll.regionStruct.set_function("setHiddenResource", &gameHelpers::setHiddenResource);
 
 	/***
 	Get a region that is reachable from this region.
@@ -1136,7 +1507,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	local connectedRegion = region:getSeaConnectedRegion(0)
 	*/
-	typeAll.region.set_function("getSeaConnectedRegion", &gameHelpers::getSeaConnectedRegion);
+	typeAll.regionStruct.set_function("getSeaConnectedRegion", &gameHelpers::getSeaConnectedRegion);
 
 	/***
 	Get a region this region is importing trade goods from.
@@ -1148,7 +1519,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	local seaImportRegion = region:getSeaImportRegion(0)
 	*/
-	typeAll.region.set_function("getSeaImportRegion", &gameHelpers::getSeaImportRegion);
+	typeAll.regionStruct.set_function("getSeaImportRegion", &gameHelpers::getSeaImportRegion);
 
 	/***
 	Get a region sea edge (point where it borders both sea and another land region).
@@ -1160,7 +1531,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	local edge = region:getRegionSeaEdge(0)
 	*/
-	typeAll.region.set_function("getRegionSeaEdge", &gameHelpers::getRegionSeaEdge);
+	typeAll.regionStruct.set_function("getRegionSeaEdge", &gameHelpers::getRegionSeaEdge);
 
 	/***
 	Get a devastated tile.
@@ -1172,7 +1543,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	local tile = region:getDevastatedTile(0)
 	*/
-	typeAll.region.set_function("getDevastatedTile", &gameHelpers::getDevastatedTile);
+	typeAll.regionStruct.set_function("getDevastatedTile", &gameHelpers::getDevastatedTile);
 
 	/***
 	Get a tile that borders the edge of the map.
@@ -1184,7 +1555,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	local edge = region:getTileBorderingEdgeOfMap(0)
 	*/
-	typeAll.region.set_function("getTileBorderingEdgeOfMap", &gameHelpers::getTileBorderingEdgeOfMap);
+	typeAll.regionStruct.set_function("getTileBorderingEdgeOfMap", &gameHelpers::getTileBorderingEdgeOfMap);
 
 	/***
 	Get a tile by index.
@@ -1196,7 +1567,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	local tile = region:getTile(0)
 	*/
-	typeAll.region.set_function("getTile", &gameHelpers::getTileRegion);
+	typeAll.regionStruct.set_function("getTile", &gameHelpers::getTileRegion);
 
 	/***
 	Get a fertile tile by index.
@@ -1208,7 +1579,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	local tile = region:getFertileTile(0)
 	*/
-	typeAll.region.set_function("getFertileTile", &gameHelpers::getFertileTile);
+	typeAll.regionStruct.set_function("getFertileTile", &gameHelpers::getFertileTile);
 
 	/***
 	Get religion amount from a set number of turns ago.
@@ -1221,7 +1592,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	local catholicThreeTurnsAgo = region:getReligionHistory(0, 3)
 	*/
-	typeAll.region.set_function("getReligionHistory", &gameHelpers::getReligionHistory);
+	typeAll.regionStruct.set_function("getReligionHistory", &gameHelpers::getReligionHistory);
 
 	/***
 	Check if region has a resource type.
@@ -1233,7 +1604,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	local hasResource = region:hasResourceType(16)
 	*/
-	typeAll.region.set_function("hasResourceType", &gameHelpers::hasResourceType);
+	typeAll.regionStruct.set_function("hasResourceType", &gameHelpers::hasResourceType);
 
 	/***
 	Get the strength total of all armies in this region that are hostile to a specific faction.
@@ -1245,7 +1616,7 @@ void luaP::initCampaign()
 	local region = sMap.getRegion(2);
 	local totalStrength = region:getHostileArmiesStrength(myFac.dipNum)
 	*/
-	typeAll.region.set_function("getHostileArmiesStrength", &gameHelpers::getHostileArmiesStrength);
+	typeAll.regionStruct.set_function("getHostileArmiesStrength", &gameHelpers::getHostileArmiesStrength);
 
 	///neighbourRegion
 	//@section neighbourRegion
@@ -1478,6 +1849,7 @@ void luaP::initP2()
 	@tfield get get
 	@tfield battleStruct battleStruct battle data
 	@tfield campaignStruct campaignStruct campaign data
+	@tfield uiCardManager uiCardManager ui and selected objects data
 
 	@table gameDataAll
 	*/
@@ -1485,7 +1857,7 @@ void luaP::initP2()
 	/***
 	Call at the start of the script, this is a static object and the pointer to it doesn't change.
 	@function gameDataAll.get
-	@treturn gameDataAllStruct gameDataAll
+	@treturn gameDataAll gameDataAll
 	@usage
 	gameData=gameDataAll.get();
 	battleXCoord=gameData.battleStruct.xCoord;
@@ -1493,6 +1865,7 @@ void luaP::initP2()
 	typeAll.gameDataAllTable.set_function("get", &gameDataAllHelper::get);
 	typeAll.gameDataAllTable.set("battleStruct", &gameDataAllStruct::battleHandler);
 	typeAll.gameDataAllTable.set("campaignStruct", &gameDataAllStruct::campaignData);
+	typeAll.gameDataAllTable.set("uiCardManager", &gameDataAllStruct::uiCardManager);
 	typeAll.gameDataAllTable.set("stratMap", &gameDataAllStruct::stratMap);
 
 
@@ -1542,7 +1915,7 @@ void luaP::initP2()
 	tfield getPlayerArmy getPlayerArmy
 	@tfield getBattleResidence getBattleResidence
 
-	@table gameDataAll.battleStruct
+	@table battleStruct
 	*/
 	typeAll.battleTable = luaState.new_usertype<battleDataS>("battleStruct");
 	typeAll.battleTable.set("battleState", &battleDataS::battleState);
@@ -1601,7 +1974,7 @@ void luaP::initP2()
 	@tfield int alliance
 	@tfield int soldierCount
 	@tfield int factionCount
-	@tfield int totalStrenght
+	@tfield int totalStrength
 	@tfield battleAI battleAIPlan
 	@tfield getBattleArmy getBattleArmy
 	@tfield trackedPointerArmy[8] armies Returns a table of trackedPointerArmy. Maximum: 8.
@@ -1610,7 +1983,7 @@ void luaP::initP2()
 
 
 
-	@table battleStruct.battleSide
+	@table battleSide
 	*/
 	typeAll.battleSideTable = luaState.new_usertype<battleSide>("battleSide");
 	typeAll.battleSideTable.set("isDefender", &battleSide::isDefender);
@@ -1619,7 +1992,7 @@ void luaP::initP2()
 	typeAll.battleSideTable.set("battleSuccess", &battleSide::battleSuccess);
 	typeAll.battleSideTable.set("alliance", &battleSide::alliance);
 	typeAll.battleSideTable.set("soldierCount", &battleSide::soldierCount);
-	typeAll.battleSideTable.set("totalStrenght", &battleSide::totalStrenght);
+	typeAll.battleSideTable.set("totalStrength", &battleSide::totalStrength);
 	typeAll.battleSideTable.set("factionCount", &battleSide::factionCount);
 	typeAll.battleSideTable.set("battleAIPlan", &battleSide::battleAIPlan);
 	typeAll.battleSideTable.set("winConditions", sol::property([](battleSide& self) { return std::ref(self.winConditions); }));
@@ -1699,7 +2072,7 @@ void luaP::initP2()
 
 
 
-	@table battleSide.trackedPointerArmy
+	@table trackedPointerArmy
 	*/
 	typeAll.trackedPointerArmyTable = luaState.new_usertype<trackedPointerArmy>("trackedPointerArmy");
 	typeAll.trackedPointerArmyTable.set("army", &trackedPointerArmy::stack);
@@ -1774,11 +2147,9 @@ void luaP::initP2()
 	@tfield stackStruct army
 	@tfield character character
 	@tfield int generalNumKillsBattle
+	@tfield float totalValue
 	@tfield float generalHPRatioLost
-	@tfield float battleOdds
 	@tfield int numKilledGenerals
-	@tfield int numDiedGenerals
-	@tfield int numKilledCaptains
 	@tfield int unitCount
 	@tfield getBattleUnit getBattleUnit
 
@@ -1789,10 +2160,8 @@ void luaP::initP2()
 	typeAll.battleArmy.set("character", &armyAndCharacter::character);
 	typeAll.battleArmy.set("generalNumKillsBattle", &armyAndCharacter::generalNumKillsBattle);
 	typeAll.battleArmy.set("generalHPRatioLost", &armyAndCharacter::generalHPRatioLost);
-	typeAll.battleArmy.set("battleOdds", &armyAndCharacter::battleOdds);
 	typeAll.battleArmy.set("numKilledGenerals", &armyAndCharacter::numKilledGenerals);
-	typeAll.battleArmy.set("numDiedGenerals", &armyAndCharacter::generalsDiedCount);
-	typeAll.battleArmy.set("numKilledCaptains", &armyAndCharacter::killedCaptainsCount);
+	typeAll.battleArmy.set("totalValue", &armyAndCharacter::totalValue);
 	typeAll.battleArmy.set("unitCount", &armyAndCharacter::unitCount);
 	/***
 	Get a battle unit by it's index.
@@ -1812,6 +2181,7 @@ void luaP::initP2()
 	Basic battleUnit table
 
 	@tfield unit unit
+	@tfield float valuePerSoldier
 	@tfield int soldiersLost
 	@tfield int soldiersStart
 	@tfield int unitsRouted
@@ -1825,11 +2195,13 @@ void luaP::initP2()
 	@tfield int expStart
 	@tfield int expGained
 	@tfield int isGeneral
+	@tfield int hasWithdrawn
 
 	@table battleUnit
 	*/
 	typeAll.battleUnit = luaState.new_usertype<battleUnit>("battleUnit");
 	typeAll.battleUnit.set("unit", &battleUnit::unit);
+	typeAll.battleUnit.set("valuePerSoldier", &battleUnit::valuePerSoldier);
 	typeAll.battleUnit.set("soldiersLost", &battleUnit::soldiersLost);
 	typeAll.battleUnit.set("soldiersStart", &battleUnit::soldiersStart);
 	typeAll.battleUnit.set("unitsRouted", &battleUnit::unitsRouted);
@@ -1843,6 +2215,7 @@ void luaP::initP2()
 	typeAll.battleUnit.set("expStart", &battleUnit::expStart);
 	typeAll.battleUnit.set("expGained", &battleUnit::expGained);
 	typeAll.battleUnit.set("isGeneral", &battleUnit::isGeneral);
+	typeAll.battleUnit.set("hasWithdrawn", &battleUnit::isGeneral);
 
 	/// battleResidence
 	//@section battleResidence

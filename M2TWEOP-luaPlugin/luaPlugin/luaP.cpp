@@ -174,74 +174,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		return nullptr;
 	}
 
-	luaState.new_enum(
-		"unitBattleProperties",
-		"guardMode", unitHelpers::guardMode,
-		"fireAtWill", unitHelpers::fireAtWill,
-		"skirmish", unitHelpers::skirmish
-	);
-
-	//luaState.new_enum(
-	//	"buildingCap",
-	//    "population_growth_bonus", buildingStructHelpers::buildingCap::population_growth_bonus,
-	//    "population_loyalty_bonus", buildingStructHelpers::buildingCap::population_loyalty_bonus,
-	//    "population_health_bonus", buildingStructHelpers::buildingCap::population_health_bonus,
-	//    "trade_base_income_bonus", buildingStructHelpers::buildingCap::trade_base_income_bonus,
-	//    "trade_level_bonus", buildingStructHelpers::buildingCap::trade_level_bonus,
-	//    "trade_fleet", buildingStructHelpers::buildingCap::trade_fleet,
-	//    "taxable_income_bonus", buildingStructHelpers::buildingCap::taxable_income_bonus,
-	//    "mine_resource", buildingStructHelpers::buildingCap::mine_resource,
-	//    "farming_level", buildingStructHelpers::buildingCap::farming_level,
-	//    "road_level", buildingStructHelpers::buildingCap::road_level,
-	//    "gate_strength", buildingStructHelpers::buildingCap::gate_strength,
-	//    "gate_defences", buildingStructHelpers::buildingCap::gate_defences,
-	//    "wall_level", buildingStructHelpers::buildingCap::wall_level,
-	//    "tower_level", buildingStructHelpers::buildingCap::tower_level,
-	//    "armour", buildingStructHelpers::buildingCap::armour,
-	//    "stage_games", buildingStructHelpers::buildingCap::stage_games,
-	//    "stage_races", buildingStructHelpers::buildingCap::stage_races,
-	//    "fire_risk", buildingStructHelpers::buildingCap::fire_risk,
-	//    "weapon_melee_simple", buildingStructHelpers::buildingCap::weapon_melee_simple,
-	//    "weapon_melee_blade", buildingStructHelpers::buildingCap::weapon_melee_blade,
-	//    "weapon_missile_mechanical", buildingStructHelpers::buildingCap::weapon_missile_mechanical,
-	//    "weapon_missile_gunpowder", buildingStructHelpers::buildingCap::weapon_missile_gunpowder,
-	//    "weapon_artillery_mechanical", buildingStructHelpers::buildingCap::weapon_artillery_mechanical,
-	//    "weapon_artillery_gunpowder", buildingStructHelpers::buildingCap::weapon_artillery_gunpowder,
-	//    "weapon_naval_gunpowder", buildingStructHelpers::buildingCap::weapon_naval_gunpowder,
-	//    "upgrade_bodyguard", buildingStructHelpers::buildingCap::upgrade_bodyguard,
-	//    "recruits_morale_bonus", buildingStructHelpers::buildingCap::recruits_morale_bonus,
-	//    "recruits_exp_bonus", buildingStructHelpers::buildingCap::recruits_exp_bonus,
-	//    "happiness_bonus", buildingStructHelpers::buildingCap::happiness_bonus,
-	//    "law_bonus", buildingStructHelpers::buildingCap::law_bonus,
-	//    "construction_cost_bonus_military", buildingStructHelpers::buildingCap::construction_cost_bonus_military,
-	//    "construction_cost_bonus_religious", buildingStructHelpers::buildingCap::construction_cost_bonus_religious,
-	//    "construction_cost_bonus_defensive", buildingStructHelpers::buildingCap::construction_cost_bonus_defensive,
-	//    "construction_cost_bonus_other", buildingStructHelpers::buildingCap::construction_cost_bonus_other,
-	//    "construction_time_bonus_military", buildingStructHelpers::buildingCap::construction_time_bonus_military,
-	//    "construction_time_bonus_religious", buildingStructHelpers::buildingCap::construction_time_bonus_religious,
-	//    "construction_time_bonus_defensive", buildingStructHelpers::buildingCap::construction_time_bonus_defensive,
-	//    "construction_time_bonus_other", buildingStructHelpers::buildingCap::construction_time_bonus_other,
-	//    "construction_cost_bonus_wooden", buildingStructHelpers::buildingCap::construction_cost_bonus_wooden,
-	//    "construction_cost_bonus_stone", buildingStructHelpers::buildingCap::construction_cost_bonus_stone,
-	//    "construction_time_bonus_wooden", buildingStructHelpers::buildingCap::construction_time_bonus_wooden,
-	//    "construction_time_bonus_stone", buildingStructHelpers::buildingCap::construction_time_bonus_stone,
-	//    "free_upkeep", buildingStructHelpers::buildingCap::free_upkeep,
-	//    "pope_approval", buildingStructHelpers::buildingCap::pope_approval,
-	//    "pope_disapproval", buildingStructHelpers::buildingCap::pope_disapproval,
-	//    "religion_level", buildingStructHelpers::buildingCap::religion_level,
-	//    "amplify_religion_level", buildingStructHelpers::buildingCap::amplify_religion_level,
-	//    "archer_bonus", buildingStructHelpers::buildingCap::archer_bonus,
-	//    "cavalry_bonus", buildingStructHelpers::buildingCap::cavalry_bonus,
-	//    "heavy_cavalry_bonus", buildingStructHelpers::buildingCap::heavy_cavalry_bonus,
-	//    "gun_bonus", buildingStructHelpers::buildingCap::gun_bonus,
-	//    "navy_bonus", buildingStructHelpers::buildingCap::navy_bonus,
-	//    "recruitment_cost_bonus_naval", buildingStructHelpers::buildingCap::recruitment_cost_bonus_naval,
-	//    "retrain_cost_bonus", buildingStructHelpers::buildingCap::retrain_cost_bonus,
-	//    "weapon_projectile", buildingStructHelpers::buildingCap::weapon_projectile,
-	//    "income_bonus", buildingStructHelpers::buildingCap::income_bonus,
-	//    "recruitment_slots", buildingStructHelpers::buildingCap::recruitment_slots
-	//);
-
 	///M2TWEOP
 	//@section m2tweopTable
 
@@ -266,6 +198,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getTileVisibility getTileVisibility
 	@tfield getRegionOwner getRegionOwner
 	@tfield setEDUUnitsSize setEDUUnitsSize
+	@tfield setBuildingChainLimit setBuildingChainLimit
 	@tfield getReligionName getReligionName
 	@tfield condition condition
 	@table M2TWEOP
@@ -953,7 +886,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int weaponLVL soldiers weapon. You can change it on stratmap and soldiers updated. Use @{setParams} if you need change several parameters at once.
 	@tfield int soldierCountStratMapMax Read only
 	@tfield int soldierCountBattleMap Read only
-	@tfield int moraleLevel (6 means routing)
+	@tfield int moraleLevel use moraleStatus enum
 	@tfield int isCloseFormation
 	@tfield int fatigue (battle)
 	@tfield int maxAmmo (battle)
@@ -1108,6 +1041,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int targetsToGo dont set
 	@tfield int hasTargets dont set
 	@tfield int isHalted
+	@tfield int combatStatus use enum: combatStatus
 	@tfield float lastTargetCoord1 dont set
 	@tfield float lastTargetCoord2 dont set
 	@tfield int towersUnderFireFromCount
@@ -1128,6 +1062,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.unitPositionData.set("additionalTargetsOverOne", &unitPositionData::additionalTargetsOverOne);
 	types.unitPositionData.set("targetsToGo", &unitPositionData::targetsToGo);
 	types.unitPositionData.set("hasTargets", &unitPositionData::hasTargets);
+	types.unitPositionData.set("combatStatus", &unitPositionData::combatStatus);
 	types.unitPositionData.set("isHalted", &unitPositionData::isHalted);
 	types.unitPositionData.set("lastTargetCoord1", &unitPositionData::lastTargetCoord1);
 	types.unitPositionData.set("lastTargetCoord2", &unitPositionData::lastTargetCoord2);
@@ -2286,7 +2221,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int secondaryColorGreen Warning: resets on reload.
 	@tfield int secondaryColorBlue Warning: resets on reload.
 	@tfield int triumphValue Usage unknown.
-	@tfield int religionID.
+	@tfield int religionID
 	@tfield int standardIndex Warning: resets on reload.
 	@tfield int logoIndex Warning: resets on reload.
 	@tfield int smallLogoIndex Warning: resets on reload.
@@ -2430,6 +2365,16 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int level
 	@tfield int isCastle
 	@tfield int settlementTaxLevel
+	@tfield int recruitmentPoolCount
+	@tfield int recruitmentCapabilityNum
+	@tfield bool freezeRecruitmentPool
+	@tfield int spiesInRecruitmentQueue
+	@tfield int assassinsInRecruitmentQueue
+	@tfield int diplomatsInRecruitmentQueue
+	@tfield int admiralsInRecruitmentQueue
+	@tfield int merchantsInRecruitmentQueue
+	@tfield int priestsInRecruitmentQueue
+	@tfield int turmoil
 	@tfield int isProvokedRebellion
 	@tfield int populationSize
 	@tfield int PopGrowthBaseFarm - Get only
@@ -2716,6 +2661,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local capability = settlementStruct:getRecruitmentCapability(0)
 	*/
 	types.settlementStruct.set_function("getRecruitmentCapability", &settlementHelpers::getRecruitmentCapability);
+	types.settlementStruct.set("recruitmentCapabilityNum", sol::property(settlementHelpers::getRecruitmentCapabilityNum));
 	/***
 	Get a recruitment pool by index.
 	@function settlementStruct:getSettlementRecruitmentPool

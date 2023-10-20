@@ -834,15 +834,10 @@ void luaP::onPluginLoadF()
 	Exports: character, faction, regionID, characterType, missionDetails, religion
 
 	@function onLeaderMissionFailed
-	@tparam namedCharacter namedChar
-	@tparam factionStruct faction
-	@tparam string missionName
-	@tparam regionStruct|nil region
-	@tparam string characterType
-	@tparam string religion
+	@tparam eventTrigger eventData
 
 	@usage
-	function onLeaderMissionFailed(namedChar, faction, missionName, region, characterType, religion)
+	function onLeaderMissionFailed(eventData)
 	--something
 	end
 	*/

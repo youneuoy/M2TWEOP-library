@@ -252,7 +252,7 @@ void luaP::initEopEdu()
 
 	/***
 	Get the amount of models in the armour_upg_models line in export_descr_unit.
-	@function M2TWEOPDU.getArmourUpgradeLevelsNum
+	@function M2TWEOPDU.getArmourUpgradeModelsNum
 	@tparam int index Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
 	@treturn int ArmourUpgradeLevelsNum
 	@usage

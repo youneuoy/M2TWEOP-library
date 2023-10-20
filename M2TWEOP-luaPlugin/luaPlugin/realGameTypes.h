@@ -960,7 +960,7 @@ struct battleUnit
 public:
 	struct unit* unit; //0x0000
 	struct UNICODE_STRING** localizedName; //0x0004
-	float someFloat; //0x0008
+	float valuePerSoldier; //0x0008
 	int32_t soldiersLost; //0x000C
 	int32_t soldiersKilled; //0x0010
 	int32_t takenPrisoner; //0x0014
@@ -1213,7 +1213,7 @@ struct armyAndCharacter { /* in battle leader and leader army */
 	struct general* character;//0x0004
 	int32_t generalNumKillsBattle; //0x0008
 	float generalHPRatioLost; //0x000C
-	float someFloat; //0x0010
+	float totalValue; //0x0010
 	float battleOdds; //0x0014
 	char pad_0018[12]; //0x0018
 	struct general* killedGenerals; //0x0024
@@ -1343,11 +1343,33 @@ public:
 	char pad_07A4[96]; //0x07A4
 }; //Size: 0x0804
 
+/*
+0 not in battle
+1 prebattle scroll
+2 delay (also for preconflict phase of successful ambushes)
+3 deployment
+4 
+5 conflict (also for pause)
+6 victory scroll
+7 pursuit
+8 
+9 postbattle scroll (not for autoresolved battles)
+0 succesful ambush
+1 failed ambush
+2 normal
+3 siege
+4 sally besieger
+5 naval
+6 withdrawal?
+ */
+
 struct battleSide {
 	bool isDefender;//0x0000
 	uchar field_0x1;//0x0001
 	bool isCanDeploy;//0x0002
-	undefined field_0x3[9];//0x0003
+	char pad_0003[1]; //0x0003
+	uint32_t factionBitMap; //0x0004
+	char pad_0008[4]; //0x0008
 	DWORD winConditions[4];//0x000C
 	int32_t winConditionCount; //0x001C
 	char pad_0020[4]; //0x0020
@@ -1366,18 +1388,18 @@ struct battleSide {
 	struct factionStruct* factions[8]; //0x185C
 	int32_t factionCount; //0x187C
 	char pad_1880[4]; //0x1880
-	DWORD someArray; //0x1884
-	int32_t someArraySize; //0x1888
-	int32_t someArrayCount; //0x188C
-	DWORD someArray2; //0x1890
-	int32_t someArraySize2; //0x1894
-	int32_t someArrayCount2; //0x1898
+	struct unit** units; //0x1884
+	int32_t unitSize; //0x1888
+	int32_t unitNum; //0x188C
+	struct stackStruct** armies2; //0x1890
+	int32_t armies2Size; //0x1894
+	int32_t armies2Num; //0x1898 --often broken dont bind to lua
 	char pad_189C[104]; //0x189C
-	int32_t totalStrenght; //0x1904
-	int32_t autoResolveStrenghtMaybe; //0x1908
+	int32_t totalStrength; //0x1904
+	int32_t totalValue; //0x1908
 	char pad_190C[4]; //0x190C
-	int32_t totalStrenght2; //0x1910
-	int32_t totalStrenght3; //0x1914
+	int32_t totalStrength2; //0x1910
+	int32_t totalStrength3; //0x1914
 	int32_t soldierCount; //0x1918
 	float battleOdds; //0x191C
 	float battleOdds2; //0x1920
@@ -1397,7 +1419,8 @@ struct battleDataS {
 	int battleState; /* 0-not in battle,5-active battle,9-results screen,etc 0x0004 */
 	uint32_t battleType; //0x0008
 	int32_t isNightBattle; //0x000C
-	char pad_0010[8]; //0x0010
+	char pad_0010[4]; //0x0010
+	int32_t battleResult; //0x0014
 	int xCoord;//0x0018
 	int yCoord;//0x001C
 	undefined somethingRelatedToBattleType[16];//0x0020
@@ -1421,7 +1444,9 @@ struct battleDataS {
 	struct battleSide sides[8]; //0x009C
 	int32_t factionSide[31]; //0xC9FC
 	int sidesNum;//0xCA78
-	char pad_CA7C[44]; //0xCA7C
+	char pad_CA7C[4]; //0xCA7C
+	int32_t soldiersLeft; //0xCA80
+	char pad_CA84[36]; //0xCA84
 	struct playerArmy playerArmies[30]; //0xCAA8
 	char pad_CD78[4]; //0xCD78
 	int32_t playerArmyCount; //0xCD7C
