@@ -1,4 +1,5 @@
 {
     "enableAutoGeneration": false,
-    "enableResultsTransfer": false
+    "enableResultsTransfer": false,
+    "isPlannedRetreatRoute": false
 }
