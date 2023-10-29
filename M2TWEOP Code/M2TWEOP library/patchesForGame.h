@@ -11,12 +11,15 @@ public:
 
 	static void __fastcall OnLoadSettlementWorldpkgdesc(worldRecord* selectedRecord);
 	static int __fastcall onfortificationlevelS(settlementStruct* settlement, bool* isCastle);
-	static char* __fastcall onSaveEDUStringS(EduEntry* eduEntry);
-	static int __fastcall onCreateUnit(int* edbIndex, int** edb, char** entryName);
+	static char* __fastcall onSaveEDUStringS(eduEntry* eduEntry);
+	static int __fastcall onCreateUnit(char** entryName, int* edbIndex);
 	static int __fastcall OnCreateMercUnitCheck(char** entryName, int eduindex);
-	static EduEntry* __fastcall OnCreateMercUnit(char** entryName, EduEntry* entry);
+	static eduEntry* __fastcall OnCreateMercUnit(char** entryName, eduEntry* entry);
+	static eduEntry* __fastcall OnCreateUnitWrapper(int eduindexBase, int removeValue);
 	static const char* __fastcall onQuickSave();
 	static const char* __fastcall onAutoSave();
+	static eduEntry* __fastcall OnGetRecruitPoolUnitEntry(int eduIndex);
+	static int __fastcall onFindUnit(char* entryName, int* edbIndex);
 
 
 	static general* __fastcall mercenaryMovepointsGetGeneral(stackStruct* army);
@@ -31,6 +34,7 @@ public:
 	static void WINAPI onNewGameStart();
 	//after reading EDU
 	static void WINAPI afterEDUread();
+	static void WINAPI onGameInit();
 
 
 	//before start of a first faction turn
@@ -64,7 +68,7 @@ public:
 
 
 	//parse events in this functions
-	static void __fastcall onEvent(DWORD** vTab);
+	static void __fastcall onEvent(DWORD** vTab, DWORD arg2);
 
 	//load game
 	static void __fastcall onLoadSaveFile(UNICODE_STRING**& savePath);
@@ -98,7 +102,8 @@ public:
 
 	static void __fastcall OnStopCharacter(general* character);
 	static void WINAPI OnMoveRecruitQueue();
-	static void __fastcall recruitEOPunit(DWORD eduoffset, DWORD pad, regionStruct* region, int eduindex, int factionid, int exp, int minusone, int armlvl, int wplvl);
+	static eduEntry* __fastcall recruitEOPunit(int eduIndex);
+	static void __fastcall recruitEOPunit2(int eduIndex);
 	static void __fastcall recruitEOPMercunit(DWORD pad, DWORD pad2, regionStruct* region, int eduindex, int factionid, int exp);
 
 

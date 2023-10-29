@@ -21,11 +21,11 @@ namespace campaignEnums
 	enum dipStateInternalEnum :int
 	{
 		peaceState = 200,
-		warState =600,
-		allianceState =0
+		warState = 600,
+		allianceState = 0
 	};
 	constexpr int protectorateState = 15;
-	constexpr int nonProtectorateeState =6;
+	constexpr int nonProtectorateeState = 6;
 }
 namespace m2tweopHelpers
 {
@@ -39,8 +39,8 @@ namespace m2tweopHelpers
 	bool getTileVisibility(factionStruct* faction, int x, int y);
 	factionStruct* getRegionOwner(int regionID);
 
-	bool checkDipStance(campaign*campaignStruct,campaignEnums::dipRelEnum dipType,factionStruct* fac1, factionStruct* fac2);
-	void setDipStance(campaign*campaignStruct,campaignEnums::dipRelEnum dipType,factionStruct* fac1, factionStruct* fac2);
+	bool checkDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2);
+	void setDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2);
 	int GetUnitSize();
 
 	void setAncLimit(unsigned char limit);
@@ -49,7 +49,9 @@ namespace m2tweopHelpers
 	void unlockGameConsoleCommands();
 
 	void setEDUUnitsSize(signed short min, signed short max);
-	void getGameVersion();
+	int getGameVersion();
+	options1* getOptions1();
+	options2* getOptions2();
 
 
 	std::tuple<int, int, void*>  loadTextureToGame(const std::string& path);

@@ -36,7 +36,7 @@ namespace stackStructHelpers
 			// Soldier Count
 			else if (sortType == 4)
 			{
-				return unitA->number > unitB->number;
+				return unitA->SoldierCountStrat > unitB->SoldierCountStrat;
 			}
 			// Experience
 			else if (sortType == 5)

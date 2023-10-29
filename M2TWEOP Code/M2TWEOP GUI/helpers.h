@@ -10,6 +10,16 @@ public:
 
 	static void closeGame(const string& exeName);
 
+	static vector<std::string> getCfgFilesInFolder();
+
+	static std::string checkCfgFileForMod(const std::string& filePath);
+
+	static std::vector<std::string> split(const std::string& s, char delimiter);
+
+	static bool verifyModPath(const std::string& modPath);
+
+	static std::string extractModPathFromLine(const std::string& line);
+
 	static void updateMetrics();
 
 	static screenS& getScreen();

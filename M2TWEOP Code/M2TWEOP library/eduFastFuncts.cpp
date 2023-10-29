@@ -14,12 +14,12 @@ namespace eduFastFuncts
 		char* _tmpfname;
 	};
 
-	static void prepareEduEntry(EduEntry*& entryForFilling)
+	static void prepareEduEntry(eduEntry*& entryForFilling)
 	{
 		int* ourInts = new int[8];
 		memset(ourInts, 0, sizeof(int[8]));
 
-		memset(entryForFilling, 0, sizeof(EduEntry));
+		memset(entryForFilling, 0, sizeof(eduEntry));
 
 		entryForFilling->N00000151 = ourInts;
 
@@ -122,7 +122,7 @@ namespace eduFastFuncts
 	}
 
 
-    int readEduFile(std::string fileName, EduEntry* entryForFilling)
+    int readEduFile(std::string fileName, eduEntry* entryForFilling)
     {
 		std::string unitString;
 

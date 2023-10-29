@@ -298,7 +298,7 @@ namespace fastFuncts
 		return year;
 	}
 
-	NOINLINE EOP_EXPORT void setHeir(generalCharacterictics* gen, bool isJustSet)
+	NOINLINE EOP_EXPORT void setHeir(namedCharacter* gen, bool isJustSet)
 	{
 		factionStruct* fac = gen->faction;
 		if (isJustSet == true)
@@ -515,7 +515,7 @@ namespace fastFuncts
 
 		for (UINT32 i = 0; i < numFac; i++)
 		{
-			for (int j = 0; j < listFac[i]->wathtowersNum; j++)
+			for (int j = 0; j < listFac[i]->watchtowersNum; j++)
 			{
 				watchTowerStruct* towS = listFac[i]->watchTowers[j];
 				if (towS->xCoord == x && towS->yCoord == y)
@@ -646,7 +646,7 @@ namespace fastFuncts
 		return;
 	}
 
-	NOINLINE EOP_EXPORT void addTrait(generalCharacterictics* character, const char* traitName, int traitLevel)
+	NOINLINE EOP_EXPORT void addTrait(namedCharacter* character, const char* traitName, int traitLevel)
 	{
 
 		DWORD adrFunc = 0;
@@ -707,7 +707,7 @@ namespace fastFuncts
 		}
 	}
 
-	NOINLINE EOP_EXPORT void removeTrait(generalCharacterictics* character, const char* traitName)
+	NOINLINE EOP_EXPORT void removeTrait(namedCharacter* character, const char* traitName)
 	{
 		DWORD adrFunc = 0;
 
@@ -765,7 +765,7 @@ namespace fastFuncts
 		}
 	}
 
-	EOP_EXPORT int addAnchillary(generalCharacterictics* character, anchillary* anch)
+	EOP_EXPORT int addAnchillary(namedCharacter* character, ancillary* anch)
 	{
 		if (character == nullptr || anch == nullptr)return 0;
 
@@ -792,7 +792,7 @@ namespace fastFuncts
 		return retr;
 	}
 
-	EOP_EXPORT void removeAnchillary(generalCharacterictics* character, anchillary* anch)
+	EOP_EXPORT void removeAnchillary(namedCharacter* character, ancillary* anch)
 	{
 		if (character == nullptr || anch == nullptr)return;
 
@@ -817,12 +817,12 @@ namespace fastFuncts
 		return;
 	}
 
-	EOP_EXPORT anchillary* findAnchillary(char* anchName)
+	EOP_EXPORT ancillary* findAnchillary(char* anchName)
 	{
 		if (anchName == nullptr)return 0;
 
 		DWORD adr = 0;
-		anchillary* retr = nullptr;
+		ancillary* retr = nullptr;
 		if (globals::dataS.gamever == 2)//steam
 		{
 			adr = 0x008b1d30;
@@ -879,8 +879,8 @@ namespace fastFuncts
 			}
 			return;
 		}
-		un->general->movepoints1 = movepoints;
-		un->general->movepoints2 = movepoints;
+		un->general->movePointsCharacter = movepoints;
+		un->general->movePointsArmy = movepoints;
 
 
 		general* gen = un->general;
@@ -926,7 +926,7 @@ namespace fastFuncts
 
 
 
-		int diff = count - un->number;
+		int diff = count - un->SoldierCountStrat;
 		if (diff == 0)
 		{
 			return;
@@ -947,7 +947,7 @@ namespace fastFuncts
 		}
 		else
 		{
-			un->number = count;
+			un->SoldierCountStrat = count;
 		}
 
 

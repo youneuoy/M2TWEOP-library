@@ -3,7 +3,21 @@
 
 namespace generalHelpers
 {
-
+	std::unordered_map<int, const char*> characterTypes = {
+		{0,"spy"},
+		{1,"assassin"},
+		{2,"diplomat"},
+		{3,"admiral"},
+		{4,"merchant"},
+		{5,"priest"},
+		{6,"general"},
+		{7,"named_character"},
+		{8,"princess"},
+		{9,"heretic"},
+		{10,"witch"},
+		{11,"inquisitor"},
+		{13,"pope"}
+	};
 	void moveToTile(general* gen, int x, int y)
 	{
 		(*(*plugData::data.funcs.moveNormal))(gen, x, y);
@@ -40,8 +54,8 @@ namespace generalHelpers
 
 	void setMovepoints(general* gen, float movepoints)
 	{
-		gen->movepoints1 = movepoints;
-		gen->movepoints2 = movepoints;
+		gen->movePointsCharacter = movepoints;
+		gen->movePointsArmy = movepoints;
 
 		if (gen->bodyguards == nullptr)return;
 
@@ -50,7 +64,17 @@ namespace generalHelpers
 
 	float getMovepoints(const general* gen)
 	{
-		return gen->movepoints2;
+		return gen->movePointsArmy;
+	}
+
+	const char* getTypeName(const general* gen)
+	{
+		const auto charType = characterTypes.find(gen->genType->type);
+		if (charType != characterTypes.end())
+		{
+			return charType->second;
+		}
+		return "unknown";
 	}
 
 	int getTypeID(const general* gen)

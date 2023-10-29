@@ -16,13 +16,13 @@
 #define EduEntryStruct_InfoCardTga 4
 
 
-#define anchillaryStruct_name 1
-#define anchillaryStruct_imagePath 2
+#define ancillaryStruct_name 1
+#define ancillaryStruct_imagePath 2
 #include <string>
 #include "realGameTypes.h"
 namespace luaGetSetFuncs
 {
-	int getTraitLevel(const traitContainer*currTrait);
+	int getTraitLevel(const traitContainer* currTrait);
 
 	std::string getTraitName(const traitContainer* currTrait);
 	traitContainer* getNextTrait(const traitContainer* currTrait);
@@ -35,19 +35,19 @@ namespace luaGetSetFuncs
 
 
 
-#pragma region anchillary
-	//anchillary
+#pragma region ancillary
+	//ancillary
 	template <char fieldIndex>
-	std::string getStringPropertyAnc(const anchillary* anch)
+	std::string getStringPropertyAnc(const ancillary* anc)
 	{
 		char* retS = nullptr;
-		if (fieldIndex == anchillaryStruct_name)
+		if (fieldIndex == ancillaryStruct_name)
 		{
-			retS = anch->anchName;
+			retS = anc->ancName;
 		}
-		else if (fieldIndex == anchillaryStruct_imagePath)
+		else if (fieldIndex == ancillaryStruct_imagePath)
 		{
-			retS = anch->patchToAnchImage;
+			retS = anc->patchToAncImage;
 		}
 
 		if (retS != nullptr)
@@ -61,18 +61,18 @@ namespace luaGetSetFuncs
 	}
 
 	template <char fieldIndex>
-	void setStringPropertyAnc(anchillary* anch, std::string newS)
+	void setStringPropertyAnc(ancillary* anc, std::string newS)
 	{
 		char* arg = nullptr;
-		if (fieldIndex == anchillaryStruct_name)
+		if (fieldIndex == ancillaryStruct_name)
 		{
 
-			arg = reinterpret_cast<char*>(&anch->anchName);
+			arg = reinterpret_cast<char*>(&anc->ancName);
 		}
-		else if (fieldIndex == anchillaryStruct_imagePath)
+		else if (fieldIndex == ancillaryStruct_imagePath)
 		{
 
-			arg = reinterpret_cast<char*>(&anch->patchToAnchImage);
+			arg = reinterpret_cast<char*>(&anc->patchToAncImage);
 		}
 		setGameString(arg, newS.c_str());
 	}
@@ -115,12 +115,12 @@ namespace luaGetSetFuncs
 	}
 #pragma endregion
 
-#pragma region generalCharacterictics
+#pragma region namedCharacter
 
 
-	//generalCharacterictics
+	//namedCharacter
 	template <char fieldIndex>
-	std::string getStringPropertyGenChar(const generalCharacterictics* genChar)
+	std::string getStringPropertyGenChar(const namedCharacter* genChar)
 	{
 		char* retS = nullptr;
 		if (fieldIndex == generalCharactericticsStruct_shortName)
@@ -162,7 +162,7 @@ namespace luaGetSetFuncs
 		}
 	}
 	template <char fieldIndex>
-	void setStringPropertyGenChar(generalCharacterictics* genChar, std::string newS)
+	void setStringPropertyGenChar(namedCharacter* genChar, std::string newS)
 	{
 		char* arg = nullptr;
 		if (fieldIndex == generalCharactericticsStruct_shortName)
@@ -211,7 +211,7 @@ namespace luaGetSetFuncs
 
 	//general
 	template <char fieldIndex>
-	std::string getStringPropertyEDU(const EduEntry* eduEn)
+	std::string getStringPropertyEDU(const eduEntry* eduEn)
 	{
 		char* retS = nullptr;
 		if (fieldIndex == EduEntryStruct_Type)
@@ -242,7 +242,7 @@ namespace luaGetSetFuncs
 	}
 
 	template <char fieldIndex>
-	void setStringPropertyEDU(EduEntry* eduEn, std::string newS)
+	void setStringPropertyEDU(eduEntry* eduEn, std::string newS)
 	{
 		char* arg = nullptr;
 		if (fieldIndex == EduEntryStruct_Type)

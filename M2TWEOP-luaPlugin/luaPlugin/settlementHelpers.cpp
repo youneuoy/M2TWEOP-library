@@ -14,7 +14,7 @@ void settlementHelpers::changeOwner(settlementStruct* sett, factionStruct* newOw
 
 float settlementHelpers::getReligion(const settlementStruct* sett, int index)
 {
-	regionStruct* currRegion = (*(*plugData::data.funcs.getRegionByID))(sett->regionNumber);
+	regionStruct* currRegion = (*(*plugData::data.funcs.getRegionByID))(sett->regionID);
 	if (currRegion == nullptr)
 	{
 		return 0.0f;
@@ -23,7 +23,7 @@ float settlementHelpers::getReligion(const settlementStruct* sett, int index)
 }
 void settlementHelpers::setReligion(const settlementStruct* sett, int index, float value)
 {
-	regionStruct* currRegion = (*(*plugData::data.funcs.getRegionByID))(sett->regionNumber);
+	regionStruct* currRegion = (*(*plugData::data.funcs.getRegionByID))(sett->regionID);
 	currRegion->religionsARR[index] = value;
 }
 resStrat* settlementHelpers::getResource(const settlementStruct* sett, int index)
@@ -60,4 +60,28 @@ int settlementHelpers::getGuildStanding(settlementStruct* sett, int index)
 void settlementHelpers::setGuildStanding(settlementStruct* sett, int index, int amount)
 {
 	*(int*)((sett->guildStandings) + 0x4 * index) = amount;
+}
+settlementCapability* settlementHelpers::getSettlementCapability(settlementStruct* sett, int capabilityType)
+{
+	return &sett->capabilities.settlementCapabilities[capabilityType];
+}
+settlementCapability* settlementHelpers::getAgentCapability(settlementStruct* sett, int agentType)
+{
+	return &sett->capabilities.settlementCapabilitiesAgent[agentType];
+}
+settlementCapability* settlementHelpers::getAgentLimitCapability(settlementStruct* sett, int agentType)
+{
+	return &sett->capabilities.settlementCapabilitiesAgentLimit[agentType];
+}
+recruitmentCapability* settlementHelpers::getRecruitmentCapability(settlementStruct* sett, int index)
+{
+	return &sett->capabilities.recruitmentCapabilities[index];
+}
+int settlementHelpers::getRecruitmentCapabilityNum(settlementStruct* sett)
+{
+	return sett->capabilities.recruitmentCapabilityCount;
+}
+settlementRecruitmentPool* settlementHelpers::getSettlementRecruitmentPool(settlementStruct* sett, int index)
+{
+	return &sett->recruitmentPools[index];
 }

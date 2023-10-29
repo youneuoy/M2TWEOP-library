@@ -29,6 +29,7 @@ namespace stratModelsChange
 	stratModelArrayEntry* getStratModelEntry(const char* name);
 	stratModelArrayEntry* findCharacterStratModel(const char* modelId);
 	EOP_EXPORT void setCharacterModel(general* gen, const char* model);
+	// ReSharper disable once CppInconsistentNaming
 	int readTGAfile(const char* path);
 	void loadCharModels();
 	//for internal use only

@@ -2,6 +2,7 @@
 
 #include "fastFunctsHelpers.h"
 #include "fastFuncts.h"
+#include "smallFuncs.h"
 
 #include <cstdio>
 namespace eopBuildings
@@ -170,7 +171,7 @@ namespace eopBuildings
 	{
 		DWORD funcPointer = (DWORD)0x008A955B; //I dont think this does anything but not 100% sure, havent checked disk version as I do not think this is needed
 		DWORD EDBpointer = dataOffsets::offsets.edbDataStart; //for some reason this is included, not sure if needed
-		BuildingLvlCapability* cap = new BuildingLvlCapability; //allocating memory
+		BuildingLvlCapability* cap = reinterpret_cast<BuildingLvlCapability*>(fastFuncts::allocateGameMem(0x20));
 		buildingLevel* eoplevel = &entry->buildingLevel[level];
 		cap->capabilityType = 0; //always 0 for normal capabilities
 		if (bonus)
@@ -197,9 +198,9 @@ namespace eopBuildings
 
 	}
 
-	NOINLINE EOP_EXPORT void addBuildingPool(edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp)
+	NOINLINE EOP_EXPORT void addBuildingPool(edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp, const char* condition)
 	{
-		recruitPool* pool = new recruitPool;
+		recruitPool* pool = reinterpret_cast<recruitPool*>(fastFuncts::allocateGameMem(0x20));
 		buildingLevel* eoplevel = &entry->buildingLevel[level];
 		pool->capabilityType = 5; //5 means normal unit, there are some other for agents I havent added yet
 		pool->capabilityLvlorExp = exp; //for units this always is xp, for agents this can be agent
@@ -209,6 +210,18 @@ namespace eopBuildings
 		pool->maxSize = maxSize;
 		pool->buildingLevelCondition = nullptr;
 		pool->nextPool = nullptr;
+		auto fakeText = std::make_shared<fakeTextInput>(fakeTextInput(condition, 0));
+		auto rawText = fakeText.get();
+		const auto makeConditionFunc = reinterpret_cast<DWORD*>(0x008A7510);
+		auto conditionPtr = &pool->buildingLevelCondition;
+		_asm
+		{
+			push 3
+			push conditionPtr
+			push fakeText
+			mov eax, makeConditionFunc
+			call eax
+		}
 		if (eoplevel->recruitPools != nullptr)
 		{
 			pool->nextPool = eoplevel->recruitPools; //always insert at start of pools

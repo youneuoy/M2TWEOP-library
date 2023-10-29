@@ -38,14 +38,14 @@ template <class T>
 class ProcLoader
 {
 public:
-	T			 m_pProc;
-	std::string			m_strNameProcedure;
+	T  m_pProc;
+	std::string	 m_strNameProcedure;
 
 	//strings for compare
 	char* stringAdr = nullptr;
 	const char* strCmp;
 
-	ProcLoader() {};
+	ProcLoader() {}
 
 	BOOL Load(std::string* pczNameLibrary, std::string* pczNameProcedure, char* sCmp = nullptr)
 	{
@@ -85,7 +85,7 @@ private:
 	ProcLoader& operator = (ProcLoader&)
 	{
 		return *this;
-	};
+	}
 };
 
 class battleFuncs
@@ -144,15 +144,17 @@ public:
 	ProcLoader<void(__cdecl*)(factionStruct* fac, const char* newName)> changeFactionName;
 	ProcLoader<UNICODE_STRING** (__cdecl*)(factionStruct* fac)> getFactionName;
 	ProcLoader<void(__cdecl*)(regionStruct* region, const char* newName)> changeRegionName;
+	ProcLoader<bool(__cdecl*)(const char* condition, const eventTrigger* eventData)> condition;
 	ProcLoader<void(__cdecl*)(regionStruct* region, const char* newName)> changeRebelsName;
 	ProcLoader<void(__cdecl*)(const factionStruct* fac, fortStruct* fort)> deleteFort;
 	ProcLoader<void(__cdecl*)(const factionStruct* fac, int x, int y)> createFortXY;
+	ProcLoader<DWORD(__cdecl*)(size_t amount)> allocateGameMem;
 	ProcLoader<void(__cdecl*)(const general* gen)> createFort;
 	ProcLoader<gameDataAllStruct* (__cdecl*)()> getGameDataAll;
 
 
 	ProcLoader<void(__cdecl*)(signed short, signed short)> setEDUUnitsSize;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*, bool)> setHeir;
+	ProcLoader<void(__cdecl*)(namedCharacter*, bool)> setHeir;
 
 
 	ProcLoader<void(__cdecl*)(unsigned char)> setAncLimit;
@@ -177,12 +179,12 @@ public:
 	ProcLoader<void(__cdecl*)(general*, general*)> attackCharacter;
 
 
-	ProcLoader<int(__cdecl*)(generalCharacterictics*, anchillary*)> addAnchillary;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*, anchillary*)> removeAnchillary;
-	ProcLoader<anchillary* (__cdecl*)(char*)> findAnchillary;
+	ProcLoader<int(__cdecl*)(namedCharacter*, ancillary*)> addAncillary;
+	ProcLoader<void(__cdecl*)(namedCharacter*, ancillary*)> removeAncillary;
+	ProcLoader<ancillary* (__cdecl*)(char*)> findAncillary;
 
-	ProcLoader<void(__cdecl*)(generalCharacterictics*, const char*, int)> addTrait;
-	ProcLoader<void(__cdecl*)(generalCharacterictics*, const char*)> removeTrait;
+	ProcLoader<void(__cdecl*)(namedCharacter*, const char*, int)> addTrait;
+	ProcLoader<void(__cdecl*)(namedCharacter*, const char*)> removeTrait;
 
 
 
@@ -224,7 +226,7 @@ public:
 
 	ProcLoader<void(__cdecl*)(general*, int, int, int)> setCharacterType;
 
-	ProcLoader<void(__cdecl*)()> getGameVersion;
+	ProcLoader<int(__cdecl*)()> getGameVersion;
 	ProcLoader<void(__cdecl*)(const char*)> saveGame;
 	ProcLoader<void(__cdecl*)(stackStruct*, stackStruct*)> mergeArmies;
 
@@ -253,7 +255,7 @@ public:
 	ProcLoader<void(__cdecl*)(edbEntry*, int, int)>removeBuildingCapability;
 	ProcLoader<BuildingLvlCapability* (__cdecl*)(edbEntry*, int, int)>getBuildingCapability;
 	ProcLoader<int(__cdecl*)(edbEntry*, int)>getBuildingCapabilityNum;
-	ProcLoader<void(__cdecl*)(edbEntry*, int, int, float, float, float, int32_t)>addBuildingPool;
+	ProcLoader<void(__cdecl*)(edbEntry*, int, int, float, float, float, int32_t, const char*)>addBuildingPool;
 	ProcLoader<void(__cdecl*)(edbEntry*, int, int)>removeBuildingPool;
 	ProcLoader<recruitPool* (__cdecl*)(edbEntry*, int, int)>getBuildingPool;
 	ProcLoader<int(__cdecl*)(edbEntry*, int)>getBuildingPoolNum;
@@ -267,11 +269,11 @@ class eopEduFuncs
 {
 public:
 	//edu functions
-	ProcLoader<EduEntry* (__cdecl*)(int, int)> addEopEduEntry;
-	ProcLoader<EduEntry* (__cdecl*)(const char*, int)> addEopEduEntryFromFile;
-	ProcLoader<EduEntry* (__cdecl*)(int)> getEopEduEntry;
-	ProcLoader<EduEntry* (__cdecl*)(int)> getEduEntry;
-	ProcLoader<EduEntry* (__cdecl*)(const char*)> getEduEntryByType;
+	ProcLoader<eduEntry* (__cdecl*)(int, int)> addEopEduEntry;
+	ProcLoader<eduEntry* (__cdecl*)(const char*, int)> addEopEduEntryFromFile;
+	ProcLoader<eduEntry* (__cdecl*)(int)> getEopEduEntry;
+	ProcLoader<eduEntry* (__cdecl*)(int)> getEduEntry;
+	ProcLoader<eduEntry* (__cdecl*)(const char*)> getEduEntryByType;
 	ProcLoader<int(__cdecl*)(const char*)> getEduIndexByType;
 	ProcLoader<int(__cdecl*)(int)> getDataEopEdu;
 

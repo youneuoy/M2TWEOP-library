@@ -1,84 +1,220 @@
-	@tfield draw draw
-	@tfield deinitDX deinitDX
-	@tfield initDX initDX
-	@tfield onPluginLoad onPluginLoad
-	@tfield onChangeTurnNum onChangeTurnNum
-	@tfield onCharacterSelected onCharacterSelected
-	@tfield onPreFactionTurnStart onPreFactionTurnStart
-	@tfield onFactionTurnStart onFactionTurnStart
-	@tfield onFactionTurnEnd onFactionTurnEnd
-	@tfield onFactionNewCapital onFactionNewCapital
-	@tfield onFactionWarDeclared onFactionWarDeclared
-	@tfield onFactionAllianceDeclared onFactionAllianceDeclared
-	@tfield onFactionTradeAgreementMade onFactionTradeAgreementMade
-	@tfield onFactionBreakAlliance onFactionBreakAlliance
-	@tfield onGiveMoney onGiveMoney
-	@tfield onUpdateAttitude onUpdateAttitude
-	@tfield onDemeanour onDemeanour
-	@tfield onGeneralAssaultsGeneral onGeneralAssaultsGeneral
-	@tfield onGeneralAssaultsResidence onGeneralAssaultsResidence
-	@tfield onGeneralCaptureSettlement onGeneralCaptureSettlement
-	@tfield onGeneralCaptureResidence onGeneralCaptureResidence
-	@tfield onSiegeEquipmentCompleted onSiegeEquipmentCompleted
-	@tfield onPostBattle onPostBattle
-	@tfield onMultiTurnMove onMultiTurnMove
-	@tfield onSettlementSelected onSettlementSelected
-	@tfield onSettlementUpgraded onSettlementUpgraded
-	@tfield onSettlementConverted onSettlementConverted
-	@tfield onCityRiots onCityRiots
-	@tfield onUngarrisonedSettlement onUngarrisonedSettlement
-	@tfield onUngarrisonedFort onUngarrisonedFort
-	@tfield onGiveSettlement onGiveSettlement
-	@tfield onOccupySettlement onOccupySettlement
-	@tfield onExterminatePopulation onExterminatePopulation
-	@tfield onSackSettlement onSackSettlement
-	@tfield onAddedToBuildingQueue onAddedToBuildingQueue
-	@tfield onBuildingDestroyed onBuildingDestroyed
-	@tfield onBuildingCompleted onBuildingCompleted
-	@tfield onEventCounter onEventCounter
-	@tfield onFactionExcommunicated onFactionExcommunicated
-	@tfield onDisaster onDisaster
-	@tfield onHordeFormed onHordeFormed
-	@tfield onAddedToTrainingQueue onAddedToTrainingQueue
-	@tfield onUnitDisbanded onUnitDisbanded
-	@tfield onUnitTrained onUnitTrained
-	@tfield onAgentCreated onAgentCreated
-	@tfield onObjSeen onObjSeen
-	@tfield onTileSeen onTileSeen
-	@tfield onGameReloaded onGameReloaded
-	@tfield onTransgression onTransgression
-	@tfield onPopeAcceptsCrusadeTarget onPopeAcceptsCrusadeTarget
-	@tfield onCrusadeCalled onCrusadeCalled
-	@tfield onCrusadeEnds onCrusadeEnds
-	@tfield onPopeRejectsCrusadeTarget onPopeRejectsCrusadeTarget
-	@tfield onArmyTakesCrusadeTarget onArmyTakesCrusadeTarget
-	@tfield onUnitsDesertCrusade onUnitsDesertCrusade
-	@tfield onPopeElected onPopeElected
-	@tfield onVotedForPope onVotedForPope
-	@tfield onAssassinCaughtAttackingPope onAssassinCaughtAttackingPope
-	@tfield onInquisitorAppointed onInquisitorAppointed
-	@tfield onSettlementPanelOpen onSettlementPanelOpen
-	@tfield onFinancesPanelOpen onFinancesPanelOpen
-	@tfield onFactionSummaryPanelOpen onFactionSummaryPanelOpen
-	@tfield onFamilyTreePanelOpenFunc onFamilyTreePanelOpenFunc
-	@tfield onDiplomaticStandingPanelOpen onDiplomaticStandingPanelOpen
-	@tfield onDiplomacyPanelOpen onDiplomacyPanelOpen
-	@tfield onPreBattlePanelOpen onPreBattlePanelOpen
-	@tfield onNavalAutoResolvePanelOpen onNavalAutoResolvePanelOpen
-	@tfield onCharacterPanelOpen onCharacterPanelOpen
-	@tfield onTradePanelOpen onTradePanelOpen
-	@tfield onRequestBuildingAdvice onRequestBuildingAdvice
-	@tfield onRequestTrainingAdvice onRequestTrainingAdvice
-	@tfield onMessageOpen onMessageOpen
-	@tfield onIncomingMessage onIncomingMessage
-	@tfield onMessageClosed onMessageClosed
-	@tfield onButtonPressed onButtonPressed
-	@tfield onScrollClosed onScrollClosed
-	@tfield onScrollOpened onScrollOpened
-	@tfield onUIElementVisible onUIElementVisible
-	@tfield onScrollAdviceRequested onScrollAdviceRequested
-	@tfield onSettlementScrollAdviceRequested onSettlementScrollAdviceRequested
-	@tfield onPreBattleScrollAdviceRequested onPreBattleScrollAdviceRequested
-	@tfield onNavalPreBattleScrollAdviceRequested onNavalPreBattleScrollAdviceRequested
-	@tfield onCollegeOfCardinalsPanelOpen onCollegeOfCardinalsPanelOpen
-	@tfield onGeneralDevastatesTile onGeneralDevastatesTile
+@tfield onCharacterTurnStart onCharacterTurnStart
+@tfield onCapturedCharacterRansomed onCapturedCharacterRansomed
+@tfield onCapturedCharacterReleased onCapturedCharacterReleased
+@tfield onFatherDiesNatural onFatherDiesNatural
+@tfield onPreBattleWithdrawal onPreBattleWithdrawal
+@tfield onPostBattle onPostBattle
+@tfield onHireMercenaries onHireMercenaries
+@tfield onGeneralCaptureResidence onGeneralCaptureResidence
+@tfield onLeaderDestroyedFaction onLeaderDestroyedFaction
+@tfield onOfferedForAdoption onOfferedForAdoption
+@tfield onLesserGeneralOfferedForAdoption onLesserGeneralOfferedForAdoption
+@tfield onOfferedForMarriage onOfferedForMarriage
+@tfield onBrotherAdopted onBrotherAdopted
+@tfield onBirth onBirth
+@tfield onCharacterComesOfAge onCharacterComesOfAge
+@tfield onCharacterMarries onCharacterMarries
+@tfield onCharacterMarriesPrincess onCharacterMarriesPrincess
+@tfield onMarriageAlliancePossible onMarriageAlliancePossible
+@tfield onMarriageAllianceOffered onMarriageAllianceOffered
+@tfield onPriestBecomesHeretic onPriestBecomesHeretic
+@tfield onCharacterNearHeretic onCharacterNearHeretic
+@tfield onCharacterNearWitch onCharacterNearWitch
+@tfield onCardinalPromoted onCardinalPromoted
+@tfield onCharacterBecomesAFather onCharacterBecomesAFather
+@tfield onGeneralDevastatesTile onGeneralDevastatesTile
+@tfield onExecutesASpyOnAMission onExecutesASpyOnAMission
+@tfield onExecutesAnAssassinOnAMission onExecutesAnAssassinOnAMission
+@tfield onSufferAssassinationAttempt onSufferAssassinationAttempt
+@tfield onSufferAcquisitionAttempt onSufferAcquisitionAttempt
+@tfield onSufferMarriageAttempt onSufferMarriageAttempt
+@tfield onSufferDenouncementAttempt onSufferDenouncementAttempt
+@tfield onLeaderOrderedSabotage onLeaderOrderedSabotage
+@tfield onAcceptBribe onAcceptBribe
+@tfield onRefuseBribe onRefuseBribe
+@tfield onInsurrection onInsurrection
+@tfield onLeaderOrderedDiplomacy onLeaderOrderedDiplomacy
+@tfield onNewAdmiralCreated onNewAdmiralCreated
+@tfield onGovernorBuildingDestroyed onGovernorBuildingDestroyed
+@tfield onGovernorThrowGames onGovernorThrowGames
+@tfield onGovernorThrowRaces onGovernorThrowRaces
+@tfield onCharacterSelected onCharacterSelected
+@tfield onEnemyCharacterSelected onEnemyCharacterSelected
+@tfield onMultiTurnMove onMultiTurnMove
+@tfield onCharacterPanelOpen onCharacterPanelOpen
+@tfield onLeaderMissionSuccess onLeaderMissionSuccess
+@tfield onLeaderMissionFailed onLeaderMissionFailed
+@tfield onGeneralJoinCrusade onGeneralJoinCrusade
+@tfield onGeneralAbandonCrusade onGeneralAbandonCrusade
+@tfield onGeneralArrivesCrusadeTargetRegion onGeneralArrivesCrusadeTargetRegion
+@tfield onGeneralTakesCrusadeTarget onGeneralTakesCrusadeTarget
+@tfield onCharacterTurnEnd onCharacterTurnEnd
+@tfield onCharacterTurnEndInSettlement onCharacterTurnEndInSettlement
+@tfield onBecomesFactionLeader onBecomesFactionLeader
+@tfield onCeasedFactionLeader onCeasedFactionLeader
+@tfield onBecomesFactionHeir onBecomesFactionHeir
+@tfield onCeasedFactionHeir onCeasedFactionHeir
+@tfield onCharacterDamagedByDisaster onCharacterDamagedByDisaster
+@tfield onGeneralCaptureSettlement onGeneralCaptureSettlement
+@tfield onGeneralAssaultsResidence onGeneralAssaultsResidence
+@tfield onGeneralAssaultsGeneral onGeneralAssaultsGeneral
+@tfield onCharacterAttacksCrusadingGeneral onCharacterAttacksCrusadingGeneral
+@tfield onGeneralPrisonersRansomedCaptor onGeneralPrisonersRansomedCaptor
+@tfield onGeneralPrisonersRansomedCaptive onGeneralPrisonersRansomedCaptive
+@tfield onFactionLeaderPrisonersRansomedCaptor onFactionLeaderPrisonersRansomedCaptor
+@tfield onFactionLeaderPrisonersRansomedCaptive onFactionLeaderPrisonersRansomedCaptive
+@tfield onSpyMission onSpyMission
+@tfield onAssassinationMission onAssassinationMission
+@tfield onAcquisitionMission onAcquisitionMission
+@tfield onMarriageMission onMarriageMission
+@tfield onDenouncementMission onDenouncementMission
+@tfield onSabotageMission onSabotageMission
+@tfield onBriberyMission onBriberyMission
+@tfield onDiplomacyMission onDiplomacyMission
+@tfield onLeaderOrderedSpyingMission onLeaderOrderedSpyingMission
+@tfield onLeaderOrderedAssassination onLeaderOrderedAssassination
+@tfield onLeaderOrderedBribery onLeaderOrderedBribery
+@tfield onSettlementTurnStart onSettlementTurnStart
+@tfield onUngarrisonedSettlement onUngarrisonedSettlement
+@tfield onSettlementUpgraded onSettlementUpgraded
+@tfield onSettlementConverted onSettlementConverted
+@tfield onSiegeEquipmentCompleted onSiegeEquipmentCompleted
+@tfield onSettlementTurnEnd onSettlementTurnEnd
+@tfield onSettlementSelected onSettlementSelected
+@tfield onSettlementPanelOpen onSettlementPanelOpen
+@tfield onRecruitmentPanelOpen onRecruitmentPanelOpen
+@tfield onConstructionPanelOpen onConstructionPanelOpen
+@tfield onTradePanelOpen onTradePanelOpen
+@tfield onSettlementScrollAdviceRequested onSettlementScrollAdviceRequested
+@tfield onGuildUpgraded onGuildUpgraded
+@tfield onGuildDestroyed onGuildDestroyed
+@tfield onOccupySettlement onOccupySettlement
+@tfield onSackSettlement onSackSettlement
+@tfield onExterminatePopulation onExterminatePopulation
+@tfield onCityRiots onCityRiots
+@tfield onGiveSettlement onGiveSettlement
+@tfield onCityRebels onCityRebels
+@tfield onCitySacked onCitySacked
+@tfield onGovernorCityRiots onGovernorCityRiots
+@tfield onGovernorCityRebels onGovernorCityRebels
+@tfield onAbandonShowMe onAbandonShowMe
+@tfield onGameReloaded onGameReloaded
+@tfield onBattleWinningPlaza onBattleWinningPlaza
+@tfield onBattleStopsWinningPlaza onBattleStopsWinningPlaza
+@tfield onBattleDominatingPlaza onBattleDominatingPlaza
+@tfield onBattngineUnmanned onBattngineUnmanned
+@tfield onBattlePlayerArmyHalfDestroyed onBattlePlayerArmyHalfDestroyed
+@tfield onBattnemyArmyHalfDestroyed onBattnemyArmyHalfDestroyed
+@tfield onBattleFinished onBattleFinished
+@tfield onBattleArmyHalfDestroyed onBattleArmyHalfDestroyed
+@tfield onEscPressed onEscPressed
+@tfield onScriptedAdvice onScriptedAdvice
+@tfield onNavalPreBattleScrollAdviceRequested onNavalPreBattleScrollAdviceRequested
+@tfield onPreBattleScrollAdviceRequested onPreBattleScrollAdviceRequested
+@tfield onCollegeOfCardinalsPanelOpen onCollegeOfCardinalsPanelOpen
+@tfield onDiplomaticStandingPanelOpen onDiplomaticStandingPanelOpen
+@tfield onBattlePlayerUnderAttackIdle onBattlePlayerUnderAttackIdle
+@tfield onBattleWinningCombat onBattleWinningCombat
+@tfield onBattleArmyTired onBattleArmyTired
+@tfield onBattleTideofBattle onBattleTideofBattle
+@tfield onBattleUnitGoesBerserk onBattleUnitGoesBerserk
+@tfield onBattleSiegeEngineDestroyed onBattleSiegeEngineDestroyed
+@tfield onBattleSiegeEngineDocksWall onBattleSiegeEngineDocksWall
+@tfield onBattleGatesAttackedByEngine onBattleGatesAttackedByEngine
+@tfield onBattleGatesDestroyedByEngine onBattleGatesDestroyedByEngine
+@tfield onBattleWallsBreachedByEngine onBattleWallsBreachedByEngine
+@tfield onBattleWallsCaptured onBattleWallsCaptured
+@tfield onBattleUnitRouts onBattleUnitRouts
+@tfield onUnitDisbanded onUnitDisbanded
+@tfield onUnitTrained onUnitTrained
+@tfield onGovernorUnitTrained onGovernorUnitTrained
+@tfield onGovernorBuildingCompleted onGovernorBuildingCompleted
+@tfield onAgentCreated onAgentCreated
+@tfield onGovernorAgentCreated onGovernorAgentCreated
+@tfield onBuildingDestroyed onBuildingDestroyed
+@tfield onAddedToBuildingQueue onAddedToBuildingQueue
+@tfield onBuildingCompleted onBuildingCompleted
+@tfield onRequestBuildingAdvice onRequestBuildingAdvice
+@tfield onRequestTrainingAdvice onRequestTrainingAdvice
+@tfield onAddedToTrainingQueue onAddedToTrainingQueue
+@tfield onBattleArmyRouted onBattleArmyRouted
+@tfield onBattleReinforcementsArrive onBattleReinforcementsArrive
+@tfield onRequestMercenariesAdvice onRequestMercenariesAdvice
+@tfield onButtonPressed onButtonPressed
+@tfield onShortcutTriggered onShortcutTriggered
+@tfield onUIElementVisible onUIElementVisible
+@tfield onScrollOpened onScrollOpened
+@tfield onScrollClosed onScrollClosed
+@tfield onScrollAdviceRequested onScrollAdviceRequested
+@tfield onAdviceSupressed onAdviceSupressed
+@tfield onBattleGeneralRouted onBattleGeneralRouted
+@tfield onBattleGeneralKilled onBattleGeneralKilled
+@tfield onCrusadeCalled onCrusadeCalled
+@tfield onPopeAcceptsCrusadeTarget onPopeAcceptsCrusadeTarget
+@tfield onPopeRejectsCrusadeTarget onPopeRejectsCrusadeTarget
+@tfield onCrusadeEnds onCrusadeEnds
+@tfield onPreFactionTurnStart onPreFactionTurnStart
+@tfield onFactionTurnStart onFactionTurnStart
+@tfield onFactionNewCapital onFactionNewCapital
+@tfield onFactionTurnEnd onFactionTurnEnd
+@tfield onVotedForPope onVotedForPope
+@tfield onFactionExcommunicated onFactionExcommunicated
+@tfield onHordeFormed onHordeFormed
+@tfield onCardinalRemoved onCardinalRemoved
+@tfield onInquisitorAppointed onInquisitorAppointed
+@tfield onAssassinCaughtAttackingPope onAssassinCaughtAttackingPope
+@tfield onFinancesPanelOpen onFinancesPanelOpen
+@tfield onFactionSummaryPanelOpen onFactionSummaryPanelOpen
+@tfield onFamilyTreePanelOpen onFamilyTreePanelOpen
+@tfield onDiplomacyPanelOpen onDiplomacyPanelOpen
+@tfield onPreBattlePanelOpen onPreBattlePanelOpen
+@tfield onIncomingMessage onIncomingMessage
+@tfield onMessageOpen onMessageOpen
+@tfield onMessageClosed onMessageClosed
+@tfield onDeclineAutomatedSettlementManagement onDeclineAutomatedSettlementManagement
+@tfield onBattleAiCommenced onBattleAiCommenced
+@tfield onBattleDelayPhaseCommenced onBattleDelayPhaseCommenced
+@tfield onBattleDeploymentPhaseCommenced onBattleDeploymentPhaseCommenced
+@tfield onBattleConflictPhaseCommenced onBattleConflictPhaseCommenced
+@tfield onFactionWarDeclared onFactionWarDeclared
+@tfield onFactionAllianceDeclared onFactionAllianceDeclared
+@tfield onInterFactionMarriage onInterFactionMarriage
+@tfield onFactionTradeAgreementMade onFactionTradeAgreementMade
+@tfield onPopeElected onPopeElected
+@tfield onFactionBreakAlliance onFactionBreakAlliance
+@tfield onUpdateAttitude onUpdateAttitude
+@tfield onDemeanour onDemeanour
+@tfield onGiveMoney onGiveMoney
+@tfield onBattlePlayerUnitAttacksEnemyUnit onBattlePlayerUnitAttacksEnemyUnit
+@tfield onBattleEnemyUnitAttacksPlayerUnit onBattleEnemyUnitAttacksPlayerUnit
+@tfield onBattlePlayerUnitGoesBerserk onBattlePlayerUnitGoesBerserk
+@tfield onBattlePlayerUnitRouts onBattlePlayerUnitRouts
+@tfield onBattlePlayerSiegeEngineDestroyed onBattlePlayerSiegeEngineDestroyed
+@tfield onBattleGatesAttackedByPlayerEngine onBattleGatesAttackedByPlayerEngine
+@tfield onBattleEnemyUnitGoesBerserk onBattleEnemyUnitGoesBerserk
+@tfield onBattnemyUnitRouts onBattnemyUnitRouts
+@tfield onBattnemySiegeEngineDestroyed onBattnemySiegeEngineDestroyed
+@tfield onBattleGatesAttackedByEnemyEngine onBattleGatesAttackedByEnemyEngine
+@tfield onDisaster onDisaster
+@tfield onEventCounter onEventCounter
+@tfield onUngarrisonedFort onUngarrisonedFort
+@tfield onObjSeen onObjSeen
+@tfield onTileSeen onTileSeen
+@tfield onTransgression onTransgression
+@tfield onForgiveness onForgiveness
+@tfield onArmyTakesCrusadeTarget onArmyTakesCrusadeTarget
+@tfield onUnitsDesertCrusade onUnitsDesertCrusade
+@tfield draw draw
+@tfield onLoadingFonts onLoadingFonts
+@tfield onNewGameStart onNewGameStart
+@tfield onReadGameDbsAtStart onReadGameDbsAtStart
+@tfield onClickAtTile onClickAtTile
+@tfield onCampaignMapLoaded onCampaignMapLoaded
+@tfield onCreateSaveFile onCreateSaveFile
+@tfield onLoadSaveFile onLoadSaveFile
+@tfield onChangeTurnNum onChangeTurnNum
+@tfield onSelectWorldpkgdesc onSelectWorldpkgdesc
+@tfield onfortificationlevelS onfortificationlevelS
+@tfield onEndSiege onEndSiege
+@tfield onStartSiege onStartSiege
+@tfield onPluginLoad onPluginLoad

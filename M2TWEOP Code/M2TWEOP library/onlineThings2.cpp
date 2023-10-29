@@ -26,7 +26,7 @@ namespace battleCreator
 		{
 			numberInArmy = pnumberInArmy;
 			type = un->eduEntry->Type;
-			soldiersNumber = un->number;
+			soldiersNumber = un->SoldierCountStrat;
 			exp = un->expScreen;
 
 
@@ -191,14 +191,14 @@ namespace battleCreator
 		}
 
 
-		if (gen->genChar->anchNum != 0)
+		if (gen->genChar->ancNum != 0)
 		{
 			jsn::json jAncs= jsn::json::array();
 
-			UINT32 anchNum = gen->genChar->anchNum;
+			UINT32 anchNum = gen->genChar->ancNum;
 			for (UINT32 i = 0; i < anchNum; i++)
 			{
-				jAncs.push_back(gen->genChar->anchillaries[i]->dataAnch->anchName);
+				jAncs.push_back(gen->genChar->ancillaries[i]->dataAnch->ancName);
 			}
 
 			genJson["ancillaries"] = jAncs;
@@ -232,7 +232,7 @@ namespace battleCreator
 			{
 				unitJson["general"] = 0;
 			}
-			unitJson["soldiers"] = unit->number;
+			unitJson["soldiers"] = unit->SoldierCountStrat;
 			unitJson["exp"] = unit->expScreen;
 
 			j.push_back(unitJson);
