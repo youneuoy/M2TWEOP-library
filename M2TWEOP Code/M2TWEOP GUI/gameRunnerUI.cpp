@@ -81,7 +81,7 @@ namespace gameRunnerUI
 
 		if (startResult == false)
 		{
-			helpers::closeGame(dataG::data.gameData.exeName);
+			helpers::closeProcess(dataG::data.gameData.exeName);
 
 			isGetResponce = false;
 		}
@@ -183,7 +183,7 @@ namespace gameRunnerUI
 		{
 			if (startProcess.isGetResponce == false)
 			{
-				helpers::closeGame(dataG::data.gameData.exeName);
+				helpers::closeProcess(dataG::data.gameData.exeName);
 			}
 			if (dataG::data.gameData.isDiscordRichPresenceEnabled == false)
 			{

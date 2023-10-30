@@ -62,7 +62,7 @@ bool helpers::loadTexture(const char* filename, GLuint* out_texture, int* out_wi
 	return true;
 }
 
-void helpers::closeGame(const string& exeName)
+void helpers::closeProcess(const string& exeName)
 {
 	HANDLE gameHNDL = NULL;
 	PROCESSENTRY32 Pc = { sizeof(PROCESSENTRY32) };
