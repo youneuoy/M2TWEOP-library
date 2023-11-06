@@ -10,6 +10,7 @@
 - The launcher should no longer throw an error if Discord isn't open/installed - *Medik*
 
 ### **Library**
+- Added support for [DXVK project](https://github.com/doitsujin/dxvk) (Vulcan wrapper over game d3d9 graphics). For use unpack dxvk d3d9.dll to game folder and rename it to d3d9_vk.dll  - *youneuoy*
 - Added error handling around loading of FBX models to aid in debugging  - *Medik*
 - `objects.addCharacterCas()` now uses a scale of 0.7 instead of 1.0 by default. Most mods seem to use 0.7 and the default of 1 was causing oversized .cas models. If passing in the scale is important you, please let us know and we can take a look.  - *Medik*
 
