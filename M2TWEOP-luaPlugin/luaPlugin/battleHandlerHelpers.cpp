@@ -1,4 +1,6 @@
 #include "battleHandlerHelpers.h"
+
+#include "gameDataAllHelper.h"
 #include "plugData.h"
 namespace battleHandlerHelpers
 {
@@ -21,11 +23,32 @@ namespace battleHandlerHelpers
 
 	armyAndCharacter* getBattleArmy(const battleSide* side, int index)
 	{
-		return side->forces + (sizeof(armyAndCharacter) * index);
+		return &side->forces[index];
 	}
 
 	battleUnit* getBattleUnit(const armyAndCharacter* battleArmy, int index)
 	{
-		return battleArmy->units + (sizeof(battleUnit) * index);
+		return &battleArmy->units[index];
+	}
+
+	stackStruct* getPlayerArmy(const battleDataS* battleData)
+	{
+		return battleData->playerArmies[0].army;
+	}
+
+	factionStruct* getFaction(const battleSide* side, int index)
+	{
+		return side->factions[index];
+	}
+
+	battleResidence* getBattleResidence()
+	{
+		const auto gameData = gameDataAllHelper::get();
+		const auto battleSettlement = gameData->battleSettlement;
+		if (battleSettlement)
+		{
+			return battleSettlement->battleResidence;
+		}
+		return nullptr;
 	}
 };

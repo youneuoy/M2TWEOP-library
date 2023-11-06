@@ -36,11 +36,11 @@ namespace UnitEnums
 };
 namespace eopEduHelpers
 {
-	EduEntry* addEopEduEntry(int baseIndex, int newIndex);
-	EduEntry* addEopEduEntryFromFile(const char* fileName, int newIndex);
-	EduEntry* getEopEduEntry(int index);
-	EduEntry* getEduEntry(int index);
-	EduEntry* getEduEntryByType(const char* type);
+	eduEntry* addEopEduEntry(int baseIndex, int newIndex);
+	eduEntry* addEopEduEntryFromFile(const char* fileName, int newIndex);
+	eduEntry* getEopEduEntry(int index);
+	eduEntry* getEduEntry(int index);
+	eduEntry* getEduEntryByType(const char* type);
 	int getEduIndexByType(const char* type);
 
 
@@ -65,6 +65,7 @@ namespace eopEduHelpers
 	int getEntryStat(int idx, UnitEnums::eduStat stat, int sec);
 	void addUnitToRQ(int idx, settlementStruct* sett);
 	int multiplexor(int n1, int n2, int sel);
+	bool hasAttribute(unit* unit, const char* attributeName);
 
 	void setEntryLocalizedName(int index, const char* newLocName);
 	void setEntryLocalizedDescr(int index, const char* newLocDescr);
@@ -72,8 +73,8 @@ namespace eopEduHelpers
 
 
 	//edu things
-	bool haveAttributeLegioGet(EduEntry* eduEn);
-	void haveAttributeLegioSet(EduEntry* eduEn, bool isHaveLegio);
+	bool haveAttributeLegioGet(eduEntry* eduEn);
+	void haveAttributeLegioSet(eduEntry* eduEn, bool isHaveLegio);
 };
 
 

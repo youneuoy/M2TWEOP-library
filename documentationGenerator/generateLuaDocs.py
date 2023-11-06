@@ -11,20 +11,35 @@ def fixTypes(field):
     
 def writeClass(newClass):
     outputfile.write("---" + newClass.descr.strip() + "\n")
-    outputfile.write("---@class " + newClass.name + "\n")
+    
+    if newClass.enum is None:
+        outputfile.write("---@class " + newClass.name + "\n")
+    else:
+        outputfile.write("---@enum " + newClass.name + "\n")
     outputfile.write(newClass.name + " = { \n\n")
     for field in newClass.tfields:
         if field.type != "function":
-            if field.comment != "":
-                outputfile.write("    ---" + field.comment.strip() + "\n") 
-            fixTypes(field)
-            outputfile.write("    ---@type " + field.type + "\n")
-            outputfile.write("    " + field.name + " = nil,\n\n")
+            if newClass.enum is None:
+                if field.comment != "":
+                    outputfile.write("    ---" + field.comment.strip() + "\n") 
+                fixTypes(field)
+                outputfile.write("    ---@type " + field.type + "\n")
+                outputfile.write("    " + field.name + " = nil,\n\n")
+            else:
+                if field.name in newClass.enum.values:
+                    if field.comment != "":
+                        outputfile.write("    ---" + field.comment.strip() + "\n") 
+                    fixTypes(field)
+                    outputfile.write("    ---@type " + field.type + "\n")
+                    if newClass.enum.values[field.name] is None:
+                        outputfile.write("    " + field.name + " = " +  "nil" + ",\n\n")
+                    else:
+                        outputfile.write("    " + field.name + " = " +  newClass.enum.values[field.name] + ",\n\n")
     outputfile.write("}\n\n")
     for field in newClass.tfields:
         if field.type == "function":
             if field.comment != "":
-                outputfile.write("---" + field.comment.strip() + "\n") 
+                outputfile.write("---" + field.comment + "\n") 
             nextparams = []
             firstParamBool = True
             firstparam = ""
@@ -58,6 +73,7 @@ class luaClass:
     name = ""
     tfields = []
     descr = ""
+    enum = None
 
 class returnValue:
     def __init__(self, type, name, comment):
@@ -74,6 +90,11 @@ class tfield:
     params = []
     selfCall = False
     funcEvent = False
+
+class enum:
+    def __init__(self):
+        self.values = {}
+    values = {}
         
 class param:
     def __init__(self, type, name, comment):
@@ -92,6 +113,7 @@ funcComment = ""
 funcName = ""
 nextLineComment = False
 newSection = False
+countEnum = False
 for name in filenames:
     file = open(luaPluginPath + name, 'r')
     for line in file:
@@ -165,14 +187,33 @@ for name in filenames:
         if re.search(r'@table', line) is not None:
             newClass.name = re.findall(r'@table\s+(\S+)', line)[0]
             newSection = False
+        if re.search(r'luaState.new_enum', line) is not None:
+            newClass.enum = enum()
+            countEnum = True
+            continue
+        if countEnum:
+            if re.search(r',', line) is not None:
+                if re.search(r',\s*\S', line) is not None:
+                    key = re.findall(r'\"(\S*)\"\s*,', line)[0].strip()
+                    if re.search(r',\s*(\d+)', line) is not None:
+                        value = re.findall(r',\s*(\d+)', line)[0].strip()
+                    else:
+                        value = None
+                    newClass.enum.values[key] = value
+            else:
+                countEnum = False
         if re.search(r'\*\*\*', line) is not None:
             nextLineComment = True
             continue
         if nextLineComment == True:
+            if line.strip() == "": continue
             if newSection == True:
                 newClass.descr = newClass.descr + line.strip() + " "
             else:
-                funcComment = funcComment + line.strip() + " "
+                if funcComment == "":
+                    funcComment = line.strip()
+                else:
+                    funcComment += "\n-- " + line.strip() 
 
 writeClass(newClass)                
 del newClass               

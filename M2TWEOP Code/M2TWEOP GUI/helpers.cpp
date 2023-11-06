@@ -372,13 +372,6 @@ bool helpers::compareFiles(string& oneFile, string& nextFile)
 	return true;
 }
 
-void helpers::getCurrentPath(string& path)
-{
-	TCHAR currentPath[MAX_PATH] = { 0 };
-	DWORD ret = GetCurrentDirectoryA(MAX_PATH, currentPath);
-	path = currentPath;
-}
-
 void helpers::setModFolder(string& modFolder)
 {
 	TCHAR currentPath[MAX_PATH] = { 0 };
@@ -386,4 +379,118 @@ void helpers::setModFolder(string& modFolder)
 	modFolder = currentPath;
 	size_t pos = modFolder.find_last_of("\\/")+1;
 	modFolder = modFolder.substr(pos);
+}
+
+void helpers::getCurrentPath(string& path)
+{
+	TCHAR currentPath[MAX_PATH] = { 0 };
+	DWORD ret = GetCurrentDirectoryA(MAX_PATH, currentPath);
+	path = currentPath;
+}
+
+vector<std::string> helpers::getCfgFilesInFolder()
+{
+	string path;
+	getCurrentPath(path);
+	path += "\\*.cfg";
+
+	WIN32_FIND_DATAA findFileData;
+	HANDLE hFind = FindFirstFileA(path.c_str(), &findFileData);
+
+	std::vector<std::string> cfgFiles;
+
+	if (hFind != INVALID_HANDLE_VALUE)
+	{
+		do {
+			const std::string name = findFileData.cFileName;
+
+			if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+			{
+				string currentPath;
+				getCurrentPath(currentPath);
+				if (checkCfgFileForMod(currentPath + "\\" + name) != "")
+				{
+					cfgFiles.push_back(name);
+				}
+			}
+
+		} while (FindNextFileA(hFind, &findFileData) != 0);
+
+		FindClose(hFind);
+	}
+
+	return cfgFiles;
+}
+
+std::string helpers::checkCfgFileForMod(const std::string& filePath)
+{
+	std::ifstream file(filePath);
+	if (!file.is_open())
+		return "";
+
+	std::string line;
+	while (std::getline(file, line))
+	{
+		line.erase(std::remove_if(line.begin(), line.end(), ::isspace), line.end());
+		
+		if (line.find("mod=") == 0)
+			return extractModPathFromLine(line);
+	}
+
+	return ""; 
+}
+
+std::vector<std::string> helpers::split(const std::string& s, char delimiter)
+{
+	std::vector<std::string> tokens;
+	std::string token;
+	std::istringstream tokenStream(s);
+	while (std::getline(tokenStream, token, delimiter))
+	{
+		tokens.push_back(token);
+	}
+	return tokens;
+}
+
+bool helpers::verifyModPath(const std::string& modPath)
+{
+	string currentPath;
+	getCurrentPath(currentPath);
+	auto modPathDirs = split(modPath, '\\');
+	auto currentPathDirs = split(currentPath, '\\');
+	
+	if (currentPathDirs.size() < 2)
+		return false;
+
+	std::string modPathCheck = modPath + "";
+
+	size_t pos = modPathCheck.find("#");
+	if (pos != std::string::npos)
+	{
+		modPathCheck = modPathCheck.substr(0, pos);
+	}
+	pos = modPathCheck.find(";");
+	if (pos != std::string::npos)
+	{
+		modPathCheck = modPathCheck.substr(0, pos);
+	}
+
+	std::string lastDir = currentPathDirs[currentPathDirs.size() - 1];
+	std::string secondLastDir = currentPathDirs[currentPathDirs.size() - 2];
+	std::string expectedPath = secondLastDir + "\\" + lastDir;
+	std::replace(expectedPath.begin(), expectedPath.end(), '/', '\\');
+	std::replace(modPathCheck.begin(), modPathCheck.end(), '/', '\\');
+	std::transform(expectedPath.begin(), expectedPath.end(), expectedPath.begin(), ::tolower);
+	std::transform(modPathCheck.begin(), modPathCheck.end(), modPathCheck.begin(), ::tolower);
+
+	return modPathCheck == expectedPath;
+}
+
+std::string helpers::extractModPathFromLine(const std::string& line)
+{
+	size_t pos = line.find("mod=");
+	if (pos == std::string::npos)
+		return ""; 
+	
+	return line.substr(pos + 4);
 }

@@ -83,7 +83,7 @@ int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlemen
 	}
 	return selectedLevel;//use old thing
 }
-char* __fastcall patchesForGame::onSaveEDUStringS(EduEntry* eduEntry)
+char* __fastcall patchesForGame::onSaveEDUStringS(eduEntry* eduEntry)
 {
 	char* retName = eduThings::getEopNameOfEduEntry(eduEntry);
 	if (retName == nullptr)
@@ -93,23 +93,40 @@ char* __fastcall patchesForGame::onSaveEDUStringS(EduEntry* eduEntry)
 
 	return retName;
 }
-int __fastcall patchesForGame::onCreateUnit(int* edbIndex, int** edb, char** entryName)
+int __fastcall patchesForGame::onCreateUnit(char** entryName, int* edbIndex)
 {
 	if (edbIndex == nullptr)
 	{
-		int* newEdu = eduThings::tryFindDataEopEdu(*entryName);
+		int* newEdu = eduThings::tryFindDataEopEduIndex(*entryName);
 
 		if (newEdu == nullptr)
 		{
 			return  -1;
 		}
 
-		*edb = newEdu;
-		return 0;
+		return *newEdu;
 	}
 
 	return *edbIndex;
 }
+
+int __fastcall patchesForGame::onFindUnit(char* entryName, int* edbIndex)
+{
+	if (edbIndex == nullptr)
+	{
+		int* newEdu = eduThings::tryFindDataEopEduIndex(entryName);
+
+		if (newEdu == nullptr)
+		{
+			return  -1;
+		}
+
+		return *newEdu;
+	}
+
+	return *edbIndex;
+}
+
 int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduindex)
 {
 	if (eduindex == -1)
@@ -126,19 +143,41 @@ int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduin
 
 	return eduindex;
 }
-EduEntry* __fastcall patchesForGame::OnCreateMercUnit(char** entryName, EduEntry* entry)
+eduEntry* __fastcall patchesForGame::OnCreateMercUnit(char** entryName, eduEntry* entry)
 {
 	DWORD entryAddr = (DWORD)entry;
 	DWORD mercEOPValue = codes::offsets.mercEOPValue;//this is some weird address made by subtracting a value from edu start or something I dont really remember but its necesarry
 	if (entryAddr == mercEOPValue)
 	{
 		int* eduindex = eduThings::tryFindDataEopEduIndex(*entryName);
-		EduEntry* eopentry = eduThings::getEopEduEntry(*eduindex);
+		eduEntry* eopentry = eduThings::getEopEduEntry(*eduindex);
 		return eopentry;
 	}
 
 	return entry;
 }
+
+eduEntry* __fastcall patchesForGame::OnCreateUnitWrapper(int eduindexBase, int removeValue)
+{
+	int eduindex = eduindexBase - (removeValue * 8);
+	eduEntry* entry = eduThings::getEduEntry(eduindex);
+	if (entry == nullptr)
+	{
+		entry = eduThings::getEopEduEntry(eduindex);
+	}
+	return entry;
+}
+
+eduEntry* __fastcall patchesForGame::OnGetRecruitPoolUnitEntry(int eduIndex)
+{
+	eduEntry* entry = eduThings::getEduEntry(eduIndex);
+	if (entry == nullptr)
+	{
+		entry = eduThings::getEopEduEntry(eduIndex);
+	}
+	return entry;
+}
+
 const char* __fastcall patchesForGame::onQuickSave()
 {
 	static std::vector<std::string> saveNames = { u8"%S-1.sav" ,u8"%S-2.sav", u8"%S-3.sav" };
@@ -306,6 +345,11 @@ void __stdcall patchesForGame::afterEDUread()
 #endif
 }
 
+void __stdcall patchesForGame::onGameInit()
+{
+	plugins::onGameInit();
+}
+
 void __stdcall patchesForGame::onChangeTurnNum()
 {
 #if defined TESTPATCHES
@@ -427,7 +471,7 @@ void __stdcall patchesForGame::onBattleStratScreen()
 
 }
 
-void __fastcall patchesForGame::onEvent(DWORD** vTab)
+void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 {
 #if defined TESTPATCHES
 	ofstream f1("logs\\TESTPATCHES.log", ios::app);
@@ -435,7 +479,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab)
 	f1 << "onEvent" << endl;
 	f1.close();
 #endif
-	plugins::onEvent(vTab);
+	plugins::onEvent(vTab, arg2);
 }
 
 void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
@@ -549,17 +593,26 @@ void __fastcall patchesForGame::OnStopCharacter(general* character)
 	}
 }
 
-void __fastcall patchesForGame::recruitEOPunit(DWORD eduoffset, DWORD pad, regionStruct* region, int eduindex, int factionid, int exp, int minusone, int armlvl, int wplvl)
+eduEntry* __fastcall patchesForGame::recruitEOPunit(int eduIndex)
 {
-	int regionID = region->regionID;
-	if (eduindex > 499)
+	eduEntry* entry = eduThings::getEduEntry(eduIndex);
+	if (entry == nullptr)
 	{
-		int eopIDX = eduThings::getDataEopEdu(eduindex);
-		fastFuncts::createUnitEDB(eopIDX, regionID, factionid, exp, armlvl, wplvl);
+		entry = eduThings::getEopEduEntry(eduIndex);
 	}
-	else
+	return entry;
+}
+
+void __fastcall patchesForGame::recruitEOPunit2(int eduIndex)
+{
+	eduEntry* entry = eduThings::getEduEntry(eduIndex);
+	if (entry == nullptr)
 	{
-		fastFuncts::createUnitIdx(eduindex, regionID, factionid, exp, armlvl, wplvl);
+		entry = eduThings::getEopEduEntry(eduIndex);
+	}
+	if (entry)
+	{
+		entry->UnitCreatedCounter++;
 	}
 }
 

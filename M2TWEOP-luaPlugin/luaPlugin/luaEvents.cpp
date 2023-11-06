@@ -15,115 +15,2898 @@ void luaP::onPluginLoadF()
 	Events functions list.
 	Just list, use it without EventsFunctionsList.!!!
 
-	@tfield draw draw
-	@tfield onLoadingFonts onLoadingFonts
-	@tfield onReadGameDbsAtStart onReadGameDbsAtStart
-	@tfield onClickAtTile onClickAtTile
-	@tfield onNewGameStart onNewGameStart
-	@tfield onCampaignMapLoaded onCampaignMapLoaded
-	@tfield onCreateSaveFile onCreateSaveFile
-	@tfield onLoadSaveFile onLoadSaveFile
-	@tfield onPluginLoad onPluginLoad
-	@tfield onEndSiege onEndSiege
-	@tfield onStartSiege onStartSiege
-	@tfield onSelectWorldpkgdesc onSelectWorldpkgdesc
-	@tfield onChangeTurnNum onChangeTurnNum
-	@tfield onCharacterSelected onCharacterSelected
-	@tfield onPreFactionTurnStart onPreFactionTurnStart
-	@tfield onFactionTurnStart onFactionTurnStart
-	@tfield onFactionTurnEnd onFactionTurnEnd
-	@tfield onFactionNewCapital onFactionNewCapital
-	@tfield onFactionWarDeclared onFactionWarDeclared
-	@tfield onFactionAllianceDeclared onFactionAllianceDeclared
-	@tfield onFactionTradeAgreementMade onFactionTradeAgreementMade
-	@tfield onFactionBreakAlliance onFactionBreakAlliance
-	@tfield onGiveMoney onGiveMoney
-	@tfield onUpdateAttitude onUpdateAttitude
-	@tfield onDemeanour onDemeanour
-	@tfield onGeneralAssaultsGeneral onGeneralAssaultsGeneral
-	@tfield onGeneralAssaultsResidence onGeneralAssaultsResidence
-	@tfield onGeneralCaptureSettlement onGeneralCaptureSettlement
-	@tfield onGeneralCaptureResidence onGeneralCaptureResidence
-	@tfield onSiegeEquipmentCompleted onSiegeEquipmentCompleted
+	@tfield onCharacterTurnStart onCharacterTurnStart
+	@tfield onCapturedCharacterRansomed onCapturedCharacterRansomed
+	@tfield onCapturedCharacterReleased onCapturedCharacterReleased
+	@tfield onFatherDiesNatural onFatherDiesNatural
+	@tfield onPreBattleWithdrawal onPreBattleWithdrawal
 	@tfield onPostBattle onPostBattle
-	@tfield onMultiTurnMove onMultiTurnMove
-	@tfield onSettlementSelected onSettlementSelected
-	@tfield onSettlementUpgraded onSettlementUpgraded
-	@tfield onSettlementConverted onSettlementConverted
-	@tfield onCityRiots onCityRiots
-	@tfield onUngarrisonedSettlement onUngarrisonedSettlement
-	@tfield onUngarrisonedFort onUngarrisonedFort
-	@tfield onGiveSettlement onGiveSettlement
-	@tfield onOccupySettlement onOccupySettlement
-	@tfield onExterminatePopulation onExterminatePopulation
-	@tfield onSackSettlement onSackSettlement
-	@tfield onAddedToBuildingQueue onAddedToBuildingQueue
-	@tfield onBuildingDestroyed onBuildingDestroyed
-	@tfield onBuildingCompleted onBuildingCompleted
-	@tfield onEventCounter onEventCounter
-	@tfield onFactionExcommunicated onFactionExcommunicated
-	@tfield onDisaster onDisaster
-	@tfield onHordeFormed onHordeFormed
-	@tfield onAddedToTrainingQueue onAddedToTrainingQueue
-	@tfield onUnitDisbanded onUnitDisbanded
-	@tfield onUnitTrained onUnitTrained
-	@tfield onAgentCreated onAgentCreated
-	@tfield onObjSeen onObjSeen
-	@tfield onTileSeen onTileSeen
-	@tfield onGameReloaded onGameReloaded
-	@tfield onTransgression onTransgression
-	@tfield onPopeAcceptsCrusadeTarget onPopeAcceptsCrusadeTarget
-	@tfield onCrusadeCalled onCrusadeCalled
-	@tfield onCrusadeEnds onCrusadeEnds
-	@tfield onPopeRejectsCrusadeTarget onPopeRejectsCrusadeTarget
-	@tfield onArmyTakesCrusadeTarget onArmyTakesCrusadeTarget
-	@tfield onUnitsDesertCrusade onUnitsDesertCrusade
-	@tfield onPopeElected onPopeElected
-	@tfield onVotedForPope onVotedForPope
-	@tfield onAssassinCaughtAttackingPope onAssassinCaughtAttackingPope
-	@tfield onInquisitorAppointed onInquisitorAppointed
-	@tfield onSettlementPanelOpen onSettlementPanelOpen
-	@tfield onFinancesPanelOpen onFinancesPanelOpen
-	@tfield onFactionSummaryPanelOpen onFactionSummaryPanelOpen
-	@tfield onFamilyTreePanelOpenFunc onFamilyTreePanelOpenFunc
-	@tfield onDiplomaticStandingPanelOpen onDiplomaticStandingPanelOpen
-	@tfield onDiplomacyPanelOpen onDiplomacyPanelOpen
-	@tfield onPreBattlePanelOpen onPreBattlePanelOpen
-	@tfield onNavalAutoResolvePanelOpen onNavalAutoResolvePanelOpen
-	@tfield onCharacterPanelOpen onCharacterPanelOpen
-	@tfield onTradePanelOpen onTradePanelOpen
-	@tfield onRequestBuildingAdvice onRequestBuildingAdvice
-	@tfield onRequestTrainingAdvice onRequestTrainingAdvice
-	@tfield onMessageOpen onMessageOpen
-	@tfield onIncomingMessage onIncomingMessage
-	@tfield onMessageClosed onMessageClosed
-	@tfield onButtonPressed onButtonPressed
-	@tfield onScrollClosed onScrollClosed
-	@tfield onScrollOpened onScrollOpened
-	@tfield onUIElementVisible onUIElementVisible
-	@tfield onScrollAdviceRequested onScrollAdviceRequested
-	@tfield onSettlementScrollAdviceRequested onSettlementScrollAdviceRequested
-	@tfield onPreBattleScrollAdviceRequested onPreBattleScrollAdviceRequested
-	@tfield onNavalPreBattleScrollAdviceRequested onNavalPreBattleScrollAdviceRequested
-	@tfield onCollegeOfCardinalsPanelOpen onCollegeOfCardinalsPanelOpen
-	@tfield onGuildUpgraded onGuildUpgraded
-	@tfield onGuildDestroyed onGuildDestroyed
+	@tfield onHireMercenaries onHireMercenaries
+	@tfield onGeneralCaptureResidence onGeneralCaptureResidence
+	@tfield onLeaderDestroyedFaction onLeaderDestroyedFaction
+	@tfield onOfferedForAdoption onOfferedForAdoption
+	@tfield onLesserGeneralOfferedForAdoption onLesserGeneralOfferedForAdoption
+	@tfield onOfferedForMarriage onOfferedForMarriage
 	@tfield onBrotherAdopted onBrotherAdopted
 	@tfield onBirth onBirth
 	@tfield onCharacterComesOfAge onCharacterComesOfAge
 	@tfield onCharacterMarries onCharacterMarries
 	@tfield onCharacterMarriesPrincess onCharacterMarriesPrincess
+	@tfield onMarriageAlliancePossible onMarriageAlliancePossible
+	@tfield onMarriageAllianceOffered onMarriageAllianceOffered
+	@tfield onPriestBecomesHeretic onPriestBecomesHeretic
+	@tfield onCharacterNearHeretic onCharacterNearHeretic
+	@tfield onCharacterNearWitch onCharacterNearWitch
+	@tfield onCardinalPromoted onCardinalPromoted
 	@tfield onCharacterBecomesAFather onCharacterBecomesAFather
-	@tfield onNewAdmiralCreated onNewAdmiralCreated
-	@tfield onShortcutTriggered onShortcutTriggered
-	@tfield onBecomesFactionLeader onBecomesFactionLeader
-	@tfield onBecomesFactionHeir onBecomesFactionHeir
 	@tfield onGeneralDevastatesTile onGeneralDevastatesTile
+	@tfield onExecutesASpyOnAMission onExecutesASpyOnAMission
+	@tfield onExecutesAnAssassinOnAMission onExecutesAnAssassinOnAMission
+	@tfield onSufferAssassinationAttempt onSufferAssassinationAttempt
+	@tfield onSufferAcquisitionAttempt onSufferAcquisitionAttempt
+	@tfield onSufferMarriageAttempt onSufferMarriageAttempt
+	@tfield onSufferDenouncementAttempt onSufferDenouncementAttempt
+	@tfield onLeaderOrderedSabotage onLeaderOrderedSabotage
+	@tfield onAcceptBribe onAcceptBribe
+	@tfield onRefuseBribe onRefuseBribe
+	@tfield onInsurrection onInsurrection
+	@tfield onLeaderOrderedDiplomacy onLeaderOrderedDiplomacy
+	@tfield onNewAdmiralCreated onNewAdmiralCreated
+	@tfield onGovernorBuildingDestroyed onGovernorBuildingDestroyed
+	@tfield onGovernorThrowGames onGovernorThrowGames
+	@tfield onGovernorThrowRaces onGovernorThrowRaces
+	@tfield onCharacterSelected onCharacterSelected
+	@tfield onEnemyCharacterSelected onEnemyCharacterSelected
+	@tfield onMultiTurnMove onMultiTurnMove
+	@tfield onCharacterPanelOpen onCharacterPanelOpen
+	@tfield onLeaderMissionSuccess onLeaderMissionSuccess
+	@tfield onLeaderMissionFailed onLeaderMissionFailed
+	@tfield onGeneralJoinCrusade onGeneralJoinCrusade
+	@tfield onGeneralAbandonCrusade onGeneralAbandonCrusade
+	@tfield onGeneralArrivesCrusadeTargetRegion onGeneralArrivesCrusadeTargetRegion
+	@tfield onGeneralTakesCrusadeTarget onGeneralTakesCrusadeTarget
+	@tfield onCharacterTurnEnd onCharacterTurnEnd
+	@tfield onCharacterTurnEndInSettlement onCharacterTurnEndInSettlement
+	@tfield onBecomesFactionLeader onBecomesFactionLeader
+	@tfield onCeasedFactionLeader onCeasedFactionLeader
+	@tfield onBecomesFactionHeir onBecomesFactionHeir
+	@tfield onCeasedFactionHeir onCeasedFactionHeir
+	@tfield onCharacterDamagedByDisaster onCharacterDamagedByDisaster
+	@tfield onGeneralCaptureSettlement onGeneralCaptureSettlement
+	@tfield onGeneralAssaultsResidence onGeneralAssaultsResidence
+	@tfield onGeneralAssaultsGeneral onGeneralAssaultsGeneral
+	@tfield onCharacterAttacksCrusadingGeneral onCharacterAttacksCrusadingGeneral
+	@tfield onGeneralPrisonersRansomedCaptor onGeneralPrisonersRansomedCaptor
+	@tfield onGeneralPrisonersRansomedCaptive onGeneralPrisonersRansomedCaptive
+	@tfield onFactionLeaderPrisonersRansomedCaptor onFactionLeaderPrisonersRansomedCaptor
+	@tfield onFactionLeaderPrisonersRansomedCaptive onFactionLeaderPrisonersRansomedCaptive
+	@tfield onSpyMission onSpyMission
+	@tfield onAssassinationMission onAssassinationMission
+	@tfield onAcquisitionMission onAcquisitionMission
+	@tfield onMarriageMission onMarriageMission
+	@tfield onDenouncementMission onDenouncementMission
+	@tfield onSabotageMission onSabotageMission
+	@tfield onBriberyMission onBriberyMission
+	@tfield onDiplomacyMission onDiplomacyMission
+	@tfield onLeaderOrderedSpyingMission onLeaderOrderedSpyingMission
+	@tfield onLeaderOrderedAssassination onLeaderOrderedAssassination
+	@tfield onLeaderOrderedBribery onLeaderOrderedBribery
+	@tfield onSettlementTurnStart onSettlementTurnStart
+	@tfield onUngarrisonedSettlement onUngarrisonedSettlement
+	@tfield onSettlementUpgraded onSettlementUpgraded
+	@tfield onSettlementConverted onSettlementConverted
+	@tfield onSiegeEquipmentCompleted onSiegeEquipmentCompleted
+	@tfield onSettlementTurnEnd onSettlementTurnEnd
+	@tfield onSettlementSelected onSettlementSelected
+	@tfield onSettlementPanelOpen onSettlementPanelOpen
+	@tfield onRecruitmentPanelOpen onRecruitmentPanelOpen
+	@tfield onConstructionPanelOpen onConstructionPanelOpen
+	@tfield onTradePanelOpen onTradePanelOpen
+	@tfield onSettlementScrollAdviceRequested onSettlementScrollAdviceRequested
+	@tfield onGuildUpgraded onGuildUpgraded
+	@tfield onGuildDestroyed onGuildDestroyed
+	@tfield onOccupySettlement onOccupySettlement
+	@tfield onSackSettlement onSackSettlement
+	@tfield onExterminatePopulation onExterminatePopulation
+	@tfield onCityRiots onCityRiots
+	@tfield onGiveSettlement onGiveSettlement
+	@tfield onCityRebels onCityRebels
+	@tfield onCitySacked onCitySacked
+	@tfield onGovernorCityRiots onGovernorCityRiots
+	@tfield onGovernorCityRebels onGovernorCityRebels
+	@tfield onAbandonShowMe onAbandonShowMe
+	@tfield onGameReloaded onGameReloaded
+	@tfield onBattleWinningPlaza onBattleWinningPlaza
+	@tfield onBattleStopsWinningPlaza onBattleStopsWinningPlaza
+	@tfield onBattleDominatingPlaza onBattleDominatingPlaza
+	@tfield onBattngineUnmanned onBattngineUnmanned
+	@tfield onBattlePlayerArmyHalfDestroyed onBattlePlayerArmyHalfDestroyed
+	@tfield onBattnemyArmyHalfDestroyed onBattnemyArmyHalfDestroyed
+	@tfield onBattleFinished onBattleFinished
+	@tfield onBattleArmyHalfDestroyed onBattleArmyHalfDestroyed
+	@tfield onEscPressed onEscPressed
+	@tfield onScriptedAdvice onScriptedAdvice
+	@tfield onNavalPreBattleScrollAdviceRequested onNavalPreBattleScrollAdviceRequested
+	@tfield onPreBattleScrollAdviceRequested onPreBattleScrollAdviceRequested
+	@tfield onCollegeOfCardinalsPanelOpen onCollegeOfCardinalsPanelOpen
+	@tfield onDiplomaticStandingPanelOpen onDiplomaticStandingPanelOpen
+	@tfield onBattlePlayerUnderAttackIdle onBattlePlayerUnderAttackIdle
+	@tfield onBattleWinningCombat onBattleWinningCombat
+	@tfield onBattleArmyTired onBattleArmyTired
+	@tfield onBattleTideofBattle onBattleTideofBattle
+	@tfield onBattleUnitGoesBerserk onBattleUnitGoesBerserk
+	@tfield onBattleSiegeEngineDestroyed onBattleSiegeEngineDestroyed
+	@tfield onBattleSiegeEngineDocksWall onBattleSiegeEngineDocksWall
+	@tfield onBattleGatesAttackedByEngine onBattleGatesAttackedByEngine
+	@tfield onBattleGatesDestroyedByEngine onBattleGatesDestroyedByEngine
+	@tfield onBattleWallsBreachedByEngine onBattleWallsBreachedByEngine
+	@tfield onBattleWallsCaptured onBattleWallsCaptured
+	@tfield onBattleUnitRouts onBattleUnitRouts
+	@tfield onUnitDisbanded onUnitDisbanded
+	@tfield onUnitTrained onUnitTrained
+	@tfield onGovernorUnitTrained onGovernorUnitTrained
+	@tfield onGovernorBuildingCompleted onGovernorBuildingCompleted
+	@tfield onAgentCreated onAgentCreated
+	@tfield onGovernorAgentCreated onGovernorAgentCreated
+	@tfield onBuildingDestroyed onBuildingDestroyed
+	@tfield onAddedToBuildingQueue onAddedToBuildingQueue
+	@tfield onBuildingCompleted onBuildingCompleted
+	@tfield onRequestBuildingAdvice onRequestBuildingAdvice
+	@tfield onRequestTrainingAdvice onRequestTrainingAdvice
+	@tfield onAddedToTrainingQueue onAddedToTrainingQueue
+	@tfield onBattleArmyRouted onBattleArmyRouted
+	@tfield onBattleReinforcementsArrive onBattleReinforcementsArrive
+	@tfield onRequestMercenariesAdvice onRequestMercenariesAdvice
+	@tfield onButtonPressed onButtonPressed
+	@tfield onShortcutTriggered onShortcutTriggered
+	@tfield onUIElementVisible onUIElementVisible
+	@tfield onScrollOpened onScrollOpened
+	@tfield onScrollClosed onScrollClosed
+	@tfield onScrollAdviceRequested onScrollAdviceRequested
+	@tfield onAdviceSupressed onAdviceSupressed
+	@tfield onBattleGeneralRouted onBattleGeneralRouted
+	@tfield onBattleGeneralKilled onBattleGeneralKilled
+	@tfield onCrusadeCalled onCrusadeCalled
+	@tfield onPopeAcceptsCrusadeTarget onPopeAcceptsCrusadeTarget
+	@tfield onPopeRejectsCrusadeTarget onPopeRejectsCrusadeTarget
+	@tfield onCrusadeEnds onCrusadeEnds
+	@tfield onPreFactionTurnStart onPreFactionTurnStart
+	@tfield onFactionTurnStart onFactionTurnStart
+	@tfield onFactionNewCapital onFactionNewCapital
+	@tfield onFactionTurnEnd onFactionTurnEnd
+	@tfield onVotedForPope onVotedForPope
+	@tfield onFactionExcommunicated onFactionExcommunicated
+	@tfield onHordeFormed onHordeFormed
+	@tfield onCardinalRemoved onCardinalRemoved
+	@tfield onInquisitorAppointed onInquisitorAppointed
+	@tfield onAssassinCaughtAttackingPope onAssassinCaughtAttackingPope
+	@tfield onFinancesPanelOpen onFinancesPanelOpen
+	@tfield onFactionSummaryPanelOpen onFactionSummaryPanelOpen
+	@tfield onFamilyTreePanelOpen onFamilyTreePanelOpen
+	@tfield onDiplomacyPanelOpen onDiplomacyPanelOpen
+	@tfield onPreBattlePanelOpen onPreBattlePanelOpen
+	@tfield onIncomingMessage onIncomingMessage
+	@tfield onMessageOpen onMessageOpen
+	@tfield onMessageClosed onMessageClosed
+	@tfield onDeclineAutomatedSettlementManagement onDeclineAutomatedSettlementManagement
+	@tfield onBattleAiCommenced onBattleAiCommenced
+	@tfield onBattleDelayPhaseCommenced onBattleDelayPhaseCommenced
+	@tfield onBattleDeploymentPhaseCommenced onBattleDeploymentPhaseCommenced
+	@tfield onBattleConflictPhaseCommenced onBattleConflictPhaseCommenced
+	@tfield onFactionWarDeclared onFactionWarDeclared
+	@tfield onFactionAllianceDeclared onFactionAllianceDeclared
+	@tfield onInterFactionMarriage onInterFactionMarriage
+	@tfield onFactionTradeAgreementMade onFactionTradeAgreementMade
+	@tfield onPopeElected onPopeElected
+	@tfield onFactionBreakAlliance onFactionBreakAlliance
+	@tfield onUpdateAttitude onUpdateAttitude
+	@tfield onDemeanour onDemeanour
+	@tfield onGiveMoney onGiveMoney
+	@tfield onBattlePlayerUnitAttacksEnemyUnit onBattlePlayerUnitAttacksEnemyUnit
+	@tfield onBattleEnemyUnitAttacksPlayerUnit onBattleEnemyUnitAttacksPlayerUnit
+	@tfield onBattlePlayerUnitGoesBerserk onBattlePlayerUnitGoesBerserk
+	@tfield onBattlePlayerUnitRouts onBattlePlayerUnitRouts
+	@tfield onBattlePlayerSiegeEngineDestroyed onBattlePlayerSiegeEngineDestroyed
+	@tfield onBattleGatesAttackedByPlayerEngine onBattleGatesAttackedByPlayerEngine
+	@tfield onBattleEnemyUnitGoesBerserk onBattleEnemyUnitGoesBerserk
+	@tfield onBattnemyUnitRouts onBattnemyUnitRouts
+	@tfield onBattnemySiegeEngineDestroyed onBattnemySiegeEngineDestroyed
+	@tfield onBattleGatesAttackedByEnemyEngine onBattleGatesAttackedByEnemyEngine
+	@tfield onDisaster onDisaster
+	@tfield onEventCounter onEventCounter
+	@tfield onUngarrisonedFort onUngarrisonedFort
+	@tfield onObjSeen onObjSeen
+	@tfield onTileSeen onTileSeen
+	@tfield onTransgression onTransgression
+	@tfield onForgiveness onForgiveness
+	@tfield onArmyTakesCrusadeTarget onArmyTakesCrusadeTarget
+	@tfield onUnitsDesertCrusade onUnitsDesertCrusade
+	@tfield draw draw
+	@tfield onLoadingFonts onLoadingFonts
+	@tfield onNewGameStart onNewGameStart
+	@tfield onReadGameDbsAtStart onReadGameDbsAtStart
+	@tfield onGameInit onGameInit
+	@tfield onClickAtTile onClickAtTile
+	@tfield onCampaignMapLoaded onCampaignMapLoaded
+	@tfield onCreateSaveFile onCreateSaveFile
+	@tfield onLoadSaveFile onLoadSaveFile
+	@tfield onChangeTurnNum onChangeTurnNum
+	@tfield onSelectWorldpkgdesc onSelectWorldpkgdesc
+	@tfield onfortificationlevelS onfortificationlevelS
+	@tfield onEndSiege onEndSiege
+	@tfield onStartSiege onStartSiege
+	@tfield onPluginLoad onPluginLoad
 
 
 
 
 	@table EventsFunctionsList
+	*/
+
+
+	/***
+	Called at a character's turn start.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onCharacterTurnStart
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCharacterTurnStart(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A captured character has been successfully ransomed back from the enemy.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onCapturedCharacterRansomed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCapturedCharacterRansomed(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A captured character has been released by the enemy.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onCapturedCharacterReleased
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCapturedCharacterReleased(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A character father died of natural causes.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onFatherDiesNatural
+	@tparam eventTrigger eventData
+
+	@usage
+	function onFatherDiesNatural(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	When a battle is about to start but one of the armies withdraws.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onPreBattleWithdrawal
+	@tparam eventTrigger eventData
+
+	@usage
+	function onPreBattleWithdrawal(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	When a battle has finished.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onPostBattle
+	@tparam eventTrigger eventData
+
+	@usage
+	function onPostBattle(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A General has hired some mercenaries.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onHireMercenaries
+	@tparam eventTrigger eventData
+
+	@usage
+	function onHireMercenaries(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A General has captured a residence such as a fort or watchtower.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onGeneralCaptureResidence
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGeneralCaptureResidence(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A faction has been destroyed.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onLeaderDestroyedFaction
+	@tparam eventTrigger eventData
+
+	@usage
+	function onLeaderDestroyedFaction(eventData)
+	--something
+	end
+	*/
+
+	/***
+	An adoption has been proposed.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onOfferedForAdoption
+	@tparam eventTrigger eventData
+
+	@usage
+	function onOfferedForAdoption(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A lesser general adoption has been proposed (man of the hour event).
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onLesserGeneralOfferedForAdoption
+	@tparam eventTrigger eventData
+
+	@usage
+	function onLesserGeneralOfferedForAdoption(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A marriage offer has been proposed.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onOfferedForMarriage
+	@tparam eventTrigger eventData
+
+	@usage
+	function onOfferedForMarriage(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A brother has been adopted.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onBrotherAdopted
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBrotherAdopted(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A child is born to the faction leader.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onBirth
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBirth(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A character has come of age.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onCharacterComesOfAge
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCharacterComesOfAge(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A character has married.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onCharacterMarries
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCharacterMarries(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A character has married a princess.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onCharacterMarriesPrincess
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCharacterMarriesPrincess(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A marriage alliance is possible.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onMarriageAlliancePossible
+	@tparam eventTrigger eventData
+
+	@usage
+	function onMarriageAlliancePossible(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A marriage alliance has been offered.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onMarriageAllianceOffered
+	@tparam eventTrigger eventData
+
+	@usage
+	function onMarriageAllianceOffered(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A priest has gone mad.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onPriestBecomesHeretic
+	@tparam eventTrigger eventData
+
+	@usage
+	function onPriestBecomesHeretic(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A character is adjacent to a heretic.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onCharacterNearHeretic
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCharacterNearHeretic(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A character is adjacent to a witch.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onCharacterNearWitch
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCharacterNearWitch(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A character has been promoted to a cardinal.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onCardinalPromoted
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCardinalPromoted(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A character has become a father.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onCharacterBecomesAFather
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCharacterBecomesAFather(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A General and his army has devastated an enemy's fertile land.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onGeneralDevastatesTile
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGeneralDevastatesTile(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A spying mission has failed and the spy is executed by the target.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onExecutesASpyOnAMission
+	@tparam eventTrigger eventData
+
+	@usage
+	function onExecutesASpyOnAMission(eventData)
+	--something
+	end
+	*/
+
+	/***
+	An assassination mission has failed and the assassin is executed by the target.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onExecutesAnAssassinOnAMission
+	@tparam eventTrigger eventData
+
+	@usage
+	function onExecutesAnAssassinOnAMission(eventData)
+	--something
+	end
+	*/
+
+	/***
+	Someone has had an attempt on their life.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onSufferAssassinationAttempt
+	@tparam eventTrigger eventData
+
+	@usage
+	function onSufferAssassinationAttempt(eventData)
+	--something
+	end
+	*/
+
+	/***
+	Someone has had an attempt on their assets.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onSufferAcquisitionAttempt
+	@tparam eventTrigger eventData
+
+	@usage
+	function onSufferAcquisitionAttempt(eventData)
+	--something
+	end
+	*/
+
+	/***
+	Someone has had an attempt on their bachelorhood.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onSufferMarriageAttempt
+	@tparam eventTrigger eventData
+
+	@usage
+	function onSufferMarriageAttempt(eventData)
+	--something
+	end
+	*/
+
+	/***
+	Someone has had a denouncement attempt.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onSufferDenouncementAttempt
+	@tparam eventTrigger eventData
+
+	@usage
+	function onSufferDenouncementAttempt(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A Faction leader has ordered a sabotage mission.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onLeaderOrderedSabotage
+	@tparam eventTrigger eventData
+
+	@usage
+	function onLeaderOrderedSabotage(eventData)
+	--something
+	end
+	*/
+
+	/***
+	Someone has been bribed.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onAcceptBribe
+	@tparam eventTrigger eventData
+
+	@usage
+	function onAcceptBribe(eventData)
+	--something
+	end
+	*/
+
+	/***
+	Someone has refused a bribe.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onRefuseBribe
+	@tparam eventTrigger eventData
+
+	@usage
+	function onRefuseBribe(eventData)
+	--something
+	end
+	*/
+
+	/***
+	Insurgence has been provoked.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onInsurrection
+	@tparam eventTrigger eventData
+
+	@usage
+	function onInsurrection(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A Faction leader has ordered a diplomacy mission.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onLeaderOrderedDiplomacy
+	@tparam eventTrigger eventData
+
+	@usage
+	function onLeaderOrderedDiplomacy(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A new admiral has been created for a new ship.
+	Exports: stratCharacter, character, faction, regionID, characterType, religion
+
+	@function onNewAdmiralCreated
+	@tparam eventTrigger eventData
+
+	@usage
+	function onNewAdmiralCreated(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A building has been destroyed.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onGovernorBuildingDestroyed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGovernorBuildingDestroyed(eventData)
+	--something
+	end
+	*/
+
+	/***
+	Games have been thrown.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onGovernorThrowGames
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGovernorThrowGames(eventData)
+	--something
+	end
+	*/
+
+	/***
+	Races have been thrown.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onGovernorThrowRaces
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGovernorThrowRaces(eventData)
+	--something
+	end
+	*/
+
+	/***
+	The player has selected a character.
+	Exports: character, targetSettlement, faction, regionID, characterType, religion
+
+	@function onCharacterSelected
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCharacterSelected(eventData)
+	--something
+	end
+	*/
+
+	/***
+	The player has selected an enemy character.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onEnemyCharacterSelected
+	@tparam eventTrigger eventData
+
+	@usage
+	function onEnemyCharacterSelected(eventData)
+	--something
+	end
+	*/
+
+	/***
+	The player has selected a position beyond the character's extents.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onMultiTurnMove
+	@tparam eventTrigger eventData
+
+	@usage
+	function onMultiTurnMove(eventData)
+	--something
+	end
+	*/
+
+	/***
+	The player has opened the panel for the selected character.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onCharacterPanelOpen
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCharacterPanelOpen(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A mission has been completed.
+	Exports: character, faction, regionID, characterType, missionDetails, religion
+
+	@function onLeaderMissionSuccess
+	@tparam eventTrigger eventData
+
+	@usage
+	function onLeaderMissionSuccess(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A mission has failed.
+	Exports: character, faction, regionID, characterType, missionDetails, religion
+
+	@function onLeaderMissionFailed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onLeaderMissionFailed(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A General has been sent on Crusade/Jihad.
+	Exports: character, targetSettlement, faction, targetFaction, regionID, targetRegionID, characterType, religion, targetReligion, crusade
+
+	@function onGeneralJoinCrusade
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGeneralJoinCrusade(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A General has left a Crusade/Jihad.
+	Exports: character, targetSettlement, faction, targetFaction, regionID, targetRegionID, characterType, religion, targetReligion, crusade
+
+	@function onGeneralAbandonCrusade
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGeneralAbandonCrusade(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A General has arrived in the Crusade/Jihad target region.
+	Exports: character, targetSettlement, faction, targetFaction, army, regionID, targetRegionID, characterType, religion, targetReligion, crusade
+
+	@function onGeneralArrivesCrusadeTargetRegion
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGeneralArrivesCrusadeTargetRegion(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A General has taken the Crusade/Jihad target settlement.
+	Exports: character, targetSettlement, faction, targetFaction, regionID, targetRegionID, characterType, religion, targetReligion, crusade
+
+	@function onGeneralTakesCrusadeTarget
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGeneralTakesCrusadeTarget(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A Character has finished its turn.
+	Exports: character, settlement, faction, regionID, characterType, religion
+
+	@function onCharacterTurnEnd
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCharacterTurnEnd(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A Character has finished its turn in a settlement.
+	Exports: character, settlement, faction, regionID, characterType, religion
+
+	@function onCharacterTurnEndInSettlement
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCharacterTurnEndInSettlement(eventData)
+	--something
+	end
+	*/
+
+	/***
+	The character has been made the faction leader.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onBecomesFactionLeader
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBecomesFactionLeader(eventData)
+		print("Function: onBecomesFactionLeader()\n\tLeader: ".. eventData.character.fullName)
+	end
+	*/
+
+	/***
+	The character is no longer faction leader.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onCeasedFactionLeader
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCeasedFactionLeader(eventData)
+		--something
+	end
+	*/
+
+	/***
+	The character has been made a faction heir.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onBecomesFactionHeir
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBecomesFactionHeir(eventData)
+		print("Function: onBecomesFactionHeir()\n\tHeir: ".. eventData.character.fullName)
+	end
+	*/
+
+	/***
+	The character is no longer faction heir.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onCeasedFactionHeir
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCeasedFactionHeir(eventData)
+		print("Function: onCeasedFactionHeir()\n\tHeir: "..  eventData.character.fullName)
+	end
+	*/
+
+	/***
+	A character has been injured by a disaster.
+	Exports: character, faction, regionID, disasterType, characterType, religion
+	disasterTypes = earthquake, flood, horde, storm, volcano, dustbowl, locusts, famine, plague, riot, fire
+
+	@function onCharacterDamagedByDisaster
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCharacterDamagedByDisaster(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A General has captured a settlement.
+	Exports: character, settlement, targetSettlement, faction, targetFaction, regionID, characterType, religion
+
+	@function onGeneralCaptureSettlement
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGeneralCaptureSettlement(eventData)
+	--something
+	end
+	*/
+
+	/***
+	An assault has taken place.
+	Exports: character, faction, targetFaction, regionID, targetRegionID, characterType, religion, targetReligion
+
+	@function onGeneralAssaultsResidence
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGeneralAssaultsResidence(eventData)
+	--something
+	end
+	*/
+
+	/***
+	An assault has taken place.
+	Exports: character, targetCharacter, faction, targetFaction, regionID, characterType, targetCharacterType, religion, targetReligion
+
+	@function onGeneralAssaultsGeneral
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGeneralAssaultsGeneral(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A general on crusade/jihad has been attacked by other character (it includes crusading generals attacked in a residence or on navy and generals attacked by spotted and killed assassin).
+	Exports: character, targetCharacter, faction, targetFaction, regionID, characterType, targetCharacterType, religion, targetReligion
+
+	@function onCharacterAttacksCrusadingGeneral
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCharacterAttacksCrusadingGeneral(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A General of a captor faction has made a ransom decision.
+	Exports: character, faction, targetFaction, regionID, characterType, religion, targetReligion, captureInfo, ransomType
+
+	@function onGeneralPrisonersRansomedCaptor
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGeneralPrisonersRansomedCaptor(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A General of a captive faction has made a ransom decision.
+	Exports: character, faction, targetFaction, regionID, characterType, religion, targetReligion, captureInfo, ransomType
+
+	@function onGeneralPrisonersRansomedCaptive
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGeneralPrisonersRansomedCaptive(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A captor faction has made a ransom decision.
+	Exports: character, faction, targetFaction, regionID, characterType, religion, targetReligion, captureInfo, ransomType
+
+	@function onFactionLeaderPrisonersRansomedCaptor
+	@tparam eventTrigger eventData
+
+	@usage
+	function onFactionLeaderPrisonersRansomedCaptor(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A captive faction has made a ransom decision.
+	Exports: character, faction, targetFaction, regionID, characterType, religion, targetReligion, captureInfo, ransomType
+
+	@function onFactionLeaderPrisonersRansomedCaptive
+	@tparam eventTrigger eventData
+
+	@usage
+	function onFactionLeaderPrisonersRansomedCaptive(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A spy mission has completed. May also export fort or settlement if target was a garrison residence.
+	Exports: character, settlement, fort, faction, targetFaction, regionID, characterType, missionSuccessLevel, missionProbability, religion, targetReligion
+
+	@function onSpyMission
+	@tparam eventTrigger eventData
+
+	@usage
+	function onSpyMission(eventData)
+	--something
+	end
+	*/
+
+	/***
+	An assassination mission has completed.
+	Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
+
+	@function onAssassinationMission
+	@tparam eventTrigger eventData
+
+	@usage
+	function onAssassinationMission(eventData)
+	--something
+	end
+	*/
+
+	/***
+	An acquisition mission has completed.
+	Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
+
+	@function onAcquisitionMission
+	@tparam eventTrigger eventData
+
+	@usage
+	function onAcquisitionMission(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A marriage mission has completed.
+	Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
+
+	@function onMarriageMission
+	@tparam eventTrigger eventData
+
+	@usage
+	function onMarriageMission(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A denouncement mission has completed.
+	Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
+
+	@function onDenouncementMission
+	@tparam eventTrigger eventData
+
+	@usage
+	function onDenouncementMission(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A sabotage mission has completed.
+	Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
+
+	@function onSabotageMission
+	@tparam eventTrigger eventData
+
+	@usage
+	function onSabotageMission(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A bribery mission has completed.
+	Exports: character, faction, targetFaction, regionID, characterType, missionSuccessLevel, religion, targetReligion
+
+	@function onBriberyMission
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBriberyMission(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A diplomacy mission has completed.
+	Exports: character, faction, targetFaction, regionID, characterType, missionSuccessLevel, religion, targetReligion
+
+	@function onDiplomacyMission
+	@tparam eventTrigger eventData
+
+	@usage
+	function onDiplomacyMission(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A Faction leader has ordered a spying mission.
+	Exports: character, settlement, fort, faction, targetFaction, regionID, characterType, missionSuccessLevel, religion, targetReligion
+
+	@function onLeaderOrderedSpyingMission
+	@tparam eventTrigger eventData
+
+	@usage
+	function onLeaderOrderedSpyingMission(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A Faction leader has ordered an assassination mission.
+	Exports: character, targetCharacter, faction, regionID, characterType, missionSuccessLevel, religion
+
+	@function onLeaderOrderedAssassination
+	@tparam eventTrigger eventData
+
+	@usage
+	function onLeaderOrderedAssassination(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A Faction leader has ordered a bribery mission.
+	Exports: character, faction, regionID, characterType, religion
+
+	@function onLeaderOrderedBribery
+	@tparam eventTrigger eventData
+
+	@usage
+	function onLeaderOrderedBribery(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A settlement is being processed for the start of its faction's turn.
+	Exports: settlement, faction, regionID, religion
+
+	@function onSettlementTurnStart
+	@tparam eventTrigger eventData
+
+	@usage
+	function onSettlementTurnStart(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A settlement is no longer garrisoned.
+	Exports: settlement, faction, regionID, religion
+
+	@function onUngarrisonedSettlement
+	@tparam eventTrigger eventData
+
+	@usage
+	function onUngarrisonedSettlement(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has been upgraded.
+	Exports: settlement, faction, regionID, religion
+
+	@function onSettlementUpgraded
+	@tparam eventTrigger eventData
+
+	@usage
+	function onSettlementUpgraded(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has been converted.
+	Exports: settlement, faction, regionID, religion
+
+	@function onSettlementConverted
+	@tparam eventTrigger eventData
+
+	@usage
+	function onSettlementConverted(eventData)
+	--something
+	end
+	*/
+
+	/***
+	Siege equipment has been completed by one of the besieging armies.
+	Exports: settlement, faction, regionID, religion
+
+	@function onSiegeEquipmentCompleted
+	@tparam eventTrigger eventData
+
+	@usage
+	function onSiegeEquipmentCompleted(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A Settlement is being processed for the end of its faction's turn.
+	Exports: settlement, faction, regionID, religion
+
+	@function onSettlementTurnEnd
+	@tparam eventTrigger eventData
+
+	@usage
+	function onSettlementTurnEnd(eventData)
+	--something
+	end
+	*/
+
+	/***
+	The player has selected a settlement.
+	Exports: settlement, faction, regionID, religion
+
+	@function onSettlementSelected
+	@tparam eventTrigger eventData
+
+	@usage
+	function onSettlementSelected(eventData)
+	--something
+	end
+	*/
+
+	/***
+	The player has opened the panel for the selected settlement.
+	Exports: settlement, faction, regionID, religion
+
+	@function onSettlementPanelOpen
+	@tparam eventTrigger eventData
+
+	@usage
+	function onSettlementPanelOpen(eventData)
+	--something
+	end
+	*/
+
+	/***
+	The player has opened a recruitment panel.
+	Exports: settlement, faction, regionID, religion
+
+	@function onRecruitmentPanelOpen
+	@tparam eventTrigger eventData
+
+	@usage
+	function onRecruitmentPanelOpen(eventData)
+	--something
+	end
+	*/
+
+	/***
+	The player has opened a construction panel.
+	Exports: settlement, faction, regionID, religion
+
+	@function onConstructionPanelOpen
+	@tparam eventTrigger eventData
+
+	@usage
+	function onConstructionPanelOpen(eventData)
+	--something
+	end
+	*/
+
+	/***
+	The player has opened a trade panel.
+	Exports: settlement, faction, regionID, religion
+
+	@function onTradePanelOpen
+	@tparam eventTrigger eventData
+
+	@usage
+	function onTradePanelOpen(eventData)
+	--something
+	end
+	*/
+
+	/***
+	The player has requested advice on the settlement scroll.
+	Exports: settlement, faction, regionID, resourceDescription, religion
+
+	@function onSettlementScrollAdviceRequested
+	@tparam eventTrigger eventData
+
+	@usage
+	function onSettlementScrollAdviceRequested(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A guild has been created/upgraded.
+	Exports: settlement, faction, regionID, resourceDescription, guild, religion
+
+	@function onGuildUpgraded
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGuildUpgraded(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A guild has been destroyed.
+	Exports: settlement, faction, regionID, guild, religion
+
+	@function onGuildDestroyed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGuildDestroyed(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has been captured and occupied.
+	Exports: character, faction, targetFaction, regionID, characterType, religion, targetReligion
+
+	@function onOccupySettlement
+	@tparam eventTrigger eventData
+
+	@usage
+	function onOccupySettlement(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has been captured and sacked.
+	Exports: character, faction, targetFaction, regionID, characterType, religion, targetReligion
+
+	@function onSackSettlement
+	@tparam eventTrigger eventData
+
+	@usage
+	function onSackSettlement(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has been captured and some of its population has been decimated.
+	Exports: character, faction, targetFaction, regionID, characterType, religion, targetReligion
+
+	@function onExterminatePopulation
+	@tparam eventTrigger eventData
+	
+	@usage
+	function onExterminatePopulation(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has rioted.
+	Exports: settlement, faction, targetFaction, regionID, religion, targetReligion
+
+	@function onCityRiots
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCityRiots(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has been given to another faction.
+	Exports: settlement, faction, targetFaction, regionID, religion, targetReligion
+
+	@function onGiveSettlement
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGiveSettlement(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has rebelled.
+	Exports: settlement, faction, targetFaction, regionID, religion, targetReligion
+
+	@function onCityRebels
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCityRebels(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has been razed.
+	Exports: settlement, faction, targetFaction, regionID, religion, targetReligion
+
+	@function onCitySacked
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCitySacked(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has rioted.
+	Exports: character, settlement, faction, targetFaction, regionID, characterType, religion, targetReligion
+
+	@function onGovernorCityRiots
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGovernorCityRiots(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A settlement has rebelled.
+	Exports: character, settlement, faction, targetFaction, regionID, characterType, religion, targetReligion
+
+	@function onGovernorCityRebels
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGovernorCityRebels(eventData)
+	--something
+	end
+	*/
+
+	/***
+	The player has abandoned a show me scipt.
+
+	@function onAbandonShowMe
+	@tparam eventTrigger eventData
+
+	@usage
+	function onAbandonShowMe(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A strat map game has been reloaded.
+
+	@function onGameReloaded
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGameReloaded(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The plaza is being captured.
+
+	@function onBattleWinningPlaza
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleWinningPlaza(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The plaza capture has been stopped.
+
+	@function onBattleStopsWinningPlaza
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleStopsWinningPlaza(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The enemy will have captured the plaza in 30s.
+
+	@function onBattleDominatingPlaza
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleDominatingPlaza(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A siege engine is now unmanned.
+
+	@function onBattngineUnmanned
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattngineUnmanned(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	Half of the player's army has been destroyed.
+
+	@function onBattlePlayerArmyHalfDestroyed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattlePlayerArmyHalfDestroyed(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	Half of the enemy's army has been destroyed.
+
+	@function onBattnemyArmyHalfDestroyed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattnemyArmyHalfDestroyed(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The battle has finished.
+
+	@function onBattleFinished
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleFinished(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	Half of an army has been destroyed.
+
+	@function onBattleArmyHalfDestroyed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleArmyHalfDestroyed(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The escape key has been pressed. This trigger will only fire if the command StealEscKey has been used.
+
+	@function onEscPressed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onEscPressed(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has been issued with advice by a script.
+
+	@function onScriptedAdvice
+	@tparam eventTrigger eventData
+
+	@usage
+	function onScriptedAdvice(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has requested advice on the naval prebattle scroll.
+
+	@function onNavalPreBattleScrollAdviceRequested
+	@tparam eventTrigger eventData
+
+	@usage
+	function onNavalPreBattleScrollAdviceRequested(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has requested advice on the prebattle scroll.
+
+	@function onPreBattleScrollAdviceRequested
+	@tparam eventTrigger eventData
+
+	@usage
+	function onPreBattleScrollAdviceRequested(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has opened the college of cardinals panel.
+
+	@function onCollegeOfCardinalsPanelOpen
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCollegeOfCardinalsPanelOpen(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has opened the diplomatic standing panel.
+
+	@function onDiplomaticStandingPanelOpen
+	@tparam eventTrigger eventData
+
+	@usage
+	function onDiplomaticStandingPanelOpen(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	An idle unit is under missile fire.
+
+	@function onBattlePlayerUnderAttackIdle
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattlePlayerUnderAttackIdle(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A team has gained the advantage in combat.
+
+	@function onBattleWinningCombat
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleWinningCombat(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The whole army is tired.
+
+	@function onBattleArmyTired
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleArmyTired(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A different team is now the strongest.
+
+	@function onBattleTideofBattle
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleTideofBattle(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A unit has gone berserk.
+	Exports: unit
+
+	@function onBattleUnitGoesBerserk
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleUnitGoesBerserk(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A siege engine has been destroyed.
+	Exports: unit
+
+	@function onBattleSiegeEngineDestroyed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleSiegeEngineDestroyed(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A siege engine has docked with a wall.
+	Exports: unit
+
+	@function onBattleSiegeEngineDocksWall
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleSiegeEngineDocksWall(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	An engine has started attacking a gate.
+	Exports: unit
+
+	@function onBattleGatesAttackedByEngine
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleGatesAttackedByEngine(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	An engine has destroyed a gate.
+	Exports: unit
+
+	@function onBattleGatesDestroyedByEngine
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleGatesDestroyedByEngine(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A siege engine has knocked down a wall.
+	Exports: unit
+
+	@function onBattleWallsBreachedByEngine
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleWallsBreachedByEngine(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A wall has been captured.
+	Exports: unit
+
+	@function onBattleWallsCaptured
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleWallsCaptured(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A unit has routed.
+	Exports: unit
+
+	@function onBattleUnitRouts
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleUnitRouts(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A unit has been disbanded.
+	Exports: faction, playerUnit, eduEntry, religion
+
+	@function onUnitDisbanded
+	@tparam eventTrigger eventData
+
+	@usage
+	function onUnitDisbanded(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A unit has been trained.
+	Exports: settlement, faction, playerUnit, eduEntry, religion
+
+	@function onUnitTrained
+	@tparam eventTrigger eventData
+
+	@usage
+	function onUnitTrained(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A unit has been trained.
+	Exports: character, settlement, faction, regionID, playerUnit, eduEntry, characterType, religion
+
+	@function onGovernorUnitTrained
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGovernorUnitTrained(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A building has been completed.
+	Exports: character, settlement, faction, regionID, priorBuild, characterType, religion
+
+	@function onGovernorBuildingCompleted
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGovernorBuildingCompleted(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	An agent has been trained.
+	Exports: character, settlement, faction, regionID, characterType, religion
+
+	@function onAgentCreated
+	@tparam eventTrigger eventData
+
+	@usage
+	function onAgentCreated(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	An agent has been trained.
+	Exports: character, settlement, faction, regionID, characterType, religion
+
+	@function onGovernorAgentCreated
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGovernorAgentCreated(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A building has been destroyed.
+	Exports: settlement, faction, regionID, resourceDescription, religion
+
+	@function onBuildingDestroyed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBuildingDestroyed(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A building has been added to the construction queue.
+	Exports: settlement, faction, regionID, resourceDescription, religion
+
+	@function onAddedToBuildingQueue
+	@tparam eventTrigger eventData
+
+	@usage
+	function onAddedToBuildingQueue(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A building has been completed.
+	Exports: settlement, faction, priorBuild, religion
+
+	@function onBuildingCompleted
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBuildingCompleted(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has requested building advice.
+	Exports: settlement, faction, regionID, religion
+
+	@function onRequestBuildingAdvice
+	@tparam eventTrigger eventData
+
+	@usage
+	function onRequestBuildingAdvice(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has requested training advice.
+	Exports: settlement, faction, regionID, religion
+
+	@function onRequestTrainingAdvice
+	@tparam eventTrigger eventData
+
+	@usage
+	function onRequestTrainingAdvice(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A unit has been added to the training queue.
+	Exports: settlement, faction, regionID, resourceDescription, religion
+
+	@function onAddedToTrainingQueue
+	@tparam eventTrigger eventData
+
+	@usage
+	function onAddedToTrainingQueue(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	An army has been entirely routed.
+	Exports: army
+
+	@function onBattleArmyRouted
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleArmyRouted(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A reinforcing army has arrived on the battlefield.
+	Exports: army
+
+	@function onBattleReinforcementsArrive
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleReinforcementsArrive(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has requested mercenaries advice.
+	Exports: army
+
+	@function onRequestMercenariesAdvice
+	@tparam eventTrigger eventData
+
+	@usage
+	function onRequestMercenariesAdvice(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has clicked on a button.
+	Exports: resourceDescription
+
+	@function onButtonPressed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onButtonPressed(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player triggered a keyboard shortcut.
+	Exports: resourceDescription
+
+	@function onShortcutTriggered
+	@tparam eventTrigger eventData
+
+	@usage
+	function onShortcutTriggered(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A special UI Element is visible.
+	Exports: resourceDescription
+
+	@function onUIElementVisible
+	@tparam eventTrigger eventData
+
+	@usage
+	function onUIElementVisible(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player opened a scroll.
+	Exports: resourceDescription
+
+	@function onScrollOpened
+	@tparam string eventData
+
+	@usage
+	function onScrollOpened(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player closed a scroll.
+	Exports: resourceDescription
+
+	@function onScrollClosed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onScrollClosed(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has requested advice on a scroll.
+	Exports: resourceDescription
+
+	@function onScrollAdviceRequested
+	@tparam eventTrigger eventData
+
+	@usage
+	function onScrollAdviceRequested(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has suppressed a piece of advice.
+	Exports: resourceDescription
+
+	@function onAdviceSupressed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onAdviceSupressed(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A general has been routed.
+	Exports: stratCharacter, character
+
+	@function onBattleGeneralRouted
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleGeneralRouted(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A general has been killed.
+	Exports: stratCharacter
+
+	@function onBattleGeneralKilled
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleGeneralKilled(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A Crusade/Jihad has been called.
+	Exports: targetSettlement, targetFaction, targetRegionID, targetReligion, crusade
+
+	@function onCrusadeCalled
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCrusadeCalled(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The Pope has accepted the player's crusade target.
+	Exports: targetSettlement, targetFaction, targetRegionID, targetReligion, crusade
+
+	@function onPopeAcceptsCrusadeTarget
+	@tparam eventTrigger eventData
+
+	@usage
+	function onPopeAcceptsCrusadeTarget(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The Pope has rejected the player's crusade target.
+	Exports: targetSettlement, targetFaction, targetRegionID, targetReligion, crusade
+
+	@function onPopeRejectsCrusadeTarget
+	@tparam eventTrigger eventData
+
+	@usage
+	function onPopeRejectsCrusadeTarget(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A Crusade/Jihad has ended.
+	Exports: targetSettlement, targetRegionID, crusade
+
+	@function onCrusadeEnds
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCrusadeEnds(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	Called before the faction's turn starts.
+	Exports: faction, religion
+
+	@function onPreFactionTurnStart
+	@tparam eventTrigger eventData
+
+	@usage
+	function onPreFactionTurnStart(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	Called at a faction's turn start.
+	Exports: faction, religion
+
+	@function onFactionTurnStart
+	@tparam eventTrigger eventData
+
+	@usage
+	function onFactionTurnStart(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	Called after faction changes to a new capital.
+	Exports: faction, religion
+
+	@function onFactionNewCapital
+	@tparam eventTrigger eventData
+
+	@usage
+	function onFactionNewCapital(eventData)
+	newCapital=fac.capital();
+	end
+	*/
+
+	/***
+	Called at a faction's turn end.
+	Exports: faction, religion
+
+	@function onFactionTurnEnd
+	@tparam eventTrigger eventData
+
+	@usage
+	function onFactionTurnEnd(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A Faction has voted for the new pope.
+	Exports: faction, religion
+
+	@function onVotedForPope
+	@tparam eventTrigger eventData
+
+	@usage
+	function onVotedForPope(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A Faction has been excommunicated.
+	Exports: faction, religion
+
+	@function onFactionExcommunicated
+	@tparam eventTrigger eventData
+
+	@usage
+	function onFactionExcommunicated(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A Faction has formed a horde.
+	Exports: faction, religion
+
+	@function onHordeFormed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onHordeFormed(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A cardinal has been removed from the game.
+	Exports: faction, religion
+
+	@function onCardinalRemoved
+	@tparam eventTrigger eventData
+
+	@usage
+	function onCardinalRemoved(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	An inquisitor has been dispatched to a region.
+	Exports: faction, religion
+
+	@function onInquisitorAppointed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onInquisitorAppointed(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	An assassination mission against the pope has failed and the assassin is executed.
+	Exports: faction, religion
+
+	@function onAssassinCaughtAttackingPope
+	@tparam eventTrigger eventData
+
+	@usage
+	function onAssassinCaughtAttackingPope(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has opened his finances panel.
+	Exports: faction, religion
+
+	@function onFinancesPanelOpen
+	@tparam eventTrigger eventData
+
+	@usage
+	function onFinancesPanelOpen(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has opened the faction summary panel.
+	Exports: faction, religion
+
+	@function onFactionSummaryPanelOpen
+	@tparam eventTrigger eventData
+
+	@usage
+	function onFactionSummaryPanelOpen(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has opened the family tree panel.
+	Exports: faction, religion
+
+	@function onFamilyTreePanelOpen
+	@tparam eventTrigger eventData
+
+	@usage
+	function onFamilyTreePanelOpen(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has opened the diplomatic standing panel.
+	Exports: faction, religion
+
+	@function onDiplomacyPanelOpen
+	@tparam eventTrigger eventData
+
+	@usage
+	function onDiplomacyPanelOpen(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has attacked an army or settlement. The decision panel is now open.
+	Exports: faction, religion
+
+	@function onPreBattlePanelOpen
+	@tparam eventTrigger eventData
+
+	@usage
+	function onPreBattlePanelOpen(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A message has arrived for the player.
+	Exports: faction, eventID, religion
+
+	@function onIncomingMessage
+	@tparam eventTrigger eventData
+
+	@usage
+	function onIncomingMessage(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has opened a message.
+	Exports: faction, eventID, religion
+
+	@function onMessageOpen
+	@tparam eventTrigger eventData
+
+	@usage
+	function onMessageOpen(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has closed a message.
+	Exports: eventID
+
+	@function onMessageClosed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onMessageClosed(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The player has declined automated settlement management.
+	Exports: faction, religion
+
+	@function onDeclineAutomatedSettlementManagement
+	@tparam eventTrigger eventData
+
+	@usage
+	function onDeclineAutomatedSettlementManagement(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The battle AI has begun processing.
+	Exports: faction, religion
+
+	@function onBattleAiCommenced
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleAiCommenced(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The delay phase has begun.
+	Exports: faction, religion
+
+	@function onBattleDelayPhaseCommenced
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleDelayPhaseCommenced(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The deployment phase has begun.
+	Exports: faction, religion
+
+	@function onBattleDeploymentPhaseCommenced
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleDeploymentPhaseCommenced(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	The conflict phase has begun.
+	Exports: faction, religion
+
+	@function onBattleConflictPhaseCommenced
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleConflictPhaseCommenced(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	Called after a faction declares a war.
+	Exports: faction, targetFaction, religion, targetReligion
+
+	@function onFactionWarDeclared
+	@tparam eventTrigger eventData
+
+	@usage
+	function onFactionWarDeclared(eventData)
+	--something
+	end
+	*/
+
+	/***
+	Called after a faction declares an alliance.
+	Exports: faction, targetFaction, religion, targetReligion
+
+	@function onFactionAllianceDeclared
+	@tparam eventTrigger eventData
+
+	@usage
+	function onFactionAllianceDeclared(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A marriage has occured between two factions. gets fired for both factions involved.
+	Exports: faction, targetFaction, religion, targetReligion
+
+	@function onInterFactionMarriage
+	@tparam eventTrigger eventData
+
+	@usage
+	function onInterFactionMarriage(eventData)
+	--something
+	end
+	*/
+
+	/***
+	Called after a faction makes a trade agreement.
+	Exports: faction, targetFaction, religion, targetReligion
+
+	@function onFactionTradeAgreementMade
+	@tparam eventTrigger eventData
+
+	@usage
+	function onFactionTradeAgreementMade(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A new pope has been elected.
+	Exports: faction, targetFaction, religion, targetReligion
+
+	@function onPopeElected
+	@tparam eventTrigger eventData
+
+	@usage
+	function onPopeElected(eventData)
+	--something
+	end
+	*/
+
+	/***
+	Called after a faction breaks an alliance.
+	Exports: faction, targetFaction, religion, targetReligion
+
+	@function onFactionBreakAlliance
+	@tparam eventTrigger eventData
+
+	@usage
+	function onFactionBreakAlliance(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A faction to faction attitude update has occurred (once every round).
+	Exports: faction, targetFaction, religion
+
+	@function onUpdateAttitude
+	@tparam eventTrigger eventData
+
+	@usage
+	function onUpdateAttitude(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A demeanour response has occured in diplomacy talks.
+	Exports: faction, targetFaction, religion, targetReligion, amount
+
+	@function onDemeanour
+	@tparam eventTrigger eventData
+
+	@usage
+	function onDemeanour(eventData)
+	--something
+	end
+	*/
+
+	/***
+	Called after a faction gives money to another faction.
+	Exports: faction, targetFaction, religion, targetReligion, amount
+
+	@function onGiveMoney
+	@tparam eventTrigger eventData
+
+	@usage
+	function onGiveMoney(eventData)
+	--something
+	end
+	*/
+
+	/***
+	A player unit has attacked one of the enemies units.
+	Exports: attackingUnit, defendingUnit, playerUnit, enemyUnit
+
+	@function onBattlePlayerUnitAttacksEnemyUnit
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattlePlayerUnitAttacksEnemyUnit(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	An enemy unit has attacked one of the players units.
+	Exports: attackingUnit, defendingUnit, playerUnit, enemyUnit
+
+	@function onBattleEnemyUnitAttacksPlayerUnit
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleEnemyUnitAttacksPlayerUnit(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	One of the player's units has gone berserk.
+	Exports: playerUnit
+
+	@function onBattlePlayerUnitGoesBerserk
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattlePlayerUnitGoesBerserk(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	One of the player's units has routed.
+	Exports: playerUnit
+
+	@function onBattlePlayerUnitRouts
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattlePlayerUnitRouts(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A siege engine belonging to the player has been destroyed.
+	Exports: playerUnit
+
+	@function onBattlePlayerSiegeEngineDestroyed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattlePlayerSiegeEngineDestroyed(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A player's engine has started attacking a gate.
+	Exports: playerUnit
+
+	@function onBattleGatesAttackedByPlayerEngine
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleGatesAttackedByPlayerEngine(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	One of the enemy's units has gone berserk.
+	Exports: enemyUnit
+
+	@function onBattleEnemyUnitGoesBerserk
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleEnemyUnitGoesBerserk(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	One of the enemy's units has routed.
+	Exports: enemyUnit
+
+	@function onBattnemyUnitRouts
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattnemyUnitRouts(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A siege engine belonging to the enemy has been destroyed.
+	Exports: enemyUnit
+
+	@function onBattnemySiegeEngineDestroyed
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattnemySiegeEngineDestroyed(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	An enemy's engine has started attacking a gate.
+	Exports: enemyUnit
+
+	@function onBattleGatesAttackedByEnemyEngine
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleGatesAttackedByEnemyEngine(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	When a particular disaster has just happened.
+	Exports: resourceDescription
+
+	@function onDisaster
+	@tparam eventTrigger eventData
+
+	@usage
+	function onDisaster(eventData)
+		if eventData.resourceDescription == "earthquake" then
+			--something here
+		end
+	end
+	*/
+
+	/***
+	An event counter has changed it's value.
+	Exports: eventCounter
+
+	@function onEventCounter
+	@tparam eventTrigger eventData
+
+	@usage
+	function onEventCounter(eventData)
+		if eventData.eventCounter == "my_event_counter" then
+			--something here
+		end
+	end
+	*/
+
+	/***
+	The last unit has been removed from a fort, agents do not count.
+	Exports: fort, faction, regionID, religion
+
+	@function onUngarrisonedFort
+	@tparam eventTrigger eventData
+
+	@usage
+	function onUngarrisonedFort(eventData)
+		--something here
+	end
+	*/
+
+	/***
+	An object of the target faction has been seen by the faction.
+	Exports: faction, targetFaction, regionID, coords, religion
+
+	@function onObjSeen
+	@tparam eventTrigger eventData
+
+	@usage
+	function onObjSeen(eventData)
+		--something here
+	end
+	*/
+
+	/***
+	The tile has been seen by the faction.
+	Exports: faction, regionID, coords, religion
+
+	@function onTileSeen
+	@tparam eventTrigger eventData
+
+	@usage
+	function onTileSeen(eventData)
+		--something here
+	end
+	*/
+
+	/***
+	A faction to faction transgression has occurred.
+	Exports: faction, targetFaction, resourceDescription, religion, targetReligion
+	transgressions: TC_THREATEN_WAR, TC_DECLARED_WAR, TC_MINOR_ASSASSINATION_ATTEMPT, TC_BROKE_TREATY_TERMS, TC_BROKE_ALLIANCE, TC_INVASION
+
+	@function onTransgression
+	@tparam eventTrigger eventData
+
+	@usage
+	function onTransgression(eventData)
+		--something here
+	end
+	*/
+
+	/***
+	A faction to faction forgiveness has occurred.
+	Exports: faction, targetFaction, resourceDescription, religion
+	forgiveness: FC_MILITARY_ASSISTANCE, FC_OBVIOUS_BRIBE
+
+	@function onForgiveness
+	@tparam eventTrigger eventData
+
+	@usage
+	function onForgiveness(eventData)
+		--something here
+	end
+	*/
+
+	/***
+	An army has taken a crusade or jihad target settlement.
+	Exports: targetSettlement, faction, targetFaction, army, regionID, targetRegionID, coords, religion, targetReligion, crusade
+
+	@function onArmyTakesCrusadeTarget
+	@tparam eventTrigger eventData
+
+	@usage
+	function onArmyTakesCrusadeTarget(eventData)
+		--something here
+	end
+	*/
+
+	/***
+	Units have deserted a crusade or jihad.
+	Exports: targetSettlement, faction, targetFaction, targetRegionID, religion, targetReligion, crusade
+
+	@function onUnitsDesertCrusade
+	@tparam eventTrigger eventData
+
+	@usage
+	function onUnitsDesertCrusade(eventData)
+		--something here
+	end
 	*/
 
 
@@ -197,6 +2980,22 @@ void luaP::onPluginLoadF()
 
 	onReadGameDbsAtStart = new sol::function(luaState["onReadGameDbsAtStart"]);
 	checkLuaFunc(&onReadGameDbsAtStart);
+
+	/***
+	Called after the game loads various db`s (edu, etc) at startup.
+
+	@function onGameInit
+
+	@usage
+	function onGameInit()
+	--something here
+	end
+	*/
+
+
+
+	onGameInit = new sol::function(luaState["onGameInit"]);
+	checkLuaFunc(&onGameInit);
 
 	/***
 	Called on clicking the stratmap.
@@ -407,1318 +3206,6 @@ void luaP::onPluginLoadF()
 	*/
 	onStartSiege = new sol::function(luaState["onStartSiege"]);
 	checkLuaFunc(&onStartSiege);
-	/***
-	A character has been selected by any means (including through the UI).
-
-	@function onCharacterSelected
-	@tparam namedCharacter selectedChar
-
-	@usage
-	function onCharacterSelected(selectedChar)
-	--something here
-	end
-	*/
-	onCharacterSelectedFunc = new sol::function(luaState["onCharacterSelected"]);
-	checkLuaFunc(&onCharacterSelectedFunc);
-
-	/***
-	Called before the faction's turn starts.
-
-	@function onPreFactionTurnStart
-	@tparam factionStruct faction
-
-	@usage
-	function onPreFactionTurnStart(fac)
-	--something here
-	end
-	*/
-	onPreFactionTurnStartFunc = new sol::function(luaState["onPreFactionTurnStart"]);
-	checkLuaFunc(&onPreFactionTurnStartFunc);
-
-	/***
-	Called at a faction's turn start.
-
-	@function onFactionTurnStart
-	@tparam factionStruct faction
-
-	@usage
-	function onFactionTurnStart(fac)
-	--something here
-	end
-	*/
-	onFactionTurnStartFunc = new sol::function(luaState["onFactionTurnStart"]);
-	checkLuaFunc(&onFactionTurnStartFunc);
-
-	/***
-	Called when a general devastates a tile.
-
-	@function onGeneralDevastatesTile
-	@tparam namedCharacter gen
-
-	@usage
-	function onGeneralDevastatesTile(gen)
-	--something here
-	end
-	*/
-	onGeneralDevastatesTileFunc = new sol::function(luaState["onGeneralDevastatesTile"]);
-	checkLuaFunc(&onGeneralDevastatesTileFunc);
-
-	/***
-	Called at a faction's turn end.
-
-	@function onFactionTurnEnd
-	@tparam factionStruct faction
-
-	@usage
-	function onFactionTurnEnd(fac)
-	--something here
-	end
-	*/
-	onFactionTurnEndFunc = new sol::function(luaState["onFactionTurnEnd"]);
-	checkLuaFunc(&onFactionTurnEndFunc);
-
-	/***
-	Called after faction changes to a new capital.
-
-	@function onFactionNewCapital
-	@tparam factionStruct faction
-
-	@usage
-	function onFactionNewCapital(fac)
-	newCapital=fac.capital();
-	end
-	*/
-	onFactionNewCapitalFunc = new sol::function(luaState["onFactionNewCapital"]);
-	checkLuaFunc(&onFactionNewCapitalFunc);
-
-	/***
-	Called after a faction declares a war.
-
-	@function onFactionWarDeclared
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-
-	@usage
-	function onFactionWarDeclared(faction,targetFaction)
-	--something
-	end
-	*/
-	onFactionWarDeclaredFunc = new sol::function(luaState["onFactionWarDeclared"]);
-	checkLuaFunc(&onFactionWarDeclaredFunc);
-
-	/***
-	Called after a faction declares an alliance.
-
-	@function onFactionAllianceDeclared
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-
-	@usage
-	function onFactionAllianceDeclared(faction,targetFaction)
-	--something
-	end
-	*/
-
-	onFactionAllianceDeclaredFunc = new sol::function(luaState["onFactionAllianceDeclared"]);
-	checkLuaFunc(&onFactionAllianceDeclaredFunc);
-
-	/***
-	Called after a faction makes a trade agreement.
-
-	@function onFactionTradeAgreementMade
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-
-	@usage
-	function onFactionTradeAgreementMade(faction,targetFaction)
-	--something
-	end
-	*/
-
-	onFactionTradeAgreementMadeFunc = new sol::function(luaState["onFactionTradeAgreementMade"]);
-	checkLuaFunc(&onFactionTradeAgreementMadeFunc);
-
-	/***
-	Called after a faction breaks an alliance.
-
-	@function onFactionBreakAlliance
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-
-	@usage
-	function onFactionBreakAlliance(faction,targetFaction)
-	--something
-	end
-	*/
-
-
-	onFactionBreakAllianceFunc = new sol::function(luaState["onFactionBreakAlliance"]);
-	checkLuaFunc(&onFactionBreakAllianceFunc);
-
-
-	/***
-	Called after a faction gives money to another faction.
-
-	@function onGiveMoney
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam int amount
-
-	@usage
-	function onGiveMoney(faction,targetFaction,amount)
-	--something
-	end
-	*/
-
-
-	onGiveMoneyFunc = new sol::function(luaState["onGiveMoney"]);
-	checkLuaFunc(&onGiveMoneyFunc);
-
-
-	/***
-	Called after a faction updates it's attitude towards another faction.
-
-	@function onUpdateAttitude
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-
-	@usage
-	function onUpdateAttitude(faction,targetFaction)
-	--something
-	end
-	*/
-
-	onUpdateAttitudeFunc = new sol::function(luaState["onUpdateAttitude"]);
-	checkLuaFunc(&onUpdateAttitudeFunc);
-
-	/***
-	A demeanour response has occured in diplomacy talks.
-
-	@function onDemeanour
-	@tparam factionStruct faction
-	@tparam factionStruct targetFaction
-	@tparam float amount
-
-	@usage
-	function onDemeanour(faction,targetFaction,amount)
-	--something
-	end
-	*/
-
-	onDemeanourFunc = new sol::function(luaState["onDemeanour"]);
-	checkLuaFunc(&onDemeanourFunc);
-
-	/***
-	A general has attacked another general.
-
-	@function onGeneralAssaultsGeneral
-	@tparam namedCharacter attacker
-	@tparam namedCharacter defender
-
-	@usage
-	function onGeneralAssaultsGeneral(attacker,defender)
-	--something
-	end
-	*/
-
-	onGeneralAssaultsGeneralFunc = new sol::function(luaState["onGeneralAssaultsGeneral"]);
-	checkLuaFunc(&onGeneralAssaultsGeneralFunc);
-
-	/***
-	An assault has taken place.
-
-	@function onGeneralAssaultsResidence
-	@tparam namedCharacter attacker
-	@tparam settlementStruct settlement nil if it is fort
-	@tparam fortStruct fort nil if it is settlement
-
-	@usage
-	function onGeneralAssaultsResidence(attacker,settlement,fort)
-		if(settlement~=nil)
-		then
-			-settlement
-		else
-			-fort
-		end
-
-	end
-	*/
-
-	onGeneralAssaultsResidenceFunc = new sol::function(luaState["onGeneralAssaultsResidence"]);
-	checkLuaFunc(&onGeneralAssaultsResidenceFunc);
-
-	/***
-	A General has captured a settlement.
-
-	@function onGeneralCaptureSettlement
-	@tparam namedCharacter attacker
-	@tparam settlementStruct settlement
-
-	@usage
-	function onGeneralCaptureSettlement(attacker,settlement)
-	--something
-	end
-	*/
-
-	onGeneralCaptureSettlementFunc = new sol::function(luaState["onGeneralCaptureSettlement"]);
-	checkLuaFunc(&onGeneralCaptureSettlementFunc);
-
-	/***
-	A General has captured a residence such as a fort or watchtower.
-
-	@function onGeneralCaptureResidence
-	@tparam namedCharacter attacker
-
-	@usage
-	function onGeneralCaptureResidence(attacker)
-	--something
-	end
-	*/
-
-	onGeneralCaptureResidenceFunc = new sol::function(luaState["onGeneralCaptureResidence"]);
-	checkLuaFunc(&onGeneralCaptureResidenceFunc);
-
-	/***
-	Siege equipment has been completed by one of the sieging armies at this residence.
-
-	@function onSiegeEquipmentCompleted
-	@tparam settlementStruct settlement nil if it is fort
-	@tparam fortStruct fort nil if it is settlement
-
-	@usage
-	--something
-	*/
-
-	onSiegeEquipmentCompletedFunc = new sol::function(luaState["onSiegeEquipmentCompleted"]);
-	checkLuaFunc(&onSiegeEquipmentCompletedFunc);
-
-	/***
-	When a battle has finished.
-
-	@function onPostBattle
-	@tparam namedCharacter character
-
-	@usage
-	--something
-	*/
-
-	onPostBattleFunc = new sol::function(luaState["onPostBattle"]);
-	checkLuaFunc(&onPostBattleFunc);
-
-	/***
-	The player has attempted to move a character beyond that character's given movement range for that turn.
-
-	@function onMultiTurnMove
-	@tparam namedCharacter character
-
-	@usage
-	--something
-	*/
-
-	onMultiTurnMoveFunc = new sol::function(luaState["onMultiTurnMove"]);
-	checkLuaFunc(&onMultiTurnMoveFunc);
-
-	/***
-	A settlement has been selected by any means (including through the UI).
-
-	@function onSettlementSelected
-	@tparam settlementStruct settlement
-
-	@usage
-	function onSettlementSelected(settlement)
-		print("Function: onSettlementSelected()\n\tSettlement: "..settlement.name)
-	end
-	*/
-
-	onSettlementSelectedFunc = new sol::function(luaState["onSettlementSelected"]);
-	checkLuaFunc(&onSettlementSelectedFunc);
-
-	/***
-	A settlement's level has been increased.
-
-	@function onSettlementUpgraded
-	@tparam settlementStruct settlement
-
-	@usage
-	function onSettlementUpgraded(settlement)
-		print("Function: onSettlementUpgraded()\n\tSettlement Level: "..settlement.level)
-	end
-	*/
-
-	onSettlementUpgradedFunc = new sol::function(luaState["onSettlementUpgraded"]);
-	checkLuaFunc(&onSettlementUpgradedFunc);
-
-	/***
-	A settlement converted between city and castle and vice-versa.
-
-	@function onSettlementConverted
-	@tparam settlementStruct settlement
-
-	@usage
-	function onSettlementConverted(settlement)
-		if settlement.isCastle == 1 then
-			--do stuff
-		end
-	end
-	*/
-
-	onSettlementConvertedFunc = new sol::function(luaState["onSettlementConverted"]);
-	checkLuaFunc(&onSettlementConvertedFunc);
-
-	/***
-	A settlement has rioted.
-
-	@function onCityRiots
-	@tparam settlementStruct settlement
-
-	@usage
-	--something
-	*/
-
-	onCityRiotsFunc = new sol::function(luaState["onCityRiots"]);
-	checkLuaFunc(&onCityRiotsFunc);
-
-	/***
-	The last unit has been removed from a settlement, agents do not count.
-
-	@function onUngarrisonedSettlement
-	@tparam settlementStruct settlement
-
-	@usage
-	--something
-	*/
-
-	onUngarrisonedSettlementFunc = new sol::function(luaState["onUngarrisonedSettlement"]);
-	checkLuaFunc(&onUngarrisonedSettlementFunc);
-
-	/***
-	The last unit has been removed from a fort, agents do not count.
-
-	@function onUngarrisonedFort
-	@tparam fortStruct fort
-
-	@usage
-	--something
-	*/
-
-	onUngarrisonedFortFunc = new sol::function(luaState["onUngarrisonedFort"]);
-	checkLuaFunc(&onUngarrisonedFortFunc);
-
-	/***
-	A settlement has been given to another faction.
-
-	@function onGiveSettlement
-	@tparam settlementStruct settlement
-	@tparam factionStruct fac1
-	@tparam factionStruct fac2
-
-
-	@usage
-	--something
-	*/
-
-	onGiveSettlementFunc = new sol::function(luaState["onGiveSettlement"]);
-	checkLuaFunc(&onGiveSettlementFunc);
-
-	/***
-	A general has captured a settlement and the occupy option has been chosen
-
-	@function onOccupySettlement
-	@tparam namedCharacter character only generals, event does not fire for captains
-	@tparam factionStruct targetFaction
-
-	@usage
-	--something
-	*/
-
-	onOccupySettlementFunc = new sol::function(luaState["onOccupySettlement"]);
-	checkLuaFunc(&onOccupySettlementFunc);
-
-	/***
-	A general has captured a settlement and the exterminate option has been chosen.
-
-	@function onExterminatePopulation
-	@tparam namedCharacter character only generals, event does not fire for captains
-	@tparam factionStruct targetFaction
-
-
-	@usage
-	--something
-	*/
-
-	onExterminatePopulationFunc = new sol::function(luaState["onExterminatePopulation"]);
-	checkLuaFunc(&onExterminatePopulationFunc);
-
-	/***
-	A general has captured a settlement and the sack option has been chosen.
-
-	@function onSackSettlement
-	@tparam namedCharacter character only generals, event does not fire for captains
-	@tparam factionStruct targetFaction
-
-
-	@usage
-	--something
-	*/
-
-	onSackSettlementFunc = new sol::function(luaState["onSackSettlement"]);
-	checkLuaFunc(&onSackSettlementFunc);
-
-	/***
-	A building has been added to the construction queue.
-
-	@function onAddedToBuildingQueue
-	@tparam settlementStruct settlement
-	@tparam string buildNme level name
-
-
-	@usage
-	--something
-	*/
-
-	onAddedToBuildingQueueFunc = new sol::function(luaState["onAddedToBuildingQueue"]);
-	checkLuaFunc(&onAddedToBuildingQueueFunc);
-
-	/***
-	A building has been destroyed.
-
-	@function onBuildingDestroyed
-	@tparam settlementStruct settlement
-	@tparam string buildNme level name
-
-
-	@usage
-	--something
-	*/
-
-	onBuildingDestroyedFunc = new sol::function(luaState["onBuildingDestroyed"]);
-	checkLuaFunc(&onBuildingDestroyedFunc);
-
-	/***
-	A building has been completed.
-
-	@function onBuildingCompleted
-	@tparam factionStruct fac
-	@tparam settlementStruct settlement
-
-	@usage
-	--something
-	*/
-
-	onBuildingCompletedFunc = new sol::function(luaState["onBuildingCompleted"]);
-	checkLuaFunc(&onBuildingCompletedFunc);
-
-	/***
-	An event counter has changed it's value.
-
-	@function onEventCounter
-	@tparam string counter
-
-	@usage
-	--something
-	*/
-
-	onEventCounterFunc = new sol::function(luaState["onEventCounter"]);
-	checkLuaFunc(&onEventCounterFunc);
-
-	/***
-	When a faction is excommunicated by the Pope.
-
-	@function onFactionExcommunicated
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onFactionExcommunicatedFunc = new sol::function(luaState["onFactionExcommunicated"]);
-	checkLuaFunc(&onFactionExcommunicatedFunc);
-
-	/***
-	When a particular disaster has just happened.
-
-	@function onDisaster
-	@tparam int eventType (earthquake, flood, horde, fire, riot, storm, volcano), Don't know enum order!
-
-	@usage
-	--something
-	*/
-
-	onDisasterFunc = new sol::function(luaState["onDisaster"]);
-	checkLuaFunc(&onDisasterFunc);
-
-	/***
-	A Faction has formed a horde.
-
-	@function onHordeFormed
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onHordeFormedFunc = new sol::function(luaState["onHordeFormed"]);
-	checkLuaFunc(&onHordeFormedFunc);
-
-	/***
-	A unit has been added to the training queue.
-
-	@function onAddedToTrainingQueue
-	@tparam settlementStruct sett
-	@tparam string unitName
-
-	@usage
-	--something
-	*/
-
-	onAddedToTrainingQueueFunc = new sol::function(luaState["onAddedToTrainingQueue"]);
-	checkLuaFunc(&onAddedToTrainingQueueFunc);
-
-	/***
-	A unit has been disbanded.
-
-	@function onUnitDisbanded
-	@tparam factionStruct fac
-	@tparam unit unit
-
-	@usage
-	--something
-	*/
-
-	onUnitDisbandedFunc = new sol::function(luaState["onUnitDisbanded"]);
-	checkLuaFunc(&onUnitDisbandedFunc);
-
-	/***
-	A unit has been trained.
-
-	@function onUnitTrained
-	@tparam factionStruct fac
-	@tparam settlementStruct sett
-	@tparam unit unit
-
-	@usage
-	--something
-	*/
-
-	onUnitTrainedFunc = new sol::function(luaState["onUnitTrained"]);
-	checkLuaFunc(&onUnitTrainedFunc);
-
-	/***
-	An agent has been trained.
-
-	@function onAgentCreated
-	@tparam namedCharacter character
-	@tparam int agentType see @{character:setTypeID} for list of type integers
-	@tparam settlementStruct sett
-
-	@usage
-	--something
-	*/
-
-	onAgentCreatedFunc = new sol::function(luaState["onAgentCreated"]);
-	checkLuaFunc(&onAgentCreatedFunc);
-
-	/***
-	An object of the target faction has been seen by the faction.
-
-	@function onObjSeen
-	@tparam factionStruct fac Faction that saw the object.
-	@tparam factionStruct targetFac Faction that owns the object.
-	@tparam int xCoord
-	@tparam int yCoord
-
-	@usage
-	--something
-	*/
-
-	onObjSeenFunc = new sol::function(luaState["onObjSeen"]);
-	checkLuaFunc(&onObjSeenFunc);
-
-	/***
-	The tile has been seen by the faction.
-
-	@function onTileSeen
-	@tparam factionStruct fac
-	@tparam int xCoord
-	@tparam int yCoord
-
-	@usage
-	--something
-	*/
-
-	onTileSeenFunc = new sol::function(luaState["onTileSeen"]);
-	checkLuaFunc(&onTileSeenFunc);
-
-	/***
-	The game has been reloaded while on the strategy map.
-
-	@function onGameReloaded
-	@tparam int something
-
-	@usage
-	--something
-	*/
-
-	onGameReloadedFunc = new sol::function(luaState["onGameReloaded"]);
-	checkLuaFunc(&onGameReloadedFunc);
-
-	/***
-	A faction to faction transgression has occurred.
-
-	@function onTransgression
-	@tparam factionStruct fac
-	@tparam string description
-	@tparam factionStruct targetFac
-
-	@usage
-	--something
-	*/
-
-	onTransgressionFunc = new sol::function(luaState["onTransgression"]);
-	checkLuaFunc(&onTransgressionFunc);
-
-	/***
-	The Pope has accepted the player's crusade target. Deus Vult!
-
-	@function onPopeAcceptsCrusadeTarget
-	@tparam crusadeStruct crusade
-	@tparam settlementStruct target
-
-	@usage
-	--something
-	*/
-
-	onPopeAcceptsCrusadeTargetFunc = new sol::function(luaState["onPopeAcceptsCrusadeTarget"]);
-	checkLuaFunc(&onPopeAcceptsCrusadeTargetFunc);
-
-	/***
-	A Crusade or Jihad has been called.
-
-	@function onCrusadeCalled
-	@tparam crusadeStruct crusade
-	@tparam settlementStruct target
-
-	@usage
-	--something
-	*/
-
-	onCrusadeCalledFunc = new sol::function(luaState["onCrusadeCalled"]);
-	checkLuaFunc(&onCrusadeCalledFunc);
-
-	/***
-	A Crusade or Jihad has ended.
-
-	@function onCrusadeEnds
-	@tparam crusadeStruct crusade
-	@tparam settlementStruct target
-
-	@usage
-	--something
-	*/
-
-	onCrusadeEndsFunc = new sol::function(luaState["onCrusadeEnds"]);
-	checkLuaFunc(&onCrusadeEndsFunc);
-
-	/***
-	The Pope has rejected the player's crusade target.
-
-	@function onPopeRejectsCrusadeTarget
-	@tparam crusadeStruct crusade
-	@tparam settlementStruct target
-
-	@usage
-	--something
-	*/
-
-	onPopeRejectsCrusadeTargetFunc = new sol::function(luaState["onPopeRejectsCrusadeTarget"]);
-	checkLuaFunc(&onPopeRejectsCrusadeTargetFunc);
-
-	/***
-	An army has taken a crusade or jihad target settlement.
-
-	@function onArmyTakesCrusadeTarget
-	@tparam crusadeStruct crusade
-	@tparam settlementStruct target
-	@tparam stackStruct army
-
-	@usage
-	--something
-	*/
-
-	onArmyTakesCrusadeTargetFunc = new sol::function(luaState["onArmyTakesCrusadeTarget"]);
-	checkLuaFunc(&onArmyTakesCrusadeTargetFunc);
-
-	/***
-	Units have deserted a crusade or jihad.
-
-	@function onUnitsDesertCrusade
-	@tparam crusadeStruct crusade
-	@tparam settlementStruct target
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onUnitsDesertCrusadeFunc = new sol::function(luaState["onUnitsDesertCrusade"]);
-	checkLuaFunc(&onUnitsDesertCrusadeFunc);
-
-	/***
-	A new pope has been elected.
-
-	@function onPopeElected
-	@tparam factionStruct fac
-	@tparam factionStruct fac2
-
-	@usage
-	--something
-	*/
-
-	onPopeElectedFunc = new sol::function(luaState["onPopeElected"]);
-	checkLuaFunc(&onPopeElectedFunc);
-
-	/***
-	A Faction has voted for the new pope.
-
-	@function onVotedForPope
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onVotedForPopeFunc = new sol::function(luaState["onVotedForPope"]);
-	checkLuaFunc(&onVotedForPopeFunc);
-
-	/***
-	An assassination mission against the pope has failed and the assassin is executed.
-
-	@function onAssassinCaughtAttackingPope
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onAssassinCaughtAttackingPopeFunc = new sol::function(luaState["onAssassinCaughtAttackingPope"]);
-	checkLuaFunc(&onAssassinCaughtAttackingPopeFunc);
-
-	/***
-	An inquisitor has been dispatched to a region.
-
-	@function onInquisitorAppointed
-	@tparam factionStruct fac
-	@tparam settlementStruct sett
-
-	@usage
-	--something
-	*/
-
-	onInquisitorAppointedFunc = new sol::function(luaState["onInquisitorAppointed"]);
-	checkLuaFunc(&onInquisitorAppointedFunc);
-
-	/***
-	The player has opened the panel for the selected settlement.
-
-	@function onSettlementPanelOpen
-	@tparam settlementStruct sett
-
-	@usage
-	--something
-	*/
-
-	onSettlementPanelOpenFunc = new sol::function(luaState["onSettlementPanelOpen"]);
-	checkLuaFunc(&onSettlementPanelOpenFunc);
-
-	/***
-	The player has opened the finances panel.
-
-	@function onFinancesPanelOpen
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onFinancesPanelOpenFunc = new sol::function(luaState["onFinancesPanelOpen"]);
-	checkLuaFunc(&onFinancesPanelOpenFunc);
-
-	/***
-	The player has opened the faction summary panel.
-
-	@function onFactionSummaryPanelOpen
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onFactionSummaryPanelOpenFunc = new sol::function(luaState["onFactionSummaryPanelOpen"]);
-	checkLuaFunc(&onFactionSummaryPanelOpenFunc);
-
-	/***
-	The player has opened the family tree panel.
-
-	@function onFamilyTreePanelOpenFunc
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onFamilyTreePanelOpenFunc = new sol::function(luaState["onFamilyTreePanelOpenFunc"]);
-	checkLuaFunc(&onFamilyTreePanelOpenFunc);
-
-	/***
-	The player has opened the diplomatic standing panel.
-
-	@function onDiplomaticStandingPanelOpen
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onDiplomaticStandingPanelOpenFunc = new sol::function(luaState["onDiplomaticStandingPanelOpen"]);
-	checkLuaFunc(&onDiplomaticStandingPanelOpenFunc);
-
-	/***
-	The player has opened a diplomacy panel.
-
-	@function onDiplomacyPanelOpen
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onDiplomacyPanelOpenFunc = new sol::function(luaState["onDiplomacyPanelOpen"]);
-	checkLuaFunc(&onDiplomacyPanelOpenFunc);
-
-	/***
-	The player has attacked an army or settlement. The decision panel is now open.
-
-	@function onPreBattlePanelOpen
-	@tparam factionStruct fac
-
-	@usage
-	--something
-	*/
-
-	onPreBattlePanelOpenFunc = new sol::function(luaState["onPreBattlePanelOpen"]);
-	checkLuaFunc(&onPreBattlePanelOpenFunc);
-
-	/***
-	The naval auto resolve panel has opened.
-
-	@function onNavalAutoResolvePanelOpen
-
-	@usage
-	--something
-	*/
-
-	onNavalAutoResolvePanelOpenFunc = new sol::function(luaState["onNavalAutoResolvePanelOpen"]);
-	checkLuaFunc(&onNavalAutoResolvePanelOpenFunc);
-
-	/***
-	The player has opened the panel for the selected character.
-
-	@function onCharacterPanelOpen
-	@tparam namedCharacter selectedChar
-
-	@usage
-	--something
-	*/
-
-	onCharacterPanelOpenFunc = new sol::function(luaState["onCharacterPanelOpen"]);
-	checkLuaFunc(&onCharacterPanelOpenFunc);
-
-	/***
-	The player has opened a trade panel.
-
-	@function onTradePanelOpen
-	@tparam settlementStruct sett
-
-	@usage
-	--something
-	*/
-
-	onTradePanelOpenFunc = new sol::function(luaState["onTradePanelOpen"]);
-	checkLuaFunc(&onTradePanelOpenFunc);
-
-	/***
-	The player has requested building advice.
-
-	@function onRequestBuildingAdvice
-	@tparam settlementStruct sett
-
-	@usage
-	--something
-	*/
-
-	onRequestBuildingAdviceFunc = new sol::function(luaState["onRequestBuildingAdvice"]);
-	checkLuaFunc(&onRequestBuildingAdviceFunc);
-
-	/***
-	The player has requested training advice.
-
-	@function onRequestTrainingAdvice
-	@tparam settlementStruct sett
-	@tparam eduEntry recommendedUnitEntry
-
-	@usage
-	--something
-	*/
-
-	onRequestTrainingAdviceFunc = new sol::function(luaState["onRequestTrainingAdvice"]);
-	checkLuaFunc(&onRequestTrainingAdviceFunc);
-
-	/***
-	The player has opened a message.
-
-	@function onMessageOpen
-	@tparam factionStruct fac
-	@tparam int msgType
-
-	@usage
-	--something
-	*/
-
-	onMessageOpenFunc = new sol::function(luaState["onMessageOpen"]);
-	checkLuaFunc(&onMessageOpenFunc);
-
-	/***
-	The player has recieved a message.
-
-	@function onIncomingMessage
-	@tparam factionStruct fac
-	@tparam int msgType
-
-	@usage
-	--something
-	*/
-
-	onIncomingMessageFunc = new sol::function(luaState["onIncomingMessage"]);
-	checkLuaFunc(&onIncomingMessageFunc);
-
-	/***
-	The player has closed a message.
-
-	@function onMessageClosed
-	@tparam int msgType
-
-	@usage
-	--something
-	*/
-
-	onMessageClosedFunc = new sol::function(luaState["onMessageClosed"]);
-	checkLuaFunc(&onMessageClosedFunc);
-
-	/***
-	The player has clicked on a button.
-
-	@function onButtonPressed
-	@tparam string buttonName
-
-	@usage
-	--something
-	*/
-
-	onButtonPressedFunc = new sol::function(luaState["onButtonPressed"]);
-	checkLuaFunc(&onButtonPressedFunc);
-
-	/***
-	The player closed a scroll.
-
-	@function onScrollClosed
-	@tparam string scrollName
-
-	@usage
-	--something
-	*/
-
-	onScrollClosedFunc = new sol::function(luaState["onScrollClosed"]);
-	checkLuaFunc(&onScrollClosedFunc);
-
-	/***
-	The player opened a scroll.
-
-	@function onScrollOpened
-	@tparam string scrollName
-
-	@usage
-	--something
-	*/
-
-	onScrollOpenedFunc = new sol::function(luaState["onScrollOpened"]);
-	checkLuaFunc(&onScrollOpenedFunc);
-
-	/***
-	A special UI Element is visible.
-
-	@function onUIElementVisible
-	@tparam string elementName
-
-	@usage
-	--something
-	*/
-
-	onUIElementVisibleFunc = new sol::function(luaState["onUIElementVisible"]);
-	checkLuaFunc(&onUIElementVisibleFunc);
-
-	/***
-	The player has requested advice on a scroll.
-
-	@function onScrollAdviceRequested
-	@tparam string scrollName
-
-	@usage
-	--something
-	*/
-
-	onScrollAdviceRequestedFunc = new sol::function(luaState["onScrollAdviceRequested"]);
-	checkLuaFunc(&onScrollAdviceRequestedFunc);
-
-	/***
-	The player has requested advice on the settlement scroll.
-
-	@function onSettlementScrollAdviceRequested
-	@tparam settlementStruct sett
-	@tparam string scrollName
-
-	@usage
-	--something
-	*/
-
-	onSettlementScrollAdviceRequestedFunc = new sol::function(luaState["onSettlementScrollAdviceRequested"]);
-	checkLuaFunc(&onSettlementScrollAdviceRequestedFunc);
-
-	/***
-	The player has requested advice on the prebattle scroll.
-
-	@function onPreBattleScrollAdviceRequested
-
-	@usage
-	--something
-	*/
-
-	onPreBattleScrollAdviceRequestedFunc = new sol::function(luaState["onPreBattleScrollAdviceRequested"]);
-	checkLuaFunc(&onPreBattleScrollAdviceRequestedFunc);
-
-	/***
-	The player has requested advice on the naval prebattle scroll.
-
-	@function onNavalPreBattleScrollAdviceRequested
-
-	@usage
-	--something
-	*/
-
-	onNavalPreBattleScrollAdviceRequestedFunc = new sol::function(luaState["onNavalPreBattleScrollAdviceRequested"]);
-	checkLuaFunc(&onNavalPreBattleScrollAdviceRequestedFunc);
-
-	/***
-	The player has opened the college of cardinals panel.
-
-	@function onCollegeOfCardinalsPanelOpen
-	@tparam collegeCardinalsStruct college
-
-	@usage
-	--something
-	*/
-
-	onCollegeOfCardinalsPanelOpenFunc = new sol::function(luaState["onCollegeOfCardinalsPanelOpen"]);
-	checkLuaFunc(&onCollegeOfCardinalsPanelOpenFunc);
-
-	/***
-	A guild has been created or upgraded.
-
-	@function onGuildUpgraded
-	@tparam settlementStruct sett
-	@tparam string guildName
-
-	@usage
-	function onGuildUpgraded(sett, guildName)
-		print("Function: onGuildUpgraded()\n\tSettlement: "..sett.name.."\n\tGuild: "..guildName)
-	end
-	*/
-
-	onGuildUpgradedFunc = new sol::function(luaState["onGuildUpgraded"]);
-	checkLuaFunc(&onGuildUpgradedFunc);
-
-	/***
-	A guild has been destroyed.
-
-	@function onGuildDestroyed
-	@tparam settlementStruct sett
-	@tparam int guildID
-
-	@usage
-	function onGuildDestroyed(sett, guildID)
-		print("Function: onGuildDestroyed()\n\tSettlement: "..sett.name.."\n\tID: "..guildID)
-	end
-	*/
-
-	onGuildDestroyedFunc = new sol::function(luaState["onGuildDestroyed"]);
-	checkLuaFunc(&onGuildDestroyedFunc);
-
-	/***
-	A character in the family tree has received a brother by adoption.
-
-	@function onBrotherAdopted
-	@tparam namedCharacter character This is the original child, not the newly adopted character.
-
-	@usage
-	function onBrotherAdopted(character)
-		print("Function: onBrotherAdopted()\n\tName: "..character.fullName.."\n\tParent: "..character.parent.fullName.."\n\tFaction: "..character.faction:getFactionName())
-	end
-	*/
-
-	onBrotherAdoptedFunc = new sol::function(luaState["onBrotherAdopted"]);
-	checkLuaFunc(&onBrotherAdoptedFunc);
-
-	/***
-	A child has been born.
-
-	@function onBirth
-	@tparam namedCharacter child
-
-	@usage
-	function onBirth(child)
-		print("Function: onBirth()\n\tChild Name: "..child.fullName.."\n\tParent: "..child.parent.fullName.."\n\tFaction: "..child.faction:getFactionName())
-	end
-	*/
-
-	onBirthFunc = new sol::function(luaState["onBirth"]);
-	checkLuaFunc(&onBirthFunc);
-
-	/***
-	A character has come of age.
-
-	@function onCharacterComesOfAge
-	@tparam namedCharacter character Character's age is equal to age\_of\_manhood in descr\_campaign\_db.xml.
-
-	@usage
-	function onCharacterComesOfAge(character)
-		print("Function: onCharacterComesOfAge()\n\tName: "..character.fullName.."\n\tParent: "..character.parent.fullName.."\n\tFaction: "..character.faction:getFactionName())
-	end
-	*/
-
-	onCharacterComesOfAgeFunc = new sol::function(luaState["onCharacterComesOfAge"]);
-	checkLuaFunc(&onCharacterComesOfAgeFunc);
-
-	/***
-	A character has married (someone who isn't a princess).
-
-	@function onCharacterMarries
-	@tparam namedCharacter husband
-
-	@usage
-	function onCharacterMarries(husband)
-		print("Function: onCharacterMarries()\n\tName: "..husband.fullName.."\n\tSpouse: "..husband.spouse.fullName.."\n\tFaction: "..husband.faction:getFactionName())
-	end
-	*/
-
-	onCharacterMarriesFunc = new sol::function(luaState["onCharacterMarries"]);
-	checkLuaFunc(&onCharacterMarriesFunc);
-
-	/***
-	A character has married a princess agent.
-
-	@function onCharacterMarriesPrincess
-	@tparam namedCharacter husband
-
-	@usage
-	function onCharacterMarriesPrincess(husband)
-		print("Function: onCharacterMarriesPrincess()\n\tName: "..husband.fullName.."\n\tSpouse: "..husband.spouse.fullName.."\n\tFaction: "..husband.faction:getFactionName())
-	end
-	*/
-
-	onCharacterMarriesPrincessFunc = new sol::function(luaState["onCharacterMarriesPrincess"]);
-	checkLuaFunc(&onCharacterMarriesPrincessFunc);
-
-	/***
-	A child has been born.
-
-	@function onCharacterBecomesAFather
-	@tparam namedCharacter father Note: this event fires for all child births for this father, not just the first one.
-
-	@usage
-	function onCharacterBecomesAFather(father)
-		local i, children = 1, ""
-		while father.childs[i] ~= nil do
-			children, i = children.." "..father.childs[i].fullName..",", i + 1
-		end
-		children = children:gsub(",$", "")
-		print("Function: onCharacterBecomesAFather()\n\tName: "..father.fullName.."\n\tChildren:"..children.."\n\tFaction: "..father.faction:getFactionName())
-	end
-	*/
-
-	onCharacterBecomesAFatherFunc = new sol::function(luaState["onCharacterBecomesAFather"]);
-	checkLuaFunc(&onCharacterBecomesAFatherFunc);
-
-	/***
-	A new admiral has been created for a new ship.
-
-	@function onNewAdmiralCreated
-	@tparam namedCharacter admiral
-	@tparam settlementStruct sett
-
-	@usage
-	function onNewAdmiralCreated(admiral, sett)
-		print("Function: onNewAdmiralCreated()\n\tAdmiral: "..admiral.fullName.."\n\tSettlement: "..sett.name)
-	end
-	*/
-
-	onNewAdmiralCreatedFunc = new sol::function(luaState["onNewAdmiralCreated"]);
-	checkLuaFunc(&onNewAdmiralCreatedFunc);
-
-	/***
-	The player triggered a keyboard shortcut.
-
-	@function onShortcutTriggered
-	@tparam string shortcut
-
-	@usage
-	function onShortcutTriggered(shortcut)
-		if shortcut == "strat_ui::mission_button" then
-			--do stuff
-		end
-	end
-	*/
-
-	onShortcutTriggeredFunc = new sol::function(luaState["onShortcutTriggered"]);
-	checkLuaFunc(&onShortcutTriggeredFunc);
-
-	/***
-	The character has been made the faction leader.
-
-	@function onBecomesFactionLeader
-	@tparam namedCharacter leader
-
-	@usage
-	function onBecomesFactionLeader(leader)
-		print("Function: onBecomesFactionLeader()\n\tLeader: "..leader.fullName)
-	end
-	*/
-
-	onBecomesFactionLeaderFunc = new sol::function(luaState["onBecomesFactionLeader"]);
-	checkLuaFunc(&onBecomesFactionLeaderFunc);
-
-	/***
-	The character has been made a faction heir.
-
-	@function onBecomesFactionHeir
-	@tparam namedCharacter heir
-
-	@usage
-	function onBecomesFactionHeir(heir)
-		print("Function: onBecomesFactionHeir()\n\tHeir: "..heir.fullName)
-	end
-	*/
-
-	onBecomesFactionHeirFunc = new sol::function(luaState["onBecomesFactionHeir"]);
-	checkLuaFunc(&onBecomesFactionHeirFunc);
 
 
 	if (onPluginLoad != nullptr)

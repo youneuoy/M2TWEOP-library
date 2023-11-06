@@ -4,7 +4,8 @@
 #include "pluginM2TWEOP.h"
 
 #include "lua/sol.hpp"
-#include <sol_ImGui.h>
+
+#include "imgui/sol_ImGui.h"
 
 int initPlugin(std::string* modPath)
 {
@@ -131,6 +132,12 @@ int initPlugin(std::string* modPath)
 	fName = "changeRegionName";
 	plugData::data.funcs.changeRegionName.Load(&plPath, &fName);
 
+	fName = "condition";
+	plugData::data.funcs.condition.Load(&plPath, &fName);
+
+	fName = "allocateGameMem";
+	plugData::data.funcs.allocateGameMem.Load(&plPath, &fName);
+
 	fName = "changeRebelsName";
 	plugData::data.funcs.changeRebelsName.Load(&plPath, &fName);
 
@@ -169,14 +176,14 @@ int initPlugin(std::string* modPath)
 	fName = "siegeSettlement";
 	plugData::data.funcs.siegeSettlement.Load(&plPath, &fName);
 
-	fName = "addAnchillary";
-	plugData::data.funcs.addAnchillary.Load(&plPath, &fName);
+	fName = "addAncillary";
+	plugData::data.funcs.addAncillary.Load(&plPath, &fName);
 
-	fName = "removeAnchillary";
-	plugData::data.funcs.removeAnchillary.Load(&plPath, &fName);
+	fName = "removeAncillary";
+	plugData::data.funcs.removeAncillary.Load(&plPath, &fName);
 
-	fName = "findAnchillary";
-	plugData::data.funcs.findAnchillary.Load(&plPath, &fName);
+	fName = "findAncillary";
+	plugData::data.funcs.findAncillary.Load(&plPath, &fName);
 
 	fName = "addTrait";
 	plugData::data.funcs.addTrait.Load(&plPath, &fName);
@@ -481,7 +488,7 @@ int initPlugin(std::string* modPath)
 
 void initLua()
 {
-	std::string luaFile = plugData::data.modFolder + "\\youneuoy_Data\\plugins\\lua\\luaPluginScript.lua";
+	std::string luaFile = plugData::data.modFolder + R"(\youneuoy_Data\plugins\lua\luaPluginScript.lua)";
 
 	sol::state* luaState = plugData::data.luaAll.init(luaFile, plugData::data.modFolder);
 	plugData::data.luaAll.initCampaign();
@@ -496,7 +503,7 @@ void initLua()
 	plugData::data.luaAll.onPluginLoadF();
 	if (luaState == nullptr)
 	{
-		MessageBoxA(NULL, "LUA loading error!", "Error!", NULL);
+		MessageBoxA(nullptr, "LUA loading error!", "Error!", NULL);
 		exit(0);
 	}
 }

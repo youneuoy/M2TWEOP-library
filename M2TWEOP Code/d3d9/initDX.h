@@ -29,18 +29,28 @@ void initDX9()
 	// Load dll
 
 	wchar_t path[MAX_PATH];
-	GetSystemDirectoryW(path, MAX_PATH);
+	GetCurrentDirectoryW(MAX_PATH, path);
 	std::wstring libPath = path;
-	libPath += L"\\d3d9.dll";
-	//GetCurrentDirectoryA(MAX_PATH,path);
-
-
+	libPath += L"\\d3d9_vk.dll";
 	d3d9dll = LoadLibraryW(libPath.c_str());
 	if (d3d9dll == NULL)
 	{
-		MessageBoxA(NULL, "Cannot find d3d9.dll in system directory!", "ATTENTION!", NULL);
-		exit(0);
+		GetSystemDirectoryW(path, MAX_PATH);
+		libPath = path;
+		libPath += L"\\d3d9.dll";
+
+		d3d9dll = LoadLibraryW(libPath.c_str());
+		if (d3d9dll == NULL)
+		{
+			MessageBoxA(NULL, "Cannot find d3d9.dll in system directory!", "ATTENTION!", NULL);
+			exit(0);
+		}
 	}
+
+	//GetCurrentDirectoryA(MAX_PATH,path);
+
+
+
 	/*DWORD err = GetLastError();
 	if (err)
 	{

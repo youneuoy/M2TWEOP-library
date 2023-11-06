@@ -28,7 +28,7 @@ namespace fastFunctsHelpers
 
 		return -1;
 	}
-	EduEntry* getEduEntryByName(const char* type)
+	eduEntry* getEduEntryByName(const char* type)
 	{
 		eduEntryes* EDB = reinterpret_cast<eduEntryes*>(dataOffsets::offsets.unitTypesStart - 4);
 
@@ -42,7 +42,7 @@ namespace fastFunctsHelpers
 		}
 		return nullptr;
 	}
-	EduEntry* getEDUEntryById(int id)
+	eduEntry* getEDUEntryById(int id)
 	{
 		eduEntryes* EDB = reinterpret_cast<eduEntryes*>(dataOffsets::offsets.unitTypesStart - 4);
 

@@ -62,6 +62,7 @@ public:
 			int gameVer = 0;
 
 			bool isBlockLaunchWithoutEop = false;
+			bool IsOverrideBattleCamera = false;
 		}gameData;
 
 		struct

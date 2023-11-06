@@ -52,6 +52,7 @@ void codes::initCodes(int gameVer)
 		offsets.createUnitFunc = 0x008edf60;
 		offsets.addUnitToArmyFunc = 0x00719380;
 		offsets.setBodyguard = 0x00598f10;
+		offsets.makeConditionFunc = 0x00874920;
 
 		offsets.killCharStratMapFunc = 0x00592900;
 		offsets.killUnitStratMapFunc = 0x007417e0;
@@ -131,6 +132,7 @@ void codes::initCodes(int gameVer)
 		offsets.createUnitFunc = 0x008ee9e0;
 		offsets.addUnitToArmyFunc = 0x00719ab0;
 		offsets.setBodyguard = 0x00599400;
+		offsets.makeConditionFunc = 0x00875310;
 
 
 		offsets.killCharStratMapFunc = 0x00592e00;

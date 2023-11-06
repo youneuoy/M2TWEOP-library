@@ -8,7 +8,7 @@
 namespace factionHelpers
 {
 	std::string getFactionName(const factionStruct* fac);
-	generalCharacterictics* getCharacterFromFullList(const factionStruct* fac, int index);
+	namedCharacter* getCharacterFromFullList(const factionStruct* fac, int index);
 	general* getCharacterFromGeneralsList(const factionStruct* fac, int index);
 	stackStruct* getStack(const factionStruct* fac, int index);
 	settlementStruct* getSettlement(const factionStruct* fac, int index);
@@ -19,9 +19,18 @@ namespace factionHelpers
 	void createFortXY(const factionStruct* fac, int x, int y);
 	void createFort(const general* gen);
 	void changeFactionName(factionStruct* fac, const char* newName);
-
+	bool hasMilitaryAccess(const factionStruct* fac1, const factionStruct* fac2);
+	float getFactionStanding(const factionStruct* fac1, const factionStruct* fac2);
+	void setFactionStanding(const factionStruct* fac1, const factionStruct* fac2, float standing);
+	void setMilitaryAccess(const factionStruct* fac1, const factionStruct* fac2, bool set);
 	std::string getLocalizedFactionName(factionStruct* fac);
-
+	const char* getRegionToHoldName(const holdRegionsWinCondition* condition, int index);
+	int getRegionToHoldLength(const holdRegionsWinCondition* condition, int index);
+	factionRanking* getFactionRanking(const factionStruct* fac, int turnNum);
+	factionEconomy* getFactionEconomy(factionStruct* fac, int turnsAgo);
+	bool isNeighbourFaction(const factionStruct* fac1, const factionStruct* fac2);
+	int getNeighbourRegionID(const factionStruct* fac, int index);
+	battleFactionCounter* getBattleVsFactionStats(factionStruct* fac, int targetFactionID);
 	//faction
 	template <char fieldIndex>
 	std::string getStringProperty(const factionStruct* fac)

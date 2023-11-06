@@ -2,54 +2,70 @@
 #include "plugData.h"
 namespace generalCharactericticsHelpers
 {
-	traitContainer* getTraits(generalCharacterictics* character)
+	traitContainer* getTraits(namedCharacter* character)
 	{
 		return character->traits;
 	}
-	anchillary* getAnchillary(generalCharacterictics* character, int index)
+	ancillary* getAncillary(namedCharacter* character, int index)
 	{
-		return character->anchillaries[index]->dataAnch;
+		return character->ancillaries[index]->dataAnc;
 
 	}
-	int addAnchillary(generalCharacterictics* character, std::string anchName)
+	int addAncillary(namedCharacter* character, std::string ancName)
 	{
-		anchillary* anch=(*(*plugData::data.funcs.findAnchillary))((char*)anchName.c_str());
-		if (anch == nullptr)return 0;
+		ancillary* anc = (*(*plugData::data.funcs.findAncillary))((char*)ancName.c_str());
+		if (anc == nullptr)return 0;
 
-		return (*(*plugData::data.funcs.addAnchillary))(character, anch);
+		return (*(*plugData::data.funcs.addAncillary))(character, anc);
 	}
-	void removeAnchillary(generalCharacterictics* character, anchillary* anch)
+	void removeAncillary(namedCharacter* character, ancillary* anc)
 	{
-		(*(*plugData::data.funcs.removeAnchillary))(character, anch);
+		(*(*plugData::data.funcs.removeAncillary))(character, anc);
 	}
-	void addTrait(generalCharacterictics* character, const char* traitName, int traitLevel)
+	void addTrait(namedCharacter* character, const char* traitName, int traitLevel)
 	{
 		(*(*plugData::data.funcs.addTrait))(character, traitName, traitLevel);
 	}
-	void removeTrait(generalCharacterictics* character, const char* traitName)
+	void removeTrait(namedCharacter* character, const char* traitName)
 	{
 		(*(*plugData::data.funcs.removeTrait))(character, traitName);
 	}
-	int getAge(generalCharacterictics* character)
+	int getAge(namedCharacter* character)
 	{
 		return (character->age >> 3) & 0x7f;
 	}
-	void setAge(generalCharacterictics* character, int age)
+	void setAge(namedCharacter* character, int age)
 	{
 		character->age = character->age ^ (age * 8 ^ character->age) & 0x3f8;
 	}
-	bool isAlive(generalCharacterictics* character)
+	bool isAlive(namedCharacter* character)
 	{
-		return character->age&1;
+		return character->age & 1;
 	}
-	bool getIsMale(generalCharacterictics* character) {
+	bool getIsMale(namedCharacter* character) {
 		return character->age & 2;
 	}
-	void setIsMale(generalCharacterictics* character, bool isMale) {
-		character->age = character->age ^ ((int) isMale << 1 ^ character->age) & 2;
+	void setIsMale(namedCharacter* character, bool isMale) {
+		character->age = character->age ^ ((int)isMale << 1 ^ character->age) & 2;
 	}
-	void setAsHeir(generalCharacterictics* character, bool isJustSet)
+	void setAsHeir(namedCharacter* character, bool isJustSet)
 	{
 		(*(*plugData::data.funcs.setHeir))(character, isJustSet);
+	}
+	int getCapturedUnitNum(capturedFactionInfo* capInfo)
+	{
+		return (capInfo->capturedUnitsEnd - (DWORD)capInfo->capturedUnits) / 12;
+	}
+	int getCapturedCharacterNum(capturedFactionInfo* capInfo)
+	{
+		return (capInfo->capturedCharactersEnd - (DWORD)capInfo->capturedCharacters) / 8;
+	}
+	capturedUnit* getCapturedUnit(const capturedFactionInfo* capInfo, const int index)
+	{
+		return &capInfo->capturedUnits[index];
+	}
+	capturedCharacter* getCapturedCharacter(const capturedFactionInfo* capInfo, const int index)
+	{
+		return &capInfo->capturedCharacters[index];
 	}
 }

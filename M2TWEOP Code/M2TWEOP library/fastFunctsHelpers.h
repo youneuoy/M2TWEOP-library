@@ -14,8 +14,8 @@ namespace fastFunctsHelpers
 	NOINLINE EOP_EXPORT void setCryptedString(char** targetS, const char* newS);
 
 	int getEduIndex(const char* type);
-	EduEntry* getEduEntryByName(const char* type);
-	EduEntry* getEDUEntryById(int id);
+	eduEntry* getEduEntryByName(const char* type);
+	eduEntry* getEDUEntryById(int id);
 
 	char** makeCryptedString(const char* string);
 

@@ -10,7 +10,7 @@
 - Enabling Discord Rich Presence no longer opens an extra window, it now seamlessly toggles on and off. You just need to use the launcher if you want to enable it.
 
 ### **Library**
-- 
+- Added support for [DXVK project](https://github.com/doitsujin/dxvk) (Vulcan wrapper over game d3d9 graphics). For use unpack dxvk d3d9.dll to game folder and rename it to d3d9_vk.dll  - *youneuoy*
 
 ### **Lua Plugin**
 

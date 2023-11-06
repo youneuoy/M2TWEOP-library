@@ -51,7 +51,7 @@ namespace battleCreator
 		{
 			json.at("enableAutoGeneration").get_to(data.isGenerationNeeded);
 			json.at("enableResultsTransfer").get_to(data.isResultTransferNeeded);
-			json.at("isPlannedRetreatRoute").get_to(data.isPlannedRetreatRoute);
+			//json.at("isPlannedRetreatRoute").get_to(data.isPlannedRetreatRoute);
 		}
 		catch (jsn::json::type_error& e)
 		{
@@ -263,13 +263,13 @@ namespace battleCreator
 			fileStrings.push_back(tempS);
 		}
 
-		if (gen->genChar->anchNum != 0)
+		if (gen->genChar->ancNum != 0)
 		{
 			tempS = "ancillaries";
-			UINT32 anchNum = gen->genChar->anchNum;
+			UINT32 anchNum = gen->genChar->ancNum;
 			for (UINT32 i = 0; i < anchNum; i++)
 			{
-				tempS.append(" ").append(gen->genChar->anchillaries[i]->dataAnch->anchName).append(" ,");
+				tempS.append(" ").append(gen->genChar->ancillaries[i]->dataAnch->ancName).append(" ,");
 			}
 			fileStrings.push_back(tempS);
 		}
@@ -370,7 +370,7 @@ namespace battleCreator
 					unit* un = army->units[k];
 					tempS = "unit		";
 					tempS.append(un->eduEntry->Type);
-					tempS.append("				soldiers ").append(to_string(un->number));
+					tempS.append("				soldiers ").append(to_string(un->SoldierCountStrat));
 					tempS.append(" exp ").append(to_string(un->expScreen));
 					tempS.append(" armour ").append(to_string(un->stats >> 0xd & 0x1f));
 					tempS.append(" weapon_lvl ").append(to_string(un->stats >> 0x8 & 0x1f));

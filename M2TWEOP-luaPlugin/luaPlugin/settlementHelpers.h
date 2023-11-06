@@ -19,6 +19,12 @@ namespace settlementHelpers
 	int getGuildStanding(settlementStruct* sett, int index);
 	void setGuildStanding(settlementStruct* sett, int index, int amount);
 	void changeSettlementName(settlementStruct* sett, const char* newName);
+	settlementCapability* getSettlementCapability(settlementStruct* sett, int capabilityType);
+	settlementCapability* getAgentCapability(settlementStruct* sett, int agentType);
+	settlementCapability* getAgentLimitCapability(settlementStruct* sett, int agentType);
+	recruitmentCapability* getRecruitmentCapability(settlementStruct* sett, int index);
+	settlementRecruitmentPool* getSettlementRecruitmentPool(settlementStruct* sett, int index);
+	int getRecruitmentCapabilityNum(settlementStruct* sett);
 
 	std::string getSettlementName(settlementStruct* sett);
 

@@ -28,6 +28,7 @@ namespace smallFuncs
 	NOINLINE EOP_EXPORT void scriptCommand(const char* command, const char* args);
 	NOINLINE EOP_EXPORT void changeRegionName(regionStruct* region, const char* newName);
 	NOINLINE EOP_EXPORT void changeRebelsName(regionStruct* region, const char* newName);
+	NOINLINE EOP_EXPORT bool condition(const char* condition, const eventTrigger* eventData);
 
 	NOINLINE EOP_EXPORT gameDataAllStruct* getGameDataAll();
 
@@ -52,4 +53,34 @@ namespace smallFuncs
 	float GetMinimumPossibleMovepointsForArmy(stackStruct* army);
 	float GetDistanceInTiles(int x, int y, int destX, int destY);
 };
+
+
+struct fakeTextInput
+{
+	explicit fakeTextInput(const char* condition, size_t start)
+	{
+		const std::string scriptPath = "luaCommand";
+		unicodePointerPointer = new UNICODE_STRING*;
+		smallFuncs::createUniString(unicodePointerPointer, scriptPath.c_str());
+		textBuffer = condition;
+		byteSize = start;
+		endString = condition + strlen(condition);
+		currRead = condition;
+		currLine = condition;
+		lineNumber = 1;
+		N1814981889 = 1814981889;
+		N0 = 0;
+		classPointer = 0;
+	}
+	const char* textBuffer; //0x0000
+	uint32_t byteSize; //0x0004
+	const char* endString; //0x0008
+	UNICODE_STRING** unicodePointerPointer; //0x000C
+	const char* currRead; //0x0010
+	const char* currLine; //0x0014
+	uint32_t lineNumber; //0x0018
+	int32_t N1814981889; //0x001C
+	int32_t N0; //0x0020
+	DWORD classPointer; //0x0024
+}; //Size: 0x0028
 

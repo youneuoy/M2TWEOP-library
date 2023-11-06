@@ -12,7 +12,7 @@ namespace m2tweopHelpers
 	}
 	bool isTileFree(int x, int y)
 	{
-		int xy[2]{x,y};
+		int xy[2]{ x,y };
 		return (*(*plugData::data.funcs.isTileFree))(xy);
 	}
 	std::tuple<int, int> getGameTileCoordsWithCursor()
@@ -25,7 +25,7 @@ namespace m2tweopHelpers
 	}
 	int getTileRegionID(int x, int y)
 	{
-		return (*(*plugData::data.funcs.getTileRegionID))(x,y);
+		return (*(*plugData::data.funcs.getTileRegionID))(x, y);
 	}
 	bool getTileVisibility(factionStruct* faction, int x, int y)
 	{
@@ -47,25 +47,25 @@ namespace m2tweopHelpers
 		using namespace campaignEnums;
 		if (dipType == dipRelEnum::war)
 		{
-			return (campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].state == dipStateInternalEnum::warState);
+			return (campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state == dipStateInternalEnum::warState);
 		}
 		else if (dipType == dipRelEnum::peace)
 		{
-			return (campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].state == dipStateInternalEnum::peaceState);
+			return (campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state == dipStateInternalEnum::peaceState);
 		}
 		else if (dipType == dipRelEnum::alliance)
 		{
-			return (campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].state == dipStateInternalEnum::allianceState);
+			return (campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state == dipStateInternalEnum::allianceState);
 		}
 		else if (dipType == dipRelEnum::suzerain)
 		{
-			return (campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].state == dipStateInternalEnum::allianceState
-				&& campaignStruct->dipArray[fac2->dipNum][fac1->dipNum].protectorate == protectorateState
+			return (campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state == dipStateInternalEnum::allianceState
+				&& campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].protectorate == protectorateState
 				);
 		}
 		else if (dipType == dipRelEnum::trade)
 		{
-			return (campaignStruct->dipArray[fac2->dipNum][fac1->dipNum].trade == 1);
+			return (campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].trade == 1);
 		}
 		return false;
 	}
@@ -73,16 +73,16 @@ namespace m2tweopHelpers
 	{
 		using namespace campaignEnums;
 
-		campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::peaceState;
-		campaignStruct->dipArray[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::peaceState;
-		if (campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].protectorate == protectorateState)
+		campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::peaceState;
+		campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::peaceState;
+		if (campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].protectorate == protectorateState)
 		{
-			campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].protectorate = nonProtectorateeState;
+			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].protectorate = nonProtectorateeState;
 		}
 
-		if (campaignStruct->dipArray[fac2->dipNum][fac1->dipNum].protectorate == protectorateState)
+		if (campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].protectorate == protectorateState)
 		{
-			campaignStruct->dipArray[fac2->dipNum][fac1->dipNum].protectorate = nonProtectorateeState;
+			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].protectorate = nonProtectorateeState;
 		}
 
 	}
@@ -93,48 +93,48 @@ namespace m2tweopHelpers
 		{
 			disableVassalage(campaignStruct, fac1, fac2);
 
-			campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].trade = 0;
-			campaignStruct->dipArray[fac2->dipNum][fac1->dipNum].trade = 0;
+			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].trade = 0;
+			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].trade = 0;
 
-			campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::warState;
-			campaignStruct->dipArray[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::warState;
+			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::warState;
+			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::warState;
 		}
 		else if (dipType == dipRelEnum::peace)
 		{
 			disableVassalage(campaignStruct, fac1, fac2);
 
-			campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::peaceState;
-			campaignStruct->dipArray[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::peaceState;
+			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::peaceState;
+			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::peaceState;
 		}
 		else if (dipType == dipRelEnum::alliance)
 		{
 			disableVassalage(campaignStruct, fac1, fac2);
 
-			campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::allianceState;
-			campaignStruct->dipArray[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::allianceState;
+			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::allianceState;
+			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::allianceState;
 		}
 		else if (dipType == dipRelEnum::suzerain)
 		{
 			disableVassalage(campaignStruct, fac1, fac2);
 
-			if (campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].protectorate == protectorateState)
+			if (campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].protectorate == protectorateState)
 			{
-				campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].protectorate = nonProtectorateeState;
+				campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].protectorate = nonProtectorateeState;
 			}
-			campaignStruct->dipArray[fac2->dipNum][fac1->dipNum].protectorate = protectorateState;
+			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].protectorate = protectorateState;
 
-			campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::allianceState;
-			campaignStruct->dipArray[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::allianceState;
+			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::allianceState;
+			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::allianceState;
 
-			campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].trade = 1;
-			campaignStruct->dipArray[fac2->dipNum][fac1->dipNum].trade = 1;
+			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].trade = 1;
+			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].trade = 1;
 		}
 		else if (dipType == dipRelEnum::trade)
 		{
-			if (campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].state != dipStateInternalEnum::warState)
+			if (campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state != dipStateInternalEnum::warState)
 			{
-				campaignStruct->dipArray[fac1->dipNum][fac2->dipNum].trade = 1;
-				campaignStruct->dipArray[fac2->dipNum][fac1->dipNum].trade = 1;
+				campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].trade = 1;
+				campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].trade = 1;
 			}
 		}
 
@@ -161,9 +161,9 @@ namespace m2tweopHelpers
 	}
 	void setEDUUnitsSize(signed short min, signed short max)
 	{
-		(*(*plugData::data.funcs.setEDUUnitsSize))(min,max);
+		(*(*plugData::data.funcs.setEDUUnitsSize))(min, max);
 	}
-	std::tuple<int,int,void*> loadTextureToGame(const std::string& path)
+	std::tuple<int, int, void*> loadTextureToGame(const std::string& path)
 	{
 		int x = 0;
 		int y = 0;
@@ -173,7 +173,7 @@ namespace m2tweopHelpers
 			x, y
 		});
 
-		return std::make_tuple(x,y, reinterpret_cast<void*>(retTexture));
+		return std::make_tuple(x, y, reinterpret_cast<void*>(retTexture));
 	}
 	void unloadTextureFromGame(void* texture)
 	{
@@ -210,9 +210,27 @@ namespace m2tweopHelpers
 		(*(*plugData::data.funcs.setGuildCooldown))(turns);
 	}
 
-	void getGameVersion()
+	int getGameVersion()
 	{
 		return (*(*plugData::data.funcs.getGameVersion))();
+	}
+
+	options1* getOptions1()
+	{
+		if (getGameVersion() == 1)
+		{
+			return reinterpret_cast<options1*>(0x02CB693C);
+		}
+		return reinterpret_cast<options1*>(0x02C6D804);
+	}
+
+	options2* getOptions2()
+	{
+		if (getGameVersion() == 1)
+		{
+			return reinterpret_cast<options2*>(0x016818A0);
+		}
+		return reinterpret_cast<options2*>(0x01639EF0);
 	}
 
 }

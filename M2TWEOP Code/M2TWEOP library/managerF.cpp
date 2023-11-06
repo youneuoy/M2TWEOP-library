@@ -117,6 +117,12 @@ void managerF::doPachs()
 	toRecruitEOPunit->Enable();
 	f1 << "Done" << endl;
 
+	f1 << "Start applying recruit eop unit patch" << endl;
+	recruitEOPunit2* toRecruitEOPunit2 = new recruitEOPunit2(mem, (LPVOID)patchesForGame::recruitEOPunit2, globals::dataS.gamever);
+	toRecruitEOPunit2->SetNewCode();
+	toRecruitEOPunit2->Enable();
+	f1 << "Done" << endl;
+
 	f1 << "Start applying recruit merc eop unit patch" << endl;
 	recruitEOPMercunit* torecruitEOPMercunit = new recruitEOPMercunit(mem, (LPVOID)patchesForGame::recruitEOPMercunit, globals::dataS.gamever);
 	torecruitEOPMercunit->SetNewCode();
@@ -145,6 +151,7 @@ void managerF::doPachs()
 	ed->SetlEDUCode();
 	ed->Enable();
 	f1 << "Done" << endl;
+
 
 	f1 << "Start applying OnChangePassedTurnsCount patch" << endl;
 
@@ -348,7 +355,7 @@ void managerF::doPachs()
 	//f1 << "Start applying toReadGameDBsAtGameStart patch" << endl;
 	//toReadGameDBsAtGameStart* toReadGameDbsAtStart = new toReadGameDBsAtGameStart(mem, (LPVOID)patchesForGame::toReadGameDbsAtStart, globals::dataS.gamever);
 	//toReadGameDbsAtStart->SetlReadCode();
-	//toReadGameDbsAtStart->Enable();
+	//totoReadGameDBsAtGameStartDbsAtStart->Enable();
 
 	//f1 << "Done" << endl;
 
@@ -396,6 +403,11 @@ void managerF::doPachs()
 	cityConversionLvlSetter->Enable();
 	f1 << "Done" << endl;
 
+	f1 << "Start applying toGameInitialize patch" << endl;
+	onGameInitialized* toGameInitialize = new onGameInitialized(mem, (LPVOID)patchesForGame::onGameInit, globals::dataS.gamever);
+	toGameInitialize->SetNewCode();
+	toGameInitialize->Enable();
+	f1 << "Done" << endl;
 
 
 	f1 << "Start applying mercenaryMovepointsGetGeneral patch" << endl;
@@ -464,6 +476,11 @@ void managerF::doPachs()
 	onCreateUnit->Enable();
 	f1 << "Done" << endl;
 
+	f1 << "Start applying toFindUnit patch" << endl;
+	OnFindUnit*toFindUnit = new OnFindUnit(mem, (LPVOID)patchesForGame::onFindUnit, globals::dataS.gamever);
+	toFindUnit->SetNewCode();
+	toFindUnit->Enable();
+	f1 << "Done" << endl;
 
 	f1 << "Start applying toCreateMercUnit patch" << endl;
 	OnCreateMercUnit* toCreateMercUnit = new OnCreateMercUnit(mem, (LPVOID)patchesForGame::OnCreateMercUnit, globals::dataS.gamever);
@@ -471,6 +488,47 @@ void managerF::doPachs()
 	toCreateMercUnit->Enable();
 	f1 << "Done" << endl;
 
+	f1 << "Start applying OnCreateUnitWrapper patch" << endl;
+	OnCreateUnitWrapper* toCreateUnitWrapper = new OnCreateUnitWrapper(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gamever);
+	toCreateUnitWrapper->SetNewCode();
+	toCreateUnitWrapper->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying OnFindUnitStrings patch" << endl;
+	OnFindUnitStrings* toFindUnitStrings = new OnFindUnitStrings(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gamever); //its same func as unit wrapper on purpose not error
+	toFindUnitStrings->SetNewCode();
+	toFindUnitStrings->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying OnFindUnitStrings patch" << endl;
+	OnFindUnitStrings2* toFindUnitStrings2 = new OnFindUnitStrings2(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gamever); //its same func as unit wrapper on purpose not error
+	toFindUnitStrings2->SetNewCode();
+	toFindUnitStrings2->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying OnGetRecruitPoolUnitEntry patch" << endl;
+	OnGetRecruitPoolUnitEntry* toGetRecruitPoolUnitEntry = new OnGetRecruitPoolUnitEntry(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gamever);
+	toGetRecruitPoolUnitEntry->SetNewCode();
+	toGetRecruitPoolUnitEntry->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying toLoadRecruitQueue patch" << endl;
+	loadRecruitQueue* toLoadRecruitQueue = new loadRecruitQueue(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gamever);
+	toLoadRecruitQueue->SetNewCode();
+	toLoadRecruitQueue->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying toLoadRecruitQueue2 patch" << endl;
+	loadRecruitQueue2* toLoadRecruitQueue2 = new loadRecruitQueue2(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gamever);
+	toLoadRecruitQueue2->SetNewCode();
+	toLoadRecruitQueue2->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying OnGetRecruitPoolUnitEntry2 patch" << endl;
+	OnGetRecruitPoolUnitEntry2* toGetRecruitPoolUnitEntry2 = new OnGetRecruitPoolUnitEntry2(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gamever);
+	toGetRecruitPoolUnitEntry2->SetNewCode();
+	toGetRecruitPoolUnitEntry2->Enable();
+	f1 << "Done" << endl;
 
 	f1 << "Start applying toCreateMercUnitCheck patch" << endl;
 	OnCreateMercUnitCheck* toCreateMercUnitCheck = new OnCreateMercUnitCheck(mem, (LPVOID)patchesForGame::OnCreateMercUnitCheck, globals::dataS.gamever);
