@@ -205,6 +205,7 @@ namespace modSettingsUI
 		ImGui::Checkbox("Tactical map viewer", &dataG::data.modulesData.isTacticalMapViewerNeeded);
 		ImGui::Checkbox("M2TWEOP developer mode", &dataG::data.modulesData.isDeveloperModeNeeded);
 		ImGui::Checkbox("Block modification launch without EOP", &dataG::data.gameData.isBlockLaunchWithoutEop);
+		ImGui::Checkbox("Override battle camera and controls", &dataG::data.gameData.IsOverrideBattleCamera);
 	}
 	void drawModSettingsUI(bool* isOpen)
 	{
