@@ -1,5 +1,7 @@
 #include "helpers.h"
 #include "dataG.h"
+#include <Windows.h>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <TlHelp32.h>
@@ -83,6 +85,20 @@ void helpers::closeProcess(const string& exeName)
 	CloseHandle(gameHNDL);
 }
 
+bool helpers::isProcessRunning(const string& exeName) {
+	PROCESSENTRY32 Pc = { sizeof(PROCESSENTRY32) };
+	HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, 0);
+	bool isProcessFound = false;
+	if (Process32First(hSnapshot, &Pc)) {
+		do {
+			if (strcmp(Pc.szExeFile, exeName.c_str()) == 0) {
+				isProcessFound = true;
+			}
+		} while (Process32Next(hSnapshot, &Pc));
+	}
+
+	return isProcessFound;
+}
 
 
 

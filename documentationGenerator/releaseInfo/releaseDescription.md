@@ -7,18 +7,13 @@
 ## **Release Notes**
 
 ### **Launcher**
-- The launcher should no longer throw an error if Discord isn't open/installed - *Medik*
+- Enabling Discord Rich Presence no longer opens an extra window, it now seamlessly toggles on and off. You just need to use the launcher if you want to enable it.
 
 ### **Library**
-- Added error handling around loading of FBX models to aid in debugging  - *Medik*
-- `objects.addCharacterCas()` now uses a scale of 0.7 instead of 1.0 by default. Most mods seem to use 0.7 and the default of 1 was causing oversized .cas models. If passing in the scale is important you, please let us know and we can take a look.  - *Medik*
+- 
 
 ### **Lua Plugin**
-- Added new function `M2TWEOP.getTileVisibility(faction, xCoord, yCoord)`. Allows you to check if a faction has seen a tile, similar to onTileSeen()  - *Medik*
-- Added new function `stackStruct.sortStack(sortType)`. Allows the sorting of units in a stack (Player and AI) based on a variety of options (EDU Type, Experience, Number of Soldiers, etc.)  - *Medik*
 
-### **Lua Plugin**
-- New function `M2TWEOP.getBattleCamCoords()`. Allows movement of the camera along the X, Y and Z axis beyond the default, max range  - *Medik*
 
 ![image](https://github.com/youneuoy/M2TWEOP-library/assets/22448079/99194af1-1ca3-44b9-9382-a5dd0a080b3b)
 
@@ -26,8 +21,7 @@
 <!-- ### **ImGUI** -->
 
 ### **Documentation**
-- Added a new 'Copy to clipboard button' above code snippets  - *Medik*
-- Added a customized version of Prism.js to manage the syntax highlighting of code snippets  - *Medik*
+
 
 ![image](https://github.com/youneuoy/M2TWEOP-library/assets/22448079/ea6c89c5-8d30-4284-8288-3bafafc56361)
 
