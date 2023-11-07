@@ -8,7 +8,8 @@ public:
 
 	static bool loadTexture(const char* filename, GLuint* out_texture, int* out_width, int* out_height);
 
-	static void closeGame(const string& exeName);
+	static void closeProcess(const string& exeName);
+	static bool isProcessRunning(const string& exeName);
 
 	static vector<std::string> getCfgFilesInFolder();
 

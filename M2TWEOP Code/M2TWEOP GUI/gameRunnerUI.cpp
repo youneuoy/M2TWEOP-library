@@ -32,7 +32,7 @@ namespace gameRunnerUI
 
 		atomic_bool isRunStarted{false};
 		atomic_bool isRunEnded{false};
-		atomic_bool isGetResponce{false};
+		atomic_bool isGetResponse{false};
 		bool isRunProcessInitiated = false;
 
 		float xWindowSize = 500.f;
@@ -66,7 +66,7 @@ namespace gameRunnerUI
 			}
 		}
 	}
-	void runGameThread(std::atomic_bool &isStarted, std::atomic_bool &isEnded, std::atomic_bool &isGetResponce, const string &exePath, const string &exeArgs, const string &eopArgs, bool isEopNeeded)
+	void runGameThread(std::atomic_bool &isStarted, std::atomic_bool &isEnded, std::atomic_bool &isGetResponse, const string &exePath, const string &exeArgs, const string &eopArgs, bool isEopNeeded)
 	{
 
 		string startArgs = exeArgs;
@@ -81,45 +81,24 @@ namespace gameRunnerUI
 
 		if (startResult == false)
 		{
-			helpers::closeGame(dataG::data.gameData.exeName);
+			helpers::closeProcess(dataG::data.gameData.exeName);
 
-			isGetResponce = false;
+			isGetResponse = false;
 		}
 
 		isEnded = true;
-		isGetResponce = true;
+		isGetResponse = true;
 	}
 
-	void drawDiscordUI(bool *isOpen)
+	void maintainDiscordRichPresence()
 	{
-	std:
-		string info = "If you disable Discord Rich Presence, this window will no longer appear.";
-
-		ImGui::SetNextWindowPos(helpers::getScreen().screenUpperPos, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
-		if (startProcess.isWindowTooSmall == false)
+		if ((startProcess.isRunEnded == true && startProcess.isGetResponse == true))
 		{
-			ImGui::SetNextWindowSize(ImVec2(startProcess.xWindowSize, -1));
+			std::this_thread::sleep_for(std::chrono::seconds(3));
+				if (helpers::isProcessRunning(dataG::data.gameData.exeName) == false) {
+						exit(0);
+				}
 		}
-		else
-		{
-			ImGui::SetNextWindowSize(ImVec2(helpers::getScreen().screenSize.x * 0.3f, -1));
-		}
-
-		ImGui::Begin("EOP: Discord Rich Presence", isOpen, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus);
-
-		// Animate a simple progress bar
-		if (startProcess.isWindowTooSmall == false)
-		{
-			ImGui::ProgressBar(ImGui::GetTime() * -0.05f, ImVec2(-1.0f, 0.0f), "");
-			TextAtCenter(info.c_str());
-		}
-		else
-		{
-			ImGui::TextWrapped(info.c_str());
-			ImGui::ProgressBar(ImGui::GetTime() * -0.05f, ImVec2(-1.0f, 0.0f));
-		}
-
-		ImGui::End();
 	}
 
 	int drawUI(bool *isOpen)
@@ -149,7 +128,7 @@ namespace gameRunnerUI
 		}
 
 		if (startProcess.isRunStarted == true &&
-			(ImGui::GetTime() > startProcess.sendingEndTime || (startProcess.isRunEnded == true && startProcess.isGetResponce == false)))
+			(ImGui::GetTime() > startProcess.sendingEndTime || (startProcess.isRunEnded == true && startProcess.isGetResponse == false)))
 		{
 			const std::string badMSG = R"(
 ![badLogo](eopData/images/deathDance.png)
@@ -173,17 +152,17 @@ namespace gameRunnerUI
 			startProcess.isRunStarted = true;
 
 			std::thread thrUrl(
-				runGameThread, std::ref(startProcess.isRunStarted), std::ref(startProcess.isRunEnded), std::ref(startProcess.isGetResponce), std::ref(startProcess.exePath), std::ref(startProcess.exeArgs), std::ref(startProcess.eopArgs), startProcess.isEopNeeded);
+				runGameThread, std::ref(startProcess.isRunStarted), std::ref(startProcess.isRunEnded), std::ref(startProcess.isGetResponse), std::ref(startProcess.exePath), std::ref(startProcess.exeArgs), std::ref(startProcess.eopArgs), startProcess.isEopNeeded);
 			thrUrl.detach();
 
 			startProcess.sendingEndTime = ImGui::GetTime() + 34.5f;
 		}
 
-		if ((startProcess.isRunEnded == true && startProcess.isGetResponce == true) || *isOpen == false)
+		if ((startProcess.isRunEnded == true && startProcess.isGetResponse == true) || *isOpen == false)
 		{
-			if (startProcess.isGetResponce == false)
+			if (startProcess.isGetResponse == false)
 			{
-				helpers::closeGame(dataG::data.gameData.exeName);
+				helpers::closeProcess(dataG::data.gameData.exeName);
 			}
 			if (dataG::data.gameData.isDiscordRichPresenceEnabled == false)
 			{
