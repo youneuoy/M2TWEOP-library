@@ -13,13 +13,13 @@ namespace gameSTDUI
 
 	void drawSTDUI(bool* isOpen)
 	{
-		ImVec2 windowSize = ImGui::CalcTextSize("Run vanilla or dlc(no M2TWEOP capabilities)");
+		ImVec2 windowSize = ImGui::CalcTextSize("Run vanilla (Without EOP)");
 		windowSize.x *= 2.0f;
 		ImGui::SetNextWindowPos(helpers::getScreen().screenHalfSize, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
 		ImGui::SetNextWindowSize(ImVec2(windowSize.x, -1.f));
 		ImGui::Begin("Select campaign", isOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
-		if (ImGui::Button("Grand campaign", helpers::getScreen().centerXButton))
+		if (ImGui::Button("Grand Campaign", helpers::getScreen().centerXButton))
 		{
 			gameSTDUIData.campaign = 1;
 		}
@@ -28,7 +28,7 @@ namespace gameSTDUI
 		{
 			gameSTDUIData.campaign = 2;
 		}
-		if (ImGui::Button("British isles", helpers::getScreen().centerXButton))
+		if (ImGui::Button("British Isles", helpers::getScreen().centerXButton))
 		{
 			gameSTDUIData.campaign = 3;
 		}

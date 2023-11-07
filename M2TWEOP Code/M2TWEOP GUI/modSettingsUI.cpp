@@ -185,6 +185,47 @@ namespace modSettingsUI
 		{
 			dataG::data.audio.bkgMusic.music->setVolume(dataG::data.audio.bkgMusic.musicVolume);
 		}
+		std::vector<std::string> cfgFiles = helpers::getCfgFilesInFolder();
+		std::vector<const char*> items;
+		for (const auto& file : cfgFiles) {
+			items.push_back(file.c_str());
+		}
+		string path;
+		helpers::getCurrentPath(path);
+		static int selectedItem = -1;
+		if (items.size() == 0)
+		{
+			dataG::data.modData.useVanillaConfig = true;
+		}
+		else
+		{
+			if (dataG::data.modData.configName == "")
+			{
+				dataG::data.modData.configName = items[0];
+				dataG::data.modData.useVanillaConfig = false;
+				selectedItem = 0;
+			}
+			else
+			{
+				for (const auto& file : items) {
+					if (file == dataG::data.modData.configName)
+					{
+						selectedItem = std::distance(items.begin(), std::find(items.begin(), items.end(), file));
+						dataG::data.modData.configName = items[selectedItem];
+						dataG::data.modData.useVanillaConfig = false;
+						break;
+					}
+				}
+			}
+		}
+		if (dataG::data.modData.useVanillaConfig == true)
+		{
+			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		}
+		ImVec2 textSize = ImGui::CalcTextSize("Launcher Theme: ");
+		ImGui::PushItemWidth(textSize.x);
+		ImGui::Combo("Launcher Theme: ", &selectedItem, &items[0], items.size());
 	}
 
 	void drawRulesSettings()
@@ -194,8 +235,16 @@ namespace modSettingsUI
 
 	void drawHsSettings()
 	{
-		ImGui::Checkbox("Autogeneration of historical battles", &dataG::data.battlesData.isGenerationNeeded);
-		ImGui::Checkbox("Autogeneration of battle results files", &dataG::data.battlesData.isResultTransferNeeded);
+		ImGui::Checkbox("Automatically generate hotseat battles", &dataG::data.battlesData.isGenerationNeeded);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+		{
+			ImGui::SetTooltip("For hotseat online play");
+		}
+		ImGui::Checkbox("Automatically generate battle result files", &dataG::data.battlesData.isGenerationNeeded);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+		{
+			ImGui::SetTooltip("");
+		}
 		ImGui::Checkbox("Planned retreat route", &dataG::data.battlesData.isPlannedRetreatRoute);
 	}
 
