@@ -151,6 +151,9 @@
     <Filter Include="features\Retreats\Retreater">
       <UniqueIdentifier>{0ff40f1f-f3d3-4e1a-82ad-deec565c667b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="features\OverridenBattleCamera">
+      <UniqueIdentifier>{7db61e2c-ce87-45e7-a97a-d5c5cba0a7ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -501,6 +504,12 @@
     <ClInclude Include="MasterDefines.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="OverridedBattleCamera.h">
+      <Filter>features\OverridenBattleCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="OverridedBattleCameraPatcher.h">
+      <Filter>features\OverridenBattleCamera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -781,6 +790,12 @@
     </ClCompile>
     <ClCompile Include="Retreater.cpp">
       <Filter>features\Retreats\Retreater</Filter>
+    </ClCompile>
+    <ClCompile Include="OverridedBattleCamera.cpp">
+      <Filter>features\OverridenBattleCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="OverridedBattleCameraPatcher.cpp">
+      <Filter>features\OverridenBattleCamera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

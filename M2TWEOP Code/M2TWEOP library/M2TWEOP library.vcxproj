@@ -279,6 +279,8 @@
     <ClInclude Include="MmbMover.h" />
     <ClInclude Include="onlineThings.h" />
     <ClInclude Include="onlineThings2.h" />
+    <ClInclude Include="OverridedBattleCamera.h" />
+    <ClInclude Include="OverridedBattleCameraPatcher.h" />
     <ClInclude Include="patchesForGame.h" />
     <ClInclude Include="PathMap.h" />
     <ClInclude Include="pch.h" />
@@ -376,6 +378,8 @@
     <ClCompile Include="MmbMover.cpp" />
     <ClCompile Include="onlineThings.cpp" />
     <ClCompile Include="onlineThings2.cpp" />
+    <ClCompile Include="OverridedBattleCamera.cpp" />
+    <ClCompile Include="OverridedBattleCameraPatcher.cpp" />
     <ClCompile Include="patchesForGame.cpp" />
     <ClCompile Include="PathMap.cpp" />
     <ClCompile Include="pch.cpp">

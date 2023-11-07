@@ -36,7 +36,7 @@ T FnCast(uint32_t fnToCast, T pFnCastTo) {
 NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	plugins::onWindowProc(hWnd, uMsg, wParam, lParam);
-
+	globals::dataS.Modules.OverridenBattleCamera.OnWindowProc(hWnd, uMsg, wParam, lParam);
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
 	{
 		return true;
@@ -191,6 +191,8 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 }
 void graphicsD3D::onDrawAllGameStuff()
 {
+	globals::dataS.Modules.OverridenBattleCamera.Tick();
+
 	if (graphicsD3D::dataS.pDevice->BeginScene() < 0)
 	{
 		return;

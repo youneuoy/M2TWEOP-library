@@ -597,6 +597,13 @@ void managerF::doPachs()
 		blockLaunch->Enable();
 		f1 << "Done" << endl;
 	}
+	if (globals::dataS.gameCfg.IsOverrideBattleCamera == true)
+	{
+
+		f1 << "Start applying OverrideBattleCamera patch" << endl;
+		globals::dataS.Modules.OverridenBattleCamera.Init(globals::dataS.gamever, globals::dataS.modPatch);
+		f1 << "Done" << endl;
+	}
 
 
 	f1 << "End." << endl;
@@ -609,10 +616,10 @@ void loadJsonSettings()
 {
 	std::string fPath = globals::dataS.modPatch;
 	fPath += "\\eopData\\gameCfg.json";
-	jsn::json json = fastFunctsHelpers::loadJsonFromFile(fPath);
 
 	try
 	{
+		jsn::json json = fastFunctsHelpers::loadJsonFromFile(fPath);
 		if (json.contains("isContextMenuNeeded"))
 		{
 			getJson(globals::dataS.Modules.contextMenuStrat.isContextMenuNeeded, "isContextMenuNeeded");
@@ -629,12 +636,16 @@ void loadJsonSettings()
 		{
 			getJson(globals::dataS.gameCfg.isBlockLaunchWithoutEop, "isBlockLaunchWithoutEop");
 		}
+		if (json.contains("IsOverrideBattleCamera"))
+		{
+			getJson(globals::dataS.gameCfg.IsOverrideBattleCamera, "IsOverrideBattleCamera");
+		}
 		if (json.contains("isDiscordRichPresenceEnabled"))
 		{
 			getJson(globals::dataS.gameCfg.isDiscordRichPresenceEnabled, "isDiscordRichPresenceEnabled");
 		}
 	}
-	catch (jsn::json::type_error& e)
+	catch (std::exception& e)
 	{
 		MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 	}
@@ -670,7 +681,6 @@ NOINLINE EOP_EXPORT void managerExport::initEOP(const char* modPath, int gameVer
 	{
 		return;
 	}
-
 	globals::dataS.gamever = gameVer;
 	globals::dataS.modPatch = modPath;
 

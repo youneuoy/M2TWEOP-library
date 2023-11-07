@@ -7,6 +7,7 @@
 #include "MmbMover.h"
 #include "TacticalMapVeiwer.h"
 #include "ContextMenuStrat.h"
+#include "OverridedBattleCamera.h"
 class globals
 {
 public:
@@ -19,6 +20,7 @@ public:
 
 		struct
 		{
+			bool IsOverrideBattleCamera = false;
 			bool isBlockLaunchWithoutEop = false;
 			bool isDiscordRichPresenceEnabled = true;
 		}gameCfg;
@@ -30,6 +32,7 @@ public:
 			RecruitSystem recruitSystem;
 			MmbMover mmbMover;
 			ContextMenuStrat contextMenuStrat;
+			OverridedBattleCamera OverridenBattleCamera;
 		}Modules;
 
 		//steam =2, kingdoms=1
