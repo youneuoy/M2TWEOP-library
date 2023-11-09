@@ -130,6 +130,13 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<settlementRecruitmentPool>settlementRecruitmentPool;
 		sol::usertype<battleFactionCounter>battleFactionCounter;
 		sol::usertype<eventTrigger> eventTrigger;
+		sol::usertype<settlementStats> settlementStats;
+		sol::usertype<aiFaction> aiFaction;
+		sol::usertype<aiLongTermGoalDirector> aiLongTermGoalDirector;
+		sol::usertype<aiPersonalityValues> aiPersonality;
+		sol::usertype<aiGlobalStrategyDirector> aiGlobalStrategyDirector;
+		sol::usertype<decisionValuesLTGD> decisionValuesLTGD;
+		sol::usertype<aiProductionController> aiProductionController;
 	}types;
 	luaState = {};
 	luaPath = modPath + "\\youneuoy_Data\\plugins\\lua";
@@ -201,6 +208,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield setBuildingChainLimit setBuildingChainLimit
 	@tfield getReligionName getReligionName
 	@tfield condition condition
+	@tfield getOptions1 getOptions1
+	@tfield getOptions2 getOptions2
+	@tfield getCampaignDifficulty1 getCampaignDifficulty1
+	@tfield getCampaignDifficulty2 getCampaignDifficulty2
 	@table M2TWEOP
 	*/
 
@@ -460,6 +471,22 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local options =M2TWEOP.getOptions2();
 	*/
 	tables.M2TWEOPTable.set_function("getOptions2", &m2tweopHelpers::getOptions2);
+	/***
+	Get the campaign difficulty modifiers.
+	@function M2TWEOP.getCampaignDifficulty1
+	@treturn options1 options
+	@usage
+	local modifiers = M2TWEOP.getCampaignDifficulty1();
+	*/
+	tables.M2TWEOPTable.set_function("getCampaignDifficulty1", &m2tweopHelpers::getCampaignDifficulty1);
+	/***
+	Get the campaign difficulty modifiers.
+	@function M2TWEOP.getCampaignDifficulty2
+	@treturn options1 options
+	@usage
+	local modifiers = M2TWEOP.getCampaignDifficulty2();
+	*/
+	tables.M2TWEOPTable.set_function("getCampaignDifficulty2", &m2tweopHelpers::getCampaignDifficulty2);
 	/***
 	Check game condition.
 	@function M2TWEOP.condition
@@ -1111,6 +1138,13 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield string InfoCardTga - Get only
 	@tfield int Index - Get only
 	@tfield int UnitCreatedCounter - Get only
+	@tfield int category - Get only
+	@tfield int class - Get only
+	@tfield int categoryClassCombo - Get only
+	@tfield int recruitPriorityOffset times 4
+	@tfield int CrusadingUpkeepModifier
+	@tfield number aiUnitValuePerSoldier
+	@tfield number aiUnitValue
 	@tfield int SoldierCount
 	@tfield float Mass
 	@tfield float Width
@@ -1189,11 +1223,18 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.EduEntry.set("StatFood1", &eduEntry::StatFood1);
 	types.EduEntry.set("StatFood2", &eduEntry::StatFood2);
 	types.EduEntry.set("Ammunition", &eduEntry::Ammunition);
+	types.EduEntry.set("category", &eduEntry::Category);
+	types.EduEntry.set("class", &eduEntry::Class);
+	types.EduEntry.set("categoryClassCombo", &eduEntry::categoryClassCombinationForAI);
+	types.EduEntry.set("recruitPriorityOffset", &eduEntry::RecruitPriorityOffsetTimes4);
+	types.EduEntry.set("crusadingUpkeepModifier", &eduEntry::CrusadingUpkeepModifier);
+	types.EduEntry.set("aiUnitValuePerSoldier", &eduEntry::aiUnitValuePerSoldier);
+	types.EduEntry.set("aiUnitValue", &eduEntry::aiUnitValue);
 
 
 
 	///Character
-	//@section characterTable
+	//@section characterTablefortStruct
 
 	/***
 	characters as they exist on the strategy map - dead characters, wives, children, and off-map characters do not have these fields.
@@ -1206,6 +1247,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield stackStruct armyNotLeaded in the stack but not leading it
 	@tfield int inEnemyZOC
 	@tfield int ambushState
+	@tfield int isMarkedToKill can check if the character died before the game updates he is dead like post battle event
 	@tfield int doNotSpendMovePoints
 	@tfield float movePointsCharacter
 	@tfield float movePointsModifier
@@ -1218,6 +1260,14 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield float popConvertedThisTurn
 	@tfield int timeInRegion
 	@tfield int timeWithArmy for auxiliary generals, not leading general
+	@tfield crusadeStruct crusade
+	@tfield int turnJoinedCrusade
+	@tfield int currentTurn
+	@tfield float distanceToCrusadeTarget
+	@tfield int disbandProgress
+	@tfield int isCrusadeDisbandActive
+	@tfield settlementStruct besiegingSettlement
+	@tfield character besiegingCharacter
 	@tfield string ability see descr\_hero\_abilities.xml
 	@tfield getTypeID getTypeID
 	@tfield getTypeName getTypeName
@@ -1238,6 +1288,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.character.set("bodyguards", &general::bodyguards);
 	types.character.set("armyLeaded", &general::armyLeaded);
 	types.character.set("armyNotLeaded", &general::armyNotLeaded);
+	types.character.set("isMarkedToKill", &general::ifMarkedToKill);
 	types.character.set("inEnemyZOC", &general::inEnemyZOC);
 	types.character.set("ambushState", &general::ambushState);
 	types.character.set("doNotSpendMovePoints", &general::doNotSpendMovePoints);
@@ -1247,6 +1298,14 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.character.set("popConvertedThisTurn", &general::popConvertedThisTurn);
 	types.character.set("timeInRegion", &general::timeInRegion);
 	types.character.set("timeWithArmy", &general::timeWithArmy);
+	types.character.set("crusade", &general::crusade);
+	types.character.set("turnJoinedCrusade", &general::turnJoinedCrusade);
+	types.character.set("currentTurn", &general::currentTurn);
+	types.character.set("distanceToCrusadeTarget", &general::distanceToCrusadeTarget);
+	types.character.set("disbandProgress", &general::disbandProgress);
+	types.character.set("isCrusadeDisbandActive", &general::isCrusadeDisbandActive);
+	types.character.set("besiegingSettlement", &general::besiegingSettlement);
+	types.character.set("besiegingCharacter", &general::besiegingCharacter);
 	types.character.set("movePointsCharacter", &general::movePointsCharacter);
 	types.character.set("movePointsModifier", &general::movePointsModifier);
 	types.character.set("movePointsMaxArmy", &general::movePointsMaxArmy);
@@ -2073,6 +2132,272 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.factionStruct.set_function("getBattleVsFactionStats", &factionHelpers::getBattleVsFactionStats);
 
+	///aiFaction
+	//@section aiFaction
+
+	/***
+	Basic aiFaction table
+
+	@tfield factionStruct faction
+	@tfield int factionID
+	@tfield aiLongTermGoalDirector LTGD
+	@tfield aiPersonality aiPersonality
+	@tfield aiGlobalStrategyDirector strategyDirector
+
+	@table aiFaction
+	*/
+	types.aiFaction = luaState.new_usertype<aiFaction>("aiFaction");
+	types.aiFaction.set("faction", &aiFaction::faction);
+	types.aiFaction.set("factionID", &aiFaction::factionID);
+	types.aiFaction.set("LTGD", &aiFaction::aiLongTermGoalDirector);
+	types.aiFaction.set("aiPersonality", &aiFaction::aiProductionControllers);
+	//types.aiFaction.set("strategyDirector", &aiFaction::aiGlobalStrategyDirector);
+
+	///aiLongTermGoalDirector
+	//@section aiLongTermGoalDirector
+
+	/***
+	Basic aiLongTermGoalDirector table
+
+	@tfield factionStruct faction
+	@tfield aiFaction aiFaction
+	@tfield int trustedAllyEnemiesBitfield
+	@tfield int freeStrengthEnemy
+	@tfield int freeStrengthEnemyBalance
+	@tfield int consideringNavalInvasion
+	@tfield int navalTargetRegionID
+	@tfield int navalTargetRegionPriority
+	@tfield getlongTermGoalValues getlongTermGoalValues
+
+	@table aiLongTermGoalDirector
+	*/
+	types.aiLongTermGoalDirector = luaState.new_usertype<aiLongTermGoalDirector>("aiLongTermGoalDirector");
+	types.aiLongTermGoalDirector.set("faction", &aiLongTermGoalDirector::faction);
+	types.aiLongTermGoalDirector.set("aiFaction", &aiLongTermGoalDirector::aiFaction);
+	types.aiLongTermGoalDirector.set("trustedAllyEnemiesBitfield", &aiLongTermGoalDirector::trustedAllyEnemies);
+	types.aiLongTermGoalDirector.set("freeStrengthEnemy", &aiLongTermGoalDirector::freeStrengthEnemy);
+	types.aiLongTermGoalDirector.set("freeStrengthEnemyBalance", &aiLongTermGoalDirector::freeStrengthEnemyBalance);
+	types.aiLongTermGoalDirector.set("consideringNavalInvasion", &aiLongTermGoalDirector::consideringNavalInvasion);
+	types.aiLongTermGoalDirector.set("navalTargetRegionID", &aiLongTermGoalDirector::navalTargetRegionID);
+	types.aiLongTermGoalDirector.set("navalTargetRegionPriority", &aiLongTermGoalDirector::navalTargetRegionPriority);
+
+	/***
+	Get long term goal director values versus a specific other faction.
+	@function aiLongTermGoalDirector:getlongTermGoalValues
+	@tparam int targetFactionID
+	@treturn decisionValuesLTGD longTermGoalValues
+	@usage
+	local longTermGoalValues = LTGD:getlongTermGoalValues(2)
+	*/
+	types.aiLongTermGoalDirector.set_function("getlongTermGoalValues", &factionHelpers::getlongTermGoalValues);
+
+	///decisionValuesLTGD
+	//@section decisionValuesLTGD
+
+	/***
+	Basic decisionValuesLTGD table
+
+	@tfield int defendType
+	@tfield int defendPriority
+	@tfield int invasionType
+	@tfield int invadePriority
+	@tfield bool atWar
+	@tfield bool wantPeace
+	@tfield bool wantAlly
+	@tfield bool wantBeProtect
+	@tfield bool wantOfferProtect
+	@tfield bool allianceAgainst
+	@tfield int ptsDesire
+	@tfield int ptsAlliance
+	@tfield bool canForceInvade
+
+	@table decisionValuesLTGD
+	*/
+	types.decisionValuesLTGD = luaState.new_usertype<decisionValuesLTGD>("decisionValuesLTGD");
+	types.decisionValuesLTGD.set("defendType", &decisionValuesLTGD::defendType);
+	types.decisionValuesLTGD.set("defendPriority", &decisionValuesLTGD::defendPriority);
+	types.decisionValuesLTGD.set("invasionType", &decisionValuesLTGD::invasionType);
+	types.decisionValuesLTGD.set("invadePriority", &decisionValuesLTGD::invadePriority);
+	types.decisionValuesLTGD.set("atWar", &decisionValuesLTGD::atWar);
+	types.decisionValuesLTGD.set("wantPeace", &decisionValuesLTGD::wantPeace);
+	types.decisionValuesLTGD.set("wantAlly", &decisionValuesLTGD::wantAlly);
+	types.decisionValuesLTGD.set("wantBeProtect", &decisionValuesLTGD::wantBeProtect);
+	types.decisionValuesLTGD.set("wantOfferProtect", &decisionValuesLTGD::wantOfferProtect);
+	types.decisionValuesLTGD.set("allianceAgainst", &decisionValuesLTGD::allianceAgainst);
+	types.decisionValuesLTGD.set("ptsDesire", &decisionValuesLTGD::ptsDesire);
+	types.decisionValuesLTGD.set("ptsAlliance", &decisionValuesLTGD::ptsAlliance);
+	types.decisionValuesLTGD.set("canForceInvade", &decisionValuesLTGD::canForceInvade);
+
+	///aiPersonality
+	//@section aiPersonality
+
+	/***
+	Basic aiPersonality table
+
+	@tfield aiFaction aiFaction
+	@tfield int aiProductionControllersNum
+	@tfield int AIPersonalityType
+	@tfield int AIPersonalityName
+	@tfield int spyBias
+	@tfield int assassinBias
+	@tfield int diplomatBias
+	@tfield int admiralBias
+	@tfield int priestBias
+	@tfield int merchantBias
+	@tfield int balancedPolicyNum
+	@tfield int financialPolicyNum
+	@tfield int militaryPolicyNum
+	@tfield int growthPolicyNum
+	@tfield int culturalPolicyNum
+	@tfield setConstructionValue setConstructionValue
+	@tfield setRecruitmentValue setRecruitmentValue
+	@tfield getConstructionValue getConstructionValue
+	@tfield getRecruitmentValue getRecruitmentValue
+	@tfield getProductionController getProductionController
+
+	@table aiPersonality
+	*/
+	types.aiPersonality = luaState.new_usertype<aiPersonalityValues>("aiPersonality");
+	types.aiPersonality.set("aiFaction", &aiPersonalityValues::aiFaction);
+	types.aiPersonality.set("aiProductionControllersNum", &aiPersonalityValues::aiProductionControllersNum);
+	types.aiPersonality.set("aiPersonalityType", &aiPersonalityValues::AIPersonalityType);
+	types.aiPersonality.set("aiPersonalityName", &aiPersonalityValues::AIPersonalityName);
+	types.aiPersonality.set("spyBias", &aiPersonalityValues::spyBias);
+	types.aiPersonality.set("assassinBias", &aiPersonalityValues::assassinBias);
+	types.aiPersonality.set("diplomatBias", &aiPersonalityValues::diplomatBias);
+	types.aiPersonality.set("admiralBias", &aiPersonalityValues::admiralBias);
+	types.aiPersonality.set("priestBias", &aiPersonalityValues::priestBias);
+	types.aiPersonality.set("merchantBias", &aiPersonalityValues::merchantBias);
+	types.aiPersonality.set("balancedPolicyNum", &aiPersonalityValues::balancedPolicyNum);
+	types.aiPersonality.set("financialPolicyNum", &aiPersonalityValues::financialPolicyNum);
+	types.aiPersonality.set("militaryPolicyNum", &aiPersonalityValues::militaryPolicyNum);
+	types.aiPersonality.set("growthPolicyNum", &aiPersonalityValues::growthPolicyNum);
+	types.aiPersonality.set("culturalPolicyNum", &aiPersonalityValues::culturalPolicyNum);
+	/***
+	Set bias value of the ai personality for a capability.
+	@function aiPersonality:setConstructionValue
+	@tparam int type use building capabilities enum
+	@tparam int value
+	@usage
+	     aiPersonality:setConstructionValue(buildingCapability.law_bonus, 100)
+	*/
+	types.aiPersonality.set_function("setConstructionValue", &factionHelpers::setConstructionValue);
+	/***
+	Set bias value of the ai personality for a recruitment class.
+	@function aiPersonality:setRecruitmentValue
+	@tparam int type use unitCategoryClass enum
+	@tparam int value
+	@usage
+		 aiPersonality:setRecruitmentValue(unitCategoryClass.heavyCavalry, 100)
+	*/
+	types.aiPersonality.set_function("setRecruitmentValue", &factionHelpers::setRecruitmentValue);
+	/***
+	Get bias value of the ai personality for a capability.
+	@function aiPersonality:getConstructionValue
+	@tparam int type use building capabilities enum
+	@treturn int value
+	@usage
+		local value = aiPersonality:setConstructionValue(buildingCapability.law_bonus)
+	*/
+	types.aiPersonality.set_function("getConstructionValue", &factionHelpers::getConstructionValue);
+	/***
+	Get bias value of the ai personality for a recruitment class.
+	@function aiPersonality:getRecruitmentValue
+	@tparam int type use unitCategoryClass enum
+	@treturn int value
+	@usage
+		local value = aiPersonality:setRecruitmentValue(unitCategoryClass.heavyCavalry)
+	*/
+	types.aiPersonality.set_function("getRecruitmentValue", &factionHelpers::getRecruitmentValue);
+	/***
+	Get a production controller by index.
+	@function aiPersonality:getProductionController
+	@tparam int index
+	@treturn aiProductionController controller
+	@usage
+		local prodController = aiPersonality:getProductionController(0)
+	*/
+	types.aiPersonality.set_function("getProductionController", &factionHelpers::getProductionController);
+
+
+	///aiProductionController
+	//@section aiProductionController
+
+	/***
+	Basic aiProductionController table
+
+	@tfield aiFaction aiFaction
+	@tfield int regionID
+	@tfield settlementStruct settlement
+	@tfield int autoManagePolicy
+	@tfield bool isAutoManaged
+	@tfield bool isAutoManagedRecruitment
+	@tfield bool isAutoManagedConstruction
+	@tfield int spyBias
+	@tfield int assassinBias
+	@tfield int diplomatBias
+	@tfield int admiralBias
+	@tfield int priestBias
+	@tfield int merchantBias
+	@tfield setConstructionValue setConstructionValue
+	@tfield setRecruitmentValue setRecruitmentValue
+	@tfield getConstructionValue getConstructionValue
+	@tfield getRecruitmentValue getRecruitmentValue
+
+	@table aiProductionController
+	*/
+	types.aiProductionController = luaState.new_usertype<aiProductionController>("aiProductionController");
+	types.aiProductionController.set("aiFaction", &aiProductionController::aiFaction);
+	types.aiProductionController.set("regionID", &aiProductionController::regionID);
+	types.aiProductionController.set("settlement", &aiProductionController::settlement);
+	types.aiProductionController.set("autoManagePolicy", &aiProductionController::autoManagePolicy);
+	types.aiProductionController.set("isAutoManaged", &aiProductionController::isAutoManaged);
+	types.aiProductionController.set("isAutoManagedRecruitment", &aiProductionController::isAutoManagedRecruitment);
+	types.aiProductionController.set("isAutoManagedConstruction", &aiProductionController::isAutoManagedConstruction);
+	types.aiProductionController.set("spyBias", &aiProductionController::spyBias);
+	types.aiProductionController.set("assassinBias", &aiProductionController::assassinBias);
+	types.aiProductionController.set("diplomatBias", &aiProductionController::diplomatBias);
+	types.aiProductionController.set("admiralBias", &aiProductionController::admiralBias);
+	types.aiProductionController.set("priestBias", &aiProductionController::priestBias);
+	types.aiProductionController.set("merchantBias", &aiProductionController::merchantBias);
+	/***
+	Set bias value of the ai personality for a capability.
+	@function aiProductionController:setConstructionValue
+	@tparam int type use building capabilities enum
+	@tparam int value
+	@usage
+		 aiProductionController:setConstructionValue(buildingCapability.law_bonus, 100)
+	*/
+	types.aiProductionController.set_function("setConstructionValue", &factionHelpers::setConstructionValueSett);
+	/***
+	Set bias value of the ai personality for a recruitment class.
+	@function aiProductionController:setRecruitmentValue
+	@tparam int type use unitCategoryClass enum
+	@tparam int value
+	@usage
+		 aiProductionController:setRecruitmentValue(unitCategoryClass.heavyCavalry, 100)
+	*/
+	types.aiProductionController.set_function("setRecruitmentValue", &factionHelpers::setRecruitmentValueSett);
+	/***
+	Get bias value of the ai personality for a capability.
+	@function aiProductionController:getConstructionValue
+	@tparam int type use building capabilities enum
+	@treturn int value
+	@usage
+		local value = aiProductionController:setConstructionValue(buildingCapability.law_bonus)
+	*/
+	types.aiProductionController.set_function("getConstructionValue", &factionHelpers::getConstructionValueSett);
+	/***
+	Get bias value of the ai personality for a recruitment class.
+	@function aiProductionController:getRecruitmentValue
+	@tparam int type use unitCategoryClass enum
+	@treturn int value
+	@usage
+		local value = aiProductionController:setRecruitmentValue(unitCategoryClass.heavyCavalry)
+	*/
+	types.aiProductionController.set_function("getRecruitmentValue", &factionHelpers::getRecruitmentValueSett);
+
+
 	///battleFactionCounter
 	//@section battleFactionCounter
 
@@ -2225,7 +2550,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int standardIndex Warning: resets on reload.
 	@tfield int logoIndex Warning: resets on reload.
 	@tfield int smallLogoIndex Warning: resets on reload.
-	@tfield int hordeMaxUnits
 	@tfield int customBattleAvailability
 	@tfield int periodsUnavailableInCustomBattle
 	@tfield int canSap shouldnt do anything in med 2, but could potentially use flag to store some other info about this faction
@@ -2236,6 +2560,19 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int disbandToPools
 	@tfield int canBuildSiegeTowers
 	@tfield int canTransmitPlague
+	@tfield int shadowedByID
+	@tfield int shadowingID
+	@tfield int spawnsOnRevoltID
+	@tfield int roman
+	@tfield int barbarian
+	@tfield int eastern
+	@tfield int slave
+	@tfield int hordeMinUnits
+	@tfield int hordeMaxUnits
+	@tfield int reductionPerHorde
+	@tfield int hordeUnitPerSettlementPop
+	@tfield int hordeMinNamedCharacters
+	@tfield int hordeMaxPercentArmyStack
 
 	@table factionStratMapStruct
 	*/
@@ -2251,7 +2588,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStratMapStruct.set("logoIndex", &factionStratMapDescrS::logo_index);
 	types.factionStratMapStruct.set("smallLogoIndex", &factionStratMapDescrS::small_logo_index);
 	types.factionStratMapStruct.set("religionID", &factionStratMapDescrS::religionID);
-	types.factionStratMapStruct.set("hordeMaxUnits", &factionStratMapDescrS::hordeMaxUnits);
 	types.factionStratMapStruct.set("customBattleAvailability", &factionStratMapDescrS::customBattleAvailability);
 	types.factionStratMapStruct.set("periodsUnavailableInCustomBattle", &factionStratMapDescrS::periodsUnavailableInCustomBattle);
 	types.factionStratMapStruct.set("canSap", &factionStratMapDescrS::canSap);
@@ -2262,6 +2598,19 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStratMapStruct.set("disbandToPools", &factionStratMapDescrS::disbandToPools);
 	types.factionStratMapStruct.set("canBuildSiegeTowers", &factionStratMapDescrS::canBuildSiegeTowers);
 	types.factionStratMapStruct.set("canTransmitPlague", &factionStratMapDescrS::canTransmitPlague);
+	types.factionStratMapStruct.set("shadowedByID", &factionStratMapDescrS::shadowedByID);
+	types.factionStratMapStruct.set("shadowingID", &factionStratMapDescrS::shadowingID);
+	types.factionStratMapStruct.set("spawnsOnRevoltID", &factionStratMapDescrS::spawnsOnRevoltID);
+	types.factionStratMapStruct.set("roman", &factionStratMapDescrS::roman);
+	types.factionStratMapStruct.set("barbarian", &factionStratMapDescrS::barbarian);
+	types.factionStratMapStruct.set("eastern", &factionStratMapDescrS::eastern);
+	types.factionStratMapStruct.set("slave", &factionStratMapDescrS::slave);
+	types.factionStratMapStruct.set("hordeMinUnits", &factionStratMapDescrS::hordeMinUnits);
+	types.factionStratMapStruct.set("hordeMaxUnits", &factionStratMapDescrS::hordeMaxUnits);
+	types.factionStratMapStruct.set("reductionPerHorde", &factionStratMapDescrS::reductionPerHorde);
+	types.factionStratMapStruct.set("hordeUnitPerSettlementPop", &factionStratMapDescrS::hordeUnitPerSettlementPop);
+	types.factionStratMapStruct.set("hordeMinNamedCharacters", &factionStratMapDescrS::hordeMinNamedCharacters);
+	types.factionStratMapStruct.set("hordeMaxPercentArmyStack", &factionStratMapDescrS::hordeMaxPercentArmyStack);
 
 
 	///WatchtowerStruct
@@ -2272,12 +2621,20 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	@tfield int xCoord
 	@tfield int yCoord
+	@tfield int factionID
+	@tfield factionStruct faction
+	@tfield settlementStruct settlement
+	@tfield stackStruct blockingArmy
 
 	@table watchtowerStruct
 	*/
 	types.watchtowerStruct = luaState.new_usertype<watchTowerStruct>("watchtowerStruct");
 	types.watchtowerStruct.set("xCoord", &watchTowerStruct::xCoord);
 	types.watchtowerStruct.set("yCoord", &watchTowerStruct::yCoord);
+	types.watchtowerStruct.set("factionID", &watchTowerStruct::factionID);
+	types.watchtowerStruct.set("faction", &watchTowerStruct::faction);
+	types.watchtowerStruct.set("settlement", &watchTowerStruct::settlement);
+	types.watchtowerStruct.set("blockingArmy", &watchTowerStruct::blockingArmy);
 
 	///FortStruct
 	//@section fortStructTable
@@ -2290,8 +2647,16 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield character governor
 	@tfield stackStruct army
 	@tfield factionStruct ownerFaction
-	@tfield siegeStruct siege
-
+	@tfield int siegeNum
+	@tfield int siegeHoldoutTurns
+	@tfield int turnsSieged
+	@tfield int plagued
+	@tfield int subFactionID
+	@tfield int factionID
+	@tfield int cultureID
+	@tfield int fortFortificationLevel
+	@tfield getSiege getSiege
+	
 	@table fortStruct
 	*/
 	types.fortStruct = luaState.new_usertype<fortStruct>("fortStruct");
@@ -2300,6 +2665,27 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.fortStruct.set("governor", &fortStruct::gubernator);
 	types.fortStruct.set("army", &fortStruct::army);
 	types.fortStruct.set("ownerFaction", &fortStruct::faction);
+	types.fortStruct.set("siegeNum", &fortStruct::siegeNum);
+	types.fortStruct.set("siegeHoldoutTurns", &fortStruct::siegeHoldoutTurns);
+	types.fortStruct.set("turnsSieged", &fortStruct::turnsSieged);
+	types.fortStruct.set("plagued", &fortStruct::plagued);
+	types.fortStruct.set("subFactionID", &fortStruct::subFactionID);
+	types.fortStruct.set("factionID", &fortStruct::factionID);
+	types.fortStruct.set("cultureID", &fortStruct::cultureID);
+	types.fortStruct.set("fortFortificationLevel", &fortStruct::fortFortificationLevel);
+
+	/***
+	Get a specific siege by it's index
+	@function fortStruct:getSiege
+	@tparam int siegeIdx
+	@treturn siegeStruct siege
+	@usage
+	for i = 0, currSet.siegesNum-1 do
+	   local siege=currFort:getSiege(i);
+	   --etc
+	end
+	*/
+	types.fortStruct.set_function("getSiege", &settlementHelpers::getSiege);
 
 
 
@@ -2364,6 +2750,18 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int regionID
 	@tfield int level
 	@tfield int isCastle
+	@tfield int siegeHoldoutTurns
+	@tfield int turnsSieged
+	@tfield int subFactionID
+	@tfield int yearFounded
+	@tfield int isCapital
+	@tfield int harvestSuccess
+	@tfield int baseFertility
+	@tfield int rebelFactionChance
+	@tfield bool plagued
+	@tfield int plagueDeaths
+	@tfield int turnsOwned start at 10 for settlements owned at game start without specification in descr_strat
+	@tfield int populationSiegeStart
 	@tfield int settlementTaxLevel
 	@tfield int recruitmentPoolCount
 	@tfield int recruitmentCapabilityNum
@@ -2374,58 +2772,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int admiralsInRecruitmentQueue
 	@tfield int merchantsInRecruitmentQueue
 	@tfield int priestsInRecruitmentQueue
+	@tfield aiProductionController aiProductionController
 	@tfield int turmoil
 	@tfield int isProvokedRebellion
 	@tfield int populationSize
-	@tfield int PopGrowthBaseFarm - Get only
-	@tfield int PopGrowthFarms - Get only
-	@tfield int PopGrowthHealth - Get only
-	@tfield int PopGrowthBuildings - Get only
-	@tfield int PopGrowthTaxBonus - Get only
-	@tfield int PopGrowthEntertainment - Get only
-	@tfield int PopGrowthTrade - Get only
-	@tfield int PopGrowthGovernorInfluence - Get only
-	@tfield int PopGrowthSqualor - Get only
-	@tfield int PopGrowthPlague - Get only
-	@tfield int PopGrowthTaxPenalty - Get only
-	@tfield int PublicOrderGarrison - Get only
-	@tfield int PublicOrderLaw - Get only
-	@tfield int PublicOrderBuildingsEntertainment - Get only
-	@tfield int PublicOrderGovernorInfluence - Get only
-	@tfield int PublicOrderTaxBonus - Get only
-	@tfield int PublicOrderTriumph - Get only
-	@tfield int PublicOrderPopulationBoom - Get only
-	@tfield int PublicOrderEntertainment - Get only
-	@tfield int PublicOrderHealth - Get only
-	@tfield int PublicOrderGarrisonTwo - Get only
-	@tfield int PublicOrderFear - Get only
-	@tfield int PublicOrderGlory - Get only
-	@tfield int PublicOrderSqualor - Get only
-	@tfield int PublicOrderDistanceToCapital - Get only
-	@tfield int PublicOrderNoGovernance - Get only
-	@tfield int PublicOrderTaxPenalty - Get only
-	@tfield int PublicOrderUnrest - Get only
-	@tfield int PublicOrderBesieged - Get only
-	@tfield int PublicOrderBlockaded - Get only
-	@tfield int PublicOrderCulturalUnrest - Get only
-	@tfield int PublicOrderExcommunication - Get only
-	@tfield int PublicOrder - Get only
-	@tfield int FarmsIncome - Get only
-	@tfield int TaxesIncome - Get only
-	@tfield int MiningIncome - Get only
-	@tfield int TradeIncome - Get only
-	@tfield int DiplomaticIncome - Get only
-	@tfield int DemolitionIncome - Get only
-	@tfield int LootingIncome - Get only
-	@tfield int BuildingsIncome - Get only
-	@tfield int AdminIncome - Get only
-	@tfield int ConstructionExpense - Get only
-	@tfield int RecruitmentExpense - Get only
-	@tfield int DiplomaticExpense - Get only
-	@tfield int CorruptionExpense - Get only
-	@tfield int EntertainmentExpense - Get only
-	@tfield int DevastationExpense - Get only
-	@tfield int TotalIncomeWithoutAdmin - Get only
 	@tfield getReligion getReligion
 	@tfield setReligion setReligion
 	@tfield getGuildStanding getGuildStanding
@@ -2436,6 +2786,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield destroyBuilding destroyBuilding
 	@tfield buildingsQueue buildingsQueue
 	@tfield int resourcesNum
+	@tfield settlementStats settlementStats
+	@tfield settlementStats settlementStatsLastTurn
 	@tfield getResource getResource
 	@tfield int siegesNum
 	@tfield getSiege getSiege
@@ -2475,8 +2827,19 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.settlementStruct.set("level", &settlementStruct::level);
 	types.settlementStruct.set("isCastle", &settlementStruct::isCastle);
 	types.settlementStruct.set("settlementTaxLevel", &settlementStruct::settlementTaxLevel);
+	types.settlementStruct.set("siegeHoldoutTurns", &settlementStruct::siegeHoldoutTurns);
+	types.settlementStruct.set("turnsSieged", &settlementStruct::turnsSieged);
+	types.settlementStruct.set("subFactionID", &settlementStruct::subFactionID);
+	types.settlementStruct.set("yearFounded", &settlementStruct::yearFounded);
+	types.settlementStruct.set("isCapital", &settlementStruct::isCapital);
+	types.settlementStruct.set("aiProductionController", &settlementStruct::aiProductionController);
+	types.settlementStruct.set("harvestSuccess", &settlementStruct::harvestSuccess);
+	types.settlementStruct.set("baseFertility", &settlementStruct::baseFertilityValue);
+	types.settlementStruct.set("rebelFactionChance", &settlementStruct::rebelFactionChance);
+	types.settlementStruct.set("plagued", &settlementStruct::plagued);
+	types.settlementStruct.set("populationSiegeStart", &settlementStruct::populationSiegeStart);
 	types.settlementStruct.set("isProvokedRebellion", &settlementStruct::isProvokedRebellion);
-	types.settlementStruct.set("populationSize", &settlementStruct::populationSize);
+	types.settlementStruct.set("populationSize", sol::property(settlementHelpers::getPopulation));
 	types.settlementStruct.set("recruitmentPoolCount", &settlementStruct::recruitmentPoolCount);
 	types.settlementStruct.set("freezeRecruitmentPool", &settlementStruct::freezeRecruitmentPool);
 	types.settlementStruct.set("spiesInRecruitmentQueue", &settlementStruct::spiesInRecruitmentQueue);
@@ -2485,56 +2848,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.settlementStruct.set("admiralsInRecruitmentQueue", &settlementStruct::admiralsInRecruitmentQueue);
 	types.settlementStruct.set("merchantsInRecruitmentQueue", &settlementStruct::merchantsInRecruitmentQueue);
 	types.settlementStruct.set("priestsInRecruitmentQueue", &settlementStruct::priestsInRecruitmentQueue);
+	types.settlementStruct.set("settlementStats", &settlementStruct::settlementStats);
+	types.settlementStruct.set("settlementStatsLastTurn", &settlementStruct::settlementStatsLastTurn);
 	types.settlementStruct.set("turmoil", &settlementStruct::turmoil);
-	types.settlementStruct.set("PopGrowthBaseFarm", &settlementStruct::PopGrowthBaseFarm);
-	types.settlementStruct.set("PopGrowthFarms", &settlementStruct::PopGrowthFarms);
-	types.settlementStruct.set("PopGrowthHealth", &settlementStruct::PopGrowthHealth);
-	types.settlementStruct.set("PopGrowthBuildings", &settlementStruct::PopGrowthBuildings);
-	types.settlementStruct.set("PopGrowthTaxBonus", &settlementStruct::PopGrowthTaxBonus);
-	types.settlementStruct.set("PopGrowthEntertainment", &settlementStruct::PopGrowthEntertainment);
-	types.settlementStruct.set("PopGrowthTrade", &settlementStruct::PopGrowthTrade);
-	types.settlementStruct.set("PopGrowthGovernorInfluence", &settlementStruct::PopGrowthGovernorInfluence);
-	types.settlementStruct.set("PopGrowthSqualor", &settlementStruct::PopGrowthSqualor);
-	types.settlementStruct.set("PopGrowthPlague", &settlementStruct::PopGrowthPlague);
-	types.settlementStruct.set("PopGrowthTaxPenalty", &settlementStruct::PopGrowthTaxPenalty);
-	types.settlementStruct.set("PublicOrderGarrison", &settlementStruct::PublicOrderGarrison);
-	types.settlementStruct.set("PublicOrderLaw", &settlementStruct::PublicOrderLaw);
-	types.settlementStruct.set("PublicOrderBuildingsEntertainment", &settlementStruct::PublicOrderBuildingsEntertainment);
-	types.settlementStruct.set("PublicOrderGovernorInfluence", &settlementStruct::PublicOrderGovernorInfluence);
-	types.settlementStruct.set("PublicOrderTaxBonus", &settlementStruct::PublicOrderTaxBonus);
-	types.settlementStruct.set("PublicOrderTriumph", &settlementStruct::PublicOrderTriumph);
-	types.settlementStruct.set("PublicOrderPopulationBoom", &settlementStruct::PublicOrderPopulationBoom);
-	types.settlementStruct.set("PublicOrderEntertainment", &settlementStruct::PublicOrderEntertainment);
-	types.settlementStruct.set("PublicOrderHealth", &settlementStruct::PublicOrderHealth);
-	types.settlementStruct.set("PublicOrderGarrisonTwo", &settlementStruct::PublicOrderGarrisonTwo);
-	types.settlementStruct.set("PublicOrderFear", &settlementStruct::PublicOrderFear);
-	types.settlementStruct.set("PublicOrderGlory", &settlementStruct::PublicOrderGlory);
-	types.settlementStruct.set("PublicOrderSqualor", &settlementStruct::PublicOrderSqualor);
-	types.settlementStruct.set("PublicOrderDistanceToCapital", &settlementStruct::PublicOrderDistanceToCapital);
-	types.settlementStruct.set("PublicOrderNoGovernance", &settlementStruct::PublicOrderNoGovernance);
-	types.settlementStruct.set("PublicOrderTaxPenalty", &settlementStruct::PublicOrderTaxPenalty);
-	types.settlementStruct.set("PublicOrderUnrest", &settlementStruct::PublicOrderUnrest);
-	types.settlementStruct.set("PublicOrderBesieged", &settlementStruct::PublicOrderBesieged);
-	types.settlementStruct.set("PublicOrderBlockaded", &settlementStruct::PublicOrderBlockaded);
-	types.settlementStruct.set("PublicOrderCulturalUnrest", &settlementStruct::PublicOrderCulturalUnrest);
-	types.settlementStruct.set("PublicOrderExcommunication", &settlementStruct::PublicOrderExcommunication);
-	types.settlementStruct.set("PublicOrder", &settlementStruct::PublicOrder);
-	types.settlementStruct.set("FarmsIncome", &settlementStruct::FarmsIncome);
-	types.settlementStruct.set("TaxesIncome", &settlementStruct::TaxesIncome);
-	types.settlementStruct.set("MiningIncome", &settlementStruct::MiningIncome);
-	types.settlementStruct.set("TradeIncome", &settlementStruct::TradeIncome);
-	types.settlementStruct.set("DiplomaticIncome", &settlementStruct::DiplomaticIncome);
-	types.settlementStruct.set("DemolitionIncome", &settlementStruct::DemolitionIncome);
-	types.settlementStruct.set("LootingIncome", &settlementStruct::LootingIncome);
-	types.settlementStruct.set("BuildingsIncome", &settlementStruct::BuildingsIncome);
-	types.settlementStruct.set("AdminIncome", &settlementStruct::AdminIncome);
-	types.settlementStruct.set("ConstructionExpense", &settlementStruct::ConstructionExpense);
-	types.settlementStruct.set("RecruitmentExpense", &settlementStruct::RecruitmentExpense);
-	types.settlementStruct.set("DiplomaticExpense", &settlementStruct::DiplomaticExpense);
-	types.settlementStruct.set("CorruptionExpense", &settlementStruct::CorruptionExpense);
-	types.settlementStruct.set("EntertainmentExpense", &settlementStruct::EntertainmentExpense);
-	types.settlementStruct.set("DevastationExpense", &settlementStruct::DevastationExpense);
-	types.settlementStruct.set("TotalIncomeWithoutAdmin", &settlementStruct::TotalIncomeWithoutAdmin);
 	/***
 	Get the settlement's specific regligion's value
 	@function settlementStruct:getReligion
@@ -2671,6 +2987,121 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local pool = settlementStruct:getSettlementRecruitmentPool(0)
 	*/
 	types.settlementStruct.set_function("getSettlementRecruitmentPool", &settlementHelpers::getSettlementRecruitmentPool);
+
+
+	///settlementStats
+	//@section settlementStats
+
+	/***
+	Basic settlementStats table
+
+	@tfield int PopGrowthBaseFarm - Get only
+	@tfield int population
+	@tfield int PopGrowthFarms - Get only
+	@tfield int PopGrowthHealth - Get only
+	@tfield int PopGrowthBuildings - Get only
+	@tfield int PopGrowthTaxBonus - Get only
+	@tfield int PopGrowthEntertainment - Get only
+	@tfield int PopGrowthTrade - Get only
+	@tfield int PopGrowthGovernorInfluence - Get only
+	@tfield int PopGrowthSqualor - Get only
+	@tfield int PopGrowthPlague - Get only
+	@tfield int PopGrowthTaxPenalty - Get only
+	@tfield int PublicOrderGarrison - Get only
+	@tfield int PublicOrderLaw - Get only
+	@tfield int PublicOrderBuildingsEntertainment - Get only
+	@tfield int PublicOrderGovernorInfluence - Get only
+	@tfield int PublicOrderTaxBonus - Get only
+	@tfield int PublicOrderTriumph - Get only
+	@tfield int PublicOrderPopulationBoom - Get only
+	@tfield int PublicOrderEntertainment - Get only
+	@tfield int PublicOrderHealth - Get only
+	@tfield int PublicOrderGarrisonTwo - Get only
+	@tfield int PublicOrderFear - Get only
+	@tfield int PublicOrderGlory - Get only
+	@tfield int PublicOrderSqualor - Get only
+	@tfield int PublicOrderDistanceToCapital - Get only
+	@tfield int PublicOrderNoGovernance - Get only
+	@tfield int PublicOrderTaxPenalty - Get only
+	@tfield int PublicOrderUnrest - Get only
+	@tfield int PublicOrderBesieged - Get only
+	@tfield int PublicOrderBlockaded - Get only
+	@tfield int PublicOrderCulturalUnrest - Get only
+	@tfield int PublicOrderExcommunication - Get only
+	@tfield int PublicOrder - Get only
+	@tfield int FarmsIncome - Get only
+	@tfield int TaxesIncome - Get only
+	@tfield int MiningIncome - Get only
+	@tfield int TradeIncome - Get only
+	@tfield int DiplomaticIncome - Get only
+	@tfield int DemolitionIncome - Get only
+	@tfield int LootingIncome - Get only
+	@tfield int BuildingsIncome - Get only
+	@tfield int AdminIncome - Get only
+	@tfield int ConstructionExpense - Get only
+	@tfield int RecruitmentExpense - Get only
+	@tfield int DiplomaticExpense - Get only
+	@tfield int CorruptionExpense - Get only
+	@tfield int EntertainmentExpense - Get only
+	@tfield int DevastationExpense - Get only
+	@tfield int TotalIncomeWithoutAdmin - Get only
+	@tfield int majorityReligionID
+
+	@table settlementStats
+	*/
+	types.settlementStats = luaState.new_usertype<settlementStats>("settlementStats");
+	types.settlementStats.set("population", &settlementStats::population);
+	types.settlementStats.set("PopGrowthBaseFarm", &settlementStats::PopGrowthBaseFarm);
+	types.settlementStats.set("PopGrowthFarms", &settlementStats::PopGrowthFarms);
+	types.settlementStats.set("PopGrowthHealth", &settlementStats::PopGrowthHealth);
+	types.settlementStats.set("PopGrowthBuildings", &settlementStats::PopGrowthBuildings);
+	types.settlementStats.set("PopGrowthTaxBonus", &settlementStats::PopGrowthTaxBonus);
+	types.settlementStats.set("PopGrowthEntertainment", &settlementStats::PopGrowthEntertainment);
+	types.settlementStats.set("PopGrowthTrade", &settlementStats::PopGrowthTrade);
+	types.settlementStats.set("PopGrowthGovernorInfluence", &settlementStats::PopGrowthGovernorInfluence);
+	types.settlementStats.set("PopGrowthSqualor", &settlementStats::PopGrowthSqualor);
+	types.settlementStats.set("PopGrowthPlague", &settlementStats::PopGrowthPlague);
+	types.settlementStats.set("PopGrowthTaxPenalty", &settlementStats::PopGrowthTaxPenalty);
+	types.settlementStats.set("PublicOrderGarrison", &settlementStats::PublicOrderGarrison);
+	types.settlementStats.set("PublicOrderLaw", &settlementStats::PublicOrderLaw);
+	types.settlementStats.set("PublicOrderBuildingsEntertainment", &settlementStats::PublicOrderBuildingsEntertainment);
+	types.settlementStats.set("PublicOrderGovernorInfluence", &settlementStats::PublicOrderGovernorInfluence);
+	types.settlementStats.set("PublicOrderTaxBonus", &settlementStats::PublicOrderTaxBonus);
+	types.settlementStats.set("PublicOrderTriumph", &settlementStats::PublicOrderTriumph);
+	types.settlementStats.set("PublicOrderPopulationBoom", &settlementStats::PublicOrderPopulationBoom);
+	types.settlementStats.set("PublicOrderEntertainment", &settlementStats::PublicOrderEntertainment);
+	types.settlementStats.set("PublicOrderHealth", &settlementStats::PublicOrderHealth);
+	types.settlementStats.set("PublicOrderGarrisonTwo", &settlementStats::PublicOrderGarrisonTwo);
+	types.settlementStats.set("PublicOrderFear", &settlementStats::PublicOrderFear);
+	types.settlementStats.set("PublicOrderGlory", &settlementStats::PublicOrderGlory);
+	types.settlementStats.set("PublicOrderSqualor", &settlementStats::PublicOrderSqualor);
+	types.settlementStats.set("PublicOrderDistanceToCapital", &settlementStats::PublicOrderDistanceToCapital);
+	types.settlementStats.set("PublicOrderNoGovernance", &settlementStats::PublicOrderNoGovernance);
+	types.settlementStats.set("PublicOrderTaxPenalty", &settlementStats::PublicOrderTaxPenalty);
+	types.settlementStats.set("PublicOrderUnrest", &settlementStats::PublicOrderUnrest);
+	types.settlementStats.set("PublicOrderBesieged", &settlementStats::PublicOrderBesieged);
+	types.settlementStats.set("PublicOrderBlockaded", &settlementStats::PublicOrderBlockaded);
+	types.settlementStats.set("PublicOrderCulturalUnrest", &settlementStats::PublicOrderCulturalUnrest);
+	types.settlementStats.set("PublicOrderExcommunication", &settlementStats::PublicOrderExcommunication);
+	types.settlementStats.set("PublicOrder", &settlementStats::PublicOrder);
+	types.settlementStats.set("FarmsIncome", &settlementStats::FarmsIncome);
+	types.settlementStats.set("TaxesIncome", &settlementStats::TaxesIncome);
+	types.settlementStats.set("MiningIncome", &settlementStats::MiningIncome);
+	types.settlementStats.set("TradeIncome", &settlementStats::TradeIncome);
+	types.settlementStats.set("DiplomaticIncome", &settlementStats::DiplomaticIncome);
+	types.settlementStats.set("DemolitionIncome", &settlementStats::DemolitionIncome);
+	types.settlementStats.set("LootingIncome", &settlementStats::LootingIncome);
+	types.settlementStats.set("BuildingsIncome", &settlementStats::BuildingsIncome);
+	types.settlementStats.set("AdminIncome", &settlementStats::AdminIncome);
+	types.settlementStats.set("ConstructionExpense", &settlementStats::ConstructionExpense);
+	types.settlementStats.set("RecruitmentExpense", &settlementStats::RecruitmentExpense);
+	types.settlementStats.set("DiplomaticExpense", &settlementStats::DiplomaticExpense);
+	types.settlementStats.set("CorruptionExpense", &settlementStats::CorruptionExpense);
+	types.settlementStats.set("EntertainmentExpense", &settlementStats::EntertainmentExpense);
+	types.settlementStats.set("DevastationExpense", &settlementStats::DevastationExpense);
+	types.settlementStats.set("TotalIncomeWithoutAdmin", &settlementStats::TotalIncomeWithoutAdmin);
+	types.settlementStats.set("majorityReligionID", &settlementStats::TotalIncomeWithoutAdmin);
+
 
 	///settlementCapability
 	//@section settlementCapability
@@ -2831,7 +3262,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.buildingInQueue.set("buildCost", &buildingInQueue::buildCost);
 	types.buildingInQueue.set("buildTurnsPassed", &buildingInQueue::buildTurnsPassed);
 	types.buildingInQueue.set("buildTurnsRemaining", &buildingInQueue::turnsToBuild);
-	types.buildingInQueue.set("percentBuilt", &buildingInQueue::petcentBuilded);
+	types.buildingInQueue.set("percentBuilt", &buildingInQueue::percentBuild);
 	/***
 	Get name of building in queue type (chain)
 

@@ -106,7 +106,8 @@ namespace eopBuildings
 				return &entry.data.edb;
 			}
 		}
-		return nullptr;
+
+		return getBuildingByID(idx);
 	}
 
 	//unique per culture!
@@ -433,6 +434,26 @@ namespace eopBuildings
 			for (int i = 0; i < buildingNum; i++)
 			{
 				if (strcmp(buildingsptr->buildingsArray->buildings[i].type, name) == 0)
+				{
+					return &buildingsptr->buildingsArray->buildings[i];
+				}
+			}
+			buildingsptr = buildingsptr->nextBuildingsListPointer;
+		}
+		return nullptr;
+	}
+
+	NOINLINE EOP_EXPORT edbEntry* getBuildingByID(int id)
+	{
+		exportDescrBuildings* edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
+		buildingListPointer* buildingsptr = &edb->buildingsList;
+		int buildingNum = 0;
+		while (buildingsptr != nullptr)
+		{
+			buildingNum = buildingsptr->arrayCount;
+			for (int i = 0; i < buildingNum; i++)
+			{
+				if (buildingsptr->buildingsArray->buildings[i].buildingID == id)
 				{
 					return &buildingsptr->buildingsArray->buildings[i];
 				}

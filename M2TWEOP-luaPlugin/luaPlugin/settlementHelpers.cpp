@@ -81,7 +81,13 @@ int settlementHelpers::getRecruitmentCapabilityNum(settlementStruct* sett)
 {
 	return sett->capabilities.recruitmentCapabilityCount;
 }
+int settlementHelpers::getPopulation(settlementStruct* sett)
+{
+	return sett->settlementStats.population;
+}
 settlementRecruitmentPool* settlementHelpers::getSettlementRecruitmentPool(settlementStruct* sett, int index)
 {
 	return &sett->recruitmentPools[index];
 }
+
+

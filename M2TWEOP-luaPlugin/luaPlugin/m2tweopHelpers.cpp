@@ -233,4 +233,22 @@ namespace m2tweopHelpers
 		return reinterpret_cast<options2*>(0x01639EF0);
 	}
 
+	campaignDifficulty1* getCampaignDifficulty1()
+	{
+		if (getGameVersion() == 1)
+		{
+			return reinterpret_cast<campaignDifficulty1*>(0x016F4760);
+		}
+		return reinterpret_cast<campaignDifficulty1*>(0x016AB5C8);
+	}
+
+	campaignDifficulty2* getCampaignDifficulty2()
+	{
+		if (getGameVersion() == 1)
+		{
+			return reinterpret_cast<campaignDifficulty2*>(0x0164BF18);
+		}
+		return reinterpret_cast<campaignDifficulty2*>(0x01604000);
+	}
+
 }

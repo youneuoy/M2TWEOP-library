@@ -30,6 +30,16 @@ namespace factionHelpers
 	factionEconomy* getFactionEconomy(factionStruct* fac, int turnsAgo);
 	bool isNeighbourFaction(const factionStruct* fac1, const factionStruct* fac2);
 	int getNeighbourRegionID(const factionStruct* fac, int index);
+	decisionValuesLTGD* getlongTermGoalValues(aiLongTermGoalDirector* LTGD, int targetFaction);
+	void setConstructionValue(aiPersonalityValues* personality, int type, int value);
+	void setRecruitmentValue(aiPersonalityValues* personality, int type, int value);
+	int getConstructionValue(aiPersonalityValues* personality, int type);
+	int getRecruitmentValue(aiPersonalityValues* personality, int type);
+	int getRecruitmentValueSett(aiProductionController* controller, int type);
+	int getConstructionValueSett(aiProductionController* controller, int type);
+	void setRecruitmentValueSett(aiProductionController* controller, int type, int value);
+	void setConstructionValueSett(aiProductionController* controller, int type, int value);
+	aiProductionController* getProductionController(aiPersonalityValues* personality, int index);
 	battleFactionCounter* getBattleVsFactionStats(factionStruct* fac, int targetFactionID);
 	//faction
 	template <char fieldIndex>
