@@ -134,6 +134,7 @@ namespace modSettingsUI
 		ImVec2 textSize = ImGui::CalcTextSize("Readme Teutonic");
 		ImGui::PushItemWidth(textSize.x);
 		ImGui::Combo("Config Files", &selectedItem, &items[0], items.size());
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("The mod config file you want EOP to read when it launches the game");}
 
 		if (selectedItem != -1)
 		{
@@ -150,6 +151,8 @@ namespace modSettingsUI
 		ImGui::SameLine();
 
 		ImGui::Checkbox("Use standard config", &dataG::data.modData.useVanillaConfig);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Don't use any mod specific config when launching the game");}
+
 		ImGui::NewLine();
 
 		if (!helpers::verifyModPath(helpers::checkCfgFileForMod(path + "\\" + dataG::data.modData.configName)))
@@ -161,9 +164,10 @@ namespace modSettingsUI
 			}
 		}
 		ImGui::Checkbox("Use M2TWEOP", &dataG::data.modData.useM2TWEOP);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable EOP when launching the mod");}
 
 		ImGui::Checkbox("Hide launcher on startup", &dataG::data.modData.hideLauncherAtStart);
-
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Hide the launcher when starting up. Can be shown again in eopData/uiCfg.json");}
 	}
 
 	void drawLauncherSettigs()
@@ -179,7 +183,10 @@ namespace modSettingsUI
 				dataG::data.audio.bkgMusic.music->play();
 			}
 		}
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enabled music in the EOP Launcher");}
+
 		ImGui::Checkbox("Discord Rich Presence", &dataG::data.gameData.isDiscordRichPresenceEnabled);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Update your Discord status/presence with details about what mod you are playing");}
 
 		if (ImGui::SliderInt("Music volume", &dataG::data.audio.bkgMusic.musicVolume, 0, 100))
 		{
@@ -201,6 +208,7 @@ namespace modSettingsUI
 		ImVec2 textSize = ImGui::CalcTextSize("Launcher Theme: ");
 		ImGui::PushItemWidth(textSize.x);
 		ImGui::Combo("Launcher Theme: ", &selectedItem, &items[0], items.size());
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Allows you to select a custom EOP theme for the launcher");}
 	}
 
 	void drawRulesSettings()
@@ -210,27 +218,34 @@ namespace modSettingsUI
 
 	void drawHsSettings()
 	{
-		ImGui::Checkbox("Automatically generate hotseat battles", &dataG::data.battlesData.isGenerationNeeded);
-		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
-		{
-			ImGui::SetTooltip("For hotseat online play");
-		}
+		ImGui::Checkbox("Automatically generate hotseat/historical battles", &dataG::data.battlesData.isGenerationNeeded);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable if you want to generate a historical battle each time you start a battle");}
+
 		ImGui::Checkbox("Automatically generate battle result files", &dataG::data.battlesData.isGenerationNeeded);
-		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
-		{
-			ImGui::SetTooltip("");
-		}
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable if you want to generate a results file from an online battle");}
+
 		ImGui::Checkbox("Planned retreat route", &dataG::data.battlesData.isPlannedRetreatRoute);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Experimental: Allows you to set the location where armies will retreat to when attacked	");}
 	}
 
 	void drawGameSettings()
 	{
 		ImGui::Checkbox("Stratmap context menu", &dataG::data.modulesData.isContextMenuNeeded);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable the strategy/campaign map while pressing MMB");}
+
 		ImGui::Checkbox("Tactical map viewer", &dataG::data.modulesData.isTacticalMapViewerNeeded);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable the tactical map viewer which allows you to view battlemaps before a battle");}
+
 		ImGui::Checkbox("M2TWEOP developer mode", &dataG::data.modulesData.isDeveloperModeNeeded);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable to quickly debug battle maps and .worldpackage files");}
+		
 		ImGui::Checkbox("Block modification launch without EOP", &dataG::data.gameData.isBlockLaunchWithoutEop);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Prevent your mod from starting without EOP enabled. See FAQ for more details.");}
+		
 		ImGui::Checkbox("Override battle camera and controls", &dataG::data.gameData.IsOverrideBattleCamera);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("For hotseat online play");}
 	}
+	
 	void drawModSettingsUI(bool* isOpen)
 	{
 		ImGuiIO& io = ImGui::GetIO();
