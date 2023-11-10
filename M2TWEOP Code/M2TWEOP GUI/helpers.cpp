@@ -422,6 +422,34 @@ vector<std::string> helpers::getCfgFilesInFolder()
 	return cfgFiles;
 }
 
+vector<std::string> helpers::getTomlFilesInFolder()
+{
+	string path;
+	getCurrentPath(path);
+	path += ".\\eopData\\themes\\*.toml";
+
+	WIN32_FIND_DATAA findFileData;
+	HANDLE hFind = FindFirstFileA(path.c_str(), &findFileData);
+	std::vector<std::string> tomlFiles;
+
+	if (hFind != INVALID_HANDLE_VALUE)
+	{
+		do {
+			const std::string name = findFileData.cFileName;
+
+			if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+			{
+				string currentPath;
+				getCurrentPath(currentPath);
+				tomlFiles.push_back(name);
+			}
+
+		} while (FindNextFileA(hFind, &findFileData) != 0);
+
+		FindClose(hFind);
+	}
+}
+
 std::string helpers::checkCfgFileForMod(const std::string& filePath)
 {
 	std::ifstream file(filePath);

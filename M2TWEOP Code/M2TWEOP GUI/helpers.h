@@ -12,6 +12,7 @@ public:
 	static bool isProcessRunning(const string& exeName);
 
 	static vector<std::string> getCfgFilesInFolder();
+	static vector<std::string> getTomlFilesInFolder();
 
 	static std::string checkCfgFileForMod(const std::string& filePath);
 
