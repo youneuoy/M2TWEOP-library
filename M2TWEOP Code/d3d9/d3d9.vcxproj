@@ -57,6 +57,7 @@
       <LanguageStandard>stdcpp14</LanguageStandard>
       <PreprocessorDefinitions>
       </PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -71,6 +72,7 @@
       </PrecompiledHeader>
       <LanguageStandard>stdcpp14</LanguageStandard>
       <PreprocessorDefinitions>WIN32;NDEBUG</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
