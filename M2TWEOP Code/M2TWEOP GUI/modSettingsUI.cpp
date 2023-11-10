@@ -151,7 +151,7 @@ namespace modSettingsUI
 		ImGui::SameLine();
 
 		ImGui::Checkbox("Use standard config", &dataG::data.modData.useVanillaConfig);
-		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Don't use any mod specific config");}
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Don't use any mod specific config when launching the game");}
 
 		ImGui::NewLine();
 
@@ -269,8 +269,8 @@ namespace modSettingsUI
 		
 		ImGui::Checkbox("Override battle camera and controls", &dataG::data.gameData.IsOverrideBattleCamera);
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("For hotseat online play");}
-	
 	}
+	
 	void drawModSettingsUI(bool* isOpen)
 	{
 		ImGuiIO& io = ImGui::GetIO();
