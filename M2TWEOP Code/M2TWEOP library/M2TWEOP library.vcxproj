@@ -154,8 +154,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>
-        $(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CCppSupport>Cpp17Support</CCppSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
