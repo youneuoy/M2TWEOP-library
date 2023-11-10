@@ -25,6 +25,7 @@ namespace settlementHelpers
 	recruitmentCapability* getRecruitmentCapability(settlementStruct* sett, int index);
 	settlementRecruitmentPool* getSettlementRecruitmentPool(settlementStruct* sett, int index);
 	int getRecruitmentCapabilityNum(settlementStruct* sett);
+	int getPopulation(settlementStruct* sett);
 
 	std::string getSettlementName(settlementStruct* sett);
 

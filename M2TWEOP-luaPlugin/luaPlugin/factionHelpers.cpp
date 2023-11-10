@@ -155,3 +155,53 @@ std::string factionHelpers::getLocalizedFactionName(factionStruct* fac)
 	}
 	return technicalHelpers::uniStringToStr(localizedname);
 }
+
+decisionValuesLTGD* factionHelpers::getlongTermGoalValues(aiLongTermGoalDirector* LTGD, int targetFaction)
+{
+	return &LTGD->longTermGoalValues[targetFaction];
+}
+
+void factionHelpers::setConstructionValue(aiPersonalityValues* personality, int type, int value)
+{
+	personality->buildingValues[type] = value;
+}
+
+void factionHelpers::setRecruitmentValue(aiPersonalityValues* personality, int type, int value)
+{
+	personality->recruitmentValues[type] = value;
+}
+
+int factionHelpers::getConstructionValue(aiPersonalityValues* personality, int type)
+{
+	return personality->buildingValues[type];
+}
+
+int factionHelpers::getRecruitmentValue(aiPersonalityValues* personality, int type)
+{
+	return personality->recruitmentValues[type];
+}
+
+void factionHelpers::setConstructionValueSett(aiProductionController* controller, int type, int value)
+{
+	controller->buildingBias[type] = value;
+}
+
+void factionHelpers::setRecruitmentValueSett(aiProductionController* controller, int type, int value)
+{
+	controller->recruitBias[type] = value;
+}
+
+int factionHelpers::getConstructionValueSett(aiProductionController* controller, int type)
+{
+	return controller->buildingBias[type];
+}
+
+int factionHelpers::getRecruitmentValueSett(aiProductionController* controller, int type)
+{
+	return controller->recruitBias[type];
+}
+
+aiProductionController* factionHelpers::getProductionController(aiPersonalityValues* personality, int index)
+{
+	return personality->aiProductionControllers[index];
+}

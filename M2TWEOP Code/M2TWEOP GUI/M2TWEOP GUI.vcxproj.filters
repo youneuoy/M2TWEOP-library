@@ -300,9 +300,6 @@
     <ClInclude Include="..\3rd\discord\discord.h">
       <Filter>3rd\discord</Filter>
     </ClInclude>
-    <ClInclude Include="..\3rd\cpptoml\cpptoml.h">
-      <Filter>3rd\cpptoml</Filter>
-    </ClInclude>
     <ClInclude Include="..\3rd\discord\event.h">
       <Filter>3rd\discord</Filter>
     </ClInclude>
@@ -338,6 +335,9 @@
     </ClInclude>
     <ClInclude Include="..\3rd\discord\voice_manager.h">
       <Filter>3rd\discord</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\cpptoml\cpptoml.h">
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

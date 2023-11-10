@@ -52,7 +52,8 @@ namespace m2tweopHelpers
 	int getGameVersion();
 	options1* getOptions1();
 	options2* getOptions2();
-
+	campaignDifficulty1* getCampaignDifficulty1();
+	campaignDifficulty2* getCampaignDifficulty2();
 
 	std::tuple<int, int, void*>  loadTextureToGame(const std::string& path);
 	void unloadTextureFromGame(void* texture);

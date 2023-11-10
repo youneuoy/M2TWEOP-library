@@ -26,6 +26,8 @@ void luaP::initCampaign()
 		sol::usertype<jihad> jihadStruct;
 		sol::usertype<options1> options1;
 		sol::usertype<options2> options2;
+		sol::usertype<campaignDifficulty1> campaignDifficulty1;
+		sol::usertype<campaignDifficulty2> campaignDifficulty2;
 		sol::usertype<uiCardManager> uiCardManager;
 		sol::usertype<coordPair> coordPair;
 		sol::usertype<landMass> landMass;
@@ -436,6 +438,108 @@ void luaP::initCampaign()
 		"pursuit", 7
 	);
 
+	//@section unitClass
+	/***
+	Enum of unit classes
+
+	@tfield int heavy
+	@tfield int light
+	@tfield int skirmish
+	@tfield int spearmen
+	@tfield int missile
+
+	@table unitClass
+	*/
+	luaState.new_enum(
+		"unitClass",
+		"heavy",0,
+		"light",1,
+		"skirmish",2,
+		"spearmen",3,
+		"missile",4
+	);
+
+	//@section unitCategory
+	/***
+	Enum of unit categories
+
+	@tfield int infantry
+	@tfield int cavalry
+	@tfield int siege
+	@tfield int non_combatant
+	@tfield int ship
+	@tfield int handler
+
+	@table unitCategory
+	*/
+	luaState.new_enum(
+		"unitCategory",
+		"infantry", 0,
+		"cavalry", 1,
+		"siege", 2,
+		"non_combatant", 3,
+		"ship", 4,
+		"handler", 4
+	);
+
+	//@section unitCategoryClass
+	/***
+	Enum of unit categories and class combo
+
+	@tfield int nonCombatant
+	@tfield int lightInfantry
+	@tfield int heavyInfantry
+	@tfield int spearmenInfantry
+	@tfield int missileInfantry
+	@tfield int lightCavalry
+	@tfield int heavyCavalry
+	@tfield int missileCavalry
+	@tfield int siegeWeapon
+	@tfield int animalHandler
+	@tfield int battleShip
+
+	@table unitCategoryClass
+	*/
+	luaState.new_enum(
+		"unitCategoryClass",
+		"nonCombatant", 0,
+		"lightInfantry", 1,
+		"heavyInfantry", 2,
+		"spearmenInfantry", 3,
+		"missileInfantry", 4,
+		"lightCavalry", 5,
+		"heavyCavalry", 6,
+		"missileCavalry", 7,
+		"siegeWeapon", 8,
+		"animalHandler", 9,
+		"battleShip", 10
+	);
+
+	//@section managePolicy
+	/***
+	Enum of automated settlement policy types
+
+	@tfield int balanced
+	@tfield int financial
+	@tfield int military
+	@tfield int growth
+	@tfield int cultural
+	@tfield int noPolicy
+
+	@table managePolicy
+	*/
+	luaState.new_enum(
+		"managePolicy",
+		"balanced", 0,
+		"financial", 1,
+		"military", 2,
+		"growth", 3,
+		"cultural", 4,
+		"noPolicy", 5
+	);
+
+
+
 	///options1
 	//@section options1
 
@@ -667,6 +771,63 @@ void luaP::initCampaign()
 	typeAll.options2.set("unitSizeMultiplierLow", &options2::unitSizeMultiplierLow);
 	typeAll.options2.set("unitSizeMultiplierMedium", &options2::unitSizeMultiplierMedium);
 	typeAll.options2.set("unitSizeMultiplierLarge", &options2::unitSizeMultiplierLarge);
+
+
+	/// campaignDifficulty1
+	//@section campaignDifficulty1
+
+	/***
+	Basic campaignDifficulty1 table.
+
+	@tfield int orderFromGrowth
+	@tfield int considerWarWithPlayer
+	@tfield float brigandChanceAi
+	@tfield float brigandChancePlayer
+	@tfield int forceAttackDelay
+	@tfield float taxIncomeModifierPlayer
+	@tfield float farmingIncomeModifierPlayer
+	@tfield float incomeModifierAi
+	@tfield float playerRegionValueModifier
+
+	@table campaignDifficulty1
+	*/
+
+	typeAll.campaignDifficulty1 = luaState.new_usertype<campaignDifficulty1>("campaignDifficulty1");
+	typeAll.campaignDifficulty1.set("orderFromGrowth", &campaignDifficulty1::orderFromGrowth);
+	typeAll.campaignDifficulty1.set("considerWarWithPlayer", &campaignDifficulty1::considerWarWithPlayer);
+	typeAll.campaignDifficulty1.set("brigandChanceAi", &campaignDifficulty1::brigandChanceAi);
+	typeAll.campaignDifficulty1.set("brigandChancePlayer", &campaignDifficulty1::brigandChancePlayer);
+	typeAll.campaignDifficulty1.set("forceAttackDelay", &campaignDifficulty1::forceAttackDelay);
+	typeAll.campaignDifficulty1.set("taxIncomeModifierPlayer", &campaignDifficulty1::taxIncomeModifierPlayer);
+	typeAll.campaignDifficulty1.set("farmingIncomeModifierPlayer", &campaignDifficulty1::farmingIncomeModifierPlayer);
+	typeAll.campaignDifficulty1.set("incomeModifierAi", &campaignDifficulty1::incomeModifierAi);
+	typeAll.campaignDifficulty1.set("playerRegionValueModifier", &campaignDifficulty1::playerRegionValueModifier);
+
+	/// campaignDifficulty2
+	//@section campaignDifficulty2
+
+	/***
+	Basic campaignDifficulty2 table.
+
+	@tfield int popGrowthBonusAi
+	@tfield int publicOrderBonusAi
+	@tfield int experienceBonusAi
+	@tfield int incomeBonusAi
+	@tfield bool wantsTargetPlayer
+	@tfield bool wantsTargetPlayerNaval
+	@tfield int autoAttackPlayerIfCrusadeTarget
+
+	@table campaignDifficulty2
+	*/
+
+	typeAll.campaignDifficulty2 = luaState.new_usertype<campaignDifficulty2>("campaignDifficulty2");
+	typeAll.campaignDifficulty2.set("popGrowthBonusAi", &campaignDifficulty2::popGrowthBonusAi);
+	typeAll.campaignDifficulty2.set("publicOrderBonusAi", &campaignDifficulty2::publicOrderBonusAi);
+	typeAll.campaignDifficulty2.set("experienceBonusAi", &campaignDifficulty2::experienceBonusAi);
+	typeAll.campaignDifficulty2.set("incomeBonusAi", &campaignDifficulty2::incomeBonusAi);
+	typeAll.campaignDifficulty2.set("wantsTargetPlayer", &campaignDifficulty2::wantsTargetPlayer);
+	typeAll.campaignDifficulty2.set("wantsTargetPlayerNaval", &campaignDifficulty2::wantsTargetPlayerNaval);
+	typeAll.campaignDifficulty2.set("autoAttackPlayerIfCrusadeTarget", &campaignDifficulty2::autoAttackPlayerIfCrusadeTarget);
 
 	///eventTrigger
 	//@section eventTrigger
@@ -1850,6 +2011,7 @@ void luaP::initP2()
 	@tfield battleStruct battleStruct battle data
 	@tfield campaignStruct campaignStruct campaign data
 	@tfield uiCardManager uiCardManager ui and selected objects data
+	@tfield stratMap stratMap data
 
 	@table gameDataAll
 	*/

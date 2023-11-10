@@ -39,4 +39,5 @@ namespace eopBuildings
     NOINLINE EOP_EXPORT void addCaps(buildingLevel* oldlevel, buildingLevel* eoplevel, int lvlidx);
     NOINLINE EOP_EXPORT void addPools(buildingLevel* oldlevel, buildingLevel* eoplevel, int lvlidx);
     NOINLINE EOP_EXPORT edbEntry* getBuildingByName(const char* name);
+    NOINLINE EOP_EXPORT edbEntry* getBuildingByID(int id);
 };
