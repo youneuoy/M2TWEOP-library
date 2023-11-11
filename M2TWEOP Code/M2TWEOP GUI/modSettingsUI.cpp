@@ -215,7 +215,6 @@ namespace modSettingsUI
 					selectedItem = i;
 					dataG::data.modData.themeName = tomlFiles[selectedItem];
 				    setStyle(dataG::data.modData.themeName);
-
 				}
 
 				// Set the initial focus on the selected item
@@ -278,7 +277,6 @@ namespace modSettingsUI
 
 		//selectable child
 		{
-			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.143f, 0.143f, 0.143f, 1.000f));
 			ImGui::BeginChild("PreferencesSelectable", settingsUIData.selectablesSize);
 			static int selected = 0;
 
@@ -288,16 +286,12 @@ namespace modSettingsUI
 				ImVec2 cp2 = ImVec2(cp.x + settingsUIData.selectableSize.x, cp.y + settingsUIData.selectableSize.y);
 
 
-				ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0, 0, 0, 0));
-				ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0, 0, 0, 0));
 
 				if (ImGui::Selectable(settingsUIData.settingsPages[n].pageName.c_str(), selected == n, 0, settingsUIData.selectableSize))
 				{
 					selected = n;
 					settingsUIData.selectedPage = settingsUIData.settingsPages[n].pageId;
 				}
-				ImGui::PopStyleColor();
-				ImGui::PopStyleColor();
 
 				if (selected == n)
 				{
@@ -313,7 +307,6 @@ namespace modSettingsUI
 			}
 
 			ImGui::EndChild();
-			ImGui::PopStyleColor();
 		}
 
 		ImGui::SameLine();

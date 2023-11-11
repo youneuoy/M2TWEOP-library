@@ -7,7 +7,14 @@
 auto parseColor = [](const std::string& colorStr) -> ImVec4 {
 	ImVec4 color;
 	sscanf_s(colorStr.c_str(), "rgba(%f, %f, %f, %f)", &color.x, &color.y, &color.z, &color.w);
+	color.x = color.x/255;
+	color.y = color.y/255;
+	color.z = color.z/255;
 	return color;
+};
+
+auto arrayToImVec2 = [](const std::vector<double> themeValues) -> ImVec2 {
+	return ImVec2(themeValues[0], themeValues[1]);
 };
 
 void tomlToStyle(string themeName)
@@ -19,6 +26,46 @@ void tomlToStyle(string themeName)
 	std::string fPath = ".\\eopData\\themes\\"+themeName+".toml";
 	auto config = cpptoml::parse_file(fPath);
 
+	// Assign the styles
+	// style.Alpha = *config->get_as<double>("alpha");
+	// style.WindowPadding 			      =  arrayToImVec2(*config->get_array_of<double>("WindowPadding"));
+	// style.WindowRounding				 = *config->get_as<double>("WindowRounding");
+	// style.WindowBorderSize 		         = *config->get_as<double>("WindowBorderSize");
+	// style.WindowMinSize 			       = arrayToImVec2(*config->get_array_of<double>("WindowMinSize"));
+	// style.WindowTitleAlign 		 		    =  arrayToImVec2(*config->get_array_of<double>("WindowTitleAlign"));
+	// style.WindowMenuButtonPosition 	=  *config->get_as<double>("WindowMenuButtonPosition");
+	// style.WindowMenuButtonPosition 	=  *config->get_as<double>("WindowMenuButtonPosition");
+
+    // style.DisabledAlpha = 0.6000000238418579f;
+    // style.WindowPadding = ImVec2(6.0f, 3.0f);
+    // style.WindowRounding = 0.0f;
+    // style.WindowBorderSize = 1.0f;
+    // style.WindowMinSize = ImVec2(32.0f, 32.0f);
+    // style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
+    // style.WindowMenuButtonPosition = ImGuiDir_Left;
+    // style.ChildRounding = 0.0f;
+    // style.ChildBorderSize = 1.0f;
+    // style.PopupRounding = 0.0f;
+    // style.PopupBorderSize = 1.0f;
+    // style.FramePadding = ImVec2(5.0f, 1.0f);
+    // style.FrameRounding = 3.0f;
+    // style.FrameBorderSize = 1.0f;
+    // style.ItemSpacing = ImVec2(8.0f, 4.0f);
+    // style.ItemInnerSpacing = ImVec2(4.0f, 4.0f);
+    // style.CellPadding = ImVec2(4.0f, 2.0f);
+    // style.IndentSpacing = 21.0f;
+    // style.ColumnsMinSpacing = 6.0f;
+    // style.ScrollbarSize = 13.0f;
+    // style.ScrollbarRounding = 16.0f;
+    // style.GrabMinSize = 20.0f;
+    // style.GrabRounding = 2.0f;
+    // style.TabRounding = 4.0f;
+    // style.TabBorderSize = 1.0f;
+    // style.TabMinWidthForCloseButton = 0.0f;
+    // style.ColorButtonPosition = ImGuiDir_Right;
+    // style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
+    // style.SelectableTextAlign = ImVec2(0.0f, 0.0f);
+
 	// Access the 'colors' section in the TOML file
     auto colorsTable = config->get_table("colors");
 
@@ -26,7 +73,7 @@ void tomlToStyle(string themeName)
 	style.Colors[ImGuiCol_Text] = parseColor(*colorsTable->get_as<std::string>("Text"));
 	style.Colors[ImGuiCol_TextDisabled] = parseColor(*colorsTable->get_as<std::string>("TextDisabled"));
 	style.Colors[ImGuiCol_WindowBg] = parseColor(*colorsTable->get_as<std::string>("WindowBg"));
-	style.Colors[ImGuiCol_WindowBg] = parseColor(*colorsTable->get_as<std::string>("ChildBg"));
+	style.Colors[ImGuiCol_ChildBg] = parseColor(*colorsTable->get_as<std::string>("ChildBg"));
 	style.Colors[ImGuiCol_PopupBg] = parseColor(*colorsTable->get_as<std::string>("PopupBg"));
 	style.Colors[ImGuiCol_Border] = parseColor(*colorsTable->get_as<std::string>("Border"));
 	style.Colors[ImGuiCol_PopupBg] = parseColor(*colorsTable->get_as<std::string>("PopupBg"));
@@ -35,6 +82,7 @@ void tomlToStyle(string themeName)
 	style.Colors[ImGuiCol_FrameBgHovered] = parseColor(*colorsTable->get_as<std::string>("FrameBgHovered"));
 	style.Colors[ImGuiCol_FrameBgActive] = parseColor(*colorsTable->get_as<std::string>("FrameBgActive"));
 	style.Colors[ImGuiCol_TitleBg] = parseColor(*colorsTable->get_as<std::string>("TitleBg"));
+	style.Colors[ImGuiCol_TitleBgActive] = parseColor(*colorsTable->get_as<std::string>("TitleBgActive"));
 	style.Colors[ImGuiCol_TitleBgCollapsed] = parseColor(*colorsTable->get_as<std::string>("TitleBgCollapsed"));
 	style.Colors[ImGuiCol_MenuBarBg] = parseColor(*colorsTable->get_as<std::string>("MenuBarBg"));
 	style.Colors[ImGuiCol_ScrollbarBg] = parseColor(*colorsTable->get_as<std::string>("ScrollbarBg"));
@@ -79,20 +127,20 @@ void tomlToStyle(string themeName)
 
 void setStyle(string themeName)
 {
-	if (themeName == "default.toml")
+	if (themeName == "youneouy.toml")
 	{
-		tomlToStyle("default");
-	}
-	else if (themeName == "youneouy.toml")
-	{
-		tomlToStyle("Youneouy");
+		tomlToStyle("youneouy");
 	}
 	else if (themeName == "mithridates.toml")
 	{
-		tomlToStyle("Mithridates");
+		tomlToStyle("mithridates");
 	}
 	else if (themeName == "sulla.toml")
 	{
-		tomlToStyle("Sulla");
+		tomlToStyle("sulla");
+	}
+	else 
+	{
+		tomlToStyle("default");
 	}
 }

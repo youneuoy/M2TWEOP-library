@@ -105,7 +105,7 @@ void initRender()
 
     // Setup Dear ImGui style
     // ImGui::StyleGrey();
-    setStyle("default");
+    setStyle(dataG::data.modData.themeName);
     //ImGui::StyleColorsClassic();
 
     // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
