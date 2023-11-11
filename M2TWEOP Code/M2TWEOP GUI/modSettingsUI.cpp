@@ -3,6 +3,7 @@
 #include "helpers.h"
 #include "dataG.h"
 #include "managerG.h"
+#include "themeManager.h"
 #include "../M2TWEOP Common/m2tweopConstData.h"
 
 namespace modSettingsUI
@@ -193,22 +194,40 @@ namespace modSettingsUI
 			dataG::data.audio.bkgMusic.music->setVolume(dataG::data.audio.bkgMusic.musicVolume);
 		}
 
-
+		// Get all the TOML files in the eopData/themes folder
 		std::vector<std::string> tomlFiles = helpers::getTomlFilesInFolder();
-		std::vector<const char*> items;
-		for (const auto& file : tomlFiles) {
-			items.push_back(file.c_str());
-		}
-		string path;
-		helpers::getCurrentPath(path);
+		
+		// Check for the selected item
 		static int selectedItem = -1;
-		for (const auto& file : items) {
-				selectedItem = std::distance(items.begin(), std::find(items.begin(), items.end(), file));
-			}
+
+		// Calculate text size for theme toml file
 		ImVec2 textSize = ImGui::CalcTextSize("Launcher Theme: ");
 		ImGui::PushItemWidth(textSize.x);
-		ImGui::Combo("Launcher Theme: ", &selectedItem, &items[0], items.size());
-		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Allows you to select a custom EOP theme for the launcher");}
+
+		// Display the combo box and tooltip
+		if (ImGui::BeginCombo("Launcher Theme: ", dataG::data.modData.themeName.c_str()))
+		{
+			for (int i = 0; i < tomlFiles.size(); i++)
+			{
+				bool isSelected = (selectedItem == i);
+				if (ImGui::Selectable(tomlFiles[i].c_str(), isSelected))
+				{
+					selectedItem = i;
+					dataG::data.modData.themeName = tomlFiles[selectedItem];
+				    setStyle(dataG::data.modData.themeName);
+
+				}
+
+				// Set the initial focus on the selected item
+				if (isSelected)
+					ImGui::SetItemDefaultFocus();
+			}
+
+			ImGui::EndCombo();
+		}
+
+		// Display the combo box and tooltip
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Allows you to select a custom EOP theme for the launcher"); }
 	}
 
 	void drawRulesSettings()

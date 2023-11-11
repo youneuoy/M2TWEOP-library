@@ -439,8 +439,6 @@ vector<std::string> helpers::getTomlFilesInFolder()
 
 			if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 			{
-				string currentPath;
-				getCurrentPath(currentPath);
 				tomlFiles.push_back(name);
 			}
 
@@ -448,6 +446,8 @@ vector<std::string> helpers::getTomlFilesInFolder()
 
 		FindClose(hFind);
 	}
+
+	return tomlFiles;
 }
 
 std::string helpers::checkCfgFileForMod(const std::string& filePath)

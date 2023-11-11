@@ -22,6 +22,7 @@
 
 #include "helpers.h"
 #include "toolRoutine.h"
+#include "themeManager.h"
 
 #include "managerG.h"
 
@@ -103,7 +104,8 @@ void initRender()
     //io.ConfigViewportsNoTaskBarIcon = true;
 
     // Setup Dear ImGui style
-    ImGui::StyleGrey();
+    // ImGui::StyleGrey();
+    setStyle("default");
     //ImGui::StyleColorsClassic();
 
     // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
