@@ -14,7 +14,7 @@ auto parseColor = [](const std::string& colorStr) -> ImVec4 {
 };
 
 auto arrayToImVec2 = [](const std::vector<double> themeValues) -> ImVec2 {
-	return ImVec2(themeValues[0], themeValues[1]);
+	return ImVec2(static_cast<float>(themeValues[0]), static_cast<float>(themeValues[1]));
 };
 
 void tomlToStyle(string themeName)
@@ -27,14 +27,35 @@ void tomlToStyle(string themeName)
 	auto config = cpptoml::parse_file(fPath);
 
 	// Assign the styles
-	// style.Alpha = *config->get_as<double>("alpha");
-	// style.WindowPadding 			      =  arrayToImVec2(*config->get_array_of<double>("WindowPadding"));
-	// style.WindowRounding				 = *config->get_as<double>("WindowRounding");
-	// style.WindowBorderSize 		         = *config->get_as<double>("WindowBorderSize");
-	// style.WindowMinSize 			       = arrayToImVec2(*config->get_array_of<double>("WindowMinSize"));
-	// style.WindowTitleAlign 		 		    =  arrayToImVec2(*config->get_array_of<double>("WindowTitleAlign"));
-	// style.WindowMenuButtonPosition 	=  *config->get_as<double>("WindowMenuButtonPosition");
-	// style.WindowMenuButtonPosition 	=  *config->get_as<double>("WindowMenuButtonPosition");
+	style.Alpha 								= *config->get_as<double>("alpha");
+	style.WindowPadding 			      =  arrayToImVec2(*config->get_array_of<double>("windowPadding"));
+	style.WindowRounding				 = *config->get_as<double>("windowRounding");
+	style.WindowBorderSize 		         = *config->get_as<double>("windowBorderSize");
+	style.WindowMinSize 			       = arrayToImVec2(*config->get_array_of<double>("windowMinSize"));
+	style.WindowTitleAlign 		 		    =  arrayToImVec2(*config->get_array_of<double>("windowTitleAlign"));
+	// style.WindowMenuButtonPosition 	=  *config->get_as<double>("windowMenuButtonPosition");
+	style.ChildRounding 		         = *config->get_as<double>("childRounding");
+	style.ChildBorderSize 		         = *config->get_as<double>("childBorderSize");
+	style.PopupRounding 		         = *config->get_as<double>("popupRounding");
+	style.PopupBorderSize 		         = *config->get_as<double>("popupBorderSize");
+	style.FramePadding 		         = arrayToImVec2(*config->get_array_of<double>("framePadding"));
+	style.FrameRounding 		         = *config->get_as<double>("frameRounding");
+	style.FrameBorderSize 		         = *config->get_as<double>("frameBorderSize");
+	style.ItemSpacing 		         = arrayToImVec2(*config->get_array_of<double>("itemSpacing"));
+	style.ItemInnerSpacing 		         = arrayToImVec2(*config->get_array_of<double>("itemInnerSpacing"));
+	style.CellPadding 		         = arrayToImVec2(*config->get_array_of<double>("cellPadding"));
+	style.IndentSpacing 		         = *config->get_as<double>("indentSpacing");
+	style.ColumnsMinSpacing 		         = *config->get_as<double>("columnsMinSpacing");
+	style.ScrollbarSize 		         = *config->get_as<double>("scrollbarSize");
+	style.ScrollbarSize 		         = *config->get_as<double>("scrollbarRounding");
+	style.GrabMinSize 		         = *config->get_as<double>("grabMinSize");
+	style.GrabRounding 		         = *config->get_as<double>("grabRounding");
+	style.TabRounding 		         = *config->get_as<double>("tabRounding");
+	style.TabBorderSize 		         = *config->get_as<double>("tabBorderSize");
+	style.TabMinWidthForCloseButton 		         = *config->get_as<double>("tabMinWidthForCloseButton");
+	// style.TabMinWidthForCloseButton 		         = *config->get_as<double>("colorButtonPosition");
+	style.ButtonTextAlign 		         = arrayToImVec2(*config->get_array_of<double>("buttonTextAlign"));
+	style.SelectableTextAlign 		         = arrayToImVec2(*config->get_array_of<double>("selectableTextAlign"));
 
     // style.DisabledAlpha = 0.6000000238418579f;
     // style.WindowPadding = ImVec2(6.0f, 3.0f);
