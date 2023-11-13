@@ -6,6 +6,11 @@ $currentLoc=(get-location).path
 $color = "`e[$(35)m"
 $endColor = "`e[0m`e[30;"
 
+param(
+        [string]$modFolder,
+        [bool]$shouldZip = True
+)
+
 function CopyFilesToFolder ($fromFolder, $toFolder) {
     $childItems = Get-ChildItem $fromFolder
     $childItems | ForEach-Object {
@@ -60,7 +65,17 @@ Copy-Item -Path  "M2TWEOP Code\Release\M2TWEOPLibrary.dll" -Destination "./M2TWE
 # 5) Generate Release ZIP
 Write-Output "$color======== 5) Generate Release ZIP ======== $endColor"
 Remove-item M2TWEOP.zip -erroraction 'silentlycontinue'
-Compress-Archive -Path "./M2TWEOPGenerated/*"  -DestinationPath "M2TWEOP.zip"
+
+if ($shouldZip) {
+    # Zip the files
+    Compress-Archive -Path $Path -DestinationPath $DestinationPath
+    Compress-Archive -Path "./M2TWEOPGenerated/*"  -DestinationPath "M2TWEOP.zip"
+}
+
+if ($modFolder) {
+    CopyFilesToFolder "./M2TWEOPGenerated" $modFolder
+}
+
 Remove-item ./M2TWEOPGenerated -recurse -erroraction 'silentlycontinue'
 
 # 6) Done
