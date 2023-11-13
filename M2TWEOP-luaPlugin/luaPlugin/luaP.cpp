@@ -1005,7 +1005,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.unit.set_function("setBattleProperty", &unitHelpers::setBattleProperty);
 	/***
-	Get unit action status in battle ( idling, hiding, ready, reforming, moving, withdrawing, missiles_firing, missiles_reloading, charging, fighting, pursuing, routing, fighting_backs_to_the_walls, running_amok, rallying, dead, leaving_battle, entering_battle, left_battle, go_berserk, taunting, bracing, infighting).
+	Get unit action status in battle ( idling, hiding, ready, reforming, moving, withdrawing, missiles\_firing, missiles\_reloading, charging, fighting, pursuing, routing, fighting\_backs\_to\_the\_walls, running\_amok, rallying, dead, leaving\_battle, entering\_battle, left\_battle, go\_berserk, taunting, bracing, infighting).
 	@function unit:getActionStatus
 	@treturn string actionStatus
 	@usage
