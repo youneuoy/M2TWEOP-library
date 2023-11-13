@@ -35,7 +35,13 @@ namespace modSettingsUI
 		ImVec2 selectablesSize{};
 	}settingsUIData;
 
-	
+	std::string remove_extension(const std::string &filename)
+	{
+		size_t lastdot = filename.find_last_of(".");
+		if (lastdot == std::string::npos)
+			return filename;
+		return filename.substr(0, lastdot);
+	}
 
 	void initSettingsUI()
 	{
@@ -210,6 +216,7 @@ namespace modSettingsUI
 			for (int i = 0; i < tomlFiles.size(); i++)
 			{
 				bool isSelected = (selectedItem == i);
+				tomlFiles[i] = remove_extension(tomlFiles[i]);
 				if (ImGui::Selectable(tomlFiles[i].c_str(), isSelected))
 				{
 					selectedItem = i;

@@ -7,5 +7,6 @@
     "useVanillaCfg": true,
     "modTitle": "",
     "runButtonColor": "",
-    "runButtonHoverColor": ""
+    "runButtonHoverColor": "",
+    "launcherTheme": "default.toml"
 }

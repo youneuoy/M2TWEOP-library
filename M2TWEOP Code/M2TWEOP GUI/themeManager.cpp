@@ -57,36 +57,6 @@ void tomlToStyle(string themeName)
 	style.ButtonTextAlign 		         = arrayToImVec2(*config->get_array_of<double>("buttonTextAlign"));
 	style.SelectableTextAlign 		         = arrayToImVec2(*config->get_array_of<double>("selectableTextAlign"));
 
-    // style.DisabledAlpha = 0.6000000238418579f;
-    // style.WindowPadding = ImVec2(6.0f, 3.0f);
-    // style.WindowRounding = 0.0f;
-    // style.WindowBorderSize = 1.0f;
-    // style.WindowMinSize = ImVec2(32.0f, 32.0f);
-    // style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
-    // style.WindowMenuButtonPosition = ImGuiDir_Left;
-    // style.ChildRounding = 0.0f;
-    // style.ChildBorderSize = 1.0f;
-    // style.PopupRounding = 0.0f;
-    // style.PopupBorderSize = 1.0f;
-    // style.FramePadding = ImVec2(5.0f, 1.0f);
-    // style.FrameRounding = 3.0f;
-    // style.FrameBorderSize = 1.0f;
-    // style.ItemSpacing = ImVec2(8.0f, 4.0f);
-    // style.ItemInnerSpacing = ImVec2(4.0f, 4.0f);
-    // style.CellPadding = ImVec2(4.0f, 2.0f);
-    // style.IndentSpacing = 21.0f;
-    // style.ColumnsMinSpacing = 6.0f;
-    // style.ScrollbarSize = 13.0f;
-    // style.ScrollbarRounding = 16.0f;
-    // style.GrabMinSize = 20.0f;
-    // style.GrabRounding = 2.0f;
-    // style.TabRounding = 4.0f;
-    // style.TabBorderSize = 1.0f;
-    // style.TabMinWidthForCloseButton = 0.0f;
-    // style.ColorButtonPosition = ImGuiDir_Right;
-    // style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
-    // style.SelectableTextAlign = ImVec2(0.0f, 0.0f);
-
 	// Access the 'colors' section in the TOML file
     auto colorsTable = config->get_table("colors");
 
@@ -148,20 +118,5 @@ void tomlToStyle(string themeName)
 
 void setStyle(string themeName)
 {
-	if (themeName == "youneouy.toml")
-	{
-		tomlToStyle("youneouy");
-	}
-	else if (themeName == "mithridates.toml")
-	{
-		tomlToStyle("mithridates");
-	}
-	else if (themeName == "sulla.toml")
-	{
-		tomlToStyle("sulla");
-	}
-	else 
-	{
-		tomlToStyle("default");
-	}
+	tomlToStyle(themeName)
 }
