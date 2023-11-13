@@ -118,5 +118,5 @@ void tomlToStyle(string themeName)
 
 void setStyle(string themeName)
 {
-	tomlToStyle(themeName)
+	tomlToStyle(themeName);
 }
