@@ -21,9 +21,15 @@ void tomlToStyle(string themeName)
 {
 	// Light style from ImThemes
 	ImGuiStyle& style = ImGui::GetStyle();
+	std::string fPath  = "";
 
 	// Load the TOML file
-	std::string fPath = ".\\eopData\\themes\\"+themeName+".toml";
+	if (themeName.find(".toml") != std::string::npos) {
+		fPath = ".\\eopData\\themes\\"+themeName;
+	} else {
+		fPath = ".\\eopData\\themes\\"+themeName+".toml";
+	}
+
 	auto config = cpptoml::parse_file(fPath);
 
 	// Assign the styles
