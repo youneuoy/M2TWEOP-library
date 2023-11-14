@@ -31,3 +31,5 @@ CopyFilesToFolder "M2TWEOP Code\Release\M2TWEOP GUI.exe" $modFolder
 
 # 6) Done
 Write-Output "======== 6) Success! EOP Built Successfully! ========"
+
+Start-Process $modFolder"\M2TWEOP GUI.exe"

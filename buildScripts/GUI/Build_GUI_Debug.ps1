@@ -27,7 +27,9 @@ Write-Output "======== 4) Copy all created files ========"
 
 Set-Location -Path $currentLoc
 
-CopyFilesToFolder "M2TWEOP Code\Release\M2TWEOP GUI.exe" $modFolder
+CopyFilesToFolder "M2TWEOP Code\Debug\M2TWEOP GUI.exe" $modFolder
 
 # 6) Done
 Write-Output "======== 6) Success! EOP Built Successfully! ========"
+
+Start-Process $modFolder"\M2TWEOP GUI.exe" -Verb RunAs
