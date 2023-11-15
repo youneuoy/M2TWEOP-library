@@ -2758,7 +2758,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int harvestSuccess
 	@tfield int baseFertility
 	@tfield int rebelFactionChance
-	@tfield bool plagued
+	@tfield int plagued
 	@tfield int plagueDeaths
 	@tfield int turnsOwned start at 10 for settlements owned at game start without specification in descr_strat
 	@tfield int populationSiegeStart

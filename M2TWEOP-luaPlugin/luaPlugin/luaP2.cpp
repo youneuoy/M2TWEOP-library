@@ -2387,8 +2387,8 @@ void luaP::initP2()
 
 	@tfield settlementStruct settlement
 	@tfield int isFortBattle
-	@tfield bool settlementWallsBreached
-	@tfield bool settlementGateDestroyed
+	@tfield int settlementWallsBreached
+	@tfield int settlementGateDestroyed
 
 	@table battleResidence
 	*/
