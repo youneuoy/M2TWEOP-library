@@ -5,6 +5,7 @@
 #include "managerG.h"
 #include "themeManager.h"
 #include "../M2TWEOP Common/m2tweopConstData.h"
+#include <cstdlib>  
 
 namespace modSettingsUI
 {
@@ -234,6 +235,11 @@ namespace modSettingsUI
 
 		// Display the combo box and tooltip
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Allows you to select a custom EOP theme for the launcher"); }
+
+		if (ImGui::Button("Open Theme Editor", helpers::getScreen().centerXButton))
+		{
+			system(".\\eopData\\themes\\ImTheme\\ImThemes-0.2.6-amd64.exe");
+		}
 	}
 
 	void drawRulesSettings()

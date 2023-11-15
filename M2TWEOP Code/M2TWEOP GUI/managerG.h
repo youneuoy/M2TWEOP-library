@@ -8,4 +8,6 @@ namespace managerG
 	void saveJsonSettings();
 
 	bool isRedistsInstallNeeded();
+
+	void loadJsonConfig();
 };
