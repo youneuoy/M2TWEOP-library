@@ -765,9 +765,9 @@ namespace fastFuncts
 		}
 	}
 
-	EOP_EXPORT int addAnchillary(namedCharacter* character, ancillary* anch)
+	EOP_EXPORT int addAncillary(namedCharacter* character, ancillary* anc)
 	{
-		if (character == nullptr || anch == nullptr)return 0;
+		if (character == nullptr || anc == nullptr)return 0;
 
 		DWORD adr = 0;
 		int retr = 0;
@@ -782,7 +782,7 @@ namespace fastFuncts
 		_asm
 		{
 			mov ecx, character
-			push anch
+			push anc
 			mov eax, adr
 			call eax
 			mov retr, eax
@@ -792,9 +792,9 @@ namespace fastFuncts
 		return retr;
 	}
 
-	EOP_EXPORT void removeAnchillary(namedCharacter* character, ancillary* anch)
+	EOP_EXPORT void removeAncillary(namedCharacter* character, ancillary* anc)
 	{
-		if (character == nullptr || anch == nullptr)return;
+		if (character == nullptr || anc == nullptr)return;
 
 		DWORD adr = 0;
 		int ret = 0;
@@ -809,7 +809,7 @@ namespace fastFuncts
 		_asm
 		{
 			mov ecx, character
-			push anch
+			push anc
 			mov eax, adr
 			call eax
 		}
@@ -817,9 +817,9 @@ namespace fastFuncts
 		return;
 	}
 
-	EOP_EXPORT ancillary* findAnchillary(char* anchName)
+	EOP_EXPORT ancillary* findAncillary(char* ancName)
 	{
-		if (anchName == nullptr)return 0;
+		if (ancName == nullptr)return 0;
 
 		DWORD adr = 0;
 		ancillary* retr = nullptr;
@@ -834,7 +834,7 @@ namespace fastFuncts
 
 		_asm
 		{
-			push anchName
+			push ancName
 			mov eax, adr
 			call eax
 			add esp, 4

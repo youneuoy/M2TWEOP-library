@@ -266,10 +266,10 @@ namespace battleCreator
 		if (gen->genChar->ancNum != 0)
 		{
 			tempS = "ancillaries";
-			UINT32 anchNum = gen->genChar->ancNum;
-			for (UINT32 i = 0; i < anchNum; i++)
+			UINT32 ancNum = gen->genChar->ancNum;
+			for (UINT32 i = 0; i < ancNum; i++)
 			{
-				tempS.append(" ").append(gen->genChar->ancillaries[i]->dataAnch->ancName).append(" ,");
+				tempS.append(" ").append(gen->genChar->ancillaries[i]->dataAnc->ancName).append(" ,");
 			}
 			fileStrings.push_back(tempS);
 		}

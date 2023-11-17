@@ -226,7 +226,7 @@ namespace gameHelpers
 	//23 resource_description
 	const char* getResourceDescription(eventTrigger* eventData)
 	{
-		return CallVFunc<23, const char*>(eventData);
+		return *CallVFunc<23, const char**>(eventData);
 	}
 
 	eduEntry* getEduEntry(eventTrigger* eventData)
@@ -298,7 +298,7 @@ namespace gameHelpers
 	//29 mission_details
 	const char* getMissionDetails(eventTrigger* eventData)
 	{
-		return CallVFunc<29, const char*>(eventData);
+		return *CallVFunc<29, const char**>(eventData);
 	}
 
 	//30 character_action_advice
@@ -322,7 +322,7 @@ namespace gameHelpers
 	//35 event_counter
 	const char* getEventCounter(eventTrigger* eventData)
 	{
-		return CallVFunc<35, const char*>(eventData);
+		return *CallVFunc<35, const char**>(eventData);
 	}
 
 	//36 sm_position

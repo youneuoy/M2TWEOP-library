@@ -2201,15 +2201,15 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int defendPriority
 	@tfield int invasionType
 	@tfield int invadePriority
-	@tfield bool atWar
-	@tfield bool wantPeace
-	@tfield bool wantAlly
-	@tfield bool wantBeProtect
-	@tfield bool wantOfferProtect
-	@tfield bool allianceAgainst
+	@tfield int atWar
+	@tfield int wantPeace
+	@tfield int wantAlly
+	@tfield int wantBeProtect
+	@tfield int wantOfferProtect
+	@tfield int allianceAgainst
 	@tfield int ptsDesire
 	@tfield int ptsAlliance
-	@tfield bool canForceInvade
+	@tfield int canForceInvade
 
 	@table decisionValuesLTGD
 	*/
@@ -2330,9 +2330,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int regionID
 	@tfield settlementStruct settlement
 	@tfield int autoManagePolicy
-	@tfield bool isAutoManaged
-	@tfield bool isAutoManagedRecruitment
-	@tfield bool isAutoManagedConstruction
+	@tfield int isAutoManaged
+	@tfield int isAutoManagedRecruitment
+	@tfield int isAutoManagedConstruction
 	@tfield int spyBias
 	@tfield int assassinBias
 	@tfield int diplomatBias
@@ -2701,7 +2701,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield settlementStruct settlement
 	@tfield character character Character standing on the port tile, only the first one, check for nil.
 	@tfield stackStruct blockadingArmy Enemy army blockading the port, by standing on it's tile, check for nil.
-	@tfield dockStruct Dock water tile, only upgraded ports have this, check for nil.
+	@tfield dockStruct dock water tile, only upgraded ports have this, check for nil.
 
 
 	@table portStruct
@@ -2758,14 +2758,14 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int harvestSuccess
 	@tfield int baseFertility
 	@tfield int rebelFactionChance
-	@tfield bool plagued
+	@tfield int plagued
 	@tfield int plagueDeaths
 	@tfield int turnsOwned start at 10 for settlements owned at game start without specification in descr_strat
 	@tfield int populationSiegeStart
 	@tfield int settlementTaxLevel
 	@tfield int recruitmentPoolCount
 	@tfield int recruitmentCapabilityNum
-	@tfield bool freezeRecruitmentPool
+	@tfield int freezeRecruitmentPool
 	@tfield int spiesInRecruitmentQueue
 	@tfield int assassinsInRecruitmentQueue
 	@tfield int diplomatsInRecruitmentQueue

@@ -3357,7 +3357,7 @@ struct someFactNameStruct {
 
 //pointer to ancillary
 struct ancData { /* data of the ancillary */
-	struct ancillary* dataAnch;
+	struct ancillary* dataAnc;
 };
 
 //data of one soldier in unit

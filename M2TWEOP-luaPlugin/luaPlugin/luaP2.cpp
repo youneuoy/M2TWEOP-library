@@ -546,50 +546,50 @@ void luaP::initCampaign()
 	/***
 	Basic options1 table
 
-	@tfield bool widescreen
+	@tfield int widescreen
 	@tfield int antiAliasMode
 	@tfield int subtitles
-	@tfield bool english
-	@tfield bool noBattleTimeLimit
+	@tfield int english
+	@tfield int noBattleTimeLimit
 	@tfield int useNewCursorActions
 	@tfield int campaignNumTimesPlay
-	@tfield bool uiWinConditions
-	@tfield bool isScenario
+	@tfield int uiWinConditions
+	@tfield int isScenario
 	@tfield int isHotseatEnabled
-	@tfield bool hotseatAutosave
-	@tfield bool email
-	@tfield bool saveConfig
-	@tfield bool closeAfterSave
-	@tfield bool validateData
-	@tfield bool campaignMapSpeedUp
+	@tfield int hotseatAutosave
+	@tfield int email
+	@tfield int saveConfig
+	@tfield int closeAfterSave
+	@tfield int validateData
+	@tfield int campaignMapSpeedUp
 	@tfield int skipAiFactions
-	@tfield bool labelCharacters
-	@tfield bool noBackGroundFmv
-	@tfield bool disableArrowMarkers
-	@tfield bool arcadeBattles
-	@tfield bool disableEvents
-	@tfield bool isPrologue
-	@tfield bool updateAiCamera
-	@tfield bool hideCampaign
+	@tfield int labelCharacters
+	@tfield int noBackGroundFmv
+	@tfield int disableArrowMarkers
+	@tfield int arcadeBattles
+	@tfield int disableEvents
+	@tfield int isPrologue
+	@tfield int updateAiCamera
+	@tfield int hideCampaign
 	@tfield int unlimitedMenOnBattlefield
 	@tfield int tgaReserveSpace
 	@tfield int keysetUsed
-	@tfield bool muteAdvisor
-	@tfield bool advancedStatsAlways
-	@tfield bool microManageAllSettlements
-	@tfield bool blindAdvisor
+	@tfield int muteAdvisor
+	@tfield int advancedStatsAlways
+	@tfield int microManageAllSettlements
+	@tfield int blindAdvisor
 	@tfield int terrainQuality
 	@tfield int vegetationQuality
-	@tfield bool useQuickChat
+	@tfield int useQuickChat
 	@tfield int graphicsAdaptor
-	@tfield bool showDemeanour
+	@tfield int showDemeanour
 	@tfield int radar
 	@tfield int unitCards
 	@tfield int sa_cards
 	@tfield int buttons
-	@tfield bool tutorialBattlePlayed
-	@tfield bool disableVnVs
-	@tfield bool allUsers
+	@tfield int tutorialBattlePlayed
+	@tfield int disableVnVs
+	@tfield int allUsers
 
 	@table options1
 	*/
@@ -648,35 +648,35 @@ void luaP::initCampaign()
 	@tfield int campaignResolutionY
 	@tfield int battleResolutionX
 	@tfield int battleResolutionY
-	@tfield bool vSync
-	@tfield bool uiIconBarCheck
-	@tfield bool uiRadarCheck
-	@tfield bool useMorale
-	@tfield bool uiAmmoCheck
-	@tfield bool useFatigue
-	@tfield bool uiSupplyCheck
-	@tfield bool toggleFowState this does not toggle fow just remembers if it was on or off
-	@tfield bool cameraRestrict
-	@tfield bool eventCutscenes
+	@tfield int vSync
+	@tfield int uiIconBarCheck
+	@tfield int uiRadarCheck
+	@tfield int useMorale
+	@tfield int uiAmmoCheck
+	@tfield int useFatigue
+	@tfield int uiSupplyCheck
+	@tfield int toggleFowState this does not toggle fow just remembers if it was on or off
+	@tfield int cameraRestrict
+	@tfield int eventCutscenes
 	@tfield int defaultCameraInBattle
-	@tfield bool splashes
-	@tfield bool stencilShadows
-	@tfield bool audioEnable
-	@tfield bool speechEnable
-	@tfield bool firstTimePlay
-	@tfield bool toggleAutoSave
-	@tfield bool showBanners
-	@tfield bool passwords
-	@tfield bool hotseatTurns
-	@tfield bool hotseatScroll
+	@tfield int splashes
+	@tfield int stencilShadows
+	@tfield int audioEnable
+	@tfield int speechEnable
+	@tfield int firstTimePlay
+	@tfield int toggleAutoSave
+	@tfield int showBanners
+	@tfield int passwords
+	@tfield int hotseatTurns
+	@tfield int hotseatScroll
 	@tfield int allowValidationFeatures
 	@tfield int campaignSpeed
-	@tfield bool labelSettlements
-	@tfield bool disablePapalElections
-	@tfield bool autoresolveAllBattles
-	@tfield bool savePrefs
-	@tfield bool disableConsole
-	@tfield bool validateDiplomacy
+	@tfield int labelSettlements
+	@tfield int disablePapalElections
+	@tfield int autoresolveAllBattles
+	@tfield int savePrefs
+	@tfield int disableConsole
+	@tfield int validateDiplomacy
 	@tfield int unitDetail
 	@tfield int buildingDetail
 	@tfield int maxSoldiersOnBattlefield if limited
@@ -698,11 +698,11 @@ void luaP::initCampaign()
 	@tfield int effectQuality
 	@tfield int EnableCameraCampaignSmoothing
 	@tfield int chatMsgDuration
-	@tfield bool saveGameSpyPassword
-	@tfield bool addDateToLogs
-	@tfield bool showToolTips
-	@tfield bool isNormalHud
-	@tfield bool showPackageLitter
+	@tfield int saveGameSpyPassword
+	@tfield int addDateToLogs
+	@tfield int showToolTips
+	@tfield int isNormalHud
+	@tfield int showPackageLitter
 	@tfield float unitSizeMultiplierLow
 	@tfield float unitSizeMultiplierMedium
 	@tfield float unitSizeMultiplierLarge
@@ -813,8 +813,8 @@ void luaP::initCampaign()
 	@tfield int publicOrderBonusAi
 	@tfield int experienceBonusAi
 	@tfield int incomeBonusAi
-	@tfield bool wantsTargetPlayer
-	@tfield bool wantsTargetPlayerNaval
+	@tfield int wantsTargetPlayer
+	@tfield int wantsTargetPlayerNaval
 	@tfield int autoAttackPlayerIfCrusadeTarget
 
 	@table campaignDifficulty2
@@ -986,8 +986,8 @@ void luaP::initCampaign()
 	@tfield jihadStruct jihad
 	@tfield float BrigandSpawnValue Lower values increase spawn rate.
 	@tfield float PirateSpawnValue Lower values increase spawn rate.
-	@tfield bool restrictAutoResolve
-	@tfield bool saveEnabled
+	@tfield int restrictAutoResolve
+	@tfield int saveEnabled
 	@tfield int FreeUpkeepForts Number of units who get free upkeep in forts.
 	@tfield float currentDate
 	@tfield int currentseason season (0=summer, 1=winter)
@@ -1788,7 +1788,7 @@ void luaP::initCampaign()
 	@tfield int regionID
 	@tfield regionStruct region
 	@tfield int tradeValue
-	@tfield bool alliedRegion
+	@tfield int alliedRegion
 	@tfield int borderTilesCount
 	@tfield roadStruct connectingRoad
 	@tfield getBorderTile getBorderTile
@@ -2387,8 +2387,8 @@ void luaP::initP2()
 
 	@tfield settlementStruct settlement
 	@tfield int isFortBattle
-	@tfield bool settlementWallsBreached
-	@tfield bool settlementGateDestroyed
+	@tfield int settlementWallsBreached
+	@tfield int settlementGateDestroyed
 
 	@table battleResidence
 	*/
