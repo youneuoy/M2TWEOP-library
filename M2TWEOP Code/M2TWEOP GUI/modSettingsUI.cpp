@@ -44,6 +44,27 @@ namespace modSettingsUI
 		return filename.substr(0, lastdot);
 	}
 
+	// Function to convert std::wstring to LPSTR
+	LPSTR ConvertWideStringToLPSTR(const std::wstring &wideString)
+	{
+		int bufferSize = WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, NULL, 0, NULL, NULL);
+		if (bufferSize == 0)
+		{
+			// Handle error, e.g., GetLastError()
+			return nullptr;
+		}
+
+		LPSTR narrowString = new char[bufferSize];
+		if (WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, narrowString, bufferSize, NULL, NULL) == 0)
+		{
+			// Handle error, e.g., GetLastError()
+			delete[] narrowString;
+			return nullptr;
+		}
+
+		return narrowString;
+	}
+
 	void initSettingsUI()
 	{
 		settingsUIData.settingsPages.clear();
@@ -180,6 +201,9 @@ namespace modSettingsUI
 
 	void drawLauncherSettigs()
 	{
+		ImGui::Checkbox("Discord Rich Presence", &dataG::data.gameData.isDiscordRichPresenceEnabled);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Update your Discord status/presence with details about what mod you are playing");}
+
 		if (ImGui::Checkbox("Play background music", &dataG::data.audio.bkgMusic.isMusicNeeded))
 		{
 			if (dataG::data.audio.bkgMusic.isMusicNeeded == false)
@@ -193,13 +217,11 @@ namespace modSettingsUI
 		}
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enabled music in the EOP Launcher");}
 
-		ImGui::Checkbox("Discord Rich Presence", &dataG::data.gameData.isDiscordRichPresenceEnabled);
-		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Update your Discord status/presence with details about what mod you are playing");}
-
 		if (ImGui::SliderInt("Music volume", &dataG::data.audio.bkgMusic.musicVolume, 0, 100))
 		{
 			dataG::data.audio.bkgMusic.music->setVolume(dataG::data.audio.bkgMusic.musicVolume);
 		}
+		ImGui::NewLine();
 
 		// Get all the TOML files in the eopData/themes folder
 		std::vector<std::string> tomlFiles = helpers::getTomlFilesInFolder();
@@ -212,7 +234,7 @@ namespace modSettingsUI
 		ImGui::PushItemWidth(textSize.x);
 
 		// Display the combo box and tooltip
-		if (ImGui::BeginCombo("Launcher Theme: ", dataG::data.modData.themeName.c_str()))
+		if (ImGui::BeginCombo("Launcher Theme", dataG::data.modData.themeName.c_str()))
 		{
 			for (int i = 0; i < tomlFiles.size(); i++)
 			{
@@ -238,7 +260,13 @@ namespace modSettingsUI
 
 		if (ImGui::Button("Open Theme Editor", helpers::getScreen().centerXButton))
 		{
-			system(".\\eopData\\themes\\ImTheme\\ImThemes-0.2.6-amd64.exe");
+			std::wstring exePath = L".\\eopData\\themes\\ImTheme\\ImThemes-0.2.6-amd64.exe";
+			LPSTR lpwstr = ConvertWideStringToLPSTR(exePath);
+			helpers::openProcess(lpwstr);
+		}
+		if (ImGui::Button("Refresh theme", helpers::getScreen().centerXButton))
+		{
+			setStyle(dataG::data.modData.themeName);
 		}
 	}
 
@@ -261,20 +289,20 @@ namespace modSettingsUI
 
 	void drawGameSettings()
 	{
-		ImGui::Checkbox("Stratmap context menu", &dataG::data.modulesData.isContextMenuNeeded);
-		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable the strategy/campaign map while pressing MMB");}
+		ImGui::Checkbox("Campaign Context Menu", &dataG::data.modulesData.isContextMenuNeeded);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable the context menu on the campaign map while pressing MMB");}
 
-		ImGui::Checkbox("Tactical map viewer", &dataG::data.modulesData.isTacticalMapViewerNeeded);
-		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable the tactical map viewer which allows you to view battlemaps before a battle");}
+		ImGui::Checkbox("Battle Map Viewer", &dataG::data.modulesData.isTacticalMapViewerNeeded);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable the tactical map viewer which allows you to view the battlemap of any tile");}
 
-		ImGui::Checkbox("M2TWEOP developer mode", &dataG::data.modulesData.isDeveloperModeNeeded);
+		ImGui::Checkbox("M2TWEOP Developer Mode", &dataG::data.modulesData.isDeveloperModeNeeded);
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable to quickly debug battle maps and .worldpackage files");}
 		
 		ImGui::Checkbox("Block modification launch without EOP", &dataG::data.gameData.isBlockLaunchWithoutEop);
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Prevent your mod from starting without EOP enabled. See FAQ for more details.");}
 		
-		ImGui::Checkbox("Override battle camera and controls", &dataG::data.gameData.IsOverrideBattleCamera);
-		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("For hotseat online play");}
+		// ImGui::Checkbox("Override battle camera and controls", &dataG::data.gameData.IsOverrideBattleCamera);
+		// if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("For hotseat online play");}
 	}
 	
 	void drawModSettingsUI(bool* isOpen)
@@ -304,17 +332,6 @@ namespace modSettingsUI
 				{
 					selected = n;
 					settingsUIData.selectedPage = settingsUIData.settingsPages[n].pageId;
-				}
-
-				if (selected == n)
-				{
-
-					ImU32 col_a = ImGui::GetColorU32(ImGuiCol_Button);
-
-
-					ImDrawList* draw_list = ImGui::GetWindowDrawList();
-					ImU32 col_b = ImGui::GetColorU32(ImGuiCol_ChildBg);
-					draw_list->AddRectFilledMultiColor(cp, cp2, col_a, col_b, col_b, col_a);
 				}
 
 			}

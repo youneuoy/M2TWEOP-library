@@ -64,6 +64,45 @@ bool helpers::loadTexture(const char* filename, GLuint* out_texture, int* out_wi
 	return true;
 }
 
+void helpers::openProcess(LPSTR& exePath)
+{
+	// Create process information
+	PROCESS_INFORMATION processInfo;
+	ZeroMemory(&processInfo, sizeof(processInfo));
+
+	// Create startup information
+	STARTUPINFO startupInfo;
+	ZeroMemory(&startupInfo, sizeof(startupInfo));
+	startupInfo.cb = sizeof(startupInfo);
+
+	// Create the process
+	if (CreateProcess(
+			NULL,	 // Application name (use NULL to use command line)
+			exePath, // Command line
+			NULL,	 // Process security attributes
+			NULL,	 // Thread security attributes
+			FALSE,	 // Inherit handles from the calling process
+			0,		 // Creation flags
+			NULL,	 // Use parent's environment block
+			NULL,	 // Use parent's starting directory
+			&startupInfo,
+			&processInfo))
+	{
+
+		// Optionally wait for the process to complete
+		// WaitForSingleObject(processInfo.hProcess, INFINITE);
+
+		// Close process and thread handles
+		CloseHandle(processInfo.hProcess);
+		CloseHandle(processInfo.hThread);
+	}
+	else
+	{
+		// Handle error
+		DWORD error = GetLastError();
+	}
+}
+
 void helpers::closeProcess(const string& exeName)
 {
 	HANDLE gameHNDL = NULL;

@@ -149,24 +149,23 @@ namespace mainUI
 		ImGui::PopStyleColor();
 		ImGui::PopStyleColor();
 
-
 		if (ImGui::Button("Settings", helpers::getScreen().centerXButton))
 		{
 			childs.isModSettingsUIOpen = true;
 		}
-		// if (ImGui::Button("Run vanilla (Without EOP)", helpers::getScreen().centerXButton))
-		// {
-		// 	childs.isGameSTDMenuOpen = true;
-		// }
-
 		ImGui::NewLine();
-		if (ImGui::Button("M2TWEOP Documentation", helpers::getScreen().centerXButton))
+
+		if (ImGui::Button("Documentation", helpers::getScreen().centerXButton))
 		{
 			ShellExecuteA(NULL, "open", "https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html", NULL, NULL, SW_SHOWNORMAL);
 		}
-		if (ImGui::Button("M2TWEOP Website", helpers::getScreen().centerXButton))
+		if (ImGui::Button("Website", helpers::getScreen().centerXButton))
 		{
 			ShellExecuteA(NULL, "open", "https://youneuoy.github.io/M2TWEOP-library/ ", NULL, NULL, SW_SHOWNORMAL);
+		}
+		if (ImGui::Button("Discord", helpers::getScreen().centerXButton))
+		{
+			ShellExecuteA(NULL, "open", "https://discord.gg/Epqjm8u2WK", NULL, NULL, SW_SHOWNORMAL);
 		}
 		ImGui::End();
 

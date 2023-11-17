@@ -8,6 +8,8 @@ public:
 
 	static bool loadTexture(const char* filename, GLuint* out_texture, int* out_width, int* out_height);
 
+	static LPWSTR ConvertStringToLPWSTR(const char* narrowString);
+	static void openProcess(LPSTR& exePath);
 	static void closeProcess(const string& exeName);
 	static bool isProcessRunning(const string& exeName);
 

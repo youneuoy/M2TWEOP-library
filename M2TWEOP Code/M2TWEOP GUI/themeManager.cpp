@@ -39,7 +39,8 @@ void tomlToStyle(string themeName)
 	style.WindowBorderSize 		         = *config->get_as<double>("windowBorderSize");
 	style.WindowMinSize 			       = arrayToImVec2(*config->get_array_of<double>("windowMinSize"));
 	style.WindowTitleAlign 		 		    =  arrayToImVec2(*config->get_array_of<double>("windowTitleAlign"));
-	// style.WindowMenuButtonPosition 	=  *config->get_as<double>("windowMenuButtonPosition");
+	style.WindowMenuButtonPosition 	=  ImGuiDir_Left;
+	style.ColorButtonPosition 			  =  ImGuiDir_Left;
 	style.ChildRounding 		         = *config->get_as<double>("childRounding");
 	style.ChildBorderSize 		         = *config->get_as<double>("childBorderSize");
 	style.PopupRounding 		         = *config->get_as<double>("popupRounding");
@@ -53,13 +54,12 @@ void tomlToStyle(string themeName)
 	style.IndentSpacing 		         = *config->get_as<double>("indentSpacing");
 	style.ColumnsMinSpacing 		         = *config->get_as<double>("columnsMinSpacing");
 	style.ScrollbarSize 		         = *config->get_as<double>("scrollbarSize");
-	style.ScrollbarSize 		         = *config->get_as<double>("scrollbarRounding");
+	style.ScrollbarRounding 		         = *config->get_as<double>("scrollbarRounding");
 	style.GrabMinSize 		         = *config->get_as<double>("grabMinSize");
 	style.GrabRounding 		         = *config->get_as<double>("grabRounding");
 	style.TabRounding 		         = *config->get_as<double>("tabRounding");
 	style.TabBorderSize 		         = *config->get_as<double>("tabBorderSize");
 	style.TabMinWidthForCloseButton 		         = *config->get_as<double>("tabMinWidthForCloseButton");
-	// style.TabMinWidthForCloseButton 		         = *config->get_as<double>("colorButtonPosition");
 	style.ButtonTextAlign 		         = arrayToImVec2(*config->get_array_of<double>("buttonTextAlign"));
 	style.SelectableTextAlign 		         = arrayToImVec2(*config->get_array_of<double>("selectableTextAlign"));
 
@@ -86,6 +86,7 @@ void tomlToStyle(string themeName)
 	style.Colors[ImGuiCol_ScrollbarGrab] = parseColor(*colorsTable->get_as<std::string>("ScrollbarGrab"));
 	style.Colors[ImGuiCol_ScrollbarGrabHovered] = parseColor(*colorsTable->get_as<std::string>("ScrollbarGrabHovered"));
 	style.Colors[ImGuiCol_ScrollbarGrabActive] = parseColor(*colorsTable->get_as<std::string>("ScrollbarGrabActive"));
+	style.Colors[ImGuiCol_CheckMark] = parseColor(*colorsTable->get_as<std::string>("CheckMark"));
 	style.Colors[ImGuiCol_SliderGrab] = parseColor(*colorsTable->get_as<std::string>("SliderGrab"));
 	style.Colors[ImGuiCol_SliderGrabActive] = parseColor(*colorsTable->get_as<std::string>("SliderGrabActive"));
 	style.Colors[ImGuiCol_Button] = parseColor(*colorsTable->get_as<std::string>("Button"));
