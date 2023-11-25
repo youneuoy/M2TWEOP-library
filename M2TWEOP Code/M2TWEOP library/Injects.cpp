@@ -3165,6 +3165,63 @@ void OnCreateMercUnitCheck::SetNewCode()
 	delete a;
 }
 
+
+onAiTurn::onAiTurn(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x0052B074;
+		otherFunc = 0x005D2F00;
+	}
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x0052AA74;
+		otherFunc = 0x005D2A70;
+	}
+}
+
+onAiTurn::~onAiTurn()
+{
+}
+
+void onAiTurn::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(eax, ecx);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onAiTurn::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(ecx, esi);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->popf();
+	a->popad();
+	a->mov(ecx, dword_ptr(esi, 0x24));
+	a->mov(eax, (DWORD)otherFunc);
+	a->call(eax);
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
 OnCreateMercUnit::OnCreateMercUnit(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

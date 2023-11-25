@@ -35,6 +35,7 @@ public:
 	//after reading EDU
 	static void WINAPI afterEDUread();
 	static void WINAPI onGameInit();
+	static void __fastcall onAiTurn(aiFaction* aifaction);
 
 
 	//before start of a first faction turn

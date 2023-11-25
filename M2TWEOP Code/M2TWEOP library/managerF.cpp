@@ -488,6 +488,12 @@ void managerF::doPachs()
 	toCreateMercUnit->Enable();
 	f1 << "Done" << endl;
 
+	f1 << "Start applying toCreateMercUnit patch" << endl;
+	onAiTurn* toAiTurn = new onAiTurn(mem, (LPVOID)patchesForGame::onAiTurn, globals::dataS.gamever);
+	toAiTurn->SetNewCode();
+	toAiTurn->Enable();
+	f1 << "Done" << endl;
+
 	f1 << "Start applying OnCreateUnitWrapper patch" << endl;
 	OnCreateUnitWrapper* toCreateUnitWrapper = new OnCreateUnitWrapper(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gamever);
 	toCreateUnitWrapper->SetNewCode();

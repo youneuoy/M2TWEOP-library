@@ -698,6 +698,14 @@ void onGameInit()
 	}
 }
 
+void onAiTurn(aiFaction* aifaction)
+{
+	if (plugData::data.luaAll.onAiTurn != nullptr)
+	{
+		tryLua((*plugData::data.luaAll.onAiTurn)(aifaction));
+	}
+}
+
 void onEndSiege(int x, int y)
 {
 	if (plugData::data.luaAll.onEndSiege != nullptr)

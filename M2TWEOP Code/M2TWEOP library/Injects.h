@@ -684,6 +684,20 @@ private:
 	LPVOID funcAddress;
 };
 
+class onAiTurn
+	:public AATemplate
+{
+public:
+	onAiTurn(MemWork* mem, LPVOID adr, int ver);
+	~onAiTurn();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+	DWORD otherFunc;
+};
+
 class onGameConsoleCommandFromConsole
 	:public AATemplate
 {
