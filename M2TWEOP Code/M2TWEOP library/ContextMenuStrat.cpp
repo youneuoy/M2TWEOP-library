@@ -2,10 +2,9 @@
 #include "fastFuncts.h"
 #include "TexturesManager.h"
 #include "PlannedRetreatRoute.h"
+
 ContextMenuStrat::ContextMenuStrat()
 {
-	if (dataG::data.battlesData.isPlannedRetreatRoute == true)
-	{
 		ctxItems.insert(std::make_pair("TacticMapView", ContextMenuItem(
 			[]()
 			{
@@ -26,10 +25,6 @@ ContextMenuStrat::ContextMenuStrat()
 				return true;
 			}
 			)));
-	}
-	
-	if (dataG::data.battlesData.isPlannedRetreatRoute == true)
-	{
 		ctxItems.insert(std::make_pair("RetreatPlanner", ContextMenuItem(
 			[]()
 			{
@@ -54,7 +49,6 @@ ContextMenuStrat::ContextMenuStrat()
 
 				return false;
 			})));
-	}
 }
 void ContextMenuStrat::Draw()
 {
