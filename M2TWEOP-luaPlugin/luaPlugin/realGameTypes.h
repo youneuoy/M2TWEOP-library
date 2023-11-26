@@ -941,7 +941,7 @@ struct campaign {
 struct uiUnitCard
 {
 public:
-	char pad_0000[380]; //0x0000
+	char pad_0000[900]; //0x0000
 	unit* unit; //0x0384
 };
 
@@ -1961,6 +1961,11 @@ public:
 }; //Size: 0x0008
 
 
+struct recruitRome
+{
+	char pad[8];
+};
+
 struct capabilityStruct
 {
 public:
@@ -1968,7 +1973,7 @@ public:
 	struct settlementCapability settlementCapabilitiesAgent[6]; //0x00E4
 	struct settlementCapability settlementCapabilitiesAgentLimit[6]; //0x00FC
 	struct settlementCapability settlementCapabilitiesAncillaryROME[4]; //0x0114
-	struct recruitRome* settlementCapabilitiesRecruitROME[64]; //0x0124
+	struct recruitRome settlementCapabilitiesRecruitROME[64]; //0x0124
 	int32_t recruitCapabilityCount; //0x0324
 	struct recruitmentCapability recruitmentCapabilities[64]; //0x0328
 	int32_t recruitmentCapabilityCount; //0x0828
@@ -2877,9 +2882,9 @@ struct unit {
 	int32_t unitBattleProperties; //0x1E44
 	char pad_1E48[4]; //0x1E48
 	void* formationsArray; //0x1E4C
-	char pad_1E50[28]; //0x1E28
+	char pad_1E50[38]; //0x1E50
 	int16_t ranks; //0x1E76
-	char pad_1E78[14]; //0x1E78
+	char pad_1E78[12]; //0x1E78
 	int8_t isCloseFormation; //0x1E84
 	char pad_1E85[59]; //0x1E85
 	float positionX; //0x1EC0
@@ -3012,11 +3017,6 @@ public:
 	int32_t battlesLost; //0x0004
 	int32_t wonLostRatio; //0x0008
 }; //Size: 0x000C
-
-struct recruitRome
-{
-	char pad[8];
-};
 
 struct factionDataStrategy
 {
@@ -3700,7 +3700,7 @@ struct eduEntry {
 	void* Ship;
 	uint32_t ownership;
 	int32_t eraAmount;
-	struct eraOwnerships* eraOwnerships;
+	void* eraOwnerships;
 	void* N00000152;
 	void* N00000153;
 	float aiUnitValuePerSoldier;
@@ -3751,6 +3751,51 @@ struct soldierData { /* one soldier in unit */
 	undefined field_0x3;
 };
 #pragma pack(pop)
+
+
+struct ltgdFactionValues
+{
+public:
+	int32_t totalPopulation; //0x0000
+	int32_t tileCount; //0x0004
+	int32_t averagePopulation; //0x0008
+	int32_t productionValue; //0x000C
+	int32_t nonAlliedBorderLength; //0x0010
+	int32_t enemyBorderLength; //0x0014
+	int32_t fleetCount; //0x0018
+	int32_t navalPowerPerFleet; //0x001C
+	int32_t navalStrength; //0x0020
+	int32_t armyCount; //0x0024
+	int32_t strengthPerArmy; //0x0028
+	int32_t totalStrength; //0x002C
+	int32_t freeStrength; //0x0030
+	int32_t neighbourEnemyNum; //0x0034
+	int32_t enemyStrength; //0x0038
+	int32_t protectorateOf; //0x003C
+}; //Size: 0x0040
+
+struct interFactionLTGD
+{
+public:
+	int32_t borderTiles; //0x0000
+	int32_t frontLineBalance; //0x0004
+	int8_t hasAllianceAgainst; //0x0008
+	int8_t isStrongestNeighbour; //0x0009
+	int8_t isWeakestNeighbour; //0x000A
+	char pad_000B[1]; //0x000B
+}; //Size: 0x000C
+
+struct ltgdGlobals
+{
+public:
+	struct factionStruct* currentFaction; //0x0000
+	char pad_0004[8]; //0x0004
+	uint32_t N00024EDA; //0x000C
+	char pad_0010[4]; //0x0010
+	struct ltgdFactionValues ltgdFactionValues[31]; //0x0014
+	struct interFactionLTGD interFactionLTGD[31][31]; //0x07D4
+};
+
 
 //fort
 struct fortStruct {

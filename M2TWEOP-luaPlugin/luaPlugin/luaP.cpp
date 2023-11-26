@@ -139,6 +139,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<aiGlobalStrategyDirector> aiGlobalStrategyDirector;
 		sol::usertype<decisionValuesLTGD> decisionValuesLTGD;
 		sol::usertype<aiProductionController> aiProductionController;
+		sol::usertype<ltgdFactionValues> aiFactionValues;
+		sol::usertype<interFactionLTGD> interFactionLTGD;
 	}types;
 	luaState = {};
 	luaPath = modPath + "\\youneuoy_Data\\plugins\\lua";
@@ -1007,7 +1009,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.unit.set_function("setBattleProperty", &unitHelpers::setBattleProperty);
 	/***
-	Get unit action status in battle ( idling, hiding, ready, reforming, moving, withdrawing, missiles_firing, missiles_reloading, charging, fighting, pursuing, routing, fighting_backs_to_the_walls, running_amok, rallying, dead, leaving_battle, entering_battle, left_battle, go_berserk, taunting, bracing, infighting).
+	Get unit action status in battle ( idling, hiding, ready, reforming, moving, withdrawing, missiles\_firing, missiles\_reloading, charging, fighting, pursuing, routing, fighting\_backs\_to\_the\_walls, running\_amok, rallying, dead, leaving\_battle, entering\_battle, left\_battle, go\_berserk, taunting, bracing, infighting).
 	@function unit:getActionStatus
 	@treturn string actionStatus
 	@usage
@@ -1134,97 +1136,97 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Basic eduEntry table
 
-	@tfield string Type - Get only
-	@tfield string Soldier - Get only
-	@tfield string UnitCardTga - Get only
-	@tfield string InfoCardTga - Get only
-	@tfield int Index - Get only
-	@tfield int UnitCreatedCounter - Get only
+	@tfield string eduType - Get only
+	@tfield string soldier - Get only
+	@tfield string unitCardTga - Get only
+	@tfield string infoCardTga - Get only
+	@tfield int index - Get only
+	@tfield int unitCreatedCounter - Get only
 	@tfield int category - Get only
 	@tfield int class - Get only
 	@tfield int categoryClassCombo - Get only
 	@tfield int recruitPriorityOffset times 4
-	@tfield int CrusadingUpkeepModifier
+	@tfield int crusadingUpkeepModifier
 	@tfield number aiUnitValuePerSoldier
 	@tfield number aiUnitValue
-	@tfield int SoldierCount
-	@tfield float Mass
-	@tfield float Width
-	@tfield float Height
+	@tfield int soldierCount
+	@tfield float mass
+	@tfield float width
+	@tfield float height
 	@tfield bool haveAttributeLegio
-	@tfield float MoveSpeedMod
-	@tfield float UnitSpacingFrontToBackClose
-	@tfield float UnitSpacingSideToSideClose
-	@tfield float UnitSpacingFrontToBackLoose
-	@tfield float UnitSpacingSideToSideLoose
-	@tfield int StatHealth
-	@tfield int StatHealthAnimal
-	@tfield int StatHeat
-	@tfield int StatGround1
-	@tfield int StatGround2
-	@tfield int StatGround3
-	@tfield int StatGround4
-	@tfield int StatCost1
-	@tfield int StatCost2
-	@tfield int StatCost3
-	@tfield int StatCost4
-	@tfield int StatCost5
-	@tfield int StatCost6
-	@tfield int StatCost7
-	@tfield int StatCost8
-	@tfield int Morale
-	@tfield int MoraleLocked
-	@tfield int StatFood1
-	@tfield int StatFood2
-	@tfield int Ammunition
+	@tfield float moveSpeedMod
+	@tfield float unitSpacingFrontToBackClose
+	@tfield float unitSpacingSideToSideClose
+	@tfield float unitSpacingFrontToBackLoose
+	@tfield float unitSpacingSideToSideLoose
+	@tfield int statHealth
+	@tfield int statHealthAnimal
+	@tfield int statHeat
+	@tfield int statScrub
+	@tfield int statSand
+	@tfield int statForest
+	@tfield int statSnow
+	@tfield int recruitTime
+	@tfield int recruitCost
+	@tfield int upkeepCost
+	@tfield int weaponCost
+	@tfield int ArmourCost
+	@tfield int customBattleCost
+	@tfield int customBattleIncrease
+	@tfield int customBattleLimit
+	@tfield int morale
+	@tfield int moraleLocked
+	@tfield int statFood1
+	@tfield int statFood2
+	@tfield int ammunition
 
 	@table eduEntry
 	*/
 	types.EduEntry = luaState.new_usertype<eduEntry>("eduEntry");
-	types.EduEntry.set("Type", sol::property(
+	types.EduEntry.set("eduType", sol::property(
 		&luaGetSetFuncs::getStringPropertyEDU<EduEntryStruct_Type>, &luaGetSetFuncs::setStringPropertyEDU<EduEntryStruct_Type>
 		));
-	types.EduEntry.set("Soldier", sol::property(
+	types.EduEntry.set("soldier", sol::property(
 		&luaGetSetFuncs::getStringPropertyEDU<EduEntryStruct_Soldier>, &luaGetSetFuncs::setStringPropertyEDU<EduEntryStruct_Soldier>
 		));
-	types.EduEntry.set("UnitCardTga", sol::property(
+	types.EduEntry.set("unitCardTga", sol::property(
 		&luaGetSetFuncs::getStringPropertyEDU<EduEntryStruct_UnitCardTga>, &luaGetSetFuncs::setStringPropertyEDU<EduEntryStruct_UnitCardTga>
 		));
-	types.EduEntry.set("InfoCardTga", sol::property(
+	types.EduEntry.set("infoCardTga", sol::property(
 		&luaGetSetFuncs::getStringPropertyEDU<EduEntryStruct_InfoCardTga>, &luaGetSetFuncs::setStringPropertyEDU<EduEntryStruct_InfoCardTga>
 		));
-	types.EduEntry.set("Index", &eduEntry::Index);
-	types.EduEntry.set("UnitCreatedCounter", &eduEntry::UnitCreatedCounter);
-	types.EduEntry.set("SoldierCount", &eduEntry::SoldierCount);
-	types.EduEntry.set("Mass", &eduEntry::Mass);
-	types.EduEntry.set("Width", &eduEntry::Width);
-	types.EduEntry.set("Height", &eduEntry::Height);
+	types.EduEntry.set("index", &eduEntry::Index);
+	types.EduEntry.set("unitCreatedCounter", &eduEntry::UnitCreatedCounter);
+	types.EduEntry.set("soldierCount", &eduEntry::SoldierCount);
+	types.EduEntry.set("mass", &eduEntry::Mass);
+	types.EduEntry.set("width", &eduEntry::Width);
+	types.EduEntry.set("height", &eduEntry::Height);
 	types.EduEntry.set("haveAttributeLegio", sol::property(&eopEduHelpers::haveAttributeLegioGet, &eopEduHelpers::haveAttributeLegioSet));
-	types.EduEntry.set("MoveSpeedMod", &eduEntry::MoveSpeedMod);
-	types.EduEntry.set("UnitSpacingFrontToBackClose", &eduEntry::UnitSpacingFrontToBackClose);
-	types.EduEntry.set("UnitSpacingSideToSideClose", &eduEntry::UnitSpacingSideToSideClose);
-	types.EduEntry.set("UnitSpacingFrontToBackLoose", &eduEntry::UnitSpacingFrontToBackLoose);
-	types.EduEntry.set("UnitSpacingSideToSideLoose", &eduEntry::UnitSpacingSideToSideLoose);
-	types.EduEntry.set("StatHealth", &eduEntry::StatHealth);
-	types.EduEntry.set("StatHealthAnimal", &eduEntry::StatHealthAnimal);
-	types.EduEntry.set("StatHeat", &eduEntry::StatHeat);
-	types.EduEntry.set("StatGround1", &eduEntry::StatGround1);
-	types.EduEntry.set("StatGround2", &eduEntry::StatGround2);
-	types.EduEntry.set("StatGround3", &eduEntry::StatGround3);
-	types.EduEntry.set("StatGround4", &eduEntry::StatGround4);
-	types.EduEntry.set("StatCost1", &eduEntry::StatCost1);
-	types.EduEntry.set("StatCost2", &eduEntry::StatCost2);
-	types.EduEntry.set("StatCost3", &eduEntry::StatCost3);
-	types.EduEntry.set("StatCost4", &eduEntry::StatCost4);
-	types.EduEntry.set("StatCost5", &eduEntry::StatCost5);
-	types.EduEntry.set("StatCost6", &eduEntry::StatCost6);
-	types.EduEntry.set("StatCost7", &eduEntry::StatCost7);
-	types.EduEntry.set("StatCost8", &eduEntry::StatCost8);
-	types.EduEntry.set("Morale", &eduEntry::Morale);
-	types.EduEntry.set("MoraleLocked", &eduEntry::MoraleLocked);
-	types.EduEntry.set("StatFood1", &eduEntry::StatFood1);
-	types.EduEntry.set("StatFood2", &eduEntry::StatFood2);
-	types.EduEntry.set("Ammunition", &eduEntry::Ammunition);
+	types.EduEntry.set("moveSpeedMod", &eduEntry::MoveSpeedMod);
+	types.EduEntry.set("unitSpacingFrontToBackClose", &eduEntry::UnitSpacingFrontToBackClose);
+	types.EduEntry.set("unitSpacingSideToSideClose", &eduEntry::UnitSpacingSideToSideClose);
+	types.EduEntry.set("unitSpacingFrontToBackLoose", &eduEntry::UnitSpacingFrontToBackLoose);
+	types.EduEntry.set("unitSpacingSideToSideLoose", &eduEntry::UnitSpacingSideToSideLoose);
+	types.EduEntry.set("statHealth", &eduEntry::StatHealth);
+	types.EduEntry.set("statHealthAnimal", &eduEntry::StatHealthAnimal);
+	types.EduEntry.set("statHeat", &eduEntry::StatHeat);
+	types.EduEntry.set("statScrub", &eduEntry::StatGround1);
+	types.EduEntry.set("statSand", &eduEntry::StatGround2);
+	types.EduEntry.set("statForest", &eduEntry::StatGround3);
+	types.EduEntry.set("statSnow", &eduEntry::StatGround4);
+	types.EduEntry.set("recruitTime", &eduEntry::StatCost1);
+	types.EduEntry.set("recruitCost", &eduEntry::StatCost2);
+	types.EduEntry.set("upkeepCost", &eduEntry::StatCost3);
+	types.EduEntry.set("weaponCost", &eduEntry::StatCost4);
+	types.EduEntry.set("ArmourCost", &eduEntry::StatCost5);
+	types.EduEntry.set("customBattleCost", &eduEntry::StatCost6);
+	types.EduEntry.set("customBattleIncrease", &eduEntry::StatCost7);
+	types.EduEntry.set("customBattleLimit", &eduEntry::StatCost8);
+	types.EduEntry.set("morale", &eduEntry::Morale);
+	types.EduEntry.set("moraleLocked", &eduEntry::MoraleLocked);
+	types.EduEntry.set("statFood1", &eduEntry::StatFood1);
+	types.EduEntry.set("statFood2", &eduEntry::StatFood2);
+	types.EduEntry.set("ammunition", &eduEntry::Ammunition);
 	types.EduEntry.set("category", &eduEntry::Category);
 	types.EduEntry.set("class", &eduEntry::Class);
 	types.EduEntry.set("categoryClassCombo", &eduEntry::categoryClassCombinationForAI);
@@ -2134,6 +2136,25 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.factionStruct.set_function("getBattleVsFactionStats", &factionHelpers::getBattleVsFactionStats);
 
+	/***
+	Get various statistics the long term goal director uses.
+	@function factionStruct:getAiFactionValues
+	@treturn aiFactionValues aiFactionValues
+	@usage
+	local aiFacValues = fac:getAiFactionValues()
+	*/
+	types.factionStruct.set_function("getAiFactionValues", &factionHelpers::getAiFactionValues);
+
+	/***
+	Get various statistics the long term goal director uses versus a target faction.
+	@function factionStruct:getInterFactionLTGD
+	@tparam factionStruct targetFaction
+	@treturn interFactionLTGD interFactionLTGD
+	@usage
+	local iLTGD = fac:getInterFactionLTGD(targetFac)
+	*/
+	types.factionStruct.set_function("getInterFactionLTGD", &factionHelpers::getInterFactionLTGD);
+
 	///aiFaction
 	//@section aiFaction
 
@@ -2144,7 +2165,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int factionID
 	@tfield aiLongTermGoalDirector LTGD
 	@tfield aiPersonality aiPersonality
-	@tfield aiGlobalStrategyDirector strategyDirector
 
 	@table aiFaction
 	*/
@@ -2203,15 +2223,15 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int defendPriority
 	@tfield int invasionType
 	@tfield int invadePriority
-	@tfield bool atWar
-	@tfield bool wantPeace
-	@tfield bool wantAlly
-	@tfield bool wantBeProtect
-	@tfield bool wantOfferProtect
-	@tfield bool allianceAgainst
+	@tfield int atWar
+	@tfield int wantPeace
+	@tfield int wantAlly
+	@tfield int wantBeProtect
+	@tfield int wantOfferProtect
+	@tfield int allianceAgainst
 	@tfield int ptsDesire
 	@tfield int ptsAlliance
-	@tfield bool canForceInvade
+	@tfield int canForceInvade
 
 	@table decisionValuesLTGD
 	*/
@@ -2229,6 +2249,72 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.decisionValuesLTGD.set("ptsDesire", &decisionValuesLTGD::ptsDesire);
 	types.decisionValuesLTGD.set("ptsAlliance", &decisionValuesLTGD::ptsAlliance);
 	types.decisionValuesLTGD.set("canForceInvade", &decisionValuesLTGD::canForceInvade);
+
+	///aiFactionValues
+	//@section aiFactionValues
+
+	/***
+	Basic aiFactionValues table
+
+	@tfield int totalPopulation
+	@tfield int tileCount
+	@tfield int averagePopulation
+	@tfield int productionValue
+	@tfield int nonAlliedBorderLength
+	@tfield int enemyBorderLength
+	@tfield int fleetCount
+	@tfield int navalPowerPerFleet
+	@tfield int navalStrength
+	@tfield int armyCount
+	@tfield int strengthPerArmy
+	@tfield int totalStrength
+	@tfield int freeStrength
+	@tfield int neighbourEnemyNum
+	@tfield int enemyStrength
+	@tfield int protectorateOf
+
+	@table aiFactionValues
+	*/
+	types.aiFactionValues = luaState.new_usertype<ltgdFactionValues>("aiFactionValues");
+	types.aiFactionValues.set("totalPopulation", &ltgdFactionValues::totalPopulation);
+	types.aiFactionValues.set("tileCount", &ltgdFactionValues::tileCount);
+	types.aiFactionValues.set("averagePopulation", &ltgdFactionValues::averagePopulation);
+	types.aiFactionValues.set("productionValue", &ltgdFactionValues::productionValue);
+	types.aiFactionValues.set("nonAlliedBorderLength", &ltgdFactionValues::nonAlliedBorderLength);
+	types.aiFactionValues.set("enemyBorderLength", &ltgdFactionValues::enemyBorderLength);
+	types.aiFactionValues.set("fleetCount", &ltgdFactionValues::fleetCount);
+	types.aiFactionValues.set("navalPowerPerFleet", &ltgdFactionValues::navalPowerPerFleet);
+	types.aiFactionValues.set("navalStrength", &ltgdFactionValues::navalStrength);
+	types.aiFactionValues.set("armyCount", &ltgdFactionValues::armyCount);
+	types.aiFactionValues.set("strengthPerArmy", &ltgdFactionValues::strengthPerArmy);
+	types.aiFactionValues.set("totalStrength", &ltgdFactionValues::totalStrength);
+	types.aiFactionValues.set("freeStrength", &ltgdFactionValues::freeStrength);
+	types.aiFactionValues.set("neighbourEnemyNum", &ltgdFactionValues::neighbourEnemyNum);
+	types.aiFactionValues.set("enemyStrength", &ltgdFactionValues::enemyStrength);
+	types.aiFactionValues.set("protectorateOf", &ltgdFactionValues::protectorateOf);
+
+
+	///interFactionLTGD
+	//@section interFactionLTGD
+
+	/***
+	Basic interFactionLTGD table
+
+	@tfield int borderTiles
+	@tfield int frontLineBalance
+	@tfield int hasAllianceAgainst
+	@tfield int isStrongestNeighbour
+	@tfield int isWeakestNeighbour
+
+	@table interFactionLTGD
+	*/
+	types.interFactionLTGD = luaState.new_usertype<interFactionLTGD>("interFactionLTGD");
+	types.interFactionLTGD.set("borderTiles", &interFactionLTGD::borderTiles);
+	types.interFactionLTGD.set("frontLineBalance", &interFactionLTGD::frontLineBalance);
+	types.interFactionLTGD.set("hasAllianceAgainst", &interFactionLTGD::hasAllianceAgainst);
+	types.interFactionLTGD.set("isStrongestNeighbour", &interFactionLTGD::isStrongestNeighbour);
+	types.interFactionLTGD.set("isWeakestNeighbour", &interFactionLTGD::isWeakestNeighbour);
+
 
 	///aiPersonality
 	//@section aiPersonality
@@ -2332,9 +2418,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int regionID
 	@tfield settlementStruct settlement
 	@tfield int autoManagePolicy
-	@tfield bool isAutoManaged
-	@tfield bool isAutoManagedRecruitment
-	@tfield bool isAutoManagedConstruction
+	@tfield int isAutoManaged
+	@tfield int isAutoManagedRecruitment
+	@tfield int isAutoManagedConstruction
 	@tfield int spyBias
 	@tfield int assassinBias
 	@tfield int diplomatBias
@@ -2703,7 +2789,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield settlementStruct settlement
 	@tfield character character Character standing on the port tile, only the first one, check for nil.
 	@tfield stackStruct blockadingArmy Enemy army blockading the port, by standing on it's tile, check for nil.
-	@tfield dockStruct Dock water tile, only upgraded ports have this, check for nil.
+	@tfield dockStruct dock water tile, only upgraded ports have this, check for nil.
 
 
 	@table portStruct
@@ -2767,7 +2853,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int settlementTaxLevel
 	@tfield int recruitmentPoolCount
 	@tfield int recruitmentCapabilityNum
-	@tfield bool freezeRecruitmentPool
+	@tfield int freezeRecruitmentPool
 	@tfield int spiesInRecruitmentQueue
 	@tfield int assassinsInRecruitmentQueue
 	@tfield int diplomatsInRecruitmentQueue

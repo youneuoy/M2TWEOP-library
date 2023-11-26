@@ -151,6 +151,7 @@ public:
 
 	sol::function* onReadGameDbsAtStart = nullptr;
 	sol::function* onGameInit = nullptr;
+	sol::function* onAiTurn = nullptr;
 	sol::function* onEndSiege = nullptr;
 	sol::function* onStartSiege = nullptr;
 	sol::function* onSelectWorldpkgdesc = nullptr;
@@ -167,7 +168,7 @@ public:
 	sol::function* onLoadingFonts = nullptr;
 	sol::function* initDXFunc = nullptr;
 	void checkLuaFunc(sol::function** lRef);
-
+	
 
 
 private:

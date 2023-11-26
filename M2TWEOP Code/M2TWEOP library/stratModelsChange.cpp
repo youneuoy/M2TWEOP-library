@@ -410,7 +410,7 @@ namespace stratModelsChange
 			funcAddr = codes::offsets.assignShadowCasToFlexi;
 			texturepath = nullptr;
 		}
-		float scale = 0.7;
+		float scale = 0.7f;
 		_asm
 		{
 			push 1

@@ -98,6 +98,7 @@ public:
 	ProcLoader<LRESULT(__cdecl*)(HWND, UINT, WPARAM, LPARAM)> onWndProc;
 	ProcLoader<void(__cdecl*)()> onReadGameDbsAtStart;
 	ProcLoader<void(__cdecl*)()> onGameInit;
+	ProcLoader<void(__cdecl*)(aiFaction*)> onAiTurn;
 
 	ProcLoader<void(__cdecl*)(int, int)> onEndSiege;
 	ProcLoader<void(__cdecl*)(int, int)> onStartSiege;
@@ -138,6 +139,7 @@ public:
 
 	static void onReadGameDbsAtStart();
 	static void onGameInit();
+	static void onAiTurn(aiFaction* aifaction);
 
 	static void onWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	static void onEndScene(LPDIRECT3DDEVICE9 pDevice);

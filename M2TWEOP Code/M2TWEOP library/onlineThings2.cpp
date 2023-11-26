@@ -195,10 +195,10 @@ namespace battleCreator
 		{
 			jsn::json jAncs= jsn::json::array();
 
-			UINT32 anchNum = gen->genChar->ancNum;
-			for (UINT32 i = 0; i < anchNum; i++)
+			UINT32 ancNum = gen->genChar->ancNum;
+			for (UINT32 i = 0; i < ancNum; i++)
 			{
-				jAncs.push_back(gen->genChar->ancillaries[i]->dataAnch->ancName);
+				jAncs.push_back(gen->genChar->ancillaries[i]->dataAnc->ancName);
 			}
 
 			genJson["ancillaries"] = jAncs;
@@ -731,10 +731,10 @@ namespace battleCreator
 						newGeneral->genChar->index = armySide->unitsForTransfer[i]->numberInArmy;
 						for (std::string& anc : newGen.ancillaries)
 						{
-							auto* resAnc=fastFuncts::findAnchillary((char*)anc.c_str());
+							auto* resAnc=fastFuncts::findAncillary((char*)anc.c_str());
 							if (resAnc != nullptr)
 							{
-								fastFuncts::addAnchillary(newGeneral->genChar, resAnc);
+								fastFuncts::addAncillary(newGeneral->genChar, resAnc);
 							}
 						}
 

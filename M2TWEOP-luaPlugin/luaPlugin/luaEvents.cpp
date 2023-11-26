@@ -226,6 +226,7 @@ void luaP::onPluginLoadF()
 	@tfield onNewGameStart onNewGameStart
 	@tfield onReadGameDbsAtStart onReadGameDbsAtStart
 	@tfield onGameInit onGameInit
+	@tfield onAiTurn onAiTurn
 	@tfield onClickAtTile onClickAtTile
 	@tfield onCampaignMapLoaded onCampaignMapLoaded
 	@tfield onCreateSaveFile onCreateSaveFile
@@ -2996,6 +2997,21 @@ void luaP::onPluginLoadF()
 
 	onGameInit = new sol::function(luaState["onGameInit"]);
 	checkLuaFunc(&onGameInit);
+
+	/***
+	Called on ai initialized on turn start.
+
+	@function onAiTurn
+	@tparam aiFaction aiFaction
+
+	@usage
+	function onAiTurn(aiFaction)
+	--something here
+	end
+	*/
+
+	onAiTurn = new sol::function(luaState["onAiTurn"]);
+	checkLuaFunc(&onAiTurn);
 
 	/***
 	Called on clicking the stratmap.

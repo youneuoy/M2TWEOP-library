@@ -41,6 +41,8 @@ namespace factionHelpers
 	void setConstructionValueSett(aiProductionController* controller, int type, int value);
 	aiProductionController* getProductionController(aiPersonalityValues* personality, int index);
 	battleFactionCounter* getBattleVsFactionStats(factionStruct* fac, int targetFactionID);
+	ltgdFactionValues* getAiFactionValues(factionStruct* fac);
+	interFactionLTGD* getInterFactionLTGD(factionStruct* fac, factionStruct* targetFac);
 	//faction
 	template <char fieldIndex>
 	std::string getStringProperty(const factionStruct* fac)
