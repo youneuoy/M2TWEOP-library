@@ -1,31 +1,22 @@
-# BUILD EOP Script
+param(
+    $modFolder
+)
+
+. .\buildScripts\Helpers.ps1
+
 $currentLoc=(get-location).path
-
-# Mod folder to copy the files to
-$modFolder = "E:\Steam\steamapps\common\Medieval II Total War\mods\MOD_FOLDER\youneuoy_Data\plugins"
-
-function CopyFilesToFolder ($fromFolder, $toFolder) {
-    $childItems = Get-ChildItem $fromFolder
-    $childItems | ForEach-Object {
-         Copy-Item -Path $_.FullName -Destination $toFolder -Recurse -Force
-    }
-}
 
 Set-Location -Path $currentLoc
 
 # 1) Build M2TWEOP-LuaPlugin
-Write-Output "======== 1) Build M2TWEOP-LuaPlugin ======== "
+Write-Host "`n`n======== 1) Build M2TWEOP-LuaPlugin ========`n" -ForegroundColor Magenta
 
-devenv  "M2TWEOP-luaPlugin\luaPlugin.sln" /build "Release|x86" /project "luaPlugin"  /out "logs\luaPlugin.log"
+msbuild  "M2TWEOP-luaPlugin\luaPlugin.sln"/p:Configuration=Release /p:Platform=x86 /t:"luaPlugin" /fileLogger /fileLoggerParameters:LogFile=logs\luaPlugin.log /nowarn:ALL -m
 
-# 4) Copy built files
-Write-Output "======== 2) Copy all created files ======== "
-
-Set-Location -Path $currentLoc
-
-CopyFilesToFolder "M2TWEOP-luaPlugin\Release\luaPlugin.dll" $modFolder
-
-# 6) Done
-Write-Output "======== 3) Success! EOP Built Successfully! ======== "
-
-"$modFolder\M2TWEOP GUI.exe"
+# 2) Copy built files
+if ($modFolder) {
+    Set-Location -Path $currentLoc
+    Write-Host "`n`n======== 6) Copy to mod folder ========`n" -ForegroundColor Magenta
+    CopyFilesToFolder "M2TWEOP-luaPlugin\Release\luaPlugin.dll" $modFolder
+    Write-Host "`n`n======== 3) Success! EOP Built Successfully! ========`n" -ForegroundColor Magenta
+}

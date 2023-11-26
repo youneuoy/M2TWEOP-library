@@ -1,33 +1,29 @@
-# BUILD EOP Script
+param(
+    $modFolder
+)
+
+. .\buildScripts\Helpers.ps1
+
 $currentLoc=(get-location).path
 
-# Mod folder to copy the files to
-$modFolder = "E:\Steam\steamapps\common\Medieval II Total War\mods\ago_beta"
-
-function CopyFilesToFolder ($fromFolder, $toFolder) {
-    $childItems = Get-ChildItem $fromFolder
-    $childItems | ForEach-Object {
-         Copy-Item -Path $_.FullName -Destination $toFolder -Recurse -Force
-    }
-}
-
-Write-Output "======== 0) Pre Cleanup ========"
+Write-Host "`n`n======== 0) Pre Cleanup ========`n" -ForegroundColor Magenta
 
 Set-Location -Path $currentLoc
 Remove-item ./logs -recurse -erroraction 'silentlycontinue'
 new-item ./logs -itemtype directory -erroraction 'silentlycontinue'
 
 # 1) Build M2TWEOP-library
-Write-Output "======== 1) Build D3D9.dll ========"
+Write-Host "`n`n======== 1) Build D3D9.dll ========`n" -ForegroundColor Magenta
 
-devenv  "M2TWEOP Code\M2TWEOP library.sln" /build "Debug|x86" /project "d3d9"  /out "logs\d3d9.log"
+msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Debug /p:Platform=x86 /t:"d3d9" /fileLogger /fileLoggerParameters:LogFile=logs\d3d9.log /nowarn:ALL -m
 
 # 2) Copy built files
-Write-Output "======== 2) Copy all created files ========"
+Write-Host "`n`n======== 2) Copy all created files ========`n" -ForegroundColor Magenta
 
 Set-Location -Path $currentLoc
 
-CopyFilesToFolder "M2TWEOP Code\Release\d3d9.dll" $modFolder
-
-# 6) Done
-Write-Output "======== 3) Success! EOP Built Successfully! ========"
+if ($modFolder) {
+    Write-Host "`n`n======== 6) Copy to mod folder ========`n" -ForegroundColor Magenta
+    CopyFilesToFolder "M2TWEOP Code\Debug\d3d9.dll" $modFolder
+    Write-Host "`n`n======== 3) Success! EOP Built Successfully! ========`n" -ForegroundColor Magenta
+}

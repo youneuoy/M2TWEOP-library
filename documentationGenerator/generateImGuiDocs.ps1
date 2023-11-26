@@ -1,6 +1,6 @@
 # Colors
-$color = "`e[$(35)m"
-$endColor = "`e[0m`e[30;"
+$color =`n" -ForegroundColor Magenta`e[$(35)m"
+$endColor =`n" -ForegroundColor Magenta`e[0m`e[30;"
 
 #remove old lua doc files
 Write-Output "$color ======== 3.1) Remove old documentation ======== $endColor"

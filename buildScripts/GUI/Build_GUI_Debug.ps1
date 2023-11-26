@@ -1,35 +1,27 @@
-# BUILD EOP Script
+param(
+    $modFolder
+)
+
+. .\buildScripts\Helpers.ps1
+
 $currentLoc=(get-location).path
 
-# Mod folder to copy the files to
-$modFolder = "E:\Steam\steamapps\common\Medieval II Total War\mods\ago_beta"
-
-function CopyFilesToFolder ($fromFolder, $toFolder) {
-    $childItems = Get-ChildItem $fromFolder
-    $childItems | ForEach-Object {
-         Copy-Item -Path $_.FullName -Destination $toFolder -Recurse -Force
-    }
-}
-
-Write-Output "======== 0) Pre Cleanup ========"
+Write-Host "`n`n======== 0) Pre Cleanup ========`n" -ForegroundColor Magenta
 
 Set-Location -Path $currentLoc
 Remove-item ./logs -recurse -erroraction 'silentlycontinue'
 new-item ./logs -itemtype directory -erroraction 'silentlycontinue'
 
 # 1) Build M2TWEOP-library
-Write-Output "======== 1) Build M2TWEOP-GUI ========"
+Write-Host "`n`n======== 1) Build M2TWEOP-GUI ========`n" -ForegroundColor Magenta
 
-devenv  "M2TWEOP Code\M2TWEOP library.sln" /build "Debug|x86" /project "M2TWEOP GUI" /out "logs\GUI.log"
+msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Debug /p:Platform=x86 /t:"M2TWEOP GUI" /fileLogger /fileLoggerParameters:LogFile=logs\gui.log /nowarn:ALL -m
 
 # 2) Copy built files
-Write-Output "======== 4) Copy all created files ========"
-
-Set-Location -Path $currentLoc
-
-CopyFilesToFolder "M2TWEOP Code\Debug\M2TWEOP GUI.exe" $modFolder
-
-# 6) Done
-Write-Output "======== 6) Success! EOP Built Successfully! ========"
-
-Start-Process $modFolder"\M2TWEOP GUI.exe" -Verb RunAs
+if ($modFolder) {
+    Set-Location -Path $currentLoc
+    Write-Host "`n`n======== 6) Copy to mod folder ========`n" -ForegroundColor Magenta
+    CopyFilesToFolder "M2TWEOP Code\Debug\M2TWEOP GUI.exe" $modFolder
+    Start-Process $modFolder"\M2TWEOP GUI.exe"
+    Write-Host "`n`n======== 3) Success! EOP Built Successfully! ========`n" -ForegroundColor Magenta
+}
