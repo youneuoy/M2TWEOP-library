@@ -611,33 +611,55 @@ void managerF::doPachs()
 }
 
 
-void loadJsonSettings()
+void managerF::loadJsonSettings()
 {
 	std::string fPath = globals::dataS.modPatch;
 	fPath += "\\eopData\\gameCfg.json";
 	jsn::json json = fastFunctsHelpers::loadJsonFromFile(fPath);
+	bool jsonBoolValue;
 
 	try
 	{
 		if (json.contains("isContextMenuNeeded"))
 		{
-			getJson(globals::dataS.Modules.contextMenuStrat.isContextMenuNeeded, "isContextMenuNeeded");
+			getJson(jsonBoolValue, "isContextMenuNeeded");
+			globals::dataS.Modules.contextMenuStrat.isContextMenuNeeded = jsonBoolValue;
 		}
 		if (json.contains("isTacticalMapViewerNeeded"))
 		{
-			getJson(globals::dataS.Modules.tacticalMapVeiwer.isTacticalMapViewerNeeded, "isTacticalMapViewerNeeded");
+			getJson(jsonBoolValue, "isTacticalMapViewerNeeded");
+			globals::dataS.Modules.tacticalMapVeiwer.isTacticalMapViewerNeeded = jsonBoolValue;
 		}
 		if (json.contains("isDeveloperModeNeeded"))
 		{
-			getJson(globals::dataS.Modules.developerMode.isDeveloperModeNeeded, "isDeveloperModeNeeded");
+			getJson(jsonBoolValue, "isDeveloperModeNeeded");
+			globals::dataS.Modules.developerMode.isDeveloperModeNeeded = jsonBoolValue;
 		}
 		if (json.contains("isBlockLaunchWithoutEop"))
 		{
-			getJson(globals::dataS.gameCfg.isBlockLaunchWithoutEop, "isBlockLaunchWithoutEop");
+			getJson(jsonBoolValue, "isBlockLaunchWithoutEop");
+			globals::dataS.gameCfg.isBlockLaunchWithoutEop = jsonBoolValue;
 		}
 		if (json.contains("isDiscordRichPresenceEnabled"))
 		{
-			getJson(globals::dataS.gameCfg.isDiscordRichPresenceEnabled, "isDiscordRichPresenceEnabled");
+			getJson(jsonBoolValue, "isDiscordRichPresenceEnabled");
+			globals::dataS.gameCfg.isDiscordRichPresenceEnabled = jsonBoolValue;
+		}
+	}
+	catch (jsn::json::type_error &e)
+	{
+		MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+	}
+
+	std::string uiPath = globals::dataS.modPatch;
+	uiPath += "\\eopData\\uiCfg.json";
+	json = fastFunctsHelpers::loadJsonFromFile(uiPath);
+
+	try
+	{
+		if (json.contains("launcherTheme"))
+		{
+			getJson(globals::dataS.gameCfg.launcherTheme, "launcherTheme");
 		}
 	}
 	catch (jsn::json::type_error& e)
@@ -657,7 +679,6 @@ void managerF::initThread()
 
 
 
-	loadJsonSettings();
 	doPachs();
 
 	plugins::init();

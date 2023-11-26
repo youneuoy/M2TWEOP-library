@@ -2,59 +2,53 @@
 #include "fastFuncts.h"
 #include "TexturesManager.h"
 #include "PlannedRetreatRoute.h"
+
 ContextMenuStrat::ContextMenuStrat()
 {
-	ctxItems.insert(std::make_pair("TacticMapView", ContextMenuItem(
-		[]()
-		{
-			if (ImGui::Button("View tactical map"))
+		ctxItems.insert(std::make_pair("TacticMapView", ContextMenuItem(
+			[]()
 			{
-				int posAtMap[2]{};
+				if (ImGui::Button("View tactical map"))
+				{
+					int posAtMap[2]{};
 
-				fastFuncts::GetGameTileCoordsWithCursor(posAtMap[0], posAtMap[1]);
-				fastFuncts::ViewTacticalMap(posAtMap[0], posAtMap[1]);
+					fastFuncts::GetGameTileCoordsWithCursor(posAtMap[0], posAtMap[1]);
+					fastFuncts::ViewTacticalMap(posAtMap[0], posAtMap[1]);
 
-				return true;
-			}
+					return true;
+				}
 
-			return false;
-		},
-		[](int posAtMap[2])
-		{
-			return true;
-		}
-		)));
-
-
-
-	ctxItems.insert(std::make_pair("RetreatPlanner", ContextMenuItem(
-		[]()
-		{
-			if (ImGui::Button("Set planned retreat route"))
-			{
-				int posAtMap[2]{};
-
-				fastFuncts::GetGameTileCoordsWithCursor(posAtMap[0], posAtMap[1]);
-				PlannedRetreatRoute::StartWork(posAtMap[0], posAtMap[1]);
-
-				return true;
-			}
-
-			return false;
-		},
-		[](int posAtMap[2])
-		{
-			if (fastFuncts::findArmy(posAtMap[0], posAtMap[1]) != nullptr)
+				return false;
+			},
+			[](int posAtMap[2])
 			{
 				return true;
 			}
+			)));
+		ctxItems.insert(std::make_pair("RetreatPlanner", ContextMenuItem(
+			[]()
+			{
+				if (ImGui::Button("Set planned retreat route"))
+				{
+					int posAtMap[2]{};
 
-			return false;
-		}
-		)));
+					fastFuncts::GetGameTileCoordsWithCursor(posAtMap[0], posAtMap[1]);
+					PlannedRetreatRoute::StartWork(posAtMap[0], posAtMap[1]);
 
+					return true;
+				}
 
+				return false;
+			},
+			[](int posAtMap[2])
+			{
+				if (fastFuncts::findArmy(posAtMap[0], posAtMap[1]) != nullptr)
+				{
+					return true;
+				}
 
+				return false;
+			})));
 }
 void ContextMenuStrat::Draw()
 {

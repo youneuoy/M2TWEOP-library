@@ -26,6 +26,8 @@ graphicsD3D::dataT graphicsD3D::dataS;
 #include "eduFastFuncts.h"
 #include <windowsx.h>
 #include "stratModelsChange.h"
+#include "themeManager.h"
+#include "managerF.h"
 template<typename T>
 T FnCast(uint32_t fnToCast, T pFnCastTo) {
 	(void)pFnCastTo;
@@ -345,9 +347,6 @@ NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc(HWND hWnd, UINT uMsg, WPARAM wP
 
 NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 {
-
-
-
 	ImGuiIO& io = ImGui::GetIO();
 	io.IniFilename = nullptr;
 	io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
@@ -361,9 +360,8 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 	}
 	f = f + "\\eopData\\fonts\\mainFont.ttf";
 
-	ImGui::StyleGrey();
-
-
+	// ImGui::StyleGrey();
+	setStyle(globals::dataS.gameCfg.launcherTheme);
 	ImGui_ImplWin32_Init(dataS.Window);
 	ImGui_ImplDX9_Init(pDevice);
 
@@ -587,13 +585,13 @@ NOINLINE EOP_EXPORT void graphicsExport::unloadTexture(LPDIRECT3DTEXTURE9 textur
 
 NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevice)
 {
+	managerF::loadJsonSettings();
+
 	graphicsD3D::dataS.pDevice = pDevice;
 
 	graphicsD3D::InitS();
 
-
 	graphicsD3D::initImgGui(pDevice);
-
 
 	fbxModels::set3dDevice(pDevice);
 

@@ -149,29 +149,23 @@ namespace mainUI
 		ImGui::PopStyleColor();
 		ImGui::PopStyleColor();
 
-
 		if (ImGui::Button("Settings", helpers::getScreen().centerXButton))
 		{
 			childs.isModSettingsUIOpen = true;
 		}
 		ImGui::NewLine();
-		if (ImGui::Button("Run Vanilla or DLC without M2TWEOP", helpers::getScreen().centerXButton))
-		{
-			childs.isGameSTDMenuOpen = true;
-		}
 
-		ImGui::NewLine();
-		if (ImGui::Button("M2TWEOP Documentation", helpers::getScreen().centerXButton))
+		if (ImGui::Button("Documentation", helpers::getScreen().centerXButton))
 		{
-			ShellExecuteA(NULL, "open", "eopData\\helpPages\\index.html", NULL, NULL, SW_SHOWNORMAL);
+			ShellExecuteA(NULL, "open", "https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html", NULL, NULL, SW_SHOWNORMAL);
 		}
-		if (ImGui::Button("M2TWEOP Website", helpers::getScreen().centerXButton))
+		if (ImGui::Button("Website", helpers::getScreen().centerXButton))
 		{
 			ShellExecuteA(NULL, "open", "https://youneuoy.github.io/M2TWEOP-library/ ", NULL, NULL, SW_SHOWNORMAL);
 		}
-		if (ImGui::Button("About M2TWEOP", helpers::getScreen().centerXButton))
+		if (ImGui::Button("Discord", helpers::getScreen().centerXButton))
 		{
-			childs.isAboutOpen = true;
+			ShellExecuteA(NULL, "open", "https://discord.gg/Epqjm8u2WK", NULL, NULL, SW_SHOWNORMAL);
 		}
 		ImGui::End();
 

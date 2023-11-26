@@ -21,6 +21,7 @@ public:
 		{
 			bool isBlockLaunchWithoutEop = false;
 			bool isDiscordRichPresenceEnabled = true;
+			string launcherTheme = "default";
 		}gameCfg;
 		struct modulesS
 		{

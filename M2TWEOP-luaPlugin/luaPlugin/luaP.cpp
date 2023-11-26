@@ -50,10 +50,12 @@ void replaceAll2(std::string& s, const std::string& search, const std::string& r
 void luaP::runScriptS(std::string* script)
 {
 	const char* retS = nullptr;
+	plugData::data.luaAll.logS.push_back("\n== Output ==");
 	auto funcResult = luaState.script(*script);
 	if (!funcResult.valid())
 	{
 		sol::error luaError = funcResult;
+		plugData::data.luaAll.logS.push_back("\n== Error ==\n");
 		luaP::logS.push_back(luaError.what());
 	}
 	return;

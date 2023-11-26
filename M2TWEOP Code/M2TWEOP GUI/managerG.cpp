@@ -15,7 +15,7 @@ namespace managerG
 		helpers::updateMetrics();
 		loadTextures();
 		loadFonts();
-		loadJsonConfig();
+		// loadJsonConfig();
 
 		modSettingsUI::initSettingsUI();
 	}
@@ -174,6 +174,10 @@ namespace managerG
 					dataG::data.gameData.buttonHoverColor.a = stoi(hoverColorValues[3]);
 				}
 			}
+			if (json.contains("launcherTheme"))
+			{
+				getJson(dataG::data.modData.themeName, "launcherTheme");
+			}
 		}
 		catch (jsn::json::type_error& e)
 		{
@@ -230,6 +234,7 @@ namespace managerG
 		setJson("modTitle", dataG::data.gameData.modTitle);
 		setJson("runButtonColor", dataG::data.gameData.buttonColorString);
 		setJson("runButtonHoverColor", dataG::data.gameData.buttonHoverColorString);
+		setJson("launcherTheme", dataG::data.modData.themeName);
 		writeJsonToFile(fPath, json);
 		json.clear();
 	}

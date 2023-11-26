@@ -19,14 +19,13 @@ namespace console
 	{
 		if (consoleData.input.size() > 0)
 		{
-			plugData::data.luaAll.logS.push_back("Command: "+consoleData.input+'\n');
+			plugData::data.luaAll.logS.push_back("\n== Command == \n" + consoleData.input);
 			plugData::data.luaAll.logCommands.push_back(consoleData.input);
 		}
 		else
 		{
 			return;
 		}
-
 
 		plugData::data.luaAll.runScriptS(&consoleData.input);
 
@@ -80,7 +79,7 @@ namespace console
 		consoleData.commandNum = plugData::data.luaAll.logCommands.size();
 
 		ImGui::Begin("##consoleInWindow", NULL, iwf);
-		if (ImGui::Button("Run"))
+		if (ImGui::Button("Run script"))
 		{
 			applyCommand();
 			consoleData.keypressamount = 0;
@@ -107,6 +106,8 @@ namespace console
 		ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x,0), ImGuiCond_Always, ImVec2(1.0f, 0.0f));
 		ImGui::SetNextWindowSize(ImVec2(800, 400), ImGuiCond_Once);
 		ImGui::Begin("##consoleWindow", NULL, iwf);
+
+		ImGui::Button("Output");
 
 		std::string outputs;
 

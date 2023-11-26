@@ -35,7 +35,7 @@ jobs:
   update-docs:
       runs-on: windows-2019
 
-      if: "startsWith(github.event.head_commit.message, 'Docs')"
+      if: "startsWith(github.event.head_commit.message, 'Docs:')"
       steps:
       - name: "Checkout from latest commit: '${{ github.event.head_commit.message }}'"
         uses: actions/checkout@v3
@@ -54,7 +54,7 @@ jobs:
     runs-on: windows-2019
 
     # If the latest commit message starts with 'Release', update docs and issue a release on GitHub
-    if: "startsWith(github.event.head_commit.message, 'Release')"
+    if: "startsWith(github.event.head_commit.message, 'Release:')"
     steps:
     - name: "Checkout from latest commit: '${{ github.event.head_commit.message }}'"
       uses: actions/checkout@v3

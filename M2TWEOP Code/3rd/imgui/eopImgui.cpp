@@ -2,11 +2,11 @@
 #include <imgui_internal.h>
 #include <cmath>
 #include <algorithm>
-static inline ImVec4 ImLerpEOP(const ImVec4& a, const ImVec4& b, float t) { return ImVec4(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t); }
+static inline ImVec4 ImLerpEOP(const ImVec4 &a, const ImVec4 &b, float t) { return ImVec4(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t); }
 void ImGui::StyleGrey()
 {
-	ImGuiStyle& style = ImGui::GetStyle();
-	ImVec4* colors = style.Colors;
+	ImGuiStyle &style = ImGui::GetStyle();
+	ImVec4 *colors = style.Colors;
 
 	colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 	colors[ImGuiCol_TextDisabled] = ImVec4(0.40f, 0.40f, 0.40f, 1.00f);
@@ -78,29 +78,33 @@ void ImGui::StyleGrey()
 	style.ScrollbarRounding = 2;
 	style.GrabRounding = 3;
 }
-void ImGui::LoadingIndicatorCircle(const char* label, const float indicator_radius,
-	const ImVec4& main_color, const ImVec4& backdrop_color,
-	const int circle_count, const float speed) {
-	ImGuiWindow* window = GetCurrentWindow();
-	if (window->SkipItems) {
+void ImGui::LoadingIndicatorCircle(const char *label, const float indicator_radius,
+								   const ImVec4 &main_color, const ImVec4 &backdrop_color,
+								   const int circle_count, const float speed)
+{
+	ImGuiWindow *window = GetCurrentWindow();
+	if (window->SkipItems)
+	{
 		return;
 	}
 
-	ImGuiContext& g = *GImGui;
+	ImGuiContext &g = *GImGui;
 	const ImGuiID id = window->GetID(label);
 
 	const ImVec2 pos = window->DC.CursorPos;
 	const float circle_radius = indicator_radius / 10.0f;
 	const ImRect bb(pos, ImVec2(pos.x + indicator_radius * 2.0f,
-		pos.y + indicator_radius * 2.0f));
+								pos.y + indicator_radius * 2.0f));
 
 	ItemSize(bb, ImGui::GetStyle().FramePadding.y);
-	if (!ItemAdd(bb, id)) {
+	if (!ItemAdd(bb, id))
+	{
 		return;
 	}
 	const float t = (float)g.Time;
 	const auto degree_offset = 2.0f * IM_PI / circle_count;
-	for (int i = 0; i < circle_count; ++i) {
+	for (int i = 0; i < circle_count; ++i)
+	{
 		const auto x = indicator_radius * std::sin(degree_offset * i);
 		const auto y = indicator_radius * std::cos(degree_offset * i);
 		const auto growth = std::max(0.0f, std::sin(t * speed - i * degree_offset));
@@ -110,8 +114,8 @@ void ImGui::LoadingIndicatorCircle(const char* label, const float indicator_radi
 		color.z = main_color.z * growth + backdrop_color.z * (1.0f - growth);
 		color.w = 1.0f;
 		window->DrawList->AddCircleFilled(ImVec2(pos.x + indicator_radius + x,
-			pos.y + indicator_radius - y),
-			circle_radius + growth * circle_radius,
-			GetColorU32(color));
+												 pos.y + indicator_radius - y),
+										  circle_radius + growth * circle_radius,
+										  GetColorU32(color));
 	}
 }
