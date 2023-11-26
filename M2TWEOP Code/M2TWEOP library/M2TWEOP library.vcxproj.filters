@@ -162,6 +162,12 @@
     <ClInclude Include="patchesForGame.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="themeManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="textEditor.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
     <ClInclude Include="functionsOffsets.h">
       <Filter>Source Files\data</Filter>
     </ClInclude>
@@ -439,7 +445,7 @@
       <Filter>3rd\discord</Filter>
     </ClInclude>
     <ClInclude Include="..\3rd\cpptoml\cpptoml.h">
-      <Filter>3rd\cpptoml</Filter>
+      <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="..\3rd\discord\event.h">
       <Filter>3rd\discord</Filter>
@@ -781,6 +787,12 @@
     </ClCompile>
     <ClCompile Include="Retreater.cpp">
       <Filter>Features\Retreats\Retreater</Filter>
+    </ClCompile>
+    <ClCompile Include="themeManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="textEditor.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

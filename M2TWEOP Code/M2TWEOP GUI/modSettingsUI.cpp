@@ -160,8 +160,8 @@ namespace modSettingsUI
 			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 		}
-		ImVec2 textSize = ImGui::CalcTextSize("Readme Teutonic");
-		ImGui::PushItemWidth(textSize.x);
+		ImVec2 textSize = ImGui::CalcTextSize(dataG::data.modData.configName.c_str());
+		ImGui::PushItemWidth(textSize.x + 50);
 		ImGui::Combo("Config Files", &selectedItem, &items[0], items.size());
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("The mod config file you want EOP to read when it launches the game");}
 

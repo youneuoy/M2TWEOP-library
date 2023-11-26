@@ -1,5 +1,6 @@
 #include "imgui.h"
 #include "cpptoml.h"
+#include "globals.h"
 
 // Convert RGBA strings to ImVec4
 auto parseColor = [](const std::string &colorStr) -> ImVec4
@@ -21,16 +22,16 @@ void tomlToStyle(std::string themeName)
 {
 	// Light style from ImThemes
 	ImGuiStyle &style = ImGui::GetStyle();
-	std::string fPath = "";
+	std::string fPath = globals::dataS.modPatch;
 
 	// Load the TOML file
 	if (themeName.find(".toml") != std::string::npos)
 	{
-		fPath = ".\\eopData\\themes\\" + themeName;
+		fPath += ".\\eopData\\themes\\" + themeName;
 	}
 	else
 	{
-		fPath = ".\\eopData\\themes\\" + themeName + ".toml";
+		fPath += ".\\eopData\\themes\\" + themeName + ".toml";
 	}
 
 	auto config = cpptoml::parse_file(fPath);
@@ -66,10 +67,10 @@ void tomlToStyle(std::string themeName)
 	style.ButtonTextAlign = arrayToImVec2(*config->get_array_of<double>("buttonTextAlign"));
 	style.SelectableTextAlign = arrayToImVec2(*config->get_array_of<double>("selectableTextAlign"));
 
-	// Access the 'colors' section in the TOML file
+	// // Access the 'colors' section in the TOML file
 	auto colorsTable = config->get_table("colors");
 
-	// Expected Output Format
+	// // Expected Output Format
 	style.Colors[ImGuiCol_Text] = parseColor(*colorsTable->get_as<std::string>("Text"));
 	style.Colors[ImGuiCol_TextDisabled] = parseColor(*colorsTable->get_as<std::string>("TextDisabled"));
 	style.Colors[ImGuiCol_WindowBg] = parseColor(*colorsTable->get_as<std::string>("WindowBg"));
