@@ -10,11 +10,11 @@
 - Fixed eop units as mercenaries causing crashes when gifting or rebelling settlements
 
 Breaking changes to watch out for:
-   regionNumber in settlement struct -> regionID
-   event function has different parameters
-   lot of info like different public order and growth types inside settlement struct moved to their own struct
-   many renamed fields in edu entry struct
-   USE THE LUA DOCS TO FIND ISSUES WITH OBSOLOTE NAMINGS
+- regionNumber in settlement struct -> regionID
+- event function has different parameters
+- lot of info like different public order and growth types inside settlement struct moved to their own struct
+- many renamed fields in edu entry struct
+- USE THE LUA DOCS TO FIND ISSUES WITH OBSOLOTE NAMINGS
    
 ### **Launcher**
 - Enabling Discord Rich Presence no longer opens an extra window, it now seamlessly toggles on and off. You just need to use the launcher if you want to enable it.
@@ -56,16 +56,17 @@ Breaking changes to watch out for:
 - added ai structs like the long term goal director, ai production controller and ai personality with changeable values
 - added much of the information the campaign ai uses like free strength, military balance and much more
 - All game events improved performance and added to the game, there is a change in how game events provide their parameters:
-
 In the below example the eventData parameter contains 4 fields with information, which you can see in the documentation under "Exports"
 
---- A settlement is being processed for the start of its faction's turn.
+```lua
+---A settlement is being processed for the start of its faction's turn.
 -- Exports: settlement, faction, regionID, religion
 ---@param eventData eventTrigger 
 function onSettlementTurnStart(eventData)
     local faction = eventData.faction
     local religion = eventData.religion
 end 
+```
 
 ![image](https://github.com/youneuoy/M2TWEOP-library/assets/22448079/99194af1-1ca3-44b9-9382-a5dd0a080b3b)
 
