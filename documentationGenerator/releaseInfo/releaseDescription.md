@@ -6,8 +6,6 @@
 
 ## **Release Notes**
 
-
-
 ### **Launcher**
 - Enabling Discord Rich Presence no longer opens an extra window, it now seamlessly toggles on and off. You just need to use the launcher if you want to enable it. - *Medik*
 - Added a new default theme for the launcher, console and all other EOP GUI elements. - *Medik*
@@ -15,6 +13,7 @@
 - Added an executable GUI that allows you to create the [toml](https://toml.io/en/) files with a GUI tool. Thank you [ImThemes](https://github.com/Patitotective/ImThemes). - *Medik*
 - Added tooltips that explain what all the EOP launcher settings do - *Medik*
 - M2TWEOP GUI automatically selects the mod .cfg file if it detects one - *Fynn*
+- Added an uninstaller batch file that deletes all EOP files in the mod folder- *Medik*
 
 ![](https://i.imgur.com/Pl02p1W.png)
 ![](https://i.imgur.com/h8UlYMT.png)
