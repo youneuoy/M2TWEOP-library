@@ -941,7 +941,7 @@ struct campaign {
 struct uiUnitCard
 {
 public:
-	char pad_0000[380]; //0x0000
+	char pad_0000[900]; //0x0000
 	unit* unit; //0x0384
 };
 
@@ -2882,9 +2882,9 @@ struct unit {
 	int32_t unitBattleProperties; //0x1E44
 	char pad_1E48[4]; //0x1E48
 	void* formationsArray; //0x1E4C
-	char pad_1E50[28]; //0x1E28
+	char pad_1E50[38]; //0x1E50
 	int16_t ranks; //0x1E76
-	char pad_1E78[14]; //0x1E78
+	char pad_1E78[12]; //0x1E78
 	int8_t isCloseFormation; //0x1E84
 	char pad_1E85[59]; //0x1E85
 	float positionX; //0x1EC0

@@ -728,7 +728,7 @@ void luaP::initEopEdu()
 	@function EDB.addBuildingPool
 	@tparam edbEntry edbEntry Entry to set.
 	@tparam int level Building level.
-	@tparam int eduIndex edu index of unit to add (EOP units not supported!).
+	@tparam int eduIndex edu index of unit to add.
 	@tparam float initialSize Initial pool.
 	@tparam float gainPerTurn Replenishment per turn.
 	@tparam float maxSize Maximum size.
