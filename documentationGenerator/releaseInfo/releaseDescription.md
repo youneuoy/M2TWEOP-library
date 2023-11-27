@@ -68,11 +68,12 @@
 - Event function has different parameters (see more below)
 - Lot of info like different public order and growth types inside settlement struct moved to their own struct
 - Many renamed fields in edu entry struct
+- `dipNum` in factionStruct -> `factionID` (dipNum still works for compatibility but it is not in docs, you should change it where you use it)
 
 **Note:** Please use the Lua docs to find problems with obsolete namings
 
 ### New Event Structure Example
-In the below example the eventData parameter contains 4 fields with information, which you can see in the documentation under "Exports
+In the below example the eventData parameter contains 4 fields with information, which you can see in the documentation under "Exports":
 
 ```lua
 ---A settlement is being processed for the start of its faction's turn.
