@@ -24,6 +24,8 @@ jobs:
 
       - name: Build EOP
         uses: ./.github/workflows/composite-actions/build-eop
+        with:
+          vsversion: "2022"
 
       - uses: actions/upload-artifact@v3
         with:
@@ -42,6 +44,8 @@ jobs:
 
       - name: Build EOP
         uses: ./.github/workflows/composite-actions/build-eop
+        with:
+          vsversion: "2022"
 
       - name: Update EOP Online Documentation
         uses: ./.github/workflows/composite-actions/build-docs
@@ -61,6 +65,8 @@ jobs:
 
     - name: Build EOP
       uses: ./.github/workflows/composite-actions/build-eop
+      with:
+        vsversion: "2022"
 
     - name: Read release version info from source
       run: |
