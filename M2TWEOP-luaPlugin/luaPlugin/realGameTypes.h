@@ -1367,26 +1367,6 @@ public:
 	char pad_07A4[96]; //0x07A4
 }; //Size: 0x0804
 
-/*
-0 not in battle
-1 prebattle scroll
-2 delay (also for preconflict phase of successful ambushes)
-3 deployment
-4 
-5 conflict (also for pause)
-6 victory scroll
-7 pursuit
-8 
-9 postbattle scroll (not for autoresolved battles)
-0 succesful ambush
-1 failed ambush
-2 normal
-3 siege
-4 sally besieger
-5 naval
-6 withdrawal?
- */
-
 struct battleSide {
 	bool isDefender;//0x0000
 	uchar field_0x1;//0x0001
@@ -3453,12 +3433,12 @@ struct factionStruct {
 	float* resourceModifiers;
 	DWORD resourceModifiersEnd;
 	DWORD resourceModifiersEnd2;
-	int32_t factionBannerIndex; //0x0AA0
-	int32_t agentNameFactionId[12]; //0x0AA4
-	char pad_0AD4[24]; //0x0AD4
+	char pad_0A8C[12]; //0x0AD4
 	UNICODE_STRING** someString;
 	UNICODE_STRING** localizedName;
-	undefined field_0xaa0[76];
+	int32_t factionBannerIndex; //0x0AA0
+	int32_t agentNameFactionId[12]; //0x0AA4
+	undefined field_0xad4[24];
 	int money; /* money of the faction */
 	int KingsPurse; /* money of the faction */
 	int32_t incomeDoubled; //0x0AF4
