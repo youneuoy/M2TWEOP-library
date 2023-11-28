@@ -1813,7 +1813,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Basic factionStruct table
 
-	@tfield int dipNum
+	@tfield int factionID
 	@tfield getFactionName getFactionName
 	@tfield int cultureID
 	@tfield int AIPersonalityType
@@ -1870,6 +1870,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.factionStruct = luaState.new_usertype<factionStruct>("factionStruct");
 	types.factionStruct.set("dipNum", &factionStruct::dipNum);
+	types.factionStruct.set("factionID", &factionStruct::dipNum);
 	types.factionStruct.set("AIPersonalityType", &factionStruct::AIPersonalityType);
 	types.factionStruct.set("AIPersonalityName", &factionStruct::AIPersonalityName);
 	/***

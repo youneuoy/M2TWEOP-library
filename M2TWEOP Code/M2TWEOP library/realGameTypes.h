@@ -3433,12 +3433,12 @@ struct factionStruct {
 	float* resourceModifiers;
 	DWORD resourceModifiersEnd;
 	DWORD resourceModifiersEnd2;
-	int32_t factionBannerIndex; //0x0AA0
-	int32_t agentNameFactionId[12]; //0x0AA4
-	char pad_0AD4[24]; //0x0AD4
+	char pad_0A8C[12]; //0x0AD4
 	UNICODE_STRING** someString;
 	UNICODE_STRING** localizedName;
-	undefined field_0xaa0[76];
+	int32_t factionBannerIndex; //0x0AA0
+	int32_t agentNameFactionId[12]; //0x0AA4
+	undefined field_0xad4[24];
 	int money; /* money of the faction */
 	int KingsPurse; /* money of the faction */
 	int32_t incomeDoubled; //0x0AF4
