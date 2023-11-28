@@ -16,6 +16,7 @@ if /i "%userResponse%"=="Y" (
     DEL /F /Q "lua5.1.dll"
     DEL /F /Q "M2TWEOPLibrary.dll"
     DEL /F /Q "openal32.dll"
+    DEL /F /Q "d3d9_vk.dll"
 ) else (
     echo You chose to cancel.
 )
