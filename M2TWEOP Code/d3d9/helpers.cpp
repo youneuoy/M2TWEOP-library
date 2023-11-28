@@ -1,11 +1,15 @@
 #include "helpers.h"
+#include "json.hpp"
+
 using namespace std;
-vector<std::string> helpers::splitString(const std::string& phrase, const std::string& delimiter) {
+vector<std::string> helpers::splitString(const std::string &phrase, const std::string &delimiter)
+{
     vector<string> list;
     string s = string(phrase);
     size_t pos = 0;
     string token;
-    while ((pos = s.find(delimiter)) != string::npos) {
+    while ((pos = s.find(delimiter)) != string::npos)
+    {
         token = s.substr(0, pos);
         list.push_back(token);
         s.erase(0, pos + delimiter.length());
@@ -14,17 +18,18 @@ vector<std::string> helpers::splitString(const std::string& phrase, const std::s
     return list;
 }
 
-
 #define BOOST_DATE_TIME_NO_LIB 1
 #include <boost/interprocess/windows_shared_memory.hpp>
 #include <boost/interprocess/mapped_region.hpp>
-void helpers::doEOPPipe(std::string& result, int waitSeconds)
-{
+std::string helpers::doEOPPipe(int waitSeconds, bool cleanup)
+{   
+    std::string result;
     ULONGLONG startTime = GetTickCount64();
     ULONGLONG endTime = startTime + 1000ull * waitSeconds;
     namespace bip = boost::interprocess;
 
-    do {
+    do
+    {
         //boost way ;(
         try
         {
@@ -35,15 +40,49 @@ void helpers::doEOPPipe(std::string& result, int waitSeconds)
             char* mem = static_cast<char*>(region.get_address());
             result = mem;
 
-            *mem = 0;
-
-            region.flush();
+            if (cleanup == true) {
+                *mem = 0;
+                region.flush();
+            }
         }
         catch (...)
         {
-
         }
 
-    } while (GetTickCount64() < endTime&& result.size()==0);
+    } while (GetTickCount64() < endTime && result.size() == 0);
 
+    return result;
+}
+
+std::string helpers::getModFolderFromPipe(const string &msg)
+{
+    vector<string> args = helpers::splitString(msg, "\n");
+    return args[2];
+}
+
+std::string helpers::getModPathFromSharedMemory()
+{
+    string resMsg = helpers::doEOPPipe(5, false);
+    string modPath = helpers::getModFolderFromPipe(resMsg);
+    return modPath;
+}
+
+jsn::json helpers::loadJsonFromFile(const std::string &fpath)
+{
+    try
+    {
+        jsn::json json;
+
+        std::ifstream f1(fpath);
+        if (f1.is_open())
+        {
+            f1 >> json;
+        }
+        f1.close();
+        return std::move(json);
+    }
+    catch (jsn::json::exception &e)
+    {
+        MessageBoxA(NULL, e.what(), "Could not load JSON from file!", MB_APPLMODAL | MB_SETFOREGROUND);
+    }
 }

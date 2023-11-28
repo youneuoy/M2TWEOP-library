@@ -61,10 +61,10 @@ namespace m2tweopStarter
 		dataEOP.gameVer = stoi(args[4]);
 		return true;
 	}
+
 	void doM2TWEOP()
 	{
-		string resMsg;
-		helpers::doEOPPipe(resMsg, 5);
+		string resMsg = helpers::doEOPPipe(5, true);
 		dataEOP.isEOPipe=parsePipeMessage(resMsg);
 
 		if (dataEOP.isEOPipe == false)

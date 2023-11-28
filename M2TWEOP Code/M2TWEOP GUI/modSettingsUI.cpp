@@ -289,6 +289,9 @@ namespace modSettingsUI
 
 	void drawGameSettings()
 	{
+		ImGui::Checkbox("DXVK Rendering Mode", &dataG::data.modulesData.isDXVKEnabled);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Experimental: Forces Medieval 2 to use DXVK instead of DirectX for rendering. Can massively improve performance on some hardware. \nNote: The first time you use DXVK Rendering, you may experience worse performance due to compilation of shaders. \nThe second time you launch the game, assuming the shaders have compiled, performance should be much better (even better than Vanilla DirectX Rendering)");}
+
 		ImGui::Checkbox("Campaign Context Menu", &dataG::data.modulesData.isContextMenuNeeded);
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable the context menu on the campaign map while pressing MMB");}
 

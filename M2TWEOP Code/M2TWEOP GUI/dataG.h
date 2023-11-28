@@ -12,6 +12,7 @@ public:
 		struct
 		{
 			bool isContextMenuNeeded = true;
+			bool isDXVKEnabled = true;
 			bool isTacticalMapViewerNeeded = true;
 			bool isDeveloperModeNeeded = true;
 

@@ -1,5 +1,7 @@
 #pragma once
 #include <d3d9.h>
+#include <string>
+
 namespace m2tweopStarter
 {
 	void doM2TWEOP();

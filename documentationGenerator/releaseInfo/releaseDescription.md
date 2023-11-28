@@ -19,7 +19,7 @@
 ![](https://i.imgur.com/h8UlYMT.png)
 
 ### **Library**
-- Added support for [DXVK project](https://github.com/doitsujin/dxvk) (Vulcan wrapper over game d3d9 graphics). For use unpack dxvk d3d9.dll to game folder and rename it to d3d9_vk.dll  - *youneuoy*
+- Added support for [DXVK project](https://github.com/doitsujin/dxvk) (Vulcan wrapper over game d3d9 graphics). To try this out simply enable the option in the launcher. For some hardware, this can massively improve performance  - *youneuoy and Medik*
 - "Show planned retreat route" no longer shows on the Stratmap Context Menu if the option is disabled in the launcher - *Medik*
 
 ### **Lua Plugin**
