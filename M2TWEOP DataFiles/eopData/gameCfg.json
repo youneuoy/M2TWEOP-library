@@ -3,5 +3,6 @@
   "isDiscordRichPresenceEnabled": true,
   "isDeveloperModeNeeded": true,
   "isTacticalMapViewerNeeded": true,
-  "isContextMenuNeeded": true
+  "isContextMenuNeeded": true,
+  "isDXVKEnabled": false
 }

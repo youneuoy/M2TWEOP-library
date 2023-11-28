@@ -114,6 +114,24 @@ bool gameStarter::initM2TWEOP()
 		return true;
 	}
 
+	// d3d9_vk.dll
+	path wrapd3dS_vk = system_complete("d3d9_vk.dll");
+
+	path d3dS_vk = system_complete("..\\..\\d3d9_vk.dll");
+	string wrapd3dStr_vk = wrapd3dS_vk.string();
+	string d3dStr_vk = d3dS_vk.string();
+
+	if (helpers::compareFiles(d3dStr_vk, wrapd3dStr_vk) == false)
+	{
+
+		if (CopyFileA(wrapd3dStr_vk.c_str(), d3dStr_vk.c_str(), FALSE) == false)
+		{
+			DWORD ERR = GetLastError();
+			MessageBoxA(NULL, "Cannot run M2TWEOP, d3d9_vk.dll replacing error! Try to delete d3d9_vk.dll in game folder or copy d3d9_vk.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
+			exit(0);
+		}
+	}
+
 	// D3D9.dll
 	path wrapd3dS = system_complete("d3d9.dll");
 

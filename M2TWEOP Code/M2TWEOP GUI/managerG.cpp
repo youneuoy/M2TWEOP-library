@@ -75,6 +75,10 @@ namespace managerG
 
 		try
 		{
+			if (json.contains("isDXVKEnabled"))
+			{
+				getJson(dataG::data.modulesData.isDXVKEnabled, "isDXVKEnabled");
+			}
 			if (json.contains("isContextMenuNeeded"))
 			{
 				getJson(dataG::data.modulesData.isContextMenuNeeded, "isContextMenuNeeded");
@@ -214,6 +218,7 @@ namespace managerG
 
 		// Save game config
 		fPath = ".\\eopData\\gameCfg.json";
+		setJson("isDXVKEnabled", dataG::data.modulesData.isDXVKEnabled);
 		setJson("isContextMenuNeeded", dataG::data.modulesData.isContextMenuNeeded);
 		setJson("isTacticalMapViewerNeeded", dataG::data.modulesData.isTacticalMapViewerNeeded);
 		setJson("isDeveloperModeNeeded", dataG::data.modulesData.isDeveloperModeNeeded);

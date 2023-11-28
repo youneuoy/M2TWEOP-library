@@ -1,5 +1,7 @@
 #pragma once
 #include "d3d9.h"
+#include "helpers.h"
+#include "m2tweopStarter.h"
 Direct3DShaderValidatorCreate9Proc m_pDirect3DShaderValidatorCreate9;
 PSGPErrorProc m_pPSGPError;
 PSGPSampleTextureProc m_pPSGPSampleTexture;
@@ -26,38 +28,39 @@ void initDX9()
 	{
 		return;
 	}
-	// Load dll
 
 	wchar_t path[MAX_PATH];
-	GetCurrentDirectoryW(MAX_PATH, path);
-	std::wstring libPath = path;
-	libPath += L"\\d3d9_vk.dll";
-	d3d9dll = LoadLibraryW(libPath.c_str());
-	if (d3d9dll == NULL)
+	std::wstring libPath;
+
+	// Check if DXVK is enabled
+	std::string cfgPath = "\\eopData\\gameCfg.json";
+	std::string modPath = helpers::getModPathFromSharedMemory();
+	modPath += cfgPath;
+
+	jsn::json json = helpers::loadJsonFromFile(modPath);
+	bool isDXVKEnabled = false;
+	if (json.contains("isDXVKEnabled"))
 	{
+		getJson(isDXVKEnabled, "isDXVKEnabled");
+	}
+
+	if (isDXVKEnabled == true) {
+		GetCurrentDirectoryW(MAX_PATH, path);
+		libPath = path;
+		libPath += L"\\d3d9_vk.dll";
+	} else {
 		GetSystemDirectoryW(path, MAX_PATH);
 		libPath = path;
 		libPath += L"\\d3d9.dll";
-
-		d3d9dll = LoadLibraryW(libPath.c_str());
-		if (d3d9dll == NULL)
-		{
-			MessageBoxA(NULL, "Cannot find d3d9.dll in system directory!", "ATTENTION!", NULL);
-			exit(0);
-		}
 	}
 
-	//GetCurrentDirectoryA(MAX_PATH,path);
-
-
-
-	/*DWORD err = GetLastError();
-	if (err)
+	d3d9dll = LoadLibraryW(libPath.c_str());
+	if (d3d9dll == NULL)
 	{
-		std::string errorS = std::to_string(err);
-		MessageBoxA(NULL, errorS.c_str(), "ATTENTION!", NULL);
+		MessageBoxA(NULL, "Cannot find d3d9.dll (or d3d9_vk.dll if you have DXVK Rendering enabled) in system directory!", "ATTENTION!", NULL);
 		exit(0);
-	}*/
+	}
+
 	// Get function addresses
 	m_pDirect3DShaderValidatorCreate9 = (Direct3DShaderValidatorCreate9Proc)GetProcAddress(d3d9dll, "Direct3DShaderValidatorCreate9");
 	m_pPSGPError = (PSGPErrorProc)GetProcAddress(d3d9dll, "PSGPError");
@@ -74,13 +77,6 @@ void initDX9()
 	m_pDirect3D9EnableMaximizedWindowedModeShim = (Direct3D9EnableMaximizedWindowedModeShimProc)GetProcAddress(d3d9dll, "Direct3D9EnableMaximizedWindowedModeShim");
 	m_pDirect3DCreate9 = (Direct3DCreate9Proc)GetProcAddress(d3d9dll, "Direct3DCreate9");
 	m_pDirect3DCreate9Ex = (Direct3DCreate9ExProc)GetProcAddress(d3d9dll, "Direct3DCreate9Ex");
-	/*DWORD err = GetLastError();
-	if (err)
-	{
-		std::string errorS = std::to_string(err);
-		MessageBoxA(NULL, errorS.c_str(), "ATTENTION!", NULL);
-		exit(0);
-	}*/
 }
 
 void deInit()
