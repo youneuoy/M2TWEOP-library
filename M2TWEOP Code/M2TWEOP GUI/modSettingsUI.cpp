@@ -177,10 +177,6 @@ namespace modSettingsUI
 			ImGui::PopStyleVar();
 		}
 		ImGui::PopItemWidth();
-		ImGui::SameLine();
-
-		ImGui::Checkbox("Use standard config", &dataG::data.modData.useVanillaConfig);
-		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Don't use any mod specific config when launching the game");}
 
 		ImGui::NewLine();
 
