@@ -71,6 +71,7 @@
 - `dipNum` in factionStruct -> `factionID` (dipNum still works for compatibility but it is not in docs, you should change it where you use it)
 
 **Note:** Please use the Lua docs to find problems with obsolete namings
+**Note:** `eopLuaHelpers.lua` has not been updated in accordance with the breaking changes.
 
 ### New Event Structure Example
 In the below example the eventData parameter contains 4 fields with information, which you can see in the documentation under "Exports":
