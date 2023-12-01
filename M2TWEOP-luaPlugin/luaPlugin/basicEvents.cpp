@@ -290,7 +290,7 @@ namespace gameEvents
 		addEvent<EventType::standardEvent>(newCode[gv], "onSettlementPanelOpen");
 		newCode[0] = 0x01370C04; newCode[1] = 0x0132BBDC;
 		addEvent<EventType::standardEvent>(newCode[gv], "onRecruitmentPanelOpen");
-		newCode[0] = 0x0132BCAC; newCode[1] = 0x0132BBDC;
+		newCode[0] = 0x01370CD4; newCode[1] = 0x0132BCAC;
 		addEvent<EventType::standardEvent>(newCode[gv], "onConstructionPanelOpen");
 		newCode[0] = 0x01370D9C; newCode[1] = 0x0132BD74;
 		addEvent<EventType::standardEvent>(newCode[gv], "onTradePanelOpen");
