@@ -66,7 +66,6 @@ namespace gameEvents
 	};
 
 	std::unordered_map<DWORD, std::unique_ptr<EventBase>> events;
-	void initEvents();
 	template<EventType EvType> void addEvent(DWORD key, const char* name);
 }
 

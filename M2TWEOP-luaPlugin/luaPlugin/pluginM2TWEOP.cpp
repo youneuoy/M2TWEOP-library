@@ -500,6 +500,7 @@ void initLua()
 	plugData::data.luaAll.initTech();
 	sol_ImGui::Init(*luaState);
 
+	gameEvents::initEvents();
 	plugData::data.luaAll.onPluginLoadF();
 	if (luaState == nullptr)
 	{
