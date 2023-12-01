@@ -72,7 +72,6 @@ div.relations {
 div.sphinxsidebar a {
     color: #444;
     text-decoration: none;
-    border-bottom: 1px dotted #999;
 }
 
 div.sphinxsidebar a:hover {
@@ -460,7 +459,6 @@ tt.xref, code.xref, a tt {
 
 a.reference {
     text-decoration: none;
-    border-bottom: 1px dotted #004B6B;
 }
 
 /* Don't put an underline on images */
@@ -469,7 +467,6 @@ a.image-reference, a.image-reference:hover {
 }
 
 a.reference:hover {
-    border-bottom: 1px solid #6D4100;
 }
 
 a.footnote-reference {
