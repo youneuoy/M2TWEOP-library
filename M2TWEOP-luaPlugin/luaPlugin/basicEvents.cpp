@@ -686,7 +686,6 @@ void checkLuaFunc(sol::function** lRef)
 
 void onReadGameDbsAtStart()
 {
-	gameEvents::initEvents();
 	if (plugData::data.luaAll.onReadGameDbsAtStart != nullptr)
 	{
 		tryLua((*plugData::data.luaAll.onReadGameDbsAtStart)());

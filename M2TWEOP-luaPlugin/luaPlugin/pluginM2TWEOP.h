@@ -15,8 +15,10 @@
 #include "framework.h"
 #include "basicFuncs.h"
 
-
-
+namespace gameEvents
+{
+	void initEvents();
+}
 //init this plugin
 extern "C" PLUGINM2TWEOP_API int initPlugin(std::string * modPath);
 
