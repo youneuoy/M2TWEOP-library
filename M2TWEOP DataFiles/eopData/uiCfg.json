@@ -6,7 +6,7 @@
     "useM2TWEOP": true,
     "useVanillaCfg": true,
     "modTitle": "",
-    "runButtonColor": "206, 168, 0, 150",
+    "runButtonColor": "201, 169, 64, 150",
     "runButtonHoverColor": "206, 168, 0, 255",
     "launcherTheme": "default"
 }
