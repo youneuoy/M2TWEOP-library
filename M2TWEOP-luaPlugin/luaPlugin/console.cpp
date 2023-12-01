@@ -34,6 +34,20 @@ namespace console
 
 	void draw()
 	{
+			if ((ImGui::GetIO().KeysDownDuration[VK_CONTROL] > 0.f && ImGui::GetIO().KeysDownDuration['1'] > 0.f && ImGui::GetIO().KeysDownDuration['8'] > 0.f)
+				&& (ImGui::GetIO().KeysDownDurationPrev[VK_CONTROL] == 0.f || ImGui::GetIO().KeysDownDurationPrev['1'] == 0.f || ImGui::GetIO().KeysDownDuration['8'] == 0.f)
+				)
+			{
+				gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+				campaign* campaign = gameDataAll->campaignData;
+				//if (campaign->isAdminPasswordExist == false || (campaign->isAdminPasswordExist == true && campaign->isHotseatLogon == true))
+				//{
+					reloadLua();
+					consoleData.keypressamount = 0;
+					return;
+				//}
+			}
+
 			if ((ImGui::GetIO().KeysDownDuration[VK_CONTROL] > 0.f && ImGui::GetIO().KeysDownDuration['1'] > 0.f && ImGui::GetIO().KeysDownDuration['9'] > 0.f)
 				&& (ImGui::GetIO().KeysDownDurationPrev[VK_CONTROL] == 0.f || ImGui::GetIO().KeysDownDurationPrev['1'] == 0.f || ImGui::GetIO().KeysDownDuration['9'] == 0.f)
 				)
@@ -42,7 +56,7 @@ namespace console
 				campaign* campaign = gameDataAll->campaignData;
 				//if (campaign->isAdminPasswordExist == false || (campaign->isAdminPasswordExist == true && campaign->isHotseatLogon == true))
 				//{
-					reloadLua();
+					initLua();
 					consoleData.keypressamount = 0;
 					return;
 				//}
