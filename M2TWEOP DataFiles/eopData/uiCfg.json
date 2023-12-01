@@ -7,6 +7,6 @@
     "useVanillaCfg": true,
     "modTitle": "",
     "runButtonColor": "201, 169, 64, 150",
-    "runButtonHoverColor": "206, 168, 0, 255",
+    "runButtonHoverColor": "201, 169, 64, 250",
     "launcherTheme": "default"
 }
