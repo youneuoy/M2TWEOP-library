@@ -133,6 +133,7 @@ void luaP::onPluginLoadF()
 	@tfield onBattlePlayerUnderAttackIdle onBattlePlayerUnderAttackIdle
 	@tfield onBattleWinningCombat onBattleWinningCombat
 	@tfield onBattleArmyTired onBattleArmyTired
+	@tfield onBattleSpySuccess onBattleSpySuccess
 	@tfield onBattleTideofBattle onBattleTideofBattle
 	@tfield onBattleUnitGoesBerserk onBattleUnitGoesBerserk
 	@tfield onBattleSiegeEngineDestroyed onBattleSiegeEngineDestroyed
@@ -1757,6 +1758,18 @@ void luaP::onPluginLoadF()
 
 	@usage
 	function onBattleArmyTired(eventData)
+	--something here
+	end
+	*/
+
+	/***
+	A spy has successfully opened the gates.
+
+	@function onBattleSpySuccess
+	@tparam eventTrigger eventData
+
+	@usage
+	function onBattleSpySuccess(eventData)
 	--something here
 	end
 	*/

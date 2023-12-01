@@ -42,7 +42,7 @@ namespace console
 				campaign* campaign = gameDataAll->campaignData;
 				//if (campaign->isAdminPasswordExist == false || (campaign->isAdminPasswordExist == true && campaign->isHotseatLogon == true))
 				//{
-					initLua();
+					reloadLua();
 					consoleData.keypressamount = 0;
 					return;
 				//}

@@ -274,3 +274,4 @@ sol::function* onNavalPreBattleScrollAdviceRequested = nullptr;
 sol::function* onPreBattleScrollAdviceRequested = nullptr;
 sol::function* onCollegeOfCardinalsPanelOpen = nullptr;
 sol::function* onDiplomaticStandingPanelOpen = nullptr;
+sol::function* onBattleSpySuccess = nullptr;
