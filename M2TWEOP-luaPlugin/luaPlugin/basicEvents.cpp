@@ -371,6 +371,9 @@ namespace gameEvents
 		newCode[0] = 0x01368F14; newCode[1] = 0x01323EEC;
 		addEvent<EventType::standardEvent>(newCode[gv], "onBattleArmyTired");
 
+		newCode[0] = 0x01367E34; newCode[1] = 0x01322E0C;
+		addEvent<EventType::standardEvent>(newCode[gv], "onBattleSpySuccess");
+
 		//standardEvents
 		newCode[0] = 0x013321D4; newCode[1] = 0x012ED1B4;
 		addEvent<EventType::standardEvent>(newCode[gv], "onCrusadeCalled");
@@ -694,6 +697,14 @@ void onGameInit()
 	if (plugData::data.luaAll.onGameInit != nullptr)
 	{
 		tryLua((*plugData::data.luaAll.onGameInit)());
+	}
+}
+
+void onAiTurn(aiFaction* aifaction)
+{
+	if (plugData::data.luaAll.onAiTurn != nullptr)
+	{
+		tryLua((*plugData::data.luaAll.onAiTurn)(aifaction));
 	}
 }
 

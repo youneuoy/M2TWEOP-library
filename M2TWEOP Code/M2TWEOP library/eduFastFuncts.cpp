@@ -21,7 +21,7 @@ namespace eduFastFuncts
 
 		memset(entryForFilling, 0, sizeof(eduEntry));
 
-		entryForFilling->N00000151 = ourInts;
+		entryForFilling->eraOwnerships = ourInts;
 
 		entryForFilling->N00000152 = &ourInts[4];
 

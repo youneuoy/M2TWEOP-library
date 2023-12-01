@@ -42,11 +42,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\3rd\M2TWEOPBoost;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\3rd\M2TWEOPBoost;$(IncludePath)$(SolutionDir)\3rd\nlohmann;</IncludePath>
     <LibraryPath>$(SolutionDir)\3rd\M2TWEOPBoost\boostLibs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\3rd\M2TWEOPBoost;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\3rd\M2TWEOPBoost;$(IncludePath)$(SolutionDir)\3rd\nlohmann;</IncludePath>
     <LibraryPath>$(SolutionDir)\3rd\M2TWEOPBoost\boostLibs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -100,6 +100,7 @@
     <ClCompile Include="IDirect3DVolumeTexture9.cpp" />
     <ClCompile Include="InterfaceQuery.cpp" />
     <ClCompile Include="m2tweopStarter.cpp" />
+    <ClInclude Include="..\3rd\nlohmann\json.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AddressLookupTable.h" />

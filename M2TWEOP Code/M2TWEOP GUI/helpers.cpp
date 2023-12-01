@@ -64,6 +64,45 @@ bool helpers::loadTexture(const char* filename, GLuint* out_texture, int* out_wi
 	return true;
 }
 
+void helpers::openProcess(LPSTR& exePath)
+{
+	// Create process information
+	PROCESS_INFORMATION processInfo;
+	ZeroMemory(&processInfo, sizeof(processInfo));
+
+	// Create startup information
+	STARTUPINFO startupInfo;
+	ZeroMemory(&startupInfo, sizeof(startupInfo));
+	startupInfo.cb = sizeof(startupInfo);
+
+	// Create the process
+	if (CreateProcess(
+			NULL,	 // Application name (use NULL to use command line)
+			exePath, // Command line
+			NULL,	 // Process security attributes
+			NULL,	 // Thread security attributes
+			FALSE,	 // Inherit handles from the calling process
+			0,		 // Creation flags
+			NULL,	 // Use parent's environment block
+			NULL,	 // Use parent's starting directory
+			&startupInfo,
+			&processInfo))
+	{
+
+		// Optionally wait for the process to complete
+		// WaitForSingleObject(processInfo.hProcess, INFINITE);
+
+		// Close process and thread handles
+		CloseHandle(processInfo.hProcess);
+		CloseHandle(processInfo.hThread);
+	}
+	else
+	{
+		// Handle error
+		DWORD error = GetLastError();
+	}
+}
+
 void helpers::closeProcess(const string& exeName)
 {
 	HANDLE gameHNDL = NULL;
@@ -420,6 +459,34 @@ vector<std::string> helpers::getCfgFilesInFolder()
 	}
 
 	return cfgFiles;
+}
+
+vector<std::string> helpers::getTomlFilesInFolder()
+{
+	string path;
+	getCurrentPath(path);
+	path += ".\\eopData\\themes\\*.toml";
+
+	WIN32_FIND_DATAA findFileData;
+	HANDLE hFind = FindFirstFileA(path.c_str(), &findFileData);
+	std::vector<std::string> tomlFiles;
+
+	if (hFind != INVALID_HANDLE_VALUE)
+	{
+		do {
+			const std::string name = findFileData.cFileName;
+
+			if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+			{
+				tomlFiles.push_back(name);
+			}
+
+		} while (FindNextFileA(hFind, &findFileData) != 0);
+
+		FindClose(hFind);
+	}
+
+	return tomlFiles;
 }
 
 std::string helpers::checkCfgFileForMod(const std::string& filePath)

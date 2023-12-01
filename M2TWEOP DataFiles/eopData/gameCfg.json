@@ -1,4 +1,8 @@
 {
-    "isBlockLaunchWithoutEop": false,
-    "isDiscordRichPresenceEnabled": true
+  "isBlockLaunchWithoutEop": false,
+  "isDiscordRichPresenceEnabled": false,
+  "isDeveloperModeNeeded": true,
+  "isTacticalMapViewerNeeded": true,
+  "isContextMenuNeeded": true,
+  "isDXVKEnabled": false
 }

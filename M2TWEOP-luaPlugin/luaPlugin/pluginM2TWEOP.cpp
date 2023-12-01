@@ -509,3 +509,10 @@ void initLua()
 	}
 }
 
+void reloadLua()
+{
+	std::string luaFile = plugData::data.modFolder + R"(\youneuoy_Data\plugins\lua\luaPluginScript.lua)";
+	auto script = plugData::data.luaAll.luaState.load_file(luaFile);
+	script();
+}
+

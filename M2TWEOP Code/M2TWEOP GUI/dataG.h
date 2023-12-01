@@ -12,6 +12,7 @@ public:
 		struct
 		{
 			bool isContextMenuNeeded = true;
+			bool isDXVKEnabled = true;
 			bool isTacticalMapViewerNeeded = true;
 			bool isDeveloperModeNeeded = true;
 
@@ -68,6 +69,7 @@ public:
 		struct
 		{
 			string configName;
+			string themeName = "default.toml";
 			bool useVanillaConfig = true;
 			bool useM2TWEOP = false;
 			bool hideLauncherAtStart = false;

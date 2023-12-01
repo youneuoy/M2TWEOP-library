@@ -235,6 +235,14 @@ void plugins::onGameInit()
 	}
 }
 
+void plugins::onAiTurn(aiFaction* aifaction)
+{
+	for (plugin* pl : pluginsCfg.plugins)
+	{
+		(*(*pl->onAiTurn))(aifaction);
+	}
+}
+
 void plugins::onWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	for (plugin* pl : pluginsCfg.plugins)
@@ -381,10 +389,13 @@ int plugin::init(string* nameP)
 	fName = "onfortificationlevelS";
 	onfortificationlevelS.Load(&plPath, &fName);
 
-
-	//onReadGameDbsAtStart
+	//onGameInit
 	fName = "onGameInit";
 	onGameInit.Load(&plPath, &fName);
+
+	//onAiTurn
+	fName = "onAiTurn";
+	onAiTurn.Load(&plPath, &fName);
 
 	//onReadGameDbsAtStart
 	fName = "onReadGameDbsAtStart";

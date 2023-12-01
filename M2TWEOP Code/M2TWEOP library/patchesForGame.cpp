@@ -350,6 +350,11 @@ void __stdcall patchesForGame::onGameInit()
 	plugins::onGameInit();
 }
 
+void __fastcall patchesForGame::onAiTurn(aiFaction* aifaction)
+{
+	plugins::onAiTurn(aifaction);
+}
+
 void __stdcall patchesForGame::onChangeTurnNum()
 {
 #if defined TESTPATCHES

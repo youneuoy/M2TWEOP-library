@@ -113,32 +113,44 @@ namespace fastFunctsHelpers
 		return result;
 	}
 
-	jsn::json loadJsonFromFile(const std::string& fpath)
+	jsn::json loadJsonFromFile(const std::string&fpath)
 	{
-		jsn::json json;
+		try
+		{
+			jsn::json json;
 
-		std::string content = readFile(fpath);
-
-		json = jsn::json::parse(content,
-			/* callback */ nullptr,
-			/* allow exceptions */ true,
-			/* ignore_comments */ true);
-
-		return json;
+			std::ifstream f1(fpath);
+			if (f1.is_open())
+			{
+				f1 >> json;
+			}
+			f1.close();
+			return std::move(json);
+		}
+		catch (jsn::json::exception& e)
+		{
+			MessageBoxA(NULL, e.what(), "Could not load JSON from file!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
 	}
-	jsn::json loadJsonFromFile(const std::wstring& fpath)
+
+	jsn::json loadJsonFromFile(const std::wstring&fpath)
 	{
-		jsn::json json;
+		try
+		{
+			jsn::json json;
 
-
-		std::string content = readFile(fpath);
-
-		json = jsn::json::parse(content,
-			/* callback */ nullptr,
-			/* allow exceptions */ true,
-			/* ignore_comments */ true);
-
-		return json;
+			std::ifstream f1(fpath);
+			if (f1.is_open())
+			{
+				f1 >> json;
+			}
+			f1.close();
+			return std::move(json);
+		}
+		catch (jsn::json::exception& e)
+		{
+			MessageBoxA(NULL, e.what(), "Could not load JSON from file!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
 	}
 
 	void writeJsonToFile(const std::string& fpath,const jsn::json& json)

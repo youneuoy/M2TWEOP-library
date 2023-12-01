@@ -201,6 +201,40 @@ int factionHelpers::getRecruitmentValueSett(aiProductionController* controller, 
 	return controller->recruitBias[type];
 }
 
+ltgdFactionValues* factionHelpers::getAiFactionValues(factionStruct* fac)
+{
+	int gameVer = m2tweopHelpers::getGameVersion();
+	ltgdGlobals* ltgd = nullptr;
+	if (gameVer == 2)
+	{
+		ltgd = reinterpret_cast<ltgdGlobals*>(0x016A7Fc4);
+	}
+	else if (gameVer == 1)
+	{
+		ltgd = reinterpret_cast<ltgdGlobals*>(0x016F115C);
+	}
+	if (!ltgd)
+		return nullptr;
+	return &ltgd->ltgdFactionValues[fac->dipNum];
+}
+
+interFactionLTGD* factionHelpers::getInterFactionLTGD(factionStruct* fac, factionStruct* targetFac)
+{
+	int gameVer = m2tweopHelpers::getGameVersion();
+	ltgdGlobals* ltgd = nullptr;
+	if (gameVer == 2)
+	{
+		ltgd = reinterpret_cast<ltgdGlobals*>(0x016A7Fc4);
+	}
+	else if (gameVer == 1)
+	{
+		ltgd = reinterpret_cast<ltgdGlobals*>(0x016F115C);
+	}
+	if (!ltgd)
+		return nullptr;
+	return &ltgd->interFactionLTGD[fac->dipNum][targetFac->dipNum];
+}
+
 aiProductionController* factionHelpers::getProductionController(aiPersonalityValues* personality, int index)
 {
 	return personality->aiProductionControllers[index];

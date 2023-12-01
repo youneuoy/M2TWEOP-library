@@ -15,7 +15,7 @@ namespace managerG
 		helpers::updateMetrics();
 		loadTextures();
 		loadFonts();
-		loadJsonConfig();
+		// loadJsonConfig();
 
 		modSettingsUI::initSettingsUI();
 	}
@@ -75,6 +75,10 @@ namespace managerG
 
 		try
 		{
+			if (json.contains("isDXVKEnabled"))
+			{
+				getJson(dataG::data.modulesData.isDXVKEnabled, "isDXVKEnabled");
+			}
 			if (json.contains("isContextMenuNeeded"))
 			{
 				getJson(dataG::data.modulesData.isContextMenuNeeded, "isContextMenuNeeded");
@@ -174,6 +178,10 @@ namespace managerG
 					dataG::data.gameData.buttonHoverColor.a = stoi(hoverColorValues[3]);
 				}
 			}
+			if (json.contains("launcherTheme"))
+			{
+				getJson(dataG::data.modData.themeName, "launcherTheme");
+			}
 		}
 		catch (jsn::json::type_error& e)
 		{
@@ -210,6 +218,7 @@ namespace managerG
 
 		// Save game config
 		fPath = ".\\eopData\\gameCfg.json";
+		setJson("isDXVKEnabled", dataG::data.modulesData.isDXVKEnabled);
 		setJson("isContextMenuNeeded", dataG::data.modulesData.isContextMenuNeeded);
 		setJson("isTacticalMapViewerNeeded", dataG::data.modulesData.isTacticalMapViewerNeeded);
 		setJson("isDeveloperModeNeeded", dataG::data.modulesData.isDeveloperModeNeeded);
@@ -230,6 +239,7 @@ namespace managerG
 		setJson("modTitle", dataG::data.gameData.modTitle);
 		setJson("runButtonColor", dataG::data.gameData.buttonColorString);
 		setJson("runButtonHoverColor", dataG::data.gameData.buttonHoverColorString);
+		setJson("launcherTheme", dataG::data.modData.themeName);
 		writeJsonToFile(fPath, json);
 		json.clear();
 	}

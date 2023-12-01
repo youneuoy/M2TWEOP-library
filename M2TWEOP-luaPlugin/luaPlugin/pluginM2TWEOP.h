@@ -23,3 +23,4 @@ namespace gameEvents
 extern "C" PLUGINM2TWEOP_API int initPlugin(std::string * modPath);
 
 void initLua();
+void reloadLua();

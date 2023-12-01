@@ -415,14 +415,14 @@ void luaP::initCampaign()
 	/***
 	Enum of battle states.
 
-	@tfield int ambushSuccess
-	@tfield int ambushFail
-	@tfield int open
-	@tfield int siege
-	@tfield int sally
-	@tfield int naval
-	@tfield int withdrawal
-	@tfield int meetEnemy
+	@tfield int notInBattle
+	@tfield int preBattle
+	@tfield int delay
+	@tfield int deployment
+	@tfield int deploymentPlayer2
+	@tfield int conflict
+	@tfield int victoryScroll
+	@tfield int pursuit
 
 	@table battleState
 	*/
@@ -479,7 +479,7 @@ void luaP::initCampaign()
 		"siege", 2,
 		"non_combatant", 3,
 		"ship", 4,
-		"handler", 4
+		"handler", 5
 	);
 
 	//@section unitCategoryClass
@@ -1104,7 +1104,7 @@ void luaP::initCampaign()
 	Get port by index.
 	@function campaignStruct:getPort
 	@tparam int index
-	@treturn portBuildingStruct port
+	@treturn portStruct port
 	@usage
 	local campaign=gameDataAll.get().campaignStruct;
 	local port=campaign:getPort(0);
@@ -1114,7 +1114,7 @@ void luaP::initCampaign()
 	Get watchtower by index.
 	@function campaignStruct:getWatchTower
 	@tparam int index
-	@treturn watchTowerStruct watchtower
+	@treturn watchtowerStruct watchtower
 	@usage
 	local campaign=gameDataAll.get().campaignStruct;
 	local watchtower=campaign:getWatchTower(0);
@@ -1506,6 +1506,7 @@ void luaP::initCampaign()
 	@tfield int portEntranceXCoord
 	@tfield int portEntranceYCoord
 	@tfield factionStruct faction
+	@tfield mercPool mercPool
 	@tfield string rebelType
 	@tfield string localizedRebelsName
 	@tfield int triumphValue
@@ -1775,7 +1776,7 @@ void luaP::initCampaign()
 	@usage
 	local sMap = gameDataAll.get().stratMap;
 	local region = sMap.getRegion(2);
-	local totalStrength = region:getHostileArmiesStrength(myFac.dipNum)
+	local totalStrength = region:getHostileArmiesStrength(myFac.factionID)
 	*/
 	typeAll.regionStruct.set_function("getHostileArmiesStrength", &gameHelpers::getHostileArmiesStrength);
 
@@ -2073,7 +2074,7 @@ void luaP::initP2()
 	@tfield float mapHeightDoubled
 	@tfield int sidesNum Returns a battleSide[8]. Maximum: 8.
 	@tfield battleSide[8] sides
-	@tfield factionSide[31] faction alliance array, -1 if not in battle, start at 1 so faction dipnum + 1
+	@tfield factionSide[31] faction alliance array, -1 if not in battle, start at 1 so faction ID + 1
 	tfield getPlayerArmy getPlayerArmy
 	@tfield getBattleResidence getBattleResidence
 

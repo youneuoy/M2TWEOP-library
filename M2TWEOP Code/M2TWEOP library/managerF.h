@@ -16,6 +16,7 @@ public:
 	static void init();
 
 	static void debug();
+	static void loadJsonSettings();
 private:
 	static void doPachs();
 
