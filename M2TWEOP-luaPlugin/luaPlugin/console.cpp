@@ -40,12 +40,9 @@ namespace console
 			{
 				gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
 				campaign* campaign = gameDataAll->campaignData;
-				//if (campaign->isAdminPasswordExist == false || (campaign->isAdminPasswordExist == true && campaign->isHotseatLogon == true))
-				//{
-					reloadLua();
-					consoleData.keypressamount = 0;
-					return;
-				//}
+				reloadLua();
+				consoleData.keypressamount = 0;
+				return;
 			}
 
 			if ((ImGui::GetIO().KeysDownDuration[VK_CONTROL] > 0.f && ImGui::GetIO().KeysDownDuration['1'] > 0.f && ImGui::GetIO().KeysDownDuration['9'] > 0.f)
@@ -54,12 +51,9 @@ namespace console
 			{
 				gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
 				campaign* campaign = gameDataAll->campaignData;
-				//if (campaign->isAdminPasswordExist == false || (campaign->isAdminPasswordExist == true && campaign->isHotseatLogon == true))
-				//{
-					initLua();
-					consoleData.keypressamount = 0;
-					return;
-				//}
+				initLua();
+				consoleData.keypressamount = 0;
+				return;
 			}
 
 			if ((ImGui::GetIO().KeysDownDuration[VK_CONTROL] > 0.f && ImGui::GetIO().KeysDownDuration['1'] > 0.f)
