@@ -182,7 +182,7 @@ namespace PathFinder
 					}
 					else
 					{
-						//prohibitNeigbourTiles();
+						prohibitNeigbourTiles();
 						return false;
 					}
 					break;
@@ -197,7 +197,7 @@ namespace PathFinder
 					}
 					else
 					{
-						//prohibitNeigbourTiles();
+						prohibitNeigbourTiles();
 						return false;
 					}
 					break;
