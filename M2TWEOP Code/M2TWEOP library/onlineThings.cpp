@@ -32,6 +32,10 @@ namespace battleCreator
 	{
 		return data.isGenerationNeeded;
 	}
+	bool IsRetreatsOverhaulEnabled()
+	{
+		return data.isPlannedRetreatRoute;
+	}
 
 	void readParams()
 	{

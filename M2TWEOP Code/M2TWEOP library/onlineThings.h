@@ -22,6 +22,8 @@ using namespace std;
 namespace battleCreator
 {
 	bool GetIsGenerationNeeded();
+	bool IsRetreatsOverhaulEnabled();
+
 	void setCreationNeeded(bool isNeeded = false);
 
 	void readParams();

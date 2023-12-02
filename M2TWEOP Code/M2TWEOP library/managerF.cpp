@@ -569,10 +569,12 @@ void managerF::doPachs()
 	onStartOfDrawFunction->Enable();
 
 
-
-	//toRetreat* onRetreat = new toRetreat(mem, (LPVOID)patchesForGame::onRetreat, globals::dataS.gamever);
-	//onRetreat->SetNewCode();
-	//onRetreat->Enable();
+	if (battleCreator::IsRetreatsOverhaulEnabled())
+	{
+		toRetreat* onRetreat = new toRetreat(mem, (LPVOID)patchesForGame::onRetreat, globals::dataS.gamever);
+		onRetreat->SetNewCode();
+		onRetreat->Enable();
+	}
 
 	/*
 	f1 << "Start applying OntryFindTypeIdInListRecruitPoolEDB patch" << endl;
@@ -672,6 +674,8 @@ void managerF::initThread()
 {
 	std::srand(std::time(0));
 
+	battleCreator::readParams();
+
 	//read_modConfig();
 	codes::initCodes(globals::dataS.gamever);
 	dataOffsets::initDataOffsets(globals::dataS.gamever);
@@ -683,7 +687,6 @@ void managerF::initThread()
 
 	plugins::init();
 
-	battleCreator::readParams();
 
 	globals::dataS.Modules.tacticalMapVeiwer.Init(globals::dataS.gamever);
 	//stratResTest::test();
