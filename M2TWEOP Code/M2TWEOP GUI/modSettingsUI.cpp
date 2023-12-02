@@ -276,7 +276,7 @@ namespace modSettingsUI
 		ImGui::Checkbox("Automatically generate hotseat/historical battles", &dataG::data.battlesData.isGenerationNeeded);
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable if you want to generate a historical battle each time you start a battle");}
 
-		ImGui::Checkbox("Automatically generate battle result files", &dataG::data.battlesData.isGenerationNeeded);
+		ImGui::Checkbox("Automatically generate battle result files", &dataG::data.battlesData.isResultTransferNeeded);
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable if you want to generate a results file from an online battle");}
 
 		ImGui::Checkbox("Planned retreat route", &dataG::data.battlesData.isPlannedRetreatRoute);
