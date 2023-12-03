@@ -21,15 +21,15 @@ namespace stackStructHelpers
 				{
 					case 1: // By EDU Type
 						if (std::string(unitA->eduEntry->Type) != std::string(unitB->eduEntry->Type))
-							return std::string(unitA->eduEntry->Type) > std::string(unitB->eduEntry->Type);
+							return std::string(unitA->eduEntry->Type) < std::string(unitB->eduEntry->Type);
 						break;
 					case 2: // By Category
 						if (unitA->eduEntry->Category != unitB->eduEntry->Category)
-							return unitA->eduEntry->Category > unitB->eduEntry->Category;
+							return unitA->eduEntry->Category < unitB->eduEntry->Category;
 						break;
 					case 3: // By Class
 						if (unitA->eduEntry->Class != unitB->eduEntry->Class)
-							return unitA->eduEntry->Class > unitB->eduEntry->Class;
+							return unitA->eduEntry->Class < unitB->eduEntry->Class;
 						break;
 					case 4: // Soldier Count
 						if (unitA->SoldierCountStrat != unitB->SoldierCountStrat)
@@ -41,7 +41,7 @@ namespace stackStructHelpers
 						break;
 					case 6: // categorClass
 						if (unitA->eduEntry->categoryClassCombinationForAI != unitB->eduEntry->categoryClassCombinationForAI)
-							return unitA->eduEntry->categoryClassCombinationForAI > unitB->eduEntry->categoryClassCombinationForAI;
+							return unitA->eduEntry->categoryClassCombinationForAI < unitB->eduEntry->categoryClassCombinationForAI;
 						break;
 					default: 
 						break;

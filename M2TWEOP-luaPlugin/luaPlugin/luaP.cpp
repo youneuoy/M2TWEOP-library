@@ -763,7 +763,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@treturn string error Note: string can be empty but not nil
 	@usage
 	-- Creating units, adding money
-	function onCharacterSelected(selectedChar)
+	function onCharacterSelected(eventData)
+		local selectedChar = eventData.character
 		local err = stratmap.game.callConsole("add_money", "2321")
 		local err2 = stratmap.game.callConsole("create_unit", "testcharacter 'Cool Unit' 4 1 1 1")
 		print(err)
@@ -3494,7 +3495,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@function tradeResource:getResourceImage
 	@treturn string imagePath
 	@usage
-	function onSettlementSelected(selectedSett)
+	function onSettlementSelected(eventData)
+		local selectedSett = eventData.settlement
 		local resList = ""
 		for i = 0, selectedSett.resourcesNum - 1, 1 do
 			local thisRes = selectedSett:getResource(i)
@@ -3562,7 +3564,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	-- 5 = Experience
 	-- 6 = Category + Class
 
-	function onFactionTurnStart(faction)
+	function onFactionTurnStart(eventData)
+	local faction = eventData.faction
     -- If it's not the players turn, don't sort
     if faction.isPlayerControlled == 0 then return end;
 

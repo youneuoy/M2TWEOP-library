@@ -2166,7 +2166,7 @@ void luaP::initP2()
 	@tparam int condition
 	@treturn string winCondition destroy\_or\_rout\_enemy, balance\_of\_strength\_percent, destroy\_enemy\_strength\_percent, capture\_location, destroy\_character, capture\_major\_settlement, capture\_army\_settlement, unknown\_condition
 	@usage
-	function onPostBattle(namedChar, faction, region, characterType, religion)
+	function onPostBattle(eventData)
 		getBattleData()
 	end
 
