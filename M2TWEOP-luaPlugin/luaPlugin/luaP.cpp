@@ -470,7 +470,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Get some game options.
 	@function M2TWEOP.getOptions2
-	@treturn options1 options
+	@treturn options2 options
 	@usage
 	local options =M2TWEOP.getOptions2();
 	*/
@@ -478,7 +478,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Get the campaign difficulty modifiers.
 	@function M2TWEOP.getCampaignDifficulty1
-	@treturn options1 options
+	@treturn campaignDifficulty1 options
 	@usage
 	local modifiers = M2TWEOP.getCampaignDifficulty1();
 	*/
@@ -486,7 +486,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Get the campaign difficulty modifiers.
 	@function M2TWEOP.getCampaignDifficulty2
-	@treturn options1 options
+	@treturn campaignDifficulty2 options
 	@usage
 	local modifiers = M2TWEOP.getCampaignDifficulty2();
 	*/
@@ -498,7 +498,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam eventTrigger eventData
 	@treturn bool isTrue
 	@usage
-	local options =M2TWEOP.condition();
+	if M2TWEOP.condition("InEnemyLands", eventData) then
+		--do stuff
+	end
 	*/
 	tables.M2TWEOPTable.set_function("condition", &gameHelpers::condition);
 
@@ -761,7 +763,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@treturn string error Note: string can be empty but not nil
 	@usage
 	-- Creating units, adding money
-	function onCharacterSelected(selectedChar)
+	function onCharacterSelected(eventData)
+		local selectedChar = eventData.character
 		local err = stratmap.game.callConsole("add_money", "2321")
 		local err2 = stratmap.game.callConsole("create_unit", "testcharacter 'Cool Unit' 4 1 1 1")
 		print(err)
@@ -1005,7 +1008,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int property use enum: unitBattleProperties.guardMode, unitBattleProperties.skirmish, unitBattleProperties.fireAtWill
 	@tparam bool value
 	@usage
-	unit:setBattleProperty(unitBattleProperties.skirmish);
+	unit:setBattleProperty(unitBattleProperties.skirmish, true);
 	*/
 	types.unit.set_function("setBattleProperty", &unitHelpers::setBattleProperty);
 	/***
@@ -1170,7 +1173,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int recruitCost
 	@tfield int upkeepCost
 	@tfield int weaponCost
-	@tfield int ArmourCost
+	@tfield int armourCost
 	@tfield int customBattleCost
 	@tfield int customBattleIncrease
 	@tfield int customBattleLimit
@@ -1218,7 +1221,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.EduEntry.set("recruitCost", &eduEntry::StatCost2);
 	types.EduEntry.set("upkeepCost", &eduEntry::StatCost3);
 	types.EduEntry.set("weaponCost", &eduEntry::StatCost4);
-	types.EduEntry.set("ArmourCost", &eduEntry::StatCost5);
+	types.EduEntry.set("armourCost", &eduEntry::StatCost5);
 	types.EduEntry.set("customBattleCost", &eduEntry::StatCost6);
 	types.EduEntry.set("customBattleIncrease", &eduEntry::StatCost7);
 	types.EduEntry.set("customBattleLimit", &eduEntry::StatCost8);
@@ -3492,7 +3495,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@function tradeResource:getResourceImage
 	@treturn string imagePath
 	@usage
-	function onSettlementSelected(selectedSett)
+	function onSettlementSelected(eventData)
+		local selectedSett = eventData.settlement
 		local resList = ""
 		for i = 0, selectedSett.resourcesNum - 1, 1 do
 			local thisRes = selectedSett:getResource(i)
@@ -3548,7 +3552,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Sort units in a stack.
 	@function stackStruct:sortStack
-	@tparam int sort mode
+	@tparam int sortMode
+	@tparam int sortMode2
+	@tparam int sortMode3
 	@usage
 	-- Note: Generals will always remain at the start of the stack
 	-- 1 = EDU Type
@@ -3556,8 +3562,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	-- 3 = Class
 	-- 4 = Soldier Count
 	-- 5 = Experience
+	-- 6 = Category + Class
 
-	function onFactionTurnStart(faction)
+	function onFactionTurnStart(eventData)
+	local faction = eventData.faction
     -- If it's not the players turn, don't sort
     if faction.isPlayerControlled == 0 then return end;
 
@@ -3578,8 +3586,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
                 --     end
                 -- end
 
-                -- Sort the stack by EDU type
-                stack:sortStack(1)
+                -- Sort the stack by category + class, then by soldier count, then by experience
+                stack:sortStack(6, 4, 5)
 
                 -- print("\n\n")
                 -- print("-- Sorted Stack --")

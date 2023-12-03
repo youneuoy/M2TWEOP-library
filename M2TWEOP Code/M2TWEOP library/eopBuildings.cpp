@@ -211,9 +211,8 @@ namespace eopBuildings
 		pool->maxSize = maxSize;
 		pool->buildingLevelCondition = nullptr;
 		pool->nextPool = nullptr;
-		auto fakeText = std::make_shared<fakeTextInput>(fakeTextInput(condition, 0));
-		auto rawText = fakeText.get();
-		const auto makeConditionFunc = reinterpret_cast<DWORD*>(0x008A7510);
+		auto fakeText = make_shared<fakeTextInput>(condition, 0);
+		const auto makeConditionFunc = codes::offsets.makeBuildingCondition;
 		auto conditionPtr = &pool->buildingLevelCondition;
 		_asm
 		{
@@ -250,21 +249,20 @@ namespace eopBuildings
 			return;
 		}
 		int i = 0;
-		BuildingLvlCapability* prevcap = cap;
 		while (cap != nullptr)
 		{
 			i++;
-			prevcap = cap;
+			BuildingLvlCapability* prevCap = cap;
 			cap = cap->nextCapability;
 			if(index == i)
 			{
 				if (cap->nextCapability != nullptr)
 				{
-					prevcap->nextCapability = cap->nextCapability;
+					prevCap->nextCapability = cap->nextCapability;
 				}
 				else
 				{
-					prevcap->nextCapability = nullptr;
+					prevCap->nextCapability = nullptr;
 				}
 				cap = nullptr;
 				return;

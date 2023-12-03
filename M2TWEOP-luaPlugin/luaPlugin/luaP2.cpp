@@ -878,6 +878,7 @@ void luaP::initCampaign()
 	typeAll.eventTrigger = luaState.new_usertype<eventTrigger>("eventTrigger");
 	typeAll.eventTrigger.set("attackingUnit", sol::property(gameHelpers::getEventAttackingUnit));
 	typeAll.eventTrigger.set("defendingUnit", sol::property(gameHelpers::getEventDefendingUnit));
+	typeAll.eventTrigger.set("stratCharacter", sol::property(gameHelpers::getEventCharacter));
 	typeAll.eventTrigger.set("character", sol::property(gameHelpers::getEventNamedCharacter));
 	typeAll.eventTrigger.set("targetCharacter", sol::property(gameHelpers::getEventTargetNamedCharacter));
 	typeAll.eventTrigger.set("settlement", sol::property(gameHelpers::getEventSettlement));
@@ -2165,7 +2166,7 @@ void luaP::initP2()
 	@tparam int condition
 	@treturn string winCondition destroy\_or\_rout\_enemy, balance\_of\_strength\_percent, destroy\_enemy\_strength\_percent, capture\_location, destroy\_character, capture\_major\_settlement, capture\_army\_settlement, unknown\_condition
 	@usage
-	function onPostBattle(namedChar, faction, region, characterType, religion)
+	function onPostBattle(eventData)
 		getBattleData()
 	end
 

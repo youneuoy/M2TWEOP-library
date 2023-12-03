@@ -382,9 +382,10 @@ namespace gameHelpers
 		return CallVFunc<45, unit*>(eventData);;
 	}
 	
-	bool condition(const char* condition, const eventTrigger* eventData)
+	bool condition(std::string condition, const eventTrigger* eventData)
 	{
-		return (*(*plugData::data.funcs.condition))(condition, eventData);
+		const char* conditionC = condition.c_str();
+		return (*(*plugData::data.funcs.condition))(conditionC, eventData);
 	}
 
 
@@ -590,9 +591,10 @@ namespace gameHelpers
 		(*(*plugData::data.funcs.saveGame))(path);
 	}
 
-	void gameHelpers::scriptCommand(const char* command, const char* args)
+	void gameHelpers::scriptCommand(std::string command, const char* args)
 	{
-		(*(*plugData::data.funcs.scriptCommand))(command, args);
+		const char* commandC = command.c_str();
+		(*(*plugData::data.funcs.scriptCommand))(commandC, args);
 	}
 
 	void gameHelpers::historicEvent(const char* name, const char* title, const char* description)

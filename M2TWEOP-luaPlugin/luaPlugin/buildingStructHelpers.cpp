@@ -102,9 +102,10 @@ namespace buildingStructHelpers
     	return (*(*plugData::data.funcs.getBuildingCapabilityNum))(entry, level);
 	}
 
-	void addBuildingPool(edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp, const char* condition)
+	void addBuildingPool(edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp, std::string condition)
 	{
-    	return (*(*plugData::data.funcs.addBuildingPool))(entry, level, eduIndex, initialSize, gainPerTurn, maxSize, exp, condition);
+		const char* cond = condition.c_str();
+    	return (*(*plugData::data.funcs.addBuildingPool))(entry, level, eduIndex, initialSize, gainPerTurn, maxSize, exp, cond);
 	}
 
 	void removeBuildingPool(edbEntry* entry, int level, int index)

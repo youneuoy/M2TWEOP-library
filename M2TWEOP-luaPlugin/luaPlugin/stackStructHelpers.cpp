@@ -2,50 +2,62 @@
 #include "plugData.h"
 namespace stackStructHelpers
 {
-	void sortStack(stackStruct *stack, int sortType)
+	void sortStack(stackStruct* stack, const int sortType, const int sortType2, int sortType3)
 	{
 		int N = stack->numOfUnits;
 
-		// Lambda function to compare unit objects based on name
-		auto compareByEduTypeName = [sortType](const unit *unitA, const unit *unitB)
-		{	
+		std::vector<int> sortTypes = { sortType };
+		if (sortType2 != 0)
+			sortTypes.push_back(sortType2);
+		if (sortType3 != 0)
+			sortTypes.push_back(sortType3);
+
+		// Lambda function to compare unit objects based on multiple criteria
+		auto compareUnits = [&sortTypes](const unit* unitA, const unit* unitB)
+		{
 			// Ensuring Generals stay at the front/start of the stack
 			if (unitA->general && !unitB->general) {
-				return true; 
+				return true;
 			}
 			if (!unitA->general && unitB->general) {
 				return false;
 			}
-
-			// Sorting Options
-			// By EDU Type
-			if (sortType == 1)
+			for (int sortType : sortTypes)
 			{
-				return std::string(unitA->eduEntry->Type) > std::string(unitB->eduEntry->Type);
-			}
-			// By Category
-			else if (sortType == 2)
-			{
-				return unitA->eduEntry->Category > unitB->eduEntry->Category;
-			}
-			// By Class
-			else if (sortType == 3)
-			{
-				return unitA->eduEntry->Class > unitB->eduEntry->Class;
-			}
-			// Soldier Count
-			else if (sortType == 4)
-			{
-				return unitA->SoldierCountStrat > unitB->SoldierCountStrat;
-			}
-			// Experience
-			else if (sortType == 5)
-			{
-				return unitA->expScreen > unitB->expScreen;
+				switch (sortType)
+				{
+					case 1: // By EDU Type
+						if (std::string(unitA->eduEntry->Type) != std::string(unitB->eduEntry->Type))
+							return std::string(unitA->eduEntry->Type) < std::string(unitB->eduEntry->Type);
+						break;
+					case 2: // By Category
+						if (unitA->eduEntry->Category != unitB->eduEntry->Category)
+							return unitA->eduEntry->Category < unitB->eduEntry->Category;
+						break;
+					case 3: // By Class
+						if (unitA->eduEntry->Class != unitB->eduEntry->Class)
+							return unitA->eduEntry->Class < unitB->eduEntry->Class;
+						break;
+					case 4: // Soldier Count
+						if (unitA->SoldierCountStrat != unitB->SoldierCountStrat)
+							return unitA->SoldierCountStrat > unitB->SoldierCountStrat;
+						break;
+					case 5: // Experience
+						if (unitA->expScreen != unitB->expScreen)
+							return unitA->expScreen > unitB->expScreen;
+						break;
+					case 6: // categorClass
+						if (unitA->eduEntry->categoryClassCombinationForAI != unitB->eduEntry->categoryClassCombinationForAI)
+							return unitA->eduEntry->categoryClassCombinationForAI < unitB->eduEntry->categoryClassCombinationForAI;
+						break;
+					default: 
+						break;
+				}
 			}
 		};
-		// Sort the units (?)
-		std::sort(stack->units, stack->units + N, compareByEduTypeName);
+
+		// Stable sort the units
+		std::stable_sort(stack->units, stack->units + N, compareUnits);
 	}
 
 	unit *getUnit(const stackStruct *army, int index)
