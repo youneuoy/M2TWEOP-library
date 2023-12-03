@@ -37,18 +37,25 @@ void initDX9()
 	std::string modPath = helpers::getModPathFromSharedMemory();
 	modPath += cfgPath;
 
-	jsn::json json = helpers::loadJsonFromFile(modPath);
 	bool isDXVKEnabled = false;
-	if (json.contains("isDXVKEnabled"))
-	{
-		getJson(isDXVKEnabled, "isDXVKEnabled");
-	}
 
+	try
+	{
+		jsn::json json = helpers::loadJsonFromFile(modPath);
+		if (json.contains("isDXVKEnabled"))
+		{
+			getJson(isDXVKEnabled, "isDXVKEnabled");
+		}
+	}
+	catch (...)
+	{
+	}
 	if (isDXVKEnabled == true) {
 		GetCurrentDirectoryW(MAX_PATH, path);
 		libPath = path;
 		libPath += L"\\d3d9_vk.dll";
-	} else {
+	}
+	else {
 		GetSystemDirectoryW(path, MAX_PATH);
 		libPath = path;
 		libPath += L"\\d3d9.dll";

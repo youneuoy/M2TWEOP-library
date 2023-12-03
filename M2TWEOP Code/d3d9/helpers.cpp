@@ -59,12 +59,42 @@ std::string helpers::getModFolderFromPipe(const string &msg)
     vector<string> args = helpers::splitString(msg, "\n");
     return args[2];
 }
+bool IsEopPipeMessage(const string& msg)
+{
+    vector<string>args = helpers::splitString(msg, "\n");
+    if (args.size() != 5)
+    {
+        return false;
+    }
 
+    if (args[0] != "m2tweopStartCommand")
+    {
+        return false;
+    }
+
+    if (args[1] != "eopModFolder:")
+    {
+        return false;
+    }
+
+    if (args[3] != "GameVer:")
+    {
+        return false;
+    }
+
+    return true;
+}
 std::string helpers::getModPathFromSharedMemory()
 {
     string resMsg = helpers::doEOPPipe(5, false);
-    string modPath = helpers::getModFolderFromPipe(resMsg);
-    return modPath;
+    if (IsEopPipeMessage(resMsg) == true)
+    {
+        return helpers::getModFolderFromPipe(resMsg);
+    }
+    else
+    {
+        return "";
+    }
 }
 
 jsn::json helpers::loadJsonFromFile(const std::string &fpath)
@@ -81,8 +111,7 @@ jsn::json helpers::loadJsonFromFile(const std::string &fpath)
         f1.close();
         return std::move(json);
     }
-    catch (jsn::json::exception &e)
+    catch (...)
     {
-        MessageBoxA(NULL, e.what(), "Could not load JSON from file!", MB_APPLMODAL | MB_SETFOREGROUND);
     }
 }
