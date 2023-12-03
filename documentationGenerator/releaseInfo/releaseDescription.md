@@ -12,7 +12,11 @@ Various bugs fixed for 3.0 release
 <!-- ![](https://i.imgur.com/h8UlYMT.png) -->
 
 ### **Library**
+- When enable planned retreat routes, also overwrite all retreats(even AI ones).
 - Fixed add building pools for disk version.
+- Fixed launching the game with installed M2TWEOP.
+- Fixed save files with non-english letters.
+- Fixed hotseat settings.
 
 ### **Lua Plugin**
 - Fixed reading condition requirements for pools.
