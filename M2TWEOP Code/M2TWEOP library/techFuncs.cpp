@@ -166,10 +166,31 @@ void techFuncs::deleteFiles(vector<string>& files)
 
 
 
+static string uniToACP(UNICODE_STRING**& uniStr)
+{
+    if (uniStr == nullptr || *uniStr == nullptr)
+    {
+        return "";
+    }
+    UNICODE_STRING* uniS = *uniStr;
+    wchar_t* wstr = (wchar_t*)&uniS->Buffer;
+
+    std::string strTo;
+    int size_needed = WideCharToMultiByte(CP_ACP, 0, wstr, -1, NULL, 0, NULL, NULL);
+
+    char* szTo = new char[size_needed];
+
+    WideCharToMultiByte(CP_ACP, 0, wstr, -1, szTo, size_needed, NULL, NULL);
+    szTo[uniS->Length] = '\0';
+    strTo = szTo;
+    delete[] szTo;
+
+    return strTo;
+}
 
 void techFuncs::saveGameMakeArchive(UNICODE_STRING**& savePath, vector<string>& files)
 {
-    string relativePath = uniToANSI(savePath);
+    string relativePath = uniToACP(savePath);
     string packPath = globals::dataS.modPatch;
 
 
