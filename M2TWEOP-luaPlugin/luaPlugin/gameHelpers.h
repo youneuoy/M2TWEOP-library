@@ -13,6 +13,7 @@ namespace gameHelpers
 	guild* getGuild(unsigned char index);
 	unit* getEventAttackingUnit(eventTrigger* eventData);
 	unit* getEventDefendingUnit(eventTrigger* eventData);
+	general* getEventCharacter(eventTrigger* eventData);
 	namedCharacter* getEventNamedCharacter(eventTrigger* eventData);
 	namedCharacter* getEventNamedCharacter2(eventTrigger* eventData);
 	namedCharacter* getEventTargetNamedCharacter(eventTrigger* eventData);
@@ -46,7 +47,7 @@ namespace gameHelpers
 	capturedFactionInfo* getCapturedFactionInfo(eventTrigger* eventData);
 	const char* getRansomType(eventTrigger* eventData);
 	unit* getUnit(eventTrigger* eventData);
-	bool condition(const char* condition, const eventTrigger* eventData);
+	bool condition(std::string condition, const eventTrigger* eventData);
 	eduEntry* getEduEntry(eventTrigger* eventData);
 
 
@@ -125,7 +126,7 @@ namespace gameHelpers
 	mercPoolUnit* addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, float startyear, float endyear, int crusading);
 	void saveGame(const char* path);
 	void historicEvent(const char* name, const char* title, const char* description);
-	void scriptCommand(const char* command, const char* args);
+	void scriptCommand(std::string command, const char* args);
 	const char* getReligionName(const int index);
 	unit* getSelectedUnitCard(const uiCardManager* cardManager, const int index);
 	unit* getUnitCard(const uiCardManager* cardManager, const int index);

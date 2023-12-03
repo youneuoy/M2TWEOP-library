@@ -878,6 +878,7 @@ void luaP::initCampaign()
 	typeAll.eventTrigger = luaState.new_usertype<eventTrigger>("eventTrigger");
 	typeAll.eventTrigger.set("attackingUnit", sol::property(gameHelpers::getEventAttackingUnit));
 	typeAll.eventTrigger.set("defendingUnit", sol::property(gameHelpers::getEventDefendingUnit));
+	typeAll.eventTrigger.set("stratCharacter", sol::property(gameHelpers::getEventCharacter));
 	typeAll.eventTrigger.set("character", sol::property(gameHelpers::getEventNamedCharacter));
 	typeAll.eventTrigger.set("targetCharacter", sol::property(gameHelpers::getEventTargetNamedCharacter));
 	typeAll.eventTrigger.set("settlement", sol::property(gameHelpers::getEventSettlement));

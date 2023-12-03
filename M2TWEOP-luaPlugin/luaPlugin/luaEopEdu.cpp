@@ -701,7 +701,7 @@ void luaP::initEopEdu()
 	@function EDB.getBuildingCapability
 	@tparam edbEntry edbEntry Entry to set.
 	@tparam int level Building level.
-	@tparam int index.
+	@tparam int index
 	@treturn capability capability.
 	@usage
 	building = EDB.getBuildingByName("market")
