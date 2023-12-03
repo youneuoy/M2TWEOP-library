@@ -15,6 +15,13 @@ namespace stackStructHelpers
 		// Lambda function to compare unit objects based on multiple criteria
 		auto compareUnits = [&sortTypes](const unit* unitA, const unit* unitB)
 		{
+			// Ensuring Generals stay at the front/start of the stack
+			if (unitA->general && !unitB->general) {
+				return true;
+			}
+			if (!unitA->general && unitB->general) {
+				return false;
+			}
 			for (int sortType : sortTypes)
 			{
 				switch (sortType)
@@ -47,8 +54,6 @@ namespace stackStructHelpers
 						break;
 				}
 			}
-			// Ensuring Generals stay at the front/start of the stack
-			return unitA->general && !unitB->general;
 		};
 
 		// Stable sort the units
