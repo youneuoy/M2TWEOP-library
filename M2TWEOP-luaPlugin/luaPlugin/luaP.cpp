@@ -210,6 +210,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getRegionOwner getRegionOwner
 	@tfield setEDUUnitsSize setEDUUnitsSize
 	@tfield setBuildingChainLimit setBuildingChainLimit
+	@tfield setGuildCooldown setGuildCooldown
 	@tfield getReligionName getReligionName
 	@tfield condition condition
 	@tfield getOptions1 getOptions1
@@ -760,6 +761,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Execute a Medieval II console command.
 	@function game.callConsole
+	@tparam string command
+	@tparam string args As one string.
 	@treturn string error Note: string can be empty but not nil
 	@usage
 	-- Creating units, adding money
@@ -1241,7 +1244,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 
 	///Character
-	//@section characterTablefortStruct
+	//@section characterTable
 
 	/***
 	characters as they exist on the strategy map - dead characters, wives, children, and off-map characters do not have these fields.
@@ -1261,7 +1264,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield float movePointsMaxCharacter
 	@tfield float movePointsMaxArmy
 	@tfield float movePointsArmy
-	@tfield int turnJoinedCrusade
 	@tfield int numTurnsIdle
 	@tfield float percentCharacterReligionInRegion 0 to 1
 	@tfield float popConvertedThisTurn
@@ -3538,6 +3540,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield siegeSettlement siegeSettlement Call it twice to initiate an assault.
 	@tfield attackArmy attackArmy
 	@tfield siegeStruct siege Current siege.
+	@tfield sortStack sortStack
 
 
 	@table stackStruct
