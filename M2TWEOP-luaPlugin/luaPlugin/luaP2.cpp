@@ -1383,10 +1383,10 @@ void luaP::initCampaign()
 	@tfield int regionID
 	@tfield tradeResource|nil resource
 	@tfield character|nil character
-	@tfield settlement|nil settlement
+	@tfield settlementStruct|nil settlement
 	@tfield fortStruct|nil fort
 	@tfield portStruct|nil port
-	@tfield watchTowerStruct|nil watchtower
+	@tfield watchtowerStruct|nil watchtower
 	@tfield int height
 	@tfield int climate
 	@tfield int heatValue
