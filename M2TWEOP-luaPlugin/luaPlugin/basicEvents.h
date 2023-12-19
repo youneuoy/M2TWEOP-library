@@ -23,6 +23,20 @@ extern "C" PLUGINM2TWEOP_API void onLoadGamePl(std::vector<std::string>*saveFile
 extern "C" PLUGINM2TWEOP_API std::vector<std::string>*onSaveGamePl(UNICODE_STRING * *&savePath);
 extern "C" PLUGINM2TWEOP_API void onEventWrapper(DWORD eventAddr, DWORD * *vTab, DWORD arg2);
 
+
+#define tryLuaBasicEventFunk(luaFunc)  \
+auto funcResult = luaFunc;\
+if (!funcResult.valid())\
+{\
+	sol::error luaError = funcResult;\
+	MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);\
+	if (plugData::data.luaAll.checkVar("terminateAtLuaException", 1) == true)\
+	{\
+		terminate();\
+	}\
+}\
+
+
 void checkLuaFunc(sol::function** lRef);
 namespace gameEvents
 {
@@ -55,7 +69,7 @@ namespace gameEvents
 			{
 				auto eventData = reinterpret_cast<eventTrigger*>(vTab);
 				if (&(*funk) != nullptr) {
-					(*funk)(eventData);
+					tryLuaBasicEventFunk((*funk)(eventData));
 				}
 				return 1;
 			}

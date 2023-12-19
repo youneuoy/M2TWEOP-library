@@ -5,27 +5,23 @@
 [![Build Status](https://img.shields.io/github/v/release/youneuoy/M2TWEOP-library?label=Download&style=for-the-badge)](#download)
 
 ## **Release Notes**
-Various bugs fixed for 3.0 release
+
 <!-- ### **Launcher** -->
 
 <!-- ![](https://i.imgur.com/Pl02p1W.png) -->
 <!-- ![](https://i.imgur.com/h8UlYMT.png) -->
 
 ### **Library**
-- When enable planned retreat routes, also overwrite all retreats(even AI ones).
-- Fixed add building pools for disk version.
-- Fixed launching the game with installed M2TWEOP.
-- Fixed save files with non-english letters.
-- Fixed hotseat settings.
+- no
+
 
 ### **Lua Plugin**
-- Fixed reading condition requirements for pools.
-- Fixed getting stratCharacter from eventData.
+- Enabled safety checks for lua events(broken since 3.0)
 
 <!-- ### **ImGUI** -->
 
 ### **Documentation**
-- Various documentation fixes
+- no
 
 ### **Links**
 
