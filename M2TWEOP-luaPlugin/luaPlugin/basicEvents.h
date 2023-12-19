@@ -60,15 +60,17 @@ namespace gameEvents
 
 		sol::function* funk;
 
-		Event(const std::string& luaFunctionName, sol::state& luaState)
-			: funk(new sol::function(luaState[luaFunctionName])) {}
+		Event(const std::string& luaFunctionName, sol::state& luaState) : funk(new sol::function(luaState[luaFunctionName]))
+		{
+			checkLuaFunc(&funk);
+		}
 
 		int callEvent(DWORD** vTab) override
 		{
 			if (EvType == EventType::standardEvent)
 			{
 				auto eventData = reinterpret_cast<eventTrigger*>(vTab);
-				if (&(*funk) != nullptr) {
+				if (funk != nullptr) {
 					tryLuaBasicEventFunk((*funk)(eventData));
 				}
 				return 1;
