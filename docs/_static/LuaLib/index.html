@@ -456,7 +456,7 @@
 <details>
   <summary><a href="#StackStruct">StackStruct </a></summary>
     <li><a href="#stackStruct">stackStruct</a></li>
-    <li><a href="#stackStruct:sortStack">stackStruct:sortStack (sort)</a></li>
+    <li><a href="#stackStruct:sortStack">stackStruct:sortStack (sortMode, sortMode2, sortMode3)</a></li>
     <li><a href="#stackStruct:getUnit">stackStruct:getUnit (number)</a></li>
     <li><a href="#stackStruct:getCharacter">stackStruct:getCharacter (number)</a></li>
     <li><a href="#stackStruct:findInSettlement">stackStruct:findInSettlement ()</a></li>
@@ -767,7 +767,7 @@
     <li><a href="#EDB.setBuildingLocalizedDescrShort">EDB.setBuildingLocalizedDescrShort (edbEntry, newName, level, facnum)</a></li>
     <li><a href="#EDB.addBuildingCapability">EDB.addBuildingCapability (edbEntry, level, capability, value, bonus)</a></li>
     <li><a href="#EDB.removeBuildingCapability">EDB.removeBuildingCapability (edbEntry, level, index)</a></li>
-    <li><a href="#EDB.getBuildingCapability">EDB.getBuildingCapability (edbEntry, level, index.)</a></li>
+    <li><a href="#EDB.getBuildingCapability">EDB.getBuildingCapability (edbEntry, level, index)</a></li>
     <li><a href="#EDB.getBuildingCapabilityNum">EDB.getBuildingCapabilityNum (edbEntry, level)</a></li>
     <li><a href="#EDB.addBuildingPool">EDB.addBuildingPool (edbEntry, level, eduIndex, initialSize, gainPerTurn, maxSize, exp, condition)</a></li>
     <li><a href="#EDB.removeBuildingPool">EDB.removeBuildingPool (edbEntry, level, index)</a></li>
@@ -1076,7 +1076,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-12-01 22:12:54</p>
+        <p class="lastUpdatedMessage">Last updated: 2023-12-26 13:05:04</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -1999,7 +1999,7 @@
 	<td class="summary">Basic stackStruct table</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#stackStruct:sortStack">stackStruct:sortStack (sort)</a></td>
+	<td class="name" nowrap><a href="#stackStruct:sortStack">stackStruct:sortStack (sortMode, sortMode2, sortMode3)</a></td>
 	<td class="summary">Sort units in a stack.</td>
 	</tr>
 	<tr>
@@ -3124,7 +3124,7 @@
 	<td class="summary">Remove a capability from a building.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#EDB.getBuildingCapability">EDB.getBuildingCapability (edbEntry, level, index.)</a></td>
+	<td class="name" nowrap><a href="#EDB.getBuildingCapability">EDB.getBuildingCapability (edbEntry, level, index)</a></td>
 	<td class="summary">
 
 </td>
@@ -4548,8 +4548,8 @@ M2TWEOP.unloadTexture(testImage.img);</code></pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> regionID=M2TWEOP.getTileRegionID(<span class="number">55</span>,<span class="number">25</span>);
-<span class="keyword">local</span> ownerFac=M2TWEOP.getRegionOwner(regionID);</code></pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> regionID = M2TWEOP.getTileRegionID(<span class="number">55</span>,<span class="number">25</span>);
+<span class="keyword">local</span> ownerFac = M2TWEOP.getRegionOwner(regionID);</code></pre>
     </ul>
 
 </dd>
@@ -4583,7 +4583,7 @@ M2TWEOP.unloadTexture(testImage.img);</code></pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> religionName =M2TWEOP.getReligionName(<span class="number">1</span>);</code></pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> religionName = M2TWEOP.getReligionName(<span class="number">1</span>);</code></pre>
     </ul>
 
 </dd>
@@ -4608,7 +4608,7 @@ M2TWEOP.unloadTexture(testImage.img);</code></pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> options =M2TWEOP.getOptions1();</code></pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> options = M2TWEOP.getOptions1();</code></pre>
     </ul>
 
 </dd>
@@ -4625,7 +4625,7 @@ M2TWEOP.unloadTexture(testImage.img);</code></pre>
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><a class="type" href="index.html#options1">options1</a></span>
+           <span class="types"><a class="type" href="index.html#options2">options2</a></span>
         options
     </ol>
 
@@ -4633,7 +4633,7 @@ M2TWEOP.unloadTexture(testImage.img);</code></pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> options =M2TWEOP.getOptions2();</code></pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> options = M2TWEOP.getOptions2();</code></pre>
     </ul>
 
 </dd>
@@ -4650,7 +4650,7 @@ M2TWEOP.unloadTexture(testImage.img);</code></pre>
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><a class="type" href="index.html#options1">options1</a></span>
+           <span class="types"><a class="type" href="index.html#campaignDifficulty1">campaignDifficulty1</a></span>
         options
     </ol>
 
@@ -4675,7 +4675,7 @@ M2TWEOP.unloadTexture(testImage.img);</code></pre>
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><a class="type" href="index.html#options1">options1</a></span>
+           <span class="types"><a class="type" href="index.html#campaignDifficulty2">campaignDifficulty2</a></span>
         options
     </ol>
 
@@ -4723,7 +4723,9 @@ M2TWEOP.unloadTexture(testImage.img);</code></pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> options =M2TWEOP.condition();</code></pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">if</span> M2TWEOP.condition(<span class="string">"InEnemyLands"</span>, eventData) <span class="keyword">then</span>
+	<span class="comment">--do stuff
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -5498,7 +5500,8 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><code class="language-lua" ><span class="comment">-- Creating units, adding money
-</span><span class="keyword">function</span> onCharacterSelected(selectedChar)
+</span><span class="keyword">function</span> onCharacterSelected(eventData)
+	<span class="keyword">local</span> selectedChar = eventData.character
 	<span class="keyword">local</span> err = stratmap.game.callConsole(<span class="string">"add_money"</span>, <span class="string">"2321"</span>)
 	<span class="keyword">local</span> err2 = stratmap.game.callConsole(<span class="string">"create_unit"</span>, <span class="string">"testcharacter 'Cool Unit' 4 1 1 1"</span>)
 	<span class="global">print</span>(err)
@@ -6242,7 +6245,7 @@ end_set_faction_banner]]</span>, facName))</code></pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" >unit:setBattleProperty(unitBattleProperties.skirmish);</code></pre>
+        <pre class="example"><code class="language-lua" >unit:setBattleProperty(unitBattleProperties.skirmish, <span class="keyword">true</span>);</code></pre>
     </ul>
 
 </dd>
@@ -6839,7 +6842,7 @@ end_set_faction_banner]]</span>, facName))</code></pre>
 
 
         </li>
-        <li><span class="parameter">ArmourCost</span>
+        <li><span class="parameter">armourCost</span>
             <span class="types"><span class="type">int</span></span>
 
 
@@ -10231,7 +10234,7 @@ ourFacName = ourFac:getFactionName();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> value = aiPersonality:setConstructionValue(buildingCapability.law_bonus)</code></pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> value = aiPersonality:getConstructionValue(buildingCapability.law_bonus)</code></pre>
     </ul>
 
 </dd>
@@ -10263,7 +10266,7 @@ ourFacName = ourFac:getFactionName();
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> value = aiPersonality:setRecruitmentValue(unitCategoryClass.heavyCavalry)</code></pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> value = aiPersonality:getRecruitmentValue(unitCategoryClass.heavyCavalry)</code></pre>
     </ul>
 
 </dd>
@@ -10906,7 +10909,7 @@ ourFacName = ourFac:getFactionName();
 
 
         </li>
-        <li><span class="parameter">FinancialRankingScore</span>
+        <li><span class="parameter">financialRankingScore</span>
             <span class="types"><span class="type">float</span></span>
 
 
@@ -13415,7 +13418,8 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onSettlementSelected(selectedSett)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onSettlementSelected(eventData)
+	<span class="keyword">local</span> selectedSett = eventData.settlement
 	<span class="keyword">local</span> resList = <span class="string">""</span>
 	<span class="keyword">for</span> i = <span class="number">0</span>, selectedSett.resourcesNum - <span class="number">1</span>, <span class="number">1</span> <span class="keyword">do</span>
 		<span class="keyword">local</span> thisRes = selectedSett:getResource(i)
@@ -13584,7 +13588,7 @@ currSet:changeOwner(fac1);
 </dd>
     <dt>
     <a name = "stackStruct:sortStack"></a>
-    <strong>stackStruct:sortStack (sort)</strong>
+    <strong>stackStruct:sortStack (sortMode, sortMode2, sortMode3)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -13593,9 +13597,23 @@ currSet:changeOwner(fac1);
 
     <h3>Parameters:</h3>
     <ul>
-        <li><span class="parameter">sort</span>
+        <li><span class="parameter">sortMode</span>
             <span class="types"><span class="type">int</span></span>
-         mode
+
+
+
+        </li>
+        <li><span class="parameter">sortMode2</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">sortMode3</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
         </li>
     </ul>
 
@@ -13610,8 +13628,10 @@ currSet:changeOwner(fac1);
 </span><span class="comment">-- 3 = Class
 </span><span class="comment">-- 4 = Soldier Count
 </span><span class="comment">-- 5 = Experience
+</span><span class="comment">-- 6 = Category + Class
 </span>
-<span class="keyword">function</span> onFactionTurnStart(faction)
+<span class="keyword">function</span> onFactionTurnStart(eventData)
+<span class="keyword">local</span> faction = eventData.faction
    <span class="comment">-- If it's not the players turn, don't sort
 </span>   <span class="keyword">if</span> faction.isPlayerControlled == <span class="number">0</span> <span class="keyword">then</span> <span class="keyword">return</span> <span class="keyword">end</span>;
 
@@ -13632,8 +13652,8 @@ currSet:changeOwner(fac1);
 </span>               <span class="comment">--     end
 </span>               <span class="comment">-- end
 </span>
-               <span class="comment">-- Sort the stack by EDU type
-</span>               stack:sortStack(<span class="number">1</span>)
+               <span class="comment">-- Sort the stack by category + class, then by soldier count, then by experience
+</span>               stack:sortStack(<span class="number">6</span>, <span class="number">4</span>, <span class="number">5</span>)
 
                <span class="comment">-- print("\n\n")
 </span>               <span class="comment">-- print("-- Sorted Stack --")
@@ -24891,7 +24911,7 @@ EDB.removeBuildingCapability(building, <span class="number">0</span>, <span clas
 </dd>
     <dt>
     <a name = "EDB.getBuildingCapability"></a>
-    <strong>EDB.getBuildingCapability (edbEntry, level, index.)</strong>
+    <strong>EDB.getBuildingCapability (edbEntry, level, index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -24911,7 +24931,7 @@ EDB.removeBuildingCapability(building, <span class="number">0</span>, <span clas
             <span class="types"><span class="type">int</span></span>
          Building level.
         </li>
-        <li><span class="parameter">index.</span>
+        <li><span class="parameter">index</span>
             <span class="types"><span class="type">int</span></span>
 
 
@@ -29805,7 +29825,7 @@ battleXCoord=gameData.battleStruct.xCoord;</code></pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onPostBattle(namedChar, faction, region, characterType, religion)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onPostBattle(eventData)
 	getBattleData()
 <span class="keyword">end</span>
 
