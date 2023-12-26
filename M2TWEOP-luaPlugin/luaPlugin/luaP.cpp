@@ -446,8 +446,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int regionID
 	@treturn factionStruct owner
 	@usage
-	local regionID=M2TWEOP.getTileRegionID(55,25);
-	local ownerFac=M2TWEOP.getRegionOwner(regionID);
+	local regionID = M2TWEOP.getTileRegionID(55,25);
+	local ownerFac = M2TWEOP.getRegionOwner(regionID);
 	*/
 	tables.M2TWEOPTable.set_function("getRegionOwner", &m2tweopHelpers::getRegionOwner);
 	/***
@@ -456,7 +456,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int index
 	@treturn string name
 	@usage
-	local religionName =M2TWEOP.getReligionName(1);
+	local religionName = M2TWEOP.getReligionName(1);
 	*/
 	tables.M2TWEOPTable.set_function("getReligionName", &gameHelpers::getReligionName);
 	/***
@@ -464,7 +464,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@function M2TWEOP.getOptions1
 	@treturn options1 options
 	@usage
-	local options =M2TWEOP.getOptions1();
+	local options = M2TWEOP.getOptions1();
 	*/
 	tables.M2TWEOPTable.set_function("getOptions1", &m2tweopHelpers::getOptions1);
 	/***
@@ -472,7 +472,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@function M2TWEOP.getOptions2
 	@treturn options2 options
 	@usage
-	local options =M2TWEOP.getOptions2();
+	local options = M2TWEOP.getOptions2();
 	*/
 	tables.M2TWEOPTable.set_function("getOptions2", &m2tweopHelpers::getOptions2);
 	/***
@@ -2389,7 +2389,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int type use building capabilities enum
 	@treturn int value
 	@usage
-		local value = aiPersonality:setConstructionValue(buildingCapability.law_bonus)
+		local value = aiPersonality:getConstructionValue(buildingCapability.law_bonus)
 	*/
 	types.aiPersonality.set_function("getConstructionValue", &factionHelpers::getConstructionValue);
 	/***
@@ -2398,7 +2398,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int type use unitCategoryClass enum
 	@treturn int value
 	@usage
-		local value = aiPersonality:setRecruitmentValue(unitCategoryClass.heavyCavalry)
+		local value = aiPersonality:getRecruitmentValue(unitCategoryClass.heavyCavalry)
 	*/
 	types.aiPersonality.set_function("getRecruitmentValue", &factionHelpers::getRecruitmentValue);
 	/***
@@ -2612,7 +2612,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield float militaryRankingScore
 	@tfield float productionRankingScore
 	@tfield float territoryRankingScore
-	@tfield float FinancialRankingScore
+	@tfield float financialRankingScore
 	@tfield float populationRankingScore
 
 	@table factionRanking
@@ -2622,7 +2622,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionRanking.set("militaryRankingScore", &factionRanking::militaryRanking);
 	types.factionRanking.set("productionRankingScore", &factionRanking::productionRanking);
 	types.factionRanking.set("territoryRankingScore", &factionRanking::territoryRanking);
-	types.factionRanking.set("FinancialRankingScore", &factionRanking::FinancialRanking);
+	types.factionRanking.set("financialRankingScore", &factionRanking::FinancialRanking);
 	types.factionRanking.set("populationRankingScore", &factionRanking::populationRanking);
 
 	///FactionStratMapStruct
