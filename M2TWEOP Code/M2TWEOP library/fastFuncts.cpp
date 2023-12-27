@@ -1305,16 +1305,19 @@ namespace fastFuncts
 
 		DWORD adr = codes::offsets.createUnitFunc;
 
+		auto* entry = reinterpret_cast<eduEntry*>(edb);
+		DWORD eduIndex = entry->UnitCreatedCounter;
+
 		regionStruct* region = getRegionByID(regionID);
 		_asm {
-			mov ecx, edb;
+				//mov ecx, edb;
 
-			push weap
+				push weap
 				push arm
 				push - 1
 				push exp
 				push facNum
-				push 0
+				push eduIndex
 				push region
 
 				mov eax, [adr]
