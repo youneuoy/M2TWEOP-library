@@ -56,6 +56,10 @@ namespace MapTextDrawer
 		auto state = graphicsExport::GetD3dState();
 		graphicsExport::SetClearD3dState();
 
+		device->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
+		device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
 		device->SetTransform(D3DTS_VIEW, graphicsExport::GetMatView());
 		device->SetTransform(D3DTS_PROJECTION, graphicsExport::GetMatProj());
 
@@ -84,7 +88,7 @@ namespace MapTextDrawer
 		graphicsExport::ReleaseD3dState(state);
 	}
 
-	NOINLINE EOP_EXPORT void* MakeTextFont(const char* fontName)
+	NOINLINE EOP_EXPORT void* MakeTextFont(const char* fontName, int weight, int isItalic)
 	{
 		if (fontName == nullptr)
 		{
@@ -101,7 +105,7 @@ namespace MapTextDrawer
 		std::wstring fontWname = techFuncs::ConvertUtf8ToWide(fontName);
 		HFONT hFont;
 
-		hFont = CreateFontW(0, 0, 0, 0, FW_NORMAL, 1, NULL, NULL, NULL, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
+		hFont = CreateFontW(0, 0, 0, 0, weight, isItalic, NULL, NULL, NULL, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
 			fontWname.c_str());
 		//L"Times New Roman");
 

@@ -1,8 +1,8 @@
 #include "eop3dObjectsHelpers.h"
 #include "plugData.h"
-void* eop3dObjectsHelpers::MakeTextFont(const char* fontName)
+void* eop3dObjectsHelpers::MakeTextFont(const char* fontName, sol::optional<int> weight, sol::optional<bool> isItalic)
 {
-    return (*(*plugData::data.funcs.MakeTextFont))(fontName);
+    return (*(*plugData::data.funcs.MakeTextFont))(fontName, weight.value_or(400), isItalic.value_or(1));
 }
 
 void eop3dObjectsHelpers::DeleteTextFont(void* fontID)

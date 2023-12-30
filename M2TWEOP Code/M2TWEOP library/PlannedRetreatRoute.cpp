@@ -57,7 +57,7 @@ namespace PlannedRetreatRoute
 	}
 	static void MakeTexts(stateS& st)
 	{
-		void* font = MapTextDrawer::MakeTextFont("Times New Roman");
+		void* font = MapTextDrawer::MakeTextFont("Times New Roman", 400, 1);
 		if (font == nullptr)
 		{
 			MessageBoxA(NULL, "Cannot create text font for PlannedRetreatRoute", "ATTENTION! Exit now!", NULL);
@@ -84,7 +84,7 @@ namespace PlannedRetreatRoute
 		graphicsExport::AddImGuiDrawCallback(Draw);
 
 
-		void* font = MapTextDrawer::MakeTextFont("Times New Roman");
+		void* font = MapTextDrawer::MakeTextFont("Times New Roman", 400, 1);
 		if (font == nullptr)
 		{
 			MessageBoxA(NULL, "Cannot create text font for PlannedRetreatRoute selectedCoord", "ATTENTION! Exit now!", NULL);

@@ -38,6 +38,8 @@ void luaP::initEop3dObjects()
 	Create new 3d text font. Fonts using for creating text(you not need font after it)
 	@function M2TWEOP3dObjects.MakeTextFont
 	@tparam string fontName name of font
+	@tparam int weight weight of font(optional). Default - 400
+	@tparam bool isItalic is font italic(optional). Default - true
 	@treturn int fondID ID of created font.
 
 	@usage

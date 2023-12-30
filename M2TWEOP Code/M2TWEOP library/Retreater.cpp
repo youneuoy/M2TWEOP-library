@@ -110,7 +110,7 @@ void Retreater::StartPostWork()
 	}
 
 
-	void* font = MapTextDrawer::MakeTextFont("Times New Roman");
+	void* font = MapTextDrawer::MakeTextFont("Times New Roman", 400, 1);
 	if (font == nullptr)
 	{
 		MessageBoxA(NULL, "Cannot create text font for PlannedRetreatRoute", "ATTENTION! Exit now!", NULL);

@@ -25,7 +25,7 @@ namespace MapTextDrawer
 	void DrawTexts();
 
 	//returns "id" of font, which is pointer to object
-	NOINLINE EOP_EXPORT void* MakeTextFont(const char* fontName);
+	NOINLINE EOP_EXPORT void* MakeTextFont(const char* fontName, int weight, int isItalic);
 	NOINLINE EOP_EXPORT void DeleteTextFont(void*  fontID);
 
 	//returns "id" of text, which is pointer to object

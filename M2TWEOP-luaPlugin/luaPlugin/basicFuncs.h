@@ -105,7 +105,7 @@ class basicFuncs
 {
 public:
 
-	ProcLoader<void*(__cdecl*)(const char* fontname)> MakeTextFont;
+	ProcLoader<void*(__cdecl*)(const char* fontName, int weight, int isItalic)> MakeTextFont;
 	ProcLoader<void(__cdecl*)(void* fontID)> DeleteTextFont;
 	ProcLoader<Text3DDrawable*(__cdecl*)(void* fontID, const char* utf8Text)> MakeText;
 	ProcLoader<void(__cdecl*)(Text3DDrawable* text, float scale)> ScaleText;

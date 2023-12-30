@@ -3,10 +3,12 @@
 #include "realGameTypes.h"
 #include "luaGetSetFuncs.h"
 #include "eopMasterTypes.h"
+
+#include "lua/sol.hpp"
 namespace eop3dObjectsHelpers
 {
 	//returns "id" of font, which is pointer to object
-	void* MakeTextFont(const char* fontName);
+	void* MakeTextFont(const char* fontName, sol::optional<int> weight, sol::optional<bool> isItalic);
 	void DeleteTextFont(void* fontID);
 
 	//returns "id" of text, which is pointer to object
