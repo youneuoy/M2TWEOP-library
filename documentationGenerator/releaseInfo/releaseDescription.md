@@ -12,11 +12,12 @@
 <!-- ![](https://i.imgur.com/h8UlYMT.png) -->
 
 ### **Library**
-- no
+- fix for alpha channel in M2TWEOP3dObjects.MakeTextFont, ChangeColor for font, etc
 
 
 ### **Lua Plugin**
 - Enabled safety checks for lua events(broken since 3.0)
+- Added 2 new parameters - weight, isItalic to M2TWEOP3dObjects.MakeTextFont
 
 <!-- ### **ImGUI** -->
 
