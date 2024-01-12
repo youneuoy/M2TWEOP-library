@@ -49,6 +49,7 @@ namespace m2tweopHelpers
 	void unlockGameConsoleCommands();
 
 	void setEDUUnitsSize(signed short min, signed short max);
+	void setBattlemapSize(signed short x, signed short y);
 	int getGameVersion();
 	options1* getOptions1();
 	options2* getOptions2();

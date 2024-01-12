@@ -163,6 +163,10 @@ namespace m2tweopHelpers
 	{
 		(*(*plugData::data.funcs.setEDUUnitsSize))(min, max);
 	}
+	void setBattlemapSize(signed short x, signed short y)
+	{
+		(*(*plugData::data.funcs.setBattlemapSize))(x, y);
+	}
 	std::tuple<int, int, void*> loadTextureToGame(const std::string& path)
 	{
 		int x = 0;

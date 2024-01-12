@@ -129,6 +129,23 @@ namespace smallFuncs
 
 		return;
 	}
+	NOINLINE EOP_EXPORT void setBattlemapSize(signed short x, signed short y)
+	{
+		DWORD codeOffset = 0;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			codeOffset = 0x00441675;
+		}
+		else
+		{
+			codeOffset = 0x00441335;
+		}
+
+		MemWork::WriteData(&x, codeOffset, 0x00000080);
+		MemWork::WriteData(&y, codeOffset, 0x0000007C);
+
+		return;
+	}
 	NOINLINE EOP_EXPORT void setMaxBgSize(unsigned char size)
 	{
 		DWORD cmpAdr = 0;

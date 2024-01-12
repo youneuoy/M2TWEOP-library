@@ -209,6 +209,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getTileVisibility getTileVisibility
 	@tfield getRegionOwner getRegionOwner
 	@tfield setEDUUnitsSize setEDUUnitsSize
+	@tfield setBattlemapSize setBattlemapSize
 	@tfield setBuildingChainLimit setBuildingChainLimit
 	@tfield getReligionName getReligionName
 	@tfield condition condition
@@ -325,6 +326,16 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	M2TWEOP.setEDUUnitsSize(1,300);
 	*/
 	tables.M2TWEOPTable.set_function("setEDUUnitsSize", &m2tweopHelpers::setEDUUnitsSize);
+
+	/***
+	Sets the new max size of battlemaps.
+	@function M2TWEOP.setBattlemapSize
+	@tparam int x 
+	@tparam int y
+	@usage
+	M2TWEOP.setBattlemapSize(500,500);
+	*/
+	tables.M2TWEOPTable.set_function("setBattlemapSize", &m2tweopHelpers::setBattlemapSize);
 
 	/***
 	* Sets the new maximum amount of building levels within a chain.
