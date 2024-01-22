@@ -1033,7 +1033,7 @@
 <details>
   <summary><a href="#M2TWEOP3dObjects">M2TWEOP3dObjects </a></summary>
     <li><a href="#M2TWEOP3dObjects">M2TWEOP3dObjects</a></li>
-    <li><a href="#M2TWEOP3dObjects.MakeTextFont">M2TWEOP3dObjects.MakeTextFont (fontName)</a></li>
+    <li><a href="#M2TWEOP3dObjects.MakeTextFont">M2TWEOP3dObjects.MakeTextFont (fontName, weight, isItalic)</a></li>
     <li><a href="#M2TWEOP3dObjects.DeleteTextFont">M2TWEOP3dObjects.DeleteTextFont (fondID)</a></li>
     <li><a href="#M2TWEOP3dObjects.Make3dText">M2TWEOP3dObjects.Make3dText (fondID, text)</a></li>
 </details>
@@ -1076,7 +1076,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-12-26 13:05:04</p>
+        <p class="lastUpdatedMessage">Last updated: 2024-01-22 17:41:51</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -3648,7 +3648,7 @@
 	<td class="summary">Basic M2TWEOP3dObjects table.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#M2TWEOP3dObjects.MakeTextFont">M2TWEOP3dObjects.MakeTextFont (fontName)</a></td>
+	<td class="name" nowrap><a href="#M2TWEOP3dObjects.MakeTextFont">M2TWEOP3dObjects.MakeTextFont (fontName, weight, isItalic)</a></td>
 	<td class="summary">Create new 3d text font.</td>
 	</tr>
 	<tr>
@@ -31195,7 +31195,7 @@ M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>)
 </dd>
     <dt>
     <a name = "M2TWEOP3dObjects.MakeTextFont"></a>
-    <strong>M2TWEOP3dObjects.MakeTextFont (fontName)</strong>
+    <strong>M2TWEOP3dObjects.MakeTextFont (fontName, weight, isItalic)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -31207,6 +31207,14 @@ M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,<span class="keyword">true</span>)
         <li><span class="parameter">fontName</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
          name of font
+        </li>
+        <li><span class="parameter">weight</span>
+            <span class="types"><span class="type">int</span></span>
+         weight of font(optional). Default - 400
+        </li>
+        <li><span class="parameter">isItalic</span>
+            <span class="types"><span class="type">bool</span></span>
+         is font italic(optional). Default - true
         </li>
     </ul>
 
