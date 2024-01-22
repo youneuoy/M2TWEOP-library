@@ -3120,7 +3120,7 @@ OnUnitInfo::OnUnitInfo(MemWork* mem, LPVOID addr, int ver)
 		m_adress = 0x00BB4C8B;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x0047504A;
+		m_adress = 0x00BBA91B;
 }
 
 OnUnitInfo::~OnUnitInfo()
