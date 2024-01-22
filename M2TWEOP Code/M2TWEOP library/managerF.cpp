@@ -512,6 +512,12 @@ void managerF::doPachs()
 	toFindUnitStrings2->Enable();
 	f1 << "Done" << endl;
 
+	f1 << "Start applying OnUnitInfo patch" << endl;
+	OnUnitInfo* toUnitInfo = new OnUnitInfo(mem, (LPVOID)patchesForGame::OnUnitInfo, globals::dataS.gamever); //its same func as unit wrapper on purpose not error
+	toUnitInfo->SetNewCode();
+	toUnitInfo->Enable();
+	f1 << "Done" << endl;
+
 	f1 << "Start applying OnGetRecruitPoolUnitEntry patch" << endl;
 	OnGetRecruitPoolUnitEntry* toGetRecruitPoolUnitEntry = new OnGetRecruitPoolUnitEntry(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gamever);
 	toGetRecruitPoolUnitEntry->SetNewCode();

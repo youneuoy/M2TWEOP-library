@@ -110,16 +110,17 @@ int __fastcall patchesForGame::onCreateUnit(char** entryName, int* edbIndex)
 	return *edbIndex;
 }
 
-int __fastcall patchesForGame::onFindUnit(char* entryName, int* edbIndex)
+int __fastcall patchesForGame::onFindUnit(char* entry, int* edbIndex)
 {
 	if (edbIndex == nullptr)
 	{
-		int* newEdu = eduThings::tryFindDataEopEduIndex(entryName);
+		if (entry == nullptr)
+			return  -1;
+
+		int* newEdu = eduThings::tryFindDataEopEduIndex(entry);
 
 		if (newEdu == nullptr)
-		{
 			return  -1;
-		}
 
 		return *newEdu;
 	}
@@ -166,6 +167,19 @@ eduEntry* __fastcall patchesForGame::OnCreateUnitWrapper(int eduindexBase, int r
 		entry = eduThings::getEopEduEntry(eduindex);
 	}
 	return entry;
+}
+
+DWORD __fastcall patchesForGame::OnUnitInfo(DWORD entryAddress)
+{
+
+	DWORD mercEOPValue = dataOffsets::offsets.unitTypesStart;
+	int index = (entryAddress - mercEOPValue) / 996;
+	if (index < 500)
+	{
+		return entryAddress;
+	}
+	auto entry = eduThings::getEopEduEntry(index);
+	return reinterpret_cast<DWORD>(entry);
 }
 
 eduEntry* __fastcall patchesForGame::OnGetRecruitPoolUnitEntry(int eduIndex)

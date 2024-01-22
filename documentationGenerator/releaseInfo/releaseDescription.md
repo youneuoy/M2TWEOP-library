@@ -13,11 +13,15 @@
 
 ### **Library**
 - fix for alpha channel in M2TWEOP3dObjects.MakeTextFont, ChangeColor for font, etc
+- improved internal naming of eop units added by text file (MIGHT MAKE UPDATE NON SAVE GAME COMPATIBLE)
 
 
 ### **Lua Plugin**
 - Enabled safety checks for lua events(broken since 3.0)
 - Added 2 new parameters - weight, isItalic to M2TWEOP3dObjects.MakeTextFont
+- fixed spawning EOP units
+- fixed some bugs with eop units in buildings
+- Fixed getting unit under fire from
 
 <!-- ### **ImGUI** -->
 

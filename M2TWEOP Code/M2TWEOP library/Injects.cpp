@@ -3081,7 +3081,7 @@ void OnFindUnit::SetNewCode()
 	Assembler* a = new Assembler();
 
 	a->push(ecx);
-	//a->mov(ecx, dword_ptr(esp, 0x8));
+	a->mov(ecx, dword_ptr(esp, 0x8));
 
 	a->push(edx);
 	a->push(ebx);
@@ -3105,6 +3105,68 @@ void OnFindUnit::SetNewCode()
 	a->pop(ecx);
 
 
+
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+OnUnitInfo::OnUnitInfo(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00BB4C8B;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0047504A;
+}
+
+OnUnitInfo::~OnUnitInfo()
+{
+}
+
+void OnUnitInfo::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(ecx);
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnUnitInfo::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(eax);
+	a->push(ebx);
+	a->push(ecx);
+	a->push(esi);
+	a->push(edi);
+	a->push(ebp);
+	a->pushf();
+
+	a->mov(ecx,edx);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->mov(edx, eax);
+
+	a->popf();
+	a->pop(ebp);
+	a->pop(edi);
+	a->pop(esi);
+	a->pop(ecx);
+	a->pop(ebx);
+	a->pop(eax);
+
+	a->push(ecx);
+	a->push(edx);
+	a->push(eax);
+	a->mov(ecx, ebx);
 
 
 	a->ret();

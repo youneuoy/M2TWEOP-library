@@ -859,6 +859,19 @@ private:
 	LPVOID funcAddress;
 };
 
+class OnUnitInfo
+	:public AATemplate
+{
+public:
+	OnUnitInfo(MemWork* mem, LPVOID addr, int ver);
+	~OnUnitInfo();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class OnGetRecruitPoolUnitEntry
 	:public AATemplate
 {

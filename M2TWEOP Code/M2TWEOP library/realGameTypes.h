@@ -2655,6 +2655,15 @@ public:
 }; //Size: 0x001C
 
 
+
+struct firingUnit
+{
+public:
+	struct unit* unit; //0x0000
+	int32_t intValue; //0x0004
+};
+
+
 struct unitPositionData
 {
 public:
@@ -2730,7 +2739,7 @@ public:
 	void** towersUnderFireFrom; //0x0C00
 	int32_t towersUnderFireFromSize; //0x0C04
 	int32_t towersUnderFireFromCount; //0x0C08
-	struct unit** unitsUnderFireFrom; //0x0C0C
+	struct firingUnit* unitsUnderFireFrom; //0x0C0C
 	int32_t unitsUnderFireFromSize; //0x0C10
 	int32_t unitsUnderFireFromCount; //0x0C14
 	void** underFireSomething2; //0x0C18

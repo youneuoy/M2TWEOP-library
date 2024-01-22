@@ -153,7 +153,7 @@ namespace unitHelpers
 	{
 		if (index < posData->unitsUnderFireFromCount)
 		{
-			return posData->unitsUnderFireFrom[index];
+			return posData->unitsUnderFireFrom[index].unit;
 		}
 		return nullptr;
 	}
