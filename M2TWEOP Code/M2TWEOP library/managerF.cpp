@@ -111,7 +111,13 @@ void managerF::doPachs()
 	//}
 	f1 << "Done" << endl;
 
-	f1 << "Start applying recruit eop unit patch" << endl;
+	//f1 << "Start applying toSizeOfBattleField patch" << endl;
+	//sizeOfBattleField* toSizeOfBattleField = new sizeOfBattleField(mem, globals::dataS.gamever, 500, 500);
+	//toSizeOfBattleField->SetlSizeCode();
+	//toSizeOfBattleField->Enable();
+	//f1 << "Done" << endl;
+
+	f1 << "Start applying battlefield patch" << endl;
 	recruitEOPunit* toRecruitEOPunit = new recruitEOPunit(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
 	toRecruitEOPunit->SetNewCode();
 	toRecruitEOPunit->Enable();
