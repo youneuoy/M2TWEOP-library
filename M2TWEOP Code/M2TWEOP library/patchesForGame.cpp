@@ -172,8 +172,8 @@ eduEntry* __fastcall patchesForGame::OnCreateUnitWrapper(int eduindexBase, int r
 DWORD __fastcall patchesForGame::OnUnitInfo(DWORD entryAddress)
 {
 
-	DWORD mercEOPValue = dataOffsets::offsets.unitTypesStart;
-	int index = (entryAddress - mercEOPValue) / 996;
+	DWORD eduBaseAddress = dataOffsets::offsets.unitTypesStart;
+	int index = (entryAddress - eduBaseAddress) / 996; // 996 is the size of the eduEntry struct
 	if (index < 500)
 	{
 		return entryAddress;

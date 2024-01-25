@@ -117,13 +117,13 @@ void managerF::doPachs()
 	//toSizeOfBattleField->Enable();
 	//f1 << "Done" << endl;
 
-	f1 << "Start applying battlefield patch" << endl;
+	f1 << "Start applying recruit eop unit 1 patch" << endl;
 	recruitEOPunit* toRecruitEOPunit = new recruitEOPunit(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
 	toRecruitEOPunit->SetNewCode();
 	toRecruitEOPunit->Enable();
 	f1 << "Done" << endl;
 
-	f1 << "Start applying recruit eop unit patch" << endl;
+	f1 << "Start applying recruit eop unit 2 patch" << endl;
 	recruitEOPunit2* toRecruitEOPunit2 = new recruitEOPunit2(mem, (LPVOID)patchesForGame::recruitEOPunit2, globals::dataS.gamever);
 	toRecruitEOPunit2->SetNewCode();
 	toRecruitEOPunit2->Enable();
@@ -519,7 +519,7 @@ void managerF::doPachs()
 	f1 << "Done" << endl;
 
 	f1 << "Start applying OnUnitInfo patch" << endl;
-	OnUnitInfo* toUnitInfo = new OnUnitInfo(mem, (LPVOID)patchesForGame::OnUnitInfo, globals::dataS.gamever); //its same func as unit wrapper on purpose not error
+	OnUnitInfo* toUnitInfo = new OnUnitInfo(mem, (LPVOID)patchesForGame::OnUnitInfo, globals::dataS.gamever);
 	toUnitInfo->SetNewCode();
 	toUnitInfo->Enable();
 	f1 << "Done" << endl;
