@@ -163,9 +163,9 @@ namespace m2tweopHelpers
 	{
 		(*(*plugData::data.funcs.setEDUUnitsSize))(min, max);
 	}
-	void setUIColorValue(signed short r, signed short g, signed short b, signed short a);
+	void setUIColorValue(signed short r, signed short g, signed short b, signed short a)
 	{
-		(*(*plugData::data.funcs.setUIColorValue(r, g, b, a);
+		(*(*plugData::data.funcs.setUIColorValue))(r, g, b, a);
 	}
 	std::tuple<int, int, void*> loadTextureToGame(const std::string& path)
 	{
