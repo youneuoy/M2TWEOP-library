@@ -209,6 +209,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getTileVisibility getTileVisibility
 	@tfield getRegionOwner getRegionOwner
 	@tfield setEDUUnitsSize setEDUUnitsSize
+	@tfield setUIColorValue setUIColorValue
 	@tfield setBuildingChainLimit setBuildingChainLimit
 	@tfield getReligionName getReligionName
 	@tfield condition condition
@@ -325,6 +326,18 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	M2TWEOP.setEDUUnitsSize(1,300);
 	*/
 	tables.M2TWEOPTable.set_function("setEDUUnitsSize", &m2tweopHelpers::setEDUUnitsSize);
+
+	/***
+	Sets the new maximum soldier count.
+	@function M2TWEOP.setUIColorValue
+	@tparam int r red: 300
+	@tparam int g green: 300
+	@tparam int b blue: 300
+	@tparam int a alpha: 300
+	@usage
+	M2TWEOP.setUIColorValue(155, 125, 160, 255);
+	*/
+	tables.M2TWEOPTable.set_function("setUIColorValue", &m2tweopHelpers::setUIColorValue);
 
 	/***
 	* Sets the new maximum amount of building levels within a chain.

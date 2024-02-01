@@ -106,6 +106,33 @@ namespace smallFuncs
 
 	};
 
+	NOINLINE EOP_EXPORT void setUIColorValue(signed short r, signed short g, signed short b, signed short a)
+	{
+		DWORD codeOffset = 0;
+		if (globals::dataS.gamever == 2)//steam
+		{
+			codeOffset = 0x00C0D280;
+		}
+		else
+		{
+			codeOffset = 0x00C12ED0;
+		}
+
+		codeOffset += 0xB9; // Red
+		MemWork::WriteData(&r, codeOffset, 1);
+
+		codeOffset += 0xBE; // Green
+		MemWork::WriteData(&g, codeOffset, 1);
+
+		codeOffset += 0xC3; // Blue
+		MemWork::WriteData(&g, codeOffset, 1);
+
+		codeOffset += 0xC8; // Alpha
+		MemWork::WriteData(&b, codeOffset, 1);
+
+		return;
+	}
+
 
 	NOINLINE EOP_EXPORT void setEDUUnitsSize(signed short min, signed short max)
 	{

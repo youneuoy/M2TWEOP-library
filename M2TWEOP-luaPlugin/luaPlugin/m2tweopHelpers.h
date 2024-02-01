@@ -49,6 +49,7 @@ namespace m2tweopHelpers
 	void unlockGameConsoleCommands();
 
 	void setEDUUnitsSize(signed short min, signed short max);
+	void setUIColorValue(signed short r, signed short g, signed short b, signed short a);
 	int getGameVersion();
 	options1* getOptions1();
 	options2* getOptions2();

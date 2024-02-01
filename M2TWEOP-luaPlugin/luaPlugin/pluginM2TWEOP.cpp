@@ -102,6 +102,9 @@ int initPlugin(std::string* modPath)
 	fName = "setEDUUnitsSize";
 	plugData::data.funcs.setEDUUnitsSize.Load(&plPath, &fName);
 
+	fName = "setUIColorValue";
+	plugData::data.funcs.setUIColorValue.Load(&plPath, &fName);
+
 	fName = "setHeir";
 	plugData::data.funcs.setHeir.Load(&plPath, &fName);
 
