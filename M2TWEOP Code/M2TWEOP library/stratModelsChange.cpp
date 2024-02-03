@@ -155,9 +155,12 @@ namespace stratModelsChange
 			return;
 		}
 
-		crashFixAr.reserve(fortEntryCount);
+		if (fortEntryCount > 0)
+			crashFixAr.reserve(fortEntryCount);
 		UINT32 numFac = fastFuncts::getFactionsCount();
 		factionStruct** listFac = fastFuncts::getFactionsList();
+
+		changeModelsNeededNow = modelsChangeStatus::changed;
 
 		for (stratModelChangeRecord* changeMod : stratModelChangeList) //static models
 		{
@@ -185,8 +188,9 @@ namespace stratModelsChange
 
 						//fastFuncts::setTileVisibility(listFac[i], changeMod->x, changeMod->y, 5);
 					}
+
+					changeModelsNeededNow = modelsChangeStatus::needFixHiding;
 				}
-				changeModelsNeededNow = modelsChangeStatus::changed;
 
 			}
 		}
@@ -202,7 +206,6 @@ namespace stratModelsChange
 			i--;
 		}
 
-		changeModelsNeededNow = modelsChangeStatus::needFixHiding;
 	}
 
 	void update()

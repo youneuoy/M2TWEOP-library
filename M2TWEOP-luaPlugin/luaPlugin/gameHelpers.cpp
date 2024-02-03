@@ -399,37 +399,40 @@ namespace gameHelpers
 		}
 		else if (index < 64) {
 			index = index - 32;
+			set = 1 << index;
 			resources = region->hiddenResources2;
 		}
 		else {
 			return false;
 		}
-		return ((resources & set) != 0);
+		return resources & set;
 	}
 
 	void gameHelpers::setHiddenResource(regionStruct* region, int index, const bool enable)
 	{
-		int set = 1 << index;
+
 		if (index < 32)
 		{
+			int set = 1 << index;
 			if (enable == true)
 			{
-				region->hiddenResources1 = region->hiddenResources1 | set;
+				region->hiddenResources1 |= (set);
 			}
 			else
 			{
-				region->hiddenResources1 = region->hiddenResources1 & (0b1111111111111111 - set);
+				region->hiddenResources1 &= ~set;
 			}
 		}
 		else if (index < 64) {
 			index = index - 32;
+			int set = 1 << index;
 			if (enable == true)
 			{
-				region->hiddenResources2 = region->hiddenResources2 | set;
+				region->hiddenResources2 |= (set);
 			}
 			else
 			{
-				region->hiddenResources2 = region->hiddenResources2 & (0b1111111111111111 - set);
+				region->hiddenResources2 &= ~set;
 			}
 		}
 	}
@@ -591,10 +594,17 @@ namespace gameHelpers
 		(*(*plugData::data.funcs.saveGame))(path);
 	}
 
-	void gameHelpers::scriptCommand(std::string command, const char* args)
+	void gameHelpers::scriptCommand(std::string command, sol::variadic_args va)
 	{
 		const char* commandC = command.c_str();
-		(*(*plugData::data.funcs.scriptCommand))(commandC, args);
+		if (va.size() == 0)
+		{
+			(*(*plugData::data.funcs.scriptCommand))(commandC, "");
+		}
+		else
+		{
+			(*(*plugData::data.funcs.scriptCommand))(commandC, va.begin()->as<std::string>().c_str());
+		}
 	}
 
 	void gameHelpers::historicEvent(const char* name, const char* title, const char* description)
@@ -604,7 +614,7 @@ namespace gameHelpers
 
 	general* gameHelpers::getCardinal(const collegeOfCardinals* college, const int index)
 	{
-		return college->cardinalsArray[index].trackedCharacter->character;
+		return college->cardinalsArray->cardinals[index].trackedCharacter->character;
 	}
 
 	fortStruct* gameHelpers::getFortAll(const campaign* campaign, const int index)

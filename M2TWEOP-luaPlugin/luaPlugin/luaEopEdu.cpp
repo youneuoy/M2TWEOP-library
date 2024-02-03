@@ -25,9 +25,34 @@ void luaP::initEopEdu()
 	}types;
 	using namespace UnitEnums;
 
+
+	//@section attackAttr
+	/***
+	Enum with a list of attack attributes.
+
+	@tfield int nothing
+	@tfield int spear
+	@tfield int light_spear
+	@tfield int prec
+	@tfield int ap
+	@tfield int bp
+	@tfield int area
+	@tfield int fire
+	@tfield int launching
+	@tfield int thrown
+	@tfield int short_pike
+	@tfield int long_pike
+	@tfield int spear_bonus_12
+	@tfield int spear_bonus_10
+	@tfield int spear_bonus_8
+	@tfield int spear_bonus_6
+	@tfield int spear_bonus_4
+
+	@table attackAttr
+	*/
 	luaState.new_enum(
 		"attackAttr",
-		"", attackAttr::nothing,
+		"nothing", attackAttr::nothing,
 		"spear", attackAttr::spear,
 		"light_spear", attackAttr::light_spear,
 		"prec", attackAttr::prec,
@@ -46,9 +71,22 @@ void luaP::initEopEdu()
 		"spear_bonus_4", attackAttr::spear_bonus_4
 	);
 
+	//@section eduStat
+	/***
+	Enum with a list of stats.
+
+	@tfield int none
+	@tfield int armour
+	@tfield int defense
+	@tfield int shield
+	@tfield int attack
+	@tfield int charge
+
+	@table eduStat
+	*/
 	luaState.new_enum(
 		"eduStat",
-		"", eduStat::none,
+		"none", eduStat::none,
 		"armour", eduStat::armour,
 		"defense", eduStat::defense,
 		"shield", eduStat::shield,
@@ -168,9 +206,9 @@ void luaP::initEopEdu()
 	Get data of a M2TWEOPDU entry. You usually won't need this.
 	@function M2TWEOPDU.getDataEopDu
 	@tparam int eopEnryIndex Entry index in M2TWEOPDU.
-	@treturn eopDuEntry retEntry Usually you shouldn't use this value.
+	@treturn int retEntry Usually you shouldn't use this value.
 	@usage
-	local eopDUEntry=M2TWEOPDU.getDataEopDu(1000);
+	local eopEntry=M2TWEOPDU.getDataEopDu(1000);
 	*/
 	tables.M2TWEOPEDUTable.set_function("getDataEopDu", &eopEduHelpers::getDataEopDu);
 

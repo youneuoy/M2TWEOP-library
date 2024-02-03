@@ -591,7 +591,9 @@ struct battleResidence
 public:
 	char pad_0000[28]; //0x0000
 	struct settlementStruct* settlement; //0x001C
-	char pad_0020[16]; //0x0020
+	char pad_0020[8]; //0x0020
+	struct factionStruct** faction; //0x0028
+	char pad_002C[4]; //0x002C
 	int32_t isFortBattle; //0x0030
 	struct battleBuildings* battleBuildings; //0x0034
 	char pad_0038[4]; //0x0038
@@ -805,13 +807,19 @@ public:
 	struct N0001F079* cardinalInfo; //0x0004
 }; //Size: 0x0008
 
+struct cardinalArray
+{
+public:
+	struct cardinal cardinals[16]; //0x0000
+}; //Size: 0x0008
+
 struct collegeOfCardinals
 {
 public:
 	char pad_0000[4]; //0x0000
 	struct namedCharacter* pope; //0x0004
 	char pad_0008[4]; //0x0008
-	struct cardinal* cardinalsArray; //0x000C
+	struct cardinalArray* cardinalsArray; //0x000C
 	int32_t cardinalsArraySize; //0x0010
 	int32_t cardinalNum; //0x0014
 	int8_t N0001D9D6; //0x0018

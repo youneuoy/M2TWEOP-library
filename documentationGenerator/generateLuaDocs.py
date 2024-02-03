@@ -2,12 +2,17 @@ import os
 import re
 
 def fixTypes(field):
-    if field.type == "int":
-        field.type = "integer"
-    if field.type == "float":
-        field.type = "number"
-    if field.type == "bool":
-        field.type = "boolean"
+    if field == "int":
+        return "integer"
+    if field == "float":
+        return "number"
+    if field == "bool":
+        return "boolean"
+    if re.search(r'\[\d+\]', field):
+        tableType = re.findall(r'(\S+)\[\d+\]', field)[0]
+        tableType = fixTypes(tableType)
+        return "table<integer, " + tableType + ">"
+    return field
     
 def writeClass(newClass):
     outputfile.write("---" + newClass.descr.strip() + "\n")
@@ -22,15 +27,15 @@ def writeClass(newClass):
             if newClass.enum is None:
                 if field.comment != "":
                     outputfile.write("    ---" + field.comment.strip() + "\n") 
-                fixTypes(field)
-                outputfile.write("    ---@type " + field.type + "\n")
+                thisType = fixTypes(field.type)
+                outputfile.write("    ---@type " + thisType + "\n")
                 outputfile.write("    " + field.name + " = nil,\n\n")
             else:
                 if field.name in newClass.enum.values:
                     if field.comment != "":
                         outputfile.write("    ---" + field.comment.strip() + "\n") 
-                    fixTypes(field)
-                    outputfile.write("    ---@type " + field.type + "\n")
+                    thisType = fixTypes(field.type)
+                    outputfile.write("    ---@type " + thisType + "\n")
                     if newClass.enum.values[field.name] is None:
                         outputfile.write("    " + field.name + " = " +  "nil" + ",\n\n")
                     else:
@@ -44,16 +49,16 @@ def writeClass(newClass):
             firstParamBool = True
             firstparam = ""
             for paramfield in field.params:
-                fixTypes(paramfield)
-                outputfile.write("---@param " + paramfield.name + " " + paramfield.type + " " +  paramfield.comment.strip() + "\n")
+                thisType = fixTypes(paramfield.type)
+                outputfile.write("---@param " + paramfield.name + " " + thisType + " " +  paramfield.comment.strip() + "\n")
                 if firstParamBool == False:
                     nextparams.append(paramfield.name)
                 else:
                     firstparam = paramfield.name
                 firstParamBool = False
             for returnfield in field.returns:
-                fixTypes(returnfield)
-                outputfile.write("---@return " + returnfield.type + " " + returnfield.name + " " +  returnfield.comment.strip() + "\n")
+                thisType = fixTypes(returnfield.type)
+                outputfile.write("---@return " + thisType + " " + returnfield.name + " " +  returnfield.comment.strip() + "\n")
             outputfile.write(makeFunction(field.name, newClass.name, firstparam, nextparams, field.selfCall, field.funcEvent) + " \n\n")
             
 def makeFunction(name, funcClass, firstparam, params, selfCall, funcEvent):
@@ -107,17 +112,17 @@ cwd = os.getcwd()
 eopPath = re.findall(r'(.+)documentationGenerator', cwd)[0]
 luaPluginPath = eopPath + "M2TWEOP-luaPlugin\\luaPlugin\\"
 outputfile = open(eopPath + "M2TWEOP DataFiles\\youneuoy_Data\\plugins\\lua\\LuaDocs.lua", 'w')
+outputfile.write("---@diagnostic disable: missing-return, lowercase-global\n")
 
-startWrite = False
-funcComment = ""
-funcName = ""
-nextLineComment = False
-newSection = False
-countEnum = False
 for name in filenames:
+    startWrite = False
+    funcComment = ""
+    funcName = ""
+    nextLineComment = False
+    newSection = False
+    countEnum = False
     file = open(luaPluginPath + name, 'r')
     for line in file:
-        #print(line)
         if re.search(r'@section', line) is not None:
             newSection = True
             funcComment = ""
@@ -214,9 +219,8 @@ for name in filenames:
                     funcComment = line.strip()
                 else:
                     funcComment += "\n-- " + line.strip() 
-
-writeClass(newClass)                
-del newClass               
+    writeClass(newClass)                
+    del newClass           
              
 outputfile.flush()
 outputfile.close()

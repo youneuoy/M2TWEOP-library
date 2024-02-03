@@ -44,7 +44,8 @@ namespace gameEvents
 
 	enum class EventType
 	{
-		standardEvent = 1
+		standardEvent = 1,
+		attackResidenceEvent = 2
 	};
 
 	class EventBase
@@ -74,6 +75,23 @@ namespace gameEvents
 					tryLuaBasicEventFunk((*funk)(eventData));
 				}
 				return 1;
+			}
+			else if (EvType == EventType::attackResidenceEvent)
+			{
+				auto eventData = reinterpret_cast<eventTrigger*>(vTab);
+				auto character = gameHelpers::getEventNamedCharacter(eventData);
+				auto settlement = character->gen->besiegingSettlement;
+				fortStruct* fort = nullptr;
+				if (settlement)
+				{
+					fort = gameHelpers::getTileFort(gameHelpers::getTile(settlement->xCoord, settlement->yCoord));
+					if (fort)
+						settlement = nullptr;
+				}
+				if (funk != nullptr) {
+					tryLuaBasicEventFunk((*funk)(eventData, settlement, fort));
+				}
+				return 2;
 			}
 			else
 			{

@@ -12,5 +12,6 @@ namespace battleHandlerHelpers
 	AIBattleObjectiveBase* getObjective(const battleAI* battleAi, int index);
 	int getObjectiveType(const AIBattleObjectiveBase* objective);
 	unit* getUnit(const AIBattleObjectiveBase* objective, int index);
+	buildingBattle* getBattleBuilding(const battleBuildings* buildings, int index);
 };
 

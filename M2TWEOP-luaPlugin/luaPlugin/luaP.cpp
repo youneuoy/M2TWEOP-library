@@ -106,7 +106,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<capturedCharacter>capturedCharacter;
 		sol::usertype<ancillary>ancillary;
 		sol::usertype<traitContainer>traitContainerT;
-		sol::usertype<eduEntry>EduEntry;
+		sol::usertype<eduEntry>eduEntry;
 		sol::usertype<factionStruct>factionStruct;
 		sol::usertype<factionStratMapDescrS>factionStratMapStruct;
 		sol::usertype<watchTowerStruct>watchtowerStruct;
@@ -430,9 +430,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Get a specific tile's visibility according to faction (i.e can a faction see a tile) Note: Once the tile has been seen by a faction, it will always return true. e.g If you have spotted a settlement but it is now outside of the fog of war, it will still be classed as visible. 
 	@function M2TWEOP.getTileVisibility
 	@tparam factionStruct faction Faction to check
-	@tparam xCoord x coord of the tile
-	@tparam yCoord y coord of the tile
-	@treturn isVisible true = visible, false = not visible
+	@tparam int xCoord x coord of the tile
+	@tparam int yCoord y coord of the tile
+	@treturn bool isVisible true = visible, false = not visible
 	@usage
 	local faction = stratmap.game.getFaction(2);
 	local isVisible = M2TWEOP.getTileVisibility(faction, xCoord, yCoord)
@@ -783,7 +783,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Execute a Medieval II console command.
 	@function game.callConsole
 	@tparam string command
-	@tparam string args
+	@tparam string? args
 	@treturn string error Note: string can be empty but not nil
 	@usage
 	-- Creating units, adding money
@@ -893,7 +893,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Do not use inc_counter, set_counter, declare_counter! they crash!
 	@function game.scriptCommand
 	@tparam string command
-	@tparam string args
+	@tparam string? args
 	@usage
 	stratmap.game.scriptCommand("give_everything_to_faction", "france england false")
 	stratmap.game.scriptCommand("send_character_off_map", "Rufus")
@@ -915,9 +915,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Basic stratmap table
 
-	@tfield objects objects
-	@tfield camera camera
-	@tfield game game
+	@tfield stratmap.objects objects
+	@tfield stratmap.camera camera
+	@tfield stratmap.game game
 
 
 	@table stratmap
@@ -954,7 +954,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield character character
 	@tfield unitPositionData unitPositionData
 	@tfield stackStruct army
-	@tfield siegeEngineNum siegeEngineNum
+	@tfield int siegeEngineNum
 	@tfield kill kill
 	@tfield setParams setParams change soldierCountStratMap, exp, armourLVL, weaponLVL at one time.
 	@tfield hasAttribute hasAttribute Check if unit has edu attribute.
@@ -1218,63 +1218,83 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	@table eduEntry
 	*/
-	types.EduEntry = luaState.new_usertype<eduEntry>("eduEntry");
-	types.EduEntry.set("eduType", sol::property(
+	types.eduEntry = luaState.new_usertype<eduEntry>("eduEntry");
+	types.eduEntry.set("eduType", sol::property(
 		&luaGetSetFuncs::getStringPropertyEDU<EduEntryStruct_Type>, &luaGetSetFuncs::setStringPropertyEDU<EduEntryStruct_Type>
 		));
-	types.EduEntry.set("soldier", sol::property(
+	types.eduEntry.set("soldier", sol::property(
 		&luaGetSetFuncs::getStringPropertyEDU<EduEntryStruct_Soldier>, &luaGetSetFuncs::setStringPropertyEDU<EduEntryStruct_Soldier>
 		));
-	types.EduEntry.set("unitCardTga", sol::property(
+	types.eduEntry.set("unitCardTga", sol::property(
 		&luaGetSetFuncs::getStringPropertyEDU<EduEntryStruct_UnitCardTga>, &luaGetSetFuncs::setStringPropertyEDU<EduEntryStruct_UnitCardTga>
 		));
-	types.EduEntry.set("infoCardTga", sol::property(
+	types.eduEntry.set("infoCardTga", sol::property(
 		&luaGetSetFuncs::getStringPropertyEDU<EduEntryStruct_InfoCardTga>, &luaGetSetFuncs::setStringPropertyEDU<EduEntryStruct_InfoCardTga>
 		));
-	types.EduEntry.set("index", &eduEntry::Index);
-	types.EduEntry.set("unitCreatedCounter", &eduEntry::UnitCreatedCounter);
-	types.EduEntry.set("soldierCount", &eduEntry::SoldierCount);
-	types.EduEntry.set("mass", &eduEntry::Mass);
-	types.EduEntry.set("width", &eduEntry::Width);
-	types.EduEntry.set("height", &eduEntry::Height);
-	types.EduEntry.set("haveAttributeLegio", sol::property(&eopEduHelpers::haveAttributeLegioGet, &eopEduHelpers::haveAttributeLegioSet));
-	types.EduEntry.set("moveSpeedMod", &eduEntry::MoveSpeedMod);
-	types.EduEntry.set("unitSpacingFrontToBackClose", &eduEntry::UnitSpacingFrontToBackClose);
-	types.EduEntry.set("unitSpacingSideToSideClose", &eduEntry::UnitSpacingSideToSideClose);
-	types.EduEntry.set("unitSpacingFrontToBackLoose", &eduEntry::UnitSpacingFrontToBackLoose);
-	types.EduEntry.set("unitSpacingSideToSideLoose", &eduEntry::UnitSpacingSideToSideLoose);
-	types.EduEntry.set("statHealth", &eduEntry::StatHealth);
-	types.EduEntry.set("statHealthAnimal", &eduEntry::StatHealthAnimal);
-	types.EduEntry.set("statHeat", &eduEntry::StatHeat);
-	types.EduEntry.set("statScrub", &eduEntry::StatGround1);
-	types.EduEntry.set("statSand", &eduEntry::StatGround2);
-	types.EduEntry.set("statForest", &eduEntry::StatGround3);
-	types.EduEntry.set("statSnow", &eduEntry::StatGround4);
-	types.EduEntry.set("recruitTime", &eduEntry::StatCost1);
-	types.EduEntry.set("recruitCost", &eduEntry::StatCost2);
-	types.EduEntry.set("upkeepCost", &eduEntry::StatCost3);
-	types.EduEntry.set("weaponCost", &eduEntry::StatCost4);
-	types.EduEntry.set("armourCost", &eduEntry::StatCost5);
-	types.EduEntry.set("customBattleCost", &eduEntry::StatCost6);
-	types.EduEntry.set("customBattleIncrease", &eduEntry::StatCost7);
-	types.EduEntry.set("customBattleLimit", &eduEntry::StatCost8);
-	types.EduEntry.set("morale", &eduEntry::Morale);
-	types.EduEntry.set("moraleLocked", &eduEntry::MoraleLocked);
-	types.EduEntry.set("statFood1", &eduEntry::StatFood1);
-	types.EduEntry.set("statFood2", &eduEntry::StatFood2);
-	types.EduEntry.set("ammunition", &eduEntry::Ammunition);
-	types.EduEntry.set("category", &eduEntry::Category);
-	types.EduEntry.set("class", &eduEntry::Class);
-	types.EduEntry.set("categoryClassCombo", &eduEntry::categoryClassCombinationForAI);
-	types.EduEntry.set("recruitPriorityOffset", &eduEntry::RecruitPriorityOffsetTimes4);
-	types.EduEntry.set("crusadingUpkeepModifier", &eduEntry::CrusadingUpkeepModifier);
-	types.EduEntry.set("aiUnitValuePerSoldier", &eduEntry::aiUnitValuePerSoldier);
-	types.EduEntry.set("aiUnitValue", &eduEntry::aiUnitValue);
+	types.eduEntry.set("index", &eduEntry::Index);
+	types.eduEntry.set("unitCreatedCounter", &eduEntry::UnitCreatedCounter);
+	types.eduEntry.set("soldierCount", &eduEntry::SoldierCount);
+	types.eduEntry.set("mass", &eduEntry::Mass);
+	types.eduEntry.set("width", &eduEntry::Width);
+	types.eduEntry.set("height", &eduEntry::Height);
+	types.eduEntry.set("haveAttributeLegio", sol::property(&eopEduHelpers::haveAttributeLegioGet, &eopEduHelpers::haveAttributeLegioSet));
+	types.eduEntry.set("moveSpeedMod", &eduEntry::MoveSpeedMod);
+	types.eduEntry.set("unitSpacingFrontToBackClose", &eduEntry::UnitSpacingFrontToBackClose);
+	types.eduEntry.set("unitSpacingSideToSideClose", &eduEntry::UnitSpacingSideToSideClose);
+	types.eduEntry.set("unitSpacingFrontToBackLoose", &eduEntry::UnitSpacingFrontToBackLoose);
+	types.eduEntry.set("unitSpacingSideToSideLoose", &eduEntry::UnitSpacingSideToSideLoose);
+	types.eduEntry.set("statHealth", &eduEntry::StatHealth);
+	types.eduEntry.set("statHealthAnimal", &eduEntry::StatHealthAnimal);
+	types.eduEntry.set("statHeat", &eduEntry::StatHeat);
+	types.eduEntry.set("statScrub", &eduEntry::StatGround1);
+	types.eduEntry.set("statSand", &eduEntry::StatGround2);
+	types.eduEntry.set("statForest", &eduEntry::StatGround3);
+	types.eduEntry.set("statSnow", &eduEntry::StatGround4);
+	types.eduEntry.set("recruitTime", &eduEntry::StatCost1);
+	types.eduEntry.set("recruitCost", &eduEntry::StatCost2);
+	types.eduEntry.set("upkeepCost", &eduEntry::StatCost3);
+	types.eduEntry.set("weaponCost", &eduEntry::StatCost4);
+	types.eduEntry.set("armourCost", &eduEntry::StatCost5);
+	types.eduEntry.set("customBattleCost", &eduEntry::StatCost6);
+	types.eduEntry.set("customBattleIncrease", &eduEntry::StatCost7);
+	types.eduEntry.set("customBattleLimit", &eduEntry::StatCost8);
+	types.eduEntry.set("morale", &eduEntry::Morale);
+	types.eduEntry.set("moraleLocked", &eduEntry::MoraleLocked);
+	types.eduEntry.set("statFood1", &eduEntry::StatFood1);
+	types.eduEntry.set("statFood2", &eduEntry::StatFood2);
+	types.eduEntry.set("ammunition", &eduEntry::Ammunition);
+	types.eduEntry.set("category", &eduEntry::Category);
+	types.eduEntry.set("class", &eduEntry::Class);
+	types.eduEntry.set("categoryClassCombo", &eduEntry::categoryClassCombinationForAI);
+	types.eduEntry.set("recruitPriorityOffset", &eduEntry::RecruitPriorityOffsetTimes4);
+	types.eduEntry.set("crusadingUpkeepModifier", &eduEntry::CrusadingUpkeepModifier);
+	types.eduEntry.set("aiUnitValuePerSoldier", &eduEntry::aiUnitValuePerSoldier);
+	types.eduEntry.set("aiUnitValue", &eduEntry::aiUnitValue);
 
+
+	/***
+	Check if a faction has ownership of this entry.
+	@function eduEntry:hasOwnership
+	@tparam int factionID
+	@treturn bool hasOwnership
+	@usage
+	local hasOwnership = unit.eduEntry:hasOwnership(2);
+	*/
+	types.eduEntry.set_function("hasOwnership", &eopEduHelpers::hasOwnership);
+
+	/***
+	Set if a faction has ownership of this entry.
+	@function eduEntry:setOwnerShip
+	@tparam int factionID
+	@tparam bool setOwnership
+	@usage
+		unit.eduEntry:setOwnerShip(2, true);
+	*/
+	types.eduEntry.set_function("setOwnerShip", &eopEduHelpers::setOwnerShip);
 
 
 	///Character
-	//@section characterTablefortStruct
+	//@section Character Table
 
 	/***
 	characters as they exist on the strategy map - dead characters, wives, children, and off-map characters do not have these fields.
@@ -1483,6 +1503,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int status 5-leader,2 - heir, 0 - ordinary character, read only, do not set value
 	@tfield setAsHeir setAsHeir
 	@tfield isAlive isAlive
+	@tfield bool isFamily
 	@tfield bool isMale
 	@tfield int age
 	@tfield float yearOfBirth For example with 4 turns per year, the yearOfBirth could be 1840.25
@@ -1490,7 +1511,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int subFaction
 	@tfield namedCharacter parent
 	@tfield namedCharacter spouse
-	@tfield namedCharacter[4] childs example: ourChar.childs[2].fullName
+	@tfield namedCharacter[4] childs Maximum 4.
 	@tfield getTraits getTraits
 	@tfield addTrait addTrait
 	@tfield removeTrait removeTrait
@@ -1594,6 +1615,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.namedCharacter.set_function("isAlive", &generalCharactericticsHelpers::isAlive);
 	types.namedCharacter.set("isMale", sol::property(&generalCharactericticsHelpers::getIsMale, &generalCharactericticsHelpers::setIsMale));
+	types.namedCharacter.set("isFamily", sol::property(&generalCharactericticsHelpers::isFamily, &generalCharactericticsHelpers::setAsFamily));
 	types.namedCharacter.set("age", sol::property(&generalCharactericticsHelpers::getAge, &generalCharactericticsHelpers::setAge));
 	types.namedCharacter.set("yearOfBirth", &namedCharacter::yearOfBirth);
 	types.namedCharacter.set("faction", &namedCharacter::faction);

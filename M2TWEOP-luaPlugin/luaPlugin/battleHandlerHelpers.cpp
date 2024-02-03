@@ -71,4 +71,9 @@ namespace battleHandlerHelpers
 		}
 		return nullptr;
 	}
+
+	buildingBattle* getBattleBuilding(const battleBuildings* buildings, int index)
+	{
+		return buildings->allBuildings[index];
+	}
 };

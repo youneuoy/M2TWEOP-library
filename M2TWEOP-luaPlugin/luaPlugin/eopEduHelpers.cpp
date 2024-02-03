@@ -295,25 +295,42 @@ int eopEduHelpers::multiplexor(int n1, int n2, int sel)
 	return (((~sel) & n1) | (n2 & sel));
 }
 
+int eopEduHelpers::hasOwnership(eduEntry* entry, int factionID)
+{
+	return entry->ownership & (1 << factionID);
+}
+
+void eopEduHelpers::setOwnerShip(eduEntry* entry, int factionID, bool set)
+{
+	if (set)
+	{
+		entry->ownership |= static_cast<int8_t>(1 << factionID);
+	}
+	else
+	{
+		entry->ownership &= static_cast<int8_t>(~(1 << factionID));
+	}
+}
+
 void eopEduHelpers::setEntryStat(int idx, UnitEnums::eduStat stat, int value, int sec)
 {
 	using namespace UnitEnums;
-	eduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
+	eduEntry* eduEn = getEduEntry(idx);
 	int newStat = value * stat;
-	if (stat < UnitEnums::attack)
+	if (stat < attack)
 	{
-		eduEn->StatPriArmour = (eopEduHelpers::multiplexor(eduEn->StatPriArmour, newStat, stat * 63));
+		eduEn->StatPriArmour = multiplexor(eduEn->StatPriArmour, newStat, stat * 63);
 	}
 	else
 	{
 		if (sec == 1)
 		{
 
-			eduEn->StatPri = eopEduHelpers::multiplexor(eduEn->StatPri, newStat, stat * 63);
+			eduEn->StatPri = multiplexor(eduEn->StatPri, newStat, stat * 63);
 		}
 		else
 		{
-			eduEn->StatSec = eopEduHelpers::multiplexor(eduEn->StatSec, newStat, stat * 63);
+			eduEn->StatSec = multiplexor(eduEn->StatSec, newStat, stat * 63);
 		}
 	}
 }

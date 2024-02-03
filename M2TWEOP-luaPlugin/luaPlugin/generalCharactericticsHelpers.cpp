@@ -42,10 +42,20 @@ namespace generalCharactericticsHelpers
 	{
 		return character->age & 1;
 	}
-	bool getIsMale(namedCharacter* character) {
+	bool isFamily(namedCharacter* character)
+	{
+		return character->age & (1 << 13);
+	}
+	bool setAsFamily(namedCharacter* character, bool set)
+	{
+		return character->age = set ? character->age | (1 << 13) : character->age & ~(1 << 13);
+	}
+	bool getIsMale(namedCharacter* character)
+	{
 		return character->age & 2;
 	}
-	void setIsMale(namedCharacter* character, bool isMale) {
+	void setIsMale(namedCharacter* character, bool isMale)
+	{
 		character->age = character->age ^ ((int)isMale << 1 ^ character->age) & 2;
 	}
 	void setAsHeir(namedCharacter* character, bool isJustSet)
