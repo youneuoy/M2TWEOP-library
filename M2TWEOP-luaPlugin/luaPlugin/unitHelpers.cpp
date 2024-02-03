@@ -177,5 +177,10 @@ namespace unitHelpers
 		}
 		return nullptr;
 	}
+	int getMountClass(unit* un)
+	{
+		if (!un) return -1;
+		return CallVFunc<186, int>(un);
+	}
 
 }

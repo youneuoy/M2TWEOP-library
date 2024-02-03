@@ -767,7 +767,6 @@ namespace gameHelpers
 
 	const char* getReligionName(const int index)
 	{
-
 		const auto* religionDb = *reinterpret_cast <religionDatabase**>(0x016A0B90);
 		if (m2tweopHelpers::getGameVersion() == 1)
 		{
@@ -789,6 +788,33 @@ namespace gameHelpers
 		WideCharToMultiByte(CP_UTF8, 0, name, -1, buffer, size, nullptr, nullptr);
 		// Return the converted string
 		return buffer;
+	}
+
+	int getReligionCount()
+	{
+		const auto* religionDb = *reinterpret_cast <religionDatabase**>(0x016A0B90);
+		if (m2tweopHelpers::getGameVersion() == 1)
+		{
+			religionDb = *reinterpret_cast <religionDatabase**>(0x016E9DC0);
+		}
+		return religionDb->religionCount;
+	}
+
+	int getReligionN(const char* name)
+	{
+		const auto* religionDb = *reinterpret_cast <religionDatabase**>(0x016A0B90);
+		if (m2tweopHelpers::getGameVersion() == 1)
+		{
+			religionDb = *reinterpret_cast <religionDatabase**>(0x016E9DC0);
+		}
+		for(int i = 0; i < religionDb->religionCount ;i++)
+		{
+			if (strcmp(getReligionName(i), name) == 0)
+			{
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	seaConnectedRegion* getSeaConnectedRegion(const regionStruct* region, const int index)

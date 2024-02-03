@@ -246,6 +246,87 @@ void luaP::initCampaign()
 		"pope", 13
 	);
 
+	//@section aiPlan
+	/***
+	Enum with a list of GTA AI plans.
+
+	@tfield int doNothing
+	@tfield int attackAll
+	@tfield int defend
+	@tfield int defendFeature
+	@tfield int hide
+	@tfield int ambush
+	@tfield int scout
+	@tfield int withdraw
+	@tfield int attackSettlement
+	@tfield int defendSettlement
+	@tfield int sallyOut
+
+	@table aiPlan
+	*/
+	luaState.new_enum(
+		"aiPlan",
+		"doNothing", 0,
+		"attackAll", 1,
+		"defend", 2,
+		"defendFeature", 3,
+		"hide", 4,
+		"ambush", 5,
+		"scout", 6,
+		"withdraw", 7,
+		"attackSettlement", 8,
+		"defendSettlement", 9,
+		"sallyOut", 10
+	);
+
+	//@section aiObjective
+	/***
+	Enum with a list of GTA AI objectives.
+
+	@tfield int invalid
+	@tfield int moveToPoint
+	@tfield int attackEnemyBattleGroup
+	@tfield int defendTerrainHill
+	@tfield int defendTerrainForest
+	@tfield int defendTerrainArea
+	@tfield int defendCrossing
+	@tfield int assaultCrossing
+	@tfield int defendLine
+	@tfield int scout
+	@tfield int withdraw
+	@tfield int defendSettlement
+	@tfield int supportDefendSettlement
+	@tfield int attackSettlement
+	@tfield int bombard
+	@tfield int attackModel
+	@tfield int sallyOut
+	@tfield int ambush
+
+	@table aiObjective
+	*/
+	luaState.new_enum(
+		"aiObjective",
+		"invalid", 0,
+		"moveToPoint", 1,
+		"attackEnemyBattleGroup", 2,
+		"defendTerrainHill", 3,
+		"defendTerrainForest", 4,
+		"defendTerrainArea", 5,
+		"defendCrossing", 6,
+		"assaultCrossing", 7,
+		"defendLine", 8,
+		"scout", 9,
+		"withdraw", 10,
+		"defendSettlement", 11,
+		"supportDefendSettlement", 12,
+		"attackSettlement", 13,
+		"skirmish", 14,
+		"bombard", 15,
+		"attackModel", 16,
+		"sallyOut", 17,
+		"ambush", 18
+	);
+
 	//@section resourceType
 	/***
 	Enum with a list of resources.
@@ -382,6 +463,25 @@ void luaP::initCampaign()
 		"average", 1,
 		"clear", 2,
 		"crushing", 3
+	);
+
+	//@section mountClass
+	/***
+	Enum of unit mount class.
+
+	@tfield int horse
+	@tfield int camel
+	@tfield int elephant
+	@tfield int infantry
+
+	@table mountClass
+	*/
+	luaState.new_enum(
+		"mountClass",
+		"horse", 0,
+		"camel", 1,
+		"elephant", 2,
+		"infantry", 3
 	);
 
 	//@section battleType
@@ -1383,10 +1483,10 @@ void luaP::initCampaign()
 	@tfield int regionID
 	@tfield tradeResource|nil resource
 	@tfield character|nil character
-	@tfield settlement|nil settlement
+	@tfield settlementStruct|nil settlement
 	@tfield fortStruct|nil fort
 	@tfield portStruct|nil port
-	@tfield watchTowerStruct|nil watchtower
+	@tfield watchtowerStruct|nil watchtower
 	@tfield int height
 	@tfield int climate
 	@tfield int heatValue
@@ -2001,6 +2101,7 @@ void luaP::initP2()
 		sol::usertype<armyAndCharacter> battleArmy;
 		sol::usertype<battleUnit> battleUnit;
 		sol::usertype<battleResidence> battleResidence;
+		sol::usertype<AIBattleObjectiveBase> battleObjective;
 
 	}typeAll;
 	///GameDataAll
@@ -2295,13 +2396,71 @@ void luaP::initP2()
 		10 = "SALLY_OUT"
 	@tfield int unitCount
 	@tfield int enemyUnitCount
+	@tfield int addedObjectivesCount
+	@tfield getObjective getObjective
+	
 
 	@table battleAI
 	*/
+
 	typeAll.battleAI = luaState.new_usertype<battleAI>("battleAI");
 	typeAll.battleAI.set("gtaPlan", &battleAI::currentAIPlan);
 	typeAll.battleAI.set("unitCount", &battleAI::unitCount);
 	typeAll.battleAI.set("enemyUnitCount", &battleAI::enemyUnitCount);
+	typeAll.battleAI.set("addedObjectivesCount", &battleAI::addedObjectivesCount);
+	/***
+	Get a battle objective by it's index.
+	@function battleAI:getObjective
+	@tparam int index
+	@treturn battleObjective objective
+	@usage
+
+		local objective = battleAI:getObjective(0)
+
+	*/
+	typeAll.battleAI.set_function("getObjective", &battleHandlerHelpers::getObjective);
+
+
+	///BattleObjective
+	//@section battleObjective
+
+	/***
+	Basic battleObjective table
+
+	@tfield int priority
+	@tfield int unitCount
+	@tfield getUnit getUnit
+	@tfield getType getType
+
+
+	@table battleObjective
+	*/
+
+	typeAll.battleObjective = luaState.new_usertype<AIBattleObjectiveBase>("battleObjective");
+	typeAll.battleObjective.set("priority", &AIBattleObjectiveBase::priority);
+	typeAll.battleObjective.set("unitCount", &AIBattleObjectiveBase::aiUnitsCount);
+	/***
+	Get a unit by it's index.
+	@function battleObjective:getUnit
+	@tparam int index
+	@treturn unit unit
+	@usage
+
+		local unit = battleObjective:getUnit(0)
+
+	*/
+	typeAll.battleObjective.set_function("getUnit", &battleHandlerHelpers::getUnit);
+	/***
+	Get the type of objective.
+	@function battleObjective:getType
+	@treturn int objectiveType
+	@usage
+
+		local objective = battleObjective:getType(0)
+
+	*/
+	typeAll.battleObjective.set_function("getType", &battleHandlerHelpers::getObjective);
+
 	///BattleArmy
 	//@section battleArmy
 

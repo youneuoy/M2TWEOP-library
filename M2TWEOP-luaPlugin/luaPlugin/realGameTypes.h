@@ -1355,13 +1355,13 @@ public:
 	int32_t unitArraySize; //0x0744
 	int32_t unitCount; //0x0748
 	char pad_074C[12]; //0x074C
-	struct aiObjectiveArrayBattle* aiObjectives; //0x0758
-	int32_t aiObjectivesSize; //0x075C
-	int32_t aiObjectivesCount; //0x0760
+	struct AIBattleObjectiveBase** currentObjectives; //0x0758
+	int32_t currentObjectivesSize; //0x075C
+	int32_t currentObjectivesCount; //0x0760
 	char pad_0764[4]; //0x0764
-	struct aiObjectiveArrayBattle* aiObjectives2; //0x0768
-	char pad_076C[4]; //0x076C
-	uint32_t objectiveCount; //0x0770
+	struct AIBattleObjectiveBase** addedObjectives; //0x0768
+	int32_t addedObjectivesSize; //0x076C
+	int32_t addedObjectivesCount; //0x0770
 	char pad_0774[44]; //0x0774
 	DWORD aiAnalysers; //0x07A0
 	char pad_07A4[96]; //0x07A4

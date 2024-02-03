@@ -207,10 +207,13 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getGameTileCoordsWithCursor getGameTileCoordsWithCursor
 	@tfield getTileRegionID getTileRegionID
 	@tfield getTileVisibility getTileVisibility
+	@tfield setGuildCooldown setGuildCooldown
 	@tfield getRegionOwner getRegionOwner
 	@tfield setEDUUnitsSize setEDUUnitsSize
 	@tfield setBuildingChainLimit setBuildingChainLimit
 	@tfield getReligionName getReligionName
+	@tfield getReligionCount getReligionCount
+	@tfield getReligion getReligion
 	@tfield condition condition
 	@tfield getOptions1 getOptions1
 	@tfield getOptions2 getOptions2
@@ -460,6 +463,23 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.M2TWEOPTable.set_function("getReligionName", &gameHelpers::getReligionName);
 	/***
+	Get the amount of religions.
+	@function M2TWEOP.getReligionCount
+	@treturn int religionCount
+	@usage
+	local religionCount = M2TWEOP.getReligionCount();
+	*/
+	tables.M2TWEOPTable.set_function("getReligionCount", &gameHelpers::getReligionCount);
+	/***
+	Get religion ID by name.
+	@function M2TWEOP.getReligion
+	@tparam string name
+	@treturn int index
+	@usage
+	local religion = M2TWEOP.getReligion("catholic");
+	*/
+	tables.M2TWEOPTable.set_function("getReligion", &gameHelpers::getReligionN);
+	/***
 	Get some game options.
 	@function M2TWEOP.getOptions1
 	@treturn options1 options
@@ -658,13 +678,15 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam string shadowcaspath Relative path from the mods folder (starting with "mods/").
 	@tparam string typename Name of the new model used to assign.
 	@tparam string texturepath Relative path from the mods folder (starting with "mods/").
+	@tparam float scale
 	@usage
 	stratmap.objects.addCharacterCas(
 		"strat_named_with_army",
 		"mods/Bare_Geomod/data/models_strat/islamic_general2.cas",
 		"mods/Bare_Geomod/data/models_strat/shadow_sword2.cas",
 		"islamic_general2",
-		"mods/Bare_Geomod/data/models_strat/textures/islamic_general_turks.tga"
+		"mods/Bare_Geomod/data/models_strat/textures/islamic_general_turks.tga",
+		0.7
 	);
 	*/
 	tables.objectsTable.set_function("addCharacterCas", &generalHelpers::addCharacterCas);
@@ -760,6 +782,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Execute a Medieval II console command.
 	@function game.callConsole
+	@tparam string command
+	@tparam string args
 	@treturn string error Note: string can be empty but not nil
 	@usage
 	-- Creating units, adding money
@@ -943,6 +967,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield isOnWalls isOnWalls
 	@tfield isEngaged isEngaged
 	@tfield isUnderFire isUnderFire
+	@tfield getMountClass getMountClass
 
 
 	@table unit
@@ -1059,6 +1084,14 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local isUnderFire = unit:isUnderFire();
 	*/
 	types.unit.set_function("isUnderFire", &unitHelpers::isUnderFire);
+	/***
+	Get unit mount class.
+	@function unit:getMountClass
+	@treturn int mountClass
+	@usage
+	local mountClass = unit:getMountClass();
+	*/
+	types.unit.set_function("getMountClass", &unitHelpers::getMountClass);
 
 	///Unit Position Data
 	//@section unitPositionData
@@ -1268,7 +1301,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int timeInRegion
 	@tfield int timeWithArmy for auxiliary generals, not leading general
 	@tfield crusadeStruct crusade
-	@tfield int turnJoinedCrusade
 	@tfield int currentTurn
 	@tfield float distanceToCrusadeTarget
 	@tfield int disbandProgress
@@ -3533,6 +3565,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield float reform_point_y Y coordinate to which the retreating units will go.
 	@tfield createEOPUnit createEOPUnit
 	@tfield createUnit createUnit
+	@tfield sortStack sortStack
 	@tfield mergeArmies mergeArmies
 	@tfield createUnitByIDX createUnitByIDX
 	@tfield siegeSettlement siegeSettlement Call it twice to initiate an assault.

@@ -1636,4 +1636,18 @@ namespace fastFuncts
 			call eax
 		}
 	}
+	DWORD* getTileObject(const oneTile* tile, int type)
+	{
+		DWORD* object = tile->object;
+
+		while (object)
+		{
+			int objectType = CallVFunc<4, int>(object);
+			if (objectType == type || (type == 0 && objectType < 28))
+				return object;
+			object = reinterpret_cast<DWORD*>(*(object + 1));
+		}
+
+		return nullptr;
+	}
 }

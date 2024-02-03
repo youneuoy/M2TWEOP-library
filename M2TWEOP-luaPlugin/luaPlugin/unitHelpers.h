@@ -38,5 +38,6 @@ namespace unitHelpers
 	unit* getEngagedUnit(unitPositionData* posData, int index);
 	unit* getTargetUnit(unitPositionData* posData);
 	int getsoldierCountStratMap(const unit* un);
+	int getMountClass(unit* un);
 };
 

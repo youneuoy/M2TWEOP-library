@@ -30,6 +30,8 @@ namespace gameHelpers
 	buildingBattle* getBuildingBattle(eventTrigger* eventData);
 	buildingInQueue* getPriorBuild(eventTrigger* eventData);
 	const char* getResourceDescription(eventTrigger* eventData);
+	int getReligionCount();
+	int getReligionN(const char* name);
 	int getEventCharacterType(eventTrigger* eventData);
 	int getEventTargetCharacterType(eventTrigger* eventData);
 	const char* getEventType(eventTrigger* eventData);

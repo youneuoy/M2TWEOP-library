@@ -156,5 +156,7 @@ namespace fastFuncts
 
 
 	NOINLINE EOP_EXPORT void mergeArmies(stackStruct* army, stackStruct* targetArmy);
+	DWORD* getTileObject(const oneTile* tile, int type);
+
 };
 
