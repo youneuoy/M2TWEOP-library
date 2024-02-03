@@ -783,7 +783,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Execute a Medieval II console command.
 	@function game.callConsole
 	@tparam string command
-	@tparam string? args
+	@tparam string args
 	@treturn string error Note: string can be empty but not nil
 	@usage
 	-- Creating units, adding money
@@ -893,7 +893,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Do not use inc_counter, set_counter, declare_counter! they crash!
 	@function game.scriptCommand
 	@tparam string command
-	@tparam string? args
+	@tparam string args
 	@usage
 	stratmap.game.scriptCommand("give_everything_to_faction", "france england false")
 	stratmap.game.scriptCommand("send_character_off_map", "Rufus")
