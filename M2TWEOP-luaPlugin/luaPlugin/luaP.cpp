@@ -797,7 +797,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.gameTable.set_function("callConsole", &gameHelpers::callConsole);
 	/***
-	Get the amount of factions
+	Get the amount of factions.
 	@function game.getFactionsCount
 	@treturn int facNumber Amount of factions
 	@usage
