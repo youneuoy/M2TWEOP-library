@@ -3,7 +3,7 @@
 #include "helpers.h"
 #include "dataG.h"
 #include "managerG.h"
-#include "themeManager.h"
+#include "themeManagerGUI.h"
 #include "../M2TWEOP Common/m2tweopConstData.h"
 #include <cstdlib>  
 

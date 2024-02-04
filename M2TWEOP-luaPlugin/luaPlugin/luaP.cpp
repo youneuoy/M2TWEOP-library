@@ -1505,6 +1505,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield isAlive isAlive
 	@tfield bool isFamily
 	@tfield bool isMale
+	@tfield isOffMap isOffMap
+	@tfield isAdult isAdult
 	@tfield int age
 	@tfield float yearOfBirth For example with 4 turns per year, the yearOfBirth could be 1840.25
 	@tfield factionStruct faction
@@ -1607,13 +1609,33 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Checks if character is alive, read only, do not set this value.
 	@function namedCharacter:isAlive
-	@treturn int liveStatus true = alive, false = dead
+	@treturn bool liveStatus true = alive, false = dead
 	@usage
 	if ourcharacter:isAlive() == true then
 		ourcharacter.character:kill()
 	end
 	*/
 	types.namedCharacter.set_function("isAlive", &generalCharactericticsHelpers::isAlive);
+	/***
+	Checks if character is off map, read only, do not set this value.
+	@function namedCharacter:isOffMap
+	@treturn bool offMap
+	@usage
+	if ourcharacter:isOffMap() == true then
+		--do something
+	end
+	*/
+	types.namedCharacter.set_function("isOffMap", &generalCharactericticsHelpers::isOffMap);
+	/***
+	Checks if character is adult, read only, do not set this value.
+	@function namedCharacter:isAdult
+	@treturn bool isAdult
+	@usage
+	if ourcharacter:isAdult() == true then
+		--do something
+	end
+	*/
+	types.namedCharacter.set_function("isAdult", &generalCharactericticsHelpers::isAdult);
 	types.namedCharacter.set("isMale", sol::property(&generalCharactericticsHelpers::getIsMale, &generalCharactericticsHelpers::setIsMale));
 	types.namedCharacter.set("isFamily", sol::property(&generalCharactericticsHelpers::isFamily, &generalCharactericticsHelpers::setAsFamily));
 	types.namedCharacter.set("age", sol::property(&generalCharactericticsHelpers::getAge, &generalCharactericticsHelpers::setAge));

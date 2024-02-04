@@ -209,7 +209,7 @@
     <ClCompile Include="markdownHelper.cpp" />
     <ClCompile Include="modSettingsUI.cpp" />
     <ClCompile Include="redistUI.cpp" />
-    <ClCompile Include="themeManager.cpp" />
+    <ClCompile Include="themeManagerGUI.cpp" />
     <ClCompile Include="toolRoutine.cpp" />
     <ClCompile Include="discordManager.cpp" />
   </ItemGroup>
@@ -269,7 +269,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="toolRoutine.h" />
     <ClInclude Include="discordManager.h" />
-    <ClInclude Include="themeManager.h" />
+    <ClInclude Include="themeManagerGUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="M2TWEOP GUI.rc" />

@@ -19,6 +19,8 @@ namespace generalCharactericticsHelpers
 	void setAge(namedCharacter* character, int age);
 	bool isFamily(namedCharacter* character);
 	bool setAsFamily(namedCharacter* character, bool set);
+	bool isOffMap(namedCharacter* character);
+	bool isAdult(namedCharacter* character);
 
 	bool getIsMale(namedCharacter* character);
 	void setIsMale(namedCharacter* character, bool isMale);

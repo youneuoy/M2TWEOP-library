@@ -46,6 +46,14 @@ namespace generalCharactericticsHelpers
 	{
 		return character->age & (1 << 13);
 	}
+	bool isOffMap(namedCharacter* character)
+	{
+		return character->status & 8;
+	}
+	bool isAdult(namedCharacter* character)
+	{
+		return character->age & 4;
+	}
 	bool setAsFamily(namedCharacter* character, bool set)
 	{
 		return character->age = set ? character->age | (1 << 13) : character->age & ~(1 << 13);
