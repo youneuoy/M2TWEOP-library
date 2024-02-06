@@ -2498,7 +2498,7 @@ void luaP::initP2()
 	@treturn int objectiveType
 	@usage
 
-		local objective = battleObjective:getType(0)
+		local objective = battleObjective:getType()
 
 	*/
 	typeAll.battleObjective.set_function("getType", &battleHandlerHelpers::getObjective);
@@ -2591,6 +2591,7 @@ void luaP::initP2()
 	@tfield settlementStruct settlement
 	@tfield factionStruct faction
 	@tfield int isFortBattle
+	@tfield battleBuildings battleBuildings
 	@tfield int settlementWallsBreached
 	@tfield int settlementGateDestroyed
 
@@ -2601,6 +2602,7 @@ void luaP::initP2()
 	typeAll.battleResidence.set("isFortBattle", &battleResidence::isFortBattle);
 	typeAll.battleResidence.set("settlementWallsBreached", &battleResidence::settlementWallsBreached);
 	typeAll.battleResidence.set("settlementGateDestroyed", &battleResidence::settlementGateDestroyed);
+	typeAll.battleResidence.set("battleBuildings", &battleResidence::battleBuildings);
 
 	/// buildingBattle
 	//@section buildingBattle

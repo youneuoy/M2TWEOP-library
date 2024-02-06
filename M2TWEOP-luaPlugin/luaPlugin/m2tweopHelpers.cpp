@@ -235,6 +235,39 @@ namespace m2tweopHelpers
 		}
 	}
 
+	void setEquipmentCosts(int equipType, int cost)
+	{
+		struct equipmentCosts
+		{
+			int ram;
+			int ladder;
+			int siegeTower;
+		};
+		equipmentCosts* costs;
+		if (getGameVersion() == 1)
+		{
+			costs = reinterpret_cast<equipmentCosts*>(0x01655BB0);
+		}
+		else
+		{
+			costs = reinterpret_cast<equipmentCosts*>(0x0160DCC8);
+		}
+		switch (equipType)
+		{
+			case 0:
+				costs->ram = cost;
+				break;
+			case 1:
+				costs->ladder = cost;
+				break;
+			case 2:
+				costs->siegeTower = cost;
+				break;
+			default:
+				break;
+		}
+	}
+
 	options1* getOptions1()
 	{
 		if (getGameVersion() == 1)

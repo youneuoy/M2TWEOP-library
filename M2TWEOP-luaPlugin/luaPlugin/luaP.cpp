@@ -209,6 +209,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield toggleUnitsBMapHighlight toggleUnitsBMapHighlight
 	@tfield getBattleCamCoords getBattleCamCoords
 	@tfield setReligionsLimit setReligionsLimit
+	@tfield setEquipmentCosts setEquipmentCosts
 	@tfield isTileFree isTileFree
 	@tfield getGameTileCoordsWithCursor getGameTileCoordsWithCursor
 	@tfield getTileRegionID getTileRegionID
@@ -418,6 +419,16 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	M2TWEOP.setReligionsLimit(25);
 	*/
 	tables.M2TWEOPTable.set_function("setReligionsLimit", &m2tweopHelpers::seReligionsLimit);
+
+	/***
+	Set the siege points required to make different siege equipment.
+	@function M2TWEOP.setEquipmentCosts
+	@tparam int equipmentType 0 = ram, 1 = ladder, 2 = siege tower
+	@tparam int newCost
+	@usage
+		M2TWEOP.setEquipmentCosts(0, 25);
+	*/
+	tables.M2TWEOPTable.set_function("setEquipmentCosts", &m2tweopHelpers::setEquipmentCosts);
 
 	/***
 	Checks if a tile is free.
@@ -1934,7 +1945,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	@tfield int index
 	@tfield string name
-	@tfield int traitPoints
 	@tfield traitLevel[10] levels Maximum: 10
 	@tfield int levelCount
 	@tfield traitEntry[20] antiTraits Maximum: 20

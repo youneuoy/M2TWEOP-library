@@ -49,6 +49,7 @@ namespace m2tweopHelpers
 	void unlockGameConsoleCommands();
 	void setPerfectSpy(bool set);
 	int getLocalFactionID();
+	void setEquipmentCosts(int equipType, int cost);
 
 	void setEDUUnitsSize(signed short min, signed short max);
 	int getGameVersion();
