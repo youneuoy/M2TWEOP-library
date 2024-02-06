@@ -3737,7 +3737,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.stackStruct.set("towers", &stackStruct::towers);
 
 	/***
-	Sort units in a stack.
+	Sort units in a stack. Use the sortType enum to specify the sorting mode.
 	@function stackStruct:sortStack
 	@tparam int sortMode
 	@tparam int sortMode2
@@ -3750,6 +3750,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	-- 4 = Soldier Count
 	-- 5 = Experience
 	-- 6 = Category + Class
+	-- 7 = AI unit value
 
 	function onFactionTurnStart(eventData)
 	local faction = eventData.faction
