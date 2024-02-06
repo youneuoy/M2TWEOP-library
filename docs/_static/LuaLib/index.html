@@ -46,6 +46,8 @@
     <li><a href="#M2TWEOP.getModPath">M2TWEOP.getModPath ()</a></li>
     <li><a href="#M2TWEOP.saveGame">M2TWEOP.saveGame (path)</a></li>
     <li><a href="#M2TWEOP.getGameVersion">M2TWEOP.getGameVersion ()</a></li>
+    <li><a href="#M2TWEOP.setPerfectSpy">M2TWEOP.setPerfectSpy (set)</a></li>
+    <li><a href="#M2TWEOP.getLocalFactionID">M2TWEOP.getLocalFactionID ()</a></li>
     <li><a href="#M2TWEOP.getPluginPath">M2TWEOP.getPluginPath ()</a></li>
     <li><a href="#M2TWEOP.loadTexture">M2TWEOP.loadTexture (path)</a></li>
     <li><a href="#M2TWEOP.unloadTexture">M2TWEOP.unloadTexture (id)</a></li>
@@ -196,6 +198,8 @@
     <li><a href="#namedCharacter">namedCharacter</a></li>
     <li><a href="#namedCharacter:setAsHeir">namedCharacter:setAsHeir (onlyHeir)</a></li>
     <li><a href="#namedCharacter:isAlive">namedCharacter:isAlive ()</a></li>
+    <li><a href="#namedCharacter:isOffMap">namedCharacter:isOffMap ()</a></li>
+    <li><a href="#namedCharacter:isChild">namedCharacter:isChild ()</a></li>
     <li><a href="#namedCharacter:getTraits">namedCharacter:getTraits ()</a></li>
     <li><a href="#namedCharacter:addTrait">namedCharacter:addTrait (traitName, traitLevel)</a></li>
     <li><a href="#namedCharacter:removeTrait">namedCharacter:removeTrait (traitName)</a></li>
@@ -234,6 +238,31 @@
 <details>
   <summary><a href="#Trait_Container">Trait Container </a></summary>
     <li><a href="#traitContainer">traitContainer</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#Trait_Struct">Trait Struct </a></summary>
+    <li><a href="#traitStruct">traitStruct</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#Trait_Entry_Struct">Trait Entry Struct </a></summary>
+    <li><a href="#traitEntry">traitEntry</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#Trait_Level_Struct">Trait Level Struct </a></summary>
+    <li><a href="#traitLevel">traitLevel</a></li>
+    <li><a href="#traitLevel:getTraitEffect">traitLevel:getTraitEffect (index)</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#Trait_Effect_Struct">Trait Effect Struct </a></summary>
+    <li><a href="#traitEffect">traitEffect</a></li>
 </details>
 
 
@@ -836,6 +865,7 @@
     <li><a href="#campaignStruct:getPort">campaignStruct:getPort (index)</a></li>
     <li><a href="#campaignStruct:getWatchTower">campaignStruct:getWatchTower (index)</a></li>
     <li><a href="#campaignStruct:getSettlementByName">campaignStruct:getSettlementByName (name)</a></li>
+    <li><a href="#campaignStruct:getCampaignPath">campaignStruct:getCampaignPath ()</a></li>
 </details>
 
 
@@ -1103,7 +1133,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2024-02-03 21:26:27</p>
+        <p class="lastUpdatedMessage">Last updated: 2024-02-06 06:50:31</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -1147,6 +1177,14 @@
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.getGameVersion">M2TWEOP.getGameVersion ()</a></td>
 	<td class="summary">Function to get the game version.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP.setPerfectSpy">M2TWEOP.setPerfectSpy (set)</a></td>
+	<td class="summary">Set perfect spy.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP.getLocalFactionID">M2TWEOP.getLocalFactionID ()</a></td>
+	<td class="summary">Get local faction ID.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.getPluginPath">M2TWEOP.getPluginPath ()</a></td>
@@ -1547,6 +1585,14 @@
 	<td class="summary">Checks if character is alive, read only, do not set this value.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#namedCharacter:isOffMap">namedCharacter:isOffMap ()</a></td>
+	<td class="summary">Checks if character is off map, read only, do not set this value.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#namedCharacter:isChild">namedCharacter:isChild ()</a></td>
+	<td class="summary">Checks if character is child, read only, do not set this value.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#namedCharacter:getTraits">namedCharacter:getTraits ()</a></td>
 	<td class="summary">Get the pointer to the character's traits container.</td>
 	</tr>
@@ -1612,6 +1658,38 @@
 	<tr>
 	<td class="name" nowrap><a href="#traitContainer">traitContainer</a></td>
 	<td class="summary">Basic traits table</td>
+	</tr>
+</table>
+<h2><a href="#Trait_Struct">Trait Struct </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#traitStruct">traitStruct</a></td>
+	<td class="summary">Basic trait table</td>
+	</tr>
+</table>
+<h2><a href="#Trait_Entry_Struct">Trait Entry Struct </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#traitEntry">traitEntry</a></td>
+	<td class="summary">Basic traitEntry table</td>
+	</tr>
+</table>
+<h2><a href="#Trait_Level_Struct">Trait Level Struct </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#traitLevel">traitLevel</a></td>
+	<td class="summary">Basic traitLevel table</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#traitLevel:getTraitEffect">traitLevel:getTraitEffect (index)</a></td>
+	<td class="summary">Get trait effect.</td>
+	</tr>
+</table>
+<h2><a href="#Trait_Effect_Struct">Trait Effect Struct </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#traitEffect">traitEffect</a></td>
+	<td class="summary">Basic traitEffect table</td>
 	</tr>
 </table>
 <h2><a href="#FactionStruct">FactionStruct </a></h2>
@@ -3294,6 +3372,10 @@
 	<td class="name" nowrap><a href="#campaignStruct:getSettlementByName">campaignStruct:getSettlementByName (name)</a></td>
 	<td class="summary">Get settlement by internal name.</td>
 	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#campaignStruct:getCampaignPath">campaignStruct:getCampaignPath ()</a></td>
+	<td class="summary">Get path to the current descr_strat file used.</td>
+	</tr>
 </table>
 <h2><a href="#CollegeofCardinals">CollegeofCardinals </a></h2>
 <table class="function_list">
@@ -3851,6 +3933,18 @@
 
 
         </li>
+        <li><span class="parameter">setPerfectSpy</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.setPerfectSpy">setPerfectSpy</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getLocalFactionID</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.getLocalFactionID">getLocalFactionID</a></span>
+
+
+
+        </li>
         <li><span class="parameter">getPluginPath</span>
             <span class="types"><a class="type" href="index.html#M2TWEOP.getPluginPath">getPluginPath</a></span>
 
@@ -4082,6 +4176,59 @@
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><code class="language-lua" >M2TWEOP.getGameVersion();</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP.setPerfectSpy"></a>
+    <strong>M2TWEOP.setPerfectSpy (set)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set perfect spy.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">set</span>
+            <span class="types"><span class="type">bool</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" >M2TWEOP.setPerfectSpy(<span class="keyword">true</span>);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP.getLocalFactionID"></a>
+    <strong>M2TWEOP.getLocalFactionID ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get local faction ID.
+    </div>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        localFaction
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> localFaction = M2TWEOP.getLocalFactionID();</code></pre>
     </ul>
 
 </dd>
@@ -4866,7 +5013,7 @@ M2TWEOP.unloadTexture(testImage.img);</code></pre>
 
         </li>
         <li><span class="parameter">eventData</span>
-            <span class="types"><a class="type" href="index.html#eventTrigger">eventTrigger</a></span>
+            <span class="types"><a class="type" href="index.html#eventTrigger">eventTrigger</a> or <span class="type">nil</span></span>
 
 
 
@@ -7805,6 +7952,18 @@ end_set_faction_banner]]</span>, facName))</code></pre>
 
 
         </li>
+        <li><span class="parameter">isOffMap</span>
+            <span class="types"><a class="type" href="index.html#namedCharacter:isOffMap">isOffMap</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">isChild</span>
+            <span class="types"><a class="type" href="index.html#namedCharacter:isChild">isChild</a></span>
+
+
+
+        </li>
         <li><span class="parameter">age</span>
             <span class="types"><span class="type">int</span></span>
 
@@ -8301,7 +8460,7 @@ end_set_faction_banner]]</span>, facName))</code></pre>
     <h3>Returns:</h3>
     <ol>
 
-           <span class="types"><span class="type">int</span></span>
+           <span class="types"><span class="type">bool</span></span>
         liveStatus true = alive, false = dead
     </ol>
 
@@ -8312,6 +8471,60 @@ end_set_faction_banner]]</span>, facName))</code></pre>
         <pre class="example"><code class="language-lua" ><span class="keyword">if</span> ourcharacter:isAlive() == <span class="keyword">true</span> <span class="keyword">then</span>
 	ourcharacter.character:kill()
 <span class="keyword">end</span></code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "namedCharacter:isOffMap"></a>
+    <strong>namedCharacter:isOffMap ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Checks if character is off map, read only, do not set this value.
+    </div>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        offMap
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">if</span> ourcharacter:isOffMap() == <span class="keyword">true</span> <span class="keyword">then</span>
+	<span class="comment">--do something
+</span><span class="keyword">end</span></code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "namedCharacter:isChild"></a>
+    <strong>namedCharacter:isChild ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Checks if character is child, read only, do not set this value.
+    </div>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        isChild
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">if</span> ourcharacter:isChild() == <span class="keyword">true</span> <span class="keyword">then</span>
+	<span class="comment">--do something
+</span><span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -8784,6 +8997,238 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
         </li>
         <li><span class="parameter">prevTrait</span>
             <span class="types"><a class="type" href="index.html#traitContainer">traitContainer</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">traitInfo</span>
+            <span class="types"><a class="type" href="index.html#traitStruct">traitStruct</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Trait_Struct"></a>Trait Struct </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "traitStruct"></a>
+    <strong>traitStruct</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic trait table
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">traitEntry</span>
+            <span class="types"><a class="type" href="index.html#traitEntry">traitEntry</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">levelEntry</span>
+            <span class="types"><a class="type" href="index.html#traitLevel">traitLevel</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">traitPoints</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Trait_Entry_Struct"></a>Trait Entry Struct </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "traitEntry"></a>
+    <strong>traitEntry</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic traitEntry table
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">traitPoints</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">levels</span>
+            <span class="types"><a class="type" href="index.html#traitLevel">traitLevel[10]</a></span>
+         Maximum: 10
+        </li>
+        <li><span class="parameter">levelCount</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">antiTraits</span>
+            <span class="types"><a class="type" href="index.html#traitEntry">traitEntry[20]</a></span>
+         Maximum: 20
+        </li>
+        <li><span class="parameter">antiTraitCount</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">noGoingBackLevel</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">hidden</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Trait_Level_Struct"></a>Trait Level Struct </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "traitLevel"></a>
+    <strong>traitLevel</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic traitLevel table
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">level</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">threshold</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">effectsCount</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">getTraitEffect</span>
+            <span class="types"><a class="type" href="index.html#traitLevel:getTraitEffect">getTraitEffect</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "traitLevel:getTraitEffect"></a>
+    <strong>traitLevel:getTraitEffect (index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get trait effect.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#traitEffect">traitEffect</a></span>
+        effect
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> effect = level:getTraitEffect(<span class="number">0</span>);</code></pre>
+    </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Trait_Effect_Struct"></a>Trait Effect Struct </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "traitEffect"></a>
+    <strong>traitEffect</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic traitEffect table
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">int</span></span>
 
 
 
@@ -10403,7 +10848,7 @@ ourFacName = ourFac:getFactionName();
 
         </li>
         <li><span class="parameter">getConstructionValue</span>
-            <span class="types"><a class="type" href="index.html#aiPersonality:getConstructionValue">getConstructionValue</a></span>
+            <span class="types"><a class="type" href="index.html#aiProductionController:getConstructionValue">getConstructionValue</a></span>
 
 
 
@@ -10695,7 +11140,7 @@ ourFacName = ourFac:getFactionName();
 
         </li>
         <li><span class="parameter">getConstructionValue</span>
-            <span class="types"><a class="type" href="index.html#aiPersonality:getConstructionValue">getConstructionValue</a></span>
+            <span class="types"><a class="type" href="index.html#aiProductionController:getConstructionValue">getConstructionValue</a></span>
 
 
 
@@ -13883,7 +14328,7 @@ currSet:changeOwner(fac1);
     </dt>
     <dd>
     <div class="functionDescription">
-    Sort units in a stack.
+    Sort units in a stack.  Use the sortType enum to specify the sorting mode.
     </div>
 
     <h3>Parameters:</h3>
@@ -13920,6 +14365,7 @@ currSet:changeOwner(fac1);
 </span><span class="comment">-- 4 = Soldier Count
 </span><span class="comment">-- 5 = Experience
 </span><span class="comment">-- 6 = Category + Class
+</span><span class="comment">-- 7 = AI unit value
 </span>
 <span class="keyword">function</span> onFactionTurnStart(eventData)
 <span class="keyword">local</span> faction = eventData.faction
@@ -17796,13 +18242,13 @@ disasterTypes = earthquake, flood, horde, storm, volcano, dustbowl, locusts, fam
 
         </li>
         <li><span class="parameter">settlement</span>
-            <span class="types"><a class="type" href="index.html#settlementStruct">settlementStruct</a></span>
+            <span class="types"><a class="type" href="index.html#settlementStruct">settlementStruct</a> or <span class="type">nil</span></span>
 
 
 
         </li>
         <li><span class="parameter">fort</span>
-            <span class="types"><a class="type" href="index.html#fortStruct">fortStruct</a></span>
+            <span class="types"><a class="type" href="index.html#fortStruct">fortStruct</a> or <span class="type">nil</span></span>
 
 
 
@@ -24810,7 +25256,7 @@ dummyBuilding.edbEntry = eopBuilding</code></pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Get EOP Building entry.
+    Get EOP Building entry.  Returns vanilla build entry if you use a vanilla building index (&lt; 128).
     </div>
 
     <h3>Parameters:</h3>
@@ -26975,6 +27421,12 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</code></pre>
 
 
         </li>
+        <li><span class="parameter">getCampaignPath</span>
+            <span class="types"><a class="type" href="index.html#campaignStruct:getCampaignPath">getCampaignPath</a></span>
+
+
+
+        </li>
         <li><span class="parameter">getFort</span>
             <span class="types"><a class="type" href="index.html#region:getFort">getFort</a></span>
 
@@ -27249,6 +27701,32 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
     <ul>
         <pre class="example"><code class="language-lua" ><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
 <span class="keyword">local</span> sett=campaign:getSettlementByName(<span class="string">"London"</span>);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "campaignStruct:getCampaignPath"></a>
+    <strong>campaignStruct:getCampaignPath ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get path to the current descr_strat file used.
+    </div>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        path
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> campaign = gameDataAll.get().campaignStruct;
+<span class="keyword">local</span> path = campaign:getCampaignPath();</code></pre>
     </ul>
 
 </dd>
@@ -29883,6 +30361,12 @@ battleXCoord=gameData.battleStruct.xCoord;</code></pre>
 
 
         </li>
+        <li><span class="parameter">inBattle</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
         <li><span class="parameter">battleSpeed</span>
             <span class="types"><span class="type">float</span></span>
 
@@ -29930,7 +30414,7 @@ battleXCoord=gameData.battleStruct.xCoord;</code></pre>
          Returns a battleSide[8]. Maximum: 8.
         </li>
         <li><span class="parameter">factionSide</span>
-            <span class="types"><span class="type">integer[31]</span></span>
+            <span class="types"><span class="type">int[31]</span></span>
 
 <p> faction alliance array, -1 if not in battle, start at 1 so faction ID + 1 Maximum 31.</p>
 <pre><code>tfield getPlayerArmy getPlayerArmy
