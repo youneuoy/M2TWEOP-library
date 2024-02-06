@@ -47,6 +47,8 @@ namespace m2tweopHelpers
 	void seReligionsLimit(unsigned char limit);
 	void setMaxBgSize(unsigned char maxBgSize);
 	void unlockGameConsoleCommands();
+	void setPerfectSpy(bool set);
+	int getLocalFactionID();
 
 	void setEDUUnitsSize(signed short min, signed short max);
 	int getGameVersion();

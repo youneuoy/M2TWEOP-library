@@ -980,7 +980,9 @@ struct gameDataAllStruct {
 	struct campaign* field_0x38;
 	undefined field_0x3c[28];
 	struct battleDataS* battleHandler;
-	undefined field_0x5c[36];
+	int* localFactionID2;
+	int* localFactionID;
+	undefined field_0x64[28];
 	struct battleSettlement* battleSettlement;
 	char pad[112];
 	struct uiCardManager* uiCardManager;
@@ -1440,7 +1442,14 @@ struct battleDataS {
 	int attackerYCoord;//0x0034
 	int defenderXCoord;//0x0038
 	int defenderYCoord;//0x003C
-	char pad_0040[20]; //0x0040
+	float N000037ED; //0x0040
+	float N000037EE; //0x0044
+	char pad_0048[4]; //0x0048
+	int8_t N000037F0; //0x004C
+	int8_t N0003A507; //0x004D
+	int8_t inBattle; //0x004E
+	int8_t N0003A508; //0x004F
+	int32_t N000037F1; //0x0050
 	int32_t paused; //0x0054
 	float speed; //0x0058
 	char pad_005C[8]; //0x005C
@@ -2430,21 +2439,57 @@ struct ancillary { /* structure of ancillary */
 };
 
 struct trait { /* traits of the character */
-	struct sometNameStruct* nameS;
-	int* level; /* level of trait */
-	struct trait* nextTrait;
-	undefined field_0xc[8];
+	struct traitEntry* traitEntry;
+	struct traitLevel* level; /* level of trait */
+	int traitPoints;
+	int someInt;
+	int somePointer;
 };
 
-struct sometNameStruct { /* char* at 0x4 */
-	undefined field_0x0[4];
+struct traitEffect
+{
+	int32_t effectID;
+	int32_t value;
+};
+
+struct traitLevel
+{
+	int32_t level;
+	struct UNICODE_STRING*** localizedName;
+	struct UNICODE_STRING*** localizedDescription;
+	struct UNICODE_STRING*** localizedEpithetDescription;
+	struct UNICODE_STRING*** localizedGainDescription;
+	struct UNICODE_STRING*** localizedLoseDescription;
+	int32_t threshold;
+	struct traitEffect* effects;
+	int32_t effectsSize;
+	int32_t effectsCount;
+	struct UNICODE_STRING*** localizedEffectsDescription;
+};
+
+struct traitEntry { /* char* at 0x4 */
+	int32_t index;
 	char* name;
+	int32_t nameHash;
+	struct traitLevel levels[10];
+	int32_t levelCount;
+	struct traitEntry* antiTraits[20];
+	int32_t antiTraitCount;
+	int32_t characterTypeNum;
+	uint32_t characterType;
+	int32_t noGoingBackLevel;
+	int32_t excludeCulturesNum;
+	uint32_t excludeCulturesStart;
+	int32_t hidden;
+	struct stringWithHash antiTraitNames[20];
+	int32_t antiTraitNameCount;
 };
 
 struct traitContainer {
 	struct trait* trait;
 	struct traitContainer* prev;
 	struct traitContainer* next;
+	int hasEpithet;
 };
 
 struct trackedPointerUnit {
@@ -2668,7 +2713,6 @@ struct firingUnit
 	struct unit* unit; //0x0000
 	int32_t intValue; //0x0004
 };
-
 
 struct unitPositionData
 {

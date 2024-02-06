@@ -443,20 +443,19 @@ namespace eopBuildings
 
 	NOINLINE EOP_EXPORT edbEntry* getBuildingByID(int id)
 	{
-		exportDescrBuildings* edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
-		buildingListPointer* buildingsptr = &edb->buildingsList;
-		int buildingNum = 0;
-		while (buildingsptr != nullptr)
+		const auto* edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
+		const buildingListPointer* buildingsPointer = &edb->buildingsList;
+		while (buildingsPointer != nullptr)
 		{
-			buildingNum = buildingsptr->arrayCount;
+			const int buildingNum = buildingsPointer->arrayCount;
 			for (int i = 0; i < buildingNum; i++)
 			{
-				if (buildingsptr->buildingsArray->buildings[i].buildingID == id)
+				if (buildingsPointer->buildingsArray->buildings[i].buildingID == id)
 				{
-					return &buildingsptr->buildingsArray->buildings[i];
+					return &buildingsPointer->buildingsArray->buildings[i];
 				}
 			}
-			buildingsptr = buildingsptr->nextBuildingsListPointer;
+			buildingsPointer = buildingsPointer->nextBuildingsListPointer;
 		}
 		return nullptr;
 	}

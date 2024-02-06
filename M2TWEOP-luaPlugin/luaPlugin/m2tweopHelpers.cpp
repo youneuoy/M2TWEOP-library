@@ -1,4 +1,6 @@
 #include "m2tweopHelpers.h"
+
+#include "gameDataAllHelper.h"
 #include "plugData.h"
 namespace m2tweopHelpers
 {
@@ -213,6 +215,24 @@ namespace m2tweopHelpers
 	int getGameVersion()
 	{
 		return (*(*plugData::data.funcs.getGameVersion))();
+	}
+
+	int getLocalFactionID()
+	{
+		gameDataAllStruct* gameData = gameDataAllHelper::get();
+		return *gameData->localFactionID;
+	}
+
+	void setPerfectSpy(bool set)
+	{
+		if (getGameVersion() == 1)
+		{
+			*reinterpret_cast<bool*>(0x016F0E5C) = set;
+		}
+		else
+		{
+			*reinterpret_cast<bool*>(0x016A7CC4) = set;
+		}
 	}
 
 	options1* getOptions1()

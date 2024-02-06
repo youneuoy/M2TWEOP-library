@@ -176,13 +176,12 @@ namespace battleCreator
 			traitContainer* traitCont = gen->genChar->traits;
 			while (traitCont != nullptr)
 			{
-				std::pair<std::string, int> traitData;
-				traitData.first= traitCont->trait->nameS->name;
-				traitData.second= *traitCont->trait->level;
+				jsn::json traitArray = jsn::json::array({ traitCont->trait->traitEntry->name, traitCont->trait->level->level });
+
+				jTraits.push_back(traitArray);
 
 				traitCont = traitCont->next;
-				jTraits.push_back(traitData);
-			};
+			}
 			genJson["traits"] = jTraits;
 		}
 		else
@@ -729,6 +728,12 @@ namespace battleCreator
 							, portrait, 0,0);
 						fastFuncts::setBodyguard(newGeneral, army->units[i]);
 						newGeneral->genChar->index = armySide->unitsForTransfer[i]->numberInArmy;
+						if (!newGen.hero_ability.empty())
+						{
+							std::string heroAbility = newGen.hero_ability;
+							newGeneral->ability = new char[heroAbility.size() + 1];
+							std::copy(heroAbility.begin(), heroAbility.end(), newGeneral->ability);
+						}
 						for (std::string& anc : newGen.ancillaries)
 						{
 							auto* resAnc=fastFuncts::findAncillary((char*)anc.c_str());

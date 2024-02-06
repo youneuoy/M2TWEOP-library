@@ -20,7 +20,7 @@ namespace generalCharactericticsHelpers
 	bool isFamily(namedCharacter* character);
 	bool setAsFamily(namedCharacter* character, bool set);
 	bool isOffMap(namedCharacter* character);
-	bool isAdult(namedCharacter* character);
+	bool isChild(namedCharacter* character);
 
 	bool getIsMale(namedCharacter* character);
 	void setIsMale(namedCharacter* character, bool isMale);

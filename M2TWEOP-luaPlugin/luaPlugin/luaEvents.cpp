@@ -1007,8 +1007,8 @@ void luaP::onPluginLoadF()
 
 	@function onGeneralAssaultsResidence
 	@tparam eventTrigger eventData
-	@tparam settlementStruct settlement
-	@tparam fortStruct fort
+	@tparam settlementStruct|nil settlement
+	@tparam fortStruct|nil fort
 
 	@usage
 	function onGeneralAssaultsResidence(eventData, settlement, fort)

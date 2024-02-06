@@ -41,9 +41,23 @@ end
 -- Fires when the plugin is first loaded at game start or reloded with CTRL+9+1
 function onPluginLoad()
     M2TWEOP.unlockGameConsoleCommands();
-    -- M2TWEOP.setAncillariesLimit(8);
-    -- M2TWEOP.setMaxBgSize(100);
-    -- M2TWEOP.setReligionsLimit(50);
-    -- M2TWEOP.setBuildingChainLimit(40);
+    M2TWEOP.setAncillariesLimit(8);
+    M2TWEOP.setMaxBgSize(31);
+    M2TWEOP.setReligionsLimit(10);
+    M2TWEOP.setBuildingChainLimit(9);
     -- M2TWEOP.setGuildCooldown(3);
 end
+
+
+--- Called after loading the campaign map
+function onCampaignMapLoaded() 
+    GAME_DATA = gameDataAll.get()
+    CAMPAIGN = GAME_DATA.campaignStruct
+    STRAT_MAP = GAME_DATA.stratMap
+    BATTLE = GAME_DATA.battleStruct
+    UI_MANAGER = GAME_DATA.uiCardManager
+end
+
+
+
+

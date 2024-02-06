@@ -591,7 +591,9 @@ struct battleResidence
 public:
 	char pad_0000[28]; //0x0000
 	struct settlementStruct* settlement; //0x001C
-	char pad_0020[16]; //0x0020
+	char pad_0020[8]; //0x0020
+	struct factionStruct** faction; //0x0028
+	char pad_002C[4]; //0x002C
 	int32_t isFortBattle; //0x0030
 	struct battleBuildings* battleBuildings; //0x0034
 	char pad_0038[4]; //0x0038
@@ -805,13 +807,19 @@ public:
 	struct N0001F079* cardinalInfo; //0x0004
 }; //Size: 0x0008
 
+struct cardinalArray
+{
+public:
+	struct cardinal cardinals[16]; //0x0000
+}; //Size: 0x0008
+
 struct collegeOfCardinals
 {
 public:
 	char pad_0000[4]; //0x0000
 	struct namedCharacter* pope; //0x0004
 	char pad_0008[4]; //0x0008
-	struct cardinal* cardinalsArray; //0x000C
+	struct cardinalArray* cardinalsArray; //0x000C
 	int32_t cardinalsArraySize; //0x0010
 	int32_t cardinalNum; //0x0014
 	int8_t N0001D9D6; //0x0018
@@ -1355,13 +1363,13 @@ public:
 	int32_t unitArraySize; //0x0744
 	int32_t unitCount; //0x0748
 	char pad_074C[12]; //0x074C
-	struct aiObjectiveArrayBattle* aiObjectives; //0x0758
-	int32_t aiObjectivesSize; //0x075C
-	int32_t aiObjectivesCount; //0x0760
+	struct AIBattleObjectiveBase** currentObjectives; //0x0758
+	int32_t currentObjectivesSize; //0x075C
+	int32_t currentObjectivesCount; //0x0760
 	char pad_0764[4]; //0x0764
-	struct aiObjectiveArrayBattle* aiObjectives2; //0x0768
-	char pad_076C[4]; //0x076C
-	uint32_t objectiveCount; //0x0770
+	struct AIBattleObjectiveBase** addedObjectives; //0x0768
+	int32_t addedObjectivesSize; //0x076C
+	int32_t addedObjectivesCount; //0x0770
 	char pad_0774[44]; //0x0774
 	DWORD aiAnalysers; //0x07A0
 	char pad_07A4[96]; //0x07A4
@@ -2422,21 +2430,57 @@ struct ancillary { /* structure of ancillary */
 };
 
 struct trait { /* traits of the character */
-	struct sometNameStruct* nameS;
-	int* level; /* level of trait */
-	struct trait* nextTrait;
-	undefined field_0xc[8];
+	struct traitEntry* traitEntry;
+	struct traitLevel* level; /* level of trait */
+	int traitPoints;
+	int someInt;
+	int somePointer;
 };
 
-struct sometNameStruct { /* char* at 0x4 */
-	undefined field_0x0[4];
+struct traitEffect
+{
+	int32_t effectID;
+	int32_t value;
+};
+
+struct traitLevel
+{
+	int32_t level;
+	struct UNICODE_STRING*** localizedName;
+	struct UNICODE_STRING*** localizedDescription;
+	struct UNICODE_STRING*** localizedEpithetDescription;
+	struct UNICODE_STRING*** localizedGainDescription;
+	struct UNICODE_STRING*** localizedLoseDescription;
+	int32_t threshold;
+	struct traitEffect* effects;
+	int32_t effectsSize;
+	int32_t effectsCount;
+	struct UNICODE_STRING*** localizedEffectsDescription;
+};
+
+struct traitEntry { /* char* at 0x4 */
+	int32_t index;
 	char* name;
+	int32_t nameHash;
+	struct traitLevel Levels[10];
+	int32_t levelCount;
+	struct traitEntry* antiTraits[20];
+	int32_t antiTraitCount;
+	int32_t characterTypeNum;
+	uint32_t characterType;
+	int32_t noGoingBackLevel;
+	int32_t excludeCulturesNum;
+	uint32_t excludeCulturesStart;
+	int32_t hidden;
+	struct stringWithHash antiTraitNames[20];
+	int32_t antiTraitNameCount;
 };
 
 struct traitContainer {
 	struct trait* trait;
 	struct traitContainer* prev;
 	struct traitContainer* next;
+	int hasEpithet;
 };
 
 struct trackedPointerUnit {
@@ -2654,15 +2698,12 @@ public:
 	float floatValue; //0x0018
 }; //Size: 0x001C
 
-
-
 struct firingUnit
 {
 public:
 	struct unit* unit; //0x0000
 	int32_t intValue; //0x0004
 };
-
 
 struct unitPositionData
 {

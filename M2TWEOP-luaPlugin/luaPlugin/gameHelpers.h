@@ -121,7 +121,7 @@ namespace gameHelpers
 	fortStruct* getTileFort(const oneTile* tile);
 	portBuildingStruct* getTilePort(const oneTile* tile);
 	watchTowerStruct* getTileWatchtower(const oneTile* tile);
-
+	std::string getCampaignPath(campaign* campaign);
 	int getMercUnitNum(mercPool* mercPool);
 	mercPoolUnit* getMercUnit(mercPool* pool, int index);
 	void setMercReligion(mercPoolUnit* unit, int religion, bool set);

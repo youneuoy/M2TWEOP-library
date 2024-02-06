@@ -50,7 +50,7 @@ namespace generalCharactericticsHelpers
 	{
 		return character->status & 8;
 	}
-	bool isAdult(namedCharacter* character)
+	bool isChild(namedCharacter* character)
 	{
 		return character->age & 4;
 	}

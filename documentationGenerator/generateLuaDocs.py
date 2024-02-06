@@ -50,6 +50,10 @@ def writeClass(newClass):
             firstparam = ""
             for paramfield in field.params:
                 thisType = fixTypes(paramfield.type)
+                if (field.name == "scriptCommand" or field.name == "callConsole") and paramfield.name == "args":
+                    thisType += "?"
+                if (field.name == "condition") and paramfield.name == "eventData":
+                    thisType += "?"
                 outputfile.write("---@param " + paramfield.name + " " + thisType + " " +  paramfield.comment.strip() + "\n")
                 if firstParamBool == False:
                     nextparams.append(paramfield.name)

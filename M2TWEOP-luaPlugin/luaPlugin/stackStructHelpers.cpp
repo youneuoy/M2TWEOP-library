@@ -46,9 +46,13 @@ namespace stackStructHelpers
 						if (unitA->expScreen != unitB->expScreen)
 							return unitA->expScreen > unitB->expScreen;
 						break;
-					case 6: // categorClass
+					case 6: // categoryClass
 						if (unitA->eduEntry->categoryClassCombinationForAI != unitB->eduEntry->categoryClassCombinationForAI)
 							return unitA->eduEntry->categoryClassCombinationForAI < unitB->eduEntry->categoryClassCombinationForAI;
+						break;
+					case 7: // aiUnitValue
+						if (unitA->eduEntry->aiUnitValuePerSoldier != unitB->eduEntry->aiUnitValuePerSoldier)
+							return unitA->eduEntry->aiUnitValuePerSoldier < unitB->eduEntry->aiUnitValuePerSoldier;
 						break;
 					default: 
 						break;

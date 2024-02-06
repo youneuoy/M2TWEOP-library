@@ -457,6 +457,11 @@ namespace gameHelpers
 		return technicalHelpers::uniStringToStr(region->localizedRebelsName);
 	}
 
+	std::string gameHelpers::getCampaignPath(campaign* campaign)
+	{
+		return technicalHelpers::uniStringToStr(campaign->currentDescrFile);
+	}
+
 	int gameHelpers::getMercUnitNum(mercPool* mercPool)
 	{
 		mercPoolUnitsPtr* unitptr = &mercPool->firstUnits;

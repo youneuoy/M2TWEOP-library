@@ -556,7 +556,7 @@ void luaP::initEopEdu()
 	tables.EDB.set_function("addEopBuildEntry", &buildingStructHelpers::addEopBuildEntry);
 
 	/***
-	Get EOP Building entry.
+	Get EOP Building entry. Returns vanilla build entry if you use a vanilla building index (< 128).
 	@function EDB.getEopBuildEntry
 	@tparam int index Index of eop entry.
 	@treturn edbEntry eopentry.

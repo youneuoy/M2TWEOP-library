@@ -12,21 +12,23 @@
 <!-- ![](https://i.imgur.com/h8UlYMT.png) -->
 
 ### **Library**
-- fix for alpha channel in M2TWEOP3dObjects.MakeTextFont, ChangeColor for font, etc
-- improved internal naming of eop units added by text file (MIGHT MAKE UPDATE NON SAVE GAME COMPATIBLE)
+- Fixed general hero abilities for hotseat battle generation - Fynn
 
 
 ### **Lua Plugin**
-- Enabled safety checks for lua events(broken since 3.0)
-- Added 2 new parameters - weight, isItalic to M2TWEOP3dObjects.MakeTextFont
-- fixed spawning EOP units
-- fixed some bugs with eop units in buildings
-- Fixed getting unit under fire from
+- Added isChild and isOffMap to namedCharacter - Fynn
+- Added lot more information about traits and new structures - Fynn
+- Added getLocalFactionID - Fynn
+- Added setPerfectSpy - Fynn
+- Added getCampaignPath - Fynn
+- Added enum for sort types you can use with sortStack and added sorting by AI unit value - Fynn
+- Added inBattle to battle struct - Fynn
+
 
 <!-- ### **ImGUI** -->
 
 ### **Documentation**
-- no
+- Various doc fixes - Fynn
 
 ### **Links**
 

@@ -72,7 +72,7 @@ namespace gameEvents
 			{
 				auto eventData = reinterpret_cast<eventTrigger*>(vTab);
 				if (funk != nullptr) {
-					tryLuaBasicEventFunk((*funk)(eventData));
+					tryLuaBasicEventFunk((*funk)(eventData))
 				}
 				return 1;
 			}
@@ -89,7 +89,7 @@ namespace gameEvents
 						settlement = nullptr;
 				}
 				if (funk != nullptr) {
-					tryLuaBasicEventFunk((*funk)(eventData, settlement, fort));
+					tryLuaBasicEventFunk((*funk)(eventData, settlement, fort))
 				}
 				return 2;
 			}

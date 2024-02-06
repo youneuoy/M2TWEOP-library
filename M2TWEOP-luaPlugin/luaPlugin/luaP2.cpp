@@ -246,6 +246,31 @@ void luaP::initCampaign()
 		"pope", 13
 	);
 
+	//@section sortType
+	/***
+	Enum with a list of army sort types.
+
+	@tfield int eduType
+	@tfield int category
+	@tfield int class
+	@tfield int soldierCount
+	@tfield int experience
+	@tfield int categoryClass
+	@tfield int aiUnitValue
+
+	@table sortType
+	*/
+	luaState.new_enum(
+		"sortType",
+		"eduType", 1,
+		"category", 2,
+		"class", 3,
+		"soldierCount", 4,
+		"experience", 5,
+		"categoryClass", 6,
+		"aiUnitValue", 7
+	);
+
 	//@section aiPlan
 	/***
 	Enum with a list of GTA AI plans.
@@ -1104,6 +1129,7 @@ void luaP::initCampaign()
 	@tfield checkDipStance checkDipStance
 	@tfield setDipStance setDipStance
 	@tfield GetUnitSize GetUnitSize
+	@tfield getCampaignPath getCampaignPath
 	@tfield getFort getFort
 	@tfield getPort getPort
 	@tfield getWatchTower getWatchTower
@@ -1231,6 +1257,15 @@ void luaP::initCampaign()
 	local sett=campaign:getSettlementByName("London");
 	*/
 	typeAll.campaignTable.set_function("getSettlementByName", &gameHelpers::getSettlementByName);
+	/***
+	Get path to the current descr\_strat file used.
+	@function campaignStruct:getCampaignPath
+	@treturn string path
+	@usage
+	local campaign = gameDataAll.get().campaignStruct;
+	local path = campaign:getCampaignPath();
+	*/
+	typeAll.campaignTable.set_function("getCampaignPath", &gameHelpers::getCampaignPath);
 
 	///CollegeofCardinals
 	//@section collegeOfCardinals
@@ -2170,6 +2205,7 @@ void luaP::initP2()
 	@tfield int defenderXCoord
 	@tfield int defenderYCoord
 	@tfield int paused
+	@tfield int inBattle
 	@tfield float battleSpeed
 	@tfield float secondsPassed
 	@tfield int secondsSinceBattleLoaded
@@ -2178,7 +2214,7 @@ void luaP::initP2()
 	@tfield float mapHeightDoubled
 	@tfield int sidesNum
 	@tfield battleSide[8] sides Returns a battleSide[8]. Maximum: 8.
-	@tfield integer[31] factionSide faction alliance array, -1 if not in battle, start at 1 so faction ID + 1 Maximum 31.
+	@tfield int[31] factionSide faction alliance array, -1 if not in battle, start at 1 so faction ID + 1 Maximum 31.
 	tfield getPlayerArmy getPlayerArmy
 	@tfield getBattleResidence getBattleResidence
 
@@ -2195,6 +2231,7 @@ void luaP::initP2()
 	typeAll.battleTable.set("defenderXCoord", &battleDataS::defenderXCoord);
 	typeAll.battleTable.set("defenderYCoord", &battleDataS::defenderYCoord);
 	typeAll.battleTable.set("paused", &battleDataS::paused);
+	typeAll.battleTable.set("inBattle", &battleDataS::inBattle);
 	typeAll.battleTable.set("battleSpeed", &battleDataS::speed);
 	typeAll.battleTable.set("secondsPassed", &battleDataS::secondsPassed);
 	typeAll.battleTable.set("secondsSinceBattleLoaded", &battleDataS::secondsSinceBattleLoaded);

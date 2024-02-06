@@ -141,6 +141,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<aiProductionController> aiProductionController;
 		sol::usertype<ltgdFactionValues> aiFactionValues;
 		sol::usertype<interFactionLTGD> interFactionLTGD;
+		sol::usertype<trait> traitStruct;
+		sol::usertype<traitEntry> traitEntry;
+		sol::usertype<traitLevel> traitLevel;
+		sol::usertype<traitEffect> traitEffect;
 	}types;
 	luaState = {};
 	luaPath = modPath + "\\youneuoy_Data\\plugins\\lua";
@@ -194,6 +198,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getModPath getModPath
 	@tfield saveGame saveGame
 	@tfield getGameVersion getGameVersion
+	@tfield setPerfectSpy setPerfectSpy
+	@tfield getLocalFactionID getLocalFactionID
 	@tfield getPluginPath  getPluginPath
 	@tfield loadTexture loadTexture
 	@tfield unloadTexture unloadTexture
@@ -256,6 +262,22 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	M2TWEOP.getGameVersion();
 	*/
 	tables.M2TWEOPTable.set_function("getGameVersion", &m2tweopHelpers::getGameVersion);
+	/***
+	Set perfect spy.
+	@function M2TWEOP.setPerfectSpy
+	@tparam bool set
+	@usage
+		M2TWEOP.setPerfectSpy(true);
+	*/
+	tables.M2TWEOPTable.set_function("setPerfectSpy", &m2tweopHelpers::setPerfectSpy);
+	/***
+	Get local faction ID.
+	@function M2TWEOP.getLocalFactionID
+	@treturn int localFaction
+	@usage
+		local localFaction = M2TWEOP.getLocalFactionID();
+	*/
+	tables.M2TWEOPTable.set_function("getLocalFactionID", &m2tweopHelpers::getLocalFactionID);
 	/***
 	Function to return the path to the plugin (location of your LUA files).
 	@function M2TWEOP.getPluginPath
@@ -515,7 +537,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Check game condition.
 	@function M2TWEOP.condition
 	@tparam string condition
-	@tparam eventTrigger eventData
+	@tparam eventTrigger|nil eventData
 	@treturn bool isTrue
 	@usage
 	if M2TWEOP.condition("InEnemyLands", eventData) then
@@ -1506,7 +1528,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield bool isFamily
 	@tfield bool isMale
 	@tfield isOffMap isOffMap
-	@tfield isAdult isAdult
+	@tfield isChild isChild
 	@tfield int age
 	@tfield float yearOfBirth For example with 4 turns per year, the yearOfBirth could be 1840.25
 	@tfield factionStruct faction
@@ -1627,15 +1649,15 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.namedCharacter.set_function("isOffMap", &generalCharactericticsHelpers::isOffMap);
 	/***
-	Checks if character is adult, read only, do not set this value.
-	@function namedCharacter:isAdult
-	@treturn bool isAdult
+	Checks if character is child, read only, do not set this value.
+	@function namedCharacter:isChild
+	@treturn bool isChild
 	@usage
-	if ourcharacter:isAdult() == true then
+	if ourcharacter:isChild() == true then
 		--do something
 	end
 	*/
-	types.namedCharacter.set_function("isAdult", &generalCharactericticsHelpers::isAdult);
+	types.namedCharacter.set_function("isChild", &generalCharactericticsHelpers::isChild);
 	types.namedCharacter.set("isMale", sol::property(&generalCharactericticsHelpers::getIsMale, &generalCharactericticsHelpers::setIsMale));
 	types.namedCharacter.set("isFamily", sol::property(&generalCharactericticsHelpers::isFamily, &generalCharactericticsHelpers::setAsFamily));
 	types.namedCharacter.set("age", sol::property(&generalCharactericticsHelpers::getAge, &generalCharactericticsHelpers::setAge));
@@ -1876,6 +1898,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield string name
 	@tfield traitContainer nextTrait
 	@tfield traitContainer prevTrait
+	@tfield traitStruct traitInfo
 
 	@table traitContainer
 	*/
@@ -1884,7 +1907,94 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.traitContainerT.set("name", sol::property(&luaGetSetFuncs::getTraitName));
 	types.traitContainerT.set("nextTrait", sol::property(&luaGetSetFuncs::getNextTrait));
 	types.traitContainerT.set("prevTrait", sol::property(&luaGetSetFuncs::getPrevTrait));
+	types.traitContainerT.set("traitInfo", &traitContainer::trait);
 
+	/// Trait Struct
+	//@section traitStruct
+
+	/***
+	Basic trait table
+
+	@tfield traitEntry traitEntry
+	@tfield traitLevel levelEntry
+	@tfield int traitPoints
+
+	@table traitStruct
+	*/
+	types.traitStruct = luaState.new_usertype<trait>("traitStruct");
+	types.traitStruct.set("traitEntry", &trait::traitEntry);
+	types.traitStruct.set("levelEntry", &trait::level);
+	types.traitStruct.set("traitPoints", &trait::traitPoints);
+
+	/// Trait Entry Struct
+	//@section traitEntry
+
+	/***
+	Basic traitEntry table
+
+	@tfield int index
+	@tfield string name
+	@tfield int traitPoints
+	@tfield traitLevel[10] levels Maximum: 10
+	@tfield int levelCount
+	@tfield traitEntry[20] antiTraits Maximum: 20
+	@tfield int antiTraitCount
+	@tfield int noGoingBackLevel
+	@tfield int hidden
+
+	@table traitEntry
+	*/
+	types.traitEntry = luaState.new_usertype<traitEntry>("traitEntry");
+	types.traitEntry.set("index", &traitEntry::index);
+	types.traitEntry.set("name", &traitEntry::name);
+	types.traitEntry.set("levels", sol::property([](traitEntry& self) { return std::ref(self.levels); }));
+	types.traitEntry.set("antiTraits", sol::property([](traitEntry& self) { return std::ref(self.antiTraits); }));
+	types.traitEntry.set("levelCount", &traitEntry::levelCount);
+	types.traitEntry.set("antiTraitCount", &traitEntry::antiTraitCount);
+	types.traitEntry.set("noGoingBackLevel", &traitEntry::noGoingBackLevel);
+	types.traitEntry.set("hidden", &traitEntry::hidden);
+
+	/// Trait Level Struct
+	//@section traitLevel
+
+	/***
+	Basic traitLevel table
+
+	@tfield int level
+	@tfield int threshold
+	@tfield int effectsCount
+	@tfield getTraitEffect getTraitEffect
+
+	@table traitLevel
+	*/
+	types.traitLevel = luaState.new_usertype<traitLevel>("traitLevel");
+	types.traitLevel.set("level", &traitLevel::level);
+	types.traitLevel.set("threshold", &traitLevel::threshold);
+	types.traitLevel.set("effectsCount", &traitLevel::effectsCount);
+	/***
+	Get trait effect.
+	@function traitLevel:getTraitEffect
+	@tparam int index
+	@treturn traitEffect effect
+	@usage
+		local effect = level:getTraitEffect(0);
+	*/
+	types.traitLevel.set_function("getTraitEffect", &luaGetSetFuncs::getTraitEffect);
+
+	/// Trait Effect Struct
+	//@section traitEffect
+
+	/***
+	Basic traitEffect table
+
+	@tfield int id
+	@tfield int value
+
+	@table traitEffect
+	*/
+	types.traitEffect = luaState.new_usertype<traitEffect>("traitEffect");
+	types.traitEffect.set("id", &traitEffect::effectID);
+	types.traitEffect.set("value", &traitEffect::value);
 
 	///FactionStruct
 	//@section factionStructTable
