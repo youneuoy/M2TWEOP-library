@@ -3175,6 +3175,98 @@ void OnUnitInfo::SetNewCode()
 	delete a;
 }
 
+OnReligionCombatBonus::OnReligionCombatBonus(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005A65EF;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005A610F;
+}
+
+OnReligionCombatBonus::~OnReligionCombatBonus()
+{
+}
+
+void OnReligionCombatBonus::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(eax, dword_ptr(edi, eax, 4, 0x118));
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnReligionCombatBonus::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+
+	a->push(ebp);
+	a->push(ebx);
+	a->push(ecx);
+	a->push(edx);
+	a->push(esi);
+	a->push(edi);
+
+	a->mov(edx, edi);
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->pop(edi);
+	a->pop(esi);
+	a->pop(edx);
+	a->pop(ecx);
+	a->pop(ebx);
+	a->pop(ebp);
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+OnBattleArmiesBug::OnBattleArmiesBug(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0062218A;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00621DCA;
+}
+
+OnBattleArmiesBug::~OnBattleArmiesBug()
+{
+}
+
+void OnBattleArmiesBug::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->call(0x0046D580);
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnBattleArmiesBug::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->pop(eax);
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
 //need to overwrite some code so it passes check with non standard edu index, and this way also flags it as eop unit for later
 OnCreateMercUnitCheck::OnCreateMercUnitCheck(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)

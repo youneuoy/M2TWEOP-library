@@ -524,6 +524,18 @@ void managerF::doPachs()
 	toUnitInfo->Enable();
 	f1 << "Done" << endl;
 
+	f1 << "Start applying OnReligionCombatBonus patch" << endl;
+	OnReligionCombatBonus* toReligionCombatBonus = new OnReligionCombatBonus(mem, (LPVOID)patchesForGame::OnReligionCombatBonus, globals::dataS.gamever);
+	toReligionCombatBonus->SetNewCode();
+	toReligionCombatBonus->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying OnReligionCombatBonus patch" << endl;
+	OnBattleArmiesBug* toOnBattleArmiesBug = new OnBattleArmiesBug(mem, nullptr, globals::dataS.gamever);
+	toOnBattleArmiesBug->SetNewCode();
+	toOnBattleArmiesBug->Enable();
+	f1 << "Done" << endl;
+
 	f1 << "Start applying OnGetRecruitPoolUnitEntry patch" << endl;
 	OnGetRecruitPoolUnitEntry* toGetRecruitPoolUnitEntry = new OnGetRecruitPoolUnitEntry(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gamever);
 	toGetRecruitPoolUnitEntry->SetNewCode();

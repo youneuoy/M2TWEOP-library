@@ -872,6 +872,32 @@ private:
 	LPVOID funcAddress;
 };
 
+class OnReligionCombatBonus
+	:public AATemplate
+{
+public:
+	OnReligionCombatBonus(MemWork* mem, LPVOID addr, int ver);
+	~OnReligionCombatBonus();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class OnBattleArmiesBug
+	:public AATemplate
+{
+public:
+	OnBattleArmiesBug(MemWork* mem, LPVOID addr, int ver);
+	~OnBattleArmiesBug();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class OnGetRecruitPoolUnitEntry
 	:public AATemplate
 {

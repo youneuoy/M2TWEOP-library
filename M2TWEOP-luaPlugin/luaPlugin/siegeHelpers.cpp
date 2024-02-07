@@ -3,10 +3,14 @@
 
 settlementStruct* siegeHelpers::getSiegedSettlement(siegeS* siege)
 {
-	return (*(*plugData::data.funcs.findSettlement))(siege->goal->xCoord, siege->goal->yCoord);
+	auto settlement = siege->goal;
+	auto tile = gameHelpers::getTile(settlement->xCoord, settlement->yCoord);
+	return gameHelpers::getTileSettlement(tile);
 }
 
 fortStruct* siegeHelpers::getSiegedFort(siegeS* siege)
 {
-	return (*(*plugData::data.funcs.findFort))(siege->goal->xCoord, siege->goal->yCoord);
+	auto settlement = siege->goal;
+	auto tile = gameHelpers::getTile(settlement->xCoord, settlement->yCoord);
+	return gameHelpers::getTileFort(tile);
 }

@@ -526,10 +526,41 @@ struct oneTile {
 	float mpModifier; //0x0030
 };
 
+struct aiSiegeEquipStruct
+{
+	int type;
+	int8_t byte4;
+	int8_t byte5_init1;
+	int8_t byte6;
+	int8_t byte7;
+	int normalCost;
+	int cost;
+	int int10;
+};
+
 struct siegeS {
-	undefined field_0x0[12];
+	void* vTable;
+	struct oneSiege* sieges; //0x0004
+	int8_t field_8;
+	char pad_0009[3]; //0x0009
 	struct settlementStruct* goal; /* settlement or fort */
 	struct stackStruct* army;
+	struct aiSiegeEquipStruct aiEquipmentQueue[25];
+	int someCount;
+	int field_20C;
+	int field_210;
+	int field_214;
+	int field_218;
+	int field_21C;
+	int field_220;
+	int field_224;
+	int field_228;
+	int siegeTurns;
+	int field_230;
+	int field_234;
+	int soldierCount;
+	int8_t gotCaptured;
+	char pad_x[3];
 };
 
 struct stringWithHash
@@ -2379,7 +2410,9 @@ struct namedCharacter { /* many important info about character */
 	int32_t infantryCommand; //0x010C
 	int32_t gunpowerCommand; //0x0110
 	int32_t artilleryCommand; //0x0114
-	undefined pad_0118[168]; //0x0118
+	int32_t combatVsReligion[10]; //0x0118
+	int32_t combatVsFaction[31]; //0x0140
+	int32_t field_01BC; //0x01BC
 	int32_t health; //0x01C0
 	int32_t squalor; //0x01C4
 	int32_t unrest; //0x01C8

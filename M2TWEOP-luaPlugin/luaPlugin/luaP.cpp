@@ -412,7 +412,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.M2TWEOPTable.set_function("getBattleCamCoords", &m2tweopHelpers::getBattleCamCoords);
 
 	/***
-	Set the maximum number of religions in the mod (per descr\_religions.txt)
+	Set the maximum number of religions in the mod (per descr\_religions.txt). Do not use religions > 10 in CombatVsReligion attributes!
 	@function M2TWEOP.setReligionsLimit
 	@tparam int newLimit maximum: 127
 	@usage
@@ -1340,6 +1340,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield stackStruct armyNotLeaded in the stack but not leading it
 	@tfield int inEnemyZOC
 	@tfield int ambushState
+	@tfield int regionID
 	@tfield int isMarkedToKill can check if the character died before the game updates he is dead like post battle event
 	@tfield int doNotSpendMovePoints
 	@tfield float movePointsCharacter
@@ -1390,6 +1391,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.character.set("popConvertedThisTurn", &general::popConvertedThisTurn);
 	types.character.set("timeInRegion", &general::timeInRegion);
 	types.character.set("timeWithArmy", &general::timeWithArmy);
+	types.character.set("regionID", &general::regionID);
 	types.character.set("crusade", &general::crusade);
 	types.character.set("turnJoinedCrusade", &general::turnJoinedCrusade);
 	types.character.set("currentTurn", &general::currentTurn);
@@ -1616,6 +1618,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int unorthodoxy
 	@tfield int unrest
 	@tfield int violence
+	@tfield int[10] combatVsReligion Maximum 10. EVEN IF YOU SET RELIGION LIMIT.
+	@tfield int[31] combatVsFaction Maximum 31.
 
 	@table namedCharacter
 	*/
@@ -1678,6 +1682,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.namedCharacter.set("parent", &namedCharacter::parent);
 	types.namedCharacter.set("spouse", &namedCharacter::spouse);
 	types.namedCharacter.set("childs", sol::property([](namedCharacter& self) { return std::ref(self.childs); }));
+	types.namedCharacter.set("combatVsReligion", sol::property([](namedCharacter& self) { return std::ref(self.combatVsReligion); }));
+	types.namedCharacter.set("combatVsFaction", sol::property([](namedCharacter& self) { return std::ref(self.combatVsFaction); }));
 	/***
 	Get the pointer to the character's traits container.
 	@function namedCharacter:getTraits
@@ -3605,6 +3611,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	@tfield int xCoord
 	@tfield int yCoord
+	@tfield int regionID
 	@tfield settlementStruct settlement
 	@tfield setStratModel setStratModel
 	@tfield getResourceID getResourceID
@@ -3617,6 +3624,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.tradeResource = luaState.new_usertype<resStrat>("tradeResource");
 	types.tradeResource.set("xCoord", &resStrat::xCoord);
 	types.tradeResource.set("yCoord", &resStrat::yCoord);
+	types.tradeResource.set("regionID", &resStrat::regionID);
+	types.tradeResource.set("resourceID", &resStrat::resourceID);
 	types.tradeResource.set("settlement", &resStrat::settlement);
 	/***
 	Set the resource's strat model.
@@ -3944,11 +3953,15 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield stackStruct besieger
 	@tfield settlementStruct besiegedSettlement
 	@tfield fortStruct besiegedFort
+	@tfield integer siegeTurns
+	@tfield integer soldierCount
 
 	@table siegeStruct
 	*/
 	types.siege = luaState.new_usertype<siegeS>("siegeStruct");
 	types.siege.set("besieger", &siegeS::army);
+	types.siege.set("siegeTurns", &siegeS::siegeTurns);
+	types.siege.set("soldierCount", &siegeS::soldierCount);
 	types.siege.set("siegedSettlement", sol::property(
 		&siegeHelpers::getSiegedSettlement));
 	types.siege.set("siegedFort", sol::property(

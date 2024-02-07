@@ -128,6 +128,14 @@ int __fastcall patchesForGame::onFindUnit(char* entry, int* edbIndex)
 	return *edbIndex;
 }
 
+int __fastcall patchesForGame::OnReligionCombatBonus(int religionID, namedCharacter* namedChar)
+{
+	if (religionID > 9)
+		return 0;
+
+	return namedChar->combatVsReligion[religionID];
+}
+
 int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduindex)
 {
 	if (eduindex == -1)
