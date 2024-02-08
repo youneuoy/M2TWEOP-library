@@ -32,6 +32,7 @@ namespace m2tweopHelpers
 
 	std::string getModPath();
 	std::string getLuaPath();
+	void toggleDeveloperMode();
 
 	bool isTileFree(int x, int y);
 	std::tuple<int, int> getGameTileCoordsWithCursor();

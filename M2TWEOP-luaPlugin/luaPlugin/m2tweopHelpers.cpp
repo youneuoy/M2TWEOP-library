@@ -149,6 +149,10 @@ namespace m2tweopHelpers
 	{
 		(*(*plugData::data.funcs.setAncLimit))(limit);
 	}
+	void toggleDeveloperMode()
+	{
+		(*(*plugData::data.funcs.toggleDeveloperMode))();
+	}
 	void seReligionsLimit(unsigned char limit)
 	{
 		(*(*plugData::data.funcs.setReligionsLimit))(limit);

@@ -1353,29 +1353,74 @@ enum ImGuiSortDirection_
 // User fill ImGuiIO.KeyMap[] array with indices into the ImGuiIO.KeysDown[512] array
 enum ImGuiKey_
 {
-    ImGuiKey_Tab,
-    ImGuiKey_LeftArrow,
-    ImGuiKey_RightArrow,
-    ImGuiKey_UpArrow,
-    ImGuiKey_DownArrow,
-    ImGuiKey_PageUp,
-    ImGuiKey_PageDown,
-    ImGuiKey_Home,
-    ImGuiKey_End,
-    ImGuiKey_Insert,
-    ImGuiKey_Delete,
-    ImGuiKey_Backspace,
-    ImGuiKey_Space,
-    ImGuiKey_Enter,
-    ImGuiKey_Escape,
-    ImGuiKey_KeyPadEnter,
-    ImGuiKey_A,                 // for text edit CTRL+A: select all
-    ImGuiKey_C,                 // for text edit CTRL+C: copy
-    ImGuiKey_V,                 // for text edit CTRL+V: paste
-    ImGuiKey_X,                 // for text edit CTRL+X: cut
-    ImGuiKey_Y,                 // for text edit CTRL+Y: redo
-    ImGuiKey_Z,                 // for text edit CTRL+Z: undo
-    ImGuiKey_COUNT
+	ImGuiKey_Tab,
+	ImGuiKey_LeftArrow,
+	ImGuiKey_RightArrow,
+	ImGuiKey_UpArrow,
+	ImGuiKey_DownArrow,
+	ImGuiKey_PageUp,
+	ImGuiKey_PageDown,
+	ImGuiKey_Home,
+	ImGuiKey_End,
+	ImGuiKey_Insert,
+	ImGuiKey_Delete,
+	ImGuiKey_Backspace,
+	ImGuiKey_Space,
+	ImGuiKey_Enter,
+	ImGuiKey_Escape,
+	ImGuiKey_KeyPadEnter,
+	ImGuiKey_One,
+	ImGuiKey_Two,
+	ImGuiKey_Three,
+	ImGuiKey_Four,
+	ImGuiKey_Five,
+	ImGuiKey_Six,
+	ImGuiKey_Seven,
+	ImGuiKey_Eight,
+	ImGuiKey_Nine,
+	ImGuiKey_Zero,
+	ImGuiKey_Tilde,
+	ImGuiKey_A,                 // for text edit CTRL+A: select all
+	ImGuiKey_B,
+	ImGuiKey_C,                 // for text edit CTRL+C: copy
+	ImGuiKey_D,
+	ImGuiKey_E,
+	ImGuiKey_F,
+	ImGuiKey_G,
+	ImGuiKey_H,
+	ImGuiKey_I,
+	ImGuiKey_J,
+	ImGuiKey_K,
+	ImGuiKey_L,
+	ImGuiKey_M,
+	ImGuiKey_N,
+	ImGuiKey_O,
+	ImGuiKey_P,
+	ImGuiKey_Q,
+	ImGuiKey_R,
+	ImGuiKey_S,
+	ImGuiKey_T,
+	ImGuiKey_U,
+	ImGuiKey_V,                 // for text edit CTRL+V: paste
+	ImGuiKey_W,
+	ImGuiKey_X,                 // for text edit CTRL+X: cut
+	ImGuiKey_Y,                 // for text edit CTRL+Y: redo
+	ImGuiKey_Z,                 // for text edit CTRL+Z: undo
+	ImGuiKey_LeftCtrl,
+	ImGuiKey_LeftShift,
+	ImGuiKey_LeftAlt,
+    ImGuiKey_CapsLock,
+    ImGuiKey_Keypad0,
+    ImGuiKey_Keypad1,
+    ImGuiKey_Keypad2,
+    ImGuiKey_Keypad3,
+    ImGuiKey_Keypad4,
+    ImGuiKey_Keypad5,
+    ImGuiKey_Keypad6,
+    ImGuiKey_Keypad7,
+    ImGuiKey_Keypad8,
+    ImGuiKey_Keypad9,
+    ImGuiKey_COUNT,
 };
 
 // To test io.KeyMods (which is a combination of individual fields io.KeyCtrl, io.KeyShift, io.KeyAlt set by user/backend)

@@ -4,6 +4,8 @@
 #include "pluginM2TWEOP.h"
 
 #include "gameDataAllHelper.h"
+#include "imgui/imgui.h"
+
 namespace console
 {
 	struct
@@ -32,54 +34,36 @@ namespace console
 		consoleData.input.clear();
 	}
 
+	void toggleConsole()
+	{
+		consoleData.isDraw = !consoleData.isDraw;
+		consoleData.keypressamount = 0;
+
+		if (plugData::data.luaAll.checkVar("enableConsole", 1) == false)
+		{
+			consoleData.isDraw = false;
+		}
+	}
+
+	void reloadScript()
+	{
+		reloadLua();
+		consoleData.keypressamount = 0;
+	}
+
+	void restartLua()
+	{
+		initLua();
+		consoleData.keypressamount = 0;
+	}
+
 	void draw()
 	{
-			if ((ImGui::GetIO().KeysDownDuration[VK_CONTROL] > 0.f && ImGui::GetIO().KeysDownDuration['1'] > 0.f && ImGui::GetIO().KeysDownDuration['8'] > 0.f)
-				&& (ImGui::GetIO().KeysDownDurationPrev[VK_CONTROL] == 0.f || ImGui::GetIO().KeysDownDurationPrev['1'] == 0.f || ImGui::GetIO().KeysDownDuration['8'] == 0.f)
-				)
-			{
-				gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
-				campaign* campaign = gameDataAll->campaignData;
-				reloadLua();
-				consoleData.keypressamount = 0;
-				return;
-			}
-
-			if ((ImGui::GetIO().KeysDownDuration[VK_CONTROL] > 0.f && ImGui::GetIO().KeysDownDuration['1'] > 0.f && ImGui::GetIO().KeysDownDuration['9'] > 0.f)
-				&& (ImGui::GetIO().KeysDownDurationPrev[VK_CONTROL] == 0.f || ImGui::GetIO().KeysDownDurationPrev['1'] == 0.f || ImGui::GetIO().KeysDownDuration['9'] == 0.f)
-				)
-			{
-				gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
-				campaign* campaign = gameDataAll->campaignData;
-				initLua();
-				consoleData.keypressamount = 0;
-				return;
-			}
-
-			if ((ImGui::GetIO().KeysDownDuration[VK_CONTROL] > 0.f && ImGui::GetIO().KeysDownDuration['1'] > 0.f)
-				&& (ImGui::GetIO().KeysDownDurationPrev[VK_CONTROL] == 0.f || ImGui::GetIO().KeysDownDurationPrev['1'] == 0.f)
-				)
-			{
-				gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
-				campaign* campaign = gameDataAll->campaignData;
-			//	if (campaign->isAdminPasswordExist == false || (campaign->isAdminPasswordExist == true && campaign->isHotseatLogon == true))
-			//	{
-					consoleData.isDraw = !consoleData.isDraw;
-					consoleData.keypressamount = 0;
-
-					if (plugData::data.luaAll.checkVar("enableConsole", 1) == false)
-					{
-						consoleData.isDraw = false;
-					}
-				//}
-			}
 
 		if (consoleData.isDraw == false)
 		{
 			return;
 		}
-
-
 
 		ImGuiWindowFlags iwf = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollWithMouse;
 		ImGui::SetNextWindowSize(ImVec2(800, 400), ImGuiCond_Once);

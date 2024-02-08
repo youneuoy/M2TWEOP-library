@@ -227,6 +227,7 @@ public:
 	ProcLoader<void(__cdecl*)(general*, int, int, int)> setCharacterType;
 
 	ProcLoader<int(__cdecl*)()> getGameVersion;
+	ProcLoader<void(__cdecl*)()> toggleDeveloperMode;
 	ProcLoader<void(__cdecl*)(const char*)> saveGame;
 	ProcLoader<void(__cdecl*)(stackStruct*, stackStruct*)> mergeArmies;
 

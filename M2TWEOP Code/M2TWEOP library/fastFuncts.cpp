@@ -1650,4 +1650,9 @@ namespace fastFuncts
 
 		return nullptr;
 	}
+	NOINLINE EOP_EXPORT void toggleDeveloperMode()
+	{
+		auto& developerMode = globals::dataS.Modules.developerMode;
+		developerMode.toggleDeveloperModeBase();
+	}
 }

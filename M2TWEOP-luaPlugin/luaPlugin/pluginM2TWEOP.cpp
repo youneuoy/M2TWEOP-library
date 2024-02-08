@@ -153,6 +153,9 @@ int initPlugin(std::string* modPath)
 	fName = "createUniString";
 	plugData::data.funcsTech.createUniString.Load(&plPath, &fName);
 
+	fName = "toggleDeveloperMode";
+	plugData::data.funcs.toggleDeveloperMode.Load(&plPath, &fName);
+
 
 	fName = "setCryptedString";
 	plugData::data.funcs.setCryptedString.Load(&plPath, &fName);

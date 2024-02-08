@@ -33,6 +33,7 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT oneTile* getTileStruct(int x,int y);
 	NOINLINE EOP_EXPORT regionStruct* getRegionByID(UINT32 regionID);
 	NOINLINE EOP_EXPORT factionStruct* getRegionOwner(int regionID);
+	NOINLINE EOP_EXPORT void toggleDeveloperMode();
 
 	//season(0-summer,1-winter)
 	NOINLINE EOP_EXPORT UINT32 getSeason();

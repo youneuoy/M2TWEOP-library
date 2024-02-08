@@ -3,6 +3,8 @@
 //@author youneuoy
 //@license GPL-3.0
 #include "luaP.h"
+
+#include "console.h"
 #include "plugData.h"
 std::vector<std::string> luaP::logS;
 std::vector<std::string> luaP::logCommands;
@@ -196,6 +198,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Basic M2TWEOP table
 
 	@tfield getModPath getModPath
+	@tfield toggleConsole toggleConsole
+	@tfield reloadScript reloadScript
+	@tfield restartLua restartLua
+	@tfield toggleDeveloperMode toggleDeveloperMode
 	@tfield saveGame saveGame
 	@tfield getGameVersion getGameVersion
 	@tfield setPerfectSpy setPerfectSpy
@@ -247,6 +253,50 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 
 	tables.M2TWEOPTable.set_function("getModPath", &m2tweopHelpers::getModPath);
+	/***
+	Open/close the lua console.
+
+
+	@function M2TWEOP.toggleConsole
+
+	@usage
+	    M2TWEOP.toggleConsole();
+	*/
+
+	tables.M2TWEOPTable.set_function("toggleConsole", &console::toggleConsole);
+	/***
+	Toggle developer mode.
+
+
+	@function M2TWEOP.toggleDeveloperMode
+
+	@usage
+	    M2TWEOP.toggleDeveloperMode();
+	*/
+
+	tables.M2TWEOPTable.set_function("toggleDeveloperMode", &m2tweopHelpers::toggleDeveloperMode);
+	/***
+	Reload the lua script (without restarting the plugin itself, onPluginLoad doesn't fire).
+
+
+	@function M2TWEOP.reloadScript
+
+	@usage
+	    M2TWEOP.reloadScript();
+	*/
+
+	tables.M2TWEOPTable.set_function("reloadScript", &console::reloadScript);
+	/***
+	Restart the lua plugin (onPluginLoad fires).
+
+
+	@function M2TWEOP.restartLua
+
+	@usage
+	    M2TWEOP.restartLua();
+	*/
+
+	tables.M2TWEOPTable.set_function("restartLua", &console::restartLua);
 	/***
 	Save the game.
 	@function M2TWEOP.saveGame

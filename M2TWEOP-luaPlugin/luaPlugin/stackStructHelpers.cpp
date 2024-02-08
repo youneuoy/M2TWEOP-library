@@ -54,10 +54,13 @@ namespace stackStructHelpers
 						if (unitA->eduEntry->aiUnitValuePerSoldier != unitB->eduEntry->aiUnitValuePerSoldier)
 							return unitA->eduEntry->aiUnitValuePerSoldier < unitB->eduEntry->aiUnitValuePerSoldier;
 						break;
-					default: 
+					default:
+						if (std::string(unitA->eduEntry->Type) != std::string(unitB->eduEntry->Type))
+							return std::string(unitA->eduEntry->Type) < std::string(unitB->eduEntry->Type);
 						break;
 				}
 			}
+			return false;
 		};
 
 		// Stable sort the units
