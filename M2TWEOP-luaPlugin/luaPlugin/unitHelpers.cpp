@@ -77,7 +77,7 @@ namespace unitHelpers
 		default:
 			break;
 		}
-		return un->eduEntry->SoldierCount* mul;
+		return static_cast<int>(un->eduEntry->SoldierCount) * mul;
 	}
 	void setMovepoints(unit* un, float movepoints)
 	{

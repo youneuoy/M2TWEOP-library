@@ -360,15 +360,15 @@ int eopEduHelpers::getEntryStat(int idx, UnitEnums::eduStat stat, int sec)
 //pretty much ignore this
 void eopEduHelpers::addUnitToRQ(int idx, settlementStruct* sett)
 {
-	int startIndexRQ = sett->startIndexRQ;
-	int endIndexRQ = sett->endIndexRQ;
+	const int startIndexRQ = sett->startIndexRQ;
+	const int endIndexRQ = sett->endIndexRQ;
 	if (startIndexRQ == 0 && endIndexRQ == 9)
 	{
 		return;
 	}
 	eduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
-	unitRQ* newUnit = new unitRQ;
-	int unitsize = m2tweopHelpers::GetUnitSize();
+	auto newUnit = new unitRQ;
+	const int unitsize = m2tweopHelpers::GetUnitSize();
 	double unitModifier = 1;
 	switch (unitsize)
 	{
@@ -395,9 +395,9 @@ void eopEduHelpers::addUnitToRQ(int idx, settlementStruct* sett)
 	newUnit->Minus1 = -1;
 	newUnit->turnsTrainedAlready = 0;
 	newUnit->percentFinished = 0;
-	newUnit->turnsToTrain = eduEn->StatCost1;
+	newUnit->turnsToTrain = static_cast<int8_t>(eduEn->StatCost1);
 	newUnit->cost = eduEn->StatCost2;
-	newUnit->soldierCount = (int)(eduEn->SoldierCount * unitModifier);
+	newUnit->soldierCount = static_cast<int>(eduEn->SoldierCount * unitModifier);
 	newUnit->armourUpg = 0;
 	newUnit->isNotFrozen = 1;
 	newUnit->recruitmentPoolSizeBeforeOrRetrainingNumbersBefore = 1;
