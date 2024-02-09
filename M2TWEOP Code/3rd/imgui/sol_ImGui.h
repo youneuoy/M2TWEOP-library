@@ -1748,9 +1748,9 @@ namespace sol_ImGui
 		@tfield int NoNavInputs No gamepad/keyboard navigation within the window
 		@tfield int NoNavFocus No focusing toward this window with gamepad/keyboard navigation (e.g. skipped by CTRL+TAB)
 		@tfield int UnsavedDocument Display a dot next to the title. When used in a tab/docking context, tab is selected when clicking the X + closure is not assumed (will wait for user to stop submitting the tab). Otherwise closure is assumed when pressing the X, so if you keep submitting the tab may reappear at end of tab bar.
-		@tfield int NoNav
-		@tfield int NoDecoration
-		@tfield int NoInputs
+		@tfield int ImGuiWindowFlags_NoNav
+		@tfield int ImGuiWindowFlags_NoDecoration
+		@tfield int ImGuiWindowFlags_NoInputs
 		
 
 		@table ImGuiWindowFlags

@@ -1,12 +1,9 @@
 #include "eopImGui.h"
 #include <imgui_internal.h>
-#include <cmath>
-#include <algorithm>
-static inline ImVec4 ImLerpEOP(const ImVec4 &a, const ImVec4 &b, float t) { return ImVec4(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t); }
 void ImGui::StyleGrey()
 {
-	ImGuiStyle &style = ImGui::GetStyle();
-	ImVec4 *colors = style.Colors;
+	ImGuiStyle& style = ImGui::GetStyle();
+	ImVec4* colors = style.Colors;
 
 	colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 	colors[ImGuiCol_TextDisabled] = ImVec4(0.40f, 0.40f, 0.40f, 1.00f);
@@ -31,7 +28,7 @@ void ImGui::StyleGrey()
 	colors[ImGuiCol_SliderGrabActive] = ImVec4(0.64f, 0.64f, 0.64f, 1.00f);
 	colors[ImGuiCol_Button] = ImVec4(0.54f, 0.54f, 0.54f, 0.35f);
 	colors[ImGuiCol_ButtonHovered] = ImVec4(0.52f, 0.52f, 0.52f, 0.59f);
-	colors[ImGuiCol_ButtonActive] = ImVec4(0.76f, 0.76f, 0.76f, 0.80f);
+	colors[ImGuiCol_ButtonActive] = ImVec4(0.76f, 0.76f, 0.76f, 1.00f);
 	colors[ImGuiCol_Header] = ImVec4(0.38f, 0.38f, 0.38f, 1.00f);
 	colors[ImGuiCol_HeaderHovered] = ImVec4(0.47f, 0.47f, 0.47f, 1.00f);
 	colors[ImGuiCol_HeaderActive] = ImVec4(0.76f, 0.76f, 0.76f, 0.77f);
@@ -39,11 +36,11 @@ void ImGui::StyleGrey()
 	colors[ImGuiCol_SeparatorHovered] = ImVec4(0.700f, 0.671f, 0.600f, 0.7f);
 	colors[ImGuiCol_SeparatorActive] = ImVec4(0.702f, 0.671f, 0.600f, 0.8f);
 
-	colors[ImGuiCol_Tab] = ImLerpEOP(colors[ImGuiCol_Header], colors[ImGuiCol_TitleBgActive], 0.80f);
+	colors[ImGuiCol_Tab] = ImLerp(colors[ImGuiCol_Header], colors[ImGuiCol_TitleBgActive], 0.80f);
 	colors[ImGuiCol_TabHovered] = colors[ImGuiCol_HeaderHovered];
-	colors[ImGuiCol_TabActive] = ImLerpEOP(colors[ImGuiCol_HeaderActive], colors[ImGuiCol_TitleBgActive], 0.60f);
-	colors[ImGuiCol_TabUnfocused] = ImLerpEOP(colors[ImGuiCol_Tab], colors[ImGuiCol_TitleBg], 0.80f);
-	colors[ImGuiCol_TabUnfocusedActive] = ImLerpEOP(colors[ImGuiCol_TabActive], colors[ImGuiCol_TitleBg], 0.40f);
+	colors[ImGuiCol_TabActive] = ImLerp(colors[ImGuiCol_HeaderActive], colors[ImGuiCol_TitleBgActive], 0.60f);
+	colors[ImGuiCol_TabUnfocused] = ImLerp(colors[ImGuiCol_Tab], colors[ImGuiCol_TitleBg], 0.80f);
+	colors[ImGuiCol_TabUnfocusedActive] = ImLerp(colors[ImGuiCol_TabActive], colors[ImGuiCol_TitleBg], 0.40f);
 
 	colors[ImGuiCol_ResizeGrip] = ImVec4(0.26f, 0.59f, 0.98f, 0.25f);
 	colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.67f);
@@ -77,45 +74,4 @@ void ImGui::StyleGrey()
 	style.FrameRounding = 3;
 	style.ScrollbarRounding = 2;
 	style.GrabRounding = 3;
-}
-void ImGui::LoadingIndicatorCircle(const char *label, const float indicator_radius,
-								   const ImVec4 &main_color, const ImVec4 &backdrop_color,
-								   const int circle_count, const float speed)
-{
-	ImGuiWindow *window = GetCurrentWindow();
-	if (window->SkipItems)
-	{
-		return;
-	}
-
-	ImGuiContext &g = *GImGui;
-	const ImGuiID id = window->GetID(label);
-
-	const ImVec2 pos = window->DC.CursorPos;
-	const float circle_radius = indicator_radius / 10.0f;
-	const ImRect bb(pos, ImVec2(pos.x + indicator_radius * 2.0f,
-								pos.y + indicator_radius * 2.0f));
-
-	ItemSize(bb, ImGui::GetStyle().FramePadding.y);
-	if (!ItemAdd(bb, id))
-	{
-		return;
-	}
-	const float t = (float)g.Time;
-	const auto degree_offset = 2.0f * IM_PI / circle_count;
-	for (int i = 0; i < circle_count; ++i)
-	{
-		const auto x = indicator_radius * std::sin(degree_offset * i);
-		const auto y = indicator_radius * std::cos(degree_offset * i);
-		const auto growth = std::max(0.0f, std::sin(t * speed - i * degree_offset));
-		ImVec4 color;
-		color.x = main_color.x * growth + backdrop_color.x * (1.0f - growth);
-		color.y = main_color.y * growth + backdrop_color.y * (1.0f - growth);
-		color.z = main_color.z * growth + backdrop_color.z * (1.0f - growth);
-		color.w = 1.0f;
-		window->DrawList->AddCircleFilled(ImVec2(pos.x + indicator_radius + x,
-												 pos.y + indicator_radius - y),
-										  circle_radius + growth * circle_radius,
-										  GetColorU32(color));
-	}
 }

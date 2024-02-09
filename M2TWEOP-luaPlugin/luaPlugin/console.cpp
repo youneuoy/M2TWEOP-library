@@ -78,14 +78,16 @@ namespace console
 		}
 
 
-		if (ImGui::GetIO().KeysDownDuration[VK_UP] > 0.f && ImGui::GetIO().KeysDownDurationPrev[VK_UP] == 0.f && ((consoleData.commandNum - 1) - consoleData.keypressamount >= 0) )
+		if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)
+			&& ((consoleData.commandNum - 1) - consoleData.keypressamount >= 0) )
 		{
 			consoleData.input = plugData::data.luaAll.logCommands[consoleData.commandNum - 1 - consoleData.keypressamount];
 			consoleData.keypressamount++;
 		}
 
 
-		if (ImGui::GetIO().KeysDownDuration[VK_DOWN] > 0.f && ImGui::GetIO().KeysDownDurationPrev[VK_DOWN] == 0.f && consoleData.keypressamount > 0)
+		if (ImGui::IsKeyPressed(ImGuiKey_DownArrow)
+			&& consoleData.keypressamount > 0)
 		{
 			consoleData.keypressamount--;
 			consoleData.input = plugData::data.luaAll.logCommands[consoleData.commandNum - 1 - consoleData.keypressamount];

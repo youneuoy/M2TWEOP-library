@@ -64,12 +64,12 @@ end
 ---@param pDevice LPDIRECT3DDEVICE9 
 function draw(pDevice) 
 
-    if (ImGui.IsKeyPressed(ImGui.GetKeyIndex(ImGuiKey.Tilde)))
-    and (ImGui.IsKeyDown(ImGui.GetKeyIndex(ImGuiKey.LeftCtrl)))
+    if (ImGui.IsKeyPressed(ImGuiKey.GraveAccent))
+    and (ImGui.IsKeyDown(ImGuiKey.LeftCtrl))
     then
         M2TWEOP.toggleConsole()
-    elseif (ImGui.IsKeyPressed(ImGui.GetKeyIndex(ImGuiKey.Tilde)))
-    and (ImGui.IsKeyDown(ImGui.GetKeyIndex(ImGuiKey.LeftAlt)))
+    elseif (ImGui.IsKeyPressed(ImGuiKey.GraveAccent))
+    and (ImGui.IsKeyDown(ImGuiKey.LeftAlt))
     then
         M2TWEOP.toggleDeveloperMode()
     end
