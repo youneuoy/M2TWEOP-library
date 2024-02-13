@@ -3827,36 +3827,51 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
     if faction.isPlayerControlled == 0 then return end;
 
     -- Sort all the stacks on the map right before the turn starts
-    local factionsNum = stratmap.game.getFactionsCount();
-    for i = 0, factionsNum - 1 do
-        local faction = stratmap.game.getFaction(i);
-        for j = 0, faction.stacksNum - 1 do
-            local stack = faction:getStack(j);
-            if stack then
-                -- Debug Info
-                -- print("\n\n")
-                -- print("-- Unsorted Stack --")
-                -- for k = 0, stack.numOfUnits - 1 do
-                --     local unit = stack:getUnit(k);
-                --     if unit.eduEntry.Type then
-                --         print(unit.eduEntry.Type)
-                --     end
-                -- end
+	-- Note: Generals will always remain at the start of the stack
+	-- 1 = EDU Type
+	-- 2 = Category
+	-- 3 = Class
+	-- 4 = Soldier Count
+	-- 5 = Experience
+	-- 6 = Category + Class
+	-- 7 = AI unit value
 
-                -- Sort the stack by category + class, then by soldier count, then by experience
-                stack:sortStack(6, 4, 5)
+	function onFactionTurnStart(eventData)
+	local faction = eventData.faction
+	-- If it's not the players turn, don't sort
+	if faction.isPlayerControlled == 0 then return end;
 
-                -- print("\n\n")
-                -- print("-- Sorted Stack --")
-                -- for k = 0, stack.numOfUnits - 1 do
-                --     local unit = stack:getUnit(k);
-                --     if unit.eduEntry.Type then
-                --         print(unit.eduEntry.Type)
-                --     end
-                -- end
-            end
-        	end
-    	end
+	-- Sort all the stacks on the map right before the turn starts
+	local factionsNum = stratmap.game.getFactionsCount();
+	for i = 0, factionsNum - 1 do
+		local faction = stratmap.game.getFaction(i);
+		for j = 0, faction.stacksNum - 1 do
+			local stack = faction:getStack(j);
+			if stack then
+				-- Debug Info
+				-- print("\n\n")
+				-- print("-- Unsorted Stack --")
+				-- for k = 0, stack.numOfUnits - 1 do
+				--     local unit = stack:getUnit(k);
+				--     if unit.eduEntry.Type then
+				--         print(unit.eduEntry.Type)
+				--     end
+				-- end
+
+				-- Sort the stack by category + class, then by soldier count, then by experience
+				stack:sortStack(sortType.categoryClass, sortType.soldierCount, sortType.experience)
+
+				-- print("\n\n")
+				-- print("-- Sorted Stack --")
+				-- for k = 0, stack.numOfUnits - 1 do
+				--     local unit = stack:getUnit(k);
+				--     if unit.eduEntry.Type then
+				--         print(unit.eduEntry.Type)
+				--     end
+				-- end
+			end
+			end
+		end
 	end
 
 	*/
