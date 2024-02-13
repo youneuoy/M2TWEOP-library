@@ -12,26 +12,30 @@
 <!-- ![](https://i.imgur.com/h8UlYMT.png) -->
 
 ### **Library**
-- Fixed general hero abilities for hotseat battle generation - Fynn
-
+- Fixed crashing on startup in some mods - *Fynn*
+- Fixed some issues with `CombatVsReligion` attributes. 
+  - **Note:** Do not use religions > 10 in CombatVsReligion attributes! - *Fynn*
 
 ### **Lua Plugin**
-- Added isChild and isOffMap to namedCharacter - Fynn
-- Added lot more information about traits and new structures - Fynn
-- Added getLocalFactionID - Fynn
-- Added setPerfectSpy - Fynn
-- Added getCampaignPath - Fynn
-- Added enum for sort types you can use with sortStack and added sorting by AI unit value - Fynn
-- Added inBattle to battle struct - Fynn
+- Removed default `CTRL+1` and `CTRL+2` binds for the Console/Developer Mode.
+  - These are now bindable in Lua, see `M2TWEOP.toggleConsole()` (Bound to `CTRL + ~` by default) and `M2TWEOP.toggleDeveloperMode()` (Bound to `ALT + ~` by default)
+- Added `M2TWEOP.setEquipmentCosts()`. Allows you to set the siege points required to make different siege equipment. *Fynn*
+- Fixed `battleObjective:getType()` to properly return the right type *Fynn*
+- Added `battleBuildings` field to `battleResidence` struct - *Fynn*
 
+### **ImGUI**
+- Updated to the latest version of the ImGUI library - *Fynn*
+  - This version bump will likely have some very small breaking changes but also includes a bunch of bugixes, performance enhancements and new features! Please consult the docs and report any bugs you find. 
+  - Previous Version: [1.86.0](https://github.com/ocornut/imgui/releases/tag/v1.86)
+  - Current Version: [1.90.2](https://github.com/ocornut/imgui/releases/tag/v1.90.2)
+- Added a bunch of new keys available to be used within ImGUI - *Fynn*
 
-<!-- ### **ImGUI** -->
 
 ### **Documentation**
-- Various doc fixes - Fynn
+- Added proper ImGUI documentation in the same format as the normal Lua documentation. - *Fynn*
+  - This enables proper Intellisense for all ImGUI Lua provided you are using Visual Studio Code and the correct [Lua Extension](https://marketplace.visualstudio.com/items?itemName=sumneko.lua)
 
 ### **Links**
-
 - [Website](https://youneuoy.github.io/M2TWEOP-library/)
 - [FAQ](https://youneuoy.github.io/M2TWEOP-library/faq.html)
 - [Lua Documentation](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html)
