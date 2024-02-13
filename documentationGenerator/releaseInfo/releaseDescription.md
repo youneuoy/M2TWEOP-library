@@ -13,22 +13,25 @@
 
 ### **Library**
 - Fixed crashing on startup in some mods - *Fynn*
-- Fixed some issues with `CombatVsReligion` attributes. 
-  - **Note:** Do not use religions > 10 in CombatVsReligion attributes! - *Fynn*
+- Fixed a vanilla game bug costing some performance in battle - *Fynn*
+- Fixed `CombatVsReligion` attribute going out of range with religions over 10 (The bonus is always 0 now if the religion index > 9). 
+  - **Note:** Do not use religions > 10 in getting CombatVsReligion attributes from named character struct! - *Fynn*
+- Reinstated some lost fixes including getting building by name on disk version. - *Fynn*
 
 ### **Lua Plugin**
 - Removed default `CTRL+1` and `CTRL+2` binds for the Console/Developer Mode.
   - These are now bindable in Lua, see `M2TWEOP.toggleConsole()` (Bound to `CTRL + ~` by default) and `M2TWEOP.toggleDeveloperMode()` (Bound to `ALT + ~` by default)
 - Added `M2TWEOP.setEquipmentCosts()`. Allows you to set the siege points required to make different siege equipment. *Fynn*
-- Fixed `battleObjective:getType()` to properly return the right type *Fynn*
 - Added `battleBuildings` field to `battleResidence` struct - *Fynn*
+- Added CombatVsFaction and CombatvsReligion arrays to namedCharacter - *Fynn*
+- Added regionID to character and resource - *Fynn*
+- Expanded and fixed siege struct a bit - *Fynn*
 
 ### **ImGUI**
 - Updated to the latest version of the ImGUI library - *Fynn*
   - This version bump will likely have some very small breaking changes but also includes a bunch of bugixes, performance enhancements and new features! Please consult the docs and report any bugs you find. 
   - Previous Version: [1.86.0](https://github.com/ocornut/imgui/releases/tag/v1.86)
   - Current Version: [1.90.2](https://github.com/ocornut/imgui/releases/tag/v1.90.2)
-- Added a bunch of new keys available to be used within ImGUI - *Fynn*
 
 
 ### **Documentation**
