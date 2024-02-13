@@ -44,6 +44,10 @@
   <summary><a href="#M2TWEOP">M2TWEOP </a></summary>
     <li><a href="#M2TWEOP">M2TWEOP</a></li>
     <li><a href="#M2TWEOP.getModPath">M2TWEOP.getModPath ()</a></li>
+    <li><a href="#M2TWEOP.toggleConsole">M2TWEOP.toggleConsole ()</a></li>
+    <li><a href="#M2TWEOP.toggleDeveloperMode">M2TWEOP.toggleDeveloperMode ()</a></li>
+    <li><a href="#M2TWEOP.reloadScript">M2TWEOP.reloadScript ()</a></li>
+    <li><a href="#M2TWEOP.restartLua">M2TWEOP.restartLua ()</a></li>
     <li><a href="#M2TWEOP.saveGame">M2TWEOP.saveGame (path)</a></li>
     <li><a href="#M2TWEOP.getGameVersion">M2TWEOP.getGameVersion ()</a></li>
     <li><a href="#M2TWEOP.setPerfectSpy">M2TWEOP.setPerfectSpy (set)</a></li>
@@ -62,6 +66,7 @@
     <li><a href="#M2TWEOP.toggleUnitsBMapHighlight">M2TWEOP.toggleUnitsBMapHighlight ()</a></li>
     <li><a href="#M2TWEOP.getBattleCamCoords">M2TWEOP.getBattleCamCoords ()</a></li>
     <li><a href="#M2TWEOP.setReligionsLimit">M2TWEOP.setReligionsLimit (newLimit)</a></li>
+    <li><a href="#M2TWEOP.setEquipmentCosts">M2TWEOP.setEquipmentCosts (equipmentType, newCost)</a></li>
     <li><a href="#M2TWEOP.isTileFree">M2TWEOP.isTileFree (X, Y)</a></li>
     <li><a href="#M2TWEOP.getGameTileCoordsWithCursor">M2TWEOP.getGameTileCoordsWithCursor ()</a></li>
     <li><a href="#M2TWEOP.getTileRegionID">M2TWEOP.getTileRegionID (x, y)</a></li>
@@ -1133,7 +1138,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2024-02-06 06:50:31</p>
+        <p class="lastUpdatedMessage">Last updated: 2024-02-13 19:09:49</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -1169,6 +1174,22 @@
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.getModPath">M2TWEOP.getModPath ()</a></td>
 	<td class="summary">Function to return the path to the mod folder, starts from the drive not the game folder.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP.toggleConsole">M2TWEOP.toggleConsole ()</a></td>
+	<td class="summary">Open/close the lua console.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP.toggleDeveloperMode">M2TWEOP.toggleDeveloperMode ()</a></td>
+	<td class="summary">Toggle developer mode.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP.reloadScript">M2TWEOP.reloadScript ()</a></td>
+	<td class="summary">Reload the lua script (without restarting the plugin itself, onPluginLoad doesn't fire).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP.restartLua">M2TWEOP.restartLua ()</a></td>
+	<td class="summary">Restart the lua plugin (onPluginLoad fires).</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.saveGame">M2TWEOP.saveGame (path)</a></td>
@@ -1240,7 +1261,11 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.setReligionsLimit">M2TWEOP.setReligionsLimit (newLimit)</a></td>
-	<td class="summary">Set the maximum number of religions in the mod (per descr_religions.txt)</td>
+	<td class="summary">Set the maximum number of religions in the mod (per descr_religions.txt).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP.setEquipmentCosts">M2TWEOP.setEquipmentCosts (equipmentType, newCost)</a></td>
+	<td class="summary">Set the siege points required to make different siege equipment.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.isTileFree">M2TWEOP.isTileFree (X, Y)</a></td>
@@ -3921,6 +3946,30 @@
 
 
         </li>
+        <li><span class="parameter">toggleConsole</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.toggleConsole">toggleConsole</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">reloadScript</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.reloadScript">reloadScript</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">restartLua</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.restartLua">restartLua</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">toggleDeveloperMode</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.toggleDeveloperMode">toggleDeveloperMode</a></span>
+
+
+
+        </li>
         <li><span class="parameter">saveGame</span>
             <span class="types"><a class="type" href="index.html#M2TWEOP.saveGame">saveGame</a></span>
 
@@ -3995,6 +4044,12 @@
         </li>
         <li><span class="parameter">setReligionsLimit</span>
             <span class="types"><a class="type" href="index.html#M2TWEOP.setReligionsLimit">setReligionsLimit</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setEquipmentCosts</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.setEquipmentCosts">setEquipmentCosts</a></span>
 
 
 
@@ -4125,6 +4180,82 @@
     <ul>
         <pre class="example"><code class="language-lua" >mPath=M2TWEOP.getModPath();
 <span class="global">print</span>(mPath);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP.toggleConsole"></a>
+    <strong>M2TWEOP.toggleConsole ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Open/close the lua console.
+    </div>
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" >M2TWEOP.toggleConsole();</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP.toggleDeveloperMode"></a>
+    <strong>M2TWEOP.toggleDeveloperMode ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Toggle developer mode.
+    </div>
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" >M2TWEOP.toggleDeveloperMode();</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP.reloadScript"></a>
+    <strong>M2TWEOP.reloadScript ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Reload the lua script (without restarting the plugin itself, onPluginLoad doesn't fire).
+    </div>
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" >M2TWEOP.reloadScript();</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP.restartLua"></a>
+    <strong>M2TWEOP.restartLua ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Restart the lua plugin (onPluginLoad fires).
+    </div>
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" >M2TWEOP.restartLua();</code></pre>
     </ul>
 
 </dd>
@@ -4598,7 +4729,7 @@ M2TWEOP.unloadTexture(testImage.img);</code></pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Set the maximum number of religions in the mod (per descr_religions.txt)
+    Set the maximum number of religions in the mod (per descr_religions.txt).  Do not use religions > 10 in CombatVsReligion attributes!
     </div>
 
     <h3>Parameters:</h3>
@@ -4615,6 +4746,38 @@ M2TWEOP.unloadTexture(testImage.img);</code></pre>
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><code class="language-lua" >M2TWEOP.setReligionsLimit(<span class="number">25</span>);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP.setEquipmentCosts"></a>
+    <strong>M2TWEOP.setEquipmentCosts (equipmentType, newCost)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set the siege points required to make different siege equipment.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">equipmentType</span>
+            <span class="types"><span class="type">int</span></span>
+         0 = ram, 1 = ladder, 2 = siege tower
+        </li>
+        <li><span class="parameter">newCost</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" >M2TWEOP.setEquipmentCosts(<span class="number">0</span>, <span class="number">25</span>);</code></pre>
     </ul>
 
 </dd>
@@ -6369,7 +6532,7 @@ end_set_faction_banner]]</span>, facName))</code></pre>
 
         </li>
         <li><span class="parameter">kill</span>
-            <span class="types"><a class="type" href="index.html#unit:kill">kill</a></span>
+            <span class="types"><a class="type" href="index.html#character:kill">kill</a></span>
 
 
 
@@ -7396,6 +7559,12 @@ end_set_faction_banner]]</span>, facName))</code></pre>
 
 
         </li>
+        <li><span class="parameter">regionID</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
         <li><span class="parameter">isMarkedToKill</span>
             <span class="types"><span class="type">int</span></span>
          can check if the character died before the game updates he is dead like post battle event
@@ -7545,7 +7714,7 @@ end_set_faction_banner]]</span>, facName))</code></pre>
 
         </li>
         <li><span class="parameter">kill</span>
-            <span class="types"><a class="type" href="index.html#unit:kill">kill</a></span>
+            <span class="types"><a class="type" href="index.html#character:kill">kill</a></span>
 
 
 
@@ -8414,6 +8583,14 @@ end_set_faction_banner]]</span>, facName))</code></pre>
 
 
         </li>
+        <li><span class="parameter">combatVsReligion</span>
+            <span class="types"><span class="type">int[10]</span></span>
+         Maximum 10. EVEN IF YOU SET RELIGION LIMIT.
+        </li>
+        <li><span class="parameter">combatVsFaction</span>
+            <span class="types"><span class="type">int[31]</span></span>
+         Maximum 31.
+        </li>
     </ul>
 
 
@@ -9077,12 +9254,6 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
         </li>
         <li><span class="parameter">name</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
-
-
-
-        </li>
-        <li><span class="parameter">traitPoints</span>
-            <span class="types"><span class="type">int</span></span>
 
 
 
@@ -12014,7 +12185,7 @@ ourFacName = ourFac:getFactionName();
 
         </li>
         <li><span class="parameter">getSiege</span>
-            <span class="types"><a class="type" href="index.html#settlementStruct:getSiege">getSiege</a></span>
+            <span class="types"><a class="type" href="index.html#fortStruct:getSiege">getSiege</a></span>
 
 
 
@@ -12469,7 +12640,7 @@ ourFacName = ourFac:getFactionName();
 
         </li>
         <li><span class="parameter">getSiege</span>
-            <span class="types"><a class="type" href="index.html#settlementStruct:getSiege">getSiege</a></span>
+            <span class="types"><a class="type" href="index.html#fortStruct:getSiege">getSiege</a></span>
 
 
 
@@ -13947,6 +14118,12 @@ currSet:changeOwner(fac1);
 
 
         </li>
+        <li><span class="parameter">regionID</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
         <li><span class="parameter">settlement</span>
             <span class="types"><a class="type" href="index.html#settlementStruct">settlementStruct</a></span>
 
@@ -14812,6 +14989,18 @@ ourChar:kill();</code></pre>
         </li>
         <li><span class="parameter">besiegedFort</span>
             <span class="types"><a class="type" href="index.html#fortStruct">fortStruct</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">siegeTurns</span>
+            <span class="types"><span class="type">integer</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">soldierCount</span>
+            <span class="types"><span class="type">integer</span></span>
 
 
 
@@ -31031,7 +31220,7 @@ deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> objective = battleObjective:getType(<span class="number">0</span>)</code></pre>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> objective = battleObjective:getType()</code></pre>
     </ul>
 
 </dd>
@@ -31286,6 +31475,12 @@ deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
         </li>
         <li><span class="parameter">isFortBattle</span>
             <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">battleBuildings</span>
+            <span class="types"><a class="type" href="index.html#battleBuildings">battleBuildings</a></span>
 
 
 
