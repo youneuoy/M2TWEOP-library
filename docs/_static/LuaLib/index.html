@@ -1138,7 +1138,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2024-02-13 19:09:49</p>
+        <p class="lastUpdatedMessage">Last updated: 2024-02-13 20:42:34</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -14550,36 +14550,51 @@ currSet:changeOwner(fac1);
 </span>   <span class="keyword">if</span> faction.isPlayerControlled == <span class="number">0</span> <span class="keyword">then</span> <span class="keyword">return</span> <span class="keyword">end</span>;
 
    <span class="comment">-- Sort all the stacks on the map right before the turn starts
-</span>   <span class="keyword">local</span> factionsNum = stratmap.game.getFactionsCount();
-   <span class="keyword">for</span> i = <span class="number">0</span>, factionsNum - <span class="number">1</span> <span class="keyword">do</span>
-       <span class="keyword">local</span> faction = stratmap.game.getFaction(i);
-       <span class="keyword">for</span> j = <span class="number">0</span>, faction.stacksNum - <span class="number">1</span> <span class="keyword">do</span>
-           <span class="keyword">local</span> stack = faction:getStack(j);
-           <span class="keyword">if</span> stack <span class="keyword">then</span>
-               <span class="comment">-- Debug Info
-</span>               <span class="comment">-- print("\n\n")
-</span>               <span class="comment">-- print("-- Unsorted Stack --")
-</span>               <span class="comment">-- for k = 0, stack.numOfUnits - 1 do
-</span>               <span class="comment">--     local unit = stack:getUnit(k);
-</span>               <span class="comment">--     if unit.eduEntry.Type then
-</span>               <span class="comment">--         print(unit.eduEntry.Type)
-</span>               <span class="comment">--     end
-</span>               <span class="comment">-- end
+</span><span class="comment">-- Note: Generals will always remain at the start of the stack
+</span><span class="comment">-- 1 = EDU Type
+</span><span class="comment">-- 2 = Category
+</span><span class="comment">-- 3 = Class
+</span><span class="comment">-- 4 = Soldier Count
+</span><span class="comment">-- 5 = Experience
+</span><span class="comment">-- 6 = Category + Class
+</span><span class="comment">-- 7 = AI unit value
 </span>
-               <span class="comment">-- Sort the stack by category + class, then by soldier count, then by experience
-</span>               stack:sortStack(<span class="number">6</span>, <span class="number">4</span>, <span class="number">5</span>)
+<span class="keyword">function</span> onFactionTurnStart(eventData)
+<span class="keyword">local</span> faction = eventData.faction
+<span class="comment">-- If it's not the players turn, don't sort
+</span><span class="keyword">if</span> faction.isPlayerControlled == <span class="number">0</span> <span class="keyword">then</span> <span class="keyword">return</span> <span class="keyword">end</span>;
 
-               <span class="comment">-- print("\n\n")
-</span>               <span class="comment">-- print("-- Sorted Stack --")
-</span>               <span class="comment">-- for k = 0, stack.numOfUnits - 1 do
-</span>               <span class="comment">--     local unit = stack:getUnit(k);
-</span>               <span class="comment">--     if unit.eduEntry.Type then
-</span>               <span class="comment">--         print(unit.eduEntry.Type)
-</span>               <span class="comment">--     end
-</span>               <span class="comment">-- end
-</span>           <span class="keyword">end</span>
-       	<span class="keyword">end</span>
-   	<span class="keyword">end</span>
+<span class="comment">-- Sort all the stacks on the map right before the turn starts
+</span><span class="keyword">local</span> factionsNum = stratmap.game.getFactionsCount();
+<span class="keyword">for</span> i = <span class="number">0</span>, factionsNum - <span class="number">1</span> <span class="keyword">do</span>
+	<span class="keyword">local</span> faction = stratmap.game.getFaction(i);
+	<span class="keyword">for</span> j = <span class="number">0</span>, faction.stacksNum - <span class="number">1</span> <span class="keyword">do</span>
+		<span class="keyword">local</span> stack = faction:getStack(j);
+		<span class="keyword">if</span> stack <span class="keyword">then</span>
+			<span class="comment">-- Debug Info
+</span>			<span class="comment">-- print("\n\n")
+</span>			<span class="comment">-- print("-- Unsorted Stack --")
+</span>			<span class="comment">-- for k = 0, stack.numOfUnits - 1 do
+</span>			<span class="comment">--     local unit = stack:getUnit(k);
+</span>			<span class="comment">--     if unit.eduEntry.Type then
+</span>			<span class="comment">--         print(unit.eduEntry.Type)
+</span>			<span class="comment">--     end
+</span>			<span class="comment">-- end
+</span>
+			<span class="comment">-- Sort the stack by category + class, then by soldier count, then by experience
+</span>			stack:sortStack(sortType.categoryClass, sortType.soldierCount, sortType.experience)
+
+			<span class="comment">-- print("\n\n")
+</span>			<span class="comment">-- print("-- Sorted Stack --")
+</span>			<span class="comment">-- for k = 0, stack.numOfUnits - 1 do
+</span>			<span class="comment">--     local unit = stack:getUnit(k);
+</span>			<span class="comment">--     if unit.eduEntry.Type then
+</span>			<span class="comment">--         print(unit.eduEntry.Type)
+</span>			<span class="comment">--     end
+</span>			<span class="comment">-- end
+</span>		<span class="keyword">end</span>
+		<span class="keyword">end</span>
+	<span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
     </ul>
 
