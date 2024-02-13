@@ -3878,7 +3878,7 @@ namespace sol_ImGui
 		/***
 		Push word-wrapping position for Text commands. < 0.0f: no wrapping; 0.0f: wrap to end of window (or column); > 0.0f: wrap at 'wrapLocalPosX' position in window local space
 		@function ImGui.PushTextWrapPos
-		@treturn float wrapLocalPosX optional
+		@tparam float wrapLocalPosX optional
 		@usage
 			ImGui.PushTextWrapPos();
 		*/
@@ -4337,6 +4337,7 @@ namespace sol_ImGui
 		/***
 		Image button.
 		@function ImGui.ImageButton
+		@tparam string label
 		@tparam any texture
 		@tparam float sizeX
 		@tparam float sizeY
@@ -6576,7 +6577,7 @@ namespace sol_ImGui
 		@function FontAtlas.AddFontFromFileTTF
 		@tparam string filename
 		@tparam float sizePixels
-		@treturn ImGuiIO io
+		@treturn ImFont font
 		@usage
 			FontAtlas.AddFontFromFileTTF();
 		*/
