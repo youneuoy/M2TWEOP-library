@@ -154,7 +154,7 @@ public:
 
 
 	ProcLoader<void(__cdecl*)(signed short, signed short)> setEDUUnitsSize;
-	ProcLoader<void(__cdecl*)(signed short, signed short)> setBattlemapSize;
+	ProcLoader<void(__cdecl*)(float, float)> setBattlemapSize;
 	ProcLoader<void(__cdecl*)(namedCharacter*, bool)> setHeir;
 
 

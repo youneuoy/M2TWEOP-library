@@ -555,6 +555,11 @@ void managerF::doPachs()
 	onAutoSave->Enable();
 	f1 << "Done" << endl;
 
+	f1 << "Start applying toSizeOfBattleField patch" << endl;
+    sizeOfBattleField* toSizeOfBattleField = new sizeOfBattleField(mem, globals::dataS.gamever, 1000, 1000);
+    toSizeOfBattleField->SetlSizeCode();
+    toSizeOfBattleField->Enable();
+    f1 << "Done" << endl;
 
 	OnPathCasheCrashPlace* onPathCasheCrashPlace = new OnPathCasheCrashPlace(mem, (LPVOID)&TacticalMapViewer::GetPathCashe, globals::dataS.gamever, (LPVOID)&globals::dataS.Modules.tacticalMapVeiwer);
 	onPathCasheCrashPlace->SetNewCode();
@@ -605,7 +610,6 @@ void managerF::doPachs()
 		blockLaunch->Enable();
 		f1 << "Done" << endl;
 	}
-
 
 	f1 << "End." << endl;
 

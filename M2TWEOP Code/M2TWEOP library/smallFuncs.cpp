@@ -129,7 +129,7 @@ namespace smallFuncs
 
 		return;
 	}
-	NOINLINE EOP_EXPORT void setBattlemapSize(signed short x, signed short y)
+	NOINLINE EOP_EXPORT void setBattlemapSize(float x, float y)
 	{
 		DWORD codeOffset = 0;
 		if (globals::dataS.gamever == 2)//steam
@@ -141,8 +141,8 @@ namespace smallFuncs
 			codeOffset = 0x00441335;
 		}
 
-		MemWork::WriteData(&x, codeOffset, 0x00000080);
-		MemWork::WriteData(&y, codeOffset, 0x0000007C);
+		MemWork::WriteData((reinterpret_cast<int*>(&x)), codeOffset, 0x00000080);
+		MemWork::WriteData((reinterpret_cast<int*>(&y)), codeOffset, 0x0000007C);
 
 		return;
 	}

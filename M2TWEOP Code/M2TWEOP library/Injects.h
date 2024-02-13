@@ -1157,3 +1157,18 @@ public:
 private:
 	LPVOID funcAddress;
 };
+
+class sizeOfBattleField :
+	public AATemplate
+{
+public:
+	sizeOfBattleField(MemWork* mem, UINT32 gamever, float sizeX, float sizeY);
+	~sizeOfBattleField();
+
+	void SetOriginalSizeCode();
+	void SetlSizeCode();
+protected:
+	UINT32 gamever;
+	float sizeX;
+	float sizeY;
+};

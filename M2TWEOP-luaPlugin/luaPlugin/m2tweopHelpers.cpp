@@ -163,7 +163,7 @@ namespace m2tweopHelpers
 	{
 		(*(*plugData::data.funcs.setEDUUnitsSize))(min, max);
 	}
-	void setBattlemapSize(signed short x, signed short y)
+	void setBattlemapSize(float x, float y)
 	{
 		(*(*plugData::data.funcs.setBattlemapSize))(x, y);
 	}
