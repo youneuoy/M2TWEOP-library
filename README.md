@@ -94,6 +94,7 @@ For a full list of EOP Events, see [here](https://youneuoy.github.io/M2TWEOP-lib
 * **Xamax** - Video tutorials, testing and many great suggestions
 * **Erken** - Excellent IMGUI tutorials, Lua examples and feedback
 * **DinarMayor** - Testing, great suggestions and examples
+* **Mekkerman** - Patron of the project
 
 ## Projects
 * [M2TWEOP Library](https://github.com/youneuoy/M2TWEOP-library) - Main project (C++ and Assembly)
