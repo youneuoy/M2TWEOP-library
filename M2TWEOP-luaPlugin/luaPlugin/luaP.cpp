@@ -200,7 +200,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getModPath getModPath
 	@tfield toggleConsole toggleConsole
 	@tfield reloadScript reloadScript
-	@tfield restartLua restartLua
 	@tfield toggleDeveloperMode toggleDeveloperMode
 	@tfield saveGame saveGame
 	@tfield getGameVersion getGameVersion
@@ -296,7 +295,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	    M2TWEOP.restartLua();
 	*/
 
-	tables.M2TWEOPTable.set_function("restartLua", &console::restartLua);
+	//tables.M2TWEOPTable.set_function("restartLua", &console::restartLua);
 	/***
 	Save the game.
 	@function M2TWEOP.saveGame
@@ -3662,6 +3661,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int xCoord
 	@tfield int yCoord
 	@tfield int regionID
+	@tfield int resourceID
 	@tfield settlementStruct settlement
 	@tfield setStratModel setStratModel
 	@tfield getResourceID getResourceID
