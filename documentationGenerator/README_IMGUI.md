@@ -312,7 +312,6 @@ GUI_OPEN, shouldDraw = ImGui.Begin("BACKGROUND_SCROLL", GUI_OPEN, ImGuiWindowFla
 
 ImGui.End() -- End window area
 ```
-![](https://cdn.discordapp.com/attachments/939640870343426059/1075868416470155364/image.png)
 
 ## Parameters Stacks (Shared)
 Note: This binding does not give functions that can obtain an ImFont* from inside Lua (besides GetFont), You'll need to add your own.

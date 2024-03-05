@@ -75,13 +75,6 @@ M2TWEOP: Medieval 2 Engine Overhaul Project
 	<span class="kr">end</span>
 	</pre>
 
-	<h3>Creating custom UI's with M2TWEOP's ImGUI Lua Plugin</h3>
-	<a target="_blank" href="https://cdn.discordapp.com/attachments/1116459429039194152/1157017402769428501/mercenaryViewer.jpg?ex=65d78eed&is=65c519ed&hm=7dd51841c000f30bdd44450303c8c2cefc8564fd84667974c298a947e8b81165&"><img class="imGuiImage" src="https://cdn.discordapp.com/attachments/1116459429039194152/1157017402769428501/mercenaryViewer.jpg?ex=65d78eed&is=65c519ed&hm=7dd51841c000f30bdd44450303c8c2cefc8564fd84667974c298a947e8b81165&"></a>
-	<a target="_blank" href="https://cdn.discordapp.com/attachments/943211834947829800/1077682337166393344/options.jpg"><img class="imGuiImage" src="https://cdn.discordapp.com/attachments/943211834947829800/1077682337166393344/options.jpg"></a>
-	<a target="_blank" href="https://cdn.discordapp.com/attachments/1116459429039194152/1154107279931609168/Alpha_1.jpg?ex=65d63329&is=65c3be29&hm=f8047c3c13b89b493f36b71822b00025edc3f84abca1a98541c88523056e10b7&"><img class="imGuiImage" src="https://cdn.discordapp.com/attachments/1116459429039194152/1154107279931609168/Alpha_1.jpg?ex=65d63329&is=65c3be29&hm=f8047c3c13b89b493f36b71822b00025edc3f84abca1a98541c88523056e10b7&"></a>
-	<a target="_blank" href="https://cdn.discordapp.com/attachments/939640870343426059/1110700778101944340/image.png?ex=65d52c35&is=65c2b735&hm=1c51d43f47b5d62c6270e76429ccf8ebb3b84297a69cb0b03f9655e4203b8ac7&"><img class="imGuiImage" src="https://cdn.discordapp.com/attachments/939640870343426059/1110700778101944340/image.png?ex=65d52c35&is=65c2b735&hm=1c51d43f47b5d62c6270e76429ccf8ebb3b84297a69cb0b03f9655e4203b8ac7&"></a>
-	<a target="_blank" href="https://cdn.discordapp.com/attachments/939640870343426059/1112032699616608337/image.png?ex=65da04a8&is=65c78fa8&hm=15296d6fee0d613411450ad094eb37be9db83d5f677ed4c0c5af62cd5fd0385b&"><img class="imGuiImage" src="https://cdn.discordapp.com/attachments/939640870343426059/1112032699616608337/image.png?ex=65da04a8&is=65c78fa8&hm=15296d6fee0d613411450ad094eb37be9db83d5f677ed4c0c5af62cd5fd0385b&"></a>
-
 	<h2>Videos</h2>
 	<div class="videoGallery">
 	<iframe frameborder="0" src="https://www.youtube.com/embed/itTng85dG5I" allowfullscreen></iframe>
