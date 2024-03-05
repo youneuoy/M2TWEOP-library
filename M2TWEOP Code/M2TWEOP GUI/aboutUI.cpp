@@ -68,10 +68,6 @@ end
 ```
 For a full list of EOP Events, see [here](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html)
 
-### Creating custom UI's with M2TWEOP' ImGUI Plugin
-![M2TWEOP-Tutorials](https://cdn.discordapp.com/attachments/939640870343426059/1075868416470155364/image.png)
-![M2TWEOP-Tutorials](https://cdn.discordapp.com/attachments/748027000353980508/971415742710960168/unknown.png)
-
 ### Developers
 * **youneuoy** - Project founder, Main Developer
 * **Jojo00182** - Great code contributions, engine bugfixes, reversing structs and much more
