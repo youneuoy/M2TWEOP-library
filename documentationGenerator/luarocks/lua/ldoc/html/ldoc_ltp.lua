@@ -98,6 +98,7 @@ return [==[
     <ul>
         <li><a href="https://www.youtube.com/watch?v=hUvbcz8i7Wk">Scripting Basics (Video Tutorial)</li>
         <li><a href="../../../_static/Introduction_to_ImGui_v4.pdf">Introduction to EOP ImGUI V4 by Erken (PDF)</a></li>
+        <li><a href="../../../UPGRADING_TO_EOP_V3.html">Upgrading from EOP V2 to EOP V3</a></li>
     <ul>
     </ul>
 # elseif module then
