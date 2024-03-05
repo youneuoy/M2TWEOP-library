@@ -15,7 +15,7 @@ end
 ## EOP V3
 
 ```lua
-function onSettlementSelected (eventData)
+function onCharacterSelected(eventData)
     local selectedChar = eventData.character
     print(selectedChar.fullName)
 end
