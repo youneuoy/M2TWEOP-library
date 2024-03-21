@@ -115,7 +115,7 @@ namespace console
 		ImGui::End();
 
 		if(consoleData.shouldReloadScript){
-			reloadLuaScript();
+			reloadLua();
 			consoleData.shouldReloadScript = false;
 		}
 
