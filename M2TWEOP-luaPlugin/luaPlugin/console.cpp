@@ -14,6 +14,8 @@ namespace console
 		bool isDraw = false;
 		int pressAmount = 0;
 		int commandNum = 0;
+		bool shouldRestartLua   = false;
+		bool shouldReloadScript = false;
 	}consoleData;
 
 	void applyCommand()
@@ -46,19 +48,18 @@ namespace console
 
 	void reloadScript()
 	{
-		reloadLua();
+		consoleData.shouldReloadScript = true;
 		consoleData.pressAmount = 0;
 	}
 
 	void restartLua()
 	{
-		initLua();
+		consoleData.shouldRestartLua = true;
 		consoleData.pressAmount = 0;
 	}
 
 	void draw()
 	{
-
 		if (consoleData.isDraw == false)
 		{
 			return;
@@ -83,7 +84,6 @@ namespace console
 			consoleData.input = luaP::logCommands[consoleData.commandNum - 1 - consoleData.pressAmount];
 			consoleData.pressAmount++;
 		}
-
 
 		if (ImGui::IsKeyPressed(ImGuiKey_DownArrow)
 			&& consoleData.pressAmount > 0)
@@ -110,10 +110,19 @@ namespace console
 			outputs += "\n";
 		}
 
-
 		ImGui::InputTextMultiline("##consoleLog", &outputs, ImVec2(-FLT_MIN, -FLT_MIN), ImGuiInputTextFlags_ReadOnly);
 
 		ImGui::End();
+
+		if(consoleData.shouldReloadScript){
+			reloadLuaScript();
+			consoleData.shouldReloadScript = false;
+		}
+
+		if(consoleData.shouldRestartLua){
+			initLua();
+			consoleData.shouldRestartLua = false;
+		}
 	}
 
 }

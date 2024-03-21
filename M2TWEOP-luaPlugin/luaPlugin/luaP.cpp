@@ -295,7 +295,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	    M2TWEOP.restartLua();
 	*/
 
-	//tables.M2TWEOPTable.set_function("restartLua", &console::restartLua);
+	tables.M2TWEOPTable.set_function("restartLua", &console::restartLua);
 	/***
 	Save the game.
 	@function M2TWEOP.saveGame
