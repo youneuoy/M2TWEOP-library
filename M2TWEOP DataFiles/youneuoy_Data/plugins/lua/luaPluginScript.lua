@@ -72,10 +72,10 @@ function draw(pDevice)
     and (ImGui.IsKeyDown(ImGuiKey.LeftAlt))
     then
         M2TWEOP.toggleDeveloperMode()
+    elseif (ImGui.IsKeyPressed(ImGuiKey.R))
+        and (ImGui.IsKeyDown(ImGuiKey.LeftCtrl))
+        and (ImGui.IsKeyDown(ImGuiKey.LeftShift))
+    then
+        M2TWEOP.restartLua()
     end
-
 end
-
-
-
-
