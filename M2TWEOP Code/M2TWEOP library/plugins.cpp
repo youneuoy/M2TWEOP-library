@@ -73,6 +73,12 @@ void __fastcall plugins::onEvent(DWORD** vTab, DWORD arg2)
 			battleCreator::onHotseatScreen();
 		}
 	}
+	else if (strcmp(event, "FactionTurnStart") == 0)
+	{
+		factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
+		discordManager::OnFactionTurnStart(fac);
+		PlannedRetreatRoute::OnFactionTurnStart(fac);
+	}
 }
 
 
