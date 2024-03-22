@@ -8,7 +8,9 @@
 
 <!-- ### **Launcher** -->
 
-<!-- ### **Library** -->
+### **Library**
+- Updated DXVK library to the latest version [2.3.1](https://github.com/doitsujin/dxvk/releases/tag/v2.3.1)
+  - Includes a fix for the black screen issue during loading screens
 
 ### **Lua Plugin**
 - Fixed `M2TWEOP.restartLua()` crashing the game. It is now bound to `CTRL+SHIFT+R` by default. You can rebind this to something else if you prefer.
