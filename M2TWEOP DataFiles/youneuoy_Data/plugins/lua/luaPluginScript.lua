@@ -62,8 +62,7 @@ end
 
 --- Called every time an image is rendered for display
 ---@param pDevice LPDIRECT3DDEVICE9 
-function draw(pDevice) 
-
+function draw(pDevice)
     if (ImGui.IsKeyPressed(ImGuiKey.GraveAccent))
     and (ImGui.IsKeyDown(ImGuiKey.LeftCtrl))
     then

@@ -200,6 +200,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getModPath getModPath
 	@tfield toggleConsole toggleConsole
 	@tfield reloadScript reloadScript
+	@tfield restartLua restartLua
 	@tfield toggleDeveloperMode toggleDeveloperMode
 	@tfield saveGame saveGame
 	@tfield getGameVersion getGameVersion
