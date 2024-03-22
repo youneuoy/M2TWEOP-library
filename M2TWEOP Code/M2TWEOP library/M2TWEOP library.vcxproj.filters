@@ -31,6 +31,9 @@
     <Filter Include="3rd\discord">
       <UniqueIdentifier>{92d88ef8-2df2-49eb-9c8d-3a534dc208f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3rd\logger">
+      <UniqueIdentifier>{92d88ef8-2df2-49eb-9c8d-3a534dc208f5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="3rd\shortestPath">
       <UniqueIdentifier>{ea658fbd-38fc-49d1-bbf5-1f128c840c4f}</UniqueIdentifier>
     </Filter>
@@ -263,6 +266,12 @@
     </ClInclude>
     <ClInclude Include="..\3rd\nlohmann\json.hpp">
       <Filter>3rd\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\logger\loguru.hpp">
+      <Filter>3rd\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd\logger\loguru.cpp">
+      <Filter>3rd\logger</Filter>
     </ClInclude>
     <ClInclude Include="..\3rd\ImNotify\fa_solid_900.h">
       <Filter>3rd\ImNotify</Filter>
