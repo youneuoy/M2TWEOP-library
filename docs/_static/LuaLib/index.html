@@ -48,6 +48,7 @@
     <li><a href="#M2TWEOP.toggleDeveloperMode">M2TWEOP.toggleDeveloperMode ()</a></li>
     <li><a href="#M2TWEOP.reloadScript">M2TWEOP.reloadScript ()</a></li>
     <li><a href="#M2TWEOP.restartLua">M2TWEOP.restartLua ()</a></li>
+    <li><a href="#M2TWEOP.saveGame">M2TWEOP.saveGame (path)</a></li>
     <li><a href="#M2TWEOP.getGameVersion">M2TWEOP.getGameVersion ()</a></li>
     <li><a href="#M2TWEOP.setPerfectSpy">M2TWEOP.setPerfectSpy (set)</a></li>
     <li><a href="#M2TWEOP.getLocalFactionID">M2TWEOP.getLocalFactionID ()</a></li>
@@ -1137,7 +1138,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2024-03-05 20:14:24</p>
+        <p class="lastUpdatedMessage">Last updated: 2024-03-22 13:51:45</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -1189,6 +1190,10 @@
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.restartLua">M2TWEOP.restartLua ()</a></td>
 	<td class="summary">Restart the lua plugin (onPluginLoad fires).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP.saveGame">M2TWEOP.saveGame (path)</a></td>
+	<td class="summary">Save the game.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.getGameVersion">M2TWEOP.getGameVersion ()</a></td>
@@ -3953,6 +3958,12 @@
 
 
         </li>
+        <li><span class="parameter">restartLua</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.restartLua">restartLua</a></span>
+
+
+
+        </li>
         <li><span class="parameter">toggleDeveloperMode</span>
             <span class="types"><a class="type" href="index.html#M2TWEOP.toggleDeveloperMode">toggleDeveloperMode</a></span>
 
@@ -3960,7 +3971,7 @@
 
         </li>
         <li><span class="parameter">saveGame</span>
-            <span class="types"><span class="type">saveGame</span></span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.saveGame">saveGame</a></span>
 
 
 
@@ -4245,6 +4256,32 @@
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><code class="language-lua" >M2TWEOP.restartLua();</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP.saveGame"></a>
+    <strong>M2TWEOP.saveGame (path)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Save the game.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         (start from mods)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" >M2TWEOP.saveGame(mods/bare_geomod/saves/newsave.sav);</code></pre>
     </ul>
 
 </dd>
@@ -6495,7 +6532,7 @@ end_set_faction_banner]]</span>, facName))</code></pre>
 
         </li>
         <li><span class="parameter">kill</span>
-            <span class="types"><a class="type" href="index.html#unit:kill">kill</a></span>
+            <span class="types"><a class="type" href="index.html#character:kill">kill</a></span>
 
 
 
@@ -7677,7 +7714,7 @@ end_set_faction_banner]]</span>, facName))</code></pre>
 
         </li>
         <li><span class="parameter">kill</span>
-            <span class="types"><a class="type" href="index.html#unit:kill">kill</a></span>
+            <span class="types"><a class="type" href="index.html#character:kill">kill</a></span>
 
 
 
@@ -9600,7 +9637,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
 
         </li>
         <li><span class="parameter">getFort</span>
-            <span class="types"><a class="type" href="index.html#campaignStruct:getFort">getFort</a></span>
+            <span class="types"><a class="type" href="index.html#region:getFort">getFort</a></span>
 
 
 
@@ -10982,7 +11019,7 @@ ourFacName = ourFac:getFactionName();
 
         </li>
         <li><span class="parameter">getConstructionValue</span>
-            <span class="types"><a class="type" href="index.html#aiPersonality:getConstructionValue">getConstructionValue</a></span>
+            <span class="types"><a class="type" href="index.html#aiProductionController:getConstructionValue">getConstructionValue</a></span>
 
 
 
@@ -11274,7 +11311,7 @@ ourFacName = ourFac:getFactionName();
 
         </li>
         <li><span class="parameter">getConstructionValue</span>
-            <span class="types"><a class="type" href="index.html#aiPersonality:getConstructionValue">getConstructionValue</a></span>
+            <span class="types"><a class="type" href="index.html#aiProductionController:getConstructionValue">getConstructionValue</a></span>
 
 
 
@@ -12148,7 +12185,7 @@ ourFacName = ourFac:getFactionName();
 
         </li>
         <li><span class="parameter">getSiege</span>
-            <span class="types"><a class="type" href="index.html#settlementStruct:getSiege">getSiege</a></span>
+            <span class="types"><a class="type" href="index.html#fortStruct:getSiege">getSiege</a></span>
 
 
 
@@ -12603,7 +12640,7 @@ ourFacName = ourFac:getFactionName();
 
         </li>
         <li><span class="parameter">getSiege</span>
-            <span class="types"><a class="type" href="index.html#settlementStruct:getSiege">getSiege</a></span>
+            <span class="types"><a class="type" href="index.html#fortStruct:getSiege">getSiege</a></span>
 
 
 
@@ -27601,7 +27638,7 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</code></pre>
 
         </li>
         <li><span class="parameter">getFort</span>
-            <span class="types"><a class="type" href="index.html#campaignStruct:getFort">getFort</a></span>
+            <span class="types"><a class="type" href="index.html#region:getFort">getFort</a></span>
 
 
 
@@ -29086,7 +29123,7 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
         </li>
         <li><span class="parameter">getFort</span>
-            <span class="types"><a class="type" href="index.html#campaignStruct:getFort">getFort</a></span>
+            <span class="types"><a class="type" href="index.html#region:getFort">getFort</a></span>
 
 
 
