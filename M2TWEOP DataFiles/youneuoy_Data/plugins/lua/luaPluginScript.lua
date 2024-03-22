@@ -62,8 +62,7 @@ end
 
 --- Called every time an image is rendered for display
 ---@param pDevice LPDIRECT3DDEVICE9 
-function draw(pDevice) 
-
+function draw(pDevice)
     if (ImGui.IsKeyPressed(ImGuiKey.GraveAccent))
     and (ImGui.IsKeyDown(ImGuiKey.LeftCtrl))
     then
@@ -72,10 +71,10 @@ function draw(pDevice)
     and (ImGui.IsKeyDown(ImGuiKey.LeftAlt))
     then
         M2TWEOP.toggleDeveloperMode()
+    elseif (ImGui.IsKeyPressed(ImGuiKey.R))
+        and (ImGui.IsKeyDown(ImGuiKey.LeftCtrl))
+        and (ImGui.IsKeyDown(ImGuiKey.LeftShift))
+    then
+        M2TWEOP.restartLua()
     end
-
 end
-
-
-
-
