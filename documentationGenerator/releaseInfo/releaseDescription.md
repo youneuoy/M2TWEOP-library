@@ -6,7 +6,8 @@
 
 ## **Release Notes**
 
-<!-- ### **Launcher** -->
+### **Launcher**
+- Fix setting of faction name in Discord Rich Presence
 
 ### **Library**
 - Updated DXVK library to the latest version [2.3.1](https://github.com/doitsujin/dxvk/releases/tag/v2.3.1)
