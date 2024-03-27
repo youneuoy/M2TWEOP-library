@@ -1716,6 +1716,10 @@ namespace sol_ImGui
 	inline int GetMouseCursor() { return ImGui::GetMouseCursor(); }
 	inline void SetMouseCursor(int cursor_type) { ImGui::SetMouseCursor(static_cast<ImGuiMouseCursor>(cursor_type)); }
 	inline void SetNextFrameWantCaptureMouse(bool want_capture_mouse_value) { ImGui::SetNextFrameWantCaptureMouse(want_capture_mouse_value); }
+	inline void AddFontFromFileTTF(ImFontAtlas* fontAtlas, const char* filename, float size_pixels)
+	{
+		fontAtlas->AddFontFromFileTTF(filename, size_pixels);
+	}
 
 	// Clipboard Utilities
 	inline std::string GetClipboardText() { return std::string(ImGui::GetClipboardText()); }
@@ -6574,14 +6578,14 @@ namespace sol_ImGui
 
 		/***
 		Access the IO structure (mouse/keyboard/gamepad inputs, time, various configuration options/flags).
-		@function FontAtlas.AddFontFromFileTTF
+		@function FontAtlas:AddFontFromFileTTF
 		@tparam string filename
 		@tparam float sizePixels
 		@treturn ImFont font
 		@usage
-			FontAtlas.AddFontFromFileTTF();
+			FontAtlas:AddFontFromFileTTF();
 		*/
-		FontAtlas.set_function("AddFontFromFileTTF", &ImFontAtlas::AddFontFromFileTTF);
+		FontAtlas.set_function("AddFontFromFileTTF", &AddFontFromFileTTF);
 
 		///ImGuiIO
 		//@section ImGuiIO
