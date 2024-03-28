@@ -204,7 +204,7 @@ public:
 	ProcLoader<void(__cdecl*)(unit*)> killUnit;
 	ProcLoader<void(__cdecl*)(general*)> killCharacter;
 	ProcLoader<void(__cdecl*)(general*, const char*)> setCharacterModel;
-	ProcLoader<void(__cdecl*)(const char*, const char*, const char*, const char*, const char*)> addCharacterCas;
+	ProcLoader<void(__cdecl*)(const char*, const char*, const char*, const char*, const char*, float)> addCharacterCas;
 
 	ProcLoader<void(__cdecl*)(unit*, int)> setSoldiersCount;
 	ProcLoader<void(__cdecl*)(unit*, int, int, int, int)> setUnitParams;
@@ -228,6 +228,7 @@ public:
 	ProcLoader<void(__cdecl*)(general*, int, int, int)> setCharacterType;
 
 	ProcLoader<int(__cdecl*)()> getGameVersion;
+	ProcLoader<void(__cdecl*)()> toggleDeveloperMode;
 	ProcLoader<void(__cdecl*)(const char*)> saveGame;
 	ProcLoader<void(__cdecl*)(stackStruct*, stackStruct*)> mergeArmies;
 

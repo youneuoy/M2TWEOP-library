@@ -1002,14 +1002,16 @@ void luaP::onPluginLoadF()
 	*/
 
 	/***
-	An assault has taken place.
+	An assault has taken place. NOTE: settlement and fort are not in eventData! They are separate arguments!.
 	Exports: character, faction, targetFaction, regionID, targetRegionID, characterType, religion, targetReligion
 
 	@function onGeneralAssaultsResidence
 	@tparam eventTrigger eventData
+	@tparam settlementStruct|nil settlement
+	@tparam fortStruct|nil fort
 
 	@usage
-	function onGeneralAssaultsResidence(eventData)
+	function onGeneralAssaultsResidence(eventData, settlement, fort)
 	--something
 	end
 	*/

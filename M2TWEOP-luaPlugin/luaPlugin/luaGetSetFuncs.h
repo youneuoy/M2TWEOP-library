@@ -27,6 +27,7 @@ namespace luaGetSetFuncs
 	std::string getTraitName(const traitContainer* currTrait);
 	traitContainer* getNextTrait(const traitContainer* currTrait);
 	traitContainer* getPrevTrait(const traitContainer* currTrait);
+	traitEffect* getTraitEffect(const traitLevel* level, int index);
 
 
 

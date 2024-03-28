@@ -13,12 +13,6 @@ void DeveloperMode::Update()
 	{
 		return;
 	}
-	if ((ImGui::GetIO().KeysDownDuration[VK_CONTROL] > 0.f && ImGui::GetIO().KeysDownDuration['2'] > 0.f)
-		&& (ImGui::GetIO().KeysDownDurationPrev[VK_CONTROL] == 0.f || ImGui::GetIO().KeysDownDurationPrev['2'] == 0.f)
-		)
-	{
-		isWork = !isWork;
-	}
 
 	if (isWork == false)
 	{
@@ -60,6 +54,11 @@ void DeveloperMode::Update()
 
 
 	ImGui::End();
+}
+
+void DeveloperMode::toggleDeveloperModeBase()
+{
+	isWork = !isWork;
 }
 
 string DeveloperMode::SelectWorldpkgdesc(const std::string& selectedRec, const std::string& selectedGroup)

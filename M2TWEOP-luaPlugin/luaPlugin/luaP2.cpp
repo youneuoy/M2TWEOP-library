@@ -246,6 +246,112 @@ void luaP::initCampaign()
 		"pope", 13
 	);
 
+	//@section sortType
+	/***
+	Enum with a list of army sort types.
+
+	@tfield int eduType
+	@tfield int category
+	@tfield int class
+	@tfield int soldierCount
+	@tfield int experience
+	@tfield int categoryClass
+	@tfield int aiUnitValue
+
+	@table sortType
+	*/
+	luaState.new_enum(
+		"sortType",
+		"eduType", 1,
+		"category", 2,
+		"class", 3,
+		"soldierCount", 4,
+		"experience", 5,
+		"categoryClass", 6,
+		"aiUnitValue", 7
+	);
+
+	//@section aiPlan
+	/***
+	Enum with a list of GTA AI plans.
+
+	@tfield int doNothing
+	@tfield int attackAll
+	@tfield int defend
+	@tfield int defendFeature
+	@tfield int hide
+	@tfield int ambush
+	@tfield int scout
+	@tfield int withdraw
+	@tfield int attackSettlement
+	@tfield int defendSettlement
+	@tfield int sallyOut
+
+	@table aiPlan
+	*/
+	luaState.new_enum(
+		"aiPlan",
+		"doNothing", 0,
+		"attackAll", 1,
+		"defend", 2,
+		"defendFeature", 3,
+		"hide", 4,
+		"ambush", 5,
+		"scout", 6,
+		"withdraw", 7,
+		"attackSettlement", 8,
+		"defendSettlement", 9,
+		"sallyOut", 10
+	);
+
+	//@section aiObjective
+	/***
+	Enum with a list of GTA AI objectives.
+
+	@tfield int invalid
+	@tfield int moveToPoint
+	@tfield int attackEnemyBattleGroup
+	@tfield int defendTerrainHill
+	@tfield int defendTerrainForest
+	@tfield int defendTerrainArea
+	@tfield int defendCrossing
+	@tfield int assaultCrossing
+	@tfield int defendLine
+	@tfield int scout
+	@tfield int withdraw
+	@tfield int defendSettlement
+	@tfield int supportDefendSettlement
+	@tfield int attackSettlement
+	@tfield int bombard
+	@tfield int attackModel
+	@tfield int sallyOut
+	@tfield int ambush
+
+	@table aiObjective
+	*/
+	luaState.new_enum(
+		"aiObjective",
+		"invalid", 0,
+		"moveToPoint", 1,
+		"attackEnemyBattleGroup", 2,
+		"defendTerrainHill", 3,
+		"defendTerrainForest", 4,
+		"defendTerrainArea", 5,
+		"defendCrossing", 6,
+		"assaultCrossing", 7,
+		"defendLine", 8,
+		"scout", 9,
+		"withdraw", 10,
+		"defendSettlement", 11,
+		"supportDefendSettlement", 12,
+		"attackSettlement", 13,
+		"skirmish", 14,
+		"bombard", 15,
+		"attackModel", 16,
+		"sallyOut", 17,
+		"ambush", 18
+	);
+
 	//@section resourceType
 	/***
 	Enum with a list of resources.
@@ -382,6 +488,25 @@ void luaP::initCampaign()
 		"average", 1,
 		"clear", 2,
 		"crushing", 3
+	);
+
+	//@section mountClass
+	/***
+	Enum of unit mount class.
+
+	@tfield int horse
+	@tfield int camel
+	@tfield int elephant
+	@tfield int infantry
+
+	@table mountClass
+	*/
+	luaState.new_enum(
+		"mountClass",
+		"horse", 0,
+		"camel", 1,
+		"elephant", 2,
+		"infantry", 3
 	);
 
 	//@section battleType
@@ -965,10 +1090,10 @@ void luaP::initCampaign()
 	Basic campaign table.
 
 	@tfield int playerFactionId
-	@tfield int[31] campaignDifficultyFaction Indexing starts at 1, so add 1 to faction ID.
-	@tfield int[31] battleDifficultyFaction Indexing starts at 1, so add 1 to faction ID.
-	@tfield factionStruct[31] factionsSortedByDescrStrat Table of factionStruct[31], indexing starts at 1.
-	@tfield factionStruct[31] factionsSortedByID Table of factionStruct[31], indexing starts at 1, so add 1 to faction ID.
+	@tfield int[31] campaignDifficultyFaction Indexing starts at 1, so add 1 to faction ID. Maximum 31.
+	@tfield int[31] battleDifficultyFaction Indexing starts at 1, so add 1 to faction ID. Maximum 31.
+	@tfield factionStruct[31] factionsSortedByDescrStrat Table of factionStruct[31], indexing starts at 1. Maximum 31.
+	@tfield factionStruct[31] factionsSortedByID Table of factionStruct[31], indexing starts at 1, so add 1 to faction ID. Maximum 31.
 	@tfield int numberOfFactions
 	@tfield int numberHumanFactions Number of player-controlled factions.
 	@tfield factionStruct currentFaction Faction whose turn it is at the moment, can be set.
@@ -1004,6 +1129,7 @@ void luaP::initCampaign()
 	@tfield checkDipStance checkDipStance
 	@tfield setDipStance setDipStance
 	@tfield GetUnitSize GetUnitSize
+	@tfield getCampaignPath getCampaignPath
 	@tfield getFort getFort
 	@tfield getPort getPort
 	@tfield getWatchTower getWatchTower
@@ -1131,6 +1257,15 @@ void luaP::initCampaign()
 	local sett=campaign:getSettlementByName("London");
 	*/
 	typeAll.campaignTable.set_function("getSettlementByName", &gameHelpers::getSettlementByName);
+	/***
+	Get path to the current descr\_strat file used.
+	@function campaignStruct:getCampaignPath
+	@treturn string path
+	@usage
+	local campaign = gameDataAll.get().campaignStruct;
+	local path = campaign:getCampaignPath();
+	*/
+	typeAll.campaignTable.set_function("getCampaignPath", &gameHelpers::getCampaignPath);
 
 	///CollegeofCardinals
 	//@section collegeOfCardinals
@@ -1383,10 +1518,10 @@ void luaP::initCampaign()
 	@tfield int regionID
 	@tfield tradeResource|nil resource
 	@tfield character|nil character
-	@tfield settlement|nil settlement
+	@tfield settlementStruct|nil settlement
 	@tfield fortStruct|nil fort
 	@tfield portStruct|nil port
-	@tfield watchTowerStruct|nil watchtower
+	@tfield watchtowerStruct|nil watchtower
 	@tfield int height
 	@tfield int climate
 	@tfield int heatValue
@@ -1935,7 +2070,7 @@ void luaP::initCampaign()
 	/***
 	Basic mercenary unit table.
 
-	@tfield EduEntry eduEntry
+	@tfield eduEntry eduEntry
 	@tfield int experience
 	@tfield int cost
 	@tfield float replenishMin
@@ -2001,6 +2136,9 @@ void luaP::initP2()
 		sol::usertype<armyAndCharacter> battleArmy;
 		sol::usertype<battleUnit> battleUnit;
 		sol::usertype<battleResidence> battleResidence;
+		sol::usertype<AIBattleObjectiveBase> battleObjective;
+		sol::usertype<buildingBattle> buildingBattle;
+		sol::usertype<battleBuildings> battleBuildings;
 
 	}typeAll;
 	///GameDataAll
@@ -2067,15 +2205,16 @@ void luaP::initP2()
 	@tfield int defenderXCoord
 	@tfield int defenderYCoord
 	@tfield int paused
+	@tfield int inBattle
 	@tfield float battleSpeed
 	@tfield float secondsPassed
 	@tfield int secondsSinceBattleLoaded
 	@tfield int hidingEnabledSet
 	@tfield float mapWidthDoubled
 	@tfield float mapHeightDoubled
-	@tfield int sidesNum Returns a battleSide[8]. Maximum: 8.
-	@tfield battleSide[8] sides
-	@tfield factionSide[31] faction alliance array, -1 if not in battle, start at 1 so faction ID + 1
+	@tfield int sidesNum
+	@tfield battleSide[8] sides Returns a battleSide[8]. Maximum: 8.
+	@tfield int[31] factionSide faction alliance array, -1 if not in battle, start at 1 so faction ID + 1 Maximum 31.
 	tfield getPlayerArmy getPlayerArmy
 	@tfield getBattleResidence getBattleResidence
 
@@ -2092,6 +2231,7 @@ void luaP::initP2()
 	typeAll.battleTable.set("defenderXCoord", &battleDataS::defenderXCoord);
 	typeAll.battleTable.set("defenderYCoord", &battleDataS::defenderYCoord);
 	typeAll.battleTable.set("paused", &battleDataS::paused);
+	typeAll.battleTable.set("inBattle", &battleDataS::inBattle);
 	typeAll.battleTable.set("battleSpeed", &battleDataS::speed);
 	typeAll.battleTable.set("secondsPassed", &battleDataS::secondsPassed);
 	typeAll.battleTable.set("secondsSinceBattleLoaded", &battleDataS::secondsSinceBattleLoaded);
@@ -2132,16 +2272,18 @@ void luaP::initP2()
 	@tfield bool isCanDeploy
 	@tfield int wonBattle 0 = lose, 1 = draw, 2 = win
 	@tfield int battleSuccess 0 = close, 1 = average, 2 = clear, 3 = crushing
-	@tfield int[4] winConditions Returns an int index of a wincondition.
+	@tfield int[4] winConditions Returns an int index of a wincondition. Maximum 4.
 	@tfield getWinConditionString getWinConditionString
 	@tfield int armiesNum
 	@tfield int alliance
 	@tfield int soldierCount
 	@tfield int factionCount
 	@tfield int totalStrength
+	@tfield float battleOdds
+	@tfield int totalValueStart
 	@tfield battleAI battleAIPlan
 	@tfield getBattleArmy getBattleArmy
-	@tfield trackedPointerArmy[8] armies Returns a table of trackedPointerArmy. Maximum: 8.
+	@tfield trackedPointerArmy[64] armies Returns a table of trackedPointerArmy. Maximum: 64.
 	
 	
 
@@ -2157,6 +2299,8 @@ void luaP::initP2()
 	typeAll.battleSideTable.set("alliance", &battleSide::alliance);
 	typeAll.battleSideTable.set("soldierCount", &battleSide::soldierCount);
 	typeAll.battleSideTable.set("totalStrength", &battleSide::totalStrength);
+	typeAll.battleSideTable.set("totalValueStart", &battleSide::totalValue);
+	typeAll.battleSideTable.set("battleOdds", &battleSide::battleOdds);
 	typeAll.battleSideTable.set("factionCount", &battleSide::factionCount);
 	typeAll.battleSideTable.set("battleAIPlan", &battleSide::battleAIPlan);
 	typeAll.battleSideTable.set("winConditions", sol::property([](battleSide& self) { return std::ref(self.winConditions); }));
@@ -2252,8 +2396,7 @@ void luaP::initP2()
 	@tfield getCoordPair getCoordPair
 
 
-
-	@table trackedPointerArmy.deploymentAreaS
+	@table deploymentAreaS
 	*/
 	typeAll.deploymentAreaTable = luaState.new_usertype<deploymentAreaS>("deploymentAreaS");
 	typeAll.deploymentAreaTable.set("coordsNum", &deploymentAreaS::coordsNum);
@@ -2295,13 +2438,71 @@ void luaP::initP2()
 		10 = "SALLY_OUT"
 	@tfield int unitCount
 	@tfield int enemyUnitCount
+	@tfield int addedObjectivesCount
+	@tfield getObjective getObjective
+	
 
 	@table battleAI
 	*/
+
 	typeAll.battleAI = luaState.new_usertype<battleAI>("battleAI");
 	typeAll.battleAI.set("gtaPlan", &battleAI::currentAIPlan);
 	typeAll.battleAI.set("unitCount", &battleAI::unitCount);
 	typeAll.battleAI.set("enemyUnitCount", &battleAI::enemyUnitCount);
+	typeAll.battleAI.set("addedObjectivesCount", &battleAI::addedObjectivesCount);
+	/***
+	Get a battle objective by it's index.
+	@function battleAI:getObjective
+	@tparam int index
+	@treturn battleObjective objective
+	@usage
+
+		local objective = battleAI:getObjective(0)
+
+	*/
+	typeAll.battleAI.set_function("getObjective", &battleHandlerHelpers::getObjective);
+
+
+	///BattleObjective
+	//@section battleObjective
+
+	/***
+	Basic battleObjective table
+
+	@tfield int priority
+	@tfield int unitCount
+	@tfield getUnit getUnit
+	@tfield getType getType
+
+
+	@table battleObjective
+	*/
+
+	typeAll.battleObjective = luaState.new_usertype<AIBattleObjectiveBase>("battleObjective");
+	typeAll.battleObjective.set("priority", &AIBattleObjectiveBase::priority);
+	typeAll.battleObjective.set("unitCount", &AIBattleObjectiveBase::aiUnitsCount);
+	/***
+	Get a unit by it's index.
+	@function battleObjective:getUnit
+	@tparam int index
+	@treturn unit unit
+	@usage
+
+		local unit = battleObjective:getUnit(0)
+
+	*/
+	typeAll.battleObjective.set_function("getUnit", &battleHandlerHelpers::getUnit);
+	/***
+	Get the type of objective.
+	@function battleObjective:getType
+	@treturn int objectiveType
+	@usage
+
+		local objective = battleObjective:getType()
+
+	*/
+	typeAll.battleObjective.set_function("getType", &battleHandlerHelpers::getObjective);
+
 	///BattleArmy
 	//@section battleArmy
 
@@ -2388,7 +2589,9 @@ void luaP::initP2()
 	Basic battleResidence table
 
 	@tfield settlementStruct settlement
+	@tfield factionStruct faction
 	@tfield int isFortBattle
+	@tfield battleBuildings battleBuildings
 	@tfield int settlementWallsBreached
 	@tfield int settlementGateDestroyed
 
@@ -2399,4 +2602,58 @@ void luaP::initP2()
 	typeAll.battleResidence.set("isFortBattle", &battleResidence::isFortBattle);
 	typeAll.battleResidence.set("settlementWallsBreached", &battleResidence::settlementWallsBreached);
 	typeAll.battleResidence.set("settlementGateDestroyed", &battleResidence::settlementGateDestroyed);
+	typeAll.battleResidence.set("battleBuildings", &battleResidence::battleBuildings);
+
+	/// buildingBattle
+	//@section buildingBattle
+
+	/***
+	Basic buildingBattle table
+
+	@tfield int type
+	@tfield int endHealth
+	@tfield int currentHealth
+	@tfield int startHealth
+	@tfield int isDefenderControlled
+	@tfield float posX
+	@tfield float posZ
+	@tfield float posY
+
+	@table buildingBattle
+	*/
+	typeAll.buildingBattle = luaState.new_usertype<buildingBattle>("buildingBattle");
+	typeAll.buildingBattle.set("type", &buildingBattle::type);
+	typeAll.buildingBattle.set("posX", &buildingBattle::posX);
+	typeAll.buildingBattle.set("posZ", &buildingBattle::posZ);
+	typeAll.buildingBattle.set("posY", &buildingBattle::posY);
+	typeAll.buildingBattle.set("endHealth", &buildingBattle::endHealth);
+	typeAll.buildingBattle.set("currentHealth", &buildingBattle::currentHealth);
+	typeAll.buildingBattle.set("startHealth", &buildingBattle::startHealth);
+	typeAll.buildingBattle.set("isDefenderControlled", &buildingBattle::isDefenderControlled);
+
+	/// battleBuildings
+	//@section battleBuildings
+
+	/***
+	Basic battleBuildings table
+
+	@tfield int buildingCount
+	@tfield getBuilding getBuilding
+
+	@table battleBuildings
+	*/
+	typeAll.battleBuildings = luaState.new_usertype<battleBuildings>("battleBuildings");
+	typeAll.battleBuildings.set("buildingCount", &battleBuildings::allBuildingsNum);
+
+	/***
+	Get a battle building by it's index.
+	@function battleBuildings:getBuilding
+	@tparam int index
+	@treturn buildingBattle building
+	@usage
+
+		local building = battleBuildings:getBuilding(0)
+
+	*/
+	typeAll.battleBuildings.set_function("getBuilding", &battleHandlerHelpers::getBattleUnit);
 }

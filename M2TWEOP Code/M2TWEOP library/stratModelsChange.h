@@ -22,10 +22,10 @@ namespace stratModelsChange
 	EOP_EXPORT void changeStratModel(general* gen, const char* model);
 	DWORD getCasAnimSet(const char* name);
 	DWORD createModelFlexi(bool shadow);
-	void fixModelFlexi(bool shadow, DWORD stratmodel, DWORD modelflexi, const char* texturepath, DWORD skeleton);
+	void fixModelFlexi(bool shadow, DWORD stratmodel, DWORD modelflexi, const char* texturepath, DWORD skeleton, float scale);
 	DWORD loadStratCAS(const char* caspath, bool shadow);
-	EOP_EXPORT void addCharacterCas(const char* skeletonname, const char* caspath, const char* shadowcaspath, const char* typeName, const char* texturepath);
-	stratModelArrayEntry* buildCharacterCas(const char* skeletonname, const char* caspath, const char* shadowcaspath, const char* typeName, const char* texturepath);
+	EOP_EXPORT void addCharacterCas(const char* skeletonname, const char* caspath, const char* shadowcaspath, const char* typeName, const char* texturepath, float scale);
+	stratModelArrayEntry* buildCharacterCas(const char* skeletonname, const char* caspath, const char* shadowcaspath, const char* typeName, const char* texturepath, float scale);
 	stratModelArrayEntry* getStratModelEntry(const char* name);
 	stratModelArrayEntry* findCharacterStratModel(const char* modelId);
 	EOP_EXPORT void setCharacterModel(general* gen, const char* model);

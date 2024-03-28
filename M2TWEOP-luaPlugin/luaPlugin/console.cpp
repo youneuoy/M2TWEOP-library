@@ -3,7 +3,8 @@
 #include "plugData.h"
 #include "pluginM2TWEOP.h"
 
-#include "gameDataAllHelper.h"
+#include "imgui/imgui.h"
+
 namespace console
 {
 	struct
@@ -11,16 +12,18 @@ namespace console
 		std::string input;
 		
 		bool isDraw = false;
-		int keypressamount = 0;
+		int pressAmount = 0;
 		int commandNum = 0;
+		bool shouldRestartLua   = false;
+		bool shouldReloadScript = false;
 	}consoleData;
 
 	void applyCommand()
 	{
-		if (consoleData.input.size() > 0)
+		if (!consoleData.input.empty())
 		{
-			plugData::data.luaAll.logS.push_back("\n== Command == \n" + consoleData.input);
-			plugData::data.luaAll.logCommands.push_back(consoleData.input);
+			luaP::logS.push_back("\n== Command == \n" + consoleData.input);
+			luaP::logCommands.push_back(consoleData.input);
 		}
 		else
 		{
@@ -32,79 +35,61 @@ namespace console
 		consoleData.input.clear();
 	}
 
+	void toggleConsole()
+	{
+		consoleData.isDraw = !consoleData.isDraw;
+		consoleData.pressAmount = 0;
+
+		if (plugData::data.luaAll.checkVar("enableConsole", 1) == false)
+		{
+			consoleData.isDraw = false;
+		}
+	}
+
+	void reloadScript()
+	{
+		consoleData.shouldReloadScript = true;
+		consoleData.pressAmount = 0;
+	}
+
+	void restartLua()
+	{
+		consoleData.shouldRestartLua = true;
+		consoleData.pressAmount = 0;
+	}
+
 	void draw()
 	{
-			if ((ImGui::GetIO().KeysDownDuration[VK_CONTROL] > 0.f && ImGui::GetIO().KeysDownDuration['1'] > 0.f && ImGui::GetIO().KeysDownDuration['8'] > 0.f)
-				&& (ImGui::GetIO().KeysDownDurationPrev[VK_CONTROL] == 0.f || ImGui::GetIO().KeysDownDurationPrev['1'] == 0.f || ImGui::GetIO().KeysDownDuration['8'] == 0.f)
-				)
-			{
-				gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
-				campaign* campaign = gameDataAll->campaignData;
-				reloadLua();
-				consoleData.keypressamount = 0;
-				return;
-			}
-
-			if ((ImGui::GetIO().KeysDownDuration[VK_CONTROL] > 0.f && ImGui::GetIO().KeysDownDuration['1'] > 0.f && ImGui::GetIO().KeysDownDuration['9'] > 0.f)
-				&& (ImGui::GetIO().KeysDownDurationPrev[VK_CONTROL] == 0.f || ImGui::GetIO().KeysDownDurationPrev['1'] == 0.f || ImGui::GetIO().KeysDownDuration['9'] == 0.f)
-				)
-			{
-				gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
-				campaign* campaign = gameDataAll->campaignData;
-				initLua();
-				consoleData.keypressamount = 0;
-				return;
-			}
-
-			if ((ImGui::GetIO().KeysDownDuration[VK_CONTROL] > 0.f && ImGui::GetIO().KeysDownDuration['1'] > 0.f)
-				&& (ImGui::GetIO().KeysDownDurationPrev[VK_CONTROL] == 0.f || ImGui::GetIO().KeysDownDurationPrev['1'] == 0.f)
-				)
-			{
-				gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
-				campaign* campaign = gameDataAll->campaignData;
-			//	if (campaign->isAdminPasswordExist == false || (campaign->isAdminPasswordExist == true && campaign->isHotseatLogon == true))
-			//	{
-					consoleData.isDraw = !consoleData.isDraw;
-					consoleData.keypressamount = 0;
-
-					if (plugData::data.luaAll.checkVar("enableConsole", 1) == false)
-					{
-						consoleData.isDraw = false;
-					}
-				//}
-			}
-
 		if (consoleData.isDraw == false)
 		{
 			return;
 		}
 
-
-
-		ImGuiWindowFlags iwf = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollWithMouse;
+		constexpr ImGuiWindowFlags iwf = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollWithMouse;
 		ImGui::SetNextWindowSize(ImVec2(800, 400), ImGuiCond_Once);
 		ImGui::SetNextWindowPos(ImVec2(0.5f, 0.5f), ImGuiCond_Always, ImVec2(0.0f, 0.0f));
-		consoleData.commandNum = plugData::data.luaAll.logCommands.size();
+		consoleData.commandNum = luaP::logCommands.size();
 
-		ImGui::Begin("##consoleInWindow", NULL, iwf);
+		ImGui::Begin("##consoleInWindow", nullptr, iwf);
 		if (ImGui::Button("Run script"))
 		{
 			applyCommand();
-			consoleData.keypressamount = 0;
+			consoleData.pressAmount = 0;
 		}
 
 
-		if (ImGui::GetIO().KeysDownDuration[VK_UP] > 0.f && ImGui::GetIO().KeysDownDurationPrev[VK_UP] == 0.f && ((consoleData.commandNum - 1) - consoleData.keypressamount >= 0) )
+		if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)
+			&& ((consoleData.commandNum - 1) - consoleData.pressAmount >= 0) )
 		{
-			consoleData.input = plugData::data.luaAll.logCommands[consoleData.commandNum - 1 - consoleData.keypressamount];
-			consoleData.keypressamount++;
+			consoleData.input = luaP::logCommands[consoleData.commandNum - 1 - consoleData.pressAmount];
+			consoleData.pressAmount++;
 		}
 
-
-		if (ImGui::GetIO().KeysDownDuration[VK_DOWN] > 0.f && ImGui::GetIO().KeysDownDurationPrev[VK_DOWN] == 0.f && consoleData.keypressamount > 0)
+		if (ImGui::IsKeyPressed(ImGuiKey_DownArrow)
+			&& consoleData.pressAmount > 0)
 		{
-			consoleData.keypressamount--;
-			consoleData.input = plugData::data.luaAll.logCommands[consoleData.commandNum - 1 - consoleData.keypressamount];
+			consoleData.pressAmount--;
+			consoleData.input = luaP::logCommands[consoleData.commandNum - 1 - consoleData.pressAmount];
 		}
 
 		ImGui::InputTextMultiline("##console", &consoleData.input, ImVec2(-FLT_MIN, -FLT_MIN), ImGuiInputTextFlags_AllowTabInput);
@@ -113,22 +98,31 @@ namespace console
 
 		ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x,0), ImGuiCond_Always, ImVec2(1.0f, 0.0f));
 		ImGui::SetNextWindowSize(ImVec2(800, 400), ImGuiCond_Once);
-		ImGui::Begin("##consoleWindow", NULL, iwf);
+		ImGui::Begin("##consoleWindow", nullptr, iwf);
 
 		ImGui::Button("Output");
 
 		std::string outputs;
 
-		for (auto& str : plugData::data.luaAll.logS)
+		for (const auto& str : luaP::logS)
 		{
 			outputs += str;
 			outputs += "\n";
 		}
 
-
 		ImGui::InputTextMultiline("##consoleLog", &outputs, ImVec2(-FLT_MIN, -FLT_MIN), ImGuiInputTextFlags_ReadOnly);
 
 		ImGui::End();
+
+		if(consoleData.shouldReloadScript){
+			reloadLua();
+			consoleData.shouldReloadScript = false;
+		}
+
+		if(consoleData.shouldRestartLua){
+			initLua();
+			consoleData.shouldRestartLua = false;
+		}
 	}
 
 }

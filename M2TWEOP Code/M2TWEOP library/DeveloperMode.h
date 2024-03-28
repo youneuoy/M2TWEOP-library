@@ -2,11 +2,15 @@
 #include "realGameTypes.h"
 #include "headersSTD.h"
 #include "BattleMapOverrider.h"
+#include "exportHeader.h"
+#include "headersMEM.h"
+
 class DeveloperMode
 {
 public:
 	void Update();
 	bool isDeveloperModeNeeded = true;
+	void toggleDeveloperModeBase();
 
 	string SelectWorldpkgdesc(const std::string& selectedRec, const std::string& selectedGroup);
 private:

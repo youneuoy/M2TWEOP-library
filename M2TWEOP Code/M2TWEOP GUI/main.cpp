@@ -22,7 +22,7 @@
 
 #include "helpers.h"
 #include "toolRoutine.h"
-#include "themeManager.h"
+#include "themeManagerGUI.h"
 
 #include "managerG.h"
 

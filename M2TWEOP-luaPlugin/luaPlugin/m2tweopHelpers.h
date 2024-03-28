@@ -32,6 +32,7 @@ namespace m2tweopHelpers
 
 	std::string getModPath();
 	std::string getLuaPath();
+	void toggleDeveloperMode();
 
 	bool isTileFree(int x, int y);
 	std::tuple<int, int> getGameTileCoordsWithCursor();
@@ -47,6 +48,9 @@ namespace m2tweopHelpers
 	void seReligionsLimit(unsigned char limit);
 	void setMaxBgSize(unsigned char maxBgSize);
 	void unlockGameConsoleCommands();
+	void setPerfectSpy(bool set);
+	int getLocalFactionID();
+	void setEquipmentCosts(int equipType, int cost);
 
 	void setEDUUnitsSize(signed short min, signed short max);
 	void setUIColorValue(signed short r, signed short g, signed short b, signed short a);

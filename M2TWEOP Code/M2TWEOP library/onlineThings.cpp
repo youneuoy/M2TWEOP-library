@@ -260,7 +260,7 @@ namespace battleCreator
 			traitContainer* traitCont = gen->genChar->traits;
 			while (traitCont != nullptr)
 			{
-				tempS.append(" ").append(traitCont->trait->nameS->name).append(" ").append(to_string(*traitCont->trait->level)).append(" ,");
+				tempS.append(" ").append(traitCont->trait->traitEntry->name).append(" ").append(to_string(traitCont->trait->level->level)).append(" ,");
 
 				traitCont = traitCont->next;
 			};
