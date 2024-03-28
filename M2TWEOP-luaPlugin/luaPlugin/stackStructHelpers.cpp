@@ -46,14 +46,21 @@ namespace stackStructHelpers
 						if (unitA->expScreen != unitB->expScreen)
 							return unitA->expScreen > unitB->expScreen;
 						break;
-					case 6: // categorClass
+					case 6: // categoryClass
 						if (unitA->eduEntry->categoryClassCombinationForAI != unitB->eduEntry->categoryClassCombinationForAI)
 							return unitA->eduEntry->categoryClassCombinationForAI < unitB->eduEntry->categoryClassCombinationForAI;
 						break;
-					default: 
+					case 7: // aiUnitValue
+						if (unitA->eduEntry->aiUnitValuePerSoldier != unitB->eduEntry->aiUnitValuePerSoldier)
+							return unitA->eduEntry->aiUnitValuePerSoldier < unitB->eduEntry->aiUnitValuePerSoldier;
+						break;
+					default:
+						if (std::string(unitA->eduEntry->Type) != std::string(unitB->eduEntry->Type))
+							return std::string(unitA->eduEntry->Type) < std::string(unitB->eduEntry->Type);
 						break;
 				}
 			}
+			return false;
 		};
 
 		// Stable sort the units
@@ -95,14 +102,10 @@ namespace stackStructHelpers
 			return nullptr;
 		}
 
-		for (int i = 0; i < army->faction->settlementsNum; i++)
-		{
-			settlementStruct *sett = army->faction->settlements[i];
-			if (sett->army == army)
-				return sett;
-		}
-
-		return nullptr;
+		int x = army->settlement->xCoord;
+		int y = army->settlement->yCoord;
+		auto tile = gameHelpers::getTile(x, y);
+		return gameHelpers::getTileSettlement(tile);
 	}
 	fortStruct *findInFort(const stackStruct *army)
 	{
@@ -111,14 +114,10 @@ namespace stackStructHelpers
 			return nullptr;
 		}
 
-		for (int i = 0; i < army->faction->fortsNum; i++)
-		{
-			fortStruct *frt = army->faction->forts[i];
-			if (frt->army == army)
-				return frt;
-		}
-
-		return nullptr;
+		int x = army->settlement->xCoord;
+		int y = army->settlement->yCoord;
+		auto tile = gameHelpers::getTile(x, y);
+		return gameHelpers::getTileFort(tile);
 	}
 
 	unit *createUnit(stackStruct *army, const char *type, int exp, int arm, int weap)

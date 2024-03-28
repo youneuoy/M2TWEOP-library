@@ -6,26 +6,22 @@
 
 ## **Release Notes**
 
-<!-- ### **Launcher** -->
-
-<!-- ![](https://i.imgur.com/Pl02p1W.png) -->
-<!-- ![](https://i.imgur.com/h8UlYMT.png) -->
+### **Launcher**
+- Fix setting of faction name in Discord Rich Presence
 
 ### **Library**
-- fix for alpha channel in M2TWEOP3dObjects.MakeTextFont, ChangeColor for font, etc
-
+- Updated DXVK library to the latest version [2.3.1](https://github.com/doitsujin/dxvk/releases/tag/v2.3.1)
+  - Includes a fix for the black screen issue during loading screens in windowed mode
 
 ### **Lua Plugin**
-- Enabled safety checks for lua events(broken since 3.0)
-- Added 2 new parameters - weight, isItalic to M2TWEOP3dObjects.MakeTextFont
+- Fixed `M2TWEOP.restartLua()` crashing the game. It is now bound to `CTRL+SHIFT+R` by default. You can rebind this to something else if you prefer.
 
 <!-- ### **ImGUI** -->
 
-### **Documentation**
-- no
+<!-- ### **Documentation** -->
 
 ### **Links**
-
+- [Known Bugs](https://github.com/youneuoy/M2TWEOP-library/issues/71)
 - [Website](https://youneuoy.github.io/M2TWEOP-library/)
 - [FAQ](https://youneuoy.github.io/M2TWEOP-library/faq.html)
 - [Lua Documentation](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html)

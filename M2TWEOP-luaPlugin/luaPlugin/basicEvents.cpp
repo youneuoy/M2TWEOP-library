@@ -245,7 +245,7 @@ namespace gameEvents
 		addEvent<EventType::standardEvent>(newCode[gv], "onGeneralCaptureSettlement");
 
 		newCode[0] = 0x0136A3E4; newCode[1] = 0x013253BC;
-		addEvent<EventType::standardEvent>(newCode[gv], "onGeneralAssaultsResidence");
+		addEvent<EventType::attackResidenceEvent>(newCode[gv], "onGeneralAssaultsResidence");
 
 		//standardEvent
 		newCode[0] = 0x0136F3C4; newCode[1] = 0x0132A39C;

@@ -67,6 +67,25 @@ void tomlToStyle(std::string themeName)
 	// style.ButtonTextAlign = arrayToImVec2(*config->get_array_of<double>("buttonTextAlign"));
 	// style.SelectableTextAlign = arrayToImVec2(*config->get_array_of<double>("selectableTextAlign"));
 
+	style.PopupRounding = 3;
+
+	style.WindowPadding = ImVec2(4, 4);
+	style.FramePadding = ImVec2(6, 4);
+	style.ItemSpacing = ImVec2(6, 2);
+
+	style.ScrollbarSize = 18;
+
+	style.WindowBorderSize = 3;
+	style.ChildBorderSize = 1;
+	style.PopupBorderSize = 1;
+	style.FrameBorderSize = 1;
+
+	style.WindowRounding = 3;
+	style.ChildRounding = 3;
+	style.FrameRounding = 3;
+	style.ScrollbarRounding = 2;
+	style.GrabRounding = 3;
+
 	// // Access the 'colors' section in the TOML file
 	auto colorsTable = config->get_table("colors");
 

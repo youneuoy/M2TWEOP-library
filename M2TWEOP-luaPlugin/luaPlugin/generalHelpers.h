@@ -15,5 +15,5 @@ namespace generalHelpers
 	int getTypeID(const general* gen);
 	void setTypeID(general* gen, int newType);
 	void setCharacterModel(general* gen, const char* model);
-	void addCharacterCas(const char* skeletonname, const char* caspath, const char* shadowcaspath, const char* typeName, const char* texturepath);
+	void addCharacterCas(const char* skeletonname, const char* caspath, const char* shadowcaspath, const char* typeName, const char* texturepath, float scale);
 }

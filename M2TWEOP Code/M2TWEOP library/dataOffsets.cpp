@@ -29,7 +29,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.guildDataStart = 0x018FD958;
 
 		//gets used in adding building capabilities function for some reason just following what game does
-		offsets.edbDataStart = 0x018940C0;
+		offsets.edbDataStart = 0x018AA5A8;
 
 
 		offsets.audioEnable = (bool*)0x016818cd;

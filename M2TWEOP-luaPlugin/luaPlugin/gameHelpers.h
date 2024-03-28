@@ -30,6 +30,8 @@ namespace gameHelpers
 	buildingBattle* getBuildingBattle(eventTrigger* eventData);
 	buildingInQueue* getPriorBuild(eventTrigger* eventData);
 	const char* getResourceDescription(eventTrigger* eventData);
+	int getReligionCount();
+	int getReligionN(const char* name);
 	int getEventCharacterType(eventTrigger* eventData);
 	int getEventTargetCharacterType(eventTrigger* eventData);
 	const char* getEventType(eventTrigger* eventData);
@@ -119,14 +121,14 @@ namespace gameHelpers
 	fortStruct* getTileFort(const oneTile* tile);
 	portBuildingStruct* getTilePort(const oneTile* tile);
 	watchTowerStruct* getTileWatchtower(const oneTile* tile);
-
+	std::string getCampaignPath(campaign* campaign);
 	int getMercUnitNum(mercPool* mercPool);
 	mercPoolUnit* getMercUnit(mercPool* pool, int index);
 	void setMercReligion(mercPoolUnit* unit, int religion, bool set);
 	mercPoolUnit* addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, float startyear, float endyear, int crusading);
 	void saveGame(const char* path);
 	void historicEvent(const char* name, const char* title, const char* description);
-	void scriptCommand(std::string command, const char* args);
+	void scriptCommand(std::string command, sol::variadic_args va);
 	const char* getReligionName(const int index);
 	unit* getSelectedUnitCard(const uiCardManager* cardManager, const int index);
 	unit* getUnitCard(const uiCardManager* cardManager, const int index);

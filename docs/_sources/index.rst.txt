@@ -28,8 +28,9 @@ M2TWEOP: Medieval 2 Engine Overhaul Project
 	<h2>Features</h2>
 	<ul>
 		<li>Hugely expanded Lua scripting system that integrates seamlessly with existing campaign_script scripts, hot-reload, new custom console, debugger and much more</li>
+		<li>Breaks the EDU limit allowing for more than 500 units in a mod</li>
 		<li>Place .fbx models anywhere on the strategy or battle map with full animation and texture support</li>
-		<li>Swap out .cas models based on any kind of condition you can imagine</li>
+		<li>Render .cas models for characters, settlements, forts, or anywhere on the map based on any kind of condition you can imagine</li>
 		<li>Play custom sounds or music with support for WAV, OGG/Vorbis and FLAC</li>
 		<li>Unlocks all vanilla console commands</li>
 		<li>Rome: Total War style <a href="https://www.youtube.com/watch?v=RrGi4zxr7bU">tactical map viewer</a></li>
@@ -37,7 +38,7 @@ M2TWEOP: Medieval 2 Engine Overhaul Project
 		<li>New custom EDU system that allows the creation and modification of new and existing units without the need to restart the game</li>
 		<li>Play out Hotseat battles online and transfer the results back to the campaign map</li>
 		<li>Set your own limits for the number of religions, ancillaries, bodyguard units, building chains, max unit size</li>
-		<li>Set the boundaries of the number of soldiers in units and the size of the battle map</li>
+		<li>Set the boundaries of the number of soldiers in units</li>
 		<li>Fixed many engine bugs, crashes and oversights (e.g crashes when using berserkers in battle)</li>
 		<li>Edit the .worldpkgdesc for any settlement on the fly without the need to restart the game</li>
 		<li>Custom keybinding support</li>
@@ -61,7 +62,7 @@ M2TWEOP: Medieval 2 Engine Overhaul Project
 
 	<h3>Playing sounds, displaying GUIs and spawning units</h3>
 	<pre class="type">
-	<span class="kr">function</span> <span class="nf">onGeneralAssaultsGeneral</span><span class="p">(</span><span class="m">attacker</span><span class="p">,</span> <span class="m">defender</span><span class="p">)</span>
+	<span class="kr">function</span> <span class="nf">onGeneralAssaultsGeneral</span><span class="p">(</span><span class="m">eventData</span><span class="p">)</span>
 		<span class="comment">-- Check if the attacker is a Nazgul</span>
 		<span class="kr">if</span><span class="p">(</span><span class="n">hasTrait</span><span class="p">(</span><span class="m">attacker</span><span class="p">,</span> <span class="s2">"NazgulRace"</span><span class="p">))</span> <span class="kr">then</span>
 			<span class="comment">-- Play a sound</span>
@@ -74,15 +75,13 @@ M2TWEOP: Medieval 2 Engine Overhaul Project
 	<span class="kr">end</span>
 	</pre>
 
-	<h3>Creating custom UI's with M2TWEOP's ImGUI Lua Plugin</h3>
-	<a target="_blank" href="https://cdn.discordapp.com/attachments/939640870343426059/1075868416470155364/image.png"><img class="imGuiImage" src="https://cdn.discordapp.com/attachments/939640870343426059/1075868416470155364/image.png"></a>
-	<a target="_blank" href="https://cdn.discordapp.com/attachments/943211834947829800/1077682337166393344/options.jpg"><img class="imGuiImage" src="https://cdn.discordapp.com/attachments/943211834947829800/1077682337166393344/options.jpg"></a>
-
 	<h2>Videos</h2>
 	<div class="videoGallery">
 	<iframe frameborder="0" src="https://www.youtube.com/embed/itTng85dG5I" allowfullscreen></iframe>
 	<iframe frameborder="0" src="https://www.youtube.com/embed/caOiB0NaGGI" allowfullscreen></iframe>
 	<iframe frameborder="0" src="https://www.youtube.com/embed/RrGi4zxr7bU" allowfullscreen></iframe>
+	<iframe frameborder="0" src="https://www.youtube.com/watch?v=Vbpqde_YI68" allowfullscreen></iframe>
+
 	<a target="_blank" href="https://www.youtube.com/watch?v=hUvbcz8i7Wk">
 	<img src="https://i.imgur.com/ByebdSI.png">
 	</a>

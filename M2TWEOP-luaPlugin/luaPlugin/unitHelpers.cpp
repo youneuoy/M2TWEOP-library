@@ -77,7 +77,7 @@ namespace unitHelpers
 		default:
 			break;
 		}
-		return un->eduEntry->SoldierCount* mul;
+		return static_cast<int>(un->eduEntry->SoldierCount) * mul;
 	}
 	void setMovepoints(unit* un, float movepoints)
 	{
@@ -153,7 +153,7 @@ namespace unitHelpers
 	{
 		if (index < posData->unitsUnderFireFromCount)
 		{
-			return posData->unitsUnderFireFrom[index];
+			return posData->unitsUnderFireFrom[index].unit;
 		}
 		return nullptr;
 	}
@@ -176,6 +176,11 @@ namespace unitHelpers
 			return posData->targetArray[posData->targetsDone].targetUnit->target;
 		}
 		return nullptr;
+	}
+	int getMountClass(unit* un)
+	{
+		if (!un) return -1;
+		return CallVFunc<186, int>(un);
 	}
 
 }

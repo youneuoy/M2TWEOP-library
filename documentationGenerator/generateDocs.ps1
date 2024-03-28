@@ -11,6 +11,7 @@ Write-Host "`n`n======== 3.2) Generate documentation config ========`n" -Foregro
 # Using LuaRocks, call ldoc.lua and pass in the config file
 .\luarocks\lua.exe ./luarocks/rocks/ldoc/1.4.6-2/bin/ldoc.lua . -c config.ld
 Start-Process -FilePath ".\makeLuaDocs.bat" -Wait -NoNewWindow
+Start-Process -FilePath ".\makeLuaImGuiDocs.bat" -Wait -NoNewWindow
 
 Write-Host "`n`n======== 3.3) Remove old files ========`n" -ForegroundColor Magenta
 

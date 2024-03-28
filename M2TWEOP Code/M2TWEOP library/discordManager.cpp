@@ -80,7 +80,7 @@ namespace discordManager
 			return;
 		}
 
-		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true && fac->isPlayerControlled == true)
+		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true && fac->isPlayerControlled == 1)
 		{
 			UNICODE_STRING **factionName = fac->localizedName;
 			UNICODE_STRING *name = *factionName;

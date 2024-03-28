@@ -274,8 +274,7 @@ void graphicsD3D::onDrawAllGameStuff()
 					ImGui::NewLine();
 					ImGui::NewLine();
 					ImGui::SetCursorPosX((ImGui::GetWindowSize().x - logoPos.y * 2) * 0.5f);
-					ImGui::LoadingIndicatorCircle("##loadCircle1", logoPos.y, ImVec4(0.584, 0.270, 0.250, 1.0f), ImVec4(0.564, 0.250, 0.230, 1.0f), 15, 5);
-
+					
 					ImGui::NewLine();
 					ImGui::NewLine();
 					ImGui::NewLine();

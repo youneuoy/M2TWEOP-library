@@ -41,6 +41,26 @@ namespace battleHandlerHelpers
 		return side->factions[index];
 	}
 
+	AIBattleObjectiveBase* getObjective(const battleAI* battleAi, int index)
+	{
+		if (!battleAi->addedObjectives) return nullptr;
+		if ( (index < 0) || (index >= battleAi->addedObjectivesCount)) return nullptr;
+		return battleAi->addedObjectives[index];
+	}
+
+	unit* getUnit(const AIBattleObjectiveBase* objective, int index)
+	{
+		if (!objective->aiUnits) return nullptr;
+		if ( (index < 0) || (index >= objective->aiUnitsCount)) return nullptr;
+		return objective->aiUnits[index];
+	}
+
+	int getObjectiveType(AIBattleObjectiveBase* objective)
+	{
+		if (!objective) return -1;
+		return CallVFunc<7, int>(objective);
+	}
+
 	battleResidence* getBattleResidence()
 	{
 		const auto gameData = gameDataAllHelper::get();
@@ -50,5 +70,10 @@ namespace battleHandlerHelpers
 			return battleSettlement->battleResidence;
 		}
 		return nullptr;
+	}
+
+	buildingBattle* getBattleBuilding(const battleBuildings* buildings, int index)
+	{
+		return buildings->allBuildings[index];
 	}
 };

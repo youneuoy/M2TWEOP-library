@@ -44,8 +44,9 @@ namespace eopEduHelpers
 	int getEduIndexByType(const char* type);
 
 
-
+	int hasOwnership(eduEntry* entry, int factionID);
 	int getDataEopDu(int index);
+	void setOwnerShip(eduEntry* entry, int factionID, bool set);
 
 
 	void setEntryUnitCardTga(int index, const char* newCard);

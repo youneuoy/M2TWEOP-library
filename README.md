@@ -1,6 +1,6 @@
 
 <div align="center">
-    <a href="https://www.twcenter.net/forums/forumdisplay.php?2296-M2TW-Engine-Overhaul-Project"><img src="https://cdn.discordapp.com/attachments/744306199075225627/819869043866468382/unknown.png" width="1920" alt="EOP" /></a>
+    <a href="https://www.twcenter.net/forums/forumdisplay.php?2296-M2TW-Engine-Overhaul-Project"><img src="https://youneuoy.github.io/M2TWEOP-library/_static/M2TWEOP.png" width="1920" alt="EOP" /></a>
     <br>
     <br>
   <p>
@@ -75,10 +75,6 @@ end
 ```
 For a full list of EOP Events, see [here](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html)
 
-### Creating custom UI's with M2TWEOP' ImGUI Plugin
-![M2TWEOP-Tutorials](https://cdn.discordapp.com/attachments/939640870343426059/1075868416470155364/image.png)
-![M2TWEOP-Tutorials](https://cdn.discordapp.com/attachments/748027000353980508/971415742710960168/unknown.png)
-
 ## Getting Started with M2TWEOP Lua Scripting
 [![M2TWEOP-Tutorials](https://i.imgur.com/ByebdSI.png)](https://youtu.be/hUvbcz8i7Wk)
 
@@ -94,6 +90,7 @@ For a full list of EOP Events, see [here](https://youneuoy.github.io/M2TWEOP-lib
 * **Xamax** - Video tutorials, testing and many great suggestions
 * **Erken** - Excellent IMGUI tutorials, Lua examples and feedback
 * **DinarMayor** - Testing, great suggestions and examples
+* **Mekkerman** - Patron of the project
 
 ## Projects
 * [M2TWEOP Library](https://github.com/youneuoy/M2TWEOP-library) - Main project (C++ and Assembly)

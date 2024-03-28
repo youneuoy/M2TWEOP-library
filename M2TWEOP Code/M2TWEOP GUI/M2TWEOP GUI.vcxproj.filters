@@ -171,7 +171,7 @@
     <ClCompile Include="..\3rd\discord\voice_manager.cpp">
       <Filter>3rd\discord</Filter>
     </ClCompile>
-    <ClCompile Include="themeManager.cpp">
+    <ClCompile Include="themeManagerGUI.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -227,7 +227,7 @@
     <ClInclude Include="discordManager.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="themeManager.h">
+    <ClInclude Include="themeManagerGUI.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="managerGHelpers.h">

@@ -111,13 +111,19 @@ void managerF::doPachs()
 	//}
 	f1 << "Done" << endl;
 
-	f1 << "Start applying recruit eop unit patch" << endl;
+	//f1 << "Start applying toSizeOfBattleField patch" << endl;
+	//sizeOfBattleField* toSizeOfBattleField = new sizeOfBattleField(mem, globals::dataS.gamever, 500, 500);
+	//toSizeOfBattleField->SetlSizeCode();
+	//toSizeOfBattleField->Enable();
+	//f1 << "Done" << endl;
+
+	f1 << "Start applying recruit eop unit 1 patch" << endl;
 	recruitEOPunit* toRecruitEOPunit = new recruitEOPunit(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
 	toRecruitEOPunit->SetNewCode();
 	toRecruitEOPunit->Enable();
 	f1 << "Done" << endl;
 
-	f1 << "Start applying recruit eop unit patch" << endl;
+	f1 << "Start applying recruit eop unit 2 patch" << endl;
 	recruitEOPunit2* toRecruitEOPunit2 = new recruitEOPunit2(mem, (LPVOID)patchesForGame::recruitEOPunit2, globals::dataS.gamever);
 	toRecruitEOPunit2->SetNewCode();
 	toRecruitEOPunit2->Enable();
@@ -510,6 +516,24 @@ void managerF::doPachs()
 	OnFindUnitStrings2* toFindUnitStrings2 = new OnFindUnitStrings2(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gamever); //its same func as unit wrapper on purpose not error
 	toFindUnitStrings2->SetNewCode();
 	toFindUnitStrings2->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying OnUnitInfo patch" << endl;
+	OnUnitInfo* toUnitInfo = new OnUnitInfo(mem, (LPVOID)patchesForGame::OnUnitInfo, globals::dataS.gamever);
+	toUnitInfo->SetNewCode();
+	toUnitInfo->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying OnReligionCombatBonus patch" << endl;
+	OnReligionCombatBonus* toReligionCombatBonus = new OnReligionCombatBonus(mem, (LPVOID)patchesForGame::OnReligionCombatBonus, globals::dataS.gamever);
+	toReligionCombatBonus->SetNewCode();
+	toReligionCombatBonus->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying OnReligionCombatBonus patch" << endl;
+	OnBattleArmiesBug* toOnBattleArmiesBug = new OnBattleArmiesBug(mem, nullptr, globals::dataS.gamever);
+	toOnBattleArmiesBug->SetNewCode();
+	toOnBattleArmiesBug->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying OnGetRecruitPoolUnitEntry patch" << endl;

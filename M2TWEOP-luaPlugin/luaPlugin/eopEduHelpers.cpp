@@ -295,25 +295,42 @@ int eopEduHelpers::multiplexor(int n1, int n2, int sel)
 	return (((~sel) & n1) | (n2 & sel));
 }
 
+int eopEduHelpers::hasOwnership(eduEntry* entry, int factionID)
+{
+	return entry->ownership & (1 << factionID);
+}
+
+void eopEduHelpers::setOwnerShip(eduEntry* entry, int factionID, bool set)
+{
+	if (set)
+	{
+		entry->ownership |= static_cast<int8_t>(1 << factionID);
+	}
+	else
+	{
+		entry->ownership &= static_cast<int8_t>(~(1 << factionID));
+	}
+}
+
 void eopEduHelpers::setEntryStat(int idx, UnitEnums::eduStat stat, int value, int sec)
 {
 	using namespace UnitEnums;
-	eduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
+	eduEntry* eduEn = getEduEntry(idx);
 	int newStat = value * stat;
-	if (stat < UnitEnums::attack)
+	if (stat < attack)
 	{
-		eduEn->StatPriArmour = (eopEduHelpers::multiplexor(eduEn->StatPriArmour, newStat, stat * 63));
+		eduEn->StatPriArmour = multiplexor(eduEn->StatPriArmour, newStat, stat * 63);
 	}
 	else
 	{
 		if (sec == 1)
 		{
 
-			eduEn->StatPri = eopEduHelpers::multiplexor(eduEn->StatPri, newStat, stat * 63);
+			eduEn->StatPri = multiplexor(eduEn->StatPri, newStat, stat * 63);
 		}
 		else
 		{
-			eduEn->StatSec = eopEduHelpers::multiplexor(eduEn->StatSec, newStat, stat * 63);
+			eduEn->StatSec = multiplexor(eduEn->StatSec, newStat, stat * 63);
 		}
 	}
 }
@@ -343,15 +360,15 @@ int eopEduHelpers::getEntryStat(int idx, UnitEnums::eduStat stat, int sec)
 //pretty much ignore this
 void eopEduHelpers::addUnitToRQ(int idx, settlementStruct* sett)
 {
-	int startIndexRQ = sett->startIndexRQ;
-	int endIndexRQ = sett->endIndexRQ;
+	const int startIndexRQ = sett->startIndexRQ;
+	const int endIndexRQ = sett->endIndexRQ;
 	if (startIndexRQ == 0 && endIndexRQ == 9)
 	{
 		return;
 	}
 	eduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
-	unitRQ* newUnit = new unitRQ;
-	int unitsize = m2tweopHelpers::GetUnitSize();
+	auto newUnit = new unitRQ;
+	const int unitsize = m2tweopHelpers::GetUnitSize();
 	double unitModifier = 1;
 	switch (unitsize)
 	{
@@ -378,9 +395,9 @@ void eopEduHelpers::addUnitToRQ(int idx, settlementStruct* sett)
 	newUnit->Minus1 = -1;
 	newUnit->turnsTrainedAlready = 0;
 	newUnit->percentFinished = 0;
-	newUnit->turnsToTrain = eduEn->StatCost1;
+	newUnit->turnsToTrain = static_cast<int8_t>(eduEn->StatCost1);
 	newUnit->cost = eduEn->StatCost2;
-	newUnit->soldierCount = (int)(eduEn->SoldierCount * unitModifier);
+	newUnit->soldierCount = static_cast<int>(eduEn->SoldierCount * unitModifier);
 	newUnit->armourUpg = 0;
 	newUnit->isNotFrozen = 1;
 	newUnit->recruitmentPoolSizeBeforeOrRetrainingNumbersBefore = 1;

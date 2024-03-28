@@ -83,13 +83,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(SolutionDir)\3rd\discord\lib;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x86\release;$(SolutionDir)\3rd\sfml\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)\3rd\cpptoml;$(DXSDK_DIR)\include;$(SolutionDir)\3rd\shortestPath;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(DXSDK_DIR)\include;$(SolutionDir)\3rd\shortestPath;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(SolutionDir)\3rd\discord\lib;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x86\release;$(SolutionDir)\3rd\sfml\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)\3rd\cpptoml;$(DXSDK_DIR)\include;$(SolutionDir)\3rd\shortestPath;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(DXSDK_DIR)\include;$(SolutionDir)\3rd\shortestPath;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -252,6 +252,8 @@
     <ClInclude Include="..\3rd\ImNotify\imgui_notify.h" />
     <ClInclude Include="..\3rd\miniz\miniz.h" />
     <ClInclude Include="..\3rd\nlohmann\json.hpp" />
+    <ClInclude Include="..\3rd\logger\loguru.hpp" />
+    <ClInclude Include="..\3rd\logger\loguru.cpp" />
     <ClInclude Include="..\3rd\shortestPath\micropather.h" />
     <ClInclude Include="actionsStrat.h" />
     <ClInclude Include="BattleMapOverrider.h" />

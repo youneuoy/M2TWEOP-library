@@ -4,7 +4,7 @@
 struct
 {
 	float drawInfoEndTime = 0;
-	bool drawEOPStartInfo = false;
+	bool drawEopStartInfo = false;
 
 	ImVec2 beginCoords{ 0.f,0.f };
 }drawParams;
@@ -12,16 +12,14 @@ void drawOnEndScene(LPDIRECT3DDEVICE9 pDevice)
 {
 	if (plugData::data.luaAll.drawLuaFunc != nullptr)
 	{
-		tryLua((*plugData::data.luaAll.drawLuaFunc)(pDevice));
+		tryLua((*plugData::data.luaAll.drawLuaFunc)(pDevice))
 	}
 
 	console::draw();
 
-	if (drawParams.drawEOPStartInfo == true)
+	if (drawParams.drawEopStartInfo == true)
 	{
-		float currTime = (float)ImGui::GetTime();
-
-		if (currTime < drawParams.drawInfoEndTime)
+		if (const auto currentTime = static_cast<float>(ImGui::GetTime()); currentTime < drawParams.drawInfoEndTime)
 		{
 			static ImGuiWindowFlags transparentF = ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove;
 
@@ -34,7 +32,7 @@ void drawOnEndScene(LPDIRECT3DDEVICE9 pDevice)
 		}
 		else
 		{
-			drawParams.drawEOPStartInfo = false;
+			drawParams.drawEopStartInfo = false;
 		}
 	}
 }
@@ -43,31 +41,31 @@ void onReset(LPDIRECT3DDEVICE9 pDevice)
 {
 	if (plugData::data.luaAll.resetDXFunc != nullptr)
 	{
-		tryLua((*plugData::data.luaAll.resetDXFunc)(pDevice));
+		tryLua((*plugData::data.luaAll.resetDXFunc)(pDevice))
 	}
 }
 void onLoadingFonts(LPDIRECT3DDEVICE9 pDevice)
 {
 	if (plugData::data.luaAll.onLoadingFonts != nullptr)
 	{
-		tryLua((*plugData::data.luaAll.onLoadingFonts)(pDevice));
+		tryLua((*plugData::data.luaAll.onLoadingFonts)(pDevice))
 	}
 }
 
 
 
-void onChangeImGuiContext(ImGuiContext* imCtx, ImGuiMemAllocFunc alloc_func, ImGuiMemFreeFunc free_func, void* user_data)
+void onChangeImGuiContext(ImGuiContext* imCtx, const ImGuiMemAllocFunc allocFunc, const ImGuiMemFreeFunc freeFunc, void* userData)
 {
 	if (plugData::data.luaAll.initDXFunc != nullptr)
 	{
-		tryLua((*plugData::data.luaAll.initDXFunc)());
+		tryLua((*plugData::data.luaAll.initDXFunc)())
 	}
 
 	//do not delete this line!!!!!!!!!
 	ImGui::SetCurrentContext(imCtx);
-	ImGui::SetAllocatorFunctions(alloc_func, free_func, user_data);
-	drawParams.drawEOPStartInfo = true;
-	drawParams.drawInfoEndTime = (float)ImGui::GetTime() + 20.0f;
+	ImGui::SetAllocatorFunctions(allocFunc, freeFunc, userData);
+	drawParams.drawEopStartInfo = true;
+	drawParams.drawInfoEndTime = static_cast<float>(ImGui::GetTime()) + 20.0f;
 }
 
 void onWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)

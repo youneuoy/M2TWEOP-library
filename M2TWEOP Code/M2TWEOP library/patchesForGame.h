@@ -19,7 +19,9 @@ public:
 	static const char* __fastcall onQuickSave();
 	static const char* __fastcall onAutoSave();
 	static eduEntry* __fastcall OnGetRecruitPoolUnitEntry(int eduIndex);
-	static int __fastcall onFindUnit(char* entryName, int* edbIndex);
+	static int __fastcall onFindUnit(char* entry, int* edbIndex);
+	static DWORD __fastcall OnUnitInfo(DWORD entryAddress);
+	static int __fastcall OnReligionCombatBonus(int religionID, namedCharacter* namedChar);
 
 
 	static general* __fastcall mercenaryMovepointsGetGeneral(stackStruct* army);

@@ -110,21 +110,30 @@ int __fastcall patchesForGame::onCreateUnit(char** entryName, int* edbIndex)
 	return *edbIndex;
 }
 
-int __fastcall patchesForGame::onFindUnit(char* entryName, int* edbIndex)
+int __fastcall patchesForGame::onFindUnit(char* entry, int* edbIndex)
 {
 	if (edbIndex == nullptr)
 	{
-		int* newEdu = eduThings::tryFindDataEopEduIndex(entryName);
+		if (entry == nullptr)
+			return  -1;
+
+		int* newEdu = eduThings::tryFindDataEopEduIndex(entry);
 
 		if (newEdu == nullptr)
-		{
 			return  -1;
-		}
 
 		return *newEdu;
 	}
 
 	return *edbIndex;
+}
+
+int __fastcall patchesForGame::OnReligionCombatBonus(int religionID, namedCharacter* namedChar)
+{
+	if (religionID > 9)
+		return 0;
+
+	return namedChar->combatVsReligion[religionID];
 }
 
 int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduindex)
@@ -166,6 +175,19 @@ eduEntry* __fastcall patchesForGame::OnCreateUnitWrapper(int eduindexBase, int r
 		entry = eduThings::getEopEduEntry(eduindex);
 	}
 	return entry;
+}
+
+DWORD __fastcall patchesForGame::OnUnitInfo(DWORD entryAddress)
+{
+
+	DWORD eduBaseAddress = dataOffsets::offsets.unitTypesStart;
+	int index = (entryAddress - eduBaseAddress) / 996; // 996 is the size of the eduEntry struct
+	if (index < 500)
+	{
+		return entryAddress;
+	}
+	auto entry = eduThings::getEopEduEntry(index);
+	return reinterpret_cast<DWORD>(entry);
 }
 
 eduEntry* __fastcall patchesForGame::OnGetRecruitPoolUnitEntry(int eduIndex)

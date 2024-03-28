@@ -1,4 +1,6 @@
 #include "m2tweopHelpers.h"
+
+#include "gameDataAllHelper.h"
 #include "plugData.h"
 namespace m2tweopHelpers
 {
@@ -147,6 +149,10 @@ namespace m2tweopHelpers
 	{
 		(*(*plugData::data.funcs.setAncLimit))(limit);
 	}
+	void toggleDeveloperMode()
+	{
+		(*(*plugData::data.funcs.toggleDeveloperMode))();
+	}
 	void seReligionsLimit(unsigned char limit)
 	{
 		(*(*plugData::data.funcs.setReligionsLimit))(limit);
@@ -217,6 +223,57 @@ namespace m2tweopHelpers
 	int getGameVersion()
 	{
 		return (*(*plugData::data.funcs.getGameVersion))();
+	}
+
+	int getLocalFactionID()
+	{
+		gameDataAllStruct* gameData = gameDataAllHelper::get();
+		return *gameData->localFactionID;
+	}
+
+	void setPerfectSpy(bool set)
+	{
+		if (getGameVersion() == 1)
+		{
+			*reinterpret_cast<bool*>(0x016F0E5C) = set;
+		}
+		else
+		{
+			*reinterpret_cast<bool*>(0x016A7CC4) = set;
+		}
+	}
+
+	void setEquipmentCosts(int equipType, int cost)
+	{
+		struct equipmentCosts
+		{
+			int ram;
+			int ladder;
+			int siegeTower;
+		};
+		equipmentCosts* costs;
+		if (getGameVersion() == 1)
+		{
+			costs = reinterpret_cast<equipmentCosts*>(0x01655BB0);
+		}
+		else
+		{
+			costs = reinterpret_cast<equipmentCosts*>(0x0160DCC8);
+		}
+		switch (equipType)
+		{
+			case 0:
+				costs->ram = cost;
+				break;
+			case 1:
+				costs->ladder = cost;
+				break;
+			case 2:
+				costs->siegeTower = cost;
+				break;
+			default:
+				break;
+		}
 	}
 
 	options1* getOptions1()

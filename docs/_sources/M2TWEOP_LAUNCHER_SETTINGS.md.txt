@@ -56,6 +56,3 @@ It is recommended not to write manually to this file.
     "status": "On the campaign map 🗺️"
 }
 ```
-
-Rich Presence is enabled for the following mods
-![](https://cdn.discordapp.com/attachments/713369537948549194/1124290437734223912/image.png)
