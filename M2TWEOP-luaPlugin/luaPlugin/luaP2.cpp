@@ -1544,6 +1544,8 @@ void luaP::initCampaign()
 	@tfield float mpModifier
 	@tfield factionHasArmyNearTile factionHasArmyNearTile
 	@tfield factionHasCharacterOnTile factionHasCharacterOnTile
+	@tfield getTileCharacterCount getTileCharacterCount
+	@tfield getTileCharacterAtIndex getTileCharacterAtIndex
 	
 	@table tileStruct
 	*/
@@ -1587,7 +1589,7 @@ void luaP::initCampaign()
 	@usage
 	local hasArmyNearTile = tile:factionHasArmyNearTile(3);
 	*/
-	typeAll.roadStruct.set_function("factionHasArmyNearTile", &gameHelpers::factionHasArmyNearTile);
+	typeAll.tileStruct.set_function("factionHasArmyNearTile", &gameHelpers::factionHasArmyNearTile);
 
 	/***
 	Check if a faction has a character on a tile.
@@ -1597,7 +1599,29 @@ void luaP::initCampaign()
 	@usage
 	local hasCharacterOnTile = tile:factionHasCharacterOnTile(3);
 	*/
-	typeAll.roadStruct.set_function("factionHasCharacterOnTile", &gameHelpers::factionHasCharacterOnTile);
+	typeAll.tileStruct.set_function("factionHasCharacterOnTile", &gameHelpers::factionHasCharacterOnTile);
+
+	/***
+	Get amount of characters on a tile.
+	@function tileStruct:getTileCharacterCount
+	@treturn int characterCount
+	@usage
+	local tileCharacterCount = tile:getTileCharacterCount();
+	*/
+	typeAll.tileStruct.set_function("getTileCharacterCount", &gameHelpers::getTileCharacterCount);
+
+	/***
+	Get a character on a tile.
+	@function tileStruct:getTileCharacterAtIndex
+	@tparam int index
+	@treturn character char
+	@usage
+	local tileCharacterCount = tile:getTileCharacterCount();
+	for i=0,tileCharacterCount -1 do
+		local character = tile:getTileCharacterAtIndex(i);
+	end
+	*/
+	typeAll.tileStruct.set_function("getTileCharacterAtIndex", &gameHelpers::getTileCharacterAtIndex);
 
 	///RegionStruct
 	//@section RegionStruct

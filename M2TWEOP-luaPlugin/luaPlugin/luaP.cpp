@@ -2120,6 +2120,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getFactionEconomy getFactionEconomy
 	@tfield getNeighbourRegionID getNeighbourRegionID
 	@tfield getBattleVsFactionStats getBattleVsFactionStats
+	@tfield setCharacterNameFaction setCharacterNameFaction
 
 	@table factionStruct
 	*/
@@ -2410,6 +2411,16 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local iLTGD = fac:getInterFactionLTGD(targetFac)
 	*/
 	types.factionStruct.set_function("getInterFactionLTGD", &factionHelpers::getInterFactionLTGD);
+
+	/***
+	Set the faction characters of a specific type draw their names from.
+	@function factionStruct:setCharacterNameFaction
+	@tparam int characterTypeIndex
+	@tparam int factionID
+	@usage
+	     fac:setCharacterNameFaction(characterType.spy, 2)
+	*/
+	types.factionStruct.set_function("setCharacterNameFaction", &factionHelpers::setCharacterNameFaction);
 
 	///aiFaction
 	//@section aiFaction

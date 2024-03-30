@@ -1005,6 +1005,54 @@ namespace gameHelpers
 		return reinterpret_cast<general*>(getTileObject(tile, 28));
 	}
 
+	int getTileCharacterCount(const oneTile* tile)
+	{
+		int count = 0;
+		const auto character = getTileCharacter(tile);
+		if (character)
+			count += 1;
+		else
+			return 0;
+		auto object = static_cast<DWORD*>(character->obj);
+		while (object)
+		{
+			int objectType = CallVFunc<4, int>(object);
+			if (objectType == 28)
+				count += 1;
+			else
+				break;
+			object = reinterpret_cast<DWORD*>(*(object + 1));
+		}
+		return count;
+	}
+
+	general* getTileCharacterAtIndex(const oneTile* tile, int index)
+	{
+		int count = 0;
+		const auto character = getTileCharacter(tile);
+		if (index == 0)
+			return character;
+		if (!character)
+			return nullptr;
+		auto object = static_cast<DWORD*>(character->obj);
+		while (object)
+		{
+			int objectType = CallVFunc<4, int>(object);
+			if (objectType == 28)
+			{
+				count += 1;
+				if (count == index)
+					return reinterpret_cast<general*>(object);
+			}
+			else
+			{
+				return nullptr;
+			}
+			object = reinterpret_cast<DWORD*>(*(object + 1));
+		}
+		return nullptr;
+	}
+
 	settlementStruct* getTileSettlement(const oneTile* tile)
 	{
 		return reinterpret_cast<settlementStruct*>(getTileObject(tile, 29));

@@ -51,6 +51,8 @@ namespace gameHelpers
 	unit* getUnit(eventTrigger* eventData);
 	bool condition(std::string condition, const eventTrigger* eventData);
 	eduEntry* getEduEntry(eventTrigger* eventData);
+	int getTileCharacterCount(const oneTile* tile);
+	general* getTileCharacterAtIndex(const oneTile* tile, int index);
 
 
 	general* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y);
