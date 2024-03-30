@@ -6,17 +6,17 @@
 
 ## **Release Notes**
 
-### **Launcher**
-- Fix setting of faction name in Discord Rich Presence
+<!-- ### **Launcher** -->
 
-### **Library**
-- Updated DXVK library to the latest version [2.3.1](https://github.com/doitsujin/dxvk/releases/tag/v2.3.1)
-  - Includes a fix for the black screen issue during loading screens in windowed mode
+
+<!--### **Library** -->
 
 ### **Lua Plugin**
-- Fixed `M2TWEOP.restartLua()` crashing the game. It is now bound to `CTRL+SHIFT+R` by default. You can rebind this to something else if you prefer.
+- Add setCharacterNameFaction to factionStruct, allowing you to change which faction a faction draws it's names from for a specific agent type.
+- Added getTileCharacterCount and getTileCharacterAtIndex, as there are instances where there is no other way to get every character on a tile (for example in postBattle event auxiliary characters that are part of a settlement's garrison army)
 
-<!-- ### **ImGUI** -->
+### **ImGUI**
+- Fixes FontAtlas extra parameters not being optional
 
 <!-- ### **Documentation** -->
 
