@@ -295,6 +295,7 @@
     <li><a href="#factionStruct:getBattleVsFactionStats">factionStruct:getBattleVsFactionStats (targetFactionID)</a></li>
     <li><a href="#factionStruct:getAiFactionValues">factionStruct:getAiFactionValues ()</a></li>
     <li><a href="#factionStruct:getInterFactionLTGD">factionStruct:getInterFactionLTGD (targetFaction)</a></li>
+    <li><a href="#factionStruct:setCharacterNameFaction">factionStruct:setCharacterNameFaction (characterTypeIndex, factionID)</a></li>
 </details>
 
 
@@ -929,6 +930,8 @@
     <li><a href="#tileStruct">tileStruct</a></li>
     <li><a href="#tileStruct:factionHasArmyNearTile">tileStruct:factionHasArmyNearTile (factionID)</a></li>
     <li><a href="#tileStruct:factionHasCharacterOnTile">tileStruct:factionHasCharacterOnTile (factionID)</a></li>
+    <li><a href="#tileStruct:getTileCharacterCount">tileStruct:getTileCharacterCount ()</a></li>
+    <li><a href="#tileStruct:getTileCharacterAtIndex">tileStruct:getTileCharacterAtIndex (index)</a></li>
 </details>
 
 
@@ -1138,7 +1141,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2024-03-22 13:51:45</p>
+        <p class="lastUpdatedMessage">Last updated: 2024-03-30 15:32:32</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -1806,6 +1809,10 @@
 	<tr>
 	<td class="name" nowrap><a href="#factionStruct:getInterFactionLTGD">factionStruct:getInterFactionLTGD (targetFaction)</a></td>
 	<td class="summary">Get various statistics the long term goal director uses versus a target faction.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#factionStruct:setCharacterNameFaction">factionStruct:setCharacterNameFaction (characterTypeIndex, factionID)</a></td>
+	<td class="summary">Set the faction characters of a specific type draw their names from.</td>
 	</tr>
 </table>
 <h2><a href="#aiFaction">aiFaction </a></h2>
@@ -3496,6 +3503,14 @@
 	<tr>
 	<td class="name" nowrap><a href="#tileStruct:factionHasCharacterOnTile">tileStruct:factionHasCharacterOnTile (factionID)</a></td>
 	<td class="summary">Check if a faction has a character on a tile.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#tileStruct:getTileCharacterCount">tileStruct:getTileCharacterCount ()</a></td>
+	<td class="summary">Get amount of characters on a tile.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#tileStruct:getTileCharacterAtIndex">tileStruct:getTileCharacterAtIndex (index)</a></td>
+	<td class="summary">Get a character on a tile.</td>
 	</tr>
 </table>
 <h2><a href="#RegionStruct">RegionStruct </a></h2>
@@ -9732,6 +9747,12 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
 
 
         </li>
+        <li><span class="parameter">setCharacterNameFaction</span>
+            <span class="types"><a class="type" href="index.html#factionStruct:setCharacterNameFaction">setCharacterNameFaction</a></span>
+
+
+
+        </li>
     </ul>
 
 
@@ -10472,6 +10493,40 @@ ourFacName = ourFac:getFactionName();
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><code class="language-lua" ><span class="keyword">local</span> iLTGD = fac:getInterFactionLTGD(targetFac)</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "factionStruct:setCharacterNameFaction"></a>
+    <strong>factionStruct:setCharacterNameFaction (characterTypeIndex, factionID)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set the faction characters of a specific type draw their names from.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">characterTypeIndex</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">factionID</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" >fac:setCharacterNameFaction(characterType.spy, <span class="number">2</span>)</code></pre>
     </ul>
 
 </dd>
@@ -12185,7 +12240,7 @@ ourFacName = ourFac:getFactionName();
 
         </li>
         <li><span class="parameter">getSiege</span>
-            <span class="types"><a class="type" href="index.html#fortStruct:getSiege">getSiege</a></span>
+            <span class="types"><a class="type" href="index.html#settlementStruct:getSiege">getSiege</a></span>
 
 
 
@@ -12640,7 +12695,7 @@ ourFacName = ourFac:getFactionName();
 
         </li>
         <li><span class="parameter">getSiege</span>
-            <span class="types"><a class="type" href="index.html#fortStruct:getSiege">getSiege</a></span>
+            <span class="types"><a class="type" href="index.html#settlementStruct:getSiege">getSiege</a></span>
 
 
 
@@ -28792,6 +28847,18 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
 
         </li>
+        <li><span class="parameter">getTileCharacterCount</span>
+            <span class="types"><a class="type" href="index.html#tileStruct:getTileCharacterCount">getTileCharacterCount</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getTileCharacterAtIndex</span>
+            <span class="types"><a class="type" href="index.html#tileStruct:getTileCharacterAtIndex">getTileCharacterAtIndex</a></span>
+
+
+
+        </li>
     </ul>
 
 
@@ -28864,6 +28931,68 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><code class="language-lua" ><span class="keyword">local</span> hasCharacterOnTile = tile:factionHasCharacterOnTile(<span class="number">3</span>);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "tileStruct:getTileCharacterCount"></a>
+    <strong>tileStruct:getTileCharacterCount ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get amount of characters on a tile.
+    </div>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        characterCount
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> tileCharacterCount = tile:getTileCharacterCount();</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "tileStruct:getTileCharacterAtIndex"></a>
+    <strong>tileStruct:getTileCharacterAtIndex (index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a character on a tile.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#character">character</a></span>
+        char
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> tileCharacterCount = tile:getTileCharacterCount();
+<span class="keyword">for</span> i=<span class="number">0</span>,tileCharacterCount -<span class="number">1</span> <span class="keyword">do</span>
+	<span class="keyword">local</span> character = tile:getTileCharacterAtIndex(i);
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
