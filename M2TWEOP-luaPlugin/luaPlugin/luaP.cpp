@@ -232,6 +232,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getOptions2 getOptions2
 	@tfield getCampaignDifficulty1 getCampaignDifficulty1
 	@tfield getCampaignDifficulty2 getCampaignDifficulty2
+	@tfield getCampaignDifficulty2 getCampaignDifficulty2
+	@tfield setConversionLvlFromCastle setConversionLvlFromCastle
+	@tfield setConversionLvlFromCity setConversionLvlFromCity
 	@table M2TWEOP
 	*/
 
@@ -613,10 +616,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	/***
 	Get information about the camera in a battle
-	@table battleCameraStruct
 	@tfield float xCoord 
 	@tfield float yCoord 
 	@tfield float zCoord 
+	@table battleCameraStruct
 	*/
 	types.battleCameraStruct = luaState.new_usertype<battleCameraStruct>("battleCameraStruct");
 	types.battleCameraStruct.set("xCoord", &battleCameraStruct::xCoord);
@@ -684,7 +687,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.uiElement.set("subElementsNum", &uiElement::subElementsNum);
 	/***
 	Get a subelement of an UI element using the index.
-	@function gameSTDUI.getSubElement
+	@function uiElementStruct.getSubElement
 	@tparam int index Starts from 0.
 	@treturn uiElementStruct subelement
 	@usage
@@ -724,7 +727,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	/***
 	Start drawing .cas campaign strategy model with a unique ID in some coords. Can be used at any time.
-	@function objects.startDrawModelAt
+	@function stratmap.objects.startDrawModelAt
 	@tparam int modelId Unique ID
 	@tparam int x
 	@tparam int y
@@ -736,7 +739,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.objectsTable.set_function("startDrawModelAt", &objectsHelpers::startDrawModelAt);
 	/***
 	Stop drawing .cas campaign strategy model with a unique ID. Can be used at any time.
-	@function objects.stopDrawModel
+	@function stratmap.objects.stopDrawModel
 	@tparam int modelId Unique ID
 	@usage
 	stratmap.objects.addModelToGame("data/models_strat/residences/invisible.CAS", 1);
@@ -746,7 +749,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.objectsTable.set_function("stopDrawModel", &objectsHelpers::stopDrawModel);
 	/***
 	Add a new .cas campaign strategy model to the game with a unique ID. This should be called during onPluginLoad()
-	@function objects.addModelToGame
+	@function stratmap.objects.addModelToGame
 	@tparam string path Relative path from the modfolder (starting with "data/").
 	@tparam int modelId  Unique ID to use the model later.
 	@usage
@@ -755,7 +758,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.objectsTable.set_function("addModelToGame", &objectsHelpers::addModelToGame);
 	/***
 	Add a new .cas character strategy model to the game with a unique name. Only add it after loading to campaign map!
-	@function objects.addCharacterCas
+	@function stratmap.objects.addCharacterCas
 	@tparam string skeleton name of skeleton used.
 	@tparam string caspath Relative path from the mods folder (starting with "mods/").
 	@tparam string shadowcaspath Relative path from the mods folder (starting with "mods/").
@@ -775,7 +778,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.objectsTable.set_function("addCharacterCas", &generalHelpers::addCharacterCas);
 	/***
 	Set the strategy model for object at specified coordinates, works only for supported object types
-	@function objects.setModel
+	@function stratmap.objects.setModel
 	@tparam int xCoord
 	@tparam int yCoord
 	@tparam int modelId used for: watchtower, resource, settlement, fort, port
@@ -788,7 +791,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		&objectsHelpers::setModelOneVar));
 	/***
 	Replace a custom tile. Change the custom battlefield on the specified coordinates.
-	@function objects.replaceTile
+	@function stratmap.objects.replaceTile
 	@tparam string label  Identifier.
 	@tparam int xCoord  X coordinate of tile.
 	@tparam int yCoord  Y coordinate of tile.
@@ -816,7 +819,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.cameraTable = luaState.create_table();
 	/***
 	Slowly move the camera to the specified tile.
-	@function camera.move
+	@function stratmap.camera.move
 	@tparam int xCoord
 	@tparam int yCoord
 	@usage
@@ -825,7 +828,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.cameraTable.set_function("move", &cameraHelpers::moveStratCamera);
 	/***
 	Quickly move the camera to the specified tile.
-	@function camera.jump
+	@function stratmap.camera.jump
 	@tparam int xCoord
 	@tparam int yCoord
 	@usage
@@ -834,7 +837,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.cameraTable.set_function("jump", &cameraHelpers::snapStratCamera);
 	/***
 	Set the zoom level of the camera.
-	@function camera.zoom
+	@function stratmap.camera.zoom
 	@tparam float distance
 	@usage
 	stratmap.camera.zoom(0.12);
@@ -858,13 +861,14 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield historicEvent historicEvent
 	@tfield scriptCommand scriptCommand
 	@tfield callConsole callConsole
+	@tfield getGuild getGuild
 
 	@table stratmap.game
 */
 	tables.gameTable = luaState.create_table();
 	/***
 	Execute a Medieval II console command.
-	@function game.callConsole
+	@function stratmap.game.callConsole
 	@tparam string command
 	@tparam string args
 	@treturn string error Note: string can be empty but not nil
@@ -881,7 +885,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.gameTable.set_function("callConsole", &gameHelpers::callConsole);
 	/***
 	Get the amount of factions.
-	@function game.getFactionsCount
+	@function stratmap.game.getFactionsCount
 	@treturn int facNumber Amount of factions
 	@usage
 	local facNum=stratmap.game.getFactionsCount();
@@ -889,7 +893,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.gameTable.set_function("getFactionsCount", &gameHelpers::getFactionsCount);
 	/***
 	Get a faction by the index, commonly used when iterating over all factions using getFactionsCount()
-	@function game.getFaction
+	@function stratmap.game.getFaction
 	@tparam int Index of the faction.
 	@treturn factionStruct faction
 	@usage
@@ -898,7 +902,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.gameTable.set_function("getFaction", &gameHelpers::getFaction);
 	/***
 	Get a guild by the index.
-	@function game.getGuild
+	@function stratmap.game.getGuild
 	@tparam int index
 	@treturn guild guild
 	@usage
@@ -908,7 +912,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	/***
 	Create a new character at the specified coordinates.
-	@function game.createCharacterByString
+	@function stratmap.game.createCharacterByString
 	@tparam string type Character type, for example "named character".
 	@tparam factionStruct Faction the new character belongs to.
 	@tparam int age The character's age
@@ -925,7 +929,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.gameTable.set_function("createCharacterByString", &gameHelpers::createCharacter);
 	/***
 	Create an army for a character. Commonly used after spawning a new character to set it's bodyguard unit.
-	@function game.createArmy
+	@function stratmap.game.createArmy
 	@tparam character ourGeneral Character class, not named character class!
 	@treturn stackStruct army
 	@usage
@@ -934,7 +938,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.gameTable.set_function("createArmy", &gameHelpers::createArmy);
 	/***
 	Create an army in a settlement (don't need a character). Used to add units to an empty settlement.
-	@function game.createArmyInSettlement
+	@function stratmap.game.createArmyInSettlement
 	@tparam settlementStruct settlement
 	@treturn stackStruct army
 	@usage
@@ -943,7 +947,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.gameTable.set_function("createArmyInSettlement", &gameHelpers::createArmyInSettlement);
 	/***
 	Get a script counter value, works for counters and for event\_counters
-	@function game.getScriptCounter
+	@function stratmap.game.getScriptCounter
 	@tparam string counterName The name of the counter
 	@treturn bool isExist Returns true if the counter exists i.e it has been used at least once in any way in the campaign\_script
 	@treturn int counterValue Returns the value of the counter
@@ -953,7 +957,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.gameTable.set_function("getScriptCounter", &gameHelpers::getScriptCounter);
 	/***
 	Set an event\_counter value, does not work for counters, only event\_counters.
-	@function game.setScriptCounter
+	@function stratmap.game.setScriptCounter
 	@tparam string counterName
 	@tparam int value
 	@usage
@@ -962,7 +966,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.gameTable.set_function("setScriptCounter", &gameHelpers::setScriptCounter);
 	/***
 	Fire a game event message. Picture needs to be provided in the ui folders as default.
-	@function game.historicEvent
+	@function stratmap.game.historicEvent
 	@tparam string eventName
 	@tparam string title
 	@tparam string body
@@ -974,7 +978,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Fire any script command available from the game. It is always just 2 parameters in the function, the command name and all the arguments as 1 string in the second parameter.
 	Do not use inc_counter, set_counter, declare_counter! they crash!
-	@function game.scriptCommand
+	@function stratmap.game.scriptCommand
 	@tparam string command
 	@tparam string args
 	@usage
@@ -1298,6 +1302,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int statFood1
 	@tfield int statFood2
 	@tfield int ammunition
+	@tfield hasOwnership hasOwnership
+	@tfield setOwnerShip setOwnerShip
 
 	@table eduEntry
 	*/
@@ -2071,8 +2077,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int factionID
 	@tfield getFactionName getFactionName
 	@tfield int cultureID
-	@tfield int AIPersonalityType
-	@tfield int AIPersonalityName
+	@tfield int aiPersonalityType
+	@tfield int aiPersonalityName
 	@tfield string ai_label
 	@tfield string name
 	@tfield string localizedName
@@ -2121,14 +2127,17 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getNeighbourRegionID getNeighbourRegionID
 	@tfield getBattleVsFactionStats getBattleVsFactionStats
 	@tfield setCharacterNameFaction setCharacterNameFaction
+	@tfield isNeighbourFaction isNeighbourFaction
+	@tfield getAiFactionValues getAiFactionValues
+	@tfield getInterFactionLTGD getInterFactionLTGD
 
 	@table factionStruct
 	*/
 	types.factionStruct = luaState.new_usertype<factionStruct>("factionStruct");
 	types.factionStruct.set("dipNum", &factionStruct::dipNum);
 	types.factionStruct.set("factionID", &factionStruct::dipNum);
-	types.factionStruct.set("AIPersonalityType", &factionStruct::AIPersonalityType);
-	types.factionStruct.set("AIPersonalityName", &factionStruct::AIPersonalityName);
+	types.factionStruct.set("aiPersonalityType", &factionStruct::AIPersonalityType);
+	types.factionStruct.set("aiPersonalityName", &factionStruct::AIPersonalityName);
 	/***
 	Get the faction's internal name
 	@function factionStruct:getFactionName
@@ -2159,7 +2168,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct.set("missionCount", &factionStruct::missionCount);
 	types.factionStruct.set("isUndiscovered", &factionStruct::isUndiscovered);
 	types.factionStruct.set("neighBourRegionsNum", &factionStruct::neighBourRegionsNum);
-	types.factionStruct.set("factionRankings", &factionStruct::factionRankings);
 	types.factionStruct.set("money", &factionStruct::money);
 	types.factionStruct.set("kingsPurse", &factionStruct::KingsPurse);
 	types.factionStruct.set("facStrat", &factionStruct::factSmDescr);
@@ -2440,7 +2448,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.aiFaction.set("factionID", &aiFaction::factionID);
 	types.aiFaction.set("LTGD", &aiFaction::aiLongTermGoalDirector);
 	types.aiFaction.set("aiPersonality", &aiFaction::aiProductionControllers);
-	//types.aiFaction.set("strategyDirector", &aiFaction::aiGlobalStrategyDirector);
 
 	///aiLongTermGoalDirector
 	//@section aiLongTermGoalDirector
@@ -2591,8 +2598,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	@tfield aiFaction aiFaction
 	@tfield int aiProductionControllersNum
-	@tfield int AIPersonalityType
-	@tfield int AIPersonalityName
+	@tfield int aiPersonalityType
+	@tfield int aiPersonalityName
 	@tfield int spyBias
 	@tfield int assassinBias
 	@tfield int diplomatBias
@@ -3621,7 +3628,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Get name of building in queue type (chain)
 
-	@function building:getQueueBuildingType
+	@function buildingInQueue:getQueueBuildingType
 	@treturn string buildingType (building chain name)
 	@usage
 	if ourQueueBld:getQueueBuildingType() = "core_building" then
@@ -3632,7 +3639,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Get name of building in queue level
 
-	@function building:getQueueBuildingName
+	@function buildingInQueue:getQueueBuildingName
 	@treturn string buildingName
 	@usage
 	if ourQueueBld:getQueueBuildingName() = "wooden_pallisade" then
@@ -4039,9 +4046,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.siege.set("besieger", &siegeS::army);
 	types.siege.set("siegeTurns", &siegeS::siegeTurns);
 	types.siege.set("soldierCount", &siegeS::soldierCount);
-	types.siege.set("siegedSettlement", sol::property(
+	types.siege.set("besiegedSettlement", sol::property(
 		&siegeHelpers::getSiegedSettlement));
-	types.siege.set("siegedFort", sol::property(
+	types.siege.set("besiegedFort", sol::property(
 		&siegeHelpers::getSiegedFort));
 
 

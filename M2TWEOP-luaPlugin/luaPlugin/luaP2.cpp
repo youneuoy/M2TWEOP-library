@@ -36,636 +36,10 @@ void luaP::initCampaign()
 		sol::usertype<neighbourRegion> neighbourRegion;
 		sol::usertype<eventTrigger> eventTrigger;
 	}typeAll;
-	using namespace campaignEnums;
-
-	///CampaignEnums
-	//@section dipRelType
-
-	/***
-	Enum with a list of types of diplomatic relations.
-
-	@tfield int war
-	@tfield int peace
-	@tfield int alliance
-	@tfield int suzerain
-	@tfield int trade (Doesn't work with trade rights agreements set at game start)
-
-	@usage
-	local campaign=gameDataAll.get().campaignStruct;
-	local fac1=campaign.factionsSortedByDescrStrat[1];
-	local fac2=campaign.factionsSortedByDescrStrat[2];
-	local isInWar=campaign:checkDipStance(dipRelType.war,fac1,fac2);
-
-	@table dipRelType
-	*/
-	luaState.new_enum(
-		"dipRelType",
-		"war", dipRelEnum::war,
-		"peace", dipRelEnum::peace,
-		"alliance", dipRelEnum::alliance,
-		"suzerain", dipRelEnum::suzerain,
-		"trade", dipRelEnum::trade
-	);
-
-	//@section unitBattleProperties
-	/***
-	Enum with a list of types of unit battle properties.
-
-	@tfield int guardMode
-	@tfield int fireAtWill
-	@tfield int skirmish
-
-	@table unitBattleProperties
-	*/
-	luaState.new_enum(
-		"unitBattleProperties",
-		"guardMode", unitHelpers::guardMode,
-		"fireAtWill", unitHelpers::fireAtWill,
-		"skirmish", unitHelpers::skirmish
-	);
-
-	//@section buildingCapability
-	/***
-	Enum with a list of types of building capabilities.
-
-	@tfield int population_growth_bonus
-	@tfield int population_loyalty_bonus
-	@tfield int population_health_bonus
-	@tfield int trade_base_income_bonus
-	@tfield int trade_level_bonus
-	@tfield int trade_fleet
-	@tfield int taxable_income_bonus
-	@tfield int mine_resource
-	@tfield int farming_level
-	@tfield int road_level
-	@tfield int gate_strength
-	@tfield int gate_defences
-	@tfield int wall_level
-	@tfield int tower_level
-	@tfield int armour
-	@tfield int stage_games
-	@tfield int stage_races
-	@tfield int fire_risk
-	@tfield int weapon_melee_simple
-	@tfield int weapon_melee_blade
-	@tfield int weapon_missile_mechanical
-	@tfield int weapon_missile_gunpowder
-	@tfield int weapon_artillery_mechanical
-	@tfield int weapon_artillery_gunpowder
-	@tfield int weapon_naval_gunpowder
-	@tfield int upgrade_bodyguard
-	@tfield int recruits_morale_bonus
-	@tfield int recruits_exp_bonus
-	@tfield int happiness_bonus
-	@tfield int law_bonus
-	@tfield int construction_cost_bonus_military
-	@tfield int construction_cost_bonus_religious
-	@tfield int construction_cost_bonus_defensive
-	@tfield int construction_cost_bonus_other
-	@tfield int construction_time_bonus_military
-	@tfield int construction_time_bonus_religious
-	@tfield int construction_time_bonus_defensive
-	@tfield int construction_time_bonus_other
-	@tfield int construction_cost_bonus_wooden
-	@tfield int construction_cost_bonus_stone
-	@tfield int construction_time_bonus_wooden
-	@tfield int construction_time_bonus_stone
-	@tfield int free_upkeep
-	@tfield int pope_approval
-	@tfield int pope_disapproval
-	@tfield int religion_level
-	@tfield int amplify_religion_level
-	@tfield int archer_bonus
-	@tfield int cavalry_bonus
-	@tfield int heavy_cavalry_bonus
-	@tfield int gun_bonus
-	@tfield int navy_bonus
-	@tfield int recruitment_cost_bonus_naval
-	@tfield int retrain_cost_bonus
-	@tfield int weapon_projectile
-	@tfield int income_bonus
-	@tfield int recruitment_slots
-
-	@table buildingCapability
-	*/
-	luaState.new_enum(
-		"buildingCapability",
-		"population_growth_bonus", 0,
-		"population_loyalty_bonus", 1,
-		"population_health_bonus", 2,
-		"trade_base_income_bonus", 3,
-		"trade_level_bonus", 4,
-		"trade_fleet", 5,
-		"taxable_income_bonus", 6,
-		"mine_resource", 7,
-		"farming_level", 8,
-		"road_level", 9,
-		"gate_strength", 10,
-		"gate_defences", 11,
-		"wall_level", 12,
-		"tower_level", 13,
-		"armour", 14,
-		"stage_games", 15,
-		"stage_races", 16,
-		"fire_risk", 17,
-		"weapon_melee_simple", 18,
-		"weapon_melee_blade", 19,
-		"weapon_missile_mechanical", 20,
-		"weapon_missile_gunpowder", 21,
-		"weapon_artillery_mechanical", 22,
-		"weapon_artillery_gunpowder", 23,
-		"weapon_naval_gunpowder", 24,
-		"upgrade_bodyguard", 25,
-		"recruits_morale_bonus", 26,
-		"recruits_exp_bonus", 27,
-		"happiness_bonus", 28,
-		"law_bonus", 29,
-		"construction_cost_bonus_military", 30,
-		"construction_cost_bonus_religious", 31,
-		"construction_cost_bonus_defensive", 32,
-		"construction_cost_bonus_other", 33,
-		"construction_time_bonus_military", 34,
-		"construction_time_bonus_religious", 35,
-		"construction_time_bonus_defensive", 36,
-		"construction_time_bonus_other", 37,
-		"construction_cost_bonus_wooden", 38,
-		"construction_cost_bonus_stone", 39,
-		"construction_time_bonus_wooden", 40,
-		"construction_time_bonus_stone", 41,
-		"free_upkeep", 42,
-		"pope_approval", 43,
-		"pope_disapproval", 44,
-		"religion_level", 45,
-		"amplify_religion_level", 46,
-		"archer_bonus", 47,
-		"cavalry_bonus", 48,
-		"heavy_cavalry_bonus", 49,
-		"gun_bonus", 50,
-		"navy_bonus", 51,
-		"recruitment_cost_bonus_naval", 52,
-		"retrain_cost_bonus", 53,
-		"weapon_projectile", 54,
-		"income_bonus", 55,
-		"recruitment_slots", 56
-	);
-
-	//@section characterType
-	/***
-	Enum with a list of character types.
-
-	@tfield int spy
-	@tfield int assassin
-	@tfield int diplomat
-	@tfield int admiral
-	@tfield int merchant
-	@tfield int priest
-	@tfield int general
-	@tfield int named_character
-	@tfield int princess
-	@tfield int heretic
-	@tfield int witch
-	@tfield int inquisitor
-	@tfield int pope
-
-	@table characterType
-	*/
-	luaState.new_enum(
-		"characterType",
-		"spy", 0,
-		"assassin", 1,
-		"diplomat", 2,
-		"admiral", 3,
-		"merchant", 4,
-		"priest", 5,
-		"general", 6,
-		"named_character", 7,
-		"princess", 8,
-		"heretic", 9,
-		"witch", 10,
-		"inquisitor", 11,
-		"pope", 13
-	);
-
-	//@section sortType
-	/***
-	Enum with a list of army sort types.
-
-	@tfield int eduType
-	@tfield int category
-	@tfield int class
-	@tfield int soldierCount
-	@tfield int experience
-	@tfield int categoryClass
-	@tfield int aiUnitValue
-
-	@table sortType
-	*/
-	luaState.new_enum(
-		"sortType",
-		"eduType", 1,
-		"category", 2,
-		"class", 3,
-		"soldierCount", 4,
-		"experience", 5,
-		"categoryClass", 6,
-		"aiUnitValue", 7
-	);
-
-	//@section aiPlan
-	/***
-	Enum with a list of GTA AI plans.
-
-	@tfield int doNothing
-	@tfield int attackAll
-	@tfield int defend
-	@tfield int defendFeature
-	@tfield int hide
-	@tfield int ambush
-	@tfield int scout
-	@tfield int withdraw
-	@tfield int attackSettlement
-	@tfield int defendSettlement
-	@tfield int sallyOut
-
-	@table aiPlan
-	*/
-	luaState.new_enum(
-		"aiPlan",
-		"doNothing", 0,
-		"attackAll", 1,
-		"defend", 2,
-		"defendFeature", 3,
-		"hide", 4,
-		"ambush", 5,
-		"scout", 6,
-		"withdraw", 7,
-		"attackSettlement", 8,
-		"defendSettlement", 9,
-		"sallyOut", 10
-	);
-
-	//@section aiObjective
-	/***
-	Enum with a list of GTA AI objectives.
-
-	@tfield int invalid
-	@tfield int moveToPoint
-	@tfield int attackEnemyBattleGroup
-	@tfield int defendTerrainHill
-	@tfield int defendTerrainForest
-	@tfield int defendTerrainArea
-	@tfield int defendCrossing
-	@tfield int assaultCrossing
-	@tfield int defendLine
-	@tfield int scout
-	@tfield int withdraw
-	@tfield int defendSettlement
-	@tfield int supportDefendSettlement
-	@tfield int attackSettlement
-	@tfield int bombard
-	@tfield int attackModel
-	@tfield int sallyOut
-	@tfield int ambush
-
-	@table aiObjective
-	*/
-	luaState.new_enum(
-		"aiObjective",
-		"invalid", 0,
-		"moveToPoint", 1,
-		"attackEnemyBattleGroup", 2,
-		"defendTerrainHill", 3,
-		"defendTerrainForest", 4,
-		"defendTerrainArea", 5,
-		"defendCrossing", 6,
-		"assaultCrossing", 7,
-		"defendLine", 8,
-		"scout", 9,
-		"withdraw", 10,
-		"defendSettlement", 11,
-		"supportDefendSettlement", 12,
-		"attackSettlement", 13,
-		"skirmish", 14,
-		"bombard", 15,
-		"attackModel", 16,
-		"sallyOut", 17,
-		"ambush", 18
-	);
-
-	//@section resourceType
-	/***
-	Enum with a list of resources.
-
-	@tfield int gold
-	@tfield int silver
-	@tfield int fish
-	@tfield int furs
-	@tfield int grain
-	@tfield int timber
-	@tfield int iron
-	@tfield int ivory
-	@tfield int wine
-	@tfield int slaves
-	@tfield int chocolate
-	@tfield int marble
-	@tfield int textiles
-	@tfield int dyes
-	@tfield int tobacco
-	@tfield int silk
-	@tfield int sugar
-	@tfield int sulfur
-	@tfield int tin
-	@tfield int spices
-	@tfield int cotton
-	@tfield int amber
-	@tfield int coal
-	@tfield int wool
-	@tfield int elephants
-	@tfield int camels
-	@tfield int dogs
-	@tfield int generic
-
-	@table resourceType
-	*/
-	luaState.new_enum(
-		"resourceType",
-		"gold", 0,
-		"silver", 1,
-		"fish", 2,
-		"furs", 3,
-		"grain", 4,
-		"timber", 5,
-		"iron", 6,
-		"ivory", 7,
-		"wine", 8,
-		"slaves", 9,
-		"chocolate", 10,
-		"marble", 11,
-		"textiles", 12,
-		"dyes", 13,
-		"tobacco", 14,
-		"silk", 15,
-		"sugar", 16,
-		"sulfur", 17,
-		"tin", 18,
-		"spices", 19,
-		"cotton", 20,
-		"amber", 21,
-		"coal", 22,
-		"wool", 23,
-		"elephants", 24,
-		"camels", 25,
-		"dogs", 26,
-		"generic", 27
-	);
-
-	//@section moraleStatus
-	/***
-	Enum of unit morale status.
-
-	@tfield int berserk
-	@tfield int impetuous
-	@tfield int high
-	@tfield int firm
-	@tfield int shaken
-	@tfield int wavering
-	@tfield int routing
-
-	@table moraleStatus
-	*/
-	luaState.new_enum(
-		"moraleStatus",
-		"berserk", 0,
-		"impetuous", 1,
-		"high", 2,
-		"firm", 3,
-		"shaken", 4,
-		"wavering", 5,
-		"routing", 6
-	);
-
-	//@section combatStatus
-	/***
-	Enum of unit combat status.
-
-	@tfield int notInCombat
-	@tfield int victoryCertain
-	@tfield int victoryAlmostCertain
-	@tfield int victoryDistinct
-	@tfield int balanced
-	@tfield int defeatDistinct
-	@tfield int defeatAlmostCertain
-	@tfield int defeatCertain
-
-	@table combatStatus
-	*/
-	luaState.new_enum(
-		"combatStatus",
-		"notInCombat", 0,
-		"victoryCertain", 1,
-		"victoryAlmostCertain", 2,
-		"victoryDistinct", 3,
-		"balanced", 4,
-		"defeatDistinct", 5,
-		"defeatAlmostCertain", 6,
-		"defeatCertain", 7
-	);
-
-	//@section battleSuccess
-	/***
-	Enum of unit combat status.
-
-	@tfield int close
-	@tfield int average
-	@tfield int clear
-	@tfield int crushing
-
-	@table battleSuccess
-	*/
-	luaState.new_enum(
-		"battleSuccess",
-		"close", 0,
-		"average", 1,
-		"clear", 2,
-		"crushing", 3
-	);
-
-	//@section mountClass
-	/***
-	Enum of unit mount class.
-
-	@tfield int horse
-	@tfield int camel
-	@tfield int elephant
-	@tfield int infantry
-
-	@table mountClass
-	*/
-	luaState.new_enum(
-		"mountClass",
-		"horse", 0,
-		"camel", 1,
-		"elephant", 2,
-		"infantry", 3
-	);
-
-	//@section battleType
-	/***
-	Enum of battle types.
-
-	@tfield int ambushSuccess
-	@tfield int ambushFail
-	@tfield int open
-	@tfield int siege
-	@tfield int sally
-	@tfield int naval
-	@tfield int withdrawal
-	@tfield int meetEnemy
-
-	@table battleType
-	*/
-	luaState.new_enum(
-		"battleType",
-		"ambushSuccess", 0,
-		"ambushFail", 1,
-		"open", 2,
-		"siege", 3,
-		"sally", 4,
-		"naval", 5,
-		"withdrawal", 6,
-		"meetEnemy", 7
-	);
-
-	//@section battleState
-	/***
-	Enum of battle states.
-
-	@tfield int notInBattle
-	@tfield int preBattle
-	@tfield int delay
-	@tfield int deployment
-	@tfield int deploymentPlayer2
-	@tfield int conflict
-	@tfield int victoryScroll
-	@tfield int pursuit
-
-	@table battleState
-	*/
-	luaState.new_enum(
-		"battleState",
-		"notInBattle", 0,
-		"preBattle", 1,
-		"delay", 2,
-		"deployment", 3,
-		"deploymentPlayer2", 4,
-		"conflict", 5,
-		"victoryScroll", 6,
-		"pursuit", 7
-	);
-
-	//@section unitClass
-	/***
-	Enum of unit classes
-
-	@tfield int heavy
-	@tfield int light
-	@tfield int skirmish
-	@tfield int spearmen
-	@tfield int missile
-
-	@table unitClass
-	*/
-	luaState.new_enum(
-		"unitClass",
-		"heavy",0,
-		"light",1,
-		"skirmish",2,
-		"spearmen",3,
-		"missile",4
-	);
-
-	//@section unitCategory
-	/***
-	Enum of unit categories
-
-	@tfield int infantry
-	@tfield int cavalry
-	@tfield int siege
-	@tfield int non_combatant
-	@tfield int ship
-	@tfield int handler
-
-	@table unitCategory
-	*/
-	luaState.new_enum(
-		"unitCategory",
-		"infantry", 0,
-		"cavalry", 1,
-		"siege", 2,
-		"non_combatant", 3,
-		"ship", 4,
-		"handler", 5
-	);
-
-	//@section unitCategoryClass
-	/***
-	Enum of unit categories and class combo
-
-	@tfield int nonCombatant
-	@tfield int lightInfantry
-	@tfield int heavyInfantry
-	@tfield int spearmenInfantry
-	@tfield int missileInfantry
-	@tfield int lightCavalry
-	@tfield int heavyCavalry
-	@tfield int missileCavalry
-	@tfield int siegeWeapon
-	@tfield int animalHandler
-	@tfield int battleShip
-
-	@table unitCategoryClass
-	*/
-	luaState.new_enum(
-		"unitCategoryClass",
-		"nonCombatant", 0,
-		"lightInfantry", 1,
-		"heavyInfantry", 2,
-		"spearmenInfantry", 3,
-		"missileInfantry", 4,
-		"lightCavalry", 5,
-		"heavyCavalry", 6,
-		"missileCavalry", 7,
-		"siegeWeapon", 8,
-		"animalHandler", 9,
-		"battleShip", 10
-	);
-
-	//@section managePolicy
-	/***
-	Enum of automated settlement policy types
-
-	@tfield int balanced
-	@tfield int financial
-	@tfield int military
-	@tfield int growth
-	@tfield int cultural
-	@tfield int noPolicy
-
-	@table managePolicy
-	*/
-	luaState.new_enum(
-		"managePolicy",
-		"balanced", 0,
-		"financial", 1,
-		"military", 2,
-		"growth", 3,
-		"cultural", 4,
-		"noPolicy", 5
-	);
 
 
 
-	///options1
+	///Game Options
 	//@section options1
 
 	/***
@@ -762,9 +136,6 @@ void luaP::initCampaign()
 	typeAll.options1.set("disableVnVs", &options1::disableVnVs);
 	typeAll.options1.set("allUsers", &options1::allUsers);
 
-
-	///options2
-	//@section options2
 
 	/***
 	Basic options2 table
@@ -898,7 +269,7 @@ void luaP::initCampaign()
 	typeAll.options2.set("unitSizeMultiplierLarge", &options2::unitSizeMultiplierLarge);
 
 
-	/// campaignDifficulty1
+	///Campaign Difficulty Modifiers
 	//@section campaignDifficulty1
 
 	/***
@@ -928,9 +299,6 @@ void luaP::initCampaign()
 	typeAll.campaignDifficulty1.set("incomeModifierAi", &campaignDifficulty1::incomeModifierAi);
 	typeAll.campaignDifficulty1.set("playerRegionValueModifier", &campaignDifficulty1::playerRegionValueModifier);
 
-	/// campaignDifficulty2
-	//@section campaignDifficulty2
-
 	/***
 	Basic campaignDifficulty2 table.
 
@@ -958,8 +326,8 @@ void luaP::initCampaign()
 	//@section eventTrigger
 
 	/***
-	Basic eventTrigger table
-
+	This is data that comes with game events. You need to check the event documentation to see what data is available under "Exports". The rest of the fields not stated inside "Exports" will return nil! 
+	
 	@tfield unit attackingUnit
 	@tfield unit defendingUnit
 	@tfield character stratCharacter
@@ -1180,7 +548,7 @@ void luaP::initCampaign()
 	typeAll.campaignTable.set("currentTimeInBattle", &campaign::currentTimeInBattle);
 	typeAll.campaignTable.set("fortsNum", &campaign::fortsNum);
 	typeAll.campaignTable.set("portsBuildingsNum", &campaign::portsBuildingsNum);
-	typeAll.campaignTable.set("watchtowersNum", &campaign::watchtowersNum);
+	typeAll.campaignTable.set("watchTowerNum", &campaign::watchtowersNum);
 	/***
 	Check if a diplomatic relation between two factions.
 	@function campaignStruct:checkDipStance
@@ -1737,7 +1105,7 @@ void luaP::initCampaign()
 
 	/***
 	Get an army by it's index.
-	@function region:getStack
+	@function regionStruct:getStack
 	@tparam int index
 	@treturn stackStruct army
 	@usage
@@ -1749,7 +1117,7 @@ void luaP::initCampaign()
 
 	/***
 	Get a fort by it's index.
-	@function region:getFort
+	@function regionStruct:getFort
 	@tparam int index
 	@treturn fortStruct fort
 	@usage
@@ -1761,7 +1129,7 @@ void luaP::initCampaign()
 
 	/***
 	Get a watchtower by it's index.
-	@function region:getWatchtower
+	@function regionStruct:getWatchtower
 	@tparam int index
 	@treturn watchtowerStruct watchtower
 	@usage
@@ -1773,7 +1141,7 @@ void luaP::initCampaign()
 
 	/***
 	Get a resource by it's index.
-	@function region:getResource
+	@function regionStruct:getResource
 	@tparam int index
 	@treturn tradeResource resource
 	@usage
@@ -1785,7 +1153,7 @@ void luaP::initCampaign()
 
 	/***
 	Get a neighbour region by it's index.
-	@function region:getNeighbour
+	@function regionStruct:getNeighbour
 	@tparam int index
 	@treturn neighbourRegion nRegion
 	@usage
@@ -1797,7 +1165,7 @@ void luaP::initCampaign()
 
 	/***
 	Check if a region has a hidden resource.
-	@function region:getHiddenResource
+	@function regionStruct:getHiddenResource
 	@tparam int index
 	@treturn bool hr
 	@usage
@@ -1809,7 +1177,7 @@ void luaP::initCampaign()
 
 	/***
 	Set a region's hidden resource (reset on game restart).
-	@function region:setHiddenResource
+	@function regionStruct:setHiddenResource
 	@tparam int index
 	@tparam bool enable
 	@usage
@@ -1821,7 +1189,7 @@ void luaP::initCampaign()
 
 	/***
 	Get a region that is reachable from this region.
-	@function region:getSeaConnectedRegion
+	@function regionStruct:getSeaConnectedRegion
 	@tparam int index
 	@treturn seaConnectedRegion connectedRegion
 	@usage
@@ -1833,7 +1201,7 @@ void luaP::initCampaign()
 
 	/***
 	Get a region this region is importing trade goods from.
-	@function region:getSeaImportRegion
+	@function regionStruct:getSeaImportRegion
 	@tparam int index
 	@treturn seaConnectedRegion seaImportRegion
 	@usage
@@ -1845,7 +1213,7 @@ void luaP::initCampaign()
 
 	/***
 	Get a region sea edge (point where it borders both sea and another land region).
-	@function region:getRegionSeaEdge
+	@function regionStruct:getRegionSeaEdge
 	@tparam int index
 	@treturn tileStruct edge
 	@usage
@@ -1857,7 +1225,7 @@ void luaP::initCampaign()
 
 	/***
 	Get a devastated tile.
-	@function region:getDevastatedTile
+	@function regionStruct:getDevastatedTile
 	@tparam int index
 	@treturn tileStruct tile
 	@usage
@@ -1869,7 +1237,7 @@ void luaP::initCampaign()
 
 	/***
 	Get a tile that borders the edge of the map.
-	@function region:getTileBorderingEdgeOfMap
+	@function regionStruct:getTileBorderingEdgeOfMap
 	@tparam int index
 	@treturn tileStruct edge
 	@usage
@@ -1881,7 +1249,7 @@ void luaP::initCampaign()
 
 	/***
 	Get a tile by index.
-	@function region:getTile
+	@function regionStruct:getTile
 	@tparam int index
 	@treturn tileStruct tile
 	@usage
@@ -1893,7 +1261,7 @@ void luaP::initCampaign()
 
 	/***
 	Get a fertile tile by index.
-	@function region:getFertileTile
+	@function regionStruct:getFertileTile
 	@tparam int index
 	@treturn tileStruct tile
 	@usage
@@ -1905,7 +1273,7 @@ void luaP::initCampaign()
 
 	/***
 	Get religion amount from a set number of turns ago.
-	@function region:getReligionHistory
+	@function regionStruct:getReligionHistory
 	@tparam int religionID
 	@tparam int turnsAgo (max 19)
 	@treturn float religionAmount
@@ -1918,7 +1286,7 @@ void luaP::initCampaign()
 
 	/***
 	Check if region has a resource type.
-	@function region:hasResourceType
+	@function regionStruct:hasResourceType
 	@tparam int resourceID
 	@treturn bool hasResource
 	@usage
@@ -1930,7 +1298,7 @@ void luaP::initCampaign()
 
 	/***
 	Get the strength total of all armies in this region that are hostile to a specific faction.
-	@function region:getHostileArmiesStrength
+	@function regionStruct:getHostileArmiesStrength
 	@tparam int factionID
 	@treturn int totalStrength
 	@usage
@@ -2239,7 +1607,7 @@ void luaP::initP2()
 	@tfield int sidesNum
 	@tfield battleSide[8] sides Returns a battleSide[8]. Maximum: 8.
 	@tfield int[31] factionSide faction alliance array, -1 if not in battle, start at 1 so faction ID + 1 Maximum 31.
-	tfield getPlayerArmy getPlayerArmy
+	@tfield getPlayerArmy getPlayerArmy
 	@tfield getBattleResidence getBattleResidence
 
 	@table battleStruct
@@ -2307,12 +1675,9 @@ void luaP::initP2()
 	@tfield int totalValueStart
 	@tfield battleAI battleAIPlan
 	@tfield getBattleArmy getBattleArmy
+	@tfield getFaction getFaction
 	@tfield trackedPointerArmy[64] armies Returns a table of trackedPointerArmy. Maximum: 64.
 	
-	
-
-
-
 	@table battleSide
 	*/
 	typeAll.battleSideTable = luaState.new_usertype<battleSide>("battleSide");
@@ -2371,7 +1736,7 @@ void luaP::initP2()
 	typeAll.battleSideTable.set("armies", sol::property([](battleSide& self) { return std::ref(self.armies); }));
 	/***
 	Get a battle army by it's index.
-	@function battleSideTable:getBattleArmy
+	@function battleSide:getBattleArmy
 	@tparam int index
 	@treturn battleArmy army
 	@usage
@@ -2382,7 +1747,7 @@ void luaP::initP2()
 	typeAll.battleSideTable.set_function("getBattleArmy", &battleHandlerHelpers::getBattleArmy);
 	/***
 	Get a faction in this side by it's index.
-	@function battleSideTable:getFaction
+	@function battleSide:getFaction
 	@tparam int index
 	@treturn factionStruct faction
 	@usage
@@ -2680,4 +2045,633 @@ void luaP::initP2()
 
 	*/
 	typeAll.battleBuildings.set_function("getBuilding", &battleHandlerHelpers::getBattleUnit);
+
+	
+	using namespace campaignEnums;
+
+	///EOP Enums
+	//@section dipRelType
+
+	/***
+	Enum with a list of types of diplomatic relations.
+
+	@tfield int war
+	@tfield int peace
+	@tfield int alliance
+	@tfield int suzerain
+	@tfield int trade (Doesn't work with trade rights agreements set at game start)
+
+	@usage
+	local campaign=gameDataAll.get().campaignStruct;
+	local fac1=campaign.factionsSortedByDescrStrat[1];
+	local fac2=campaign.factionsSortedByDescrStrat[2];
+	local isInWar=campaign:checkDipStance(dipRelType.war,fac1,fac2);
+
+	@table dipRelType
+	*/
+	luaState.new_enum(
+		"dipRelType",
+		"war", dipRelEnum::war,
+		"peace", dipRelEnum::peace,
+		"alliance", dipRelEnum::alliance,
+		"suzerain", dipRelEnum::suzerain,
+		"trade", dipRelEnum::trade
+	);
+
+	
+	/***
+	Enum with a list of types of unit battle properties.
+
+	@tfield int guardMode
+	@tfield int fireAtWill
+	@tfield int skirmish
+
+	@table unitBattleProperties
+	*/
+	luaState.new_enum(
+		"unitBattleProperties",
+		"guardMode", unitHelpers::guardMode,
+		"fireAtWill", unitHelpers::fireAtWill,
+		"skirmish", unitHelpers::skirmish
+	);
+
+	
+	/***
+	Enum with a list of types of building capabilities.
+
+	@tfield int population_growth_bonus
+	@tfield int population_loyalty_bonus
+	@tfield int population_health_bonus
+	@tfield int trade_base_income_bonus
+	@tfield int trade_level_bonus
+	@tfield int trade_fleet
+	@tfield int taxable_income_bonus
+	@tfield int mine_resource
+	@tfield int farming_level
+	@tfield int road_level
+	@tfield int gate_strength
+	@tfield int gate_defences
+	@tfield int wall_level
+	@tfield int tower_level
+	@tfield int armour
+	@tfield int stage_games
+	@tfield int stage_races
+	@tfield int fire_risk
+	@tfield int weapon_melee_simple
+	@tfield int weapon_melee_blade
+	@tfield int weapon_missile_mechanical
+	@tfield int weapon_missile_gunpowder
+	@tfield int weapon_artillery_mechanical
+	@tfield int weapon_artillery_gunpowder
+	@tfield int weapon_naval_gunpowder
+	@tfield int upgrade_bodyguard
+	@tfield int recruits_morale_bonus
+	@tfield int recruits_exp_bonus
+	@tfield int happiness_bonus
+	@tfield int law_bonus
+	@tfield int construction_cost_bonus_military
+	@tfield int construction_cost_bonus_religious
+	@tfield int construction_cost_bonus_defensive
+	@tfield int construction_cost_bonus_other
+	@tfield int construction_time_bonus_military
+	@tfield int construction_time_bonus_religious
+	@tfield int construction_time_bonus_defensive
+	@tfield int construction_time_bonus_other
+	@tfield int construction_cost_bonus_wooden
+	@tfield int construction_cost_bonus_stone
+	@tfield int construction_time_bonus_wooden
+	@tfield int construction_time_bonus_stone
+	@tfield int free_upkeep
+	@tfield int pope_approval
+	@tfield int pope_disapproval
+	@tfield int religion_level
+	@tfield int amplify_religion_level
+	@tfield int archer_bonus
+	@tfield int cavalry_bonus
+	@tfield int heavy_cavalry_bonus
+	@tfield int gun_bonus
+	@tfield int navy_bonus
+	@tfield int recruitment_cost_bonus_naval
+	@tfield int retrain_cost_bonus
+	@tfield int weapon_projectile
+	@tfield int income_bonus
+	@tfield int recruitment_slots
+
+	@table buildingCapability
+	*/
+	luaState.new_enum(
+		"buildingCapability",
+		"population_growth_bonus", 0,
+		"population_loyalty_bonus", 1,
+		"population_health_bonus", 2,
+		"trade_base_income_bonus", 3,
+		"trade_level_bonus", 4,
+		"trade_fleet", 5,
+		"taxable_income_bonus", 6,
+		"mine_resource", 7,
+		"farming_level", 8,
+		"road_level", 9,
+		"gate_strength", 10,
+		"gate_defences", 11,
+		"wall_level", 12,
+		"tower_level", 13,
+		"armour", 14,
+		"stage_games", 15,
+		"stage_races", 16,
+		"fire_risk", 17,
+		"weapon_melee_simple", 18,
+		"weapon_melee_blade", 19,
+		"weapon_missile_mechanical", 20,
+		"weapon_missile_gunpowder", 21,
+		"weapon_artillery_mechanical", 22,
+		"weapon_artillery_gunpowder", 23,
+		"weapon_naval_gunpowder", 24,
+		"upgrade_bodyguard", 25,
+		"recruits_morale_bonus", 26,
+		"recruits_exp_bonus", 27,
+		"happiness_bonus", 28,
+		"law_bonus", 29,
+		"construction_cost_bonus_military", 30,
+		"construction_cost_bonus_religious", 31,
+		"construction_cost_bonus_defensive", 32,
+		"construction_cost_bonus_other", 33,
+		"construction_time_bonus_military", 34,
+		"construction_time_bonus_religious", 35,
+		"construction_time_bonus_defensive", 36,
+		"construction_time_bonus_other", 37,
+		"construction_cost_bonus_wooden", 38,
+		"construction_cost_bonus_stone", 39,
+		"construction_time_bonus_wooden", 40,
+		"construction_time_bonus_stone", 41,
+		"free_upkeep", 42,
+		"pope_approval", 43,
+		"pope_disapproval", 44,
+		"religion_level", 45,
+		"amplify_religion_level", 46,
+		"archer_bonus", 47,
+		"cavalry_bonus", 48,
+		"heavy_cavalry_bonus", 49,
+		"gun_bonus", 50,
+		"navy_bonus", 51,
+		"recruitment_cost_bonus_naval", 52,
+		"retrain_cost_bonus", 53,
+		"weapon_projectile", 54,
+		"income_bonus", 55,
+		"recruitment_slots", 56
+	);
+
+	
+	/***
+	Enum with a list of character types.
+
+	@tfield int spy
+	@tfield int assassin
+	@tfield int diplomat
+	@tfield int admiral
+	@tfield int merchant
+	@tfield int priest
+	@tfield int general
+	@tfield int named_character
+	@tfield int princess
+	@tfield int heretic
+	@tfield int witch
+	@tfield int inquisitor
+	@tfield int pope
+
+	@table characterType
+	*/
+	luaState.new_enum(
+		"characterType",
+		"spy", 0,
+		"assassin", 1,
+		"diplomat", 2,
+		"admiral", 3,
+		"merchant", 4,
+		"priest", 5,
+		"general", 6,
+		"named_character", 7,
+		"princess", 8,
+		"heretic", 9,
+		"witch", 10,
+		"inquisitor", 11,
+		"pope", 13
+	);
+
+	
+	/***
+	Enum with a list of army sort types.
+
+	@tfield int eduType
+	@tfield int category
+	@tfield int class
+	@tfield int soldierCount
+	@tfield int experience
+	@tfield int categoryClass
+	@tfield int aiUnitValue
+
+	@table sortType
+	*/
+	luaState.new_enum(
+		"sortType",
+		"eduType", 1,
+		"category", 2,
+		"class", 3,
+		"soldierCount", 4,
+		"experience", 5,
+		"categoryClass", 6,
+		"aiUnitValue", 7
+	);
+
+	
+	/***
+	Enum with a list of GTA AI plans.
+
+	@tfield int doNothing
+	@tfield int attackAll
+	@tfield int defend
+	@tfield int defendFeature
+	@tfield int hide
+	@tfield int ambush
+	@tfield int scout
+	@tfield int withdraw
+	@tfield int attackSettlement
+	@tfield int defendSettlement
+	@tfield int sallyOut
+
+	@table aiPlan
+	*/
+	luaState.new_enum(
+		"aiPlan",
+		"doNothing", 0,
+		"attackAll", 1,
+		"defend", 2,
+		"defendFeature", 3,
+		"hide", 4,
+		"ambush", 5,
+		"scout", 6,
+		"withdraw", 7,
+		"attackSettlement", 8,
+		"defendSettlement", 9,
+		"sallyOut", 10
+	);
+
+	
+	/***
+	Enum with a list of GTA AI objectives.
+
+	@tfield int invalid
+	@tfield int moveToPoint
+	@tfield int attackEnemyBattleGroup
+	@tfield int defendTerrainHill
+	@tfield int defendTerrainForest
+	@tfield int defendTerrainArea
+	@tfield int defendCrossing
+	@tfield int assaultCrossing
+	@tfield int defendLine
+	@tfield int scout
+	@tfield int withdraw
+	@tfield int defendSettlement
+	@tfield int supportDefendSettlement
+	@tfield int attackSettlement
+	@tfield int skirmish
+	@tfield int bombard
+	@tfield int attackModel
+	@tfield int sallyOut
+	@tfield int ambush
+
+	@table aiObjective
+	*/
+	luaState.new_enum(
+		"aiObjective",
+		"invalid", 0,
+		"moveToPoint", 1,
+		"attackEnemyBattleGroup", 2,
+		"defendTerrainHill", 3,
+		"defendTerrainForest", 4,
+		"defendTerrainArea", 5,
+		"defendCrossing", 6,
+		"assaultCrossing", 7,
+		"defendLine", 8,
+		"scout", 9,
+		"withdraw", 10,
+		"defendSettlement", 11,
+		"supportDefendSettlement", 12,
+		"attackSettlement", 13,
+		"skirmish", 14,
+		"bombard", 15,
+		"attackModel", 16,
+		"sallyOut", 17,
+		"ambush", 18
+	);
+
+	
+	/***
+	Enum with a list of resources.
+
+	@tfield int gold
+	@tfield int silver
+	@tfield int fish
+	@tfield int furs
+	@tfield int grain
+	@tfield int timber
+	@tfield int iron
+	@tfield int ivory
+	@tfield int wine
+	@tfield int slaves
+	@tfield int chocolate
+	@tfield int marble
+	@tfield int textiles
+	@tfield int dyes
+	@tfield int tobacco
+	@tfield int silk
+	@tfield int sugar
+	@tfield int sulfur
+	@tfield int tin
+	@tfield int spices
+	@tfield int cotton
+	@tfield int amber
+	@tfield int coal
+	@tfield int wool
+	@tfield int elephants
+	@tfield int camels
+	@tfield int dogs
+	@tfield int generic
+
+	@table resourceType
+	*/
+	luaState.new_enum(
+		"resourceType",
+		"gold", 0,
+		"silver", 1,
+		"fish", 2,
+		"furs", 3,
+		"grain", 4,
+		"timber", 5,
+		"iron", 6,
+		"ivory", 7,
+		"wine", 8,
+		"slaves", 9,
+		"chocolate", 10,
+		"marble", 11,
+		"textiles", 12,
+		"dyes", 13,
+		"tobacco", 14,
+		"silk", 15,
+		"sugar", 16,
+		"sulfur", 17,
+		"tin", 18,
+		"spices", 19,
+		"cotton", 20,
+		"amber", 21,
+		"coal", 22,
+		"wool", 23,
+		"elephants", 24,
+		"camels", 25,
+		"dogs", 26,
+		"generic", 27
+	);
+
+	
+	/***
+	Enum of unit morale status.
+
+	@tfield int berserk
+	@tfield int impetuous
+	@tfield int high
+	@tfield int firm
+	@tfield int shaken
+	@tfield int wavering
+	@tfield int routing
+
+	@table moraleStatus
+	*/
+	luaState.new_enum(
+		"moraleStatus",
+		"berserk", 0,
+		"impetuous", 1,
+		"high", 2,
+		"firm", 3,
+		"shaken", 4,
+		"wavering", 5,
+		"routing", 6
+	);
+
+	
+	/***
+	Enum of unit combat status.
+
+	@tfield int notInCombat
+	@tfield int victoryCertain
+	@tfield int victoryAlmostCertain
+	@tfield int victoryDistinct
+	@tfield int balanced
+	@tfield int defeatDistinct
+	@tfield int defeatAlmostCertain
+	@tfield int defeatCertain
+
+	@table combatStatus
+	*/
+	luaState.new_enum(
+		"combatStatus",
+		"notInCombat", 0,
+		"victoryCertain", 1,
+		"victoryAlmostCertain", 2,
+		"victoryDistinct", 3,
+		"balanced", 4,
+		"defeatDistinct", 5,
+		"defeatAlmostCertain", 6,
+		"defeatCertain", 7
+	);
+
+	
+	/***
+	Enum of unit combat status.
+
+	@tfield int close
+	@tfield int average
+	@tfield int clear
+	@tfield int crushing
+
+	@table battleSuccess
+	*/
+	luaState.new_enum(
+		"battleSuccess",
+		"close", 0,
+		"average", 1,
+		"clear", 2,
+		"crushing", 3
+	);
+
+	
+	/***
+	Enum of unit mount class.
+
+	@tfield int horse
+	@tfield int camel
+	@tfield int elephant
+	@tfield int infantry
+
+	@table mountClass
+	*/
+	luaState.new_enum(
+		"mountClass",
+		"horse", 0,
+		"camel", 1,
+		"elephant", 2,
+		"infantry", 3
+	);
+
+	
+	/***
+	Enum of battle types.
+
+	@tfield int ambushSuccess
+	@tfield int ambushFail
+	@tfield int open
+	@tfield int siege
+	@tfield int sally
+	@tfield int naval
+	@tfield int withdrawal
+	@tfield int meetEnemy
+
+	@table battleType
+	*/
+	luaState.new_enum(
+		"battleType",
+		"ambushSuccess", 0,
+		"ambushFail", 1,
+		"open", 2,
+		"siege", 3,
+		"sally", 4,
+		"naval", 5,
+		"withdrawal", 6,
+		"meetEnemy", 7
+	);
+
+	
+	/***
+	Enum of battle states.
+
+	@tfield int notInBattle
+	@tfield int preBattle
+	@tfield int delay
+	@tfield int deployment
+	@tfield int deploymentPlayer2
+	@tfield int conflict
+	@tfield int victoryScroll
+	@tfield int pursuit
+
+	@table battleState
+	*/
+	luaState.new_enum(
+		"battleState",
+		"notInBattle", 0,
+		"preBattle", 1,
+		"delay", 2,
+		"deployment", 3,
+		"deploymentPlayer2", 4,
+		"conflict", 5,
+		"victoryScroll", 6,
+		"pursuit", 7
+	);
+
+	
+	/***
+	Enum of unit classes
+
+	@tfield int heavy
+	@tfield int light
+	@tfield int skirmish
+	@tfield int spearmen
+	@tfield int missile
+
+	@table unitClass
+	*/
+	luaState.new_enum(
+		"unitClass",
+		"heavy",0,
+		"light",1,
+		"skirmish",2,
+		"spearmen",3,
+		"missile",4
+	);
+
+	
+	/***
+	Enum of unit categories
+
+	@tfield int infantry
+	@tfield int cavalry
+	@tfield int siege
+	@tfield int non_combatant
+	@tfield int ship
+	@tfield int handler
+
+	@table unitCategory
+	*/
+	luaState.new_enum(
+		"unitCategory",
+		"infantry", 0,
+		"cavalry", 1,
+		"siege", 2,
+		"non_combatant", 3,
+		"ship", 4,
+		"handler", 5
+	);
+
+	
+	/***
+	Enum of unit categories and class combo
+
+	@tfield int nonCombatant
+	@tfield int lightInfantry
+	@tfield int heavyInfantry
+	@tfield int spearmenInfantry
+	@tfield int missileInfantry
+	@tfield int lightCavalry
+	@tfield int heavyCavalry
+	@tfield int missileCavalry
+	@tfield int siegeWeapon
+	@tfield int animalHandler
+	@tfield int battleShip
+
+	@table unitCategoryClass
+	*/
+	luaState.new_enum(
+		"unitCategoryClass",
+		"nonCombatant", 0,
+		"lightInfantry", 1,
+		"heavyInfantry", 2,
+		"spearmenInfantry", 3,
+		"missileInfantry", 4,
+		"lightCavalry", 5,
+		"heavyCavalry", 6,
+		"missileCavalry", 7,
+		"siegeWeapon", 8,
+		"animalHandler", 9,
+		"battleShip", 10
+	);
+
+	
+	/***
+	Enum of automated settlement policy types
+
+	@tfield int balanced
+	@tfield int financial
+	@tfield int military
+	@tfield int growth
+	@tfield int cultural
+	@tfield int noPolicy
+
+	@table managePolicy
+	*/
+	luaState.new_enum(
+		"managePolicy",
+		"balanced", 0,
+		"financial", 1,
+		"military", 2,
+		"growth", 3,
+		"cultural", 4,
+		"noPolicy", 5
+	);
 }
