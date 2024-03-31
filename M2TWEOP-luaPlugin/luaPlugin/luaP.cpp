@@ -232,7 +232,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getOptions2 getOptions2
 	@tfield getCampaignDifficulty1 getCampaignDifficulty1
 	@tfield getCampaignDifficulty2 getCampaignDifficulty2
-	@tfield getCampaignDifficulty2 getCampaignDifficulty2
 	@tfield setConversionLvlFromCastle setConversionLvlFromCastle
 	@tfield setConversionLvlFromCity setConversionLvlFromCity
 	@table M2TWEOP

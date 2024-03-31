@@ -174,8 +174,6 @@ for name in filenames:
                 newComment = re.findall(r'@tfield \S+ \S+ (.+)', line)[0]
             else:
                 newComment = ""
-            if newType == newName:
-                newType = "function"
             userType.table.tfields.append(typedField(newType, newName, newComment))
             commentCache = ""
             continue
@@ -205,6 +203,7 @@ for name in filenames:
             if classes.get(newFunction.typeName) is not None:
                 for field in classes[newFunction.typeName].table.tfields:
                     if field.name == newFunction.name:
+                        field.type = "function"
                         functionFound = True
                         break
             if functionFound == False:
