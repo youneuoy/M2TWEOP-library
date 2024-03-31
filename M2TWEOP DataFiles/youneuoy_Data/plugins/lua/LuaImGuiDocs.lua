@@ -1906,10 +1906,10 @@ function ImGui.End() end
 ---@param name string window name
 ---@param sizeX number? optional
 ---@param sizeY number? optional
----@param open boolean? optional
----@param flags integer? optional
+---@param childFlags integer? optional
+---@param windowFlags integer? optional
 ---@return boolean collapsed 
-function ImGui.BeginChild(name, sizeX, sizeY, open, flags) end 
+function ImGui.BeginChild(name, sizeX, sizeY, childFlags, windowFlags) end 
 
 --- End Child.
 function ImGui.EndChild() end 

@@ -48,8 +48,8 @@ namespace sol_ImGui
 	inline bool BeginChild(const std::string& name) { return ImGui::BeginChild(name.c_str()); }
 	inline bool BeginChild(const std::string& name, float sizeX) { return ImGui::BeginChild(name.c_str(), { sizeX, 0 }); }
 	inline bool BeginChild(const std::string& name, float sizeX, float sizeY) { return ImGui::BeginChild(name.c_str(), { sizeX, sizeY }); }
-	inline bool BeginChild(const std::string& name, float sizeX, float sizeY, bool border) { return ImGui::BeginChild(name.c_str(), { sizeX, sizeY }, border); }
-	inline bool BeginChild(const std::string& name, float sizeX, float sizeY, bool border, int flags) { return ImGui::BeginChild(name.c_str(), { sizeX, sizeY }, border, static_cast<ImGuiWindowFlags>(flags)); }
+	inline bool BeginChild(const std::string& name, float sizeX, float sizeY, int childFlags) { return ImGui::BeginChild(name.c_str(), { sizeX, sizeY }, childFlags); }
+	inline bool BeginChild(const std::string& name, float sizeX, float sizeY, int childFlags, int windowFlags) { return ImGui::BeginChild(name.c_str(), { sizeX, sizeY }, static_cast<ImGuiChildFlags>(childFlags), static_cast<ImGuiWindowFlags>(windowFlags)); }
 	inline void EndChild() { ImGui::EndChild(); }
 
 	// Windows Utilities
@@ -3330,8 +3330,8 @@ namespace sol_ImGui
 		@tparam string name window name
 		@tparam float sizeX optional
 		@tparam float sizeY optional
-		@tparam bool open optional
-		@tparam int flags optional
+		@tparam int childFlags optional
+		@tparam int windowFlags optional
 		@treturn bool collapsed
 		@usage
 		ImGui.BeginChild("SampleWindow");
@@ -3342,8 +3342,8 @@ namespace sol_ImGui
 			sol::resolve<bool(const std::string&)>(BeginChild),
 			sol::resolve<bool(const std::string&, float)>(BeginChild),
 			sol::resolve<bool(const std::string&, float, float)>(BeginChild),
-			sol::resolve<bool(const std::string&, float, float, bool)>(BeginChild),
-			sol::resolve<bool(const std::string&, float, float, bool, int)>(BeginChild)
+			sol::resolve<bool(const std::string&, float, float, int)>(BeginChild),
+			sol::resolve<bool(const std::string&, float, float, int, int)>(BeginChild)
 		));
 		/***
 		End Child.
