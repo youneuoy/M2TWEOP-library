@@ -11,14 +11,16 @@
 
 <!--### **Library** -->
 
-### **Lua Plugin**
-- Add setCharacterNameFaction to factionStruct, allowing you to change which faction a faction draws it's names from for a specific agent type.
-- Added getTileCharacterCount and getTileCharacterAtIndex, as there are instances where there is no other way to get every character on a tile (for example in postBattle event auxiliary characters that are part of a settlement's garrison army)
+<!--### **Lua Plugin** -->
 
 ### **ImGUI**
-- Fixes FontAtlas extra parameters not being optional
+- Fixed beginChild() parameters
+- Fixed the number keys binding
+- Fixed fontAtlas not returning the font
 
-<!-- ### **Documentation** -->
+### **Documentation**
+- Major fixes to the documentation in many places, some fixes enabled some fields that were broken due to typos (siegeStruct besiegedSettlement for example)
+- Added the enums to the online documentation too.
 
 ### **Links**
 - [Known Bugs](https://github.com/youneuoy/M2TWEOP-library/issues/71)

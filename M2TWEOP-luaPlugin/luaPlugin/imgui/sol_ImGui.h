@@ -1716,9 +1716,9 @@ namespace sol_ImGui
 	inline int GetMouseCursor() { return ImGui::GetMouseCursor(); }
 	inline void SetMouseCursor(int cursor_type) { ImGui::SetMouseCursor(static_cast<ImGuiMouseCursor>(cursor_type)); }
 	inline void SetNextFrameWantCaptureMouse(bool want_capture_mouse_value) { ImGui::SetNextFrameWantCaptureMouse(want_capture_mouse_value); }
-	inline void AddFontFromFileTTF(ImFontAtlas* fontAtlas, const char* filename, float size_pixels)
+	inline ImFont* AddFontFromFileTTF(ImFontAtlas* fontAtlas, const char* filename, float size_pixels)
 	{
-		fontAtlas->AddFontFromFileTTF(filename, size_pixels);
+		return fontAtlas->AddFontFromFileTTF(filename, size_pixels);
 	}
 
 	// Clipboard Utilities
