@@ -21,6 +21,7 @@ public:
 	static eduEntry* __fastcall OnGetRecruitPoolUnitEntry(int eduIndex);
 	static int __fastcall onFindUnit(char* entry, int* edbIndex);
 	static DWORD __fastcall OnUnitInfo(DWORD entryAddress);
+	static float __fastcall OnCalculateUnitValue(eduEntry* entry, DWORD value);
 	static int __fastcall OnReligionCombatBonus(int religionID, namedCharacter* namedChar);
 
 

@@ -74,6 +74,14 @@ void __fastcall patchesForGame::OnLoadSettlementWorldpkgdesc(worldRecord* select
 	string selectRecordG = battlemapWorker.getRecordGroup(selectedRecord);
 	battleCreator::OnLoadSettlementWorldpkgdesc(selectRecordS, selectRecordG);
 }
+
+float __fastcall patchesForGame::OnCalculateUnitValue(eduEntry* entry, const DWORD value)
+{
+	float floatValue;
+	std::memcpy(&floatValue, &value, sizeof(float));
+	return plugins::OnCalculateUnitValue(entry, floatValue);
+}
+
 int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlement, bool* isCastle)
 {
 	int selectedLevel = plugins::onfortificationlevelS(settlement, isCastle);

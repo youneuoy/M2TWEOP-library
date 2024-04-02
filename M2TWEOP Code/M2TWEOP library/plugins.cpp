@@ -117,6 +117,15 @@ int plugins::onfortificationlevelS(settlementStruct* settlement, bool* isCastle)
 	return retVal;
 }
 
+float plugins::OnCalculateUnitValue(eduEntry* entry, float value)
+{
+	for (const plugin* pl : pluginsCfg.plugins)
+	{
+		value = (*(*pl->onCalculateUnitValue))(entry, value);
+	}
+	return value;
+}
+
 void plugins::onClickAtTile(int x, int y)
 {
 	for (plugin* pl : pluginsCfg.plugins)
@@ -394,6 +403,10 @@ int plugin::init(string* nameP)
 	//onfortificationlevelS
 	fName = "onfortificationlevelS";
 	onfortificationlevelS.Load(&plPath, &fName);
+
+	//onCalculateUnitValue
+	fName = "onCalculateUnitValue";
+	onCalculateUnitValue.Load(&plPath, &fName);
 
 	//onGameInit
 	fName = "onGameInit";

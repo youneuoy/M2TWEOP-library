@@ -74,6 +74,7 @@ public:
 
 	ProcLoader<std::string* (__cdecl*)(const char*, const char*)> onSelectWorldpkgdesc;
 	ProcLoader<int(__cdecl*)(settlementStruct*, bool*, bool*)> onfortificationlevelS;
+	ProcLoader<float(__cdecl*)(eduEntry*, float)> onCalculateUnitValue;
 
 	ProcLoader<void(__cdecl*)(int, int)> onClickAtTile;
 
@@ -126,6 +127,7 @@ public:
 
 	static std::string onSelectWorldpkgdesc(const char* selectedRec, const char* selectedGroup);
 	static int onfortificationlevelS(settlementStruct* settlement, bool* isCastle);
+	static float OnCalculateUnitValue(eduEntry* entry, float value);
 	static void onClickAtTile(int x, int y);
 	static void onCampaignMapLoaded();
 

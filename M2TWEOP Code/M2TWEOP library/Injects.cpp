@@ -2686,6 +2686,144 @@ void OnLoadSettlementWorldpkgdesc::SetNewCode()
 	delete a;
 }
 
+OnCalculateUnitValue::OnCalculateUnitValue(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x0045B14B;
+		otherFunc = 0x0045ABE0;
+	}
+
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x0045ADCB;
+		otherFunc = 0x0045A860;
+	}
+}
+
+OnCalculateUnitValue::~OnCalculateUnitValue()
+{
+}
+
+void OnCalculateUnitValue::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->call(0x0045B1B6);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnCalculateUnitValue::SetNewCode()
+{
+	const auto a = new Assembler();
+
+	//store the edu entry in esi as it remains unaltered throughout the original
+	a->mov(esi, ptr(esp));
+	//call original function
+	a->mov(eax, otherFunc);
+	a->call(eax);
+	//original function stored result in st(0)
+	
+	a->pushad();
+	a->pushf();
+	
+	//move edu entry into ecx for fastcall first argument
+	a->mov(ecx, esi);
+	
+	//get value from float stack and put in edx, we will reinterpret cast as float in function
+	a->sub(esp, 0x4);
+	a->fstp(dword_ptr(esp));
+	a->mov(edx, dword_ptr(esp));
+	a->add(esp, 0x4);
+	
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+
+	delete a;
+}
+
+OnCalculateUnitValue2::OnCalculateUnitValue2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x0045B1B6;
+		otherFunc = 0x0045ABE0;
+	}
+
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x0045AE36;
+		otherFunc = 0x0045A860;
+	}
+}
+
+OnCalculateUnitValue2::~OnCalculateUnitValue2()
+{
+}
+
+void OnCalculateUnitValue2::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->call(0x0045B1B6);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void OnCalculateUnitValue2::SetNewCode()
+{
+	const auto a = new Assembler();
+
+	//store the edu entry in esi as it remains unaltered throughout the original
+	a->mov(esi, ptr(esp));
+	//call original function
+	a->mov(eax, otherFunc);
+	a->call(eax);
+	//original function stored result in st(0)
+	
+	a->pushad();
+	a->pushf();
+	
+	//move edu entry into ecx for fastcall first argument
+	a->mov(ecx, esi);
+	
+	//get value from float stack and put in edx, we will reinterpret cast as float in function
+	a->sub(esp, 0x4);
+	a->fstp(dword_ptr(esp));
+	a->mov(edx, dword_ptr(esp));
+	a->add(esp, 0x4);
+	
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+
+	delete a;
+}
+
 LimitRecruitmentQueueToSlotsInj::LimitRecruitmentQueueToSlotsInj(MemWork* mem, int* gameplaySettingAddr, int ver)
 	:AATemplate(mem)
 {

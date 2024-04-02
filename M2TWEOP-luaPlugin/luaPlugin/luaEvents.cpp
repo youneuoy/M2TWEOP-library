@@ -235,6 +235,7 @@ void luaP::onPluginLoadF()
 	@tfield onChangeTurnNum onChangeTurnNum
 	@tfield onSelectWorldpkgdesc onSelectWorldpkgdesc
 	@tfield onfortificationlevelS onfortificationlevelS
+	@tfield onCalculateUnitValue onCalculateUnitValue
 	@tfield onEndSiege onEndSiege
 	@tfield onStartSiege onStartSiege
 	@tfield onPluginLoad onPluginLoad
@@ -3208,6 +3209,25 @@ void luaP::onPluginLoadF()
 	*/
 	onfortificationlevelS = new sol::function(luaState["onfortificationlevelS"]);
 	checkLuaFunc(&onfortificationlevelS);
+	
+	/***
+	Called when the game calculates the value of a unit. 
+
+	@function onCalculateUnitValue
+	@tparam eduEntry entry
+	@tparam float value
+	@treturn float newValue
+
+	@usage
+	function onCalculateUnitValue(entry, value)
+		if entry.eduType = "my_unit" then
+			return value * 2
+		end
+		return value
+	end
+	*/
+	onCalculateUnitValue = new sol::function(luaState["onCalculateUnitValue"]);
+	checkLuaFunc(&onCalculateUnitValue);
 
 	/***
 	Called on the completion of the siege (in any way, with any outcome).

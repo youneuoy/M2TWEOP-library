@@ -791,6 +791,26 @@ int onfortificationlevelS(settlementStruct* settlement, bool* isCastle, bool* is
 
 	return 0;
 }
+float onCalculateUnitValue(eduEntry* entry, float value)
+{
+	if (plugData::data.luaAll.onCalculateUnitValue != nullptr)
+	{
+		const auto funcResult = (*plugData::data.luaAll.onCalculateUnitValue)(entry, value);
+		if (!funcResult.valid())
+		{
+			const sol::error luaError = funcResult;
+			MessageBoxA(nullptr, luaError.what(), "Lua exception in onCalculateUnitValue() call!", NULL);
+		}
+		else
+		{
+			sol::optional<float>res = funcResult;
+			if (res)
+				return res.value();
+		}
+	}
+
+	return value;
+}
 
 void onChangeTurnNum(const int num)
 {
@@ -805,6 +825,7 @@ void onNewGameStart()
 		tryLua((*plugData::data.luaAll.onNewGameStart)());
 	}
 }
+
 
 void onCampaignMapLoaded()
 {

@@ -754,6 +754,36 @@ private:
 	LPVOID funcAddress;
 };
 
+
+
+class OnCalculateUnitValue
+	:public AATemplate
+{
+public:
+	OnCalculateUnitValue(MemWork* mem, LPVOID addr, int ver);
+	~OnCalculateUnitValue();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+	DWORD otherFunc;
+};
+
+class OnCalculateUnitValue2
+	:public AATemplate
+{
+public:
+	OnCalculateUnitValue2(MemWork* mem, LPVOID addr, int ver);
+	~OnCalculateUnitValue2();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+	DWORD otherFunc;
+};
+
 class LimitRecruitmentQueueToSlotsInj
 	:public AATemplate
 {
