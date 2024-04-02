@@ -11,16 +11,12 @@
 
 <!--### **Library** -->
 
-<!--### **Lua Plugin** -->
+### **Lua Plugin**
+- New event onCalculateUnitValue allowing more freedom over game balance as you can modify how the game evaluates a unit's strength, which affects autoresolve, AI recruitment, AI attack decisions on strategy and battle map and more.
 
-### **ImGUI**
-- Fixed beginChild() parameters
-- Fixed the number keys binding
-- Fixed fontAtlas not returning the font
+<!--### **ImGUI**
 
-### **Documentation**
-- Major fixes to the documentation in many places, some fixes enabled some fields that were broken due to typos (siegeStruct besiegedSettlement for example)
-- Added the enums to the online documentation too.
+### **Documentation** -->
 
 ### **Links**
 - [Known Bugs](https://github.com/youneuoy/M2TWEOP-library/issues/71)
