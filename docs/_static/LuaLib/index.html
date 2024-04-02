@@ -740,6 +740,7 @@
     <li><a href="#onChangeTurnNum">onChangeTurnNum (turnNumber)</a></li>
     <li><a href="#onSelectWorldpkgdesc">onSelectWorldpkgdesc (selectedRecordName, selectedRecordGroup)</a></li>
     <li><a href="#onfortificationlevelS">onfortificationlevelS (siegedSettlement)</a></li>
+    <li><a href="#onCalculateUnitValue">onCalculateUnitValue (entry, value)</a></li>
     <li><a href="#onEndSiege">onEndSiege (xCoord, yCoord)</a></li>
     <li><a href="#onStartSiege">onStartSiege (xCoord, yCoord)</a></li>
 </details>
@@ -1148,7 +1149,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2024-04-01 14:12:12</p>
+        <p class="lastUpdatedMessage">Last updated: 2024-04-02 23:16:32</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -3103,6 +3104,10 @@
 	<tr>
 	<td class="name" nowrap><a href="#onfortificationlevelS">onfortificationlevelS (siegedSettlement)</a></td>
 	<td class="summary">Called on specified fortificationlevel in a siege of a settlement.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#onCalculateUnitValue">onCalculateUnitValue (entry, value)</a></td>
+	<td class="summary">Called when the game calculates the value of a unit.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#onEndSiege">onEndSiege (xCoord, yCoord)</a></td>
@@ -9751,7 +9756,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
 
         </li>
         <li><span class="parameter">getFort</span>
-            <span class="types"><a class="type" href="index.html#factionStruct:getFort">getFort</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getFort">getFort</a></span>
 
 
 
@@ -16541,6 +16546,12 @@ ourChar:kill();</code></pre>
         </li>
         <li><span class="parameter">onfortificationlevelS</span>
             <span class="types"><a class="type" href="index.html#onfortificationlevelS">onfortificationlevelS</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">onCalculateUnitValue</span>
+            <span class="types"><a class="type" href="index.html#onCalculateUnitValue">onCalculateUnitValue</a></span>
 
 
 
@@ -24168,6 +24179,51 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 
 </dd>
     <dt>
+    <a name = "onCalculateUnitValue"></a>
+    <strong>onCalculateUnitValue (entry, value)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Called when the game calculates the value of a unit.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">entry</span>
+            <span class="types"><a class="type" href="index.html#eduEntry">eduEntry</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">float</span></span>
+        newValue
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onCalculateUnitValue(entry, value)
+	<span class="keyword">if</span> entry.eduType = <span class="string">"my_unit"</span> <span class="keyword">then</span>
+		<span class="keyword">return</span> value * <span class="number">2</span>
+	<span class="keyword">end</span>
+	<span class="keyword">return</span> value
+<span class="keyword">end</span></code></pre>
+    </ul>
+
+</dd>
+    <dt>
     <a name = "onEndSiege"></a>
     <strong>onEndSiege (xCoord, yCoord)</strong>
     </dt>
@@ -27749,7 +27805,7 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</code></pre>
 
         </li>
         <li><span class="parameter">getFort</span>
-            <span class="types"><a class="type" href="index.html#factionStruct:getFort">getFort</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getFort">getFort</a></span>
 
 
 
@@ -29308,7 +29364,7 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
         </li>
         <li><span class="parameter">getFort</span>
-            <span class="types"><a class="type" href="index.html#factionStruct:getFort">getFort</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getFort">getFort</a></span>
 
 
 
