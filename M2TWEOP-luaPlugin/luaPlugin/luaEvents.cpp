@@ -3211,8 +3211,8 @@ void luaP::onPluginLoadF()
 	checkLuaFunc(&onfortificationlevelS);
 	
 	/***
-	Called when the game calculates the value of a unit. 
-
+	Called when the game calculates the value of a unit. For example, in battle, when it says 'Victory seems certain' when units are engaging each other it uses this, it uses this to decide which units to recruit, to evaluate army strength for attack decisions, for auto resolve balance and results, it is just the value that decides how strong it thinks a unit is. The long term goal director also uses this for the values you have in campaign_ai_db like military balance and free strength balance.
+  
 	@function onCalculateUnitValue
 	@tparam eduEntry entry
 	@tparam float value
