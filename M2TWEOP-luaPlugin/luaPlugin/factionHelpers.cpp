@@ -34,6 +34,11 @@ fortStruct* factionHelpers::getFort(const factionStruct* fac, int index)
 	return fac->forts[index];
 }
 
+void factionHelpers::setCharacterNameFaction(factionStruct* fac, int characterType, int factionID)
+{
+	fac->agentNameFactionId[characterType] = factionID;
+}
+
 portBuildingStruct* factionHelpers::getPort(const factionStruct* fac, int index)
 {
 	return fac->portBuildings[index];

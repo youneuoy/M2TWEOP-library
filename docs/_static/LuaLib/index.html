@@ -99,7 +99,7 @@
 <details>
   <summary><a href="#UIElement">UIElement </a></summary>
     <li><a href="#uiElementStruct">uiElementStruct</a></li>
-    <li><a href="#gameSTDUI.getSubElement">gameSTDUI.getSubElement (index)</a></li>
+    <li><a href="#uiElementStruct.getSubElement">uiElementStruct.getSubElement (index)</a></li>
     <li><a href="#uiElementStruct:execute">uiElementStruct:execute ()</a></li>
 </details>
 
@@ -107,38 +107,38 @@
 <details>
   <summary><a href="#StratmapObjects">StratmapObjects </a></summary>
     <li><a href="#stratmap.objects">stratmap.objects</a></li>
-    <li><a href="#objects.startDrawModelAt">objects.startDrawModelAt (modelId, x, y, sizeMultiplier)</a></li>
-    <li><a href="#objects.stopDrawModel">objects.stopDrawModel (modelId)</a></li>
-    <li><a href="#objects.addModelToGame">objects.addModelToGame (path, modelId)</a></li>
-    <li><a href="#objects.addCharacterCas">objects.addCharacterCas (skeleton, caspath, shadowcaspath, typename, texturepath, scale)</a></li>
-    <li><a href="#objects.setModel">objects.setModel (xCoord, yCoord, modelId, modelId2)</a></li>
-    <li><a href="#objects.replaceTile">objects.replaceTile (label, xCoord, yCoord, filename, weather, dayTime)</a></li>
+    <li><a href="#stratmap.objects.startDrawModelAt">stratmap.objects.startDrawModelAt (modelId, x, y, sizeMultiplier)</a></li>
+    <li><a href="#stratmap.objects.stopDrawModel">stratmap.objects.stopDrawModel (modelId)</a></li>
+    <li><a href="#stratmap.objects.addModelToGame">stratmap.objects.addModelToGame (path, modelId)</a></li>
+    <li><a href="#stratmap.objects.addCharacterCas">stratmap.objects.addCharacterCas (skeleton, caspath, shadowcaspath, typename, texturepath, scale)</a></li>
+    <li><a href="#stratmap.objects.setModel">stratmap.objects.setModel (xCoord, yCoord, modelId, modelId2)</a></li>
+    <li><a href="#stratmap.objects.replaceTile">stratmap.objects.replaceTile (label, xCoord, yCoord, filename, weather, dayTime)</a></li>
 </details>
 
 
 <details>
   <summary><a href="#Camera">Camera </a></summary>
     <li><a href="#stratmap.camera">stratmap.camera</a></li>
-    <li><a href="#camera.move">camera.move (xCoord, yCoord)</a></li>
-    <li><a href="#camera.jump">camera.jump (xCoord, yCoord)</a></li>
-    <li><a href="#camera.zoom">camera.zoom (distance)</a></li>
+    <li><a href="#stratmap.camera.move">stratmap.camera.move (xCoord, yCoord)</a></li>
+    <li><a href="#stratmap.camera.jump">stratmap.camera.jump (xCoord, yCoord)</a></li>
+    <li><a href="#stratmap.camera.zoom">stratmap.camera.zoom (distance)</a></li>
 </details>
 
 
 <details>
   <summary><a href="#Game">Game </a></summary>
     <li><a href="#stratmap.game">stratmap.game</a></li>
-    <li><a href="#game.callConsole">game.callConsole (command, args)</a></li>
-    <li><a href="#game.getFactionsCount">game.getFactionsCount ()</a></li>
-    <li><a href="#game.getFaction">game.getFaction (Index)</a></li>
-    <li><a href="#game.getGuild">game.getGuild (index)</a></li>
-    <li><a href="#game.createCharacterByString">game.createCharacterByString (type, Faction, age, name, name2, subFaction, portrait_custom, xCoord, yCoord)</a></li>
-    <li><a href="#game.createArmy">game.createArmy (ourGeneral)</a></li>
-    <li><a href="#game.createArmyInSettlement">game.createArmyInSettlement (settlement)</a></li>
-    <li><a href="#game.getScriptCounter">game.getScriptCounter (counterName)</a></li>
-    <li><a href="#game.setScriptCounter">game.setScriptCounter (counterName, value)</a></li>
-    <li><a href="#game.historicEvent">game.historicEvent (eventName, title, body)</a></li>
-    <li><a href="#game.scriptCommand">game.scriptCommand (command, args)</a></li>
+    <li><a href="#stratmap.game.callConsole">stratmap.game.callConsole (command, args)</a></li>
+    <li><a href="#stratmap.game.getFactionsCount">stratmap.game.getFactionsCount ()</a></li>
+    <li><a href="#stratmap.game.getFaction">stratmap.game.getFaction (Index)</a></li>
+    <li><a href="#stratmap.game.getGuild">stratmap.game.getGuild (index)</a></li>
+    <li><a href="#stratmap.game.createCharacterByString">stratmap.game.createCharacterByString (type, Faction, age, name, name2, subFaction, portrait_custom, xCoord, yCoord)</a></li>
+    <li><a href="#stratmap.game.createArmy">stratmap.game.createArmy (ourGeneral)</a></li>
+    <li><a href="#stratmap.game.createArmyInSettlement">stratmap.game.createArmyInSettlement (settlement)</a></li>
+    <li><a href="#stratmap.game.getScriptCounter">stratmap.game.getScriptCounter (counterName)</a></li>
+    <li><a href="#stratmap.game.setScriptCounter">stratmap.game.setScriptCounter (counterName, value)</a></li>
+    <li><a href="#stratmap.game.historicEvent">stratmap.game.historicEvent (eventName, title, body)</a></li>
+    <li><a href="#stratmap.game.scriptCommand">stratmap.game.scriptCommand (command, args)</a></li>
 </details>
 
 
@@ -295,6 +295,7 @@
     <li><a href="#factionStruct:getBattleVsFactionStats">factionStruct:getBattleVsFactionStats (targetFactionID)</a></li>
     <li><a href="#factionStruct:getAiFactionValues">factionStruct:getAiFactionValues ()</a></li>
     <li><a href="#factionStruct:getInterFactionLTGD">factionStruct:getInterFactionLTGD (targetFaction)</a></li>
+    <li><a href="#factionStruct:setCharacterNameFaction">factionStruct:setCharacterNameFaction (characterTypeIndex, factionID)</a></li>
 </details>
 
 
@@ -470,8 +471,8 @@
 <details>
   <summary><a href="#BuildingInQueue">BuildingInQueue </a></summary>
     <li><a href="#buildingInQueue">buildingInQueue</a></li>
-    <li><a href="#building:getQueueBuildingType">building:getQueueBuildingType ()</a></li>
-    <li><a href="#building:getQueueBuildingName">building:getQueueBuildingName ()</a></li>
+    <li><a href="#buildingInQueue:getQueueBuildingType">buildingInQueue:getQueueBuildingType ()</a></li>
+    <li><a href="#buildingInQueue:getQueueBuildingName">buildingInQueue:getQueueBuildingName ()</a></li>
 </details>
 
 
@@ -739,6 +740,7 @@
     <li><a href="#onChangeTurnNum">onChangeTurnNum (turnNumber)</a></li>
     <li><a href="#onSelectWorldpkgdesc">onSelectWorldpkgdesc (selectedRecordName, selectedRecordGroup)</a></li>
     <li><a href="#onfortificationlevelS">onfortificationlevelS (siegedSettlement)</a></li>
+    <li><a href="#onCalculateUnitValue">onCalculateUnitValue (entry, value)</a></li>
     <li><a href="#onEndSiege">onEndSiege (xCoord, yCoord)</a></li>
     <li><a href="#onStartSiege">onStartSiege (xCoord, yCoord)</a></li>
 </details>
@@ -817,31 +819,15 @@
 
 
 <details>
-  <summary><a href="#CampaignEnums">CampaignEnums </a></summary>
-    <li><a href="#dipRelType">dipRelType</a></li>
-</details>
-
-
-<details>
-  <summary><a href="#options1">options1 </a></summary>
+  <summary><a href="#Game_Options">Game Options </a></summary>
     <li><a href="#options1">options1</a></li>
-</details>
-
-
-<details>
-  <summary><a href="#options2">options2 </a></summary>
     <li><a href="#options2">options2</a></li>
 </details>
 
 
 <details>
-  <summary><a href="#campaignDifficulty1">campaignDifficulty1 </a></summary>
+  <summary><a href="#Campaign_Difficulty_Modifiers">Campaign Difficulty Modifiers </a></summary>
     <li><a href="#campaignDifficulty1">campaignDifficulty1</a></li>
-</details>
-
-
-<details>
-  <summary><a href="#campaignDifficulty2">campaignDifficulty2 </a></summary>
     <li><a href="#campaignDifficulty2">campaignDifficulty2</a></li>
 </details>
 
@@ -929,29 +915,31 @@
     <li><a href="#tileStruct">tileStruct</a></li>
     <li><a href="#tileStruct:factionHasArmyNearTile">tileStruct:factionHasArmyNearTile (factionID)</a></li>
     <li><a href="#tileStruct:factionHasCharacterOnTile">tileStruct:factionHasCharacterOnTile (factionID)</a></li>
+    <li><a href="#tileStruct:getTileCharacterCount">tileStruct:getTileCharacterCount ()</a></li>
+    <li><a href="#tileStruct:getTileCharacterAtIndex">tileStruct:getTileCharacterAtIndex (index)</a></li>
 </details>
 
 
 <details>
   <summary><a href="#RegionStruct">RegionStruct </a></summary>
     <li><a href="#regionStruct">regionStruct</a></li>
-    <li><a href="#region:getStack">region:getStack (index)</a></li>
-    <li><a href="#region:getFort">region:getFort (index)</a></li>
-    <li><a href="#region:getWatchtower">region:getWatchtower (index)</a></li>
-    <li><a href="#region:getResource">region:getResource (index)</a></li>
-    <li><a href="#region:getNeighbour">region:getNeighbour (index)</a></li>
-    <li><a href="#region:getHiddenResource">region:getHiddenResource (index)</a></li>
-    <li><a href="#region:setHiddenResource">region:setHiddenResource (index, enable)</a></li>
-    <li><a href="#region:getSeaConnectedRegion">region:getSeaConnectedRegion (index)</a></li>
-    <li><a href="#region:getSeaImportRegion">region:getSeaImportRegion (index)</a></li>
-    <li><a href="#region:getRegionSeaEdge">region:getRegionSeaEdge (index)</a></li>
-    <li><a href="#region:getDevastatedTile">region:getDevastatedTile (index)</a></li>
-    <li><a href="#region:getTileBorderingEdgeOfMap">region:getTileBorderingEdgeOfMap (index)</a></li>
-    <li><a href="#region:getTile">region:getTile (index)</a></li>
-    <li><a href="#region:getFertileTile">region:getFertileTile (index)</a></li>
-    <li><a href="#region:getReligionHistory">region:getReligionHistory (religionID, turnsAgo)</a></li>
-    <li><a href="#region:hasResourceType">region:hasResourceType (resourceID)</a></li>
-    <li><a href="#region:getHostileArmiesStrength">region:getHostileArmiesStrength (factionID)</a></li>
+    <li><a href="#regionStruct:getStack">regionStruct:getStack (index)</a></li>
+    <li><a href="#regionStruct:getFort">regionStruct:getFort (index)</a></li>
+    <li><a href="#regionStruct:getWatchtower">regionStruct:getWatchtower (index)</a></li>
+    <li><a href="#regionStruct:getResource">regionStruct:getResource (index)</a></li>
+    <li><a href="#regionStruct:getNeighbour">regionStruct:getNeighbour (index)</a></li>
+    <li><a href="#regionStruct:getHiddenResource">regionStruct:getHiddenResource (index)</a></li>
+    <li><a href="#regionStruct:setHiddenResource">regionStruct:setHiddenResource (index, enable)</a></li>
+    <li><a href="#regionStruct:getSeaConnectedRegion">regionStruct:getSeaConnectedRegion (index)</a></li>
+    <li><a href="#regionStruct:getSeaImportRegion">regionStruct:getSeaImportRegion (index)</a></li>
+    <li><a href="#regionStruct:getRegionSeaEdge">regionStruct:getRegionSeaEdge (index)</a></li>
+    <li><a href="#regionStruct:getDevastatedTile">regionStruct:getDevastatedTile (index)</a></li>
+    <li><a href="#regionStruct:getTileBorderingEdgeOfMap">regionStruct:getTileBorderingEdgeOfMap (index)</a></li>
+    <li><a href="#regionStruct:getTile">regionStruct:getTile (index)</a></li>
+    <li><a href="#regionStruct:getFertileTile">regionStruct:getFertileTile (index)</a></li>
+    <li><a href="#regionStruct:getReligionHistory">regionStruct:getReligionHistory (religionID, turnsAgo)</a></li>
+    <li><a href="#regionStruct:hasResourceType">regionStruct:hasResourceType (resourceID)</a></li>
+    <li><a href="#regionStruct:getHostileArmiesStrength">regionStruct:getHostileArmiesStrength (factionID)</a></li>
 </details>
 
 
@@ -1005,8 +993,8 @@
   <summary><a href="#BattleSide">BattleSide </a></summary>
     <li><a href="#battleSide">battleSide</a></li>
     <li><a href="#battleSide.getWinConditionString">battleSide.getWinConditionString (condition)</a></li>
-    <li><a href="#battleSideTable:getBattleArmy">battleSideTable:getBattleArmy (index)</a></li>
-    <li><a href="#battleSideTable:getFaction">battleSideTable:getFaction (index)</a></li>
+    <li><a href="#battleSide:getBattleArmy">battleSide:getBattleArmy (index)</a></li>
+    <li><a href="#battleSide:getFaction">battleSide:getFaction (index)</a></li>
 </details>
 
 
@@ -1067,6 +1055,29 @@
   <summary><a href="#battleBuildings">battleBuildings </a></summary>
     <li><a href="#battleBuildings">battleBuildings</a></li>
     <li><a href="#battleBuildings:getBuilding">battleBuildings:getBuilding (index)</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#EOP_Enums">EOP Enums </a></summary>
+    <li><a href="#dipRelType">dipRelType</a></li>
+    <li><a href="#unitBattleProperties">unitBattleProperties</a></li>
+    <li><a href="#buildingCapability">buildingCapability</a></li>
+    <li><a href="#characterType">characterType</a></li>
+    <li><a href="#sortType">sortType</a></li>
+    <li><a href="#aiPlan">aiPlan</a></li>
+    <li><a href="#aiObjective">aiObjective</a></li>
+    <li><a href="#resourceType">resourceType</a></li>
+    <li><a href="#moraleStatus">moraleStatus</a></li>
+    <li><a href="#combatStatus">combatStatus</a></li>
+    <li><a href="#battleSuccess">battleSuccess</a></li>
+    <li><a href="#mountClass">mountClass</a></li>
+    <li><a href="#battleType">battleType</a></li>
+    <li><a href="#battleState">battleState</a></li>
+    <li><a href="#unitClass">unitClass</a></li>
+    <li><a href="#unitCategory">unitCategory</a></li>
+    <li><a href="#unitCategoryClass">unitCategoryClass</a></li>
+    <li><a href="#managePolicy">managePolicy</a></li>
 </details>
 
 
@@ -1138,7 +1149,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2024-03-22 13:51:45</p>
+        <p class="lastUpdatedMessage">Last updated: 2024-04-04 11:52:26</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -1345,7 +1356,7 @@
 	<td class="summary">Basic uiElementStruct table</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#gameSTDUI.getSubElement">gameSTDUI.getSubElement (index)</a></td>
+	<td class="name" nowrap><a href="#uiElementStruct.getSubElement">uiElementStruct.getSubElement (index)</a></td>
 	<td class="summary">Get a subelement of an UI element using the index.</td>
 	</tr>
 	<tr>
@@ -1360,27 +1371,27 @@
 	<td class="summary">Basic stratmap.objects table</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#objects.startDrawModelAt">objects.startDrawModelAt (modelId, x, y, sizeMultiplier)</a></td>
+	<td class="name" nowrap><a href="#stratmap.objects.startDrawModelAt">stratmap.objects.startDrawModelAt (modelId, x, y, sizeMultiplier)</a></td>
 	<td class="summary">Start drawing .cas campaign strategy model with a unique ID in some coords.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#objects.stopDrawModel">objects.stopDrawModel (modelId)</a></td>
+	<td class="name" nowrap><a href="#stratmap.objects.stopDrawModel">stratmap.objects.stopDrawModel (modelId)</a></td>
 	<td class="summary">Stop drawing .cas campaign strategy model with a unique ID.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#objects.addModelToGame">objects.addModelToGame (path, modelId)</a></td>
+	<td class="name" nowrap><a href="#stratmap.objects.addModelToGame">stratmap.objects.addModelToGame (path, modelId)</a></td>
 	<td class="summary">Add a new .cas campaign strategy model to the game with a unique ID.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#objects.addCharacterCas">objects.addCharacterCas (skeleton, caspath, shadowcaspath, typename, texturepath, scale)</a></td>
+	<td class="name" nowrap><a href="#stratmap.objects.addCharacterCas">stratmap.objects.addCharacterCas (skeleton, caspath, shadowcaspath, typename, texturepath, scale)</a></td>
 	<td class="summary">Add a new .cas character strategy model to the game with a unique name.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#objects.setModel">objects.setModel (xCoord, yCoord, modelId, modelId2)</a></td>
+	<td class="name" nowrap><a href="#stratmap.objects.setModel">stratmap.objects.setModel (xCoord, yCoord, modelId, modelId2)</a></td>
 	<td class="summary">Set the strategy model for object at specified coordinates, works only for supported object types</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#objects.replaceTile">objects.replaceTile (label, xCoord, yCoord, filename, weather, dayTime)</a></td>
+	<td class="name" nowrap><a href="#stratmap.objects.replaceTile">stratmap.objects.replaceTile (label, xCoord, yCoord, filename, weather, dayTime)</a></td>
 	<td class="summary">Replace a custom tile.</td>
 	</tr>
 </table>
@@ -1391,15 +1402,15 @@
 	<td class="summary">Basic stratmap.camera table</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#camera.move">camera.move (xCoord, yCoord)</a></td>
+	<td class="name" nowrap><a href="#stratmap.camera.move">stratmap.camera.move (xCoord, yCoord)</a></td>
 	<td class="summary">Slowly move the camera to the specified tile.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#camera.jump">camera.jump (xCoord, yCoord)</a></td>
+	<td class="name" nowrap><a href="#stratmap.camera.jump">stratmap.camera.jump (xCoord, yCoord)</a></td>
 	<td class="summary">Quickly move the camera to the specified tile.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#camera.zoom">camera.zoom (distance)</a></td>
+	<td class="name" nowrap><a href="#stratmap.camera.zoom">stratmap.camera.zoom (distance)</a></td>
 	<td class="summary">Set the zoom level of the camera.</td>
 	</tr>
 </table>
@@ -1410,47 +1421,47 @@
 	<td class="summary">Basic stratmap.game table</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#game.callConsole">game.callConsole (command, args)</a></td>
+	<td class="name" nowrap><a href="#stratmap.game.callConsole">stratmap.game.callConsole (command, args)</a></td>
 	<td class="summary">Execute a Medieval II console command.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#game.getFactionsCount">game.getFactionsCount ()</a></td>
+	<td class="name" nowrap><a href="#stratmap.game.getFactionsCount">stratmap.game.getFactionsCount ()</a></td>
 	<td class="summary">Get the amount of factions.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#game.getFaction">game.getFaction (Index)</a></td>
+	<td class="name" nowrap><a href="#stratmap.game.getFaction">stratmap.game.getFaction (Index)</a></td>
 	<td class="summary">Get a faction by the index, commonly used when iterating over all factions using getFactionsCount()</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#game.getGuild">game.getGuild (index)</a></td>
+	<td class="name" nowrap><a href="#stratmap.game.getGuild">stratmap.game.getGuild (index)</a></td>
 	<td class="summary">Get a guild by the index.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#game.createCharacterByString">game.createCharacterByString (type, Faction, age, name, name2, subFaction, portrait_custom, xCoord, yCoord)</a></td>
+	<td class="name" nowrap><a href="#stratmap.game.createCharacterByString">stratmap.game.createCharacterByString (type, Faction, age, name, name2, subFaction, portrait_custom, xCoord, yCoord)</a></td>
 	<td class="summary">Create a new character at the specified coordinates.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#game.createArmy">game.createArmy (ourGeneral)</a></td>
+	<td class="name" nowrap><a href="#stratmap.game.createArmy">stratmap.game.createArmy (ourGeneral)</a></td>
 	<td class="summary">Create an army for a character.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#game.createArmyInSettlement">game.createArmyInSettlement (settlement)</a></td>
+	<td class="name" nowrap><a href="#stratmap.game.createArmyInSettlement">stratmap.game.createArmyInSettlement (settlement)</a></td>
 	<td class="summary">Create an army in a settlement (don't need a character).</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#game.getScriptCounter">game.getScriptCounter (counterName)</a></td>
+	<td class="name" nowrap><a href="#stratmap.game.getScriptCounter">stratmap.game.getScriptCounter (counterName)</a></td>
 	<td class="summary">Get a script counter value, works for counters and for event_counters</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#game.setScriptCounter">game.setScriptCounter (counterName, value)</a></td>
+	<td class="name" nowrap><a href="#stratmap.game.setScriptCounter">stratmap.game.setScriptCounter (counterName, value)</a></td>
 	<td class="summary">Set an event_counter value, does not work for counters, only event_counters.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#game.historicEvent">game.historicEvent (eventName, title, body)</a></td>
+	<td class="name" nowrap><a href="#stratmap.game.historicEvent">stratmap.game.historicEvent (eventName, title, body)</a></td>
 	<td class="summary">Fire a game event message.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#game.scriptCommand">game.scriptCommand (command, args)</a></td>
+	<td class="name" nowrap><a href="#stratmap.game.scriptCommand">stratmap.game.scriptCommand (command, args)</a></td>
 	<td class="summary">Fire any script command available from the game.</td>
 	</tr>
 </table>
@@ -1807,6 +1818,10 @@
 	<td class="name" nowrap><a href="#factionStruct:getInterFactionLTGD">factionStruct:getInterFactionLTGD (targetFaction)</a></td>
 	<td class="summary">Get various statistics the long term goal director uses versus a target faction.</td>
 	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#factionStruct:setCharacterNameFaction">factionStruct:setCharacterNameFaction (characterTypeIndex, factionID)</a></td>
+	<td class="summary">Set the faction characters of a specific type draw their names from.</td>
+	</tr>
 </table>
 <h2><a href="#aiFaction">aiFaction </a></h2>
 <table class="function_list">
@@ -2100,11 +2115,11 @@
 	<td class="summary">Basic buildingInQueue table</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#building:getQueueBuildingType">building:getQueueBuildingType ()</a></td>
+	<td class="name" nowrap><a href="#buildingInQueue:getQueueBuildingType">buildingInQueue:getQueueBuildingType ()</a></td>
 	<td class="summary">Get name of building in queue type (chain)</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#building:getQueueBuildingName">building:getQueueBuildingName ()</a></td>
+	<td class="name" nowrap><a href="#buildingInQueue:getQueueBuildingName">buildingInQueue:getQueueBuildingName ()</a></td>
 	<td class="summary">Get name of building in queue level</td>
 	</tr>
 </table>
@@ -3091,6 +3106,10 @@
 	<td class="summary">Called on specified fortificationlevel in a siege of a settlement.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#onCalculateUnitValue">onCalculateUnitValue (entry, value)</a></td>
+	<td class="summary">Called when the game calculates the value of a unit.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#onEndSiege">onEndSiege (xCoord, yCoord)</a></td>
 	<td class="summary">Called on the completion of the siege (in any way, with any outcome).</td>
 	</tr>
@@ -3306,36 +3325,23 @@
 	<td class="summary">Get a building edb entry by name.</td>
 	</tr>
 </table>
-<h2><a href="#CampaignEnums">CampaignEnums </a></h2>
-<table class="function_list">
-	<tr>
-	<td class="name" nowrap><a href="#dipRelType">dipRelType</a></td>
-	<td class="summary">Enum with a list of types of diplomatic relations.</td>
-	</tr>
-</table>
-<h2><a href="#options1">options1 </a></h2>
+<h2><a href="#Game_Options">Game Options </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#options1">options1</a></td>
 	<td class="summary">Basic options1 table</td>
 	</tr>
-</table>
-<h2><a href="#options2">options2 </a></h2>
-<table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#options2">options2</a></td>
 	<td class="summary">Basic options2 table</td>
 	</tr>
 </table>
-<h2><a href="#campaignDifficulty1">campaignDifficulty1 </a></h2>
+<h2><a href="#Campaign_Difficulty_Modifiers">Campaign Difficulty Modifiers </a></h2>
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#campaignDifficulty1">campaignDifficulty1</a></td>
 	<td class="summary">Basic campaignDifficulty1 table.</td>
 	</tr>
-</table>
-<h2><a href="#campaignDifficulty2">campaignDifficulty2 </a></h2>
-<table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#campaignDifficulty2">campaignDifficulty2</a></td>
 	<td class="summary">Basic campaignDifficulty2 table.</td>
@@ -3345,7 +3351,7 @@
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#eventTrigger">eventTrigger</a></td>
-	<td class="summary">Basic eventTrigger table</td>
+	<td class="summary">This is data that comes with game events.</td>
 	</tr>
 </table>
 <h2><a href="#uiCardManager">uiCardManager </a></h2>
@@ -3497,6 +3503,14 @@
 	<td class="name" nowrap><a href="#tileStruct:factionHasCharacterOnTile">tileStruct:factionHasCharacterOnTile (factionID)</a></td>
 	<td class="summary">Check if a faction has a character on a tile.</td>
 	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#tileStruct:getTileCharacterCount">tileStruct:getTileCharacterCount ()</a></td>
+	<td class="summary">Get amount of characters on a tile.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#tileStruct:getTileCharacterAtIndex">tileStruct:getTileCharacterAtIndex (index)</a></td>
+	<td class="summary">Get a character on a tile.</td>
+	</tr>
 </table>
 <h2><a href="#RegionStruct">RegionStruct </a></h2>
 <table class="function_list">
@@ -3505,71 +3519,71 @@
 	<td class="summary">Basic regionStruct table.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:getStack">region:getStack (index)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:getStack">regionStruct:getStack (index)</a></td>
 	<td class="summary">Get an army by it's index.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:getFort">region:getFort (index)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:getFort">regionStruct:getFort (index)</a></td>
 	<td class="summary">Get a fort by it's index.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:getWatchtower">region:getWatchtower (index)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:getWatchtower">regionStruct:getWatchtower (index)</a></td>
 	<td class="summary">Get a watchtower by it's index.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:getResource">region:getResource (index)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:getResource">regionStruct:getResource (index)</a></td>
 	<td class="summary">Get a resource by it's index.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:getNeighbour">region:getNeighbour (index)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:getNeighbour">regionStruct:getNeighbour (index)</a></td>
 	<td class="summary">Get a neighbour region by it's index.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:getHiddenResource">region:getHiddenResource (index)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:getHiddenResource">regionStruct:getHiddenResource (index)</a></td>
 	<td class="summary">Check if a region has a hidden resource.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:setHiddenResource">region:setHiddenResource (index, enable)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:setHiddenResource">regionStruct:setHiddenResource (index, enable)</a></td>
 	<td class="summary">Set a region's hidden resource (reset on game restart).</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:getSeaConnectedRegion">region:getSeaConnectedRegion (index)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:getSeaConnectedRegion">regionStruct:getSeaConnectedRegion (index)</a></td>
 	<td class="summary">Get a region that is reachable from this region.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:getSeaImportRegion">region:getSeaImportRegion (index)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:getSeaImportRegion">regionStruct:getSeaImportRegion (index)</a></td>
 	<td class="summary">Get a region this region is importing trade goods from.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:getRegionSeaEdge">region:getRegionSeaEdge (index)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:getRegionSeaEdge">regionStruct:getRegionSeaEdge (index)</a></td>
 	<td class="summary">Get a region sea edge (point where it borders both sea and another land region).</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:getDevastatedTile">region:getDevastatedTile (index)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:getDevastatedTile">regionStruct:getDevastatedTile (index)</a></td>
 	<td class="summary">Get a devastated tile.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:getTileBorderingEdgeOfMap">region:getTileBorderingEdgeOfMap (index)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:getTileBorderingEdgeOfMap">regionStruct:getTileBorderingEdgeOfMap (index)</a></td>
 	<td class="summary">Get a tile that borders the edge of the map.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:getTile">region:getTile (index)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:getTile">regionStruct:getTile (index)</a></td>
 	<td class="summary">Get a tile by index.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:getFertileTile">region:getFertileTile (index)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:getFertileTile">regionStruct:getFertileTile (index)</a></td>
 	<td class="summary">Get a fertile tile by index.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:getReligionHistory">region:getReligionHistory (religionID, turnsAgo)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:getReligionHistory">regionStruct:getReligionHistory (religionID, turnsAgo)</a></td>
 	<td class="summary">Get religion amount from a set number of turns ago.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:hasResourceType">region:hasResourceType (resourceID)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:hasResourceType">regionStruct:hasResourceType (resourceID)</a></td>
 	<td class="summary">Check if region has a resource type.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#region:getHostileArmiesStrength">region:getHostileArmiesStrength (factionID)</a></td>
+	<td class="name" nowrap><a href="#regionStruct:getHostileArmiesStrength">regionStruct:getHostileArmiesStrength (factionID)</a></td>
 	<td class="summary">Get the strength total of all armies in this region that are hostile to a specific faction.</td>
 	</tr>
 </table>
@@ -3666,11 +3680,11 @@
 	<td class="summary">Get win condition string, for example: destroy_or_rout_enemy</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#battleSideTable:getBattleArmy">battleSideTable:getBattleArmy (index)</a></td>
+	<td class="name" nowrap><a href="#battleSide:getBattleArmy">battleSide:getBattleArmy (index)</a></td>
 	<td class="summary">Get a battle army by it's index.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#battleSideTable:getFaction">battleSideTable:getFaction (index)</a></td>
+	<td class="name" nowrap><a href="#battleSide:getFaction">battleSide:getFaction (index)</a></td>
 	<td class="summary">Get a faction in this side by it's index.</td>
 	</tr>
 </table>
@@ -3759,6 +3773,81 @@
 	<tr>
 	<td class="name" nowrap><a href="#battleBuildings:getBuilding">battleBuildings:getBuilding (index)</a></td>
 	<td class="summary">Get a battle building by it's index.</td>
+	</tr>
+</table>
+<h2><a href="#EOP_Enums">EOP Enums </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#dipRelType">dipRelType</a></td>
+	<td class="summary">Enum with a list of types of diplomatic relations.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#unitBattleProperties">unitBattleProperties</a></td>
+	<td class="summary">Enum with a list of types of unit battle properties.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#buildingCapability">buildingCapability</a></td>
+	<td class="summary">Enum with a list of types of building capabilities.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#characterType">characterType</a></td>
+	<td class="summary">Enum with a list of character types.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#sortType">sortType</a></td>
+	<td class="summary">Enum with a list of army sort types.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#aiPlan">aiPlan</a></td>
+	<td class="summary">Enum with a list of GTA AI plans.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#aiObjective">aiObjective</a></td>
+	<td class="summary">Enum with a list of GTA AI objectives.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#resourceType">resourceType</a></td>
+	<td class="summary">Enum with a list of resources.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#moraleStatus">moraleStatus</a></td>
+	<td class="summary">Enum of unit morale status.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#combatStatus">combatStatus</a></td>
+	<td class="summary">Enum of unit combat status.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#battleSuccess">battleSuccess</a></td>
+	<td class="summary">Enum of unit combat status.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mountClass">mountClass</a></td>
+	<td class="summary">Enum of unit mount class.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#battleType">battleType</a></td>
+	<td class="summary">Enum of battle types.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#battleState">battleState</a></td>
+	<td class="summary">Enum of battle states.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#unitClass">unitClass</a></td>
+	<td class="summary">Enum of unit classes</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#unitCategory">unitCategory</a></td>
+	<td class="summary">Enum of unit categories</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#unitCategoryClass">unitCategoryClass</a></td>
+	<td class="summary">Enum of unit categories and class combo</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#managePolicy">managePolicy</a></td>
+	<td class="summary">Enum of automated settlement policy types</td>
 	</tr>
 </table>
 <h2><a href="#M2TWEOPFBX">M2TWEOPFBX </a></h2>
@@ -4146,6 +4235,18 @@
         </li>
         <li><span class="parameter">getCampaignDifficulty2</span>
             <span class="types"><a class="type" href="index.html#M2TWEOP.getCampaignDifficulty2">getCampaignDifficulty2</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setConversionLvlFromCastle</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.setConversionLvlFromCastle">setConversionLvlFromCastle</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setConversionLvlFromCity</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.setConversionLvlFromCity">setConversionLvlFromCity</a></span>
 
 
 
@@ -5362,7 +5463,7 @@ M2TWEOP.unloadTexture(testImage.img);</code></pre>
 
         </li>
         <li><span class="parameter">getSubElement</span>
-            <span class="types"><a class="type" href="index.html#gameSTDUI.getSubElement">getSubElement</a></span>
+            <span class="types"><a class="type" href="index.html#uiElementStruct.getSubElement">getSubElement</a></span>
 
 
 
@@ -5381,8 +5482,8 @@ M2TWEOP.unloadTexture(testImage.img);</code></pre>
 
 </dd>
     <dt>
-    <a name = "gameSTDUI.getSubElement"></a>
-    <strong>gameSTDUI.getSubElement (index)</strong>
+    <a name = "uiElementStruct.getSubElement"></a>
+    <strong>uiElementStruct.getSubElement (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -5451,37 +5552,37 @@ subElement1:execute();</code></pre>
     <h3>Fields:</h3>
     <ul>
         <li><span class="parameter">addModelToGame</span>
-            <span class="types"><a class="type" href="index.html#objects.addModelToGame">addModelToGame</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.objects.addModelToGame">addModelToGame</a></span>
 
 
 
         </li>
         <li><span class="parameter">addCharacterCas</span>
-            <span class="types"><a class="type" href="index.html#objects.addCharacterCas">addCharacterCas</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.objects.addCharacterCas">addCharacterCas</a></span>
 
 
 
         </li>
         <li><span class="parameter">setModel</span>
-            <span class="types"><a class="type" href="index.html#objects.setModel">setModel</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.objects.setModel">setModel</a></span>
 
 
 
         </li>
         <li><span class="parameter">replaceTile</span>
-            <span class="types"><a class="type" href="index.html#objects.replaceTile">replaceTile</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.objects.replaceTile">replaceTile</a></span>
 
 
 
         </li>
         <li><span class="parameter">startDrawModelAt</span>
-            <span class="types"><a class="type" href="index.html#objects.startDrawModelAt">startDrawModelAt</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.objects.startDrawModelAt">startDrawModelAt</a></span>
 
 
 
         </li>
         <li><span class="parameter">stopDrawModel</span>
-            <span class="types"><a class="type" href="index.html#objects.stopDrawModel">stopDrawModel</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.objects.stopDrawModel">stopDrawModel</a></span>
 
 
 
@@ -5494,8 +5595,8 @@ subElement1:execute();</code></pre>
 
 </dd>
     <dt>
-    <a name = "objects.startDrawModelAt"></a>
-    <strong>objects.startDrawModelAt (modelId, x, y, sizeMultiplier)</strong>
+    <a name = "stratmap.objects.startDrawModelAt"></a>
+    <strong>stratmap.objects.startDrawModelAt (modelId, x, y, sizeMultiplier)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -5537,8 +5638,8 @@ stratmap.objects.startDrawModelAt(<span class="number">1</span>, <span class="nu
 
 </dd>
     <dt>
-    <a name = "objects.stopDrawModel"></a>
-    <strong>objects.stopDrawModel (modelId)</strong>
+    <a name = "stratmap.objects.stopDrawModel"></a>
+    <strong>stratmap.objects.stopDrawModel (modelId)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -5565,8 +5666,8 @@ stratmap.objects.stopDrawModel(<span class="number">1</span>);</code></pre>
 
 </dd>
     <dt>
-    <a name = "objects.addModelToGame"></a>
-    <strong>objects.addModelToGame (path, modelId)</strong>
+    <a name = "stratmap.objects.addModelToGame"></a>
+    <strong>stratmap.objects.addModelToGame (path, modelId)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -5595,8 +5696,8 @@ stratmap.objects.stopDrawModel(<span class="number">1</span>);</code></pre>
 
 </dd>
     <dt>
-    <a name = "objects.addCharacterCas"></a>
-    <strong>objects.addCharacterCas (skeleton, caspath, shadowcaspath, typename, texturepath, scale)</strong>
+    <a name = "stratmap.objects.addCharacterCas"></a>
+    <strong>stratmap.objects.addCharacterCas (skeleton, caspath, shadowcaspath, typename, texturepath, scale)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -5650,8 +5751,8 @@ stratmap.objects.stopDrawModel(<span class="number">1</span>);</code></pre>
 
 </dd>
     <dt>
-    <a name = "objects.setModel"></a>
-    <strong>objects.setModel (xCoord, yCoord, modelId, modelId2)</strong>
+    <a name = "stratmap.objects.setModel"></a>
+    <strong>stratmap.objects.setModel (xCoord, yCoord, modelId, modelId2)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -5693,8 +5794,8 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
     <dt>
-    <a name = "objects.replaceTile"></a>
-    <strong>objects.replaceTile (label, xCoord, yCoord, filename, weather, dayTime)</strong>
+    <a name = "stratmap.objects.replaceTile"></a>
+    <strong>stratmap.objects.replaceTile (label, xCoord, yCoord, filename, weather, dayTime)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -5754,19 +5855,19 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     <h3>Fields:</h3>
     <ul>
         <li><span class="parameter">move</span>
-            <span class="types"><a class="type" href="index.html#camera.move">move</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.camera.move">move</a></span>
 
 
 
         </li>
         <li><span class="parameter">jump</span>
-            <span class="types"><a class="type" href="index.html#camera.jump">jump</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.camera.jump">jump</a></span>
 
 
 
         </li>
         <li><span class="parameter">zoom</span>
-            <span class="types"><a class="type" href="index.html#camera.zoom">zoom</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.camera.zoom">zoom</a></span>
 
 
 
@@ -5779,8 +5880,8 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
     <dt>
-    <a name = "camera.move"></a>
-    <strong>camera.move (xCoord, yCoord)</strong>
+    <a name = "stratmap.camera.move"></a>
+    <strong>stratmap.camera.move (xCoord, yCoord)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -5813,8 +5914,8 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
     <dt>
-    <a name = "camera.jump"></a>
-    <strong>camera.jump (xCoord, yCoord)</strong>
+    <a name = "stratmap.camera.jump"></a>
+    <strong>stratmap.camera.jump (xCoord, yCoord)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -5847,8 +5948,8 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
     <dt>
-    <a name = "camera.zoom"></a>
-    <strong>camera.zoom (distance)</strong>
+    <a name = "stratmap.camera.zoom"></a>
+    <strong>stratmap.camera.zoom (distance)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -5890,61 +5991,67 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     <h3>Fields:</h3>
     <ul>
         <li><span class="parameter">getFactionsCount</span>
-            <span class="types"><a class="type" href="index.html#game.getFactionsCount">getFactionsCount</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.game.getFactionsCount">getFactionsCount</a></span>
 
 
 
         </li>
         <li><span class="parameter">getFaction</span>
-            <span class="types"><a class="type" href="index.html#battleSideTable:getFaction">getFaction</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.game.getFaction">getFaction</a></span>
 
 
 
         </li>
         <li><span class="parameter">createCharacterByString</span>
-            <span class="types"><a class="type" href="index.html#game.createCharacterByString">createCharacterByString</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.game.createCharacterByString">createCharacterByString</a></span>
 
 
 
         </li>
         <li><span class="parameter">createArmy</span>
-            <span class="types"><a class="type" href="index.html#game.createArmy">createArmy</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.game.createArmy">createArmy</a></span>
 
 
 
         </li>
         <li><span class="parameter">createArmyInSettlement</span>
-            <span class="types"><a class="type" href="index.html#game.createArmyInSettlement">createArmyInSettlement</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.game.createArmyInSettlement">createArmyInSettlement</a></span>
 
 
 
         </li>
         <li><span class="parameter">getScriptCounter</span>
-            <span class="types"><a class="type" href="index.html#game.getScriptCounter">getScriptCounter</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.game.getScriptCounter">getScriptCounter</a></span>
 
 
 
         </li>
         <li><span class="parameter">setScriptCounter</span>
-            <span class="types"><a class="type" href="index.html#game.setScriptCounter">setScriptCounter</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.game.setScriptCounter">setScriptCounter</a></span>
 
 
 
         </li>
         <li><span class="parameter">historicEvent</span>
-            <span class="types"><a class="type" href="index.html#game.historicEvent">historicEvent</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.game.historicEvent">historicEvent</a></span>
 
 
 
         </li>
         <li><span class="parameter">scriptCommand</span>
-            <span class="types"><a class="type" href="index.html#game.scriptCommand">scriptCommand</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.game.scriptCommand">scriptCommand</a></span>
 
 
 
         </li>
         <li><span class="parameter">callConsole</span>
-            <span class="types"><a class="type" href="index.html#game.callConsole">callConsole</a></span>
+            <span class="types"><a class="type" href="index.html#stratmap.game.callConsole">callConsole</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getGuild</span>
+            <span class="types"><a class="type" href="index.html#stratmap.game.getGuild">getGuild</a></span>
 
 
 
@@ -5957,8 +6064,8 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
     <dt>
-    <a name = "game.callConsole"></a>
-    <strong>game.callConsole (command, args)</strong>
+    <a name = "stratmap.game.callConsole"></a>
+    <strong>stratmap.game.callConsole (command, args)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -6004,8 +6111,8 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
     <dt>
-    <a name = "game.getFactionsCount"></a>
-    <strong>game.getFactionsCount ()</strong>
+    <a name = "stratmap.game.getFactionsCount"></a>
+    <strong>stratmap.game.getFactionsCount ()</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -6029,8 +6136,8 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
     <dt>
-    <a name = "game.getFaction"></a>
-    <strong>game.getFaction (Index)</strong>
+    <a name = "stratmap.game.getFaction"></a>
+    <strong>stratmap.game.getFaction (Index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -6061,8 +6168,8 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
     <dt>
-    <a name = "game.getGuild"></a>
-    <strong>game.getGuild (index)</strong>
+    <a name = "stratmap.game.getGuild"></a>
+    <strong>stratmap.game.getGuild (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -6095,8 +6202,8 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
     <dt>
-    <a name = "game.createCharacterByString"></a>
-    <strong>game.createCharacterByString (type, Faction, age, name, name2, subFaction, portrait_custom, xCoord, yCoord)</strong>
+    <a name = "stratmap.game.createCharacterByString"></a>
+    <strong>stratmap.game.createCharacterByString (type, Faction, age, name, name2, subFaction, portrait_custom, xCoord, yCoord)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -6159,8 +6266,8 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
     <dt>
-    <a name = "game.createArmy"></a>
-    <strong>game.createArmy (ourGeneral)</strong>
+    <a name = "stratmap.game.createArmy"></a>
+    <strong>stratmap.game.createArmy (ourGeneral)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -6191,8 +6298,8 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
     <dt>
-    <a name = "game.createArmyInSettlement"></a>
-    <strong>game.createArmyInSettlement (settlement)</strong>
+    <a name = "stratmap.game.createArmyInSettlement"></a>
+    <strong>stratmap.game.createArmyInSettlement (settlement)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -6225,8 +6332,8 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
     <dt>
-    <a name = "game.getScriptCounter"></a>
-    <strong>game.getScriptCounter (counterName)</strong>
+    <a name = "stratmap.game.getScriptCounter"></a>
+    <strong>stratmap.game.getScriptCounter (counterName)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -6260,8 +6367,8 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
     <dt>
-    <a name = "game.setScriptCounter"></a>
-    <strong>game.setScriptCounter (counterName, value)</strong>
+    <a name = "stratmap.game.setScriptCounter"></a>
+    <strong>stratmap.game.setScriptCounter (counterName, value)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -6294,8 +6401,8 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
     <dt>
-    <a name = "game.historicEvent"></a>
-    <strong>game.historicEvent (eventName, title, body)</strong>
+    <a name = "stratmap.game.historicEvent"></a>
+    <strong>stratmap.game.historicEvent (eventName, title, body)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -6334,8 +6441,8 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 </dd>
     <dt>
-    <a name = "game.scriptCommand"></a>
-    <strong>game.scriptCommand (command, args)</strong>
+    <a name = "stratmap.game.scriptCommand"></a>
+    <strong>stratmap.game.scriptCommand (command, args)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -7416,6 +7523,18 @@ end_set_faction_banner]]</span>, facName))</code></pre>
         </li>
         <li><span class="parameter">ammunition</span>
             <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">hasOwnership</span>
+            <span class="types"><a class="type" href="index.html#eduEntry:hasOwnership">hasOwnership</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setOwnerShip</span>
+            <span class="types"><a class="type" href="index.html#eduEntry:setOwnerShip">setOwnerShip</a></span>
 
 
 
@@ -9444,13 +9563,13 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
 
 
         </li>
-        <li><span class="parameter">AIPersonalityType</span>
+        <li><span class="parameter">aiPersonalityType</span>
             <span class="types"><span class="type">int</span></span>
 
 
 
         </li>
-        <li><span class="parameter">AIPersonalityName</span>
+        <li><span class="parameter">aiPersonalityName</span>
             <span class="types"><span class="type">int</span></span>
 
 
@@ -9637,7 +9756,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
 
         </li>
         <li><span class="parameter">getFort</span>
-            <span class="types"><a class="type" href="index.html#region:getFort">getFort</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getFort">getFort</a></span>
 
 
 
@@ -9661,7 +9780,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
 
         </li>
         <li><span class="parameter">getWatchtower</span>
-            <span class="types"><a class="type" href="index.html#region:getWatchtower">getWatchtower</a></span>
+            <span class="types"><a class="type" href="index.html#factionStruct:getWatchtower">getWatchtower</a></span>
 
 
 
@@ -9728,6 +9847,30 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
         </li>
         <li><span class="parameter">getBattleVsFactionStats</span>
             <span class="types"><a class="type" href="index.html#factionStruct:getBattleVsFactionStats">getBattleVsFactionStats</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">setCharacterNameFaction</span>
+            <span class="types"><a class="type" href="index.html#factionStruct:setCharacterNameFaction">setCharacterNameFaction</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">isNeighbourFaction</span>
+            <span class="types"><a class="type" href="index.html#factionStruct:isNeighbourFaction">isNeighbourFaction</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getAiFactionValues</span>
+            <span class="types"><a class="type" href="index.html#factionStruct:getAiFactionValues">getAiFactionValues</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getInterFactionLTGD</span>
+            <span class="types"><a class="type" href="index.html#factionStruct:getInterFactionLTGD">getInterFactionLTGD</a></span>
 
 
 
@@ -10475,6 +10618,40 @@ ourFacName = ourFac:getFactionName();
     </ul>
 
 </dd>
+    <dt>
+    <a name = "factionStruct:setCharacterNameFaction"></a>
+    <strong>factionStruct:setCharacterNameFaction (characterTypeIndex, factionID)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Set the faction characters of a specific type draw their names from.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">characterTypeIndex</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">factionID</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" >fac:setCharacterNameFaction(characterType.spy, <span class="number">2</span>)</code></pre>
+    </ul>
+
+</dd>
 </dl>
     <h2 class="section-header "><a name="aiFaction"></a>aiFaction </h2>
 
@@ -10928,13 +11105,13 @@ ourFacName = ourFac:getFactionName();
 
 
         </li>
-        <li><span class="parameter">AIPersonalityType</span>
+        <li><span class="parameter">aiPersonalityType</span>
             <span class="types"><span class="type">int</span></span>
 
 
 
         </li>
-        <li><span class="parameter">AIPersonalityName</span>
+        <li><span class="parameter">aiPersonalityName</span>
             <span class="types"><span class="type">int</span></span>
 
 
@@ -12185,7 +12362,7 @@ ourFacName = ourFac:getFactionName();
 
         </li>
         <li><span class="parameter">getSiege</span>
-            <span class="types"><a class="type" href="index.html#fortStruct:getSiege">getSiege</a></span>
+            <span class="types"><a class="type" href="index.html#settlementStruct:getSiege">getSiege</a></span>
 
 
 
@@ -12640,7 +12817,7 @@ ourFacName = ourFac:getFactionName();
 
         </li>
         <li><span class="parameter">getSiege</span>
-            <span class="types"><a class="type" href="index.html#fortStruct:getSiege">getSiege</a></span>
+            <span class="types"><a class="type" href="index.html#settlementStruct:getSiege">getSiege</a></span>
 
 
 
@@ -13967,13 +14144,13 @@ currSet:changeOwner(fac1);
 
         </li>
         <li><span class="parameter">getQueueBuildingType</span>
-            <span class="types"><a class="type" href="index.html#building:getQueueBuildingType">getQueueBuildingType</a></span>
+            <span class="types"><a class="type" href="index.html#buildingInQueue:getQueueBuildingType">getQueueBuildingType</a></span>
 
 
 
         </li>
         <li><span class="parameter">getQueueBuildingName</span>
-            <span class="types"><a class="type" href="index.html#building:getQueueBuildingName">getQueueBuildingName</a></span>
+            <span class="types"><a class="type" href="index.html#buildingInQueue:getQueueBuildingName">getQueueBuildingName</a></span>
 
 
 
@@ -13986,8 +14163,8 @@ currSet:changeOwner(fac1);
 
 </dd>
     <dt>
-    <a name = "building:getQueueBuildingType"></a>
-    <strong>building:getQueueBuildingType ()</strong>
+    <a name = "buildingInQueue:getQueueBuildingType"></a>
+    <strong>buildingInQueue:getQueueBuildingType ()</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -14013,8 +14190,8 @@ currSet:changeOwner(fac1);
 
 </dd>
     <dt>
-    <a name = "building:getQueueBuildingName"></a>
-    <strong>building:getQueueBuildingName ()</strong>
+    <a name = "buildingInQueue:getQueueBuildingName"></a>
+    <strong>buildingInQueue:getQueueBuildingName ()</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -16369,6 +16546,12 @@ ourChar:kill();</code></pre>
         </li>
         <li><span class="parameter">onfortificationlevelS</span>
             <span class="types"><a class="type" href="index.html#onfortificationlevelS">onfortificationlevelS</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">onCalculateUnitValue</span>
+            <span class="types"><a class="type" href="index.html#onCalculateUnitValue">onCalculateUnitValue</a></span>
 
 
 
@@ -23996,6 +24179,52 @@ isCampaignLoadedFirstTime=<span class="keyword">false</span>;
 
 </dd>
     <dt>
+    <a name = "onCalculateUnitValue"></a>
+    <strong>onCalculateUnitValue (entry, value)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Called when the game calculates the value of a unit.  For example, in battle, when it says 'Victory seems certain' when units are engaging each other it uses this, it uses this to decide which units to recruit, to evaluate army strength for attack decisions, for auto resolve balance and results, it is just the value that decides how strong it thinks a unit is. The long term goal director also uses this for the values you have in campaign<em>ai</em>db like military balance and free strength balance.
+
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">entry</span>
+            <span class="types"><a class="type" href="index.html#eduEntry">eduEntry</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">float</span></span>
+        newValue
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onCalculateUnitValue(entry, value)
+	<span class="keyword">if</span> entry.eduType = <span class="string">"my_unit"</span> <span class="keyword">then</span>
+		<span class="keyword">return</span> value * <span class="number">2</span>
+	<span class="keyword">end</span>
+	<span class="keyword">return</span> value
+<span class="keyword">end</span></code></pre>
+    </ul>
+
+</dd>
+    <dt>
     <a name = "onEndSiege"></a>
     <strong>onEndSiege (xCoord, yCoord)</strong>
     </dt>
@@ -26157,64 +26386,7 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</code></pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="CampaignEnums"></a>CampaignEnums </h2>
-
-    <dl class="function">
-    <dt>
-    <a name = "dipRelType"></a>
-    <strong>dipRelType</strong>
-    </dt>
-    <dd>
-    <div class="functionDescription">
-    Enum with a list of types of diplomatic relations.
-    </div>
-
-    <h3>Fields:</h3>
-    <ul>
-        <li><span class="parameter">war</span>
-            <span class="types"><span class="type">int</span></span>
-
-
-
-        </li>
-        <li><span class="parameter">peace</span>
-            <span class="types"><span class="type">int</span></span>
-
-
-
-        </li>
-        <li><span class="parameter">alliance</span>
-            <span class="types"><span class="type">int</span></span>
-
-
-
-        </li>
-        <li><span class="parameter">suzerain</span>
-            <span class="types"><span class="type">int</span></span>
-
-
-
-        </li>
-        <li><span class="parameter">trade</span>
-            <span class="types"><span class="type">int</span></span>
-         (Doesn't work with trade rights agreements set at game start)
-        </li>
-    </ul>
-
-
-
-
-    <h3>Usage:</h3>
-    <ul>
-        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
-<span class="keyword">local</span> fac1=campaign.factionsSortedByDescrStrat[<span class="number">1</span>];
-<span class="keyword">local</span> fac2=campaign.factionsSortedByDescrStrat[<span class="number">2</span>];
-<span class="keyword">local</span> isInWar=campaign:checkDipStance(dipRelType.war,fac1,fac2);</code></pre>
-    </ul>
-
-</dd>
-</dl>
-    <h2 class="section-header "><a name="options1"></a>options1 </h2>
+    <h2 class="section-header "><a name="Game_Options"></a>Game Options </h2>
 
     <dl class="function">
     <dt>
@@ -26499,10 +26671,6 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</code></pre>
 
 
 </dd>
-</dl>
-    <h2 class="section-header "><a name="options2"></a>options2 </h2>
-
-    <dl class="function">
     <dt>
     <a name = "options2"></a>
     <strong>options2</strong>
@@ -26890,7 +27058,7 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</code></pre>
 
 </dd>
 </dl>
-    <h2 class="section-header "><a name="campaignDifficulty1"></a>campaignDifficulty1 </h2>
+    <h2 class="section-header "><a name="Campaign_Difficulty_Modifiers"></a>Campaign Difficulty Modifiers </h2>
 
     <dl class="function">
     <dt>
@@ -26965,10 +27133,6 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</code></pre>
 
 
 </dd>
-</dl>
-    <h2 class="section-header "><a name="campaignDifficulty2"></a>campaignDifficulty2 </h2>
-
-    <dl class="function">
     <dt>
     <a name = "campaignDifficulty2"></a>
     <strong>campaignDifficulty2</strong>
@@ -27039,7 +27203,11 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</code></pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Basic eventTrigger table
+
+<p>This is data that comes with game events.  You need to check the event documentation to see what data is available under "Exports". The rest of the fields not stated inside "Exports" will return nil! </p>
+<pre><code>
+</code></pre>
+
     </div>
 
     <h3>Fields:</h3>
@@ -27638,7 +27806,7 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</code></pre>
 
         </li>
         <li><span class="parameter">getFort</span>
-            <span class="types"><a class="type" href="index.html#region:getFort">getFort</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getFort">getFort</a></span>
 
 
 
@@ -28211,7 +28379,7 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
         </li>
         <li><span class="parameter">getTile</span>
-            <span class="types"><a class="type" href="index.html#region:getTile">getTile</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getTile">getTile</a></span>
 
 
 
@@ -28792,6 +28960,18 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
 
         </li>
+        <li><span class="parameter">getTileCharacterCount</span>
+            <span class="types"><a class="type" href="index.html#tileStruct:getTileCharacterCount">getTileCharacterCount</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getTileCharacterAtIndex</span>
+            <span class="types"><a class="type" href="index.html#tileStruct:getTileCharacterAtIndex">getTileCharacterAtIndex</a></span>
+
+
+
+        </li>
     </ul>
 
 
@@ -28864,6 +29044,68 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><code class="language-lua" ><span class="keyword">local</span> hasCharacterOnTile = tile:factionHasCharacterOnTile(<span class="number">3</span>);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "tileStruct:getTileCharacterCount"></a>
+    <strong>tileStruct:getTileCharacterCount ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get amount of characters on a tile.
+    </div>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">int</span></span>
+        characterCount
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> tileCharacterCount = tile:getTileCharacterCount();</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "tileStruct:getTileCharacterAtIndex"></a>
+    <strong>tileStruct:getTileCharacterAtIndex (index)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a character on a tile.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">index</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#character">character</a></span>
+        char
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> tileCharacterCount = tile:getTileCharacterCount();
+<span class="keyword">for</span> i=<span class="number">0</span>,tileCharacterCount -<span class="number">1</span> <span class="keyword">do</span>
+	<span class="keyword">local</span> character = tile:getTileCharacterAtIndex(i);
+<span class="keyword">end</span></code></pre>
     </ul>
 
 </dd>
@@ -29123,13 +29365,13 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
         </li>
         <li><span class="parameter">getFort</span>
-            <span class="types"><a class="type" href="index.html#region:getFort">getFort</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getFort">getFort</a></span>
 
 
 
         </li>
         <li><span class="parameter">getWatchtower</span>
-            <span class="types"><a class="type" href="index.html#region:getWatchtower">getWatchtower</a></span>
+            <span class="types"><a class="type" href="index.html#factionStruct:getWatchtower">getWatchtower</a></span>
 
 
 
@@ -29141,79 +29383,79 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
         </li>
         <li><span class="parameter">getNeighbour</span>
-            <span class="types"><a class="type" href="index.html#region:getNeighbour">getNeighbour</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getNeighbour">getNeighbour</a></span>
 
 
 
         </li>
         <li><span class="parameter">getHiddenResource</span>
-            <span class="types"><a class="type" href="index.html#region:getHiddenResource">getHiddenResource</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getHiddenResource">getHiddenResource</a></span>
 
 
 
         </li>
         <li><span class="parameter">setHiddenResource</span>
-            <span class="types"><a class="type" href="index.html#region:setHiddenResource">setHiddenResource</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:setHiddenResource">setHiddenResource</a></span>
 
 
 
         </li>
         <li><span class="parameter">getSeaConnectedRegion</span>
-            <span class="types"><a class="type" href="index.html#region:getSeaConnectedRegion">getSeaConnectedRegion</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getSeaConnectedRegion">getSeaConnectedRegion</a></span>
 
 
 
         </li>
         <li><span class="parameter">getSeaImportRegion</span>
-            <span class="types"><a class="type" href="index.html#region:getSeaImportRegion">getSeaImportRegion</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getSeaImportRegion">getSeaImportRegion</a></span>
 
 
 
         </li>
         <li><span class="parameter">getRegionSeaEdge</span>
-            <span class="types"><a class="type" href="index.html#region:getRegionSeaEdge">getRegionSeaEdge</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getRegionSeaEdge">getRegionSeaEdge</a></span>
 
 
 
         </li>
         <li><span class="parameter">getReligionHistory</span>
-            <span class="types"><a class="type" href="index.html#region:getReligionHistory">getReligionHistory</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getReligionHistory">getReligionHistory</a></span>
 
 
 
         </li>
         <li><span class="parameter">getTileBorderingEdgeOfMap</span>
-            <span class="types"><a class="type" href="index.html#region:getTileBorderingEdgeOfMap">getTileBorderingEdgeOfMap</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getTileBorderingEdgeOfMap">getTileBorderingEdgeOfMap</a></span>
 
 
 
         </li>
         <li><span class="parameter">getTile</span>
-            <span class="types"><a class="type" href="index.html#region:getTile">getTile</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getTile">getTile</a></span>
 
 
 
         </li>
         <li><span class="parameter">getFertileTile</span>
-            <span class="types"><a class="type" href="index.html#region:getFertileTile">getFertileTile</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getFertileTile">getFertileTile</a></span>
 
 
 
         </li>
         <li><span class="parameter">getDevastatedTile</span>
-            <span class="types"><a class="type" href="index.html#region:getDevastatedTile">getDevastatedTile</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getDevastatedTile">getDevastatedTile</a></span>
 
 
 
         </li>
         <li><span class="parameter">getHostileArmiesStrength</span>
-            <span class="types"><a class="type" href="index.html#region:getHostileArmiesStrength">getHostileArmiesStrength</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getHostileArmiesStrength">getHostileArmiesStrength</a></span>
 
 
 
         </li>
         <li><span class="parameter">hasResourceType</span>
-            <span class="types"><a class="type" href="index.html#region:hasResourceType">hasResourceType</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:hasResourceType">hasResourceType</a></span>
 
 
 
@@ -29226,8 +29468,8 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
 </dd>
     <dt>
-    <a name = "region:getStack"></a>
-    <strong>region:getStack (index)</strong>
+    <a name = "regionStruct:getStack"></a>
+    <strong>regionStruct:getStack (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -29262,8 +29504,8 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
 </dd>
     <dt>
-    <a name = "region:getFort"></a>
-    <strong>region:getFort (index)</strong>
+    <a name = "regionStruct:getFort"></a>
+    <strong>regionStruct:getFort (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -29298,8 +29540,8 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
 </dd>
     <dt>
-    <a name = "region:getWatchtower"></a>
-    <strong>region:getWatchtower (index)</strong>
+    <a name = "regionStruct:getWatchtower"></a>
+    <strong>regionStruct:getWatchtower (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -29334,8 +29576,8 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
 </dd>
     <dt>
-    <a name = "region:getResource"></a>
-    <strong>region:getResource (index)</strong>
+    <a name = "regionStruct:getResource"></a>
+    <strong>regionStruct:getResource (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -29370,8 +29612,8 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
 </dd>
     <dt>
-    <a name = "region:getNeighbour"></a>
-    <strong>region:getNeighbour (index)</strong>
+    <a name = "regionStruct:getNeighbour"></a>
+    <strong>regionStruct:getNeighbour (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -29406,8 +29648,8 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
 </dd>
     <dt>
-    <a name = "region:getHiddenResource"></a>
-    <strong>region:getHiddenResource (index)</strong>
+    <a name = "regionStruct:getHiddenResource"></a>
+    <strong>regionStruct:getHiddenResource (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -29442,8 +29684,8 @@ localhr = region:getHiddenResource(<span class="number">0</span>)</code></pre>
 
 </dd>
     <dt>
-    <a name = "region:setHiddenResource"></a>
-    <strong>region:setHiddenResource (index, enable)</strong>
+    <a name = "regionStruct:setHiddenResource"></a>
+    <strong>regionStruct:setHiddenResource (index, enable)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -29478,8 +29720,8 @@ region:setHiddenResource(<span class="number">0</span>, <span class="keyword">fa
 
 </dd>
     <dt>
-    <a name = "region:getSeaConnectedRegion"></a>
-    <strong>region:getSeaConnectedRegion (index)</strong>
+    <a name = "regionStruct:getSeaConnectedRegion"></a>
+    <strong>regionStruct:getSeaConnectedRegion (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -29514,8 +29756,8 @@ region:setHiddenResource(<span class="number">0</span>, <span class="keyword">fa
 
 </dd>
     <dt>
-    <a name = "region:getSeaImportRegion"></a>
-    <strong>region:getSeaImportRegion (index)</strong>
+    <a name = "regionStruct:getSeaImportRegion"></a>
+    <strong>regionStruct:getSeaImportRegion (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -29550,8 +29792,8 @@ region:setHiddenResource(<span class="number">0</span>, <span class="keyword">fa
 
 </dd>
     <dt>
-    <a name = "region:getRegionSeaEdge"></a>
-    <strong>region:getRegionSeaEdge (index)</strong>
+    <a name = "regionStruct:getRegionSeaEdge"></a>
+    <strong>regionStruct:getRegionSeaEdge (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -29586,8 +29828,8 @@ region:setHiddenResource(<span class="number">0</span>, <span class="keyword">fa
 
 </dd>
     <dt>
-    <a name = "region:getDevastatedTile"></a>
-    <strong>region:getDevastatedTile (index)</strong>
+    <a name = "regionStruct:getDevastatedTile"></a>
+    <strong>regionStruct:getDevastatedTile (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -29622,8 +29864,8 @@ region:setHiddenResource(<span class="number">0</span>, <span class="keyword">fa
 
 </dd>
     <dt>
-    <a name = "region:getTileBorderingEdgeOfMap"></a>
-    <strong>region:getTileBorderingEdgeOfMap (index)</strong>
+    <a name = "regionStruct:getTileBorderingEdgeOfMap"></a>
+    <strong>regionStruct:getTileBorderingEdgeOfMap (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -29658,8 +29900,8 @@ region:setHiddenResource(<span class="number">0</span>, <span class="keyword">fa
 
 </dd>
     <dt>
-    <a name = "region:getTile"></a>
-    <strong>region:getTile (index)</strong>
+    <a name = "regionStruct:getTile"></a>
+    <strong>regionStruct:getTile (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -29694,8 +29936,8 @@ region:setHiddenResource(<span class="number">0</span>, <span class="keyword">fa
 
 </dd>
     <dt>
-    <a name = "region:getFertileTile"></a>
-    <strong>region:getFertileTile (index)</strong>
+    <a name = "regionStruct:getFertileTile"></a>
+    <strong>regionStruct:getFertileTile (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -29730,8 +29972,8 @@ region:setHiddenResource(<span class="number">0</span>, <span class="keyword">fa
 
 </dd>
     <dt>
-    <a name = "region:getReligionHistory"></a>
-    <strong>region:getReligionHistory (religionID, turnsAgo)</strong>
+    <a name = "regionStruct:getReligionHistory"></a>
+    <strong>regionStruct:getReligionHistory (religionID, turnsAgo)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -29770,8 +30012,8 @@ region:setHiddenResource(<span class="number">0</span>, <span class="keyword">fa
 
 </dd>
     <dt>
-    <a name = "region:hasResourceType"></a>
-    <strong>region:hasResourceType (resourceID)</strong>
+    <a name = "regionStruct:hasResourceType"></a>
+    <strong>regionStruct:hasResourceType (resourceID)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -29806,8 +30048,8 @@ region:setHiddenResource(<span class="number">0</span>, <span class="keyword">fa
 
 </dd>
     <dt>
-    <a name = "region:getHostileArmiesStrength"></a>
-    <strong>region:getHostileArmiesStrength (factionID)</strong>
+    <a name = "regionStruct:getHostileArmiesStrength"></a>
+    <strong>regionStruct:getHostileArmiesStrength (factionID)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -30625,10 +30867,12 @@ battleXCoord=gameData.battleStruct.xCoord;</code></pre>
         </li>
         <li><span class="parameter">factionSide</span>
             <span class="types"><span class="type">int[31]</span></span>
+         faction alliance array, -1 if not in battle, start at 1 so faction ID + 1 Maximum 31.
+        </li>
+        <li><span class="parameter">getPlayerArmy</span>
+            <span class="types"><a class="type" href="index.html#battleStruct:getPlayerArmy">getPlayerArmy</a></span>
 
-<p> faction alliance array, -1 if not in battle, start at 1 so faction ID + 1 Maximum 31.</p>
-<pre><code>tfield getPlayerArmy getPlayerArmy
-</code></pre>
+
 
         </li>
         <li><span class="parameter">getBattleResidence</span>
@@ -30788,7 +31032,13 @@ battleXCoord=gameData.battleStruct.xCoord;</code></pre>
 
         </li>
         <li><span class="parameter">getBattleArmy</span>
-            <span class="types"><a class="type" href="index.html#battleSideTable:getBattleArmy">getBattleArmy</a></span>
+            <span class="types"><a class="type" href="index.html#battleSide:getBattleArmy">getBattleArmy</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getFaction</span>
+            <span class="types"><a class="type" href="index.html#stratmap.game.getFaction">getFaction</a></span>
 
 
 
@@ -30869,8 +31119,8 @@ battleXCoord=gameData.battleStruct.xCoord;</code></pre>
 
 </dd>
     <dt>
-    <a name = "battleSideTable:getBattleArmy"></a>
-    <strong>battleSideTable:getBattleArmy (index)</strong>
+    <a name = "battleSide:getBattleArmy"></a>
+    <strong>battleSide:getBattleArmy (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -30903,8 +31153,8 @@ battleXCoord=gameData.battleStruct.xCoord;</code></pre>
 
 </dd>
     <dt>
-    <a name = "battleSideTable:getFaction"></a>
-    <strong>battleSideTable:getFaction (index)</strong>
+    <a name = "battleSide:getFaction"></a>
+    <strong>battleSide:getFaction (index)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -31661,6 +31911,1599 @@ deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
     <ul>
         <pre class="example"><code class="language-lua" ><span class="keyword">local</span> building = battleBuildings:getBuilding(<span class="number">0</span>)</code></pre>
     </ul>
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="EOP_Enums"></a>EOP Enums </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "dipRelType"></a>
+    <strong>dipRelType</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum with a list of types of diplomatic relations.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">war</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">peace</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">alliance</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">suzerain</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">trade</span>
+            <span class="types"><span class="type">int</span></span>
+         (Doesn't work with trade rights agreements set at game start)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
+<span class="keyword">local</span> fac1=campaign.factionsSortedByDescrStrat[<span class="number">1</span>];
+<span class="keyword">local</span> fac2=campaign.factionsSortedByDescrStrat[<span class="number">2</span>];
+<span class="keyword">local</span> isInWar=campaign:checkDipStance(dipRelType.war,fac1,fac2);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "unitBattleProperties"></a>
+    <strong>unitBattleProperties</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum with a list of types of unit battle properties.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">guardMode</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">fireAtWill</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">skirmish</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "buildingCapability"></a>
+    <strong>buildingCapability</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum with a list of types of building capabilities.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">population_growth_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">population_loyalty_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">population_health_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">trade_base_income_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">trade_level_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">trade_fleet</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">taxable_income_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">mine_resource</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">farming_level</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">road_level</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">gate_strength</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">gate_defences</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">wall_level</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">tower_level</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">armour</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">stage_games</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">stage_races</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">fire_risk</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">weapon_melee_simple</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">weapon_melee_blade</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">weapon_missile_mechanical</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">weapon_missile_gunpowder</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">weapon_artillery_mechanical</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">weapon_artillery_gunpowder</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">weapon_naval_gunpowder</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">upgrade_bodyguard</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">recruits_morale_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">recruits_exp_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">happiness_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">law_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">construction_cost_bonus_military</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">construction_cost_bonus_religious</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">construction_cost_bonus_defensive</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">construction_cost_bonus_other</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">construction_time_bonus_military</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">construction_time_bonus_religious</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">construction_time_bonus_defensive</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">construction_time_bonus_other</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">construction_cost_bonus_wooden</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">construction_cost_bonus_stone</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">construction_time_bonus_wooden</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">construction_time_bonus_stone</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">free_upkeep</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">pope_approval</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">pope_disapproval</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">religion_level</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">amplify_religion_level</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">archer_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">cavalry_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">heavy_cavalry_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">gun_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">navy_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">recruitment_cost_bonus_naval</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">retrain_cost_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">weapon_projectile</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">income_bonus</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">recruitment_slots</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "characterType"></a>
+    <strong>characterType</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum with a list of character types.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">spy</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">assassin</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">diplomat</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">admiral</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">merchant</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">priest</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">general</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">named_character</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">princess</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">heretic</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">witch</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">inquisitor</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">pope</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "sortType"></a>
+    <strong>sortType</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum with a list of army sort types.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">eduType</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">category</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">class</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">soldierCount</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">experience</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">categoryClass</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">aiUnitValue</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "aiPlan"></a>
+    <strong>aiPlan</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum with a list of GTA AI plans.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">doNothing</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">attackAll</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">defend</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">defendFeature</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">hide</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">ambush</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">scout</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">withdraw</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">attackSettlement</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">defendSettlement</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">sallyOut</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "aiObjective"></a>
+    <strong>aiObjective</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum with a list of GTA AI objectives.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">invalid</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">moveToPoint</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">attackEnemyBattleGroup</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">defendTerrainHill</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">defendTerrainForest</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">defendTerrainArea</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">defendCrossing</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">assaultCrossing</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">defendLine</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">scout</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">withdraw</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">defendSettlement</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">supportDefendSettlement</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">attackSettlement</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">skirmish</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">bombard</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">attackModel</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">sallyOut</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">ambush</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "resourceType"></a>
+    <strong>resourceType</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum with a list of resources.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">gold</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">silver</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">fish</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">furs</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">grain</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">timber</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">iron</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">ivory</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">wine</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">slaves</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">chocolate</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">marble</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">textiles</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">dyes</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">tobacco</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">silk</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">sugar</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">sulfur</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">tin</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">spices</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">cotton</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">amber</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">coal</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">wool</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">elephants</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">camels</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">dogs</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">generic</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "moraleStatus"></a>
+    <strong>moraleStatus</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum of unit morale status.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">berserk</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">impetuous</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">high</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">firm</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">shaken</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">wavering</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">routing</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "combatStatus"></a>
+    <strong>combatStatus</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum of unit combat status.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">notInCombat</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">victoryCertain</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">victoryAlmostCertain</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">victoryDistinct</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">balanced</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">defeatDistinct</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">defeatAlmostCertain</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">defeatCertain</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "battleSuccess"></a>
+    <strong>battleSuccess</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum of unit combat status.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">close</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">average</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">clear</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">crushing</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "mountClass"></a>
+    <strong>mountClass</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum of unit mount class.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">horse</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">camel</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">elephant</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">infantry</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "battleType"></a>
+    <strong>battleType</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum of battle types.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">ambushSuccess</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">ambushFail</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">open</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">siege</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">sally</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">naval</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">withdrawal</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">meetEnemy</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "battleState"></a>
+    <strong>battleState</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum of battle states.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">notInBattle</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">preBattle</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">delay</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">deployment</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">deploymentPlayer2</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">conflict</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">victoryScroll</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">pursuit</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "unitClass"></a>
+    <strong>unitClass</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum of unit classes
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">heavy</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">light</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">skirmish</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">spearmen</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">missile</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "unitCategory"></a>
+    <strong>unitCategory</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum of unit categories
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">infantry</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">cavalry</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">siege</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">non_combatant</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">ship</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">handler</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "unitCategoryClass"></a>
+    <strong>unitCategoryClass</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum of unit categories and class combo
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">nonCombatant</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">lightInfantry</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">heavyInfantry</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">spearmenInfantry</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">missileInfantry</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">lightCavalry</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">heavyCavalry</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">missileCavalry</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">siegeWeapon</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">animalHandler</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">battleShip</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "managePolicy"></a>
+    <strong>managePolicy</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum of automated settlement policy types
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">balanced</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">financial</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">military</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">growth</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">cultural</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">noPolicy</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
 
 </dd>
 </dl>

@@ -235,6 +235,7 @@ void luaP::onPluginLoadF()
 	@tfield onChangeTurnNum onChangeTurnNum
 	@tfield onSelectWorldpkgdesc onSelectWorldpkgdesc
 	@tfield onfortificationlevelS onfortificationlevelS
+	@tfield onCalculateUnitValue onCalculateUnitValue
 	@tfield onEndSiege onEndSiege
 	@tfield onStartSiege onStartSiege
 	@tfield onPluginLoad onPluginLoad
@@ -3208,6 +3209,25 @@ void luaP::onPluginLoadF()
 	*/
 	onfortificationlevelS = new sol::function(luaState["onfortificationlevelS"]);
 	checkLuaFunc(&onfortificationlevelS);
+	
+	/***
+	Called when the game calculates the value of a unit. For example, in battle, when it says 'Victory seems certain' when units are engaging each other it uses this, it uses this to decide which units to recruit, to evaluate army strength for attack decisions, for auto resolve balance and results, it is just the value that decides how strong it thinks a unit is. The long term goal director also uses this for the values you have in campaign_ai_db like military balance and free strength balance.
+  
+	@function onCalculateUnitValue
+	@tparam eduEntry entry
+	@tparam float value
+	@treturn float newValue
+
+	@usage
+	function onCalculateUnitValue(entry, value)
+		if entry.eduType = "my_unit" then
+			return value * 2
+		end
+		return value
+	end
+	*/
+	onCalculateUnitValue = new sol::function(luaState["onCalculateUnitValue"]);
+	checkLuaFunc(&onCalculateUnitValue);
 
 	/***
 	Called on the completion of the siege (in any way, with any outcome).

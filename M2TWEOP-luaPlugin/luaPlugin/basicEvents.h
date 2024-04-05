@@ -16,6 +16,7 @@ std::unordered_map<int, const char*> religionNames = {
 extern "C" PLUGINM2TWEOP_API void onClickAtTile(int x, int y);
 extern "C" PLUGINM2TWEOP_API std::string * onSelectWorldpkgdesc(const char* selectedRec, const char* selectedGroup);
 extern "C" PLUGINM2TWEOP_API int onfortificationlevelS(settlementStruct * settlement, bool* isCastle, bool* isChanged);
+extern "C" PLUGINM2TWEOP_API float onCalculateUnitValue(eduEntry* entry, float value);
 extern "C" PLUGINM2TWEOP_API void onChangeTurnNum(int num);
 extern "C" PLUGINM2TWEOP_API void onNewGameStart();
 extern "C" PLUGINM2TWEOP_API void onCampaignMapLoaded();

@@ -494,11 +494,23 @@ void managerF::doPachs()
 	toCreateMercUnit->Enable();
 	f1 << "Done" << endl;
 
-	f1 << "Start applying toCreateMercUnit patch" << endl;
+	f1 << "Start applying onAiTurn patch" << endl;
 	onAiTurn* toAiTurn = new onAiTurn(mem, (LPVOID)patchesForGame::onAiTurn, globals::dataS.gamever);
 	toAiTurn->SetNewCode();
 	toAiTurn->Enable();
 	f1 << "Done" << endl;
+
+	f1 << "Start applying toCalculateUnitValue patch" << '\n';
+	OnCalculateUnitValue* toCalculateUnitValue = new OnCalculateUnitValue(mem, (LPVOID)patchesForGame::OnCalculateUnitValue, globals::dataS.gamever);
+	toCalculateUnitValue->SetNewCode();
+	toCalculateUnitValue->Enable();
+	f1 << "Done" << '\n';
+
+	f1 << "Start applying toCalculateUnitValue2 patch" << '\n';
+	OnCalculateUnitValue2* toCalculateUnitValue2 = new OnCalculateUnitValue2(mem, (LPVOID)patchesForGame::OnCalculateUnitValue, globals::dataS.gamever);
+	toCalculateUnitValue2->SetNewCode();
+	toCalculateUnitValue2->Enable();
+	f1 << "Done" << '\n';
 
 	f1 << "Start applying OnCreateUnitWrapper patch" << endl;
 	OnCreateUnitWrapper* toCreateUnitWrapper = new OnCreateUnitWrapper(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gamever);
@@ -512,7 +524,7 @@ void managerF::doPachs()
 	toFindUnitStrings->Enable();
 	f1 << "Done" << endl;
 
-	f1 << "Start applying OnFindUnitStrings patch" << endl;
+	f1 << "Start applying toFindUnitStrings2 patch" << endl;
 	OnFindUnitStrings2* toFindUnitStrings2 = new OnFindUnitStrings2(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gamever); //its same func as unit wrapper on purpose not error
 	toFindUnitStrings2->SetNewCode();
 	toFindUnitStrings2->Enable();
@@ -530,7 +542,7 @@ void managerF::doPachs()
 	toReligionCombatBonus->Enable();
 	f1 << "Done" << endl;
 
-	f1 << "Start applying OnReligionCombatBonus patch" << endl;
+	f1 << "Start applying toOnBattleArmiesBug patch" << endl;
 	OnBattleArmiesBug* toOnBattleArmiesBug = new OnBattleArmiesBug(mem, nullptr, globals::dataS.gamever);
 	toOnBattleArmiesBug->SetNewCode();
 	toOnBattleArmiesBug->Enable();

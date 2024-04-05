@@ -43,6 +43,7 @@ namespace factionHelpers
 	battleFactionCounter* getBattleVsFactionStats(factionStruct* fac, int targetFactionID);
 	ltgdFactionValues* getAiFactionValues(factionStruct* fac);
 	interFactionLTGD* getInterFactionLTGD(factionStruct* fac, factionStruct* targetFac);
+	void setCharacterNameFaction(factionStruct* fac, int characterType, int factionID);
 	//faction
 	template <char fieldIndex>
 	std::string getStringProperty(const factionStruct* fac)

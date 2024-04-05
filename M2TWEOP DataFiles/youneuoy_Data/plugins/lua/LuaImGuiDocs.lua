@@ -1906,10 +1906,10 @@ function ImGui.End() end
 ---@param name string window name
 ---@param sizeX number? optional
 ---@param sizeY number? optional
----@param open boolean? optional
----@param flags integer? optional
+---@param childFlags integer? optional
+---@param windowFlags integer? optional
 ---@return boolean collapsed 
-function ImGui.BeginChild(name, sizeX, sizeY, open, flags) end 
+function ImGui.BeginChild(name, sizeX, sizeY, childFlags, windowFlags) end 
 
 --- End Child.
 function ImGui.EndChild() end 
@@ -2208,39 +2208,6 @@ function ImGui.EndGroup() end
 ---@return number posX 
 ---@return number posY 
 function ImGui.GetCursorPos() end 
-
---[[
-GENERATED CODE | READ-ONLY
-You can directly copy from here, or from File > Export to clipboard
---]]
-
---[[
-GENERATED CODE | READ-ONLY
-You can directly copy from here, or from File > Export to clipboard
---]]
-
----@type boolean
-isWindowOpen = true
-ImGui.SetNextWindowSize(1160,707)
---[[!! You might want to use these ^^ values in the OS window instead, and add the ImGuiWindowFlags.NoTitleBar flag in the ImGui window !!--]]
-
-if (ImGui.Begin("window_name", isWindowOpen))
-then
-
-end
-ImGui.End();
-
-
---[[
-Reminder: some widgets may have the same label "##" (if you didn't change it), and can lead to undesired ID collisions.
-More info: https://github.com/ocornut/imgui/blob/master/docs/FAQ.md#q-about-the-id-stack-system
---]]
-
-
---[[
-Reminder: some widgets may have the same label "##" (if you didn't change it), and can lead to undesired ID collisions.
-More info: https://github.com/ocornut/imgui/blob/master/docs/FAQ.md#q-about-the-id-stack-system
---]]
 
 --- Some functions are using window-relative coordinates, such as: GetCursorPos, GetCursorStartPos, GetContentRegionMax, GetWindowContentRegion* etc.
 ---@return number posX 
@@ -3645,7 +3612,7 @@ ImFontAtlas = {
 ---@param filename string 
 ---@param sizePixels number 
 ---@return ImFont font 
-function ImFontAtlas.AddFontFromFileTTF(filename, sizePixels) end 
+function ImFontAtlas:AddFontFromFileTTF(filename, sizePixels) end 
 
 ---Basic ImGuiIO table
 ---@class ImGuiIO
@@ -3755,40 +3722,4 @@ ImGuiTableSortSpecs = {
     SpecsDirty = nil,
 
 }
-local IsWindowOpen = true
-ImGui.SetNextWindowPos(503.0, 61.0)
-ImGui.SetNextWindowSize(682.0, 711.0)
-ImGui.Begin("myWindow", IsWindowOpen, 37)
-ImGui.PushStyleColor(ImGuiCol.Text, 0.000, 0.000, 0.000, 1.000)
-ImGui.PushStyleColor(ImGuiCol.Button, 0.259, 0.980, 0.280, 1.000)
-ImGui.SetCursorPos(68.2, 284.4);
-ImGui.BeginChild("Child_0", 532.0, 383.9, 0, 0)
-ImGui.SetCursorPos(54.6, 28.4);
-ImGui.BeginChild("Child_1", 422.1, 213.3, 0, 0)
-ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 50.000)
-ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, 2.000)
-ImGui.PushStyleColor(ImGuiCol.BorderShadow, 0.000, 0.000, 0.000, 1.000)
-ImGui.PushStyleColor(ImGuiCol.Button, 0.259, 0.588, 0.980, 1.000)
-ImGui.SetCursorPos(136.4, 142.2);
-if ImGui.Button("Button", 132.5, 56.9) then
 
-end
-ImGui.PopStyleVar(2)
-ImGui.PopStyleColor(2)
-ImGui.EndChild()
-ImGui.SetCursorPos(136.4, 284.4);
-if ImGui.Button("Button", 108.6, 56.9) then
-
-end
-ImGui.PushStyleColor(ImGuiCol.Button, 0.696, 0.780, 0.494, 1.000)
-ImGui.SetCursorPos(313.7, 284.4);
-if ImGui.Button("Button", 108.4, 56.9) then
-
-end
-ImGui.PopStyleColor(1)
-ImGui.EndChild()
-ImGui.PopStyleColor(2)
-ImGui.SetCursorPos(68.2, 42.7);
-ImGui.BeginChild("Child_2", 532.0, 213.3, 0, 0)
-ImGui.EndChild()
-ImGui.End()

@@ -48,8 +48,8 @@ namespace sol_ImGui
 	inline bool BeginChild(const std::string& name) { return ImGui::BeginChild(name.c_str()); }
 	inline bool BeginChild(const std::string& name, float sizeX) { return ImGui::BeginChild(name.c_str(), { sizeX, 0 }); }
 	inline bool BeginChild(const std::string& name, float sizeX, float sizeY) { return ImGui::BeginChild(name.c_str(), { sizeX, sizeY }); }
-	inline bool BeginChild(const std::string& name, float sizeX, float sizeY, bool border) { return ImGui::BeginChild(name.c_str(), { sizeX, sizeY }, border); }
-	inline bool BeginChild(const std::string& name, float sizeX, float sizeY, bool border, int flags) { return ImGui::BeginChild(name.c_str(), { sizeX, sizeY }, border, static_cast<ImGuiWindowFlags>(flags)); }
+	inline bool BeginChild(const std::string& name, float sizeX, float sizeY, int childFlags) { return ImGui::BeginChild(name.c_str(), { sizeX, sizeY }, childFlags); }
+	inline bool BeginChild(const std::string& name, float sizeX, float sizeY, int childFlags, int windowFlags) { return ImGui::BeginChild(name.c_str(), { sizeX, sizeY }, static_cast<ImGuiChildFlags>(childFlags), static_cast<ImGuiWindowFlags>(windowFlags)); }
 	inline void EndChild() { ImGui::EndChild(); }
 
 	// Windows Utilities
@@ -1716,9 +1716,9 @@ namespace sol_ImGui
 	inline int GetMouseCursor() { return ImGui::GetMouseCursor(); }
 	inline void SetMouseCursor(int cursor_type) { ImGui::SetMouseCursor(static_cast<ImGuiMouseCursor>(cursor_type)); }
 	inline void SetNextFrameWantCaptureMouse(bool want_capture_mouse_value) { ImGui::SetNextFrameWantCaptureMouse(want_capture_mouse_value); }
-	inline void AddFontFromFileTTF(ImFontAtlas* fontAtlas, const char* filename, float size_pixels)
+	inline ImFont* AddFontFromFileTTF(ImFontAtlas* fontAtlas, const char* filename, float size_pixels)
 	{
-		fontAtlas->AddFontFromFileTTF(filename, size_pixels);
+		return fontAtlas->AddFontFromFileTTF(filename, size_pixels);
 	}
 
 	// Clipboard Utilities
@@ -2386,16 +2386,16 @@ namespace sol_ImGui
 			"RightAlt", ImGuiKey_RightAlt,
 			"RightSuper", ImGuiKey_RightSuper,
 			"Menu", ImGuiKey_Menu,
-			"0", ImGuiKey_0,
-			"1", ImGuiKey_1,
-			"2", ImGuiKey_2,
-			"3", ImGuiKey_3,
-			"4", ImGuiKey_4,
-			"5", ImGuiKey_5,
-			"6", ImGuiKey_6,
-			"7", ImGuiKey_7,
-			"8", ImGuiKey_8,
-			"9", ImGuiKey_9,
+			"_0", ImGuiKey_0,
+			"_1", ImGuiKey_1,
+			"_2", ImGuiKey_2,
+			"_3", ImGuiKey_3,
+			"_4", ImGuiKey_4,
+			"_5", ImGuiKey_5,
+			"_6", ImGuiKey_6,
+			"_7", ImGuiKey_7,
+			"_8", ImGuiKey_8,
+			"_9", ImGuiKey_9,
 			"A", ImGuiKey_A,
 			"B", ImGuiKey_B,
 			"C", ImGuiKey_C,
@@ -3330,8 +3330,8 @@ namespace sol_ImGui
 		@tparam string name window name
 		@tparam float sizeX optional
 		@tparam float sizeY optional
-		@tparam bool open optional
-		@tparam int flags optional
+		@tparam int childFlags optional
+		@tparam int windowFlags optional
 		@treturn bool collapsed
 		@usage
 		ImGui.BeginChild("SampleWindow");
@@ -3342,8 +3342,8 @@ namespace sol_ImGui
 			sol::resolve<bool(const std::string&)>(BeginChild),
 			sol::resolve<bool(const std::string&, float)>(BeginChild),
 			sol::resolve<bool(const std::string&, float, float)>(BeginChild),
-			sol::resolve<bool(const std::string&, float, float, bool)>(BeginChild),
-			sol::resolve<bool(const std::string&, float, float, bool, int)>(BeginChild)
+			sol::resolve<bool(const std::string&, float, float, int)>(BeginChild),
+			sol::resolve<bool(const std::string&, float, float, int, int)>(BeginChild)
 		));
 		/***
 		End Child.

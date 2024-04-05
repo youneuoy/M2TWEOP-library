@@ -6,19 +6,17 @@
 
 ## **Release Notes**
 
-### **Launcher**
-- Fix setting of faction name in Discord Rich Presence
+<!-- ### **Launcher** -->
 
-### **Library**
-- Updated DXVK library to the latest version [2.3.1](https://github.com/doitsujin/dxvk/releases/tag/v2.3.1)
-  - Includes a fix for the black screen issue during loading screens in windowed mode
+
+<!--### **Library** -->
 
 ### **Lua Plugin**
-- Fixed `M2TWEOP.restartLua()` crashing the game. It is now bound to `CTRL+SHIFT+R` by default. You can rebind this to something else if you prefer.
+- New event onCalculateUnitValue allowing more freedom over game balance as you can modify how the game evaluates a unit's strength, which affects autoresolve, AI recruitment, AI attack decisions on strategy and battle map and more.
 
-<!-- ### **ImGUI** -->
+<!--### **ImGUI**
 
-<!-- ### **Documentation** -->
+### **Documentation** -->
 
 ### **Links**
 - [Known Bugs](https://github.com/youneuoy/M2TWEOP-library/issues/71)
