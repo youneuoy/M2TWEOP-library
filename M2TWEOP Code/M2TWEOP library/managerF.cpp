@@ -494,6 +494,18 @@ void managerF::doPachs()
 	toCreateMercUnit->Enable();
 	f1 << "Done" << endl;
 
+	f1 << "Start applying onEvaluateUnit patch" << endl;
+	onEvaluateUnit* toEvaluateUnit = new onEvaluateUnit(mem, (LPVOID)patchesForGame::onEvaluateUnit, globals::dataS.gamever);
+	toEvaluateUnit->SetNewCode();
+	toEvaluateUnit->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying onEvaluateUnit2 patch" << endl;
+	onEvaluateUnit2* toEvaluateUnit2 = new onEvaluateUnit2(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gamever);
+	toEvaluateUnit2->SetNewCode();
+	toEvaluateUnit2->Enable();
+	f1 << "Done" << endl;
+
 	f1 << "Start applying onAiTurn patch" << endl;
 	onAiTurn* toAiTurn = new onAiTurn(mem, (LPVOID)patchesForGame::onAiTurn, globals::dataS.gamever);
 	toAiTurn->SetNewCode();

@@ -22,6 +22,8 @@ public:
 	static int __fastcall onFindUnit(char* entry, int* edbIndex);
 	static DWORD __fastcall OnUnitInfo(DWORD entryAddress);
 	static float __fastcall OnCalculateUnitValue(eduEntry* entry, DWORD value);
+	static int __fastcall onEvaluateUnit(int eduIndex);
+	static eduEntry* __fastcall onEvaluateUnit2(int eduIndex);
 	static int __fastcall OnReligionCombatBonus(int religionID, namedCharacter* namedChar);
 
 

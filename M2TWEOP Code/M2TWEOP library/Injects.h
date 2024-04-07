@@ -902,6 +902,32 @@ private:
 	LPVOID funcAddress;
 };
 
+class onEvaluateUnit
+	:public AATemplate
+{
+public:
+	onEvaluateUnit(MemWork* mem, LPVOID addr, int ver);
+	~onEvaluateUnit();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onEvaluateUnit2
+	:public AATemplate
+{
+public:
+	onEvaluateUnit2(MemWork* mem, LPVOID addr, int ver);
+	~onEvaluateUnit2();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class OnReligionCombatBonus
 	:public AATemplate
 {

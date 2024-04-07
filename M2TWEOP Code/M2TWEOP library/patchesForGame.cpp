@@ -82,6 +82,27 @@ float __fastcall patchesForGame::OnCalculateUnitValue(eduEntry* entry, const DWO
 	return plugins::OnCalculateUnitValue(entry, floatValue);
 }
 
+int patchesForGame::onEvaluateUnit(int eduIndex)
+{
+	if (eduIndex < 500)
+		return eduThings::getEduEntry(eduIndex)->categoryClassCombinationForAI;
+	
+	if (const auto eopUnit = eduThings::getEopEduEntry(eduIndex); eopUnit == nullptr)
+		return 0;
+	else
+		return eopUnit->categoryClassCombinationForAI;
+}
+
+eduEntry* patchesForGame::onEvaluateUnit2(int eduIndex)
+{
+	if (eduIndex < 500)
+		return eduThings::getEduEntry(eduIndex);
+	if (const auto eopUnit = eduThings::getEopEduEntry(eduIndex); eopUnit == nullptr)
+		return eduThings::getEduEntry(0);
+	else
+		return eopUnit;
+}
+
 int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlement, bool* isCastle)
 {
 	int selectedLevel = plugins::onfortificationlevelS(settlement, isCastle);

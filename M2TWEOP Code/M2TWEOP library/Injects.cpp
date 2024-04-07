@@ -3093,6 +3093,7 @@ void OnSaveEDUStringS2::SetNewCode()
 
 	a->popf();
 
+
 	a->pop(edi);
 	a->pop(esi);
 	a->pop(ebp);
@@ -3107,6 +3108,94 @@ void OnSaveEDUStringS2::SetNewCode()
 
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();
+	delete a;
+}
+
+onEvaluateUnit::onEvaluateUnit(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0052F52F;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0052EF2F;
+}
+
+onEvaluateUnit::~onEvaluateUnit()
+{
+}
+
+void onEvaluateUnit::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(ecx, 0x018C2BF0);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onEvaluateUnit::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(ecx, edi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(ecx, eax);
+
+	a->popf();
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+
+	delete a;
+}
+
+onEvaluateUnit2::onEvaluateUnit2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0052F53D;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0052EF3D;
+}
+
+onEvaluateUnit2::~onEvaluateUnit2()
+{
+}
+
+void onEvaluateUnit2::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(ecx, 0x018C2BF0);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onEvaluateUnit2::SetNewCode()
+{
+	Assembler* a = new Assembler();
+	
+	a->mov(ecx, edi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
 
 	delete a;
 }
