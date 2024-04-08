@@ -64,6 +64,8 @@ namespace m2tweopHelpers
 
 	void toggleUnitsBMapHighlight();
 	battleCameraStruct* getBattleCamCoords();
+	settlementTextStrings* getUIStrings(settlementInfoScroll* settlementInfoScroll);
+	settlementInfoScroll* getSettlementInfoScroll();
 
 	void setConversionLvlFromCastle(int castleLvl, int convertToLvl);
 	void setConversionLvlFromCity(int cityLvl, int convertToLvl);

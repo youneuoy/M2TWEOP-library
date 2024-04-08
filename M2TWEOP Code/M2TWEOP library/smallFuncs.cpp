@@ -106,7 +106,6 @@ namespace smallFuncs
 
 	};
 
-
 	NOINLINE EOP_EXPORT void setEDUUnitsSize(signed short min, signed short max)
 	{
 		DWORD codeOffset = 0;

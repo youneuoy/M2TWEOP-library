@@ -207,7 +207,7 @@ for name in filenames:
                         functionFound = True
                         break
             if functionFound == False:
-                print("Function " + newFunction.name + " not found in class " + newFunction.typeName)
+                print("[Warning]  Function " + newFunction.name + " not found in class " + newFunction.typeName)
             commentCache = ""
             classes[newFunction.typeName].functions[newFunction.name] = luaFunction()
             classes[newFunction.typeName].functions[newFunction.name].name = newFunction.name
@@ -254,7 +254,7 @@ for name in filenames:
             oldname = userType.table.name
             userType.table.name = re.findall(r'luaState\.new_usertype\<.+\>\(\"(\S+)\"\)', line)[0]
             if userType.table.name != oldname:
-                print("Documentation inconsistency: " + userType.table.name)
+                print("[Warning]  Documentation inconsistency: " + userType.table.name)
             userType.internalName = re.findall(r'\.(\S+)\s*=\s*luaState\.new_usertype', line)[0]
             internalClasses[userType.internalName] = userType.table.name
             if userType.table.name != "" and classes.get(userType.table.name) is None:
@@ -267,7 +267,7 @@ for name in filenames:
                 oldname = userType.table.name
                 userType.table.name = re.findall(r'luaState\.create_table\(\"(\S+)\"\)', line)[0]
                 if userType.table.name != oldname:
-                    print("Documentation inconsistency: " + userType.table.name)
+                    print("[Warning]  Documentation inconsistency: " + userType.table.name)
                 userType.internalName = re.findall(r'\.(\S+)\s*=\s*luaState\.create_table', line)[0]
                 internalClasses[userType.internalName] = userType.table.name
             else:
@@ -284,7 +284,7 @@ for name in filenames:
             if internalClasses.get(className) is not None:
                 className = internalClasses[className]
             else:
-                print("Class " + className + " not found")
+                print("[Warning]  Class " + className + " not found")
             fieldFound = False
             if classes.get(className) is not None:
                 for field in classes[className].table.tfields:
@@ -292,7 +292,7 @@ for name in filenames:
                         fieldFound = True
                         break
             if fieldFound == False:
-                print("Field " + fieldName + " not found in class " + className)
+                print("[Warning]  Field " + fieldName + " not found in class " + className)
             continue
         if re.search(r'\.set_function\(\"(\S+)\"', line) is not None:
             if re.search(r'^\s*\/\/', line) is not None:
@@ -302,7 +302,7 @@ for name in filenames:
             if internalClasses.get(className) is not None:
                 className = internalClasses[className]
             else:
-                print("Class " + className + " not found")
+                print("[Warning]  Class " + className + " not found")
             functionFound = False
             if classes.get(className) is not None:
                 for function in classes[className].functions:
@@ -310,7 +310,7 @@ for name in filenames:
                         functionFound = True
                         break
             if functionFound == False:
-                print("function " + functionName + " not found in class " + className)
+                print("[Warning]  function " + functionName + " not found in class " + className)
             continue
         if re.search(r'luaState.new_enum', line) is not None:
             if re.search(r'^\/\/', line) is not None:
@@ -326,7 +326,7 @@ for name in filenames:
                     oldname = userType.table.name
                     userType.table.name = re.findall(r'\"(\S*)\"\s*,', line)[0].strip()
                     if userType.table.name != oldname:
-                        print("Documentation inconsistency: " + userType.table.name)
+                        print("[Warning]  Documentation inconsistency: " + userType.table.name)
                     enumCount += 1
                 if re.search(r',\s*\S', line) is not None:
                     enumCount += 1

@@ -196,6 +196,23 @@ namespace m2tweopHelpers
 		battleCameraStruct* battleCamStruct =  (*(*plugData::data.funcsBattle.getBattleCamCoords))();
 		return battleCamStruct;
 	}
+	
+	settlementInfoScroll* getSettlementInfoScroll()
+	{
+		gameDataAllStruct* gameData = gameDataAllHelper::get();
+		if (!gameData->uiManager) 
+			return nullptr;
+		if (!gameData->uiManager->stratUI) 
+			return nullptr;
+
+		return gameData->uiManager->stratUI->settlementInfoScroll;
+	}
+
+	settlementTextStrings* getUIStrings(settlementInfoScroll* settlementInfoScroll)
+	{
+		return settlementInfoScroll->settlementStatsTable->settlementTextStrings;
+	}
+
 	void setConversionLvlFromCastle(int castleLvl, int convertToLvl)
 	{
 		(*(*plugData::data.funcs.setConversionLvlFromCastle))(castleLvl, convertToLvl);

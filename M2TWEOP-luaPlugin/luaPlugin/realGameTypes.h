@@ -1017,7 +1017,8 @@ struct gameDataAllStruct {
 	struct battleSettlement* battleSettlement;
 	char pad[112];
 	struct uiCardManager* uiCardManager;
-	char pad2[84];
+	char pad2[4];
+	struct uiManager* uiManager;
 };
 
 struct battleUnit
@@ -3963,5 +3964,98 @@ struct descr_sm_factions_list {
 	int capacity;
 	int size;
 };
+
+struct uiManager
+{
+public:
+	char pad_0000[12]; //0x0000
+	char *N00009D87; //0x000C
+	char pad_0010[32]; //0x0010
+	void *dragObjectContainer; //0x0030
+	struct stratUIStruct *stratUI; //0x0034
+}; //Size: 0x00A0
+
+
+// Settlement UI Stuff
+struct stratUIStruct
+{
+public:
+	char pad_0000[84]; //0x0000
+	struct settlementInfoScroll *settlementInfoScroll; //0x0054
+}; //Size: 0x0164
+
+
+struct settlementInfoScroll
+{
+public:
+	char pad_0000[40]; //0x0000
+	uint32_t N000218A6; //0x0028
+	char pad_002C[136]; //0x002C
+	float N000218C9; //0x00B4
+	float N000218CA; //0x00B8
+	float N000218CB; //0x00BC
+	float N000218CC; //0x00C0
+	char pad_00C4[576]; //0x00C4
+	struct settlementStruct *settlement; //0x0304
+	char pad_0308[12]; //0x0308
+	void *N00021961; //0x0314
+	char pad_0318[16]; //0x0318
+	void *uiTable; //0x0328
+	void *uiTable2; //0x032C
+	char pad_0330[12]; //0x0330
+	void *uiSettlementFrame; //0x033C
+	char pad_0340[4]; //0x0340
+	void *characterInfoFrame; //0x0344
+	void *uiCycleListTax; //0x0348
+	void *uiCycleList0; //0x034C
+	void *uiCycleList; //0x0350
+	char pad_0354[16]; //0x0354
+	void *uiCheckBox; //0x0364
+	void *uiCheckBox2; //0x0368
+	void *uiCheckBox3; //0x036C
+	void *N00021978; //0x0370
+	char pad_0374[16]; //0x0374
+	void *settlementRenameElement; //0x0384
+	struct settlementStatsTable *settlementStatsTable; //0x0388
+}; //Size: 0x0840
+
+struct settlementStatsTable
+{
+public:
+	char pad_0000[76]; //0x0000
+	struct settlementTextStrings *settlementTextStrings; //0x004C
+}; //Size: 0x0844
+
+struct settlementTextStrings
+{
+public:
+	struct uiString *incomeString; //0x0000
+	struct uiString *incomeValue; //0x0004
+	struct uiString *publicOrderString; //0x0008
+	struct uiString *publicOrderValue; //0x000C
+	struct uiString *populationString; //0x0010
+	struct uiString *populationValue; //0x0014
+	struct uiString *populationGrowthString; //0x0018
+	struct uiString *populationGrowthValue; //0x001C
+}; //Size: 0x0020
+
+struct uiString
+{
+public:
+	char pad_0000[72]; //0x0000
+	void *N00023379; //0x0048
+	void *N0002337A; //0x004C
+	char pad_0050[8]; //0x0050
+	void *N0002337D; //0x0058
+	char pad_005C[4]; //0x005C
+	void *settlementText; //0x0060
+	char pad_0064[4]; //0x0064
+	uint8_t thickness; //0x0068
+	uint8_t blue; //0x0069
+	uint8_t green; //0x006A
+	uint8_t red; //0x006B
+	char pad_006C[36]; //0x006C
+}; //Size: 0x0090
+
 
 #pragma pack(pop)
