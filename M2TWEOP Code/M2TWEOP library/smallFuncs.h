@@ -12,7 +12,6 @@ namespace smallFuncs
 	void* GetMainStratObject(void*baseObj);
 	NOINLINE EOP_EXPORT void setAncLimit(unsigned char limit);
 	NOINLINE EOP_EXPORT void setEDUUnitsSize(signed short min, signed short max);
-	NOINLINE EOP_EXPORT void setUIColorValue(signed short r, signed short g, signed short b, signed short a);
 	NOINLINE EOP_EXPORT void setMaxBgSize(unsigned char size);
 	NOINLINE EOP_EXPORT void unlockConsoleCommands();
 	NOINLINE EOP_EXPORT int getBattleCondCode(DWORD condObject);

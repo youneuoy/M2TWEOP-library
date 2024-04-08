@@ -125,6 +125,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<siegeS>siege;
 		sol::usertype<buildingLevel>buildingLevel;
 		sol::usertype<battleCameraStruct>battleCameraStruct;
+		sol::usertype<settlementInfoScroll>settlementInfoScroll;
+		sol::usertype<settlementTextStrings>settlementTextStrings;
+		sol::usertype<uiString>uiString;
 		sol::usertype<unitPositionData>unitPositionData;
 		sol::usertype<factionEconomy>factionEconomy;
 		sol::usertype<factionRanking>factionRanking;
@@ -223,10 +226,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield setGuildCooldown setGuildCooldown
 	@tfield getRegionOwner getRegionOwner
 	@tfield setEDUUnitsSize setEDUUnitsSize
-	@tfield setUIColorValue setUIColorValue
 	@tfield setBuildingChainLimit setBuildingChainLimit
 	@tfield getReligionName getReligionName
 	@tfield getReligionCount getReligionCount
+	@tfield getSettlementInfoScroll getSettlementInfoScroll
 	@tfield getReligion getReligion
 	@tfield condition condition
 	@tfield getOptions1 getOptions1
@@ -406,16 +409,17 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.M2TWEOPTable.set_function("setEDUUnitsSize", &m2tweopHelpers::setEDUUnitsSize);
 
 	/***
-	Sets the new maximum soldier count.
-	@function M2TWEOP.setUIColorValue
-	@tparam int r red: 300
-	@tparam int g green: 300
-	@tparam int b blue: 300
-	@tparam int a alpha: 300
+	Gets a struct containing color information about the settlement info scroll.
+	@function M2TWEOP.getSettlementInfoScroll
+	@treturn settlementInfoScroll infoScroll
 	@usage
-	M2TWEOP.setUIColorValue(155, 125, 160, 255);
+	// Make the words "Income" on the Settlement Info scroll red
+	settlementInfoScroll = M2TWEOP.getSettlementInfoScroll();
+	settlementInfoScroll:getUIStrings.incomeString.red = 255
+	settlementInfoScroll:getUIStrings.incomeString.green = 0
+	settlementInfoScroll:getUIStrings.incomeString.blue = 0
 	*/
-	tables.M2TWEOPTable.set_function("setUIColorValue", &m2tweopHelpers::setUIColorValue);
+	tables.M2TWEOPTable.set_function("getSettlementInfoScroll", &m2tweopHelpers::getSettlementInfoScroll);
 
 	/***
 	* Sets the new maximum amount of building levels within a chain.
@@ -1935,6 +1939,90 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.capturedUnit.set("unit", &capturedUnit::unit);
 	types.capturedUnit.set("capturedSoldiers", &capturedUnit::capturedSoldiers);
 	types.capturedUnit.set("capturedValue", &capturedUnit::capturedValue);
+
+
+	///settlementTextStrings
+	//@section settlementTextStrings
+
+	/***
+	Basic settlementTextStrings table.
+
+	@tfield uiString incomeString
+	@tfield uiString incomeValue
+	@tfield uiString publicOrderString
+	@tfield uiString publicOrderValue
+	@tfield uiString populationString
+	@tfield uiString populationValue
+	@tfield uiString populationGrowthString
+	@tfield uiString populationGrowthValue
+
+	@table settlementTextStrings
+	*/
+	types.settlementTextStrings = luaState.new_usertype<settlementTextStrings>("settlementTextStrings");
+	types.settlementTextStrings.set("incomeString", &settlementTextStrings::incomeString);
+	types.settlementTextStrings.set("incomeValue", &settlementTextStrings::incomeValue);
+	types.settlementTextStrings.set("publicOrderString", &settlementTextStrings::publicOrderString);
+	types.settlementTextStrings.set("publicOrderValue", &settlementTextStrings::publicOrderValue);
+	types.settlementTextStrings.set("populationString", &settlementTextStrings::populationString);
+	types.settlementTextStrings.set("populationValue", &settlementTextStrings::populationValue);
+	types.settlementTextStrings.set("populationGrowthString", &settlementTextStrings::populationGrowthString);
+	types.settlementTextStrings.set("populationGrowthValue", &settlementTextStrings::populationGrowthValue);
+
+	///uiString
+	//@section uiString
+
+	/***
+	Basic uiString table.
+
+	@tfield int thickness (0-255)
+	@tfield int blue (0-255)
+	@tfield int green (0-255)
+	@tfield int red (0-255)
+
+	@table uiString
+	*/
+	types.uiString = luaState.new_usertype<uiString>("uiString");
+	types.uiString.set("thickness", &uiString::thickness);
+	types.uiString.set("blue", &uiString::blue);
+	types.uiString.set("green", &uiString::green);
+	types.uiString.set("red", &uiString::red);
+
+	///settlementInfoScroll
+	//@section settlementInfoScroll
+
+	/***
+	Basic settlementInfoScroll table.
+
+	@tfield settlementStruct settlement
+	@tfield getUIStrings getUIStrings
+
+	@table settlementInfoScroll
+	*/
+	types.settlementInfoScroll = luaState.new_usertype<settlementInfoScroll>("settlementInfoScroll");
+	types.settlementInfoScroll.set("settlement", &settlementInfoScroll::settlement);
+
+	/***
+	Get settlement text color info.
+	@function settlementInfoScroll:getUIStrings
+	@treturn settlementTextStrings getUIStrings
+	@usage
+	function onScrollOpened(eventData)
+    	local settlementInfoScroll = M2TWEOP.getSettlementInfoScroll();
+		if settlementInfoScroll then
+			settlementInfoScroll:getUIStrings().incomeString.red = 0
+			settlementInfoScroll:getUIStrings().incomeString.green = 0
+			settlementInfoScroll:getUIStrings().incomeString.blue = 0
+			settlementInfoScroll:getUIStrings().incomeString.thickness = 0
+
+			settlementInfoScroll:getUIStrings().incomeValue.red = 0
+			settlementInfoScroll:getUIStrings().incomeValue.green = 0
+			settlementInfoScroll:getUIStrings().incomeValue.blue = 0
+		end
+	end
+	*/
+	types.settlementInfoScroll.set_function("getUIStrings", &m2tweopHelpers::getUIStrings);
+
+
 
 	///capturedCharacter
 	//@section capturedCharacterTable

@@ -154,7 +154,6 @@ public:
 
 
 	ProcLoader<void(__cdecl*)(signed short, signed short)> setEDUUnitsSize;
-	ProcLoader<void(__cdecl*)(signed short, signed short, signed short, signed short)> setUIColorValue;
 	ProcLoader<void(__cdecl*)(namedCharacter*, bool)> setHeir;
 
 

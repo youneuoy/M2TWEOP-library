@@ -53,7 +53,6 @@ namespace m2tweopHelpers
 	void setEquipmentCosts(int equipType, int cost);
 
 	void setEDUUnitsSize(signed short min, signed short max);
-	void setUIColorValue(signed short r, signed short g, signed short b, signed short a);
 	int getGameVersion();
 	options1* getOptions1();
 	options2* getOptions2();
@@ -65,6 +64,8 @@ namespace m2tweopHelpers
 
 	void toggleUnitsBMapHighlight();
 	battleCameraStruct* getBattleCamCoords();
+	settlementTextStrings* getUIStrings(settlementInfoScroll* settlementInfoScroll);
+	settlementInfoScroll* getSettlementInfoScroll();
 
 	void setConversionLvlFromCastle(int castleLvl, int convertToLvl);
 	void setConversionLvlFromCity(int cityLvl, int convertToLvl);
