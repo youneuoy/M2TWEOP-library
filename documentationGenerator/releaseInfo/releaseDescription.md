@@ -8,11 +8,10 @@
 
 <!-- ### **Launcher** -->
 
-
 <!--### **Library** -->
 
 ### **Lua Plugin**
-- New event onCalculateUnitValue allowing more freedom over game balance as you can modify how the game evaluates a unit's strength, which affects autoresolve, AI recruitment, AI attack decisions on strategy and battle map and more.
+- Added settlementInfoScroll struct. Allows you to set colours of some elements ![](https://github.com/youneuoy/M2TWEOP-library/assets/22448079/6fd79330-6c82-4498-9962-3fd3612a6da2)
 
 <!--### **ImGUI**
 
