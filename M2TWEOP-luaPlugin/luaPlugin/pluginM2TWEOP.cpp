@@ -179,6 +179,9 @@ int initPlugin(std::string* modPath)
 	fName = "siegeSettlement";
 	plugData::data.funcs.siegeSettlement.Load(&plPath, &fName);
 
+	fName = "siegeFort";
+	plugData::data.funcs.siegeFort.Load(&plPath, &fName);
+
 	fName = "addAncillary";
 	plugData::data.funcs.addAncillary.Load(&plPath, &fName);
 

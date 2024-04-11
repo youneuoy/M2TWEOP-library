@@ -415,6 +415,24 @@ void managerF::doPachs()
 	toGameInitialize->Enable();
 	f1 << "Done" << endl;
 
+	f1 << "Start applying toUnloadCampaign patch" << endl;
+	onUnloadCampaign* toUnloadCampaign = new onUnloadCampaign(mem, (LPVOID)patchesForGame::onUnloadCampaign, globals::dataS.gamever);
+	toUnloadCampaign->SetNewCode();
+	toUnloadCampaign->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying onBuildingUnitAttributes patch" << '\n';
+	auto toBuildingUnitAttributes = new onBuildingUnitAttributes(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gamever);
+	toBuildingUnitAttributes->SetNewCode();
+	toBuildingUnitAttributes->Enable();
+	f1 << "Done" << '\n';
+
+	f1 << "Start applying onBuildingUnitAttributes2 patch" << '\n';
+	auto toBuildingUnitAttributes2 = new onBuildingUnitAttributes2(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gamever);
+	toBuildingUnitAttributes2->SetNewCode();
+	toBuildingUnitAttributes2->Enable();
+	f1 << "Done" << '\n';
+
 
 	f1 << "Start applying mercenaryMovepointsGetGeneral patch" << endl;
 	mercenaryMovepointsGetGeneral* mercP = new mercenaryMovepointsGetGeneral(mem, (LPVOID)patchesForGame::mercenaryMovepointsGetGeneral, globals::dataS.gamever);

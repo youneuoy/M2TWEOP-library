@@ -250,6 +250,14 @@ void plugins::onGameInit()
 	}
 }
 
+void plugins::onUnloadCampaign()
+{
+	for (plugin* pl : pluginsCfg.plugins)
+	{
+		(*(*pl->onUnloadCampaign))();
+	}
+}
+
 void plugins::onAiTurn(aiFaction* aifaction)
 {
 	for (plugin* pl : pluginsCfg.plugins)
@@ -411,6 +419,10 @@ int plugin::init(string* nameP)
 	//onGameInit
 	fName = "onGameInit";
 	onGameInit.Load(&plPath, &fName);
+
+	//onUnloadCampaign
+	fName = "onUnloadCampaign";
+	onUnloadCampaign.Load(&plPath, &fName);
 
 	//onAiTurn
 	fName = "onAiTurn";

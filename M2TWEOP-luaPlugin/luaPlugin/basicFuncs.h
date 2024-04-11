@@ -175,7 +175,8 @@ public:
 	ProcLoader<factionStruct** (__cdecl*)()> getFactionsList;
 
 	ProcLoader<void(__cdecl*)(general*, int, int)> moveNormal;
-	ProcLoader<void(__cdecl*)(general*, settlementStruct*)> siegeSettlement;
+	ProcLoader<void(__cdecl*)(general*, settlementStruct*, bool)> siegeSettlement;
+	ProcLoader<void(__cdecl*)(general*, fortStruct*, bool)> siegeFort;
 	ProcLoader<void(__cdecl*)(general*, general*)> attackCharacter;
 
 

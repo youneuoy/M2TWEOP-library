@@ -86,15 +86,27 @@ namespace stackStructHelpers
 
 		return 1;
 	}
-	void siegeSettlement(stackStruct *army, settlementStruct *sett)
+	
+	void siegeSettlement(stackStruct *army, settlementStruct *sett, bool isAttack)
 	{
 		general *atkGen = army->gen;
 
 		if (atkGen == nullptr || sett == nullptr)
 			return;
 
-		(*(*plugData::data.funcs.siegeSettlement))(atkGen, sett);
+		(*(*plugData::data.funcs.siegeSettlement))(atkGen, sett, isAttack);
 	}
+	
+	void siegeFort(stackStruct *army, fortStruct *fort, bool isAttack)
+	{
+		general *atkGen = army->gen;
+
+		if (atkGen == nullptr || fort == nullptr)
+			return;
+
+		(*(*plugData::data.funcs.siegeFort))(atkGen, fort, isAttack);
+	}
+	
 	settlementStruct *findInSettlement(const stackStruct *army)
 	{
 		if (army->settlement == nullptr)

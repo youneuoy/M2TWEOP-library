@@ -2528,6 +2528,53 @@ void onGameInitialized::SetNewCode()
 	delete a;
 }
 
+onUnloadCampaign::onUnloadCampaign(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00473338;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00414C08;
+}
+
+onUnloadCampaign::~onUnloadCampaign()
+{
+}
+
+void onUnloadCampaign::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(esi, ecx);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onUnloadCampaign::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+	a->mov(esi, ecx);
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
 onGameConsoleCommandFromScript::onGameConsoleCommandFromScript(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
@@ -3999,6 +4046,113 @@ void OnFindUnitStrings2::SetNewCode()
 
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+
+
+void fillWithNOP(DWORD address, size_t size) {
+	DWORD oldProtect;
+	VirtualProtect((LPVOID)address, size, PAGE_EXECUTE_READWRITE, &oldProtect);
+
+	memset((LPVOID)address, 0x90, size); // 0x90 is the opcode for NOP in x86/x64
+
+	VirtualProtect((LPVOID)address, size, oldProtect, &oldProtect);
+}
+
+onBuildingUnitAttributes::onBuildingUnitAttributes(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x005F789F;
+		fillWithNOP(0x005F78A2, 0x7);
+	}
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x005F74AF;
+		fillWithNOP(0x005F74B2, 0x7);
+	}
+}
+
+onBuildingUnitAttributes::~onBuildingUnitAttributes()
+{
+}
+
+
+void onBuildingUnitAttributes::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(eax, 0x18C2BAC);
+	
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onBuildingUnitAttributes::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(ecx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	
+	delete a;
+}
+
+onBuildingUnitAttributes2::onBuildingUnitAttributes2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x0060E866;
+	}
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x0060E4B6;
+	}
+}
+
+onBuildingUnitAttributes2::~onBuildingUnitAttributes2()
+{
+}
+
+
+void onBuildingUnitAttributes2::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(eax, 0x18C2BAC);
+	
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onBuildingUnitAttributes2::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	
+	a->push(eax);
+	a->push(ecx);
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(edi, eax);
+	a->pop(ecx);
+	a->pop(eax);
+
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
 
 	delete a;
 }

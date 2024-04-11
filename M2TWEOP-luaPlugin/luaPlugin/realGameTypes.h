@@ -647,9 +647,83 @@ public:
 	float militaryRanking; //0x0004
 	float productionRanking; //0x0008
 	float territoryRanking; //0x000C
-	float FinancialRanking; //0x0010
+	float financialRanking; //0x0010
 	float populationRanking; //0x0014
 }; //Size: 0x0018
+
+struct projectile
+{
+	char pad_0000[4];
+	char *name;
+	int32_t nameHash;
+	int32_t specialType;
+	struct projectile *flamingProjectile;
+	int8_t shatterDust;
+	int8_t shatterDebris;
+	int8_t vanishDust;
+	int8_t vanishDebris;
+	int8_t fiery;
+	int8_t particleTrail;
+	int8_t aimed;
+	int8_t invertModelZ;
+	int8_t spin;
+	int8_t rocket;
+	int8_t explosive;
+	int8_t bool1f;
+	float spinAmount;
+	void *ptr24;
+	float minAngle;
+	float maxAngle;
+	int8_t preferHigh;
+	int8_t byte31;
+	int8_t byte32;
+	int8_t byte33;
+	char pad_0034[4];
+	float maxVelocity;
+	char pad_003C[12];
+	float minVelocity;
+	float float4c;
+	float float50;
+	char pad_0054[20];
+	float radius;
+	float mass;
+	float area;
+	float accuracyVsUnits;
+	float accuracyVsBuildings;
+	float accuracyVsTowers;
+	int8_t affectedByRain;
+	int8_t damageToTroops;
+	int8_t groundShatter;
+	int8_t bounce;
+	float bounceFloat1;
+	float bounceFloat2;
+	float bounceFloat3;
+	float bounceFloat4;
+	int8_t erratic;
+	int8_t isBodyPiercing;
+	int16_t short96;
+	int8_t destroyMaxRange;
+	int destroyMaxRangeVariation;
+	char pad_0098[20];
+	int32_t damage;
+	char end_effect1[32];
+	char *endEffect;
+	char pad_00DC[24];
+	char *endManEffect;
+	char pad_00F8[24];
+	char *endPackageEffect;
+	char pad_0114[24];
+	char *endShatterPackageEffect;
+	char pad_0130[24];
+	char *endShatterManEffect;
+	char pad_014C[24];
+	char *endShatterEffect;
+	char pad_0168[48];
+	char areaEffect[24];
+	char pad_01B0[48];
+	float EffectOffset;
+	char pad_01E4[588];
+};
 
 struct factionStratMapDescrS { /* see descr_sm_factions.txt */
 	int id;
@@ -3551,6 +3625,32 @@ struct factionStruct {
 	char pad_0EF0[24]; //0x0EF0
 };
 
+struct animSetModelDB
+{
+public:
+	char pad_0000[4]; //0x0000
+	char *name; //0x0004
+	char pad_0008[24]; //0x0008
+}; //Size: 0x0020
+
+struct modelDbAnims
+{
+public:
+	char pad_0000[4]; //0x0000
+	char N000028CE[4]; //0x0004
+	char N000028CF[4]; //0x0008
+	char pad_000C[20]; //0x000C
+	char *N00022FB0; //0x0020
+	char pad_0024[52]; //0x0024
+	struct animSetModelDB *primaryAnim; //0x0058
+	void *N0000092A; //0x005C
+	void *N0000092B; //0x0060
+	char pad_0064[4]; //0x0064
+	struct animSetModelDB *secondaryAnim; //0x0068
+	char pad_006C[12]; //0x006C
+}; //Size: 0x0078
+
+
 struct ModelDbEntry
 {
 public:
@@ -3561,13 +3661,13 @@ public:
 	char pad_0018[4]; //0x0018
 	float scale; //0x001C
 	char pad_0020[4]; //0x0020
-	class ModelDbMesh* Mesh; //0x0024
+	struct ModelDbMesh* mesh; //0x0024
 	char pad_0028[12]; //0x0028
-	class ModelDbEntryTextures* Textures; //0x0034
+	struct ModelDbEntryTextures* textures; //0x0034
 	char pad_0038[12]; //0x0038
-	class ModelDbEntryTextures* AttTextures; //0x0044
+	struct ModelDbEntryTextures* attTextures; //0x0044
 	char pad_0048[12]; //0x0048
-	class ModelDbAnims* Animations; //0x0054
+	struct modelDbAnims* animations; //0x0054
 	char pad_0058[8]; //0x0058
 	int32_t torchAttachBone; //0x0060
 	float N00000857; //0x0064
@@ -3592,6 +3692,41 @@ public:
 	char* UpgradeThree; //0x0018
 	int32_t UpgradeThreeHash; //0x001C
 };
+
+struct descrMountEntry
+{
+public:
+	char *name; //0x0000
+	char pad_0004[4]; //0x0004
+	int32_t mountClass; //0x0008
+	char *modelName; //0x000C
+	char pad_0010[12]; //0x0010
+	float radius; //0x001C
+	float xRadius; //0x0020
+	float yRadius; //0x0024
+	float yOffset; //0x0028
+	float height; //0x002C
+	float mass; //0x0030
+	float bannerHeight; //0x0034
+	float bouyancyOffset; //0x0038
+	float elephantRootNodeHeight; //0x003C
+	float elephantAttackDelay; //0x0040
+	float elephantDeadRadius; //0x0044
+	float elephantTuskZ; //0x0048
+	float elephantTuskRadius; //0x004C
+	int32_t elephantNumberOfRiders; //0x0050
+	float elephantRiderOffset1X; //0x0054
+	float elephantRiderOffset1Y; //0x0058
+	float elephantRiderOffset1Z; //0x005C
+	char pad_0060[168]; //0x0060
+	float rootNodeHeight; //0x0108
+	float riderOffSetX; //0x010C
+	float riderOffSetY; //0x0110
+	float riderOffsetZ; //0x0114
+	char pad_0118[8]; //0x0118
+	char *waterTrailEffect; //0x0120
+	char pad_0124[20]; //0x0124
+}; //Size: 0x0138
 
 
 //type of unit from EDU
@@ -3692,7 +3827,7 @@ struct eduEntry {
 	DWORD MissleRange;
 	float MissleRangeSquared;
 	DWORD HasPrimary;
-	void* StatPriMissle;
+	projectile* StatPriMissle;
 	DWORD WeaponType;
 	DWORD TechType;
 	DWORD DamageType;
@@ -3706,7 +3841,7 @@ struct eduEntry {
 	DWORD SecMissleRange;
 	float SecMissleRangeSquared;
 	DWORD HasSecondary;
-	void* StatSecMissle;
+	projectile* StatSecMissle;
 	DWORD SecWeaponType;
 	DWORD SecTechType;
 	DWORD SecDamageType;
@@ -3761,11 +3896,11 @@ struct eduEntry {
 	DWORD N00000115;
 	DWORD TerMissleAttackMinDelay;
 	char pad_02A0[36];
-	void* MountModel;
-	void* MountSomerthing;
+	struct descrMountEntry* mount;
+	struct ModelDbEntry* mountModel;
 	DWORD StatSecAndSecArmour;
 	char pad_02D0[68];
-	DWORD Mount;
+	DWORD notmount;
 	char pad_0318[8];
 	void* AnimalModel;
 	void* AnimalSomething;

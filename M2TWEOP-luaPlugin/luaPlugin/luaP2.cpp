@@ -331,8 +331,8 @@ void luaP::initCampaign()
 	@tfield unit attackingUnit
 	@tfield unit defendingUnit
 	@tfield character stratCharacter
-	@tfield namedCharacter character
-	@tfield namedCharacter targetCharacter
+	@tfield namedCharacter namedCharacter
+	@tfield namedCharacter targetNamedCharacter
 	@tfield settlementStruct settlement
 	@tfield settlementStruct targetSettlement
 	@tfield fortStruct fort
@@ -354,7 +354,7 @@ void luaP::initCampaign()
 	@tfield int missionProbability
 	@tfield string missionDetails
 	@tfield int eventID
-	@tfield guild guild
+	@tfield int guildID
 	@tfield string eventCounter
 	@tfield coordPair coords
 	@tfield int religion
@@ -373,6 +373,8 @@ void luaP::initCampaign()
 	typeAll.eventTrigger.set("defendingUnit", sol::property(gameHelpers::getEventDefendingUnit));
 	typeAll.eventTrigger.set("stratCharacter", sol::property(gameHelpers::getEventCharacter));
 	typeAll.eventTrigger.set("character", sol::property(gameHelpers::getEventNamedCharacter));
+	typeAll.eventTrigger.set("namedCharacter", sol::property(gameHelpers::getEventNamedCharacter));
+	typeAll.eventTrigger.set("targetNamedCharacter", sol::property(gameHelpers::getEventTargetNamedCharacter));
 	typeAll.eventTrigger.set("targetCharacter", sol::property(gameHelpers::getEventTargetNamedCharacter));
 	typeAll.eventTrigger.set("settlement", sol::property(gameHelpers::getEventSettlement));
 	typeAll.eventTrigger.set("targetSettlement", sol::property(gameHelpers::getEventTargetSettlement));
@@ -395,7 +397,7 @@ void luaP::initCampaign()
 	typeAll.eventTrigger.set("missionProbability", sol::property(gameHelpers::getMissionProbability));
 	typeAll.eventTrigger.set("missionDetails", sol::property(gameHelpers::getMissionDetails));
 	typeAll.eventTrigger.set("eventID", sol::property(gameHelpers::getEventID));
-	typeAll.eventTrigger.set("guild", sol::property(gameHelpers::getEventGuild));
+	typeAll.eventTrigger.set("guildID", sol::property(gameHelpers::getEventGuild));
 	typeAll.eventTrigger.set("eventCounter", sol::property(gameHelpers::getEventCounter));
 	typeAll.eventTrigger.set("coords", sol::property(gameHelpers::getPosition));
 	typeAll.eventTrigger.set("religion", sol::property(gameHelpers::getReligion));
@@ -451,7 +453,7 @@ void luaP::initCampaign()
 	*/
 	typeAll.uiCardManager.set_function("getUnitCard", &gameHelpers::getUnitCard);
 
-	/// Campaign
+	///Campaign
 	//@section campaignStruct
 
 	/***
@@ -501,6 +503,7 @@ void luaP::initCampaign()
 	@tfield getFort getFort
 	@tfield getPort getPort
 	@tfield getWatchTower getWatchTower
+	@tfield getFaction getFaction
 	@tfield getSettlementByName getSettlementByName
 
 	@table campaignStruct
@@ -626,6 +629,16 @@ void luaP::initCampaign()
 	*/
 	typeAll.campaignTable.set_function("getSettlementByName", &gameHelpers::getSettlementByName);
 	/***
+	Get a faction by it's internal name.
+	@function campaignStruct:getFaction
+	@tparam string name
+	@treturn factionStruct faction
+	@usage
+	local CAMPAIGN = gameDataAll.get().campaignStruct;
+	local fac = CAMPAIGN:getFaction("england");
+	*/
+	typeAll.campaignTable.set_function("getFaction", &gameHelpers::getFactionHashed);
+	/***
 	Get path to the current descr\_strat file used.
 	@function campaignStruct:getCampaignPath
 	@treturn string path
@@ -735,6 +748,8 @@ void luaP::initCampaign()
 	@tfield getVolcanoCoords getVolcanoCoords
 	@tfield getLandConnection getLandConnection
 	@tfield getLandMass getLandMass
+	@tfield getSettlement getSettlement
+	@tfield getRegionByName getRegionByName
 
 	@table stratMap
 	*/
@@ -801,6 +816,28 @@ void luaP::initCampaign()
 	local tile = sMap:getLandMass(0);
 	*/
 	typeAll.stratMap.set_function("getLandMass", &gameHelpers::getLandMass);
+
+	/***
+	Get a settlement by its internal name. This is the intended way to get a settlement quickly by it's name.
+	@function stratMap:getSettlement
+	@tparam string name
+	@treturn settlementStruct settlement
+	@usage
+	local STRAT_MAP = gameDataAll.get().stratMap;
+	local london = STRAT_MAP:getSettlement("London");
+	*/
+	typeAll.stratMap.set_function("getSettlement", &gameHelpers::getSettlement);
+
+	/***
+	Get a region by its internal name.
+	@function stratMap:getRegionByName
+	@tparam string name
+	@treturn regionStruct region
+	@usage
+	local STRAT_MAP = gameDataAll.get().stratMap;
+	local londonRegion = STRAT_MAP:getRegionByName("London_Province");
+	*/
+	typeAll.stratMap.set_function("getRegionByName", &gameHelpers::getRegionByName);
 
 	/// landMass
 	//@section landMass

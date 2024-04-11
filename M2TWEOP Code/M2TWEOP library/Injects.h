@@ -684,6 +684,48 @@ private:
 	LPVOID funcAddress;
 };
 
+
+class onUnloadCampaign
+	:public AATemplate
+{
+public:
+	onUnloadCampaign(MemWork* mem, LPVOID adr, int ver);
+	~onUnloadCampaign();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+
+class onBuildingUnitAttributes
+	:public AATemplate
+{
+public:
+	onBuildingUnitAttributes(MemWork* mem, LPVOID adr, int ver);
+	~onBuildingUnitAttributes();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+
+class onBuildingUnitAttributes2
+	:public AATemplate
+{
+public:
+	onBuildingUnitAttributes2(MemWork* mem, LPVOID adr, int ver);
+	~onBuildingUnitAttributes2();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onAiTurn
 	:public AATemplate
 {

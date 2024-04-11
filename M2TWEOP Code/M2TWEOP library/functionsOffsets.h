@@ -18,6 +18,9 @@ public:
 
 		DWORD createSiegeSettlementGarrisonedFunc = NULL;
 		DWORD getReadySiegeCharacterGarrisonedFunc = NULL;
+		DWORD createCadAssaultSettlementFunc = NULL;
+		DWORD createCadSiegeSettlementFunc = NULL;
+		DWORD createCadAttackSettlementFunc = NULL;
 		DWORD finalyzeActionStratmapFunc = NULL;
 
 
@@ -28,6 +31,8 @@ public:
 		DWORD makeTrackedPointerToAttackFunc = NULL;
 		DWORD makeCadAttackFunc = NULL;
 		DWORD somethingWithTrackedPointerAttackFunc = NULL;
+		
+		DWORD somethingWithTrackedPointerFortFunc = NULL;
 
 
 		//strat camera funcs
@@ -98,6 +103,13 @@ public:
 		DWORD createFortFunc = NULL;
 		DWORD mercEOPValue = NULL;
 		DWORD makeConditionFunc = NULL;
+		DWORD getEquipmentPreferencesFunc = NULL;
+		DWORD decideEquipmentFunc = NULL;
+		DWORD createCadMovingNormalFunc = NULL;
+		DWORD createCadAttackFortFunc = NULL;
+		DWORD createCadAssaultFortFunc = NULL;
+		DWORD createCadSiegeFortFunc = NULL;
+		DWORD makeTrackedPointerFortFunc = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

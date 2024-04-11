@@ -93,7 +93,11 @@ void eopEduHelpers::haveAttributeLegioSet(eduEntry* eduEn, bool isHaveLegio)
 
 bool eopEduHelpers::hasAttribute(unit* unit, const char* attributeName)
 {
-	const auto entry = unit->eduEntry;
+	return hasAttributeEdu(unit->eduEntry, attributeName);
+}
+
+bool eopEduHelpers::hasAttributeEdu(eduEntry* entry, const char* attributeName)
+{
 	const int attributesNum = (reinterpret_cast<DWORD>(entry->EndOfAttributes) - reinterpret_cast<DWORD>(entry->Attributes)) / 8;
 	for (int i = 0; i < attributesNum; i+= 2)
 	{
@@ -293,6 +297,20 @@ bool eopEduHelpers::getEntryAttackAttribute(int idx, UnitEnums::attackAttr attri
 int eopEduHelpers::multiplexor(int n1, int n2, int sel)
 {
 	return (((~sel) & n1) | (n2 & sel));
+}
+
+std::string eopEduHelpers::getPrimaryAnim(const eduEntry* entry)
+{
+	if (!entry->ModelDBEntry->animations->primaryAnim)
+		return "";
+	return entry->ModelDBEntry->animations->primaryAnim->name;
+}
+
+std::string eopEduHelpers::getSecondaryAnim(const eduEntry* entry)
+{
+	if (!entry->ModelDBEntry->animations->secondaryAnim)
+		return "";
+	return entry->ModelDBEntry->animations->secondaryAnim->name;
 }
 
 int eopEduHelpers::hasOwnership(eduEntry* entry, int factionID)

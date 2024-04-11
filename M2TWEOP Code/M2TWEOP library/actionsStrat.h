@@ -21,7 +21,8 @@ namespace actionsStrat
 	void finalizeAction(DWORD allocatedMem, general* gen);
 
 	NOINLINE EOP_EXPORT void Idle(general* gen);
-	NOINLINE EOP_EXPORT void siegeSettlement(general* gen, settlementStruct* sett);
+	NOINLINE EOP_EXPORT void siegeSettlement(general* gen, settlementStruct* sett, bool isAttack);
+	NOINLINE EOP_EXPORT void siegeFort(general* gen, fortStruct* fort, bool isAttack);
 	NOINLINE EOP_EXPORT void moveNormal(general* gen, int x,int y);
 	NOINLINE EOP_EXPORT void attackCharacter(general* attacker, general* defender);
 };

@@ -401,6 +401,11 @@ void __stdcall patchesForGame::onGameInit()
 	plugins::onGameInit();
 }
 
+void __stdcall patchesForGame::onUnloadCampaign()
+{
+	plugins::onUnloadCampaign();
+}
+
 void __fastcall patchesForGame::onAiTurn(aiFaction* aifaction)
 {
 	plugins::onAiTurn(aifaction);

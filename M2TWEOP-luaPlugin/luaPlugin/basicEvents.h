@@ -6,11 +6,10 @@ using namespace std;
 
 extern "C" PLUGINM2TWEOP_API void onReadGameDbsAtStart();
 extern "C" PLUGINM2TWEOP_API void onGameInit();
+extern "C" PLUGINM2TWEOP_API void onUnloadCampaign();
 extern "C" PLUGINM2TWEOP_API void onAiTurn(aiFaction* aifaction);
 extern "C" PLUGINM2TWEOP_API void onEndSiege(int x, int y);
 extern "C" PLUGINM2TWEOP_API void onStartSiege(int x, int y);
-std::unordered_map<int, const char*> religionNames = {
-};
 
 
 extern "C" PLUGINM2TWEOP_API void onClickAtTile(int x, int y);

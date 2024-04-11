@@ -40,6 +40,7 @@ public:
 	//after reading EDU
 	static void WINAPI afterEDUread();
 	static void WINAPI onGameInit();
+	static void WINAPI onUnloadCampaign();
 	static void __fastcall onAiTurn(aiFaction* aifaction);
 
 

@@ -54,7 +54,10 @@ namespace gameHelpers
 	int getTileCharacterCount(const oneTile* tile);
 	general* getTileCharacterAtIndex(const oneTile* tile, int index);
 
-
+	factionStruct* getFactionHashed(const campaign* campaign, const char* name);
+	settlementStruct* getSettlement(const stratMap* map, const char* name);
+	regionStruct* getRegionByName(stratMap* map, const char* name);
+	
 	general* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y);
 	stackStruct* createArmy(general* character);
 	stackStruct* createArmyInSettlement(settlementStruct* sett);

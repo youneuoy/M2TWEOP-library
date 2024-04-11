@@ -1,5 +1,7 @@
 #include "basicEvents.h"
 #include <unordered_map>
+
+#include "gameDataAllHelper.h"
 using namespace std;
 
 
@@ -700,6 +702,14 @@ void onGameInit()
 	}
 }
 
+void onUnloadCampaign()
+{
+	if (plugData::data.luaAll.onUnloadCampaign != nullptr)
+	{
+		tryLua((*plugData::data.luaAll.onUnloadCampaign)());
+	}
+}
+
 void onAiTurn(aiFaction* aifaction)
 {
 	if (plugData::data.luaAll.onAiTurn != nullptr)
@@ -829,11 +839,16 @@ void onNewGameStart()
 
 void onCampaignMapLoaded()
 {
+	if (!plugData::data.luaAll.hashLoaded)
+		plugData::data.luaAll.fillHashMaps();
 	if (plugData::data.luaAll.onCampaignMapLoaded != nullptr)
 	{
 		tryLua((*plugData::data.luaAll.onCampaignMapLoaded)());
 	}
 }
+
+bool hashLoaded = false;
+
 
 void onLoadGamePl(std::vector<std::string>* saveFiles)
 {

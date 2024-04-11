@@ -35,7 +35,11 @@ namespace gameHelpers
 
 	factionStruct* gameHelpers::getFaction(const int index)
 	{
-		return (*(*plugData::data.funcs.getFactionsList))()[index];
+		const gameDataAllStruct* gameData = gameDataAllHelper::get();
+		const campaign* campaign = gameData->campaignData;
+		if (!campaign || index < 0 || index >= campaign->numberOfFactionsWithSlave)
+			return nullptr;
+		return campaign->factionsSortedByDescrStrat[index];
 	}
 
 	guild* gameHelpers::getGuild(const unsigned char index)
@@ -1071,6 +1075,36 @@ namespace gameHelpers
 	watchTowerStruct* getTileWatchtower(const oneTile* tile)
 	{
 		return reinterpret_cast<watchTowerStruct*>(getTileObject(tile, 32));
+	}
+	
+	factionStruct* getFactionHashed(const campaign* campaign, const char* name)
+	{
+		if (!plugData::data.luaAll.hashLoaded)
+			plugData::data.luaAll.fillHashMaps();
+		const auto factionId = plugData::data.luaAll.factions.find(name);
+		if (factionId == plugData::data.luaAll.factions.end()) 
+			return nullptr;
+		return campaign->factionsSortedByID[factionId->second];
+	}
+
+	settlementStruct* getSettlement(const stratMap* map, const char* name)
+	{
+		if (!plugData::data.luaAll.hashLoaded)
+			plugData::data.luaAll.fillHashMaps();
+		const auto regionId = plugData::data.luaAll.settlements.find(name);
+		if (regionId == plugData::data.luaAll.settlements.end()) 
+			return nullptr;
+		return map->regions[regionId->second].settlement;
+	}
+
+	regionStruct* getRegionByName(stratMap* map, const char* name)
+	{
+		if (!plugData::data.luaAll.hashLoaded)
+			plugData::data.luaAll.fillHashMaps();
+		const auto regionId = plugData::data.luaAll.regions.find(name);
+		if (regionId == plugData::data.luaAll.regions.end()) 
+			return nullptr;
+		return &map->regions[regionId->second];
 	}
 
 

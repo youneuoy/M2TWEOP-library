@@ -145,12 +145,24 @@ public:
 
 	}types;
 	*/
+	void fillHashMaps();
+	
+	bool hashLoaded = false;
 
+	std::unordered_map<const char*, int> factions = {
+	};
+	std::unordered_map<const char*, int> regions = {
+	};
+	std::unordered_map<const char*, int> settlements = {
+	};
+	std::unordered_map<int, const char*> religionNames = {
+	};
 
 	sol::function* onCampaignMapLoaded = nullptr;
 
 	sol::function* onReadGameDbsAtStart = nullptr;
 	sol::function* onGameInit = nullptr;
+	sol::function* onUnloadCampaign = nullptr;
 	sol::function* onAiTurn = nullptr;
 	sol::function* onEndSiege = nullptr;
 	sol::function* onStartSiege = nullptr;

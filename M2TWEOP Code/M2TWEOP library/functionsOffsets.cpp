@@ -10,7 +10,13 @@ void codes::initCodes(int gameVer)
 		offsets.allocMemFunc = 0x012418d8;
 
 		offsets.createSiegeSettlementGarrisonedFunc = 0x005b56c0;
+		offsets.createCadAttackSettlementFunc = 0x005B55B0;
+		offsets.createCadAssaultSettlementFunc = 0x005B57D0;
+		offsets.createCadSiegeSettlementFunc = 0x005B56C0;
+		offsets.createCadMovingNormalFunc = 0x005B0060;
 		offsets.getReadySiegeCharacterGarrisonedFunc = 0x005a18e0;
+		offsets.decideEquipmentFunc = 0x0071C920;
+		offsets.getEquipmentPreferencesFunc = 0x00521520;
 		offsets.finalyzeActionStratmapFunc = 0x0059e790;
 
 		offsets.createIdleActionFunc = 0x005aff40;
@@ -32,6 +38,12 @@ void codes::initCodes(int gameVer)
 		offsets.moveStratCameraSlowFunc = 0x0098d940;
 		offsets.moveStratCameraFastFunc = 0x0098d4b0;
 		offsets.zoomStratCameraFunc = 0x0098d6a0;
+		
+		offsets.createCadAttackFortFunc = 0x005B5950;
+		offsets.createCadAssaultFortFunc = 0x005B5B90;
+		offsets.createCadSiegeFortFunc = 0x005B5A70;
+		offsets.makeTrackedPointerFortFunc = 0x004E61F0;
+		offsets.somethingWithTrackedPointerFortFunc = 0x004EB5B0;
 
 
 		offsets.teleportCharacterFunc = 0x0059b580;
@@ -94,7 +106,17 @@ void codes::initCodes(int gameVer)
 
 		offsets.createSiegeSettlementGarrisonedFunc = 0x005b5ba0;
 		offsets.getReadySiegeCharacterGarrisonedFunc = 0x005a1dc0;
+		
+		offsets.createCadAttackSettlementFunc = 0x00005B5A90;
+		offsets.createCadAssaultSettlementFunc = 0x005B5CB0;
+		offsets.createCadSiegeSettlementFunc = 0x005B5BA0;
+		offsets.createCadMovingNormalFunc = 0x005B0540;
+		offsets.decideEquipmentFunc = 0x0071D050;
+		offsets.getEquipmentPreferencesFunc = 0x00521B10;
+		offsets.createCadSiegeSettlementFunc = 0x005B5BA0;
+		
 		offsets.finalyzeActionStratmapFunc = 0x0059ec70;
+		
 
 		offsets.createIdleActionFunc = 0x005b0420;
 
@@ -115,6 +137,12 @@ void codes::initCodes(int gameVer)
 		offsets.moveStratCameraSlowFunc = 0x0098e4c0;
 		offsets.moveStratCameraFastFunc = 0x0098e030;
 		offsets.zoomStratCameraFunc = 0x0098e220;
+		
+		offsets.createCadAttackFortFunc = 0x005B5E30;
+		offsets.createCadAssaultFortFunc = 0x005B6070;
+		offsets.createCadSiegeFortFunc = 0x005B5F50;
+		offsets.makeTrackedPointerFortFunc = 0x004E67F0;
+		offsets.somethingWithTrackedPointerFortFunc = 0x004EBBC0;
 
 
 		offsets.teleportCharacterFunc = 0x0059ba70;

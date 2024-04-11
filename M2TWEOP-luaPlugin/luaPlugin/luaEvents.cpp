@@ -227,6 +227,7 @@ void luaP::onPluginLoadF()
 	@tfield onNewGameStart onNewGameStart
 	@tfield onReadGameDbsAtStart onReadGameDbsAtStart
 	@tfield onGameInit onGameInit
+	@tfield onUnloadCampaign onUnloadCampaign
 	@tfield onAiTurn onAiTurn
 	@tfield onClickAtTile onClickAtTile
 	@tfield onCampaignMapLoaded onCampaignMapLoaded
@@ -3013,6 +3014,22 @@ void luaP::onPluginLoadF()
 
 	onGameInit = new sol::function(luaState["onGameInit"]);
 	checkLuaFunc(&onGameInit);
+
+	/***
+	Called after the campaignStruct gets unloaded (exit to menu, load save etc).
+
+	@function onUnloadCampaign
+
+	@usage
+	function onUnloadCampaign()
+	--something here
+	end
+	*/
+
+
+
+	onUnloadCampaign = new sol::function(luaState["onUnloadCampaign"]);
+	checkLuaFunc(&onUnloadCampaign);
 
 	/***
 	Called on ai initialized on turn start.

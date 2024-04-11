@@ -5,6 +5,7 @@
 #include "luaP.h"
 
 #include "console.h"
+#include "gameDataAllHelper.h"
 #include "plugData.h"
 std::vector<std::string> luaP::logS;
 std::vector<std::string> luaP::logCommands;
@@ -137,6 +138,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<settlementRecruitmentPool>settlementRecruitmentPool;
 		sol::usertype<battleFactionCounter>battleFactionCounter;
 		sol::usertype<eventTrigger> eventTrigger;
+		sol::usertype<descrMountEntry> mountStruct;
+		sol::usertype<projectile> projectileStruct;
 		sol::usertype<settlementStats> settlementStats;
 		sol::usertype<aiFaction> aiFaction;
 		sol::usertype<aiLongTermGoalDirector> aiLongTermGoalDirector;
@@ -1269,6 +1272,45 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.unitPositionData.set_function("getTargetUnit", &unitHelpers::getTargetUnit);
 
 
+	///Projectile
+	//@section projectileStruct
+
+	/***
+
+	@tfield string name
+	@tfield float accuracy
+	@tfield int isBodyPiercing
+
+	@table projectileStruct
+	*/
+	types.projectileStruct = luaState.new_usertype<projectile>("projectileStruct");
+	types.projectileStruct.set("name", &projectile::name);
+	types.projectileStruct.set("accuracy", &projectile::accuracyVsUnits);
+	types.projectileStruct.set("isBodyPiercing", &projectile::accuracyVsUnits);
+
+
+	///Mount
+	//@section mountStruct
+
+	/***
+
+	@tfield string name
+	@tfield int mountClass
+	@tfield float radius
+	@tfield float mass
+	@tfield float elephantDeadRadius
+	@tfield float elephantTuskRadius
+
+	@table mountStruct
+	*/
+	types.mountStruct = luaState.new_usertype<descrMountEntry>("mountStruct");
+	types.mountStruct.set("name", &descrMountEntry::name);
+	types.mountStruct.set("mountClass", &descrMountEntry::mountClass);
+	types.mountStruct.set("radius", &descrMountEntry::radius);
+	types.mountStruct.set("mass", &descrMountEntry::radius);
+	types.mountStruct.set("elephantDeadRadius", &descrMountEntry::elephantDeadRadius);
+	types.mountStruct.set("elephantTuskRadius", &descrMountEntry::elephantTuskRadius);
+
 	///EduEntry
 	//@section eduEntryTable
 
@@ -1313,12 +1355,19 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int customBattleCost
 	@tfield int customBattleIncrease
 	@tfield int customBattleLimit
+	@tfield int training
+	@tfield int discipline
+	@tfield int canPhalanx
 	@tfield int morale
 	@tfield int moraleLocked
 	@tfield int statFood1
 	@tfield int statFood2
 	@tfield int ammunition
+	@tfield int range
+	@tfield projectileStruct projectile
+	@tfield mountStruct mount
 	@tfield hasOwnership hasOwnership
+	@tfield hasAttribute hasAttribute
 	@tfield setOwnerShip setOwnerShip
 
 	@table eduEntry
@@ -1342,6 +1391,12 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.eduEntry.set("mass", &eduEntry::Mass);
 	types.eduEntry.set("width", &eduEntry::Width);
 	types.eduEntry.set("height", &eduEntry::Height);
+	types.eduEntry.set("range", &eduEntry::MissleRange);
+	types.eduEntry.set("training", &eduEntry::Trained);
+	types.eduEntry.set("discipline", &eduEntry::StatMentalDicipline);
+	types.eduEntry.set("range", &eduEntry::MissleRange);
+	types.eduEntry.set("projectile", &eduEntry::StatPriMissle);
+	types.eduEntry.set("canPhalanx", &eduEntry::formationPhalanx);
 	types.eduEntry.set("haveAttributeLegio", sol::property(&eopEduHelpers::haveAttributeLegioGet, &eopEduHelpers::haveAttributeLegioSet));
 	types.eduEntry.set("moveSpeedMod", &eduEntry::MoveSpeedMod);
 	types.eduEntry.set("unitSpacingFrontToBackClose", &eduEntry::UnitSpacingFrontToBackClose);
@@ -1396,6 +1451,17 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		unit.eduEntry:setOwnerShip(2, true);
 	*/
 	types.eduEntry.set_function("setOwnerShip", &eopEduHelpers::setOwnerShip);
+
+
+	/***
+	Check if the entry has an attribute.
+	@function eduEntry:hasAttribute
+	@tparam string attributeName
+	@treturn bool hasAttribute
+	@usage
+	local hasAttribute = entry:hasAttribute("sea_faring");
+	*/
+	types.eduEntry.set_function("hasAttribute", &eopEduHelpers::hasAttributeEdu);
 
 
 	///Character
@@ -2992,7 +3058,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionRanking.set("militaryRankingScore", &factionRanking::militaryRanking);
 	types.factionRanking.set("productionRankingScore", &factionRanking::productionRanking);
 	types.factionRanking.set("territoryRankingScore", &factionRanking::territoryRanking);
-	types.factionRanking.set("financialRankingScore", &factionRanking::FinancialRanking);
+	types.factionRanking.set("financialRankingScore", &factionRanking::financialRanking);
 	types.factionRanking.set("populationRankingScore", &factionRanking::populationRanking);
 
 	///FactionStratMapStruct
@@ -3208,7 +3274,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield string localizedName
 	@tfield factionStruct ownerFaction
 	@tfield changeOwner changeOwner
-	@tfield int fac_creatorNum
+	@tfield int creatorFactionID
 	@tfield int regionID
 	@tfield int level
 	@tfield int isCastle
@@ -3284,7 +3350,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	end
 	*/
 	types.settlementStruct.set_function("changeOwner", &settlementHelpers::changeOwner);
-	types.settlementStruct.set("fac_creatorNum", &settlementStruct::fac_creatorModNum);
+	types.settlementStruct.set("creatorFactionID", &settlementStruct::fac_creatorModNum);
 	types.settlementStruct.set("regionID", &settlementStruct::regionID);
 	types.settlementStruct.set("level", &settlementStruct::level);
 	types.settlementStruct.set("isCastle", &settlementStruct::isCastle);
@@ -3910,7 +3976,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield sortStack sortStack
 	@tfield mergeArmies mergeArmies
 	@tfield createUnitByIDX createUnitByIDX
-	@tfield siegeSettlement siegeSettlement Call it twice to initiate an assault.
+	@tfield siegeSettlement siegeSettlement
+	@tfield siegeFort siegeFort
 	@tfield attackArmy attackArmy
 	@tfield siegeStruct siege Current siege.
 
@@ -4108,10 +4175,22 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Besiege the specified settlement, or attack it if already besieging it. Requires movement points.
 	@function stackStruct:siegeSettlement
 	@tparam settlementStruct settlement
+	@tparam bool isAttack if this is false it makes the army maintain a siege
 	@usage
 	stackStruct:siegeSettlement(settlement);
 	*/
 	types.stackStruct.set_function("siegeSettlement", &stackStructHelpers::siegeSettlement);
+
+	/***
+	Besiege the specified fort, or attack it if already besieging it. Requires movement points.
+	@function stackStruct:siegeFort
+	@tparam fortStruct fort
+	@tparam bool isAttack if this is false it makes the army maintain a siege
+	@usage
+	stackStruct:siegeFort(fort);
+	*/
+	types.stackStruct.set_function("siegeFort", &stackStructHelpers::siegeFort);
+	
 	/***
 	Attack another army. Requires movement points.
 
@@ -4172,4 +4251,37 @@ void luaP::onChangeTurnNum(int num)
 	{
 		tryLua((*onChangeTurnNumFunc)(num));
 	}
+}
+
+
+void luaP::fillHashMaps()
+{
+	const gameDataAllStruct* gameData = gameDataAllHelper::get();
+	const campaign* campaign = gameData->campaignData;
+	if (!campaign)
+		return;
+	for (int i = 0; i < campaign->numberOfFactionsWithSlave; i++)
+	{
+		const auto faction = campaign->factionsSortedByID[i];
+		if (faction)
+			factions.insert_or_assign(faction->factSmDescr->facName, i);
+	}
+	const auto stratMap = gameData->stratMap;
+	if (!stratMap)
+		return;
+	for (int i = 0; i < stratMap->regionsNum; i++)
+	{
+		const auto region = &stratMap->regions[i];
+		if (region)
+			regions.insert_or_assign(region->regionName, i);
+		if(region->settlement)
+			settlements.insert_or_assign(region->settlement->name, i);
+	}
+	for (int i = 0; i < gameHelpers::getReligionCount(); i++)
+	{
+		auto religionName = gameHelpers::getReligionName(i);
+		if (religionName)
+			religionNames.insert_or_assign(i, religionName);
+	}
+	hashLoaded = true;
 }
