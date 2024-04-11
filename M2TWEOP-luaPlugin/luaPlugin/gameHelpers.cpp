@@ -9,7 +9,11 @@ namespace gameHelpers
 
 	UINT32 gameHelpers::getFactionsCount()
 	{
-		return (*(*plugData::data.funcs.getFactionsCount))();
+		const gameDataAllStruct* gameData = gameDataAllHelper::get();
+		const campaign* campaign = gameData->campaignData;
+		if (!campaign)
+			return 0;
+		return campaign->numberOfFactionsWithSlave;
 	}
 
 	std::string gameHelpers::callConsole(const std::string cmdName, sol::variadic_args va)
@@ -31,6 +35,11 @@ namespace gameHelpers
 			sprintf_s(buffer, "error");
 		}
 		return buffer;;
+	}
+
+	float GetMovepointsForReachNearTile(int originX, int originY, int destX, int destY)
+	{
+		return (*(*plugData::data.funcs.GetMovepointsForReachNearTile))(originX, originY, destX, destY);
 	}
 
 	factionStruct* gameHelpers::getFaction(const int index)
@@ -784,7 +793,7 @@ namespace gameHelpers
 		return nullptr;
 	}
 
-	const char* getReligionName(const int index)
+	const char* getReligionName2(const int index)
 	{
 		const auto* religionDb = *reinterpret_cast <religionDatabase**>(0x016A0B90);
 		if (m2tweopHelpers::getGameVersion() == 1)
@@ -809,6 +818,16 @@ namespace gameHelpers
 		return buffer;
 	}
 
+	const char* getReligionName(const int index)
+	{
+		if (!plugData::data.luaAll.hashLoaded)
+			plugData::data.luaAll.fillHashMaps();
+		const auto religionName = plugData::data.luaAll.religionNames.find(index);
+		if (religionName == plugData::data.luaAll.religionNames.end()) 
+			return nullptr;
+		return religionName->second;
+	}
+
 	int getReligionCount()
 	{
 		const auto* religionDb = *reinterpret_cast <religionDatabase**>(0x016A0B90);
@@ -819,21 +838,14 @@ namespace gameHelpers
 		return religionDb->religionCount;
 	}
 
-	int getReligionN(const char* name)
+	int getReligionN(const std::string& name)
 	{
-		const auto* religionDb = *reinterpret_cast <religionDatabase**>(0x016A0B90);
-		if (m2tweopHelpers::getGameVersion() == 1)
-		{
-			religionDb = *reinterpret_cast <religionDatabase**>(0x016E9DC0);
-		}
-		for(int i = 0; i < religionDb->religionCount ;i++)
-		{
-			if (strcmp(getReligionName(i), name) == 0)
-			{
-				return i;
-			}
-		}
-		return -1;
+		if (!plugData::data.luaAll.hashLoaded)
+			plugData::data.luaAll.fillHashMaps();
+		const auto religionIndex = plugData::data.luaAll.religionIndex.find(name);
+		if (religionIndex == plugData::data.luaAll.religionIndex.end()) 
+			return -1;
+		return religionIndex->second;
 	}
 
 	seaConnectedRegion* getSeaConnectedRegion(const regionStruct* region, const int index)
@@ -1077,7 +1089,7 @@ namespace gameHelpers
 		return reinterpret_cast<watchTowerStruct*>(getTileObject(tile, 32));
 	}
 	
-	factionStruct* getFactionHashed(const campaign* campaign, const char* name)
+	factionStruct* getFactionHashed(const campaign* campaign, const std::string& name)
 	{
 		if (!plugData::data.luaAll.hashLoaded)
 			plugData::data.luaAll.fillHashMaps();
@@ -1087,7 +1099,7 @@ namespace gameHelpers
 		return campaign->factionsSortedByID[factionId->second];
 	}
 
-	settlementStruct* getSettlement(const stratMap* map, const char* name)
+	settlementStruct* getSettlement(const stratMap* map, const std::string& name)
 	{
 		if (!plugData::data.luaAll.hashLoaded)
 			plugData::data.luaAll.fillHashMaps();
@@ -1097,7 +1109,7 @@ namespace gameHelpers
 		return map->regions[regionId->second].settlement;
 	}
 
-	regionStruct* getRegionByName(stratMap* map, const char* name)
+	regionStruct* getRegionByName(stratMap* map, const std::string& name)
 	{
 		if (!plugData::data.luaAll.hashLoaded)
 			plugData::data.luaAll.fillHashMaps();

@@ -172,4 +172,31 @@ namespace stackStructHelpers
 	{
 		(*(*plugData::data.funcs.mergeArmies))(army, targetArmy);
 	}
+	stackStruct* spawnArmy(
+		factionStruct* faction,
+		const char* name,
+		const char* name2,
+		int characterType,
+		const char* label,
+		const char* portrait,
+		int x,
+		int y,
+		int age,
+		bool family,
+		int subFaction,
+		int unitIndex,
+		int exp,
+		int wpn,
+		int armour
+		)
+	{
+		if (portrait != nullptr && strlen(portrait) == 0)
+			portrait = nullptr;
+		if (label != nullptr && strlen(label) == 0)
+			label = nullptr;
+		const auto army = (*(*plugData::data.funcs.spawnArmy))(faction, name, name2, characterType, label, portrait, x, y, age, family, subFaction, unitIndex, exp, wpn, armour);
+		if (army && label && label != "")
+			luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_label>(army->gen->genChar, std::string(label));
+		return army;
+	}
 }

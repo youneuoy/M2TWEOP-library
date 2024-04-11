@@ -704,6 +704,7 @@ void onGameInit()
 
 void onUnloadCampaign()
 {
+	plugData::data.luaAll.hashLoaded = false;
 	if (plugData::data.luaAll.onUnloadCampaign != nullptr)
 	{
 		tryLua((*plugData::data.luaAll.onUnloadCampaign)());
@@ -846,9 +847,6 @@ void onCampaignMapLoaded()
 		tryLua((*plugData::data.luaAll.onCampaignMapLoaded)());
 	}
 }
-
-bool hashLoaded = false;
-
 
 void onLoadGamePl(std::vector<std::string>* saveFiles)
 {

@@ -110,6 +110,14 @@ public:
 		DWORD createCadAssaultFortFunc = NULL;
 		DWORD createCadSiegeFortFunc = NULL;
 		DWORD makeTrackedPointerFortFunc = NULL;
+		DWORD getRandomNameFunc = NULL;
+		DWORD getNameIndexFunc = NULL;
+		DWORD getCharacterName = NULL;
+		DWORD respawnOffMapCharacterFunc = NULL;
+		DWORD setFactionLeaderFunc = NULL;
+		DWORD findParentForAdoptionFunc = NULL;
+		DWORD setArmyRegionEntriesFunc = NULL;
+		DWORD factionRessurectStuffFunc = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

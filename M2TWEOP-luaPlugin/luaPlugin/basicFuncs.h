@@ -226,11 +226,29 @@ public:
 
 
 	ProcLoader<void(__cdecl*)(general*, int, int, int)> setCharacterType;
+	
+	ProcLoader<float(__cdecl*)(int, int, int, int)> GetMovepointsForReachNearTile;
 
 	ProcLoader<int(__cdecl*)()> getGameVersion;
 	ProcLoader<void(__cdecl*)()> toggleDeveloperMode;
 	ProcLoader<void(__cdecl*)(const char*)> saveGame;
 	ProcLoader<void(__cdecl*)(stackStruct*, stackStruct*)> mergeArmies;
+	ProcLoader<stackStruct*(__cdecl*)(
+		factionStruct*,
+		const char*,
+		const char*,
+		int,
+		const char*,
+		const char*,
+		int,
+		int,
+		int,
+		bool,
+		int,
+		int,
+		int,
+		int,
+		int)> spawnArmy;
 
 	//graphics
 	ProcLoader<LPDIRECT3DTEXTURE9(__cdecl*)(const char*, int*, int*)> loadTexture;

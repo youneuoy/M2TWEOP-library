@@ -2505,7 +2505,10 @@ struct namedCharacter { /* many important info about character */
 	struct general* gen; /* on stratmap */
 	undefined field_0x1fc[8];
 	float yearOfBirth; /* yearOfBirth */
-	undefined field_0x208[16];
+	int seasonOfBirth;
+	float yearOfMaturity;
+	int seasonOfMaturity;
+	int32_t numberOfChildren;
 	struct factionStruct* faction;
 	int subFaction;
 	undefined field_0x220[4];
@@ -3613,8 +3616,9 @@ struct factionStruct {
 	int32_t nextCounterEconomy; //0x0EB8
 	int32_t counterEconomy; //0x0EBC
 	int32_t maxTurnsTillReset; //0x0EC0
-	int32_t upkeepModifier; //0x0E4
-	char pad_0EC8[12]; //0x0EC8
+	int32_t upkeepModifier; //0x0EC4
+	factionStruct* thisBeforeBattlesAndStuff; //0x0EC8
+	char pad_0ECC[8]; //0x0ECC
 	struct battleFactionCounter(*battlesWonVsFaction)[31]; //0x0ED4
 	int32_t factionCountStart; //0x0ED8
 	int32_t otherFactionCount; //0x0EDC
@@ -4093,6 +4097,17 @@ public:
 	char pad_000C[20]; //0x000C
 	float zCoord; //0x0020
 }; //Size: 0x0024
+
+struct settlementUiTextStruct
+{
+public:
+	float ValueColumn; //0x0000
+	char pad_0004[4]; //0x0004
+	float yCoord; //0x0008
+	char pad_000C[20]; //0x000C
+	float zCoord; //0x0020
+}; //Size: 0x0024
+
 
 struct descr_sm_factions_list {
 	struct factionStratMapDescrS* facDescrs;

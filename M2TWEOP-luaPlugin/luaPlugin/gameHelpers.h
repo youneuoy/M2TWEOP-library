@@ -11,6 +11,7 @@ namespace gameHelpers
 	std::string callConsole(std::string cmdName, sol::variadic_args va);
 	factionStruct* getFaction(int index);
 	guild* getGuild(unsigned char index);
+	float GetMovepointsForReachNearTile(int originX, int originY, int destX, int destY);
 	unit* getEventAttackingUnit(eventTrigger* eventData);
 	unit* getEventDefendingUnit(eventTrigger* eventData);
 	general* getEventCharacter(eventTrigger* eventData);
@@ -31,7 +32,7 @@ namespace gameHelpers
 	buildingInQueue* getPriorBuild(eventTrigger* eventData);
 	const char* getResourceDescription(eventTrigger* eventData);
 	int getReligionCount();
-	int getReligionN(const char* name);
+	int getReligionN(const std::string& name);
 	int getEventCharacterType(eventTrigger* eventData);
 	int getEventTargetCharacterType(eventTrigger* eventData);
 	const char* getEventType(eventTrigger* eventData);
@@ -54,9 +55,9 @@ namespace gameHelpers
 	int getTileCharacterCount(const oneTile* tile);
 	general* getTileCharacterAtIndex(const oneTile* tile, int index);
 
-	factionStruct* getFactionHashed(const campaign* campaign, const char* name);
-	settlementStruct* getSettlement(const stratMap* map, const char* name);
-	regionStruct* getRegionByName(stratMap* map, const char* name);
+	factionStruct* getFactionHashed(const campaign* campaign, const std::string& name);
+	settlementStruct* getSettlement(const stratMap* map, const std::string& name);
+	regionStruct* getRegionByName(stratMap* map, const std::string& name);
 	
 	general* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y);
 	stackStruct* createArmy(general* character);
@@ -135,6 +136,7 @@ namespace gameHelpers
 	void historicEvent(const char* name, const char* title, const char* description);
 	void scriptCommand(std::string command, sol::variadic_args va);
 	const char* getReligionName(const int index);
+	const char* getReligionName2(const int index);
 	unit* getSelectedUnitCard(const uiCardManager* cardManager, const int index);
 	unit* getUnitCard(const uiCardManager* cardManager, const int index);
 };

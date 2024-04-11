@@ -237,6 +237,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield condition condition
 	@tfield getOptions1 getOptions1
 	@tfield getOptions2 getOptions2
+	@tfield CalculateTileMovementCost CalculateTileMovementCost
 	@tfield getCampaignDifficulty1 getCampaignDifficulty1
 	@tfield getCampaignDifficulty2 getCampaignDifficulty2
 	@tfield setConversionLvlFromCastle setConversionLvlFromCastle
@@ -628,6 +629,18 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	end
 	*/
 	tables.M2TWEOPTable.set_function("condition", &gameHelpers::condition);
+	/***
+	Calculate movement point cost between two adjacent tiles.
+	@function M2TWEOP.CalculateTileMovementCost
+	@tparam int originX
+	@tparam int originY
+	@tparam int targetX only adjacent tiles! Does not calculate paths just the cost of moving from one tile to another.
+	@tparam int targetY only adjacent tiles! Does not calculate paths just the cost of moving from one tile to another.
+	@treturn float moveCost
+	@usage
+	local moveCost = M2TWEOP.CalculateTileMovementCost(153, 245, 154, 245);
+	*/
+	tables.M2TWEOPTable.set_function("CalculateTileMovementCost", &gameHelpers::GetMovepointsForReachNearTile);
 
 
 	/// BattleCamera
@@ -874,6 +887,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getFaction getFaction
 	@tfield createCharacterByString createCharacterByString
 	@tfield createArmy createArmy
+	@tfield spawnArmy spawnArmy
 	@tfield createArmyInSettlement createArmyInSettlement
 	@tfield getScriptCounter getScriptCounter
 	@tfield setScriptCounter setScriptCounter
@@ -946,6 +960,40 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	newCharacter=stratmap.game.createCharacterByString("named character",stratmap.game.getFaction(0),18,"Name1","Name2",31,"custom_portrait_name",character.character.xCoord+5,character.character.yCoord);
 	*/
 	tables.gameTable.set_function("createCharacterByString", &gameHelpers::createCharacter);
+
+	/***
+	Create a new army at the specified coordinates. Works similarly to the script command spawn_army. You can respawn off-map characters using it.
+	@function stratmap.game.spawnArmy
+	@tparam factionStruct Faction the new character belongs to.
+	@tparam string name The short name of the character.
+	@tparam string name2 The full name of the character.
+	@tparam int type characterType.named_character or characterType.general or characterType.admiral.
+	@tparam string label label of the character, has to be unique!.
+	@tparam string portrait Name of the folder inside 'data/ui/custom_portraits folder. Can not be nil!
+	@tparam int x X coordinate of the new character
+	@tparam int y Y coordinate of the new character
+	@tparam int age The character's age
+	@tparam bool family should character be auto adopted?
+	@tparam int subFaction Set to 31 to disable.
+	@tparam int unitIndex Index of the unit in the unit list. Can be EOP or normal.
+	@tparam int exp
+	@tparam int wpn
+	@tparam int armour
+	@treturn stackStruct newArmy
+	@usage
+	newArmy = stratmap.game.spawnArmy(
+	stratmap.game.getFaction(0),
+	"Name1","Name2",
+	characterType.named_character,
+	"unique_label_1",
+	"custom_portrait_name",
+	18,
+	143, 156,
+	1001, 3, 0, 0
+	);
+	*/
+	tables.gameTable.set_function("spawnArmy", &stackStructHelpers::spawnArmy);
+	
 	/***
 	Create an army for a character. Commonly used after spawning a new character to set it's bodyguard unit.
 	@function stratmap.game.createArmy
@@ -1366,6 +1414,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int range
 	@tfield projectileStruct projectile
 	@tfield mountStruct mount
+	@tfield string primaryAnim
+	@tfield string secondaryAnim
 	@tfield hasOwnership hasOwnership
 	@tfield hasAttribute hasAttribute
 	@tfield setOwnerShip setOwnerShip
@@ -1424,6 +1474,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.eduEntry.set("statFood2", &eduEntry::StatFood2);
 	types.eduEntry.set("ammunition", &eduEntry::Ammunition);
 	types.eduEntry.set("category", &eduEntry::Category);
+	types.eduEntry.set("primaryAnim", sol::property(eopEduHelpers::getPrimaryAnim));
+	types.eduEntry.set("secondaryAnim", sol::property(eopEduHelpers::getSecondaryAnim));
 	types.eduEntry.set("class", &eduEntry::Class);
 	types.eduEntry.set("categoryClassCombo", &eduEntry::categoryClassCombinationForAI);
 	types.eduEntry.set("recruitPriorityOffset", &eduEntry::RecruitPriorityOffsetTimes4);
@@ -1486,6 +1538,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield float movePointsMaxCharacter
 	@tfield float movePointsMaxArmy
 	@tfield float movePointsArmy
+	@tfield float movePoints sets both army and character move points.
 	@tfield int turnJoinedCrusade
 	@tfield int numTurnsIdle
 	@tfield float percentCharacterReligionInRegion 0 to 1
@@ -1542,23 +1595,11 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.character.set("movePointsModifier", &general::movePointsModifier);
 	types.character.set("movePointsMaxArmy", &general::movePointsMaxArmy);
 	types.character.set("movePointsMaxCharacter", &general::movePointsMax);
-	types.character.set("movePointsArmy", sol::property(&generalHelpers::getMovepoints, &generalHelpers::setMovepoints));
+	types.character.set("movePoints", sol::property(&generalHelpers::getMovepoints, &generalHelpers::setMovepoints));
+	types.character.set("movePointsArmy", &general::movePointsArmy);
 	types.character.set("ability", sol::property(&luaGetSetFuncs::getStringPropertyGen<generalStruct_abilityID>, &luaGetSetFuncs::setStringPropertyGen<generalStruct_abilityID>));
 	/***
-	Get the character type. See hint below for the types.
-	0-spy
-	1-assassin
-	2-diplomat
-	3-admiral
-	4-merchant
-	5-priest
-	6-general
-	7-named character
-	8-princess
-	9-heretic
-	10-witch
-	11-inquisitor
-	13-pope
+	Get the character type. Use characterType enum.
 	@function character:getTypeID
 	@treturn int typeId
 	@usage
@@ -1566,20 +1607,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.character.set_function("getTypeID", &generalHelpers::getTypeID);
 	/***
-	Get the character type. See hint below for the types.
-	0-spy
-	1-assassin
-	2-diplomat
-	3-admiral
-	4-merchant
-	5-priest
-	6-general
-	7-named character
-	8-princess
-	9-heretic
-	10-witch
-	11-inquisitor
-	13-pope
+	Get the character type. Use characterType enum.
 	@function character:getTypeName
 	@treturn string type
 	@usage
@@ -1587,20 +1615,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.character.set_function("getTypeName", &generalHelpers::getTypeName);
 	/***
-	Set the character type. See hint below for the types.
-	0-spy
-	1-assassin
-	2-diplomat
-	3-admiral
-	4-merchant
-	5-priest
-	6-general
-	7-named character
-	8-princess
-	9-heretic
-	10-witch
-	11-inquisitor
-	13-pope
+	Set the character type. Use characterType enum.
 	@function character:setTypeID
 	@tparam int typeId
 	@usage
@@ -1682,6 +1697,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield isChild isChild
 	@tfield int age
 	@tfield float yearOfBirth For example with 4 turns per year, the yearOfBirth could be 1840.25
+	@tfield int seasonOfBirth
+	@tfield float yearOfMaturity
+	@tfield int seasonOfMaturity
+	@tfield int numberOfChildren
 	@tfield factionStruct faction
 	@tfield int subFaction
 	@tfield namedCharacter parent
@@ -3357,6 +3376,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.settlementStruct.set("settlementTaxLevel", &settlementStruct::settlementTaxLevel);
 	types.settlementStruct.set("siegeHoldoutTurns", &settlementStruct::siegeHoldoutTurns);
 	types.settlementStruct.set("turnsSieged", &settlementStruct::turnsSieged);
+	types.settlementStruct.set("turnsOwned", &settlementStruct::turnsOwned);
 	types.settlementStruct.set("subFactionID", &settlementStruct::subFactionID);
 	types.settlementStruct.set("yearFounded", &settlementStruct::yearFounded);
 	types.settlementStruct.set("isCapital", &settlementStruct::isCapital);
@@ -3365,6 +3385,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.settlementStruct.set("baseFertility", &settlementStruct::baseFertilityValue);
 	types.settlementStruct.set("rebelFactionChance", &settlementStruct::rebelFactionChance);
 	types.settlementStruct.set("plagued", &settlementStruct::plagued);
+	types.settlementStruct.set("plagueDeaths", &settlementStruct::plagueDeaths);
 	types.settlementStruct.set("populationSiegeStart", &settlementStruct::populationSiegeStart);
 	types.settlementStruct.set("isProvokedRebellion", &settlementStruct::isProvokedRebellion);
 	types.settlementStruct.set("populationSize", sol::property(settlementHelpers::getPopulation));
@@ -4262,9 +4283,9 @@ void luaP::fillHashMaps()
 		return;
 	for (int i = 0; i < campaign->numberOfFactionsWithSlave; i++)
 	{
-		const auto faction = campaign->factionsSortedByID[i];
+		const auto faction = campaign->factionsSortedByDescrStrat[i];
 		if (faction)
-			factions.insert_or_assign(faction->factSmDescr->facName, i);
+			factions.insert_or_assign(std::string(faction->factSmDescr->facName), i);
 	}
 	const auto stratMap = gameData->stratMap;
 	if (!stratMap)
@@ -4273,15 +4294,18 @@ void luaP::fillHashMaps()
 	{
 		const auto region = &stratMap->regions[i];
 		if (region)
-			regions.insert_or_assign(region->regionName, i);
+			regions.insert_or_assign(std::string(region->regionName), i);
 		if(region->settlement)
-			settlements.insert_or_assign(region->settlement->name, i);
+			settlements.insert_or_assign(std::string(region->settlement->name), i);
 	}
 	for (int i = 0; i < gameHelpers::getReligionCount(); i++)
 	{
-		auto religionName = gameHelpers::getReligionName(i);
+		auto religionName = gameHelpers::getReligionName2(i);
 		if (religionName)
+		{
 			religionNames.insert_or_assign(i, religionName);
+			religionIndex.insert_or_assign(std::string(religionName), i);
+		}
 	}
 	hashLoaded = true;
 }

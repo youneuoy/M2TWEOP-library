@@ -48,12 +48,14 @@ namespace console
 
 	void reloadScript()
 	{
+		plugData::data.luaAll.hashLoaded = false;
 		consoleData.shouldReloadScript = true;
 		consoleData.pressAmount = 0;
 	}
 
 	void restartLua()
 	{
+		plugData::data.luaAll.hashLoaded = false;
 		consoleData.shouldRestartLua = true;
 		consoleData.pressAmount = 0;
 	}

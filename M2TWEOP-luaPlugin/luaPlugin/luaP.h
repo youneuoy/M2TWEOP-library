@@ -149,11 +149,13 @@ public:
 	
 	bool hashLoaded = false;
 
-	std::unordered_map<const char*, int> factions = {
+	std::unordered_map<std::string, int> factions = {
 	};
-	std::unordered_map<const char*, int> regions = {
+	std::unordered_map<std::string, int> regions = {
 	};
-	std::unordered_map<const char*, int> settlements = {
+	std::unordered_map<std::string, int> settlements = {
+	};
+	std::unordered_map<std::string, int> religionIndex = {
 	};
 	std::unordered_map<int, const char*> religionNames = {
 	};

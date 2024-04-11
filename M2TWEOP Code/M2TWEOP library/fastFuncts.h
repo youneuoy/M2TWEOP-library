@@ -47,6 +47,24 @@ namespace fastFuncts
 
 	//array of pointers to factions
 	NOINLINE EOP_EXPORT factionStruct** getFactionsList();
+	
+	NOINLINE EOP_EXPORT stackStruct* spawnArmy(
+		factionStruct* faction,
+		const char* name,
+		const char* name2,
+		int characterType,
+		const char* label,
+		const char* portrait,
+		int x,
+		int y,
+		int age,
+		bool family,
+		int subFaction,
+		int unitIndex,
+		int exp,
+		int wpn,
+		int armour
+		);
 
 	//number of passed turns
 	NOINLINE EOP_EXPORT UINT32 getPassedTurnsNum();

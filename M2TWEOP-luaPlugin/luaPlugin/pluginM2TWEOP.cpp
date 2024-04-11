@@ -132,6 +132,9 @@ int initPlugin(std::string* modPath)
 	fName = "changeRegionName";
 	plugData::data.funcs.changeRegionName.Load(&plPath, &fName);
 
+	fName = "GetMovepointsForReachNearTile";
+	plugData::data.funcs.GetMovepointsForReachNearTile.Load(&plPath, &fName);
+
 	fName = "condition";
 	plugData::data.funcs.condition.Load(&plPath, &fName);
 
@@ -149,6 +152,9 @@ int initPlugin(std::string* modPath)
 
 	fName = "mergeArmies";
 	plugData::data.funcs.mergeArmies.Load(&plPath, &fName);
+
+	fName = "spawnArmy";
+	plugData::data.funcs.spawnArmy.Load(&plPath, &fName);
 
 	fName = "createUniString";
 	plugData::data.funcsTech.createUniString.Load(&plPath, &fName);

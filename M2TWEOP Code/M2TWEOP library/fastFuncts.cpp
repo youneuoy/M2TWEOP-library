@@ -1,5 +1,10 @@
 #include "pch.h"
 #include "fastFuncts.h"
+
+#include <queue>
+#include <set>
+
+#include "eduThings.h"
 #include "smallFuncs.h"
 
 #include "fastFunctsHelpers.h"
@@ -1226,10 +1231,11 @@ namespace fastFuncts
 		stackStruct* stack = nullptr;
 
 		factionStruct* fac = character->genChar->faction;
+		bool isAdmiral = character->genType->type == 3;
 		DWORD adrFunc = codes::offsets.createArmyFunc;
 		_asm
 		{
-			push 0
+			push isAdmiral
 			push character
 			mov ecx, fac
 			mov eax, adrFunc
@@ -1636,6 +1642,249 @@ namespace fastFuncts
 			call eax
 		}
 	}
+
+#define GAME_FUNC(funcType, funcAddr) reinterpret_cast<funcType>(codes::offsets.funcAddr)
+	
+	std::unordered_map<int, const char*> characterTypes = {
+		{0,"spy"},
+		{1,"assassin"},
+		{2,"diplomat"},
+		{3,"admiral"},
+		{4,"merchant"},
+		{5,"priest"},
+		{6,"general"},
+		{7,"named character"},
+		{8,"princess"},
+		{9,"heretic"},
+		{10,"witch"},
+		{11,"inquisitor"},
+		{13,"pope"}
+	};
+	
+	NOINLINE EOP_EXPORT stackStruct* spawnArmy(
+		factionStruct* faction,
+		const char* name,
+		const char* name2,
+		int characterType,
+		const char* label,
+		const char* portrait,
+		int x,
+		int y,
+		int age,
+		bool family,
+		int subFaction,
+		int unitIndex,
+		int exp,
+		int wpn,
+		int armour
+		)
+	{
+		if (!faction)
+			return nullptr;
+		queue<std::pair<int, int>> q;
+		set<std::pair<int, int>> visited;
+		q.emplace(x, y);
+		visited.insert({x, y});
+		stratMap* map = smallFuncs::getGameDataAll()->stratMap;
+		auto spawnCoords = new coords;
+		while (!q.empty()) {
+			auto [curX, curY] = q.front();
+			q.pop();
+			if (const oneTile* tile = getTileStruct(curX, curY);
+				smallFuncs::isTileFree(&curX)
+				&& tile->isLand == (characterType != 3)
+				&& !getTileObject(tile, 28)
+				&& !getTileObject(tile, 29)
+				&& !getTileObject(tile, 30))
+				{
+					spawnCoords->xCoord = curX;
+					spawnCoords->yCoord = curY;
+					break;
+				}
+			for (int dx = -1; dx <= 1; ++dx)
+			{
+				for (int dy = -1; dy <= 1; ++dy)
+				{
+					if (dx == 0 && dy == 0) continue;
+
+					int newX = curX + dx;
+					int newY = curY + dy;
+					
+					if (newX >= 0 && newX < map->mapWidth && newY >= 0 && newY < map->mapHeight
+						&& !visited.count({newX, newY}))
+					{
+						q.emplace(newX, newY);
+						visited.insert({newX, newY});
+					}
+				}
+			}
+		}
+		if (!spawnCoords)
+		{
+			delete spawnCoords;
+			return nullptr;
+		}
+		general* character = nullptr;
+		const char* typeName = characterTypes.find(characterType)->second;
+		int factionNum = getFactionsCount();
+		campaign* campaign = smallFuncs::getGameDataAll()->campaignData;
+		if (label && !std::string(label).empty())
+		{
+			for (int i = 0; i < campaign->numberOfFactionsWithSlave; i++)
+			{
+				auto fac = campaign->factionsSortedByDescrStrat[i];
+				for(int j = 0; j < fac->numOfCharactersAll; j++)
+				{
+					if (auto namedChar = fac->charactersAll[j]; namedChar->label != nullptr && std::string(namedChar->label) == std::string(label))
+					{
+						if ((namedChar->status & 8) != 0)
+						{
+
+							char** cryptS = fastFunctsHelpers::makeCryptedString(typeName);
+							DWORD adrType = reinterpret_cast<DWORD>(cryptS);
+							character = GAME_FUNC(general*(__cdecl*)(DWORD, int, namedCharacter*, const char*), respawnOffMapCharacterFunc)
+							(adrType, faction->dipNum, namedChar, portrait);
+							if (character)
+							{
+								DWORD adrFunc = codes::offsets.spawnCreatedCharacterFunc;
+							
+								_asm
+								{
+									push spawnCoords
+									push character
+									mov eax, adrFunc
+									call eax
+								}
+							}
+							break;
+						}
+						delete spawnCoords;
+						return nullptr;
+					}
+				}
+				if (character)
+					break;
+			}
+		}
+		if (!character)
+		{
+			int nameFaction = faction->agentNameFactionId[characterType];
+			if (subFaction != 31)
+				nameFaction = subFaction;
+			if (const auto nameS = std::string(name); nameS == "random_name")
+			{
+				const int checkCountMax = faction->numOfCharactersAll * 2;
+				int checkCount = 0;
+				int firstNameIndex = 0;
+				int secondNameIndex = 0;
+				while (checkCount < checkCountMax)
+				{
+					GAME_FUNC(int(__cdecl*)(int*, int, int, int*, int*), getRandomNameFunc)
+					(&campaign->lastrandomseed, nameFaction, 0, &firstNameIndex, &secondNameIndex);
+					bool research = false;
+					for(int i = 0; i < faction->numOfCharactersAll; i++)
+					{
+						if (const int nameIndex = GAME_FUNC(int(__cdecl*)(namedCharacter*), getNameIndexFunc)(faction->charactersAll[i]);
+							firstNameIndex == nameIndex)
+						{
+							research = true;
+							break;
+						}
+					}
+					checkCount++;
+					if (research)
+						continue;
+					break;
+				}
+
+				name = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(0, nameFaction, firstNameIndex);
+				name2 = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(2, nameFaction, secondNameIndex);
+			}
+			character = createCharacterWithoutSpawning(typeName, faction, age, name, name2, subFaction, portrait, x, y);
+			auto namedChar = character->genChar;
+			namedChar->age ^= (namedChar->age ^ (family << 13)) & 0x2000u;
+			if (!faction->leader)
+			{
+				namedChar->age |= 0x2000u;
+				DWORD codeOffset = codes::offsets.setFactionLeaderFunc;
+				_asm
+				{
+					push namedChar
+					mov ecx, faction
+					mov eax, codeOffset
+					call eax
+				}
+			}
+			if ( (namedChar->age & 0x2000) != 0 )
+			{
+				DWORD facDWORD = reinterpret_cast<DWORD>(faction);
+				facDWORD += 0xEC8;
+				auto parent = GAME_FUNC(namedCharacter*(__thiscall*)(DWORD, namedCharacter*), findParentForAdoptionFunc)
+				(facDWORD, namedChar);
+				if (parent)
+				{
+					namedChar->parent = parent;
+					int childNum = parent->numberOfChildren;
+					parent->numberOfChildren = childNum + 1;
+					namedChar->parent->childs[childNum] = namedChar;
+				}
+			}
+		}
+		if (character)
+		{
+			
+			DWORD adrFunc = codes::offsets.doSomeWithCharacterFunc;
+			void* some = faction->tilesFac;
+			_asm
+			{
+				push 0
+				push character
+				mov ecx, some
+				mov eax, adrFunc
+				call eax
+			}
+				
+			stackStruct* army = createArmy(character);
+			const oneTile* tile = getTileStruct(spawnCoords->xCoord, spawnCoords->yCoord);
+			int regionId = tile->regionId;
+			GAME_FUNC(void(__thiscall*)(stratMap*, stackStruct*, int), setArmyRegionEntriesFunc)(map, army, regionId);
+			unit* bgUnit = nullptr;
+			if (eduThings::getEduEntry(unitIndex))
+			{
+				bgUnit = createUnitIdx(unitIndex, regionId, faction->dipNum, exp, armour, wpn);
+			}
+			else
+			{
+				int eopIDX = eduThings::getDataEopEdu(unitIndex);
+				if (eopIDX == 0)
+					bgUnit = createUnitIdx(0, regionId, faction->dipNum, exp, armour, wpn);
+				else
+					bgUnit = createUnitEDB(eopIDX, regionId, faction->dipNum, exp, armour, wpn);
+			}
+			addUnitToArmy(army, bgUnit);
+			if (characterType == 7)
+				setBodyguard(character, bgUnit);
+			adrFunc = codes::offsets.factionRessurectStuffFunc;
+			_asm
+			{
+				mov ecx, faction
+				push spawnCoords
+				mov eax, adrFunc
+				call eax
+			}
+			delete spawnCoords;
+			return army;
+		}
+		delete spawnCoords;
+		return nullptr;
+	}
+
+
+
+
+
+
+	
 	DWORD* getTileObject(const oneTile* tile, int type)
 	{
 		DWORD* object = tile->object;

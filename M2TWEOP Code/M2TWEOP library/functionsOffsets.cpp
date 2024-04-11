@@ -21,6 +21,15 @@ void codes::initCodes(int gameVer)
 
 		offsets.createIdleActionFunc = 0x005aff40;
 
+		offsets.getRandomNameFunc = 0x008DC920;
+		offsets.getNameIndexFunc = 0x005A43D0;
+		offsets.getCharacterName = 0x008DBFE0;
+		offsets.respawnOffMapCharacterFunc = 0x008B4450;
+		offsets.setFactionLeaderFunc = 0x004E8FE0;
+		offsets.findParentForAdoptionFunc = 0x004EA4E0;
+		offsets.setArmyRegionEntriesFunc = 0x004A40E0;
+		offsets.factionRessurectStuffFunc = 0x004F4C80;
+
 
 		offsets.getReadyForMovingFunc = 0x005b0060;
 		offsets.getReadyForMoving2Func = 0x005a0870;
@@ -120,7 +129,14 @@ void codes::initCodes(int gameVer)
 
 		offsets.createIdleActionFunc = 0x005b0420;
 
-
+		offsets.getRandomNameFunc = 0x008DD390;
+		offsets.getNameIndexFunc = 0x005A48B0;
+		offsets.getCharacterName = 0x008DCA50;
+		offsets.respawnOffMapCharacterFunc = 0x008B4E40;
+		offsets.setFactionLeaderFunc = 0x004E95F0;
+		offsets.findParentForAdoptionFunc = 0x004EAAF0;
+		offsets.setArmyRegionEntriesFunc = 0x004A4580;
+		offsets.factionRessurectStuffFunc = 0x004F5250;
 
 		offsets.getReadyForMovingFunc = 0x005b0540;
 		offsets.getReadyForMoving2Func = 0x005a0d50;

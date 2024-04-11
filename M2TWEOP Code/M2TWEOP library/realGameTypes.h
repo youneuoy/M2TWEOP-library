@@ -647,9 +647,83 @@ public:
 	float militaryRanking; //0x0004
 	float productionRanking; //0x0008
 	float territoryRanking; //0x000C
-	float FinancialRanking; //0x0010
+	float financialRanking; //0x0010
 	float populationRanking; //0x0014
 }; //Size: 0x0018
+
+struct projectile
+{
+	char pad_0000[4];
+	char *name;
+	int32_t nameHash;
+	int32_t specialType;
+	struct projectile *flamingProjectile;
+	int8_t shatterDust;
+	int8_t shatterDebris;
+	int8_t vanishDust;
+	int8_t vanishDebris;
+	int8_t fiery;
+	int8_t particleTrail;
+	int8_t aimed;
+	int8_t invertModelZ;
+	int8_t spin;
+	int8_t rocket;
+	int8_t explosive;
+	int8_t bool1f;
+	float spinAmount;
+	void *ptr24;
+	float minAngle;
+	float maxAngle;
+	int8_t preferHigh;
+	int8_t byte31;
+	int8_t byte32;
+	int8_t byte33;
+	char pad_0034[4];
+	float maxVelocity;
+	char pad_003C[12];
+	float minVelocity;
+	float float4c;
+	float float50;
+	char pad_0054[20];
+	float radius;
+	float mass;
+	float area;
+	float accuracyVsUnits;
+	float accuracyVsBuildings;
+	float accuracyVsTowers;
+	int8_t affectedByRain;
+	int8_t damageToTroops;
+	int8_t groundShatter;
+	int8_t bounce;
+	float bounceFloat1;
+	float bounceFloat2;
+	float bounceFloat3;
+	float bounceFloat4;
+	int8_t erratic;
+	int8_t isBodyPiercing;
+	int16_t short96;
+	int8_t destroyMaxRange;
+	int destroyMaxRangeVariation;
+	char pad_0098[20];
+	int32_t damage;
+	char end_effect1[32];
+	char *endEffect;
+	char pad_00DC[24];
+	char *endManEffect;
+	char pad_00F8[24];
+	char *endPackageEffect;
+	char pad_0114[24];
+	char *endShatterPackageEffect;
+	char pad_0130[24];
+	char *endShatterManEffect;
+	char pad_014C[24];
+	char *endShatterEffect;
+	char pad_0168[48];
+	char areaEffect[24];
+	char pad_01B0[48];
+	float EffectOffset;
+	char pad_01E4[588];
+};
 
 struct factionStratMapDescrS { /* see descr_sm_factions.txt */
 	int id;
@@ -1017,7 +1091,8 @@ struct gameDataAllStruct {
 	struct battleSettlement* battleSettlement;
 	char pad[112];
 	struct uiCardManager* uiCardManager;
-	char pad2[84];
+	char pad2[4];
+	struct uiManager* uiManager;
 };
 
 struct battleUnit
@@ -2430,7 +2505,10 @@ struct namedCharacter { /* many important info about character */
 	struct general* gen; /* on stratmap */
 	undefined field_0x1fc[8];
 	float yearOfBirth; /* yearOfBirth */
-	undefined field_0x208[16];
+	int seasonOfBirth;
+	float yearOfMaturity;
+	int seasonOfMaturity;
+	int32_t numberOfChildren;
 	struct factionStruct* faction;
 	int subFaction;
 	undefined field_0x220[4];
@@ -3538,8 +3616,9 @@ struct factionStruct {
 	int32_t nextCounterEconomy; //0x0EB8
 	int32_t counterEconomy; //0x0EBC
 	int32_t maxTurnsTillReset; //0x0EC0
-	int32_t upkeepModifier; //0x0E4
-	char pad_0EC8[12]; //0x0EC8
+	int32_t upkeepModifier; //0x0EC4
+	factionStruct* thisBeforeBattlesAndStuff; //0x0EC8
+	char pad_0ECC[8]; //0x0ECC
 	struct battleFactionCounter(*battlesWonVsFaction)[31]; //0x0ED4
 	int32_t factionCountStart; //0x0ED8
 	int32_t otherFactionCount; //0x0EDC
@@ -3549,6 +3628,32 @@ struct factionStruct {
 	int32_t settlementsLost; //0x0EEC
 	char pad_0EF0[24]; //0x0EF0
 };
+
+struct animSetModelDB
+{
+public:
+	char pad_0000[4]; //0x0000
+	char *name; //0x0004
+	char pad_0008[24]; //0x0008
+}; //Size: 0x0020
+
+struct modelDbAnims
+{
+public:
+	char pad_0000[4]; //0x0000
+	char N000028CE[4]; //0x0004
+	char N000028CF[4]; //0x0008
+	char pad_000C[20]; //0x000C
+	char *N00022FB0; //0x0020
+	char pad_0024[52]; //0x0024
+	struct animSetModelDB *primaryAnim; //0x0058
+	void *N0000092A; //0x005C
+	void *N0000092B; //0x0060
+	char pad_0064[4]; //0x0064
+	struct animSetModelDB *secondaryAnim; //0x0068
+	char pad_006C[12]; //0x006C
+}; //Size: 0x0078
+
 
 struct ModelDbEntry
 {
@@ -3560,13 +3665,13 @@ public:
 	char pad_0018[4]; //0x0018
 	float scale; //0x001C
 	char pad_0020[4]; //0x0020
-	class ModelDbMesh* Mesh; //0x0024
+	struct ModelDbMesh* mesh; //0x0024
 	char pad_0028[12]; //0x0028
-	class ModelDbEntryTextures* Textures; //0x0034
+	struct ModelDbEntryTextures* textures; //0x0034
 	char pad_0038[12]; //0x0038
-	class ModelDbEntryTextures* AttTextures; //0x0044
+	struct ModelDbEntryTextures* attTextures; //0x0044
 	char pad_0048[12]; //0x0048
-	class ModelDbAnims* Animations; //0x0054
+	struct modelDbAnims* animations; //0x0054
 	char pad_0058[8]; //0x0058
 	int32_t torchAttachBone; //0x0060
 	float N00000857; //0x0064
@@ -3591,6 +3696,41 @@ public:
 	char* UpgradeThree; //0x0018
 	int32_t UpgradeThreeHash; //0x001C
 };
+
+struct descrMountEntry
+{
+public:
+	char *name; //0x0000
+	char pad_0004[4]; //0x0004
+	int32_t mountClass; //0x0008
+	char *modelName; //0x000C
+	char pad_0010[12]; //0x0010
+	float radius; //0x001C
+	float xRadius; //0x0020
+	float yRadius; //0x0024
+	float yOffset; //0x0028
+	float height; //0x002C
+	float mass; //0x0030
+	float bannerHeight; //0x0034
+	float bouyancyOffset; //0x0038
+	float elephantRootNodeHeight; //0x003C
+	float elephantAttackDelay; //0x0040
+	float elephantDeadRadius; //0x0044
+	float elephantTuskZ; //0x0048
+	float elephantTuskRadius; //0x004C
+	int32_t elephantNumberOfRiders; //0x0050
+	float elephantRiderOffset1X; //0x0054
+	float elephantRiderOffset1Y; //0x0058
+	float elephantRiderOffset1Z; //0x005C
+	char pad_0060[168]; //0x0060
+	float rootNodeHeight; //0x0108
+	float riderOffSetX; //0x010C
+	float riderOffSetY; //0x0110
+	float riderOffsetZ; //0x0114
+	char pad_0118[8]; //0x0118
+	char *waterTrailEffect; //0x0120
+	char pad_0124[20]; //0x0124
+}; //Size: 0x0138
 
 
 //type of unit from EDU
@@ -3691,7 +3831,7 @@ struct eduEntry {
 	DWORD MissleRange;
 	float MissleRangeSquared;
 	DWORD HasPrimary;
-	void* StatPriMissle;
+	projectile* StatPriMissle;
 	DWORD WeaponType;
 	DWORD TechType;
 	DWORD DamageType;
@@ -3705,7 +3845,7 @@ struct eduEntry {
 	DWORD SecMissleRange;
 	float SecMissleRangeSquared;
 	DWORD HasSecondary;
-	void* StatSecMissle;
+	projectile* StatSecMissle;
 	DWORD SecWeaponType;
 	DWORD SecTechType;
 	DWORD SecDamageType;
@@ -3760,11 +3900,11 @@ struct eduEntry {
 	DWORD N00000115;
 	DWORD TerMissleAttackMinDelay;
 	char pad_02A0[36];
-	void* MountModel;
-	void* MountSomerthing;
+	struct descrMountEntry* mount;
+	struct ModelDbEntry* mountModel;
 	DWORD StatSecAndSecArmour;
 	char pad_02D0[68];
-	DWORD Mount;
+	DWORD notmount;
 	char pad_0318[8];
 	void* AnimalModel;
 	void* AnimalSomething;
@@ -3974,5 +4114,98 @@ struct descr_sm_factions_list {
 	int capacity;
 	int size;
 };
+
+struct uiManager
+{
+public:
+	char pad_0000[12]; //0x0000
+	char *N00009D87; //0x000C
+	char pad_0010[32]; //0x0010
+	void *dragObjectContainer; //0x0030
+	struct stratUIStruct *stratUI; //0x0034
+}; //Size: 0x00A0
+
+
+// Settlement UI Stuff
+struct stratUIStruct
+{
+public:
+	char pad_0000[84]; //0x0000
+	struct settlementInfoScroll *settlementInfoScroll; //0x0054
+}; //Size: 0x0164
+
+
+struct settlementInfoScroll
+{
+public:
+	char pad_0000[40]; //0x0000
+	uint32_t N000218A6; //0x0028
+	char pad_002C[136]; //0x002C
+	float N000218C9; //0x00B4
+	float N000218CA; //0x00B8
+	float N000218CB; //0x00BC
+	float N000218CC; //0x00C0
+	char pad_00C4[576]; //0x00C4
+	struct settlementStruct *settlement; //0x0304
+	char pad_0308[12]; //0x0308
+	void *N00021961; //0x0314
+	char pad_0318[16]; //0x0318
+	void *uiTable; //0x0328
+	void *uiTable2; //0x032C
+	char pad_0330[12]; //0x0330
+	void *uiSettlementFrame; //0x033C
+	char pad_0340[4]; //0x0340
+	void *characterInfoFrame; //0x0344
+	void *uiCycleListTax; //0x0348
+	void *uiCycleList0; //0x034C
+	void *uiCycleList; //0x0350
+	char pad_0354[16]; //0x0354
+	void *uiCheckBox; //0x0364
+	void *uiCheckBox2; //0x0368
+	void *uiCheckBox3; //0x036C
+	void *N00021978; //0x0370
+	char pad_0374[16]; //0x0374
+	void *settlementRenameElement; //0x0384
+	struct settlementStatsTable *settlementStatsTable; //0x0388
+}; //Size: 0x0840
+
+struct settlementStatsTable
+{
+public:
+	char pad_0000[76]; //0x0000
+	struct settlementTextStrings *settlementTextStrings; //0x004C
+}; //Size: 0x0844
+
+struct settlementTextStrings
+{
+public:
+	struct uiString *incomeString; //0x0000
+	struct uiString *incomeValue; //0x0004
+	struct uiString *publicOrderString; //0x0008
+	struct uiString *publicOrderValue; //0x000C
+	struct uiString *populationString; //0x0010
+	struct uiString *populationValue; //0x0014
+	struct uiString *populationGrowthString; //0x0018
+	struct uiString *populationGrowthValue; //0x001C
+}; //Size: 0x0020
+
+struct uiString
+{
+public:
+	char pad_0000[72]; //0x0000
+	void *N00023379; //0x0048
+	void *N0002337A; //0x004C
+	char pad_0050[8]; //0x0050
+	void *N0002337D; //0x0058
+	char pad_005C[4]; //0x005C
+	void *settlementText; //0x0060
+	char pad_0064[4]; //0x0064
+	uint8_t thickness; //0x0068
+	uint8_t blue; //0x0069
+	uint8_t green; //0x006A
+	uint8_t red; //0x006B
+	char pad_006C[36]; //0x006C
+}; //Size: 0x0090
+
 
 #pragma pack(pop)
