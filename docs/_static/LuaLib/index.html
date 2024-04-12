@@ -1191,7 +1191,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2024-04-12 06:19:38</p>
+        <p class="lastUpdatedMessage">Last updated: 2024-04-12 08:14:43</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -3614,7 +3614,7 @@
 <table class="function_list">
 	<tr>
 	<td class="name" nowrap><a href="#tileStruct">tileStruct</a></td>
-	<td class="summary">Basic tile table, not everything very known and understood yet, you can research with these fields.</td>
+	<td class="summary">Basic tile table.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#tileStruct:factionHasArmyNearTile">tileStruct:factionHasArmyNearTile (factionID)</a></td>
@@ -5191,12 +5191,12 @@ settlementInfoScroll:getUIStrings.incomeString.blue = <span class="number">0</sp
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> faction = stratmap.game.getFaction(<span class="number">2</span>);
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> faction = CAMPAIGN:getFaction(<span class="string">"england"</span>)
 <span class="keyword">local</span> isVisible = M2TWEOP.getTileVisibility(faction, xCoord, yCoord)
 <span class="keyword">if</span> isVisible == <span class="keyword">true</span> <span class="keyword">then</span>
-	<span class="global">print</span>(<span class="string">"Tile is visible to faction "</span>..faction:getFactionName())
+	<span class="global">print</span>(<span class="string">"Tile is visible to faction "</span>..faction.name)
 <span class="keyword">else</span>
-	<span class="global">print</span>(<span class="string">"Tile is not visible to faction "</span>..faction:getFactionName())
+	<span class="global">print</span>(<span class="string">"Tile is not visible to faction "</span>..faction.name)
 <span class="keyword">end</span></code></pre>
     </ul>
 
@@ -6579,16 +6579,17 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" >newArmy = stratmap.game.spawnArmy(
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> army = stratmap.game.spawnArmy(
 CAMPAIGN:getFaction(<span class="string">"england"</span>),
-<span class="string">"Name1"</span>,<span class="string">"Name2"</span>,
+<span class="string">"Rufus"</span>,
+<span class="string">""</span>,
 characterType.named_character,
-<span class="string">"unique_label_1"</span>,
-<span class="string">"custom_portrait_name"</span>,
-<span class="number">18</span>,
-<span class="number">143</span>, <span class="number">156</span>,
-<span class="number">1001</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">0</span>
-);</code></pre>
+<span class="string">"rufus_1"</span>,
+<span class="string">""</span>,
+<span class="number">106</span>, <span class="number">149</span>,
+<span class="number">18</span>, <span class="keyword">false</span>, <span class="number">31</span>,
+M2TWEOPDU.getEduIndexByType(<span class="string">"Peasants"</span>), <span class="number">3</span>, <span class="number">0</span>, <span class="number">0</span>
+   )</code></pre>
     </ul>
 
 </dd>
@@ -10688,17 +10689,33 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><code class="language-lua" ><span class="keyword">function</span> FindArmy(x,y)
-	<span class="keyword">local</span> factionsNum = stratmap.game.getFactionsCount();
-	<span class="keyword">for</span> i = <span class="number">0</span>, factionsNum - <span class="number">1</span> <span class="keyword">do</span>
-		<span class="keyword">local</span> faction = stratmap.game.getFaction(i);
+	CAMPAIGN = gameDataAll.get().campaignStruct
+	<span class="keyword">for</span> i = <span class="number">1</span>, #CAMPAIGN.numberOfFactions <span class="keyword">do</span>
+		<span class="keyword">local</span> faction = CAMPAIGN.factionsSortedByDescrStrat[i]
 		<span class="keyword">if</span> <span class="keyword">not</span> faction <span class="keyword">then</span>
-			<span class="keyword">return</span> <span class="keyword">nil</span>;
+			<span class="keyword">return</span> <span class="keyword">nil</span>
 		<span class="keyword">end</span>
-		<span class="keyword">local</span> armiesNum = faction.stacksNum;
+		<span class="keyword">local</span> armiesNum = faction.stacksNum
 		<span class="keyword">for</span> j = <span class="number">0</span>, armiesNum - <span class="number">1</span> <span class="keyword">do</span>
-			<span class="keyword">local</span> army = faction:getStack(j);
-			<span class="keyword">if</span> (army.xCoord == x <span class="keyword">and</span> army.yCoord == y) <span class="keyword">then</span>
-				<span class="keyword">return</span> army;
+			<span class="keyword">local</span> army = faction:getStack(j)
+			<span class="keyword">local</span> x2, y2 = <span class="number">0</span>, <span class="number">0</span>
+			<span class="keyword">if</span> (army.leader) <span class="keyword">then</span>
+				x2 = army.leader.xCoord
+				y2 = army.leader.yCoord
+			<span class="keyword">elseif</span> army:findInSettlement() <span class="keyword">then</span>
+				x2 = army:findInSettlement().xCoord
+				y2 = army:findInSettlement().yCoord
+			<span class="keyword">elseif</span> army:findInFort() <span class="keyword">then</span>
+				x2 = army:findInFort().xCoord
+				y2 = army:findInFort().yCoord
+			<span class="keyword">elseif</span> army.shipArmy <span class="keyword">and</span> army.shipArmy.leader <span class="keyword">then</span>
+				x2 = army.shipArmy.leader.xCoord
+				y2 = army.shipArmy.leader.yCoord
+			<span class="keyword">else</span>
+				<span class="keyword">return</span> <span class="keyword">nil</span>
+			<span class="keyword">end</span>
+			<span class="keyword">if</span> (x2 == x <span class="keyword">and</span> y2 == y) <span class="keyword">then</span>
+				<span class="keyword">return</span> army
 			<span class="keyword">end</span>
 		<span class="keyword">end</span>
 	<span class="keyword">end</span>
@@ -10737,7 +10754,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" >ourSett = stratmap.game.getFaction(<span class="number">0</span>):getSettlement(<span class="number">0</span>)
+        <pre class="example"><code class="language-lua" >ourSett = CAMPAIGN:getFaction(<span class="string">"byzantium"</span>):getSettlement(<span class="number">0</span>)
 <span class="keyword">if</span> ourSett.isProvokedRebellion ~= <span class="number">0</span> <span class="keyword">then</span>
 	ourFac.money = ourFac.money - (ourSett.level*<span class="number">5000</span>)
 <span class="keyword">end</span></code></pre>
@@ -10774,7 +10791,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" >ourFort = stratmap.game.getFaction(<span class="number">0</span>):getFort(<span class="number">0</span>)
+        <pre class="example"><code class="language-lua" >ourFort = CAMPAIGN:getFaction(<span class="string">"byzantium"</span>):getFort(<span class="number">0</span>)
 <span class="keyword">if</span> ourFort <span class="keyword">then</span>
 	<span class="global">print</span>(ourFort.xCoord..<span class="string">", "</span>..ourFort.yCoord)
 <span class="keyword">end</span></code></pre>
@@ -15069,37 +15086,8 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" ><span class="comment">-- ID -&gt; Internal Name
-</span><span class="number">0</span>   = <span class="string">"gold"</span>;
-<span class="number">1</span>   = <span class="string">"silver"</span>;
-<span class="number">2</span>   = <span class="string">"fish"</span>;
-<span class="number">3</span>   = <span class="string">"furs"</span>;
-<span class="number">4</span>   = <span class="string">"grain"</span>;
-<span class="number">5</span>   = <span class="string">"timber"</span>;
-<span class="number">6</span>   = <span class="string">"iron"</span>;
-<span class="number">7</span>   = <span class="string">"ivory"</span>;
-<span class="number">8</span>   = <span class="string">"wine"</span>;
-<span class="number">9</span>   = <span class="string">"slaves"</span>;
-<span class="number">10</span>  = <span class="string">"chocolate"</span>;
-<span class="number">11</span>  = <span class="string">"marble"</span>;
-<span class="number">12</span>  = <span class="string">"textiles"</span>;
-<span class="number">13</span>  = <span class="string">"dyes"</span>;
-<span class="number">14</span>  = <span class="string">"tobacco"</span>;
-<span class="number">15</span>  = <span class="string">"silk"</span>;
-<span class="number">16</span>  = <span class="string">"sugar"</span>;
-<span class="number">17</span>  = <span class="string">"sulfur"</span>;
-<span class="number">18</span>  = <span class="string">"tin"</span>;
-<span class="number">19</span>  = <span class="string">"spices"</span>;
-<span class="number">20</span>  = <span class="string">"cotton"</span>;
-<span class="number">21</span>  = <span class="string">"amber"</span>;
-<span class="number">22</span>  = <span class="string">"coal"</span>;
-<span class="number">23</span>  = <span class="string">"wool"</span>;
-<span class="number">24</span>  = <span class="string">"elephants"</span>;
-<span class="number">25</span>  = <span class="string">"camels"</span>;
-<span class="number">26</span>  = <span class="string">"dogs"</span>;
-<span class="number">27</span>  = <span class="string">"generic"</span>;
-<span class="comment">--
-</span><span class="keyword">if</span> tradeResource:getResourceID() == <span class="number">23</span> <span class="keyword">then</span> <span class="comment">--wool
+        <pre class="example"><code class="language-lua" ><span class="comment">--
+</span><span class="keyword">if</span> tradeResource:getResourceID() == resourceType.wool <span class="keyword">then</span> <span class="comment">--wool
 </span>	<span class="comment">--do stuff
 </span><span class="keyword">end</span></code></pre>
     </ul>
@@ -15398,64 +15386,27 @@ currSet:changeOwner(fac1);
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" ><span class="comment">-- Note: Generals will always remain at the start of the stack
-</span><span class="comment">-- 1 = EDU Type
-</span><span class="comment">-- 2 = Category
-</span><span class="comment">-- 3 = Class
-</span><span class="comment">-- 4 = Soldier Count
-</span><span class="comment">-- 5 = Experience
-</span><span class="comment">-- 6 = Category + Class
-</span><span class="comment">-- 7 = AI unit value
-</span>
-<span class="keyword">function</span> onFactionTurnStart(eventData)
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onFactionTurnStart(eventData)
 <span class="keyword">local</span> faction = eventData.faction
    <span class="comment">-- If it's not the players turn, don't sort
 </span>   <span class="keyword">if</span> faction.isPlayerControlled == <span class="number">0</span> <span class="keyword">then</span> <span class="keyword">return</span> <span class="keyword">end</span>;
 
-   <span class="comment">-- Sort all the stacks on the map right before the turn starts
-</span><span class="comment">-- Note: Generals will always remain at the start of the stack
-</span><span class="comment">-- 1 = EDU Type
-</span><span class="comment">-- 2 = Category
-</span><span class="comment">-- 3 = Class
-</span><span class="comment">-- 4 = Soldier Count
-</span><span class="comment">-- 5 = Experience
-</span><span class="comment">-- 6 = Category + Class
-</span><span class="comment">-- 7 = AI unit value
-</span>
 <span class="keyword">function</span> onFactionTurnStart(eventData)
-<span class="keyword">local</span> faction = eventData.faction
-<span class="comment">-- If it's not the players turn, don't sort
-</span><span class="keyword">if</span> faction.isPlayerControlled == <span class="number">0</span> <span class="keyword">then</span> <span class="keyword">return</span> <span class="keyword">end</span>;
+	CAMPAIGN = gameDataAll.get().campaignStruct
+	<span class="keyword">local</span> faction = eventData.faction
+	<span class="comment">-- If it's not the players turn, don't sort
+</span>	<span class="keyword">if</span> faction.isPlayerControlled == <span class="number">0</span> <span class="keyword">then</span> <span class="keyword">return</span> <span class="keyword">end</span>;
 
-<span class="comment">-- Sort all the stacks on the map right before the turn starts
-</span><span class="keyword">local</span> factionsNum = stratmap.game.getFactionsCount();
-<span class="keyword">for</span> i = <span class="number">0</span>, factionsNum - <span class="number">1</span> <span class="keyword">do</span>
-	<span class="keyword">local</span> faction = stratmap.game.getFaction(i);
-	<span class="keyword">for</span> j = <span class="number">0</span>, faction.stacksNum - <span class="number">1</span> <span class="keyword">do</span>
-		<span class="keyword">local</span> stack = faction:getStack(j);
-		<span class="keyword">if</span> stack <span class="keyword">then</span>
-			<span class="comment">-- Debug Info
-</span>			<span class="comment">-- print("\n\n")
-</span>			<span class="comment">-- print("-- Unsorted Stack --")
-</span>			<span class="comment">-- for k = 0, stack.numOfUnits - 1 do
-</span>			<span class="comment">--     local unit = stack:getUnit(k);
-</span>			<span class="comment">--     if unit.eduEntry.Type then
-</span>			<span class="comment">--         print(unit.eduEntry.Type)
-</span>			<span class="comment">--     end
-</span>			<span class="comment">-- end
-</span>
-			<span class="comment">-- Sort the stack by category + class, then by soldier count, then by experience
-</span>			stack:sortStack(sortType.categoryClass, sortType.soldierCount, sortType.experience)
-
-			<span class="comment">-- print("\n\n")
-</span>			<span class="comment">-- print("-- Sorted Stack --")
-</span>			<span class="comment">-- for k = 0, stack.numOfUnits - 1 do
-</span>			<span class="comment">--     local unit = stack:getUnit(k);
-</span>			<span class="comment">--     if unit.eduEntry.Type then
-</span>			<span class="comment">--         print(unit.eduEntry.Type)
-</span>			<span class="comment">--     end
-</span>			<span class="comment">-- end
-</span>		<span class="keyword">end</span>
+	<span class="comment">-- Sort all the stacks on the map right before the turn starts
+</span>	<span class="keyword">local</span> factionsNum = CAMPAIGN.numberOfFactions;
+	<span class="keyword">for</span> i = <span class="number">1</span>, #factionsNum <span class="keyword">do</span>
+		<span class="keyword">local</span> fac = CAMPAIGN.factionsSortedByDescrStrat[i];
+		<span class="keyword">for</span> j = <span class="number">0</span>, fac.stacksNum - <span class="number">1</span> <span class="keyword">do</span>
+			<span class="keyword">local</span> stack = fac:getStack(j);
+			<span class="keyword">if</span> stack <span class="keyword">then</span>
+				<span class="comment">-- Sort the stack by category + class, then by soldier count, then by experience
+</span>				stack:sortStack(sortType.categoryClass, sortType.soldierCount, sortType.experience)
+			<span class="keyword">end</span>
 		<span class="keyword">end</span>
 	<span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
@@ -19272,7 +19223,7 @@ ourChar:kill();</code></pre>
 
 <p>A character has been injured by a disaster. </p>
 <pre><code>Exports: character, faction, regionID, disasterType, characterType, religion
-disasterTypes = earthquake, flood, horde, storm, volcano, dustbowl, locusts, famine, plague, riot, fire
+disasterTypes: earthquake, flood, horde, storm, volcano, dustbowl, locusts, famine, plague, riot, fire
 </code></pre>
 
 
@@ -19460,6 +19411,7 @@ disasterTypes = earthquake, flood, horde, storm, volcano, dustbowl, locusts, fam
 
 <p>A General of a captor faction has made a ransom decision. </p>
 <pre><code>Exports: character, faction, targetFaction, regionID, characterType, religion, targetReligion, captureInfo, ransomType
+ransomType: ransom, execute, release, cannot_pay_ransom
 </code></pre>
 
 
@@ -19600,6 +19552,7 @@ disasterTypes = earthquake, flood, horde, storm, volcano, dustbowl, locusts, fam
 
 <p>A spy mission has completed.  May also export fort or settlement if target was a garrison residence.</p>
 <pre><code>Exports: character, settlement, fort, faction, targetFaction, regionID, characterType, missionSuccessLevel, missionProbability, religion, targetReligion
+missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 </code></pre>
 
 
@@ -19635,6 +19588,7 @@ disasterTypes = earthquake, flood, horde, storm, volcano, dustbowl, locusts, fam
 
 <p>An assassination mission has completed. </p>
 <pre><code>Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
+missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 </code></pre>
 
 
@@ -19670,6 +19624,7 @@ disasterTypes = earthquake, flood, horde, storm, volcano, dustbowl, locusts, fam
 
 <p>An acquisition mission has completed. </p>
 <pre><code>Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
+missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 </code></pre>
 
 
@@ -19705,6 +19660,7 @@ disasterTypes = earthquake, flood, horde, storm, volcano, dustbowl, locusts, fam
 
 <p>A marriage mission has completed. </p>
 <pre><code>Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
+missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 </code></pre>
 
 
@@ -19740,6 +19696,7 @@ disasterTypes = earthquake, flood, horde, storm, volcano, dustbowl, locusts, fam
 
 <p>A denouncement mission has completed. </p>
 <pre><code>Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
+missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 </code></pre>
 
 
@@ -19775,6 +19732,7 @@ disasterTypes = earthquake, flood, horde, storm, volcano, dustbowl, locusts, fam
 
 <p>A sabotage mission has completed. </p>
 <pre><code>Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
+missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 </code></pre>
 
 
@@ -19810,8 +19768,9 @@ disasterTypes = earthquake, flood, horde, storm, volcano, dustbowl, locusts, fam
 
 <p>A bribery mission has completed. </p>
 <pre><code>Exports: character, faction, targetFaction, regionID, characterType, missionSuccessLevel, religion, targetReligion
-</code></pre>
+missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 
+</code></pre>
 
     </div>
 
@@ -19845,8 +19804,9 @@ disasterTypes = earthquake, flood, horde, storm, volcano, dustbowl, locusts, fam
 
 <p>A diplomacy mission has completed. </p>
 <pre><code>Exports: character, faction, targetFaction, regionID, characterType, missionSuccessLevel, religion, targetReligion
-</code></pre>
+missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 
+</code></pre>
 
     </div>
 
@@ -19880,8 +19840,9 @@ disasterTypes = earthquake, flood, horde, storm, volcano, dustbowl, locusts, fam
 
 <p>A Faction leader has ordered a spying mission. </p>
 <pre><code>Exports: character, settlement, fort, faction, targetFaction, regionID, characterType, missionSuccessLevel, religion, targetReligion
-</code></pre>
+missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 
+</code></pre>
 
     </div>
 
@@ -19915,6 +19876,7 @@ disasterTypes = earthquake, flood, horde, storm, volcano, dustbowl, locusts, fam
 
 <p>A Faction leader has ordered an assassination mission. </p>
 <pre><code>Exports: character, targetCharacter, faction, regionID, characterType, missionSuccessLevel, religion
+missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 </code></pre>
 
 
@@ -26383,7 +26345,7 @@ M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, <span class="number">5</span>, 
         </li>
         <li><span class="parameter">newIndex</span>
             <span class="types"><span class="type">int</span></span>
-         New index of new entry.
+         New index of new entry. Use index > 127!
         </li>
     </ul>
 
@@ -26404,8 +26366,7 @@ newBuilding = EDB.addEopBuildEntry(oldBuilding,<span class="number">150</span>);
 
 <span class="comment">-- Full example
 </span><span class="keyword">local</span> oldBuilding = EDB.getBuildingByName(<span class="string">"market"</span>);
-EDB.addEopBuildEntry(oldBuilding, <span class="number">0</span>);
-<span class="keyword">local</span> eopBuilding = EDB.getEopBuildEntry(<span class="number">0</span>);
+<span class="keyword">local</span> eopBuilding = EDB.addEopBuildEntry(oldBuilding, <span class="number">150</span>);
 
 <span class="comment">-- Set pictures, names and descriptions by culture and faction
 </span><span class="keyword">for</span> c = <span class="number">0</span>, <span class="number">6</span> <span class="keyword">do</span> <span class="comment">--every culture
@@ -26418,10 +26379,10 @@ EDB.addEopBuildEntry(oldBuilding, <span class="number">0</span>);
 <span class="keyword">end</span>
 
 <span class="comment">-- Add in an income bonus of 500
-</span>EDB.addBuildingCapability(eopBuilding, <span class="number">0</span>, <span class="number">55</span>, <span class="number">500</span>, <span class="keyword">true</span>)
+</span>EDB.addBuildingCapability(eopBuilding, <span class="number">0</span>, buildingCapability.income_bonus, <span class="number">500</span>, <span class="keyword">true</span>)
 
 <span class="comment">-- Add a recruit pool
-</span>EDB.addBuildingPool(eopBuilding, <span class="number">0</span>, <span class="number">55</span>, <span class="number">1</span>, <span class="number">0.1</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="string">""</span>);
+</span>EDB.addBuildingPool(eopBuilding, <span class="number">0</span>, M2TWEOPDU.getEduIndexByType(<span class="string">"Peasants"</span>), <span class="number">1</span>, <span class="number">0.1</span>, <span class="number">2</span>, <span class="number">0</span>, <span class="string">""</span>);
 
 <span class="comment">-- Create a dummy building and get it
 </span>sett:createBuilding(<span class="string">"market"</span>);; <span class="comment">--just assuming you have got a sett with some loop or function
@@ -26719,7 +26680,7 @@ EDB.setBuildingLocalizedDescrShort(building, modPath .. mp_path_mods .. <span cl
         </li>
         <li><span class="parameter">capability</span>
             <span class="types"><span class="type">int</span></span>
-         ID of capability to set.
+         ID of capability to set. Use buildingCapability enum.
         </li>
         <li><span class="parameter">value</span>
             <span class="types"><span class="type">int</span></span>
@@ -26736,72 +26697,13 @@ EDB.setBuildingLocalizedDescrShort(building, modPath .. mp_path_mods .. <span cl
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" ><span class="comment">-- Building Capability Enums
-</span>population_growth_bonus = <span class="number">0</span>,
-   population_loyalty_bonus = <span class="number">1</span>,
-   population_health_bonus = <span class="number">2</span>,
-   trade_base_income_bonus = <span class="number">3</span>,
-   trade_level_bonus = <span class="number">4</span>,
-   trade_fleet = <span class="number">5</span>,
-   taxable_income_bonus = <span class="number">6</span>,
-   mine_resource = <span class="number">7</span>,
-   farming_level = <span class="number">8</span>,
-   road_level = <span class="number">9</span>,
-   gate_strength = <span class="number">10</span>,
-   gate_defences = <span class="number">11</span>,
-   wall_level = <span class="number">12</span>,
-   tower_level = <span class="number">13</span>,
-   armour = <span class="number">14</span>,
-   stage_games = <span class="number">15</span>,
-   stage_races = <span class="number">16</span>,
-   fire_risk = <span class="number">17</span>,
-   weapon_melee_simple = <span class="number">18</span>,
-   weapon_melee_blade = <span class="number">19</span>,
-   weapon_missile_mechanical = <span class="number">20</span>,
-   weapon_missile_gunpowder = <span class="number">21</span>,
-   weapon_artillery_mechanical = <span class="number">22</span>,
-   weapon_artillery_gunpowder = <span class="number">23</span>,
-   weapon_naval_gunpowder = <span class="number">24</span>,
-   upgrade_bodyguard = <span class="number">25</span>,
-   recruits_morale_bonus = <span class="number">26</span>,
-   recruits_exp_bonus = <span class="number">27</span>,
-   happiness_bonus = <span class="number">28</span>,
-   law_bonus = <span class="number">29</span>,
-   construction_cost_bonus_military = <span class="number">30</span>,
-   construction_cost_bonus_religious = <span class="number">31</span>,
-   construction_cost_bonus_defensive = <span class="number">32</span>,
-   construction_cost_bonus_other = <span class="number">33</span>,
-   construction_time_bonus_military = <span class="number">34</span>,
-   construction_time_bonus_religious = <span class="number">35</span>,
-   construction_time_bonus_defensive = <span class="number">36</span>,
-   construction_time_bonus_other = <span class="number">37</span>,
-   construction_cost_bonus_wooden = <span class="number">38</span>,
-   construction_cost_bonus_stone = <span class="number">39</span>,
-   construction_time_bonus_wooden = <span class="number">40</span>,
-   construction_time_bonus_stone = <span class="number">41</span>,
-   free_upkeep = <span class="number">42</span>,
-   pope_approval = <span class="number">43</span>,
-   pope_disapproval = <span class="number">44</span>,
-   religion_level = <span class="number">45</span>,
-   amplify_religion_level = <span class="number">46</span>,
-   archer_bonus = <span class="number">47</span>,
-   cavalry_bonus = <span class="number">48</span>,
-   heavy_cavalry_bonus = <span class="number">49</span>,
-   gun_bonus = <span class="number">50</span>,
-   navy_bonus = <span class="number">51</span>,
-   recruitment_cost_bonus_naval = <span class="number">52</span>,
-   retrain_cost_bonus = <span class="number">53</span>,
-   weapon_projectile = <span class="number">54</span>,
-   income_bonus = <span class="number">55</span>,
-   recruitment_slots = <span class="number">56</span>
-
-building = EDB.getBuildingByName(<span class="string">"market"</span>)
+        <pre class="example"><code class="language-lua" >building = EDB.getBuildingByName(<span class="string">"market"</span>)
 
 <span class="comment">-- Add a population growth bonus to the market building
 </span>EDB.addBuildingCapability(building, <span class="number">0</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="keyword">true</span>);
 
 <span class="comment">-- Add a 500 income bonus to the market building
-</span>EDB.addBuildingCapability(building, <span class="number">0</span>, <span class="number">55</span>, <span class="number">500</span>, <span class="keyword">true</span>)</code></pre>
+</span>EDB.addBuildingCapability(building, <span class="number">0</span>, buildingCapability.income_bonus, <span class="number">500</span>, <span class="keyword">true</span>)</code></pre>
     </ul>
 
 </dd>
@@ -29628,7 +29530,7 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Basic tile table, not everything very known and understood yet, you can research with these fields.
+    Basic tile table.
     </div>
 
     <h3>Fields:</h3>
@@ -31974,7 +31876,7 @@ battleXCoord=gameData.battleStruct.xCoord;</code></pre>
 			<span class="keyword">repeat</span>
 				<span class="keyword">local</span> thisArmy = thisSide.armies[k].army
 				<span class="keyword">if</span> thisArmy ~= <span class="keyword">nil</span> <span class="keyword">then</span>
-					battleList = battleList..<span class="string">"\n\t\tArmy "</span>..k..<span class="string">"\n\t\t\tFaction: "</span>..thisArmy.faction:getFactionName()
+					battleList = battleList..<span class="string">"\n\t\tArmy "</span>..k..<span class="string">"\n\t\t\tFaction: "</span>..thisArmy.faction.name
 					<span class="keyword">if</span> thisArmy.leader ~= <span class="keyword">nil</span> <span class="keyword">then</span>
 						battleList = battleList..<span class="string">"\n\t\t\tLeader: "</span>..thisArmy.leader.namedCharacter.fullName
 					<span class="keyword">end</span>
