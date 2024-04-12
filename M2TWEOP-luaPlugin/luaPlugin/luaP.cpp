@@ -981,16 +981,17 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int armour
 	@treturn stackStruct newArmy
 	@usage
-	newArmy = stratmap.game.spawnArmy(
+	local army = stratmap.game.spawnArmy(
 	CAMPAIGN:getFaction("england"),
-	"Name1","Name2",
+	"Rufus",
+	"",
 	characterType.named_character,
-	"unique_label_1",
-	"custom_portrait_name",
-	18,
-	143, 156,
-	1001, 3, 0, 0
-	);
+	"rufus_1",
+	"",
+	106, 149,
+	18, false, 31,
+	M2TWEOPDU.getEduIndexByType("Peasants"), 3, 0, 0
+    )
 	*/
 	tables.gameTable.set_function("spawnArmy", &stackStructHelpers::spawnArmy);
 	
