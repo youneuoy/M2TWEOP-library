@@ -59,6 +59,7 @@
     <li><a href="#M2TWEOP.unlockGameConsoleCommands">M2TWEOP.unlockGameConsoleCommands ()</a></li>
     <li><a href="#M2TWEOP.setMaxBgSize">M2TWEOP.setMaxBgSize (newSize)</a></li>
     <li><a href="#M2TWEOP.setEDUUnitsSize">M2TWEOP.setEDUUnitsSize (minSize, maxSize)</a></li>
+    <li><a href="#M2TWEOP.getSettlementInfoScroll">M2TWEOP.getSettlementInfoScroll ()</a></li>
     <li><a href="#M2TWEOP.setBuildingChainLimit">M2TWEOP.setBuildingChainLimit (limit)</a></li>
     <li><a href="#M2TWEOP.setConversionLvlFromCastle">M2TWEOP.setConversionLvlFromCastle (castleLvl, convertToLvl)</a></li>
     <li><a href="#M2TWEOP.setConversionLvlFromCity">M2TWEOP.setConversionLvlFromCity (cityLvl, convertToLvl)</a></li>
@@ -80,6 +81,7 @@
     <li><a href="#M2TWEOP.getCampaignDifficulty1">M2TWEOP.getCampaignDifficulty1 ()</a></li>
     <li><a href="#M2TWEOP.getCampaignDifficulty2">M2TWEOP.getCampaignDifficulty2 ()</a></li>
     <li><a href="#M2TWEOP.condition">M2TWEOP.condition (condition, eventData)</a></li>
+    <li><a href="#M2TWEOP.CalculateTileMovementCost">M2TWEOP.CalculateTileMovementCost (originX, originY, targetX, targetY)</a></li>
 </details>
 
 
@@ -133,6 +135,7 @@
     <li><a href="#stratmap.game.getFaction">stratmap.game.getFaction (Index)</a></li>
     <li><a href="#stratmap.game.getGuild">stratmap.game.getGuild (index)</a></li>
     <li><a href="#stratmap.game.createCharacterByString">stratmap.game.createCharacterByString (type, Faction, age, name, name2, subFaction, portrait_custom, xCoord, yCoord)</a></li>
+    <li><a href="#stratmap.game.spawnArmy">stratmap.game.spawnArmy (Faction, name, name2, type, label, portrait, x, y, age, family, subFaction, unitIndex, exp, wpn, armour)</a></li>
     <li><a href="#stratmap.game.createArmy">stratmap.game.createArmy (ourGeneral)</a></li>
     <li><a href="#stratmap.game.createArmyInSettlement">stratmap.game.createArmyInSettlement (settlement)</a></li>
     <li><a href="#stratmap.game.getScriptCounter">stratmap.game.getScriptCounter (counterName)</a></li>
@@ -176,10 +179,23 @@
 
 
 <details>
+  <summary><a href="#Projectile">Projectile </a></summary>
+    <li><a href="#projectileStruct">projectileStruct</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#Mount">Mount </a></summary>
+    <li><a href="#mountStruct">mountStruct</a></li>
+</details>
+
+
+<details>
   <summary><a href="#EduEntry">EduEntry </a></summary>
     <li><a href="#eduEntry">eduEntry</a></li>
     <li><a href="#eduEntry:hasOwnership">eduEntry:hasOwnership (factionID)</a></li>
     <li><a href="#eduEntry:setOwnerShip">eduEntry:setOwnerShip (factionID, setOwnership)</a></li>
+    <li><a href="#eduEntry:hasAttribute">eduEntry:hasAttribute (attributeName)</a></li>
 </details>
 
 
@@ -225,6 +241,25 @@
 <details>
   <summary><a href="#capturedUnit">capturedUnit </a></summary>
     <li><a href="#capturedUnit">capturedUnit</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#settlementTextStrings">settlementTextStrings </a></summary>
+    <li><a href="#settlementTextStrings">settlementTextStrings</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#uiString">uiString </a></summary>
+    <li><a href="#uiString">uiString</a></li>
+</details>
+
+
+<details>
+  <summary><a href="#settlementInfoScroll">settlementInfoScroll </a></summary>
+    <li><a href="#settlementInfoScroll">settlementInfoScroll</a></li>
+    <li><a href="#settlementInfoScroll:getUIStrings">settlementInfoScroll:getUIStrings ()</a></li>
 </details>
 
 
@@ -505,7 +540,8 @@
     <li><a href="#stackStruct:createUnit">stackStruct:createUnit (type, exp, armor, weapon)</a></li>
     <li><a href="#stackStruct:createUnitByIDX">stackStruct:createUnitByIDX (index, exp, armor, weapon)</a></li>
     <li><a href="#stackStruct:mergeArmies">stackStruct:mergeArmies (targetArmy)</a></li>
-    <li><a href="#stackStruct:siegeSettlement">stackStruct:siegeSettlement (settlement)</a></li>
+    <li><a href="#stackStruct:siegeSettlement">stackStruct:siegeSettlement (settlement, isAttack)</a></li>
+    <li><a href="#stackStruct:siegeFort">stackStruct:siegeFort (fort, isAttack)</a></li>
     <li><a href="#stackStruct:attackArmy">stackStruct:attackArmy (defender)</a></li>
 </details>
 
@@ -731,6 +767,7 @@
     <li><a href="#onNewGameStart">onNewGameStart ()</a></li>
     <li><a href="#onReadGameDbsAtStart">onReadGameDbsAtStart ()</a></li>
     <li><a href="#onGameInit">onGameInit ()</a></li>
+    <li><a href="#onUnloadCampaign">onUnloadCampaign ()</a></li>
     <li><a href="#onAiTurn">onAiTurn (aiFaction)</a></li>
     <li><a href="#onClickAtTile">onClickAtTile (x, y)</a></li>
     <li><a href="#onCampaignMapLoaded">onCampaignMapLoaded ()</a></li>
@@ -856,6 +893,7 @@
     <li><a href="#campaignStruct:getPort">campaignStruct:getPort (index)</a></li>
     <li><a href="#campaignStruct:getWatchTower">campaignStruct:getWatchTower (index)</a></li>
     <li><a href="#campaignStruct:getSettlementByName">campaignStruct:getSettlementByName (name)</a></li>
+    <li><a href="#campaignStruct:getFaction">campaignStruct:getFaction (name)</a></li>
     <li><a href="#campaignStruct:getCampaignPath">campaignStruct:getCampaignPath ()</a></li>
 </details>
 
@@ -893,6 +931,8 @@
     <li><a href="#stratMap:getVolcanoCoords">stratMap:getVolcanoCoords (index)</a></li>
     <li><a href="#stratMap:getLandConnection">stratMap:getLandConnection (index)</a></li>
     <li><a href="#stratMap:getLandMass">stratMap:getLandMass (index)</a></li>
+    <li><a href="#stratMap:getSettlement">stratMap:getSettlement (name)</a></li>
+    <li><a href="#stratMap:getRegionByName">stratMap:getRegionByName (name)</a></li>
 </details>
 
 
@@ -1069,6 +1109,8 @@
     <li><a href="#aiObjective">aiObjective</a></li>
     <li><a href="#resourceType">resourceType</a></li>
     <li><a href="#moraleStatus">moraleStatus</a></li>
+    <li><a href="#unitDiscipline">unitDiscipline</a></li>
+    <li><a href="#unitTraining">unitTraining</a></li>
     <li><a href="#combatStatus">combatStatus</a></li>
     <li><a href="#battleSuccess">battleSuccess</a></li>
     <li><a href="#mountClass">mountClass</a></li>
@@ -1149,7 +1191,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2024-04-04 11:52:26</p>
+        <p class="lastUpdatedMessage">Last updated: 2024-04-12 06:19:38</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -1247,6 +1289,10 @@
 	<td class="summary">Sets the new maximum soldier count.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP.getSettlementInfoScroll">M2TWEOP.getSettlementInfoScroll ()</a></td>
+	<td class="summary">Gets a struct containing color information about the settlement info scroll.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.setBuildingChainLimit">M2TWEOP.setBuildingChainLimit (limit)</a></td>
 	<td class="summary">Sets the new maximum amount of building levels within a chain.</td>
 	</tr>
@@ -1329,6 +1375,10 @@
 	<tr>
 	<td class="name" nowrap><a href="#M2TWEOP.condition">M2TWEOP.condition (condition, eventData)</a></td>
 	<td class="summary">Check game condition.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#M2TWEOP.CalculateTileMovementCost">M2TWEOP.CalculateTileMovementCost (originX, originY, targetX, targetY)</a></td>
+	<td class="summary">Calculate movement point cost between two adjacent tiles.</td>
 	</tr>
 </table>
 <h2><a href="#BattleCamera">BattleCamera </a></h2>
@@ -1430,7 +1480,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#stratmap.game.getFaction">stratmap.game.getFaction (Index)</a></td>
-	<td class="summary">Get a faction by the index, commonly used when iterating over all factions using getFactionsCount()</td>
+	<td class="summary">Get a faction by the turn order.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#stratmap.game.getGuild">stratmap.game.getGuild (index)</a></td>
@@ -1441,8 +1491,12 @@
 	<td class="summary">Create a new character at the specified coordinates.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#stratmap.game.spawnArmy">stratmap.game.spawnArmy (Faction, name, name2, type, label, portrait, x, y, age, family, subFaction, unitIndex, exp, wpn, armour)</a></td>
+	<td class="summary">Create a new army at the specified coordinates.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#stratmap.game.createArmy">stratmap.game.createArmy (ourGeneral)</a></td>
-	<td class="summary">Create an army for a character.</td>
+	<td class="summary">Legacy code to spawn an army for a created character.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#stratmap.game.createArmyInSettlement">stratmap.game.createArmyInSettlement (settlement)</a></td>
@@ -1548,6 +1602,24 @@
 	<td class="summary">Get the unit this unit is currently targeting.</td>
 	</tr>
 </table>
+<h2><a href="#Projectile">Projectile </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#projectileStruct">projectileStruct</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+</table>
+<h2><a href="#Mount">Mount </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#mountStruct">mountStruct</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+</table>
 <h2><a href="#EduEntry">EduEntry </a></h2>
 <table class="function_list">
 	<tr>
@@ -1561,6 +1633,10 @@
 	<tr>
 	<td class="name" nowrap><a href="#eduEntry:setOwnerShip">eduEntry:setOwnerShip (factionID, setOwnership)</a></td>
 	<td class="summary">Set if a faction has ownership of this entry.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#eduEntry:hasAttribute">eduEntry:hasAttribute (attributeName)</a></td>
+	<td class="summary">Check if the entry has an attribute.</td>
 	</tr>
 </table>
 <h2><a href="#Character">Character </a></h2>
@@ -1675,6 +1751,31 @@
 	<td class="summary">Basic capturedUnit table.</td>
 	</tr>
 </table>
+<h2><a href="#settlementTextStrings">settlementTextStrings </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#settlementTextStrings">settlementTextStrings</a></td>
+	<td class="summary">Basic settlementTextStrings table.</td>
+	</tr>
+</table>
+<h2><a href="#uiString">uiString </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uiString">uiString</a></td>
+	<td class="summary">Basic uiString table.</td>
+	</tr>
+</table>
+<h2><a href="#settlementInfoScroll">settlementInfoScroll </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#settlementInfoScroll">settlementInfoScroll</a></td>
+	<td class="summary">Basic settlementInfoScroll table.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#settlementInfoScroll:getUIStrings">settlementInfoScroll:getUIStrings ()</a></td>
+	<td class="summary">Get settlement text color info.</td>
+	</tr>
+</table>
 <h2><a href="#capturedCharacter">capturedCharacter </a></h2>
 <table class="function_list">
 	<tr>
@@ -1736,7 +1837,7 @@
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#factionStruct:getFactionName">factionStruct:getFactionName ()</a></td>
-	<td class="summary">Get the faction's internal name</td>
+	<td class="summary">Outdated legacy function.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#factionStruct:getNamedCharacter">factionStruct:getNamedCharacter (number)</a></td>
@@ -2200,8 +2301,12 @@
 	<td class="summary">Merge 2 armies on the strat map.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#stackStruct:siegeSettlement">stackStruct:siegeSettlement (settlement)</a></td>
+	<td class="name" nowrap><a href="#stackStruct:siegeSettlement">stackStruct:siegeSettlement (settlement, isAttack)</a></td>
 	<td class="summary">Besiege the specified settlement, or attack it if already besieging it.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#stackStruct:siegeFort">stackStruct:siegeFort (fort, isAttack)</a></td>
+	<td class="summary">Besiege the specified fort, or attack it if already besieging it.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#stackStruct:attackArmy">stackStruct:attackArmy (defender)</a></td>
@@ -3070,6 +3175,10 @@
 	<td class="summary">Called after the game loads various db`s (edu, etc) at startup.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#onUnloadCampaign">onUnloadCampaign ()</a></td>
+	<td class="summary">Called after the campaignStruct gets unloaded (exit to menu, load save etc).</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#onAiTurn">onAiTurn (aiFaction)</a></td>
 	<td class="summary">Called on ai initialized on turn start.</td>
 	</tr>
@@ -3404,6 +3513,10 @@
 	<td class="summary">Get settlement by internal name.</td>
 	</tr>
 	<tr>
+	<td class="name" nowrap><a href="#campaignStruct:getFaction">campaignStruct:getFaction (name)</a></td>
+	<td class="summary">Get a faction by it's internal name.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#campaignStruct:getCampaignPath">campaignStruct:getCampaignPath ()</a></td>
 	<td class="summary">Get path to the current descr_strat file used.</td>
 	</tr>
@@ -3465,6 +3578,14 @@
 	<tr>
 	<td class="name" nowrap><a href="#stratMap:getLandMass">stratMap:getLandMass (index)</a></td>
 	<td class="summary">Get a landmass (collection of regions reachable by land, like a continent or island).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#stratMap:getSettlement">stratMap:getSettlement (name)</a></td>
+	<td class="summary">Get a settlement by its internal name.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#stratMap:getRegionByName">stratMap:getRegionByName (name)</a></td>
+	<td class="summary">Get a region by its internal name.</td>
 	</tr>
 </table>
 <h2><a href="#landMass">landMass </a></h2>
@@ -3812,6 +3933,14 @@
 	<tr>
 	<td class="name" nowrap><a href="#moraleStatus">moraleStatus</a></td>
 	<td class="summary">Enum of unit morale status.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#unitDiscipline">unitDiscipline</a></td>
+	<td class="summary">Enum of unit discipline.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#unitTraining">unitTraining</a></td>
+	<td class="summary">Enum of unit training.</td>
 	</tr>
 	<tr>
 	<td class="name" nowrap><a href="#combatStatus">combatStatus</a></td>
@@ -4203,6 +4332,12 @@
 
 
         </li>
+        <li><span class="parameter">getSettlementInfoScroll</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.getSettlementInfoScroll">getSettlementInfoScroll</a></span>
+
+
+
+        </li>
         <li><span class="parameter">getReligion</span>
             <span class="types"><a class="type" href="index.html#settlementStruct:getReligion">getReligion</a></span>
 
@@ -4223,6 +4358,12 @@
         </li>
         <li><span class="parameter">getOptions2</span>
             <span class="types"><a class="type" href="index.html#M2TWEOP.getOptions2">getOptions2</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">CalculateTileMovementCost</span>
+            <span class="types"><a class="type" href="index.html#M2TWEOP.CalculateTileMovementCost">CalculateTileMovementCost</a></span>
 
 
 
@@ -4663,6 +4804,35 @@ M2TWEOP.unloadTexture(testImage.img);</code></pre>
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><code class="language-lua" >M2TWEOP.setEDUUnitsSize(<span class="number">1</span>,<span class="number">300</span>);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP.getSettlementInfoScroll"></a>
+    <strong>M2TWEOP.getSettlementInfoScroll ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Gets a struct containing color information about the settlement info scroll.
+    </div>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#settlementInfoScroll">settlementInfoScroll</a></span>
+        infoScroll
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" >// Make the words <span class="string">"Income"</span> on the Settlement Info scroll red
+settlementInfoScroll = M2TWEOP.getSettlementInfoScroll();
+settlementInfoScroll:getUIStrings.incomeString.red = <span class="number">255</span>
+settlementInfoScroll:getUIStrings.incomeString.green = <span class="number">0</span>
+settlementInfoScroll:getUIStrings.incomeString.blue = <span class="number">0</span></code></pre>
     </ul>
 
 </dd>
@@ -5298,6 +5468,54 @@ M2TWEOP.unloadTexture(testImage.img);</code></pre>
         <pre class="example"><code class="language-lua" ><span class="keyword">if</span> M2TWEOP.condition(<span class="string">"InEnemyLands"</span>, eventData) <span class="keyword">then</span>
 	<span class="comment">--do stuff
 </span><span class="keyword">end</span></code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "M2TWEOP.CalculateTileMovementCost"></a>
+    <strong>M2TWEOP.CalculateTileMovementCost (originX, originY, targetX, targetY)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Calculate movement point cost between two adjacent tiles.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">originX</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">originY</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">targetX</span>
+            <span class="types"><span class="type">int</span></span>
+         only adjacent tiles! Does not calculate paths just the cost of moving from one tile to another.
+        </li>
+        <li><span class="parameter">targetY</span>
+            <span class="types"><span class="type">int</span></span>
+         only adjacent tiles! Does not calculate paths just the cost of moving from one tile to another.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">float</span></span>
+        moveCost
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> moveCost = M2TWEOP.CalculateTileMovementCost(<span class="number">153</span>, <span class="number">245</span>, <span class="number">154</span>, <span class="number">245</span>);</code></pre>
     </ul>
 
 </dd>
@@ -6014,6 +6232,12 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
 
         </li>
+        <li><span class="parameter">spawnArmy</span>
+            <span class="types"><a class="type" href="index.html#stratmap.game.spawnArmy">spawnArmy</a></span>
+
+
+
+        </li>
         <li><span class="parameter">createArmyInSettlement</span>
             <span class="types"><a class="type" href="index.html#stratmap.game.createArmyInSettlement">createArmyInSettlement</a></span>
 
@@ -6116,7 +6340,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Get the amount of factions.
+    Get the amount of factions.  Just returns campaignStruct.numberOfFactions field.
     </div>
 
 
@@ -6141,7 +6365,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Get a faction by the index, commonly used when iterating over all factions using getFactionsCount()
+    Get a faction by the turn order.  Same thing as doing campaignStruct.factionsSortedByDescrStrat[index + 1].
     </div>
 
     <h3>Parameters:</h3>
@@ -6207,7 +6431,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Create a new character at the specified coordinates.
+    Create a new character at the specified coordinates.  If you are not spawning an agent it is preferred to use spawnArmy instead.
     </div>
 
     <h3>Parameters:</h3>
@@ -6261,7 +6485,110 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" >newCharacter=stratmap.game.createCharacterByString(<span class="string">"named character"</span>,stratmap.game.getFaction(<span class="number">0</span>),<span class="number">18</span>,<span class="string">"Name1"</span>,<span class="string">"Name2"</span>,<span class="number">31</span>,<span class="string">"custom_portrait_name"</span>,character.character.xCoord+<span class="number">5</span>,character.character.yCoord);</code></pre>
+        <pre class="example"><code class="language-lua" >newCharacter=stratmap.game.createCharacterByString(<span class="string">"named character"</span>,CAMPAIGN:getFaction(<span class="string">"england"</span>),<span class="number">18</span>,<span class="string">"Name1"</span>,<span class="string">"Name2"</span>,<span class="number">31</span>,<span class="string">"custom_portrait_name"</span>,character.character.xCoord+<span class="number">5</span>,character.character.yCoord);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "stratmap.game.spawnArmy"></a>
+    <strong>stratmap.game.spawnArmy (Faction, name, name2, type, label, portrait, x, y, age, family, subFaction, unitIndex, exp, wpn, armour)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Create a new army at the specified coordinates.  Works similarly to the script command spawn_army. You can respawn off-map characters using it. You can not re-use labels!
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">Faction</span>
+            <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
+         the new character belongs to.
+        </li>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The short name of the character. Use random_name to pick a random name.
+        </li>
+        <li><span class="parameter">name2</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         The full name of the character.
+        </li>
+        <li><span class="parameter">type</span>
+            <span class="types"><span class="type">int</span></span>
+         characterType.named_character or characterType.general or characterType.admiral.
+        </li>
+        <li><span class="parameter">label</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         label of the character, has to be unique!. Can be nil.
+        </li>
+        <li><span class="parameter">portrait</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Name of the folder inside 'data/ui/custom_portraits folder.
+        </li>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">int</span></span>
+         X coordinate of the new character
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">int</span></span>
+         Y coordinate of the new character
+        </li>
+        <li><span class="parameter">age</span>
+            <span class="types"><span class="type">int</span></span>
+         The character's age
+        </li>
+        <li><span class="parameter">family</span>
+            <span class="types"><span class="type">bool</span></span>
+         should character be auto adopted?
+        </li>
+        <li><span class="parameter">subFaction</span>
+            <span class="types"><span class="type">int</span></span>
+         Set to 31 to disable.
+        </li>
+        <li><span class="parameter">unitIndex</span>
+            <span class="types"><span class="type">int</span></span>
+         Index of the unit in the unit list. Can be EOP or normal.
+        </li>
+        <li><span class="parameter">exp</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">wpn</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">armour</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#stackStruct">stackStruct</a></span>
+        newArmy
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" >newArmy = stratmap.game.spawnArmy(
+CAMPAIGN:getFaction(<span class="string">"england"</span>),
+<span class="string">"Name1"</span>,<span class="string">"Name2"</span>,
+characterType.named_character,
+<span class="string">"unique_label_1"</span>,
+<span class="string">"custom_portrait_name"</span>,
+<span class="number">18</span>,
+<span class="number">143</span>, <span class="number">156</span>,
+<span class="number">1001</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">0</span>
+);</code></pre>
     </ul>
 
 </dd>
@@ -6271,7 +6598,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
     </dt>
     <dd>
     <div class="functionDescription">
-    Create an army for a character.  Commonly used after spawning a new character to set it's bodyguard unit.
+    Legacy code to spawn an army for a created character.  Use spawnArmy instead!
     </div>
 
     <h3>Parameters:</h3>
@@ -6327,7 +6654,7 @@ stratmap.objects.setModel(<span class="number">288</span>,<span class="number">2
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" >army=stratmap.game.createArmyInSettlement(sett);</code></pre>
+        <pre class="example"><code class="language-lua" >army=stratmap.game.createArmyInSettlement(STRAT_MAP:getSettlement(<span class="string">"London"</span>));</code></pre>
     </ul>
 
 </dd>
@@ -6639,7 +6966,7 @@ end_set_faction_banner]]</span>, facName))</code></pre>
 
         </li>
         <li><span class="parameter">kill</span>
-            <span class="types"><a class="type" href="index.html#character:kill">kill</a></span>
+            <span class="types"><a class="type" href="index.html#unit:kill">kill</a></span>
 
 
 
@@ -7239,6 +7566,108 @@ end_set_faction_banner]]</span>, facName))</code></pre>
 
 </dd>
 </dl>
+    <h2 class="section-header "><a name="Projectile"></a>Projectile </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "projectileStruct"></a>
+    <strong>projectileStruct</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+
+
+
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">accuracy</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">isBodyPiercing</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Mount"></a>Mount </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "mountStruct"></a>
+    <strong>mountStruct</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+
+
+
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">mountClass</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">radius</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">mass</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">elephantDeadRadius</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">elephantTuskRadius</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
     <h2 class="section-header "><a name="EduEntry"></a>EduEntry </h2>
 
     <dl class="function">
@@ -7497,6 +7926,24 @@ end_set_faction_banner]]</span>, facName))</code></pre>
 
 
         </li>
+        <li><span class="parameter">training</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">discipline</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">canPhalanx</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
         <li><span class="parameter">morale</span>
             <span class="types"><span class="type">int</span></span>
 
@@ -7527,8 +7974,44 @@ end_set_faction_banner]]</span>, facName))</code></pre>
 
 
         </li>
+        <li><span class="parameter">range</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">projectile</span>
+            <span class="types"><a class="type" href="index.html#projectileStruct">projectileStruct</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">mount</span>
+            <span class="types"><a class="type" href="index.html#mountStruct">mountStruct</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">primaryAnim</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">secondaryAnim</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
         <li><span class="parameter">hasOwnership</span>
             <span class="types"><a class="type" href="index.html#eduEntry:hasOwnership">hasOwnership</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">hasAttribute</span>
+            <span class="types"><a class="type" href="index.html#unit:hasAttribute">hasAttribute</a></span>
 
 
 
@@ -7611,6 +8094,40 @@ end_set_faction_banner]]</span>, facName))</code></pre>
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><code class="language-lua" >unit.eduEntry:setOwnerShip(<span class="number">2</span>, <span class="keyword">true</span>);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "eduEntry:hasAttribute"></a>
+    <strong>eduEntry:hasAttribute (attributeName)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Check if the entry has an attribute.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">attributeName</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        hasAttribute
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> hasAttribute = entry:hasAttribute(<span class="string">"sea_faring"</span>);</code></pre>
     </ul>
 
 </dd>
@@ -7724,6 +8241,10 @@ end_set_faction_banner]]</span>, facName))</code></pre>
 
 
         </li>
+        <li><span class="parameter">movePoints</span>
+            <span class="types"><span class="type">float</span></span>
+         sets both army and character move points.
+        </li>
         <li><span class="parameter">turnJoinedCrusade</span>
             <span class="types"><span class="type">int</span></span>
 
@@ -7833,7 +8354,7 @@ end_set_faction_banner]]</span>, facName))</code></pre>
 
         </li>
         <li><span class="parameter">kill</span>
-            <span class="types"><a class="type" href="index.html#character:kill">kill</a></span>
+            <span class="types"><a class="type" href="index.html#unit:kill">kill</a></span>
 
 
 
@@ -7869,23 +8390,7 @@ end_set_faction_banner]]</span>, facName))</code></pre>
     </dt>
     <dd>
     <div class="functionDescription">
-
-<p>Get the character type.  See hint below for the types.</p>
-<pre><code>0-spy
-1-assassin
-2-diplomat
-3-admiral
-4-merchant
-5-priest
-6-general
-7-named character
-8-princess
-9-heretic
-10-witch
-11-inquisitor
-13-pope
-</code></pre>
-
+    Get the character type.  Use characterType enum.
     </div>
 
 
@@ -7910,23 +8415,7 @@ end_set_faction_banner]]</span>, facName))</code></pre>
     </dt>
     <dd>
     <div class="functionDescription">
-
-<p>Get the character type.  See hint below for the types.</p>
-<pre><code>0-spy
-1-assassin
-2-diplomat
-3-admiral
-4-merchant
-5-priest
-6-general
-7-named character
-8-princess
-9-heretic
-10-witch
-11-inquisitor
-13-pope
-</code></pre>
-
+    Get the character type.  Use characterType enum.
     </div>
 
 
@@ -7951,23 +8440,7 @@ end_set_faction_banner]]</span>, facName))</code></pre>
     </dt>
     <dd>
     <div class="functionDescription">
-
-<p>Set the character type.  See hint below for the types.</p>
-<pre><code>0-spy
-1-assassin
-2-diplomat
-3-admiral
-4-merchant
-5-priest
-6-general
-7-named character
-8-princess
-9-heretic
-10-witch
-11-inquisitor
-13-pope
-</code></pre>
-
+    Set the character type.  Use characterType enum.
     </div>
 
     <h3>Parameters:</h3>
@@ -8261,6 +8734,30 @@ end_set_faction_banner]]</span>, facName))</code></pre>
         <li><span class="parameter">yearOfBirth</span>
             <span class="types"><span class="type">float</span></span>
          For example with 4 turns per year, the yearOfBirth could be 1840.25
+        </li>
+        <li><span class="parameter">seasonOfBirth</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">yearOfMaturity</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">seasonOfMaturity</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">numberOfChildren</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
         </li>
         <li><span class="parameter">faction</span>
             <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
@@ -9185,6 +9682,185 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
 
 </dd>
 </dl>
+    <h2 class="section-header "><a name="settlementTextStrings"></a>settlementTextStrings </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "settlementTextStrings"></a>
+    <strong>settlementTextStrings</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic settlementTextStrings table.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">incomeString</span>
+            <span class="types"><a class="type" href="index.html#uiString">uiString</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">incomeValue</span>
+            <span class="types"><a class="type" href="index.html#uiString">uiString</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">publicOrderString</span>
+            <span class="types"><a class="type" href="index.html#uiString">uiString</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">publicOrderValue</span>
+            <span class="types"><a class="type" href="index.html#uiString">uiString</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">populationString</span>
+            <span class="types"><a class="type" href="index.html#uiString">uiString</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">populationValue</span>
+            <span class="types"><a class="type" href="index.html#uiString">uiString</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">populationGrowthString</span>
+            <span class="types"><a class="type" href="index.html#uiString">uiString</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">populationGrowthValue</span>
+            <span class="types"><a class="type" href="index.html#uiString">uiString</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="uiString"></a>uiString </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "uiString"></a>
+    <strong>uiString</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic uiString table.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">thickness</span>
+            <span class="types"><span class="type">int</span></span>
+         (0-255)
+        </li>
+        <li><span class="parameter">blue</span>
+            <span class="types"><span class="type">int</span></span>
+         (0-255)
+        </li>
+        <li><span class="parameter">green</span>
+            <span class="types"><span class="type">int</span></span>
+         (0-255)
+        </li>
+        <li><span class="parameter">red</span>
+            <span class="types"><span class="type">int</span></span>
+         (0-255)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="settlementInfoScroll"></a>settlementInfoScroll </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "settlementInfoScroll"></a>
+    <strong>settlementInfoScroll</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Basic settlementInfoScroll table.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">settlement</span>
+            <span class="types"><a class="type" href="index.html#settlementStruct">settlementStruct</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getUIStrings</span>
+            <span class="types"><a class="type" href="index.html#settlementInfoScroll:getUIStrings">getUIStrings</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "settlementInfoScroll:getUIStrings"></a>
+    <strong>settlementInfoScroll:getUIStrings ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get settlement text color info.
+    </div>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#settlementTextStrings">settlementTextStrings</a></span>
+        getUIStrings
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onScrollOpened(eventData)
+   	<span class="keyword">local</span> settlementInfoScroll = M2TWEOP.getSettlementInfoScroll();
+	<span class="keyword">if</span> settlementInfoScroll <span class="keyword">then</span>
+		settlementInfoScroll:getUIStrings().incomeString.red = <span class="number">0</span>
+		settlementInfoScroll:getUIStrings().incomeString.green = <span class="number">0</span>
+		settlementInfoScroll:getUIStrings().incomeString.blue = <span class="number">0</span>
+		settlementInfoScroll:getUIStrings().incomeString.thickness = <span class="number">0</span>
+
+		settlementInfoScroll:getUIStrings().incomeValue.red = <span class="number">0</span>
+		settlementInfoScroll:getUIStrings().incomeValue.green = <span class="number">0</span>
+		settlementInfoScroll:getUIStrings().incomeValue.blue = <span class="number">0</span>
+	<span class="keyword">end</span>
+<span class="keyword">end</span></code></pre>
+    </ul>
+
+</dd>
+</dl>
     <h2 class="section-header "><a name="capturedCharacter"></a>capturedCharacter </h2>
 
     <dl class="function">
@@ -9756,7 +10432,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
 
         </li>
         <li><span class="parameter">getFort</span>
-            <span class="types"><a class="type" href="index.html#regionStruct:getFort">getFort</a></span>
+            <span class="types"><a class="type" href="index.html#campaignStruct:getFort">getFort</a></span>
 
 
 
@@ -9780,7 +10456,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
 
         </li>
         <li><span class="parameter">getWatchtower</span>
-            <span class="types"><a class="type" href="index.html#factionStruct:getWatchtower">getWatchtower</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getWatchtower">getWatchtower</a></span>
 
 
 
@@ -9888,7 +10564,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
     </dt>
     <dd>
     <div class="functionDescription">
-    Get the faction's internal name
+    Outdated legacy function.  Use faction.name instead.
     </div>
 
 
@@ -9903,11 +10579,7 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><code class="language-lua" >ourFac = stratmap.game.getFaction(<span class="number">0</span>);
-ourFacName = ourFac:getFactionName();
-<span class="keyword">if</span> ourFacName == <span class="string">"england"</span> <span class="keyword">then</span>
-	ourFac.money = ourFac.money + (ourFac.fortsNum * <span class="number">500</span>)
-<span class="keyword">end</span></code></pre>
+        <pre class="example"><code class="language-lua" ></code></pre>
     </ul>
 
 </dd>
@@ -11184,7 +11856,7 @@ ourFacName = ourFac:getFactionName();
 
         </li>
         <li><span class="parameter">setConstructionValue</span>
-            <span class="types"><a class="type" href="index.html#aiProductionController:setConstructionValue">setConstructionValue</a></span>
+            <span class="types"><a class="type" href="index.html#aiPersonality:setConstructionValue">setConstructionValue</a></span>
 
 
 
@@ -11476,7 +12148,7 @@ ourFacName = ourFac:getFactionName();
 
         </li>
         <li><span class="parameter">setConstructionValue</span>
-            <span class="types"><a class="type" href="index.html#aiProductionController:setConstructionValue">setConstructionValue</a></span>
+            <span class="types"><a class="type" href="index.html#aiPersonality:setConstructionValue">setConstructionValue</a></span>
 
 
 
@@ -12554,7 +13226,7 @@ ourFacName = ourFac:getFactionName();
 
 
         </li>
-        <li><span class="parameter">fac_creatorNum</span>
+        <li><span class="parameter">creatorFactionID</span>
             <span class="types"><span class="type">int</span></span>
 
 
@@ -14663,7 +15335,15 @@ currSet:changeOwner(fac1);
         </li>
         <li><span class="parameter">siegeSettlement</span>
             <span class="types"><a class="type" href="index.html#stackStruct:siegeSettlement">siegeSettlement</a></span>
-         Call it twice to initiate an assault.
+
+
+
+        </li>
+        <li><span class="parameter">siegeFort</span>
+            <span class="types"><a class="type" href="index.html#stackStruct:siegeFort">siegeFort</a></span>
+
+
+
         </li>
         <li><span class="parameter">attackArmy</span>
             <span class="types"><a class="type" href="index.html#stackStruct:attackArmy">attackArmy</a></span>
@@ -15094,7 +15774,7 @@ ourChar:kill();</code></pre>
 </dd>
     <dt>
     <a name = "stackStruct:siegeSettlement"></a>
-    <strong>stackStruct:siegeSettlement (settlement)</strong>
+    <strong>stackStruct:siegeSettlement (settlement, isAttack)</strong>
     </dt>
     <dd>
     <div class="functionDescription">
@@ -15109,6 +15789,10 @@ ourChar:kill();</code></pre>
 
 
         </li>
+        <li><span class="parameter">isAttack</span>
+            <span class="types"><span class="type">bool</span></span>
+         if this is false it makes the army maintain a siege
+        </li>
     </ul>
 
 
@@ -15117,6 +15801,38 @@ ourChar:kill();</code></pre>
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><code class="language-lua" >stackStruct:siegeSettlement(settlement);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "stackStruct:siegeFort"></a>
+    <strong>stackStruct:siegeFort (fort, isAttack)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Besiege the specified fort, or attack it if already besieging it.  Requires movement points.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fort</span>
+            <span class="types"><a class="type" href="index.html#fortStruct">fortStruct</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">isAttack</span>
+            <span class="types"><span class="type">bool</span></span>
+         if this is false it makes the army maintain a siege
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" >stackStruct:siegeFort(fort);</code></pre>
     </ul>
 
 </dd>
@@ -16498,6 +17214,12 @@ ourChar:kill();</code></pre>
         </li>
         <li><span class="parameter">onGameInit</span>
             <span class="types"><a class="type" href="index.html#onGameInit">onGameInit</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">onUnloadCampaign</span>
+            <span class="types"><a class="type" href="index.html#onUnloadCampaign">onUnloadCampaign</a></span>
 
 
 
@@ -23859,6 +24581,27 @@ forgiveness: FC_MILITARY_ASSISTANCE, FC_OBVIOUS_BRIBE
 
 </dd>
     <dt>
+    <a name = "onUnloadCampaign"></a>
+    <strong>onUnloadCampaign ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Called after the campaignStruct gets unloaded (exit to menu, load save etc).
+    </div>
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">function</span> onUnloadCampaign()
+<span class="comment">--something here
+</span><span class="keyword">end</span></code></pre>
+    </ul>
+
+</dd>
+    <dt>
     <a name = "onAiTurn"></a>
     <strong>onAiTurn (aiFaction)</strong>
     </dt>
@@ -27233,13 +27976,17 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</code></pre>
         <li><span class="parameter">character</span>
             <span class="types"><a class="type" href="index.html#namedCharacter">namedCharacter</a></span>
 
-
+<ul>
+    <li>Note it is namedCharacter, not character</li>
+</ul>
 
         </li>
         <li><span class="parameter">targetCharacter</span>
             <span class="types"><a class="type" href="index.html#namedCharacter">namedCharacter</a></span>
 
-
+<ul>
+    <li>Note it is namedCharacter, not character</li>
+</ul>
 
         </li>
         <li><span class="parameter">settlement</span>
@@ -27368,8 +28115,8 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</code></pre>
 
 
         </li>
-        <li><span class="parameter">guild</span>
-            <span class="types"><a class="type" href="index.html#guild">guild</a></span>
+        <li><span class="parameter">guildID</span>
+            <span class="types"><span class="type">int</span></span>
 
 
 
@@ -27603,7 +28350,7 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</code></pre>
         </li>
         <li><span class="parameter">factionsSortedByDescrStrat</span>
             <span class="types"><a class="type" href="index.html#factionStruct">factionStruct[31]</a></span>
-         Table of factionStruct[31], indexing starts at 1. Maximum 31.
+         Table of factionStruct[31], indexing starts at 1. Maximum 31. Slightly misleading name, sorted by the turn order of the factions. Player controlled faction is at index 0 in single player.
         </li>
         <li><span class="parameter">factionsSortedByID</span>
             <span class="types"><a class="type" href="index.html#factionStruct">factionStruct[31]</a></span>
@@ -27806,7 +28553,7 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</code></pre>
 
         </li>
         <li><span class="parameter">getFort</span>
-            <span class="types"><a class="type" href="index.html#regionStruct:getFort">getFort</a></span>
+            <span class="types"><a class="type" href="index.html#campaignStruct:getFort">getFort</a></span>
 
 
 
@@ -27819,6 +28566,12 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</code></pre>
         </li>
         <li><span class="parameter">getWatchTower</span>
             <span class="types"><a class="type" href="index.html#campaignStruct:getWatchTower">getWatchTower</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getFaction</span>
+            <span class="types"><a class="type" href="index.html#stratmap.game.getFaction">getFaction</a></span>
 
 
 
@@ -28079,6 +28832,41 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
     <ul>
         <pre class="example"><code class="language-lua" ><span class="keyword">local</span> campaign=gameDataAll.get().campaignStruct;
 <span class="keyword">local</span> sett=campaign:getSettlementByName(<span class="string">"London"</span>);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "campaignStruct:getFaction"></a>
+    <strong>campaignStruct:getFaction (name)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a faction by it's internal name.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
+        faction
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> CAMPAIGN = gameDataAll.get().campaignStruct;
+<span class="keyword">local</span> fac = CAMPAIGN:getFaction(<span class="string">"england"</span>);</code></pre>
     </ul>
 
 </dd>
@@ -28402,6 +29190,18 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
 
         </li>
+        <li><span class="parameter">getSettlement</span>
+            <span class="types"><a class="type" href="index.html#factionStruct:getSettlement">getSettlement</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">getRegionByName</span>
+            <span class="types"><a class="type" href="index.html#stratMap:getRegionByName">getRegionByName</a></span>
+
+
+
+        </li>
     </ul>
 
 
@@ -28587,6 +29387,76 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
     <ul>
         <pre class="example"><code class="language-lua" ><span class="keyword">local</span> sMap = gameDataAll.get().stratMap;
 <span class="keyword">local</span> tile = sMap:getLandMass(<span class="number">0</span>);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "stratMap:getSettlement"></a>
+    <strong>stratMap:getSettlement (name)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a settlement by its internal name.  This is the intended way to get a settlement quickly by it's name.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#settlementStruct">settlementStruct</a></span>
+        settlement
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> STRAT_MAP = gameDataAll.get().stratMap;
+<span class="keyword">local</span> london = STRAT_MAP:getSettlement(<span class="string">"London"</span>);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "stratMap:getRegionByName"></a>
+    <strong>stratMap:getRegionByName (name)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Get a region by its internal name.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#regionStruct">regionStruct</a></span>
+        region
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> STRAT_MAP = gameDataAll.get().stratMap;
+<span class="keyword">local</span> londonRegion = STRAT_MAP:getRegionByName(<span class="string">"London_Province"</span>);</code></pre>
     </ul>
 
 </dd>
@@ -29365,13 +30235,13 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
         </li>
         <li><span class="parameter">getFort</span>
-            <span class="types"><a class="type" href="index.html#regionStruct:getFort">getFort</a></span>
+            <span class="types"><a class="type" href="index.html#campaignStruct:getFort">getFort</a></span>
 
 
 
         </li>
         <li><span class="parameter">getWatchtower</span>
-            <span class="types"><a class="type" href="index.html#factionStruct:getWatchtower">getWatchtower</a></span>
+            <span class="types"><a class="type" href="index.html#regionStruct:getWatchtower">getWatchtower</a></span>
 
 
 
@@ -31738,12 +32608,6 @@ deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
 
 
         </li>
-        <li><span class="parameter">faction</span>
-            <span class="types"><a class="type" href="index.html#factionStruct">factionStruct</a></span>
-
-
-
-        </li>
         <li><span class="parameter">isFortBattle</span>
             <span class="types"><span class="type">int</span></span>
 
@@ -32972,6 +33836,90 @@ deployArea1=side1.armies[<span class="number">1</span>].deploymentArea;
 
         </li>
         <li><span class="parameter">routing</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "unitDiscipline"></a>
+    <strong>unitDiscipline</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum of unit discipline.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">berserker</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">impetuous</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">low</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">normal</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">disciplined</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "unitTraining"></a>
+    <strong>unitTraining</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Enum of unit training.
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">untrained</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">trained</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">highly_trained</span>
             <span class="types"><span class="type">int</span></span>
 
 
