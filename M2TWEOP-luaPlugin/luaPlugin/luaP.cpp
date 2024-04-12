@@ -540,12 +540,12 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int yCoord y coord of the tile
 	@treturn bool isVisible true = visible, false = not visible
 	@usage
-	local faction = stratmap.game.getFaction(2);
+	local faction = CAMPAIGN:getFaction("england")
 	local isVisible = M2TWEOP.getTileVisibility(faction, xCoord, yCoord)
 	if isVisible == true then 
-		print("Tile is visible to faction "..faction:getFactionName())
+		print("Tile is visible to faction "..faction.name)
 	else
-		print("Tile is not visible to faction "..faction:getFactionName())
+		print("Tile is not visible to faction "..faction.name)
 	end
 	*/
 	tables.M2TWEOPTable.set_function("getTileVisibility", &m2tweopHelpers::getTileVisibility);
@@ -2401,17 +2401,33 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@treturn stackStruct army
 	@usage
 	function FindArmy(x,y)
-		local factionsNum = stratmap.game.getFactionsCount();
-		for i = 0, factionsNum - 1 do
-			local faction = stratmap.game.getFaction(i);
+		CAMPAIGN = gameDataAll.get().campaignStruct
+		for i = 1, #CAMPAIGN.numberOfFactions do
+			local faction = CAMPAIGN.factionsSortedByDescrStrat[i]
 			if not faction then
-				return nil;
+				return nil
 			end
-			local armiesNum = faction.stacksNum;
+			local armiesNum = faction.stacksNum
 			for j = 0, armiesNum - 1 do
-				local army = faction:getStack(j);
-				if (army.xCoord == x and army.yCoord == y) then
-					return army;
+				local army = faction:getStack(j)
+				local x2, y2 = 0, 0
+				if (army.leader) then
+					x2 = army.leader.xCoord
+					y2 = army.leader.yCoord
+				elseif army:findInSettlement() then
+					x2 = army:findInSettlement().xCoord
+					y2 = army:findInSettlement().yCoord
+				elseif army:findInFort() then
+					x2 = army:findInFort().xCoord
+					y2 = army:findInFort().yCoord
+				elseif army.shipArmy and army.shipArmy.leader then
+					x2 = army.shipArmy.leader.xCoord
+					y2 = army.shipArmy.leader.yCoord
+				else
+					return nil
+				end
+				if (x2 == x and y2 == y) then
+					return army
 				end
 			end
 		end
@@ -2426,7 +2442,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int number
 	@treturn settlementStruct settlement
 	@usage
-	ourSett = stratmap.game.getFaction(0):getSettlement(0)
+	ourSett = CAMPAIGN:getFaction("byzantium"):getSettlement(0)
 	if ourSett.isProvokedRebellion ~= 0 then
 		ourFac.money = ourFac.money - (ourSett.level*5000)
 	end
@@ -2439,7 +2455,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int number
 	@treturn fortStruct fort
 	@usage
-	ourFort = stratmap.game.getFaction(0):getFort(0)
+	ourFort = CAMPAIGN:getFaction("byzantium"):getFort(0)
 	if ourFort then
 		print(ourFort.xCoord..", "..ourFort.yCoord)
 	end
@@ -3899,37 +3915,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@function tradeResource:getResourceID
 	@treturn int ID
 	@usage
-	-- ID -> Internal Name
-	0   = "gold";
-	1   = "silver";
-	2   = "fish";
-	3   = "furs";
-	4   = "grain";
-	5   = "timber";
-	6   = "iron";
-	7   = "ivory";
-	8   = "wine";
-	9   = "slaves";
-	10  = "chocolate";
-	11  = "marble";
-	12  = "textiles";
-	13  = "dyes";
-	14  = "tobacco";
-	15  = "silk";
-	16  = "sugar";
-	17  = "sulfur";
-	18  = "tin";
-	19  = "spices";
-	20  = "cotton";
-	21  = "amber";
-	22  = "coal";
-	23  = "wool";
-	24  = "elephants";
-	25  = "camels";
-	26  = "dogs";
-	27  = "generic";
+	
 	--
-	if tradeResource:getResourceID() == 23 then --wool
+	if tradeResource:getResourceID() == resourceType.wool then --wool
 		--do stuff
 	end
 	*/
@@ -4022,68 +4010,32 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int sortMode2
 	@tparam int sortMode3
 	@usage
-	-- Note: Generals will always remain at the start of the stack
-	-- 1 = EDU Type
-	-- 2 = Category
-	-- 3 = Class
-	-- 4 = Soldier Count
-	-- 5 = Experience
-	-- 6 = Category + Class
-	-- 7 = AI unit value
 
 	function onFactionTurnStart(eventData)
 	local faction = eventData.faction
     -- If it's not the players turn, don't sort
     if faction.isPlayerControlled == 0 then return end;
 
-    -- Sort all the stacks on the map right before the turn starts
-	-- Note: Generals will always remain at the start of the stack
-	-- 1 = EDU Type
-	-- 2 = Category
-	-- 3 = Class
-	-- 4 = Soldier Count
-	-- 5 = Experience
-	-- 6 = Category + Class
-	-- 7 = AI unit value
-
 	function onFactionTurnStart(eventData)
-	local faction = eventData.faction
-	-- If it's not the players turn, don't sort
-	if faction.isPlayerControlled == 0 then return end;
+		CAMPAIGN = gameDataAll.get().campaignStruct
+		local faction = eventData.faction
+		-- If it's not the players turn, don't sort
+		if faction.isPlayerControlled == 0 then return end;
 
-	-- Sort all the stacks on the map right before the turn starts
-	local factionsNum = stratmap.game.getFactionsCount();
-	for i = 0, factionsNum - 1 do
-		local faction = stratmap.game.getFaction(i);
-		for j = 0, faction.stacksNum - 1 do
-			local stack = faction:getStack(j);
-			if stack then
-				-- Debug Info
-				-- print("\n\n")
-				-- print("-- Unsorted Stack --")
-				-- for k = 0, stack.numOfUnits - 1 do
-				--     local unit = stack:getUnit(k);
-				--     if unit.eduEntry.Type then
-				--         print(unit.eduEntry.Type)
-				--     end
-				-- end
-
-				-- Sort the stack by category + class, then by soldier count, then by experience
-				stack:sortStack(sortType.categoryClass, sortType.soldierCount, sortType.experience)
-
-				-- print("\n\n")
-				-- print("-- Sorted Stack --")
-				-- for k = 0, stack.numOfUnits - 1 do
-				--     local unit = stack:getUnit(k);
-				--     if unit.eduEntry.Type then
-				--         print(unit.eduEntry.Type)
-				--     end
-				-- end
-			end
+		-- Sort all the stacks on the map right before the turn starts
+		local factionsNum = CAMPAIGN.numberOfFactions;
+		for i = 1, #factionsNum do
+			local fac = CAMPAIGN.factionsSortedByDescrStrat[i];
+			for j = 0, fac.stacksNum - 1 do
+				local stack = fac:getStack(j);
+				if stack then
+					-- Sort the stack by category + class, then by soldier count, then by experience
+					stack:sortStack(sortType.categoryClass, sortType.soldierCount, sortType.experience)
+				end
 			end
 		end
 	end
-
+	
 	*/
 	types.stackStruct.set_function("sortStack", &stackStructHelpers::sortStack);
 

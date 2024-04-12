@@ -900,7 +900,7 @@ void luaP::initCampaign()
 	//@section tileStruct
 
 	/***
-	Basic tile table, not everything very known and understood yet, you can research with these fields.
+	Basic tile table.
 
 	@tfield roadStruct road
 	@tfield int isLand (1 = land, 0 = sea)
@@ -1759,7 +1759,7 @@ void luaP::initP2()
 				repeat
 					local thisArmy = thisSide.armies[k].army
 					if thisArmy ~= nil then
-						battleList = battleList.."\n\t\tArmy "..k.."\n\t\t\tFaction: "..thisArmy.faction:getFactionName()
+						battleList = battleList.."\n\t\tArmy "..k.."\n\t\t\tFaction: "..thisArmy.faction.name
 						if thisArmy.leader ~= nil then
 							battleList = battleList.."\n\t\t\tLeader: "..thisArmy.leader.namedCharacter.fullName
 						end

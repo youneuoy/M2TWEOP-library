@@ -518,7 +518,7 @@ void luaP::initEopEdu()
 	Create new EOP Building entry
 	@function EDB.addEopBuildEntry
 	@tparam edbEntry edbEntry Old entry.
-	@tparam int newIndex New index of new entry.
+	@tparam int newIndex New index of new entry. Use index > 127!
 	@treturn edbEntry eopentry.
 	@usage
 	-- Basic Example
@@ -527,8 +527,7 @@ void luaP::initEopEdu()
 
 	-- Full example
 	local oldBuilding = EDB.getBuildingByName("market");
-	EDB.addEopBuildEntry(oldBuilding, 0);
-	local eopBuilding = EDB.getEopBuildEntry(0);
+	local eopBuilding = EDB.addEopBuildEntry(oldBuilding, 150);
 
 	-- Set pictures, names and descriptions by culture and faction
 	for c = 0, 6 do --every culture
@@ -541,10 +540,10 @@ void luaP::initEopEdu()
 	end
 
 	-- Add in an income bonus of 500
-	EDB.addBuildingCapability(eopBuilding, 0, 55, 500, true)
+	EDB.addBuildingCapability(eopBuilding, 0, buildingCapability.income_bonus, 500, true)
 
 	-- Add a recruit pool
-	EDB.addBuildingPool(eopBuilding, 0, 55, 1, 0.1, 2, 0, "");
+	EDB.addBuildingPool(eopBuilding, 0, M2TWEOPDU.getEduIndexByType("Peasants"), 1, 0.1, 2, 0, "");
 
 	-- Create a dummy building and get it
 	sett:createBuilding("market");; --just assuming you have got a sett with some loop or function
@@ -648,76 +647,18 @@ void luaP::initEopEdu()
 	@function EDB.addBuildingCapability
 	@tparam edbEntry edbEntry Entry to set.
 	@tparam int level Building level.
-	@tparam int capability ID of capability to set.
+	@tparam int capability ID of capability to set. Use buildingCapability enum.
 	@tparam int value Value to set.
 	@tparam bool bonus Is it bonus or not.
 	@usage
-	-- Building Capability Enums
-	population_growth_bonus = 0,
-    population_loyalty_bonus = 1,
-    population_health_bonus = 2,
-    trade_base_income_bonus = 3,
-    trade_level_bonus = 4,
-    trade_fleet = 5,
-    taxable_income_bonus = 6,
-    mine_resource = 7,
-    farming_level = 8,
-    road_level = 9,
-    gate_strength = 10,
-    gate_defences = 11,
-    wall_level = 12,
-    tower_level = 13,
-    armour = 14,
-    stage_games = 15,
-    stage_races = 16,
-    fire_risk = 17,
-    weapon_melee_simple = 18,
-    weapon_melee_blade = 19,
-    weapon_missile_mechanical = 20,
-    weapon_missile_gunpowder = 21,
-    weapon_artillery_mechanical = 22,
-    weapon_artillery_gunpowder = 23,
-    weapon_naval_gunpowder = 24,
-    upgrade_bodyguard = 25,
-    recruits_morale_bonus = 26,
-    recruits_exp_bonus = 27,
-    happiness_bonus = 28,
-    law_bonus = 29,
-    construction_cost_bonus_military = 30,
-    construction_cost_bonus_religious = 31,
-    construction_cost_bonus_defensive = 32,
-    construction_cost_bonus_other = 33,
-    construction_time_bonus_military = 34,
-    construction_time_bonus_religious = 35,
-    construction_time_bonus_defensive = 36,
-    construction_time_bonus_other = 37,
-    construction_cost_bonus_wooden = 38,
-    construction_cost_bonus_stone = 39,
-    construction_time_bonus_wooden = 40,
-    construction_time_bonus_stone = 41,
-    free_upkeep = 42,
-    pope_approval = 43,
-    pope_disapproval = 44,
-    religion_level = 45,
-    amplify_religion_level = 46,
-    archer_bonus = 47,
-    cavalry_bonus = 48,
-    heavy_cavalry_bonus = 49,
-    gun_bonus = 50,
-    navy_bonus = 51,
-    recruitment_cost_bonus_naval = 52,
-    retrain_cost_bonus = 53,
-    weapon_projectile = 54,
-    income_bonus = 55,
-    recruitment_slots = 56
-
+	
 	building = EDB.getBuildingByName("market")
 
 	-- Add a population growth bonus to the market building
 	EDB.addBuildingCapability(building, 0, 0, 5, true);
 
 	-- Add a 500 income bonus to the market building
-	EDB.addBuildingCapability(building, 0, 55, 500, true)
+	EDB.addBuildingCapability(building, 0, buildingCapability.income_bonus, 500, true)
 	*/
 	tables.EDB.set_function("addBuildingCapability", &buildingStructHelpers::addBuildingCapability);
 

@@ -979,7 +979,7 @@ void luaP::onPluginLoadF()
 	/***
 	A character has been injured by a disaster.
 	Exports: character, faction, regionID, disasterType, characterType, religion
-	disasterTypes = earthquake, flood, horde, storm, volcano, dustbowl, locusts, famine, plague, riot, fire
+	disasterTypes: earthquake, flood, horde, storm, volcano, dustbowl, locusts, famine, plague, riot, fire
 
 	@function onCharacterDamagedByDisaster
 	@tparam eventTrigger eventData
@@ -1047,6 +1047,7 @@ void luaP::onPluginLoadF()
 	/***
 	A General of a captor faction has made a ransom decision.
 	Exports: character, faction, targetFaction, regionID, characterType, religion, targetReligion, captureInfo, ransomType
+	ransomType: ransom, execute, release, cannot_pay_ransom
 
 	@function onGeneralPrisonersRansomedCaptor
 	@tparam eventTrigger eventData
@@ -1099,6 +1100,7 @@ void luaP::onPluginLoadF()
 	/***
 	A spy mission has completed. May also export fort or settlement if target was a garrison residence.
 	Exports: character, settlement, fort, faction, targetFaction, regionID, characterType, missionSuccessLevel, missionProbability, religion, targetReligion
+	missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 
 	@function onSpyMission
 	@tparam eventTrigger eventData
@@ -1112,6 +1114,7 @@ void luaP::onPluginLoadF()
 	/***
 	An assassination mission has completed.
 	Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
+	missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 
 	@function onAssassinationMission
 	@tparam eventTrigger eventData
@@ -1125,6 +1128,7 @@ void luaP::onPluginLoadF()
 	/***
 	An acquisition mission has completed.
 	Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
+	missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 
 	@function onAcquisitionMission
 	@tparam eventTrigger eventData
@@ -1138,6 +1142,7 @@ void luaP::onPluginLoadF()
 	/***
 	A marriage mission has completed.
 	Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
+	missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 
 	@function onMarriageMission
 	@tparam eventTrigger eventData
@@ -1151,6 +1156,7 @@ void luaP::onPluginLoadF()
 	/***
 	A denouncement mission has completed.
 	Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
+	missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 
 	@function onDenouncementMission
 	@tparam eventTrigger eventData
@@ -1164,6 +1170,7 @@ void luaP::onPluginLoadF()
 	/***
 	A sabotage mission has completed.
 	Exports: character, faction, regionID, characterType, missionSuccessLevel, missionProbability, religion
+	missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 
 	@function onSabotageMission
 	@tparam eventTrigger eventData
@@ -1177,7 +1184,8 @@ void luaP::onPluginLoadF()
 	/***
 	A bribery mission has completed.
 	Exports: character, faction, targetFaction, regionID, characterType, missionSuccessLevel, religion, targetReligion
-
+	missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
+	
 	@function onBriberyMission
 	@tparam eventTrigger eventData
 
@@ -1190,7 +1198,8 @@ void luaP::onPluginLoadF()
 	/***
 	A diplomacy mission has completed.
 	Exports: character, faction, targetFaction, regionID, characterType, missionSuccessLevel, religion, targetReligion
-
+	missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
+	
 	@function onDiplomacyMission
 	@tparam eventTrigger eventData
 
@@ -1203,7 +1212,8 @@ void luaP::onPluginLoadF()
 	/***
 	A Faction leader has ordered a spying mission.
 	Exports: character, settlement, fort, faction, targetFaction, regionID, characterType, missionSuccessLevel, religion, targetReligion
-
+	missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
+	
 	@function onLeaderOrderedSpyingMission
 	@tparam eventTrigger eventData
 
@@ -1216,6 +1226,7 @@ void luaP::onPluginLoadF()
 	/***
 	A Faction leader has ordered an assassination mission.
 	Exports: character, targetCharacter, faction, regionID, characterType, missionSuccessLevel, religion
+	missionSuccessLevel: not_successful, slightly_successful, partly_successful, highly_successful
 
 	@function onLeaderOrderedAssassination
 	@tparam eventTrigger eventData
