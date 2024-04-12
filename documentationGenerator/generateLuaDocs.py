@@ -119,6 +119,7 @@ class typedField:
         self.type = type
         self.name = name
         self.comment = comment
+        self.confirmed = False
 
 
 filenames = ["luaP.cpp", "luaP2.cpp", "luaEopEdu.cpp", "luaSounds.cpp", "luaFbx.cpp", "luaEvents.cpp"]
@@ -162,6 +163,9 @@ for name in filenames:
         if re.search(r'@tfield', line) is not None:
             nextLineComment = False
             if startNewTable:
+                for field in userType.table.tfields:
+                    if field.confirmed == False:
+                        print("[Warning]  Field " + field.name + " not confirmed in class " + userType.table.name)
                 del userType
                 userType = luaUserType()
                 userType.functions = {}
@@ -290,6 +294,7 @@ for name in filenames:
                 for field in classes[className].table.tfields:
                     if field.name == fieldName:
                         fieldFound = True
+                        field.confirmed = True
                         break
             if fieldFound == False:
                 print("[Warning]  Field " + fieldName + " not found in class " + className)
@@ -308,6 +313,12 @@ for name in filenames:
                 for function in classes[className].functions:
                     if classes[className].functions[function].name == functionName:
                         functionFound = True
+                        break
+            if classes.get(className) is not None:
+                for field in classes[className].table.tfields:
+                    if field.name == functionName:
+                        fieldFound = True
+                        field.confirmed = True
                         break
             if functionFound == False:
                 print("[Warning]  function " + functionName + " not found in class " + className)
@@ -340,6 +351,7 @@ for name in filenames:
                     for field in userType.table.tfields:
                         if field.name == key:
                             foundField = True
+                            field.confirmed = True
                             break
                     if foundField == False:
                         print("Field " + key + " not found in enum " + userType.table.name)

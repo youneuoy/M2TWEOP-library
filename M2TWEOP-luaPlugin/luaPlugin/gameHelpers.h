@@ -40,7 +40,7 @@ namespace gameHelpers
 	int getMissionProbability(eventTrigger* eventData);
 	const char* getMissionDetails(eventTrigger* eventData);
 	int getEventID(eventTrigger* eventData);
-	guild* getEventGuild(eventTrigger* eventData);
+	int getEventGuild(eventTrigger* eventData);
 	const char* getEventCounter(eventTrigger* eventData);
 	coordPair* getPosition(eventTrigger* eventData);
 	int getReligion(eventTrigger* eventData);

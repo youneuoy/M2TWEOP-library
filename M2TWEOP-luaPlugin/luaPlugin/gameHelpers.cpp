@@ -327,9 +327,9 @@ namespace gameHelpers
 	//33 unk2
 
 	//34 guild handler
-	guild* getEventGuild(eventTrigger* eventData)
+	int getEventGuild(eventTrigger* eventData)
 	{
-		return CallVFunc<34, guild*>(eventData);
+		return CallVFunc<34, int>(eventData);
 	}
 
 	//35 event_counter

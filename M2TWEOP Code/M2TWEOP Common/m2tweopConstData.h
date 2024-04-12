@@ -1,5 +1,5 @@
 #pragma once
 namespace eopConstData
 {
-	const char eopVersionName[] = "M2TWEOP-3.1.4";
+	const char eopVersionName[] = "M2TWEOP-3.2.0";
 }

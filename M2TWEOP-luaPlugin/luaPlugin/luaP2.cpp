@@ -110,12 +110,14 @@ void luaP::initCampaign()
 	typeAll.options1.set("validateData", &options1::validateData);
 	typeAll.options1.set("campaignMapSpeedUp", &options1::campaignMapSpeedUp);
 	typeAll.options1.set("skipAiFactions", &options1::skipAiFactions);
+	typeAll.options1.set("labelCharacters", &options1::labelCharacters);
 	typeAll.options1.set("noBackGroundFmv", &options1::noBackGroundFmv);
 	typeAll.options1.set("disableArrowMarkers", &options1::disableArrowMarkers);
 	typeAll.options1.set("arcadeBattles", &options1::arcadeBattles);
 	typeAll.options1.set("disableEvents", &options1::disableEvents);
 	typeAll.options1.set("isPrologue", &options1::isPrologue);
 	typeAll.options1.set("updateAiCamera", &options1::updateAiCamera);
+	typeAll.options1.set("hideCampaign", &options1::hideCampaign);
 	typeAll.options1.set("unlimitedMenOnBattlefield", &options1::unlimitedMenOnBattlefield);
 	typeAll.options1.set("tgaReserveSpace", &options1::tgaReserveSpace);
 	typeAll.options1.set("keysetUsed", &options1::keysetUsed);
@@ -262,6 +264,7 @@ void luaP::initCampaign()
 	typeAll.options2.set("chatMsgDuration", &options2::chatMsgDuration);
 	typeAll.options2.set("saveGameSpyPassword", &options2::saveGameSpyPassword);
 	typeAll.options2.set("addDateToLogs", &options2::addDateToLogs);
+	typeAll.options2.set("showToolTips", &options2::showToolTips);
 	typeAll.options2.set("isNormalHud", &options2::isNormalHud);
 	typeAll.options2.set("showPackageLitter", &options2::showPackageLitter);
 	typeAll.options2.set("unitSizeMultiplierLow", &options2::unitSizeMultiplierLow);
@@ -331,8 +334,8 @@ void luaP::initCampaign()
 	@tfield unit attackingUnit
 	@tfield unit defendingUnit
 	@tfield character stratCharacter
-	@tfield namedCharacter namedCharacter
-	@tfield namedCharacter targetNamedCharacter
+	@tfield namedCharacter character - Note it is namedCharacter, not character
+	@tfield namedCharacter targetCharacter - Note it is namedCharacter, not character
 	@tfield settlementStruct settlement
 	@tfield settlementStruct targetSettlement
 	@tfield fortStruct fort
@@ -373,8 +376,6 @@ void luaP::initCampaign()
 	typeAll.eventTrigger.set("defendingUnit", sol::property(gameHelpers::getEventDefendingUnit));
 	typeAll.eventTrigger.set("stratCharacter", sol::property(gameHelpers::getEventCharacter));
 	typeAll.eventTrigger.set("character", sol::property(gameHelpers::getEventNamedCharacter));
-	typeAll.eventTrigger.set("namedCharacter", sol::property(gameHelpers::getEventNamedCharacter));
-	typeAll.eventTrigger.set("targetNamedCharacter", sol::property(gameHelpers::getEventTargetNamedCharacter));
 	typeAll.eventTrigger.set("targetCharacter", sol::property(gameHelpers::getEventTargetNamedCharacter));
 	typeAll.eventTrigger.set("settlement", sol::property(gameHelpers::getEventSettlement));
 	typeAll.eventTrigger.set("targetSettlement", sol::property(gameHelpers::getEventTargetSettlement));
@@ -462,7 +463,7 @@ void luaP::initCampaign()
 	@tfield int playerFactionId
 	@tfield int[31] campaignDifficultyFaction Indexing starts at 1, so add 1 to faction ID. Maximum 31.
 	@tfield int[31] battleDifficultyFaction Indexing starts at 1, so add 1 to faction ID. Maximum 31.
-	@tfield factionStruct[31] factionsSortedByDescrStrat Table of factionStruct[31], indexing starts at 1. Maximum 31.
+	@tfield factionStruct[31] factionsSortedByDescrStrat Table of factionStruct[31], indexing starts at 1. Maximum 31. Slightly misleading name, sorted by the turn order of the factions. Player controlled faction is at index 0 in single player.
 	@tfield factionStruct[31] factionsSortedByID Table of factionStruct[31], indexing starts at 1, so add 1 to faction ID. Maximum 31.
 	@tfield int numberOfFactions
 	@tfield int numberHumanFactions Number of player-controlled factions.
@@ -533,7 +534,7 @@ void luaP::initCampaign()
 	typeAll.campaignTable.set("constantinopleSettlement", &campaign::constantinople);
 
 	typeAll.campaignTable.set("BrigandSpawnValue", &campaign::BrigandSpawnValue);
-	typeAll.campaignTable.set("BrigandSpawnValue", &campaign::PirateSpawnValue);
+	typeAll.campaignTable.set("PirateSpawnValue", &campaign::PirateSpawnValue);
 	typeAll.campaignTable.set("restrictAutoResolve", &campaign::restrictAutoResolve);
 	typeAll.campaignTable.set("saveEnabled", &campaign::saveEnabled);
 	typeAll.campaignTable.set("FreeUpkeepForts", &campaign::FreeUpkeepForts);
@@ -1103,6 +1104,7 @@ void luaP::initCampaign()
 		));
 	typeAll.regionStruct.set("legioName", &regionStruct::legioName);
 	typeAll.regionStruct.set("regionID", &regionStruct::regionID);
+	typeAll.regionStruct.set("loyaltyFactionID", &regionStruct::loyaltyFactionID);
 	typeAll.regionStruct.set("roadLevel", &regionStruct::roadLevel);
 	typeAll.regionStruct.set("farmingLevel", &regionStruct::farmingLevel);
 	typeAll.regionStruct.set("famineThreat", &regionStruct::famineThreat);
@@ -1114,6 +1116,7 @@ void luaP::initCampaign()
 	typeAll.regionStruct.set("roadToPort", &regionStruct::roadToPort);
 	typeAll.regionStruct.set("seaExportRegion", &regionStruct::seaExportRegion);
 	typeAll.regionStruct.set("regionSeaEdgesCount", &regionStruct::regionSeaEdgesCount);
+	typeAll.regionStruct.set("devastatedTilesCount", &regionStruct::devastatedTilesCount);
 	typeAll.regionStruct.set("tilesBorderingEdgeOfMapCount", &regionStruct::tilesBorderingEdgeOfMapCount);
 	typeAll.regionStruct.set("fertileTilesCount", &regionStruct::fertileTilesCount);
 	typeAll.regionStruct.set("resourceTypesBitMap", &regionStruct::resourceTypesBitMap);
@@ -2015,7 +2018,6 @@ void luaP::initP2()
 	Basic battleResidence table
 
 	@tfield settlementStruct settlement
-	@tfield factionStruct faction
 	@tfield int isFortBattle
 	@tfield battleBuildings battleBuildings
 	@tfield int settlementWallsBreached
@@ -2491,6 +2493,44 @@ void luaP::initP2()
 		"shaken", 4,
 		"wavering", 5,
 		"routing", 6
+	);
+
+	
+	/***
+	Enum of unit discipline.
+
+	@tfield int berserker
+	@tfield int impetuous
+	@tfield int low
+	@tfield int normal
+	@tfield int disciplined
+
+	@table unitDiscipline
+	*/
+	luaState.new_enum(
+		"unitDiscipline",
+		"berserker", 0,
+		"impetuous", 1,
+		"low", 2,
+		"normal", 3,
+		"disciplined", 4
+	);
+
+	
+	/***
+	Enum of unit training.
+
+	@tfield int untrained
+	@tfield int trained
+	@tfield int highly_trained
+
+	@table unitTraining
+	*/
+	luaState.new_enum(
+		"unitTraining",
+		"untrained", 0,
+		"trained", 1,
+		"highly_trained", 2
 	);
 
 	

@@ -917,7 +917,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.gameTable.set_function("callConsole", &gameHelpers::callConsole);
 	/***
-	Get the amount of factions.
+	Get the amount of factions. Just returns campaignStruct.numberOfFactions field.
 	@function stratmap.game.getFactionsCount
 	@treturn int facNumber Amount of factions
 	@usage
@@ -925,7 +925,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	tables.gameTable.set_function("getFactionsCount", &gameHelpers::getFactionsCount);
 	/***
-	Get a faction by the index, commonly used when iterating over all factions using getFactionsCount()
+	Get a faction by the turn order. Same thing as doing campaignStruct.factionsSortedByDescrStrat[index + 1].
 	@function stratmap.game.getFaction
 	@tparam int Index of the faction.
 	@treturn factionStruct faction
@@ -944,7 +944,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.gameTable.set_function("getGuild", &gameHelpers::getGuild);
 
 	/***
-	Create a new character at the specified coordinates.
+	Create a new character at the specified coordinates. If you are not spawning an agent it is preferred to use spawnArmy instead.
 	@function stratmap.game.createCharacterByString
 	@tparam string type Character type, for example "named character".
 	@tparam factionStruct Faction the new character belongs to.
@@ -957,19 +957,19 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int yCoord Y coordinate of the new character
 	@treturn character newCharacter Returns a character class, not a named character class!
 	@usage
-	newCharacter=stratmap.game.createCharacterByString("named character",stratmap.game.getFaction(0),18,"Name1","Name2",31,"custom_portrait_name",character.character.xCoord+5,character.character.yCoord);
+	newCharacter=stratmap.game.createCharacterByString("named character",CAMPAIGN:getFaction("england"),18,"Name1","Name2",31,"custom_portrait_name",character.character.xCoord+5,character.character.yCoord);
 	*/
 	tables.gameTable.set_function("createCharacterByString", &gameHelpers::createCharacter);
 
 	/***
-	Create a new army at the specified coordinates. Works similarly to the script command spawn_army. You can respawn off-map characters using it.
+	Create a new army at the specified coordinates. Works similarly to the script command spawn_army. You can respawn off-map characters using it. You can not re-use labels!
 	@function stratmap.game.spawnArmy
 	@tparam factionStruct Faction the new character belongs to.
-	@tparam string name The short name of the character.
+	@tparam string name The short name of the character. Use random_name to pick a random name.
 	@tparam string name2 The full name of the character.
 	@tparam int type characterType.named_character or characterType.general or characterType.admiral.
-	@tparam string label label of the character, has to be unique!.
-	@tparam string portrait Name of the folder inside 'data/ui/custom_portraits folder. Can not be nil!
+	@tparam string label label of the character, has to be unique!. Can be nil.
+	@tparam string portrait Name of the folder inside 'data/ui/custom_portraits folder.
 	@tparam int x X coordinate of the new character
 	@tparam int y Y coordinate of the new character
 	@tparam int age The character's age
@@ -982,7 +982,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@treturn stackStruct newArmy
 	@usage
 	newArmy = stratmap.game.spawnArmy(
-	stratmap.game.getFaction(0),
+	CAMPAIGN:getFaction("england"),
 	"Name1","Name2",
 	characterType.named_character,
 	"unique_label_1",
@@ -995,7 +995,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.gameTable.set_function("spawnArmy", &stackStructHelpers::spawnArmy);
 	
 	/***
-	Create an army for a character. Commonly used after spawning a new character to set it's bodyguard unit.
+	Legacy code to spawn an army for a created character. Use spawnArmy instead!
 	@function stratmap.game.createArmy
 	@tparam character ourGeneral Character class, not named character class!
 	@treturn stackStruct army
@@ -1009,7 +1009,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam settlementStruct settlement
 	@treturn stackStruct army
 	@usage
-	army=stratmap.game.createArmyInSettlement(sett);
+	army=stratmap.game.createArmyInSettlement(STRAT_MAP:getSettlement("London"));
 	*/
 	tables.gameTable.set_function("createArmyInSettlement", &gameHelpers::createArmyInSettlement);
 	/***
@@ -1446,6 +1446,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.eduEntry.set("discipline", &eduEntry::StatMentalDicipline);
 	types.eduEntry.set("range", &eduEntry::MissleRange);
 	types.eduEntry.set("projectile", &eduEntry::StatPriMissle);
+	types.eduEntry.set("mount", &eduEntry::mount);
 	types.eduEntry.set("canPhalanx", &eduEntry::formationPhalanx);
 	types.eduEntry.set("haveAttributeLegio", sol::property(&eopEduHelpers::haveAttributeLegioGet, &eopEduHelpers::haveAttributeLegioSet));
 	types.eduEntry.set("moveSpeedMod", &eduEntry::MoveSpeedMod);
@@ -1621,7 +1622,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:setTypeID(2);
 	*/
-	types.character.set_function("setTypeID", &generalHelpers::setTypeID);	/***
+	types.character.set_function("setTypeID", &generalHelpers::setTypeID);
+	/***
 	Issue regular move command, character must have movement points.
 	@function character:moveToTile
 	@tparam int xCoord
@@ -1834,6 +1836,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.namedCharacter.set("isFamily", sol::property(&generalCharactericticsHelpers::isFamily, &generalCharactericticsHelpers::setAsFamily));
 	types.namedCharacter.set("age", sol::property(&generalCharactericticsHelpers::getAge, &generalCharactericticsHelpers::setAge));
 	types.namedCharacter.set("yearOfBirth", &namedCharacter::yearOfBirth);
+	types.namedCharacter.set("seasonOfBirth", &namedCharacter::seasonOfBirth);
+	types.namedCharacter.set("seasonOfMaturity", &namedCharacter::seasonOfMaturity);
+	types.namedCharacter.set("yearOfMaturity", &namedCharacter::yearOfMaturity);
+	types.namedCharacter.set("numberOfChildren", &namedCharacter::numberOfChildren);
 	types.namedCharacter.set("faction", &namedCharacter::faction);
 	types.namedCharacter.set("subFaction", &namedCharacter::subFaction);
 	types.namedCharacter.set("parent", &namedCharacter::parent);
@@ -2324,15 +2330,10 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct.set("aiPersonalityType", &factionStruct::AIPersonalityType);
 	types.factionStruct.set("aiPersonalityName", &factionStruct::AIPersonalityName);
 	/***
-	Get the faction's internal name
+	Outdated legacy function. Use faction.name instead.
 	@function factionStruct:getFactionName
 	@treturn string facName
 	@usage
-	ourFac = stratmap.game.getFaction(0);
-	ourFacName = ourFac:getFactionName();
-	if ourFacName == "england" then
-		ourFac.money = ourFac.money + (ourFac.fortsNum * 500)
-	end
 	*/
 	types.factionStruct.set_function("getFactionName", &factionHelpers::getFactionName);
 	types.factionStruct.set("cultureID", &factionStruct::cultureID);
@@ -2348,6 +2349,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct.set("capital", &factionStruct::capital);
 	types.factionStruct.set("leader", &factionStruct::leader);
 	types.factionStruct.set("heir", &factionStruct::heir);
+	types.factionStruct.set("neighBourFactionsBitmap", &factionStruct::neighBourFactionsBitmap);
 	types.factionStruct.set("isPlayerControlled", &factionStruct::isPlayerControlled);
 	types.factionStruct.set("religion", &factionStruct::religion);
 	types.factionStruct.set("missionCount", &factionStruct::missionCount);
