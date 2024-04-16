@@ -719,7 +719,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.uiElement.set("subElementsNum", &uiElement::subElementsNum);
 	/***
 	Get a subelement of an UI element using the index.
-	@function uiElementStruct.getSubElement
+	@function uiElementStruct:getSubElement
 	@tparam int index Starts from 0.
 	@treturn uiElementStruct subelement
 	@usage
