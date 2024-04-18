@@ -33,12 +33,14 @@ namespace m2tweopHelpers
 	std::string getModPath();
 	std::string getLuaPath();
 	void toggleDeveloperMode();
+	mapImage* makeMapImage();
 
 	bool isTileFree(int x, int y);
 	std::tuple<int, int> getGameTileCoordsWithCursor();
 	int getTileRegionID(int x, int y);
 	bool getTileVisibility(factionStruct* faction, int x, int y);
 	factionStruct* getRegionOwner(int regionID);
+	void setBorderColor(mapImage* img, int r, int g, int b);
 
 	bool checkDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2);
 	void setDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2);
@@ -51,7 +53,8 @@ namespace m2tweopHelpers
 	void setPerfectSpy(bool set);
 	int getLocalFactionID();
 	void setEquipmentCosts(int equipType, int cost);
-
+	void fillRegionColor(mapImage* img, int id, int r, int g, int b);
+	void fillTileColor(mapImage* img, int x, int y, int r, int g, int b);
 	void setEDUUnitsSize(signed short min, signed short max);
 	int getGameVersion();
 	options1* getOptions1();
@@ -60,6 +63,7 @@ namespace m2tweopHelpers
 	campaignDifficulty2* getCampaignDifficulty2();
 
 	std::tuple<int, int, void*>  loadTextureToGame(const std::string& path);
+	std::tuple<int, int, void*>  loadMapTexture(mapImage* mapImage, const std::string& path);
 	void unloadTextureFromGame(void* texture);
 
 	void toggleUnitsBMapHighlight();

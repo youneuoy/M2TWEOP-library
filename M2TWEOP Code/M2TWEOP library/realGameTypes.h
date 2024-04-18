@@ -526,6 +526,23 @@ struct oneTile {
 	float mpModifier; //0x0030
 };
 
+struct color
+{
+	int8_t r = 0;
+	int8_t g = 0;
+	int8_t b = 0;
+	bool set = false;
+};
+
+struct mapImage
+{
+	color tiles[250000]{};
+	bool drawBorder = false;
+	float borderWeight = 0.5f;
+	float fillWeight = 0.5f;
+	color borderColor = { 20,20,20,};
+};
+
 struct aiSiegeEquipStruct
 {
 	int type;

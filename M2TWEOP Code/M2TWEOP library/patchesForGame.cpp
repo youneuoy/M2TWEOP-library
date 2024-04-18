@@ -82,23 +82,35 @@ float __fastcall patchesForGame::OnCalculateUnitValue(eduEntry* entry, const DWO
 	return plugins::OnCalculateUnitValue(entry, floatValue);
 }
 
+struct nameIndex
+{
+	nameIndex(char* n, int i) : name(n), index(i) {}
+	char* name;
+	int index;
+};
+
+DWORD __fastcall patchesForGame::onSearchUnitType(char* typeName)
+{
+	if (const auto eopUnit = eduThings::tryFindDataEopEduIndex(typeName); eopUnit != nullptr)
+	{
+		auto newIndex = new nameIndex(typeName, *eopUnit);
+		return reinterpret_cast<DWORD>(newIndex);
+	}
+	return 0;
+}
+
 int patchesForGame::onEvaluateUnit(int eduIndex)
 {
-	if (eduIndex < 500)
-		return eduThings::getEduEntry(eduIndex)->categoryClassCombinationForAI;
-	
 	if (const auto eopUnit = eduThings::getEopEduEntry(eduIndex); eopUnit == nullptr)
-		return 0;
+		return eduThings::getEduEntry(eduIndex)->categoryClassCombinationForAI;
 	else
 		return eopUnit->categoryClassCombinationForAI;
 }
 
 eduEntry* patchesForGame::onEvaluateUnit2(int eduIndex)
 {
-	if (eduIndex < 500)
-		return eduThings::getEduEntry(eduIndex);
 	if (const auto eopUnit = eduThings::getEopEduEntry(eduIndex); eopUnit == nullptr)
-		return eduThings::getEduEntry(0);
+		return eduThings::getEduEntry(eduIndex);
 	else
 		return eopUnit;
 }

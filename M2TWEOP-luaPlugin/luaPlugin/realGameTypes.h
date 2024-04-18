@@ -2526,6 +2526,23 @@ struct namedCharacter { /* many important info about character */
 	int age;
 };
 
+struct color
+{
+	int8_t r = 0;
+	int8_t g = 0;
+	int8_t b = 0;
+	bool set = false;
+};
+
+struct mapImage
+{
+	color tiles[250000]{};
+	bool drawBorder = false;
+	float borderWeight = 0.5f;
+	float fillWeight = 0.5f;
+	color borderColor = { 20,20,20,};
+};
+
 //ancillary of character
 struct ancillary { /* structure of ancillary */
 	UINT32 index;

@@ -141,6 +141,13 @@ namespace m2tweopHelpers
 		}
 
 	}
+
+	mapImage* makeMapImage()
+	{
+		return new mapImage();
+	}
+
+	
 	int GetUnitSize()
 	{
 		return (*(*plugData::data.funcs.GetUnitSize))();
@@ -181,6 +188,60 @@ namespace m2tweopHelpers
 
 		return std::make_tuple(x, y, reinterpret_cast<void*>(retTexture));
 	}
+	
+	std::tuple<int, int, void*> loadMapTexture(mapImage* mapImage, const std::string& path)
+	{
+		int x = 0;
+		int y = 0;
+		LPDIRECT3DTEXTURE9 retTexture = (*(*plugData::data.funcs.loadTexture))(path.c_str(), &x, &y);
+		retTexture = (*(*plugData::data.funcs.updateRegionColors))(mapImage, retTexture, x, y);
+
+		sol::as_table_t int2 = sol::as_table(std::vector<int>{
+			x, y
+		});
+
+		return std::make_tuple(x, y, reinterpret_cast<void*>(retTexture));
+	}
+
+	void fillRegionColor(mapImage* img, int id, int r, int g, int b)
+	{
+		gameDataAllStruct* gameData = gameDataAllHelper::get();
+		if (!gameData->stratMap) 
+			return;
+		auto sMap = gameData->stratMap;
+		const auto region = &sMap->regions[id];
+		for (int i = 0; i < region->tileCount; i++)
+		{
+			const int tileIndex = region->tiles[i];
+			img->tiles[tileIndex].r = r;
+			img->tiles[tileIndex].g = g;
+			img->tiles[tileIndex].b = b;
+			img->tiles[tileIndex].set = true;
+		}
+	}
+
+	void fillTileColor(mapImage* img, int x, int y, int r, int g, int b)
+	{
+		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		stratMap* map = gameDataAll->stratMap;
+		if (!map) 
+			return;
+		const int tileIndex = map->mapWidth * y + x;
+		img->tiles[tileIndex].r = r;
+		img->tiles[tileIndex].g = g;
+		img->tiles[tileIndex].b = b;
+		img->tiles[tileIndex].set = true;
+	}
+
+	void setBorderColor(mapImage* img, int r, int g, int b)
+	{
+		img->borderColor.r = r;
+		img->borderColor.g = g;
+		img->borderColor.b = b;
+	}
+
+
+	
 	void unloadTextureFromGame(void* texture)
 	{
 		LPDIRECT3DTEXTURE9 tex = reinterpret_cast<LPDIRECT3DTEXTURE9>(texture);

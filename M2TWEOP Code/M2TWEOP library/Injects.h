@@ -699,6 +699,33 @@ private:
 };
 
 
+class onSearchUnitType
+	:public AATemplate
+{
+public:
+	onSearchUnitType(MemWork* mem, LPVOID adr, int ver);
+	~onSearchUnitType();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onReadBuildingPool
+	:public AATemplate
+{
+public:
+	onReadBuildingPool(MemWork* mem, LPVOID adr, int ver);
+	~onReadBuildingPool();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+
 class onBuildingUnitAttributes
 	:public AATemplate
 {

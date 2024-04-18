@@ -35,6 +35,8 @@ void luaP::initCampaign()
 		sol::usertype<seaConnectedRegion> seaConnectedRegion;
 		sol::usertype<neighbourRegion> neighbourRegion;
 		sol::usertype<eventTrigger> eventTrigger;
+		sol::usertype<color> colorStruct;
+		sol::usertype<mapImage> mapImageStruct;
 	}typeAll;
 
 
@@ -408,8 +410,90 @@ void luaP::initCampaign()
 	typeAll.eventTrigger.set("captureInfo", sol::property(gameHelpers::getCapturedFactionInfo));
 	typeAll.eventTrigger.set("ransomType", sol::property(gameHelpers::getRansomType));
 	typeAll.eventTrigger.set("unit", sol::property(gameHelpers::getUnit));
+	
+	
+	///mapImage
+	//@section mapImageStruct
 
-
+	/***
+	@tfield bool drawBorder
+	@tfield float borderWeight
+	@tfield float fillWeight
+	@tfield makeMapImage makeMapImage
+	@tfield loadMapTexture loadMapTexture
+	@tfield fillRegionColor fillRegionColor
+	@tfield fillTileColor fillTileColor
+	@tfield setBorderColor setBorderColor
+	@table mapImageStruct
+	*/
+	typeAll.mapImageStruct = luaState.new_usertype<mapImage>("mapImageStruct");
+	typeAll.mapImageStruct.set("drawBorder", &mapImage::drawBorder);
+	typeAll.mapImageStruct.set("borderWeight", &mapImage::borderWeight);
+	typeAll.mapImageStruct.set("fillWeight", &mapImage::fillWeight);
+	
+	/***
+	Create a new image you want to determine region colors.
+	@function mapImageStruct.makeMapImage
+	@treturn mapImageStruct mapImage
+	@usage
+	local mapImage = mapImageStruct.makeMapImage();
+	*/
+	typeAll.mapImageStruct.set_function("makeMapImage", &m2tweopHelpers::makeMapImage);
+	
+	/***
+	Create a new map texture.
+	@function mapImageStruct:loadMapTexture
+	@tparam string path full path to texture
+	@treturn int x size of the image
+	@treturn int y size of the image
+	@treturn int id of the image
+	@usage
+	local mapImage = mapImageStruct.makeMapImage();
+	local x, y, id = mapImage:loadMapTexture("map_regions.dds");
+	ImGui.Image(id, x, y);
+	*/
+	typeAll.mapImageStruct.set_function("loadMapTexture", &m2tweopHelpers::loadMapTexture);
+	
+	/***
+	Fill a region with a color.
+	@function mapImageStruct:fillRegionColor
+	@tparam int id region ID
+	@tparam int r red
+	@tparam int g green
+	@tparam int b blue
+	@usage
+	local mapImage = mapImageStruct.makeMapImage();
+	mapImage:fillRegionColor(50, 0, 255, 0);
+	*/
+	typeAll.mapImageStruct.set_function("fillRegionColor", &m2tweopHelpers::fillRegionColor);
+	
+	/***
+	Fill a tile with a color.
+	@function mapImageStruct:fillTileColor
+	@tparam int x x coordinate
+	@tparam int y y coordinate
+	@tparam int r red
+	@tparam int g green
+	@tparam int b blue
+	@treturn mapImageStruct mapImage
+	@usage
+	local mapImage = mapImageStruct.makeMapImage();
+	mapImage:fillTileColor(153, 210, 0, 255, 0);
+	*/
+	typeAll.mapImageStruct.set_function("fillTileColor", &m2tweopHelpers::fillTileColor);
+	
+	/***
+	Set color of borders.
+	@function mapImageStruct:setBorderColor
+	@tparam int r red
+	@tparam int g green
+	@tparam int b blue
+	@treturn mapImageStruct mapImage
+	@usage
+	local mapImage = mapImageStruct.makeMapImage();
+	mapImage:setBorderColor(50, 50, 50);
+	*/
+	typeAll.mapImageStruct.set_function("setBorderColor", &m2tweopHelpers::setBorderColor);
 
 	///uiCardManager
 	//@section uiCardManager
@@ -1047,6 +1131,9 @@ void luaP::initCampaign()
 	@tfield int totalSeaTradeValue
 	@tfield int stacksNum
 	@tfield int fortsNum
+	@tfield int colorRed
+	@tfield int colorGreen
+	@tfield int colorBlue
 	@tfield int watchtowersNum
 	@tfield int isSea
 	@tfield int hasLake (fully enclosed by region)
@@ -1103,6 +1190,9 @@ void luaP::initCampaign()
 		&gameHelpers::getRegionName, &gameHelpers::changeRegionName
 		));
 	typeAll.regionStruct.set("legioName", &regionStruct::legioName);
+	typeAll.regionStruct.set("colorRed", &regionStruct::colorRed);
+	typeAll.regionStruct.set("colorGreen", &regionStruct::colorGreen);
+	typeAll.regionStruct.set("colorBlue", &regionStruct::colorBlue);
 	typeAll.regionStruct.set("regionID", &regionStruct::regionID);
 	typeAll.regionStruct.set("loyaltyFactionID", &regionStruct::loyaltyFactionID);
 	typeAll.regionStruct.set("roadLevel", &regionStruct::roadLevel);

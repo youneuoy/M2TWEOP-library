@@ -260,6 +260,9 @@ int initPlugin(std::string* modPath)
 	fName = "attackCharacter";
 	plugData::data.funcs.attackCharacter.Load(&plPath, &fName);
 
+	fName = "updateRegionColors";
+	plugData::data.funcs.updateRegionColors.Load(&plPath, &fName);
+
 	fName = "loadTexture";
 	plugData::data.funcs.loadTexture.Load(&plPath, &fName);
 

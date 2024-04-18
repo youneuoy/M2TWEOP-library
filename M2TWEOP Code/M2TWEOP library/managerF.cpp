@@ -135,6 +135,12 @@ void managerF::doPachs()
 	torecruitEOPMercunit->Enable();
 	f1 << "Done" << endl;
 
+	f1 << "Start applying toSearchUnitType patch" << '\n';
+	onSearchUnitType* toSearchUnitType = new onSearchUnitType(mem, (LPVOID)patchesForGame::onSearchUnitType, globals::dataS.gamever);
+	toSearchUnitType->SetNewCode();
+	toSearchUnitType->Enable();
+	f1 << "Done" << '\n';
+
 
 	f1 << "Start applying toLoadDescrBattleCharacter patch #1" << endl;
 
@@ -540,6 +546,12 @@ void managerF::doPachs()
 	OnCalculateUnitValue2* toCalculateUnitValue2 = new OnCalculateUnitValue2(mem, (LPVOID)patchesForGame::OnCalculateUnitValue, globals::dataS.gamever);
 	toCalculateUnitValue2->SetNewCode();
 	toCalculateUnitValue2->Enable();
+	f1 << "Done" << '\n';
+
+	f1 << "Start applying onReadBuildingPool patch" << '\n';
+	onReadBuildingPool* toReadBuildingPool = new onReadBuildingPool(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gamever);
+	toReadBuildingPool->SetNewCode();
+	toReadBuildingPool->Enable();
 	f1 << "Done" << '\n';
 
 	f1 << "Start applying OnCreateUnitWrapper patch" << endl;

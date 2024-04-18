@@ -2575,6 +2575,106 @@ void onUnloadCampaign::SetNewCode()
 	delete a;
 }
 
+onSearchUnitType::onSearchUnitType(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0046DF88;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00414C08;
+}
+
+onSearchUnitType::~onSearchUnitType()
+{
+}
+
+void onSearchUnitType::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onSearchUnitType::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	Label notEop = a->newLabel();
+	
+	a->mov(dword_ptr(esp, 0x14), esi);
+	a->mov(ebp, edx);       // Move EDX to EBP
+	a->shl(ebp, 3);         // Multiply EDX by 8, storing result in EBP
+	a->add(ebp, esi);       // Add ESI to EBP
+	a->push(ecx);
+	
+	a->push(ebp);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->pop(ebp);
+	
+	a->cmp(eax, 0);
+	a->je(notEop);
+	a->mov(ebp, eax);
+	a->mov(dword_ptr(esp, 0x18), ebp);
+	a->mov(ebx, 0x0);
+	a->bind(notEop);
+	//a->mov(esi, dword_ptr(ebp, 0x0));
+	a->pop(ecx);
+	a->ret();
+	
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onReadBuildingPool::onReadBuildingPool(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x008A9CE5;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00414C08;
+}
+
+onReadBuildingPool::~onReadBuildingPool()
+{
+}
+
+void onReadBuildingPool::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onReadBuildingPool::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(eax);
+	a->mov(ecx, edi);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->mov(ecx, eax);
+	a->pop(eax);
+	
+	a->ret();
+	
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
 onGameConsoleCommandFromScript::onGameConsoleCommandFromScript(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

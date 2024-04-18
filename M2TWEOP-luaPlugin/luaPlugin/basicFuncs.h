@@ -252,6 +252,7 @@ public:
 
 	//graphics
 	ProcLoader<LPDIRECT3DTEXTURE9(__cdecl*)(const char*, int*, int*)> loadTexture;
+	ProcLoader<IDirect3DTexture9*(__cdecl*)(mapImage*,IDirect3DTexture9*, int, int)> updateRegionColors;
 	ProcLoader<void(__cdecl*)(LPDIRECT3DTEXTURE9)> unloadTexture;
 
 
