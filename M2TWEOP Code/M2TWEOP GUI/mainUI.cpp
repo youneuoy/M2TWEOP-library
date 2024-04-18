@@ -120,7 +120,7 @@ namespace mainUI
 				dataG::data.gameData.buttonColor.a,
 			));
 		}
-
+		//
 		if(dataG::data.gameData.buttonHoverColorString == "") {
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.564, 0.250, 0.230, 1.0f));
 		} else {
