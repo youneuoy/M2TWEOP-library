@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+
 template<unsigned int IIdx, typename TRet, typename ... TArgs>
 TRet CallVFunc(void* thisptr, TArgs ... argList)
 {
@@ -2526,21 +2528,41 @@ struct namedCharacter { /* many important info about character */
 	int age;
 };
 
+
+
 struct color
 {
 	int8_t r = 0;
 	int8_t g = 0;
 	int8_t b = 0;
-	bool set = false;
+};
+
+#define GETBLUE(color) ((color) & 0xFF)
+#define GETGREEN(color) (((color) >> 8) & 0xFF)
+#define GETRED(color) (((color) >> 16) & 0xFF)
+#define GETALPHA(color) (((color) >> 24) & 0xFF)
+#define SETBLUE(color, red) ((color) = ((color) & 0xFFFFFF00) | (red))
+#define SETGREEN(color, green) ((color) = ((color) & 0xFFFF00FF) | ((green) << 8))
+#define SETRED(color, blue) ((color) = ((color) & 0xFF00FFFF) | ((blue) << 16))
+#define SETALPHA(color, alpha) ((color) = ((color) & 0x00FFFFFF) | ((alpha) << 24))
+#define MAKECOLOR(r, g, b, a) ((b) | ((g) << 8) | ((r) << 16) | ((a) << 24))
+
+struct tileColor
+{
+	tileColor() : color(0), coords({ 0,0 }) {}
+	tileColor(uint32_t colorA, int x, int y) : color(colorA), coords({ x,y }) {}
+	uint32_t color;
+	struct coordPair coords;
 };
 
 struct mapImage
 {
-	color tiles[250000]{};
+	std::vector<tileColor> tiles = {};
 	bool drawBorder = false;
-	float borderWeight = 0.5f;
-	float fillWeight = 0.5f;
-	color borderColor = { 20,20,20,};
+	bool useBlur = true;
+	float blurStrength = 1.0f;
+	bool adaptiveBlur = false;
+	uint32_t borderColor;
 };
 
 //ancillary of character

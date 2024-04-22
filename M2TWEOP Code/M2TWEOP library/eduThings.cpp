@@ -20,7 +20,7 @@ namespace eduThings
 			data.edu = *oldEn;
 			data.edu.Index = newIdx;
 
-			eopTypeName = "EOPT_";
+			eopTypeName = "EOPT";
 			eopTypeName.append(data.edu.Type);
 			eopTypeName.append(to_string(newIdx));//added to make typename unique
 		}
@@ -36,7 +36,7 @@ namespace eduThings
 			}
 			data.edu.Index = newIdx;
 
-			eopTypeName = "EOPT_";
+			eopTypeName = "EOPT";
 			eopTypeName.append(data.edu.Type);
 			eopTypeName.append(to_string(newIdx));//added to make typename unique
 		}

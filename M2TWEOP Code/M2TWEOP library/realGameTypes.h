@@ -9,6 +9,7 @@ TRet CallVFunc(void* thisptr, TArgs ... argList)
 #include <cstdint>
 #include <windows.h>
 #include <basetsd.h>
+#include <vector>
 typedef unsigned char   undefined;
 typedef unsigned int    uint;
 typedef unsigned char    uchar;
@@ -533,14 +534,32 @@ struct color
 	int8_t b = 0;
 	bool set = false;
 };
+#define GETRED(color) ((color) & 0xFF)
+#define GETGREEN(color) (((color) >> 8) & 0xFF)
+#define GETBLUE(color) (((color) >> 16) & 0xFF)
+#define GETALPHA(color) (((color) >> 24) & 0xFF)
+#define SETRED(color, red) ((color) = ((color) & 0xFFFFFF00) | (red))
+#define SETGREEN(color, green) ((color) = ((color) & 0xFFFF00FF) | ((green) << 8))
+#define SETBLUE(color, blue) ((color) = ((color) & 0xFF00FFFF) | ((blue) << 16))
+#define SETALPHA(color, alpha) ((color) = ((color) & 0x00FFFFFF) | ((alpha) << 24))
+#define MAKECOLOR(r, g, b, a) ((r) | ((g) << 8) | ((b) << 16) | ((a) << 24))
+
+struct tileColor
+{
+	tileColor() : color(0), coords({ 0,0 }) {}
+	tileColor(uint32_t colorA, int x, int y) : color(colorA), coords({ x,y }) {}
+	uint32_t color;
+	struct coordPair coords;
+};
 
 struct mapImage
 {
-	color tiles[250000]{};
+	std::vector<tileColor> tiles = {};
 	bool drawBorder = false;
-	float borderWeight = 0.5f;
-	float fillWeight = 0.5f;
-	color borderColor = { 20,20,20,};
+	bool useBlur = true;
+	float blurStrength = 1.0f;
+	bool adaptiveBlur = false;
+	uint32_t borderColor;
 };
 
 struct aiSiegeEquipStruct

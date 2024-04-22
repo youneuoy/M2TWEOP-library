@@ -202,8 +202,13 @@ namespace m2tweopHelpers
 
 		return std::make_tuple(x, y, reinterpret_cast<void*>(retTexture));
 	}
+	
+	void updateMapTexture(mapImage* mapImage, void* texture, int x, int y)
+	{
+		(*(*plugData::data.funcs.updateRegionColors))(mapImage, static_cast<IDirect3DTexture9*>(texture), x, y);
+	}
 
-	void fillRegionColor(mapImage* img, int id, int r, int g, int b)
+	void fillRegionColor(mapImage* img, int id, int r, int g, int b, int a)
 	{
 		gameDataAllStruct* gameData = gameDataAllHelper::get();
 		if (!gameData->stratMap) 
@@ -212,32 +217,34 @@ namespace m2tweopHelpers
 		const auto region = &sMap->regions[id];
 		for (int i = 0; i < region->tileCount; i++)
 		{
-			const int tileIndex = region->tiles[i];
-			img->tiles[tileIndex].r = r;
-			img->tiles[tileIndex].g = g;
-			img->tiles[tileIndex].b = b;
-			img->tiles[tileIndex].set = true;
+			int tileIndex = region->tiles[i];
+			uint32_t color = MAKECOLOR(r, g, b, a);
+			coordPair* tileCoords = gameHelpers::convertTileCoords(tileIndex);
+			if (tileIndex >= img->tiles.size()) {
+				img->tiles.resize(tileIndex + 1);
+			}
+			img->tiles[tileIndex] = tileColor(color, tileCoords->xCoord, tileCoords->yCoord);
 		}
 	}
 
-	void fillTileColor(mapImage* img, int x, int y, int r, int g, int b)
+	void fillTileColor(mapImage* img, int x, int y, int r, int g, int b, int a)
 	{
-		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
-		stratMap* map = gameDataAll->stratMap;
-		if (!map) 
+		gameDataAllStruct* gameData = gameDataAllHelper::get();
+		if (!gameData->stratMap) 
 			return;
-		const int tileIndex = map->mapWidth * y + x;
-		img->tiles[tileIndex].r = r;
-		img->tiles[tileIndex].g = g;
-		img->tiles[tileIndex].b = b;
-		img->tiles[tileIndex].set = true;
+		auto sMap = gameData->stratMap;
+		int tileIndex = sMap->mapWidth * y + x;
+		if (tileIndex >= img->tiles.size()) {
+			img->tiles.resize(tileIndex + 1);
+		}
+		uint32_t color = MAKECOLOR(r, g, b, a);
+		img->tiles[tileIndex] = tileColor(color, x, y);
+		img->tiles.push_back(tileColor(MAKECOLOR(r, g, b, a), x, y));
 	}
 
-	void setBorderColor(mapImage* img, int r, int g, int b)
+	void setBorderColor(mapImage* img, int r, int g, int b, int a)
 	{
-		img->borderColor.r = r;
-		img->borderColor.g = g;
-		img->borderColor.b = b;
+		img->borderColor = MAKECOLOR(r, g, b, a);
 	}
 
 

@@ -414,9 +414,7 @@ namespace stratModelsChange
 			push pushScale
 			push texturepath
 			push skeleton
-			mov eax, stratmodel
-			add eax, 0x64
-			push eax
+			push stratmodel
 			mov ecx, modelflexi
 			mov eax, funcAddr
 			call eax
@@ -438,9 +436,6 @@ namespace stratModelsChange
 				mov ecx, zeropointer
 				mov eax, loadFunc
 				call eax
-				test al, al
-				mov eax, [esp + 0x178]
-				mov stratModel, eax
 			}
 		}
 		else {
@@ -451,13 +446,10 @@ namespace stratModelsChange
 				mov ecx, zeropointer
 				mov eax, loadFunc
 				call eax
-				test al, al
-				mov eax, [esp + 0x17C]
-				mov stratModel, eax
 			}
 		}
 
-		return stratModel;
+		return *zeropointer;
 	}
 
 
@@ -492,10 +484,6 @@ namespace stratModelsChange
 		//build new cas file
 		const size_t stringsize = strlen(typeName);
 		const DWORD skeleton = getCasAnimSet(skeletonname);
-		const DWORD newModelFlexi = createModelFlexi(false);
-		const DWORD newModelFlexiShadow = createModelFlexi(true);
-		const DWORD stratmodel = loadStratCAS(caspath, false);//this is very fickle with the stack position the data gets pulled from, watch out!
-		const DWORD stratmodelShadow = loadStratCAS(shadowcaspath, true);
 
 		std::string texturepathString = texturepath;
 		size_t pos = texturepathString.find_last_of("\\/") + 1;
@@ -505,11 +493,16 @@ namespace stratModelsChange
 			pos = texturepathString.find_first_of("\\/") + 1;
 			texturepathString = texturepathString.substr(pos);
 		}
+		const int textureindex = readTGAfile(texturepath);
+		
+		const DWORD newModelFlexi = createModelFlexi(false);
+		const DWORD newModelFlexiShadow = createModelFlexi(true);
+		DWORD stratmodel = loadStratCAS(caspath, false) + 0x64;
+		DWORD stratmodelShadow = loadStratCAS(shadowcaspath, true) + 0x64;
 
 		fixModelFlexi(false, stratmodel, newModelFlexi, texturepathString.c_str(), skeleton, scale);
 		fixModelFlexi(true, stratmodelShadow, newModelFlexiShadow, texturepathString.c_str(), skeleton, scale);
 
-		const int textureindex = readTGAfile(texturepath);
 		auto* newEntry = new stratModelArrayEntry;
 		newEntry->model_flexi_m = newModelFlexi;
 		newEntry->zeropoint = 0; //just filling the 0 stuff with loops and assignments so that there isn't random crap in there, we don't know what's used as 0

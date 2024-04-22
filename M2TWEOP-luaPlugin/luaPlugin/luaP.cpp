@@ -2271,6 +2271,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int cultureID
 	@tfield int aiPersonalityType
 	@tfield int aiPersonalityName
+	@tfield aiFaction aiFaction
 	@tfield string ai_label
 	@tfield string name
 	@tfield string localizedName
@@ -2328,6 +2329,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct = luaState.new_usertype<factionStruct>("factionStruct");
 	types.factionStruct.set("dipNum", &factionStruct::dipNum);
 	types.factionStruct.set("factionID", &factionStruct::dipNum);
+	types.factionStruct.set("aiFaction", &factionStruct::aiFaction);
 	types.factionStruct.set("aiPersonalityType", &factionStruct::AIPersonalityType);
 	types.factionStruct.set("aiPersonalityName", &factionStruct::AIPersonalityName);
 	/***

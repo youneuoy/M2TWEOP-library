@@ -702,7 +702,7 @@ namespace gameHelpers
 
 	int tileBorderType(const oneTile* tile)
 	{
-		return tile->border / 4;
+		return tile->border;
 	}
 
 	bool tileHasCharacter(const oneTile* tile)

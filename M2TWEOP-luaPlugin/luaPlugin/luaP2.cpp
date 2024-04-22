@@ -35,7 +35,6 @@ void luaP::initCampaign()
 		sol::usertype<seaConnectedRegion> seaConnectedRegion;
 		sol::usertype<neighbourRegion> neighbourRegion;
 		sol::usertype<eventTrigger> eventTrigger;
-		sol::usertype<color> colorStruct;
 		sol::usertype<mapImage> mapImageStruct;
 	}typeAll;
 
@@ -416,20 +415,20 @@ void luaP::initCampaign()
 	//@section mapImageStruct
 
 	/***
-	@tfield bool drawBorder
-	@tfield float borderWeight
-	@tfield float fillWeight
+	@tfield float blurStrength
+	@tfield bool useBlur
+	@tfield bool adaptiveBlur Can be slow on large or frequently updated images! needs use blur also true.
 	@tfield makeMapImage makeMapImage
 	@tfield loadMapTexture loadMapTexture
 	@tfield fillRegionColor fillRegionColor
 	@tfield fillTileColor fillTileColor
-	@tfield setBorderColor setBorderColor
 	@table mapImageStruct
 	*/
 	typeAll.mapImageStruct = luaState.new_usertype<mapImage>("mapImageStruct");
 	typeAll.mapImageStruct.set("drawBorder", &mapImage::drawBorder);
-	typeAll.mapImageStruct.set("borderWeight", &mapImage::borderWeight);
-	typeAll.mapImageStruct.set("fillWeight", &mapImage::fillWeight);
+	typeAll.mapImageStruct.set("useBlur", &mapImage::useBlur);
+	typeAll.mapImageStruct.set("adaptiveBlur", &mapImage::adaptiveBlur);
+	typeAll.mapImageStruct.set("blurStrength", &mapImage::blurStrength);
 	
 	/***
 	Create a new image you want to determine region colors.
@@ -461,6 +460,7 @@ void luaP::initCampaign()
 	@tparam int r red
 	@tparam int g green
 	@tparam int b blue
+	@tparam int a alpha
 	@usage
 	local mapImage = mapImageStruct.makeMapImage();
 	mapImage:fillRegionColor(50, 0, 255, 0);
@@ -475,25 +475,13 @@ void luaP::initCampaign()
 	@tparam int r red
 	@tparam int g green
 	@tparam int b blue
+	@tparam int a alpha
 	@treturn mapImageStruct mapImage
 	@usage
 	local mapImage = mapImageStruct.makeMapImage();
 	mapImage:fillTileColor(153, 210, 0, 255, 0);
 	*/
 	typeAll.mapImageStruct.set_function("fillTileColor", &m2tweopHelpers::fillTileColor);
-	
-	/***
-	Set color of borders.
-	@function mapImageStruct:setBorderColor
-	@tparam int r red
-	@tparam int g green
-	@tparam int b blue
-	@treturn mapImageStruct mapImage
-	@usage
-	local mapImage = mapImageStruct.makeMapImage();
-	mapImage:setBorderColor(50, 50, 50);
-	*/
-	typeAll.mapImageStruct.set_function("setBorderColor", &m2tweopHelpers::setBorderColor);
 
 	///uiCardManager
 	//@section uiCardManager
@@ -1447,7 +1435,8 @@ void luaP::initCampaign()
 	@tfield int regionID
 	@tfield regionStruct region
 	@tfield int tradeValue
-	@tfield int alliedRegion
+	@tfield int notReachable
+	@tfield float distance
 	@tfield int borderTilesCount
 	@tfield roadStruct connectingRoad
 	@tfield getBorderTile getBorderTile
@@ -1461,7 +1450,8 @@ void luaP::initCampaign()
 	typeAll.neighbourRegion.set("region", &neighbourRegion::region);
 	typeAll.neighbourRegion.set("borderTilesCount", &neighbourRegion::borderTilesCount);
 	typeAll.neighbourRegion.set("connectingRoad", &neighbourRegion::connectingRoad);
-	typeAll.neighbourRegion.set("alliedRegion", &neighbourRegion::alliedRegion);
+	typeAll.neighbourRegion.set("notReachable", &neighbourRegion::alliedRegion);
+	typeAll.neighbourRegion.set("distance", &neighbourRegion::value);
 
 	/***
 	Get a border tile by index.
@@ -2173,7 +2163,7 @@ void luaP::initP2()
 		local building = battleBuildings:getBuilding(0)
 
 	*/
-	typeAll.battleBuildings.set_function("getBuilding", &battleHandlerHelpers::getBattleUnit);
+	typeAll.battleBuildings.set_function("getBuilding", &battleHandlerHelpers::getBattleBuilding);
 
 	
 	using namespace campaignEnums;

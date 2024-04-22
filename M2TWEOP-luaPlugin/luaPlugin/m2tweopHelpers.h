@@ -40,7 +40,8 @@ namespace m2tweopHelpers
 	int getTileRegionID(int x, int y);
 	bool getTileVisibility(factionStruct* faction, int x, int y);
 	factionStruct* getRegionOwner(int regionID);
-	void setBorderColor(mapImage* img, int r, int g, int b);
+	void setBorderColor(mapImage* img, int r, int g, int b, int a);
+	void updateMapTexture(mapImage* mapImage, void* texture, int x, int y);
 
 	bool checkDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2);
 	void setDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2);
@@ -53,8 +54,8 @@ namespace m2tweopHelpers
 	void setPerfectSpy(bool set);
 	int getLocalFactionID();
 	void setEquipmentCosts(int equipType, int cost);
-	void fillRegionColor(mapImage* img, int id, int r, int g, int b);
-	void fillTileColor(mapImage* img, int x, int y, int r, int g, int b);
+	void fillRegionColor(mapImage* img, int id, int r, int g, int b, int a);
+	void fillTileColor(mapImage* img, int x, int y, int r, int g, int b, int a);
 	void setEDUUnitsSize(signed short min, signed short max);
 	int getGameVersion();
 	options1* getOptions1();

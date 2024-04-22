@@ -1,4 +1,7 @@
 #include "m2tweopMapManager.h"
+
+#include <numbers>
+
 #include "CImg.h"
 #include "graphicsD3D.h"
 
@@ -14,14 +17,116 @@ namespace m2tweopMapManager
 		bool isShowMap = false;
 	}managerData;
 
-	float kernel[3][3] = {
-		{ 1 / 16.0f, 2 / 16.0f, 1 / 16.0f },
-		{ 2 / 16.0f, 4 / 16.0f, 2 / 16.0f },
-		{ 1 / 16.0f, 2 / 16.0f, 1 / 16.0f }
-	};
+	// Helper function to extract individual color components from a pixel
+	inline int getRed(DWORD pixel) { return (pixel >> 16) & 0xFF; }
+	inline int getGreen(DWORD pixel) { return (pixel >> 8) & 0xFF; }
+	inline int getBlue(DWORD pixel) { return pixel & 0xFF; }
 
-	void applyGaussianBlur(DWORD* pixels, int width, int height, D3DLOCKED_RECT& lockedRect) {
+	float calculateLocalContrast(const std::vector<DWORD>& pixels, int x, int y, int width, int height) {
+		int maxR = 0, maxG = 0, maxB = 0;
+		int minR = 255, minG = 255, minB = 255;
+
+		for (int ky = -1; ky <= 1; ky++) {
+			for (int kx = -1; kx <= 1; kx++) {
+				int px = x + kx;
+				int py = y + ky;
+				if (px >= 0 && px < width && py >= 0 && py < height) {
+					DWORD pixel = pixels[py * width + px];
+					int r = getRed(pixel);
+					int g = getGreen(pixel);
+					int b = getBlue(pixel);
+
+					maxR = max(maxR, r);
+					minR = min(minR, r);
+					maxG = max(maxG, g);
+					minG = min(minG, g);
+					maxB = max(maxB, b);
+					minB = min(minB, b);
+				}
+			}
+		}
+		// Calculate contrast for each channel and use the maximum as the overall contrast
+		int contrastR = maxR - minR;
+		int contrastG = maxG - minG;
+		int contrastB = maxB - minB;
+
+		return max(contrastR, max(contrastG, contrastB));
+	}
+
+	void applyAdaptiveGaussianBlur(DWORD* pixels, int width, int height, float strength) {
+		std::vector<DWORD> temp(pixels, pixels + width * height);
+
+		for (int y = 1; y < height - 1; y++) {
+			for (int x = 1; x < width - 1; x++) {
+				const float contrast = calculateLocalContrast(temp, x, y, width, height);
+				float weight = contrast / 255.0f;
+				weight = max(0.05f, weight);  // Ensure some blurring happens
+				weight *= strength;  // Scale weight by the strength parameter
+
+				float kernel[3][3];
+				float kernelSum = 0;
+				for (int ky = -1; ky <= 1; ky++) {
+					for (int kx = -1; kx <= 1; kx++) {
+						kernel[ky + 1][kx + 1] = exp(-0.5f * (kx * kx + ky * ky) / (weight * weight)) * weight;
+						kernelSum += kernel[ky + 1][kx + 1];
+					}
+				}
+
+				// Normalize the kernel
+				for (int ky = 0; ky < 3; ky++) {
+					for (int kx = 0; kx < 3; kx++) {
+						kernel[ky][kx] /= kernelSum;
+					}
+				}
+
+				float sumR = 0, sumG = 0, sumB = 0;
+				for (int ky = -1; ky <= 1; ky++) {
+					for (int kx = -1; kx <= 1; kx++) {
+						int px = x + kx;
+						int py = y + ky;
+						const DWORD pixel = temp[py * width + px];
+
+						sumR += ((pixel >> 16) & 0xFF) * kernel[ky + 1][kx + 1];
+						sumG += ((pixel >> 8) & 0xFF) * kernel[ky + 1][kx + 1];
+						sumB += (pixel & 0xFF) * kernel[ky + 1][kx + 1];
+					}
+				}
+
+				int newR = min(max(int(sumR), 0), 255);
+				int newG = min(max(int(sumG), 0), 255);
+				int newB = min(max(int(sumB), 0), 255);
+				pixels[y * width + x] = (0xFF << 24) | (newR << 16) | (newG << 8) | newB;
+			}
+		}
+	}
+
+	void generateGaussianKernel(float kernel[3][3], float sigma) {
+		float sum = 0.0f;
+		int size = 3;  // Kernel size
+		int kCenter = size / 2;
+		float twoSigmaSquare = 2.0f * sigma * sigma;
+
+		for (int y = -kCenter; y <= kCenter; y++) {
+			for (int x = -kCenter; x <= kCenter; x++) {
+				float exponent = -(x * x + y * y) / twoSigmaSquare;
+				kernel[y + kCenter][x + kCenter] = exp(exponent) / (cimg_library::cimg::PI * twoSigmaSquare);
+				sum += kernel[y + kCenter][x + kCenter];
+			}
+		}
+
+		// Normalize the kernel
+		for (int y = 0; y < size; y++) {
+			for (int x = 0; x < size; x++) {
+				kernel[y][x] /= sum;
+			}
+		}
+	}
+
+	void applyGaussianBlur(DWORD* pixels, int width, int height, float strength) {
 		std::vector<DWORD> temp(pixels, pixels + width * height);  // Copy original pixels to temp
+
+		float kernel[3][3];
+		generateGaussianKernel(kernel, strength);
 
 		for (int y = 1; y < height - 1; y++) {
 			for (int x = 1; x < width - 1; x++) {
@@ -48,6 +153,7 @@ namespace m2tweopMapManager
 	}
 	
 	IDirect3DTexture9* updateRegionColors(mapImage* img, IDirect3DTexture9* regionDataTexture, int width, int height) {
+		ofstream f1("logs\\lol.youneuoylog");
 		D3DLOCKED_RECT lockedRect;
 		auto success = regionDataTexture->LockRect(0, &lockedRect, NULL, D3DLOCK_DISCARD);
 		if (FAILED(success)) {
@@ -57,26 +163,62 @@ namespace m2tweopMapManager
 		auto* pTexels = static_cast<DWORD*>(lockedRect.pBits);
 		const gameDataAllStruct* gameDataAll = dataOffsets::offsets.gameDataAllOffset;
 		const stratMap* sMap = gameDataAll->stratMap;
-		const float xScale = static_cast<float>(width) / sMap->mapWidth;
-		const float yScale = static_cast<float>(height) / sMap->mapHeight;
+		const int xScale = width / sMap->mapWidth;
+		const int yScale = height / sMap->mapHeight;
+		/*
 		for (int x = 0; x < width; x++)
 		{
 			for (int y = 0; y < height; y++)
 			{
 				const int gameX = max(0, min(sMap->mapWidth - 1, x / xScale));
 				const int gameY = max(0, min(sMap->mapHeight - 1, sMap->mapHeight - y / yScale));
+				auto formattedString = "x:" + std::to_string(x) + " y:" + std::to_string(y) + " gameX:" + std::to_string(gameX) + " gameY:" + std::to_string(gameY);
+				f1 << formattedString << '\n';
 				if (const auto tile = fastFuncts::getTileStruct(gameX, gameY))
 				{
 					DWORD* pPixel = pTexels + y * lockedRect.Pitch / sizeof(DWORD) + x;
 					if (const int tileIndex = sMap->mapWidth * gameY + gameX; img->tiles[tileIndex].set)
-						*pPixel = interpolateColors(*pPixel, D3DCOLOR_ARGB(255, img->tiles[tileIndex].r, img->tiles[tileIndex].g, img->tiles[tileIndex].b), img->fillWeight);
+					{
+						formattedString = "r:" + std::to_string(img->tiles[tileIndex].r) + " g:" + std::to_string(img->tiles[tileIndex].g) + " b:" + std::to_string(img->tiles[tileIndex].b);
+						//f1 << formattedString << '\n';
+						*pPixel = D3DCOLOR_ARGB(255, img->tiles[tileIndex].r, img->tiles[tileIndex].g, img->tiles[tileIndex].b);
+						//*pPixel = interpolateColors(*pPixel, D3DCOLOR_ARGB(255, img->tiles[tileIndex].r, img->tiles[tileIndex].g, img->tiles[tileIndex].b), img->fillWeight);
+					}
 					if (tile->border && img->drawBorder)
 						*pPixel = interpolateColors(*pPixel, D3DCOLOR_ARGB(255, img->borderColor.r, img->borderColor.g, img->borderColor.b), img->borderWeight);
 				}
 			}
 		}
+		 */
+
+		for (auto tileCol : img->tiles)
+		{
+			if (tileCol.color == 0)
+				continue;
+			const float weight = GETALPHA(tileCol.color) / 255.0f;
+			SETALPHA(tileCol.color, 255);
+			const int gameX = tileCol.coords.xCoord;
+			const int gameY = tileCol.coords.yCoord;
+			for (int i = 0, imageX = gameX * xScale; i < xScale; i++, imageX++)
+				for (int j = 0, imageY = height - (gameY * yScale) - yScale; j < yScale; j++, imageY++)
+				{
+					imageX = max(0, min(width - 1, imageX));
+					imageY = max(0, min(height - 1, imageY));
+					//auto formattedString = "imageX:" + std::to_string(imageX) + " imageY:" + std::to_string(imageY) + " gameX:" + std::to_string(gameX) + " gameY:" + std::to_string(gameY);
+					//f1 << formattedString << '\n';
+					DWORD* pPixel = pTexels + imageY * lockedRect.Pitch / sizeof(DWORD) + imageX;
+					*pPixel = interpolateColors(*pPixel, tileCol.color, weight);
+				}
+		}
+
+		if (img->useBlur)
+		{
+			if (img->adaptiveBlur)
+				applyAdaptiveGaussianBlur(pTexels, width, height, img->blurStrength);
+			else
+				applyGaussianBlur(pTexels, width, height, img->blurStrength);
+		}
 		
-		applyGaussianBlur(pTexels, width, height, lockedRect);
 		
 		success = regionDataTexture->UnlockRect(0);
 		if (FAILED(success)) {
