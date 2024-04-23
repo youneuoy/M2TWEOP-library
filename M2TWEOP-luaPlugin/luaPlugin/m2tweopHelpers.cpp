@@ -142,9 +142,14 @@ namespace m2tweopHelpers
 
 	}
 
-	mapImage* makeMapImage()
+	std::shared_ptr<mapImage> makeMapImage()
 	{
-		return new mapImage();
+		return std::make_shared<mapImage>(mapImage());
+	}
+
+	void clearMapImage(mapImage* img)
+	{
+		img->tiles.clear();
 	}
 
 	
@@ -202,52 +207,96 @@ namespace m2tweopHelpers
 
 		return std::make_tuple(x, y, reinterpret_cast<void*>(retTexture));
 	}
-	
-	void updateMapTexture(mapImage* mapImage, void* texture, int x, int y)
-	{
-		(*(*plugData::data.funcs.updateRegionColors))(mapImage, static_cast<IDirect3DTexture9*>(texture), x, y);
-	}
 
-	void fillRegionColor(mapImage* img, int id, int r, int g, int b, int a)
+	void fillRegionColor(mapImage* img, const int id, int r, int g, int b, int a)
 	{
-		gameDataAllStruct* gameData = gameDataAllHelper::get();
-		if (!gameData->stratMap) 
+		const gameDataAllStruct* gameData = gameDataAllHelper::get();
+		const auto sMap = gameData->stratMap;
+		if (!sMap) 
 			return;
-		auto sMap = gameData->stratMap;
+		if (id >= sMap->regionsNum) 
+			return;
+		r = max(0, min(255, r));
+		g = max(0, min(255, g));
+		b = max(0, min(255, b));
+		a = max(0, min(255, a));
 		const auto region = &sMap->regions[id];
 		for (int i = 0; i < region->tileCount; i++)
 		{
-			int tileIndex = region->tiles[i];
-			uint32_t color = MAKECOLOR(r, g, b, a);
-			coordPair* tileCoords = gameHelpers::convertTileCoords(tileIndex);
-			if (tileIndex >= img->tiles.size()) {
+			const int tileIndex = region->tiles[i];
+			const uint32_t color = MAKECOLOR(r, g, b, a);
+			const coordPair* tileCoords = gameHelpers::convertTileCoords(tileIndex);
+			if (tileIndex >= img->tiles.size())
 				img->tiles.resize(tileIndex + 1);
-			}
 			img->tiles[tileIndex] = tileColor(color, tileCoords->xCoord, tileCoords->yCoord);
+			delete tileCoords;
 		}
 	}
 
-	void fillTileColor(mapImage* img, int x, int y, int r, int g, int b, int a)
+	void addRegionColor(mapImage* img, const int id, const int r, const int g, const int b, const int a)
 	{
-		gameDataAllStruct* gameData = gameDataAllHelper::get();
-		if (!gameData->stratMap) 
+		const gameDataAllStruct* gameData = gameDataAllHelper::get();
+		const auto sMap = gameData->stratMap;
+		if (!sMap) 
 			return;
-		auto sMap = gameData->stratMap;
-		int tileIndex = sMap->mapWidth * y + x;
-		if (tileIndex >= img->tiles.size()) {
-			img->tiles.resize(tileIndex + 1);
+		if (id >= sMap->regionsNum) 
+			return;
+		const auto region = &sMap->regions[id];
+		for (int i = 0; i < region->tileCount; i++)
+		{
+			const int tileIndex = region->tiles[i];
+			const coordPair* tileCoords = gameHelpers::convertTileCoords(tileIndex);
+			if (tileIndex >= img->tiles.size())
+				img->tiles.resize(tileIndex + 1);
+			const auto newR = max(0, min(255, GETRED(img->tiles[tileIndex].color) + r));
+			const auto newG = max(0, min(255, GETGREEN(img->tiles[tileIndex].color) + g));
+			const auto newB = max(0, min(255, GETBLUE(img->tiles[tileIndex].color) + b));
+			const auto newA = max(0, min(255, GETALPHA(img->tiles[tileIndex].color) + a));
+			const uint32_t color = MAKECOLOR(newR, newG, newB, newA);
+			img->tiles[tileIndex] = tileColor(color, tileCoords->xCoord, tileCoords->yCoord);
+			delete tileCoords;
 		}
-		uint32_t color = MAKECOLOR(r, g, b, a);
-		img->tiles[tileIndex] = tileColor(color, x, y);
-		img->tiles.push_back(tileColor(MAKECOLOR(r, g, b, a), x, y));
 	}
 
-	void setBorderColor(mapImage* img, int r, int g, int b, int a)
+	void fillTileColor(mapImage* img, const int x, const int y, int r, int g, int b, int a)
 	{
-		img->borderColor = MAKECOLOR(r, g, b, a);
+		const gameDataAllStruct* gameData = gameDataAllHelper::get();
+		const auto sMap = gameData->stratMap;
+		if (!sMap) 
+			return;
+		if (x >= sMap->mapWidth || y >= sMap->mapHeight) 
+			return;
+		if (x < 0 || y < 0) 
+			return;
+		r = max(0, min(255, r));
+		g = max(0, min(255, g));
+		b = max(0, min(255, b));
+		a = max(0, min(255, a));
+		const int tileIndex = sMap->mapWidth * y + x;
+		if (tileIndex >= img->tiles.size())
+			img->tiles.resize(tileIndex + 1);
+		img->tiles[tileIndex] = tileColor(MAKECOLOR(r, g, b, a), x, y);
 	}
-
-
+	
+	void addTileColor(mapImage* img, const int x, const int y, int r, int g, int b, int a)
+	{
+		const gameDataAllStruct* gameData = gameDataAllHelper::get();
+		const auto sMap = gameData->stratMap;
+		if (!sMap) 
+			return;
+		if (x >= sMap->mapWidth || y >= sMap->mapHeight) 
+			return;
+		if (x < 0 || y < 0) 
+			return;
+		const int tileIndex = sMap->mapWidth * y + x;
+		if (tileIndex >= img->tiles.size())
+			img->tiles.resize(tileIndex + 1);
+		r = max(0, min(255, GETRED(img->tiles[tileIndex].color) + r));
+		g = max(0, min(255, GETGREEN(img->tiles[tileIndex].color) + g));
+		b = max(0, min(255, GETBLUE(img->tiles[tileIndex].color) + b));
+		a = max(0, min(255, GETALPHA(img->tiles[tileIndex].color) + a));
+		img->tiles[tileIndex] = tileColor(MAKECOLOR(r, g, b, a), x, y);
+	}
 	
 	void unloadTextureFromGame(void* texture)
 	{

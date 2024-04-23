@@ -243,6 +243,7 @@
     <ClCompile Include="console.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="eop3dObjectsHelpers.cpp" />
+    <ClCompile Include="imgui\sol_ImGui.cpp" />
     <ClCompile Include="luaEop3dObjects.cpp" />
     <ClCompile Include="eopEduHelpers.cpp" />
     <ClCompile Include="eopFbxHelpers.cpp" />

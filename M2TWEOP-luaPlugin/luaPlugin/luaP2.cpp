@@ -419,13 +419,15 @@ void luaP::initCampaign()
 	@tfield bool useBlur
 	@tfield bool adaptiveBlur Can be slow on large or frequently updated images! needs use blur also true.
 	@tfield makeMapImage makeMapImage
+	@tfield clearMapImage clearMapImage
 	@tfield loadMapTexture loadMapTexture
 	@tfield fillRegionColor fillRegionColor
+	@tfield addRegionColor addRegionColor
 	@tfield fillTileColor fillTileColor
+	@tfield addTileColor addTileColor
 	@table mapImageStruct
 	*/
 	typeAll.mapImageStruct = luaState.new_usertype<mapImage>("mapImageStruct");
-	typeAll.mapImageStruct.set("drawBorder", &mapImage::drawBorder);
 	typeAll.mapImageStruct.set("useBlur", &mapImage::useBlur);
 	typeAll.mapImageStruct.set("adaptiveBlur", &mapImage::adaptiveBlur);
 	typeAll.mapImageStruct.set("blurStrength", &mapImage::blurStrength);
@@ -440,7 +442,16 @@ void luaP::initCampaign()
 	typeAll.mapImageStruct.set_function("makeMapImage", &m2tweopHelpers::makeMapImage);
 	
 	/***
-	Create a new map texture.
+	Reset image state.
+	@function mapImageStruct:clearMapImage
+	@usage
+	local mapImage = mapImageStruct.makeMapImage();
+	mapImage:clearMapImage();
+	*/
+	typeAll.mapImageStruct.set_function("clearMapImage", &m2tweopHelpers::clearMapImage);
+	
+	/***
+	Create a new map texture. Use an uncompressed(!) dds image that is some multiple of your map_regions size. The background must line up with map_regions for whatever scale you chose for it to display correctly.
 	@function mapImageStruct:loadMapTexture
 	@tparam string path full path to texture
 	@treturn int x size of the image
@@ -448,7 +459,7 @@ void luaP::initCampaign()
 	@treturn int id of the image
 	@usage
 	local mapImage = mapImageStruct.makeMapImage();
-	local x, y, id = mapImage:loadMapTexture("map_regions.dds");
+	local x, y, id = mapImage:loadMapTexture(M2TWEOP.getModPath() .. "map_regions.dds");
 	ImGui.Image(id, x, y);
 	*/
 	typeAll.mapImageStruct.set_function("loadMapTexture", &m2tweopHelpers::loadMapTexture);
@@ -463,9 +474,24 @@ void luaP::initCampaign()
 	@tparam int a alpha
 	@usage
 	local mapImage = mapImageStruct.makeMapImage();
-	mapImage:fillRegionColor(50, 0, 255, 0);
+	mapImage:fillRegionColor(50, 0, 255, 0, 255);
 	*/
 	typeAll.mapImageStruct.set_function("fillRegionColor", &m2tweopHelpers::fillRegionColor);
+	
+	/***
+	Add a color to already filled region.
+	@function mapImageStruct:addRegionColor
+	@tparam int id region ID
+	@tparam int r red
+	@tparam int g green
+	@tparam int b blue
+	@tparam int a alpha
+	@usage
+	local mapImage = mapImageStruct.makeMapImage();
+	mapImage:fillRegionColor(50, 0, 255, 0, 255);
+	mapImage:addRegionColor(50, 10, -10, 10, 0);
+	*/
+	typeAll.mapImageStruct.set_function("addRegionColor", &m2tweopHelpers::addRegionColor);
 	
 	/***
 	Fill a tile with a color.
@@ -479,9 +505,25 @@ void luaP::initCampaign()
 	@treturn mapImageStruct mapImage
 	@usage
 	local mapImage = mapImageStruct.makeMapImage();
-	mapImage:fillTileColor(153, 210, 0, 255, 0);
+	mapImage:fillTileColor(153, 210, 0, 255, 0, 255);
 	*/
 	typeAll.mapImageStruct.set_function("fillTileColor", &m2tweopHelpers::fillTileColor);
+	/***
+	Add a color to an already set tile.
+	@function mapImageStruct:addTileColor
+	@tparam int x x coordinate
+	@tparam int y y coordinate
+	@tparam int r red
+	@tparam int g green
+	@tparam int b blue
+	@tparam int a alpha
+	@treturn mapImageStruct mapImage
+	@usage
+	local mapImage = mapImageStruct.makeMapImage();
+	mapImage:fillTileColor(153, 210, 0, 255, 0, 255);
+	mapImage:addTileColor(153, 210, 20, -10, 20, 0);
+	*/
+	typeAll.mapImageStruct.set_function("addTileColor", &m2tweopHelpers::addTileColor);
 
 	///uiCardManager
 	//@section uiCardManager
@@ -1004,7 +1046,8 @@ void luaP::initCampaign()
 	@tfield int climate
 	@tfield int heatValue
 	@tfield int factionID
-	@tfield coordPair coords
+	@tfield int xCoord
+	@tfield int yCoord
 	@tfield int objectTypes bitfield, from left to right: unknown, character, ship, watchtower, port, unknown, fort, settlement.
 	@tfield bool hasRiver
 	@tfield bool hasCrossing
@@ -1015,7 +1058,6 @@ void luaP::initCampaign()
 	@tfield bool hasFort
 	@tfield bool hasSettlement
 	@tfield bool isDevastated
-	@tfield int borderingSettlement 1 = bordering 2 = settlement.
 	@tfield int border 1 = border, 2 = seaBorder, 3 = sea edge border (point where the region border both another land region and sea).
 	@tfield int armiesNearTile bitfield of faction id's (counts both tile and the 8 tiles around it, if you want only on tile combine with charactersOnTile).
 	@tfield int charactersOnTile bitfield of faction id's
@@ -1033,9 +1075,11 @@ void luaP::initCampaign()
 	typeAll.tileStruct.set("groundType", &oneTile::groundType);
 	typeAll.tileStruct.set("regionID", &oneTile::regionId);
 	typeAll.tileStruct.set("objectTypes", &oneTile::objectTypes);
-	typeAll.tileStruct.set("coords", sol::property(gameHelpers::getTileCoords));
+	typeAll.tileStruct.set("xCoord", sol::property(gameHelpers::getTileX));
+	typeAll.tileStruct.set("yCoord", sol::property(gameHelpers::getTileY));
 	typeAll.tileStruct.set("factionID", sol::property(gameHelpers::getTileFactionID));
-	typeAll.tileStruct.set("borderingSettlement", &oneTile::borderingSettlement);
+	typeAll.tileStruct.set("riverField", &oneTile::factionId);
+	//typeAll.tileStruct.set("borderingSettlement", &oneTile::borderingSettlement);
 	typeAll.tileStruct.set("hasRiver", sol::property(gameHelpers::tileHasRiver));
 	typeAll.tileStruct.set("hasCrossing", sol::property(gameHelpers::tileHasCrossing));
 	typeAll.tileStruct.set("border", sol::property(gameHelpers::tileBorderType));

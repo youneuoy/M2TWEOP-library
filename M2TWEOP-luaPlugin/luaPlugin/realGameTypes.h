@@ -512,10 +512,7 @@ struct oneTile {
 	int groundType;
 	int regionId;
 	undefined field_0x18[4];
-	int8_t factionId;
-	int8_t borderingRiver;
-	int8_t borderingSettlement;
-	undefined field_0x1F[1];
+	uint32_t factionId;
 	int8_t hasRoad; //bit 1 has devastation status
 	int8_t border;
 	undefined field_0x22[2];
@@ -2558,11 +2555,9 @@ struct tileColor
 struct mapImage
 {
 	std::vector<tileColor> tiles = {};
-	bool drawBorder = false;
 	bool useBlur = true;
 	float blurStrength = 1.0f;
 	bool adaptiveBlur = false;
-	uint32_t borderColor;
 };
 
 //ancillary of character

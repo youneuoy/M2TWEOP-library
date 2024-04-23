@@ -477,14 +477,12 @@ namespace gameHelpers
 
 	int gameHelpers::getMercUnitNum(mercPool* mercPool)
 	{
-		mercPoolUnitsPtr* unitptr = &mercPool->firstUnits;
+		mercPoolUnitsPtr* unitsPtr = &mercPool->firstUnits;
 		int units = 0;
-		int addunits = 0;
-		while (unitptr != nullptr)
+		while (unitsPtr != nullptr)
 		{
-			addunits = unitptr->currentPool;
-			units = units + addunits;
-			unitptr = unitptr->nextUnitsPtr;
+			units += unitsPtr->currentPool;
+			unitsPtr = unitsPtr->nextUnitsPtr;
 		}
 		return units;
 	}
@@ -493,7 +491,7 @@ namespace gameHelpers
 	{
 		auto* newMerc = reinterpret_cast<mercPoolUnit*>(technicalHelpers::allocateGameMem(sizeof(mercPoolUnit)));
 		*newMerc = mercPool->firstUnits.mercPoolUnits[0];
-		int mercUnitNum = gameHelpers::getMercUnitNum(mercPool);
+		const int mercUnitNum = getMercUnitNum(mercPool);
 		eduEntry* entry = eopEduHelpers::getEduEntry(idx);
 		newMerc->eduEntry = entry;
 		newMerc->experience = exp;
@@ -513,53 +511,46 @@ namespace gameHelpers
 		newMerc->crusading = crusading;
 		newMerc->mercPoolUnitIndex = static_cast<int16_t>(mercUnitNum);
 		newMerc->mercPool = mercPool;
-		mercPoolUnitsPtr* unitptr = &mercPool->firstUnits;
-		int currunits = unitptr->currentPool;
-		int maxunitsP = unitptr->Maxpool;
-		while ((maxunitsP - currunits) == 0 && unitptr->nextUnitsPtr != nullptr)
-		{
-			unitptr = unitptr->nextUnitsPtr;
-			currunits = unitptr->currentPool;
-			maxunitsP = unitptr->Maxpool;
-		}
-		if ((maxunitsP - currunits) == 0)
+		
+		mercPoolUnitsPtr* unitPtr = &mercPool->firstUnits;
+		while (unitPtr->Maxpool - unitPtr->currentPool == 0 && unitPtr->nextUnitsPtr != nullptr)
+			unitPtr = unitPtr->nextUnitsPtr;
+			
+		if (unitPtr->Maxpool - unitPtr->currentPool == 0)
 		{
 			const auto newPtr = reinterpret_cast<mercPoolUnitsPtr*>(technicalHelpers::allocateGameMem(sizeof(mercPoolUnitsPtr)));
-			newPtr->Maxpool = unitptr->Maxpool * 2;
+			newPtr->Maxpool = unitPtr->Maxpool * 2;
 			newPtr->currentPool = 0;
 			newPtr->nextUnitsPtr = nullptr;
-			newPtr->prevPoolUnits = unitptr->mercPoolUnits;
-			unitptr->nextUnitsPtr = newPtr;
-			unitptr = unitptr->nextUnitsPtr;
-			currunits = 0;
+			newPtr->prevPoolUnits = unitPtr->mercPoolUnits;
+			unitPtr->nextUnitsPtr = newPtr;
+			unitPtr = unitPtr->nextUnitsPtr;
 		}
-		const auto newArray = reinterpret_cast<mercPoolUnit*>(technicalHelpers::allocateGameMem(sizeof(mercPoolUnitsPtr) * unitptr->Maxpool));
-		for (int i = 0; i < currunits; i++) {
-			newArray[i] = unitptr->mercPoolUnits[i];
+		const auto newArray = reinterpret_cast<mercPoolUnit*>(technicalHelpers::allocateGameMem(sizeof(mercPoolUnitsPtr) * unitPtr->Maxpool));
+		for (int i = 0; i < unitPtr->currentPool; i++) {
+			newArray[i] = unitPtr->mercPoolUnits[i];
 		}
-		unitptr->mercPoolUnits = newArray;
-		unitptr->mercPoolUnits[currunits] = *newMerc;
-		unitptr->currentPool++;
-		return &unitptr->mercPoolUnits[currunits];
+		unitPtr->mercPoolUnits = newArray;
+		unitPtr->mercPoolUnits[unitPtr->currentPool] = *newMerc;
+		unitPtr->currentPool++;
+		return &unitPtr->mercPoolUnits[unitPtr->currentPool];
 	}
 
-	mercPoolUnit* gameHelpers::getMercUnit(mercPool* pool, const int index)
+	mercPoolUnit* gameHelpers::getMercUnit(const mercPool* pool, const int index)
 	{
-		mercPoolUnitsPtr* unitptr = &pool->firstUnits;
-		int currunits = 0;
-		while (unitptr != nullptr)
+		const mercPoolUnitsPtr* poolUnitsPtr = &pool->firstUnits;
+		while (poolUnitsPtr != nullptr)
 		{
-			currunits = unitptr->currentPool;
-			for (int i = 0; i < currunits; i++)
+			const int unitCount = poolUnitsPtr->currentPool;
+			for (int i = 0; i < unitCount; i++)
 			{
-				if (&unitptr->mercPoolUnits[i] != nullptr && unitptr->mercPoolUnits[i].mercPoolUnitIndex == index)
+				if (&poolUnitsPtr->mercPoolUnits[i] != nullptr && poolUnitsPtr->mercPoolUnits[i].mercPoolUnitIndex == index)
 				{
-					return &unitptr->mercPoolUnits[i];
+					return &poolUnitsPtr->mercPoolUnits[i];
 				}
 			}
-			unitptr = unitptr->nextUnitsPtr;
+			poolUnitsPtr = poolUnitsPtr->nextUnitsPtr;
 		}
-
 		return nullptr;
 	}
 
@@ -574,35 +565,25 @@ namespace gameHelpers
 			if (unit->religionsList[i] == religion)
 			{
 				if (set)
-				{
 					return;
-				}
-				else
-				{
-					relFound = true;
-				}
+				relFound = true;
 			}
 			else
-			{
 				religions.push_back(unit->religionsList[i]);
-			}
 		}
-		if (relFound == false && set == false) { return; }
+		if (relFound == false && set == false)
+			return;
 		if (set)
 		{
 			religions.push_back(religion);
 			mercRelNum++;
 		}
 		else
-		{
 			mercRelNum--;
-		}
-		int* newList = new int[mercRelNum];
+		const auto newList = reinterpret_cast<int*>(technicalHelpers::allocateGameMem(sizeof(int) * mercRelNum));
 		unit->religionsList = newList;
 		for (int i = 0; i < mercRelNum; i++)
-		{
 			unit->religionsList[i] = religions[i];
-		}
 		unit->religionsListEnd = &unit->religionsList[mercRelNum];
 		unit->religionsListEnd2 = &unit->religionsList[mercRelNum];
 	}
@@ -745,20 +726,19 @@ namespace gameHelpers
 		return tile->charactersOnTile & (1 << factionID);
 	}
 
-	coordPair* convertTileCoords(DWORD arrayIndex)
+	coordPair* convertTileCoords(const DWORD arrayIndex)
 	{
-		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
-		stratMap* map = gameDataAll->stratMap;
-		bool found = false;
-		int x = 0;
-		int y = 0;
-		int index = arrayIndex;
-		for (y = 0;y < map->mapHeight;y++)
+		const gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		const stratMap* map = gameDataAll->stratMap;
+		if (!map)
+			return nullptr;
+		const int index = arrayIndex;
+		for (int y = 0;y < map->mapHeight;y++)
 		{
-			x = index - y * map->mapWidth;
+			const int x = index - y * map->mapWidth;
 			if (x >= 0 && x < map->mapWidth)
 			{
-				auto coords = new coordPair;
+				const auto coords = new coordPair({x ,y});
 				coords->xCoord = x;
 				coords->yCoord = y;
 				return coords;
@@ -767,11 +747,28 @@ namespace gameHelpers
 		return nullptr;
 	}
 
-	coordPair* getTileCoords(const oneTile* tile)
+	int getTileX(const oneTile* tile)
 	{
-		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
-		stratMap* map = gameDataAll->stratMap;
-		return convertTileCoords(tile - map->tilesArr);
+		const gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		const stratMap* map = gameDataAll->stratMap;
+		if (!map)
+			return -1;
+		const auto coords = convertTileCoords(tile - map->tilesArr);
+		const int x = coords->xCoord;
+		delete coords;
+		return x;
+	}
+
+	int getTileY(const oneTile* tile)
+	{
+		const gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		const stratMap* map = gameDataAll->stratMap;
+		if (!map)
+			return -1;
+		const auto coords = convertTileCoords(tile - map->tilesArr);
+		const int y = coords->yCoord;
+		delete coords;
+		return y;
 	}
 
 	settlementStruct* getSettlementByName(campaign* campaign, const char* name)
@@ -890,96 +887,109 @@ namespace gameHelpers
 
 	oneTileDouble* tileToDoubleTile(const oneTile* tile)
 	{
-		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
-		stratMap* map = gameDataAll->stratMap;
-		int mapWidth = map->mapWidth * 2 + 1;
-		auto coords = getTileCoords(tile);
-		return &map->climateTileArray[(coords->yCoord * 2) * mapWidth + (coords->xCoord * 2)];
+		const gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		const stratMap* map = gameDataAll->stratMap;
+		if (!map)
+			return nullptr;
+		const int mapWidth = map->mapWidth * 2 + 1;
+		const int x = getTileX(tile) * 2;
+		const int y = getTileY(tile) * 2;
+		if (x < 0 || y < 0 || x >= mapWidth || y >= mapWidth)
+			return nullptr;
+		return &map->climateTileArray[y  * mapWidth + x];
 	}
 
 	float getTileHeight(const oneTile* tile)
 	{
-		return tileToDoubleTile(tile)->height;
+		const auto doubleTile = tileToDoubleTile(tile);
+		if (!doubleTile)
+			return 0.0f;
+		return doubleTile->height;
 	}
 
 	int getTileClimate(const oneTile* tile)
 	{
+		const auto doubleTile = tileToDoubleTile(tile);
+		if (!doubleTile)
+			return 0;
 		return tileToDoubleTile(tile)->climate;
 	}
 
 	int getTileHeatValue(const oneTile* tile)
 	{
-		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
-		stratMap* map = gameDataAll->stratMap;
-		auto climate = tileToDoubleTile(tile)->climate;
+		const gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		const stratMap* map = gameDataAll->stratMap;
+		if (!map)
+			return 0;
+		const auto climate = getTileClimate(tile);
 		return map->climates->climateArray[climate].heatValue;
 	}
 
-	float getReligionHistory(const regionStruct* region, const int religionID, int turnsAgo)
+	float getReligionHistory(const regionStruct* region, const int religionId, const int turnsAgo)
 	{
 		if (turnsAgo > 19)
-		{
 			return 0.0f;
-		}
 		if (turnsAgo == 0)
-		{
-			return region->religionsARR[religionID];
-		}
-		return region->religionHistory[turnsAgo][religionID];
+			return region->religionsARR[religionId];
+		return region->religionHistory[turnsAgo][religionId];
 	}
 
 	oneTile* getTileBorderingEdgeOfMap(const regionStruct* region, const int index)
 	{
-		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
-		stratMap* map = gameDataAll->stratMap;
-
+		const gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		const stratMap* map = gameDataAll->stratMap;
+		if (!map)
+			return nullptr;
 		return &map->tilesArr[region->tilesBorderingEdgeOfMap[index]];
 	}
 
 	oneTile* getTileRegion(const regionStruct* region, const int index)
 	{
-		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
-		stratMap* map = gameDataAll->stratMap;
-
+		const gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		const stratMap* map = gameDataAll->stratMap;
+		if (!map)
+			return nullptr;
 		return &map->tilesArr[region->tiles[index]];
 	}
 
 	oneTile* getFertileTile(const regionStruct* region, const int index)
 	{
-		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
-		stratMap* map = gameDataAll->stratMap;
-
+		const gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		const stratMap* map = gameDataAll->stratMap;
+		if (!map)
+			return nullptr;
 		return &map->tilesArr[region->fertileTiles[index]];
 	}
 
 	oneTile* getBorderTile(const neighbourRegion* region, const int index)
 	{
-		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
-		stratMap* map = gameDataAll->stratMap;
-
+		const gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		const stratMap* map = gameDataAll->stratMap;
+		if (!map)
+			return nullptr;
 		return &map->tilesArr[region->bordertiles[index]];
 	}
 
-	oneTile* getReachableTile(const seaConnectedRegion* region, int index)
+	oneTile* getReachableTile(const seaConnectedRegion* region, const int index)
 	{
-		gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
-		stratMap* map = gameDataAll->stratMap;
-		if (!&region->tilesReachable[index])
-		{
+		const gameDataAllStruct* gameDataAll = gameDataAllHelper::get();
+		const stratMap* map = gameDataAll->stratMap;
+		if (!map)
 			return nullptr;
-		}
-		auto tile = region->tilesReachable[index].tileId;
+		if (!&region->tilesReachable[index])
+			return nullptr;
+		const auto tile = region->tilesReachable[index].tileId;
 		return &map->tilesArr[tile];
 	}
 
-	coordPair* getTradeLaneCoord(const seaConnectedRegion* region, int index)
+	coordPair* getTradeLaneCoord(const seaConnectedRegion* region, const int index)
 	{
 		return &region->seaTradeLanePath[index];
 	}
 
 	bool hasResourceType(const regionStruct* region, const int resourceType)
 	{
-		return region->resourceTypesBitMap & (1 << resourceType);
+		return region->resourceTypesBitMap & 1 << resourceType;
 	}
 
 	/*
@@ -996,16 +1006,16 @@ namespace gameHelpers
 		36 = battleSiteMarker
 	*/
 
-	DWORD* getTileObject(const oneTile* tile, int type)
+	DWORD* getTileObject(const oneTile* tile, const int type)
 	{
 		DWORD* object = tile->object;
 
 		while (object)
 		{
-			int objectType = CallVFunc<4, int>(object);
+			const int objectType = CallVFunc<4, int>(object);
 			if (objectType == type || (type == 0 && objectType < 28))
 				return object;
-			object = reinterpret_cast<DWORD*>(*(object + 1));
+			object = reinterpret_cast<DWORD*>(*(object + 1));  // NOLINT(performance-no-int-to-ptr)
 		}
 
 		return nullptr;
@@ -1032,12 +1042,12 @@ namespace gameHelpers
 		auto object = static_cast<DWORD*>(character->obj);
 		while (object)
 		{
-			int objectType = CallVFunc<4, int>(object);
+			const int objectType = CallVFunc<4, int>(object);
 			if (objectType == 28)
 				count += 1;
 			else
 				break;
-			object = reinterpret_cast<DWORD*>(*(object + 1));
+			object = reinterpret_cast<DWORD*>(*(object + 1));  // NOLINT(performance-no-int-to-ptr)
 		}
 		return count;
 	}
@@ -1053,7 +1063,7 @@ namespace gameHelpers
 		auto object = static_cast<DWORD*>(character->obj);
 		while (object)
 		{
-			int objectType = CallVFunc<4, int>(object);
+			const int objectType = CallVFunc<4, int>(object);
 			if (objectType == 28)
 			{
 				count += 1;
@@ -1061,10 +1071,8 @@ namespace gameHelpers
 					return reinterpret_cast<general*>(object);
 			}
 			else
-			{
 				return nullptr;
-			}
-			object = reinterpret_cast<DWORD*>(*(object + 1));
+			object = reinterpret_cast<DWORD*>(*(object + 1));  // NOLINT(performance-no-int-to-ptr)
 		}
 		return nullptr;
 	}

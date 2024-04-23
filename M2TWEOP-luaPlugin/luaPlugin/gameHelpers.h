@@ -103,12 +103,13 @@ namespace gameHelpers
 	bool factionHasCharacterOnTile(const oneTile* tile, int factionID);
 	int getHostileArmiesStrength(const regionStruct* region, const int factionID);
 	coordPair* convertTileCoords(DWORD arrayIndex);
-	coordPair* getTileCoords(const oneTile* tile);
+	int getTileX(const oneTile* tile);
+	int getTileY(const oneTile* tile);
 	seaConnectedRegion* getSeaConnectedRegion(const regionStruct* region, const int index);
 	seaConnectedRegion* getSeaImportRegion(const regionStruct* region, const int index);
 	oneTile* getRegionSeaEdge(const regionStruct* region, const int index);
 	oneTile* getDevastatedTile(const regionStruct* region, const int index);
-	float getReligionHistory(const regionStruct* region, const int religionID, int turnsAgo);
+	float getReligionHistory(const regionStruct* region, const int religionId, int turnsAgo);
 	oneTile* getTileBorderingEdgeOfMap(const regionStruct* region, const int index);
 	oneTile* getTileRegion(const regionStruct* region, const int index);
 	oneTile* getFertileTile(const regionStruct* region, const int index);
@@ -129,7 +130,7 @@ namespace gameHelpers
 	watchTowerStruct* getTileWatchtower(const oneTile* tile);
 	std::string getCampaignPath(campaign* campaign);
 	int getMercUnitNum(mercPool* mercPool);
-	mercPoolUnit* getMercUnit(mercPool* pool, int index);
+	mercPoolUnit* getMercUnit(const mercPool* pool, int index);
 	void setMercReligion(mercPoolUnit* unit, int religion, bool set);
 	mercPoolUnit* addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, float startyear, float endyear, int crusading);
 	void saveGame(const char* path);
