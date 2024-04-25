@@ -274,7 +274,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2024-04-25 11:58:16</p>
+        <p class="lastUpdatedMessage">Last updated: 2024-04-25 12:24:03</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -296,21 +296,35 @@
 <h1></h1>
 
 <div class="disclaimerMessage">
+  <p>
+<pre>
+Welcome to the EOP ImGui bindings. The following bindings allow you to use the ImGUI library inside Medieval <span class="number">2.</span>
+</pre>
+  </p>
 <p>
-  Welcome to the LuaPlugin ImGui bindings. These bindings are being developed to support https://github.com/youneuoy/M2TWEOP-luaPlugin. Enjoy!
+  The current bindings are based on <a href="https://github.com/ocornut/imgui/releases/tag/v1.90.2">ImGUI version
+<pre>
+<span class="number">1.90</span>.<span class="number">2</span>&lt;/a&gt;
+</pre>
+  You can find all the supported bindings in <a
+<pre>
+href=<span class="string">"https://github.com/youneuoy/M2TWEOP-library/blob/master/M2TWEOP%20DataFiles/youneuoy_Data/plugins/lua/LuaImGuiDocs.lua"</span>&gt;LuaImGuiDocs.lua&lt;/a&gt;
+</pre>
 </p>
 
 <p>
-ImGui lua binding is based on
-<a href="https://github.com/youneuoy/sol2_ImGui_Bindings"> youneuoy`s fork</a>
-of
-<a href="https://github.com/MSeys/sol2_ImGui_Bindings">this</a>
-repository.
-</p>
-<p>
-This binding is adapted for the needs of the M2TW Engine Overhaul Project.
+  The examples that you can find below were based on <a
+<pre>
+href=<span class="string">"https://github.com/ocornut/imgui/releases/tag/v1.86"</span>&gt;ImGUI version <span class="number">1.86</span>&lt;/a&gt;. They exist as samples <span class="keyword">and</span>
+</pre>
+  general guidance but you should always reference the <a
+<pre>
+href=<span class="string">"https://github.com/youneuoy/M2TWEOP-library/blob/master/M2TWEOP%20DataFiles/youneuoy_Data/plugins/lua/LuaImGuiDocs.lua"</span>&gt;LuaImGuiDocs.lua&lt;/a&gt;
+</pre>
+  for the latest changes.
 
-You can find all the supported functions and overloads below.
+  This file is included as part of EOP and aso enables Intellisense when writing writing EOP code, assuming you are
+  using VSCode and the Lua Language Server extension.
 </p>
 </div>
 
@@ -630,7 +644,6 @@ ImGui.End() <span class="comment">-- End window area</span>
 
 <p><a name="Parameters_Stacks__Shared_"></a></p>
 <h2>Parameters Stacks (Shared)</h2>
-<p>Note: This binding does not give functions that can obtain an ImFont* from inside Lua (besides GetFont), You'll need to add your own.</p>
 
 <pre>
   <span class="comment">-- ImGui.PushFont(...)
