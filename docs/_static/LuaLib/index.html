@@ -876,6 +876,19 @@
 
 
 <details>
+  <summary><a href="#mapImage">mapImage </a></summary>
+    <li><a href="#mapImageStruct">mapImageStruct</a></li>
+    <li><a href="#mapImageStruct.makeMapImage">mapImageStruct.makeMapImage ()</a></li>
+    <li><a href="#mapImageStruct:clearMapImage">mapImageStruct:clearMapImage ()</a></li>
+    <li><a href="#mapImageStruct:loadMapTexture">mapImageStruct:loadMapTexture (path)</a></li>
+    <li><a href="#mapImageStruct:fillRegionColor">mapImageStruct:fillRegionColor (id, r, g, b, a)</a></li>
+    <li><a href="#mapImageStruct:addRegionColor">mapImageStruct:addRegionColor (id, r, g, b, a)</a></li>
+    <li><a href="#mapImageStruct:fillTileColor">mapImageStruct:fillTileColor (x, y, r, g, b, a)</a></li>
+    <li><a href="#mapImageStruct:addTileColor">mapImageStruct:addTileColor (x, y, r, g, b, a)</a></li>
+</details>
+
+
+<details>
   <summary><a href="#uiCardManager">uiCardManager </a></summary>
     <li><a href="#uiCardManager">uiCardManager</a></li>
     <li><a href="#uiCardManager:getSelectedUnitCard">uiCardManager:getSelectedUnitCard (index)</a></li>
@@ -1191,7 +1204,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2024-04-16 12:07:05</p>
+        <p class="lastUpdatedMessage">Last updated: 2024-04-25 11:58:16</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -3461,6 +3474,43 @@
 	<tr>
 	<td class="name" nowrap><a href="#eventTrigger">eventTrigger</a></td>
 	<td class="summary">This is data that comes with game events.</td>
+	</tr>
+</table>
+<h2><a href="#mapImage">mapImage </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#mapImageStruct">mapImageStruct</a></td>
+	<td class="summary">
+
+</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mapImageStruct.makeMapImage">mapImageStruct.makeMapImage ()</a></td>
+	<td class="summary">Create a new image you want to determine region colors.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mapImageStruct:clearMapImage">mapImageStruct:clearMapImage ()</a></td>
+	<td class="summary">Reset image state.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mapImageStruct:loadMapTexture">mapImageStruct:loadMapTexture (path)</a></td>
+	<td class="summary">Create a new map texture.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mapImageStruct:fillRegionColor">mapImageStruct:fillRegionColor (id, r, g, b, a)</a></td>
+	<td class="summary">Fill a region with a color.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mapImageStruct:addRegionColor">mapImageStruct:addRegionColor (id, r, g, b, a)</a></td>
+	<td class="summary">Add a color to already filled region.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mapImageStruct:fillTileColor">mapImageStruct:fillTileColor (x, y, r, g, b, a)</a></td>
+	<td class="summary">Fill a tile with a color.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#mapImageStruct:addTileColor">mapImageStruct:addTileColor (x, y, r, g, b, a)</a></td>
+	<td class="summary">Add a color to an already set tile.</td>
 	</tr>
 </table>
 <h2><a href="#uiCardManager">uiCardManager </a></h2>
@@ -10248,6 +10298,12 @@ ourNamedCharacter:removeAncillary(ourAnc);</code></pre>
         </li>
         <li><span class="parameter">aiPersonalityName</span>
             <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">aiFaction</span>
+            <span class="types"><a class="type" href="index.html#aiFaction">aiFaction</a></span>
 
 
 
@@ -18557,7 +18613,7 @@ ourChar:kill();</code></pre>
     <div class="functionDescription">
 
 <p>A building has been destroyed. </p>
-<pre><code>Exports: character, faction, regionID, characterType, religion
+<pre><code>Exports: character, faction, regionID, characterType, religion, settlement
 </code></pre>
 
 
@@ -28088,6 +28144,367 @@ EDB.getBuildingPoolNum(building, <span class="number">0</span>);</code></pre>
 
 </dd>
 </dl>
+    <h2 class="section-header "><a name="mapImage"></a>mapImage </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "mapImageStruct"></a>
+    <strong>mapImageStruct</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+
+
+
+    </div>
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">blurStrength</span>
+            <span class="types"><span class="type">float</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">useBlur</span>
+            <span class="types"><span class="type">bool</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">adaptiveBlur</span>
+            <span class="types"><span class="type">bool</span></span>
+         Can be slow on large or frequently updated images! needs use blur also true.
+        </li>
+        <li><span class="parameter">makeMapImage</span>
+            <span class="types"><a class="type" href="index.html#mapImageStruct.makeMapImage">makeMapImage</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">clearMapImage</span>
+            <span class="types"><a class="type" href="index.html#mapImageStruct:clearMapImage">clearMapImage</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">loadMapTexture</span>
+            <span class="types"><a class="type" href="index.html#mapImageStruct:loadMapTexture">loadMapTexture</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">fillRegionColor</span>
+            <span class="types"><a class="type" href="index.html#mapImageStruct:fillRegionColor">fillRegionColor</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">addRegionColor</span>
+            <span class="types"><a class="type" href="index.html#mapImageStruct:addRegionColor">addRegionColor</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">fillTileColor</span>
+            <span class="types"><a class="type" href="index.html#mapImageStruct:fillTileColor">fillTileColor</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">addTileColor</span>
+            <span class="types"><a class="type" href="index.html#mapImageStruct:addTileColor">addTileColor</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "mapImageStruct.makeMapImage"></a>
+    <strong>mapImageStruct.makeMapImage ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Create a new image you want to determine region colors.
+    </div>
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#mapImageStruct">mapImageStruct</a></span>
+        mapImage
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> mapImage = mapImageStruct.makeMapImage();</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "mapImageStruct:clearMapImage"></a>
+    <strong>mapImageStruct:clearMapImage ()</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Reset image state.
+    </div>
+
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> mapImage = mapImageStruct.makeMapImage();
+mapImage:clearMapImage();</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "mapImageStruct:loadMapTexture"></a>
+    <strong>mapImageStruct:loadMapTexture (path)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Create a new map texture.  Use an uncompressed(!) dds image that is some multiple of your map<em>regions size. The background must line up with map</em>regions for whatever scale you chose for it to display correctly.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         full path to texture
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">int</span></span>
+        x size of the image</li>
+        <li>
+           <span class="types"><span class="type">int</span></span>
+        y size of the image</li>
+        <li>
+           <span class="types"><span class="type">int</span></span>
+        id of the image</li>
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> mapImage = mapImageStruct.makeMapImage();
+<span class="keyword">local</span> x, y, id = mapImage:loadMapTexture(M2TWEOP.getModPath() .. <span class="string">"map_regions.dds"</span>);
+ImGui.Image(id, x, y);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "mapImageStruct:fillRegionColor"></a>
+    <strong>mapImageStruct:fillRegionColor (id, r, g, b, a)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Fill a region with a color.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><span class="type">int</span></span>
+         region ID
+        </li>
+        <li><span class="parameter">r</span>
+            <span class="types"><span class="type">int</span></span>
+         red
+        </li>
+        <li><span class="parameter">g</span>
+            <span class="types"><span class="type">int</span></span>
+         green
+        </li>
+        <li><span class="parameter">b</span>
+            <span class="types"><span class="type">int</span></span>
+         blue
+        </li>
+        <li><span class="parameter">a</span>
+            <span class="types"><span class="type">int</span></span>
+         alpha
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> mapImage = mapImageStruct.makeMapImage();
+mapImage:fillRegionColor(<span class="number">50</span>, <span class="number">0</span>, <span class="number">255</span>, <span class="number">0</span>, <span class="number">255</span>);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "mapImageStruct:addRegionColor"></a>
+    <strong>mapImageStruct:addRegionColor (id, r, g, b, a)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Add a color to already filled region.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">id</span>
+            <span class="types"><span class="type">int</span></span>
+         region ID
+        </li>
+        <li><span class="parameter">r</span>
+            <span class="types"><span class="type">int</span></span>
+         red
+        </li>
+        <li><span class="parameter">g</span>
+            <span class="types"><span class="type">int</span></span>
+         green
+        </li>
+        <li><span class="parameter">b</span>
+            <span class="types"><span class="type">int</span></span>
+         blue
+        </li>
+        <li><span class="parameter">a</span>
+            <span class="types"><span class="type">int</span></span>
+         alpha
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> mapImage = mapImageStruct.makeMapImage();
+mapImage:fillRegionColor(<span class="number">50</span>, <span class="number">0</span>, <span class="number">255</span>, <span class="number">0</span>, <span class="number">255</span>);
+mapImage:addRegionColor(<span class="number">50</span>, <span class="number">10</span>, -<span class="number">10</span>, <span class="number">10</span>, <span class="number">0</span>);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "mapImageStruct:fillTileColor"></a>
+    <strong>mapImageStruct:fillTileColor (x, y, r, g, b, a)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Fill a tile with a color.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">int</span></span>
+         x coordinate
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">int</span></span>
+         y coordinate
+        </li>
+        <li><span class="parameter">r</span>
+            <span class="types"><span class="type">int</span></span>
+         red
+        </li>
+        <li><span class="parameter">g</span>
+            <span class="types"><span class="type">int</span></span>
+         green
+        </li>
+        <li><span class="parameter">b</span>
+            <span class="types"><span class="type">int</span></span>
+         blue
+        </li>
+        <li><span class="parameter">a</span>
+            <span class="types"><span class="type">int</span></span>
+         alpha
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#mapImageStruct">mapImageStruct</a></span>
+        mapImage
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> mapImage = mapImageStruct.makeMapImage();
+mapImage:fillTileColor(<span class="number">153</span>, <span class="number">210</span>, <span class="number">0</span>, <span class="number">255</span>, <span class="number">0</span>, <span class="number">255</span>);</code></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "mapImageStruct:addTileColor"></a>
+    <strong>mapImageStruct:addTileColor (x, y, r, g, b, a)</strong>
+    </dt>
+    <dd>
+    <div class="functionDescription">
+    Add a color to an already set tile.
+    </div>
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">int</span></span>
+         x coordinate
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">int</span></span>
+         y coordinate
+        </li>
+        <li><span class="parameter">r</span>
+            <span class="types"><span class="type">int</span></span>
+         red
+        </li>
+        <li><span class="parameter">g</span>
+            <span class="types"><span class="type">int</span></span>
+         green
+        </li>
+        <li><span class="parameter">b</span>
+            <span class="types"><span class="type">int</span></span>
+         blue
+        </li>
+        <li><span class="parameter">a</span>
+            <span class="types"><span class="type">int</span></span>
+         alpha
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="index.html#mapImageStruct">mapImageStruct</a></span>
+        mapImage
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><code class="language-lua" ><span class="keyword">local</span> mapImage = mapImageStruct.makeMapImage();
+mapImage:fillTileColor(<span class="number">153</span>, <span class="number">210</span>, <span class="number">0</span>, <span class="number">255</span>, <span class="number">0</span>, <span class="number">255</span>);
+mapImage:addTileColor(<span class="number">153</span>, <span class="number">210</span>, <span class="number">20</span>, -<span class="number">10</span>, <span class="number">20</span>, <span class="number">0</span>);</code></pre>
+    </ul>
+
+</dd>
+</dl>
     <h2 class="section-header "><a name="uiCardManager"></a>uiCardManager </h2>
 
     <dl class="function">
@@ -29634,8 +30051,14 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
 
         </li>
-        <li><span class="parameter">coords</span>
-            <span class="types"><a class="type" href="index.html#coordPair">coordPair</a></span>
+        <li><span class="parameter">xCoord</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">yCoord</span>
+            <span class="types"><span class="type">int</span></span>
 
 
 
@@ -29697,10 +30120,6 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
 
 
-        </li>
-        <li><span class="parameter">borderingSettlement</span>
-            <span class="types"><span class="type">int</span></span>
-         1 = bordering 2 = settlement.
         </li>
         <li><span class="parameter">border</span>
             <span class="types"><span class="type">int</span></span>
@@ -29959,6 +30378,24 @@ campaign:setDipStance(dipRelType.war,fac1,fac2);</code></pre>
 
         </li>
         <li><span class="parameter">fortsNum</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">colorRed</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">colorGreen</span>
+            <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">colorBlue</span>
             <span class="types"><span class="type">int</span></span>
 
 
@@ -30888,8 +31325,14 @@ region:setHiddenResource(<span class="number">0</span>, <span class="keyword">fa
 
 
         </li>
-        <li><span class="parameter">alliedRegion</span>
+        <li><span class="parameter">notReachable</span>
             <span class="types"><span class="type">int</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">distance</span>
+            <span class="types"><span class="type">float</span></span>
 
 
 
