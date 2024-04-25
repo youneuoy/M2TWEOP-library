@@ -319,7 +319,6 @@ ImGui.End() -- End window area
 ```
 
 ## Parameters Stacks (Shared)
-Note: This binding does not give functions that can obtain an ImFont* from inside Lua (besides GetFont), You'll need to add your own.
 ```lua
   -- ImGui.PushFont(...)
   -- Parameters: ImFont* (font)
