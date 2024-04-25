@@ -731,7 +731,7 @@ void luaP::onPluginLoadF()
 
 	/***
 	A building has been destroyed.
-	Exports: character, faction, regionID, characterType, religion
+	Exports: character, faction, regionID, characterType, religion, settlement
 
 	@function onGovernorBuildingDestroyed
 	@tparam eventTrigger eventData
