@@ -1643,7 +1643,6 @@ namespace fastFuncts
 		}
 	}
 
-#define GAME_FUNC(funcType, funcAddr) reinterpret_cast<funcType>(codes::offsets.funcAddr)
 	
 	std::unordered_map<int, const char*> characterTypes = {
 		{0,"spy"},
@@ -1784,7 +1783,7 @@ namespace fastFuncts
 					bool research = false;
 					for(int i = 0; i < faction->numOfCharactersAll; i++)
 					{
-						if (const int nameIndex = GAME_FUNC(int(__cdecl*)(namedCharacter*), getNameIndexFunc)(faction->charactersAll[i]);
+						if (const int nameIndex = GAME_FUNC(int(__thiscall*)(namedCharacter*), getNameIndexFunc)(faction->charactersAll[i]);
 							firstNameIndex == nameIndex)
 						{
 							research = true;

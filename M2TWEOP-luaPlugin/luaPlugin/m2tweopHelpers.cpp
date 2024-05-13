@@ -44,33 +44,26 @@ namespace m2tweopHelpers
 	{
 		return (*(*plugData::data.funcs.getRegionOwner))(regionID);
 	}
-	bool checkDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2)
+	bool checkDipStance(const campaign* campaignStruct, const campaignEnums::dipRelEnum dipType, const factionStruct* fac1, const factionStruct* fac2)
 	{
 		using namespace campaignEnums;
-		if (dipType == dipRelEnum::war)
-		{
-			return (campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state == dipStateInternalEnum::warState);
-		}
-		else if (dipType == dipRelEnum::peace)
-		{
-			return (campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state == dipStateInternalEnum::peaceState);
-		}
-		else if (dipType == dipRelEnum::alliance)
-		{
-			return (campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state == dipStateInternalEnum::allianceState);
-		}
-		else if (dipType == dipRelEnum::suzerain)
-		{
-			return (campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state == dipStateInternalEnum::allianceState
-				&& campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].protectorate == protectorateState
-				);
-		}
-		else if (dipType == dipRelEnum::trade)
-		{
-			return (campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].trade == 1);
-		}
+		if (!fac1 || !fac2)
+			return false;
+		const auto facDiplomacy = campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum];
+		if (dipType == trade)
+			return facDiplomacy.trade & 1;
+		const auto state = facDiplomacy.state;
+		if (dipType == war)
+			return state == warState;
+		if (dipType == peace)
+			return state == peaceState;
+		if (dipType == alliance)
+			return state == allianceState;
+		if (dipType == suzerain)
+			return state == allianceState && facDiplomacy.protectorate == protectorateState;
 		return false;
 	}
+	
 	static void disableVassalage(campaign* campaignStruct, factionStruct* fac1, factionStruct* fac2)
 	{
 		using namespace campaignEnums;
@@ -128,15 +121,15 @@ namespace m2tweopHelpers
 			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::allianceState;
 			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::allianceState;
 
-			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].trade = 1;
-			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].trade = 1;
+			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].trade |= 1;
+			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].trade |= 1;
 		}
 		else if (dipType == dipRelEnum::trade)
 		{
 			if (campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state != dipStateInternalEnum::warState)
 			{
-				campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].trade = 1;
-				campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].trade = 1;
+				campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].trade |= 1;
+				campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].trade |= 1;
 			}
 		}
 
@@ -316,7 +309,7 @@ namespace m2tweopHelpers
 	
 	settlementInfoScroll* getSettlementInfoScroll()
 	{
-		gameDataAllStruct* gameData = gameDataAllHelper::get();
+		const gameDataAllStruct* gameData = gameDataAllHelper::get();
 		if (!gameData->uiManager) 
 			return nullptr;
 		if (!gameData->uiManager->stratUI) 
@@ -325,8 +318,10 @@ namespace m2tweopHelpers
 		return gameData->uiManager->stratUI->settlementInfoScroll;
 	}
 
-	settlementTextStrings* getUIStrings(settlementInfoScroll* settlementInfoScroll)
+	settlementTextStrings* getUIStrings(const settlementInfoScroll* settlementInfoScroll)
 	{
+		if (!settlementInfoScroll->settlementStatsTable) 
+			return nullptr;
 		return settlementInfoScroll->settlementStatsTable->settlementTextStrings;
 	}
 
@@ -357,39 +352,31 @@ namespace m2tweopHelpers
 
 	int getLocalFactionID()
 	{
-		gameDataAllStruct* gameData = gameDataAllHelper::get();
+		const gameDataAllStruct* gameData = gameDataAllHelper::get();
 		return *gameData->localFactionID;
 	}
 
-	void setPerfectSpy(bool set)
+	void setPerfectSpy(const bool set)
 	{
 		if (getGameVersion() == 1)
-		{
 			*reinterpret_cast<bool*>(0x016F0E5C) = set;
-		}
 		else
-		{
 			*reinterpret_cast<bool*>(0x016A7CC4) = set;
-		}
 	}
 
-	void setEquipmentCosts(int equipType, int cost)
+	void setEquipmentCosts(const int equipType, const int cost)
 	{
-		struct equipmentCosts
+		struct EquipmentCosts
 		{
 			int ram;
 			int ladder;
 			int siegeTower;
 		};
-		equipmentCosts* costs;
+		EquipmentCosts* costs;
 		if (getGameVersion() == 1)
-		{
-			costs = reinterpret_cast<equipmentCosts*>(0x01655BB0);
-		}
+			costs = reinterpret_cast<EquipmentCosts*>(0x01655BB0);
 		else
-		{
-			costs = reinterpret_cast<equipmentCosts*>(0x0160DCC8);
-		}
+			costs = reinterpret_cast<EquipmentCosts*>(0x0160DCC8);
 		switch (equipType)
 		{
 			case 0:
@@ -409,36 +396,32 @@ namespace m2tweopHelpers
 	options1* getOptions1()
 	{
 		if (getGameVersion() == 1)
-		{
 			return reinterpret_cast<options1*>(0x02CB693C);
-		}
+		
 		return reinterpret_cast<options1*>(0x02C6D804);
 	}
 
 	options2* getOptions2()
 	{
 		if (getGameVersion() == 1)
-		{
 			return reinterpret_cast<options2*>(0x016818A0);
-		}
+		
 		return reinterpret_cast<options2*>(0x01639EF0);
 	}
 
 	campaignDifficulty1* getCampaignDifficulty1()
 	{
 		if (getGameVersion() == 1)
-		{
 			return reinterpret_cast<campaignDifficulty1*>(0x016F4760);
-		}
+		
 		return reinterpret_cast<campaignDifficulty1*>(0x016AB5C8);
 	}
 
 	campaignDifficulty2* getCampaignDifficulty2()
 	{
 		if (getGameVersion() == 1)
-		{
 			return reinterpret_cast<campaignDifficulty2*>(0x0164BF18);
-		}
+		
 		return reinterpret_cast<campaignDifficulty2*>(0x01604000);
 	}
 

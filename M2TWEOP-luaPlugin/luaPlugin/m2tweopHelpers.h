@@ -42,7 +42,7 @@ namespace m2tweopHelpers
 	bool getTileVisibility(factionStruct* faction, int x, int y);
 	factionStruct* getRegionOwner(int regionID);
 	
-	bool checkDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2);
+	bool checkDipStance(const campaign* campaignStruct, campaignEnums::dipRelEnum dipType, const factionStruct* fac1, const factionStruct* fac2);
 	void setDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2);
 	int GetUnitSize();
 
@@ -72,7 +72,7 @@ namespace m2tweopHelpers
 
 	void toggleUnitsBMapHighlight();
 	battleCameraStruct* getBattleCamCoords();
-	settlementTextStrings* getUIStrings(settlementInfoScroll* settlementInfoScroll);
+	settlementTextStrings* getUIStrings(const settlementInfoScroll* settlementInfoScroll);
 	settlementInfoScroll* getSettlementInfoScroll();
 
 	void setConversionLvlFromCastle(int castleLvl, int convertToLvl);
