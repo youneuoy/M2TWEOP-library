@@ -576,11 +576,11 @@ void managerF::doPachs()
 	toFindUnitStrings2->Enable();
 	f1 << "Done" << endl;
 
-	f1 << "Start applying OnUnitInfo patch" << endl;
-	OnUnitInfo* toUnitInfo = new OnUnitInfo(mem, (LPVOID)patchesForGame::OnUnitInfo, globals::dataS.gamever);
-	toUnitInfo->SetNewCode();
-	toUnitInfo->Enable();
-	f1 << "Done" << endl;
+	// f1 << "Start applying OnUnitInfo patch" << endl;
+	// OnUnitInfo* toUnitInfo = new OnUnitInfo(mem, (LPVOID)patchesForGame::OnUnitInfo, globals::dataS.gamever);
+	// toUnitInfo->SetNewCode();
+	// toUnitInfo->Enable();
+	// f1 << "Done" << endl;
 
 	f1 << "Start applying OnReligionCombatBonus patch" << endl;
 	OnReligionCombatBonus* toReligionCombatBonus = new OnReligionCombatBonus(mem, (LPVOID)patchesForGame::OnReligionCombatBonus, globals::dataS.gamever);
