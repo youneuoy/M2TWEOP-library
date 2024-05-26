@@ -23,5 +23,4 @@ traitEffect* luaGetSetFuncs::getTraitEffect(const traitLevel* level, int index)
 void luaGetSetFuncs::setGameString(char* targetP, const char* newS)
 {
 	(*(*plugData::data.funcs.setCryptedString))(targetP, newS);
-
 }

@@ -90,6 +90,7 @@ namespace gameHelpers
 	int getRegionID(const landMass* landMass, const int index);
 	coordPair* getRoadCoord(const roadStruct* road, const int index);
 	int getTileFactionID(const oneTile* tile);
+	bool tileHasRiverSource(const oneTile* tile);
 	bool tileHasRiver(const oneTile* tile);
 	bool tileHasCrossing(const oneTile* tile);
 	int tileBorderType(const oneTile* tile);
@@ -97,6 +98,11 @@ namespace gameHelpers
 	bool tileHasShip(const oneTile* tile);
 	bool tileHasWatchtower(const oneTile* tile);
 	bool tileHasPort(const oneTile* tile);
+	bool tileHasCliff(const oneTile* tile);
+	bool isCoastalWater(const oneTile* tile);
+	bool isLandConnection(const oneTile* tile);
+	bool isSeaCrossing(const oneTile* tile);
+	int tileRoadLevel(const oneTile* tile);
 	bool tileHasFort(const oneTile* tile);
 	bool tileHasSettlement(const oneTile* tile);
 	bool factionHasArmyNearTile(const oneTile* tile, int factionID);
@@ -132,6 +138,8 @@ namespace gameHelpers
 	int getMercUnitNum(mercPool* mercPool);
 	mercPoolUnit* getMercUnit(const mercPool* pool, int index);
 	void setMercReligion(mercPoolUnit* unit, int religion, bool set);
+	int getPoolIndex(mercPoolUnitsPtr *unitPtr);
+	mercPoolUnit* getNewMercUnit(mercPoolUnitsPtr* unitPtr);
 	mercPoolUnit* addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, float startyear, float endyear, int crusading);
 	void saveGame(const char* path);
 	void historicEvent(const char* name, const char* title, const char* description);

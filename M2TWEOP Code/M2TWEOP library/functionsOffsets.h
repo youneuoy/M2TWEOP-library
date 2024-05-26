@@ -118,6 +118,27 @@ public:
 		DWORD findParentForAdoptionFunc = NULL;
 		DWORD setArmyRegionEntriesFunc = NULL;
 		DWORD factionRessurectStuffFunc = NULL;
+
+		DWORD unitMove = NULL;
+		DWORD unitOrderMove = NULL;
+		DWORD unitPlace = NULL;
+		DWORD getUnitByLabel = NULL;
+		DWORD getUnitByLabel2 = NULL;
+		DWORD unitImmediatePlace = NULL;
+		DWORD unitAttackClosestUnit = NULL;
+		DWORD unitAttackUnit = NULL;
+		DWORD unitDeployStakes = NULL;
+		DWORD unitChangeFormation = NULL;
+		DWORD unitHalt = NULL;
+		DWORD getMapHeight = NULL;
+		DWORD unitMoveToOrientation = NULL;
+		DWORD moveRelative = NULL;
+		DWORD moveToMissileRange = NULL;
+		DWORD unitTurn = NULL;
+		DWORD unitTaunt = NULL;
+		DWORD useSpecialAbility = NULL;
+		DWORD getBuildingAngle = NULL;
+		DWORD attackBuilding = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

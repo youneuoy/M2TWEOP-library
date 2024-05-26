@@ -128,6 +128,7 @@ namespace sol_ImGui
 	inline int GetColorU32(int col);
 #endif
 	inline std::tuple<float, float, float, float> GetStyleColorVec4(int idx);
+	inline int GetColorU32(float colR, float colG, float colB, float colA);
 
 
 	// Layout cursor positioning
@@ -620,7 +621,76 @@ namespace sol_ImGui
 	inline void SetMouseCursor(int cursor_type);
 	inline void SetNextFrameWantCaptureMouse(bool want_capture_mouse_value);
 	inline ImFont* AddFontFromFileTTF(ImFontAtlas* fontAtlas, const char* filename, float size_pixels);
-
+	
+	inline void PushClipRectDraw(ImDrawList* drawlist, float posXmin, float posYmin, float posXmax, float posYmax);
+	inline void PushClipRectDraw(ImDrawList* drawlist, float posXmin, float posYmin, float posXmax, float posYmax, bool intersect);	
+    inline void PopClipRectDraw(ImDrawList* drawlist);
+    inline ImVec2 GetClipRectMin(ImDrawList* drawlist);
+    inline ImVec2 GetClipRectMax(ImDrawList* drawlist);
+    inline void AddLine(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color);
+	inline void AddLine(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color, float thickness);
+	inline void AddRect(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color);
+	inline void AddRect(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color, float rounding);
+	inline void AddRect(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color, float rounding, int flags);
+	inline void AddRect(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color, float rounding, int flags, float thickness);
+	inline void AddRectFilled(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color);
+	inline void AddRectFilled(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color, float rounding);
+	inline void AddRectFilled(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color, float rounding, int flags);
+	inline void AddRectFilledMultiColor(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t colorUpperLeft, uint32_t colorUpperRight, uint32_t colorBottomRight, uint32_t colorBottomLeft);
+	inline void AddQuad(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, float p3X, float p3Y, float p4X, float p4Y, uint32_t color);
+	inline void AddQuad(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, float p3X, float p3Y, float p4X, float p4Y, uint32_t color, float thickness);
+	inline void AddQuadFilled(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, float p3X, float p3Y, float p4X, float p4Y, uint32_t color);
+	inline void AddTriangle(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, float p3X, float p3Y, uint32_t color);
+	inline void AddTriangle(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, float p3X, float p3Y, uint32_t color, float thickness);
+	inline void AddTriangleFilled(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, float p3X, float p3Y, uint32_t color);
+	inline void AddCircle(ImDrawList* drawlist, float pX, float pY, float radius, uint32_t color);
+	inline void AddCircle(ImDrawList* drawlist, float pX, float pY, float radius, uint32_t color, int numSegments);
+	inline void AddCircle(ImDrawList* drawlist, float pX, float pY, float radius, uint32_t color, int numSegments, float thickness);
+	inline void AddCircleFilled(ImDrawList* drawlist, float pX, float pY, float radius, uint32_t color);
+	inline void AddCircleFilled(ImDrawList* drawlist, float pX, float pY, float radius, uint32_t color, int numSegments);
+	inline void AddNgon(ImDrawList* drawlist, float centerX, float centerY, float radius, uint32_t color, int numSegments);
+	inline void AddNgon(ImDrawList* drawlist, float centerX, float centerY, float radius, uint32_t color, int numSegments, float thickness);
+	inline void AddNgonFilled(ImDrawList* drawlist, float centerX, float centerY, float radius, uint32_t color, int numSegments);
+	inline void AddEllipse(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY, uint32_t color);
+	inline void AddEllipse(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY, uint32_t color, float rotation);
+	inline void AddEllipse(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY, uint32_t color, float rotation, int numSegments);
+	inline void AddEllipse(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY, uint32_t color, float rotation, int numSegments, float thickness);
+	inline void AddEllipseFilled(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY, uint32_t color);
+	inline void AddEllipseFilled(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY, uint32_t color, float rotation);
+	inline void AddEllipseFilled(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY, uint32_t color, float rotation, int numSegments);
+	inline void AddText(ImDrawList* drawlist, float posX, float posY, uint32_t color, const char* textBegin);
+	inline void AddText(ImDrawList* drawlist, float posX, float posY, uint32_t color, const char* textBegin, const char* textEnd);
+	inline void AddBezierCubic(ImDrawList* drawlist, float p1X, float p1Y, 
+		float p2X, float p2Y, float p3X, float p3Y, float p4X, float p4Y,
+		uint32_t color, float thickness);
+	inline void AddBezierCubic(ImDrawList* drawlist, float p1X, float p1Y, 
+		float p2X, float p2Y, float p3X, float p3Y, float p4X, float p4Y,
+		uint32_t color, float thickness, int numSegments);
+	inline void AddBezierQuadratic(ImDrawList* drawlist, float p1X, float p1Y, 
+		float p2X, float p2Y, float p3X, float p3Y,
+		uint32_t color, float thickness);
+	inline void AddBezierQuadratic(ImDrawList* drawlist, float p1X, float p1Y, 
+		float p2X, float p2Y, float p3X, float p3Y,
+		uint32_t color, float thickness, int numSegments);
+	inline void PathClear(ImDrawList* drawlist);
+	inline void PathLineTo(ImDrawList* drawlist, float posX, float posY);
+	inline void PathLineToMergeDuplicate(ImDrawList* drawlist, float posX, float posY);
+	inline void PathFillConvex(ImDrawList* drawlist, uint32_t color);
+	inline void PathStroke(ImDrawList* drawlist, uint32_t color);
+	inline void PathStroke(ImDrawList* drawlist, uint32_t color, int flags);
+	inline void PathArcTo(ImDrawList* drawlist, float centerX, float centerY, float radius, float aMin, float aMax);
+	inline void PathArcTo(ImDrawList* drawlist, float centerX, float centerY, float radius, float aMin, float aMax, int numSegments);
+	inline void PathArcToFast(ImDrawList* drawlist, float centerX, float centerY, float radius, int aMin, int aMax);
+	inline void PathEllipticalArcTo(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY, float rotation, float aMin, float aMax);
+	inline void PathEllipticalArcTo(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY, float rotation, float aMin, float aMax, int numSegments);
+	inline void PathBezierCubicCurveTo(ImDrawList* drawlist, float p2X, float p2Y, float p3X, float p3Y, float p4X, float p4Y);
+	inline void PathBezierCubicCurveTo(ImDrawList* drawlist, float p2X, float p2Y, float p3X, float p3Y, float p4X, float p4Y, int numSegments);
+	inline void PathBezierQuadraticCurveTo(ImDrawList* drawlist, float p2X, float p2Y, float p3X, float p3Y);
+	inline void PathBezierQuadraticCurveTo(ImDrawList* drawlist, float p2X, float p2Y, float p3X, float p3Y, int numSegments);
+	inline void PathRect(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2Y);
+	inline void PathRect(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2Y, float rounding);
+	inline void PathRect(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2Y, float rounding, int flags);
+	
 	// Clipboard Utilities
 	inline std::string GetClipboardText();
 	inline void SetClipboardText(const std::string& text);

@@ -1,4 +1,7 @@
 #include "unitHelpers.h"
+
+#include "battleHandlerHelpers.h"
+#include "gameDataAllHelper.h"
 #include "plugData.h"
 namespace unitHelpers
 {
@@ -33,7 +36,7 @@ namespace unitHelpers
 	}
 	void setExp(unit* un, int exp)
 	{
-		(*(*plugData::data.funcs.setUnitParams))(un, un->SoldierCountStrat, exp, getarmourLVL(un), getweaponLVL(un));
+		un->expScreen = exp;
 	}
 	int getarmourLVL(unit* un)
 	{
@@ -51,6 +54,7 @@ namespace unitHelpers
 	{
 		(*(*plugData::data.funcs.setUnitParams))(un, un->SoldierCountStrat, un->expScreen, getarmourLVL(un), lvl);
 	}
+	
 	int getMaxSoldiersCount(unit* un)
 	{
 
@@ -165,8 +169,243 @@ namespace unitHelpers
 		}
 		return nullptr;
 	}
+
+	unitGroup* getEmptyGroup(const stackStruct* army)
+	{
+		if (!army || !army->unitGroups)
+			return nullptr;
+		for (int i = 0; i < army->maxUnitGroups; i++)
+		{
+			const auto group = &army->unitGroups[i];
+			if (group->unitsInFormationNum + group->unitsNotInFormationNum == 0)
+				return group;
+		}
+		return nullptr;
+	}
+
+	unitGroup* getGroupByLabel(const char* label)
+	{
+		DWORD funcOffset = 0x00A931C0;
+		if (m2tweopHelpers::getGameVersion() == 1)
+			funcOffset = 0x00A945C0;
+		
+		DWORD groupLabels = 0x01B60580;
+		if (m2tweopHelpers::getGameVersion() == 1)
+			groupLabels = 0x001BA96A0;
+		
+		stringWithHash* labelHash = new stringWithHash();
+		luaGetSetFuncs::setGameString(reinterpret_cast<char*>(labelHash), label);
+		unitGroup** group = nullptr;
+		__asm
+		{
+			push labelHash
+			mov ecx, groupLabels
+			mov eax, funcOffset
+			call eax
+			mov group, eax
+		}
+		delete labelHash;
+		return *group;
+	}
+
+	const char* getGroupLabel(const unitGroup* group)
+	{
+		if (!group)
+			return "";
+		
+		auto allLabels = reinterpret_cast<groupLabels*>(0x01B60580);
+		if (m2tweopHelpers::getGameVersion() == 1)
+			allLabels = reinterpret_cast<groupLabels*>(0x001BA96A0);
+		
+		for (int i = 0; i < allLabels->count; i++)
+		{
+			if (allLabels->labels[i].group == group)
+				return allLabels->labels[i].name;
+		}
+		return "";
+	}
+
+	void removeUnitFromGroup(unitGroup* group, unit* un)
+	{
+		if (!group || !un || !un->unitGroup || un->unitGroup != group)
+			return;
+		CallVFunc<2, void*>(group, un, 1);
+		if (group->unitsInFormationNum + group->unitsNotInFormationNum == 0)
+			undefineUnitGroup(group);
+	}
+
+	unit* getUnitInFormation(const unitGroup* group, const int index)
+	{
+		if (!group || index < 0 || index >= group->unitsInFormationNum)
+			return nullptr;
+		return group->unitsInFormation[index];
+	}
+
+	unit* getUnitNotInFormation(const unitGroup* group, const int index)
+	{
+		if (!group || index < 0 || index >= group->unitsNotInFormationNum)
+			return nullptr;
+		return group->unitsNotInFormation[index];
+	}
+
+	void automateGroup(const unitGroup* group, bool automate)
+	{
+		if (!group)
+			return;
+		DWORD funcAddr = 0x00721B50;
+		if (m2tweopHelpers::getGameVersion() == 1)
+			funcAddr = 0x00721410;
+		_asm
+		{
+			push automate
+			mov ecx, group
+			mov eax, funcAddr
+			call eax
+		}
+	}
+
+	void automateAttack(unitGroup* group, unit* targetUnit)
+	{
+		if (!group || !targetUnit)
+			return;
+		group->automationType = 0;
+		group->defendXCoord = 0;
+		group->defendYCoord = 0;
+		group->field_1338 = 0;
+		group->targetUnit = nullptr;
+		group->defendRadius = 0;
+		group->field_133C = 0;
+		group->field_1340 = 0;
+		group->field_1344 = 0;
+		group->automationType = 2;
+		group->targetUnit = targetUnit;
+	}
+
+	void automateDefense(unitGroup* group, float xCoord, float yCoord, float radius)
+	{
+		if (!group)
+			return;
+		group->automationType = 0;
+		group->defendXCoord = 0;
+		group->defendYCoord = 0;
+		group->field_1338 = 0;
+		group->targetUnit = nullptr;
+		group->defendRadius = 0;
+		group->field_133C = 0;
+		group->field_1340 = 0;
+		group->field_1344 = 0;
+		group->automationType = 1;
+		group->defendXCoord = xCoord;
+		group->defendXCoord = yCoord;
+		group->defendRadius = radius;
+	}
+
+	void placeGroup(unitGroup* group, float xCoord, float yCoord, float angle)
+	{
+		if (!group)
+			return;
+		const auto coords = new float[2];
+		coords[0] = xCoord;
+		coords[1] = yCoord;
+		DWORD funcAddr = 0x0071E620;
+		if (m2tweopHelpers::getGameVersion() == 1)
+			funcAddr = 0x0071DEE0;
+		int16_t pushAngle = (angle * 0.017453292) * 10430.378;
+		_asm
+		{
+			push 1
+			push 1
+			push pushAngle
+			push coords
+			mov ecx, group
+			mov eax, funcAddr
+			call eax
+		}
+		delete[] coords;
+	}
+
+	void undefineUnitGroup(const unitGroup* group)
+	{
+		if (!group)
+			return;
+		DWORD clearUnitGroup = 0x0071ECD0;
+		if (m2tweopHelpers::getGameVersion() == 1)
+			clearUnitGroup = 0x0071E590;
+		_asm
+		{
+			mov ecx, group
+			mov eax, clearUnitGroup
+			call eax
+		}
+		auto label = getGroupLabel(group);
+		if (label != "")
+		{
+			DWORD removeUnusedLabel = 0x00A93380;
+			if (m2tweopHelpers::getGameVersion() == 1)
+				removeUnusedLabel = 0x00A92320;
+			
+			DWORD groupLabels = 0x01B60580;
+			if (m2tweopHelpers::getGameVersion() == 1)
+				groupLabels = 0x001BA96A0;
+			
+			stringWithHash* labelHash = new stringWithHash();
+			luaGetSetFuncs::setGameString(reinterpret_cast<char*>(labelHash), label);
+			_asm
+			{
+				push labelHash
+				mov ecx, groupLabels
+				mov eax, removeUnusedLabel
+				call eax
+			}
+			delete labelHash;
+		}
+	}
+
+	void addUnitToGroup(unitGroup* group, unit* un)
+	{
+		if (!group || !un || un->unitGroup)
+			return;
+		CallVFunc<1, void*>(group, un);
+	}
+
+	unitGroup* defineUnitGroup(const stackStruct* army, const char* label, unit* un)
+	{
+		if (!army || !army->unitGroups || !un || un->unitGroup)
+			return nullptr;
+		auto group = getEmptyGroup(army);
+		if (!group)
+			return nullptr;
+		
+		DWORD funcOffset = 0x00A92C30;
+		if (m2tweopHelpers::getGameVersion() == 1)
+			funcOffset = 0x00A91BD0;
+		
+		DWORD groupLabels = 0x01B60580;
+		if (m2tweopHelpers::getGameVersion() == 1)
+			groupLabels = 0x001BA96A0;
+		
+		stringWithHash* labelHash = new stringWithHash();
+		luaGetSetFuncs::setGameString(reinterpret_cast<char*>(labelHash), label);
+		unitGroup** groupPtr = &group;
+		__asm
+		{
+			push groupPtr
+			push labelHash
+			mov ecx, groupLabels
+			mov eax, funcOffset
+			call eax
+		}
+		addUnitToGroup(group, un);
+		delete labelHash;
+		return group;
+	}
+
+	
+	
 	unit* getTargetUnit(unitPositionData* posData)
 	{
+		if (!battleHandlerHelpers::inBattle())
+			return nullptr;
 		if (!posData->hasTargets || posData->isHalted)
 		{
 			return nullptr;
@@ -177,10 +416,150 @@ namespace unitHelpers
 		}
 		return nullptr;
 	}
+	
 	int getMountClass(unit* un)
 	{
 		if (!un) return -1;
 		return CallVFunc<186, int>(un);
 	}
 
+	int getUnitFormation(const unit* unit)
+	{
+		return (*(*plugData::data.funcs.getUnitFormation))(unit);
+	}
+
+	unit* getUnitByLabel(const char* label)
+	{
+		return (*(*plugData::data.funcs.getUnitByLabel))(label);
+	}
+
+	void unitAttackClosest(const unit* un, int16_t angle, bool run)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.unitAttackClosest))(un, angle, run);
+	}
+
+	void unitAttackUnit(const unit* un, const unit* targetUnit, bool run)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.attackUnit))(un, targetUnit, run);
+	}
+
+	void unitMovetoPosition(const unit* unit, float xCoord, float yCoord, bool run)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.unitMovetoPosition))(unit, xCoord, yCoord, run);
+	}
+
+	void moveToOrientation(const unit* unit, float xCoord, float yCoord, int widthInMen, int16_t angle, bool run)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.moveToOrientation))(unit, xCoord, yCoord, widthInMen, angle, run);
+	}
+
+	void placeUnit(unit* unit, float xCoord, float yCoord, int16_t angle, int width)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.placeUnit))(unit, xCoord, yCoord, angle, width);
+	}
+
+	void deployStakes(const unit* unit)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.deployStakes))(unit);
+	}
+
+	void haltUnit(const unit* unit)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.haltUnit))(unit);
+	}
+
+	void changeUnitFormation(const unit* unit, int formationType)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.changeUnitFormation))(unit, formationType);
+	}
+
+	float getBattleMapHeight(float xCoord, float yCoord)
+	{
+		return (*(*plugData::data.funcs.getBattleMapHeight))(xCoord, yCoord);
+	}
+
+	void moveRelative(const unit* unit, float xCoord, float yCoord, bool run)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.moveRelative))(unit, xCoord, yCoord, run);
+	}
+
+	void moveToMissileRange(const unit* un, const unit* targetUnit, bool run)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.moveToMissileRange))(un, targetUnit, run);
+	}
+
+	void unitTurn(const unit* un, int16_t angle, bool isRelative)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.unitTurn))(un, angle, isRelative);
+	}
+
+	void taunt(const unit* un)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.taunt))(un);
+	}
+
+	void useSpecialAbility(const unit* un)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.useSpecialAbility))(un);
+	}
+
+
+	siegeEngine* getSiegeEngine(const unit* un, const int index)
+	{
+		const auto category = un->eduEntry->Category;
+		if (category != 0 && category != 2)
+			return nullptr;
+		if (!un->siegeEngine)
+			return nullptr;
+		if (index < 0 || index >= un->siegeEnNum)
+			return nullptr;
+		return un->siegeEngine[index];
+	}
+
+	void attackBuilding(const unit* un, buildingBattle* building)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.attackBuilding))(un, building);
+	}
+
+	void collectEngine(const unit* un, siegeEngine* engine)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		if (!un || !engine || un->eduEntry->Category != 0)
+			return;
+		haltUnit(un);
+		un->unitPositionData->targetArray[0].siegeEngine = engine;
+		un->unitPositionData->targetArray[0].typeOrSomething = 6;
+		un->unitPositionData->isHalted = 0;
+		un->unitPositionData->hasTargets = 1;
+		un->unitPositionData->targetsToGo = 1;
+	}
 }

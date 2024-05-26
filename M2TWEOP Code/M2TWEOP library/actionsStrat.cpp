@@ -1,8 +1,5 @@
 #include "actionsStrat.h"
 
-
-#define GAME_FUNC(funcType, funcAddr) reinterpret_cast<funcType>(codes::offsets.funcAddr)
-
 namespace actionsStrat {
 	NOINLINE EOP_EXPORT void Idle(general* gen)
 	{
@@ -32,8 +29,7 @@ namespace actionsStrat {
 
 			//Loop through the array and decide what equipment to use
 			for (int i = 0; pref[i] != 3 && i < 5; ++i)
-				GAME_FUNC(char(__thiscall*)(siegeS* siegeP, DWORD* currPrefP),
-					decideEquipmentFunc)(gen->armyLeaded->siege, &pref[i]);
+				GAME_FUNC(char(__thiscall*)(siegeS* siegeP, DWORD* currPrefP), decideEquipmentFunc)(gen->armyLeaded->siege, &pref[i]);
 			
 			return;
 		}

@@ -11,6 +11,17 @@ Injects::~Injects()
 {
 }
 
+
+
+void fillWithNOP(DWORD address, size_t size) {
+	DWORD oldProtect;
+	VirtualProtect((LPVOID)address, size, PAGE_EXECUTE_READWRITE, &oldProtect);
+
+	memset((LPVOID)address, 0x90, size); // 0x90 is the opcode for NOP in x86/x64
+
+	VirtualProtect((LPVOID)address, size, oldProtect, &oldProtect);
+}
+
 void Injects::SetOriginalUnitCode()
 {
 	Assembler* a = new Assembler();
@@ -2575,6 +2586,717 @@ void onUnloadCampaign::SetNewCode()
 	delete a;
 }
 
+onAddCultureToArray::onAddCultureToArray(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x008BD1D0;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x008BC7E0;
+}
+
+onAddCultureToArray::~onAddCultureToArray()
+{
+}
+
+void onAddCultureToArray::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(dword_ptr(edi, 0), 7);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onAddCultureToArray::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(edi);
+	a->mov(edi, 0x0161F0F8);
+	a->cmp(dword_ptr(edi, 0), 31);
+	a->pop(edi);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onParseBuildingPics::onParseBuildingPics(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x008AC71F;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x008ABD37;
+}
+
+onParseBuildingPics::~onParseBuildingPics()
+{
+}
+
+void onParseBuildingPics::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(dword_ptr(edi, 0), 7);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onParseBuildingPics::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(ebx, 7);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onParseBuildingLevelPics::onParseBuildingLevelPics(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x008A74C4;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x008A6AE4;
+}
+
+onParseBuildingLevelPics::~onParseBuildingLevelPics()
+{
+}
+
+void onParseBuildingLevelPics::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(dword_ptr(edi, 0), 7);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onParseBuildingLevelPics::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(eax, 7);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onParseEventBodies::onParseEventBodies(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x008D068A;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x008CFC6A;
+}
+
+onParseEventBodies::~onParseEventBodies()
+{
+}
+
+void onParseEventBodies::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(dword_ptr(edi, 0), 7);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onParseEventBodies::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(ebp, 7);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onCreatePortraitDb::onCreatePortraitDb(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x008B5173;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x008B4783;
+}
+
+onCreatePortraitDb::~onCreatePortraitDb()
+{
+}
+
+void onCreatePortraitDb::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(dword_ptr(edi, 0), 7);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onCreatePortraitDb::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(ebx, 7);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onGetBrowserPicConstructed::onGetBrowserPicConstructed(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x008A472D;
+	}
+	
+
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x008A3D3B;
+	}
+}
+
+onGetBrowserPicConstructed::~onGetBrowserPicConstructed()
+{
+}
+
+void onGetBrowserPicConstructed::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(dword_ptr(edi, 0), 7);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onGetBrowserPicConstructed::SetNewCode()
+{
+	Assembler* a = new Assembler();
+	
+	Label diskVersion = a->newLabel();
+	
+	a->push(dword_ptr(esp,0));
+	a->mov(ecx, eax);
+	a->mov(eax,reinterpret_cast<DWORD>(funcAddress));
+	a->cmp(eax, 0x008A3D3B);
+	a->je(diskVersion);
+	a->mov(edx, ebx);
+	a->bind(diskVersion);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onGetBrowserPicConstruction::onGetBrowserPicConstruction(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x008A474B;
+		//fillWithNOP(0x008A472F, 0x4);
+	}
+	
+
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x008A3D55;
+	}
+}
+
+onGetBrowserPicConstruction::~onGetBrowserPicConstruction()
+{
+}
+
+void onGetBrowserPicConstruction::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(dword_ptr(edi, 0), 7);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onGetBrowserPicConstruction::SetNewCode()
+{
+	Assembler* a = new Assembler();
+	
+	Label steamVersion = a->newLabel();
+	Label callFunc = a->newLabel();
+
+	a->push(dword_ptr(esp,0));
+	a->mov(eax, (DWORD)funcAddress);
+	a->cmp(eax, 0x008A474B);
+	a->je(steamVersion);
+	a->mov(ecx, ebx);
+	a->jmp(callFunc);
+	a->bind(steamVersion);
+	a->mov(edx, ebx);
+	a->bind(callFunc);
+	a->call(eax);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onGetBuildingPic::onGetBuildingPic(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x005FCB93;
+	}
+	
+
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x005FC7A3;
+	}
+}
+
+onGetBuildingPic::~onGetBuildingPic()
+{
+}
+
+void onGetBuildingPic::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(dword_ptr(edi, 0), 7);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onGetBuildingPic::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(edx);
+	a->push(ecx);
+	a->mov(ecx, esi);
+	a->mov(edx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->pop(ecx);
+	a->pop(edx);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onGetBuildingPic2::onGetBuildingPic2(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x005FC90D;
+	}
+	
+
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x005FC51D;
+	}
+}
+
+onGetBuildingPic2::~onGetBuildingPic2()
+{
+}
+
+void onGetBuildingPic2::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(dword_ptr(edi, 0), 7);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onGetBuildingPic2::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(edx);
+	a->push(ecx);
+	a->mov(ecx, esi);
+	a->mov(edx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->pop(ecx);
+	a->pop(edx);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onGetGuildOfferPic::onGetGuildOfferPic(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x00BB3F4C;
+		//fillWithNOP(0x008A472F, 0x4);
+	}
+	
+
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x00414C08;
+	}
+}
+
+onGetGuildOfferPic::~onGetGuildOfferPic()
+{
+}
+
+void onGetGuildOfferPic::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(dword_ptr(edi, 0), 7);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onGetGuildOfferPic::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(ecx);
+	a->push(eax);
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->mov(ebp, eax);
+	a->pop(eax);
+	a->pop(ecx);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onGetBuildingPicConstruction::onGetBuildingPicConstruction(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x005FCC13;
+		//fillWithNOP(0x008A472F, 0x4);
+	}
+	
+
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x005FC823;
+	}
+}
+
+onGetBuildingPicConstruction::~onGetBuildingPicConstruction()
+{
+}
+
+void onGetBuildingPicConstruction::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(dword_ptr(edi, 0), 7);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onGetBuildingPicConstruction::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(edx);
+	a->push(ecx);
+	a->mov(ecx, esi);
+	a->mov(edx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->pop(ecx);
+	a->pop(edx);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onGetBuildingPicConstructed::onGetBuildingPicConstructed(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x005FCBD3;
+		//fillWithNOP(0x008A472F, 0x4);
+	}
+	
+
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x005FC7E3;
+	}
+}
+
+onGetBuildingPicConstructed::~onGetBuildingPicConstructed()
+{
+}
+
+void onGetBuildingPicConstructed::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(dword_ptr(edi, 0), 7);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onGetBuildingPicConstructed::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(edx);
+	a->push(ecx);
+	a->mov(ecx, esi);
+	a->mov(edx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->pop(ecx);
+	a->pop(edx);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onGetBrowserPicConstructed2::onGetBrowserPicConstructed2(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x005FC93D;
+	}
+	
+
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x005FC54D;
+	}
+}
+
+onGetBrowserPicConstructed2::~onGetBrowserPicConstructed2()
+{
+}
+
+void onGetBrowserPicConstructed2::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(dword_ptr(edi, 0), 7);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onGetBrowserPicConstructed2::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(edx);
+	a->push(ecx);
+	a->mov(ecx, esi);
+	a->mov(edx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->pop(ecx);
+	a->pop(edx);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onGetPortraitDbEntry::onGetPortraitDbEntry(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x008B4F7A;
+	}
+	
+
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x008B458A;
+	}
+}
+
+onGetPortraitDbEntry::~onGetPortraitDbEntry()
+{
+}
+
+void onGetPortraitDbEntry::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->cmp(dword_ptr(edi, 0), 7);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onGetPortraitDbEntry::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(ecx);
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->mov(ebx, eax);
+	a->pop(ecx);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onGetUnitByLabel::onGetUnitByLabel(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x00A9560A;
+		otherFunc = 0x00A927E0;
+	}
+
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x00A945AA;
+		otherFunc = 0x00A91780;
+	}
+}
+
+onGetUnitByLabel::~onGetUnitByLabel()
+{
+}
+
+void onGetUnitByLabel::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->call(0xA927E0);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onGetUnitByLabel::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->pop(eax);
+	a->push(ebx);
+	a->push(edx);
+	a->push(ecx);
+	a->push(edi);
+	a->push(esi);
+	a->mov(edx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->pop(esi);
+	a->pop(edi);
+	a->pop(ecx);
+	a->pop(edx);
+	a->pop(ebx);
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
 onSearchUnitType::onSearchUnitType(MemWork* mem, LPVOID adr, int ver)
 	:AATemplate(mem), funcAddress(adr)
 {
@@ -2582,7 +3304,7 @@ onSearchUnitType::onSearchUnitType(MemWork* mem, LPVOID adr, int ver)
 		m_adress = 0x0046DF88;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x00414C08;
+		m_adress = 0x0046DBC8;
 }
 
 onSearchUnitType::~onSearchUnitType()
@@ -2639,7 +3361,7 @@ onReadBuildingPool::onReadBuildingPool(MemWork* mem, LPVOID adr, int ver)
 		m_adress = 0x008A9CE5;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x00414C08;
+		m_adress = 0x008A9305;
 }
 
 onReadBuildingPool::~onReadBuildingPool()
@@ -4148,17 +4870,6 @@ void OnFindUnitStrings2::SetNewCode()
 	m_cheatBytes = (unsigned char*)a->make();
 
 	delete a;
-}
-
-
-
-void fillWithNOP(DWORD address, size_t size) {
-	DWORD oldProtect;
-	VirtualProtect((LPVOID)address, size, PAGE_EXECUTE_READWRITE, &oldProtect);
-
-	memset((LPVOID)address, 0x90, size); // 0x90 is the opcode for NOP in x86/x64
-
-	VirtualProtect((LPVOID)address, size, oldProtect, &oldProtect);
 }
 
 onBuildingUnitAttributes::onBuildingUnitAttributes(MemWork* mem, LPVOID addr, int ver)

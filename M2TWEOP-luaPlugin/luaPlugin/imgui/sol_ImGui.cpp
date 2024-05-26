@@ -55,11 +55,301 @@ namespace sol_ImGui
 	inline bool IsWindowFocused(int flags) { return ImGui::IsWindowFocused(static_cast<ImGuiFocusedFlags>(flags)); }
 	inline bool IsWindowHovered() { return ImGui::IsWindowHovered(); }
 	inline bool IsWindowHovered(int flags) { return ImGui::IsWindowHovered(static_cast<ImGuiHoveredFlags>(flags)); }
-	inline ImDrawList* GetWindowDrawList() { return nullptr; /* TODO: GetWindowDrawList() ==> UNSUPPORTED */ }
+	inline ImDrawList* GetWindowDrawList() { return ImGui::GetWindowDrawList();}
 #if defined(IMGUI_HAS_DOCK)
 	inline float GetWindowDpiScale() { return ImGui::GetWindowDpiScale(); }
 	inline ImGuiViewport* GetWindowViewport() { return nullptr; /* TODO: GetWindowViewport() ==> UNSUPPORTED */ }
 #endif
+	inline void PushClipRectDraw(ImDrawList* drawlist, float posXmin, float posYmin, float posXmax, float posYmax)
+	{
+		drawlist->PushClipRect({posXmin, posYmin}, {posXmax, posYmax});
+	}
+	inline void PushClipRectDraw(ImDrawList* drawlist, float posXmin, float posYmin, float posXmax, float posYmax, bool intersect)
+	{
+		drawlist->PushClipRect({posXmin, posYmin}, {posXmax, posYmax}, intersect);
+	}
+	inline void PopClipRectDraw(ImDrawList* drawlist)
+	{
+		drawlist->PopClipRect();
+	}
+	inline ImVec2 GetClipRectMin(ImDrawList* drawlist)
+	{
+		return drawlist->GetClipRectMin();
+	}
+	inline ImVec2 GetClipRectMax(ImDrawList* drawlist)
+	{
+		return drawlist->GetClipRectMax();
+	}
+	inline void AddLine(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color)
+	{
+		drawlist->AddLine({p1X, p1Y}, {p2X, p2y}, color);
+	}
+	inline void AddLine(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color, float thickness)
+	{
+		drawlist->AddLine({p1X, p1Y}, {p2X, p2y}, color, thickness);
+	}
+	inline void AddRect(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color)
+	{
+		drawlist->AddRect({p1X, p1Y}, {p2X, p2y}, color);
+	}
+	inline void AddRect(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color, float rounding)
+	{
+		drawlist->AddRect({p1X, p1Y}, {p2X, p2y}, color, rounding);
+	}
+	inline void AddRect(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color, float rounding, int flags)
+	{
+		drawlist->AddRect({p1X, p1Y}, {p2X, p2y}, color, rounding, flags);
+	}
+	inline void AddRect(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color, float rounding, int flags, float thickness)
+	{
+		drawlist->AddRect({p1X, p1Y}, {p2X, p2y}, color, rounding, flags, thickness);
+	}
+	inline void AddRectFilled(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color)
+	{
+		drawlist->AddRectFilled({p1X, p1Y}, {p2X, p2y}, color);
+	}
+	inline void AddRectFilled(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color, float rounding)
+	{
+		drawlist->AddRectFilled({p1X, p1Y}, {p2X, p2y}, color, rounding);
+	}
+	inline void AddRectFilled(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y, uint32_t color, float rounding, int flags)
+	{
+		drawlist->AddRectFilled({p1X, p1Y}, {p2X, p2y}, color, rounding, flags);
+	}
+	inline void AddRectFilledMultiColor(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2y
+		, uint32_t colorUpperLeft
+		, uint32_t colorUpperRight
+		, uint32_t colorBottomRight
+		, uint32_t colorBottomLeft
+		)
+	{
+		drawlist->AddRectFilledMultiColor({p1X, p1Y}, {p2X, p2y}, colorUpperLeft, colorUpperRight, colorBottomRight, colorBottomLeft);
+	}
+	inline void AddQuad(ImDrawList* drawlist,
+		float p1X, float p1Y, float p2X, float p2y,
+		float p3X, float p3Y, float p4X, float p4y,
+		uint32_t color)
+	{
+		drawlist->AddQuad({p1X, p1Y}, {p2X, p2y}, {p3X, p3Y}, {p4X, p4y}, color);
+	}
+	inline void AddQuad(ImDrawList* drawlist,
+		float p1X, float p1Y, float p2X, float p2y,
+		float p3X, float p3Y, float p4X, float p4y,
+		uint32_t color, float thickness)
+	{
+		drawlist->AddQuad({p1X, p1Y}, {p2X, p2y}, {p3X, p3Y}, {p4X, p4y}, color, thickness);
+	}
+	inline void AddQuadFilled(ImDrawList* drawlist,
+		float p1X, float p1Y, float p2X, float p2y,
+		float p3X, float p3Y, float p4X, float p4y,
+		uint32_t color)
+	{
+		drawlist->AddQuadFilled({p1X, p1Y}, {p2X, p2y}, {p3X, p3Y}, {p4X, p4y}, color);
+	}
+	inline void AddTriangle(ImDrawList* drawlist,
+		float p1X, float p1Y, float p2X, float p2y,
+		float p3X, float p3Y,
+		uint32_t color)
+	{
+		drawlist->AddTriangle({p1X, p1Y}, {p2X, p2y}, {p3X, p3Y}, color);
+	}
+	inline void AddTriangle(ImDrawList* drawlist,
+		float p1X, float p1Y, float p2X, float p2y,
+		float p3X, float p3Y,
+		uint32_t color, float thickness)
+	{
+		drawlist->AddTriangle({p1X, p1Y}, {p2X, p2y}, {p3X, p3Y}, color, thickness);
+	}
+	inline void AddTriangleFilled(ImDrawList* drawlist,
+		float p1X, float p1Y, float p2X, float p2y,
+		float p3X, float p3Y,
+		uint32_t color)
+	{
+		drawlist->AddTriangleFilled({p1X, p1Y}, {p2X, p2y}, {p3X, p3Y}, color);
+	}
+	inline void AddCircle(ImDrawList* drawlist, float centerX, float centerY, float radius, uint32_t color)
+	{
+		drawlist->AddCircle({centerX, centerY}, radius, color);
+	}
+	inline void AddCircle(ImDrawList* drawlist, float centerX, float centerY, float radius,
+		uint32_t color, int numSegments)
+	{
+		drawlist->AddCircle({centerX, centerY}, radius, color, numSegments);
+	}
+	inline void AddCircle(ImDrawList* drawlist, float centerX, float centerY, float radius,
+		uint32_t color, int numSegments, float thickness)
+	{
+		drawlist->AddCircle({centerX, centerY}, radius, color, numSegments, thickness);
+	}
+	inline void AddCircleFilled(ImDrawList* drawlist, float centerX, float centerY, float radius, uint32_t color)
+	{
+		drawlist->AddCircleFilled({centerX, centerY}, radius, color);
+	}
+	inline void AddCircleFilled(ImDrawList* drawlist, float centerX, float centerY, float radius,
+		uint32_t color, int numSegments)
+	{
+		drawlist->AddCircleFilled({centerX, centerY}, radius, color, numSegments);
+	}
+	inline void AddNgon(ImDrawList* drawlist, float centerX, float centerY, float radius,
+		uint32_t color, int numSegments)
+	{
+		drawlist->AddNgon({centerX, centerY}, radius, color, numSegments);
+	}
+	inline void AddNgon(ImDrawList* drawlist, float centerX, float centerY, float radius,
+		uint32_t color, int numSegments, float thickness)
+	{
+		drawlist->AddNgon({centerX, centerY}, radius, color, numSegments, thickness);
+	}
+	inline void AddNgonFilled(ImDrawList* drawlist, float centerX, float centerY, float radius,
+		uint32_t color, int numSegments)
+	{
+		drawlist->AddNgonFilled({centerX, centerY}, radius, color, numSegments);
+	}
+	inline void AddEllipse(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY, uint32_t color)
+	{
+		drawlist->AddEllipse({centerX, centerY}, radiusX, radiusY, color);
+	}
+	inline void AddEllipse(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY,
+		 uint32_t color, float rotation)
+	{
+		drawlist->AddEllipse({centerX, centerY}, radiusX, radiusY, color, rotation);
+	}
+	inline void AddEllipse(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY,
+		 uint32_t color, float rotation, int numSegments)
+	{
+		drawlist->AddEllipse({centerX, centerY}, radiusX, radiusY, color, rotation, numSegments);
+	}
+	inline void AddEllipse(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY,
+		 uint32_t color, float rotation, int numSegments, float thickness)
+	{
+		drawlist->AddEllipse({centerX, centerY}, radiusX, radiusY, color, rotation, numSegments, thickness);
+	}
+	inline void AddEllipseFilled(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY, uint32_t color)
+	{
+		drawlist->AddEllipseFilled({centerX, centerY}, radiusX, radiusY, color);
+	}
+	inline void AddEllipseFilled(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY,
+		 uint32_t color, float rotation)
+	{
+		drawlist->AddEllipseFilled({centerX, centerY}, radiusX, radiusY, color, rotation);
+	}
+	inline void AddEllipseFilled(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY,
+		 uint32_t color, float rotation, int numSegments)
+	{
+		drawlist->AddEllipseFilled({centerX, centerY}, radiusX, radiusY, color, rotation, numSegments);
+	}
+	inline void AddText(ImDrawList* drawlist, float posX, float posY, uint32_t color, const char* textBegin)
+	{
+		drawlist->AddText({posX, posY}, color, textBegin);
+	}
+	inline void AddText(ImDrawList* drawlist, float posX, float posY, uint32_t color, const char* textBegin, const char* textEnd)
+	{
+		drawlist->AddText({posX, posY}, color, textBegin, textEnd);
+	}
+	inline void AddBezierCubic(ImDrawList* drawlist, float p1X, float p1Y, 
+	    float p2X, float p2Y, float p3X, float p3Y, float p4X, float p4Y,
+	    uint32_t color, float thickness)
+	{
+		drawlist->AddBezierCubic({p1X, p1Y}, {p2X, p2Y}, {p3X, p3Y}, {p4X, p4Y}, color, thickness);
+	}
+	inline void AddBezierCubic(ImDrawList* drawlist, float p1X, float p1Y, 
+	    float p2X, float p2Y, float p3X, float p3Y, float p4X, float p4Y,
+	    uint32_t color, float thickness, int numSegments)
+	{
+		drawlist->AddBezierCubic({p1X, p1Y}, {p2X, p2Y}, {p3X, p3Y}, {p4X, p4Y}, color, thickness, numSegments);
+	}
+	inline void AddBezierQuadratic(ImDrawList* drawlist, float p1X, float p1Y, 
+	    float p2X, float p2Y, float p3X, float p3Y,
+	    uint32_t color, float thickness)
+	{
+		drawlist->AddBezierQuadratic({p1X, p1Y}, {p2X, p2Y}, {p3X, p3Y}, color, thickness);
+	}
+	inline void AddBezierQuadratic(ImDrawList* drawlist, float p1X, float p1Y, 
+	    float p2X, float p2Y, float p3X, float p3Y,
+	    uint32_t color, float thickness, int numSegments)
+	{
+		drawlist->AddBezierQuadratic({p1X, p1Y}, {p2X, p2Y}, {p3X, p3Y}, color, thickness, numSegments);
+	}
+	inline void PathClear(ImDrawList* drawlist)
+	{
+		drawlist->PathClear();
+	}
+	inline void PathLineTo(ImDrawList* drawlist, float posX, float posY)
+	{
+		drawlist->PathLineTo({posX, posY});
+	}
+	inline void PathLineToMergeDuplicate(ImDrawList* drawlist, float posX, float posY)
+	{
+		drawlist->PathLineToMergeDuplicate({posX, posY});
+	}
+	inline void PathFillConvex(ImDrawList* drawlist, uint32_t color)
+	{
+		drawlist->PathFillConvex(color);
+	}
+	inline void PathStroke(ImDrawList* drawlist, uint32_t color)
+	{
+		drawlist->PathStroke(color);
+	}
+	inline void PathStroke(ImDrawList* drawlist, uint32_t color, int flags)
+	{
+		drawlist->PathStroke(color, flags);
+	}
+	inline void PathStroke(ImDrawList* drawlist, uint32_t color, int flags, float thickness)
+	{
+		drawlist->PathStroke(color, flags, thickness);
+	}
+	inline void PathArcTo(ImDrawList* drawlist, float centerX, float centerY, float radius, float aMin, float aMax)
+	{
+		drawlist->PathArcTo({centerX, centerY}, radius, aMin, aMax);
+	}
+	inline void PathArcTo(ImDrawList* drawlist, float centerX, float centerY, float radius, float aMin, float aMax, int numSegments)
+	{
+		drawlist->PathArcTo({centerX, centerY}, radius, aMin, aMax, numSegments);
+	}
+	inline void PathArcToFast(ImDrawList* drawlist, float centerX, float centerY, float radius, int aMinOf12, int aMaxOf12)
+	{
+		drawlist->PathArcToFast({centerX, centerY}, radius, aMinOf12, aMaxOf12);
+	}
+	inline void PathEllipticalArcTo(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY, float rotation,
+	     float aMin, float aMax)
+	{
+		drawlist->PathEllipticalArcTo({centerX, centerY}, radiusX, radiusY, rotation, aMin, aMax);
+	}
+	inline void PathEllipticalArcTo(ImDrawList* drawlist, float centerX, float centerY, float radiusX, float radiusY, float rotation,
+	     float aMin, float aMax, int numSegments)
+	{
+		drawlist->PathEllipticalArcTo({centerX, centerY}, radiusX, radiusY, rotation, aMin, aMax, numSegments);
+	}
+	inline void PathBezierCubicCurveTo(ImDrawList* drawlist, float p2X, float p2Y, float p3X, float p3Y, float p4X, float p4Y)
+	{
+		drawlist->PathBezierCubicCurveTo({p2X, p2Y}, {p3X, p3Y}, {p4X, p4Y});
+	}
+	inline void PathBezierCubicCurveTo(ImDrawList* drawlist, float p2X, float p2Y, float p3X, float p3Y, float p4X, float p4Y, int numSegments)
+	{
+		drawlist->PathBezierCubicCurveTo({p2X, p2Y}, {p3X, p3Y}, {p4X, p4Y}, numSegments);
+	}
+	inline void PathBezierQuadraticCurveTo(ImDrawList* drawlist, float p2X, float p2Y, float p3X, float p3Y)
+	{
+		drawlist->PathBezierQuadraticCurveTo({p2X, p2Y}, {p3X, p3Y});
+	}
+	inline void PathBezierQuadraticCurveTo(ImDrawList* drawlist, float p2X, float p2Y, float p3X, float p3Y, int numSegments)
+	{
+		drawlist->PathBezierQuadraticCurveTo({p2X, p2Y}, {p3X, p3Y}, numSegments);
+	}
+	inline void PathRect(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2Y)
+	{
+		drawlist->PathRect({p1X, p1Y}, {p2X, p2Y});
+	}
+	inline void PathRect(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2Y, float rounding)
+	{
+		drawlist->PathRect({p1X, p1Y}, {p2X, p2Y}, rounding);
+	}
+	inline void PathRect(ImDrawList* drawlist, float p1X, float p1Y, float p2X, float p2Y, float rounding, int flags)
+	{
+		drawlist->PathRect({p1X, p1Y}, {p2X, p2Y}, rounding, flags);
+	}
+	
+	
 
 	inline std::tuple<float, float> GetWindowPos() { const auto vec2{ ImGui::GetWindowPos() };  return std::make_tuple(vec2.x, vec2.y); }
 	inline std::tuple<float, float> GetWindowSize() { const auto vec2{ ImGui::GetWindowSize() };  return std::make_tuple(vec2.x, vec2.y); }
@@ -151,11 +441,11 @@ namespace sol_ImGui
 	inline std::tuple<float, float> GetFontTexUvWhitePixel() { const auto vec2{ ImGui::GetFontTexUvWhitePixel() };	return std::make_tuple(vec2.x, vec2.y); }
 #ifdef SOL_IMGUI_USE_COLOR_U32
 	inline int GetColorU32(int idx, float alphaMul) { return ImGui::GetColorU32(static_cast<ImGuiCol>(idx), alphaMul); }
-	inline int GetColorU32(float colR, float colG, float colB, float colA) { return ImGui::GetColorU32({ colR, colG, colB, colA }); }
 	inline int GetColorU32(int col) { return ImGui::GetColorU32(ImU32(col)); }
 #endif
 	inline std::tuple<float, float, float, float> GetStyleColorVec4(int idx) { const auto col{ ImGui::GetStyleColorVec4(static_cast<ImGuiCol>(idx)) };	return std::make_tuple(col.x, col.y, col.z, col.w); }
 
+	inline int GetColorU32(float colR, float colG, float colB, float colA) { return ImGui::ColorConvertFloat4ToU32({ colR, colG, colB, colA }); }
 
 	// Layout cursor positioning
 	inline std::tuple<float, float> GetCursorScreenPos() { const auto vec2{ ImGui::GetCursorScreenPos() };  return std::make_tuple(vec2.x, vec2.y); }
@@ -3283,6 +3573,8 @@ namespace sol_ImGui
 		@tfield SetClipboardText SetClipboardText
 		@tfield GetStyle GetStyle
 		@tfield GetIO GetIO
+		@tfield GetWindowDrawList GetWindowDrawList
+		@tfield GetColorU32 GetColorU32
 		@table ImGui
 		*/
 
@@ -3834,13 +4126,23 @@ namespace sol_ImGui
 			ImGui.GetFontTexUvWhitePixel();
 		*/
 		ImGui.set_function("GetFontTexUvWhitePixel", GetFontTexUvWhitePixel);
-#ifdef SOL_IMGUI_USE_COLOR_U32
+
+		
+		/***
+		Get Color U32.
+		@function ImGui.GetColorU32
+		@tparam float R
+		@tparam float G
+		@tparam float B
+		@tparam float A
+		@treturn int color
+		@usage
+			ImGui.GetColorU32();
+		*/
 		ImGui.set_function("GetColorU32", sol::overload(
-			sol::resolve<int(int, float)>(GetColorU32),
-			sol::resolve<int(float, float, float, float)>(GetColorU32),
-			sol::resolve<int(int)>(GetColorU32)
+			sol::resolve<int(float, float, float, float)>(GetColorU32)
 		));
-#endif
+		
 #pragma endregion Parameters stacks (shared)
 
 #pragma region Parameters stacks (current window)
@@ -6404,6 +6706,15 @@ namespace sol_ImGui
 			ImGui.GetIO();
 		*/
 		ImGui.set_function("GetIO", GetIO);
+		
+		/***
+		Get window draw list.
+		@function ImGui.GetWindowDrawList
+		@treturn ImDrawList drawList
+		@usage
+			ImGui.GetWindowDrawList();
+		*/
+		ImGui.set_function("GetWindowDrawList", GetWindowDrawList);
 
 		///ImVec4
 		//@section ImVec4
@@ -6582,6 +6893,565 @@ namespace sol_ImGui
 			FontAtlas:AddFontFromFileTTF();
 		*/
 		FontAtlas.set_function("AddFontFromFileTTF", &AddFontFromFileTTF);
+
+		///ImDrawList
+		//@section ImDrawList
+		/***
+		Basic ImDrawList table
+		
+		@tfield PushClipRect PushClipRect
+		@tfield PopClipRect PopClipRect
+		@tfield GetClipRectMin GetClipRectMin
+		@tfield GetClipRectMax GetClipRectMax
+		@tfield AddLine AddLine
+		@tfield AddRect AddRect
+		@tfield AddRectFilled AddRectFilled
+		@tfield AddRectFilledMultiColor AddRectFilledMultiColor
+		@tfield AddQuad AddQuad
+		@tfield AddQuadFilled AddQuadFilled
+		@tfield AddTriangle AddTriangle
+		@tfield AddTriangleFilled AddTriangleFilled
+		@tfield AddCircle AddCircle
+		@tfield AddCircleFilled AddCircleFilled
+		@tfield AddNgon AddNgon
+		@tfield AddNgonFilled AddNgonFilled
+		@tfield AddEllipse AddEllipse
+		@tfield AddEllipseFilled AddEllipseFilled
+		@tfield AddText AddText
+		@tfield AddBezierCubic AddBezierCubic
+		@tfield AddBezierQuadratic AddBezierQuadratic
+		@tfield PathClear PathClear
+		@tfield PathLineTo PathLineTo
+		@tfield PathLineToMergeDuplicate PathLineToMergeDuplicate
+		@tfield PathFillConvex PathFillConvex
+		@tfield PathStroke PathStroke
+		@tfield PathArcTo PathArcTo
+		@tfield PathArcToFast PathArcToFast
+		@tfield PathEllipticalArcTo PathEllipticalArcTo
+		@tfield PathBezierCubicCurveTo PathBezierCubicCurveTo
+		@tfield PathBezierQuadraticCurveTo PathBezierQuadraticCurveTo
+		@tfield PathRect PathRect
+		
+		
+		@table ImDrawList
+		*/
+		sol::usertype<ImDrawList> DrawList = lua.new_usertype<ImDrawList>("ImDrawList");
+
+		/***
+		Push Clip Rect.
+		@function DrawList:PushClipRect
+		@tparam float posXmin
+		@tparam float posYmin
+		@tparam float posXmax
+		@tparam float posYmax
+		@tparam bool intersect optional
+		@usage
+			DrawList:PushClipRect();
+		*/
+		DrawList.set_function("PushClipRect", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float)>(PushClipRectDraw),
+			sol::resolve<void(ImDrawList*, float, float, float, float, bool)>(PushClipRectDraw)
+		));
+		
+		/***
+		Pop Clip Rect.
+		@function DrawList:PopClipRect
+		@usage
+			DrawList:PopClipRect();
+		*/
+		DrawList.set_function("PopClipRect", &PopClipRectDraw);
+		
+		/***
+		Get Clip Rect Min.
+		@function DrawList:GetClipRectMin
+		@treturn ImVec2 clipRectMin
+		@usage
+			DrawList:GetClipRectMin();
+		*/
+		DrawList.set_function("GetClipRectMin", &GetClipRectMin);
+		
+		/***
+		Get Clip Rect Max.
+		@function DrawList:GetClipRectMax
+		@treturn ImVec2 clipRectMax
+		@usage
+			DrawList:GetClipRectMax();
+		*/
+		DrawList.set_function("GetClipRectMax", &GetClipRectMax);
+		
+		/***
+		Add Line.
+		@function DrawList:AddLine
+		@tparam float point1X
+		@tparam float point1Y
+		@tparam float point2X
+		@tparam float point2Y
+		@tparam int color
+		@tparam float thickness optional
+		@usage
+			DrawList:AddLine();
+		*/
+		DrawList.set_function("AddLine", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t)>(AddLine),
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t, float)>(AddLine)
+		));
+		
+		/***
+		Add Rect.
+		@function DrawList:AddRect
+		@tparam float point1X
+		@tparam float point1Y
+		@tparam float point2X
+		@tparam float point2Y
+		@tparam int color
+		@tparam float rounding optional
+		@tparam int flags optional
+		@tparam float thickness optional
+		@usage
+			DrawList:AddRect();
+		*/
+		DrawList.set_function("AddRect", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t)>(AddRect),
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t, float)>(AddRect),
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t, float, int)>(AddRect),
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t, float, int, float)>(AddRect)
+		));
+		
+		/***
+		Add Rect Filled.
+		@function DrawList:AddRectFilled
+		@tparam float point1X
+		@tparam float point1Y
+		@tparam float point2X
+		@tparam float point2Y
+		@tparam int color
+		@tparam float rounding optional
+		@tparam int flags optional
+		@usage
+			DrawList:AddRectFilled();
+		*/
+		DrawList.set_function("AddRectFilled", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t)>(AddRectFilled),
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t, float)>(AddRectFilled),
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t, float, int)>(AddRectFilled)
+		));
+		
+		/***
+		Add Rect Filled Multi Color.
+		@function DrawList:AddRectFilledMultiColor
+		@tparam float point1X
+		@tparam float point1Y
+		@tparam float point2X
+		@tparam float point2Y
+		@tparam int colorUpperLeft
+		@tparam int colorUpperRight
+		@tparam int colorBottomRight
+		@tparam int colorBottomLeft
+		@usage
+			DrawList:AddRectFilledMultiColor();
+		*/
+		DrawList.set_function("AddRectFilledMultiColor", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t, uint32_t, uint32_t, uint32_t)>(AddRectFilledMultiColor)
+			));
+		
+		/***
+		Add Quad.
+		@function DrawList:AddQuad
+		@tparam float point1X
+		@tparam float point1Y
+		@tparam float point2X
+		@tparam float point2Y
+		@tparam float point3X
+		@tparam float point3Y
+		@tparam float point4X
+		@tparam float point4Y
+		@tparam int color
+		@tparam float thickness optional
+		@usage
+			DrawList:AddQuad();
+		*/
+		DrawList.set_function("AddQuad", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float, float, float, float, float, uint32_t)>(AddQuad),
+			sol::resolve<void(ImDrawList*, float, float, float, float, float, float, float, float, uint32_t, float)>(AddQuad)
+		));
+		
+		/***
+		Add Quad Filled.
+		@function DrawList:AddQuadFilled
+		@tparam float point1X
+		@tparam float point1Y
+		@tparam float point2X
+		@tparam float point2Y
+		@tparam float point3X
+		@tparam float point3Y
+		@tparam float point4X
+		@tparam float point4Y
+		@tparam int color
+		@usage
+			DrawList:AddQuadFilled();
+		*/
+		DrawList.set_function("AddQuadFilled", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float, float, float, float, float, uint32_t)>(AddQuadFilled)
+		));
+		
+		/***
+		Add Triangle.
+		@function DrawList:AddTriangle
+		@tparam float point1X
+		@tparam float point1Y
+		@tparam float point2X
+		@tparam float point2Y
+		@tparam float point3X
+		@tparam float point3Y
+		@tparam int color
+		@tparam float thickness optional
+		@usage
+			DrawList:AddTriangle();
+		*/
+		DrawList.set_function("AddTriangle", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float, float, float, uint32_t)>(AddTriangle),
+			sol::resolve<void(ImDrawList*, float, float, float, float, float, float, uint32_t, float)>(AddTriangle)
+		));
+		
+		/***
+		Add Triangle Filled.
+		@function DrawList:AddTriangleFilled
+		@tparam float point1X
+		@tparam float point1Y
+		@tparam float point2X
+		@tparam float point2Y
+		@tparam float point3X
+		@tparam float point3Y
+		@tparam int color
+		@usage
+			DrawList:AddTriangleFilled();
+		*/
+		DrawList.set_function("AddTriangleFilled", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float, float, float, uint32_t)>(AddTriangleFilled)
+		));
+		
+		/***
+		Add Circle.
+		@function DrawList:AddCircle
+		@tparam float point1X
+		@tparam float point1Y
+		@tparam float radius
+		@tparam int color
+		@tparam int numSegments optional
+		@tparam float thickness optional
+		@usage
+			DrawList:AddCircle();
+		*/
+		DrawList.set_function("AddCircle", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, uint32_t)>(AddCircle),
+			sol::resolve<void(ImDrawList*, float, float, float, uint32_t, int)>(AddCircle),
+			sol::resolve<void(ImDrawList*, float, float, float, uint32_t, int, float)>(AddCircle)
+		));
+		
+		/***
+		Add Circle Filled.
+		@function DrawList:AddCircleFilled
+		@tparam float point1X
+		@tparam float point1Y
+		@tparam float radius
+		@tparam int color
+		@tparam int numSegments optional
+		@usage
+			DrawList:AddCircle();
+		*/
+		DrawList.set_function("AddCircleFilled", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, uint32_t)>(AddCircleFilled),
+			sol::resolve<void(ImDrawList*, float, float, float, uint32_t, int)>(AddCircleFilled)
+		));
+		
+		/***
+		Add Ngon.
+		@function DrawList:AddNgon
+		@tparam float point1X
+		@tparam float point1Y
+		@tparam float radius
+		@tparam int color
+		@tparam int numSegments
+		@tparam float thickness optional
+		@usage
+			DrawList:AddNgon();
+		*/
+		DrawList.set_function("AddNgon", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, uint32_t, int)>(AddNgon),
+			sol::resolve<void(ImDrawList*, float, float, float, uint32_t, int, float)>(AddNgon)
+		));
+		
+		/***
+		Add Ngon Filled.
+		@function DrawList:AddNgonFilled
+		@tparam float point1X
+		@tparam float point1Y
+		@tparam float radius
+		@tparam int color
+		@tparam int numSegments
+		@usage
+			DrawList:AddNgonFilled();
+		*/
+		DrawList.set_function("AddNgonFilled", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, uint32_t, int)>(AddNgonFilled)
+		));
+		
+		/***
+		Add Ellipse.
+		@function DrawList:AddEllipse
+		@tparam float centerX
+		@tparam float centerY
+		@tparam float radiusX
+		@tparam float radiusY
+		@tparam int color
+		@tparam float rotation optional
+		@tparam int numSegments optional
+		@tparam float thickness optional
+		@usage
+			DrawList:AddEllipse();
+		*/
+		DrawList.set_function("AddEllipse", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t)>(AddEllipse),
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t, float)>(AddEllipse),
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t, float, int)>(AddEllipse),
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t, float, int, float)>(AddEllipse)
+		));
+		
+		/***
+		Add Ellipse Filled.
+		@function DrawList:AddEllipseFilled
+		@tparam float centerX
+		@tparam float centerY
+		@tparam float radiusX
+		@tparam float radiusY
+		@tparam int color
+		@tparam float rotation optional
+		@tparam int numSegments optional
+		@usage
+			DrawList:AddEllipseFilled();
+		*/
+		DrawList.set_function("AddEllipseFilled", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t)>(AddEllipseFilled),
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t, float)>(AddEllipseFilled),
+			sol::resolve<void(ImDrawList*, float, float, float, float, uint32_t, float, int)>(AddEllipseFilled)
+		));
+		
+		/***
+		Add Text.
+		@function DrawList:AddText
+		@tparam float posX
+		@tparam float posY
+		@tparam int color
+		@tparam string textBegin
+		@tparam string textEnd optional
+		@usage
+			DrawList:AddText();
+		*/
+		DrawList.set_function("AddText", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, uint32_t, const char*)>(AddText),
+			sol::resolve<void(ImDrawList*, float, float, uint32_t, const char*, const char*)>(AddText)
+		));
+		
+		/***
+		Add Bezier Cubic.
+		@function DrawList:AddBezierCubic
+		@tparam float p1X
+		@tparam float p1Y
+		@tparam float p2X
+		@tparam float p2Y
+		@tparam float p3X
+		@tparam float p3Y
+		@tparam float p4X
+		@tparam float p4Y
+		@tparam int color
+		@tparam float thickness
+		@tparam int numSegments optional
+		@usage
+			DrawList:AddBezierCubic();
+		*/
+		DrawList.set_function("AddBezierCubic", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float, float, float, float, float, uint32_t, float)>(AddBezierCubic),
+			sol::resolve<void(ImDrawList*, float, float, float, float, float, float, float, float, uint32_t, float, int)>(AddBezierCubic)
+		));
+		
+		/***
+		Add Bezier Quadratic.
+		@function DrawList:AddBezierQuadratic
+		@tparam float p1X
+		@tparam float p1Y
+		@tparam float p2X
+		@tparam float p2Y
+		@tparam float p3X
+		@tparam float p3Y
+		@tparam int color
+		@tparam float thickness
+		@tparam int numSegments optional
+		@usage
+			DrawList:AddBezierQuadratic();
+		*/
+		DrawList.set_function("AddBezierQuadratic", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float, float, float, uint32_t, float)>(AddBezierQuadratic),
+			sol::resolve<void(ImDrawList*, float, float, float, float, float, float, uint32_t, float, int)>(AddBezierQuadratic)
+		));
+		
+		/***
+		Path Clear.
+		@function DrawList:PathClear
+		@usage
+			DrawList:PathClear();
+		*/
+		DrawList.set_function("PathClear", &PathClear);
+		
+		/***
+		Path Line To.
+		@function DrawList:PathLineTo
+		@tparam float posX
+		@tparam float posY
+		@usage
+			DrawList:PathLineTo();
+		*/
+		DrawList.set_function("PathLineTo", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float)>(PathLineTo)
+		));
+		
+		/***
+		Path Line To Merge Duplicate.
+		@function DrawList:PathLineToMergeDuplicate
+		@tparam float posX
+		@tparam float posY
+		@usage
+			DrawList:PathLineToMergeDuplicate();
+		*/
+		DrawList.set_function("PathLineToMergeDuplicate", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float)>(PathLineToMergeDuplicate)
+		));
+		
+		/***
+		Path Fill Convex.
+		@function DrawList:PathFillConvex
+		@tparam int color
+		@usage
+			DrawList:PathFillConvex();
+		*/
+		DrawList.set_function("PathFillConvex", sol::overload(
+			sol::resolve<void(ImDrawList*, uint32_t)>(PathFillConvex)
+		));
+		
+		/***
+		Path Stroke.
+		@function DrawList:PathStroke
+		@tparam int color
+		@tparam int flags optional
+		@usage
+			DrawList:PathStroke();
+		*/
+		DrawList.set_function("PathStroke", sol::overload(
+			sol::resolve<void(ImDrawList*, uint32_t)>(PathStroke),
+			sol::resolve<void(ImDrawList*, uint32_t, int)>(PathStroke)
+		));
+		
+		/***
+		Path Arc To.
+		@function DrawList:PathArcTo
+		@tparam float centerX
+		@tparam float centerY
+		@tparam float radius
+		@tparam float aMin
+		@tparam float aMax
+		@tparam int numSegments optional
+		@usage
+			DrawList:PathArcTo();
+		*/
+		DrawList.set_function("PathArcTo", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float, float)>(PathArcTo),
+			sol::resolve<void(ImDrawList*, float, float, float, float, float, int)>(PathArcTo)
+		));
+		
+		/***
+		Path Arc To Fast.
+		@function DrawList:PathArcToFast
+		@tparam float centerX
+		@tparam float centerY
+		@tparam float radius
+		@tparam int aMin
+		@tparam int aMax
+		@usage
+			DrawList:PathArcToFast();
+		*/
+		DrawList.set_function("PathArcToFast", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, int, int)>(PathArcToFast)
+		));
+		
+		/***
+		Path Elliptical Arc To.
+		@function DrawList:PathEllipticalArcTo
+		@tparam float centerX
+		@tparam float centerY
+		@tparam float radiusX
+		@tparam float radiusY
+		@tparam float rotation
+		@tparam float aMin
+		@tparam float aMax
+		@tparam int numSegments optional
+		@usage
+			DrawList:PathEllipticalArcTo();
+		*/
+		DrawList.set_function("PathEllipticalArcTo", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float, float, float, float)>(PathEllipticalArcTo),
+			sol::resolve<void(ImDrawList*, float, float, float, float, float, float, float, int)>(PathEllipticalArcTo)
+		));
+		
+		/***
+		Path Bezier Cubic Curve To.
+		@function DrawList:PathBezierCubicCurveTo
+		@tparam float p2X
+		@tparam float p2Y
+		@tparam float p3X
+		@tparam float p3Y
+		@tparam float p4X
+		@tparam float p4Y
+		@tparam int numSegments optional
+		@usage
+			DrawList:PathBezierCubicCurveTo();
+		*/
+		DrawList.set_function("PathBezierCubicCurveTo", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float, float, float)>(PathBezierCubicCurveTo),
+			sol::resolve<void(ImDrawList*, float, float, float, float, float, float, int)>(PathBezierCubicCurveTo)
+		));
+		
+		/***
+		Path Bezier Quadratic Curve To.
+		@function DrawList:PathBezierQuadraticCurveTo
+		@tparam float p2X
+		@tparam float p2Y
+		@tparam float p3X
+		@tparam float p3Y
+		@tparam int numSegments optional
+		@usage
+			DrawList:PathBezierQuadraticCurveTo();
+		*/
+		DrawList.set_function("PathBezierQuadraticCurveTo", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float)>(PathBezierQuadraticCurveTo),
+			sol::resolve<void(ImDrawList*, float, float, float, float, int)>(PathBezierQuadraticCurveTo)
+		));
+		
+		/***
+		Path Rect.
+		@function DrawList:PathRect
+		@tparam float p1X
+		@tparam float p1Y
+		@tparam float p2X
+		@tparam float p2Y
+		@tparam float rounding optional
+		@tparam int flags optional
+		@usage
+			DrawList:PathRect();
+		*/
+		DrawList.set_function("PathRect", sol::overload(
+			sol::resolve<void(ImDrawList*, float, float, float, float)>(PathRect),
+			sol::resolve<void(ImDrawList*, float, float, float, float, float)>(PathRect),
+			sol::resolve<void(ImDrawList*, float, float, float, float, float, int)>(PathRect)
+		));
 
 		///ImGuiIO
 		//@section ImGuiIO

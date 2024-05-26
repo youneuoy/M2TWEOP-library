@@ -106,6 +106,29 @@ void codes::initCodes(int gameVer)
 		offsets.deleteFortFuncTwo = 0x004BCA80;
 		offsets.createFortFunc = 0x00714760;
 		offsets.mercEOPValue = 0x0190B928;
+		
+		offsets.getUnitByLabel = 0x0A945A0;
+		offsets.getUnitByLabel2 = 0x0A91780;
+		
+		offsets.unitOrderMove = 0x00A6DAA0;
+		offsets.unitImmediatePlace = 0x00A6D310;
+		offsets.unitAttackClosestUnit = 0x00A789C0;
+		offsets.unitAttackUnit = 0x00A6E920;
+		offsets.unitDeployStakes = 0x00A77E00;
+		offsets.unitChangeFormation = 0x00A6F040;
+		offsets.unitHalt = 0x00A6D680;
+		offsets.getMapHeight = 0x00443E70;
+		offsets.unitMoveToOrientation = 0x0A6E140;
+		offsets.moveRelative = 0x0A79810;
+		offsets.moveToMissileRange = 0x0A6F400;
+		offsets.unitTurn = 0x0A6F940;
+		offsets.unitTaunt = 0x0A723F0;
+		offsets.useSpecialAbility = 0x0A72630;
+		offsets.getBuildingAngle = 0x006EAB10;
+		offsets.attackBuilding = 0x00757750;
+		
+		//offsets.unitPlace = 0x00770A70;
+		offsets.unitMove = 0x0759B70;
 	}
 	else if (gameVer == 2) //steam
 	{
@@ -214,5 +237,28 @@ void codes::initCodes(int gameVer)
 		offsets.deleteFortFuncTwo = 0x004bd010;
 		offsets.createFortFunc = 0x00714E60;
 		offsets.mercEOPValue = 0x018C27C8;
+		
+		offsets.getUnitByLabel = 0x0A95600;
+		offsets.getUnitByLabel2 = 0x0A927E0;
+		
+		offsets.unitOrderMove = 0x00A6EB00;
+		offsets.unitImmediatePlace = 0x00A6E370;
+		offsets.unitAttackClosestUnit = 0x00A79A20;
+		offsets.unitAttackUnit = 0x00A6F980;
+		offsets.unitDeployStakes = 0x00A78E60;
+		offsets.unitChangeFormation = 0x00A700A0;
+		offsets.unitHalt = 0x00A6E6E0;
+		offsets.getMapHeight = 0x004441B0;
+		offsets.unitMoveToOrientation = 0x0A6F1A0;
+		offsets.moveRelative = 0x00A7A870;
+		offsets.moveToMissileRange = 0x00A70460;
+		offsets.unitTurn = 0x00A709A0;
+		offsets.unitTaunt = 0x00A73450;
+		offsets.useSpecialAbility = 0x00A73690;
+		offsets.getBuildingAngle = 0x006EB0F0;
+		offsets.attackBuilding = 0x00757EE0;
+		
+		//offsets.unitPlace = 0x00770A70;
+		offsets.unitMove = 0x075A320;
 	}
 }

@@ -9,8 +9,13 @@ namespace battleHandlerHelpers
 	stackStruct* getPlayerArmy(const battleDataS* battleData);
 	factionStruct* getFaction(const battleSide* side, int index);
 	battleResidence* getBattleResidence();
+	battlefieldEngines* getBattlefieldEngines();
+	siegeEngine* getSiegeEngine(const battlefieldEngines* engineDb, const int index);
+	battleDataS* getBattleData();
+	bool inBattle();
+	int getEngineType(const siegeEngine* engine);
 	AIBattleObjectiveBase* getObjective(const battleAI* battleAi, int index);
-	int getObjectiveType(const AIBattleObjectiveBase* objective);
+	int getObjectiveType(AIBattleObjectiveBase* objective);
 	unit* getUnit(const AIBattleObjectiveBase* objective, int index);
 	buildingBattle* getBattleBuilding(const battleBuildings* buildings, int index);
 };

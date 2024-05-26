@@ -153,6 +153,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<traitEntry> traitEntry;
 		sol::usertype<traitLevel> traitLevel;
 		sol::usertype<traitEffect> traitEffect;
+		sol::usertype<unitGroup> unitGroup;
 	}types;
 	luaState = {};
 	luaPath = modPath + "\\youneuoy_Data\\plugins\\lua";
@@ -1101,6 +1102,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int soldierCountBattleMap Read only
 	@tfield int moraleLevel use moraleStatus enum
 	@tfield int isCloseFormation
+	@tfield unitGroup unitGroup
 	@tfield int fatigue (battle)
 	@tfield int maxAmmo (battle)
 	@tfield int currentAmmo (battle)
@@ -1123,7 +1125,23 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield isEngaged isEngaged
 	@tfield isUnderFire isUnderFire
 	@tfield getMountClass getMountClass
-
+	@tfield moveToPosition moveToPosition
+	@tfield immediatePlace immediatePlace
+	@tfield getFormation getFormation
+	@tfield attackClosestUnit attackClosestUnit
+	@tfield attackUnit attackUnit
+	@tfield deployStakes deployStakes
+	@tfield changeFormation changeFormation
+	@tfield halt halt
+	@tfield moveToOrientation moveToOrientation
+	@tfield moveRelative moveRelative
+	@tfield moveToMissileRange moveToMissileRange
+	@tfield turn turn
+	@tfield taunt taunt
+	@tfield useSpecialAbility useSpecialAbility
+	@tfield getSiegeEngine getSiegeEngine
+	@tfield attackBuilding attackBuilding
+	@tfield collectEngine collectEngine
 
 	@table unit
 	*/
@@ -1143,6 +1161,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.unit.set("moraleLevel", &unit::moraleLevel);
 	types.unit.set("battlePosX", &unit::positionX);
 	types.unit.set("battlePosY", &unit::positionY);
+	types.unit.set("unitGroup", &unit::unitGroup);
 	types.unit.set("fatigue", &unit::fatigue);
 	types.unit.set("maxAmmo", &unit::maxAmmo);
 	types.unit.set("currentAmmo", &unit::currentAmmo);
@@ -1247,6 +1266,154 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local mountClass = unit:getMountClass();
 	*/
 	types.unit.set_function("getMountClass", &unitHelpers::getMountClass);
+	/***
+	Get unit formation type.
+	@function unit:getFormation
+	@treturn int formationType
+	@usage
+	local formationType = unit:getFormation();
+	*/
+	types.unit.set_function("getFormation", &unitHelpers::getUnitFormation);
+	/***
+	Orders the unit to move to the specified position.
+	@function unit:moveToPosition
+	@tparam float xCoord
+	@tparam float yCoord
+	@tparam bool run
+	@usage
+		unit:moveToPosition(150, -300, true);
+	*/
+	types.unit.set_function("moveToPosition", &unitHelpers::unitMovetoPosition);
+	/***
+	Immediately positions the unit at the given location.
+	@function unit:immediatePlace
+	@tparam float xCoord
+	@tparam float yCoord
+	@tparam int angle
+	@tparam int width
+	@usage
+		unit:immediatePlace(150, -300, 60, 0);
+	*/
+	types.unit.set_function("immediatePlace", &unitHelpers::placeUnit);
+	/***
+	Searches an arc in front of the unit, and attacks the closest enemy found.
+	@function unit:attackClosestUnit
+	@tparam int angle
+	@tparam bool run
+	@usage
+		unit:attackClosestUnit(0, true);
+	*/
+	types.unit.set_function("attackClosestUnit", &unitHelpers::unitAttackClosest);
+	/***
+	Orders the unit to attack another unit.
+	@function unit:attackUnit
+	@tparam unit targetUnit
+	@tparam bool run
+	@usage
+		unit:attackUnit(target, true);
+	*/
+	types.unit.set_function("attackUnit", &unitHelpers::unitAttackUnit);
+	/***
+	Deploys stakes.
+	@function unit:deployStakes
+	@usage
+		unit:deployStakes();
+	*/
+	types.unit.set_function("deployStakes", &unitHelpers::deployStakes);
+	/***
+	Changes the unit's formation.
+	@function unit:changeFormation
+	@tparam int formationType use formationType enum
+	@usage
+		unit:changeFormation();
+	*/
+	types.unit.set_function("changeFormation", &unitHelpers::changeUnitFormation);
+	/***
+	Orders the unit to stop it's orders.
+	@function unit:halt
+	@usage
+		unit:halt();
+	*/
+	types.unit.set_function("halt", &unitHelpers::haltUnit);
+	/***
+	Orders the unit to move to the specified position with a specified rotation and orientation.
+	@function unit:moveToOrientation
+	@tparam float xCoord
+	@tparam float yCoord
+	@tparam int widthInMen
+	@tparam int angle
+	@tparam bool run
+	@usage
+		unit:moveToOrientation(150, 105, 100, 60, true);
+	*/
+	types.unit.set_function("moveToOrientation", &unitHelpers::moveToOrientation);
+	/***
+	Orders the unit to move to the specified position.
+	@function unit:moveRelative
+	@tparam float xCoord
+	@tparam float yCoord
+	@tparam bool run
+	@usage
+		unit:moveRelative(150, 105, true);
+	*/
+	types.unit.set_function("moveRelative", &unitHelpers::moveRelative);
+	/***
+	Orders the attacker to move into missile range of the target.
+	@function unit:moveToMissileRange
+	@tparam unit targetUnit
+	@tparam bool run
+	@usage
+		unit:moveToMissileRange(targetUnit, true);
+	*/
+	types.unit.set_function("moveToMissileRange", &unitHelpers::moveToMissileRange);
+	/***
+	Turn to an absolute angle or by an angle relative to it's current rotation.
+	@function unit:turn
+	@tparam int angle
+	@tparam bool isRelative
+	@usage
+		unit:turn(90, true);
+	*/
+	types.unit.set_function("turn", &unitHelpers::unitTurn);
+	/***
+	Makes the unit taunt.
+	@function unit:taunt
+	@usage
+		unit:taunt();
+	*/
+	types.unit.set_function("taunt", &unitHelpers::taunt);
+	/***
+	Makes the unit perform their special ability.
+	@function unit:useSpecialAbility
+	@usage
+		unit:useSpecialAbility();
+	*/
+	types.unit.set_function("useSpecialAbility", &unitHelpers::useSpecialAbility);
+	/***
+	Get Siege engine.
+	@function unit:getSiegeEngine
+	@tparam int index
+	@treturn siegeEngine engine
+	@usage
+		local engine = unit:getSiegeEngine(0);
+	*/
+	types.unit.set_function("getSiegeEngine", &unitHelpers::getSiegeEngine);
+	/***
+	Order a unit with appropriate siege equipment to attack an appropriate building (including docking towers/ladders to walls).
+	@function unit:attackBuilding
+	@tparam buildingBattle building
+	@usage
+		unit:attackBuilding(building);
+	*/
+	types.unit.set_function("attackBuilding", &unitHelpers::attackBuilding);
+	/***
+	Order an infantry unit to collect an engine (ram/ladder/tower).
+	@function unit:collectEngine
+	@tparam siegeEngine engine
+	@usage
+		unit:collectEngine(engine);
+	*/
+	types.unit.set_function("collectEngine", &unitHelpers::collectEngine);
 
 	///Unit Position Data
 	//@section unitPositionData
@@ -3983,6 +4150,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield findInSettlement findInSettlement
 	@tfield findInFort findInFort
 	@tfield int totalStrength
+	@tfield int maxGroups
 	@tfield float reform_point_x X coordinate to which the retreating units will go.
 	@tfield float reform_point_y Y coordinate to which the retreating units will go.
 	@tfield createEOPUnit createEOPUnit
@@ -3993,7 +4161,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield siegeSettlement siegeSettlement
 	@tfield siegeFort siegeFort
 	@tfield attackArmy attackArmy
+	@tfield getGroup getGroup
 	@tfield siegeStruct siege Current siege.
+	@tfield defineUnitGroup defineUnitGroup
 
 
 	@table stackStruct
@@ -4003,7 +4173,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.stackStruct.set("isBoarded", &stackStruct::isBoarded);
 	types.stackStruct.set("ladders", &stackStruct::ladders);
 	types.stackStruct.set("rams", &stackStruct::rams);
+	types.stackStruct.set("maxGroups", &stackStruct::maxUnitGroups);
 	types.stackStruct.set("towers", &stackStruct::towers);
+	types.stackStruct.set("siege", &stackStruct::siege);
 
 	/***
 	Sort units in a stack. Use the sortType enum to specify the sorting mode.
@@ -4183,8 +4355,124 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	end
 	*/
 	types.stackStruct.set_function("attackArmy", &stackStructHelpers::attackArmy);
+	
+	/***
+	Get unit group at index.
+	@function stackStruct:getGroup
+	@tparam int index
+	@treturn unitGroup group
+	@usage
+	    local group =stackStruct:getGroup(0);
+	*/
+	types.stackStruct.set_function("getGroup", &stackStructHelpers::getGroup);
+	
+	/***
+	Define a new unit group with a label.
+	@function stackStruct:defineUnitGroup
+	@tparam string name
+	@tparam unit unit
+	@treturn unitGroup group
+	@usage
+	    local group =stackStruct:defineUnitGroup("group1", unit);
+	*/
+	types.stackStruct.set_function("defineUnitGroup", &unitHelpers::defineUnitGroup);
+	
+	///unitGroup
+	//@section Unit Group
 
-	types.stackStruct.set("siege", &stackStruct::siege);
+	/***
+	Basic unitGroup table
+
+	@tfield int unitsInFormationNum
+	@tfield int unitsNotInFormationNum
+	@tfield int unitNumTotal
+	@tfield float xCoord
+	@tfield float yCoord
+	@tfield int angle
+	@tfield int automationType 1 = defend, 2 = attack
+	@tfield float defendXCoord if automated defend (1)
+	@tfield float defendYCoord if automated defend (1)
+	@tfield float defendRadius if automated defend (1)
+	@tfield unit targetUnit if automated attack (2)
+	@tfield int newAutomationType 1 = defend, 2 = attack (setting this passes info from new fields to active fields)
+	@tfield float newDefendXCoord if automated defend (1)
+	@tfield float newDefendYCoord if automated defend (1)
+	@tfield float newDefendRadius if automated defend (1)
+	@tfield unit newTargetUnit if automated attack (2)
+	@tfield getUnitInFormation getUnitInFormation
+	@tfield getUnitNotInFormation getUnitNotInFormation
+	@tfield addUnit addUnit
+	@tfield removeUnit removeUnit
+	@tfield undefine undefine
+	
+
+	@table unitGroup
+	*/
+	types.unitGroup = luaState.new_usertype<unitGroup>("unitGroup");
+	types.unitGroup.set("unitsInFormationNum", &unitGroup::unitsInFormationNum);
+	types.unitGroup.set("unitsNotInFormationNum", &unitGroup::unitsNotInFormationNum);
+	types.unitGroup.set("unitNumTotal", &unitGroup::unitsNumTotal);
+	types.unitGroup.set("xCoord", &unitGroup::xCoord);
+	types.unitGroup.set("yCoord", &unitGroup::yCoord);
+	types.unitGroup.set("angle", &unitGroup::angle);
+	types.unitGroup.set("automationType", &unitGroup::automationType);
+	types.unitGroup.set("defendXCoord", &unitGroup::defendXCoord);
+	types.unitGroup.set("defendYCoord", &unitGroup::defendYCoord);
+	types.unitGroup.set("defendRadius", &unitGroup::defendRadius);
+	types.unitGroup.set("targetUnit", &unitGroup::targetUnit);
+	types.unitGroup.set("newAutomationType", &unitGroup::newAutomationType);
+	types.unitGroup.set("newDefendXCoord", &unitGroup::newDefendXCoord);
+	types.unitGroup.set("newDefendYCoord", &unitGroup::newDefendYCoord);
+	types.unitGroup.set("newDefendRadius", &unitGroup::newDefendRadius);
+	types.unitGroup.set("newTargetUnit", &unitGroup::newTargetUnit);
+	
+	/***
+	Add a unit to the group (won't add if unit already in group).
+	@function unitGroup:addUnit
+	@tparam unit unit
+	@usage
+			unitGroup:addUnit(unit);
+	*/
+	types.unitGroup.set_function("addUnit", &unitHelpers::addUnitToGroup);
+	
+	/***
+	Remove a unit from a group.
+	@function unitGroup:removeUnit
+	@tparam unit unit
+	@usage
+			unitGroup:removeUnit(unit);
+	*/
+	types.unitGroup.set_function("removeUnit", &unitHelpers::removeUnitFromGroup);
+	
+	/***
+	Undefine a unit group.
+	@function unitGroup:undefine
+	@usage
+			unitGroup:undefine();
+	*/
+	types.unitGroup.set_function("undefine", &unitHelpers::undefineUnitGroup);
+	
+	/***
+	Get a unit in the group's formation (not given individual commands). Once you give a unit a command once it seems they will always be in the other array.
+	@function unitGroup:getUnitInFormation
+	@tparam int index
+	@treturn unit unit
+	@usage
+			local un = unitGroup:getUnitInFormation(0);
+	*/
+	types.unitGroup.set_function("getUnitInFormation", &unitHelpers::getUnitInFormation);
+	
+	/***
+	Get a unit not in the group's formation (given individual commands).
+	@function unitGroup:getUnitNotInFormation
+	@tparam int index
+	@treturn unit unit
+	@usage
+			local un = unitGroup:getUnitNotInFormation(0);
+	*/
+	types.unitGroup.set_function("getUnitNotInFormation", &unitHelpers::getUnitNotInFormation);
+	
+	
 	///SiegeStruct
 	//@section siegeStruct
 

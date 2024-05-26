@@ -1048,16 +1048,22 @@ void luaP::initCampaign()
 	@tfield int factionID
 	@tfield int xCoord
 	@tfield int yCoord
-	@tfield int objectTypes bitfield, from left to right: unknown, character, ship, watchtower, port, unknown, fort, settlement.
+	@tfield int objectTypes bitfield, from left to right: unknown, character, ship, watchtower, port, ship, fort, settlement.
 	@tfield bool hasRiver
+	@tfield bool hasRiverSource
 	@tfield bool hasCrossing
 	@tfield bool hasCharacter
 	@tfield bool hasShip
 	@tfield bool hasWatchtower
 	@tfield bool hasPort
 	@tfield bool hasFort
+	@tfield bool hasCliff
 	@tfield bool hasSettlement
 	@tfield bool isDevastated
+	@tfield bool isCoastalWater
+	@tfield int roadLevel Settlement tiles return 3.
+	@tfield bool isLandConnection Crossing created by green arrows.
+	@tfield bool isSeaCrossing Crossing created by close proximity, not green arrows.
 	@tfield int border 1 = border, 2 = seaBorder, 3 = sea edge border (point where the region border both another land region and sea).
 	@tfield int armiesNearTile bitfield of faction id's (counts both tile and the 8 tiles around it, if you want only on tile combine with charactersOnTile).
 	@tfield int charactersOnTile bitfield of faction id's
@@ -1066,6 +1072,15 @@ void luaP::initCampaign()
 	@tfield factionHasCharacterOnTile factionHasCharacterOnTile
 	@tfield getTileCharacterCount getTileCharacterCount
 	@tfield getTileCharacterAtIndex getTileCharacterAtIndex
+	@tfield int hasRoad
+	@tfield int borderField
+	@tfield int otherField
+	@tfield int choke
+	@tfield int field_0x8
+	@tfield int field_0xB
+	@tfield int terrainModel
+	@tfield int ModelIsHills
+	@tfield int field_0xE
 	
 	@table tileStruct
 	*/
@@ -1075,13 +1090,26 @@ void luaP::initCampaign()
 	typeAll.tileStruct.set("groundType", &oneTile::groundType);
 	typeAll.tileStruct.set("regionID", &oneTile::regionId);
 	typeAll.tileStruct.set("objectTypes", &oneTile::objectTypes);
+	typeAll.tileStruct.set("otherField", &oneTile::otherField);
+	typeAll.tileStruct.set("borderField", &oneTile::border);
+	typeAll.tileStruct.set("hasRoad", &oneTile::hasRoad);
+	typeAll.tileStruct.set("choke", &oneTile::choke);
+	typeAll.tileStruct.set("field_0x8", &oneTile::field_0x8);
+	typeAll.tileStruct.set("field_0xB", &oneTile::field_0xB);
+	typeAll.tileStruct.set("terrainModel", &oneTile::terrainModel);
+	typeAll.tileStruct.set("ModelIsHills", &oneTile::ModelIsHills);
+	typeAll.tileStruct.set("field_0xE", &oneTile::field_0xE);
 	typeAll.tileStruct.set("xCoord", sol::property(gameHelpers::getTileX));
 	typeAll.tileStruct.set("yCoord", sol::property(gameHelpers::getTileY));
 	typeAll.tileStruct.set("factionID", sol::property(gameHelpers::getTileFactionID));
-	typeAll.tileStruct.set("riverField", &oneTile::factionId);
-	//typeAll.tileStruct.set("borderingSettlement", &oneTile::borderingSettlement);
 	typeAll.tileStruct.set("hasRiver", sol::property(gameHelpers::tileHasRiver));
+	typeAll.tileStruct.set("hasRiverSource", sol::property(gameHelpers::tileHasRiverSource));
+	typeAll.tileStruct.set("hasCliff", sol::property(gameHelpers::tileHasCliff));
+	typeAll.tileStruct.set("isLandConnection", sol::property(gameHelpers::isLandConnection));
+	typeAll.tileStruct.set("isCoastalWater", sol::property(gameHelpers::isCoastalWater));
+	typeAll.tileStruct.set("isSeaCrossing", sol::property(gameHelpers::isSeaCrossing));
 	typeAll.tileStruct.set("hasCrossing", sol::property(gameHelpers::tileHasCrossing));
+	typeAll.tileStruct.set("roadLevel", sol::property(gameHelpers::tileRoadLevel));
 	typeAll.tileStruct.set("border", sol::property(gameHelpers::tileBorderType));
 	typeAll.tileStruct.set("hasCharacter", sol::property(gameHelpers::tileHasCharacter));
 	typeAll.tileStruct.set("hasShip", sol::property(gameHelpers::tileHasShip));
@@ -1695,6 +1723,8 @@ void luaP::initP2()
 		sol::usertype<AIBattleObjectiveBase> battleObjective;
 		sol::usertype<buildingBattle> buildingBattle;
 		sol::usertype<battleBuildings> battleBuildings;
+		sol::usertype<siegeEngine> siegeEngineStruct;
+		sol::usertype<battlefieldEngines> battlefieldEngines;
 
 	}typeAll;
 	///GameDataAll
@@ -1773,6 +1803,10 @@ void luaP::initP2()
 	@tfield int[31] factionSide faction alliance array, -1 if not in battle, start at 1 so faction ID + 1 Maximum 31.
 	@tfield getPlayerArmy getPlayerArmy
 	@tfield getBattleResidence getBattleResidence
+	@tfield getUnitByLabel getUnitByLabel
+	@tfield getGroupByLabel getGroupByLabel
+	@tfield getBattleMapHeight getBattleMapHeight
+	@tfield getBattlefieldEngines getBattlefieldEngines
 
 	@table battleStruct
 	*/
@@ -1817,6 +1851,44 @@ void luaP::initP2()
 
 	*/
 	typeAll.battleTable.set_function("getBattleResidence", &battleHandlerHelpers::getBattleResidence);
+	/***
+	Get a unit by it's label.
+	@function battleStruct.getUnitByLabel
+	@tparam string label
+	@treturn unit foundUnit
+	@usage
+	local unit = BATTLE.getUnitByLabel("a1u1");
+	*/
+	typeAll.battleTable.set_function("getUnitByLabel", &unitHelpers::getUnitByLabel);
+	/***
+	Get a group by it's label.
+	@function battleStruct.getGroupByLabel
+	@tparam string label
+	@treturn unitGroup foundGroup
+	@usage
+	      local group = BATTLE.getGroupByLabel("group1");
+	*/
+	typeAll.battleTable.set_function("getGroupByLabel", &unitHelpers::getGroupByLabel);
+	
+	/***
+	Get battlemap height at position.
+	@function battleStruct.getBattleMapHeight
+	@tparam float xCoord
+	@tparam float yCoord
+	@treturn float zCoord
+	@usage
+	local unit = BATTLE.getBattleMapHeight(10,20);
+	*/
+	typeAll.battleTable.set_function("getBattleMapHeight", &unitHelpers::getBattleMapHeight);
+	
+	/***
+	Get battlefield engines.
+	@function battleStruct.getBattlefieldEngines
+	@treturn battlefieldEngines engines
+	@usage
+	     local engines = BATTLE.getBattlefieldEngines();
+	*/
+	typeAll.battleTable.set_function("getBattlefieldEngines", &battleHandlerHelpers::getBattlefieldEngines);
 
 	///BattleSide
 	//@section battleSide
@@ -1831,12 +1903,15 @@ void luaP::initP2()
 	@tfield int[4] winConditions Returns an int index of a wincondition. Maximum 4.
 	@tfield getWinConditionString getWinConditionString
 	@tfield int armiesNum
+	@tfield int battleArmyNum
 	@tfield int alliance
-	@tfield int soldierCount
+	@tfield int soldierCountStart
 	@tfield int factionCount
 	@tfield int totalStrength
+	@tfield int reinforceArmyCount
+	@tfield float reinforcementTimer
 	@tfield float battleOdds
-	@tfield int totalValueStart
+	@tfield int activeArmyStrength
 	@tfield battleAI battleAIPlan
 	@tfield getBattleArmy getBattleArmy
 	@tfield getFaction getFaction
@@ -1849,10 +1924,13 @@ void luaP::initP2()
 	typeAll.battleSideTable.set("isCanDeploy", &battleSide::isCanDeploy);
 	typeAll.battleSideTable.set("wonBattle", &battleSide::wonBattle);
 	typeAll.battleSideTable.set("battleSuccess", &battleSide::battleSuccess);
+	typeAll.battleSideTable.set("battleArmyNum", &battleSide::armiesNum);
+	typeAll.battleSideTable.set("reinforceArmyCount", &battleSide::reinforceArmyCount);
+	typeAll.battleSideTable.set("reinforcementTimer", &battleSide::reinforcementTimer);
 	typeAll.battleSideTable.set("alliance", &battleSide::alliance);
-	typeAll.battleSideTable.set("soldierCount", &battleSide::soldierCount);
+	typeAll.battleSideTable.set("soldierCountStart", &battleSide::soldierCount);
 	typeAll.battleSideTable.set("totalStrength", &battleSide::totalStrength);
-	typeAll.battleSideTable.set("totalValueStart", &battleSide::totalValue);
+	typeAll.battleSideTable.set("activeArmyStrength", &battleSide::activeArmyStrength);
 	typeAll.battleSideTable.set("battleOdds", &battleSide::battleOdds);
 	typeAll.battleSideTable.set("factionCount", &battleSide::factionCount);
 	typeAll.battleSideTable.set("battleAIPlan", &battleSide::battleAIPlan);
@@ -1896,7 +1974,7 @@ void luaP::initP2()
 	end
 	*/
 	typeAll.battleSideTable.set_function("getWinConditionString", &battleHandlerHelpers::getWinConditionS);
-	typeAll.battleSideTable.set("armiesNum", &battleSide::armiesNum);
+	typeAll.battleSideTable.set("armiesNum", &battleSide::armyAICount);
 	typeAll.battleSideTable.set("armies", sol::property([](battleSide& self) { return std::ref(self.armies); }));
 	/***
 	Get a battle army by it's index.
@@ -2054,7 +2132,7 @@ void luaP::initP2()
 		local objective = battleObjective:getType()
 
 	*/
-	typeAll.battleObjective.set_function("getType", &battleHandlerHelpers::getObjective);
+	typeAll.battleObjective.set_function("getType", &battleHandlerHelpers::getObjectiveType);
 
 	///BattleArmy
 	//@section battleArmy
@@ -2182,6 +2260,68 @@ void luaP::initP2()
 	typeAll.buildingBattle.set("currentHealth", &buildingBattle::currentHealth);
 	typeAll.buildingBattle.set("startHealth", &buildingBattle::startHealth);
 	typeAll.buildingBattle.set("isDefenderControlled", &buildingBattle::isDefenderControlled);
+
+	///Siege Engine
+	//@section Siege Engine
+
+	/***
+	Basic siegeEngineStruct table
+
+	@tfield float xCoord
+	@tfield float zCoord
+	@tfield float yCoord
+	@tfield float mass
+	@tfield int angle
+	@tfield int engineID
+	@tfield unit currentUnit
+	@tfield unit lastUnit
+	@tfield getType getType
+
+	@table siegeEngineStruct
+	*/
+	typeAll.siegeEngineStruct = luaState.new_usertype<siegeEngine>("siegeEngineStruct");
+	typeAll.siegeEngineStruct.set("xCoord", &siegeEngine::posX);
+	typeAll.siegeEngineStruct.set("zCoord", &siegeEngine::posZ);
+	typeAll.siegeEngineStruct.set("yCoord", &siegeEngine::posY);
+	typeAll.siegeEngineStruct.set("mass", &siegeEngine::mass);
+	typeAll.siegeEngineStruct.set("angle", &siegeEngine::angle);
+	typeAll.siegeEngineStruct.set("currentUnit", &siegeEngine::currentUnit);
+	typeAll.siegeEngineStruct.set("lastUnit", &siegeEngine::lastUnit);
+	typeAll.siegeEngineStruct.set("engineID", &siegeEngine::engineID);
+
+	/***
+	Get the type of the engine (use the enum).
+	@function siegeEngineStruct:getType
+	@treturn int type
+	@usage
+		local type = siegeEngineStruct:getType()
+	*/
+	typeAll.siegeEngineStruct.set_function("getType", &battleHandlerHelpers::getEngineType);
+
+	///Battlefield Engines
+	//@section Battlefield Engines
+
+	/***
+	Basic battlefieldEngines table
+
+	@tfield int engineNum
+	@tfield getEngine getEngine
+
+	@table battlefieldEngines
+	*/
+	typeAll.battlefieldEngines = luaState.new_usertype<battlefieldEngines>("battlefieldEngines");
+	typeAll.battlefieldEngines.set("engineNum", &battlefieldEngines::enginesNum);
+
+	/***
+	Get an engine from the battlefield.
+	@function battlefieldEngines:getEngine
+	@tparam int index
+	@treturn siegeEngine engine
+	@usage
+		local engine = battlefieldEngines:getEngine(0)
+	*/
+	typeAll.battlefieldEngines.set_function("getEngine", &battleHandlerHelpers::getSiegeEngine);
+
 
 	/// battleBuildings
 	//@section battleBuildings
@@ -2686,7 +2826,7 @@ void luaP::initP2()
 
 	
 	/***
-	Enum of unit combat status.
+	Enum of battle success types.
 
 	@tfield int close
 	@tfield int average
@@ -2874,5 +3014,86 @@ void luaP::initP2()
 		"growth", 3,
 		"cultural", 4,
 		"noPolicy", 5
+	);
+
+	
+	/***
+	Enum of formation types
+
+	@tfield int horde
+	@tfield int column
+	@tfield int square
+	@tfield int wedge
+	@tfield int squareHollow
+	@tfield int phalanx
+	@tfield int schiltrom
+	@tfield int shieldWall
+	@tfield int wall
+	@tfield int movingThrough
+
+	@table formationType
+	*/
+	luaState.new_enum(
+		"formationType",
+		"horde", 0,
+		"column", 1,
+		"square", 2,
+		"wedge", 3,
+		"squareHollow", 4,
+		"phalanx", 5,
+		"schiltrom", 6,
+		"shieldWall", 7,
+		"wall", 8,
+		"movingThrough", 9
+	);
+
+	
+	/***
+	Enum of engine types
+
+	@tfield int catapult
+	@tfield int trebuchet
+	@tfield int ballista
+	@tfield int bombard
+	@tfield int grandBombard
+	@tfield int hugeBombard
+	@tfield int culverin
+	@tfield int basilisk
+	@tfield int cannon
+	@tfield int mortar
+	@tfield int scorpion
+	@tfield int serpentine
+	@tfield int rocketLauncher
+	@tfield int monsterRibault
+	@tfield int mangonel
+	@tfield int tower
+	@tfield int ram
+	@tfield int ladder
+	@tfield int holy_cart
+
+	@table engineType
+	*/
+	luaState.new_enum(
+		"engineType",
+		"catapult", 0,
+		"trebuchet", 1,
+		"ballista", 2,
+		"bombard", 3,
+		"grandBombard", 4,
+		"hugeBombard", 5,
+		"culverin", 6,
+		"basilisk", 7,
+		"cannon", 8,
+		"mortar", 9,
+		"scorpion", 10,
+		"serpentine", 11,
+		"rocketLauncher", 12,
+		"ribault", 13,
+		"monsterRibault", 14,
+		"mangonel", 15,
+		"tower", 17,
+		"ram", 18,
+		"ladder", 19,
+		"holy_cart", 20
 	);
 }

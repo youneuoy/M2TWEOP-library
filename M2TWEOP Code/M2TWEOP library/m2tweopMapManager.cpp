@@ -12,9 +12,9 @@ namespace m2tweopMapManager
 	{
 		m2tweopMap currentMap;
 		ImVec2 tileSize = {7.f,7.f};
-
-
 		bool isShowMap = false;
+		bool isShowBattleMap = false;
+		bool showBattleStats = false;
 	}managerData;
 
 	// Helper function to extract individual color components from a pixel
@@ -165,31 +165,6 @@ namespace m2tweopMapManager
 		const stratMap* sMap = gameDataAll->stratMap;
 		const int xScale = width / sMap->mapWidth;
 		const int yScale = height / sMap->mapHeight;
-		/*
-		for (int x = 0; x < width; x++)
-		{
-			for (int y = 0; y < height; y++)
-			{
-				const int gameX = max(0, min(sMap->mapWidth - 1, x / xScale));
-				const int gameY = max(0, min(sMap->mapHeight - 1, sMap->mapHeight - y / yScale));
-				auto formattedString = "x:" + std::to_string(x) + " y:" + std::to_string(y) + " gameX:" + std::to_string(gameX) + " gameY:" + std::to_string(gameY);
-				f1 << formattedString << '\n';
-				if (const auto tile = fastFuncts::getTileStruct(gameX, gameY))
-				{
-					DWORD* pPixel = pTexels + y * lockedRect.Pitch / sizeof(DWORD) + x;
-					if (const int tileIndex = sMap->mapWidth * gameY + gameX; img->tiles[tileIndex].set)
-					{
-						formattedString = "r:" + std::to_string(img->tiles[tileIndex].r) + " g:" + std::to_string(img->tiles[tileIndex].g) + " b:" + std::to_string(img->tiles[tileIndex].b);
-						//f1 << formattedString << '\n';
-						*pPixel = D3DCOLOR_ARGB(255, img->tiles[tileIndex].r, img->tiles[tileIndex].g, img->tiles[tileIndex].b);
-						//*pPixel = interpolateColors(*pPixel, D3DCOLOR_ARGB(255, img->tiles[tileIndex].r, img->tiles[tileIndex].g, img->tiles[tileIndex].b), img->fillWeight);
-					}
-					if (tile->border && img->drawBorder)
-						*pPixel = interpolateColors(*pPixel, D3DCOLOR_ARGB(255, img->borderColor.r, img->borderColor.g, img->borderColor.b), img->borderWeight);
-				}
-			}
-		}
-		 */
 
 		for (auto tileCol : img->tiles)
 		{
@@ -249,52 +224,6 @@ namespace m2tweopMapManager
 	
 	void m2tweopMapManager::createImage(mapImage* image)
 	{
-		//add_file("M2TWEOP.log", loguru::Append, loguru::Verbosity_MAX);
-		/*
-		ofstream f1("logs\\lol.youneuoylog");
-		cimg_library::CImg<unsigned char> img(
-			R"(E:\SteamLibrary\steamapps\common\Medieval II Total War\mods\bare_geomod2\data\world\maps\base\map_background.bmp)");
-
-		const gameDataAllStruct* gameDataAll = dataOffsets::offsets.gameDataAllOffset;
-		const stratMap* tilesMap = gameDataAll->stratMap;
-
-		for (int i = 0; i < tilesMap->regionsNum; i++)
-		{
-			if (!image->regions[i].set)
-			{
-				image->regions[i].r = tilesMap->regions[i].colorRed;
-				image->regions[i].g = tilesMap->regions[i].colorGreen;
-				image->regions[i].b = tilesMap->regions[i].colorBlue;
-			}
-		}
-		const int mapWidth = tilesMap->mapWidth;
-		const int mapHeight = tilesMap->mapHeight;
-		for (int x = 0; x < mapWidth * 2 + 1; x++)
-		{
-			for (int y = 0, gameY = mapHeight * 2 - 1; y < mapHeight * 2 + 1; y++, gameY--)
-			{
-				const int gameX = x / 2;
-				const int realGameY = gameY / 2;
-				auto formattedString = "x:" + std::to_string(x) + " y:" + std::to_string(y) + " gameX:" + std::to_string(gameX) + " gameY:" + std::to_string(realGameY);
-				f1 << formattedString << endl;
-				const auto tile = fastFuncts::getTileStruct(gameX, realGameY);
-				const auto regionId = tile->regionId;
-				if (tile && tile->isLand)
-				{
-					if (tile->border && image->drawBorder)
-					{
-						img.draw_point(x, y, new int[]{0,0,0});
-					}
-					else
-					{
-						img.draw_point(x, y, new int[]{image->regions[regionId].r,image->regions[regionId].g,image->regions[regionId].b});
-					}
-				}
-			}
-		}
-		// ReSharper disable once CppExpressionWithoutSideEffects
-		img.save(R"(E:\SteamLibrary\steamapps\common\Medieval II Total War\mods\bare_geomod2\data\world\maps\base\map_background2.bmp)");
-		*/
 	}
 	
 	bool draw()

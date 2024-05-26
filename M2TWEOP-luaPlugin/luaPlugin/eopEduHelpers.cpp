@@ -99,7 +99,7 @@ bool eopEduHelpers::hasAttribute(unit* unit, const char* attributeName)
 bool eopEduHelpers::hasAttributeEdu(eduEntry* entry, const char* attributeName)
 {
 	const int attributesNum = (reinterpret_cast<DWORD>(entry->EndOfAttributes) - reinterpret_cast<DWORD>(entry->Attributes)) / 8;
-	for (int i = 0; i < attributesNum; i+= 2)
+	for (int i = 0; i < attributesNum * 2; i+= 2)
 	{
 		if (strcmp(reinterpret_cast<const char*>(entry->Attributes[i]), attributeName) == 0)
 		{

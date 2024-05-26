@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "plugins.h"
+
+#include "cultures.h"
 #include "tests.h"
 
 #include "smallFuncs.h"
@@ -244,6 +246,7 @@ void plugins::onReadGameDbsAtStart()
 
 void plugins::onGameInit()
 {
+	cultures::eopPortraitDb::createEopPortraitDb();
 	for (plugin* pl : pluginsCfg.plugins)
 	{
 		(*(*pl->onGameInit))();

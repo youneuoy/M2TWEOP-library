@@ -179,6 +179,25 @@ public:
 	ProcLoader<void(__cdecl*)(general*, fortStruct*, bool)> siegeFort;
 	ProcLoader<void(__cdecl*)(general*, general*)> attackCharacter;
 
+	ProcLoader<void(__cdecl*)(const unit*, float, float, bool)> unitMovetoPosition;
+	ProcLoader<int(__cdecl*)(const unit*)> getUnitFormation;
+	ProcLoader<void(__cdecl*)(unit*, float, float, int16_t, int)> placeUnit;
+	ProcLoader<unit*(__cdecl*)(const char*)> getUnitByLabel;
+	ProcLoader<void*(__cdecl*)(const unit*, int16_t, bool)> unitAttackClosest;
+	ProcLoader<void*(__cdecl*)(const unit*, const unit*, bool)> attackUnit;
+	ProcLoader<void*(__cdecl*)(const unit*)> deployStakes;
+	ProcLoader<void*(__cdecl*)(const unit*)> haltUnit;
+	ProcLoader<void*(__cdecl*)(const unit*, int)> changeUnitFormation;
+	ProcLoader<float(__cdecl*)(float, float)> getBattleMapHeight;
+	ProcLoader<void(__cdecl*)(const unit*, float, float, int, int16_t, bool)> moveToOrientation;
+	ProcLoader<void(__cdecl*)(const unit*, float, float, bool)> moveRelative;
+	ProcLoader<void(__cdecl*)(const unit*, const unit*, bool)> moveToMissileRange;
+	ProcLoader<void(__cdecl*)(const unit*, int16_t, bool)> unitTurn;
+	ProcLoader<void(__cdecl*)(const unit*)> taunt;
+	ProcLoader<void(__cdecl*)(const unit*)> useSpecialAbility;
+	ProcLoader<void(__cdecl*)(const unit*, buildingBattle*)> attackBuilding;
+	
+
 
 	ProcLoader<int(__cdecl*)(namedCharacter*, ancillary*)> addAncillary;
 	ProcLoader<void(__cdecl*)(namedCharacter*, ancillary*)> removeAncillary;

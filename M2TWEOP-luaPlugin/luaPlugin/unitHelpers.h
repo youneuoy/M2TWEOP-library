@@ -39,5 +39,40 @@ namespace unitHelpers
 	unit* getTargetUnit(unitPositionData* posData);
 	int getsoldierCountStratMap(const unit* un);
 	int getMountClass(unit* un);
+	int getUnitFormation(const unit* unit);
+	unit* getUnitByLabel(const char* label);
+	void unitAttackClosest(const unit* un, int16_t angle, bool run);
+	void unitAttackUnit(const unit* un, const unit* targetUnit, bool run);
+	void unitMovetoPosition(const unit* unit, float xCoord, float yCoord, bool run);
+	void moveToOrientation(const unit* unit, float xCoord, float yCoord, int widthInMen, int16_t angle, bool run);
+	void placeUnit(unit* unit, float xCoord, float yCoord, int16_t angle, int width);
+	void deployStakes(const unit* unit);
+	void haltUnit(const unit* unit);
+	void changeUnitFormation(const unit* unit, int formationType);
+	float getBattleMapHeight(float xCoord, float yCoord);
+	void moveRelative(const unit* unit, float xCoord, float yCoord, bool run);
+	void moveToMissileRange(const unit* un, const unit* targetUnit, bool run);
+	void unitTurn(const unit* un, int16_t angle, bool isRelative);
+	void taunt(const unit* un);
+	void useSpecialAbility(const unit* un);
+	siegeEngine* getSiegeEngine(const unit* un, const int index);
+	void attackBuilding(const unit* un, buildingBattle* building);
+	void collectEngine(const unit* un, siegeEngine* engine);
+
+	
+	unitGroup* getEmptyGroup(const stackStruct* army);
+	const char* getGroupLabel(const unitGroup* group);
+	
+	unitGroup* defineUnitGroup(const stackStruct* army, const char* label, unit* un);
+	void addUnitToGroup(unitGroup* group, unit* un);
+	unitGroup* getGroupByLabel(const char* label);
+	void undefineUnitGroup(const unitGroup* group);
+	void removeUnitFromGroup(unitGroup* group, unit* un);
+	unit* getUnitInFormation(const unitGroup* group, int index);
+	unit* getUnitNotInFormation(const unitGroup* group, int index);
+	void automateGroup(const unitGroup* group, bool automate);
+	void automateAttack(unitGroup* group, unit* targetUnit);
+	void automateDefense(unitGroup* group, float xCoord, float yCoord, float radius);
+	void placeGroup(unitGroup* group, float xCoord, float yCoord, float angle);
 };
 

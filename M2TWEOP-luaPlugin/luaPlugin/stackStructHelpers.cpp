@@ -132,6 +132,13 @@ namespace stackStructHelpers
 		return gameHelpers::getTileFort(tile);
 	}
 
+	unitGroup* getGroup(const stackStruct* army, int index)
+	{
+		if (!army || !army->unitGroups || index < 0 || index >= army->maxUnitGroups)
+			return nullptr;
+		return &army->unitGroups[index];
+	}
+
 	unit *createUnit(stackStruct *army, const char *type, int exp, int arm, int weap)
 	{
 		unit *newUnit = (*(*plugData::data.funcs.createUnitN))(type, army->regionID, army->faction->dipNum, exp, arm, weap);

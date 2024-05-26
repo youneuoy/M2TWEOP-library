@@ -6,7 +6,7 @@
 
 
 #define SOL_SAFE_FUNCTIONS 1
-#define SOL_ALL_SAFETIES_ON  1
+#define SOL_ALL_SAFETIES_ON  0
 #define SOL_LUAJIT 1
 #include "lua/sol.hpp"
 

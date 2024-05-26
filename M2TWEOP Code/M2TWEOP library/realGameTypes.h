@@ -18,6 +18,15 @@ typedef unsigned short    ushort;
 typedef struct stackStruct stackStruct, * PstackStruct;
 typedef struct settlementStruct settlementStruct, * PsettlementStruct;
 
+#define GAME_FUNC(funcType, funcAddr) reinterpret_cast<funcType>(codes::offsets.funcAddr)
+
+
+struct stringWithHash
+{
+public:
+	char* name; //0x0000
+	int32_t hash; //0x0004
+}; //Size
 
 struct UNICODE_STRING {
 	USHORT something;//idk
@@ -60,39 +69,145 @@ public:
 struct cultureAgent
 {
 public:
-	char* cardName; //0x0000
-	int32_t cardNameHash; //0x0004
-	char* infoCardName; //0x0008
-	int32_t infoCardNameHash; //0x000C
-	char* cardName2; //0x0010
-	int32_t cardName2Hash; //0x0014
-	int16_t index1; //0x0018
-	char pad_001A[2]; //0x001A
-	int16_t index2; //0x001C
-	char pad_001E[2]; //0x001E
-	int16_t cost; //0x0020
-	int16_t time; //0x0022
-	int16_t popCost; //0x0024
-	int16_t someOtherRomeShit; //0x0026
-	char pad_0028[4]; //0x0028
+	char *cardName;
+	int32_t cardNameHash;
+	char *infoCardName;
+	int32_t infoCardNameHash;
+	char *cardName2;
+	int32_t cardName2Hash;
+	int index1;
+	int index2;
+	int16_t cost;
+	int8_t time;
+	int8_t pad23;
+	int16_t popCost;
+	int16_t someOtherRomeShit;
+	int recruitBiasValue;
 }; //Size: 0x002C
 
+struct underlay
+{
+	char *name;
+	int nameHash;
+	char *path;
+	int pathHash;
+	float float10;
+	int field14;
+};
 
+struct cultureCasEntry
+{
+	int field_0;
+	int field_4;
+	char *casName;
+	int casNameHash;
+	int field_10;
+	int field_14;
+	int field_18;
+	int field_1C;
+	underlay *underlay;
+};
+
+struct cultureFort
+{
+	void *modelRigid;
+	void *stratModelArrayEntry;
+	stringWithHash fortCasName;
+	stringWithHash fortWallsCasName;
+	int array_18[31];
+	stringWithHash stringsHash_94[31];
+	char *strings_18c[31];
+	stringWithHash stringsHash_208[31];
+	stringWithHash uiGenericFort;
+	underlay *underlay;
+};
+
+struct smthingCult2
+{
+	int field_0;
+	int field_4;
+	stringWithHash field_8;
+	stringWithHash field_10;
+	int field_18;
+};
+
+struct cultureSettlement
+{
+	int field_0;
+	int field_4;
+	char *casNameCity;
+	int casNameCityHash;
+	void *casNameCastle;
+	int casNameCastleHash;
+	int field_18;
+	char *strings1C[31];
+	char *strings98[31];
+	stringWithHash stringHash114[31];
+	stringWithHash stringHash20c[31];
+	smthingCult2 field_304[5];
+	char *tgaFileCity;
+	int field_394;
+	char *tgaFileCastle;
+	int field_39C;
+	underlay *underlay;
+};
 
 struct culture
 {
+	int32_t cultureID;
+	char *cultureName;
+	int32_t cultureNameHash;
+	cultureFort fort;
+	cultureCasEntry fishingVillage;
+	cultureCasEntry portWalls[3];
+	cultureCasEntry portBuildings[3];
+	cultureCasEntry watchTower;
+	int cultureCasEntryCount;
+	int32_t fortCost;
+	int32_t watchTowerCost;
+	int field_444;
+	char *portraitMapping;
+	int field_44C;
+	int rebelStandardIndex;
+	struct cultureSettlement cultureSettlements[6];
+	struct cultureAgent cultureAgents[6];
+	int maxLevel;
+};
+
+struct culturesDB
+{
+	struct culture *cultures;
+	int32_t culturesSize;
+	int32_t culturesCount;
+};
+
+struct portraitsEntry
+{
+	int32_t count{}; //0x0000
+	int32_t *portraitIndexes{}; //0x0004
+	int32_t usageCount{}; //0x0008
+};
+
+struct portraitDdCharacterEntry
+{
 public:
-	int32_t cultureID; //0x0000
-	char* cultureName; //0x0004
-	int32_t cultureNameHash; //0x0008
-	char pad_000C[1072]; //0x000C
-	int32_t fortCost; //0x043C
-	int32_t watchTowerCost; //0x0440
-	char pad_0444[24]; //0x0444
-	struct cultureModels cultureModelCrap; //0x045C
-	struct cultureAgent cultureAgents[6]; //0x1A2C
-	char pad_1B34[4]; //0x1B34
-}; //Size: 0x1B38
+	portraitsEntry ages[3]; //0x0000
+}; //Size: 0x0024
+
+struct portraitDbEntry
+{
+public:
+	char *cultureName{}; //0x0000
+	int32_t cultureNameHash{}; //0x0004
+	struct portraitDdCharacterEntry portraits[9]; //0x0008
+}; //Size: 0x014C
+
+struct portraitDb
+{
+public:
+	struct portraitDbEntry cultures[7]; //0x0000
+}; //Size: 0x0914
+
 
 struct coordPair
 {
@@ -116,6 +231,14 @@ struct eventTrigger
 	char pad_0004[28]; //0x0004
 };
 
+struct smthingBattleBuilding
+{
+public:
+	char pad_0000[100]; //0x0000
+	void *worldData; //0x0064
+	char pad_0068[220]; //0x0068
+}; //Size: 0x0144
+
 struct buildingBattle
 {
 public:
@@ -131,8 +254,213 @@ public:
 	int32_t startHealth; //0x003C
 	char pad_0040[4]; //0x0040
 	int32_t isDefenderControlled; //0x0044
-	char pad_0048[8]; //0x0048
+	struct smthingBattleBuilding *battleResidence; //0x0048
+	char pad_004C[4]; //0x004C
 }; //Size: 0x0050
+
+struct siegeEngine
+{
+	void *vftable /*VFT*/;
+	int field_4;
+	int objectType;
+	int bitfield;
+	float mass;
+	float inverseMass;
+	float posX;
+	float posZ;
+	float posY;
+	int self;
+	float someRadius1;
+	float someRadius2;
+	float someRadius3;
+	float markerRadius;
+	float height;
+	int field_3C_initMinus1;
+	int field_40;
+	__int16 angle;
+	int field_48;
+	int field_4C;
+	int field_50;
+	int field_54;
+	int field_58;
+	int field_5C;
+	void *vftbl_5_0000000001317C08;
+	int engineID;
+	int field_68;
+	int field_6C;
+	int field_70;
+	int field_74;
+	int field_78;
+	int field_7C;
+	struct engineRecord* engineRecord;
+	int field_84;
+	int field_88;
+	uint32_t stats;
+	DWORD ammunition;
+	DWORD range;
+	float missleRangeSquared;
+	DWORD hasPrimary;
+	void *statPriMissle;
+	DWORD weaponType;
+	DWORD techType;
+	DWORD damageType;
+	DWORD soundType;
+	DWORD attackMinDelay;
+	DWORD field_b8;
+	DWORD weaponShootEffect;
+	DWORD fieldc0;
+	DWORD fieldc4;
+	DWORD fieldc8;
+	DWORD field_cc;
+	DWORD field_d0;
+	int field_D4;
+	int field_D8;
+	char byte_DC;
+	char byte_DD;
+	char byte_De;
+	char byte_Df;
+	int field_E0;
+	int field_E4;
+	int field_E8;
+	int field_EC;
+	int field_F0;
+	char gapF4[172];
+	int field_1A0;
+	char gap1A4[244];
+	int field_298;
+	int field_29C;
+	int field_2A0;
+	int field_2A4;
+	int field_2A8;
+	int field_2AC;
+	int field_2B0;
+	int field_2B4;
+	float float_2B8;
+	int field_2BC;
+	int field_2C0;
+	int field_2C4;
+	int field_2C8;
+	int field_2CC;
+	int field_2D0;
+	int field_2D4;
+	int field_2D8;
+	int field_2DC;
+	int field_2E0;
+	int field_2E4;
+	int field_2E8;
+	int field_2EC;
+	int field_2F0;
+	int field_2F4;
+	int field_2F8;
+	int field_2FC;
+	int field_300;
+	int field_304;
+	int field_308;
+	int field_30C;
+	int16_t short_310;
+	int16_t short_312;
+	int field_314;
+	int field_318;
+	int field_31C;
+	float float_320;
+	int field_324;
+	char gap328[60];
+	int field_364;
+	char gap368[172];
+	int field_414;
+	int field_418;
+	int field_41C;
+	void *field_420;
+	int field_424;
+	char gap428[24];
+	uint32_t bitfield440;
+	float float_444;
+	int field_448;
+	int field_44C;
+	int field_450;
+	int field_454;
+	int field_458;
+	int field_45C;
+	int field_460;
+	int field_464;
+	int field_468;
+	int field_46C;
+	int field_470;
+	int field_474;
+	int field_478;
+	int field_47C;
+	int field_480;
+	char gap484[88];
+	int field_4DC;
+	char gap4E0[8];
+	void *vftbl_85_0000000001317B60;
+	char gap4EC[8];
+	void *vftbl_86_0000000001317B84;
+	char gap4F8[92];
+	char byte_554;
+	char byte_555;
+	char byte_556;
+	char byte_557;
+	int field_558;
+	int field_55C;
+	int field_560;
+	int field_564;
+	int field_568;
+	int field_56C;
+	int field_570;
+	char byte_574;
+	char byte_575;
+	char byte_576;
+	char byte_577;
+	float float_578;
+	float float_57C;
+	int16_t short_580;
+	int16_t short_582;
+	int field_584;
+	char byte_588;
+	char byte_589;
+	char byte_58a;
+	char byte_58b;
+	int field_58C;
+	int field_590;
+	int array_594;
+	int array_594Size;
+	int array_594Num;
+	int array_5A0;
+	int array_5A0Size;
+	int array_5A0Num;
+	char byte_5AC;
+	char byte_5Ad;
+	char byte_5Ae;
+	char byte_5Af;
+	int field_5B0;
+	int bitfield_5B4;
+	int field_5B8;
+	int field_5BC;
+	int field_5C0;
+	char byte_5C4;
+	char byte_5C5;
+	char byte_5C6;
+	char byte_5C7;
+	int field_5C8;
+	int field_5CC;
+	int field_5D0;
+	int field_5D4;
+	int field_5D8;
+	int field_5DC;
+	int field_5E0;
+	int field_5E4;
+	char byte_5E8_init1;
+	char byte_5E9;
+	char byte_5Ea;
+	char byte_5Eb;
+	int areaEffect;
+	int field_5F0;
+	int field_5F4_facid;
+	int field_5F8;
+	int field_5FC;
+	int field_600;
+};
 
 
 
@@ -502,47 +830,64 @@ public:
 struct oneTile {
 	DWORD* object; //can be character, resource, fort, 
 	struct roadStruct* road; //0x0004
-	undefined field_0x8[2];
+	uint16_t field_0x8;
 	int8_t isLand;
-	undefined field_0xB[1];
+	int8_t field_0xB;
 	int8_t terrainModel;
 	int8_t ModelIsHills;
-	undefined field_0xE[2];
+	uint16_t field_0xE;
 	int groundType;
 	int regionId;
-	undefined field_0x18[4];
-	int8_t factionId;
-	int8_t borderingRiver;
-	int8_t borderingSettlement;
-	undefined field_0x1F[1];
-	int8_t hasRoad; //bit 1 has devastation status
-	int8_t border;
-	undefined field_0x22[2];
-	int8_t objectTypes; //bit87_character6_ship5_watchtower4_port3_bit32_fort1_settlement0
-	int8_t passable;
-	int8_t N0002227F; //0x0026
-	int8_t N00022271; //0x0027
+	int32_t choke; //choke value like in toggle_terrain
+	uint32_t factionId; //see below
+	/*
+	 * bit 0 - 4 - faction id
+	 * bit 5 - river source
+	 * bit 6 - river
+	 * bit 7 - crossing
+	 * 
+	 * bit 8 - cliff
+	 * bit 9 - coastal water
+	 * bit 10 - cliff not directly bordering water
+	 * bit 11
+	 * bit 12 - land connection
+	 * bit 13 - land connection
+	 * bit 14 - sea crossing
+	 * bit 15 - road level 1
+	 * 
+	 * bit 16 - road level 2
+	 * bit 17 - road level 3
+	 * all rest - unknown or unused
+	 */
+	uint8_t hasRoad; //bit 0 - devastation status, bit 5 - has road, all rest - unknown or unused
+	uint8_t border; //bit 0-2 unknown, bit 3 - land border, bit 4 - sea border (land), bit 5 - sea border (water), bit 6 - unknown, bit 7 - unknown
+	uint16_t otherField;
+	int8_t objectTypes; //unk character ship watchtower port upgraded_port fort settlement
+	int8_t nonPassable;
+	int16_t field_0x1E;
 	uint32_t armiesNearTile; //0x0028
 	uint32_t charactersOnTile; //0x002C
 	float mpModifier; //0x0030
 };
+
+
 
 struct color
 {
 	int8_t r = 0;
 	int8_t g = 0;
 	int8_t b = 0;
-	bool set = false;
 };
-#define GETRED(color) ((color) & 0xFF)
+
+#define GETBLUE(color) ((color) & 0xFF)
 #define GETGREEN(color) (((color) >> 8) & 0xFF)
-#define GETBLUE(color) (((color) >> 16) & 0xFF)
+#define GETRED(color) (((color) >> 16) & 0xFF)
 #define GETALPHA(color) (((color) >> 24) & 0xFF)
-#define SETRED(color, red) ((color) = ((color) & 0xFFFFFF00) | (red))
+#define SETBLUE(color, red) ((color) = ((color) & 0xFFFFFF00) | (red))
 #define SETGREEN(color, green) ((color) = ((color) & 0xFFFF00FF) | ((green) << 8))
-#define SETBLUE(color, blue) ((color) = ((color) & 0xFF00FFFF) | ((blue) << 16))
+#define SETRED(color, blue) ((color) = ((color) & 0xFF00FFFF) | ((blue) << 16))
 #define SETALPHA(color, alpha) ((color) = ((color) & 0x00FFFFFF) | ((alpha) << 24))
-#define MAKECOLOR(r, g, b, a) ((r) | ((g) << 8) | ((b) << 16) | ((a) << 24))
+#define MAKECOLOR(r, g, b, a) ((b) | ((g) << 8) | ((r) << 16) | ((a) << 24))
 
 struct tileColor
 {
@@ -555,12 +900,11 @@ struct tileColor
 struct mapImage
 {
 	std::vector<tileColor> tiles = {};
-	bool drawBorder = false;
 	bool useBlur = true;
 	float blurStrength = 1.0f;
 	bool adaptiveBlur = false;
-	uint32_t borderColor;
 };
+
 
 struct aiSiegeEquipStruct
 {
@@ -598,13 +942,6 @@ struct siegeS {
 	int8_t gotCaptured;
 	char pad_x[3];
 };
-
-struct stringWithHash
-{
-public:
-	char* name; //0x0000
-	int32_t hash; //0x0004
-}; //Size: 0x0008
 
 struct holdRegionsWinCondition
 {
@@ -912,6 +1249,105 @@ struct settlementList
 	int32_t settlementsNum; //0x0010
 };
 
+struct movePoint
+{
+	float float1;
+	int32_t field4;
+	float float2;
+	int32_t tileIndex;
+	int32_t xCoord;
+	int32_t yCoord;
+	struct movePoint *nextCoords;
+};
+
+struct movementExtentTile
+{
+	int tileIndex;
+	float movePoints;
+	int smthingUseMovepoints;
+};
+
+struct characterMovementExtents
+{
+	void * vtbl;
+	int tilesMoved;
+	int fieldx8_init7;
+	int tileIndex;
+	int xCoord1;
+	int yCoord1;
+	int xCoord2;
+	int yCoord2;
+	int fieldx20;
+	movementExtentTile* tiles;
+	int tilesEnd;
+	int tilesEnd2;
+	struct general *character;
+	int boolx34;
+};
+
+struct trackedPointerCharacter
+{
+	void *vtbl /*VFT*/;
+	struct general *character;
+};
+
+struct stratPathFinding
+{
+	float mpRelated;
+	struct trackedPointerCharacter trackedPointerCharacter;
+	int characterType;
+	struct factionStruct *faction;
+	int invalidOrReached;
+	int8_t noSpeedUp;
+	int8_t bytex19;
+	int8_t bytex1A;
+	int8_t bytex1B;
+	int stratWaterCreatedMaybe;
+	int8_t bytex20;
+	int8_t someBoolCheckForCaptureStuff;
+	int8_t bytex22;
+	int8_t bytex23;
+	void *floatingGeneral1;
+	void *floatingGeneral2;
+	void *charVerification;
+	void *charVerificationPos;
+	int fieldx34;
+	int somethingBattleCapturedStatus;
+	int fieldx3C;
+	int fieldx40;
+	int fieldx44;
+	int fieldx48;
+	int fieldx4C;
+	int fieldx50;
+	int fieldx54;
+	int fieldx58_12;
+	int8_t fieldx5C;
+	int8_t fieldx5D;
+	int8_t fieldx5E;
+	int8_t fieldx5F;
+	int fieldx60;
+	int fieldx64;
+	int fieldx68;
+	int fieldx6C;
+	struct character **characterArray1;
+	int characterArray1Size;
+	int characterArray1Num;
+	struct character **characterArray2;
+	int characterArray2Size;
+	int characterArray2Num;
+	int fieldx88;
+	characterMovementExtents **characterMovementExtents;
+	int characterMovementExtentsEnd;
+	int characterMovementExtentsEnd2;
+	int fieldx98;
+	int fieldx9C;
+	int fieldxA0;
+	int fieldxA4;
+	struct coordPair *coords;
+	int coordsSize;
+	int coordsNum;
+};
+
 
 struct factionDiplomacy
 {
@@ -921,15 +1357,34 @@ public:
 	int trade; /* trade rights(0 or 1) */
 	int protectorate; /* protectorate or not(15 or 6) */
 	float factionStanding; //0x0010
-	char pad_0014[4]; //0x0014
+	int32_t protectoratePayment; //0x0014
 	int32_t numTurnsAllied; //0x0018
 	int32_t numTurnsWar; //0x001C
 	int32_t numTurnsPeace; //0x0020
 	int32_t numTurnsTrade; //0x0024
 	int32_t numTurnsAccess; //0x0028
-	char pad_002C[72]; //0x002C
+	int field_2c;
+	int field_30;
+	int field_34;
+	int field_38;
+	int field_3C;
+	int field_40;
+	int32_t TurnsSinceLastDemand;
+	int field_0048;
+	int giveMoneyAmount;
+	int field_0050;
+	int field_0054;
+	int field_0058;
+	int field_005C;
+	int field_0060;
+	int field_0064;
+	int field_0068;
+	int field_006C;
+	int field_0070;
 	int32_t turnsSinceMapInfoGiven; //0x0074 -no start at 0 but like 10 on campaign start
-	char pad_0078[8]; //0x0078
+	int32_t acceptRejectOfferRatio;
+	int16_t N0001196B;
+	int16_t N0001F222;
 	int32_t turnsSinceMapInfoTaken; //0x0080 -no start at 0 but like 10 on campaign start
 	int32_t numTurnsCeasefire; //0x0084
 }; //Size: 0x0088
@@ -1116,18 +1571,55 @@ public:
 struct gameDataAllStruct {
 	undefined field_0x0[40];
 	struct campaign* campaignData;
-	undefined field_0x2c[8];
+	undefined field_0x2c[4];
+	void* menu_handler;
 	struct stratMap* stratMap;
-	struct campaign* field_0x38;
-	undefined field_0x3c[28];
+	struct stratMap* stratMap2;
+	struct stratMap* stratMap3;
+	void* unk1_0x40;
+	struct campaign* campaign2;
+	void* unk1_0x48;
+	struct campaign* campaign3;
 	struct battleDataS* battleHandler;
+	struct battleDataS** battleHandlerPtr;
+	struct battleDataS* battleHandler2;
 	int* localFactionID2;
 	int* localFactionID;
-	undefined field_0x64[28];
+	struct stratPathFinding* stratPathFinding;
+	struct stratPathFinding* stratPathFinding2;
+	struct stratPathFinding** stratPathFindingPtr;
+	void* unk3_0x70[3];
 	struct battleSettlement* battleSettlement;
-	char pad[112];
+	struct battleSettlement* battleSettlement2;
+	void* unk4_0x84[2];
+	void* battleGameHandler;
+	void* battleGameHandler2;
+	void* rtmHandler;
+	void* rtmHandler2;
+	void* stratMapGameHandler;
+	void* stratMapGameHandler2;
+	void* menuHandler;
+	void* menuHandler2;
+	void* battleMapStuff;
+	void* battleMapStuff2;
+	void* selectionInfo;
+	void* selectionInfoPtr;
+	void* selectionInfoPtr2;
+	void* logBuffer;
+	void* logBuffer2;
+	void* someArray;
+	void* someArray2;
+	void* resources;
+	void* resources2;
+	void* nonNetworkGameManager;
+	void* networkGameManager;
+	void* replayGameManager;
+	void* camControl;
+	void* waypointsDisplay;
 	struct uiCardManager* uiCardManager;
-	char pad2[4];
+	void* uiShortcuts;
+	struct uiCardManager* uiCardManager2;
+	void* uiMessageHandler;
 	struct uiManager* uiManager;
 };
 
@@ -1924,7 +2416,7 @@ public:
 
 
 //siege engine
-struct siegeEngine {
+struct siegeEngine2 {
 	undefined field_0x0[172];
 	int type; /* 2-RAM,4-ladder,1-tower */
 };
@@ -2826,7 +3318,7 @@ public:
 	float targetCoordXEngine; //0x0070
 	float targetCoordZEngine; //0x0074
 	float targetCoordYEngine; //0x0078
-	struct siegeEngine* siegeEngine; //0x007C
+	void* siegeEngine; //0x007C
 	int32_t N0001B8FB; //0x0080
 	int32_t N0001B8FC; //0x0084
 	char pad_0088[8]; //0x0088
@@ -3279,7 +3771,7 @@ struct aiPersonalityValues
 	int32_t aiProductionControllersNum;
 	int32_t AIPersonalityType;
 	int32_t AIPersonalityName;
-	int32_t buildingValues[257];
+	int32_t buildingValues[57];
 	int32_t unkBiasCultural1;
 	int32_t unkBiasCultural2;
 	int32_t unkBiasCultural3;

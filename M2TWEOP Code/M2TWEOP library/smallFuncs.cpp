@@ -427,7 +427,7 @@ namespace smallFuncs
 		}
 		std::string fullCommand = std::string(command) + " " + args;
 		size_t start = strlen(command) + static_cast<int8_t>(0x8);
-		fakeTextInput* fakeText = std::make_shared<fakeTextInput>(fakeTextInput(fullCommand.c_str(), start)).get();
+		auto fakeText = std::make_shared<fakeTextInput>(fakeTextInput(fullCommand.c_str(), start));
 		DWORD classPointer = 0x0;
 		_asm
 		{

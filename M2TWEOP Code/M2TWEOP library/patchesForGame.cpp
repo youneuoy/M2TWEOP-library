@@ -5,6 +5,7 @@
 #include <functional>
 
 
+#include "cultures.h"
 #include "onlineThings.h"
 
 #include "eduThings.h"
@@ -175,6 +176,156 @@ int __fastcall patchesForGame::OnReligionCombatBonus(int religionID, namedCharac
 		return 0;
 
 	return namedChar->combatVsReligion[religionID];
+}
+
+std::string filePath;
+
+char* __fastcall patchesForGame::getBrowserPicConstructed(int cultureID, edbEntry* entry, int buildingLevel)
+{
+	filePath = fastFuncts::GetModPath();
+	const auto level = entry->buildingLevel[buildingLevel];
+	const auto levelName = level.name;
+	if (levelName == nullptr)
+		return nullptr;
+	const auto cultureName = cultures::getCultureName(cultureID);
+	if (cultureName.empty())
+		return nullptr;
+	filePath.append("/data/ui/");
+	filePath.append(cultureName);
+	filePath.append("/buildings/#");
+	filePath.append(cultureName);
+	filePath.append("_");
+	filePath.append(levelName);
+	filePath.append("_constructed.tga");
+	if (std::filesystem::exists(filePath))
+		return filePath.data();
+	return nullptr;
+}
+
+char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEntry* entry, int buildingLevel)
+{
+	filePath = fastFuncts::GetModPath();
+	const auto level = entry->buildingLevel[buildingLevel];
+	const auto levelName = level.name;
+	if (levelName == nullptr)
+		return nullptr;
+	const auto cultureName = cultures::getCultureName(cultureID);
+	if (cultureName.empty())
+		return nullptr;
+	filePath.append("/data/ui/");
+	filePath.append(cultureName);
+	filePath.append("/buildings/construction/#");
+	filePath.append(cultureName);
+	filePath.append("_");
+	filePath.append(levelName);
+	filePath.append(".tga");
+	if (std::filesystem::exists(filePath))
+		return filePath.data();
+	return nullptr;
+}
+
+char* __fastcall patchesForGame::getBuildingPic(buildingLevel* level, int cultureID)
+{
+	filePath = fastFuncts::GetModPath();
+	const auto levelName = level->name;
+	if (levelName == nullptr)
+		return nullptr;
+	const auto cultureName = cultures::getCultureName(cultureID);
+	if (cultureName.empty())
+		return nullptr;
+	filePath.append("/data/ui/");
+	filePath.append(cultureName);
+	filePath.append("/buildings/#");
+	filePath.append(cultureName);
+	filePath.append("_");
+	filePath.append(levelName);
+	filePath.append(".tga");
+	if (std::filesystem::exists(filePath))
+		return filePath.data();
+	return nullptr;
+}
+
+char* __fastcall patchesForGame::getBuildingPicConstructed(buildingLevel* level, int cultureID)
+{
+	filePath = fastFuncts::GetModPath();
+	const auto levelName = level->name;
+	if (levelName == nullptr)
+		return nullptr;
+	const auto cultureName = cultures::getCultureName(cultureID);
+	if (cultureName.empty())
+		return nullptr;
+	filePath.append("/data/ui/");
+	filePath.append(cultureName);
+	filePath.append("/buildings/#");
+	filePath.append(cultureName);
+	filePath.append("_");
+	filePath.append(levelName);
+	filePath.append("_constructed.tga");
+	if (std::filesystem::exists(filePath))
+		return filePath.data();
+	return nullptr;
+}
+
+char* __fastcall patchesForGame::getBuildingPicConstruction(buildingLevel* level, int cultureID)
+{
+	filePath = fastFuncts::GetModPath();
+	const auto levelName = level->name;
+	if (levelName == nullptr)
+		return nullptr;
+	const auto cultureName = cultures::getCultureName(cultureID);
+	if (cultureName.empty())
+		return nullptr;
+	filePath.append("/data/ui/");
+	filePath.append(cultureName);
+	filePath.append("/buildings/construction/#");
+	filePath.append(cultureName);
+	filePath.append("_");
+	filePath.append(levelName);
+	filePath.append(".tga");
+	if (std::filesystem::exists(filePath))
+		return filePath.data();
+	return nullptr;
+}
+
+portraitDbEntry* patchesForGame::getPortraitDbEntry(int cultureID)
+{
+	if (cultureID < 7)
+	{
+		const auto portraitDatabase = reinterpret_cast<portraitDb*>(dataOffsets::offsets.portraitDatabase);
+		return &portraitDatabase->cultures[cultureID];
+	}
+	return cultures::eopPortraitDb::getEntry(cultureID);
+}
+
+char* patchesForGame::onGetGuildOfferPic(DWORD level, int cultureID)
+{
+	const DWORD lvlAddr = level - 8;
+	const auto lvl = reinterpret_cast<buildingLevel*>(lvlAddr);
+	filePath = fastFuncts::GetModPath();
+	const auto levelName = lvl->name;
+	if (levelName == nullptr)
+		return nullptr;
+	const auto cultureName = cultures::getCultureName(cultureID);
+	if (cultureName.empty())
+		return nullptr;
+	filePath.append("/data/ui/");
+	filePath.append(cultureName);
+	filePath.append("/buildings/#");
+	filePath.append(cultureName);
+	filePath.append("_");
+	filePath.append(levelName);
+	filePath.append("_constructed.tga");
+	if (std::filesystem::exists(filePath))
+		return filePath.data();
+	return nullptr;
+}
+
+unit** __fastcall patchesForGame::onGetUnitByLabel(DWORD unitLabels, char* label)
+{
+	if (const DWORD value = **reinterpret_cast<DWORD**>(label); value >= 0x01308DE4 && value <= 0x0135106C)
+		return reinterpret_cast<unit**>(label);
+	
+	return GAME_FUNC(unit**(__thiscall*)(DWORD, char*), getUnitByLabel2)(unitLabels, label);
 }
 
 int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduindex)

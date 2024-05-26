@@ -6,6 +6,9 @@ void dataOffsets::initDataOffsets(int gameVer)
 	if (gameVer == 1) //kingdoms
 	{
 		offsets.factionOffsetsStart = 0x02c00140;
+		
+		offsets.battleMapData = 0x02c00130;
+		
 		offsets.statStratModelsListOffset = 0x01b5e708;
 
 		offsets.unitTypesStart = 0x0190bd0c;
@@ -17,6 +20,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.someStratmapPointer = 0x019b3134;
 
 		offsets.skeletonDatabase = 0x01B59B08;
+
+		offsets.getMovePath = 0x004D8390;
 
 		offsets.tgaDataBase = 0x019875E8;
 
@@ -30,8 +35,15 @@ void dataOffsets::initDataOffsets(int gameVer)
 
 		//gets used in adding building capabilities function for some reason just following what game does
 		offsets.edbDataStart = 0x018AA5A8;
+		
+		offsets.scriptCommandVFT = 0x0134E3A0;
+		
+		offsets.religionDatabase = 0x016E9DC0;
+		
+		offsets.portraitDatabase = 0x18B0340;
 
-
+		offsets.cultureDatabase = 0x01666FC8;
+		
 		offsets.audioEnable = (bool*)0x016818cd;
 		offsets.audioMaster_vol = (int*)0x01681910;
 		offsets.gameUnit_size = (int*)0x0016818fc;
@@ -41,6 +53,9 @@ void dataOffsets::initDataOffsets(int gameVer)
 	else if (gameVer == 2) //steam
 	{
 		offsets.factionOffsetsStart = 0x02bb7088;
+		
+		offsets.battleMapData = 0x02BB7078;
+		
 		offsets.statStratModelsListOffset = 0x01b155d8;
 
 		offsets.unitTypesStart = 0x18C2BAC;
@@ -57,11 +72,21 @@ void dataOffsets::initDataOffsets(int gameVer)
 
 		offsets.stratModelArray = 0x01B186A8;
 
+		offsets.getMovePath = 0x004D8390;
+
 		offsets.gameDataAllOffset = reinterpret_cast<gameDataAllStruct*>(0x02c2bed8);
 
 		offsets.consoleCommands = reinterpret_cast<consoleCommands*>(0x02c73df8);
 
 		offsets.guildDataStart = 0x18B47E8;
+		
+		offsets.scriptCommandVFT = 0x013933D0;
+		
+		offsets.religionDatabase = 0x016A0B90;
+		
+		offsets.portraitDatabase = 0x0161F0F0;
+
+		offsets.cultureDatabase = 0x0161F0F0;
 
 		//gets used in adding building capabilities function for some reason just following what game does
 		offsets.edbDataStart = 0x01861438;

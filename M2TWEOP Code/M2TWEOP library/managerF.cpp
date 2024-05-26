@@ -18,6 +18,11 @@ void managerF::debug()
 {
 	//MessageBoxA(NULL, "TEST", "TEST", NULL);
 }
+	
+static void noFunc()
+{
+		
+}
 
 
 //apply code injects
@@ -135,7 +140,7 @@ void managerF::doPachs()
 	torecruitEOPMercunit->Enable();
 	f1 << "Done" << endl;
 
-	/*
+	/*g
 	f1 << "Start applying toSearchUnitType patch" << '\n';
 	onSearchUnitType* toSearchUnitType = new onSearchUnitType(mem, (LPVOID)patchesForGame::onSearchUnitType, globals::dataS.gamever);
 	toSearchUnitType->SetNewCode();
@@ -532,6 +537,90 @@ void managerF::doPachs()
 	toEvaluateUnit2->Enable();
 	f1 << "Done" << endl;
 
+	f1 << "Start applying toAddCultureToArray patch" << endl;
+	onAddCultureToArray* toAddCultureToArray = new onAddCultureToArray(mem, (LPVOID)noFunc, globals::dataS.gamever);
+	toAddCultureToArray->SetNewCode();
+	toAddCultureToArray->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying toParseBuildingPics patch" << endl;
+	onParseBuildingPics* toParseBuildingPics = new onParseBuildingPics(mem, (LPVOID)noFunc, globals::dataS.gamever);
+	toParseBuildingPics->SetNewCode();
+	toParseBuildingPics->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying onParseBuildingLevelPics patch" << endl;
+	onParseBuildingLevelPics* toParseBuildingLevelPics = new onParseBuildingLevelPics(mem, (LPVOID)noFunc, globals::dataS.gamever);
+	toParseBuildingLevelPics->SetNewCode();
+	toParseBuildingLevelPics->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying toParseBuildingPics patch" << endl;
+	onParseEventBodies* toParseEventBodies = new onParseEventBodies(mem, (LPVOID)noFunc, globals::dataS.gamever);
+	toParseEventBodies->SetNewCode();
+	toParseEventBodies->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onCreatePortraitDb patch" << endl;
+	onCreatePortraitDb* toCreatePortraitDb = new onCreatePortraitDb(mem, (LPVOID)noFunc, globals::dataS.gamever);
+	toCreatePortraitDb->SetNewCode();
+	toCreatePortraitDb->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onGetBrowserPicConstructed patch" << endl;
+	onGetBrowserPicConstructed* toGetBrowserPicConstructed= new onGetBrowserPicConstructed(mem, (LPVOID)patchesForGame::getBrowserPicConstructed, globals::dataS.gamever);
+	toGetBrowserPicConstructed->SetNewCode();
+	toGetBrowserPicConstructed->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onGetBrowserPicConstruction patch" << endl;
+	onGetBrowserPicConstruction* toGetBrowserPicConstruction= new onGetBrowserPicConstruction(mem, (LPVOID)patchesForGame::getBrowserPicConstruction, globals::dataS.gamever);
+	toGetBrowserPicConstruction->SetNewCode();
+	toGetBrowserPicConstruction->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onGetBuildingPic patch" << endl;
+	onGetBuildingPic* toGetBuildingPic = new onGetBuildingPic(mem, (LPVOID)patchesForGame::getBuildingPic, globals::dataS.gamever);
+	toGetBuildingPic->SetNewCode();
+	toGetBuildingPic->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onGetGuildOfferPic patch" << endl;
+	onGetGuildOfferPic* toGetGuildOfferPic = new onGetGuildOfferPic(mem, (LPVOID)patchesForGame::onGetGuildOfferPic, globals::dataS.gamever);
+	toGetGuildOfferPic->SetNewCode();
+	toGetGuildOfferPic->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onGetBuildingPic2 patch" << endl;
+	onGetBuildingPic2* toGetBuildingPic2 = new onGetBuildingPic2(mem, (LPVOID)patchesForGame::getBuildingPic, globals::dataS.gamever);
+	toGetBuildingPic2->SetNewCode();
+	toGetBuildingPic2->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onGetBuildingPicConstruction patch" << endl;
+	onGetBuildingPicConstruction* toGetBuildingPicConstruction = new onGetBuildingPicConstruction(mem, (LPVOID)patchesForGame::getBuildingPicConstruction, globals::dataS.gamever);
+	toGetBuildingPicConstruction->SetNewCode();
+	toGetBuildingPicConstruction->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onGetBuildingPicConstructed patch" << endl;
+	onGetBuildingPicConstructed* toGetBuildingPicConstructed = new onGetBuildingPicConstructed(mem, (LPVOID)patchesForGame::getBuildingPicConstructed, globals::dataS.gamever);
+	toGetBuildingPicConstructed->SetNewCode();
+	toGetBuildingPicConstructed->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying toGetBuildingPicConstructed2 patch" << endl;
+	onGetBrowserPicConstructed2* toGetBuildingPicConstructed2 = new onGetBrowserPicConstructed2(mem, (LPVOID)patchesForGame::getBuildingPicConstructed, globals::dataS.gamever);
+	toGetBuildingPicConstructed2->SetNewCode();
+	toGetBuildingPicConstructed2->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onGetPortraitDbEntry patch" << endl;
+	onGetPortraitDbEntry* toGetPortraitDbEntry = new onGetPortraitDbEntry(mem, (LPVOID)patchesForGame::getPortraitDbEntry, globals::dataS.gamever);
+	toGetPortraitDbEntry->SetNewCode();
+	toGetPortraitDbEntry->Enable();
+	f1 << "Done" << endl;
+	
 	f1 << "Start applying onAiTurn patch" << endl;
 	onAiTurn* toAiTurn = new onAiTurn(mem, (LPVOID)patchesForGame::onAiTurn, globals::dataS.gamever);
 	toAiTurn->SetNewCode();
@@ -548,6 +637,12 @@ void managerF::doPachs()
 	OnCalculateUnitValue2* toCalculateUnitValue2 = new OnCalculateUnitValue2(mem, (LPVOID)patchesForGame::OnCalculateUnitValue, globals::dataS.gamever);
 	toCalculateUnitValue2->SetNewCode();
 	toCalculateUnitValue2->Enable();
+	f1 << "Done" << '\n';
+
+	f1 << "Start applying onGetUnitByLabel patch" << '\n';
+	onGetUnitByLabel* toGetUnitByLabel = new onGetUnitByLabel(mem, (LPVOID)patchesForGame::onGetUnitByLabel, globals::dataS.gamever);
+	toGetUnitByLabel->SetNewCode();
+	toGetUnitByLabel->Enable();
 	f1 << "Done" << '\n';
 
 	/*

@@ -188,6 +188,57 @@ int initPlugin(std::string* modPath)
 	fName = "siegeFort";
 	plugData::data.funcs.siegeFort.Load(&plPath, &fName);
 
+	fName = "unitMovetoPosition";
+	plugData::data.funcs.unitMovetoPosition.Load(&plPath, &fName);
+
+	fName = "getUnitFormation";
+	plugData::data.funcs.getUnitFormation.Load(&plPath, &fName);
+
+	fName = "placeUnit";
+	plugData::data.funcs.placeUnit.Load(&plPath, &fName);
+
+	fName = "moveToOrientation";
+	plugData::data.funcs.moveToOrientation.Load(&plPath, &fName);
+
+	fName = "moveRelative";
+	plugData::data.funcs.moveRelative.Load(&plPath, &fName);
+
+	fName = "moveToMissileRange";
+	plugData::data.funcs.moveToMissileRange.Load(&plPath, &fName);
+
+	fName = "unitTurn";
+	plugData::data.funcs.unitTurn.Load(&plPath, &fName);
+
+	fName = "taunt";
+	plugData::data.funcs.taunt.Load(&plPath, &fName);
+
+	fName = "useSpecialAbility";
+	plugData::data.funcs.useSpecialAbility.Load(&plPath, &fName);
+
+	fName = "attackBuilding";
+	plugData::data.funcs.attackBuilding.Load(&plPath, &fName);
+
+	fName = "getUnitByLabel";
+	plugData::data.funcs.getUnitByLabel.Load(&plPath, &fName);
+
+	fName = "unitAttackClosest";
+	plugData::data.funcs.unitAttackClosest.Load(&plPath, &fName);
+
+	fName = "attackUnit";
+	plugData::data.funcs.attackUnit.Load(&plPath, &fName);
+
+	fName = "deployStakes";
+	plugData::data.funcs.deployStakes.Load(&plPath, &fName);
+
+	fName = "changeUnitFormation";
+	plugData::data.funcs.changeUnitFormation.Load(&plPath, &fName);
+
+	fName = "haltUnit";
+	plugData::data.funcs.haltUnit.Load(&plPath, &fName);
+
+	fName = "getBattleMapHeight";
+	plugData::data.funcs.getBattleMapHeight.Load(&plPath, &fName);
+
 	fName = "addAncillary";
 	plugData::data.funcs.addAncillary.Load(&plPath, &fName);
 

@@ -71,6 +71,41 @@ namespace battleHandlerHelpers
 		}
 		return nullptr;
 	}
+	
+	battleDataS* getBattleData()
+	{
+		return gameDataAllHelper::get()->battleHandler;
+	}
+	
+	bool inBattle()
+	{
+		const auto battle = getBattleData();
+		if (!battle) return false;
+		return battle->inBattle == 1;
+	}
+
+	battlefieldEngines* getBattlefieldEngines()
+	{
+		auto enginesDbPtr = reinterpret_cast<battlefieldEngines**>(0x02C3A254);
+		if (m2tweopHelpers::getGameVersion() == 1)
+			enginesDbPtr = reinterpret_cast<battlefieldEngines**>(0x02C8329C);
+		if (!enginesDbPtr) return nullptr;
+		return *enginesDbPtr;
+	}
+
+	siegeEngine* getSiegeEngine(const battlefieldEngines* engineDb, const int index)
+	{
+		if (!engineDb || index < 0 || index >= engineDb->enginesNum) return nullptr;
+		return engineDb->engines[index];
+	}
+
+	int getEngineType(const siegeEngine* engine)
+	{
+		if (!engine) return -1;
+		const auto engineRec = engine->engineRecord;
+		if (!engineRec) return -1;
+		return engineRec->classID;
+	}
 
 	buildingBattle* getBattleBuilding(const battleBuildings* buildings, int index)
 	{
