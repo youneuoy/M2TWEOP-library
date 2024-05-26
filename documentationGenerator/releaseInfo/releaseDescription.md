@@ -8,23 +8,23 @@
 
 <!-- ### **Launcher** -->
 
-### **Library**
-- Rewrote and improved moveToTile, siegeSettlement, attackCharacter (Fynn)
-- Fixed some more potential crashes with EOP unit recruitment due to reports provided to me, thanks to perry123 (Fynn)
+<!-- ### **Library** -->
 
 ### **Lua Plugin**
-- Added settlementInfoScroll struct. Allows you to set colours of some elements ![](https://github.com/youneuoy/M2TWEOP-library/assets/22448079/6fd79330-6c82-4498-9962-3fd3612a6da2) (Medik)
-- Added spawnArmy, works similar to game spawn_army command allowing you to spawn admirals, respawn off-map characters and use random_name (Fynn)
-- Added siegeFort, works pretty much the same way as siegeSettlement but for forts (Fynn)
-- Added getFaction, getSettlement and getRegionByName which use internal hash tables for instant retrieval of the selected types by their names. (Fynn)
-- Added onUnloadCampaign event so you can for example detect when a user quits back to main menu from the campaign. (Fynn)
-- Expanded eduEntry struct with many new fields like getting the animation names, checking if unit has an attribute and getting the mount/projectile the entry uses (Fynn)
-- Incompatibility: siegeSettlement now takes 3 arguments, third one being a boolean isAttack which does the same as the game's siege_settlement command maintain|attack option. (Fynn)
+- [Added new `mapImage` struct](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html#mapImage)
+  - Enables users to render their own versions of the campaign strategy map
+  - Includes options for filling certain tiles and regions with color and blurring options for smoothing out jagged lines
+  - VIDEO HERE
+- Added `riverField` to the `tileStruct`
+- Expanded `coords` to `xCoord` and `yCoord` in the `tileStruct`
+- Added `aiFaction` to `factionStruct`
+- Fixed `battleBuilding:getBuilding()` returning the wrong thing
+- Fixed a bug where right clicking an EOP unit in the building description would do nothing
+- Fixed the getting and setting of certain diplomatic statues such as 'Trade Rights'
 
 <!--### **ImGUI** -->
 
 ### **Documentation**
-- Some more fixes and missing fields added (Fynn)
 
 ### **Links**
 - [Known Bugs](https://github.com/youneuoy/M2TWEOP-library/issues/71)
