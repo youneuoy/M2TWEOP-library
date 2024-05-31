@@ -108,6 +108,7 @@ void codes::initCodes(int gameVer)
 		offsets.mercEOPValue = 0x0190B928;
 		
 		offsets.getUnitByLabel = 0x0A945A0;
+		offsets.getGroupByLabel = 0x00A945C0;
 		offsets.getUnitByLabel2 = 0x0A91780;
 		
 		offsets.unitOrderMove = 0x00A6DAA0;
@@ -126,6 +127,20 @@ void codes::initCodes(int gameVer)
 		offsets.useSpecialAbility = 0x0A72630;
 		offsets.getBuildingAngle = 0x006EAB10;
 		offsets.attackBuilding = 0x00757750;
+
+		//Group commands
+		offsets.groupUnitChangeFormation = 0x00A78FA0;
+		offsets.groupMoveToRangeOfGroup = 0x00A758C0;
+		
+		offsets.groupMoveToRangeOfUnit = 0x00A752D0;
+		offsets.groupAttackGroup = 0x00A76310;
+		offsets.groupChangeFormation = 0x00A76820;
+		offsets.groupHalt = 0x00A73AC0;
+		offsets.groupMoveFormed = 0x00A73F50;
+		offsets.groupMoveUnformed = 0x00A744B0;
+		offsets.groupRelativeMoveFormed = 0x00A749B0;
+		offsets.groupRelativeMoveUnformed = 0x00A74E80;
+		offsets.groupTurn = 0x00A76BF0;
 		
 		//offsets.unitPlace = 0x00770A70;
 		offsets.unitMove = 0x0759B70;
@@ -239,8 +254,10 @@ void codes::initCodes(int gameVer)
 		offsets.mercEOPValue = 0x018C27C8;
 		
 		offsets.getUnitByLabel = 0x0A95600;
+		offsets.getGroupByLabel = 0x00A931C0;
 		offsets.getUnitByLabel2 = 0x0A927E0;
-		
+
+		//unit commands
 		offsets.unitOrderMove = 0x00A6EB00;
 		offsets.unitImmediatePlace = 0x00A6E370;
 		offsets.unitAttackClosestUnit = 0x00A79A20;
@@ -257,6 +274,19 @@ void codes::initCodes(int gameVer)
 		offsets.useSpecialAbility = 0x00A73690;
 		offsets.getBuildingAngle = 0x006EB0F0;
 		offsets.attackBuilding = 0x00757EE0;
+
+		//Group commands
+		offsets.groupUnitChangeFormation = 0x00A7A000;
+		offsets.groupMoveToRangeOfGroup = 0x00A76920;
+		offsets.groupMoveToRangeOfUnit = 0x00A76330;
+		offsets.groupAttackGroup = 0x00A77370;
+		offsets.groupChangeFormation = 0x00A77880;
+		offsets.groupHalt = 0x00A74B20;
+		offsets.groupMoveFormed = 0x00A74FB0;
+		offsets.groupMoveUnformed = 0x00A75510;
+		offsets.groupRelativeMoveFormed = 0x00A75A10;
+		offsets.groupRelativeMoveUnformed = 0x00A75EE0;
+		offsets.groupTurn = 0x00A77C50;
 		
 		//offsets.unitPlace = 0x00770A70;
 		offsets.unitMove = 0x075A320;

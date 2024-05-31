@@ -124,6 +124,7 @@ public:
 		DWORD unitPlace = NULL;
 		DWORD getUnitByLabel = NULL;
 		DWORD getUnitByLabel2 = NULL;
+		DWORD getGroupByLabel = NULL;
 		DWORD unitImmediatePlace = NULL;
 		DWORD unitAttackClosestUnit = NULL;
 		DWORD unitAttackUnit = NULL;
@@ -139,6 +140,18 @@ public:
 		DWORD useSpecialAbility = NULL;
 		DWORD getBuildingAngle = NULL;
 		DWORD attackBuilding = NULL;
+		
+		DWORD groupUnitChangeFormation = NULL;
+		DWORD groupMoveToRangeOfGroup = NULL;
+		DWORD groupMoveToRangeOfUnit = NULL;
+		DWORD groupAttackGroup = NULL;
+		DWORD groupChangeFormation = NULL;
+		DWORD groupHalt = NULL;
+		DWORD groupMoveFormed = NULL;
+		DWORD groupMoveUnformed = NULL;
+		DWORD groupRelativeMoveFormed = NULL;
+		DWORD groupRelativeMoveUnformed = NULL;
+		DWORD groupTurn = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

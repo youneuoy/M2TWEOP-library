@@ -328,6 +328,26 @@ unit** __fastcall patchesForGame::onGetUnitByLabel(DWORD unitLabels, char* label
 	return GAME_FUNC(unit**(__thiscall*)(DWORD, char*), getUnitByLabel2)(unitLabels, label);
 }
 
+//12FFA84
+unitGroup** __fastcall patchesForGame::onGetGroupByLabel(DWORD groupLabels, char* label)
+{
+	if (const DWORD value = **reinterpret_cast<DWORD**>(label); value == 0x12FFA84)
+		return reinterpret_cast<unitGroup**>(label);
+	
+	return GAME_FUNC(unitGroup**(__thiscall*)(DWORD, char*), getGroupByLabel)(groupLabels, label);
+}
+
+std::string sound;
+
+char* patchesForGame::onGetCultureEndTurnSound(int cultureID)
+{
+	if (cultureID == 0)
+		sound = "END_TURN";
+	else
+		sound = "END_TURN_CULTURE_" + to_string(cultureID);
+	return sound.data();
+}
+
 int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduindex)
 {
 	if (eduindex == -1)

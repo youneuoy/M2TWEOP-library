@@ -429,7 +429,7 @@ namespace unitActions
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
-                                                  Attack Gate
+                                                  Attack Building
     \*----------------------------------------------------------------------------------------------------------------*/
 
     int getSiegeEngineType(const unit* un)
@@ -455,7 +455,7 @@ namespace unitActions
             return;
         auto unit = un;
         int buildingAngle = GAME_FUNC(int(__thiscall*)(buildingBattle*), getBuildingAngle)(building);
-        float* coords = &building->posX;
+        float* coords = &building->xCoord;
         DWORD funcAddr = codes::offsets.attackBuilding;
         _asm
         {
@@ -470,5 +470,255 @@ namespace unitActions
             call eax
         }
         unit->unitPositionData->hasTargets = 1;
+    }
+
+    /////////////////////////////////////// GROUP COMMANDS ////////////////////////////////////////////////////////////
+
+    /*----------------------------------------------------------------------------------------------------------------*\
+                                          Group change unit formation
+    \*----------------------------------------------------------------------------------------------------------------*/
+    
+    struct groupChangeUnitFormation
+    {
+        scriptCommand command = scriptCommand("groupChangeUnitFormation");
+        const unitGroup* group = nullptr;
+        int groupLabelHash = 0;
+        int formationId = 0;
+        groupChangeUnitFormation(const unitGroup* group, int formationType)
+            : group(group), formationId(formationType){}
+    };
+    
+    void changeGroupUnitFormation(const unitGroup* group, int formationType)
+    {
+        if (group == nullptr)
+            return;
+        const auto order = std::make_shared<groupChangeUnitFormation>(group, formationType);
+        fireGameScriptFunc(order.get(), codes::offsets.groupUnitChangeFormation);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*\
+                                          Group Move To Missile Range of Group
+    \*----------------------------------------------------------------------------------------------------------------*/
+    
+    struct groupMoveToRangeOfGroup
+    {
+        scriptCommand command = scriptCommand("groupChangeUnitFormation");
+        const unitGroup* group = nullptr;
+        int groupLabelHash = 0;
+        const unitGroup* targetGroup = nullptr;
+        int targetGroupLabelHash = 0;
+        bool run = true;
+        char pad[3]{};
+        groupMoveToRangeOfGroup(const unitGroup* group, const unitGroup* targetGroup, bool run)
+            : group(group), targetGroup(targetGroup), run(run) {}
+    };
+    
+    void moveToRangeOfGroup(const unitGroup* group, const unitGroup* targetGroup, bool run)
+    {
+        if (group == nullptr)
+            return;
+        const auto order = std::make_shared<groupMoveToRangeOfGroup>(group, targetGroup, run);
+        fireGameScriptFunc(order.get(), codes::offsets.groupMoveToRangeOfGroup);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*\
+                                          Group Move To Missile Range of Unit
+    \*----------------------------------------------------------------------------------------------------------------*/
+    
+    struct groupMoveToRangeOfUnit
+    {
+        scriptCommand command = scriptCommand("groupMoveToRangeOfUnit");
+        const unitGroup* group = nullptr;
+        int groupLabelHash = 0;
+        const unit* targetUnit = nullptr;
+        int unitLabelHash = 0;
+        bool run = true;
+        char pad[3]{};
+        groupMoveToRangeOfUnit(const unitGroup* group, const unit* targetUnit, bool run)
+            : group(group), targetUnit(targetUnit), run(run) {}
+    };
+    
+    void moveGroupToRangeOfUnit(const unitGroup* group, const unit* targetUnit, bool run)
+    {
+        if (group == nullptr || targetUnit == nullptr)
+            return;
+        const auto order = std::make_shared<groupMoveToRangeOfUnit>(group, targetUnit, run);
+        fireGameScriptFunc(order.get(), codes::offsets.groupMoveToRangeOfUnit);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*\
+                                          Group Attack Group
+    \*----------------------------------------------------------------------------------------------------------------*/
+    
+    struct groupOrderAttackGroup
+    {
+        scriptCommand command = scriptCommand("groupOrderAttackGroup");
+        const unitGroup* group = nullptr;
+        int groupLabelHash = 0;
+        const unitGroup* targetGroup = nullptr;
+        int targetGroupLabelHash = 0;
+        bool run = true;
+        char pad[3]{};
+        groupOrderAttackGroup(const unitGroup* group, const unitGroup* targetGroup, bool run)
+            : group(group), targetGroup(targetGroup), run(run) {}
+    };
+    
+    void groupAttackGroup(const unitGroup* group, const unitGroup* targetGroup, bool run)
+    {
+        if (group == nullptr || targetGroup == nullptr)
+            return;
+        const auto order = std::make_shared<groupOrderAttackGroup>(group, targetGroup, run);
+        fireGameScriptFunc(order.get(), codes::offsets.groupAttackGroup);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*\
+                                                   Group Halt
+    \*----------------------------------------------------------------------------------------------------------------*/
+    
+    struct groupOrderHalt
+    {
+        scriptCommand command = scriptCommand("groupOrderHalt");
+        const unitGroup* group = nullptr;
+        int groupLabelHash = 0;
+        groupOrderHalt(const unitGroup* group) : group(group){}
+    };
+    
+    void groupHalt(const unitGroup* group)
+    {
+        if (group == nullptr)
+            return;
+        const auto order = std::make_shared<groupOrderHalt>(group);
+        fireGameScriptFunc(order.get(), codes::offsets.groupHalt);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*\
+                                                   Group Move Formed
+    \*----------------------------------------------------------------------------------------------------------------*/
+    
+    struct groupOrderMoveFormed
+    {
+        scriptCommand command = scriptCommand("groupOrderMoveFormed");
+        const unitGroup* group = nullptr;
+        int groupLabelHash = 0;
+        char *positionLabel = nullptr;
+        int positionLabelHash = 0;
+        float xCoord = 0;
+        float yCoord = 0;
+        bool run = true;
+        char pad[3]{};
+        groupOrderMoveFormed(const unitGroup* group, float xCoord, float yCoord, bool run)
+        : group(group), xCoord(xCoord), yCoord(yCoord), run(run) {}
+    };
+    
+    void groupMoveFormed(const unitGroup* group, float xCoord, float yCoord, bool run)
+    {
+        if (group == nullptr)
+            return;
+        const auto order = std::make_shared<groupOrderMoveFormed>(group, xCoord, yCoord, run);
+        fireGameScriptFunc(order.get(), codes::offsets.groupMoveFormed);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*\
+                                                   Group Move Unformed
+    \*----------------------------------------------------------------------------------------------------------------*/
+    
+    struct groupOrderMoveUnformed
+    {
+        scriptCommand command = scriptCommand("groupOrderMoveUnformed");
+        const unitGroup* group = nullptr;
+        int groupLabelHash = 0;
+        char *positionLabel = nullptr;
+        int positionLabelHash = 0;
+        float xCoord = 0;
+        float yCoord = 0;
+        bool run = true;
+        char pad[3]{};
+        groupOrderMoveUnformed(const unitGroup* group, float xCoord, float yCoord, bool run)
+        : group(group), xCoord(xCoord), yCoord(yCoord), run(run) {}
+    };
+    
+    void groupMoveUnformed(const unitGroup* group, float xCoord, float yCoord, bool run)
+    {
+        if (group == nullptr)
+            return;
+        const auto order = std::make_shared<groupOrderMoveUnformed>(group, xCoord, yCoord, run);
+        fireGameScriptFunc(order.get(), codes::offsets.groupMoveUnformed);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*\
+                                                   Group Move Formed Relative
+    \*----------------------------------------------------------------------------------------------------------------*/
+    
+    struct groupOrderRelativeMoveFormed
+    {
+        scriptCommand command = scriptCommand("groupOrderRelativeMoveFormed");
+        const unitGroup* group = nullptr;
+        int groupLabelHash = 0;
+        float xCoord = 0;
+        float yCoord = 0;
+        bool run = true;
+        char pad[3]{};
+        groupOrderRelativeMoveFormed(const unitGroup* group, float xCoord, float yCoord, bool run)
+        : group(group), xCoord(xCoord), yCoord(yCoord), run(run) {}
+    };
+    
+    void groupMoveFormedRelative(const unitGroup* group, float xCoord, float yCoord, bool run)
+    {
+        if (group == nullptr)
+            return;
+        const auto order = std::make_shared<groupOrderRelativeMoveFormed>(group, xCoord, yCoord, run);
+        fireGameScriptFunc(order.get(), codes::offsets.groupRelativeMoveFormed);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*\
+                                                   Group Move Unformed Relative
+    \*----------------------------------------------------------------------------------------------------------------*/
+    
+    struct groupOrderRelativeMoveUnformed
+    {
+        scriptCommand command = scriptCommand("groupOrderRelativeMoveUnformed");
+        const unitGroup* group = nullptr;
+        int groupLabelHash = 0;
+        float xCoord = 0;
+        float yCoord = 0;
+        bool run = true;
+        char pad[3]{};
+        groupOrderRelativeMoveUnformed(const unitGroup* group, float xCoord, float yCoord, bool run)
+        : group(group), xCoord(xCoord), yCoord(yCoord), run(run) {}
+    };
+    
+    void groupMoveUnformedRelative(const unitGroup* group, float xCoord, float yCoord, bool run)
+    {
+        if (group == nullptr)
+            return;
+        const auto order = std::make_shared<groupOrderRelativeMoveUnformed>(group, xCoord, yCoord, run);
+        fireGameScriptFunc(order.get(), codes::offsets.groupRelativeMoveUnformed);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*\
+                                                   Group Turn
+    \*----------------------------------------------------------------------------------------------------------------*/
+    
+    struct groupOrderTurn
+    {
+        scriptCommand command = scriptCommand("groupOrderTurn");
+        const unitGroup* group = nullptr;
+        int groupLabelHash = 0;
+        int16_t angle = 0;
+        bool isRelative = true;
+        char pad2[1]{};
+        groupOrderTurn(const unitGroup* group, int16_t angle, bool isRelative)
+        : group(group), isRelative(isRelative)
+        {
+            this->angle = static_cast<int16_t>((angle * 0.017453292f) * 10430.378f);
+        }
+    };
+    
+    void groupTurn(const unitGroup* group, int16_t angle, bool isRelative)
+    {
+        if (group == nullptr)
+            return;
+        const auto order = std::make_shared<groupOrderTurn>(group, angle, isRelative);
+        fireGameScriptFunc(order.get(), codes::offsets.groupTurn);
     }
 }

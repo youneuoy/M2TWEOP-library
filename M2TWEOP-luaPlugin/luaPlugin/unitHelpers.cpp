@@ -104,10 +104,42 @@ namespace unitHelpers
 	{
 		return un->movePoints;
 	}
+	int getMoraleLevel(const unit* un)
+	{
+		return un->unitMorale.moraleLevel;
+	}
+	void setMoraleLevel(unit* un, int level)
+	{
+		un->unitMorale.moraleLevel = level;
+	}
+
+	int16_t angleFloatToShort(float angle)
+	{
+		return static_cast<int16_t>(angle * 182.044432904376f);
+	}
+
+	float angleShortToFloat(int16_t angle)
+	{
+		return angle * 0.0054931640625f;
+	}
+
+	float getUnitAngle(const unit* un)
+	{
+		if (!un->unitPositionData)
+			return 0;
+		return angleShortToFloat(un->unitPositionData->angle);
+	}
+	
+	void setUnitAngle(unit* un, float angle)
+	{
+		un->unitPositionData->angle = angleFloatToShort(angle);
+	}
+	
 	int getsoldierCountStratMap(const unit* un)
 	{
 		return un->SoldierCountStrat;
 	}
+	
 	bool hasBattleProperty(const unit* un, unitBattleProperties prop)
 	{
 		return (un->unitBattleProperties & prop) != 0;
@@ -151,7 +183,7 @@ namespace unitHelpers
 	bool isUnderFire(unit* un)
 	{
 		auto posData = un->unitPositionData;
-		return posData->towersUnderFireFromCount + posData->unitsUnderFireFromCount + posData->underFireSomething2Count + posData->underFireSomething3Count;
+		return posData->towersUnderFireFromCount + posData->unitsUnderFireFromCount + posData->underFireSomething2Count + posData->artilleryUnderFireFromNum;
 	}
 	unit* getUnitUnderFireFrom(unitPositionData* posData, int index)
 	{
@@ -229,6 +261,13 @@ namespace unitHelpers
 	{
 		if (!group || !un || !un->unitGroup || un->unitGroup != group)
 			return;
+		if (un->army && un->army->faction)
+		{
+			if (un->army->faction->isPlayerControlled)
+				un->aiActiveSet = 0;
+			else
+				un->aiActiveSet = 1;
+		}
 		CallVFunc<2, void*>(group, un, 1);
 		if (group->unitsInFormationNum + group->unitsNotInFormationNum == 0)
 			undefineUnitGroup(group);
@@ -268,36 +307,36 @@ namespace unitHelpers
 	{
 		if (!group || !targetUnit)
 			return;
-		group->automationType = 0;
-		group->defendXCoord = 0;
-		group->defendYCoord = 0;
+		group->newAutomationType = 0;
+		group->newDefendXCoord = 0;
+		group->newDefendYCoord = 0;
 		group->field_1338 = 0;
-		group->targetUnit = nullptr;
-		group->defendRadius = 0;
+		group->newTargetUnit = nullptr;
+		group->newDefendRadius = 0;
 		group->field_133C = 0;
 		group->field_1340 = 0;
 		group->field_1344 = 0;
-		group->automationType = 2;
-		group->targetUnit = targetUnit;
+		group->newAutomationType = 2;
+		group->newTargetUnit = targetUnit;
 	}
 
 	void automateDefense(unitGroup* group, float xCoord, float yCoord, float radius)
 	{
 		if (!group)
 			return;
-		group->automationType = 0;
-		group->defendXCoord = 0;
-		group->defendYCoord = 0;
+		group->newAutomationType = 0;
+		group->newDefendXCoord = 0;
+		group->newDefendYCoord = 0;
 		group->field_1338 = 0;
-		group->targetUnit = nullptr;
-		group->defendRadius = 0;
+		group->newTargetUnit = nullptr;
+		group->newDefendRadius = 0;
 		group->field_133C = 0;
 		group->field_1340 = 0;
 		group->field_1344 = 0;
-		group->automationType = 1;
-		group->defendXCoord = xCoord;
-		group->defendXCoord = yCoord;
-		group->defendRadius = radius;
+		group->newAutomationType = 1;
+		group->newDefendXCoord = xCoord;
+		group->newDefendYCoord = yCoord;
+		group->newDefendRadius = radius;
 	}
 
 	void placeGroup(unitGroup* group, float xCoord, float yCoord, float angle)
@@ -322,6 +361,76 @@ namespace unitHelpers
 			call eax
 		}
 		delete[] coords;
+	}
+
+	void changeGroupUnitFormation(const unitGroup* group, int formationType)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.changeGroupUnitFormation))(group, formationType);
+	}
+
+	void moveToRangeOfGroup(const unitGroup* group, const unitGroup* targetGroup, bool run)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.moveToRangeOfGroup))(group, targetGroup, run);
+	}
+
+	void moveGroupToRangeOfUnit(const unitGroup* group, const unit* targetUnit, bool run)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.moveGroupToRangeOfUnit))(group, targetUnit, run);
+	}
+
+	void groupAttackGroup(const unitGroup* group, const unitGroup* targetGroup, bool run)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.groupAttackGroup))(group, targetGroup, run);
+	}
+
+	void groupHalt(const unitGroup* group)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.groupHalt))(group);
+	}
+
+	void groupMoveFormed(const unitGroup* group, float xCoord, float yCoord, bool run)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.groupMoveFormed))(group, xCoord, yCoord, run);
+	}
+
+	void groupMoveUnformed(const unitGroup* group, float xCoord, float yCoord, bool run)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.groupMoveUnformed))(group, xCoord, yCoord, run);
+	}
+
+	void groupMoveFormedRelative(const unitGroup* group, float xCoord, float yCoord, bool run)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.groupMoveFormedRelative))(group, xCoord, yCoord, run);
+	}
+
+	void groupMoveUnformedRelative(const unitGroup* group, float xCoord, float yCoord, bool run)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.groupMoveUnformedRelative))(group, xCoord, yCoord, run);
+	}
+
+	void groupTurn(const unitGroup* group, int16_t angle, bool isRelative)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		(*(*plugData::data.funcs.groupTurn))(group, angle, isRelative);
 	}
 
 	void undefineUnitGroup(const unitGroup* group)
@@ -365,6 +474,7 @@ namespace unitHelpers
 	{
 		if (!group || !un || un->unitGroup)
 			return;
+		un->aiActiveSet = 2;
 		CallVFunc<1, void*>(group, un);
 	}
 
@@ -410,9 +520,9 @@ namespace unitHelpers
 		{
 			return nullptr;
 		}
-		if (posData->targetArray[posData->targetsDone].targetUnit)
+		if (posData->targetArray[posData->currIndex].targetVerification.tablePos)
 		{
-			return posData->targetArray[posData->targetsDone].targetUnit->target;
+			return posData->targetArray[posData->currIndex].targetVerification.tablePos->unit;
 		}
 		return nullptr;
 	}
@@ -433,31 +543,35 @@ namespace unitHelpers
 		return (*(*plugData::data.funcs.getUnitByLabel))(label);
 	}
 
-	void unitAttackClosest(const unit* un, int16_t angle, bool run)
+	void unitAttackClosest(unit* un, int16_t angle, bool run)
 	{
 		if (!battleHandlerHelpers::inBattle())
 			return;
+		un->aiActiveSet = 2;
 		(*(*plugData::data.funcs.unitAttackClosest))(un, angle, run);
 	}
 
-	void unitAttackUnit(const unit* un, const unit* targetUnit, bool run)
+	void unitAttackUnit(unit* un, const unit* targetUnit, bool run)
 	{
 		if (!battleHandlerHelpers::inBattle())
 			return;
+		un->aiActiveSet = 2;
 		(*(*plugData::data.funcs.attackUnit))(un, targetUnit, run);
 	}
 
-	void unitMovetoPosition(const unit* unit, float xCoord, float yCoord, bool run)
+	void unitMovetoPosition(unit* unit, float xCoord, float yCoord, bool run)
 	{
 		if (!battleHandlerHelpers::inBattle())
 			return;
+		unit->aiActiveSet = 2;
 		(*(*plugData::data.funcs.unitMovetoPosition))(unit, xCoord, yCoord, run);
 	}
 
-	void moveToOrientation(const unit* unit, float xCoord, float yCoord, int widthInMen, int16_t angle, bool run)
+	void moveToOrientation(unit* unit, float xCoord, float yCoord, int widthInMen, int16_t angle, bool run)
 	{
 		if (!battleHandlerHelpers::inBattle())
 			return;
+		unit->aiActiveSet = 2;
 		(*(*plugData::data.funcs.moveToOrientation))(unit, xCoord, yCoord, widthInMen, angle, run);
 	}
 
@@ -494,24 +608,27 @@ namespace unitHelpers
 		return (*(*plugData::data.funcs.getBattleMapHeight))(xCoord, yCoord);
 	}
 
-	void moveRelative(const unit* unit, float xCoord, float yCoord, bool run)
+	void moveRelative(unit* unit, float xCoord, float yCoord, bool run)
 	{
 		if (!battleHandlerHelpers::inBattle())
 			return;
+		unit->aiActiveSet = 2;
 		(*(*plugData::data.funcs.moveRelative))(unit, xCoord, yCoord, run);
 	}
 
-	void moveToMissileRange(const unit* un, const unit* targetUnit, bool run)
+	void moveToMissileRange(unit* un, const unit* targetUnit, bool run)
 	{
 		if (!battleHandlerHelpers::inBattle())
 			return;
+		un->aiActiveSet = 2;
 		(*(*plugData::data.funcs.moveToMissileRange))(un, targetUnit, run);
 	}
 
-	void unitTurn(const unit* un, int16_t angle, bool isRelative)
+	void unitTurn(unit* un, int16_t angle, bool isRelative)
 	{
 		if (!battleHandlerHelpers::inBattle())
 			return;
+		un->aiActiveSet = 2;
 		(*(*plugData::data.funcs.unitTurn))(un, angle, isRelative);
 	}
 
@@ -557,7 +674,7 @@ namespace unitHelpers
 			return;
 		haltUnit(un);
 		un->unitPositionData->targetArray[0].siegeEngine = engine;
-		un->unitPositionData->targetArray[0].typeOrSomething = 6;
+		un->unitPositionData->targetArray[0].actionType = static_cast<int>(unitActionType::unitCollectEngine);
 		un->unitPositionData->isHalted = 0;
 		un->unitPositionData->hasTargets = 1;
 		un->unitPositionData->targetsToGo = 1;

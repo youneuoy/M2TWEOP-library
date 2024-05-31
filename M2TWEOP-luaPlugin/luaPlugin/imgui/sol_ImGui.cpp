@@ -5126,8 +5126,8 @@ namespace sol_ImGui
 		Input with Keyboard.
 		@function ImGui.InputTextWithHint
 		@tparam string label
-		@tparam string text
 		@tparam string hint
+		@tparam string text
 		@tparam int bufferSize
 		@tparam int inputTextFlags optional
 		@treturn string value

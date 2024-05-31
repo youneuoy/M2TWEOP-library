@@ -1716,6 +1716,7 @@ void luaP::initP2()
 		sol::usertype<battleSide> battleSideTable;
 		sol::usertype<trackedPointerArmy> trackedPointerArmyTable;
 		sol::usertype<deploymentAreaS> deploymentAreaTable;
+		sol::usertype<battlePos> battlePos;
 		sol::usertype<battleAI> battleAI;
 		sol::usertype<armyAndCharacter> battleArmy;
 		sol::usertype<battleUnit> battleUnit;
@@ -2016,12 +2017,28 @@ void luaP::initP2()
 	typeAll.trackedPointerArmyTable = luaState.new_usertype<trackedPointerArmy>("trackedPointerArmy");
 	typeAll.trackedPointerArmyTable.set("army", &trackedPointerArmy::stack);
 	typeAll.trackedPointerArmyTable.set("deploymentArea", &trackedPointerArmy::deploymentArea);
+	
+	///battlePos
+	//@section battlePos
+
+	/***
+	Basic battlePos table
+
+	@tfield float xCoord
+	@tfield float yCoord
+
+
+	@table battlePos
+	*/
+	typeAll.battlePos = luaState.new_usertype<battlePos>("battlePos");
+	typeAll.battlePos.set("xCoord", &battlePos::xCoord);
+	typeAll.battlePos.set("yCoord", &battlePos::yCoord);
 
 	///DeploymentAreaS
 	//@section deploymentAreaS
 
 	/***
-	Basic trackedPointerArmy table
+	Basic DeploymentAreaS table
 
 	@tfield int coordsNum
 	@tfield getCoordPair getCoordPair
@@ -2034,8 +2051,8 @@ void luaP::initP2()
 	/***
 	Get pair of coords with index.
 	@function deploymentAreaS:getCoordPair
-	@treturn float xCoord X coordinate of the area.
-	@treturn float yCoord Y coordinate of the area.
+	@tparam int index
+	@treturn battlePos position
 	@usage
 	gameData=gameDataAll.get();
 	battleS=gameData.battleStruct;
@@ -2047,7 +2064,7 @@ void luaP::initP2()
 		print(xCoord,yCoord);
 	end
 	*/
-	typeAll.deploymentAreaTable.set("getCoordPair", [](deploymentAreaS& self, int pairNum) { return std::make_tuple(self.coordsPairs[0 + pairNum], self.coordsPairs[1 + pairNum]); });
+	typeAll.deploymentAreaTable.set("getCoordPair", &battleHandlerHelpers::getCoordPair);
 
 	///BattleAI
 	//@section battleAI
@@ -2220,7 +2237,6 @@ void luaP::initP2()
 	Basic battleResidence table
 
 	@tfield settlementStruct settlement
-	@tfield int isFortBattle
 	@tfield battleBuildings battleBuildings
 	@tfield int settlementWallsBreached
 	@tfield int settlementGateDestroyed
@@ -2229,7 +2245,6 @@ void luaP::initP2()
 	*/
 	typeAll.battleResidence = luaState.new_usertype<battleResidence>("battleResidence");
 	typeAll.battleResidence.set("settlement", &battleResidence::settlement);
-	typeAll.battleResidence.set("isFortBattle", &battleResidence::isFortBattle);
 	typeAll.battleResidence.set("settlementWallsBreached", &battleResidence::settlementWallsBreached);
 	typeAll.battleResidence.set("settlementGateDestroyed", &battleResidence::settlementGateDestroyed);
 	typeAll.battleResidence.set("battleBuildings", &battleResidence::battleBuildings);
@@ -2244,7 +2259,7 @@ void luaP::initP2()
 	@tfield int endHealth
 	@tfield int currentHealth
 	@tfield int startHealth
-	@tfield int isDefenderControlled
+	@tfield int alliance
 	@tfield float posX
 	@tfield float posZ
 	@tfield float posY
@@ -2253,13 +2268,13 @@ void luaP::initP2()
 	*/
 	typeAll.buildingBattle = luaState.new_usertype<buildingBattle>("buildingBattle");
 	typeAll.buildingBattle.set("type", &buildingBattle::type);
-	typeAll.buildingBattle.set("posX", &buildingBattle::posX);
-	typeAll.buildingBattle.set("posZ", &buildingBattle::posZ);
-	typeAll.buildingBattle.set("posY", &buildingBattle::posY);
+	typeAll.buildingBattle.set("posX", &buildingBattle::xCoord);
+	typeAll.buildingBattle.set("posZ", &buildingBattle::zCoord);
+	typeAll.buildingBattle.set("posY", &buildingBattle::yCoord);
 	typeAll.buildingBattle.set("endHealth", &buildingBattle::endHealth);
 	typeAll.buildingBattle.set("currentHealth", &buildingBattle::currentHealth);
 	typeAll.buildingBattle.set("startHealth", &buildingBattle::startHealth);
-	typeAll.buildingBattle.set("isDefenderControlled", &buildingBattle::isDefenderControlled);
+	typeAll.buildingBattle.set("alliance", &buildingBattle::alliance);
 
 	///Siege Engine
 	//@section Siege Engine

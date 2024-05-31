@@ -29,6 +29,7 @@ namespace factionHelpers
 	factionRanking* getFactionRanking(const factionStruct* fac, int turnNum);
 	factionEconomy* getFactionEconomy(factionStruct* fac, int turnsAgo);
 	bool isNeighbourFaction(const factionStruct* fac1, const factionStruct* fac2);
+	watchTowerStruct* spawnWatchtower(const factionStruct* fac, int x, int y);
 	int getNeighbourRegionID(const factionStruct* fac, int index);
 	decisionValuesLTGD* getlongTermGoalValues(aiLongTermGoalDirector* LTGD, int targetFaction);
 	void setConstructionValue(aiPersonalityValues* personality, int type, int value);

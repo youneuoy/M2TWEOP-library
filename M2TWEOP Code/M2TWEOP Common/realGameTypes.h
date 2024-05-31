@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+
 template<unsigned int IIdx, typename TRet, typename ... TArgs>
 TRet CallVFunc(void* thisptr, TArgs ... argList)
 {
@@ -9,7 +11,6 @@ TRet CallVFunc(void* thisptr, TArgs ... argList)
 #include <cstdint>
 #include <windows.h>
 #include <basetsd.h>
-#include <vector>
 typedef unsigned char   undefined;
 typedef unsigned int    uint;
 typedef unsigned char    uchar;
@@ -224,6 +225,92 @@ public:
 	int32_t tileCoordsCount; //0x0008
 }; //Size: 0x000C
 
+/* 1869 */
+struct gateEntry
+{
+	char *name;
+	int32_t nameHash;
+	int32_t health;
+	float height;
+	float pursuitLockoutRadius;
+	float blockedLockoutRadous;
+};
+
+/* 1872 */
+struct wallEntry
+{
+	char *name;
+	int32_t nameHash;
+	int32_t flammability;
+	int32_t impactDamage;
+	int32_t health;
+	float controlAreaRadius;
+	int8_t manned;
+	int8_t isSelectable;
+	int8_t healthExcluded;
+	int8_t byte_1b;
+	struct UNICODE_STRING **localizedName;
+};
+
+/* 1873 */
+struct gateWayEntry : wallEntry
+{
+	int32_t field_20;
+	int32_t field_24;
+	int32_t field_28;
+	int32_t field_2C;
+	struct gateEntry **gateEntries;
+	int32_t gateEntrySize;
+	int32_t gateEntryCount;
+	int32_t projectileImpactsAllHitGate;
+};
+
+/* 1874 */
+struct towerEntry : wallEntry
+{
+	int32_t field20;
+	struct towerStats *towerStats;
+	int32_t someListEnd;
+	int32_t someListEnd2;
+};
+
+/* 1875 */
+struct gateHouseEntry : wallEntry
+{
+	int32_t field20;
+	struct towerStats *someList;
+	int32_t someListEnd;
+	int32_t someListEnd2;
+	int32_t field30;
+	int32_t field34;
+	int32_t field38;
+	int32_t field3C;
+};
+
+struct descrWalls
+{
+	struct descrWallEntry *walls;
+	int32_t wallsSize;
+	int32_t wallNum;
+	struct gateEntry *gates;
+	int32_t field10;
+	int32_t field14;
+	int32_t gatesSize;
+	int32_t gatesNum;
+};
+
+
+
+struct descrWallEntry
+{
+	int32_t siegeTowerSize;
+	int32_t level;
+	struct wallEntry wall;
+	struct gateWayEntry gateway;
+	struct towerEntry tower;
+	struct gateHouseEntry gatehouse;
+	int32_t hasGatehouse;
+};
 
 struct eventTrigger
 {
@@ -239,23 +326,136 @@ public:
 	char pad_0068[220]; //0x0068
 }; //Size: 0x0144
 
+struct weaponFX
+{
+	int field0;
+	char *name;
+	int field8;
+	int fieldC;
+	int field10;
+	int field14;
+	int field18;
+};
+
+struct fireRate
+{
+	int normal;
+	int flaming;
+};
+
+struct towerStats
+{
+	int32_t statBitfield;
+	int ammoBitfield;
+	int missileRange;
+	float missileRangeSquared;
+	int hasPrimary;
+	struct projectile *missile;
+	int32_t weaponType;
+	int32_t techType;
+	int damageType;
+	int soundType;
+	int32_t attackMinDelay;
+	weaponFX weaponEffect;
+	struct weaponFX shot_sfx;
+	struct weaponFX shot_gfx;
+	float fireAngle;
+	float slotYawX;
+	float slotYawY;
+	float slotPitchX;
+	float slotPitchY;
+	fireRate fireRatesNormal[4];
+};
+
+
+
 struct buildingBattle
 {
 public:
-	char pad_0000[24]; //0x0000
-	int32_t type; //0x0018
-	char pad_001C[8]; //0x001C
-	float posX; //0x0024
-	float posZ; //0x0028
-	float posY; //0x002C
-	char pad_0030[4]; //0x0030
-	int32_t endHealth; //0x0034
-	int32_t currentHealth; //0x0038
-	int32_t startHealth; //0x003C
-	char pad_0040[4]; //0x0040
-	int32_t isDefenderControlled; //0x0044
-	struct smthingBattleBuilding *battleResidence; //0x0048
-	char pad_004C[4]; //0x004C
+	void *__vftable /*VFT*/;
+	int field4;
+	int field8;
+	int fieldC;
+	int field10;
+	void *field_14;
+	int type;
+	int field_1C;
+	int factionId;
+	float xCoord;
+	float zCoord;
+	float yCoord;
+	int16_t angle;
+	char byte_32;
+	char byte_33;
+	int endHealth;
+	int currentHealth;
+	int startHealth;
+	struct factionStruct *faction;
+	int alliance;
+	struct battleResidence *battleResidence;
+	int field_4C;
+	struct wallEntry *descrWallsEntry;
+	int field_54;
+	char field_58;
+	char pad_59[3];
+	int field_5C;
+	char field_60;
+	char field_61;
+	char pad_62[2];
+	int field_64;
+	int field_68;
+	void *fireAmbientRegister;
+	void *fireAmbientRegisterSP;
+	float float_74;
+	int field_78;
+	int field_7C;
+	int field_80;
+	int field_84_init1;
+	int field_88;
+	void *worldData;
+	int field_90;
+	int index;
+	int field_98;
+	char field_9C;
+	char pad_9D[3];
+	int field_A0;
+	int field_A4;
+	towerStats towerStats;
+	int field_15C;
+	int32_t statBitfield;
+	int ammoBitfield;
+	int missileRange;
+	float missileRangeSquared;
+	int hasPrimary;
+	struct projectile *missile;
+	int32_t weaponType;
+	int32_t techType;
+	int damageType;
+	int soundType;
+	int32_t attackMinDelay;
+	weaponFX weaponEffect;
+	int32_t statPriArmour;
+	int32_t armourSoundType;
+	int8_t attackInBattle;
+	int8_t armourInBattle;
+	int8_t pad52;
+	int8_t byte_53;
+	int8_t byte_54;
+	int8_t byte_55;
+	int8_t byte_56;
+	int8_t byte_57;
+	int field_1B8;
+	int field_1BC;
+	int field_1C0;
+	int field_1C4;
+	char byte_1C8;
+	char byte_1C9;
+	char pad_1CA[2];
+	int field_1CC;
+	int field_1D0;
+	int array_1D4;
+	int array_1D4Size;
+	int array_1D4Num;
 }; //Size: 0x0050
 
 struct siegeEngine
@@ -293,14 +493,14 @@ struct siegeEngine
 	int field_78;
 	int field_7C;
 	struct engineRecord* engineRecord;
-	int field_84;
-	int field_88;
+	struct unit* currentUnit;
+	struct unit* lastUnit;
 	uint32_t stats;
 	DWORD ammunition;
 	DWORD range;
 	float missleRangeSquared;
 	DWORD hasPrimary;
-	void *statPriMissle;
+	struct projectile *statPriMissle;
 	DWORD weaponType;
 	DWORD techType;
 	DWORD damageType;
@@ -872,6 +1072,45 @@ struct oneTile {
 
 
 
+/* 2190 */
+struct unitVerificationElement
+{
+	unitVerificationElement *nextElementIfEmpty;
+	unit *unit;
+	int32_t field_8;
+	int32_t index;
+	int32_t field_10;
+};
+
+/* 2191 */
+struct unitVerificationSection
+{
+	struct unitVerificationSection *nextSection;
+	struct unitVerificationElement unitVerificationElements[128];
+};
+
+/* 2192 */
+struct unitVerificationTable
+{
+	struct unitVerificationSection *firstSection;
+	struct unitVerificationSection *lastSection;
+	struct unitVerificationElement *freeSpot;
+	struct unitVerificationElement *lastElement;
+	int32_t count;
+	int8_t hasElements;
+	int8_t pad_15[3];
+	int32_t field_18;
+	char *name;
+};
+
+/* 2193 */
+struct unitVerification
+{
+	unitVerificationTable *unitVerificationTable;
+	unitVerificationElement *tablePos;
+	int unitVerField_8;
+};
+
 struct color
 {
 	int8_t r = 0;
@@ -970,7 +1209,7 @@ public:
 	char pad_0010[304]; //0x0010
 }; //Size: 0x0140
 
-struct settlementBuildings
+struct perimeterBuildings
 {
 public:
 	struct buildingBattle** buildingList; //0x0000
@@ -981,36 +1220,120 @@ public:
 struct battleBuildings
 {
 public:
-	char pad_0000[20]; //0x0000
+	int field0;
+	int field4;
+	int field8;
+	int fieldc;
+	int field10;
 	struct buildingBattle** allBuildings; //0x0014
 	int32_t allBuildingsSize; //0x0020
 	int32_t allBuildingsNum; //0x0020
 	int32_t* allBuildingsInt; //0x0020
-	char pad_0024[8]; //0x0024
-	struct settlementBuildings* settlementBuildings; //0x002C
+	int allBuildingsIntSize;
+	int allBuildingsIntNum;
+	struct perimeterBuildings *perimeters;
+	int perimetersSize;
+	int perimitersNum;
+	void *array38;
+	int array38Size;
+	int array38Num;
 }; //Size: 0x0444
+
+struct plazaStuff
+{
+	int soldiersAlliance1;
+	int soldiersAlliance2;
+	void *field8;
+	void *field8End;
+	int field10;
+	int field14;
+	void *someFloats;
+	int field1C;
+	int factionID1;
+	int factionID2;
+	UNICODE_STRING ***localizedName;
+	int8_t byte2c;
+	int8_t byte2d;
+	int8_t pad2e[2];
+	int settType;
+	float plazaXcoord;
+	float plazaYCoord;
+	int field3c;
+	int field40;
+	int field44;
+	int field48;
+	int field4c;
+	int field50;
+	float float54;
+	float float58;
+	int field5c;
+	int field60;
+	int field64;
+	int8_t byte68;
+	int8_t pad69[3];
+	int alliancePlaza;
+	int field70;
+	float plazaMaxTime;
+	float plazaControlRatioNeeded;
+	float plazaTimer;
+	int8_t byte80;
+	int8_t pad81[3];
+	int field84;
+	int field88;
+	int field8c;
+	int field90;
+	int field94;
+	int field98;
+	int field9c;
+	int fielda0;
+	int fielda4;
+	int fielda8;
+	int fieldac;
+};
 
 struct battleResidence
 {
 public:
-	char pad_0000[28]; //0x0000
-	struct settlementStruct* settlement; //0x001C
-	char pad_0020[8]; //0x0020
-	struct factionStruct** faction; //0x0028
-	char pad_002C[4]; //0x002C
-	int32_t isFortBattle; //0x0030
-	struct battleBuildings* battleBuildings; //0x0034
-	char pad_0038[4]; //0x0038
-	float N000203C6; //0x003C
-	float N000203C7; //0x0040
-	char pad_0044[40]; //0x0044
-	int8_t settlementWallsBreached; //0x006C
-	int8_t settlementGateDestroyed; //0x006D
-	char pad_006E[2]; //0x006E
-	int8_t N0003A33C; //0x0070
-	char pad_0071[7]; //0x0071
-	float N0003A33E; //0x0078
-	char pad_007C[200]; //0x007C
+	int8_t gateStrength;
+	int8_t pad1[3];
+	float defendOffset1;
+	int field8;
+	float defendOffset2;
+	int attackerDirection;
+	int field18;
+	void *ptr_1c;
+	struct settlementStruct *settlement;
+	struct fortBattleInfo *fort;
+	int field24;
+	struct factionStruct *faction;
+	char byte_2c;
+	char byte_2d;
+	char byte_2e;
+	char byte_2f;
+	int32_t fortFortificationLevel;
+	struct battleBuildings *battleBuildings;
+	int field_38_init2;
+	float float_3c;
+	float float_40;
+	float float_44;
+	float float_48;
+	float float_4C;
+	float float_50;
+	float float_54;
+	float float_58;
+	float float_5C;
+	struct plazaStuff *plazaStuff;
+	void *worldData;
+	int someGroundTypeBitfield;
+	int8_t settlementWallsBreached;
+	int8_t settlementGateDestroyed;
+	char pad_006E[2];
+	int8_t alliance;
+	char pad_0071[3];
+	int32_t field_74;
+	void *list_78;
+	void *list_78end;
+	void *list_78end2;
 }; //Size: 0x0144
 
 struct factionRanking
@@ -1178,15 +1501,15 @@ struct watchTowerModel {
 //watchtower
 struct watchTowerStruct {
 	void* watchTowerVtable; //0x0000
-	DWORD* object; //0x0004
-	struct general* character; //0x0008
+	DWORD* nextObject; //0x0004
+	DWORD* previousObject; //0x0008
 	int xCoord;
 	int yCoord;
-	char pad_0014[4]; //0x0014
-	int8_t N000021C7; //0x0018
-	char pad_0019[3]; //0x0019
-	float N000021C8; //0x001C
-	int8_t N000021C9; //0x0020
+	int somethingIdle;
+	bool inSettOrNotArmyLead;
+	char pad19[3];
+	float floatCheckedForLessThen1ForMove;
+	bool fieldx20;
 	char pad_0021[3]; //0x0021
 	struct watchTowerModel* model;
 	int32_t regionID; //0x0028
@@ -1195,7 +1518,6 @@ struct watchTowerStruct {
 	void* trackedPointerArmyVtable; //0x0034
 	struct stackStruct* blockingArmy; //0x0038
 	int32_t factionID; //0x003C
-	char pad_0040[8]; //0x0040
 };
 
 struct worldRecord {
@@ -1208,6 +1530,131 @@ struct worldRecord {
 	int groupLen;
 	int allocatedGroupLen;
 	undefined field_0x38[40];
+};
+
+
+
+struct arrayInUnitGroup
+{
+	int someStatus;
+	int field4;
+	int field_8;
+	int16_t short_C;
+	int8_t byte_d;
+	int8_t byte_e;
+	int field10;
+	int8_t byte_14;
+	int8_t byte_15;
+	int8_t byte_16;
+	int8_t byte_17;
+	int field18;
+	int field1C;
+	int field_20;
+	int8_t isAiAutomated;
+	int8_t byte_25;
+	int8_t byte_26;
+	int8_t byte_27;
+	int isAiFormation;
+	int field2C;
+	int field30;
+	int field34;
+	int field38;
+	float float_3c;
+	int groupFormationID;
+	int field44;
+};
+
+struct unitGroup
+{
+	void *vftable /*VFT*/;
+	char field_4init1;
+	char field_5;
+	char field_6;
+	char field_7;
+	struct unit **unitsInFormation;
+	int32_t unitsSize;
+	int32_t unitsInFormationNum;
+	int unitsNumTotal;
+	void *array18;
+	int32_t array18Size;
+	int32_t array18Num;
+	void *array24;
+	int32_t array24Size;
+	int32_t array24Num;
+	struct smthingUnitGroup *formationStuffOne;
+	int32_t formationStuffOneSize;
+	int32_t formationStuffOneNum;
+	void *formationStuffTwo;
+	int32_t formationStuffTwoSize;
+	int32_t formationStuffTwoNum;
+	void *descrFormationEntry;
+	char hasFormation;
+	char field_4d;
+	char field_4e;
+	char field_4f;
+	int field_50;
+	float float_54;
+	float float_58;
+	float float_5c;
+	float smthingAngle;
+	float smthingAngle2;
+	float xCoord;
+	float yCoord;
+	float float_70;
+	float float_74;
+	int16_t angle;
+	int16_t field_7a;
+	float smthingFloatsSkeleton;
+	float smthingFloatsSkeleton2;
+	char smthingSpecialAbility;
+	char field_85;
+	char field_86;
+	char field_87;
+	int noFormation;
+	int alliance;
+	int field_90;
+	arrayInUnitGroup arrayInUnitGroupThing[8];
+	int field_2D4;
+	int arrayIndex;
+	int aiActive;
+	unit **unitsNotInFormation;
+	int unitsNotInFormationSize;
+	int unitsNotInFormationNum;
+	int field_2EC;
+	unitGroup *thisGroup;
+	void *groupAutomationTasks;
+	int taskNum;
+	char gap2FC[4096];
+	char field_12FC;
+	char field_12FD;
+	char someBool;
+	char field_12FF;
+	char field_1300;
+	char field_1301;
+	char field_1302;
+	char field_1303;
+	int automationType;
+	float defendXCoord;
+	float defendYCoord;
+	float defendRadius;
+	int field_1314;
+	int field_1318;
+	int field_131C;
+	int field_1320;
+	unit* targetUnit;
+	int newAutomationType;
+	float newDefendXCoord;
+	float newDefendYCoord;
+	float newDefendRadius;
+	int field_1338;
+	int field_133C;
+	int field_1340;
+	int field_1344;
+	unit *newTargetUnit;
+	int field_134C;
+	int field_1350;
+	int field_1354;
+	int field_1358;
 };
 
 struct crusade
@@ -1623,6 +2070,7 @@ struct gameDataAllStruct {
 	struct uiManager* uiManager;
 };
 
+
 struct battleUnit
 {
 public:
@@ -1901,10 +2349,16 @@ struct armyAndCharacter { /* in battle leader and leader army */
 	char pad_00A8[20]; //0x00A8
 };//Size: 0x00BC
 
+struct battlePos
+{
+	float xCoord;
+	float yCoord;
+};
+
 struct deploymentAreaS {
-	undefined field_0x0[4];
-	float* coordsPairs;
-	undefined field_0x8[4];
+	void* vftable;
+	battlePos* coordsPairs;
+	int coordsSize;
 	int coordsNum;
 };
 
@@ -2013,7 +2467,7 @@ public:
 
 struct battleSide {
 	bool isDefender;//0x0000
-	uchar field_0x1;//0x0001
+	uchar canWithdraw;//0x0001
 	bool isCanDeploy;//0x0002
 	char pad_0003[1]; //0x0003
 	uint32_t factionBitMap; //0x0004
@@ -2036,23 +2490,48 @@ struct battleSide {
 	struct factionStruct* factions[8]; //0x185C
 	int32_t factionCount; //0x187C
 	char pad_1880[4]; //0x1880
-	struct unit** units; //0x1884
-	int32_t unitSize; //0x1888
-	int32_t unitNum; //0x188C
-	struct stackStruct** armies2; //0x1890
-	int32_t armies2Size; //0x1894
-	int32_t armies2Num; //0x1898 --often broken dont bind to lua
-	char pad_189C[104]; //0x189C
-	int32_t totalStrength; //0x1904
-	int32_t totalValue; //0x1908
-	char pad_190C[4]; //0x190C
-	int32_t totalStrength2; //0x1910
-	int32_t totalStrength3; //0x1914
-	int32_t soldierCount; //0x1918
-	float battleOdds; //0x191C
-	float battleOdds2; //0x1920
-	float someFloat; //0x1924
-	char pad_1928[4]; //0x1928
+	struct unit** enemyUnits; //0x1884
+	int32_t enemyUnitsSize; //0x1888
+	int32_t enemyUnitsNum; //0x188C
+	struct stackStruct** enemyArmies; //0x1890
+	int32_t enemyArmiesSize; //0x1894
+	int32_t enemyArmiesNum; //0x1898
+	struct stackStruct *reinforcementArmy;
+	int field_18A0;
+	float reinforcementTimer;
+	int field_18A8;
+	int field_18AC;
+	int field_18B0;
+	int field_18B4;
+	int field_18B8;
+	int field_18BC;
+	int field_18C0;
+	int field_18C4;
+	int field_18C8;
+	int field_18CC;
+	int field_18D0;
+	int field_18D4;
+	int field_18D8;
+	int field_18DC;
+	int field_18E0;
+	int field_18E4;
+	int field_18E8;
+	int field_18EC;
+	int field_18F0;
+	int field_18F4;
+	int field_18F8;
+	int reinforceArmyCount;
+	int field_1900;
+	int32_t activeArmyStrength;
+	int32_t aiUnitStrengthTotal;
+	int armyPower;
+	int32_t totalStrength;
+	int32_t previousArmyStrength;
+	int32_t soldierCount;
+	float battleOdds;
+	float lastBattleOdds;
+	float someFloatUnitCostGetDeducedFrom;
+	int totalSoldierCustomCostValues;
 };
 
 struct playerArmy
@@ -2061,6 +2540,60 @@ public:
 	struct stackStruct* army; //0x0000
 	char pad_0004[20]; //0x0004
 }; //Size: 0x0018
+
+struct autoResolveData
+{
+	int int1;
+	int int2_checkForFiveOrFour;
+	int int3;
+	int int4_Init6;
+	int array_Size0x100;
+	int array_Size0x100Size;
+	int array_Size0x100Num;
+	int field_1C;
+	int field_20;
+	int field_24;
+	int field_28;
+	stackStruct *array2Armies;
+	int array2Size;
+	int array2Num;
+	int array3;
+	int array3Size;
+	int array3Num;
+	int wallEquipmentAndInfantry;
+	int field_48;
+	int8_t byte_4C;
+	int8_t hasWonBattle;
+	int8_t byte_4E;
+	int8_t maybeIsNotNaval;
+	int8_t isPlayerControlled;
+	int8_t alsoIsPlayerControlled;
+	int8_t byte_52;
+	int8_t byte_53;
+	int8_t byte_54;
+	int8_t byte_55;
+	int8_t byte_56;
+	int8_t byte_57;
+	int gate_defence_strength_oil;
+	int gate_defence_strength_arrow;
+	int gate_defence_strength_default;
+	int sett_defence_strength_arrow;
+	int sett_defence_strength_default;
+	int8_t hasRams;
+	int8_t byte_6D;
+	int8_t byte_6E;
+	int8_t byte_6F;
+};
+
+struct fortBattleInfo
+{
+	struct fortStruct *fort;
+	struct stackStruct *garrison;
+	struct factionStruct *faction;
+	int ownerFactionID;
+	int creatorFactionID;
+	int fortFortificationLevel;
+};
 
 struct battleDataS {
 	undefined field_0x0[4];//0x0000
@@ -2079,7 +2612,7 @@ struct battleDataS {
 	float N000037ED; //0x0040
 	float N000037EE; //0x0044
 	char pad_0048[4]; //0x0048
-	int8_t N000037F0; //0x004C
+	int8_t battleAiEnabled; //0x004C
 	int8_t N0003A507; //0x004D
 	int8_t inBattle; //0x004E
 	int8_t N0003A508; //0x004F
@@ -2100,22 +2633,35 @@ struct battleDataS {
 	int32_t factionSide[31]; //0xC9FC
 	int sidesNum;//0xCA78
 	char pad_CA7C[4]; //0xCA7C
-	int32_t soldiersLeft; //0xCA80
-	char pad_CA84[36]; //0xCA84
-	struct playerArmy playerArmies[30]; //0xCAA8
-	char pad_CD78[4]; //0xCD78
-	int32_t playerArmyCount; //0xCD7C
-	char pad_CD80[84]; //0xCD80
-	int32_t N0001D4DC; //0xCDD4
-	int32_t N0001D4DD; //0xCDD8
-	char pad_CDDC[20]; //0xCDDC
-	int32_t N0001D4E3; //0xCDF0
-	int32_t N0001D4E4; //0xCDF4
-	char pad_CDF8[4]; //0xCDF8
-	int32_t N0001D4E6; //0xCDFC
-	int32_t N0001D4E7; //0xCE00
-	char pad_CE04[44]; //0xCE04
-	struct battleDataS* thisStruct; //0xCE30
+	int32_t totalSoldierCount; //0xCA80
+	void *terrainFeatures;
+	void *array_CA88_objSize0x120;
+	int array_CA88Size;
+	int array_CA88Num;
+	struct playerArmy playerArmies[31];
+	int32_t playerArmyNum;
+	int8_t byte_CD80;
+	int8_t isFortBattle;
+	int8_t byte_CD82;
+	int8_t byte_CD83;
+	struct fortBattleInfo fortInfo;
+	int8_t byte_CD9C;
+	int8_t byte_CD9D;
+	int8_t byte_CD9E;
+	int8_t byte_CD9F;
+	int field_CDA0;
+	int field_CDA4;
+	int field_CDA8;
+	int field_CDAC;
+	int field_CDB0;
+	int unitSize;
+	int8_t byte_CDB8;
+	int8_t byte_CDB9;
+	int8_t byte_CDba;
+	int8_t byte_CDbb;
+	int tideOfBattle;
+	struct autoResolveData autoResolveData;
+	struct battleDataS *thisData;
 };//Size: 0xCA7C
 
 struct stratPortModel {
@@ -2414,12 +2960,15 @@ public:
 	struct recruitPool* nextPool; //0x001C
 }; //Size: 0x0020
 
-
-//siege engine
-struct siegeEngine2 {
-	undefined field_0x0[172];
-	int type; /* 2-RAM,4-ladder,1-tower */
-};
+struct battlefieldEngines
+{
+public:
+	struct siegeEngine **engines; //0x0000
+	int32_t enginesSize; //0x0004
+	int32_t enginesNum; //0x0008
+	int32_t enginesNum2; //0x000C
+	int32_t enginesNum3; //0x0010
+}; //Size: 0x0014
 
 //building data
 struct edbEntry { /* SETTLEMENT_CONDITION_SETTLEMENT_FACTION */
@@ -2520,6 +3069,24 @@ public:
 	struct buildingListPointer buildingsList; //0x0280
 	char pad_0294[188]; //0x0294
 }; //Size: 0x0350
+
+
+struct groupLabel
+{
+public:
+	char *name; //0x0000
+	int32_t nameHash; //0x0004
+	struct unitGroup *group; //0x0008
+}; //Size: 0x000C
+
+
+struct groupLabels
+{
+public:
+	int32_t count; //0x0000
+	struct groupLabel *labels; //0x0004
+}; //Size: 0x0008
+
 
 
 struct oneSiege {
@@ -3137,6 +3704,11 @@ struct trackedPointerUnit {
 	undefined field_0x8[88];
 };
 
+struct trackedUnit {
+	undefined field_0x0[4];
+	struct unit* unit;
+};
+
 struct engineRecord {
 	undefined field_0x0[4];
 	char* type;
@@ -3275,56 +3847,72 @@ public:
 	char pad_0010[4]; //0x0010
 }; //Size: 0x0014
 
+struct unitMoveStruct
+{
+	int xCoord;
+	int yCoord;
+	int field_8;
+	int field_C;
+	int field_10;
+	int field_14;
+	int noDraggedFormation;
+	int16_t angle;
+	int16_t short_1e;
+	float float_20;
+	int field_24;
+	float somethingDistanceRelated;
+	int widthInMen;
+	char isClose;
+	char byte_31;
+	char byte_32;
+	char byte_33;
+	int field_34;
+	char isFormed;
+	char byte_39;
+	char byte_3a;
+	char byte_3b;
+	float float_3C;
+	char byte_40;
+	int8_t hasSetAngle;
+	int8_t byte_42;
+	int8_t hasSetWidth;
+	int8_t hasCloseSet;
+	int8_t byte_45;
+	int8_t byte_46;
+	int8_t byte_47;
+};
+
 struct targetPos
 {
 public:
-	int32_t typeOrSomething; //0x0000
-	int32_t N0001B8DA; //0x0004
-	void* unitVerificationTable; //0x0008
-	struct targetUnitStruct* targetUnit; //0x000C
-	char pad_0010[4]; //0x0010
-	float targetPosXStart; //0x0014
-	float targetPosYStart; //0x0018
-	char pad_001C[16]; //0x001C
-	int32_t noDraggedFormation; //0x002C
-	float N0001B8E5; //0x0030
-	float N0001B8E6; //0x0034
-	char pad_0038[4]; //0x0038
-	float somethingDistanceRelated; //0x003C
-	int32_t ranks; //0x0040
-	float N0001B8EA; //0x0044
-	char pad_0048[4]; //0x0048
-	float N0001B8EC; //0x004C
-	char pad_0050[4]; //0x0050
-	int8_t N0001B8EE; //0x0054
-	int8_t draggedFormation1; //0x0055
-	int8_t N0003D819; //0x0056
-	int8_t draggedFormation2; //0x0057
-	int8_t N0001B8EF; //0x0058
-	int8_t N0003D80B; //0x0059
-	int8_t N0003D80E; //0x005A
-	int8_t N0003D80C; //0x005B
+	int32_t actionType;
+	int groupType;
+	unitVerification targetVerification;
+	unitMoveStruct moveStruct;
 	float targetPosXEnd; //0x005C
 	float targetPosYEnd; //0x0060
-	int8_t N0001B8F4; //0x0064
-	int8_t N0003D7F4; //0x0065
-	int8_t N0003D7F7; //0x0066
-	int8_t N0003D7F5; //0x0067
-	void* N0001B8F5; //0x0068
-	int8_t N0001B8F6; //0x006C
-	int8_t N0003D7EA; //0x006D
-	int8_t N0003D7ED; //0x006E
-	int8_t N0003D7EB; //0x006F
-	float targetCoordXEngine; //0x0070
-	float targetCoordZEngine; //0x0074
-	float targetCoordYEngine; //0x0078
-	void* siegeEngine; //0x007C
-	int32_t N0001B8FB; //0x0080
-	int32_t N0001B8FC; //0x0084
-	char pad_0088[8]; //0x0088
-	float N0001B8FF; //0x0090
-	char pad_0094[16]; //0x0094
-	float N0003A5AB; //0x00A4
+	int8_t run;
+	int8_t pad_65[3];
+	void *worldData;
+	int someIdForSiege;
+	float targetCoordXEngine;
+	float targetCoordZEngine;
+	float targetCoordYEngine;
+	siegeEngine *siegeEngine;
+	int32_t meleeStateBitfield;
+	int32_t formationId;
+	int32_t field_88;
+	int32_t field_8C;
+	int8_t byte_90;
+	int8_t pad_91[3];
+	int field_94;
+	__int16 frontRankSoldierCount;
+	__int16 short_98;
+	float float_9C;
+	float float_a0;
+	__int16 targetAngle;
+	int8_t formationClose;
+	int8_t byte_a7;
 }; //Size: 0x00A8
 
 struct battleMapPosition
@@ -3337,18 +3925,18 @@ public:
 struct engagedUnit
 {
 public:
-	struct unit* unit; //0x0000
-	int32_t intValue; //0x0004
-	int32_t intValue2; //0x0008
-	int32_t intValue3; //0x000C
-	int32_t intValue4; //0x0010
-	int32_t intValue5; //0x0014
-	float floatValue; //0x0018
+	unit *unit;
+	int32_t engagedSoldiers;
+	int32_t engagedAnimals1;
+	int32_t engagedAnimals2;
+	int32_t intValue4;
+	int32_t intValue5;
+	float engagedRatio;
 }; //Size: 0x001C
 
 struct firingUnit
 {
-public:
+	public:
 	struct unit* unit; //0x0000
 	int32_t intValue; //0x0004
 };
@@ -3362,17 +3950,23 @@ public:
 	struct engagedUnit* engagedUnits2; //0x000C
 	int32_t engagedUnits2Size; //0x0010
 	int32_t engagedUnits2Num; //0x0014
-	char pad_0018[16]; //0x0018
-	struct unit* unit; //0x0028
-	char pad_002C[4]; //0x002C
-	void* N00002C71; //0x0030
-	char pad_0034[4]; //0x0034
-	struct unit* N00002C73; //0x0038
-	float coord0; //0x003C
-	float coord1; //0x0040
-	float coord2; //0x0044
-	float coord3; //0x0048
-	float rotation; //0x004C
+	struct soldierInBattle *engagedSoldier;
+	int field_1C;
+	int soldiersEngaged;
+	int timeEngaged;
+	struct unit *thisUnit;
+	int8_t byte_2C;
+	int8_t byte_2D;
+	int8_t pad_2E[2];
+	struct unit *supportingFriendlyUnit;
+	int field_34;
+	struct unit *closestEnemyUnit;
+	float distanceFromCenter;
+	float xCoord;
+	float zCoord;
+	float yCoord;
+	int16_t angle;
+	int8_t pad_4E[2];
 	struct battleMapPosition* isOnWalls; //0x0050
 	int32_t isOnWallsSize; //0x0054
 	int32_t isOnWallsCount; //0x0058
@@ -3394,37 +3988,49 @@ public:
 	struct battleMapPosition* positions4; //0x0098
 	int32_t positions4Size; //0x009C
 	int32_t positions4Count; //0x00A0
-	char pad_00A4[12]; //0x00A4
-	struct floatPosData floatPosData; //0x00B0
-	char pad_00F4[4]; //0x00F4
-	struct targetPos targetArray[16]; //0x00F8
-	int32_t targetsDone; //0x0B78
-	int32_t additionalTargetsOverOne; //0x0B7C
-	int32_t targetsToGo; //0x0B80
-	int8_t hasTargets; //0x0B84
-	int8_t isHalted; //0x0B85
-	char pad_0B86[6]; //0x0B86
+	int soldierCount1;
+	int field_A8;
+	int soldierCount2;
+	struct floatPosData floatPosData;
+	int16_t angle_e8;
+	int field_ec;
+	int field_f0;
+	int field_f4;
+	struct targetPos targetArray[16];
+	int32_t currIndex;
+	int32_t additionalTargetsOverOne;
+	int32_t targetsToGo;
+	char hasTargets;
+	char isHalted;
+	char pad_B86[2];
+	char byte_B88;
+	char pad_B89[3];
 	float lastTargetCoord1; //0x0B8C
 	float lastTargetCoord2; //0x0B90
-	char pad_0B94[20]; //0x0B94
-	float N00002F68; //0x0BA8
-	float N00002F69; //0x0BAC
-	float N00002F6A; //0x0BB0
-	float N00002F6B; //0x0BB4
-	float N00002F6C; //0x0BB8
-	float N00002F6D; //0x0BBC
-	float N00002F6E; //0x0BC0
-	float N00002F6F; //0x0BC4
-	float N00002F70; //0x0BC8
-	float N00002F71; //0x0BCC
-	float N00002F72; //0x0BD0
-	float N00002F73; //0x0BD4
-	float N00002F74; //0x0BD8
-	float N00002F75; //0x0BDC
-	float N00002F76; //0x0BE0
-	float N00002F77; //0x0BE4
-	float N00002F78; //0x0BE8
-	char pad_0BEC[20]; //0x0BEC
+	int16_t lastTargetAngle;
+	char pad_B96[2];
+	int field_B98;
+	char byte_B9C;
+	char pad_B9d[3];
+	int field_BA0;
+	int field_BA4;
+	float someFloats[14];
+	char byte_BE0;
+	char pad_Be1[3];
+	float float_BE4;
+	float float_BE8;
+	int16_t short_BEC;
+	char pad_Bee[2];
+	char guardModeRelated;
+	char byte_BF1;
+	char byte_BF2;
+	char byte_BF3;
+	char byte_BF4;
+	char byte_BF5;
+	char byte_BF6;
+	char byte_BF7;
+	int field_BF8;
+	int field_BFC;
 	void** towersUnderFireFrom; //0x0C00
 	int32_t towersUnderFireFromSize; //0x0C04
 	int32_t towersUnderFireFromCount; //0x0C08
@@ -3434,11 +4040,43 @@ public:
 	void** underFireSomething2; //0x0C18
 	int32_t underFireSomething2Size; //0x0C1C
 	int32_t underFireSomething2Count; //0x0C20
-	void** underFireSomething3; //0x0C24
-	int32_t underFireSomething3Size; //0x0C28
-	int32_t underFireSomething3Count; //0x0C2C
-	char pad_0C30[8]; //0x0C30
-	int32_t combatStatus; //0x0C38
+	firingUnit *artilleryUnderFireFrom;
+	int32_t artilleryUnderFireFromSize;
+	int32_t artilleryUnderFireFromNum;
+	int field_C30;
+	int field_C34;
+	int combatStatus;
+	int field_C3C;
+	int field_C40;
+	int field_C44;
+	int field_C48;
+	int field_C4C;
+	int field_C50;
+	int field_C54;
+	int field_C58;
+	int field_C5C;
+	int field_C60;
+	int field_C64;
+	int field_C68;
+	int updateTimerOne;
+	int updateTimerTwo;
+	int updateTimerDuration;
+	int field_C78;
+	float float_C7C;
+	float float_C80;
+	int field_C84;
+	int field_C88;
+	int field_C8C;
+	int outOfCombatCounterMaybe;
+	struct unit *targetUnit;
+	void *unitTaskStuff;
+	int field_C9C;
+	struct unit *targetUnitMissile;
+	struct stackStruct *army;
+	char gapCA8[240];
+	int field_D98;
+	int field_D9C;
+	int field_DA0;
 }; //Size: 0x0C3C
 
 struct rebelUnitName
@@ -3461,55 +4099,246 @@ public:
 	int32_t unitCount; //0x0B70
 }; //Size: 0x0B74
 
+struct spyingInfo
+{
+public:
+	void *spyingInfo_vtbl; //0x0000
+	int8_t spyingInfoFactionArray[31]; //0x0004
+	char pad_0023[1]; //0x0023
+	int32_t fieldx24; //0x0024
+	int32_t fieldx28; //0x0028
+}; //Size: 0x002C
+
+struct gfxEntityStruct
+{
+public:
+	void* gfxEntityMeshes; //0x0000
+	void* sharedPointer; //0x0004
+	float float_8; //0x0008
+	float float_C; //0x000C
+	float float_10; //0x0010
+	float float_14; //0x0014
+	struct ModelDbEntry *bmdbEntry; //0x0018
+	char (*spritePaths)[4]; //0x001C
+	int32_t field_20; //0x0020
+	int32_t field_24; //0x0024
+	int32_t field_28; //0x0028
+	int32_t field_2C; //0x002C
+	int32_t field_30; //0x0030
+	int32_t field_34; //0x0034
+	int32_t field_38; //0x0038
+	int32_t field_3C; //0x003C
+	int32_t field_40; //0x0040
+	int32_t field_44; //0x0044
+	int32_t field_48; //0x0048
+	int32_t field_4C; //0x004C
+	int32_t field_50; //0x0050
+	int32_t field_54; //0x0054
+	int32_t field_58; //0x0058
+	int32_t field_5C; //0x005C
+	int32_t field_60; //0x0060
+	int32_t field_64; //0x0064
+	int32_t field_68; //0x0068
+	int32_t field_6C; //0x006C
+	int32_t field_70; //0x0070
+	int32_t field_74; //0x0074
+	int32_t field_78; //0x0078
+	int32_t field_7C; //0x007C
+	int32_t field_80; //0x0080
+	int32_t field_84; //0x0084
+	int32_t field_88; //0x0088
+	int32_t field_8C; //0x008C
+	int32_t field_90; //0x0090
+	int32_t field_94; //0x0094
+	int8_t byte_98; //0x0098
+	int8_t byte_99; //0x0099
+	int8_t byte_9a; //0x009A
+	int8_t byte_9b; //0x009B
+	void *sprite; //0x009C
+	int32_t field_A0; //0x00A0
+	int32_t field_A4; //0x00A4
+	int32_t field_A8; //0x00A8
+	int32_t field_AC; //0x00AC
+	int32_t field_B0; //0x00B0
+}; //Size: 0x00B4
+
+struct moraleEffect
+{
+	int id;
+	int amount;
+	int amountDouble;
+};
+
+struct moraleEffects
+{
+	moraleEffect effects[34];
+};
+
+struct moraleStruct
+{
+	struct unit *thisUnit;
+	int moraleLevel;
+	int moraleThreshold;
+	int moraleBerserkCounter;
+	int moraleCounter2Negative;
+	int moraleRoutingCounterBig;
+	int moraleRoutingCounterSmall;
+	int moraleCounterNormal;
+	int moraleCounter6Psotiviev;
+	moraleEffects effects;
+	moraleEffects *effectsPtr;
+	int effectCount;
+	int moraleBonus;
+	int smthingAttackAnglesProbably;
+	int8_t isFLanked;
+	int8_t isRallied;
+	int8_t byte_1ce;
+	int8_t skipsMoraleCalcIFNotZero;
+	int8_t lockedMoralelvl;
+	int8_t enemyCurseEffectCounter;
+	int8_t curseEffectCounter;
+	int8_t enemyChantEffectCounter;
+	int8_t chantEffectCounter;
+	int8_t routingCounter;
+	int8_t byte_1d6;
+	int8_t byte_1d7;
+	void *aeCowCarcass;
+	void *ae_holy_inspiration;
+	int field1e0;
+	int field1e4;
+	int8_t byte_1e8;
+	int8_t byte_1e9;
+	int8_t byte_1ea;
+	int8_t byte_1eb;
+	int scriptMoraleMaybe;
+	int recalcWait;
+};
+
+struct nearbyEnemyUnit
+{
+	unit *unit;
+	int field_4;
+	int8_t isFlanking;
+	int8_t byte_9;
+	int8_t pada[2];
+	int fightStatus;
+	int someSwitchStatus;
+};
+
+struct unitTaskInterface
+{
+	void *vftable /*VFT*/;
+	struct unitTaskMem *taskMem;
+};
+
+struct unitTaskMem
+{
+	void *vftable /*VFT*/;
+	unit *unit;
+	void *unitTask;
+	int32_t actionStatus;
+	int field_10;
+	int field_14;
+	int field_18;
+	int32_t field_1C;
+	float float_20;
+	float float_24;
+	char pad_0634[36];
+	int8_t byte_4c;
+	char pad_0659[71];
+	int32_t getsComparedToSoldierIndexAtFormedCharge;
+	int field_06A4;
+	int32_t getsCheckedForZeroInFormedCharge;
+	char pad_00a0[4524];
+	int32_t isGeneral;
+	char pad_1250[1472];
+	int field_1810;
+	char byte_1814;
+	char field_1815;
+	char field_1816;
+	char field_1817;
+};
+
+struct aiUnitGroupandObjective
+{
+	struct unitGroup *aiUnitGroup;
+	int32_t actionStatus;
+	int32_t isSet;
+	struct AIBattleObjectiveBase *battleObjective;
+	int isChangingObjective;
+	int objective;
+	int field_0018;
+	int field_001C;
+	int field_0020;
+	int field_0024;
+	int field_0028;
+};
+
 //unit data
-struct unit {
+struct unit
+{
 	undefined field0_0x0[4];
 	struct trackedPointerUnit** trackedUnitPointerP;
-	undefined field2_0x8[52];
+	undefined field0_0xC[4];
+	spyingInfo spyingInfoUnit;
+	void* crusadeFinishedNotification;
 	int32_t aiActiveSet; //0x003C
-	undefined field_0040[24];
-	struct modelEntry* bmdbEntry; //0x0058
-	undefined field3_0x5C[548];//0x005C
+	gfxEntityStruct unitEntity; //0x0040
+	int32_t field_F4; //0x00F4
+	gfxEntityStruct *generalAndOfficerEntities; //0x00F8
+	int entitiesEnd; //0x00FC
+	int entitiesEnd2; //0x0100
+	gfxEntityStruct mountEntity; //0x0104
+	gfxEntityStruct someOtherEntity; //0x01B8
+	void *unitGfxUpdateCallBack; //0x026C
+	void *sharedPointerForCallback; //0x0270
+	void *unitVerificationTableStart; //0x0274
+	void *unitVerificationTablePos; //0x0278
+	int32_t field_27c; //0x027C
 	struct unitPositionData* unitPositionData; //0x0280
 	struct stackStruct* army;//0x0284
-	undefined field4_0x288[12];
+	struct unitGroup *unitGroup; //0x0288
+	int32_t field_28C; //0x028C
+	int32_t foodRequirement; //0x0290
 	struct eduEntry* eduEntry;
 	int ID; //0x0298
 	int battlemapTeam; //0x029C
 	int actionStatus; //0x02A0
-	char pad_02A4[24]; //0x02A4
-	void* ThirtyTwoByteObject; //0x02BC
-	char pad_02C0[8]; //0x02C0
-	void* hundredSixtyByteObject; //0x02C8
-	char pad_02CC[8]; //0x02CC
+	int field_2A4_init2;
+	int field_2A8_init2;
+	int field_2AC_init2;
+	unit *killerUnit1;
+	unit *killerUnit2;
+	unit *killerUnit3;
+	unit **nearbyFriendlyUnits;
+	int nearbyFriendlyUnitsSize;
+	int nearbyFriendlyUnitsNum;
+	nearbyEnemyUnit *nearbyEnemyUnits;
+	int nearbyEnemyUnitsSize;
+	int nearbyEnemyUnitsNum;
 	int fatigue; //0x02D4
 	float killChanceModifier; //0x02D8
-	struct Unit* this2; //0x02DC
-	int moraleLevel; //0x02E0
-	int moraleStatusSum; //0x02E4
-	char pad_02E8[24]; //0x02E8
-	int moraleValue1; //0x0300
-	int moraleValue2; //0x0304
-	int moraleValue3; //0x0308
-	int moraleValue4; //0x030C
-	int moraleValue5; //0x0310
-	int moraleValue6; //0x0314
-	int moraleValue7; //0x0318
-	int moraleValue8; //0x031C
-	int moraleValue9; //0x0320
-	char pad_0324[372]; //0x0324
-	struct unitMorale* moralePartOfUnitLookAbove; //0x0498
-	char pad_049C[4]; //0x049C
-	int someMoraleValue; //0x04A0
-	char pad_04A4[4]; //0x04A4
-	int16_t N0000271D; //0x04A8
-	int8_t N00009770; //0x04AA
-	int8_t skipsMoraleCalcIFNotZero; //0x04AB
-	int8_t lockedMorale; //0x04AC
-	char pad_04AD[11]; //0x04AD
-	int moraleAreaEffectEnd; //0x04B8
-	char pad_04BC[60]; //0x04BC
-	int hasActiveEffects; //0x04F8
+	moraleStruct unitMorale;
+	int extraMorale1;
+	int extraMorale2;
+	int field_4D8;
+	int8_t hasKillElephantsAbility;
+	int8_t byte_4Dd;
+	int8_t byte_4De;
+	int8_t byte_4Df;
+	int field_4E0;
+	int field_4E4;
+	int field_4E8;
+	int field_4EC;
+	char someSwitchTimed;
+	char byte_4F1;
+	char byte_4F2;
+	char byte_4F3;
+	int counterForByte_4F0;
+	char hasActiveEffects;
+	char byte_4f9;
+	char byte_4fa;
+	char byte_4fb;
 	int activeEffectsOnThisUnit; //0x04FC
 	int expScreen; /* screen experience */
 	struct general* general;
@@ -3529,19 +4358,24 @@ struct unit {
 	struct soldierInBattle* officer3Soldier; //0x0578
 	int32_t numOfficer; //0x057C
 	int32_t numOfficerInBattle; //0x0580
-	int32_t N00002755; //0x0584
-	int32_t N00002756; //0x0588
-	int32_t N00002757; //0x058C
-	int32_t N00002758; //0x0590
+	int32_t field_584;
+	int32_t field_588;
+	int32_t field_58C;
+	int32_t field_590;
 	int32_t statPri; //0x0594
-	char pad_0598[20]; //0x0598
+	uint32_t ammoBitfield; //0x0004
+	int32_t missileRange; //0x0008
+	float missileRangeSquared; //0x000C
+	int32_t hasPrimary; //0x0010
+	projectile *missile; //0x0014
 	int32_t weaponType; //0x05AC
 	int32_t weaponTecType; //0x05B0
-	char pad_05B4[8]; //0x05B4
+	int32_t damageType; //0x0020
+	int32_t soundType; //0x0024
 	int32_t minAttackDelayPri; //0x05BC
 	char pad_05C0[28]; //0x05C0
 	int32_t statPriArmour; //0x05DC
-	int32_t valueAfterInEdu; //0x05E0
+	int32_t armourMaterial; //0x05E0
 	int8_t attackInBattle; //0x05E4
 	int16_t armourInBattle; //0x05E5
 	char pad_05E7[1]; //0x05E7
@@ -3552,23 +4386,107 @@ struct unit {
 	struct soldierInBattle** soldiersBattleArr; /* array of soldiers battle data */
 	struct soldierData* soldiersArr; /* array of soldiers data */
 	void* soldierIndices; //0x05FC
-	void* generalOrMount; //0x0600
-	int32_t attachmentCount; //0x0604
-	char pad_0608[6172]; //0x0608
-	void* UNIT_TASK_INTERFACE; //0x1E24
-	char pad_1E28[28]; //0x1E28
+	struct generalInfo* generalArmy; //0x0600
+	int32_t unitCategory; //0x0604
+	int32_t field_608;
+	unitTaskMem unitTaskMem;
+	unitTaskInterface unitTaskInterface;
+	int actionStatusTwo;
+	int someOtherStatus;
+	trackedUnit engagedUnit;
+	int8_t byte_1e3C;
+	int8_t byte_1e3D;
+	int8_t byte_1e3E;
+	int8_t byte_1e3F;
+	int field_0x1e40;
 	int32_t unitBattleProperties; //0x1E44
-	char pad_1E48[4]; //0x1E48
+	int8_t isFiring;
+	int8_t byte_0x1e49;
+	int8_t byte_0x1e4a;
+	int8_t byte_0x1e4b;
 	void* formationsArray; //0x1E4C
-	char pad_1E50[38]; //0x1E50
-	int16_t ranks; //0x1E76
-	char pad_1E78[12]; //0x1E78
-	int8_t isCloseFormation; //0x1E84
-	char pad_1E85[59]; //0x1E85
-	float positionX; //0x1EC0
-	float N00002FB7; //0x1EC4
-	float positionY; //0x1EC8
-	char pad_1ECC[400]; //0x1ECC
+	float someRotationValueX;
+	float someRotationValueZ;
+	float someRotationValueY;
+	float unitSpacingX;
+	float unitSpacingZ;
+	float unitSpacingY;
+	float rotationSomething;
+	float ranksPerSoldierOrSomething;
+	float ranksPerSoldierOrSomething2;
+	uint16_t soldierCount;
+	int16_t frontRankSoldierCount;
+	int8_t byte_1e78;
+	int8_t lastRankSoldierCount;
+	int8_t byte_1e7a;
+	int8_t byte_1e7b;
+	void *ptr_1e7c;
+	int32_t someCounterInUnit;
+	int8_t isCloseFormation;
+	int8_t byte_1e85;
+	int8_t byte_1e86;
+	int8_t byte_1e87;
+	float float_1e88;
+	float float_1e8C;
+	int32_t angle;
+	float float_1e94;
+	float float_1e98;
+	int32_t getsCheckedForStakes;
+	struct aiUnitGroupandObjective *unitGroupAndObjective;
+	int32_t field_1EA4;
+	float float_1ea8;
+	float float_1eac;
+	float float_1eb0;
+	float float_1eb4;
+	float float_1eb8;
+	float float_1ebC;
+	float positionX;
+	float positionZ;
+	float positionY;
+	float lastPositionX;
+	float lastPositionZ;
+	float lastPositionY;
+	int32_t someClock;
+	int someTable[40];
+	int someTableIndex;
+	int ifThisFortyGoNextTable;
+	int someCount;
+	int tableValuesGetREmovedHere;
+	float float_1f8c;
+	float float_1f90;
+	float float_1f94;
+	float velocityX;
+	float velocityZ;
+	float velocityY;
+	char pad_1FA4[100];
+	char byte_2008;
+	char byte_2009;
+	char byte_200a;
+	char byte_200b;
+	int16_t angle2;
+	int16_t short_200e;
+	float radiusMaybe;
+	float float_2014;
+	float float_2018;
+	char byte_201C;
+	char byte_201d;
+	char byte_201e;
+	char byte_201f;
+	int field_2020;
+	float float_2024;
+	int field_2028;
+	int field_202C;
+	int field_2030;
+	int field_2034;
+	void *banner;
+	int field_203C;
+	void *ptr_2040;
+	void *ptr_2044;
+	void *ptr_2048;
+	void *ptr_204C;
+	void *ptr_2050;
+	int field_2054;
+	int field_2058;
 	int32_t maxAmmo; //0x205C
 	int32_t currentAmmo; //0x2060
 	uint8_t statusField1; //0x2064
@@ -3579,8 +4497,9 @@ struct unit {
 	char pad_2069[15];; //0x2069
 	UNICODE_STRING** alias; /* Legio string etc */
 	undefined field20_0x207c[44];
+	//only unitInfantry has below
 	struct siegeEngine** siegeEngine;
-	undefined field22_0x20ac[4];
+	int siegeEnSize;
 	int siegeEnNum; /* number of siege engines */
 	undefined field24_0x20b4[36];
 	struct engineRecord* engineRec;
@@ -3604,11 +4523,15 @@ struct stackStruct { /* structure of stack */
 	undefined field_0xa4[8];
 	struct siegeS* siege;
 	struct portBuildingStruct* blockedPort; /* if port blocked by this army when it here */
-	undefined field_0xb4[3];
-	int8_t ladders; //0x00B7
-	int8_t rams; //0x00B8
-	int8_t towers; //0x00B9
-	char pad_00BA[10]; //0x00BA
+	char autoLadders;
+	char autoRams;
+	char autoTowers;
+	char ladders;
+	char rams;
+	char towers;
+	char pad_ba[2];
+	struct unitGroup *unitGroups;
+	int maxUnitGroups;
 	int32_t tilesMovedThisTurnDoesntStatAtZero; //0x00C4
 	char pad_00C8[4]; //0x00C8
 	uint32_t upkeepModifier; //0x00CC
@@ -3623,13 +4546,18 @@ struct stackStruct { /* structure of stack */
 	int charactersNum; //0x00F8
 	undefined field_0xfc[4]; //0x00FC
 	struct settlementStruct* settlement; //0x0100
-	undefined field_0x104[16];
+	int pad_104;
+	int field_108;
+	char aiControlled;
+	char inBattle;
+	char somethingNoUnits;
+	char byte_10F;
+	void *trackedPointerArmy_vtbl3;
 	struct stackStruct* enemyArmy;
-	int32_t inBattle; //0x0118
-	int8_t N00001BCA; //0x011C
-	int8_t N0003D211; //0x011D
-	uint16_t N0003D214; //0x011E
-	char pad_0120[4]; //0x0120
+	int32_t inBattle2; //0x0118
+	int8_t isInactiveBattlefield; //0x011C
+	int8_t N0003D211[3]; //0x011D
+    int totalStrengthCurrent;
 	int totalStrength;
 	float reform_point_x;
 	float reform_point_y;

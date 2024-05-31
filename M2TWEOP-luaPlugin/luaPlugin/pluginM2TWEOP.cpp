@@ -161,10 +161,40 @@ int initPlugin(std::string* modPath)
 
 	fName = "toggleDeveloperMode";
 	plugData::data.funcs.toggleDeveloperMode.Load(&plPath, &fName);
-
-
+	
 	fName = "setCryptedString";
 	plugData::data.funcs.setCryptedString.Load(&plPath, &fName);
+	
+	
+	fName = "changeGroupUnitFormation";
+	plugData::data.funcs.changeGroupUnitFormation.Load(&plPath, &fName);
+	
+	fName = "moveToRangeOfGroup";
+	plugData::data.funcs.moveToRangeOfGroup.Load(&plPath, &fName);
+	
+	fName = "moveGroupToRangeOfUnit";
+	plugData::data.funcs.moveGroupToRangeOfUnit.Load(&plPath, &fName);
+	
+	fName = "groupAttackGroup";
+	plugData::data.funcs.groupAttackGroup.Load(&plPath, &fName);
+	
+	fName = "groupHalt";
+	plugData::data.funcs.groupHalt.Load(&plPath, &fName);
+	
+	fName = "groupMoveFormed";
+	plugData::data.funcs.groupMoveFormed.Load(&plPath, &fName);
+	
+	fName = "groupMoveUnformed";
+	plugData::data.funcs.groupMoveUnformed.Load(&plPath, &fName);
+	
+	fName = "groupMoveFormedRelative";
+	plugData::data.funcs.groupMoveFormedRelative.Load(&plPath, &fName);
+	
+	fName = "groupMoveUnformedRelative";
+	plugData::data.funcs.groupMoveUnformedRelative.Load(&plPath, &fName);
+	
+	fName = "groupTurn";
+	plugData::data.funcs.groupTurn.Load(&plPath, &fName);
 
 
 	fName = "setReligionsLimit";

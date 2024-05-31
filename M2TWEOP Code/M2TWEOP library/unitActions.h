@@ -23,4 +23,18 @@ namespace unitActions
     NOINLINE EOP_EXPORT void useSpecialAbility(const unit* un);
     NOINLINE EOP_EXPORT int getSiegeEngineType(const unit* un);
     NOINLINE EOP_EXPORT void attackBuilding(const unit* un, buildingBattle* building);
+
+	NOINLINE EOP_EXPORT void changeGroupUnitFormation(const unitGroup* group, int formationType);
+    NOINLINE EOP_EXPORT void moveToRangeOfGroup(const unitGroup* group, const unitGroup* targetGroup, bool run);
+    NOINLINE EOP_EXPORT void moveGroupToRangeOfUnit(const unitGroup* group, const unit* targetUnit, bool run);
+    NOINLINE EOP_EXPORT void groupAttackGroup(const unitGroup* group, const unitGroup* targetGroup, bool run);
+    NOINLINE EOP_EXPORT void groupHalt(const unitGroup* group);
+	NOINLINE EOP_EXPORT void groupMoveFormed(const unitGroup* group, float xCoord, float yCoord, bool run);
+    NOINLINE EOP_EXPORT void groupMoveUnformed(const unitGroup* group, float xCoord, float yCoord, bool run);
+    NOINLINE EOP_EXPORT void groupMoveFormedRelative(const unitGroup* group, float xCoord, float yCoord, bool run);
+    NOINLINE EOP_EXPORT void groupMoveUnformedRelative(const unitGroup* group, float xCoord, float yCoord, bool run);
+    NOINLINE EOP_EXPORT void groupTurn(const unitGroup* group, int16_t angle, bool isRelative);
+	
+
+
 }

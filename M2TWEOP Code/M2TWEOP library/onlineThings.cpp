@@ -481,13 +481,13 @@ namespace battleCreator
 				fileStrings.push_back("\n");
 
 				int coordsPairsNum = side.armies[j].deploymentArea->coordsNum;
-				float* coords = side.armies[j].deploymentArea->coordsPairs;
+				battlePos* coords = side.armies[j].deploymentArea->coordsPairs;
 				for (int k = 0; k < coordsPairsNum; k++)
 				{
 					tempS = "deployment_area_point	";
-					tempS.append(to_string(coords[k * 2]));
+					tempS.append(to_string(coords[k].xCoord));
 					tempS.append(", ");
-					tempS.append(to_string(coords[k * 2 + 1]));
+					tempS.append(to_string(coords[k].yCoord));
 					fileStrings.push_back(tempS);
 				}
 				fileStrings.push_back("\n");

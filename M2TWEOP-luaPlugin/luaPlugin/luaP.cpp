@@ -1104,6 +1104,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int isCloseFormation
 	@tfield unitGroup unitGroup
 	@tfield int fatigue (battle)
+	@tfield float angle (battle)
 	@tfield int maxAmmo (battle)
 	@tfield int currentAmmo (battle)
 	@tfield float battlePosX 2d position on battlemap useful for getting distance etc (battle)
@@ -1158,9 +1159,11 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.unit.set("unitPositionData", &unit::unitPositionData);
 	types.unit.set("character", &unit::general);
 	types.unit.set("isCloseFormation", &unit::isCloseFormation);
-	types.unit.set("moraleLevel", &unit::moraleLevel);
+	types.unit.set("moraleLevel", sol::property(&unitHelpers::getMoraleLevel, &unitHelpers::setMoraleLevel));
 	types.unit.set("battlePosX", &unit::positionX);
+	types.unit.set("battlePosZ", &unit::positionZ);
 	types.unit.set("battlePosY", &unit::positionY);
+	types.unit.set("angle", sol::property(&unitHelpers::getUnitAngle, &unitHelpers::setUnitAngle));
 	types.unit.set("unitGroup", &unit::unitGroup);
 	types.unit.set("fatigue", &unit::fatigue);
 	types.unit.set("maxAmmo", &unit::maxAmmo);
@@ -1443,11 +1446,11 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.unitPositionData = luaState.new_usertype<unitPositionData>("unitPositionData");
 	types.unitPositionData.set("engagedUnitsNum", &unitPositionData::engagedUnitsNum);
-	types.unitPositionData.set("unit", &unitPositionData::unit);
+	types.unitPositionData.set("unit", &unitPositionData::thisUnit);
 	types.unitPositionData.set("isOnWallsCount", &unitPositionData::isOnWallsCount);
 	types.unitPositionData.set("isInTowerCount", &unitPositionData::isInTowerCount);
 	types.unitPositionData.set("isInGateHouseCount", &unitPositionData::isInGateHouseCount);
-	types.unitPositionData.set("targetsDone", &unitPositionData::targetsDone);
+	types.unitPositionData.set("targetsDone", &unitPositionData::currIndex);
 	types.unitPositionData.set("additionalTargetsOverOne", &unitPositionData::additionalTargetsOverOne);
 	types.unitPositionData.set("targetsToGo", &unitPositionData::targetsToGo);
 	types.unitPositionData.set("hasTargets", &unitPositionData::hasTargets);
@@ -2478,6 +2481,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int neighBourRegionsNum
 	@tfield deleteFort deleteFort
 	@tfield createFortXY createFortXY
+	@tfield createWatchtower createWatchtower
 	@tfield hasMilitaryAccess hasMilitaryAccess
 	@tfield setMilitaryAccess setMilitaryAccess
 	@tfield getFactionStanding getFactionStanding
@@ -2684,6 +2688,17 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	fac:createFortXY(193, 283)
 	*/
 	types.factionStruct.set_function("createFortXY", &factionHelpers::createFortXY);
+
+	/***
+	Create a watchtower at the specified coordinates.
+	@function factionStruct:createWatchtower
+	@tparam int X
+	@tparam int Y
+	@treturn watchtowerStruct watchTower
+	@usage
+	     fac:createWatchtower(193, 283)
+	*/
+	types.factionStruct.set_function("createWatchtower", &factionHelpers::spawnWatchtower);
 
 	/***
 	Check if a faction has military access to another faction.
@@ -3357,6 +3372,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int xCoord
 	@tfield int yCoord
 	@tfield int factionID
+	@tfield int regionID
 	@tfield factionStruct faction
 	@tfield settlementStruct settlement
 	@tfield stackStruct blockingArmy
@@ -3367,6 +3383,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.watchtowerStruct.set("xCoord", &watchTowerStruct::xCoord);
 	types.watchtowerStruct.set("yCoord", &watchTowerStruct::yCoord);
 	types.watchtowerStruct.set("factionID", &watchTowerStruct::factionID);
+	types.watchtowerStruct.set("regionID", &watchTowerStruct::regionID);
 	types.watchtowerStruct.set("faction", &watchTowerStruct::faction);
 	types.watchtowerStruct.set("settlement", &watchTowerStruct::settlement);
 	types.watchtowerStruct.set("blockingArmy", &watchTowerStruct::blockingArmy);
@@ -4404,6 +4421,19 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield addUnit addUnit
 	@tfield removeUnit removeUnit
 	@tfield undefine undefine
+	@tfield automate automate
+	@tfield automateAttack automateAttack
+	@tfield automateDefense automateDefense
+	@tfield changeUnitFormation changeUnitFormation
+	@tfield moveToMissileRangeOfGroup moveToMissileRangeOfGroup
+	@tfield moveToMissileRangeOfUnit moveToMissileRangeOfUnit
+	@tfield attackGroup attackGroup
+	@tfield halt halt
+	@tfield moveFormed moveFormed
+	@tfield moveUnformed moveUnformed
+	@tfield moveRelativeFormed moveRelativeFormed
+	@tfield moveRelativeUnformed moveRelativeUnformed
+	@tfield turn turn
 	
 
 	@table unitGroup
@@ -4453,6 +4483,35 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.unitGroup.set_function("undefine", &unitHelpers::undefineUnitGroup);
 	
 	/***
+	Toggle group automation.
+	@function unitGroup:automate
+	@tparam bool automate
+	@usage
+			unitGroup:automate(true);
+	*/
+	types.unitGroup.set_function("automate", &unitHelpers::automateGroup);
+	
+	/***
+	Automate group attack.
+	@function unitGroup:automateAttack
+	@tparam unit targetUnit
+	@usage
+			unitGroup:automateAttack(targetUnit);
+	*/
+	types.unitGroup.set_function("automateAttack", &unitHelpers::automateAttack);
+	
+	/***
+	Automate group defense.
+	@function unitGroup:automateDefense
+	@tparam float xCoord
+	@tparam float yCoord
+	@tparam float radius
+	@usage
+			unitGroup:automateDefense(180, 283, 50);
+	*/
+	types.unitGroup.set_function("automateDefense", &unitHelpers::automateDefense);
+	
+	/***
 	Get a unit in the group's formation (not given individual commands). Once you give a unit a command once it seems they will always be in the other array.
 	@function unitGroup:getUnitInFormation
 	@tparam int index
@@ -4463,7 +4522,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.unitGroup.set_function("getUnitInFormation", &unitHelpers::getUnitInFormation);
 	
 	/***
-	Get a unit not in the group's formation (given individual commands).
+	Get a unit not in the group's formation (not given individual commands). Once you give a unit a command once it seems they will always be in the other array.
 	@function unitGroup:getUnitNotInFormation
 	@tparam int index
 	@treturn unit unit
@@ -4471,6 +4530,118 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 			local un = unitGroup:getUnitNotInFormation(0);
 	*/
 	types.unitGroup.set_function("getUnitNotInFormation", &unitHelpers::getUnitNotInFormation);
+	
+	/***
+	Place a group at a location.
+	@function unitGroup:place
+	@tparam float xCoord
+	@tparam float yCoord
+	@tparam float angle
+	@usage
+			unitGroup:place(150, 127, 0);
+	*/
+	types.unitGroup.set_function("place", &unitHelpers::placeGroup);
+	
+	/***
+	Change the group's units formations.
+	@function unitGroup:changeUnitFormation
+	@tparam int formationType use enum
+	@usage
+			unitGroup:changeUnitFormation(formationType.phalanx);
+	*/
+	types.unitGroup.set_function("changeUnitFormation", &unitHelpers::changeGroupUnitFormation);
+	
+	/***
+	Move to put an enemy group inside your missile range.
+	@function unitGroup:moveToMissileRangeOfGroup
+	@tparam unitGroup targetGroup
+	@tparam bool run
+	@usage
+			unitGroup:moveToMissileRangeOfGroup(otherGroup, true);
+	*/
+	types.unitGroup.set_function("moveToMissileRangeOfGroup", &unitHelpers::moveToRangeOfGroup);
+	
+	/***
+	Move to put an enemy unit inside your missile range.
+	@function unitGroup:moveToMissileRangeOfUnit
+	@tparam unit targetUnit
+	@tparam bool run
+	@usage
+			unitGroup:moveToMissileRangeOfUnit(targetUnit, true);
+	*/
+	types.unitGroup.set_function("moveToMissileRangeOfUnit", &unitHelpers::moveGroupToRangeOfUnit);
+	
+	/***
+	Attack another group.
+	@function unitGroup:attackGroup
+	@tparam unitGroup targetGroup
+	@tparam bool run
+	@usage
+			unitGroup:attackGroup(targetGroup, true);
+	*/
+	types.unitGroup.set_function("attackGroup", &unitHelpers::groupAttackGroup);
+	
+	/***
+	Halt the group's orders.
+	@function unitGroup:halt
+	@usage
+			unitGroup:halt();
+	*/
+	types.unitGroup.set_function("halt", &unitHelpers::groupHalt);
+	
+	/***
+	Move to the specified location in formation.
+	@function unitGroup:moveFormed
+	@tparam float xCoord
+	@tparam float yCoord
+	@tparam bool run
+	@usage
+			unitGroup:moveFormed(182, 333, true);
+	*/
+	types.unitGroup.set_function("moveFormed", &unitHelpers::groupMoveFormed);
+	
+	/***
+	Move to the specified location not in formation.
+	@function unitGroup:moveUnformed
+	@tparam float xCoord
+	@tparam float yCoord
+	@tparam bool run
+	@usage
+			unitGroup:moveUnformed(182, 333, true);
+	*/
+	types.unitGroup.set_function("moveUnformed", &unitHelpers::groupMoveUnformed);
+	
+	/***
+	Move to the specified location in formation.
+	@function unitGroup:moveRelativeFormed
+	@tparam float xCoord
+	@tparam float yCoord
+	@tparam bool run
+	@usage
+			unitGroup:moveRelativeFormed(182, 333, true);
+	*/
+	types.unitGroup.set_function("moveRelativeFormed", &unitHelpers::groupMoveFormedRelative);
+	
+	/***
+	Move to the specified location not in formation.
+	@function unitGroup:moveRelativeUnformed
+	@tparam float xCoord
+	@tparam float yCoord
+	@tparam bool run
+	@usage
+			unitGroup:moveRelativeUnformed(182, 333, true);
+	*/
+	types.unitGroup.set_function("moveRelativeUnformed", &unitHelpers::groupMoveUnformedRelative);
+	
+	/***
+	Turn the group either relative or absolute.
+	@function unitGroup:turn
+	@tparam int angle
+	@tparam bool isRelative
+	@usage
+			unitGroup:turn(90, true);
+	*/
+	types.unitGroup.set_function("turn", &unitHelpers::groupTurn);
 	
 	
 	///SiegeStruct

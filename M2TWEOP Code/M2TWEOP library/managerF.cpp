@@ -591,6 +591,12 @@ void managerF::doPachs()
 	toGetGuildOfferPic->Enable();
 	f1 << "Done" << endl;
 	
+	f1 << "Start applying onGetCultureEndTurnSound patch" << endl;
+	onGetCultureEndTurnSound* toGetCultureEndTurnSound = new onGetCultureEndTurnSound(mem, (LPVOID)patchesForGame::onGetCultureEndTurnSound, globals::dataS.gamever);
+	toGetCultureEndTurnSound->SetNewCode();
+	toGetCultureEndTurnSound->Enable();
+	f1 << "Done" << endl;
+	
 	f1 << "Start applying onGetBuildingPic2 patch" << endl;
 	onGetBuildingPic2* toGetBuildingPic2 = new onGetBuildingPic2(mem, (LPVOID)patchesForGame::getBuildingPic, globals::dataS.gamever);
 	toGetBuildingPic2->SetNewCode();
@@ -643,6 +649,12 @@ void managerF::doPachs()
 	onGetUnitByLabel* toGetUnitByLabel = new onGetUnitByLabel(mem, (LPVOID)patchesForGame::onGetUnitByLabel, globals::dataS.gamever);
 	toGetUnitByLabel->SetNewCode();
 	toGetUnitByLabel->Enable();
+	f1 << "Done" << '\n';
+
+	f1 << "Start applying onGetGroupByLabel patch" << '\n';
+	onGetGroupByLabel* toGetGroupByLabel = new onGetGroupByLabel(mem, (LPVOID)patchesForGame::onGetGroupByLabel, globals::dataS.gamever);
+	toGetGroupByLabel->SetNewCode();
+	toGetGroupByLabel->Enable();
 	f1 << "Done" << '\n';
 
 	/*

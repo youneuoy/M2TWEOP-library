@@ -106,7 +106,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;_DEBUG;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_CRT_SECURE_NO_WARNINGS;PLUGINM2TWEOP_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\luaPlugin\lua\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\luaPlugin\lua\include;../../M2TWEOP Code/M2TWEOP Common/;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <AdditionalOptions>/bigobj  /Zm500 /m:4 %(AdditionalOptions)</AdditionalOptions>
@@ -130,7 +130,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;WIN32_LEAN_AND_MEAN;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NDEBUG;PLUGINM2TWEOP_EXPORTS;_CRT_SECURE_NO_WARNINGS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\luaPlugin\lua\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\luaPlugin\lua\include;../../M2TWEOP Code/M2TWEOP Common/;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <Optimization>MaxSpeed</Optimization>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
@@ -156,6 +156,7 @@
       <PreprocessorDefinitions>_DEBUG;PLUGINM2TWEOP_EXPORTS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_CRT_SECURE_NO_WARNINGS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(_ZVcpkgCurrentInstalledDir)include;../../M2TWEOP Code/M2TWEOP Common/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -172,6 +173,7 @@
       <PreprocessorDefinitions>NDEBUG;PLUGINM2TWEOP_EXPORTS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_CRT_SECURE_NO_WARNINGS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(_ZVcpkgCurrentInstalledDir)include;../../M2TWEOP Code/M2TWEOP Common/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

@@ -34,6 +34,8 @@ public:
 	static portraitDbEntry* __fastcall getPortraitDbEntry(int cultureID);
 	static char* __fastcall onGetGuildOfferPic(DWORD level, int cultureID);
 	static unit** __fastcall onGetUnitByLabel(DWORD unitLabels, char* label);
+	static unitGroup** __fastcall onGetGroupByLabel(DWORD groupLabels, char* label);
+	static char* __fastcall onGetCultureEndTurnSound(int cultureID);
 
 
 	static general* __fastcall mercenaryMovepointsGetGeneral(stackStruct* army);

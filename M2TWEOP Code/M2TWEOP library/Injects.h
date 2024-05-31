@@ -714,6 +714,21 @@ private:
 };
 
 
+class onGetGroupByLabel
+	:public AATemplate
+{
+public:
+	onGetGroupByLabel(MemWork* mem, LPVOID adr, int ver);
+	~onGetGroupByLabel();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+	DWORD otherFunc;
+};
+
+
 class onAddCultureToArray
 	:public AATemplate
 {
@@ -866,6 +881,19 @@ class onParseEventBodies
 public:
 	onParseEventBodies(MemWork* mem, LPVOID adr, int ver);
 	~onParseEventBodies();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetCultureEndTurnSound
+	:public AATemplate
+{
+public:
+	onGetCultureEndTurnSound(MemWork* mem, LPVOID adr, int ver);
+	~onGetCultureEndTurnSound();
 
 	void SetOriginalCode();
 	void SetNewCode();

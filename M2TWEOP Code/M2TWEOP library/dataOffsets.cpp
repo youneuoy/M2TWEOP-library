@@ -84,7 +84,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		
 		offsets.religionDatabase = 0x016A0B90;
 		
-		offsets.portraitDatabase = 0x0161F0F0;
+		offsets.portraitDatabase = 0x018671D0;
 
 		offsets.cultureDatabase = 0x0161F0F0;
 

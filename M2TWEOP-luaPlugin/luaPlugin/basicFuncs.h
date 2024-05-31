@@ -197,6 +197,17 @@ public:
 	ProcLoader<void(__cdecl*)(const unit*)> useSpecialAbility;
 	ProcLoader<void(__cdecl*)(const unit*, buildingBattle*)> attackBuilding;
 	
+	ProcLoader<void(__cdecl*)(const unitGroup*, int)> changeGroupUnitFormation;
+	ProcLoader<void(__cdecl*)(const unitGroup*, const unitGroup*, bool)> moveToRangeOfGroup;
+	ProcLoader<void(__cdecl*)(const unitGroup*, const unit*, bool)> moveGroupToRangeOfUnit;
+	ProcLoader<void(__cdecl*)(const unitGroup*, const unitGroup*, bool)> groupAttackGroup;
+	ProcLoader<void(__cdecl*)(const unitGroup*)> groupHalt;
+	ProcLoader<void(__cdecl*)(const unitGroup*, float, float, bool)> groupMoveFormed;
+	ProcLoader<void(__cdecl*)(const unitGroup*, float, float, bool)> groupMoveUnformed;
+	ProcLoader<void(__cdecl*)(const unitGroup*, float, float, bool)> groupMoveFormedRelative;
+	ProcLoader<void(__cdecl*)(const unitGroup*, float, float, bool)> groupMoveUnformedRelative;
+	ProcLoader<void(__cdecl*)(const unitGroup*, int16_t, bool)> groupTurn;
+	
 
 
 	ProcLoader<int(__cdecl*)(namedCharacter*, ancillary*)> addAncillary;

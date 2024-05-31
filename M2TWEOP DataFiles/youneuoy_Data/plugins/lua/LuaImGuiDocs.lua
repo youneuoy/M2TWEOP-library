@@ -2627,13 +2627,13 @@ function ImGui.InputTextMultiline(label, text, bufferSize, sizeX, sizeY, inputTe
 
 --- Input with Keyboard.
 ---@param label string 
----@param text string 
 ---@param hint string 
+---@param text string 
 ---@param bufferSize integer 
 ---@param inputTextFlags integer? optional
 ---@return string value 
 ---@return boolean returnBool 
-function ImGui.InputTextWithHint(label, text, hint, bufferSize, inputTextFlags) end 
+function ImGui.InputTextWithHint(label, hint, text, bufferSize, inputTextFlags) end 
 
 --- Input with Keyboard.
 ---@param label string 

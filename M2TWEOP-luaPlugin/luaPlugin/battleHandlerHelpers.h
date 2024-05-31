@@ -13,6 +13,7 @@ namespace battleHandlerHelpers
 	siegeEngine* getSiegeEngine(const battlefieldEngines* engineDb, const int index);
 	battleDataS* getBattleData();
 	bool inBattle();
+	battlePos* getCoordPair(const deploymentAreaS* deployArea, const int index);
 	int getEngineType(const siegeEngine* engine);
 	AIBattleObjectiveBase* getObjective(const battleAI* battleAi, int index);
 	int getObjectiveType(AIBattleObjectiveBase* objective);

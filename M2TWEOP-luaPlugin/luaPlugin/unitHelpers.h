@@ -14,6 +14,29 @@ namespace unitHelpers
 		skirmish = 4,
 	};
 
+	enum class unitActionType
+	{
+		unitChangeFormation = 0,
+		unitChangeFormationClose = 1,
+		unitChangeFormationWidth = 2,
+		unitChangeSpeed = 3,
+		unitChangeMeleeState = 4,
+		unitSetupEngine = 5,
+		unitCollectEngine = 6,
+		unitDropEngine = 7,
+		unitHide = 8,
+		unitMove = 9,
+		UnitMoveIntoPlayableArea = 10,
+		unitTurn = 11,
+		unitAttackUnit = 12,
+		unitAttackBuilding = 13,
+		unitAttackEngine = 14,
+		unitWithdraw = 15,
+		unitFeignRout = 16,
+		unitUseAbility = 17,
+		unitHalt = 18,
+	};
+
 	int getExp(unit* un);
 	void setExp(unit* un,int exp);
 	int getarmourLVL(unit* un);
@@ -27,8 +50,12 @@ namespace unitHelpers
 	void setMovepoints(unit* un,float movepoints);
 	void setSoldiersCount(unit* un,int number);
 	void killUnit(unit* un);
+	float getUnitAngle(const unit* un);
+	void setUnitAngle(unit* un, float angle);
 	void setUnitParams(unit* un, int exp, int armor, int weap);
 	float getMovepoints(const unit* un);
+	int getMoraleLevel(const unit* un);
+	void setMoraleLevel(const unit* un, int level);
 	bool isMovingFastSet(unit* un);
 	void setMovingFastSet(unit* un, bool set);
 	bool isOnWalls(unit* un);
@@ -41,18 +68,18 @@ namespace unitHelpers
 	int getMountClass(unit* un);
 	int getUnitFormation(const unit* unit);
 	unit* getUnitByLabel(const char* label);
-	void unitAttackClosest(const unit* un, int16_t angle, bool run);
-	void unitAttackUnit(const unit* un, const unit* targetUnit, bool run);
-	void unitMovetoPosition(const unit* unit, float xCoord, float yCoord, bool run);
-	void moveToOrientation(const unit* unit, float xCoord, float yCoord, int widthInMen, int16_t angle, bool run);
+	void unitAttackClosest(unit* un, int16_t angle, bool run);
+	void unitAttackUnit(unit* un, const unit* targetUnit, bool run);
+	void unitMovetoPosition(unit* unit, float xCoord, float yCoord, bool run);
+	void moveToOrientation(unit* unit, float xCoord, float yCoord, int widthInMen, int16_t angle, bool run);
 	void placeUnit(unit* unit, float xCoord, float yCoord, int16_t angle, int width);
 	void deployStakes(const unit* unit);
 	void haltUnit(const unit* unit);
 	void changeUnitFormation(const unit* unit, int formationType);
 	float getBattleMapHeight(float xCoord, float yCoord);
-	void moveRelative(const unit* unit, float xCoord, float yCoord, bool run);
-	void moveToMissileRange(const unit* un, const unit* targetUnit, bool run);
-	void unitTurn(const unit* un, int16_t angle, bool isRelative);
+	void moveRelative(unit* unit, float xCoord, float yCoord, bool run);
+	void moveToMissileRange(unit* un, const unit* targetUnit, bool run);
+	void unitTurn(unit* un, int16_t angle, bool isRelative);
 	void taunt(const unit* un);
 	void useSpecialAbility(const unit* un);
 	siegeEngine* getSiegeEngine(const unit* un, const int index);
@@ -74,5 +101,26 @@ namespace unitHelpers
 	void automateAttack(unitGroup* group, unit* targetUnit);
 	void automateDefense(unitGroup* group, float xCoord, float yCoord, float radius);
 	void placeGroup(unitGroup* group, float xCoord, float yCoord, float angle);
+	void changeGroupUnitFormation(const unitGroup* group, int formationType);
+	void moveToRangeOfGroup(const unitGroup* group, const unitGroup* targetGroup, bool run);
+	void moveGroupToRangeOfUnit(const unitGroup* group, const unit* targetUnit, bool run);
+	void groupAttackGroup(const unitGroup* group, const unitGroup* targetGroup, bool run);
+	void groupHalt(const unitGroup* group);
+	void groupMoveFormed(const unitGroup* group, float xCoord, float yCoord, bool run);
+	void groupMoveUnformed(const unitGroup* group, float xCoord, float yCoord, bool run);
+	void groupMoveFormedRelative(const unitGroup* group, float xCoord, float yCoord, bool run);
+	void groupMoveUnformedRelative(const unitGroup* group, float xCoord, float yCoord, bool run);
+	void groupTurn(const unitGroup* group, int16_t angle, bool isRelative);
+	
 };
 
+/*
+* @tfield moveToMissileRangeOfUnit moveToMissileRangeOfUnit
+	@tfield attackGroup attackGroup
+	@tfield halt halt
+	@tfield moveFormed moveFormed
+	@tfield moveUnformed moveUnformed
+	@tfield moveRelativeFormed moveRelativeFormed
+	@tfield moveRelativeUnformed moveRelativeUnformed
+	@tfield turn turn
+ */

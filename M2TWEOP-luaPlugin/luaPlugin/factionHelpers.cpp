@@ -99,6 +99,65 @@ bool factionHelpers::isNeighbourFaction(const factionStruct* fac1, const faction
 	return fac1->neighBourFactionsBitmap & (1 << fac2->dipNum);
 }
 
+watchTowerStruct* factionHelpers::spawnWatchtower(const factionStruct* fac, int x, int y)
+{
+	auto tile = gameHelpers::getTile(x, y);
+	if (!tile)
+		return nullptr;
+	auto region = gameHelpers::getRegion(tile->regionId);
+	if (!region || !region->settlement || region->factionOwner != fac)
+		return nullptr;
+	int gameVer = m2tweopHelpers::getGameVersion();
+	auto settlement = region->settlement;
+	auto tower = nullptr;
+	DWORD makeTowerAddr = 0x008B97B0;
+	if (gameVer == 1)
+		makeTowerAddr = 0x008B8DC0;
+	_asm
+	{
+		push settlement
+		mov eax, makeTowerAddr
+		call eax
+		mov tower, eax
+		add esp, 4
+	}
+	DWORD spawnCreatedObject = 0x004CD800;
+	if (gameVer == 1)
+		spawnCreatedObject = 0x004CD240;
+	coords* spawnCoords = new coords();
+	spawnCoords->xCoord = x;
+	spawnCoords->yCoord = y;
+	_asm
+	{
+		push spawnCoords
+		push tower
+		mov eax, spawnCreatedObject
+		call eax
+	}
+	auto watchtowers = &gameDataAllHelper::get()->campaignData->watchtowers;
+	DWORD addToWatchtowerList = 0x004DD940;
+	if (gameVer == 1)
+		spawnCreatedObject = 0x004DD390;
+	_asm
+	{
+		push tower
+		mov ecx, watchtowers
+		mov eax, addToWatchtowerList
+		call eax
+	}
+	DWORD blockadeStuff = 0x004DD2F0;
+	if (gameVer == 1)
+		spawnCreatedObject = 0x004DCD40;
+	_asm
+	{
+		mov ecx, tower
+		mov eax, blockadeStuff
+		call eax
+	}
+	delete spawnCoords;
+	return tower;
+}
+
 void factionHelpers::setFactionStanding(const factionStruct* fac1, const factionStruct* fac2, float standing)
 {
 	const auto gameData = gameDataAllHelper::get();

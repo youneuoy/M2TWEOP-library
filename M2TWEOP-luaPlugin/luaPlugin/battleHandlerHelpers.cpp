@@ -84,6 +84,11 @@ namespace battleHandlerHelpers
 		return battle->inBattle == 1;
 	}
 
+	battlePos* getCoordPair(const deploymentAreaS* deployArea, const int index)
+	{
+		return &deployArea->coordsPairs[index];
+	}
+
 	battlefieldEngines* getBattlefieldEngines()
 	{
 		auto enginesDbPtr = reinterpret_cast<battlefieldEngines**>(0x02C3A254);

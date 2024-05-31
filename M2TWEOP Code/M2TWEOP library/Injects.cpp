@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Injects.h"
 
+
 Injects::Injects(MemWork* mem)
 	:AATemplate(mem)
 {
@@ -2770,9 +2771,55 @@ void onCreatePortraitDb::SetOriginalCode()
 
 void onCreatePortraitDb::SetNewCode()
 {
+	//auto cultureDb = reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
+	//int cultureCount = cultureDb->culturesCount;
+	//if (cultureCount > 7)
+	//	cultureCount = 7;
+	
+	Assembler* a = new Assembler();
+	a->cmp(ebx, 7);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onGetCultureEndTurnSound::onGetCultureEndTurnSound(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00A5C7B2;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x008B4783;
+}
+
+onGetCultureEndTurnSound::~onGetCultureEndTurnSound()
+{
+}
+
+void onGetCultureEndTurnSound::SetOriginalCode()
+{
 	Assembler* a = new Assembler();
 
-	a->cmp(ebx, 7);
+	a->mov(ecx, 0x0162854C);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onGetCultureEndTurnSound::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->push(ecx);
+	a->mov(ecx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->pop(ecx);
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();
 
@@ -3273,6 +3320,64 @@ void onGetUnitByLabel::SetOriginalCode()
 }
 
 void onGetUnitByLabel::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->pop(eax);
+	a->push(ebx);
+	a->push(edx);
+	a->push(ecx);
+	a->push(edi);
+	a->push(esi);
+	a->mov(edx, eax);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->pop(esi);
+	a->pop(edi);
+	a->pop(ecx);
+	a->pop(edx);
+	a->pop(ebx);
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onGetGroupByLabel::onGetGroupByLabel(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAddress(adr)
+{
+	if (ver == 2)//steam
+	{
+		m_adress = 0x00A9562A;
+		otherFunc = 0x00A927E0;
+	}
+
+	else if (ver == 1)//kingdoms
+	{
+		m_adress = 0x00A945CA;
+		otherFunc = 0x00A91780;
+	}
+}
+
+onGetGroupByLabel::~onGetGroupByLabel()
+{
+}
+
+void onGetGroupByLabel::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->call(0xA927E0);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onGetGroupByLabel::SetNewCode()
 {
 	Assembler* a = new Assembler();
 
