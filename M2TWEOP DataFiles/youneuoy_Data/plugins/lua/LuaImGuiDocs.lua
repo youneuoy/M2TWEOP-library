@@ -2369,11 +2369,15 @@ function ImGui.SeparatorText(text) end
 ---@param sizeY number 
 function ImGui.ImageButton(label, texture, sizeX, sizeY) end 
 
---- Image.
+--- Image (the optional parameters are pairs, obviously you can't just use an xCoord only).
 ---@param texture any 
 ---@param sizeX number 
 ---@param sizeY number 
-function ImGui.Image(texture, sizeX, sizeY) end 
+---@param uv0X number? optional
+---@param uv0Y number? optional
+---@param uv1X number? optional
+---@param uv1Y number? optional
+function ImGui.Image(texture, sizeX, sizeY, uv0X, uv0Y, uv1X, uv1Y) end 
 
 --- The BeginCombo()/EndCombo() api allows you to manage your contents and selection state however you want it, by creating e.g. Selectable() items.
 ---@param label string 
@@ -2789,8 +2793,8 @@ function ImGui.GetTreeNodeToLabelSpacing() end
 
 --- If returning 'true' the header is open. doesn't indent nor push on ID stack. user doesn't have to call TreePop(). If second argument bool then display an additional small close button on upper right of the header which will set the bool to false when clicked.
 ---@param label string 
----@param openOrFlags integer 
----@param flags integer 
+---@param openOrFlags integer? optional
+---@param flags integer? optional
 ---@return boolean open 
 ---@return boolean returnBool2 
 function ImGui.CollapsingHeader(label, openOrFlags, flags) end 

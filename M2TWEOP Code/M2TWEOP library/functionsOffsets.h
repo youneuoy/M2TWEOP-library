@@ -10,10 +10,15 @@ public:
 		DWORD loadStratCasModelFunc = NULL;
 
 		DWORD allocMemFunc = NULL;
+		
+		DWORD createEduEntry = NULL;
 
 
 
 		DWORD createIdleActionFunc = NULL;
+		DWORD makeCadDiplomacyFunc = NULL;
+		DWORD makeCadDiplomacySettlementFunc = NULL;
+		DWORD createCADTargetCharacter = NULL;
 
 
 		DWORD createSiegeSettlementGarrisonedFunc = NULL;
@@ -152,6 +157,22 @@ public:
 		DWORD groupRelativeMoveFormed = NULL;
 		DWORD groupRelativeMoveUnformed = NULL;
 		DWORD groupTurn = NULL;
+		DWORD gameLogCommand = NULL;
+		DWORD executeCADTargetCharacter = NULL;
+		DWORD switchCharacterFaction = NULL;
+		DWORD switchNamedCharacterFaction = NULL;
+		DWORD switchArmyFaction = NULL;
+		DWORD changeCharacterTileStuff = NULL;
+		DWORD initPlaceCharacter = NULL;
+		DWORD getResidenceCharacterNum = NULL;
+		DWORD getResidenceCharacterAtIndex = NULL;
+		DWORD removeSieges = NULL;
+		DWORD doHordeStuff = NULL;
+		DWORD getTileCharactersFunc = NULL;
+		DWORD getValidRegionTile = NULL;
+		DWORD isTileValidForCharacter = NULL;
+		DWORD deleteMoveExtents = NULL;
+		DWORD someSelectionStuff = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

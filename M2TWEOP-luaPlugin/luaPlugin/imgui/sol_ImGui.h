@@ -200,6 +200,8 @@ namespace sol_ImGui
 
 	// Widgets: Images
 	inline void Image(void* texture, float x, float y);
+	inline void Image(void* texture, float x, float y, float uv0X, float uv0Y);
+	inline void Image(void* texture, float x, float y, float uv0X, float uv0Y, float uv1X, float uv1Y);
 	inline bool ImageButton(const std::string& label, void* texture, float sizeX, float sizeY);
 
 	// Widgets: Combo Box

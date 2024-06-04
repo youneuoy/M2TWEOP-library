@@ -74,6 +74,15 @@ namespace unitActions
         }
     };
 
+    struct gameLogCommand
+    {
+        scriptCommand command = scriptCommand("gameLog");
+        int level = 4000;
+        const char* message = nullptr;
+        int messageHash = 0;
+        gameLogCommand(const char* msg) : message(msg) {}
+    };
+
     void fireGameScriptFunc(void* scriptStruct, DWORD offset)
     {
         void* scriptStructPtr = scriptStruct;
@@ -84,6 +93,12 @@ namespace unitActions
             mov eax, func
             call eax
         }
+    }
+
+    void logStringGame(const std::string& msg)
+    {
+        const auto order = std::make_shared<gameLogCommand>(msg.c_str());
+        fireGameScriptFunc(order.get(), codes::offsets.gameLogCommand);
     }
 
     enum aiGtaObjective : int
@@ -445,8 +460,8 @@ namespace unitActions
     {
         if (un == nullptr || building == nullptr)
             return;
-        if (getSiegeEngineType(un) == -1)
-            return;
+        //if (getSiegeEngineType(un) == -1)
+        //    return;
         auto battleResidence = building->battleResidence;
         if (battleResidence == nullptr)
             return;

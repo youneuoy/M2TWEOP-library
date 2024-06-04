@@ -60,7 +60,7 @@ namespace m2tweopHelpers
 		if (dipType == alliance)
 			return state == allianceState;
 		if (dipType == suzerain)
-			return state == allianceState && facDiplomacy.protectorate == protectorateState;
+			return facDiplomacy.protectorate & 8u;
 		return false;
 	}
 	
@@ -70,69 +70,70 @@ namespace m2tweopHelpers
 
 		campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::peaceState;
 		campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::peaceState;
-		if (campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].protectorate == protectorateState)
-		{
-			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].protectorate = nonProtectorateeState;
-		}
-
-		if (campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].protectorate == protectorateState)
-		{
-			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].protectorate = nonProtectorateeState;
-		}
-
+		campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].protectorate &= ~8u;
+		campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].protectorate &= ~8u;
 	}
+	
 	void setDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2)
 	{
 		using namespace campaignEnums;
+		if (!fac1 || !fac2 || !fac1->factSmDescr || !fac2->factSmDescr)
+			return;
+		const auto facOneName = std::string(fac1->factSmDescr->facName);
+		const auto facTwoName = std::string(fac2->factSmDescr->facName);
+		const std::string command = "diplomatic_stance " + facOneName + " " + facTwoName + " ";
 		if (dipType == dipRelEnum::war)
-		{
-			disableVassalage(campaignStruct, fac1, fac2);
-
-			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].trade = 0;
-			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].trade = 0;
-
-			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::warState;
-			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::warState;
-		}
+			(*(*plugData::data.funcs.scriptCommand))("console_command", (command + "war").c_str());
 		else if (dipType == dipRelEnum::peace)
-		{
-			disableVassalage(campaignStruct, fac1, fac2);
-
-			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::peaceState;
-			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::peaceState;
-		}
+			(*(*plugData::data.funcs.scriptCommand))("console_command", (command + "neutral").c_str());
 		else if (dipType == dipRelEnum::alliance)
-		{
-			disableVassalage(campaignStruct, fac1, fac2);
-
-			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::allianceState;
-			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::allianceState;
-		}
+			(*(*plugData::data.funcs.scriptCommand))("console_command", (command + "allied").c_str());
 		else if (dipType == dipRelEnum::suzerain)
-		{
-			disableVassalage(campaignStruct, fac1, fac2);
-
-			if (campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].protectorate == protectorateState)
-			{
-				campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].protectorate = nonProtectorateeState;
-			}
-			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].protectorate = protectorateState;
-
-			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::allianceState;
-			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::allianceState;
-
-			campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].trade |= 1;
-			campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].trade |= 1;
-		}
+			setFactionProtectorate(fac1, fac2);
 		else if (dipType == dipRelEnum::trade)
-		{
-			if (campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state != dipStateInternalEnum::warState)
-			{
-				campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].trade |= 1;
-				campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].trade |= 1;
-			}
-		}
+			setFactionTrade(fac1, fac2);
+	}
 
+	void setFactionTrade(factionStruct* factionOne, factionStruct* factionTwo)
+	{
+		auto campaign = gameDataAllHelper::get()->campaignData;
+		DWORD funcAddr = 0x00503480;
+		DWORD diplomaticStuff = (reinterpret_cast<DWORD>(campaign) + 0x858);
+		int facIdOne = factionOne->dipNum;
+		int facIdTwo = factionTwo->dipNum;
+		auto set = (campaign->diplomaticStandings[facIdOne][facIdTwo].trade & 1) == 0;
+		_asm
+		{
+			push set
+			push facIdTwo
+			push facIdOne
+			mov ecx, diplomaticStuff
+			mov eax, funcAddr
+			call eax
+		}
+	}
+
+	void setFactionProtectorate(factionStruct* factionOne, factionStruct* factionTwo)
+	{
+		auto campaign = gameDataAllHelper::get()->campaignData;
+		DWORD funcAddr = 0x00504F20;
+		DWORD diplomaticStuff = (reinterpret_cast<DWORD>(campaign) + 0x858);
+		//
+		int facIdOne = factionOne->dipNum;
+		int facIdTwo = factionTwo->dipNum;
+		_asm
+		{
+			push facIdTwo
+			push facIdOne
+			mov ecx, diplomaticStuff
+			mov eax, funcAddr
+			call eax
+		}
+	}
+
+	void loadSaveGame(const std::string& path)
+	{
+		(*(*plugData::data.funcs.loadSaveGame))(path.c_str());
 	}
 
 	std::shared_ptr<mapImage> makeMapImage()
@@ -297,6 +298,12 @@ namespace m2tweopHelpers
 		(*(*plugData::data.funcs.unloadTexture))(tex);
 
 	}
+
+	void logStringGame(const std::string& msg)
+	{
+		(*(*plugData::data.funcs.logStringGame))(msg);
+	}
+
 	void toggleUnitsBMapHighlight()
 	{
 		(*(*plugData::data.funcsBattle.swUnBMapHighlight))();

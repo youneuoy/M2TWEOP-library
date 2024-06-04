@@ -1,5 +1,4 @@
 #pragma once
-#include"headersSTD.h"
 #include"realGameTypes.h"
 class dataOffsets
 {
@@ -32,6 +31,7 @@ public:
 		DWORD religionDatabase = NULL;
 		DWORD portraitDatabase = NULL;
 		DWORD cultureDatabase = NULL;
+		DWORD loadGameHandler = NULL;
 
 
 
@@ -45,7 +45,8 @@ public:
 		descr_sm_factions_list* descr_sm_factionslist = nullptr;
 		DWORD scriptCommandVFT = NULL;
 		DWORD battleMapData = NULL;
-		
+		DWORD globalSett = NULL;
+		DWORD currentGameHandler = NULL;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);

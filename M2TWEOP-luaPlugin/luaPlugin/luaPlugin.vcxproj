@@ -187,6 +187,7 @@
     <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\M2TWEOP Code\M2TWEOP Common\realGameTypes.h" />
     <ClInclude Include="basicEvents.h" />
     <ClInclude Include="basicFuncs.h" />
     <ClInclude Include="battleHandlerHelpers.h" />

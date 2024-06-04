@@ -166,6 +166,9 @@ public:
 	ProcLoader<void(__cdecl*)(int, int)> setConversionLvlFromCastle;
 	ProcLoader<void(__cdecl*)(int, int)> setConversionLvlFromCity;
 	ProcLoader<void(__cdecl*)(unsigned char)> setGuildCooldown;
+	ProcLoader<void(__cdecl*)(const std::string&)> logStringGame;
+	ProcLoader<void(__cdecl*)(general*, general*)> diplomacyCharacter;
+	ProcLoader<void(__cdecl*)(general*, settlementStruct*)> diplomacySettlement;
 
 
 	//get current game year
@@ -178,6 +181,14 @@ public:
 	ProcLoader<void(__cdecl*)(general*, settlementStruct*, bool)> siegeSettlement;
 	ProcLoader<void(__cdecl*)(general*, fortStruct*, bool)> siegeFort;
 	ProcLoader<void(__cdecl*)(general*, general*)> attackCharacter;
+	ProcLoader<void(__cdecl*)(general*, general*)> assassinate;
+	ProcLoader<void(__cdecl*)(general*, general*)> marry;
+	ProcLoader<void(__cdecl*)(general*, general*)> spyCharacter;
+	ProcLoader<void(__cdecl*)(general*, general*)> denounce;
+	ProcLoader<void(__cdecl*)(general*, general*)> bribe;
+	ProcLoader<void(__cdecl*)(general*, general*)> acquire;
+	ProcLoader<void(__cdecl*)(general*, factionStruct*, bool, bool)> switchCharacterFaction;
+	ProcLoader<void(__cdecl*)(fortStruct*, factionStruct*)> changeFortOwner;
 
 	ProcLoader<void(__cdecl*)(const unit*, float, float, bool)> unitMovetoPosition;
 	ProcLoader<int(__cdecl*)(const unit*)> getUnitFormation;
@@ -224,6 +235,7 @@ public:
 	ProcLoader<void(__cdecl*)(int, int)> moveStratCameraFast;
 	ProcLoader<void(__cdecl*)(float)> zoomStratCamera;
 	ProcLoader<void(__cdecl*)(general*, int, int)> teleportCharacter;
+	ProcLoader<void(__cdecl*)(const char*)> loadSaveGame;
 
 	//get list of armies in battle
 	ProcLoader<std::vector<basicStructs::arm*>* (__cdecl*)()> getBattleArmies;

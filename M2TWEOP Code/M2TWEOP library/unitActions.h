@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <string>
+
 #include "exportHeader.h"
 #include "headersMEM.h"
 #include "realGameTypes.h"
@@ -23,6 +25,7 @@ namespace unitActions
     NOINLINE EOP_EXPORT void useSpecialAbility(const unit* un);
     NOINLINE EOP_EXPORT int getSiegeEngineType(const unit* un);
     NOINLINE EOP_EXPORT void attackBuilding(const unit* un, buildingBattle* building);
+    NOINLINE EOP_EXPORT void logStringGame(const std::string& msg);
 
 	NOINLINE EOP_EXPORT void changeGroupUnitFormation(const unitGroup* group, int formationType);
     NOINLINE EOP_EXPORT void moveToRangeOfGroup(const unitGroup* group, const unitGroup* targetGroup, bool run);

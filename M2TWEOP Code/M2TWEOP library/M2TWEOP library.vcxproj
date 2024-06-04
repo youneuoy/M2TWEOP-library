@@ -271,6 +271,7 @@
     <ClInclude Include="..\3rd\logger\loguru.hpp" />
     <ClInclude Include="..\3rd\logger\loguru.cpp" />
     <ClInclude Include="..\3rd\shortestPath\micropather.h" />
+    <ClInclude Include="..\M2TWEOP Common\realGameTypes.h" />
     <ClInclude Include="actionsStrat.h" />
     <ClInclude Include="BattleMapOverrider.h" />
     <ClInclude Include="battlemapWorker.h" />

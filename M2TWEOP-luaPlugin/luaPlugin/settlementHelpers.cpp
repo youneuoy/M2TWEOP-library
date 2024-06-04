@@ -7,9 +7,19 @@ siegeS* settlementHelpers::getSiege(const settlementStruct* sett, int index)
 	return sett->sieges[index].siege;
 }
 
+siegeS* settlementHelpers::getSiegeFort(const fortStruct* fort, int index)
+{
+	return fort->sieges[index].siege;
+}
+
 void settlementHelpers::changeOwner(settlementStruct* sett, factionStruct* newOwner)
 {
 	(*(*plugData::data.funcs.setSettlementOwner))(sett, newOwner);
+}
+
+void settlementHelpers::changeFortOwner(fortStruct* fort, factionStruct* newFaction)
+{
+	(*(*plugData::data.funcs.changeFortOwner))(fort, newFaction);
 }
 
 float settlementHelpers::getReligion(const settlementStruct* sett, int index)

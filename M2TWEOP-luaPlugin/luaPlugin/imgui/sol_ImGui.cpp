@@ -528,6 +528,14 @@ namespace sol_ImGui
 	{
 		ImGui::Image(texture, ImVec2(x, y));
 	}
+	inline void Image(void* texture, float x, float y, float uv0X, float uv0Y)
+	{
+		ImGui::Image(texture, ImVec2(x, y), ImVec2(uv0X, uv0Y));
+	}
+	inline void Image(void* texture, float x, float y, float uv0X, float uv0Y, float uv1X, float uv1Y)
+	{
+		ImGui::Image(texture, ImVec2(x, y), ImVec2(uv0X, uv0Y), ImVec2(uv1X, uv1Y));
+	}
 	inline bool ImageButton(const std::string& label, void* texture, float sizeX, float sizeY)
 	{
 		ImVec2 buttonSize;
@@ -4648,15 +4656,23 @@ namespace sol_ImGui
 		*/
 		ImGui.set_function("ImageButton", ImageButton);
 		/***
-		Image.
+		Image (the optional parameters are pairs, obviously you can't just use an xCoord only).
 		@function ImGui.Image
 		@tparam any texture
 		@tparam float sizeX
 		@tparam float sizeY
+		@tparam float uv0X optional
+		@tparam float uv0Y optional
+		@tparam float uv1X optional
+		@tparam float uv1Y optional
 		@usage
 			ImGui.Image();
 		*/
-		ImGui.set_function("Image", Image);
+		ImGui.set_function("Image", sol::overload(
+			sol::resolve<void(void*, float, float)>(Image),
+			sol::resolve<void(void*, float, float, float, float)>(Image),
+			sol::resolve<void(void*, float, float, float, float, float, float)>(Image)
+		));
 #pragma endregion Widgets: Main
 
 #pragma region Widgets: Combo Box
@@ -5442,8 +5458,8 @@ namespace sol_ImGui
 		If returning 'true' the header is open. doesn't indent nor push on ID stack. user doesn't have to call TreePop(). If second argument bool then display an additional small close button on upper right of the header which will set the bool to false when clicked.
 		@function ImGui.CollapsingHeader
 		@tparam string label
-		@tparam int|bool openOrFlags
-		@tparam int flags
+		@tparam int|bool openOrFlags optional
+		@tparam int flags optional
 		@treturn bool open
 		@treturn bool returnBool2
 		@usage

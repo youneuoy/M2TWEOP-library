@@ -12,6 +12,7 @@
 #include "fastFunctsHelpers.h"
 #include "PlannedRetreatRoute.h"
 #include "discordManager.h"
+#include "unitActions.h"
 
 
 worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, worldRecord* selectedRecord)
@@ -94,6 +95,7 @@ DWORD __fastcall patchesForGame::onSearchUnitType(char* typeName)
 {
 	if (const auto eopUnit = eduThings::tryFindDataEopEduIndex(typeName); eopUnit != nullptr)
 	{
+		unitActions::logStringGame("Unit found in M2TWEOP: " + std::string(typeName) + " index: " + std::to_string(*eopUnit));
 		auto newIndex = new nameIndex(typeName, *eopUnit);
 		return reinterpret_cast<DWORD>(newIndex);
 	}
@@ -364,6 +366,23 @@ int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduin
 
 	return eduindex;
 }
+
+int __fastcall patchesForGame::onAttackGate(unit* un, void* tactic)
+{
+	auto eduEntry = un->eduEntry;
+	if (eduEntry == nullptr)
+		return 0;
+	if (eduEntry->mountedEngine)
+	{
+		const auto building = *reinterpret_cast<buildingBattle**>(reinterpret_cast<DWORD>(tactic) + 0x2AD0);
+		if (building == nullptr)
+			return 0;
+		unitActions::attackBuilding(un, building);
+		return 1;
+	}
+	return 0;
+}
+
 eduEntry* __fastcall patchesForGame::OnCreateMercUnit(char** entryName, eduEntry* entry)
 {
 	DWORD entryAddr = (DWORD)entry;
@@ -904,7 +923,7 @@ void __fastcall patchesForGame::onStartSiege(settlementStruct* sett)
 
 void __fastcall patchesForGame::onLoadDescrBattleCharacter(stackStruct* army, general* goalGen)
 {
-	fastFuncts::setBodyguard(goalGen, army->units[0]);//we replace game function what set army leader character.
+	fastFuncts::setBodyguardStart(goalGen, army->units[0]);//we replace game function what set army leader character.
 
 	std::string relativePath = techFuncs::uniToANSI(smallFuncs::getGameDataAll()->campaignData->currentDescrFile);
 

@@ -8,9 +8,24 @@
 #include "smallFuncs.h"
 
 #include "fastFunctsHelpers.h"
+#include "unitActions.h"
+
 namespace fastFuncts
 {
 
+	//unique per faction!
+	NOINLINE EOP_EXPORT void loadSaveGame(const char* saveName)
+	{
+		UNICODE_STRING** nameMem = new UNICODE_STRING*;
+
+		auto loadName = reinterpret_cast<UNICODE_STRING***>(dataOffsets::offsets.loadGameHandler + 0x4);
+		*loadName = nameMem;
+		
+		smallFuncs::createUniString(*loadName, saveName);
+
+		const auto currentHandler = reinterpret_cast<DWORD*>(dataOffsets::offsets.currentGameHandler);
+		*currentHandler = dataOffsets::offsets.loadGameHandler;
+	}
 
 	NOINLINE EOP_EXPORT factionStruct* getRegionOwner(int regionID)
 	{
@@ -159,40 +174,156 @@ namespace fastFuncts
 
 	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner)
 	{
-		DWORD adrFunc = 0x0;
-		int* vTableAdr = (int*)sett->vTable;
-		adrFunc = vTableAdr[39];
+		const int charNum = GAME_FUNC(int(__thiscall*)(settlementStruct*, int), getResidenceCharacterNum)(sett, 1);
+		for (int i = 0; i < charNum; i++)
+		{
+			const auto thisChar = GAME_FUNC(general*(__thiscall*)(settlementStruct*, int, int), getResidenceCharacterAtIndex)(sett, i, 1);
+			if (thisChar->genType->type != characterTypeStrat::spy || thisChar->genChar->faction == sett->faction)
+			{
+				DWORD funcAddr = codes::offsets.switchCharacterFaction;
+				_asm
+				{
+					push 0
+					push 0
+					push newOwner
+					mov ecx, thisChar
+					mov eax, funcAddr
+					call eax
+				}
+			}
+			GAME_FUNC(void(__thiscall*)(general*), changeCharacterTileStuff)(thisChar);
 
-		//give settlement
-		__asm
+			if (thisChar->genType->type == characterTypeStrat::namedCharacter)
+			{
+				DWORD funcAddr2 = codes::offsets.switchNamedCharacterFaction;
+				_asm
+				{
+					push 0
+					push newOwner
+					mov ecx, thisChar
+					mov eax, funcAddr2
+					call eax
+				}
+			}
+			GAME_FUNC(void(__thiscall*)(general*), initPlaceCharacter)(thisChar);
+		}
+		if (auto stack = sett->army)
+		{
+			auto origFaction = stack->faction;
+			DWORD funcAddr3 = codes::offsets.switchArmyFaction;
+			_asm
+			{
+				push newOwner
+				push stack
+				mov ecx, origFaction
+				mov eax, funcAddr3
+				call eax
+			}
+		}
+		DWORD vtable = *reinterpret_cast<DWORD*>(sett);
+		DWORD vFuncOffset = vtable + 0x9c;
+		DWORD vFunc = *reinterpret_cast<DWORD*>(vFuncOffset);
+		_asm
 		{
 			push 5
 			push newOwner
 			push 0
 			mov ecx, sett
-			mov eax, adrFunc
+			mov eax, vFunc
 			call eax
 		}
-
-		adrFunc = 0x0;
-
-		//release sieges
-		if (globals::dataS.gamever == 2)//steam
+		
+		GAME_FUNC(void(__thiscall*)(settlementStruct*, int), removeSieges)(sett, 0);
+		if (newOwner->factionHordeInfo && newOwner->factionHordeInfo->isHorde)
 		{
-			adrFunc = 0x004bf8d0;
+			auto globalFort = reinterpret_cast<settlementStruct*>(dataOffsets::offsets.globalSett);
+			globalFort = sett;
+			auto hordeInfo = newOwner->factionHordeInfo;
+			DWORD funcAddr4 = codes::offsets.doHordeStuff;
+			_asm
+			{
+				mov ecx, hordeInfo
+				mov eax, funcAddr4
+				call eax
+			}
 		}
-		else
+	}
+	
+	NOINLINE EOP_EXPORT void changeFortOwner(fortStruct* fort, factionStruct* newFaction)
+	{
+		const int charNum = GAME_FUNC(int(__thiscall*)(fortStruct*, int), getResidenceCharacterNum)(fort, 1);
+		for (int i = 0; i < charNum; i++)
 		{
-			adrFunc = 0x004bf340;
+			const auto thisChar = GAME_FUNC(general*(__thiscall*)(fortStruct*, int, int), getResidenceCharacterAtIndex)(fort, i, 1);
+			if (thisChar->genType->type != characterTypeStrat::spy || thisChar->genChar->faction == fort->faction)
+			{
+				DWORD funcAddr = codes::offsets.switchCharacterFaction;
+				_asm
+				{
+					push 0
+					push 0
+					push newFaction
+					mov ecx, thisChar
+					mov eax, funcAddr
+					call eax
+				}
+			}
+			GAME_FUNC(void(__thiscall*)(general*), changeCharacterTileStuff)(thisChar);
+
+			if (thisChar->genType->type == characterTypeStrat::namedCharacter)
+			{
+				DWORD funcAddr2 = codes::offsets.switchNamedCharacterFaction;
+				_asm
+				{
+					push 0
+					push newFaction
+					mov ecx, thisChar
+					mov eax, funcAddr2
+					call eax
+				}
+			}
+		    GAME_FUNC(void(__thiscall*)(general*), initPlaceCharacter)(thisChar);
 		}
-		__asm
+		if (auto stack = fort->army)
 		{
-			push 1
-			mov ecx, sett
-			mov eax, adrFunc
+			auto origFaction = stack->faction;
+			DWORD funcAddr3 = codes::offsets.switchArmyFaction;
+			_asm
+			{
+				push newFaction
+				push stack
+				mov ecx, origFaction
+				mov eax, funcAddr3
+				call eax
+			}
+		}
+		DWORD vtable = *reinterpret_cast<DWORD*>(fort);
+		DWORD vFuncOffset = vtable + 0x9c;
+		DWORD vFunc = *reinterpret_cast<DWORD*>(vFuncOffset);
+		_asm
+		{
+			push 7
+			push newFaction
+			push 0
+			mov ecx, fort
+			mov eax, vFunc
 			call eax
 		}
-
+		
+		GAME_FUNC(void(__thiscall*)(fortStruct*, int), removeSieges)(fort, 0);
+		if (newFaction->factionHordeInfo && newFaction->factionHordeInfo->isHorde)
+		{
+			auto globalFort = reinterpret_cast<fortStruct*>(dataOffsets::offsets.globalSett);
+			globalFort = fort;
+			auto hordeInfo = newFaction->factionHordeInfo;
+			DWORD funcAddr4 = codes::offsets.doHordeStuff;
+			_asm
+			{
+				mov ecx, hordeInfo
+				mov eax, funcAddr4
+				call eax
+			}
+		}
 	}
 
 	NOINLINE EOP_EXPORT void GetGameTileCoordsWithCursor(int& x, int& y)
@@ -614,41 +745,56 @@ namespace fastFuncts
 		return nullptr;
 	}
 
+	NOINLINE EOP_EXPORT bool isTileValidForCharacterType(int charType, coordPair* coords)
+	{
+		auto stratMap = smallFuncs::getGameDataAll()->stratMap;
+		if (!stratMap)
+			return false;
+		if (!GAME_FUNC(bool(__stdcall*)(coordPair*, int, int), isTileValidForCharacter)(coords, charType, 1))
+			return false;
+		const auto tile = getTileStruct(coords->xCoord, coords->yCoord);
+		return tile->nonPassable != -1 && ((tile->objectTypes & 107) == 0);
+	}
+
 	NOINLINE EOP_EXPORT void teleportCharacter(general* gen, int x, int y)
 	{
-		if (gen->armyLeaded!=nullptr)
+		if (gen->residence)
+			return;
+		
+		if (gen->armyLeaded != nullptr)
 		{
 			fastFuncts::StopSiege(gen->armyLeaded);
 			fastFuncts::StopBlockPort(gen->armyLeaded);
 		}
 
-		DWORD adrFunc = codes::offsets.teleportCharacterFunc;
-		_asm
+		auto targetCoords = new coordPair{ x,y };
+		auto charArray = new characterArray();
+		GAME_FUNC(void(__stdcall*)(coordPair*, characterArray*, int), getTileCharactersFunc)(targetCoords, charArray, 12);
+		if ((!charArray->charactersNum && isTileValidForCharacterType(gen->genType->type, targetCoords)) ||
+			GAME_FUNC(bool(__thiscall*)(regionStruct*, coordPair*, char), getValidRegionTile)(getRegionByID(getTileStruct(x, y)->regionId), &targetCoords[0], 0))
 		{
-			push y
-			push x
+			
+			GAME_FUNC(void(__thiscall*)(general*), changeCharacterTileStuff)(gen);
+			DWORD adrFunc = codes::offsets.teleportCharacterFunc;
+			int xCoord = targetCoords->xCoord;
+			int yCoord = targetCoords->yCoord;
+			_asm
+			{
+				push yCoord
+				push xCoord
 
-			mov ecx, gen
-			mov eax, adrFunc
-			call eax
+				mov ecx, gen
+				mov eax, adrFunc
+				call eax
+			}
+			DWORD moveExtentThing = reinterpret_cast<DWORD>(smallFuncs::getGameDataAll()->stratPathFinding) + 0x88;
+		    GAME_FUNC(void(__thiscall*)(DWORD), deleteMoveExtents)(moveExtentThing);
+			auto selectInfoPtr = smallFuncs::getGameDataAll()->selectionInfoPtr2;
+		    GAME_FUNC(void(__thiscall*)(selectionInfo**, general*), someSelectionStuff)(selectInfoPtr, gen);
+		    GAME_FUNC(void(__thiscall*)(general*), initPlaceCharacter)(gen);
 		}
-
-		if (globals::dataS.gamever == 2)//steam
-		{
-			adrFunc = 0x00599900;
-		}
-		else
-		{
-			adrFunc = 0x00599410;
-		}
-
-		_asm
-		{
-			mov ecx, gen
-			mov eax, adrFunc
-			call eax
-		}
-		return;
+		delete targetCoords;
+		delete charArray;
 	}
 
 	NOINLINE EOP_EXPORT void addTrait(namedCharacter* character, const char* traitName, int traitLevel)
@@ -1337,6 +1483,7 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT bool StopSiege(stackStruct* army)
 	{
 		bool retVal = (army->siege == nullptr);
+		if (retVal)return false;
 
 		typedef void(__thiscall* StopSiegeF)(stackStruct* army, int some);
 
@@ -1358,6 +1505,7 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT bool StopBlockPort(stackStruct* army)
 	{
 		bool retVal = (army->blockedPort == nullptr);
+		if (retVal)return false;
 
 		typedef void(__thiscall* StopBlockPortF)(stackStruct* army);
 
@@ -1392,6 +1540,32 @@ namespace fastFuncts
 	}
 
 	NOINLINE EOP_EXPORT void setBodyguard(general* gen, unit* un)
+	{
+		if (gen->bodyguards != nullptr && gen->bodyguards->trackedUnitPointerP != nullptr)
+		{
+			un->general = gen;
+			un->trackedUnitPointerP = gen->bodyguards->trackedUnitPointerP;
+			gen->bodyguards->trackedUnitPointerP = nullptr;///
+			gen->bodyguards->general = nullptr;
+
+			gen->bodyguards = un;
+
+			(*un->trackedUnitPointerP)->unit = un;
+			return;
+
+		}
+		DWORD adr = codes::offsets.setBodyguard;
+		_asm {
+			push un
+			mov ecx, gen
+			mov eax, adr
+			call eax
+		}
+
+		return;
+	}
+
+	NOINLINE EOP_EXPORT void setBodyguardStart(general* gen, unit* un)
 	{
 		DWORD adr = codes::offsets.setBodyguard;
 		_asm {
@@ -1619,6 +1793,12 @@ namespace fastFuncts
 
 		return retMem;
 	}
+
+	void logFuncError(const std::string& funcName, const std::string& error)
+	{
+		unitActions::logStringGame(funcName + " error: " + error);
+	}
+
 	NOINLINE EOP_EXPORT void mergeArmies(stackStruct* army, stackStruct* targetArmy)
 	{
 		if (army->numOfUnits + targetArmy->numOfUnits > 20)

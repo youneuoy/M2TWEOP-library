@@ -8,6 +8,7 @@ void codes::initCodes(int gameVer)
 		offsets.stringCryptFunc = 0x00d4cfd0;
 		offsets.loadStratCasModelFunc = 0x00a04380;
 		offsets.allocMemFunc = 0x012418d8;
+		offsets.createEduEntry = 0x008EECA0;
 
 		offsets.createSiegeSettlementGarrisonedFunc = 0x005b56c0;
 		offsets.createCadAttackSettlementFunc = 0x005B55B0;
@@ -56,6 +57,7 @@ void codes::initCodes(int gameVer)
 
 
 		offsets.teleportCharacterFunc = 0x0059b580;
+		offsets.removeSieges = 0x004bf340;
 
 
 
@@ -144,15 +146,26 @@ void codes::initCodes(int gameVer)
 		
 		//offsets.unitPlace = 0x00770A70;
 		offsets.unitMove = 0x0759B70;
+		offsets.gameLogCommand = 0xA8FAC0;
 	}
 	else if (gameVer == 2) //steam
 	{
 		offsets.stringCryptFunc = 0x00d47330;
 		offsets.loadStratCasModelFunc = 0x00a04f00;
 		offsets.allocMemFunc = 0x011d318a;
+		offsets.createEduEntry = 0x008EF720;
 
 		offsets.createSiegeSettlementGarrisonedFunc = 0x005b5ba0;
 		offsets.getReadySiegeCharacterGarrisonedFunc = 0x005a1dc0;
+		offsets.switchCharacterFaction = 0x005A2100;
+		offsets.switchNamedCharacterFaction = 0x00594870;
+		offsets.switchArmyFaction = 0x004F4AF0;
+		offsets.changeCharacterTileStuff = 0x005933B0;
+		offsets.initPlaceCharacter = 0x00599900;
+		offsets.getResidenceCharacterNum = 0x004C0250;
+		offsets.getResidenceCharacterAtIndex = 0x004C0440;
+		offsets.removeSieges = 0x004bf8d0;
+		offsets.doHordeStuff = 0x0050B750;
 		
 		offsets.createCadAttackSettlementFunc = 0x00005B5A90;
 		offsets.createCadAssaultSettlementFunc = 0x005B5CB0;
@@ -160,7 +173,6 @@ void codes::initCodes(int gameVer)
 		offsets.createCadMovingNormalFunc = 0x005B0540;
 		offsets.decideEquipmentFunc = 0x0071D050;
 		offsets.getEquipmentPreferencesFunc = 0x00521B10;
-		offsets.createCadSiegeSettlementFunc = 0x005B5BA0;
 		
 		offsets.finalyzeActionStratmapFunc = 0x0059ec70;
 		
@@ -186,6 +198,8 @@ void codes::initCodes(int gameVer)
 		offsets.makeTrackedPointerToAttackFunc = 0x004e6600;
 		offsets.makeCadAttackFunc = 0x005b5900;
 		offsets.somethingWithTrackedPointerAttackFunc = 0x004cbc90;
+		offsets.makeCadDiplomacyFunc = 0x005B65B0;
+		offsets.makeCadDiplomacySettlementFunc = 0x005B66D0;
 
 		//CAMERA
 		offsets.moveStratCameraSlowFunc = 0x0098e4c0;
@@ -200,6 +214,12 @@ void codes::initCodes(int gameVer)
 
 
 		offsets.teleportCharacterFunc = 0x0059ba70;
+		offsets.getTileCharactersFunc = 0x004D05B0;
+		offsets.getValidRegionTile = 0x004A5970;
+		offsets.isTileValidForCharacter = 0x004CCFD0;
+		offsets.deleteMoveExtents = 0x004B67E0;
+		offsets.someSelectionStuff = 0x004DB420;
+		
 
 		offsets.replenishUnitFunc = 0x007495a0;
 		offsets.setUnitArmorFunc = 0x0073c470;
@@ -274,6 +294,8 @@ void codes::initCodes(int gameVer)
 		offsets.useSpecialAbility = 0x00A73690;
 		offsets.getBuildingAngle = 0x006EB0F0;
 		offsets.attackBuilding = 0x00757EE0;
+		offsets.createCADTargetCharacter = 0x00AAC0F0;
+		offsets.executeCADTargetCharacter = 0x00AAE0B0;
 
 		//Group commands
 		offsets.groupUnitChangeFormation = 0x00A7A000;
@@ -290,5 +312,6 @@ void codes::initCodes(int gameVer)
 		
 		//offsets.unitPlace = 0x00770A70;
 		offsets.unitMove = 0x075A320;
+		offsets.gameLogCommand = 0x0A90B20;
 	}
 }

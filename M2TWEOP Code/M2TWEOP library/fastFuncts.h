@@ -89,6 +89,7 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT void deleteFort(const factionStruct* fac, fortStruct* fort);
 	NOINLINE EOP_EXPORT void createFortXY(const factionStruct* fac, int x, int y);
 	NOINLINE EOP_EXPORT void createFort(const general* gen);
+	NOINLINE EOP_EXPORT void changeFortOwner(fortStruct* fort, factionStruct* newFaction);
 
 	//move stratmap camera slow
 	NOINLINE EOP_EXPORT void moveStratCameraSlow(int x, int y);
@@ -96,6 +97,8 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT void moveStratCameraFast(int x, int y);
 	//zoom stratmap camera
 	NOINLINE EOP_EXPORT void zoomStratCamera(float zoom);
+	NOINLINE EOP_EXPORT void setBodyguardStart(general* gen, unit* un);
+	NOINLINE EOP_EXPORT void loadSaveGame(const char* saveName);
 
 	factionStratMapDescrS* GetFactSmDescrById(int id);
 	//teleport character
@@ -159,6 +162,8 @@ namespace fastFuncts
 
 	//allocate mem for game class/etc
 	NOINLINE EOP_EXPORT DWORD allocateGameMem(size_t amount);
+	
+	NOINLINE EOP_EXPORT void logFuncError(const std::string& funcName, const std::string& error);
 
 	//attacker or defender
 	NOINLINE EOP_EXPORT bool autoWin(const char* winnerSide);

@@ -55,7 +55,9 @@ namespace unitHelpers
 	void setUnitParams(unit* un, int exp, int armor, int weap);
 	float getMovepoints(const unit* un);
 	int getMoraleLevel(const unit* un);
-	void setMoraleLevel(const unit* un, int level);
+	void setMoraleLevel(unit* un, int level);
+	unit* getNearbyUnit(const unit* unit, const int index);
+	unit* getNearbyEnemyUnit(const unit* unit, const int index);
 	bool isMovingFastSet(unit* un);
 	void setMovingFastSet(unit* un, bool set);
 	bool isOnWalls(unit* un);
@@ -85,7 +87,12 @@ namespace unitHelpers
 	siegeEngine* getSiegeEngine(const unit* un, const int index);
 	void attackBuilding(const unit* un, buildingBattle* building);
 	void collectEngine(const unit* un, siegeEngine* engine);
-
+	std::string getLocalizedUnitName(const eduEntry* entry);
+	std::string getLocalizedUnitDescr(const eduEntry* entry);
+	std::string getLocalizedUnitDescrShort(const eduEntry* entry);
+	void setUnitName(const eduEntry* entry, const std::string& name);
+	void setUnitDescr(const eduEntry* entry, const std::string& descr);
+	void setUnitDescrShort(const eduEntry* entry, const std::string& descr);
 	
 	unitGroup* getEmptyGroup(const stackStruct* army);
 	const char* getGroupLabel(const unitGroup* group);

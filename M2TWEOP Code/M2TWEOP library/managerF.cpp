@@ -140,13 +140,11 @@ void managerF::doPachs()
 	torecruitEOPMercunit->Enable();
 	f1 << "Done" << endl;
 
-	/*g
 	f1 << "Start applying toSearchUnitType patch" << '\n';
 	onSearchUnitType* toSearchUnitType = new onSearchUnitType(mem, (LPVOID)patchesForGame::onSearchUnitType, globals::dataS.gamever);
 	toSearchUnitType->SetNewCode();
 	toSearchUnitType->Enable();
 	f1 << "Done" << '\n';
-	 */
 
 
 	f1 << "Start applying toLoadDescrBattleCharacter patch #1" << endl;
@@ -567,6 +565,24 @@ void managerF::doPachs()
 	toCreatePortraitDb->Enable();
 	f1 << "Done" << endl;
 	
+	f1 << "Start applying toAssignGateAttacker patch" << endl;
+	onAssignGateAttacker* toAssignGateAttacker = new onAssignGateAttacker(mem, (LPVOID)noFunc, globals::dataS.gamever);
+	toAssignGateAttacker->SetNewCode();
+	toAssignGateAttacker->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onAttackGate patch" << endl;
+	onAttackGate2* toAttackGate2 = new onAttackGate2(mem, (LPVOID)noFunc, globals::dataS.gamever);
+	toAttackGate2->SetNewCode();
+	toAttackGate2->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onAttackGate patch" << endl;
+	onAttackGate* toAttackGate = new onAttackGate(mem, (LPVOID)patchesForGame::onAttackGate, globals::dataS.gamever);
+	toAttackGate->SetNewCode();
+	toAttackGate->Enable();
+	f1 << "Done" << endl;
+	
 	f1 << "Start applying onGetBrowserPicConstructed patch" << endl;
 	onGetBrowserPicConstructed* toGetBrowserPicConstructed= new onGetBrowserPicConstructed(mem, (LPVOID)patchesForGame::getBrowserPicConstructed, globals::dataS.gamever);
 	toGetBrowserPicConstructed->SetNewCode();
@@ -657,13 +673,17 @@ void managerF::doPachs()
 	toGetGroupByLabel->Enable();
 	f1 << "Done" << '\n';
 
-	/*
 	f1 << "Start applying onReadBuildingPool patch" << '\n';
 	onReadBuildingPool* toReadBuildingPool = new onReadBuildingPool(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gamever);
 	toReadBuildingPool->SetNewCode();
 	toReadBuildingPool->Enable();
 	f1 << "Done" << '\n';
-	*/
+
+	f1 << "Start applying onReadMercenaryPool patch" << '\n';
+	onReadMercenaryPool* toReadMercenaryPool = new onReadMercenaryPool(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gamever);
+	toReadMercenaryPool->SetNewCode();
+	toReadMercenaryPool->Enable();
+	f1 << "Done" << '\n';
 
 	f1 << "Start applying OnCreateUnitWrapper patch" << endl;
 	OnCreateUnitWrapper* toCreateUnitWrapper = new OnCreateUnitWrapper(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gamever);

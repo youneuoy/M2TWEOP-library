@@ -65,10 +65,14 @@ namespace m2tweopHelpers
 	options2* getOptions2();
 	campaignDifficulty1* getCampaignDifficulty1();
 	campaignDifficulty2* getCampaignDifficulty2();
+	void setFactionTrade(factionStruct* factionOne, factionStruct* factionTwo);
+	void setFactionProtectorate(factionStruct* factionOne, factionStruct* factionTwo);
+	void loadSaveGame(const std::string& path);
 
 	std::tuple<int, int, void*>  loadTextureToGame(const std::string& path);
 	std::tuple<int, int, void*>  loadMapTexture(mapImage* mapImage, const std::string& path);
 	void unloadTextureFromGame(void* texture);
+	void logStringGame(const std::string& msg);
 
 	void toggleUnitsBMapHighlight();
 	battleCameraStruct* getBattleCamCoords();

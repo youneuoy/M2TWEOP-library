@@ -487,12 +487,34 @@ namespace gameHelpers
 		return units;
 	}
 
+	roadStruct* getRoad(const campaign* campaign, const int index)
+	{
+		return campaign->roads[index];
+	}
+
 	int getPoolIndex(mercPoolUnitsPtr *unitPtr)
 	{
 		auto nextUnitsPtr = unitPtr->nextUnitsPtr;
 		if ( nextUnitsPtr && nextUnitsPtr->currentPool )
 			return unitPtr->currentPool + getPoolIndex(nextUnitsPtr);
 		return unitPtr->currentPool;
+	}
+
+	mercPool* getMercPool(const campaign* campaign, const std::string& name)
+	{
+		auto mercPools = &campaign->allMercPools;
+		if (!mercPools || !mercPools->currentCount)
+			return nullptr;
+		while (mercPools)
+		{
+			for (int i = 0; i < mercPools->currentCount; i++)
+			{
+				if (strcmp(mercPools->mercPools[i].name, name.c_str()) == 0)
+					return &mercPools->mercPools[i];
+			}
+			mercPools = mercPools->nextMercPools;
+		}
+		return nullptr;
 	}
 
 	mercPoolUnit* getNewMercUnit(mercPoolUnitsPtr* unitPtr)
@@ -990,6 +1012,42 @@ namespace gameHelpers
 		if (!doubleTile)
 			return 0;
 		return tileToDoubleTile(tile)->climate;
+	}
+
+	void setTileHeight(const oneTile* tile, float height)
+	{
+		const auto doubleTile = tileToDoubleTile(tile);
+		if (!doubleTile)
+			return;
+		doubleTile->height = height;
+	}
+
+	void setTileClimate(const oneTile* tile, int climate)
+	{
+		const auto doubleTile = tileToDoubleTile(tile);
+		if (!doubleTile)
+			return;
+		doubleTile->climate = climate;
+	}
+
+	void setTileGroundType(oneTile* tile, int ground)
+	{
+		const auto doubleTile = tileToDoubleTile(tile);
+		tile->groundType = ground;
+		if (ground >= 14 || ground == 4 || ground == 5 || ground == 7 || ground >= 10 && ground < 13)
+		{
+			tile->nonPassable = -1;
+			if (ground >= 10 && ground < 13)
+				tile->isLand = 0;
+		}
+		if (!doubleTile)
+			return;
+		doubleTile->groundType = ground;
+	}
+
+	int getTileGroundType(oneTile* tile)
+	{
+		return tile->groundType;
 	}
 
 	int getTileHeatValue(const oneTile* tile)

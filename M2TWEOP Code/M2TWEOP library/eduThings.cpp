@@ -3,6 +3,9 @@
 #include "fastFunctsHelpers.h"
 
 #include <cstdio>
+
+#include "unitActions.h"
+
 namespace eduThings
 {
 	struct eopEduEntry
@@ -19,9 +22,9 @@ namespace eduThings
 			}
 			data.edu = *oldEn;
 			data.edu.Index = newIdx;
-
-			eopTypeName = "EOPT";
+			
 			eopTypeName.append(data.edu.Type);
+			eopTypeName.append("_");
 			eopTypeName.append(to_string(newIdx));//added to make typename unique
 		}
 		eopEduEntry(const char* fileName, int newIdx)
@@ -36,8 +39,8 @@ namespace eduThings
 			}
 			data.edu.Index = newIdx;
 
-			eopTypeName = "EOPT";
 			eopTypeName.append(data.edu.Type);
+			eopTypeName.append("_");
 			eopTypeName.append(to_string(newIdx));//added to make typename unique
 		}
 
@@ -59,6 +62,7 @@ namespace eduThings
 	{
 		if (getEopEduEntry(newIdx))
 		{
+			unitActions::logStringGame("Duplicate EOP index " + to_string(newIdx) + " in addEopEduEntryFromFile");
 			return nullptr;
 		}
 

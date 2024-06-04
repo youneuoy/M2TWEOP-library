@@ -35,6 +35,7 @@ void luaP::initCampaign()
 		sol::usertype<seaConnectedRegion> seaConnectedRegion;
 		sol::usertype<neighbourRegion> neighbourRegion;
 		sol::usertype<eventTrigger> eventTrigger;
+		sol::usertype<selectionInfo> selectionInfo;
 		sol::usertype<mapImage> mapImageStruct;
 	}typeAll;
 
@@ -567,6 +568,35 @@ void luaP::initCampaign()
 	local unit=cardManager:getUnitCard(0);
 	*/
 	typeAll.uiCardManager.set_function("getUnitCard", &gameHelpers::getUnitCard);
+	
+	///selectionInfo
+	//@section Selection Info
+
+	/***
+	Basic selectionInfo table
+
+	@tfield character selectedCharacter (Get only)
+	@tfield character hoveredCharacter (Get only)
+	@tfield character selectedEnemyCharacter You can only select non-player characters with zoom to location button (Get only)
+	@tfield settlementStruct selectedSettlement (Get only)
+	@tfield settlementStruct hoveredSettlement (Get only)
+	@tfield settlementStruct selectedEnemySettlement You can only select non-player settlements with zoom to location button (Get only)
+	@tfield fortStruct selectedFort (Get only)
+	@tfield fortStruct hoveredFort (Get only)
+	@tfield fortStruct selectedEnemyFort You can only select non-player forts with zoom to location button (Get only)
+
+	@table selectionInfo
+	*/
+	typeAll.selectionInfo = luaState.new_usertype<selectionInfo>("selectionInfo");
+	typeAll.selectionInfo.set("selectedCharacter", sol::property(&gameDataAllHelper::getSelectedCharacter));
+	typeAll.selectionInfo.set("hoveredCharacter", sol::property(&gameDataAllHelper::getHoveredCharacter));
+	typeAll.selectionInfo.set("selectedEnemyCharacter", sol::property(&gameDataAllHelper::getSelectedEnemyCharacter));
+	typeAll.selectionInfo.set("selectedSettlement", sol::property(&gameDataAllHelper::getSelectedSettlement));
+	typeAll.selectionInfo.set("hoveredSettlement", sol::property(&gameDataAllHelper::getHoveredSettlement));
+	typeAll.selectionInfo.set("selectedEnemySettlement", sol::property(&gameDataAllHelper::getSelectedEnemySettlement));
+	typeAll.selectionInfo.set("selectedFort", sol::property(&gameDataAllHelper::getSelectedFort));
+	typeAll.selectionInfo.set("hoveredFort", sol::property(&gameDataAllHelper::getHoveredFort));
+	typeAll.selectionInfo.set("selectedEnemyFort", sol::property(&gameDataAllHelper::getSelectedEnemyFort));
 
 	///Campaign
 	//@section campaignStruct
@@ -589,7 +619,7 @@ void luaP::initCampaign()
 	@tfield int tickCount
 	@tfield int millisecondCount
 	@tfield float secondCount
-	@tfield int passedTurnsNum
+	@tfield int turnNumber
 	@tfield float timescale Factor for number of turns per year, see descr\_strat.txt
 	@tfield settlementStruct romeSettlement
 	@tfield settlementStruct constantinopleSettlement
@@ -601,7 +631,7 @@ void luaP::initCampaign()
 	@tfield int saveEnabled
 	@tfield int FreeUpkeepForts Number of units who get free upkeep in forts.
 	@tfield float currentDate
-	@tfield int currentseason season (0=summer, 1=winter)
+	@tfield int currentSeason season (0=summer, 1=winter)
 	@tfield float startDate
 	@tfield int startSeason season (0=summer, 1=winter)
 	@tfield float endDate
@@ -611,6 +641,10 @@ void luaP::initCampaign()
 	@tfield int fortsNum
 	@tfield int portsBuildingsNum
 	@tfield int watchTowerNum
+	@tfield int slaveFactionID
+	@tfield int roadsNum
+	@tfield int nightBattlesEnabled
+	@tfield int rebellingCharactersActive
 	@tfield checkDipStance checkDipStance
 	@tfield setDipStance setDipStance
 	@tfield GetUnitSize GetUnitSize
@@ -620,6 +654,8 @@ void luaP::initCampaign()
 	@tfield getWatchTower getWatchTower
 	@tfield getFaction getFaction
 	@tfield getSettlementByName getSettlementByName
+	@tfield getMercPool getMercPool
+	@tfield getRoad getRoad
 
 	@table campaignStruct
 	*/
@@ -640,10 +676,12 @@ void luaP::initCampaign()
 	typeAll.campaignTable.set("secondCount", &campaign::secondCount);
 	typeAll.campaignTable.set("fogOfWar", &campaign::fogOfWar);
 	typeAll.campaignTable.set("passedTurnsNum", &campaign::TurnNumber);
+	typeAll.campaignTable.set("turnNumber", &campaign::TurnNumber);
 	typeAll.campaignTable.set("crusade", &campaign::crusade);
 	typeAll.campaignTable.set("jihad", &campaign::jihad);
 
 	typeAll.campaignTable.set("timescale", &campaign::TimeScale);
+	typeAll.campaignTable.set("slaveFactionID", &campaign::slaveFactionID);
 	typeAll.campaignTable.set("romeSettlement", &campaign::rome);
 	typeAll.campaignTable.set("constantinopleSettlement", &campaign::constantinople);
 
@@ -652,9 +690,11 @@ void luaP::initCampaign()
 	typeAll.campaignTable.set("restrictAutoResolve", &campaign::restrictAutoResolve);
 	typeAll.campaignTable.set("saveEnabled", &campaign::saveEnabled);
 	typeAll.campaignTable.set("FreeUpkeepForts", &campaign::FreeUpkeepForts);
+	typeAll.campaignTable.set("rebellingCharactersActive", &campaign::rebellingCharactersActive);
+	typeAll.campaignTable.set("nightBattlesEnabled", &campaign::nightBattlesEnabled);
 
 	typeAll.campaignTable.set("currentDate", &campaign::currentDate);
-	typeAll.campaignTable.set("currentseason", &campaign::season);
+	typeAll.campaignTable.set("currentSeason", &campaign::season);
 
 	typeAll.campaignTable.set("startDate", &campaign::startDate);
 	typeAll.campaignTable.set("startSeason", &campaign::startSeason);
@@ -665,6 +705,7 @@ void luaP::initCampaign()
 	typeAll.campaignTable.set("daysInBattle", &campaign::daysInBattle);
 	typeAll.campaignTable.set("currentTimeInBattle", &campaign::currentTimeInBattle);
 	typeAll.campaignTable.set("fortsNum", &campaign::fortsNum);
+	typeAll.campaignTable.set("roadsNum", &campaign::roadsNum);
 	typeAll.campaignTable.set("portsBuildingsNum", &campaign::portsBuildingsNum);
 	typeAll.campaignTable.set("watchTowerNum", &campaign::watchtowersNum);
 	/***
@@ -762,6 +803,26 @@ void luaP::initCampaign()
 	local path = campaign:getCampaignPath();
 	*/
 	typeAll.campaignTable.set_function("getCampaignPath", &gameHelpers::getCampaignPath);
+	/***
+	Get a mercenary pool by name.
+	@function campaignStruct:getMercPool
+	@tparam string name
+	@treturn mercPool pool
+	@usage
+	local campaign = gameDataAll.get().campaignStruct;
+	local pool = campaign:getMercPool("mercpool1");
+	*/
+	typeAll.campaignTable.set_function("getMercPool", &gameHelpers::getMercPool);
+	/***
+	Get a road by index.
+	@function campaignStruct:getRoad
+	@tparam int index
+	@treturn roadStruct road
+	@usage
+	local campaign = gameDataAll.get().campaignStruct;
+	local pool = campaign:getRoad(0);
+	*/
+	typeAll.campaignTable.set_function("getRoad", &gameHelpers::getRoad);
 
 	///CollegeofCardinals
 	//@section collegeOfCardinals
@@ -1076,29 +1137,21 @@ void luaP::initCampaign()
 	@tfield int borderField
 	@tfield int otherField
 	@tfield int choke
-	@tfield int field_0x8
-	@tfield int field_0xB
-	@tfield int terrainModel
 	@tfield int ModelIsHills
-	@tfield int field_0xE
 	
 	@table tileStruct
 	*/
 	typeAll.tileStruct = luaState.new_usertype<oneTile>("tileStruct");
 	typeAll.tileStruct.set("road", &oneTile::road);
 	typeAll.tileStruct.set("isLand", &oneTile::isLand);
-	typeAll.tileStruct.set("groundType", &oneTile::groundType);
+	typeAll.tileStruct.set("groundType", sol::property(&gameHelpers::getTileGroundType, &gameHelpers::setTileGroundType));
 	typeAll.tileStruct.set("regionID", &oneTile::regionId);
 	typeAll.tileStruct.set("objectTypes", &oneTile::objectTypes);
 	typeAll.tileStruct.set("otherField", &oneTile::otherField);
 	typeAll.tileStruct.set("borderField", &oneTile::border);
 	typeAll.tileStruct.set("hasRoad", &oneTile::hasRoad);
 	typeAll.tileStruct.set("choke", &oneTile::choke);
-	typeAll.tileStruct.set("field_0x8", &oneTile::field_0x8);
-	typeAll.tileStruct.set("field_0xB", &oneTile::field_0xB);
-	typeAll.tileStruct.set("terrainModel", &oneTile::terrainModel);
 	typeAll.tileStruct.set("ModelIsHills", &oneTile::ModelIsHills);
-	typeAll.tileStruct.set("field_0xE", &oneTile::field_0xE);
 	typeAll.tileStruct.set("xCoord", sol::property(gameHelpers::getTileX));
 	typeAll.tileStruct.set("yCoord", sol::property(gameHelpers::getTileY));
 	typeAll.tileStruct.set("factionID", sol::property(gameHelpers::getTileFactionID));
@@ -1118,8 +1171,8 @@ void luaP::initCampaign()
 	typeAll.tileStruct.set("hasFort", sol::property(gameHelpers::tileHasFort));
 	typeAll.tileStruct.set("hasSettlement", sol::property(gameHelpers::tileHasSettlement));
 	typeAll.tileStruct.set("isDevastated", sol::property(gameHelpers::isDevastated));
-	typeAll.tileStruct.set("height", sol::property(gameHelpers::getTileHeight));
-	typeAll.tileStruct.set("climate", sol::property(gameHelpers::getTileClimate));
+	typeAll.tileStruct.set("height", sol::property(&gameHelpers::getTileHeight, &gameHelpers::setTileHeight));
+	typeAll.tileStruct.set("climate", sol::property(&gameHelpers::getTileClimate, &gameHelpers::setTileClimate));
 	typeAll.tileStruct.set("heatValue", sol::property(gameHelpers::getTileHeatValue));
 	typeAll.tileStruct.set("resource", sol::property(gameHelpers::getTileResource));
 	typeAll.tileStruct.set("character", sol::property(gameHelpers::getTileCharacter));
@@ -1508,7 +1561,7 @@ void luaP::initCampaign()
 	@tfield regionStruct region
 	@tfield int tradeValue
 	@tfield int notReachable
-	@tfield float distance
+	@tfield float moveCost
 	@tfield int borderTilesCount
 	@tfield roadStruct connectingRoad
 	@tfield getBorderTile getBorderTile
@@ -1523,7 +1576,7 @@ void luaP::initCampaign()
 	typeAll.neighbourRegion.set("borderTilesCount", &neighbourRegion::borderTilesCount);
 	typeAll.neighbourRegion.set("connectingRoad", &neighbourRegion::connectingRoad);
 	typeAll.neighbourRegion.set("notReachable", &neighbourRegion::alliedRegion);
-	typeAll.neighbourRegion.set("distance", &neighbourRegion::value);
+	typeAll.neighbourRegion.set("moveCost", &neighbourRegion::value);
 
 	/***
 	Get a border tile by index.
@@ -1714,7 +1767,7 @@ void luaP::initP2()
 		//this inside gameDataAll table
 		sol::usertype<battleDataS> battleTable;
 		sol::usertype<battleSide> battleSideTable;
-		sol::usertype<trackedPointerArmy> trackedPointerArmyTable;
+		sol::usertype<battleSideArmy> battleSideArmyTable;
 		sol::usertype<deploymentAreaS> deploymentAreaTable;
 		sol::usertype<battlePos> battlePos;
 		sol::usertype<battleAI> battleAI;
@@ -1739,6 +1792,7 @@ void luaP::initP2()
 	@tfield campaignStruct campaignStruct campaign data
 	@tfield uiCardManager uiCardManager ui and selected objects data
 	@tfield stratMap stratMap data
+	@tfield selectionInfo selectionInfo data
 
 	@table gameDataAll
 	*/
@@ -1756,6 +1810,7 @@ void luaP::initP2()
 	typeAll.gameDataAllTable.set("campaignStruct", &gameDataAllStruct::campaignData);
 	typeAll.gameDataAllTable.set("uiCardManager", &gameDataAllStruct::uiCardManager);
 	typeAll.gameDataAllTable.set("stratMap", &gameDataAllStruct::stratMap);
+	typeAll.gameDataAllTable.set("selectionInfo", &gameDataAllStruct::selectInfo);
 
 
 
@@ -1916,7 +1971,7 @@ void luaP::initP2()
 	@tfield battleAI battleAIPlan
 	@tfield getBattleArmy getBattleArmy
 	@tfield getFaction getFaction
-	@tfield trackedPointerArmy[64] armies Returns a table of trackedPointerArmy. Maximum: 64.
+	@tfield battleSideArmy[64] armies Returns a table of battleSideArmy. Maximum: 64.
 	
 	@table battleSide
 	*/
@@ -2001,22 +2056,22 @@ void luaP::initP2()
 	typeAll.battleSideTable.set_function("getFaction", &battleHandlerHelpers::getFaction);
 
 
-	///TrackedPointerArmy
-	//@section trackedPointerArmy
+	///battleSideArmy
+	//@section battleSideArmy
 
 	/***
-	Basic trackedPointerArmy table
+	Basic battleSideArmy table
 
 	@tfield stackStruct army
 	@tfield deploymentAreaS deploymentArea
 
 
 
-	@table trackedPointerArmy
+	@table battleSideArmy
 	*/
-	typeAll.trackedPointerArmyTable = luaState.new_usertype<trackedPointerArmy>("trackedPointerArmy");
-	typeAll.trackedPointerArmyTable.set("army", &trackedPointerArmy::stack);
-	typeAll.trackedPointerArmyTable.set("deploymentArea", &trackedPointerArmy::deploymentArea);
+	typeAll.battleSideArmyTable = luaState.new_usertype<battleSideArmy>("battleSideArmy");
+	typeAll.battleSideArmyTable.set("army", &battleSideArmy::stack);
+	typeAll.battleSideArmyTable.set("deploymentArea", &battleSideArmy::deploymentArea);
 	
 	///battlePos
 	//@section battlePos
@@ -2238,6 +2293,7 @@ void luaP::initP2()
 
 	@tfield settlementStruct settlement
 	@tfield battleBuildings battleBuildings
+	@tfield factionStruct faction
 	@tfield int settlementWallsBreached
 	@tfield int settlementGateDestroyed
 
@@ -2245,6 +2301,7 @@ void luaP::initP2()
 	*/
 	typeAll.battleResidence = luaState.new_usertype<battleResidence>("battleResidence");
 	typeAll.battleResidence.set("settlement", &battleResidence::settlement);
+	typeAll.battleResidence.set("faction", &battleResidence::faction);
 	typeAll.battleResidence.set("settlementWallsBreached", &battleResidence::settlementWallsBreached);
 	typeAll.battleResidence.set("settlementGateDestroyed", &battleResidence::settlementGateDestroyed);
 	typeAll.battleResidence.set("battleBuildings", &battleResidence::battleBuildings);
@@ -2260,6 +2317,9 @@ void luaP::initP2()
 	@tfield int currentHealth
 	@tfield int startHealth
 	@tfield int alliance
+	@tfield int factionId
+	@tfield factionStruct faction
+	@tfield battleResidence battleResidence
 	@tfield float posX
 	@tfield float posZ
 	@tfield float posY
@@ -2268,12 +2328,15 @@ void luaP::initP2()
 	*/
 	typeAll.buildingBattle = luaState.new_usertype<buildingBattle>("buildingBattle");
 	typeAll.buildingBattle.set("type", &buildingBattle::type);
+	typeAll.buildingBattle.set("factionId", &buildingBattle::factionId);
 	typeAll.buildingBattle.set("posX", &buildingBattle::xCoord);
 	typeAll.buildingBattle.set("posZ", &buildingBattle::zCoord);
 	typeAll.buildingBattle.set("posY", &buildingBattle::yCoord);
+	typeAll.buildingBattle.set("faction", &buildingBattle::faction);
 	typeAll.buildingBattle.set("endHealth", &buildingBattle::endHealth);
 	typeAll.buildingBattle.set("currentHealth", &buildingBattle::currentHealth);
 	typeAll.buildingBattle.set("startHealth", &buildingBattle::startHealth);
+	typeAll.buildingBattle.set("battleResidence", &buildingBattle::battleResidence);
 	typeAll.buildingBattle.set("alliance", &buildingBattle::alliance);
 
 	///Siege Engine
@@ -3079,7 +3142,8 @@ void luaP::initP2()
 	@tfield int scorpion
 	@tfield int serpentine
 	@tfield int rocketLauncher
-	@tfield int monsterRibault
+	@tfield int ribault
+	@tfield int monsterRibaultCollapsingHeader
 	@tfield int mangonel
 	@tfield int tower
 	@tfield int ram

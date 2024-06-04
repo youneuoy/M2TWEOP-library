@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "dataOffsets.h"
 dataOffsets::offsetsT dataOffsets::offsets;
 void dataOffsets::initDataOffsets(int gameVer)
@@ -73,6 +72,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.stratModelArray = 0x01B186A8;
 
 		offsets.getMovePath = 0x004D8390;
+		
+		offsets.globalSett = 0x016A7F38;
 
 		offsets.gameDataAllOffset = reinterpret_cast<gameDataAllStruct*>(0x02c2bed8);
 
@@ -87,6 +88,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.portraitDatabase = 0x018671D0;
 
 		offsets.cultureDatabase = 0x0161F0F0;
+		offsets.loadGameHandler = 0x02C6DC60;
+		offsets.currentGameHandler = 0x016A2FA4;
 
 		//gets used in adding building capabilities function for some reason just following what game does
 		offsets.edbDataStart = 0x01861438;

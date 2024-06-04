@@ -369,6 +369,7 @@ namespace smallFuncs
 			push titleUnip
 			mov eax, funcAddr
 			call eax
+			add esp, 0x20
 		}
 
 	}

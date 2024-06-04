@@ -941,12 +941,65 @@ private:
 	LPVOID funcAddress;
 };
 
+
+class onAssignGateAttacker
+	:public AATemplate
+{
+public:
+	onAssignGateAttacker(MemWork* mem, LPVOID adr, int ver);
+	~onAssignGateAttacker();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onAttackGate
+	:public AATemplate
+{
+public:
+	onAttackGate(MemWork* mem, LPVOID adr, int ver);
+	~onAttackGate();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onAttackGate2
+	:public AATemplate
+{
+public:
+	onAttackGate2(MemWork* mem, LPVOID adr, int ver);
+	~onAttackGate2();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onReadBuildingPool
 	:public AATemplate
 {
 public:
 	onReadBuildingPool(MemWork* mem, LPVOID adr, int ver);
 	~onReadBuildingPool();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onReadMercenaryPool
+	:public AATemplate
+{
+public:
+	onReadMercenaryPool(MemWork* mem, LPVOID adr, int ver);
+	~onReadMercenaryPool();
 
 	void SetOriginalCode();
 	void SetNewCode();

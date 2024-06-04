@@ -137,7 +137,7 @@ watchTowerStruct* factionHelpers::spawnWatchtower(const factionStruct* fac, int 
 	auto watchtowers = &gameDataAllHelper::get()->campaignData->watchtowers;
 	DWORD addToWatchtowerList = 0x004DD940;
 	if (gameVer == 1)
-		spawnCreatedObject = 0x004DD390;
+		addToWatchtowerList = 0x004DD390;
 	_asm
 	{
 		push tower
@@ -147,7 +147,7 @@ watchTowerStruct* factionHelpers::spawnWatchtower(const factionStruct* fac, int 
 	}
 	DWORD blockadeStuff = 0x004DD2F0;
 	if (gameVer == 1)
-		spawnCreatedObject = 0x004DCD40;
+		blockadeStuff = 0x004DCD40;
 	_asm
 	{
 		mov ecx, tower

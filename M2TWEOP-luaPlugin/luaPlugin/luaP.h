@@ -90,61 +90,6 @@ public:
 	void onChangeTurnNum(int num);
 
 	sol::state luaState;
-
-	/*
-	struct
-	{
-		sol::table M2TWEOPTable;
-		sol::table M2TWEOPEDUTable;
-		sol::table M2TWEOPFBXTable;
-
-
-		sol::table stratmapTable;
-		//this inside stratmap table
-		sol::table objectsTable;
-		sol::table cameraTable;
-		sol::table gameTable;
-
-
-	}tables;
-	struct
-	{
-		//global game table
-		sol::usertype<gameDataAllStruct> gameDataAllTable;
-		//this inside gameDataAll table
-		sol::usertype<battleDataS> battleTable;
-		sol::usertype<battleSide> battleSideTable;
-		sol::usertype<trackedPointerArmy> trackedPointerArmyTable;
-		sol::usertype<deploymentAreaS> deploymentAreaTable;
-
-		sol::usertype<campaign> campaignTable;
-	}typeAll;
-	struct
-	{
-		sol::table uniString;
-	}techTypes;
-	struct
-	{
-		sol::usertype<unit>unit;
-		sol::usertype<general>character;
-		sol::usertype<namedCharacter>namedCharacter;
-		sol::usertype<ancillary>ancillary;
-		sol::usertype<traitContainer>traitContainerT;
-		sol::usertype<EduEntry>EduEntry;
-		sol::usertype<factionStruct>factionStruct;
-		sol::usertype<fortStruct>fortStruct;
-		sol::usertype<portBuildingStruct>portBuildingStruct;
-		sol::usertype<settlementStruct>settlementStruct;
-		sol::usertype<guild>guild;
-		sol::usertype<resStrat>resStrat;
-		sol::usertype<stackStruct>stackStruct;
-		sol::usertype<building>building;
-		sol::usertype<siegeS>siege;
-		sol::usertype<edbEntry>edbEntry;
-		sol::usertype<buildingLevel>buildingLevel;
-
-	}types;
-	*/
 	void fillHashMaps();
 	
 	bool hashLoaded = false;

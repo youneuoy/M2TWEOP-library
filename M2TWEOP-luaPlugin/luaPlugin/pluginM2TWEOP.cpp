@@ -165,6 +165,15 @@ int initPlugin(std::string* modPath)
 	fName = "setCryptedString";
 	plugData::data.funcs.setCryptedString.Load(&plPath, &fName);
 	
+	fName = "logStringGame";
+	plugData::data.funcs.logStringGame.Load(&plPath, &fName);
+	
+	fName = "diplomacyCharacter";
+	plugData::data.funcs.diplomacyCharacter.Load(&plPath, &fName);
+	
+	fName = "diplomacySettlement";
+	plugData::data.funcs.diplomacySettlement.Load(&plPath, &fName);
+	
 	
 	fName = "changeGroupUnitFormation";
 	plugData::data.funcs.changeGroupUnitFormation.Load(&plPath, &fName);
@@ -212,6 +221,30 @@ int initPlugin(std::string* modPath)
 	fName = "moveNormal";
 	plugData::data.funcs.moveNormal.Load(&plPath, &fName);
 
+	fName = "assassinate";
+	plugData::data.funcs.assassinate.Load(&plPath, &fName);
+
+	fName = "marry";
+	plugData::data.funcs.marry.Load(&plPath, &fName);
+
+	fName = "spyCharacter";
+	plugData::data.funcs.spyCharacter.Load(&plPath, &fName);
+
+	fName = "denounce";
+	plugData::data.funcs.denounce.Load(&plPath, &fName);
+
+	fName = "switchCharacterFaction";
+	plugData::data.funcs.switchCharacterFaction.Load(&plPath, &fName);
+
+	fName = "changeFortOwner";
+	plugData::data.funcs.changeFortOwner.Load(&plPath, &fName);
+
+	fName = "bribe";
+	plugData::data.funcs.bribe.Load(&plPath, &fName);
+
+	fName = "acquire";
+	plugData::data.funcs.acquire.Load(&plPath, &fName);
+
 	fName = "siegeSettlement";
 	plugData::data.funcs.siegeSettlement.Load(&plPath, &fName);
 
@@ -220,6 +253,9 @@ int initPlugin(std::string* modPath)
 
 	fName = "unitMovetoPosition";
 	plugData::data.funcs.unitMovetoPosition.Load(&plPath, &fName);
+
+	fName = "loadSaveGame";
+	plugData::data.funcs.loadSaveGame.Load(&plPath, &fName);
 
 	fName = "getUnitFormation";
 	plugData::data.funcs.getUnitFormation.Load(&plPath, &fName);

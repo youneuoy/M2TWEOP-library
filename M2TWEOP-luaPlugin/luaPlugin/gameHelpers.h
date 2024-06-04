@@ -136,9 +136,15 @@ namespace gameHelpers
 	watchTowerStruct* getTileWatchtower(const oneTile* tile);
 	std::string getCampaignPath(campaign* campaign);
 	int getMercUnitNum(mercPool* mercPool);
+	void setTileHeight(const oneTile* tile, float height);
+	void setTileClimate(const oneTile* tile, int climate);
+	void setTileGroundType(oneTile* tile, int ground);
+	int getTileGroundType(oneTile* tile);
 	mercPoolUnit* getMercUnit(const mercPool* pool, int index);
 	void setMercReligion(mercPoolUnit* unit, int religion, bool set);
 	int getPoolIndex(mercPoolUnitsPtr *unitPtr);
+	mercPool* getMercPool(const campaign* campaign, const std::string& name);
+	roadStruct* getRoad(const campaign* campaign, const int index);
 	mercPoolUnit* getNewMercUnit(mercPoolUnitsPtr* unitPtr);
 	mercPoolUnit* addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, float startyear, float endyear, int crusading);
 	void saveGame(const char* path);

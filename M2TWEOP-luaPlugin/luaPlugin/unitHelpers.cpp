@@ -510,7 +510,45 @@ namespace unitHelpers
 		return group;
 	}
 
-	
+	std::string getLocalizedUnitName(const eduEntry* entry)
+	{
+		return technicalHelpers::uniStringToStr(*entry->localizedName);
+	}
+
+	std::string getLocalizedUnitDescr(const eduEntry* entry)
+	{
+		return technicalHelpers::uniStringToStr(*entry->localizedDescr);
+	}
+
+	std::string getLocalizedUnitDescrShort(const eduEntry* entry)
+	{
+		return technicalHelpers::uniStringToStr(*entry->localizedDescrShort);
+	}
+
+	void setUnitName(const eduEntry* entry, const std::string& name)
+	{
+		(*(*plugData::data.funcsTech.createUniString))(*entry->localizedName, name.c_str());
+	}
+
+	void setUnitDescr(const eduEntry* entry, const std::string& descr)
+	{
+		(*(*plugData::data.funcsTech.createUniString))(*entry->localizedDescr, descr.c_str());
+	}
+
+	void setUnitDescrShort(const eduEntry* entry, const std::string& descr)
+	{
+		(*(*plugData::data.funcsTech.createUniString))(*entry->localizedDescrShort, descr.c_str());
+	}
+
+	/*
+	* 
+
+	void namedCharSetLocalizedNameForSave(namedCharacter* genChar, const char* str)
+	{
+		(*(*plugData::data.funcsTech.createUniString))(genChar->localizedNameForSave, str);
+	}
+
+	 */
 	
 	unit* getTargetUnit(unitPositionData* posData)
 	{
@@ -646,7 +684,20 @@ namespace unitHelpers
 		(*(*plugData::data.funcs.useSpecialAbility))(un);
 	}
 
+	unit* getNearbyUnit(const unit* unit, const int index)
+	{
+		if (index < 0 || index >= unit->nearbyFriendlyUnitsNum)
+			return nullptr;
+		return unit->nearbyFriendlyUnits[index];
+	}
 
+	unit* getNearbyEnemyUnit(const unit* unit, const int index)
+	{
+		if (index < 0 || index >= unit->nearbyEnemyUnitsNum)
+			return nullptr;
+		return unit->nearbyEnemyUnits[index].unit;
+	}
+	
 	siegeEngine* getSiegeEngine(const unit* un, const int index)
 	{
 		const auto category = un->eduEntry->Category;

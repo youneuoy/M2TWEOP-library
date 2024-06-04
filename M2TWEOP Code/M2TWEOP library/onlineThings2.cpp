@@ -352,7 +352,7 @@ namespace battleCreator
 	}
 
 
-	void addArmyToSide(shared_ptr<sideDataS> side, trackedPointerArmy army)
+	void addArmyToSide(shared_ptr<sideDataS> side, battleSideArmy army)
 	{
 		shared_ptr<armyDataS> armyPtr(new armyDataS);
 		for (int i = 0; i < army.stack->numOfUnits; i++)

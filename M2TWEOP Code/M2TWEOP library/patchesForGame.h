@@ -23,6 +23,7 @@ public:
 	static DWORD __fastcall OnUnitInfo(DWORD entryAddress);
 	static float __fastcall OnCalculateUnitValue(eduEntry* entry, DWORD value);
 	static int __fastcall onEvaluateUnit(int eduIndex);
+	static int __fastcall onAttackGate(unit* unit, void* tactic);
 	static eduEntry* __fastcall onEvaluateUnit2(int eduIndex);
 	static DWORD __fastcall onSearchUnitType(char* typeName);
 	static int __fastcall OnReligionCombatBonus(int religionID, namedCharacter* namedChar);
