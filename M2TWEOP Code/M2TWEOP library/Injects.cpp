@@ -2547,7 +2547,7 @@ onUnloadCampaign::onUnloadCampaign(MemWork* mem, LPVOID adr, int ver)
 		m_adress = 0x00473338;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x00414C08;
+		m_adress = 0x00472F78;
 }
 
 onUnloadCampaign::~onUnloadCampaign()
@@ -2617,9 +2617,13 @@ void onAddCultureToArray::SetOriginalCode()
 void onAddCultureToArray::SetNewCode()
 {
 	Assembler* a = new Assembler();
+	
 
 	a->push(edi);
-	a->mov(edi, 0x0161F0F8);
+	if (m_adress == 0x008BD1D0)
+		a->mov(edi, 0x0161F0F8);
+	else
+		a->mov(edi, 0x01666FD0);
 	a->cmp(dword_ptr(edi, 0), 31);
 	a->pop(edi);
 	a->ret();
@@ -2791,7 +2795,7 @@ onGetCultureEndTurnSound::onGetCultureEndTurnSound(MemWork* mem, LPVOID adr, int
 		m_adress = 0x00A5C7B2;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x008B4783;
+		m_adress = 0x00A5B782;
 }
 
 onGetCultureEndTurnSound::~onGetCultureEndTurnSound()
@@ -3056,7 +3060,7 @@ onGetGuildOfferPic::onGetGuildOfferPic(MemWork* mem, LPVOID adr, int ver)
 
 	else if (ver == 1)//kingdoms
 	{
-		m_adress = 0x00414C08;
+		m_adress = 0x0BB9BDC;
 	}
 }
 

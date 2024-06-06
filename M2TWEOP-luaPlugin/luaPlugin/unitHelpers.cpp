@@ -134,6 +134,16 @@ namespace unitHelpers
 	{
 		un->unitPositionData->angle = angleFloatToShort(angle);
 	}
+
+	float getEngineAngle(const siegeEngine* engine)
+	{
+		return angleShortToFloat(engine->angle);
+	}
+	
+	void setEngineAngle(siegeEngine* engine, float angle)
+	{
+		engine->angle = angleFloatToShort(angle);
+	}
 	
 	int getsoldierCountStratMap(const unit* un)
 	{
@@ -710,20 +720,22 @@ namespace unitHelpers
 		return un->siegeEngine[index];
 	}
 
-	void attackBuilding(const unit* un, buildingBattle* building)
+	void attackBuilding(unit* un, buildingBattle* building)
 	{
 		if (!battleHandlerHelpers::inBattle())
 			return;
+		un->aiActiveSet = 2;
 		(*(*plugData::data.funcs.attackBuilding))(un, building);
 	}
 
-	void collectEngine(const unit* un, siegeEngine* engine)
+	void collectEngine(unit* un, siegeEngine* engine)
 	{
 		if (!battleHandlerHelpers::inBattle())
 			return;
 		if (!un || !engine || un->eduEntry->Category != 0)
 			return;
 		haltUnit(un);
+		un->aiActiveSet = 2;
 		un->unitPositionData->targetArray[0].siegeEngine = engine;
 		un->unitPositionData->targetArray[0].actionType = static_cast<int>(unitActionType::unitCollectEngine);
 		un->unitPositionData->isHalted = 0;

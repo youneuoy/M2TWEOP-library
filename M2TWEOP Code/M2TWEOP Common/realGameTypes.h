@@ -20,6 +20,7 @@ typedef struct stackStruct stackStruct, * PstackStruct;
 typedef struct settlementStruct settlementStruct, * PsettlementStruct;
 
 #define GAME_FUNC(funcType, funcAddr) reinterpret_cast<funcType>(codes::offsets.funcAddr)
+#define GAME_FUNC_RAW(funcType, funcAddr) reinterpret_cast<funcType>(funcAddr)
 
 struct stringWithHash
 {
@@ -2730,6 +2731,14 @@ public:
 	char pad_07A4[96]; //0x07A4
 }; //Size: 0x0804
 
+struct reinforcingArmy
+{
+	stackStruct *army;
+	stackStruct *commandingArmy;
+	int field_8;
+};
+
+
 struct battleSide {
 	bool isDefender;//0x0000
 	uchar canWithdraw;//0x0001
@@ -2743,15 +2752,15 @@ struct battleSide {
 	int32_t wonBattle; //0x0024 2 means won, 0 means lost, 1 is draw maybe
 	int32_t battleSuccess; //0x0028 0 = close, 1 = average, 2 = clear, 3 = crushing
 	char pad_002C[4]; //0x002C
-	struct armyAndCharacter* forces;//0x0030
-	int32_t armyArraySize; //0x0034
-	int armiesNum;//0x0038
+	struct armyAndCharacter* forces;//0x0030 
+	int32_t armyArraySize; //0x0034 
+	int armiesNum;//0x0038 
 	char pad_003C[12]; //0x003C
 	int32_t alliance; //0x0048
 	struct battleAI* battleAIPlan; //0x004C
 	char pad_0050[8]; //0x0050
-	struct battleSideArmy armies[64];//0x0058
-	int32_t armyAICount; //0x1858
+	struct battleSideArmy armies[64];//0x0058 
+	int32_t battleSideArmyNum; //0x1858
 	struct factionStruct* factions[8]; //0x185C
 	int32_t factionCount; //0x187C
 	char pad_1880[4]; //0x1880
@@ -2761,32 +2770,9 @@ struct battleSide {
 	struct stackStruct** enemyArmies; //0x1890
 	int32_t enemyArmiesSize; //0x1894
 	int32_t enemyArmiesNum; //0x1898
-	struct stackStruct *reinforcementArmy;
-	int field_18A0;
-	float reinforcementTimer;
-	int field_18A8;
-	int field_18AC;
-	int field_18B0;
-	int field_18B4;
-	int field_18B8;
-	int field_18BC;
-	int field_18C0;
-	int field_18C4;
-	int field_18C8;
-	int field_18CC;
-	int field_18D0;
-	int field_18D4;
-	int field_18D8;
-	int field_18DC;
-	int field_18E0;
-	int field_18E4;
-	int field_18E8;
-	int field_18EC;
-	int field_18F0;
-	int field_18F4;
-	int field_18F8;
+	reinforcingArmy reinforcementArmies[8];
 	int reinforceArmyCount;
-	int field_1900;
+	int balanceOfPower;
 	int32_t activeArmyStrength;
 	int32_t aiUnitStrengthTotal;
 	int armyPower;
@@ -5263,6 +5249,30 @@ public:
 	int32_t militaryBalanceLevel; //0x05FC
 	char pad_0600[4]; //0x0600
 }; //Size: 0x0604
+
+struct aiResourcePrivate
+{
+	void *vftable /*VFT*/;
+	int number;
+	void* trackedCharVtbl;
+	general* character;
+	void* trackedArmyVtbl;
+	stackStruct* army;
+	int field_18;
+	void *aiController;
+	int field_20;
+	int intSometimesTen;
+	char field_28;
+	char field_29;
+	char field_2A;
+	char hasToBeTrueForAttackOpen;
+	char field_2C;
+	char pad_2d[3];
+	void *aiController2;
+	int integerx34;
+	void *aiController3;
+	int integer3C;
+};
 
 struct aiFaction
 {

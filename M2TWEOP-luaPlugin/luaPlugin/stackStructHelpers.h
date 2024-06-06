@@ -13,10 +13,13 @@ namespace stackStructHelpers
 	settlementStruct* findInSettlement(const stackStruct* army);
 	fortStruct* findInFort(const stackStruct* army);
 	unitGroup* getGroup(const stackStruct* army, int index);
+	unit* getDeadUnit(const stackStruct* army, int index);
+	
 
 	unit* createUnit(stackStruct* army, const char* type, int exp, int arm, int weap);
 	unit* createUnitByIDX(stackStruct* army,int typeIDX, int exp, int arm, int weap);
 	unit* createEOPUnit(stackStruct* army,int typeIDX, int exp, int arm, int weap);
+	void mergeArmies(stackStruct* army, stackStruct* targetArmy, bool force = true);
 	void mergeArmies(stackStruct* army, stackStruct* targetArmy);
 	stackStruct* spawnArmy(
 		factionStruct* faction,

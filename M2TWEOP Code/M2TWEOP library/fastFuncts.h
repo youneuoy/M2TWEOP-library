@@ -22,7 +22,7 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT void setTileVisibility(factionStruct* faction, int x, int y, int8_t vis);
 
 
-	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct*sett, factionStruct* newOwner);
+	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct*sett, factionStruct* newOwner, bool convertGarrison = false);
 
 	NOINLINE EOP_EXPORT void GetGameTileCoordsWithCursor(int& x, int& y);
 	NOINLINE EOP_EXPORT void ViewTacticalMap(int x, int y);
@@ -107,6 +107,7 @@ namespace fastFuncts
 	//add trait to character
 	NOINLINE EOP_EXPORT void addTrait(namedCharacter* character, const char* traitName, int traitLevel);
 	NOINLINE EOP_EXPORT void removeTrait(namedCharacter* character, const char* traitName);
+	NOINLINE EOP_EXPORT bool isTileValidForCharacterType(int charType, coordPair* coords);
 
 
 	//add ancillary to character

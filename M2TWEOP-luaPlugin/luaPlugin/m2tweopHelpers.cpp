@@ -98,6 +98,8 @@ namespace m2tweopHelpers
 	{
 		auto campaign = gameDataAllHelper::get()->campaignData;
 		DWORD funcAddr = 0x00503480;
+		if (getGameVersion() == 1)
+			funcAddr = 0x00502EE0;
 		DWORD diplomaticStuff = (reinterpret_cast<DWORD>(campaign) + 0x858);
 		int facIdOne = factionOne->dipNum;
 		int facIdTwo = factionTwo->dipNum;
@@ -117,6 +119,8 @@ namespace m2tweopHelpers
 	{
 		auto campaign = gameDataAllHelper::get()->campaignData;
 		DWORD funcAddr = 0x00504F20;
+		if (getGameVersion() == 1)
+			funcAddr = 0x00504980;
 		DWORD diplomaticStuff = (reinterpret_cast<DWORD>(campaign) + 0x858);
 		//
 		int facIdOne = factionOne->dipNum;

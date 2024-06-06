@@ -47,6 +47,7 @@ public:
 		DWORD battleMapData = NULL;
 		DWORD globalSett = NULL;
 		DWORD currentGameHandler = NULL;
+		DWORD logFlushRate = NULL;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);

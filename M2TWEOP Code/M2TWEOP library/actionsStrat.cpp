@@ -376,7 +376,10 @@ namespace actionsStrat {
 		GAME_FUNC(DWORD(__thiscall*)(general**, general**, int, int),
 		createCADTargetCharacter)(&gen, &targetCharacter, type, 0);
 		gen->armyLeaded = army;
-		DWORD cadClass = *reinterpret_cast<DWORD*>(0x0162C740);
+		DWORD cadClass =0x0162C740;
+		if (smallFuncs::getGameVersion() == 1)
+			cadClass = 0x1674570;
+		cadClass = *reinterpret_cast<DWORD*>(cadClass);
 		DWORD adrFunc = codes::offsets.finalyzeActionStratmapFunc;
 		_asm
 		{

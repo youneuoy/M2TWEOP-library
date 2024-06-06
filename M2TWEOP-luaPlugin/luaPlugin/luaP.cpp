@@ -2691,6 +2691,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield isNeighbourFaction isNeighbourFaction
 	@tfield getAiFactionValues getAiFactionValues
 	@tfield getInterFactionLTGD getInterFactionLTGD
+	@tfield splitArmy splitArmy
 
 	@table factionStruct
 	*/
@@ -3015,6 +3016,21 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	     fac:setCharacterNameFaction(characterType.spy, 2)
 	*/
 	types.factionStruct.set_function("setCharacterNameFaction", &factionHelpers::setCharacterNameFaction);
+
+	/***
+	Split an army.
+	@function factionStruct:splitArmy
+	@tparam table units
+	@tparam int targetX
+	@tparam int targetY
+	@usage
+	     local units = {}
+	     for i = 0, myStack.unitsNum / 2 - 1 do
+	         table.insert(units, myStack:getUnit(i))
+	     end
+	     fac:splitArmy(units, 154, 84)
+	*/
+	types.factionStruct.set_function("splitArmy", &factionHelpers::splitArmy);
 
 	///aiFaction
 	//@section aiFaction
@@ -3805,13 +3821,17 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Change owner faction of settlement. All agents, armies etc. leave the settlement.
 	@function settlementStruct:changeOwner
 	@tparam factionStruct newOwner Faction to change ownership to.
+	@tparam bool convertGarrison optional
 	@usage
 	local campaign=gameDataAll.get().campaignStruct;
 	local fac1=campaign.factionsSortedByDescrStrat[1];
 	currSet:changeOwner(fac1);
 	end
 	*/
-	types.settlementStruct.set_function("changeOwner", &settlementHelpers::changeOwner);
+	types.settlementStruct.set_function("changeOwner", sol::overload(
+			sol::resolve<void(settlementStruct*, factionStruct*)>(settlementHelpers::changeOwner),
+			sol::resolve<void(settlementStruct*, factionStruct*, bool)>(settlementHelpers::changeOwner)
+		));
 	types.settlementStruct.set("creatorFactionID", &settlementStruct::fac_creatorModNum);
 	types.settlementStruct.set("regionID", &settlementStruct::regionID);
 	types.settlementStruct.set("level", &settlementStruct::level);
@@ -4435,6 +4455,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getGroup getGroup
 	@tfield siegeStruct siege Current siege.
 	@tfield defineUnitGroup defineUnitGroup
+	@tfield getDeadUnit getDeadUnit
 
 
 	@table stackStruct
@@ -4600,10 +4621,14 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	Merge 2 armies on the strat map. Does nothing if the total size of the new army exceeds 20 units.
 	@function stackStruct:mergeArmies
 	@tparam stackStruct targetArmy
+	@tparam bool force optional
 	@usage
 	army:mergeArmies(anotherArmy);
 	*/
-	types.stackStruct.set_function("mergeArmies", &stackStructHelpers::mergeArmies);
+	types.stackStruct.set_function("mergeArmies", sol::overload(
+			sol::resolve<void(stackStruct*, stackStruct*)>(stackStructHelpers::mergeArmies),
+			sol::resolve<void(stackStruct*, stackStruct*, bool)>(stackStructHelpers::mergeArmies)
+		));
 
 	/***
 	Besiege the specified settlement, or attack it if already besieging it. Requires movement points.
@@ -4639,6 +4664,16 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	end
 	*/
 	types.stackStruct.set_function("attackArmy", &stackStructHelpers::attackArmy);
+	
+	/***
+	Get dead unit at index.
+	@function stackStruct:getDeadUnit
+	@tparam int index
+	@treturn unit deadUnit
+	@usage
+	    local unit =stackStruct:getDeadUnit(0);
+	*/
+	types.stackStruct.set_function("getDeadUnit", &stackStructHelpers::getDeadUnit);
 	
 	/***
 	Get unit group at index.

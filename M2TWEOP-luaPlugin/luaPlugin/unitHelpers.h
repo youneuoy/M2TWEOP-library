@@ -85,15 +85,16 @@ namespace unitHelpers
 	void taunt(const unit* un);
 	void useSpecialAbility(const unit* un);
 	siegeEngine* getSiegeEngine(const unit* un, const int index);
-	void attackBuilding(const unit* un, buildingBattle* building);
-	void collectEngine(const unit* un, siegeEngine* engine);
+	void attackBuilding(unit* un, buildingBattle* building);
+	void collectEngine(unit* un, siegeEngine* engine);
 	std::string getLocalizedUnitName(const eduEntry* entry);
 	std::string getLocalizedUnitDescr(const eduEntry* entry);
 	std::string getLocalizedUnitDescrShort(const eduEntry* entry);
 	void setUnitName(const eduEntry* entry, const std::string& name);
 	void setUnitDescr(const eduEntry* entry, const std::string& descr);
 	void setUnitDescrShort(const eduEntry* entry, const std::string& descr);
-	
+	float getEngineAngle(const siegeEngine* engine);
+	void setEngineAngle(siegeEngine* engine, float angle);
 	unitGroup* getEmptyGroup(const stackStruct* army);
 	const char* getGroupLabel(const unitGroup* group);
 	

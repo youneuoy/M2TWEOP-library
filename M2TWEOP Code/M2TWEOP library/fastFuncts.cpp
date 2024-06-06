@@ -4,6 +4,7 @@
 #include <queue>
 #include <set>
 
+#include "actionsStrat.h"
 #include "eduThings.h"
 #include "smallFuncs.h"
 
@@ -172,52 +173,115 @@ namespace fastFuncts
 		faction->tilesFac->tilesVisiblity[faction->tilesFac->tilesXBound * (y)+x] = vis;
 	}
 
-	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner)
+	std::queue<coordPair> getNeighbourTiles(int x, int y)
 	{
-		const int charNum = GAME_FUNC(int(__thiscall*)(settlementStruct*, int), getResidenceCharacterNum)(sett, 1);
-		for (int i = 0; i < charNum; i++)
-		{
-			const auto thisChar = GAME_FUNC(general*(__thiscall*)(settlementStruct*, int, int), getResidenceCharacterAtIndex)(sett, i, 1);
-			if (thisChar->genType->type != characterTypeStrat::spy || thisChar->genChar->faction == sett->faction)
-			{
-				DWORD funcAddr = codes::offsets.switchCharacterFaction;
-				_asm
-				{
-					push 0
-					push 0
-					push newOwner
-					mov ecx, thisChar
-					mov eax, funcAddr
-					call eax
-				}
-			}
-			GAME_FUNC(void(__thiscall*)(general*), changeCharacterTileStuff)(thisChar);
+		std::queue<coordPair> neighbours;
+		neighbours.push({ x - 1, y });
+		neighbours.push({ x + 1, y });
+		neighbours.push({ x, y - 1 });
+		neighbours.push({ x, y + 1 });
+		neighbours.push({ x - 1, y + 1 });
+		neighbours.push({ x - 1, y - 1 });
+		neighbours.push({ x + 1, y + 1 });
+		neighbours.push({ x + 1, y - 1 });
+		return neighbours;
+	}
 
-			if (thisChar->genType->type == characterTypeStrat::namedCharacter)
+	coordPair* findValidTileNearTile(coordPair* coords, int charType)
+	{
+		if (isTileValidForCharacterType(charType, coords))
+			return coords;
+		const auto startCoords = *coords;
+		std::queue<coordPair> neighbours = getNeighbourTiles(coords->xCoord, coords->yCoord);
+		std::vector<coordPair> visited = { *coords };
+		while (true)
+		{
+			if (neighbours.empty())
+				break;
+			coordPair checkCoord = neighbours.front();
+			*coords = { checkCoord.xCoord, checkCoord.yCoord };
+			neighbours.pop();
+			visited.push_back(checkCoord);
+			if (isTileValidForCharacterType(charType, coords))
+				return coords;
+			std::queue<coordPair> newNeighbours = getNeighbourTiles(checkCoord.xCoord, checkCoord.yCoord);
+			while (!newNeighbours.empty())
 			{
-				DWORD funcAddr2 = codes::offsets.switchNamedCharacterFaction;
+				auto newCoord = newNeighbours.front();
+				newNeighbours.pop();
+				bool isVisited = false;
+				for (const auto& [xCoord, yCoord] : visited)
+				{
+					if (xCoord == newCoord.xCoord && yCoord == newCoord.yCoord)
+						isVisited = true;
+				}
+				if (isVisited)
+					continue;
+				neighbours.push(newCoord);
+			}
+		}
+		*coords = startCoords;
+		return coords;
+	}
+
+	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner, bool convertGarrison)
+	{
+		stackStruct* garrison = nullptr;
+		std::vector<general*> characters;
+		if (convertGarrison)
+		{
+			const int charNum = GAME_FUNC(int(__thiscall*)(settlementStruct*, int), getResidenceCharacterNum)(sett, 1);
+			for (int i = 0; i < charNum; i++)
+			{
+				const auto thisChar = GAME_FUNC(general*(__thiscall*)(settlementStruct*, int, int), getResidenceCharacterAtIndex)(sett, i, 1);
+				if (thisChar->genType->type != characterTypeStrat::spy || thisChar->genChar->faction == sett->faction)
+				{
+					DWORD funcAddr = codes::offsets.switchCharacterFaction;
+					_asm
+					{
+						push 0
+						push 0
+						push newOwner
+						mov ecx, thisChar
+						mov eax, funcAddr
+						call eax
+					}
+				}
+				GAME_FUNC(void(__thiscall*)(general*), changeCharacterTileStuff)(thisChar);
+
+				if (thisChar->genType->type == characterTypeStrat::namedCharacter)
+				{
+					DWORD funcAddr2 = codes::offsets.switchNamedCharacterFaction;
+					_asm
+					{
+						push 0
+						push newOwner
+						mov ecx, thisChar
+						mov eax, funcAddr2
+						call eax
+					}
+				}
+				GAME_FUNC(void(__thiscall*)(general*), initPlaceCharacter)(thisChar);
+				//if (thisChar && !thisChar->ifMarkedToKill)
+				//{
+				//	auto coords = findValidTileNearTile(reinterpret_cast<coordPair*>(&thisChar->xCoord), thisChar->genType->type);
+				//	actionsStrat::moveNormal(thisChar, coords->xCoord, coords->yCoord);
+				//	characters.push_back(thisChar);
+				//}
+			}
+			if (auto stack = sett->army)
+			{
+				garrison = stack;
+				auto origFaction = stack->faction;
+				DWORD funcAddr3 = codes::offsets.switchArmyFaction;
 				_asm
 				{
-					push 0
 					push newOwner
-					mov ecx, thisChar
-					mov eax, funcAddr2
+					push stack
+					mov ecx, origFaction
+					mov eax, funcAddr3
 					call eax
 				}
-			}
-			GAME_FUNC(void(__thiscall*)(general*), initPlaceCharacter)(thisChar);
-		}
-		if (auto stack = sett->army)
-		{
-			auto origFaction = stack->faction;
-			DWORD funcAddr3 = codes::offsets.switchArmyFaction;
-			_asm
-			{
-				push newOwner
-				push stack
-				mov ecx, origFaction
-				mov eax, funcAddr3
-				call eax
 			}
 		}
 		DWORD vtable = *reinterpret_cast<DWORD*>(sett);
@@ -234,6 +298,46 @@ namespace fastFuncts
 		}
 		
 		GAME_FUNC(void(__thiscall*)(settlementStruct*, int), removeSieges)(sett, 0);
+		if (garrison)
+		{
+			if (sett->army)
+				mergeArmies(garrison, sett->army);
+			else
+			{
+				auto newGarrison = createArmyInSettlement(sett);
+				mergeArmies(garrison, newGarrison);
+			}
+		}
+		for (int i = 0; i < newOwner->stackNum; i++)
+		{
+			auto stack = newOwner->stacks[i];
+			if (!stack->gen)
+				continue;
+			if (stack->gen->xCoord == sett->xCoord && stack->gen->yCoord == sett->yCoord && stack->settlement == nullptr)
+			{
+				if (sett->army)
+				{
+					if (sett->army != garrison)
+						mergeArmies(stack, sett->army);
+				}
+				else
+				{
+					auto newGarrison = createArmyInSettlement(sett);
+					mergeArmies(stack, newGarrison);
+				}	
+			}
+		}
+
+		if (convertGarrison && !characters.empty())
+		{
+			for (auto character : characters)
+			{
+				if (character->xCoord == sett->xCoord && character->yCoord == sett->yCoord)  // NOLINT(clang-diagnostic-sign-compare)
+					continue;
+				actionsStrat::moveNormal(character, sett->xCoord, sett->yCoord);
+			}
+		}
+		
 		if (newOwner->factionHordeInfo && newOwner->factionHordeInfo->isHorde)
 		{
 			auto globalFort = reinterpret_cast<settlementStruct*>(dataOffsets::offsets.globalSett);

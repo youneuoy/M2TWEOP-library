@@ -262,7 +262,7 @@ public:
 	ProcLoader<void(__cdecl*)(general*, unit*)> setBodyguard;
 
 
-	ProcLoader<void(__cdecl*)(settlementStruct*, factionStruct*)> setSettlementOwner;
+	ProcLoader<void(__cdecl*)(settlementStruct*, factionStruct*, bool)> setSettlementOwner;
 	ProcLoader<void(__cdecl*)(settlementStruct*, const char*, bool)> destroyBuilding;
 	ProcLoader<void(__cdecl*)(settlementStruct*, const char*)> createBuilding;
 

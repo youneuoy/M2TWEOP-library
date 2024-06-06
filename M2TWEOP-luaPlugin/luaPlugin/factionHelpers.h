@@ -45,6 +45,7 @@ namespace factionHelpers
 	ltgdFactionValues* getAiFactionValues(factionStruct* fac);
 	interFactionLTGD* getInterFactionLTGD(factionStruct* fac, factionStruct* targetFac);
 	void setCharacterNameFaction(factionStruct* fac, int characterType, int factionID);
+	stackStruct* splitArmy(factionStruct *faction, const sol::table& units, int x, int y);
 	//faction
 	template <char fieldIndex>
 	std::string getStringProperty(const factionStruct* fac)

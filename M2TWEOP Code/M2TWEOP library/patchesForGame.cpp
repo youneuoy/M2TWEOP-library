@@ -333,7 +333,7 @@ unit** __fastcall patchesForGame::onGetUnitByLabel(DWORD unitLabels, char* label
 //12FFA84
 unitGroup** __fastcall patchesForGame::onGetGroupByLabel(DWORD groupLabels, char* label)
 {
-	if (const DWORD value = **reinterpret_cast<DWORD**>(label); value == 0x12FFA84)
+	if (const DWORD value = **reinterpret_cast<DWORD**>(label); value == 0x12FFA84 || value == 0x01344AA4)
 		return reinterpret_cast<unitGroup**>(label);
 	
 	return GAME_FUNC(unitGroup**(__thiscall*)(DWORD, char*), getGroupByLabel)(groupLabels, label);

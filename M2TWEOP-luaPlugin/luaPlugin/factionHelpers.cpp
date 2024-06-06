@@ -220,6 +220,134 @@ std::string factionHelpers::getLocalizedFactionName(factionStruct* fac)
 	return technicalHelpers::uniStringToStr(localizedname);
 }
 
+float distance(int x1, int y1, int x2, int y2)
+{
+	return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+}
+
+void* disembark(stackStruct* army, int x, int y)
+{
+	DWORD cadClass = technicalHelpers::allocateGameMem(0x301Cu);
+	DWORD createCadDisembark = 0x005B06D0;
+	if (m2tweopHelpers::getGameVersion() == 1)
+		createCadDisembark = 0x5B01F0;
+	cadClass = GAME_FUNC_RAW(DWORD(__thiscall*)(DWORD, int), createCadDisembark)(cadClass, 0);
+	DWORD setCadClass = 0xAAC080;
+	if (m2tweopHelpers::getGameVersion() == 1)
+		setCadClass = 0xAAB050;
+	auto charPtr = &army->gen;
+	coordPair coords{x, y};
+	auto coordsPtr = &coords;
+	GAME_FUNC_RAW(void(__thiscall*)(general**, coordPair*, DWORD), setCadClass)(charPtr, coordsPtr, cadClass);
+	DWORD globalCadClass = 0x0162C740;
+	if (m2tweopHelpers::getGameVersion() == 1)
+		globalCadClass = 0x1674570;
+	DWORD cadClass2 = *reinterpret_cast<DWORD*>(globalCadClass);
+	DWORD finalize = 0x0059ec70;
+	if (m2tweopHelpers::getGameVersion() == 1)
+		finalize = 0x0059e790;
+	auto character = army->gen;
+	_asm
+	{
+		push cadClass2
+		mov ecx, character
+		mov eax, finalize
+		call eax
+	}
+}
+
+stackStruct* factionHelpers::splitArmy(factionStruct *faction, const sol::table& units, int x, int y)
+{
+	unit* unitList[20]{};
+	coordPair targetCoords{x, y};
+	const int unitCount = units.size();
+	if (unitCount > 20 || unitCount < 1)
+	{
+		m2tweopHelpers::logStringGame("factionStruct.splitArmy: unit count must be between 1 and 20.");
+		return nullptr;
+	}
+	auto tile = gameHelpers::getTile(x, y);
+	auto tileChar = gameHelpers::getTileCharacter(tile);
+	stackStruct* targetMerge = nullptr;
+	if (tileChar)
+	{
+		if (tileChar->armyLeaded)
+		{
+			if (tileChar->armyLeaded->faction != faction)
+			{
+				m2tweopHelpers::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy.");
+				return nullptr;
+			}
+		}
+	}
+	auto tileSett = gameHelpers::getTileSettlement(tile);
+	if (tileSett)
+	{
+		if (tileSett->faction != faction)
+		{
+			m2tweopHelpers::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy settlement.");
+			return nullptr;
+		}
+	}
+	auto tileFort = gameHelpers::getTileFort(tile);
+	if (tileFort)
+	{
+		if (tileFort->faction != faction)
+		{
+			m2tweopHelpers::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy fort.");
+			return nullptr;
+		}
+	}
+	stackStruct* stack = nullptr;
+	for (int i{ 1 }; i <= unitCount; i++)
+	{
+		const auto& un = units.get<sol::optional<unit*>>(i);
+		if (!un)
+			break;
+		unit* unit = un.value_or(nullptr);
+		if (!unit)
+			break;
+		if (!stack)
+			stack = unit->army;
+		if (unit && unit->army == stack)
+		    unitList[i - 1] = unit;
+	}
+	if (!stack)
+		return nullptr;
+	if (stack->shipArmy)
+	{
+		if (distance(stack->shipArmy->gen->xCoord, stack->shipArmy->gen->yCoord, x, y) > 1.5)
+		{
+			disembark(stack->shipArmy, x, y);
+		}
+	}
+	DWORD canArmySplit = 0x4D61F0;
+	if (m2tweopHelpers::getGameVersion() == 1)
+		canArmySplit = 0x4D5C30;
+	auto stratPathFind = gameDataAllHelper::get()->stratPathFinding; 
+	if (!GAME_FUNC_RAW(bool(__thiscall*)(stratPathFinding*, unit**, int, coordPair*), canArmySplit)
+		(stratPathFind, &unitList[0], unitCount, &targetCoords))
+	{
+		m2tweopHelpers::logStringGame("factionStruct.splitArmy: can not split army.");
+		return nullptr;
+	}
+	DWORD splitArmy = 0x4F9C90;
+	if (m2tweopHelpers::getGameVersion() == 1)
+		splitArmy = 0x4F9740;
+	auto coordsPtr = &targetCoords;
+	auto listPtr = &unitList[0];
+	_asm
+	{
+		push coordsPtr
+		push unitCount
+		push listPtr
+		mov ecx, faction
+		mov eax, splitArmy
+		call eax
+	}
+	return unitList[0]->army;
+}
+
 decisionValuesLTGD* factionHelpers::getlongTermGoalValues(aiLongTermGoalDirector* LTGD, int targetFaction)
 {
 	return &LTGD->longTermGoalValues[targetFaction];

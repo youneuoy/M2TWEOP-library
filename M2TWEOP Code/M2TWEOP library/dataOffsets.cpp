@@ -15,6 +15,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.stratMapAllOffsetStart = 0x02c74ff4;
 
 		offsets.stringTable = 0x02CB97E8;
+		
+		offsets.globalSett = 0x016F10D0;
 
 		offsets.someStratmapPointer = 0x019b3134;
 
@@ -42,6 +44,9 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.portraitDatabase = 0x18B0340;
 
 		offsets.cultureDatabase = 0x01666FC8;
+		offsets.loadGameHandler = 0x02CB6D78;
+		offsets.currentGameHandler = 0x016EC1C4;
+		offsets.logFlushRate = 0x16E445C;
 		
 		offsets.audioEnable = (bool*)0x016818cd;
 		offsets.audioMaster_vol = (int*)0x01681910;
@@ -90,6 +95,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.cultureDatabase = 0x0161F0F0;
 		offsets.loadGameHandler = 0x02C6DC60;
 		offsets.currentGameHandler = 0x016A2FA4;
+		offsets.logFlushRate = 0x169CF94;
 
 		//gets used in adding building capabilities function for some reason just following what game does
 		offsets.edbDataStart = 0x01861438;

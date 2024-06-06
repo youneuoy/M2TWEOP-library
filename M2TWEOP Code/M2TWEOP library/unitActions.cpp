@@ -97,8 +97,12 @@ namespace unitActions
 
     void logStringGame(const std::string& msg)
     {
+        const auto flushRate = reinterpret_cast<int*>(dataOffsets::offsets.logFlushRate);
+        const int oldRate = *flushRate;
+        *flushRate = 1;
         const auto order = std::make_shared<gameLogCommand>(msg.c_str());
         fireGameScriptFunc(order.get(), codes::offsets.gameLogCommand);
+        *flushRate = oldRate;
     }
 
     enum aiGtaObjective : int

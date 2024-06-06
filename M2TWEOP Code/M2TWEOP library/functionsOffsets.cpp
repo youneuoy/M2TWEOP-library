@@ -30,8 +30,21 @@ void codes::initCodes(int gameVer)
 		offsets.findParentForAdoptionFunc = 0x004EA4E0;
 		offsets.setArmyRegionEntriesFunc = 0x004A40E0;
 		offsets.factionRessurectStuffFunc = 0x004F4C80;
-
-
+		offsets.doHordeStuff = 0x0050B170;
+		offsets.doHordeStuff2 = 0x004EAA10;
+		offsets.doHordeStuff3 = 0x00C5CBC0;
+		
+		offsets.switchCharacterFaction = 0x005A1C20;
+		offsets.switchNamedCharacterFaction = 0x00594370;
+		offsets.switchArmyFaction = 0x004F4520;
+		offsets.changeCharacterTileStuff = 0x00592EB0;
+		offsets.initPlaceCharacter = 0x00599410;
+		
+		offsets.getResidenceCharacterNum = 0x004BFCC0;
+		offsets.getResidenceCharacterAtIndex = 0x004BFEB0;
+		
+		
+		
 		offsets.getReadyForMovingFunc = 0x005b0060;
 		offsets.getReadyForMoving2Func = 0x005a0870;
 		offsets.getGeneralReadyForMovingFunc = 0x004cd460;
@@ -41,6 +54,8 @@ void codes::initCodes(int gameVer)
 		offsets.makeTrackedPointerToAttackFunc = 0x004e6000;
 		offsets.makeCadAttackFunc = 0x005b5420;
 		offsets.somethingWithTrackedPointerAttackFunc = 0x004cb6d0;
+		offsets.makeCadDiplomacyFunc = 0x005B60D0;
+		offsets.makeCadDiplomacySettlementFunc = 0x005B61F0;
 
 
 
@@ -129,6 +144,13 @@ void codes::initCodes(int gameVer)
 		offsets.useSpecialAbility = 0x0A72630;
 		offsets.getBuildingAngle = 0x006EAB10;
 		offsets.attackBuilding = 0x00757750;
+		offsets.createCADTargetCharacter = 0x00AAB0C0;
+		offsets.executeCADTargetCharacter = 0x00AAD080;
+		offsets.getTileCharactersFunc = 0x004D0000;
+		offsets.getValidRegionTile = 0x004A5420;
+		offsets.isTileValidForCharacter = 0x004CCA10;
+		offsets.deleteMoveExtents = 0x004B6250;
+		offsets.someSelectionStuff = 0x004DAE80;
 
 		//Group commands
 		offsets.groupUnitChangeFormation = 0x00A78FA0;
@@ -166,6 +188,8 @@ void codes::initCodes(int gameVer)
 		offsets.getResidenceCharacterAtIndex = 0x004C0440;
 		offsets.removeSieges = 0x004bf8d0;
 		offsets.doHordeStuff = 0x0050B750;
+		offsets.doHordeStuff2 = 0x004EB020;
+		offsets.doHordeStuff3 = 0x00C56FC0;
 		
 		offsets.createCadAttackSettlementFunc = 0x00005B5A90;
 		offsets.createCadAssaultSettlementFunc = 0x005B5CB0;

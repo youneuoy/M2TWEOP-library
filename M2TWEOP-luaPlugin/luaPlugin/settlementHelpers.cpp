@@ -14,7 +14,12 @@ siegeS* settlementHelpers::getSiegeFort(const fortStruct* fort, int index)
 
 void settlementHelpers::changeOwner(settlementStruct* sett, factionStruct* newOwner)
 {
-	(*(*plugData::data.funcs.setSettlementOwner))(sett, newOwner);
+	(*(*plugData::data.funcs.setSettlementOwner))(sett, newOwner, false);
+}
+
+void settlementHelpers::changeOwner(settlementStruct* sett, factionStruct* newOwner, bool convertGarrison)
+{
+	(*(*plugData::data.funcs.setSettlementOwner))(sett, newOwner, convertGarrison);
 }
 
 void settlementHelpers::changeFortOwner(fortStruct* fort, factionStruct* newFaction)

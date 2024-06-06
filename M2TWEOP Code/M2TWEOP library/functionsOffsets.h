@@ -173,6 +173,8 @@ public:
 		DWORD isTileValidForCharacter = NULL;
 		DWORD deleteMoveExtents = NULL;
 		DWORD someSelectionStuff = NULL;
+		DWORD doHordeStuff2 = NULL;
+		DWORD doHordeStuff3 = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

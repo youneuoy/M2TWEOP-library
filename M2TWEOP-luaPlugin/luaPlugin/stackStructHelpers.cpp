@@ -77,12 +77,18 @@ namespace stackStructHelpers
 	}
 	int attackArmy(stackStruct *army, stackStruct *defender)
 	{
-		general *atkGen = army->gen;
-		general *defGen = defender->gen;
-		if (atkGen == nullptr || defGen == nullptr)
+		if (!army || !defender || defender->settlement)
 			return 0;
-
-		(*(*plugData::data.funcs.attackCharacter))(atkGen, defGen);
+		DWORD funcAddr = 0x007195A0;
+		if (m2tweopHelpers::getGameVersion() == 1)
+			funcAddr = 0x718E80;
+		_asm
+		{
+			push defender
+			mov ecx, army
+			mov eax, funcAddr
+			call eax
+		}
 
 		return 1;
 	}
@@ -139,6 +145,13 @@ namespace stackStructHelpers
 		return &army->unitGroups[index];
 	}
 
+	unit* getDeadUnit(const stackStruct* army, int index)
+	{
+		if (!army || !army->deadUnits || index < 0 || index >= army->deadUnitsNum)
+			return nullptr;
+		return army->deadUnits[index];
+	}
+
 	unit *createUnit(stackStruct *army, const char *type, int exp, int arm, int weap)
 	{
 		unit *newUnit = (*(*plugData::data.funcs.createUnitN))(type, army->regionID, army->faction->dipNum, exp, arm, weap);
@@ -175,10 +188,40 @@ namespace stackStructHelpers
 		(*(*plugData::data.funcs.addUnitToArmy))(army, newUnit);
 		return newUnit;
 	}
+	void mergeArmies(stackStruct *army, stackStruct *targetArmy, bool force)
+	{
+		if (force)
+			(*(*plugData::data.funcs.mergeArmies))(army, targetArmy);
+		else
+		{
+			int targetX, targetY;
+			if (targetArmy->gen)
+			{
+				targetX = targetArmy->gen->xCoord;
+				targetY = targetArmy->gen->yCoord;
+			}
+			else if (targetArmy->settlement)
+			{
+				targetX = targetArmy->settlement->xCoord;
+				targetY = targetArmy->settlement->yCoord;
+			}
+			else
+				return;
+			
+			sol::table units = sol::state_view(plugData::data.luaAll.luaState).create_table();
+			for (int i = 0; i < army->numOfUnits; i++)
+			{
+				units.add(army->units[i]);
+			}
+			const auto faction = army->faction;
+			factionHelpers::splitArmy(faction, units, targetX, targetY);
+		}
+	}
 	void mergeArmies(stackStruct *army, stackStruct *targetArmy)
 	{
 		(*(*plugData::data.funcs.mergeArmies))(army, targetArmy);
 	}
+	
 	stackStruct* spawnArmy(
 		factionStruct* faction,
 		const char* name,

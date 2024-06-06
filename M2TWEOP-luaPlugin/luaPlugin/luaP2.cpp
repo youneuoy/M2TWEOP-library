@@ -1982,7 +1982,6 @@ void luaP::initP2()
 	typeAll.battleSideTable.set("battleSuccess", &battleSide::battleSuccess);
 	typeAll.battleSideTable.set("battleArmyNum", &battleSide::armiesNum);
 	typeAll.battleSideTable.set("reinforceArmyCount", &battleSide::reinforceArmyCount);
-	typeAll.battleSideTable.set("reinforcementTimer", &battleSide::reinforcementTimer);
 	typeAll.battleSideTable.set("alliance", &battleSide::alliance);
 	typeAll.battleSideTable.set("soldierCountStart", &battleSide::soldierCount);
 	typeAll.battleSideTable.set("totalStrength", &battleSide::totalStrength);
@@ -2030,7 +2029,7 @@ void luaP::initP2()
 	end
 	*/
 	typeAll.battleSideTable.set_function("getWinConditionString", &battleHandlerHelpers::getWinConditionS);
-	typeAll.battleSideTable.set("armiesNum", &battleSide::armyAICount);
+	typeAll.battleSideTable.set("armiesNum", &battleSide::battleSideArmyNum);
 	typeAll.battleSideTable.set("armies", sol::property([](battleSide& self) { return std::ref(self.armies); }));
 	/***
 	Get a battle army by it's index.
@@ -2362,7 +2361,7 @@ void luaP::initP2()
 	typeAll.siegeEngineStruct.set("zCoord", &siegeEngine::posZ);
 	typeAll.siegeEngineStruct.set("yCoord", &siegeEngine::posY);
 	typeAll.siegeEngineStruct.set("mass", &siegeEngine::mass);
-	typeAll.siegeEngineStruct.set("angle", &siegeEngine::angle);
+	typeAll.siegeEngineStruct.set("angle", sol::property(&unitHelpers::getEngineAngle, &unitHelpers::setEngineAngle));
 	typeAll.siegeEngineStruct.set("currentUnit", &siegeEngine::currentUnit);
 	typeAll.siegeEngineStruct.set("lastUnit", &siegeEngine::lastUnit);
 	typeAll.siegeEngineStruct.set("engineID", &siegeEngine::engineID);
