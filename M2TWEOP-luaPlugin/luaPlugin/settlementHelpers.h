@@ -10,11 +10,33 @@ namespace settlementHelpers
 	siegeS* getSiegeFort(const fortStruct* fort, int index);
 	void changeOwner(settlementStruct* sett, factionStruct* newOwner);
 	void changeOwner(settlementStruct* sett, factionStruct* newOwner, bool convertGarrison);
-	void changeFortOwner(fortStruct* fort, factionStruct* newFaction);
-
+	void changeFortOwner(fortStruct* fort, factionStruct* newFaction, bool convertGarrison);
+	void setBuildingHealth(building* building, int health);
+	bool addBuildingToQueue(buildingInQueue* building);
+	bool addUnitToQueue(unitRQ* unit);
+	recruitmentOptions* getAvailableRetrainingUnits(settlementStruct* sett);
 	float getReligion(const settlementStruct* sett, int index);
 	void setReligion(const settlementStruct* sett, int index, float value);
-
+	exportDescrBuildings* getEdb();
+	void upgradeSettlement(settlementStruct* sett);
+	int getAvailableBuildingsCount(const availableBuildings* list);
+	buildingInQueue* getBuildingOption(const availableBuildings* list, const int index);
+	availableBuildings* getAvailableBuildingsMem();
+	availableBuildings* getAvailableBuildings(settlementStruct* sett);
+	int makeBuildOptionsHash(const settlementStruct* sett);
+	settlementBuildingOptions* getBuildingOptions(settlementStruct* sett);
+	buildingInQueue* getBuildingOptionFromDb(const settlementBuildingOptions* list, const int index);
+	int getBuildingHealth(building* build);
+	settlementRecruitmentOptions* getRecruitOptions(settlementStruct* sett);
+	unitRQ* getRecruitOptionFromDb(const settlementRecruitmentOptions* list, const int index);
+	int makeRecruitOptionsHash(const settlementStruct* sett);
+	recruitmentOptions* getAvailableUnitsMem();
+	recruitmentOptions* getAvailableUnits(settlementStruct* sett);
+	eduEntry* getUnitEntry(const unitRQ* unitOption);
+	void setUnitEntry(unitRQ* unitOption, eduEntry* entry);
+	void setAgentType(unitRQ* unitOption, int type);
+	int getAgentType(const unitRQ* unitOption);
+	
 	resStrat* getResource(const settlementStruct* sett, int index);
 	building* getBuilding(const settlementStruct* sett, int index);
 	void destroyBuilding(settlementStruct* sett, const char* typeName, bool isReturnMoney);

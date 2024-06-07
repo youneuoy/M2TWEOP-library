@@ -152,6 +152,27 @@ namespace stackStructHelpers
 		return army->deadUnits[index];
 	}
 
+	void setAiActiveSet(const stackStruct* army, const int set)
+	{
+		if (!army)
+			return;
+		for (int i = 0; i < army->numOfUnits; i++)
+			army->units[i]->aiActiveSet = set;
+	}
+
+	void releaseUnits(const stackStruct* army)
+	{
+		if (!army)
+			return;
+		for (int i = 0; i < army->numOfUnits; i++)
+			unitHelpers::releaseUnit(army->units[i]);
+	}
+
+	bool blockadePort(stackStruct* fleet, portBuildingStruct* port)
+	{
+		return (*(*plugData::data.funcs.blockadePort))(fleet, port);
+	}
+
 	unit *createUnit(stackStruct *army, const char *type, int exp, int arm, int weap)
 	{
 		unit *newUnit = (*(*plugData::data.funcs.createUnitN))(type, army->regionID, army->faction->dipNum, exp, arm, weap);

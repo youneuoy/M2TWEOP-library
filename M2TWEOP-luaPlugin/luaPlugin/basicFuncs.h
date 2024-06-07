@@ -188,7 +188,10 @@ public:
 	ProcLoader<void(__cdecl*)(general*, general*)> bribe;
 	ProcLoader<void(__cdecl*)(general*, general*)> acquire;
 	ProcLoader<void(__cdecl*)(general*, factionStruct*, bool, bool)> switchCharacterFaction;
-	ProcLoader<void(__cdecl*)(fortStruct*, factionStruct*)> changeFortOwner;
+	ProcLoader<void(__cdecl*)(fortStruct*, factionStruct*, bool)> changeFortOwner;
+	ProcLoader<bool(__cdecl*)(general*, int, int)> teleportCharacterClose;
+	ProcLoader<coordPair*(__cdecl*)(coordPair*, int)> findValidTileNearTile;
+	ProcLoader<bool(__cdecl*)(int, coordPair*)> isTileValidForCharacterType;
 
 	ProcLoader<void(__cdecl*)(const unit*, float, float, bool)> unitMovetoPosition;
 	ProcLoader<int(__cdecl*)(const unit*)> getUnitFormation;
@@ -265,6 +268,16 @@ public:
 	ProcLoader<void(__cdecl*)(settlementStruct*, factionStruct*, bool)> setSettlementOwner;
 	ProcLoader<void(__cdecl*)(settlementStruct*, const char*, bool)> destroyBuilding;
 	ProcLoader<void(__cdecl*)(settlementStruct*, const char*)> createBuilding;
+	ProcLoader<void(__cdecl*)(general*)> sendOffMap;
+	ProcLoader<bool(__cdecl*)(stackStruct*, portBuildingStruct*)> blockadePort;
+
+	
+	ProcLoader<void(__cdecl*)(general*, fortStruct*)> diplomacyFort;
+	ProcLoader<void(__cdecl*)(general*, fortStruct*)> bribeFort;
+	ProcLoader<void(__cdecl*)(general*, fortStruct*)> spyFort;
+	ProcLoader<void(__cdecl*)(general*, settlementStruct*)> bribeSettlement;
+	ProcLoader<void(__cdecl*)(general*, settlementStruct*)> spySettlement;
+	ProcLoader<void(__cdecl*)(general*, settlementStruct*)> sabotageSettlement;
 
 
 	ProcLoader<void(__cdecl*)(general*, int, int, int)> setCharacterType;

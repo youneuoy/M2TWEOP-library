@@ -34,7 +34,6 @@ void dataOffsets::initDataOffsets(int gameVer)
 
 		offsets.guildDataStart = 0x018FD958;
 
-		//gets used in adding building capabilities function for some reason just following what game does
 		offsets.edbDataStart = 0x018AA5A8;
 		
 		offsets.scriptCommandVFT = 0x0134E3A0;
@@ -97,7 +96,6 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.currentGameHandler = 0x016A2FA4;
 		offsets.logFlushRate = 0x169CF94;
 
-		//gets used in adding building capabilities function for some reason just following what game does
 		offsets.edbDataStart = 0x01861438;
 
 		offsets.audioEnable = (bool*)0x01639f1d;

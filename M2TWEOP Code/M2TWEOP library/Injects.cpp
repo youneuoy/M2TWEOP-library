@@ -2879,6 +2879,7 @@ void onGetBrowserPicConstructed::SetNewCode()
 	else
 	{
 		a->push(dword_ptr(esp,0));
+		a->mov(edx, dword_ptr(esp,8));
 	    a->mov(ecx, eax);
 		a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
 		a->call(eax);
@@ -2937,6 +2938,7 @@ void onGetBrowserPicConstruction::SetNewCode()
 	else
 	{
 		a->push(dword_ptr(esp,0));
+		a->mov(edx, dword_ptr(esp,8));
 	    a->mov(ecx, ebx);
 		a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
 		a->call(eax);

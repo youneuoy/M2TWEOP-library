@@ -251,6 +251,7 @@ namespace fastFuncts
 
 				if (thisChar->genType->type == characterTypeStrat::namedCharacter)
 				{
+					characters.push_back(thisChar);
 					DWORD funcAddr2 = codes::offsets.switchNamedCharacterFaction;
 					_asm
 					{
@@ -262,12 +263,6 @@ namespace fastFuncts
 					}
 				}
 				GAME_FUNC(void(__thiscall*)(general*), initPlaceCharacter)(thisChar);
-				//if (thisChar && !thisChar->ifMarkedToKill)
-				//{
-				//	auto coords = findValidTileNearTile(reinterpret_cast<coordPair*>(&thisChar->xCoord), thisChar->genType->type);
-				//	actionsStrat::moveNormal(thisChar, coords->xCoord, coords->yCoord);
-				//	characters.push_back(thisChar);
-				//}
 			}
 			if (auto stack = sett->army)
 			{
@@ -300,7 +295,7 @@ namespace fastFuncts
 		GAME_FUNC(void(__thiscall*)(settlementStruct*, int), removeSieges)(sett, 0);
 		if (garrison)
 		{
-			if (sett->army)
+			if (sett->army && sett->army != garrison)
 				mergeArmies(garrison, sett->army);
 			else
 			{
@@ -313,11 +308,11 @@ namespace fastFuncts
 			auto stack = newOwner->stacks[i];
 			if (!stack->gen)
 				continue;
-			if (stack->gen->xCoord == sett->xCoord && stack->gen->yCoord == sett->yCoord && stack->settlement == nullptr)
+			if (stack->gen->xCoord == sett->xCoord && stack->gen->yCoord == sett->yCoord)
 			{
 				if (sett->army)
 				{
-					if (sett->army != garrison)
+					if (sett->army != stack)
 						mergeArmies(stack, sett->army);
 				}
 				else
@@ -327,14 +322,41 @@ namespace fastFuncts
 				}	
 			}
 		}
-
-		if (convertGarrison && !characters.empty())
+		for (auto character : characters)
 		{
-			for (auto character : characters)
+			if (character && !character->ifMarkedToKill && character->genType->type == characterTypeStrat::namedCharacter)
 			{
-				if (character->xCoord == sett->xCoord && character->yCoord == sett->yCoord)  // NOLINT(clang-diagnostic-sign-compare)
-					continue;
-				actionsStrat::moveNormal(character, sett->xCoord, sett->yCoord);
+				if (!character->genChar->label || character->genChar->labelCrypt == 0)
+				{
+					auto label = std::string(character->genChar->shortName) + "_" + std::to_string(character->genChar->index);
+					fastFunctsHelpers::setCryptedString(&character->genChar->label, label.c_str());
+				}
+				int unitId = character->bodyguards->eduEntry->Index;
+				int xp = character->bodyguards->expScreen;
+				int armour = (character->bodyguards->stats>> 8) & 0x1F;
+				int weapon = (character->bodyguards->stats>> 13) & 0x1F;
+				actionsStrat::sendOffMap(character);
+				if (auto newStack = spawnArmy(
+					newOwner,
+					character->genChar->shortName,
+					character->genChar->lastName,
+					character->genType->type,
+					character->genChar->label,
+					character->genChar->portrait_custom,
+					sett->xCoord,
+					sett->yCoord,
+					(character->genChar->age >> 3) & 0x7F,
+					false,
+					character->genChar->subFaction,unitId,xp,weapon,armour))
+				{
+					if (sett->army)
+						mergeArmies(newStack, sett->army);
+					else
+					{
+						auto newGarrison = createArmyInSettlement(sett);
+						mergeArmies(newStack, newGarrison);
+					}
+				}
 			}
 		}
 		
@@ -353,52 +375,55 @@ namespace fastFuncts
 		}
 	}
 	
-	NOINLINE EOP_EXPORT void changeFortOwner(fortStruct* fort, factionStruct* newFaction)
+	NOINLINE EOP_EXPORT void changeFortOwner(fortStruct* fort, factionStruct* newFaction, bool convertGarrison)
 	{
-		const int charNum = GAME_FUNC(int(__thiscall*)(fortStruct*, int), getResidenceCharacterNum)(fort, 1);
-		for (int i = 0; i < charNum; i++)
+		if (convertGarrison)
 		{
-			const auto thisChar = GAME_FUNC(general*(__thiscall*)(fortStruct*, int, int), getResidenceCharacterAtIndex)(fort, i, 1);
-			if (thisChar->genType->type != characterTypeStrat::spy || thisChar->genChar->faction == fort->faction)
+			const int charNum = GAME_FUNC(int(__thiscall*)(fortStruct*, int), getResidenceCharacterNum)(fort, 1);
+			for (int i = 0; i < charNum; i++)
 			{
-				DWORD funcAddr = codes::offsets.switchCharacterFaction;
-				_asm
+				const auto thisChar = GAME_FUNC(general*(__thiscall*)(fortStruct*, int, int), getResidenceCharacterAtIndex)(fort, i, 1);
+				if (thisChar->genType->type != characterTypeStrat::spy || thisChar->genChar->faction == fort->faction)
 				{
-					push 0
-					push 0
-					push newFaction
-					mov ecx, thisChar
-					mov eax, funcAddr
-					call eax
+					DWORD funcAddr = codes::offsets.switchCharacterFaction;
+					_asm
+					{
+						push 0
+						push 0
+						push newFaction
+						mov ecx, thisChar
+						mov eax, funcAddr
+						call eax
+					}
 				}
-			}
-			GAME_FUNC(void(__thiscall*)(general*), changeCharacterTileStuff)(thisChar);
+				GAME_FUNC(void(__thiscall*)(general*), changeCharacterTileStuff)(thisChar);
 
-			if (thisChar->genType->type == characterTypeStrat::namedCharacter)
+				if (thisChar->genType->type == characterTypeStrat::namedCharacter)
+				{
+					DWORD funcAddr2 = codes::offsets.switchNamedCharacterFaction;
+					_asm
+					{
+						push 0
+						push newFaction
+						mov ecx, thisChar
+						mov eax, funcAddr2
+						call eax
+					}
+				}
+				GAME_FUNC(void(__thiscall*)(general*), initPlaceCharacter)(thisChar);
+			}
+			if (auto stack = fort->army)
 			{
-				DWORD funcAddr2 = codes::offsets.switchNamedCharacterFaction;
+				auto origFaction = stack->faction;
+				DWORD funcAddr3 = codes::offsets.switchArmyFaction;
 				_asm
 				{
-					push 0
 					push newFaction
-					mov ecx, thisChar
-					mov eax, funcAddr2
+					push stack
+					mov ecx, origFaction
+					mov eax, funcAddr3
 					call eax
 				}
-			}
-		    GAME_FUNC(void(__thiscall*)(general*), initPlaceCharacter)(thisChar);
-		}
-		if (auto stack = fort->army)
-		{
-			auto origFaction = stack->faction;
-			DWORD funcAddr3 = codes::offsets.switchArmyFaction;
-			_asm
-			{
-				push newFaction
-				push stack
-				mov ecx, origFaction
-				mov eax, funcAddr3
-				call eax
 			}
 		}
 		DWORD vtable = *reinterpret_cast<DWORD*>(fort);
@@ -863,7 +888,10 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT void teleportCharacter(general* gen, int x, int y)
 	{
 		if (gen->residence)
+		{
+			unitActions::logStringGame("character.teleport: Character is in residence, cancelled to avoid bugs");
 			return;
+		}
 		
 		if (gen->armyLeaded != nullptr)
 		{
@@ -899,6 +927,48 @@ namespace fastFuncts
 		}
 		delete targetCoords;
 		delete charArray;
+	}
+
+	NOINLINE EOP_EXPORT bool teleportCharacterClose(general* gen, int x, int y)
+	{
+		if (gen->residence)
+		{
+			unitActions::logStringGame("character.teleport: Character is in residence, cancelled to avoid bugs");
+			return false;
+		}
+		bool isTeleported = false;
+		if (gen->armyLeaded != nullptr)
+		{
+			fastFuncts::StopSiege(gen->armyLeaded);
+			fastFuncts::StopBlockPort(gen->armyLeaded);
+		}
+
+		auto targetCoords = new coordPair{ x,y };
+		if (targetCoords = findValidTileNearTile(targetCoords, gen->genType->type);
+			isTileValidForCharacterType(gen->genType->type, targetCoords))
+		{
+			GAME_FUNC(void(__thiscall*)(general*), changeCharacterTileStuff)(gen);
+			DWORD adrFunc = codes::offsets.teleportCharacterFunc;
+			int xCoord = targetCoords->xCoord;
+			int yCoord = targetCoords->yCoord;
+			_asm
+			{
+				push yCoord
+				push xCoord
+
+				mov ecx, gen
+				mov eax, adrFunc
+				call eax
+			}
+			DWORD moveExtentThing = reinterpret_cast<DWORD>(smallFuncs::getGameDataAll()->stratPathFinding) + 0x88;
+		    GAME_FUNC(void(__thiscall*)(DWORD), deleteMoveExtents)(moveExtentThing);
+			auto selectInfoPtr = smallFuncs::getGameDataAll()->selectionInfoPtr2;
+		    GAME_FUNC(void(__thiscall*)(selectionInfo**, general*), someSelectionStuff)(selectInfoPtr, gen);
+		    GAME_FUNC(void(__thiscall*)(general*), initPlaceCharacter)(gen);
+			isTeleported = true;
+		}
+		delete targetCoords;
+		return isTeleported;
 	}
 
 	NOINLINE EOP_EXPORT void addTrait(namedCharacter* character, const char* traitName, int traitLevel)

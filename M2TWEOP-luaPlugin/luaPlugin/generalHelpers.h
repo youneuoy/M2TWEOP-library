@@ -6,6 +6,8 @@ namespace generalHelpers
 {
 	void moveToTile(general* gen, int x, int y);
 	void reposition(general* gen, int x, int y);
+	bool teleport(general* gen, int x, int y);
+	void sendOffMap(general* gen);
 	void diplomacyCharacter(general* gen, general* targetCharacter);
 	void assassinate(general* gen, general* targetCharacter);
 	void marry(general* gen, general* targetCharacter);
@@ -13,7 +15,14 @@ namespace generalHelpers
 	void denounce(general* gen, general* targetCharacter);
 	void bribe(general* gen, general* targetCharacter);
 	void acquire(general* gen, general* targetCharacter);
+	void sabotageBuilding(general* gen, building* build);
 	void diplomacySettlement(general* gen, settlementStruct* targetSettlement);
+	void diplomacyFort(general* gen, fortStruct* targetFort);
+	void bribeFort(general* gen, fortStruct* targetFort);
+	void spyFort(general* gen, fortStruct* targetFort);
+	void bribeSettlement(general* gen, settlementStruct* targetSettlement);
+	void spySettlement(general* gen, settlementStruct* targetSettlement);
+	void sabotageSettlement(general* gen, settlementStruct* targetSettlement);
 
 	const char* getTypeName(const general* gen);
 	void killGeneral(general* gen);

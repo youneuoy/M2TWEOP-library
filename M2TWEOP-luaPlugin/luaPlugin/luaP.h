@@ -104,6 +104,14 @@ public:
 	};
 	std::unordered_map<int, const char*> religionNames = {
 	};
+	std::unordered_map<std::string, int> cultureIndex = {
+	};
+	std::unordered_map<int, const char*> cultureNames = {
+	};
+	std::unordered_map<std::string, int> climateIndex = {
+	};
+	std::unordered_map<int, const char*> climateNames = {
+	};
 
 	sol::function* onCampaignMapLoaded = nullptr;
 

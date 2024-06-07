@@ -728,6 +728,31 @@ namespace unitHelpers
 		(*(*plugData::data.funcs.attackBuilding))(un, building);
 	}
 
+	void releaseUnit(unit* un)
+	{
+		if (!battleHandlerHelpers::inBattle())
+			return;
+		const auto stack = un->army;
+		const auto battleData = battleHandlerHelpers::getBattleData();
+		for (int i = 0; i < battleData->playerArmyNum; i++)
+		{
+			const auto playerArmy = battleData->playerArmies[i].army;
+			if (playerArmy == stack)
+			{
+				un->aiActiveSet = 0;
+				return;
+			}
+		}
+		un->aiActiveSet = 1;
+	}
+
+	int getSiegeEngineNum(unit* un)
+	{
+		if (un->eduEntry->Category != 0 && un->eduEntry->Category != 2)
+			return 0;
+		return un->siegeEnNum;
+	}
+
 	void collectEngine(unit* un, siegeEngine* engine)
 	{
 		if (!battleHandlerHelpers::inBattle())

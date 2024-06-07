@@ -94,6 +94,14 @@ namespace m2tweopHelpers
 			setFactionTrade(fac1, fac2);
 	}
 
+	culturesDB* getCultureDb()
+	{
+		DWORD offset = 0x0161F0F0;
+		if (getGameVersion() == 1)
+			offset = 0x01666FC8;
+		return reinterpret_cast<culturesDB*>(offset);
+	}
+
 	void setFactionTrade(factionStruct* factionOne, factionStruct* factionTwo)
 	{
 		auto campaign = gameDataAllHelper::get()->campaignData;

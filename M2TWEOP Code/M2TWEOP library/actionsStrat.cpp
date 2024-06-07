@@ -161,14 +161,14 @@ namespace actionsStrat {
 	{
 		if (!gen || !targetCharacter)
 			return;
-		targetCharacterAction(gen, targetCharacter, 20);
+		targetCharacterAction(gen, targetCharacter, characterAction::diplomacy);
 	}
 
 	NOINLINE EOP_EXPORT void assassinate(general* gen, general* targetCharacter)
 	{
 		if (!gen || !targetCharacter)
 			return;
-		targetCharacterAction(gen, targetCharacter, 0x1A);
+		targetCharacterAction(gen, targetCharacter, characterAction::assassinate);
 	}
 
 	NOINLINE EOP_EXPORT void marry(general* gen, general* targetCharacter)
@@ -185,14 +185,14 @@ namespace actionsStrat {
 			fastFuncts::logFuncError("character.marry", "target character is not family member");
 			return;
 		}
-		targetCharacterAction(gen, targetCharacter, 0x22);
+		targetCharacterAction(gen, targetCharacter, characterAction::marry);
 	}
 
 	NOINLINE EOP_EXPORT void spyCharacter(general* gen, general* targetCharacter)
 	{
 		if (!gen || !targetCharacter)
 			return;
-		targetCharacterAction(gen, targetCharacter, 0x19);
+		targetCharacterAction(gen, targetCharacter, characterAction::spy);
 	}
 
 	NOINLINE EOP_EXPORT void switchCharacterFaction(general* gen, factionStruct* fac, bool keepArmy, bool keepBg)
@@ -348,24 +348,24 @@ namespace actionsStrat {
 	{
 		if (!gen || !targetCharacter)
 			return;
-		targetCharacterAction(gen, targetCharacter, 0x23);
+		targetCharacterAction(gen, targetCharacter, characterAction::denounce);
 	}
 
 	NOINLINE EOP_EXPORT void bribe(general* gen, general* targetCharacter)
 	{
 		if (!gen || !targetCharacter)
 			return;
-		targetCharacterAction(gen, targetCharacter, 0x15);
+		targetCharacterAction(gen, targetCharacter, characterAction::bribe);
 	}
 
 	NOINLINE EOP_EXPORT void acquire(general* gen, general* targetCharacter)
 	{
 		if (!gen || !targetCharacter)
 			return;
-		targetCharacterAction(gen, targetCharacter, 0x21);
+		targetCharacterAction(gen, targetCharacter, characterAction::acquire);
 	}
 
-	NOINLINE EOP_EXPORT void targetCharacterAction(general* gen, general* targetCharacter, int type)
+	NOINLINE EOP_EXPORT void targetCharacterAction(general* gen, general* targetCharacter, characterAction type)
 	{
 		if (!gen || !targetCharacter)
 			return;
@@ -373,7 +373,7 @@ namespace actionsStrat {
 		if (gen->armyLeaded)
 			army = gen->armyLeaded;
 		gen->armyLeaded = nullptr;
-		GAME_FUNC(DWORD(__thiscall*)(general**, general**, int, int),
+		GAME_FUNC(DWORD(__thiscall*)(general**, general**, characterAction, int),
 		createCADTargetCharacter)(&gen, &targetCharacter, type, 0);
 		gen->armyLeaded = army;
 		DWORD cadClass =0x0162C740;
@@ -389,6 +389,149 @@ namespace actionsStrat {
 			call eax
 		}
 	}
+
+	NOINLINE EOP_EXPORT void diplomacyFort(general* gen, fortStruct* targetFort)
+	{
+		if (!gen || !targetFort)
+			return;
+		targetFortAction(gen, targetFort, characterAction::diplomacy);
+	}
+
+	NOINLINE EOP_EXPORT void bribeFort(general* gen, fortStruct* targetFort)
+	{
+		if (!gen || !targetFort)
+			return;
+		targetFortAction(gen, targetFort, characterAction::bribe);
+	}
+
+	NOINLINE EOP_EXPORT void spyFort(general* gen, fortStruct* targetFort)
+	{
+		if (!gen || !targetFort)
+			return;
+		targetFortAction(gen, targetFort, characterAction::spy);
+	}
+
+	NOINLINE EOP_EXPORT void bribeSettlement(general* gen, settlementStruct* targetSettlement)
+	{
+		if (!gen || !targetSettlement)
+			return;
+		targetSettlementAction(gen, targetSettlement, characterAction::bribe);
+	}
+
+	NOINLINE EOP_EXPORT void spySettlement(general* gen, settlementStruct* targetSettlement)
+	{
+		if (!gen || !targetSettlement)
+			return;
+		targetSettlementAction(gen, targetSettlement, characterAction::spy);
+	}
+
+	NOINLINE EOP_EXPORT void sabotageSettlement(general* gen, settlementStruct* targetSettlement)
+	{
+		if (!gen || !targetSettlement)
+			return;
+		targetSettlementAction(gen, targetSettlement, characterAction::sabotage);
+	}
+
+	NOINLINE EOP_EXPORT void targetFortAction(general* gen, fortStruct* targetFort, characterAction type)
+	{
+		if (!gen || !targetFort)
+			return;
+		stackStruct* army = nullptr;
+		if (gen->armyLeaded)
+			army = gen->armyLeaded;
+		gen->armyLeaded = nullptr;
+		GAME_FUNC(DWORD(__thiscall*)(general**, fortStruct**, characterAction, int),
+		createCADTargetFort)(&gen, &targetFort, type, 0);
+		gen->armyLeaded = army;
+		DWORD cadClass =0x0162C740;
+		if (smallFuncs::getGameVersion() == 1)
+			cadClass = 0x1674570;
+		cadClass = *reinterpret_cast<DWORD*>(cadClass);
+		DWORD adrFunc = codes::offsets.finalyzeActionStratmapFunc;
+		_asm
+		{
+			push cadClass
+			mov ecx, gen
+			mov eax, adrFunc
+			call eax
+		}
+	}
+
+	NOINLINE EOP_EXPORT void targetSettlementAction(general* gen, settlementStruct* targetSettlement, characterAction type)
+	{
+		if (!gen || !targetSettlement)
+			return;
+		stackStruct* army = nullptr;
+		if (gen->armyLeaded)
+			army = gen->armyLeaded;
+		gen->armyLeaded = nullptr;
+		GAME_FUNC(DWORD(__thiscall*)(general**, settlementStruct**, characterAction, int),
+		createCADTargetSettlement)(&gen, &targetSettlement, type, 0);
+		gen->armyLeaded = army;
+		DWORD cadClass =0x0162C740;
+		if (smallFuncs::getGameVersion() == 1)
+			cadClass = 0x1674570;
+		cadClass = *reinterpret_cast<DWORD*>(cadClass);
+		DWORD adrFunc = codes::offsets.finalyzeActionStratmapFunc;
+		_asm
+		{
+			push cadClass
+			mov ecx, gen
+			mov eax, adrFunc
+			call eax
+		}
+	}
+	
+	NOINLINE EOP_EXPORT bool blockadePort(stackStruct* fleet, portBuildingStruct* port)
+	{
+		if (!fleet || !port )
+			return false;
+		int success = 0;
+		DWORD funcAddr = codes::offsets.assaultObject;
+		_asm
+		{
+			push 0
+			push port
+			mov ecx, fleet
+			mov eax, funcAddr
+			call eax
+			mov success, eax
+		}
+		return success != 0;
+	}
+	
+	
+	NOINLINE EOP_EXPORT void sendOffMap(general* gen)
+	{
+		if (!gen || !gen->genChar)
+			return;
+		if (gen->ifMarkedToKill == 1)
+			return;
+		if ((gen->genChar->status & 8) != 0)
+			return;
+		unit* newUnit = nullptr;
+		if (gen->armyLeaded && gen->armyLeaded->numOfUnits == 1)
+		{
+			const auto id = gen->bodyguards->eduEntry->Index;
+			newUnit = fastFuncts::createUnitIdx(id, gen->regionID, gen->armyLeaded->faction->dipNum, 0, 0, 0);
+			fastFuncts::addUnitToArmy(gen->armyLeaded, newUnit);
+		}
+		DWORD funcAddr = codes::offsets.sendCharacterOffMap;
+		auto faction = gen->genChar->faction;
+		_asm
+		{
+			push 1
+			push 0
+			push 1
+			push gen
+			mov ecx, faction
+			mov eax, funcAddr
+			call eax
+		}
+		if (newUnit)
+			fastFuncts::killUnit(newUnit);
+	}
+	
 
 	NOINLINE EOP_EXPORT void diplomacySettlement(general* gen, settlementStruct* targetSettlement)
 	{

@@ -914,6 +914,28 @@ namespace gameHelpers
 		return buffer;
 	}
 
+	const char* getClimateName2(const int index)
+	{
+	    const gameDataAllStruct* gameData = gameDataAllHelper::get();
+	    const auto stratMap = gameData->stratMap;
+		const wchar_t* name = stratMap->climates->climateArray[index].rcString->string;
+		// Determine the size of the required buffer
+		const int size = WideCharToMultiByte(CP_UTF8, 0, name, -1, nullptr, 0, nullptr, nullptr);
+		if (size == 0) {
+			return nullptr;
+		}
+		// Allocate a buffer for the converted string
+		const auto buffer = new char[size];
+		if (buffer == nullptr) {
+			// Allocation failed
+			return nullptr;
+		}
+		// Convert the string
+		WideCharToMultiByte(CP_UTF8, 0, name, -1, buffer, size, nullptr, nullptr);
+		// Return the converted string
+		return buffer;
+	}
+
 	const char* getReligionName(const int index)
 	{
 		if (!plugData::data.luaAll.hashLoaded)
@@ -922,6 +944,26 @@ namespace gameHelpers
 		if (religionName == plugData::data.luaAll.religionNames.end()) 
 			return nullptr;
 		return religionName->second;
+	}
+
+	const char* getClimateName(const int index)
+	{
+		if (!plugData::data.luaAll.hashLoaded)
+			plugData::data.luaAll.fillHashMaps();
+		const auto name = plugData::data.luaAll.climateNames.find(index);
+		if (name == plugData::data.luaAll.climateNames.end()) 
+			return nullptr;
+		return name->second;
+	}
+
+	const char* getCultureName(const int index)
+	{
+		if (!plugData::data.luaAll.hashLoaded)
+			plugData::data.luaAll.fillHashMaps();
+		const auto name = plugData::data.luaAll.cultureNames.find(index);
+		if (name == plugData::data.luaAll.cultureNames.end()) 
+			return nullptr;
+		return name->second;
 	}
 
 	int getReligionCount()
@@ -942,6 +984,26 @@ namespace gameHelpers
 		if (religionIndex == plugData::data.luaAll.religionIndex.end()) 
 			return -1;
 		return religionIndex->second;
+	}
+
+	int getClimateN(const std::string& name)
+	{
+		if (!plugData::data.luaAll.hashLoaded)
+			plugData::data.luaAll.fillHashMaps();
+		const auto index = plugData::data.luaAll.climateIndex.find(name);
+		if (index == plugData::data.luaAll.climateIndex.end()) 
+			return -1;
+		return index->second;
+	}
+
+	int getCultureN(const std::string& name)
+	{
+		if (!plugData::data.luaAll.hashLoaded)
+			plugData::data.luaAll.fillHashMaps();
+		const auto index = plugData::data.luaAll.cultureIndex.find(name);
+		if (index == plugData::data.luaAll.cultureIndex.end()) 
+			return -1;
+		return index->second;
 	}
 
 	seaConnectedRegion* getSeaConnectedRegion(const regionStruct* region, const int index)

@@ -11,6 +11,7 @@ namespace gameHelpers
 	std::string callConsole(std::string cmdName, sol::variadic_args va);
 	factionStruct* getFaction(int index);
 	guild* getGuild(unsigned char index);
+	const char* getClimateName2(const int index);
 	float GetMovepointsForReachNearTile(int originX, int originY, int destX, int destY);
 	unit* getEventAttackingUnit(eventTrigger* eventData);
 	unit* getEventDefendingUnit(eventTrigger* eventData);
@@ -33,6 +34,8 @@ namespace gameHelpers
 	const char* getResourceDescription(eventTrigger* eventData);
 	int getReligionCount();
 	int getReligionN(const std::string& name);
+	int getClimateN(const std::string& name);
+	int getCultureN(const std::string& name);
 	int getEventCharacterType(eventTrigger* eventData);
 	int getEventTargetCharacterType(eventTrigger* eventData);
 	const char* getEventType(eventTrigger* eventData);
@@ -151,6 +154,8 @@ namespace gameHelpers
 	void historicEvent(const char* name, const char* title, const char* description);
 	void scriptCommand(std::string command, sol::variadic_args va);
 	const char* getReligionName(const int index);
+	const char* getCultureName(const int index);
+	const char* getClimateName(const int index);
 	const char* getReligionName2(const int index);
 	unit* getSelectedUnitCard(const uiCardManager* cardManager, const int index);
 	unit* getUnitCard(const uiCardManager* cardManager, const int index);

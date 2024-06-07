@@ -6,7 +6,8 @@ namespace battleHandlerHelpers
 	std::string getWinConditionS(DWORD condition);
 	armyAndCharacter* getBattleArmy(const battleSide* side, int index);
 	battleUnit* getBattleUnit(const armyAndCharacter* battleArmy, int index);
-	stackStruct* getPlayerArmy(const battleDataS* battleData);
+	stackStruct* getPlayerArmy(const battleDataS* battleData, int index);
+	stackStruct* getReinforcementArmy(const battleSide* side, int index);
 	factionStruct* getFaction(const battleSide* side, int index);
 	battleResidence* getBattleResidence();
 	battlefieldEngines* getBattlefieldEngines();
@@ -19,5 +20,19 @@ namespace battleHandlerHelpers
 	int getObjectiveType(AIBattleObjectiveBase* objective);
 	unit* getUnit(const AIBattleObjectiveBase* objective, int index);
 	buildingBattle* getBattleBuilding(const battleBuildings* buildings, int index);
+	int getBattleTileIndex(float xCoord, float yCoord);
+	battleTerrainData* getBattleTerrainData();
+	battleTile* getBattleTile(float xCoord, float yCoord);
+	int getGroundType(const battleTile* tile);
+	float getGroundHeight(const battleTile* tile);
+	float getWaterHeight(const battleTile* tile);
+	int getStreetNum(const battleStreets* streets);
+	battleStreets* getBattleStreets();
+	int getZoneID(float x, float y);
+	int getZonePerimeter(float x, float y);
+	bool isZoneValid(int zoneID);
+	roadNode* getStreetNode(const battleStreets* streets, const int index);
+	terrainFeatureHill* getHill(const hillVector* hills, const int index);
+	terrainLineSegment* getTerrainLine(const terrainSegmentVector* segments, const int index);
 };
 

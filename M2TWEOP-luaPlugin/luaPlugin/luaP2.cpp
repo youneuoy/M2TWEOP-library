@@ -1778,7 +1778,17 @@ void luaP::initP2()
 		sol::usertype<buildingBattle> buildingBattle;
 		sol::usertype<battleBuildings> battleBuildings;
 		sol::usertype<siegeEngine> siegeEngineStruct;
+		sol::usertype<battleTile> battleTile;
 		sol::usertype<battlefieldEngines> battlefieldEngines;
+		sol::usertype<terrainLineSegment> terrainLine;
+		sol::usertype<terrainSegmentVector> terrainLines;
+		sol::usertype<terrainFeatures> terrainFeatures;
+		sol::usertype<terrainFeatureHill> terrainFeatureHill;
+		sol::usertype<hillVector> terrainHills;
+		sol::usertype<plazaStuff> plazaData;
+		sol::usertype<fortBattleInfo> fortBattleInfo;
+		sol::usertype<battleStreets> battleStreets;
+		sol::usertype<roadNode> roadNode;
 
 	}typeAll;
 	///GameDataAll
@@ -1852,9 +1862,12 @@ void luaP::initP2()
 	@tfield float secondsPassed
 	@tfield int secondsSinceBattleLoaded
 	@tfield int hidingEnabledSet
-	@tfield float mapWidthDoubled
-	@tfield float mapHeightDoubled
+	@tfield fortBattleInfo fortInfo
+	@tfield float mapWidth
+	@tfield float mapHeight
+	@tfield terrainFeatures terrainFeatures
 	@tfield int sidesNum
+	@tfield int playerArmyNum
 	@tfield battleSide[8] sides Returns a battleSide[8]. Maximum: 8.
 	@tfield int[31] factionSide faction alliance array, -1 if not in battle, start at 1 so faction ID + 1 Maximum 31.
 	@tfield getPlayerArmy getPlayerArmy
@@ -1863,6 +1876,10 @@ void luaP::initP2()
 	@tfield getGroupByLabel getGroupByLabel
 	@tfield getBattleMapHeight getBattleMapHeight
 	@tfield getBattlefieldEngines getBattlefieldEngines
+	@tfield getBattleTile getBattleTile
+	@tfield getZoneID getZoneID
+	@tfield getPosPerimeter getPosPerimeter
+	@tfield isZoneValid isZoneValid
 
 	@table battleStruct
 	*/
@@ -1871,7 +1888,9 @@ void luaP::initP2()
 	typeAll.battleTable.set("battleType", &battleDataS::battleType);
 	typeAll.battleTable.set("isNightBattle", &battleDataS::isNightBattle);
 	typeAll.battleTable.set("xCoord", &battleDataS::xCoord);
+	typeAll.battleTable.set("fortInfo", &battleDataS::fortInfo);
 	typeAll.battleTable.set("yCoord", &battleDataS::yCoord);
+	typeAll.battleTable.set("playerArmyNum", &battleDataS::playerArmyNum);
 	typeAll.battleTable.set("attackerXCoord", &battleDataS::attackerXCoord);
 	typeAll.battleTable.set("attackerYCoord", &battleDataS::attackerYCoord);
 	typeAll.battleTable.set("defenderXCoord", &battleDataS::defenderXCoord);
@@ -1884,16 +1903,20 @@ void luaP::initP2()
 	typeAll.battleTable.set("hidingEnabledSet", &battleDataS::hidingEnabledSet);
 	typeAll.battleTable.set("mapWidthDoubled", &battleDataS::mapWidthDoubled);
 	typeAll.battleTable.set("mapHeightDoubled", &battleDataS::mapHeightDoubled);
+	typeAll.battleTable.set("mapHeight", &battleDataS::mapHeightDoubled);
+	typeAll.battleTable.set("mapWidth", &battleDataS::mapHeightDoubled);
 	typeAll.battleTable.set("sidesNum", &battleDataS::sidesNum);
+	typeAll.battleTable.set("terrainFeatures", &battleDataS::terrainFeatures);
 	typeAll.battleTable.set("sides", sol::property([](battleDataS& self) { return std::ref(self.sides); }));
 	typeAll.battleTable.set("factionSide", sol::property([](battleDataS& self) { return std::ref(self.factionSide); }));
 	/***
-	Get the players army.
+	Get a players army.
 	@function battleStruct:getPlayerArmy
+	@tparam int index
 	@treturn stackStruct army
 	@usage
 
-		local playerArmy = battle:getPlayerArmy()
+		local playerArmy = battle:getPlayerArmy(0)
 
 	*/
 	typeAll.battleTable.set_function("getPlayerArmy", &battleHandlerHelpers::getPlayerArmy);
@@ -1945,6 +1968,49 @@ void luaP::initP2()
 	     local engines = BATTLE.getBattlefieldEngines();
 	*/
 	typeAll.battleTable.set_function("getBattlefieldEngines", &battleHandlerHelpers::getBattlefieldEngines);
+	
+	/***
+	Get battlefield tile.
+	@function battleStruct.getBattleTile
+	@tparam float xCoord
+	@tparam float yCoord
+	@treturn battleTile tile
+	@usage
+	     local tile = BATTLE.getBattleTile(103.65, 385.54);
+	*/
+	typeAll.battleTable.set_function("getBattleTile", &battleHandlerHelpers::getBattleTile);
+	
+	/***
+	Get zone ID.
+	@function battleStruct.getZoneID
+	@tparam float xCoord
+	@tparam float yCoord
+	@treturn int zoneID
+	@usage
+	     local id = BATTLE.getZoneID(103.65, 385.54);
+	*/
+	typeAll.battleTable.set_function("getZoneID", &battleHandlerHelpers::getZoneID);
+	
+	/***
+	Get position perimeter.
+	@function battleStruct.getPosPerimeter
+	@tparam float xCoord
+	@tparam float yCoord
+	@treturn int perimeter
+	@usage
+	     local perimeter = BATTLE.getPosPerimeter(103.65, 385.54);
+	*/
+	typeAll.battleTable.set_function("getPosPerimeter", &battleHandlerHelpers::getZonePerimeter);
+	
+	/***
+	Is zone valid.
+	@function battleStruct.isZoneValid
+	@tparam int zoneID
+	@treturn bool valid
+	@usage
+	     local valid = BATTLE.isZoneValid(3);
+	*/
+	typeAll.battleTable.set_function("isZoneValid", &battleHandlerHelpers::isZoneValid);
 
 	///BattleSide
 	//@section battleSide
@@ -1965,12 +2031,12 @@ void luaP::initP2()
 	@tfield int factionCount
 	@tfield int totalStrength
 	@tfield int reinforceArmyCount
-	@tfield float reinforcementTimer
 	@tfield float battleOdds
 	@tfield int activeArmyStrength
 	@tfield battleAI battleAIPlan
 	@tfield getBattleArmy getBattleArmy
 	@tfield getFaction getFaction
+	@tfield getReinforcementArmy getReinforcementArmy
 	@tfield battleSideArmy[64] armies Returns a table of battleSideArmy. Maximum: 64.
 	
 	@table battleSide
@@ -2053,6 +2119,17 @@ void luaP::initP2()
 
 	*/
 	typeAll.battleSideTable.set_function("getFaction", &battleHandlerHelpers::getFaction);
+	/***
+	Get a reinforcement army in this side by it's index.
+	@function battleSide:getReinforcementArmy
+	@tparam int index
+	@treturn stackStruct army
+	@usage
+
+		army = side:getReinforcementArmy(0)
+
+	*/
+	typeAll.battleSideTable.set_function("getReinforcementArmy", &battleHandlerHelpers::getReinforcementArmy);
 
 
 	///battleSideArmy
@@ -2062,14 +2139,14 @@ void luaP::initP2()
 	Basic battleSideArmy table
 
 	@tfield stackStruct army
+	@tfield int isReinforcement
 	@tfield deploymentAreaS deploymentArea
-
-
 
 	@table battleSideArmy
 	*/
 	typeAll.battleSideArmyTable = luaState.new_usertype<battleSideArmy>("battleSideArmy");
 	typeAll.battleSideArmyTable.set("army", &battleSideArmy::stack);
+	typeAll.battleSideArmyTable.set("isReinforcement", &battleSideArmy::isReinforcement);
 	typeAll.battleSideArmyTable.set("deploymentArea", &battleSideArmy::deploymentArea);
 	
 	///battlePos
@@ -2293,8 +2370,11 @@ void luaP::initP2()
 	@tfield settlementStruct settlement
 	@tfield battleBuildings battleBuildings
 	@tfield factionStruct faction
+	@tfield plazaData plazaData
+	@tfield fortBattleInfo fortInfo
 	@tfield int settlementWallsBreached
 	@tfield int settlementGateDestroyed
+	@tfield getBattleStreets getBattleStreets
 
 	@table battleResidence
 	*/
@@ -2304,6 +2384,229 @@ void luaP::initP2()
 	typeAll.battleResidence.set("settlementWallsBreached", &battleResidence::settlementWallsBreached);
 	typeAll.battleResidence.set("settlementGateDestroyed", &battleResidence::settlementGateDestroyed);
 	typeAll.battleResidence.set("battleBuildings", &battleResidence::battleBuildings);
+	typeAll.battleResidence.set("fortInfo", &battleResidence::fort);
+	typeAll.battleResidence.set("plazaData", &battleResidence::plaza);
+	/***
+	Get battle streets.
+	@function battleResidence.getBattleStreets
+	@treturn battleStreets streets
+	@usage
+
+		local streets = battleResidence.getBattleStreets()
+
+	*/
+	typeAll.battleResidence.set_function("getBattleStreets", &battleHandlerHelpers::getBattleStreets);
+
+	/// plazaData
+	//@section Plaza Data
+
+	/***
+	Basic plazaData table
+
+	@tfield int soldiersAlliance0
+	@tfield int soldiersAlliance1
+	@tfield float xCoord
+	@tfield float yCoord
+	@tfield float sizeX
+	@tfield float sizeY
+	@tfield int alliance
+	@tfield float plazaMaxTime
+	@tfield float plazaControlPerSecond
+	@tfield float plazaControl
+
+	@table plazaData
+	*/
+	typeAll.plazaData = luaState.new_usertype<plazaStuff>("plazaData");
+	typeAll.plazaData.set("soldiersAlliance0", &plazaStuff::soldiersAlliance0);
+	typeAll.plazaData.set("soldiersAlliance1", &plazaStuff::soldiersAlliance1);
+	typeAll.plazaData.set("xCoord", &plazaStuff::plazaXcoord);
+	typeAll.plazaData.set("yCoord", &plazaStuff::plazaYCoord);
+	typeAll.plazaData.set("sizeX", &plazaStuff::sizeX);
+	typeAll.plazaData.set("sizeY", &plazaStuff::sizeY);
+	typeAll.plazaData.set("alliance", &plazaStuff::alliancePlaza);
+	typeAll.plazaData.set("plazaMaxTime", &plazaStuff::plazaMaxTime);
+	typeAll.plazaData.set("plazaControlPerSecond", &plazaStuff::plazaControlPerSecond);
+	typeAll.plazaData.set("plazaControl", &plazaStuff::plazaTimer);
+
+	/// terrainLine
+	//@section Terrain Line
+
+	/***
+	Basic terrainLine table
+
+	@tfield float startX
+	@tfield float startZ
+	@tfield float startY
+	@tfield float endX
+	@tfield float endZ
+	@tfield float endY
+	@tfield terrainLine previousSegment
+	@tfield terrainLine nextSegment
+	
+
+	@table terrainLine
+	*/
+	typeAll.terrainLine = luaState.new_usertype<terrainLineSegment>("terrainLine");
+	typeAll.terrainLine.set("startX", &terrainLineSegment::startX);
+	typeAll.terrainLine.set("startZ", &terrainLineSegment::startZ);
+	typeAll.terrainLine.set("startY", &terrainLineSegment::startY);
+	typeAll.terrainLine.set("endX", &terrainLineSegment::endX);
+	typeAll.terrainLine.set("endZ", &terrainLineSegment::endZ);
+	typeAll.terrainLine.set("endY", &terrainLineSegment::endY);
+	typeAll.terrainLine.set("previousSegment", &terrainLineSegment::previousSegment);
+	typeAll.terrainLine.set("nextSegment", &terrainLineSegment::nextSegment);
+
+	/// terrainFeatureHill
+	//@section Terrain Hill
+
+	/***
+	Basic terrainFeatureHill table
+
+	@tfield float xCoord
+	@tfield float zCoord
+	@tfield float yCoord
+	@tfield float radius
+	@tfield terrainLine terrainLinesStart
+	@tfield float area
+	
+
+	@table terrainFeatureHill
+	*/
+	typeAll.terrainFeatureHill = luaState.new_usertype<terrainFeatureHill>("terrainFeatureHill");
+	typeAll.terrainFeatureHill.set("xCoord", &terrainFeatureHill::xCoord);
+	typeAll.terrainFeatureHill.set("zCoord", &terrainFeatureHill::zCoord);
+	typeAll.terrainFeatureHill.set("yCoord", &terrainFeatureHill::yCoord);
+	typeAll.terrainFeatureHill.set("radius", &terrainFeatureHill::radius);
+	typeAll.terrainFeatureHill.set("terrainLinesStart", &terrainFeatureHill::terrainLineSegmentStart);
+	typeAll.terrainFeatureHill.set("area", &terrainFeatureHill::area);
+
+	/// terrainHills
+	//@section Terrain Hills
+
+	/***
+	Basic terrainHills table
+
+	@tfield int hillsNum
+	@tfield terrainHills nextHills
+	@tfield terrainHills previousHills
+	@tfield getHill getHill
+	
+
+	@table terrainHills
+	*/
+	typeAll.terrainHills = luaState.new_usertype<hillVector>("terrainHills");
+	typeAll.terrainHills.set("hillsNum", &hillVector::hillsNum);
+	typeAll.terrainHills.set("nextHills", &hillVector::nextHills);
+	typeAll.terrainHills.set("previousHills", &hillVector::previousHills);
+
+	/***
+	Get a hill by index.
+	@function terrainHills:getHill
+	@tparam int index
+	@treturn terrainFeatureHill hill
+	@usage
+		local hill = terrainHills:getHill(0)
+	*/
+	typeAll.terrainHills.set_function("getHill", &battleHandlerHelpers::getHill);
+
+	/// terrainLines
+	//@section Terrain Lines
+
+	/***
+	Basic terrainLines table
+
+	@tfield int segmentNum
+	@tfield terrainLines nextLines
+	@tfield terrainLines previousLines
+	@tfield getTerrainLine getTerrainLine
+	
+
+	@table terrainLines
+	*/
+	typeAll.terrainLines = luaState.new_usertype<terrainSegmentVector>("terrainLines");
+	typeAll.terrainLines.set("segmentNum", &terrainSegmentVector::lineSegmentsNum);
+	typeAll.terrainLines.set("nextLines", &terrainSegmentVector::nextSegments);
+	typeAll.terrainLines.set("previousLines", &terrainSegmentVector::previousSegments);
+
+	/***
+	Get a terrain line segment by index.
+	@function terrainLines:getTerrainLine
+	@tparam int index
+	@treturn terrainLine line
+	@usage
+		local lineSegment = terrainLines:getTerrainLine(0)
+	*/
+	typeAll.terrainLines.set_function("getTerrainLine", &battleHandlerHelpers::getTerrainLine);
+
+	/// terrainFeatures
+	//@section Terrain Features
+
+	/***
+	Basic terrainFeatures table
+
+	@tfield terrainLines lines
+	@tfield terrainHills hills
+	@tfield float width
+	@tfield float widthHalf
+	@tfield float length
+	@tfield float lengthHalf
+	@tfield float widthOnePercent
+	@tfield float lengthOnePercent
+	
+
+	@table terrainFeatures
+	*/
+	typeAll.terrainFeatures = luaState.new_usertype<terrainFeatures>("terrainFeatures");
+	typeAll.terrainFeatures.set("lines", &terrainFeatures::terrainLines);
+	typeAll.terrainFeatures.set("hills", &terrainFeatures::hills);
+	typeAll.terrainFeatures.set("width", &terrainFeatures::width);
+	typeAll.terrainFeatures.set("widthHalf", &terrainFeatures::widthHalf);
+	typeAll.terrainFeatures.set("length", &terrainFeatures::height);
+	typeAll.terrainFeatures.set("lengthHalf", &terrainFeatures::heightHalf);
+	typeAll.terrainFeatures.set("widthOnePercent", &terrainFeatures::widthOnePercent);
+	typeAll.terrainFeatures.set("lengthOnePercent", &terrainFeatures::heightOnePercent);
+
+	/// roadNode
+	//@section roadNode
+
+	/***
+	Basic roadNode table
+
+	@tfield float xCoord
+	@tfield float yCoord
+	
+
+	@table roadNode
+	*/
+	typeAll.roadNode = luaState.new_usertype<roadNode>("roadNode");
+	typeAll.roadNode.set("xCoord", &roadNode::xCoord);
+	typeAll.roadNode.set("yCoord", &roadNode::yCoord);
+
+	/// battleStreets
+	//@section Battle Streets
+
+	/***
+	Basic battleStreets table
+
+	@tfield getStreetNode getStreetNode
+	@tfield nodeNum nodeNum
+	
+
+	@table battleStreets
+	*/
+	typeAll.battleStreets = luaState.new_usertype<battleStreets>("battleStreets");
+	typeAll.battleStreets.set("nodeNum", sol::property(&battleHandlerHelpers::getStreetNum));
+
+	/***
+	Get a street point.
+	@function battleStreets:getStreetNode
+	@tparam int index
+	@treturn roadNode node
+	@usage
+		local node = battleStreets:getStreetNode(0)
+	*/
+	typeAll.battleStreets.set_function("getStreetNode", &battleHandlerHelpers::getStreetNode);
+	
 
 	/// buildingBattle
 	//@section buildingBattle
@@ -2375,6 +2678,23 @@ void luaP::initP2()
 	*/
 	typeAll.siegeEngineStruct.set_function("getType", &battleHandlerHelpers::getEngineType);
 
+	///Battle Tile
+	//@section Battle Tile
+
+	/***
+	Basic battleTile table
+
+	@tfield int physicalGroundType
+	@tfield float height
+	@tfield float waterHeight
+
+	@table battleTile
+	*/
+	typeAll.battleTile = luaState.new_usertype<battleTile>("battleTile");
+	typeAll.battleTile.set("physicalGroundType", sol::property(&battleHandlerHelpers::getGroundType));
+	typeAll.battleTile.set("height", sol::property(&battleHandlerHelpers::getGroundHeight));
+	typeAll.battleTile.set("waterHeight", sol::property(&battleHandlerHelpers::getWaterHeight));
+
 	///Battlefield Engines
 	//@section Battlefield Engines
 
@@ -2393,7 +2713,7 @@ void luaP::initP2()
 	Get an engine from the battlefield.
 	@function battlefieldEngines:getEngine
 	@tparam int index
-	@treturn siegeEngine engine
+	@treturn siegeEngineStruct engine
 	@usage
 		local engine = battlefieldEngines:getEngine(0)
 	*/
@@ -2425,6 +2745,30 @@ void luaP::initP2()
 
 	*/
 	typeAll.battleBuildings.set_function("getBuilding", &battleHandlerHelpers::getBattleBuilding);
+
+
+	/// fortBattleInfo
+	//@section Fort battle info
+
+	/***
+	Basic fortBattleInfo table
+
+	@tfield fortStruct fort
+	@tfield stackStruct garrison
+	@tfield factionStruct faction
+	@tfield int ownerFactionID
+	@tfield int creatorFactionID
+	@tfield int fortFortificationLevel
+
+	@table fortBattleInfo
+	*/
+	typeAll.fortBattleInfo = luaState.new_usertype<fortBattleInfo>("fortBattleInfo");
+	typeAll.fortBattleInfo.set("fort", &fortBattleInfo::fort);
+	typeAll.fortBattleInfo.set("garrison", &fortBattleInfo::garrison);
+	typeAll.fortBattleInfo.set("faction", &fortBattleInfo::faction);
+	typeAll.fortBattleInfo.set("ownerFactionID", &fortBattleInfo::ownerFactionID);
+	typeAll.fortBattleInfo.set("creatorFactionID", &fortBattleInfo::creatorFactionID);
+	typeAll.fortBattleInfo.set("fortFortificationLevel", &fortBattleInfo::fortFortificationLevel);
 
 	
 	using namespace campaignEnums;
@@ -3142,7 +3486,7 @@ void luaP::initP2()
 	@tfield int serpentine
 	@tfield int rocketLauncher
 	@tfield int ribault
-	@tfield int monsterRibaultCollapsingHeader
+	@tfield int monsterRibault
 	@tfield int mangonel
 	@tfield int tower
 	@tfield int ram

@@ -180,11 +180,68 @@ int __fastcall patchesForGame::OnReligionCombatBonus(int religionID, namedCharac
 	return namedChar->combatVsReligion[religionID];
 }
 
-std::string filePath;
+std::string FILE_PATH;
+std::string GAME_PATH;
+
+std::string getBuildingPicPath(const char* cultureName, const char* levelName)
+{
+	FILE_PATH = "";
+	FILE_PATH.append("/data/ui/");
+	FILE_PATH.append(cultureName);
+	FILE_PATH.append("/buildings/#");
+	FILE_PATH.append(cultureName);
+	FILE_PATH.append("_");
+	FILE_PATH.append(levelName);
+	FILE_PATH.append(".tga");
+	return FILE_PATH;
+}
+
+std::string getBuildingPicConstructionPath(const char* cultureName, const char* levelName)
+{
+	FILE_PATH = "";
+	FILE_PATH.append("/data/ui/");
+	FILE_PATH.append(cultureName);
+	FILE_PATH.append("/buildings/construction/#");
+	FILE_PATH.append(cultureName);
+	FILE_PATH.append("_");
+	FILE_PATH.append(levelName);
+	FILE_PATH.append(".tga");
+	return FILE_PATH;
+}
+
+std::string getBuildingPicConstructedPath(const char* cultureName, const char* levelName)
+{
+	FILE_PATH = "";
+	FILE_PATH.append("/data/ui/");
+	FILE_PATH.append(cultureName);
+	FILE_PATH.append("/buildings/#");
+	FILE_PATH.append(cultureName);
+	FILE_PATH.append("_");
+	FILE_PATH.append(levelName);
+	FILE_PATH.append("_constructed.tga");
+	return FILE_PATH;
+}
+
+std::string getGamePath(const std::string& modPath) {
+	size_t pos = modPath.length();
+	int dirCount = 0;
+	if (modPath.back() == '/' || modPath.back() == '\\') {
+		pos--;
+	}
+	for (; pos > 0; pos--) {
+		if (modPath[pos] == '/' || modPath[pos] == '\\') {
+			dirCount++;
+			if (dirCount == 2) {
+				break;
+			}
+		}
+	}
+	return modPath.substr(0, pos);
+}
+
 
 char* __fastcall patchesForGame::getBrowserPicConstructed(int cultureID, edbEntry* entry, int buildingLevel)
 {
-	filePath = fastFuncts::GetModPath();
 	const auto level = entry->buildingLevel[buildingLevel];
 	const auto levelName = level.name;
 	if (levelName == nullptr)
@@ -192,21 +249,49 @@ char* __fastcall patchesForGame::getBrowserPicConstructed(int cultureID, edbEntr
 	const auto cultureName = cultures::getCultureName(cultureID);
 	if (cultureName.empty())
 		return nullptr;
-	filePath.append("/data/ui/");
-	filePath.append(cultureName);
-	filePath.append("/buildings/#");
-	filePath.append(cultureName);
-	filePath.append("_");
-	filePath.append(levelName);
-	filePath.append("_constructed.tga");
-	if (std::filesystem::exists(filePath))
-		return filePath.data();
+	const auto picPath = getBuildingPicConstructedPath(cultureName.c_str(), levelName);
+	const auto modPath = fastFuncts::GetModPath();
+	FILE_PATH = modPath + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	if (GAME_PATH.empty())
+		GAME_PATH = getGamePath(modPath);
+	FILE_PATH = GAME_PATH + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
+	auto lookUpVariants = &edb->lookupVariantsVector;
+	while(lookUpVariants)
+	{
+		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		{
+			const auto variant = &lookUpVariants->lookupVariants[i];
+			if (strcmp(variant->name, cultureName.c_str()) == 0)
+			{
+				auto list = &variant->names;
+				while (list)
+				{
+					for (int j = 0; j < list->lookupVariantNamesNum; j++)
+					{
+						const auto variantString = list->lookupVariantNames[j].name;
+						FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+						FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+					}
+					list = list->next;
+				}
+			}
+		}
+		lookUpVariants = lookUpVariants->next;
+	}
 	return nullptr;
 }
 
 char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEntry* entry, int buildingLevel)
 {
-	filePath = fastFuncts::GetModPath();
 	const auto level = entry->buildingLevel[buildingLevel];
 	const auto levelName = level.name;
 	if (levelName == nullptr)
@@ -214,78 +299,191 @@ char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEnt
 	const auto cultureName = cultures::getCultureName(cultureID);
 	if (cultureName.empty())
 		return nullptr;
-	filePath.append("/data/ui/");
-	filePath.append(cultureName);
-	filePath.append("/buildings/construction/#");
-	filePath.append(cultureName);
-	filePath.append("_");
-	filePath.append(levelName);
-	filePath.append(".tga");
-	if (std::filesystem::exists(filePath))
-		return filePath.data();
+	const auto picPath = getBuildingPicConstructionPath(cultureName.c_str(), levelName);
+	const auto modPath = fastFuncts::GetModPath();
+	FILE_PATH = modPath + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	if (GAME_PATH.empty())
+		GAME_PATH = getGamePath(modPath);
+	FILE_PATH = GAME_PATH + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
+	auto lookUpVariants = &edb->lookupVariantsVector;
+	while(lookUpVariants)
+	{
+		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		{
+			const auto variant = &lookUpVariants->lookupVariants[i];
+			if (strcmp(variant->name, cultureName.c_str()) == 0)
+			{
+				auto list = &variant->names;
+				while (list)
+				{
+					for (int j = 0; j < list->lookupVariantNamesNum; j++)
+					{
+						const auto variantString = list->lookupVariantNames[j].name;
+						FILE_PATH = modPath + getBuildingPicConstructionPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+						FILE_PATH = GAME_PATH + getBuildingPicConstructionPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+					}
+					list = list->next;
+				}
+			}
+		}
+		lookUpVariants = lookUpVariants->next;
+	}
 	return nullptr;
 }
 
 char* __fastcall patchesForGame::getBuildingPic(buildingLevel* level, int cultureID)
 {
-	filePath = fastFuncts::GetModPath();
 	const auto levelName = level->name;
 	if (levelName == nullptr)
 		return nullptr;
 	const auto cultureName = cultures::getCultureName(cultureID);
 	if (cultureName.empty())
 		return nullptr;
-	filePath.append("/data/ui/");
-	filePath.append(cultureName);
-	filePath.append("/buildings/#");
-	filePath.append(cultureName);
-	filePath.append("_");
-	filePath.append(levelName);
-	filePath.append(".tga");
-	if (std::filesystem::exists(filePath))
-		return filePath.data();
+	const auto picPath = getBuildingPicPath(cultureName.c_str(), levelName);
+	const auto modPath = fastFuncts::GetModPath();
+	FILE_PATH = modPath + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	if (GAME_PATH.empty())
+		GAME_PATH = getGamePath(modPath);
+	FILE_PATH = GAME_PATH + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
+	auto lookUpVariants = &edb->lookupVariantsVector;
+	while(lookUpVariants)
+	{
+		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		{
+			const auto variant = &lookUpVariants->lookupVariants[i];
+			if (strcmp(variant->name, cultureName.c_str()) == 0)
+			{
+				auto list = &variant->names;
+				while (list)
+				{
+					for (int j = 0; j < list->lookupVariantNamesNum; j++)
+					{
+						const auto variantString = list->lookupVariantNames[j].name;
+						FILE_PATH = modPath + getBuildingPicPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+						FILE_PATH = GAME_PATH + getBuildingPicPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+					}
+					list = list->next;
+				}
+			}
+		}
+		lookUpVariants = lookUpVariants->next;
+	}
 	return nullptr;
 }
 
 char* __fastcall patchesForGame::getBuildingPicConstructed(buildingLevel* level, int cultureID)
 {
-	filePath = fastFuncts::GetModPath();
 	const auto levelName = level->name;
 	if (levelName == nullptr)
 		return nullptr;
 	const auto cultureName = cultures::getCultureName(cultureID);
 	if (cultureName.empty())
 		return nullptr;
-	filePath.append("/data/ui/");
-	filePath.append(cultureName);
-	filePath.append("/buildings/#");
-	filePath.append(cultureName);
-	filePath.append("_");
-	filePath.append(levelName);
-	filePath.append("_constructed.tga");
-	if (std::filesystem::exists(filePath))
-		return filePath.data();
+	const auto picPath = getBuildingPicConstructedPath(cultureName.c_str(), levelName);
+	const auto modPath = fastFuncts::GetModPath();
+	FILE_PATH = modPath + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	if (GAME_PATH.empty())
+		GAME_PATH = getGamePath(modPath);
+	FILE_PATH = GAME_PATH + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
+	auto lookUpVariants = &edb->lookupVariantsVector;
+	while(lookUpVariants)
+	{
+		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		{
+			const auto variant = &lookUpVariants->lookupVariants[i];
+			if (strcmp(variant->name, cultureName.c_str()) == 0)
+			{
+				auto list = &variant->names;
+				while (list)
+				{
+					for (int j = 0; j < list->lookupVariantNamesNum; j++)
+					{
+						const auto variantString = list->lookupVariantNames[j].name;
+						FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+						FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+					}
+					list = list->next;
+				}
+			}
+		}
+		lookUpVariants = lookUpVariants->next;
+	}
 	return nullptr;
 }
 
 char* __fastcall patchesForGame::getBuildingPicConstruction(buildingLevel* level, int cultureID)
 {
-	filePath = fastFuncts::GetModPath();
 	const auto levelName = level->name;
 	if (levelName == nullptr)
 		return nullptr;
 	const auto cultureName = cultures::getCultureName(cultureID);
 	if (cultureName.empty())
 		return nullptr;
-	filePath.append("/data/ui/");
-	filePath.append(cultureName);
-	filePath.append("/buildings/construction/#");
-	filePath.append(cultureName);
-	filePath.append("_");
-	filePath.append(levelName);
-	filePath.append(".tga");
-	if (std::filesystem::exists(filePath))
-		return filePath.data();
+	const auto picPath = getBuildingPicConstructionPath(cultureName.c_str(), levelName);
+	const auto modPath = fastFuncts::GetModPath();
+	FILE_PATH = modPath + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	if (GAME_PATH.empty())
+		GAME_PATH = getGamePath(modPath);
+	FILE_PATH = GAME_PATH + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
+	auto lookUpVariants = &edb->lookupVariantsVector;
+	while(lookUpVariants)
+	{
+		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		{
+			const auto variant = &lookUpVariants->lookupVariants[i];
+			if (strcmp(variant->name, cultureName.c_str()) == 0)
+			{
+				auto list = &variant->names;
+				while (list)
+				{
+					for (int j = 0; j < list->lookupVariantNamesNum; j++)
+					{
+						const auto variantString = list->lookupVariantNames[j].name;
+						FILE_PATH = modPath + getBuildingPicConstructionPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+						FILE_PATH = GAME_PATH + getBuildingPicConstructionPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+					}
+					list = list->next;
+				}
+			}
+		}
+		lookUpVariants = lookUpVariants->next;
+	}
 	return nullptr;
 }
 
@@ -303,22 +501,50 @@ char* patchesForGame::onGetGuildOfferPic(DWORD level, int cultureID)
 {
 	const DWORD lvlAddr = level - 8;
 	const auto lvl = reinterpret_cast<buildingLevel*>(lvlAddr);
-	filePath = fastFuncts::GetModPath();
 	const auto levelName = lvl->name;
 	if (levelName == nullptr)
 		return nullptr;
 	const auto cultureName = cultures::getCultureName(cultureID);
 	if (cultureName.empty())
 		return nullptr;
-	filePath.append("/data/ui/");
-	filePath.append(cultureName);
-	filePath.append("/buildings/#");
-	filePath.append(cultureName);
-	filePath.append("_");
-	filePath.append(levelName);
-	filePath.append("_constructed.tga");
-	if (std::filesystem::exists(filePath))
-		return filePath.data();
+	const auto picPath = getBuildingPicConstructedPath(cultureName.c_str(), levelName);
+	const auto modPath = fastFuncts::GetModPath();
+	FILE_PATH = modPath + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	if (GAME_PATH.empty())
+		GAME_PATH = getGamePath(modPath);
+	FILE_PATH = GAME_PATH + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
+	auto lookUpVariants = &edb->lookupVariantsVector;
+	while(lookUpVariants)
+	{
+		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		{
+			const auto variant = &lookUpVariants->lookupVariants[i];
+			if (strcmp(variant->name, cultureName.c_str()) == 0)
+			{
+				auto list = &variant->names;
+				while (list)
+				{
+					for (int j = 0; j < list->lookupVariantNamesNum; j++)
+					{
+						const auto variantString = list->lookupVariantNames[j].name;
+						FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+						FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+					}
+					list = list->next;
+				}
+			}
+		}
+		lookUpVariants = lookUpVariants->next;
+	}
 	return nullptr;
 }
 

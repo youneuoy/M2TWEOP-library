@@ -14,6 +14,9 @@ namespace stackStructHelpers
 	fortStruct* findInFort(const stackStruct* army);
 	unitGroup* getGroup(const stackStruct* army, int index);
 	unit* getDeadUnit(const stackStruct* army, int index);
+	bool blockadePort(stackStruct* fleet, portBuildingStruct* port);
+	void setAiActiveSet(const stackStruct* army, const int set);
+	void releaseUnits(const stackStruct* army);
 	
 
 	unit* createUnit(stackStruct* army, const char* type, int exp, int arm, int weap);

@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <memory>
 
 template<unsigned int IIdx, typename TRet, typename ... TArgs>
 TRet CallVFunc(void* thisptr, TArgs ... argList)
@@ -35,6 +36,16 @@ struct UNICODE_STRING {
 	USHORT something2;//idk
 	PWSTR Buffer;//y
 };
+
+struct availableBuildings
+{
+	struct buildingInQueue *buildingsList;
+	struct availableBuildings *next;
+	struct availableBuildings *previous;
+	int listSize;
+	int buildingCount;
+};
+
 
 struct rcString
 {
@@ -78,10 +89,57 @@ struct battleTile
 	__int16 fielde;
 };
 
+struct terrainLineSegment
+{
+	float startX;
+	float startZ;
+	float startY;
+	float endX;
+	float endZ;
+	float endY;
+	terrainLineSegment *previousSegment;
+	terrainLineSegment *nextSegment;
+	float radius1;
+	float radius2;
+	int16_t angle;
+	int16_t field_2a;
+};
+
+struct terrainSegmentVector
+{
+	struct terrainLineSegment *lineSegments;
+	struct terrainSegmentVector *nextSegments;
+	struct terrainSegmentVector *previousSegments;
+	int32_t lineSegmentsSize;
+	int32_t lineSegmentsNum;
+};
+
+
+struct terrainFeatureHill
+{
+	void* vfTable;
+	float xCoord;
+	float zCoord;
+	float yCoord;
+	float radius;
+	terrainLineSegment *terrainLineSegmentStart;
+	terrainLineSegment *terrainLineSegmentEnd;
+	float area;
+};
+
+struct hillVector
+{
+	struct terrainFeatureHill *hills;
+	struct hillVector *nextHills;
+	struct hillVector *previousHills;
+	int32_t hillsSize;
+	int32_t hillsNum;
+};
+
 struct plazaStuff
 {
+	int soldiersAlliance0;
 	int soldiersAlliance1;
-	int soldiersAlliance2;
 	void *field8;
 	void *field8End;
 	int field10;
@@ -185,7 +243,7 @@ struct battleAreas
 struct battleTerrainData
 {
 	battleTile battleTiles[1000000];
-	int heightOffset;
+	float heightOffset;
 	int field_F42404;
 	int field_F42408;
 	int field_F4240C;
@@ -591,14 +649,14 @@ struct siegeEngine
 {
 	void *vftable /*VFT*/;
 	int field_4;
-	int objectType;
+	int type;
 	int bitfield;
 	float mass;
 	float inverseMass;
 	float posX;
 	float posZ;
 	float posY;
-	int self;
+	soldierInBattle *soldier;
 	float someRadius1;
 	float someRadius2;
 	float someRadius3;
@@ -607,19 +665,20 @@ struct siegeEngine
 	int field_3C_initMinus1;
 	int field_40;
 	__int16 angle;
-	int field_48;
-	int field_4C;
-	int field_50;
+	__int16 pad46;
+	int velocityX;
+	int velocityZ;
+	int velocityY;
 	int field_54;
-	int field_58;
+	battleTile *battleTile;
 	int field_5C;
 	void *vftbl_5_0000000001317C08;
 	int engineID;
 	int field_68;
-	int field_6C;
+	void *meshStuff;
 	int field_70;
 	int field_74;
-	int field_78;
+	int ID;
 	int field_7C;
 	struct engineRecord* engineRecord;
 	struct unit* currentUnit;
@@ -1427,6 +1486,14 @@ struct roadNode
 	int8_t byte_17;
 };
 
+struct battleStreets
+{
+	int field0;
+	roadNode *streets;
+	roadNode *streetsEnd;
+	roadNode *streetsEnd2;
+};
+
 struct battlePerimeters
 {
 public:
@@ -1452,9 +1519,9 @@ public:
 	void *N0008FBFA; //0x00F8
 	char pad_00FC[68]; //0x00FC
 	void *N0008FC0C; //0x0140
-	char pad_0144[12]; //0x0144
-	roadNode *roadPoints; //0x0150
-	char pad_0154[12]; //0x0154
+	char pad_0144[8]; //0x0144
+	battleStreets battleStreets; //0x014C
+	char pad_0154[4]; //0x015C
 	void *N0008FC14; //0x0160
 	char pad_0164[8]; //0x0164
 }; //Size: 0x016C
@@ -2299,8 +2366,8 @@ struct gameDataAllStruct {
 	struct stratPathFinding* stratPathFinding2;
 	struct stratPathFinding** stratPathFindingPtr;
 	void* field_40BCCPtr;
-	void* battleterrainData;
-	void* battleterrainData2;
+	battleTerrainData* battleTerrainDataPtr;
+	battleTerrainData* battleTerrainData2;
 	struct battleSettlement* battleSettlement;
 	struct battleSettlement* battleSettlement2;
 	void* struct_40bd0Ptr;
@@ -2631,7 +2698,26 @@ struct deploymentAreaS {
 struct battleSideArmy {
 	undefined field_0x0[4];//0x0000
 	struct stackStruct* stack;//0x0004
-	undefined field_0x8[44];//0x0008
+	int field_0x8;
+	int8_t isReinforcement;
+	int8_t byte_0xD;
+	int8_t byte_0xE;
+	int8_t byte_0xF;
+	int isAiControlled;
+	int8_t byte_0x14;
+	int8_t byte_0x15;
+	int8_t byte_0x16;
+	int8_t byte_0x17;
+	int field_0x18;
+	int field_0x1C;
+	int field_0x20;
+	int field_0x24;
+	int field_0x28;
+	int field_0x2C;
+	int8_t byte_0x30;
+	int8_t byte_0x31;
+	int8_t byte_0x32;
+	int8_t byte_0x33;
 	struct deploymentAreaS* deploymentArea;//0x0048
 	undefined field_0x38[40];
 };
@@ -2788,8 +2874,15 @@ struct battleSide {
 struct playerArmy
 {
 public:
-	struct stackStruct* army; //0x0000
-	char pad_0004[20]; //0x0004
+	int8_t inBattle;
+	int8_t deploymentTimer;
+	int8_t field2;
+	int8_t field3;
+	uint32_t factionId;
+	int field8;
+	int fieldC;
+	int field10;
+	stackStruct *army;
 }; //Size: 0x0018
 
 struct autoResolveData
@@ -2846,6 +2939,22 @@ struct fortBattleInfo
 	int fortFortificationLevel;
 };
 
+struct terrainFeatures
+{
+	terrainSegmentVector terrainLines;
+	hillVector hills;
+	float width;
+	float widthHalf;
+	float height;
+	float heightHalf;
+	float widthOnePercent;
+	float widthOnePercentInverse;
+	float heightOnePercent;
+	float heightOnePercentInverse;
+	int giantArrayNum;
+	int giantArray[1048576];
+};
+
 struct battleDataS {
 	undefined field_0x0[4];//0x0000
 	int battleState; /* 0-not in battle,5-active battle,9-results screen,etc 0x0004 */
@@ -2885,7 +2994,7 @@ struct battleDataS {
 	int sidesNum;//0xCA78
 	char pad_CA7C[4]; //0xCA7C
 	int32_t totalSoldierCount; //0xCA80
-	void *terrainFeatures;
+	terrainFeatures *terrainFeatures;
 	void *array_CA88_objSize0x120;
 	int array_CA88Size;
 	int array_CA88Num;
@@ -3268,23 +3377,31 @@ struct building { /* building structure */
 	int field_64;
 };
 
+struct recruitmentOptions
+{
+	int field0;
+	struct unitRQ *units;
+	int lastUnit;
+	int unitsEnd;
+};
+
 struct buildingInQueue { /* building in settlement queue */
-	int someID;
-	struct edbEntry* edbEntry;
-	struct building* existsBuilding; /* 0 if building dont exist yet */
-	struct settlementStruct* settlement;
-	int currentLevel;
-	int pastLevel;
-	int buildCost;
-	int something2;
-	int turnsToBuild;
-	int buildTurnsPassed;
-	int percentBuild;
-	int8_t turnNumber;
-	char pad[3];
-	int buildCost2;
-	int turnsToBuild2;
-	void* texture;
+	int someID{};
+	struct edbEntry* edbEntry{};
+	struct building* existsBuilding{}; /* 0 if building dont exist yet */
+	struct settlementStruct* settlement{};
+	int currentLevel{};
+	int pastLevel{};
+	int buildCost{};
+	int something2{};
+	int turnsToBuild{};
+	int buildTurnsPassed{};
+	int percentBuild{};
+	int8_t turnNumber{};
+	char pad[3]{};
+	int buildCost2{};
+	int turnsToBuild2{};
+	void* texture{};
 };
 
 struct buildingsQueue {
@@ -3293,6 +3410,28 @@ struct buildingsQueue {
 	int lastIndex;
 	int buildingsInQueue;
 	int currentBuildingIndex;
+};
+
+
+
+struct settlementBuildingOptions
+{
+	std::vector<std::shared_ptr<buildingInQueue>> constructionOptions;
+	int count;
+	int totalCost;
+	int totalTime;
+	int turn;
+	int hash;
+};
+
+struct settlementRecruitmentOptions
+{
+	std::vector<std::shared_ptr<unitRQ>> recruitOptions;
+	int count;
+	int totalCost;
+	int totalTime;
+	int turn;
+	int hash;
 };
 
 struct hiddenResource
@@ -3318,19 +3457,94 @@ public:
 	int32_t arrayCount; //0x0010
 }; //Size: 0x0014
 
+struct lookupVariantNamesList
+{
+public:
+	struct stringWithHash *lookupVariantNames; //0x0000
+	struct lookupVariantNamesList *next; //0x0004
+	struct lookupVariantNamesList *previous; //0x0008
+	int32_t lookupVariantNamesSize; //0x000C
+	int32_t lookupVariantNamesNum; //0x0010
+}; //Size: 0x0014
+
+struct lookupVariant
+{
+public:
+	lookupVariantNamesList names;
+	char *name; //0x0014
+	int32_t nameHash; //0x0018
+}; //Size: 0x001C
+
+struct lookupVariantsVector
+{
+public:
+	struct lookupVariant *lookupVariants; //0x0000
+	struct lookupVariantsVector *next; //0x0004
+	struct lookupVariantsVector *prev; //0x0008
+	int32_t lookupVariantsSize; //0x000C
+	int32_t lookupVariantsNum; //0x0010
+}; //Size: 0x0014
+
+struct battleBuildingVector
+{
+public:
+	struct buildingBattleEntry *battleBuildings; //0x0000
+	struct battleBuildingVector *next; //0x0004
+	struct battleBuildingVector *prev; //0x0008
+	int32_t battleBuildingsSize; //0x000C
+	int32_t battleBuildingsNum; //0x0010
+}; //Size: 0x0014
+
+struct buildingBattleWallsVector
+{
+public:
+	struct buildingBattleWallEntry *buildingBattleWalls; //0x0000
+	struct buildingBattleWallsVector *next; //0x0004
+	struct buildingBattleWallsVector *prev; //0x0008
+	int32_t buildingBattleWallsSize; //0x000C
+	int32_t buildingBattleWallsNum; //0x0010
+}; //Size: 0x0014
+
 struct exportDescrBuildings
 {
 public:
-	struct hiddenResource hiddenResources[64]; //0x0000
+	struct hiddenResource hiddenresources[64]; //0x0000
 	int32_t hiddenResourceCount; //0x0200
-	char pad_0204[68]; //0x0204
-	struct edbEntry* cityPort; //0x0248
-	struct edbEntry* castlePort; //0x024C
-	struct edbEntry* coreCityBuilding; //0x0250
-	struct edbEntry* coreCastleBuilding; //0x0254
-	char pad_0258[40]; //0x0258
+	int32_t field_204; //0x0204
+	void *stringLookupTable; //0x0208
+	int32_t field_20c; //0x020C
+	int32_t field_210; //0x0210
+	int32_t field_214; //0x0214
+	void *array_218; //0x0218
+	int32_t array_218Next; //0x021C
+	int32_t array_218NextPRev; //0x0220
+	int32_t array_218Size; //0x0224
+	int32_t array_218SizeNum; //0x0228
+	struct lookupVariantsVector lookupVariantsVector; //0x022C
+	void *stringTable1; //0x0240
+	void *stringTable2; //0x0244
+	struct edbEntry *port; //0x0248
+	struct edbEntry *castlePort; //0x024C
+	struct edbEntry *coreCityBuilding; //0x0250
+	struct edbEntry *coreCastleBuilding; //0x0254
+	struct battleBuildingVector battleBuildingVector; //0x0258
+	void *array_26c; //0x026C
+	void*array_26cNext; //0x0270
+	void*array_26cPrev; //0x0274
+	int32_t array_26cSize; //0x0278
+	int32_t array_26cNum; //0x027C
 	struct buildingListPointer buildingsList; //0x0280
-	char pad_0294[188]; //0x0294
+	void *array_294; //0x0294
+	void *array_294NExt; //0x0298
+	void*array_294Prev; //0x029C
+	int32_t array_294Size; //0x02A0
+	int32_t array_294Num; //0x02A4
+	struct buildingBattleWallsVector buildingBattleWallsVector; //0x02A8
+	void *uniRepairString1; //0x02BC
+	void*uniRepairString2; //0x02C0
+	void *uniRepairString3; //0x02C4
+	void*uniRepairString4; //0x02C8
+
 }; //Size: 0x0350
 
 
@@ -3359,27 +3573,27 @@ struct oneSiege {
 
 struct unitRQ {
 public:
-	struct eduEntry* eduEntry; //0x0000
-	int32_t FourtySeven; //0x0004
-	struct settlementStruct* settlement; //0x0008
-	int8_t N0001082F; //0x000C
-	int8_t recruitType; //0x000D
-	int8_t experience; //0x000E
-	int8_t armourUpg; //0x000F
-	int8_t weaponUpgrade; //0x0010
-	int8_t Minus1; //0x0011
-	int8_t turnsTrainedAlready; //0x0012
-	int8_t percentFinished; //0x0013
-	int8_t costUpkeep; //0x0014
-	int8_t turnsToTrain; //0x0015
-	int16_t cost; //0x0016
-	int16_t soldierCount; //0x0018
-	int16_t turnNumber; //0x001A
-	int8_t fieldx1C; //0x001C
-	int8_t isNotFrozen; //0x001D
-	int16_t recruitmentPoolSizeBeforeOrRetrainingNumbersBefore; //0x001E
-	int8_t isRetraining; //0x0020
-	char pad_0021[3]; //0x0021
+	struct eduEntry* eduEntry{}; //0x0000
+	int32_t FourtySeven{}; //0x0004
+	struct settlementStruct* settlement{}; //0x0008
+	int8_t byte_C{}; //0x000C
+	int8_t recruitType{}; //0x000D
+	int8_t experience{}; //0x000E
+	int8_t armourUpg{}; //0x000F
+	int8_t weaponUpgrade{}; //0x0010
+	int8_t Minus1{}; //0x0011
+	int8_t turnsTrainedAlready{}; //0x0012
+	int8_t percentFinished{}; //0x0013
+	int8_t turnsToTrain{}; //0x0014
+	int8_t byte_15{}; //0x0015
+	int16_t cost{}; //0x0016
+	int16_t soldierCount{}; //0x0018
+	int16_t turnNumber{}; //0x001A
+	int8_t fieldx1C{}; //0x001C
+	int8_t isNotFrozen{}; //0x001D
+	int16_t recruitmentPoolSizeBeforeOrRetrainingNumbersBefore{}; //0x001E
+	int8_t isMercenary{}; //0x0020
+	char pad_0021[3]{}; //0x0021
 }; //Size: 0x0024
 
 
@@ -3792,9 +4006,11 @@ struct namedCharacter { /* many important info about character */
 	UNICODE_STRING** localizedNextNameForSave; /* saved to save file */
 	UNICODE_STRING** localizedNicknameForSave; /* saved to save file */
 	char* shortName; /* not a full name) */
-	undefined field_0x18[12];
+	int shortNameHash;
+	char* lastName;
+	int lastNameHash;
 	char* fullName; /* full name of character) */
-	undefined field_0x28[4];
+	int fullNameHash;
 	char* label; /* label of character */
 	UINT32 labelCrypt; /* crypt  of the label */
 	char* modelName; /* custom model */
@@ -6074,6 +6290,58 @@ inline bool operator ==(int a, characterTypeStrat b)
 inline bool operator !=(int a, characterTypeStrat b)
 {
 	return static_cast<characterTypeStrat>(a) != b;
+}
+
+
+enum class characterAction
+{
+	movingNormal = 0,
+	movingQuickMarch = 1,
+	fleeing = 2,
+	constructingRoad = 3,
+	constructingBridge = 4,
+	constructingWall = 5,
+	landRallyPath = 6,
+	seaRallyPath = 7,
+	besiege = 8,
+	entrench = 9,
+	ambush = 10,
+	captureResidence = 11,
+	captureTile = 12,
+	assault = 13,
+	buildingFort = 15,
+	buildingWatchtower = 16,
+	engineering = 17,
+	sapping = 18,
+	infiltrate = 19,
+	diplomacy = 20,
+	bribe = 21,
+	quickSail = 22,
+	blockade = 23,
+	disembark = 24,
+	spy = 25,
+	assassinate = 26,
+	insurrection = 27,
+	sabotage = 28,
+	dying = 29,
+	deploy = 30,
+	delayBattle = 31,
+	exchange = 32,
+	acquire = 33,
+	marry = 34,
+	denounce = 35,
+	invalid = 38,
+	idle = -1,
+};
+
+inline bool operator ==(int a, characterAction b)
+{
+	return static_cast<characterAction>(a) == b;
+}
+
+inline bool operator !=(int a, characterAction b)
+{
+	return static_cast<characterAction>(a) != b;
 }
 
 

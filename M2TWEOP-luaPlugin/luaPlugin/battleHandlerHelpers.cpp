@@ -31,9 +31,135 @@ namespace battleHandlerHelpers
 		return &battleArmy->units[index];
 	}
 
-	stackStruct* getPlayerArmy(const battleDataS* battleData)
+	stackStruct* getPlayerArmy(const battleDataS* battleData, int index)
 	{
-		return battleData->playerArmies[0].army;
+		return battleData->playerArmies[index].army;
+	}
+
+	int getBattleTileIndex(float xCoord, float yCoord)
+	{
+		return 1000 * (int((xCoord + 1000.0) - 0.5) >> 1) + (int((yCoord + 1000.0) - 0.5) >> 1);
+	}
+
+	battleTerrainData* getBattleTerrainData()
+	{
+		return gameDataAllHelper::get()->battleTerrainDataPtr;
+	}
+
+	battleTile* getBattleTile(float xCoord, float yCoord)
+	{
+		const auto terrainData = getBattleTerrainData();
+		if (!terrainData) return nullptr;
+		const auto index = getBattleTileIndex(xCoord, yCoord);
+		if (index < 0 || index >= 1000000) return nullptr;
+		return &terrainData->battleTiles[index];
+	}
+
+	int getGroundType(const battleTile* tile)
+	{
+		if (!tile) return -1;
+		return 0b11111111 & (tile->physicalGroundType >> 4);
+	}
+
+	float getGroundHeight(const battleTile* tile)
+	{
+		if (!tile) return -1;
+		const auto terrainData = getBattleTerrainData();
+		if (!terrainData) return 0;
+		return (tile->height * 0.1f) + terrainData->heightOffset;
+	}
+
+	float getWaterHeight(const battleTile* tile)
+	{
+		if (!tile) return -1;
+		const auto terrainData = getBattleTerrainData();
+		if (!terrainData) return 0;
+		return tile->waterHeight * 0.1 + terrainData->heightOffset;
+	}
+
+	terrainFeatureHill* getHill(const hillVector* hills, const int index)
+	{
+		if (index < 0 || index >= hills->hillsNum) return nullptr;
+		return &hills->hills[index];
+	}
+
+	int getStreetNum(const battleStreets* streets)
+	{
+		if (!streets)
+			return 0;
+		const int end = reinterpret_cast<DWORD>(streets->streetsEnd);
+		const int start = reinterpret_cast<DWORD>(streets->streets);
+		return (end - start) / sizeof(roadNode);
+	}
+
+	roadNode* getStreetNode(const battleStreets* streets, const int index)
+	{
+		if (!streets)
+			return nullptr;
+		return &streets->streets[index];
+	}
+
+	battlePerimeters* getBattlePerimeters()
+	{
+		auto perimeters = reinterpret_cast<battlePerimeters*>(0x016A7428);
+		if (m2tweopHelpers::getGameVersion() == 1)
+			perimeters = reinterpret_cast<battlePerimeters*>(0x16F0600);
+		return perimeters;
+	}
+
+	battleStreets* getBattleStreets()
+	{
+		battlePerimeters* perimeters = getBattlePerimeters();
+		if (!perimeters) return nullptr;
+		return &perimeters->battleStreets;
+	}
+
+	bool isZoneValid(int zoneID)
+	{
+		const auto perimeters = getBattlePerimeters();
+		if (!perimeters) return false;
+		DWORD funcAddr = 0x6733A0;
+		if (m2tweopHelpers::getGameVersion() == 1)
+			funcAddr = 0x672EC0;
+		return GAME_FUNC_RAW(bool(__thiscall*)(battlePerimeters*, int), funcAddr)(perimeters, zoneID);
+	}
+
+	int getZonePerimeter(float x, float y)
+	{
+		const auto perimeters = getBattlePerimeters();
+		if (!perimeters) return -1;
+		battlePos pos{x,y};
+		const auto posPtr = &pos;
+		DWORD funcAddr = 0xE08290;
+		if (m2tweopHelpers::getGameVersion() == 1)
+			funcAddr = 0xE0DC00;
+		return GAME_FUNC_RAW(int(__thiscall*)(battlePerimeters*, battlePos*), funcAddr)(perimeters, posPtr);
+	}
+
+	int getZoneID(float x, float y)
+	{
+		const auto perimeters = getBattlePerimeters();
+		if (!perimeters) return -1;
+		const DWORD offset = reinterpret_cast<DWORD>(perimeters) + 0x48;
+		DWORD getZoneAddr = 0xDF0680;
+		if (m2tweopHelpers::getGameVersion() == 1)
+			getZoneAddr = 0xDF6050;
+		battlePos pos{x,y};
+		const auto posPtr = &pos;
+		return GAME_FUNC_RAW(int(__thiscall*)(DWORD, battlePos*), getZoneAddr)(offset, posPtr);
+	}
+
+	terrainLineSegment* getTerrainLine(const terrainSegmentVector* segments, const int index)
+	{
+		if (index < 0 || index >= segments->lineSegmentsNum) return nullptr;
+		return &segments->lineSegments[index];
+	}
+
+	stackStruct* getReinforcementArmy(const battleSide* side, int index)
+	{
+		if (index >= side->reinforceArmyCount)
+			return nullptr;
+		return side->reinforcementArmies[index].army;
 	}
 
 	factionStruct* getFaction(const battleSide* side, int index)

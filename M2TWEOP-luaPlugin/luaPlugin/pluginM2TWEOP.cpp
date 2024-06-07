@@ -257,6 +257,33 @@ int initPlugin(std::string* modPath)
 	fName = "loadSaveGame";
 	plugData::data.funcs.loadSaveGame.Load(&plPath, &fName);
 
+	fName = "diplomacyFort";
+	plugData::data.funcs.diplomacyFort.Load(&plPath, &fName);
+
+	fName = "bribeFort";
+	plugData::data.funcs.bribeFort.Load(&plPath, &fName);
+
+	fName = "spyFort";
+	plugData::data.funcs.spyFort.Load(&plPath, &fName);
+
+	fName = "bribeSettlement";
+	plugData::data.funcs.bribeSettlement.Load(&plPath, &fName);
+
+	fName = "spySettlement";
+	plugData::data.funcs.spySettlement.Load(&plPath, &fName);
+
+	fName = "teleportCharacterClose";
+	plugData::data.funcs.teleportCharacterClose.Load(&plPath, &fName);
+
+	fName = "sabotageSettlement";
+	plugData::data.funcs.sabotageSettlement.Load(&plPath, &fName);
+
+	fName = "sendOffMap";
+	plugData::data.funcs.sendOffMap.Load(&plPath, &fName);
+
+	fName = "blockadePort";
+	plugData::data.funcs.blockadePort.Load(&plPath, &fName);
+
 	fName = "getUnitFormation";
 	plugData::data.funcs.getUnitFormation.Load(&plPath, &fName);
 
@@ -280,6 +307,12 @@ int initPlugin(std::string* modPath)
 
 	fName = "useSpecialAbility";
 	plugData::data.funcs.useSpecialAbility.Load(&plPath, &fName);
+
+	fName = "findValidTileNearTile";
+	plugData::data.funcs.findValidTileNearTile.Load(&plPath, &fName);
+
+	fName = "isTileValidForCharacterType";
+	plugData::data.funcs.isTileValidForCharacterType.Load(&plPath, &fName);
 
 	fName = "attackBuilding";
 	plugData::data.funcs.attackBuilding.Load(&plPath, &fName);

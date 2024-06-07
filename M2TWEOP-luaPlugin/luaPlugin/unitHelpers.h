@@ -76,6 +76,7 @@ namespace unitHelpers
 	void moveToOrientation(unit* unit, float xCoord, float yCoord, int widthInMen, int16_t angle, bool run);
 	void placeUnit(unit* unit, float xCoord, float yCoord, int16_t angle, int width);
 	void deployStakes(const unit* unit);
+	void releaseUnit(unit* un);
 	void haltUnit(const unit* unit);
 	void changeUnitFormation(const unit* unit, int formationType);
 	float getBattleMapHeight(float xCoord, float yCoord);
@@ -119,7 +120,7 @@ namespace unitHelpers
 	void groupMoveFormedRelative(const unitGroup* group, float xCoord, float yCoord, bool run);
 	void groupMoveUnformedRelative(const unitGroup* group, float xCoord, float yCoord, bool run);
 	void groupTurn(const unitGroup* group, int16_t angle, bool isRelative);
-	
+	int getSiegeEngineNum(unit* un);
 };
 
 /*

@@ -145,6 +145,8 @@ void codes::initCodes(int gameVer)
 		offsets.getBuildingAngle = 0x006EAB10;
 		offsets.attackBuilding = 0x00757750;
 		offsets.createCADTargetCharacter = 0x00AAB0C0;
+		offsets.createCADTargetFort = 0x00AAB1A0;
+		offsets.createCADTargetSettlement = 0x00AAB130;
 		offsets.executeCADTargetCharacter = 0x00AAD080;
 		offsets.getTileCharactersFunc = 0x004D0000;
 		offsets.getValidRegionTile = 0x004A5420;
@@ -165,6 +167,8 @@ void codes::initCodes(int gameVer)
 		offsets.groupRelativeMoveFormed = 0x00A749B0;
 		offsets.groupRelativeMoveUnformed = 0x00A74E80;
 		offsets.groupTurn = 0x00A76BF0;
+		offsets.sendCharacterOffMap = 0x4EEBC0;
+		offsets.assaultObject = 0x00718F50;
 		
 		//offsets.unitPlace = 0x00770A70;
 		offsets.unitMove = 0x0759B70;
@@ -319,6 +323,8 @@ void codes::initCodes(int gameVer)
 		offsets.getBuildingAngle = 0x006EB0F0;
 		offsets.attackBuilding = 0x00757EE0;
 		offsets.createCADTargetCharacter = 0x00AAC0F0;
+		offsets.createCADTargetFort = 0x00AAC1D0;
+		offsets.createCADTargetSettlement = 0x00AAC160;
 		offsets.executeCADTargetCharacter = 0x00AAE0B0;
 
 		//Group commands
@@ -333,6 +339,8 @@ void codes::initCodes(int gameVer)
 		offsets.groupRelativeMoveFormed = 0x00A75A10;
 		offsets.groupRelativeMoveUnformed = 0x00A75EE0;
 		offsets.groupTurn = 0x00A77C50;
+		offsets.sendCharacterOffMap = 0x004EF1D0;
+		offsets.assaultObject = 0x00719670;
 		
 		//offsets.unitPlace = 0x00770A70;
 		offsets.unitMove = 0x075A320;

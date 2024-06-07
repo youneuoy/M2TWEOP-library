@@ -19,6 +19,8 @@ public:
 		DWORD makeCadDiplomacyFunc = NULL;
 		DWORD makeCadDiplomacySettlementFunc = NULL;
 		DWORD createCADTargetCharacter = NULL;
+		DWORD createCADTargetFort = NULL;
+		DWORD createCADTargetSettlement = NULL;
 
 
 		DWORD createSiegeSettlementGarrisonedFunc = NULL;
@@ -175,6 +177,8 @@ public:
 		DWORD someSelectionStuff = NULL;
 		DWORD doHordeStuff2 = NULL;
 		DWORD doHordeStuff3 = NULL;
+		DWORD sendCharacterOffMap = NULL;
+		DWORD assaultObject = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

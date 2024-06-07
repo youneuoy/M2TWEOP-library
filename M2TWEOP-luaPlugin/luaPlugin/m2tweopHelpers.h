@@ -52,6 +52,7 @@ namespace m2tweopHelpers
 	void unlockGameConsoleCommands();
 	void setPerfectSpy(bool set);
 	int getLocalFactionID();
+	culturesDB* getCultureDb();
 	void setEquipmentCosts(int equipType, int cost);
 	void fillRegionColor(mapImage* img, int id, int r, int g, int b, int a);
 	void addRegionColor(mapImage* img, int id, int r, int g, int b, int a);
