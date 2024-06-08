@@ -170,6 +170,10 @@ void codes::initCodes(int gameVer)
 		offsets.sendCharacterOffMap = 0x4EEBC0;
 		offsets.assaultObject = 0x00718F50;
 		
+		offsets.checkOwnershipCustom = 0x8EE450;
+		offsets.getUnitCard = 0x008EB550;
+		offsets.addToCardArray = 0x464610;
+		
 		//offsets.unitPlace = 0x00770A70;
 		offsets.unitMove = 0x0759B70;
 		offsets.gameLogCommand = 0xA8FAC0;
@@ -341,6 +345,9 @@ void codes::initCodes(int gameVer)
 		offsets.groupTurn = 0x00A77C50;
 		offsets.sendCharacterOffMap = 0x004EF1D0;
 		offsets.assaultObject = 0x00719670;
+		offsets.checkOwnershipCustom = 0x8EEED0;
+		offsets.getUnitCard = 0x008EBFD0;
+		offsets.addToCardArray = 0x464990;
 		
 		//offsets.unitPlace = 0x00770A70;
 		offsets.unitMove = 0x075A320;

@@ -8,52 +8,43 @@
 
 namespace eduThings
 {
-	struct eopEduEntry
+	eopEduEntry::eopEduEntry(int baseIdx, int newIdx)
 	{
-		eopEduEntry(int baseIdx, int newIdx)
+		eduEntry* oldEn = fastFunctsHelpers::getEDUEntryById(baseIdx);
+		if (oldEn == nullptr)
 		{
-			eduEntry* oldEn = fastFunctsHelpers::getEDUEntryById(baseIdx);
-			if (oldEn == nullptr)
-			{
-				string errs = "Can`t create eop`s unit entry:\n";
-				errs += to_string(newIdx);
-				MessageBoxA(NULL, errs.c_str(), "ERROR!", NULL);
-				exit(0);
-			}
-			data.edu = *oldEn;
-			data.edu.Index = newIdx;
-			
-			eopTypeName.append(data.edu.Type);
-			eopTypeName.append("_");
-			eopTypeName.append(to_string(newIdx));//added to make typename unique
+			string errs = "Can`t create eop`s unit entry:\n";
+			errs += to_string(newIdx);
+			MessageBoxA(NULL, errs.c_str(), "ERROR!", NULL);
+			exit(0);
 		}
-		eopEduEntry(const char* fileName, int newIdx)
+		data.edu = *oldEn;
+		data.edu.Index = newIdx;
+		originalTypeName = data.edu.Type;
+		isFileAdded = false;
+		eopTypeName.append(data.edu.Type);
+		eopTypeName.append("_");
+		eopTypeName.append(to_string(newIdx));//added to make typename unique
+		fastFunctsHelpers::setCryptedString(&data.edu.Type, eopTypeName.c_str());
+	}
+	eopEduEntry::eopEduEntry(const char* fileName, int newIdx)
+	{
+		int isOk = eduFastFuncts::readEduFile(fileName, &data.edu);
+		if (isOk == 0)
 		{
-			int isOk = eduFastFuncts::readEduFile(fileName, &data.edu);
-			if (isOk == 0)
-			{
-				std::string errS = "Can`t read edu file: ";
-				errS += fileName;
-				MessageBoxA(NULL, errS.c_str(), "ERROR!", NULL);
-				throw "not good";
-			}
-			data.edu.Index = newIdx;
-
-			eopTypeName.append(data.edu.Type);
-			eopTypeName.append("_");
-			eopTypeName.append(to_string(newIdx));//added to make typename unique
+			std::string errS = "Can`t read edu file: ";
+			errS += fileName;
+			MessageBoxA(NULL, errS.c_str(), "ERROR!", NULL);
+			throw "not good";
 		}
-
-
-		std::string eopTypeName;
-		std::string eopUnitLabel;
-		std::string eopSoldierString;
-		struct dataS
-		{
-			int fakeVtable = 0;
-			eduEntry edu;
-		}data;
-	};
+		data.edu.Index = newIdx;
+		originalTypeName = data.edu.Type;
+		isFileAdded = true;
+		eopTypeName.append(data.edu.Type);
+		eopTypeName.append("_");
+		eopTypeName.append(to_string(newIdx));//added to make typename unique
+		fastFunctsHelpers::setCryptedString(&data.edu.Type, eopTypeName.c_str());
+	}
 	struct eduThingsG
 	{
 		vector<eopEduEntry>eopEdu;
@@ -94,9 +85,6 @@ namespace eduThings
 
 		data.eopEdu.push_back(newEntry);
 
-
-
-
 		return getEopEduEntry(newIdx);
 	}
 
@@ -111,6 +99,12 @@ namespace eduThings
 		}
 		return nullptr;
 	}
+
+	eopEduEntry* getEopEduEntryInternalIterating(int idx)
+	{
+		return &data.eopEdu[idx];
+	}
+	
 	NOINLINE EOP_EXPORT eduEntry* getEopEduEntry(int idx)
 	{
 		for (eopEduEntry& entry : data.eopEdu)
@@ -121,6 +115,10 @@ namespace eduThings
 			}
 		}
 		return nullptr;
+	}
+	NOINLINE EOP_EXPORT int getEopEntryNum()
+	{
+		return data.eopEdu.size();
 	}
 	NOINLINE EOP_EXPORT char* getEopNameOfEduEntry(eduEntry* entryAdress)
 	{
@@ -148,7 +146,8 @@ namespace eduThings
 	{
 		for (eopEduEntry& entry : data.eopEdu)
 		{
-			if (strcmp(entry.eopTypeName.c_str(), entryName) == 0)
+			if (strcmp(entry.eopTypeName.c_str(), entryName) == 0
+				|| (entry.isFileAdded && strcmp(entry.originalTypeName.c_str(), entryName) == 0))
 			{
 				return (int*)&entry.data;
 			}
@@ -159,10 +158,9 @@ namespace eduThings
 	{
 		for (eopEduEntry& entry : data.eopEdu)
 		{
-			if (strcmp(entry.eopTypeName.c_str(), entryName) == 0)
-			{
-				return (int*)&entry.data.edu.Index;
-			}
+			if (strcmp(entry.eopTypeName.c_str(), entryName) == 0
+				|| (entry.isFileAdded && strcmp(entry.originalTypeName.c_str(), entryName) == 0))
+				return reinterpret_cast<int*>(&entry.data.edu.Index);
 		}
 		return nullptr;
 	}

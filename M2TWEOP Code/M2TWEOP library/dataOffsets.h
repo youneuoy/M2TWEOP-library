@@ -32,6 +32,7 @@ public:
 		DWORD portraitDatabase = NULL;
 		DWORD cultureDatabase = NULL;
 		DWORD loadGameHandler = NULL;
+		DWORD selectedEra = NULL;
 
 
 

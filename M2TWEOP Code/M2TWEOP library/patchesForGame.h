@@ -23,8 +23,11 @@ public:
 	static DWORD __fastcall OnUnitInfo(DWORD entryAddress);
 	static float __fastcall OnCalculateUnitValue(eduEntry* entry, DWORD value);
 	static int __fastcall onEvaluateUnit(int eduIndex);
+	static DWORD __fastcall onCustomBattleUnitCards(DWORD cardArrayThing, int factionID);
+	static int __fastcall onCustomBattleUnits(eduEntry** unitArray, int currentCount, int factionID);
 	static int __fastcall onAttackGate(unit* unit, void* tactic);
 	static eduEntry* __fastcall onEvaluateUnit2(int eduIndex);
+	static eduEntry* __fastcall onReadDescrRebel(DWORD value);
 	static DWORD __fastcall onSearchUnitType(char* typeName);
 	static int __fastcall OnReligionCombatBonus(int religionID, namedCharacter* namedChar);
 	static char* __fastcall getBrowserPicConstructed(int cultureID, edbEntry* entry, int buildingLevel);

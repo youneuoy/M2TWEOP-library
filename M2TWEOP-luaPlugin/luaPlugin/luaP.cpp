@@ -1610,14 +1610,26 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	@tfield string name
 	@tfield float accuracy
+	@tfield float accuracyVsBuildings
+	@tfield float accuracyVsTowers
+	@tfield int damage
+	@tfield int damageToTroops
 	@tfield int isBodyPiercing
+	@tfield int fiery
+	@tfield int affectedByRain
 
 	@table projectileStruct
 	*/
 	types.projectileStruct = luaState.new_usertype<projectile>("projectileStruct");
 	types.projectileStruct.set("name", &projectile::name);
 	types.projectileStruct.set("accuracy", &projectile::accuracyVsUnits);
+	types.projectileStruct.set("accuracyVsBuildings", &projectile::accuracyVsBuildings);
+	types.projectileStruct.set("accuracyVsTowers", &projectile::accuracyVsTowers);
+	types.projectileStruct.set("damage", &projectile::damage);
+	types.projectileStruct.set("damageToTroops", &projectile::damageToTroops);
+	types.projectileStruct.set("affectedByRain", &projectile::affectedByRain);
 	types.projectileStruct.set("isBodyPiercing", &projectile::accuracyVsUnits);
+	types.projectileStruct.set("fiery", &projectile::fiery);
 
 
 	///Mount
@@ -4531,6 +4543,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int percentBuilt
 	@tfield getQueueBuildingType getQueueBuildingType
 	@tfield getQueueBuildingName getQueueBuildingName
+	@tfield addBuildingToQueue addBuildingToQueue
 
 	@table buildingInQueue
 	*/

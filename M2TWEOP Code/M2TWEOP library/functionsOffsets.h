@@ -179,6 +179,9 @@ public:
 		DWORD doHordeStuff3 = NULL;
 		DWORD sendCharacterOffMap = NULL;
 		DWORD assaultObject = NULL;
+		DWORD checkOwnershipCustom = NULL;
+		DWORD getUnitCard = NULL;
+		DWORD addToCardArray = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

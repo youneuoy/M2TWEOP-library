@@ -1007,6 +1007,149 @@ private:
 	LPVOID funcAddress;
 };
 
+class onReadDescrStrat
+	:public AATemplate
+{
+public:
+	onReadDescrStrat(MemWork* mem, LPVOID adr, int ver);
+	~onReadDescrStrat();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onSpawnBrigands
+	:public AATemplate
+{
+public:
+	onSpawnBrigands(MemWork* mem, LPVOID adr, int ver);
+	~onSpawnBrigands();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onSpawnBrigands2
+	:public AATemplate
+{
+public:
+	onSpawnBrigands2(MemWork* mem, LPVOID adr, int ver);
+	~onSpawnBrigands2();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCustomBattleCost
+	:public AATemplate
+{
+public:
+	onCustomBattleCost(MemWork* mem, LPVOID adr, int ver);
+	~onCustomBattleCost();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class spawnUnitsSettGift
+	:public AATemplate
+{
+public:
+	spawnUnitsSettGift(MemWork* mem, LPVOID adr, int ver);
+	~spawnUnitsSettGift();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class spawnUnitsSettGift2
+	:public AATemplate
+{
+public:
+	spawnUnitsSettGift2(MemWork* mem, LPVOID adr, int ver);
+	~spawnUnitsSettGift2();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class spawnUnitsSettGift3
+	:public AATemplate
+{
+public:
+	spawnUnitsSettGift3(MemWork* mem, LPVOID adr, int ver);
+	~spawnUnitsSettGift3();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class spawnUnitsSettGift4
+	:public AATemplate
+{
+public:
+	spawnUnitsSettGift4(MemWork* mem, LPVOID adr, int ver);
+	~spawnUnitsSettGift4();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onReadDescrRebel
+	:public AATemplate
+{
+public:
+	onReadDescrRebel(MemWork* mem, LPVOID adr, int ver);
+	~onReadDescrRebel();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCustomBattleUnitCards
+	:public AATemplate
+{
+public:
+	onCustomBattleUnitCards(MemWork* mem, LPVOID adr, int ver);
+	~onCustomBattleUnitCards();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCustomBattleUnits
+	:public AATemplate
+{
+public:
+	onCustomBattleUnits(MemWork* mem, LPVOID adr, int ver);
+	~onCustomBattleUnits();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 
 class onBuildingUnitAttributes
 	:public AATemplate
@@ -1193,6 +1336,19 @@ class OnCreateUnit
 public:
 	OnCreateUnit(MemWork* mem, LPVOID addr, int ver);
 	~OnCreateUnit();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class OnCreateUnit2
+	:public AATemplate
+{
+public:
+	OnCreateUnit2(MemWork* mem, LPVOID addr, int ver);
+	~OnCreateUnit2();
 
 	void SetOriginialCode();
 	void SetNewCode();

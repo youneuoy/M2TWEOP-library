@@ -442,8 +442,8 @@ struct wallEntry
 /* 1873 */
 struct gateWayEntry : wallEntry
 {
-	int32_t field_20;
-	int32_t field_24;
+	int32_t field20;
+	struct towerStats *towerStats;
 	int32_t field_28;
 	int32_t field_2C;
 	struct gateEntry **gateEntries;
@@ -581,7 +581,7 @@ public:
 	int alliance;
 	struct battleResidence *battleResidence;
 	int field_4C;
-	struct wallEntry *descrWallsEntry;
+	struct towerEntry *descrWallsEntry;
 	int field_54;
 	char field_58;
 	char pad_59[3];
@@ -6165,12 +6165,32 @@ public:
 }; //Size: 0x00A0
 
 
+struct buildingInfoScroll
+{
+	char pad[812];
+	settlementStruct* settlement;
+	char pad2[12];
+	building* building;
+	char pad3[12];
+	edbEntry* entry;
+};
+struct unitInfoScroll
+{
+	char pad[812];
+	unit* unit;
+	char pad2[20];
+	eduEntry* entry;
+};
+
 // Settlement UI Stuff
 struct stratUIStruct
 {
 public:
 	char pad_0000[84]; //0x0000
 	struct settlementInfoScroll *settlementInfoScroll; //0x0054
+	char pad_0058[6]; //0x0000
+	buildingInfoScroll* buildingInfoScroll;
+	unitInfoScroll* unitInfoScroll;
 }; //Size: 0x0164
 
 

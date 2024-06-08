@@ -37,6 +37,8 @@ void luaP::initCampaign()
 		sol::usertype<eventTrigger> eventTrigger;
 		sol::usertype<selectionInfo> selectionInfo;
 		sol::usertype<mapImage> mapImageStruct;
+		sol::usertype<buildingInfoScroll> buildingInfoScroll;
+		sol::usertype<unitInfoScroll> unitInfoScroll;
 	}typeAll;
 
 
@@ -526,6 +528,35 @@ void luaP::initCampaign()
 	*/
 	typeAll.mapImageStruct.set_function("addTileColor", &m2tweopHelpers::addTileColor);
 
+	///unitInfoScroll
+	//@section Info scrolls
+
+	/***
+	Basic unitInfoScroll table
+
+	@tfield unit unit If the scroll is about existing unit, this is set and eduEntry empty.
+	@tfield eduEntry eduEntry only for non-recruited units.
+
+	@table unitInfoScroll
+	*/
+	typeAll.unitInfoScroll = luaState.new_usertype<unitInfoScroll>("unitInfoScroll");
+	typeAll.unitInfoScroll.set("unit", &unitInfoScroll::unit);
+	typeAll.unitInfoScroll.set("eduEntry", &unitInfoScroll::entry);
+
+	/***
+	Basic buildingInfoScroll table
+
+	@tfield settlementStruct settlement
+	@tfield building building If the scroll is about existing building, this is set and edbEntry empty.
+	@tfield edbEntry edbEntry only for non-constructed buildings.
+
+	@table buildingInfoScroll
+	*/
+	typeAll.buildingInfoScroll = luaState.new_usertype<buildingInfoScroll>("buildingInfoScroll");
+	typeAll.buildingInfoScroll.set("settlement", &buildingInfoScroll::settlement);
+	typeAll.buildingInfoScroll.set("building", &buildingInfoScroll::building);
+	typeAll.buildingInfoScroll.set("edbEntry", &buildingInfoScroll::entry);
+
 	///uiCardManager
 	//@section uiCardManager
 
@@ -539,6 +570,8 @@ void luaP::initCampaign()
 	@tfield fortStruct selectedFort
 	@tfield getSelectedUnitCard getSelectedUnitCard
 	@tfield getUnitCard getUnitCard
+	@tfield getBuildingInfoScroll getBuildingInfoScroll
+	@tfield getUnitInfoScroll getUnitInfoScroll
 
 	@table uiCardManager
 	*/
@@ -568,6 +601,22 @@ void luaP::initCampaign()
 	local unit=cardManager:getUnitCard(0);
 	*/
 	typeAll.uiCardManager.set_function("getUnitCard", &gameHelpers::getUnitCard);
+	/***
+	Get building info scroll.
+	@function uiCardManager:getBuildingInfoScroll
+	@treturn buildingInfoScroll scroll
+	@usage
+	local infoScroll = cardManager:getBuildingInfoScroll();
+	*/
+	typeAll.uiCardManager.set_function("getBuildingInfoScroll", &gameSTDUIHelpers::getBuildingInfoScroll);
+	/***
+	Get unit info scroll.
+	@function uiCardManager:getUnitInfoScroll
+	@treturn unitInfoScroll scroll
+	@usage
+	local infoScroll = cardManager:getUnitInfoScroll();
+	*/
+	typeAll.uiCardManager.set_function("getUnitInfoScroll", &gameSTDUIHelpers::getUnitInfoScroll);
 	
 	///selectionInfo
 	//@section Selection Info
@@ -1789,6 +1838,10 @@ void luaP::initP2()
 		sol::usertype<fortBattleInfo> fortBattleInfo;
 		sol::usertype<battleStreets> battleStreets;
 		sol::usertype<roadNode> roadNode;
+		sol::usertype<perimeterBuildings> perimeterBuildings;
+		sol::usertype<towerEntry> battleBuildingStats;
+		sol::usertype<towerStats> towerStats;
+		sol::usertype<fireRate> fireRate;
 
 	}typeAll;
 	///GameDataAll
@@ -2428,6 +2481,88 @@ void luaP::initP2()
 	typeAll.plazaData.set("plazaControlPerSecond", &plazaStuff::plazaControlPerSecond);
 	typeAll.plazaData.set("plazaControl", &plazaStuff::plazaTimer);
 
+	/// battleBuildingStats
+	//@section Battle Building Stats
+
+	/***
+	Basic battleBuildingStats table
+
+	@tfield string name
+	@tfield int flammability
+	@tfield int impactDamage
+	@tfield int health (descr_walls, not currently battle)
+	@tfield float controlAreaRadius
+	@tfield int manned
+	@tfield int isSelectable
+	@tfield int healthExcluded
+	@tfield getTowerStats getTowerStats
+	@tfield int towerStatsCount
+	
+
+	@table battleBuildingStats
+	*/
+	typeAll.battleBuildingStats = luaState.new_usertype<towerEntry>("battleBuildingStats");
+	typeAll.battleBuildingStats.set("name", &towerEntry::name);
+	typeAll.battleBuildingStats.set("flammability", &towerEntry::flammability);
+	typeAll.battleBuildingStats.set("impactDamage", &towerEntry::impactDamage);
+	typeAll.battleBuildingStats.set("health", &towerEntry::health);
+	typeAll.battleBuildingStats.set("controlAreaRadius", &towerEntry::controlAreaRadius);
+	typeAll.battleBuildingStats.set("manned", &towerEntry::manned);
+	typeAll.battleBuildingStats.set("isSelectable", &towerEntry::isSelectable);
+	typeAll.battleBuildingStats.set("towerStatsCount", sol::property(battleHandlerHelpers::getTowerStatCount));
+
+	/***
+	Get tower stats by index.
+	@function battleBuildingStats:getTowerStats
+	@tparam int index
+	@treturn towerStats stats
+	@usage
+		local stats = battleBuildingStats:getTowerStats(0)
+	*/
+	typeAll.battleBuildingStats.set_function("getTowerStats", &battleHandlerHelpers::getTowerStats);
+
+	/// towerStats
+	//@section Tower Stats
+
+	/***
+	Basic towerStats table
+
+	@tfield int range
+	@tfield projectileStruct projectile
+	@tfield float fireAngle
+	@tfield float slotYawX
+	@tfield float slotYawY
+	@tfield float slotPitchX
+	@tfield float slotPitchY
+	@tfield fireRate[4] fireRates
+	
+
+	@table towerStats
+	*/
+	typeAll.towerStats = luaState.new_usertype<towerStats>("towerStats");
+	typeAll.towerStats.set("range", &towerStats::missileRange);
+	typeAll.towerStats.set("projectile", &towerStats::missile);
+	typeAll.towerStats.set("fireAngle", &towerStats::fireAngle);
+	typeAll.towerStats.set("slotYawX", &towerStats::slotYawX);
+	typeAll.towerStats.set("slotYawY", &towerStats::slotYawY);
+	typeAll.towerStats.set("slotPitchX", &towerStats::slotPitchX);
+	typeAll.towerStats.set("slotPitchY", &towerStats::slotPitchY);
+	typeAll.towerStats.set("fireRates", sol::property([](towerStats& self) { return std::ref(self.fireRatesNormal); }));
+
+	/***
+	Basic fireRate table
+
+	@tfield int normal
+	@tfield int flaming
+	
+
+	@table fireRate
+	*/
+	typeAll.fireRate = luaState.new_usertype<fireRate>("fireRate");
+	typeAll.fireRate.set("normal", &fireRate::normal);
+	typeAll.fireRate.set("flaming", &fireRate::flaming);
+
+
 	/// terrainLine
 	//@section Terrain Line
 
@@ -2625,6 +2760,8 @@ void luaP::initP2()
 	@tfield float posX
 	@tfield float posZ
 	@tfield float posY
+	@tfield battleBuildingStats battleBuildingStats
+	@tfield int index
 
 	@table buildingBattle
 	*/
@@ -2640,6 +2777,8 @@ void luaP::initP2()
 	typeAll.buildingBattle.set("startHealth", &buildingBattle::startHealth);
 	typeAll.buildingBattle.set("battleResidence", &buildingBattle::battleResidence);
 	typeAll.buildingBattle.set("alliance", &buildingBattle::alliance);
+	typeAll.buildingBattle.set("index", &buildingBattle::index);
+	typeAll.buildingBattle.set("battleBuildingStats", &buildingBattle::descrWallsEntry);
 
 	///Siege Engine
 	//@section Siege Engine
@@ -2656,6 +2795,8 @@ void luaP::initP2()
 	@tfield unit currentUnit
 	@tfield unit lastUnit
 	@tfield getType getType
+	@tfield int range
+	@tfield projectileStruct projectile
 
 	@table siegeEngineStruct
 	*/
@@ -2668,6 +2809,8 @@ void luaP::initP2()
 	typeAll.siegeEngineStruct.set("currentUnit", &siegeEngine::currentUnit);
 	typeAll.siegeEngineStruct.set("lastUnit", &siegeEngine::lastUnit);
 	typeAll.siegeEngineStruct.set("engineID", &siegeEngine::engineID);
+	typeAll.siegeEngineStruct.set("range", &siegeEngine::range);
+	typeAll.siegeEngineStruct.set("projectile", &siegeEngine::statPriMissle);
 
 	/***
 	Get the type of the engine (use the enum).
@@ -2727,12 +2870,15 @@ void luaP::initP2()
 	Basic battleBuildings table
 
 	@tfield int buildingCount
+	@tfield int perimeterCount
 	@tfield getBuilding getBuilding
+	@tfield getPerimeter getPerimeter
 
 	@table battleBuildings
 	*/
 	typeAll.battleBuildings = luaState.new_usertype<battleBuildings>("battleBuildings");
 	typeAll.battleBuildings.set("buildingCount", &battleBuildings::allBuildingsNum);
+	typeAll.battleBuildings.set("perimeterCount", &battleBuildings::perimitersNum);
 
 	/***
 	Get a battle building by it's index.
@@ -2745,6 +2891,44 @@ void luaP::initP2()
 
 	*/
 	typeAll.battleBuildings.set_function("getBuilding", &battleHandlerHelpers::getBattleBuilding);
+
+	/***
+	Get a perimeter by it's index.
+	@function battleBuildings:getPerimeter
+	@tparam int index
+	@treturn perimeterBuildings perimeter
+	@usage
+
+		local perimeter = battleBuildings:getPerimeter(0)
+
+	*/
+	typeAll.battleBuildings.set_function("getPerimeter", &battleHandlerHelpers::getPerimeter);
+	
+	/// perimeterBuildings
+	//@section Perimeter Buildings
+
+	/***
+	Basic perimeterBuildings table
+
+	@tfield int buildingCount
+	@tfield getBuilding getBuilding
+
+	@table perimeterBuildings
+	*/
+	typeAll.perimeterBuildings = luaState.new_usertype<perimeterBuildings>("perimeterBuildings");
+	typeAll.perimeterBuildings.set("buildingCount", &perimeterBuildings::buildingNum);
+
+	/***
+	Get a battle building in a perimiter by it's index.
+	@function perimeterBuildings:getBuilding
+	@tparam int index
+	@treturn buildingBattle building
+	@usage
+
+		local building = perimeterBuildings:getBuilding(0)
+
+	*/
+	typeAll.perimeterBuildings.set_function("getBuilding", &battleHandlerHelpers::getPerimeterBuilding);
 
 
 	/// fortBattleInfo
@@ -3468,6 +3652,66 @@ void luaP::initP2()
 		"movingThrough", 9
 	);
 
+	
+	/***
+	Enum of battle building types
+
+	@tfield int ambient
+	@tfield int gate
+	@tfield int tower
+	@tfield int wall
+
+	@table battleBuildingType
+	*/
+	luaState.new_enum(
+		"battleBuildingType",
+		"ambient", 1,
+		"gate", 3,
+		"tower", 9,
+		"wall", 10
+	);
+	
+	/***
+	Enum of battle ground types
+
+	@tfield int grassShort
+	@tfield int grassLong
+	@tfield int sand
+	@tfield int rock
+	@tfield int forestDense
+	@tfield int scrubDense
+	@tfield int swamp
+	@tfield int mud
+	@tfield int mudRoad
+	@tfield int stoneRoad
+	@tfield int water
+	@tfield int ice
+	@tfield int snow
+	@tfield int wood
+	@tfield int dirt
+	@tfield int unknown
+
+	@table physicalGroundType
+	*/
+	luaState.new_enum(
+		"physicalGroundType",
+		"grassShort", 0,
+		"grassLong", 1,
+		"sand", 2,
+		"rock", 3,
+		"forestDense", 4,
+		"scrubDense", 5,
+		"swamp", 6,
+		"mud", 7,
+		"mudRoad", 8,
+		"stoneRoad", 9,
+		"water", 10,
+		"ice", 11,
+		"snow", 12,
+		"wood", 13,
+		"dirt", 14,
+		"unknown", 15
+	);
 	
 	/***
 	Enum of engine types

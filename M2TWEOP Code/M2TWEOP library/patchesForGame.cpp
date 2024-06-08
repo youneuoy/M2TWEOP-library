@@ -110,6 +110,51 @@ int patchesForGame::onEvaluateUnit(int eduIndex)
 		return eopUnit->categoryClassCombinationForAI;
 }
 
+DWORD __fastcall patchesForGame::onCustomBattleUnitCards(DWORD cardArrayThing, int factionID)
+{
+	const int eopUnitNum = eduThings::getEopEntryNum();
+	for (int i = 0; i < eopUnitNum; i++)
+	{
+		const auto eopUnit = eduThings::getEopEduEntryInternalIterating(i);
+		if (!eopUnit->isFileAdded)
+			continue;
+		const auto entry = &eopUnit->data.edu;
+		if (entry->Category == 3 || entry->Category == 4)
+			continue;
+		if (GAME_FUNC(bool(__thiscall*)(eduEntry*, int, int), checkOwnershipCustom)(entry, factionID, 3))
+		{
+			stringWithHash card{};
+			GAME_FUNC(void(__thiscall*)(eduEntry*, int, stringWithHash*), getUnitCard)(entry, factionID, &card);
+			GAME_FUNC(void(__thiscall*)(DWORD, stringWithHash*), addToCardArray)(cardArrayThing, &card);
+		}
+	}
+	return cardArrayThing;
+}
+
+int __fastcall patchesForGame::onCustomBattleUnits(eduEntry** unitArray, int currentCount, int factionID)
+{
+	const int eopUnitNum = eduThings::getEopEntryNum();
+	for (int i = 0; i < eopUnitNum; i++)
+	{
+		if (currentCount >= 200)
+			break;
+		const auto eopUnit = eduThings::getEopEduEntryInternalIterating(i);
+		if (!eopUnit->isFileAdded)
+			continue;
+		const auto entry = &eopUnit->data.edu;
+		if (entry->Category == 3 || entry->Category == 4 || ((entry->Attributes5 & 8) != 0))
+			continue;
+		if (const int era = *reinterpret_cast<int*>(dataOffsets::offsets.selectedEra);
+			GAME_FUNC(bool(__thiscall*)(eduEntry*, int, int), checkOwnershipCustom)(entry, factionID, era))
+		{
+			*unitArray = entry;
+			unitArray++;
+			currentCount++;
+		}
+	}
+	return currentCount;
+}
+
 eduEntry* patchesForGame::onEvaluateUnit2(int eduIndex)
 {
 	if (const auto eopUnit = eduThings::getEopEduEntry(eduIndex); eopUnit == nullptr)
@@ -1103,6 +1148,15 @@ void __fastcall patchesForGame::recruitEOPunit2(int eduIndex)
 	{
 		entry->UnitCreatedCounter++;
 	}
+}
+
+eduEntry* __fastcall patchesForGame::onReadDescrRebel(DWORD value)
+{
+	const DWORD eduIndex = (value * 4) / 996;
+	eduEntry* entry = eduThings::getEduEntry(eduIndex);
+	if (entry == nullptr)
+		entry = eduThings::getEopEduEntry(eduIndex);
+	return entry;
 }
 
 void __fastcall patchesForGame::recruitEOPMercunit(DWORD pad, DWORD pad2, regionStruct* region, int eduindex, int factionid, int exp)

@@ -41,6 +41,16 @@ namespace battleHandlerHelpers
 		return 1000 * (int((xCoord + 1000.0) - 0.5) >> 1) + (int((yCoord + 1000.0) - 0.5) >> 1);
 	}
 
+	int getTowerStatCount(towerEntry* entry)
+	{
+		return (entry->someListEnd - reinterpret_cast<DWORD>(entry->towerStats)) / sizeof(towerStats);
+	}
+
+	towerStats* getTowerStats(towerEntry* entry, int index)
+	{
+		return &entry->towerStats[index];
+	}
+
 	battleTerrainData* getBattleTerrainData()
 	{
 		return gameDataAllHelper::get()->battleTerrainDataPtr;
@@ -90,6 +100,11 @@ namespace battleHandlerHelpers
 		const int end = reinterpret_cast<DWORD>(streets->streetsEnd);
 		const int start = reinterpret_cast<DWORD>(streets->streets);
 		return (end - start) / sizeof(roadNode);
+	}
+
+	perimeterBuildings* getPerimeter(const battleBuildings* battleBuildings, int index)
+	{
+		return &battleBuildings->perimeters[index];
 	}
 
 	roadNode* getStreetNode(const battleStreets* streets, const int index)
@@ -241,5 +256,10 @@ namespace battleHandlerHelpers
 	buildingBattle* getBattleBuilding(const battleBuildings* buildings, int index)
 	{
 		return buildings->allBuildings[index];
+	}
+
+	buildingBattle* getPerimeterBuilding(const perimeterBuildings* buildings, int index)
+	{
+		return buildings->buildingList[index];
 	}
 };

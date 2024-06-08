@@ -504,17 +504,92 @@ void managerF::doPachs()
 	eduStringsSaveOn2->Enable();
 	f1 << "Done" << endl;
 
-
+    /*
 	f1 << "Start applying OnCreateUnit patch" << endl;
 	OnCreateUnit* onCreateUnit = new OnCreateUnit(mem, (LPVOID)patchesForGame::onCreateUnit, globals::dataS.gamever);
 	onCreateUnit->SetNewCode();
 	onCreateUnit->Enable();
+	f1 << "Done" << endl;
+	*/
+
+	f1 << "Start applying OnCreateUnit2 patch" << endl;
+	OnCreateUnit2* onCreateUnit2 = new OnCreateUnit2(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	onCreateUnit2->SetNewCode();
+	onCreateUnit2->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toFindUnit patch" << endl;
 	OnFindUnit*toFindUnit = new OnFindUnit(mem, (LPVOID)patchesForGame::onFindUnit, globals::dataS.gamever);
 	toFindUnit->SetNewCode();
 	toFindUnit->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying onReadDescrStrat patch" << endl;
+	onReadDescrStrat* toReadDescrStrat = new onReadDescrStrat(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	toReadDescrStrat->SetNewCode();
+	toReadDescrStrat->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying onSpawnBrigands patch" << endl;
+	onSpawnBrigands* toSpawnBrigands = new onSpawnBrigands(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	toSpawnBrigands->SetNewCode();
+	toSpawnBrigands->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying onSpawnBrigands2 patch" << endl;
+	onSpawnBrigands2* toSpawnBrigands2 = new onSpawnBrigands2(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	toSpawnBrigands2->SetNewCode();
+	toSpawnBrigands2->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying onCustomBattleCost patch" << endl;
+	onCustomBattleCost* toCustomBattleCost = new onCustomBattleCost(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	toCustomBattleCost->SetNewCode();
+	toCustomBattleCost->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying spawnUnitsSettGift patch" << endl;
+	spawnUnitsSettGift* toSpawnUnitsSettGift = new spawnUnitsSettGift(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	toSpawnUnitsSettGift->SetNewCode();
+	toSpawnUnitsSettGift->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying spawnUnitsSettGift2 patch" << endl;
+	spawnUnitsSettGift2* toSpawnUnitsSettGift2 = new spawnUnitsSettGift2(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	toSpawnUnitsSettGift2->SetNewCode();
+	toSpawnUnitsSettGift2->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying spawnUnitsSettGift3 patch" << endl;
+	spawnUnitsSettGift3* toSpawnUnitsSettGift3 = new spawnUnitsSettGift3(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	toSpawnUnitsSettGift3->SetNewCode();
+	toSpawnUnitsSettGift3->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying onReadDescrRebel patch" << endl;
+	onReadDescrRebel* toReadDescrRebel = new onReadDescrRebel(mem, (LPVOID)patchesForGame::onReadDescrRebel, globals::dataS.gamever);
+	toReadDescrRebel->SetNewCode();
+	toReadDescrRebel->Enable();
+	f1 << "Done" << endl;
+
+
+	f1 << "Start applying onCustomBattleUnitCards patch" << endl;
+	onCustomBattleUnitCards* toCustomBattleUnitCards = new onCustomBattleUnitCards(mem, (LPVOID)patchesForGame::onCustomBattleUnitCards, globals::dataS.gamever);
+	toCustomBattleUnitCards->SetNewCode();
+	toCustomBattleUnitCards->Enable();
+	f1 << "Done" << endl;
+
+
+	f1 << "Start applying onCustomBattleUnits patch" << endl;
+	onCustomBattleUnits* toCustomBattleUnits = new onCustomBattleUnits(mem, (LPVOID)patchesForGame::onCustomBattleUnits, globals::dataS.gamever);
+	toCustomBattleUnits->SetNewCode();
+	toCustomBattleUnits->Enable();
+	f1 << "Done" << endl;
+
+	f1 << "Start applying spawnUnitsSettGift4 patch" << endl;
+	spawnUnitsSettGift4* toSpawnUnitsSettGift4 = new spawnUnitsSettGift4(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	toSpawnUnitsSettGift4->SetNewCode();
+	toSpawnUnitsSettGift4->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toCreateMercUnit patch" << endl;
