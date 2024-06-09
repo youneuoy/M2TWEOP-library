@@ -332,6 +332,9 @@ int initPlugin(std::string* modPath)
 	fName = "changeUnitFormation";
 	plugData::data.funcs.changeUnitFormation.Load(&plPath, &fName);
 
+	fName = "buildWatchTower";
+	plugData::data.funcs.buildWatchTower.Load(&plPath, &fName);
+
 	fName = "haltUnit";
 	plugData::data.funcs.haltUnit.Load(&plPath, &fName);
 

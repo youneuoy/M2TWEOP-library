@@ -18,30 +18,6 @@ namespace unitActions
         wall = 8,
         movingThrough = 9,
     };
-    
-    enum class engineType
-    {
-        catapult = 0,
-        trebuchet = 1,
-        ballista = 2,
-        bombard = 3,
-        grandBombard = 4,
-        hugeBombard = 5,
-        culverin = 6,
-        basilisk = 7,
-        cannon = 8,
-        mortar = 9,
-        scorpion = 10,
-        serpentine = 11,
-        rocketLauncher = 12,
-        ribault = 13,
-        monsterRibault = 14,
-        mangonel = 15,
-        tower = 17,
-        ram = 18,
-        ladder = 19,
-        holy_cart = 20,
-    };
 
     int getUnitFormation(const unit* unit)
     {

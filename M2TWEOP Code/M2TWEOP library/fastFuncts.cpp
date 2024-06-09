@@ -1894,11 +1894,18 @@ namespace fastFuncts
 		}
 	}
 
-	NOINLINE EOP_EXPORT void createFortXY(const factionStruct* fac, int x, int y)
+	NOINLINE EOP_EXPORT void createFortXY(factionStruct* fac, int x, int y)
 	{
 		factionStruct* faction = (factionStruct*)fac;
 		general* newgen = fastFuncts::createCharacterWithoutSpawning("named character", faction, 30, "fort", "fort", 31, "default", x, y);
 		stackStruct* newarmy = fastFuncts::createArmy(newgen);
+		auto cultureID = fac->cultureID;
+		auto cultureDb = reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
+		auto culture = cultureDb->cultures[cultureID];
+		auto cost = culture.fortCost;
+		fac->money += cost;
+		auto oldOption = getCampaignDb()->campaignDbSettlement.canBuildForts;
+		getCampaignDb()->campaignDbSettlement.canBuildForts = true;
 		DWORD adrFunc = codes::offsets.createFortFunc;
 		_asm
 		{
@@ -1907,6 +1914,17 @@ namespace fastFuncts
 			call eax
 		}
 		killCharacter(newgen);
+		getCampaignDb()->campaignDbSettlement.canBuildForts = oldOption;
+	}
+
+	campaignDb* getCampaignDb()
+	{
+		return reinterpret_cast<campaignDb*>(dataOffsets::offsets.campaignDb);
+	}
+
+	campaignDbExtra* getCampaignDbExtra()
+	{
+		return reinterpret_cast<campaignDbExtra*>(dataOffsets::offsets.campaignDbExtra);
 	}
 
 	NOINLINE EOP_EXPORT void createFort(const general* gen)
@@ -1915,6 +1933,8 @@ namespace fastFuncts
 		if (newarmy == nullptr) {
 			return;
 		}
+		auto oldOption = getCampaignDb()->campaignDbSettlement.canBuildForts;
+		getCampaignDb()->campaignDbSettlement.canBuildForts = true;
 		DWORD adrFunc = codes::offsets.createFortFunc;
 		_asm
 		{
@@ -1922,6 +1942,7 @@ namespace fastFuncts
 			mov eax, adrFunc
 			call eax
 		}
+		getCampaignDb()->campaignDbSettlement.canBuildForts = oldOption;
 	}
 
 	NOINLINE EOP_EXPORT void setUnitParams(unit* un, int count, int exp, int armor, int weap)

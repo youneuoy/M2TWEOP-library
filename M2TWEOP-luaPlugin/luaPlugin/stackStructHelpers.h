@@ -17,6 +17,7 @@ namespace stackStructHelpers
 	bool blockadePort(stackStruct* fleet, portBuildingStruct* port);
 	void setAiActiveSet(const stackStruct* army, const int set);
 	void releaseUnits(const stackStruct* army);
+	void buildWatchTower(stackStruct* army);
 	
 
 	unit* createUnit(stackStruct* army, const char* type, int exp, int arm, int weap);

@@ -33,6 +33,8 @@ public:
 		DWORD cultureDatabase = NULL;
 		DWORD loadGameHandler = NULL;
 		DWORD selectedEra = NULL;
+		DWORD campaignDb = NULL;
+		DWORD campaignDbExtra = NULL;
 
 
 

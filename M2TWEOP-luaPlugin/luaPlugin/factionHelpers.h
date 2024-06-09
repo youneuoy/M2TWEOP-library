@@ -16,7 +16,7 @@ namespace factionHelpers
 	portBuildingStruct* getPort(const factionStruct* fac, int index);
 	watchTowerStruct* getWatchtower(const factionStruct* fac, int index);
 	void deleteFort(const factionStruct* fac, fortStruct* fort);
-	void createFortXY(const factionStruct* fac, int x, int y);
+	void createFortXY(factionStruct* fac, int x, int y);
 	void createFort(const general* gen);
 	void changeFactionName(factionStruct* fac, const char* newName);
 	bool hasMilitaryAccess(const factionStruct* fac1, const factionStruct* fac2);

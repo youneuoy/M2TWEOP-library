@@ -182,6 +182,7 @@ public:
 		DWORD checkOwnershipCustom = NULL;
 		DWORD getUnitCard = NULL;
 		DWORD addToCardArray = NULL;
+		DWORD buildWatchtower = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

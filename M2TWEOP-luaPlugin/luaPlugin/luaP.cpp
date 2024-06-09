@@ -4745,6 +4745,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getDeadUnit getDeadUnit
 	@tfield setAiActiveSet setAiActiveSet
 	@tfield releaseUnits releaseUnits
+	@tfield buildWatchTower buildWatchTower
 
 
 	@table stackStruct
@@ -5011,6 +5012,14 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	     stackStruct:releaseUnits();
 	*/
 	types.stackStruct.set_function("releaseUnits", &stackStructHelpers::releaseUnits);
+	
+	/***
+	Build a watchtower (payment applies)
+	@function stackStruct:buildWatchTower
+	@usage
+	     stackStruct:buildWatchTower();
+	*/
+	types.stackStruct.set_function("buildWatchTower", &stackStructHelpers::buildWatchTower);
 	
 	///unitGroup
 	//@section Unit Group

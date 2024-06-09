@@ -38,6 +38,7 @@ namespace eduThings
 	NOINLINE EOP_EXPORT eduEntry* getEopEduEntry(int idx);
 	NOINLINE EOP_EXPORT eduEntry* getEduEntry(int idx);
 	NOINLINE EOP_EXPORT int getEopEntryNum();
+	NOINLINE EOP_EXPORT eduEntry* getEopEduEntryByName(const char* entryName);
 
 	eopEduEntry* getEopEduEntryInternalIterating(int idx);
 	NOINLINE EOP_EXPORT  char* getEopNameOfEduEntry(eduEntry*entryAdress);

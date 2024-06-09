@@ -29,6 +29,7 @@ namespace actionsStrat
 	NOINLINE EOP_EXPORT void bribeSettlement(general* gen, settlementStruct* targetSettlement);
 	NOINLINE EOP_EXPORT void spySettlement(general* gen, settlementStruct* targetSettlement);
 	NOINLINE EOP_EXPORT void sabotageSettlement(general* gen, settlementStruct* targetSettlement);
+	NOINLINE EOP_EXPORT void buildWatchTower(stackStruct* army);
 	
 	NOINLINE EOP_EXPORT void Idle(general* gen);
 	NOINLINE EOP_EXPORT void siegeSettlement(general* gen, settlementStruct* sett, bool isAttack);

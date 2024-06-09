@@ -87,13 +87,14 @@ namespace fastFuncts
 	//find watchtower on coords
 	NOINLINE EOP_EXPORT watchTowerStruct* findWatchTower(int x, int y);
 	NOINLINE EOP_EXPORT void deleteFort(const factionStruct* fac, fortStruct* fort);
-	NOINLINE EOP_EXPORT void createFortXY(const factionStruct* fac, int x, int y);
+	NOINLINE EOP_EXPORT void createFortXY(factionStruct* fac, int x, int y);
 	NOINLINE EOP_EXPORT void createFort(const general* gen);
 	NOINLINE EOP_EXPORT void changeFortOwner(fortStruct* fort, factionStruct* newFaction, bool convertGarrison);
 	NOINLINE EOP_EXPORT bool teleportCharacterClose(general* gen, int x, int y);
 	NOINLINE EOP_EXPORT coordPair* findValidTileNearTile(coordPair* coords, int charType);
 	NOINLINE EOP_EXPORT bool isTileValidForCharacterType(int charType, coordPair* coords);
-
+	campaignDb* getCampaignDb();
+	campaignDbExtra* getCampaignDbExtra();
 	//move stratmap camera slow
 	NOINLINE EOP_EXPORT void moveStratCameraSlow(int x, int y);
 	//move stratmap camera fast

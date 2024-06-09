@@ -147,9 +147,10 @@ public:
 	ProcLoader<bool(__cdecl*)(const char* condition, const eventTrigger* eventData)> condition;
 	ProcLoader<void(__cdecl*)(regionStruct* region, const char* newName)> changeRebelsName;
 	ProcLoader<void(__cdecl*)(const factionStruct* fac, fortStruct* fort)> deleteFort;
-	ProcLoader<void(__cdecl*)(const factionStruct* fac, int x, int y)> createFortXY;
+	ProcLoader<void(__cdecl*)(factionStruct* fac, int x, int y)> createFortXY;
 	ProcLoader<DWORD(__cdecl*)(size_t amount)> allocateGameMem;
 	ProcLoader<void(__cdecl*)(const general* gen)> createFort;
+	ProcLoader<void(__cdecl*)(stackStruct* army)> buildWatchTower;
 	ProcLoader<gameDataAllStruct* (__cdecl*)()> getGameDataAll;
 
 

@@ -180,6 +180,12 @@ namespace unitHelpers
 	}
 	void setMovingFastSet(unit* un, bool set)
 	{
+		if (un->eduEntry->Category == 0 && un->siegeEnNum > 0
+			&& un->siegeEngine[0]->engineRecord->classID != engineType::ladder)
+		{
+			un->statusField2 &= ~0x1;
+			return;
+		}
 		un->statusField2 = set ? un->statusField2 | 0x1 : un->statusField2 & ~0x1;
 	}
 	bool isOnWalls(unit* un)
@@ -535,18 +541,25 @@ namespace unitHelpers
 		return technicalHelpers::uniStringToStr(*entry->localizedDescrShort);
 	}
 
-	void setUnitName(const eduEntry* entry, const std::string& name)
+	void setUnitName(eduEntry* entry, const std::string& name)
 	{
+
+		UNICODE_STRING*** nameMem = new UNICODE_STRING**;
+		entry->localizedName = nameMem;
 		(*(*plugData::data.funcsTech.createUniString))(*entry->localizedName, name.c_str());
 	}
 
-	void setUnitDescr(const eduEntry* entry, const std::string& descr)
+	void setUnitDescr(eduEntry* entry, const std::string& descr)
 	{
+		UNICODE_STRING*** descrMem = new UNICODE_STRING * *[4];
+		entry->localizedDescr = descrMem;
 		(*(*plugData::data.funcsTech.createUniString))(*entry->localizedDescr, descr.c_str());
 	}
 
-	void setUnitDescrShort(const eduEntry* entry, const std::string& descr)
+	void setUnitDescrShort(eduEntry* entry, const std::string& descr)
 	{
+		UNICODE_STRING*** shDescrMem = new UNICODE_STRING * *[4];
+		entry->localizedDescrShort = shDescrMem;
 		(*(*plugData::data.funcsTech.createUniString))(*entry->localizedDescrShort, descr.c_str());
 	}
 

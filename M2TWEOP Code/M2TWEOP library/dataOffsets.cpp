@@ -36,6 +36,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 
 		offsets.edbDataStart = 0x018AA5A8;
 		offsets.selectedEra = 0x2CB9210;
+		offsets.campaignDb = 0x16666BC;
+		offsets.campaignDbExtra = 0x18AA87C;
 		
 		offsets.scriptCommandVFT = 0x0134E3A0;
 		
@@ -99,6 +101,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 
 		offsets.edbDataStart = 0x01861438;
 		offsets.selectedEra = 0x02C70178;
+		offsets.campaignDb = 0x0161E7E4;
+		offsets.campaignDbExtra = 0x0186170C;
 
 		offsets.audioEnable = (bool*)0x01639f1d;
 		offsets.audioMaster_vol = (int*)0x01639f60;

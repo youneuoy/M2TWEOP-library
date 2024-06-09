@@ -165,7 +165,7 @@ void factionHelpers::setFactionStanding(const factionStruct* fac1, const faction
 	campaign->diplomaticStandings[fac1->dipNum][fac2->dipNum].factionStanding = standing;
 }
 
-void factionHelpers::createFortXY(const factionStruct* fac, int x, int y)
+void factionHelpers::createFortXY(factionStruct* fac, int x, int y)
 {
 	(*(*plugData::data.funcs.createFortXY))(fac, x, y);
 }

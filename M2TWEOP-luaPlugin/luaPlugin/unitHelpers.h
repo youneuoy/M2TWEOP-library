@@ -91,9 +91,9 @@ namespace unitHelpers
 	std::string getLocalizedUnitName(const eduEntry* entry);
 	std::string getLocalizedUnitDescr(const eduEntry* entry);
 	std::string getLocalizedUnitDescrShort(const eduEntry* entry);
-	void setUnitName(const eduEntry* entry, const std::string& name);
-	void setUnitDescr(const eduEntry* entry, const std::string& descr);
-	void setUnitDescrShort(const eduEntry* entry, const std::string& descr);
+	void setUnitName(eduEntry* entry, const std::string& name);
+	void setUnitDescr(eduEntry* entry, const std::string& descr);
+	void setUnitDescrShort(eduEntry* entry, const std::string& descr);
 	float getEngineAngle(const siegeEngine* engine);
 	void setEngineAngle(siegeEngine* engine, float angle);
 	unitGroup* getEmptyGroup(const stackStruct* army);

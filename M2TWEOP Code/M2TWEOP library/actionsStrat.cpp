@@ -39,6 +39,12 @@ namespace actionsStrat {
 			}
 			return;
 		}
+		
+		if (!isAttack)
+		{
+			targetSettlementAction(gen, sett, characterAction::besiege);
+			return;
+		}
 
 		//Allocate memory for the CAD class
 		auto cadClass = fastFuncts::allocateGameMem(isAttack && sett->army ? 0x3028 : 0x3024);
@@ -65,12 +71,20 @@ namespace actionsStrat {
 		GAME_FUNC(DWORD(__thiscall*)(general* character, DWORD cadClassP, int a3),
 			getReadySiegeCharacterGarrisonedFunc)(gen, cadClass, 0);
 		
-		finalizeAction(cadClass, gen);
+		DWORD adrFunc = codes::offsets.finalyzeActionStratmapFunc;
+		_asm
+		{
+			push cadClass
+			mov ecx, gen
+			mov eax, adrFunc
+			call eax
+		}
 		CallVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); //Destructor
 	}
 	
 	NOINLINE EOP_EXPORT void siegeFort(general* gen, fortStruct* fort, bool isAttack)
 	{
+		
 		//if general or namedchar or sett is nil or general isnt alive return
 		if (!gen || !gen->genChar || !fort || (gen->genChar->age & 1) == 0)
 			return;
@@ -94,6 +108,12 @@ namespace actionsStrat {
 			}
 			return;
 		}
+		
+		if (!isAttack)
+		{
+			targetFortAction(gen, fort, characterAction::besiege);
+			return;
+		}
 
 		//Allocate memory for the CAD class
 		auto cadClass = fastFuncts::allocateGameMem(isAttack && fort->army ? 0x302C : 0x3028);
@@ -108,26 +128,36 @@ namespace actionsStrat {
 		//Select appropriate function to create the relevant CAD class
 		//CAD_ATTACK_FORT
 		if (!fort->army)
+		{
 			cadClass = GAME_FUNC(DWORD(__thiscall*)(DWORD cadClassP, TrackedPointerFort* fortP, int a3),
 				createCadAttackFortFunc)(cadClass, &trackedPointer, 0);
-		
+		}
 		//CAD_ASSAULT_FORT
 		else if (isAttack)
+		{
 			cadClass = GAME_FUNC(DWORD(__thiscall*)(DWORD cadClassP, int a2, TrackedPointerFort* fortP, int a4),
 				createCadAssaultFortFunc)(cadClass, 0, &trackedPointer, 0);
-		
+		}
 		//CAD_SIEGE_FORT
 		else
+		{
 			cadClass = GAME_FUNC(DWORD(__thiscall*)(DWORD cadClassP, TrackedPointerFort* fortP, int a3),
 				createCadSiegeFortFunc)(cadClass, &trackedPointer, 0);
+		}
 		
 		if (cadClass == 0) return;
 		
 		GAME_FUNC(void(__thiscall*)(TrackedPointerFort* trackedPointerP),
 		   somethingWithTrackedPointerFortFunc)(&trackedPointer);
 		
-		finalizeAction(cadClass, gen);
-		CallVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); //Destructor
+		DWORD adrFunc = codes::offsets.finalyzeActionStratmapFunc;
+		_asm
+		{
+			push cadClass
+			mov ecx, gen
+			mov eax, adrFunc
+			call eax
+		}
 	}
 
 	NOINLINE EOP_EXPORT void moveNormal(general* gen, int x, int y)
@@ -439,7 +469,8 @@ namespace actionsStrat {
 		stackStruct* army = nullptr;
 		if (gen->armyLeaded)
 			army = gen->armyLeaded;
-		gen->armyLeaded = nullptr;
+		if (type != characterAction::besiege && type != characterAction::assault && type != characterAction::captureResidence)
+			gen->armyLeaded = nullptr;
 		GAME_FUNC(DWORD(__thiscall*)(general**, fortStruct**, characterAction, int),
 		createCADTargetFort)(&gen, &targetFort, type, 0);
 		gen->armyLeaded = army;
@@ -464,7 +495,8 @@ namespace actionsStrat {
 		stackStruct* army = nullptr;
 		if (gen->armyLeaded)
 			army = gen->armyLeaded;
-		gen->armyLeaded = nullptr;
+		if (type != characterAction::besiege && type != characterAction::assault && type != characterAction::captureResidence)
+			gen->armyLeaded = nullptr;
 		GAME_FUNC(DWORD(__thiscall*)(general**, settlementStruct**, characterAction, int),
 		createCADTargetSettlement)(&gen, &targetSettlement, type, 0);
 		gen->armyLeaded = army;
@@ -500,6 +532,23 @@ namespace actionsStrat {
 		return success != 0;
 	}
 	
+	NOINLINE EOP_EXPORT void buildWatchTower(stackStruct* army)
+	{
+		if (!army->gen || !army->gen->genChar || !army->gen->genChar->faction)
+			return;
+		int cultureID = army->gen->genChar->faction->cultureID;
+		culturesDB* cultures = reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
+		int cost = cultures->cultures[cultureID].watchTowerCost;
+		if (army->gen->genChar->faction->money < cost)
+			return;
+		DWORD funcAddr = codes::offsets.buildWatchtower;
+		_asm
+		{
+			mov ecx, army
+			mov eax, funcAddr
+			call eax
+		}
+	}
 	
 	NOINLINE EOP_EXPORT void sendOffMap(general* gen)
 	{
@@ -578,7 +627,14 @@ namespace actionsStrat {
 		GAME_FUNC(void(__thiscall*)(TrackedPointerCharacter* trackedPointerP),
 		   somethingWithTrackedPointerAttackFunc)(&trackedPointer);
 		
-		finalizeAction(cadClass, attacker);
+		DWORD adrFunc = codes::offsets.finalyzeActionStratmapFunc;
+		_asm
+		{
+			push cadClass
+			mov ecx, attacker
+			mov eax, adrFunc
+			call eax
+		}
 		//Destructor -- game doesnt call it, but I think it might be a bug
 		CallVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); 
 	}

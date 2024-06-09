@@ -168,6 +168,11 @@ namespace stackStructHelpers
 			unitHelpers::releaseUnit(army->units[i]);
 	}
 
+	void buildWatchTower(stackStruct* army)
+	{
+		(*(*plugData::data.funcs.buildWatchTower))(army);
+	}
+
 	bool blockadePort(stackStruct* fleet, portBuildingStruct* port)
 	{
 		return (*(*plugData::data.funcs.blockadePort))(fleet, port);

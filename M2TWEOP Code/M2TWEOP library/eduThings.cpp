@@ -18,6 +18,7 @@ namespace eduThings
 			MessageBoxA(NULL, errs.c_str(), "ERROR!", NULL);
 			exit(0);
 		}
+
 		data.edu = *oldEn;
 		data.edu.Index = newIdx;
 		originalTypeName = data.edu.Type;
@@ -59,26 +60,25 @@ namespace eduThings
 
 		try
 		{
-			eopEduEntry newEntry(fileName, newIdx);
-
+			const eopEduEntry newEntry(fileName, newIdx);
+			if (getEduEntryByType(newEntry.originalTypeName.c_str()))
+			{
+				unitActions::logStringGame("Duplicate unit name " + newEntry.originalTypeName + " in addEopEduEntryFromFile");
+				return nullptr;
+			}
 			data.eopEdu.push_back(newEntry);
 		}
 		catch (...)
 		{
 			return nullptr;
 		}
-
-
-		eduEntryes* EDB = reinterpret_cast<eduEntryes*>(dataOffsets::offsets.unitTypesStart - 4);
-
-		//--EDB->numberOfTupes;
-
 		return getEopEduEntry(newIdx);
 	}
 	NOINLINE EOP_EXPORT eduEntry* addEopEduEntry(int baseIdx, int newIdx)
 	{
 		if (getEopEduEntry(newIdx))
 		{
+			unitActions::logStringGame("Duplicate EOP index " + to_string(newIdx) + " in addEopEduEntry");
 			return nullptr;
 		}
 		eopEduEntry newEntry(baseIdx, newIdx);
@@ -150,6 +150,18 @@ namespace eduThings
 				|| (entry.isFileAdded && strcmp(entry.originalTypeName.c_str(), entryName) == 0))
 			{
 				return (int*)&entry.data;
+			}
+		}
+		return nullptr;
+	}
+	NOINLINE EOP_EXPORT eduEntry* getEopEduEntryByName(const char* entryName)
+	{
+		for (eopEduEntry& entry : data.eopEdu)
+		{
+			if (strcmp(entry.eopTypeName.c_str(), entryName) == 0
+				|| (entry.isFileAdded && strcmp(entry.originalTypeName.c_str(), entryName) == 0))
+			{
+				return &entry.data.edu;
 			}
 		}
 		return nullptr;
