@@ -261,7 +261,7 @@ vector<string> techFuncs::loadGameLoadArchive(UNICODE_STRING**& savePath)
     archiveFiles=unzip(relativePath, unpackPath);
     if (archiveFiles.size() == 0)
     {
-        MessageBoxA(NULL, "You trying load standart game save with M2TWEOP. Don`t do this, EOP is not full savecompatible with it.", "ERROR", NULL);
+        MessageBoxA(NULL, "You have attempted to load a non-EOP save with EOP. This is not supported and the game will now exit. You can find instructions on converting a non-EOP save to an EOP save in our Discord.", "ERROR", NULL);
         exit(0);
     }
 
