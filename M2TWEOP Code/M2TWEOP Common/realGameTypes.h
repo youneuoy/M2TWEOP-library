@@ -4283,8 +4283,14 @@ struct CompareCounter { /* I_CompareCounter script command */
 };
 
 /* character on the stratmap, who has a unit in a stack */
-struct general : public smObject
+struct general
 { 
+	undefined field0_0x0[4];
+	void* obj;
+	undefined field2_0x8[4];
+	int xCoord; /* number of x-coord of unit fosition */
+	int yCoord; /* number of y-coord of unit fosition */
+	undefined field5_0x14[108];
 	struct namedCharacter* genChar; /* many important info about character */
 	undefined field7_0x84[4];
 	struct genMod* genType;
