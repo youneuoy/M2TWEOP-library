@@ -18,6 +18,9 @@ namespace fastFunctsHelpers
 	}
 	int getEduIndex(const char* type)
 	{
+		if (const auto data = eduThings::getEopEduEntryByName(type))
+			return data->Index;
+		
 		eduEntryes* EDB = reinterpret_cast<eduEntryes*>(dataOffsets::offsets.unitTypesStart - 4);
 
 		int unitsNum = EDB->numberOfTupes;

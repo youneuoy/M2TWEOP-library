@@ -332,7 +332,17 @@ char* __fastcall patchesForGame::getBrowserPicConstructed(int cultureID, edbEntr
 		}
 		lookUpVariants = lookUpVariants->next;
 	}
-	return nullptr;
+	for (auto& i : level.buildingPicConstructed)
+	{
+		if (i.buildingPicPath != nullptr)
+		{
+			FILE_PATH = i.buildingPicPath;
+			return FILE_PATH.data();
+		}
+	}
+	unitActions::logStringGame("getBrowserPicConstructed error: " + std::string(modPath + picPath));
+	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_constructed_building.tga";
+	return FILE_PATH.data();
 }
 
 char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEntry* entry, int buildingLevel)
@@ -382,7 +392,17 @@ char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEnt
 		}
 		lookUpVariants = lookUpVariants->next;
 	}
-	return nullptr;
+	for (auto& i : level.buildingPicConstruction)
+	{
+		if (i.buildingPicPath != nullptr)
+		{
+			FILE_PATH = i.buildingPicPath;
+			return FILE_PATH.data();
+		}
+	}
+	unitActions::logStringGame("getBrowserPicConstruction error: " + std::string(modPath + picPath));
+	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_preconstructed_building.tga";
+	return FILE_PATH.data();
 }
 
 char* __fastcall patchesForGame::getBuildingPic(buildingLevel* level, int cultureID)
@@ -431,7 +451,17 @@ char* __fastcall patchesForGame::getBuildingPic(buildingLevel* level, int cultur
 		}
 		lookUpVariants = lookUpVariants->next;
 	}
-	return nullptr;
+	for (auto& i : level->buildingPic)
+	{
+		if (i.buildingPicPath != nullptr)
+		{
+			FILE_PATH = i.buildingPicPath;
+			return FILE_PATH.data();
+		}
+	}
+	unitActions::logStringGame("getBuildingPic error: " + std::string(modPath + picPath));
+	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_building.tga";
+	return FILE_PATH.data();
 }
 
 char* __fastcall patchesForGame::getBuildingPicConstructed(buildingLevel* level, int cultureID)
@@ -480,7 +510,17 @@ char* __fastcall patchesForGame::getBuildingPicConstructed(buildingLevel* level,
 		}
 		lookUpVariants = lookUpVariants->next;
 	}
-	return nullptr;
+	for (auto& i : level->buildingPicConstructed)
+	{
+		if (i.buildingPicPath != nullptr)
+		{
+			FILE_PATH = i.buildingPicPath;
+			return FILE_PATH.data();
+		}
+	}
+	unitActions::logStringGame("getBuildingPicConstructed error: " + std::string(modPath + picPath));
+	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_constructed_building.tga";
+	return FILE_PATH.data();
 }
 
 char* __fastcall patchesForGame::getBuildingPicConstruction(buildingLevel* level, int cultureID)
@@ -529,7 +569,17 @@ char* __fastcall patchesForGame::getBuildingPicConstruction(buildingLevel* level
 		}
 		lookUpVariants = lookUpVariants->next;
 	}
-	return nullptr;
+	for (auto& i : level->buildingPicConstruction)
+	{
+		if (i.buildingPicPath != nullptr)
+		{
+			FILE_PATH = i.buildingPicPath;
+			return FILE_PATH.data();
+		}
+	}
+	unitActions::logStringGame("getBuildingPicConstruction error: " + std::string(modPath + picPath));
+	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_preconstructed_building.tga";
+	return FILE_PATH.data();
 }
 
 portraitDbEntry* patchesForGame::getPortraitDbEntry(int cultureID)
@@ -590,7 +640,17 @@ char* patchesForGame::onGetGuildOfferPic(DWORD level, int cultureID)
 		}
 		lookUpVariants = lookUpVariants->next;
 	}
-	return nullptr;
+	for (auto& i : lvl->buildingPicConstructed)
+	{
+		if (i.buildingPicPath != nullptr)
+		{
+			FILE_PATH = i.buildingPicPath;
+			return FILE_PATH.data();
+		}
+	}
+	unitActions::logStringGame("onGetGuildOfferPic error: " + std::string(modPath + picPath));
+	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_constructed_building.tga";
+	return FILE_PATH.data();
 }
 
 unit** __fastcall patchesForGame::onGetUnitByLabel(DWORD unitLabels, char* label)

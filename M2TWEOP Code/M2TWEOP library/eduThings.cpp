@@ -64,7 +64,9 @@ namespace eduThings
 			if (getEduEntryByType(newEntry.originalTypeName.c_str()))
 			{
 				unitActions::logStringGame("Duplicate unit name " + newEntry.originalTypeName + " in addEopEduEntryFromFile");
-				return nullptr;
+				std::string errS = "Can`t add: " + newEntry.originalTypeName + " Duplicate type name";
+				MessageBoxA(NULL, errS.c_str(), "ERROR!", NULL);
+				exit(0);
 			}
 			data.eopEdu.push_back(newEntry);
 		}
