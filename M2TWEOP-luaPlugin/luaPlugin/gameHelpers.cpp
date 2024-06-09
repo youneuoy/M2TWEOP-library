@@ -487,11 +487,104 @@ namespace gameHelpers
 		return units;
 	}
 
+	roadStruct* getRoad(const campaign* campaign, const int index)
+	{
+		return campaign->roads[index];
+	}
+
+	int getPoolIndex(mercPoolUnitsPtr *unitPtr)
+	{
+		auto nextUnitsPtr = unitPtr->nextUnitsPtr;
+		if ( nextUnitsPtr && nextUnitsPtr->currentPool )
+			return unitPtr->currentPool + getPoolIndex(nextUnitsPtr);
+		return unitPtr->currentPool;
+	}
+
+	mercPool* getMercPool(const campaign* campaign, const std::string& name)
+	{
+		auto mercPools = &campaign->allMercPools;
+		if (!mercPools || !mercPools->currentCount)
+			return nullptr;
+		while (mercPools)
+		{
+			for (int i = 0; i < mercPools->currentCount; i++)
+			{
+				if (strcmp(mercPools->mercPools[i].name, name.c_str()) == 0)
+					return &mercPools->mercPools[i];
+			}
+			mercPools = mercPools->nextMercPools;
+		}
+		return nullptr;
+	}
+
+	mercPoolUnit* getNewMercUnit(mercPoolUnitsPtr* unitPtr)
+	{
+		const auto currentPool = unitPtr->currentPool;
+		if (currentPool >= unitPtr->Maxpool)
+		{
+			if (!unitPtr->nextUnitsPtr)
+			{
+				const auto newPtr = reinterpret_cast<mercPoolUnitsPtr*>(technicalHelpers::allocateGameMem(0x14));
+				newPtr->Maxpool = unitPtr->Maxpool * 2;
+				newPtr->currentPool = 0;
+				newPtr->mercPoolUnits = reinterpret_cast<mercPoolUnit*>(technicalHelpers::allocateGameMem(0x50 * newPtr->Maxpool));
+				unitPtr->nextUnitsPtr = newPtr;
+				newPtr->prevPoolUnits = unitPtr->mercPoolUnits;
+			}
+			return getNewMercUnit(unitPtr->nextUnitsPtr);
+		}
+		const auto unit = &unitPtr->mercPoolUnits[currentPool];
+		unitPtr->currentPool++;
+		unit->eduEntry = nullptr;
+		unit->experience = 0;
+		unit->replenishMin = 0;
+		unit->replenishMax = 0;
+		unit->maxUnits = 0;
+		unit->currentPool = 0;
+		unit->startYear = 0;
+		unit->endYear = 0;
+		unit->religionsList = nullptr;
+		unit->religionsListEnd = nullptr;
+		unit->religionsListEnd2 = nullptr;
+		unit->crusading = 0;
+		unit->eventsList = nullptr;
+		unit->eventsListEnd = nullptr;
+		unit->eventsListEnd2 = nullptr;
+		unit->poolIndex = 0;
+		unit->mercPoolUnitIndex = 0;
+		unit->mercPool = nullptr;
+		return unit;
+	}
+
 	mercPoolUnit* gameHelpers::addMercUnit(mercPool* mercPool, const int idx, const int exp, const int cost, const float repmin, const float repmax, const int maxunits, const float startpool, const float startyear, const float endyear, const int crusading)
 	{
-		auto* newMerc = reinterpret_cast<mercPoolUnit*>(technicalHelpers::allocateGameMem(sizeof(mercPoolUnit)));
-		*newMerc = mercPool->firstUnits.mercPoolUnits[0];
-		const int mercUnitNum = getMercUnitNum(mercPool);
+		int16_t mercPoolUnitIndex = mercPool->firstUnits.currentPool;
+		int16_t poolIndex = 0;
+		const auto unit = &mercPool->firstUnits.mercPoolUnits[0];
+		if (!unit)
+		{
+			const auto campaign = gameDataAllHelper::get()->campaignData;
+			auto mercPools = &campaign->allMercPools;
+			while (mercPools)
+			{
+				for (int i = 0; i < mercPools->currentCount; i++)
+				{
+					if (strcmp(mercPools->mercPools[i].name , mercPool->name) == 0)
+						break;
+					poolIndex++;
+				}
+				mercPools = mercPools->nextMercPools;
+			}
+		}
+		else
+			poolIndex = unit->poolIndex;
+		const auto nextUnitsPtr = mercPool->firstUnits.nextUnitsPtr;
+		if ( nextUnitsPtr && nextUnitsPtr->currentPool )
+			mercPoolUnitIndex = mercPool->firstUnits.currentPool + getPoolIndex(nextUnitsPtr);
+		const auto newMerc = getNewMercUnit(&mercPool->firstUnits);
+		newMerc->mercPoolUnitIndex = mercPoolUnitIndex;
+		newMerc->poolIndex = poolIndex;
+		newMerc->mercPool = mercPool;
 		eduEntry* entry = eopEduHelpers::getEduEntry(idx);
 		newMerc->eduEntry = entry;
 		newMerc->experience = exp;
@@ -502,38 +595,8 @@ namespace gameHelpers
 		newMerc->currentPool = startpool;
 		newMerc->startYear = startyear;
 		newMerc->endYear = endyear;
-		newMerc->religionsList = nullptr;
-		newMerc->religionsListEnd = nullptr;
-		newMerc->religionsListEnd2 = nullptr;
-		newMerc->eventsList = nullptr;
-		newMerc->eventsListEnd = nullptr;
-		newMerc->eventsListEnd2 = nullptr;
 		newMerc->crusading = crusading;
-		newMerc->mercPoolUnitIndex = static_cast<int16_t>(mercUnitNum);
-		newMerc->mercPool = mercPool;
-		
-		mercPoolUnitsPtr* unitPtr = &mercPool->firstUnits;
-		while (unitPtr->Maxpool - unitPtr->currentPool == 0 && unitPtr->nextUnitsPtr != nullptr)
-			unitPtr = unitPtr->nextUnitsPtr;
-			
-		if (unitPtr->Maxpool - unitPtr->currentPool == 0)
-		{
-			const auto newPtr = reinterpret_cast<mercPoolUnitsPtr*>(technicalHelpers::allocateGameMem(sizeof(mercPoolUnitsPtr)));
-			newPtr->Maxpool = unitPtr->Maxpool * 2;
-			newPtr->currentPool = 0;
-			newPtr->nextUnitsPtr = nullptr;
-			newPtr->prevPoolUnits = unitPtr->mercPoolUnits;
-			unitPtr->nextUnitsPtr = newPtr;
-			unitPtr = unitPtr->nextUnitsPtr;
-		}
-		const auto newArray = reinterpret_cast<mercPoolUnit*>(technicalHelpers::allocateGameMem(sizeof(mercPoolUnitsPtr) * unitPtr->Maxpool));
-		for (int i = 0; i < unitPtr->currentPool; i++) {
-			newArray[i] = unitPtr->mercPoolUnits[i];
-		}
-		unitPtr->mercPoolUnits = newArray;
-		unitPtr->mercPoolUnits[unitPtr->currentPool] = *newMerc;
-		unitPtr->currentPool++;
-		return &unitPtr->mercPoolUnits[unitPtr->currentPool];
+		return newMerc;
 	}
 
 	mercPoolUnit* gameHelpers::getMercUnit(const mercPool* pool, const int index)
@@ -668,17 +731,53 @@ namespace gameHelpers
 
 	int getTileFactionID(const oneTile* tile)
 	{
-		return tile->factionId & 0b00111111;
+		return tile->factionId & 0b00011111;
 	}
 
 	bool tileHasRiver(const oneTile* tile)
 	{
-		return tile->factionId & 0b01000000;
+		return tile->factionId & 0b01100000;
+	}
+
+	bool tileHasRiverSource(const oneTile* tile)
+	{
+		return tile->factionId & 0b00100000;
 	}
 
 	bool tileHasCrossing(const oneTile* tile)
 	{
 		return tile->factionId & 0b10000000;
+	}
+
+	bool tileHasCliff(const oneTile* tile)
+	{
+		return tile->factionId & ((1 << 8) | (1 << 10));
+	}
+
+	bool isLandConnection(const oneTile* tile)
+	{
+		return tile->factionId & (1 << 12);
+	}
+
+	bool isSeaCrossing(const oneTile* tile)
+	{
+		return tile->factionId & (1 << 14);
+	}
+
+	int tileRoadLevel(const oneTile* tile)
+	{
+		if (tile->factionId & (1 << 17))
+			return 3;
+		if (tile->factionId & (1 << 16))
+			return 2;
+		if (tile->factionId & (1 << 15))
+			return 1;
+		return 0;
+	}
+
+	bool isCoastalWater(const oneTile* tile)
+	{
+		return tile->factionId & (1 << 9);
 	}
 
 	int tileBorderType(const oneTile* tile)
@@ -815,6 +914,28 @@ namespace gameHelpers
 		return buffer;
 	}
 
+	const char* getClimateName2(const int index)
+	{
+	    const gameDataAllStruct* gameData = gameDataAllHelper::get();
+	    const auto stratMap = gameData->stratMap;
+		const wchar_t* name = stratMap->climates->climateArray[index].rcString->string;
+		// Determine the size of the required buffer
+		const int size = WideCharToMultiByte(CP_UTF8, 0, name, -1, nullptr, 0, nullptr, nullptr);
+		if (size == 0) {
+			return nullptr;
+		}
+		// Allocate a buffer for the converted string
+		const auto buffer = new char[size];
+		if (buffer == nullptr) {
+			// Allocation failed
+			return nullptr;
+		}
+		// Convert the string
+		WideCharToMultiByte(CP_UTF8, 0, name, -1, buffer, size, nullptr, nullptr);
+		// Return the converted string
+		return buffer;
+	}
+
 	const char* getReligionName(const int index)
 	{
 		if (!plugData::data.luaAll.hashLoaded)
@@ -823,6 +944,26 @@ namespace gameHelpers
 		if (religionName == plugData::data.luaAll.religionNames.end()) 
 			return nullptr;
 		return religionName->second;
+	}
+
+	const char* getClimateName(const int index)
+	{
+		if (!plugData::data.luaAll.hashLoaded)
+			plugData::data.luaAll.fillHashMaps();
+		const auto name = plugData::data.luaAll.climateNames.find(index);
+		if (name == plugData::data.luaAll.climateNames.end()) 
+			return nullptr;
+		return name->second;
+	}
+
+	const char* getCultureName(const int index)
+	{
+		if (!plugData::data.luaAll.hashLoaded)
+			plugData::data.luaAll.fillHashMaps();
+		const auto name = plugData::data.luaAll.cultureNames.find(index);
+		if (name == plugData::data.luaAll.cultureNames.end()) 
+			return nullptr;
+		return name->second;
 	}
 
 	int getReligionCount()
@@ -843,6 +984,26 @@ namespace gameHelpers
 		if (religionIndex == plugData::data.luaAll.religionIndex.end()) 
 			return -1;
 		return religionIndex->second;
+	}
+
+	int getClimateN(const std::string& name)
+	{
+		if (!plugData::data.luaAll.hashLoaded)
+			plugData::data.luaAll.fillHashMaps();
+		const auto index = plugData::data.luaAll.climateIndex.find(name);
+		if (index == plugData::data.luaAll.climateIndex.end()) 
+			return -1;
+		return index->second;
+	}
+
+	int getCultureN(const std::string& name)
+	{
+		if (!plugData::data.luaAll.hashLoaded)
+			plugData::data.luaAll.fillHashMaps();
+		const auto index = plugData::data.luaAll.cultureIndex.find(name);
+		if (index == plugData::data.luaAll.cultureIndex.end()) 
+			return -1;
+		return index->second;
 	}
 
 	seaConnectedRegion* getSeaConnectedRegion(const regionStruct* region, const int index)
@@ -913,6 +1074,42 @@ namespace gameHelpers
 		if (!doubleTile)
 			return 0;
 		return tileToDoubleTile(tile)->climate;
+	}
+
+	void setTileHeight(const oneTile* tile, float height)
+	{
+		const auto doubleTile = tileToDoubleTile(tile);
+		if (!doubleTile)
+			return;
+		doubleTile->height = height;
+	}
+
+	void setTileClimate(const oneTile* tile, int climate)
+	{
+		const auto doubleTile = tileToDoubleTile(tile);
+		if (!doubleTile)
+			return;
+		doubleTile->climate = climate;
+	}
+
+	void setTileGroundType(oneTile* tile, int ground)
+	{
+		const auto doubleTile = tileToDoubleTile(tile);
+		tile->groundType = ground;
+		if (ground >= 14 || ground == 4 || ground == 5 || ground == 7 || ground >= 10 && ground < 13)
+		{
+			tile->nonPassable = -1;
+			if (ground >= 10 && ground < 13)
+				tile->isLand = 0;
+		}
+		if (!doubleTile)
+			return;
+		doubleTile->groundType = ground;
+	}
+
+	int getTileGroundType(oneTile* tile)
+	{
+		return tile->groundType;
 	}
 
 	int getTileHeatValue(const oneTile* tile)

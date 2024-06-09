@@ -8,6 +8,7 @@ void codes::initCodes(int gameVer)
 		offsets.stringCryptFunc = 0x00d4cfd0;
 		offsets.loadStratCasModelFunc = 0x00a04380;
 		offsets.allocMemFunc = 0x012418d8;
+		offsets.createEduEntry = 0x008EECA0;
 
 		offsets.createSiegeSettlementGarrisonedFunc = 0x005b56c0;
 		offsets.createCadAttackSettlementFunc = 0x005B55B0;
@@ -29,8 +30,21 @@ void codes::initCodes(int gameVer)
 		offsets.findParentForAdoptionFunc = 0x004EA4E0;
 		offsets.setArmyRegionEntriesFunc = 0x004A40E0;
 		offsets.factionRessurectStuffFunc = 0x004F4C80;
-
-
+		offsets.doHordeStuff = 0x0050B170;
+		offsets.doHordeStuff2 = 0x004EAA10;
+		offsets.doHordeStuff3 = 0x00C5CBC0;
+		
+		offsets.switchCharacterFaction = 0x005A1C20;
+		offsets.switchNamedCharacterFaction = 0x00594370;
+		offsets.switchArmyFaction = 0x004F4520;
+		offsets.changeCharacterTileStuff = 0x00592EB0;
+		offsets.initPlaceCharacter = 0x00599410;
+		
+		offsets.getResidenceCharacterNum = 0x004BFCC0;
+		offsets.getResidenceCharacterAtIndex = 0x004BFEB0;
+		
+		
+		
 		offsets.getReadyForMovingFunc = 0x005b0060;
 		offsets.getReadyForMoving2Func = 0x005a0870;
 		offsets.getGeneralReadyForMovingFunc = 0x004cd460;
@@ -40,6 +54,8 @@ void codes::initCodes(int gameVer)
 		offsets.makeTrackedPointerToAttackFunc = 0x004e6000;
 		offsets.makeCadAttackFunc = 0x005b5420;
 		offsets.somethingWithTrackedPointerAttackFunc = 0x004cb6d0;
+		offsets.makeCadDiplomacyFunc = 0x005B60D0;
+		offsets.makeCadDiplomacySettlementFunc = 0x005B61F0;
 
 
 
@@ -56,6 +72,7 @@ void codes::initCodes(int gameVer)
 
 
 		offsets.teleportCharacterFunc = 0x0059b580;
+		offsets.removeSieges = 0x004bf340;
 
 
 
@@ -106,15 +123,82 @@ void codes::initCodes(int gameVer)
 		offsets.deleteFortFuncTwo = 0x004BCA80;
 		offsets.createFortFunc = 0x00714760;
 		offsets.mercEOPValue = 0x0190B928;
+		
+		offsets.getUnitByLabel = 0x0A945A0;
+		offsets.getGroupByLabel = 0x00A945C0;
+		offsets.getUnitByLabel2 = 0x0A91780;
+		
+		offsets.unitOrderMove = 0x00A6DAA0;
+		offsets.unitImmediatePlace = 0x00A6D310;
+		offsets.unitAttackClosestUnit = 0x00A789C0;
+		offsets.unitAttackUnit = 0x00A6E920;
+		offsets.unitDeployStakes = 0x00A77E00;
+		offsets.unitChangeFormation = 0x00A6F040;
+		offsets.unitHalt = 0x00A6D680;
+		offsets.getMapHeight = 0x00443E70;
+		offsets.unitMoveToOrientation = 0x0A6E140;
+		offsets.moveRelative = 0x0A79810;
+		offsets.moveToMissileRange = 0x0A6F400;
+		offsets.unitTurn = 0x0A6F940;
+		offsets.unitTaunt = 0x0A723F0;
+		offsets.useSpecialAbility = 0x0A72630;
+		offsets.getBuildingAngle = 0x006EAB10;
+		offsets.attackBuilding = 0x00757750;
+		offsets.createCADTargetCharacter = 0x00AAB0C0;
+		offsets.createCADTargetFort = 0x00AAB1A0;
+		offsets.createCADTargetSettlement = 0x00AAB130;
+		offsets.executeCADTargetCharacter = 0x00AAD080;
+		offsets.getTileCharactersFunc = 0x004D0000;
+		offsets.getValidRegionTile = 0x004A5420;
+		offsets.isTileValidForCharacter = 0x004CCA10;
+		offsets.deleteMoveExtents = 0x004B6250;
+		offsets.someSelectionStuff = 0x004DAE80;
+
+		//Group commands
+		offsets.groupUnitChangeFormation = 0x00A78FA0;
+		offsets.groupMoveToRangeOfGroup = 0x00A758C0;
+		
+		offsets.groupMoveToRangeOfUnit = 0x00A752D0;
+		offsets.groupAttackGroup = 0x00A76310;
+		offsets.groupChangeFormation = 0x00A76820;
+		offsets.groupHalt = 0x00A73AC0;
+		offsets.groupMoveFormed = 0x00A73F50;
+		offsets.groupMoveUnformed = 0x00A744B0;
+		offsets.groupRelativeMoveFormed = 0x00A749B0;
+		offsets.groupRelativeMoveUnformed = 0x00A74E80;
+		offsets.groupTurn = 0x00A76BF0;
+		offsets.sendCharacterOffMap = 0x4EEBC0;
+		offsets.assaultObject = 0x00718F50;
+		offsets.buildWatchtower = 0x0714A50;
+		
+		offsets.checkOwnershipCustom = 0x8EE450;
+		offsets.getUnitCard = 0x008EB550;
+		offsets.addToCardArray = 0x464610;
+		
+		//offsets.unitPlace = 0x00770A70;
+		offsets.unitMove = 0x0759B70;
+		offsets.gameLogCommand = 0xA8FAC0;
 	}
 	else if (gameVer == 2) //steam
 	{
 		offsets.stringCryptFunc = 0x00d47330;
 		offsets.loadStratCasModelFunc = 0x00a04f00;
 		offsets.allocMemFunc = 0x011d318a;
+		offsets.createEduEntry = 0x008EF720;
 
 		offsets.createSiegeSettlementGarrisonedFunc = 0x005b5ba0;
 		offsets.getReadySiegeCharacterGarrisonedFunc = 0x005a1dc0;
+		offsets.switchCharacterFaction = 0x005A2100;
+		offsets.switchNamedCharacterFaction = 0x00594870;
+		offsets.switchArmyFaction = 0x004F4AF0;
+		offsets.changeCharacterTileStuff = 0x005933B0;
+		offsets.initPlaceCharacter = 0x00599900;
+		offsets.getResidenceCharacterNum = 0x004C0250;
+		offsets.getResidenceCharacterAtIndex = 0x004C0440;
+		offsets.removeSieges = 0x004bf8d0;
+		offsets.doHordeStuff = 0x0050B750;
+		offsets.doHordeStuff2 = 0x004EB020;
+		offsets.doHordeStuff3 = 0x00C56FC0;
 		
 		offsets.createCadAttackSettlementFunc = 0x00005B5A90;
 		offsets.createCadAssaultSettlementFunc = 0x005B5CB0;
@@ -122,7 +206,6 @@ void codes::initCodes(int gameVer)
 		offsets.createCadMovingNormalFunc = 0x005B0540;
 		offsets.decideEquipmentFunc = 0x0071D050;
 		offsets.getEquipmentPreferencesFunc = 0x00521B10;
-		offsets.createCadSiegeSettlementFunc = 0x005B5BA0;
 		
 		offsets.finalyzeActionStratmapFunc = 0x0059ec70;
 		
@@ -148,6 +231,8 @@ void codes::initCodes(int gameVer)
 		offsets.makeTrackedPointerToAttackFunc = 0x004e6600;
 		offsets.makeCadAttackFunc = 0x005b5900;
 		offsets.somethingWithTrackedPointerAttackFunc = 0x004cbc90;
+		offsets.makeCadDiplomacyFunc = 0x005B65B0;
+		offsets.makeCadDiplomacySettlementFunc = 0x005B66D0;
 
 		//CAMERA
 		offsets.moveStratCameraSlowFunc = 0x0098e4c0;
@@ -162,6 +247,12 @@ void codes::initCodes(int gameVer)
 
 
 		offsets.teleportCharacterFunc = 0x0059ba70;
+		offsets.getTileCharactersFunc = 0x004D05B0;
+		offsets.getValidRegionTile = 0x004A5970;
+		offsets.isTileValidForCharacter = 0x004CCFD0;
+		offsets.deleteMoveExtents = 0x004B67E0;
+		offsets.someSelectionStuff = 0x004DB420;
+		
 
 		offsets.replenishUnitFunc = 0x007495a0;
 		offsets.setUnitArmorFunc = 0x0073c470;
@@ -214,5 +305,54 @@ void codes::initCodes(int gameVer)
 		offsets.deleteFortFuncTwo = 0x004bd010;
 		offsets.createFortFunc = 0x00714E60;
 		offsets.mercEOPValue = 0x018C27C8;
+		
+		offsets.getUnitByLabel = 0x0A95600;
+		offsets.getGroupByLabel = 0x00A931C0;
+		offsets.getUnitByLabel2 = 0x0A927E0;
+
+		//unit commands
+		offsets.unitOrderMove = 0x00A6EB00;
+		offsets.unitImmediatePlace = 0x00A6E370;
+		offsets.unitAttackClosestUnit = 0x00A79A20;
+		offsets.unitAttackUnit = 0x00A6F980;
+		offsets.unitDeployStakes = 0x00A78E60;
+		offsets.unitChangeFormation = 0x00A700A0;
+		offsets.unitHalt = 0x00A6E6E0;
+		offsets.getMapHeight = 0x004441B0;
+		offsets.unitMoveToOrientation = 0x0A6F1A0;
+		offsets.moveRelative = 0x00A7A870;
+		offsets.moveToMissileRange = 0x00A70460;
+		offsets.unitTurn = 0x00A709A0;
+		offsets.unitTaunt = 0x00A73450;
+		offsets.useSpecialAbility = 0x00A73690;
+		offsets.getBuildingAngle = 0x006EB0F0;
+		offsets.attackBuilding = 0x00757EE0;
+		offsets.createCADTargetCharacter = 0x00AAC0F0;
+		offsets.createCADTargetFort = 0x00AAC1D0;
+		offsets.createCADTargetSettlement = 0x00AAC160;
+		offsets.executeCADTargetCharacter = 0x00AAE0B0;
+
+		//Group commands
+		offsets.groupUnitChangeFormation = 0x00A7A000;
+		offsets.groupMoveToRangeOfGroup = 0x00A76920;
+		offsets.groupMoveToRangeOfUnit = 0x00A76330;
+		offsets.groupAttackGroup = 0x00A77370;
+		offsets.groupChangeFormation = 0x00A77880;
+		offsets.groupHalt = 0x00A74B20;
+		offsets.groupMoveFormed = 0x00A74FB0;
+		offsets.groupMoveUnformed = 0x00A75510;
+		offsets.groupRelativeMoveFormed = 0x00A75A10;
+		offsets.groupRelativeMoveUnformed = 0x00A75EE0;
+		offsets.groupTurn = 0x00A77C50;
+		offsets.sendCharacterOffMap = 0x004EF1D0;
+		offsets.assaultObject = 0x00719670;
+		offsets.checkOwnershipCustom = 0x8EEED0;
+		offsets.getUnitCard = 0x008EBFD0;
+		offsets.addToCardArray = 0x464990;
+		offsets.buildWatchtower = 0x0715150;
+		
+		//offsets.unitPlace = 0x00770A70;
+		offsets.unitMove = 0x075A320;
+		offsets.gameLogCommand = 0x0A90B20;
 	}
 }

@@ -699,6 +699,235 @@ private:
 };
 
 
+class onGetUnitByLabel
+	:public AATemplate
+{
+public:
+	onGetUnitByLabel(MemWork* mem, LPVOID adr, int ver);
+	~onGetUnitByLabel();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+	DWORD otherFunc;
+};
+
+
+class onGetGroupByLabel
+	:public AATemplate
+{
+public:
+	onGetGroupByLabel(MemWork* mem, LPVOID adr, int ver);
+	~onGetGroupByLabel();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+	DWORD otherFunc;
+};
+
+
+class onAddCultureToArray
+	:public AATemplate
+{
+public:
+	onAddCultureToArray(MemWork* mem, LPVOID adr, int ver);
+	~onAddCultureToArray();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+
+class onCreatePortraitDb
+	:public AATemplate
+{
+public:
+	onCreatePortraitDb(MemWork* mem, LPVOID adr, int ver);
+	~onCreatePortraitDb();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+//008A472D
+class onGetBrowserPicConstructed
+	:public AATemplate
+{
+public:
+	onGetBrowserPicConstructed(MemWork* mem, LPVOID adr, int ver);
+	~onGetBrowserPicConstructed();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetBrowserPicConstructed2
+	:public AATemplate
+{
+public:
+	onGetBrowserPicConstructed2(MemWork* mem, LPVOID adr, int ver);
+	~onGetBrowserPicConstructed2();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+//008A472D
+class onGetBrowserPicConstruction
+	:public AATemplate
+{
+public:
+	onGetBrowserPicConstruction(MemWork* mem, LPVOID adr, int ver);
+	~onGetBrowserPicConstruction();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetBuildingPic
+	:public AATemplate
+{
+public:
+	onGetBuildingPic(MemWork* mem, LPVOID adr, int ver);
+	~onGetBuildingPic();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetBuildingPic2
+	:public AATemplate
+{
+public:
+	onGetBuildingPic2(MemWork* mem, LPVOID adr, int ver);
+	~onGetBuildingPic2();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetGuildOfferPic
+	:public AATemplate
+{
+public:
+	onGetGuildOfferPic(MemWork* mem, LPVOID adr, int ver);
+	~onGetGuildOfferPic();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetPortraitDbEntry
+	:public AATemplate
+{
+public:
+	onGetPortraitDbEntry(MemWork* mem, LPVOID adr, int ver);
+	~onGetPortraitDbEntry();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onParseBuildingPics
+	:public AATemplate
+{
+public:
+	onParseBuildingPics(MemWork* mem, LPVOID adr, int ver);
+	~onParseBuildingPics();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onParseBuildingLevelPics
+	:public AATemplate
+{
+public:
+	onParseBuildingLevelPics(MemWork* mem, LPVOID adr, int ver);
+	~onParseBuildingLevelPics();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onParseEventBodies
+	:public AATemplate
+{
+public:
+	onParseEventBodies(MemWork* mem, LPVOID adr, int ver);
+	~onParseEventBodies();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetCultureEndTurnSound
+	:public AATemplate
+{
+public:
+	onGetCultureEndTurnSound(MemWork* mem, LPVOID adr, int ver);
+	~onGetCultureEndTurnSound();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetBuildingPicConstruction
+	:public AATemplate
+{
+public:
+	onGetBuildingPicConstruction(MemWork* mem, LPVOID adr, int ver);
+	~onGetBuildingPicConstruction();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetBuildingPicConstructed
+	:public AATemplate
+{
+public:
+	onGetBuildingPicConstructed(MemWork* mem, LPVOID adr, int ver);
+	~onGetBuildingPicConstructed();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+
 class onSearchUnitType
 	:public AATemplate
 {
@@ -712,12 +941,208 @@ private:
 	LPVOID funcAddress;
 };
 
+
+class onAssignGateAttacker
+	:public AATemplate
+{
+public:
+	onAssignGateAttacker(MemWork* mem, LPVOID adr, int ver);
+	~onAssignGateAttacker();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onAttackGate
+	:public AATemplate
+{
+public:
+	onAttackGate(MemWork* mem, LPVOID adr, int ver);
+	~onAttackGate();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onAttackGate2
+	:public AATemplate
+{
+public:
+	onAttackGate2(MemWork* mem, LPVOID adr, int ver);
+	~onAttackGate2();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onReadBuildingPool
 	:public AATemplate
 {
 public:
 	onReadBuildingPool(MemWork* mem, LPVOID adr, int ver);
 	~onReadBuildingPool();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onReadMercenaryPool
+	:public AATemplate
+{
+public:
+	onReadMercenaryPool(MemWork* mem, LPVOID adr, int ver);
+	~onReadMercenaryPool();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onReadDescrStrat
+	:public AATemplate
+{
+public:
+	onReadDescrStrat(MemWork* mem, LPVOID adr, int ver);
+	~onReadDescrStrat();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onSpawnBrigands
+	:public AATemplate
+{
+public:
+	onSpawnBrigands(MemWork* mem, LPVOID adr, int ver);
+	~onSpawnBrigands();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onSpawnBrigands2
+	:public AATemplate
+{
+public:
+	onSpawnBrigands2(MemWork* mem, LPVOID adr, int ver);
+	~onSpawnBrigands2();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCustomBattleCost
+	:public AATemplate
+{
+public:
+	onCustomBattleCost(MemWork* mem, LPVOID adr, int ver);
+	~onCustomBattleCost();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class spawnUnitsSettGift
+	:public AATemplate
+{
+public:
+	spawnUnitsSettGift(MemWork* mem, LPVOID adr, int ver);
+	~spawnUnitsSettGift();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class spawnUnitsSettGift2
+	:public AATemplate
+{
+public:
+	spawnUnitsSettGift2(MemWork* mem, LPVOID adr, int ver);
+	~spawnUnitsSettGift2();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class spawnUnitsSettGift3
+	:public AATemplate
+{
+public:
+	spawnUnitsSettGift3(MemWork* mem, LPVOID adr, int ver);
+	~spawnUnitsSettGift3();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class spawnUnitsSettGift4
+	:public AATemplate
+{
+public:
+	spawnUnitsSettGift4(MemWork* mem, LPVOID adr, int ver);
+	~spawnUnitsSettGift4();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onReadDescrRebel
+	:public AATemplate
+{
+public:
+	onReadDescrRebel(MemWork* mem, LPVOID adr, int ver);
+	~onReadDescrRebel();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCustomBattleUnitCards
+	:public AATemplate
+{
+public:
+	onCustomBattleUnitCards(MemWork* mem, LPVOID adr, int ver);
+	~onCustomBattleUnitCards();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCustomBattleUnits
+	:public AATemplate
+{
+public:
+	onCustomBattleUnits(MemWork* mem, LPVOID adr, int ver);
+	~onCustomBattleUnits();
 
 	void SetOriginalCode();
 	void SetNewCode();
@@ -911,6 +1336,19 @@ class OnCreateUnit
 public:
 	OnCreateUnit(MemWork* mem, LPVOID addr, int ver);
 	~OnCreateUnit();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class OnCreateUnit2
+	:public AATemplate
+{
+public:
+	OnCreateUnit2(MemWork* mem, LPVOID addr, int ver);
+	~OnCreateUnit2();
 
 	void SetOriginialCode();
 	void SetNewCode();

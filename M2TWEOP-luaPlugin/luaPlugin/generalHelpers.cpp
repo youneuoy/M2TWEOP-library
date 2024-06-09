@@ -23,9 +23,136 @@ namespace generalHelpers
 		(*(*plugData::data.funcs.moveNormal))(gen, x, y);
 	}
 
+	void sabotageBuilding(general* gen, building* build)
+	{
+		if (!gen || !gen->genChar || !build)
+			return;
+		auto generalPtr = &gen;
+		auto buildingPtr = &build;
+		DWORD funcAddr = 0xAAC2B0;
+		if (m2tweopHelpers::getGameVersion() == 1)
+			funcAddr = 0xAAB280;
+		_asm
+		{
+			push 0
+			push buildingPtr
+			mov ecx, generalPtr
+			mov eax, funcAddr
+			call eax
+		}
+		DWORD globalCadClass = 0x0162C740;
+		if (m2tweopHelpers::getGameVersion() == 1)
+			globalCadClass = 0x1674570;
+		DWORD cadClass2 = *reinterpret_cast<DWORD*>(globalCadClass);
+		DWORD finalize = 0x0059ec70;
+		if (m2tweopHelpers::getGameVersion() == 1)
+			finalize = 0x0059e790;
+		_asm
+		{
+			push cadClass2
+			mov ecx, gen
+			mov eax, finalize
+			call eax
+		}
+	}
+
 	void reposition(general* gen, int x, int y)
 	{
 		(*(*plugData::data.funcs.teleportCharacter))(gen, x, y);
+	}
+
+	bool teleport(general* gen, int x, int y)
+	{
+		return (*(*plugData::data.funcs.teleportCharacterClose))(gen, x, y);
+	}
+
+	void diplomacyCharacter(general* gen, general* targetCharacter)
+	{
+		(*(*plugData::data.funcs.diplomacyCharacter))(gen, targetCharacter);
+	}
+
+	void assassinate(general* gen, general* targetCharacter)
+	{
+		(*(*plugData::data.funcs.assassinate))(gen, targetCharacter);
+	}
+
+	void marry(general* gen, general* targetCharacter)
+	{
+		(*(*plugData::data.funcs.marry))(gen, targetCharacter);
+	}
+
+	void spyCharacter(general* gen, general* targetCharacter)
+	{
+		(*(*plugData::data.funcs.spyCharacter))(gen, targetCharacter);
+	}
+
+	void sendOffMap(general* gen)
+	{
+		if (!gen || !gen->genChar)
+			return;
+		if (!gen->genChar->label || gen->genChar->label == "")
+		{
+			m2tweopHelpers::logStringGame("character.sendOffMap: character has no label, you wont be able to get him back, command cancelled.");
+			return;
+		}
+		(*(*plugData::data.funcs.sendOffMap))(gen);
+	}
+
+	void denounce(general* gen, general* targetCharacter)
+	{
+		(*(*plugData::data.funcs.denounce))(gen, targetCharacter);
+	}
+
+	void bribe(general* gen, general* targetCharacter)
+	{
+		(*(*plugData::data.funcs.bribe))(gen, targetCharacter);
+	}
+
+	void acquire(general* gen, general* targetCharacter)
+	{
+		(*(*plugData::data.funcs.acquire))(gen, targetCharacter);
+	}
+	
+	void switchCharacterFaction(general* gen, factionStruct* fac, bool keepArmy, bool keepBg)
+	{
+		(*(*plugData::data.funcs.switchCharacterFaction))(gen, fac, keepArmy, keepBg);
+		if (gen->armyLeaded)
+			stackStructHelpers::sortStack(gen->armyLeaded, 6, 7, 4);
+	}
+
+	void diplomacySettlement(general* gen, settlementStruct* targetSettlement)
+	{
+		(*(*plugData::data.funcs.diplomacySettlement))(gen, targetSettlement);
+	}
+
+	void diplomacyFort(general* gen, fortStruct* targetFort)
+	{
+		(*(*plugData::data.funcs.diplomacyFort))(gen, targetFort);
+	}
+
+	void bribeFort(general* gen, fortStruct* targetFort)
+	{
+		(*(*plugData::data.funcs.bribeFort))(gen, targetFort);
+	}
+
+	void spyFort(general* gen, fortStruct* targetFort)
+	{
+		(*(*plugData::data.funcs.spyFort))(gen, targetFort);
+	}
+
+	void bribeSettlement(general* gen, settlementStruct* targetSettlement)
+	{
+		(*(*plugData::data.funcs.bribeSettlement))(gen, targetSettlement);
+	}
+
+	void spySettlement(general* gen, settlementStruct* targetSettlement)
+	{
+		(*(*plugData::data.funcs.spySettlement))(gen, targetSettlement);
+	}
+
+	void sabotageSettlement(general* gen, settlementStruct* targetSettlement)
+	{
+		(*(*plugData::data.funcs.sabotageSettlement))(gen, targetSettlement);
 	}
 
 
@@ -36,19 +163,6 @@ namespace generalHelpers
 
 	void setBodyguard(general* gen, unit* un)
 	{
-		if (gen->bodyguards != nullptr)
-		{
-			un->general = gen;
-			un->trackedUnitPointerP = gen->bodyguards->trackedUnitPointerP;
-			gen->bodyguards->trackedUnitPointerP = 0;///
-			gen->bodyguards->general = 0;
-
-			gen->bodyguards = un;
-
-			(*un->trackedUnitPointerP)->unit = un;
-			return;
-
-		}
 		(*(*plugData::data.funcs.setBodyguard))(gen, un);
 	}
 

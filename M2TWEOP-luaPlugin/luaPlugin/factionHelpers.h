@@ -16,7 +16,7 @@ namespace factionHelpers
 	portBuildingStruct* getPort(const factionStruct* fac, int index);
 	watchTowerStruct* getWatchtower(const factionStruct* fac, int index);
 	void deleteFort(const factionStruct* fac, fortStruct* fort);
-	void createFortXY(const factionStruct* fac, int x, int y);
+	void createFortXY(factionStruct* fac, int x, int y);
 	void createFort(const general* gen);
 	void changeFactionName(factionStruct* fac, const char* newName);
 	bool hasMilitaryAccess(const factionStruct* fac1, const factionStruct* fac2);
@@ -29,6 +29,7 @@ namespace factionHelpers
 	factionRanking* getFactionRanking(const factionStruct* fac, int turnNum);
 	factionEconomy* getFactionEconomy(factionStruct* fac, int turnsAgo);
 	bool isNeighbourFaction(const factionStruct* fac1, const factionStruct* fac2);
+	watchTowerStruct* spawnWatchtower(const factionStruct* fac, int x, int y);
 	int getNeighbourRegionID(const factionStruct* fac, int index);
 	decisionValuesLTGD* getlongTermGoalValues(aiLongTermGoalDirector* LTGD, int targetFaction);
 	void setConstructionValue(aiPersonalityValues* personality, int type, int value);
@@ -44,6 +45,7 @@ namespace factionHelpers
 	ltgdFactionValues* getAiFactionValues(factionStruct* fac);
 	interFactionLTGD* getInterFactionLTGD(factionStruct* fac, factionStruct* targetFac);
 	void setCharacterNameFaction(factionStruct* fac, int characterType, int factionID);
+	stackStruct* splitArmy(factionStruct *faction, const sol::table& units, int x, int y);
 	//faction
 	template <char fieldIndex>
 	std::string getStringProperty(const factionStruct* fac)

@@ -12,10 +12,18 @@ namespace stackStructHelpers
 	void sortStack(stackStruct* stack, const int sortType, const int sortType2, int sortType3);
 	settlementStruct* findInSettlement(const stackStruct* army);
 	fortStruct* findInFort(const stackStruct* army);
+	unitGroup* getGroup(const stackStruct* army, int index);
+	unit* getDeadUnit(const stackStruct* army, int index);
+	bool blockadePort(stackStruct* fleet, portBuildingStruct* port);
+	void setAiActiveSet(const stackStruct* army, const int set);
+	void releaseUnits(const stackStruct* army);
+	void buildWatchTower(stackStruct* army);
+	
 
 	unit* createUnit(stackStruct* army, const char* type, int exp, int arm, int weap);
 	unit* createUnitByIDX(stackStruct* army,int typeIDX, int exp, int arm, int weap);
 	unit* createEOPUnit(stackStruct* army,int typeIDX, int exp, int arm, int weap);
+	void mergeArmies(stackStruct* army, stackStruct* targetArmy, bool force = true);
 	void mergeArmies(stackStruct* army, stackStruct* targetArmy);
 	stackStruct* spawnArmy(
 		factionStruct* faction,

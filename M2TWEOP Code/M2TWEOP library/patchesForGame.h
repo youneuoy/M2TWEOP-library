@@ -23,9 +23,23 @@ public:
 	static DWORD __fastcall OnUnitInfo(DWORD entryAddress);
 	static float __fastcall OnCalculateUnitValue(eduEntry* entry, DWORD value);
 	static int __fastcall onEvaluateUnit(int eduIndex);
+	static DWORD __fastcall onCustomBattleUnitCards(DWORD cardArrayThing, int factionID);
+	static int __fastcall onCustomBattleUnits(eduEntry** unitArray, int currentCount, int factionID);
+	static int __fastcall onAttackGate(unit* unit, void* tactic);
 	static eduEntry* __fastcall onEvaluateUnit2(int eduIndex);
+	static eduEntry* __fastcall onReadDescrRebel(DWORD value);
 	static DWORD __fastcall onSearchUnitType(char* typeName);
 	static int __fastcall OnReligionCombatBonus(int religionID, namedCharacter* namedChar);
+	static char* __fastcall getBrowserPicConstructed(int cultureID, edbEntry* entry, int buildingLevel);
+	static char* __fastcall getBrowserPicConstruction(int cultureID, edbEntry* entry, int buildingLevel);
+	static char* __fastcall getBuildingPic(buildingLevel* level, int cultureID);
+	static char* __fastcall getBuildingPicConstructed(buildingLevel* level, int cultureID);
+	static char* __fastcall getBuildingPicConstruction(buildingLevel* level, int cultureID);
+	static portraitDbEntry* __fastcall getPortraitDbEntry(int cultureID);
+	static char* __fastcall onGetGuildOfferPic(DWORD level, int cultureID);
+	static unit** __fastcall onGetUnitByLabel(DWORD unitLabels, char* label);
+	static unitGroup** __fastcall onGetGroupByLabel(DWORD groupLabels, char* label);
+	static char* __fastcall onGetCultureEndTurnSound(int cultureID);
 
 
 	static general* __fastcall mercenaryMovepointsGetGeneral(stackStruct* army);

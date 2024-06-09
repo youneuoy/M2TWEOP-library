@@ -115,26 +115,6 @@ void m2tweopMap::drawInteract()
 				ImGui::Text("Tile pointer:%p", tile);
 				ImGui::InputScalar("X coordinate", ImGuiDataType_U32, &selectedTile->xTile, 0, NULL, "%u");
 				ImGui::InputScalar("Y coordinate", ImGuiDataType_U32, &selectedTile->yTile, 0, NULL, "%u");
-				ImGui::InputScalar("Region ID", ImGuiDataType_U32, &selectedTile->tileRegionID, 0, NULL, "%u");
-				ImGui::Text("object:%p", tile->object);
-				ImGui::Text("road:%p", tile->road);
-				ImGui::Text("isLand:%d", tile->isLand);
-				ImGui::Text("field_0xB:%d", reinterpret_cast<int>(tile->field_0xB));
-				ImGui::Text("terrainModel:%d", tile->terrainModel);
-				ImGui::Text("ModelIsHills:%d", tile->ModelIsHills);
-				ImGui::Text("groundType:%d", tile->groundType);
-				ImGui::Text("regionId:%d", tile->regionId);
-				ImGui::Text("factionId:%d", tile->factionId);
-				ImGui::Text("borderingRiver:%d", tile->borderingRiver);
-				ImGui::Text("borderingSettlement:%d", tile->borderingSettlement);
-				ImGui::Text("hasRoad:%d", tile->hasRoad);
-				ImGui::Text("border:%d", tile->border);
-				ImGui::Text("objectTypes:%d", tile->objectTypes);
-				ImGui::Text("passable:%d", tile->passable);
-				ImGui::Text("N0002227F:%d", tile->N0002227F);
-				ImGui::Text("N00022271:%d", tile->N00022271);
-				ImGui::Text("armiesNearTile:%d", tile->armiesNearTile);
-				ImGui::Text("charactersOnTile:%d", tile->charactersOnTile);
 	
 				ImGui::Separator();
 

@@ -1,6 +1,9 @@
 #include "fastFunctsHelpers.h"
 
 #include <filesystem>
+
+#include "eduThings.h"
+
 namespace fastFunctsHelpers
 {
 	NOINLINE EOP_EXPORT void setCryptedString(char** targetS, const char* newS)
@@ -30,6 +33,9 @@ namespace fastFunctsHelpers
 	}
 	eduEntry* getEduEntryByName(const char* type)
 	{
+		if (const auto data = eduThings::getEopEduEntryByName(type))
+			return data;
+		
 		eduEntryes* EDB = reinterpret_cast<eduEntryes*>(dataOffsets::offsets.unitTypesStart - 4);
 
 		int unitsNum = EDB->numberOfTupes;

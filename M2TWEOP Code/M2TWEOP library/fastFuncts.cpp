@@ -4,13 +4,29 @@
 #include <queue>
 #include <set>
 
+#include "actionsStrat.h"
 #include "eduThings.h"
 #include "smallFuncs.h"
 
 #include "fastFunctsHelpers.h"
+#include "unitActions.h"
+
 namespace fastFuncts
 {
 
+	//unique per faction!
+	NOINLINE EOP_EXPORT void loadSaveGame(const char* saveName)
+	{
+		UNICODE_STRING** nameMem = new UNICODE_STRING*;
+
+		auto loadName = reinterpret_cast<UNICODE_STRING***>(dataOffsets::offsets.loadGameHandler + 0x4);
+		*loadName = nameMem;
+		
+		smallFuncs::createUniString(*loadName, saveName);
+
+		const auto currentHandler = reinterpret_cast<DWORD*>(dataOffsets::offsets.currentGameHandler);
+		*currentHandler = dataOffsets::offsets.loadGameHandler;
+	}
 
 	NOINLINE EOP_EXPORT factionStruct* getRegionOwner(int regionID)
 	{
@@ -157,42 +173,286 @@ namespace fastFuncts
 		faction->tilesFac->tilesVisiblity[faction->tilesFac->tilesXBound * (y)+x] = vis;
 	}
 
-	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner)
+	std::queue<coordPair> getNeighbourTiles(int x, int y)
 	{
-		DWORD adrFunc = 0x0;
-		int* vTableAdr = (int*)sett->vTable;
-		adrFunc = vTableAdr[39];
+		std::queue<coordPair> neighbours;
+		neighbours.push({ x - 1, y });
+		neighbours.push({ x + 1, y });
+		neighbours.push({ x, y - 1 });
+		neighbours.push({ x, y + 1 });
+		neighbours.push({ x - 1, y + 1 });
+		neighbours.push({ x - 1, y - 1 });
+		neighbours.push({ x + 1, y + 1 });
+		neighbours.push({ x + 1, y - 1 });
+		return neighbours;
+	}
 
-		//give settlement
-		__asm
+	coordPair* findValidTileNearTile(coordPair* coords, int charType)
+	{
+		if (isTileValidForCharacterType(charType, coords))
+			return coords;
+		const auto startCoords = *coords;
+		std::queue<coordPair> neighbours = getNeighbourTiles(coords->xCoord, coords->yCoord);
+		std::vector<coordPair> visited = { *coords };
+		while (true)
+		{
+			if (neighbours.empty())
+				break;
+			coordPair checkCoord = neighbours.front();
+			*coords = { checkCoord.xCoord, checkCoord.yCoord };
+			neighbours.pop();
+			visited.push_back(checkCoord);
+			if (isTileValidForCharacterType(charType, coords))
+				return coords;
+			std::queue<coordPair> newNeighbours = getNeighbourTiles(checkCoord.xCoord, checkCoord.yCoord);
+			while (!newNeighbours.empty())
+			{
+				auto newCoord = newNeighbours.front();
+				newNeighbours.pop();
+				bool isVisited = false;
+				for (const auto& [xCoord, yCoord] : visited)
+				{
+					if (xCoord == newCoord.xCoord && yCoord == newCoord.yCoord)
+						isVisited = true;
+				}
+				if (isVisited)
+					continue;
+				neighbours.push(newCoord);
+			}
+		}
+		*coords = startCoords;
+		return coords;
+	}
+
+	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner, bool convertGarrison)
+	{
+		stackStruct* garrison = nullptr;
+		std::vector<general*> characters;
+		if (convertGarrison)
+		{
+			const int charNum = GAME_FUNC(int(__thiscall*)(settlementStruct*, int), getResidenceCharacterNum)(sett, 1);
+			for (int i = 0; i < charNum; i++)
+			{
+				const auto thisChar = GAME_FUNC(general*(__thiscall*)(settlementStruct*, int, int), getResidenceCharacterAtIndex)(sett, i, 1);
+				if (thisChar->genType->type != characterTypeStrat::spy || thisChar->genChar->faction == sett->faction)
+				{
+					DWORD funcAddr = codes::offsets.switchCharacterFaction;
+					_asm
+					{
+						push 0
+						push 0
+						push newOwner
+						mov ecx, thisChar
+						mov eax, funcAddr
+						call eax
+					}
+				}
+				GAME_FUNC(void(__thiscall*)(general*), changeCharacterTileStuff)(thisChar);
+
+				if (thisChar->genType->type == characterTypeStrat::namedCharacter)
+				{
+					characters.push_back(thisChar);
+					DWORD funcAddr2 = codes::offsets.switchNamedCharacterFaction;
+					_asm
+					{
+						push 0
+						push newOwner
+						mov ecx, thisChar
+						mov eax, funcAddr2
+						call eax
+					}
+				}
+				GAME_FUNC(void(__thiscall*)(general*), initPlaceCharacter)(thisChar);
+			}
+			if (auto stack = sett->army)
+			{
+				garrison = stack;
+				auto origFaction = stack->faction;
+				DWORD funcAddr3 = codes::offsets.switchArmyFaction;
+				_asm
+				{
+					push newOwner
+					push stack
+					mov ecx, origFaction
+					mov eax, funcAddr3
+					call eax
+				}
+			}
+		}
+		DWORD vtable = *reinterpret_cast<DWORD*>(sett);
+		DWORD vFuncOffset = vtable + 0x9c;
+		DWORD vFunc = *reinterpret_cast<DWORD*>(vFuncOffset);
+		_asm
 		{
 			push 5
 			push newOwner
 			push 0
 			mov ecx, sett
-			mov eax, adrFunc
+			mov eax, vFunc
 			call eax
 		}
-
-		adrFunc = 0x0;
-
-		//release sieges
-		if (globals::dataS.gamever == 2)//steam
+		
+		GAME_FUNC(void(__thiscall*)(settlementStruct*, int), removeSieges)(sett, 0);
+		if (garrison)
 		{
-			adrFunc = 0x004bf8d0;
+			if (sett->army && sett->army != garrison)
+				mergeArmies(garrison, sett->army);
+			else
+			{
+				auto newGarrison = createArmyInSettlement(sett);
+				mergeArmies(garrison, newGarrison);
+			}
 		}
-		else
+		for (int i = 0; i < newOwner->stackNum; i++)
 		{
-			adrFunc = 0x004bf340;
+			auto stack = newOwner->stacks[i];
+			if (!stack->gen)
+				continue;
+			if (stack->gen->xCoord == sett->xCoord && stack->gen->yCoord == sett->yCoord)
+			{
+				if (sett->army)
+				{
+					if (sett->army != stack)
+						mergeArmies(stack, sett->army);
+				}
+				else
+				{
+					auto newGarrison = createArmyInSettlement(sett);
+					mergeArmies(stack, newGarrison);
+				}	
+			}
 		}
-		__asm
+		for (auto character : characters)
 		{
-			push 1
-			mov ecx, sett
-			mov eax, adrFunc
+			if (character && !character->ifMarkedToKill && character->genType->type == characterTypeStrat::namedCharacter)
+			{
+				if (!character->genChar->label || character->genChar->labelCrypt == 0)
+				{
+					auto label = std::string(character->genChar->shortName) + "_" + std::to_string(character->genChar->index);
+					fastFunctsHelpers::setCryptedString(&character->genChar->label, label.c_str());
+				}
+				int unitId = character->bodyguards->eduEntry->Index;
+				int xp = character->bodyguards->expScreen;
+				int armour = (character->bodyguards->stats>> 8) & 0x1F;
+				int weapon = (character->bodyguards->stats>> 13) & 0x1F;
+				actionsStrat::sendOffMap(character);
+				if (auto newStack = spawnArmy(
+					newOwner,
+					character->genChar->shortName,
+					character->genChar->lastName,
+					character->genType->type,
+					character->genChar->label,
+					character->genChar->portrait_custom,
+					sett->xCoord,
+					sett->yCoord,
+					(character->genChar->age >> 3) & 0x7F,
+					false,
+					character->genChar->subFaction,unitId,xp,weapon,armour))
+				{
+					if (sett->army)
+						mergeArmies(newStack, sett->army);
+					else
+					{
+						auto newGarrison = createArmyInSettlement(sett);
+						mergeArmies(newStack, newGarrison);
+					}
+				}
+			}
+		}
+		
+		if (newOwner->factionHordeInfo && newOwner->factionHordeInfo->isHorde)
+		{
+			auto globalFort = reinterpret_cast<settlementStruct*>(dataOffsets::offsets.globalSett);
+			globalFort = sett;
+			auto hordeInfo = newOwner->factionHordeInfo;
+			DWORD funcAddr4 = codes::offsets.doHordeStuff;
+			_asm
+			{
+				mov ecx, hordeInfo
+				mov eax, funcAddr4
+				call eax
+			}
+		}
+	}
+	
+	NOINLINE EOP_EXPORT void changeFortOwner(fortStruct* fort, factionStruct* newFaction, bool convertGarrison)
+	{
+		if (convertGarrison)
+		{
+			const int charNum = GAME_FUNC(int(__thiscall*)(fortStruct*, int), getResidenceCharacterNum)(fort, 1);
+			for (int i = 0; i < charNum; i++)
+			{
+				const auto thisChar = GAME_FUNC(general*(__thiscall*)(fortStruct*, int, int), getResidenceCharacterAtIndex)(fort, i, 1);
+				if (thisChar->genType->type != characterTypeStrat::spy || thisChar->genChar->faction == fort->faction)
+				{
+					DWORD funcAddr = codes::offsets.switchCharacterFaction;
+					_asm
+					{
+						push 0
+						push 0
+						push newFaction
+						mov ecx, thisChar
+						mov eax, funcAddr
+						call eax
+					}
+				}
+				GAME_FUNC(void(__thiscall*)(general*), changeCharacterTileStuff)(thisChar);
+
+				if (thisChar->genType->type == characterTypeStrat::namedCharacter)
+				{
+					DWORD funcAddr2 = codes::offsets.switchNamedCharacterFaction;
+					_asm
+					{
+						push 0
+						push newFaction
+						mov ecx, thisChar
+						mov eax, funcAddr2
+						call eax
+					}
+				}
+				GAME_FUNC(void(__thiscall*)(general*), initPlaceCharacter)(thisChar);
+			}
+			if (auto stack = fort->army)
+			{
+				auto origFaction = stack->faction;
+				DWORD funcAddr3 = codes::offsets.switchArmyFaction;
+				_asm
+				{
+					push newFaction
+					push stack
+					mov ecx, origFaction
+					mov eax, funcAddr3
+					call eax
+				}
+			}
+		}
+		DWORD vtable = *reinterpret_cast<DWORD*>(fort);
+		DWORD vFuncOffset = vtable + 0x9c;
+		DWORD vFunc = *reinterpret_cast<DWORD*>(vFuncOffset);
+		_asm
+		{
+			push 7
+			push newFaction
+			push 0
+			mov ecx, fort
+			mov eax, vFunc
 			call eax
 		}
-
+		
+		GAME_FUNC(void(__thiscall*)(fortStruct*, int), removeSieges)(fort, 0);
+		if (newFaction->factionHordeInfo && newFaction->factionHordeInfo->isHorde)
+		{
+			auto globalFort = reinterpret_cast<fortStruct*>(dataOffsets::offsets.globalSett);
+			globalFort = fort;
+			auto hordeInfo = newFaction->factionHordeInfo;
+			DWORD funcAddr4 = codes::offsets.doHordeStuff;
+			_asm
+			{
+				mov ecx, hordeInfo
+				mov eax, funcAddr4
+				call eax
+			}
+		}
 	}
 
 	NOINLINE EOP_EXPORT void GetGameTileCoordsWithCursor(int& x, int& y)
@@ -614,41 +874,101 @@ namespace fastFuncts
 		return nullptr;
 	}
 
+	NOINLINE EOP_EXPORT bool isTileValidForCharacterType(int charType, coordPair* coords)
+	{
+		auto stratMap = smallFuncs::getGameDataAll()->stratMap;
+		if (!stratMap)
+			return false;
+		if (!GAME_FUNC(bool(__stdcall*)(coordPair*, int, int), isTileValidForCharacter)(coords, charType, 1))
+			return false;
+		const auto tile = getTileStruct(coords->xCoord, coords->yCoord);
+		return tile->nonPassable != -1 && ((tile->objectTypes & 107) == 0);
+	}
+
 	NOINLINE EOP_EXPORT void teleportCharacter(general* gen, int x, int y)
 	{
-		if (gen->armyLeaded!=nullptr)
+		if (gen->residence)
+		{
+			unitActions::logStringGame("character.teleport: Character is in residence, cancelled to avoid bugs");
+			return;
+		}
+		
+		if (gen->armyLeaded != nullptr)
 		{
 			fastFuncts::StopSiege(gen->armyLeaded);
 			fastFuncts::StopBlockPort(gen->armyLeaded);
 		}
 
-		DWORD adrFunc = codes::offsets.teleportCharacterFunc;
-		_asm
+		auto targetCoords = new coordPair{ x,y };
+		auto charArray = new characterArray();
+		GAME_FUNC(void(__stdcall*)(coordPair*, characterArray*, int), getTileCharactersFunc)(targetCoords, charArray, 12);
+		if ((!charArray->charactersNum && isTileValidForCharacterType(gen->genType->type, targetCoords)) ||
+			GAME_FUNC(bool(__thiscall*)(regionStruct*, coordPair*, char), getValidRegionTile)(getRegionByID(getTileStruct(x, y)->regionId), &targetCoords[0], 0))
 		{
-			push y
-			push x
+			
+			GAME_FUNC(void(__thiscall*)(general*), changeCharacterTileStuff)(gen);
+			DWORD adrFunc = codes::offsets.teleportCharacterFunc;
+			int xCoord = targetCoords->xCoord;
+			int yCoord = targetCoords->yCoord;
+			_asm
+			{
+				push yCoord
+				push xCoord
 
-			mov ecx, gen
-			mov eax, adrFunc
-			call eax
+				mov ecx, gen
+				mov eax, adrFunc
+				call eax
+			}
+			DWORD moveExtentThing = reinterpret_cast<DWORD>(smallFuncs::getGameDataAll()->stratPathFinding) + 0x88;
+		    GAME_FUNC(void(__thiscall*)(DWORD), deleteMoveExtents)(moveExtentThing);
+			auto selectInfoPtr = smallFuncs::getGameDataAll()->selectionInfoPtr2;
+		    GAME_FUNC(void(__thiscall*)(selectionInfo**, general*), someSelectionStuff)(selectInfoPtr, gen);
+		    GAME_FUNC(void(__thiscall*)(general*), initPlaceCharacter)(gen);
+		}
+		delete targetCoords;
+		delete charArray;
+	}
+
+	NOINLINE EOP_EXPORT bool teleportCharacterClose(general* gen, int x, int y)
+	{
+		if (gen->residence)
+		{
+			unitActions::logStringGame("character.teleport: Character is in residence, cancelled to avoid bugs");
+			return false;
+		}
+		bool isTeleported = false;
+		if (gen->armyLeaded != nullptr)
+		{
+			fastFuncts::StopSiege(gen->armyLeaded);
+			fastFuncts::StopBlockPort(gen->armyLeaded);
 		}
 
-		if (globals::dataS.gamever == 2)//steam
+		auto targetCoords = new coordPair{ x,y };
+		if (targetCoords = findValidTileNearTile(targetCoords, gen->genType->type);
+			isTileValidForCharacterType(gen->genType->type, targetCoords))
 		{
-			adrFunc = 0x00599900;
-		}
-		else
-		{
-			adrFunc = 0x00599410;
-		}
+			GAME_FUNC(void(__thiscall*)(general*), changeCharacterTileStuff)(gen);
+			DWORD adrFunc = codes::offsets.teleportCharacterFunc;
+			int xCoord = targetCoords->xCoord;
+			int yCoord = targetCoords->yCoord;
+			_asm
+			{
+				push yCoord
+				push xCoord
 
-		_asm
-		{
-			mov ecx, gen
-			mov eax, adrFunc
-			call eax
+				mov ecx, gen
+				mov eax, adrFunc
+				call eax
+			}
+			DWORD moveExtentThing = reinterpret_cast<DWORD>(smallFuncs::getGameDataAll()->stratPathFinding) + 0x88;
+		    GAME_FUNC(void(__thiscall*)(DWORD), deleteMoveExtents)(moveExtentThing);
+			auto selectInfoPtr = smallFuncs::getGameDataAll()->selectionInfoPtr2;
+		    GAME_FUNC(void(__thiscall*)(selectionInfo**, general*), someSelectionStuff)(selectInfoPtr, gen);
+		    GAME_FUNC(void(__thiscall*)(general*), initPlaceCharacter)(gen);
+			isTeleported = true;
 		}
-		return;
+		delete targetCoords;
+		return isTeleported;
 	}
 
 	NOINLINE EOP_EXPORT void addTrait(namedCharacter* character, const char* traitName, int traitLevel)
@@ -1337,6 +1657,7 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT bool StopSiege(stackStruct* army)
 	{
 		bool retVal = (army->siege == nullptr);
+		if (retVal)return false;
 
 		typedef void(__thiscall* StopSiegeF)(stackStruct* army, int some);
 
@@ -1358,6 +1679,7 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT bool StopBlockPort(stackStruct* army)
 	{
 		bool retVal = (army->blockedPort == nullptr);
+		if (retVal)return false;
 
 		typedef void(__thiscall* StopBlockPortF)(stackStruct* army);
 
@@ -1392,6 +1714,32 @@ namespace fastFuncts
 	}
 
 	NOINLINE EOP_EXPORT void setBodyguard(general* gen, unit* un)
+	{
+		if (gen->bodyguards != nullptr && gen->bodyguards->trackedUnitPointerP != nullptr)
+		{
+			un->general = gen;
+			un->trackedUnitPointerP = gen->bodyguards->trackedUnitPointerP;
+			gen->bodyguards->trackedUnitPointerP = nullptr;///
+			gen->bodyguards->general = nullptr;
+
+			gen->bodyguards = un;
+
+			(*un->trackedUnitPointerP)->unit = un;
+			return;
+
+		}
+		DWORD adr = codes::offsets.setBodyguard;
+		_asm {
+			push un
+			mov ecx, gen
+			mov eax, adr
+			call eax
+		}
+
+		return;
+	}
+
+	NOINLINE EOP_EXPORT void setBodyguardStart(general* gen, unit* un)
 	{
 		DWORD adr = codes::offsets.setBodyguard;
 		_asm {
@@ -1546,11 +1894,18 @@ namespace fastFuncts
 		}
 	}
 
-	NOINLINE EOP_EXPORT void createFortXY(const factionStruct* fac, int x, int y)
+	NOINLINE EOP_EXPORT void createFortXY(factionStruct* fac, int x, int y)
 	{
 		factionStruct* faction = (factionStruct*)fac;
 		general* newgen = fastFuncts::createCharacterWithoutSpawning("named character", faction, 30, "fort", "fort", 31, "default", x, y);
 		stackStruct* newarmy = fastFuncts::createArmy(newgen);
+		auto cultureID = fac->cultureID;
+		auto cultureDb = reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
+		auto culture = cultureDb->cultures[cultureID];
+		auto cost = culture.fortCost;
+		fac->money += cost;
+		auto oldOption = getCampaignDb()->campaignDbSettlement.canBuildForts;
+		getCampaignDb()->campaignDbSettlement.canBuildForts = true;
 		DWORD adrFunc = codes::offsets.createFortFunc;
 		_asm
 		{
@@ -1559,6 +1914,17 @@ namespace fastFuncts
 			call eax
 		}
 		killCharacter(newgen);
+		getCampaignDb()->campaignDbSettlement.canBuildForts = oldOption;
+	}
+
+	campaignDb* getCampaignDb()
+	{
+		return reinterpret_cast<campaignDb*>(dataOffsets::offsets.campaignDb);
+	}
+
+	campaignDbExtra* getCampaignDbExtra()
+	{
+		return reinterpret_cast<campaignDbExtra*>(dataOffsets::offsets.campaignDbExtra);
 	}
 
 	NOINLINE EOP_EXPORT void createFort(const general* gen)
@@ -1567,6 +1933,8 @@ namespace fastFuncts
 		if (newarmy == nullptr) {
 			return;
 		}
+		auto oldOption = getCampaignDb()->campaignDbSettlement.canBuildForts;
+		getCampaignDb()->campaignDbSettlement.canBuildForts = true;
 		DWORD adrFunc = codes::offsets.createFortFunc;
 		_asm
 		{
@@ -1574,6 +1942,7 @@ namespace fastFuncts
 			mov eax, adrFunc
 			call eax
 		}
+		getCampaignDb()->campaignDbSettlement.canBuildForts = oldOption;
 	}
 
 	NOINLINE EOP_EXPORT void setUnitParams(unit* un, int count, int exp, int armor, int weap)
@@ -1619,6 +1988,12 @@ namespace fastFuncts
 
 		return retMem;
 	}
+
+	void logFuncError(const std::string& funcName, const std::string& error)
+	{
+		unitActions::logStringGame(funcName + " error: " + error);
+	}
+
 	NOINLINE EOP_EXPORT void mergeArmies(stackStruct* army, stackStruct* targetArmy)
 	{
 		if (army->numOfUnits + targetArmy->numOfUnits > 20)

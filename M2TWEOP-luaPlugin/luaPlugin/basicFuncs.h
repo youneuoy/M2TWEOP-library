@@ -147,9 +147,10 @@ public:
 	ProcLoader<bool(__cdecl*)(const char* condition, const eventTrigger* eventData)> condition;
 	ProcLoader<void(__cdecl*)(regionStruct* region, const char* newName)> changeRebelsName;
 	ProcLoader<void(__cdecl*)(const factionStruct* fac, fortStruct* fort)> deleteFort;
-	ProcLoader<void(__cdecl*)(const factionStruct* fac, int x, int y)> createFortXY;
+	ProcLoader<void(__cdecl*)(factionStruct* fac, int x, int y)> createFortXY;
 	ProcLoader<DWORD(__cdecl*)(size_t amount)> allocateGameMem;
 	ProcLoader<void(__cdecl*)(const general* gen)> createFort;
+	ProcLoader<void(__cdecl*)(stackStruct* army)> buildWatchTower;
 	ProcLoader<gameDataAllStruct* (__cdecl*)()> getGameDataAll;
 
 
@@ -166,6 +167,9 @@ public:
 	ProcLoader<void(__cdecl*)(int, int)> setConversionLvlFromCastle;
 	ProcLoader<void(__cdecl*)(int, int)> setConversionLvlFromCity;
 	ProcLoader<void(__cdecl*)(unsigned char)> setGuildCooldown;
+	ProcLoader<void(__cdecl*)(const std::string&)> logStringGame;
+	ProcLoader<void(__cdecl*)(general*, general*)> diplomacyCharacter;
+	ProcLoader<void(__cdecl*)(general*, settlementStruct*)> diplomacySettlement;
 
 
 	//get current game year
@@ -178,6 +182,47 @@ public:
 	ProcLoader<void(__cdecl*)(general*, settlementStruct*, bool)> siegeSettlement;
 	ProcLoader<void(__cdecl*)(general*, fortStruct*, bool)> siegeFort;
 	ProcLoader<void(__cdecl*)(general*, general*)> attackCharacter;
+	ProcLoader<void(__cdecl*)(general*, general*)> assassinate;
+	ProcLoader<void(__cdecl*)(general*, general*)> marry;
+	ProcLoader<void(__cdecl*)(general*, general*)> spyCharacter;
+	ProcLoader<void(__cdecl*)(general*, general*)> denounce;
+	ProcLoader<void(__cdecl*)(general*, general*)> bribe;
+	ProcLoader<void(__cdecl*)(general*, general*)> acquire;
+	ProcLoader<void(__cdecl*)(general*, factionStruct*, bool, bool)> switchCharacterFaction;
+	ProcLoader<void(__cdecl*)(fortStruct*, factionStruct*, bool)> changeFortOwner;
+	ProcLoader<bool(__cdecl*)(general*, int, int)> teleportCharacterClose;
+	ProcLoader<coordPair*(__cdecl*)(coordPair*, int)> findValidTileNearTile;
+	ProcLoader<bool(__cdecl*)(int, coordPair*)> isTileValidForCharacterType;
+
+	ProcLoader<void(__cdecl*)(const unit*, float, float, bool)> unitMovetoPosition;
+	ProcLoader<int(__cdecl*)(const unit*)> getUnitFormation;
+	ProcLoader<void(__cdecl*)(unit*, float, float, int16_t, int)> placeUnit;
+	ProcLoader<unit*(__cdecl*)(const char*)> getUnitByLabel;
+	ProcLoader<void*(__cdecl*)(const unit*, int16_t, bool)> unitAttackClosest;
+	ProcLoader<void*(__cdecl*)(const unit*, const unit*, bool)> attackUnit;
+	ProcLoader<void*(__cdecl*)(const unit*)> deployStakes;
+	ProcLoader<void*(__cdecl*)(const unit*)> haltUnit;
+	ProcLoader<void*(__cdecl*)(const unit*, int)> changeUnitFormation;
+	ProcLoader<float(__cdecl*)(float, float)> getBattleMapHeight;
+	ProcLoader<void(__cdecl*)(const unit*, float, float, int, int16_t, bool)> moveToOrientation;
+	ProcLoader<void(__cdecl*)(const unit*, float, float, bool)> moveRelative;
+	ProcLoader<void(__cdecl*)(const unit*, const unit*, bool)> moveToMissileRange;
+	ProcLoader<void(__cdecl*)(const unit*, int16_t, bool)> unitTurn;
+	ProcLoader<void(__cdecl*)(const unit*)> taunt;
+	ProcLoader<void(__cdecl*)(const unit*)> useSpecialAbility;
+	ProcLoader<void(__cdecl*)(const unit*, buildingBattle*)> attackBuilding;
+	
+	ProcLoader<void(__cdecl*)(const unitGroup*, int)> changeGroupUnitFormation;
+	ProcLoader<void(__cdecl*)(const unitGroup*, const unitGroup*, bool)> moveToRangeOfGroup;
+	ProcLoader<void(__cdecl*)(const unitGroup*, const unit*, bool)> moveGroupToRangeOfUnit;
+	ProcLoader<void(__cdecl*)(const unitGroup*, const unitGroup*, bool)> groupAttackGroup;
+	ProcLoader<void(__cdecl*)(const unitGroup*)> groupHalt;
+	ProcLoader<void(__cdecl*)(const unitGroup*, float, float, bool)> groupMoveFormed;
+	ProcLoader<void(__cdecl*)(const unitGroup*, float, float, bool)> groupMoveUnformed;
+	ProcLoader<void(__cdecl*)(const unitGroup*, float, float, bool)> groupMoveFormedRelative;
+	ProcLoader<void(__cdecl*)(const unitGroup*, float, float, bool)> groupMoveUnformedRelative;
+	ProcLoader<void(__cdecl*)(const unitGroup*, int16_t, bool)> groupTurn;
+	
 
 
 	ProcLoader<int(__cdecl*)(namedCharacter*, ancillary*)> addAncillary;
@@ -194,6 +239,7 @@ public:
 	ProcLoader<void(__cdecl*)(int, int)> moveStratCameraFast;
 	ProcLoader<void(__cdecl*)(float)> zoomStratCamera;
 	ProcLoader<void(__cdecl*)(general*, int, int)> teleportCharacter;
+	ProcLoader<void(__cdecl*)(const char*)> loadSaveGame;
 
 	//get list of armies in battle
 	ProcLoader<std::vector<basicStructs::arm*>* (__cdecl*)()> getBattleArmies;
@@ -220,9 +266,19 @@ public:
 	ProcLoader<void(__cdecl*)(general*, unit*)> setBodyguard;
 
 
-	ProcLoader<void(__cdecl*)(settlementStruct*, factionStruct*)> setSettlementOwner;
+	ProcLoader<void(__cdecl*)(settlementStruct*, factionStruct*, bool)> setSettlementOwner;
 	ProcLoader<void(__cdecl*)(settlementStruct*, const char*, bool)> destroyBuilding;
 	ProcLoader<void(__cdecl*)(settlementStruct*, const char*)> createBuilding;
+	ProcLoader<void(__cdecl*)(general*)> sendOffMap;
+	ProcLoader<bool(__cdecl*)(stackStruct*, portBuildingStruct*)> blockadePort;
+
+	
+	ProcLoader<void(__cdecl*)(general*, fortStruct*)> diplomacyFort;
+	ProcLoader<void(__cdecl*)(general*, fortStruct*)> bribeFort;
+	ProcLoader<void(__cdecl*)(general*, fortStruct*)> spyFort;
+	ProcLoader<void(__cdecl*)(general*, settlementStruct*)> bribeSettlement;
+	ProcLoader<void(__cdecl*)(general*, settlementStruct*)> spySettlement;
+	ProcLoader<void(__cdecl*)(general*, settlementStruct*)> sabotageSettlement;
 
 
 	ProcLoader<void(__cdecl*)(general*, int, int, int)> setCharacterType;

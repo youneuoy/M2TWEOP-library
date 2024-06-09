@@ -2369,11 +2369,15 @@ function ImGui.SeparatorText(text) end
 ---@param sizeY number 
 function ImGui.ImageButton(label, texture, sizeX, sizeY) end 
 
---- Image.
+--- Image (the optional parameters are pairs, obviously you can't just use an xCoord only).
 ---@param texture any 
 ---@param sizeX number 
 ---@param sizeY number 
-function ImGui.Image(texture, sizeX, sizeY) end 
+---@param uv0X number? optional
+---@param uv0Y number? optional
+---@param uv1X number? optional
+---@param uv1Y number? optional
+function ImGui.Image(texture, sizeX, sizeY, uv0X, uv0Y, uv1X, uv1Y) end 
 
 --- The BeginCombo()/EndCombo() api allows you to manage your contents and selection state however you want it, by creating e.g. Selectable() items.
 ---@param label string 
@@ -2627,13 +2631,13 @@ function ImGui.InputTextMultiline(label, text, bufferSize, sizeX, sizeY, inputTe
 
 --- Input with Keyboard.
 ---@param label string 
----@param text string 
 ---@param hint string 
+---@param text string 
 ---@param bufferSize integer 
 ---@param inputTextFlags integer? optional
 ---@return string value 
 ---@return boolean returnBool 
-function ImGui.InputTextWithHint(label, text, hint, bufferSize, inputTextFlags) end 
+function ImGui.InputTextWithHint(label, hint, text, bufferSize, inputTextFlags) end 
 
 --- Input with Keyboard.
 ---@param label string 
@@ -2789,8 +2793,8 @@ function ImGui.GetTreeNodeToLabelSpacing() end
 
 --- If returning 'true' the header is open. doesn't indent nor push on ID stack. user doesn't have to call TreePop(). If second argument bool then display an additional small close button on upper right of the header which will set the bool to false when clicked.
 ---@param label string 
----@param openOrFlags integer 
----@param flags integer 
+---@param openOrFlags integer? optional
+---@param flags integer? optional
 ---@return boolean open 
 ---@return boolean returnBool2 
 function ImGui.CollapsingHeader(label, openOrFlags, flags) end 
@@ -3356,6 +3360,18 @@ function ImGui.GetStyle() end
 ---@return ImGuiIO io 
 function ImGui.GetIO() end 
 
+--- Get window draw list.
+---@return ImDrawList drawList 
+function ImGui.GetWindowDrawList() end 
+
+--- Get Color U32.
+---@param R number 
+---@param G number 
+---@param B number 
+---@param A number 
+---@return integer color 
+function ImGui.GetColorU32(R, G, B, A) end 
+
 ---Basic ImVec4 table
 ---@class ImVec4
 ImVec4 = { 
@@ -3613,6 +3629,284 @@ ImFontAtlas = {
 ---@param sizePixels number 
 ---@return ImFont font 
 function ImFontAtlas:AddFontFromFileTTF(filename, sizePixels) end 
+
+---Basic ImDrawList table
+---@class ImDrawList
+ImDrawList = { 
+
+}
+
+--- Push Clip Rect.
+---@param posXmin number 
+---@param posYmin number 
+---@param posXmax number 
+---@param posYmax number 
+---@param intersect boolean? optional
+function ImDrawList:PushClipRect(posXmin, posYmin, posXmax, posYmax, intersect) end 
+
+--- Pop Clip Rect.
+function ImDrawList:PopClipRect() end 
+
+--- Get Clip Rect Min.
+---@return ImVec2 clipRectMin 
+function ImDrawList:GetClipRectMin() end 
+
+--- Get Clip Rect Max.
+---@return ImVec2 clipRectMax 
+function ImDrawList:GetClipRectMax() end 
+
+--- Add Line.
+---@param point1X number 
+---@param point1Y number 
+---@param point2X number 
+---@param point2Y number 
+---@param color integer 
+---@param thickness number? optional
+function ImDrawList:AddLine(point1X, point1Y, point2X, point2Y, color, thickness) end 
+
+--- Add Rect.
+---@param point1X number 
+---@param point1Y number 
+---@param point2X number 
+---@param point2Y number 
+---@param color integer 
+---@param rounding number? optional
+---@param flags integer? optional
+---@param thickness number? optional
+function ImDrawList:AddRect(point1X, point1Y, point2X, point2Y, color, rounding, flags, thickness) end 
+
+--- Add Rect Filled.
+---@param point1X number 
+---@param point1Y number 
+---@param point2X number 
+---@param point2Y number 
+---@param color integer 
+---@param rounding number? optional
+---@param flags integer? optional
+function ImDrawList:AddRectFilled(point1X, point1Y, point2X, point2Y, color, rounding, flags) end 
+
+--- Add Rect Filled Multi Color.
+---@param point1X number 
+---@param point1Y number 
+---@param point2X number 
+---@param point2Y number 
+---@param colorUpperLeft integer 
+---@param colorUpperRight integer 
+---@param colorBottomRight integer 
+---@param colorBottomLeft integer 
+function ImDrawList:AddRectFilledMultiColor(point1X, point1Y, point2X, point2Y, colorUpperLeft, colorUpperRight, colorBottomRight, colorBottomLeft) end 
+
+--- Add Quad.
+---@param point1X number 
+---@param point1Y number 
+---@param point2X number 
+---@param point2Y number 
+---@param point3X number 
+---@param point3Y number 
+---@param point4X number 
+---@param point4Y number 
+---@param color integer 
+---@param thickness number? optional
+function ImDrawList:AddQuad(point1X, point1Y, point2X, point2Y, point3X, point3Y, point4X, point4Y, color, thickness) end 
+
+--- Add Quad Filled.
+---@param point1X number 
+---@param point1Y number 
+---@param point2X number 
+---@param point2Y number 
+---@param point3X number 
+---@param point3Y number 
+---@param point4X number 
+---@param point4Y number 
+---@param color integer 
+function ImDrawList:AddQuadFilled(point1X, point1Y, point2X, point2Y, point3X, point3Y, point4X, point4Y, color) end 
+
+--- Add Triangle.
+---@param point1X number 
+---@param point1Y number 
+---@param point2X number 
+---@param point2Y number 
+---@param point3X number 
+---@param point3Y number 
+---@param color integer 
+---@param thickness number? optional
+function ImDrawList:AddTriangle(point1X, point1Y, point2X, point2Y, point3X, point3Y, color, thickness) end 
+
+--- Add Triangle Filled.
+---@param point1X number 
+---@param point1Y number 
+---@param point2X number 
+---@param point2Y number 
+---@param point3X number 
+---@param point3Y number 
+---@param color integer 
+function ImDrawList:AddTriangleFilled(point1X, point1Y, point2X, point2Y, point3X, point3Y, color) end 
+
+--- Add Circle.
+---@param point1X number 
+---@param point1Y number 
+---@param radius number 
+---@param color integer 
+---@param numSegments integer? optional
+---@param thickness number? optional
+function ImDrawList:AddCircle(point1X, point1Y, radius, color, numSegments, thickness) end 
+
+--- Add Circle Filled.
+---@param point1X number 
+---@param point1Y number 
+---@param radius number 
+---@param color integer 
+---@param numSegments integer? optional
+function ImDrawList:AddCircleFilled(point1X, point1Y, radius, color, numSegments) end 
+
+--- Add Ngon.
+---@param point1X number 
+---@param point1Y number 
+---@param radius number 
+---@param color integer 
+---@param numSegments integer 
+---@param thickness number? optional
+function ImDrawList:AddNgon(point1X, point1Y, radius, color, numSegments, thickness) end 
+
+--- Add Ngon Filled.
+---@param point1X number 
+---@param point1Y number 
+---@param radius number 
+---@param color integer 
+---@param numSegments integer 
+function ImDrawList:AddNgonFilled(point1X, point1Y, radius, color, numSegments) end 
+
+--- Add Ellipse.
+---@param centerX number 
+---@param centerY number 
+---@param radiusX number 
+---@param radiusY number 
+---@param color integer 
+---@param rotation number? optional
+---@param numSegments integer? optional
+---@param thickness number? optional
+function ImDrawList:AddEllipse(centerX, centerY, radiusX, radiusY, color, rotation, numSegments, thickness) end 
+
+--- Add Ellipse Filled.
+---@param centerX number 
+---@param centerY number 
+---@param radiusX number 
+---@param radiusY number 
+---@param color integer 
+---@param rotation number? optional
+---@param numSegments integer? optional
+function ImDrawList:AddEllipseFilled(centerX, centerY, radiusX, radiusY, color, rotation, numSegments) end 
+
+--- Add Text.
+---@param posX number 
+---@param posY number 
+---@param color integer 
+---@param textBegin string 
+---@param textEnd string? optional
+function ImDrawList:AddText(posX, posY, color, textBegin, textEnd) end 
+
+--- Add Bezier Cubic.
+---@param p1X number 
+---@param p1Y number 
+---@param p2X number 
+---@param p2Y number 
+---@param p3X number 
+---@param p3Y number 
+---@param p4X number 
+---@param p4Y number 
+---@param color integer 
+---@param thickness number 
+---@param numSegments integer? optional
+function ImDrawList:AddBezierCubic(p1X, p1Y, p2X, p2Y, p3X, p3Y, p4X, p4Y, color, thickness, numSegments) end 
+
+--- Add Bezier Quadratic.
+---@param p1X number 
+---@param p1Y number 
+---@param p2X number 
+---@param p2Y number 
+---@param p3X number 
+---@param p3Y number 
+---@param color integer 
+---@param thickness number 
+---@param numSegments integer? optional
+function ImDrawList:AddBezierQuadratic(p1X, p1Y, p2X, p2Y, p3X, p3Y, color, thickness, numSegments) end 
+
+--- Path Clear.
+function ImDrawList:PathClear() end 
+
+--- Path Line To.
+---@param posX number 
+---@param posY number 
+function ImDrawList:PathLineTo(posX, posY) end 
+
+--- Path Line To Merge Duplicate.
+---@param posX number 
+---@param posY number 
+function ImDrawList:PathLineToMergeDuplicate(posX, posY) end 
+
+--- Path Fill Convex.
+---@param color integer 
+function ImDrawList:PathFillConvex(color) end 
+
+--- Path Stroke.
+---@param color integer 
+---@param flags integer? optional
+function ImDrawList:PathStroke(color, flags) end 
+
+--- Path Arc To.
+---@param centerX number 
+---@param centerY number 
+---@param radius number 
+---@param aMin number 
+---@param aMax number 
+---@param numSegments integer? optional
+function ImDrawList:PathArcTo(centerX, centerY, radius, aMin, aMax, numSegments) end 
+
+--- Path Arc To Fast.
+---@param centerX number 
+---@param centerY number 
+---@param radius number 
+---@param aMin integer 
+---@param aMax integer 
+function ImDrawList:PathArcToFast(centerX, centerY, radius, aMin, aMax) end 
+
+--- Path Elliptical Arc To.
+---@param centerX number 
+---@param centerY number 
+---@param radiusX number 
+---@param radiusY number 
+---@param rotation number 
+---@param aMin number 
+---@param aMax number 
+---@param numSegments integer? optional
+function ImDrawList:PathEllipticalArcTo(centerX, centerY, radiusX, radiusY, rotation, aMin, aMax, numSegments) end 
+
+--- Path Bezier Cubic Curve To.
+---@param p2X number 
+---@param p2Y number 
+---@param p3X number 
+---@param p3Y number 
+---@param p4X number 
+---@param p4Y number 
+---@param numSegments integer? optional
+function ImDrawList:PathBezierCubicCurveTo(p2X, p2Y, p3X, p3Y, p4X, p4Y, numSegments) end 
+
+--- Path Bezier Quadratic Curve To.
+---@param p2X number 
+---@param p2Y number 
+---@param p3X number 
+---@param p3Y number 
+---@param numSegments integer? optional
+function ImDrawList:PathBezierQuadraticCurveTo(p2X, p2Y, p3X, p3Y, numSegments) end 
+
+--- Path Rect.
+---@param p1X number 
+---@param p1Y number 
+---@param p2X number 
+---@param p2Y number 
+---@param rounding number? optional
+---@param flags integer? optional
+function ImDrawList:PathRect(p1X, p1Y, p2X, p2Y, rounding, flags) end 
 
 ---Basic ImGuiIO table
 ---@class ImGuiIO

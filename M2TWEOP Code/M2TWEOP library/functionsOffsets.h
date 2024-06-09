@@ -10,10 +10,17 @@ public:
 		DWORD loadStratCasModelFunc = NULL;
 
 		DWORD allocMemFunc = NULL;
+		
+		DWORD createEduEntry = NULL;
 
 
 
 		DWORD createIdleActionFunc = NULL;
+		DWORD makeCadDiplomacyFunc = NULL;
+		DWORD makeCadDiplomacySettlementFunc = NULL;
+		DWORD createCADTargetCharacter = NULL;
+		DWORD createCADTargetFort = NULL;
+		DWORD createCADTargetSettlement = NULL;
 
 
 		DWORD createSiegeSettlementGarrisonedFunc = NULL;
@@ -118,6 +125,64 @@ public:
 		DWORD findParentForAdoptionFunc = NULL;
 		DWORD setArmyRegionEntriesFunc = NULL;
 		DWORD factionRessurectStuffFunc = NULL;
+
+		DWORD unitMove = NULL;
+		DWORD unitOrderMove = NULL;
+		DWORD unitPlace = NULL;
+		DWORD getUnitByLabel = NULL;
+		DWORD getUnitByLabel2 = NULL;
+		DWORD getGroupByLabel = NULL;
+		DWORD unitImmediatePlace = NULL;
+		DWORD unitAttackClosestUnit = NULL;
+		DWORD unitAttackUnit = NULL;
+		DWORD unitDeployStakes = NULL;
+		DWORD unitChangeFormation = NULL;
+		DWORD unitHalt = NULL;
+		DWORD getMapHeight = NULL;
+		DWORD unitMoveToOrientation = NULL;
+		DWORD moveRelative = NULL;
+		DWORD moveToMissileRange = NULL;
+		DWORD unitTurn = NULL;
+		DWORD unitTaunt = NULL;
+		DWORD useSpecialAbility = NULL;
+		DWORD getBuildingAngle = NULL;
+		DWORD attackBuilding = NULL;
+		
+		DWORD groupUnitChangeFormation = NULL;
+		DWORD groupMoveToRangeOfGroup = NULL;
+		DWORD groupMoveToRangeOfUnit = NULL;
+		DWORD groupAttackGroup = NULL;
+		DWORD groupChangeFormation = NULL;
+		DWORD groupHalt = NULL;
+		DWORD groupMoveFormed = NULL;
+		DWORD groupMoveUnformed = NULL;
+		DWORD groupRelativeMoveFormed = NULL;
+		DWORD groupRelativeMoveUnformed = NULL;
+		DWORD groupTurn = NULL;
+		DWORD gameLogCommand = NULL;
+		DWORD executeCADTargetCharacter = NULL;
+		DWORD switchCharacterFaction = NULL;
+		DWORD switchNamedCharacterFaction = NULL;
+		DWORD switchArmyFaction = NULL;
+		DWORD changeCharacterTileStuff = NULL;
+		DWORD initPlaceCharacter = NULL;
+		DWORD getResidenceCharacterNum = NULL;
+		DWORD getResidenceCharacterAtIndex = NULL;
+		DWORD removeSieges = NULL;
+		DWORD doHordeStuff = NULL;
+		DWORD getTileCharactersFunc = NULL;
+		DWORD getValidRegionTile = NULL;
+		DWORD isTileValidForCharacter = NULL;
+		DWORD deleteMoveExtents = NULL;
+		DWORD someSelectionStuff = NULL;
+		DWORD doHordeStuff2 = NULL;
+		DWORD doHordeStuff3 = NULL;
+		DWORD sendCharacterOffMap = NULL;
+		DWORD assaultObject = NULL;
+		DWORD checkOwnershipCustom = NULL;
+		DWORD getUnitCard = NULL;
+		DWORD addToCardArray = NULL;
+		DWORD buildWatchtower = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

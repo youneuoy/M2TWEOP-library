@@ -5,12 +5,14 @@
 #include <functional>
 
 
+#include "cultures.h"
 #include "onlineThings.h"
 
 #include "eduThings.h"
 #include "fastFunctsHelpers.h"
 #include "PlannedRetreatRoute.h"
 #include "discordManager.h"
+#include "unitActions.h"
 
 
 worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, worldRecord* selectedRecord)
@@ -93,6 +95,7 @@ DWORD __fastcall patchesForGame::onSearchUnitType(char* typeName)
 {
 	if (const auto eopUnit = eduThings::tryFindDataEopEduIndex(typeName); eopUnit != nullptr)
 	{
+		unitActions::logStringGame("Unit found in M2TWEOP: " + std::string(typeName) + " index: " + std::to_string(*eopUnit));
 		auto newIndex = new nameIndex(typeName, *eopUnit);
 		return reinterpret_cast<DWORD>(newIndex);
 	}
@@ -105,6 +108,51 @@ int patchesForGame::onEvaluateUnit(int eduIndex)
 		return eduThings::getEduEntry(eduIndex)->categoryClassCombinationForAI;
 	else
 		return eopUnit->categoryClassCombinationForAI;
+}
+
+DWORD __fastcall patchesForGame::onCustomBattleUnitCards(DWORD cardArrayThing, int factionID)
+{
+	const int eopUnitNum = eduThings::getEopEntryNum();
+	for (int i = 0; i < eopUnitNum; i++)
+	{
+		const auto eopUnit = eduThings::getEopEduEntryInternalIterating(i);
+		if (!eopUnit->isFileAdded)
+			continue;
+		const auto entry = &eopUnit->data.edu;
+		if (entry->Category == 3 || entry->Category == 4)
+			continue;
+		if (GAME_FUNC(bool(__thiscall*)(eduEntry*, int, int), checkOwnershipCustom)(entry, factionID, 3))
+		{
+			stringWithHash card{};
+			GAME_FUNC(void(__thiscall*)(eduEntry*, int, stringWithHash*), getUnitCard)(entry, factionID, &card);
+			GAME_FUNC(void(__thiscall*)(DWORD, stringWithHash*), addToCardArray)(cardArrayThing, &card);
+		}
+	}
+	return cardArrayThing;
+}
+
+int __fastcall patchesForGame::onCustomBattleUnits(eduEntry** unitArray, int currentCount, int factionID)
+{
+	const int eopUnitNum = eduThings::getEopEntryNum();
+	for (int i = 0; i < eopUnitNum; i++)
+	{
+		if (currentCount >= 200)
+			break;
+		const auto eopUnit = eduThings::getEopEduEntryInternalIterating(i);
+		if (!eopUnit->isFileAdded)
+			continue;
+		const auto entry = &eopUnit->data.edu;
+		if (entry->Category == 3 || entry->Category == 4 || ((entry->Attributes5 & 8) != 0))
+			continue;
+		if (const int era = *reinterpret_cast<int*>(dataOffsets::offsets.selectedEra);
+			GAME_FUNC(bool(__thiscall*)(eduEntry*, int, int), checkOwnershipCustom)(entry, factionID, era))
+		{
+			*unitArray = entry;
+			unitArray++;
+			currentCount++;
+		}
+	}
+	return currentCount;
 }
 
 eduEntry* patchesForGame::onEvaluateUnit2(int eduIndex)
@@ -177,6 +225,402 @@ int __fastcall patchesForGame::OnReligionCombatBonus(int religionID, namedCharac
 	return namedChar->combatVsReligion[religionID];
 }
 
+std::string FILE_PATH;
+std::string GAME_PATH;
+
+std::string getBuildingPicPath(const char* cultureName, const char* levelName)
+{
+	FILE_PATH = "";
+	FILE_PATH.append("/data/ui/");
+	FILE_PATH.append(cultureName);
+	FILE_PATH.append("/buildings/#");
+	FILE_PATH.append(cultureName);
+	FILE_PATH.append("_");
+	FILE_PATH.append(levelName);
+	FILE_PATH.append(".tga");
+	return FILE_PATH;
+}
+
+std::string getBuildingPicConstructionPath(const char* cultureName, const char* levelName)
+{
+	FILE_PATH = "";
+	FILE_PATH.append("/data/ui/");
+	FILE_PATH.append(cultureName);
+	FILE_PATH.append("/buildings/construction/#");
+	FILE_PATH.append(cultureName);
+	FILE_PATH.append("_");
+	FILE_PATH.append(levelName);
+	FILE_PATH.append(".tga");
+	return FILE_PATH;
+}
+
+std::string getBuildingPicConstructedPath(const char* cultureName, const char* levelName)
+{
+	FILE_PATH = "";
+	FILE_PATH.append("/data/ui/");
+	FILE_PATH.append(cultureName);
+	FILE_PATH.append("/buildings/#");
+	FILE_PATH.append(cultureName);
+	FILE_PATH.append("_");
+	FILE_PATH.append(levelName);
+	FILE_PATH.append("_constructed.tga");
+	return FILE_PATH;
+}
+
+std::string getGamePath(const std::string& modPath) {
+	size_t pos = modPath.length();
+	int dirCount = 0;
+	if (modPath.back() == '/' || modPath.back() == '\\') {
+		pos--;
+	}
+	for (; pos > 0; pos--) {
+		if (modPath[pos] == '/' || modPath[pos] == '\\') {
+			dirCount++;
+			if (dirCount == 2) {
+				break;
+			}
+		}
+	}
+	return modPath.substr(0, pos);
+}
+
+
+char* __fastcall patchesForGame::getBrowserPicConstructed(int cultureID, edbEntry* entry, int buildingLevel)
+{
+	const auto level = entry->buildingLevel[buildingLevel];
+	const auto levelName = level.name;
+	if (levelName == nullptr)
+		return nullptr;
+	const auto cultureName = cultures::getCultureName(cultureID);
+	if (cultureName.empty())
+		return nullptr;
+	const auto picPath = getBuildingPicConstructedPath(cultureName.c_str(), levelName);
+	const auto modPath = fastFuncts::GetModPath();
+	FILE_PATH = modPath + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	if (GAME_PATH.empty())
+		GAME_PATH = getGamePath(modPath);
+	FILE_PATH = GAME_PATH + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
+	auto lookUpVariants = &edb->lookupVariantsVector;
+	while(lookUpVariants)
+	{
+		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		{
+			const auto variant = &lookUpVariants->lookupVariants[i];
+			if (strcmp(variant->name, cultureName.c_str()) == 0)
+			{
+				auto list = &variant->names;
+				while (list)
+				{
+					for (int j = 0; j < list->lookupVariantNamesNum; j++)
+					{
+						const auto variantString = list->lookupVariantNames[j].name;
+						FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+						FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+					}
+					list = list->next;
+				}
+			}
+		}
+		lookUpVariants = lookUpVariants->next;
+	}
+	return nullptr;
+}
+
+char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEntry* entry, int buildingLevel)
+{
+	const auto level = entry->buildingLevel[buildingLevel];
+	const auto levelName = level.name;
+	if (levelName == nullptr)
+		return nullptr;
+	const auto cultureName = cultures::getCultureName(cultureID);
+	if (cultureName.empty())
+		return nullptr;
+	const auto picPath = getBuildingPicConstructionPath(cultureName.c_str(), levelName);
+	const auto modPath = fastFuncts::GetModPath();
+	FILE_PATH = modPath + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	if (GAME_PATH.empty())
+		GAME_PATH = getGamePath(modPath);
+	FILE_PATH = GAME_PATH + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
+	auto lookUpVariants = &edb->lookupVariantsVector;
+	while(lookUpVariants)
+	{
+		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		{
+			const auto variant = &lookUpVariants->lookupVariants[i];
+			if (strcmp(variant->name, cultureName.c_str()) == 0)
+			{
+				auto list = &variant->names;
+				while (list)
+				{
+					for (int j = 0; j < list->lookupVariantNamesNum; j++)
+					{
+						const auto variantString = list->lookupVariantNames[j].name;
+						FILE_PATH = modPath + getBuildingPicConstructionPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+						FILE_PATH = GAME_PATH + getBuildingPicConstructionPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+					}
+					list = list->next;
+				}
+			}
+		}
+		lookUpVariants = lookUpVariants->next;
+	}
+	return nullptr;
+}
+
+char* __fastcall patchesForGame::getBuildingPic(buildingLevel* level, int cultureID)
+{
+	const auto levelName = level->name;
+	if (levelName == nullptr)
+		return nullptr;
+	const auto cultureName = cultures::getCultureName(cultureID);
+	if (cultureName.empty())
+		return nullptr;
+	const auto picPath = getBuildingPicPath(cultureName.c_str(), levelName);
+	const auto modPath = fastFuncts::GetModPath();
+	FILE_PATH = modPath + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	if (GAME_PATH.empty())
+		GAME_PATH = getGamePath(modPath);
+	FILE_PATH = GAME_PATH + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
+	auto lookUpVariants = &edb->lookupVariantsVector;
+	while(lookUpVariants)
+	{
+		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		{
+			const auto variant = &lookUpVariants->lookupVariants[i];
+			if (strcmp(variant->name, cultureName.c_str()) == 0)
+			{
+				auto list = &variant->names;
+				while (list)
+				{
+					for (int j = 0; j < list->lookupVariantNamesNum; j++)
+					{
+						const auto variantString = list->lookupVariantNames[j].name;
+						FILE_PATH = modPath + getBuildingPicPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+						FILE_PATH = GAME_PATH + getBuildingPicPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+					}
+					list = list->next;
+				}
+			}
+		}
+		lookUpVariants = lookUpVariants->next;
+	}
+	return nullptr;
+}
+
+char* __fastcall patchesForGame::getBuildingPicConstructed(buildingLevel* level, int cultureID)
+{
+	const auto levelName = level->name;
+	if (levelName == nullptr)
+		return nullptr;
+	const auto cultureName = cultures::getCultureName(cultureID);
+	if (cultureName.empty())
+		return nullptr;
+	const auto picPath = getBuildingPicConstructedPath(cultureName.c_str(), levelName);
+	const auto modPath = fastFuncts::GetModPath();
+	FILE_PATH = modPath + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	if (GAME_PATH.empty())
+		GAME_PATH = getGamePath(modPath);
+	FILE_PATH = GAME_PATH + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
+	auto lookUpVariants = &edb->lookupVariantsVector;
+	while(lookUpVariants)
+	{
+		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		{
+			const auto variant = &lookUpVariants->lookupVariants[i];
+			if (strcmp(variant->name, cultureName.c_str()) == 0)
+			{
+				auto list = &variant->names;
+				while (list)
+				{
+					for (int j = 0; j < list->lookupVariantNamesNum; j++)
+					{
+						const auto variantString = list->lookupVariantNames[j].name;
+						FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+						FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+					}
+					list = list->next;
+				}
+			}
+		}
+		lookUpVariants = lookUpVariants->next;
+	}
+	return nullptr;
+}
+
+char* __fastcall patchesForGame::getBuildingPicConstruction(buildingLevel* level, int cultureID)
+{
+	const auto levelName = level->name;
+	if (levelName == nullptr)
+		return nullptr;
+	const auto cultureName = cultures::getCultureName(cultureID);
+	if (cultureName.empty())
+		return nullptr;
+	const auto picPath = getBuildingPicConstructionPath(cultureName.c_str(), levelName);
+	const auto modPath = fastFuncts::GetModPath();
+	FILE_PATH = modPath + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	if (GAME_PATH.empty())
+		GAME_PATH = getGamePath(modPath);
+	FILE_PATH = GAME_PATH + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
+	auto lookUpVariants = &edb->lookupVariantsVector;
+	while(lookUpVariants)
+	{
+		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		{
+			const auto variant = &lookUpVariants->lookupVariants[i];
+			if (strcmp(variant->name, cultureName.c_str()) == 0)
+			{
+				auto list = &variant->names;
+				while (list)
+				{
+					for (int j = 0; j < list->lookupVariantNamesNum; j++)
+					{
+						const auto variantString = list->lookupVariantNames[j].name;
+						FILE_PATH = modPath + getBuildingPicConstructionPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+						FILE_PATH = GAME_PATH + getBuildingPicConstructionPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+					}
+					list = list->next;
+				}
+			}
+		}
+		lookUpVariants = lookUpVariants->next;
+	}
+	return nullptr;
+}
+
+portraitDbEntry* patchesForGame::getPortraitDbEntry(int cultureID)
+{
+	if (cultureID < 7)
+	{
+		const auto portraitDatabase = reinterpret_cast<portraitDb*>(dataOffsets::offsets.portraitDatabase);
+		return &portraitDatabase->cultures[cultureID];
+	}
+	return cultures::eopPortraitDb::getEntry(cultureID);
+}
+
+char* patchesForGame::onGetGuildOfferPic(DWORD level, int cultureID)
+{
+	const DWORD lvlAddr = level - 8;
+	const auto lvl = reinterpret_cast<buildingLevel*>(lvlAddr);
+	const auto levelName = lvl->name;
+	if (levelName == nullptr)
+		return nullptr;
+	const auto cultureName = cultures::getCultureName(cultureID);
+	if (cultureName.empty())
+		return nullptr;
+	const auto picPath = getBuildingPicConstructedPath(cultureName.c_str(), levelName);
+	const auto modPath = fastFuncts::GetModPath();
+	FILE_PATH = modPath + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	if (GAME_PATH.empty())
+		GAME_PATH = getGamePath(modPath);
+	FILE_PATH = GAME_PATH + picPath;
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
+	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
+	auto lookUpVariants = &edb->lookupVariantsVector;
+	while(lookUpVariants)
+	{
+		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		{
+			const auto variant = &lookUpVariants->lookupVariants[i];
+			if (strcmp(variant->name, cultureName.c_str()) == 0)
+			{
+				auto list = &variant->names;
+				while (list)
+				{
+					for (int j = 0; j < list->lookupVariantNamesNum; j++)
+					{
+						const auto variantString = list->lookupVariantNames[j].name;
+						FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+						FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
+						if (std::filesystem::exists(FILE_PATH))
+							return FILE_PATH.data();
+					}
+					list = list->next;
+				}
+			}
+		}
+		lookUpVariants = lookUpVariants->next;
+	}
+	return nullptr;
+}
+
+unit** __fastcall patchesForGame::onGetUnitByLabel(DWORD unitLabels, char* label)
+{
+	if (const DWORD value = **reinterpret_cast<DWORD**>(label); value >= 0x01308DE4 && value <= 0x0135106C)
+		return reinterpret_cast<unit**>(label);
+	
+	return GAME_FUNC(unit**(__thiscall*)(DWORD, char*), getUnitByLabel2)(unitLabels, label);
+}
+
+//12FFA84
+unitGroup** __fastcall patchesForGame::onGetGroupByLabel(DWORD groupLabels, char* label)
+{
+	if (const DWORD value = **reinterpret_cast<DWORD**>(label); value == 0x12FFA84 || value == 0x01344AA4)
+		return reinterpret_cast<unitGroup**>(label);
+	
+	return GAME_FUNC(unitGroup**(__thiscall*)(DWORD, char*), getGroupByLabel)(groupLabels, label);
+}
+
+std::string sound;
+
+char* patchesForGame::onGetCultureEndTurnSound(int cultureID)
+{
+	if (cultureID == 0)
+		sound = "END_TURN";
+	else
+		sound = "END_TURN_CULTURE_" + to_string(cultureID);
+	return sound.data();
+}
+
 int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduindex)
 {
 	if (eduindex == -1)
@@ -193,6 +637,23 @@ int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduin
 
 	return eduindex;
 }
+
+int __fastcall patchesForGame::onAttackGate(unit* un, void* tactic)
+{
+	auto eduEntry = un->eduEntry;
+	if (eduEntry == nullptr)
+		return 0;
+	if (eduEntry->mountedEngine)
+	{
+		const auto building = *reinterpret_cast<buildingBattle**>(reinterpret_cast<DWORD>(tactic) + 0x2AD0);
+		if (building == nullptr)
+			return 0;
+		unitActions::attackBuilding(un, building);
+		return 1;
+	}
+	return 0;
+}
+
 eduEntry* __fastcall patchesForGame::OnCreateMercUnit(char** entryName, eduEntry* entry)
 {
 	DWORD entryAddr = (DWORD)entry;
@@ -689,6 +1150,15 @@ void __fastcall patchesForGame::recruitEOPunit2(int eduIndex)
 	}
 }
 
+eduEntry* __fastcall patchesForGame::onReadDescrRebel(DWORD value)
+{
+	const DWORD eduIndex = (value * 4) / 996;
+	eduEntry* entry = eduThings::getEduEntry(eduIndex);
+	if (entry == nullptr)
+		entry = eduThings::getEopEduEntry(eduIndex);
+	return entry;
+}
+
 void __fastcall patchesForGame::recruitEOPMercunit(DWORD pad, DWORD pad2, regionStruct* region, int eduindex, int factionid, int exp)
 {
 	int regionID = region->regionID;
@@ -733,7 +1203,7 @@ void __fastcall patchesForGame::onStartSiege(settlementStruct* sett)
 
 void __fastcall patchesForGame::onLoadDescrBattleCharacter(stackStruct* army, general* goalGen)
 {
-	fastFuncts::setBodyguard(goalGen, army->units[0]);//we replace game function what set army leader character.
+	fastFuncts::setBodyguardStart(goalGen, army->units[0]);//we replace game function what set army leader character.
 
 	std::string relativePath = techFuncs::uniToANSI(smallFuncs::getGameDataAll()->campaignData->currentDescrFile);
 

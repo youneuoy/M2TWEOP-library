@@ -161,10 +161,49 @@ int initPlugin(std::string* modPath)
 
 	fName = "toggleDeveloperMode";
 	plugData::data.funcs.toggleDeveloperMode.Load(&plPath, &fName);
-
-
+	
 	fName = "setCryptedString";
 	plugData::data.funcs.setCryptedString.Load(&plPath, &fName);
+	
+	fName = "logStringGame";
+	plugData::data.funcs.logStringGame.Load(&plPath, &fName);
+	
+	fName = "diplomacyCharacter";
+	plugData::data.funcs.diplomacyCharacter.Load(&plPath, &fName);
+	
+	fName = "diplomacySettlement";
+	plugData::data.funcs.diplomacySettlement.Load(&plPath, &fName);
+	
+	
+	fName = "changeGroupUnitFormation";
+	plugData::data.funcs.changeGroupUnitFormation.Load(&plPath, &fName);
+	
+	fName = "moveToRangeOfGroup";
+	plugData::data.funcs.moveToRangeOfGroup.Load(&plPath, &fName);
+	
+	fName = "moveGroupToRangeOfUnit";
+	plugData::data.funcs.moveGroupToRangeOfUnit.Load(&plPath, &fName);
+	
+	fName = "groupAttackGroup";
+	plugData::data.funcs.groupAttackGroup.Load(&plPath, &fName);
+	
+	fName = "groupHalt";
+	plugData::data.funcs.groupHalt.Load(&plPath, &fName);
+	
+	fName = "groupMoveFormed";
+	plugData::data.funcs.groupMoveFormed.Load(&plPath, &fName);
+	
+	fName = "groupMoveUnformed";
+	plugData::data.funcs.groupMoveUnformed.Load(&plPath, &fName);
+	
+	fName = "groupMoveFormedRelative";
+	plugData::data.funcs.groupMoveFormedRelative.Load(&plPath, &fName);
+	
+	fName = "groupMoveUnformedRelative";
+	plugData::data.funcs.groupMoveUnformedRelative.Load(&plPath, &fName);
+	
+	fName = "groupTurn";
+	plugData::data.funcs.groupTurn.Load(&plPath, &fName);
 
 
 	fName = "setReligionsLimit";
@@ -182,11 +221,125 @@ int initPlugin(std::string* modPath)
 	fName = "moveNormal";
 	plugData::data.funcs.moveNormal.Load(&plPath, &fName);
 
+	fName = "assassinate";
+	plugData::data.funcs.assassinate.Load(&plPath, &fName);
+
+	fName = "marry";
+	plugData::data.funcs.marry.Load(&plPath, &fName);
+
+	fName = "spyCharacter";
+	plugData::data.funcs.spyCharacter.Load(&plPath, &fName);
+
+	fName = "denounce";
+	plugData::data.funcs.denounce.Load(&plPath, &fName);
+
+	fName = "switchCharacterFaction";
+	plugData::data.funcs.switchCharacterFaction.Load(&plPath, &fName);
+
+	fName = "changeFortOwner";
+	plugData::data.funcs.changeFortOwner.Load(&plPath, &fName);
+
+	fName = "bribe";
+	plugData::data.funcs.bribe.Load(&plPath, &fName);
+
+	fName = "acquire";
+	plugData::data.funcs.acquire.Load(&plPath, &fName);
+
 	fName = "siegeSettlement";
 	plugData::data.funcs.siegeSettlement.Load(&plPath, &fName);
 
 	fName = "siegeFort";
 	plugData::data.funcs.siegeFort.Load(&plPath, &fName);
+
+	fName = "unitMovetoPosition";
+	plugData::data.funcs.unitMovetoPosition.Load(&plPath, &fName);
+
+	fName = "loadSaveGame";
+	plugData::data.funcs.loadSaveGame.Load(&plPath, &fName);
+
+	fName = "diplomacyFort";
+	plugData::data.funcs.diplomacyFort.Load(&plPath, &fName);
+
+	fName = "bribeFort";
+	plugData::data.funcs.bribeFort.Load(&plPath, &fName);
+
+	fName = "spyFort";
+	plugData::data.funcs.spyFort.Load(&plPath, &fName);
+
+	fName = "bribeSettlement";
+	plugData::data.funcs.bribeSettlement.Load(&plPath, &fName);
+
+	fName = "spySettlement";
+	plugData::data.funcs.spySettlement.Load(&plPath, &fName);
+
+	fName = "teleportCharacterClose";
+	plugData::data.funcs.teleportCharacterClose.Load(&plPath, &fName);
+
+	fName = "sabotageSettlement";
+	plugData::data.funcs.sabotageSettlement.Load(&plPath, &fName);
+
+	fName = "sendOffMap";
+	plugData::data.funcs.sendOffMap.Load(&plPath, &fName);
+
+	fName = "blockadePort";
+	plugData::data.funcs.blockadePort.Load(&plPath, &fName);
+
+	fName = "getUnitFormation";
+	plugData::data.funcs.getUnitFormation.Load(&plPath, &fName);
+
+	fName = "placeUnit";
+	plugData::data.funcs.placeUnit.Load(&plPath, &fName);
+
+	fName = "moveToOrientation";
+	plugData::data.funcs.moveToOrientation.Load(&plPath, &fName);
+
+	fName = "moveRelative";
+	plugData::data.funcs.moveRelative.Load(&plPath, &fName);
+
+	fName = "moveToMissileRange";
+	plugData::data.funcs.moveToMissileRange.Load(&plPath, &fName);
+
+	fName = "unitTurn";
+	plugData::data.funcs.unitTurn.Load(&plPath, &fName);
+
+	fName = "taunt";
+	plugData::data.funcs.taunt.Load(&plPath, &fName);
+
+	fName = "useSpecialAbility";
+	plugData::data.funcs.useSpecialAbility.Load(&plPath, &fName);
+
+	fName = "findValidTileNearTile";
+	plugData::data.funcs.findValidTileNearTile.Load(&plPath, &fName);
+
+	fName = "isTileValidForCharacterType";
+	plugData::data.funcs.isTileValidForCharacterType.Load(&plPath, &fName);
+
+	fName = "attackBuilding";
+	plugData::data.funcs.attackBuilding.Load(&plPath, &fName);
+
+	fName = "getUnitByLabel";
+	plugData::data.funcs.getUnitByLabel.Load(&plPath, &fName);
+
+	fName = "unitAttackClosest";
+	plugData::data.funcs.unitAttackClosest.Load(&plPath, &fName);
+
+	fName = "attackUnit";
+	plugData::data.funcs.attackUnit.Load(&plPath, &fName);
+
+	fName = "deployStakes";
+	plugData::data.funcs.deployStakes.Load(&plPath, &fName);
+
+	fName = "changeUnitFormation";
+	plugData::data.funcs.changeUnitFormation.Load(&plPath, &fName);
+
+	fName = "buildWatchTower";
+	plugData::data.funcs.buildWatchTower.Load(&plPath, &fName);
+
+	fName = "haltUnit";
+	plugData::data.funcs.haltUnit.Load(&plPath, &fName);
+
+	fName = "getBattleMapHeight";
+	plugData::data.funcs.getBattleMapHeight.Load(&plPath, &fName);
 
 	fName = "addAncillary";
 	plugData::data.funcs.addAncillary.Load(&plPath, &fName);

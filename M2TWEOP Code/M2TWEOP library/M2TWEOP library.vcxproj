@@ -83,13 +83,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(SolutionDir)\3rd\discord\lib;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x86\release;$(SolutionDir)\3rd\sfml\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(DXSDK_DIR)\include;$(SolutionDir)\3rd\shortestPath;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(DXSDK_DIR)\include;$(SolutionDir)\3rd\shortestPath;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath);</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(SolutionDir)\3rd\discord\lib;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x86\release;$(SolutionDir)\3rd\sfml\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(DXSDK_DIR)\include;$(SolutionDir)\3rd\shortestPath;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(DXSDK_DIR)\include;$(SolutionDir)\3rd\shortestPath;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath);</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -122,7 +122,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories);$(SolutionDir)\3rd;../M2TWEOP Common/;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -147,7 +147,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories);$(SolutionDir)\3rd;../M2TWEOP Common/;</AdditionalIncludeDirectories>
       <CCppSupport>Cpp17Support</CCppSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -169,6 +169,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(_ZVcpkgCurrentInstalledDir)include;../M2TWEOP Common/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -186,6 +187,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(_ZVcpkgCurrentInstalledDir)include;../M2TWEOP Common/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -235,6 +237,20 @@
     <ClInclude Include="..\3rd\discord\types.h" />
     <ClInclude Include="..\3rd\discord\user_manager.h" />
     <ClInclude Include="..\3rd\discord\voice_manager.h" />
+    <ClInclude Include="..\3rd\fmt\args.h" />
+    <ClInclude Include="..\3rd\fmt\base.h" />
+    <ClInclude Include="..\3rd\fmt\chrono.h" />
+    <ClInclude Include="..\3rd\fmt\color.h" />
+    <ClInclude Include="..\3rd\fmt\compile.h" />
+    <ClInclude Include="..\3rd\fmt\core.h" />
+    <ClInclude Include="..\3rd\fmt\format-inl.h" />
+    <ClInclude Include="..\3rd\fmt\format.h" />
+    <ClInclude Include="..\3rd\fmt\os.h" />
+    <ClInclude Include="..\3rd\fmt\ostream.h" />
+    <ClInclude Include="..\3rd\fmt\printf.h" />
+    <ClInclude Include="..\3rd\fmt\ranges.h" />
+    <ClInclude Include="..\3rd\fmt\std.h" />
+    <ClInclude Include="..\3rd\fmt\xchar.h" />
     <ClInclude Include="..\3rd\imgui\eopImgui.h" />
     <ClInclude Include="..\3rd\imgui\imconfig.h" />
     <ClInclude Include="..\3rd\imgui\ImFileDialog.h" />
@@ -255,11 +271,13 @@
     <ClInclude Include="..\3rd\logger\loguru.hpp" />
     <ClInclude Include="..\3rd\logger\loguru.cpp" />
     <ClInclude Include="..\3rd\shortestPath\micropather.h" />
+    <ClInclude Include="..\M2TWEOP Common\realGameTypes.h" />
     <ClInclude Include="actionsStrat.h" />
     <ClInclude Include="BattleMapOverrider.h" />
     <ClInclude Include="battlemapWorker.h" />
     <ClInclude Include="casModelsDrawer.h" />
     <ClInclude Include="ContextMenuStrat.h" />
+    <ClInclude Include="cultures.h" />
     <ClInclude Include="dataOffsets.h" />
     <ClInclude Include="DeveloperMode.h" />
     <ClInclude Include="eduFastFuncts.h" />
@@ -316,6 +334,7 @@
     <ClInclude Include="TexturesManager.h" />
     <ClInclude Include="ThemeManager.h" />
     <ClInclude Include="tilesChange.h" />
+    <ClInclude Include="unitActions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\AsmJit\headers\Assembler.cpp" />
@@ -364,6 +383,7 @@
     <ClCompile Include="battlemapWorker.cpp" />
     <ClCompile Include="casModelsDrawer.cpp" />
     <ClCompile Include="ContextMenuStrat.cpp" />
+    <ClCompile Include="cultures.cpp" />
     <ClCompile Include="dataOffsets.cpp" />
     <ClCompile Include="DeveloperMode.cpp" />
     <ClCompile Include="dllmain.cpp" />
@@ -417,6 +437,7 @@
     <ClCompile Include="TemplateCh.cpp" />
     <ClCompile Include="TexturesManager.cpp" />
     <ClCompile Include="tilesChange.cpp" />
+    <ClCompile Include="unitActions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\AsmJit\headers\Regenerate.py" />

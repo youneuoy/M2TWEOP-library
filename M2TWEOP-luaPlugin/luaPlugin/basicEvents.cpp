@@ -841,7 +841,10 @@ void onNewGameStart()
 void onCampaignMapLoaded()
 {
 	if (!plugData::data.luaAll.hashLoaded)
+	{
 		plugData::data.luaAll.fillHashMaps();
+		m2tweopHelpers::logStringGame("Hashmaps filled");
+	}
 	if (plugData::data.luaAll.onCampaignMapLoaded != nullptr)
 	{
 		tryLua((*plugData::data.luaAll.onCampaignMapLoaded)());

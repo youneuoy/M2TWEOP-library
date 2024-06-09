@@ -22,7 +22,7 @@ namespace fastFuncts
 	NOINLINE EOP_EXPORT void setTileVisibility(factionStruct* faction, int x, int y, int8_t vis);
 
 
-	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct*sett, factionStruct* newOwner);
+	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct*sett, factionStruct* newOwner, bool convertGarrison = false);
 
 	NOINLINE EOP_EXPORT void GetGameTileCoordsWithCursor(int& x, int& y);
 	NOINLINE EOP_EXPORT void ViewTacticalMap(int x, int y);
@@ -87,15 +87,22 @@ namespace fastFuncts
 	//find watchtower on coords
 	NOINLINE EOP_EXPORT watchTowerStruct* findWatchTower(int x, int y);
 	NOINLINE EOP_EXPORT void deleteFort(const factionStruct* fac, fortStruct* fort);
-	NOINLINE EOP_EXPORT void createFortXY(const factionStruct* fac, int x, int y);
+	NOINLINE EOP_EXPORT void createFortXY(factionStruct* fac, int x, int y);
 	NOINLINE EOP_EXPORT void createFort(const general* gen);
-
+	NOINLINE EOP_EXPORT void changeFortOwner(fortStruct* fort, factionStruct* newFaction, bool convertGarrison);
+	NOINLINE EOP_EXPORT bool teleportCharacterClose(general* gen, int x, int y);
+	NOINLINE EOP_EXPORT coordPair* findValidTileNearTile(coordPair* coords, int charType);
+	NOINLINE EOP_EXPORT bool isTileValidForCharacterType(int charType, coordPair* coords);
+	campaignDb* getCampaignDb();
+	campaignDbExtra* getCampaignDbExtra();
 	//move stratmap camera slow
 	NOINLINE EOP_EXPORT void moveStratCameraSlow(int x, int y);
 	//move stratmap camera fast
 	NOINLINE EOP_EXPORT void moveStratCameraFast(int x, int y);
 	//zoom stratmap camera
 	NOINLINE EOP_EXPORT void zoomStratCamera(float zoom);
+	NOINLINE EOP_EXPORT void setBodyguardStart(general* gen, unit* un);
+	NOINLINE EOP_EXPORT void loadSaveGame(const char* saveName);
 
 	factionStratMapDescrS* GetFactSmDescrById(int id);
 	//teleport character
@@ -159,6 +166,8 @@ namespace fastFuncts
 
 	//allocate mem for game class/etc
 	NOINLINE EOP_EXPORT DWORD allocateGameMem(size_t amount);
+	
+	NOINLINE EOP_EXPORT void logFuncError(const std::string& funcName, const std::string& error);
 
 	//attacker or defender
 	NOINLINE EOP_EXPORT bool autoWin(const char* winnerSide);
