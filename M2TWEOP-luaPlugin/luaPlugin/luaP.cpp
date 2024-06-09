@@ -252,6 +252,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield setConversionLvlFromCity setConversionLvlFromCity
 	@tfield loadGame loadGame
 	@tfield logGame logGame
+	@tfield getCampaignDb getCampaignDb
+	@tfield getCampaignDbExtra getCampaignDbExtra
 	@table M2TWEOP
 	*/
 
@@ -679,6 +681,22 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local modifiers = M2TWEOP.getCampaignDifficulty2();
 	*/
 	tables.M2TWEOPTable.set_function("getCampaignDifficulty2", &m2tweopHelpers::getCampaignDifficulty2);
+	/***
+	Get the campaign options.
+	@function M2TWEOP.getCampaignDb
+	@treturn campaignDb options
+	@usage
+	local options = M2TWEOP.getCampaignDb();
+	*/
+	tables.M2TWEOPTable.set_function("getCampaignDb", &gameHelpers::getCampaignDb);
+	/***
+	Get the campaign options.
+	@function M2TWEOP.getCampaignDbExtra
+	@treturn campaignDbExtra options
+	@usage
+	local options = M2TWEOP.getCampaignDbExtra();
+	*/
+	tables.M2TWEOPTable.set_function("getCampaignDbExtra", &gameHelpers::getCampaignDbExtra);
 	/***
 	Check game condition.
 	@function M2TWEOP.condition

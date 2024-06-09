@@ -114,6 +114,8 @@ namespace gameHelpers
 	coordPair* convertTileCoords(DWORD arrayIndex);
 	int getTileX(const oneTile* tile);
 	int getTileY(const oneTile* tile);
+	campaignDbExtra* getCampaignDbExtra();
+	campaignDb* getCampaignDb();
 	seaConnectedRegion* getSeaConnectedRegion(const regionStruct* region, const int index);
 	seaConnectedRegion* getSeaImportRegion(const regionStruct* region, const int index);
 	oneTile* getRegionSeaEdge(const regionStruct* region, const int index);

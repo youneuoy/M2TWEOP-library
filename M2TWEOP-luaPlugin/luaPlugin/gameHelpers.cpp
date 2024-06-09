@@ -121,6 +121,22 @@ namespace gameHelpers
 		return region->forts[index];
 	}
 
+	campaignDb* getCampaignDb()
+	{
+		DWORD offset = 0x0161E7E4;
+		if (m2tweopHelpers::getGameVersion() == 1)
+			offset = 0x16666BC;
+		return reinterpret_cast<campaignDb*>(offset);
+	}
+
+	campaignDbExtra* getCampaignDbExtra()
+	{
+		DWORD offset = 0x0186170C;
+		if (m2tweopHelpers::getGameVersion() == 1)
+			offset = 0x18AA87C;
+		return reinterpret_cast<campaignDbExtra*>(offset);
+	}
+
 	watchTowerStruct* gameHelpers::getWatchtower(const regionStruct* region, const int index)
 	{
 		return region->watchtowers[index];
