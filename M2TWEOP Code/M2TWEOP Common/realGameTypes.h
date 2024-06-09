@@ -28,7 +28,7 @@ struct stringWithHash
 public:
 	char* name; //0x0000
 	int32_t hash; //0x0004
-}; //Size
+}; //Size 
 
 struct UNICODE_STRING {
 	USHORT something;//idk

@@ -661,6 +661,7 @@ void initLua()
 	sol::state* luaState = plugData::data.luaAll.init(luaFile, plugData::data.modFolder);
 	plugData::data.luaAll.initCampaign();
 	plugData::data.luaAll.initP2();
+	plugData::data.luaAll.initP3();
 	plugData::data.luaAll.initEopEdu();
 	plugData::data.luaAll.initEopFbx();
 	plugData::data.luaAll.initEop3dObjects();
@@ -669,12 +670,12 @@ void initLua()
 	sol_ImGui::Init(*luaState);
 
 	gameEvents::initEvents();
-	plugData::data.luaAll.onPluginLoadF();
 	if (luaState == nullptr)
 	{
 		MessageBoxA(nullptr, "LUA loading error!", "Error!", NULL);
 		exit(0);
 	}
+	plugData::data.luaAll.onPluginLoadF();
 }
 
 void reloadLua()

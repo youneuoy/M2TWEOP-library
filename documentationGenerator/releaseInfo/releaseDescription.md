@@ -14,13 +14,10 @@
 - [Added new `mapImage` struct](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html#mapImage)
   - Enables users to render their own versions of the campaign strategy map
   - Includes options for filling certain tiles and regions with color and blurring options for smoothing out jagged lines
-  - VIDEO HERE
-- Added `riverField` to the `tileStruct`
 - Expanded `coords` to `xCoord` and `yCoord` in the `tileStruct`
 - Added `aiFaction` to `factionStruct`
 - Fixed `battleBuilding:getBuilding()` returning the wrong thing
 - Fixed a bug where right clicking an EOP unit in the building description would do nothing
-- Fixed the getting and setting of certain diplomatic statues such as 'Trade Rights'
 
 <!--### **ImGUI** -->
 
