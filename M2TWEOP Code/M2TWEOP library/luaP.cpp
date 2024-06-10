@@ -9,6 +9,7 @@
 #include "console.h"
 #include "gameDataAllHelper.h"
 #include "plugData.h"
+#include "settlementConversionLvlSetter.h"
 #include "smallFuncs.h"
 #include "stratModelsChange.h"
 #include "tilesChange.h"
@@ -16,6 +17,17 @@
 std::vector<std::string> luaP::logS;
 std::vector<std::string> luaP::logCommands;
 
+std::array<sol::table*, 200> settlementData;
+
+sol::table* getSettlementData(const settlementStruct* sett)
+{
+	return settlementData[sett->regionID];
+}
+
+void setSettlementData(const settlementStruct* sett, sol::table* data)
+{
+	settlementData[sett->regionID] = data;
+}
 static int ourP(lua_State* L) {
 	int n = lua_gettop(L);  /* number of arguments */
 	int i;
@@ -417,14 +429,14 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	M2TWEOP.setAncillariesLimit(15);
 	*/
-	tables.M2TWEOPTable.set_function("setAncillariesLimit", &m2tweopHelpers::setAncLimit);
+	tables.M2TWEOPTable.set_function("setAncillariesLimit", &smallFuncs::setAncLimit);
 	/***
 	Unlocks all console commands, also allows the use of the 'control' command to change factions in singleplayer campaigns.
 	@function M2TWEOP.unlockGameConsoleCommands
 	@usage
 	M2TWEOP.unlockGameConsoleCommands();
 	*/
-	tables.M2TWEOPTable.set_function("unlockGameConsoleCommands", &m2tweopHelpers::unlockGameConsoleCommands);
+	tables.M2TWEOPTable.set_function("unlockGameConsoleCommands", &smallFuncs::unlockConsoleCommands);
 	/***
 	Sets the maximum amount of soldiers a general's bodyguard unit can replenish to. The value is multiplied by the unit size modifiers (e.g Huge = 2.5 multiplier)
 	@function M2TWEOP.setMaxBgSize
@@ -434,7 +446,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	M2TWEOP.setMaxBgSize(150) -- On huge unit size, 150*2.5 = 300 max bodyguard size
 	M2TWEOP.setMaxBgSize(50)  -- On huge unit size, 50*2.5 = 125 max bodyguard size
 	*/
-	tables.M2TWEOPTable.set_function("setMaxBgSize", &m2tweopHelpers::setMaxBgSize);
+	tables.M2TWEOPTable.set_function("setMaxBgSize", &smallFuncs::setMaxBgSize);
 
 	/***
 	Sets the new maximum soldier count.
@@ -444,7 +456,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	M2TWEOP.setEDUUnitsSize(1,300);
 	*/
-	tables.M2TWEOPTable.set_function("setEDUUnitsSize", &m2tweopHelpers::setEDUUnitsSize);
+	tables.M2TWEOPTable.set_function("setEDUUnitsSize", &smallFuncs::setEDUUnitsSize);
 
 	/***
 	Gets a struct containing color information about the settlement info scroll.
@@ -467,7 +479,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	* M2TWEOP.setBuildingChainLimit(12);
 	*/
 
-	tables.M2TWEOPTable.set_function("setBuildingChainLimit", &m2tweopHelpers::setBuildingChainLimit);
+	tables.M2TWEOPTable.set_function("setBuildingChainLimit", &smallFuncs::setBuildingChainLimit);
 
 	/***
 	* Sets which level of castle converts to which level of city.
@@ -477,7 +489,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	* @usage
 	* M2TWEOP.setConversionLvlFromCastle(3,3)
 	*/
-	tables.M2TWEOPTable.set_function("setConversionLvlFromCastle", &m2tweopHelpers::setConversionLvlFromCastle);
+	tables.M2TWEOPTable.set_function("setConversionLvlFromCastle", &settlementConversionLvlSetter::setConversionLvlFromCastle);
 
 	/***
 	* Sets which level of city converts to which level of castle.
@@ -487,7 +499,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	* @usage
 	* M2TWEOP.setConversionLvlFromCity(3,3)
 	*/
-	tables.M2TWEOPTable.set_function("setConversionLvlFromCity", &m2tweopHelpers::setConversionLvlFromCity);
+	tables.M2TWEOPTable.set_function("setConversionLvlFromCity", &settlementConversionLvlSetter::setConversionLvlFromCity);
 
 	/***
 	* Sets the minimum number of turns until the next guild offer after a rejection by the player.
@@ -496,7 +508,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	* @usage
 	* M2TWEOP.setGuildCooldown(5)
 	*/
-	tables.M2TWEOPTable.set_function("setGuildCooldown", &m2tweopHelpers::setGuildCooldown);
+	tables.M2TWEOPTable.set_function("setGuildCooldown", &smallFuncs::setGuildCooldown);
 
 
 	/***
@@ -525,7 +537,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	M2TWEOP.setReligionsLimit(25);
 	*/
-	tables.M2TWEOPTable.set_function("setReligionsLimit", &m2tweopHelpers::seReligionsLimit);
+	tables.M2TWEOPTable.set_function("setReligionsLimit", &smallFuncs::setReligionsLimit);
 
 	/***
 	Set the siege points required to make different siege equipment.
@@ -1127,7 +1139,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	stratmap.game.historicEvent("my_event", "my title", "my description")
 	*/
-	tables.gameTable.set_function("historicEvent", &gameHelpers::historicEvent);
+	tables.gameTable.set_function("historicEvent", &smallFuncs::historicEvent);
 
 	/***
 	Fire any script command available from the game. It is always just 2 parameters in the function, the command name and all the arguments as 1 string in the second parameter.
@@ -2018,7 +2030,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:moveToTile(11,25);
 	*/
-	types.character.set_function("moveToTile", &generalHelpers::moveToTile);
+	types.character.set_function("moveToTile", &actionsStrat::moveNormal);
 	/***
 	Issue diplomacy command.
 	@function character:diplomacyCharacter
@@ -2026,7 +2038,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:diplomacyCharacter(targetChar);
 	*/
-	types.character.set_function("diplomacyCharacter", &generalHelpers::diplomacyCharacter);
+	types.character.set_function("diplomacyCharacter", &actionsStrat::diplomacyCharacter);
 	/***
 	Issue assassination command.
 	@function character:assassinate
@@ -2034,7 +2046,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:assassinate(targetChar);
 	*/
-	types.character.set_function("assassinate", &generalHelpers::assassinate);
+	types.character.set_function("assassinate", &actionsStrat::assassinate);
 	/***
 	Issue marry command.
 	@function character:marry
@@ -2042,7 +2054,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:marry(targetChar);
 	*/
-	types.character.set_function("marry", &generalHelpers::marry);
+	types.character.set_function("marry", &actionsStrat::marry);
 	/***
 	Issue spyCharacter command.
 	@function character:spyCharacter
@@ -2050,7 +2062,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:spyCharacter(targetChar);
 	*/
-	types.character.set_function("spyCharacter", &generalHelpers::spyCharacter);
+	types.character.set_function("spyCharacter", &actionsStrat::spyCharacter);
 	/***
 	Issue denounce command.
 	@function character:denounce
@@ -2058,7 +2070,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:denounce(targetChar);
 	*/
-	types.character.set_function("denounce", &generalHelpers::denounce);
+	types.character.set_function("denounce", &actionsStrat::denounce);
 	/***
 	Issue bribe command.
 	@function character:bribe
@@ -2066,7 +2078,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:bribe(targetChar);
 	*/
-	types.character.set_function("bribe", &generalHelpers::bribe);
+	types.character.set_function("bribe", &actionsStrat::bribe);
 	/***
 	Issue acquire command.
 	@function character:acquire
@@ -2074,7 +2086,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:acquire(targetChar);
 	*/
-	types.character.set_function("acquire", &generalHelpers::acquire);
+	types.character.set_function("acquire", &actionsStrat::acquire);
 	/***
 	Issue sabotage command.
 	@function character:sabotage
@@ -2092,7 +2104,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:switchFaction(otherFac, true, true);
 	*/
-	types.character.set_function("switchFaction", &generalHelpers::switchCharacterFaction);
+	types.character.set_function("switchFaction", &actionsStrat::switchCharacterFaction);
 	/***
 	Issue diplomacy command.
 	@function character:diplomacySettlement
@@ -2100,7 +2112,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:diplomacySettlement(targetSettlement);
 	*/
-	types.character.set_function("diplomacySettlement", &generalHelpers::diplomacySettlement);
+	types.character.set_function("diplomacySettlement", &actionsStrat::diplomacySettlement);
 	/***
 	Issue bribe command.
 	@function character:bribeSettlement
@@ -2157,7 +2169,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:reposition(11,25);
 	*/
-	types.character.set_function("reposition", &generalHelpers::reposition);
+	types.character.set_function("reposition",  &fastFuncts::teleportCharacter);
 	/***
 	Instantly teleport character to the coordinates, if occupied the closest valid place to the coordinates is chosen.
 	@function character:teleport
@@ -2167,7 +2179,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	 local success = ourCharacter:teleport(11,25);
 	*/
-	types.character.set_function("teleport", &generalHelpers::teleport);
+	types.character.set_function("teleport", &fastFuncts::teleportCharacterClose);
 	/***
 	Delete this character
 	@function character:kill
@@ -2336,7 +2348,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourcharacter:setAsHeir(true)
 	*/
-	types.namedCharacter.set_function("setAsHeir", &generalCharactericticsHelpers::setAsHeir);
+	types.namedCharacter.set_function("setAsHeir", &fastFuncts::setHeir);
 	/***
 	Checks if character is alive, read only, do not set this value.
 	@function namedCharacter:isAlive
@@ -4006,6 +4018,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 			sol::resolve<void(settlementStruct*, factionStruct*, bool)>(settlementHelpers::changeOwner)
 		));
 	types.settlementStruct.set("creatorFactionID", &settlementStruct::fac_creatorModNum);
+	types.settlementStruct.set("data", sol::property(
+		&getSettlementData, &setSettlementData
+		));
 	types.settlementStruct.set("regionID", &settlementStruct::regionID);
 	types.settlementStruct.set("level", &settlementStruct::level);
 	types.settlementStruct.set("isCastle", &settlementStruct::isCastle);
@@ -4952,7 +4967,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	stackStruct:siegeSettlement(settlement);
 	*/
-	types.stackStruct.set_function("siegeSettlement", &stackStructHelpers::siegeSettlement);
+	types.stackStruct.set_function("siegeSettlement", &actionsStrat::siegeSettlement);
 
 	/***
 	Besiege the specified fort, or attack it if already besieging it. Requires movement points.
@@ -4962,7 +4977,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	stackStruct:siegeFort(fort);
 	*/
-	types.stackStruct.set_function("siegeFort", &stackStructHelpers::siegeFort);
+	types.stackStruct.set_function("siegeFort", &actionsStrat::siegeFort);
 
 	/***
 	Blockade a port.

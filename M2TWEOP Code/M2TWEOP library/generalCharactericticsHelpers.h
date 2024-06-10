@@ -26,7 +26,6 @@ namespace generalCharactericticsHelpers
 	void setIsMale(namedCharacter* character, bool isMale);
 
 	bool isAlive(namedCharacter* character);
-	void setAsHeir(namedCharacter* character, bool isJustSet);
 	int getCapturedUnitNum(capturedFactionInfo* capInfo);
 	int getCapturedCharacterNum(capturedFactionInfo* capInfo);
 	capturedUnit* getCapturedUnit(const capturedFactionInfo* capInfo, const int index);

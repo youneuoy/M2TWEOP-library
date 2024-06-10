@@ -1,6 +1,7 @@
 #include "actionsStrat.h"
 
 #include "eduThings.h"
+#include "stackStructHelpers.h"
 #include "unitActions.h"
 
 namespace actionsStrat {
@@ -373,6 +374,8 @@ namespace actionsStrat {
 			}
 		}
 		GAME_FUNC(void(__thiscall*)(general*), initPlaceCharacter)(gen);
+		if (gen->armyLeaded)
+			stackStructHelpers::sortStack(gen->armyLeaded, 6, 7, 4);
 	}
 
 	void denounce(general* gen, general* targetCharacter)

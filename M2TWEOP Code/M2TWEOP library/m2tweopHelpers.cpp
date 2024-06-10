@@ -83,11 +83,11 @@ namespace m2tweopHelpers
 		const auto facTwoName = std::string(fac2->factSmDescr->facName);
 		const std::string command = "diplomatic_stance " + facOneName + " " + facTwoName + " ";
 		if (dipType == dipRelEnum::war)
-			(*(*plugData::data.funcs.scriptCommand))("console_command", (command + "war").c_str());
+			smallFuncs::scriptCommand("console_command", (command + "war").c_str());
 		else if (dipType == dipRelEnum::peace)
-			(*(*plugData::data.funcs.scriptCommand))("console_command", (command + "neutral").c_str());
+			smallFuncs::scriptCommand("console_command", (command + "neutral").c_str());
 		else if (dipType == dipRelEnum::alliance)
-			(*(*plugData::data.funcs.scriptCommand))("console_command", (command + "allied").c_str());
+			smallFuncs::scriptCommand("console_command", (command + "allied").c_str());
 		else if (dipType == dipRelEnum::suzerain)
 			setFactionProtectorate(fac1, fac2);
 		else if (dipType == dipRelEnum::trade)
@@ -163,29 +163,9 @@ namespace m2tweopHelpers
 	{
 		return (*(*plugData::data.funcs.GetUnitSize))();
 	}
-	void setAncLimit(unsigned char limit)
-	{
-		(*(*plugData::data.funcs.setAncLimit))(limit);
-	}
 	void toggleDeveloperMode()
 	{
 		(*(*plugData::data.funcs.toggleDeveloperMode))();
-	}
-	void seReligionsLimit(unsigned char limit)
-	{
-		(*(*plugData::data.funcs.setReligionsLimit))(limit);
-	}
-	void setMaxBgSize(unsigned char maxBgSize)
-	{
-		(*(*plugData::data.funcs.setMaxBgSize))(maxBgSize);
-	}
-	void unlockGameConsoleCommands()
-	{
-		(*(*plugData::data.funcs.unlockConsoleCommands))();
-	}
-	void setEDUUnitsSize(signed short min, signed short max)
-	{
-		(*(*plugData::data.funcs.setEDUUnitsSize))(min, max);
 	}
 	std::tuple<int, int, void*> loadTextureToGame(const std::string& path)
 	{
@@ -327,31 +307,6 @@ namespace m2tweopHelpers
 		if (!settlementInfoScroll->settlementStatsTable) 
 			return nullptr;
 		return settlementInfoScroll->settlementStatsTable->settlementTextStrings;
-	}
-
-	void setConversionLvlFromCastle(int castleLvl, int convertToLvl)
-	{
-		(*(*plugData::data.funcs.setConversionLvlFromCastle))(castleLvl, convertToLvl);
-
-	}
-	void setConversionLvlFromCity(int cityLvl, int convertToLvl)
-	{
-		(*(*plugData::data.funcs.setConversionLvlFromCity))(cityLvl, convertToLvl);
-	}
-
-	void setBuildingChainLimit(unsigned int limit)
-	{
-		(*(*plugData::data.funcs.setBuildingChainLimit))(limit);
-	}
-
-	void setGuildCooldown(unsigned char turns)
-	{
-		(*(*plugData::data.funcs.setGuildCooldown))(turns);
-	}
-
-	int getGameVersion()
-	{
-		return (*(*plugData::data.funcs.getGameVersion))();
 	}
 
 	int getLocalFactionID()

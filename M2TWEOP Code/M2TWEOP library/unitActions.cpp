@@ -1,6 +1,7 @@
 ﻿// ReSharper disable CppTooWideScopeInitStatement
 #include "unitActions.h"
 
+#include "battleHandlerHelpers.h"
 #include "fastFunctsHelpers.h"
 #include "functionsOffsets.h"
 
@@ -131,6 +132,8 @@ namespace unitActions
     {
         if (un == nullptr)
             return;
+        if (!battleHandlerHelpers::inBattle())
+            return;
         const auto order = std::make_shared<unitImmediatePlace>(un, xCoord, yCoord, angle, width);
         fireGameScriptFunc(order.get(), codes::offsets.unitImmediatePlace);
     }
@@ -154,11 +157,14 @@ namespace unitActions
             : unitToMove(_un), xCoord(xCoord), yCoord(yCoord), run(run) {}
     };
     
-    void unitMovetoPosition(const unit* un, float xCoord, float yCoord, bool run)
+    void unitMovetoPosition(unit* unit, float xCoord, float yCoord, bool run)
     {
-        if (un == nullptr)
+        if (unit == nullptr)
             return;
-        const auto order = std::make_shared<unitOrderMove>(un, xCoord, yCoord, run);
+        if (!battleHandlerHelpers::inBattle())
+            return;
+        unit->aiActiveSet = 2;
+        const auto order = std::make_shared<unitOrderMove>(unit, xCoord, yCoord, run);
         fireGameScriptFunc(order.get(), codes::offsets.unitOrderMove);
     }
 
@@ -181,10 +187,13 @@ namespace unitActions
         }
     };
     
-    void unitAttackClosest(const unit* un, int16_t angle, bool run)
+    void unitAttackClosest(unit* un, int16_t angle, bool run)
     {
         if (un == nullptr)
             return;
+        if (!battleHandlerHelpers::inBattle())
+            return;
+        un->aiActiveSet = 2;
         const auto order = std::make_shared<unitAttackClosestUnit>(un, angle, run);
         fireGameScriptFunc(order.get(), codes::offsets.unitAttackClosestUnit);
     }
@@ -206,10 +215,13 @@ namespace unitActions
             : unitToMove(_un), targetUnit(targetUn), run(run) {}
     };
     
-    void attackUnit(const unit* un, const unit* targetUnit, bool run)
+    void attackUnit(unit* un, const unit* targetUnit, bool run)
     {
         if (un == nullptr)
             return;
+        if (!battleHandlerHelpers::inBattle())
+            return;
+        un->aiActiveSet = 2;
         const auto order = std::make_shared<unitAttackUnit>(un, targetUnit, run);
         fireGameScriptFunc(order.get(), codes::offsets.unitAttackUnit);
     }
@@ -298,10 +310,13 @@ namespace unitActions
         }
     };
     
-    void moveToOrientation(const unit* un, float xCoord, float yCoord, int widthInMen, int16_t angle, bool run)
+    void moveToOrientation(unit* un, float xCoord, float yCoord, int widthInMen, int16_t angle, bool run)
     {
         if (un == nullptr)
             return;
+        if (!battleHandlerHelpers::inBattle())
+            return;
+        un->aiActiveSet = 2;
         const auto order = std::make_shared<unitMoveToOrientation>(un, xCoord, yCoord, widthInMen, angle, run);
         fireGameScriptFunc(order.get(), codes::offsets.unitMoveToOrientation);
     }
@@ -323,10 +338,13 @@ namespace unitActions
             : thisUnit(unit), xCoord(x), yCoord(y), run(run) {}
     };
     
-    void moveRelative(const unit* un, float xCoord, float yCoord, bool run)
+    void moveRelative(unit* un, float xCoord, float yCoord, bool run)
     {
         if (un == nullptr)
             return;
+        if (!battleHandlerHelpers::inBattle())
+            return;
+        un->aiActiveSet = 2;
         const auto order = std::make_shared<unitMoveRelative>(un, xCoord, yCoord, run);
         fireGameScriptFunc(order.get(), codes::offsets.moveRelative);
     }
@@ -348,10 +366,13 @@ namespace unitActions
             : thisUnit(un), targetUnit(targetUnit), run(run) {}
     };
     
-    void moveToMissileRange(const unit* un, const unit* targetUnit, bool run)
+    void moveToMissileRange(unit* un, const unit* targetUnit, bool run)
     {
         if (un == nullptr)
             return;
+        if (!battleHandlerHelpers::inBattle())
+            return;
+        un->aiActiveSet = 2;
         const auto order = std::make_shared<unitMoveToMissileRange>(un, targetUnit, run);
         fireGameScriptFunc(order.get(), codes::offsets.moveToMissileRange);
     }

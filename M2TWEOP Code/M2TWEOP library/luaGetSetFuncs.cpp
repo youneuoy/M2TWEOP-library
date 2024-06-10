@@ -1,4 +1,6 @@
 #include "luaGetSetFuncs.h"
+
+#include "fastFunctsHelpers.h"
 #include "plugData.h"
 int luaGetSetFuncs::getTraitLevel(const traitContainer* currTrait)
 {
@@ -22,5 +24,5 @@ traitEffect* luaGetSetFuncs::getTraitEffect(const traitLevel* level, int index)
 }
 void luaGetSetFuncs::setGameString(char* targetP, const char* newS)
 {
-	(*(*plugData::data.funcs.setCryptedString))(targetP, newS);
+	fastFunctsHelpers::setCryptedString(reinterpret_cast<char**>(targetP), newS);
 }

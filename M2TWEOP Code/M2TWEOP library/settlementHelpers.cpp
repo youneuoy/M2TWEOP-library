@@ -25,33 +25,6 @@ void settlementHelpers::changeOwner(settlementStruct* sett, factionStruct* newOw
 	(*(*plugData::data.funcs.setSettlementOwner))(sett, newOwner, convertGarrison);
 }
 
-void settlementHelpers::changeFortOwner(fortStruct* fort, factionStruct* newFaction, bool convertGarrison)
-{
-	(*(*plugData::data.funcs.changeFortOwner))(fort, newFaction, convertGarrison);
-	if (!convertGarrison && fort->army)
-	{
-		auto oldCoords = coordPair{static_cast<int>(fort->xCoord), static_cast<int>(fort->yCoord)};
-		if (const auto coords = (*(*plugData::data.funcs.findValidTileNearTile))(&oldCoords, 7);
-			(*(*plugData::data.funcs.isTileValidForCharacterType))(7, coords))
-		{
-			sol::table units = sol::state_view(plugData::data.luaAll.luaState).create_table();
-			for (int i = 0; i < fort->army->numOfUnits; i++)
-			{
-				units.add(fort->army->units[i]);
-			}
-			const auto faction = fort->army->faction;
-			if (const auto army = factionHelpers::splitArmy(faction, units, coords->xCoord, coords->yCoord); army)
-				return;
-		}
-		if (fort->army)
-		{
-			for (int i = 0; i < fort->army->numOfUnits; i++)
-			{
-				unitHelpers::killUnit(fort->army->units[i]);
-			}
-		}
-	}
-}
 
 void settlementHelpers::setBuildingHealth(building* build, int health)
 {

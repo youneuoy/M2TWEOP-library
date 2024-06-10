@@ -9,13 +9,15 @@
 #include "smallFuncs.h"
 
 #include "fastFunctsHelpers.h"
+#include "plugData.h"
 #include "unitActions.h"
+#include "lua/forward.hpp"
 
 namespace fastFuncts
 {
 
 	//unique per faction!
-	NOINLINE EOP_EXPORT void loadSaveGame(const char* saveName)
+	void loadSaveGame(const char* saveName)
 	{
 		UNICODE_STRING** nameMem = new UNICODE_STRING*;
 
@@ -28,7 +30,7 @@ namespace fastFuncts
 		*currentHandler = dataOffsets::offsets.loadGameHandler;
 	}
 
-	NOINLINE EOP_EXPORT factionStruct* getRegionOwner(int regionID)
+	factionStruct* getRegionOwner(int regionID)
 	{
 		UINT32 numFac = fastFuncts::getFactionsCount();
 		factionStruct** listFac = fastFuncts::getFactionsList();
@@ -66,7 +68,8 @@ namespace fastFuncts
 	{
 		return globals::dataS.modPatch;
 	}
-	NOINLINE EOP_EXPORT float GetMovepointsForReachNearTile(int x, int y, int destX, int destY)
+	
+	float GetMovepointsForReachNearTile(int x, int y, int destX, int destY)
 	{
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
 		if (x > gameDataAll->stratMap->mapWidth)
@@ -102,7 +105,7 @@ namespace fastFuncts
 
 		return getMovepointsForReachTileF(xy, destxy);
 	}
-	NOINLINE EOP_EXPORT void revealTile(factionStruct* faction, int x, int y)
+	void revealTile(factionStruct* faction, int x, int y)
 	{
 		if (IsStratMap() == false)
 		{
@@ -123,7 +126,8 @@ namespace fastFuncts
 		int coords[2] = { x,y };
 		revealTileF(faction->tilesFac, coords, 1, -1.0);
 	}
-	NOINLINE EOP_EXPORT void hideRevealedTile(factionStruct* faction, int x, int y)
+	
+	void hideRevealedTile(factionStruct* faction, int x, int y)
 	{
 		if (IsStratMap() == false)
 		{
@@ -164,11 +168,13 @@ namespace fastFuncts
 			}
 		}
 	}
-	NOINLINE EOP_EXPORT int8_t getTileVisibility(factionStruct* faction, int x, int y)
+	
+	int8_t getTileVisibility(factionStruct* faction, int x, int y)
 	{
 		return faction->tilesFac->tilesVisiblity[faction->tilesFac->tilesXBound * (y)+x];
 	}
-	NOINLINE EOP_EXPORT void setTileVisibility(factionStruct* faction, int x, int y, int8_t vis)
+	
+	void setTileVisibility(factionStruct* faction, int x, int y, int8_t vis)
 	{
 		faction->tilesFac->tilesVisiblity[faction->tilesFac->tilesXBound * (y)+x] = vis;
 	}
@@ -224,7 +230,7 @@ namespace fastFuncts
 		return coords;
 	}
 
-	NOINLINE EOP_EXPORT void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner, bool convertGarrison)
+	void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner, bool convertGarrison)
 	{
 		stackStruct* garrison = nullptr;
 		std::vector<general*> characters;
@@ -375,7 +381,7 @@ namespace fastFuncts
 		}
 	}
 	
-	NOINLINE EOP_EXPORT void changeFortOwner(fortStruct* fort, factionStruct* newFaction, bool convertGarrison)
+	void changeFortOwner(fortStruct* fort, factionStruct* newFaction, bool convertGarrison)
 	{
 		if (convertGarrison)
 		{
@@ -453,9 +459,33 @@ namespace fastFuncts
 				call eax
 			}
 		}
+		
+		if (!convertGarrison && fort->army)
+		{
+			auto oldCoords = coordPair{static_cast<int>(fort->xCoord), static_cast<int>(fort->yCoord)};
+			if (const auto coords = findValidTileNearTile(&oldCoords, 7);
+				isTileValidForCharacterType(7, coords))
+			{
+				sol::table units = sol::state_view(plugData::data.luaAll.luaState).create_table();
+				for (int i = 0; i < fort->army->numOfUnits; i++)
+				{
+					units.add(fort->army->units[i]);
+				}
+				const auto faction = fort->army->faction;
+				if (const auto army = factionHelpers::splitArmy(faction, units, coords->xCoord, coords->yCoord); army)
+					return;
+			}
+			if (fort->army)
+			{
+				for (int i = 0; i < fort->army->numOfUnits; i++)
+				{
+					killUnit(fort->army->units[i]);
+				}
+			}
+		}
 	}
 
-	NOINLINE EOP_EXPORT void GetGameTileCoordsWithCursor(int& x, int& y)
+	void GetGameTileCoordsWithCursor(int& x, int& y)
 	{
 		int* mouseOffset = 0x0;
 		if (globals::dataS.gamever == 2)//steam
@@ -469,11 +499,11 @@ namespace fastFuncts
 		x = mouseOffset[0];
 		y = mouseOffset[1];
 	}
-	NOINLINE EOP_EXPORT void ViewTacticalMap(int x, int y)
+	void ViewTacticalMap(int x, int y)
 	{
 		globals::dataS.Modules.tacticalMapVeiwer.View(x, y);
 	}
-	NOINLINE EOP_EXPORT bool IsStratMap()
+	bool IsStratMap()
 	{
 		int* isStratMap = reinterpret_cast<int*>(dataOffsets::offsets.someStratmapPointer);
 		if (isStratMap == 0)
@@ -483,7 +513,7 @@ namespace fastFuncts
 		return true;
 	}
 
-	NOINLINE EOP_EXPORT void setCharacterType(general* character, int typeID, int subFaction, int factionDipNum)
+	void setCharacterType(general* character, int typeID, int subFaction, int factionDipNum)
 	{
 		DWORD adrFunc = 0x0;
 		if (globals::dataS.gamever == 2)//steam
@@ -508,7 +538,7 @@ namespace fastFuncts
 		}
 		character->genType = retVal;
 	}
-	NOINLINE EOP_EXPORT UINT32 getTileRegionID(int x, int y)
+	UINT32 getTileRegionID(int x, int y)
 	{
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
 		UINT32 redID = gameDataAll->stratMap->tilesArr[gameDataAll->stratMap->mapWidth * y + x].regionId;
@@ -516,26 +546,26 @@ namespace fastFuncts
 
 		return redID;
 	}
-	NOINLINE EOP_EXPORT oneTile* getTileStruct(int x, int y)
+	oneTile* getTileStruct(int x, int y)
 	{
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
 		return &(gameDataAll->stratMap->tilesArr[gameDataAll->stratMap->mapWidth * y + x]);
 	}
-	NOINLINE EOP_EXPORT regionStruct* getRegionByID(UINT32 regionID)
+	regionStruct* getRegionByID(UINT32 regionID)
 	{
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
 
 		return &gameDataAll->stratMap->regions[regionID];
 	}
 
-	NOINLINE EOP_EXPORT factionStruct** getFactionsList()
+	factionStruct** getFactionsList()
 	{
 		factionStruct** list;
 		list = reinterpret_cast<factionStruct**>(dataOffsets::offsets.factionOffsetsStart + 0x22c);
 		return list;
 	}
 
-	NOINLINE EOP_EXPORT UINT32 getPassedTurnsNum()
+	UINT32 getPassedTurnsNum()
 	{
 		UINT32 count = 0;
 		techFuncs::Read(dataOffsets::offsets.factionOffsetsStart + 0x378, &count);
@@ -543,7 +573,7 @@ namespace fastFuncts
 		return count;
 	}
 
-	NOINLINE EOP_EXPORT UINT32 getSeason()
+	UINT32 getSeason()
 	{
 		UINT32 season = 0;
 
@@ -552,7 +582,7 @@ namespace fastFuncts
 		return season;
 	}
 
-	NOINLINE EOP_EXPORT UINT32 getYear()
+	UINT32 getYear()
 	{
 		UINT32 year = 0;
 		float t = 0;
@@ -563,7 +593,7 @@ namespace fastFuncts
 		return year;
 	}
 
-	NOINLINE EOP_EXPORT void setHeir(namedCharacter* gen, bool isJustSet)
+	void setHeir(namedCharacter* gen, bool isJustSet)
 	{
 		factionStruct* fac = gen->faction;
 		if (isJustSet == true)
@@ -597,7 +627,7 @@ namespace fastFuncts
 		return;
 	}
 
-	NOINLINE EOP_EXPORT UINT32 getFactionsCount()
+	UINT32 getFactionsCount()
 	{
 		UINT32 count = 0;
 
@@ -606,7 +636,7 @@ namespace fastFuncts
 		return count;
 	}
 
-	NOINLINE EOP_EXPORT guild* getGuild(unsigned char index)
+	guild* getGuild(unsigned char index)
 	{
 		uintptr_t currentOffsett = dataOffsets::offsets.guildDataStart;
 		int count = 0;
@@ -658,7 +688,7 @@ namespace fastFuncts
 		return { -1,-1 };
 	}
 
-	NOINLINE EOP_EXPORT stackStruct* findArmy(int x, int y)
+	stackStruct* findArmy(int x, int y)
 	{
 		UINT32 numFac = fastFuncts::getFactionsCount();
 		factionStruct** listFac = fastFuncts::getFactionsList();
@@ -681,7 +711,7 @@ namespace fastFuncts
 		return nullptr;
 	}
 
-	NOINLINE EOP_EXPORT fortStruct* findFort(int x, int y)
+	fortStruct* findFort(int x, int y)
 	{
 		UINT32 numFac = fastFuncts::getFactionsCount();
 		factionStruct** listFac = fastFuncts::getFactionsList();
@@ -703,7 +733,7 @@ namespace fastFuncts
 		return nullptr;
 	}
 
-	NOINLINE EOP_EXPORT portBuildingStruct* findPort(int x, int y)
+	portBuildingStruct* findPort(int x, int y)
 	{
 		UINT32 numFac = fastFuncts::getFactionsCount();
 		factionStruct** listFac = fastFuncts::getFactionsList();
@@ -725,7 +755,7 @@ namespace fastFuncts
 		return nullptr;
 	}
 
-	NOINLINE EOP_EXPORT resStrat* findResource(int x, int y)
+	resStrat* findResource(int x, int y)
 	{
 		UINT32 numFac = fastFuncts::getFactionsCount();
 		factionStruct** listFac = fastFuncts::getFactionsList();
@@ -751,7 +781,7 @@ namespace fastFuncts
 		return nullptr;
 	}
 
-	NOINLINE EOP_EXPORT settlementStruct* findSettlement(int x, int y)
+	settlementStruct* findSettlement(int x, int y)
 	{
 		UINT32 numFac = fastFuncts::getFactionsCount();
 		factionStruct** listFac = fastFuncts::getFactionsList();
@@ -773,7 +803,7 @@ namespace fastFuncts
 		return nullptr;
 	}
 
-	NOINLINE EOP_EXPORT watchTowerStruct* findWatchTower(int x, int y)
+	watchTowerStruct* findWatchTower(int x, int y)
 	{
 		UINT32 numFac = fastFuncts::getFactionsCount();
 		factionStruct** listFac = fastFuncts::getFactionsList();
@@ -795,7 +825,7 @@ namespace fastFuncts
 		return nullptr;
 	}
 
-	NOINLINE EOP_EXPORT void moveStratCameraSlow(int x, int y)
+	void moveStratCameraSlow(int x, int y)
 	{
 		int* isStratMap = reinterpret_cast<int*>(dataOffsets::offsets.someStratmapPointer);
 		if (isStratMap == 0)return;
@@ -816,7 +846,7 @@ namespace fastFuncts
 		return;
 	}
 
-	NOINLINE EOP_EXPORT void moveStratCameraFast(int x, int y)
+	void moveStratCameraFast(int x, int y)
 	{
 		int* isStratMap = reinterpret_cast<int*>(dataOffsets::offsets.someStratmapPointer);
 		if (isStratMap == 0)return;
@@ -837,7 +867,7 @@ namespace fastFuncts
 		return;
 	}
 
-	NOINLINE EOP_EXPORT void zoomStratCamera(float zoom)
+	void zoomStratCamera(float zoom)
 	{
 		int* isStratMap = reinterpret_cast<int*>(dataOffsets::offsets.someStratmapPointer);
 		if (isStratMap == 0)return;
@@ -874,7 +904,7 @@ namespace fastFuncts
 		return nullptr;
 	}
 
-	NOINLINE EOP_EXPORT bool isTileValidForCharacterType(int charType, coordPair* coords)
+	bool isTileValidForCharacterType(int charType, coordPair* coords)
 	{
 		auto stratMap = smallFuncs::getGameDataAll()->stratMap;
 		if (!stratMap)
@@ -885,7 +915,7 @@ namespace fastFuncts
 		return tile->nonPassable != -1 && ((tile->objectTypes & 107) == 0);
 	}
 
-	NOINLINE EOP_EXPORT void teleportCharacter(general* gen, int x, int y)
+	void teleportCharacter(general* gen, int x, int y)
 	{
 		if (gen->residence)
 		{
@@ -929,7 +959,7 @@ namespace fastFuncts
 		delete charArray;
 	}
 
-	NOINLINE EOP_EXPORT bool teleportCharacterClose(general* gen, int x, int y)
+	bool teleportCharacterClose(general* gen, int x, int y)
 	{
 		if (gen->residence)
 		{
@@ -970,8 +1000,8 @@ namespace fastFuncts
 		delete targetCoords;
 		return isTeleported;
 	}
-
-	NOINLINE EOP_EXPORT void addTrait(namedCharacter* character, const char* traitName, int traitLevel)
+	
+	void addTrait(namedCharacter* character, const char* traitName, int traitLevel)
 	{
 
 		DWORD adrFunc = 0;
@@ -1032,7 +1062,7 @@ namespace fastFuncts
 		}
 	}
 
-	NOINLINE EOP_EXPORT void removeTrait(namedCharacter* character, const char* traitName)
+	void removeTrait(namedCharacter* character, const char* traitName)
 	{
 		DWORD adrFunc = 0;
 
@@ -1090,7 +1120,7 @@ namespace fastFuncts
 		}
 	}
 
-	EOP_EXPORT int addAncillary(namedCharacter* character, ancillary* anc)
+	int addAncillary(namedCharacter* character, ancillary* anc)
 	{
 		if (character == nullptr || anc == nullptr)return 0;
 
@@ -1117,7 +1147,7 @@ namespace fastFuncts
 		return retr;
 	}
 
-	EOP_EXPORT void removeAncillary(namedCharacter* character, ancillary* anc)
+	void removeAncillary(namedCharacter* character, ancillary* anc)
 	{
 		if (character == nullptr || anc == nullptr)return;
 
@@ -1142,7 +1172,7 @@ namespace fastFuncts
 		return;
 	}
 
-	EOP_EXPORT ancillary* findAncillary(char* ancName)
+	ancillary* findAncillary(char* ancName)
 	{
 		if (ancName == nullptr)return 0;
 
@@ -1170,12 +1200,12 @@ namespace fastFuncts
 		return retr;
 	}
 
-	NOINLINE EOP_EXPORT void setSoldiersCountAndExp(unit* un, int count, int exp)
+	void setSoldiersCountAndExp(unit* un, int count, int exp)
 	{
 		un->expScreen = exp;
 		setSoldiersCount(un, count);
 	}
-	NOINLINE EOP_EXPORT void setUnitMovepoints(unit* un, float movepoints)
+	void setUnitMovepoints(unit* un, float movepoints)
 	{
 		un->movePoints = movepoints;
 
@@ -1241,7 +1271,7 @@ namespace fastFuncts
 		}
 	}
 
-	NOINLINE EOP_EXPORT void setSoldiersCount(unit* un, int count)
+	void setSoldiersCount(unit* un, int count)
 	{
 		if (count == 0)
 		{
@@ -1280,7 +1310,7 @@ namespace fastFuncts
 		return;
 	}
 
-	NOINLINE EOP_EXPORT void killUnit(unit* un)
+	void killUnit(unit* un)
 	{
 		if (un->general)
 		{
@@ -1297,7 +1327,7 @@ namespace fastFuncts
 		}
 	}
 
-	NOINLINE EOP_EXPORT void killCharacter(general* gen)
+	void killCharacter(general* gen)
 	{
 		DWORD adr = codes::offsets.killCharStratMapFunc;
 
@@ -1309,7 +1339,7 @@ namespace fastFuncts
 		}
 	}
 
-	NOINLINE EOP_EXPORT void destroyBuilding(settlementStruct* sett, const char* typeName, bool isReturnMoney)
+	void destroyBuilding(settlementStruct* sett, const char* typeName, bool isReturnMoney)
 	{
 
 		DWORD adr = codes::offsets.destroyBuildingFunc;
@@ -1328,7 +1358,7 @@ namespace fastFuncts
 		return;
 	}
 
-	NOINLINE EOP_EXPORT bool useButton(const char* buttonName)
+	bool useButton(const char* buttonName)
 	{
 		DWORD findedButton = 0;
 		char** cryptS = fastFunctsHelpers::makeCryptedString(buttonName);
@@ -1355,7 +1385,7 @@ namespace fastFuncts
 		}
 		return true;
 	}
-	NOINLINE EOP_EXPORT uiElement* getUiElement(const char* elementName)
+	uiElement* getUiElement(const char* elementName)
 	{
 		uiElement* resElement = nullptr;
 		char** cryptS = fastFunctsHelpers::makeCryptedString(elementName);
@@ -1371,7 +1401,7 @@ namespace fastFuncts
 
 		return resElement;
 	}
-	NOINLINE EOP_EXPORT void useUiElement(uiElement* element)
+	void useUiElement(uiElement* element)
 	{
 		DWORD adrF = codes::offsets.useButtonFunc;
 		_asm
@@ -1381,7 +1411,7 @@ namespace fastFuncts
 			call eax
 		}
 	}
-	NOINLINE EOP_EXPORT void autoResolve()
+	void autoResolve()
 	{
 		DWORD adrFunc = codes::offsets.autoResolveFunc;
 
@@ -1391,7 +1421,7 @@ namespace fastFuncts
 			call eax
 		}
 	}
-	NOINLINE EOP_EXPORT bool autoWin(const char* winnerSide)
+	bool autoWin(const char* winnerSide)
 	{
 		DWORD adrFunc = codes::offsets.autoWinFunc;
 		string command = winnerSide;
@@ -1410,7 +1440,7 @@ namespace fastFuncts
 		}
 		return result;
 	}
-	NOINLINE EOP_EXPORT bool callGameConsoleCommand(const char* name, const char* arg, char* errorBuffer)
+	bool callGameConsoleCommand(const char* name, const char* arg, char* errorBuffer)
 	{
 		auto cmd = dataOffsets::offsets.consoleCommands;
 		for (int i = 0; i < cmd->size; i++)
@@ -1426,7 +1456,7 @@ namespace fastFuncts
 
 		return false;
 	}
-	NOINLINE EOP_EXPORT void createBuilding(settlementStruct* sett, const char* building_level_id)
+	void createBuilding(settlementStruct* sett, const char* building_level_id)
 	{
 		DWORD adrFunc = codes::offsets.createBuildingFunc;
 		string command = sett->name;
@@ -1444,7 +1474,7 @@ namespace fastFuncts
 		}
 	}
 
-	NOINLINE EOP_EXPORT general* createCharacterWithoutSpawning(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
+	general* createCharacterWithoutSpawning(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
 	{
 		DWORD adrFunc = codes::offsets.createCharacterFunc;
 
@@ -1489,7 +1519,7 @@ namespace fastFuncts
 
 		return gen;
 	}
-	NOINLINE EOP_EXPORT general* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
+	general* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
 	{
 		DWORD adrFunc = codes::offsets.createCharacterFunc;
 
@@ -1546,7 +1576,7 @@ namespace fastFuncts
 		return gen;
 	}
 
-	NOINLINE EOP_EXPORT stackStruct* createArmy(general* character)
+	stackStruct* createArmy(general* character)
 	{
 		stackStruct* stack = nullptr;
 
@@ -1567,7 +1597,7 @@ namespace fastFuncts
 		return stack;
 	}
 
-	NOINLINE EOP_EXPORT stackStruct* createArmyInSettlement(settlementStruct* sett)
+	stackStruct* createArmyInSettlement(settlementStruct* sett)
 	{
 		stackStruct* stack = nullptr;
 
@@ -1584,7 +1614,7 @@ namespace fastFuncts
 		return stack;
 	}
 
-	NOINLINE EOP_EXPORT unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap)
+	unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap)
 	{
 		int unitIndex = fastFunctsHelpers::getEduIndex(type);
 
@@ -1592,7 +1622,7 @@ namespace fastFuncts
 		return createUnitIdx(unitIndex, regionID, facNum, exp, arm, weap);
 	}
 
-	NOINLINE EOP_EXPORT unit* createUnitIdx(int index, int regionID, int facNum, int exp, int arm, int weap)
+	unit* createUnitIdx(int index, int regionID, int facNum, int exp, int arm, int weap)
 	{
 		if (index == -1)return nullptr;
 
@@ -1621,7 +1651,7 @@ namespace fastFuncts
 		return res;
 	}
 
-	NOINLINE EOP_EXPORT unit* createUnitEDB(int edb, int regionID, int facNum, int exp, int arm, int weap)
+	unit* createUnitEDB(int edb, int regionID, int facNum, int exp, int arm, int weap)
 	{
 		if (edb == 0)
 		{
@@ -1654,7 +1684,7 @@ namespace fastFuncts
 		return res;
 	}
 
-	NOINLINE EOP_EXPORT bool StopSiege(stackStruct* army)
+	bool StopSiege(stackStruct* army)
 	{
 		bool retVal = (army->siege == nullptr);
 		if (retVal)return false;
@@ -1676,7 +1706,7 @@ namespace fastFuncts
 		return retVal;
 	}
 
-	NOINLINE EOP_EXPORT bool StopBlockPort(stackStruct* army)
+	bool StopBlockPort(stackStruct* army)
 	{
 		bool retVal = (army->blockedPort == nullptr);
 		if (retVal)return false;
@@ -1698,7 +1728,7 @@ namespace fastFuncts
 		return retVal;
 	}
 
-	NOINLINE EOP_EXPORT int addUnitToArmy(stackStruct* army, unit* un)
+	int addUnitToArmy(stackStruct* army, unit* un)
 	{
 		if (army->numOfUnits == 20)return 0;
 
@@ -1713,7 +1743,7 @@ namespace fastFuncts
 		return 1;
 	}
 
-	NOINLINE EOP_EXPORT void setBodyguard(general* gen, unit* un)
+	void setBodyguard(general* gen, unit* un)
 	{
 		if (gen->bodyguards != nullptr && gen->bodyguards->trackedUnitPointerP != nullptr)
 		{
@@ -1739,7 +1769,7 @@ namespace fastFuncts
 		return;
 	}
 
-	NOINLINE EOP_EXPORT void setBodyguardStart(general* gen, unit* un)
+	void setBodyguardStart(general* gen, unit* un)
 	{
 		DWORD adr = codes::offsets.setBodyguard;
 		_asm {
@@ -1752,7 +1782,7 @@ namespace fastFuncts
 		return;
 	}
 
-	NOINLINE EOP_EXPORT void AddToSettlement(stackStruct* army, settlementStruct* set)
+	void AddToSettlement(stackStruct* army, settlementStruct* set)
 	{
 		if (army->settlement != nullptr)
 		{
@@ -1784,7 +1814,7 @@ namespace fastFuncts
 		addToSettlementF(set, army->gen);
 	}
 
-	NOINLINE EOP_EXPORT void AddToFort(stackStruct* army, fortStruct* fort)
+	void AddToFort(stackStruct* army, fortStruct* fort)
 	{
 		if (army->settlement != nullptr)
 		{
@@ -1816,7 +1846,7 @@ namespace fastFuncts
 		addToFortF(fort, army->gen);
 	}
 
-	NOINLINE EOP_EXPORT void UngarisonSetOrFort(void* setOrFort)
+	void UngarisonSetOrFort(void* setOrFort)
 	{
 		typedef void(__thiscall* UngarisonSetOrFortF)(void* setOrFort);
 
@@ -1833,7 +1863,7 @@ namespace fastFuncts
 		ungarisonSetOrFortF(setOrFort);
 	}
 
-	NOINLINE EOP_EXPORT ModelDbEntry* findBattleModel(const char* modelName)
+	ModelDbEntry* findBattleModel(const char* modelName)
 	{
 
 		DWORD funcAdr = 0;
@@ -1870,7 +1900,7 @@ namespace fastFuncts
 		return res;
 	}
 
-	NOINLINE EOP_EXPORT void deleteFort(const factionStruct* fac, fortStruct* fort)
+	void deleteFort(const factionStruct* fac, fortStruct* fort)
 	{
 		DWORD delFort = (DWORD)fort;
 		DWORD delFaction = (DWORD)fac;
@@ -1894,7 +1924,7 @@ namespace fastFuncts
 		}
 	}
 
-	NOINLINE EOP_EXPORT void createFortXY(factionStruct* fac, int x, int y)
+	void createFortXY(factionStruct* fac, int x, int y)
 	{
 		factionStruct* faction = (factionStruct*)fac;
 		general* newgen = fastFuncts::createCharacterWithoutSpawning("named character", faction, 30, "fort", "fort", 31, "default", x, y);
@@ -1927,7 +1957,7 @@ namespace fastFuncts
 		return reinterpret_cast<campaignDbExtra*>(dataOffsets::offsets.campaignDbExtra);
 	}
 
-	NOINLINE EOP_EXPORT void createFort(const general* gen)
+	void createFort(const general* gen)
 	{
 		stackStruct* newarmy = gen->armyLeaded;
 		if (newarmy == nullptr) {
@@ -1945,7 +1975,7 @@ namespace fastFuncts
 		getCampaignDb()->campaignDbSettlement.canBuildForts = oldOption;
 	}
 
-	NOINLINE EOP_EXPORT void setUnitParams(unit* un, int count, int exp, int armor, int weap)
+	void setUnitParams(unit* un, int count, int exp, int armor, int weap)
 	{
 		setSoldiersCountAndExp(un, count, exp);
 		DWORD adrFunc = codes::offsets.setUnitArmorFunc;
@@ -1994,7 +2024,7 @@ namespace fastFuncts
 		unitActions::logStringGame(funcName + " error: " + error);
 	}
 
-	NOINLINE EOP_EXPORT void mergeArmies(stackStruct* army, stackStruct* targetArmy)
+	void mergeArmies(stackStruct* army, stackStruct* targetArmy)
 	{
 		if (army->numOfUnits + targetArmy->numOfUnits > 20)
 		{
@@ -2035,7 +2065,7 @@ namespace fastFuncts
 		{13,"pope"}
 	};
 	
-	NOINLINE EOP_EXPORT stackStruct* spawnArmy(
+	stackStruct* spawnArmy(
 		factionStruct* faction,
 		const char* name,
 		const char* name2,
@@ -2273,7 +2303,7 @@ namespace fastFuncts
 
 		return nullptr;
 	}
-	NOINLINE EOP_EXPORT void toggleDeveloperMode()
+	void toggleDeveloperMode()
 	{
 		auto& developerMode = globals::dataS.Modules.developerMode;
 		developerMode.toggleDeveloperModeBase();

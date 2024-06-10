@@ -19,10 +19,6 @@ namespace generalHelpers
 		{11,"inquisitor"},
 		{13,"pope"}
 	};
-	void moveToTile(general* gen, int x, int y)
-	{
-		(*(*plugData::data.funcs.moveNormal))(gen, x, y);
-	}
 
 	void sabotageBuilding(general* gen, building* build)
 	{
@@ -57,62 +53,6 @@ namespace generalHelpers
 		}
 	}
 
-	void reposition(general* gen, int x, int y)
-	{
-		(*(*plugData::data.funcs.teleportCharacter))(gen, x, y);
-	}
-
-	bool teleport(general* gen, int x, int y)
-	{
-		return (*(*plugData::data.funcs.teleportCharacterClose))(gen, x, y);
-	}
-
-	void diplomacyCharacter(general* gen, general* targetCharacter)
-	{
-		(*(*plugData::data.funcs.diplomacyCharacter))(gen, targetCharacter);
-	}
-
-	void assassinate(general* gen, general* targetCharacter)
-	{
-		(*(*plugData::data.funcs.assassinate))(gen, targetCharacter);
-	}
-
-	void marry(general* gen, general* targetCharacter)
-	{
-		(*(*plugData::data.funcs.marry))(gen, targetCharacter);
-	}
-
-	void spyCharacter(general* gen, general* targetCharacter)
-	{
-		(*(*plugData::data.funcs.spyCharacter))(gen, targetCharacter);
-	}
-
-	void denounce(general* gen, general* targetCharacter)
-	{
-		(*(*plugData::data.funcs.denounce))(gen, targetCharacter);
-	}
-
-	void bribe(general* gen, general* targetCharacter)
-	{
-		(*(*plugData::data.funcs.bribe))(gen, targetCharacter);
-	}
-
-	void acquire(general* gen, general* targetCharacter)
-	{
-		(*(*plugData::data.funcs.acquire))(gen, targetCharacter);
-	}
-	
-	void switchCharacterFaction(general* gen, factionStruct* fac, bool keepArmy, bool keepBg)
-	{
-		(*(*plugData::data.funcs.switchCharacterFaction))(gen, fac, keepArmy, keepBg);
-		if (gen->armyLeaded)
-			stackStructHelpers::sortStack(gen->armyLeaded, 6, 7, 4);
-	}
-
-	void diplomacySettlement(general* gen, settlementStruct* targetSettlement)
-	{
-		(*(*plugData::data.funcs.diplomacySettlement))(gen, targetSettlement);
-	}
 
 	void diplomacyFort(general* gen, fortStruct* targetFort)
 	{

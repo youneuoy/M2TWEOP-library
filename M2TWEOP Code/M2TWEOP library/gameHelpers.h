@@ -150,7 +150,6 @@ namespace gameHelpers
 	mercPoolUnit* getNewMercUnit(mercPoolUnitsPtr* unitPtr);
 	mercPoolUnit* addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, float startyear, float endyear, int crusading);
 	void saveGame(const char* path);
-	void historicEvent(const char* name, const char* title, const char* description);
 	void scriptCommand(std::string command, sol::variadic_args va);
 	const char* getReligionName(const int index);
 	const char* getCultureName(const int index);

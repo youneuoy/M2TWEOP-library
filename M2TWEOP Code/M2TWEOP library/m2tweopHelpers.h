@@ -45,10 +45,6 @@ namespace m2tweopHelpers
 	void setDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2);
 	int GetUnitSize();
 
-	void setAncLimit(unsigned char limit);
-	void seReligionsLimit(unsigned char limit);
-	void setMaxBgSize(unsigned char maxBgSize);
-	void unlockGameConsoleCommands();
 	void setPerfectSpy(bool set);
 	int getLocalFactionID();
 	
@@ -58,9 +54,7 @@ namespace m2tweopHelpers
 	void addRegionColor(mapImage* img, int id, int r, int g, int b, int a);
 	void fillTileColor(mapImage* img, int x, int y, int r, int g, int b, int a);
 	void addTileColor(mapImage* img, int x, int y, int r, int g, int b, int a);
-
-
-	void setEDUUnitsSize(signed short min, signed short max);
+	
 	int getGameVersion();
 	options1* getOptions1();
 	options2* getOptions2();
@@ -76,12 +70,5 @@ namespace m2tweopHelpers
 
 	settlementTextStrings* getUIStrings(const settlementInfoScroll* settlementInfoScroll);
 	settlementInfoScroll* getSettlementInfoScroll();
-
-	void setConversionLvlFromCastle(int castleLvl, int convertToLvl);
-	void setConversionLvlFromCity(int cityLvl, int convertToLvl);
-
-	void setBuildingChainLimit(unsigned int limit);
-
-	void setGuildCooldown(unsigned char turns);
 };
 

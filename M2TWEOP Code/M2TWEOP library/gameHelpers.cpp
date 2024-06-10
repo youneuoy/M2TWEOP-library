@@ -665,17 +665,12 @@ namespace gameHelpers
 		const char* commandC = command.c_str();
 		if (va.size() == 0)
 		{
-			(*(*plugData::data.funcs.scriptCommand))(commandC, "");
+			smallFuncs::scriptCommand(commandC, "");
 		}
 		else
 		{
-			(*(*plugData::data.funcs.scriptCommand))(commandC, va.begin()->as<std::string>().c_str());
+			smallFuncs::scriptCommand(commandC, va.begin()->as<std::string>().c_str());
 		}
-	}
-
-	void gameHelpers::historicEvent(const char* name, const char* title, const char* description)
-	{
-		(*(*plugData::data.funcs.historicEvent))(name, title, description);
 	}
 
 	general* gameHelpers::getCardinal(const collegeOfCardinals* college, const int index)

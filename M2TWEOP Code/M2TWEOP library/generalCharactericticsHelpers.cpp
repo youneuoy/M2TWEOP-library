@@ -66,10 +66,6 @@ namespace generalCharactericticsHelpers
 	{
 		character->age = character->age ^ ((int)isMale << 1 ^ character->age) & 2;
 	}
-	void setAsHeir(namedCharacter* character, bool isJustSet)
-	{
-		(*(*plugData::data.funcs.setHeir))(character, isJustSet);
-	}
 	int getCapturedUnitNum(capturedFactionInfo* capInfo)
 	{
 		return (capInfo->capturedUnitsEnd - (DWORD)capInfo->capturedUnits) / 12;

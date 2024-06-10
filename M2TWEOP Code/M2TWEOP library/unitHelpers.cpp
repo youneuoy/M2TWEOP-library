@@ -605,46 +605,7 @@ namespace unitHelpers
 	{
 		return (*(*plugData::data.funcs.getUnitByLabel))(label);
 	}
-
-	void unitAttackClosest(unit* un, int16_t angle, bool run)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		un->aiActiveSet = 2;
-		(*(*plugData::data.funcs.unitAttackClosest))(un, angle, run);
-	}
-
-	void unitAttackUnit(unit* un, const unit* targetUnit, bool run)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		un->aiActiveSet = 2;
-		(*(*plugData::data.funcs.attackUnit))(un, targetUnit, run);
-	}
-
-	void unitMovetoPosition(unit* unit, float xCoord, float yCoord, bool run)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		unit->aiActiveSet = 2;
-		(*(*plugData::data.funcs.unitMovetoPosition))(unit, xCoord, yCoord, run);
-	}
-
-	void moveToOrientation(unit* unit, float xCoord, float yCoord, int widthInMen, int16_t angle, bool run)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		unit->aiActiveSet = 2;
-		(*(*plugData::data.funcs.moveToOrientation))(unit, xCoord, yCoord, widthInMen, angle, run);
-	}
-
-	void placeUnit(unit* unit, float xCoord, float yCoord, int16_t angle, int width)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		(*(*plugData::data.funcs.placeUnit))(unit, xCoord, yCoord, angle, width);
-	}
-
+	
 	void deployStakes(const unit* unit)
 	{
 		if (!battleHandlerHelpers::inBattle())
@@ -669,22 +630,6 @@ namespace unitHelpers
 	float getBattleMapHeight(float xCoord, float yCoord)
 	{
 		return (*(*plugData::data.funcs.getBattleMapHeight))(xCoord, yCoord);
-	}
-
-	void moveRelative(unit* unit, float xCoord, float yCoord, bool run)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		unit->aiActiveSet = 2;
-		(*(*plugData::data.funcs.moveRelative))(unit, xCoord, yCoord, run);
-	}
-
-	void moveToMissileRange(unit* un, const unit* targetUnit, bool run)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		un->aiActiveSet = 2;
-		(*(*plugData::data.funcs.moveToMissileRange))(un, targetUnit, run);
 	}
 
 	void unitTurn(unit* un, int16_t angle, bool isRelative)

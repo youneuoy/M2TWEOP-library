@@ -104,46 +104,7 @@ public:
 class basicFuncs
 {
 public:
-
-	ProcLoader<void(__cdecl*)(signed short, signed short)> setEDUUnitsSize;
-	ProcLoader<void(__cdecl*)(namedCharacter*, bool)> setHeir;
-
-
-	ProcLoader<void(__cdecl*)(unsigned char)> setAncLimit;
-	ProcLoader<void(__cdecl*)(const char*, const char*, const char*)> historicEvent;
-	ProcLoader<void(__cdecl*)(const char*, const char*)> scriptCommand;
-	ProcLoader<void(__cdecl*)(unsigned char)> setReligionsLimit;
-	ProcLoader<void(__cdecl*)(unsigned char)> setMaxBgSize;
-	ProcLoader<void(__cdecl*)()> unlockConsoleCommands;
-	ProcLoader<void(__cdecl*)(int, int)> setConversionLvlFromCastle;
-	ProcLoader<void(__cdecl*)(int, int)> setConversionLvlFromCity;
-	ProcLoader<void(__cdecl*)(unsigned char)> setGuildCooldown;
-	ProcLoader<void(__cdecl*)(const std::string&)> logStringGame;
-	ProcLoader<void(__cdecl*)(general*, general*)> diplomacyCharacter;
-	ProcLoader<void(__cdecl*)(general*, settlementStruct*)> diplomacySettlement;
-
-
-	//get current game year
-	ProcLoader<UINT32(__cdecl*)()> getYear;
-	ProcLoader<void(__cdecl*)(char*, const char*)> setCryptedString;
-	ProcLoader<UINT32(__cdecl*)()> getFactionsCount;
-	ProcLoader<factionStruct** (__cdecl*)()> getFactionsList;
-
-	ProcLoader<void(__cdecl*)(general*, int, int)> moveNormal;
-	ProcLoader<void(__cdecl*)(general*, settlementStruct*, bool)> siegeSettlement;
-	ProcLoader<void(__cdecl*)(general*, fortStruct*, bool)> siegeFort;
-	ProcLoader<void(__cdecl*)(general*, general*)> attackCharacter;
-	ProcLoader<void(__cdecl*)(general*, general*)> assassinate;
-	ProcLoader<void(__cdecl*)(general*, general*)> marry;
-	ProcLoader<void(__cdecl*)(general*, general*)> spyCharacter;
-	ProcLoader<void(__cdecl*)(general*, general*)> denounce;
-	ProcLoader<void(__cdecl*)(general*, general*)> bribe;
-	ProcLoader<void(__cdecl*)(general*, general*)> acquire;
-	ProcLoader<void(__cdecl*)(general*, factionStruct*, bool, bool)> switchCharacterFaction;
-	ProcLoader<void(__cdecl*)(fortStruct*, factionStruct*, bool)> changeFortOwner;
-	ProcLoader<bool(__cdecl*)(general*, int, int)> teleportCharacterClose;
-	ProcLoader<coordPair*(__cdecl*)(coordPair*, int)> findValidTileNearTile;
-	ProcLoader<bool(__cdecl*)(int, coordPair*)> isTileValidForCharacterType;
+	
 
 	ProcLoader<void(__cdecl*)(const unit*, float, float, bool)> unitMovetoPosition;
 	ProcLoader<int(__cdecl*)(const unit*)> getUnitFormation;
