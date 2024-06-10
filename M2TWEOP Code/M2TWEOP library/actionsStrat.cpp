@@ -4,7 +4,8 @@
 #include "unitActions.h"
 
 namespace actionsStrat {
-	NOINLINE EOP_EXPORT void Idle(general* gen)
+	
+	void idle(general* gen)
 	{
 		DWORD mem = fastFuncts::allocateGameMem(0x301C);
 		if (mem == 0)return;
@@ -14,7 +15,7 @@ namespace actionsStrat {
 		finalizeAction(mem, gen);
 	}
 	
-	NOINLINE EOP_EXPORT void siegeSettlement(general* gen, settlementStruct* sett, bool isAttack)
+	void siegeSettlement(general* gen, settlementStruct* sett, bool isAttack)
 	{
 		//if general or namedchar or sett is nil or general isnt alive return
 		if (!gen || !gen->genChar || !sett || (gen->genChar->age & 1) == 0)
@@ -82,7 +83,7 @@ namespace actionsStrat {
 		CallVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); //Destructor
 	}
 	
-	NOINLINE EOP_EXPORT void siegeFort(general* gen, fortStruct* fort, bool isAttack)
+	void siegeFort(general* gen, fortStruct* fort, bool isAttack)
 	{
 		
 		//if general or namedchar or sett is nil or general isnt alive return
@@ -160,7 +161,7 @@ namespace actionsStrat {
 		}
 	}
 
-	NOINLINE EOP_EXPORT void moveNormal(general* gen, int x, int y)
+	void moveNormal(general* gen, int x, int y)
 	{
 		if (!gen)
 			return;
@@ -187,21 +188,21 @@ namespace actionsStrat {
 		CallVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); //Destructor
 	}
 
-	NOINLINE EOP_EXPORT void diplomacyCharacter(general* gen, general* targetCharacter)
+	void diplomacyCharacter(general* gen, general* targetCharacter)
 	{
 		if (!gen || !targetCharacter)
 			return;
 		targetCharacterAction(gen, targetCharacter, characterAction::diplomacy);
 	}
 
-	NOINLINE EOP_EXPORT void assassinate(general* gen, general* targetCharacter)
+	void assassinate(general* gen, general* targetCharacter)
 	{
 		if (!gen || !targetCharacter)
 			return;
 		targetCharacterAction(gen, targetCharacter, characterAction::assassinate);
 	}
 
-	NOINLINE EOP_EXPORT void marry(general* gen, general* targetCharacter)
+	void marry(general* gen, general* targetCharacter)
 	{
 		if (!gen || !targetCharacter || !gen->genType || !targetCharacter->genType)
 			return;
@@ -218,14 +219,14 @@ namespace actionsStrat {
 		targetCharacterAction(gen, targetCharacter, characterAction::marry);
 	}
 
-	NOINLINE EOP_EXPORT void spyCharacter(general* gen, general* targetCharacter)
+	void spyCharacter(general* gen, general* targetCharacter)
 	{
 		if (!gen || !targetCharacter)
 			return;
 		targetCharacterAction(gen, targetCharacter, characterAction::spy);
 	}
 
-	NOINLINE EOP_EXPORT void switchCharacterFaction(general* gen, factionStruct* fac, bool keepArmy, bool keepBg)
+	void switchCharacterFaction(general* gen, factionStruct* fac, bool keepArmy, bool keepBg)
 	{
 		std::string functionName = "character.switchFaction";
 		if (!gen || !fac || !gen->genType)
@@ -374,28 +375,28 @@ namespace actionsStrat {
 		GAME_FUNC(void(__thiscall*)(general*), initPlaceCharacter)(gen);
 	}
 
-	NOINLINE EOP_EXPORT void denounce(general* gen, general* targetCharacter)
+	void denounce(general* gen, general* targetCharacter)
 	{
 		if (!gen || !targetCharacter)
 			return;
 		targetCharacterAction(gen, targetCharacter, characterAction::denounce);
 	}
 
-	NOINLINE EOP_EXPORT void bribe(general* gen, general* targetCharacter)
+	void bribe(general* gen, general* targetCharacter)
 	{
 		if (!gen || !targetCharacter)
 			return;
 		targetCharacterAction(gen, targetCharacter, characterAction::bribe);
 	}
 
-	NOINLINE EOP_EXPORT void acquire(general* gen, general* targetCharacter)
+	void acquire(general* gen, general* targetCharacter)
 	{
 		if (!gen || !targetCharacter)
 			return;
 		targetCharacterAction(gen, targetCharacter, characterAction::acquire);
 	}
 
-	NOINLINE EOP_EXPORT void targetCharacterAction(general* gen, general* targetCharacter, characterAction type)
+	void targetCharacterAction(general* gen, general* targetCharacter, characterAction type)
 	{
 		if (!gen || !targetCharacter)
 			return;
@@ -420,49 +421,49 @@ namespace actionsStrat {
 		}
 	}
 
-	NOINLINE EOP_EXPORT void diplomacyFort(general* gen, fortStruct* targetFort)
+	void diplomacyFort(general* gen, fortStruct* targetFort)
 	{
 		if (!gen || !targetFort)
 			return;
 		targetFortAction(gen, targetFort, characterAction::diplomacy);
 	}
 
-	NOINLINE EOP_EXPORT void bribeFort(general* gen, fortStruct* targetFort)
+	void bribeFort(general* gen, fortStruct* targetFort)
 	{
 		if (!gen || !targetFort)
 			return;
 		targetFortAction(gen, targetFort, characterAction::bribe);
 	}
 
-	NOINLINE EOP_EXPORT void spyFort(general* gen, fortStruct* targetFort)
+	void spyFort(general* gen, fortStruct* targetFort)
 	{
 		if (!gen || !targetFort)
 			return;
 		targetFortAction(gen, targetFort, characterAction::spy);
 	}
 
-	NOINLINE EOP_EXPORT void bribeSettlement(general* gen, settlementStruct* targetSettlement)
+	void bribeSettlement(general* gen, settlementStruct* targetSettlement)
 	{
 		if (!gen || !targetSettlement)
 			return;
 		targetSettlementAction(gen, targetSettlement, characterAction::bribe);
 	}
 
-	NOINLINE EOP_EXPORT void spySettlement(general* gen, settlementStruct* targetSettlement)
+	void spySettlement(general* gen, settlementStruct* targetSettlement)
 	{
 		if (!gen || !targetSettlement)
 			return;
 		targetSettlementAction(gen, targetSettlement, characterAction::spy);
 	}
 
-	NOINLINE EOP_EXPORT void sabotageSettlement(general* gen, settlementStruct* targetSettlement)
+	void sabotageSettlement(general* gen, settlementStruct* targetSettlement)
 	{
 		if (!gen || !targetSettlement)
 			return;
 		targetSettlementAction(gen, targetSettlement, characterAction::sabotage);
 	}
 
-	NOINLINE EOP_EXPORT void targetFortAction(general* gen, fortStruct* targetFort, characterAction type)
+	void targetFortAction(general* gen, fortStruct* targetFort, characterAction type)
 	{
 		if (!gen || !targetFort)
 			return;
@@ -488,7 +489,7 @@ namespace actionsStrat {
 		}
 	}
 
-	NOINLINE EOP_EXPORT void targetSettlementAction(general* gen, settlementStruct* targetSettlement, characterAction type)
+	void targetSettlementAction(general* gen, settlementStruct* targetSettlement, characterAction type)
 	{
 		if (!gen || !targetSettlement)
 			return;
@@ -514,7 +515,7 @@ namespace actionsStrat {
 		}
 	}
 	
-	NOINLINE EOP_EXPORT bool blockadePort(stackStruct* fleet, portBuildingStruct* port)
+	bool blockadePort(stackStruct* fleet, portBuildingStruct* port)
 	{
 		if (!fleet || !port )
 			return false;
@@ -532,7 +533,7 @@ namespace actionsStrat {
 		return success != 0;
 	}
 	
-	NOINLINE EOP_EXPORT void buildWatchTower(stackStruct* army)
+	void buildWatchTower(stackStruct* army)
 	{
 		if (!army->gen || !army->gen->genChar || !army->gen->genChar->faction)
 			return;
@@ -550,10 +551,15 @@ namespace actionsStrat {
 		}
 	}
 	
-	NOINLINE EOP_EXPORT void sendOffMap(general* gen)
+	void sendOffMap(general* gen)
 	{
 		if (!gen || !gen->genChar)
 			return;
+		if (!gen->genChar->label || gen->genChar->label == "")
+		{
+			unitActions::logStringGame("character.sendOffMap: character has no label, you wont be able to get him back, command cancelled.");
+			return;
+		}
 		if (gen->ifMarkedToKill == 1)
 			return;
 		if ((gen->genChar->status & 8) != 0)
@@ -582,7 +588,7 @@ namespace actionsStrat {
 	}
 	
 
-	NOINLINE EOP_EXPORT void diplomacySettlement(general* gen, settlementStruct* targetSettlement)
+	void diplomacySettlement(general* gen, settlementStruct* targetSettlement)
 	{
 		if (!gen || !targetSettlement)
 			return;
@@ -607,7 +613,7 @@ namespace actionsStrat {
 		CallVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); //Destructor
 	}
 
-	NOINLINE EOP_EXPORT void attackCharacter(general* attacker, general* defender)
+	void attackCharacter(general* attacker, general* defender)
 	{
 		if (!attacker || !defender)
 			return;

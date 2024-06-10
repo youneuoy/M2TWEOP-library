@@ -45,7 +45,7 @@ public:
 	static general* __fastcall mercenaryMovepointsGetGeneral(stackStruct* army);
 
 	//click at tile
-	static void __fastcall clickAtTile(int* xy);
+	static void __fastcall clickAtTile(coordPair* xy);
 
 	//after loading of campaign map
 	static void WINAPI afterCampaignMapLoaded();

@@ -1,10 +1,10 @@
-#include "headersSTD.h"
+
 #include "realGameTypes.h"
 #include "fastFuncts.h"
-#include "exportHeader.h"
 #include "functionsOffsets.h"
 #include "dataOffsets.h"
 #include "actionsStrat.h"
+
 namespace actionsStrat 
 {
 	DWORD getReadyIdleAction(DWORD allocatedMem)

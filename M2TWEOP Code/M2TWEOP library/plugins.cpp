@@ -12,6 +12,7 @@
 #include "onlineThings.h"
 
 #include "PlannedRetreatRoute.h"
+/*
 plugins::configT plugins::pluginsCfg;
 
 void plugins::init()
@@ -444,3 +445,4 @@ int plugin::init(string* nameP)
 	onStartSiege.Load(&plPath, &fName);
 	return 1;
 }
+*/

@@ -3,6 +3,7 @@
 #include "dataOffsets.h"
 
 #include "fastFunctsHelpers.h"
+#include "gameDataAllHelper.h"
 #include "MasterDefines.h"
 
 
@@ -478,7 +479,7 @@ namespace smallFuncs
 	}
 
 	bool highlightOn = false;
-	NOINLINE EOP_EXPORT void swUnBMapHighlight()
+	void toggleUnitHighlight()
 	{
 		static unsigned char highLightOn = 0x8f;
 		static unsigned char highLightOff = 0x8e;
@@ -507,7 +508,7 @@ namespace smallFuncs
 		return;
 	}
 
-	NOINLINE EOP_EXPORT battleCameraStruct* getBattleCamCoords()
+	battleCameraStruct* getBattleCamCoords()
 	{
 		int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
 
@@ -529,6 +530,14 @@ namespace smallFuncs
 		battleCameraStruct* battleCamData = reinterpret_cast<battleCameraStruct*>(battleCameraAddress);
 
 		return battleCamData;
+	}
+
+	stratMap* getStratMap()
+	{
+		const auto data = gameDataAllHelper::get();
+		if (!data)
+			return nullptr;
+		return data->stratMap;
 	}
 
 	NOINLINE EOP_EXPORT void setReligionsLimit(unsigned char limit)

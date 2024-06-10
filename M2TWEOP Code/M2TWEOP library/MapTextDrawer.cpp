@@ -4,6 +4,9 @@
 #include "graphicsD3D.h"
 
 #include <mutex>
+
+#include "lua/sol.hpp"
+
 namespace MapTextDrawer
 {
 	coordsVText::dataS coordsVText::Data;
@@ -86,6 +89,11 @@ namespace MapTextDrawer
 
 		graphicsExport::SetD3dState(state);
 		graphicsExport::ReleaseD3dState(state);
+	}
+
+	void* MakeTextFontLua(const char* fontName, sol::optional<int> weight, sol::optional<bool> isItalic)
+	{
+		return MakeTextFont(fontName, weight.value_or(400), isItalic.value_or(1));
 	}
 
 	NOINLINE EOP_EXPORT void* MakeTextFont(const char* fontName, int weight, int isItalic)

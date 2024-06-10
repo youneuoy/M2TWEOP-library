@@ -8,11 +8,11 @@
 
 #include "techFuncs.h"
 #include "fastFuncts.h"
-#include "imgui.h"
+#include "imgui/imgui.h"
 #include <d3d9.h>
 #include <sstream>
 #include "realGameTypes.h"
-using namespace std;
+using namespace std;/*
 template <class T>
 class ProcLoader
 {
@@ -158,3 +158,4 @@ private:
 
 };
 
+*/

@@ -1,10 +1,6 @@
 #pragma once
-#include "headersSTD.h"
 #include "realGameTypes.h"
-#include "fastFuncts.h"
-#include "exportHeader.h"
-#include "functionsOffsets.h"
-#include "dataOffsets.h"
+
 namespace actionsStrat
 {
 	DWORD getReadyIdleAction(DWORD allocatedMem);
@@ -12,39 +8,39 @@ namespace actionsStrat
 	//Siege helpers
 	DWORD getReadySiegeActionSett(DWORD allocatedMem, settlementStruct* sett);
 	void getReadySiegeActionChar(DWORD allocatedMem, general* gen);
-	NOINLINE EOP_EXPORT void sendOffMap(general* gen);
-	NOINLINE EOP_EXPORT bool blockadePort(stackStruct* fleet, portBuildingStruct* port);
+	void sendOffMap(general* gen);
+	bool blockadePort(stackStruct* fleet, portBuildingStruct* port);
 
 	//moving helpers
 	DWORD getReadyForMoving(DWORD allocatedMem,general* gen,int x, int y);
 	void getGeneralReadyForMoving(general* gen);
-	NOINLINE EOP_EXPORT void switchCharacterFaction(general* gen, factionStruct* fac, bool keepArmy, bool keepBg);
+	void switchCharacterFaction(general* gen, factionStruct* fac, bool keepArmy, bool keepBg);
 	
 	//helpers
 	void finalizeAction(DWORD allocatedMem, general* gen);
 
-	NOINLINE EOP_EXPORT void diplomacyFort(general* gen, fortStruct* targetFort);
-	NOINLINE EOP_EXPORT void bribeFort(general* gen, fortStruct* targetFort);
-	NOINLINE EOP_EXPORT void spyFort(general* gen, fortStruct* targetFort);
-	NOINLINE EOP_EXPORT void bribeSettlement(general* gen, settlementStruct* targetSettlement);
-	NOINLINE EOP_EXPORT void spySettlement(general* gen, settlementStruct* targetSettlement);
-	NOINLINE EOP_EXPORT void sabotageSettlement(general* gen, settlementStruct* targetSettlement);
-	NOINLINE EOP_EXPORT void buildWatchTower(stackStruct* army);
+	void diplomacyFort(general* gen, fortStruct* targetFort);
+	void bribeFort(general* gen, fortStruct* targetFort);
+	void spyFort(general* gen, fortStruct* targetFort);
+	void bribeSettlement(general* gen, settlementStruct* targetSettlement);
+	void spySettlement(general* gen, settlementStruct* targetSettlement);
+	void sabotageSettlement(general* gen, settlementStruct* targetSettlement);
+	void buildWatchTower(stackStruct* army);
 	
-	NOINLINE EOP_EXPORT void Idle(general* gen);
-	NOINLINE EOP_EXPORT void siegeSettlement(general* gen, settlementStruct* sett, bool isAttack);
-	NOINLINE EOP_EXPORT void siegeFort(general* gen, fortStruct* fort, bool isAttack);
-	NOINLINE EOP_EXPORT void moveNormal(general* gen, int x,int y);
-	NOINLINE EOP_EXPORT void attackCharacter(general* attacker, general* defender);
-	NOINLINE EOP_EXPORT void diplomacyCharacter(general* gen, general* targetCharacter);
-	NOINLINE EOP_EXPORT void diplomacySettlement(general* gen, settlementStruct* targetSettlement);
-	NOINLINE EOP_EXPORT void targetCharacterAction(general* gen, general* targetCharacter, characterAction type);
-	NOINLINE EOP_EXPORT void targetFortAction(general* gen, fortStruct* targetFort, characterAction type);
-	NOINLINE EOP_EXPORT void targetSettlementAction(general* gen, settlementStruct* targetSettlement, characterAction type);
-	NOINLINE EOP_EXPORT void assassinate(general* gen, general* targetCharacter);
-	NOINLINE EOP_EXPORT void marry(general* gen, general* targetCharacter);
-	NOINLINE EOP_EXPORT void spyCharacter(general* gen, general* targetCharacter);
-	NOINLINE EOP_EXPORT void denounce(general* gen, general* targetCharacter);
-	NOINLINE EOP_EXPORT void bribe(general* gen, general* targetCharacter);
-	NOINLINE EOP_EXPORT void acquire(general* gen, general* targetCharacter);
+	void idle(general* gen);
+	void siegeSettlement(general* gen, settlementStruct* sett, bool isAttack);
+	void siegeFort(general* gen, fortStruct* fort, bool isAttack);
+	void moveNormal(general* gen, int x,int y);
+	void attackCharacter(general* attacker, general* defender);
+	void diplomacyCharacter(general* gen, general* targetCharacter);
+	void diplomacySettlement(general* gen, settlementStruct* targetSettlement);
+	void targetCharacterAction(general* gen, general* targetCharacter, characterAction type);
+	void targetFortAction(general* gen, fortStruct* targetFort, characterAction type);
+	void targetSettlementAction(general* gen, settlementStruct* targetSettlement, characterAction type);
+	void assassinate(general* gen, general* targetCharacter);
+	void marry(general* gen, general* targetCharacter);
+	void spyCharacter(general* gen, general* targetCharacter);
+	void denounce(general* gen, general* targetCharacter);
+	void bribe(general* gen, general* targetCharacter);
+	void acquire(general* gen, general* targetCharacter);
 };

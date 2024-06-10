@@ -229,7 +229,6 @@
     <ClInclude Include="..\3rd\imguiDocking\imstb_truetype.h" />
     <ClInclude Include="..\3rd\imguiDocking\md4c.h" />
     <ClInclude Include="..\3rd\imguiDocking\stb_image.h" />
-    <ClInclude Include="..\3rd\imgui\imgui_markdown.h" />
     <ClInclude Include="..\3rd\ImNotify\fa_solid_900.h" />
     <ClInclude Include="..\3rd\ImNotify\font_awesome_5.h" />
     <ClInclude Include="..\3rd\ImNotify\imgui_notify.h" />

@@ -17,18 +17,19 @@ namespace stratModelsChange
 	//add model to a game
 	//pass path to model and its id(used for change models)
 	//example of path - youneuoy_Data/models_strat/northern_european_large_castle.CAS
-	EOP_EXPORT void addModelToGame(const char* path, UINT32 modelId);
-	EOP_EXPORT void setModel(int x, int y, UINT32 modelId, UINT32 modelId2);
-	EOP_EXPORT void changeStratModel(general* gen, const char* model);
+	void addModelToGame(const char* path, UINT32 modelId);
+	void setModel(int x, int y, UINT32 modelId, UINT32 modelId2);
+	void setModelOneVar(int x, int y, UINT32 modelId);
+	void changeStratModel(general* gen, const char* model);
 	DWORD getCasAnimSet(const char* name);
 	DWORD createModelFlexi(bool shadow);
 	void fixModelFlexi(bool shadow, DWORD stratmodel, DWORD modelflexi, const char* texturepath, DWORD skeleton, float scale);
 	DWORD loadStratCAS(const char* caspath, bool shadow);
-	EOP_EXPORT void addCharacterCas(const char* skeletonname, const char* caspath, const char* shadowcaspath, const char* typeName, const char* texturepath, float scale);
+	void addCharacterCas(const char* skeletonname, const char* caspath, const char* shadowcaspath, const char* typeName, const char* texturepath, float scale);
 	stratModelArrayEntry* buildCharacterCas(const char* skeletonname, const char* caspath, const char* shadowcaspath, const char* typeName, const char* texturepath, float scale);
 	stratModelArrayEntry* getStratModelEntry(const char* name);
 	stratModelArrayEntry* findCharacterStratModel(const char* modelId);
-	EOP_EXPORT void setCharacterModel(general* gen, const char* model);
+	void setCharacterModel(general* gen, const char* model);
 	// ReSharper disable once CppInconsistentNaming
 	int readTGAfile(const char* path);
 	void loadCharModels();

@@ -100,6 +100,11 @@ namespace stratModelsChange
 		changeModelsNeededNow = modelsChangeStatus::needChange;
 	}
 
+	void setModelOneVar(int x, int y, UINT32 modelId)
+	{
+		setModel(x, y, modelId, modelId);
+	}
+
 	stratModelRecord* findStratModel(const UINT32 modelId)
 	{
 		try

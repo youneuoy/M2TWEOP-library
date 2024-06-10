@@ -2,6 +2,7 @@
 #include "headersSTD.h"
 #include "exportHeader.h"
 #include "headersMEM.h"
+#include "lua/sol.hpp"
 
 namespace MapTextDrawer
 {
@@ -25,24 +26,26 @@ namespace MapTextDrawer
 	void DrawTexts();
 
 	//returns "id" of font, which is pointer to object
-	NOINLINE EOP_EXPORT void* MakeTextFont(const char* fontName, int weight, int isItalic);
-	NOINLINE EOP_EXPORT void DeleteTextFont(void*  fontID);
+	void* MakeTextFont(const char* fontName, int weight, int isItalic);
+	void* MakeTextFontLua(const char* fontName, sol::optional<int> weight, sol::optional<bool> isItalic)
+	
+	void DeleteTextFont(void*  fontID);
 
 	//returns "id" of text, which is pointer to object
-	NOINLINE EOP_EXPORT Text3DDrawable* MakeText(void* fontID,const char* utf8Text);
-	NOINLINE EOP_EXPORT void Delete3dText(Text3DDrawable*text);
+	Text3DDrawable* MakeText(void* fontID,const char* utf8Text);
+	void Delete3dText(Text3DDrawable*text);
 
-	NOINLINE EOP_EXPORT void ScaleText(Text3DDrawable* text,float scale);
-	NOINLINE EOP_EXPORT void SetDimensionsTextXYZ(Text3DDrawable* text,float scaleX, float scaleY, float scaleZ);
-	NOINLINE EOP_EXPORT void SetRotationTextXYZ(Text3DDrawable* text,float rotX, float rotY, float rotZ);
-	NOINLINE EOP_EXPORT void ChangeTextColor(Text3DDrawable* text, unsigned char a, unsigned char r, unsigned char g, unsigned char b);
+	void ScaleText(Text3DDrawable* text,float scale);
+	void SetDimensionsTextXYZ(Text3DDrawable* text,float scaleX, float scaleY, float scaleZ);
+	void SetRotationTextXYZ(Text3DDrawable* text,float rotX, float rotY, float rotZ);
+	void ChangeTextColor(Text3DDrawable* text, unsigned char a, unsigned char r, unsigned char g, unsigned char b);
 
 
-	NOINLINE EOP_EXPORT void SetTextDrawingCoords(Text3DDrawable* text,float x, float y, float z);
+	void SetTextDrawingCoords(Text3DDrawable* text,float x, float y, float z);
 
-	NOINLINE EOP_EXPORT void StartDrawingText(Text3DDrawable* text);
-	NOINLINE EOP_EXPORT void StopDrawingText(Text3DDrawable* text);
-	NOINLINE EOP_EXPORT void DrawingTextOnce(Text3DDrawable* text);
+	void StartDrawingText(Text3DDrawable* text);
+	void StopDrawingText(Text3DDrawable* text);
+	void DrawingTextOnce(Text3DDrawable* text);
 
 	struct coordsVText
 	{

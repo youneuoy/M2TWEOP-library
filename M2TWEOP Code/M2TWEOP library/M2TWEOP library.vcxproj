@@ -83,13 +83,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(SolutionDir)\3rd\discord\lib;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x86\release;$(SolutionDir)\3rd\sfml\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(DXSDK_DIR)\include;$(SolutionDir)\3rd\shortestPath;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(DXSDK_DIR)\include;$(SolutionDir)\3rd\shortestPath;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath);$(SolutionDir)\M2TWEOP library/lua/include;$(SolutionDir)\M2TWEOP library/lua/include$(SolutionDir)\M2TWEOP library/imgui</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>$(DXSDK_DIR)\lib\x86;$(SolutionDir)\3rd\AsmJit\libs;$(SolutionDir)\3rd\BeaEngine\libs;$(SolutionDir)\3rd\MinHook\lib;$(SolutionDir)\3rd\discord\lib;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x86\release;$(SolutionDir)\3rd\sfml\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(DXSDK_DIR)\include;$(SolutionDir)\3rd\shortestPath;$(SolutionDir)\3rd\imgui;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(DXSDK_DIR)\include;$(SolutionDir)\3rd\shortestPath;$(SolutionDir)\3rd\AsmJit\headers;$(SolutionDir)\3rd\BeaEngine\headers;$(SolutionDir)\3rd\MinHook\include;$(SolutionDir)\3rd\utf8cpp\source;$(SolutionDir)\3rd\miniz;$(SolutionDir)\3rd\discord;$(SolutionDir)\3rd\Autodesk\FBX\FBX SDK\2019.5\include;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\ImNotify;$(IncludePath);$(SolutionDir)\M2TWEOP library/lua/include</IncludePath>
     <TargetName>M2TWEOPLibrary</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -237,18 +237,6 @@
     <ClInclude Include="..\3rd\discord\types.h" />
     <ClInclude Include="..\3rd\discord\user_manager.h" />
     <ClInclude Include="..\3rd\discord\voice_manager.h" />
-    <ClInclude Include="..\3rd\imgui\eopImgui.h" />
-    <ClInclude Include="..\3rd\imgui\imconfig.h" />
-    <ClInclude Include="..\3rd\imgui\ImFileDialog.h" />
-    <ClInclude Include="..\3rd\imgui\imgui.h" />
-    <ClInclude Include="..\3rd\imgui\imgui_impl_dx9.h" />
-    <ClInclude Include="..\3rd\imgui\imgui_impl_win32.h" />
-    <ClInclude Include="..\3rd\imgui\imgui_internal.h" />
-    <ClInclude Include="..\3rd\imgui\imgui_stdlib.h" />
-    <ClInclude Include="..\3rd\imgui\imstb_rectpack.h" />
-    <ClInclude Include="..\3rd\imgui\imstb_textedit.h" />
-    <ClInclude Include="..\3rd\imgui\imstb_truetype.h" />
-    <ClInclude Include="..\3rd\imgui\stb_image.h" />
     <ClInclude Include="..\3rd\ImNotify\fa_solid_900.h" />
     <ClInclude Include="..\3rd\ImNotify\font_awesome_5.h" />
     <ClInclude Include="..\3rd\ImNotify\imgui_notify.h" />
@@ -259,15 +247,44 @@
     <ClInclude Include="..\3rd\shortestPath\micropather.h" />
     <ClInclude Include="..\M2TWEOP Common\realGameTypes.h" />
     <ClInclude Include="actionsStrat.h" />
+    <ClInclude Include="basicEvents.h" />
+    <ClInclude Include="basicFuncs.h" />
+    <ClInclude Include="battleHandlerHelpers.h" />
     <ClInclude Include="BattleMapOverrider.h" />
     <ClInclude Include="battlemapWorker.h" />
+    <ClInclude Include="buildingStructHelpers.h" />
+    <ClInclude Include="cameraHelpers.h" />
     <ClInclude Include="casModelsDrawer.h" />
+    <ClInclude Include="console.h" />
     <ClInclude Include="ContextMenuStrat.h" />
     <ClInclude Include="cultures.h" />
     <ClInclude Include="dataOffsets.h" />
     <ClInclude Include="DeveloperMode.h" />
     <ClInclude Include="eduFastFuncts.h" />
     <ClInclude Include="discordManager.h" />
+    <ClInclude Include="eopEduHelpers.h" />
+    <ClInclude Include="eopFbxHelpers.h" />
+    <ClInclude Include="eopMasterTypes.h" />
+    <ClInclude Include="eopSoundHelpers.h" />
+    <ClInclude Include="factionHelpers.h" />
+    <ClInclude Include="gameDataAllHelper.h" />
+    <ClInclude Include="gameHelpers.h" />
+    <ClInclude Include="gameSTDUIHelpers.h" />
+    <ClInclude Include="generalCharactericticsHelpers.h" />
+    <ClInclude Include="generalHelpers.h" />
+    <ClInclude Include="graphicsEvents.h" />
+    <ClInclude Include="guildHelpers.h" />
+    <ClInclude Include="imgui\eopImgui.h" />
+    <ClInclude Include="imgui\imconfig.h" />
+    <ClInclude Include="imgui\imgui.h" />
+    <ClInclude Include="imgui\imgui_impl_dx9.h" />
+    <ClInclude Include="imgui\imgui_impl_win32.h" />
+    <ClInclude Include="imgui\imgui_internal.h" />
+    <ClInclude Include="imgui\imgui_stdlib.h" />
+    <ClInclude Include="imgui\imstb_rectpack.h" />
+    <ClInclude Include="imgui\imstb_textedit.h" />
+    <ClInclude Include="imgui\imstb_truetype.h" />
+    <ClInclude Include="imgui\sol_ImGui.h" />
     <ClInclude Include="jsonManager.h" />
     <ClInclude Include="eduThings.h" />
     <ClInclude Include="eopBuildings.h" />
@@ -286,6 +303,18 @@
     <ClInclude Include="headersMEM.h" />
     <ClInclude Include="headersSTD.h" />
     <ClInclude Include="Injects.h" />
+    <ClInclude Include="luaGetSetFuncs.h" />
+    <ClInclude Include="luaP.h" />
+    <ClInclude Include="lua\config.hpp" />
+    <ClInclude Include="lua\forward.hpp" />
+    <ClInclude Include="lua\include\lauxlib.h" />
+    <ClInclude Include="lua\include\lua.h" />
+    <ClInclude Include="lua\include\lua.hpp" />
+    <ClInclude Include="lua\include\luaconf.h" />
+    <ClInclude Include="lua\include\luajit.h" />
+    <ClInclude Include="lua\include\lualib.h" />
+    <ClInclude Include="lua\sol.hpp" />
+    <ClInclude Include="m2tweopHelpers.h" />
     <ClInclude Include="m2tweopMap.h" />
     <ClInclude Include="m2tweopMapManager.h" />
     <ClInclude Include="m2tweopTile.h" />
@@ -296,31 +325,44 @@
     <ClInclude Include="MmbMover.h" />
     <ClInclude Include="onlineThings.h" />
     <ClInclude Include="onlineThings2.h" />
+    <ClInclude Include="otherEvents.h" />
     <ClInclude Include="patchesForGame.h" />
     <ClInclude Include="PathMap.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlannedRetreatRoute.h" />
+    <ClInclude Include="plugData.h" />
+    <ClInclude Include="pluginM2TWEOP.h" />
     <ClInclude Include="plugins.h" />
     <ClInclude Include="realGameTypes.h" />
     <ClInclude Include="RecruitSystem.h" />
+    <ClInclude Include="religionEvents.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resourcesHelpers.h" />
     <ClInclude Include="Retreater.h" />
     <ClInclude Include="RetreatRoutes.h" />
     <ClInclude Include="RSExport.h" />
+    <ClInclude Include="seaBattle.h" />
     <ClInclude Include="settlementConversionLvlSetter.h" />
+    <ClInclude Include="settlementHelpers.h" />
+    <ClInclude Include="siegeHelpers.h" />
     <ClInclude Include="SingleFbxMesh.h" />
     <ClInclude Include="smallFuncs.h" />
+    <ClInclude Include="stackStructHelpers.h" />
     <ClInclude Include="stratModelsChange.h" />
     <ClInclude Include="stratModelsOptimise.h" />
     <ClInclude Include="TacticalMapVeiwer.h" />
     <ClInclude Include="tAutodeskMemoryStream.h" />
     <ClInclude Include="techFuncs.h" />
+    <ClInclude Include="technicalHelpers.h" />
     <ClInclude Include="technicalStringsFuncs.h" />
     <ClInclude Include="TemplateCh.h" />
     <ClInclude Include="tests.h" />
     <ClInclude Include="TexturesManager.h" />
     <ClInclude Include="ThemeManager.h" />
     <ClInclude Include="tilesChange.h" />
+    <ClInclude Include="uiEvents.h" />
     <ClInclude Include="unitActions.h" />
+    <ClInclude Include="unitHelpers.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\AsmJit\headers\Assembler.cpp" />
@@ -351,23 +393,19 @@
     <ClCompile Include="..\3rd\discord\types.cpp" />
     <ClCompile Include="..\3rd\discord\user_manager.cpp" />
     <ClCompile Include="..\3rd\discord\voice_manager.cpp" />
-    <ClCompile Include="..\3rd\imgui\eopImgui.cpp" />
-    <ClCompile Include="..\3rd\imgui\ImFileDialog.cpp" />
-    <ClCompile Include="..\3rd\imgui\imgui.cpp" />
-    <ClCompile Include="..\3rd\imgui\imgui_demo.cpp" />
-    <ClCompile Include="..\3rd\imgui\imgui_draw.cpp" />
-    <ClCompile Include="..\3rd\imgui\imgui_impl_dx9.cpp" />
-    <ClCompile Include="..\3rd\imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\3rd\imgui\imgui_stdlib.cpp" />
-    <ClCompile Include="..\3rd\imgui\imgui_tables.cpp" />
-    <ClCompile Include="..\3rd\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\3rd\miniz\miniz.c" />
     <ClCompile Include="..\3rd\shortestPath\micropather.cpp" />
     <ClCompile Include="actionsStrat.cpp" />
     <ClCompile Include="actionsStratHelpers.cpp" />
+    <ClCompile Include="basicEvents.cpp" />
+    <ClCompile Include="basicFuncs.cpp" />
+    <ClCompile Include="battleHandlerHelpers.cpp" />
     <ClCompile Include="BattleMapOverrider.cpp" />
     <ClCompile Include="battlemapWorker.cpp" />
+    <ClCompile Include="buildingStructHelpers.cpp" />
+    <ClCompile Include="cameraHelpers.cpp" />
     <ClCompile Include="casModelsDrawer.cpp" />
+    <ClCompile Include="console.cpp" />
     <ClCompile Include="ContextMenuStrat.cpp" />
     <ClCompile Include="cultures.cpp" />
     <ClCompile Include="dataOffsets.cpp" />
@@ -375,6 +413,27 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="eduFastFuncts.cpp" />
     <ClCompile Include="discordManager.cpp" />
+    <ClCompile Include="eopEduHelpers.cpp" />
+    <ClCompile Include="eopFbxHelpers.cpp" />
+    <ClCompile Include="eopSoundHelpers.cpp" />
+    <ClCompile Include="factionHelpers.cpp" />
+    <ClCompile Include="gameDataAllHelper.cpp" />
+    <ClCompile Include="gameHelpers.cpp" />
+    <ClCompile Include="gameSTDUIHelpers.cpp" />
+    <ClCompile Include="generalCharactericticsHelpers.cpp" />
+    <ClCompile Include="generalHelpers.cpp" />
+    <ClCompile Include="graphicsEvents.cpp" />
+    <ClCompile Include="guildHelpers.cpp" />
+    <ClCompile Include="imgui\eopImgui.cpp" />
+    <ClCompile Include="imgui\imgui.cpp" />
+    <ClCompile Include="imgui\imgui_demo.cpp" />
+    <ClCompile Include="imgui\imgui_draw.cpp" />
+    <ClCompile Include="imgui\imgui_impl_dx9.cpp" />
+    <ClCompile Include="imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="imgui\imgui_stdlib.cpp" />
+    <ClCompile Include="imgui\imgui_tables.cpp" />
+    <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="imgui\sol_ImGui.cpp" />
     <ClCompile Include="jsonManager.cpp" />
     <ClCompile Include="eduThings.cpp" />
     <ClCompile Include="eopBuildings.cpp" />
@@ -387,6 +446,17 @@
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="graphicsD3D.cpp" />
     <ClCompile Include="Injects.cpp" />
+    <ClCompile Include="luaEop3dObjects.cpp" />
+    <ClCompile Include="luaEopEdu.cpp" />
+    <ClCompile Include="luaEvents.cpp" />
+    <ClCompile Include="luaFbx.cpp" />
+    <ClCompile Include="luaGetSetFuncs.cpp" />
+    <ClCompile Include="luaP.cpp" />
+    <ClCompile Include="luaP2.cpp" />
+    <ClCompile Include="luaSounds.cpp" />
+    <ClCompile Include="luaTech.cpp" />
+    <ClCompile Include="lua\include\luajit.c" />
+    <ClCompile Include="m2tweopHelpers.cpp" />
     <ClCompile Include="m2tweopMap.cpp" />
     <ClCompile Include="m2tweopMapManager.cpp" />
     <ClCompile Include="m2tweopTile.cpp" />
@@ -396,6 +466,7 @@
     <ClCompile Include="MmbMover.cpp" />
     <ClCompile Include="onlineThings.cpp" />
     <ClCompile Include="onlineThings2.cpp" />
+    <ClCompile Include="otherEvents.cpp" />
     <ClCompile Include="patchesForGame.cpp" />
     <ClCompile Include="PathMap.cpp" />
     <ClCompile Include="pch.cpp">
@@ -405,9 +476,18 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PlannedRetreatRoute.cpp" />
+    <ClCompile Include="plugData.cpp" />
+    <ClCompile Include="pluginM2TWEOP.cpp" />
     <ClCompile Include="plugins.cpp" />
     <ClCompile Include="RecruitSystem.cpp" />
+    <ClCompile Include="religionEvents.cpp" />
+    <ClCompile Include="resourcesHelpers.cpp" />
     <ClCompile Include="Retreater.cpp" />
+    <ClCompile Include="seaBattle.cpp" />
+    <ClCompile Include="settlementHelpers.cpp" />
+    <ClCompile Include="siegeHelpers.cpp" />
+    <ClCompile Include="stackStructHelpers.cpp" />
+    <ClCompile Include="technicalHelpers.cpp" />
     <ClCompile Include="themeManager.cpp" />
     <ClCompile Include="RSExport.cpp" />
     <ClCompile Include="settlementConversionLvlSetter.cpp" />
@@ -423,13 +503,26 @@
     <ClCompile Include="TemplateCh.cpp" />
     <ClCompile Include="TexturesManager.cpp" />
     <ClCompile Include="tilesChange.cpp" />
+    <ClCompile Include="uiEvents.cpp" />
     <ClCompile Include="unitActions.cpp" />
+    <ClCompile Include="unitHelpers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\AsmJit\headers\Regenerate.py" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="notes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lua\lua5.1.dll" />
+    <Content Include="lua\lua5.1.lib" />
+    <Content Include="lua\lua51.dll" />
+    <Content Include="lua\lua51.lib" />
+    <Content Include="lua\luajit.exe" />
+    <Content Include="lua\luajit.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="lua\include\lua\jit\" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

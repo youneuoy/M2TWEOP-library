@@ -5,11 +5,11 @@
 #include <functional>
 
 
+#include "basicEvents.h"
 #include "cultures.h"
 #include "onlineThings.h"
 
 #include "eduThings.h"
-#include "fastFunctsHelpers.h"
 #include "PlannedRetreatRoute.h"
 #include "discordManager.h"
 #include "unitActions.h"
@@ -24,7 +24,11 @@ worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, world
 
 	string selectRecordS = battlemapWorker.getRecordName(selectedRecord);
 	string selectRecordG = battlemapWorker.getRecordGroup(selectedRecord);
-	string selectedWorld = plugins::onSelectWorldpkgdesc(selectRecordS.c_str(), selectRecordG.c_str());
+	
+	std::string retVal;
+	std::string* tmpVal = gameEvents::onSelectWorldpkgdesc(selectRecordS.c_str(), selectRecordG.c_str());
+	string selectedWorld = *tmpVal;
+	delete tmpVal;
 	if (selectedWorld.empty() || selectedWorld == selectRecordS)
 	{
 		selectedWorld = battleCreator::selectWorldpkgdesc(selectRecordS, selectRecordG);
@@ -81,7 +85,7 @@ float __fastcall patchesForGame::OnCalculateUnitValue(eduEntry* entry, const DWO
 {
 	float floatValue;
 	std::memcpy(&floatValue, &value, sizeof(float));
-	return plugins::OnCalculateUnitValue(entry, floatValue);
+	return gameEvents::onCalculateUnitValue(entry, floatValue);
 }
 
 struct nameIndex
@@ -165,7 +169,13 @@ eduEntry* patchesForGame::onEvaluateUnit2(int eduIndex)
 
 int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlement, bool* isCastle)
 {
-	int selectedLevel = plugins::onfortificationlevelS(settlement, isCastle);
+	int selectedLevel = -2;//magic value, mean not change anything
+	bool isChanged = false;
+	int tmpVal = gameEvents::onfortificationlevelS(settlement, isCastle, &isChanged);
+	if (isChanged == true)
+	{
+		selectedLevel = tmpVal;
+	}
 	if (selectedLevel == -2)
 	{
 		*isCastle = settlement->isCastle;
@@ -685,13 +695,8 @@ int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduin
 {
 	if (eduindex == -1)
 	{
-		int* newEdu = eduThings::tryFindDataEopEdu(*entryName);
-
-		if (newEdu == nullptr)
-		{
+		if (const int* newEdu = eduThings::tryFindDataEopEdu(*entryName); newEdu == nullptr)
 			return  -1;
-		}
-
 		return 0;
 	}
 
@@ -700,7 +705,7 @@ int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduin
 
 int __fastcall patchesForGame::onAttackGate(unit* un, void* tactic)
 {
-	auto eduEntry = un->eduEntry;
+	const auto eduEntry = un->eduEntry;
 	if (eduEntry == nullptr)
 		return 0;
 	if (eduEntry->mountedEngine)
@@ -716,13 +721,12 @@ int __fastcall patchesForGame::onAttackGate(unit* un, void* tactic)
 
 eduEntry* __fastcall patchesForGame::OnCreateMercUnit(char** entryName, eduEntry* entry)
 {
-	DWORD entryAddr = (DWORD)entry;
-	DWORD mercEOPValue = codes::offsets.mercEOPValue;//this is some weird address made by subtracting a value from edu start or something I dont really remember but its necesarry
-	if (entryAddr == mercEOPValue)
+	const DWORD entryAddr = reinterpret_cast<DWORD>(entry);
+	if (const DWORD mercEopValue = codes::offsets.mercEOPValue; entryAddr == mercEopValue)
 	{
-		int* eduindex = eduThings::tryFindDataEopEduIndex(*entryName);
-		eduEntry* eopentry = eduThings::getEopEduEntry(*eduindex);
-		return eopentry;
+		const int* index = eduThings::tryFindDataEopEduIndex(*entryName);
+		eduEntry* eopEntry = eduThings::getEopEduEntry(*index);
+		return eopEntry;
 	}
 
 	return entry;
@@ -900,27 +904,27 @@ general* __fastcall patchesForGame::mercenaryMovepointsGetGeneral(stackStruct* a
 	}
 	return gen;
 }
-void __fastcall patchesForGame::clickAtTile(int* xy)
+void __fastcall patchesForGame::clickAtTile(coordPair* xy)
 {
-	plugins::onClickAtTile(xy[0], xy[1]);
+	gameEvents::onClickAtTile(xy->xCoord, xy->yCoord);
+	PlannedRetreatRoute::OnClickAtTile(xy->xCoord, xy->yCoord);
 }
 void __stdcall patchesForGame::afterCampaignMapLoaded()
 {
-	plugins::onCampaignMapLoaded();
+	discordManager::onCampaignMapLoaded();
+	globals::dataS.Modules.tacticalMapVeiwer.UnView();
+	gameEvents::onCampaignMapLoaded();
 }
 void __stdcall patchesForGame::onNewGameStart()
 {
-	plugins::onNewGameStart();
-
-
+	gameEvents::onNewGameStart();
 	PlannedRetreatRoute::OnNewGameStart();
-
-
 }
+
 //#define TESTPATCHES
 void __stdcall patchesForGame::afterEDUread()
 {
-	plugins::onReadGameDbsAtStart();
+	gameEvents::onReadGameDbsAtStart();
 #if defined TESTPATCHES
 	ofstream f1("logs\\TESTPATCHES.log", ios::app);
 
@@ -931,17 +935,18 @@ void __stdcall patchesForGame::afterEDUread()
 
 void __stdcall patchesForGame::onGameInit()
 {
-	plugins::onGameInit();
+	cultures::eopPortraitDb::createEopPortraitDb();
+	gameEvents::onGameInit();
 }
 
 void __stdcall patchesForGame::onUnloadCampaign()
 {
-	plugins::onUnloadCampaign();
+	gameEvents::onUnloadCampaign();
 }
 
 void __fastcall patchesForGame::onAiTurn(aiFaction* aifaction)
 {
-	plugins::onAiTurn(aifaction);
+	gameEvents::onAiTurn(aifaction);
 }
 
 void __stdcall patchesForGame::onChangeTurnNum()
@@ -955,7 +960,9 @@ void __stdcall patchesForGame::onChangeTurnNum()
 
 #endif
 
-	plugins::onChangeTurnNum();
+	int num = fastFuncts::getPassedTurnsNum();
+	discordManager::OnChangeTurnNum(num);
+	gameEvents::onChangeTurnNum(num);
 }
 
 void __stdcall patchesForGame::onGiveTrait()
@@ -1073,17 +1080,75 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	f1 << "onEvent" << endl;
 	f1.close();
 #endif
-	plugins::onEvent(vTab, arg2);
+	DWORD adr = (*vTab)[43];
+	char* event = nullptr;
+	_asm
+	{
+		mov eax, adr
+		call eax
+		mov event, eax
+	}
+
+	DWORD* eventAddr = vTab[0];
+	if (event == nullptr)return;
+	gameEvents::onEventWrapper(reinterpret_cast<DWORD>(eventAddr), vTab, arg2);
+
+	if (strcmp(event, "ScrollOpened") == 0)
+	{
+		char* str = reinterpret_cast<char*>(vTab[1]);
+		if (strcmp(str, "prebattle_scroll") == 0)
+		{
+			battleCreator::onBattleStratScreen();
+		}
+		else if (strcmp(str, "post_battle_scroll") == 0)
+		{
+			battleCreator::onPostBattleStratScreen();
+		}
+		else if (strcmp(str, "hotseat_scroll") == 0)
+		{
+			battleCreator::onHotseatScreen();
+		}
+	}
+	else if (strcmp(event, "FactionTurnStart") == 0)
+	{
+		factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
+		discordManager::OnFactionTurnStart(fac);
+		PlannedRetreatRoute::OnFactionTurnStart(fac);
+	}
 }
 
 void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
 {
-	plugins::onLoadGame(savePath);
+	vector<string>files = techFuncs::loadGameLoadArchive(savePath);
+	if (files.size() == 0)
+	{
+		return;
+	}
+	gameEvents::onLoadGamePl(&files);
+	PlannedRetreatRoute::OnGameLoad(files);
+
+	techFuncs::deleteFiles(files);
 }
 
 void __fastcall patchesForGame::onSaveGame(UNICODE_STRING**& savePath)
 {
-	plugins::onSaveGame(savePath);
+	vector<string>files;
+	vector<string>* plugFiles = gameEvents::onSaveGamePl(savePath);
+	for (string& path : *plugFiles)
+	{
+		files.push_back(path);
+	}
+
+	delete plugFiles;
+	std::string retreatsFile = PlannedRetreatRoute::OnGameSave();
+	if (!retreatsFile.empty())
+	{
+		files.push_back(retreatsFile);
+	}
+	techFuncs::saveGameMakeArchive(savePath, files);
+
+
+	techFuncs::deleteFiles(files);
 }
 
 void __fastcall patchesForGame::onTileCheck(int* coords)
@@ -1247,7 +1312,9 @@ void WINAPI patchesForGame::OnMoveRecruitQueue()
 
 void __fastcall patchesForGame::onEndSiege(settlementStruct* sett)
 {
-	plugins::onEndSiege(sett);
+	const int x = sett->xCoord;
+	const int y = sett->yCoord;
+	gameEvents::onEndSiege(x, y);
 }
 
 void __fastcall patchesForGame::onStartSiege(settlementStruct* sett)
@@ -1256,7 +1323,9 @@ void __fastcall patchesForGame::onStartSiege(settlementStruct* sett)
 	{
 		return;
 	}
-	plugins::onStartSiege(sett);
+	const int x = sett->xCoord;
+	const int y = sett->yCoord;
+	gameEvents::onStartSiege(x, y);
 }
 
 
@@ -1276,9 +1345,8 @@ void __fastcall patchesForGame::onLoadDescrBattleCharacter(stackStruct* army, ge
 
 void __stdcall patchesForGame::onBattleStateChange()
 {
-	int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
 	//results screen
-	if (battleState == 9)
+	if (const int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState; battleState == 9)
 	{
 		battleCreator::onBattleResultsScreen();
 	}
