@@ -26,11 +26,13 @@ namespace techFuncs
 	std::string uniToANSI(UNICODE_STRING**& uniStr);
 
 	void deleteFiles(std::vector<std::string>& files);
+	
+	std::vector<std::string> getEopArchiveFiles(const std::string& path);
 
 	//create archive with files
 	void saveGameMakeArchive(UNICODE_STRING**& savePath, std::vector<std::string>& files);
 
 	//unpack archive
-	std::vector<std::string> loadGameLoadArchive(UNICODE_STRING**& savePath);
+	std::vector<std::string> loadGameLoadArchive(std::vector<std::string> files, UNICODE_STRING**& savePath);
 };
 

@@ -1114,11 +1114,18 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 
 void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
 {
-	vector<string>files = techFuncs::loadGameLoadArchive(savePath);
-	if (files.size() == 0)
+	const string relativePath = techFuncs::uniToANSI(savePath);
+	vector<string> files = techFuncs::getEopArchiveFiles(relativePath);
+	if (files.empty())
 	{
-		return;
+		onSaveGame(savePath);
+		vector<string> newFiles = techFuncs::getEopArchiveFiles(relativePath);
+		for (string& path : newFiles)
+		{
+			files.push_back(path);
+		}
 	}
+	files = techFuncs::loadGameLoadArchive(files, savePath);
 	gameEvents::onLoadGamePl(&files);
 	PlannedRetreatRoute::OnGameLoad(files);
 

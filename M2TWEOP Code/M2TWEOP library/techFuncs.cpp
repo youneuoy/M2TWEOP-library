@@ -228,12 +228,11 @@ void techFuncs::saveGameMakeArchive(UNICODE_STRING**& savePath, vector<string>& 
 
 }
 
-vector<string> techFuncs::loadGameLoadArchive(UNICODE_STRING**& savePath)
+vector<string> techFuncs::getEopArchiveFiles(const string& savePath)
 {
-	vector<string> archiveFiles;
+    vector<string> archiveFiles;
 
-    string relativePath = uniToANSI(savePath);
-    if (std::filesystem::exists(relativePath) == false)
+    if (std::filesystem::exists(savePath) == false)
     {
         return archiveFiles;
     }
@@ -258,14 +257,19 @@ vector<string> techFuncs::loadGameLoadArchive(UNICODE_STRING**& savePath)
 
     }
 
-    archiveFiles=unzip(relativePath, unpackPath);
-    if (archiveFiles.size() == 0)
+    archiveFiles = techFuncs::unzip(savePath, unpackPath);
+}
+
+vector<string> techFuncs::loadGameLoadArchive(vector<string> files, UNICODE_STRING**& savePath)
+{
+    if (files.empty())
     {
         MessageBoxA(NULL, "You have attempted to load a non-EOP save with EOP. This is not supported and the game will now exit. You can find instructions on converting a non-EOP save to an EOP save in our Discord.", "ERROR", NULL);
         exit(0);
     }
-
-    for (string& file : archiveFiles)
+    string relativePath = techFuncs::uniToANSI(savePath);
+    
+    for (string& file : files)
     {
         if (filesystem::path(file).filename()=="M2TWEOPTEMPgameSaveDONTTOUCHTHISFILE.sav")
         {
@@ -282,10 +286,5 @@ vector<string> techFuncs::loadGameLoadArchive(UNICODE_STRING**& savePath)
           //  (*savePath)->something = 1;
         }
     }
-
-
-
-
-
-    return archiveFiles;
+    return files;
 }

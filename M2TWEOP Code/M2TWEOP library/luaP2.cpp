@@ -2800,6 +2800,8 @@ void luaP::initP2()
 	@tfield getType getType
 	@tfield int range
 	@tfield projectileStruct projectile
+	@tfield int fireLevel
+	@tfield int isBurning
 
 	@table siegeEngineStruct
 	*/
@@ -2813,6 +2815,8 @@ void luaP::initP2()
 	typeAll.siegeEngineStruct.set("lastUnit", &siegeEngine::lastUnit);
 	typeAll.siegeEngineStruct.set("engineID", &siegeEngine::engineID);
 	typeAll.siegeEngineStruct.set("range", &siegeEngine::range);
+	typeAll.siegeEngineStruct.set("fireLevel", &siegeEngine::fireLevel);
+	typeAll.siegeEngineStruct.set("isBurning", &siegeEngine::isBurning);
 	typeAll.siegeEngineStruct.set("projectile", &siegeEngine::statPriMissle);
 
 	/***
