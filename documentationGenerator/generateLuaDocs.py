@@ -125,7 +125,7 @@ class typedField:
 filenames = ["luaP.cpp", "luaP2.cpp", "luaEopEdu.cpp", "luaSounds.cpp", "luaFbx.cpp", "luaEvents.cpp"]
 cwd = os.getcwd()
 eopPath = re.findall(r'(.+)documentationGenerator', cwd)[0]
-luaPluginPath = eopPath + "M2TWEOP-luaPlugin\\luaPlugin\\"
+luaPluginPath = eopPath + "M2TWEOP Code\\M2TWEOP library\\"
 outputfile = open(eopPath + "M2TWEOP DataFiles\\youneuoy_Data\\plugins\\lua\\LuaDocs.lua", 'w')
 outputfile.write("---@diagnostic disable: missing-return, lowercase-global\n")
 

@@ -30,6 +30,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
@@ -38,6 +39,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
@@ -45,12 +47,14 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -122,7 +126,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories);$(SolutionDir)\3rd;../M2TWEOP Common/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories);$(SolutionDir)\3rd;../M2TWEOP Common/;$(SolutionDir)\M2TWEOP Code\M2TWEOP Library\lua\include;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/bigobj</AdditionalOptions>
     </ClCompile>
@@ -141,16 +145,16 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>BEA_ENGINE_STATIC;ASMJIT_EMBED;ASMJIT_STATIC;FBXSDK_SHARED;WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;M2TWEOPLIBRARY_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>      
+	  <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories);$(SolutionDir)\3rd;../M2TWEOP Common/</AdditionalIncludeDirectories>
-      <CCppSupport>Cpp17Support</CCppSupport>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+	  <CCppSupport>Cpp17Support</CCppSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories);$(SolutionDir)\3rd;../M2TWEOP Common/;$(SolutionDir)\M2TWEOP Code\M2TWEOP Library\lua\include;</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -303,15 +307,6 @@
     <ClInclude Include="Injects.h" />
     <ClInclude Include="luaGetSetFuncs.h" />
     <ClInclude Include="luaP.h" />
-    <ClInclude Include="lua\config.hpp" />
-    <ClInclude Include="lua\forward.hpp" />
-    <ClInclude Include="lua\include\lauxlib.h" />
-    <ClInclude Include="lua\include\lua.h" />
-    <ClInclude Include="lua\include\lua.hpp" />
-    <ClInclude Include="lua\include\luaconf.h" />
-    <ClInclude Include="lua\include\luajit.h" />
-    <ClInclude Include="lua\include\lualib.h" />
-    <ClInclude Include="lua\sol.hpp" />
     <ClInclude Include="m2tweopHelpers.h" />
     <ClInclude Include="m2tweopMap.h" />
     <ClInclude Include="m2tweopMapManager.h" />
@@ -423,6 +418,9 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="imgui\sol_ImGui.cpp" />
+    <ClCompile Include="imgui\sol_ImGui_enums.cpp" />
+    <ClCompile Include="imgui\sol_ImGui_enums2.cpp" />
+    <ClCompile Include="imgui\sol_ImGui_keys.cpp" />
     <ClCompile Include="jsonManager.cpp" />
     <ClCompile Include="eduThings.cpp" />
     <ClCompile Include="eopBuildings.cpp" />
@@ -444,7 +442,6 @@
     <ClCompile Include="luaP2.cpp" />
     <ClCompile Include="luaSounds.cpp" />
     <ClCompile Include="luaTech.cpp" />
-    <ClCompile Include="lua\include\luajit.c" />
     <ClCompile Include="m2tweopHelpers.cpp" />
     <ClCompile Include="m2tweopMap.cpp" />
     <ClCompile Include="m2tweopMapManager.cpp" />
@@ -495,17 +492,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="notes.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="lua\lua5.1.dll" />
-    <Content Include="lua\lua5.1.lib" />
-    <Content Include="lua\lua51.dll" />
-    <Content Include="lua\lua51.lib" />
-    <Content Include="lua\luajit.exe" />
-    <Content Include="lua\luajit.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="lua\include\lua\jit\" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
