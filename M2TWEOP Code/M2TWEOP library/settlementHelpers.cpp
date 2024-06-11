@@ -1,8 +1,10 @@
 #include "settlementHelpers.h"
 
+#include "fastFuncts.h"
 #include "gameDataAllHelper.h"
 #include "plugData.h"
 #include "smallFuncs.h"
+#include "technicalHelpers.h"
 #include "unitActions.h"
 
 siegeS* settlementHelpers::getSiege(const settlementStruct* sett, int index)
@@ -17,19 +19,14 @@ siegeS* settlementHelpers::getSiegeFort(const fortStruct* fort, int index)
 
 void settlementHelpers::changeOwner(settlementStruct* sett, factionStruct* newOwner)
 {
-	(*(*plugData::data.funcs.setSettlementOwner))(sett, newOwner, false);
-}
-
-void settlementHelpers::changeOwner(settlementStruct* sett, factionStruct* newOwner, bool convertGarrison)
-{
-	(*(*plugData::data.funcs.setSettlementOwner))(sett, newOwner, convertGarrison);
+	fastFuncts::setSettlementOwner(sett, newOwner, false);
 }
 
 
 void settlementHelpers::setBuildingHealth(building* build, int health)
 {
 	DWORD repairBuilding = 0x005F8DC0;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		repairBuilding = 0x005F89D0;
 	GAME_FUNC_RAW(void(__thiscall*)(building*, int), repairBuilding)(build, health);
 }
@@ -44,7 +41,7 @@ bool settlementHelpers::addBuildingToQueue(buildingInQueue* building)
 	if (!sett)
 		return false;
 	DWORD funcAddr = 0x005E4600;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		funcAddr = 0x5E4190;
 	int result = 0;
 	_asm
@@ -64,7 +61,7 @@ bool settlementHelpers::addUnitToQueue(unitRQ* unit)
 	if (!sett)
 		return false;
 	DWORD funcAddr = 0x005E4510;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		funcAddr = 0x5E40A0;
 	int result = 0;
 	_asm
@@ -81,13 +78,13 @@ bool settlementHelpers::addUnitToQueue(unitRQ* unit)
 void settlementHelpers::upgradeSettlement(settlementStruct* sett)
 {
 	DWORD createBuildInSett = 0x008A3CE0;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		createBuildInSett = 0x008A32F0;
 	DWORD upgradeBuildInSett = 0x005F80A0;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		upgradeBuildInSett = 0x005F7CB0;
 	DWORD upgradeSett = 0x005DBA20;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		upgradeSett = 0x005DB560;
 	int upgraded = 0;
 	_asm
@@ -174,7 +171,7 @@ buildingInQueue* settlementHelpers::getBuildingOption(const availableBuildings* 
 availableBuildings* settlementHelpers::getAvailableBuildingsMem()
 {
 	DWORD offset = 0x016ABB14;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		offset = 0x016F4CAC;
 	return reinterpret_cast<availableBuildings*>(offset);
 }
@@ -182,7 +179,7 @@ availableBuildings* settlementHelpers::getAvailableBuildingsMem()
 recruitmentOptions* settlementHelpers::getAvailableUnitsMem()
 {
 	DWORD offset = 0x0016ABC68;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		offset = 0x16F4E00;
 	return reinterpret_cast<recruitmentOptions*>(offset);
 }
@@ -191,7 +188,7 @@ recruitmentOptions* settlementHelpers::getAvailableUnits(settlementStruct* sett)
 {
 	const auto mem = getAvailableUnitsMem();
 	DWORD getUnits = 0x005E7EA0;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		getUnits = 0x005E7A40;
 	GAME_FUNC_RAW(void(__thiscall*)(settlementStruct*, recruitmentOptions*), getUnits)(sett, mem);
 	return mem;
@@ -201,7 +198,7 @@ recruitmentOptions* settlementHelpers::getAvailableRetrainingUnits(settlementStr
 {
 	const auto mem = getAvailableUnitsMem();
 	DWORD getUnits = 0x005E65A0;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		getUnits = 0x005E6140;
 	GAME_FUNC_RAW(void(__thiscall*)(settlementStruct*, recruitmentOptions*), getUnits)(sett, mem);
 	return mem;
@@ -223,11 +220,11 @@ availableBuildings* settlementHelpers::getAvailableBuildings(settlementStruct* s
 {
 	const auto mem = getAvailableBuildingsMem();
 	DWORD funcAddrReset = 0x5FA710;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		funcAddrReset = 0x005FA320;
 	GAME_FUNC_RAW(void(__thiscall*)(availableBuildings*), funcAddrReset)(mem);
 	DWORD getAvailableBuildings = 0x005E1C00;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		getAvailableBuildings = 0x005E1730;
 	GAME_FUNC_RAW(void(__thiscall*)(settlementStruct*, availableBuildings*, int, int, int),
 		getAvailableBuildings)(sett, mem, 1, 1, 0);
@@ -356,7 +353,7 @@ void settlementHelpers::setAgentType(unitRQ* unitOption, int type)
 exportDescrBuildings* settlementHelpers::getEdb()
 {
 	DWORD offset = 0x01861438;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		offset = 0x018AA5A8;
 	return reinterpret_cast<exportDescrBuildings*>(offset);
 }
@@ -385,15 +382,6 @@ building* settlementHelpers::getBuilding(const settlementStruct* sett, int index
 	return sett->buildings[index];
 }
 
-void settlementHelpers::destroyBuilding(settlementStruct* sett, const char* typeName, bool isReturnMoney)
-{
-	(*(*plugData::data.funcs.destroyBuilding))(sett, typeName, isReturnMoney);
-}
-
-void settlementHelpers::createBuilding(settlementStruct* sett, const char* building_level_id)
-{
-	(*(*plugData::data.funcs.createBuilding))(sett, building_level_id);
-}
 std::string settlementHelpers::getSettlementName(settlementStruct* sett)
 {
 	return technicalHelpers::uniStringToStr(sett->localizedName);

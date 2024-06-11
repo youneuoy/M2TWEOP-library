@@ -3,7 +3,6 @@
 
 #include "battlemapWorker.h"
 #include "DeveloperMode.h"
-#include "RecruitSystem.h"
 #include "MmbMover.h"
 #include "TacticalMapVeiwer.h"
 #include "ContextMenuStrat.h"
@@ -28,14 +27,13 @@ public:
 			TacticalMapViewer tacticalMapVeiwer;
 			DeveloperMode developerMode;
 			battlemapWorker battlemapWorker;
-			RecruitSystem recruitSystem;
 			MmbMover mmbMover;
 			ContextMenuStrat contextMenuStrat;
 		}Modules;
 
 		//steam =2, kingdoms=1
 		UINT32 gamever;
-		string modPatch;
+		string modPath;
 
 		struct
 		{

@@ -1,4 +1,6 @@
 #include "DeveloperMode.h"
+
+#include "dataOffsets.h"
 #include "m2tweopMapManager.h"
 
 void DeveloperMode::Update()

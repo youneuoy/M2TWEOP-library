@@ -1,5 +1,6 @@
 #include "generalHelpers.h"
 #include "plugData.h"
+#include "smallFuncs.h"
 #include "unitActions.h"
 
 namespace generalHelpers
@@ -27,7 +28,7 @@ namespace generalHelpers
 		auto generalPtr = &gen;
 		auto buildingPtr = &build;
 		DWORD funcAddr = 0xAAC2B0;
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			funcAddr = 0xAAB280;
 		_asm
 		{
@@ -38,11 +39,11 @@ namespace generalHelpers
 			call eax
 		}
 		DWORD globalCadClass = 0x0162C740;
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			globalCadClass = 0x1674570;
 		DWORD cadClass2 = *reinterpret_cast<DWORD*>(globalCadClass);
 		DWORD finalize = 0x0059ec70;
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			finalize = 0x0059e790;
 		_asm
 		{
@@ -51,48 +52,6 @@ namespace generalHelpers
 			mov eax, finalize
 			call eax
 		}
-	}
-
-
-	void diplomacyFort(general* gen, fortStruct* targetFort)
-	{
-		(*(*plugData::data.funcs.diplomacyFort))(gen, targetFort);
-	}
-
-	void bribeFort(general* gen, fortStruct* targetFort)
-	{
-		(*(*plugData::data.funcs.bribeFort))(gen, targetFort);
-	}
-
-	void spyFort(general* gen, fortStruct* targetFort)
-	{
-		(*(*plugData::data.funcs.spyFort))(gen, targetFort);
-	}
-
-	void bribeSettlement(general* gen, settlementStruct* targetSettlement)
-	{
-		(*(*plugData::data.funcs.bribeSettlement))(gen, targetSettlement);
-	}
-
-	void spySettlement(general* gen, settlementStruct* targetSettlement)
-	{
-		(*(*plugData::data.funcs.spySettlement))(gen, targetSettlement);
-	}
-
-	void sabotageSettlement(general* gen, settlementStruct* targetSettlement)
-	{
-		(*(*plugData::data.funcs.sabotageSettlement))(gen, targetSettlement);
-	}
-
-
-	void killGeneral(general* gen)
-	{
-		(*(*plugData::data.funcs.killCharacter))(gen);
-	}
-
-	void setBodyguard(general* gen, unit* un)
-	{
-		(*(*plugData::data.funcs.setBodyguard))(gen, un);
 	}
 
 	void setMovepoints(general* gen, float movepoints)
@@ -123,21 +82,6 @@ namespace generalHelpers
 	int getTypeID(const general* gen)
 	{
 		return gen->genType->type;
-	}
-
-	void setTypeID(general* gen, int newType)
-	{
-		(*(*plugData::data.funcs.setCharacterType))(gen, newType, gen->genChar->subFaction, gen->genChar->faction->dipNum);
-	}
-
-	void setCharacterModel(general* gen, const char* model)
-	{
-		(*(*plugData::data.funcs.setCharacterModel))(gen, model);
-	}
-
-	void addCharacterCas(const char* skeletonname, const char* caspath, const char* shadowcaspath, const char* typeName, const char* texturepath, float scale)
-	{
-		(*(*plugData::data.funcs.addCharacterCas))(skeletonname, caspath, shadowcaspath, typeName, texturepath, scale);
 	}
 
 }

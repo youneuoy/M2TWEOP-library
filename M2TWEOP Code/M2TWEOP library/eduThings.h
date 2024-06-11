@@ -1,19 +1,7 @@
 #pragma once
 #include <string>
-#include <vector>
-#include <windows.h>
-#include "FastFuncts.h" 
-#include "eventsCodes.h" 
-#include "globals.h"
-
-#include "techFuncs.h"
-#include "fastFuncts.h"
-#include "smallFuncs.h"
-#include <sstream>
-#include <unordered_set>
 #include <filesystem>
 #include "realGameTypes.h"
-#include "eduFastFuncts.h"
 using namespace std;
 
 namespace eduThings
@@ -33,29 +21,29 @@ namespace eduThings
 			eduEntry edu;
 		}data;
 	};
-	NOINLINE EOP_EXPORT eduEntry* addEopEduEntryFromFile(const char*fileName, int newIdx);
-	NOINLINE EOP_EXPORT eduEntry* addEopEduEntry(int baseIdx , int newIdx);
-	NOINLINE EOP_EXPORT eduEntry* getEopEduEntry(int idx);
-	NOINLINE EOP_EXPORT eduEntry* getEduEntry(int idx);
-	NOINLINE EOP_EXPORT int getEopEntryNum();
-	NOINLINE EOP_EXPORT eduEntry* getEopEduEntryByName(const char* entryName);
+	eduEntry* addEopEduEntryFromFile(const char*fileName, int newIdx);
+	eduEntry* addEopEduEntry(int baseIdx , int newIdx);
+	eduEntry* getEopEduEntry(int idx);
+	eduEntry* getEduEntry(int idx);
+	int getEopEntryNum();
+	eduEntry* getEopEduEntryByName(const char* entryName);
 
 	eopEduEntry* getEopEduEntryInternalIterating(int idx);
-	NOINLINE EOP_EXPORT  char* getEopNameOfEduEntry(eduEntry*entryAdress);
+	 char* getEopNameOfEduEntry(eduEntry*entryAdress);
 	//used for creation of new units, etc
-	NOINLINE EOP_EXPORT int getDataEopEdu(int idx);
-	NOINLINE EOP_EXPORT int* tryFindDataEopEdu(char* entryName);
+	int getDataEopEdu(int idx);
+	int* tryFindDataEopEdu(char* entryName);
 
-	NOINLINE EOP_EXPORT int* tryFindDataEopEduIndex(char* entryName);
+	int* tryFindDataEopEduIndex(char* entryName);
 
 
-	NOINLINE EOP_EXPORT void setEntryUnitCardTga(int entryIdx,const char*newCard);
-	NOINLINE EOP_EXPORT void setEntryInfoCardTga(int entryIdx,const char*newCard);
-	NOINLINE EOP_EXPORT void setEntrySoldierModel(int entryIdx,const char*newModel);
-	NOINLINE EOP_EXPORT void setEntryLocalizedName(int entryIdx,const char*newName);
-	NOINLINE EOP_EXPORT void setEntryLocalizedDescr(int entryIdx,const char*newDesr);
-	NOINLINE EOP_EXPORT void setEntryLocalizedShortDescr(int entryIdx,const char*newDecrShort);
-	NOINLINE EOP_EXPORT int getEduIndexByType(const char* type);
-	NOINLINE EOP_EXPORT eduEntry* getEduEntryByType(const char* type);
+	void setEntryUnitCardTga(int entryIdx,const char*newCard);
+	void setEntryInfoCardTga(int entryIdx,const char*newCard);
+	void setEntrySoldierModel(int entryIdx,const char*newModel);
+	void setEntryLocalizedName(int entryIdx,const char*newName);
+	void setEntryLocalizedDescr(int entryIdx,const char*newDesr);
+	void setEntryLocalizedShortDescr(int entryIdx,const char*newDecrShort);
+	int getEduIndexByType(const char* type);
+	eduEntry* getEduEntryByType(const char* type);
 };
 

@@ -3,7 +3,9 @@
 #include "dataOffsets.h"
 
 #include "fastFunctsHelpers.h"
+#include "functionsOffsets.h"
 #include "gameDataAllHelper.h"
+#include "globals.h"
 #include "MasterDefines.h"
 
 
@@ -45,7 +47,7 @@ namespace smallFuncs
 		}
 		return baseObj;
 	}
-	NOINLINE EOP_EXPORT void setAncLimit(unsigned char limit)
+	void setAncLimit(unsigned char limit)
 	{
 
 		DWORD ancillariesOffset = 0;
@@ -61,21 +63,12 @@ namespace smallFuncs
 		MemWork::WriteData(&limit, ancillariesOffset, 1);
 	}
 
-	NOINLINE EOP_EXPORT int getGameVersion()
+	int getGameVersion()
 	{
-
-		if (globals::dataS.gamever == 2)//steam
-		{
-			return 2;
-		}
-		else
-		{
-			return 1;
-		}
-
+		return globals::dataS.gamever == 2 ? 2 : 1;
 	}
 
-	NOINLINE EOP_EXPORT void saveGame(const char* path)
+	void saveGame(const char* path)
 	{
 		DWORD codeOffset = 0;
 		DWORD codeOffset2 = 0;
@@ -107,7 +100,7 @@ namespace smallFuncs
 
 	};
 
-	NOINLINE EOP_EXPORT void setEDUUnitsSize(signed short min, signed short max)
+	void setEDUUnitsSize(signed short min, signed short max)
 	{
 		DWORD codeOffset = 0;
 		if (globals::dataS.gamever == 2)//steam
@@ -129,7 +122,7 @@ namespace smallFuncs
 
 		return;
 	}
-	NOINLINE EOP_EXPORT void setMaxBgSize(unsigned char size)
+	void setMaxBgSize(unsigned char size)
 	{
 		DWORD cmpAdr = 0;
 		DWORD retAdr = 0;
@@ -146,7 +139,7 @@ namespace smallFuncs
 		MemWork::WriteData(&size, cmpAdr, 1);
 		MemWork::WriteData(&size, retAdr, 1);
 	}
-	NOINLINE EOP_EXPORT void unlockConsoleCommands()
+	void unlockConsoleCommands()
 	{
 		uchar nops[2] = { 0x90,0x90 };
 		DWORD cmd = 0;
@@ -187,7 +180,7 @@ namespace smallFuncs
 
 		MemWork::WriteData(nops1, cmd, 6);
 	}
-	NOINLINE EOP_EXPORT int getBattleCondCode(DWORD condObject)
+	int getBattleCondCode(DWORD condObject)
 	{
 		if (condObject == 0)
 		{
@@ -241,7 +234,7 @@ namespace smallFuncs
 		default: return "unknown_condition"; break;
 		}
 	}
-	NOINLINE EOP_EXPORT void createUniString(UNICODE_STRING**& newUniStringPointer, const char* nonUniStr)
+	void createUniString(UNICODE_STRING**& newUniStringPointer, const char* nonUniStr)
 	{
 		DWORD funcAdr = 0;
 		if (globals::dataS.gamever == 2)//steam
@@ -296,14 +289,14 @@ namespace smallFuncs
 		*(ptr + utf16line.size()) = (unsigned short)0;
 	}
 
-	NOINLINE EOP_EXPORT gameDataAllStruct* getGameDataAll()
+	gameDataAllStruct* getGameDataAll()
 	{
 		gameDataAllStruct* retStruct = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
 
 		return retStruct;
 	}
 
-	NOINLINE EOP_EXPORT void changeSettlementName(settlementStruct* sett, const char* newName)
+	void changeSettlementName(settlementStruct* sett, const char* newName)
 	{
 
 		UNICODE_STRING** nameMem = new UNICODE_STRING*;
@@ -312,7 +305,7 @@ namespace smallFuncs
 		smallFuncs::createUniString(sett->localizedName, newName);
 	}
 
-	NOINLINE EOP_EXPORT void changeFactionName(factionStruct* fac, const char* newName)
+	void changeFactionName(factionStruct* fac, const char* newName)
 	{
 
 		UNICODE_STRING** nameMem = new UNICODE_STRING*;
@@ -321,7 +314,7 @@ namespace smallFuncs
 		smallFuncs::createUniString(fac->localizedName, newName);
 	}
 
-	NOINLINE EOP_EXPORT UNICODE_STRING** getFactionName(factionStruct* fac)
+	UNICODE_STRING** getFactionName(factionStruct* fac)
 	{
 
 		std::string facname = fac->factSmDescr->facName;
@@ -344,7 +337,7 @@ namespace smallFuncs
 		return *nameMem2;
 	}
 
-	NOINLINE EOP_EXPORT void historicEvent(const char* name, const char* title, const char* description)
+	void historicEvent(const char* name, const char* title, const char* description)
 	{
 		DWORD funcAddr = codes::offsets.historicEventFunc;
 
@@ -396,7 +389,7 @@ namespace smallFuncs
 
 
 
-	NOINLINE EOP_EXPORT bool condition(const char* condition, const eventTrigger* eventData)
+	bool condition(const char* condition, const eventTrigger* eventData)
 	{
 
 		auto fakeText = std::make_shared<fakeTextInput>(fakeTextInput(condition, 0));
@@ -420,7 +413,7 @@ namespace smallFuncs
 		return CallVFunc<1, bool>(result, eventData);
 	}
 
-	NOINLINE EOP_EXPORT void scriptCommand(const char* command, const char* args)
+	void scriptCommand(const char* command, const char* args)
 	{
 		DWORD scriptClass = getScriptCommandByName(command);
 		if (scriptClass == 0x0)
@@ -460,7 +453,7 @@ namespace smallFuncs
 		}
 	}
 
-	NOINLINE EOP_EXPORT void changeRegionName(regionStruct* region, const char* newName)
+	void changeRegionName(regionStruct* region, const char* newName)
 	{
 
 		UNICODE_STRING** nameMem = new UNICODE_STRING*;
@@ -469,7 +462,7 @@ namespace smallFuncs
 		smallFuncs::createUniString(region->localizedRegionName, newName);
 	}
 
-	NOINLINE EOP_EXPORT void changeRebelsName(regionStruct* region, const char* newName)
+	void changeRebelsName(regionStruct* region, const char* newName)
 	{
 
 		UNICODE_STRING** nameMem = new UNICODE_STRING*;
@@ -540,7 +533,7 @@ namespace smallFuncs
 		return data->stratMap;
 	}
 
-	NOINLINE EOP_EXPORT void setReligionsLimit(unsigned char limit)
+	void setReligionsLimit(unsigned char limit)
 	{
 		DWORD codeAdr = 0;
 		if (globals::dataS.gamever == 2)//steam
@@ -556,7 +549,7 @@ namespace smallFuncs
 
 		return;
 	}
-	NOINLINE EOP_EXPORT bool isTileFree(int* xy)
+	bool isTileFree(int* xy)
 	{
 		DWORD funcAdr = 0;
 		bool retZ = false;
@@ -592,7 +585,7 @@ namespace smallFuncs
 		void* something;
 		void* testCounterSValue;
 	};
-	NOINLINE EOP_EXPORT int getScriptCounter(const char* counterName, bool& isFinded)
+	int getScriptCounter(const char* counterName, bool& isFinded)
 	{
 		countersObjectS* eventsObject = 0;
 		counterS* retS = 0;
@@ -647,7 +640,7 @@ namespace smallFuncs
 
 		return 0;
 	}
-	NOINLINE EOP_EXPORT void setScriptCounter(const char* counterName, int counterValue)
+	void setScriptCounter(const char* counterName, int counterValue)
 	{
 		DWORD eventsObject;
 		if (globals::dataS.gamever == 2)//steam
@@ -684,42 +677,31 @@ namespace smallFuncs
 		return;
 	}
 
-	NOINLINE EOP_EXPORT void setBuildingChainLimit(unsigned int limit)
+	void setBuildingChainLimit(unsigned int limit)
 	{
 		DWORD codeAdr = 0;
-
 		if (globals::dataS.gamever == 2)//steam
-		{
 			codeAdr = 0x008AC174;
-		}
 		else
-		{
 			codeAdr = 0x008AB794;
-		}
-
-
+		limit++;
+		
 		MemWork::WriteData(&limit, codeAdr, 4);
-		return;
 	}
 
-	NOINLINE EOP_EXPORT void setGuildCooldown(unsigned char turns)
+	void setGuildCooldown(unsigned char turns)
 	{
 		DWORD codeAdr = 0;
 
 		if (globals::dataS.gamever == 2)//steam
-		{
 			codeAdr = 0x004F5D7B;
-		}
 		else
-		{
 			codeAdr = 0x004F57AB;
-		}
 
 		MemWork::WriteData(&turns, codeAdr, 1);
-
 	}
 
-	NOINLINE EOP_EXPORT int GetUnitSize()
+	int GetUnitSize()
 	{
 		return *dataOffsets::offsets.gameUnit_size;
 	}

@@ -1,78 +1,10 @@
 #include "eopEduHelpers.h"
 #include <string>
+
+#include "eduThings.h"
 #include "luaGetSetFuncs.h"
 #include "plugData.h"
 
-
-
-eduEntry* eopEduHelpers::addEopEduEntry(int baseIndex, int newIndex)
-{
-	return (*(*plugData::data.funcsEopEdu.addEopEduEntry))(baseIndex, newIndex);
-}
-eduEntry* eopEduHelpers::addEopEduEntryFromFile(const char* fileName, int newIndex)
-{
-	return (*(*plugData::data.funcsEopEdu.addEopEduEntryFromFile))(fileName, newIndex);
-}
-
-eduEntry* eopEduHelpers::getEopEduEntry(int index)
-{
-	return (*(*plugData::data.funcsEopEdu.getEopEduEntry))(index);
-}
-eduEntry* eopEduHelpers::getEduEntry(int index)
-{
-	if (index < 500)
-	{
-		return (*(*plugData::data.funcsEopEdu.getEduEntry))(index);
-	}
-	else
-	{
-		return (*(*plugData::data.funcsEopEdu.getEopEduEntry))(index);
-	}
-}
-eduEntry* eopEduHelpers::getEduEntryByType(const char* type)
-{
-	return (*(*plugData::data.funcsEopEdu.getEduEntryByType))(type);
-}
-int eopEduHelpers::getEduIndexByType(const char* type)
-{
-	return (*(*plugData::data.funcsEopEdu.getEduIndexByType))(type);
-}
-
-int eopEduHelpers::getDataEopDu(int index)
-{
-	return (*(*plugData::data.funcsEopEdu.getDataEopEdu))(index);
-}
-
-void eopEduHelpers::setEntryUnitCardTga(int index, const char* newCard)
-{
-	(*(*plugData::data.funcsEopEdu.setEntryUnitCardTga))(index, newCard);
-
-}
-
-void eopEduHelpers::setEntryInfoCardTga(int index, const char* newCard)
-{
-	(*(*plugData::data.funcsEopEdu.setEntryInfoCardTga))(index, newCard);
-}
-
-void eopEduHelpers::setEntrySoldierModel(int index, const char* newModel)
-{
-	(*(*plugData::data.funcsEopEdu.setEntrySoldierModel))(index, newModel);
-}
-
-void eopEduHelpers::setEntryLocalizedName(int index, const char* newLocName)
-{
-	(*(*plugData::data.funcsEopEdu.setEntryLocalizedName))(index, newLocName);
-}
-
-void eopEduHelpers::setEntryLocalizedDescr(int index, const char* newLocDescr)
-{
-	(*(*plugData::data.funcsEopEdu.setEntryLocalizedDescr))(index, newLocDescr);
-}
-
-void eopEduHelpers::setEntryLocalizedShortDescr(int index, const char* newLocShortDescr)
-{
-	(*(*plugData::data.funcsEopEdu.setEntryLocalizedShortDescr))(index, newLocShortDescr);
-}
 
 bool eopEduHelpers::haveAttributeLegioGet(eduEntry* eduEn)
 {
@@ -111,7 +43,7 @@ bool eopEduHelpers::hasAttributeEdu(eduEntry* entry, const char* attributeName)
 
 int eopEduHelpers::getArmourUpgradeLevelsNum(int idx)
 {
-	eduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
+	eduEntry* eduEn = eduThings::getEduEntry(idx);
 	return (eduEn->ArmorUpgradesEnd - eduEn->ArmorUpgradeLevels);
 }
 
@@ -121,7 +53,7 @@ void eopEduHelpers::setArmourUpgradeLevelsNum(int idx, int amount)
 	{
 		return;
 	}
-	eduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
+	eduEntry* eduEn = eduThings::getEduEntry(idx);
 	int curramount = getArmourUpgradeLevelsNum(idx);
 	eduEn->ArmorUpgradesEnd = eduEn->ArmorUpgradeLevels + amount;
 	eduEn->ArmorUpgrade2 = eduEn->ArmorUpgradeLevels + amount;
@@ -138,7 +70,7 @@ void eopEduHelpers::setArmourUpgradeLevelsNum(int idx, int amount)
 
 int eopEduHelpers::getArmourUpgradeLevel(int idx, int levelidx)
 {
-	eduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
+	eduEntry* eduEn = eduThings::getEduEntry(idx);
 
 	int LevelsNum = eopEduHelpers::getArmourUpgradeLevelsNum(idx);
 
@@ -151,7 +83,7 @@ int eopEduHelpers::getArmourUpgradeLevel(int idx, int levelidx)
 
 void eopEduHelpers::setArmourUpgradeLevel(int idx, int levelidx, int8_t newlevel)
 {
-	eduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
+	eduEntry* eduEn = eduThings::getEduEntry(idx);
 
 	int LevelsNum = eopEduHelpers::getArmourUpgradeLevelsNum(idx);
 	if (levelidx >= LevelsNum)
@@ -163,7 +95,7 @@ void eopEduHelpers::setArmourUpgradeLevel(int idx, int levelidx, int8_t newlevel
 
 int eopEduHelpers::getArmourUpgradeModelsNum(int idx)
 {
-	eduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
+	eduEntry* eduEn = eduThings::getEduEntry(idx);
 	return ((eduEn->ArmorUpgradeModelsEnd - (int*)eduEn->ArmorUpgradeModels)) / 2;
 }
 
@@ -174,7 +106,7 @@ void eopEduHelpers::setArmourUpgradeModelsNum(int idx, int amount)
 		return;
 	}
 	amount = amount * 2;
-	eduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
+	eduEntry* eduEn = eduThings::getEduEntry(idx);
 	int curramount = getArmourUpgradeModelsNum(idx);
 	ArmourUpgModels* newModels = new ArmourUpgModels;
 	ArmourUpgModels* oldModels = eduEn->ArmorUpgradeModels;
@@ -195,34 +127,30 @@ void eopEduHelpers::setArmourUpgradeModelsNum(int idx, int amount)
 
 std::string eopEduHelpers::getArmourUpgradeModel(int idx, int levelidx)
 {
-	eduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
-	char* modelname = nullptr;
+	eduEntry* eduEn = eduThings::getEduEntry(idx);
+	char* modelName;
 	switch (levelidx)
 	{
 	case 3:
-		modelname = eduEn->ArmorUpgradeModels->UpgradeThree;
+		modelName = eduEn->ArmorUpgradeModels->UpgradeThree;
 		break;
 	case 2:
-		modelname = eduEn->ArmorUpgradeModels->UpgradeTwo;
+		modelName = eduEn->ArmorUpgradeModels->UpgradeTwo;
 		break;
 	case 1:
-		modelname = eduEn->ArmorUpgradeModels->UpgradeOne;
+		modelName = eduEn->ArmorUpgradeModels->UpgradeOne;
 		break;
-	case 0:
-		modelname = eduEn->ArmorUpgradeModels->BaseModel;
+	default:
+		modelName = eduEn->ArmorUpgradeModels->BaseModel;
 		break;
 	}
-	if (modelname != nullptr)
-	{
-		return std::string(modelname);
-	}
-	return "";
+	return std::string(modelName);
 }
 
 void eopEduHelpers::setArmourUpgradeModel(int idx, int levelidx, const std::string& newModel)
 {
 
-	eduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
+	eduEntry* eduEn = eduThings::getEduEntry(idx);
 	int modelsNum = getArmourUpgradeModelsNum(idx);
 	ArmourUpgModels* newModels = new ArmourUpgModels;
 	ArmourUpgModels* oldModels = eduEn->ArmorUpgradeModels;
@@ -230,32 +158,29 @@ void eopEduHelpers::setArmourUpgradeModel(int idx, int levelidx, const std::stri
 	eduEn->ArmorUpgradeModels = newModels;
 	eduEn->ArmorUpgradeModelsEnd = (int*)eduEn->ArmorUpgradeModels + (modelsNum * 2);
 	eduEn->ArmorUpgrade5 = (int*)eduEn->ArmorUpgradeModels + (modelsNum * 2);
-	char* modelname = nullptr;
+	char* modelName;
 	switch (levelidx)
 	{
 	case 3:
-		modelname = reinterpret_cast<char*>(&eduEn->ArmorUpgradeModels->UpgradeThree);
+		modelName = reinterpret_cast<char*>(&eduEn->ArmorUpgradeModels->UpgradeThree);
 		break;
 	case 2:
-		modelname = reinterpret_cast<char*>(&eduEn->ArmorUpgradeModels->UpgradeTwo);
+		modelName = reinterpret_cast<char*>(&eduEn->ArmorUpgradeModels->UpgradeTwo);
 		break;
 	case 1:
-		modelname = reinterpret_cast<char*>(&eduEn->ArmorUpgradeModels->UpgradeOne);
+		modelName = reinterpret_cast<char*>(&eduEn->ArmorUpgradeModels->UpgradeOne);
 		break;
-	case 0:
-		modelname = reinterpret_cast<char*>(&eduEn->ArmorUpgradeModels->BaseModel);
+	default:
+		modelName = reinterpret_cast<char*>(&eduEn->ArmorUpgradeModels->BaseModel);
 		break;
 	}
-	if (modelname != nullptr)
-	{
-		luaGetSetFuncs::setGameString(modelname, newModel.c_str());
-	}
+	luaGetSetFuncs::setGameString(modelName, newModel.c_str());
 }
 
 void eopEduHelpers::setEntryAttackAttribute(int idx, UnitEnums::attackAttr attribute, bool enable, int sec)
 {
 	using namespace UnitEnums;
-	eduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
+	eduEntry* eduEn = eduThings::getEduEntry(idx);
 	if (sec == 1)
 	{
 		if (enable == true)
@@ -283,7 +208,7 @@ void eopEduHelpers::setEntryAttackAttribute(int idx, UnitEnums::attackAttr attri
 bool eopEduHelpers::getEntryAttackAttribute(int idx, UnitEnums::attackAttr attribute, int sec)
 {
 	using namespace UnitEnums;
-	eduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
+	eduEntry* eduEn = eduThings::getEduEntry(idx);
 	if (sec == 1)
 	{
 		return ((eduEn->StatPri & attribute) != 0);
@@ -333,7 +258,7 @@ void eopEduHelpers::setOwnerShip(eduEntry* entry, int factionID, bool set)
 void eopEduHelpers::setEntryStat(int idx, UnitEnums::eduStat stat, int value, int sec)
 {
 	using namespace UnitEnums;
-	eduEntry* eduEn = getEduEntry(idx);
+	eduEntry* eduEn = eduThings::getEduEntry(idx);
 	int newStat = value * stat;
 	if (stat < attack)
 	{
@@ -356,7 +281,7 @@ void eopEduHelpers::setEntryStat(int idx, UnitEnums::eduStat stat, int value, in
 int eopEduHelpers::getEntryStat(int idx, UnitEnums::eduStat stat, int sec)
 {
 	using namespace UnitEnums;
-	eduEntry* eduEn = eopEduHelpers::getEduEntry(idx);
+	eduEntry* eduEn = eduThings::getEduEntry(idx);
 
 	if (stat < UnitEnums::attack)
 	{

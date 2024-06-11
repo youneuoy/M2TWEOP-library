@@ -106,7 +106,7 @@ watchTowerStruct* factionHelpers::spawnWatchtower(const factionStruct* fac, int 
 	auto region = gameHelpers::getRegion(tile->regionId);
 	if (!region || !region->settlement || region->factionOwner != fac)
 		return nullptr;
-	int gameVer = m2tweopHelpers::getGameVersion();
+	int gameVer = smallFuncs::getGameVersion();
 	auto settlement = region->settlement;
 	auto tower = nullptr;
 	DWORD makeTowerAddr = 0x008B97B0;
@@ -212,22 +212,22 @@ void* disembark(stackStruct* army, int x, int y)
 {
 	DWORD cadClass = fastFuncts::allocateGameMem(0x301Cu);
 	DWORD createCadDisembark = 0x005B06D0;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		createCadDisembark = 0x5B01F0;
 	cadClass = GAME_FUNC_RAW(DWORD(__thiscall*)(DWORD, int), createCadDisembark)(cadClass, 0);
 	DWORD setCadClass = 0xAAC080;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		setCadClass = 0xAAB050;
 	auto charPtr = &army->gen;
 	coordPair coords{x, y};
 	auto coordsPtr = &coords;
 	GAME_FUNC_RAW(void(__thiscall*)(general**, coordPair*, DWORD), setCadClass)(charPtr, coordsPtr, cadClass);
 	DWORD globalCadClass = 0x0162C740;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		globalCadClass = 0x1674570;
 	DWORD cadClass2 = *reinterpret_cast<DWORD*>(globalCadClass);
 	DWORD finalize = 0x0059ec70;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		finalize = 0x0059e790;
 	auto character = army->gen;
 	_asm
@@ -305,7 +305,7 @@ stackStruct* factionHelpers::splitArmy(factionStruct *faction, const sol::table&
 		}
 	}
 	DWORD canArmySplit = 0x4D61F0;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		canArmySplit = 0x4D5C30;
 	auto stratPathFind = gameDataAllHelper::get()->stratPathFinding; 
 	if (!GAME_FUNC_RAW(bool(__thiscall*)(stratPathFinding*, unit**, int, coordPair*), canArmySplit)
@@ -315,7 +315,7 @@ stackStruct* factionHelpers::splitArmy(factionStruct *faction, const sol::table&
 		return nullptr;
 	}
 	DWORD splitArmy = 0x4F9C90;
-	if (m2tweopHelpers::getGameVersion() == 1)
+	if (smallFuncs::getGameVersion() == 1)
 		splitArmy = 0x4F9740;
 	auto coordsPtr = &targetCoords;
 	auto listPtr = &unitList[0];
@@ -378,7 +378,7 @@ int factionHelpers::getRecruitmentValueSett(aiProductionController* controller, 
 
 ltgdFactionValues* factionHelpers::getAiFactionValues(factionStruct* fac)
 {
-	int gameVer = m2tweopHelpers::getGameVersion();
+	int gameVer = smallFuncs::getGameVersion();
 	ltgdGlobals* ltgd = nullptr;
 	if (gameVer == 2)
 	{
@@ -395,7 +395,7 @@ ltgdFactionValues* factionHelpers::getAiFactionValues(factionStruct* fac)
 
 interFactionLTGD* factionHelpers::getInterFactionLTGD(factionStruct* fac, factionStruct* targetFac)
 {
-	int gameVer = m2tweopHelpers::getGameVersion();
+	int gameVer = smallFuncs::getGameVersion();
 	ltgdGlobals* ltgd = nullptr;
 	if (gameVer == 2)
 	{

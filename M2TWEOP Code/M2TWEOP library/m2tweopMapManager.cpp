@@ -1,9 +1,12 @@
 #include "m2tweopMapManager.h"
 
 #include <numbers>
+#include "imgui/imgui.h"
 
 #include "CImg.h"
+#include "dataOffsets.h"
 #include "graphicsD3D.h"
+#include "m2tweopMap.h"
 
 
 namespace m2tweopMapManager

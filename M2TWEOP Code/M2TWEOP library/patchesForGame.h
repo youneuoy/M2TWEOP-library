@@ -1,5 +1,4 @@
 #pragma once
-#include "plugins.h"
 #include "stratModelsChange.h"
 #include "graphicsD3D.h"
 class patchesForGame

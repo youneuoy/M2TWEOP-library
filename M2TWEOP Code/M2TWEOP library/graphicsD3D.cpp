@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "graphicsD3D.h"
-#include "plugins.h"
 #include <DxErr.h>
 #pragma comment(lib, "DXERR.lib")
 
@@ -355,7 +354,7 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 	io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
 	io.ConfigFlags &= ~ImGuiConfigFlags_NavEnableKeyboard;
 	io.MouseDrawCursor = false;
-	string f = globals::dataS.modPatch;
+	string f = globals::dataS.modPath;
 	if (f.size() == 0)
 	{
 		MessageBoxA(NULL, "graphics init error", "Error", NULL);

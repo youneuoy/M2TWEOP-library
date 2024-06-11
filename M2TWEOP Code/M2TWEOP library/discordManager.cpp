@@ -1,4 +1,6 @@
 #include "discordManager.h"
+
+#include "globals.h"
 #include "jsonManager.h"
 #include "techFuncs.h"
 #include "smallFuncs.h"

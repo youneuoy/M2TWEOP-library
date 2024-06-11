@@ -1,7 +1,10 @@
 #include "basicEvents.h"
 #include <unordered_map>
 
+#include "fastFuncts.h"
 #include "gameDataAllHelper.h"
+#include "gameHelpers.h"
+#include "smallFuncs.h"
 #include "unitActions.h"
 using namespace std;
 
@@ -20,7 +23,7 @@ namespace gameEvents
 
 	void initEvents()
 	{
-		const int gv = (m2tweopHelpers::getGameVersion()) - 1;
+		const int gv = (smallFuncs::getGameVersion()) - 1;
 		DWORD newCode[] = { 0x0136BFE4, 0x01326FBC };
 		addEvent<EventType::standardEvent>(newCode[gv], "onCharacterTurnStart");
 
@@ -672,7 +675,7 @@ namespace gameEvents
 
 	regionStruct* getCharacterRegion(const namedCharacter* character)
 	{
-		return gameHelpers::getRegion(m2tweopHelpers::getTileRegionID(character->gen->xCoord, character->gen->yCoord));
+		return gameHelpers::getRegion(fastFuncts::getTileRegionID(character->gen->xCoord, character->gen->yCoord));
 	}
 
 

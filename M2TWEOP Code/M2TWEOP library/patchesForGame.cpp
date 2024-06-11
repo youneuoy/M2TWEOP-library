@@ -12,6 +12,7 @@
 #include "eduThings.h"
 #include "PlannedRetreatRoute.h"
 #include "discordManager.h"
+#include "smallFuncs.h"
 #include "unitActions.h"
 
 
@@ -771,7 +772,7 @@ const char* __fastcall patchesForGame::onQuickSave()
 	static std::vector<std::string> saveNames = { u8"%S-1.sav" ,u8"%S-2.sav", u8"%S-3.sav" };
 	jsn::json json;
 
-	std::string fPath = globals::dataS.modPatch;
+	std::string fPath = globals::dataS.modPath;
 	fPath += "\\saves\\quickSavesM2TWEOP.json";
 
 	int currSaveID = 0;
@@ -834,7 +835,7 @@ const char* __fastcall patchesForGame::onAutoSave()
 	};
 	jsn::json json;
 
-	std::string fPath = globals::dataS.modPatch;
+	std::string fPath = globals::dataS.modPath;
 	fPath += "\\saves\\autoSavesM2TWEOP.json";
 
 	int currSaveID = 0;

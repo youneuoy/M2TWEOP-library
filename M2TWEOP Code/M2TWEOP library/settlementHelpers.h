@@ -9,7 +9,6 @@ namespace settlementHelpers
 	siegeS* getSiege(const settlementStruct* sett, int index);
 	siegeS* getSiegeFort(const fortStruct* fort, int index);
 	void changeOwner(settlementStruct* sett, factionStruct* newOwner);
-	void changeOwner(settlementStruct* sett, factionStruct* newOwner, bool convertGarrison);
 	void setBuildingHealth(building* building, int health);
 	bool addBuildingToQueue(buildingInQueue* building);
 	bool addUnitToQueue(unitRQ* unit);
@@ -38,8 +37,6 @@ namespace settlementHelpers
 	
 	resStrat* getResource(const settlementStruct* sett, int index);
 	building* getBuilding(const settlementStruct* sett, int index);
-	void destroyBuilding(settlementStruct* sett, const char* typeName, bool isReturnMoney);
-	void createBuilding(settlementStruct* sett, const char* building_level_id);
 	int getGuildStanding(settlementStruct* sett, int index);
 	void setGuildStanding(settlementStruct* sett, int index, int amount);
 	settlementCapability* getSettlementCapability(settlementStruct* sett, int capabilityType);

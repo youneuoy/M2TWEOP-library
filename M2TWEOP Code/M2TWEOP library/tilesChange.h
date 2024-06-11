@@ -10,6 +10,6 @@ namespace tilesChange
 {
 	void onTilesCheck(int* coords);
 
-	NOINLINE EOP_EXPORT void replaceTile(const char* tileLabel, UINT32 x, UINT32 y, const char* fileName, const char* weather, const char* dayTime);
+	void replaceTile(const char* tileLabel, UINT32 x, UINT32 y, const char* fileName, const char* weather, const char* dayTime);
 };
 

@@ -1,6 +1,5 @@
 #include "gameDataAllHelper.h"
 
-#include "plugData.h"
 #include "smallFuncs.h"
 
 namespace gameDataAllHelper

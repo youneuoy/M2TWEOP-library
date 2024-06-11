@@ -20,12 +20,13 @@ namespace unitActions
 	void moveToOrientation(unit* un, float xCoord, float yCoord, int widthInMen, int16_t angle, bool run);
 	void moveRelative(unit* un, float xCoord, float yCoord, bool run);
 	void moveToMissileRange(unit* un, const unit* targetUnit, bool run);
-	void unitTurn(const unit* un, int16_t angle, bool isRelative);
+	void unitTurn(unit* un, int16_t angle, bool isRelative);
 	void taunt(const unit* un);
 	void useSpecialAbility(const unit* un);
 	int getSiegeEngineType(const unit* un);
 	void attackBuilding(unit* un, buildingBattle* building);
 	void logStringGame(const std::string& msg);
+	void collectEngine(unit* un, siegeEngine* engine);
 
 	void changeGroupUnitFormation(const unitGroup* group, int formationType);
 	void moveToRangeOfGroup(const unitGroup* group, const unitGroup* targetGroup, bool run);

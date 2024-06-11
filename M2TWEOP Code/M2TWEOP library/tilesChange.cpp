@@ -1,5 +1,7 @@
 #include "tilesChange.h"
 
+#include "globals.h"
+
 namespace tilesChange
 {
 	vector<custom_tile*>eopCustomTiles;
@@ -120,7 +122,7 @@ namespace tilesChange
 		}
 		newTile->timeCode = getTimeCode(dayTime);
 
-		string pathName = globals::dataS.modPatch;
+		string pathName = globals::dataS.modPath;
 		string f = "\\";
 		string r = "/";
 		replaceAll2(pathName, f, r);

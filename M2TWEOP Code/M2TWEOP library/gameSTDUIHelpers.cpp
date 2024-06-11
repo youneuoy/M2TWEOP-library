@@ -1,17 +1,8 @@
 #include "gameSTDUIHelpers.h"
 
+#include "fastFuncts.h"
 #include "gameDataAllHelper.h"
 #include "plugData.h"
-
-uiElement* gameSTDUIHelpers::getUiElement(const char* elementName)
-{
-	return (*(*plugData::data.functsGameUI.getUiElement))(elementName);
-}
-
-void gameSTDUIHelpers::useUiElement(uiElement* element)
-{
-	(*(*plugData::data.functsGameUI.useUiElement))(element);
-}
 
 std::string gameSTDUIHelpers::getUIElementName(const uiElement* element)
 {

@@ -3,8 +3,10 @@
 #include "plugData.h"
 #include <vector>
 
+#include "eduThings.h"
 #include "FastFuncts.h"
 #include "smallFuncs.h"
+#include "technicalHelpers.h"
 
 namespace gameHelpers
 {
@@ -19,7 +21,7 @@ namespace gameHelpers
 		return campaign->numberOfFactionsWithSlave;
 	}
 
-	std::string gameHelpers::callConsole(const std::string cmdName, sol::variadic_args va)
+	std::string gameHelpers::callConsole(const std::string& cmdName, sol::variadic_args va)
 	{
 		char buffer[100]{};
 		buffer[0] = '\0';
@@ -40,11 +42,6 @@ namespace gameHelpers
 		return buffer;;
 	}
 
-	float GetMovepointsForReachNearTile(int originX, int originY, int destX, int destY)
-	{
-		return (*(*plugData::data.funcs.GetMovepointsForReachNearTile))(originX, originY, destX, destY);
-	}
-
 	factionStruct* gameHelpers::getFaction(const int index)
 	{
 		const gameDataAllStruct* gameData = gameDataAllHelper::get();
@@ -52,38 +49,6 @@ namespace gameHelpers
 		if (!campaign || index < 0 || index >= campaign->numberOfFactionsWithSlave)
 			return nullptr;
 		return campaign->factionsSortedByDescrStrat[index];
-	}
-
-	guild* gameHelpers::getGuild(const unsigned char index)
-	{
-		return (*(*plugData::data.funcs.getGuild))(index);
-	}
-
-	general* gameHelpers::createCharacter(const char* type, factionStruct* fac, const int age, const char* name, const char* name2, const int subFaction, const char* portrait, const int x, const int y)
-	{
-		if (portrait != nullptr && strlen(portrait) == 0)
-		{
-			portrait = nullptr;
-		}
-		if (name != nullptr && strlen(name) == 0)
-		{
-			name = nullptr;
-		}
-		if (name2 != nullptr && strlen(name2) == 0)
-		{
-			name2 = nullptr;
-		}
-		return (*(*plugData::data.funcs.createCharacter))(type, fac, age, name, name2, subFaction, portrait, x, y);
-	}
-
-	stackStruct* gameHelpers::createArmy(general* character)
-	{
-		return (*(*plugData::data.funcs.createArmy))(character);
-	}
-
-	stackStruct* gameHelpers::createArmyInSettlement(settlementStruct* sett)
-	{
-		return (*(*plugData::data.funcs.createArmyInSettlement))(sett);
 	}
 
 
@@ -122,7 +87,7 @@ namespace gameHelpers
 	campaignDb* getCampaignDb()
 	{
 		DWORD offset = 0x0161E7E4;
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			offset = 0x16666BC;
 		return reinterpret_cast<campaignDb*>(offset);
 	}
@@ -130,7 +95,7 @@ namespace gameHelpers
 	campaignDbExtra* getCampaignDbExtra()
 	{
 		DWORD offset = 0x0186170C;
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			offset = 0x18AA87C;
 		return reinterpret_cast<campaignDbExtra*>(offset);
 	}
@@ -589,7 +554,7 @@ namespace gameHelpers
 		newMerc->mercPoolUnitIndex = mercPoolUnitIndex;
 		newMerc->poolIndex = poolIndex;
 		newMerc->mercPool = mercPool;
-		eduEntry* entry = eopEduHelpers::getEduEntry(idx);
+		eduEntry* entry = eduThings::getEduEntry(idx);
 		newMerc->eduEntry = entry;
 		newMerc->experience = exp;
 		newMerc->cost = cost;
@@ -653,11 +618,6 @@ namespace gameHelpers
 			unit->religionsList[i] = religions[i];
 		unit->religionsListEnd = &unit->religionsList[mercRelNum];
 		unit->religionsListEnd2 = &unit->religionsList[mercRelNum];
-	}
-
-	void gameHelpers::saveGame(const char* path)
-	{
-		(*(*plugData::data.funcs.saveGame))(path);
 	}
 
 	void gameHelpers::scriptCommand(std::string command, sol::variadic_args va)
@@ -871,17 +831,13 @@ namespace gameHelpers
 
 	settlementStruct* getSettlementByName(campaign* campaign, const char* name)
 	{
-		settlementList* settlementList = &campaign->settlementList;
-		int settNum = 0;
+		const settlementList* settlementList = &campaign->settlementList;
 		while (settlementList != nullptr)
 		{
-			settNum = settlementList->settlementsNum;
-			for (int i = 0; i < settNum; i++)
+			for (int i = 0; i < settlementList->settlementsNum; i++)
 			{
 				if (strcmp(settlementList->settlements[i]->name, name) == 0)
-				{
 					return settlementList->settlements[i];
-				}
 			}
 			settlementList = settlementList->nextSettlements;
 		}
@@ -891,7 +847,7 @@ namespace gameHelpers
 	const char* getReligionName2(const int index)
 	{
 		const auto* religionDb = *reinterpret_cast <religionDatabase**>(0x016A0B90);
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 		{
 			religionDb = *reinterpret_cast <religionDatabase**>(0x016E9DC0);
 		}
@@ -968,7 +924,7 @@ namespace gameHelpers
 	int getReligionCount()
 	{
 		const auto* religionDb = *reinterpret_cast <religionDatabase**>(0x016A0B90);
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 		{
 			religionDb = *reinterpret_cast <religionDatabase**>(0x016E9DC0);
 		}
@@ -1322,10 +1278,5 @@ namespace gameHelpers
 			return nullptr;
 		return &map->regions[regionId->second];
 	}
-
-
-
-
-
 
 }

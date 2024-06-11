@@ -14,6 +14,24 @@
 #include "stratModelsChange.h"
 #include "tilesChange.h"
 #include "unitActions.h"
+#include "realGameTypes.h"
+#include <windows.h>
+#include "luaGetSetFuncs.h"
+#include "factionHelpers.h"
+#include "settlementHelpers.h"
+#include "resourcesHelpers.h"
+#include "gameHelpers.h"
+#include "stackStructHelpers.h"
+#include "buildingStructHelpers.h"
+#include "generalHelpers.h"
+#include "unitHelpers.h"
+#include "m2tweopHelpers.h"
+#include "generalCharactericticsHelpers.h"
+#include "technicalHelpers.h"
+#include "eopEduHelpers.h"
+#include "guildHelpers.h"
+#include "siegeHelpers.h"
+#include "gameSTDUIHelpers.h"
 std::vector<std::string> luaP::logS;
 std::vector<std::string> luaP::logCommands;
 
@@ -314,7 +332,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	    M2TWEOP.toggleDeveloperMode();
 	*/
 
-	tables.M2TWEOPTable.set_function("toggleDeveloperMode", &m2tweopHelpers::toggleDeveloperMode);
+	tables.M2TWEOPTable.set_function("toggleDeveloperMode", &fastFuncts::toggleDeveloperMode);
 	/***
 	Reload the lua script (without restarting the plugin itself, onPluginLoad doesn't fire).
 
@@ -344,7 +362,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	M2TWEOP.saveGame("mods/bare_geomod/saves/newsave.sav");
 	*/
-	tables.M2TWEOPTable.set_function("saveGame", &gameHelpers::saveGame);
+	tables.M2TWEOPTable.set_function("saveGame", &smallFuncs::saveGame);
 	/***
 	Function to get the game version.
 	@function M2TWEOP.getGameVersion
@@ -352,7 +370,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	M2TWEOP.getGameVersion();
 	*/
-	tables.M2TWEOPTable.set_function("getGameVersion", &m2tweopHelpers::getGameVersion);
+	tables.M2TWEOPTable.set_function("getGameVersion", &smallFuncs::getGameVersion);
 	/***
 	Set perfect spy.
 	@function M2TWEOP.setPerfectSpy
@@ -393,7 +411,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	 M2TWEOP.loadGame("mods/bare_geomod/saves/test.sav");
 	*/
-	tables.M2TWEOPTable.set_function("loadGame", &m2tweopHelpers::loadSaveGame);
+	tables.M2TWEOPTable.set_function("loadGame", &fastFuncts::loadSaveGame);
 
 	/***
 	Load d3d texture
@@ -738,7 +756,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	local moveCost = M2TWEOP.CalculateTileMovementCost(153, 245, 154, 245);
 	*/
-	tables.M2TWEOPTable.set_function("CalculateTileMovementCost", &gameHelpers::GetMovepointsForReachNearTile);
+	tables.M2TWEOPTable.set_function("CalculateTileMovementCost", &fastFuncts::GetMovepointsForReachNearTile);
 
 
 	/// BattleCamera
@@ -788,7 +806,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	end
 	*/
 
-	tables.gameUITable.set_function("getUiElement", &gameSTDUIHelpers::getUiElement);
+	tables.gameUITable.set_function("getUiElement", &fastFuncts::getUiElement);
 
 	/// UIElement
 	//@section uiElementStructTable
@@ -834,7 +852,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local subElement1 = financeScroll:getSubElement(5);
 	subElement1:execute();
 	*/
-	types.uiElement.set("execute", &gameSTDUIHelpers::useUiElement);
+	types.uiElement.set("execute", &fastFuncts::useUiElement);
 
 
 	///StratmapObjects
@@ -905,7 +923,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		0.7
 	);
 	*/
-	tables.objectsTable.set_function("addCharacterCas", &generalHelpers::addCharacterCas);
+	tables.objectsTable.set_function("addCharacterCas", &stratModelsChange::addCharacterCas);
 	/***
 	Set the strategy model for object at specified coordinates, works only for supported object types
 	@function stratmap.objects.setModel
@@ -955,7 +973,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	stratmap.camera.move(1,2);
 	*/
-	tables.cameraTable.set_function("move", &cameraHelpers::moveStratCamera);
+	tables.cameraTable.set_function("move", &fastFuncts::moveStratCameraSlow);
 	/***
 	Quickly move the camera to the specified tile.
 	@function stratmap.camera.jump
@@ -964,7 +982,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	stratmap.camera.jump(1,2);
 	*/
-	tables.cameraTable.set_function("jump", &cameraHelpers::snapStratCamera);
+	tables.cameraTable.set_function("jump", &fastFuncts::moveStratCameraFast);
 	/***
 	Set the zoom level of the camera.
 	@function stratmap.camera.zoom
@@ -972,7 +990,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	stratmap.camera.zoom(0.12);
 	*/
-	tables.cameraTable.set_function("zoom", &cameraHelpers::zoomStratCamera);
+	tables.cameraTable.set_function("zoom", &fastFuncts::zoomStratCamera);
 
 	///Game
 	//@section gameTable
@@ -1039,7 +1057,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourGuild=stratmap.game.getGuild(1);
 	*/
-	tables.gameTable.set_function("getGuild", &gameHelpers::getGuild);
+	tables.gameTable.set_function("getGuild", &fastFuncts::getGuild);
 
 	/***
 	Create a new character at the specified coordinates. If you are not spawning an agent it is preferred to use spawnArmy instead.
@@ -1057,7 +1075,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	newCharacter=stratmap.game.createCharacterByString("named character",CAMPAIGN:getFaction("england"),18,"Name1","Name2",31,"custom_portrait_name",character.character.xCoord+5,character.character.yCoord);
 	*/
-	tables.gameTable.set_function("createCharacterByString", &gameHelpers::createCharacter);
+	tables.gameTable.set_function("createCharacterByString", &fastFuncts::createCharacter);
 
 	/***
 	Create a new army at the specified coordinates. Works similarly to the script command spawn_army. You can respawn off-map characters using it. You can not re-use labels!
@@ -1091,7 +1109,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	M2TWEOPDU.getEduIndexByType("Peasants"), 3, 0, 0
     )
 	*/
-	tables.gameTable.set_function("spawnArmy", &stackStructHelpers::spawnArmy);
+	tables.gameTable.set_function("spawnArmy", &fastFuncts::spawnArmy);
 	
 	/***
 	Legacy code to spawn an army for a created character. Use spawnArmy instead!
@@ -1101,7 +1119,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	army=stratmap.game.createArmy(gen);
 	*/
-	tables.gameTable.set_function("createArmy", &gameHelpers::createArmy);
+	tables.gameTable.set_function("createArmy", &fastFuncts::createArmy);
 	/***
 	Create an army in a settlement (don't need a character). Used to add units to an empty settlement.
 	@function stratmap.game.createArmyInSettlement
@@ -1110,7 +1128,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	army=stratmap.game.createArmyInSettlement(STRAT_MAP:getSettlement("London"));
 	*/
-	tables.gameTable.set_function("createArmyInSettlement", &gameHelpers::createArmyInSettlement);
+	tables.gameTable.set_function("createArmyInSettlement", &fastFuncts::createArmyInSettlement);
 	/***
 	Get a script counter value, works for counters and for event\_counters
 	@function stratmap.game.getScriptCounter
@@ -1261,8 +1279,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.unit = luaState.new_usertype<unit>("unit");
 	types.unit.set("eduEntry", &unit::eduEntry);
 	types.unit.set("aiActiveSet", &unit::aiActiveSet);
-	types.unit.set("movePoints", sol::property(&unitHelpers::getMovepoints, &unitHelpers::setMovepoints));
-	types.unit.set("soldierCountStratMap", sol::property(&unitHelpers::getsoldierCountStratMap, &unitHelpers::setSoldiersCount));
+	types.unit.set("movePoints", sol::property(&unitHelpers::getMovepoints, &fastFuncts::setUnitMovepoints));
+	types.unit.set("soldierCountStratMap", sol::property(&unitHelpers::getsoldierCountStratMap, &fastFuncts::setSoldiersCount));
 	types.unit.set("exp", sol::property(&unitHelpers::getExp, &unitHelpers::setExp));
 	types.unit.set("armourLVL", sol::property(&unitHelpers::getarmourLVL, &unitHelpers::setarmourLVL));
 	types.unit.set("weaponLVL", sol::property(&unitHelpers::getweaponLVL, &unitHelpers::setweaponLVL));
@@ -1299,7 +1317,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	unit:kill();
 	*/
-	types.unit.set_function("kill", &unitHelpers::killUnit);
+	types.unit.set_function("kill", &fastFuncts::killUnit);
 	/***
 	Set unit basic parameters
 	@function unit:setParams
@@ -1399,7 +1417,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	local formationType = unit:getFormation();
 	*/
-	types.unit.set_function("getFormation", &unitHelpers::getUnitFormation);
+	types.unit.set_function("getFormation", &unitActions::getUnitFormation);
 	/***
 	Orders the unit to move to the specified position.
 	@function unit:moveToPosition
@@ -1409,7 +1427,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 		unit:moveToPosition(150, -300, true);
 	*/
-	types.unit.set_function("moveToPosition", &unitHelpers::unitMovetoPosition);
+	types.unit.set_function("moveToPosition", &unitActions::unitMovetoPosition);
 	/***
 	Immediately positions the unit at the given location.
 	@function unit:immediatePlace
@@ -1420,7 +1438,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 		unit:immediatePlace(150, -300, 60, 0);
 	*/
-	types.unit.set_function("immediatePlace", &unitHelpers::placeUnit);
+	types.unit.set_function("immediatePlace", &unitActions::placeUnit);
 	/***
 	Searches an arc in front of the unit, and attacks the closest enemy found.
 	@function unit:attackClosestUnit
@@ -1429,7 +1447,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 		unit:attackClosestUnit(0, true);
 	*/
-	types.unit.set_function("attackClosestUnit", &unitHelpers::unitAttackClosest);
+	types.unit.set_function("attackClosestUnit", &unitActions::unitAttackClosest);
 	/***
 	Orders the unit to attack another unit.
 	@function unit:attackUnit
@@ -1438,14 +1456,14 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 		unit:attackUnit(target, true);
 	*/
-	types.unit.set_function("attackUnit", &unitHelpers::unitAttackUnit);
+	types.unit.set_function("attackUnit", &unitActions::attackUnit);
 	/***
 	Deploys stakes.
 	@function unit:deployStakes
 	@usage
 		unit:deployStakes();
 	*/
-	types.unit.set_function("deployStakes", &unitHelpers::deployStakes);
+	types.unit.set_function("deployStakes", &unitActions::deployStakes);
 	/***
 	Changes the unit's formation.
 	@function unit:changeFormation
@@ -1453,14 +1471,14 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 		unit:changeFormation();
 	*/
-	types.unit.set_function("changeFormation", &unitHelpers::changeUnitFormation);
+	types.unit.set_function("changeFormation", &unitActions::changeUnitFormation);
 	/***
 	Orders the unit to stop it's orders.
 	@function unit:halt
 	@usage
 		unit:halt();
 	*/
-	types.unit.set_function("halt", &unitHelpers::haltUnit);
+	types.unit.set_function("halt", &unitActions::haltUnit);
 	/***
 	Orders the unit to move to the specified position with a specified rotation and orientation.
 	@function unit:moveToOrientation
@@ -1472,7 +1490,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 		unit:moveToOrientation(150, 105, 100, 60, true);
 	*/
-	types.unit.set_function("moveToOrientation", &unitHelpers::moveToOrientation);
+	types.unit.set_function("moveToOrientation", &unitActions::moveToOrientation);
 	/***
 	Orders the unit to move to the specified position.
 	@function unit:moveRelative
@@ -1482,7 +1500,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 		unit:moveRelative(150, 105, true);
 	*/
-	types.unit.set_function("moveRelative", &unitHelpers::moveRelative);
+	types.unit.set_function("moveRelative", &unitActions::moveRelative);
 	/***
 	Orders the attacker to move into missile range of the target.
 	@function unit:moveToMissileRange
@@ -1491,7 +1509,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 		unit:moveToMissileRange(targetUnit, true);
 	*/
-	types.unit.set_function("moveToMissileRange", &unitHelpers::moveToMissileRange);
+	types.unit.set_function("moveToMissileRange", &unitActions::moveToMissileRange);
 	/***
 	Turn to an absolute angle or by an angle relative to it's current rotation.
 	@function unit:turn
@@ -1500,21 +1518,21 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 		unit:turn(90, true);
 	*/
-	types.unit.set_function("turn", &unitHelpers::unitTurn);
+	types.unit.set_function("turn", &unitActions::unitTurn);
 	/***
 	Makes the unit taunt.
 	@function unit:taunt
 	@usage
 		unit:taunt();
 	*/
-	types.unit.set_function("taunt", &unitHelpers::taunt);
+	types.unit.set_function("taunt", &unitActions::taunt);
 	/***
 	Makes the unit perform their special ability.
 	@function unit:useSpecialAbility
 	@usage
 		unit:useSpecialAbility();
 	*/
-	types.unit.set_function("useSpecialAbility", &unitHelpers::useSpecialAbility);
+	types.unit.set_function("useSpecialAbility", &unitActions::useSpecialAbility);
 	/***
 	Get Siege engine.
 	@function unit:getSiegeEngine
@@ -1531,7 +1549,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 		unit:attackBuilding(building);
 	*/
-	types.unit.set_function("attackBuilding", &unitHelpers::attackBuilding);
+	types.unit.set_function("attackBuilding", &unitActions::attackBuilding);
 	/***
 	Order an infantry unit to collect an engine (ram/ladder/tower).
 	@function unit:collectEngine
@@ -1539,7 +1557,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 		unit:collectEngine(engine);
 	*/
-	types.unit.set_function("collectEngine", &unitHelpers::collectEngine);
+	types.unit.set_function("collectEngine", &unitActions::collectEngine);
 	/***
 	Get Nearby friendly unit.
 	@function unit:getNearbyFriendlyUnit
@@ -2021,7 +2039,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:setTypeID(2);
 	*/
-	types.character.set_function("setTypeID", &generalHelpers::setTypeID);
+	types.character.set_function("setTypeID", &fastFuncts::setCharacterType);
 	/***
 	Issue regular move command, character must have movement points.
 	@function character:moveToTile
@@ -2120,7 +2138,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:bribeSettlement(targetSettlement);
 	*/
-	types.character.set_function("bribeSettlement", &generalHelpers::bribeSettlement);
+	types.character.set_function("bribeSettlement", &actionsStrat::bribeSettlement);
 	/***
 	Issue spy command.
 	@function character:spySettlement
@@ -2128,7 +2146,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:spySettlement(targetSettlement);
 	*/
-	types.character.set_function("spySettlement", &generalHelpers::spySettlement);
+	types.character.set_function("spySettlement", &actionsStrat::spySettlement);
 	/***
 	Issue sabotage command.
 	@function character:sabotageSettlement
@@ -2136,7 +2154,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:sabotageSettlement(targetSettlement);
 	*/
-	types.character.set_function("sabotageSettlement", &generalHelpers::sabotageSettlement);
+	types.character.set_function("sabotageSettlement", &actionsStrat::sabotageSettlement);
 	/***
 	Issue diplomacy command.
 	@function character:diplomacyFort
@@ -2144,7 +2162,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:diplomacyFort(targetFort);
 	*/
-	types.character.set_function("diplomacyFort", &generalHelpers::diplomacyFort);
+	types.character.set_function("diplomacyFort", &actionsStrat::diplomacyFort);
 	/***
 	Issue bribe command.
 	@function character:bribeFort
@@ -2152,7 +2170,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:bribeFort(targetFort);
 	*/
-	types.character.set_function("bribeFort", &generalHelpers::bribeFort);
+	types.character.set_function("bribeFort", &actionsStrat::bribeFort);
 	/***
 	Issue spy command.
 	@function character:spyFort
@@ -2160,7 +2178,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:spyFort(targetFort);
 	*/
-	types.character.set_function("spyFort", &generalHelpers::spyFort);
+	types.character.set_function("spyFort", &actionsStrat::spyFort);
 	/***
 	Instantly teleport character to the coordinates, if occupied a random place in the same region is chosen.
 	@function character:reposition
@@ -2186,7 +2204,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:kill();
 	*/
-	types.character.set_function("kill", &generalHelpers::killGeneral);
+	types.character.set_function("kill", &fastFuncts::killCharacter);
 	/***
 	Create a fort at the character's coordinates
 	@function character:createFort
@@ -2201,7 +2219,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:setBodyguardUnit(unit);
 	*/
-	types.character.set_function("setBodyguardUnit", &generalHelpers::setBodyguard);
+	types.character.set_function("setBodyguardUnit", &fastFuncts::setBodyguard);
 	/***
 	Set a character's model to a new one.
 	@function character:setCharacterModel
@@ -2209,7 +2227,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourCharacter:setCharacterModel("saruman");
 	*/
-	types.character.set_function("setCharacterModel", &generalHelpers::setCharacterModel);
+	types.character.set_function("setCharacterModel", &stratModelsChange::setCharacterModel);
 	/***
 	Send a character off map (command will not fire if the general does not have a label, as you wouldn't be able to respawn him). It automatically acounts for the bug relating to sending characters off map that are leading a 1 unit army, by adding and killing a unit.
 	@function character:sendOffMap
@@ -2415,7 +2433,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourNamedCharacter:addTrait("GoodCommander", 2)
 	*/
-	types.namedCharacter.set_function("addTrait", &generalCharactericticsHelpers::addTrait);
+	types.namedCharacter.set_function("addTrait", &fastFuncts::addTrait);
 	/***
 	Remove a trait from the character.
 	@function namedCharacter:removeTrait
@@ -2423,7 +2441,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourNamedCharacter:removeTrait("GoodCommander");
 	*/
-	types.namedCharacter.set_function("removeTrait", &generalCharactericticsHelpers::removeTrait);
+	types.namedCharacter.set_function("removeTrait", &fastFuncts::removeTrait);
 	types.namedCharacter.set("ancNum", &namedCharacter::ancNum);
 	/***
 	Get the pointer to the ancillary using it's index. You can iterate over a character's ancillaries for example by going from index 0 to ancNum - 1.
@@ -2450,7 +2468,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	ourAnc=ourNamedCharacter:getAncillary(2);
 	ourNamedCharacter:removeAncillary(ourAnc);
 	*/
-	types.namedCharacter.set_function("removeAncillary", &generalCharactericticsHelpers::removeAncillary);
+	types.namedCharacter.set_function("removeAncillary", &fastFuncts::removeAncillary);
 	types.namedCharacter.set("level", &namedCharacter::level);
 	types.namedCharacter.set("authority", &namedCharacter::leaderAutority);
 	types.namedCharacter.set("command", &namedCharacter::authority);
@@ -3853,7 +3871,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 		myFort:changeFortOwner(otherFac, true)
 	*/
-	types.fortStruct.set_function("changeFortOwner", &settlementHelpers::changeFortOwner);
+	types.fortStruct.set_function("changeFortOwner", &fastFuncts::changeFortOwner);
 
 
 
@@ -4015,7 +4033,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.settlementStruct.set_function("changeOwner", sol::overload(
 			sol::resolve<void(settlementStruct*, factionStruct*)>(settlementHelpers::changeOwner),
-			sol::resolve<void(settlementStruct*, factionStruct*, bool)>(settlementHelpers::changeOwner)
+			sol::resolve<void(settlementStruct*, factionStruct*, bool)>(fastFuncts::setSettlementOwner)
 		));
 	types.settlementStruct.set("creatorFactionID", &settlementStruct::fac_creatorModNum);
 	types.settlementStruct.set("data", sol::property(
@@ -4108,7 +4126,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	settlementStruct:createBuilding("some_build1");
 	*/
-	types.settlementStruct.set_function("createBuilding", &settlementHelpers::createBuilding);
+	types.settlementStruct.set_function("createBuilding", &fastFuncts::createBuilding);
 	/***
 	Destroy a building of a specified type in the settlement.
 	@function settlementStruct:destroyBuilding
@@ -4117,7 +4135,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	settlementStruct:destroyBuilding("some_buildType",false);
 	*/
-	types.settlementStruct.set_function("destroyBuilding", &settlementHelpers::destroyBuilding);
+	types.settlementStruct.set_function("destroyBuilding", &fastFuncts::destroyBuilding);
 	types.settlementStruct.set("buildingsQueue", &settlementStruct::buildingsQueueArray);
 	types.settlementStruct.set("resourcesNum", &settlementStruct::resourcesNum);
 	/***
@@ -5216,7 +5234,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 			unitGroup:changeUnitFormation(formationType.phalanx);
 	*/
-	types.unitGroup.set_function("changeUnitFormation", &unitHelpers::changeGroupUnitFormation);
+	types.unitGroup.set_function("changeUnitFormation", &unitActions::changeGroupUnitFormation);
 	
 	/***
 	Move to put an enemy group inside your missile range.
@@ -5226,7 +5244,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 			unitGroup:moveToMissileRangeOfGroup(otherGroup, true);
 	*/
-	types.unitGroup.set_function("moveToMissileRangeOfGroup", &unitHelpers::moveToRangeOfGroup);
+	types.unitGroup.set_function("moveToMissileRangeOfGroup", &unitActions::moveToRangeOfGroup);
 	
 	/***
 	Move to put an enemy unit inside your missile range.
@@ -5236,7 +5254,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 			unitGroup:moveToMissileRangeOfUnit(targetUnit, true);
 	*/
-	types.unitGroup.set_function("moveToMissileRangeOfUnit", &unitHelpers::moveGroupToRangeOfUnit);
+	types.unitGroup.set_function("moveToMissileRangeOfUnit", &unitActions::moveGroupToRangeOfUnit);
 	
 	/***
 	Attack another group.
@@ -5246,7 +5264,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 			unitGroup:attackGroup(targetGroup, true);
 	*/
-	types.unitGroup.set_function("attackGroup", &unitHelpers::groupAttackGroup);
+	types.unitGroup.set_function("attackGroup", &unitActions::groupAttackGroup);
 	
 	/***
 	Halt the group's orders.
@@ -5254,7 +5272,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 			unitGroup:halt();
 	*/
-	types.unitGroup.set_function("halt", &unitHelpers::groupHalt);
+	types.unitGroup.set_function("halt", &unitActions::groupHalt);
 	
 	/***
 	Move to the specified location in formation.
@@ -5265,7 +5283,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 			unitGroup:moveFormed(182, 333, true);
 	*/
-	types.unitGroup.set_function("moveFormed", &unitHelpers::groupMoveFormed);
+	types.unitGroup.set_function("moveFormed", &unitActions::groupMoveFormed);
 	
 	/***
 	Move to the specified location not in formation.
@@ -5276,7 +5294,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 			unitGroup:moveUnformed(182, 333, true);
 	*/
-	types.unitGroup.set_function("moveUnformed", &unitHelpers::groupMoveUnformed);
+	types.unitGroup.set_function("moveUnformed", &unitActions::groupMoveUnformed);
 	
 	/***
 	Move to the specified location in formation.
@@ -5287,7 +5305,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 			unitGroup:moveRelativeFormed(182, 333, true);
 	*/
-	types.unitGroup.set_function("moveRelativeFormed", &unitHelpers::groupMoveFormedRelative);
+	types.unitGroup.set_function("moveRelativeFormed", &unitActions::groupMoveFormedRelative);
 	
 	/***
 	Move to the specified location not in formation.
@@ -5298,7 +5316,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 			unitGroup:moveRelativeUnformed(182, 333, true);
 	*/
-	types.unitGroup.set_function("moveRelativeUnformed", &unitHelpers::groupMoveUnformedRelative);
+	types.unitGroup.set_function("moveRelativeUnformed", &unitActions::groupMoveUnformedRelative);
 	
 	/***
 	Turn the group either relative or absolute.
@@ -5308,7 +5326,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 			unitGroup:turn(90, true);
 	*/
-	types.unitGroup.set_function("turn", &unitHelpers::groupTurn);
+	types.unitGroup.set_function("turn", &unitActions::groupTurn);
 	
 	
 	///SiegeStruct

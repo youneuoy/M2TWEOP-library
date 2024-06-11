@@ -1,7 +1,7 @@
 #include "console.h"
 #include "imgui/imgui_stdlib.h"
 #include "plugData.h"
-#include "pluginM2TWEOP.h"
+#include "luaPlugin.h"
 
 #include "imgui/imgui.h"
 

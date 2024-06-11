@@ -27,7 +27,7 @@ namespace MapTextDrawer
 
 	//returns "id" of font, which is pointer to object
 	void* MakeTextFont(const char* fontName, int weight, int isItalic);
-	void* MakeTextFontLua(const char* fontName, sol::optional<int> weight, sol::optional<bool> isItalic)
+	void* MakeTextFontLua(const char* fontName, sol::optional<int> weight, sol::optional<bool> isItalic);
 	
 	void DeleteTextFont(void*  fontID);
 

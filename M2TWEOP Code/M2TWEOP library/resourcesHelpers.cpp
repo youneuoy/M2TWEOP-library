@@ -1,9 +1,10 @@
 #include "resourcesHelpers.h"
 #include "plugData.h"
+#include "stratModelsChange.h"
 
 void resourcesHelpers::setModel(const resStrat* resource, UINT32 modelId)
 {
-	(*(*plugData::data.funcs.setModel))(resource->xCoord, resource->yCoord, modelId, modelId);
+	stratModelsChange::setModel(resource->xCoord, resource->yCoord, modelId, modelId);
 }
 
 int resourcesHelpers::getResourceCode(const resStrat* resource)

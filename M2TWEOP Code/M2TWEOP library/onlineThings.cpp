@@ -2,9 +2,21 @@
 #include "imgui_notify.h"
 
 #include "onlineThings2.h"
+#include <vector>
+#include <windows.h>
+#include "FastFuncts.h" 
+#include "globals.h"
 
-#include <ImFileDialog.h>
-#include <imgui_internal.h>
+#include "techFuncs.h"
+#include "smallFuncs.h"
+#include "imgui/imgui.h"
+#include <sstream>
+#include <thread>
+#include <set>
+#include <map>
+
+#include "imgui/ImFileDialog.h"
+#include "imgui/imgui_internal.h"
 namespace battleCreator
 {
 	struct
@@ -41,7 +53,7 @@ namespace battleCreator
 	{
 		jsn::json json;
 
-		std::string fPath = globals::dataS.modPatch;
+		std::string fPath = globals::dataS.modPath;
 		fPath += "\\eopBattles\\battlesCfg.json";
 
 
@@ -624,7 +636,7 @@ namespace battleCreator
 		bMsg.set_content("Objectives section of %s done", bName.c_str());
 		ImGui::InsertNotification(bMsg);
 
-		std::string fPath = globals::dataS.modPatch;
+		std::string fPath = globals::dataS.modPath;
 		fPath += "\\eopBattles";
 		filesystem::create_directory(fPath);
 		fPath += "\\lastBattle";

@@ -7,7 +7,7 @@ namespace TexturesManager
 	{
 		try
 		{
-			auto tex = std::make_shared<eopTexture>(globals::dataS.modPatch + relativePath);
+			auto tex = std::make_shared<eopTexture>(globals::dataS.modPath + relativePath);
 			textures[id] = tex;
 			return tex;
 		}

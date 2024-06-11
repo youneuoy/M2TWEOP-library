@@ -5,6 +5,7 @@
 #include "smallFuncs.h"
 #include "MasterDefines.h"
 #include <map>
+#include "headersMEM.h"
 
 #include <mutex>
 #include "ring_buffer.h"
@@ -26,8 +27,6 @@ namespace PathFinder
 		}
 		XCenter = xCenter - radius;
 		YCenter = yCenter - radius;
-
-		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
 
 		StateMap.resize(Diameter * Diameter + Diameter + 1);
 		for (int x = 0; x <= Diameter; ++x)
@@ -759,24 +758,24 @@ namespace PathFinder
 
 		return pathMap->GetSafestTileForArmy(army);
 	}
-	NOINLINE EOP_EXPORT void* CreateCasheForArmy(stackStruct* army, int radius)
+	void* CreateCasheForArmy(stackStruct* army, int radius)
 	{
 		PathMap* pathMap = new PathMap(army, radius);
 
 		return pathMap;
 	}
-	NOINLINE EOP_EXPORT void* CreateCasheForDistances(int x, int y, int radius)
+	void* CreateCasheForDistances(int x, int y, int radius)
 	{
 		PathMap* pathMap = new PathMap(x, y, radius);
 
 		return pathMap;
 	}
-	NOINLINE EOP_EXPORT void DeleteCasheForDistances(void* cashe)
+	void DeleteCasheForDistances(void* cashe)
 	{
 		PathMap* pathMap = reinterpret_cast<PathMap*>(cashe);
 		delete pathMap;
 	}
-	NOINLINE EOP_EXPORT float GetMovepointsForReachTileFromCashe(void* cashe, int x, int y, int destX, int destY)
+	float GetMovepointsForReachTileFromCashe(void* cashe, int x, int y, int destX, int destY)
 	{
 		PathMap* pathMap = reinterpret_cast<PathMap*>(cashe);
 		return pathMap->CalculateDistance(x, y, destX, destY);

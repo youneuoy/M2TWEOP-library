@@ -1,5 +1,6 @@
 #include "graphicsEvents.h"
 #include "console.h"
+#include "plugData.h"
 
 struct
 {

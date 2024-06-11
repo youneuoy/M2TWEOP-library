@@ -245,15 +245,13 @@
     <ClInclude Include="..\3rd\logger\loguru.hpp" />
     <ClInclude Include="..\3rd\logger\loguru.cpp" />
     <ClInclude Include="..\3rd\shortestPath\micropather.h" />
-    <ClInclude Include="..\M2TWEOP Common\realGameTypes.h" />
+    <ClInclude Include="realGameTypes.h" />
     <ClInclude Include="actionsStrat.h" />
     <ClInclude Include="basicEvents.h" />
-    <ClInclude Include="basicFuncs.h" />
     <ClInclude Include="battleHandlerHelpers.h" />
     <ClInclude Include="BattleMapOverrider.h" />
     <ClInclude Include="battlemapWorker.h" />
     <ClInclude Include="buildingStructHelpers.h" />
-    <ClInclude Include="cameraHelpers.h" />
     <ClInclude Include="casModelsDrawer.h" />
     <ClInclude Include="console.h" />
     <ClInclude Include="ContextMenuStrat.h" />
@@ -265,7 +263,6 @@
     <ClInclude Include="eopEduHelpers.h" />
     <ClInclude Include="eopFbxHelpers.h" />
     <ClInclude Include="eopMasterTypes.h" />
-    <ClInclude Include="eopSoundHelpers.h" />
     <ClInclude Include="factionHelpers.h" />
     <ClInclude Include="gameDataAllHelper.h" />
     <ClInclude Include="gameHelpers.h" />
@@ -289,7 +286,6 @@
     <ClInclude Include="eduThings.h" />
     <ClInclude Include="eopBuildings.h" />
     <ClInclude Include="eopSounds.h" />
-    <ClInclude Include="eventsCodes.h" />
     <ClInclude Include="exportHeader.h" />
     <ClInclude Include="fastFuncts.h" />
     <ClInclude Include="fastFunctsHelpers.h" />
@@ -325,23 +321,18 @@
     <ClInclude Include="MmbMover.h" />
     <ClInclude Include="onlineThings.h" />
     <ClInclude Include="onlineThings2.h" />
-    <ClInclude Include="otherEvents.h" />
     <ClInclude Include="patchesForGame.h" />
     <ClInclude Include="PathMap.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PlannedRetreatRoute.h" />
     <ClInclude Include="plugData.h" />
-    <ClInclude Include="pluginM2TWEOP.h" />
-    <ClInclude Include="plugins.h" />
+    <ClInclude Include="luaPlugin.h" />
     <ClInclude Include="realGameTypes.h" />
-    <ClInclude Include="RecruitSystem.h" />
-    <ClInclude Include="religionEvents.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resourcesHelpers.h" />
     <ClInclude Include="Retreater.h" />
     <ClInclude Include="RetreatRoutes.h" />
     <ClInclude Include="RSExport.h" />
-    <ClInclude Include="seaBattle.h" />
     <ClInclude Include="settlementConversionLvlSetter.h" />
     <ClInclude Include="settlementHelpers.h" />
     <ClInclude Include="siegeHelpers.h" />
@@ -360,7 +351,6 @@
     <ClInclude Include="TexturesManager.h" />
     <ClInclude Include="ThemeManager.h" />
     <ClInclude Include="tilesChange.h" />
-    <ClInclude Include="uiEvents.h" />
     <ClInclude Include="unitActions.h" />
     <ClInclude Include="unitHelpers.h" />
   </ItemGroup>
@@ -398,12 +388,10 @@
     <ClCompile Include="actionsStrat.cpp" />
     <ClCompile Include="actionsStratHelpers.cpp" />
     <ClCompile Include="basicEvents.cpp" />
-    <ClCompile Include="basicFuncs.cpp" />
     <ClCompile Include="battleHandlerHelpers.cpp" />
     <ClCompile Include="BattleMapOverrider.cpp" />
     <ClCompile Include="battlemapWorker.cpp" />
     <ClCompile Include="buildingStructHelpers.cpp" />
-    <ClCompile Include="cameraHelpers.cpp" />
     <ClCompile Include="casModelsDrawer.cpp" />
     <ClCompile Include="console.cpp" />
     <ClCompile Include="ContextMenuStrat.cpp" />
@@ -415,7 +403,6 @@
     <ClCompile Include="discordManager.cpp" />
     <ClCompile Include="eopEduHelpers.cpp" />
     <ClCompile Include="eopFbxHelpers.cpp" />
-    <ClCompile Include="eopSoundHelpers.cpp" />
     <ClCompile Include="factionHelpers.cpp" />
     <ClCompile Include="gameDataAllHelper.cpp" />
     <ClCompile Include="gameHelpers.cpp" />
@@ -466,7 +453,6 @@
     <ClCompile Include="MmbMover.cpp" />
     <ClCompile Include="onlineThings.cpp" />
     <ClCompile Include="onlineThings2.cpp" />
-    <ClCompile Include="otherEvents.cpp" />
     <ClCompile Include="patchesForGame.cpp" />
     <ClCompile Include="PathMap.cpp" />
     <ClCompile Include="pch.cpp">
@@ -477,13 +463,9 @@
     </ClCompile>
     <ClCompile Include="PlannedRetreatRoute.cpp" />
     <ClCompile Include="plugData.cpp" />
-    <ClCompile Include="pluginM2TWEOP.cpp" />
-    <ClCompile Include="plugins.cpp" />
-    <ClCompile Include="RecruitSystem.cpp" />
-    <ClCompile Include="religionEvents.cpp" />
+    <ClCompile Include="luaPlugin.cpp" />
     <ClCompile Include="resourcesHelpers.cpp" />
     <ClCompile Include="Retreater.cpp" />
-    <ClCompile Include="seaBattle.cpp" />
     <ClCompile Include="settlementHelpers.cpp" />
     <ClCompile Include="siegeHelpers.cpp" />
     <ClCompile Include="stackStructHelpers.cpp" />
@@ -503,7 +485,6 @@
     <ClCompile Include="TemplateCh.cpp" />
     <ClCompile Include="TexturesManager.cpp" />
     <ClCompile Include="tilesChange.cpp" />
-    <ClCompile Include="uiEvents.cpp" />
     <ClCompile Include="unitActions.cpp" />
     <ClCompile Include="unitHelpers.cpp" />
   </ItemGroup>

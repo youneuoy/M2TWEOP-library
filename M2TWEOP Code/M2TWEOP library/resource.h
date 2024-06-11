@@ -2,7 +2,6 @@
 // Microsoft Visual C++ generated include file.
 // Used by luaPlugin.rc
 
-// Следующие стандартные значения для новых объектов
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS

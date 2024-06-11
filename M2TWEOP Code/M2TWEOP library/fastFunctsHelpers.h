@@ -1,17 +1,12 @@
 #pragma once
-#include "functionsOffsets.h"
-#include "dataOffsets.h"
 #include"headersSTD.h"
-#include "headersMEM.h"
 #include "realGameTypes.h"
-#include "globals.h"
-#include "exportHeader.h"
 namespace fastFunctsHelpers
 {
 	//set new crypted string
 	//alloc memory, copy string to it
 	//copy crypt to next 4 bytes after pointer
-	NOINLINE EOP_EXPORT void setCryptedString(char** targetS, const char* newS);
+	void setCryptedString(char** targetS, const char* newS);
 
 	int getEduIndex(const char* type);
 	eduEntry* getEduEntryByName(const char* type);

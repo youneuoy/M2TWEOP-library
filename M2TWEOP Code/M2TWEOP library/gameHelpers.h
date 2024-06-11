@@ -1,8 +1,6 @@
 #pragma once
 #include <string>
 #include "realGameTypes.h"
-#include "luaGetSetFuncs.h"
-#include <vector>
 
 #include "lua/sol.hpp"
 namespace gameHelpers
@@ -10,9 +8,7 @@ namespace gameHelpers
 	UINT32 getFactionsCount();
 	std::string callConsole(std::string cmdName, sol::variadic_args va);
 	factionStruct* getFaction(int index);
-	guild* getGuild(unsigned char index);
 	const char* getClimateName2(const int index);
-	float GetMovepointsForReachNearTile(int originX, int originY, int destX, int destY);
 	unit* getEventAttackingUnit(eventTrigger* eventData);
 	unit* getEventDefendingUnit(eventTrigger* eventData);
 	general* getEventCharacter(eventTrigger* eventData);
@@ -61,10 +57,6 @@ namespace gameHelpers
 	factionStruct* getFactionHashed(const campaign* campaign, const std::string& name);
 	settlementStruct* getSettlement(const stratMap* map, const std::string& name);
 	regionStruct* getRegionByName(stratMap* map, const std::string& name);
-	
-	general* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y);
-	stackStruct* createArmy(general* character);
-	stackStruct* createArmyInSettlement(settlementStruct* sett);
 
 	std::tuple<bool, int> getScriptCounter(const char* type);
 	regionStruct* getRegion(int index);
@@ -149,7 +141,6 @@ namespace gameHelpers
 	roadStruct* getRoad(const campaign* campaign, const int index);
 	mercPoolUnit* getNewMercUnit(mercPoolUnitsPtr* unitPtr);
 	mercPoolUnit* addMercUnit(mercPool* mercPool, int idx, int exp, int cost, float repmin, float repmax, int maxunits, float startpool, float startyear, float endyear, int crusading);
-	void saveGame(const char* path);
 	void scriptCommand(std::string command, sol::variadic_args va);
 	const char* getReligionName(const int index);
 	const char* getCultureName(const int index);

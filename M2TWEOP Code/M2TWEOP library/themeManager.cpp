@@ -1,4 +1,5 @@
-#include "imgui.h"
+
+#include "imgui/imgui.h"
 #include "cpptoml.h"
 #include "globals.h"
 
@@ -22,7 +23,7 @@ void tomlToStyle(std::string themeName)
 {
 	// Light style from ImThemes
 	ImGuiStyle &style = ImGui::GetStyle();
-	std::string fPath = globals::dataS.modPatch;
+	std::string fPath = globals::dataS.modPath;
 
 	// Load the TOML file
 	if (themeName.find(".toml") != std::string::npos)

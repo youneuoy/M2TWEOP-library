@@ -6,13 +6,7 @@ namespace generalCharactericticsHelpers
 {
 	traitContainer* getTraits(namedCharacter* character);
 	ancillary* getAncillary(namedCharacter* character, int index);
-	int addAncillary(namedCharacter* character, std::string ancName);
-
-	void removeAncillary(namedCharacter* character, ancillary* anc);
-
-
-	void addTrait(namedCharacter* character, const char* traitName, int traitLevel);
-	void removeTrait(namedCharacter* character, const char* traitName);
+	int addAncillary(namedCharacter* character, const std::string& ancName);
 
 
 	int getAge(namedCharacter* character);

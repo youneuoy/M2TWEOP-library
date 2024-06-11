@@ -5,11 +5,7 @@
 //@author youneuoy
 //@license GPL-3.0
 #include "luaP.h"
-#include "plugData.h"
-#include "gameDataAllHelper.h"
-#include "battleHandlerHelpers.h"
 #include "eopMasterTypes.h"
-#include "eop3dObjectsHelpers.h"
 #include "MapTextDrawer.h"
 
 void luaP::initEop3dObjects()

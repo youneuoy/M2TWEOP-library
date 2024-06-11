@@ -121,7 +121,7 @@ void ContextMenuStrat::Draw()
 	}
 	else
 	{
-		auto currPos = ImGui::GetCursorPos();
+		currPos = ImGui::GetCursorPos();
 
 
 		ImGui::Image(image, ctxSize);

@@ -1,7 +1,18 @@
 #include "onlineThings2.h"
 
+#include <vector>
+#include <windows.h>
+#include "fastFuncts.h"
+#include "imgui/imgui.h"
+#include <d3d9.h>
+#include <sstream>
+#include <thread>
+#include <set>
+
+#include "globals.h"
+#include "smallFuncs.h"
 #include "imgui_notify.h"
-#include "fastFunctsHelpers.h"
+
 namespace battleCreator
 {
 	struct genDataS
@@ -21,7 +32,7 @@ namespace battleCreator
 
 	struct unitDataS
 	{
-		unitDataS() {};
+		unitDataS() {}
 		unitDataS(unit*un,int pnumberInArmy)
 		{
 			numberInArmy = pnumberInArmy;
@@ -94,7 +105,7 @@ namespace battleCreator
 			shared_ptr<unitDataS> retUn = nullptr;
 			for (auto& un : unitsForTransfer)
 			{
-				if (un->numberInArmy == id)
+				if (un->numberInArmy == static_cast<size_t>(id))
 				{
 					retUn = un;
 					break;
@@ -403,7 +414,7 @@ namespace battleCreator
 
 	void doResultsFileCreating()
 	{
-		std::string fPath = globals::dataS.modPatch;
+		std::string fPath = globals::dataS.modPath;
 		fPath += "\\eopBattles";
 		filesystem::create_directory(fPath);
 		fPath += "\\lastBattleResult";
@@ -627,6 +638,8 @@ namespace battleCreator
 		}
 
 		return true;
+		/*
+		* 
 		bool transferResult = doTransfer();
 		if (transferResult == false)
 		{
@@ -634,6 +647,7 @@ namespace battleCreator
 			return false;
 		}
 		return transferResult;
+		 */
 	}
 
 	void transferResults2()
@@ -736,7 +750,7 @@ namespace battleCreator
 						}
 						for (std::string& anc : newGen.ancillaries)
 						{
-							auto* resAnc=fastFuncts::findAncillary((char*)anc.c_str());
+							auto* resAnc= fastFuncts::findAncillary(anc.c_str());
 							if (resAnc != nullptr)
 							{
 								fastFuncts::addAncillary(newGeneral->genChar, resAnc);

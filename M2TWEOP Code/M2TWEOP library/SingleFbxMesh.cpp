@@ -148,7 +148,7 @@ void SingleFbxMesh::release()
 
 void SingleFbxMesh::advanceTime(unsigned long long timeMod)
 {
-    fbxsdk::FbxTime fbxFrameTime;
+    FbxTime fbxFrameTime;
     unsigned long long localAnimationTime = (GetTickCount64()* timeMod) % m_initialAnimationDurationInMs;
 
     fbxFrameTime.SetMilliSeconds(localAnimationTime);
@@ -309,7 +309,7 @@ void SingleFbxMesh::_getMatrices(
 }
 
 void SingleFbxMesh::_buildMatrices(
-    const fbxsdk::FbxTime& fbxFrameTime)
+    const FbxTime& fbxFrameTime)
 {
     if (m_boneVector.empty())
     {
@@ -353,7 +353,7 @@ void SingleFbxMesh::_loadModel()
 
     FbxIOPluginRegistry* fbxIoPluginRegistry = m_sdkManagerPtr->GetIOPluginRegistry();
     tAutodeskMemoryStream stream = tAutodeskMemoryStream((char*)buffer.data(), fileSize, fbxIoPluginRegistry->FindReaderIDByExtension("fbx"));
-    fbxsdk::FbxImporter* importerPtr = FbxImporter::Create(m_sdkManagerPtr, "");
+    FbxImporter* importerPtr = FbxImporter::Create(m_sdkManagerPtr, "");
 
     assert(nullptr != importerPtr);
     importerPtr->Initialize(&stream, nullptr, -1, m_sdkManagerPtr->GetIOSettings());

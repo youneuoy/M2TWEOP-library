@@ -1,5 +1,8 @@
 #include "m2tweopMap.h"
-#include <imgui_internal.h>
+#include <imgui/imgui_internal.h>
+
+#include "dataOffsets.h"
+#include "fastFuncts.h"
 
 void m2tweopMap::buildMap()
 {

@@ -5,8 +5,8 @@
 //@author youneuoy
 //@license GPL-3.0
 #include "luaP.h"
-#include "plugData.h"
-
+#include "eopFbxHelpers.h"
+#include "fbxModels.h"
 
 void luaP::initEopFbx()
 {
@@ -55,7 +55,7 @@ void luaP::initEopFbx()
 	@usage
 	M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath().."/eopData/testmodel.fbx",M2TWEOP.getModPath().."/eopData/testtexture.dds",1);
 	*/
-	tables.M2TWEOPFBXTable.set_function("addFbxModel", &eopFbxHelpers::addFbxModel);
+	tables.M2TWEOPFBXTable.set_function("addFbxModel", &fbxModels::addFbxModel);
 
 	/***
 	Delete a fbx model.
@@ -67,7 +67,7 @@ void luaP::initEopFbx()
 	M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath().."/eopData/testmodel.fbx",M2TWEOP.getModPath().."/eopData/testtexture.dds",1);
 	M2TWEOPFBX.deleteFbxModel(1);
 	*/
-	tables.M2TWEOPFBXTable.set_function("deleteFbxModel", &eopFbxHelpers::deleteFbxModel);
+	tables.M2TWEOPFBXTable.set_function("deleteFbxModel", &fbxModels::deleteFbxModel);
 
 
 	/***
@@ -81,7 +81,7 @@ void luaP::initEopFbx()
 	M2TWEOPFBX.addFbxModel(M2TWEOP.getModPath().."/eopData/testmodel.fbx",M2TWEOP.getModPath().."/eopData/testtexture.dds",1);
 	local ourNewModel=M2TWEOPFBX.getFbxModel(1);
 	*/
-	tables.M2TWEOPFBXTable.set_function("getFbxModel", &eopFbxHelpers::getFbxModel);
+	tables.M2TWEOPFBXTable.set_function("getFbxModel", &fbxModels::getFbxModel);
 
 	/***
 	Create new fbx object with our previously loaded model. It can be placed on map, etc.
@@ -97,7 +97,7 @@ void luaP::initEopFbx()
 	--2 is object id here
 	local ourNewObject=M2TWEOPFBX.addFbxObject(1,2);
 	*/
-	tables.M2TWEOPFBXTable.set_function("addFbxObject", &eopFbxHelpers::addFbxObject);
+	tables.M2TWEOPFBXTable.set_function("addFbxObject", &fbxModels::addFbxObject);
 
 	/***
 	Delete an fbx object.
@@ -112,7 +112,7 @@ void luaP::initEopFbx()
 	local ourNewObject=M2TWEOPFBX.addFbxObject(1,2);
 	M2TWEOPFBX.deleteFbxObject(ourNewObject);
 	*/
-	tables.M2TWEOPFBXTable.set_function("deleteFbxObject", &eopFbxHelpers::deleteFbxObject);
+	tables.M2TWEOPFBXTable.set_function("deleteFbxObject", &fbxModels::deleteFbxObject);
 
 	/***
 	Get an fbx object by it's ID.
@@ -129,7 +129,7 @@ void luaP::initEopFbx()
 	local ourNewObject=M2TWEOPFBX.getFbxObject(2);
 
 	*/
-	tables.M2TWEOPFBXTable.set_function("getFbxObject", &eopFbxHelpers::getFbxObject);
+	tables.M2TWEOPFBXTable.set_function("getFbxObject", &fbxModels::getFbxObject);
 
 
 	/***
@@ -190,7 +190,7 @@ void luaP::initEopFbx()
 
 	M2TWEOPFBX.setFbxObjectSize(ourNewObject,25.2);
 	*/
-	tables.M2TWEOPFBXTable.set_function("setFbxObjectSize", &eopFbxHelpers::setFbxObjectSize);
+	tables.M2TWEOPFBXTable.set_function("setFbxObjectSize", &fbxModels::setFbxObjectSize);
 
 	/***
 	Get an fbx object's size modifier.
@@ -211,7 +211,7 @@ void luaP::initEopFbx()
 	M2TWEOPFBX.setFbxObjectSize(ourNewObject,25.2);
 	local size=M2TWEOPFBX.getFbxObjectSize(ourNewObject);
 	*/
-	tables.M2TWEOPFBXTable.set_function("getFbxObjectSize", &eopFbxHelpers::getFbxObjectSize);
+	tables.M2TWEOPFBXTable.set_function("getFbxObjectSize", &fbxModels::getFbxObjectSize);
 
 	/***
 	Set an fbx object's draw state.
@@ -236,7 +236,7 @@ void luaP::initEopFbx()
 
 	M2TWEOPFBX.setFbxObjectDrawState(ourNewObject,true);
 	*/
-	tables.M2TWEOPFBXTable.set_function("setFbxObjectDrawState", &eopFbxHelpers::setFbxObjectDrawState);
+	tables.M2TWEOPFBXTable.set_function("setFbxObjectDrawState", &fbxModels::setFbxObjectDrawState);
 
 	/***
 	Get an fbx object's draw state.
@@ -262,7 +262,7 @@ void luaP::initEopFbx()
 	M2TWEOPFBX.setFbxObjectDrawState(ourNewObject,true);
 	local isDrawed=M2TWEOPFBX.getFbxObjectDrawState(ourNewObject);
 	*/
-	tables.M2TWEOPFBXTable.set_function("getFbxObjectDrawState", &eopFbxHelpers::getFbxObjectDrawState);
+	tables.M2TWEOPFBXTable.set_function("getFbxObjectDrawState", &fbxModels::getFbxObjectDrawState);
 
 
 	/***
@@ -290,7 +290,7 @@ void luaP::initEopFbx()
 	local isDrawed=M2TWEOPFBX.getFbxObjectDrawState(ourNewObject);
 	M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,true);
 	*/
-	tables.M2TWEOPFBXTable.set_function("setFbxObjectAnimState", &eopFbxHelpers::setFbxObjectAnimState);
+	tables.M2TWEOPFBXTable.set_function("setFbxObjectAnimState", &fbxModels::setFbxObjectAnimState);
 
 	/***
 	Get an fbx object's animation state.
@@ -318,7 +318,7 @@ void luaP::initEopFbx()
 	M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,true);
 	local isAnimationPlayed=M2TWEOPFBX.getFbxObjectAnimState(ourNewObject);
 	*/
-	tables.M2TWEOPFBXTable.set_function("getFbxObjectAnimState", &eopFbxHelpers::getFbxObjectAnimState);
+	tables.M2TWEOPFBXTable.set_function("getFbxObjectAnimState", &fbxModels::getFbxObjectAnimState);
 
 
 	/***
@@ -361,7 +361,7 @@ void luaP::initEopFbx()
 		M2TWEOPFBX.setFbxObjectDrawType(ourNewObject,2);
 	end
 	*/
-	tables.M2TWEOPFBXTable.set_function("setFbxObjectDrawType", &eopFbxHelpers::setFbxObjectDrawType);
+	tables.M2TWEOPFBXTable.set_function("setFbxObjectDrawType", &fbxModels::setFbxObjectDrawType);
 	/***
 	Get fbx object draw type, i.e. on what part of game it is drawn.
 	Can be:
@@ -394,5 +394,5 @@ void luaP::initEopFbx()
 	M2TWEOPFBX.setFbxObjectAnimState(ourNewObject,true);
 	local whereWeDrawObject=M2TWEOPFBX.getFbxObjectDrawType(ourNewObject);
 */
-	tables.M2TWEOPFBXTable.set_function("getFbxObjectDrawType", &eopFbxHelpers::getFbxObjectDrawType);
+	tables.M2TWEOPFBXTable.set_function("getFbxObjectDrawType", &fbxModels::getFbxObjectDrawType);
 }

@@ -4,6 +4,9 @@
 
 #include <cstdio>
 
+#include "eduFastFuncts.h"
+#include "fastFuncts.h"
+#include "smallFuncs.h"
 #include "unitActions.h"
 
 namespace eduThings
@@ -50,7 +53,7 @@ namespace eduThings
 	{
 		vector<eopEduEntry>eopEdu;
 	}data;
-	NOINLINE EOP_EXPORT eduEntry* addEopEduEntryFromFile(const char* fileName, int newIdx)
+	eduEntry* addEopEduEntryFromFile(const char* fileName, int newIdx)
 	{
 		if (getEopEduEntry(newIdx))
 		{
@@ -76,7 +79,7 @@ namespace eduThings
 		}
 		return getEopEduEntry(newIdx);
 	}
-	NOINLINE EOP_EXPORT eduEntry* addEopEduEntry(int baseIdx, int newIdx)
+	eduEntry* addEopEduEntry(int baseIdx, int newIdx)
 	{
 		if (getEopEduEntry(newIdx))
 		{
@@ -107,7 +110,7 @@ namespace eduThings
 		return &data.eopEdu[idx];
 	}
 	
-	NOINLINE EOP_EXPORT eduEntry* getEopEduEntry(int idx)
+	eduEntry* getEopEduEntry(int idx)
 	{
 		for (eopEduEntry& entry : data.eopEdu)
 		{
@@ -118,11 +121,11 @@ namespace eduThings
 		}
 		return nullptr;
 	}
-	NOINLINE EOP_EXPORT int getEopEntryNum()
+	int getEopEntryNum()
 	{
 		return data.eopEdu.size();
 	}
-	NOINLINE EOP_EXPORT char* getEopNameOfEduEntry(eduEntry* entryAdress)
+	char* getEopNameOfEduEntry(eduEntry* entryAdress)
 	{
 		for (eopEduEntry& entry : data.eopEdu)
 		{
@@ -133,7 +136,7 @@ namespace eduThings
 		}
 		return nullptr;
 	}
-	NOINLINE EOP_EXPORT int getDataEopEdu(int idx)
+	int getDataEopEdu(int idx)
 	{
 		for (eopEduEntry& entry : data.eopEdu)
 		{
@@ -144,7 +147,7 @@ namespace eduThings
 		}
 		return 0;
 	}
-	NOINLINE EOP_EXPORT int* tryFindDataEopEdu(char* entryName)
+	int* tryFindDataEopEdu(char* entryName)
 	{
 		for (eopEduEntry& entry : data.eopEdu)
 		{
@@ -156,7 +159,7 @@ namespace eduThings
 		}
 		return nullptr;
 	}
-	NOINLINE EOP_EXPORT eduEntry* getEopEduEntryByName(const char* entryName)
+	eduEntry* getEopEduEntryByName(const char* entryName)
 	{
 		for (eopEduEntry& entry : data.eopEdu)
 		{
@@ -168,7 +171,7 @@ namespace eduThings
 		}
 		return nullptr;
 	}
-	NOINLINE EOP_EXPORT int* tryFindDataEopEduIndex(char* entryName)
+	int* tryFindDataEopEduIndex(char* entryName)
 	{
 		for (eopEduEntry& entry : data.eopEdu)
 		{
@@ -178,25 +181,28 @@ namespace eduThings
 		}
 		return nullptr;
 	}
-	NOINLINE EOP_EXPORT void setEntryUnitCardTga(int entryIdx, const char* newCard)
+	void setEntryUnitCardTga(int entryIdx, const char* newCard)
 	{
 		eduEntry* entry = getEopEduEntry(entryIdx);
 
 		fastFunctsHelpers::setCryptedString(&entry->UnitCardTga, newCard);
 	}
-	NOINLINE EOP_EXPORT eduEntry* getEduEntry(int Idx)
+	eduEntry* getEduEntry(int Idx)
 	{
-		eduEntry* entry = fastFunctsHelpers::getEDUEntryById(Idx);
+		eduEntry* entry = getEopEduEntry(Idx);
+		if (entry)
+			return entry;
+		entry = fastFunctsHelpers::getEDUEntryById(Idx);
 		return entry;
 	}
-	NOINLINE EOP_EXPORT void setEntryInfoCardTga(int entryIdx, const char* newCard)
+	void setEntryInfoCardTga(int entryIdx, const char* newCard)
 	{
 		eduEntry* entry = getEopEduEntry(entryIdx);
 
 		fastFunctsHelpers::setCryptedString(&entry->InfoCardTga, newCard);
 	}
 
-	NOINLINE EOP_EXPORT void setEntrySoldierModel(int entryIdx, const char* newModel)
+	void setEntrySoldierModel(int entryIdx, const char* newModel)
 	{
 		eduEntry* entry = getEopEduEntry(entryIdx);
 
@@ -207,7 +213,7 @@ namespace eduThings
 		entry->Soldier = (char*)entryInternal->eopSoldierString.c_str();
 	}
 
-	NOINLINE EOP_EXPORT void setEntryLocalizedName(int entryIdx, const char* newName)
+	void setEntryLocalizedName(int entryIdx, const char* newName)
 	{
 		eduEntry* entry = getEopEduEntry(entryIdx);
 
@@ -218,7 +224,7 @@ namespace eduThings
 		smallFuncs::createUniString(*entry->localizedName, newName);
 	}
 
-	NOINLINE EOP_EXPORT void setEntryLocalizedDescr(int entryIdx, const char* newDesr)
+	void setEntryLocalizedDescr(int entryIdx, const char* newDesr)
 	{
 		eduEntry* entry = getEopEduEntry(entryIdx);
 
@@ -227,7 +233,7 @@ namespace eduThings
 		smallFuncs::createUniString(*entry->localizedDescr, newDesr);
 	}
 
-	NOINLINE EOP_EXPORT void setEntryLocalizedShortDescr(int entryIdx, const char* newDecrShort)
+	void setEntryLocalizedShortDescr(int entryIdx, const char* newDecrShort)
 	{
 		eduEntry* entry = getEopEduEntry(entryIdx);
 
@@ -235,11 +241,11 @@ namespace eduThings
 		entry->localizedDescrShort = shDescrMem;
 		smallFuncs::createUniString(*entry->localizedDescrShort, newDecrShort);
 	}
-	NOINLINE EOP_EXPORT int getEduIndexByType(const char* type)
+	int getEduIndexByType(const char* type)
 	{
 		return fastFunctsHelpers::getEduIndex(type);
 	}
-	NOINLINE EOP_EXPORT eduEntry* getEduEntryByType(const char* type)
+	eduEntry* getEduEntryByType(const char* type)
 	{
 		return fastFunctsHelpers::getEduEntryByName(type);
 	}

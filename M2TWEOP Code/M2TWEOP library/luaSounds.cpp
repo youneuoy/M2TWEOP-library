@@ -4,11 +4,8 @@
 //@module LuaPlugin
 //@author youneuoy
 //@license GPL-3.0
+#include "eopSounds.h"
 #include "luaP.h"
-#include "plugData.h"
-
-
-#include "eopSoundHelpers.h"
 
 void luaP::initEopSounds()
 {
@@ -54,7 +51,7 @@ void luaP::initEopSounds()
 	@usage
 	local ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath().."/eopData/testsound.wav");
 	*/
-	tables.M2TWEOPSoundsTable.set_function("createEOPSound", &eopSoundHelpers::createEOPSound);
+	tables.M2TWEOPSoundsTable.set_function("createEOPSound", &eopSounds::createEOPSound);
 	/***
 	Delete a sound
 	@function M2TWEOPSounds.deleteEOPSound
@@ -64,7 +61,7 @@ void luaP::initEopSounds()
 	local ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath().."/eopData/testsound.wav");
 	M2TWEOPSounds.deleteEOPSound(ourNewSound);
 	*/
-	tables.M2TWEOPSoundsTable.set_function("deleteEOPSound", &eopSoundHelpers::deleteEOPSound);
+	tables.M2TWEOPSoundsTable.set_function("deleteEOPSound", &eopSounds::deleteEOPSound);
 	/***
 	Play a sound.
 	@function M2TWEOPSounds.playEOPSound
@@ -74,7 +71,7 @@ void luaP::initEopSounds()
 	local ourNewSound=M2TWEOPSounds.createEOPSound(M2TWEOP.getModPath().."/eopData/testsound.wav");
 	M2TWEOPSounds.playEOPSound(ourNewSound);
 	*/
-	tables.M2TWEOPSoundsTable.set_function("playEOPSound", &eopSoundHelpers::playEOPSound);
+	tables.M2TWEOPSoundsTable.set_function("playEOPSound", &eopSounds::playEOPSound);
 	/***
 	Set a sound's playing offset. i.e Skip a certain number of milliseconds of the beginning of the sound.
 	@function M2TWEOPSounds.setEOPSoundOffset
@@ -86,7 +83,7 @@ void luaP::initEopSounds()
 	M2TWEOPSounds.setEOPSoundOffset(ourNewSound,1000);
 	M2TWEOPSounds.playSound(ourNewSound);
 	*/
-	tables.M2TWEOPSoundsTable.set_function("setEOPSoundOffset", &eopSoundHelpers::setEOPSoundOffset);
+	tables.M2TWEOPSoundsTable.set_function("setEOPSoundOffset", &eopSounds::setEOPSoundOffset);
 	/***
 	Get a sound's playing offset.
 	@function M2TWEOPSounds.getEOPSoundOffset
@@ -98,7 +95,7 @@ void luaP::initEopSounds()
 	M2TWEOPSounds.playSound(ourNewSound);
 	local currentPlayPosition=M2TWEOPSounds.getEOPSoundOffset(ourNewSound);
 	*/
-	tables.M2TWEOPSoundsTable.set_function("getEOPSoundOffset", &eopSoundHelpers::getEOPSoundOffset);
+	tables.M2TWEOPSoundsTable.set_function("getEOPSoundOffset", &eopSounds::getEOPSoundOffset);
 	/***
 	Pause a sound that is playing.
 	@function M2TWEOPSounds.pauseEOPSound
@@ -109,7 +106,7 @@ void luaP::initEopSounds()
 	M2TWEOPSounds.playSound(ourNewSound);
 	M2TWEOPSounds.pauseEOPSound(ourNewSound);
 	*/
-	tables.M2TWEOPSoundsTable.set_function("pauseEOPSound", &eopSoundHelpers::pauseEOPSound);
+	tables.M2TWEOPSoundsTable.set_function("pauseEOPSound", &eopSounds::pauseEOPSound);
 	/***
 	Stop a sound that is playing.
 	@function M2TWEOPSounds.stopEOPSound
@@ -120,5 +117,5 @@ void luaP::initEopSounds()
 	M2TWEOPSounds.playSound(ourNewSound);
 	M2TWEOPSounds.stopEOPSound(ourNewSound);
 	*/
-	tables.M2TWEOPSoundsTable.set_function("stopEOPSound", &eopSoundHelpers::stopEOPSound);
+	tables.M2TWEOPSoundsTable.set_function("stopEOPSound", &eopSounds::stopEOPSound);
 }

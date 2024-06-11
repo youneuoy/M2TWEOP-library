@@ -12,27 +12,6 @@
 
 
 #include <string>
-#include "realGameTypes.h"
-#include <windows.h>
-#include "luaGetSetFuncs.h"
-#include "factionHelpers.h"
-#include "settlementHelpers.h"
-#include "resourcesHelpers.h"
-#include "objectsHelpers.h"
-#include "gameHelpers.h"
-#include "stackStructHelpers.h"
-#include "buildingStructHelpers.h"
-#include "generalHelpers.h"
-#include "unitHelpers.h"
-#include "cameraHelpers.h"
-#include "m2tweopHelpers.h"
-#include "generalCharactericticsHelpers.h"
-#include "technicalHelpers.h"
-#include "eopEduHelpers.h"
-#include "guildHelpers.h"
-#include "eopFbxHelpers.h"
-#include "siegeHelpers.h"
-#include "gameSTDUIHelpers.h"
 
 #define tryLua(luaFunc)  \
 auto funcResult = luaFunc;\

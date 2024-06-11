@@ -1,15 +1,7 @@
 #include "casModelsDrawer.h"
-
-#include <string>
 #include <vector>
 #include <shared_mutex>
-#include <windows.h>
-#include "FastFuncts.h"
 #include "globals.h"
-
-#include "techFuncs.h"
-#include "fastFuncts.h"
-#include "smallFuncs.h"
 #include "realGameTypes.h"
 
 #include "stratModelsChange.h"
@@ -34,7 +26,7 @@ namespace casModelsDrawer
 		vector<unique_ptr<casModelRecS>>objects;
 	}data;
 
-	NOINLINE EOP_EXPORT void addCasModelToDrawList(UINT32 modelId, int x, int y, float sizeMultiplier)
+	void addCasModelToDrawList(UINT32 modelId, int x, int y, float sizeMultiplier)
 	{
 		std::unique_lock<std::shared_mutex> lock(data.casMutex);
 		data.objects.emplace_back(std::make_unique<casModelRecS>(modelId, x, y, sizeMultiplier));
@@ -42,7 +34,7 @@ namespace casModelsDrawer
 		return;
 	}
 
-	EOP_EXPORT void removeCasModelFromDrawList(UINT32 modelId)
+	void removeCasModelFromDrawList(UINT32 modelId)
 	{
 		std::unique_lock<std::shared_mutex> lock(data.casMutex);
 		for (UINT32 i = 0; i < data.objects.size(); i++)

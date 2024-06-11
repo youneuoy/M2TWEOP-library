@@ -2,6 +2,9 @@
 
 #include "FastFuncts.h"
 #include "gameDataAllHelper.h"
+#include "gameHelpers.h"
+#include "graphicsD3D.h"
+#include "m2tweopMapManager.h"
 #include "plugData.h"
 #include "smallFuncs.h"
 
@@ -64,16 +67,6 @@ namespace m2tweopHelpers
 		return false;
 	}
 	
-	static void disableVassalage(campaign* campaignStruct, factionStruct* fac1, factionStruct* fac2)
-	{
-		using namespace campaignEnums;
-
-		campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].state = dipStateInternalEnum::peaceState;
-		campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].state = dipStateInternalEnum::peaceState;
-		campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum].protectorate &= ~8u;
-		campaignStruct->diplomaticStandings[fac2->dipNum][fac1->dipNum].protectorate &= ~8u;
-	}
-	
 	void setDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2)
 	{
 		using namespace campaignEnums;
@@ -97,7 +90,7 @@ namespace m2tweopHelpers
 	culturesDB* getCultureDb()
 	{
 		DWORD offset = 0x0161F0F0;
-		if (getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			offset = 0x01666FC8;
 		return reinterpret_cast<culturesDB*>(offset);
 	}
@@ -106,7 +99,7 @@ namespace m2tweopHelpers
 	{
 		auto campaign = gameDataAllHelper::get()->campaignData;
 		DWORD funcAddr = 0x00503480;
-		if (getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			funcAddr = 0x00502EE0;
 		DWORD diplomaticStuff = (reinterpret_cast<DWORD>(campaign) + 0x858);
 		int facIdOne = factionOne->dipNum;
@@ -127,7 +120,7 @@ namespace m2tweopHelpers
 	{
 		auto campaign = gameDataAllHelper::get()->campaignData;
 		DWORD funcAddr = 0x00504F20;
-		if (getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			funcAddr = 0x00504980;
 		DWORD diplomaticStuff = (reinterpret_cast<DWORD>(campaign) + 0x858);
 		//
@@ -143,11 +136,6 @@ namespace m2tweopHelpers
 		}
 	}
 
-	void loadSaveGame(const std::string& path)
-	{
-		(*(*plugData::data.funcs.loadSaveGame))(path.c_str());
-	}
-
 	std::shared_ptr<mapImage> makeMapImage()
 	{
 		return std::make_shared<mapImage>(mapImage());
@@ -157,21 +145,12 @@ namespace m2tweopHelpers
 	{
 		img->tiles.clear();
 	}
-
 	
-	int GetUnitSize()
-	{
-		return (*(*plugData::data.funcs.GetUnitSize))();
-	}
-	void toggleDeveloperMode()
-	{
-		(*(*plugData::data.funcs.toggleDeveloperMode))();
-	}
 	std::tuple<int, int, void*> loadTextureToGame(const std::string& path)
 	{
 		int x = 0;
 		int y = 0;
-		LPDIRECT3DTEXTURE9 retTexture = (*(*plugData::data.funcs.loadTexture))(path.c_str(), &x, &y);
+		LPDIRECT3DTEXTURE9 retTexture = graphicsExport::loadTexture(path.c_str(), &x, &y);
 
 		sol::as_table_t int2 = sol::as_table(std::vector<int>{
 			x, y
@@ -184,8 +163,8 @@ namespace m2tweopHelpers
 	{
 		int x = 0;
 		int y = 0;
-		LPDIRECT3DTEXTURE9 retTexture = (*(*plugData::data.funcs.loadTexture))(path.c_str(), &x, &y);
-		retTexture = (*(*plugData::data.funcs.updateRegionColors))(mapImage, retTexture, x, y);
+		LPDIRECT3DTEXTURE9 retTexture = graphicsExport::loadTexture(path.c_str(), &x, &y);
+		retTexture = m2tweopMapManager::updateRegionColors(mapImage, retTexture, x, y);
 
 		sol::as_table_t int2 = sol::as_table(std::vector<int>{
 			x, y
@@ -287,8 +266,7 @@ namespace m2tweopHelpers
 	void unloadTextureFromGame(void* texture)
 	{
 		LPDIRECT3DTEXTURE9 tex = reinterpret_cast<LPDIRECT3DTEXTURE9>(texture);
-		(*(*plugData::data.funcs.unloadTexture))(tex);
-
+		graphicsExport::unloadTexture(tex);
 	}
 	
 	settlementInfoScroll* getSettlementInfoScroll()
@@ -317,7 +295,7 @@ namespace m2tweopHelpers
 
 	void setPerfectSpy(const bool set)
 	{
-		if (getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			*reinterpret_cast<bool*>(0x016F0E5C) = set;
 		else
 			*reinterpret_cast<bool*>(0x016A7CC4) = set;
@@ -332,7 +310,7 @@ namespace m2tweopHelpers
 			int siegeTower;
 		};
 		EquipmentCosts* costs;
-		if (getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			costs = reinterpret_cast<EquipmentCosts*>(0x01655BB0);
 		else
 			costs = reinterpret_cast<EquipmentCosts*>(0x0160DCC8);
@@ -354,7 +332,7 @@ namespace m2tweopHelpers
 
 	options1* getOptions1()
 	{
-		if (getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			return reinterpret_cast<options1*>(0x02CB693C);
 		
 		return reinterpret_cast<options1*>(0x02C6D804);
@@ -362,7 +340,7 @@ namespace m2tweopHelpers
 
 	options2* getOptions2()
 	{
-		if (getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			return reinterpret_cast<options2*>(0x016818A0);
 		
 		return reinterpret_cast<options2*>(0x01639EF0);
@@ -370,7 +348,7 @@ namespace m2tweopHelpers
 
 	campaignDifficulty1* getCampaignDifficulty1()
 	{
-		if (getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			return reinterpret_cast<campaignDifficulty1*>(0x016F4760);
 		
 		return reinterpret_cast<campaignDifficulty1*>(0x016AB5C8);
@@ -378,7 +356,7 @@ namespace m2tweopHelpers
 
 	campaignDifficulty2* getCampaignDifficulty2()
 	{
-		if (getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			return reinterpret_cast<campaignDifficulty2*>(0x0164BF18);
 		
 		return reinterpret_cast<campaignDifficulty2*>(0x01604000);

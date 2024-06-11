@@ -4404,7 +4404,6 @@ void OnCreateUnit::SetOriginialCode()
 
 void OnCreateUnit::SetNewCode()
 {
-	static int fakeEDBPointer;
 	Assembler* a = new Assembler();
 
 	a->push(edx);
@@ -5039,7 +5038,6 @@ void OnFindUnit::SetOriginialCode()
 
 void OnFindUnit::SetNewCode()
 {
-	static int fakeEDBPointer;
 	Assembler* a = new Assembler();
 
 	a->push(ecx);
@@ -6309,7 +6307,8 @@ OnPathCasheCrashPlace::~OnPathCasheCrashPlace()
 }
 void OnPathCasheCrashPlace::SetOriginalCode()
 {
-	return;
+	/*
+	* 
 	Assembler* a = new Assembler();
 	//filler, not work!
 	a->mov(ecx, ecx);
@@ -6317,6 +6316,7 @@ void OnPathCasheCrashPlace::SetOriginalCode()
 	m_originalBytes = (unsigned char*)a->make();
 	m_originalSize = m_memory->GetASMSize(m_originalBytes);
 	delete a;
+	 */
 }
 void OnPathCasheCrashPlace::SetNewCode()
 {

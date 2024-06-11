@@ -1,17 +1,23 @@
 #include "pch.h"
 #include "fastFuncts.h"
 
+#include "exportHeader.h"
+#include "globals.h"
+#include "functionsOffsets.h"
+#include "dataOffsets.h"
 #include <queue>
 #include <set>
 
 #include "actionsStrat.h"
 #include "eduThings.h"
+#include "factionHelpers.h"
 #include "smallFuncs.h"
 
 #include "fastFunctsHelpers.h"
+#include "headersMEM.h"
 #include "plugData.h"
+#include "techFuncs.h"
 #include "unitActions.h"
-#include "lua/forward.hpp"
 
 namespace fastFuncts
 {
@@ -66,7 +72,7 @@ namespace fastFuncts
 	}
 	std::string GetModPath()
 	{
-		return globals::dataS.modPatch;
+		return globals::dataS.modPath;
 	}
 	
 	float GetMovepointsForReachNearTile(int x, int y, int destX, int destY)
@@ -1122,6 +1128,8 @@ namespace fastFuncts
 
 	int addAncillary(namedCharacter* character, ancillary* anc)
 	{
+		
+		
 		if (character == nullptr || anc == nullptr)return 0;
 
 		DWORD adr = 0;
@@ -1172,7 +1180,7 @@ namespace fastFuncts
 		return;
 	}
 
-	ancillary* findAncillary(char* ancName)
+	ancillary* findAncillary(const char* ancName)
 	{
 		if (ancName == nullptr)return 0;
 
@@ -1521,6 +1529,12 @@ namespace fastFuncts
 	}
 	general* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
 	{
+		if (portrait != nullptr && strlen(portrait) == 0)
+			portrait = nullptr;
+		if (name != nullptr && strlen(name) == 0)
+			name = nullptr;
+		if (name2 != nullptr && strlen(name2) == 0)
+			name2 = nullptr;
 		DWORD adrFunc = codes::offsets.createCharacterFunc;
 
 		general* gen = nullptr;
@@ -2085,6 +2099,10 @@ namespace fastFuncts
 	{
 		if (!faction)
 			return nullptr;
+		if (portrait != nullptr && strlen(portrait) == 0)
+			portrait = nullptr;
+		if (label != nullptr && strlen(label) == 0)
+			label = nullptr;
 		queue<std::pair<int, int>> q;
 		set<std::pair<int, int>> visited;
 		q.emplace(x, y);
@@ -2277,6 +2295,8 @@ namespace fastFuncts
 				call eax
 			}
 			delete spawnCoords;
+			if (army && label && label != "")
+				luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_label>(army->gen->genChar, std::string(label));
 			return army;
 		}
 		delete spawnCoords;

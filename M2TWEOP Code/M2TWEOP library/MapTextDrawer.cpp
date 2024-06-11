@@ -96,7 +96,7 @@ namespace MapTextDrawer
 		return MakeTextFont(fontName, weight.value_or(400), isItalic.value_or(1));
 	}
 
-	NOINLINE EOP_EXPORT void* MakeTextFont(const char* fontName, int weight, int isItalic)
+	void* MakeTextFont(const char* fontName, int weight, int isItalic)
 	{
 		if (fontName == nullptr)
 		{
@@ -121,13 +121,13 @@ namespace MapTextDrawer
 		return hFont;
 	}
 
-	NOINLINE EOP_EXPORT void DeleteTextFont(void* fontID)
+	void DeleteTextFont(void* fontID)
 	{
 		HFONT hFont = reinterpret_cast<HFONT>(fontID);
 		DeleteObject(hFont);
 	}
 
-	NOINLINE EOP_EXPORT Text3DDrawable* MakeText(void* fontID, const char* utf8Text)
+	Text3DDrawable* MakeText(void* fontID, const char* utf8Text)
 	{
 		if (utf8Text == nullptr)
 		{
@@ -161,7 +161,7 @@ namespace MapTextDrawer
 
 		return newText;
 	}
-	NOINLINE EOP_EXPORT void Delete3dText(Text3DDrawable* text)
+	void Delete3dText(Text3DDrawable* text)
 	{
 		if (text == nullptr)
 		{
@@ -172,7 +172,7 @@ namespace MapTextDrawer
 		text->textMesh->Release();
 		delete text;
 	}
-	NOINLINE EOP_EXPORT void ScaleText(Text3DDrawable* text, float scale)
+	void ScaleText(Text3DDrawable* text, float scale)
 	{
 		if (text == nullptr)
 		{
@@ -193,7 +193,7 @@ namespace MapTextDrawer
 
 		TextMesh->UnlockVertexBuffer();
 	}
-	NOINLINE EOP_EXPORT void SetDimensionsTextXYZ(Text3DDrawable* text, float scaleX, float scaleY, float scaleZ)
+	void SetDimensionsTextXYZ(Text3DDrawable* text, float scaleX, float scaleY, float scaleZ)
 	{
 		if (text == nullptr)
 		{
@@ -204,7 +204,7 @@ namespace MapTextDrawer
 		text->ySize = scaleY;
 		text->zSize = scaleZ;
 	}
-	NOINLINE EOP_EXPORT void SetRotationTextXYZ(Text3DDrawable* text, float rotX, float rotY, float rotZ)
+	void SetRotationTextXYZ(Text3DDrawable* text, float rotX, float rotY, float rotZ)
 	{
 		if (text == nullptr)
 		{
@@ -215,7 +215,7 @@ namespace MapTextDrawer
 		text->xRoll = rotY;
 		text->zRoll = rotZ;
 	}
-	NOINLINE EOP_EXPORT void ChangeTextColor(Text3DDrawable* text, unsigned char a, unsigned char r, unsigned char g, unsigned char b)
+	void ChangeTextColor(Text3DDrawable* text, unsigned char a, unsigned char r, unsigned char g, unsigned char b)
 	{
 		if (text == nullptr)
 		{
@@ -224,7 +224,7 @@ namespace MapTextDrawer
 
 		text->color = D3DCOLOR_ARGB(a, r, g, b);
 	}
-	NOINLINE EOP_EXPORT void SetTextDrawingCoords(Text3DDrawable* text, float x, float y, float z)
+	void SetTextDrawingCoords(Text3DDrawable* text, float x, float y, float z)
 	{
 		if (text == nullptr)
 		{
@@ -237,16 +237,16 @@ namespace MapTextDrawer
 	}
 
 
-	NOINLINE EOP_EXPORT void StartDrawingText(Text3DDrawable* text)
+	void StartDrawingText(Text3DDrawable* text)
 	{
 		text->isDrawOnce = false;
 		data.textForDrawing.push_back(text);
 	}
-	NOINLINE EOP_EXPORT void StopDrawingText(Text3DDrawable* text)
+	void StopDrawingText(Text3DDrawable* text)
 	{
 		data.textForDrawing.remove(text);
 	}
-	NOINLINE EOP_EXPORT void DrawingTextOnce(Text3DDrawable* text)
+	void DrawingTextOnce(Text3DDrawable* text)
 	{
 		text->isDrawOnce = true;
 		data.textForDrawing.push_back(text);

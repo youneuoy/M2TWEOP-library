@@ -1,6 +1,5 @@
 
 #include "realGameTypes.h"
-#include "fastFuncts.h"
 #include "functionsOffsets.h"
 #include "dataOffsets.h"
 #include "actionsStrat.h"

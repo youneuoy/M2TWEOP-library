@@ -6,8 +6,8 @@
 #include <memory>
 #include <random>
 
+#include "dataOffsets.h"
 #include "fastFuncts.h"
-#include "smallFuncs.h"
 
 namespace cultures
 {

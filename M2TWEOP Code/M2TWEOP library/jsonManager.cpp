@@ -1,6 +1,7 @@
 #include "jsonManager.h"
 #include "fastFunctsHelpers.h"
 #include "fastFuncts.h"
+#include "globals.h"
 
 namespace jsonManager
 {
@@ -9,7 +10,7 @@ namespace jsonManager
     {
         try
         {
-            std::string modPath = globals::dataS.modPatch;
+            std::string modPath = globals::dataS.modPath;
             string jsonPath = modPath + fpath;
             jsn::json json = fastFunctsHelpers::loadJsonFromFile(jsonPath);
             json[jsonKey]=jsonValue;

@@ -3,8 +3,7 @@
 #include <sstream> 
 
 #include "FastFuncts.h"
-#include "fastFunctsHelpers.h"
-#include "smallFuncs.h"
+#include "functionsOffsets.h"
 #include "unitActions.h"
 
 namespace eduFastFuncts

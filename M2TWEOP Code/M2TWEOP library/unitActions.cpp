@@ -2,23 +2,12 @@
 #include "unitActions.h"
 
 #include "battleHandlerHelpers.h"
+#include "dataOffsets.h"
 #include "fastFunctsHelpers.h"
 #include "functionsOffsets.h"
 
 namespace unitActions
 {
-    enum class formation
-    {
-        horde = 0,
-        column = 1,
-        square = 2,
-        wedge = 3,
-        phalanx = 5,
-        schiltrom = 6,
-        shieldWall = 7,
-        wall = 8,
-        movingThrough = 9,
-    };
 
     int getUnitFormation(const unit* unit)
     {
@@ -81,30 +70,6 @@ namespace unitActions
         fireGameScriptFunc(order.get(), codes::offsets.gameLogCommand);
         *flushRate = oldRate;
     }
-
-    enum aiGtaObjective : int
-    {
-        gtaObjective_INVALID = 0,
-        gtaObjective_MOVE_TO_POINT = 1,
-        gtaObjective_ATTACK_ENEMY_BATTLEGROUP = 2,
-        gtaObjective_DEFEND_TERRAIN_HILL = 3,
-        gtaObjective_DEFEND_TERRAIN_FOREST = 4,
-        gtaObjective_DEFEND_TERRAIN_AREA = 5,
-        gtaObjective_DEFEND_CROSSING = 6,
-        gtaObjective_ASSAULT_CROSSING = 7,
-        gtaObjective_DEFEND_LINE = 8,
-        gtaObjective_SCOUT = 9,
-        gtaObjective_WITHDRAW = 10,
-        gtaObjective_DEFEND_SETTLEMENT = 11,
-        gtaObjective_SUPPORT_DEFEND_SETTLEMENT = 12,
-        gtaObjective_ATTACK_SETTLEMENT = 13,
-        gtaObjective_SKIRMISH = 14,
-        gtaObjective_BOMBARD = 15,
-        gtaObjective_ATTACK_MODEL = 16,
-        gtaObjective_SALLY_OUT = 17,
-        gtaObjective_AMBUSH = 18,
-        gtaObjective_ERROR = 19,
-    };
 
     
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -396,10 +361,11 @@ namespace unitActions
         }
     };
     
-    void unitTurn(const unit* un, int16_t angle, bool isRelative)
+    void unitTurn(unit* un, int16_t angle, bool isRelative)
     {
         if (un == nullptr)
             return;
+        un->aiActiveSet = 2;
         const auto order = std::make_shared<unitOrderTurn>(un, angle, isRelative);
         fireGameScriptFunc(order.get(), codes::offsets.unitTurn);
     }
@@ -508,6 +474,8 @@ namespace unitActions
     {
         if (group == nullptr)
             return;
+        if (!battleHandlerHelpers::inBattle())
+            return;
         const auto order = std::make_shared<groupChangeUnitFormation>(group, formationType);
         fireGameScriptFunc(order.get(), codes::offsets.groupUnitChangeFormation);
     }
@@ -532,6 +500,8 @@ namespace unitActions
     void moveToRangeOfGroup(const unitGroup* group, const unitGroup* targetGroup, bool run)
     {
         if (group == nullptr)
+            return;
+        if (!battleHandlerHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupMoveToRangeOfGroup>(group, targetGroup, run);
         fireGameScriptFunc(order.get(), codes::offsets.groupMoveToRangeOfGroup);
@@ -558,6 +528,8 @@ namespace unitActions
     {
         if (group == nullptr || targetUnit == nullptr)
             return;
+        if (!battleHandlerHelpers::inBattle())
+            return;
         const auto order = std::make_shared<groupMoveToRangeOfUnit>(group, targetUnit, run);
         fireGameScriptFunc(order.get(), codes::offsets.groupMoveToRangeOfUnit);
     }
@@ -583,6 +555,8 @@ namespace unitActions
     {
         if (group == nullptr || targetGroup == nullptr)
             return;
+        if (!battleHandlerHelpers::inBattle())
+            return;
         const auto order = std::make_shared<groupOrderAttackGroup>(group, targetGroup, run);
         fireGameScriptFunc(order.get(), codes::offsets.groupAttackGroup);
     }
@@ -602,6 +576,8 @@ namespace unitActions
     void groupHalt(const unitGroup* group)
     {
         if (group == nullptr)
+            return;
+        if (!battleHandlerHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupOrderHalt>(group);
         fireGameScriptFunc(order.get(), codes::offsets.groupHalt);
@@ -630,6 +606,8 @@ namespace unitActions
     {
         if (group == nullptr)
             return;
+        if (!battleHandlerHelpers::inBattle())
+            return;
         const auto order = std::make_shared<groupOrderMoveFormed>(group, xCoord, yCoord, run);
         fireGameScriptFunc(order.get(), codes::offsets.groupMoveFormed);
     }
@@ -657,6 +635,8 @@ namespace unitActions
     {
         if (group == nullptr)
             return;
+        if (!battleHandlerHelpers::inBattle())
+            return;
         const auto order = std::make_shared<groupOrderMoveUnformed>(group, xCoord, yCoord, run);
         fireGameScriptFunc(order.get(), codes::offsets.groupMoveUnformed);
     }
@@ -682,6 +662,8 @@ namespace unitActions
     {
         if (group == nullptr)
             return;
+        if (!battleHandlerHelpers::inBattle())
+            return;
         const auto order = std::make_shared<groupOrderRelativeMoveFormed>(group, xCoord, yCoord, run);
         fireGameScriptFunc(order.get(), codes::offsets.groupRelativeMoveFormed);
     }
@@ -706,6 +688,8 @@ namespace unitActions
     void groupMoveUnformedRelative(const unitGroup* group, float xCoord, float yCoord, bool run)
     {
         if (group == nullptr)
+            return;
+        if (!battleHandlerHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupOrderRelativeMoveUnformed>(group, xCoord, yCoord, run);
         fireGameScriptFunc(order.get(), codes::offsets.groupRelativeMoveUnformed);
@@ -734,7 +718,24 @@ namespace unitActions
     {
         if (group == nullptr)
             return;
+        if (!battleHandlerHelpers::inBattle())
+            return;
         const auto order = std::make_shared<groupOrderTurn>(group, angle, isRelative);
         fireGameScriptFunc(order.get(), codes::offsets.groupTurn);
+    }
+    
+    void collectEngine(unit* un, siegeEngine* engine)
+    {
+        if (!battleHandlerHelpers::inBattle())
+            return;
+        if (!un || !engine || un->eduEntry->Category != 0)
+            return;
+        haltUnit(un);
+        un->aiActiveSet = 2;
+        un->unitPositionData->targetArray[0].siegeEngine = engine;
+        un->unitPositionData->targetArray[0].actionType = static_cast<int>(unitActionType::unitCollectEngine);
+        un->unitPositionData->isHalted = 0;
+        un->unitPositionData->hasTargets = 1;
+        un->unitPositionData->targetsToGo = 1;
     }
 }

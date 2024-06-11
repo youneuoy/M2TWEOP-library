@@ -4,6 +4,7 @@
 //@module LuaPlugin
 //@author youneuoy
 //@license GPL-3.0
+#include "AsmJit.h"
 #include "luaP.h"
 #include "plugData.h"
 void luaP::onPluginLoadF()
@@ -3289,6 +3290,6 @@ void luaP::onPluginLoadF()
 
 	if (onPluginLoad != nullptr)
 	{
-		tryLua((*onPluginLoad)());
+		tryLua((*onPluginLoad)())
 	}
 }

@@ -21,22 +21,5 @@ namespace stackStructHelpers
 	unit* createEOPUnit(stackStruct* army,int typeIDX, int exp, int arm, int weap);
 	void mergeArmies(stackStruct* army, stackStruct* targetArmy, bool force = true);
 	void mergeArmies(stackStruct* army, stackStruct* targetArmy);
-	stackStruct* spawnArmy(
-		factionStruct* faction,
-		const char* name,
-		const char* name2,
-		int characterType,
-		const char* label,
-		const char* portrait,
-		int x,
-		int y,
-		int age,
-		bool family,
-		int subFaction,
-		int unitIndex,
-		int exp,
-		int wpn,
-		int armour
-		);
 };
 

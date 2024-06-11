@@ -1,4 +1,8 @@
 #include "m2tweopTile.h"
+#include "FastFuncts.h" 
+#include "globals.h"
+
+#include "techFuncs.h"
 
 void m2tweopTile::buildTile(int x, int y)
 {

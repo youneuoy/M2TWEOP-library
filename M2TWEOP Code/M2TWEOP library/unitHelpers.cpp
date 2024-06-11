@@ -1,15 +1,19 @@
 #include "unitHelpers.h"
 
 #include "battleHandlerHelpers.h"
+#include "FastFuncts.h"
 #include "gameDataAllHelper.h"
 #include "plugData.h"
 #include "smallFuncs.h"
+#include "technicalHelpers.h"
 
 namespace unitHelpers
 {
 	std::unordered_map<int, const char*> actionTypes = {
 		{0,"idling"},
 		{1,"hiding"},
+		{2,"taunting"},
+		{3,"celebrating"},
 		{4,"ready"},
 		{5,"reforming"},
 		{6,"moving"},
@@ -22,15 +26,14 @@ namespace unitHelpers
 		{13,"routing"},
 		{14,"fighting_backs_to_the_walls"},
 		{15,"running_amok"},
-		{23,"infighting"},
 		{16,"go_berserk"},
 		{17,"rallying"},
 		{18,"dead"},
 		{19,"leaving_battle"},
 		{20,"entering_battle"},
 		{21,"left_battle"},
-		{2,"taunting"},
-		{24,"bracing"},
+		{22,"bracing"},
+		{23,"infighting"},
 	};
 	int getExp(unit* un)
 	{
@@ -46,7 +49,7 @@ namespace unitHelpers
 	}
 	void setarmourLVL(unit* un, int lvl)
 	{
-		(*(*plugData::data.funcs.setUnitParams))(un, un->SoldierCountStrat, un->expScreen, lvl, getweaponLVL(un));
+		fastFuncts::setUnitParams(un, un->SoldierCountStrat, un->expScreen, lvl, getweaponLVL(un));
 	}
 	int getweaponLVL(unit* un)
 	{
@@ -54,13 +57,21 @@ namespace unitHelpers
 	}
 	void setweaponLVL(unit* un, int lvl)
 	{
-		(*(*plugData::data.funcs.setUnitParams))(un, un->SoldierCountStrat, un->expScreen, getarmourLVL(un), lvl);
+		fastFuncts::setUnitParams(un, un->SoldierCountStrat, un->expScreen, getarmourLVL(un), lvl);
+	}
+	
+	groupLabels* getGroupLabels()
+	{
+		DWORD offset = 0x01B60580;
+		if (smallFuncs::getGameVersion() == 1)
+			offset = 0x001BA96A0;
+		return reinterpret_cast<groupLabels*>(offset);
 	}
 	
 	int getMaxSoldiersCount(unit* un)
 	{
 
-		int sizeMul=m2tweopHelpers::GetUnitSize();
+		int sizeMul = smallFuncs::GetUnitSize();
 
 		float mul = 2.5f;
 		switch (sizeMul)
@@ -85,22 +96,9 @@ namespace unitHelpers
 		}
 		return static_cast<int>(un->eduEntry->SoldierCount) * mul;
 	}
-	void setMovepoints(unit* un, float movepoints)
-	{
-		(*(*plugData::data.funcs.setUnitMovepoints))(un, movepoints);
-
-	}
-	void setSoldiersCount(unit* un, int number)
-	{
-		(*(*plugData::data.funcs.setSoldiersCount))(un, number);
-	}
-	void killUnit(unit* un)
-	{
-		(*(*plugData::data.funcs.killUnit))(un);
-	}
 	void setUnitParams(unit* un, int exp, int armor, int weap)
 	{
-		(*(*plugData::data.funcs.setUnitParams))(un, un->SoldierCountStrat, exp, armor, weap);
+		fastFuncts::setUnitParams(un, un->SoldierCountStrat, exp, armor, weap);
 	}
 	float getMovepoints(const unit* un)
 	{
@@ -114,7 +112,6 @@ namespace unitHelpers
 	{
 		un->unitMorale.moraleLevel = level;
 	}
-
 	int16_t angleFloatToShort(float angle)
 	{
 		return static_cast<int16_t>(angle * 182.044432904376f);
@@ -236,12 +233,10 @@ namespace unitHelpers
 	unitGroup* getGroupByLabel(const char* label)
 	{
 		DWORD funcOffset = 0x00A931C0;
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			funcOffset = 0x00A945C0;
 		
-		DWORD groupLabels = 0x01B60580;
-		if (m2tweopHelpers::getGameVersion() == 1)
-			groupLabels = 0x001BA96A0;
+		auto groupLabels = getGroupLabels();
 		
 		stringWithHash* labelHash = new stringWithHash();
 		luaGetSetFuncs::setGameString(reinterpret_cast<char*>(labelHash), label);
@@ -258,14 +253,14 @@ namespace unitHelpers
 		return *group;
 	}
 
+	
+
 	const char* getGroupLabel(const unitGroup* group)
 	{
 		if (!group)
 			return "";
-		
-		auto allLabels = reinterpret_cast<groupLabels*>(0x01B60580);
-		if (m2tweopHelpers::getGameVersion() == 1)
-			allLabels = reinterpret_cast<groupLabels*>(0x001BA96A0);
+
+		const auto allLabels = getGroupLabels();
 		
 		for (int i = 0; i < allLabels->count; i++)
 		{
@@ -310,7 +305,7 @@ namespace unitHelpers
 		if (!group)
 			return;
 		DWORD funcAddr = 0x00721B50;
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			funcAddr = 0x00721410;
 		_asm
 		{
@@ -365,7 +360,7 @@ namespace unitHelpers
 		coords[0] = xCoord;
 		coords[1] = yCoord;
 		DWORD funcAddr = 0x0071E620;
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			funcAddr = 0x0071DEE0;
 		int16_t pushAngle = (angle * 0.017453292) * 10430.378;
 		_asm
@@ -381,82 +376,12 @@ namespace unitHelpers
 		delete[] coords;
 	}
 
-	void changeGroupUnitFormation(const unitGroup* group, int formationType)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		(*(*plugData::data.funcs.changeGroupUnitFormation))(group, formationType);
-	}
-
-	void moveToRangeOfGroup(const unitGroup* group, const unitGroup* targetGroup, bool run)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		(*(*plugData::data.funcs.moveToRangeOfGroup))(group, targetGroup, run);
-	}
-
-	void moveGroupToRangeOfUnit(const unitGroup* group, const unit* targetUnit, bool run)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		(*(*plugData::data.funcs.moveGroupToRangeOfUnit))(group, targetUnit, run);
-	}
-
-	void groupAttackGroup(const unitGroup* group, const unitGroup* targetGroup, bool run)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		(*(*plugData::data.funcs.groupAttackGroup))(group, targetGroup, run);
-	}
-
-	void groupHalt(const unitGroup* group)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		(*(*plugData::data.funcs.groupHalt))(group);
-	}
-
-	void groupMoveFormed(const unitGroup* group, float xCoord, float yCoord, bool run)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		(*(*plugData::data.funcs.groupMoveFormed))(group, xCoord, yCoord, run);
-	}
-
-	void groupMoveUnformed(const unitGroup* group, float xCoord, float yCoord, bool run)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		(*(*plugData::data.funcs.groupMoveUnformed))(group, xCoord, yCoord, run);
-	}
-
-	void groupMoveFormedRelative(const unitGroup* group, float xCoord, float yCoord, bool run)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		(*(*plugData::data.funcs.groupMoveFormedRelative))(group, xCoord, yCoord, run);
-	}
-
-	void groupMoveUnformedRelative(const unitGroup* group, float xCoord, float yCoord, bool run)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		(*(*plugData::data.funcs.groupMoveUnformedRelative))(group, xCoord, yCoord, run);
-	}
-
-	void groupTurn(const unitGroup* group, int16_t angle, bool isRelative)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		(*(*plugData::data.funcs.groupTurn))(group, angle, isRelative);
-	}
-
 	void undefineUnitGroup(const unitGroup* group)
 	{
 		if (!group)
 			return;
 		DWORD clearUnitGroup = 0x0071ECD0;
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			clearUnitGroup = 0x0071E590;
 		_asm
 		{
@@ -468,19 +393,18 @@ namespace unitHelpers
 		if (label != "")
 		{
 			DWORD removeUnusedLabel = 0x00A93380;
-			if (m2tweopHelpers::getGameVersion() == 1)
+			if (smallFuncs::getGameVersion() == 1)
 				removeUnusedLabel = 0x00A92320;
 			
-			DWORD groupLabels = 0x01B60580;
-			if (m2tweopHelpers::getGameVersion() == 1)
-				groupLabels = 0x001BA96A0;
+			
+			auto labels = getGroupLabels();
 			
 			stringWithHash* labelHash = new stringWithHash();
 			luaGetSetFuncs::setGameString(reinterpret_cast<char*>(labelHash), label);
 			_asm
 			{
 				push labelHash
-				mov ecx, groupLabels
+				mov ecx, labels
 				mov eax, removeUnusedLabel
 				call eax
 			}
@@ -505,12 +429,10 @@ namespace unitHelpers
 			return nullptr;
 		
 		DWORD funcOffset = 0x00A92C30;
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			funcOffset = 0x00A91BD0;
 		
-		DWORD groupLabels = 0x01B60580;
-		if (m2tweopHelpers::getGameVersion() == 1)
-			groupLabels = 0x001BA96A0;
+		auto labels = getGroupLabels();
 		
 		stringWithHash* labelHash = new stringWithHash();
 		luaGetSetFuncs::setGameString(reinterpret_cast<char*>(labelHash), label);
@@ -519,7 +441,7 @@ namespace unitHelpers
 		{
 			push groupPtr
 			push labelHash
-			mov ecx, groupLabels
+			mov ecx, labels
 			mov eax, funcOffset
 			call eax
 		}
@@ -596,64 +518,6 @@ namespace unitHelpers
 		return CallVFunc<186, int>(un);
 	}
 
-	int getUnitFormation(const unit* unit)
-	{
-		return (*(*plugData::data.funcs.getUnitFormation))(unit);
-	}
-
-	unit* getUnitByLabel(const char* label)
-	{
-		return (*(*plugData::data.funcs.getUnitByLabel))(label);
-	}
-	
-	void deployStakes(const unit* unit)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		(*(*plugData::data.funcs.deployStakes))(unit);
-	}
-
-	void haltUnit(const unit* unit)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		(*(*plugData::data.funcs.haltUnit))(unit);
-	}
-
-	void changeUnitFormation(const unit* unit, int formationType)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		(*(*plugData::data.funcs.changeUnitFormation))(unit, formationType);
-	}
-
-	float getBattleMapHeight(float xCoord, float yCoord)
-	{
-		return (*(*plugData::data.funcs.getBattleMapHeight))(xCoord, yCoord);
-	}
-
-	void unitTurn(unit* un, int16_t angle, bool isRelative)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		un->aiActiveSet = 2;
-		(*(*plugData::data.funcs.unitTurn))(un, angle, isRelative);
-	}
-
-	void taunt(const unit* un)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		(*(*plugData::data.funcs.taunt))(un);
-	}
-
-	void useSpecialAbility(const unit* un)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		(*(*plugData::data.funcs.useSpecialAbility))(un);
-	}
-
 	unit* getNearbyUnit(const unit* unit, const int index)
 	{
 		if (index < 0 || index >= unit->nearbyFriendlyUnitsNum)
@@ -680,14 +544,6 @@ namespace unitHelpers
 		return un->siegeEngine[index];
 	}
 
-	void attackBuilding(unit* un, buildingBattle* building)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		un->aiActiveSet = 2;
-		(*(*plugData::data.funcs.attackBuilding))(un, building);
-	}
-
 	void releaseUnit(unit* un)
 	{
 		if (!battleHandlerHelpers::inBattle())
@@ -711,20 +567,5 @@ namespace unitHelpers
 		if (un->eduEntry->Category != 0 && un->eduEntry->Category != 2)
 			return 0;
 		return un->siegeEnNum;
-	}
-
-	void collectEngine(unit* un, siegeEngine* engine)
-	{
-		if (!battleHandlerHelpers::inBattle())
-			return;
-		if (!un || !engine || un->eduEntry->Category != 0)
-			return;
-		haltUnit(un);
-		un->aiActiveSet = 2;
-		un->unitPositionData->targetArray[0].siegeEngine = engine;
-		un->unitPositionData->targetArray[0].actionType = static_cast<int>(unitActionType::unitCollectEngine);
-		un->unitPositionData->isHalted = 0;
-		un->unitPositionData->hasTargets = 1;
-		un->unitPositionData->targetsToGo = 1;
 	}
 }

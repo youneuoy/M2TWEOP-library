@@ -1,5 +1,6 @@
 #include "siegeHelpers.h"
-#include "plugData.h"
+
+#include "gameHelpers.h"
 
 settlementStruct* siegeHelpers::getSiegedSettlement(siegeS* siege)
 {

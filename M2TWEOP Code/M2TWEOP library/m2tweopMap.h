@@ -1,17 +1,6 @@
 #pragma once
-#include <string>
 #include <vector>
-#include <windows.h>
-#include "FastFuncts.h" 
-#include "eventsCodes.h" 
-#include "globals.h"
-
-#include "techFuncs.h"
-#include "fastFuncts.h"
-#include "imgui.h"
-#include <d3d9.h>
-#include <sstream>
-#include "realGameTypes.h"
+#include "imgui/imgui.h"
 
 #include "m2tweopTile.h"
 using namespace std;

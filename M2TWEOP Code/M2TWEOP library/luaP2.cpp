@@ -5,10 +5,14 @@
 //@author youneuoy
 //@license GPL-3.0
 #include "luaP.h"
-#include "plugData.h"
 #include "gameDataAllHelper.h"
 #include "battleHandlerHelpers.h"
+#include "gameHelpers.h"
+#include "gameSTDUIHelpers.h"
+#include "m2tweopHelpers.h"
 #include "smallFuncs.h"
+#include "unitActions.h"
+#include "unitHelpers.h"
 
 
 void luaP::initCampaign()
@@ -790,7 +794,7 @@ void luaP::initCampaign()
 	local campaign=gameDataAll.get().campaignStruct;
 	local unitSize=campaign:GetUnitSize();
 	*/
-	typeAll.campaignTable.set_function("GetUnitSize", &m2tweopHelpers::GetUnitSize);
+	typeAll.campaignTable.set_function("GetUnitSize", &smallFuncs::GetUnitSize);
 	/***
 	Get fort by index.
 	@function campaignStruct:getFort
@@ -1989,7 +1993,7 @@ void luaP::initP2()
 	@usage
 	local unit = BATTLE.getUnitByLabel("a1u1");
 	*/
-	typeAll.battleTable.set_function("getUnitByLabel", &unitHelpers::getUnitByLabel);
+	typeAll.battleTable.set_function("getUnitByLabel", &unitActions::getUnitByLabel);
 	/***
 	Get a group by it's label.
 	@function battleStruct.getGroupByLabel
@@ -2009,7 +2013,7 @@ void luaP::initP2()
 	@usage
 	local unit = BATTLE.getBattleMapHeight(10,20);
 	*/
-	typeAll.battleTable.set_function("getBattleMapHeight", &unitHelpers::getBattleMapHeight);
+	typeAll.battleTable.set_function("getBattleMapHeight", &unitActions::getBattleMapHeight);
 	
 	/***
 	Get battlefield engines.

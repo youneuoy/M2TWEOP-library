@@ -146,9 +146,9 @@ namespace fbxModels
 		data.currDevice = device;
 	}
 
-	NOINLINE EOP_EXPORT bool addFbxModel(const char* path, const char* texture, int modelID)
+	bool addFbxModel(const char* path, const char* texture, int modelID)
 	{
-		std::string fPath = globals::dataS.modPatch;
+		std::string fPath = globals::dataS.modPath;
 		fPath += "\\eopData\\shaders\\skinned.fx";
 
 
@@ -160,7 +160,7 @@ namespace fbxModels
 		return true;
 	}
 	
-	NOINLINE EOP_EXPORT void* getFbxModel(int modelID)
+	void* getFbxModel(int modelID)
 	{
 		for (SingleFbxMesh* mod : data.models)
 		{
@@ -173,7 +173,7 @@ namespace fbxModels
 		return nullptr;
 	}
 
-	NOINLINE EOP_EXPORT bool deleteFbxModel(int modelID)
+	bool deleteFbxModel(int modelID)
 	{
 		for (auto& object : data.objects)
 		{
@@ -200,7 +200,7 @@ namespace fbxModels
 		return true;
 	}
 
-	NOINLINE EOP_EXPORT void* addFbxObject(int modelID, int objectID)
+	void* addFbxObject(int modelID, int objectID)
 	{
 		SingleFbxMesh* model = (SingleFbxMesh*)getFbxModel(modelID);
 
@@ -218,7 +218,7 @@ namespace fbxModels
 		return getFbxObject(objectID);
 	}
 
-	NOINLINE EOP_EXPORT bool deleteFbxObject(void* object)
+	bool deleteFbxObject(void* object)
 	{
 		for (auto& objectT : data.objects)
 		{
@@ -233,7 +233,7 @@ namespace fbxModels
 		return true;
 	}
 
-	NOINLINE EOP_EXPORT void* getFbxObject(int objectID)
+	void* getFbxObject(int objectID)
 	{
 		for (fbxObject* obj : data.objects)
 		{
@@ -246,68 +246,68 @@ namespace fbxModels
 		return nullptr;
 	}
 
-	NOINLINE EOP_EXPORT void setFbxObjectCoords(void* object, float* coords)
+	void setFbxObjectCoords(void* object, float* coords)
 	{
 		fbxObject* currObject = reinterpret_cast<fbxObject*>(object);
 		currObject->setCoords(coords);
 	}
 
-	NOINLINE EOP_EXPORT float* getFbxObjectCoords(void* object)
+	float* getFbxObjectCoords(void* object)
 	{
 		fbxObject* currObject = reinterpret_cast<fbxObject*>(object);
 
 		return currObject->getCoords();
 	}
 
-	NOINLINE EOP_EXPORT void setFbxObjectSize(void* object, float size)
+	void setFbxObjectSize(void* object, float size)
 	{
 		fbxObject* currObject = reinterpret_cast<fbxObject*>(object);
 
 		currObject->setSize(size);
 	}
 
-	NOINLINE EOP_EXPORT float getFbxObjectSize(void* object)
+	float getFbxObjectSize(void* object)
 	{
 		fbxObject* currObject = reinterpret_cast<fbxObject*>(object);
 
 		return currObject->getSize();
 	}
 
-	NOINLINE EOP_EXPORT void setFbxObjectDrawState(void* object, bool isDrawNeed)
+	void setFbxObjectDrawState(void* object, bool isDrawNeed)
 	{
 		fbxObject* currObject = reinterpret_cast<fbxObject*>(object);
 
 		currObject->setDrawState(isDrawNeed);
 	}
 
-	NOINLINE EOP_EXPORT bool getFbxObjectDrawState(void* object)
+	bool getFbxObjectDrawState(void* object)
 	{
 		fbxObject* currObject = reinterpret_cast<fbxObject*>(object);
 
 		return currObject->getDrawState();
 	}
 
-	NOINLINE EOP_EXPORT void setFbxObjectAnimState(void* object, bool isAnimate)
+	void setFbxObjectAnimState(void* object, bool isAnimate)
 	{
 		fbxObject* currObject = reinterpret_cast<fbxObject*>(object);
 
 		currObject->setAnimate(isAnimate);
 	}
 
-	NOINLINE EOP_EXPORT bool getFbxObjectAnimState(void* object)
+	bool getFbxObjectAnimState(void* object)
 	{
 		fbxObject* currObject = reinterpret_cast<fbxObject*>(object);
 
 		return currObject->getAnimate();
 	}
 
-	NOINLINE EOP_EXPORT int getFbxObjectDrawType(void* object)
+	int getFbxObjectDrawType(void* object)
 	{
 		fbxObject* currObject = reinterpret_cast<fbxObject*>(object);
 
 		return currObject->getType();
 	}
-	NOINLINE EOP_EXPORT void setFbxObjectDrawType(void* object, int drawType)
+	void setFbxObjectDrawType(void* object, int drawType)
 	{
 		fbxObject* currObject = reinterpret_cast<fbxObject*>(object);
 

@@ -5,6 +5,10 @@
 #include "smallFuncs.h"
 
 #include <cstdio>
+
+#include "dataOffsets.h"
+#include "functionsOffsets.h"
+
 namespace eopBuildings
 {
 	struct eopBuildEntry
@@ -28,7 +32,7 @@ namespace eopBuildings
 		vector<eopBuildEntry>eopEdb;
 	}data;
 
-	NOINLINE EOP_EXPORT edbEntry* addEopBuildEntry(edbEntry* oldEntry, int newIndex)
+	edbEntry* addEopBuildEntry(edbEntry* oldEntry, int newIndex)
 	{
 		if (getEopBuildEntry(newIndex)) //dont overwrite existing entries
 		{
@@ -52,7 +56,7 @@ namespace eopBuildings
 		return eopentry;
 	}
 
-	NOINLINE EOP_EXPORT void addCaps(buildingLevel* eoplevel, buildingLevel* oldlevel, int lvlidx)
+	void addCaps(buildingLevel* eoplevel, buildingLevel* oldlevel, int lvlidx)
 	{
 		if (oldlevel->capabilities == nullptr)
 		{
@@ -74,7 +78,7 @@ namespace eopBuildings
 
 	}
 
-	NOINLINE EOP_EXPORT void addPools(buildingLevel* eoplevel, buildingLevel* oldlevel, int lvlidx)
+	void addPools(buildingLevel* eoplevel, buildingLevel* oldlevel, int lvlidx)
 	{
 		if (oldlevel->recruitPools == nullptr)
 		{
@@ -97,7 +101,7 @@ namespace eopBuildings
 	}
 
 	//get data from an existing eop build entry, in edbentry format
-	NOINLINE EOP_EXPORT edbEntry* getEopBuildEntry(int idx)
+	edbEntry* getEopBuildEntry(int idx)
 	{
 		for (eopBuildEntry& entry : data.eopEdb)
 		{
@@ -111,7 +115,7 @@ namespace eopBuildings
 	}
 
 	//unique per culture!
-	NOINLINE EOP_EXPORT void setBuildingPic(edbEntry* entry, const char* newPic, int level, int cultureID)
+	void setBuildingPic(edbEntry* entry, const char* newPic, int level, int cultureID)
 	{
 		buildingLevel* eoplevel = &entry->buildingLevel[level];
 
@@ -119,7 +123,7 @@ namespace eopBuildings
 	}
 
 	//unique per culture!
-	NOINLINE EOP_EXPORT void setBuildingPicConstructed(edbEntry* entry, const char* newPic, int level, int cultureID)
+	void setBuildingPicConstructed(edbEntry* entry, const char* newPic, int level, int cultureID)
 	{
 		buildingLevel* eoplevel = &entry->buildingLevel[level];
 
@@ -127,7 +131,7 @@ namespace eopBuildings
 	}
 
 	//unique per culture!
-	NOINLINE EOP_EXPORT void setBuildingPicConstruction(edbEntry* entry, const char* newPic, int level, int cultureID)
+	void setBuildingPicConstruction(edbEntry* entry, const char* newPic, int level, int cultureID)
 	{
 		buildingLevel* eoplevel = &entry->buildingLevel[level];
 
@@ -135,7 +139,7 @@ namespace eopBuildings
 	}
 
 	//unique per faction!
-	NOINLINE EOP_EXPORT void setBuildingLocalizedName(edbEntry* entry, const char* newName, int level, int facnum)
+	void setBuildingLocalizedName(edbEntry* entry, const char* newName, int level, int facnum)
 	{
 		UNICODE_STRING*** nameMem = new UNICODE_STRING**;
 
@@ -146,7 +150,7 @@ namespace eopBuildings
 	}
 
 	//unique per faction!
-	NOINLINE EOP_EXPORT void setBuildingLocalizedDescr(edbEntry* entry, const char* newName, int level, int facnum)
+	void setBuildingLocalizedDescr(edbEntry* entry, const char* newName, int level, int facnum)
 	{
 		UNICODE_STRING*** nameMem = new UNICODE_STRING**;
 		buildingLevel* eoplevel = &entry->buildingLevel[level];
@@ -157,7 +161,7 @@ namespace eopBuildings
 	}
 
 	//unique per faction!
-	NOINLINE EOP_EXPORT void setBuildingLocalizedDescrShort(edbEntry* entry, const char* newName, int level, int facnum)
+	void setBuildingLocalizedDescrShort(edbEntry* entry, const char* newName, int level, int facnum)
 	{
 		UNICODE_STRING*** nameMem = new UNICODE_STRING**;
 		buildingLevel* eoplevel = &entry->buildingLevel[level];
@@ -168,7 +172,7 @@ namespace eopBuildings
 	}
 
 	//add new building capability, bonus refers to bonus keyboard in edb
-	NOINLINE EOP_EXPORT void addBuildingCapability(edbEntry* entry, int level, int capability, int16_t value, bool bonus)
+	void addBuildingCapability(edbEntry* entry, int level, int capability, int16_t value, bool bonus)
 	{
 		DWORD funcPointer = (DWORD)0x008A955B; //I dont think this does anything but not 100% sure, havent checked disk version as I do not think this is needed
 		DWORD EDBpointer = dataOffsets::offsets.edbDataStart; //for some reason this is included, not sure if needed
@@ -199,7 +203,7 @@ namespace eopBuildings
 
 	}
 
-	NOINLINE EOP_EXPORT void addBuildingPool(edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp, const char* condition)
+	void addBuildingPool(edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp, const char* condition)
 	{
 		recruitPool* pool = reinterpret_cast<recruitPool*>(fastFuncts::allocateGameMem(0x20));
 		buildingLevel* eoplevel = &entry->buildingLevel[level];
@@ -230,7 +234,7 @@ namespace eopBuildings
 	}
 
 
-	NOINLINE EOP_EXPORT void removeBuildingCapability(edbEntry* entry, int level, int index)
+	void removeBuildingCapability(edbEntry* entry, int level, int index)
 	{
 		buildingLevel* eoplevel = &entry->buildingLevel[level];
 		BuildingLvlCapability* cap = eoplevel->capabilities;
@@ -270,7 +274,7 @@ namespace eopBuildings
 		}
 	}
 
-	NOINLINE EOP_EXPORT void removeBuildingPool(edbEntry* entry, int level, int index)
+	void removeBuildingPool(edbEntry* entry, int level, int index)
 	{
 		buildingLevel* eoplevel = &entry->buildingLevel[level];
 		recruitPool* pool = eoplevel->recruitPools;
@@ -289,21 +293,20 @@ namespace eopBuildings
 			return;
 		}
 		int i = 0;
-		recruitPool* prevpool = pool;
 		while (pool != nullptr)
 		{
 			i++;
-			prevpool = pool;
+			recruitPool* prevPool = pool;
 			pool = pool->nextPool;
 			if (index == i)
 			{
 				if (pool->nextPool != nullptr)
 				{
-					prevpool->nextPool = pool->nextPool;
+					prevPool->nextPool = pool->nextPool;
 				}
 				else
 				{
-					prevpool->nextPool = nullptr;
+					prevPool->nextPool = nullptr;
 				}
 				pool = nullptr;
 				return;
@@ -312,7 +315,7 @@ namespace eopBuildings
 	}
 
 	//get a capability to change some of its attributes or check them, like to remove it
-	NOINLINE EOP_EXPORT BuildingLvlCapability* getBuildingCapability(edbEntry* entry, int level, int index)
+	BuildingLvlCapability* getBuildingCapability(edbEntry* entry, int level, int index)
 	{
 		buildingLevel* eoplevel = &entry->buildingLevel[level];
 		BuildingLvlCapability* cap = eoplevel->capabilities;
@@ -338,7 +341,7 @@ namespace eopBuildings
 		return nullptr;
 	}
 
-	NOINLINE EOP_EXPORT recruitPool* getBuildingPool(edbEntry* entry, int level, int index)
+	recruitPool* getBuildingPool(edbEntry* entry, int level, int index)
 	{
 		buildingLevel* eoplevel = &entry->buildingLevel[level];
 		recruitPool* pool = eoplevel->recruitPools;
@@ -365,7 +368,7 @@ namespace eopBuildings
 	}
 
 	//get amount of capabilities, useful for iteration
-	NOINLINE EOP_EXPORT int getBuildingCapabilityNum(edbEntry* entry, int level)
+	int getBuildingCapabilityNum(edbEntry* entry, int level)
 	{
 		if (entry == nullptr)
 		{
@@ -388,7 +391,7 @@ namespace eopBuildings
 	}
 
 	//get amount of pools, useful for iteration
-	NOINLINE EOP_EXPORT int getBuildingPoolNum(edbEntry* entry, int level)
+	int getBuildingPoolNum(edbEntry* entry, int level)
 	{
 		if (entry == nullptr)
 		{
@@ -411,7 +414,7 @@ namespace eopBuildings
 	}
 
 	//not sure how useful this function is, basically just combines creating a building with switching its entry to eop building
-	NOINLINE EOP_EXPORT void createEOPBuilding(settlementStruct* sett, int edbIdx, int level)
+	void createEOPBuilding(settlementStruct* sett, int edbIdx, int level)
 	{
 		edbEntry* entry = getEopBuildEntry(edbIdx);
 		buildingLevel* eoplevel = &entry->buildingLevel[level];
@@ -421,27 +424,26 @@ namespace eopBuildings
 	}
 
 	//get a building entry by its name, very useful to change some of the edb building attributes dynamically, does not save!
-	NOINLINE EOP_EXPORT edbEntry* getBuildingByName(const char* name)
+	edbEntry* getBuildingByName(const char* name)
 	{
-		exportDescrBuildings* edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
-		buildingListPointer* buildingsptr = &edb->buildingsList;
-		int buildingNum = 0;
-		while (buildingsptr != nullptr)
+		const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
+		const buildingListPointer* buildingsPtr = &edb->buildingsList;
+		while (buildingsPtr != nullptr)
 		{
-			buildingNum = buildingsptr->arrayCount;
+			const int buildingNum = buildingsPtr->arrayCount;
 			for (int i = 0; i < buildingNum; i++)
 			{
-				if (strcmp(buildingsptr->buildingsArray->buildings[i].type, name) == 0)
+				if (strcmp(buildingsPtr->buildingsArray->buildings[i].type, name) == 0)
 				{
-					return &buildingsptr->buildingsArray->buildings[i];
+					return &buildingsPtr->buildingsArray->buildings[i];
 				}
 			}
-			buildingsptr = buildingsptr->nextBuildingsListPointer;
+			buildingsPtr = buildingsPtr->nextBuildingsListPointer;
 		}
 		return nullptr;
 	}
 
-	NOINLINE EOP_EXPORT edbEntry* getBuildingByID(int id)
+	edbEntry* getBuildingByID(int id)
 	{
 		const auto* edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
 		const buildingListPointer* buildingsPointer = &edb->buildingsList;

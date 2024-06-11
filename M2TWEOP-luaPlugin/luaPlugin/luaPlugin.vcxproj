@@ -156,7 +156,7 @@
       <PreprocessorDefinitions>_DEBUG;PLUGINM2TWEOP_EXPORTS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_CRT_SECURE_NO_WARNINGS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(_ZVcpkgCurrentInstalledDir)include;../../M2TWEOP Code/M2TWEOP Common/;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(_ZVcpkgCurrentInstalledDir)include;../../M2TWEOP Code/M2TWEOP library/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -173,7 +173,7 @@
       <PreprocessorDefinitions>NDEBUG;PLUGINM2TWEOP_EXPORTS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_CRT_SECURE_NO_WARNINGS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(_ZVcpkgCurrentInstalledDir)include;../../M2TWEOP Code/M2TWEOP Common/;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(_ZVcpkgCurrentInstalledDir)include;../../M2TWEOP Code/M2TWEOP library/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -187,7 +187,7 @@
     <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\M2TWEOP Code\M2TWEOP Common\realGameTypes.h" />
+    <ClInclude Include="..\..\M2TWEOP Code\M2TWEOP Library\realGameTypes.h" />
     <ClInclude Include="basicEvents.h" />
     <ClInclude Include="basicFuncs.h" />
     <ClInclude Include="battleHandlerHelpers.h" />

@@ -117,7 +117,7 @@ namespace battleHandlerHelpers
 	battlePerimeters* getBattlePerimeters()
 	{
 		auto perimeters = reinterpret_cast<battlePerimeters*>(0x016A7428);
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			perimeters = reinterpret_cast<battlePerimeters*>(0x16F0600);
 		return perimeters;
 	}
@@ -134,7 +134,7 @@ namespace battleHandlerHelpers
 		const auto perimeters = getBattlePerimeters();
 		if (!perimeters) return false;
 		DWORD funcAddr = 0x6733A0;
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			funcAddr = 0x672EC0;
 		return GAME_FUNC_RAW(bool(__thiscall*)(battlePerimeters*, int), funcAddr)(perimeters, zoneID);
 	}
@@ -146,7 +146,7 @@ namespace battleHandlerHelpers
 		battlePos pos{x,y};
 		const auto posPtr = &pos;
 		DWORD funcAddr = 0xE08290;
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			funcAddr = 0xE0DC00;
 		return GAME_FUNC_RAW(int(__thiscall*)(battlePerimeters*, battlePos*), funcAddr)(perimeters, posPtr);
 	}
@@ -157,7 +157,7 @@ namespace battleHandlerHelpers
 		if (!perimeters) return -1;
 		const DWORD offset = reinterpret_cast<DWORD>(perimeters) + 0x48;
 		DWORD getZoneAddr = 0xDF0680;
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			getZoneAddr = 0xDF6050;
 		battlePos pos{x,y};
 		const auto posPtr = &pos;
@@ -233,7 +233,7 @@ namespace battleHandlerHelpers
 	battlefieldEngines* getBattlefieldEngines()
 	{
 		auto enginesDbPtr = reinterpret_cast<battlefieldEngines**>(0x02C3A254);
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			enginesDbPtr = reinterpret_cast<battlefieldEngines**>(0x02C8329C);
 		if (!enginesDbPtr) return nullptr;
 		return *enginesDbPtr;

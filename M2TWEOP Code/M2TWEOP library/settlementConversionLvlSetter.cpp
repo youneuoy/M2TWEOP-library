@@ -16,7 +16,7 @@ namespace settlementConversionLvlSetter
 		return lvlFromCity[cityLvl];
 	}
 
-	NOINLINE EOP_EXPORT void setConversionLvlFromCastle(int castleLvl, int convertToLvl)
+	void setConversionLvlFromCastle(int castleLvl, int convertToLvl)
 	{
 		if (castleLvl < 0 || castleLvl > 5 || convertToLvl < 0 || convertToLvl > 6)
 		{
@@ -28,7 +28,7 @@ namespace settlementConversionLvlSetter
 		}
 	}
 
-	NOINLINE EOP_EXPORT void setConversionLvlFromCity(int cityLvl, int convertToLvl)
+	void setConversionLvlFromCity(int cityLvl, int convertToLvl)
 	{
 		if (cityLvl < 0 || cityLvl > 5 || convertToLvl < 0 || convertToLvl > 6)
 		{

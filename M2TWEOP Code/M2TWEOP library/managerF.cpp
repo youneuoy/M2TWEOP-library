@@ -8,6 +8,12 @@
 #include "jsonManager.h"
 
 #include "casModelsDrawer.h"
+#include "globals.h"
+#include "Injects.h"
+#include "luaPlugin.h"
+#include "MemWork.h"
+#include "patchesForGame.h"
+
 void managerF::init()
 {
 
@@ -899,7 +905,7 @@ void managerF::doPachs()
 
 void managerF::loadJsonSettings()
 {
-	std::string fPath = globals::dataS.modPatch;
+	std::string fPath = globals::dataS.modPath;
 	fPath += "\\eopData\\gameCfg.json";
 	jsn::json json = fastFunctsHelpers::loadJsonFromFile(fPath);
 	bool jsonBoolValue;
@@ -937,7 +943,7 @@ void managerF::loadJsonSettings()
 		MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 	}
 
-	std::string uiPath = globals::dataS.modPatch;
+	std::string uiPath = globals::dataS.modPath;
 	uiPath += "\\eopData\\uiCfg.json";
 	json = fastFunctsHelpers::loadJsonFromFile(uiPath);
 
@@ -956,7 +962,7 @@ void managerF::loadJsonSettings()
 //#include "tests.h"
 void managerF::initThread()
 {
-	std::srand(std::time(0));
+	std::srand(std::time(nullptr));
 
 	battleCreator::readParams();
 
@@ -969,16 +975,14 @@ void managerF::initThread()
 
 	doPachs();
 
-	plugins::init();
-
-
+	initLuaPlugin(&globals::dataS.modPath);
+	
 	globals::dataS.Modules.tacticalMapVeiwer.Init(globals::dataS.gamever);
 	//stratResTest::test();
 }
 
 
-#include "stratModelsOptimise.h"
-NOINLINE EOP_EXPORT void managerExport::initEOP(const char* modPath, int gameVer)
+void managerExport::initEOP(const char* modPath, int gameVer)
 {	// Initialize MinHook.
 	if (MH_Initialize() != MH_OK)
 	{
@@ -986,10 +990,9 @@ NOINLINE EOP_EXPORT void managerExport::initEOP(const char* modPath, int gameVer
 	}
 
 	globals::dataS.gamever = gameVer;
-	globals::dataS.modPatch = modPath;
+	globals::dataS.modPath = modPath;
 
 	CreateDirectoryA("logs", NULL);
 
 	managerF::init();
-
 }

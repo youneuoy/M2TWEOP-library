@@ -3,10 +3,13 @@
 #include <filesystem>
 
 #include "eduThings.h"
+#include "globals.h"
+#include "functionsOffsets.h"
+#include "dataOffsets.h"
 
 namespace fastFunctsHelpers
 {
-	NOINLINE EOP_EXPORT void setCryptedString(char** targetS, const char* newS)
+	void setCryptedString(char** targetS, const char* newS)
 	{
 		UINT32 functionOffset = codes::offsets.stringCryptFunc;
 		_asm {
@@ -124,9 +127,9 @@ namespace fastFunctsHelpers
 
 	jsn::json loadJsonFromFile(const std::string&fpath)
 	{
+		jsn::json json;
 		try
 		{
-			jsn::json json;
 
 			std::ifstream f1(fpath);
 			if (f1.is_open())
@@ -139,14 +142,15 @@ namespace fastFunctsHelpers
 		catch (jsn::json::exception& e)
 		{
 			MessageBoxA(NULL, e.what(), "Could not load JSON from file!", MB_APPLMODAL | MB_SETFOREGROUND);
+			return json;
 		}
 	}
 
 	jsn::json loadJsonFromFile(const std::wstring&fpath)
 	{
+		jsn::json json;
 		try
 		{
-			jsn::json json;
 
 			std::ifstream f1(fpath);
 			if (f1.is_open())
@@ -159,6 +163,7 @@ namespace fastFunctsHelpers
 		catch (jsn::json::exception& e)
 		{
 			MessageBoxA(NULL, e.what(), "Could not load JSON from file!", MB_APPLMODAL | MB_SETFOREGROUND);
+			return json;
 		}
 	}
 

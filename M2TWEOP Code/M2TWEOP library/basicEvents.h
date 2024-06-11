@@ -1,7 +1,10 @@
 #pragma once
-#include "pluginM2TWEOP.h"
+#include "luaPlugin.h"
 #include <unordered_map>
 #include <functional>
+
+#include "gameHelpers.h"
+#include "realGameTypes.h"
 using namespace std;
 
 

@@ -1,8 +1,6 @@
 #pragma once
 #include <unordered_set>
 #include "micropather.h"
-#include "exportHeader.h"
-#include "headersMEM.h"
 
 #include "realGameTypes.h"
 
@@ -90,8 +88,8 @@ namespace PathFinder
 	//for retreats, etc
 	std::pair<int, int> GetSafestTileForArmyFromCashe(void* cashe, stackStruct* army);
 
-	NOINLINE EOP_EXPORT void* CreateCasheForArmy(stackStruct* army, int radius);
-	NOINLINE EOP_EXPORT void* CreateCasheForDistances(int x, int y, int radius);
-	NOINLINE EOP_EXPORT void DeleteCasheForDistances(void* cashe); 
-	NOINLINE EOP_EXPORT float GetMovepointsForReachTileFromCashe(void* cashe, int x, int y, int destX, int destY);
+	void* CreateCasheForArmy(stackStruct* army, int radius);
+	void* CreateCasheForDistances(int x, int y, int radius);
+	void DeleteCasheForDistances(void* cashe); 
+	float GetMovepointsForReachTileFromCashe(void* cashe, int x, int y, int destX, int destY);
 };

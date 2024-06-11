@@ -5,9 +5,10 @@
 //@author youneuoy
 //@license GPL-3.0
 #include "luaP.h"
-#include "plugData.h"
 #include "eopEduHelpers.h"
 #include "buildingStructHelpers.h"
+#include "eduThings.h"
+#include "eopBuildings.h"
 
 void luaP::initEopEdu()
 {
@@ -141,7 +142,7 @@ void luaP::initEopEdu()
 	@usage
 	M2TWEOPDU.addEopEduEntryFromFile(M2TWEOP.getModPath().."/youneuoy_Data/unitTypes/myTestType.txt",1000);
 	*/
-	tables.M2TWEOPEDUTable.set_function("addEopEduEntryFromFile", &eopEduHelpers::addEopEduEntryFromFile);
+	tables.M2TWEOPEDUTable.set_function("addEopEduEntryFromFile", &eduThings::addEopEduEntryFromFile);
 
 	/***
 	Create new M2TWEOPDU entry.
@@ -152,7 +153,7 @@ void luaP::initEopEdu()
 	@usage
 	M2TWEOPDU.addEopEduEntryFromEDUID(1,1000);
 	*/
-	tables.M2TWEOPEDUTable.set_function("addEopEduEntryFromEDUID", &eopEduHelpers::addEopEduEntry);
+	tables.M2TWEOPEDUTable.set_function("addEopEduEntryFromEDUID", &eduThings::addEopEduEntry);
 
 	/***
 	Get eduEntry of a M2TWEOPDU entry. Needed to change many parameters of the entry.
@@ -164,7 +165,7 @@ void luaP::initEopEdu()
 	eduEntryOfEOPDU.SoldierCount=20;
 	eduEntryOfEOPDU.Width=1.5;
 	*/
-	tables.M2TWEOPEDUTable.set_function("getEopEduEntryByID", &eopEduHelpers::getEopEduEntry);
+	tables.M2TWEOPEDUTable.set_function("getEopEduEntryByID", &eduThings::getEopEduEntry);
 
 	/***
 	Get eduEntry by index. Needed to change many parameters of the entry.
@@ -176,7 +177,7 @@ void luaP::initEopEdu()
 	eduEntry.SoldierCount=20;
 	eduEntry.Width=1.5;
 	*/
-	tables.M2TWEOPEDUTable.set_function("getEduEntry", &eopEduHelpers::getEduEntry);
+	tables.M2TWEOPEDUTable.set_function("getEduEntry", &eduThings::getEduEntry);
 
 	/***
 	Get eduEntry by edu type name. Needed to change many parameters of the entry.
@@ -188,7 +189,7 @@ void luaP::initEopEdu()
 	eduEntry.SoldierCount=20;
 	eduEntry.Width=1.5;
 	*/
-	tables.M2TWEOPEDUTable.set_function("getEduEntryByType", &eopEduHelpers::getEduEntryByType);
+	tables.M2TWEOPEDUTable.set_function("getEduEntryByType", &eduThings::getEduEntryByType);
 
 	/***
 	Get edu index by edu type name. Needed to use many edu functions.
@@ -199,7 +200,7 @@ void luaP::initEopEdu()
 	local eduindex=M2TWEOPDU.getEduIndexByType("Peasants");
 	M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, 5, 1);
 	*/
-	tables.M2TWEOPEDUTable.set_function("getEduIndexByType", &eopEduHelpers::getEduIndexByType);
+	tables.M2TWEOPEDUTable.set_function("getEduIndexByType", &eduThings::getEduIndexByType);
 
 
 	/***
@@ -210,7 +211,7 @@ void luaP::initEopEdu()
 	@usage
 	local eopEntry=M2TWEOPDU.getDataEopDu(1000);
 	*/
-	tables.M2TWEOPEDUTable.set_function("getDataEopDu", &eopEduHelpers::getDataEopDu);
+	tables.M2TWEOPEDUTable.set_function("getDataEopDu", &eduThings::getDataEopEdu);
 
 
 	/***
@@ -221,7 +222,7 @@ void luaP::initEopEdu()
 	@usage
 	M2TWEOPDU.setEntryUnitCardTga(1000,"#akavir_swordsmen.tga");
 	*/
-	tables.M2TWEOPEDUTable.set_function("setEntryUnitCardTga", &eopEduHelpers::setEntryUnitCardTga);
+	tables.M2TWEOPEDUTable.set_function("setEntryUnitCardTga", &eduThings::setEntryUnitCardTga);
 
 	/***
 	Set unit info card for M2TWEOPDU entry. Requirements for the location and parameters of the image are unchanged in relation to the game (only for eopdu units added by file!).
@@ -231,7 +232,7 @@ void luaP::initEopEdu()
 	@usage
 	M2TWEOPDU.setEntryInfoCardTga(1000,"akavir_swordsmen_info.tga");
 	*/
-	tables.M2TWEOPEDUTable.set_function("setEntryInfoCardTga", &eopEduHelpers::setEntryInfoCardTga);
+	tables.M2TWEOPEDUTable.set_function("setEntryInfoCardTga", &eduThings::setEntryInfoCardTga);
 
 
 	/***
@@ -242,7 +243,7 @@ void luaP::initEopEdu()
 	@usage
 	M2TWEOPDU.setEntrySoldierModel(1000,"Sword_and_Buckler_Men");
 	*/
-	tables.M2TWEOPEDUTable.set_function("setEntrySoldierModel", &eopEduHelpers::setEntrySoldierModel);
+	tables.M2TWEOPEDUTable.set_function("setEntrySoldierModel", &eduThings::setEntrySoldierModel);
 
 	/***
 	Get the amount of numbers in the armour_upg_levels line in export_descr_unit.
@@ -387,7 +388,7 @@ void luaP::initEopEdu()
 	@usage
 	M2TWEOPDU.setEntryLocalizedName(1000,"Test unit");
 	*/
-	tables.M2TWEOPEDUTable.set_function("setEntryLocalizedName", &eopEduHelpers::setEntryLocalizedName);
+	tables.M2TWEOPEDUTable.set_function("setEntryLocalizedName", &eduThings::setEntryLocalizedName);
 	//tables.M2TWEOPEDUTable.set_function("addUnitToRQ", &eopEduHelpers::addUnitToRQ); comment out not good implementation
 
 
@@ -399,7 +400,7 @@ void luaP::initEopEdu()
 	@usage
 	M2TWEOPDU.setEntryLocalizedDescr(1000,"This is test unit description\n123321\nCreated with m2tweop");
 	*/
-	tables.M2TWEOPEDUTable.set_function("setEntryLocalizedDescr", &eopEduHelpers::setEntryLocalizedDescr);
+	tables.M2TWEOPEDUTable.set_function("setEntryLocalizedDescr", &eduThings::setEntryLocalizedDescr);
 
 	/***
 	Set localized short description for M2TWEOPDU entry. This does not require any entries in the text folder.
@@ -409,7 +410,7 @@ void luaP::initEopEdu()
 	@usage
 	M2TWEOPDU.setEntryLocalizedShortDescr(1000,"This is test unit short description\n123321\nCreated with m2tweop");
 	*/
-	tables.M2TWEOPEDUTable.set_function("setEntryLocalizedShortDescr", &eopEduHelpers::setEntryLocalizedShortDescr);
+	tables.M2TWEOPEDUTable.set_function("setEntryLocalizedShortDescr", &eduThings::setEntryLocalizedShortDescr);
 
 
 	///EdbEntry
@@ -552,7 +553,7 @@ void luaP::initEopEdu()
 	local dummyBuilding = sett:getBuilding(5)
 	dummyBuilding.edbEntry = eopBuilding
 	*/
-	tables.EDB.set_function("addEopBuildEntry", &buildingStructHelpers::addEopBuildEntry);
+	tables.EDB.set_function("addEopBuildEntry", &eopBuildings::addEopBuildEntry);
 
 	/***
 	Get EOP Building entry. Returns vanilla build entry if you use a vanilla building index (< 128).
@@ -562,7 +563,7 @@ void luaP::initEopEdu()
 	@usage
 	building = EDB.getEopBuildEntry(150);
 	*/
-	tables.EDB.set_function("getEopBuildEntry", &buildingStructHelpers::getEopBuildEntry);
+	tables.EDB.set_function("getEopBuildEntry", &eopBuildings::getEopBuildEntry);
 
 	/***
 	Set picture of building.
@@ -575,7 +576,7 @@ void luaP::initEopEdu()
 	building = EDB.getBuildingByName("market")
 	EDB.setBuildingPic(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
 	*/
-	tables.EDB.set_function("setBuildingPic", &buildingStructHelpers::setBuildingPic);
+	tables.EDB.set_function("setBuildingPic", &eopBuildings::setBuildingPic);
 
 	/***
 	Set constructed picture of building.
@@ -588,7 +589,7 @@ void luaP::initEopEdu()
 	building = EDB.getBuildingByName("market")
 	EDB.setBuildingPicConstructed(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
 	*/
-	tables.EDB.set_function("setBuildingPicConstructed", &buildingStructHelpers::setBuildingPicConstructed);
+	tables.EDB.set_function("setBuildingPicConstructed", &eopBuildings::setBuildingPicConstructed);
 
 	/***
 	Set construction picture of building.
@@ -601,7 +602,7 @@ void luaP::initEopEdu()
 	building = EDB.getBuildingByName("market")
 	EDB.setBuildingPicConstruction(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
 	*/
-	tables.EDB.set_function("setBuildingPicConstruction", &buildingStructHelpers::setBuildingPicConstruction);
+	tables.EDB.set_function("setBuildingPicConstruction", &eopBuildings::setBuildingPicConstruction);
 
 	/***
 	Set name of a building.
@@ -614,7 +615,7 @@ void luaP::initEopEdu()
 	building = EDB.getBuildingByName("market")
 	EDB.setBuildingLocalizedName(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
 	*/
-	tables.EDB.set_function("setBuildingLocalizedName", &buildingStructHelpers::setBuildingLocalizedName);
+	tables.EDB.set_function("setBuildingLocalizedName", &eopBuildings::setBuildingLocalizedName);
 
 	/***
 	Set description of a building.
@@ -627,7 +628,7 @@ void luaP::initEopEdu()
 	building = EDB.getBuildingByName("market")
 	EDB.setBuildingLocalizedDescr(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
 	*/
-	tables.EDB.set_function("setBuildingLocalizedDescr", &buildingStructHelpers::setBuildingLocalizedDescr);
+	tables.EDB.set_function("setBuildingLocalizedDescr", &eopBuildings::setBuildingLocalizedDescr);
 
 	/***
 	Set short description of a building.
@@ -640,7 +641,7 @@ void luaP::initEopEdu()
 	building = EDB.getBuildingByName("market")
 	EDB.setBuildingLocalizedDescrShort(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
 	*/
-	tables.EDB.set_function("setBuildingLocalizedDescrShort", &buildingStructHelpers::setBuildingLocalizedDescrShort);
+	tables.EDB.set_function("setBuildingLocalizedDescrShort", &eopBuildings::setBuildingLocalizedDescrShort);
 
 	/***
 	Add a capability to a building.
@@ -660,7 +661,7 @@ void luaP::initEopEdu()
 	-- Add a 500 income bonus to the market building
 	EDB.addBuildingCapability(building, 0, buildingCapability.income_bonus, 500, true)
 	*/
-	tables.EDB.set_function("addBuildingCapability", &buildingStructHelpers::addBuildingCapability);
+	tables.EDB.set_function("addBuildingCapability", &eopBuildings::addBuildingCapability);
 
 	/***
 	Remove a capability from a building.
@@ -672,7 +673,7 @@ void luaP::initEopEdu()
 	building = EDB.getBuildingByName("market")
 	EDB.removeBuildingCapability(building, 0, 3);
 	*/
-	tables.EDB.set_function("removeBuildingCapability", &buildingStructHelpers::removeBuildingCapability);
+	tables.EDB.set_function("removeBuildingCapability", &eopBuildings::removeBuildingCapability);
 
 	/***
 
@@ -686,7 +687,7 @@ void luaP::initEopEdu()
 	building = EDB.getBuildingByName("market")
 	cap = EDB.getBuildingCapability(building, 0, 3);
 	*/
-	tables.EDB.set_function("getBuildingCapability", &buildingStructHelpers::getBuildingCapability);
+	tables.EDB.set_function("getBuildingCapability", &eopBuildings::getBuildingCapability);
 
 
 	/***
@@ -700,7 +701,7 @@ void luaP::initEopEdu()
 	building = EDB.getBuildingByName("market")
 	EDB.getBuildingCapabilityNum(building, 0);
 	*/
-	tables.EDB.set_function("getBuildingCapabilityNum", &buildingStructHelpers::getBuildingCapabilityNum);
+	tables.EDB.set_function("getBuildingCapabilityNum", &eopBuildings::getBuildingCapabilityNum);
 
 	/***
 	Add a recruitment pool to a building.
@@ -730,7 +731,7 @@ void luaP::initEopEdu()
 	building = EDB.getBuildingByName("market")
 	EDB.removeBuildingPool(building, 0, 3);
 	*/
-	tables.EDB.set_function("removeBuildingPool", &buildingStructHelpers::removeBuildingPool);
+	tables.EDB.set_function("removeBuildingPool", &eopBuildings::removeBuildingPool);
 
 
 	/***
@@ -744,7 +745,7 @@ void luaP::initEopEdu()
 	building = EDB.getBuildingByName("market")
 	EDB.getBuildingPool(building, 0, 3);
 	*/
-	tables.EDB.set_function("getBuildingPool", &buildingStructHelpers::getBuildingPool);
+	tables.EDB.set_function("getBuildingPool", &eopBuildings::getBuildingPool);
 
 
 	/***
@@ -757,7 +758,7 @@ void luaP::initEopEdu()
 	building = EDB.getBuildingByName("market")
 	EDB.getBuildingPoolNum(building, 0);
 	*/
-	tables.EDB.set_function("getBuildingPoolNum", &buildingStructHelpers::getBuildingPoolNum);
+	tables.EDB.set_function("getBuildingPoolNum", &eopBuildings::getBuildingPoolNum);
 
 
 	//tables.EDB.set_function("createEOPBuilding", &buildingStructHelpers::createEOPBuilding);
@@ -771,5 +772,5 @@ void luaP::initEopEdu()
 	@usage
 	building = EDB.getBuildingByName("market")
 	*/
-	tables.EDB.set_function("getBuildingByName", &buildingStructHelpers::getBuildingByName);
+	tables.EDB.set_function("getBuildingByName", &eopBuildings::getBuildingByName);
 }

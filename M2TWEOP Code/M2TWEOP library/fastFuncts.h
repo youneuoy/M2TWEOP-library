@@ -1,12 +1,6 @@
 #pragma once
-#include "functionsOffsets.h"
-#include "dataOffsets.h"
 #include"headersSTD.h"
-#include "headersMEM.h"
 #include "realGameTypes.h"
-#include "techFuncs.h"
-#include "exportHeader.h"
-#include "globals.h"
 
 namespace fastFuncts
 {
@@ -118,7 +112,7 @@ namespace fastFuncts
 	//remove ancillary from character
 	void removeAncillary(namedCharacter* character, ancillary* anc);
 	//find ancillary in anc list
-	ancillary* findAncillary(char* ancName);
+	ancillary* findAncillary(const char* ancName);
 
 	//edit unit characteristics
 	void setUnitParams(unit* un, int count, int exp, int armor, int weap);

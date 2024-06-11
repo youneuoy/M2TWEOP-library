@@ -1,4 +1,6 @@
 #include "generalCharactericticsHelpers.h"
+
+#include "FastFuncts.h"
 #include "plugData.h"
 namespace generalCharactericticsHelpers
 {
@@ -11,24 +13,12 @@ namespace generalCharactericticsHelpers
 		return character->ancillaries[index]->dataAnc;
 
 	}
-	int addAncillary(namedCharacter* character, std::string ancName)
+	int addAncillary(namedCharacter* character, const std::string& ancName)
 	{
-		ancillary* anc = (*(*plugData::data.funcs.findAncillary))((char*)ancName.c_str());
+		ancillary* anc = fastFuncts::findAncillary(ancName.c_str());
 		if (anc == nullptr)return 0;
 
-		return (*(*plugData::data.funcs.addAncillary))(character, anc);
-	}
-	void removeAncillary(namedCharacter* character, ancillary* anc)
-	{
-		(*(*plugData::data.funcs.removeAncillary))(character, anc);
-	}
-	void addTrait(namedCharacter* character, const char* traitName, int traitLevel)
-	{
-		(*(*plugData::data.funcs.addTrait))(character, traitName, traitLevel);
-	}
-	void removeTrait(namedCharacter* character, const char* traitName)
-	{
-		(*(*plugData::data.funcs.removeTrait))(character, traitName);
+		return fastFuncts::addAncillary(character, anc);
 	}
 	int getAge(namedCharacter* character)
 	{

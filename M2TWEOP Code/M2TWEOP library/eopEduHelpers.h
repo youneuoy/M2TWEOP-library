@@ -36,22 +36,11 @@ namespace UnitEnums
 };
 namespace eopEduHelpers
 {
-	eduEntry* addEopEduEntry(int baseIndex, int newIndex);
-	eduEntry* addEopEduEntryFromFile(const char* fileName, int newIndex);
-	eduEntry* getEopEduEntry(int index);
-	eduEntry* getEduEntry(int index);
-	eduEntry* getEduEntryByType(const char* type);
-	int getEduIndexByType(const char* type);
-
-
 	int hasOwnership(eduEntry* entry, int factionID);
 	int getDataEopDu(int index);
 	void setOwnerShip(eduEntry* entry, int factionID, bool set);
 
 
-	void setEntryUnitCardTga(int index, const char* newCard);
-	void setEntryInfoCardTga(int index, const char* newCard);
-	void setEntrySoldierModel(int index, const char* newModel);
 	int getArmourUpgradeLevelsNum(int index);
 	void setArmourUpgradeLevelsNum(int index, int amount);
 	int getArmourUpgradeLevel(int idx, int levelidx);
@@ -69,12 +58,7 @@ namespace eopEduHelpers
 	std::string getSecondaryAnim(const eduEntry* entry);
 	bool hasAttribute(unit* unit, const char* attributeName);
 	bool hasAttributeEdu(eduEntry* entry, const char* attributeName);
-
-	void setEntryLocalizedName(int index, const char* newLocName);
-	void setEntryLocalizedDescr(int index, const char* newLocDescr);
-	void setEntryLocalizedShortDescr(int index, const char* newLocShortDescr);
-
-
+	
 	//edu things
 	bool haveAttributeLegioGet(eduEntry* eduEn);
 	void haveAttributeLegioSet(eduEntry* eduEn, bool isHaveLegio);

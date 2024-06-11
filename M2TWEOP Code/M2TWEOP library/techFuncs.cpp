@@ -191,7 +191,7 @@ static string uniToACP(UNICODE_STRING**& uniStr)
 void techFuncs::saveGameMakeArchive(UNICODE_STRING**& savePath, vector<string>& files)
 {
     string relativePath = uniToACP(savePath);
-    string packPath = globals::dataS.modPatch;
+    string packPath = globals::dataS.modPath;
 
 
 
@@ -237,7 +237,7 @@ vector<string> techFuncs::loadGameLoadArchive(UNICODE_STRING**& savePath)
     {
         return archiveFiles;
     }
-    string unpackPath = globals::dataS.modPatch;
+    string unpackPath = globals::dataS.modPath;
 
 
     unpackPath += "\\youneuoy_Data";

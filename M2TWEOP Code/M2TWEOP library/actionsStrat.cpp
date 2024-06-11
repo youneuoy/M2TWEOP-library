@@ -1,6 +1,10 @@
 #include "actionsStrat.h"
 
+#include "dataOffsets.h"
 #include "eduThings.h"
+#include "fastFuncts.h"
+#include "functionsOffsets.h"
+#include "smallFuncs.h"
 #include "stackStructHelpers.h"
 #include "unitActions.h"
 

@@ -1,5 +1,13 @@
 #include "stackStructHelpers.h"
+
+#include "eduThings.h"
+#include "factionHelpers.h"
+#include "fastFuncts.h"
+#include "gameHelpers.h"
 #include "plugData.h"
+#include "smallFuncs.h"
+#include "unitHelpers.h"
+
 namespace stackStructHelpers
 {
 	void sortStack(stackStruct* stack, const int sortType, const int sortType2, int sortType3)
@@ -80,7 +88,7 @@ namespace stackStructHelpers
 		if (!army || !defender || defender->settlement)
 			return 0;
 		DWORD funcAddr = 0x007195A0;
-		if (m2tweopHelpers::getGameVersion() == 1)
+		if (smallFuncs::getGameVersion() == 1)
 			funcAddr = 0x718E80;
 		_asm
 		{
@@ -150,44 +158,36 @@ namespace stackStructHelpers
 
 	unit *createUnit(stackStruct *army, const char *type, int exp, int arm, int weap)
 	{
-		unit *newUnit = (*(*plugData::data.funcs.createUnitN))(type, army->regionID, army->faction->dipNum, exp, arm, weap);
+		unit *newUnit = fastFuncts::createUnitN(type, army->regionID, army->faction->dipNum, exp, arm, weap);
 		if (newUnit == nullptr)
-		{
 			return newUnit;
-		}
-		(*(*plugData::data.funcs.addUnitToArmy))(army, newUnit);
+		fastFuncts::addUnitToArmy(army, newUnit);
 		return newUnit;
 	}
 	unit *createUnitByIDX(stackStruct *army, int typeIDX, int exp, int arm, int weap)
 	{
-		unit *newUnit = (*(*plugData::data.funcs.createUnitIdx))(typeIDX, army->regionID, army->faction->dipNum, exp, arm, weap);
+		unit *newUnit = fastFuncts::createUnitIdx(typeIDX, army->regionID, army->faction->dipNum, exp, arm, weap);
 		if (newUnit == nullptr)
-		{
 			return newUnit;
-		}
-		(*(*plugData::data.funcs.addUnitToArmy))(army, newUnit);
+		fastFuncts::addUnitToArmy(army, newUnit);
 		return newUnit;
 	}
 	unit *createEOPUnit(stackStruct *army, int typeIDX, int exp, int arm, int weap)
 	{
-		int eopIDX = (*(*plugData::data.funcsEopEdu.getDataEopEdu))(typeIDX);
-		if (eopIDX == 0)
-		{
+		const int eopIdx = eduThings::getDataEopEdu(typeIDX);
+		if (eopIdx == 0)
 			return nullptr;
-		}
 
-		unit *newUnit = (*(*plugData::data.funcs.createUnitEDB))(eopIDX, army->regionID, army->faction->dipNum, exp, arm, weap);
+		unit *newUnit = fastFuncts::createUnitEDB(eopIdx, army->regionID, army->faction->dipNum, exp, arm, weap);
 		if (newUnit == nullptr)
-		{
 			return newUnit;
-		}
-		(*(*plugData::data.funcs.addUnitToArmy))(army, newUnit);
+		fastFuncts::addUnitToArmy(army, newUnit);
 		return newUnit;
 	}
 	void mergeArmies(stackStruct *army, stackStruct *targetArmy, bool force)
 	{
 		if (force)
-			(*(*plugData::data.funcs.mergeArmies))(army, targetArmy);
+			fastFuncts::mergeArmies(army, targetArmy);
 		else
 		{
 			int targetX, targetY;
@@ -213,37 +213,10 @@ namespace stackStructHelpers
 			factionHelpers::splitArmy(faction, units, targetX, targetY);
 		}
 	}
-	void mergeArmies(stackStruct *army, stackStruct *targetArmy)
+
+	void mergeArmies(stackStruct* army, stackStruct* targetArmy)
 	{
-		(*(*plugData::data.funcs.mergeArmies))(army, targetArmy);
-	}
-	
-	stackStruct* spawnArmy(
-		factionStruct* faction,
-		const char* name,
-		const char* name2,
-		int characterType,
-		const char* label,
-		const char* portrait,
-		int x,
-		int y,
-		int age,
-		bool family,
-		int subFaction,
-		int unitIndex,
-		int exp,
-		int wpn,
-		int armour
-		)
-	{
-		if (portrait != nullptr && strlen(portrait) == 0)
-			portrait = nullptr;
-		if (label != nullptr && strlen(label) == 0)
-			label = nullptr;
-		const auto army = (*(*plugData::data.funcs.spawnArmy))(faction, name, name2, characterType, label, portrait, x, y, age, family, subFaction, unitIndex, exp, wpn, armour);
-		if (army && label && label != "")
-			luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_label>(army->gen->genChar, std::string(label));
-		return army;
+		mergeArmies(army, targetArmy, true);
 	}
 	
 

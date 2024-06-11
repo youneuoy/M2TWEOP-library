@@ -1,12 +1,6 @@
 #pragma once
-#include "functionsOffsets.h"
-#include "dataOffsets.h"
 #include "headersSTD.h"
-#include "headersMEM.h"
 #include "realGameTypes.h"
-
-#include "exportHeader.h"
-#include "globals.h"
 namespace smallFuncs
 {
 	void* GetMainStratObject(void*baseObj);
