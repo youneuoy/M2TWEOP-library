@@ -118,7 +118,7 @@ class param:
         self.name = name
         self.comment = comment
 
-filenames = ["imgui\\sol_ImGui.cpp"]
+filenames = ["imgui\\sol_ImGui.cpp", "imgui\\sol_ImGui_enums.cpp", "imgui\\sol_ImGui_enums2.cpp", "imgui\\sol_ImGui_keys.cpp"]
 cwd = os.getcwd()
 eopPath = re.findall(r'(.+)documentationGenerator', cwd)[0]
 luaPluginPath = eopPath + "M2TWEOP Code\\M2TWEOP library\\"
