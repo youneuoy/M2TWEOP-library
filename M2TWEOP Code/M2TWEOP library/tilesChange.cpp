@@ -99,7 +99,7 @@ namespace tilesChange
 		return ret;
 	}
 
-	EOP_EXPORT void replaceTile(const char* tileLabel, UINT32 x, UINT32 y, const char* fileName, const char* weather, const char* dayTime)
+	void replaceTile(const char* tileLabel, UINT32 x, UINT32 y, const char* fileName, const char* weather, const char* dayTime)
 	{
 		custom_tile* newTile = new custom_tile();
 		newTile->x = x;

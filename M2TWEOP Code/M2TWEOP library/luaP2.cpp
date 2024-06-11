@@ -605,18 +605,18 @@ void luaP::initCampaign()
 	typeAll.uiCardManager.set_function("getUnitCard", &gameHelpers::getUnitCard);
 	/***
 	Get building info scroll.
-	@function uiCardManager:getBuildingInfoScroll
+	@function uiCardManager.getBuildingInfoScroll
 	@treturn buildingInfoScroll scroll
 	@usage
-	local infoScroll = cardManager:getBuildingInfoScroll();
+	local infoScroll = cardManager.getBuildingInfoScroll();
 	*/
 	typeAll.uiCardManager.set_function("getBuildingInfoScroll", &gameSTDUIHelpers::getBuildingInfoScroll);
 	/***
 	Get unit info scroll.
-	@function uiCardManager:getUnitInfoScroll
+	@function uiCardManager.getUnitInfoScroll
 	@treturn unitInfoScroll scroll
 	@usage
-	local infoScroll = cardManager:getUnitInfoScroll();
+	local infoScroll = cardManager.getUnitInfoScroll();
 	*/
 	typeAll.uiCardManager.set_function("getUnitInfoScroll", &gameSTDUIHelpers::getUnitInfoScroll);
 	

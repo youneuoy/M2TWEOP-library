@@ -6,7 +6,7 @@
 namespace gameHelpers
 {
 	UINT32 getFactionsCount();
-	std::string callConsole(std::string cmdName, sol::variadic_args va);
+	std::string callConsole(const std::string& cmdName, sol::variadic_args va);
 	factionStruct* getFaction(int index);
 	const char* getClimateName2(const int index);
 	unit* getEventAttackingUnit(eventTrigger* eventData);

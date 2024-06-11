@@ -4,7 +4,9 @@
 
 #include "FastFuncts.h"
 #include "gameDataAllHelper.h"
+#include "gameHelpers.h"
 #include "smallFuncs.h"
+#include "technicalHelpers.h"
 #include "unitActions.h"
 
 std::string factionHelpers::getFactionName(const factionStruct* fac)

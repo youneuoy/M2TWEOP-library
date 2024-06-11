@@ -1,9 +1,9 @@
 #include "console.h"
-#include "imgui/imgui_stdlib.h"
 #include "plugData.h"
 #include "luaPlugin.h"
 
 #include "imgui/imgui.h"
+#include "imgui/imgui_stdlib.h"
 
 namespace console
 {

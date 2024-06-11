@@ -149,7 +149,7 @@ struct hillVector
 	int32_t hillsNum;
 };
 
-struct plazaStuff
+struct plazaStuff 
 {
 	int soldiersAlliance0;
 	int soldiersAlliance1;
@@ -692,7 +692,7 @@ struct siegeEngine
 	int field_70;
 	int field_74;
 	int ID;
-	int field_7C;
+	int health;
 	struct engineRecord* engineRecord;
 	struct unit* currentUnit;
 	struct unit* lastUnit;
@@ -714,12 +714,12 @@ struct siegeEngine
 	DWORD fieldc8;
 	DWORD field_cc;
 	DWORD field_d0;
-	int field_D4;
-	int field_D8;
-	char byte_DC;
-	char byte_DD;
-	char byte_De;
-	char byte_Df;
+	int statArmour;
+	int armourMaterial;
+	char attackTotal;
+	char armourTotal;
+	char formationDefBonus;
+	char formationAttBonus;
 	int field_E0;
 	int field_E4;
 	int field_E8;
@@ -817,8 +817,8 @@ struct siegeEngine
 	float float_57C;
 	int16_t short_580;
 	int16_t short_582;
-	int field_584;
-	char byte_588;
+	int fireLevel;
+	char isBurning;
 	char byte_589;
 	char byte_58a;
 	char byte_58b;
@@ -849,15 +849,13 @@ struct siegeEngine
 	int field_5D4;
 	int field_5D8;
 	int field_5DC;
-	int field_5E0;
-	int field_5E4;
-	char byte_5E8_init1;
-	char byte_5E9;
-	char byte_5Ea;
-	char byte_5Eb;
+	int totalAmmo;
+	int totalMaxAmmo;
+	char ammoStacksCount;
+	char byte_5E9[3];
 	int areaEffect;
-	int field_5F0;
-	int field_5F4_facid;
+	int debugShowProxies;
+	int deployingFaction;
 	int field_5F8;
 	int field_5FC;
 	int field_600;
@@ -6559,7 +6557,7 @@ struct buildingInfoScroll
 };
 struct unitInfoScroll
 {
-	char pad[812];
+	char pad[772];
 	unit* unit;
 	char pad2[20];
 	eduEntry* entry;
@@ -6571,7 +6569,7 @@ struct stratUIStruct
 public:
 	char pad_0000[84]; //0x0000
 	struct settlementInfoScroll *settlementInfoScroll; //0x0054
-	char pad_0058[6]; //0x0000
+	int pad_0058[6]; //0x0000
 	buildingInfoScroll* buildingInfoScroll;
 	unitInfoScroll* unitInfoScroll;
 }; //Size: 0x0164

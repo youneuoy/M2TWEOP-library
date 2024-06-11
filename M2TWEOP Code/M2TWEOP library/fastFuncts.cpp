@@ -2015,7 +2015,7 @@ namespace fastFuncts
 
 
 
-	EOP_EXPORT DWORD allocateGameMem(size_t amount)
+	DWORD allocateGameMem(size_t amount)
 	{
 		DWORD retMem = 0;
 
