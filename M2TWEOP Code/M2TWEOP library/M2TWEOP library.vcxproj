@@ -251,6 +251,7 @@
     <ClInclude Include="..\3rd\logger\loguru.hpp" />
     <ClInclude Include="..\3rd\logger\loguru.cpp" />
     <ClInclude Include="..\3rd\shortestPath\micropather.h" />
+    <ClInclude Include="imgui\ImFileDialog.h" />
     <ClInclude Include="realGameTypes.h" />
     <ClInclude Include="actionsStrat.h" />
     <ClInclude Include="basicEvents.h" />
@@ -409,6 +410,7 @@
     <ClCompile Include="graphicsEvents.cpp" />
     <ClCompile Include="guildHelpers.cpp" />
     <ClCompile Include="imgui\eopImgui.cpp" />
+    <ClCompile Include="imgui\ImFileDialog.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />

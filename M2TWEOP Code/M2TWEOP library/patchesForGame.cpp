@@ -1081,20 +1081,14 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	f1 << "onEvent" << endl;
 	f1.close();
 #endif
-	DWORD adr = (*vTab)[43];
-	char* event = nullptr;
-	_asm
-	{
-		mov eax, adr
-		call eax
-		mov event, eax
-	}
 
-	DWORD* eventAddr = vTab[0];
-	if (event == nullptr)return;
-	gameEvents::onEventWrapper(reinterpret_cast<DWORD>(eventAddr), vTab, arg2);
+	const DWORD eventCode = reinterpret_cast<DWORD>(vTab[0]);
+	gameEvents::onEventWrapper(eventCode, vTab);
 
-	if (strcmp(event, "ScrollOpened") == 0)
+	const int gameVersion = smallFuncs::getGameVersion();
+	const DWORD scrollOpenedCode = gameVersion == 1 ? 0x013719FC : 0x0132C9D4;
+	const DWORD factionTurnStartCode = gameVersion == 1 ? 0x0136931C : 0x013242F4;
+	if (eventCode == scrollOpenedCode)
 	{
 		char* str = reinterpret_cast<char*>(vTab[1]);
 		if (strcmp(str, "prebattle_scroll") == 0)
@@ -1110,7 +1104,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 			battleCreator::onHotseatScreen();
 		}
 	}
-	else if (strcmp(event, "FactionTurnStart") == 0)
+	else if (eventCode == factionTurnStartCode)
 	{
 		factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
 		discordManager::OnFactionTurnStart(fac);

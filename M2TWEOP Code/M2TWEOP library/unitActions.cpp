@@ -423,12 +423,13 @@ namespace unitActions
         return un->engineRec->classID;
     }
 
-    void attackBuilding(const unit* un, buildingBattle* building)
+    void attackBuilding(unit* un, buildingBattle* building)
     {
         if (un == nullptr || building == nullptr)
             return;
         //if (getSiegeEngineType(un) == -1)
         //    return;
+        un->aiActiveSet = 2;
         auto battleResidence = building->battleResidence;
         if (battleResidence == nullptr)
             return;

@@ -9,18 +9,59 @@
 using namespace std;
 
 
-void onEventWrapper(const DWORD eventAddr, DWORD** vTab, DWORD arg2)
-{
-	const auto currentEvent = gameEvents::events.find(eventAddr);
-	if (currentEvent == gameEvents::events.end()) {
-		return;
-	}
-	currentEvent->second->callEvent(vTab);
-}
 
 namespace gameEvents
 {
+	void onEventWrapper(const DWORD eventAddr, DWORD** vTab)
+	{
+		if (const auto currentEvent = gameEventManager::getEvent(eventAddr); currentEvent != nullptr)
+			currentEvent->callEvent(vTab);
+	}
 
+	EventBase* gameEventManager::getEvent(DWORD key)
+	{
+		if (const auto it = m_Events.find(key); it != m_Events.end())
+			return it->second.get();
+		return nullptr;
+	}
+
+	std::unordered_map<DWORD, std::unique_ptr<EventBase>> gameEventManager::m_Events = {};
+
+	template<EventType EvType> 
+	int Event<EvType>::callEvent(DWORD** vTab)
+	{
+		if (EvType == EventType::standardEvent)
+		{
+			auto eventData = reinterpret_cast<eventTrigger*>(vTab);
+			if (funk != nullptr) {
+				tryLuaBasicEventFunk((*funk)(eventData))
+			}
+			return 1;
+		}
+		else if (EvType == EventType::attackResidenceEvent)
+		{
+			auto eventData = reinterpret_cast<eventTrigger*>(vTab);
+			auto character = gameHelpers::getEventNamedCharacter(eventData);
+			auto settlement = character->gen->besiegingSettlement;
+			fortStruct* fort = nullptr;
+			if (settlement)
+			{
+				fort = gameHelpers::getTileFort(gameHelpers::getTile(settlement->xCoord, settlement->yCoord));
+				if (fort)
+					settlement = nullptr;
+			}
+			if (funk != nullptr) {
+				tryLuaBasicEventFunk((*funk)(eventData, settlement, fort))
+			}
+			return 2;
+		}
+		else
+		{
+			return 0;
+		}
+		
+	}
+	
 	void initEvents()
 	{
 		const int gv = (smallFuncs::getGameVersion()) - 1;
@@ -668,9 +709,16 @@ namespace gameEvents
 		addEvent<EventType::standardEvent>(newCode[gv], "onObjSeen");
 	}
 
-	template<EventType EvType> void addEvent(const DWORD key, const char* name)
+	template<EventType EvType>
+	void gameEventManager::addEvent(const DWORD key, const char* name)
 	{
-		events[key] = std::make_unique<Event<EvType>>(name, plugData::data.luaAll.luaState);
+		m_Events[key] = std::make_unique<Event<EvType>>(name, plugData::data.luaAll.luaState);
+	}
+	
+	template<EventType EvType>
+	void addEvent(const DWORD key, const char* name)
+	{
+		gameEventManager::addEvent<EvType>(key, name);
 	}
 
 	regionStruct* getCharacterRegion(const namedCharacter* character)

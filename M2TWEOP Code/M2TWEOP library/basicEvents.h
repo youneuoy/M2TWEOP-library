@@ -58,55 +58,36 @@ namespace gameEvents
 	void onCampaignMapLoaded();
 	void onLoadGamePl(std::vector<std::string>*saveFiles);
 	std::vector<std::string>*onSaveGamePl(UNICODE_STRING * *&savePath);
-	void onEventWrapper(DWORD eventAddr, DWORD * *vTab, DWORD arg2);
+	void onEventWrapper(DWORD eventAddr, DWORD** vTab);
 	
 	template<EventType EvType> class Event :public EventBase
 	{
 	public:
 
 		sol::function* funk;
-
+		
 		Event(const std::string& luaFunctionName, sol::state& luaState) : funk(new sol::function(luaState[luaFunctionName]))
 		{
 			checkLuaFunc(&funk);
 		}
 
-		int callEvent(DWORD** vTab) override
-		{
-			if (EvType == EventType::standardEvent)
-			{
-				auto eventData = reinterpret_cast<eventTrigger*>(vTab);
-				if (funk != nullptr) {
-					tryLuaBasicEventFunk((*funk)(eventData))
-				}
-				return 1;
-			}
-			else if (EvType == EventType::attackResidenceEvent)
-			{
-				auto eventData = reinterpret_cast<eventTrigger*>(vTab);
-				auto character = gameHelpers::getEventNamedCharacter(eventData);
-				auto settlement = character->gen->besiegingSettlement;
-				fortStruct* fort = nullptr;
-				if (settlement)
-				{
-					fort = gameHelpers::getTileFort(gameHelpers::getTile(settlement->xCoord, settlement->yCoord));
-					if (fort)
-						settlement = nullptr;
-				}
-				if (funk != nullptr) {
-					tryLuaBasicEventFunk((*funk)(eventData, settlement, fort))
-				}
-				return 2;
-			}
-			else
-			{
-				return 0;
-			}
-		}
+		int callEvent(DWORD** vTab) override;
 	};
 
-	std::unordered_map<DWORD, std::unique_ptr<EventBase>> events;
-	template<EventType EvType> void addEvent(DWORD key, const char* name);
+	template<EventType EvType>
+	void addEvent(DWORD key, const char* name);
+	
+	class gameEventManager
+	{
+	public:
+		static EventBase* getEvent(DWORD key);
+		
+		template<EventType EvType>
+		static void addEvent(DWORD key, const char* name);
+	private:
+		static std::unordered_map<DWORD, std::unique_ptr<EventBase>> m_Events;
+	};
+
 }
 
 /*
