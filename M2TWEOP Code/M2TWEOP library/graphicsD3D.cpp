@@ -470,22 +470,22 @@ graphicsExport::D3dState graphicsExport::GetD3dState()
 	return retState;
 }
 
-void graphicsExport::AddStratmapDrawCallback(EOPDrawCallback callFunk)
+EOP_EXPORT void graphicsExport::AddStratmapDrawCallback(EOPDrawCallback callFunk)
 {
 	graphicsD3D::dataS.stratmapDrawCallbacks.push_back(callFunk);
 }
 
-void graphicsExport::AddImGuiDrawCallback(EOPDrawCallback callFunk)
+EOP_EXPORT void graphicsExport::AddImGuiDrawCallback(EOPDrawCallback callFunk)
 {
 	graphicsD3D::dataS.imguiDrawCallbacks.push_back(callFunk);
 }
 
-void graphicsExport::SetClearD3dState()
+EOP_EXPORT void graphicsExport::SetClearD3dState()
 {
 	graphicsD3D::dataS.clearStateBlock->Apply();
 }
 
-void graphicsExport::SetD3dState(graphicsExport::D3dState& state)
+EOP_EXPORT void graphicsExport::SetD3dState(graphicsExport::D3dState& state)
 {
 	state.d3d9_state_block->Apply();
 
@@ -494,12 +494,12 @@ void graphicsExport::SetD3dState(graphicsExport::D3dState& state)
 	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_PROJECTION, &state.projection);
 }
 
-void graphicsExport::ReleaseD3dState(graphicsExport::D3dState& state)
+EOP_EXPORT void graphicsExport::ReleaseD3dState(graphicsExport::D3dState& state)
 {
 	state.d3d9_state_block->Release();
 }
 
-const D3DXMATRIXA16* graphicsExport::GetMatView()
+EOP_EXPORT const D3DXMATRIXA16* graphicsExport::GetMatView()
 {
 	D3DXMATRIXA16* matView = nullptr;;
 
@@ -515,7 +515,7 @@ const D3DXMATRIXA16* graphicsExport::GetMatView()
 	return matView;
 }
 
-const D3DXMATRIXA16* graphicsExport::GetMatProj()
+EOP_EXPORT const D3DXMATRIXA16* graphicsExport::GetMatProj()
 {
 	D3DXMATRIXA16* matProj = nullptr;;
 
@@ -531,12 +531,12 @@ const D3DXMATRIXA16* graphicsExport::GetMatProj()
 	return matProj;
 }
 
-IDirect3DDevice9* graphicsExport::GetDevice()
+EOP_EXPORT IDirect3DDevice9* graphicsExport::GetDevice()
 {
 	return graphicsD3D::dataS.pDevice;
 }
 
-LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* path, int* x, int* y)
+EOP_EXPORT LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* path, int* x, int* y)
 {
 	LPDIRECT3DTEXTURE9 imageRet = nullptr;
 	// https://learn.microsoft.com/en-us/windows/win32/direct3d9/d3dxcreatetexturefromfileex
@@ -576,7 +576,7 @@ LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* path, int* x, int* y)
 	return imageRet;
 }
 
-void graphicsExport::unloadTexture(LPDIRECT3DTEXTURE9 texture)
+EOP_EXPORT void graphicsExport::unloadTexture(LPDIRECT3DTEXTURE9 texture)
 {
 	if (texture == nullptr)
 	{
@@ -585,7 +585,7 @@ void graphicsExport::unloadTexture(LPDIRECT3DTEXTURE9 texture)
 	tempData.texturesForDeleting.push_back(texture);
 }
 
-void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevice)
+EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevice)
 {
 	managerF::loadJsonSettings();
 
@@ -652,7 +652,12 @@ void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevice)
 	};
 }
 
-void graphicsExport::onReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
+EOP_EXPORT void graphicsExport::onEndScene(IDirect3DDevice9* pDevice)
+{
+		
+}
+
+EOP_EXPORT void graphicsExport::onReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
 {
 	ImGui_ImplDX9_InvalidateDeviceObjects();
 
@@ -661,7 +666,7 @@ void graphicsExport::onReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* p
 		graphicsD3D::dataS.clearStateBlock->Release();
 }
 
-void graphicsExport::afterReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
+EOP_EXPORT void graphicsExport::afterReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
 {
 	ImGui_ImplDX9_CreateDeviceObjects();
 

@@ -2300,6 +2300,7 @@ namespace sol_ImGui
 
 		InitEnums(lua);
 		InitEnums2(lua);
+		InitKeyEnum(lua);
 
 		sol::table ImGui = lua.create_named_table("ImGui");
 

@@ -64,23 +64,23 @@ namespace graphicsExport
 	};
 	D3dState GetD3dState();
 
-	void AddStratmapDrawCallback(EOPDrawCallback callFunk);
-	void AddImGuiDrawCallback(EOPDrawCallback callFunk);
+	EOP_EXPORT void AddStratmapDrawCallback(EOPDrawCallback callFunk);
+	EOP_EXPORT void AddImGuiDrawCallback(EOPDrawCallback callFunk);
 
-	void SetClearD3dState();
-	void SetD3dState(D3dState& state);
-	void ReleaseD3dState(D3dState& state);
-
-
-	const D3DXMATRIXA16* GetMatView();
-	const D3DXMATRIXA16* GetMatProj();
-
-	IDirect3DDevice9* GetDevice();
-	LPDIRECT3DTEXTURE9 loadTexture(const char* path, int* x, int* y);
-	void unloadTexture(LPDIRECT3DTEXTURE9 texture);
+	EOP_EXPORT void SetClearD3dState();
+	EOP_EXPORT void SetD3dState(D3dState& state);
+	EOP_EXPORT void ReleaseD3dState(D3dState& state);
 
 
-	void onCreateDevice(IDirect3DDevice9* pDevice);
-	void onReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters);
-	void afterReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters);
+	EOP_EXPORT const D3DXMATRIXA16* GetMatView();
+	EOP_EXPORT const D3DXMATRIXA16* GetMatProj();
+
+	EOP_EXPORT IDirect3DDevice9* GetDevice();
+	EOP_EXPORT LPDIRECT3DTEXTURE9 loadTexture(const char* path, int* x, int* y);
+	EOP_EXPORT void unloadTexture(LPDIRECT3DTEXTURE9 texture);
+
+	EOP_EXPORT void onEndScene(IDirect3DDevice9* pDevice);
+	EOP_EXPORT void onCreateDevice(IDirect3DDevice9* pDevice);
+	EOP_EXPORT void onReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters);
+	EOP_EXPORT void afterReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters);
 };

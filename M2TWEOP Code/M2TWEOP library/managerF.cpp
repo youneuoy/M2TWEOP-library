@@ -982,7 +982,7 @@ void managerF::initThread()
 }
 
 
-void managerExport::initEOP(const char* modPath, int gameVer)
+EOP_EXPORT void managerExport::initEOP(const char* modPath, int gameVer)
 {	// Initialize MinHook.
 	if (MH_Initialize() != MH_OK)
 	{

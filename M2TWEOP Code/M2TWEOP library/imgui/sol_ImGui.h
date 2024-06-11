@@ -701,6 +701,7 @@ namespace sol_ImGui
 
 	void InitEnums(sol::state& lua);
 	void InitEnums2(sol::state& lua);
+	void InitKeyEnum(sol::state& lua);
 	
 	void Init(sol::state& lua);
 	

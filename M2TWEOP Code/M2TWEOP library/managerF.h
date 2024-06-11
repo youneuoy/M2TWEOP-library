@@ -1,4 +1,6 @@
 #pragma once
+#include "exportHeader.h"
+
 class managerF
 {
 public:
@@ -16,6 +18,6 @@ private:
 
 namespace managerExport
 {
-	void initEOP(const char* modPath, int gameVer);
+	EOP_EXPORT void initEOP(const char* modPath, int gameVer);
 
 }
