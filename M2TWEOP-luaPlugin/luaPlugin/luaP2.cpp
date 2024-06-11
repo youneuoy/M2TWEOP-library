@@ -601,18 +601,18 @@ void luaP::initCampaign()
 	typeAll.uiCardManager.set_function("getUnitCard", &gameHelpers::getUnitCard);
 	/***
 	Get building info scroll.
-	@function uiCardManager:getBuildingInfoScroll
+	@function uiCardManager.getBuildingInfoScroll
 	@treturn buildingInfoScroll scroll
 	@usage
-	local infoScroll = cardManager:getBuildingInfoScroll();
+	local infoScroll = cardManager.getBuildingInfoScroll();
 	*/
 	typeAll.uiCardManager.set_function("getBuildingInfoScroll", &gameSTDUIHelpers::getBuildingInfoScroll);
 	/***
 	Get unit info scroll.
-	@function uiCardManager:getUnitInfoScroll
+	@function uiCardManager.getUnitInfoScroll
 	@treturn unitInfoScroll scroll
 	@usage
-	local infoScroll = cardManager:getUnitInfoScroll();
+	local infoScroll = cardManager.getUnitInfoScroll();
 	*/
 	typeAll.uiCardManager.set_function("getUnitInfoScroll", &gameSTDUIHelpers::getUnitInfoScroll);
 	
@@ -2796,6 +2796,8 @@ void luaP::initP2()
 	@tfield getType getType
 	@tfield int range
 	@tfield projectileStruct projectile
+	@tfield int fireLevel
+	@tfield int isBurning
 
 	@table siegeEngineStruct
 	*/
@@ -2810,6 +2812,8 @@ void luaP::initP2()
 	typeAll.siegeEngineStruct.set("engineID", &siegeEngine::engineID);
 	typeAll.siegeEngineStruct.set("range", &siegeEngine::range);
 	typeAll.siegeEngineStruct.set("projectile", &siegeEngine::statPriMissle);
+	typeAll.siegeEngineStruct.set("fireLevel", &siegeEngine::fireLevel);
+	typeAll.siegeEngineStruct.set("isBurning", &siegeEngine::isBurning);
 
 	/***
 	Get the type of the engine (use the enum).

@@ -26,7 +26,6 @@ namespace eduThings
 		eopTypeName.append(data.edu.Type);
 		eopTypeName.append("_");
 		eopTypeName.append(to_string(newIdx));//added to make typename unique
-		fastFunctsHelpers::setCryptedString(&data.edu.Type, eopTypeName.c_str());
 	}
 	eopEduEntry::eopEduEntry(const char* fileName, int newIdx)
 	{
@@ -44,7 +43,6 @@ namespace eduThings
 		eopTypeName.append(data.edu.Type);
 		eopTypeName.append("_");
 		eopTypeName.append(to_string(newIdx));//added to make typename unique
-		fastFunctsHelpers::setCryptedString(&data.edu.Type, eopTypeName.c_str());
 	}
 	struct eduThingsG
 	{
