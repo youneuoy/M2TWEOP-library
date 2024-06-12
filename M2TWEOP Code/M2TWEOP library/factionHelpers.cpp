@@ -8,18 +8,19 @@
 #include "smallFuncs.h"
 #include "technicalHelpers.h"
 #include "unitActions.h"
+#include "character.h"
 
 std::string factionHelpers::getFactionName(const factionStruct* fac)
 {
 	return std::string(fac->factSmDescr->facName);
 }
 
-namedCharacter* factionHelpers::getCharacterFromFullList(const factionStruct* fac, int index)
+characterRecord* factionHelpers::getCharacterFromFullList(const factionStruct* fac, int index)
 {
-	return fac->charactersAll[index];
+	return fac->characterRecords[index];
 }
 
-general* factionHelpers::getCharacterFromGeneralsList(const factionStruct* fac, int index)
+character* factionHelpers::getCharacterFromGeneralsList(const factionStruct* fac, int index)
 {
 	return fac->characters[index];
 }
@@ -223,7 +224,7 @@ void* disembark(stackStruct* army, int x, int y)
 	auto charPtr = &army->gen;
 	coordPair coords{x, y};
 	auto coordsPtr = &coords;
-	GAME_FUNC_RAW(void(__thiscall*)(general**, coordPair*, DWORD), setCadClass)(charPtr, coordsPtr, cadClass);
+	GAME_FUNC_RAW(void(__thiscall*)(character**, coordPair*, DWORD), setCadClass)(charPtr, coordsPtr, cadClass);
 	DWORD globalCadClass = 0x0162C740;
 	if (smallFuncs::getGameVersion() == 1)
 		globalCadClass = 0x1674570;

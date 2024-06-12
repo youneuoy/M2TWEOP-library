@@ -4,6 +4,7 @@
 #include "smallFuncs.h"
 #include "MasterDefines.h"
 #include "MapTextDrawer.h"
+#include "character.h"
 #include <mutex>
 
 
@@ -40,7 +41,7 @@ void Retreater::RetreatArmy(armyAndCharacter& army)
 
 	if (destDile->object == nullptr)
 	{
-		fastFuncts::teleportCharacter(army.character, x, y);
+		characterHelpers::teleportCharacter(army.character, x, y);
 		army.character->ambushState = 10;
 		return;
 	}

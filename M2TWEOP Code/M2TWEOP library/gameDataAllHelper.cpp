@@ -9,21 +9,21 @@ namespace gameDataAllHelper
 			return smallFuncs::getGameDataAll();
 	}
 
-	general* getSelectedCharacter(selectionInfo* selection)
+	character* getSelectedCharacter(selectionInfo* selection)
 	{
 		if (!selection || !selection->selectedCharacter)
 			return nullptr;
 		return selection->selectedCharacter->selectedCharacter;
 	}
 
-	general* getHoveredCharacter(selectionInfo* selection)
+	character* getHoveredCharacter(selectionInfo* selection)
 	{
 		if (!selection || !selection->hoveredCharacter)
 			return nullptr;
 		return selection->hoveredCharacter->selectedCharacter;
 	}
 
-	general* getSelectedEnemyCharacter(selectionInfo* selection)
+	character* getSelectedEnemyCharacter(selectionInfo* selection)
 	{
 		if (!selection || !selection->selectedEnemyCharacter)
 			return nullptr;

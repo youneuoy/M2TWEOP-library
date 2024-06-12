@@ -23,7 +23,6 @@
 #include "gameHelpers.h"
 #include "stackStructHelpers.h"
 #include "buildingStructHelpers.h"
-#include "generalHelpers.h"
 #include "unitHelpers.h"
 #include "m2tweopHelpers.h"
 #include "generalCharactericticsHelpers.h"
@@ -32,6 +31,7 @@
 #include "guildHelpers.h"
 #include "siegeHelpers.h"
 #include "gameSTDUIHelpers.h"
+#include "character.h"
 std::vector<std::string> luaP::logS;
 std::vector<std::string> luaP::logCommands;
 
@@ -111,6 +111,8 @@ bool luaP::checkVar(const char* gName, int variable)
 	return false;
 }
 
+
+
 sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 {
 
@@ -135,11 +137,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	struct
 	{
 		sol::usertype<uiElement>uiElement;
-
-
 		sol::usertype<unit>unit;
-		sol::usertype<general>character;
-		sol::usertype<namedCharacter>namedCharacter;
+		sol::usertype<characterRecord>characterRecord;
 		sol::usertype<capturedFactionInfo>capturedFactionInfo;
 		sol::usertype<capturedUnit>capturedUnit;
 		sol::usertype<capturedCharacter>capturedCharacter;
@@ -149,7 +148,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<factionStruct>factionStruct;
 		sol::usertype<factionStratMapDescrS>factionStratMapStruct;
 		sol::usertype<watchTowerStruct>watchtowerStruct;
-		sol::usertype<fortStruct>fortStruct;
 		sol::usertype<portBuildingStruct>portStruct;
 		sol::usertype<portDockStrat>dockStruct;
 		sol::usertype<settlementStruct>settlementStruct;
@@ -236,6 +234,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		MessageBoxA(NULL, luaError.what(), "Lua execution error!", NULL);
 		return nullptr;
 	}
+
+	characterHelpers::addToLua(luaState);
+	fortHelpers::addToLua(luaState);
 
 	///M2TWEOP
 	//@section m2tweopTable
@@ -1916,333 +1917,11 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.eduEntry.set_function("hasAttribute", &eopEduHelpers::hasAttributeEdu);
 
 
-	///Character
-	//@section Character Table
+	///character Record
+	//@section Character record
 
 	/***
-	characters as they exist on the strategy map - dead characters, wives, children, and off-map characters do not have these fields.
-
-	@tfield int xCoord
-	@tfield int yCoord
-	@tfield namedCharacter namedCharacter
-	@tfield unit bodyguards
-	@tfield stackStruct armyLeaded
-	@tfield stackStruct armyNotLeaded in the stack but not leading it
-	@tfield int inEnemyZOC
-	@tfield int ambushState
-	@tfield int regionID
-	@tfield int isMarkedToKill can check if the character died before the game updates he is dead like post battle event
-	@tfield int doNotSpendMovePoints
-	@tfield float movePointsCharacter
-	@tfield float movePointsModifier
-	@tfield float movePointsMaxCharacter
-	@tfield float movePointsMaxArmy
-	@tfield float movePointsArmy
-	@tfield float movePoints sets both army and character move points.
-	@tfield int turnJoinedCrusade
-	@tfield int numTurnsIdle
-	@tfield float percentCharacterReligionInRegion 0 to 1
-	@tfield float popConvertedThisTurn
-	@tfield int timeInRegion
-	@tfield int timeWithArmy for auxiliary generals, not leading general
-	@tfield crusadeStruct crusade
-	@tfield int currentTurn
-	@tfield float distanceToCrusadeTarget
-	@tfield int disbandProgress
-	@tfield int isCrusadeDisbandActive
-	@tfield settlementStruct besiegingSettlement
-	@tfield character besiegingCharacter
-	@tfield string ability see descr\_hero\_abilities.xml
-	@tfield getTypeID getTypeID
-	@tfield getTypeName getTypeName
-	@tfield setTypeID setTypeID
-	@tfield moveToTile moveToTile
-	@tfield reposition reposition
-	@tfield teleport teleport
-	@tfield diplomacyCharacter diplomacyCharacter
-	@tfield diplomacySettlement diplomacySettlement
-	@tfield kill kill
-	@tfield createFort createFort
-	@tfield assassinate assassinate
-	@tfield marry marry
-	@tfield spyCharacter spyCharacter
-	@tfield denounce denounce
-	@tfield bribe bribe
-	@tfield acquire acquire
-	@tfield setBodyguardUnit setBodyguardUnit
-	@tfield setCharacterModel setCharacterModel
-	@tfield switchFaction switchFaction
-	@tfield sendOffMap sendOffMap
-	@tfield sabotage sabotage
-	@tfield diplomacyFort diplomacyFort
-	@tfield bribeFort bribeFort
-	@tfield spyFort spyFort
-	@tfield bribeSettlement bribeSettlement
-	@tfield spySettlement spySettlement
-	@tfield sabotageSettlement sabotageSettlement
-
-	@table character
-	*/
-	types.character = luaState.new_usertype<general>("character");
-	types.character.set("xCoord", &general::xCoord);
-	types.character.set("yCoord", &general::yCoord);
-	types.character.set("namedCharacter", &general::genChar);
-	types.character.set("bodyguards", &general::bodyguards);
-	types.character.set("armyLeaded", &general::armyLeaded);
-	types.character.set("armyNotLeaded", &general::armyNotLeaded);
-	types.character.set("isMarkedToKill", &general::ifMarkedToKill);
-	types.character.set("inEnemyZOC", &general::inEnemyZOC);
-	types.character.set("ambushState", &general::ambushState);
-	types.character.set("doNotSpendMovePoints", &general::doNotSpendMovePoints);
-	types.character.set("turnJoinedCrusade", &general::turnJoinedCrusade);
-	types.character.set("numTurnsIdle", &general::numTurnsIdle);
-	types.character.set("percentCharacterReligionInRegion", &general::percentCharacterReligionInRegion);
-	types.character.set("popConvertedThisTurn", &general::popConvertedThisTurn);
-	types.character.set("timeInRegion", &general::timeInRegion);
-	types.character.set("timeWithArmy", &general::timeWithArmy);
-	types.character.set("regionID", &general::regionID);
-	types.character.set("crusade", &general::crusade);
-	types.character.set("turnJoinedCrusade", &general::turnJoinedCrusade);
-	types.character.set("currentTurn", &general::currentTurn);
-	types.character.set("distanceToCrusadeTarget", &general::distanceToCrusadeTarget);
-	types.character.set("disbandProgress", &general::disbandProgress);
-	types.character.set("isCrusadeDisbandActive", &general::isCrusadeDisbandActive);
-	types.character.set("besiegingSettlement", &general::besiegingSettlement);
-	types.character.set("besiegingCharacter", &general::besiegingCharacter);
-	types.character.set("movePointsCharacter", &general::movePointsCharacter);
-	types.character.set("movePointsModifier", &general::movePointsModifier);
-	types.character.set("movePointsMaxArmy", &general::movePointsMaxArmy);
-	types.character.set("movePointsMaxCharacter", &general::movePointsMax);
-	types.character.set("movePoints", sol::property(&generalHelpers::getMovepoints, &generalHelpers::setMovepoints));
-	types.character.set("movePointsArmy", &general::movePointsArmy);
-	types.character.set("ability", sol::property(&luaGetSetFuncs::getStringPropertyGen<generalStruct_abilityID>, &luaGetSetFuncs::setStringPropertyGen<generalStruct_abilityID>));
-	/***
-	Get the character type. Use characterType enum.
-	@function character:getTypeID
-	@treturn int typeId
-	@usage
-	local ourType=ourCharacter:getTypeID();
-	*/
-	types.character.set_function("getTypeID", &generalHelpers::getTypeID);
-	/***
-	Get the character type. Use characterType enum.
-	@function character:getTypeName
-	@treturn string type
-	@usage
-	local ourType=ourCharacter:getTypeName();
-	*/
-	types.character.set_function("getTypeName", &generalHelpers::getTypeName);
-	/***
-	Set the character type. Use characterType enum.
-	@function character:setTypeID
-	@tparam int typeId
-	@usage
-	ourCharacter:setTypeID(2);
-	*/
-	types.character.set_function("setTypeID", &fastFuncts::setCharacterType);
-	/***
-	Issue regular move command, character must have movement points.
-	@function character:moveToTile
-	@tparam int xCoord
-	@tparam int yCoord
-	@usage
-	ourCharacter:moveToTile(11,25);
-	*/
-	types.character.set_function("moveToTile", &actionsStrat::moveNormal);
-	/***
-	Issue diplomacy command.
-	@function character:diplomacyCharacter
-	@tparam character targetChar
-	@usage
-	ourCharacter:diplomacyCharacter(targetChar);
-	*/
-	types.character.set_function("diplomacyCharacter", &actionsStrat::diplomacyCharacter);
-	/***
-	Issue assassination command.
-	@function character:assassinate
-	@tparam character targetChar
-	@usage
-	ourCharacter:assassinate(targetChar);
-	*/
-	types.character.set_function("assassinate", &actionsStrat::assassinate);
-	/***
-	Issue marry command.
-	@function character:marry
-	@tparam character targetChar
-	@usage
-	ourCharacter:marry(targetChar);
-	*/
-	types.character.set_function("marry", &actionsStrat::marry);
-	/***
-	Issue spyCharacter command.
-	@function character:spyCharacter
-	@tparam character targetChar
-	@usage
-	ourCharacter:spyCharacter(targetChar);
-	*/
-	types.character.set_function("spyCharacter", &actionsStrat::spyCharacter);
-	/***
-	Issue denounce command.
-	@function character:denounce
-	@tparam character targetChar
-	@usage
-	ourCharacter:denounce(targetChar);
-	*/
-	types.character.set_function("denounce", &actionsStrat::denounce);
-	/***
-	Issue bribe command.
-	@function character:bribe
-	@tparam character targetChar
-	@usage
-	ourCharacter:bribe(targetChar);
-	*/
-	types.character.set_function("bribe", &actionsStrat::bribe);
-	/***
-	Issue acquire command.
-	@function character:acquire
-	@tparam character targetChar
-	@usage
-	ourCharacter:acquire(targetChar);
-	*/
-	types.character.set_function("acquire", &actionsStrat::acquire);
-	/***
-	Issue sabotage command.
-	@function character:sabotage
-	@tparam building target
-	@usage
-	ourCharacter:sabotage(targetBuilding);
-	*/
-	types.character.set_function("sabotage", &generalHelpers::sabotageBuilding);
-	/***
-	Switch character faction.
-	@function character:switchFaction
-	@tparam factionStruct newFac
-	@tparam bool keepArmy
-	@tparam bool keepUnit
-	@usage
-	ourCharacter:switchFaction(otherFac, true, true);
-	*/
-	types.character.set_function("switchFaction", &actionsStrat::switchCharacterFaction);
-	/***
-	Issue diplomacy command.
-	@function character:diplomacySettlement
-	@tparam settlementStruct targetSettlement
-	@usage
-	ourCharacter:diplomacySettlement(targetSettlement);
-	*/
-	types.character.set_function("diplomacySettlement", &actionsStrat::diplomacySettlement);
-	/***
-	Issue bribe command.
-	@function character:bribeSettlement
-	@tparam settlementStruct targetSettlement
-	@usage
-	ourCharacter:bribeSettlement(targetSettlement);
-	*/
-	types.character.set_function("bribeSettlement", &actionsStrat::bribeSettlement);
-	/***
-	Issue spy command.
-	@function character:spySettlement
-	@tparam settlementStruct targetSettlement
-	@usage
-	ourCharacter:spySettlement(targetSettlement);
-	*/
-	types.character.set_function("spySettlement", &actionsStrat::spySettlement);
-	/***
-	Issue sabotage command.
-	@function character:sabotageSettlement
-	@tparam settlementStruct targetSettlement
-	@usage
-	ourCharacter:sabotageSettlement(targetSettlement);
-	*/
-	types.character.set_function("sabotageSettlement", &actionsStrat::sabotageSettlement);
-	/***
-	Issue diplomacy command.
-	@function character:diplomacyFort
-	@tparam fortStruct targetFort
-	@usage
-	ourCharacter:diplomacyFort(targetFort);
-	*/
-	types.character.set_function("diplomacyFort", &actionsStrat::diplomacyFort);
-	/***
-	Issue bribe command.
-	@function character:bribeFort
-	@tparam fortStruct targetFort
-	@usage
-	ourCharacter:bribeFort(targetFort);
-	*/
-	types.character.set_function("bribeFort", &actionsStrat::bribeFort);
-	/***
-	Issue spy command.
-	@function character:spyFort
-	@tparam fortStruct targetFort
-	@usage
-	ourCharacter:spyFort(targetFort);
-	*/
-	types.character.set_function("spyFort", &actionsStrat::spyFort);
-	/***
-	Instantly teleport character to the coordinates, if occupied a random place in the same region is chosen.
-	@function character:reposition
-	@tparam int xCoord
-	@tparam int yCoord
-	@usage
-	ourCharacter:reposition(11,25);
-	*/
-	types.character.set_function("reposition",  &fastFuncts::teleportCharacter);
-	/***
-	Instantly teleport character to the coordinates, if occupied the closest valid place to the coordinates is chosen.
-	@function character:teleport
-	@tparam int xCoord
-	@tparam int yCoord
-	@treturn bool hasTeleported
-	@usage
-	 local success = ourCharacter:teleport(11,25);
-	*/
-	types.character.set_function("teleport", &fastFuncts::teleportCharacterClose);
-	/***
-	Delete this character
-	@function character:kill
-	@usage
-	ourCharacter:kill();
-	*/
-	types.character.set_function("kill", &fastFuncts::killCharacter);
-	/***
-	Create a fort at the character's coordinates
-	@function character:createFort
-	@usage
-	ourCharacter:createFort();
-	*/
-	types.character.set_function("createFort", &fastFuncts::createFort);
-	/***
-	Set bodyguard. Do this only for characters without it, such as immediately after creating a character.
-	@function character:setBodyguardUnit
-	@tparam unit unit
-	@usage
-	ourCharacter:setBodyguardUnit(unit);
-	*/
-	types.character.set_function("setBodyguardUnit", &fastFuncts::setBodyguard);
-	/***
-	Set a character's model to a new one.
-	@function character:setCharacterModel
-	@tparam string model
-	@usage
-	ourCharacter:setCharacterModel("saruman");
-	*/
-	types.character.set_function("setCharacterModel", &stratModelsChange::setCharacterModel);
-	/***
-	Send a character off map (command will not fire if the general does not have a label, as you wouldn't be able to respawn him). It automatically acounts for the bug relating to sending characters off map that are leading a 1 unit army, by adding and killing a unit.
-	@function character:sendOffMap
-	@usage
-	       ourCharacter:sendOffMap();
-	*/
-	types.character.set_function("sendOffMap", &actionsStrat::sendOffMap);
-
-
-
-	///NamedCharacter
-	//@section namedCharacterTable
-
-	/***
-	Basic namedCharacter table. All named characters have these fields including dead characters, wives, children, and off-map characters.
+	Basic characterRecord table. All named characters have these fields including dead characters, wives, children, and off-map characters.
 
 	@tfield int index
 	@tfield character character
@@ -2269,9 +1948,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int numberOfChildren
 	@tfield factionStruct faction
 	@tfield int subFaction
-	@tfield namedCharacter parent
-	@tfield namedCharacter spouse
-	@tfield namedCharacter[4] childs Maximum 4.
+	@tfield characterRecord parent
+	@tfield characterRecord spouse
+	@tfield characterRecord[4] childs Maximum 4.
 	@tfield getTraits getTraits
 	@tfield addTrait addTrait
 	@tfield removeTrait removeTrait
@@ -2345,77 +2024,77 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int[10] combatVsReligion Maximum 10. EVEN IF YOU SET RELIGION LIMIT.
 	@tfield int[31] combatVsFaction Maximum 31.
 
-	@table namedCharacter
+	@table characterRecord
 	*/
-	types.namedCharacter = luaState.new_usertype<namedCharacter>("namedCharacter");
-	types.namedCharacter.set("index", &namedCharacter::index);
-	types.namedCharacter.set("character", &namedCharacter::gen);
-	types.namedCharacter.set("shortName", sol::property(&luaGetSetFuncs::getStringPropertyGenChar<generalCharactericticsStruct_shortName>, &luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_shortName>));
-	types.namedCharacter.set("fullName", sol::property(&luaGetSetFuncs::getStringPropertyGenChar<generalCharactericticsStruct_fullName>, &luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_fullName>));
-	types.namedCharacter.set("localizedDisplayName", sol::property(&technicalHelpers::namedCharUniStringToStr<namedChar_localizedFullName>, &technicalHelpers::namedCharSetLocalizedFullName));
-	types.namedCharacter.set("label", sol::property(&luaGetSetFuncs::getStringPropertyGenChar<generalCharactericticsStruct_label>, &luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_label>));
-	types.namedCharacter.set("portrait", sol::property(&luaGetSetFuncs::getStringPropertyGenChar<generalCharactericticsStruct_portrait>, &luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_portrait>));
-	types.namedCharacter.set("portrait2", sol::property(&luaGetSetFuncs::getStringPropertyGenChar<generalCharactericticsStruct_portrait2>, &luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_portrait2>));
-	types.namedCharacter.set("portrait_custom", sol::property(&luaGetSetFuncs::getStringPropertyGenChar<generalCharactericticsStruct_portrait_custom>, &luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_portrait_custom>));
-	types.namedCharacter.set("modelName", sol::property(&luaGetSetFuncs::getStringPropertyGenChar<generalCharactericticsStruct_modelName>, &luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_modelName>));
-	types.namedCharacter.set("status", &namedCharacter::status);
+	types.characterRecord = luaState.new_usertype<characterRecord>("characterRecord");
+	types.characterRecord.set("index", &characterRecord::index);
+	types.characterRecord.set("character", &characterRecord::gen);
+	types.characterRecord.set("shortName", sol::property(&luaGetSetFuncs::getStringPropertyGenChar<generalCharactericticsStruct_shortName>, &luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_shortName>));
+	types.characterRecord.set("fullName", sol::property(&luaGetSetFuncs::getStringPropertyGenChar<generalCharactericticsStruct_fullName>, &luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_fullName>));
+	types.characterRecord.set("localizedDisplayName", sol::property(&technicalHelpers::namedCharUniStringToStr<namedChar_localizedFullName>, &technicalHelpers::namedCharSetLocalizedFullName));
+	types.characterRecord.set("label", sol::property(&luaGetSetFuncs::getStringPropertyGenChar<generalCharactericticsStruct_label>, &luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_label>));
+	types.characterRecord.set("portrait", sol::property(&luaGetSetFuncs::getStringPropertyGenChar<generalCharactericticsStruct_portrait>, &luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_portrait>));
+	types.characterRecord.set("portrait2", sol::property(&luaGetSetFuncs::getStringPropertyGenChar<generalCharactericticsStruct_portrait2>, &luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_portrait2>));
+	types.characterRecord.set("portrait_custom", sol::property(&luaGetSetFuncs::getStringPropertyGenChar<generalCharactericticsStruct_portrait_custom>, &luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_portrait_custom>));
+	types.characterRecord.set("modelName", sol::property(&luaGetSetFuncs::getStringPropertyGenChar<generalCharactericticsStruct_modelName>, &luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_modelName>));
+	types.characterRecord.set("status", &characterRecord::status);
 	/***
 	Sets the named character as the faction heir.
-	@function namedCharacter:setAsHeir
+	@function characterRecord:setAsHeir
 	@tparam bool onlyHeir True = this character will be the only heir, false = add another heir (faction can appear to have multiple heirs but only one will become leader).
 	@usage
 	ourcharacter:setAsHeir(true)
 	*/
-	types.namedCharacter.set_function("setAsHeir", &fastFuncts::setHeir);
+	types.characterRecord.set_function("setAsHeir", &fastFuncts::setHeir);
 	/***
 	Checks if character is alive, read only, do not set this value.
-	@function namedCharacter:isAlive
+	@function characterRecord:isAlive
 	@treturn bool liveStatus true = alive, false = dead
 	@usage
 	if ourcharacter:isAlive() == true then
 		ourcharacter.character:kill()
 	end
 	*/
-	types.namedCharacter.set_function("isAlive", &generalCharactericticsHelpers::isAlive);
+	types.characterRecord.set_function("isAlive", &generalCharactericticsHelpers::isAlive);
 	/***
 	Checks if character is off map, read only, do not set this value.
-	@function namedCharacter:isOffMap
+	@function characterRecord:isOffMap
 	@treturn bool offMap
 	@usage
 	if ourcharacter:isOffMap() == true then
 		--do something
 	end
 	*/
-	types.namedCharacter.set_function("isOffMap", &generalCharactericticsHelpers::isOffMap);
+	types.characterRecord.set_function("isOffMap", &generalCharactericticsHelpers::isOffMap);
 	/***
 	Checks if character is child, read only, do not set this value.
-	@function namedCharacter:isChild
+	@function characterRecord:isChild
 	@treturn bool isChild
 	@usage
 	if ourcharacter:isChild() == true then
 		--do something
 	end
 	*/
-	types.namedCharacter.set_function("isChild", &generalCharactericticsHelpers::isChild);
-	types.namedCharacter.set("isMale", sol::property(&generalCharactericticsHelpers::getIsMale, &generalCharactericticsHelpers::setIsMale));
-	types.namedCharacter.set("isFamily", sol::property(&generalCharactericticsHelpers::isFamily, &generalCharactericticsHelpers::setAsFamily));
-	types.namedCharacter.set("age", sol::property(&generalCharactericticsHelpers::getAge, &generalCharactericticsHelpers::setAge));
-	types.namedCharacter.set("yearOfBirth", &namedCharacter::yearOfBirth);
-	types.namedCharacter.set("seasonOfBirth", &namedCharacter::seasonOfBirth);
-	types.namedCharacter.set("seasonOfMaturity", &namedCharacter::seasonOfMaturity);
-	types.namedCharacter.set("yearOfMaturity", &namedCharacter::yearOfMaturity);
-	types.namedCharacter.set("numberOfChildren", &namedCharacter::numberOfChildren);
-	types.namedCharacter.set("faction", &namedCharacter::faction);
-	types.namedCharacter.set("subFaction", &namedCharacter::subFaction);
-	types.namedCharacter.set("parent", &namedCharacter::parent);
-	types.namedCharacter.set("portraitIndex", &namedCharacter::portraitIndex);
-	types.namedCharacter.set("spouse", &namedCharacter::spouse);
-	types.namedCharacter.set("childs", sol::property([](namedCharacter& self) { return std::ref(self.childs); }));
-	types.namedCharacter.set("combatVsReligion", sol::property([](namedCharacter& self) { return std::ref(self.combatVsReligion); }));
-	types.namedCharacter.set("combatVsFaction", sol::property([](namedCharacter& self) { return std::ref(self.combatVsFaction); }));
+	types.characterRecord.set_function("isChild", &generalCharactericticsHelpers::isChild);
+	types.characterRecord.set("isMale", sol::property(&generalCharactericticsHelpers::getIsMale, &generalCharactericticsHelpers::setIsMale));
+	types.characterRecord.set("isFamily", sol::property(&generalCharactericticsHelpers::isFamily, &generalCharactericticsHelpers::setAsFamily));
+	types.characterRecord.set("age", sol::property(&generalCharactericticsHelpers::getAge, &generalCharactericticsHelpers::setAge));
+	types.characterRecord.set("yearOfBirth", &characterRecord::yearOfBirth);
+	types.characterRecord.set("seasonOfBirth", &characterRecord::seasonOfBirth);
+	types.characterRecord.set("seasonOfMaturity", &characterRecord::seasonOfMaturity);
+	types.characterRecord.set("yearOfMaturity", &characterRecord::yearOfMaturity);
+	types.characterRecord.set("numberOfChildren", &characterRecord::numberOfChildren);
+	types.characterRecord.set("faction", &characterRecord::faction);
+	types.characterRecord.set("subFaction", &characterRecord::subFaction);
+	types.characterRecord.set("parent", &characterRecord::parent);
+	types.characterRecord.set("portraitIndex", &characterRecord::portraitIndex);
+	types.characterRecord.set("spouse", &characterRecord::spouse);
+	types.characterRecord.set("childs", sol::property([](characterRecord& self) { return std::ref(self.childs); }));
+	types.characterRecord.set("combatVsReligion", sol::property([](characterRecord& self) { return std::ref(self.combatVsReligion); }));
+	types.characterRecord.set("combatVsFaction", sol::property([](characterRecord& self) { return std::ref(self.combatVsFaction); }));
 	/***
 	Get the pointer to the character's traits container.
-	@function namedCharacter:getTraits
+	@function characterRecord:getTraits
 	@treturn traitContainer The character's traits.
 	@usage
 	local thisTrait, traitsList, index = selectedChar:getTraits(), selectedChar.fullName.." traits:", 0
@@ -2424,113 +2103,113 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	end
 	print(traitsList)
 	*/
-	types.namedCharacter.set_function("getTraits", &generalCharactericticsHelpers::getTraits);
+	types.characterRecord.set_function("getTraits", &generalCharactericticsHelpers::getTraits);
 	/***
 	Add a trait to the character.
-	@function namedCharacter:addTrait
+	@function characterRecord:addTrait
 	@tparam string traitName Trait's internal name per export\_descr\_character\_traits.txt
 	@tparam int traitLevel Trait's level.
 	@usage
 	ourNamedCharacter:addTrait("GoodCommander", 2)
 	*/
-	types.namedCharacter.set_function("addTrait", &fastFuncts::addTrait);
+	types.characterRecord.set_function("addTrait", &fastFuncts::addTrait);
 	/***
 	Remove a trait from the character.
-	@function namedCharacter:removeTrait
+	@function characterRecord:removeTrait
 	@tparam string traitName Trait's internal name per export\_descr\_character\_traits.txt
 	@usage
 	ourNamedCharacter:removeTrait("GoodCommander");
 	*/
-	types.namedCharacter.set_function("removeTrait", &fastFuncts::removeTrait);
-	types.namedCharacter.set("ancNum", &namedCharacter::ancNum);
+	types.characterRecord.set_function("removeTrait", &fastFuncts::removeTrait);
+	types.characterRecord.set("ancNum", &characterRecord::ancNum);
 	/***
 	Get the pointer to the ancillary using it's index. You can iterate over a character's ancillaries for example by going from index 0 to ancNum - 1.
-	@function namedCharacter:getAncillary
+	@function characterRecord:getAncillary
 	@tparam int index
 	@treturn ancillary ancillary
 	@usage
 	ancillary = ourNamedCharacter:getAncillary(2)
 	*/
-	types.namedCharacter.set_function("getAncillary", &generalCharactericticsHelpers::getAncillary);
+	types.characterRecord.set_function("getAncillary", &generalCharactericticsHelpers::getAncillary);
 	/***
 	Add an ancillary to the named character using the name per export\_descr\_ancillaries.txt.
-	@function namedCharacter:addAncillary
+	@function characterRecord:addAncillary
 	@tparam string ancillaryName
 	@usage
 	ourNamedCharacter:addAncillary("VeryVeryGoodMan");
 	*/
-	types.namedCharacter.set_function("addAncillary", &generalCharactericticsHelpers::addAncillary);
+	types.characterRecord.set_function("addAncillary", &generalCharactericticsHelpers::addAncillary);
 	/***
 	Remove an ancillary from the named character using it's pointer. Use getAncillary function to get the specific ancillary.
-	@function namedCharacter:removeAncillary
+	@function characterRecord:removeAncillary
 	@tparam ancillary ancillary
 	@usage
 	ourAnc=ourNamedCharacter:getAncillary(2);
 	ourNamedCharacter:removeAncillary(ourAnc);
 	*/
-	types.namedCharacter.set_function("removeAncillary", &fastFuncts::removeAncillary);
-	types.namedCharacter.set("level", &namedCharacter::level);
-	types.namedCharacter.set("authority", &namedCharacter::leaderAutority);
-	types.namedCharacter.set("command", &namedCharacter::authority);
-	types.namedCharacter.set("chivalryAndDread", &namedCharacter::nobility);
-	types.namedCharacter.set("loyalty", &namedCharacter::loyality);
-	types.namedCharacter.set("piety", &namedCharacter::piety);
-	types.namedCharacter.set("influence", &namedCharacter::influence);
-	types.namedCharacter.set("subterfuge", &namedCharacter::subterfuge);
-	types.namedCharacter.set("charm", &namedCharacter::charm);
-	types.namedCharacter.set("finance", &namedCharacter::finance);
-	types.namedCharacter.set("magic", &namedCharacter::magic);
-	types.namedCharacter.set("unorthodoxy", &namedCharacter::unorthodoxy);
-	types.namedCharacter.set("heresyImmunity", &namedCharacter::heresyImmunity);
-	types.namedCharacter.set("assassination", &namedCharacter::assassination);
-	types.namedCharacter.set("sabotage", &namedCharacter::sabotage);
-	types.namedCharacter.set("eligibility", &namedCharacter::eligibility);
-	types.namedCharacter.set("purity", &namedCharacter::purity);
-	types.namedCharacter.set("violence", &namedCharacter::violence);
-	types.namedCharacter.set("disposition", &namedCharacter::disposition);
-	types.namedCharacter.set("boldness", &namedCharacter::boldness);
-	types.namedCharacter.set("generosity", &namedCharacter::generosity);
-	types.namedCharacter.set("management", &namedCharacter::management);
-	types.namedCharacter.set("bodyguardSize", &namedCharacter::bodyguardSize);
-	types.namedCharacter.set("troopMorale", &namedCharacter::troopMorale);
-	types.namedCharacter.set("movementPointsBonus", &namedCharacter::movementPointsBonus);
-	types.namedCharacter.set("attack", &namedCharacter::attack);
-	types.namedCharacter.set("defence", &namedCharacter::defence);
-	types.namedCharacter.set("siegeAttack", &namedCharacter::siegeAttack);
-	types.namedCharacter.set("siegeDefense", &namedCharacter::siegeDefense);
-	types.namedCharacter.set("ambush", &namedCharacter::ambush);
-	types.namedCharacter.set("navalCommand", &namedCharacter::navalCommand);
-	types.namedCharacter.set("siegeEngineering", &namedCharacter::siegeEngineering);
-	types.namedCharacter.set("nightBattle", &namedCharacter::nightBattle);
-	types.namedCharacter.set("personalSecurity", &namedCharacter::personalSecurity);
-	types.namedCharacter.set("publicSecurity", &namedCharacter::publicSecurity);
-	types.namedCharacter.set("bribery", &namedCharacter::bribery);
-	types.namedCharacter.set("bribeResistance", &namedCharacter::bribeResistance);
-	types.namedCharacter.set("electability", &namedCharacter::electability);
-	types.namedCharacter.set("lineOfSight", &namedCharacter::lineOfSight);
-	types.namedCharacter.set("trainingUnits", &namedCharacter::trainingUnits);
-	types.namedCharacter.set("trainingAgents", &namedCharacter::trainingAgents);
-	types.namedCharacter.set("construction", &namedCharacter::construction);
-	types.namedCharacter.set("trading", &namedCharacter::trading);
-	types.namedCharacter.set("localPopularity", &namedCharacter::localPopularity);
-	types.namedCharacter.set("footInTheDoor", &namedCharacter::footInTheDoor);
-	types.namedCharacter.set("farming", &namedCharacter::farming);
-	types.namedCharacter.set("mining", &namedCharacter::mining);
-	types.namedCharacter.set("taxCollection", &namedCharacter::taxCollection);
-	types.namedCharacter.set("fertility", &namedCharacter::fertility);
-	types.namedCharacter.set("cavalryCommand", &namedCharacter::cavalryCommand);
-	types.namedCharacter.set("infantryCommand", &namedCharacter::infantryCommand);
-	types.namedCharacter.set("gunpowerCommand", &namedCharacter::gunpowerCommand);
-	types.namedCharacter.set("artilleryCommand", &namedCharacter::artilleryCommand);
-	types.namedCharacter.set("health", &namedCharacter::health);
-	types.namedCharacter.set("squalor", &namedCharacter::squalor);
-	types.namedCharacter.set("unrest", &namedCharacter::unrest);
-	types.namedCharacter.set("law", &namedCharacter::law);
-	types.namedCharacter.set("looting", &namedCharacter::looting);
-	types.namedCharacter.set("bodyguardValour", &namedCharacter::bodyguardValour);
-	types.namedCharacter.set("hitpoints", &namedCharacter::hitpoints);
-	types.namedCharacter.set("trainingAnimalUnits", &namedCharacter::trainingAnimalUnits);
-	types.namedCharacter.set("battleSurgery", &namedCharacter::battleSurgery);
+	types.characterRecord.set_function("removeAncillary", &fastFuncts::removeAncillary);
+	types.characterRecord.set("level", &characterRecord::level);
+	types.characterRecord.set("authority", &characterRecord::leaderAutority);
+	types.characterRecord.set("command", &characterRecord::authority);
+	types.characterRecord.set("chivalryAndDread", &characterRecord::nobility);
+	types.characterRecord.set("loyalty", &characterRecord::loyality);
+	types.characterRecord.set("piety", &characterRecord::piety);
+	types.characterRecord.set("influence", &characterRecord::influence);
+	types.characterRecord.set("subterfuge", &characterRecord::subterfuge);
+	types.characterRecord.set("charm", &characterRecord::charm);
+	types.characterRecord.set("finance", &characterRecord::finance);
+	types.characterRecord.set("magic", &characterRecord::magic);
+	types.characterRecord.set("unorthodoxy", &characterRecord::unorthodoxy);
+	types.characterRecord.set("heresyImmunity", &characterRecord::heresyImmunity);
+	types.characterRecord.set("assassination", &characterRecord::assassination);
+	types.characterRecord.set("sabotage", &characterRecord::sabotage);
+	types.characterRecord.set("eligibility", &characterRecord::eligibility);
+	types.characterRecord.set("purity", &characterRecord::purity);
+	types.characterRecord.set("violence", &characterRecord::violence);
+	types.characterRecord.set("disposition", &characterRecord::disposition);
+	types.characterRecord.set("boldness", &characterRecord::boldness);
+	types.characterRecord.set("generosity", &characterRecord::generosity);
+	types.characterRecord.set("management", &characterRecord::management);
+	types.characterRecord.set("bodyguardSize", &characterRecord::bodyguardSize);
+	types.characterRecord.set("troopMorale", &characterRecord::troopMorale);
+	types.characterRecord.set("movementPointsBonus", &characterRecord::movementPointsBonus);
+	types.characterRecord.set("attack", &characterRecord::attack);
+	types.characterRecord.set("defence", &characterRecord::defence);
+	types.characterRecord.set("siegeAttack", &characterRecord::siegeAttack);
+	types.characterRecord.set("siegeDefense", &characterRecord::siegeDefense);
+	types.characterRecord.set("ambush", &characterRecord::ambush);
+	types.characterRecord.set("navalCommand", &characterRecord::navalCommand);
+	types.characterRecord.set("siegeEngineering", &characterRecord::siegeEngineering);
+	types.characterRecord.set("nightBattle", &characterRecord::nightBattle);
+	types.characterRecord.set("personalSecurity", &characterRecord::personalSecurity);
+	types.characterRecord.set("publicSecurity", &characterRecord::publicSecurity);
+	types.characterRecord.set("bribery", &characterRecord::bribery);
+	types.characterRecord.set("bribeResistance", &characterRecord::bribeResistance);
+	types.characterRecord.set("electability", &characterRecord::electability);
+	types.characterRecord.set("lineOfSight", &characterRecord::lineOfSight);
+	types.characterRecord.set("trainingUnits", &characterRecord::trainingUnits);
+	types.characterRecord.set("trainingAgents", &characterRecord::trainingAgents);
+	types.characterRecord.set("construction", &characterRecord::construction);
+	types.characterRecord.set("trading", &characterRecord::trading);
+	types.characterRecord.set("localPopularity", &characterRecord::localPopularity);
+	types.characterRecord.set("footInTheDoor", &characterRecord::footInTheDoor);
+	types.characterRecord.set("farming", &characterRecord::farming);
+	types.characterRecord.set("mining", &characterRecord::mining);
+	types.characterRecord.set("taxCollection", &characterRecord::taxCollection);
+	types.characterRecord.set("fertility", &characterRecord::fertility);
+	types.characterRecord.set("cavalryCommand", &characterRecord::cavalryCommand);
+	types.characterRecord.set("infantryCommand", &characterRecord::infantryCommand);
+	types.characterRecord.set("gunpowerCommand", &characterRecord::gunpowerCommand);
+	types.characterRecord.set("artilleryCommand", &characterRecord::artilleryCommand);
+	types.characterRecord.set("health", &characterRecord::health);
+	types.characterRecord.set("squalor", &characterRecord::squalor);
+	types.characterRecord.set("unrest", &characterRecord::unrest);
+	types.characterRecord.set("law", &characterRecord::law);
+	types.characterRecord.set("looting", &characterRecord::looting);
+	types.characterRecord.set("bodyguardValour", &characterRecord::bodyguardValour);
+	types.characterRecord.set("hitpoints", &characterRecord::hitpoints);
+	types.characterRecord.set("trainingAnimalUnits", &characterRecord::trainingAnimalUnits);
+	types.characterRecord.set("battleSurgery", &characterRecord::battleSurgery);
 
 
 	///capturedFactionInfo
@@ -2541,8 +2220,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	@tfield int targetFactionID
 	@tfield int factionID
-	@tfield namedCharacter namedChar
-	@tfield namedCharacter targetCharacter
+	@tfield characterRecord namedChar
+	@tfield characterRecord targetCharacter
 	@tfield getCapturedCharacter getCapturedCharacter
 	@tfield int capturedCharactersNum
 	@tfield getCapturedUnit getCapturedUnit
@@ -2687,7 +2366,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Basic capturedCharacter table.
 
-	@tfield namedCharacter namedChar
+	@tfield characterRecord namedChar
 	@tfield int capturedValue
 
 	@table capturedCharacter
@@ -2841,8 +2520,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield string name
 	@tfield string localizedName
 	@tfield settlementStruct capital
-	@tfield namedCharacter leader
-	@tfield namedCharacter heir
+	@tfield characterRecord leader
+	@tfield characterRecord heir
 	@tfield int isPlayerControlled 0=AI, 1=player
 	@tfield int neighBourFactionsBitmap
 	@tfield int religion
@@ -2860,8 +2539,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield int kingsPurse
 	@tfield int regionsOwnedStart
 	@tfield factionStratMapStruct facStrat
-	@tfield int numOfNamedCharacters includes literally all characters without distinction (so also wives, children, dead and those sent off map)
-	@tfield getNamedCharacter getNamedCharacter
+	@tfield int characterRecordNum includes literally all characters without distinction (so also wives, children, dead and those sent off map)
+	@tfield getCharacterRecord getCharacterRecord
 	@tfield int numOfCharacters includes all the characters present on the strat map
 	@tfield getCharacter getCharacter
 	@tfield int stacksNum
@@ -2938,19 +2617,21 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.factionStruct.set("settlementsCaptured", &factionStruct::settlementsCaptured);
 	types.factionStruct.set("settlementsLost", &factionStruct::settlementsLost);
 	types.factionStruct.set("otherFactionCount", &factionStruct::otherFactionCount);
-	types.factionStruct.set("numOfNamedCharacters", &factionStruct::numOfCharactersAll);
+	types.factionStruct.set("numOfNamedCharacters", &factionStruct::characterRecordNum);
+	types.factionStruct.set("characterRecordNum", &factionStruct::characterRecordNum);
+	types.factionStruct.set_function("getNamedCharacter", &factionHelpers::getCharacterFromFullList);
 	/***
-	Get named character using it's index.
-	@function factionStruct:getNamedCharacter
+	Get a character record using it's index.
+	@function factionStruct:characterRecord
 	@tparam int number
-	@treturn namedCharacter retNamedCharacter
+	@treturn characterRecord retCharacter
 	@usage
-	ourNamedCharacter = stratmap.game.getFaction(0):getNamedCharacter(0)
+	ourNamedCharacter = stratmap.game.getFaction(0):getCharacterRecord(0)
 	if ourNamedCharacter.command > 5 then
 		ourFac.money = ourFac.money - (ourNamedCharacter.command * 10)
 	end
 	*/
-	types.factionStruct.set_function("getNamedCharacter", &factionHelpers::getCharacterFromFullList);
+	types.factionStruct.set_function("getCharacterRecord", &factionHelpers::getCharacterFromFullList);
 	types.factionStruct.set("numOfCharacters", &factionStruct::numOfCharacters);
 	/***
 	Get a character using it's index.
@@ -3807,71 +3488,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.watchtowerStruct.set("settlement", &watchTowerStruct::settlement);
 	types.watchtowerStruct.set("blockingArmy", &watchTowerStruct::blockingArmy);
 
-	///FortStruct
-	//@section fortStructTable
-
-	/***
-	Basic fortStruct table
-
-	@tfield int xCoord
-	@tfield int yCoord
-	@tfield character governor
-	@tfield stackStruct army
-	@tfield factionStruct ownerFaction
-	@tfield int siegeNum
-	@tfield int siegeHoldoutTurns
-	@tfield int turnsSieged
-	@tfield int plagued
-	@tfield int subFactionID
-	@tfield int factionID
-	@tfield int regionID
-	@tfield int cultureID
-	@tfield int gatesAreOpened
-	@tfield int fortFortificationLevel
-	@tfield getSiege getSiege
-	@tfield changeFortOwner changeFortOwner
-	
-	@table fortStruct
-	*/
-	types.fortStruct = luaState.new_usertype<fortStruct>("fortStruct");
-	types.fortStruct.set("xCoord", &fortStruct::xCoord);
-	types.fortStruct.set("yCoord", &fortStruct::yCoord);
-	types.fortStruct.set("governor", &fortStruct::gubernator);
-	types.fortStruct.set("army", &fortStruct::army);
-	types.fortStruct.set("gatesAreOpened", &fortStruct::gatesAreOpened);
-	types.fortStruct.set("ownerFaction", &fortStruct::faction);
-	types.fortStruct.set("siegeNum", &fortStruct::siegeNum);
-	types.fortStruct.set("siegeHoldoutTurns", &fortStruct::siegeHoldoutTurns);
-	types.fortStruct.set("turnsSieged", &fortStruct::turnsSieged);
-	types.fortStruct.set("plagued", &fortStruct::plagued);
-	types.fortStruct.set("subFactionID", &fortStruct::subFactionID);
-	types.fortStruct.set("factionID", &fortStruct::factionID);
-	types.fortStruct.set("cultureID", &fortStruct::cultureID);
-	types.fortStruct.set("regionID", &fortStruct::regionID);
-	types.fortStruct.set("fortFortificationLevel", &fortStruct::fortFortificationLevel);
-
-	/***
-	Get a specific siege by it's index
-	@function fortStruct:getSiege
-	@tparam int siegeIdx
-	@treturn siegeStruct siege
-	@usage
-	for i = 0, currSet.siegesNum-1 do
-	   local siege=currFort:getSiege(i);
-	   --etc
-	end
-	*/
-	types.fortStruct.set_function("getSiege", &settlementHelpers::getSiegeFort);
-
-	/***
-	Change fort ownership.
-	@function fortStruct:changeFortOwner
-	@tparam factionStruct newFaction
-	@tparam bool convertGarrison
-	@usage
-		myFort:changeFortOwner(otherFac, true)
-	*/
-	types.fortStruct.set_function("changeFortOwner", &fastFuncts::changeFortOwner);
 
 
 
@@ -4985,7 +4601,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	stackStruct:siegeSettlement(settlement);
 	*/
-	types.stackStruct.set_function("siegeSettlement", &actionsStrat::siegeSettlement);
+	types.stackStruct.set_function("siegeSettlement", &characterHelpers::siegeSettlement);
 
 	/***
 	Besiege the specified fort, or attack it if already besieging it. Requires movement points.
@@ -4995,7 +4611,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	stackStruct:siegeFort(fort);
 	*/
-	types.stackStruct.set_function("siegeFort", &actionsStrat::siegeFort);
+	types.stackStruct.set_function("siegeFort", &characterHelpers::siegeFort);
 
 	/***
 	Blockade a port.

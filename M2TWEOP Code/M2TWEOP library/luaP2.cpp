@@ -340,8 +340,8 @@ void luaP::initCampaign()
 	@tfield unit attackingUnit
 	@tfield unit defendingUnit
 	@tfield character stratCharacter
-	@tfield namedCharacter character - Note it is namedCharacter, not character
-	@tfield namedCharacter targetCharacter - Note it is namedCharacter, not character
+	@tfield characterRecord character - Note it is characterRecord, not character
+	@tfield characterRecord targetCharacter - Note it is characterRecord, not character
 	@tfield settlementStruct settlement
 	@tfield settlementStruct targetSettlement
 	@tfield fortStruct fort
@@ -880,7 +880,7 @@ void luaP::initCampaign()
 
 	/***
 	Basic College of Cardinals table.
-	@tfield namedCharacter pope
+	@tfield characterRecord pope
 	@tfield int cardinalNum
 	@tfield getCardinal getCardinal
 
@@ -2139,7 +2139,7 @@ void luaP::initP2()
 					if thisArmy ~= nil then
 						battleList = battleList.."\n\t\tArmy "..k.."\n\t\t\tFaction: "..thisArmy.faction.name
 						if thisArmy.leader ~= nil then
-							battleList = battleList.."\n\t\t\tLeader: "..thisArmy.leader.namedCharacter.fullName
+							battleList = battleList.."\n\t\t\tLeader: "..thisArmy.leader.characterRecord.fullName
 						end
 					end
 					k = k + 1

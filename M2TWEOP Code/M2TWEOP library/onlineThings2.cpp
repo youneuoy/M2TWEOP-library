@@ -11,6 +11,7 @@
 
 #include "globals.h"
 #include "smallFuncs.h"
+#include "character.h"
 #include "imgui_notify.h"
 
 namespace battleCreator
@@ -116,7 +117,7 @@ namespace battleCreator
 	};
 
 
-	jsn::json addCharacter(general* gen)
+	jsn::json addCharacter(character* gen)
 	{
 		jsn::json genJson;
 
@@ -130,26 +131,26 @@ namespace battleCreator
 		}
 
 		std::string genName;
-		if (gen->genChar->fullName == nullptr || string(gen->genChar->fullName).size() == 0)
+		if (gen->characterRecord->fullName == nullptr || string(gen->characterRecord->fullName).size() == 0)
 		{
 			genName="default";
 		}
 		else
 		{
-			genName=gen->genChar->fullName;
+			genName=gen->characterRecord->fullName;
 		}
 		genJson["name"] = genName;
 		
-		int age = (gen->genChar->age >> 3) & 0x7f;
-		genJson["index"] = gen->genChar->index;
+		int age = (gen->characterRecord->age >> 3) & 0x7f;
+		genJson["index"] = gen->characterRecord->index;
 		genJson["age"] = age;
-		genJson["faction"] = gen->genChar->faction->factSmDescr->facName;
-		genJson["subfaction"] = gen->genChar->subFaction;
+		genJson["faction"] = gen->characterRecord->faction->factSmDescr->facName;
+		genJson["subfaction"] = gen->characterRecord->subFaction;
 
 		std::string portrait;
-		if (gen->genChar->portrait_custom)
+		if (gen->characterRecord->portrait_custom)
 		{
-			portrait = gen->genChar->portrait_custom;
+			portrait = gen->characterRecord->portrait_custom;
 		}
 		else
 		{
@@ -158,9 +159,9 @@ namespace battleCreator
 		genJson["portrait"] = portrait;
 
 		std::string battle_model;
-		if (gen->genChar->modelName)
+		if (gen->characterRecord->modelName)
 		{
-			battle_model = gen->genChar->modelName;
+			battle_model = gen->characterRecord->modelName;
 		}
 		else
 		{
@@ -180,11 +181,11 @@ namespace battleCreator
 		genJson["hero_ability"] = hero_ability;
 
 
-		if (gen->genChar->traits != nullptr)
+		if (gen->characterRecord->traits != nullptr)
 		{
 			jsn::json jTraits=jsn::json::array();
 
-			traitContainer* traitCont = gen->genChar->traits;
+			traitContainer* traitCont = gen->characterRecord->traits;
 			while (traitCont != nullptr)
 			{
 				jsn::json traitArray = jsn::json::array({ traitCont->trait->traitEntry->name, traitCont->trait->level->level });
@@ -201,14 +202,14 @@ namespace battleCreator
 		}
 
 
-		if (gen->genChar->ancNum != 0)
+		if (gen->characterRecord->ancNum != 0)
 		{
 			jsn::json jAncs= jsn::json::array();
 
-			UINT32 ancNum = gen->genChar->ancNum;
+			UINT32 ancNum = gen->characterRecord->ancNum;
 			for (UINT32 i = 0; i < ancNum; i++)
 			{
-				jAncs.push_back(gen->genChar->ancillaries[i]->dataAnc->ancName);
+				jAncs.push_back(gen->characterRecord->ancillaries[i]->dataAnc->ancName);
 			}
 
 			genJson["ancillaries"] = jAncs;
@@ -705,7 +706,7 @@ namespace battleCreator
 					}
 					if (army->units[0]->general != nullptr)
 					{
-						army->units[0]->general->genChar->index = armySide->unitsForTransfer[0]->numberInArmy;
+						army->units[0]->general->characterRecord->index = armySide->unitsForTransfer[0]->numberInArmy;
 					}
 
 					for (int i = 0; i < army->numOfUnits; i++)
@@ -737,11 +738,11 @@ namespace battleCreator
 							portrait = newGen.portrait.c_str();
 						}
 	
-						general*newGeneral=fastFuncts::createCharacterWithoutSpawning("named character",army->faction, newGen.age
+						character*newGeneral=fastFuncts::createCharacterWithoutSpawning("named character",army->faction, newGen.age
 							, newGen.genName.c_str(), newGen.genName.c_str(), newGen.subfaction
 							, portrait, 0,0);
-						fastFuncts::setBodyguard(newGeneral, army->units[i]);
-						newGeneral->genChar->index = armySide->unitsForTransfer[i]->numberInArmy;
+						characterHelpers::setBodyguard(newGeneral, army->units[i]);
+						newGeneral->characterRecord->index = armySide->unitsForTransfer[i]->numberInArmy;
 						if (!newGen.hero_ability.empty())
 						{
 							std::string heroAbility = newGen.hero_ability;
@@ -753,13 +754,13 @@ namespace battleCreator
 							auto* resAnc= fastFuncts::findAncillary(anc.c_str());
 							if (resAnc != nullptr)
 							{
-								fastFuncts::addAncillary(newGeneral->genChar, resAnc);
+								fastFuncts::addAncillary(newGeneral->characterRecord, resAnc);
 							}
 						}
 
 						for (auto& trait : newGen.traits)
 						{
-							fastFuncts::addTrait(newGeneral->genChar, trait.first.c_str(), trait.second);
+							fastFuncts::addTrait(newGeneral->characterRecord, trait.first.c_str(), trait.second);
 						}
 					}
 

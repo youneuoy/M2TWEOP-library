@@ -37,7 +37,7 @@ namespace actionsStrat
 
 		return allocatedMem;
 	}
-	void getReadySiegeActionChar(DWORD allocatedMem, general* gen)
+	void getReadySiegeActionChar(DWORD allocatedMem, character* gen)
 	{
 		DWORD adrFunc = codes::offsets.getReadySiegeCharacterGarrisonedFunc;
 		_asm
@@ -52,7 +52,7 @@ namespace actionsStrat
 		return;
 	}
 
-	void finalizeAction(DWORD allocatedMem, general* gen)
+	void finalizeAction(DWORD allocatedMem, character* gen)
 	{
 		DWORD adrFunc = codes::offsets.finalyzeActionStratmapFunc;
 		_asm
@@ -65,7 +65,7 @@ namespace actionsStrat
 
 		return;
 	}
-	DWORD getReadyForMoving(DWORD allocatedMem,general* gen,int x, int y)
+	DWORD getReadyForMoving(DWORD allocatedMem,character* gen,int x, int y)
 	{
 		DWORD res = 0;
 		DWORD adrFunc = codes::offsets.getReadyForMovingFunc;
@@ -93,7 +93,7 @@ namespace actionsStrat
 	
 		return res;
 	}
-	void getGeneralReadyForMoving(general* gen)
+	void getGeneralReadyForMoving(character* gen)
 	{
 		DWORD adrFunc = codes::offsets.getGeneralReadyForMovingFunc;
 		DWORD arg = dataOffsets::offsets.stratMapAllOffsetStart;

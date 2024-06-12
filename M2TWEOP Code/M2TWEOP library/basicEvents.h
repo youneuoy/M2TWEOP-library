@@ -26,7 +26,7 @@ void checkLuaFunc(sol::function** lRef);
 
 namespace gameEvents
 {
-	regionStruct* getCharacterRegion(const namedCharacter* character);
+	regionStruct* getCharacterRegion(const characterRecord* character);
 
 	enum class EventType
 	{

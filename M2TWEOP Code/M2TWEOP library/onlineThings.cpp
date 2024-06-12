@@ -6,10 +6,12 @@
 #include <windows.h>
 #include "FastFuncts.h" 
 #include "globals.h"
+#include "fort.h"
 
 #include "techFuncs.h"
 #include "smallFuncs.h"
 #include "imgui/imgui.h"
+#include "character.h"
 #include <sstream>
 #include <thread>
 #include <set>
@@ -219,46 +221,46 @@ namespace battleCreator
 		fileStrings.push_back("}");
 	}
 
-	void writeCharacterInfo(vector<string>& fileStrings, general* gen)
+	void writeCharacterInfo(vector<string>& fileStrings, character* gen)
 	{
-		int age = (gen->genChar->age >> 3) & 0x7f;
+		int age = (gen->characterRecord->age >> 3) & 0x7f;
 
 		string tempS = "character	";
-		if (gen->genChar->fullName == nullptr || string(gen->genChar->fullName).size() == 0)
+		if (gen->characterRecord->fullName == nullptr || string(gen->characterRecord->fullName).size() == 0)
 		{
 			tempS.append("default");
 		}
 		else
 		{
-			tempS.append(gen->genChar->fullName);
+			tempS.append(gen->characterRecord->fullName);
 		}
 		tempS.append(", named character, male");
-		if (gen->genChar->status & 2)
+		if (gen->characterRecord->status & 2)
 		{
 			tempS.append(", heir");
 		}
-		else if (gen->genChar->status & 5)
+		else if (gen->characterRecord->status & 5)
 		{
 			tempS.append(", leader");
 		}
 		tempS.append(", age ").append(to_string(age));
 		tempS.append(", x ").append(to_string(gen->xCoord));
 		tempS.append(", y ").append(to_string(gen->yCoord));
-		if (gen->genChar->portrait_custom)
+		if (gen->characterRecord->portrait_custom)
 		{
-			tempS.append(", portrait ").append(gen->genChar->portrait_custom);
+			tempS.append(", portrait ").append(gen->characterRecord->portrait_custom);
 		}
-		if (gen->genChar->modelName)
+		if (gen->characterRecord->modelName)
 		{
-			tempS.append(", battle_model ").append(gen->genChar->modelName);
+			tempS.append(", battle_model ").append(gen->characterRecord->modelName);
 		}
 		if (gen->ability)
 		{
 			tempS.append(", hero_ability ").append(gen->ability);
 		}
-		if (gen->genChar->label)
+		if (gen->characterRecord->label)
 		{
-			tempS.append(", label ").append(gen->genChar->label);
+			tempS.append(", label ").append(gen->characterRecord->label);
 		}
 
 
@@ -266,10 +268,10 @@ namespace battleCreator
 
 		fileStrings.push_back(tempS);
 
-		if (gen->genChar->traits != nullptr)
+		if (gen->characterRecord->traits != nullptr)
 		{
 			tempS = "traits";
-			traitContainer* traitCont = gen->genChar->traits;
+			traitContainer* traitCont = gen->characterRecord->traits;
 			while (traitCont != nullptr)
 			{
 				tempS.append(" ").append(traitCont->trait->traitEntry->name).append(" ").append(to_string(traitCont->trait->level->level)).append(" ,");
@@ -279,13 +281,13 @@ namespace battleCreator
 			fileStrings.push_back(tempS);
 		}
 
-		if (gen->genChar->ancNum != 0)
+		if (gen->characterRecord->ancNum != 0)
 		{
 			tempS = "ancillaries";
-			UINT32 ancNum = gen->genChar->ancNum;
+			UINT32 ancNum = gen->characterRecord->ancNum;
 			for (UINT32 i = 0; i < ancNum; i++)
 			{
-				tempS.append(" ").append(gen->genChar->ancillaries[i]->dataAnc->ancName).append(" ,");
+				tempS.append(" ").append(gen->characterRecord->ancillaries[i]->dataAnc->ancName).append(" ,");
 			}
 			fileStrings.push_back(tempS);
 		}
@@ -371,7 +373,7 @@ namespace battleCreator
 
 				if (army->gen != nullptr)
 				{
-					general* gen = army->gen;
+					character* gen = army->gen;
 					writeCharacterInfo(fileStrings, gen);
 				}
 				else

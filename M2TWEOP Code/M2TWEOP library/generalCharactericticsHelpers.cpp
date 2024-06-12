@@ -4,55 +4,55 @@
 #include "plugData.h"
 namespace generalCharactericticsHelpers
 {
-	traitContainer* getTraits(namedCharacter* character)
+	traitContainer* getTraits(characterRecord* character)
 	{
 		return character->traits;
 	}
-	ancillary* getAncillary(namedCharacter* character, int index)
+	ancillary* getAncillary(characterRecord* character, int index)
 	{
 		return character->ancillaries[index]->dataAnc;
 
 	}
-	int addAncillary(namedCharacter* character, const std::string& ancName)
+	int addAncillary(characterRecord* character, const std::string& ancName)
 	{
 		ancillary* anc = fastFuncts::findAncillary(ancName.c_str());
 		if (anc == nullptr)return 0;
 
 		return fastFuncts::addAncillary(character, anc);
 	}
-	int getAge(namedCharacter* character)
+	int getAge(characterRecord* character)
 	{
 		return (character->age >> 3) & 0x7f;
 	}
-	void setAge(namedCharacter* character, int age)
+	void setAge(characterRecord* character, int age)
 	{
 		character->age = character->age ^ (age * 8 ^ character->age) & 0x3f8;
 	}
-	bool isAlive(namedCharacter* character)
+	bool isAlive(characterRecord* character)
 	{
 		return character->age & 1;
 	}
-	bool isFamily(namedCharacter* character)
+	bool isFamily(characterRecord* character)
 	{
 		return character->age & (1 << 13);
 	}
-	bool isOffMap(namedCharacter* character)
+	bool isOffMap(characterRecord* character)
 	{
 		return character->status & 8;
 	}
-	bool isChild(namedCharacter* character)
+	bool isChild(characterRecord* character)
 	{
 		return character->age & 4;
 	}
-	bool setAsFamily(namedCharacter* character, bool set)
+	bool setAsFamily(characterRecord* character, bool set)
 	{
 		return character->age = set ? character->age | (1 << 13) : character->age & ~(1 << 13);
 	}
-	bool getIsMale(namedCharacter* character)
+	bool getIsMale(characterRecord* character)
 	{
 		return character->age & 2;
 	}
-	void setIsMale(namedCharacter* character, bool isMale)
+	void setIsMale(characterRecord* character, bool isMale)
 	{
 		character->age = character->age ^ ((int)isMale << 1 ^ character->age) & 2;
 	}

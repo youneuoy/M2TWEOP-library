@@ -183,6 +183,8 @@ public:
 		DWORD getUnitCard = NULL;
 		DWORD addToCardArray = NULL;
 		DWORD buildWatchtower = NULL;
+		DWORD sabotageBuilding = NULL;
+		DWORD setCharacterType = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

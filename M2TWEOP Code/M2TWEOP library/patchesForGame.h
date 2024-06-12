@@ -28,7 +28,7 @@ public:
 	static eduEntry* __fastcall onEvaluateUnit2(int eduIndex);
 	static eduEntry* __fastcall onReadDescrRebel(DWORD value);
 	static DWORD __fastcall onSearchUnitType(char* typeName);
-	static int __fastcall OnReligionCombatBonus(int religionID, namedCharacter* namedChar);
+	static int __fastcall OnReligionCombatBonus(int religionID, characterRecord* namedChar);
 	static char* __fastcall getBrowserPicConstructed(int cultureID, edbEntry* entry, int buildingLevel);
 	static char* __fastcall getBrowserPicConstruction(int cultureID, edbEntry* entry, int buildingLevel);
 	static char* __fastcall getBuildingPic(buildingLevel* level, int cultureID);
@@ -41,7 +41,7 @@ public:
 	static char* __fastcall onGetCultureEndTurnSound(int cultureID);
 
 
-	static general* __fastcall mercenaryMovepointsGetGeneral(stackStruct* army);
+	static character* __fastcall mercenaryMovepointsGetGeneral(stackStruct* army);
 
 	//click at tile
 	static void __fastcall clickAtTile(coordPair* xy);
@@ -121,7 +121,7 @@ public:
 	static void WINAPI onRetreat();
 
 
-	static void __fastcall OnStopCharacter(general* character);
+	static void __fastcall OnStopCharacter(character* character);
 	static void WINAPI OnMoveRecruitQueue();
 	static eduEntry* __fastcall recruitEOPunit(int eduIndex);
 	static void __fastcall recruitEOPunit2(int eduIndex);
@@ -130,7 +130,7 @@ public:
 
 	static void __fastcall onEndSiege(settlementStruct* sett);
 	static void __fastcall onStartSiege(settlementStruct* sett);
-	static void __fastcall onLoadDescrBattleCharacter(stackStruct* army, general* goalGen);
+	static void __fastcall onLoadDescrBattleCharacter(stackStruct* army, character* goalGen);
 
 
 	//called not in all cases!

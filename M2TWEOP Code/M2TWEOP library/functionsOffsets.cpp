@@ -178,6 +178,8 @@ void codes::initCodes(int gameVer)
 		//offsets.unitPlace = 0x00770A70;
 		offsets.unitMove = 0x0759B70;
 		offsets.gameLogCommand = 0xA8FAC0;
+		offsets.sabotageBuilding = 0xAAB280;
+		offsets.setCharacterType = 0x008b3810;
 	}
 	else if (gameVer == 2) //steam
 	{
@@ -354,5 +356,7 @@ void codes::initCodes(int gameVer)
 		//offsets.unitPlace = 0x00770A70;
 		offsets.unitMove = 0x075A320;
 		offsets.gameLogCommand = 0x0A90B20;
+		offsets.sabotageBuilding = 0xAAC2B0;
+		offsets.setCharacterType = 0x008b4200;
 	}
 }

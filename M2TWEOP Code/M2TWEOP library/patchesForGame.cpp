@@ -8,6 +8,7 @@
 #include "basicEvents.h"
 #include "cultures.h"
 #include "onlineThings.h"
+#include "character.h"
 
 #include "eduThings.h"
 #include "PlannedRetreatRoute.h"
@@ -228,7 +229,7 @@ int __fastcall patchesForGame::onFindUnit(char* entry, int* edbIndex)
 	return *edbIndex;
 }
 
-int __fastcall patchesForGame::OnReligionCombatBonus(int religionID, namedCharacter* namedChar)
+int __fastcall patchesForGame::OnReligionCombatBonus(int religionID, characterRecord* namedChar)
 {
 	if (religionID > 9)
 		return 0;
@@ -345,13 +346,16 @@ char* __fastcall patchesForGame::getBrowserPicConstructed(int cultureID, edbEntr
 	}
 	for (auto& i : level.buildingPicConstructed)
 	{
-		if (i.buildingPicPath != nullptr)
+		if (i.buildingPicPath != nullptr && i.picHash != 0)
 		{
 			FILE_PATH = i.buildingPicPath;
 			return FILE_PATH.data();
 		}
 	}
 	unitActions::logStringGame("getBrowserPicConstructed error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_constructed_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_constructed_building.tga";
 	return FILE_PATH.data();
 }
@@ -405,13 +409,16 @@ char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEnt
 	}
 	for (auto& i : level.buildingPicConstruction)
 	{
-		if (i.buildingPicPath != nullptr)
+		if (i.buildingPicPath != nullptr && i.picHash != 0)
 		{
 			FILE_PATH = i.buildingPicPath;
 			return FILE_PATH.data();
 		}
 	}
 	unitActions::logStringGame("getBrowserPicConstruction error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_preconstructed_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_preconstructed_building.tga";
 	return FILE_PATH.data();
 }
@@ -464,13 +471,16 @@ char* __fastcall patchesForGame::getBuildingPic(buildingLevel* level, int cultur
 	}
 	for (auto& i : level->buildingPic)
 	{
-		if (i.buildingPicPath != nullptr)
+		if (i.buildingPicPath != nullptr && i.picHash != 0)
 		{
 			FILE_PATH = i.buildingPicPath;
 			return FILE_PATH.data();
 		}
 	}
 	unitActions::logStringGame("getBuildingPic error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_building.tga";
 	return FILE_PATH.data();
 }
@@ -523,13 +533,16 @@ char* __fastcall patchesForGame::getBuildingPicConstructed(buildingLevel* level,
 	}
 	for (auto& i : level->buildingPicConstructed)
 	{
-		if (i.buildingPicPath != nullptr)
+		if (i.buildingPicPath != nullptr && i.picHash != 0)
 		{
 			FILE_PATH = i.buildingPicPath;
 			return FILE_PATH.data();
 		}
 	}
 	unitActions::logStringGame("getBuildingPicConstructed error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_constructed_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_constructed_building.tga";
 	return FILE_PATH.data();
 }
@@ -582,13 +595,16 @@ char* __fastcall patchesForGame::getBuildingPicConstruction(buildingLevel* level
 	}
 	for (auto& i : level->buildingPicConstruction)
 	{
-		if (i.buildingPicPath != nullptr)
+		if (i.buildingPicPath != nullptr && i.picHash != 0)
 		{
 			FILE_PATH = i.buildingPicPath;
 			return FILE_PATH.data();
 		}
 	}
 	unitActions::logStringGame("getBuildingPicConstruction error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_preconstructed_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_preconstructed_building.tga";
 	return FILE_PATH.data();
 }
@@ -653,13 +669,16 @@ char* patchesForGame::onGetGuildOfferPic(DWORD level, int cultureID)
 	}
 	for (auto& i : lvl->buildingPicConstructed)
 	{
-		if (i.buildingPicPath != nullptr)
+		if (i.buildingPicPath != nullptr && i.picHash != 0)
 		{
 			FILE_PATH = i.buildingPicPath;
 			return FILE_PATH.data();
 		}
 	}
 	unitActions::logStringGame("onGetGuildOfferPic error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_preconstructed_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_constructed_building.tga";
 	return FILE_PATH.data();
 }
@@ -891,15 +910,21 @@ const char* __fastcall patchesForGame::onAutoSave()
 
 	return saveNames[currSaveID].c_str();
 }
-general* __fastcall patchesForGame::mercenaryMovepointsGetGeneral(stackStruct* army)
+character* __fastcall patchesForGame::mercenaryMovepointsGetGeneral(stackStruct* army)
 {
-	general* gen = army->gen;
+	character* gen = army->gen;
 	if (gen == nullptr)
 	{
 		if (army->settlement != nullptr)
 		{
-			fortStruct* ourFort = fastFuncts::findFort(army->settlement->xCoord, army->settlement->yCoord);
-			gen = ourFort->gubernator;
+			fortStruct* ourFort = reinterpret_cast<fortStruct*>(army->settlement);
+			const auto nextObject = ourFort->nextObject;
+			if (nextObject == nullptr)
+				return nullptr;
+			if (const int objectType = CallVFunc<4, int>(nextObject); objectType == 4)
+			{
+				gen = static_cast<character*>(nextObject);
+			}
 		}
 
 	}
@@ -1245,7 +1270,7 @@ void __stdcall patchesForGame::onRetreat()
 	PlannedRetreatRoute::OnRetreat();
 }
 
-void __fastcall patchesForGame::OnStopCharacter(general* character)
+void __fastcall patchesForGame::OnStopCharacter(character* character)
 {
 	auto& campaign = smallFuncs::getGameDataAll()->campaignData;
 	if (campaign->humanPlayers < 2)
@@ -1332,7 +1357,7 @@ void __fastcall patchesForGame::onStartSiege(settlementStruct* sett)
 
 
 
-void __fastcall patchesForGame::onLoadDescrBattleCharacter(stackStruct* army, general* goalGen)
+void __fastcall patchesForGame::onLoadDescrBattleCharacter(stackStruct* army, character* goalGen)
 {
 	fastFuncts::setBodyguardStart(goalGen, army->units[0]);//we replace game function what set army leader character.
 

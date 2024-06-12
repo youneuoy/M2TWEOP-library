@@ -4,9 +4,9 @@ namespace gameDataAllHelper
 {
 	gameDataAllStruct* get();
 
-	general* getSelectedCharacter(selectionInfo* selection);
-	general* getHoveredCharacter(selectionInfo* selection);
-	general* getSelectedEnemyCharacter(selectionInfo* selection);
+	character* getSelectedCharacter(selectionInfo* selection);
+	character* getHoveredCharacter(selectionInfo* selection);
+	character* getSelectedEnemyCharacter(selectionInfo* selection);
 	
 	settlementStruct* getSelectedSettlement(selectionInfo* selection);
 	settlementStruct* getHoveredSettlement(selectionInfo* selection);

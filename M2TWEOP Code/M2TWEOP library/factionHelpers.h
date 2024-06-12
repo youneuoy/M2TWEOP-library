@@ -8,8 +8,8 @@
 namespace factionHelpers
 {
 	std::string getFactionName(const factionStruct* fac);
-	namedCharacter* getCharacterFromFullList(const factionStruct* fac, int index);
-	general* getCharacterFromGeneralsList(const factionStruct* fac, int index);
+	characterRecord* getCharacterFromFullList(const factionStruct* fac, int index);
+	character* getCharacterFromGeneralsList(const factionStruct* fac, int index);
 	stackStruct* getStack(const factionStruct* fac, int index);
 	settlementStruct* getSettlement(const factionStruct* fac, int index);
 	fortStruct* getFort(const factionStruct* fac, int index);

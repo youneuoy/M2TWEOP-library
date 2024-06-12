@@ -11,10 +11,10 @@ namespace gameHelpers
 	const char* getClimateName2(const int index);
 	unit* getEventAttackingUnit(eventTrigger* eventData);
 	unit* getEventDefendingUnit(eventTrigger* eventData);
-	general* getEventCharacter(eventTrigger* eventData);
-	namedCharacter* getEventNamedCharacter(eventTrigger* eventData);
-	namedCharacter* getEventNamedCharacter2(eventTrigger* eventData);
-	namedCharacter* getEventTargetNamedCharacter(eventTrigger* eventData);
+	character* getEventCharacter(eventTrigger* eventData);
+	characterRecord* getEventNamedCharacter(eventTrigger* eventData);
+	characterRecord* getEventNamedCharacter2(eventTrigger* eventData);
+	characterRecord* getEventTargetNamedCharacter(eventTrigger* eventData);
 	settlementStruct* getEventSettlement(eventTrigger* eventData);
 	settlementStruct* getEventTargetSettlement(eventTrigger* eventData);
 	fortStruct* getEventFort(eventTrigger* eventData);
@@ -52,7 +52,7 @@ namespace gameHelpers
 	bool condition(std::string condition, const eventTrigger* eventData);
 	eduEntry* getEduEntry(eventTrigger* eventData);
 	int getTileCharacterCount(const oneTile* tile);
-	general* getTileCharacterAtIndex(const oneTile* tile, int index);
+	character* getTileCharacterAtIndex(const oneTile* tile, int index);
 
 	factionStruct* getFactionHashed(const campaign* campaign, const std::string& name);
 	settlementStruct* getSettlement(const stratMap* map, const std::string& name);
@@ -70,7 +70,7 @@ namespace gameHelpers
 	bool getHiddenResource(regionStruct* region, int index);
 	void setHiddenResource(regionStruct* region, int index, bool enable);
 	std::string getRegionName(regionStruct* region);
-	general* getCardinal(const collegeOfCardinals* college, const int index);
+	character* getCardinal(const collegeOfCardinals* college, const int index);
 	fortStruct* getFortAll(const campaign* campaign, const int index);
 	portBuildingStruct* getPortAll(const campaign* campaign, const int index);
 	watchTowerStruct* getWatchTowerAll(const campaign* campaign, const int index);
@@ -123,7 +123,7 @@ namespace gameHelpers
 	int getTileHeatValue(const oneTile* tile);
 	DWORD* getTileObject(const oneTile* tile, int type);
 	resStrat* getTileResource(const oneTile* tile);
-	general* getTileCharacter(const oneTile* tile);
+	character* getTileCharacter(const oneTile* tile);
 	settlementStruct* getTileSettlement(const oneTile* tile);
 	fortStruct* getTileFort(const oneTile* tile);
 	portBuildingStruct* getTilePort(const oneTile* tile);

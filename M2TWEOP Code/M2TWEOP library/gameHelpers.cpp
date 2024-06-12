@@ -7,6 +7,7 @@
 #include "FastFuncts.h"
 #include "smallFuncs.h"
 #include "technicalHelpers.h"
+#include "character.h"
 
 namespace gameHelpers
 {
@@ -127,26 +128,26 @@ namespace gameHelpers
 		return CallVFunc<3, unit*>(eventData);
 	}
 
-	general* getEventCharacter(eventTrigger* eventData)
+	character* getEventCharacter(eventTrigger* eventData)
 	{
-		return CallVFunc<4, general*>(eventData);
+		return CallVFunc<4, character*>(eventData);
 	}
 
-	namedCharacter* getEventNamedCharacter(eventTrigger* eventData)
+	characterRecord* getEventNamedCharacter(eventTrigger* eventData)
 	{
-		return CallVFunc<5, namedCharacter*>(eventData);
+		return CallVFunc<5, characterRecord*>(eventData);
 	}
 
-	namedCharacter* getEventNamedCharacter2(eventTrigger* eventData)
+	characterRecord* getEventNamedCharacter2(eventTrigger* eventData)
 	{
-		return CallVFunc<6, namedCharacter*>(eventData);
+		return CallVFunc<6, characterRecord*>(eventData);
 	}
 
 	//7 status thing
 
-	namedCharacter* getEventTargetNamedCharacter(eventTrigger* eventData)
+	characterRecord* getEventTargetNamedCharacter(eventTrigger* eventData)
 	{
-		return CallVFunc<8, namedCharacter*>(eventData);
+		return CallVFunc<8, characterRecord*>(eventData);
 	}
 
 	settlementStruct* getEventSettlement(eventTrigger* eventData)
@@ -633,7 +634,7 @@ namespace gameHelpers
 		}
 	}
 
-	general* gameHelpers::getCardinal(const collegeOfCardinals* college, const int index)
+	character* gameHelpers::getCardinal(const collegeOfCardinals* college, const int index)
 	{
 		return college->cardinalsArray->cardinals[index].trackedCharacter->character;
 	}
@@ -1178,9 +1179,9 @@ namespace gameHelpers
 		return reinterpret_cast<resStrat*>(getTileObject(tile, 0));
 	}
 
-	general* getTileCharacter(const oneTile* tile)
+	character* getTileCharacter(const oneTile* tile)
 	{
-		return reinterpret_cast<general*>(getTileObject(tile, 28));
+		return reinterpret_cast<character*>(getTileObject(tile, 28));
 	}
 
 	int getTileCharacterCount(const oneTile* tile)
@@ -1204,15 +1205,15 @@ namespace gameHelpers
 		return count;
 	}
 
-	general* getTileCharacterAtIndex(const oneTile* tile, int index)
+	character* getTileCharacterAtIndex(const oneTile* tile, int index)
 	{
 		int count = 0;
-		const auto character = getTileCharacter(tile);
+		const auto thisChar = getTileCharacter(tile);
 		if (index == 0)
-			return character;
-		if (!character)
+			return thisChar;
+		if (!thisChar)
 			return nullptr;
-		auto object = static_cast<DWORD*>(character->obj);
+		auto object = static_cast<DWORD*>(thisChar->obj);
 		while (object)
 		{
 			const int objectType = CallVFunc<4, int>(object);
@@ -1220,7 +1221,7 @@ namespace gameHelpers
 			{
 				count += 1;
 				if (count == index)
-					return reinterpret_cast<general*>(object);
+					return reinterpret_cast<character*>(object);
 			}
 			else
 				return nullptr;

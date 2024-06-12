@@ -5,6 +5,7 @@
 #include "fastFuncts.h"
 #include "smallFuncs.h"
 #include "MapTextDrawer.h"
+#include "character.h"
 
 #include "PathMap.h"
 #include "imgui_notify.h"
@@ -323,7 +324,7 @@ namespace PlannedRetreatRoute
 		{
 			void* cashe = PathFinder::CreateCasheForArmy(army.army, dist + maneurDistance);
 			auto resCoords = PathFinder::GetNearestTileForArmyFromCashe(cashe,x,y, destx, desty);
-			fastFuncts::teleportCharacter(army.character, resCoords.first, resCoords.second);
+			characterHelpers::teleportCharacter(army.character, resCoords.first, resCoords.second);
 
 			PathFinder::DeleteCasheForDistances(cashe);
 		}

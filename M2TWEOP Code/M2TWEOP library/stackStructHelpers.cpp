@@ -7,6 +7,7 @@
 #include "plugData.h"
 #include "smallFuncs.h"
 #include "unitHelpers.h"
+#include "character.h"
 
 namespace stackStructHelpers
 {
@@ -79,7 +80,7 @@ namespace stackStructHelpers
 	{
 		return army->units[index];
 	}
-	general *getCharacter(const stackStruct *army, int index)
+	character *getCharacter(const stackStruct *army, int index)
 	{
 		return army->characters[index];
 	}

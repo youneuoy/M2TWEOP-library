@@ -2,10 +2,10 @@
 #include <unordered_map>
 
 #include "fastFuncts.h"
-#include "gameDataAllHelper.h"
 #include "gameHelpers.h"
 #include "smallFuncs.h"
 #include "unitActions.h"
+#include "character.h"
 using namespace std;
 
 
@@ -721,7 +721,7 @@ namespace gameEvents
 		gameEventManager::addEvent<EvType>(key, name);
 	}
 
-	regionStruct* getCharacterRegion(const namedCharacter* character)
+	regionStruct* getCharacterRegion(const characterRecord* character)
 	{
 		return gameHelpers::getRegion(fastFuncts::getTileRegionID(character->gen->xCoord, character->gen->yCoord));
 	}

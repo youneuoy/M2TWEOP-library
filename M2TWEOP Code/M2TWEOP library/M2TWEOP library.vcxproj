@@ -126,7 +126,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories);$(SolutionDir)\3rd;../M2TWEOP Common/;$(SolutionDir)\M2TWEOP Code\M2TWEOP Library\lua\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories);$(SolutionDir)\3rd;../M2TWEOP Common/;$(SolutionDir)\M2TWEOP Code\M2TWEOP Library\lua\include;$(SolutionDir)\M2TWEOP Library\types;$(SolutionDir)\M2TWEOP Library;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/bigobj</AdditionalOptions>
     </ClCompile>
@@ -154,7 +154,7 @@
 	  <CCppSupport>Cpp17Support</CCppSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories);$(SolutionDir)\3rd;../M2TWEOP Common/;$(SolutionDir)\M2TWEOP Code\M2TWEOP Library\lua\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories);$(SolutionDir)\3rd;../M2TWEOP Common/;$(SolutionDir)\M2TWEOP Code\M2TWEOP Library\lua\include;$(SolutionDir)\M2TWEOP Library\types;$(SolutionDir)\M2TWEOP Library;</AdditionalIncludeDirectories>
       <AdditionalOptions>/bigobj</AdditionalOptions>
     </ClCompile>
     <Link>
@@ -252,7 +252,6 @@
     <ClInclude Include="..\3rd\logger\loguru.cpp" />
     <ClInclude Include="..\3rd\shortestPath\micropather.h" />
     <ClInclude Include="imgui\ImFileDialog.h" />
-    <ClInclude Include="realGameTypes.h" />
     <ClInclude Include="actionsStrat.h" />
     <ClInclude Include="basicEvents.h" />
     <ClInclude Include="battleHandlerHelpers.h" />
@@ -275,7 +274,6 @@
     <ClInclude Include="gameHelpers.h" />
     <ClInclude Include="gameSTDUIHelpers.h" />
     <ClInclude Include="generalCharactericticsHelpers.h" />
-    <ClInclude Include="generalHelpers.h" />
     <ClInclude Include="graphicsEvents.h" />
     <ClInclude Include="guildHelpers.h" />
     <ClInclude Include="imgui\eopImgui.h" />
@@ -349,6 +347,8 @@
     <ClInclude Include="TexturesManager.h" />
     <ClInclude Include="ThemeManager.h" />
     <ClInclude Include="tilesChange.h" />
+    <ClInclude Include="types\character.h" />
+    <ClInclude Include="types\fort.h" />
     <ClInclude Include="unitActions.h" />
     <ClInclude Include="unitHelpers.h" />
   </ItemGroup>
@@ -406,7 +406,6 @@
     <ClCompile Include="gameHelpers.cpp" />
     <ClCompile Include="gameSTDUIHelpers.cpp" />
     <ClCompile Include="generalCharactericticsHelpers.cpp" />
-    <ClCompile Include="generalHelpers.cpp" />
     <ClCompile Include="graphicsEvents.cpp" />
     <ClCompile Include="guildHelpers.cpp" />
     <ClCompile Include="imgui\eopImgui.cpp" />
@@ -486,6 +485,8 @@
     <ClCompile Include="TemplateCh.cpp" />
     <ClCompile Include="TexturesManager.cpp" />
     <ClCompile Include="tilesChange.cpp" />
+    <ClCompile Include="types\character.cpp" />
+    <ClCompile Include="types\fort.cpp" />
     <ClCompile Include="unitActions.cpp" />
     <ClCompile Include="unitHelpers.cpp" />
   </ItemGroup>

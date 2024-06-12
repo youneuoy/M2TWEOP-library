@@ -490,7 +490,7 @@ namespace unitHelpers
 	/*
 	* 
 
-	void namedCharSetLocalizedNameForSave(namedCharacter* genChar, const char* str)
+	void namedCharSetLocalizedNameForSave(characterRecord* genChar, const char* str)
 	{
 		(*(*plugData::data.funcsTech.createUniString))(genChar->localizedNameForSave, str);
 	}

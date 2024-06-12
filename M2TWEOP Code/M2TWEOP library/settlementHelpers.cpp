@@ -12,10 +12,6 @@ siegeS* settlementHelpers::getSiege(const settlementStruct* sett, int index)
 	return sett->sieges[index].siege;
 }
 
-siegeS* settlementHelpers::getSiegeFort(const fortStruct* fort, int index)
-{
-	return fort->sieges[index].siege;
-}
 
 void settlementHelpers::changeOwner(settlementStruct* sett, factionStruct* newOwner)
 {

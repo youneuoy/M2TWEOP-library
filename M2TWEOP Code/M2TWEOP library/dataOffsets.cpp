@@ -53,6 +53,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.audioEnable = (bool*)0x016818cd;
 		offsets.audioMaster_vol = (int*)0x01681910;
 		offsets.gameUnit_size = (int*)0x0016818fc;
+		offsets.globalCadClass = 0x1674570;
 
 		offsets.descr_sm_factionslist = reinterpret_cast<descr_sm_factions_list*>(0x01667288);
 	}
@@ -103,6 +104,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.selectedEra = 0x02C70178;
 		offsets.campaignDb = 0x0161E7E4;
 		offsets.campaignDbExtra = 0x0186170C;
+		offsets.globalCadClass = 0x0162C740;
 
 		offsets.audioEnable = (bool*)0x01639f1d;
 		offsets.audioMaster_vol = (int*)0x01639f60;

@@ -122,7 +122,7 @@ class typedField:
         self.confirmed = False
 
 
-filenames = ["luaP.cpp", "luaP2.cpp", "luaEopEdu.cpp", "luaSounds.cpp", "luaFbx.cpp", "luaEvents.cpp"]
+filenames = ["luaP.cpp", "luaP2.cpp", "luaEopEdu.cpp", "luaSounds.cpp", "luaFbx.cpp", "luaEvents.cpp", "/types/fort.h"]
 cwd = os.getcwd()
 eopPath = re.findall(r'(.+)documentationGenerator', cwd)[0]
 luaPluginPath = eopPath + "M2TWEOP Code\\M2TWEOP library\\"

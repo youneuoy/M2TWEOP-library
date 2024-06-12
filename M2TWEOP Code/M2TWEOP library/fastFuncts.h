@@ -22,7 +22,6 @@ namespace fastFuncts
 	void ViewTacticalMap(int x, int y);
 	bool IsStratMap();
 
-	void setCharacterType(general*character, int typeID,int subFaction,int factionDipNum);
 	UINT32 getTileRegionID(int x,int y);
 	oneTile* getTileStruct(int x,int y);
 	regionStruct* getRegionByID(UINT32 regionID);
@@ -34,7 +33,7 @@ namespace fastFuncts
 
 	UINT32 getYear();
 	//set character as heir
-	void setHeir(namedCharacter* gen, bool isJustSet);
+	void setHeir(characterRecord* gen, bool isJustSet);
 
 	//count of factions in game
 	UINT32 getFactionsCount();
@@ -82,9 +81,8 @@ namespace fastFuncts
 	watchTowerStruct* findWatchTower(int x, int y);
 	void deleteFort(const factionStruct* fac, fortStruct* fort);
 	void createFortXY(factionStruct* fac, int x, int y);
-	void createFort(const general* gen);
+	fortStruct* createFort(const character* gen);
 	void changeFortOwner(fortStruct* fort, factionStruct* newFaction, bool convertGarrison);
-	bool teleportCharacterClose(general* gen, int x, int y);
 	coordPair* findValidTileNearTile(coordPair* coords, int charType);
 	bool isTileValidForCharacterType(int charType, coordPair* coords);
 	campaignDb* getCampaignDb();
@@ -95,22 +93,20 @@ namespace fastFuncts
 	void moveStratCameraFast(int x, int y);
 	//zoom stratmap camera
 	void zoomStratCamera(float zoom);
-	void setBodyguardStart(general* gen, unit* un);
+	void setBodyguardStart(character* gen, unit* un);
 	void loadSaveGame(const char* saveName);
 
 	factionStratMapDescrS* GetFactSmDescrById(int id);
-	//teleport character
-	void  teleportCharacter(general* gen, int x, int y);
 
 	//add trait to character
-	void addTrait(namedCharacter* character, const char* traitName, int traitLevel);
-	void removeTrait(namedCharacter* character, const char* traitName);
+	void addTrait(characterRecord* character, const char* traitName, int traitLevel);
+	void removeTrait(characterRecord* character, const char* traitName);
 
 
 	//add ancillary to character
-	int addAncillary(namedCharacter* character, ancillary* anc);
+	int addAncillary(characterRecord* character, ancillary* anc);
 	//remove ancillary from character
-	void removeAncillary(namedCharacter* character, ancillary* anc);
+	void removeAncillary(characterRecord* character, ancillary* anc);
 	//find ancillary in anc list
 	ancillary* findAncillary(const char* ancName);
 
@@ -123,17 +119,16 @@ namespace fastFuncts
 
 	//kills
 	void killUnit(unit* un);
-	void killCharacter(general* gen);
 
 	void destroyBuilding(settlementStruct* sett, const char* typeName, bool isReturnMoney);
 	void createBuilding(settlementStruct* sett, const char* building_level_id);
 
-	general* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y);
+	character* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y);
 
 	//very very technical func 
-	general* createCharacterWithoutSpawning(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y);
+	character* createCharacterWithoutSpawning(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y);
 
-	stackStruct* createArmy(general* character);
+	stackStruct* createArmy(character* character);
 	stackStruct* createArmyInSettlement(settlementStruct* sett);
 
 
@@ -146,8 +141,6 @@ namespace fastFuncts
 	bool StopSiege(stackStruct* army);
 	bool StopBlockPort(stackStruct* army);
 	int addUnitToArmy(stackStruct* army, unit* un);
-	void setBodyguard(general* gen, unit* un);
-
 
 	void AddToSettlement(stackStruct*army,settlementStruct* set);
 	void AddToFort(stackStruct*army,fortStruct* fort);

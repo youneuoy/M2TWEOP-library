@@ -20,6 +20,7 @@
 #define ancillaryStruct_imagePath 2
 #include <string>
 #include "realGameTypes.h"
+#include "character.h"
 namespace luaGetSetFuncs
 {
 	int getTraitLevel(const traitContainer* currTrait);
@@ -85,7 +86,7 @@ namespace luaGetSetFuncs
 
 	//general
 	template <char fieldIndex>
-	std::string getStringPropertyGen(const general* gen)
+	std::string getStringPropertyGen(const character* gen)
 	{
 		char* retS = nullptr;
 		if (fieldIndex == generalStruct_abilityID)
@@ -104,7 +105,7 @@ namespace luaGetSetFuncs
 	}
 
 	template <char fieldIndex>
-	void setStringPropertyGen(general* gen, std::string newS)
+	void setStringPropertyGen(character* gen, std::string newS)
 	{
 		char* arg = nullptr;
 		if (fieldIndex == generalStruct_abilityID)
@@ -116,12 +117,12 @@ namespace luaGetSetFuncs
 	}
 #pragma endregion
 
-#pragma region namedCharacter
+#pragma region characterRecord
 
 
-	//namedCharacter
+	//characterRecord
 	template <char fieldIndex>
-	std::string getStringPropertyGenChar(const namedCharacter* genChar)
+	std::string getStringPropertyGenChar(const characterRecord* genChar)
 	{
 		char* retS = nullptr;
 		if (fieldIndex == generalCharactericticsStruct_shortName)
@@ -163,7 +164,7 @@ namespace luaGetSetFuncs
 		}
 	}
 	template <char fieldIndex>
-	void setStringPropertyGenChar(namedCharacter* genChar, std::string newS)
+	void setStringPropertyGenChar(characterRecord* genChar, std::string newS)
 	{
 		char* arg = nullptr;
 		if (fieldIndex == generalCharactericticsStruct_shortName)

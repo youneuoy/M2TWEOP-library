@@ -18,7 +18,7 @@ namespace technicalHelpers
 
 
 	template <char fieldIndex>
-	std::string namedCharUniStringToStr(namedCharacter* genChar)
+	std::string namedCharUniStringToStr(characterRecord* genChar)
 	{
 		if (fieldIndex == namedChar_localizedFullName)
 		{
@@ -44,9 +44,9 @@ namespace technicalHelpers
 	}
 
 
-	void namedCharSetLocalizedFullName(namedCharacter* genChar, const char* str);
-	void namedCharSetLocalizedNameForSave(namedCharacter* genChar, const char* str);
-	void namedCharSetLocalizedNextNameForSave(namedCharacter* genChar, const char* str);
-	void namedCharSetLocalizedNicknameForSave(namedCharacter* genChar, const char* str);
+	void namedCharSetLocalizedFullName(characterRecord* genChar, const char* str);
+	void namedCharSetLocalizedNameForSave(characterRecord* genChar, const char* str);
+	void namedCharSetLocalizedNextNameForSave(characterRecord* genChar, const char* str);
+	void namedCharSetLocalizedNicknameForSave(characterRecord* genChar, const char* str);
 };
 

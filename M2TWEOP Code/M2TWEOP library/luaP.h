@@ -13,6 +13,9 @@
 
 #include <string>
 
+#include "fort.h"
+#include "character.h"
+
 #define tryLua(luaFunc)  \
 auto funcResult = luaFunc;\
 if (!funcResult.valid())\
@@ -47,10 +50,13 @@ result=funcResult;	\
 class luaP
 {
 public:
+	
 	static std::vector<std::string> logS;
 	static std::vector<std::string> logCommands;
 	std::string luaPath;
 	bool checkVar(const char* gName, int variable);
+
+	
 
 	//create lua instance, init some basic tables
 	sol::state* init(std::string& luaFilePath, std::string& modPath);

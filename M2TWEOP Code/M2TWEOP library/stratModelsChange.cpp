@@ -5,6 +5,7 @@
 #include "fastFuncts.h"
 #include "functionsOffsets.h"
 #include "dataOffsets.h"
+#include "character.h"
 namespace stratModelsChange
 {
 	enum class modelsChangeStatus
@@ -56,7 +57,7 @@ namespace stratModelsChange
 
 	struct stratModelCharacterRecordChange
 	{
-		general* gen;
+		character* gen;
 
 		const char* modelId;
 	};
@@ -271,7 +272,7 @@ namespace stratModelsChange
 		return reinterpret_cast<model_Rigid*>(res);
 	}
 
-	void setCharacterModel(general* gen, const char* model) //add character to be changed to the queue
+	void setCharacterModel(character* gen, const char* model) //add character to be changed to the queue
 	{
 		const size_t stringsize = strlen(model);
 		for (UINT32 i = 0; i < stratModelCharacterChangeList.size(); i++)
@@ -293,7 +294,7 @@ namespace stratModelsChange
 		changeModelsNeededNow = modelsChangeStatus::needChange;
 	}
 
-	void changeStratModel(general* gen, const char* model)
+	void changeStratModel(character* gen, const char* model)
 	{
 		if (gen == nullptr) { //maybe captain dont exist anymore
 			return;

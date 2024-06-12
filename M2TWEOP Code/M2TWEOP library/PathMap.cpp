@@ -1,11 +1,13 @@
 #include "PathMap.h"
 #include "realGameTypes.h"
+#include "fort.h"
 #include "dataOffsets.h"
 #include "fastFuncts.h"
 #include "smallFuncs.h"
 #include "MasterDefines.h"
 #include <map>
 #include "headersMEM.h"
+#include "character.h"
 
 #include <mutex>
 #include "ring_buffer.h"
@@ -152,8 +154,8 @@ namespace PathFinder
 				}
 				case StartMapObjectType::Character:
 				{
-					general* gen = (general*)endObj;
-					if (gen->genChar->faction->dipNum == army->faction->dipNum)
+					character* gen = (character*)endObj;
+					if (gen->characterRecord->faction->dipNum == army->faction->dipNum)
 					{
 						return true;
 					}
