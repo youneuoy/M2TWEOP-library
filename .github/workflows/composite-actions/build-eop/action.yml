@@ -40,7 +40,7 @@ runs:
     # Run build script
     - name: Run buildEOPNew.ps1
       run: |
-       ./buildEOP.ps1 -shouldZip "True"
+       ./buildEOPNew.ps1 -shouldZip "True"
       shell: pwsh
       env:
         DXSDK_DIR: ${{ github.workspace }}\DXSDK\
