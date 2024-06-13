@@ -180,6 +180,11 @@ void codes::initCodes(int gameVer)
 		offsets.gameLogCommand = 0xA8FAC0;
 		offsets.sabotageBuilding = 0xAAB280;
 		offsets.setCharacterType = 0x008b3810;
+		offsets.addAncillary = 0x005a5870;
+		offsets.getTrait = 0x008b6680;
+		offsets.addTrait = 0x005a7710;
+		offsets.removeTrait = 0x005a53a0;
+		offsets.removeAncillary = 0x005a5990;
 	}
 	else if (gameVer == 2) //steam
 	{
@@ -358,5 +363,10 @@ void codes::initCodes(int gameVer)
 		offsets.gameLogCommand = 0x0A90B20;
 		offsets.sabotageBuilding = 0xAAC2B0;
 		offsets.setCharacterType = 0x008b4200;
+		offsets.addAncillary = 0x005a5d50;
+		offsets.getTrait = 0x008b7070;
+		offsets.addTrait = 0x005a7bf0;
+		offsets.removeTrait = 0x005a5880;
+		offsets.removeAncillary = 0x005a5e70;
 	}
 }

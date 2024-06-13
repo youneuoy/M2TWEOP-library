@@ -8,6 +8,7 @@
 #include "smallFuncs.h"
 #include "technicalHelpers.h"
 #include "character.h"
+#include "characterRecord.h"
 
 namespace gameHelpers
 {

@@ -122,9 +122,13 @@ class typedField:
         self.confirmed = False
 
 
-filenames = ["luaP.cpp", "luaP2.cpp", "luaEopEdu.cpp", "luaSounds.cpp", "luaFbx.cpp", "luaEvents.cpp", "/types/fort.h"]
+filenames = ["luaP.cpp", "luaP2.cpp", "luaEopEdu.cpp", "luaSounds.cpp", "luaFbx.cpp", "luaEvents.cpp"]
 cwd = os.getcwd()
 eopPath = re.findall(r'(.+)documentationGenerator', cwd)[0]
+typesPath = eopPath + "M2TWEOP Code\\M2TWEOP library\\types\\"
+for file in os.listdir(typesPath):
+    if file.endswith(".cpp"):
+        filenames.append("types/" + file)
 luaPluginPath = eopPath + "M2TWEOP Code\\M2TWEOP library\\"
 outputfile = open(eopPath + "M2TWEOP DataFiles\\youneuoy_Data\\plugins\\lua\\LuaDocs.lua", 'w')
 outputfile.write("---@diagnostic disable: missing-return, lowercase-global\n")

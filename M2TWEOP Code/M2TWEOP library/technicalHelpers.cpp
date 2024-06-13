@@ -35,25 +35,5 @@ namespace technicalHelpers
 		return strTo;
 	}
 
-	void namedCharSetLocalizedFullName(characterRecord* genChar, const char* str)
-	{
-		smallFuncs::createUniString(genChar->localizedFullName, str);
-	}
-
-	void namedCharSetLocalizedNameForSave(characterRecord* genChar, const char* str)
-	{
-		smallFuncs::createUniString(genChar->localizedNameForSave, str);
-	}
-
-	void namedCharSetLocalizedNextNameForSave(characterRecord* genChar, const char* str)
-	{
-		smallFuncs::createUniString(genChar->localizedNextNameForSave, str);
-	}
-
-	void namedCharSetLocalizedNicknameForSave(characterRecord* genChar, const char* str)
-	{
-		smallFuncs::createUniString(genChar->localizedNicknameForSave, str);
-	}
-
 };
 

@@ -8,6 +8,7 @@
 #include <map>
 #include "headersMEM.h"
 #include "character.h"
+#include "characterRecord.h"
 
 #include <mutex>
 #include "ring_buffer.h"

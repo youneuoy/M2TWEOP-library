@@ -13,6 +13,7 @@
 #include "smallFuncs.h"
 #include "unitActions.h"
 #include "unitHelpers.h"
+#include "characterRecord.h"
 
 
 void luaP::initCampaign()
@@ -2727,7 +2728,7 @@ void luaP::initP2()
 	Basic battleStreets table
 
 	@tfield getStreetNode getStreetNode
-	@tfield nodeNum nodeNum
+	@tfield int nodeNum
 	
 
 	@table battleStreets

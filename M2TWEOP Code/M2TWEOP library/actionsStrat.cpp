@@ -3,6 +3,7 @@
 #include "dataOffsets.h"
 #include "functionsOffsets.h"
 #include "stackStructHelpers.h"
+#include "characterRecord.h"
 
 namespace actionsStrat {
 	

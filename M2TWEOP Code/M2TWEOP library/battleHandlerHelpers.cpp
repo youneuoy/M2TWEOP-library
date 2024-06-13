@@ -85,7 +85,7 @@ namespace battleHandlerHelpers
 		if (!tile) return -1;
 		const auto terrainData = getBattleTerrainData();
 		if (!terrainData) return 0;
-		return tile->waterHeight * 0.1 + terrainData->heightOffset;
+		return tile->waterHeight * 0.1f + terrainData->heightOffset;
 	}
 
 	terrainFeatureHill* getHill(const hillVector* hills, const int index)

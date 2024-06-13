@@ -6,6 +6,7 @@
 #include "functionsOffsets.h"
 #include "plugData.h"
 #include "character.h"
+#include "characterRecord.h"
 
 namespace fortHelpers
 {

@@ -36,10 +36,10 @@
 
 #include "config.hpp"
 
+
 #define SOL_VERSION_MAJOR 3
 #define SOL_VERSION_MINOR 2
 #define SOL_VERSION_PATCH 3
-#define SOL_VERSION_STRING "3.2.3"
 #define SOL_VERSION ((SOL_VERSION_MAJOR * 100000) + (SOL_VERSION_MINOR * 100) + (SOL_VERSION_PATCH))
 
 #define SOL_TOKEN_TO_STRING_POST_EXPANSION_I_(_TOKEN) #_TOKEN
@@ -234,6 +234,8 @@
 
 #define SOL_PLATFORM_APPLE_IPHONE_I_ SOL_OFF
 #define SOL_PLATFORM_BSDLIKE_I_      SOL_OFF
+
+#define SOL_SAFE_FUNCTION_OBJECTS 0
 
 #if defined(SOL_IN_DEBUG_DETECTED)
 #if SOL_IN_DEBUG_DETECTED != 0
@@ -27820,6 +27822,7 @@ namespace sol {
 				return safe_script_file(filename, env, script_default_on_error, mode);
 			}
 
+			
 #if SOL_IS_ON(SOL_SAFE_FUNCTION_OBJECTS)
 			protected_function_result script(
 				lua_Reader reader, void* data, const std::string& chunkname = detail::default_chunk_name(), load_mode mode = load_mode::any) {

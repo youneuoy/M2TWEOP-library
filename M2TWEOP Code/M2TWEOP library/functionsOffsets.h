@@ -185,6 +185,11 @@ public:
 		DWORD buildWatchtower = NULL;
 		DWORD sabotageBuilding = NULL;
 		DWORD setCharacterType = NULL;
+		DWORD addAncillary = NULL;
+		DWORD getTrait = NULL;
+		DWORD addTrait = NULL;
+		DWORD removeTrait = NULL;
+		DWORD removeAncillary = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

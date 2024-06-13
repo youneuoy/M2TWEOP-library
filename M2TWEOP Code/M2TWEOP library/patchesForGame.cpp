@@ -9,6 +9,7 @@
 #include "cultures.h"
 #include "onlineThings.h"
 #include "character.h"
+#include "characterRecord.h"
 
 #include "eduThings.h"
 #include "PlannedRetreatRoute.h"

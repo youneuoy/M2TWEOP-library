@@ -21,6 +21,7 @@
 #include "techFuncs.h"
 #include "unitActions.h"
 #include "character.h"
+#include "characterRecord.h"
 
 namespace fastFuncts
 {
@@ -362,7 +363,7 @@ namespace fastFuncts
 					sett->yCoord,
 					(character->characterRecord->age >> 3) & 0x7F,
 					false,
-					character->characterRecord->subFaction,unitId,xp,weapon,armour))
+					character->characterRecord->originalFaction,unitId,xp,weapon,armour))
 				{
 					if (sett->army)
 						mergeArmies(newStack, sett->army);
@@ -601,41 +602,6 @@ namespace fastFuncts
 		year = (UINT32)t;
 		return year;
 	}
-
-	void setHeir(characterRecord* gen, bool isJustSet)
-	{
-		factionStruct* fac = gen->faction;
-		if (isJustSet == true)
-		{
-			for (int i = 0; i < fac->numOfCharacters; i++)
-			{
-				if (fac->characters[i]->characterRecord->status & 2)
-				{
-					fac->characters[i]->characterRecord->status = 0;
-				}
-			}
-
-			fac->heir = gen;
-
-			gen->status = 2;
-		}
-
-		else
-		{
-			_asm {
-				push gen
-				mov ecx, fac
-				mov eax, [fac]
-				mov eax, [eax]
-				mov eax, [eax + 0x20]
-				call eax
-			}
-		}
-
-
-		return;
-	}
-
 	UINT32 getFactionsCount()
 	{
 		UINT32 count = 0;
@@ -923,266 +889,7 @@ namespace fastFuncts
 		const auto tile = getTileStruct(coords->xCoord, coords->yCoord);
 		return tile->nonPassable != -1 && ((tile->objectTypes & 107) == 0);
 	}
-
-	void teleportCharacter(character* gen, int x, int y)
-	{
-		if (gen->residence)
-		{
-			unitActions::logStringGame("character.teleport: Character is in residence, cancelled to avoid bugs");
-			return;
-		}
-		
-		if (gen->armyLeaded != nullptr)
-		{
-			fastFuncts::StopSiege(gen->armyLeaded);
-			fastFuncts::StopBlockPort(gen->armyLeaded);
-		}
-
-		auto targetCoords = new coordPair{ x,y };
-		auto charArray = new characterArray();
-		GAME_FUNC(void(__stdcall*)(coordPair*, characterArray*, int), getTileCharactersFunc)(targetCoords, charArray, 12);
-		if ((!charArray->charactersNum && isTileValidForCharacterType(gen->genType->type, targetCoords)) ||
-			GAME_FUNC(bool(__thiscall*)(regionStruct*, coordPair*, char), getValidRegionTile)(getRegionByID(getTileStruct(x, y)->regionId), &targetCoords[0], 0))
-		{
-			
-			GAME_FUNC(void(__thiscall*)(character*), changeCharacterTileStuff)(gen);
-			DWORD adrFunc = codes::offsets.teleportCharacterFunc;
-			int xCoord = targetCoords->xCoord;
-			int yCoord = targetCoords->yCoord;
-			_asm
-			{
-				push yCoord
-				push xCoord
-
-				mov ecx, gen
-				mov eax, adrFunc
-				call eax
-			}
-			DWORD moveExtentThing = reinterpret_cast<DWORD>(smallFuncs::getGameDataAll()->stratPathFinding) + 0x88;
-		    GAME_FUNC(void(__thiscall*)(DWORD), deleteMoveExtents)(moveExtentThing);
-			auto selectInfoPtr = smallFuncs::getGameDataAll()->selectionInfoPtr2;
-		    GAME_FUNC(void(__thiscall*)(selectionInfo**, character*), someSelectionStuff)(selectInfoPtr, gen);
-		    GAME_FUNC(void(__thiscall*)(character*), initPlaceCharacter)(gen);
-		}
-		delete targetCoords;
-		delete charArray;
-	}
-
-	bool teleportCharacterClose(character* gen, int x, int y)
-	{
-		if (gen->residence)
-		{
-			unitActions::logStringGame("character.teleport: Character is in residence, cancelled to avoid bugs");
-			return false;
-		}
-		bool isTeleported = false;
-		if (gen->armyLeaded != nullptr)
-		{
-			fastFuncts::StopSiege(gen->armyLeaded);
-			fastFuncts::StopBlockPort(gen->armyLeaded);
-		}
-
-		auto targetCoords = new coordPair{ x,y };
-		if (targetCoords = findValidTileNearTile(targetCoords, gen->genType->type);
-			isTileValidForCharacterType(gen->genType->type, targetCoords))
-		{
-			GAME_FUNC(void(__thiscall*)(character*), changeCharacterTileStuff)(gen);
-			DWORD adrFunc = codes::offsets.teleportCharacterFunc;
-			int xCoord = targetCoords->xCoord;
-			int yCoord = targetCoords->yCoord;
-			_asm
-			{
-				push yCoord
-				push xCoord
-
-				mov ecx, gen
-				mov eax, adrFunc
-				call eax
-			}
-			DWORD moveExtentThing = reinterpret_cast<DWORD>(smallFuncs::getGameDataAll()->stratPathFinding) + 0x88;
-		    GAME_FUNC(void(__thiscall*)(DWORD), deleteMoveExtents)(moveExtentThing);
-			auto selectInfoPtr = smallFuncs::getGameDataAll()->selectionInfoPtr2;
-		    GAME_FUNC(void(__thiscall*)(selectionInfo**, character*), someSelectionStuff)(selectInfoPtr, gen);
-		    GAME_FUNC(void(__thiscall*)(character*), initPlaceCharacter)(gen);
-			isTeleported = true;
-		}
-		delete targetCoords;
-		return isTeleported;
-	}
 	
-	void addTrait(characterRecord* character, const char* traitName, int traitLevel)
-	{
-
-		DWORD adrFunc = 0;
-
-
-
-		//getTrait
-		if (globals::dataS.gamever == 2)//steam
-		{
-			adrFunc = 0x008b7070;
-		}
-		else
-		{
-			adrFunc = 0x008b6680;
-		}
-		char** cryptS = fastFunctsHelpers::makeCryptedString(traitName);
-
-
-		void* resTrait = nullptr;
-
-		auto oneArg = cryptS[0];
-		auto nextArg = cryptS[1];
-		_asm
-		{
-			push nextArg
-			push oneArg
-
-			mov eax, adrFunc
-			call eax
-
-			mov resTrait, eax
-			add esp, 0x8
-		}
-		if (resTrait == nullptr)
-		{
-			return;
-		}
-
-		//set trait
-		if (globals::dataS.gamever == 2)//steam
-		{
-			adrFunc = 0x005a7bf0;
-		}
-		else
-		{
-			adrFunc = 0x005a7710;
-		}
-
-		_asm
-		{
-			push 1
-			push traitLevel
-			push resTrait
-			mov ecx, character
-
-			mov eax, adrFunc
-			call eax
-		}
-	}
-
-	void removeTrait(characterRecord* character, const char* traitName)
-	{
-		DWORD adrFunc = 0;
-
-
-
-		//getTrait
-		if (globals::dataS.gamever == 2)//steam
-		{
-			adrFunc = 0x008b7070;
-		}
-		else
-		{
-			adrFunc = 0x008b6680;
-		}
-		char** cryptS = fastFunctsHelpers::makeCryptedString(traitName);
-
-
-		void* resTrait = nullptr;
-
-		auto oneArg = cryptS[0];
-		auto nextArg = cryptS[1];
-		_asm
-		{
-			push nextArg
-			push oneArg
-
-			mov eax, adrFunc
-			call eax
-
-			mov resTrait, eax
-			add esp, 0x8
-		}
-		if (resTrait == nullptr)
-		{
-			return;
-		}
-
-		//set trait
-		if (globals::dataS.gamever == 2)//steam
-		{
-			adrFunc = 0x005a5880;
-		}
-		else
-		{
-			adrFunc = 0x005a53a0;
-		}
-
-		_asm
-		{
-			push resTrait
-			mov ecx, character
-
-			mov eax, adrFunc
-			call eax
-		}
-	}
-
-	int addAncillary(characterRecord* character, ancillary* anc)
-	{
-		
-		
-		if (character == nullptr || anc == nullptr)return 0;
-
-		DWORD adr = 0;
-		int retr = 0;
-		if (globals::dataS.gamever == 2)//steam
-		{
-			adr = 0x005a5d50;
-		}
-		else
-		{
-			adr = 0x005a5870;
-		}
-		_asm
-		{
-			mov ecx, character
-			push anc
-			mov eax, adr
-			call eax
-			mov retr, eax
-		}
-
-
-		return retr;
-	}
-
-	void removeAncillary(characterRecord* character, ancillary* anc)
-	{
-		if (character == nullptr || anc == nullptr)return;
-
-		DWORD adr = 0;
-		int ret = 0;
-		if (globals::dataS.gamever == 2)//steam
-		{
-			adr = 0x005a5e70;
-		}
-		else
-		{
-			adr = 0x005a5990;
-		}
-		_asm
-		{
-			mov ecx, character
-			push anc
-			mov eax, adr
-			call eax
-		}
-
-		return;
-	}
-
 	ancillary* findAncillary(const char* ancName)
 	{
 		if (ancName == nullptr)return 0;
@@ -1289,9 +996,7 @@ namespace fastFuncts
 			killUnit(un);
 			return;
 		}
-
-
-
+		
 		int diff = count - un->SoldierCountStrat;
 		if (diff == 0)
 		{
@@ -2289,8 +1994,8 @@ namespace fastFuncts
 				call eax
 			}
 			delete spawnCoords;
-			if (army && label && label != "")
-				luaGetSetFuncs::setStringPropertyGenChar<generalCharactericticsStruct_label>(army->gen->characterRecord, std::string(label));
+			if (army && label && strcmp(label, "") == 0)
+				fastFunctsHelpers::setCryptedString(&gen->characterRecord->label, label);
 			return army;
 		}
 		delete spawnCoords;

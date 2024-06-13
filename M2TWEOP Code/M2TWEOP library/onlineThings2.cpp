@@ -12,6 +12,7 @@
 #include "globals.h"
 #include "smallFuncs.h"
 #include "character.h"
+#include "characterRecord.h"
 #include "imgui_notify.h"
 
 namespace battleCreator
@@ -145,7 +146,7 @@ namespace battleCreator
 		genJson["index"] = gen->characterRecord->index;
 		genJson["age"] = age;
 		genJson["faction"] = gen->characterRecord->faction->factSmDescr->facName;
-		genJson["subfaction"] = gen->characterRecord->subFaction;
+		genJson["subfaction"] = gen->characterRecord->originalFaction;
 
 		std::string portrait;
 		if (gen->characterRecord->portrait_custom)
@@ -754,13 +755,13 @@ namespace battleCreator
 							auto* resAnc= fastFuncts::findAncillary(anc.c_str());
 							if (resAnc != nullptr)
 							{
-								fastFuncts::addAncillary(newGeneral->characterRecord, resAnc);
+								characterRecordHelpers::addAncillary(newGeneral->characterRecord, resAnc);
 							}
 						}
 
 						for (auto& trait : newGen.traits)
 						{
-							fastFuncts::addTrait(newGeneral->characterRecord, trait.first.c_str(), trait.second);
+							characterRecordHelpers::addTrait(newGeneral->characterRecord, trait.first.c_str(), trait.second);
 						}
 					}
 

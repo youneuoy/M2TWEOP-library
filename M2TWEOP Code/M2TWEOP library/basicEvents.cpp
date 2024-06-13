@@ -6,6 +6,7 @@
 #include "smallFuncs.h"
 #include "unitActions.h"
 #include "character.h"
+#include "characterRecord.h"
 using namespace std;
 
 

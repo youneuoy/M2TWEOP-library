@@ -97,16 +97,6 @@ namespace fastFuncts
 	void loadSaveGame(const char* saveName);
 
 	factionStratMapDescrS* GetFactSmDescrById(int id);
-
-	//add trait to character
-	void addTrait(characterRecord* character, const char* traitName, int traitLevel);
-	void removeTrait(characterRecord* character, const char* traitName);
-
-
-	//add ancillary to character
-	int addAncillary(characterRecord* character, ancillary* anc);
-	//remove ancillary from character
-	void removeAncillary(characterRecord* character, ancillary* anc);
 	//find ancillary in anc list
 	ancillary* findAncillary(const char* ancName);
 

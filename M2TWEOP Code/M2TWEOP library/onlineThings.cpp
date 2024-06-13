@@ -7,6 +7,7 @@
 #include "FastFuncts.h" 
 #include "globals.h"
 #include "fort.h"
+#include "characterRecord.h"
 
 #include "techFuncs.h"
 #include "smallFuncs.h"

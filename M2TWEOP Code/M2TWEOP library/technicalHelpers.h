@@ -1,8 +1,4 @@
 #pragma once
-#define namedChar_localizedFullName 1
-#define namedChar_localizedNameForSave 2
-#define namedChar_localizedNextNameForSave 3
-#define namedChar_localizedNicknameForSave 4
 
 
 #include <string>
@@ -17,31 +13,6 @@ namespace technicalHelpers
 	std::string uniStringToStr(UNICODE_STRING**& uniString);
 
 
-	template <char fieldIndex>
-	std::string namedCharUniStringToStr(characterRecord* genChar)
-	{
-		if (fieldIndex == namedChar_localizedFullName)
-		{
-			return uniStringToStr(genChar->localizedFullName);
-		}
-		else if (fieldIndex == namedChar_localizedNameForSave)
-		{
-			return uniStringToStr(genChar->localizedNameForSave);
-
-		}
-		else if (fieldIndex == namedChar_localizedNextNameForSave)
-		{
-			return uniStringToStr(genChar->localizedNextNameForSave);
-		}
-		else if (fieldIndex == namedChar_localizedNicknameForSave)
-		{
-			return uniStringToStr(genChar->localizedNicknameForSave);
-		}
-		else
-		{
-			return "";
-		}
-	}
 
 
 	void namedCharSetLocalizedFullName(characterRecord* genChar, const char* str);

@@ -348,6 +348,7 @@
     <ClInclude Include="ThemeManager.h" />
     <ClInclude Include="tilesChange.h" />
     <ClInclude Include="types\character.h" />
+    <ClInclude Include="types\characterRecord.h" />
     <ClInclude Include="types\fort.h" />
     <ClInclude Include="unitActions.h" />
     <ClInclude Include="unitHelpers.h" />
@@ -486,6 +487,7 @@
     <ClCompile Include="TexturesManager.cpp" />
     <ClCompile Include="tilesChange.cpp" />
     <ClCompile Include="types\character.cpp" />
+    <ClCompile Include="types\characterRecord.cpp" />
     <ClCompile Include="types\fort.cpp" />
     <ClCompile Include="unitActions.cpp" />
     <ClCompile Include="unitHelpers.cpp" />

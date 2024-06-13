@@ -10,6 +10,7 @@
 #include "unitActions.h"
 #include "fort.h"
 #include "m2tweopHelpers.h"
+#include "characterRecord.h"
 #include "stratModelsChange.h"
 
 namespace characterHelpers
@@ -82,7 +83,7 @@ namespace characterHelpers
 
 	void setTypeID(character* gen, int typeID)
 	{
-		const int subFac = gen->characterRecord->subFaction;
+		const int subFac = gen->characterRecord->originalFaction;
 		const auto faction = *gen->faction;
 		if (!faction)
 			return;
@@ -867,7 +868,6 @@ namespace characterHelpers
 			fastFunctsHelpers::setCryptedString(&gen->ability, newS.c_str());
 	}
 	
-	
     void addToLua(sol::state& luaState)
     {
         struct
@@ -957,6 +957,7 @@ namespace characterHelpers
 	types.character.set("yCoord", &character::yCoord);
 	types.character.set("namedCharacter", &character::characterRecord);
 	types.character.set("characterRecord", &character::characterRecord);
+	//types.character.set("characterRecord", sol::property(&getCharRecord));
 	types.character.set("faction", sol::property(&character::getFaction));
 	types.character.set("isMarkedToKill", &character::ifMarkedToKill);
 	types.character.set("inEnemyZOC", &character::inEnemyZOC);
