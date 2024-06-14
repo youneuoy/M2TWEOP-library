@@ -592,6 +592,32 @@ void managerF::doPachs()
 	toCustomBattleUnits->Enable();
 	f1 << "Done" << endl;
 
+
+	f1 << "Start applying onBattleRams patch" << endl;
+	onBattleRams* toBattleRams = new onBattleRams(mem, (LPVOID)noFunc, globals::dataS.gamever);
+	toBattleRams->SetNewCode();
+	toBattleRams->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onPreBattlePlacement patch" << endl;
+	onPreBattlePlacement* toPreBattlePlacement = new onPreBattlePlacement(mem, (LPVOID)patchesForGame::onPreBattlePlacement, globals::dataS.gamever);
+	toPreBattlePlacement->SetNewCode();
+	toPreBattlePlacement->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onDecideRamAttacks patch" << endl;
+	onDecideRamAttacks* toDecideRamAttacks = new onDecideRamAttacks(mem, (LPVOID)patchesForGame::onDecideRamAttacks, globals::dataS.gamever);
+	toDecideRamAttacks->SetNewCode();
+	toDecideRamAttacks->Enable();
+	f1 << "Done" << endl;
+
+	/*
+	f1 << "Start applying onPreBattlePlacement2 patch" << endl;
+	onPreBattlePlacement2* toPreBattlePlacement2 = new onPreBattlePlacement2(mem, (LPVOID)patchesForGame::onPreBattlePlacement2, globals::dataS.gamever);
+	toPreBattlePlacement2->SetNewCode();
+	toPreBattlePlacement2->Enable();
+	f1 << "Done" << endl;*/
+
 	f1 << "Start applying spawnUnitsSettGift4 patch" << endl;
 	spawnUnitsSettGift4* toSpawnUnitsSettGift4 = new spawnUnitsSettGift4(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
 	toSpawnUnitsSettGift4->SetNewCode();

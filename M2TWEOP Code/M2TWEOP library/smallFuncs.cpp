@@ -296,14 +296,6 @@ namespace smallFuncs
 		return retStruct;
 	}
 
-	void changeSettlementName(settlementStruct* sett, const char* newName)
-	{
-
-		UNICODE_STRING** nameMem = new UNICODE_STRING*;
-		sett->localizedName = nameMem;
-
-		smallFuncs::createUniString(sett->localizedName, newName);
-	}
 
 	void changeFactionName(factionStruct* fac, const char* newName)
 	{

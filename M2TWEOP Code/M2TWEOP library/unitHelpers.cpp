@@ -362,10 +362,10 @@ namespace unitHelpers
 		DWORD funcAddr = 0x0071E620;
 		if (smallFuncs::getGameVersion() == 1)
 			funcAddr = 0x0071DEE0;
-		int16_t pushAngle = (angle * 0.017453292) * 10430.378;
+		int16_t pushAngle = angleFloatToShort(angle);
 		_asm
 		{
-			push 1
+			push 4
 			push 1
 			push pushAngle
 			push coords

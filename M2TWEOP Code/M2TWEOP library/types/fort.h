@@ -17,6 +17,8 @@ public:
 	float opacity;
 	bool highlighted;
 	char pad1[3];
+	trackedObject trackObject;
+	void* crusadeFinishedVtbl;
     float stratPosX;
     float stratPosZ;
     float stratPosY;
@@ -70,5 +72,7 @@ public :
 namespace fortHelpers
 {
 	void addToLua(sol::state& luaState);
+	void deleteFort(const factionStruct* fac, fortStruct* fort);
+	void createFortXY(factionStruct* fac, int x, int y);
 	void changeOwner(fortStruct* fort, factionStruct* newFaction, bool convertGarrison);
 };

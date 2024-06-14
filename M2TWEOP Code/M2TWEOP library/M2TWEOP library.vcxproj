@@ -257,7 +257,6 @@
     <ClInclude Include="battleHandlerHelpers.h" />
     <ClInclude Include="BattleMapOverrider.h" />
     <ClInclude Include="battlemapWorker.h" />
-    <ClInclude Include="buildingStructHelpers.h" />
     <ClInclude Include="casModelsDrawer.h" />
     <ClInclude Include="console.h" />
     <ClInclude Include="ContextMenuStrat.h" />
@@ -275,7 +274,6 @@
     <ClInclude Include="gameSTDUIHelpers.h" />
     <ClInclude Include="generalCharactericticsHelpers.h" />
     <ClInclude Include="graphicsEvents.h" />
-    <ClInclude Include="guildHelpers.h" />
     <ClInclude Include="imgui\eopImgui.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -330,7 +328,6 @@
     <ClInclude Include="RetreatRoutes.h" />
     <ClInclude Include="RSExport.h" />
     <ClInclude Include="settlementConversionLvlSetter.h" />
-    <ClInclude Include="settlementHelpers.h" />
     <ClInclude Include="siegeHelpers.h" />
     <ClInclude Include="SingleFbxMesh.h" />
     <ClInclude Include="smallFuncs.h" />
@@ -350,6 +347,7 @@
     <ClInclude Include="types\character.h" />
     <ClInclude Include="types\characterRecord.h" />
     <ClInclude Include="types\fort.h" />
+    <ClInclude Include="types\settlement.h" />
     <ClInclude Include="unitActions.h" />
     <ClInclude Include="unitHelpers.h" />
   </ItemGroup>
@@ -390,7 +388,6 @@
     <ClCompile Include="battleHandlerHelpers.cpp" />
     <ClCompile Include="BattleMapOverrider.cpp" />
     <ClCompile Include="battlemapWorker.cpp" />
-    <ClCompile Include="buildingStructHelpers.cpp" />
     <ClCompile Include="casModelsDrawer.cpp" />
     <ClCompile Include="console.cpp" />
     <ClCompile Include="ContextMenuStrat.cpp" />
@@ -408,7 +405,6 @@
     <ClCompile Include="gameSTDUIHelpers.cpp" />
     <ClCompile Include="generalCharactericticsHelpers.cpp" />
     <ClCompile Include="graphicsEvents.cpp" />
-    <ClCompile Include="guildHelpers.cpp" />
     <ClCompile Include="imgui\eopImgui.cpp" />
     <ClCompile Include="imgui\ImFileDialog.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -467,7 +463,6 @@
     <ClCompile Include="luaPlugin.cpp" />
     <ClCompile Include="resourcesHelpers.cpp" />
     <ClCompile Include="Retreater.cpp" />
-    <ClCompile Include="settlementHelpers.cpp" />
     <ClCompile Include="siegeHelpers.cpp" />
     <ClCompile Include="stackStructHelpers.cpp" />
     <ClCompile Include="technicalHelpers.cpp" />
@@ -489,6 +484,7 @@
     <ClCompile Include="types\character.cpp" />
     <ClCompile Include="types\characterRecord.cpp" />
     <ClCompile Include="types\fort.cpp" />
+    <ClCompile Include="types\settlement.cpp" />
     <ClCompile Include="unitActions.cpp" />
     <ClCompile Include="unitHelpers.cpp" />
   </ItemGroup>

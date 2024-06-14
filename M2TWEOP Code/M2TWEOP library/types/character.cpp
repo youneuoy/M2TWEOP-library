@@ -11,6 +11,7 @@
 #include "fort.h"
 #include "m2tweopHelpers.h"
 #include "characterRecord.h"
+#include "gameHelpers.h"
 #include "stratModelsChange.h"
 
 namespace characterHelpers
@@ -90,6 +91,116 @@ namespace characterHelpers
 		const int factionDipNum = faction->dipNum;
 		setCharacterType(gen, typeID, subFac, factionDipNum);
 	}
+	
+	character* createCharacterWithoutSpawning(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
+	{
+		DWORD adrFunc = codes::offsets.createCharacterFunc;
+
+		character* gen = nullptr;
+
+		char** cryptS = fastFunctsHelpers::makeCryptedString(type);
+
+		DWORD adrType = (DWORD)cryptS;
+		_asm
+		{
+			push portrait
+			push subFaction
+			push name2
+			push name
+			push age
+			push fac
+			push adrType
+			mov eax, adrFunc
+			call eax
+			mov gen, eax
+			add esp, 0x1c
+		}
+		struct xyS
+		{
+			int x = 0;
+			int y = 0;
+		}xy;
+		xy.x = x;
+		xy.y = y;
+
+
+		adrFunc = codes::offsets.spawnCreatedCharacterFunc;
+		xyS* xyP = &xy;
+
+		_asm
+		{
+			push xyP
+			push gen
+			mov eax, adrFunc
+			call eax
+		}
+
+		return gen;
+	}
+	
+	character* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
+	{
+		if (portrait != nullptr && strlen(portrait) == 0)
+			portrait = nullptr;
+		if (name != nullptr && strlen(name) == 0)
+			name = nullptr;
+		if (name2 != nullptr && strlen(name2) == 0)
+			name2 = nullptr;
+		DWORD adrFunc = codes::offsets.createCharacterFunc;
+
+		character* gen = nullptr;
+
+		char** cryptS = fastFunctsHelpers::makeCryptedString(type);
+
+		DWORD adrType = (DWORD)cryptS;
+		_asm
+		{
+			push portrait
+			push subFaction
+			push name2
+			push name
+			push age
+			push fac
+			push adrType
+			mov eax, adrFunc
+			call eax
+			mov gen, eax
+			add esp, 0x1c
+		}
+		struct xyS
+		{
+			int x = 0;
+			int y = 0;
+		}xy;
+		xy.x = x;
+		xy.y = y;
+
+
+		adrFunc = codes::offsets.spawnCreatedCharacterFunc;
+		xyS* xyP = &xy;
+
+		_asm
+		{
+			push xyP
+			push gen
+			mov eax, adrFunc
+			call eax
+		}
+
+		adrFunc = codes::offsets.doSomeWithCharacterFunc;
+		void* some = fac->tilesFac;
+		_asm
+		{
+			push 0
+			push gen
+			mov ecx, some
+			mov eax, adrFunc
+			call eax
+		}
+
+		return gen;
+	}
+
 
 	/*----------------------------------------------------------------------------------------------------------------*\
 												Character actions
@@ -845,7 +956,7 @@ namespace characterHelpers
 
 		return;
 	}
-
+	
 	//general
 	template <char fieldIndex>
 	std::string getStringPropertyGen(const character* gen)
@@ -1217,4 +1328,20 @@ namespace characterHelpers
 	types.character.set_function("sendOffMap", &sendOffMap);
 		
     }
+}
+
+	
+settlementStruct* character::getSettlement()
+{
+	const auto tile = gameHelpers::getTile(xCoord, yCoord);
+	if (!tile)
+		return nullptr;
+	return gameHelpers::getTileSettlement(tile);
+}
+fortStruct* character::getFort()
+{
+	const auto tile = gameHelpers::getTile(xCoord, yCoord);
+	if (!tile)
+		return nullptr;
+	return gameHelpers::getTileFort(tile);
 }

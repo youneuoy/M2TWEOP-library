@@ -1,6 +1,7 @@
 #pragma once
 #include"headersSTD.h"
 #include "realGameTypes.h"
+#include "settlement.h"
 
 namespace fastFuncts
 {
@@ -14,9 +15,6 @@ namespace fastFuncts
 
 	int8_t getTileVisibility(factionStruct* faction, int x, int y);
 	void setTileVisibility(factionStruct* faction, int x, int y, int8_t vis);
-
-
-	void setSettlementOwner(settlementStruct*sett, factionStruct* newOwner, bool convertGarrison = false);
 
 	void GetGameTileCoordsWithCursor(int& x, int& y);
 	void ViewTacticalMap(int x, int y);
@@ -62,9 +60,6 @@ namespace fastFuncts
 	//number of passed turns
 	UINT32 getPassedTurnsNum();
 
-	//get guild by index
-	guild* getGuild(unsigned char index);
-
 	//-1, -1 if not recognized
 	std::pair<int, int> getArmyCoords(stackStruct* army);
 	//find fort on coords
@@ -79,10 +74,6 @@ namespace fastFuncts
 	settlementStruct* findSettlement(int x, int y);
 	//find watchtower on coords
 	watchTowerStruct* findWatchTower(int x, int y);
-	void deleteFort(const factionStruct* fac, fortStruct* fort);
-	void createFortXY(factionStruct* fac, int x, int y);
-	fortStruct* createFort(const character* gen);
-	void changeFortOwner(fortStruct* fort, factionStruct* newFaction, bool convertGarrison);
 	coordPair* findValidTileNearTile(coordPair* coords, int charType);
 	bool isTileValidForCharacterType(int charType, coordPair* coords);
 	campaignDb* getCampaignDb();
@@ -109,15 +100,6 @@ namespace fastFuncts
 
 	//kills
 	void killUnit(unit* un);
-
-	void destroyBuilding(settlementStruct* sett, const char* typeName, bool isReturnMoney);
-	void createBuilding(settlementStruct* sett, const char* building_level_id);
-
-	character* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y);
-
-	//very very technical func 
-	character* createCharacterWithoutSpawning(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y);
-
 	stackStruct* createArmy(character* character);
 	stackStruct* createArmyInSettlement(settlementStruct* sett);
 

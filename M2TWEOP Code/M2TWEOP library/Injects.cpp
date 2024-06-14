@@ -6253,6 +6253,180 @@ void OnStopCharacter::SetNewCode()
 	delete a;
 }
 
+onBattleRams::onBattleRams(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x006A2CAC;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00ab4175;
+}
+
+onBattleRams::~onBattleRams()
+{
+}
+
+void onBattleRams::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(byte_ptr(eax, 0xD0), 01);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onBattleRams::SetNewCode()
+{
+	Assembler* a = new Assembler();
+	
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onDecideRamAttacks::onDecideRamAttacks(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x006A324F;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x006A2D3F;
+}
+
+onDecideRamAttacks::~onDecideRamAttacks()
+{
+}
+
+void onDecideRamAttacks::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(byte_ptr(eax, 0xD0), 01);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onDecideRamAttacks::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	auto label = a->newLabel();
+	
+	a->push(edx);
+	a->push(ecx);
+	a->mov(ecx, dword_ptr(esp, 0x34));
+	a->push(ecx);
+	a->mov(edx, esi);
+	a->mov(ecx, edi);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->pop(ecx);
+	a->pop(edx);
+	a->cmp(eax, 0);
+	a->jnz(label);
+	//a->mov(eax, 0x6A328B);
+	if (m_adress == 0x006A324F)
+		a->jmp(0x2A424B);
+	else
+		a->jmp(0x2A3D3B);
+	a->bind(label);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onPreBattlePlacement::onPreBattlePlacement(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x006C8D9D;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x006C886D;
+}
+
+onPreBattlePlacement::~onPreBattlePlacement()
+{
+}
+
+void onPreBattlePlacement::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(byte_ptr(esi, 0x2AF0), 0);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onPreBattlePlacement::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(byte_ptr(esi, 0x2AF0), 0);
+	a->mov(ecx, esi);
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
+onPreBattlePlacement2::onPreBattlePlacement2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x006C823F;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x006C7D0F;
+}
+
+onPreBattlePlacement2::~onPreBattlePlacement2()
+{
+}
+
+void onPreBattlePlacement2::SetOriginialCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(dword_ptr(esi, 0x2AE8), edx);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onPreBattlePlacement2::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(eax, (DWORD)funcAddress);
+	a->call(eax);
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
 OnMoveRecruitQueue::OnMoveRecruitQueue(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

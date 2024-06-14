@@ -6,7 +6,6 @@
 //@license GPL-3.0
 #include "luaP.h"
 #include "eopEduHelpers.h"
-#include "buildingStructHelpers.h"
 #include "eduThings.h"
 #include "eopBuildings.h"
 
@@ -718,7 +717,7 @@ void luaP::initEopEdu()
 	building = EDB.getBuildingByName("market")
 	EDB.addBuildingPool(building, 0, 55, 1, 0.1, 2, 0, "region_religion catholic 34");
 	*/
-	tables.EDB.set_function("addBuildingPool", &buildingStructHelpers::addBuildingPool);
+	tables.EDB.set_function("addBuildingPool", &settlementHelpers::addBuildingPool);
 
 
 	/***

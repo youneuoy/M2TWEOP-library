@@ -72,44 +72,6 @@ namespace luaGetSetFuncs
 #pragma endregion
 
 
-#pragma region general
-
-
-	//general
-	template <char fieldIndex>
-	std::string getStringPropertyGen(const character* gen)
-	{
-		char* retS = nullptr;
-		if (fieldIndex == generalStruct_abilityID)
-		{
-			retS = gen->ability;
-		}
-
-		if (retS != nullptr)
-		{
-			return std::string(retS);
-		}
-		else
-		{
-			return std::string("");
-		}
-	}
-
-	template <char fieldIndex>
-	void setStringPropertyGen(character* gen, std::string newS)
-	{
-		char* arg = nullptr;
-		if (fieldIndex == generalStruct_abilityID)
-		{
-
-			arg = reinterpret_cast<char*>(&gen->ability);
-		}
-		setGameString(arg, newS.c_str());
-	}
-#pragma endregion
-
-
-
 #pragma region EduEntry
 
 

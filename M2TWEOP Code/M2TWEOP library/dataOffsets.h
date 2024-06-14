@@ -52,6 +52,8 @@ public:
 		DWORD currentGameHandler = NULL;
 		DWORD logFlushRate = NULL;
 		DWORD globalCadClass = NULL;
+		DWORD constructionItems = NULL;
+		DWORD recruitmentItems = NULL;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);

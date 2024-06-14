@@ -6,6 +6,7 @@
 
 
 #include "basicEvents.h"
+#include "battleHandlerHelpers.h"
 #include "cultures.h"
 #include "onlineThings.h"
 #include "character.h"
@@ -16,6 +17,7 @@
 #include "discordManager.h"
 #include "smallFuncs.h"
 #include "unitActions.h"
+#include "unitHelpers.h"
 
 
 worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, worldRecord* selectedRecord)
@@ -787,6 +789,224 @@ eduEntry* __fastcall patchesForGame::OnGetRecruitPoolUnitEntry(int eduIndex)
 	return entry;
 }
 
+DWORD getVFunc(DWORD* addr, DWORD offset)
+{
+	DWORD vtbl = reinterpret_cast<DWORD>(addr);
+	return *reinterpret_cast<DWORD*>(vtbl + offset);
+}
+
+enum UNIT_GROUP_MOVE_TYPE
+{
+	MT_MOVE_FORMED_STATIC_TURN_AT_WAYPOINT,					// move as a group, stop reforming and turning at each waypoint
+	MT_MOVE_FORMED,											// move as a group, stopping only at a constriction
+	MT_MOVE_UNFORMED_UNITS_FORMED,							// move unformed, units within the group get individual orders to move formed
+	MT_MOVE_UNFORMED_UNITS_UNFORMED,						// move unformed, units within the group move unformed
+};
+
+
+float distance(float x, float y, float x2, float y2)
+{
+	return sqrt(pow(x - x2, 2) + pow(y - y2, 2));
+}
+
+void __fastcall patchesForGame::onPreBattlePlacement(aiTacticAssault* aiTactic)
+{
+	auto battle = battleHandlerHelpers::getBattleData();
+	if (!battle || battle->battleState >= 5)
+		return;
+	DWORD vFunc = getVFunc(aiTactic->vftable, 0x4C);
+	int tacticType = GAME_FUNC_RAW(int(__thiscall*)(aiTacticAssault*), vFunc)(aiTactic);
+	if (tacticType != 19)
+		return;
+	auto group1 = &aiTactic->aiUnitGroup;
+	auto group2 = &aiTactic->siegeUnitGroup;
+	DWORD funcAddr = codes::offsets.issueMoveOrder;
+	GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, float*, int16_t, int, bool, bool), funcAddr)(
+		group1,
+		&aiTactic->advanceX,
+		aiTactic->angle,
+		MT_MOVE_FORMED,
+		true,
+		true);
+	for (int i = 0; i < group1->unitsInFormationNum; i++)
+	{
+		auto unit = group1->unitsInFormation[i];
+		if (distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 150)
+			unitActions::placeUnit(unit, aiTactic->advanceX, aiTactic->advanceY, aiTactic->angle, 0);
+	}
+	GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, float*, int16_t, int, bool, bool), funcAddr)(
+		group2,
+		&aiTactic->advanceX,
+		aiTactic->angle,
+		MT_MOVE_FORMED,
+		true,
+		true);
+	for (int i = 0; i < group2->unitsInFormationNum; i++)
+	{
+		auto unit = group2->unitsInFormation[i];
+		if (distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 150)
+			unitActions::placeUnit(unit, aiTactic->advanceX, aiTactic->advanceY, aiTactic->angle, 0);
+	}
+	/*
+	* 
+	for (int i = 0; i < group1.unitsInFormationNum; i++)
+	{
+		auto unit = group1.unitsInFormation[i];
+		unitActions::placeUnit(unit, posX, posY, (int)angle, 0);
+		unitActions::logStringGame("Unit placed at2: " + to_string(unit->positionX) + " " + to_string(unit->positionY) + " " + to_string(angle));
+		group1.xCoord = unit->positionX;
+		group1.yCoord = unit->positionY;
+		group1.angle = aiTactic->angle;
+	}
+	auto group2 = aiTactic->siegeUnitGroup;
+	for (int i = 0; i < group2.unitsInFormationNum; i++)
+	{
+		auto unit = group2.unitsInFormation[i];
+		unitActions::placeUnit(unit, posX, posY, (int)angle, 0);
+		group2.xCoord = unit->positionX;
+		group2.yCoord = unit->positionY;
+		group2.angle = aiTactic->angle;
+		unitActions::logStringGame("Siege unit placed at2: " + to_string(unit->positionX) + " " + to_string(unit->positionY) + " " + to_string(angle));
+		unitActions::placeUnit(unit, unit->positionX, unit->positionY, (int)angle, 0);
+	}
+	 */
+}
+
+bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetachment* detachment, int numRamsLeft)
+{
+	if (numRamsLeft == 0)
+		return false;
+	int numLaddersTowers = 0;
+	int numRams = 0;
+	int infCavNum = 0;
+	for (int i = 0; i < detachment->aiDetachUnitsCount; i++)
+	{
+		auto unit = detachment->aiDetachUnits[i].unit;
+		if (unit->eduEntry->Category != 2 && unit->eduEntry->Class != 4 && unit->eduEntry->Class != 2)
+			infCavNum++;
+		if (unit->eduEntry->Category != 0)
+			continue;
+		if (unit->siegeEnNum == 0)
+			continue;
+		auto engine = unit->siegeEngine[0];
+		if (engine == nullptr)
+			continue;
+		if (engine->engineRecord->classID == engineType::ram)
+			numRams++;
+		if (engine->engineRecord->classID == engineType::ladder || engine->engineRecord->classID == engineType::tower)
+			numLaddersTowers++;
+	}
+	auto battleData = battleHandlerHelpers::getBattleData();
+	battleSide* attacker = nullptr;
+	battleSide* defender = nullptr;
+	for (int i = 0; i < battleData->sidesNum; i++)
+	{
+		auto side = battleData->sides[i];
+		if (side.isDefender)
+			defender = &side;
+		else
+			attacker = &side;
+	}
+	auto defenderArmy = defender->armies[0].stack;
+	int infCavNumDef = 0;
+	if (defenderArmy)
+	{
+		for (int i = 0; i < defenderArmy->numOfUnits; i++)
+		{
+			if (auto unit = defenderArmy->units[i]; unit->eduEntry->Category != 2 && unit->eduEntry->Class != 4 && unit->eduEntry->Class != 2)
+				infCavNumDef++;
+		}
+	}
+	auto battleSideArmy = attacker->armies[0];
+	auto deployArea = battleSideArmy.deploymentArea;
+	auto areaX = deployArea->centreX;
+	auto areaY = deployArea->centreY;
+	int bonus = std::clamp(infCavNum - infCavNumDef, -5, 5);
+	int ramsNeeded = (infCavNum - numLaddersTowers) / (6 - bonus);
+	std::vector<buildingBattle*> gates{};
+	auto buildings = gate->battleResidence->battleBuildings;
+	for (int i = 0; i < buildings->allBuildingsNum; i++)
+	{
+		if (auto building = buildings->allBuildings[i]; building->type == 3)
+			gates.push_back(building);
+	}
+	std::sort(gates.begin(), gates.end(), [areaX, areaY](buildingBattle* a, buildingBattle* b)
+		{
+			return distance(a->xCoord, a->yCoord, areaX, areaY) < distance(b->xCoord, b->yCoord, areaX, areaY);
+		});
+	if (gate == gates[0])
+		return true;
+	int gateNum = static_cast<int>(gates.size());
+	ramsNeeded = std::clamp(ramsNeeded, 1, gateNum);
+	if (int ramsUsed = numRams - numRamsLeft; ramsUsed >= ramsNeeded)
+		return false;
+	if (ramsNeeded < gateNum)
+	{
+		for (int i = 0; i < gateNum - ramsNeeded; i++)
+			gates.erase(gates.end());
+	}
+	bool isCloseEnough = false;
+	for (int i = 0; i < deployArea->coordsNum; i++)
+	{
+		if (distance(deployArea->coordsPairs[i].xCoord, deployArea->coordsPairs[i].yCoord, gate->xCoord, gate->yCoord) < 200)
+			isCloseEnough = true;
+		if (!gates.empty() && distance(gates[0]->xCoord, gates[0]->yCoord, gate->xCoord, gate->yCoord) < 125)
+			isCloseEnough = true;
+		if (isCloseEnough)
+			break;
+	}
+	if (!isCloseEnough)
+		return false;
+	if (std::any_of(gates.begin(), gates.end(), [gate](const buildingBattle* gt){return gate == gt;}))
+		return true;
+	return false;
+}
+
+bool __thiscall patchesForGame::onPreBattlePlacement2(aiUnitGroup* group, DWORD formationTemplate, bool force_issue_order)
+{
+	DWORD orderChangeFormation = codes::offsets.issueFormationOrder;
+	auto retBool = GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, DWORD, bool), orderChangeFormation)(group, formationTemplate, force_issue_order);
+	auto battle = battleHandlerHelpers::getBattleData();
+	if (battle->battleType != 3)
+		return retBool;
+	if (battle->battleState >= 5)
+		return retBool;
+	auto tactic = group->detachmentTactic;
+	if (!tactic)
+		return retBool;
+	DWORD vFunc = getVFunc(tactic->vftable, 0x4C);
+	int tacticType = GAME_FUNC_RAW(int(__thiscall*)(aiDetachmentTactic*), vFunc)(tactic);
+	if (tacticType != 19)
+		return retBool;
+	auto aiTactic = reinterpret_cast<aiTacticAssault*>(tactic);
+	float posX = aiTactic->building->xCoord;
+	float posY = aiTactic->building->yCoord;
+	aiTactic->advanceX = posX;
+	aiTactic->advanceY = posY;
+	auto group1 = aiTactic->aiUnitGroup;
+	auto angle = unitHelpers::angleShortToFloat(aiTactic->angle);
+	for (int i = 0; i < group1.unitsInFormationNum; i++)
+	{
+		auto unit = group1.unitsInFormation[i];
+		unitActions::placeUnit(unit, posX, posY, aiTactic->angle, 0);
+		unitActions::logStringGame("Unit placed at2: " + to_string(unit->positionX) + " " + to_string(unit->positionY) + " " + to_string(angle));
+		group1.xCoord = unit->positionX;
+		group1.yCoord = unit->positionY;
+		group1.angle = aiTactic->angle;
+	}
+	auto group2 = aiTactic->siegeUnitGroup;
+	for (int i = 0; i < group2.unitsInFormationNum; i++)
+	{
+		auto unit = group2.unitsInFormation[i];
+		unitActions::placeUnit(unit, posX, posY, aiTactic->angle, 0);
+		group2.xCoord = unit->positionX;
+		group2.yCoord = unit->positionY;
+		group2.angle = aiTactic->angle;
+		unitActions::logStringGame("Siege unit placed at2: " + to_string(unit->positionX) + " " + to_string(unit->positionY) + " " + to_string(angle));
+	}
+	return retBool;
+}
+
 const char* __fastcall patchesForGame::onQuickSave()
 {
 	static std::vector<std::string> saveNames = { u8"%S-1.sav" ,u8"%S-2.sav", u8"%S-3.sav" };
@@ -1347,7 +1567,7 @@ void __fastcall patchesForGame::onEndSiege(settlementStruct* sett)
 
 void __fastcall patchesForGame::onStartSiege(settlementStruct* sett)
 {
-	if (sett->siegesNumber == 0)
+	if (sett->siegeNum == 0)
 	{
 		return;
 	}

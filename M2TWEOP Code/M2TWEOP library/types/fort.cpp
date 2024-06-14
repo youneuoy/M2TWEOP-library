@@ -114,6 +114,53 @@ namespace fortHelpers
 			}
 		}
 	}
+
+	void deleteFort(const factionStruct* fac, fortStruct* fort)
+	{
+		DWORD delFort = (DWORD)fort;
+		DWORD delFaction = (DWORD)fac;
+		DWORD funcB = codes::offsets.deleteFortFuncOne;
+		DWORD funcC = codes::offsets.deleteFortFuncTwo;
+		DWORD facOffset = dataOffsets::offsets.factionOffsetsStart + 0x4;
+		_asm
+		{
+			mov edi, delFort
+			mov esi, delFaction
+			push edi
+			mov eax, funcB
+			call eax
+			push edi
+			push ebp
+			mov ebp, facOffset
+			lea ecx, [ebp + 0x21608]
+			pop ebp
+			mov eax, funcC
+			call eax
+		}
+	}
+	
+	void createFortXY(factionStruct* fac, int x, int y)
+	{
+		factionStruct* faction = (factionStruct*)fac;
+		character* newgen = characterHelpers::createCharacterWithoutSpawning("named character", faction, 30, "fort", "fort", 31, "default", x, y);
+		stackStruct* newarmy = fastFuncts::createArmy(newgen);
+		auto cultureID = fac->cultureID;
+		auto cultureDb = reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
+		auto culture = cultureDb->cultures[cultureID];
+		auto cost = culture.fortCost;
+		fac->money += cost;
+		auto oldOption = fastFuncts::getCampaignDb()->campaignDbSettlement.canBuildForts;
+		fastFuncts::getCampaignDb()->campaignDbSettlement.canBuildForts = true;
+		DWORD adrFunc = codes::offsets.createFortFunc;
+		_asm
+		{
+			mov ecx, newarmy
+			mov eax, adrFunc
+			call eax
+		}
+		characterHelpers::killCharacter(newgen);
+		fastFuncts::getCampaignDb()->campaignDbSettlement.canBuildForts = oldOption;
+	}
 	
 	void addToLua(sol::state& luaState)
     {

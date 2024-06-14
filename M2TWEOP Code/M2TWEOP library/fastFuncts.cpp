@@ -20,6 +20,7 @@
 #include "plugData.h"
 #include "techFuncs.h"
 #include "unitActions.h"
+#include "settlement.h"
 #include "character.h"
 #include "characterRecord.h"
 
@@ -240,261 +241,6 @@ namespace fastFuncts
 		return coords;
 	}
 
-	void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner, bool convertGarrison)
-	{
-		stackStruct* garrison = nullptr;
-		std::vector<character*> characters;
-		if (convertGarrison)
-		{
-			const int charNum = GAME_FUNC(int(__thiscall*)(settlementStruct*, int), getResidenceCharacterNum)(sett, 1);
-			for (int i = 0; i < charNum; i++)
-			{
-				const auto thisChar = GAME_FUNC(character*(__thiscall*)(settlementStruct*, int, int), getResidenceCharacterAtIndex)(sett, i, 1);
-				if (thisChar->genType->type != characterTypeStrat::spy || thisChar->characterRecord->faction == sett->faction)
-				{
-					DWORD funcAddr = codes::offsets.switchCharacterFaction;
-					_asm
-					{
-						push 0
-						push 0
-						push newOwner
-						mov ecx, thisChar
-						mov eax, funcAddr
-						call eax
-					}
-				}
-				GAME_FUNC(void(__thiscall*)(character*), changeCharacterTileStuff)(thisChar);
-
-				if (thisChar->genType->type == characterTypeStrat::namedCharacter)
-				{
-					characters.push_back(thisChar);
-					DWORD funcAddr2 = codes::offsets.switchNamedCharacterFaction;
-					_asm
-					{
-						push 0
-						push newOwner
-						mov ecx, thisChar
-						mov eax, funcAddr2
-						call eax
-					}
-				}
-				GAME_FUNC(void(__thiscall*)(character*), initPlaceCharacter)(thisChar);
-			}
-			if (auto stack = sett->army)
-			{
-				garrison = stack;
-				auto origFaction = stack->faction;
-				DWORD funcAddr3 = codes::offsets.switchArmyFaction;
-				_asm
-				{
-					push newOwner
-					push stack
-					mov ecx, origFaction
-					mov eax, funcAddr3
-					call eax
-				}
-			}
-		}
-		DWORD vtable = *reinterpret_cast<DWORD*>(sett);
-		DWORD vFuncOffset = vtable + 0x9c;
-		DWORD vFunc = *reinterpret_cast<DWORD*>(vFuncOffset);
-		_asm
-		{
-			push 5
-			push newOwner
-			push 0
-			mov ecx, sett
-			mov eax, vFunc
-			call eax
-		}
-		
-		GAME_FUNC(void(__thiscall*)(settlementStruct*, int), removeSieges)(sett, 0);
-		if (garrison)
-		{
-			if (sett->army && sett->army != garrison)
-				mergeArmies(garrison, sett->army);
-			else
-			{
-				auto newGarrison = createArmyInSettlement(sett);
-				mergeArmies(garrison, newGarrison);
-			}
-		}
-		for (int i = 0; i < newOwner->stackNum; i++)
-		{
-			auto stack = newOwner->stacks[i];
-			if (!stack->gen)
-				continue;
-			if (stack->gen->xCoord == sett->xCoord && stack->gen->yCoord == sett->yCoord)
-			{
-				if (sett->army)
-				{
-					if (sett->army != stack)
-						mergeArmies(stack, sett->army);
-				}
-				else
-				{
-					auto newGarrison = createArmyInSettlement(sett);
-					mergeArmies(stack, newGarrison);
-				}	
-			}
-		}
-		for (auto character : characters)
-		{
-			if (character && !character->ifMarkedToKill && character->genType->type == characterTypeStrat::namedCharacter)
-			{
-				if (!character->characterRecord->label || character->characterRecord->labelCrypt == 0)
-				{
-					auto label = std::string(character->characterRecord->shortName) + "_" + std::to_string(character->characterRecord->index);
-					fastFunctsHelpers::setCryptedString(&character->characterRecord->label, label.c_str());
-				}
-				int unitId = character->bodyguards->eduEntry->Index;
-				int xp = character->bodyguards->expScreen;
-				int armour = (character->bodyguards->stats>> 8) & 0x1F;
-				int weapon = (character->bodyguards->stats>> 13) & 0x1F;
-				characterHelpers::sendOffMap(character);
-				if (auto newStack = spawnArmy(
-					newOwner,
-					character->characterRecord->shortName,
-					character->characterRecord->lastName,
-					character->genType->type,
-					character->characterRecord->label,
-					character->characterRecord->portrait_custom,
-					sett->xCoord,
-					sett->yCoord,
-					(character->characterRecord->age >> 3) & 0x7F,
-					false,
-					character->characterRecord->originalFaction,unitId,xp,weapon,armour))
-				{
-					if (sett->army)
-						mergeArmies(newStack, sett->army);
-					else
-					{
-						auto newGarrison = createArmyInSettlement(sett);
-						mergeArmies(newStack, newGarrison);
-					}
-				}
-			}
-		}
-		
-		if (newOwner->factionHordeInfo && newOwner->factionHordeInfo->isHorde)
-		{
-			auto globalFort = reinterpret_cast<settlementStruct*>(dataOffsets::offsets.globalSett);
-			globalFort = sett;
-			auto hordeInfo = newOwner->factionHordeInfo;
-			DWORD funcAddr4 = codes::offsets.doHordeStuff;
-			_asm
-			{
-				mov ecx, hordeInfo
-				mov eax, funcAddr4
-				call eax
-			}
-		}
-	}
-	
-	void changeFortOwner(fortStruct* fort, factionStruct* newFaction, bool convertGarrison)
-	{
-		if (convertGarrison)
-		{
-			const int charNum = GAME_FUNC(int(__thiscall*)(fortStruct*, int), getResidenceCharacterNum)(fort, 1);
-			for (int i = 0; i < charNum; i++)
-			{
-				const auto thisChar = GAME_FUNC(character*(__thiscall*)(fortStruct*, int, int), getResidenceCharacterAtIndex)(fort, i, 1);
-				if (thisChar->genType->type != characterTypeStrat::spy || thisChar->characterRecord->faction == fort->faction)
-				{
-					DWORD funcAddr = codes::offsets.switchCharacterFaction;
-					_asm
-					{
-						push 0
-						push 0
-						push newFaction
-						mov ecx, thisChar
-						mov eax, funcAddr
-						call eax
-					}
-				}
-				GAME_FUNC(void(__thiscall*)(character*), changeCharacterTileStuff)(thisChar);
-
-				if (thisChar->genType->type == characterTypeStrat::namedCharacter)
-				{
-					DWORD funcAddr2 = codes::offsets.switchNamedCharacterFaction;
-					_asm
-					{
-						push 0
-						push newFaction
-						mov ecx, thisChar
-						mov eax, funcAddr2
-						call eax
-					}
-				}
-				GAME_FUNC(void(__thiscall*)(character*), initPlaceCharacter)(thisChar);
-			}
-			if (auto stack = fort->army)
-			{
-				auto origFaction = stack->faction;
-				DWORD funcAddr3 = codes::offsets.switchArmyFaction;
-				_asm
-				{
-					push newFaction
-					push stack
-					mov ecx, origFaction
-					mov eax, funcAddr3
-					call eax
-				}
-			}
-		}
-		DWORD vtable = *reinterpret_cast<DWORD*>(fort);
-		DWORD vFuncOffset = vtable + 0x9c;
-		DWORD vFunc = *reinterpret_cast<DWORD*>(vFuncOffset);
-		_asm
-		{
-			push 7
-			push newFaction
-			push 0
-			mov ecx, fort
-			mov eax, vFunc
-			call eax
-		}
-		
-		GAME_FUNC(void(__thiscall*)(fortStruct*, int), removeSieges)(fort, 0);
-		if (newFaction->factionHordeInfo && newFaction->factionHordeInfo->isHorde)
-		{
-			auto globalFort = reinterpret_cast<fortStruct*>(dataOffsets::offsets.globalSett);
-			globalFort = fort;
-			auto hordeInfo = newFaction->factionHordeInfo;
-			DWORD funcAddr4 = codes::offsets.doHordeStuff;
-			_asm
-			{
-				mov ecx, hordeInfo
-				mov eax, funcAddr4
-				call eax
-			}
-		}
-		
-		if (!convertGarrison && fort->army)
-		{
-			auto oldCoords = coordPair{static_cast<int>(fort->xCoord), static_cast<int>(fort->yCoord)};
-			if (const auto coords = findValidTileNearTile(&oldCoords, 7);
-				isTileValidForCharacterType(7, coords))
-			{
-				sol::table units = sol::state_view(plugData::data.luaAll.luaState).create_table();
-				for (int i = 0; i < fort->army->numOfUnits; i++)
-				{
-					units.add(fort->army->units[i]);
-				}
-				const auto faction = fort->army->faction;
-				if (const auto army = factionHelpers::splitArmy(faction, units, coords->xCoord, coords->yCoord); army)
-					return;
-			}
-			if (fort->army)
-			{
-				for (int i = 0; i < fort->army->numOfUnits; i++)
-				{
-					killUnit(fort->army->units[i]);
-				}
-			}
-		}
-	}
-
 	void GetGameTileCoordsWithCursor(int& x, int& y)
 	{
 		int* mouseOffset = 0x0;
@@ -522,32 +268,7 @@ namespace fastFuncts
 			return false;
 		return true;
 	}
-
-	void setCharacterType(character* character, int typeID, int subFaction, int factionDipNum)
-	{
-		DWORD adrFunc = 0x0;
-		if (globals::dataS.gamever == 2)//steam
-		{
-			adrFunc = 0x008b4200;
-		}
-		else
-		{
-			adrFunc = 0x008b3810;
-		}
-
-		genMod* retVal = nullptr;
-
-		__asm
-		{
-			push factionDipNum
-			push subFaction
-			push typeID
-			mov eax, adrFunc
-			call eax
-			mov retVal, eax
-		}
-		character->genType = retVal;
-	}
+	
 	UINT32 getTileRegionID(int x, int y)
 	{
 		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
@@ -609,43 +330,6 @@ namespace fastFuncts
 		techFuncs::Read(dataOffsets::offsets.factionOffsetsStart + 0x324, &count);
 
 		return count;
-	}
-
-	guild* getGuild(unsigned char index)
-	{
-		uintptr_t currentOffsett = dataOffsets::offsets.guildDataStart;
-		int count = 0;
-		UINT32 maxCount = 0;
-		UINT8 currID = 0;
-
-		do {
-			techFuncs::Read(currentOffsett + 0x10, &count);
-			techFuncs::Read(currentOffsett + 0xC, &maxCount);
-			uintptr_t guilds = *(uintptr_t*)currentOffsett;
-
-			if (guilds == 0)
-			{
-				return nullptr;
-			}
-
-			for (int i = 0; i < count; ++i)
-			{
-				if (index == currID)
-				{
-					return  (guild*)(guilds + 0x4C * i);
-				}
-				++currID;
-			}
-
-			if (count < (int)maxCount || *(uintptr_t*)(currentOffsett + 0x4) == 0)
-			{
-				return nullptr;
-			}
-			currentOffsett = *(uintptr_t*)(currentOffsett + 0x4);
-
-		} while (*(uintptr_t*)currentOffsett != 0);
-
-		return nullptr;
 	}
 
 
@@ -772,9 +456,6 @@ namespace fastFuncts
 				}
 			}
 		}
-
-
-
 		return nullptr;
 	}
 
@@ -1043,25 +724,6 @@ namespace fastFuncts
 		}
 	}
 
-	void destroyBuilding(settlementStruct* sett, const char* typeName, bool isReturnMoney)
-	{
-
-		DWORD adr = codes::offsets.destroyBuildingFunc;
-		char** buildTypeS = fastFunctsHelpers::makeCryptedString(typeName);
-		if (buildTypeS == nullptr)return;
-		char* buildType = buildTypeS[0];
-		char* hash = buildTypeS[1];
-		_asm {
-			push isReturnMoney
-			push hash
-			push buildType
-			mov ecx, [sett]
-			mov eax, [adr]
-			call eax
-		}
-		return;
-	}
-
 	bool useButton(const char* buttonName)
 	{
 		DWORD findedButton = 0;
@@ -1160,132 +822,6 @@ namespace fastFuncts
 
 		return false;
 	}
-	void createBuilding(settlementStruct* sett, const char* building_level_id)
-	{
-		DWORD adrFunc = codes::offsets.createBuildingFunc;
-		string command = sett->name;
-		command.push_back(' ');
-		command += building_level_id;
-		char buffer[100]{};
-		const char* cmdC = command.c_str();
-		_asm
-		{
-			lea eax, buffer
-			push eax
-			push cmdC
-			mov eax, adrFunc
-			call eax
-		}
-	}
-
-	character* createCharacterWithoutSpawning(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
-	{
-		DWORD adrFunc = codes::offsets.createCharacterFunc;
-
-		character* gen = nullptr;
-
-		char** cryptS = fastFunctsHelpers::makeCryptedString(type);
-
-		DWORD adrType = (DWORD)cryptS;
-		_asm
-		{
-			push portrait
-			push subFaction
-			push name2
-			push name
-			push age
-			push fac
-			push adrType
-			mov eax, adrFunc
-			call eax
-			mov gen, eax
-			add esp, 0x1c
-		}
-		struct xyS
-		{
-			int x = 0;
-			int y = 0;
-		}xy;
-		xy.x = x;
-		xy.y = y;
-
-
-		adrFunc = codes::offsets.spawnCreatedCharacterFunc;
-		xyS* xyP = &xy;
-
-		_asm
-		{
-			push xyP
-			push gen
-			mov eax, adrFunc
-			call eax
-		}
-
-		return gen;
-	}
-	character* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
-	{
-		if (portrait != nullptr && strlen(portrait) == 0)
-			portrait = nullptr;
-		if (name != nullptr && strlen(name) == 0)
-			name = nullptr;
-		if (name2 != nullptr && strlen(name2) == 0)
-			name2 = nullptr;
-		DWORD adrFunc = codes::offsets.createCharacterFunc;
-
-		character* gen = nullptr;
-
-		char** cryptS = fastFunctsHelpers::makeCryptedString(type);
-
-		DWORD adrType = (DWORD)cryptS;
-		_asm
-		{
-			push portrait
-			push subFaction
-			push name2
-			push name
-			push age
-			push fac
-			push adrType
-			mov eax, adrFunc
-			call eax
-			mov gen, eax
-			add esp, 0x1c
-		}
-		struct xyS
-		{
-			int x = 0;
-			int y = 0;
-		}xy;
-		xy.x = x;
-		xy.y = y;
-
-
-		adrFunc = codes::offsets.spawnCreatedCharacterFunc;
-		xyS* xyP = &xy;
-
-		_asm
-		{
-			push xyP
-			push gen
-			mov eax, adrFunc
-			call eax
-		}
-
-		adrFunc = codes::offsets.doSomeWithCharacterFunc;
-		void* some = fac->tilesFac;
-		_asm
-		{
-			push 0
-			push gen
-			mov ecx, some
-			mov eax, adrFunc
-			call eax
-		}
-
-		return gen;
-	}
-
 	stackStruct* createArmy(character* character)
 	{
 		stackStruct* stack = nullptr;
@@ -1610,53 +1146,6 @@ namespace fastFuncts
 		return res;
 	}
 
-	void deleteFort(const factionStruct* fac, fortStruct* fort)
-	{
-		DWORD delFort = (DWORD)fort;
-		DWORD delFaction = (DWORD)fac;
-		DWORD funcB = codes::offsets.deleteFortFuncOne;
-		DWORD funcC = codes::offsets.deleteFortFuncTwo;
-		DWORD facOffset = dataOffsets::offsets.factionOffsetsStart + 0x4;
-		_asm
-		{
-			mov edi, delFort
-			mov esi, delFaction
-			push edi
-			mov eax, funcB
-			call eax
-			push edi
-			push ebp
-			mov ebp, facOffset
-			lea ecx, [ebp + 0x21608]
-			pop ebp
-			mov eax, funcC
-			call eax
-		}
-	}
-
-	void createFortXY(factionStruct* fac, int x, int y)
-	{
-		factionStruct* faction = (factionStruct*)fac;
-		character* newgen = fastFuncts::createCharacterWithoutSpawning("named character", faction, 30, "fort", "fort", 31, "default", x, y);
-		stackStruct* newarmy = fastFuncts::createArmy(newgen);
-		auto cultureID = fac->cultureID;
-		auto cultureDb = reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
-		auto culture = cultureDb->cultures[cultureID];
-		auto cost = culture.fortCost;
-		fac->money += cost;
-		auto oldOption = getCampaignDb()->campaignDbSettlement.canBuildForts;
-		getCampaignDb()->campaignDbSettlement.canBuildForts = true;
-		DWORD adrFunc = codes::offsets.createFortFunc;
-		_asm
-		{
-			mov ecx, newarmy
-			mov eax, adrFunc
-			call eax
-		}
-		characterHelpers::killCharacter(newgen);
-		getCampaignDb()->campaignDbSettlement.canBuildForts = oldOption;
-	}
-
 	campaignDb* getCampaignDb()
 	{
 		return reinterpret_cast<campaignDb*>(dataOffsets::offsets.campaignDb);
@@ -1665,27 +1154,6 @@ namespace fastFuncts
 	campaignDbExtra* getCampaignDbExtra()
 	{
 		return reinterpret_cast<campaignDbExtra*>(dataOffsets::offsets.campaignDbExtra);
-	}
-
-	fortStruct* createFort(const character* gen)
-	{
-		if (!gen || !gen->characterRecord || !gen->characterRecord->faction || !gen->armyLeaded)
-			return nullptr;
-		if (auto faction = gen->characterRecord->faction;
-			faction->money < m2tweopHelpers::getCultureDb()->cultures[faction->cultureID].fortCost)
-			return nullptr;
-		stackStruct* newArmy = gen->armyLeaded;
-		auto oldOption = getCampaignDb()->campaignDbSettlement.canBuildForts;
-		getCampaignDb()->campaignDbSettlement.canBuildForts = true;
-		DWORD adrFunc = codes::offsets.createFortFunc;
-		_asm
-		{
-			mov ecx, newArmy
-			mov eax, adrFunc
-			call eax
-		}
-		getCampaignDb()->campaignDbSettlement.canBuildForts = oldOption;
-		return gameHelpers::getTileFort(gameHelpers::getTile(gen->xCoord, gen->yCoord));
 	}
 
 	void setUnitParams(unit* un, int count, int exp, int armor, int weap)
@@ -1921,7 +1389,7 @@ namespace fastFuncts
 				name = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(0, nameFaction, firstNameIndex);
 				name2 = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(2, nameFaction, secondNameIndex);
 			}
-			gen = createCharacterWithoutSpawning(typeName, faction, age, name, name2, subFaction, portrait, x, y);
+			gen = characterHelpers::createCharacterWithoutSpawning(typeName, faction, age, name, name2, subFaction, portrait, x, y);
 			auto namedChar = gen->characterRecord;
 			namedChar->age ^= (namedChar->age ^ (family << 13)) & 0x2000u;
 			if (!faction->leader)
@@ -2001,12 +1469,6 @@ namespace fastFuncts
 		delete spawnCoords;
 		return nullptr;
 	}
-
-
-
-
-
-
 	
 	DWORD* getTileObject(const oneTile* tile, int type)
 	{

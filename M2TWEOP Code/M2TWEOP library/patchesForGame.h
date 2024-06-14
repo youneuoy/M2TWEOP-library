@@ -13,8 +13,11 @@ public:
 	static char* __fastcall onSaveEDUStringS(eduEntry* eduEntry);
 	static int __fastcall onCreateUnit(char** entryName, int* edbIndex);
 	static int __fastcall OnCreateMercUnitCheck(char** entryName, int eduindex);
+	static void __fastcall onPreBattlePlacement(aiTacticAssault* aiTactic);
+	static bool __thiscall onPreBattlePlacement2(aiUnitGroup* group, DWORD formationTemplate, bool force_issue_order);
 	static eduEntry* __fastcall OnCreateMercUnit(char** entryName, eduEntry* entry);
 	static eduEntry* __fastcall OnCreateUnitWrapper(int eduindexBase, int removeValue);
+	static bool __fastcall onDecideRamAttacks(buildingBattle* gate, aiDetachment* detachment, int numRamsLeft);
 	static const char* __fastcall onQuickSave();
 	static const char* __fastcall onAutoSave();
 	static eduEntry* __fastcall OnGetRecruitPoolUnitEntry(int eduIndex);

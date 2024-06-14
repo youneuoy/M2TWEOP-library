@@ -1,8 +1,11 @@
 #pragma once
 #include <string>
 #include "realGameTypes.h"
+#include "settlement.h"
+#include "character.h"
 
 #include "lua/sol.hpp"
+struct buildingInQueue;
 namespace gameHelpers
 {
 	UINT32 getFactionsCount();

@@ -55,6 +55,8 @@ namespace unitHelpers
 	unitGroup* getEmptyGroup(const stackStruct* army);
 	const char* getGroupLabel(const unitGroup* group);
 	void releaseUnit(unit* un);
+	int16_t angleFloatToShort(float angle);
+	float angleShortToFloat(int16_t angle);
 	
 	unitGroup* defineUnitGroup(const stackStruct* army, const char* label, unit* un);
 	void addUnitToGroup(unitGroup* group, unit* un);

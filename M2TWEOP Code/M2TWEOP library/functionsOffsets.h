@@ -190,6 +190,18 @@ public:
 		DWORD addTrait = NULL;
 		DWORD removeTrait = NULL;
 		DWORD removeAncillary = NULL;
+		DWORD issueMoveOrder = NULL;
+		DWORD issueFormationOrder = NULL;
+		DWORD repairBuilding = NULL;
+		DWORD addBuildingToQueue = NULL;
+		DWORD addUnitToQueue = NULL;
+		DWORD createBuildInSett = NULL;
+		DWORD upgradeBuildInSett = NULL;
+		DWORD upgradeSett = NULL;
+		DWORD getRecruitmentOptions = NULL;
+		DWORD getRetrainingOptions = NULL;
+		DWORD resetBuildingsMem = NULL;
+		DWORD getConstructionOptions = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

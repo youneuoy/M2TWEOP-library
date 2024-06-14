@@ -9,6 +9,7 @@
 #include "technicalHelpers.h"
 #include "unitActions.h"
 #include "character.h"
+#include "settlement.h"
 
 std::string factionHelpers::getFactionName(const factionStruct* fac)
 {
@@ -357,26 +358,6 @@ int factionHelpers::getConstructionValue(aiPersonalityValues* personality, int t
 int factionHelpers::getRecruitmentValue(aiPersonalityValues* personality, int type)
 {
 	return personality->recruitmentValues[type];
-}
-
-void factionHelpers::setConstructionValueSett(aiProductionController* controller, int type, int value)
-{
-	controller->buildingBias[type] = value;
-}
-
-void factionHelpers::setRecruitmentValueSett(aiProductionController* controller, int type, int value)
-{
-	controller->recruitBias[type] = value;
-}
-
-int factionHelpers::getConstructionValueSett(aiProductionController* controller, int type)
-{
-	return controller->buildingBias[type];
-}
-
-int factionHelpers::getRecruitmentValueSett(aiProductionController* controller, int type)
-{
-	return controller->recruitBias[type];
 }
 
 ltgdFactionValues* factionHelpers::getAiFactionValues(factionStruct* fac)

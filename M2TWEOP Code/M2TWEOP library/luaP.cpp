@@ -18,35 +18,24 @@
 #include <windows.h>
 #include "luaGetSetFuncs.h"
 #include "factionHelpers.h"
-#include "settlementHelpers.h"
 #include "resourcesHelpers.h"
 #include "gameHelpers.h"
 #include "stackStructHelpers.h"
-#include "buildingStructHelpers.h"
 #include "unitHelpers.h"
 #include "m2tweopHelpers.h"
 #include "generalCharactericticsHelpers.h"
 #include "technicalHelpers.h"
 #include "eopEduHelpers.h"
-#include "guildHelpers.h"
 #include "siegeHelpers.h"
 #include "gameSTDUIHelpers.h"
 #include "character.h"
+#include "settlement.h"
 #include "characterRecord.h"
+#include "eopBuildings.h"
 std::vector<std::string> luaP::logS;
 std::vector<std::string> luaP::logCommands;
 
-std::array<sol::table*, 200> settlementData;
 
-sol::table* getSettlementData(const settlementStruct* sett)
-{
-	return settlementData[sett->regionID];
-}
-
-void setSettlementData(const settlementStruct* sett, sol::table* data)
-{
-	settlementData[sett->regionID] = data;
-}
 static int ourP(lua_State* L) {
 	int n = lua_gettop(L);  /* number of arguments */
 	int i;
@@ -151,14 +140,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<watchTowerStruct>watchtowerStruct;
 		sol::usertype<portBuildingStruct>portStruct;
 		sol::usertype<portDockStrat>dockStruct;
-		sol::usertype<settlementStruct>settlementStruct;
-		sol::usertype<guild>guild;
 		sol::usertype<resStrat>tradeResource;
 		sol::usertype<stackStruct>stackStruct;
-		sol::usertype<building>building;
-		sol::usertype<buildingsQueue>buildingsQueue;
-		sol::usertype<buildingInQueue>buildingInQueue;
-		sol::usertype<unitRQ>unitInQueue;
 		sol::usertype<siegeS>siege;
 		sol::usertype<buildingLevel>buildingLevel;
 		sol::usertype<battleCameraStruct>battleCameraStruct;
@@ -169,20 +152,15 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<factionEconomy>factionEconomy;
 		sol::usertype<factionRanking>factionRanking;
 		sol::usertype<holdRegionsWinCondition>holdRegionsWinCondition;
-		sol::usertype<settlementCapability>settlementCapability;
-		sol::usertype<recruitmentCapability>recruitmentCapability;
-		sol::usertype<settlementRecruitmentPool>settlementRecruitmentPool;
 		sol::usertype<battleFactionCounter>battleFactionCounter;
 		sol::usertype<eventTrigger> eventTrigger;
 		sol::usertype<descrMountEntry> mountStruct;
 		sol::usertype<projectile> projectileStruct;
-		sol::usertype<settlementStats> settlementStats;
 		sol::usertype<aiFaction> aiFaction;
 		sol::usertype<aiLongTermGoalDirector> aiLongTermGoalDirector;
 		sol::usertype<aiPersonalityValues> aiPersonality;
 		sol::usertype<aiGlobalStrategyDirector> aiGlobalStrategyDirector;
 		sol::usertype<decisionValuesLTGD> decisionValuesLTGD;
-		sol::usertype<aiProductionController> aiProductionController;
 		sol::usertype<ltgdFactionValues> aiFactionValues;
 		sol::usertype<interFactionLTGD> interFactionLTGD;
 		sol::usertype<trait> traitStruct;
@@ -190,8 +168,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::usertype<traitLevel> traitLevel;
 		sol::usertype<traitEffect> traitEffect;
 		sol::usertype<unitGroup> unitGroup;
-		sol::usertype<settlementBuildingOptions> constructionOptions;
-		sol::usertype<settlementRecruitmentOptions> recruitmentOptions;
 	}types;
 	luaState = {};
 	luaPath = modPath + "\\youneuoy_Data\\plugins\\lua";
@@ -238,6 +214,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	characterHelpers::addToLua(luaState);
 	characterRecordHelpers::addToLua(luaState);
+	settlementHelpers::addToLua(luaState);
 	fortHelpers::addToLua(luaState);
 
 	///M2TWEOP
@@ -1060,7 +1037,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	ourGuild=stratmap.game.getGuild(1);
 	*/
-	tables.gameTable.set_function("getGuild", &fastFuncts::getGuild);
+	tables.gameTable.set_function("getGuild", &eopBuildings::getGuild);
 
 	/***
 	Create a new character at the specified coordinates. If you are not spawning an agent it is preferred to use spawnArmy instead.
@@ -1078,7 +1055,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	newCharacter=stratmap.game.createCharacterByString("named character",CAMPAIGN:getFaction("england"),18,"Name1","Name2",31,"custom_portrait_name",character.character.xCoord+5,character.character.yCoord);
 	*/
-	tables.gameTable.set_function("createCharacterByString", &fastFuncts::createCharacter);
+	tables.gameTable.set_function("createCharacterByString", &characterHelpers::createCharacter);
 
 	/***
 	Create a new army at the specified coordinates. Works similarly to the script command spawn_army. You can respawn off-map characters using it. You can not re-use labels!
@@ -2462,7 +2439,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	fac:deleteFort(someFort)
 	*/
-	types.factionStruct.set_function("deleteFort", &fastFuncts::deleteFort);
+	types.factionStruct.set_function("deleteFort", &fortHelpers::deleteFort);
 
 	/***
 	Create a fort at the specified coordinates.
@@ -2472,7 +2449,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	fac:createFortXY(193, 283)
 	*/
-	types.factionStruct.set_function("createFortXY", &fastFuncts::createFortXY);
+	types.factionStruct.set_function("createFortXY", &fortHelpers::createFortXY);
 
 	/***
 	Create a watchtower at the specified coordinates.
@@ -2876,84 +2853,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.aiPersonality.set_function("getProductionController", &factionHelpers::getProductionController);
 
 
-	///aiProductionController
-	//@section aiProductionController
-
-	/***
-	Basic aiProductionController table
-
-	@tfield aiFaction aiFaction
-	@tfield int regionID
-	@tfield settlementStruct settlement
-	@tfield int autoManagePolicy
-	@tfield int isAutoManaged
-	@tfield int isAutoManagedRecruitment
-	@tfield int isAutoManagedConstruction
-	@tfield int spyBias
-	@tfield int assassinBias
-	@tfield int diplomatBias
-	@tfield int admiralBias
-	@tfield int priestBias
-	@tfield int merchantBias
-	@tfield setConstructionValue setConstructionValue
-	@tfield setRecruitmentValue setRecruitmentValue
-	@tfield getConstructionValue getConstructionValue
-	@tfield getRecruitmentValue getRecruitmentValue
-
-	@table aiProductionController
-	*/
-	types.aiProductionController = luaState.new_usertype<aiProductionController>("aiProductionController");
-	types.aiProductionController.set("aiFaction", &aiProductionController::aiFaction);
-	types.aiProductionController.set("regionID", &aiProductionController::regionID);
-	types.aiProductionController.set("settlement", &aiProductionController::settlement);
-	types.aiProductionController.set("autoManagePolicy", &aiProductionController::autoManagePolicy);
-	types.aiProductionController.set("isAutoManaged", &aiProductionController::isAutoManaged);
-	types.aiProductionController.set("isAutoManagedRecruitment", &aiProductionController::isAutoManagedRecruitment);
-	types.aiProductionController.set("isAutoManagedConstruction", &aiProductionController::isAutoManagedConstruction);
-	types.aiProductionController.set("spyBias", &aiProductionController::spyBias);
-	types.aiProductionController.set("assassinBias", &aiProductionController::assassinBias);
-	types.aiProductionController.set("diplomatBias", &aiProductionController::diplomatBias);
-	types.aiProductionController.set("admiralBias", &aiProductionController::admiralBias);
-	types.aiProductionController.set("priestBias", &aiProductionController::priestBias);
-	types.aiProductionController.set("merchantBias", &aiProductionController::merchantBias);
-	/***
-	Set bias value of the ai personality for a capability.
-	@function aiProductionController:setConstructionValue
-	@tparam int type use building capabilities enum
-	@tparam int value
-	@usage
-		 aiProductionController:setConstructionValue(buildingCapability.law_bonus, 100)
-	*/
-	types.aiProductionController.set_function("setConstructionValue", &factionHelpers::setConstructionValueSett);
-	/***
-	Set bias value of the ai personality for a recruitment class.
-	@function aiProductionController:setRecruitmentValue
-	@tparam int type use unitCategoryClass enum
-	@tparam int value
-	@usage
-		 aiProductionController:setRecruitmentValue(unitCategoryClass.heavyCavalry, 100)
-	*/
-	types.aiProductionController.set_function("setRecruitmentValue", &factionHelpers::setRecruitmentValueSett);
-	/***
-	Get bias value of the ai personality for a capability.
-	@function aiProductionController:getConstructionValue
-	@tparam int type use building capabilities enum
-	@treturn int value
-	@usage
-		local value = aiProductionController:setConstructionValue(buildingCapability.law_bonus)
-	*/
-	types.aiProductionController.set_function("getConstructionValue", &factionHelpers::getConstructionValueSett);
-	/***
-	Get bias value of the ai personality for a recruitment class.
-	@function aiProductionController:getRecruitmentValue
-	@tparam int type use unitCategoryClass enum
-	@treturn int value
-	@usage
-		local value = aiProductionController:setRecruitmentValue(unitCategoryClass.heavyCavalry)
-	*/
-	types.aiProductionController.set_function("getRecruitmentValue", &factionHelpers::getRecruitmentValueSett);
-
-
 	///battleFactionCounter
 	//@section battleFactionCounter
 
@@ -3257,739 +3156,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	types.dockStruct.set("numTurnsBlocked", &portDockStrat::numTurnsBlocked);
 	types.dockStruct.set("port", &portDockStrat::port);
 	types.dockStruct.set("dockedArmy", &portDockStrat::dockedArmy);
-
-
-	///SettlementStruct
-	//@section settlementStructTable
-
-	/***
-	Basic settlementStruct table
-
-	@tfield int xCoord
-	@tfield int yCoord
-	@tfield character governor
-	@tfield stackStruct army
-	@tfield string name internal name of settlement
-	@tfield string localizedName
-	@tfield factionStruct ownerFaction
-	@tfield changeOwner changeOwner
-	@tfield int creatorFactionID
-	@tfield int regionID
-	@tfield int level
-	@tfield int isCastle
-	@tfield int siegeHoldoutTurns
-	@tfield int turnsSieged
-	@tfield int subFactionID
-	@tfield int yearFounded
-	@tfield int isCapital
-	@tfield int harvestSuccess
-	@tfield int baseFertility
-	@tfield int rebelFactionChance
-	@tfield int plagued
-	@tfield int plagueDeaths
-	@tfield int turnsOwned start at 10 for settlements owned at game start without specification in descr_strat
-	@tfield int populationSiegeStart
-	@tfield int settlementTaxLevel
-	@tfield int recruitmentPoolCount
-	@tfield int recruitmentCapabilityNum
-	@tfield int freezeRecruitmentPool
-	@tfield int spiesInRecruitmentQueue
-	@tfield int assassinsInRecruitmentQueue
-	@tfield int diplomatsInRecruitmentQueue
-	@tfield int admiralsInRecruitmentQueue
-	@tfield int merchantsInRecruitmentQueue
-	@tfield int priestsInRecruitmentQueue
-	@tfield aiProductionController aiProductionController
-	@tfield int turmoil
-	@tfield int gatesAreOpened
-	@tfield int isProvokedRebellion
-	@tfield int populationSize
-	@tfield getReligion getReligion
-	@tfield setReligion setReligion
-	@tfield getGuildStanding getGuildStanding
-	@tfield setGuildStanding setGuildStanding
-	@tfield int buildingsNum
-	@tfield getBuilding getBuilding
-	@tfield createBuilding createBuilding
-	@tfield destroyBuilding destroyBuilding
-	@tfield buildingsQueue buildingsQueue
-	@tfield int resourcesNum
-	@tfield settlementStats settlementStats
-	@tfield settlementStats settlementStatsLastTurn
-	@tfield getResource getResource
-	@tfield int siegesNum
-	@tfield getSiege getSiege
-	@tfield getSettlementCapability getSettlementCapability
-	@tfield getAgentCapability getAgentCapability
-	@tfield getAgentLimitCapability getAgentLimitCapability
-	@tfield getRecruitmentCapability getRecruitmentCapability
-	@tfield getSettlementRecruitmentPool getSettlementRecruitmentPool
-	@tfield upgrade upgrade
-	@tfield getConstructionOptions getConstructionOptions
-	@tfield getRecruitmentOptions getRecruitmentOptions
-
-	@table settlementStruct
-	*/
-	types.settlementStruct = luaState.new_usertype<settlementStruct>("settlementStruct");
-	types.settlementStruct.set("xCoord", &settlementStruct::xCoord);
-	types.settlementStruct.set("yCoord", &settlementStruct::yCoord);
-	types.settlementStruct.set("governor", &settlementStruct::governor);
-	types.settlementStruct.set("army", &settlementStruct::army);
-	types.settlementStruct.set("name", sol::property(
-		&settlementHelpers::getStringProperty<settlementStruct_name>, &settlementHelpers::setStringProperty<settlementStruct_name>
-		));
-	types.settlementStruct.set("localizedName", sol::property(
-		&settlementHelpers::getSettlementName, &smallFuncs::changeSettlementName
-		));
-	types.settlementStruct.set("ownerFaction", &settlementStruct::faction);
-	/***
-	Change owner faction of settlement. All agents, armies etc. leave the settlement.
-	@function settlementStruct:changeOwner
-	@tparam factionStruct newOwner Faction to change ownership to.
-	@tparam bool convertGarrison
-	@usage
-	local campaign=gameDataAll.get().campaignStruct;
-	local fac1=campaign.factionsSortedByDescrStrat[1];
-	currSet:changeOwner(fac1);
-	end
-	*/
-	types.settlementStruct.set_function("changeOwner", sol::overload(
-			sol::resolve<void(settlementStruct*, factionStruct*)>(settlementHelpers::changeOwner),
-			sol::resolve<void(settlementStruct*, factionStruct*, bool)>(fastFuncts::setSettlementOwner)
-		));
-	types.settlementStruct.set("creatorFactionID", &settlementStruct::fac_creatorModNum);
-	types.settlementStruct.set("data", sol::property(
-		&getSettlementData, &setSettlementData
-		));
-	types.settlementStruct.set("regionID", &settlementStruct::regionID);
-	types.settlementStruct.set("level", &settlementStruct::level);
-	types.settlementStruct.set("isCastle", &settlementStruct::isCastle);
-	types.settlementStruct.set("gatesAreOpened", &settlementStruct::gatesAreOpened);
-	types.settlementStruct.set("settlementTaxLevel", &settlementStruct::settlementTaxLevel);
-	types.settlementStruct.set("siegeHoldoutTurns", &settlementStruct::siegeHoldoutTurns);
-	types.settlementStruct.set("turnsSieged", &settlementStruct::turnsSieged);
-	types.settlementStruct.set("turnsOwned", &settlementStruct::turnsOwned);
-	types.settlementStruct.set("subFactionID", &settlementStruct::subFactionID);
-	types.settlementStruct.set("yearFounded", &settlementStruct::yearFounded);
-	types.settlementStruct.set("isCapital", &settlementStruct::isCapital);
-	types.settlementStruct.set("aiProductionController", &settlementStruct::aiProductionController);
-	types.settlementStruct.set("harvestSuccess", &settlementStruct::harvestSuccess);
-	types.settlementStruct.set("baseFertility", &settlementStruct::baseFertilityValue);
-	types.settlementStruct.set("rebelFactionChance", &settlementStruct::rebelFactionChance);
-	types.settlementStruct.set("plagued", &settlementStruct::plagued);
-	types.settlementStruct.set("plagueDeaths", &settlementStruct::plagueDeaths);
-	types.settlementStruct.set("populationSiegeStart", &settlementStruct::populationSiegeStart);
-	types.settlementStruct.set("isProvokedRebellion", &settlementStruct::isProvokedRebellion);
-	types.settlementStruct.set("populationSize", sol::property(settlementHelpers::getPopulation));
-	types.settlementStruct.set("recruitmentPoolCount", &settlementStruct::recruitmentPoolCount);
-	types.settlementStruct.set("freezeRecruitmentPool", &settlementStruct::freezeRecruitmentPool);
-	types.settlementStruct.set("spiesInRecruitmentQueue", &settlementStruct::spiesInRecruitmentQueue);
-	types.settlementStruct.set("assassinsInRecruitmentQueue", &settlementStruct::assassinsInRecruitmentQueue);
-	types.settlementStruct.set("diplomatsInRecruitmentQueue", &settlementStruct::diplomatsInRecruitmentQueue);
-	types.settlementStruct.set("admiralsInRecruitmentQueue", &settlementStruct::admiralsInRecruitmentQueue);
-	types.settlementStruct.set("merchantsInRecruitmentQueue", &settlementStruct::merchantsInRecruitmentQueue);
-	types.settlementStruct.set("priestsInRecruitmentQueue", &settlementStruct::priestsInRecruitmentQueue);
-	types.settlementStruct.set("settlementStats", &settlementStruct::settlementStats);
-	types.settlementStruct.set("settlementStatsLastTurn", &settlementStruct::settlementStatsLastTurn);
-	types.settlementStruct.set("turmoil", &settlementStruct::turmoil);
-	/***
-	Get the settlement's specific regligion's value
-	@function settlementStruct:getReligion
-	@tparam int religionID In order of descr\_religions.txt, starting from 0
-	@treturn float religionValue from 0 to 1
-	@usage
-	local firstRelVal = settlementStruct:getReligion(0) --get float of religion with ID 0
-	*/
-	types.settlementStruct.set_function("getReligion", &settlementHelpers::getReligion);
-	/***
-	Set the settlement's specific religion's value, make sure the sum of all religion values does not exceed 1.0!
-	@function settlementStruct:setReligion
-	@tparam int religionID in order of descr\_religions.txt, starting from 0
-	@tparam float religionValue from 0 to 1
-	@usage
-	settlementStruct:setReligion(0, 0.5) --set religion with ID 0 as 50%
-	*/
-	types.settlementStruct.set_function("setReligion", &settlementHelpers::setReligion);
-	/***
-	Get a settlement's standing points with a specific guild by ID
-	@function settlementStruct:getGuildStanding
-	@tparam int guild_id
-	@usage
-	ourGuildStanding = settlementStruct:getGuildStanding(0)
-	*/
-	types.settlementStruct.set_function("getGuildStanding", &settlementHelpers::getGuildStanding);
-	/***
-	Set the settlement's standing points with specific guild.
-	@function settlementStruct:setGuildStanding
-	@tparam int guild_id
-	@tparam int standing
-	@usage
-	settlementStruct:setGuildStanding(0, 300)
-	*/
-	types.settlementStruct.set_function("setGuildStanding", &settlementHelpers::setGuildStanding);
-	types.settlementStruct.set("buildingsNum", &settlementStruct::buildingsNum);
-	/***
-	Get a specific building by it's index.
-	@function settlementStruct:getBuilding
-	@tparam int number
-	@treturn building build
-	@usage
-	ourBuilding=settlementStruct:getBuilding(0);
-	if(ourBuilding.level>1)
-	then
-		print("test");
-	end
-	*/
-	types.settlementStruct.set_function("getBuilding", &settlementHelpers::getBuilding);
-	/***
-	Create a building in the settlement.
-	@function settlementStruct:createBuilding
-	@tparam string building_level_id
-	@usage
-	settlementStruct:createBuilding("some_build1");
-	*/
-	types.settlementStruct.set_function("createBuilding", &fastFuncts::createBuilding);
-	/***
-	Destroy a building of a specified type in the settlement.
-	@function settlementStruct:destroyBuilding
-	@tparam string typeName Type of building.
-	@tparam bool isReturnMoney Should money be returned to the faction like with a manual desctruction.
-	@usage
-	settlementStruct:destroyBuilding("some_buildType",false);
-	*/
-	types.settlementStruct.set_function("destroyBuilding", &fastFuncts::destroyBuilding);
-	types.settlementStruct.set("buildingsQueue", &settlementStruct::buildingsQueueArray);
-	types.settlementStruct.set("resourcesNum", &settlementStruct::resourcesNum);
-	/***
-	Get a specific resource by it's index.
-	@function settlementStruct:getResource
-	@tparam int number
-	@treturn tradeResource resource
-	@usage
-	ourResource = settlementStruct:getResource(0)
-	*/
-	types.settlementStruct.set_function("getResource", &settlementHelpers::getResource);
-	types.settlementStruct.set("siegesNum", &settlementStruct::siegesNumber);
-	/***
-	Get a specific siege by it's index
-	@function settlementStruct:getSiege
-	@tparam int siegeIdx
-	@treturn siegeStruct siege
-	@usage
-	for i = 0, currSet.siegesNum-1 do
-	   local siege=currSet:getSiege(i);
-	   --etc
-	end
-	*/
-	types.settlementStruct.set_function("getSiege", &settlementHelpers::getSiege);
-	/***
-	Get a capability by capability type.
-	@function settlementStruct:getSettlementCapability
-	@tparam int capabilityType
-	@treturn settlementCapability capability
-	@usage
-	local incomeBonus = settlementStruct:getSettlementCapability(55)
-	*/
-	types.settlementStruct.set_function("getSettlementCapability", &settlementHelpers::getSettlementCapability);
-	/***
-	Get an agent capability by agent type (only recruitable agents) 0 = spy, 1 = assassin, 2 = diplomat, 3 = princess, 4 = merchant, 5 = priest.
-	@function settlementStruct:getAgentCapability
-	@tparam int agentType
-	@treturn settlementCapability capability
-	@usage
-	local spyCap = settlementStruct:getAgentCapability(0)
-	*/
-	types.settlementStruct.set_function("getAgentCapability", &settlementHelpers::getAgentCapability);
-	/***
-	Get an agent limit capability by agent type (only recruitable agents) 0 = spy, 1 = assassin, 2 = diplomat, 3 = princess, 4 = merchant, 5 = priest.
-	@function settlementStruct:getAgentLimitCapability
-	@tparam int agentType
-	@treturn settlementCapability capability
-	@usage
-	local spyCapLimit = settlementStruct:getAgentLimitCapability(0)
-	*/
-	types.settlementStruct.set_function("getAgentLimitCapability", &settlementHelpers::getAgentCapability);
-	/***
-	Get a recruitment capability by index (max 64!).
-	@function settlementStruct:getRecruitmentCapability
-	@tparam int index
-	@treturn recruitmentCapability capability
-	@usage
-	local capability = settlementStruct:getRecruitmentCapability(0)
-	*/
-	types.settlementStruct.set_function("getRecruitmentCapability", &settlementHelpers::getRecruitmentCapability);
-	types.settlementStruct.set("recruitmentCapabilityNum", sol::property(settlementHelpers::getRecruitmentCapabilityNum));
-	/***
-	Get a recruitment pool by index.
-	@function settlementStruct:getSettlementRecruitmentPool
-	@tparam int index
-	@treturn settlementRecruitmentPool pool
-	@usage
-	local pool = settlementStruct:getSettlementRecruitmentPool(0)
-	*/
-	types.settlementStruct.set_function("getSettlementRecruitmentPool", &settlementHelpers::getSettlementRecruitmentPool);
-	/***
-	Upgrade a settlement to the next level.
-	@function settlementStruct:upgrade
-	@usage
-	      settlement:upgrade()
-	*/
-	types.settlementStruct.set_function("upgrade", &settlementHelpers::upgradeSettlement);
-	/***
-	Get available construction items.
-	@function settlementStruct:getConstructionOptions
-	@treturn constructionOptions options
-	@usage
-	      local items = settlement:getConstructionOptions()
-	*/
-	types.settlementStruct.set_function("getConstructionOptions", &settlementHelpers::getBuildingOptions);
-	/***
-	Get available recruitment items.
-	@function settlementStruct:getRecruitmentOptions
-	@treturn recruitmentOptions options
-	@usage
-	      local items = settlement:getRecruitmentOptions()
-	*/
-	types.settlementStruct.set_function("getRecruitmentOptions", &settlementHelpers::getRecruitOptions);
-	
-	///construction options
-	//@section Construction Options
-
-	/***
-	Basic constructionOptions table
-
-	@tfield int buildingNum
-	@tfield int totalCost
-	@tfield int totalTime
-	@tfield getConstructionOption getConstructionOption
-
-	@table constructionOptions
-	*/
-	types.constructionOptions = luaState.new_usertype<settlementBuildingOptions>("constructionOptions");
-	types.constructionOptions.set("buildingNum", &settlementBuildingOptions::count);
-	types.constructionOptions.set("totalCost", &settlementBuildingOptions::totalCost);
-	types.constructionOptions.set("totalTime", &settlementBuildingOptions::totalTime);
-	
-	/***
-	Get an available construction item.
-	@function constructionOptions:getConstructionOption
-	@tparam int index
-	@treturn buildingInQueue building
-	@usage
-		 local building = constructionOptions:getConstructionOption(0)
-	*/
-	types.constructionOptions.set_function("getConstructionOption", &settlementHelpers::getBuildingOptionFromDb);
-	
-	///recruitment options
-	//@section Recruitment Options
-
-	/***
-	Basic recruitmentOptions table
-
-	@tfield int unitNum
-	@tfield int totalCost
-	@tfield int totalTime
-	@tfield getRecruitmentOption getRecruitmentOption
-
-	@table recruitmentOptions
-	*/
-	types.recruitmentOptions = luaState.new_usertype<settlementRecruitmentOptions>("recruitmentOptions");
-	types.recruitmentOptions.set("unitNum", &settlementRecruitmentOptions::count);
-	types.recruitmentOptions.set("totalCost", &settlementRecruitmentOptions::totalCost);
-	types.recruitmentOptions.set("totalTime", &settlementRecruitmentOptions::totalTime);
-	
-	/***
-	Get an available recruitment item.
-	@function recruitmentOptions:getRecruitmentOption
-	@tparam int index
-	@treturn unitInQueue item
-	@usage
-		 local item = recruitmentOptions:getRecruitmentOption(0)
-	*/
-	types.recruitmentOptions.set_function("getRecruitmentOption", &settlementHelpers::getRecruitOptionFromDb);
-	
-	///unit in queue
-	//@section Unit in queue
-
-	/***
-	Basic unitInQueue table
-
-	@tfield int recruitType 0 = normal, 1 = ship, 2 = agent, 3 = retraining 4 = retraining ship
-	@tfield int experience
-	@tfield int armourUpg
-	@tfield int weaponUpg
-	@tfield eduEntry eduEntry
-	@tfield int agentType
-	@tfield int soldierCount
-	@tfield int cost
-	@tfield int recruitTime
-	@tfield int turnsTrained
-	@tfield settlementStruct settlement
-	@tfield int turnNumber
-	@tfield int isMercenary
-	@tfield addUnitToQueue addUnitToQueue
-
-	@table unitInQueue
-	*/
-	types.unitInQueue = luaState.new_usertype<unitRQ>("unitInQueue");
-	types.unitInQueue.set("recruitType", &unitRQ::recruitType);
-	types.unitInQueue.set("experience", &unitRQ::experience);
-	types.unitInQueue.set("armourUpg", &unitRQ::armourUpg);
-	types.unitInQueue.set("weaponUpg", &unitRQ::weaponUpgrade);
-	types.unitInQueue.set("eduEntry", sol::property(settlementHelpers::getUnitEntry, settlementHelpers::setUnitEntry));
-	types.unitInQueue.set("agentType", sol::property(settlementHelpers::getAgentType, settlementHelpers::setAgentType));
-	types.unitInQueue.set("soldierCount", &unitRQ::soldierCount);
-	types.unitInQueue.set("cost", &unitRQ::cost);
-	types.unitInQueue.set("recruitTime", &unitRQ::turnsToTrain);
-	types.unitInQueue.set("turnsTrained", &unitRQ::turnsTrainedAlready);
-	types.unitInQueue.set("settlement", &unitRQ::settlement);
-	types.unitInQueue.set("turnNumber", &unitRQ::turnNumber);
-	types.unitInQueue.set("isMercenary", &unitRQ::isMercenary);
-	
-	/***
-	Add a unit to the recruitment queue.
-	@function unitInQueue:addUnitToQueue
-	@treturn bool success
-	@usage
-		unitOption:addUnitToQueue()
-	*/
-	types.unitInQueue.set_function("addUnitToQueue", &settlementHelpers::addUnitToQueue);
-
-
-	///settlementStats
-	//@section settlementStats
-
-	/***
-	Basic settlementStats table
-
-	@tfield int PopGrowthBaseFarm - Get only
-	@tfield int population
-	@tfield int PopGrowthFarms - Get only
-	@tfield int PopGrowthHealth - Get only
-	@tfield int PopGrowthBuildings - Get only
-	@tfield int PopGrowthTaxBonus - Get only
-	@tfield int PopGrowthEntertainment - Get only
-	@tfield int PopGrowthTrade - Get only
-	@tfield int PopGrowthGovernorInfluence - Get only
-	@tfield int PopGrowthSqualor - Get only
-	@tfield int PopGrowthPlague - Get only
-	@tfield int PopGrowthTaxPenalty - Get only
-	@tfield int PublicOrderGarrison - Get only
-	@tfield int PublicOrderLaw - Get only
-	@tfield int PublicOrderBuildingsEntertainment - Get only
-	@tfield int PublicOrderGovernorInfluence - Get only
-	@tfield int PublicOrderTaxBonus - Get only
-	@tfield int PublicOrderTriumph - Get only
-	@tfield int PublicOrderPopulationBoom - Get only
-	@tfield int PublicOrderEntertainment - Get only
-	@tfield int PublicOrderHealth - Get only
-	@tfield int PublicOrderGarrisonTwo - Get only
-	@tfield int PublicOrderFear - Get only
-	@tfield int PublicOrderGlory - Get only
-	@tfield int PublicOrderSqualor - Get only
-	@tfield int PublicOrderDistanceToCapital - Get only
-	@tfield int PublicOrderNoGovernance - Get only
-	@tfield int PublicOrderTaxPenalty - Get only
-	@tfield int PublicOrderUnrest - Get only
-	@tfield int PublicOrderBesieged - Get only
-	@tfield int PublicOrderBlockaded - Get only
-	@tfield int PublicOrderCulturalUnrest - Get only
-	@tfield int PublicOrderExcommunication - Get only
-	@tfield int PublicOrder - Get only
-	@tfield int FarmsIncome - Get only
-	@tfield int TaxesIncome - Get only
-	@tfield int MiningIncome - Get only
-	@tfield int TradeIncome - Get only
-	@tfield int DiplomaticIncome - Get only
-	@tfield int DemolitionIncome - Get only
-	@tfield int LootingIncome - Get only
-	@tfield int BuildingsIncome - Get only
-	@tfield int AdminIncome - Get only
-	@tfield int ConstructionExpense - Get only
-	@tfield int RecruitmentExpense - Get only
-	@tfield int DiplomaticExpense - Get only
-	@tfield int CorruptionExpense - Get only
-	@tfield int EntertainmentExpense - Get only
-	@tfield int DevastationExpense - Get only
-	@tfield int TotalIncomeWithoutAdmin - Get only
-	@tfield int majorityReligionID
-
-	@table settlementStats
-	*/
-	types.settlementStats = luaState.new_usertype<settlementStats>("settlementStats");
-	types.settlementStats.set("population", &settlementStats::population);
-	types.settlementStats.set("PopGrowthBaseFarm", &settlementStats::PopGrowthBaseFarm);
-	types.settlementStats.set("PopGrowthFarms", &settlementStats::PopGrowthFarms);
-	types.settlementStats.set("PopGrowthHealth", &settlementStats::PopGrowthHealth);
-	types.settlementStats.set("PopGrowthBuildings", &settlementStats::PopGrowthBuildings);
-	types.settlementStats.set("PopGrowthTaxBonus", &settlementStats::PopGrowthTaxBonus);
-	types.settlementStats.set("PopGrowthEntertainment", &settlementStats::PopGrowthEntertainment);
-	types.settlementStats.set("PopGrowthTrade", &settlementStats::PopGrowthTrade);
-	types.settlementStats.set("PopGrowthGovernorInfluence", &settlementStats::PopGrowthGovernorInfluence);
-	types.settlementStats.set("PopGrowthSqualor", &settlementStats::PopGrowthSqualor);
-	types.settlementStats.set("PopGrowthPlague", &settlementStats::PopGrowthPlague);
-	types.settlementStats.set("PopGrowthTaxPenalty", &settlementStats::PopGrowthTaxPenalty);
-	types.settlementStats.set("PublicOrderGarrison", &settlementStats::PublicOrderGarrison);
-	types.settlementStats.set("PublicOrderLaw", &settlementStats::PublicOrderLaw);
-	types.settlementStats.set("PublicOrderBuildingsEntertainment", &settlementStats::PublicOrderBuildingsEntertainment);
-	types.settlementStats.set("PublicOrderGovernorInfluence", &settlementStats::PublicOrderGovernorInfluence);
-	types.settlementStats.set("PublicOrderTaxBonus", &settlementStats::PublicOrderTaxBonus);
-	types.settlementStats.set("PublicOrderTriumph", &settlementStats::PublicOrderTriumph);
-	types.settlementStats.set("PublicOrderPopulationBoom", &settlementStats::PublicOrderPopulationBoom);
-	types.settlementStats.set("PublicOrderEntertainment", &settlementStats::PublicOrderEntertainment);
-	types.settlementStats.set("PublicOrderHealth", &settlementStats::PublicOrderHealth);
-	types.settlementStats.set("PublicOrderGarrisonTwo", &settlementStats::PublicOrderGarrisonTwo);
-	types.settlementStats.set("PublicOrderFear", &settlementStats::PublicOrderFear);
-	types.settlementStats.set("PublicOrderGlory", &settlementStats::PublicOrderGlory);
-	types.settlementStats.set("PublicOrderSqualor", &settlementStats::PublicOrderSqualor);
-	types.settlementStats.set("PublicOrderDistanceToCapital", &settlementStats::PublicOrderDistanceToCapital);
-	types.settlementStats.set("PublicOrderNoGovernance", &settlementStats::PublicOrderNoGovernance);
-	types.settlementStats.set("PublicOrderTaxPenalty", &settlementStats::PublicOrderTaxPenalty);
-	types.settlementStats.set("PublicOrderUnrest", &settlementStats::PublicOrderUnrest);
-	types.settlementStats.set("PublicOrderBesieged", &settlementStats::PublicOrderBesieged);
-	types.settlementStats.set("PublicOrderBlockaded", &settlementStats::PublicOrderBlockaded);
-	types.settlementStats.set("PublicOrderCulturalUnrest", &settlementStats::PublicOrderCulturalUnrest);
-	types.settlementStats.set("PublicOrderExcommunication", &settlementStats::PublicOrderExcommunication);
-	types.settlementStats.set("PublicOrder", &settlementStats::PublicOrder);
-	types.settlementStats.set("FarmsIncome", &settlementStats::FarmsIncome);
-	types.settlementStats.set("TaxesIncome", &settlementStats::TaxesIncome);
-	types.settlementStats.set("MiningIncome", &settlementStats::MiningIncome);
-	types.settlementStats.set("TradeIncome", &settlementStats::TradeIncome);
-	types.settlementStats.set("DiplomaticIncome", &settlementStats::DiplomaticIncome);
-	types.settlementStats.set("DemolitionIncome", &settlementStats::DemolitionIncome);
-	types.settlementStats.set("LootingIncome", &settlementStats::LootingIncome);
-	types.settlementStats.set("BuildingsIncome", &settlementStats::BuildingsIncome);
-	types.settlementStats.set("AdminIncome", &settlementStats::AdminIncome);
-	types.settlementStats.set("ConstructionExpense", &settlementStats::ConstructionExpense);
-	types.settlementStats.set("RecruitmentExpense", &settlementStats::RecruitmentExpense);
-	types.settlementStats.set("DiplomaticExpense", &settlementStats::DiplomaticExpense);
-	types.settlementStats.set("CorruptionExpense", &settlementStats::CorruptionExpense);
-	types.settlementStats.set("EntertainmentExpense", &settlementStats::EntertainmentExpense);
-	types.settlementStats.set("DevastationExpense", &settlementStats::DevastationExpense);
-	types.settlementStats.set("TotalIncomeWithoutAdmin", &settlementStats::TotalIncomeWithoutAdmin);
-	types.settlementStats.set("majorityReligionID", &settlementStats::TotalIncomeWithoutAdmin);
-
-
-	///settlementCapability
-	//@section settlementCapability
-
-	/***
-	Basic settlementCapability table
-
-	@tfield int value
-	@tfield int bonus
-
-	@table settlementCapability
-	*/
-	types.settlementCapability = luaState.new_usertype<settlementCapability>("settlementCapability");
-	types.settlementCapability.set("value", &settlementCapability::value);
-	types.settlementCapability.set("bonus", &settlementCapability::bonus);
-
-	///recruitmentCapability
-	//@section recruitmentCapability
-
-	/***
-	Basic recruitmentCapability table
-
-	@tfield int eduIndex
-	@tfield int xp
-	@tfield float initialSize
-	@tfield float replenishRate
-	@tfield float maxSize
-
-	@table recruitmentCapability
-	*/
-	types.recruitmentCapability = luaState.new_usertype<recruitmentCapability>("recruitmentCapability");
-	types.recruitmentCapability.set("eduIndex", &recruitmentCapability::eduIndex);
-	types.recruitmentCapability.set("xp", &recruitmentCapability::xp);
-	types.recruitmentCapability.set("initialSize", &recruitmentCapability::initialSize);
-	types.recruitmentCapability.set("replenishRate", &recruitmentCapability::replenishRate);
-	types.recruitmentCapability.set("maxSize", &recruitmentCapability::maxSize);
-
-	///settlementRecruitmentPool
-	//@section settlementRecruitmentPool
-
-	/***
-	Basic settlementRecruitmentPool table
-
-	@tfield int eduIndex
-	@tfield float availablePool
-
-	@table settlementRecruitmentPool
-	*/
-	types.settlementRecruitmentPool = luaState.new_usertype<settlementRecruitmentPool>("settlementRecruitmentPool");
-	types.settlementRecruitmentPool.set("eduIndex", &settlementRecruitmentPool::eduIndex);
-	types.settlementRecruitmentPool.set("availablePool", &settlementRecruitmentPool::availablePool);
-
-
-	///Building
-	//@section buildingTable
-
-	/***
-	Basic building table
-
-	@tfield int level
-	@tfield int hp
-	@tfield int factionID
-	@tfield settlementStruct settlement
-	@tfield edbEntry edbEntry
-	@tfield getType getType
-	@tfield getName getName
-
-	@table building
-	*/
-	types.building = luaState.new_usertype<building>("building");
-	types.building.set("level", &building::level);
-	types.building.set("hp", sol::property(settlementHelpers::getBuildingHealth, settlementHelpers::setBuildingHealth));
-	types.building.set("settlement", &building::settlement);
-	types.building.set("edbEntry", &building::edbEntry);
-	types.building.set("factionID", &building::factionID);
-	/***
-	Get the name of the building type (the building chain in export\_descr\_buildings.txt).
-
-	@function building:getType
-	@treturn string buildingType (building chain name)
-	@usage
-	if building:getType() == "core_building" then
-		--do stuff
-	end
-	*/
-	types.building.set_function("getType", &buildingStructHelpers::getType);
-	/***
-	Get name of building level (as per export\_descr\_buildings.txt).
-
-	@function building:getName
-	@treturn string buildingName
-	@usage
-	if building:getName() == "large_stone_wall" then
-		--do stuff
-	end
-	*/
-	types.building.set_function("getName", &buildingStructHelpers::getName);
-
-	//types.building.set_function("addCapability", &buildingStructHelpers::addCapability);
-
-
-	///BuildingsQueue
-	//@section buildingsQueueTable
-
-	/***
-	Basic buildingsQueue table
-
-	@tfield int currentlyBuilding position in queue of building currently under construction, usually 1
-	@tfield int numBuildingsInQueue maximum is 6
-	@tfield getBuildingInQueue getBuildingInQueue by position in queue (1-6)
-
-	@table buildingsQueue
-	*/
-	types.buildingsQueue = luaState.new_usertype<buildingsQueue>("buildingsQueue");
-	types.buildingsQueue.set("currentlyBuilding", &buildingsQueue::currentBuildingIndex);
-	types.buildingsQueue.set("numBuildingsInQueue", &buildingsQueue::buildingsInQueue);
-	/***
-	Get building in queue by position
-
-	@function buildingsQueue:getBuildingInQueue
-	@tparam int position
-	@treturn buildingInQueue buildingInQueue
-	@usage
-	if ourQueue.numBuildingsInQueue > 0 then
-		local result = "ourQueue:\n\t"
-		for i = 1, ourQueue.numBuildingsInQueue, 1 do
-			local ourQueueBuld = ourQueue:getBuildingInQueue(i)
-			result = result..i.." "..ourQueueBuld:getQueueBuildingName().."\n\t"
-		end
-		print(result)
-	end
-	*/
-	types.buildingsQueue.set_function("getBuildingInQueue", &buildingStructHelpers::getBuildingInQueue);
-
-
-	///BuildingInQueue
-	//@section buildingInQueueTable
-
-	/***
-	Basic buildingInQueue table
-
-	@tfield building building Is nil if building doesn't exist yet.
-	@tfield settlementStruct settlement
-	@tfield int currentLevel
-	@tfield edbEntry edbEntry
-	@tfield int constructionType 0 = upgrade, 1 = normal, 4 = convert settlement
-	@tfield int previousLevel
-	@tfield int buildCost
-	@tfield int buildTurnsPassed
-	@tfield int buildTurnsRemaining
-	@tfield int percentBuilt
-	@tfield getQueueBuildingType getQueueBuildingType
-	@tfield getQueueBuildingName getQueueBuildingName
-	@tfield addBuildingToQueue addBuildingToQueue
-
-	@table buildingInQueue
-	*/
-	types.buildingInQueue = luaState.new_usertype<buildingInQueue>("buildingInQueue");
-	types.buildingInQueue.set("building", &buildingInQueue::existsBuilding);
-	types.buildingInQueue.set("edbEntry", &buildingInQueue::edbEntry);
-	types.buildingInQueue.set("constructionType", &buildingInQueue::someID);
-	types.buildingInQueue.set("settlement", &buildingInQueue::settlement);
-	types.buildingInQueue.set("currentLevel", &buildingInQueue::currentLevel);
-	types.buildingInQueue.set("previousLevel", &buildingInQueue::pastLevel);
-	types.buildingInQueue.set("buildCost", &buildingInQueue::buildCost);
-	types.buildingInQueue.set("buildTurnsPassed", &buildingInQueue::buildTurnsPassed);
-	types.buildingInQueue.set("buildTurnsRemaining", &buildingInQueue::turnsToBuild);
-	types.buildingInQueue.set("percentBuilt", &buildingInQueue::percentBuild);
-	/***
-	Get name of building in queue type (chain)
-
-	@function buildingInQueue:getQueueBuildingType
-	@treturn string buildingType (building chain name)
-	@usage
-	if ourQueueBld:getQueueBuildingType() = "core_building" then
-		--do stuff
-	end
-	*/
-	types.buildingInQueue.set_function("getQueueBuildingType", &buildingStructHelpers::getQueueType);
-	/***
-	Get name of building in queue level
-
-	@function buildingInQueue:getQueueBuildingName
-	@treturn string buildingName
-	@usage
-	if ourQueueBld:getQueueBuildingName() = "wooden_pallisade" then
-		--do stuff
-	end
-	*/
-	types.buildingInQueue.set_function("getQueueBuildingName", &buildingStructHelpers::getQueueName);
-	/***
-	Add a building to the construction queue.
-	@function buildingInQueue:addBuildingToQueue
-	@treturn bool success
-	@usage
-		build:addBuildingToQueue()
-	*/
-	types.buildingInQueue.set_function("addBuildingToQueue", &settlementHelpers::addBuildingToQueue);
-
-
-	///Guild
-	//@section guildTable
-
-	/***
-	Basic guild table
-
-	@tfield string name
-	@tfield int id
-	@tfield int level1
-	@tfield int level2
-	@tfield int level3
-
-	@table guild
-	*/
-	types.guild = luaState.new_usertype<guild>("guild");
-	types.guild.set("name", sol::property(
-		&guildHelpers::getStringProperty<guild_name>, &guildHelpers::setStringProperty<guild_name>));
-	types.guild.set("id", &guild::id);
-	types.guild.set("level1", &guild::level1Threshold);
-	types.guild.set("level2", &guild::level2Threshold);
-	types.guild.set("level3", &guild::level3Threshold);
 
 	///TradeResource
 	//@section tradeResource

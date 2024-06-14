@@ -1,6 +1,7 @@
 #include "stratModelsChange.h"
 #include "fastFuncts.h"
 #include "fort.h"
+#include "settlement.h"
 #include "functionsOffsets.h"
 #include "dataOffsets.h"
 namespace stratModelsChange

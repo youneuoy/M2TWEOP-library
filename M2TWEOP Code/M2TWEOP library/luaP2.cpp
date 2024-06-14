@@ -3474,6 +3474,28 @@ void luaP::initP2()
 		"elephant", 2,
 		"infantry", 3
 	);
+	
+	/***
+	Enum of construction types.
+
+	@tfield int upgrade
+	@tfield int construction
+	@tfield int repair
+	@tfield int demolition
+	@tfield int convert
+	@tfield int none
+
+	@table constructionType
+	*/
+	luaState.new_enum(
+		"constructionType",
+		"upgrade", 0,
+		"construction", 1,
+		"repair", 2,
+		"demolition", 3,
+		"convert", 4,
+		"none", 5
+	);
 
 	
 	/***
@@ -3627,6 +3649,46 @@ void luaP::initP2()
 		"growth", 3,
 		"cultural", 4,
 		"noPolicy", 5
+	);
+	
+	/***
+	Enum of production controller extra bias
+
+	@tfield int frontier
+	@tfield int conflict
+	@tfield int frontline
+	@tfield int abandon
+	@tfield int increaseGarrison
+	@tfield int trade
+	@tfield int tax
+	@tfield int spies
+	@tfield int assassins
+	@tfield int merchants
+	@tfield int priests
+	@tfield int diplomats
+	@tfield int ships
+	@tfield int qualityUnits
+	@tfield int buildStrengthLimit
+
+	@table managePolicy
+	*/
+	luaState.new_enum(
+		"productionBias",
+		"frontier", 0,
+		"conflict", 1,
+		"frontline", 2,
+		"abandon", 3,
+		"increaseGarrison", 4,
+		"trade", 5,
+		"tax", 6,
+		"spies", 7,
+		"assassins", 8,
+		"merchants", 9,
+		"priests", 10,
+		"diplomats", 11,
+		"ships", 12,
+		"qualityUnits", 13,
+		"buildStrengthLimit", 14
 	);
 
 	

@@ -1,4 +1,5 @@
 #include "siegeHelpers.h"
+#include "settlement.h"
 
 #include "gameHelpers.h"
 

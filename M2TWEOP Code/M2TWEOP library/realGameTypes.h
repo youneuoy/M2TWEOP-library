@@ -38,15 +38,6 @@ struct UNICODE_STRING {
 	PWSTR Buffer;//y
 };
 
-struct availableBuildings
-{
-	struct buildingInQueue *buildingsList;
-	struct availableBuildings *next;
-	struct availableBuildings *previous;
-	int listSize;
-	int buildingCount;
-};
-
 struct trackedObject
 {
 	DWORD* vtbl;
@@ -54,6 +45,75 @@ struct trackedObject
 	bool destroying;
 	char pad[3];
 };
+
+
+struct settlementCapability
+{
+public:
+	int16_t value; //0x0000
+	int16_t bonus; //0x0002
+}; //Size: 0x0004
+
+struct recruitCapRome
+{
+public:
+	char pad[8];
+}; //Size: 0x0008
+
+struct recruitmentCapability
+{
+public:
+	int32_t eduIndex; //0x0000
+	int32_t xp; //0x0004
+	float initialSize; //0x0008
+	float replenishRate; //0x000C
+	float maxSize; //0x0010
+}; //Size: 0x0014
+
+struct settlementRecruitmentPool
+{
+public:
+	int32_t eduIndex; //0x0000
+	float availablePool; //0x0004
+}; //Size: 0x0008
+
+
+struct recruitRome
+{
+	char pad[8];
+};
+
+struct capabilityStruct
+{
+public:
+	struct settlementCapability settlementCapabilities[57]; //0x0000
+	struct settlementCapability settlementCapabilitiesAgent[6]; //0x00E4
+	struct settlementCapability settlementCapabilitiesAgentLimit[6]; //0x00FC
+	struct settlementCapability settlementCapabilitiesAncillaryROME[4]; //0x0114
+	struct recruitRome settlementCapabilitiesRecruitROME[64]; //0x0124
+	int32_t recruitCapabilityCount; //0x0324
+	struct recruitmentCapability recruitmentCapabilities[64]; //0x0328
+	int32_t recruitmentCapabilityCount; //0x0828
+}; //Size: 0x082C
+
+struct floatPosData
+{
+public:
+	float boundUpRightX; //0x0000
+	float boundUpRightY; //0x0004
+	float boundDownRightX; //0x0008
+	float boundDownRightY; //0x000C
+	float boundUpLeftX; //0x0010
+	float boundUpLeftY; //0x0014
+	float boundDownLeftX; //0x0018
+	float boundDownLeftY; //0x001C
+	float float_20; //0x0020
+	float float_24; //0x0024
+	float rotation1; //0x0028
+	float rotation2; //0x002C
+	float coord1_1; //0x0030
+	float coord1_2; //0x0034
+}; //Size: 0x0044
 
 struct smObject
 {
@@ -1822,10 +1882,8 @@ struct arrayInUnitGroup
 struct unitGroup
 {
 	void *vftable /*VFT*/;
-	char field_4init1;
-	char field_5;
-	char field_6;
-	char field_7;
+	char useGroupFormation;
+	char field_5[3];
 	struct unit **unitsInFormation;
 	int32_t unitsSize;
 	int32_t unitsInFormationNum;
@@ -1855,8 +1913,8 @@ struct unitGroup
 	float smthingAngle2;
 	float xCoord;
 	float yCoord;
-	float float_70;
-	float float_74;
+	float midPointX;
+	float midPointY;
 	int16_t angle;
 	int16_t field_7a;
 	float smthingFloatsSkeleton;
@@ -1911,6 +1969,73 @@ struct unitGroup
 	int field_1354;
 	int field_1358;
 };
+
+struct battleGroup
+{
+	int index;
+	unit **units;
+	int unitsSize;
+	int unitCount;
+	char positionDataSet;
+	char field_11;
+	char field_12;
+	char field_13;
+	float midPointX;
+	float midPointY;
+	float prevmidPointX;
+	float prevmidPointY;
+	int radius;
+	int somthingRotation;
+	struct floatPosData floatPosDataStart;
+	float midPointDiffX;
+	float midPointDiffY;
+	int8_t gap6C_positionFloats[172];
+	char field_118;
+	char field_119;
+	char field_11a;
+	char field_11b;
+	int16_t someAngle;
+	int16_t pad11e;
+	float distRateOfChange;
+	char field_124;
+	char positionIDSet;
+	char field_126;
+	char field_127;
+	int positionID;
+	int cavalryRatio;
+	int missileRatio;
+	int routingRatio;
+	int soldierCountssmthingBattleMap;
+	int soldierCounts;
+	int cavalryRatioConditional;
+	int missileRatioConditional;
+	int routingRatioConditional;
+	int soldierCountssmthingBattleMapConditional;
+	int soldierCountsConditional;
+	int unitNumForStats;
+};
+
+struct aiUnitGroup : unitGroup
+{
+	int field_135C;
+	struct aiDetachmentTactic *detachmentTactic;
+	unit **units;
+	int array_1364Size;
+	int unitNum;
+	battleGroup battleAiUnitGroup;
+	char gap14c8[88];
+	char field_1520;
+	char field_1521;
+	char field_1522;
+	char field_1523;
+	int xCoord2;
+	int yCoord2;
+	char gap152C[8];
+	int16_t field_1534;
+	int16_t field_1536;
+	float field_1538;
+};
+
 
 struct crusade
 {
@@ -2713,6 +2838,14 @@ struct deploymentAreaS {
 	battlePos* coordsPairs;
 	int coordsSize;
 	int coordsNum;
+	int outLine;
+	int numOutlineSegs;
+	int width;
+	int height;
+	float centreX;
+	float centreY;
+	float facingX;
+	float facingY;
 };
 
 struct battleSideArmy {
@@ -2742,6 +2875,63 @@ struct battleSideArmy {
 	undefined field_0x38[40];
 };
 
+struct aiDetachmentTactic
+{
+	DWORD *vftable /*VFT*/;
+	struct aiDetachment *aiDetachment;
+	char hasBeenConsidered;
+	char isExecuting;
+	char hasExecuted;
+	char field_B;
+	int phaseStarted;
+	int arrayOfTenRandomValues[10];
+	char startedTactic;
+	char differentUnitsThisUpdate;
+	unit **units;
+	int unitsSize;
+	int unitNum;
+};
+
+struct aiTacticAssault
+{
+	DWORD *vftable /*VFT*/;
+	struct aiDetachment *aiDetachment;
+	char hasBeenConsidered;
+	char isExecuting;
+	char hasExecuted;
+	char field_B;
+	int phaseStarted;
+	int arrayOfTenRandomValues[10];
+	char startedTactic;
+	char differentUnitsThisUpdate;
+	char pad[2];
+	unit **units;
+	int unitsSize;
+	int unitNum;
+	void* fsm;
+	DWORD fsmState;
+	struct aiDetachment *detachment;
+	struct aiUnitGroup siegeUnitGroup;
+	struct aiUnitGroup aiUnitGroup;
+	bool started;
+	char field_2ACd[3];
+	struct buildingBattle *building;
+	struct unit *attackUnit;
+	int formationIndex;
+	float advanceX;
+	float advanceY;
+	int16_t angle;
+	int16_t angle2;
+	int advanceDirectionX;
+	float advanceDirectionY;
+	char firstAdvanceOrders;
+	char docking;
+	char engineLeft;
+	char finished;
+	float priority;
+};
+
+
 struct aiDetachmentUnit
 {
 public:
@@ -2756,7 +2946,7 @@ struct aiDetachment
 public:
 	char pad_0000[4]; //0x0000
 	struct AIBattleObjectiveBase* aiObjective; //0x0004
-	struct aiDetachmentUnit** aiDetachUnits; //0x0008
+	struct aiDetachmentUnit* aiDetachUnits; //0x0008
 	int32_t aiDetachUnitsSize; //0x000C
 	int32_t aiDetachUnitsCount; //0x0010
 	char pad_0014[8]; //0x0014
@@ -3747,81 +3937,6 @@ struct edbEntry { /* SETTLEMENT_CONDITION_SETTLEMENT_FACTION */
 	char pad_0094[8]; //0x0094
 };
 
-//building
-struct building { /* building structure */
-	undefined field_0x0[56];
-	struct edbEntry* edbEntry; /* many info (type, name, etc), exportDescrBuildingEntry */
-	int8_t level;
-	int8_t plugins;
-	char pad_003E[2];
-	int field_40;
-	int field_44;
-	int field_48;
-	int field_4C;
-	int field_50;
-	int factionID;
-	int hp; /* health points of the building */
-	struct settlementStruct* settlement;
-	int settlementLevel;
-	int field_64;
-};
-
-struct recruitmentOptions
-{
-	int field0;
-	struct unitRQ *units;
-	int lastUnit;
-	int unitsEnd;
-};
-
-struct buildingInQueue { /* building in settlement queue */
-	int someID{};
-	struct edbEntry* edbEntry{};
-	struct building* existsBuilding{}; /* 0 if building dont exist yet */
-	struct settlementStruct* settlement{};
-	int currentLevel{};
-	int pastLevel{};
-	int buildCost{};
-	int something2{};
-	int turnsToBuild{};
-	int buildTurnsPassed{};
-	int percentBuild{};
-	int8_t turnNumber{};
-	char pad[3]{};
-	int buildCost2{};
-	int turnsToBuild2{};
-	void* texture{};
-};
-
-struct buildingsQueue {
-	struct buildingInQueue items[6];
-	int firstIndex;
-	int lastIndex;
-	int buildingsInQueue;
-	int currentBuildingIndex;
-};
-
-
-
-struct settlementBuildingOptions
-{
-	std::vector<std::shared_ptr<buildingInQueue>> constructionOptions;
-	int count;
-	int totalCost;
-	int totalTime;
-	int turn;
-	int hash;
-};
-
-struct settlementRecruitmentOptions
-{
-	std::vector<std::shared_ptr<unitRQ>> recruitOptions;
-	int count;
-	int totalCost;
-	int totalTime;
-	int turn;
-	int hash;
-};
 
 struct hiddenResource
 {
@@ -3960,31 +4075,6 @@ struct oneSiege {
 	struct siegeS* siege;
 };
 
-struct unitRQ {
-public:
-	struct eduEntry* eduEntry{}; //0x0000
-	int32_t FourtySeven{}; //0x0004
-	struct settlementStruct* settlement{}; //0x0008
-	int8_t byte_C{}; //0x000C
-	int8_t recruitType{}; //0x000D
-	int8_t experience{}; //0x000E
-	int8_t armourUpg{}; //0x000F
-	int8_t weaponUpgrade{}; //0x0010
-	int8_t Minus1{}; //0x0011
-	int8_t turnsTrainedAlready{}; //0x0012
-	int8_t percentFinished{}; //0x0013
-	int8_t turnsToTrain{}; //0x0014
-	int8_t byte_15{}; //0x0015
-	int16_t cost{}; //0x0016
-	int16_t soldierCount{}; //0x0018
-	int16_t turnNumber{}; //0x001A
-	int8_t fieldx1C{}; //0x001C
-	int8_t isNotFrozen{}; //0x001D
-	int16_t recruitmentPoolSizeBeforeOrRetrainingNumbersBefore{}; //0x001E
-	int8_t isMercenary{}; //0x0020
-	char pad_0021[3]{}; //0x0021
-}; //Size: 0x0024
-
 
 struct RallyPointSundry {
 	undefined field0_0x0[4];
@@ -3992,242 +4082,6 @@ struct RallyPointSundry {
 	undefined field2_0x8[56];
 	void* object2;
 	undefined field4_0x44[16];
-};
-
-struct settlementCapability
-{
-public:
-	int16_t value; //0x0000
-	int16_t bonus; //0x0002
-}; //Size: 0x0004
-
-struct recruitCapRome
-{
-public:
-	char pad[8];
-}; //Size: 0x0008
-
-struct recruitmentCapability
-{
-public:
-	int32_t eduIndex; //0x0000
-	int32_t xp; //0x0004
-	float initialSize; //0x0008
-	float replenishRate; //0x000C
-	float maxSize; //0x0010
-}; //Size: 0x0014
-
-struct settlementRecruitmentPool
-{
-public:
-	int32_t eduIndex; //0x0000
-	float availablePool; //0x0004
-}; //Size: 0x0008
-
-
-struct recruitRome
-{
-	char pad[8];
-};
-
-struct capabilityStruct
-{
-public:
-	struct settlementCapability settlementCapabilities[57]; //0x0000
-	struct settlementCapability settlementCapabilitiesAgent[6]; //0x00E4
-	struct settlementCapability settlementCapabilitiesAgentLimit[6]; //0x00FC
-	struct settlementCapability settlementCapabilitiesAncillaryROME[4]; //0x0114
-	struct recruitRome settlementCapabilitiesRecruitROME[64]; //0x0124
-	int32_t recruitCapabilityCount; //0x0324
-	struct recruitmentCapability recruitmentCapabilities[64]; //0x0328
-	int32_t recruitmentCapabilityCount; //0x0828
-}; //Size: 0x082C
-
-
-struct settlementStats
-{
-	struct settlementStruct* settlement;
-	int32_t PopGrowthBaseFarm;
-	int32_t PopGrowthFarms;
-	int32_t PopGrowthHealth;
-	int32_t PopGrowthBuildings;
-	int32_t PopGrowthTaxBonus;
-	int32_t PopGrowthEntertainment;
-	int32_t PopGrowthTrade;
-	int32_t PopGrowthGovernorInfluence;
-	int32_t PopGrowthSqualor;
-	int32_t PopGrowthPlague;
-	int32_t PopGrowthTaxPenalty;
-	int32_t population;
-	int32_t PublicOrderGarrison;
-	int32_t PublicOrderLaw;
-	int32_t PublicOrderBuildingsEntertainment;
-	int32_t PublicOrderGovernorInfluence;
-	int32_t PublicOrderTaxBonus;
-	int32_t PublicOrderTriumph;
-	int32_t PublicOrderPopulationBoom;
-	int32_t PublicOrderEntertainment;
-	int32_t PublicOrderHealth;
-	int32_t PublicOrderGarrisonTwo;
-	int32_t PublicOrderFear;
-	int32_t PublicOrderGlory;
-	int32_t PublicOrderSqualor;
-	int32_t PublicOrderDistanceToCapital;
-	int32_t PublicOrderNoGovernance;
-	int32_t PublicOrderTaxPenalty;
-	int32_t PublicOrderUnrest;
-	int32_t PublicOrderBesieged;
-	int32_t PublicOrderBlockaded;
-	int32_t PublicOrderCulturalUnrest;
-	int32_t PublicOrderExcommunication;
-	int32_t PublicOrder;
-	int32_t FarmsIncome;
-	int32_t TaxesIncome;
-	int32_t MiningIncome;
-	int32_t TradeIncome;
-	int32_t DiplomaticIncome;
-	int32_t DemolitionIncome;
-	int32_t LootingIncome;
-	int32_t BuildingsIncome;
-	int32_t AdminIncome;
-	int32_t N000025DD;
-	int32_t upkeepExpense;
-	int32_t ConstructionExpense;
-	int32_t RecruitmentExpense;
-	int32_t DiplomaticExpense;
-	int32_t CorruptionExpense;
-	int32_t EntertainmentExpense;
-	int32_t DevastationExpense;
-	int32_t TotalIncomeWithoutAdmin;
-	int32_t* religionPercentages;
-	int32_t religionPercentagesSize;
-	int32_t religionPercentagesNum;
-	int32_t majorityReligionID;
-};
-
-//settlement
-struct settlementStruct {
-	void* vTable;
-	undefined field1_0x4[8];
-	UINT32 xCoord; /* x coordinate */
-	UINT32 yCoord; /* y coordinate */
-	undefined field4_0x14[32];
-	float bannerPosX;
-	float bannerPosZ;
-	float bannerPosY;
-	struct trackedPointerArmy_vtbl* trackedPointerArmyVtable;
-	struct stackStruct* army; /* army on the settlement */
-	struct oneSiege sieges[8];
-	BYTE siegesNumber;
-	undefined pad_3[3];
-	int siegeHoldoutTurns;
-	int turnsSieged;
-	int fieldx94;
-	int populationSiegeStart;
-	int32_t fieldx9C;
-	int32_t somethingPlagueRelated;
-	BYTE plagued;
-	int8_t bytexA5;
-	int8_t gatesAreOpened;
-	int8_t bytexA7;
-	int32_t fieldxA8;
-	struct descrRebelEntry* descrRebel; //0x00AC
-	int32_t subFactionID; //0x00B0
-	char pad_00B4[152]; //0x00B4
-	struct settMod* model;
-	int cultureID;
-	undefined field11_0x154[12];
-	struct portBuildingStruct* port;
-	char* name; /* internal name of settlement */
-	int nameCrypt;
-	UNICODE_STRING** localizedName;
-	struct factionStruct* faction; /* faction of the owner */
-	undefined field16_0x174[36];
-	int level; /* level of the settlement/castle */
-	int fac_creatorModNum;
-	undefined field19_0x1a0[4];
-	BYTE isCastle; /* castle or settlement */
-	undefined field21_0x1a5[1];
-	BYTE turnsOwned; /* start at 10 for settlements owned at game start without specification in descr_strat */
-	undefined field21_0x1a7[1];
-	UINT32 regionID; /* number of region */
-	int32_t factionID; //0x01AC
-	int32_t yearFounded; //0x01B0
-	int32_t triumph; //0x01B4
-	int queueCost;
-	undefined field24_0xBC[24];
-	struct unitRQ unitQueue[9];
-	int startIndexRQ;
-	int endIndexRQ;
-	int countRQ;
-	undefined field24_0x324[272];
-	struct buildingsQueue buildingsQueueArray;
-	undefined field26_0x5ac[520];
-	struct building* buildings[128];
-	int buildingsNum; /* number of the buildings in the settlement */
-	undefined field29_0x9b8[1080];
-	int32_t rallyPointX; //0x0DF0
-	int32_t rallyPointY; //0x0DF4
-	void* rallyPointPointer; //0x0DF8
-	struct aiProductionController* aiProductionController; //0x0DFC
-	int32_t plagueDeaths; //0x0E00
-	int8_t scriptRebel; //0x0E04
-	uchar isProvokedRebellion;//0x0E05
-	uchar field31_0xe06[10];//0x0E06
-	int8_t isCapital; //0x0E10
-	char pad_0E11[15]; //0x0E11
-	struct character* governor;//0x0E20
-	char pad_0E24[16]; //0x0E24
-	int32_t somthingPO; //0x0E34
-	int32_t publicOrderLastTurnEnd; //0x0E38
-	int32_t populationLastTurnEnd; //0x0E3C
-	int32_t harvestSuccess; //0x0E40
-	struct resStrat** resources;
-	int32_t resourceSize; //0x0E48
-	int resourcesNum;
-	int32_t settlementTaxLevel; //0x0E50
-	struct capabilityStruct capabilities; //0x0E54
-	int8_t N000089C8; //0x1680
-	char pad_1681[3]; //0x1681
-	struct settlementStruct* thisSett; //0x1684
-	struct settlementRecruitmentPool* recruitmentPools; //0x1688
-	int32_t recruitmentPoolsSize; //0x168C
-	int32_t recruitmentPoolCount; //0x1690
-	char pad_1694[12]; //0x1694
-	int8_t freezeRecruitmentPool; //0x16A0
-	char pad_16A1[3]; //0x16A1
-	int32_t spiesInRecruitmentQueue; //0x16A4
-	int32_t assassinsInRecruitmentQueue; //0x16A8
-	int32_t diplomatsInRecruitmentQueue; //0x16AC
-	int32_t admiralsInRecruitmentQueue; //0x16B0
-	int32_t merchantsInRecruitmentQueue; //0x16B4
-	int32_t priestsInRecruitmentQueue; //0x16B8
-	char pad_16BC[8]; //0x16BC
-	intptr_t guildStandings;
-	char pad_16C8[48]; //0x16C8
-	int32_t baseFertilityValue; //0x16F8
-	int32_t rebelFactionChance; //0x16FC
-	int32_t turmoil; //0x1700
-	int32_t N00002567; //0x1704
-	int32_t N00002568; //0x1708
-	int32_t N00002569; //0x170C
-	int32_t N0000256A; //0x1710
-	int32_t N0000256B; //0x1714
-	int32_t N0000256C; //0x1718
-	int32_t N0000256D; //0x171C
-	int32_t N0000256E; //0x1720
-	int32_t diplomacyIncome; //0x1724
-	int32_t otherIncome1; //0x1728
-	int32_t wages; //0x172C
-	int32_t upkeep; //0x1730
-	int fieldx1734;
-	int fieldx1738;
-	int diplomacyExpense;
-	int fieldx1740;
-	int fieldx1744;
-	struct settlementStats settlementStatsLastTurn;
-	struct settlementStats settlementStats;
-	int32_t alternateTradeCalc; //0x1910
 };
 
 struct campaignDifficulty1
@@ -4258,23 +4112,6 @@ public:
 	int32_t autoAttackPlayerIfCrusadeTarget; //0x001C
 	char pad_0020[32]; //0x0020
 }; //Size: 0x0040
-
-
-
-struct guild
-{
-	char* name; //0x0000
-	DWORD nameHash; //0x0004
-	uint8_t id; //0x0008
-	char pad_0009[3]; //0x0009
-	void* building; //0x000C
-	int32_t level1Threshold; //0x0010
-	int32_t level2Threshold; //0x0014
-	int32_t level3Threshold; //0x0018
-	char pad_001C[4]; //0x001C
-	void* excludedGuildIds; //0x0020
-	char pad_0024[40]; //0x0024
-}; //Size: 0x004C
 
 /* I_CompareCounter script command */
 struct CompareCounter { /* I_CompareCounter script command */
@@ -4488,25 +4325,6 @@ public:
 	struct heroAbility* ability; //0x0070
 	char pad_0074[144]; //0x0074
 }; //Size: 0x0104
-
-struct floatPosData
-{
-public:
-	float boundUpRightX; //0x0000
-	float boundUpRightY; //0x0004
-	float boundDownRightX; //0x0008
-	float boundDownRightY; //0x000C
-	float boundUpLeftX; //0x0010
-	float boundUpLeftY; //0x0014
-	float boundDownLeftX; //0x0018
-	float boundDownLeftY; //0x001C
-	float float_20; //0x0020
-	float float_24; //0x0024
-	float rotation1; //0x0028
-	float rotation2; //0x002C
-	float coord1_1; //0x0030
-	float coord1_2; //0x0034
-}; //Size: 0x0044
 
 struct targetUnitStruct
 {
@@ -5459,101 +5277,6 @@ struct aiGlobalStrategyDirector
 	void* crusadeController;
 };
 
-struct settlementPolicies
-{
-	int32_t regionID;
-	int32_t autoManageBuildPolicy;
-	int32_t secondaryPolicy;
-	int8_t autoManagedConstruction;
-	int8_t autoManagedRecruitment;
-	char pad_000E[2];
-};
-
-struct aiProductionController
-{
-	void* vftable /*VFT*/;
-	struct aiFaction* aiFaction;
-	int regionID;
-	struct settlementStruct* settlement;
-	int32_t autoManagePolicy;
-	int secondaryPolicy;
-	int regionRiskLevel1;
-	int regionRiskLevel2;
-	int regionRiskLevel3;
-	int regionRiskLevel4;
-	int increaseUnitBias5;
-	int increaseTradeStuff;
-	int increaseGrowthStuff;
-	int increaseSpyBias;
-	int increaseAssasinBias;
-	int increasePriestBias;
-	int increaseMerchantBias;
-	int increaseDiplomatBias;
-	int increaseShipBias;
-	int generalBuildRecruitDesire;
-	int minimumUnitValue;
-	int fieldx54;
-	int fieldx58;
-	int startLevel;
-	int controllerIndex;
-	int8_t isAutoManaged;
-	int8_t isAutoManagedRecruitment;
-	int8_t isAutoManagedConstruction;
-	int8_t isAutoManagedTaxes;
-	int8_t hasGrowthBuildPolicy;
-	char pad_x[3];
-	int fieldx6C;
-	int fieldx70;
-	int fieldx74;
-	int fieldx78;
-	int fieldx7C;
-	int fieldx80;
-	int fieldx84;
-	int fieldx88;
-	int fieldx8C;
-	int fieldx90;
-	struct settlementStruct* settlement2;
-	struct unitRQ unitInQueue;
-	struct buildingInQueue buildingInQueue;
-	int randomIncreaseLocation;
-	int fieldxFC;
-	bool isRandomIncreased;
-	bool boolx101;
-	char pad_102[2];
-	int buildingBias[257];
-	int fieldx1E8_unkBiasCultural;
-	int fieldx1EC_unkBiasCultural;
-	int fieldx1F0_unkBiasCultural;
-	int fieldx1F4_unkBiasCultural;
-	int spyBiasTurn;
-	int assassinBiasTurn;
-	int diplomatBiasTurn;
-	int admiralBiasTurn;
-	int priestBiasTurn;
-	int merchantBiasTurn;
-	int recruitBiasBoosted[11];
-	int populationBoost;
-	int8_t buildingQueueEmpty;
-	int8_t manualConstruction;
-	int8_t unitQueueEmpty;
-	int8_t pad22;
-	struct settlementStruct* settlement3;
-	struct unitRQ unitInQueue2;
-	struct buildingInQueue buildingInQueue2;
-	int unitValue;
-	int fieldx2AC;
-	bool boolx2B0;
-	bool boolx2B1;
-	bool boolx2B2;
-	bool boolx2B3;
-	int spyBias;
-	int assassinBias;
-	int diplomatBias;
-	int admiralBias;
-	int priestBias;
-	int merchantBias;
-	int recruitBias[11];
-};
 
 
 struct militaryValuesLTGD
@@ -6295,14 +6018,12 @@ public:
 	void *dragObjectContainer; //0x0030
 	struct stratUIStruct *stratUI; //0x0034
 }; //Size: 0x00A0
-
-
 struct buildingInfoScroll
 {
 	char pad[812];
 	settlementStruct* settlement;
 	char pad2[12];
-	building* building;
+	struct building* building;
 	char pad3[12];
 	edbEntry* entry;
 };

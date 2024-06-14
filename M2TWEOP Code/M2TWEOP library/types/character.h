@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include <lua/sol.hpp>
 
-#include "gameHelpers.h"
 #include "realGameTypes.h"
+#include "settlement.h"
 
 struct character
 { 
@@ -122,25 +122,15 @@ public:
 	{
 		return *faction;
 	}
-	settlementStruct* getSettlement()
-	{
-		const auto tile = gameHelpers::getTile(xCoord, yCoord);
-		if (!tile)
-			return nullptr;
-		return gameHelpers::getTileSettlement(tile);
-	}
-	fortStruct* getFort()
-	{
-		const auto tile = gameHelpers::getTile(xCoord, yCoord);
-		if (!tile)
-			return nullptr;
-		return gameHelpers::getTileFort(tile);
-	}
+	settlementStruct* getSettlement();
+	fortStruct* getFort();
 };
 
 namespace characterHelpers
 {
 	void sendOffMap(character* gen);
+	character* createCharacterWithoutSpawning(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y);
+	character* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y);
 	void diplomacyFort(character* gen, fortStruct* targetFort);
 	void bribeFort(character* gen, fortStruct* targetFort);
 	void spyFort(character* gen, fortStruct* targetFort);

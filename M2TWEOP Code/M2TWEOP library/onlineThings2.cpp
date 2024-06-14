@@ -739,7 +739,7 @@ namespace battleCreator
 							portrait = newGen.portrait.c_str();
 						}
 	
-						character*newGeneral=fastFuncts::createCharacterWithoutSpawning("named character",army->faction, newGen.age
+						character*newGeneral=characterHelpers::createCharacterWithoutSpawning("named character",army->faction, newGen.age
 							, newGen.genName.c_str(), newGen.genName.c_str(), newGen.subfaction
 							, portrait, 0,0);
 						characterHelpers::setBodyguard(newGeneral, army->units[i]);

@@ -1,6 +1,12 @@
 #pragma once
-#include "realGameTypes.h"
+#include <string>
 
+#include "fastFunctsHelpers.h"
+#include "realGameTypes.h"
+#include "settlement.h"
+
+#define edbEntryStruct_type 1
+#define buildingLevelStruct_name 1
 namespace eopBuildings
 {
     edbEntry* addEopBuildEntry(edbEntry* oldEntry, int newIndex);
@@ -24,4 +30,67 @@ namespace eopBuildings
     void addPools(buildingLevel* oldlevel, buildingLevel* eoplevel, int lvlidx);
     edbEntry* getBuildingByName(const char* name);
     edbEntry* getBuildingByID(int id);
+    exportDescrBuildings* getEdb();
+    guild* getGuild(unsigned char index);
+    
+#pragma region buildingLevel
+
+    //edbEntry
+    template <char fieldIndex>
+    std::string getStringPropertyBDI(const buildingLevel* bInfo)
+    {
+        char* retS = nullptr;
+        if (fieldIndex == buildingLevelStruct_name)
+        {
+            retS = bInfo->name;
+        }
+
+        if (retS != nullptr)
+        {
+            return std::string(retS);
+        }
+        else
+        {
+            return std::string("");
+        }
+    }
+
+    template <char fieldIndex>
+    void setStringPropertyBDI(buildingLevel* bInfo, std::string newS)
+    {
+        if (fieldIndex == buildingLevelStruct_name)
+            fastFunctsHelpers::setCryptedString(&bInfo->name, newS.c_str());
+    }
+
+#pragma endregion
+#pragma region edbEntry
+
+    //edbEntry
+    template <char fieldIndex>
+    std::string getStringPropertyBD(const edbEntry* edbEntry)
+    {
+        char* retS = nullptr;
+        if (fieldIndex == edbEntryStruct_type)
+        {
+            retS = edbEntry->type;
+        }
+
+        if (retS != nullptr)
+        {
+            return std::string(retS);
+        }
+        else
+        {
+            return std::string("");
+        }
+    }
+
+    template <char fieldIndex>
+    void setStringPropertyBD(edbEntry* edbEntry, std::string newS)
+    {
+        if (fieldIndex == edbEntryStruct_type)
+            fastFunctsHelpers::setCryptedString(&edbEntry->type, newS.c_str());
+    }
+
+#pragma endregion
 };

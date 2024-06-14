@@ -185,6 +185,18 @@ void codes::initCodes(int gameVer)
 		offsets.addTrait = 0x005a7710;
 		offsets.removeTrait = 0x005a53a0;
 		offsets.removeAncillary = 0x005a5990;
+		offsets.issueMoveOrder = 0x692CD0;
+		offsets.issueFormationOrder = 0x692230;
+		offsets.repairBuilding = 0x005F89D0;
+		offsets.addBuildingToQueue = 0x5E4190;
+		offsets.addUnitToQueue = 0x5E40A0;
+		offsets.createBuildInSett = 0x008A32F0;
+		offsets.upgradeBuildInSett = 0x005F7CB0;
+		offsets.upgradeSett = 0x005DB560;
+		offsets.getRecruitmentOptions = 0x005E7A40;
+		offsets.getRetrainingOptions = 0x005E6140;
+		offsets.resetBuildingsMem = 0x005FA320;
+		offsets.getConstructionOptions = 0x005E1730;
 	}
 	else if (gameVer == 2) //steam
 	{
@@ -368,5 +380,17 @@ void codes::initCodes(int gameVer)
 		offsets.addTrait = 0x005a7bf0;
 		offsets.removeTrait = 0x005a5880;
 		offsets.removeAncillary = 0x005a5e70;
+		offsets.issueMoveOrder = 0x6931C0;
+		offsets.issueFormationOrder = 0x692720;
+		offsets.repairBuilding = 0x005F8DC0;
+		offsets.addBuildingToQueue = 0x005E4600;
+		offsets.addUnitToQueue = 0x005E4510;
+		offsets.createBuildInSett = 0x008A3CE0;
+		offsets.upgradeBuildInSett = 0x005F80A0;
+		offsets.upgradeSett = 0x005DBA20;
+		offsets.getRecruitmentOptions = 0x005E7EA0;
+		offsets.getRetrainingOptions = 0x005E65A0;
+		offsets.resetBuildingsMem = 0x5FA710;
+		offsets.getConstructionOptions = 0x005E1C00;
 	}
 }
