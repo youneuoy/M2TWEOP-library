@@ -3,17 +3,10 @@
 #include "FastFuncts.h"
 #include "plugData.h"
 #include "smallFuncs.h"
+#include "unit.h"
 
 namespace technicalHelpers
 {
-	std::string unitUniStringToStr(unit* unit)
-	{
-		return uniStringToStr(unit->alias);
-	}
-	void setUnitUniStr(unit* unit, const char* str)
-	{
-		smallFuncs::createUniString(unit->alias, str);
-	}
 	std::string uniStringToStr(UNICODE_STRING**& uniString)
 	{
 		UNICODE_STRING* uniS = *uniString;

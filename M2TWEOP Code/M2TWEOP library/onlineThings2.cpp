@@ -13,6 +13,7 @@
 #include "smallFuncs.h"
 #include "character.h"
 #include "faction.h"
+#include "unit.h"
 #include "characterRecord.h"
 #include "imgui_notify.h"
 
@@ -575,11 +576,11 @@ namespace battleCreator
 			auto& gameUnit = unitPair.second;
 			if (gameUnit->general!=nullptr&& unit->gen.isCharacterDied)
 			{
-				fastFuncts::setSoldiersCountAndExp(gameUnit, 0, unit->exp);
+				unitHelpers::setSoldiersCountAndExp(gameUnit, 0, unit->exp);
 			}				
 			else
 			{
-				fastFuncts::setSoldiersCountAndExp(gameUnit, unit->soldiersNumber, unit->exp);
+				unitHelpers::setSoldiersCountAndExp(gameUnit, unit->soldiersNumber, unit->exp);
 			}
 		}
 		transferPairs.clear();

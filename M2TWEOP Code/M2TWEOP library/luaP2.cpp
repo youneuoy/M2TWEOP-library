@@ -11,10 +11,9 @@
 #include "gameSTDUIHelpers.h"
 #include "m2tweopHelpers.h"
 #include "smallFuncs.h"
-#include "unitActions.h"
-#include "unitHelpers.h"
 #include "characterRecord.h"
 #include "faction.h"
+#include "unit.h"
 
 
 void luaP::initCampaign()
@@ -1830,7 +1829,6 @@ void luaP::initP2()
 		sol::usertype<AIBattleObjectiveBase> battleObjective;
 		sol::usertype<buildingBattle> buildingBattle;
 		sol::usertype<battleBuildings> battleBuildings;
-		sol::usertype<siegeEngine> siegeEngineStruct;
 		sol::usertype<battleTile> battleTile;
 		sol::usertype<battlefieldEngines> battlefieldEngines;
 		sol::usertype<terrainLineSegment> terrainLine;
@@ -2015,7 +2013,7 @@ void luaP::initP2()
 	@usage
 	local unit = BATTLE.getBattleMapHeight(10,20);
 	*/
-	typeAll.battleTable.set_function("getBattleMapHeight", &unitActions::getBattleMapHeight);
+	typeAll.battleTable.set_function("getBattleMapHeight", &battleHandlerHelpers::getBattleMapHeight);
 	
 	/***
 	Get battlefield engines.
@@ -2785,51 +2783,6 @@ void luaP::initP2()
 	typeAll.buildingBattle.set("index", &buildingBattle::index);
 	typeAll.buildingBattle.set("battleBuildingStats", &buildingBattle::descrWallsEntry);
 
-	///Siege Engine
-	//@section Siege Engine
-
-	/***
-	Basic siegeEngineStruct table
-
-	@tfield float xCoord
-	@tfield float zCoord
-	@tfield float yCoord
-	@tfield float mass
-	@tfield int angle
-	@tfield int engineID
-	@tfield unit currentUnit
-	@tfield unit lastUnit
-	@tfield getType getType
-	@tfield int range
-	@tfield projectileStruct projectile
-	@tfield int fireLevel
-	@tfield int isBurning
-
-	@table siegeEngineStruct
-	*/
-	typeAll.siegeEngineStruct = luaState.new_usertype<siegeEngine>("siegeEngineStruct");
-	typeAll.siegeEngineStruct.set("xCoord", &siegeEngine::posX);
-	typeAll.siegeEngineStruct.set("zCoord", &siegeEngine::posZ);
-	typeAll.siegeEngineStruct.set("yCoord", &siegeEngine::posY);
-	typeAll.siegeEngineStruct.set("mass", &siegeEngine::mass);
-	typeAll.siegeEngineStruct.set("angle", sol::property(&unitHelpers::getEngineAngle, &unitHelpers::setEngineAngle));
-	typeAll.siegeEngineStruct.set("currentUnit", &siegeEngine::currentUnit);
-	typeAll.siegeEngineStruct.set("lastUnit", &siegeEngine::lastUnit);
-	typeAll.siegeEngineStruct.set("engineID", &siegeEngine::engineID);
-	typeAll.siegeEngineStruct.set("range", &siegeEngine::range);
-	typeAll.siegeEngineStruct.set("fireLevel", &siegeEngine::fireLevel);
-	typeAll.siegeEngineStruct.set("isBurning", &siegeEngine::isBurning);
-	typeAll.siegeEngineStruct.set("projectile", &siegeEngine::statPriMissle);
-
-	/***
-	Get the type of the engine (use the enum).
-	@function siegeEngineStruct:getType
-	@treturn int type
-	@usage
-		local type = siegeEngineStruct:getType()
-	*/
-	typeAll.siegeEngineStruct.set_function("getType", &battleHandlerHelpers::getEngineType);
-
 	///Battle Tile
 	//@section Battle Tile
 
@@ -3007,9 +2960,9 @@ void luaP::initP2()
 	*/
 	luaState.new_enum(
 		"unitBattleProperties",
-		"guardMode", unitHelpers::guardMode,
-		"fireAtWill", unitHelpers::fireAtWill,
-		"skirmish", unitHelpers::skirmish
+		"guardMode", guardMode,
+		"fireAtWill", fireAtWill,
+		"skirmish", skirmish
 	);
 
 	

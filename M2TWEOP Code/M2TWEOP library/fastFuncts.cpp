@@ -18,11 +18,11 @@
 #include "m2tweopHelpers.h"
 #include "plugData.h"
 #include "techFuncs.h"
-#include "unitActions.h"
 #include "settlement.h"
 #include "character.h"
 #include "characterRecord.h"
 #include "faction.h"
+#include "unit.h"
 
 namespace fastFuncts
 {
@@ -598,65 +598,6 @@ namespace fastFuncts
 
 		return retr;
 	}
-
-	void setSoldiersCountAndExp(unit* un, int count, int exp)
-	{
-		un->expScreen = exp;
-		setSoldiersCount(un, count);
-	}
-	void setUnitMovepoints(unit* un, float movepoints)
-	{
-		un->movePoints = movepoints;
-
-
-		if (un->general == nullptr)
-		{
-			character* gen = un->army->gen;
-			if (gen != 0)
-			{
-				DWORD adrFunc = 0;
-				if (globals::dataS.gamever == 2)//steam
-				{
-					adrFunc = 0x00597c60;
-				}
-				else
-				{
-					adrFunc = 0x00597770;
-				}
-				_asm
-				{
-					mov ecx, gen
-
-					mov eax, adrFunc
-					call eax
-				}
-			}
-			return;
-		}
-		un->general->movePointsCharacter = movepoints;
-		un->general->movePointsArmy = movepoints;
-
-
-		character* gen = un->general;
-
-		DWORD adrFunc = 0;
-		if (globals::dataS.gamever == 2)//steam
-		{
-			adrFunc = 0x00597c60;
-		}
-		else
-		{
-			adrFunc = 0x00597770;
-		}
-		_asm
-		{
-			mov ecx, gen
-
-			mov eax, adrFunc
-			call eax
-		}
-
-	}
 	void NuullifyMovepoints(stackStruct* army)
 	{
 		if (army == nullptr)
@@ -666,64 +607,9 @@ namespace fastFuncts
 
 		for (int i = 0; i < army->numOfUnits; ++i)
 		{
-			setUnitMovepoints(army->units[i], 0);
+			unitHelpers::setUnitMovePoints(army->units[i], 0);
 		}
 	}
-
-	void setSoldiersCount(unit* un, int count)
-	{
-		if (count == 0)
-		{
-			killUnit(un);
-			return;
-		}
-		
-		int diff = count - un->SoldierCountStrat;
-		if (diff == 0)
-		{
-			return;
-		}
-
-		int exp = un->expScreen;
-		if (diff > 0)
-		{
-			DWORD adrFunc = codes::offsets.replenishUnitFunc;
-			_asm
-			{
-				push exp
-				push diff
-				mov ecx, un
-				mov eax, adrFunc
-				call eax
-			}
-		}
-		else
-		{
-			un->SoldierCountStrat = count;
-		}
-
-
-
-		return;
-	}
-
-	void killUnit(unit* un)
-	{
-		if (un->general)
-		{
-			characterHelpers::killCharacter(un->general);
-			return;
-		}
-		DWORD adr = codes::offsets.killUnitStratMapFunc;
-
-		_asm {
-			push 0x1
-			mov ecx, [un]
-			mov eax, [adr]
-			call eax
-		}
-	}
-
 	bool useButton(const char* buttonName)
 	{
 		DWORD findedButton = 0;
@@ -858,76 +744,6 @@ namespace fastFuncts
 
 
 		return stack;
-	}
-
-	unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap)
-	{
-		int unitIndex = fastFunctsHelpers::getEduIndex(type);
-
-
-		return createUnitIdx(unitIndex, regionID, facNum, exp, arm, weap);
-	}
-
-	unit* createUnitIdx(int index, int regionID, int facNum, int exp, int arm, int weap)
-	{
-		if (index == -1)return nullptr;
-
-		unit* res = nullptr;
-
-		DWORD EDB = dataOffsets::offsets.unitTypesStart - 4;
-		DWORD adr = codes::offsets.createUnitFunc;
-
-		regionStruct* region = getRegionByID(regionID);
-		_asm {
-			mov ecx, EDB;
-
-			push weap
-				push arm
-				push - 1
-				push exp
-				push facNum
-				push index
-				push region
-
-				mov eax, [adr]
-				call eax
-				mov res, eax
-		}
-
-		return res;
-	}
-
-	unit* createUnitEDB(int edb, int regionID, int facNum, int exp, int arm, int weap)
-	{
-		if (edb == 0)
-		{
-			return nullptr;
-		}
-		unit* res = nullptr;
-
-		DWORD adr = codes::offsets.createUnitFunc;
-
-		auto* entry = reinterpret_cast<eduEntry*>(edb);
-		DWORD eduIndex = entry->UnitCreatedCounter;
-
-		regionStruct* region = getRegionByID(regionID);
-		_asm {
-				//mov ecx, edb;
-
-				push weap
-				push arm
-				push - 1
-				push exp
-				push facNum
-				push eduIndex
-				push region
-
-				mov eax, [adr]
-				call eax
-				mov res, eax
-		}
-
-		return res;
 	}
 
 	bool StopSiege(stackStruct* army)
@@ -1156,30 +972,6 @@ namespace fastFuncts
 		return reinterpret_cast<campaignDbExtra*>(dataOffsets::offsets.campaignDbExtra);
 	}
 
-	void setUnitParams(unit* un, int count, int exp, int armor, int weap)
-	{
-		setSoldiersCountAndExp(un, count, exp);
-		DWORD adrFunc = codes::offsets.setUnitArmorFunc;
-		_asm
-		{
-			push armor
-			mov ecx, un
-			mov eax, adrFunc
-			call eax
-		}
-		adrFunc = codes::offsets.setUnitWeapFunc;
-		_asm
-		{
-			push weap
-			mov ecx, un
-			mov eax, adrFunc
-			call eax
-		}
-
-
-		return;
-	}
-
 
 
 	DWORD allocateGameMem(size_t amount)
@@ -1202,7 +994,7 @@ namespace fastFuncts
 
 	void logFuncError(const std::string& funcName, const std::string& error)
 	{
-		unitActions::logStringGame(funcName + " error: " + error);
+		m2tweopHelpers::logStringGame(funcName + " error: " + error);
 	}
 
 	void mergeArmies(stackStruct* army, stackStruct* targetArmy)
@@ -1440,15 +1232,15 @@ namespace fastFuncts
 			unit* bgUnit = nullptr;
 			if (eduThings::getEduEntry(unitIndex))
 			{
-				bgUnit = createUnitIdx(unitIndex, regionId, faction->factionID, exp, armour, wpn);
+				bgUnit = unitHelpers::createUnitIdx(unitIndex, regionId, faction->factionID, exp, armour, wpn);
 			}
 			else
 			{
 				int eopIDX = eduThings::getDataEopEdu(unitIndex);
 				if (eopIDX == 0)
-					bgUnit = createUnitIdx(0, regionId, faction->factionID, exp, armour, wpn);
+					bgUnit = unitHelpers::createUnitIdx(0, regionId, faction->factionID, exp, armour, wpn);
 				else
-					bgUnit = createUnitEDB(eopIDX, regionId, faction->factionID, exp, armour, wpn);
+					bgUnit = unitHelpers::createUnitEDB(eopIDX, regionId, faction->factionID, exp, armour, wpn);
 			}
 			addUnitToArmy(army, bgUnit);
 			if (characterType == 7)

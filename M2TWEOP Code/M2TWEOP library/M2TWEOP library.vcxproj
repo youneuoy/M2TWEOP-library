@@ -347,8 +347,7 @@
     <ClInclude Include="types\faction.h" />
     <ClInclude Include="types\fort.h" />
     <ClInclude Include="types\settlement.h" />
-    <ClInclude Include="unitActions.h" />
-    <ClInclude Include="unitHelpers.h" />
+    <ClInclude Include="types\unit.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\3rd\AsmJit\headers\Assembler.cpp" />
@@ -482,8 +481,7 @@
     <ClCompile Include="types\faction.cpp" />
     <ClCompile Include="types\fort.cpp" />
     <ClCompile Include="types\settlement.cpp" />
-    <ClCompile Include="unitActions.cpp" />
-    <ClCompile Include="unitHelpers.cpp" />
+    <ClCompile Include="types\unit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\3rd\AsmJit\headers\Regenerate.py" />

@@ -6,8 +6,8 @@
 
 #include "eduFastFuncts.h"
 #include "fastFuncts.h"
+#include "m2tweopHelpers.h"
 #include "smallFuncs.h"
-#include "unitActions.h"
 
 namespace eduThings
 {
@@ -55,7 +55,7 @@ namespace eduThings
 	{
 		if (getEopEduEntry(newIdx))
 		{
-			unitActions::logStringGame("Duplicate EOP index " + to_string(newIdx) + " in addEopEduEntryFromFile");
+			m2tweopHelpers::logStringGame("Duplicate EOP index " + to_string(newIdx) + " in addEopEduEntryFromFile");
 			return nullptr;
 		}
 
@@ -64,7 +64,7 @@ namespace eduThings
 			const eopEduEntry newEntry(fileName, newIdx);
 			if (getEduEntryByType(newEntry.originalTypeName.c_str()))
 			{
-				unitActions::logStringGame("Duplicate unit name " + newEntry.originalTypeName + " in addEopEduEntryFromFile");
+				m2tweopHelpers::logStringGame("Duplicate unit name " + newEntry.originalTypeName + " in addEopEduEntryFromFile");
 				std::string errS = "Can`t add: " + newEntry.originalTypeName + " Duplicate type name";
 				MessageBoxA(NULL, errS.c_str(), "ERROR!", NULL);
 				exit(0);
@@ -81,7 +81,7 @@ namespace eduThings
 	{
 		if (getEopEduEntry(newIdx))
 		{
-			unitActions::logStringGame("Duplicate EOP index " + to_string(newIdx) + " in addEopEduEntry");
+			m2tweopHelpers::logStringGame("Duplicate EOP index " + to_string(newIdx) + " in addEopEduEntry");
 			return nullptr;
 		}
 		eopEduEntry newEntry(baseIdx, newIdx);

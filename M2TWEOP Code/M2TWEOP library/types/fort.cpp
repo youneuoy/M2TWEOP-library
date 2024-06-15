@@ -5,6 +5,7 @@
 #include "functionsOffsets.h"
 #include "plugData.h"
 #include "faction.h"
+#include "unit.h"
 #include "character.h"
 #include "characterRecord.h"
 
@@ -62,19 +63,9 @@ namespace fortHelpers
 					}
 			}
 		}
-		DWORD vtable = *reinterpret_cast<DWORD*>(fort);
-		DWORD vFuncOffset = vtable + 0x9c;
-		DWORD vFunc = *reinterpret_cast<DWORD*>(vFuncOffset);
-		_asm
-			{
-			push 7
-			push newFaction
-			push 0
-			mov ecx, fort
-			mov eax, vFunc
-			call eax
-			}
-			
+		
+		callClassFunc<fortStruct*, void, int, factionStruct*, int>(fort, 0x9c, 0, newFaction, 7);
+		
 		GAME_FUNC(void(__thiscall*)(fortStruct*, int), removeSieges)(fort, 0);
 		if (newFaction->factionHordeInfo && newFaction->factionHordeInfo->isHorde)
 		{
@@ -83,42 +74,40 @@ namespace fortHelpers
 			auto hordeInfo = newFaction->factionHordeInfo;
 			DWORD funcAddr4 = codes::offsets.doHordeStuff;
 			_asm
-				{
+			{
 				mov ecx, hordeInfo
 				mov eax, funcAddr4
 				call eax
-				}
+			}
 		}
 			
 		if (!convertGarrison && fort->army)
 		{
 			auto oldCoords = coordPair{static_cast<int>(fort->xCoord), static_cast<int>(fort->yCoord)};
 			if (const auto coords = fastFuncts::findValidTileNearTile(&oldCoords, 7);
-				fastFuncts::isTileValidForCharacterType(7, coords))
+				fastFuncts::isTileValidForCharacterType(static_cast<int>(characterTypeStrat::namedCharacter), coords))
 			{
 				sol::table units = sol::state_view(plugData::data.luaAll.luaState).create_table();
 				for (int i = 0; i < fort->army->numOfUnits; i++)
-				{
 					units.add(fort->army->units[i]);
-				}
 				const auto faction = fort->army->faction;
-				if (const auto army = factionHelpers::splitArmy(faction, units, coords->xCoord, coords->yCoord); army)
-					return;
-			}
-			if (fort->army)
-			{
-				for (int i = 0; i < fort->army->numOfUnits; i++)
+				if (const auto army = factionHelpers::splitArmy(faction, units, coords->xCoord, coords->yCoord); !army)
 				{
-					fastFuncts::killUnit(fort->army->units[i]);
+					if (fort->army)
+					{
+						for (int i = 0; i < fort->army->numOfUnits; i++)
+							unitHelpers::killUnit(fort->army->units[i]);
+					}
 				}
+				units.clear();	
 			}
 		}
 	}
 
 	void deleteFort(const factionStruct* fac, fortStruct* fort)
 	{
-		DWORD delFort = (DWORD)fort;
-		DWORD delFaction = (DWORD)fac;
+		fortStruct* delFort = fort;
+		const factionStruct* delFaction = fac;
 		DWORD funcB = codes::offsets.deleteFortFuncOne;
 		DWORD funcC = codes::offsets.deleteFortFuncTwo;
 		DWORD facOffset = dataOffsets::offsets.factionOffsetsStart + 0x4;
@@ -141,14 +130,15 @@ namespace fortHelpers
 	
 	void createFortXY(factionStruct* fac, int x, int y)
 	{
-		factionStruct* faction = (factionStruct*)fac;
+		factionStruct* faction = fac;
 		character* newgen = characterHelpers::createCharacterWithoutSpawning("named character", faction, 30, "fort", "fort", 31, "default", x, y);
 		stackStruct* newarmy = fastFuncts::createArmy(newgen);
 		auto cultureID = fac->cultureID;
 		auto cultureDb = reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
 		auto culture = cultureDb->cultures[cultureID];
 		auto cost = culture.fortCost;
-		fac->money += cost;
+		auto oldMoney = fac->money;
+		fac->money = cost;
 		auto oldOption = fastFuncts::getCampaignDb()->campaignDbSettlement.canBuildForts;
 		fastFuncts::getCampaignDb()->campaignDbSettlement.canBuildForts = true;
 		DWORD adrFunc = codes::offsets.createFortFunc;
@@ -160,6 +150,7 @@ namespace fortHelpers
 		}
 		characterHelpers::killCharacter(newgen);
 		fastFuncts::getCampaignDb()->campaignDbSettlement.canBuildForts = oldOption;
+		fac->money = oldMoney;
 	}
 	
 	void addToLua(sol::state& luaState)

@@ -36,6 +36,7 @@ namespace m2tweopHelpers
 	std::tuple<int, int> getGameTileCoordsWithCursor();
 	bool getTileVisibility(factionStruct* faction, int x, int y);
 	factionStruct* getRegionOwner(int regionID);
+	void fireGameScriptFunc(void* scriptStruct, DWORD offset);
 	
 	bool checkDipStance(const campaign* campaignStruct, campaignEnums::dipRelEnum dipType, const factionStruct* fac1, const factionStruct* fac2);
 	void setDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2);
@@ -49,7 +50,7 @@ namespace m2tweopHelpers
 	void addRegionColor(mapImage* img, int id, int r, int g, int b, int a);
 	void fillTileColor(mapImage* img, int x, int y, int r, int g, int b, int a);
 	void addTileColor(mapImage* img, int x, int y, int r, int g, int b, int a);
-	
+	void logStringGame(const std::string& msg);
 	options1* getOptions1();
 	options2* getOptions2();
 	campaignDifficulty1* getCampaignDifficulty1();

@@ -4,6 +4,8 @@
 #include "plugData.h"
 #include "smallFuncs.h"
 #include "character.h"
+#include "dataOffsets.h"
+#include "unit.h"
 
 namespace battleHandlerHelpers
 {
@@ -252,6 +254,12 @@ namespace battleHandlerHelpers
 		const auto engineRec = engine->engineRecord;
 		if (!engineRec) return -1;
 		return engineRec->classID;
+	}
+	
+	float getBattleMapHeight(float xCoord, float yCoord)
+	{
+		const DWORD* offset = reinterpret_cast<DWORD*>(dataOffsets::offsets.battleMapData);
+		return GAME_FUNC(float(__thiscall*)(DWORD, float, float, float), getMapHeight)(*offset, xCoord, yCoord, 0.0f);
 	}
 
 	buildingBattle* getBattleBuilding(const battleBuildings* buildings, int index)

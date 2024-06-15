@@ -10,8 +10,9 @@
 #include "gameDataAllHelper.h"
 #include "smallFuncs.h"
 #include "technicalHelpers.h"
-#include "unitActions.h"
 #include "faction.h"
+#include "unit.h"
+#include "m2tweopHelpers.h"
 
 namespace settlementHelpers
 {
@@ -128,8 +129,8 @@ namespace settlementHelpers
 				}
 				int unitId = character->bodyguards->eduEntry->Index;
 				int xp = character->bodyguards->expScreen;
-				int armour = (character->bodyguards->stats>> 8) & 0x1F;
-				int weapon = (character->bodyguards->stats>> 13) & 0x1F;
+				int armour = character->bodyguards->avgArmourUpg;
+				int weapon = character->bodyguards->avgWeaponUpg;
 				characterHelpers::sendOffMap(character);
 				if (auto newStack = fastFuncts::spawnArmy(
 					newOwner,
@@ -190,7 +191,7 @@ namespace settlementHelpers
 		}
 		if (!upgraded)
 		{
-			unitActions::logStringGame("settlementStruct.upgrade: could not upgrade settlement.");
+			m2tweopHelpers::logStringGame("settlementStruct.upgrade: could not upgrade settlement.");
 			return;
 		}
 		edbEntry* coreEntry;

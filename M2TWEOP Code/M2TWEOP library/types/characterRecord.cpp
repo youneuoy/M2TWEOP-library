@@ -6,6 +6,7 @@
 #include "smallFuncs.h"
 #include "character.h"
 #include "faction.h"
+#include "unit.h"
 #include "technicalHelpers.h"
 
 #define namedChar_localizedFullName 1

@@ -90,25 +90,12 @@ namespace fastFuncts
 	factionRecord* GetFactSmDescrById(int id);
 	//find ancillary in anc list
 	ancillary* findAncillary(const char* ancName);
-
-	//edit unit characteristics
-	void setUnitParams(unit* un, int count, int exp, int armor, int weap);
-	void setSoldiersCount(unit* un,int count);
-	void setSoldiersCountAndExp(unit* un,int count, int exp);
-	void setUnitMovepoints(unit* un,float movepoints);
 	void NuullifyMovepoints(stackStruct* army);
 
 	//kills
-	void killUnit(unit* un);
 	stackStruct* createArmy(character* character);
 	stackStruct* createArmyInSettlement(settlementStruct* sett);
-
-
-	//facNum - factionID
-	unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap);
-	unit* createUnitIdx(int index, int regionID, int facNum, int exp, int arm, int weap);
-	unit* createUnitEDB(int edb, int regionID, int facNum, int exp, int arm, int weap);
-
+	
 	//returns true if we have siege before
 	bool StopSiege(stackStruct* army);
 	bool StopBlockPort(stackStruct* army);

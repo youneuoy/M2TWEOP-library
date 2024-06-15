@@ -35,6 +35,7 @@ public:
 		DWORD selectedEra = NULL;
 		DWORD campaignDb = NULL;
 		DWORD campaignDbExtra = NULL;
+		DWORD groupLabels = NULL;
 
 
 

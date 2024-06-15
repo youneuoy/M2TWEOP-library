@@ -57,6 +57,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.constructionItems = 0x016F4CAC;
 		offsets.recruitmentItems = 0x16F4E00;
 		offsets.ltgdGlobals = 0x016F115C;
+		offsets.groupLabels = 0x001BA96A0;
 
 		offsets.descr_sm_factionslist = reinterpret_cast<descr_sm_factions_list*>(0x01667288);
 	}
@@ -111,6 +112,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.constructionItems = 0x016ABB14;
 		offsets.recruitmentItems = 0x0016ABC68;
 		offsets.ltgdGlobals = 0x016A7Fc4;
+		offsets.groupLabels = 0x01B60580;
 
 		offsets.audioEnable = (bool*)0x01639f1d;
 		offsets.audioMaster_vol = (int*)0x01639f60;

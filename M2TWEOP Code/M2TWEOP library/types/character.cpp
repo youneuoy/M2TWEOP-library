@@ -7,13 +7,13 @@
 #include "functionsOffsets.h"
 #include "smallFuncs.h"
 #include "stackStructHelpers.h"
-#include "unitActions.h"
 #include "fort.h"
 #include "m2tweopHelpers.h"
 #include "characterRecord.h"
 #include "gameHelpers.h"
 #include "stratModelsChange.h"
 #include "faction.h"
+#include "unit.h"
 
 namespace characterHelpers
 {
@@ -631,7 +631,7 @@ namespace characterHelpers
 			return;
 		if (!gen->characterRecord->label || gen->characterRecord->labelCrypt == 0 || strcmp(gen->characterRecord->label, "") == 0)
 		{
-			unitActions::logStringGame("character.sendOffMap: character has no label, you wont be able to get him back, command cancelled.");
+			m2tweopHelpers::logStringGame("character.sendOffMap: character has no label, you wont be able to get him back, command cancelled.");
 			return;
 		}
 		if (gen->ifMarkedToKill == 1)
@@ -642,7 +642,7 @@ namespace characterHelpers
 		if (gen->armyLeaded && gen->armyLeaded->numOfUnits == 1)
 		{
 			const auto id = gen->bodyguards->eduEntry->Index;
-			newUnit = fastFuncts::createUnitIdx(id, gen->regionID, gen->armyLeaded->faction->factionID, 0, 0, 0);
+			newUnit = unitHelpers::createUnitIdx(id, gen->regionID, gen->armyLeaded->faction->factionID, 0, 0, 0);
 			fastFuncts::addUnitToArmy(gen->armyLeaded, newUnit);
 		}
 		DWORD funcAddr = codes::offsets.sendCharacterOffMap;
@@ -658,7 +658,7 @@ namespace characterHelpers
 			call eax
 		}
 		if (newUnit)
-			fastFuncts::killUnit(newUnit);
+			unitHelpers::killUnit(newUnit);
 	}
 	
 	void switchCharacterFaction(character* gen, factionStruct* fac, bool keepArmy, bool keepBg)
@@ -708,8 +708,8 @@ namespace characterHelpers
 			explicit unitInfo(const unit* unit)
 			{
 				xp = unit->expScreen;
-				armour = (unit->stats >> 8) & 0x1F;
-				weapon = (unit->stats >> 13) & 0x1F;
+				armour = unit->avgArmourUpg;
+				weapon = unit->avgWeaponUpg;
 				soldierCount = unit->SoldierCountStrat;
 				alias = unit->alias;
 				supplies = unit->foodRequirement;
@@ -719,9 +719,9 @@ namespace characterHelpers
 			{
 				unit* newUnit;
 				if (eduThings::getDataEopEdu(eduType))
-					 newUnit = fastFuncts::createUnitEDB(eduType, character->regionID, faction->factionID, xp, armour, weapon);
+					 newUnit = unitHelpers::createUnitEDB(eduType, character->regionID, faction->factionID, xp, armour, weapon);
 				else
-					 newUnit = fastFuncts::createUnitIdx(eduType, character->regionID, faction->factionID, xp, armour, weapon);
+					 newUnit = unitHelpers::createUnitIdx(eduType, character->regionID, faction->factionID, xp, armour, weapon);
 				newUnit->alias = alias;
 				newUnit->foodRequirement = supplies;
 				newUnit->SoldierCountStrat = soldierCount;
@@ -786,7 +786,7 @@ namespace characterHelpers
 					auto bodyguard = gen->bodyguards;
 					auto randomUnit = gen->armyLeaded->units[17];
 					setBodyguard(gen, randomUnit);
-					fastFuncts::killUnit(bodyguard);
+					unitHelpers::killUnit(bodyguard);
 					fastFuncts::addUnitToArmy(gen->armyLeaded, newUnit);
 					setBodyguard(gen, newUnit);
 				}
@@ -795,7 +795,7 @@ namespace characterHelpers
 					auto bodyguard = gen->bodyguards;
 					setBodyguard(gen, newUnit);
 					fastFuncts::addUnitToArmy(gen->armyLeaded, newUnit);
-					fastFuncts::killUnit(bodyguard);
+					unitHelpers::killUnit(bodyguard);
 				}
 			}
 			if (keepArmy)
@@ -816,7 +816,7 @@ namespace characterHelpers
 	{
 		if (gen->residence)
 		{
-			unitActions::logStringGame("character.teleport: Character is in residence, cancelled to avoid bugs");
+			m2tweopHelpers::logStringGame("character.teleport: Character is in residence, cancelled to avoid bugs");
 			return;
 		}
 		
@@ -860,7 +860,7 @@ namespace characterHelpers
 	{
 		if (gen->residence)
 		{
-			unitActions::logStringGame("character.teleport: Character is in residence, cancelled to avoid bugs");
+			m2tweopHelpers::logStringGame("character.teleport: Character is in residence, cancelled to avoid bugs");
 			return false;
 		}
 		bool isTeleported = false;
@@ -1069,7 +1069,6 @@ namespace characterHelpers
 	types.character.set("yCoord", &character::yCoord);
 	types.character.set("namedCharacter", &character::characterRecord);
 	types.character.set("characterRecord", &character::characterRecord);
-	//types.character.set("characterRecord", sol::property(&getCharRecord));
 	types.character.set("faction", sol::property(&character::getFaction));
 	types.character.set("isMarkedToKill", &character::ifMarkedToKill);
 	types.character.set("inEnemyZOC", &character::inEnemyZOC);

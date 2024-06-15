@@ -4,6 +4,7 @@
 #include "eduThings.h"
 #include "luaGetSetFuncs.h"
 #include "plugData.h"
+#include "unit.h"
 
 
 bool eopEduHelpers::haveAttributeLegioGet(eduEntry* eduEn)

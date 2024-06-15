@@ -209,6 +209,12 @@ public:
 		DWORD setCadClass = NULL;
 		DWORD canArmySplit = NULL;
 		DWORD splitArmy = NULL;
+		DWORD setUnitMovePoints = NULL;
+		DWORD automateGroup = NULL;
+		DWORD placeGroup = NULL;
+		DWORD clearUnitGroup = NULL;
+		DWORD removeUnusedLabel = NULL;
+		DWORD defineUnitGroup = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

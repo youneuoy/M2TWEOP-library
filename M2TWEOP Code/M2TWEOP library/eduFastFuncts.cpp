@@ -4,7 +4,7 @@
 
 #include "FastFuncts.h"
 #include "functionsOffsets.h"
-#include "unitActions.h"
+#include "m2tweopHelpers.h"
 
 namespace eduFastFuncts
 {
@@ -66,7 +66,7 @@ namespace eduFastFuncts
 
     int readEduFile(std::string fileName, eduEntry* entryForFilling)
     {
-		unitActions::logStringGame("Reading EDU file: " + fileName);
+		m2tweopHelpers::logStringGame("Reading EDU file: " + fileName);
 		std::string unitString;
 
 		std::ifstream eduFile;

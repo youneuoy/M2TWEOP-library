@@ -4,10 +4,11 @@
 #include "fastFuncts.h"
 #include "gameHelpers.h"
 #include "smallFuncs.h"
-#include "unitActions.h"
 #include "character.h"
 #include "settlement.h"
+#include "faction.h"
 #include "characterRecord.h"
+#include "m2tweopHelpers.h"
 using namespace std;
 
 
@@ -886,7 +887,7 @@ void onCampaignMapLoaded()
 	if (!plugData::data.luaAll.hashLoaded)
 	{
 		plugData::data.luaAll.fillHashMaps();
-		unitActions::logStringGame("Hashmaps filled");
+		m2tweopHelpers::logStringGame("Hashmaps filled");
 	}
 	if (plugData::data.luaAll.onCampaignMapLoaded != nullptr)
 	{

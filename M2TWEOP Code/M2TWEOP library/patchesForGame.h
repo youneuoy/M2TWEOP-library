@@ -1,6 +1,48 @@
 #pragma once
 #include "stratModelsChange.h"
 #include "graphicsD3D.h"
+#include "unit.h"
+
+
+struct aiTacticAssault
+{
+	DWORD *vftable /*VFT*/;
+	struct aiDetachment *aiDetachment;
+	char hasBeenConsidered;
+	char isExecuting;
+	char hasExecuted;
+	char field_B;
+	int phaseStarted;
+	int arrayOfTenRandomValues[10];
+	char startedTactic;
+	char differentUnitsThisUpdate;
+	char pad[2];
+	unit **units;
+	int unitsSize;
+	int unitNum;
+	void* fsm;
+	DWORD fsmState;
+	struct aiDetachment *detachment;
+	struct aiUnitGroup siegeUnitGroup;
+	struct aiUnitGroup aiUnitGroup;
+	bool started;
+	char field_2ACd[3];
+	struct buildingBattle *building;
+	struct unit *attackUnit;
+	int formationIndex;
+	float advanceX;
+	float advanceY;
+	int16_t angle;
+	int16_t angle2;
+	int advanceDirectionX;
+	float advanceDirectionY;
+	char firstAdvanceOrders;
+	char docking;
+	char engineLeft;
+	char finished;
+	float priority;
+};
+
 class patchesForGame
 {
 public:

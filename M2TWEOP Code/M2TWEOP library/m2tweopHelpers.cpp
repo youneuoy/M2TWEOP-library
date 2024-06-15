@@ -1,5 +1,6 @@
 #include "m2tweopHelpers.h"
 
+#include "dataOffsets.h"
 #include "FastFuncts.h"
 #include "gameDataAllHelper.h"
 #include "gameHelpers.h"
@@ -9,6 +10,10 @@
 #include "smallFuncs.h"
 #include "faction.h"
 
+scriptCommand::scriptCommand(const char* name) : className(name)
+{
+	this->vftable = dataOffsets::offsets.scriptCommandVFT;
+}
 namespace m2tweopHelpers
 {
 	std::string getModPath()
@@ -23,6 +28,28 @@ namespace m2tweopHelpers
 	{
 		int xy[2]{ x,y };
 		return smallFuncs::isTileFree(xy);
+	}
+	
+	void fireGameScriptFunc(void* scriptStruct, DWORD offset)
+	{
+		void* scriptStructPtr = scriptStruct;
+		DWORD func = offset;
+		_asm
+		{
+			mov ecx, scriptStructPtr
+			mov eax, func
+			call eax
+		}
+	}
+	
+	void logStringGame(const std::string& msg)
+	{
+		const auto flushRate = reinterpret_cast<int*>(dataOffsets::offsets.logFlushRate);
+		const int oldRate = *flushRate;
+		*flushRate = 1;
+		const auto order = std::make_shared<gameLogCommand>(msg.c_str());
+		fireGameScriptFunc(order.get(), codes::offsets.gameLogCommand);
+		*flushRate = oldRate;
 	}
 	
 	std::tuple<int, int> getGameTileCoordsWithCursor()

@@ -15,9 +15,9 @@
 #include "eduThings.h"
 #include "PlannedRetreatRoute.h"
 #include "discordManager.h"
+#include "m2tweopHelpers.h"
 #include "smallFuncs.h"
-#include "unitActions.h"
-#include "unitHelpers.h"
+#include "unit.h"
 
 
 worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, worldRecord* selectedRecord)
@@ -104,7 +104,7 @@ DWORD __fastcall patchesForGame::onSearchUnitType(char* typeName)
 {
 	if (const auto eopUnit = eduThings::tryFindDataEopEduIndex(typeName); eopUnit != nullptr)
 	{
-		unitActions::logStringGame("Unit found in M2TWEOP: " + std::string(typeName) + " index: " + std::to_string(*eopUnit));
+		m2tweopHelpers::logStringGame("Unit found in M2TWEOP: " + std::string(typeName) + " index: " + std::to_string(*eopUnit));
 		auto newIndex = new nameIndex(typeName, *eopUnit);
 		return reinterpret_cast<DWORD>(newIndex);
 	}
@@ -355,7 +355,7 @@ char* __fastcall patchesForGame::getBrowserPicConstructed(int cultureID, edbEntr
 			return FILE_PATH.data();
 		}
 	}
-	unitActions::logStringGame("getBrowserPicConstructed error: " + std::string(modPath + picPath));
+	m2tweopHelpers::logStringGame("getBrowserPicConstructed error: " + std::string(modPath + picPath));
 	FILE_PATH = modPath + "/data/ui/generic/generic_constructed_building.tga";
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -418,7 +418,7 @@ char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEnt
 			return FILE_PATH.data();
 		}
 	}
-	unitActions::logStringGame("getBrowserPicConstruction error: " + std::string(modPath + picPath));
+	m2tweopHelpers::logStringGame("getBrowserPicConstruction error: " + std::string(modPath + picPath));
 	FILE_PATH = modPath + "/data/ui/generic/generic_preconstructed_building.tga";
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -480,7 +480,7 @@ char* __fastcall patchesForGame::getBuildingPic(buildingLevel* level, int cultur
 			return FILE_PATH.data();
 		}
 	}
-	unitActions::logStringGame("getBuildingPic error: " + std::string(modPath + picPath));
+	m2tweopHelpers::logStringGame("getBuildingPic error: " + std::string(modPath + picPath));
 	FILE_PATH = modPath + "/data/ui/generic/generic_building.tga";
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -542,7 +542,7 @@ char* __fastcall patchesForGame::getBuildingPicConstructed(buildingLevel* level,
 			return FILE_PATH.data();
 		}
 	}
-	unitActions::logStringGame("getBuildingPicConstructed error: " + std::string(modPath + picPath));
+	m2tweopHelpers::logStringGame("getBuildingPicConstructed error: " + std::string(modPath + picPath));
 	FILE_PATH = modPath + "/data/ui/generic/generic_constructed_building.tga";
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -604,7 +604,7 @@ char* __fastcall patchesForGame::getBuildingPicConstruction(buildingLevel* level
 			return FILE_PATH.data();
 		}
 	}
-	unitActions::logStringGame("getBuildingPicConstruction error: " + std::string(modPath + picPath));
+	m2tweopHelpers::logStringGame("getBuildingPicConstruction error: " + std::string(modPath + picPath));
 	FILE_PATH = modPath + "/data/ui/generic/generic_preconstructed_building.tga";
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -678,7 +678,7 @@ char* patchesForGame::onGetGuildOfferPic(DWORD level, int cultureID)
 			return FILE_PATH.data();
 		}
 	}
-	unitActions::logStringGame("onGetGuildOfferPic error: " + std::string(modPath + picPath));
+	m2tweopHelpers::logStringGame("onGetGuildOfferPic error: " + std::string(modPath + picPath));
 	FILE_PATH = modPath + "/data/ui/generic/generic_preconstructed_building.tga";
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -795,12 +795,12 @@ DWORD getVFunc(DWORD* addr, DWORD offset)
 	return *reinterpret_cast<DWORD*>(vtbl + offset);
 }
 
-enum UNIT_GROUP_MOVE_TYPE
+enum class groupMoveType
 {
-	MT_MOVE_FORMED_STATIC_TURN_AT_WAYPOINT,					// move as a group, stop reforming and turning at each waypoint
-	MT_MOVE_FORMED,											// move as a group, stopping only at a constriction
-	MT_MOVE_UNFORMED_UNITS_FORMED,							// move unformed, units within the group get individual orders to move formed
-	MT_MOVE_UNFORMED_UNITS_UNFORMED,						// move unformed, units within the group move unformed
+	formedStatic,
+	formed,						
+	unformedUnitsFormed,		
+	unformedUnitsUnformed,	
 };
 
 
@@ -825,7 +825,7 @@ void __fastcall patchesForGame::onPreBattlePlacement(aiTacticAssault* aiTactic)
 		group1,
 		&aiTactic->advanceX,
 		aiTactic->angle,
-		MT_MOVE_FORMED,
+		(int)groupMoveType::formed,
 		true,
 		true);
 	for (int i = 0; i < group1->unitsInFormationNum; i++)
@@ -838,7 +838,7 @@ void __fastcall patchesForGame::onPreBattlePlacement(aiTacticAssault* aiTactic)
 		group2,
 		&aiTactic->advanceX,
 		aiTactic->angle,
-		MT_MOVE_FORMED,
+		(int)groupMoveType::formed,
 		true,
 		true);
 	for (int i = 0; i < group2->unitsInFormationNum; i++)
@@ -888,7 +888,7 @@ bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetac
 			continue;
 		if (unit->siegeEnNum == 0)
 			continue;
-		auto engine = unit->siegeEngine[0];
+		auto engine = unit->siegeEngines[0];
 		if (engine == nullptr)
 			continue;
 		if (engine->engineRecord->classID == engineType::ram)
@@ -921,8 +921,8 @@ bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetac
 	auto deployArea = battleSideArmy.deploymentArea;
 	auto areaX = deployArea->centreX;
 	auto areaY = deployArea->centreY;
-	int bonus = std::clamp(infCavNum - infCavNumDef, -5, 5);
-	int ramsNeeded = (infCavNum - numLaddersTowers) / (6 - bonus);
+	int bonus = std::clamp(infCavNum - infCavNumDef, -3, 3);
+	int ramsNeeded = (infCavNum - numLaddersTowers) / (4 - bonus);
 	std::vector<buildingBattle*> gates{};
 	auto buildings = gate->battleResidence->battleBuildings;
 	for (int i = 0; i < buildings->allBuildingsNum; i++)
@@ -943,7 +943,7 @@ bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetac
 	if (ramsNeeded < gateNum)
 	{
 		for (int i = 0; i < gateNum - ramsNeeded; i++)
-			gates.erase(gates.end());
+			gates.pop_back();
 	}
 	bool isCloseEnough = false;
 	for (int i = 0; i < deployArea->coordsNum; i++)
@@ -989,7 +989,7 @@ bool __thiscall patchesForGame::onPreBattlePlacement2(aiUnitGroup* group, DWORD 
 	{
 		auto unit = group1.unitsInFormation[i];
 		unitActions::placeUnit(unit, posX, posY, aiTactic->angle, 0);
-		unitActions::logStringGame("Unit placed at2: " + to_string(unit->positionX) + " " + to_string(unit->positionY) + " " + to_string(angle));
+		m2tweopHelpers::logStringGame("Unit placed at2: " + to_string(unit->positionX) + " " + to_string(unit->positionY) + " " + to_string(angle));
 		group1.xCoord = unit->positionX;
 		group1.yCoord = unit->positionY;
 		group1.angle = aiTactic->angle;
@@ -1002,7 +1002,7 @@ bool __thiscall patchesForGame::onPreBattlePlacement2(aiUnitGroup* group, DWORD 
 		group2.xCoord = unit->positionX;
 		group2.yCoord = unit->positionY;
 		group2.angle = aiTactic->angle;
-		unitActions::logStringGame("Siege unit placed at2: " + to_string(unit->positionX) + " " + to_string(unit->positionY) + " " + to_string(angle));
+		m2tweopHelpers::logStringGame("Siege unit placed at2: " + to_string(unit->positionX) + " " + to_string(unit->positionY) + " " + to_string(angle));
 	}
 	return retBool;
 }
@@ -1538,11 +1538,11 @@ void __fastcall patchesForGame::recruitEOPMercunit(DWORD pad, DWORD pad2, region
 	if (eduindex > 499)
 	{
 		int eopIDX = eduThings::getDataEopEdu(eduindex);
-		fastFuncts::createUnitEDB(eopIDX, regionID, factionid, exp, 0, 0);
+		unitHelpers::createUnitEDB(eopIDX, regionID, factionid, exp, 0, 0);
 	}
 	else
 	{
-		fastFuncts::createUnitIdx(eduindex, regionID, factionid, exp, 0, 0);
+		unitHelpers::createUnitIdx(eduindex, regionID, factionid, exp, 0, 0);
 	}
 }
 

@@ -6,8 +6,9 @@
 #include "gameHelpers.h"
 #include "smallFuncs.h"
 #include "technicalHelpers.h"
-#include "unitActions.h"
 #include "fort.h"
+#include "unit.h"
+#include "m2tweopHelpers.h"
 
 #define factionStruct_ai_label 1
 #define factionStruct_name 2
@@ -203,7 +204,7 @@ namespace factionHelpers
 		const int unitCount = units.size();
 		if (unitCount > 20 || unitCount < 1)
 		{
-			unitActions::logStringGame("factionStruct.splitArmy: unit count must be between 1 and 20.");
+			m2tweopHelpers::logStringGame("factionStruct.splitArmy: unit count must be between 1 and 20.");
 			return nullptr;
 		}
 		auto tile = gameHelpers::getTile(x, y);
@@ -211,18 +212,18 @@ namespace factionHelpers
 		{
 			if (tileChar->armyLeaded && tileChar->armyLeaded->faction != faction)
 			{
-				unitActions::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy.");
+				m2tweopHelpers::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy.");
 				return nullptr;
 			}
 		}
 		if (auto tileSett = gameHelpers::getTileSettlement(tile); tileSett && tileSett->faction != faction)
 		{
-			unitActions::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy settlement.");
+			m2tweopHelpers::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy settlement.");
 			return nullptr;
 		}
 		if (auto tileFort = gameHelpers::getTileFort(tile); tileFort && tileFort->faction != faction)
 		{
-			unitActions::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy fort.");
+			m2tweopHelpers::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy fort.");
 			return nullptr;
 		}
 		stackStruct* stack = nullptr;
@@ -250,7 +251,7 @@ namespace factionHelpers
 		if (!GAME_FUNC(bool(__thiscall*)(stratPathFinding*, unit**, int, coordPair*), canArmySplit)
 			(stratPathFind, &unitList[0], unitCount, &targetCoords))
 		{
-			unitActions::logStringGame("factionStruct.splitArmy: can not split army.");
+			m2tweopHelpers::logStringGame("factionStruct.splitArmy: can not split army.");
 			return nullptr;
 		}
 		DWORD splitArmy = codes::offsets.splitArmy;
@@ -392,6 +393,7 @@ namespace factionHelpers
 		@tfield getAiFactionValues getAiFactionValues
 		@tfield getInterFactionLTGD getInterFactionLTGD
 		@tfield splitArmy splitArmy
+		@tfield getSpottedCharacter getSpottedCharacter
 
 		@table factionStruct
 		*/
@@ -809,11 +811,11 @@ namespace factionHelpers
 
 		/***
 		Get long term goal director values versus a specific other faction.
-		@function aiLongTermGoalDirector:getlongTermGoalValues
+		@function aiLongTermGoalDirector:getLongTermGoalValues
 		@tparam int targetFactionID
 		@treturn decisionValuesLTGD longTermGoalValues
 		@usage
-		local longTermGoalValues = LTGD:getlongTermGoalValues(2)
+		local longTermGoalValues = LTGD:getLongTermGoalValues(2)
 		*/
 		types.aiLongTermGoalDirector.set_function("getLongTermGoalValues", &aiLongTermGoalDirector::getlongTermGoalValues);
 

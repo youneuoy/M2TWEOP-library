@@ -7,6 +7,7 @@
 #include "FastFuncts.h" 
 #include "globals.h"
 #include "fort.h"
+#include "unit.h"
 #include "characterRecord.h"
 
 #include "techFuncs.h"
@@ -392,8 +393,8 @@ namespace battleCreator
 					tempS.append(un->eduEntry->Type);
 					tempS.append("				soldiers ").append(to_string(un->SoldierCountStrat));
 					tempS.append(" exp ").append(to_string(un->expScreen));
-					tempS.append(" armour ").append(to_string(un->stats >> 0xd & 0x1f));
-					tempS.append(" weapon_lvl ").append(to_string(un->stats >> 0x8 & 0x1f));
+					tempS.append(" armour ").append(to_string(un->avgArmourUpg));
+					tempS.append(" weapon_lvl ").append(to_string(un->avgWeaponUpg));
 
 					fileStrings.push_back(tempS);
 				}

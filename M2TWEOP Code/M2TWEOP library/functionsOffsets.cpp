@@ -204,6 +204,12 @@ void codes::initCodes(int gameVer)
 		offsets.setCadClass = 0xAAB050;
 		offsets.canArmySplit = 0x4D5C30;
 		offsets.splitArmy = 0x4F9740;
+		offsets.setUnitMovePoints = 0x00597770;
+		offsets.automateGroup = 0x00721410;
+		offsets.placeGroup = 0x0071DEE0;
+		offsets.clearUnitGroup = 0x0071E590;
+		offsets.removeUnusedLabel = 0x00A92320;
+		offsets.defineUnitGroup = 0x00A91BD0;
 	}
 	else if (gameVer == 2) //steam
 	{
@@ -406,5 +412,11 @@ void codes::initCodes(int gameVer)
 		offsets.setCadClass = 0xAAC080;
 		offsets.canArmySplit = 0x4D61F0;
 		offsets.splitArmy = 0x4F9C90;
+		offsets.setUnitMovePoints = 0x00597c60;
+		offsets.automateGroup = 0x00721B50;
+		offsets.placeGroup = 0x0071E620;
+		offsets.clearUnitGroup = 0x0071ECD0;
+		offsets.removeUnusedLabel = 0x00A93380;
+		offsets.defineUnitGroup = 0x00A92C30;
 	}
 }
