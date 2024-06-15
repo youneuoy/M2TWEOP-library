@@ -12,6 +12,7 @@
 #include "globals.h"
 #include "smallFuncs.h"
 #include "character.h"
+#include "faction.h"
 #include "characterRecord.h"
 #include "imgui_notify.h"
 
@@ -145,7 +146,7 @@ namespace battleCreator
 		int age = (gen->characterRecord->age >> 3) & 0x7f;
 		genJson["index"] = gen->characterRecord->index;
 		genJson["age"] = age;
-		genJson["faction"] = gen->characterRecord->faction->factSmDescr->facName;
+		genJson["faction"] = gen->characterRecord->faction->factionRecord->facName;
 		genJson["subfaction"] = gen->characterRecord->originalFaction;
 
 		std::string portrait;

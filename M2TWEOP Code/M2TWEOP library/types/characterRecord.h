@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "realGameTypes.h"
-#include "stackStructHelpers.h"
+#include "lua/sol.hpp"
 
 enum class deathType
 {
@@ -20,11 +20,93 @@ enum class deathType
 	bribed,
 	disbanded,
 	sinkingShip,
-	married,			// princess removed due to marriage
-	acquired,			// merchant removed due to acquisition
-	retired,			// character removed due to retirement
-	disgraced,			// character removed due to disgraced
+	married,
+	acquired,
+	retired,
+	disgraced,
 	denounced
+};
+
+struct traitLevel
+{
+	int32_t level;
+	struct UNICODE_STRING*** localizedName;
+	struct UNICODE_STRING*** localizedDescription;
+	struct UNICODE_STRING*** localizedEpithetDescription;
+	struct UNICODE_STRING*** localizedGainDescription;
+	struct UNICODE_STRING*** localizedLoseDescription;
+	int32_t threshold;
+	struct traitEffect* effects;
+	int32_t effectsSize;
+	int32_t effectsCount;
+	struct UNICODE_STRING*** localizedEffectsDescription;
+};
+
+struct traitEntry { /* char* at 0x4 */
+	int32_t index;
+	char* name;
+	int32_t nameHash;
+	struct traitLevel levels[10];
+	int32_t levelCount;
+	struct traitEntry* antiTraits[20];
+	int32_t antiTraitCount;
+	int32_t characterTypeNum;
+	uint32_t characterType;
+	int32_t noGoingBackLevel;
+	int32_t excludeCulturesNum;
+	uint32_t excludeCulturesStart;
+	int32_t hidden;
+	struct stringWithHash antiTraitNames[20];
+	int32_t antiTraitNameCount;
+};
+
+struct traitContainer {
+	struct trait* trait;
+	struct traitContainer* prev;
+	struct traitContainer* next;
+	int hasEpithet;
+};
+
+struct trait { /* traits of the character */
+	struct traitEntry* traitEntry;
+	struct traitLevel* level; /* level of trait */
+	int traitPoints;
+};
+
+struct traitEffect
+{
+	int32_t effectID;
+	int32_t value;
+};
+
+//ancillary of character
+struct ancillary { /* structure of ancillary */
+	UINT32 index;
+	UNICODE_STRING*** localizedAncName; //04
+	UNICODE_STRING*** localizedAncDesc; //08
+	char* ancName; //000C
+	int ancNameHash; //0010
+	char* patchToAncImage; //0014
+	int pathHash; //0018
+	bool isUnique; //0x001C
+	char pad_001D[3]; //0x001D
+	ancillary* exclusions[3]; //0020
+	int exclusionsNum; //002C
+	uint32_t somethingBitfield; //0030
+	uint32_t excludedCultures; //0034
+	traitEffect* effects; //0038
+	int effectsSize; //003C
+	int effectsNum; //0040
+	UNICODE_STRING*** effectsDescr; //044
+	char* type; //0048
+	int typeHash; //004C
+	bool transferable;//00050
+	char pad_0051[3];
+	
+	traitEffect* getEffect(int i)
+	{
+		return &effects[i];
+	}
 };
 
 //additional character data(name,label,traits, etc)
@@ -226,6 +308,50 @@ public:
 	void setIsFamilyHead(bool set)
 	{
 		isFamilyHead = set;
+	}
+};
+
+struct capturedCharacter
+{
+	struct characterRecord* namedChar;
+	int32_t capturedValue;
+};
+
+struct capturedUnit
+{
+	struct unit* unit;
+	int32_t capturedSoldiers;
+	int32_t capturedValue;
+};
+
+struct capturedFactionInfo
+{
+	int32_t targetFactionID;
+	int32_t factionID;
+	struct characterRecord* character;
+	struct characterRecord* targetCharacter;
+	std::vector<capturedCharacter> capturedCharacters;
+	std::vector<capturedUnit> capturedUnits;
+	int32_t ransomValue;
+	bool heirCaptured;
+	bool leaderCaptured;
+	char pad_001E[2];
+public:
+	int getCapturedUnitNum()
+	{
+		return capturedUnits.size();
+	}
+	int getCapturedCharacterNum()
+	{
+		return capturedCharacters.size();
+	}
+	capturedUnit* getCapturedUnit(const int index)
+	{
+		return &capturedUnits[index];
+	}
+	capturedCharacter* getCapturedCharacter(const int index)
+	{
+		return &capturedCharacters[index];
 	}
 };
 

@@ -87,7 +87,7 @@ namespace fastFuncts
 	void setBodyguardStart(character* gen, unit* un);
 	void loadSaveGame(const char* saveName);
 
-	factionStratMapDescrS* GetFactSmDescrById(int id);
+	factionRecord* GetFactSmDescrById(int id);
 	//find ancillary in anc list
 	ancillary* findAncillary(const char* ancName);
 
@@ -104,7 +104,7 @@ namespace fastFuncts
 	stackStruct* createArmyInSettlement(settlementStruct* sett);
 
 
-	//facNum - dipnum
+	//facNum - factionID
 	unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap);
 	unit* createUnitIdx(int index, int regionID, int facNum, int exp, int arm, int weap);
 	unit* createUnitEDB(int edb, int regionID, int facNum, int exp, int arm, int weap);

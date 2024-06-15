@@ -3,6 +3,7 @@
 
 #include "realGameTypes.h"
 #include "settlement.h"
+#define generalStruct_abilityID 1
 
 struct character
 { 

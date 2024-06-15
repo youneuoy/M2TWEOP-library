@@ -2,8 +2,9 @@
 
 #include "dataOffsets.h"
 #include "functionsOffsets.h"
-#include "stackStructHelpers.h"
+#include "character.h"
 #include "characterRecord.h"
+#include "faction.h"
 
 namespace actionsStrat {
 	
@@ -42,6 +43,4 @@ namespace actionsStrat {
 			call eax
 		}
 	}
-
-
 }

@@ -1208,7 +1208,7 @@ void __stdcall patchesForGame::onChangeTurnNum()
 #endif
 
 	int num = fastFuncts::getPassedTurnsNum();
-	discordManager::OnChangeTurnNum(num);
+	discordManager::onChangeTurnNum(num);
 	gameEvents::onChangeTurnNum(num);
 }
 
@@ -1353,8 +1353,8 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	else if (eventCode == factionTurnStartCode)
 	{
 		factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
-		discordManager::OnFactionTurnStart(fac);
-		PlannedRetreatRoute::OnFactionTurnStart(fac);
+		discordManager::onFactionTurnStart(fac);
+		PlannedRetreatRoute::onFactionTurnStart(fac);
 	}
 }
 
@@ -1575,8 +1575,6 @@ void __fastcall patchesForGame::onStartSiege(settlementStruct* sett)
 	const int y = sett->yCoord;
 	gameEvents::onStartSiege(x, y);
 }
-
-
 
 void __fastcall patchesForGame::onLoadDescrBattleCharacter(stackStruct* army, character* goalGen)
 {

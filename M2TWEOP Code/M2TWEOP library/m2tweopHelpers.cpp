@@ -7,6 +7,7 @@
 #include "m2tweopMapManager.h"
 #include "plugData.h"
 #include "smallFuncs.h"
+#include "faction.h"
 
 namespace m2tweopHelpers
 {
@@ -52,7 +53,7 @@ namespace m2tweopHelpers
 		using namespace campaignEnums;
 		if (!fac1 || !fac2)
 			return false;
-		const auto facDiplomacy = campaignStruct->diplomaticStandings[fac1->dipNum][fac2->dipNum];
+		const auto facDiplomacy = campaignStruct->diplomaticStandings[fac1->factionID][fac2->factionID];
 		if (dipType == trade)
 			return facDiplomacy.trade & 1;
 		const auto state = facDiplomacy.state;
@@ -70,10 +71,10 @@ namespace m2tweopHelpers
 	void setDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2)
 	{
 		using namespace campaignEnums;
-		if (!fac1 || !fac2 || !fac1->factSmDescr || !fac2->factSmDescr)
+		if (!fac1 || !fac2 || !fac1->factionRecord || !fac2->factionRecord)
 			return;
-		const auto facOneName = std::string(fac1->factSmDescr->facName);
-		const auto facTwoName = std::string(fac2->factSmDescr->facName);
+		const auto facOneName = std::string(fac1->factionRecord->facName);
+		const auto facTwoName = std::string(fac2->factionRecord->facName);
 		const std::string command = "diplomatic_stance " + facOneName + " " + facTwoName + " ";
 		if (dipType == dipRelEnum::war)
 			smallFuncs::scriptCommand("console_command", (command + "war").c_str());
@@ -102,8 +103,8 @@ namespace m2tweopHelpers
 		if (smallFuncs::getGameVersion() == 1)
 			funcAddr = 0x00502EE0;
 		DWORD diplomaticStuff = (reinterpret_cast<DWORD>(campaign) + 0x858);
-		int facIdOne = factionOne->dipNum;
-		int facIdTwo = factionTwo->dipNum;
+		int facIdOne = factionOne->factionID;
+		int facIdTwo = factionTwo->factionID;
 		auto set = (campaign->diplomaticStandings[facIdOne][facIdTwo].trade & 1) == 0;
 		_asm
 		{
@@ -124,8 +125,8 @@ namespace m2tweopHelpers
 			funcAddr = 0x00504980;
 		DWORD diplomaticStuff = (reinterpret_cast<DWORD>(campaign) + 0x858);
 		//
-		int facIdOne = factionOne->dipNum;
-		int facIdTwo = factionTwo->dipNum;
+		int facIdOne = factionOne->factionID;
+		int facIdTwo = factionTwo->factionID;
 		_asm
 		{
 			push facIdTwo

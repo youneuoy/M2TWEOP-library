@@ -5,6 +5,7 @@
 #include "MasterDefines.h"
 #include "MapTextDrawer.h"
 #include "character.h"
+#include "faction.h"
 #include <mutex>
 
 

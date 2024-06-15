@@ -1,13 +1,14 @@
 #include "stackStructHelpers.h"
 
 #include "eduThings.h"
-#include "factionHelpers.h"
+#include "faction.h"
 #include "fastFuncts.h"
 #include "gameHelpers.h"
 #include "plugData.h"
 #include "smallFuncs.h"
 #include "unitHelpers.h"
 #include "character.h"
+#include "faction.h"
 
 namespace stackStructHelpers
 {
@@ -159,7 +160,7 @@ namespace stackStructHelpers
 
 	unit *createUnit(stackStruct *army, const char *type, int exp, int arm, int weap)
 	{
-		unit *newUnit = fastFuncts::createUnitN(type, army->regionID, army->faction->dipNum, exp, arm, weap);
+		unit *newUnit = fastFuncts::createUnitN(type, army->regionID, army->faction->factionID, exp, arm, weap);
 		if (newUnit == nullptr)
 			return newUnit;
 		fastFuncts::addUnitToArmy(army, newUnit);
@@ -167,7 +168,7 @@ namespace stackStructHelpers
 	}
 	unit *createUnitByIDX(stackStruct *army, int typeIDX, int exp, int arm, int weap)
 	{
-		unit *newUnit = fastFuncts::createUnitIdx(typeIDX, army->regionID, army->faction->dipNum, exp, arm, weap);
+		unit *newUnit = fastFuncts::createUnitIdx(typeIDX, army->regionID, army->faction->factionID, exp, arm, weap);
 		if (newUnit == nullptr)
 			return newUnit;
 		fastFuncts::addUnitToArmy(army, newUnit);
@@ -179,7 +180,7 @@ namespace stackStructHelpers
 		if (eopIdx == 0)
 			return nullptr;
 
-		unit *newUnit = fastFuncts::createUnitEDB(eopIdx, army->regionID, army->faction->dipNum, exp, arm, weap);
+		unit *newUnit = fastFuncts::createUnitEDB(eopIdx, army->regionID, army->faction->factionID, exp, arm, weap);
 		if (newUnit == nullptr)
 			return newUnit;
 		fastFuncts::addUnitToArmy(army, newUnit);

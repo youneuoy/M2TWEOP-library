@@ -54,6 +54,7 @@ public:
 		DWORD globalCadClass = NULL;
 		DWORD constructionItems = NULL;
 		DWORD recruitmentItems = NULL;
+		DWORD ltgdGlobals = NULL;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);

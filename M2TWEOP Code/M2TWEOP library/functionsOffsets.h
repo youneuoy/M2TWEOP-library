@@ -62,7 +62,7 @@ public:
 
 		//create character
 		DWORD createCharacterFunc = NULL;
-		DWORD spawnCreatedCharacterFunc = NULL;
+		DWORD spawnCreatedObject = NULL;
 		DWORD doSomeWithCharacterFunc = NULL;
 
 		//create army
@@ -202,6 +202,13 @@ public:
 		DWORD getRetrainingOptions = NULL;
 		DWORD resetBuildingsMem = NULL;
 		DWORD getConstructionOptions = NULL;
+		DWORD makeWatchTower = NULL;
+		DWORD addToWatchtowerList = NULL;
+		DWORD updateBlockades = NULL;
+		DWORD createCadDisembark = NULL;
+		DWORD setCadClass = NULL;
+		DWORD canArmySplit = NULL;
+		DWORD splitArmy = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

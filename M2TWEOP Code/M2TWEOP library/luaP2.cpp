@@ -14,6 +14,7 @@
 #include "unitActions.h"
 #include "unitHelpers.h"
 #include "characterRecord.h"
+#include "faction.h"
 
 
 void luaP::initCampaign()
@@ -3670,7 +3671,7 @@ void luaP::initP2()
 	@tfield int qualityUnits
 	@tfield int buildStrengthLimit
 
-	@table managePolicy
+	@table productionBias
 	*/
 	luaState.new_enum(
 		"productionBias",

@@ -33,12 +33,8 @@ namespace resourcesHelpers
 	template <char fieldIndex>
 	void setStringPropertyBD(stratResMod* stratMod, std::string newS)
 	{
-		char* arg = nullptr;
 		if (fieldIndex == resource_dataStruct_type)
-		{
-			arg = reinterpret_cast<char*>(&stratMod->tga);
-		}
-		luaGetSetFuncs::setGameString(arg, newS.c_str());
+			fastFunctsHelpers::setCryptedString(&stratMod->tga, newS.c_str());
 	}
 #pragma endregion
 };

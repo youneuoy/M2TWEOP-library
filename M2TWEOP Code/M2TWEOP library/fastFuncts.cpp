@@ -10,7 +10,6 @@
 
 #include "actionsStrat.h"
 #include "eduThings.h"
-#include "factionHelpers.h"
 #include "smallFuncs.h"
 
 #include "fastFunctsHelpers.h"
@@ -23,6 +22,7 @@
 #include "settlement.h"
 #include "character.h"
 #include "characterRecord.h"
+#include "faction.h"
 
 namespace fastFuncts
 {
@@ -356,13 +356,13 @@ namespace fastFuncts
 		{
 			for (int j = 0; j < listFac[i]->stackNum; j++)
 			{
-				auto armyCoords = getArmyCoords(listFac[i]->stacks[j]);
+				auto armyCoords = getArmyCoords(listFac[i]->armies[j]);
 				if (armyCoords.first == x
 					&&
 					armyCoords.second == y
 					)
 				{
-					return listFac[i]->stacks[j];
+					return listFac[i]->armies[j];
 				}
 			}
 		}
@@ -542,7 +542,7 @@ namespace fastFuncts
 		return;
 	}
 
-	factionStratMapDescrS* GetFactSmDescrById(int id)
+	factionRecord* GetFactSmDescrById(int id)
 	{
 		if (dataOffsets::offsets.descr_sm_factionslist == nullptr)
 		{
@@ -1332,10 +1332,10 @@ namespace fastFuncts
 							char** cryptS = fastFunctsHelpers::makeCryptedString(typeName);
 							DWORD adrType = reinterpret_cast<DWORD>(cryptS);
 							gen = GAME_FUNC(character*(__cdecl*)(DWORD, int, characterRecord*, const char*), respawnOffMapCharacterFunc)
-							(adrType, faction->dipNum, namedChar, portrait);
+							(adrType, faction->factionID, namedChar, portrait);
 							if (gen)
 							{
-								DWORD adrFunc = codes::offsets.spawnCreatedCharacterFunc;
+								DWORD adrFunc = codes::offsets.spawnCreatedObject;
 							
 								_asm
 								{
@@ -1440,15 +1440,15 @@ namespace fastFuncts
 			unit* bgUnit = nullptr;
 			if (eduThings::getEduEntry(unitIndex))
 			{
-				bgUnit = createUnitIdx(unitIndex, regionId, faction->dipNum, exp, armour, wpn);
+				bgUnit = createUnitIdx(unitIndex, regionId, faction->factionID, exp, armour, wpn);
 			}
 			else
 			{
 				int eopIDX = eduThings::getDataEopEdu(unitIndex);
 				if (eopIDX == 0)
-					bgUnit = createUnitIdx(0, regionId, faction->dipNum, exp, armour, wpn);
+					bgUnit = createUnitIdx(0, regionId, faction->factionID, exp, armour, wpn);
 				else
-					bgUnit = createUnitEDB(eopIDX, regionId, faction->dipNum, exp, armour, wpn);
+					bgUnit = createUnitEDB(eopIDX, regionId, faction->factionID, exp, armour, wpn);
 			}
 			addUnitToArmy(army, bgUnit);
 			if (characterType == 7)

@@ -13,6 +13,7 @@
 #include "characterRecord.h"
 #include "gameHelpers.h"
 #include "stratModelsChange.h"
+#include "faction.h"
 
 namespace characterHelpers
 {
@@ -66,13 +67,13 @@ namespace characterHelpers
 		return gen->genType->type;
 	}
 	
-	void setCharacterType(character* character, int typeID, int subFaction, int factionDipNum)
+	void setCharacterType(character* character, int typeID, int subFaction, int factionID)
 	{
 		DWORD adrFunc = codes::offsets.setCharacterType;
 		genMod* retVal = nullptr;
 		__asm
 		{
-			push factionDipNum
+			push factionID
 			push subFaction
 			push typeID
 			mov eax, adrFunc
@@ -88,7 +89,7 @@ namespace characterHelpers
 		const auto faction = *gen->faction;
 		if (!faction)
 			return;
-		const int factionDipNum = faction->dipNum;
+		const int factionDipNum = faction->factionID;
 		setCharacterType(gen, typeID, subFac, factionDipNum);
 	}
 	
@@ -124,7 +125,7 @@ namespace characterHelpers
 		xy.y = y;
 
 
-		adrFunc = codes::offsets.spawnCreatedCharacterFunc;
+		adrFunc = codes::offsets.spawnCreatedObject;
 		xyS* xyP = &xy;
 
 		_asm
@@ -176,7 +177,7 @@ namespace characterHelpers
 		xy.y = y;
 
 
-		adrFunc = codes::offsets.spawnCreatedCharacterFunc;
+		adrFunc = codes::offsets.spawnCreatedObject;
 		xyS* xyP = &xy;
 
 		_asm
@@ -641,7 +642,7 @@ namespace characterHelpers
 		if (gen->armyLeaded && gen->armyLeaded->numOfUnits == 1)
 		{
 			const auto id = gen->bodyguards->eduEntry->Index;
-			newUnit = fastFuncts::createUnitIdx(id, gen->regionID, gen->armyLeaded->faction->dipNum, 0, 0, 0);
+			newUnit = fastFuncts::createUnitIdx(id, gen->regionID, gen->armyLeaded->faction->factionID, 0, 0, 0);
 			fastFuncts::addUnitToArmy(gen->armyLeaded, newUnit);
 		}
 		DWORD funcAddr = codes::offsets.sendCharacterOffMap;
@@ -718,9 +719,9 @@ namespace characterHelpers
 			{
 				unit* newUnit;
 				if (eduThings::getDataEopEdu(eduType))
-					 newUnit = fastFuncts::createUnitEDB(eduType, character->regionID, faction->dipNum, xp, armour, weapon);
+					 newUnit = fastFuncts::createUnitEDB(eduType, character->regionID, faction->factionID, xp, armour, weapon);
 				else
-					 newUnit = fastFuncts::createUnitIdx(eduType, character->regionID, faction->dipNum, xp, armour, weapon);
+					 newUnit = fastFuncts::createUnitIdx(eduType, character->regionID, faction->factionID, xp, armour, weapon);
 				newUnit->alias = alias;
 				newUnit->foodRequirement = supplies;
 				newUnit->SoldierCountStrat = soldierCount;
@@ -742,7 +743,7 @@ namespace characterHelpers
 					auto un = gen->armyLeaded->units[i];
 					if (un->generalInfo || un == gen->bodyguards)
 						continue;
-					if ((un->eduEntry->ownership & (1 << fac->dipNum)) == 0)
+					if ((un->eduEntry->ownership & (1 << fac->factionID)) == 0)
 						unitsInfo.emplace_back(un);
 				}
 			}

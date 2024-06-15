@@ -1,5 +1,6 @@
 #pragma once
 #include "fastFuncts.h"
+#include "faction.h"
 class SCoord
 {
 public:
@@ -33,9 +34,9 @@ public:
 			TurnNum = -1;
 			return;
 		}
-		FactionID = army->faction->dipNum;
+		FactionID = army->faction->factionID;
 
-		if (fastFuncts::GetCurrentFaction()->dipNum != FactionID)
+		if (fastFuncts::GetCurrentFaction()->factionID != FactionID)
 		{
 			throw std::exception("Cannot add retreat point for other player faction");
 		}

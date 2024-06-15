@@ -14,8 +14,6 @@ namespace smallFuncs
 	void saveGame(const char* path);
 
 	void createUniString(UNICODE_STRING**& newUniStringPointer, const char* nonUniStr);
-	void changeFactionName(factionStruct* fac, const char* newName);
-	UNICODE_STRING** getFactionName(factionStruct* fac);
 	void historicEvent(const char* name, const char* title, const char* description);
 	DWORD getScriptCommandByName(const char* cmdName);
 	void scriptCommand(const char* command, const char* args);

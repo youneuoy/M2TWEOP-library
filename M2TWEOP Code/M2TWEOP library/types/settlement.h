@@ -4,8 +4,7 @@
 #include "fastFunctsHelpers.h"
 #include "functionsOffsets.h"
 #include "realGameTypes.h"
-#include "smallFuncs.h"
-#include "stackStructHelpers.h"
+#include "lua/sol.hpp"
 
 enum class productionBias
 {

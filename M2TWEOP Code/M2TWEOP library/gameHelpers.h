@@ -3,6 +3,7 @@
 #include "realGameTypes.h"
 #include "settlement.h"
 #include "character.h"
+#include "characterRecord.h"
 
 #include "lua/sol.hpp"
 struct buildingInQueue;

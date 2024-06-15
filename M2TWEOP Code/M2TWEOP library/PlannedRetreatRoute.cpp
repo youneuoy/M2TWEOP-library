@@ -6,6 +6,7 @@
 #include "smallFuncs.h"
 #include "MapTextDrawer.h"
 #include "character.h"
+#include "faction.h"
 
 #include "PathMap.h"
 #include "imgui_notify.h"
@@ -139,7 +140,7 @@ namespace PlannedRetreatRoute
 		state.possibleCoords.clear();
 		routes.data.clear();
 	}
-	void OnFactionTurnStart(factionStruct* fac)
+	void onFactionTurnStart(factionStruct* fac)
 	{
 		if (fac == nullptr)
 		{
@@ -148,7 +149,7 @@ namespace PlannedRetreatRoute
 
 		routes.data.erase(std::remove_if(routes.data.begin(), routes.data.end(), [&](RetreatRoute& route)
 			{
-				if (route.FactionID == fac->dipNum)
+				if (route.FactionID == fac->factionID)
 				{
 					return true;
 				}

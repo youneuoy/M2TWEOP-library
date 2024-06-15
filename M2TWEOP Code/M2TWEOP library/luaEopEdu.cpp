@@ -609,7 +609,7 @@ void luaP::initEopEdu()
 	@tparam edbEntry edbEntry Entry to set.
 	@tparam string newName New name.
 	@tparam int level Building level.
-	@tparam int facnum Faction ID of the faction to set it for (dipNum).
+	@tparam int facnum Faction ID of the faction to set it for (factionID).
 	@usage
 	building = EDB.getBuildingByName("market")
 	EDB.setBuildingLocalizedName(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
@@ -622,7 +622,7 @@ void luaP::initEopEdu()
 	@tparam edbEntry edbEntry Entry to set.
 	@tparam string newName New description.
 	@tparam int level Building level.
-	@tparam int facnum Faction ID of the faction to set it for (dipNum).
+	@tparam int facnum Faction ID of the faction to set it for (factionID).
 	@usage
 	building = EDB.getBuildingByName("market")
 	EDB.setBuildingLocalizedDescr(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
@@ -635,7 +635,7 @@ void luaP::initEopEdu()
 	@tparam edbEntry edbEntry Entry to set.
 	@tparam string newName New short description.
 	@tparam int level Building level.
-	@tparam int facnum Faction ID of the faction to set it for (dipNum).
+	@tparam int facnum Faction ID of the faction to set it for (factionID).
 	@usage
 	building = EDB.getBuildingByName("market")
 	EDB.setBuildingLocalizedDescrShort(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);

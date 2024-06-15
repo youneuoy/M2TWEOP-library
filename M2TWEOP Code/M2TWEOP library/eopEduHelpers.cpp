@@ -158,23 +158,23 @@ void eopEduHelpers::setArmourUpgradeModel(int idx, int levelidx, const std::stri
 	eduEn->ArmorUpgradeModels = newModels;
 	eduEn->ArmorUpgradeModelsEnd = (int*)eduEn->ArmorUpgradeModels + (modelsNum * 2);
 	eduEn->ArmorUpgrade5 = (int*)eduEn->ArmorUpgradeModels + (modelsNum * 2);
-	char* modelName;
+	char** modelName;
 	switch (levelidx)
 	{
 	case 3:
-		modelName = reinterpret_cast<char*>(&eduEn->ArmorUpgradeModels->UpgradeThree);
+		modelName = &eduEn->ArmorUpgradeModels->UpgradeThree;
 		break;
 	case 2:
-		modelName = reinterpret_cast<char*>(&eduEn->ArmorUpgradeModels->UpgradeTwo);
+		modelName = &eduEn->ArmorUpgradeModels->UpgradeTwo;
 		break;
 	case 1:
-		modelName = reinterpret_cast<char*>(&eduEn->ArmorUpgradeModels->UpgradeOne);
+		modelName = &eduEn->ArmorUpgradeModels->UpgradeOne;
 		break;
 	default:
-		modelName = reinterpret_cast<char*>(&eduEn->ArmorUpgradeModels->BaseModel);
+		modelName = &eduEn->ArmorUpgradeModels->BaseModel;
 		break;
 	}
-	luaGetSetFuncs::setGameString(modelName, newModel.c_str());
+	fastFunctsHelpers::setCryptedString(modelName, newModel.c_str());
 }
 
 void eopEduHelpers::setEntryAttackAttribute(int idx, UnitEnums::attackAttr attribute, bool enable, int sec)

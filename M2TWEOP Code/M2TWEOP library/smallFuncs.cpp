@@ -296,39 +296,6 @@ namespace smallFuncs
 		return retStruct;
 	}
 
-
-	void changeFactionName(factionStruct* fac, const char* newName)
-	{
-
-		UNICODE_STRING** nameMem = new UNICODE_STRING*;
-		fac->localizedName = nameMem;
-
-		smallFuncs::createUniString(fac->localizedName, newName);
-	}
-
-	UNICODE_STRING** getFactionName(factionStruct* fac)
-	{
-
-		std::string facname = fac->factSmDescr->facName;
-		std::transform(facname.begin(), facname.end(), facname.begin(), ::toupper);
-		UNICODE_STRING** nameMem = new UNICODE_STRING*;
-		smallFuncs::createUniString(nameMem, facname.c_str());
-		UNICODE_STRING*** nameMem2 = &nameMem;
-		DWORD funcAddr = codes::offsets.getStringFromTable;
-		DWORD stringTable = dataOffsets::offsets.stringTable;
-		_asm
-		{
-			push nameMem2
-			mov ecx, stringTable
-			mov ecx, [ecx]
-			mov eax, funcAddr
-			call eax
-			mov nameMem2, eax
-		}
-
-		return *nameMem2;
-	}
-
 	void historicEvent(const char* name, const char* title, const char* description)
 	{
 		DWORD funcAddr = codes::offsets.historicEventFunc;

@@ -4,6 +4,7 @@
 #include "FastFuncts.h"
 #include "gameDataAllHelper.h"
 #include "plugData.h"
+#include "faction.h"
 #include "smallFuncs.h"
 #include "technicalHelpers.h"
 
@@ -239,7 +240,7 @@ namespace unitHelpers
 		auto groupLabels = getGroupLabels();
 		
 		stringWithHash* labelHash = new stringWithHash();
-		luaGetSetFuncs::setGameString(reinterpret_cast<char*>(labelHash), label);
+		fastFunctsHelpers::setCryptedString(&labelHash->name, label);
 		unitGroup** group = nullptr;
 		__asm
 		{
@@ -400,7 +401,7 @@ namespace unitHelpers
 			auto labels = getGroupLabels();
 			
 			stringWithHash* labelHash = new stringWithHash();
-			luaGetSetFuncs::setGameString(reinterpret_cast<char*>(labelHash), label);
+		    fastFunctsHelpers::setCryptedString(&labelHash->name, label);
 			_asm
 			{
 				push labelHash
@@ -435,7 +436,7 @@ namespace unitHelpers
 		auto labels = getGroupLabels();
 		
 		stringWithHash* labelHash = new stringWithHash();
-		luaGetSetFuncs::setGameString(reinterpret_cast<char*>(labelHash), label);
+		fastFunctsHelpers::setCryptedString(&labelHash->name, label);
 		unitGroup** groupPtr = &group;
 		__asm
 		{

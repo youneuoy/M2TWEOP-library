@@ -82,7 +82,7 @@ void codes::initCodes(int gameVer)
 
 
 		offsets.createCharacterFunc = 0x008b5d60;
-		offsets.spawnCreatedCharacterFunc = 0x004cd240;
+		offsets.spawnCreatedObject = 0x004cd240;
 		offsets.doSomeWithCharacterFunc = 0x004bafa0;
 
 		offsets.createArmyFunc = 0x004f40d0;
@@ -197,6 +197,13 @@ void codes::initCodes(int gameVer)
 		offsets.getRetrainingOptions = 0x005E6140;
 		offsets.resetBuildingsMem = 0x005FA320;
 		offsets.getConstructionOptions = 0x005E1730;
+		offsets.makeWatchTower = 0x008B8DC0;
+		offsets.addToWatchtowerList = 0x004DD390;
+		offsets.updateBlockades = 0x004DCD40;
+		offsets.createCadDisembark = 0x5B01F0;
+		offsets.setCadClass = 0xAAB050;
+		offsets.canArmySplit = 0x4D5C30;
+		offsets.splitArmy = 0x4F9740;
 	}
 	else if (gameVer == 2) //steam
 	{
@@ -279,7 +286,7 @@ void codes::initCodes(int gameVer)
 
 
 		offsets.createCharacterFunc = 0x008b6750;
-		offsets.spawnCreatedCharacterFunc = 0x004cd800;
+		offsets.spawnCreatedObject = 0x004cd800;
 		offsets.doSomeWithCharacterFunc = 0x004bb530;
 
 		offsets.createArmyFunc = 0x004f46a0;
@@ -392,5 +399,12 @@ void codes::initCodes(int gameVer)
 		offsets.getRetrainingOptions = 0x005E65A0;
 		offsets.resetBuildingsMem = 0x5FA710;
 		offsets.getConstructionOptions = 0x005E1C00;
+		offsets.makeWatchTower = 0x008B97B0;
+		offsets.addToWatchtowerList = 0x004DD940;
+		offsets.updateBlockades = 0x004DD2F0;
+		offsets.createCadDisembark = 0x005B06D0;
+		offsets.setCadClass = 0xAAC080;
+		offsets.canArmySplit = 0x4D61F0;
+		offsets.splitArmy = 0x4F9C90;
 	}
 }

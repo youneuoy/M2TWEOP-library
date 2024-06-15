@@ -13,6 +13,7 @@
 #include "smallFuncs.h"
 #include "imgui/imgui.h"
 #include "character.h"
+#include "faction.h"
 #include <sstream>
 #include <thread>
 #include <set>
@@ -100,7 +101,7 @@ namespace battleCreator
 		battleName += to_string(fastFuncts::getPassedTurnsNum());
 		battleName += "_";
 		factionStruct* currFac = smallFuncs::getGameDataAll()->campaignData->currentFactionTurn;
-		battleName += currFac->factSmDescr->facName;
+		battleName += currFac->factionRecord->facName;
 
 		return battleName;
 	}
@@ -120,7 +121,7 @@ namespace battleCreator
 			{
 				stackStruct* army = side.armies[j].stack;
 
-				retSet.emplace(army->faction->factSmDescr->facName);
+				retSet.emplace(army->faction->factionRecord->facName);
 			}
 		}
 
@@ -347,11 +348,11 @@ namespace battleCreator
 			for (int j = 0; j < side.armiesNum; j++)
 			{
 				stackStruct* army = side.armies[j].stack;
-				if (facsNames.count(army->faction->factSmDescr->facName))
+				if (facsNames.count(army->faction->factionRecord->facName))
 				{
-					facsNames.erase(army->faction->factSmDescr->facName);
+					facsNames.erase(army->faction->factionRecord->facName);
 
-					fileStrings.push_back(string("faction	").append(army->faction->factSmDescr->facName));
+					fileStrings.push_back(string("faction	").append(army->faction->factionRecord->facName));
 				}
 
 				if (army->gen != nullptr && army->gen->xCoord == battleData->xCoord
@@ -420,7 +421,7 @@ namespace battleCreator
 		fileStrings.push_back("weather	clear\n");
 
 		tempS = "home_faction	";
-		tempS.append(battleData->sides[0].armies[0].stack->faction->factSmDescr->facName);
+		tempS.append(battleData->sides[0].armies[0].stack->faction->factionRecord->facName);
 		fileStrings.push_back(tempS);
 
 
@@ -438,7 +439,7 @@ namespace battleCreator
 			{
 				stackStruct* army = side.armies[j].stack;
 
-				sideFactions.emplace(army->faction->factSmDescr->facName);
+				sideFactions.emplace(army->faction->factionRecord->facName);
 			}
 			for (const string& fac : sideFactions)
 			{
@@ -465,7 +466,7 @@ namespace battleCreator
 			for (int j = 0; j < side.armiesNum; j++)
 			{
 				stackStruct* army = side.armies[j].stack;
-				char* armyFacName = army->faction->factSmDescr->facName;
+				char* armyFacName = army->faction->factionRecord->facName;
 
 				fileStrings.push_back("");
 				tempS = "army	";

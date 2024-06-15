@@ -19,24 +19,14 @@ namespace settlementConversionLvlSetter
 	void setConversionLvlFromCastle(int castleLvl, int convertToLvl)
 	{
 		if (castleLvl < 0 || castleLvl > 5 || convertToLvl < 0 || convertToLvl > 6)
-		{
 			return;
-		}
-		else
-		{
-			lvlFromCastle[castleLvl] = convertToLvl;
-		}
+		lvlFromCastle[castleLvl] = convertToLvl;
 	}
 
 	void setConversionLvlFromCity(int cityLvl, int convertToLvl)
 	{
 		if (cityLvl < 0 || cityLvl > 5 || convertToLvl < 0 || convertToLvl > 6)
-		{
 			return;
-		}
-		else
-		{
-			lvlFromCity[cityLvl] = convertToLvl;
-		}
+		lvlFromCity[cityLvl] = convertToLvl;
 	}
 }

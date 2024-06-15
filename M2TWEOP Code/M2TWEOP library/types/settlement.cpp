@@ -11,6 +11,7 @@
 #include "smallFuncs.h"
 #include "technicalHelpers.h"
 #include "unitActions.h"
+#include "faction.h"
 
 namespace settlementHelpers
 {
@@ -99,7 +100,7 @@ namespace settlementHelpers
 		}
 		for (int i = 0; i < newOwner->stackNum; i++)
 		{
-			auto stack = newOwner->stacks[i];
+			auto stack = newOwner->armies[i];
 			if (!stack->gen)
 				continue;
 			if (stack->gen->xCoord == sett->xCoord && stack->gen->yCoord == sett->yCoord)
@@ -139,7 +140,7 @@ namespace settlementHelpers
 					character->characterRecord->portrait_custom,
 					sett->xCoord,
 					sett->yCoord,
-					(character->characterRecord->age >> 3) & 0x7F,
+					character->characterRecord->getAge(),
 					false,
 					character->characterRecord->originalFaction,unitId,xp,weapon,armour))
 				{
@@ -206,7 +207,7 @@ namespace settlementHelpers
 			if (sett->buildings[i]->edbEntry->buildingID == coreEntry->buildingID)
 			{
 				existing = sett->buildings[i];
-				int factionId = sett->faction->dipNum;
+				int factionId = sett->faction->factionID;
 				int newLevel = existing->level + 1;
 				_asm
 				{
@@ -239,9 +240,7 @@ namespace settlementHelpers
 	{
 		const regionStruct* currRegion = &smallFuncs::getStratMap()->regions[sett->regionID];
 		if (currRegion == nullptr)
-		{
 			return 0.0f;
-		}
 		return currRegion->religionsARR[index];
 	}
 	
@@ -607,6 +606,8 @@ namespace settlementHelpers
 		@tfield setRecruitmentValue setRecruitmentValue
 		@tfield getConstructionValue getConstructionValue
 		@tfield getRecruitmentValue getRecruitmentValue
+		@tfield setExtraBias setExtraBias
+		@tfield getExtraBias getExtraBias
 
 		@table aiProductionController
 		*/
@@ -742,11 +743,12 @@ namespace settlementHelpers
 		@tfield aiProductionController aiProductionController
 		@tfield int unitInQueueCount
 		@tfield int turmoil
-		@tfield int turmoil
 		@tfield int governorDuration
 		@tfield int isProvokedRebellion
 		@tfield int publicHealth
 		@tfield int populationSize
+		@tfield int gatesAreOpened
+		@tfield table savedData
 		@tfield getReligion getReligion
 		@tfield setReligion setReligion
 		@tfield getGuildStanding getGuildStanding
@@ -770,6 +772,7 @@ namespace settlementHelpers
 		@tfield upgrade upgrade
 		@tfield getConstructionOptions getConstructionOptions
 		@tfield getRecruitmentOptions getRecruitmentOptions
+		@tfield getUnitInQueue getUnitInQueue
 
 		@table settlementStruct
 		*/
@@ -801,7 +804,7 @@ namespace settlementHelpers
 				sol::resolve<void(settlementStruct*, factionStruct*, bool)>(setSettlementOwner)
 			));
 		types.settlementStruct.set("creatorFactionID", &settlementStruct::fac_creatorModNum);
-		types.settlementStruct.set("data", sol::property(
+		types.settlementStruct.set("savedData", sol::property(
 			&getSettlementData, &setSettlementData
 			));
 		types.settlementStruct.set("regionID", &settlementStruct::regionID);
@@ -1086,7 +1089,7 @@ namespace settlementHelpers
 		*/
 		types.recruitmentOptions.set_function("getRecruitmentOption", &getRecruitOptionFromDb);
 
-		///unit in queue
+		///Unit in queue
 		//@section Unit in queue
 
 		/***

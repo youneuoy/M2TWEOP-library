@@ -946,36 +946,6 @@ public:
 
 }; //Size: 0x0020
 
-struct capturedCharacter
-{
-	struct characterRecord* namedChar;
-	int32_t capturedValue;
-};
-
-struct capturedUnit
-{
-	struct unit* unit;
-	int32_t capturedSoldiers;
-	int32_t capturedValue;
-};
-
-struct capturedFactionInfo
-{
-	int32_t targetFactionID;
-	int32_t factionID;
-	struct characterRecord* character;
-	struct characterRecord* targetCharacter;
-	int32_t bitMap;
-	struct capturedCharacter* capturedCharacters;
-	uint32_t capturedCharactersEnd;
-	uint32_t capturedCharactersEnd2;
-	char* logString;
-	struct capturedUnit* capturedUnits;
-	uint32_t capturedUnitsEnd;
-	int32_t capturedUnitsEnd2;
-	int32_t ransomValue;
-};
-
 struct floatsSeaConnect
 {
 public:
@@ -1450,22 +1420,6 @@ struct siegeS {
 	char pad_x[3];
 };
 
-struct holdRegionsWinCondition
-{
-public:
-	char pad_0000[4]; //0x0000
-	uint32_t stratTableStringIndex; //0x0004
-	struct stringWithHash* regionsToHold; //0x0008
-	int32_t regionsToHoldSize; //0x000C
-	int32_t regionsToHoldCount; //0x0010
-	uint32_t factionsToOutliveBitfield; //0x0014
-	int32_t numberOfRegions; //0x0018
-	char pad_001C[4]; //0x001C
-	int32_t* holdRegionLengths; //0x0020
-	int32_t holdRegionLengthsSize; //0x0024
-	int32_t holdRegionLengthsCount; //0x0028
-	char pad_002C[12]; //0x002C
-}; //Size: 0x0080
 
 struct perimeterBuildings
 {
@@ -1651,17 +1605,6 @@ struct battleSettlement
 	int32_t field_761C;
 };
 
-struct factionRanking
-{
-public:
-	float totalRanking; //0x0000
-	float militaryRanking; //0x0004
-	float productionRanking; //0x0008
-	float territoryRanking; //0x000C
-	float financialRanking; //0x0010
-	float populationRanking; //0x0014
-}; //Size: 0x0018
-
 struct projectile
 {
 	char pad_0000[4];
@@ -1734,78 +1677,6 @@ struct projectile
 	char pad_01B0[48];
 	float EffectOffset;
 	char pad_01E4[588];
-};
-
-struct factionStratMapDescrS { /* see descr_sm_factions.txt */
-	int id;
-	char* facName;
-	DWORD facNameHash;
-	int shadowedByID;
-	char* shadowedBy;
-	char pad_0014[4];
-	int32_t shadowingID;
-	wchar_t* shadowing;
-	char pad_0020[4];
-	int32_t spawnsOnRevoltID;
-	char* spawnsOnRevolt;
-	char pad_002C[4];
-	int32_t otherId;
-	char pad_0034[12];
-	struct culture* culture;
-	int religionID;
-	struct model_Rigid* symbol;
-	char* symbolPath;
-	DWORD symbolPathHash;
-	struct model_Rigid* rebel_symbol;
-	char* rebel_symbolPath;
-	DWORD rebel_symbolPathHash;
-	undefined field_0x60[8];
-	char* loading_logo;
-	DWORD loading_logoHash;
-	uchar primary_colour_blue;
-	uchar primary_colour_green;
-	uchar primary_colour_red;
-	uchar secondary_colour_blue;
-	uchar secondary_colour_green;
-	uchar secondary_colour_red;
-	undefined field_0x76[2];
-	int triumph_value;
-	int standard_index;
-	int logo_index;
-	int small_logo_index;
-	int8_t roman;
-	int8_t barbarian;
-	int8_t eastern;
-	int8_t slave;
-	struct stringWithHash* hordeUnitNames;
-	int32_t hordeUnitNamesSize;
-	int32_t hordeUnitNamesCount;
-	int32_t hordeMinUnits;
-	int32_t hordeMaxUnits; //0x009C
-	int32_t reductionPerHorde;
-	int32_t hordeUnitPerSettlementPop;
-	int32_t hordeMinNamedCharacters;
-	int32_t hordeMaxPercentArmyStack;
-	void* N00008DBD;
-	int32_t N00008DBE;
-	int32_t N00008DBF;
-	uint8_t customBattleAvailability; //0x00BC
-	char pad_00BD[3]; //0x00BD
-	uint32_t periodsUnavailableInCustomBattle; //0x00C0
-	uint8_t N00008DC2; //0x00C4
-	uint8_t canSap; //0x00C5
-	char pad_00C6[2]; //0x00C6
-	int32_t prefersNavalInvasions; //0x00C8
-	uint8_t canHavePrincess; //0x00CC
-	char pad_00CD[3]; //0x00CD
-	char* specialfactionType; //0x00D0
-	char pad_00D4[4]; //0x00D4
-	uint8_t hasFamilyTree; //0x00D8
-	uint8_t teutonic; //0x00D9
-	uint8_t disbandToPools; //0x00DA
-	uint8_t canBuildSiegeTowers; //0x00DB
-	uint8_t canTransmitPlague; //0x00DC
-	char pad_00DD[3]; //0x00DD
 };
 
 struct watchTowerModel {
@@ -2275,7 +2146,7 @@ public:
 struct trackedCharacter
 {
 public:
-	struct N0001F08D* N0001F061; //0x0000
+	void* vtbl; //0x0000
 	struct character* character; //0x0004
 }; //Size: 0x0008
 
@@ -4126,87 +3997,10 @@ struct CompareCounter { /* I_CompareCounter script command */
 	int checkedValue; /* value for check */
 };
 
-//ancillary of character
-struct ancillary { /* structure of ancillary */
-	UINT32 index;
-	undefined field_0x4;
-	undefined field_0x5;
-	undefined field_0x6;
-	undefined field_0x7;
-	undefined field_0x8;
-	undefined field_0x9;
-	undefined field_0xa;
-	undefined field_0xb;
-	char* ancName;
-	undefined field_0x10;
-	undefined field_0x11;
-	undefined field_0x12;
-	undefined field_0x13;
-	char* patchToAncImage;
-	char pad_0018[4]; //0x0018
-	int8_t isUnique; //0x001C
-	char pad_001D[23]; //0x001D
-	uint32_t excludedCultures; //0x0034
-};
-
-struct trait { /* traits of the character */
-	struct traitEntry* traitEntry;
-	struct traitLevel* level; /* level of trait */
-	int traitPoints;
-	int someInt;
-	int somePointer;
-};
-
-struct traitEffect
-{
-	int32_t effectID;
-	int32_t value;
-};
-
 struct loadGameHandler
 {
 	void* vtable;
 	struct UNICODE_STRING*** saveGameName;
-};
-
-struct traitLevel
-{
-	int32_t level;
-	struct UNICODE_STRING*** localizedName;
-	struct UNICODE_STRING*** localizedDescription;
-	struct UNICODE_STRING*** localizedEpithetDescription;
-	struct UNICODE_STRING*** localizedGainDescription;
-	struct UNICODE_STRING*** localizedLoseDescription;
-	int32_t threshold;
-	struct traitEffect* effects;
-	int32_t effectsSize;
-	int32_t effectsCount;
-	struct UNICODE_STRING*** localizedEffectsDescription;
-};
-
-struct traitEntry { /* char* at 0x4 */
-	int32_t index;
-	char* name;
-	int32_t nameHash;
-	struct traitLevel levels[10];
-	int32_t levelCount;
-	struct traitEntry* antiTraits[20];
-	int32_t antiTraitCount;
-	int32_t characterTypeNum;
-	uint32_t characterType;
-	int32_t noGoingBackLevel;
-	int32_t excludeCulturesNum;
-	uint32_t excludeCulturesStart;
-	int32_t hidden;
-	struct stringWithHash antiTraitNames[20];
-	int32_t antiTraitNameCount;
-};
-
-struct traitContainer {
-	struct trait* trait;
-	struct traitContainer* prev;
-	struct traitContainer* next;
-	int hasEpithet;
 };
 
 struct trackedPointerUnit {
@@ -5080,292 +4874,6 @@ struct coords {
 	int xCoord;
 	int yCoord;
 };
-
-struct factionTileStruct {
-	int8_t* tilesVisiblity;
-	int tilesXBound;
-	int tilesYBound;
-	undefined field3_0xc[28];
-	void* revealedTiles;
-	int revealedTilesContainerAllocatedSize;
-	int revealedTilesNumber;
-	undefined field7_0x34[24];
-};
-
-struct factionEconomy
-{
-public:
-	int32_t farmingIncome; //0x0000
-	int32_t taxesIncome; //0x0004
-	int32_t miningIncome; //0x0008
-	int32_t tradeIncome; //0x000C
-	int32_t merchantIncome; //0x0010
-	int32_t constructionIncome; //0x0014
-	int32_t otherIncome1; //0x0018
-	int32_t otherIncome2; //0x001C
-	int32_t diplomacyIncome; //0x0020
-	int32_t tributesIncome; //0x0024
-	int32_t adminIncome; //0x0028
-	int32_t kingsPurseIncome; //0x002C
-	int32_t wagesExpense; //0x0030
-	int32_t upkeepExpense; //0x0034
-	int32_t constructionExpenseBuildings; //0x0038
-	int32_t constructionExpenseField; //0x003C
-	int32_t recruitmentExpenseBuildings; //0x0040
-	int32_t recruitmentExpenseMercs; //0x0044
-	int32_t corruptionExpense; //0x0048
-	int32_t diplomacyExpense; //0x004C
-	int32_t tributesExpense; //0x0050
-	int32_t otherExpense1; //0x0054
-	int32_t otherExpense2; //0x0058
-	int32_t devastationExpense; //0x005C
-}; //Size: 0x0060
-
-struct battleFactionCounter
-{
-public:
-	int32_t battlesWon; //0x0000
-	int32_t battlesLost; //0x0004
-	int32_t wonLostRatio; //0x0008
-}; //Size: 0x000C
-
-struct factionDataStrategy
-{
-	int32_t intx0;
-	int32_t intx4;
-	int intx8;
-	int intxC;
-	int somethingSubterFugeTasks;
-	float someOtherStrengthModifier;
-	float strengthLimitModifier;
-	int8_t atWar;
-	int8_t notWantCeaseFire;
-	int8_t canAttack;
-	int8_t pad;
-};
-
-struct aiRegionData
-{
-	void* vftable /*VFT*/;
-	int fieldx4;
-	bool boolx8;
-	char pad1[3];
-	int factionID;
-	int regionID;
-	bool boolx14;
-	bool boolx15;
-	char pad2[2];
-	int regionValue;
-	int fieldx1C;
-	int hasNeighbouringEnemies;
-	int hasNeighbouringOwnArmies;
-	int fieldx28;
-	int ownArmiesTotalStrength;
-	int ownArmiesTotalCount;
-	int enemyArmiesTotalStrength;
-	int enemyArmiesTotalCount;
-	int neutralArmiesTotalStrength;
-	int neutralArmiesTotalCount;
-	int neighbourRegionsOwnArmyStrength;
-	int neighbourRegionsOwnArmyNum;
-	int neighbourRegionsEnemyArmyStrength;
-	int neighbourRegionsEnemyArmyNum;
-	int neighbourRegionsNeutralArmyStrength;
-	int neighbourRegionsNeutralArmyNum;
-	int regionRisk;
-	int fieldx60;
-};
-
-struct someStructInGS
-{
-	struct aiFaction* aiFaction;
-	struct factionStruct* faction;
-	void* arrayx8_objSize20;
-	int32_t arrayx8Size;
-	int32_t arrayx8Num;
-	void* arrayx14_objSize20;
-	int32_t arrayx14Size;
-	int32_t arrayx14Num;
-	void* arrayx20_objSize20;
-	int32_t arrayx20Size;
-	int32_t arrayx20Num;
-	void* aiBrigandControllers;
-	int32_t aiBrigandControllersSize;
-	int32_t aiBrigandControllersNum;
-	int32_t fieldx38;
-	void* aiMilitaryControllerWorldWide;
-};
-
-struct aiPersonalityValues
-{
-	struct aiFaction* aiFaction;
-	struct aiProductionController** aiProductionControllers;
-	int32_t aiProductionControllersSize;
-	int32_t aiProductionControllersNum;
-	int32_t AIPersonalityType;
-	int32_t AIPersonalityName;
-	int32_t buildingValues[57];
-	int32_t unkBiasCultural1;
-	int32_t unkBiasCultural2;
-	int32_t unkBiasCultural3;
-	int32_t unkBiasCultural4;
-	int32_t spyBiasLarge;
-	int32_t assassinBiasLarge;
-	int32_t diplomatBiasLarge;
-	int32_t admiralBiasLarge;
-	int32_t priestBiasLarge;
-	int32_t merchantBiasLarge;
-	int32_t recruitmentValuesLarge[11];
-	int32_t populationBias;
-	int32_t spyBias;
-	int32_t assassinBias;
-	int32_t diplomatBias;
-	int32_t admiralBias;
-	int32_t priestBias;
-	int32_t merchantBias;
-	int32_t recruitmentValues[11];
-	int32_t balancedPolicyNum;
-	int32_t financialPolicyNum;
-	int32_t militaryPolicyNum;
-	int32_t growthPolicyNum;
-	int32_t culturalPolicyNum;
-	struct settlementPolicies* settlementPolicies;
-	int32_t settlementPoliciesSize;
-	int32_t settlementPoliciesCount;
-	int8_t autoManagedRecruitment;
-	int8_t autoManagedConstruction;
-	int8_t isAiControlled;
-	char pad_01BB[9];
-};
-
-struct aiGlobalStrategyDirector
-{
-	void* _vftable /*VFT*/;
-	struct aiFaction* aiFaction;
-	struct factionStruct* faction;
-	struct factionDataStrategy someFactionData[31];
-	struct aiRegionData* ownRegions;
-	int32_t ownRegionsSize;
-	int32_t ownRegionsCount;
-	struct aiRegionData* allNeighbourRegions;
-	int32_t allNeighbourRegionsSize;
-	int32_t allNeighbourRegionsCount;
-	struct aiRegionData* targetRegions;
-	int32_t targetRegionsSize;
-	int32_t targetRegionsCount;
-	struct aiRegionData targetRegionCrusade;
-	void* arrayx474_objsize380_maybeNavalTargets;
-	int32_t arrayx474Size;
-	int32_t arrayx474Num;
-	void* arrayx480_objsize180;
-	int32_t arrayx480Size;
-	int32_t freeShipsMaybe;
-	void* regionControllers;
-	int32_t arrayx48CSize;
-	int32_t regionControllersNum;
-	struct someStructInGS someStructInGS;
-	void* aiNavalControllers;
-	int32_t aiNavalControllersSize;
-	int32_t aiNavalControllersNum;
-	void* arrayx4F8_objsize20;
-	int32_t arrayx4F8Size;
-	int32_t arrayx4F8Num;
-	int fieldx504_initMinusOne;
-	int fieldx508;
-	int fieldx50C_init31;
-	int fieldx510_init31;
-	void* crusadeController;
-};
-
-
-
-struct militaryValuesLTGD
-{
-	int32_t totalPopulation; //0x0000
-	int32_t tileCount; //0x0004
-	int32_t averagePopulation; //0x0008
-	int32_t productionValue; //0x000C
-	int32_t nonAlliedBorderLength; //0x0010
-	int32_t enemyBorderLength; //0x0014
-	int32_t fleetCount; //0x0018
-	int32_t navalPowerPerFleet; //0x001C
-	int32_t navalStrength; //0x0020
-	int32_t armyCount; //0x0024
-	int32_t strengthPerArmy; //0x0028
-	int32_t totalStrength; //0x002C
-	int32_t freeStrength; //0x0030
-	int32_t neighbourEnemyNum; //0x0034
-	int32_t enemyStrength; //0x0038
-	int32_t protectorateOf; //0x003C
-};
-
-struct strategyValuesLTGD
-{
-	int32_t borderTiles; //0x0000
-	int32_t frontLineBalance; //0x0004
-	int8_t hasAllianceAgainst; //0x0008
-	int8_t isStrongestNeighbour; //0x0009
-	int8_t isWeakestNeighbour; //0x000A
-	char pad_000B[1]; //0x000B
-
-};
-
-struct dataLTGD
-{
-public:
-	struct factionStruct* currentFaction; //0x0000
-	char pad_0004[8]; //0x0004
-	uint32_t N00024EDA; //0x000C
-	char pad_0010[4]; //0x0010
-	struct militaryValuesLTGD militaryValuesLTGD[31]; //0x0014
-	struct strategyValuesLTGD strategyValuesLTGD[31][31]; //0x07D4
-};
-
-
-struct decisionValuesLTGD
-{
-public:
-	int32_t defendType; //0x0000
-	int32_t defendPriority; //0x0004
-	int32_t invasionType; //0x0008
-	int32_t invadePriority; //0x000C
-	int8_t atWar; //0x0010
-	int8_t wantPeace; //0x0011
-	int8_t wantAlly; //0x0012
-	int8_t wantBeProtect; //0x0013
-	int8_t wantOfferProtect; //0x0014
-	int8_t forceInvade;
-	int8_t pad16;
-	int8_t pad17;
-	int32_t allianceAgainst; //0x0018
-	int32_t ptsDesire; //0x001C
-	int32_t ptsAlliance; //0x0020
-	int32_t pointsInvasion; //0x0024
-	int32_t pointsDefense; //0x0028
-	int8_t canForceInvade; //0x002C
-	char pad_002D[3]; //0x002D
-}; //Size: 0x0030
-
-struct aiLongTermGoalDirector
-{
-public:
-	char pad_0000[4]; //0x0000
-	struct aiFaction* aiFaction; //0x0004
-	struct factionStruct* faction; //0x0008
-	uint32_t trustedAllyEnemies; //0x000C --bitfield
-	int32_t freeStrengthEnemy; //0x0010
-	int32_t freeStrengthEnemyBalance; //0x0014
-	int8_t consideringNavalInvasion; //0x0018
-	char pad_0019[3]; //0x0019
-	int32_t navalTargetRegionID;
-	int32_t navalTargetRegionPriority;
-	int32_t x24;
-	struct decisionValuesLTGD longTermGoalValues[31]; //0x0028
-	int32_t N0002EFB5; //0x05F8
-	int32_t militaryBalanceLevel; //0x05FC
-	char pad_0600[4]; //0x0600
-}; //Size: 0x0604
-
 struct aiResourcePrivate
 {
 	void *vftable /*VFT*/;
@@ -5390,142 +4898,7 @@ struct aiResourcePrivate
 	int integer3C;
 };
 
-struct aiFaction
-{
-public:
-	char pad_0000[4]; //0x0000
-	struct factionStruct* faction; //0x0004
-	int32_t factionID; //0x0008
-	char pad_000C[4]; //0x000C
-	int8_t N00001E8C; //0x0010
-	int8_t N0002F25A; //0x0011
-	char pad_0012[14]; //0x0012
-	struct aiLongTermGoalDirector* aiLongTermGoalDirector; //0x0020
-	struct aiDiplomacyManager* aiDiplomacyManager; //0x0024
-	struct aiActionRequestController* aiActionRequestController; //0x0028
-	struct aiResourceManager* aiResourceManager; //0x002C
-	struct AiFinanceManager* AiFinanceManager; //0x0030
-	struct aiPersonalityValues* aiProductionControllers; //0x0034
-	struct aiGlobalStrategyDirector* aiGlobalStrategyDirector; //0x0038
-	struct aiSubterFugeController* aiSubterFugeController; //0x003C
-	struct aiNamedCharacterController* aiNamedCharacterController; //0x0040
-	struct aiPriestController* aiPriestController; //0x0044
-	struct aiMerchantController* aiMerchantController; //0x0048
-}; //Size: 0x0058
 
-//faction
-struct factionStruct {
-	undefined field_0x0[180];
-	int dipNum; /* number of faction in diplomatic array */
-	int cultureID;
-	char* ai_label; /* ai_label of faction */
-	int32_t AILabelHash; //0x00C0
-	struct settlementStruct* capital; /* capital of the faction */
-	struct characterRecord* leader; /* faction leader */
-	struct characterRecord* heir; /* faction heir */
-	struct factionStratMapDescrS* factSmDescr;
-	int isPlayerControlled; /* is faction a controlled by player */
-	struct aiFaction* aiFaction; //0x00D8
-	int32_t AIPersonalityType; //0x00DC
-	int32_t AIPersonalityName; //0x00E0
-	char pad_00E4[12]; //0x00E4
-	struct holdRegionsWinCondition* WinConditions; //0x00F0
-	int32_t regionsOwnedStart; //0x00F4
-	struct characterRecord** characterRecords; /* all characters, died, alive, etc */
-	int32_t characterRecordsSize; //0x00FC
-	int characterRecordNum; /* all characters, died, alive, etc */
-	struct character** characters; /* characters on stratmap */
-	int32_t charactersSize; //0x0108
-	int numOfCharacters; /* characters on stratmap */
-	struct stackStruct** stacks;
-	int32_t armiesSize; //0x0114
-	int stackNum;
-	int* regionsID;
-	int32_t regionsSize; //0x0120
-	int regionsNum;
-	struct settlementStruct** settlements;
-	int32_t settlementsSize; //0x012C
-	int settlementsNum;
-	struct fortStruct** forts;
-	int32_t fortsSize; //0x0138
-	int fortsNum;
-	struct watchTowerStruct** watchTowers; /* watchtowers */
-	int32_t watchtowersSize; //0x0144
-	int watchtowersNum;
-	struct portBuildingStruct** portBuildings; /* port buildings */
-	int32_t portBuildingsSize; //0x0150
-	int portBuildingsNum;
-	uint32_t neighBourFactionsBitmap; //0x0158
-	int* neighBourRegions; //0x015C
-	int32_t neighBourRegionsSize; //0x0160
-	int32_t neighBourRegionsNum; //0x0164
-	char pad_0168[44]; //0x0168
-	int32_t deadStatus; //0x0194 3 means until resurrected 4 means until emerged
-	int8_t reEmergent; //0x0198
-	int8_t isUndiscovered; //0x0199
-	char pad_019A[2]; //0x019A
-	factionTileStruct* tilesFac;
-	struct mission** missions; //0x01A0
-	int32_t missionsSize; //0x01A4
-	int32_t missionCount; //0x01A8
-	char pad_01AC[48]; //0x01AC
-	struct factionRanking* factionRankings; //0x01DC
-	int32_t factionRankingsSize; //0x01E0
-	int32_t factionRankingsCount; //0x01E4
-	char pad_01E8[12]; //0x01E8
-	int32_t triumphValue; //0x01F4
-	int8_t someBool;
-	int8_t autoManageRecruitment;
-	int8_t autoManageBuildings;
-	int8_t autoManageTaxes;
-	float someEconomyFloat;
-	int8_t freezeFactionAI; //0x0200
-	char pad_0201[3]; //0x0201
-	struct capabilityStruct factionCapabilities;
-	int8_t hasSettlementsProcessed; //0x0A30
-	char pad_0A31;
-	char pad_0A32;
-	char pad_0A33;
-	int32_t treasuryTurnStart;
-	int8_t isHorde;
-	char pad_0A39;
-	char pad_0A3A;
-	char pad_0A3B;
-	factionHordeInfo *factionHordeInfo;
-	UINT32 religion; /* number of religion */
-	undefined field_0xa44[16];
-	int8_t isFactionExcommunicated; //0x0A54
-	char pad_0A55[3]; //0x0A55
-	int32_t glory; //0x0A34
-	char pad_0A5C[36]; //0x0A5C
-	float* resourceModifiers;
-	DWORD resourceModifiersEnd;
-	DWORD resourceModifiersEnd2;
-	char pad_0A8C[12]; //0x0AD4
-	UNICODE_STRING** someString;
-	UNICODE_STRING** localizedName;
-	int32_t factionBannerIndex; //0x0AA0
-	int32_t agentNameFactionId[12]; //0x0AA4
-	undefined field_0xad4[24];
-	int money; /* money of the faction */
-	int KingsPurse; /* money of the faction */
-	int32_t incomeDoubled; //0x0AF4
-	struct factionEconomy factionEconomy[10]; //0x0AF8
-	int32_t nextCounterEconomy; //0x0EB8
-	int32_t counterEconomy; //0x0EBC
-	int32_t maxTurnsTillReset; //0x0EC0
-	int32_t upkeepModifier; //0x0EC4
-	factionStruct* thisBeforeBattlesAndStuff; //0x0EC8
-	char pad_0ECC[8]; //0x0ECC
-	struct battleFactionCounter(*battlesWonVsFaction)[31]; //0x0ED4
-	int32_t factionCountStart; //0x0ED8
-	int32_t otherFactionCount; //0x0EDC
-	int32_t battlesWon; //0x0EE0
-	int32_t battlesLost; //0x0EE4
-	int32_t settlementsCaptured; //0x0EE8
-	int32_t settlementsLost; //0x0EEC
-	char pad_0EF0[24]; //0x0EF0
-};
 
 struct animSetModelDB
 {
@@ -5905,49 +5278,6 @@ struct soldierData { /* one soldier in unit */
 #pragma pack(pop)
 
 
-struct ltgdFactionValues
-{
-public:
-	int32_t totalPopulation; //0x0000
-	int32_t tileCount; //0x0004
-	int32_t averagePopulation; //0x0008
-	int32_t productionValue; //0x000C
-	int32_t nonAlliedBorderLength; //0x0010
-	int32_t enemyBorderLength; //0x0014
-	int32_t fleetCount; //0x0018
-	int32_t navalPowerPerFleet; //0x001C
-	int32_t navalStrength; //0x0020
-	int32_t armyCount; //0x0024
-	int32_t strengthPerArmy; //0x0028
-	int32_t totalStrength; //0x002C
-	int32_t freeStrength; //0x0030
-	int32_t neighbourEnemyNum; //0x0034
-	int32_t enemyStrength; //0x0038
-	int32_t protectorateOf; //0x003C
-}; //Size: 0x0040
-
-struct interFactionLTGD
-{
-public:
-	int32_t borderTiles; //0x0000
-	int32_t frontLineBalance; //0x0004
-	int8_t hasAllianceAgainst; //0x0008
-	int8_t isStrongestNeighbour; //0x0009
-	int8_t isWeakestNeighbour; //0x000A
-	char pad_000B[1]; //0x000B
-}; //Size: 0x000C
-
-struct ltgdGlobals
-{
-public:
-	struct factionStruct* currentFaction; //0x0000
-	char pad_0004[8]; //0x0004
-	uint32_t N00024EDA; //0x000C
-	char pad_0010[4]; //0x0010
-	struct ltgdFactionValues ltgdFactionValues[31]; //0x0014
-	struct interFactionLTGD interFactionLTGD[31][31]; //0x07D4
-};
-
 struct traidingResource {
 	char* name;
 	int nameCrypt;
@@ -6004,7 +5334,7 @@ public:
 
 
 struct descr_sm_factions_list {
-	struct factionStratMapDescrS* facDescrs;
+	struct factionRecord* facDescrs;
 	int capacity;
 	int size;
 };

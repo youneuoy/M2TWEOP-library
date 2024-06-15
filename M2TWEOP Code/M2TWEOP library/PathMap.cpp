@@ -8,6 +8,7 @@
 #include <map>
 #include "headersMEM.h"
 #include "character.h"
+#include "faction.h"
 #include "characterRecord.h"
 
 #include <mutex>
@@ -156,7 +157,7 @@ namespace PathFinder
 				case StartMapObjectType::Character:
 				{
 					character* gen = (character*)endObj;
-					if (gen->characterRecord->faction->dipNum == army->faction->dipNum)
+					if (gen->characterRecord->faction->factionID == army->faction->factionID)
 					{
 						return true;
 					}
@@ -178,7 +179,7 @@ namespace PathFinder
 				{
 					settlementStruct* set = (settlementStruct*)endObj;
 
-					if (set->faction->dipNum == army->faction->dipNum)
+					if (set->faction->factionID == army->faction->factionID)
 					{
 						return true;
 					}
@@ -193,7 +194,7 @@ namespace PathFinder
 				{
 					fortStruct* fort = (fortStruct*)endObj;
 
-					if (fort->faction->dipNum == army->faction->dipNum)
+					if (fort->faction->factionID == army->faction->factionID)
 					{
 						return true;
 					}
@@ -499,7 +500,7 @@ namespace PathFinder
 				{
 					settlementStruct* set = (settlementStruct*)endObj;
 
-					if (set->faction->dipNum == army->faction->dipNum)
+					if (set->faction->factionID == army->faction->factionID)
 					{
 						if (set->army == nullptr)
 						{
@@ -519,7 +520,7 @@ namespace PathFinder
 				{
 					fortStruct* fort = (fortStruct*)endObj;
 
-					if (fort->faction->dipNum == army->faction->dipNum)
+					if (fort->faction->factionID == army->faction->factionID)
 					{
 						if (fort->army == nullptr)
 						{

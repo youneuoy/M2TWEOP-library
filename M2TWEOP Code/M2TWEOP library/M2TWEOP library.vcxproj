@@ -268,11 +268,9 @@
     <ClInclude Include="eopEduHelpers.h" />
     <ClInclude Include="eopFbxHelpers.h" />
     <ClInclude Include="eopMasterTypes.h" />
-    <ClInclude Include="factionHelpers.h" />
     <ClInclude Include="gameDataAllHelper.h" />
     <ClInclude Include="gameHelpers.h" />
     <ClInclude Include="gameSTDUIHelpers.h" />
-    <ClInclude Include="generalCharactericticsHelpers.h" />
     <ClInclude Include="graphicsEvents.h" />
     <ClInclude Include="imgui\eopImgui.h" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -346,6 +344,7 @@
     <ClInclude Include="tilesChange.h" />
     <ClInclude Include="types\character.h" />
     <ClInclude Include="types\characterRecord.h" />
+    <ClInclude Include="types\faction.h" />
     <ClInclude Include="types\fort.h" />
     <ClInclude Include="types\settlement.h" />
     <ClInclude Include="unitActions.h" />
@@ -383,7 +382,6 @@
     <ClCompile Include="..\3rd\miniz\miniz.c" />
     <ClCompile Include="..\3rd\shortestPath\micropather.cpp" />
     <ClCompile Include="actionsStrat.cpp" />
-    <ClCompile Include="actionsStratHelpers.cpp" />
     <ClCompile Include="basicEvents.cpp" />
     <ClCompile Include="battleHandlerHelpers.cpp" />
     <ClCompile Include="BattleMapOverrider.cpp" />
@@ -399,11 +397,9 @@
     <ClCompile Include="discordManager.cpp" />
     <ClCompile Include="eopEduHelpers.cpp" />
     <ClCompile Include="eopFbxHelpers.cpp" />
-    <ClCompile Include="factionHelpers.cpp" />
     <ClCompile Include="gameDataAllHelper.cpp" />
     <ClCompile Include="gameHelpers.cpp" />
     <ClCompile Include="gameSTDUIHelpers.cpp" />
-    <ClCompile Include="generalCharactericticsHelpers.cpp" />
     <ClCompile Include="graphicsEvents.cpp" />
     <ClCompile Include="imgui\eopImgui.cpp" />
     <ClCompile Include="imgui\ImFileDialog.cpp" />
@@ -483,6 +479,7 @@
     <ClCompile Include="tilesChange.cpp" />
     <ClCompile Include="types\character.cpp" />
     <ClCompile Include="types\characterRecord.cpp" />
+    <ClCompile Include="types\faction.cpp" />
     <ClCompile Include="types\fort.cpp" />
     <ClCompile Include="types\settlement.cpp" />
     <ClCompile Include="unitActions.cpp" />

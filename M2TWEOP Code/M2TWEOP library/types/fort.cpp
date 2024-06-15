@@ -2,9 +2,9 @@
 
 #include "dataOffsets.h"
 #include "fastFuncts.h"
-#include "factionHelpers.h"
 #include "functionsOffsets.h"
 #include "plugData.h"
+#include "faction.h"
 #include "character.h"
 #include "characterRecord.h"
 

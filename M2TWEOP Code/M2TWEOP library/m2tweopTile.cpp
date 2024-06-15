@@ -1,6 +1,7 @@
 #include "m2tweopTile.h"
 #include "FastFuncts.h" 
 #include "globals.h"
+#include "faction.h"
 
 #include "techFuncs.h"
 
@@ -13,7 +14,7 @@ void m2tweopTile::buildTile(int x, int y)
 
 	if (owner != nullptr)
 	{
-		ownerDipNum = owner->dipNum;
+		ownerDipNum = owner->factionID;
 	}
 
 
@@ -47,14 +48,14 @@ void m2tweopTile::buildTile(int x, int y)
 	if (owner != nullptr)
 	{
 
-		tileColor.x = owner->factSmDescr->primary_colour_red / 255.0F;
-		tileColor.y = owner->factSmDescr->primary_colour_green / 255.0F;
-		tileColor.z = owner->factSmDescr->primary_colour_blue / 255.0F;
+		tileColor.x = owner->factionRecord->primary_colour_red / 255.0F;
+		tileColor.y = owner->factionRecord->primary_colour_green / 255.0F;
+		tileColor.z = owner->factionRecord->primary_colour_blue / 255.0F;
 
 
-		tileSecColor.x = owner->factSmDescr->secondary_colour_red / 255.0F;
-		tileSecColor.y = owner->factSmDescr->secondary_colour_green / 255.0F;
-		tileSecColor.z = owner->factSmDescr->secondary_colour_blue / 255.0F;
+		tileSecColor.x = owner->factionRecord->secondary_colour_red / 255.0F;
+		tileSecColor.y = owner->factionRecord->secondary_colour_green / 255.0F;
+		tileSecColor.z = owner->factionRecord->secondary_colour_blue / 255.0F;
 	}
 }
 
@@ -216,9 +217,9 @@ void m2tweopTile::buildAsArmyTile(stackStruct* army)
 
 	if (fac != nullptr)
 	{
-		tileColor.x = fac->factSmDescr->secondary_colour_red / 255.0F;
-		tileColor.y = fac->factSmDescr->secondary_colour_green / 255.0F;
-		tileColor.z = fac->factSmDescr->secondary_colour_blue / 255.0F;
+		tileColor.x = fac->factionRecord->secondary_colour_red / 255.0F;
+		tileColor.y = fac->factionRecord->secondary_colour_green / 255.0F;
+		tileColor.z = fac->factionRecord->secondary_colour_blue / 255.0F;
 	}
 
 	tileCont = tileContent::army;
