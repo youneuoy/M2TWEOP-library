@@ -4,7 +4,7 @@
 #include "battlemapWorker.h"
 #include "DeveloperMode.h"
 #include "MmbMover.h"
-#include "TacticalMapVeiwer.h"
+#include "tacticalMapViewer.h"
 #include "ContextMenuStrat.h"
 class globals
 {
@@ -24,15 +24,15 @@ public:
 		}gameCfg;
 		struct modulesS
 		{
-			TacticalMapViewer tacticalMapVeiwer;
+			tacticalMapViewer tacticalMapViewer;
 			DeveloperMode developerMode;
-			battlemapWorker battlemapWorker;
+			battlemapWorker battleMapWorker;
 			MmbMover mmbMover;
 			ContextMenuStrat contextMenuStrat;
 		}Modules;
 
 		//steam =2, kingdoms=1
-		UINT32 gamever;
+		UINT32 gameVersion;
 		string modPath;
 
 		struct
@@ -102,10 +102,6 @@ public:
 		{
 			int32_t bLimitRecruitmentToSlotsAndByMoney = 0;
 		}eopGameplaySettings;
-
-
-
-
 
 	}dataS;
 };

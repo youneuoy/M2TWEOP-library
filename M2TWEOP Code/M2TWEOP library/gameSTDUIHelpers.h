@@ -9,5 +9,8 @@ namespace gameSTDUIHelpers
 	uiElement* getSubElement(const uiElement * element,int index);
 	buildingInfoScroll* getBuildingInfoScroll();
 	unitInfoScroll* getUnitInfoScroll();
+	bool useButton(const char* buttonName);
+	uiElement* getUiElement(const char* elementName);
+	void useUiElement(uiElement* element);
 };
 

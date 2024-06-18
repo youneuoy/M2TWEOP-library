@@ -2,11 +2,8 @@
 #include <string>
 #include <vector>
 #include <windows.h>
-#include "FastFuncts.h" 
 #include "globals.h"
-
 #include "techFuncs.h"
-#include "fastFuncts.h"
 #include "smallFuncs.h"
 #include "realGameTypes.h"
 

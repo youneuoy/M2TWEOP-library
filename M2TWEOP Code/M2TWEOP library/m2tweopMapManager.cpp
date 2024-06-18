@@ -1,12 +1,15 @@
 #include "m2tweopMapManager.h"
 
 #include <numbers>
+
+#include "campaign.h"
 #include "imgui/imgui.h"
 
 #include "CImg.h"
 #include "dataOffsets.h"
 #include "graphicsD3D.h"
 #include "m2tweopMap.h"
+#include "strategyMap.h"
 
 
 namespace m2tweopMapManager
@@ -232,14 +235,6 @@ namespace m2tweopMapManager
 	bool draw()
 	{
 		bool isWork = true;
-
-		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
-		campaign* campaign = gameDataAll->campaignData;
-		//if (campaign->isAdminPasswordExist == false||(campaign->isAdminPasswordExist==true&& campaign->isHotseatLogon==true))
-		//{
-
-		//}
-
 
 		ImGui::SetNextWindowPos({ 0,0 }, ImGuiCond_Always);
 		if (managerData.isShowMap == true)

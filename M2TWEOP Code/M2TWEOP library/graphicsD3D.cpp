@@ -26,7 +26,6 @@ graphicsD3D::dataT graphicsD3D::dataS;
 #include "m2tweopMapManager.h"
 
 #include "../../M2TWEOP Common/m2tweopConstData.h"
-#include "eduFastFuncts.h"
 #include <windowsx.h>
 #include "stratModelsChange.h"
 #include "themeManager.h"
@@ -182,7 +181,7 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-	fbxModels::draw(drawType, globals::dataS.gamever);
+	fbxModels::draw(drawType, globals::dataS.gameVersion);
 	// Restore the DX9 transform
 
 	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_WORLD, &last_world);
@@ -429,7 +428,7 @@ DWORD __stdcall graphicsD3D::InitS()
 	init();
 
 	DWORD adr = 0;
-	if (globals::dataS.gamever == 2)//steam
+	if (globals::dataS.gameVersion == 2)//steam
 	{
 		adr = 0x01178a40;
 	}
@@ -503,7 +502,7 @@ EOP_EXPORT const D3DXMATRIXA16* graphicsExport::GetMatView()
 {
 	D3DXMATRIXA16* matView = nullptr;;
 
-	if (globals::dataS.gamever == 2)//steam
+	if (globals::dataS.gameVersion == 2)//steam
 	{
 		matView = reinterpret_cast<D3DXMATRIXA16*>(0x0193D604);
 	}
@@ -519,7 +518,7 @@ EOP_EXPORT const D3DXMATRIXA16* graphicsExport::GetMatProj()
 {
 	D3DXMATRIXA16* matProj = nullptr;;
 
-	if (globals::dataS.gamever == 2)//steam
+	if (globals::dataS.gameVersion == 2)//steam
 	{
 		matProj = reinterpret_cast<D3DXMATRIXA16*>(0x02C9E0F8);
 	}

@@ -2,7 +2,7 @@
 #include <imgui/imgui_internal.h>
 
 #include "dataOffsets.h"
-#include "fastFuncts.h"
+#include "strategyMap.h"
 
 void m2tweopMap::buildMap()
 {
@@ -113,7 +113,7 @@ void m2tweopMap::drawInteract()
 				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 
-				oneTile* tile = fastFuncts::getTileStruct(selectedTile->xTile, selectedTile->yTile);
+				oneTile* tile = stratMapHelpers::getTile(selectedTile->xTile, selectedTile->yTile);
 				
 				ImGui::Text("Tile pointer:%p", tile);
 				ImGui::InputScalar("X coordinate", ImGuiDataType_U32, &selectedTile->xTile, 0, NULL, "%u");

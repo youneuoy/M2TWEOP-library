@@ -4,7 +4,6 @@
 #include "onlineThings2.h"
 #include <vector>
 #include <windows.h>
-#include "FastFuncts.h" 
 #include "globals.h"
 #include "fort.h"
 #include "unit.h"
@@ -15,11 +14,14 @@
 #include "imgui/imgui.h"
 #include "character.h"
 #include "faction.h"
+#include "army.h"
 #include <sstream>
 #include <thread>
 #include <set>
 #include <map>
 
+#include "campaign.h"
+#include "strategyMap.h"
 #include "imgui/ImFileDialog.h"
 #include "imgui/imgui_internal.h"
 namespace battleCreator
@@ -45,7 +47,7 @@ namespace battleCreator
 		data.isGenerationNeeded = isNeeded;
 	}
 
-	bool GetIsGenerationNeeded()
+	bool getIsGenerationNeeded()
 	{
 		return data.isGenerationNeeded;
 	}
@@ -83,7 +85,7 @@ namespace battleCreator
 	string makeWeatherString()
 	{
 		string retS;
-		if (fastFuncts::getSeason() == 0)
+		if (campaignHelpers::getCampaignData()->season == 0)
 		{
 			retS = "summer";
 		}
@@ -91,19 +93,18 @@ namespace battleCreator
 		{
 			retS = "winter";
 		}
-
 		return retS;
 	}
+	
 	string makeBattleName()
 	{
 		string battleName = makeWeatherString();
-
+		const auto campaignData = campaignHelpers::getCampaignData();
 		battleName += "_T";
-		battleName += to_string(fastFuncts::getPassedTurnsNum());
+		battleName += to_string(campaignData->turnNumber);
 		battleName += "_";
-		factionStruct* currFac = smallFuncs::getGameDataAll()->campaignData->currentFactionTurn;
+		const factionStruct* currFac = campaignData->currentFactionTurn;
 		battleName += currFac->factionRecord->facName;
-
 		return battleName;
 	}
 
@@ -120,7 +121,7 @@ namespace battleCreator
 
 			for (int j = 0; j < side.armiesNum; j++)
 			{
-				stackStruct* army = side.armies[j].stack;
+				armyStruct* army = side.armies[j].stack;
 
 				retSet.emplace(army->faction->factionRecord->facName);
 			}
@@ -199,7 +200,7 @@ namespace battleCreator
 		fileStrings.push_back("	plan_set default_set");
 
 
-		auto* facCreator = fastFuncts::GetFactSmDescrById(sett->fac_creatorModNum);
+		const auto* facCreator = factionHelpers::getFactionRecord(sett->fac_creatorModNum);
 		if (facCreator != nullptr)
 		{
 			fileStrings.push_back(string("	faction_creator ").append(facCreator->facName));
@@ -320,12 +321,13 @@ namespace battleCreator
 		fileStrings.push_back("\n");
 		fileStrings.push_back("\n");
 
+		const auto year = campaignHelpers::getCampaignData()->currentDate;
 		tempS = "start_date	";
-		tempS.append(to_string(fastFuncts::getYear())).append(" ").append(makeWeatherString());
+		tempS.append(to_string(year)).append(" ").append(makeWeatherString());
 		fileStrings.push_back(tempS);
 
 		tempS = "end_date	";
-		tempS.append(to_string(fastFuncts::getYear())).append(" ").append(makeWeatherString());
+		tempS.append(to_string(year)).append(" ").append(makeWeatherString());
 		fileStrings.push_back(tempS);
 		fileStrings.push_back("\n");
 		fileStrings.push_back("\n");
@@ -348,7 +350,7 @@ namespace battleCreator
 
 			for (int j = 0; j < side.armiesNum; j++)
 			{
-				stackStruct* army = side.armies[j].stack;
+				armyStruct* army = side.armies[j].stack;
 				if (facsNames.count(army->faction->factionRecord->facName))
 				{
 					facsNames.erase(army->faction->factionRecord->facName);
@@ -360,18 +362,11 @@ namespace battleCreator
 					&& army->gen->yCoord == battleData->yCoord
 					)
 				{
-					settlementStruct* sett = fastFuncts::findSettlement(army->gen->xCoord, army->gen->yCoord);
-					if (sett != nullptr)
-					{
+					const auto tile = stratMapHelpers::getTile(army->gen->xCoord, army->gen->yCoord);
+					if (settlementStruct* sett = tile->getSettlement(); sett)
 						writeSettlementInfo(fileStrings, sett);
-					}
-
-
-					fortStruct* fort = fastFuncts::findFort(army->gen->xCoord, army->gen->yCoord);
-					if (fort != nullptr)
-					{
+					if (fortStruct* fort = tile->getFort(); fort)
 						writeFortInfo(fileStrings, fort);
-					}
 				}
 
 				if (army->gen != nullptr)
@@ -390,7 +385,7 @@ namespace battleCreator
 				{
 					unit* un = army->units[k];
 					tempS = "unit		";
-					tempS.append(un->eduEntry->Type);
+					tempS.append(un->eduEntry->eduType);
 					tempS.append("				soldiers ").append(to_string(un->SoldierCountStrat));
 					tempS.append(" exp ").append(to_string(un->expScreen));
 					tempS.append(" armour ").append(to_string(un->avgArmourUpg));
@@ -415,7 +410,7 @@ namespace battleCreator
 		fileStrings.push_back(tempS);
 
 		tempS = "battle_time	";
-		tempS.append(to_string(smallFuncs::getGameDataAll()->campaignData->timeAtStartBattle));
+		tempS.append(to_string( campaignHelpers::getCampaignData()->timeAtStartBattle));
 		tempS.append("	0.00");
 		fileStrings.push_back(tempS);
 
@@ -430,7 +425,7 @@ namespace battleCreator
 		{
 			battleSide& side = battleData->sides[i];
 			tempS = "alliance	";
-			if (side.isCanDeploy == true)
+			if (side.canDeploy == true)
 			{
 				tempS.append("can_deploy	");
 			}
@@ -438,7 +433,7 @@ namespace battleCreator
 			set<string>sideFactions;
 			for (int j = 0; j < side.armiesNum; j++)
 			{
-				stackStruct* army = side.armies[j].stack;
+				armyStruct* army = side.armies[j].stack;
 
 				sideFactions.emplace(army->faction->factionRecord->facName);
 			}
@@ -466,7 +461,7 @@ namespace battleCreator
 
 			for (int j = 0; j < side.armiesNum; j++)
 			{
-				stackStruct* army = side.armies[j].stack;
+				armyStruct* army = side.armies[j].stack;
 				char* armyFacName = army->faction->factionRecord->facName;
 
 				fileStrings.push_back("");
@@ -497,8 +492,8 @@ namespace battleCreator
 				fileStrings.push_back(tempS);
 				fileStrings.push_back("\n");
 
-				int coordsPairsNum = side.armies[j].deploymentArea->coordsNum;
-				battlePos* coords = side.armies[j].deploymentArea->coordsPairs;
+				int coordsPairsNum = side.armies[j].deploymentAreas.get(0)->area.coordsNum;
+				battlePos* coords = side.armies[j].deploymentAreas.get(0)->area.coordsPairs;
 				for (int k = 0; k < coordsPairsNum; k++)
 				{
 					tempS = "deployment_area_point	";
@@ -535,7 +530,7 @@ namespace battleCreator
 						tempS.append("50");
 
 
-						if (un->eduEntry->Category == 0 && un->engineRec != nullptr)
+						if (un->eduEntry->category == 0 && un->engineRec != nullptr)
 						{
 							engineRecord* enRec = un->engineRec;
 							if (enRec->classID == 18)//ram
@@ -878,7 +873,7 @@ namespace battleCreator
 		}
 	}
 
-	void addCharactersToCustomBattleArmy(stackStruct* army, const std::string& relativePath)
+	void addCharactersToCustomBattleArmy(armyStruct* army, const std::string& relativePath)
 	{
 
 		std::filesystem::path charactersPath = relativePath;
@@ -892,17 +887,13 @@ namespace battleCreator
 			return "";
 		}
 
-		auto gameData = smallFuncs::getGameDataAll();
-		if (gameData->campaignData == nullptr)
-		{
+		auto campaign = campaignHelpers::getCampaignData();
+		if (!campaign)
 			return "";
-		}
-		if (gameData->campaignData->currentDescrFile == nullptr)
-		{
+		if (campaign->currentDescrFile == nullptr)
 			return "";
-		}
 
-		std::string relativePath = techFuncs::uniToANSI(smallFuncs::getGameDataAll()->campaignData->currentDescrFile);
+		std::string relativePath = techFuncs::uniToANSI(campaign->currentDescrFile);
 
 		if (relativePath.find("battle") != std::string::npos)//need load/
 		{

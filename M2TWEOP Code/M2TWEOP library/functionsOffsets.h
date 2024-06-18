@@ -12,6 +12,7 @@ public:
 		DWORD allocMemFunc = NULL;
 		
 		DWORD createEduEntry = NULL;
+		DWORD uniStrCustomTile = NULL;
 
 
 
@@ -28,7 +29,7 @@ public:
 		DWORD createCadAssaultSettlementFunc = NULL;
 		DWORD createCadSiegeSettlementFunc = NULL;
 		DWORD createCadAttackSettlementFunc = NULL;
-		DWORD finalyzeActionStratmapFunc = NULL;
+		DWORD finalizeActionStrat = NULL;
 
 
 		DWORD getReadyForMovingFunc = NULL;
@@ -42,7 +43,7 @@ public:
 		DWORD somethingWithTrackedPointerFortFunc = NULL;
 
 
-		//strat camera funcs
+		//strat camera functions
 		//params - x,y at stack
 		//restore stack after call it
 		DWORD moveStratCameraSlowFunc = NULL;
@@ -58,7 +59,7 @@ public:
 		//@replenishUnit(unit *un,int howManyAdd,int exp)
 		DWORD replenishUnitFunc = NULL;
 		DWORD setUnitArmorFunc = NULL;
-		DWORD setUnitWeapFunc = NULL;
+		DWORD setUnitWeaponFunc = NULL;
 
 		//create character
 		DWORD createCharacterFunc = NULL;
@@ -74,9 +75,9 @@ public:
 
 		DWORD setBodyguard = NULL;
 
-		//kill character on stratmap
+		//kill character on strat map
 		DWORD killCharStratMapFunc = NULL;
-		//kill unit on stratmap
+		//kill unit on strat map
 		DWORD killUnitStratMapFunc = NULL;
 
 		//destroy all building of type in settlement
@@ -124,7 +125,7 @@ public:
 		DWORD setFactionLeaderFunc = NULL;
 		DWORD findParentForAdoptionFunc = NULL;
 		DWORD setArmyRegionEntriesFunc = NULL;
-		DWORD factionRessurectStuffFunc = NULL;
+		DWORD factionResurrectStuffFunc = NULL;
 
 		DWORD unitMove = NULL;
 		DWORD unitOrderMove = NULL;
@@ -215,6 +216,21 @@ public:
 		DWORD clearUnitGroup = NULL;
 		DWORD removeUnusedLabel = NULL;
 		DWORD defineUnitGroup = NULL;
+		DWORD findAncillary = NULL;
+		DWORD mergeArmies = NULL;
+		DWORD stopBlockade = NULL;
+		DWORD stopSiege = NULL;
+		DWORD addToSettlement = NULL;
+		DWORD addToFort = NULL;
+		DWORD ungarrisonResidence = NULL;
+		DWORD attackArmy = NULL;
+		DWORD getTileMoveCost = NULL;
+		DWORD revealTile = NULL;
+		DWORD setFactionTrade = NULL;
+		DWORD setProtectorate = NULL;
+		DWORD isTileFree = NULL;
+		DWORD hideRevealedTile = NULL;
+		DWORD findBattleModel = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

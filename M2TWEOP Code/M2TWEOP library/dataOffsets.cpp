@@ -18,7 +18,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		
 		offsets.globalSett = 0x016F10D0;
 
-		offsets.someStratmapPointer = 0x019b3134;
+		offsets.someStratMapPointer = 0x019b3134;
 
 		offsets.skeletonDatabase = 0x01B59B08;
 
@@ -50,14 +50,17 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.currentGameHandler = 0x016EC1C4;
 		offsets.logFlushRate = 0x16E445C;
 		
-		offsets.audioEnable = (bool*)0x016818cd;
-		offsets.audioMaster_vol = (int*)0x01681910;
-		offsets.gameUnit_size = (int*)0x0016818fc;
+		offsets.audioEnable = reinterpret_cast<bool*>(0x016818cd);
+		offsets.audioMaster_vol = reinterpret_cast<int*>(0x01681910);
+		offsets.gameUnit_size = reinterpret_cast<int*>(0x0016818fc);
 		offsets.globalCadClass = 0x1674570;
 		offsets.constructionItems = 0x016F4CAC;
 		offsets.recruitmentItems = 0x16F4E00;
 		offsets.ltgdGlobals = 0x016F115C;
 		offsets.groupLabels = 0x001BA96A0;
+		offsets.stratCursorCoords = 0x02c86c28;
+		offsets.modelsDb = 0x016e9dc8;
+		offsets.customTiles = 0x02C3BF50;
 
 		offsets.descr_sm_factionslist = reinterpret_cast<descr_sm_factions_list*>(0x01667288);
 	}
@@ -66,6 +69,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.factionOffsetsStart = 0x02bb7088;
 		
 		offsets.battleMapData = 0x02BB7078;
+		offsets.customTiles = 0x02BF2E98;
 		
 		offsets.statStratModelsListOffset = 0x01b155d8;
 
@@ -75,7 +79,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 
 		offsets.stringTable = 0x02C70760;
 
-		offsets.someStratmapPointer = 0x0196a004;
+		offsets.someStratMapPointer = 0x0196a004;
 
 		offsets.skeletonDatabase = 0x01B109D8;
 
@@ -113,10 +117,12 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.recruitmentItems = 0x0016ABC68;
 		offsets.ltgdGlobals = 0x016A7Fc4;
 		offsets.groupLabels = 0x01B60580;
+		offsets.stratCursorCoords = 0x02c3da48;
+		offsets.modelsDb = 0x016a0b98;
 
-		offsets.audioEnable = (bool*)0x01639f1d;
-		offsets.audioMaster_vol = (int*)0x01639f60;
-		offsets.gameUnit_size = (int*)0x01639f4c;
+		offsets.audioEnable = reinterpret_cast<bool*>(0x01639f1d);
+		offsets.audioMaster_vol = reinterpret_cast<int*>(0x01639f60);
+		offsets.gameUnit_size = reinterpret_cast<int*>(0x01639f4c);
 
 		offsets.descr_sm_factionslist = reinterpret_cast<descr_sm_factions_list*>(0x0161f3b0);
 	}

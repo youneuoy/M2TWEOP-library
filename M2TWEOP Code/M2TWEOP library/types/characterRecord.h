@@ -330,8 +330,8 @@ struct capturedFactionInfo
 	int32_t factionID;
 	struct characterRecord* character;
 	struct characterRecord* targetCharacter;
-	std::vector<capturedCharacter> capturedCharacters;
-	std::vector<capturedUnit> capturedUnits;
+	gameStdVector<capturedCharacter> capturedCharacters;
+	gameStdVector<capturedUnit> capturedUnits;
 	int32_t ransomValue;
 	bool heirCaptured;
 	bool leaderCaptured;
@@ -365,9 +365,11 @@ namespace characterRecordHelpers
 	void namedCharSetLocalizedNextNameForSave(characterRecord* genChar, const char* str);
 	void namedCharSetLocalizedNicknameForSave(characterRecord* genChar, const char* str);
 	void setHeir(characterRecord* gen, bool isJustSet);
+	
 	int addAncillaryName(characterRecord* character, const std::string& ancName);
 	int addAncillary(characterRecord* character, ancillary* anc);
 	void removeAncillary(characterRecord* character, ancillary* anc);
+	
 	void removeTrait(characterRecord* character, const char* traitName);
 	void addTrait(characterRecord* character, const char* traitName, int traitLevel);
 	void addToLua(sol::state& luaState);

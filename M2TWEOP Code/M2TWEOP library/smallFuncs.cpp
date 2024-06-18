@@ -6,52 +6,17 @@
 #include "functionsOffsets.h"
 #include "gameDataAllHelper.h"
 #include "globals.h"
-#include "MasterDefines.h"
+#include "army.h"
+#include "strategyMap.h"
 
 
 namespace smallFuncs
 {
-	void* GetMainStratObject(void* baseObj)
-	{
-		if (baseObj == nullptr)
-		{
-			return baseObj;
-		}
-
-		StartMapObjectType objT = CallVFunc<4, StartMapObjectType>(baseObj);
-		switch (objT)
-		{
-		case StartMapObjectType::FloatingGeneral:
-			break;
-		case StartMapObjectType::Settlement:
-			break;
-		case StartMapObjectType::Fort:
-			break;
-		case StartMapObjectType::Port:
-			break;
-		case StartMapObjectType::Character:
-			break;
-		case StartMapObjectType::RallyPointSundry:
-		{
-			RallyPointSundry* ral = (RallyPointSundry*)baseObj;
-			if (ral->object == nullptr)
-			{
-				break;
-			}
-			return GetMainStratObject(ral->object);
-
-			break;
-		}
-		default:
-			break;
-		}
-		return baseObj;
-	}
 	void setAncLimit(unsigned char limit)
 	{
 
 		DWORD ancillariesOffset = 0;
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			ancillariesOffset = 0x005A5CAD;
 		}
@@ -65,14 +30,14 @@ namespace smallFuncs
 
 	int getGameVersion()
 	{
-		return globals::dataS.gamever == 2 ? 2 : 1;
+		return globals::dataS.gameVersion == 2 ? 2 : 1;
 	}
 
 	void saveGame(const char* path)
 	{
 		DWORD codeOffset = 0;
 		DWORD codeOffset2 = 0;
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			codeOffset = 0x004350e0;
 			codeOffset2 = 0x02C1B904;
@@ -103,7 +68,7 @@ namespace smallFuncs
 	void setEDUUnitsSize(signed short min, signed short max)
 	{
 		DWORD codeOffset = 0;
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			codeOffset = 0x008efe01;
 		}
@@ -126,7 +91,7 @@ namespace smallFuncs
 	{
 		DWORD cmpAdr = 0;
 		DWORD retAdr = 0;
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			cmpAdr = 0x008ec815 + 2;
 			retAdr = 0x008ec81a + 1;
@@ -144,7 +109,7 @@ namespace smallFuncs
 		uchar nops[2] = { 0x90,0x90 };
 		DWORD cmd = 0;
 
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			cmd = 0x00d27ae3;
 		}
@@ -169,7 +134,7 @@ namespace smallFuncs
 
 		//unlock change_faction
 		uchar nops1[6] = { 0x90,0x90,0x90,0x90,0x90,0x90 };
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			cmd = 0x00d2cd2a;
 		}
@@ -189,7 +154,7 @@ namespace smallFuncs
 
 		DWORD* objectPtr = reinterpret_cast<DWORD*>(condObject);
 		DWORD vtablePtr = *objectPtr;
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			switch (vtablePtr)
 			{
@@ -237,7 +202,7 @@ namespace smallFuncs
 	void createUniString(UNICODE_STRING**& newUniStringPointer, const char* nonUniStr)
 	{
 		DWORD funcAdr = 0;
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			funcAdr = 0x00f01eb0;
 		}
@@ -369,7 +334,7 @@ namespace smallFuncs
 		if (result == nullptr)
 			return false;
 
-		return CallVFunc<1, bool>(result, eventData);
+		return callVFunc<1, bool>(result, eventData);
 	}
 
 	void scriptCommand(const char* command, const char* args)
@@ -412,24 +377,6 @@ namespace smallFuncs
 		}
 	}
 
-	void changeRegionName(regionStruct* region, const char* newName)
-	{
-
-		UNICODE_STRING** nameMem = new UNICODE_STRING*;
-		region->localizedRegionName = nameMem;
-
-		smallFuncs::createUniString(region->localizedRegionName, newName);
-	}
-
-	void changeRebelsName(regionStruct* region, const char* newName)
-	{
-
-		UNICODE_STRING** nameMem = new UNICODE_STRING*;
-		region->localizedRebelsName = nameMem;
-
-		smallFuncs::createUniString(region->localizedRebelsName, newName);
-	}
-
 	bool highlightOn = false;
 	void toggleUnitHighlight()
 	{
@@ -437,7 +384,7 @@ namespace smallFuncs
 		static unsigned char highLightOff = 0x8e;
 
 		DWORD codeAdr = 0;
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			codeAdr = 0x009e1a64;
 		}
@@ -470,7 +417,7 @@ namespace smallFuncs
 
 		DWORD battleCameraAddress = 0;
 
-		if (globals::dataS.gamever == 2) //steam
+		if (globals::dataS.gameVersion == 2) //steam
 		{
 			battleCameraAddress = 0x0193f34c;
 		}
@@ -495,7 +442,7 @@ namespace smallFuncs
 	void setReligionsLimit(unsigned char limit)
 	{
 		DWORD codeAdr = 0;
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			codeAdr = 0x0411E0E;
 		}
@@ -508,28 +455,7 @@ namespace smallFuncs
 
 		return;
 	}
-	bool isTileFree(int* xy)
-	{
-		DWORD funcAdr = 0;
-		bool retZ = false;
-		if (globals::dataS.gamever == 2)//steam
-		{
-			funcAdr = 0x004c9220;
-		}
-		else
-		{
-			funcAdr = 0x004c8c70;
-		}
-
-		_asm {
-			push xy
-			mov eax, funcAdr
-			call eax
-			mov retZ, al
-		}
-
-		return retZ;
-	}
+	
 	struct counterS
 	{
 		counterS* something1;
@@ -549,7 +475,7 @@ namespace smallFuncs
 		countersObjectS* eventsObject = 0;
 		counterS* retS = 0;
 		int retValue = 0;
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			eventsObject = (countersObjectS*)0x016A7A58;
 		}
@@ -559,7 +485,7 @@ namespace smallFuncs
 		}
 		DWORD funcAdr = 0;
 
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			funcAdr = 0x00489760;
 		}
@@ -602,7 +528,7 @@ namespace smallFuncs
 	void setScriptCounter(const char* counterName, int counterValue)
 	{
 		DWORD eventsObject;
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			eventsObject = 0x016A7A30;
 		}
@@ -614,7 +540,7 @@ namespace smallFuncs
 		DWORD funcAdr = 0;
 
 
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			funcAdr = 0x0048cce0;
 		}
@@ -639,7 +565,7 @@ namespace smallFuncs
 	void setBuildingChainLimit(unsigned int limit)
 	{
 		DWORD codeAdr = 0;
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 			codeAdr = 0x008AC174;
 		else
 			codeAdr = 0x008AB794;
@@ -652,7 +578,7 @@ namespace smallFuncs
 	{
 		DWORD codeAdr = 0;
 
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 			codeAdr = 0x004F5D7B;
 		else
 			codeAdr = 0x004F57AB;
@@ -665,7 +591,7 @@ namespace smallFuncs
 		return *dataOffsets::offsets.gameUnit_size;
 	}
 
-	float GetMinimumPossibleMovepointsForArmy(stackStruct* army)
+	float getMinimumPossibleMovepointsForArmy(armyStruct* army)
 	{
 		if (army == nullptr)
 		{
@@ -675,7 +601,7 @@ namespace smallFuncs
 		typedef float (__thiscall* GetUnitFullMovePointsF)(unit* un);
 
 		GetUnitFullMovePointsF getUnitFullMovePointsF = nullptr;
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			getUnitFullMovePointsF = (GetUnitFullMovePointsF)0x00742b10;
 		}

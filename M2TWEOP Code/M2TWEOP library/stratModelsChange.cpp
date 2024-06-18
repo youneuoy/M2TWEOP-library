@@ -2,10 +2,12 @@
 
 #include <map>
 
-#include "fastFuncts.h"
+#include "campaign.h"
 #include "functionsOffsets.h"
 #include "dataOffsets.h"
 #include "character.h"
+#include "strategyMap.h"
+
 namespace stratModelsChange
 {
 	enum class modelsChangeStatus
@@ -88,8 +90,7 @@ namespace stratModelsChange
 		rec->y = y;
 		rec->isFort = false;
 
-		auto tile = fastFuncts::getTileStruct(x, y);
-		if (fastFuncts::getTileObject(tile, 30))
+		if (stratMapHelpers::getTile(x, y)->getFort())
 		{
 			fortEntryCount++;
 			rec->isFort = true;	
@@ -133,14 +134,14 @@ namespace stratModelsChange
 	struct visibilityCrashFixS
 	{
 		visibilityCrashFixS(int x, int y, factionStruct* fac, int8_t vis)
-			:X(x), Y(y), Fac(fac), Vis(vis)
+			:xCoord(x), yCoord(y), fac(fac), vis(vis)
 		{
 
 		}
-		int X;
-		int Y;
-		factionStruct* Fac = nullptr;
-		int8_t Vis = 0;
+		int xCoord;
+		int yCoord;
+		factionStruct* fac = nullptr;
+		int8_t vis = 0;
 	};
 	vector<visibilityCrashFixS> crashFixAr;
 
@@ -148,9 +149,9 @@ namespace stratModelsChange
 	{
 		if (changeModelsNeededNow == modelsChangeStatus::needFixHiding)
 		{
-			for (auto& visFix : crashFixAr)
+			for (const auto& visFix : crashFixAr)
 			{
-				fastFuncts::hideRevealedTile(visFix.Fac, visFix.X, visFix.Y);
+				visFix.fac->hideRevealedTile(visFix.xCoord, visFix.yCoord);
 			}
 			crashFixAr.clear();
 			changeModelsNeededNow = modelsChangeStatus::changed;
@@ -163,15 +164,14 @@ namespace stratModelsChange
 
 		if (fortEntryCount > 0)
 			crashFixAr.reserve(fortEntryCount);
-		UINT32 numFac = fastFuncts::getFactionsCount();
-		factionStruct** listFac = fastFuncts::getFactionsList();
-
+		
+		const auto campaignData = campaignHelpers::getCampaignData();
 		changeModelsNeededNow = modelsChangeStatus::changed;
-
 		for (stratModelChangeRecord* changeMod : stratModelChangeList) //static models
 		{
 			stratModelRecord* mod1 = findStratModel(changeMod->modelId);
-			if (mod1 == nullptr)continue;
+			if (mod1 == nullptr)
+				continue;
 
 			stratModelRecord* mod2 = nullptr;
 			 
@@ -181,23 +181,17 @@ namespace stratModelsChange
 			{
 				if (changeMod->isFort)
 				{
-					for (UINT32 i = 0; i < numFac; i++)
+					for (int i = 0; i < campaignData->factionCount; i++)
 					{
-						auto vis = fastFuncts::getTileVisibility(listFac[i], changeMod->x, changeMod->y);
-
+						auto fac = campaignData->getFactionByOrder(i);
+						auto vis = fac->getTileVisibility(changeMod->x, changeMod->y);
 						if (vis == 0)
 							continue;
-
-						crashFixAr.emplace_back(changeMod->x, changeMod->y, listFac[i], vis);
-
-						fastFuncts::revealTile(listFac[i], changeMod->x, changeMod->y);
-
-						//fastFuncts::setTileVisibility(listFac[i], changeMod->x, changeMod->y, 5);
+						crashFixAr.emplace_back(changeMod->x, changeMod->y, fac, vis);
+						fac->revealTile(changeMod->x, changeMod->y);
 					}
-
 					changeModelsNeededNow = modelsChangeStatus::needFixHiding;
 				}
-
 			}
 		}
 		for (const stratModelCharacterRecordChange* changeMod : stratModelCharacterChangeList) //character models

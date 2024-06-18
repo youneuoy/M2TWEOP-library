@@ -2,7 +2,6 @@
 
 #include "headersSTD.h"
 #include "realGameTypes.h"
-#include "fastFuncts.h"
 #include "exportHeader.h"
 #include "functionsOffsets.h"
 #include "dataOffsets.h"

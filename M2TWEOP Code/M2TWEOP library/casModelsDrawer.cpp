@@ -57,7 +57,7 @@ namespace casModelsDrawer
 		SetModelForDraw setModelForDraw = nullptr;
 		DoSomeWithCoordsGetZ doSomeWithCoordsGetZ = nullptr;
 		void* modelDisp = nullptr;
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			setModelForDraw = (SetModelForDraw)0x009e34e0;
 			modelDisp = (void*)0x01982130;

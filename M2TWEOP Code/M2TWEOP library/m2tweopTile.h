@@ -37,7 +37,7 @@ private:
 	void buildAsSettlementTile();
 	void buildAsFortTile();
 	void buildAsPortTile();
-	void buildAsArmyTile(stackStruct* army);
+	void buildAsArmyTile(armyStruct* army);
 
 	int tileRegionID = 0;
 	int ownerDipNum = 0;

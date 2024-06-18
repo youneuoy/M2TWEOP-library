@@ -1,7 +1,7 @@
 #include "m2tweopHelpers.h"
 
+#include "campaign.h"
 #include "dataOffsets.h"
-#include "FastFuncts.h"
 #include "gameDataAllHelper.h"
 #include "gameHelpers.h"
 #include "graphicsD3D.h"
@@ -24,10 +24,18 @@ namespace m2tweopHelpers
 	{
 		return plugData::data.luaAll.luaPath;
 	}
-	bool isTileFree(int x, int y)
+	
+	void loadSaveGame(const char* saveName)
 	{
-		int xy[2]{ x,y };
-		return smallFuncs::isTileFree(xy);
+		UNICODE_STRING** nameMem = new UNICODE_STRING*;
+
+		auto loadName = reinterpret_cast<UNICODE_STRING***>(dataOffsets::offsets.loadGameHandler + 0x4);
+		*loadName = nameMem;
+		
+		smallFuncs::createUniString(*loadName, saveName);
+
+		const auto currentHandler = reinterpret_cast<DWORD*>(dataOffsets::offsets.currentGameHandler);
+		*currentHandler = dataOffsets::offsets.loadGameHandler;
 	}
 	
 	void fireGameScriptFunc(void* scriptStruct, DWORD offset)
@@ -52,14 +60,20 @@ namespace m2tweopHelpers
 		*flushRate = oldRate;
 	}
 	
+	void logFuncError(const std::string& funcName, const std::string& error)
+	{
+		logStringGame(funcName + " error: " + error);
+	}
+	
 	std::tuple<int, int> getGameTileCoordsWithCursor()
 	{
 		int x = 0;
 		int y = 0;
-		fastFuncts::GetGameTileCoordsWithCursor(x, y);
+		stratMapHelpers::getGameTileCoordsWithCursor(x, y);
 
 		return std::make_tuple(x, y);
 	}
+	
 	bool getTileVisibility(factionStruct* faction, int x, int y)
 	{
 		auto vis = faction->tilesFac->tilesVisiblity[faction->tilesFac->tilesXBound * (y)+x];
@@ -73,46 +87,7 @@ namespace m2tweopHelpers
 	}
 	factionStruct* getRegionOwner(int regionID)
 	{
-		return smallFuncs::getStratMap()->regions[regionID].factionOwner;
-	}
-	bool checkDipStance(const campaign* campaignStruct, const campaignEnums::dipRelEnum dipType, const factionStruct* fac1, const factionStruct* fac2)
-	{
-		using namespace campaignEnums;
-		if (!fac1 || !fac2)
-			return false;
-		const auto facDiplomacy = campaignStruct->diplomaticStandings[fac1->factionID][fac2->factionID];
-		if (dipType == trade)
-			return facDiplomacy.trade & 1;
-		const auto state = facDiplomacy.state;
-		if (dipType == war)
-			return state == warState;
-		if (dipType == peace)
-			return state == peaceState;
-		if (dipType == alliance)
-			return state == allianceState;
-		if (dipType == suzerain)
-			return facDiplomacy.protectorate & 8u;
-		return false;
-	}
-	
-	void setDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2)
-	{
-		using namespace campaignEnums;
-		if (!fac1 || !fac2 || !fac1->factionRecord || !fac2->factionRecord)
-			return;
-		const auto facOneName = std::string(fac1->factionRecord->facName);
-		const auto facTwoName = std::string(fac2->factionRecord->facName);
-		const std::string command = "diplomatic_stance " + facOneName + " " + facTwoName + " ";
-		if (dipType == dipRelEnum::war)
-			smallFuncs::scriptCommand("console_command", (command + "war").c_str());
-		else if (dipType == dipRelEnum::peace)
-			smallFuncs::scriptCommand("console_command", (command + "neutral").c_str());
-		else if (dipType == dipRelEnum::alliance)
-			smallFuncs::scriptCommand("console_command", (command + "allied").c_str());
-		else if (dipType == dipRelEnum::suzerain)
-			setFactionProtectorate(fac1, fac2);
-		else if (dipType == dipRelEnum::trade)
-			setFactionTrade(fac1, fac2);
+		return stratMapHelpers::getStratMap()->regions[regionID].factionOwner;
 	}
 
 	culturesDB* getCultureDb()
@@ -121,47 +96,6 @@ namespace m2tweopHelpers
 		if (smallFuncs::getGameVersion() == 1)
 			offset = 0x01666FC8;
 		return reinterpret_cast<culturesDB*>(offset);
-	}
-
-	void setFactionTrade(factionStruct* factionOne, factionStruct* factionTwo)
-	{
-		auto campaign = gameDataAllHelper::get()->campaignData;
-		DWORD funcAddr = 0x00503480;
-		if (smallFuncs::getGameVersion() == 1)
-			funcAddr = 0x00502EE0;
-		DWORD diplomaticStuff = (reinterpret_cast<DWORD>(campaign) + 0x858);
-		int facIdOne = factionOne->factionID;
-		int facIdTwo = factionTwo->factionID;
-		auto set = (campaign->diplomaticStandings[facIdOne][facIdTwo].trade & 1) == 0;
-		_asm
-		{
-			push set
-			push facIdTwo
-			push facIdOne
-			mov ecx, diplomaticStuff
-			mov eax, funcAddr
-			call eax
-		}
-	}
-
-	void setFactionProtectorate(factionStruct* factionOne, factionStruct* factionTwo)
-	{
-		auto campaign = gameDataAllHelper::get()->campaignData;
-		DWORD funcAddr = 0x00504F20;
-		if (smallFuncs::getGameVersion() == 1)
-			funcAddr = 0x00504980;
-		DWORD diplomaticStuff = (reinterpret_cast<DWORD>(campaign) + 0x858);
-		//
-		int facIdOne = factionOne->factionID;
-		int facIdTwo = factionTwo->factionID;
-		_asm
-		{
-			push facIdTwo
-			push facIdOne
-			mov ecx, diplomaticStuff
-			mov eax, funcAddr
-			call eax
-		}
 	}
 
 	std::shared_ptr<mapImage> makeMapImage()
@@ -218,11 +152,10 @@ namespace m2tweopHelpers
 		{
 			const int tileIndex = region->tiles[i];
 			const uint32_t color = MAKECOLOR(r, g, b, a);
-			const coordPair* tileCoords = gameHelpers::convertTileCoords(tileIndex);
+			auto [xCoord, yCoord] = stratMapHelpers::convertTileCoords(tileIndex);
 			if (tileIndex >= img->tiles.size())
 				img->tiles.resize(tileIndex + 1);
-			img->tiles[tileIndex] = tileColor(color, tileCoords->xCoord, tileCoords->yCoord);
-			delete tileCoords;
+			img->tiles[tileIndex] = tileColor(color, xCoord, yCoord);
 		}
 	}
 
@@ -238,7 +171,7 @@ namespace m2tweopHelpers
 		for (int i = 0; i < region->tileCount; i++)
 		{
 			const int tileIndex = region->tiles[i];
-			const coordPair* tileCoords = gameHelpers::convertTileCoords(tileIndex);
+			const auto [xCoord, yCoord] = stratMapHelpers::convertTileCoords(tileIndex);
 			if (tileIndex >= img->tiles.size())
 				img->tiles.resize(tileIndex + 1);
 			const auto newR = max(0, min(255, GETRED(img->tiles[tileIndex].color) + r));
@@ -246,8 +179,7 @@ namespace m2tweopHelpers
 			const auto newB = max(0, min(255, GETBLUE(img->tiles[tileIndex].color) + b));
 			const auto newA = max(0, min(255, GETALPHA(img->tiles[tileIndex].color) + a));
 			const uint32_t color = MAKECOLOR(newR, newG, newB, newA);
-			img->tiles[tileIndex] = tileColor(color, tileCoords->xCoord, tileCoords->yCoord);
-			delete tileCoords;
+			img->tiles[tileIndex] = tileColor(color, xCoord, yCoord);
 		}
 	}
 

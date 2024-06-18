@@ -5,6 +5,50 @@
 #include "settlement.h"
 #define generalStruct_abilityID 1
 
+struct genMod {
+	int type; /* 0-spy, 2 - diplomat, etc */
+	struct descrCharacterStratModelArray* stratInfo;
+	int modelCountArrayMax;
+	int modelCount;
+	char* card;
+	int cardHash;
+	char* portrait;
+	int portraitHash;
+	char* rebelCard;
+	int rebelCardHash;
+	char* rebelPortrait;
+	int rebelPortraitHash;
+	struct eduOfficer* battleMod;
+	bool actions[34];
+	char pad[2];
+};
+
+struct descrCharacterEntry
+{
+public:
+	char* type; //0x0000
+	char pad_0004[4]; //0x0004
+	int32_t dictionary; //0x0008
+	struct genMod* ptrsToDescrCharacterFactionEntries[31]; //0x000C
+	struct genMod factionEntries[31]; //0x0088
+	int32_t factionCount; //0x0750
+	int8_t hasAction[40]; //0x0754
+	int32_t wageBase; //0x077C
+	float startingActionPoints; //0x0780
+}; //Size: 0x0784
+
+struct descrCharacterArray
+{
+public:
+	int32_t entryCount; //0x0000
+	char pad_0004[4]; //0x0004
+	int32_t defaultStartingActionPoints; //0x0008
+	char pad_000C[8]; //0x000C
+	int16_t N0000416D; //0x0014
+	char pad_0016[2]; //0x0016
+	struct descrCharacterEntry entries[12]; //0x0018
+}; //Size: 0x5A48
+
 struct character
 { 
 	DWORD* vtbl;
@@ -14,8 +58,9 @@ struct character
 	int yCoord;
 	int fade;
 	bool render;
-	float m_opacity;
-	bool m_highlighted;
+	float opacity;
+	bool highlighted;
+	char pad_0x1D[3];
 	trackedObject trackedObject;
 	spyingInfo spyInfo;
 	void* crusadeFinishListener;
@@ -31,8 +76,8 @@ struct character
 	factionStruct** faction;
 	struct genMod* genType;
 	undefined field9_0x8c[24];
-	uchar ifMarkedToKill;
-	uchar deathAction;
+	bool ifMarkedToKill;
+	bool deathAction;
 	bool inEnemyZOC; //0x00A6
 	bool inEnemyTerritory;
 	int32_t rally;
@@ -41,7 +86,7 @@ struct character
 	bool isPlagued;
 	int8_t padb3;
 	int32_t plaguedDuration;
-	int ambushState;
+	int actionType;
 	int32_t actionsThisTurn; //0x00BC
 	int32_t passiveState;
 	bool unusedMovePoints;
@@ -63,10 +108,10 @@ struct character
 	portBuildingStruct* dockedPort;
 	portBuildingStruct* blockadedPort;
 	DWORD armyLeadedVtbl;
-	struct stackStruct* armyLeaded; /* army of the general */
+	struct armyStruct* armyLeaded; /* army of the general */
 	DWORD bodyguardsVtbl;
 	struct unit* bodyguards; /* unit of general */
-	struct stackStruct* armyNotLeaded; /* army, if not leader */
+	struct armyStruct* armyNotLeaded; /* army, if not leader */
 	character *surrenderToCharacter;
 	character *surrenderTile;
 	factionStruct *captor;

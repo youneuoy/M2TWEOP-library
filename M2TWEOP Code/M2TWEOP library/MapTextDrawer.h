@@ -4,7 +4,7 @@
 #include "headersMEM.h"
 #include "lua/sol.hpp"
 
-namespace MapTextDrawer
+namespace mapTextDrawer
 {
 
 	struct Text3DDrawable
@@ -26,13 +26,13 @@ namespace MapTextDrawer
 	void DrawTexts();
 
 	//returns "id" of font, which is pointer to object
-	void* MakeTextFont(const char* fontName, int weight, int isItalic);
+	void* makeTextFont(const char* fontName, int weight, int isItalic);
 	void* MakeTextFontLua(const char* fontName, sol::optional<int> weight, sol::optional<bool> isItalic);
 	
-	void DeleteTextFont(void*  fontID);
+	void deleteTextFont(void*  fontID);
 
 	//returns "id" of text, which is pointer to object
-	Text3DDrawable* MakeText(void* fontID,const char* utf8Text);
+	Text3DDrawable* makeText(void* fontID,const char* utf8Text);
 	void Delete3dText(Text3DDrawable*text);
 
 	void ScaleText(Text3DDrawable* text,float scale);
@@ -45,15 +45,15 @@ namespace MapTextDrawer
 
 	void StartDrawingText(Text3DDrawable* text);
 	void StopDrawingText(Text3DDrawable* text);
-	void DrawingTextOnce(Text3DDrawable* text);
+	void drawingTextOnce(Text3DDrawable* text);
 
 	struct coordsVText
 	{
 	public:
 		coordsVText() = delete;
-		coordsVText(int x, int y, MapTextDrawer::Text3DDrawable* pointText);
+		coordsVText(int x, int y, mapTextDrawer::Text3DDrawable* pointText);
 		~coordsVText();
-		MapTextDrawer::Text3DDrawable* PointText = nullptr;
+		mapTextDrawer::Text3DDrawable* PointText = nullptr;
 		int X = 0;
 		int Y = 0;
 

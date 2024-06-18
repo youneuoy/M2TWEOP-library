@@ -5,7 +5,7 @@ bool BattleMapOverrider::Draw()
 {
 	Updateinternal();
 
-	auto& battlemapWorker = globals::dataS.Modules.battlemapWorker;
+	auto& battlemapWorker = globals::dataS.Modules.battleMapWorker;
 
     bool isWork = true;
 
@@ -120,7 +120,7 @@ string BattleMapOverrider::SelectWorldpkgdesc(const std::string& selectedRec, co
 
 void BattleMapOverrider::Updateinternal()
 {
-	auto& battlemapWorker = globals::dataS.Modules.battlemapWorker;
+	auto& battlemapWorker = globals::dataS.Modules.battleMapWorker;
 	if (battlemapWorker.worldRecords.empty())
 	{
 		return;

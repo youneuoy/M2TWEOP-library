@@ -122,7 +122,7 @@ namespace console
 		}
 
 		if(consoleData.shouldRestartLua){
-			initLua();
+			initLuaPlugin();
 			consoleData.shouldRestartLua = false;
 		}
 	}

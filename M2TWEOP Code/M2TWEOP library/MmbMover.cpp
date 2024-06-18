@@ -29,7 +29,7 @@ void MmbMover::Update(LPARAM lParam)
 	int xPosAbsolute = GET_X_LPARAM(lParam);
 	int yPosAbsolute = GET_Y_LPARAM(lParam);
 
-	float** isStratMap = reinterpret_cast<float**>(dataOffsets::offsets.someStratmapPointer);
+	float** isStratMap = reinterpret_cast<float**>(dataOffsets::offsets.someStratMapPointer);
 	if (*(int**)isStratMap == 0)return;
 
 

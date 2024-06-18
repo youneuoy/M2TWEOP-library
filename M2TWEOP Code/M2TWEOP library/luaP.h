@@ -62,10 +62,11 @@ public:
 	sol::state* init(std::string& luaFilePath, std::string& modPath);
 	//init part 2 of tables
 	void initP2();
-	void initP3();
+	void initCampaignDb();
 	void initCampaign();
 	void initTech();
 	void initEopEdu();
+	void initUnits();
 	void initEopFbx();
 	void initEop3dObjects();
 	void initEopSounds();

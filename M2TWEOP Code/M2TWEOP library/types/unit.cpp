@@ -3,14 +3,19 @@
 #include "battleHandlerHelpers.h"
 #include "character.h"
 #include "dataOffsets.h"
-#include "eopEduHelpers.h"
+#include "eopdu.h"
+#include "luaP.h"
 #include "fastFunctsHelpers.h"
 #include "functionsOffsets.h"
 #include "m2tweopHelpers.h"
 #include "smallFuncs.h"
 #include "faction.h"
-#include "fastFuncts.h"
+#include "army.h"
+#include "plugData.h"
+#include <map>
+#include "strategyMap.h"
 #include "technicalHelpers.h"
+
 
 std::unordered_map<int, const char*> actionTypes = {
 	{0,"idling"},
@@ -50,7 +55,7 @@ void unit::setUnitParams(int count, int exp, int armor, int weap)
 		mov eax, adrFunc
 		call eax
 	}
-	adrFunc = codes::offsets.setUnitWeapFunc;
+	adrFunc = codes::offsets.setUnitWeaponFunc;
 	_asm
 	{
 		push weap
@@ -749,7 +754,7 @@ namespace unitActions
     {
         if (!battleHandlerHelpers::inBattle())
             return;
-        if (!un || !engine || un->eduEntry->Category != 0)
+        if (!un || !engine || un->eduEntry->category != 0)
             return;
         haltUnit(un);
         un->aiActiveSet = 2;
@@ -767,21 +772,21 @@ namespace unitHelpers
 
 	unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap)
 	{
-		int unitIndex = fastFunctsHelpers::getEduIndex(type);
-		
+		const int unitIndex = getEduIndex(type);
 		return createUnitIdx(unitIndex, regionID, facNum, exp, arm, weap);
 	}
 
 	unit* createUnitIdx(int index, int regionID, int facNum, int exp, int arm, int weap)
 	{
-		if (index == -1)return nullptr;
+		if (index == -1)
+			return nullptr;
 
 		unit* res = nullptr;
 
 		DWORD EDB = dataOffsets::offsets.unitTypesStart - 4;
 		DWORD adr = codes::offsets.createUnitFunc;
 
-		regionStruct* region = fastFuncts::getRegionByID(regionID);
+		regionStruct* region = stratMapHelpers::getRegion(regionID);
 		_asm
 		{
 			mov ecx, EDB;
@@ -805,12 +810,11 @@ namespace unitHelpers
 	{
 		if (edb == 0)
 			return nullptr;
-		
 		unit* res = nullptr;
 		DWORD adr = codes::offsets.createUnitFunc;
 		auto* entry = reinterpret_cast<eduEntry*>(edb);
-		DWORD eduIndex = entry->UnitCreatedCounter;
-		regionStruct* region = fastFuncts::getRegionByID(regionID);
+		DWORD eduIndex = entry->unitCreatedCounter;
+		regionStruct* region = stratMapHelpers::getRegion(regionID);
 		_asm
 		{
 			//mov ecx, edb;
@@ -929,6 +933,23 @@ namespace unitHelpers
 		}
 	}
 	
+	modelDbEntry* findBattleModel(const char* modelName)
+	{
+		DWORD funcAdr = codes::offsets.findBattleModel;
+		DWORD paramAdr = *reinterpret_cast<int*>(dataOffsets::offsets.modelsDb);
+		paramAdr += 0x84;
+		modelDbEntry* res = nullptr;
+		_asm
+		{
+			mov ecx, paramAdr
+			push modelName
+			mov eax, [funcAdr]
+			call eax
+			mov res, eax
+		}
+		return res;
+	}
+	
 	groupLabels* getGroupLabels()
 	{
 		return reinterpret_cast<groupLabels*>(dataOffsets::offsets.groupLabels);
@@ -954,7 +975,7 @@ namespace unitHelpers
 		default:
 			break;
 		}
-		return static_cast<int>(un->eduEntry->SoldierCount) * mul;
+		return static_cast<int>(un->eduEntry->soldierCount) * mul;
 	}
 	int16_t angleFloatToShort(float angle)
 	{
@@ -976,7 +997,7 @@ namespace unitHelpers
 		engine->angle = angleFloatToShort(angle);
 	}
 
-	unitGroup* getEmptyGroup(const stackStruct* army)
+	unitGroup* getEmptyGroup(const armyStruct* army)
 	{
 		if (!army || !army->unitGroups)
 			return nullptr;
@@ -996,7 +1017,7 @@ namespace unitHelpers
 		auto groupLabels = getGroupLabels();
 		
 		stringWithHash* labelHash = new stringWithHash();
-		fastFunctsHelpers::setCryptedString(&labelHash->name, label);
+		fastFunctsHelpers::setCryptedString(const_cast<char**>(&labelHash->name), label);
 		unitGroup** group = nullptr;
 		__asm
 		{
@@ -1030,7 +1051,7 @@ namespace unitHelpers
 		if (!group || !un || !un->unitGroup || un->unitGroup != group)
 			return;
 		un->releaseUnit();
-		CallVFunc<2, void*>(group, un, 1);
+		callVFunc<2, void*>(group, un, 1);
 		if (group->unitsInFormationNum + group->unitsNotInFormationNum == 0)
 			undefineUnitGroup(group);
 	}
@@ -1123,7 +1144,7 @@ namespace unitHelpers
 			DWORD removeUnusedLabel = codes::offsets.removeUnusedLabel;
 			auto labels = getGroupLabels();
 			auto labelHash = new stringWithHash();
-		    fastFunctsHelpers::setCryptedString(&labelHash->name, label);
+		    fastFunctsHelpers::setCryptedString(const_cast<char**>(&labelHash->name), label);
 			_asm
 			{
 				push labelHash
@@ -1140,10 +1161,10 @@ namespace unitHelpers
 		if (!group || !un || un->unitGroup)
 			return;
 		un->aiActiveSet = 2;
-		CallVFunc<1, void*>(group, un);
+		callVFunc<1, void*>(group, un);
 	}
 
-	unitGroup* defineUnitGroup(const stackStruct* army, const char* label, unit* un)
+	unitGroup* defineUnitGroup(const armyStruct* army, const char* label, unit* un)
 	{
 		if (!army || !army->unitGroups || !un || un->unitGroup)
 			return nullptr;
@@ -1154,7 +1175,7 @@ namespace unitHelpers
 		DWORD funcOffset = codes::offsets.defineUnitGroup;
 		auto labels = getGroupLabels();
 		stringWithHash* labelHash = new stringWithHash();
-		fastFunctsHelpers::setCryptedString(&labelHash->name, label);
+		fastFunctsHelpers::setCryptedString(const_cast<char**>(&labelHash->name), label);
 		unitGroup** groupPtr = &group;
 		__asm
 		{
@@ -1167,6 +1188,54 @@ namespace unitHelpers
 		addUnitToGroup(group, un);
 		delete labelHash;
 		return group;
+	}
+#define EduEntryStruct_Type 1
+#define EduEntryStruct_Soldier 2
+#define EduEntryStruct_UnitCardTga 3
+#define EduEntryStruct_InfoCardTga 4
+	
+	template <char fieldIndex>
+	std::string getStringPropertyEDU(const eduEntry* eduEn)
+	{
+		char* retS = nullptr;
+		if (fieldIndex == EduEntryStruct_Type)
+		{
+			retS = eduEn->eduType;
+		}
+		else if (fieldIndex == EduEntryStruct_Soldier)
+		{
+			retS = eduEn->soldier;
+		}
+		else if (fieldIndex == EduEntryStruct_UnitCardTga)
+		{
+			retS = eduEn->unitCardTga;
+		}
+		else if (fieldIndex == EduEntryStruct_InfoCardTga)
+		{
+			retS = eduEn->infoCardTga;
+		}
+
+		if (retS != nullptr)
+		{
+			return std::string(retS);
+		}
+		else
+		{
+			return std::string("");
+		}
+	}
+
+	template <char fieldIndex>
+	void setStringPropertyEDU(eduEntry* eduEn, std::string newS)
+	{
+		if (fieldIndex == EduEntryStruct_Type)
+			fastFunctsHelpers::setCryptedString(&eduEn->eduType, newS.c_str());
+		else if (fieldIndex == EduEntryStruct_Soldier)
+			fastFunctsHelpers::setCryptedString(&eduEn->soldier, newS.c_str());
+		else if (fieldIndex == EduEntryStruct_UnitCardTga)
+			fastFunctsHelpers::setCryptedString(&eduEn->unitCardTga, newS.c_str());
+		else if (fieldIndex == EduEntryStruct_InfoCardTga)
+			fastFunctsHelpers::setCryptedString(&eduEn->infoCardTga, newS.c_str());
 	}
 
 	std::string getLocalizedUnitName(const eduEntry* entry)
@@ -1206,14 +1275,95 @@ namespace unitHelpers
 		smallFuncs::createUniString(*entry->localizedDescrShort, descr.c_str());
 	}
 	
-    void addToLua(sol::state& luaState)
+	int getEduIndex(const char* type)
+	{
+		if (const auto data = eopDu::getEopEduEntryByName(type))
+			return data->index;
+		
+		unitDb* EDB = reinterpret_cast<unitDb*>(dataOffsets::offsets.unitTypesStart - 4);
+
+		int unitsNum = EDB->numberOfEntries;
+		for (int i = 0; i < unitsNum; i++)
+		{
+			if (strcmp(EDB->unitEntries[i].eduType, type) == 0)
+			{
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
+	std::unordered_map<std::string, int> BASE_UNITS_LOOKUP = {};
+
+	void initBaseUnitsLookup()
+	{
+		const auto edu = getEdu();
+		const int unitsNum = edu->numberOfEntries;
+		for (int i = 0; i < unitsNum; i++)
+		{
+			BASE_UNITS_LOOKUP[edu->unitEntries[i].eduType] = edu->unitEntries[i].index;
+		}
+	}
+	
+	eduEntry* getEduEntryByName(const char* type)
+	{
+		if (BASE_UNITS_LOOKUP.find(type) != BASE_UNITS_LOOKUP.end())
+			return getEDUEntryById(BASE_UNITS_LOOKUP[type]);
+		if (const auto data = eopDu::getEopEduEntryByName(type))
+			return data;
+		const auto edu = getEdu();
+		const int unitsNum = edu->numberOfEntries;
+		for (int i = 0; i < unitsNum; i++)
+		{
+			if (strcmp(edu->unitEntries[i].eduType, type) == 0)
+			{
+				return &edu->unitEntries[i];
+			}
+		}
+		return nullptr;
+	}
+
+	unitDb* getEdu()
+	{
+		return reinterpret_cast<unitDb*>(dataOffsets::offsets.unitTypesStart - 4);
+	}
+	
+	eduEntry* getEDUEntryById(int id)
+	{
+		const auto edu = getEdu();
+		const int unitsNum = edu->numberOfEntries;
+		if (id < 0 || id >= unitsNum)
+			return nullptr;
+		if (edu->unitEntries[id].index == id)
+			return &edu->unitEntries[id];
+		for (int i = 0; i < unitsNum; i++)
+		{
+			if (edu->unitEntries[i].index == id)
+			{
+				return &edu->unitEntries[i];
+			}
+		}
+		return nullptr;
+	}
+	
+}
+
+    //void addToLua(sol::state& luaState)
+	void luaP::initUnits()
     {
         struct
         {
             sol::usertype<unit>unit;
             sol::usertype<unitPositionData>unitPositionData;
             sol::usertype<unitGroup> unitGroup;
-            sol::usertype<siegeEngine> siegeEngineStruct;
+        	sol::usertype<siegeEngine> siegeEngineStruct;
+        	sol::usertype<eduEntry>eduEntry;
+        	sol::usertype<descrMountEntry> mountStruct;
+        	sol::usertype<projectile> projectileStruct;
+        	sol::usertype<statPri> attackStats;
+        	sol::usertype<statArmour> defenseStats;
+        	sol::usertype<unitStats> unitStats;
         }types;
     	
 		///Unit
@@ -1266,7 +1416,7 @@ namespace unitHelpers
 		@tfield float battlePosY (battle)
 		@tfield character character
 		@tfield unitPositionData unitPositionData
-		@tfield stackStruct army
+		@tfield armyStruct army
 		@tfield int siegeEngineNum (only infantry and artillery units!)
 		@tfield kill kill
 		@tfield setParams setParams change soldierCountStratMap, exp, armourLVL, weaponLVL at one time.
@@ -1302,18 +1452,19 @@ namespace unitHelpers
 		@tfield getNearbyFriendlyUnit getNearbyFriendlyUnit
 		@tfield getNearbyEnemyUnit getNearbyEnemyUnit
 		@tfield releaseUnit releaseUnit
+		@tfield unitStats unitStats
 
 		@table unit
 		*/
 		types.unit = luaState.new_usertype<unit>("unit");
 		types.unit.set("eduEntry", &unit::eduEntry);
 		types.unit.set("aiActiveSet", &unit::aiActiveSet);
-		types.unit.set("movePoints", sol::property(&unit::getMovepoints, &setUnitMovePoints));
-		types.unit.set("soldierCountStratMap", sol::property(&unit::getSoldierCountStratMap, &setSoldiersCount));
+		types.unit.set("movePoints", sol::property(&unit::getMovepoints, &unitHelpers::setUnitMovePoints));
+		types.unit.set("soldierCountStratMap", sol::property(&unit::getSoldierCountStratMap, &unitHelpers::setSoldiersCount));
 		types.unit.set("exp", sol::property(&unit::getExp, &unit::setExp));
 		types.unit.set("armourLVL", sol::property(&unit::getArmourLevel, &unit::setarmourLVL));
 		types.unit.set("weaponLVL", sol::property(&unit::getWeaponLevel, &unit::setweaponLVL));
-		types.unit.set("soldierCountStratMapMax", sol::property(&getMaxSoldiersCount));
+		types.unit.set("soldierCountStratMapMax", sol::property(&unitHelpers::getMaxSoldiersCount));
 		types.unit.set("soldierCountBattleMap", &unit::SoldierCountBattlemap);
 		types.unit.set("unitPositionData", &unit::unitPositionData);
 		types.unit.set("character", &unit::general);
@@ -1325,6 +1476,7 @@ namespace unitHelpers
 		types.unit.set("flankRearThreat", &unit::flankRearThreat);
 		types.unit.set("soldiersFled", &unit::soldiersFled);
 		types.unit.set("isInfighting", &unit::isInfighting);
+		types.unit.set("unitStats", &unit::battleStats);
 		types.unit.set("isCloseFormation", &unit::isCloseFormation);
 		types.unit.set("moraleLevel", sol::property(&unit::getMoraleLevel, &unit::setMoraleLevel));
 		types.unit.set("inPlayableArea", sol::property(&unit::getInPlayableArea, &unit::setInPlayableArea));
@@ -1359,7 +1511,7 @@ namespace unitHelpers
 		@usage
 		unit:kill();
 		*/
-		types.unit.set_function("kill", &killUnit);
+		types.unit.set_function("kill", &unitHelpers::killUnit);
 		/***
 		Set unit basic parameters
 		@function unit:setParams
@@ -1370,14 +1522,14 @@ namespace unitHelpers
 		unit:setParams(0,0,0);
 		*/
 		types.unit.set_function("setParams", &unit::setUnitParamsLua);
-		types.unit.set("alias", sol::property(&unitUniStringToStr, &setUnitUniStr));
+		types.unit.set("alias", sol::property(&unitHelpers::unitUniStringToStr, &unitHelpers::setUnitUniStr));
 		/***
 		Check if unit has edu attribute.
 		@function unit:hasAttribute
 		@usage
 		local hasAttr = unit:hasAttribute("sea_faring");
 		*/
-		types.unit.set_function("hasAttribute", &eopEduHelpers::hasAttribute);
+		types.unit.set_function("hasAttribute", &unit::hasAttribute);
 		/***
 		Check if unit has guard mode, skirmish or fire at will on.
 		@function unit:hasBattleProperty
@@ -1704,12 +1856,13 @@ namespace unitHelpers
 		@tfield float yCoord
 		@tfield float mass
 		@tfield int angle
-		@tfield int engineID
+		@tfield int engineID Unique ID not class!
 		@tfield unit currentUnit
 		@tfield unit lastUnit
 		@tfield getType getType
 		@tfield int fireLevel
 		@tfield int isBurning
+		@tfield unitStats stats
 	
 		@table siegeEngineStruct
 		*/
@@ -1718,12 +1871,13 @@ namespace unitHelpers
     	types.siegeEngineStruct.set("zCoord", &siegeEngine::posZ);
     	types.siegeEngineStruct.set("yCoord", &siegeEngine::posY);
     	types.siegeEngineStruct.set("mass", &siegeEngine::mass);
-    	types.siegeEngineStruct.set("angle", sol::property(&getEngineAngle, &setEngineAngle));
+    	types.siegeEngineStruct.set("angle", sol::property(&unitHelpers::getEngineAngle, &unitHelpers::setEngineAngle));
     	types.siegeEngineStruct.set("currentUnit", &siegeEngine::currentUnit);
     	types.siegeEngineStruct.set("lastUnit", &siegeEngine::lastUnit);
     	types.siegeEngineStruct.set("engineID", &siegeEngine::engineID);
     	types.siegeEngineStruct.set("fireLevel", &siegeEngine::fireLevel);
     	types.siegeEngineStruct.set("isBurning", &siegeEngine::isBurning);
+    	types.siegeEngineStruct.set("stats", &siegeEngine::stats);
 
     	/***
 		Get the type of the engine (use the enum).
@@ -1804,7 +1958,7 @@ namespace unitHelpers
 		@usage
 				unitGroup:addUnit(unit);
 		*/
-		types.unitGroup.set_function("addUnit", &addUnitToGroup);
+		types.unitGroup.set_function("addUnit", &unitHelpers::addUnitToGroup);
 		
 		/***
 		Remove a unit from a group.
@@ -1813,7 +1967,7 @@ namespace unitHelpers
 		@usage
 				unitGroup:removeUnit(unit);
 		*/
-		types.unitGroup.set_function("removeUnit", &removeUnitFromGroup);
+		types.unitGroup.set_function("removeUnit", &unitHelpers::removeUnitFromGroup);
 		
 		/***
 		Undefine a unit group.
@@ -1821,7 +1975,7 @@ namespace unitHelpers
 		@usage
 				unitGroup:undefine();
 		*/
-		types.unitGroup.set_function("undefine", &undefineUnitGroup);
+		types.unitGroup.set_function("undefine", &unitHelpers::undefineUnitGroup);
 		
 		/***
 		Toggle group automation.
@@ -1830,7 +1984,7 @@ namespace unitHelpers
 		@usage
 				unitGroup:automate(true);
 		*/
-		types.unitGroup.set_function("automate", &automateGroup);
+		types.unitGroup.set_function("automate", &unitHelpers::automateGroup);
 		
 		/***
 		Automate group attack.
@@ -1839,7 +1993,7 @@ namespace unitHelpers
 		@usage
 				unitGroup:automateAttack(targetUnit);
 		*/
-		types.unitGroup.set_function("automateAttack", &automateAttack);
+		types.unitGroup.set_function("automateAttack", &unitHelpers::automateAttack);
 		
 		/***
 		Automate group defense.
@@ -1850,7 +2004,7 @@ namespace unitHelpers
 		@usage
 				unitGroup:automateDefense(180, 283, 50);
 		*/
-		types.unitGroup.set_function("automateDefense", &automateDefense);
+		types.unitGroup.set_function("automateDefense", &unitHelpers::automateDefense);
 		
 		/***
 		Get a unit in the group's formation (not given individual commands). Once you give a unit a command once it seems they will always be in the other array.
@@ -1881,7 +2035,7 @@ namespace unitHelpers
 		@usage
 				unitGroup:place(150, 127, 0);
 		*/
-		types.unitGroup.set_function("place", &placeGroup);
+		types.unitGroup.set_function("place", &unitHelpers::placeGroup);
 		
 		/***
 		Change the group's units formations.
@@ -1983,8 +2137,456 @@ namespace unitHelpers
 				unitGroup:turn(90, true);
 		*/
 		types.unitGroup.set_function("turn", &unitActions::groupTurn);
-	
-    	
+		
+		///Projectile
+		//@section projectileStruct
 
+		/***
+
+		@tfield string name
+		@tfield float accuracy
+		@tfield float accuracyVsBuildings
+		@tfield float accuracyVsTowers
+		@tfield int damage
+		@tfield int damageToTroops
+		@tfield int isBodyPiercing
+		@tfield int fiery
+		@tfield int affectedByRain
+
+		@table projectileStruct
+		*/
+		types.projectileStruct = luaState.new_usertype<projectile>("projectileStruct");
+		types.projectileStruct.set("name", &projectile::name);
+		types.projectileStruct.set("accuracy", &projectile::accuracyVsUnits);
+		types.projectileStruct.set("accuracyVsBuildings", &projectile::accuracyVsBuildings);
+		types.projectileStruct.set("accuracyVsTowers", &projectile::accuracyVsTowers);
+		types.projectileStruct.set("damage", &projectile::damage);
+		types.projectileStruct.set("damageToTroops", &projectile::damageToTroops);
+		types.projectileStruct.set("affectedByRain", &projectile::affectedByRain);
+		types.projectileStruct.set("isBodyPiercing", &projectile::accuracyVsUnits);
+		types.projectileStruct.set("fiery", &projectile::fiery);
+		
+		///Mount
+		//@section mountStruct
+
+		/***
+
+		@tfield string name
+		@tfield int mountClass
+		@tfield float radius
+		@tfield float mass
+		@tfield float elephantDeadRadius
+		@tfield float elephantTuskRadius
+
+		@table mountStruct
+		*/
+		types.mountStruct = luaState.new_usertype<descrMountEntry>("mountStruct");
+		types.mountStruct.set("name", &descrMountEntry::name);
+		types.mountStruct.set("mountClass", &descrMountEntry::mountClass);
+		types.mountStruct.set("radius", &descrMountEntry::radius);
+		types.mountStruct.set("mass", &descrMountEntry::radius);
+		types.mountStruct.set("elephantDeadRadius", &descrMountEntry::elephantDeadRadius);
+		types.mountStruct.set("elephantTuskRadius", &descrMountEntry::elephantTuskRadius);
+
+		///EduEntry
+		//@section eduEntryTable
+
+		/***
+		Basic eduEntry table
+
+		@tfield string eduType - Get only
+		@tfield string soldier - Get only
+		@tfield string unitCardTga - Get only
+		@tfield string infoCardTga - Get only
+		@tfield string localizedName
+		@tfield string localizedDescription
+		@tfield string localizedDescriptionShort
+		@tfield int index - Get only
+		@tfield int unitCreatedCounter - Get only
+		@tfield int category - Get only
+		@tfield int class - Get only
+		@tfield int categoryClassCombo - Get only
+		@tfield int recruitPriorityOffset times 4
+		@tfield int crusadingUpkeepModifier
+		@tfield float aiUnitValuePerSoldier
+		@tfield float aiUnitValue
+		@tfield int soldierCount
+		@tfield float mass
+		@tfield float width
+		@tfield float height
+		@tfield bool legio
+		@tfield bool hideForest
+		@tfield bool hideImprovedForest
+		@tfield bool hideLongGrass
+		@tfield bool hideAnywhere
+		@tfield bool powerCharge
+		@tfield bool seaFaring
+		@tfield bool command
+		@tfield bool heavyUnit
+		@tfield bool hardy
+		@tfield bool veryHardy
+		@tfield bool slave
+		@tfield bool frightenFoot
+		@tfield bool frightenMounted
+		@tfield bool freeUpkeepUnit
+		@tfield bool gunpowderUnit
+		@tfield bool gunpowderArtillery
+		@tfield bool fireByRank
+		@tfield bool startNotSkirmishing
+		@tfield bool mercenaryUnit
+		@tfield bool noCustom
+		@tfield bool isPeasant
+		@tfield bool generalUnit
+		@tfield bool generalUnitUpgrade
+		@tfield bool cantabrianCircle
+		@tfield bool druid
+		@tfield bool screechingWomen
+		@tfield bool warCry
+		@tfield bool stakes
+		@tfield bool canSkirmish
+		@tfield float moveSpeedMod
+		@tfield float unitSpacingFrontToBackClose
+		@tfield float unitSpacingSideToSideClose
+		@tfield float unitSpacingFrontToBackLoose
+		@tfield float unitSpacingSideToSideLoose
+		@tfield int statHealth
+		@tfield int statHealthAnimal
+		@tfield int statHeat
+		@tfield int statScrub
+		@tfield int statSand
+		@tfield int statForest
+		@tfield int statSnow
+		@tfield int recruitTime
+		@tfield int recruitCost
+		@tfield int upkeepCost
+		@tfield int weaponCost
+		@tfield int armourCost
+		@tfield int customBattleCost
+		@tfield int customBattleIncrease
+		@tfield int customBattleLimit
+		@tfield int training
+		@tfield int discipline
+		@tfield int canPhalanx
+		@tfield int morale
+		@tfield int moraleLocked
+		@tfield int statFood1
+		@tfield int statFood2
+		@tfield attackStats primaryStats
+		@tfield attackStats secondaryStats
+		@tfield attackStats tertiaryStats
+		@tfield attackStats engineStats
+		@tfield attackStats mountStats
+		@tfield attackStats animalStats
+		@tfield defenseStats primaryDefenseStats
+		@tfield defenseStats secondaryDefenseStats
+		@tfield defenseStats mountDefenseStats
+		@tfield defenseStats animalDefenseStats
+		@tfield mountStruct mount
+		@tfield string primaryAnim
+		@tfield string secondaryAnim
+		@tfield hasOwnership hasOwnership
+		@tfield hasAttribute hasAttribute
+		@tfield setOwnership setOwnership
+		@tfield getArmourLevelNum getArmourLevelNum
+		@tfield getArmourLevel getArmourLevel
+		@tfield setArmourLevel setArmourLevel
+		@tfield getArmourModelNum getArmourModelNum
+		@tfield getArmourModel getArmourModel
+		@tfield setArmourModel setArmourModel
+
+		@table eduEntry
+		*/
+		types.eduEntry = luaState.new_usertype<eduEntry>("eduEntry");
+		types.eduEntry.set("eduType", sol::property(
+			&unitHelpers::getStringPropertyEDU<EduEntryStruct_Type>, &unitHelpers::setStringPropertyEDU<EduEntryStruct_Type>
+			));
+		types.eduEntry.set("soldier", sol::property(
+			&unitHelpers::getStringPropertyEDU<EduEntryStruct_Soldier>, &unitHelpers::setStringPropertyEDU<EduEntryStruct_Soldier>
+			));
+		types.eduEntry.set("unitCardTga", sol::property(
+			&unitHelpers::getStringPropertyEDU<EduEntryStruct_UnitCardTga>, &unitHelpers::setStringPropertyEDU<EduEntryStruct_UnitCardTga>
+			));
+		types.eduEntry.set("infoCardTga", sol::property(
+			&unitHelpers::getStringPropertyEDU<EduEntryStruct_InfoCardTga>, &unitHelpers::setStringPropertyEDU<EduEntryStruct_InfoCardTga>
+			));
+		types.eduEntry.set("localizedName", sol::property(&unitHelpers::getLocalizedUnitName, &unitHelpers::setUnitName));
+		types.eduEntry.set("localizedDescription", sol::property(&unitHelpers::getLocalizedUnitDescr, &unitHelpers::setUnitDescr));
+		types.eduEntry.set("localizedDescriptionShort", sol::property(&unitHelpers::getLocalizedUnitDescrShort, &unitHelpers::setUnitDescrShort));
+		types.eduEntry.set("index", &eduEntry::index);
+		types.eduEntry.set("unitCreatedCounter", &eduEntry::unitCreatedCounter);
+		types.eduEntry.set("soldierCount", &eduEntry::soldierCount);
+		types.eduEntry.set("mass", &eduEntry::mass);
+		types.eduEntry.set("width", &eduEntry::width);
+		types.eduEntry.set("primaryStats", &eduEntry::priStats);
+	    types.eduEntry.set("secondaryStats", &eduEntry::secStats);
+		types.eduEntry.set("tertiaryStats", &eduEntry::terStats);
+		types.eduEntry.set("engineStats", &eduEntry::engineStats);
+	 	types.eduEntry.set("mountStats", &eduEntry::mountStats);
+		types.eduEntry.set("animalStats", &eduEntry::animalStats);
+		types.eduEntry.set("primaryDefenseStats", &eduEntry::statPriArmour);
+		types.eduEntry.set("secondaryDefenseStats", &eduEntry::statSecArmour);
+		types.eduEntry.set("mountDefenseStats", &eduEntry::statArmourMount);
+		types.eduEntry.set("animalDefenseStats", &eduEntry::statArmourAnimal);
+		types.eduEntry.set("height", &eduEntry::height);
+		types.eduEntry.set("training", &eduEntry::trained);
+		types.eduEntry.set("discipline", &eduEntry::discipline);
+		types.eduEntry.set("mount", &eduEntry::mount);
+		types.eduEntry.set("canPhalanx", &eduEntry::formationPhalanx);
+		types.eduEntry.set("moveSpeedMod", &eduEntry::moveSpeedMod);
+		types.eduEntry.set("unitSpacingFrontToBackClose", &eduEntry::unitSpacingFrontToBackClose);
+		types.eduEntry.set("unitSpacingSideToSideClose", &eduEntry::unitSpacingSideToSideClose);
+		types.eduEntry.set("unitSpacingFrontToBackLoose", &eduEntry::unitSpacingFrontToBackLoose);
+		types.eduEntry.set("unitSpacingSideToSideLoose", &eduEntry::unitSpacingSideToSideLoose);
+		types.eduEntry.set("statHealth", &eduEntry::statHealth);
+		types.eduEntry.set("statHealthAnimal", &eduEntry::statHealthAnimal);
+		types.eduEntry.set("statHeat", &eduEntry::statHeat);
+		types.eduEntry.set("statScrub", &eduEntry::statScrub);
+		types.eduEntry.set("statSand", &eduEntry::statSand);
+		types.eduEntry.set("statForest", &eduEntry::statForest);
+		types.eduEntry.set("statSnow", &eduEntry::statSnow);
+		types.eduEntry.set("recruitTime", &eduEntry::recruitTime);
+		types.eduEntry.set("recruitCost", &eduEntry::recruitCost);
+		types.eduEntry.set("upkeepCost", &eduEntry::upkeepCost);
+		types.eduEntry.set("weaponCost", &eduEntry::weaponCost);
+		types.eduEntry.set("armourCost", &eduEntry::armourCost);
+		types.eduEntry.set("customBattleCost", &eduEntry::customBattleCost);
+		types.eduEntry.set("customBattleIncrease", &eduEntry::customBattleIncrease);
+		types.eduEntry.set("customBattleLimit", &eduEntry::customBattleLimit);
+		types.eduEntry.set("morale", &eduEntry::morale);
+		types.eduEntry.set("moraleLocked", &eduEntry::moraleLocked);
+		types.eduEntry.set("statFood1", &eduEntry::statFood1);
+		types.eduEntry.set("statFood2", &eduEntry::statFood2);
+		types.eduEntry.set("category", &eduEntry::category);
+		types.eduEntry.set("primaryAnim", sol::property(&eduEntry::getPrimaryAnim));
+		types.eduEntry.set("secondaryAnim", sol::property(&eduEntry::getSecondaryAnim));
+		types.eduEntry.set("class", &eduEntry::unitClass);
+		types.eduEntry.set("categoryClassCombo", &eduEntry::unitProductionClass);
+		types.eduEntry.set("recruitPriorityOffset", &eduEntry::recruitPriorityOffset);
+		types.eduEntry.set("crusadingUpkeepModifier", &eduEntry::crusadingUpkeepModifier);
+		types.eduEntry.set("aiUnitValuePerSoldier", &eduEntry::aiUnitValuePerSoldier);
+		types.eduEntry.set("aiUnitValue", &eduEntry::aiUnitValue);
+		types.eduEntry.set("haveAttributeLegio", sol::property(&eduEntry::getIsLegio, &eduEntry::setIsLegio));
+		types.eduEntry.set("legio", sol::property(&eduEntry::getIsLegio, &eduEntry::setIsLegio));
+		types.eduEntry.set("hideForest", sol::property(&eduEntry::getHideForest, &eduEntry::setHideForest));
+		types.eduEntry.set("hideImprovedForest", sol::property(&eduEntry::getHideImprovedForest, &eduEntry::setHideImprovedForest));
+		types.eduEntry.set("hideLongGrass", sol::property(&eduEntry::getHideLongGrass, &eduEntry::setHideLongGrass));
+		types.eduEntry.set("hideAnywhere", sol::property(&eduEntry::getHideAnywhere, &eduEntry::setHideAnywhere));
+		types.eduEntry.set("powerCharge", sol::property(&eduEntry::getPowerCharge, &eduEntry::setPowerCharge));
+		types.eduEntry.set("seaFaring", sol::property(&eduEntry::getSeaFaring, &eduEntry::setSeaFaring));
+		types.eduEntry.set("command", sol::property(&eduEntry::getCommand, &eduEntry::setCommand));
+		types.eduEntry.set("heavyUnit", sol::property(&eduEntry::getHeavyUnit, &eduEntry::setHeavyUnit));
+		types.eduEntry.set("hardy", sol::property(&eduEntry::getHardy, &eduEntry::setHardy));
+		types.eduEntry.set("veryHardy", sol::property(&eduEntry::getVeryHardy, &eduEntry::setVeryHardy));
+		types.eduEntry.set("slave", sol::property(&eduEntry::getSlave, &eduEntry::setSlave));
+		types.eduEntry.set("frightenFoot", sol::property(&eduEntry::getFrightenFoot, &eduEntry::setFrightenFoot));
+		types.eduEntry.set("frightenMounted", sol::property(&eduEntry::getFrightenMounted, &eduEntry::setFrightenMounted));
+		types.eduEntry.set("freeUpkeepUnit", sol::property(&eduEntry::getFreeUpkeepUnit, &eduEntry::setFreeUpkeepUnit));
+		types.eduEntry.set("gunpowderUnit", sol::property(&eduEntry::getGunpowderUnit, &eduEntry::setGunpowderUnit));
+		types.eduEntry.set("gunpowderArtillery", sol::property(&eduEntry::getGunpowderArtillery, &eduEntry::setGunpowderArtillery));
+		types.eduEntry.set("fireByRank", sol::property(&eduEntry::getFireByRank, &eduEntry::setFireByRank));
+		types.eduEntry.set("startNotSkirmishing", sol::property(&eduEntry::getStartNotSkirmishing, &eduEntry::setStartNotSkirmishing));
+		types.eduEntry.set("mercenaryUnit", sol::property(&eduEntry::getMercenaryUnit, &eduEntry::setMercenaryUnit));
+		types.eduEntry.set("noCustom", sol::property(&eduEntry::getNoCustom, &eduEntry::setNoCustom));
+		types.eduEntry.set("isPeasant", sol::property(&eduEntry::getIsPeasant, &eduEntry::setIsPeasant));
+		types.eduEntry.set("generalUnit", sol::property(&eduEntry::getGeneralUnit, &eduEntry::setGeneralUnit));
+		types.eduEntry.set("generalUnitUpgrade", sol::property(&eduEntry::getGeneralUnitUpgrade, &eduEntry::setGeneralUnitUpgrade));
+		types.eduEntry.set("cantabrianCircle", sol::property(&eduEntry::getCantabrianCircle, &eduEntry::setCantabrianCircle));
+		types.eduEntry.set("druid", sol::property(&eduEntry::getDruid, &eduEntry::setDruid));
+		types.eduEntry.set("screechingWomen", sol::property(&eduEntry::getScreechingWomen, &eduEntry::setScreechingWomen));
+		types.eduEntry.set("warCry", sol::property(&eduEntry::getWarCry, &eduEntry::setWarCry));
+		types.eduEntry.set("stakes", sol::property(&eduEntry::getStakes, &eduEntry::setStakes));
+		types.eduEntry.set("canSkirmish", sol::property(&eduEntry::getCanSkirmish, &eduEntry::setCanSkirmish));
+		
+		
+		/***
+		Check if a faction has ownership of this entry.
+		@function eduEntry:hasOwnership
+		@tparam int factionID
+		@treturn bool hasOwnership
+		@usage
+		local hasOwnership = unit.eduEntry:hasOwnership(2);
+		*/
+		types.eduEntry.set_function("hasOwnership", &eduEntry::hasOwnership);
+
+		/***
+		Set if a faction has ownership of this entry.
+		@function eduEntry:setOwnership
+		@tparam int factionID
+		@tparam bool setOwnership
+		@usage
+			unit.eduEntry:setOwnership(2, true);
+		*/
+		types.eduEntry.set_function("setOwnership", &eduEntry::setOwnership);
+		
+		/***
+		Check if the entry has an attribute.
+		@function eduEntry:hasAttribute
+		@tparam string attributeName
+		@treturn bool hasAttribute
+		@usage
+		local hasAttribute = entry:hasAttribute("sea_faring");
+		*/
+		types.eduEntry.set_function("hasAttribute", &eduEntry::hasAttribute);
+		
+		/***
+		Get number of armour levels.
+		@function eduEntry:getArmourLevelNum
+		@treturn int levelNum
+		@usage
+		local num = entry:getArmourLevelNum();
+		*/
+		types.eduEntry.set_function("getArmourLevelNum", &eduEntry::getArmourLevelNum);
+		
+		/***
+		Get number of armour models.
+		@function eduEntry:getArmourModelNum
+		@treturn int levelNum
+		@usage
+		local num = entry:getArmourModelNum();
+		*/
+		types.eduEntry.set_function("getArmourModelNum", &eduEntry::getArmourModelNum);
+		
+		/***
+		Get armour level at index.
+		@function eduEntry:getArmourLevel
+		@tparam int index
+		@treturn int level
+		@usage
+		local level = entry:getArmourLevel(0);
+		*/
+		types.eduEntry.set_function("getArmourLevel", &eduEntry::getArmourLevel);
+		
+		/***
+		Get armour model at index.
+		@function eduEntry:getArmourModel
+		@tparam int index
+		@treturn string model
+		@usage
+		local model = entry:getArmourModel(0);
+		*/
+		types.eduEntry.set_function("getArmourModel", &eduEntry::getArmourModel);
+		
+		/***
+		Set armour level at index.
+		@function eduEntry:setArmourLevel
+		@tparam int index
+		@tparam int level
+		@usage
+			entry:setArmourLevel(0, 2);
+		*/
+		types.eduEntry.set_function("setArmourLevel", &eduEntry::setArmourLevel);
+		
+		/***
+		Set armour model at index.
+		@function eduEntry:setArmourModel
+		@tparam int index
+		@tparam string model
+		@usage
+			entry:setArmourModel(0, "peasants");
+		*/
+		types.eduEntry.set_function("setArmourModel", &eduEntry::setArmourModel);
+		
+		/***
+		@tfield bool isValid
+		@tfield bool isMissile
+		@tfield bool isSpear
+		@tfield bool isLightSpear
+		@tfield bool isPrec
+		@tfield bool isAP
+		@tfield bool isBP
+		@tfield bool isArea
+		@tfield bool isFire
+		@tfield bool isBodyLaunching
+		@tfield bool isThrown
+		@tfield bool isShortPike
+		@tfield bool isLongPike
+		@tfield bool isSpearBonus12
+		@tfield bool isSpearBonus10
+		@tfield bool isSpearBonus8
+		@tfield bool isSpearBonus6
+		@tfield bool isSpearBonus4
+		@tfield int attack
+		@tfield int charge
+		@tfield int ammo
+		@tfield int range
+		@tfield float rangeSquared
+		@tfield projectileStruct projectile
+		@tfield int weaponType
+		@tfield int techType
+		@tfield int damageType
+		@tfield int soundType
+		@tfield int minAttackDelayPri
+		@tfield string weaponFX
+
+		@table attackStats
+		*/
+		types.attackStats = luaState.new_usertype<statPri>("attackStats");
+		types.attackStats.set("isValid", sol::property(&statPri::getIsValid, &statPri::setIsValid));
+		types.attackStats.set("isMissile", sol::property(&statPri::getIsMissile, &statPri::setIsMissile));
+		types.attackStats.set("isSpear", sol::property(&statPri::getIsSpear, &statPri::setIsSpear));
+		types.attackStats.set("isLightSpear", sol::property(&statPri::getIsLightSpear, &statPri::setIsLightSpear));
+		types.attackStats.set("isPrec", sol::property(&statPri::getIsPrec, &statPri::setIsPrec));
+		types.attackStats.set("isAP", sol::property(&statPri::getIsAP, &statPri::setIsAP));
+		types.attackStats.set("isBP", sol::property(&statPri::getIsBP, &statPri::setIsBP));
+		types.attackStats.set("isArea", sol::property(&statPri::getIsArea, &statPri::setIsArea));
+		types.attackStats.set("isFire", sol::property(&statPri::getIsFire, &statPri::setIsFire));
+		types.attackStats.set("isBodyLaunching", sol::property(&statPri::getIsBodyLaunching, &statPri::setIsBodyLaunching));
+		types.attackStats.set("isThrown", sol::property(&statPri::getIsThrown, &statPri::setIsThrown));
+		types.attackStats.set("isShortPike", sol::property(&statPri::getIsShortPike, &statPri::setIsShortPike));
+		types.attackStats.set("isLongPike", sol::property(&statPri::getIsLongPike, &statPri::setIsLongPike));
+		types.attackStats.set("isSpearBonus12", sol::property(&statPri::getIsSpearBonus12, &statPri::setIsSpearBonus12));
+		types.attackStats.set("isSpearBonus10", sol::property(&statPri::getIsSpearBonus10, &statPri::setIsSpearBonus10));
+		types.attackStats.set("isSpearBonus8", sol::property(&statPri::getIsSpearBonus8, &statPri::setIsSpearBonus8));
+		types.attackStats.set("isSpearBonus6", sol::property(&statPri::getIsSpearBonus6, &statPri::setIsSpearBonus6));
+		types.attackStats.set("isSpearBonus4", sol::property(&statPri::getIsSpearBonus4, &statPri::setIsSpearBonus4));
+		types.attackStats.set("attack", sol::property(&statPri::getAttack, &statPri::setAttack));
+		types.attackStats.set("charge", sol::property(&statPri::getCharge, &statPri::setCharge));
+		types.attackStats.set("ammo", sol::property(&statPri::getAmmo, &statPri::setAmmo));
+		types.attackStats.set("range", &statPri::missileRange);
+		types.attackStats.set("rangeSquared", &statPri::missileRangeSquared);
+		types.attackStats.set("projectile", &statPri::missile);
+		types.attackStats.set("weaponType", &statPri::weaponType);
+		types.attackStats.set("techType", &statPri::weaponTecType);
+		types.attackStats.set("damageType", &statPri::damageType);
+		types.attackStats.set("soundType", &statPri::soundType);
+		types.attackStats.set("minAttackDelayPri", &statPri::minAttackDelayPri);
+		types.attackStats.set("weaponFX", &statPri::weaponFX);
+		
+		/***
+		@tfield bool isValid
+		@tfield int armour
+		@tfield int defense
+		@tfield int shield
+		@tfield int armourMaterial
+		
+		@table defenseStats
+		*/
+		types.defenseStats = luaState.new_usertype<statArmour>("defenseStats");
+		types.defenseStats.set("isValid", sol::property(&statArmour::getIsValid, &statArmour::setIsValid));
+		types.defenseStats.set("armour", sol::property(&statArmour::getArmour, &statArmour::setArmour));
+		types.defenseStats.set("defense", sol::property(&statArmour::getDefense, &statArmour::setDefense));
+		types.defenseStats.set("shield", sol::property(&statArmour::getShield, &statArmour::setShield));
+		types.defenseStats.set("armourMaterial", &statArmour::armourMaterial);
+		
+		/***
+		@tfield attackStats attackStats
+		@tfield defenseStats defenseStats
+		@tfield int attackInBattle
+		@tfield int armourInBattle
+		@tfield int formationDefBonus
+		@tfield int formationAttBonus
+		@tfield int generalsBonus
+		@tfield int chargeBonus
+		@tfield int chargeDecay
+		
+		@table unitStats
+		*/
+		types.unitStats = luaState.new_usertype<unitStats>("unitStats");
+		types.unitStats.set("chargeBonus", sol::property(&unitStats::getChargeBonus, &unitStats::setChargeBonus));
+		types.unitStats.set("chargeDecay", sol::property(&unitStats::getChargeDecay, &unitStats::setChargeDecay));
+		types.unitStats.set("attackInBattle", &unitStats::attackInBattle);
+		types.unitStats.set("armourInBattle", &unitStats::armourInBattle);
+		types.unitStats.set("formationDefBonus", &unitStats::formationDefBonus);
+		types.unitStats.set("formationAttBonus", &unitStats::formationAttBonus);
+		types.unitStats.set("generalsBonus", &unitStats::generalsBonus);
     }
-}

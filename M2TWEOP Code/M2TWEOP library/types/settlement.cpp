@@ -1,7 +1,6 @@
 ﻿#include "settlement.h"
 
 #include "dataOffsets.h"
-#include "fastFuncts.h"
 #include "character.h"
 #include "characterRecord.h"
 #include "eopBuildings.h"
@@ -13,6 +12,9 @@
 #include "faction.h"
 #include "unit.h"
 #include "m2tweopHelpers.h"
+#include "army.h"
+#include "campaign.h"
+#include "strategyMap.h"
 
 namespace settlementHelpers
 {
@@ -22,7 +24,7 @@ namespace settlementHelpers
 #pragma region Settlement helpers
 	void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner, bool convertGarrison)
 	{
-		stackStruct* garrison = nullptr;
+		armyStruct* garrison = nullptr;
 		std::vector<character*> characters;
 		if (convertGarrison)
 		{
@@ -92,11 +94,11 @@ namespace settlementHelpers
 		if (garrison)
 		{
 			if (sett->army && sett->army != garrison)
-				fastFuncts::mergeArmies(garrison, sett->army);
+				armyHelpers::mergeArmies(garrison, sett->army);
 			else
 			{
-				auto newGarrison = fastFuncts::createArmyInSettlement(sett);
-				fastFuncts::mergeArmies(garrison, newGarrison);
+				auto newGarrison = armyHelpers::createArmyInSettlement(sett);
+				armyHelpers::mergeArmies(garrison, newGarrison);
 			}
 		}
 		for (int i = 0; i < newOwner->stackNum; i++)
@@ -109,12 +111,12 @@ namespace settlementHelpers
 				if (sett->army)
 				{
 					if (sett->army != stack)
-						fastFuncts::mergeArmies(stack, sett->army);
+						armyHelpers::mergeArmies(stack, sett->army);
 				}
 				else
 				{
-					auto newGarrison = fastFuncts::createArmyInSettlement(sett);
-					fastFuncts::mergeArmies(stack, newGarrison);
+					auto newGarrison = armyHelpers::createArmyInSettlement(sett);
+					armyHelpers::mergeArmies(stack, newGarrison);
 				}	
 			}
 		}
@@ -127,12 +129,12 @@ namespace settlementHelpers
 					auto label = std::string(character->characterRecord->shortName) + "_" + std::to_string(character->characterRecord->index);
 					fastFunctsHelpers::setCryptedString(&character->characterRecord->label, label.c_str());
 				}
-				int unitId = character->bodyguards->eduEntry->Index;
+				int unitId = character->bodyguards->eduEntry->index;
 				int xp = character->bodyguards->expScreen;
 				int armour = character->bodyguards->avgArmourUpg;
 				int weapon = character->bodyguards->avgWeaponUpg;
 				characterHelpers::sendOffMap(character);
-				if (auto newStack = fastFuncts::spawnArmy(
+				if (auto newStack = armyHelpers::spawnArmy(
 					newOwner,
 					character->characterRecord->shortName,
 					character->characterRecord->lastName,
@@ -146,11 +148,11 @@ namespace settlementHelpers
 					character->characterRecord->originalFaction,unitId,xp,weapon,armour))
 				{
 					if (sett->army)
-						fastFuncts::mergeArmies(newStack, sett->army);
+						armyHelpers::mergeArmies(newStack, sett->army);
 					else
 					{
-						auto newGarrison = fastFuncts::createArmyInSettlement(sett);
-						fastFuncts::mergeArmies(newStack, newGarrison);
+						auto newGarrison = armyHelpers::createArmyInSettlement(sett);
+						armyHelpers::mergeArmies(newStack, newGarrison);
 					}
 				}
 			}
@@ -239,7 +241,7 @@ namespace settlementHelpers
 	
 	float getReligion(settlementStruct* sett, int index)
 	{
-		const regionStruct* currRegion = &smallFuncs::getStratMap()->regions[sett->regionID];
+		const regionStruct* currRegion = &stratMapHelpers::getStratMap()->regions[sett->regionID];
 		if (currRegion == nullptr)
 			return 0.0f;
 		return currRegion->religionsARR[index];
@@ -247,7 +249,7 @@ namespace settlementHelpers
 	
 	void setReligion(settlementStruct* sett, int index, float value)
 	{
-		const regionStruct* currRegion = &smallFuncs::getStratMap()->regions[sett->regionID];
+		const regionStruct* currRegion = &stratMapHelpers::getStratMap()->regions[sett->regionID];
 		currRegion->religionsARR[index] = value;
 	}
 	
@@ -397,7 +399,7 @@ namespace settlementHelpers
 	settlementBuildingOptions* getBuildingOptions(settlementStruct* sett)
 	{
 		const int index = sett->regionID;
-		const int turnNum = gameDataAllHelper::get()->campaignData->TurnNumber;
+		const int turnNum = campaignHelpers::getCampaignData()->turnNumber;
 		const int hash = makeBuildOptionsHash(sett);
 		auto options = buildingOptionsDbPtr->settOptions[index];
 		if (options && options->hash == hash && options->turn == turnNum)
@@ -513,7 +515,7 @@ namespace settlementHelpers
 	settlementRecruitmentOptions* getRecruitOptions(settlementStruct* sett)
 	{
 		const int index = sett->regionID;
-		const int turnNum = gameDataAllHelper::get()->campaignData->TurnNumber;
+		const int turnNum = campaignHelpers::getCampaignData()->turnNumber;
 		const int hash = makeRecruitOptionsHash(sett);
 		auto options = recruitOptionsDbPtr->settRecruitOptions[index];
 		if (options && options->hash == hash && options->turn == turnNum)
@@ -693,7 +695,7 @@ namespace settlementHelpers
 		@tfield character governor
 		@tfield character lastGovernor
 		@tfield character portAdmiral
-		@tfield stackStruct army
+		@tfield armyStruct army
 		@tfield string name internal name of settlement
 		@tfield string localizedName
 		@tfield factionStruct ownerFaction

@@ -1,7 +1,14 @@
 #include "DeveloperMode.h"
 
-#include "dataOffsets.h"
+#include "campaign.h"
+#include "globals.h"
 #include "m2tweopMapManager.h"
+	
+void toggleDeveloperMode()
+{
+	auto& developerMode = globals::dataS.Modules.developerMode;
+	developerMode.toggleDeveloperModeBase();
+}
 
 void DeveloperMode::Update()
 {
@@ -9,19 +16,14 @@ void DeveloperMode::Update()
 	{
 		return;
 	}
-	gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
-	campaign* campaign = gameDataAll->campaignData;
-	if (campaign->humanPlayers > 1)
-	{
+	if (const campaign* campaign = campaignHelpers::getCampaignData(); campaign->humanPlayers > 1)
 		return;
-	}
 
 	if (isWork == false)
 	{
 		return;
 	}
-
-
+	
 	if (subsState.isMapManager==true)
 	{
 		if (m2tweopMapManager::draw() == false)

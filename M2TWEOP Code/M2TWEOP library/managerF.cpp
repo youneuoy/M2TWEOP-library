@@ -16,7 +16,6 @@
 
 void managerF::init()
 {
-
 	initThread();
 }
 
@@ -24,15 +23,10 @@ void managerF::debug()
 {
 	//MessageBoxA(NULL, "TEST", "TEST", NULL);
 }
-	
-static void noFunc()
-{
-		
-}
-
+static void noFunc(){}
 
 //apply code injects
-void managerF::doPachs()
+void managerF::execPatches()
 {
 	ofstream f1("logs\\applyingPatches.youneuoylog");
 	f1 << "Log:" << endl;
@@ -57,7 +51,7 @@ void managerF::doPachs()
 
 	f1 << "Start applying berserkers patch" << endl;
 
-	berserkersP* brs = new berserkersP(mem, globals::dataS.gamever);
+	berserkersP* brs = new berserkersP(mem, globals::dataS.gameVersion);
 	brs->SetlBersCode();
 	brs->Enable();
 	f1 << "Done" << endl;
@@ -70,7 +64,7 @@ void managerF::doPachs()
 		DWORD nbPtr;
 
 
-		if (globals::dataS.gamever == 2)
+		if (globals::dataS.gameVersion == 2)
 		{
 
 			nPtr = 0x008eebbd;
@@ -91,12 +85,12 @@ void managerF::doPachs()
 
 	f1 << "Start applying stop_character patch" << endl;
 
-	OnStopCharacter* toStopCharacter = new OnStopCharacter(mem, (LPVOID)patchesForGame::OnStopCharacter, globals::dataS.gamever);
+	OnStopCharacter* toStopCharacter = new OnStopCharacter(mem, (LPVOID)patchesForGame::OnStopCharacter, globals::dataS.gameVersion);
 	toStopCharacter->SetNewCode();
 	toStopCharacter->Enable();
 
 
-	OnMoveRecruitQueue* toMoveRecruitQueue = new OnMoveRecruitQueue(mem, (LPVOID)patchesForGame::OnMoveRecruitQueue, globals::dataS.gamever);
+	OnMoveRecruitQueue* toMoveRecruitQueue = new OnMoveRecruitQueue(mem, (LPVOID)patchesForGame::onMoveRecruitQueue, globals::dataS.gameVersion);
 	toMoveRecruitQueue->SetNewCode();
 	toMoveRecruitQueue->Enable();
 
@@ -129,25 +123,25 @@ void managerF::doPachs()
 	//f1 << "Done" << endl;
 
 	f1 << "Start applying recruit eop unit 1 patch" << endl;
-	recruitEOPunit* toRecruitEOPunit = new recruitEOPunit(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	recruitEOPunit* toRecruitEOPunit = new recruitEOPunit(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
 	toRecruitEOPunit->SetNewCode();
 	toRecruitEOPunit->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying recruit eop unit 2 patch" << endl;
-	recruitEOPunit2* toRecruitEOPunit2 = new recruitEOPunit2(mem, (LPVOID)patchesForGame::recruitEOPunit2, globals::dataS.gamever);
+	recruitEOPunit2* toRecruitEOPunit2 = new recruitEOPunit2(mem, (LPVOID)patchesForGame::recruitEOPunit2, globals::dataS.gameVersion);
 	toRecruitEOPunit2->SetNewCode();
 	toRecruitEOPunit2->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying recruit merc eop unit patch" << endl;
-	recruitEOPMercunit* torecruitEOPMercunit = new recruitEOPMercunit(mem, (LPVOID)patchesForGame::recruitEOPMercunit, globals::dataS.gamever);
+	recruitEOPMercunit* torecruitEOPMercunit = new recruitEOPMercunit(mem, (LPVOID)patchesForGame::recruitEopMercUnit, globals::dataS.gameVersion);
 	torecruitEOPMercunit->SetNewCode();
 	torecruitEOPMercunit->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toSearchUnitType patch" << '\n';
-	onSearchUnitType* toSearchUnitType = new onSearchUnitType(mem, (LPVOID)patchesForGame::onSearchUnitType, globals::dataS.gamever);
+	onSearchUnitType* toSearchUnitType = new onSearchUnitType(mem, (LPVOID)patchesForGame::onSearchUnitType, globals::dataS.gameVersion);
 	toSearchUnitType->SetNewCode();
 	toSearchUnitType->Enable();
 	f1 << "Done" << '\n';
@@ -155,14 +149,14 @@ void managerF::doPachs()
 
 	f1 << "Start applying toLoadDescrBattleCharacter patch #1" << endl;
 
-	toLoadDescrBattleCharacter* toDescrChar = new toLoadDescrBattleCharacter(mem, (LPVOID)patchesForGame::onLoadDescrBattleCharacter, globals::dataS.gamever);
+	toLoadDescrBattleCharacter* toDescrChar = new toLoadDescrBattleCharacter(mem, (LPVOID)patchesForGame::onLoadDescrBattleCharacter, globals::dataS.gameVersion);
 	toDescrChar->SetlBattleCode();
 	toDescrChar->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toBattleStateResults patch #1" << endl;
 
-	toBattleStateResults* toBattleStats = new toBattleStateResults(mem, (LPVOID)patchesForGame::onBattleStateChange, globals::dataS.gamever);
+	toBattleStateResults* toBattleStats = new toBattleStateResults(mem, (LPVOID)patchesForGame::onBattleStateChange, globals::dataS.gameVersion);
 	toBattleStats->SetlBattleCode();
 	toBattleStats->Enable();
 	f1 << "Done" << endl;
@@ -170,7 +164,7 @@ void managerF::doPachs()
 
 	f1 << "Start applying unit types patch #1" << endl;
 
-	toReadEDU* ed = new toReadEDU(mem, (LPVOID)patchesForGame::afterEDUread, globals::dataS.gamever);
+	toReadEDU* ed = new toReadEDU(mem, (LPVOID)patchesForGame::afterEDUread, globals::dataS.gameVersion);
 	ed->SetlEDUCode();
 	ed->Enable();
 	f1 << "Done" << endl;
@@ -178,7 +172,7 @@ void managerF::doPachs()
 
 	f1 << "Start applying OnChangePassedTurnsCount patch" << endl;
 
-	toChangePassedTurnsCount* tcptc = new toChangePassedTurnsCount(mem, (LPVOID)patchesForGame::onChangeTurnNum, globals::dataS.gamever);
+	toChangePassedTurnsCount* tcptc = new toChangePassedTurnsCount(mem, (LPVOID)patchesForGame::onChangeTurnNum, globals::dataS.gameVersion);
 	tcptc->SetlTurnsCountCode();
 	tcptc->Enable();
 	f1 << "Done" << endl;
@@ -228,7 +222,7 @@ void managerF::doPachs()
 
 
 	f1 << "Start applying spawn_army coords patch" << endl;
-	toSpawnArmy* spwnArm = new toSpawnArmy(mem, (LPVOID)patchesForGame::spawnArmyCoords, globals::dataS.gamever);
+	toSpawnArmy* spwnArm = new toSpawnArmy(mem, (LPVOID)patchesForGame::spawnArmyCoords, globals::dataS.gameVersion);
 	spwnArm->SetlSpawnCode();
 	spwnArm->Enable();
 
@@ -236,14 +230,14 @@ void managerF::doPachs()
 
 
 	f1 << "Start applying spawn_army coords patch end" << endl;
-	toEndOfSpawnArmy* endSpwnArm = new toEndOfSpawnArmy(mem, (LPVOID)patchesForGame::spawnEndArmyCoords, globals::dataS.gamever);
+	toEndOfSpawnArmy* endSpwnArm = new toEndOfSpawnArmy(mem, (LPVOID)patchesForGame::spawnEndArmyCoords, globals::dataS.gameVersion);
 	endSpwnArm->SetlEndSpawnCode();
 	endSpwnArm->Enable();
 
 	f1 << "Done" << endl;
 
 	f1 << "Start applying spawn_character coords patch" << endl;
-	toSpawnCharacter* spwnChar = new toSpawnCharacter(mem, (LPVOID)patchesForGame::spawnCharacterCoords, globals::dataS.gamever);
+	toSpawnCharacter* spwnChar = new toSpawnCharacter(mem, (LPVOID)patchesForGame::spawnCharacterCoords, globals::dataS.gameVersion);
 	spwnChar->SetlSpawnCode();
 	spwnChar->Enable();
 
@@ -251,7 +245,7 @@ void managerF::doPachs()
 
 
 	f1 << "Start applying battle_start patch" << endl;
-	toBattleStratScreen* bstart = new toBattleStratScreen(mem, (LPVOID)patchesForGame::onBattleStratScreen, globals::dataS.gamever);
+	toBattleStratScreen* bstart = new toBattleStratScreen(mem, (LPVOID)patchesForGame::onBattleStratScreen, globals::dataS.gameVersion);
 	bstart->SetlBSCode();
 	bstart->Enable();
 
@@ -268,7 +262,7 @@ void managerF::doPachs()
 
 
 	f1 << "Start applying models load patch #1" << endl;
-	toStartReadModels* readModelsStart = new toStartReadModels(mem, (LPVOID)stratModelsChange::disableChecker, globals::dataS.gamever);
+	toStartReadModels* readModelsStart = new toStartReadModels(mem, (LPVOID)stratModelsChange::disableChecker, globals::dataS.gameVersion);
 	readModelsStart->SetlStReadModelsCode();
 	readModelsStart->Enable();
 
@@ -276,7 +270,7 @@ void managerF::doPachs()
 
 
 	f1 << "Start applying unical strat models patch" << endl;
-	toResourcesReadModels* readResModels = new toResourcesReadModels(mem, (LPVOID)patchesForGame::unicalStratModsRead, globals::dataS.gamever);
+	toResourcesReadModels* readResModels = new toResourcesReadModels(mem, (LPVOID)patchesForGame::unicalStratModsRead, globals::dataS.gameVersion);
 	readResModels->SetlResModelsCode();
 	readResModels->Enable();
 
@@ -284,28 +278,28 @@ void managerF::doPachs()
 
 
 	f1 << "Start applying char strat models patch" << endl;
-	toCharReadModels* CharReadModels = new toCharReadModels(mem, (LPVOID)patchesForGame::loadCharStratModels, globals::dataS.gamever);
+	toCharReadModels* CharReadModels = new toCharReadModels(mem, (LPVOID)patchesForGame::loadCharStratModels, globals::dataS.gameVersion);
 	CharReadModels->SetNewCode();
 	CharReadModels->Enable();
 
 	f1 << "Done" << endl;
 
 	f1 << "Start applying onEvents patch" << endl;
-	toEvents* evnts = new toEvents(mem, (LPVOID)patchesForGame::onEvent, globals::dataS.gamever);
+	toEvents* evnts = new toEvents(mem, (LPVOID)patchesForGame::onEvent, globals::dataS.gameVersion);
 	evnts->SetlEventsCode();
 	evnts->Enable();
 
 	f1 << "Done" << endl;
 
 	f1 << "Start applying custom_tiles patch" << endl;
-	toCustomTileSelection* ctiles = new toCustomTileSelection(mem, (LPVOID)patchesForGame::onTileCheck, globals::dataS.gamever);
+	toCustomTileSelection* ctiles = new toCustomTileSelection(mem, (LPVOID)patchesForGame::onTileCheck, globals::dataS.gameVersion);
 	ctiles->SetlTilesCode();
 	ctiles->Enable();
 
 	f1 << "Done" << endl;
 
 	f1 << "Start applying custom_tiles file patch" << endl;
-	toCustomTileFileRead* ctilesF = new toCustomTileFileRead(mem, (LPVOID)patchesForGame::readTilesFile, globals::dataS.gamever);
+	toCustomTileFileRead* ctilesF = new toCustomTileFileRead(mem, (LPVOID)patchesForGame::readTilesFile, globals::dataS.gameVersion);
 	ctilesF->SetlTilesCode();
 	ctilesF->Enable();
 
@@ -313,7 +307,7 @@ void managerF::doPachs()
 
 
 	f1 << "Start applying start fort models patch" << endl;
-	toStratModelsSelect* stratModSel = new toStratModelsSelect(mem, (LPVOID)patchesForGame::checkAndChangeModels, globals::dataS.gamever);
+	toStratModelsSelect* stratModSel = new toStratModelsSelect(mem, (LPVOID)patchesForGame::checkAndChangeModels, globals::dataS.gameVersion);
 	stratModSel->SetlStratModelsCode();
 	stratModSel->Enable();
 
@@ -321,14 +315,14 @@ void managerF::doPachs()
 
 
 	f1 << "Start applying load save patch" << endl;
-	toLoadSaveFile* loadSave = new toLoadSaveFile(mem, (LPVOID)patchesForGame::onLoadSaveFile, globals::dataS.gamever);
+	toLoadSaveFile* loadSave = new toLoadSaveFile(mem, (LPVOID)patchesForGame::onLoadSaveFile, globals::dataS.gameVersion);
 	loadSave->SetlLoadCode();
 	loadSave->Enable();
 
 	f1 << "Done" << endl;
 
 	f1 << "Start applying save game patch" << endl;
-	toSaveGame* saveGame = new toSaveGame(mem, (LPVOID)patchesForGame::onSaveGame, globals::dataS.gamever);
+	toSaveGame* saveGame = new toSaveGame(mem, (LPVOID)patchesForGame::onSaveGame, globals::dataS.gameVersion);
 	saveGame->SetlSaveCode();
 	saveGame->Enable();
 
@@ -337,7 +331,7 @@ void managerF::doPachs()
 
 
 	f1 << "Start applying new game patch" << endl;
-	toStartNewGame* newGame = new toStartNewGame(mem, (LPVOID)patchesForGame::onNewGameStart, globals::dataS.gamever);
+	toStartNewGame* newGame = new toStartNewGame(mem, (LPVOID)patchesForGame::onNewGameStart, globals::dataS.gameVersion);
 	newGame->SetlStartCode();
 	newGame->Enable();
 
@@ -345,7 +339,7 @@ void managerF::doPachs()
 
 
 	f1 << "Start applying strategical map loading patch" << endl;
-	toEndReadModels* stratMapLoaded = new toEndReadModels(mem, (LPVOID)patchesForGame::afterCampaignMapLoaded, globals::dataS.gamever);
+	toEndReadModels* stratMapLoaded = new toEndReadModels(mem, (LPVOID)patchesForGame::afterCampaignMapLoaded, globals::dataS.gameVersion);
 	stratMapLoaded->SetlEndReadModelsCode();
 	stratMapLoaded->Enable();
 
@@ -353,14 +347,14 @@ void managerF::doPachs()
 
 
 	f1 << "Start applying click on tile patch" << endl;
-	toClickAtCoords* clickAtTile = new toClickAtCoords(mem, (LPVOID)patchesForGame::clickAtTile, globals::dataS.gamever);
+	toClickAtCoords* clickAtTile = new toClickAtCoords(mem, (LPVOID)patchesForGame::clickAtTile, globals::dataS.gameVersion);
 	clickAtTile->SetlClickCode();
 	clickAtTile->Enable();
 
 	f1 << "Done" << endl;
 
 	f1 << "Start applying select worldpkgdesc from db patch" << endl;
-	toSelectWorldFromDB* selWorld = new toSelectWorldFromDB(mem, (LPVOID)patchesForGame::selectWorldpkgdesc, globals::dataS.gamever);
+	toSelectWorldFromDB* selWorld = new toSelectWorldFromDB(mem, (LPVOID)patchesForGame::selectWorldpkgdesc, globals::dataS.gameVersion);
 	selWorld->SetlSelectCode();
 	selWorld->Enable();
 
@@ -369,7 +363,7 @@ void managerF::doPachs()
 
 
 	f1 << "Start applying battle loaded patch" << endl;
-	toBattleLoaded* battleLoad = new toBattleLoaded(mem, (LPVOID)patchesForGame::battleLoaded, globals::dataS.gamever);
+	toBattleLoaded* battleLoad = new toBattleLoaded(mem, (LPVOID)patchesForGame::battleLoaded, globals::dataS.gameVersion);
 	battleLoad->SetlLoadCode();
 	battleLoad->Enable();
 
@@ -384,23 +378,23 @@ void managerF::doPachs()
 
 
 	f1 << "Start applying toDrawPartsOfStratObjects patch" << endl;
-	toDrawPartsOfStratObjects* toDrawPartsOfStratO = new toDrawPartsOfStratObjects(mem, (LPVOID)patchesForGame::onDrawPartsOfStratObjects, globals::dataS.gamever);
+	toDrawPartsOfStratObjects* toDrawPartsOfStratO = new toDrawPartsOfStratObjects(mem, (LPVOID)patchesForGame::onDrawPartsOfStratObjects, globals::dataS.gameVersion);
 	toDrawPartsOfStratO->SetlDrawCode();
 	toDrawPartsOfStratO->Enable();
 
 	f1 << "Start applying toGameFormDrawImage patch" << endl;
-	toGameFormDrawImage* toDrawAllSt = new toGameFormDrawImage(mem, (LPVOID)patchesForGame::onDrawAll, globals::dataS.gamever);
+	toGameFormDrawImage* toDrawAllSt = new toGameFormDrawImage(mem, (LPVOID)patchesForGame::onDrawAll, globals::dataS.gameVersion);
 	toDrawAllSt->SetlDrawCode();
 	toDrawAllSt->Enable();
 
 
 	f1 << "Start applying toEndSettlementSiege patch" << endl;
-	toEndSettlementSiege* toEndSiegSett = new toEndSettlementSiege(mem, (LPVOID)patchesForGame::onEndSiege, globals::dataS.gamever);
+	toEndSettlementSiege* toEndSiegSett = new toEndSettlementSiege(mem, (LPVOID)patchesForGame::onEndSiege, globals::dataS.gameVersion);
 	toEndSiegSett->SetlSiegeCode();
 	toEndSiegSett->Enable();
 
 	f1 << "Start applying toStartSettlementSiege patch" << endl;
-	toStartSettlementSiege* toStartSiegSett = new toStartSettlementSiege(mem, (LPVOID)patchesForGame::onStartSiege, globals::dataS.gamever);
+	toStartSettlementSiege* toStartSiegSett = new toStartSettlementSiege(mem, (LPVOID)patchesForGame::onStartSiege, globals::dataS.gameVersion);
 	toStartSiegSett->SetlSiegeCode();
 	toStartSiegSett->Enable();
 
@@ -415,97 +409,97 @@ void managerF::doPachs()
 
 
 	f1 << "Start applying CastleConversionLvl patch" << endl;
-	CastleConversionLvlSetter* castleConversionLvlSetter = new CastleConversionLvlSetter(mem, (LPVOID)settlementConversionLvlSetter::getConversionLvlFromCastle, globals::dataS.gamever);
+	CastleConversionLvlSetter* castleConversionLvlSetter = new CastleConversionLvlSetter(mem, (LPVOID)settlementConversionLvlSetter::getConversionLvlFromCastle, globals::dataS.gameVersion);
 	castleConversionLvlSetter->SetNewCode();
 	castleConversionLvlSetter->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying CityConversionLvl patch" << endl;
-	CityConversionLvlSetter* cityConversionLvlSetter = new CityConversionLvlSetter(mem, (LPVOID)settlementConversionLvlSetter::getConversionLvlFromCity, globals::dataS.gamever);
+	CityConversionLvlSetter* cityConversionLvlSetter = new CityConversionLvlSetter(mem, (LPVOID)settlementConversionLvlSetter::getConversionLvlFromCity, globals::dataS.gameVersion);
 	cityConversionLvlSetter->SetNewCode();
 	cityConversionLvlSetter->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toGameInitialize patch" << endl;
-	onGameInitialized* toGameInitialize = new onGameInitialized(mem, (LPVOID)patchesForGame::onGameInit, globals::dataS.gamever);
+	onGameInitialized* toGameInitialize = new onGameInitialized(mem, (LPVOID)patchesForGame::onGameInit, globals::dataS.gameVersion);
 	toGameInitialize->SetNewCode();
 	toGameInitialize->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toUnloadCampaign patch" << endl;
-	onUnloadCampaign* toUnloadCampaign = new onUnloadCampaign(mem, (LPVOID)patchesForGame::onUnloadCampaign, globals::dataS.gamever);
+	onUnloadCampaign* toUnloadCampaign = new onUnloadCampaign(mem, (LPVOID)patchesForGame::onUnloadCampaign, globals::dataS.gameVersion);
 	toUnloadCampaign->SetNewCode();
 	toUnloadCampaign->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying onBuildingUnitAttributes patch" << '\n';
-	auto toBuildingUnitAttributes = new onBuildingUnitAttributes(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gamever);
+	auto toBuildingUnitAttributes = new onBuildingUnitAttributes(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gameVersion);
 	toBuildingUnitAttributes->SetNewCode();
 	toBuildingUnitAttributes->Enable();
 	f1 << "Done" << '\n';
 
 	f1 << "Start applying onBuildingUnitAttributes2 patch" << '\n';
-	auto toBuildingUnitAttributes2 = new onBuildingUnitAttributes2(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gamever);
+	auto toBuildingUnitAttributes2 = new onBuildingUnitAttributes2(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gameVersion);
 	toBuildingUnitAttributes2->SetNewCode();
 	toBuildingUnitAttributes2->Enable();
 	f1 << "Done" << '\n';
 
 
 	f1 << "Start applying mercenaryMovepointsGetGeneral patch" << endl;
-	mercenaryMovepointsGetGeneral* mercP = new mercenaryMovepointsGetGeneral(mem, (LPVOID)patchesForGame::mercenaryMovepointsGetGeneral, globals::dataS.gamever);
+	mercenaryMovepointsGetGeneral* mercP = new mercenaryMovepointsGetGeneral(mem, (LPVOID)patchesForGame::mercenaryMovepointsGetGeneral, globals::dataS.gameVersion);
 	mercP->SetNewCode();
 	mercP->Enable();
 	f1 << "Done" << endl;
 
 
 	f1 << "Start applying onGameConsoleCommandFromConsole patch" << endl;
-	onGameConsoleCommandFromConsole* cons1 = new onGameConsoleCommandFromConsole(mem, (LPVOID)patchessForConsole::onGameConsoleCommandFromConsole, globals::dataS.gamever);
+	onGameConsoleCommandFromConsole* cons1 = new onGameConsoleCommandFromConsole(mem, (LPVOID)patchessForConsole::onGameConsoleCommandFromConsole, globals::dataS.gameVersion);
 	cons1->SetNewCode();
 	cons1->Enable();
 	f1 << "Done" << endl;
 
 
 	f1 << "Start applying onGameConsoleCommandFromScript patch" << endl;
-	onGameConsoleCommandFromScript* cons2 = new onGameConsoleCommandFromScript(mem, (LPVOID)patchessForConsole::onGameConsoleCommandFromScript, globals::dataS.gamever);
+	onGameConsoleCommandFromScript* cons2 = new onGameConsoleCommandFromScript(mem, (LPVOID)patchessForConsole::onGameConsoleCommandFromScript, globals::dataS.gameVersion);
 	cons2->SetNewCode();
 	cons2->Enable();
 	f1 << "Done" << endl;
 
 
 	f1 << "Start applying onGameConsoleCommandFromScript patch" << endl;
-	OnReadLogonOrLogoff* cons3 = new OnReadLogonOrLogoff(mem, (LPVOID)patchessForConsole::OnReadLogonOrLogoff, globals::dataS.gamever);
+	OnReadLogonOrLogoff* cons3 = new OnReadLogonOrLogoff(mem, (LPVOID)patchessForConsole::OnReadLogonOrLogoff, globals::dataS.gameVersion);
 	cons3->SetNewCode();
 	cons3->Enable();
 	f1 << "Done" << endl;
 
 
 	f1 << "Start applying OnLoadSettlementWorldpkgdesc patch" << endl;
-	OnLoadSettlementWorldpkgdesc* loadWordSet = new OnLoadSettlementWorldpkgdesc(mem, (LPVOID)patchesForGame::OnLoadSettlementWorldpkgdesc, globals::dataS.gamever);
+	OnLoadSettlementWorldpkgdesc* loadWordSet = new OnLoadSettlementWorldpkgdesc(mem, (LPVOID)patchesForGame::onLoadSettlementWorldpkgdesc, globals::dataS.gameVersion);
 	loadWordSet->SetNewCode();
 	loadWordSet->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying fortificationlevelS patch" << endl;
-	fortificationlevelS* fortificationlevel = new fortificationlevelS(mem, (LPVOID)patchesForGame::onfortificationlevelS, globals::dataS.gamever);
+	fortificationlevelS* fortificationlevel = new fortificationlevelS(mem, (LPVOID)patchesForGame::onfortificationlevelS, globals::dataS.gameVersion);
 	fortificationlevel->SetNewCode();
 	fortificationlevel->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying LimitRecruitmentQueueToSlots patch" << endl;
-	LimitRecruitmentQueueToSlotsInj* limitRecr = new LimitRecruitmentQueueToSlotsInj(mem, &globals::dataS.eopGameplaySettings.bLimitRecruitmentToSlotsAndByMoney, globals::dataS.gamever);
+	LimitRecruitmentQueueToSlotsInj* limitRecr = new LimitRecruitmentQueueToSlotsInj(mem, &globals::dataS.eopGameplaySettings.bLimitRecruitmentToSlotsAndByMoney, globals::dataS.gameVersion);
 	limitRecr->SetNewCode();
 	limitRecr->Enable();
 	f1 << "Done" << endl;
 
 
 	f1 << "Start applying OnSaveEDUStringS patch" << endl;
-	OnSaveEDUStringS* eduStringsSaveOn = new OnSaveEDUStringS(mem, (LPVOID)patchesForGame::onSaveEDUStringS, globals::dataS.gamever);
+	OnSaveEDUStringS* eduStringsSaveOn = new OnSaveEDUStringS(mem, (LPVOID)patchesForGame::onSaveEDUStringS, globals::dataS.gameVersion);
 	eduStringsSaveOn->SetNewCode();
 	eduStringsSaveOn->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying OnSaveEDUStringS2 patch" << endl;
-	OnSaveEDUStringS2* eduStringsSaveOn2 = new OnSaveEDUStringS2(mem, (LPVOID)patchesForGame::onSaveEDUStringS, globals::dataS.gamever);
+	OnSaveEDUStringS2* eduStringsSaveOn2 = new OnSaveEDUStringS2(mem, (LPVOID)patchesForGame::onSaveEDUStringS, globals::dataS.gameVersion);
 	eduStringsSaveOn2->SetNewCode();
 	eduStringsSaveOn2->Enable();
 	f1 << "Done" << endl;
@@ -519,94 +513,94 @@ void managerF::doPachs()
 	*/
 
 	f1 << "Start applying OnCreateUnit2 patch" << endl;
-	OnCreateUnit2* onCreateUnit2 = new OnCreateUnit2(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	OnCreateUnit2* onCreateUnit2 = new OnCreateUnit2(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
 	onCreateUnit2->SetNewCode();
 	onCreateUnit2->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toFindUnit patch" << endl;
-	OnFindUnit*toFindUnit = new OnFindUnit(mem, (LPVOID)patchesForGame::onFindUnit, globals::dataS.gamever);
+	OnFindUnit*toFindUnit = new OnFindUnit(mem, (LPVOID)patchesForGame::onFindUnit, globals::dataS.gameVersion);
 	toFindUnit->SetNewCode();
 	toFindUnit->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying onReadDescrStrat patch" << endl;
-	onReadDescrStrat* toReadDescrStrat = new onReadDescrStrat(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	onReadDescrStrat* toReadDescrStrat = new onReadDescrStrat(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
 	toReadDescrStrat->SetNewCode();
 	toReadDescrStrat->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying onSpawnBrigands patch" << endl;
-	onSpawnBrigands* toSpawnBrigands = new onSpawnBrigands(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	onSpawnBrigands* toSpawnBrigands = new onSpawnBrigands(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
 	toSpawnBrigands->SetNewCode();
 	toSpawnBrigands->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying onSpawnBrigands2 patch" << endl;
-	onSpawnBrigands2* toSpawnBrigands2 = new onSpawnBrigands2(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	onSpawnBrigands2* toSpawnBrigands2 = new onSpawnBrigands2(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
 	toSpawnBrigands2->SetNewCode();
 	toSpawnBrigands2->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying onCustomBattleCost patch" << endl;
-	onCustomBattleCost* toCustomBattleCost = new onCustomBattleCost(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	onCustomBattleCost* toCustomBattleCost = new onCustomBattleCost(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
 	toCustomBattleCost->SetNewCode();
 	toCustomBattleCost->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying spawnUnitsSettGift patch" << endl;
-	spawnUnitsSettGift* toSpawnUnitsSettGift = new spawnUnitsSettGift(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	spawnUnitsSettGift* toSpawnUnitsSettGift = new spawnUnitsSettGift(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
 	toSpawnUnitsSettGift->SetNewCode();
 	toSpawnUnitsSettGift->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying spawnUnitsSettGift2 patch" << endl;
-	spawnUnitsSettGift2* toSpawnUnitsSettGift2 = new spawnUnitsSettGift2(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	spawnUnitsSettGift2* toSpawnUnitsSettGift2 = new spawnUnitsSettGift2(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
 	toSpawnUnitsSettGift2->SetNewCode();
 	toSpawnUnitsSettGift2->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying spawnUnitsSettGift3 patch" << endl;
-	spawnUnitsSettGift3* toSpawnUnitsSettGift3 = new spawnUnitsSettGift3(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	spawnUnitsSettGift3* toSpawnUnitsSettGift3 = new spawnUnitsSettGift3(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
 	toSpawnUnitsSettGift3->SetNewCode();
 	toSpawnUnitsSettGift3->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying onReadDescrRebel patch" << endl;
-	onReadDescrRebel* toReadDescrRebel = new onReadDescrRebel(mem, (LPVOID)patchesForGame::onReadDescrRebel, globals::dataS.gamever);
+	onReadDescrRebel* toReadDescrRebel = new onReadDescrRebel(mem, (LPVOID)patchesForGame::onReadDescrRebel, globals::dataS.gameVersion);
 	toReadDescrRebel->SetNewCode();
 	toReadDescrRebel->Enable();
 	f1 << "Done" << endl;
 
 
 	f1 << "Start applying onCustomBattleUnitCards patch" << endl;
-	onCustomBattleUnitCards* toCustomBattleUnitCards = new onCustomBattleUnitCards(mem, (LPVOID)patchesForGame::onCustomBattleUnitCards, globals::dataS.gamever);
+	onCustomBattleUnitCards* toCustomBattleUnitCards = new onCustomBattleUnitCards(mem, (LPVOID)patchesForGame::onCustomBattleUnitCards, globals::dataS.gameVersion);
 	toCustomBattleUnitCards->SetNewCode();
 	toCustomBattleUnitCards->Enable();
 	f1 << "Done" << endl;
 
 
 	f1 << "Start applying onCustomBattleUnits patch" << endl;
-	onCustomBattleUnits* toCustomBattleUnits = new onCustomBattleUnits(mem, (LPVOID)patchesForGame::onCustomBattleUnits, globals::dataS.gamever);
+	onCustomBattleUnits* toCustomBattleUnits = new onCustomBattleUnits(mem, (LPVOID)patchesForGame::onCustomBattleUnits, globals::dataS.gameVersion);
 	toCustomBattleUnits->SetNewCode();
 	toCustomBattleUnits->Enable();
 	f1 << "Done" << endl;
 
 
 	f1 << "Start applying onBattleRams patch" << endl;
-	onBattleRams* toBattleRams = new onBattleRams(mem, (LPVOID)noFunc, globals::dataS.gamever);
+	onBattleRams* toBattleRams = new onBattleRams(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
 	toBattleRams->SetNewCode();
 	toBattleRams->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying onPreBattlePlacement patch" << endl;
-	onPreBattlePlacement* toPreBattlePlacement = new onPreBattlePlacement(mem, (LPVOID)patchesForGame::onPreBattlePlacement, globals::dataS.gamever);
+	onPreBattlePlacement* toPreBattlePlacement = new onPreBattlePlacement(mem, (LPVOID)patchesForGame::onPreBattlePlacement, globals::dataS.gameVersion);
 	toPreBattlePlacement->SetNewCode();
 	toPreBattlePlacement->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying onDecideRamAttacks patch" << endl;
-	onDecideRamAttacks* toDecideRamAttacks = new onDecideRamAttacks(mem, (LPVOID)patchesForGame::onDecideRamAttacks, globals::dataS.gamever);
+	onDecideRamAttacks* toDecideRamAttacks = new onDecideRamAttacks(mem, (LPVOID)patchesForGame::onDecideRamAttacks, globals::dataS.gameVersion);
 	toDecideRamAttacks->SetNewCode();
 	toDecideRamAttacks->Enable();
 	f1 << "Done" << endl;
@@ -619,193 +613,193 @@ void managerF::doPachs()
 	f1 << "Done" << endl;*/
 
 	f1 << "Start applying spawnUnitsSettGift4 patch" << endl;
-	spawnUnitsSettGift4* toSpawnUnitsSettGift4 = new spawnUnitsSettGift4(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gamever);
+	spawnUnitsSettGift4* toSpawnUnitsSettGift4 = new spawnUnitsSettGift4(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
 	toSpawnUnitsSettGift4->SetNewCode();
 	toSpawnUnitsSettGift4->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toCreateMercUnit patch" << endl;
-	OnCreateMercUnit* toCreateMercUnit = new OnCreateMercUnit(mem, (LPVOID)patchesForGame::OnCreateMercUnit, globals::dataS.gamever);
+	OnCreateMercUnit* toCreateMercUnit = new OnCreateMercUnit(mem, (LPVOID)patchesForGame::OnCreateMercUnit, globals::dataS.gameVersion);
 	toCreateMercUnit->SetNewCode();
 	toCreateMercUnit->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying onEvaluateUnit patch" << endl;
-	onEvaluateUnit* toEvaluateUnit = new onEvaluateUnit(mem, (LPVOID)patchesForGame::onEvaluateUnit, globals::dataS.gamever);
+	onEvaluateUnit* toEvaluateUnit = new onEvaluateUnit(mem, (LPVOID)patchesForGame::onEvaluateUnit, globals::dataS.gameVersion);
 	toEvaluateUnit->SetNewCode();
 	toEvaluateUnit->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying onEvaluateUnit2 patch" << endl;
-	onEvaluateUnit2* toEvaluateUnit2 = new onEvaluateUnit2(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gamever);
+	onEvaluateUnit2* toEvaluateUnit2 = new onEvaluateUnit2(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gameVersion);
 	toEvaluateUnit2->SetNewCode();
 	toEvaluateUnit2->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toAddCultureToArray patch" << endl;
-	onAddCultureToArray* toAddCultureToArray = new onAddCultureToArray(mem, (LPVOID)noFunc, globals::dataS.gamever);
+	onAddCultureToArray* toAddCultureToArray = new onAddCultureToArray(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
 	toAddCultureToArray->SetNewCode();
 	toAddCultureToArray->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toParseBuildingPics patch" << endl;
-	onParseBuildingPics* toParseBuildingPics = new onParseBuildingPics(mem, (LPVOID)noFunc, globals::dataS.gamever);
+	onParseBuildingPics* toParseBuildingPics = new onParseBuildingPics(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
 	toParseBuildingPics->SetNewCode();
 	toParseBuildingPics->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying onParseBuildingLevelPics patch" << endl;
-	onParseBuildingLevelPics* toParseBuildingLevelPics = new onParseBuildingLevelPics(mem, (LPVOID)noFunc, globals::dataS.gamever);
+	onParseBuildingLevelPics* toParseBuildingLevelPics = new onParseBuildingLevelPics(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
 	toParseBuildingLevelPics->SetNewCode();
 	toParseBuildingLevelPics->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toParseBuildingPics patch" << endl;
-	onParseEventBodies* toParseEventBodies = new onParseEventBodies(mem, (LPVOID)noFunc, globals::dataS.gamever);
+	onParseEventBodies* toParseEventBodies = new onParseEventBodies(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
 	toParseEventBodies->SetNewCode();
 	toParseEventBodies->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying onCreatePortraitDb patch" << endl;
-	onCreatePortraitDb* toCreatePortraitDb = new onCreatePortraitDb(mem, (LPVOID)noFunc, globals::dataS.gamever);
+	onCreatePortraitDb* toCreatePortraitDb = new onCreatePortraitDb(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
 	toCreatePortraitDb->SetNewCode();
 	toCreatePortraitDb->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying toAssignGateAttacker patch" << endl;
-	onAssignGateAttacker* toAssignGateAttacker = new onAssignGateAttacker(mem, (LPVOID)noFunc, globals::dataS.gamever);
+	onAssignGateAttacker* toAssignGateAttacker = new onAssignGateAttacker(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
 	toAssignGateAttacker->SetNewCode();
 	toAssignGateAttacker->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying onAttackGate patch" << endl;
-	onAttackGate2* toAttackGate2 = new onAttackGate2(mem, (LPVOID)noFunc, globals::dataS.gamever);
+	onAttackGate2* toAttackGate2 = new onAttackGate2(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
 	toAttackGate2->SetNewCode();
 	toAttackGate2->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying onAttackGate patch" << endl;
-	onAttackGate* toAttackGate = new onAttackGate(mem, (LPVOID)patchesForGame::onAttackGate, globals::dataS.gamever);
+	onAttackGate* toAttackGate = new onAttackGate(mem, (LPVOID)patchesForGame::onAttackGate, globals::dataS.gameVersion);
 	toAttackGate->SetNewCode();
 	toAttackGate->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying onGetBrowserPicConstructed patch" << endl;
-	onGetBrowserPicConstructed* toGetBrowserPicConstructed= new onGetBrowserPicConstructed(mem, (LPVOID)patchesForGame::getBrowserPicConstructed, globals::dataS.gamever);
+	onGetBrowserPicConstructed* toGetBrowserPicConstructed= new onGetBrowserPicConstructed(mem, (LPVOID)patchesForGame::getBrowserPicConstructed, globals::dataS.gameVersion);
 	toGetBrowserPicConstructed->SetNewCode();
 	toGetBrowserPicConstructed->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying onGetBrowserPicConstruction patch" << endl;
-	onGetBrowserPicConstruction* toGetBrowserPicConstruction= new onGetBrowserPicConstruction(mem, (LPVOID)patchesForGame::getBrowserPicConstruction, globals::dataS.gamever);
+	onGetBrowserPicConstruction* toGetBrowserPicConstruction= new onGetBrowserPicConstruction(mem, (LPVOID)patchesForGame::getBrowserPicConstruction, globals::dataS.gameVersion);
 	toGetBrowserPicConstruction->SetNewCode();
 	toGetBrowserPicConstruction->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying onGetBuildingPic patch" << endl;
-	onGetBuildingPic* toGetBuildingPic = new onGetBuildingPic(mem, (LPVOID)patchesForGame::getBuildingPic, globals::dataS.gamever);
+	onGetBuildingPic* toGetBuildingPic = new onGetBuildingPic(mem, (LPVOID)patchesForGame::getBuildingPic, globals::dataS.gameVersion);
 	toGetBuildingPic->SetNewCode();
 	toGetBuildingPic->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying onGetGuildOfferPic patch" << endl;
-	onGetGuildOfferPic* toGetGuildOfferPic = new onGetGuildOfferPic(mem, (LPVOID)patchesForGame::onGetGuildOfferPic, globals::dataS.gamever);
+	onGetGuildOfferPic* toGetGuildOfferPic = new onGetGuildOfferPic(mem, (LPVOID)patchesForGame::onGetGuildOfferPic, globals::dataS.gameVersion);
 	toGetGuildOfferPic->SetNewCode();
 	toGetGuildOfferPic->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying onGetCultureEndTurnSound patch" << endl;
-	onGetCultureEndTurnSound* toGetCultureEndTurnSound = new onGetCultureEndTurnSound(mem, (LPVOID)patchesForGame::onGetCultureEndTurnSound, globals::dataS.gamever);
+	onGetCultureEndTurnSound* toGetCultureEndTurnSound = new onGetCultureEndTurnSound(mem, (LPVOID)patchesForGame::onGetCultureEndTurnSound, globals::dataS.gameVersion);
 	toGetCultureEndTurnSound->SetNewCode();
 	toGetCultureEndTurnSound->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying onGetBuildingPic2 patch" << endl;
-	onGetBuildingPic2* toGetBuildingPic2 = new onGetBuildingPic2(mem, (LPVOID)patchesForGame::getBuildingPic, globals::dataS.gamever);
+	onGetBuildingPic2* toGetBuildingPic2 = new onGetBuildingPic2(mem, (LPVOID)patchesForGame::getBuildingPic, globals::dataS.gameVersion);
 	toGetBuildingPic2->SetNewCode();
 	toGetBuildingPic2->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying onGetBuildingPicConstruction patch" << endl;
-	onGetBuildingPicConstruction* toGetBuildingPicConstruction = new onGetBuildingPicConstruction(mem, (LPVOID)patchesForGame::getBuildingPicConstruction, globals::dataS.gamever);
+	onGetBuildingPicConstruction* toGetBuildingPicConstruction = new onGetBuildingPicConstruction(mem, (LPVOID)patchesForGame::getBuildingPicConstruction, globals::dataS.gameVersion);
 	toGetBuildingPicConstruction->SetNewCode();
 	toGetBuildingPicConstruction->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying onGetBuildingPicConstructed patch" << endl;
-	onGetBuildingPicConstructed* toGetBuildingPicConstructed = new onGetBuildingPicConstructed(mem, (LPVOID)patchesForGame::getBuildingPicConstructed, globals::dataS.gamever);
+	onGetBuildingPicConstructed* toGetBuildingPicConstructed = new onGetBuildingPicConstructed(mem, (LPVOID)patchesForGame::getBuildingPicConstructed, globals::dataS.gameVersion);
 	toGetBuildingPicConstructed->SetNewCode();
 	toGetBuildingPicConstructed->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying toGetBuildingPicConstructed2 patch" << endl;
-	onGetBrowserPicConstructed2* toGetBuildingPicConstructed2 = new onGetBrowserPicConstructed2(mem, (LPVOID)patchesForGame::getBuildingPicConstructed, globals::dataS.gamever);
+	onGetBrowserPicConstructed2* toGetBuildingPicConstructed2 = new onGetBrowserPicConstructed2(mem, (LPVOID)patchesForGame::getBuildingPicConstructed, globals::dataS.gameVersion);
 	toGetBuildingPicConstructed2->SetNewCode();
 	toGetBuildingPicConstructed2->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying onGetPortraitDbEntry patch" << endl;
-	onGetPortraitDbEntry* toGetPortraitDbEntry = new onGetPortraitDbEntry(mem, (LPVOID)patchesForGame::getPortraitDbEntry, globals::dataS.gamever);
+	onGetPortraitDbEntry* toGetPortraitDbEntry = new onGetPortraitDbEntry(mem, (LPVOID)patchesForGame::getPortraitDbEntry, globals::dataS.gameVersion);
 	toGetPortraitDbEntry->SetNewCode();
 	toGetPortraitDbEntry->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying onAiTurn patch" << endl;
-	onAiTurn* toAiTurn = new onAiTurn(mem, (LPVOID)patchesForGame::onAiTurn, globals::dataS.gamever);
+	onAiTurn* toAiTurn = new onAiTurn(mem, (LPVOID)patchesForGame::onAiTurn, globals::dataS.gameVersion);
 	toAiTurn->SetNewCode();
 	toAiTurn->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toCalculateUnitValue patch" << '\n';
-	OnCalculateUnitValue* toCalculateUnitValue = new OnCalculateUnitValue(mem, (LPVOID)patchesForGame::OnCalculateUnitValue, globals::dataS.gamever);
+	OnCalculateUnitValue* toCalculateUnitValue = new OnCalculateUnitValue(mem, (LPVOID)patchesForGame::onCalculateUnitValue, globals::dataS.gameVersion);
 	toCalculateUnitValue->SetNewCode();
 	toCalculateUnitValue->Enable();
 	f1 << "Done" << '\n';
 
 	f1 << "Start applying toCalculateUnitValue2 patch" << '\n';
-	OnCalculateUnitValue2* toCalculateUnitValue2 = new OnCalculateUnitValue2(mem, (LPVOID)patchesForGame::OnCalculateUnitValue, globals::dataS.gamever);
+	OnCalculateUnitValue2* toCalculateUnitValue2 = new OnCalculateUnitValue2(mem, (LPVOID)patchesForGame::onCalculateUnitValue, globals::dataS.gameVersion);
 	toCalculateUnitValue2->SetNewCode();
 	toCalculateUnitValue2->Enable();
 	f1 << "Done" << '\n';
 
 	f1 << "Start applying onGetUnitByLabel patch" << '\n';
-	onGetUnitByLabel* toGetUnitByLabel = new onGetUnitByLabel(mem, (LPVOID)patchesForGame::onGetUnitByLabel, globals::dataS.gamever);
+	onGetUnitByLabel* toGetUnitByLabel = new onGetUnitByLabel(mem, (LPVOID)patchesForGame::onGetUnitByLabel, globals::dataS.gameVersion);
 	toGetUnitByLabel->SetNewCode();
 	toGetUnitByLabel->Enable();
 	f1 << "Done" << '\n';
 
 	f1 << "Start applying onGetGroupByLabel patch" << '\n';
-	onGetGroupByLabel* toGetGroupByLabel = new onGetGroupByLabel(mem, (LPVOID)patchesForGame::onGetGroupByLabel, globals::dataS.gamever);
+	onGetGroupByLabel* toGetGroupByLabel = new onGetGroupByLabel(mem, (LPVOID)patchesForGame::onGetGroupByLabel, globals::dataS.gameVersion);
 	toGetGroupByLabel->SetNewCode();
 	toGetGroupByLabel->Enable();
 	f1 << "Done" << '\n';
 
 	f1 << "Start applying onReadBuildingPool patch" << '\n';
-	onReadBuildingPool* toReadBuildingPool = new onReadBuildingPool(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gamever);
+	onReadBuildingPool* toReadBuildingPool = new onReadBuildingPool(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gameVersion);
 	toReadBuildingPool->SetNewCode();
 	toReadBuildingPool->Enable();
 	f1 << "Done" << '\n';
 
 	f1 << "Start applying onReadMercenaryPool patch" << '\n';
-	onReadMercenaryPool* toReadMercenaryPool = new onReadMercenaryPool(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gamever);
+	onReadMercenaryPool* toReadMercenaryPool = new onReadMercenaryPool(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gameVersion);
 	toReadMercenaryPool->SetNewCode();
 	toReadMercenaryPool->Enable();
 	f1 << "Done" << '\n';
 
 	f1 << "Start applying OnCreateUnitWrapper patch" << endl;
-	OnCreateUnitWrapper* toCreateUnitWrapper = new OnCreateUnitWrapper(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gamever);
+	OnCreateUnitWrapper* toCreateUnitWrapper = new OnCreateUnitWrapper(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gameVersion);
 	toCreateUnitWrapper->SetNewCode();
 	toCreateUnitWrapper->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying OnFindUnitStrings patch" << endl;
-	OnFindUnitStrings* toFindUnitStrings = new OnFindUnitStrings(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gamever); //its same func as unit wrapper on purpose not error
+	OnFindUnitStrings* toFindUnitStrings = new OnFindUnitStrings(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gameVersion); //its same func as unit wrapper on purpose not error
 	toFindUnitStrings->SetNewCode();
 	toFindUnitStrings->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toFindUnitStrings2 patch" << endl;
-	OnFindUnitStrings2* toFindUnitStrings2 = new OnFindUnitStrings2(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gamever); //its same func as unit wrapper on purpose not error
+	OnFindUnitStrings2* toFindUnitStrings2 = new OnFindUnitStrings2(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gameVersion); //its same func as unit wrapper on purpose not error
 	toFindUnitStrings2->SetNewCode();
 	toFindUnitStrings2->Enable();
 	f1 << "Done" << endl;
@@ -817,77 +811,77 @@ void managerF::doPachs()
 	// f1 << "Done" << endl;
 
 	f1 << "Start applying OnReligionCombatBonus patch" << endl;
-	OnReligionCombatBonus* toReligionCombatBonus = new OnReligionCombatBonus(mem, (LPVOID)patchesForGame::OnReligionCombatBonus, globals::dataS.gamever);
+	OnReligionCombatBonus* toReligionCombatBonus = new OnReligionCombatBonus(mem, (LPVOID)patchesForGame::OnReligionCombatBonus, globals::dataS.gameVersion);
 	toReligionCombatBonus->SetNewCode();
 	toReligionCombatBonus->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toOnBattleArmiesBug patch" << endl;
-	OnBattleArmiesBug* toOnBattleArmiesBug = new OnBattleArmiesBug(mem, nullptr, globals::dataS.gamever);
+	OnBattleArmiesBug* toOnBattleArmiesBug = new OnBattleArmiesBug(mem, nullptr, globals::dataS.gameVersion);
 	toOnBattleArmiesBug->SetNewCode();
 	toOnBattleArmiesBug->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying OnGetRecruitPoolUnitEntry patch" << endl;
-	OnGetRecruitPoolUnitEntry* toGetRecruitPoolUnitEntry = new OnGetRecruitPoolUnitEntry(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gamever);
+	OnGetRecruitPoolUnitEntry* toGetRecruitPoolUnitEntry = new OnGetRecruitPoolUnitEntry(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gameVersion);
 	toGetRecruitPoolUnitEntry->SetNewCode();
 	toGetRecruitPoolUnitEntry->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toLoadRecruitQueue patch" << endl;
-	loadRecruitQueue* toLoadRecruitQueue = new loadRecruitQueue(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gamever);
+	loadRecruitQueue* toLoadRecruitQueue = new loadRecruitQueue(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gameVersion);
 	toLoadRecruitQueue->SetNewCode();
 	toLoadRecruitQueue->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toLoadRecruitQueue2 patch" << endl;
-	loadRecruitQueue2* toLoadRecruitQueue2 = new loadRecruitQueue2(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gamever);
+	loadRecruitQueue2* toLoadRecruitQueue2 = new loadRecruitQueue2(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gameVersion);
 	toLoadRecruitQueue2->SetNewCode();
 	toLoadRecruitQueue2->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying OnGetRecruitPoolUnitEntry2 patch" << endl;
-	OnGetRecruitPoolUnitEntry2* toGetRecruitPoolUnitEntry2 = new OnGetRecruitPoolUnitEntry2(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gamever);
+	OnGetRecruitPoolUnitEntry2* toGetRecruitPoolUnitEntry2 = new OnGetRecruitPoolUnitEntry2(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gameVersion);
 	toGetRecruitPoolUnitEntry2->SetNewCode();
 	toGetRecruitPoolUnitEntry2->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toCreateMercUnitCheck patch" << endl;
-	OnCreateMercUnitCheck* toCreateMercUnitCheck = new OnCreateMercUnitCheck(mem, (LPVOID)patchesForGame::OnCreateMercUnitCheck, globals::dataS.gamever);
+	OnCreateMercUnitCheck* toCreateMercUnitCheck = new OnCreateMercUnitCheck(mem, (LPVOID)patchesForGame::OnCreateMercUnitCheck, globals::dataS.gameVersion);
 	toCreateMercUnitCheck->SetNewCode();
 	toCreateMercUnitCheck->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying OnQuickSave patch" << endl;
-	OnQuickSave* onQuickSave = new OnQuickSave(mem, (LPVOID)patchesForGame::onQuickSave, globals::dataS.gamever);
+	OnQuickSave* onQuickSave = new OnQuickSave(mem, (LPVOID)patchesForGame::onQuickSave, globals::dataS.gameVersion);
 	onQuickSave->SetNewCode();
 	onQuickSave->Enable();
 	f1 << "Done" << endl;
 
 
 	f1 << "Start applying OnAutoSave patch" << endl;
-	OnAutoSave* onAutoSave = new OnAutoSave(mem, (LPVOID)patchesForGame::onAutoSave, globals::dataS.gamever);
+	OnAutoSave* onAutoSave = new OnAutoSave(mem, (LPVOID)patchesForGame::onAutoSave, globals::dataS.gameVersion);
 	onAutoSave->SetNewCode();
 	onAutoSave->Enable();
 	f1 << "Done" << endl;
 
 
-	OnPathCasheCrashPlace* onPathCasheCrashPlace = new OnPathCasheCrashPlace(mem, (LPVOID)&TacticalMapViewer::GetPathCashe, globals::dataS.gamever, (LPVOID)&globals::dataS.Modules.tacticalMapVeiwer);
+	OnPathCasheCrashPlace* onPathCasheCrashPlace = new OnPathCasheCrashPlace(mem, (LPVOID)&tacticalMapViewer::getPathCache, globals::dataS.gameVersion, (LPVOID)&globals::dataS.Modules.tacticalMapViewer);
 	onPathCasheCrashPlace->SetNewCode();
 	onPathCasheCrashPlace->Enable();
 
-	toSelectForDrawPortsCas* onSelectForDrawPortsCas = new toSelectForDrawPortsCas(mem, (LPVOID)casModelsDrawer::drawModels, globals::dataS.gamever);
+	toSelectForDrawPortsCas* onSelectForDrawPortsCas = new toSelectForDrawPortsCas(mem, (LPVOID)casModelsDrawer::drawModels, globals::dataS.gameVersion);
 	onSelectForDrawPortsCas->SetNewCode();
 	onSelectForDrawPortsCas->Enable();
 
-	toStartOfDrawFunction* onStartOfDrawFunction = new toStartOfDrawFunction(mem, (LPVOID)patchesForGame::onStartOfDrawFunction, globals::dataS.gamever);
+	toStartOfDrawFunction* onStartOfDrawFunction = new toStartOfDrawFunction(mem, (LPVOID)patchesForGame::onStartOfDrawFunction, globals::dataS.gameVersion);
 	onStartOfDrawFunction->SetNewCode();
 	onStartOfDrawFunction->Enable();
 
 
 	if (battleCreator::IsRetreatsOverhaulEnabled())
 	{
-		toRetreat* onRetreat = new toRetreat(mem, (LPVOID)patchesForGame::onRetreat, globals::dataS.gamever);
+		toRetreat* onRetreat = new toRetreat(mem, (LPVOID)patchesForGame::onRetreat, globals::dataS.gameVersion);
 		onRetreat->SetNewCode();
 		onRetreat->Enable();
 	}
@@ -916,7 +910,7 @@ void managerF::doPachs()
 	{
 
 		f1 << "Start applying isBlockLaunchWithoutEop patch" << endl;
-		blockLaunchWithoutEop* blockLaunch = new blockLaunchWithoutEop(mem, globals::dataS.gamever);
+		blockLaunchWithoutEop* blockLaunch = new blockLaunchWithoutEop(mem, globals::dataS.gameVersion);
 		blockLaunch->SetNewCode();
 		blockLaunch->Enable();
 		f1 << "Done" << endl;
@@ -946,7 +940,7 @@ void managerF::loadJsonSettings()
 		if (json.contains("isTacticalMapViewerNeeded"))
 		{
 			getJson(jsonBoolValue, "isTacticalMapViewerNeeded");
-			globals::dataS.Modules.tacticalMapVeiwer.isTacticalMapViewerNeeded = jsonBoolValue;
+			globals::dataS.Modules.tacticalMapViewer.isTacticalMapViewerNeeded = jsonBoolValue;
 		}
 		if (json.contains("isDeveloperModeNeeded"))
 		{
@@ -993,17 +987,18 @@ void managerF::initThread()
 	battleCreator::readParams();
 
 	//read_modConfig();
-	codes::initCodes(globals::dataS.gamever);
-	dataOffsets::initDataOffsets(globals::dataS.gamever);
+	codes::initCodes(globals::dataS.gameVersion);
+	dataOffsets::initDataOffsets(globals::dataS.gameVersion);
 	//read_limits();
 
 
 
-	doPachs();
+	execPatches();
 
-	initLuaPlugin(&globals::dataS.modPath);
+	plugData::data.modFolder = globals::dataS.modPath;
+	initLuaPlugin();
 	
-	globals::dataS.Modules.tacticalMapVeiwer.Init(globals::dataS.gamever);
+	globals::dataS.Modules.tacticalMapViewer.init(globals::dataS.gameVersion);
 	//stratResTest::test();
 }
 
@@ -1015,7 +1010,7 @@ EOP_EXPORT void managerExport::initEOP(const char* modPath, int gameVer)
 		return;
 	}
 
-	globals::dataS.gamever = gameVer;
+	globals::dataS.gameVersion = gameVer;
 	globals::dataS.modPath = modPath;
 
 	CreateDirectoryA("logs", NULL);

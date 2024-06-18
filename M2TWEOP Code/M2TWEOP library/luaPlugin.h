@@ -7,6 +7,5 @@ namespace gameEvents
 	void initEvents();
 }
 
-int initLuaPlugin(std::string * modPath);
-void initLua();
+int initLuaPlugin();
 void reloadLua();

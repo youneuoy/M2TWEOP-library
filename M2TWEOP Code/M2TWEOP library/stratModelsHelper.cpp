@@ -1,9 +1,10 @@
 #include "stratModelsChange.h"
-#include "fastFuncts.h"
 #include "fort.h"
 #include "settlement.h"
 #include "functionsOffsets.h"
-#include "dataOffsets.h"
+#include "strategyMap.h"
+#include "campaign.h"
+
 namespace stratModelsChange
 {
 	void changeWatchTowerStratModel(watchTowerStruct* tower, model_Rigid* modelP)
@@ -16,7 +17,7 @@ namespace stratModelsChange
 
 		tower->model = newMod;
 	}
-	void changeResourceStratModel(resStrat* resource, model_Rigid* modelP)
+	void changeResourceStratModel(resourceStruct* resource, model_Rigid* modelP)
 	{
 		if (resource->stratMod->model == modelP)return;
 		stratResMod* newMod = new stratResMod();
@@ -101,27 +102,20 @@ namespace stratModelsChange
 		port->portDock->dockStratModel = newDockMod;
 
 	}
-	bool stratModelsChange::changeModel(int x, int y, model_Rigid* modelP, model_Rigid* modelP2)
+	bool changeModel(int x, int y, model_Rigid* modelP, model_Rigid* modelP2)
 	{
-		if (modelP == nullptr)return false;
-
-		fortStruct* fort = nullptr;
-		portBuildingStruct* port = nullptr;
-		resStrat* resource = nullptr;
-		settlementStruct* settlement = nullptr;
-		watchTowerStruct* tower = nullptr;
-
+		if (modelP == nullptr)
+			return false;
+		const auto tile = stratMapHelpers::getTile(x, y);
 		if (modelP2 != nullptr)
 		{
-			fort = fastFuncts::findFort(x, y);
+			fortStruct* fort = tile->getFort();
 			if (fort != nullptr)
 			{
 				changeFortStratModel(fort, modelP, modelP2);
 				return true;
 			}
-
-
-			port = fastFuncts::findPort(x, y);
+			portBuildingStruct* port = tile->getPort();
 			if (port != nullptr)
 			{
 
@@ -129,20 +123,19 @@ namespace stratModelsChange
 				return true;
 			}
 		}
-
-		resource = fastFuncts::findResource(x, y);
+		resourceStruct* resource = tile->getResource();
 		if (resource != nullptr)
 		{
 			changeResourceStratModel(resource, modelP);
 			return true;
 		}
-		settlement= fastFuncts::findSettlement(x, y);
+		settlementStruct* settlement = tile->getSettlement();
 		if (settlement != nullptr)
 		{
 			changeSettlementStratModel(settlement, modelP);
 			return true;
 		}
-		tower = fastFuncts::findWatchTower(x, y);
+		watchTowerStruct* tower = tile->getWatchtower();
 		if (tower != nullptr)
 		{
 			changeWatchTowerStratModel(tower, modelP);

@@ -4,6 +4,9 @@
 #include "unit.h"
 
 
+struct regionStruct;
+struct aiFaction;
+
 struct aiTacticAssault
 {
 	DWORD *vftable /*VFT*/;
@@ -50,7 +53,7 @@ public:
 	static worldRecord* __fastcall selectWorldpkgdesc(char* database, worldRecord* selectedRecord);
 
 
-	static void __fastcall OnLoadSettlementWorldpkgdesc(worldRecord* selectedRecord);
+	static void __fastcall onLoadSettlementWorldpkgdesc(worldRecord* selectedRecord);
 	static int __fastcall onfortificationlevelS(settlementStruct* settlement, bool* isCastle);
 	static char* __fastcall onSaveEDUStringS(eduEntry* eduEntry);
 	static int __fastcall onCreateUnit(char** entryName, int* edbIndex);
@@ -65,7 +68,7 @@ public:
 	static eduEntry* __fastcall OnGetRecruitPoolUnitEntry(int eduIndex);
 	static int __fastcall onFindUnit(char* entry, int* edbIndex);
 	static DWORD __fastcall OnUnitInfo(DWORD entryAddress);
-	static float __fastcall OnCalculateUnitValue(eduEntry* entry, DWORD value);
+	static float __fastcall onCalculateUnitValue(eduEntry* entry, DWORD value);
 	static int __fastcall onEvaluateUnit(int eduIndex);
 	static DWORD __fastcall onCustomBattleUnitCards(DWORD cardArrayThing, int factionID);
 	static int __fastcall onCustomBattleUnits(eduEntry** unitArray, int currentCount, int factionID);
@@ -86,7 +89,7 @@ public:
 	static char* __fastcall onGetCultureEndTurnSound(int cultureID);
 
 
-	static character* __fastcall mercenaryMovepointsGetGeneral(stackStruct* army);
+	static character* __fastcall mercenaryMovepointsGetGeneral(armyStruct* army);
 
 	//click at tile
 	static void __fastcall clickAtTile(coordPair* xy);
@@ -100,9 +103,8 @@ public:
 	static void WINAPI afterEDUread();
 	static void WINAPI onGameInit();
 	static void WINAPI onUnloadCampaign();
-	static void __fastcall onAiTurn(aiFaction* aifaction);
-
-
+	static void __fastcall onAiTurn(aiFaction* aiFac);
+	
 	//before start of a first faction turn
 	static void WINAPI onChangeTurnNum();
 
@@ -167,15 +169,15 @@ public:
 
 
 	static void __fastcall OnStopCharacter(character* character);
-	static void WINAPI OnMoveRecruitQueue();
+	static void WINAPI onMoveRecruitQueue();
 	static eduEntry* __fastcall recruitEOPunit(int eduIndex);
 	static void __fastcall recruitEOPunit2(int eduIndex);
-	static void __fastcall recruitEOPMercunit(DWORD pad, DWORD pad2, regionStruct* region, int eduindex, int factionid, int exp);
+	static void __fastcall recruitEopMercUnit(DWORD pad, DWORD pad2, regionStruct* region, int eduindex, int factionid, int exp);
 
 
 	static void __fastcall onEndSiege(settlementStruct* sett);
 	static void __fastcall onStartSiege(settlementStruct* sett);
-	static void __fastcall onLoadDescrBattleCharacter(stackStruct* army, character* goalGen);
+	static void __fastcall onLoadDescrBattleCharacter(armyStruct* army, character* goalGen);
 
 
 	//called not in all cases!

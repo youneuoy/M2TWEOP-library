@@ -4,26 +4,7 @@
 #include "lua/sol.hpp"
 
 #include "realGameTypes.h"
-namespace campaignEnums
-{
-	enum dipRelEnum :int
-	{
-		war = 1,
-		peace = 2,
-		alliance = 3,
-		suzerain = 4,
-		trade = 6
-	};
 
-	enum dipStateInternalEnum :int
-	{
-		peaceState = 200,
-		warState = 600,
-		allianceState = 0
-	};
-	constexpr int protectorateState = 15;
-	constexpr int nonProtectorateeState = 6;
-}
 namespace m2tweopHelpers
 {
 
@@ -31,16 +12,13 @@ namespace m2tweopHelpers
 	std::string getLuaPath();
 	std::shared_ptr<mapImage> makeMapImage();
 	void clearMapImage(mapImage* img);
+	void loadSaveGame(const char* saveName);
 	
 	bool isTileFree(int x, int y);
 	std::tuple<int, int> getGameTileCoordsWithCursor();
 	bool getTileVisibility(factionStruct* faction, int x, int y);
 	factionStruct* getRegionOwner(int regionID);
 	void fireGameScriptFunc(void* scriptStruct, DWORD offset);
-	
-	bool checkDipStance(const campaign* campaignStruct, campaignEnums::dipRelEnum dipType, const factionStruct* fac1, const factionStruct* fac2);
-	void setDipStance(campaign* campaignStruct, campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2);
-
 	void setPerfectSpy(bool set);
 	int getLocalFactionID();
 	
@@ -51,6 +29,7 @@ namespace m2tweopHelpers
 	void fillTileColor(mapImage* img, int x, int y, int r, int g, int b, int a);
 	void addTileColor(mapImage* img, int x, int y, int r, int g, int b, int a);
 	void logStringGame(const std::string& msg);
+	void logFuncError(const std::string& funcName, const std::string& error);
 	options1* getOptions1();
 	options2* getOptions2();
 	campaignDifficulty1* getCampaignDifficulty1();

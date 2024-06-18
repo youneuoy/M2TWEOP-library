@@ -1,13 +1,15 @@
 ﻿#include "fort.h"
 
 #include "dataOffsets.h"
-#include "fastFuncts.h"
 #include "functionsOffsets.h"
 #include "plugData.h"
 #include "faction.h"
 #include "unit.h"
 #include "character.h"
 #include "characterRecord.h"
+#include "army.h"
+#include "campaignDb.h"
+#include "strategyMap.h"
 
 namespace fortHelpers
 {
@@ -84,8 +86,8 @@ namespace fortHelpers
 		if (!convertGarrison && fort->army)
 		{
 			auto oldCoords = coordPair{static_cast<int>(fort->xCoord), static_cast<int>(fort->yCoord)};
-			if (const auto coords = fastFuncts::findValidTileNearTile(&oldCoords, 7);
-				fastFuncts::isTileValidForCharacterType(static_cast<int>(characterTypeStrat::namedCharacter), coords))
+			if (const auto coords = stratMapHelpers::findValidTileNearTile(&oldCoords, 7);
+				stratMapHelpers::isTileValidForCharacterType(static_cast<int>(characterTypeStrat::namedCharacter), coords))
 			{
 				sol::table units = sol::state_view(plugData::data.luaAll.luaState).create_table();
 				for (int i = 0; i < fort->army->numOfUnits; i++)
@@ -132,15 +134,15 @@ namespace fortHelpers
 	{
 		factionStruct* faction = fac;
 		character* newgen = characterHelpers::createCharacterWithoutSpawning("named character", faction, 30, "fort", "fort", 31, "default", x, y);
-		stackStruct* newarmy = fastFuncts::createArmy(newgen);
+		armyStruct* newarmy = armyHelpers::createArmy(newgen);
 		auto cultureID = fac->cultureID;
 		auto cultureDb = reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
 		auto culture = cultureDb->cultures[cultureID];
 		auto cost = culture.fortCost;
 		auto oldMoney = fac->money;
 		fac->money = cost;
-		auto oldOption = fastFuncts::getCampaignDb()->campaignDbSettlement.canBuildForts;
-		fastFuncts::getCampaignDb()->campaignDbSettlement.canBuildForts = true;
+		auto oldOption = campaignHelpers::getCampaignDb()->campaignDbSettlement.canBuildForts;
+		campaignHelpers::getCampaignDb()->campaignDbSettlement.canBuildForts = true;
 		DWORD adrFunc = codes::offsets.createFortFunc;
 		_asm
 		{
@@ -149,7 +151,7 @@ namespace fortHelpers
 			call eax
 		}
 		characterHelpers::killCharacter(newgen);
-		fastFuncts::getCampaignDb()->campaignDbSettlement.canBuildForts = oldOption;
+		campaignHelpers::getCampaignDb()->campaignDbSettlement.canBuildForts = oldOption;
 		fac->money = oldMoney;
 	}
 	
@@ -164,7 +166,7 @@ namespace fortHelpers
 		@tfield int xCoord
 		@tfield int yCoord
 		@tfield character governor
-		@tfield stackStruct army
+		@tfield armyStruct army
 		@tfield factionStruct ownerFaction
 		@tfield int siegeNum
 		@tfield int maxHoldoutTurns

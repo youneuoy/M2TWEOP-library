@@ -2,18 +2,18 @@
 #include "realGameTypes.h"
 #include "fort.h"
 #include "dataOffsets.h"
-#include "fastFuncts.h"
 #include "smallFuncs.h"
-#include "MasterDefines.h"
 #include <map>
 #include "headersMEM.h"
 #include "character.h"
 #include "faction.h"
 #include "characterRecord.h"
+#include "army.h"
+#include "strategyMap.h"
 
 #include <mutex>
 #include "ring_buffer.h"
-namespace PathFinder
+namespace pathFinder
 {
 	PathMap::PathMap()
 	{
@@ -44,7 +44,7 @@ namespace PathFinder
 			}
 		}
 	}
-	PathMap::PathMap(stackStruct* army, int radius) :PathMap()
+	PathMap::PathMap(armyStruct* army, int radius) :PathMap()
 	{
 		Diameter = radius * 2;
 		Pather = new MicroPather(this, (Diameter * Diameter), Diameter);
@@ -72,26 +72,26 @@ namespace PathFinder
 			return;
 		}
 
-		bool isAtLand = fastFuncts::getTileStruct(xCenter, yCenter)->isLand;
+		bool isAtLand = stratMapHelpers::getTile(xCenter, yCenter)->isLand;
 
 
-		std::map<GroundType, bool> pathableGround = {
-			{GroundType::low_fertility, isAtLand == true},
-			{GroundType::medium_fertility, isAtLand == true},
-			{GroundType::high_fertility, isAtLand == true},
-			{GroundType::wilderness, isAtLand == true},
-			{GroundType::high_moutains, false},
-			{GroundType::low_moutains, false},
-			{GroundType::hills, isAtLand == true},
-			{GroundType::dense_forest, false},
-			{GroundType::woodland,  isAtLand == true},
-			{GroundType::swamp,  isAtLand == true},
-			{GroundType::ocean,  isAtLand == false},
-			{GroundType::deep_sea,  isAtLand == false},
-			{GroundType::shallow_sea,  isAtLand == false},
-			{GroundType::coast,  isAtLand == false},
-			{GroundType::impassable_land, false},
-			{GroundType::impassable_sea, false}
+		std::map<strategyGroundType, bool> pathableGround = {
+			{strategyGroundType::lowFertility, isAtLand == true},
+			{strategyGroundType::mediumFertility, isAtLand == true},
+			{strategyGroundType::highFertility, isAtLand == true},
+			{strategyGroundType::wilderness, isAtLand == true},
+			{strategyGroundType::highMountains, false},
+			{strategyGroundType::lowMountains, false},
+			{strategyGroundType::hills, isAtLand == true},
+			{strategyGroundType::denseForest, false},
+			{strategyGroundType::woodland,  isAtLand == true},
+			{strategyGroundType::swamp,  isAtLand == true},
+			{strategyGroundType::ocean,  isAtLand == false},
+			{strategyGroundType::deepSea,  isAtLand == false},
+			{strategyGroundType::shallowSea,  isAtLand == false},
+			{strategyGroundType::coast,  isAtLand == false},
+			{strategyGroundType::impassableLand, false},
+			{strategyGroundType::impassableSea, false}
 		};
 
 
@@ -126,7 +126,7 @@ namespace PathFinder
 				prohibitTile(xDest + 1, yDest);
 			};
 
-			auto* destDile = fastFuncts::getTileStruct(xDest, yDest);
+			auto* destDile = stratMapHelpers::getTile(xDest, yDest);
 
 			if (destDile->isLand != isAtLand)
 			{
@@ -137,24 +137,24 @@ namespace PathFinder
 			{
 				return false;
 			}
-			GroundType currGround = GroundType(destDile->groundType);
+			strategyGroundType currGround = strategyGroundType(destDile->groundType);
 
 
 			if (destDile->object != nullptr)
 			{
 
-				void* endObj = smallFuncs::GetMainStratObject(destDile->object);
+				void* endObj = stratMapHelpers::getMainStratObject(destDile->object);
 
-				StartMapObjectType objT = CallVFunc<4, StartMapObjectType>(endObj);
+				strategyObject objT = callVFunc<4, strategyObject>(endObj);
 				switch (objT)
 				{
-				case StartMapObjectType::FloatingGeneral:
+				case strategyObject::floatingGeneral:
 				{
 					prohibitNeigbourTiles();
 					return false;
 					break;
 				}
-				case StartMapObjectType::Character:
+				case strategyObject::character:
 				{
 					character* gen = (character*)endObj;
 					if (gen->characterRecord->faction->factionID == army->faction->factionID)
@@ -175,7 +175,7 @@ namespace PathFinder
 					}
 					break;
 				}
-				case StartMapObjectType::Settlement:
+				case strategyObject::settlement:
 				{
 					settlementStruct* set = (settlementStruct*)endObj;
 
@@ -190,7 +190,7 @@ namespace PathFinder
 					}
 					break;
 				}
-				case StartMapObjectType::Fort:
+				case strategyObject::fort:
 				{
 					fortStruct* fort = (fortStruct*)endObj;
 
@@ -207,7 +207,7 @@ namespace PathFinder
 				}
 				//for port and also for port dock
 				//need check ground type etc
-				case StartMapObjectType::Port:
+				case strategyObject::port:
 					break;
 				default:
 					break;
@@ -297,14 +297,13 @@ namespace PathFinder
 	}
 	void PathMap::GetPossibleTilesForArmy(int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords)
 	{
-		auto* army = fastFuncts::findArmy(x, y);
+		const auto tile = stratMapHelpers::getTile(x, y);
+		auto* army = tile->getArmy();
 		if (army == nullptr)
-		{
 			return;
-		}
 
 
-		float possibleMP = smallFuncs::GetMinimumPossibleMovepointsForArmy(army);
+		float possibleMP = smallFuncs::getMinimumPossibleMovepointsForArmy(army);
 
 		//bitset wrapper, 1 bit per value
 		std::vector<bool>visited;
@@ -442,7 +441,7 @@ namespace PathFinder
 
 	std::pair<int, int> PathMap::GetNearestTileForArmy(int x, int y, int destx, int desty)
 	{
-		std::unordered_set<std::pair<int, int>, PathFinder::pathPairHash> possibleCoords;
+		std::unordered_set<std::pair<int, int>, pathFinder::pathPairHash> possibleCoords;
 		GetPossibleTilesForArmy(x, y, possibleCoords);
 
 		std::pair<int, int> res = std::make_pair(x, y);
@@ -460,7 +459,7 @@ namespace PathFinder
 		return res;
 	}
 
-	std::pair<int, int> PathMap::GetSafestTileForArmy(stackStruct* army)
+	std::pair<int, int> PathMap::GetSafestTileForArmy(armyStruct* army)
 	{
 
 		int x = 0;
@@ -482,21 +481,21 @@ namespace PathFinder
 		auto evaluateSafety = [&](int evX, int evY)
 		{
 			int safetyCost = 0;
-			auto* destDile = fastFuncts::getTileStruct(evX, evY);
+			auto* destDile = stratMapHelpers::getTile(evX, evY);
 
-			GroundType currGround = GroundType(destDile->groundType);
+			strategyGroundType currGround = strategyGroundType(destDile->groundType);
 
 			if (destDile->object != nullptr)
 			{
-				void* endObj = smallFuncs::GetMainStratObject(destDile->object);
+				void* endObj = stratMapHelpers::getMainStratObject(destDile->object);
 
-				StartMapObjectType objT = CallVFunc<4, StartMapObjectType>(endObj);
+				strategyObject objT = callVFunc<4, strategyObject>(endObj);
 
 				switch (objT)
 				{
-				case StartMapObjectType::FloatingGeneral:
+				case strategyObject::floatingGeneral:
 					break;
-				case StartMapObjectType::Settlement:
+				case strategyObject::settlement:
 				{
 					settlementStruct* set = (settlementStruct*)endObj;
 
@@ -516,7 +515,7 @@ namespace PathFinder
 					}
 					break;
 				}
-				case StartMapObjectType::Fort:
+				case strategyObject::fort:
 				{
 					fortStruct* fort = (fortStruct*)endObj;
 
@@ -536,11 +535,11 @@ namespace PathFinder
 					}
 					break;
 				}
-				case StartMapObjectType::Port:
+				case strategyObject::port:
 					break;
-				case StartMapObjectType::Character:
+				case strategyObject::character:
 					break;
-				case StartMapObjectType::RallyPointSundry:
+				case strategyObject::rallyPointSundry:
 					break;
 				default:
 					break;
@@ -548,42 +547,42 @@ namespace PathFinder
 			}
 			switch (currGround)
 			{
-			case GroundType::low_fertility:
+			case strategyGroundType::lowFertility:
 				break;
-			case GroundType::medium_fertility:
+			case strategyGroundType::mediumFertility:
 				break;
-			case GroundType::high_fertility:
+			case strategyGroundType::highFertility:
 				break;
-			case GroundType::wilderness:
+			case strategyGroundType::wilderness:
 				break;
-			case GroundType::high_moutains:
+			case strategyGroundType::highMountains:
 				break;
-			case GroundType::low_moutains:
+			case strategyGroundType::lowMountains:
 				break;
-			case GroundType::hills:
+			case strategyGroundType::hills:
 				break;
-			case GroundType::dense_forest:
+			case strategyGroundType::denseForest:
 				break;
-			case GroundType::woodland:
+			case strategyGroundType::woodland:
 			{
 				//we can hide army here
 				safetyCost += 199;
 				break;
 			}
 
-			case GroundType::swamp:
+			case strategyGroundType::swamp:
 				break;
-			case GroundType::ocean:
+			case strategyGroundType::ocean:
 				break;
-			case GroundType::deep_sea:
+			case strategyGroundType::deepSea:
 				break;
-			case GroundType::shallow_sea:
+			case strategyGroundType::shallowSea:
 				break;
-			case GroundType::coast:
+			case strategyGroundType::coast:
 				break;
-			case GroundType::impassable_land:
+			case strategyGroundType::impassableLand:
 				break;
-			case GroundType::impassable_sea:
+			case strategyGroundType::impassableSea:
 				break;
 			default:
 				break;
@@ -595,7 +594,7 @@ namespace PathFinder
 		};
 
 
-		std::unordered_set<std::pair<int, int>, PathFinder::pathPairHash> possibleCoords;
+		std::unordered_set<std::pair<int, int>, pathFinder::pathPairHash> possibleCoords;
 		GetPossibleTilesForArmy(x, y, possibleCoords);
 		std::pair<int, int> res = std::make_pair(x, y);
 		int currSafety = -1;
@@ -682,7 +681,7 @@ namespace PathFinder
 				return;
 			}
 
-			float distance = fastFuncts::GetMovepointsForReachNearTile(x, y, currX, currY);
+			float distance = stratMapHelpers::getTileMoveCost(x, y, currX, currY);
 			if (distance >= 0)
 			{
 				StateCost nodeCost = { statEn, distance };
@@ -740,11 +739,11 @@ namespace PathFinder
 	}
 	bool PathMap::IsSameTypeOfGround(int x, int y, int destX, int destY)
 	{
-		auto* fTile = fastFuncts::getTileStruct(x, y);
-		auto* nTile = fastFuncts::getTileStruct(destX, destY);
+		auto* fTile = stratMapHelpers::getTile(x, y);
+		auto* nTile = stratMapHelpers::getTile(destX, destY);
 		return fTile->isLand == nTile->isLand;
 	}
-	void GetPossibleTilesForArmyFromCashe(void* cashe, int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords)
+	void getPossibleTilesForArmyFromCache(void* cashe, int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords)
 	{
 		PathMap* pathMap = reinterpret_cast<PathMap*>(cashe);
 
@@ -756,13 +755,13 @@ namespace PathFinder
 
 		return pathMap->GetNearestTileForArmy(x, y, destx, desty);
 	}
-	std::pair<int, int> GetSafestTileForArmyFromCashe(void* cashe, stackStruct* army)
+	std::pair<int, int> getSafestTileForArmyFromCache(void* cashe, armyStruct* army)
 	{
 		PathMap* pathMap = reinterpret_cast<PathMap*>(cashe);
 
 		return pathMap->GetSafestTileForArmy(army);
 	}
-	void* CreateCasheForArmy(stackStruct* army, int radius)
+	void* createCacheForArmy(armyStruct* army, int radius)
 	{
 		PathMap* pathMap = new PathMap(army, radius);
 
@@ -774,7 +773,7 @@ namespace PathFinder
 
 		return pathMap;
 	}
-	void DeleteCasheForDistances(void* cashe)
+	void deleteCacheForDistances(void* cashe)
 	{
 		PathMap* pathMap = reinterpret_cast<PathMap*>(cashe);
 		delete pathMap;

@@ -2,7 +2,6 @@
 
 #include <filesystem>
 
-#include "eduThings.h"
 #include "globals.h"
 #include "functionsOffsets.h"
 #include "dataOffsets.h"
@@ -18,55 +17,6 @@ namespace fastFunctsHelpers
 			mov eax, functionOffset
 			call eax
 		}
-	}
-	int getEduIndex(const char* type)
-	{
-		if (const auto data = eduThings::getEopEduEntryByName(type))
-			return data->Index;
-		
-		eduEntryes* EDB = reinterpret_cast<eduEntryes*>(dataOffsets::offsets.unitTypesStart - 4);
-
-		int unitsNum = EDB->numberOfTupes;
-		for (int i = 0; i < unitsNum; i++)
-		{
-			if (strcmp(EDB->unitTupes[i].Type, type) == 0)
-			{
-				return i;
-			}
-		}
-
-		return -1;
-	}
-	eduEntry* getEduEntryByName(const char* type)
-	{
-		if (const auto data = eduThings::getEopEduEntryByName(type))
-			return data;
-		
-		eduEntryes* EDB = reinterpret_cast<eduEntryes*>(dataOffsets::offsets.unitTypesStart - 4);
-
-		int unitsNum = EDB->numberOfTupes;
-		for (int i = 0; i < unitsNum; i++)
-		{
-			if (strcmp(EDB->unitTupes[i].Type, type) == 0)
-			{
-				return &EDB->unitTupes[i];
-			}
-		}
-		return nullptr;
-	}
-	eduEntry* getEDUEntryById(int id)
-	{
-		eduEntryes* EDB = reinterpret_cast<eduEntryes*>(dataOffsets::offsets.unitTypesStart - 4);
-
-		int unitsNum = EDB->numberOfTupes;
-		for (int i = 0; i < unitsNum; i++)
-		{
-			if (EDB->unitTupes[i].Index==id)
-			{
-				return &EDB->unitTupes[i];
-			}
-		}
-		return nullptr;
 	}
 	char** makeCryptedString(const char* string)
 	{
@@ -104,8 +54,7 @@ namespace fastFunctsHelpers
 		MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
 		return wstrTo;
 	}
-
-
+	
 	namespace fs = std::filesystem;
 
 	std::string readFile(const fs::path& path)

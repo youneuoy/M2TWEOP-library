@@ -9,7 +9,7 @@ public:
 	static void debug();
 	static void loadJsonSettings();
 private:
-	static void doPachs();
+	static void execPatches();
 
 	static void initThread();
 

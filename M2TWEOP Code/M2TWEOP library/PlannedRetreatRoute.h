@@ -3,21 +3,21 @@
 #include<vector>
 #include "realGameTypes.h"
 #include "RetreatRoutes.h"
-namespace PlannedRetreatRoute
+namespace plannedRetreatRoute
 {
-	void StartWork(int x, int y);
+	void startWork(int x, int y);
 
 	//reset routes
-	void OnNewGameStart();
+	void onNewGameStart();
 	
 	void onFactionTurnStart(factionStruct*fac);
-	std::string OnGameSave();
-	void OnGameLoad(const std::vector<std::string>& filePathes);
+	std::string onGameSave();
+	void onGameLoad(const std::vector<std::string>& filePathes);
 
 
-	void OnClickAtTile(int x, int y);
+	void onClickAtTile(int x, int y);
 
-	bool TryRetreatArmyWithRoute(armyAndCharacter& army, std::pair<int, int>&resCoords);
-	void OnRetreat();
+	bool tryRetreatArmyWithRoute(battleArmy& army, std::pair<int, int>&resCoords);
+	void onRetreat();
 };
 

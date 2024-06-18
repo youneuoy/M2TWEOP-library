@@ -4,13 +4,15 @@
 namespace battleHandlerHelpers
 {
 	std::string getWinConditionS(DWORD condition);
-	armyAndCharacter* getBattleArmy(const battleSide* side, int index);
-	battleUnit* getBattleUnit(const armyAndCharacter* battleArmy, int index);
-	stackStruct* getPlayerArmy(const battleDataS* battleData, int index);
-	stackStruct* getReinforcementArmy(const battleSide* side, int index);
+	battleArmy* getBattleArmy(const battleSide* side, int index);
+	battleUnit* getBattleUnit(const battleArmy* battleArmy, int index);
+	armyStruct* getPlayerArmy(const battleDataS* battleData, int index);
+	armyStruct* getReinforcementArmy(const battleSide* side, int index);
 	factionStruct* getFaction(const battleSide* side, int index);
 	battleResidence* getBattleResidence();
 	battlefieldEngines* getBattlefieldEngines();
+	void autoResolve();
+	bool autoWin(const char* winnerSide);
 	siegeEngine* getSiegeEngine(const battlefieldEngines* engineDb, const int index);
 	battleDataS* getBattleData();
 	bool inBattle();
@@ -32,7 +34,6 @@ namespace battleHandlerHelpers
 	float getWaterHeight(const battleTile* tile);
 	int getStreetNum(const battleStreets* streets);
 	perimeterBuildings* getPerimeter(const battleBuildings* battleBuildings, int index);
-	battleStreets* getBattleStreets();
 	int getZoneID(float x, float y);
 	int getZonePerimeter(float x, float y);
 	bool isZoneValid(int zoneID);

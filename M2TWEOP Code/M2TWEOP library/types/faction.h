@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <lua/sol.hpp>
 #include "realGameTypes.h"
+#include "settlement.h"
 
 struct militaryValuesLTGD
 {
@@ -52,6 +53,28 @@ public:
 	char pad_0010[4]; //0x0010
 	struct militaryValuesLTGD ltgdFactionValues[31]; //0x0014
 	struct interFactionLTGD interFactionLTGD[31][31]; //0x07D4
+};
+
+struct factionHordeInfo
+{
+	factionStruct *faction;
+	int someFactionID;
+	int xCoord;
+	int yCoord;
+	int hordeUnitCount;
+	char field_14;
+	char field_15;
+	char field_16;
+	char field_17;
+	int amountTimesHorded;
+	int array1c;
+	int array1cSize;
+	int array1cNum;
+	char isHorde;
+	char field_29;
+	char field_2a;
+	char field_2b;
+	int hordeMinUnits2;
 };
 
 struct tileRevealer
@@ -263,7 +286,7 @@ struct factionStruct {
 	struct character** characters; /* characters on stratmap */
 	int32_t charactersSize; //0x0108
 	int numOfCharacters; /* characters on stratmap */
-	struct stackStruct** armies;
+	struct armyStruct** armies;
 	int32_t armiesSize; //0x0114
 	int stackNum;
 	int* regionsID;
@@ -350,9 +373,9 @@ struct factionStruct {
 	bool isExcommunicated; //0x0A54
 	char pad_0A55[3]; //0x0A55
 	int32_t turnsSinceAmericaDiscovered; //0x0A34
-	std::vector<void*> diplomaticProposals;
-	std::vector<float> previousStandings;
-	std::vector<float> resourceModifiers;
+	gameStdVector<void*> diplomaticProposals;
+	gameStdVector<float> previousStandings;
+	gameStdVector<float> resourceModifiers;
 	int revoltReason;
 	int playerPasswordHash;
 	bool hasPassWord;
@@ -363,10 +386,10 @@ struct factionStruct {
 	int32_t agentNameFactionId[12]; //0x0AA4
 	bool showDefeatScreen;
 	char pad_0AD4[3];
-	std::vector<void*> hotSeatStuff;
+	gameStdVector<void*> hotSeatStuff;
 	factionStruct* factionEconomyOffset;
 	int money; /* money of the faction */
-	int KingsPurse; /* money of the faction */
+	int kingsPurse; /* money of the faction */
 	int32_t incomeDoubled; //0x0AF4
 	struct factionEconomy factionEconomyTable[10]; //0x0AF8
 	int32_t nextCounterEconomy; //0x0EB8
@@ -399,7 +422,7 @@ public:
 	{
 		return spottedCharacters[index].character;
 	}
-	stackStruct* getArmy(int index)
+	armyStruct* getArmy(int index)
 	{
 		return armies[index];
 	}
@@ -445,6 +468,16 @@ public:
 		if (turnIndex < 0)
 			turnIndex += maxTurnsTillReset;
 		return &factionEconomyTable[turnIndex];
+	}
+	void revealTile(int x, int y);
+	void hideRevealedTile(int x, int y);
+	int8_t getTileVisibility(const int x, const int y)
+	{
+		return tilesFac->tilesVisiblity[tilesFac->tilesXBound * y + x];
+	}
+	void setTileVisibility(const int x, const int y, const int8_t vis)
+	{
+		tilesFac->tilesVisiblity[tilesFac->tilesXBound * y + x] = vis;
 	}
 };
 
@@ -573,7 +606,10 @@ public:
 	{
 		return &longTermGoalValues[targetFaction];
 	}
-
+	bool isTrustedAllyEnemy(const factionStruct* fac)
+	{
+		return trustedAllyEnemies & (1 << fac->factionID);
+	}
 }; //Size: 0x0604
 
 struct aiPersonalityValues
@@ -690,6 +726,7 @@ struct aiGlobalStrategyDirector
 
 namespace factionHelpers
 {
+	factionRecord* getFactionRecord(int id);
 	std::string getFactionName(const factionStruct* fac);
 	void changeFactionName(factionStruct* fac, const char* newName);
 	UNICODE_STRING** getFactionNameLocal(factionStruct* fac);
@@ -699,8 +736,8 @@ namespace factionHelpers
 	watchTowerStruct* spawnWatchtower(const factionStruct* fac, int x, int y);
 	void setFactionStanding(const factionStruct* fac1, const factionStruct* fac2, float standing);
 	std::string getLocalizedFactionName(factionStruct* fac);
-	void* disembark(stackStruct* army, int x, int y);
-	stackStruct* splitArmy(factionStruct *faction, const sol::table& units, int x, int y);
+	void* disembark(armyStruct* army, int x, int y);
+	armyStruct* splitArmy(factionStruct *faction, const sol::table& units, int x, int y);
 
 	ltgdGlobals* getLtgdGlobals();
 	militaryValuesLTGD* getAiFactionValues(factionStruct* fac);

@@ -1,7 +1,6 @@
 ﻿#include "faction.h"
 
 #include "dataOffsets.h"
-#include "fastFuncts.h"
 #include "gameDataAllHelper.h"
 #include "gameHelpers.h"
 #include "smallFuncs.h"
@@ -9,11 +8,62 @@
 #include "fort.h"
 #include "unit.h"
 #include "m2tweopHelpers.h"
+#include "army.h"
+#include "campaign.h"
+#include "strategyMap.h"
+#include "techFuncs.h"
 
 #define factionStruct_ai_label 1
 #define factionStruct_name 2
+
+void factionStruct::revealTile(const int x, const int y)
+{
+	if (stratMapHelpers::isStratMap() == false)
+		return;
+	int coords[2] = {x, y};
+	GAME_FUNC(int*(__thiscall*)(void*, int*, int, float), revealTile)(tilesFac, coords, 1, -1.0);
+}
+	
+void factionStruct::hideRevealedTile(const int x, const int y)
+{
+	if (stratMapHelpers::isStratMap() == false)
+		return;
+	struct someArgForHiding
+	{
+		int x;
+		int y;
+		int some = 2;
+		float some2 = -1;
+	};
+	const auto revealedTiles = reinterpret_cast<void**>(tilesFac);
+	const auto tilesArr = static_cast<someArgForHiding**>(revealedTiles[10]);
+	const int num = reinterpret_cast<int>(revealedTiles[12]);
+	for (int i = 0; i < num; i++)
+	{
+		if (tilesArr[i]->x == x && tilesArr[i]->y == y)
+		{
+			GAME_FUNC(int*(__thiscall*)(void*, someArgForHiding*, unsigned char), hideRevealedTile)(tilesFac, tilesArr[i], 1);
+			return;
+		}
+	}
+}
+
 namespace factionHelpers
 {
+	
+	factionRecord* getFactionRecord(const int id)
+	{
+		if (dataOffsets::offsets.descr_sm_factionslist == nullptr)
+			return nullptr;
+		
+		const int facNum = dataOffsets::offsets.descr_sm_factionslist->size;
+		for (int i = 0; i < facNum; ++i)
+		{
+			if (dataOffsets::offsets.descr_sm_factionslist->facDescrs[i].id==id)
+				return &dataOffsets::offsets.descr_sm_factionslist->facDescrs[i];
+		}
+		return nullptr;
+	}
 	
 	/*----------------------------------------------------------------------------------------------------------------*\
 											 Faction helpers
@@ -82,36 +132,28 @@ namespace factionHelpers
 
 	bool hasMilitaryAccess(const factionStruct* fac1, const factionStruct* fac2)
 	{
-		const auto gameData = gameDataAllHelper::get();
-		const auto campaign = gameData->campaignData;
-		const auto agreements = campaign->diplomaticStandings[fac1->factionID][fac2->factionID].trade;
-		return agreements & 2;
+		const auto campaign = campaignHelpers::getCampaignData();
+		return campaign->diplomaticStandings[fac1->factionID][fac2->factionID].hasMilitaryAccess;
 	}
 
 	void setMilitaryAccess(const factionStruct* fac1, const factionStruct* fac2, bool set)
 	{
-		const auto gameData = gameDataAllHelper::get();
-		const auto campaign = gameData->campaignData;
-		const auto agreements = campaign->diplomaticStandings[fac1->factionID][fac2->factionID].trade;
-		if (set)
-			campaign->diplomaticStandings[fac1->factionID][fac2->factionID].trade = agreements | static_cast<int8_t>(0x2);
-		else
-			campaign->diplomaticStandings[fac1->factionID][fac2->factionID].trade = agreements & static_cast<int8_t>(~0x2);
+		const auto campaign = campaignHelpers::getCampaignData();
+		campaign->diplomaticStandings[fac1->factionID][fac2->factionID].hasMilitaryAccess = set;
 	}
 
 	float getFactionStanding(const factionStruct* fac1, const factionStruct* fac2)
 	{
-		const auto gameData = gameDataAllHelper::get();
-		const auto campaign = gameData->campaignData;
+		const auto campaign =campaignHelpers::getCampaignData();
 		return campaign->diplomaticStandings[fac1->factionID][fac2->factionID].factionStanding;
 	}
 
 	watchTowerStruct* spawnWatchtower(const factionStruct* fac, int x, int y)
 	{
-		auto tile = gameHelpers::getTile(x, y);
+		auto tile = stratMapHelpers::getTile(x, y);
 		if (!tile)
 			return nullptr;
-		auto region = gameHelpers::getRegion(tile->regionId);
+		auto region = stratMapHelpers::getRegion(tile->regionId);
 		if (!region || !region->settlement || region->factionOwner != fac)
 			return nullptr;
 		auto settlement = region->settlement;
@@ -136,7 +178,7 @@ namespace factionHelpers
 			mov eax, spawnCreatedObject
 			call eax
 		}
-		auto watchtowers = &gameDataAllHelper::get()->campaignData->watchtowers;
+		auto watchtowers = &campaignHelpers::getCampaignData()->watchtowers;
 		DWORD addToWatchtowerList = codes::offsets.addToWatchtowerList;
 		_asm
 		{
@@ -158,8 +200,7 @@ namespace factionHelpers
 
 	void setFactionStanding(const factionStruct* fac1, const factionStruct* fac2, float standing)
 	{
-		const auto gameData = gameDataAllHelper::get();
-		const auto campaign = gameData->campaignData;
+		const auto campaign = campaignHelpers::getCampaignData();
 		campaign->diplomaticStandings[fac1->factionID][fac2->factionID].factionStanding = standing;
 	}
 	
@@ -177,16 +218,16 @@ namespace factionHelpers
 		return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
 	}
 
-	void* disembark(stackStruct* army, int x, int y)
+	void* disembark(armyStruct* army, int x, int y)
 	{
-		DWORD cadClass = fastFuncts::allocateGameMem(0x301Cu);
+		DWORD cadClass = techFuncs::allocateGameMem(0x301Cu);
 		cadClass = GAME_FUNC(DWORD(__thiscall*)(DWORD, int), createCadDisembark)(cadClass, 0);
 		auto charPtr = &army->gen;
 		coordPair coords{x, y};
 		auto coordsPtr = &coords;
 		GAME_FUNC(void(__thiscall*)(character**, coordPair*, DWORD), setCadClass)(charPtr, coordsPtr, cadClass);
 		DWORD cadClass2 = *reinterpret_cast<DWORD*>(dataOffsets::offsets.globalCadClass);
-		DWORD finalize = codes::offsets.finalyzeActionStratmapFunc;
+		DWORD finalize = codes::offsets.finalizeActionStrat;
 		auto character = army->gen;
 		_asm
 		{
@@ -197,7 +238,7 @@ namespace factionHelpers
 		}
 	}
 
-	stackStruct* splitArmy(factionStruct *faction, const sol::table& units, int x, int y)
+	armyStruct* splitArmy(factionStruct *faction, const sol::table& units, int x, int y)
 	{
 		unit* unitList[20]{};
 		coordPair targetCoords{x, y};
@@ -207,8 +248,8 @@ namespace factionHelpers
 			m2tweopHelpers::logStringGame("factionStruct.splitArmy: unit count must be between 1 and 20.");
 			return nullptr;
 		}
-		auto tile = gameHelpers::getTile(x, y);
-		if (auto tileChar = gameHelpers::getTileCharacter(tile))
+		auto tile = stratMapHelpers::getTile(x, y);
+		if (auto tileChar = tile->getCharacter(); tileChar)
 		{
 			if (tileChar->armyLeaded && tileChar->armyLeaded->faction != faction)
 			{
@@ -216,17 +257,17 @@ namespace factionHelpers
 				return nullptr;
 			}
 		}
-		if (auto tileSett = gameHelpers::getTileSettlement(tile); tileSett && tileSett->faction != faction)
+		if (auto tileSett = tile->getSettlement(); tileSett && tileSett->faction != faction)
 		{
 			m2tweopHelpers::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy settlement.");
 			return nullptr;
 		}
-		if (auto tileFort = gameHelpers::getTileFort(tile); tileFort && tileFort->faction != faction)
+		if (auto tileFort = tile->getFort(); tileFort && tileFort->faction != faction)
 		{
 			m2tweopHelpers::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy fort.");
 			return nullptr;
 		}
-		stackStruct* stack = nullptr;
+		armyStruct* stack = nullptr;
 		for (int i{ 1 }; i <= unitCount; i++)
 		{
 			const auto& un = units.get<sol::optional<unit*>>(i);
@@ -429,7 +470,7 @@ namespace factionHelpers
 		types.factionStruct.set("neighbourRegionsNum", &factionStruct::neighBourRegionsNum);
 		types.factionStruct.set("money", &factionStruct::money);
 		types.factionStruct.set("deadStatus", &factionStruct::deadStatus);
-		types.factionStruct.set("kingsPurse", &factionStruct::KingsPurse);
+		types.factionStruct.set("kingsPurse", &factionStruct::kingsPurse);
 		types.factionStruct.set("facStrat", &factionStruct::factionRecord);
 		types.factionStruct.set("factionRecord", &factionStruct::factionRecord);
 		types.factionStruct.set("autoManageAll", &factionStruct::autoManageAll);
@@ -496,7 +537,7 @@ namespace factionHelpers
 		Get an army using it's index.
 		@function factionStruct:getStack
 		@tparam int number
-		@treturn stackStruct army
+		@treturn armyStruct army
 		@usage
 		function FindArmy(x,y)
 			CAMPAIGN = gameDataAll.get().campaignStruct

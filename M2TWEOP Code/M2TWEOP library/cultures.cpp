@@ -7,12 +7,12 @@
 #include <random>
 
 #include "dataOffsets.h"
-#include "fastFuncts.h"
+#include "m2tweopHelpers.h"
 
 namespace cultures
 {
 
-    std::vector<shared_ptr<portraitDbEntry>> eopPortraitDb::portraits{};
+    std::vector<std::shared_ptr<portraitDbEntry>> eopPortraitDb::portraits{};
     int eopPortraitDb::entryCount = 0;
     
     std::unordered_map<portraitType, std::string> folderNames = {
@@ -111,7 +111,7 @@ namespace cultures
     {
         const auto cultureDb = reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
         auto religions = *reinterpret_cast <religionDatabase**>(dataOffsets::offsets.religionDatabase);
-        auto modPath = fastFuncts::GetModPath();
+        auto modPath = m2tweopHelpers::getModPath();
         for (int cultureID = 0; cultureID < cultureDb->culturesCount; cultureID++)
         {
             auto culture = cultureDb->cultures[cultureID];
@@ -228,6 +228,4 @@ namespace cultures
             }
         }
     }
-    
-    
 }

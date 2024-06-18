@@ -1,6 +1,5 @@
 #include "eopSounds.h"
 #include <windows.h>
-#include "FastFuncts.h" 
 #include "realGameTypes.h"
 
 #include <SFML/Audio.hpp>

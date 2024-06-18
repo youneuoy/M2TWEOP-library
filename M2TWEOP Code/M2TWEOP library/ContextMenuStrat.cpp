@@ -1,7 +1,7 @@
 #include "ContextMenuStrat.h"
-#include "fastFuncts.h"
 #include "TexturesManager.h"
 #include "PlannedRetreatRoute.h"
+#include "strategyMap.h"
 
 ContextMenuStrat::ContextMenuStrat()
 {
@@ -12,8 +12,8 @@ ContextMenuStrat::ContextMenuStrat()
 				{
 					int posAtMap[2]{};
 
-					fastFuncts::GetGameTileCoordsWithCursor(posAtMap[0], posAtMap[1]);
-					fastFuncts::ViewTacticalMap(posAtMap[0], posAtMap[1]);
+					stratMapHelpers::getGameTileCoordsWithCursor(posAtMap[0], posAtMap[1]);
+					stratMapHelpers::viewTacticalMap(posAtMap[0], posAtMap[1]);
 
 					return true;
 				}
@@ -32,8 +32,8 @@ ContextMenuStrat::ContextMenuStrat()
 				{
 					int posAtMap[2]{};
 
-					fastFuncts::GetGameTileCoordsWithCursor(posAtMap[0], posAtMap[1]);
-					PlannedRetreatRoute::StartWork(posAtMap[0], posAtMap[1]);
+					stratMapHelpers::getGameTileCoordsWithCursor(posAtMap[0], posAtMap[1]);
+					plannedRetreatRoute::startWork(posAtMap[0], posAtMap[1]);
 
 					return true;
 				}
@@ -42,10 +42,8 @@ ContextMenuStrat::ContextMenuStrat()
 			},
 			[](int posAtMap[2])
 			{
-				if (fastFuncts::findArmy(posAtMap[0], posAtMap[1]) != nullptr)
-				{
+				if (const auto tile = stratMapHelpers::getTile(posAtMap[0], posAtMap[1]); tile->getArmy())
 					return true;
-				}
 
 				return false;
 			})));
@@ -56,7 +54,7 @@ void ContextMenuStrat::Draw()
 	{
 		return;
 	}
-	if (fastFuncts::IsStratMap() == false)
+	if (stratMapHelpers::isStratMap() == false)
 	{
 		return;
 	}
@@ -72,7 +70,7 @@ void ContextMenuStrat::Draw()
 		if (isWork == true)
 		{
 			int posAtMap[2]{};
-			fastFuncts::GetGameTileCoordsWithCursor(posAtMap[0], posAtMap[1]);
+			stratMapHelpers::getGameTileCoordsWithCursor(posAtMap[0], posAtMap[1]);
 			for (auto& item : ctxItems)
 			{
 				auto& ctx = item.second;

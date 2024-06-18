@@ -1,7 +1,9 @@
 #include "m2tweopTile.h"
-#include "FastFuncts.h" 
 #include "globals.h"
 #include "faction.h"
+#include "army.h"
+#include "character.h"
+#include "strategyMap.h"
 
 #include "techFuncs.h"
 
@@ -9,42 +11,37 @@ void m2tweopTile::buildTile(int x, int y)
 {
 	xTile = x;
 	yTile = y;
-	tileRegionID = fastFuncts::getTileRegionID(xTile, yTile);
-	factionStruct* owner = fastFuncts::getRegionOwner(tileRegionID);
-
+	const auto tile = stratMapHelpers::getTile(x, y);
+	tileRegionID = tile->regionId;
+	const factionStruct* owner = stratMapHelpers::getRegion(tileRegionID)->factionOwner;
 	if (owner != nullptr)
 	{
 		ownerDipNum = owner->factionID;
 	}
-
-
-	settlementStruct* sett = fastFuncts::findSettlement(xTile, yTile);
+	const settlementStruct* sett = tile->getSettlement();
 	if (sett != nullptr)
 	{
 		buildAsSettlementTile();
 		return;
 	}
-
-	auto* fort = fastFuncts::findFort(xTile, yTile);
+	auto* fort = tile->getFort();
 	if (fort != nullptr)
 	{
 		buildAsFortTile();
 		return;
 	}
-	auto* port = fastFuncts::findPort(xTile, yTile);
+	auto* port = tile->getPort();
 	if (port != nullptr)
 	{
 		buildAsPortTile();
 		return;
 	}
-	auto* army = fastFuncts::findArmy(xTile, yTile);
-	if (army != nullptr)
+	const auto* character = tile->getCharacter();
+	if (character && character->armyLeaded)
 	{
-		buildAsArmyTile(army);
+		buildAsArmyTile(character->armyLeaded);
 		return;
 	}
-
-
 	if (owner != nullptr)
 	{
 
@@ -211,7 +208,7 @@ void m2tweopTile::buildAsPortTile()
 	tileCont = tileContent::port;
 }
 
-void m2tweopTile::buildAsArmyTile(stackStruct* army)
+void m2tweopTile::buildAsArmyTile(armyStruct* army)
 {
 	factionStruct* fac = army->faction;
 

@@ -3,6 +3,8 @@
 
 #include "miniz.h"
 #include <filesystem>
+
+#include "functionsOffsets.h"
 #include "globals.h"
 #include "smallFuncs.h"
 void techFuncs::WriteData(void* ptr, DWORD to, size_t size)
@@ -15,7 +17,7 @@ void techFuncs::WriteData(void* ptr, DWORD to, size_t size)
 
     CloseHandle(h);
 }
-void techFuncs::NopBytes(DWORD address, size_t size)
+void techFuncs::nopBytes(DWORD address, size_t size)
 {
     std::vector<uint8_t> nops(size, 0x90);
     WriteData(nops.data(), address, size);
@@ -164,8 +166,6 @@ void techFuncs::deleteFiles(vector<string>& files)
     }
 }
 
-
-
 static string uniToACP(UNICODE_STRING**& uniStr)
 {
     if (uniStr == nullptr || *uniStr == nullptr)
@@ -259,6 +259,22 @@ vector<string> techFuncs::getEopArchiveFiles(const string& savePath)
 
     archiveFiles = techFuncs::unzip(savePath, unpackPath);
 }
+
+DWORD techFuncs::allocateGameMem(size_t amount)
+{
+    DWORD retMem = 0;
+    DWORD adrFunc = codes::offsets.allocMemFunc;
+    _asm
+    {
+        push amount
+        mov eax, adrFunc
+        call eax
+        add esp, 0x4
+        mov retMem, eax
+    }
+    return retMem;
+}
+
 
 vector<string> techFuncs::loadGameLoadArchive(vector<string> files, UNICODE_STRING**& savePath)
 {

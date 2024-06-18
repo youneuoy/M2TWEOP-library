@@ -4,7 +4,6 @@
 //@license GPL-3.0
 #include "luaP.h"
 
-#include "actionsStrat.h"
 #include "casModelsDrawer.h"
 #include "console.h"
 #include "gameDataAllHelper.h"
@@ -15,21 +14,21 @@
 #include "tilesChange.h"
 #include "realGameTypes.h"
 #include <windows.h>
-#include "luaGetSetFuncs.h"
-#include "resourcesHelpers.h"
 #include "gameHelpers.h"
-#include "stackStructHelpers.h"
 #include "m2tweopHelpers.h"
 #include "technicalHelpers.h"
-#include "eopEduHelpers.h"
-#include "siegeHelpers.h"
 #include "gameSTDUIHelpers.h"
 #include "character.h"
 #include "settlement.h"
 #include "characterRecord.h"
 #include "faction.h"
 #include "unit.h"
+#include "army.h"
+#include "campaign.h"
+#include "campaignDb.h"
+#include "DeveloperMode.h"
 #include "eopBuildings.h"
+#include "strategyMap.h"
 std::vector<std::string> luaP::logS;
 std::vector<std::string> luaP::logCommands;
 
@@ -74,7 +73,6 @@ void replaceAll2(std::string& s, const std::string& search, const std::string& r
 	}
 }
 
-
 void luaP::runScriptS(std::string* script)
 {
 	const char* retS = nullptr;
@@ -96,7 +94,6 @@ bool luaP::checkVar(const char* gName, int variable)
 	{
 		return scriptVar.value() == variable;
 	}
-
 	return false;
 }
 
@@ -104,43 +101,25 @@ bool luaP::checkVar(const char* gName, int variable)
 
 sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 {
-
-
-
 	struct
 	{
 		sol::table M2TWEOPTable;
-
-
-
 		sol::table stratmapTable;
 		//this inside stratmap table
 		sol::table objectsTable;
 		sol::table cameraTable;
 		sol::table gameTable;
-
-
 		sol::table gameUITable;
 	}tables;
 
 	struct
 	{
 		sol::usertype<uiElement>uiElement;
-		sol::usertype<eduEntry>eduEntry;
-		sol::usertype<watchTowerStruct>watchtowerStruct;
-		sol::usertype<portBuildingStruct>portStruct;
-		sol::usertype<portDockStrat>dockStruct;
-		sol::usertype<resStrat>tradeResource;
-		sol::usertype<stackStruct>stackStruct;
-		sol::usertype<siegeS>siege;
 		sol::usertype<buildingLevel>buildingLevel;
 		sol::usertype<battleCameraStruct>battleCameraStruct;
 		sol::usertype<settlementInfoScroll>settlementInfoScroll;
 		sol::usertype<settlementTextStrings>settlementTextStrings;
 		sol::usertype<uiString>uiString;
-		sol::usertype<eventTrigger> eventTrigger;
-		sol::usertype<descrMountEntry> mountStruct;
-		sol::usertype<projectile> projectileStruct;
 	}types;
 	luaState = {};
 	luaPath = modPath + "\\youneuoy_Data\\plugins\\lua";
@@ -188,9 +167,9 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	characterHelpers::addToLua(luaState);
 	characterRecordHelpers::addToLua(luaState);
 	factionHelpers::addToLua(luaState);
-	unitHelpers::addToLua(luaState);
 	settlementHelpers::addToLua(luaState);
 	fortHelpers::addToLua(luaState);
+	armyHelpers::addToLua(luaState);
 
 	///M2TWEOP
 	//@section m2tweopTable
@@ -287,7 +266,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	    M2TWEOP.toggleDeveloperMode();
 	*/
 
-	tables.M2TWEOPTable.set_function("toggleDeveloperMode", &fastFuncts::toggleDeveloperMode);
+	tables.M2TWEOPTable.set_function("toggleDeveloperMode", &toggleDeveloperMode);
 	/***
 	Reload the lua script (without restarting the plugin itself, onPluginLoad doesn't fire).
 
@@ -366,7 +345,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	 M2TWEOP.loadGame("mods/bare_geomod/saves/test.sav");
 	*/
-	tables.M2TWEOPTable.set_function("loadGame", &fastFuncts::loadSaveGame);
+	tables.M2TWEOPTable.set_function("loadGame", &m2tweopHelpers::loadSaveGame);
 
 	/***
 	Load d3d texture
@@ -531,7 +510,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	M2TWEOP.isTileFree(55,25);
 	*/
-	tables.M2TWEOPTable.set_function("isTileFree", &m2tweopHelpers::isTileFree);
+	tables.M2TWEOPTable.set_function("isTileFree", &stratMapHelpers::isTileFree);
 	/***
 	Get the selected tile coords.
 	@function M2TWEOP.getGameTileCoordsWithCursor
@@ -541,16 +520,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local x,y=M2TWEOP.getGameTileCoordsWithCursor();
 	*/
 	tables.M2TWEOPTable.set_function("getGameTileCoordsWithCursor", &m2tweopHelpers::getGameTileCoordsWithCursor);
-	/***
-	Get the RegionID of a tile.
-	@function M2TWEOP.getTileRegionID
-	@tparam int x
-	@tparam int y
-	@treturn int regionID
-	@usage
-	local regionID=M2TWEOP.getTileRegionID(55,25);
-	*/
-	tables.M2TWEOPTable.set_function("getTileRegionID", &fastFuncts::getTileRegionID);
+	tables.M2TWEOPTable.set_function("getTileRegionID", &stratMapHelpers::getTileRegionID);
 	/***
 	Get a specific tile's visibility according to faction (i.e can a faction see a tile) Note: Once the tile has been seen by a faction, it will always return true. e.g If you have spotted a settlement but it is now outside of the fog of war, it will still be classed as visible. 
 	@function M2TWEOP.getTileVisibility
@@ -679,7 +649,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	local options = M2TWEOP.getCampaignDb();
 	*/
-	tables.M2TWEOPTable.set_function("getCampaignDb", &gameHelpers::getCampaignDb);
+	tables.M2TWEOPTable.set_function("getCampaignDb", &campaignHelpers::getCampaignDb);
 	/***
 	Get the campaign options.
 	@function M2TWEOP.getCampaignDbExtra
@@ -687,7 +657,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	local options = M2TWEOP.getCampaignDbExtra();
 	*/
-	tables.M2TWEOPTable.set_function("getCampaignDbExtra", &gameHelpers::getCampaignDbExtra);
+	tables.M2TWEOPTable.set_function("getCampaignDbExtra", &campaignHelpers::getCampaignDbExtra);
 	/***
 	Check game condition.
 	@function M2TWEOP.condition
@@ -711,7 +681,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	local moveCost = M2TWEOP.CalculateTileMovementCost(153, 245, 154, 245);
 	*/
-	tables.M2TWEOPTable.set_function("CalculateTileMovementCost", &fastFuncts::GetMovepointsForReachNearTile);
+	tables.M2TWEOPTable.set_function("CalculateTileMovementCost", &stratMapHelpers::getTileMoveCost);
 
 
 	/// BattleCamera
@@ -761,7 +731,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	end
 	*/
 
-	tables.gameUITable.set_function("getUiElement", &fastFuncts::getUiElement);
+	tables.gameUITable.set_function("getUiElement", &gameSTDUIHelpers::getUiElement);
 
 	/// UIElement
 	//@section uiElementStructTable
@@ -807,7 +777,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local subElement1 = financeScroll:getSubElement(5);
 	subElement1:execute();
 	*/
-	types.uiElement.set("execute", &fastFuncts::useUiElement);
+	types.uiElement.set("execute", &gameSTDUIHelpers::useUiElement);
 
 
 	///StratmapObjects
@@ -928,7 +898,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	stratmap.camera.move(1,2);
 	*/
-	tables.cameraTable.set_function("move", &fastFuncts::moveStratCameraSlow);
+	tables.cameraTable.set_function("move", &stratMapHelpers::moveStratCameraSlow);
 	/***
 	Quickly move the camera to the specified tile.
 	@function stratmap.camera.jump
@@ -937,7 +907,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	stratmap.camera.jump(1,2);
 	*/
-	tables.cameraTable.set_function("jump", &fastFuncts::moveStratCameraFast);
+	tables.cameraTable.set_function("jump", &stratMapHelpers::moveStratCameraFast);
 	/***
 	Set the zoom level of the camera.
 	@function stratmap.camera.zoom
@@ -945,7 +915,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	stratmap.camera.zoom(0.12);
 	*/
-	tables.cameraTable.set_function("zoom", &fastFuncts::zoomStratCamera);
+	tables.cameraTable.set_function("zoom", &stratMapHelpers::zoomStratCamera);
 
 	///Game
 	//@section gameTable
@@ -954,8 +924,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	Basic stratmap.game table
 
-	@tfield getFactionsCount getFactionsCount
-	@tfield getFaction getFaction
 	@tfield createCharacterByString createCharacterByString
 	@tfield createArmy createArmy
 	@tfield spawnArmy spawnArmy
@@ -987,23 +955,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	end
 	*/
 	tables.gameTable.set_function("callConsole", &gameHelpers::callConsole);
-	/***
-	Get the amount of factions. Just returns campaignStruct.numberOfFactions field.
-	@function stratmap.game.getFactionsCount
-	@treturn int facNumber Amount of factions
-	@usage
-	local facNum=stratmap.game.getFactionsCount();
-	*/
-	tables.gameTable.set_function("getFactionsCount", &gameHelpers::getFactionsCount);
-	/***
-	Get a faction by the turn order. Same thing as doing campaignStruct.factionsSortedByDescrStrat[index + 1].
-	@function stratmap.game.getFaction
-	@tparam int Index of the faction.
-	@treturn factionStruct faction
-	@usage
-	faction=stratmap.game.getFaction(2);
-	*/
-	tables.gameTable.set_function("getFaction", &gameHelpers::getFaction);
+	tables.gameTable.set_function("getFactionsCount", &campaignHelpers::getFactionsCount);
+	tables.gameTable.set_function("getFaction", &campaignHelpers::getFaction);
 	/***
 	Get a guild by the index.
 	@function stratmap.game.getGuild
@@ -1050,7 +1003,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int exp
 	@tparam int wpn
 	@tparam int armour
-	@treturn stackStruct newArmy
+	@treturn armyStruct newArmy
 	@usage
 	local army = stratmap.game.spawnArmy(
 	CAMPAIGN:getFaction("england"),
@@ -1064,26 +1017,26 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	M2TWEOPDU.getEduIndexByType("Peasants"), 3, 0, 0
     )
 	*/
-	tables.gameTable.set_function("spawnArmy", &fastFuncts::spawnArmy);
+	tables.gameTable.set_function("spawnArmy", &armyHelpers::spawnArmy);
 	
 	/***
 	Legacy code to spawn an army for a created character. Use spawnArmy instead!
 	@function stratmap.game.createArmy
 	@tparam character ourGeneral Character class, not named character class!
-	@treturn stackStruct army
+	@treturn armyStruct army
 	@usage
 	army=stratmap.game.createArmy(gen);
 	*/
-	tables.gameTable.set_function("createArmy", &fastFuncts::createArmy);
+	tables.gameTable.set_function("createArmy", &armyHelpers::createArmy);
 	/***
 	Create an army in a settlement (don't need a character). Used to add units to an empty settlement.
 	@function stratmap.game.createArmyInSettlement
 	@tparam settlementStruct settlement
-	@treturn stackStruct army
+	@treturn armyStruct army
 	@usage
 	army=stratmap.game.createArmyInSettlement(STRAT_MAP:getSettlement("London"));
 	*/
-	tables.gameTable.set_function("createArmyInSettlement", &fastFuncts::createArmyInSettlement);
+	tables.gameTable.set_function("createArmyInSettlement", &armyHelpers::createArmyInSettlement);
 	/***
 	Get a script counter value, works for counters and for event\_counters
 	@function stratmap.game.getScriptCounter
@@ -1154,265 +1107,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.stratmapTable.set("objects", tables.objectsTable);
 	tables.stratmapTable.set("camera", tables.cameraTable);
 	tables.stratmapTable.set("game", tables.gameTable);
-
-	///Projectile
-	//@section projectileStruct
-
-	/***
-
-	@tfield string name
-	@tfield float accuracy
-	@tfield float accuracyVsBuildings
-	@tfield float accuracyVsTowers
-	@tfield int damage
-	@tfield int damageToTroops
-	@tfield int isBodyPiercing
-	@tfield int fiery
-	@tfield int affectedByRain
-
-	@table projectileStruct
-	*/
-	types.projectileStruct = luaState.new_usertype<projectile>("projectileStruct");
-	types.projectileStruct.set("name", &projectile::name);
-	types.projectileStruct.set("accuracy", &projectile::accuracyVsUnits);
-	types.projectileStruct.set("accuracyVsBuildings", &projectile::accuracyVsBuildings);
-	types.projectileStruct.set("accuracyVsTowers", &projectile::accuracyVsTowers);
-	types.projectileStruct.set("damage", &projectile::damage);
-	types.projectileStruct.set("damageToTroops", &projectile::damageToTroops);
-	types.projectileStruct.set("affectedByRain", &projectile::affectedByRain);
-	types.projectileStruct.set("isBodyPiercing", &projectile::accuracyVsUnits);
-	types.projectileStruct.set("fiery", &projectile::fiery);
-	
-	///Mount
-	//@section mountStruct
-
-	/***
-
-	@tfield string name
-	@tfield int mountClass
-	@tfield float radius
-	@tfield float mass
-	@tfield float elephantDeadRadius
-	@tfield float elephantTuskRadius
-
-	@table mountStruct
-	*/
-	types.mountStruct = luaState.new_usertype<descrMountEntry>("mountStruct");
-	types.mountStruct.set("name", &descrMountEntry::name);
-	types.mountStruct.set("mountClass", &descrMountEntry::mountClass);
-	types.mountStruct.set("radius", &descrMountEntry::radius);
-	types.mountStruct.set("mass", &descrMountEntry::radius);
-	types.mountStruct.set("elephantDeadRadius", &descrMountEntry::elephantDeadRadius);
-	types.mountStruct.set("elephantTuskRadius", &descrMountEntry::elephantTuskRadius);
-
-	///EduEntry
-	//@section eduEntryTable
-
-	/***
-	Basic eduEntry table
-
-	@tfield string eduType - Get only
-	@tfield string soldier - Get only
-	@tfield string unitCardTga - Get only
-	@tfield string infoCardTga - Get only
-	@tfield string localizedName
-	@tfield string localizedDescription
-	@tfield string localizedDescriptionShort
-	@tfield int index - Get only
-	@tfield int unitCreatedCounter - Get only
-	@tfield int category - Get only
-	@tfield int class - Get only
-	@tfield int categoryClassCombo - Get only
-	@tfield int recruitPriorityOffset times 4
-	@tfield int crusadingUpkeepModifier
-	@tfield number aiUnitValuePerSoldier
-	@tfield number aiUnitValue
-	@tfield int soldierCount
-	@tfield float mass
-	@tfield float width
-	@tfield float height
-	@tfield bool haveAttributeLegio
-	@tfield float moveSpeedMod
-	@tfield float unitSpacingFrontToBackClose
-	@tfield float unitSpacingSideToSideClose
-	@tfield float unitSpacingFrontToBackLoose
-	@tfield float unitSpacingSideToSideLoose
-	@tfield int statHealth
-	@tfield int statHealthAnimal
-	@tfield int statHeat
-	@tfield int statScrub
-	@tfield int statSand
-	@tfield int statForest
-	@tfield int statSnow
-	@tfield int recruitTime
-	@tfield int recruitCost
-	@tfield int upkeepCost
-	@tfield int weaponCost
-	@tfield int armourCost
-	@tfield int customBattleCost
-	@tfield int customBattleIncrease
-	@tfield int customBattleLimit
-	@tfield int training
-	@tfield int discipline
-	@tfield int canPhalanx
-	@tfield int morale
-	@tfield int moraleLocked
-	@tfield int statFood1
-	@tfield int statFood2
-	@tfield int ammunition
-	@tfield int range
-	@tfield projectileStruct projectile
-	@tfield int weaponType
-	@tfield int techType
-	@tfield int damageType
-	@tfield int soundType
-	@tfield int attackMinDelay
-	@tfield int secAmmunition
-	@tfield int secRange
-	@tfield projectileStruct secProjectile
-	@tfield int secWeaponType
-	@tfield int secTechType
-	@tfield int secDamageType
-	@tfield int secSoundType
-	@tfield int secAttackMinDelay
-	@tfield int engineAmmunition
-	@tfield int engineRange
-	@tfield projectileStruct engineProjectile
-	@tfield int engineWeaponType
-	@tfield int engineTechType
-	@tfield int engineDamageType
-	@tfield int engineSoundType
-	@tfield int engineAttackMinDelay
-	@tfield int armourMaterial
-	@tfield mountStruct mount
-	@tfield string primaryAnim
-	@tfield string secondaryAnim
-	@tfield hasOwnership hasOwnership
-	@tfield hasAttribute hasAttribute
-	@tfield setOwnerShip setOwnerShip
-
-	@table eduEntry
-	*/
-	types.eduEntry = luaState.new_usertype<eduEntry>("eduEntry");
-	types.eduEntry.set("eduType", sol::property(
-		&luaGetSetFuncs::getStringPropertyEDU<EduEntryStruct_Type>, &luaGetSetFuncs::setStringPropertyEDU<EduEntryStruct_Type>
-		));
-	types.eduEntry.set("soldier", sol::property(
-		&luaGetSetFuncs::getStringPropertyEDU<EduEntryStruct_Soldier>, &luaGetSetFuncs::setStringPropertyEDU<EduEntryStruct_Soldier>
-		));
-	types.eduEntry.set("unitCardTga", sol::property(
-		&luaGetSetFuncs::getStringPropertyEDU<EduEntryStruct_UnitCardTga>, &luaGetSetFuncs::setStringPropertyEDU<EduEntryStruct_UnitCardTga>
-		));
-	types.eduEntry.set("infoCardTga", sol::property(
-		&luaGetSetFuncs::getStringPropertyEDU<EduEntryStruct_InfoCardTga>, &luaGetSetFuncs::setStringPropertyEDU<EduEntryStruct_InfoCardTga>
-		));
-	types.eduEntry.set("localizedName", sol::property(unitHelpers::getLocalizedUnitName, unitHelpers::setUnitName));
-	types.eduEntry.set("localizedDescription", sol::property(unitHelpers::getLocalizedUnitDescr, unitHelpers::setUnitDescr));
-	types.eduEntry.set("localizedDescriptionShort", sol::property(unitHelpers::getLocalizedUnitDescrShort, unitHelpers::setUnitDescrShort));
-	types.eduEntry.set("index", &eduEntry::Index);
-	types.eduEntry.set("unitCreatedCounter", &eduEntry::UnitCreatedCounter);
-	types.eduEntry.set("soldierCount", &eduEntry::SoldierCount);
-	types.eduEntry.set("mass", &eduEntry::Mass);
-	types.eduEntry.set("width", &eduEntry::Width);
-	types.eduEntry.set("height", &eduEntry::Height);
-	types.eduEntry.set("range", &eduEntry::MissleRange);
-	types.eduEntry.set("training", &eduEntry::Trained);
-	types.eduEntry.set("discipline", &eduEntry::StatMentalDicipline);
-	types.eduEntry.set("range", &eduEntry::MissleRange);
-	types.eduEntry.set("projectile", &eduEntry::StatPriMissle);
-	types.eduEntry.set("mount", &eduEntry::mount);
-	types.eduEntry.set("canPhalanx", &eduEntry::formationPhalanx);
-	types.eduEntry.set("haveAttributeLegio", sol::property(&eopEduHelpers::haveAttributeLegioGet, &eopEduHelpers::haveAttributeLegioSet));
-	types.eduEntry.set("moveSpeedMod", &eduEntry::MoveSpeedMod);
-	types.eduEntry.set("unitSpacingFrontToBackClose", &eduEntry::UnitSpacingFrontToBackClose);
-	types.eduEntry.set("unitSpacingSideToSideClose", &eduEntry::UnitSpacingSideToSideClose);
-	types.eduEntry.set("unitSpacingFrontToBackLoose", &eduEntry::UnitSpacingFrontToBackLoose);
-	types.eduEntry.set("unitSpacingSideToSideLoose", &eduEntry::UnitSpacingSideToSideLoose);
-	types.eduEntry.set("statHealth", &eduEntry::StatHealth);
-	types.eduEntry.set("statHealthAnimal", &eduEntry::StatHealthAnimal);
-	types.eduEntry.set("statHeat", &eduEntry::StatHeat);
-	types.eduEntry.set("statScrub", &eduEntry::StatGround1);
-	types.eduEntry.set("statSand", &eduEntry::StatGround2);
-	types.eduEntry.set("statForest", &eduEntry::StatGround3);
-	types.eduEntry.set("statSnow", &eduEntry::StatGround4);
-	types.eduEntry.set("recruitTime", &eduEntry::StatCost1);
-	types.eduEntry.set("recruitCost", &eduEntry::StatCost2);
-	types.eduEntry.set("upkeepCost", &eduEntry::StatCost3);
-	types.eduEntry.set("weaponCost", &eduEntry::StatCost4);
-	types.eduEntry.set("armourCost", &eduEntry::StatCost5);
-	types.eduEntry.set("customBattleCost", &eduEntry::StatCost6);
-	types.eduEntry.set("customBattleIncrease", &eduEntry::StatCost7);
-	types.eduEntry.set("customBattleLimit", &eduEntry::StatCost8);
-	types.eduEntry.set("morale", &eduEntry::Morale);
-	types.eduEntry.set("moraleLocked", &eduEntry::MoraleLocked);
-	types.eduEntry.set("statFood1", &eduEntry::StatFood1);
-	types.eduEntry.set("statFood2", &eduEntry::StatFood2);
-	types.eduEntry.set("ammunition", &eduEntry::Ammunition);
-	types.eduEntry.set("category", &eduEntry::Category);
-	types.eduEntry.set("primaryAnim", sol::property(eopEduHelpers::getPrimaryAnim));
-	types.eduEntry.set("secondaryAnim", sol::property(eopEduHelpers::getSecondaryAnim));
-	types.eduEntry.set("class", &eduEntry::Class);
-	types.eduEntry.set("categoryClassCombo", &eduEntry::categoryClassCombinationForAI);
-	types.eduEntry.set("recruitPriorityOffset", &eduEntry::RecruitPriorityOffsetTimes4);
-	types.eduEntry.set("crusadingUpkeepModifier", &eduEntry::CrusadingUpkeepModifier);
-	types.eduEntry.set("aiUnitValuePerSoldier", &eduEntry::aiUnitValuePerSoldier);
-	types.eduEntry.set("aiUnitValue", &eduEntry::aiUnitValue);
-	types.eduEntry.set("weaponType", &eduEntry::WeaponType);
-	types.eduEntry.set("techType", &eduEntry::TechType);
-	types.eduEntry.set("damageType", &eduEntry::DamageType);
-	types.eduEntry.set("soundType", &eduEntry::SoundType);
-	types.eduEntry.set("attackMinDelay", &eduEntry::AttackMinDelay);
-	types.eduEntry.set("secAmmunition", &eduEntry::SecAmmunition);
-	types.eduEntry.set("secRange", &eduEntry::SecMissleRange);
-	types.eduEntry.set("secProjectile", &eduEntry::StatSecMissle);
-	types.eduEntry.set("secWeaponType", &eduEntry::SecWeaponType);
-	types.eduEntry.set("secTechType", &eduEntry::SecTechType);
-	types.eduEntry.set("secDamageType", &eduEntry::SecDamageType);
-	types.eduEntry.set("secSoundType", &eduEntry::SecSoundType);
-	types.eduEntry.set("secAttackMinDelay", &eduEntry::SecAttackMinDelay);
-	types.eduEntry.set("engineAmmunition", &eduEntry::engineAmmunition);
-	types.eduEntry.set("engineRange", &eduEntry::engineRange);
-	types.eduEntry.set("engineProjectile", &eduEntry::engineMissle);
-	types.eduEntry.set("engineWeaponType", &eduEntry::engineWeaponType);
-	types.eduEntry.set("engineTechType", &eduEntry::engineTechType);
-	types.eduEntry.set("engineDamageType", &eduEntry::engineDamageType);
-	types.eduEntry.set("engineSoundType", &eduEntry::engineSoundType);
-	types.eduEntry.set("engineAttackMinDelay", &eduEntry::engineAttackMinDelay);
-	types.eduEntry.set("armourMaterial", &eduEntry::armourMaterial);
-
-
-	/***
-	Check if a faction has ownership of this entry.
-	@function eduEntry:hasOwnership
-	@tparam int factionID
-	@treturn bool hasOwnership
-	@usage
-	local hasOwnership = unit.eduEntry:hasOwnership(2);
-	*/
-	types.eduEntry.set_function("hasOwnership", &eopEduHelpers::hasOwnership);
-
-	/***
-	Set if a faction has ownership of this entry.
-	@function eduEntry:setOwnerShip
-	@tparam int factionID
-	@tparam bool setOwnership
-	@usage
-		unit.eduEntry:setOwnerShip(2, true);
-	*/
-	types.eduEntry.set_function("setOwnerShip", &eopEduHelpers::setOwnerShip);
-
-
-	/***
-	Check if the entry has an attribute.
-	@function eduEntry:hasAttribute
-	@tparam string attributeName
-	@treturn bool hasAttribute
-	@usage
-	local hasAttribute = entry:hasAttribute("sea_faring");
-	*/
-	types.eduEntry.set_function("hasAttribute", &eopEduHelpers::hasAttributeEdu);
-	
-
 	///settlementTextStrings
 	//@section settlementTextStrings
 
@@ -1494,531 +1188,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	*/
 	types.settlementInfoScroll.set_function("getUIStrings", &m2tweopHelpers::getUIStrings);
 	
-	///WatchtowerStruct
-	//@section watchtowerStructTable
-
-	/***
-	Basic watchtowerStruct table
-
-	@tfield int xCoord
-	@tfield int yCoord
-	@tfield int factionID
-	@tfield int regionID
-	@tfield factionStruct faction
-	@tfield settlementStruct settlement
-	@tfield stackStruct blockingArmy
-
-	@table watchtowerStruct
-	*/
-	types.watchtowerStruct = luaState.new_usertype<watchTowerStruct>("watchtowerStruct");
-	types.watchtowerStruct.set("xCoord", &watchTowerStruct::xCoord);
-	types.watchtowerStruct.set("yCoord", &watchTowerStruct::yCoord);
-	types.watchtowerStruct.set("factionID", &watchTowerStruct::factionID);
-	types.watchtowerStruct.set("regionID", &watchTowerStruct::regionID);
-	types.watchtowerStruct.set("faction", &watchTowerStruct::faction);
-	types.watchtowerStruct.set("settlement", &watchTowerStruct::settlement);
-	types.watchtowerStruct.set("blockingArmy", &watchTowerStruct::blockingArmy);
-
-
-
-
-	///PortStruct
-	//@section portStructTable
-
-	/***
-	Basic portStruct table
-
-	@tfield int xCoord land tile, Note: setting this only moves port's strat model.
-	@tfield int yCoord land tile, Note: setting this only moves port's strat model.
-	@tfield factionStruct ownerFaction Note: port's ownership changes to blockading faction (army on port)
-	@tfield settlementStruct settlement
-	@tfield int regionID
-	@tfield int cultureID
-	@tfield int numTurnsBlocked
-	@tfield stackStruct blockadingArmy Enemy army blockading the port, by standing on it's tile, check for nil.
-	@tfield dockStruct dock water tile, only upgraded ports have this, check for nil.
-
-
-	@table portStruct
-	*/
-	types.portStruct = luaState.new_usertype<portBuildingStruct>("portStruct");
-	types.portStruct.set("xCoord", &portBuildingStruct::xCoord);
-	types.portStruct.set("yCoord", &portBuildingStruct::yCoord);
-	types.portStruct.set("ownerFaction", &portBuildingStruct::fac);
-	types.portStruct.set("settlement", &portBuildingStruct::settlement);
-	types.portStruct.set("blockadingArmy", &portBuildingStruct::occupantsArmy);
-	types.portStruct.set("dock", &portBuildingStruct::portDock);
-	types.portStruct.set("regionID", &portBuildingStruct::regionID);
-	types.portStruct.set("numTurnsBlocked", &portBuildingStruct::numTurnsBlocked);
-	types.portStruct.set("cultureID", &portBuildingStruct::subFactionCultureID);
-
-
-	///DockStruct
-	//@section dockStructTable
-
-	/***
-	Basic dockStruct table
-
-	@tfield int xCoord water tile, Note: setting only moves dock strat model
-	@tfield int yCoord water tile, Note: setting only moves dock strat model
-	@tfield int regionID
-	@tfield factionStruct ownerFaction Note: port's ownership changes to blockading faction (army on port)
-	@tfield settlementStruct settlement
-	@tfield int cultureID
-	@tfield int numTurnsBlocked
-	@tfield portStruct port
-	@tfield stackStruct dockedArmy
-	
-
-	@table dockStruct
-	*/
-	types.dockStruct = luaState.new_usertype<portDockStrat>("dockStruct");
-	types.dockStruct.set("xCoord", &portDockStrat::xCoord);
-	types.dockStruct.set("yCoord", &portDockStrat::yCoord);
-	types.dockStruct.set("regionID", &portDockStrat::regionID);
-	types.dockStruct.set("ownerFaction", &portDockStrat::fac);
-	types.dockStruct.set("settlement", &portDockStrat::settlement);
-	types.dockStruct.set("cultureID", &portDockStrat::subFactionCultureID);
-	types.dockStruct.set("numTurnsBlocked", &portDockStrat::numTurnsBlocked);
-	types.dockStruct.set("port", &portDockStrat::port);
-	types.dockStruct.set("dockedArmy", &portDockStrat::dockedArmy);
-
-	///TradeResource
-	//@section tradeResource
-
-	/***
-	Basic tradeResource table
-
-	@tfield int xCoord
-	@tfield int yCoord
-	@tfield int regionID
-	@tfield int resourceID
-	@tfield settlementStruct settlement
-	@tfield setStratModel setStratModel
-	@tfield getResourceID getResourceID
-	@tfield getResourceValue getResourceValue
-	@tfield getResourceHasMine getResourceHasMine
-	@tfield getResourceImage getResourceImage
-
-	@table tradeResource
-	*/
-	types.tradeResource = luaState.new_usertype<resStrat>("tradeResource");
-	types.tradeResource.set("xCoord", &resStrat::xCoord);
-	types.tradeResource.set("yCoord", &resStrat::yCoord);
-	types.tradeResource.set("regionID", &resStrat::regionID);
-	types.tradeResource.set("resourceID", &resStrat::resourceID);
-	types.tradeResource.set("settlement", &resStrat::settlement);
-	/***
-	Set the resource's strat model.
-	@function tradeResource:setStratModel
-	@tparam int modelId Added with stratmap.objects.addModelToGame
-	@usage
-	tradeResource:setStratModel(5);
-	*/
-	types.tradeResource.set_function("setStratModel", &resourcesHelpers::setModel);
-	/***
-	Get the resource's ID.
-	@function tradeResource:getResourceID
-	@treturn int ID
-	@usage
-	
-	--
-	if tradeResource:getResourceID() == resourceType.wool then --wool
-		--do stuff
-	end
-	*/
-	types.tradeResource.set_function("getResourceID", &resourcesHelpers::getResourceCode);
-	/***
-	Get the resource's trade value.
-	@function tradeResource:getResourceValue
-	@treturn int value
-	@usage
-	if tradeResource:getResourceValue() == 5 then
-		--do stuff
-	end
-	*/
-	types.tradeResource.set_function("getResourceValue", &resourcesHelpers::getResourceCost);
-	/***
-	Check if the resource has a mine.
-	@function tradeResource:getResourceHasMine
-	@treturn int hasMine 0=no mine, 1=mine
-	@usage
-	if tradeResource:getResourceHasMine() == 1 then
-		--do stuff
-	end
-	*/
-	types.tradeResource.set_function("getResourceHasMine", &resourcesHelpers::getResourceHasMine);
-	/***
-	Get the resource's image (icon) relative path.
-	@function tradeResource:getResourceImage
-	@treturn string imagePath
-	@usage
-	function onSettlementSelected(eventData)
-		local selectedSett = eventData.settlement
-		local resList = ""
-		for i = 0, selectedSett.resourcesNum - 1, 1 do
-			local thisRes = selectedSett:getResource(i)
-			resList = resList.."Resource ID: "..thisRes:getResourceID().."\n\t("..thisRes.xCoord..", "..thisRes.yCoord..")\n\tTrade Value: "..thisRes:getResourceValue().."\n\thasMine: "..thisRes:getResourceHasMine().."\n\timage: "..thisRes:getResourceImage().."\n\n"
-		end
-		print(selectedSett.name.." resource list\n\n"..resList)
-	end
-	*/
-	types.tradeResource.set_function("getResourceImage", &resourcesHelpers::getImage);
-
-	///StackStruct
-	//@section stackStructTable
-
-	/***
-	Basic stackStruct table
-
-	@tfield factionStruct faction
-	@tfield getUnit getUnit
-	@tfield int numOfUnits
-	@tfield int deadUnitsNum
-	@tfield int isAdmiral
-	@tfield int ladders
-	@tfield int rams
-	@tfield int towers
-	@tfield getCharacter getCharacter
-	@tfield int numOfCharacters Includes Auxiliary generals and agents (i.e all characters excluding the leading general)
-	@tfield stackStruct boardedArmy army embarked on this fleet stack
-	@tfield stackStruct shipArmy fleet that this army stack is embarked on
-	@tfield dockStruct blockedPort
-	@tfield character leader Returns nil if stack is inside residence (fleet, settlement, fort).
-	@tfield findInSettlement findInSettlement
-	@tfield findInFort findInFort
-	@tfield int totalStrength
-	@tfield int subFactionID
-	@tfield int regionID
-	@tfield int totalStrengthStart
-	@tfield int alliance
-	@tfield int isHalfDestroyed
-	@tfield int generalBattleCommand
-	@tfield number generalCommandRadius
-	@tfield stackStruct commandingArmy if not leading army but reinforcement
-	@tfield stackStruct commandingArmyThatGivesCommands reinforcement and listening to player commands
-	@tfield int inBattle
-	@tfield int maxGroups
-	@tfield float reform_point_x X coordinate to which the retreating units will go.
-	@tfield float reform_point_y Y coordinate to which the retreating units will go.
-	@tfield createEOPUnit createEOPUnit
-	@tfield createUnit createUnit
-	@tfield sortStack sortStack
-	@tfield mergeArmies mergeArmies
-	@tfield createUnitByIDX createUnitByIDX
-	@tfield siegeSettlement siegeSettlement
-	@tfield siegeFort siegeFort
-	@tfield blockadePort blockadePort
-	@tfield attackArmy attackArmy
-	@tfield getGroup getGroup
-	@tfield siegeStruct siege Current siege.
-	@tfield defineUnitGroup defineUnitGroup
-	@tfield getDeadUnit getDeadUnit
-	@tfield setAiActiveSet setAiActiveSet
-	@tfield releaseUnits releaseUnits
-	@tfield buildWatchTower buildWatchTower
-
-
-	@table stackStruct
-	*/
-	types.stackStruct = luaState.new_usertype<stackStruct>("stackStruct");
-	types.stackStruct.set("faction", &stackStruct::faction);
-	types.stackStruct.set("isAdmiral", &stackStruct::isAdmiral);
-	types.stackStruct.set("deadUnitsNum", &stackStruct::deadUnitsNum);
-	types.stackStruct.set("ladders", &stackStruct::ladders);
-	types.stackStruct.set("rams", &stackStruct::rams);
-	types.stackStruct.set("maxGroups", &stackStruct::maxUnitGroups);
-	types.stackStruct.set("towers", &stackStruct::towers);
-	types.stackStruct.set("siege", &stackStruct::siege);
-	types.stackStruct.set("regionID", &stackStruct::regionID);
-	types.stackStruct.set("subFactionID", &stackStruct::subFactionID);
-	types.stackStruct.set("totalStrengthStart", &stackStruct::totalStrengthStart);
-	types.stackStruct.set("totalStrengthStart", &stackStruct::totalStrengthStart);
-	types.stackStruct.set("inBattle", &stackStruct::inBattle);
-	types.stackStruct.set("generalCommandRadius", &stackStruct::generalCommandRadius);
-	types.stackStruct.set("generalBattleCommand", &stackStruct::generalBattleCommand);
-	types.stackStruct.set("alliance", &stackStruct::battleSide);
-	types.stackStruct.set("isHalfDestroyed", &stackStruct::isHalfDestroyed);
-	types.stackStruct.set("isHalfDestroyed", &stackStruct::isHalfDestroyed);
-	types.stackStruct.set("commandingArmy", &stackStruct::commandingArmy);
-	types.stackStruct.set("commandingArmyThatGivesCommands", &stackStruct::commandingArmyThatGivesCommands);
-
-	/***
-	Sort units in a stack. Use the sortType enum to specify the sorting mode.
-	@function stackStruct:sortStack
-	@tparam int sortMode
-	@tparam int sortMode2
-	@tparam int sortMode3
-	@usage
-
-	function onFactionTurnStart(eventData)
-	local faction = eventData.faction
-    -- If it's not the players turn, don't sort
-    if faction.isPlayerControlled == 0 then return end;
-
-	function onFactionTurnStart(eventData)
-		CAMPAIGN = gameDataAll.get().campaignStruct
-		local faction = eventData.faction
-		-- If it's not the players turn, don't sort
-		if faction.isPlayerControlled == 0 then return end;
-
-		-- Sort all the stacks on the map right before the turn starts
-		local factionsNum = CAMPAIGN.numberOfFactions;
-		for i = 1, #factionsNum do
-			local fac = CAMPAIGN.factionsSortedByDescrStrat[i];
-			for j = 0, fac.stacksNum - 1 do
-				local stack = fac:getStack(j);
-				if stack then
-					-- Sort the stack by category + class, then by soldier count, then by experience
-					stack:sortStack(sortType.categoryClass, sortType.soldierCount, sortType.experience)
-				end
-			end
-		end
-	end
-	
-	*/
-	types.stackStruct.set_function("sortStack", &stackStructHelpers::sortStack);
-
-	/***
-	Get a unit by it's index.
-	@function stackStruct:getUnit
-	@tparam int number
-	@treturn unit retUnit
-	@usage
-	ourUnit=stackStruct:getUnit(0);
-	ourUnit:kill();
-	*/
-	types.stackStruct.set_function("getUnit", &stackStructHelpers::getUnit);
-	types.stackStruct.set("numOfUnits", &stackStruct::numOfUnits);
-	/***
-	Get a character (agent or non-leading named character) by it's index.
-	@function stackStruct:getCharacter
-	@tparam int number
-	@treturn character retCharacter
-	@usage
-	ourChar=stackStruct:getCharacter(0);
-	ourChar:kill();
-	*/
-	types.stackStruct.set_function("getCharacter", &stackStructHelpers::getCharacter);
-	types.stackStruct.set("numOfCharacters", &stackStruct::charactersNum);
-	types.stackStruct.set("boardedArmy", &stackStruct::boardedArmy);
-	types.stackStruct.set("shipArmy", &stackStruct::shipArmy);
-	types.stackStruct.set("blockedPort", &stackStruct::blockedPort);
-	types.stackStruct.set("leader", &stackStruct::gen);
-	/***
-	Find the settlement in which the army is located. Returns nil if the army is not in a settlement.
-
-	Returns nil if the army is not in the settlement.
-
-	@function stackStruct:findInSettlement
-	@treturn  settlementStruct  settlement
-	@usage
-	ourSett=stackStruct:findInSettlement();
-	if(ourSett~=nil)
-	then
-		--something
-	end
-	*/
-	types.stackStruct.set_function("findInSettlement", &stackStructHelpers::findInSettlement);
-	/***
-	Find the fort in which the army is located. Returns nil if the army is not in a fort.
-
-	Returns nil if the army is not in the fort.
-
-	@function stackStruct:findInFort
-	@treturn  fortStruct  fort
-	@usage
-	ourFort=stackStruct:findInFort();
-	if(ourFort~=nil)
-	then
-		--something
-	end
-	*/
-	types.stackStruct.set_function("findInFort", &stackStructHelpers::findInFort);
-	types.stackStruct.set("totalStrength", &stackStruct::totalStrength);
-	types.stackStruct.set("reform_point_x", &stackStruct::reform_point_x);
-	types.stackStruct.set("reform_point_y", &stackStruct::reform_point_y);
-
-	/***
-	Create a unit in the army by index from M2TWEOP units DB (M2TWEOPDU).
-	@function stackStruct:createEOPUnit
-	@tparam int index
-	@tparam int exp
-	@tparam int armor
-	@tparam int weapon
-	@treturn unit newUnit
-	@usage
-	local newUnit=stackStruct:createEOPUnit(1000,1,1,1);
-	*/
-	types.stackStruct.set_function("createEOPUnit", &stackStructHelpers::createEOPUnit);
-	/***
-	Create a unit in the army by type from export\_descr\_unit.txt
-	@function stackStruct:createUnit
-	@tparam string type
-	@tparam int exp Experience. Maximum: 9.
-	@tparam int armor Armour level.
-	@tparam int weapon Weapon upgrade. Maximum: 1.
-	@treturn unit newUnit
-	@usage
-	local newUnit=stackStruct:createUnit("Axemen of Lossarnach",1,1,1);
-	*/
-	types.stackStruct.set_function("createUnit", &stackStructHelpers::createUnit);
-
-	/***
-	Create a unit in the army by index from export\_descr\_unit.txt
-	@function stackStruct:createUnitByIDX
-	@tparam int index Index (order in export\_descr\_unit.txt)
-	@tparam int exp Experience. Maximum: 9.
-	@tparam int armor Armour level.
-	@tparam int weapon Weapon upgrade. Maximum: 1.
-	@treturn unit newUnit
-	@usage
-	local newUnit=stackStruct:createUnitByIDX(255,1,1,1);
-	*/
-	types.stackStruct.set_function("createUnitByIDX", &stackStructHelpers::createUnitByIDX);
-
-
-	/***
-	Merge 2 armies on the strat map. Does nothing if the total size of the new army exceeds 20 units.
-	@function stackStruct:mergeArmies
-	@tparam stackStruct targetArmy
-	@tparam bool force optional
-	@usage
-	army:mergeArmies(anotherArmy);
-	*/
-	types.stackStruct.set_function("mergeArmies", sol::overload(
-			sol::resolve<void(stackStruct*, stackStruct*)>(stackStructHelpers::mergeArmies),
-			sol::resolve<void(stackStruct*, stackStruct*, bool)>(stackStructHelpers::mergeArmies)
-		));
-
-	/***
-	Besiege the specified settlement, or attack it if already besieging it. Requires movement points.
-	@function stackStruct:siegeSettlement
-	@tparam settlementStruct settlement
-	@tparam bool isAttack if this is false it makes the army maintain a siege
-	@usage
-	stackStruct:siegeSettlement(settlement);
-	*/
-	types.stackStruct.set_function("siegeSettlement", &characterHelpers::siegeSettlement);
-
-	/***
-	Besiege the specified fort, or attack it if already besieging it. Requires movement points.
-	@function stackStruct:siegeFort
-	@tparam fortStruct fort
-	@tparam bool isAttack if this is false it makes the army maintain a siege
-	@usage
-	stackStruct:siegeFort(fort);
-	*/
-	types.stackStruct.set_function("siegeFort", &characterHelpers::siegeFort);
-
-	/***
-	Blockade a port.
-	@function stackStruct:blockadePort
-	@tparam portStruct port
-	@treturn bool success
-	@usage
-	local success = stackStruct:blockadePort(port);
-	*/
-	types.stackStruct.set_function("blockadePort", &actionsStrat::blockadePort);
-	
-	/***
-	Attack another army. Requires movement points.
-
-	@function stackStruct:attackArmy
-	@tparam stackStruct defender
-	@treturn  int Success Failed = 0.
-	@usage
-	sucess=stackStruct:attackArmy(defenderArmy);
-	if(sucess~=0)
-	then
-		--something
-	end
-	*/
-	types.stackStruct.set_function("attackArmy", &stackStructHelpers::attackArmy);
-	
-	/***
-	Get dead unit at index.
-	@function stackStruct:getDeadUnit
-	@tparam int index
-	@treturn unit deadUnit
-	@usage
-	    local unit =stackStruct:getDeadUnit(0);
-	*/
-	types.stackStruct.set_function("getDeadUnit", &stackStructHelpers::getDeadUnit);
-	
-	/***
-	Get unit group at index.
-	@function stackStruct:getGroup
-	@tparam int index
-	@treturn unitGroup group
-	@usage
-	    local group =stackStruct:getGroup(0);
-	*/
-	types.stackStruct.set_function("getGroup", &stackStructHelpers::getGroup);
-	
-	/***
-	Define a new unit group with a label.
-	@function stackStruct:defineUnitGroup
-	@tparam string name
-	@tparam unit unit
-	@treturn unitGroup group
-	@usage
-	    local group =stackStruct:defineUnitGroup("group1", unit);
-	*/
-	types.stackStruct.set_function("defineUnitGroup", &unitHelpers::defineUnitGroup);
-	
-	/***
-	Set ai active set to a value for the whole army (0 = inacitve, 1 = active, 2 = script controlled)
-	@function stackStruct:setAiActiveSet
-	@tparam int activeSet
-	@usage
-	     stackStruct:setAiActiveSet(1);
-	*/
-	types.stackStruct.set_function("setAiActiveSet", &stackStructHelpers::setAiActiveSet);
-	
-	/***
-	Set ai active set to on or off depending if army is player controlled
-	@function stackStruct:releaseUnits
-	@usage
-	     stackStruct:releaseUnits();
-	*/
-	types.stackStruct.set_function("releaseUnits", &stackStructHelpers::releaseUnits);
-	
-	/***
-	Build a watchtower (payment applies)
-	@function stackStruct:buildWatchTower
-	@usage
-	     stackStruct:buildWatchTower();
-	*/
-	types.stackStruct.set_function("buildWatchTower", &actionsStrat::buildWatchTower);
-	
-	///SiegeStruct
-	//@section siegeStruct
-
-	/***
-	Basic siegeStruct table
-
-	@tfield stackStruct besieger
-	@tfield settlementStruct besiegedSettlement
-	@tfield fortStruct besiegedFort
-	@tfield integer siegeTurns
-	@tfield integer soldierCount
-
-	@table siegeStruct
-	*/
-	types.siege = luaState.new_usertype<siegeS>("siegeStruct");
-	types.siege.set("besieger", &siegeS::army);
-	types.siege.set("siegeTurns", &siegeS::siegeTurns);
-	types.siege.set("soldierCount", &siegeS::soldierCount);
-	types.siege.set("besiegedSettlement", sol::property(
-		&siegeHelpers::getSiegedSettlement));
-	types.siege.set("besiegedFort", sol::property(
-		&siegeHelpers::getSiegedFort));
-
-
-
-
-
 	return &luaState;
 }
 
@@ -2041,16 +1210,15 @@ void luaP::onChangeTurnNum(int num)
 
 void luaP::fillHashMaps()
 {
-	const gameDataAllStruct* gameData = gameDataAllHelper::get();
-	const campaign* campaign = gameData->campaignData;
+	const campaign* campaign = campaignHelpers::getCampaignData();
 	if (!campaign)
 		return;
-	for (int i = 0; i < campaign->numberOfFactionsWithSlave; i++)
+	for (int i = 0; i < campaign->factionCount; i++)
 	{
-		if (const auto faction = campaign->factionsSortedByDescrStrat[i])
+		if (const auto faction = campaign->factionsSortedByTurnOrder[i])
 			factions.insert_or_assign(std::string(faction->factionRecord->facName), faction->factionID);
 	}
-	const auto stratMap = gameData->stratMap;
+	const auto stratMap = stratMapHelpers::getStratMap();
 	if (!stratMap)
 		return;
 	for (int i = 0; i < stratMap->regionsNum; i++)

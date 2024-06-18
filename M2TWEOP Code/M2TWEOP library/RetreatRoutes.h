@@ -1,49 +1,50 @@
 #pragma once
-#include "fastFuncts.h"
+#include "army.h"
 #include "faction.h"
-class SCoord
+#include "strategyMap.h"
+
+class sCoord
 {
 public:
-	int X;
-	int Y;
+	int x;
+	int y;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(SCoord, X, Y)
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(sCoord, x, y)
 };
 
-class RetreatRoute
+class retreatRoute
 {
 public:
-	SCoord RouteStart;
-	SCoord RouteEnd;
-	int FactionID;
-	int TurnNum;
+	sCoord routeStart;
+	sCoord routeEnd;
+	int factionID;
+	int turnNum;
 public:
-	RetreatRoute() = default;
-	RetreatRoute(int x, int y, int endX, int endY)
+	retreatRoute() = default;
+	retreatRoute(int x, int y, int endX, int endY)
 	{
-		RouteStart.X = x;
-		RouteStart.Y = y;
+		routeStart.x = x;
+		routeStart.y = y;
 
-		RouteEnd.X = endX;
-		RouteEnd.Y = endY;
-
-		auto* army = fastFuncts::findArmy(x, y);
+		routeEnd.x = endX;
+		routeEnd.y = endY;
+		const auto campaignData = campaignHelpers::getCampaignData();
+		const auto tile = stratMapHelpers::getTile(x, y);
+		auto* army = tile->getArmy();
 		if (army == nullptr)
 		{
-			FactionID = -1;
-			TurnNum = -1;
+			factionID = -1;
+			turnNum = -1;
 			return;
 		}
-		FactionID = army->faction->factionID;
+		factionID = army->faction->factionID;
 
-		if (fastFuncts::GetCurrentFaction()->factionID != FactionID)
+		if (campaignData->currentFactionTurn->factionID != factionID)
 		{
 			throw std::exception("Cannot add retreat point for other player faction");
 		}
-
-		TurnNum = fastFuncts::getPassedTurnsNum();
-
-		fastFuncts::NuullifyMovepoints(army);
+		turnNum = campaignData->turnNumber;
+		army->nullifyMovePoints();
 	}
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(RetreatRoute, RouteStart, RouteEnd, FactionID, TurnNum)
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(retreatRoute, routeStart, routeEnd, factionID, turnNum)
 };

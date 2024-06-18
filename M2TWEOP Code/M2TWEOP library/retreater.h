@@ -1,20 +1,20 @@
 #pragma once
 #include "realGameTypes.h"
 #include <vector>
-class Retreater
+class retreater
 {
 private:
 	battleDataS* Battle;
 
-	void RetreatArmy(armyAndCharacter& army);
-	void RetreatSide(battleSide& bside);
+	void retreatArmy(battleArmy& battleArmy);
+	void retreatSide(battleSide& bside);
 
-	void StartPostWork();
+	void startPostWork();
 	bool isPlayerInvolved = false;
 	std::vector<std::tuple<int, int, int, int>> retreats;
 public:
-	Retreater(battleDataS* battle);
-	~Retreater();
+	retreater(battleDataS* battle);
+	~retreater();
 
-	void Retreat();
+	void retreat();
 };

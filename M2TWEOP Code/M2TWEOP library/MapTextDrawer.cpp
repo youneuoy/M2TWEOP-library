@@ -7,7 +7,7 @@
 
 #include "lua/sol.hpp"
 
-namespace MapTextDrawer
+namespace mapTextDrawer
 {
 	coordsVText::dataS coordsVText::Data;
 
@@ -93,10 +93,10 @@ namespace MapTextDrawer
 
 	void* MakeTextFontLua(const char* fontName, sol::optional<int> weight, sol::optional<bool> isItalic)
 	{
-		return MakeTextFont(fontName, weight.value_or(400), isItalic.value_or(1));
+		return makeTextFont(fontName, weight.value_or(400), isItalic.value_or(1));
 	}
 
-	void* MakeTextFont(const char* fontName, int weight, int isItalic)
+	void* makeTextFont(const char* fontName, int weight, int isItalic)
 	{
 		if (fontName == nullptr)
 		{
@@ -121,13 +121,13 @@ namespace MapTextDrawer
 		return hFont;
 	}
 
-	void DeleteTextFont(void* fontID)
+	void deleteTextFont(void* fontID)
 	{
 		HFONT hFont = reinterpret_cast<HFONT>(fontID);
 		DeleteObject(hFont);
 	}
 
-	Text3DDrawable* MakeText(void* fontID, const char* utf8Text)
+	Text3DDrawable* makeText(void* fontID, const char* utf8Text)
 	{
 		if (utf8Text == nullptr)
 		{
@@ -246,12 +246,12 @@ namespace MapTextDrawer
 	{
 		data.textForDrawing.remove(text);
 	}
-	void DrawingTextOnce(Text3DDrawable* text)
+	void drawingTextOnce(Text3DDrawable* text)
 	{
 		text->isDrawOnce = true;
 		data.textForDrawing.push_back(text);
 	}
-	coordsVText::coordsVText(int x, int y, MapTextDrawer::Text3DDrawable* pointText)
+	coordsVText::coordsVText(int x, int y, mapTextDrawer::Text3DDrawable* pointText)
 		:PointText(pointText), X(x), Y(y)
 	{
 		static std::once_flag initFLAG;
@@ -259,7 +259,7 @@ namespace MapTextDrawer
 	}
 	coordsVText::~coordsVText()
 	{
-		MapTextDrawer::Delete3dText(PointText);
+		mapTextDrawer::Delete3dText(PointText);
 	}
 	void coordsVText::SetTileToLive(float seconds)
 	{
@@ -277,7 +277,7 @@ namespace MapTextDrawer
 		auto it = Data.SelfControlled.begin();
 		while (it != Data.SelfControlled.end())
 		{
-			DrawingTextOnce((*it)->PointText);
+			drawingTextOnce((*it)->PointText);
 
 			if ((*it)->LiveTimeEnd < Data.CurrTime)
 			{

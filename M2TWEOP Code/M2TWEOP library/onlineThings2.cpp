@@ -2,7 +2,6 @@
 
 #include <vector>
 #include <windows.h>
-#include "fastFuncts.h"
 #include "imgui/imgui.h"
 #include <d3d9.h>
 #include <sstream>
@@ -14,7 +13,9 @@
 #include "character.h"
 #include "faction.h"
 #include "unit.h"
+#include "army.h"
 #include "characterRecord.h"
+#include "gameSTDUIHelpers.h"
 #include "imgui_notify.h"
 
 namespace battleCreator
@@ -40,7 +41,7 @@ namespace battleCreator
 		unitDataS(unit*un,int pnumberInArmy)
 		{
 			numberInArmy = pnumberInArmy;
-			type = un->eduEntry->Type;
+			type = un->eduEntry->eduType;
 			soldiersNumber = un->SoldierCountStrat;
 			exp = un->expScreen;
 
@@ -237,7 +238,7 @@ namespace battleCreator
 
 			unitJson["number in army"] = i;
 			unitJson["index"] = unit->ID;
-			unitJson["type"] = unit->eduEntry->Type;
+			unitJson["type"] = unit->eduEntry->eduType;
 			if (unit->general != nullptr)
 			{
 				unitJson["general"] = addCharacter(unit->general);
@@ -472,11 +473,8 @@ namespace battleCreator
 	void writeSettlementJson(const std::string& filePath, const std::string& lastSettlementWorldRec)
 	{
 		battleDataS* battleData = smallFuncs::getGameDataAll()->battleHandler;
-		fortStruct* isFort = fastFuncts::findFort(battleData->xCoord, battleData->yCoord);
-		if (isFort == nullptr)
-		{
+		if (!battleData->isFortBattle)
 			battleSett.fort.isFort = false;
-		}
 		else
 		{
 			battleSett.fort.isFort = true;
@@ -492,21 +490,13 @@ namespace battleCreator
 	void setWinner(int selectedWinner)
 	{
 		if (selectedWinner == 2)//draw
-		{
 			return;
-		}
-
-		else if (selectedWinner == 0)
-		{
-			fastFuncts::autoWin("attacker");
-		}
+		if (selectedWinner == 0)
+			battleHandlerHelpers::autoWin("attacker");
 		else if (selectedWinner == 1)
-		{
-			fastFuncts::autoWin("defender");
-		}
+			battleHandlerHelpers::autoWin("defender");
 	}
-
-
+	
 	bool doTransfer()
 	{
 		Sleep(200);
@@ -557,7 +547,7 @@ namespace battleCreator
 						clearStructs();
 						return false;
 					}
-					if (strcmp(ourUnit->type.c_str(), gameUnit->eduEntry->Type) != 0)
+					if (strcmp(ourUnit->type.c_str(), gameUnit->eduEntry->eduType) != 0)
 					{
 						MessageBoxA(NULL, "The unit types in the results file and in the battle does not match.", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 
@@ -629,7 +619,7 @@ namespace battleCreator
 		if (selectedWinner != 2)//draw
 		{
 			setWinner(selectedWinner);
-			bool res = fastFuncts::useButton("prebattle_auto_resolve_button");
+			bool res = gameSTDUIHelpers::useButton("prebattle_auto_resolve_button");
 			if (res == false)
 			{
 				MessageBoxA(NULL, "Something goes wrong!", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
@@ -661,7 +651,7 @@ namespace battleCreator
 		thrUrl.detach();
 	}
 
-	void onLoadCharacter(stackStruct* army, const std::filesystem::path& relativePath)
+	void onLoadCharacter(armyStruct* army, const std::filesystem::path& relativePath)
 	{
 		charactersParams.numOfArmy++;
 		jsn::json json2;
@@ -722,7 +712,7 @@ namespace battleCreator
 					}
 					for (int i = 1; i < army->numOfUnits; i++)
 					{
-						if (strcmp(army->units[i]->eduEntry->Type, armySide->unitsForTransfer[i]->type.c_str()) != 0)
+						if (strcmp(army->units[i]->eduEntry->eduType, armySide->unitsForTransfer[i]->type.c_str()) != 0)
 						{
 							MessageBoxA(NULL, "M2TWEOP characters creating error!", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 							return;
@@ -754,13 +744,8 @@ namespace battleCreator
 						}
 						for (std::string& anc : newGen.ancillaries)
 						{
-							auto* resAnc= fastFuncts::findAncillary(anc.c_str());
-							if (resAnc != nullptr)
-							{
-								characterRecordHelpers::addAncillary(newGeneral->characterRecord, resAnc);
-							}
+							characterRecordHelpers::addAncillaryName(newGeneral->characterRecord, anc.c_str());
 						}
-
 						for (auto& trait : newGen.traits)
 						{
 							characterRecordHelpers::addTrait(newGeneral->characterRecord, trait.first.c_str(), trait.second);

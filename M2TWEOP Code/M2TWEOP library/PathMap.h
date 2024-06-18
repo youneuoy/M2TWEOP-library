@@ -7,7 +7,7 @@
 #include <random>
 using namespace micropather;
 
-namespace PathFinder
+namespace pathFinder
 {
 	struct pathPairHash {
 		inline std::size_t operator()(const std::pair<int, int>& v) const {
@@ -51,7 +51,7 @@ namespace PathFinder
 		PathMap(int xCenter, int yCenter, int radius);
 		//build map with army specific
 		//for example for sea one we add only sea tiles, etc
-		PathMap(stackStruct* army, int radius);
+		PathMap(armyStruct* army, int radius);
 		virtual ~PathMap() {
 			delete Pather;
 		}
@@ -60,7 +60,7 @@ namespace PathFinder
 		float CalculateDistance(int x, int y, int destX, int destY, std::vector<std::pair<int, int>>& path);
 		void GetPossibleTilesForArmy(int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords);
 		std::pair<int, int> GetNearestTileForArmy(int x, int y, int destx, int desty);
-		std::pair<int, int> GetSafestTileForArmy(stackStruct* army);
+		std::pair<int, int> GetSafestTileForArmy(armyStruct* army);
 	private:
 		PathMap();
 		MicroPather* Pather;
@@ -82,14 +82,14 @@ namespace PathFinder
 		bool IsSameTypeOfGround(int x, int y, int destX, int destY);
 	};
 
-	void GetPossibleTilesForArmyFromCashe(void* cashe, int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords);
+	void getPossibleTilesForArmyFromCache(void* cashe, int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords);
 	std::pair<int, int> GetNearestTileForArmyFromCashe(void* cashe, int x, int y, int destx, int desty);
 
 	//for retreats, etc
-	std::pair<int, int> GetSafestTileForArmyFromCashe(void* cashe, stackStruct* army);
+	std::pair<int, int> getSafestTileForArmyFromCache(void* cashe, armyStruct* army);
 
-	void* CreateCasheForArmy(stackStruct* army, int radius);
+	void* createCacheForArmy(armyStruct* army, int radius);
 	void* CreateCasheForDistances(int x, int y, int radius);
-	void DeleteCasheForDistances(void* cashe); 
+	void deleteCacheForDistances(void* cashe); 
 	float GetMovepointsForReachTileFromCashe(void* cashe, int x, int y, int destX, int destY);
 };

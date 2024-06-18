@@ -23,7 +23,7 @@ public:
     float stratPosZ;
     float stratPosY;
     void* trackedPointerArmyVtable;
-    struct stackStruct* army;
+    struct armyStruct* army;
     struct oneSiege sieges[8];
     int8_t siegeNum; //0x0088
     char pad_0089[3]; //0x0089
@@ -37,7 +37,7 @@ public:
     int8_t salliedOut; //0x00A5
     int8_t gatesAreOpened;
     int8_t readyToSurrender;
-    crusade* takenByCrusade;
+    struct crusade* takenByCrusade;
     struct descrRebelEntry* descrRebel; //0x00AC
     int32_t subFactionID; //0x00B0
 	spyingInfo spyInfo;
@@ -61,7 +61,7 @@ public :
 	{
 		if (!nextObject)
 			return nullptr;
-		if (CallVFunc<4, int>(nextObject) == 28)
+		if (callVFunc<4, int>(nextObject) == 28)
 		{
 			return static_cast<character*>(nextObject);
 		}

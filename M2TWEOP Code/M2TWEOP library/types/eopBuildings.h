@@ -4,13 +4,38 @@
 #include "fastFunctsHelpers.h"
 #include "realGameTypes.h"
 #include "settlement.h"
+#include "lua/sol.hpp"
 
 #define edbEntryStruct_type 1
 #define buildingLevelStruct_name 1
+
+class eopBuildEntry
+{
+public:
+    edbEntry baseEntry;
+    eopBuildEntry(edbEntry* oldEntry, int newIndex)
+    {
+        baseEntry = *oldEntry;
+        eopBuildID = newIndex;
+    }
+    int eopBuildID;
+};
+
+class buildEntryDB
+{
+public:
+    static edbEntry* addEopBuildEntry(edbEntry* oldEntry, int newIndex);
+    static edbEntry* getEopBuildEntry(int idx);
+    static void addCaps(buildingLevel* eopLevel, const buildingLevel* oldLevel);
+    static void addPools(buildingLevel* eopLevel, const buildingLevel* oldLevel);
+public:
+    static std::vector<eopBuildEntry> eopEdb;
+};
+
+
+
 namespace eopBuildings
 {
-    edbEntry* addEopBuildEntry(edbEntry* oldEntry, int newIndex);
-    edbEntry* getEopBuildEntry(int idx);
     void setBuildingPic(edbEntry* entry, const char* newPic, int level, int cultureID);
     void setBuildingPicConstructed(edbEntry* entry, const char* newPic, int level, int cultureID);
     void setBuildingPicConstruction(edbEntry* entry, const char* newPic, int level, int cultureID);
@@ -94,3 +119,8 @@ namespace eopBuildings
 
 #pragma endregion
 };
+
+namespace buildingHelpers
+{
+    void addToLua(sol::state& luaState);
+}

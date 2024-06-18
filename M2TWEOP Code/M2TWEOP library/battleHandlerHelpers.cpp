@@ -6,6 +6,7 @@
 #include "character.h"
 #include "dataOffsets.h"
 #include "unit.h"
+#include "army.h"
 
 namespace battleHandlerHelpers
 {
@@ -23,18 +24,48 @@ namespace battleHandlerHelpers
 		default: return "unknown_condition";
 		}
 	}
+	
+	void autoResolve()
+	{
+		DWORD adrFunc = codes::offsets.autoResolveFunc;
+		_asm
+		{
+			mov eax, adrFunc
+			call eax
+		}
+	}
+	
+	bool autoWin(const char* winnerSide)
+	{
+		DWORD adrFunc = codes::offsets.autoWinFunc;
+		string command = winnerSide;
+		char buffer[100]{};
+		const char* cmdC = command.c_str();
 
-	armyAndCharacter* getBattleArmy(const battleSide* side, int index)
+		bool result = false;
+		_asm
+		{
+			lea eax, buffer
+			push eax
+			push cmdC
+			mov eax, adrFunc
+			call eax
+			mov result, al
+		}
+		return result;
+	}
+
+	battleArmy* getBattleArmy(const battleSide* side, int index)
 	{
 		return &side->forces[index];
 	}
 
-	battleUnit* getBattleUnit(const armyAndCharacter* battleArmy, int index)
+	battleUnit* getBattleUnit(const battleArmy* battleArmy, int index)
 	{
 		return &battleArmy->units[index];
 	}
 
-	stackStruct* getPlayerArmy(const battleDataS* battleData, int index)
+	armyStruct* getPlayerArmy(const battleDataS* battleData, int index)
 	{
 		return battleData->playerArmies[index].army;
 	}
@@ -125,13 +156,6 @@ namespace battleHandlerHelpers
 		return perimeters;
 	}
 
-	battleStreets* getBattleStreets()
-	{
-		battlePerimeters* perimeters = getBattlePerimeters();
-		if (!perimeters) return nullptr;
-		return &perimeters->battleStreets;
-	}
-
 	bool isZoneValid(int zoneID)
 	{
 		const auto perimeters = getBattlePerimeters();
@@ -173,7 +197,7 @@ namespace battleHandlerHelpers
 		return &segments->lineSegments[index];
 	}
 
-	stackStruct* getReinforcementArmy(const battleSide* side, int index)
+	armyStruct* getReinforcementArmy(const battleSide* side, int index)
 	{
 		if (index >= side->reinforceArmyCount)
 			return nullptr;
@@ -202,7 +226,7 @@ namespace battleHandlerHelpers
 	int getObjectiveType(AIBattleObjectiveBase* objective)
 	{
 		if (!objective) return -1;
-		return CallVFunc<7, int>(objective);
+		return callVFunc<7, int>(objective);
 	}
 
 	battleResidence* getBattleResidence()

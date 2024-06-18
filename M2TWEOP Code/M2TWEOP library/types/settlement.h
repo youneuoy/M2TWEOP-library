@@ -25,6 +25,56 @@ enum class productionBias
 	buildStrengthLimit
 };
 
+struct settlementCapability
+{
+public:
+	int16_t value; //0x0000
+	int16_t bonus; //0x0002
+}; //Size: 0x0004
+
+struct recruitCapRome
+{
+public:
+	char pad[8];
+}; //Size: 0x0008
+
+struct recruitmentCapability
+{
+public:
+	int32_t eduIndex; //0x0000
+	int32_t xp; //0x0004
+	float initialSize; //0x0008
+	float replenishRate; //0x000C
+	float maxSize; //0x0010
+}; //Size: 0x0014
+
+struct settlementRecruitmentPool
+{
+public:
+	int32_t eduIndex; //0x0000
+	float availablePool; //0x0004
+}; //Size: 0x0008
+
+
+struct recruitRome
+{
+	char pad[8];
+};
+
+struct capabilityStruct
+{
+public:
+	struct settlementCapability settlementCapabilities[57]; //0x0000
+	struct settlementCapability settlementCapabilitiesAgent[6]; //0x00E4
+	struct settlementCapability settlementCapabilitiesAgentLimit[6]; //0x00FC
+	struct settlementCapability settlementCapabilitiesAncillaryROME[4]; //0x0114
+	struct recruitRome settlementCapabilitiesRecruitROME[64]; //0x0124
+	int32_t recruitCapabilityCount; //0x0324
+	struct recruitmentCapability recruitmentCapabilities[64]; //0x0328
+	int32_t recruitmentCapabilityCount; //0x0828
+}; //Size: 0x082C
+
+
 struct unitRQ {
 public:
 	struct eduEntry* entry{}; //0x0000
@@ -368,7 +418,7 @@ struct settlementStruct {
 	float stratPosZ;
 	float stratPosY;
 	void* trackedPointerArmyVtable;
-	struct stackStruct* army;
+	struct armyStruct* army;
 	struct oneSiege sieges[8];
 	int8_t siegeNum; //0x0088
 	char pad_0089[3]; //0x0089
@@ -382,7 +432,7 @@ struct settlementStruct {
 	int8_t salliedOut; //0x00A5
 	int8_t gatesAreOpened;
 	int8_t readyToSurrender;
-	crusade* takenByCrusade;
+	struct crusade* takenByCrusade;
 	struct descrRebelEntry* descrRebel; //0x00AC
 	int32_t subFactionID; //0x00B0
 	spyingInfo spyInfo;
@@ -482,7 +532,7 @@ struct settlementStruct {
 	int32_t loyalty; //0x0E38
 	int32_t lastPopulation; //0x0E3C
 	int32_t harvestSuccess; //0x0E40
-	struct resStrat** resources;
+	struct resourceStruct** resources;
 	int32_t resourceSize; //0x0E48
 	int resourcesNum;
 	int32_t settlementTaxLevel; //0x0E50
@@ -509,7 +559,7 @@ struct settlementStruct {
 	char pad_16C0[4]; //0x16BC
 	int* guildStandings;
 	int capturedSettlementOption;
-	std::string packagePath;
+	basicStringGame packagePath;
 	float foundingConversionRate;
 	float ownerConversionRate;
 	factionStruct* factionMechanics;
@@ -542,7 +592,7 @@ public:
 	{
 		return sieges[index].siege;
 	}
-	resStrat* getResource(int index)
+	resourceStruct* getResource(int index)
 	{
 		return resources[index];
 	}
@@ -553,6 +603,10 @@ public:
 	settlementCapability* getSettlementCapability(int capabilityType)
 	{
 		return &capabilities.settlementCapabilities[capabilityType];
+	}
+	settlementCapability* getSettlementCapabilityEnum(buildingCapabilities capabilityType)
+	{
+		return &capabilities.settlementCapabilities[static_cast<int>(capabilityType)];
 	}
 	settlementCapability* getAgentCapability(int agentType)
 	{

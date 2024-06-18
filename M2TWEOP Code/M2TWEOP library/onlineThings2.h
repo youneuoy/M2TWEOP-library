@@ -19,12 +19,9 @@ namespace battleCreator
 	void transferResults2();
 
 	//create new characters here
-	void onLoadCharacter(stackStruct* army, const std::filesystem::path& relativePath);
-
-
+	void onLoadCharacter(armyStruct* army, const std::filesystem::path& relativePath);
 	//create settlement here
 	string onLoadSettlementWord(const std::filesystem::path& relativePath);
-
 	void clearStructs();
 };
 

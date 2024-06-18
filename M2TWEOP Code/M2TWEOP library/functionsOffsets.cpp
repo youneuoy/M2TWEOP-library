@@ -9,6 +9,7 @@ void codes::initCodes(int gameVer)
 		offsets.loadStratCasModelFunc = 0x00a04380;
 		offsets.allocMemFunc = 0x012418d8;
 		offsets.createEduEntry = 0x008EECA0;
+		offsets.uniStrCustomTile = 0x00f018e0;
 
 		offsets.createSiegeSettlementGarrisonedFunc = 0x005b56c0;
 		offsets.createCadAttackSettlementFunc = 0x005B55B0;
@@ -18,7 +19,7 @@ void codes::initCodes(int gameVer)
 		offsets.getReadySiegeCharacterGarrisonedFunc = 0x005a18e0;
 		offsets.decideEquipmentFunc = 0x0071C920;
 		offsets.getEquipmentPreferencesFunc = 0x00521520;
-		offsets.finalyzeActionStratmapFunc = 0x0059e790;
+		offsets.finalizeActionStrat = 0x0059e790;
 
 		offsets.createIdleActionFunc = 0x005aff40;
 
@@ -29,7 +30,7 @@ void codes::initCodes(int gameVer)
 		offsets.setFactionLeaderFunc = 0x004E8FE0;
 		offsets.findParentForAdoptionFunc = 0x004EA4E0;
 		offsets.setArmyRegionEntriesFunc = 0x004A40E0;
-		offsets.factionRessurectStuffFunc = 0x004F4C80;
+		offsets.factionResurrectStuffFunc = 0x004F4C80;
 		offsets.doHordeStuff = 0x0050B170;
 		offsets.doHordeStuff2 = 0x004EAA10;
 		offsets.doHordeStuff3 = 0x00C5CBC0;
@@ -78,7 +79,7 @@ void codes::initCodes(int gameVer)
 
 		offsets.replenishUnitFunc = 0x00748e20;
 		offsets.setUnitArmorFunc = 0x0073bce0;
-		offsets.setUnitWeapFunc = 0x0073bb00;
+		offsets.setUnitWeaponFunc = 0x0073bb00;
 
 
 		offsets.createCharacterFunc = 0x008b5d60;
@@ -210,6 +211,22 @@ void codes::initCodes(int gameVer)
 		offsets.clearUnitGroup = 0x0071E590;
 		offsets.removeUnusedLabel = 0x00A92320;
 		offsets.defineUnitGroup = 0x00A91BD0;
+		offsets.findAncillary = 0x008b1340;
+		offsets.mergeArmies = 0x00714EF0;
+		
+		offsets.stopBlockade = 0x00711310;
+		offsets.stopSiege = 0x007110f0;
+		offsets.addToSettlement = 0x005e18f0;
+		offsets.addToFort = 0x004bc690;
+		offsets.ungarrisonResidence = 0x004bf9c0;
+		offsets.attackArmy = 0x718E80;
+		offsets.getTileMoveCost = 0x004c7620;
+		offsets.revealTile = 0x004ba910;
+		offsets.setFactionTrade = 0x00502EE0;
+		offsets.setProtectorate = 0x00504980;
+		offsets.isTileFree = 0x004c8c70;
+		offsets.hideRevealedTile = 0x004ba9f0;
+		offsets.findBattleModel = 0x010e86c0;
 	}
 	else if (gameVer == 2) //steam
 	{
@@ -239,7 +256,7 @@ void codes::initCodes(int gameVer)
 		offsets.decideEquipmentFunc = 0x0071D050;
 		offsets.getEquipmentPreferencesFunc = 0x00521B10;
 		
-		offsets.finalyzeActionStratmapFunc = 0x0059ec70;
+		offsets.finalizeActionStrat = 0x0059ec70;
 		
 
 		offsets.createIdleActionFunc = 0x005b0420;
@@ -251,7 +268,7 @@ void codes::initCodes(int gameVer)
 		offsets.setFactionLeaderFunc = 0x004E95F0;
 		offsets.findParentForAdoptionFunc = 0x004EAAF0;
 		offsets.setArmyRegionEntriesFunc = 0x004A4580;
-		offsets.factionRessurectStuffFunc = 0x004F5250;
+		offsets.factionResurrectStuffFunc = 0x004F5250;
 
 		offsets.getReadyForMovingFunc = 0x005b0540;
 		offsets.getReadyForMoving2Func = 0x005a0d50;
@@ -288,7 +305,7 @@ void codes::initCodes(int gameVer)
 
 		offsets.replenishUnitFunc = 0x007495a0;
 		offsets.setUnitArmorFunc = 0x0073c470;
-		offsets.setUnitWeapFunc = 0x0073c290;
+		offsets.setUnitWeaponFunc = 0x0073c290;
 
 
 		offsets.createCharacterFunc = 0x008b6750;
@@ -418,5 +435,22 @@ void codes::initCodes(int gameVer)
 		offsets.clearUnitGroup = 0x0071ECD0;
 		offsets.removeUnusedLabel = 0x00A93380;
 		offsets.defineUnitGroup = 0x00A92C30;
+		offsets.findAncillary = 0x008b1d30;
+		offsets.mergeArmies = 0x007155F0;
+		
+		offsets.stopBlockade = 0x00711a50;
+		offsets.stopSiege = 0x00711830;
+		offsets.addToSettlement = 0x005e1dc0;
+		offsets.addToFort = 0x004bcc20;
+		offsets.ungarrisonResidence = 0x004bff50;
+		offsets.attackArmy = 0x007195A0;
+		offsets.getTileMoveCost = 0x004c7bd0;
+		offsets.revealTile = 0x004baea0;
+		offsets.setFactionTrade = 0x00503480;
+		offsets.setProtectorate = 0x00504F20;
+		offsets.isTileFree = 0x004c9220;
+		offsets.hideRevealedTile = 0x004baf80;
+		offsets.findBattleModel = 0x010e8ee0;
+		offsets.uniStrCustomTile = 0x00f01eb0;
 	}
 }

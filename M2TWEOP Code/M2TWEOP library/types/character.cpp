@@ -1,19 +1,21 @@
 ﻿#include "character.h"
 
 #include "dataOffsets.h"
-#include "eduThings.h"
-#include "FastFuncts.h"
 #include "fastFunctsHelpers.h"
 #include "functionsOffsets.h"
 #include "smallFuncs.h"
-#include "stackStructHelpers.h"
 #include "fort.h"
 #include "m2tweopHelpers.h"
 #include "characterRecord.h"
+#include "eopdu.h"
 #include "gameHelpers.h"
 #include "stratModelsChange.h"
 #include "faction.h"
 #include "unit.h"
+#include "army.h"
+#include "campaignDb.h"
+#include "strategyMap.h"
+#include "techFuncs.h"
 
 namespace characterHelpers
 {
@@ -101,7 +103,7 @@ namespace characterHelpers
 
 		char** cryptS = fastFunctsHelpers::makeCryptedString(type);
 
-		DWORD adrType = (DWORD)cryptS;
+		DWORD adrType = reinterpret_cast<DWORD>(cryptS);
 		_asm
 		{
 			push portrait
@@ -153,7 +155,7 @@ namespace characterHelpers
 
 		char** cryptS = fastFunctsHelpers::makeCryptedString(type);
 
-		DWORD adrType = (DWORD)cryptS;
+		DWORD adrType = reinterpret_cast<DWORD>(cryptS);
 		_asm
 		{
 			push portrait
@@ -220,7 +222,7 @@ namespace characterHelpers
 			DWORD pref[5] {};
 			
 			//Game function to fill that array
-			if (!GAME_FUNC(bool(__cdecl*)(stackStruct* armyP, DWORD* prefP, settlementStruct* settlementP),
+			if (!GAME_FUNC(bool(__cdecl*)(armyStruct* armyP, DWORD* prefP, settlementStruct* settlementP),
 				getEquipmentPreferencesFunc)(gen->armyLeaded, &pref[0], sett))
 			{
 				//Loop through the array and decide what equipment to use
@@ -240,7 +242,7 @@ namespace characterHelpers
 		}
 
 		//Allocate memory for the CAD class
-		auto cadClass = fastFuncts::allocateGameMem(isAttack && sett->army ? 0x3028 : 0x3024);
+		auto cadClass = techFuncs::allocateGameMem(isAttack && sett->army ? 0x3028 : 0x3024);
 		if (cadClass == 0) return;
 
 		//Select appropriate function to create the relevant CAD class
@@ -264,7 +266,7 @@ namespace characterHelpers
 		GAME_FUNC(DWORD(__thiscall*)(character* character, DWORD cadClassP, int a3),
 			getReadySiegeCharacterGarrisonedFunc)(gen, cadClass, 0);
 		
-		DWORD adrFunc = codes::offsets.finalyzeActionStratmapFunc;
+		DWORD adrFunc = codes::offsets.finalizeActionStrat;
 		_asm
 		{
 			push cadClass
@@ -272,7 +274,7 @@ namespace characterHelpers
 			mov eax, adrFunc
 			call eax
 		}
-		CallVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); //Destructor
+		callVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); //Destructor
 	}
 	
 	void siegeFort(character* gen, fortStruct* fort, bool isAttack)
@@ -289,7 +291,7 @@ namespace characterHelpers
 			DWORD pref[5] {};
 			
 			//Game function to fill that array
-			if (!GAME_FUNC(bool(__cdecl*)(stackStruct*, DWORD*, fortStruct*),
+			if (!GAME_FUNC(bool(__cdecl*)(armyStruct*, DWORD*, fortStruct*),
 				getEquipmentPreferencesFunc)(gen->armyLeaded, &pref[0], fort))
 			{
 				//Loop through the array and decide what equipment to use
@@ -309,7 +311,7 @@ namespace characterHelpers
 		}
 
 		//Allocate memory for the CAD class
-		auto cadClass = fastFuncts::allocateGameMem(isAttack && fort->army ? 0x302C : 0x3028);
+		auto cadClass = techFuncs::allocateGameMem(isAttack && fort->army ? 0x302C : 0x3028);
 		if (cadClass == 0) return;
 		
 		struct TrackedPointerFort { void* vtable; fortStruct* fort; };
@@ -343,7 +345,7 @@ namespace characterHelpers
 		GAME_FUNC(void(__thiscall*)(TrackedPointerFort* trackedPointerP),
 		   somethingWithTrackedPointerFortFunc)(&trackedPointer);
 		
-		DWORD adrFunc = codes::offsets.finalyzeActionStratmapFunc;
+		DWORD adrFunc = codes::offsets.finalizeActionStrat;
 		_asm
 		{
 			push cadClass
@@ -358,7 +360,7 @@ namespace characterHelpers
 		if (!attacker || !defender)
 			return;
 		
-		DWORD cadClass = fastFuncts::allocateGameMem(0x302C);
+		DWORD cadClass = techFuncs::allocateGameMem(0x302C);
 		if (cadClass == 0) return;
 		
 		
@@ -373,7 +375,7 @@ namespace characterHelpers
 		GAME_FUNC(void(__thiscall*)(TrackedPointerCharacter* trackedPointerP),
 		   somethingWithTrackedPointerAttackFunc)(&trackedPointer);
 		
-		DWORD adrFunc = codes::offsets.finalyzeActionStratmapFunc;
+		DWORD adrFunc = codes::offsets.finalizeActionStrat;
 		_asm
 		{
 			push cadClass
@@ -382,14 +384,14 @@ namespace characterHelpers
 			call eax
 		}
 		//Destructor -- game doesnt call it, but I think it might be a bug
-		CallVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); 
+		callVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); 
 	}
 
 	void moveNormal(character* gen, int x, int y)
 	{
 		if (!gen)
 			return;
-		DWORD cadClass = fastFuncts::allocateGameMem(0x301C);
+		DWORD cadClass = techFuncs::allocateGameMem(0x301C);
 		if (cadClass == 0) return;
 		cadClass = GAME_FUNC(DWORD(__thiscall*)(DWORD cadClassP, int a2),
 			createCadMovingNormalFunc)(cadClass, 0);
@@ -398,10 +400,10 @@ namespace characterHelpers
 		if (!GAME_FUNC(bool(__thiscall*)(character* character, DWORD cadClassP, int xCoord, int yCoord, int a5, int a6),
 			getReadyForMoving2Func)(gen, cadClass, x, y, 0, 0))
 		{
-			CallVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); //Destructor
+			callVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); //Destructor
 			return;
 		}
-		DWORD adrFunc = codes::offsets.finalyzeActionStratmapFunc;
+		DWORD adrFunc = codes::offsets.finalizeActionStrat;
 		_asm
 		{
 			push cadClass
@@ -409,7 +411,7 @@ namespace characterHelpers
 			mov eax, adrFunc
 			call eax
 		}
-		CallVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); //Destructor
+		callVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); //Destructor
 	}
 
 	///Target character
@@ -418,7 +420,7 @@ namespace characterHelpers
 	{
 		if (!gen || !targetCharacter)
 			return;
-		stackStruct* army = nullptr;
+		armyStruct* army = nullptr;
 		if (gen->armyLeaded)
 			army = gen->armyLeaded;
 		gen->armyLeaded = nullptr;
@@ -427,7 +429,7 @@ namespace characterHelpers
 		gen->armyLeaded = army;
 		DWORD cadClass = dataOffsets::offsets.globalCadClass;
 		cadClass = *reinterpret_cast<DWORD*>(cadClass);
-		DWORD adrFunc = codes::offsets.finalyzeActionStratmapFunc;
+		DWORD adrFunc = codes::offsets.finalizeActionStrat;
 		_asm
 		{
 			push cadClass
@@ -478,12 +480,12 @@ namespace characterHelpers
 			return;
 		if (gen->genType->type != characterTypeStrat::princess)
 		{
-			fastFuncts::logFuncError("character.marry", "character is not princess");
+			m2tweopHelpers::logFuncError("character.marry", "character is not princess");
 			return;
 		}
 		if (targetCharacter->genType->type != characterTypeStrat::namedCharacter)
 		{
-			fastFuncts::logFuncError("character.marry", "target character is not family member");
+			m2tweopHelpers::logFuncError("character.marry", "target character is not family member");
 			return;
 		}
 		targetCharacterAction(gen, targetCharacter, characterAction::marry);
@@ -501,7 +503,7 @@ namespace characterHelpers
 	{
 		if (!gen || !targetSettlement)
 			return;
-		stackStruct* army = nullptr;
+		armyStruct* army = nullptr;
 		if (gen->armyLeaded)
 			army = gen->armyLeaded;
 		if (type != characterAction::besiege && type != characterAction::assault && type != characterAction::captureResidence)
@@ -511,7 +513,7 @@ namespace characterHelpers
 		gen->armyLeaded = army;
 		DWORD cadClass = dataOffsets::offsets.globalCadClass;
 		cadClass = *reinterpret_cast<DWORD*>(cadClass);
-		DWORD adrFunc = codes::offsets.finalyzeActionStratmapFunc;
+		DWORD adrFunc = codes::offsets.finalizeActionStrat;
 		_asm
 		{
 			push cadClass
@@ -565,7 +567,7 @@ namespace characterHelpers
 			call eax
 		}
 		DWORD cadClass2 = *reinterpret_cast<DWORD*>(dataOffsets::offsets.globalCadClass);
-		DWORD finalize = codes::offsets.finalyzeActionStratmapFunc;
+		DWORD finalize = codes::offsets.finalizeActionStrat;
 		_asm
 		{
 			push cadClass2
@@ -580,7 +582,7 @@ namespace characterHelpers
 	{
 		if (!gen || !targetFort)
 			return;
-		stackStruct* army = nullptr;
+		armyStruct* army = nullptr;
 		if (gen->armyLeaded)
 			army = gen->armyLeaded;
 		if (type != characterAction::besiege && type != characterAction::assault && type != characterAction::captureResidence)
@@ -590,7 +592,7 @@ namespace characterHelpers
 		gen->armyLeaded = army;
 		DWORD cadClass = dataOffsets::offsets.globalCadClass;
 		cadClass = *reinterpret_cast<DWORD*>(cadClass);
-		DWORD adrFunc = codes::offsets.finalyzeActionStratmapFunc;
+		DWORD adrFunc = codes::offsets.finalizeActionStrat;
 		_asm
 		{
 			push cadClass
@@ -641,9 +643,9 @@ namespace characterHelpers
 		unit* newUnit = nullptr;
 		if (gen->armyLeaded && gen->armyLeaded->numOfUnits == 1)
 		{
-			const auto id = gen->bodyguards->eduEntry->Index;
+			const auto id = gen->bodyguards->eduEntry->index;
 			newUnit = unitHelpers::createUnitIdx(id, gen->regionID, gen->armyLeaded->faction->factionID, 0, 0, 0);
-			fastFuncts::addUnitToArmy(gen->armyLeaded, newUnit);
+			armyHelpers::addUnitToArmy(gen->armyLeaded, newUnit);
 		}
 		DWORD funcAddr = codes::offsets.sendCharacterOffMap;
 		auto faction = gen->characterRecord->faction;
@@ -666,32 +668,32 @@ namespace characterHelpers
 		std::string functionName = "character.switchFaction";
 		if (!gen || !fac || !gen->genType)
 		{
-			fastFuncts::logFuncError(functionName, "gen or fac or genType is nil");
+			m2tweopHelpers::logFuncError(functionName, "gen or fac or genType is nil");
 			return;
 		}
 		if (gen->genType->type == characterTypeStrat::admiral)
 		{
-			fastFuncts::logFuncError(functionName, "unsupported character type admiral");
+			m2tweopHelpers::logFuncError(functionName, "unsupported character type admiral");
 			return;
 		}
 		if (gen->genType->type == characterTypeStrat::princess)
 		{
-			fastFuncts::logFuncError(functionName, "unsupported character type princess");
+			m2tweopHelpers::logFuncError(functionName, "unsupported character type princess");
 			return;
 		}
 		if (gen->armyNotLeaded)
 		{
-			fastFuncts::logFuncError(functionName, "character is part of an army");
+			m2tweopHelpers::logFuncError(functionName, "character is part of an army");
 			return;
 		}
 		if (gen->armyLeaded && (gen->armyLeaded->shipArmy || gen->armyLeaded->charactersNum != 0))
 		{
-			fastFuncts::logFuncError(functionName, "character is boarded or has auxiliary characters");
+			m2tweopHelpers::logFuncError(functionName, "character is boarded or has auxiliary characters");
 			return;
 		}
 		if (gen->genType->type == characterTypeStrat::namedCharacter && !gen->armyLeaded)
 		{
-			fastFuncts::logFuncError(functionName, "character is in a residence or off-map");
+			m2tweopHelpers::logFuncError(functionName, "character is in a residence or off-map");
 			return;
 		}
 		
@@ -713,12 +715,12 @@ namespace characterHelpers
 				soldierCount = unit->SoldierCountStrat;
 				alias = unit->alias;
 				supplies = unit->foodRequirement;
-				eduType = unit->eduEntry->Index;
+				eduType = unit->eduEntry->index;
 			}
 			[[nodiscard]] unit* CreateUnit(const factionStruct* faction, const character* character) const
 			{
 				unit* newUnit;
-				if (eduThings::getDataEopEdu(eduType))
+				if (eopDu::getDataEopEdu(eduType))
 					 newUnit = unitHelpers::createUnitEDB(eduType, character->regionID, faction->factionID, xp, armour, weapon);
 				else
 					 newUnit = unitHelpers::createUnitIdx(eduType, character->regionID, faction->factionID, xp, armour, weapon);
@@ -787,14 +789,14 @@ namespace characterHelpers
 					auto randomUnit = gen->armyLeaded->units[17];
 					setBodyguard(gen, randomUnit);
 					unitHelpers::killUnit(bodyguard);
-					fastFuncts::addUnitToArmy(gen->armyLeaded, newUnit);
+					armyHelpers::addUnitToArmy(gen->armyLeaded, newUnit);
 					setBodyguard(gen, newUnit);
 				}
 				else
 				{
 					auto bodyguard = gen->bodyguards;
 					setBodyguard(gen, newUnit);
-					fastFuncts::addUnitToArmy(gen->armyLeaded, newUnit);
+					armyHelpers::addUnitToArmy(gen->armyLeaded, newUnit);
 					unitHelpers::killUnit(bodyguard);
 				}
 			}
@@ -803,13 +805,13 @@ namespace characterHelpers
 				for (auto& un : unitsInfo)
 				{
 					auto newUnit = un.CreateUnit(fac, gen);
-					fastFuncts::addUnitToArmy(gen->armyLeaded, newUnit);
+					armyHelpers::addUnitToArmy(gen->armyLeaded, newUnit);
 				}
 			}
 		}
 		GAME_FUNC(void(__thiscall*)(character*), initPlaceCharacter)(gen);
 		if (gen->armyLeaded)
-			stackStructHelpers::sortStack(gen->armyLeaded, 6, 7, 4);
+			gen->armyLeaded->sortStack(6, 7, 4);
 	}
 	
 	void teleportCharacter(character* gen, int x, int y)
@@ -822,15 +824,15 @@ namespace characterHelpers
 		
 		if (gen->armyLeaded != nullptr)
 		{
-			fastFuncts::StopSiege(gen->armyLeaded);
-			fastFuncts::StopBlockPort(gen->armyLeaded);
+			armyHelpers::stopSiege(gen->armyLeaded);
+			armyHelpers::stopBlockPort(gen->armyLeaded);
 		}
 
 		auto targetCoords = new coordPair{ x,y };
 		auto charArray = new characterArray();
 		GAME_FUNC(void(__stdcall*)(coordPair*, characterArray*, int), getTileCharactersFunc)(targetCoords, charArray, 12);
-		if ((!charArray->charactersNum && fastFuncts::isTileValidForCharacterType(gen->genType->type, targetCoords)) ||
-			GAME_FUNC(bool(__thiscall*)(regionStruct*, coordPair*, char), getValidRegionTile)(fastFuncts::getRegionByID(fastFuncts::getTileStruct(x, y)->regionId), &targetCoords[0], 0))
+		if ((!charArray->charactersNum && stratMapHelpers::isTileValidForCharacterType(gen->genType->type, targetCoords)) ||
+			GAME_FUNC(bool(__thiscall*)(regionStruct*, coordPair*, char), getValidRegionTile)(stratMapHelpers::getRegion(stratMapHelpers::getTile(x, y)->regionId), &targetCoords[0], 0))
 		{
 			
 			GAME_FUNC(void(__thiscall*)(character*), changeCharacterTileStuff)(gen);
@@ -866,13 +868,13 @@ namespace characterHelpers
 		bool isTeleported = false;
 		if (gen->armyLeaded != nullptr)
 		{
-			fastFuncts::StopSiege(gen->armyLeaded);
-			fastFuncts::StopBlockPort(gen->armyLeaded);
+			armyHelpers::stopSiege(gen->armyLeaded);
+			armyHelpers::stopBlockPort(gen->armyLeaded);
 		}
 
 		auto targetCoords = new coordPair{ x,y };
-		if (targetCoords = fastFuncts::findValidTileNearTile(targetCoords, gen->genType->type);
-			fastFuncts::isTileValidForCharacterType(gen->genType->type, targetCoords))
+		if (targetCoords = stratMapHelpers::findValidTileNearTile(targetCoords, gen->genType->type);
+			stratMapHelpers::isTileValidForCharacterType(gen->genType->type, targetCoords))
 		{
 			GAME_FUNC(void(__thiscall*)(character*), changeCharacterTileStuff)(gen);
 			DWORD adrFunc = codes::offsets.teleportCharacterFunc;
@@ -906,9 +908,9 @@ namespace characterHelpers
 		if (auto faction = gen->characterRecord->faction;
 			faction->money < m2tweopHelpers::getCultureDb()->cultures[faction->cultureID].fortCost)
 			return nullptr;
-		stackStruct* newArmy = gen->armyLeaded;
-		auto oldOption = gameHelpers::getCampaignDb()->campaignDbSettlement.canBuildForts;
-		gameHelpers::getCampaignDb()->campaignDbSettlement.canBuildForts = true;
+		armyStruct* newArmy = gen->armyLeaded;
+		auto oldOption = campaignHelpers::getCampaignDb()->campaignDbSettlement.canBuildForts;
+		campaignHelpers::getCampaignDb()->campaignDbSettlement.canBuildForts = true;
 		DWORD adrFunc = codes::offsets.createFortFunc;
 		_asm
 		{
@@ -916,8 +918,8 @@ namespace characterHelpers
 			mov eax, adrFunc
 			call eax
 		}
-		gameHelpers::getCampaignDb()->campaignDbSettlement.canBuildForts = oldOption;
-		return gameHelpers::getTileFort(gameHelpers::getTile(gen->xCoord, gen->yCoord));
+		campaignHelpers::getCampaignDb()->campaignDbSettlement.canBuildForts = oldOption;
+		return stratMapHelpers::getTile(gen->xCoord, gen->yCoord)->getFort();
 	}
 	
 	void killCharacter(character* gen)
@@ -1005,8 +1007,8 @@ namespace characterHelpers
 	@tfield bool isPlagued
 	@tfield int plaguedDuration
 	@tfield unit bodyguards
-	@tfield stackStruct armyLeaded
-	@tfield stackStruct armyNotLeaded in the stack but not leading it
+	@tfield armyStruct armyLeaded
+	@tfield armyStruct armyNotLeaded in the stack but not leading it
 	@tfield int actionType
 	@tfield bool unusedMovePoints
 	@tfield bool infiniteMovePoints
@@ -1076,8 +1078,8 @@ namespace characterHelpers
 	types.character.set("sedentaryTurns", &character::sedentaryTurns);
 	types.character.set("isPlagued", &character::isPlagued);
 	types.character.set("plaguedDuration", &character::plaguedDuration);
-	types.character.set("ambushState", &character::ambushState);
-	types.character.set("actionType", &character::ambushState);
+	types.character.set("ambushState", &character::actionType);
+	types.character.set("actionType", &character::actionType);
 	types.character.set("unusedMovePoints", &character::unusedMovePoints);
     types.character.set("infiniteMovePoints", &character::infiniteMovePoints);
 	types.character.set("movePointsCharacter", &character::movePointsCharacter);
@@ -1333,15 +1335,15 @@ namespace characterHelpers
 	
 settlementStruct* character::getSettlement()
 {
-	const auto tile = gameHelpers::getTile(xCoord, yCoord);
+	const auto tile = stratMapHelpers::getTile(xCoord, yCoord);
 	if (!tile)
 		return nullptr;
-	return gameHelpers::getTileSettlement(tile);
+	return tile->getSettlement();
 }
 fortStruct* character::getFort()
 {
-	const auto tile = gameHelpers::getTile(xCoord, yCoord);
+	const auto tile = stratMapHelpers::getTile(xCoord, yCoord);
 	if (!tile)
 		return nullptr;
-	return gameHelpers::getTileFort(tile);
+	return tile->getFort();
 }

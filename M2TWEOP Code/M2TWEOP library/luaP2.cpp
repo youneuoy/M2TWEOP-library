@@ -14,32 +14,21 @@
 #include "characterRecord.h"
 #include "faction.h"
 #include "unit.h"
+#include "army.h"
+#include "strategyMap.h"
 
 
 void luaP::initCampaign()
 {
+
+	stratMapHelpers::addToLua(luaState);
 	struct
 	{
-		sol::usertype<campaign> campaignTable;
-		sol::usertype<stratMap> stratMap;
-		sol::usertype<oneTile> tileStruct;
-		sol::usertype<regionStruct> regionStruct;
-		sol::usertype<mercPool> mercPool;
-		sol::usertype<mercPoolUnit> mercPoolUnit;
-		sol::usertype<collegeOfCardinals> collegeOfCardinals;
-		sol::usertype<crusade> crusadeStruct;
-		sol::usertype<jihad> jihadStruct;
 		sol::usertype<options1> options1;
 		sol::usertype<options2> options2;
 		sol::usertype<campaignDifficulty1> campaignDifficulty1;
 		sol::usertype<campaignDifficulty2> campaignDifficulty2;
 		sol::usertype<uiCardManager> uiCardManager;
-		sol::usertype<coordPair> coordPair;
-		sol::usertype<landMass> landMass;
-		sol::usertype<roadStruct> roadStruct;
-		sol::usertype<seaConnectedRegion> seaConnectedRegion;
-		sol::usertype<neighbourRegion> neighbourRegion;
-		sol::usertype<eventTrigger> eventTrigger;
 		sol::usertype<selectionInfo> selectionInfo;
 		sol::usertype<mapImage> mapImageStruct;
 		sol::usertype<buildingInfoScroll> buildingInfoScroll;
@@ -332,91 +321,6 @@ void luaP::initCampaign()
 	typeAll.campaignDifficulty2.set("wantsTargetPlayerNaval", &campaignDifficulty2::wantsTargetPlayerNaval);
 	typeAll.campaignDifficulty2.set("autoAttackPlayerIfCrusadeTarget", &campaignDifficulty2::autoAttackPlayerIfCrusadeTarget);
 
-	///eventTrigger
-	//@section eventTrigger
-
-	/***
-	This is data that comes with game events. You need to check the event documentation to see what data is available under "Exports". The rest of the fields not stated inside "Exports" will return nil! 
-	
-	@tfield unit attackingUnit
-	@tfield unit defendingUnit
-	@tfield character stratCharacter
-	@tfield characterRecord character - Note it is characterRecord, not character
-	@tfield characterRecord targetCharacter - Note it is characterRecord, not character
-	@tfield settlementStruct settlement
-	@tfield settlementStruct targetSettlement
-	@tfield fortStruct fort
-	@tfield factionStruct faction
-	@tfield factionStruct targetFaction
-	@tfield stackStruct army
-	@tfield int regionID
-	@tfield int targetRegionID
-	@tfield unit playerUnit
-	@tfield unit enemyUnit
-	@tfield buildingBattle battleBuilding
-	@tfield buildingInQueue priorBuild
-	@tfield string resourceDescription
-	@tfield eduEntry eduEntry
-	@tfield int characterType
-	@tfield int targetCharacterType
-	@tfield string disasterType
-	@tfield string missionSuccessLevel
-	@tfield int missionProbability
-	@tfield string missionDetails
-	@tfield int eventID
-	@tfield int guildID
-	@tfield string eventCounter
-	@tfield coordPair coords
-	@tfield int religion
-	@tfield int targetReligion
-	@tfield float amount
-	@tfield crusadeStruct crusade
-	@tfield capturedFactionInfo captureInfo
-	@tfield string ransomType
-	@tfield unit unit
-	
-	
-	@table eventTrigger
-	*/
-	typeAll.eventTrigger = luaState.new_usertype<eventTrigger>("eventTrigger");
-	typeAll.eventTrigger.set("attackingUnit", sol::property(gameHelpers::getEventAttackingUnit));
-	typeAll.eventTrigger.set("defendingUnit", sol::property(gameHelpers::getEventDefendingUnit));
-	typeAll.eventTrigger.set("stratCharacter", sol::property(gameHelpers::getEventCharacter));
-	typeAll.eventTrigger.set("character", sol::property(gameHelpers::getEventNamedCharacter));
-	typeAll.eventTrigger.set("targetCharacter", sol::property(gameHelpers::getEventTargetNamedCharacter));
-	typeAll.eventTrigger.set("settlement", sol::property(gameHelpers::getEventSettlement));
-	typeAll.eventTrigger.set("targetSettlement", sol::property(gameHelpers::getEventTargetSettlement));
-	typeAll.eventTrigger.set("fort", sol::property(gameHelpers::getEventFort));
-	typeAll.eventTrigger.set("faction", sol::property(gameHelpers::getEventFaction));
-	typeAll.eventTrigger.set("targetFaction", sol::property(gameHelpers::getEventTargetFaction));
-	typeAll.eventTrigger.set("army", sol::property(gameHelpers::getEventArmy));
-	typeAll.eventTrigger.set("regionID", sol::property(gameHelpers::getEventRegion));
-	typeAll.eventTrigger.set("targetRegionID", sol::property(gameHelpers::getEventTargetRegion));
-	typeAll.eventTrigger.set("playerUnit", sol::property(gameHelpers::getEventPlayerUnit));
-	typeAll.eventTrigger.set("enemyUnit", sol::property(gameHelpers::getEventEnemyUnit));
-	typeAll.eventTrigger.set("battleBuilding", sol::property(gameHelpers::getBuildingBattle));
-	typeAll.eventTrigger.set("priorBuild", sol::property(gameHelpers::getPriorBuild));
-	typeAll.eventTrigger.set("resourceDescription", sol::property(gameHelpers::getResourceDescription));
-	typeAll.eventTrigger.set("eduEntry", sol::property(gameHelpers::getEduEntry));
-	typeAll.eventTrigger.set("characterType", sol::property(gameHelpers::getEventCharacterType));
-	typeAll.eventTrigger.set("targetCharacterType", sol::property(gameHelpers::getEventTargetCharacterType));
-	typeAll.eventTrigger.set("disasterType", sol::property(gameHelpers::getEventType));
-	typeAll.eventTrigger.set("missionSuccessLevel", sol::property(gameHelpers::getMissionSuccessLevel));
-	typeAll.eventTrigger.set("missionProbability", sol::property(gameHelpers::getMissionProbability));
-	typeAll.eventTrigger.set("missionDetails", sol::property(gameHelpers::getMissionDetails));
-	typeAll.eventTrigger.set("eventID", sol::property(gameHelpers::getEventID));
-	typeAll.eventTrigger.set("guildID", sol::property(gameHelpers::getEventGuild));
-	typeAll.eventTrigger.set("eventCounter", sol::property(gameHelpers::getEventCounter));
-	typeAll.eventTrigger.set("coords", sol::property(gameHelpers::getPosition));
-	typeAll.eventTrigger.set("religion", sol::property(gameHelpers::getReligion));
-	typeAll.eventTrigger.set("targetReligion", sol::property(gameHelpers::getTargetReligion));
-	typeAll.eventTrigger.set("amount", sol::property(gameHelpers::getAmount));
-	typeAll.eventTrigger.set("crusade", sol::property(gameHelpers::getCrusade));
-	typeAll.eventTrigger.set("captureInfo", sol::property(gameHelpers::getCapturedFactionInfo));
-	typeAll.eventTrigger.set("ransomType", sol::property(gameHelpers::getRansomType));
-	typeAll.eventTrigger.set("unit", sol::property(gameHelpers::getUnit));
-	
-	
 	///mapImage
 	//@section mapImageStruct
 
@@ -650,1165 +554,6 @@ void luaP::initCampaign()
 	typeAll.selectionInfo.set("hoveredFort", sol::property(&gameDataAllHelper::getHoveredFort));
 	typeAll.selectionInfo.set("selectedEnemyFort", sol::property(&gameDataAllHelper::getSelectedEnemyFort));
 
-	///Campaign
-	//@section campaignStruct
-
-	/***
-	Basic campaign table.
-
-	@tfield int playerFactionId
-	@tfield int[31] campaignDifficultyFaction Indexing starts at 1, so add 1 to faction ID. Maximum 31.
-	@tfield int[31] battleDifficultyFaction Indexing starts at 1, so add 1 to faction ID. Maximum 31.
-	@tfield factionStruct[31] factionsSortedByDescrStrat Table of factionStruct[31], indexing starts at 1. Maximum 31. Slightly misleading name, sorted by the turn order of the factions. Player controlled faction is at index 0 in single player.
-	@tfield factionStruct[31] factionsSortedByID Table of factionStruct[31], indexing starts at 1, so add 1 to faction ID. Maximum 31.
-	@tfield int numberOfFactions
-	@tfield int numberHumanFactions Number of player-controlled factions.
-	@tfield factionStruct currentFaction Faction whose turn it is at the moment, can be set.
-	@tfield collegeOfCardinals collegeOfCardinals
-	@tfield factionStruct papalFaction
-	@tfield int fogOfWar
-	@tfield int factionTurnID
-	@tfield int tickCount
-	@tfield int millisecondCount
-	@tfield float secondCount
-	@tfield int turnNumber
-	@tfield float timescale Factor for number of turns per year, see descr\_strat.txt
-	@tfield settlementStruct romeSettlement
-	@tfield settlementStruct constantinopleSettlement
-	@tfield crusadeStruct crusade
-	@tfield jihadStruct jihad
-	@tfield float BrigandSpawnValue Lower values increase spawn rate.
-	@tfield float PirateSpawnValue Lower values increase spawn rate.
-	@tfield int restrictAutoResolve
-	@tfield int saveEnabled
-	@tfield int FreeUpkeepForts Number of units who get free upkeep in forts.
-	@tfield float currentDate
-	@tfield int currentSeason season (0=summer, 1=winter)
-	@tfield float startDate
-	@tfield int startSeason season (0=summer, 1=winter)
-	@tfield float endDate
-	@tfield int endSeason season (0=summer, 1=winter)
-	@tfield int daysInBattle
-	@tfield float currentTimeInBattle 24 max, so calculate as daysInBattle*24+currentTimeInBattle.
-	@tfield int fortsNum
-	@tfield int portsBuildingsNum
-	@tfield int watchTowerNum
-	@tfield int slaveFactionID
-	@tfield int roadsNum
-	@tfield int nightBattlesEnabled
-	@tfield int rebellingCharactersActive
-	@tfield checkDipStance checkDipStance
-	@tfield setDipStance setDipStance
-	@tfield GetUnitSize GetUnitSize
-	@tfield getCampaignPath getCampaignPath
-	@tfield getFort getFort
-	@tfield getPort getPort
-	@tfield getWatchTower getWatchTower
-	@tfield getFaction getFaction
-	@tfield getSettlementByName getSettlementByName
-	@tfield getMercPool getMercPool
-	@tfield getRoad getRoad
-
-	@table campaignStruct
-	*/
-	typeAll.campaignTable = luaState.new_usertype<campaign>("campaignStruct");
-	typeAll.campaignTable.set("playerFactionId", &campaign::playerFactionId);
-	typeAll.campaignTable.set("campaignDifficultyFaction", sol::property([](campaign& self) { return std::ref(self.campaignDifficultyFaction); }));
-	typeAll.campaignTable.set("battleDifficultyFaction", sol::property([](campaign& self) { return std::ref(self.battleDifficultyFaction); }));
-	typeAll.campaignTable.set("factionsSortedByDescrStrat", sol::property([](campaign& self) { return std::ref(self.factionsSortedByDescrStrat); }));
-	typeAll.campaignTable.set("factionsSortedByID", sol::property([](campaign& self) { return std::ref(self.factionsSortedByID); }));
-	typeAll.campaignTable.set("numberOfFactions", &campaign::numberOfFactionsWithSlave);
-	typeAll.campaignTable.set("papalFaction", &campaign::papalFaction);
-	typeAll.campaignTable.set("numberHumanFactions", &campaign::humanPlayers);
-	typeAll.campaignTable.set("collegeOfCardinals", &campaign::collegeOfCardinals);
-	typeAll.campaignTable.set("currentFaction", &campaign::currentFactionTurn);
-	typeAll.campaignTable.set("factionTurnID", &campaign::factionTurnID);
-	typeAll.campaignTable.set("tickCount", &campaign::tickCount);
-	typeAll.campaignTable.set("millisecondCount", &campaign::millisecondCount);
-	typeAll.campaignTable.set("secondCount", &campaign::secondCount);
-	typeAll.campaignTable.set("fogOfWar", &campaign::fogOfWar);
-	typeAll.campaignTable.set("passedTurnsNum", &campaign::TurnNumber);
-	typeAll.campaignTable.set("turnNumber", &campaign::TurnNumber);
-	typeAll.campaignTable.set("crusade", &campaign::crusade);
-	typeAll.campaignTable.set("jihad", &campaign::jihad);
-
-	typeAll.campaignTable.set("timescale", &campaign::TimeScale);
-	typeAll.campaignTable.set("slaveFactionID", &campaign::slaveFactionID);
-	typeAll.campaignTable.set("romeSettlement", &campaign::rome);
-	typeAll.campaignTable.set("constantinopleSettlement", &campaign::constantinople);
-
-	typeAll.campaignTable.set("BrigandSpawnValue", &campaign::BrigandSpawnValue);
-	typeAll.campaignTable.set("PirateSpawnValue", &campaign::PirateSpawnValue);
-	typeAll.campaignTable.set("restrictAutoResolve", &campaign::restrictAutoResolve);
-	typeAll.campaignTable.set("saveEnabled", &campaign::saveEnabled);
-	typeAll.campaignTable.set("FreeUpkeepForts", &campaign::FreeUpkeepForts);
-	typeAll.campaignTable.set("rebellingCharactersActive", &campaign::rebellingCharactersActive);
-	typeAll.campaignTable.set("nightBattlesEnabled", &campaign::nightBattlesEnabled);
-
-	typeAll.campaignTable.set("currentDate", &campaign::currentDate);
-	typeAll.campaignTable.set("currentSeason", &campaign::season);
-
-	typeAll.campaignTable.set("startDate", &campaign::startDate);
-	typeAll.campaignTable.set("startSeason", &campaign::startSeason);
-
-	typeAll.campaignTable.set("endDate", &campaign::endDate);
-	typeAll.campaignTable.set("endSeason", &campaign::endSeason);
-
-	typeAll.campaignTable.set("daysInBattle", &campaign::daysInBattle);
-	typeAll.campaignTable.set("currentTimeInBattle", &campaign::currentTimeInBattle);
-	typeAll.campaignTable.set("fortsNum", &campaign::fortsNum);
-	typeAll.campaignTable.set("roadsNum", &campaign::roadsNum);
-	typeAll.campaignTable.set("portsBuildingsNum", &campaign::portsBuildingsNum);
-	typeAll.campaignTable.set("watchTowerNum", &campaign::watchtowersNum);
-	/***
-	Check if a diplomatic relation between two factions.
-	@function campaignStruct:checkDipStance
-	@tparam dipRelType checkType Example: dipRelType.war
-	@tparam factionStruct fac1 A faction.
-	@tparam factionStruct fac2 Another faction.
-	@treturn bool checkResult
-	@usage
-	local campaign=gameDataAll.get().campaignStruct;
-	local fac1=campaign.factionsSortedByDescrStrat[1];
-	local fac2=campaign.factionsSortedByDescrStrat[2];
-	local isInWar=campaign:checkDipStance(dipRelType.war,fac1,fac2);
-	*/
-	typeAll.campaignTable.set_function("checkDipStance", &m2tweopHelpers::checkDipStance);
-	/***
-	Set a diplomatic relation between two factions.
-	@function campaignStruct:setDipStance
-	@tparam dipRelType relType Example: dipRelType.war
-	@tparam factionStruct fac1 A faction.
-	@tparam factionStruct fac2 Another faction.
-	@usage
-	local campaign=gameDataAll.get().campaignStruct;
-	local fac1=campaign.factionsSortedByDescrStrat[1];
-	local fac2=campaign.factionsSortedByDescrStrat[2];
-	campaign:setDipStance(dipRelType.war,fac1,fac2);
-	*/
-	typeAll.campaignTable.set_function("setDipStance", &m2tweopHelpers::setDipStance);
-	/***
-	Get size of unit(i.e. small or medium, etc). Numbers from 0 to 3
-	@function campaignStruct:GetUnitSize
-	@treturn int unitSize
-	@usage
-	local campaign=gameDataAll.get().campaignStruct;
-	local unitSize=campaign:GetUnitSize();
-	*/
-	typeAll.campaignTable.set_function("GetUnitSize", &smallFuncs::GetUnitSize);
-	/***
-	Get fort by index.
-	@function campaignStruct:getFort
-	@tparam int index
-	@treturn fortStruct fort
-	@usage
-	local campaign=gameDataAll.get().campaignStruct;
-	local fort=campaign:getFort(0);
-	*/
-	typeAll.campaignTable.set_function("getFort", &gameHelpers::getFortAll);
-	/***
-	Get port by index.
-	@function campaignStruct:getPort
-	@tparam int index
-	@treturn portStruct port
-	@usage
-	local campaign=gameDataAll.get().campaignStruct;
-	local port=campaign:getPort(0);
-	*/
-	typeAll.campaignTable.set_function("getPort", &gameHelpers::getPortAll);
-	/***
-	Get watchtower by index.
-	@function campaignStruct:getWatchTower
-	@tparam int index
-	@treturn watchtowerStruct watchtower
-	@usage
-	local campaign=gameDataAll.get().campaignStruct;
-	local watchtower=campaign:getWatchTower(0);
-	*/
-	typeAll.campaignTable.set_function("getWatchTower", &gameHelpers::getWatchTowerAll);
-	/***
-	Get settlement by internal name.
-	@function campaignStruct:getSettlementByName
-	@tparam string name
-	@treturn settlementStruct settlement
-	@usage
-	local campaign=gameDataAll.get().campaignStruct;
-	local sett=campaign:getSettlementByName("London");
-	*/
-	typeAll.campaignTable.set_function("getSettlementByName", &gameHelpers::getSettlementByName);
-	/***
-	Get a faction by it's internal name.
-	@function campaignStruct:getFaction
-	@tparam string name
-	@treturn factionStruct faction
-	@usage
-	local CAMPAIGN = gameDataAll.get().campaignStruct;
-	local fac = CAMPAIGN:getFaction("england");
-	*/
-	typeAll.campaignTable.set_function("getFaction", &gameHelpers::getFactionHashed);
-	/***
-	Get path to the current descr\_strat file used.
-	@function campaignStruct:getCampaignPath
-	@treturn string path
-	@usage
-	local campaign = gameDataAll.get().campaignStruct;
-	local path = campaign:getCampaignPath();
-	*/
-	typeAll.campaignTable.set_function("getCampaignPath", &gameHelpers::getCampaignPath);
-	/***
-	Get a mercenary pool by name.
-	@function campaignStruct:getMercPool
-	@tparam string name
-	@treturn mercPool pool
-	@usage
-	local campaign = gameDataAll.get().campaignStruct;
-	local pool = campaign:getMercPool("mercpool1");
-	*/
-	typeAll.campaignTable.set_function("getMercPool", &gameHelpers::getMercPool);
-	/***
-	Get a road by index.
-	@function campaignStruct:getRoad
-	@tparam int index
-	@treturn roadStruct road
-	@usage
-	local campaign = gameDataAll.get().campaignStruct;
-	local pool = campaign:getRoad(0);
-	*/
-	typeAll.campaignTable.set_function("getRoad", &gameHelpers::getRoad);
-
-	///CollegeofCardinals
-	//@section collegeOfCardinals
-
-	/***
-	Basic College of Cardinals table.
-	@tfield characterRecord pope
-	@tfield int cardinalNum
-	@tfield getCardinal getCardinal
-
-	@table collegeOfCardinals
-	*/
-	typeAll.collegeOfCardinals = luaState.new_usertype<collegeOfCardinals>("collegeOfCardinals");
-	typeAll.collegeOfCardinals.set("pope", &collegeOfCardinals::pope);
-	typeAll.collegeOfCardinals.set("cardinalNum", &collegeOfCardinals::cardinalNum);
-
-	/***
-	Get a specific cardinal by index.
-	@function collegeOfCardinals:getCardinal
-	@tparam int index
-	@treturn character cardinal
-	@usage
-	local college = campaign.collegeOfCardinals;
-	local cardinal = college:getCardinal(2);
-	*/
-	typeAll.collegeOfCardinals.set_function("getCardinal", &gameHelpers::getCardinal);
-
-	/// Crusade
-	//@section crusade
-
-	/***
-	Basic crusade table.
-
-	@tfield int startTurn
-	@tfield int endTurn
-	@tfield settlementStruct targetSettlement
-	@tfield int length
-	@tfield int outcome
-
-	@table crusadeStruct
-	*/
-	typeAll.crusadeStruct = luaState.new_usertype<crusade>("crusadeStruct");
-	typeAll.crusadeStruct.set("startTurn", &crusade::startTurn);
-	typeAll.crusadeStruct.set("endTurn", &crusade::endTurn);
-	typeAll.crusadeStruct.set("targetSettlement", &crusade::targetSettlement);
-	typeAll.crusadeStruct.set("length", &crusade::length);
-	typeAll.crusadeStruct.set("outcome", &crusade::outcome);
-
-	/// Jihad
-	//@section jihad
-
-	/***
-	Basic jihad table.
-
-	@tfield int startTurn
-	@tfield int endTurn
-	@tfield settlementStruct targetSettlement
-	@tfield int length
-	@tfield int outcome
-
-	@table jihadStruct
-	*/
-	typeAll.jihadStruct = luaState.new_usertype<jihad>("jihadStruct");
-	typeAll.jihadStruct.set("startTurn", &jihad::startTurn);
-	typeAll.jihadStruct.set("endTurn", &jihad::endTurn);
-	typeAll.jihadStruct.set("targetSettlement", &jihad::targetSettlement);
-	typeAll.jihadStruct.set("length", &jihad::length);
-	typeAll.jihadStruct.set("outcome", &jihad::outcome);
-
-	/// coords
-	//@section coordPair
-
-	/***
-	Basic coordPair table.
-
-	@tfield int xCoord
-	@tfield int yCoord
-
-	@table coordPair
-	*/
-	typeAll.coordPair = luaState.new_usertype<coordPair>("coordPair");
-	typeAll.coordPair.set("xCoord", &coordPair::xCoord);
-	typeAll.coordPair.set("yCoord", &coordPair::yCoord);
-
-	/// Strat Map
-	//@section stratMap
-
-	/***
-	Basic strat map table.
-
-	@tfield int mapWidth
-	@tfield int mapHeight
-	@tfield int regionsNum
-	@tfield int volcanoesNum
-	@tfield int landConnectionsNum
-	@tfield int landMassNum
-	@tfield getRegion getRegion
-	@tfield getTile getTile
-	@tfield getVolcanoCoords getVolcanoCoords
-	@tfield getLandConnection getLandConnection
-	@tfield getLandMass getLandMass
-	@tfield getSettlement getSettlement
-	@tfield getRegionByName getRegionByName
-
-	@table stratMap
-	*/
-	typeAll.stratMap = luaState.new_usertype<stratMap>("stratMap");
-	typeAll.stratMap.set("mapWidth", &stratMap::mapWidth);
-	typeAll.stratMap.set("mapHeight", &stratMap::mapHeight);
-	typeAll.stratMap.set("regionsNum", &stratMap::regionsNum);
-	typeAll.stratMap.set("volcanoesNum", &stratMap::volcanoesNum);
-	typeAll.stratMap.set("landConnectionsNum", &stratMap::landMassConnectionsNum);
-	typeAll.stratMap.set("landMassNum", &stratMap::landMassNum);
-
-	/***
-	Get a specific region by index.
-	@function stratMap.getRegion
-	@tparam int index
-	@treturn regionStruct region
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	*/
-	typeAll.stratMap.set_function("getRegion", &gameHelpers::getRegion);
-
-	/***
-	Get a specific tile by it's coordinates.
-	@function stratMap.getTile
-	@tparam int x
-	@tparam int y
-	@treturn tileStruct tile
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local tile = sMap.getTile(182, 243);
-	*/
-	typeAll.stratMap.set_function("getTile", &gameHelpers::getTile);
-
-	/***
-	Get a volcano's coordinates.
-	@function stratMap:getVolcanoCoords
-	@tparam int index
-	@treturn coordPair tile
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local volcano = sMap:getVolcanoCoords(0);
-	*/
-	typeAll.stratMap.set_function("getVolcanoCoords", &gameHelpers::getVolcanoCoords);
-
-	/***
-	Get a land connection's coordinates (the green arrows on the map that allow you to cross bodies of water).
-	@function stratMap:getLandConnection
-	@tparam int index
-	@treturn coordPair tile
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local connection = sMap:getLandConnection(0);
-	*/
-	typeAll.stratMap.set_function("getLandConnection", &gameHelpers::getLandConnection);
-
-	/***
-	Get a landmass (collection of regions reachable by land, like a continent or island).
-	@function stratMap:getLandMass
-	@tparam int index
-	@treturn landMass landMass
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local tile = sMap:getLandMass(0);
-	*/
-	typeAll.stratMap.set_function("getLandMass", &gameHelpers::getLandMass);
-
-	/***
-	Get a settlement by its internal name. This is the intended way to get a settlement quickly by it's name.
-	@function stratMap:getSettlement
-	@tparam string name
-	@treturn settlementStruct settlement
-	@usage
-	local STRAT_MAP = gameDataAll.get().stratMap;
-	local london = STRAT_MAP:getSettlement("London");
-	*/
-	typeAll.stratMap.set_function("getSettlement", &gameHelpers::getSettlement);
-
-	/***
-	Get a region by its internal name.
-	@function stratMap:getRegionByName
-	@tparam string name
-	@treturn regionStruct region
-	@usage
-	local STRAT_MAP = gameDataAll.get().stratMap;
-	local londonRegion = STRAT_MAP:getRegionByName("London_Province");
-	*/
-	typeAll.stratMap.set_function("getRegionByName", &gameHelpers::getRegionByName);
-
-	/// landMass
-	//@section landMass
-
-	/***
-	Basic landMass table.
-
-	@tfield int index
-	@tfield int regionsNum
-	@tfield getRegionID getRegionID
-
-	@table landMass
-	*/
-	typeAll.landMass = luaState.new_usertype<landMass>("landMass");
-	typeAll.landMass.set("index", &landMass::index);
-	typeAll.landMass.set("regionsNum", &landMass::regionsNum);
-
-	/***
-	Get a region ID by index.
-	@function landMass:getRegionID
-	@tparam int index
-	@treturn int regionID
-	@usage
-	local region = landMass:getRegionID(0);
-	*/
-	typeAll.landMass.set_function("getRegionID", &gameHelpers::getRegionID);
-
-	/// roadStruct
-	//@section roadStruct
-
-	/***
-	Basic roadStruct table.
-
-	@tfield int coordsNum
-	@tfield int regionIdStart
-	@tfield int regionIdEnd
-	@tfield getCoord getCoord
-	@tfield int tradeValue --only counts from 1 side (importer)
-
-	@table roadStruct
-	*/
-	typeAll.roadStruct = luaState.new_usertype<roadStruct>("roadStruct");
-	typeAll.roadStruct.set("coordsNum", &roadStruct::coordsNum);
-	typeAll.roadStruct.set("regionIdStart", &roadStruct::regionIdStart);
-	typeAll.roadStruct.set("regionIdEnd", &roadStruct::regionIdEnd);
-	typeAll.roadStruct.set("tradeValue", &roadStruct::tradeValue);
-
-	/***
-	Get a road coord by index.
-	@function roadStruct:getCoord
-	@tparam int index
-	@treturn coordPair coords
-	@usage
-	local coords = road:getCoord(0);
-	*/
-	typeAll.roadStruct.set_function("getCoord", &gameHelpers::getRoadCoord);
-
-	///Tile
-	//@section tileStruct
-
-	/***
-	Basic tile table.
-
-	@tfield roadStruct road
-	@tfield int isLand (1 = land, 0 = sea)
-	@tfield int groundType
-	0 low fertility
-	1 medium fertility
-	2 high fertility
-	3 wilderness
-	4 high moutains
-	5 low moutains
-	6 hills
-	7 dense forest
-	8 woodland
-	9 swamp
-	10 ocean
-	11 deep sea
-	12 shallow sea
-	13 coast (beach)
-	14 impassable_land
-	15 impassable_sea
-	@tfield int regionID
-	@tfield tradeResource|nil resource
-	@tfield character|nil character
-	@tfield settlementStruct|nil settlement
-	@tfield fortStruct|nil fort
-	@tfield portStruct|nil port
-	@tfield watchtowerStruct|nil watchtower
-	@tfield int height
-	@tfield int climate
-	@tfield int heatValue
-	@tfield int factionID
-	@tfield int xCoord
-	@tfield int yCoord
-	@tfield int objectTypes bitfield, from left to right: unknown, character, ship, watchtower, port, ship, fort, settlement.
-	@tfield bool hasRiver
-	@tfield bool hasRiverSource
-	@tfield bool hasCrossing
-	@tfield bool hasCharacter
-	@tfield bool hasShip
-	@tfield bool hasWatchtower
-	@tfield bool hasPort
-	@tfield bool hasFort
-	@tfield bool hasCliff
-	@tfield bool hasSettlement
-	@tfield bool isDevastated
-	@tfield bool isCoastalWater
-	@tfield int roadLevel Settlement tiles return 3.
-	@tfield bool isLandConnection Crossing created by green arrows.
-	@tfield bool isSeaCrossing Crossing created by close proximity, not green arrows.
-	@tfield int border 1 = border, 2 = seaBorder, 3 = sea edge border (point where the region border both another land region and sea).
-	@tfield int armiesNearTile bitfield of faction id's (counts both tile and the 8 tiles around it, if you want only on tile combine with charactersOnTile).
-	@tfield int charactersOnTile bitfield of faction id's
-	@tfield float mpModifier
-	@tfield factionHasArmyNearTile factionHasArmyNearTile
-	@tfield factionHasCharacterOnTile factionHasCharacterOnTile
-	@tfield getTileCharacterCount getTileCharacterCount
-	@tfield getTileCharacterAtIndex getTileCharacterAtIndex
-	@tfield int hasRoad
-	@tfield int borderField
-	@tfield int otherField
-	@tfield int choke
-	@tfield int ModelIsHills
-	
-	@table tileStruct
-	*/
-	typeAll.tileStruct = luaState.new_usertype<oneTile>("tileStruct");
-	typeAll.tileStruct.set("road", &oneTile::road);
-	typeAll.tileStruct.set("isLand", &oneTile::isLand);
-	typeAll.tileStruct.set("groundType", sol::property(&gameHelpers::getTileGroundType, &gameHelpers::setTileGroundType));
-	typeAll.tileStruct.set("regionID", &oneTile::regionId);
-	typeAll.tileStruct.set("objectTypes", &oneTile::objectTypes);
-	typeAll.tileStruct.set("otherField", &oneTile::otherField);
-	typeAll.tileStruct.set("borderField", &oneTile::border);
-	typeAll.tileStruct.set("hasRoad", &oneTile::hasRoad);
-	typeAll.tileStruct.set("choke", &oneTile::choke);
-	typeAll.tileStruct.set("ModelIsHills", &oneTile::ModelIsHills);
-	typeAll.tileStruct.set("xCoord", sol::property(gameHelpers::getTileX));
-	typeAll.tileStruct.set("yCoord", sol::property(gameHelpers::getTileY));
-	typeAll.tileStruct.set("factionID", sol::property(gameHelpers::getTileFactionID));
-	typeAll.tileStruct.set("hasRiver", sol::property(gameHelpers::tileHasRiver));
-	typeAll.tileStruct.set("hasRiverSource", sol::property(gameHelpers::tileHasRiverSource));
-	typeAll.tileStruct.set("hasCliff", sol::property(gameHelpers::tileHasCliff));
-	typeAll.tileStruct.set("isLandConnection", sol::property(gameHelpers::isLandConnection));
-	typeAll.tileStruct.set("isCoastalWater", sol::property(gameHelpers::isCoastalWater));
-	typeAll.tileStruct.set("isSeaCrossing", sol::property(gameHelpers::isSeaCrossing));
-	typeAll.tileStruct.set("hasCrossing", sol::property(gameHelpers::tileHasCrossing));
-	typeAll.tileStruct.set("roadLevel", sol::property(gameHelpers::tileRoadLevel));
-	typeAll.tileStruct.set("border", sol::property(gameHelpers::tileBorderType));
-	typeAll.tileStruct.set("hasCharacter", sol::property(gameHelpers::tileHasCharacter));
-	typeAll.tileStruct.set("hasShip", sol::property(gameHelpers::tileHasShip));
-	typeAll.tileStruct.set("hasWatchtower", sol::property(gameHelpers::tileHasWatchtower));
-	typeAll.tileStruct.set("hasPort", sol::property(gameHelpers::tileHasPort));
-	typeAll.tileStruct.set("hasFort", sol::property(gameHelpers::tileHasFort));
-	typeAll.tileStruct.set("hasSettlement", sol::property(gameHelpers::tileHasSettlement));
-	typeAll.tileStruct.set("isDevastated", sol::property(gameHelpers::isDevastated));
-	typeAll.tileStruct.set("height", sol::property(&gameHelpers::getTileHeight, &gameHelpers::setTileHeight));
-	typeAll.tileStruct.set("climate", sol::property(&gameHelpers::getTileClimate, &gameHelpers::setTileClimate));
-	typeAll.tileStruct.set("heatValue", sol::property(gameHelpers::getTileHeatValue));
-	typeAll.tileStruct.set("resource", sol::property(gameHelpers::getTileResource));
-	typeAll.tileStruct.set("character", sol::property(gameHelpers::getTileCharacter));
-	typeAll.tileStruct.set("settlement", sol::property(gameHelpers::getTileSettlement));
-	typeAll.tileStruct.set("fort", sol::property(gameHelpers::getTileFort));
-	typeAll.tileStruct.set("port", sol::property(gameHelpers::getTilePort));
-	typeAll.tileStruct.set("watchtower", sol::property(gameHelpers::getTileWatchtower));
-	typeAll.tileStruct.set("armiesNearTile", &oneTile::armiesNearTile);
-	typeAll.tileStruct.set("charactersOnTile", &oneTile::charactersOnTile);
-	typeAll.tileStruct.set("mpModifier", &oneTile::mpModifier);
-
-	/***
-	Check if a faction has an army near a tile.
-	@function tileStruct:factionHasArmyNearTile
-	@tparam int factionID
-	@treturn bool hasArmyNearTile
-	@usage
-	local hasArmyNearTile = tile:factionHasArmyNearTile(3);
-	*/
-	typeAll.tileStruct.set_function("factionHasArmyNearTile", &gameHelpers::factionHasArmyNearTile);
-
-	/***
-	Check if a faction has a character on a tile.
-	@function tileStruct:factionHasCharacterOnTile
-	@tparam int factionID
-	@treturn bool hasCharacterOnTile
-	@usage
-	local hasCharacterOnTile = tile:factionHasCharacterOnTile(3);
-	*/
-	typeAll.tileStruct.set_function("factionHasCharacterOnTile", &gameHelpers::factionHasCharacterOnTile);
-
-	/***
-	Get amount of characters on a tile.
-	@function tileStruct:getTileCharacterCount
-	@treturn int characterCount
-	@usage
-	local tileCharacterCount = tile:getTileCharacterCount();
-	*/
-	typeAll.tileStruct.set_function("getTileCharacterCount", &gameHelpers::getTileCharacterCount);
-
-	/***
-	Get a character on a tile.
-	@function tileStruct:getTileCharacterAtIndex
-	@tparam int index
-	@treturn character char
-	@usage
-	local tileCharacterCount = tile:getTileCharacterCount();
-	for i=0,tileCharacterCount -1 do
-		local character = tile:getTileCharacterAtIndex(i);
-	end
-	*/
-	typeAll.tileStruct.set_function("getTileCharacterAtIndex", &gameHelpers::getTileCharacterAtIndex);
-
-	///RegionStruct
-	//@section RegionStruct
-
-	/***
-	Basic regionStruct table.
-
-	@tfield string regionName
-	@tfield string localizedName
-	@tfield string settlementName
-	@tfield string legioName
-	@tfield int regionID
-	@tfield int roadLevel as set in descr_strat
-	@tfield int farmingLevel as set in descr_strat
-	@tfield int famineThreat
-	@tfield int harvestSuccess
-	@tfield int totalSeaTradeValue
-	@tfield int stacksNum
-	@tfield int fortsNum
-	@tfield int colorRed
-	@tfield int colorGreen
-	@tfield int colorBlue
-	@tfield int watchtowersNum
-	@tfield int isSea
-	@tfield int hasLake (fully enclosed by region)
-	@tfield landMass landMass
-	@tfield roadStruct roadToPort
-	@tfield int seaConnectedRegionsCount
-	@tfield int loyaltyFactionID
-	@tfield seaConnectedRegion seaExportRegion
-	@tfield int seaImportRegionsCount
-	@tfield int regionSeaEdgesCount (point where the region border both another land region and sea).
-	@tfield int tilesBorderingEdgeOfMapCount
-	@tfield int devastatedTilesCount
-	@tfield settlementStruct settlement
-	@tfield int tileCount
-	@tfield int fertileTilesCount
-	@tfield int neighbourRegionsNum
-	@tfield int resourcesNum
-	@tfield int resourceTypesBitMap
-	@tfield int hiddenResources1 (bitmap with 32 first hidden resources), needs to be converted to binary and then use bitwise operators from lua.
-	@tfield int hiddenResources2 (bitmap last 32 first hidden resources), needs to be converted to binary and then use bitwise operators from lua.
-	@tfield int settlementXCoord
-	@tfield int settlementYCoord
-	@tfield int portEntranceXCoord
-	@tfield int portEntranceYCoord
-	@tfield factionStruct faction
-	@tfield mercPool mercPool
-	@tfield string rebelType
-	@tfield string localizedRebelsName
-	@tfield int triumphValue
-	@tfield getStack getStack
-	@tfield getFort getFort
-	@tfield getWatchtower getWatchtower
-	@tfield getResource getResource
-	@tfield getNeighbour getNeighbour
-	@tfield getHiddenResource getHiddenResource
-	@tfield setHiddenResource setHiddenResource
-	@tfield getSeaConnectedRegion getSeaConnectedRegion
-	@tfield getSeaImportRegion getSeaImportRegion
-	@tfield getRegionSeaEdge getRegionSeaEdge
-	@tfield getReligionHistory getReligionHistory
-	@tfield getTileBorderingEdgeOfMap getTileBorderingEdgeOfMap
-	@tfield getTile getTile
-	@tfield getFertileTile getFertileTile
-	@tfield getDevastatedTile getDevastatedTile
-	@tfield getHostileArmiesStrength getHostileArmiesStrength
-	@tfield hasResourceType hasResourceType
-
-	@table regionStruct
-	*/
-	typeAll.regionStruct = luaState.new_usertype<regionStruct>("regionStruct");
-	typeAll.regionStruct.set("regionName", &regionStruct::regionName);
-	typeAll.regionStruct.set("settlementName", &regionStruct::settlementName);
-	typeAll.regionStruct.set("localizedName", sol::property(
-		&gameHelpers::getRegionName, &smallFuncs::changeRegionName
-		));
-	typeAll.regionStruct.set("legioName", &regionStruct::legioName);
-	typeAll.regionStruct.set("colorRed", &regionStruct::colorRed);
-	typeAll.regionStruct.set("colorGreen", &regionStruct::colorGreen);
-	typeAll.regionStruct.set("colorBlue", &regionStruct::colorBlue);
-	typeAll.regionStruct.set("regionID", &regionStruct::regionID);
-	typeAll.regionStruct.set("loyaltyFactionID", &regionStruct::loyaltyFactionID);
-	typeAll.regionStruct.set("roadLevel", &regionStruct::roadLevel);
-	typeAll.regionStruct.set("farmingLevel", &regionStruct::farmingLevel);
-	typeAll.regionStruct.set("famineThreat", &regionStruct::famineThreat);
-	typeAll.regionStruct.set("harvestSuccess", &regionStruct::harvestSuccess);
-	typeAll.regionStruct.set("totalSeaTradeValue", &regionStruct::totalSeaTradeValue);
-	typeAll.regionStruct.set("seaConnectedRegionsCount", &regionStruct::seaConnectedRegionsCount);
-	typeAll.regionStruct.set("seaImportRegionsCount", &regionStruct::seaImportRegionsCount);
-	typeAll.regionStruct.set("landMass", &regionStruct::landMass);
-	typeAll.regionStruct.set("roadToPort", &regionStruct::roadToPort);
-	typeAll.regionStruct.set("seaExportRegion", &regionStruct::seaExportRegion);
-	typeAll.regionStruct.set("regionSeaEdgesCount", &regionStruct::regionSeaEdgesCount);
-	typeAll.regionStruct.set("devastatedTilesCount", &regionStruct::devastatedTilesCount);
-	typeAll.regionStruct.set("tilesBorderingEdgeOfMapCount", &regionStruct::tilesBorderingEdgeOfMapCount);
-	typeAll.regionStruct.set("fertileTilesCount", &regionStruct::fertileTilesCount);
-	typeAll.regionStruct.set("resourceTypesBitMap", &regionStruct::resourceTypesBitMap);
-	typeAll.regionStruct.set("stacksNum", &regionStruct::stacksNum);
-	typeAll.regionStruct.set("fortsNum", &regionStruct::fortsNum);
-	typeAll.regionStruct.set("watchtowersNum", &regionStruct::watchtowersNum);
-	typeAll.regionStruct.set("isSea", &regionStruct::isSea);
-	typeAll.regionStruct.set("hasLake", &regionStruct::hasLake);
-	typeAll.regionStruct.set("mercPool", &regionStruct::mercPool);
-	typeAll.regionStruct.set("settlement", &regionStruct::settlement);
-	typeAll.regionStruct.set("tileCount", &regionStruct::tileCount);
-	typeAll.regionStruct.set("neighbourRegionsNum", &regionStruct::neighbourRegionsNum);
-	typeAll.regionStruct.set("resourcesNum", &regionStruct::resourcesNum);
-	typeAll.regionStruct.set("hiddenResources1", &regionStruct::hiddenResources1);
-	typeAll.regionStruct.set("hiddenResources2", &regionStruct::hiddenResources2);
-	typeAll.regionStruct.set("settlementXCoord", &regionStruct::settlementXCoord);
-	typeAll.regionStruct.set("settlementYCoord", &regionStruct::settlementYCoord);
-	typeAll.regionStruct.set("portEntranceXCoord", &regionStruct::portEntranceXCoord);
-	typeAll.regionStruct.set("portEntranceYCoord", &regionStruct::portEntranceYCoord);
-	typeAll.regionStruct.set("faction", &regionStruct::factionOwner);
-	typeAll.regionStruct.set("rebelType", &regionStruct::rebelType);
-	typeAll.regionStruct.set("localizedRebelsName", sol::property(
-		&gameHelpers::getRebelsName, &smallFuncs::changeRebelsName
-		));
-	typeAll.regionStruct.set("triumphValue", &regionStruct::triumphValue);
-
-	/***
-	Get an army by it's index.
-	@function regionStruct:getStack
-	@tparam int index
-	@treturn stackStruct army
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local army = region:getStack(0)
-	*/
-	typeAll.regionStruct.set_function("getStack", &gameHelpers::getStack);
-
-	/***
-	Get a fort by it's index.
-	@function regionStruct:getFort
-	@tparam int index
-	@treturn fortStruct fort
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local fort = region:getFort(0)
-	*/
-	typeAll.regionStruct.set_function("getFort", &gameHelpers::getFort);
-
-	/***
-	Get a watchtower by it's index.
-	@function regionStruct:getWatchtower
-	@tparam int index
-	@treturn watchtowerStruct watchtower
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local watch = region:getWatchtower(0)
-	*/
-	typeAll.regionStruct.set_function("getWatchtower", &gameHelpers::getWatchtower);
-
-	/***
-	Get a resource by it's index.
-	@function regionStruct:getResource
-	@tparam int index
-	@treturn tradeResource resource
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local res = region:getResource(0)
-	*/
-	typeAll.regionStruct.set_function("getResource", &gameHelpers::getResource);
-
-	/***
-	Get a neighbour region by it's index.
-	@function regionStruct:getNeighbour
-	@tparam int index
-	@treturn neighbourRegion nRegion
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local nRegion = region:getNeighbour(0)
-	*/
-	typeAll.regionStruct.set_function("getNeighbour", &gameHelpers::getNeighbour);
-
-	/***
-	Check if a region has a hidden resource.
-	@function regionStruct:getHiddenResource
-	@tparam int index
-	@treturn bool hr
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	localhr = region:getHiddenResource(0)
-	*/
-	typeAll.regionStruct.set_function("getHiddenResource", &gameHelpers::getHiddenResource);
-
-	/***
-	Set a region's hidden resource (reset on game restart).
-	@function regionStruct:setHiddenResource
-	@tparam int index
-	@tparam bool enable
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	region:setHiddenResource(0, false)
-	*/
-	typeAll.regionStruct.set_function("setHiddenResource", &gameHelpers::setHiddenResource);
-
-	/***
-	Get a region that is reachable from this region.
-	@function regionStruct:getSeaConnectedRegion
-	@tparam int index
-	@treturn seaConnectedRegion connectedRegion
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local connectedRegion = region:getSeaConnectedRegion(0)
-	*/
-	typeAll.regionStruct.set_function("getSeaConnectedRegion", &gameHelpers::getSeaConnectedRegion);
-
-	/***
-	Get a region this region is importing trade goods from.
-	@function regionStruct:getSeaImportRegion
-	@tparam int index
-	@treturn seaConnectedRegion seaImportRegion
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local seaImportRegion = region:getSeaImportRegion(0)
-	*/
-	typeAll.regionStruct.set_function("getSeaImportRegion", &gameHelpers::getSeaImportRegion);
-
-	/***
-	Get a region sea edge (point where it borders both sea and another land region).
-	@function regionStruct:getRegionSeaEdge
-	@tparam int index
-	@treturn tileStruct edge
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local edge = region:getRegionSeaEdge(0)
-	*/
-	typeAll.regionStruct.set_function("getRegionSeaEdge", &gameHelpers::getRegionSeaEdge);
-
-	/***
-	Get a devastated tile.
-	@function regionStruct:getDevastatedTile
-	@tparam int index
-	@treturn tileStruct tile
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local tile = region:getDevastatedTile(0)
-	*/
-	typeAll.regionStruct.set_function("getDevastatedTile", &gameHelpers::getDevastatedTile);
-
-	/***
-	Get a tile that borders the edge of the map.
-	@function regionStruct:getTileBorderingEdgeOfMap
-	@tparam int index
-	@treturn tileStruct edge
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local edge = region:getTileBorderingEdgeOfMap(0)
-	*/
-	typeAll.regionStruct.set_function("getTileBorderingEdgeOfMap", &gameHelpers::getTileBorderingEdgeOfMap);
-
-	/***
-	Get a tile by index.
-	@function regionStruct:getTile
-	@tparam int index
-	@treturn tileStruct tile
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local tile = region:getTile(0)
-	*/
-	typeAll.regionStruct.set_function("getTile", &gameHelpers::getTileRegion);
-
-	/***
-	Get a fertile tile by index.
-	@function regionStruct:getFertileTile
-	@tparam int index
-	@treturn tileStruct tile
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local tile = region:getFertileTile(0)
-	*/
-	typeAll.regionStruct.set_function("getFertileTile", &gameHelpers::getFertileTile);
-
-	/***
-	Get religion amount from a set number of turns ago.
-	@function regionStruct:getReligionHistory
-	@tparam int religionID
-	@tparam int turnsAgo (max 19)
-	@treturn float religionAmount
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local catholicThreeTurnsAgo = region:getReligionHistory(0, 3)
-	*/
-	typeAll.regionStruct.set_function("getReligionHistory", &gameHelpers::getReligionHistory);
-
-	/***
-	Check if region has a resource type.
-	@function regionStruct:hasResourceType
-	@tparam int resourceID
-	@treturn bool hasResource
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local hasResource = region:hasResourceType(16)
-	*/
-	typeAll.regionStruct.set_function("hasResourceType", &gameHelpers::hasResourceType);
-
-	/***
-	Get the strength total of all armies in this region that are hostile to a specific faction.
-	@function regionStruct:getHostileArmiesStrength
-	@tparam int factionID
-	@treturn int totalStrength
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local totalStrength = region:getHostileArmiesStrength(myFac.factionID)
-	*/
-	typeAll.regionStruct.set_function("getHostileArmiesStrength", &gameHelpers::getHostileArmiesStrength);
-
-	///neighbourRegion
-	//@section neighbourRegion
-
-	/***
-	Basic neighbourRegion table.
-
-	@tfield int regionID
-	@tfield regionStruct region
-	@tfield int tradeValue
-	@tfield int notReachable
-	@tfield float moveCost
-	@tfield int borderTilesCount
-	@tfield roadStruct connectingRoad
-	@tfield getBorderTile getBorderTile
-
-
-	@table neighbourRegion
-	*/
-	typeAll.neighbourRegion = luaState.new_usertype<neighbourRegion>("neighbourRegion");
-	typeAll.neighbourRegion.set("regionID", &neighbourRegion::regionID);
-	typeAll.neighbourRegion.set("tradeValue", &neighbourRegion::tradeValue);
-	typeAll.neighbourRegion.set("region", &neighbourRegion::region);
-	typeAll.neighbourRegion.set("borderTilesCount", &neighbourRegion::borderTilesCount);
-	typeAll.neighbourRegion.set("connectingRoad", &neighbourRegion::connectingRoad);
-	typeAll.neighbourRegion.set("notReachable", &neighbourRegion::alliedRegion);
-	typeAll.neighbourRegion.set("moveCost", &neighbourRegion::value);
-
-	/***
-	Get a border tile by index.
-	@function neighbourRegion:getBorderTile
-	@tparam int index
-	@treturn tileStruct tile
-	@usage
-	local tile = nRegion:getBorderTile(0)
-	*/
-	typeAll.neighbourRegion.set_function("getBorderTile", &gameHelpers::getBorderTile);
-
-
-
-	///seaConnectedRegion
-	//@section seaConnectedRegion
-
-	/***
-	Basic seaConnectedRegion table.
-
-	@tfield int regionID
-	@tfield int seaExportValue
-	@tfield int seaImportValue
-	@tfield int tilesReachableCount
-	@tfield int seaTradeLanePathCount
-	@tfield getReachableTile getReachableTile
-	@tfield getTradeLaneCoord getTradeLaneCoord
-	
-
-	@table seaConnectedRegion
-	*/
-	typeAll.seaConnectedRegion = luaState.new_usertype<seaConnectedRegion>("seaConnectedRegion");
-	typeAll.seaConnectedRegion.set("regionID", &seaConnectedRegion::regionID);
-	typeAll.seaConnectedRegion.set("seaExportValue", &seaConnectedRegion::seaExportValue);
-	typeAll.seaConnectedRegion.set("seaImportValue", &seaConnectedRegion::seaImportValue);
-	typeAll.seaConnectedRegion.set("tilesReachableCount", &seaConnectedRegion::tilesReachableCount);
-	typeAll.seaConnectedRegion.set("seaTradeLanePathCount", &seaConnectedRegion::seaTradeLanePathCount);
-
-	/***
-	Get a reachable tile by index.
-	@function seaConnectedRegion:getReachableTile
-	@tparam int index
-	@treturn tileStruct tile
-	@usage
-	local tile = seaRegion:getReachableTile(0)
-	*/
-	typeAll.seaConnectedRegion.set_function("getReachableTile", &gameHelpers::getReachableTile);
-
-	/***
-	Get trade lane coords by index.
-	@function seaConnectedRegion:getTradeLaneCoord
-	@tparam int index
-	@treturn coordPair coords
-	@usage
-	local coords = seaRegion:getTradeLaneCoord(0)
-	*/
-	typeAll.seaConnectedRegion.set_function("getTradeLaneCoord", &gameHelpers::getTradeLaneCoord);
-
-	///MercPools
-	//@section mercPool
-
-	/***
-	Basic mercenary pool table.
-
-	@tfield string name
-	@tfield getMercUnitNum getMercUnitNum
-	@tfield addMercUnit addMercUnit
-	@tfield getMercUnit getMercUnit
-
-	@table mercPool
-	*/
-	typeAll.mercPool = luaState.new_usertype<mercPool>("mercPool");
-	typeAll.mercPool.set("name", &mercPool::name);
-
-	/***
-	Get amount of mercenary units a region has.
-	@function mercPool:getMercUnitNum
-	@treturn int mercUnitNum
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local mercpool = region.mercPool;
-	local mercNum = mercpool:getMercUnitNum();
-	*/
-	typeAll.mercPool.set_function("getMercUnitNum", &gameHelpers::getMercUnitNum);
-
-	/***
-	Add a new mercenary unit to a pool.
-	@function mercPool:addMercUnit
-	@tparam int idx EDU index, supports EOP units.
-	@tparam int exp Starting experience.
-	@tparam int cost
-	@tparam float repmin Minimum replenishment rate.
-	@tparam float repmax Maximum replenishment rate.
-	@tparam int maxunits Maximum Pool.
-	@tparam float startpool Starting pool.
-	@tparam int startyear (0 to disable) Use 0 if the startyear is before the year you introduce the merc, not an earlier startyear!
-	@tparam int endyear (0 to disable)
-	@tparam int crusading
-	@treturn mercPoolUnit mercunit
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local mercpool = region.mercPool;
-	local mercUnit = mercpool:addMercUnit(1907, 0, 570, 0.15, 0.35, 3, 3, 0, 0, 0);
-	*/
-	typeAll.mercPool.set_function("addMercUnit", &gameHelpers::addMercUnit);
-
-	/***
-	Get a mercenary unit from a pool by index.
-	@function mercPool:getMercUnit
-	@tparam int idx
-	@treturn mercPoolUnit mercUnit
-	@usage
-	local sMap = gameDataAll.get().stratMap;
-	local region = sMap.getRegion(2);
-	local mercpool = region.mercPool;
-	local mercNum = mercPool:getMercUnitNum();
-	for i = 0, mercNum-1 do
-		local mercUnit = mercpool:getMercUnit(i);
-	end
-	*/
-	typeAll.mercPool.set_function("getMercUnit", &gameHelpers::getMercUnit);
-
-
-	///MercenaryUnits
-	//@section mercPoolUnit
-
-	/***
-	Basic mercenary unit table.
-
-	@tfield eduEntry eduEntry
-	@tfield int experience
-	@tfield int cost
-	@tfield float replenishMin
-	@tfield float replenishMax
-	@tfield int maxUnits
-	@tfield float currentPool
-	@tfield int startYear
-	@tfield int endYear
-	@tfield int crusading
-	@tfield int poolIndex
-	@tfield int mercPoolUnitIndex
-	@tfield mercPool mercPool
-	@tfield setMercReligion setMercReligion
-
-	@table mercPoolUnit
-	*/
-	typeAll.mercPoolUnit = luaState.new_usertype<mercPoolUnit>("mercPoolUnit");
-	typeAll.mercPoolUnit.set("eduEntry", &mercPoolUnit::eduEntry);
-	typeAll.mercPoolUnit.set("experience", &mercPoolUnit::experience);
-	typeAll.mercPoolUnit.set("cost", &mercPoolUnit::cost);
-	typeAll.mercPoolUnit.set("replenishMin", &mercPoolUnit::replenishMin);
-	typeAll.mercPoolUnit.set("replenishMax", &mercPoolUnit::replenishMax);
-	typeAll.mercPoolUnit.set("maxUnits", &mercPoolUnit::maxUnits);
-	typeAll.mercPoolUnit.set("currentPool", &mercPoolUnit::currentPool);
-	typeAll.mercPoolUnit.set("startYear", &mercPoolUnit::startYear);
-	typeAll.mercPoolUnit.set("endYear", &mercPoolUnit::endYear);
-	typeAll.mercPoolUnit.set("crusading", &mercPoolUnit::crusading);
-	typeAll.mercPoolUnit.set("poolIndex", &mercPoolUnit::poolIndex);
-	typeAll.mercPoolUnit.set("mercPoolUnitIndex", &mercPoolUnit::mercPoolUnitIndex);
-	typeAll.mercPoolUnit.set("mercPool", &mercPoolUnit::mercPool);
-
-	/***
-	Set or remove a religion requirement for a mercenary unit.
-	@function mercPoolUnit:setMercReligion
-	@tparam int religion
-	@tparam bool set True means enable this religion requirement, False means disable.
-	@usage
-	local stratmap = gameDataAll.get().stratMap;
-	local region = stratMap.getRegion(2);
-	local mercpool = region.mercPool;
-	local mercNum = mercPool:getMercUnitNum();
-	for i = 0, mercNum-1 do
-		local mercUnit = mercPool:getMercUnit(i);
-		mercUnit:setMercReligion(3, true)
-	end
-	*/
-	typeAll.mercPoolUnit.set_function("setMercReligion", &gameHelpers::setMercReligion);
-
-
 }
 void luaP::initP2()
 {
@@ -1823,7 +568,7 @@ void luaP::initP2()
 		sol::usertype<deploymentAreaS> deploymentAreaTable;
 		sol::usertype<battlePos> battlePos;
 		sol::usertype<battleAI> battleAI;
-		sol::usertype<armyAndCharacter> battleArmy;
+		sol::usertype<battleArmy> battleArmy;
 		sol::usertype<battleUnit> battleUnit;
 		sol::usertype<battleResidence> battleResidence;
 		sol::usertype<AIBattleObjectiveBase> battleObjective;
@@ -1872,7 +617,7 @@ void luaP::initP2()
 	*/
 	typeAll.gameDataAllTable.set_function("get", &gameDataAllHelper::get);
 	typeAll.gameDataAllTable.set("battleStruct", &gameDataAllStruct::battleHandler);
-	typeAll.gameDataAllTable.set("campaignStruct", &gameDataAllStruct::campaignData);
+	typeAll.gameDataAllTable.set("campaignStruct", &gameDataAllStruct::campaignStruct);
 	typeAll.gameDataAllTable.set("uiCardManager", &gameDataAllStruct::uiCardManager);
 	typeAll.gameDataAllTable.set("stratMap", &gameDataAllStruct::stratMap);
 	typeAll.gameDataAllTable.set("selectionInfo", &gameDataAllStruct::selectInfo);
@@ -1956,10 +701,10 @@ void luaP::initP2()
 	typeAll.battleTable.set("secondsPassed", &battleDataS::secondsPassed);
 	typeAll.battleTable.set("secondsSinceBattleLoaded", &battleDataS::secondsSinceBattleLoaded);
 	typeAll.battleTable.set("hidingEnabledSet", &battleDataS::hidingEnabledSet);
-	typeAll.battleTable.set("mapWidthDoubled", &battleDataS::mapWidthDoubled);
-	typeAll.battleTable.set("mapHeightDoubled", &battleDataS::mapHeightDoubled);
-	typeAll.battleTable.set("mapHeight", &battleDataS::mapHeightDoubled);
-	typeAll.battleTable.set("mapWidth", &battleDataS::mapHeightDoubled);
+	typeAll.battleTable.set("mapWidthDoubled", &battleDataS::mapWidth);
+	typeAll.battleTable.set("mapHeightDoubled", &battleDataS::mapHeight);
+	typeAll.battleTable.set("mapWidth", &battleDataS::mapWidth);
+	typeAll.battleTable.set("mapHeight", &battleDataS::mapHeight);
 	typeAll.battleTable.set("sidesNum", &battleDataS::sidesNum);
 	typeAll.battleTable.set("terrainFeatures", &battleDataS::terrainFeatures);
 	typeAll.battleTable.set("sides", sol::property([](battleDataS& self) { return std::ref(self.sides); }));
@@ -1968,7 +713,7 @@ void luaP::initP2()
 	Get a players army.
 	@function battleStruct:getPlayerArmy
 	@tparam int index
-	@treturn stackStruct army
+	@treturn armyStruct army
 	@usage
 
 		local playerArmy = battle:getPlayerArmy(0)
@@ -2074,7 +819,7 @@ void luaP::initP2()
 	Basic battleSide table
 
 	@tfield bool isDefender
-	@tfield bool isCanDeploy
+	@tfield bool canDeploy
 	@tfield int wonBattle 0 = lose, 1 = draw, 2 = win
 	@tfield int battleSuccess 0 = close, 1 = average, 2 = clear, 3 = crushing
 	@tfield int[4] winConditions Returns an int index of a wincondition. Maximum 4.
@@ -2098,7 +843,8 @@ void luaP::initP2()
 	*/
 	typeAll.battleSideTable = luaState.new_usertype<battleSide>("battleSide");
 	typeAll.battleSideTable.set("isDefender", &battleSide::isDefender);
-	typeAll.battleSideTable.set("isCanDeploy", &battleSide::isCanDeploy);
+	typeAll.battleSideTable.set("canDeploy", &battleSide::canDeploy);
+	typeAll.battleSideTable.set("isCanDeploy", &battleSide::canDeploy);
 	typeAll.battleSideTable.set("wonBattle", &battleSide::wonBattle);
 	typeAll.battleSideTable.set("battleSuccess", &battleSide::battleSuccess);
 	typeAll.battleSideTable.set("battleArmyNum", &battleSide::armiesNum);
@@ -2178,7 +924,7 @@ void luaP::initP2()
 	Get a reinforcement army in this side by it's index.
 	@function battleSide:getReinforcementArmy
 	@tparam int index
-	@treturn stackStruct army
+	@treturn armyStruct army
 	@usage
 
 		army = side:getReinforcementArmy(0)
@@ -2193,7 +939,7 @@ void luaP::initP2()
 	/***
 	Basic battleSideArmy table
 
-	@tfield stackStruct army
+	@tfield armyStruct army
 	@tfield int isReinforcement
 	@tfield deploymentAreaS deploymentArea
 
@@ -2202,7 +948,7 @@ void luaP::initP2()
 	typeAll.battleSideArmyTable = luaState.new_usertype<battleSideArmy>("battleSideArmy");
 	typeAll.battleSideArmyTable.set("army", &battleSideArmy::stack);
 	typeAll.battleSideArmyTable.set("isReinforcement", &battleSideArmy::isReinforcement);
-	typeAll.battleSideArmyTable.set("deploymentArea", &battleSideArmy::deploymentArea);
+	typeAll.battleSideArmyTable.set("deploymentArea", sol::property(&battleSideArmy::getMainDeployArea));
 	
 	///battlePos
 	//@section battlePos
@@ -2343,7 +1089,7 @@ void luaP::initP2()
 	/***
 	Basic battleArmy table
 
-	@tfield stackStruct army
+	@tfield armyStruct army
 	@tfield character character
 	@tfield int generalNumKillsBattle
 	@tfield float totalValue
@@ -2354,14 +1100,14 @@ void luaP::initP2()
 
 	@table battleArmy
 	*/
-	typeAll.battleArmy = luaState.new_usertype<armyAndCharacter>("battleArmy");
-	typeAll.battleArmy.set("army", &armyAndCharacter::army);
-	typeAll.battleArmy.set("character", &armyAndCharacter::character);
-	typeAll.battleArmy.set("generalNumKillsBattle", &armyAndCharacter::generalNumKillsBattle);
-	typeAll.battleArmy.set("generalHPRatioLost", &armyAndCharacter::generalHPRatioLost);
-	typeAll.battleArmy.set("numKilledGenerals", &armyAndCharacter::numKilledGenerals);
-	typeAll.battleArmy.set("totalValue", &armyAndCharacter::totalValue);
-	typeAll.battleArmy.set("unitCount", &armyAndCharacter::unitCount);
+	typeAll.battleArmy = luaState.new_usertype<battleArmy>("battleArmy");
+	typeAll.battleArmy.set("army", &battleArmy::army);
+	typeAll.battleArmy.set("character", &battleArmy::character);
+	typeAll.battleArmy.set("generalNumKillsBattle", &battleArmy::generalNumKillsBattle);
+	typeAll.battleArmy.set("generalHPRatioLost", &battleArmy::generalHPRatioLost);
+	typeAll.battleArmy.set("numKilledGenerals", &battleArmy::numKilledGenerals);
+	typeAll.battleArmy.set("totalValue", &battleArmy::totalValue);
+	typeAll.battleArmy.set("unitCount", &battleArmy::unitCount);
 	/***
 	Get a battle unit by it's index.
 	@function battleArmy:getBattleUnit
@@ -2429,7 +1175,6 @@ void luaP::initP2()
 	@tfield fortBattleInfo fortInfo
 	@tfield int settlementWallsBreached
 	@tfield int settlementGateDestroyed
-	@tfield getBattleStreets getBattleStreets
 
 	@table battleResidence
 	*/
@@ -2441,16 +1186,6 @@ void luaP::initP2()
 	typeAll.battleResidence.set("battleBuildings", &battleResidence::battleBuildings);
 	typeAll.battleResidence.set("fortInfo", &battleResidence::fort);
 	typeAll.battleResidence.set("plazaData", &battleResidence::plaza);
-	/***
-	Get battle streets.
-	@function battleResidence.getBattleStreets
-	@treturn battleStreets streets
-	@usage
-
-		local streets = battleResidence.getBattleStreets()
-
-	*/
-	typeAll.battleResidence.set_function("getBattleStreets", &battleHandlerHelpers::getBattleStreets);
 
 	/// plazaData
 	//@section Plaza Data
@@ -2458,8 +1193,6 @@ void luaP::initP2()
 	/***
 	Basic plazaData table
 
-	@tfield int soldiersAlliance0
-	@tfield int soldiersAlliance1
 	@tfield float xCoord
 	@tfield float yCoord
 	@tfield float sizeX
@@ -2472,9 +1205,7 @@ void luaP::initP2()
 	@table plazaData
 	*/
 	typeAll.plazaData = luaState.new_usertype<plazaStuff>("plazaData");
-	typeAll.plazaData.set("soldiersAlliance0", &plazaStuff::soldiersAlliance0);
-	typeAll.plazaData.set("soldiersAlliance1", &plazaStuff::soldiersAlliance1);
-	typeAll.plazaData.set("xCoord", &plazaStuff::plazaXcoord);
+	typeAll.plazaData.set("xCoord", &plazaStuff::plazaXCoord);
 	typeAll.plazaData.set("yCoord", &plazaStuff::plazaYCoord);
 	typeAll.plazaData.set("sizeX", &plazaStuff::sizeX);
 	typeAll.plazaData.set("sizeY", &plazaStuff::sizeY);
@@ -2530,8 +1261,6 @@ void luaP::initP2()
 	/***
 	Basic towerStats table
 
-	@tfield int range
-	@tfield projectileStruct projectile
 	@tfield float fireAngle
 	@tfield float slotYawX
 	@tfield float slotYawY
@@ -2543,8 +1272,6 @@ void luaP::initP2()
 	@table towerStats
 	*/
 	typeAll.towerStats = luaState.new_usertype<towerStats>("towerStats");
-	typeAll.towerStats.set("range", &towerStats::missileRange);
-	typeAll.towerStats.set("projectile", &towerStats::missile);
 	typeAll.towerStats.set("fireAngle", &towerStats::fireAngle);
 	typeAll.towerStats.set("slotYawX", &towerStats::slotYawX);
 	typeAll.towerStats.set("slotYawY", &towerStats::slotYawY);
@@ -2682,8 +1409,6 @@ void luaP::initP2()
 	/***
 	Basic terrainFeatures table
 
-	@tfield terrainLines lines
-	@tfield terrainHills hills
 	@tfield float width
 	@tfield float widthHalf
 	@tfield float length
@@ -2695,8 +1420,6 @@ void luaP::initP2()
 	@table terrainFeatures
 	*/
 	typeAll.terrainFeatures = luaState.new_usertype<terrainFeatures>("terrainFeatures");
-	typeAll.terrainFeatures.set("lines", &terrainFeatures::terrainLines);
-	typeAll.terrainFeatures.set("hills", &terrainFeatures::hills);
 	typeAll.terrainFeatures.set("width", &terrainFeatures::width);
 	typeAll.terrainFeatures.set("widthHalf", &terrainFeatures::widthHalf);
 	typeAll.terrainFeatures.set("length", &terrainFeatures::height);
@@ -2753,7 +1476,6 @@ void luaP::initP2()
 	Basic buildingBattle table
 
 	@tfield int type
-	@tfield int endHealth
 	@tfield int currentHealth
 	@tfield int startHealth
 	@tfield int alliance
@@ -2775,7 +1497,6 @@ void luaP::initP2()
 	typeAll.buildingBattle.set("posZ", &buildingBattle::zCoord);
 	typeAll.buildingBattle.set("posY", &buildingBattle::yCoord);
 	typeAll.buildingBattle.set("faction", &buildingBattle::faction);
-	typeAll.buildingBattle.set("endHealth", &buildingBattle::endHealth);
 	typeAll.buildingBattle.set("currentHealth", &buildingBattle::currentHealth);
 	typeAll.buildingBattle.set("startHealth", &buildingBattle::startHealth);
 	typeAll.buildingBattle.set("battleResidence", &buildingBattle::battleResidence);
@@ -2840,7 +1561,7 @@ void luaP::initP2()
 	*/
 	typeAll.battleBuildings = luaState.new_usertype<battleBuildings>("battleBuildings");
 	typeAll.battleBuildings.set("buildingCount", &battleBuildings::allBuildingsNum);
-	typeAll.battleBuildings.set("perimeterCount", &battleBuildings::perimitersNum);
+	typeAll.battleBuildings.set("perimeterCount", &battleBuildings::perimetersNum);
 
 	/***
 	Get a battle building by it's index.
@@ -2900,7 +1621,7 @@ void luaP::initP2()
 	Basic fortBattleInfo table
 
 	@tfield fortStruct fort
-	@tfield stackStruct garrison
+	@tfield armyStruct garrison
 	@tfield factionStruct faction
 	@tfield int ownerFactionID
 	@tfield int creatorFactionID
@@ -3525,7 +2246,6 @@ void luaP::initP2()
 		"spearmen",3,
 		"missile",4
 	);
-
 	
 	/***
 	Enum of unit categories
@@ -3788,745 +2508,3 @@ void luaP::initP2()
 	);
 }
 
-
-void luaP::initP3()
-{
-	struct
-	{
-		sol::usertype<campaignDbRecruitment> campaignDbRecruitment;
-		sol::usertype<campaignDbReligion> campaignDbReligion;
-		sol::usertype<campaignDbBribery> campaignDbBribery;
-		sol::usertype<campaignDbFamilyTree> campaignDbFamilyTree;
-		sol::usertype<campaignDbDiplomacy> campaignDbDiplomacy;
-		sol::usertype<campaignDbDisplay> campaignDbDisplay;
-		sol::usertype<campaignDbRansom> campaignDbRansom;
-		sol::usertype<campaignDbAutoresolve> campaignDbAutoresolve;
-		sol::usertype<campaignDbSettlement> campaignDbSettlement;
-		sol::usertype<campaignDbRevolt> campaignDbRevolt;
-		sol::usertype<campaignDbHorde> campaignDbHorde;
-		sol::usertype<campaignDbMerchants> campaignDbMerchants;
-		sol::usertype<campaignDbAgents> campaignDbAgents;
-		sol::usertype<campaignDbCrusades> campaignDbCrusades;
-		sol::usertype<campaignDbAi> campaignDbAi;
-		sol::usertype<campaignDbMisc> campaignDbMisc;
-		sol::usertype<campaignDb> campaignDb;
-		sol::usertype<campaignDbExtra> campaignDbExtra;
-	}typeAll;
-
-
-
-		///Campaign DB
-		//@section Campaign DB
-
-		/***
-		Basic campaignDb Recruitment table
-
-		@tfield int recruitmentSlots
-		@tfield int retrainingSlots
-		@tfield bool deplenishPoolsWithCaps
-		@tfield float deplenishMultiplier
-		@tfield float deplenishOffset
-		@tfield bool addDisbandNoCaps
-		@tfield int percentagePoolReductionLost
-		@tfield int percentagePoolReductionOccupy
-		@tfield int percentagePoolReductionSack
-		@tfield int percentagePoolReductionExterminate
-		@tfield int maxAgentsPerTurn
-
-		@table campaignDbRecruitment
-		*/
-	typeAll.campaignDbRecruitment = luaState.new_usertype<campaignDbRecruitment>("campaignDbRecruitment");
-	typeAll.campaignDbRecruitment.set("recruitmentSlots", &campaignDbRecruitment::recruitmentSlots);
-	typeAll.campaignDbRecruitment.set("retrainingSlots", &campaignDbRecruitment::retrainingSlots);
-	typeAll.campaignDbRecruitment.set("deplenishPoolsWithCaps", &campaignDbRecruitment::deplenishPoolsWithCaps);
-	typeAll.campaignDbRecruitment.set("deplenishMultiplier", &campaignDbRecruitment::deplenishMultiplier);
-	typeAll.campaignDbRecruitment.set("deplenishOffset", &campaignDbRecruitment::deplenishOffset);
-	typeAll.campaignDbRecruitment.set("addDisbandNoCaps", &campaignDbRecruitment::addDisbandNoCaps);
-	typeAll.campaignDbRecruitment.set("percentagePoolReductionLost", &campaignDbRecruitment::percentagePoolReductionLost);
-	typeAll.campaignDbRecruitment.set("percentagePoolReductionOccupy", &campaignDbRecruitment::percentagePoolReductionOccupy);
-	typeAll.campaignDbRecruitment.set("percentagePoolReductionSack", &campaignDbRecruitment::percentagePoolReductionSack);
-	typeAll.campaignDbRecruitment.set("percentagePoolReductionExterminate", &campaignDbRecruitment::percentagePoolReductionExterminate);
-	typeAll.campaignDbRecruitment.set("maxAgentsPerTurn", &campaignDbRecruitment::maxAgentsPerTurn);
-
-	/***
-	Basic campaignDb Religion table
-
-	@tfield int maxWitchesPerRegion
-	@tfield int maxWitches
-	@tfield int maxHereticsPerRegion
-	@tfield int maxHeretics
-	@tfield int maxInquisitorsPerRegion
-	@tfield int maxInquisitors
-	@tfield float maxHereticsConversionModifier
-	@tfield float hereticConversionRateModifier
-	@tfield float hereticConversionRateOffset
-	@tfield float witchConversionRateOffset
-	@tfield float inquisitorConversionRateModifier
-	@tfield float inquisitorConversionRateOffset
-	@tfield float priestConversionRateModifier
-	@tfield float priestConversionRateOffset
-	@tfield float witchChanceModifier
-	@tfield float hereticChanceModifier
-	@tfield float inquisitorChanceModifier
-	@tfield int minCardinalPiety
-	@tfield float convertToHereticBaseModifier
-	@tfield float convertToHereticUnorthodoxModifier
-	@tfield int inquisitorTurnStart
-
-	@table campaignDbReligion
-	*/
-	typeAll.campaignDbReligion = luaState.new_usertype<campaignDbReligion>("campaignDbReligion");
-	typeAll.campaignDbReligion.set("maxWitchesPerRegion", &campaignDbReligion::maxWitchesPerRegion);
-	typeAll.campaignDbReligion.set("maxWitches", &campaignDbReligion::maxWitches);
-	typeAll.campaignDbReligion.set("maxHereticsPerRegion", &campaignDbReligion::maxHereticsPerRegion);
-	typeAll.campaignDbReligion.set("maxHeretics", &campaignDbReligion::maxHeretics);
-	typeAll.campaignDbReligion.set("maxInquisitorsPerRegion", &campaignDbReligion::maxInquisitorsPerRegion);
-	typeAll.campaignDbReligion.set("maxInquisitors", &campaignDbReligion::maxInquisitors);
-	typeAll.campaignDbReligion.set("maxHereticsConversionModifier", &campaignDbReligion::maxHereticsConversionModifier);
-	typeAll.campaignDbReligion.set("hereticConversionRateModifier", &campaignDbReligion::hereticConversionRateModifier);
-	typeAll.campaignDbReligion.set("hereticConversionRateOffset", &campaignDbReligion::hereticConversionRateOffset);
-	typeAll.campaignDbReligion.set("witchConversionRateOffset", &campaignDbReligion::witchConversionRateOffset);
-	typeAll.campaignDbReligion.set("inquisitorConversionRateModifier", &campaignDbReligion::inquisitorConversionRateModifier);
-	typeAll.campaignDbReligion.set("inquisitorConversionRateOffset", &campaignDbReligion::inquisitorConversionRateOffset);
-	typeAll.campaignDbReligion.set("priestConversionRateModifier", &campaignDbReligion::priestConversionRateModifier);
-	typeAll.campaignDbReligion.set("priestConversionRateOffset", &campaignDbReligion::priestConversionRateOffset);
-	typeAll.campaignDbReligion.set("witchChanceModifier", &campaignDbReligion::witchChanceModifier);
-	typeAll.campaignDbReligion.set("hereticChanceModifier", &campaignDbReligion::hereticChanceModifier);
-	typeAll.campaignDbReligion.set("inquisitorChanceModifier", &campaignDbReligion::inquisitorChanceModifier);
-	typeAll.campaignDbReligion.set("minCardinalPiety", &campaignDbReligion::minCardinalPiety);
-	typeAll.campaignDbReligion.set("convertToHereticBaseModifier", &campaignDbReligion::convertToHereticBaseModifier);
-	typeAll.campaignDbReligion.set("convertToHereticUnorthodoxModifier", &campaignDbReligion::convertToHereticUnorthodoxModifier);
-	typeAll.campaignDbReligion.set("inquisitorTurnStart", &campaignDbReligion::inquisitorTurnStart);
-	typeAll.campaignDbReligion.set("inquisitorTurnStart", &campaignDbReligion::inquisitorTurnStart);
-
-	/***
-	Basic campaignDb Bribery table
-
-	@tfield float baseCharacterChance
-	@tfield float religionModifier
-	@tfield float combinedAttributeModifier
-	@tfield float briberAttributeDivisor
-	@tfield float bribeeAttributeDivisor
-	@tfield float armySizeModifier
-	@tfield float baseSettlementChance
-	@tfield float settlementLoyaltyModifier
-	@tfield float settlementPopulationModifier
-	@tfield float factionStandingDivisor
-	@tfield float maxBribeChance
-	@tfield float minBribeChance
-	@tfield float bribeChanceModifier
-
-	@table campaignDbBribery
-	*/
-	typeAll.campaignDbBribery = luaState.new_usertype<campaignDbBribery>("campaignDbBribery");
-	typeAll.campaignDbBribery.set("baseCharacterChance", &campaignDbBribery::baseCharacterChance);
-	typeAll.campaignDbBribery.set("religionModifier", &campaignDbBribery::religionModifier);
-	typeAll.campaignDbBribery.set("combinedAttributeModifier", &campaignDbBribery::combinedAttributeModifier);
-	typeAll.campaignDbBribery.set("briberAttributeDivisor", &campaignDbBribery::briberAttributeDivisor);
-	typeAll.campaignDbBribery.set("bribeeAttributeDivisor", &campaignDbBribery::bribeeAttributeDivisor);
-	typeAll.campaignDbBribery.set("armySizeModifier", &campaignDbBribery::armySizeModifier);
-	typeAll.campaignDbBribery.set("baseSettlementChance", &campaignDbBribery::baseSettlementChance);
-	typeAll.campaignDbBribery.set("settlementLoyaltyModifier", &campaignDbBribery::settlementLoyaltyModifier);
-	typeAll.campaignDbBribery.set("settlementPopulationModifier", &campaignDbBribery::settlementPopulationModifier);
-	typeAll.campaignDbBribery.set("factionStandingDivisor", &campaignDbBribery::factionStandingDivisor);
-	typeAll.campaignDbBribery.set("maxBribeChance", &campaignDbBribery::maxBribeChance);
-	typeAll.campaignDbBribery.set("minBribeChance", &campaignDbBribery::minBribeChance);
-	typeAll.campaignDbBribery.set("bribeChanceModifier", &campaignDbBribery::bribeChanceModifier);
-
-	/***
-	Basic campaignDb Family Tree table
-
-	@tfield int maxAge
-	@tfield int maxAgeForMarriageMale
-	@tfield int maxAgeForMarriageForFemale
-	@tfield int maxAgeBeforeDeath
-	@tfield int maxAgeOfChild
-	@tfield int oldAge
-	@tfield int ageOfManhood
-	@tfield int daughtersAgeOfConsent
-	@tfield int daughtersRetirementAge
-	@tfield int ageDifferenceMin
-	@tfield int ageDifferenceMax
-	@tfield int parentToChildMinAgeDiff
-	@tfield int minAdoptionAge
-	@tfield int maxAdoptionAge
-	@tfield int maxAgeForConception
-	@tfield int ageOfManhoodClose
-	@tfield int maxNumberOfChildren
-
-	@table campaignDbFamilyTree
-	*/
-	typeAll.campaignDbFamilyTree = luaState.new_usertype<campaignDbFamilyTree>("campaignDbFamilyTree");
-	typeAll.campaignDbFamilyTree.set("maxAge", &campaignDbFamilyTree::maxAge);
-	typeAll.campaignDbFamilyTree.set("maxAgeForMarriageMale", &campaignDbFamilyTree::maxAgeForMarriageMale);
-	typeAll.campaignDbFamilyTree.set("maxAgeForMarriageForFemale", &campaignDbFamilyTree::maxAgeForMarriageForFemale);
-	typeAll.campaignDbFamilyTree.set("maxAgeBeforeDeath", &campaignDbFamilyTree::maxAgeBeforeDeath);
-	typeAll.campaignDbFamilyTree.set("maxAgeOfChild", &campaignDbFamilyTree::maxAgeOfChild);
-	typeAll.campaignDbFamilyTree.set("oldAge", &campaignDbFamilyTree::oldAge);
-	typeAll.campaignDbFamilyTree.set("ageOfManhood", &campaignDbFamilyTree::ageOfManhood);
-	typeAll.campaignDbFamilyTree.set("daughtersAgeOfConsent", &campaignDbFamilyTree::daughtersAgeOfConsent);
-	typeAll.campaignDbFamilyTree.set("daughtersRetirementAge", &campaignDbFamilyTree::daughtersRetirementAge);
-	typeAll.campaignDbFamilyTree.set("ageDifferenceMin", &campaignDbFamilyTree::ageDifferenceMin);
-	typeAll.campaignDbFamilyTree.set("ageDifferenceMax", &campaignDbFamilyTree::ageDifferenceMax);
-	typeAll.campaignDbFamilyTree.set("parentToChildMinAgeDiff", &campaignDbFamilyTree::parentToChildMinAgeDiff);
-	typeAll.campaignDbFamilyTree.set("minAdoptionAge", &campaignDbFamilyTree::minAdoptionAge);
-	typeAll.campaignDbFamilyTree.set("maxAdoptionAge", &campaignDbFamilyTree::maxAdoptionAge);
-	typeAll.campaignDbFamilyTree.set("maxAgeForConception", &campaignDbFamilyTree::maxAgeForConception);
-	typeAll.campaignDbFamilyTree.set("ageOfManhoodClose", &campaignDbFamilyTree::ageOfManhoodClose);
-	typeAll.campaignDbFamilyTree.set("maxNumberOfChildren", &campaignDbFamilyTree::maxNumberOfChildren);
-
-	/***
-	Basic campaignDb Diplomacy table
-
-	@tfield int maxDiplomacyItems
-	@tfield int nullMissionScore
-
-	@table campaignDbDiplomacy
-	*/
-	typeAll.campaignDbDiplomacy = luaState.new_usertype<campaignDbDiplomacy>("campaignDbDiplomacy");
-	typeAll.campaignDbDiplomacy.set("maxDiplomacyItems", &campaignDbDiplomacy::maxDiplomacyItems);
-	typeAll.campaignDbDiplomacy.set("nullMissionScore", &campaignDbDiplomacy::nullMissionScore);
-
-	/***
-	Basic campaignDb Display table
-
-	@tfield float characterSelectionRadius
-	@tfield float characterSelectionHeight
-	@tfield float characterSelectionHeightCrouching
-	@tfield float diplomacyScrollHeight
-	@tfield float factionStandingMin
-	@tfield float factionStandingMax
-	@tfield bool UseOrigRebelFactionModels
-	@tfield int hudTabTextOffset
-	@tfield bool useFactionCreatorSettModels
-	@tfield int standardSoldierLimit
-	@tfield int standardSoldierLevelScale
-	@tfield bool clearBattleModelsOnNewFaction
-
-	@table campaignDbDisplay
-	*/
-	typeAll.campaignDbDisplay = luaState.new_usertype<campaignDbDisplay>("campaignDbDisplay");
-	typeAll.campaignDbDisplay.set("characterSelectionRadius", &campaignDbDisplay::characterSelectionRadius);
-	typeAll.campaignDbDisplay.set("characterSelectionHeight", &campaignDbDisplay::characterSelectionHeight);
-	typeAll.campaignDbDisplay.set("characterSelectionHeightCrouching", &campaignDbDisplay::characterSelectionHeightCrouching);
-	typeAll.campaignDbDisplay.set("diplomacyScrollHeight", &campaignDbDisplay::diplomacyScrollHeight);
-	typeAll.campaignDbDisplay.set("factionStandingMin", &campaignDbDisplay::factionStandingMin);
-	typeAll.campaignDbDisplay.set("factionStandingMax", &campaignDbDisplay::factionStandingMax);
-	typeAll.campaignDbDisplay.set("UseOrigRebelFactionModels", &campaignDbDisplay::UseOrigRebelFactionModels);
-	typeAll.campaignDbDisplay.set("hudTabTextOffset", &campaignDbDisplay::hudTabTextOffset);
-	typeAll.campaignDbDisplay.set("useFactionCreatorSettModels", &campaignDbDisplay::useFactionCreatorSettModels);
-	typeAll.campaignDbDisplay.set("standardSoldierLimit", &campaignDbDisplay::standardSoldierLimit);
-	typeAll.campaignDbDisplay.set("standardSoldierLevelScale", &campaignDbDisplay::standardSoldierLevelScale);
-	typeAll.campaignDbDisplay.set("clearBattleModelsOnNewFaction", &campaignDbDisplay::clearBattleModelsOnNewFaction);
-
-	/***
-	Basic campaignDb Ransom table
-
-	@tfield float captorReleaseChanceBase
-	@tfield float captorReleaseChanceChivMod
-	@tfield float captorRansomChanceBase
-	@tfield float captorRansomChanceChivMod
-	@tfield float captorRansomChanceTmMod
-	@tfield float captiveRansomChanceBase
-	@tfield float captiveRansomChanceChivMod
-	@tfield float captiveRansomChanceTmMod
-	@tfield float captiveRansomChanceMsmMod
-
-	@table campaignDbRansom
-	*/
-	typeAll.campaignDbRansom = luaState.new_usertype<campaignDbRansom>("campaignDbRansom");
-	typeAll.campaignDbRansom.set("captorReleaseChanceBase", &campaignDbRansom::captorReleaseChanceBase);
-	typeAll.campaignDbRansom.set("captorReleaseChanceChivMod", &campaignDbRansom::captorReleaseChanceChivMod);
-	typeAll.campaignDbRansom.set("captorRansomChanceBase", &campaignDbRansom::captorRansomChanceBase);
-	typeAll.campaignDbRansom.set("captorRansomChanceChivMod", &campaignDbRansom::captorRansomChanceChivMod);
-	typeAll.campaignDbRansom.set("captorRansomChanceTmMod", &campaignDbRansom::captorRansomChanceTmMod);
-	typeAll.campaignDbRansom.set("captiveRansomChanceBase", &campaignDbRansom::captiveRansomChanceBase);
-	typeAll.campaignDbRansom.set("captiveRansomChanceChivMod", &campaignDbRansom::captiveRansomChanceChivMod);
-	typeAll.campaignDbRansom.set("captiveRansomChanceTmMod", &campaignDbRansom::captiveRansomChanceTmMod);
-	typeAll.campaignDbRansom.set("captiveRansomChanceMsmMod", &campaignDbRansom::captiveRansomChanceMsmMod);
-
-	/***
-	Basic campaignDb Autoresolve table
-
-	@tfield float minCapturePercent
-	@tfield float maxCapturePercent
-	@tfield float lopsidedThresh
-	@tfield float lopsidedHnMod
-	@tfield int separationMissileAdd
-	@tfield float navalSinkModifier
-	@tfield float navalSinkOffset
-	@tfield float navalSinkMax
-	@tfield float sallyAtDefDrawDivisor
-	@tfield bool useNewSettAutoResolve
-	@tfield int gateDefenceNumOilAttacks
-	@tfield float gateDefenceStrengthOilBase
-	@tfield int gateDefenceNumArrowAttacks
-	@tfield float gateDefenceStrengthArrowBase
-	@tfield float gateDefenceStrengthArrowLevelModifier
-	@tfield int gateDefenceNumDefaultAttacks
-	@tfield float gateDefenceStrengthDefaultBase
-	@tfield float gateDefenceStrengthDefaultLevelModifier
-	@tfield int settDefenceNumArrowAttacks
-	@tfield float settDefenceStrengthArrowBase
-	@tfield float settDefenceStrengthArrowModifier
-	@tfield float settDefenceStrengthDefaultBase
-	@tfield float settDefenceStrengthDefaultModifier
-	@tfield float displayStrengthOil
-	@tfield float displayStrengthArrow
-	@tfield float displayStrengthDefault
-
-	@table campaignDbAutoresolve
-	*/
-	typeAll.campaignDbAutoresolve = luaState.new_usertype<campaignDbAutoresolve>("campaignDbAutoresolve");
-	typeAll.campaignDbAutoresolve.set("minCapturePercent", &campaignDbAutoresolve::minCapturePercent);
-	typeAll.campaignDbAutoresolve.set("maxCapturePercent", &campaignDbAutoresolve::maxCapturePercent);
-	typeAll.campaignDbAutoresolve.set("lopsidedThresh", &campaignDbAutoresolve::lopsidedThresh);
-	typeAll.campaignDbAutoresolve.set("lopsidedHnMod", &campaignDbAutoresolve::lopsidedHnMod);
-	typeAll.campaignDbAutoresolve.set("separationMissileAdd", &campaignDbAutoresolve::separationMissileAdd);
-	typeAll.campaignDbAutoresolve.set("navalSinkModifier", &campaignDbAutoresolve::navalSinkModifier);
-	typeAll.campaignDbAutoresolve.set("navalSinkOffset", &campaignDbAutoresolve::navalSinkOffset);
-	typeAll.campaignDbAutoresolve.set("navalSinkMax", &campaignDbAutoresolve::navalSinkMax);
-	typeAll.campaignDbAutoresolve.set("sallyAtDefDrawDivisor", &campaignDbAutoresolve::sallyAtDefDrawDivisor);
-	typeAll.campaignDbAutoresolve.set("useNewSettAutoResolve", &campaignDbAutoresolve::useNewSettAutoResolve);
-	typeAll.campaignDbAutoresolve.set("gateDefenceNumOilAttacks", &campaignDbAutoresolve::gateDefenceNumOilAttacks);
-	typeAll.campaignDbAutoresolve.set("gateDefenceStrengthOilBase", &campaignDbAutoresolve::gateDefenceStrengthOilBase);
-	typeAll.campaignDbAutoresolve.set("gateDefenceNumArrowAttacks", &campaignDbAutoresolve::gateDefenceNumArrowAttacks);
-	typeAll.campaignDbAutoresolve.set("gateDefenceStrengthArrowBase", &campaignDbAutoresolve::gateDefenceStrengthArrowBase);
-	typeAll.campaignDbAutoresolve.set("gateDefenceStrengthArrowLevelModifier", &campaignDbAutoresolve::gateDefenceStrengthArrowLevelModifier);
-	typeAll.campaignDbAutoresolve.set("gateDefenceNumDefaultAttacks", &campaignDbAutoresolve::gateDefenceNumDefaultAttacks);
-	typeAll.campaignDbAutoresolve.set("gateDefenceStrengthDefaultBase", &campaignDbAutoresolve::gateDefenceStrengthDefaultBase);
-	typeAll.campaignDbAutoresolve.set("gateDefenceStrengthDefaultLevelModifier", &campaignDbAutoresolve::gateDefenceStrengthDefaultLevelModifier);
-	typeAll.campaignDbAutoresolve.set("settDefenceNumArrowAttacks", &campaignDbAutoresolve::settDefenceNumArrowAttacks);
-	typeAll.campaignDbAutoresolve.set("settDefenceStrengthArrowBase", &campaignDbAutoresolve::settDefenceStrengthArrowBase);
-	typeAll.campaignDbAutoresolve.set("settDefenceStrengthArrowModifier", &campaignDbAutoresolve::settDefenceStrengthArrowModifier);
-	typeAll.campaignDbAutoresolve.set("settDefenceStrengthDefaultBase", &campaignDbAutoresolve::settDefenceStrengthDefaultBase);
-	typeAll.campaignDbAutoresolve.set("settDefenceStrengthDefaultModifier", &campaignDbAutoresolve::settDefenceStrengthDefaultModifier);
-	typeAll.campaignDbAutoresolve.set("displayStrengthOil", &campaignDbAutoresolve::displayStrengthOil);
-	typeAll.campaignDbAutoresolve.set("displayStrengthArrow", &campaignDbAutoresolve::displayStrengthArrow);
-	typeAll.campaignDbAutoresolve.set("displayStrengthDefault", &campaignDbAutoresolve::displayStrengthDefault);
-
-	/***
-	Basic campaignDb Settlement table
-
-	@tfield float sackMoneyModifier
-	@tfield float exterminateMoneyModifier
-	@tfield float chivSpfModifier
-	@tfield float chivSofModifier
-	@tfield float dreadSofModifier
-	@tfield float pietyCorruptionModifier
-	@tfield float pietyAdminSifModifier
-	@tfield float portToPortMpMin
-	@tfield float heresyUnrestNodifier
-	@tfield float religionUnrestModifier
-	@tfield int siegeGearRequiredForCityLevel
-	@tfield int noTowersOnlyForCityLevel
-	@tfield int minTurnKeepRebelGarrison
-	@tfield bool destroyEmptyForts
-	@tfield bool canBuildForts
-	@tfield float raceGameCostsModifier
-	@tfield float altRelAlliedModifier
-	@tfield float altRelGovModifierBase
-	@tfield float altRelGovCoefficient
-
-	@table campaignDbSettlement
-	*/
-	typeAll.campaignDbSettlement = luaState.new_usertype<campaignDbSettlement>("campaignDbSettlement");
-	typeAll.campaignDbSettlement.set("sackMoneyModifier", &campaignDbSettlement::sackMoneyModifier);
-	typeAll.campaignDbSettlement.set("exterminateMoneyModifier", &campaignDbSettlement::exterminateMoneyModifier);
-	typeAll.campaignDbSettlement.set("chivSpfModifier", &campaignDbSettlement::chivSpfModifier);
-	typeAll.campaignDbSettlement.set("chivSofModifier", &campaignDbSettlement::chivSofModifier);
-	typeAll.campaignDbSettlement.set("dreadSofModifier", &campaignDbSettlement::dreadSofModifier);
-	typeAll.campaignDbSettlement.set("pietyCorruptionModifier", &campaignDbSettlement::pietyCorruptionModifier);
-	typeAll.campaignDbSettlement.set("pietyAdminSifModifier", &campaignDbSettlement::pietyAdminSifModifier);
-	typeAll.campaignDbSettlement.set("portToPortMpMin", &campaignDbSettlement::portToPortMpMin);
-	typeAll.campaignDbSettlement.set("heresyUnrestNodifier", &campaignDbSettlement::heresyUnrestNodifier);
-	typeAll.campaignDbSettlement.set("religionUnrestModifier", &campaignDbSettlement::religionUnrestModifier);
-	typeAll.campaignDbSettlement.set("siegeGearRequiredForCityLevel", &campaignDbSettlement::siegeGearRequiredForCityLevel);
-	typeAll.campaignDbSettlement.set("noTowersOnlyForCityLevel", &campaignDbSettlement::noTowersOnlyForCityLevel);
-	typeAll.campaignDbSettlement.set("minTurnKeepRebelGarrison", &campaignDbSettlement::minTurnKeepRebelGarrison);
-	typeAll.campaignDbSettlement.set("destroyEmptyForts", &campaignDbSettlement::destroyEmptyForts);
-	typeAll.campaignDbSettlement.set("canBuildForts", &campaignDbSettlement::canBuildForts);
-	typeAll.campaignDbSettlement.set("raceGameCostsModifier", &campaignDbSettlement::raceGameCostsModifier);
-	typeAll.campaignDbSettlement.set("altRelAlliedModifier", &campaignDbSettlement::altRelAlliedModifier);
-	typeAll.campaignDbSettlement.set("altRelGovModifierBase", &campaignDbSettlement::altRelGovModifierBase);
-	typeAll.campaignDbSettlement.set("altRelGovCoefficient", &campaignDbSettlement::altRelGovCoefficient);
-
-	/***
-	Basic campaignDb Revolt table
-
-	@tfield float endTurnModifier
-	@tfield float excommunicatedModifier
-	@tfield float newLeaderModifier
-	@tfield float maxEffectiveLoyalty
-	@tfield float rebelRegionModifier
-	@tfield float shadowRegionModifier
-	@tfield float rebelBorderModifier
-	@tfield float shadowBorderModifier
-	@tfield float numUnitsModifier
-	@tfield float captainModifier
-	@tfield float minRevoltChance
-	@tfield float maxRevoltChance
-	@tfield float aiRevoltModifier
-	@tfield float shadowAuthorityModifier
-	@tfield float shadowAuthorityModifierSett
-
-	@table campaignDbRevolt
-	*/
-	typeAll.campaignDbRevolt = luaState.new_usertype<campaignDbRevolt>("campaignDbRevolt");
-	typeAll.campaignDbRevolt.set("endTurnModifier", &campaignDbRevolt::endTurnModifier);
-	typeAll.campaignDbRevolt.set("excommunicatedModifier", &campaignDbRevolt::excommunicatedModifier);
-	typeAll.campaignDbRevolt.set("newLeaderModifier", &campaignDbRevolt::newLeaderModifier);
-	typeAll.campaignDbRevolt.set("maxEffectiveLoyalty", &campaignDbRevolt::maxEffectiveLoyalty);
-	typeAll.campaignDbRevolt.set("rebelRegionModifier", &campaignDbRevolt::rebelRegionModifier);
-	typeAll.campaignDbRevolt.set("shadowRegionModifier", &campaignDbRevolt::shadowRegionModifier);
-	typeAll.campaignDbRevolt.set("rebelBorderModifier", &campaignDbRevolt::rebelBorderModifier);
-	typeAll.campaignDbRevolt.set("shadowBorderModifier", &campaignDbRevolt::shadowBorderModifier);
-	typeAll.campaignDbRevolt.set("numUnitsModifier", &campaignDbRevolt::numUnitsModifier);
-	typeAll.campaignDbRevolt.set("captainModifier", &campaignDbRevolt::captainModifier);
-	typeAll.campaignDbRevolt.set("minRevoltChance", &campaignDbRevolt::minRevoltChance);
-	typeAll.campaignDbRevolt.set("maxRevoltChance", &campaignDbRevolt::maxRevoltChance);
-	typeAll.campaignDbRevolt.set("aiRevoltModifier", &campaignDbRevolt::aiRevoltModifier);
-	typeAll.campaignDbRevolt.set("shadowAuthorityModifier", &campaignDbRevolt::shadowAuthorityModifier);
-	typeAll.campaignDbRevolt.set("shadowAuthorityModifierSett", &campaignDbRevolt::shadowAuthorityModifierSett);
-
-	/***
-	Basic campaignDb Horde table
-
-	@tfield int endTargetFactionBonus
-	@tfield int startTargetFactionBonus
-	@tfield int farmingLevelBonus
-	@tfield int sharedTargetBonus
-	@tfield int disbandingHordeBonus
-	@tfield int hordeStartingRegionBonus
-	@tfield int hordeTargetResourceBonus
-
-	@table campaignDbHorde
-	*/
-	typeAll.campaignDbHorde = luaState.new_usertype<campaignDbHorde>("campaignDbHorde");
-	typeAll.campaignDbHorde.set("endTargetFactionBonus", &campaignDbHorde::endTargetFactionBonus);
-	typeAll.campaignDbHorde.set("startTargetFactionBonus", &campaignDbHorde::startTargetFactionBonus);
-	typeAll.campaignDbHorde.set("farmingLevelBonus", &campaignDbHorde::farmingLevelBonus);
-	typeAll.campaignDbHorde.set("sharedTargetBonus", &campaignDbHorde::sharedTargetBonus);
-	typeAll.campaignDbHorde.set("disbandingHordeBonus", &campaignDbHorde::disbandingHordeBonus);
-	typeAll.campaignDbHorde.set("hordeStartingRegionBonus", &campaignDbHorde::hordeStartingRegionBonus);
-	typeAll.campaignDbHorde.set("hordeTargetResourceBonus", &campaignDbHorde::hordeTargetResourceBonus);
-
-	/***
-	Basic campaignDb Merchants table
-
-	@tfield float baseIncomeModifier
-	@tfield float tradeBonusOffset
-
-	@table campaignDbMerchants
-	*/
-	typeAll.campaignDbMerchants = luaState.new_usertype<campaignDbMerchants>("campaignDbMerchants");
-	typeAll.campaignDbMerchants.set("baseIncomeModifier", &campaignDbMerchants::baseIncomeModifier);
-	typeAll.campaignDbMerchants.set("tradeBonusOffset", &campaignDbMerchants::tradeBonusOffset);
-
-	/***
-	Basic campaignDb Agents table
-
-	@tfield float denounceInquisitorBaseChance
-	@tfield float DenouncePriestBaseChance
-	@tfield float denounceAttackModifier
-	@tfield float denounceDefenceModifier
-	@tfield int denounceChanceMax
-	@tfield float assassinateBaseChance
-	@tfield float assassinateAttackModifier
-	@tfield float assassinateDefenceModifier
-	@tfield float assassinatePublicModifier
-	@tfield float assassinatePersonalModifier
-	@tfield float assassinateCounterSpyModifier
-	@tfield float assassinateAgentModifier
-	@tfield float assassinateOwnRegionModifier
-	@tfield float assassinateAssassinateAttrModifier
-	@tfield int assassinateChanceMin
-	@tfield int assassinateChanceMax
-	@tfield float denounceHereticAttemptModifier
-	@tfield float denounceCharacterAttemptModifier
-	@tfield float acquisitionBaseChance
-	@tfield float acquisitionLevelModifier
-	@tfield float acquisitionAttackTradeRightsModifier
-	@tfield float acquisitionDefenceTradeRightsModifier
-	@tfield int acquisitionChanceMin
-	@tfield int acquisitionChanceMax
-	@tfield float inquisitorCrtHeresyDivisor
-	@tfield float inquisitorCrtPfpModifier
-	@tfield float inquisitorCrtPfpModifierMin
-	@tfield float inquisitorCrtPfpModifierMax
-	@tfield float inquisitorCrtChanceMax
-	@tfield float spyBaseChance
-	@tfield float spyLevelModifier
-	@tfield float notSpyLevelModifier
-	@tfield float spyPublicModifier
-	@tfield float spyCounterSpyModifier
-	@tfield float spyDistanceModifier
-	@tfield float spySecretAgentTargetModifier
-	@tfield float spySedentaryTurnsModifier
-	@tfield float spyAllianceModifier
-	@tfield float spyTargetEngagedModifier
-	@tfield float spyInSettlementModifier
-	@tfield float spyWatchtowerModifier
-	@tfield float spyInOwnRegionModifier
-	@tfield int spyChanceMin
-	@tfield int spyChanceMax
-
-	@table campaignDbAgents
-	*/
-	typeAll.campaignDbAgents = luaState.new_usertype<campaignDbAgents>("campaignDbAgents");
-	typeAll.campaignDbAgents.set("denounceInquisitorBaseChance", &campaignDbAgents::denounceInquisitorBaseChance);
-	typeAll.campaignDbAgents.set("DenouncePriestBaseChance", &campaignDbAgents::DenouncePriestBaseChance);
-	typeAll.campaignDbAgents.set("denounceAttackModifier", &campaignDbAgents::denounceAttackModifier);
-	typeAll.campaignDbAgents.set("denounceDefenceModifier", &campaignDbAgents::denounceDefenceModifier);
-	typeAll.campaignDbAgents.set("denounceChanceMax", &campaignDbAgents::denounceChanceMax);
-	typeAll.campaignDbAgents.set("assassinateBaseChance", &campaignDbAgents::assassinateBaseChance);
-	typeAll.campaignDbAgents.set("assassinateAttackModifier", &campaignDbAgents::assassinateAttackModifier);
-	typeAll.campaignDbAgents.set("assassinateDefenceModifier", &campaignDbAgents::assassinateDefenceModifier);
-	typeAll.campaignDbAgents.set("assassinatePublicModifier", &campaignDbAgents::assassinatePublicModifier);
-	typeAll.campaignDbAgents.set("assassinatePersonalModifier", &campaignDbAgents::assassinatePersonalModifier);
-	typeAll.campaignDbAgents.set("assassinateCounterSpyModifier", &campaignDbAgents::assassinateCounterSpyModifier);
-	typeAll.campaignDbAgents.set("assassinateAgentModifier", &campaignDbAgents::assassinateAgentModifier);
-	typeAll.campaignDbAgents.set("assassinateOwnRegionModifier", &campaignDbAgents::assassinateOwnRegionModifier);
-	typeAll.campaignDbAgents.set("assassinateAssassinateAttrModifier", &campaignDbAgents::assassinateAssassinateAttrModifier);
-	typeAll.campaignDbAgents.set("assassinateChanceMin", &campaignDbAgents::assassinateChanceMin);
-	typeAll.campaignDbAgents.set("assassinateChanceMax", &campaignDbAgents::assassinateChanceMax);
-	typeAll.campaignDbAgents.set("denounceHereticAttemptModifier", &campaignDbAgents::denounceHereticAttemptModifier);
-	typeAll.campaignDbAgents.set("denounceCharacterAttemptModifier", &campaignDbAgents::denounceCharacterAttemptModifier);
-	typeAll.campaignDbAgents.set("acquisitionBaseChance", &campaignDbAgents::acquisitionBaseChance);
-	typeAll.campaignDbAgents.set("acquisitionLevelModifier", &campaignDbAgents::acquisitionLevelModifier);
-	typeAll.campaignDbAgents.set("acquisitionAttackTradeRightsModifier", &campaignDbAgents::acquisitionAttackTradeRightsModifier);
-	typeAll.campaignDbAgents.set("acquisitionDefenceTradeRightsModifier", &campaignDbAgents::acquisitionDefenceTradeRightsModifier);
-	typeAll.campaignDbAgents.set("acquisitionChanceMin", &campaignDbAgents::acquisitionChanceMin);
-	typeAll.campaignDbAgents.set("acquisitionChanceMax", &campaignDbAgents::acquisitionChanceMax);
-	typeAll.campaignDbAgents.set("inquisitorCrtHeresyDivisor", &campaignDbAgents::inquisitorCrtHeresyDivisor);
-	typeAll.campaignDbAgents.set("inquisitorCrtPfpModifier", &campaignDbAgents::inquisitorCrtPfpModifier);
-	typeAll.campaignDbAgents.set("inquisitorCrtPfpModifierMin", &campaignDbAgents::inquisitorCrtPfpModifierMin);
-	typeAll.campaignDbAgents.set("inquisitorCrtPfpModifierMax", &campaignDbAgents::inquisitorCrtPfpModifierMax);
-	typeAll.campaignDbAgents.set("inquisitorCrtChanceMax", &campaignDbAgents::inquisitorCrtChanceMax);
-	typeAll.campaignDbAgents.set("spyBaseChance", &campaignDbAgents::spyBaseChance);
-	typeAll.campaignDbAgents.set("spyLevelModifier", &campaignDbAgents::spyLevelModifier);
-	typeAll.campaignDbAgents.set("notSpyLevelModifier", &campaignDbAgents::notSpyLevelModifier);
-	typeAll.campaignDbAgents.set("spyPublicModifier", &campaignDbAgents::spyPublicModifier);
-	typeAll.campaignDbAgents.set("spyCounterSpyModifier", &campaignDbAgents::spyCounterSpyModifier);
-	typeAll.campaignDbAgents.set("spyDistanceModifier", &campaignDbAgents::spyDistanceModifier);
-	typeAll.campaignDbAgents.set("spySecretAgentTargetModifier", &campaignDbAgents::spySecretAgentTargetModifier);
-	typeAll.campaignDbAgents.set("spySedentaryTurnsModifier", &campaignDbAgents::spySedentaryTurnsModifier);
-	typeAll.campaignDbAgents.set("spyAllianceModifier", &campaignDbAgents::spyAllianceModifier);
-	typeAll.campaignDbAgents.set("spyTargetEngagedModifier", &campaignDbAgents::spyTargetEngagedModifier);
-	typeAll.campaignDbAgents.set("spyInSettlementModifier", &campaignDbAgents::spyInSettlementModifier);
-	typeAll.campaignDbAgents.set("spyWatchtowerModifier", &campaignDbAgents::spyWatchtowerModifier);
-	typeAll.campaignDbAgents.set("spyInOwnRegionModifier", &campaignDbAgents::spyInOwnRegionModifier);
-	typeAll.campaignDbAgents.set("spyChanceMin", &campaignDbAgents::spyChanceMin);
-	typeAll.campaignDbAgents.set("spyChanceMax", &campaignDbAgents::spyChanceMax);
-
-	/***
-	Basic campaignDb Crusades table
-
-	@tfield int requiredJihadPiety
-	@tfield float maxDisbandProgress
-	@tfield float nearTargetNoDisbandDistance
-	@tfield int disbandProgressWindow
-	@tfield int crusadeCalledStartTurn
-	@tfield int jihadCalledStartTurn
-	@tfield float movementPointsModifier
-
-	@table campaignDbCrusades
-	*/
-	typeAll.campaignDbCrusades = luaState.new_usertype<campaignDbCrusades>("campaignDbCrusades");
-	typeAll.campaignDbCrusades.set("requiredJihadPiety", &campaignDbCrusades::requiredJihadPiety);
-	typeAll.campaignDbCrusades.set("maxDisbandProgress", &campaignDbCrusades::maxDisbandProgress);
-	typeAll.campaignDbCrusades.set("nearTargetNoDisbandDistance", &campaignDbCrusades::nearTargetNoDisbandDistance);
-	typeAll.campaignDbCrusades.set("disbandProgressWindow", &campaignDbCrusades::disbandProgressWindow);
-	typeAll.campaignDbCrusades.set("crusadeCalledStartTurn", &campaignDbCrusades::crusadeCalledStartTurn);
-	typeAll.campaignDbCrusades.set("jihadCalledStartTurn", &campaignDbCrusades::jihadCalledStartTurn);
-	typeAll.campaignDbCrusades.set("movementPointsModifier", &campaignDbCrusades::movementPointsModifier);
-
-	/***
-	Basic campaignDb Ai table
-
-	@tfield float priestReligionMin
-	@tfield float priestReligionMax
-	@tfield float priestHeresyMin
-	@tfield float priestHeresyMax
-	@tfield float priestReligionExport
-	@tfield float priestMaxProdTurns
-	@tfield int merchantMinSurvivalAcquire
-	@tfield float attStrModifier
-	@tfield float siegeAttStrModifier
-	@tfield float crusadeAttStrModifier
-	@tfield float sallyAttStrModifier
-	@tfield float ambushAttStrModifier
-	@tfield float strLimitWeak
-	@tfield float strLimitStrong
-
-	@table campaignDbAi
-	*/
-	typeAll.campaignDbAi = luaState.new_usertype<campaignDbAi>("campaignDbAi");
-	typeAll.campaignDbAi.set("priestReligionMin", &campaignDbAi::priestReligionMin);
-	typeAll.campaignDbAi.set("priestReligionMax", &campaignDbAi::priestReligionMax);
-	typeAll.campaignDbAi.set("priestHeresyMin", &campaignDbAi::priestHeresyMin);
-	typeAll.campaignDbAi.set("priestHeresyMax", &campaignDbAi::priestHeresyMax);
-	typeAll.campaignDbAi.set("priestReligionExport", &campaignDbAi::priestReligionExport);
-	typeAll.campaignDbAi.set("priestMaxProdTurns", &campaignDbAi::priestMaxProdTurns);
-	typeAll.campaignDbAi.set("merchantMinSurvivalAcquire", &campaignDbAi::merchantMinSurvivalAcquire);
-	typeAll.campaignDbAi.set("attStrModifier", &campaignDbAi::attStrModifier);
-	typeAll.campaignDbAi.set("siegeAttStrModifier", &campaignDbAi::siegeAttStrModifier);
-	typeAll.campaignDbAi.set("crusadeAttStrModifier", &campaignDbAi::crusadeAttStrModifier);
-	typeAll.campaignDbAi.set("sallyAttStrModifier", &campaignDbAi::sallyAttStrModifier);
-	typeAll.campaignDbAi.set("ambushAttStrModifier", &campaignDbAi::ambushAttStrModifier);
-	typeAll.campaignDbAi.set("strLimitWeak", &campaignDbAi::strLimitWeak);
-	typeAll.campaignDbAi.set("strLimitStrong", &campaignDbAi::strLimitStrong);
-
-	/***
-	Basic campaignDb Misc table
-
-	@tfield int fortDevastationDistance
-	@tfield int armyDevastationDistance
-	@tfield int fortDevastationModifier
-	@tfield int armyDevastationModifier
-	@tfield bool allowEnemyForts
-	@tfield int siegeMovementPointsModifier
-	@tfield int cavalryMovementPointsModifier
-
-	@table campaignDbMisc
-	*/
-	typeAll.campaignDbMisc = luaState.new_usertype<campaignDbMisc>("campaignDbMisc");
-	typeAll.campaignDbMisc.set("fortDevastationDistance", &campaignDbMisc::fortDevastationDistance);
-	typeAll.campaignDbMisc.set("armyDevastationDistance", &campaignDbMisc::armyDevastationDistance);
-	typeAll.campaignDbMisc.set("fortDevastationModifier", &campaignDbMisc::fortDevastationModifier);
-	typeAll.campaignDbMisc.set("armyDevastationModifier", &campaignDbMisc::armyDevastationModifier);
-	typeAll.campaignDbMisc.set("allowEnemyForts", &campaignDbMisc::allowEnemyForts);
-	typeAll.campaignDbMisc.set("siegeMovementPointsModifier", &campaignDbMisc::siegeMovementPointsModifier);
-	typeAll.campaignDbMisc.set("cavalryMovementPointsModifier", &campaignDbMisc::cavalryMovementPointsModifier);
-
-	/***
-	Basic campaignDb table
-
-	@tfield campaignDbRecruitment recruitment
-	@tfield campaignDbReligion religion
-	@tfield campaignDbBribery bribery
-	@tfield campaignDbFamilyTree familyTree
-	@tfield campaignDbDiplomacy diplomacy
-	@tfield campaignDbDisplay display
-	@tfield campaignDbRansom ransom
-	@tfield campaignDbAutoresolve autoResolve
-	@tfield campaignDbSettlement settlement
-	@tfield campaignDbRevolt revolt
-	@tfield campaignDbHorde horde
-	@tfield campaignDbMerchants merchants
-	@tfield campaignDbAgents agents
-	@tfield campaignDbCrusades crusades
-	@tfield campaignDbAi ai
-	@tfield campaignDbMisc misc
-
-	@table campaignDb
-	*/
-	typeAll.campaignDb = luaState.new_usertype<campaignDb>("campaignDb");
-	typeAll.campaignDb.set("recruitment", &campaignDb::campaignDbRecruitment);
-	typeAll.campaignDb.set("religion", &campaignDb::campaignDbReligion);
-	typeAll.campaignDb.set("bribery", &campaignDb::campaignDbBribery);
-	typeAll.campaignDb.set("familyTree", &campaignDb::campaignDbFamilyTree);
-	typeAll.campaignDb.set("diplomacy", &campaignDb::campaignDbDiplomacy);
-	typeAll.campaignDb.set("display", &campaignDb::campaignDbDisplay);
-	typeAll.campaignDb.set("ransom", &campaignDb::campaignDbRansom);
-	typeAll.campaignDb.set("autoResolve", &campaignDb::campaignDbAutoresolve);
-	typeAll.campaignDb.set("settlement", &campaignDb::campaignDbSettlement);
-	typeAll.campaignDb.set("revolt", &campaignDb::campaignDbRevolt);
-	typeAll.campaignDb.set("horde", &campaignDb::campaignDbHorde);
-	typeAll.campaignDb.set("merchants", &campaignDb::campaignDbMerchants);
-	typeAll.campaignDb.set("agents", &campaignDb::campaignDbAgents);
-	typeAll.campaignDb.set("crusades", &campaignDb::campaignDbCrusades);
-	typeAll.campaignDb.set("ai", &campaignDb::campaignDbAi);
-	typeAll.campaignDb.set("misc", &campaignDb::campaignDbMisc);
-
-	/***
-	Basic campaignDb Extra table (these options are just in another place in memory)
-
-	@tfield bool clearPoolsWithCaps
-	@tfield bool addInitialWithCaps
-	@tfield bool forceClampToMax
-	@tfield float witchConversionRateModifier
-	@tfield bool inquisitorTargetCrusades
-	@tfield float foundingConversionDefaultRate
-	@tfield float ownerConversionDefaultRate
-	@tfield float neighbourNormaliseWeight
-	@tfield float governorConversionRateOffset
-	@tfield float governorConversionRateModifier
-	@tfield float spyConversionRateOffset
-	@tfield float spyConversionRateModifier
-	@tfield float spyConversionRateForeignModifier
-	@tfield bool bribeToFamilyTree
-	@tfield bool enemiesRejectGifts
-	@tfield bool useBalanceOwed
-	@tfield bool recruitmentSortSimple
-	@tfield bool keepOriginalHereticPortraits
-	@tfield bool altSettOrderColors
-	@tfield bool separateGamesRaces
-	@tfield int chivalryDisplayThreshold
-	@tfield bool captiveRansomForSlave
-	@tfield bool switchableDefenceExposed
-	@tfield float gateDefenceStrengthOilLevelModifier
-	@tfield int settDefenceStrengthNumDefaultAttacks
-	@tfield int siegeGearRequiredForCastleLevel
-	@tfield int noTowersOnlyForCastleLevel
-	@tfield int fortFortificationLevel
-	@tfield bool alternativeReligiousUnrest
-	@tfield bool revoltAdditionalArmies
-	@tfield bool revoltCrusadingArmies
-	@tfield bool agentsCanHide
-	@tfield int denounceChanceMin
-	@tfield float inquisitorCrtChanceMin
-	@tfield bool inquisitorTargetLeaders
-	@tfield bool inquisitorTargetHeirs
-	@tfield bool spyRescaleChance
-	@tfield bool allowResourceForts
-	@tfield bool enableHotseatMessages
-	@tfield bool enableBananaRepublicCheat
-	@tfield bool enableUnitAccentOverrides
-
-	@table campaignDbExtra
-	*/
-
-	typeAll.campaignDbExtra = luaState.new_usertype<campaignDbExtra>("campaignDbExtra");
-	typeAll.campaignDbExtra.set("clearPoolsWithCaps", &campaignDbExtra::clearPoolsWithCaps);
-	typeAll.campaignDbExtra.set("addInitialWithCaps", &campaignDbExtra::addInitialWithCaps);
-	typeAll.campaignDbExtra.set("forceClampToMax", &campaignDbExtra::forceClampToMax);
-	typeAll.campaignDbExtra.set("witchConversionRateModifier", &campaignDbExtra::witchConversionRateModifier);
-	typeAll.campaignDbExtra.set("inquisitorTargetCrusades", &campaignDbExtra::inquisitorTargetCrusades);
-	typeAll.campaignDbExtra.set("foundingConversionDefaultRate", &campaignDbExtra::foundingConversionDefaultRate);
-	typeAll.campaignDbExtra.set("ownerConversionDefaultRate", &campaignDbExtra::ownerConversionDefaultRate);
-	typeAll.campaignDbExtra.set("neighbourNormaliseWeight", &campaignDbExtra::neighbourNormaliseWeight);
-	typeAll.campaignDbExtra.set("governorConversionRateOffset", &campaignDbExtra::governorConversionRateOffset);
-	typeAll.campaignDbExtra.set("governorConversionRateModifier", &campaignDbExtra::governorConversionRateModifier);
-	typeAll.campaignDbExtra.set("spyConversionRateOffset", &campaignDbExtra::spyConversionRateOffset);
-	typeAll.campaignDbExtra.set("spyConversionRateModifier", &campaignDbExtra::spyConversionRateModifier);
-	typeAll.campaignDbExtra.set("spyConversionRateForeignModifier", &campaignDbExtra::spyConversionRateForeignModifier);
-	typeAll.campaignDbExtra.set("bribeToFamilyTree", &campaignDbExtra::bribeToFamilyTree);
-	typeAll.campaignDbExtra.set("enemiesRejectGifts", &campaignDbExtra::enemiesRejectGifts);
-	typeAll.campaignDbExtra.set("useBalanceOwed", &campaignDbExtra::useBalanceOwed);
-	typeAll.campaignDbExtra.set("recruitmentSortSimple", &campaignDbExtra::recruitmentSortSimple);
-	typeAll.campaignDbExtra.set("keepOriginalHereticPortraits", &campaignDbExtra::keepOriginalHereticPortraits);
-	typeAll.campaignDbExtra.set("altSettOrderColors", &campaignDbExtra::altSettOrderColors);
-	typeAll.campaignDbExtra.set("separateGamesRaces", &campaignDbExtra::separateGamesRaces);
-	typeAll.campaignDbExtra.set("chivalryDisplayThreshold", &campaignDbExtra::chivalryDisplayThreshold);
-	typeAll.campaignDbExtra.set("captiveRansomForSlave", &campaignDbExtra::captiveRansomForSlave);
-	typeAll.campaignDbExtra.set("switchableDefenceExposed", &campaignDbExtra::switchableDefenceExposed);
-	typeAll.campaignDbExtra.set("gateDefenceStrengthOilLevelModifier", &campaignDbExtra::gateDefenceStrengthOilLevelModifier);
-	typeAll.campaignDbExtra.set("settDefenceStrengthNumDefaultAttacks", &campaignDbExtra::settDefenceStrengthNumDefaultAttacks);
-	typeAll.campaignDbExtra.set("siegeGearRequiredForCastleLevel", &campaignDbExtra::siegeGearRequiredForCastleLevel);
-	typeAll.campaignDbExtra.set("noTowersOnlyForCastleLevel", &campaignDbExtra::noTowersOnlyForCastleLevel);
-	typeAll.campaignDbExtra.set("fortFortificationLevel", &campaignDbExtra::fortFortificationLevel);
-	typeAll.campaignDbExtra.set("alternativeReligiousUnrest", &campaignDbExtra::alternativeReligiousUnrest);
-	typeAll.campaignDbExtra.set("revoltAdditionalArmies", &campaignDbExtra::revoltAdditionalArmies);
-	typeAll.campaignDbExtra.set("revoltCrusadingArmies", &campaignDbExtra::revoltCrusadingArmies);
-	typeAll.campaignDbExtra.set("agentsCanHide", &campaignDbExtra::agentsCanHide);
-	typeAll.campaignDbExtra.set("denounceChanceMin", &campaignDbExtra::denounceChanceMin);
-	typeAll.campaignDbExtra.set("inquisitorCrtChanceMin", &campaignDbExtra::inquisitorCrtChanceMin);
-	typeAll.campaignDbExtra.set("inquisitorTargetLeaders", &campaignDbExtra::inquisitorTargetLeaders);
-	typeAll.campaignDbExtra.set("inquisitorTargetHeirs", &campaignDbExtra::inquisitorTargetHeirs);
-	typeAll.campaignDbExtra.set("spyRescaleChance", &campaignDbExtra::spyRescaleChance);
-	typeAll.campaignDbExtra.set("allowResourceForts", &campaignDbExtra::allowResourceForts);
-	typeAll.campaignDbExtra.set("enableHotseatMessages", &campaignDbExtra::enableHotseatMessages);
-	typeAll.campaignDbExtra.set("enableBananaRepublicCheat", &campaignDbExtra::enableBananaRepublicCheat);
-	typeAll.campaignDbExtra.set("enableUnitAccentOverrides", &campaignDbExtra::enableUnitAccentOverrides);
-}

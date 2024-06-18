@@ -24,4 +24,5 @@ private:
 		BattleMapOverrider battleMapOverrider;
 	}subs;
 };
+void toggleDeveloperMode();
 

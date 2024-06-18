@@ -1,6 +1,5 @@
 ﻿#include "characterRecord.h"
 
-#include "fastFuncts.h"
 #include "fastFunctsHelpers.h"
 #include "functionsOffsets.h"
 #include "smallFuncs.h"
@@ -141,10 +140,28 @@ namespace characterRecordHelpers
 	/*----------------------------------------------------------------------------------------------------------------*\
 										       Ancillaries
 	\*----------------------------------------------------------------------------------------------------------------*/
-#pragma region Ancillary helpers	
+#pragma region Ancillary helpers
+	
+	ancillary* findAncillary(const char* ancName)
+	{
+		if (ancName == nullptr)
+			return nullptr;
+		DWORD adr = codes::offsets.findAncillary;
+		ancillary* anc = nullptr;
+		_asm
+		{
+			push ancName
+			mov eax, adr
+			call eax
+			add esp, 4
+			mov anc, eax
+		}
+		return anc;
+	}
+	
 	int addAncillaryName(characterRecord* character, const std::string& ancName)
 	{
-		ancillary* anc = fastFuncts::findAncillary(ancName.c_str());
+		ancillary* anc = findAncillary(ancName.c_str());
 		if (anc == nullptr)return 0;
 		return addAncillary(character, anc);
 	}

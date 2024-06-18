@@ -5,9 +5,24 @@
 //@author youneuoy
 //@license GPL-3.0
 #include "luaP.h"
-#include "eopMasterTypes.h"
 #include "MapTextDrawer.h"
-
+#include <d3dx9mesh.h>
+struct Text3DDrawable
+{
+	LPD3DXMESH textMesh;
+	DWORD color;
+	float xCoord;
+	float yCoord;
+	float zCoord;
+	float xSize = 1;
+	float ySize = 1;
+	float zSize = 1;
+	float xRoll = 1;
+	float yRoll = 90;
+	float zRoll = 1;
+	bool isDrawOnce;
+	bool isDeleteNeeded;
+};
 void luaP::initEop3dObjects()
 {
 	struct
@@ -42,7 +57,7 @@ void luaP::initEop3dObjects()
 	@usage
 	newFont = M2TWEOP3dObjects.MakeTextFont("Times New Roman");
 	*/
-	tables.M2TWEOP3dObjectsTable.set_function("MakeTextFont", &MapTextDrawer::MakeTextFontLua);
+	tables.M2TWEOP3dObjectsTable.set_function("MakeTextFont", &mapTextDrawer::MakeTextFontLua);
 	/***
 	Delete 3d text font. Do it where not need anymore
 	@function M2TWEOP3dObjects.DeleteTextFont
@@ -53,7 +68,7 @@ void luaP::initEop3dObjects()
 		newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
 	M2TWEOP3dObjects.DeleteTextFont(newFont);
 	*/
-	tables.M2TWEOP3dObjectsTable.set_function("DeleteTextFont", &MapTextDrawer::DeleteTextFont);
+	tables.M2TWEOP3dObjectsTable.set_function("DeleteTextFont", &mapTextDrawer::deleteTextFont);
 	/***
 	Create line of 3d text.
 	@function M2TWEOP3dObjects.Make3dText
@@ -66,7 +81,7 @@ void luaP::initEop3dObjects()
 	newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
 	M2TWEOP3dObjects.DeleteTextFont(newFont);
 	*/
-	tables.M2TWEOP3dObjectsTable.set_function("Make3dText", &MapTextDrawer::MakeText);
+	tables.M2TWEOP3dObjectsTable.set_function("Make3dText", &mapTextDrawer::makeText);
 
 	///3dText
 	//@section Eop3dText
@@ -115,7 +130,7 @@ void luaP::initEop3dObjects()
 	newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
 	newText:Scale(0.3);
 	*/
-	tables.text3dDrawable.set_function("Scale", &MapTextDrawer::ScaleText);
+	tables.text3dDrawable.set_function("Scale", &mapTextDrawer::ScaleText);
 
 	/***
 	Set 3d text color.
@@ -129,7 +144,7 @@ void luaP::initEop3dObjects()
 	newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
 	newText:ChangeColor(255,0,255,177);
 	*/
-	tables.text3dDrawable.set_function("ChangeColor", &MapTextDrawer::ChangeTextColor);
+	tables.text3dDrawable.set_function("ChangeColor", &mapTextDrawer::ChangeTextColor);
 	/***
 	Set 3d text coords.
 	@function Eop3dText:SetCoords
@@ -141,7 +156,7 @@ void luaP::initEop3dObjects()
 	newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
 	newText:SetCoords(10,20,0.2);
 	*/
-	tables.text3dDrawable.set_function("SetCoords", &MapTextDrawer::SetTextDrawingCoords);
+	tables.text3dDrawable.set_function("SetCoords", &mapTextDrawer::SetTextDrawingCoords);
 	/***
 	Start draw text. Text go on display until stop function called
 	@function Eop3dText:StartDrawing
@@ -151,7 +166,7 @@ void luaP::initEop3dObjects()
 	newText:SetCoords(10,20,0.2);
 	newText:StartDrawing();
 	*/
-	tables.text3dDrawable.set_function("StartDrawing", &MapTextDrawer::StartDrawingText);
+	tables.text3dDrawable.set_function("StartDrawing", &mapTextDrawer::StartDrawingText);
 	/***
 	Stop draw text.
 	@function Eop3dText:StopDrawing
@@ -163,7 +178,7 @@ void luaP::initEop3dObjects()
 	--some time we draw
 	newText:StopDrawing();
 	*/
-	tables.text3dDrawable.set_function("StopDrawing", &MapTextDrawer::StopDrawingText);
+	tables.text3dDrawable.set_function("StopDrawing", &mapTextDrawer::StopDrawingText);
 	/***
 	Draw text once(at one frame only). Can be called in draw loop. Not need call stop after it.
 	@function Eop3dText:DrawOnce
@@ -173,7 +188,7 @@ void luaP::initEop3dObjects()
 	newText:SetCoords(10,20,0.2);
 	newText:DrawOnce();
 	*/
-	tables.text3dDrawable.set_function("DrawOnce", &MapTextDrawer::DrawingTextOnce);
+	tables.text3dDrawable.set_function("DrawOnce", &mapTextDrawer::drawingTextOnce);
 	/***
 	Delete text. Not use after it!
 	@function Eop3dText:Delete
@@ -184,5 +199,5 @@ void luaP::initEop3dObjects()
 	newText:DrawOnce();
 	newText:Delete();
 	*/
-	tables.text3dDrawable.set_function("Delete", &MapTextDrawer::Delete3dText);
+	tables.text3dDrawable.set_function("Delete", &mapTextDrawer::Delete3dText);
 }

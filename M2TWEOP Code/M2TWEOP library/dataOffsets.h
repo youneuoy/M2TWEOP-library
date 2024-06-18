@@ -11,19 +11,22 @@ public:
 
 		DWORD stratMapAllOffsetStart = NULL;
 		DWORD stringTable = NULL;
+		DWORD stratCursorCoords = NULL;
+		DWORD customTiles = NULL;
 
 
 		DWORD unitTypesStart = NULL;
-		//if on stratmap then not 0
-		DWORD someStratmapPointer = NULL;
+		//if on strat map then not 0
+		DWORD someStratMapPointer = NULL;
 
 		DWORD skeletonDatabase = NULL;
 		DWORD tgaDataBase = NULL;
 		DWORD stratModelArray = NULL;
 		DWORD getMovePath = NULL;
+		DWORD modelsDb = NULL;
 
-		gameDataAllStruct* gameDataAllOffset = NULL;
-		consoleCommands* consoleCommands = NULL;
+		gameDataAllStruct* gameDataAllOffset = nullptr;
+		consoleCommands* consoleCommands = nullptr;
 
 		DWORD guildDataStart = NULL;
 

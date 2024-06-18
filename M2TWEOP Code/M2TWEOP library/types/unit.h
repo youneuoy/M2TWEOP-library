@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "battleHandlerHelpers.h"
+#include "fastFunctsHelpers.h"
 #include "realGameTypes.h"
 #include "lua/sol.hpp"
 
@@ -9,6 +10,75 @@ enum unitBattleProperties :int
 		fireAtWill = 2,
 		skirmish = 4,
 	};
+
+enum class unitCategory
+{
+	infantry,
+	cavalry,
+	siege,
+	nonCombatant,
+	ship,
+	animalHandler,
+};
+
+inline bool operator ==(int a, unitCategory b)
+{
+	return static_cast<unitCategory>(a) == b;
+}
+
+inline bool operator !=(int a, unitCategory b)
+{
+	return static_cast<unitCategory>(a) != b;
+}
+/* 2190 */
+struct unitVerificationElement
+{
+	unitVerificationElement *nextElementIfEmpty;
+	struct unit *unit;
+	int32_t field_8;
+	int32_t index;
+	int32_t field_10;
+};
+
+/* 2191 */
+struct unitVerificationSection
+{
+	struct unitVerificationSection *nextSection;
+	struct unitVerificationElement unitVerificationElements[128];
+};
+
+/* 2192 */
+struct unitVerificationTable
+{
+	struct unitVerificationSection *firstSection;
+	struct unitVerificationSection *lastSection;
+	struct unitVerificationElement *freeSpot;
+	struct unitVerificationElement *lastElement;
+	int32_t count;
+	int8_t hasElements;
+	int8_t pad_15[3];
+	int32_t field_18;
+	char *name;
+};
+
+enum class unitClass
+{
+	heavy,
+	light,
+	skirmish,
+	spearmen,
+	missile
+};
+
+inline bool operator ==(int a, unitClass b)
+{
+	return static_cast<unitClass>(a) == b;
+}
+
+inline bool operator !=(int a, unitClass b)
+{
+	return static_cast<unitClass>(a) != b;
+}
 	
 /* 2193 */
 struct unitVerification
@@ -17,6 +87,130 @@ struct unitVerification
 	unitVerificationElement *tablePos;
 	int unitVerField_8;
 };
+
+struct animSetModelDB
+{
+public:
+	char pad_0000[4]; //0x0000
+	char *name; //0x0004
+	char pad_0008[24]; //0x0008
+}; //Size: 0x0020
+
+struct modelDbAnims
+{
+public:
+	char pad_0000[4]; //0x0000
+	char N000028CE[4]; //0x0004
+	char N000028CF[4]; //0x0008
+	char pad_000C[20]; //0x000C
+	char *N00022FB0; //0x0020
+	char pad_0024[52]; //0x0024
+	struct animSetModelDB *primaryAnim; //0x0058
+	void *N0000092A; //0x005C
+	void *N0000092B; //0x0060
+	char pad_0064[4]; //0x0064
+	struct animSetModelDB *secondaryAnim; //0x0068
+	char pad_006C[12]; //0x006C
+}; //Size: 0x0078
+
+
+struct modelDbEntry
+{
+public:
+	char pad_0000[4]; //0x0000
+	char N00002889[8]; //0x0004
+	char pad_000C[8]; //0x000C
+	int32_t nameLength; //0x0014
+	char pad_0018[4]; //0x0018
+	float scale; //0x001C
+	char pad_0020[4]; //0x0020
+	struct ModelDbMesh* mesh; //0x0024
+	char pad_0028[12]; //0x0028
+	struct ModelDbEntryTextures* textures; //0x0034
+	char pad_0038[12]; //0x0038
+	struct ModelDbEntryTextures* attTextures; //0x0044
+	char pad_0048[12]; //0x0048
+	struct modelDbAnims* animations; //0x0054
+	char pad_0058[8]; //0x0058
+	int32_t torchAttachBone; //0x0060
+	float N00000857; //0x0064
+	float N00000858; //0x0068
+	float N00000859; //0x006C
+	float N0000085A; //0x0070
+	float N0000085B; //0x0074
+	float N0000085C; //0x0078
+	char pad_007C[4]; //0x007C
+}; //Size: 0x0080
+
+struct descrMountEntry
+{
+public:
+	char *name; //0x0000
+	char pad_0004[4]; //0x0004
+	int32_t mountClass; //0x0008
+	char *modelName; //0x000C
+	char pad_0010[12]; //0x0010
+	float radius; //0x001C
+	float xRadius; //0x0020
+	float yRadius; //0x0024
+	float yOffset; //0x0028
+	float height; //0x002C
+	float mass; //0x0030
+	float bannerHeight; //0x0034
+	float bouyancyOffset; //0x0038
+	float elephantRootNodeHeight; //0x003C
+	float elephantAttackDelay; //0x0040
+	float elephantDeadRadius; //0x0044
+	float elephantTuskZ; //0x0048
+	float elephantTuskRadius; //0x004C
+	int32_t elephantNumberOfRiders; //0x0050
+	float elephantRiderOffset1X; //0x0054
+	float elephantRiderOffset1Y; //0x0058
+	float elephantRiderOffset1Z; //0x005C
+	char pad_0060[168]; //0x0060
+	float rootNodeHeight; //0x0108
+	float riderOffSetX; //0x010C
+	float riderOffSetY; //0x0110
+	float riderOffsetZ; //0x0114
+	char pad_0118[8]; //0x0118
+	char *waterTrailEffect; //0x0120
+	char pad_0124[20]; //0x0124
+}; //Size: 0x0138
+
+struct groupLabel
+{
+public:
+	char *name; //0x0000
+	int32_t nameHash; //0x0004
+	struct unitGroup *group; //0x0008
+}; //Size: 0x000C
+
+struct groupLabels
+{
+public:
+	int32_t count; //0x0000
+	struct groupLabel *labels; //0x0004
+}; //Size: 0x0008
+
+struct floatPosData
+{
+public:
+	float boundUpRightX; //0x0000
+	float boundUpRightY; //0x0004
+	float boundDownRightX; //0x0008
+	float boundDownRightY; //0x000C
+	float boundUpLeftX; //0x0010
+	float boundUpLeftY; //0x0014
+	float boundDownLeftX; //0x0018
+	float boundDownLeftY; //0x001C
+	float width; //0x0020
+	float height; //0x0024
+	float centreX; //0x0028
+	float centreY; //0x002C
+	float minRadians; //0x0030
+	float maxRadians; //0x0034
+}; //Size: 0x0044
+
 struct arrayInUnitGroup
 {
 	int order;
@@ -224,7 +418,7 @@ public:
 	float float_C; //0x000C
 	float float_10; //0x0010
 	float float_14; //0x0014
-	struct ModelDbEntry *bmdbEntry; //0x0018
+	struct modelDbEntry *bmdbEntry; //0x0018
 	char (*spritePaths)[4]; //0x001C
 	int32_t field_20; //0x0020
 	int32_t field_24; //0x0024
@@ -388,64 +582,63 @@ struct soldierData
 	unsigned __int32 scale : 3;
 	unsigned __int32 armour : 3;
 	unsigned __int32 weapon : 3;
-};
-
-struct statPri
-{
-	unsigned __int32 isValid : 1;
-	unsigned __int32 isMissile : 1;
-	unsigned __int32 isSpear : 1;
-	unsigned __int32 isLightSpear : 1;
-	unsigned __int32 isPrec : 1;
-	unsigned __int32 isAP : 1;
-	unsigned __int32 isBP : 1;
-	unsigned __int32 isArea : 1;
-	unsigned __int32 isFire : 1;
-	unsigned __int32 isBodyLaunching : 1;
-	unsigned __int32 isThrown : 1;
-	unsigned __int32 isShortPike : 1;
-	unsigned __int32 isLongPike : 1;
-	unsigned __int32 isSpearBonus12 : 1;
-	unsigned __int32 isSpearBonus10 : 1;
-	unsigned __int32 isSpearBonus8 : 1;
-	unsigned __int32 isSpearBonus6 : 1;
-	unsigned __int32 isSpearBonus4 : 1;
-	unsigned __int32 attack : 6;
-	unsigned __int32 charge : 6;
-	unsigned __int32 ammo : 7;
-	int32_t missileRange; //0x0008
-	float missileRangeSquared; //0x000C
-	int32_t missileClose; //0x0010
-	projectile *missile; //0x0014
-	int32_t weaponType; //0x05AC
-	int32_t weaponTecType; //0x05B0
-	int32_t damageType; //0x0020
-	int32_t soundType; //0x0024
-	int32_t minAttackDelayPri; //0x05BC
-	std::string weaponFX; //0x05C0
-};
-
-struct statArmour
-{
-	unsigned __int32 isValid : 1;
-	unsigned __int32 armour : 6;
-	unsigned __int32 defense : 6;
-	unsigned __int32 shield : 5;
-	int32_t armourMaterial; 
-};
-
-struct unitStats
-{
-	statPri priStats;
-	statArmour armourStats;
-	int8_t attackInBattle;
-	int8_t armourInBattle;
-	int8_t formationDefBonus;
-	int8_t formationAttBonus;
-	unsigned __int8 chargeBonus : 6;
-	unsigned __int8 chargeDecay : 2;
-	int8_t generalsBonus;
-	int8_t byte_56[2];
+public:
+	int getName()
+	{
+		return name;
+	}
+	int getYears()
+	{
+		return years;
+	}
+	int getExperience()
+	{
+		return experience;
+	}
+	int getNumKills()
+	{
+		return numKills;
+	}
+	int getScale()
+	{
+		return scale;
+	}
+	int getArmour()
+	{
+		return armour;
+	}
+	int getWeapon()
+	{
+		return weapon;
+	}
+	void setName(int newName)
+	{
+		name = newName;
+	}
+	void setYears(int newYears)
+	{
+		years = newYears;
+	}
+	void setExperience(int newExp)
+	{
+		experience = newExp;
+	}
+	void setNumKills(int newKills)
+	{
+		numKills = newKills;
+	}
+	void setScale(int newScale)
+	{
+		scale = newScale;
+	}
+	void setArmour(int newArmour)
+	{
+		armour = newArmour;
+	}
+	void setWeapon(int newWeapon)
+	{
+		weapon = newWeapon;
+	}
 };
 
 	
@@ -778,7 +971,7 @@ public:
 	int *engageMode;
     float engageDistance;
 	struct unit *targetUnitMissile;
-    stackStruct *reinforcingArmy;
+    armyStruct *reinforcingArmy;
 	char pathHistory[240];
 	int pathHistoryStart;
 	int pathHistoryEnd;
@@ -986,7 +1179,508 @@ struct siegeEngine
 	int field_5FC;
 	int field_600;
 };
+
+struct mountEffect
+{
+	int mountClass;
+	int mountIndex;
+	int bonus;
+};
+
+//type of unit from EDU
+struct eduEntry {
+	char* eduType;
+	uint32_t typeHash;
+	DWORD index;
+	DWORD unitCreatedCounter;
+	char* unitCardTga;
+	uint32_t unitCardHash;
+	char* infoCardTga;
+	uint32_t unitInfoCardHash;
+	char* cardPicDir;
+	uint32_t cardPicDirHash;
+	char* infoPicDir;
+	uint32_t infoPicDirHash;
+	UNICODE_STRING*** localizedName;
+	UNICODE_STRING*** localizedDescr;
+	UNICODE_STRING*** localizedDescrShort;
+	uint32_t category;
+	uint32_t unitClass;
+	uint32_t unitProductionClass;
+	DWORD voiceType;
+	char *accent;
+	uint32_t accentHash;
+	char *bannerFaction;
+	uint32_t bannerFactionHash;
+	char *bannerUnit;
+	uint32_t bannerUnitHash;
+	char *bannerHoly;
+	uint32_t bannerHolyHash;
+	char *bannerMarine;
+	uint32_t bannerMarineHash;
+	char *bannerSecondary;
+	uint32_t bannerSecondaryHash;
+	char *bannerMini;
+	uint32_t bannerMiniHash;
+	DWORD trained;
+	DWORD discipline;
+	bool moraleLocked;
+	int8_t morale;
+	int8_t statHealth;
+	int8_t statHealthAnimal;
+	int8_t statHeat;
+	int8_t statScrub;
+	int8_t statSand;
+	int8_t statForest;
+	int8_t statSnow;
+	char pad_0095[1];
+	ushort statFood1;
+	ushort statFood2;
+	ushort statFireDelay;
+	DWORD statStl;
+	float chargeDistance;
+	mountEffect mountEffects[3];
+	DWORD mountEffectCount;
+	ushort recruitTime;
+	ushort recruitCost;
+	ushort upkeepCost;
+	ushort weaponCost;
+	ushort armourCost;
+	ushort customBattleCost;
+	ushort customBattleIncrease;
+	ushort customBattleLimit;
+	DWORD crusadingUpkeepModifier;
+	DWORD recruitPriorityOffset;
+	int8_t formationHorde;
+	int8_t formationColumn;
+	int8_t formationSquare;
+	int8_t formationSquareHollow;
+	int8_t formationWedge;
+	int8_t formationPhalanx;
+	int8_t formationSchiltrom;
+	int8_t formationShieldWall;
+	int8_t formationWall;
+	int8_t formationMovingThrough;
+	char pad_00EE[2];
+	uint32_t defaultRanks;
+	float unitSpacingFrontToBackClose;
+	float unitSpacingSideToSideClose;
+	float unitSpacingFrontToBackLoose;
+	float unitSpacingSideToSideLoose;
+	char* soldier;
+	int soldierHash;
+    int modelIndex;
+	void* modelGroup;
+	struct modelDbEntry* modelEntry;
+	uint16_t soldierCount;
+	uint16_t pad11a;
+	float mass;
+	float width;
+	float height;
+	statPri priStats;
+	statPri secStats;
+	statArmour statPriArmour;
+	eduOfficer officers[3];
+	DWORD officerCount;
+	gameStdVector<int8_t>armourUpgradeLevels{};
+	gameStdVector<stringWithHash>armourUpgradeModels{};
+	int extrasCount;
+	struct engineRecord *engineRec;
+	int engineExtras;
+	statPri engineStats;
+	statPri terStats;
+	statArmour statSecArmour;
+	struct descrMountEntry* mount;
+	struct modelDbEntry* mountModel;
+	statPri mountStats;
+	int mountIndex; 
+	statArmour statArmourMount;
+	void *descrAnimal;
+	modelDbEntry *animalBmdbEntry;
+	statPri animalStats; 
+	statArmour statArmourAnimal;
+	void* mountedEngine;
+	void* ship;
+	uint32_t ownership;
+	gameStdVector<uint32_t> eraOwnerShips{};
+	float aiUnitValuePerSoldier;
+	float aiUnitValue;
+	gameStdVector<stringWithHash>attributes{};
+	uint32_t canSap : 1;
+	uint32_t canSetupEngines : 1;
+	uint32_t canWithdraw : 1;
+	uint32_t formedCharge : 1;
+	uint32_t feignRout : 1;
+	uint32_t runsAmok : 1;
+	uint32_t canSwim : 1;
+	uint32_t canHorde : 1;
+	uint32_t hideForest : 1;
+	uint32_t hideImprovedForest : 1;
+	uint32_t hideLongGrass : 1;
+	uint32_t hideAnywhere : 1;
+	uint32_t powerCharge : 1;
+	uint32_t seaFaring : 1;
+	uint32_t command : 1;
+	uint32_t heavyUnit : 1;
+	uint32_t hardy : 1;
+	uint32_t veryHardy : 1;
+	uint32_t slave : 1;
+	uint32_t frightenFoot : 1;
+	uint32_t frightenMounted : 1;
+	uint32_t freeUpkeepUnit : 1;
+	uint32_t gunpowderUnit : 1;
+	uint32_t gunpowderArtillery	: 1;
+	uint32_t fireByRank : 1;
+	uint32_t startNotSkirmishing : 1;
+	uint32_t mercenaryUnit : 1;
+	uint32_t noCustom : 1;
+	uint32_t isPeasant : 1;
+	uint32_t generalUnit : 1;
+	uint32_t generalUnitUpgrade : 1;
+	uint32_t cantabrianCircle : 1;
+	uint32_t druid : 1;
+	uint32_t screechingWomen : 1;
+	uint32_t warCry	: 1;
+	uint32_t stakes	: 1;
+	uint32_t legio : 1;
+	uint32_t canSkirmish : 1;
+	float moveSpeedMod;
+	basicStringGame	areaEffectAttribute;
+	int wagonFortBitfield;
+	float priSkeletonCompFactor;
+	float secSkeletonCompFactor;
+	float terSkeletonCompFactor;
+public:
+	int getArmourLevelNum()
+	{
+		return armourUpgradeLevels.size();
+	}
+	int getArmourLevel(int i)
+	{
+		if (i < armourUpgradeLevels.size())
+		{
+			return armourUpgradeLevels[i];
+		}
+		return -1;
+	}
+	void setArmourLevel(int i, int8_t newLevel)
+	{
+		if (i < armourUpgradeLevels.size())
+		{
+			armourUpgradeLevels[i] = newLevel;
+		}
+	}
+	int getArmourModelNum()
+	{
+		return armourUpgradeModels.size();
+	}
+	std::string getArmourModel(int i)
+	{
+		if (i < armourUpgradeModels.size())
+		{
+			return std::string(armourUpgradeModels[i].name);
+		}
+		return "";
+	}
+	void setArmourModel(int i, const std::string& newModel)
+	{
+		if (i < armourUpgradeModels.size())
+		{
+			fastFunctsHelpers::setCryptedString(const_cast<char**>(&armourUpgradeModels[i].name), newModel.c_str());
+		}
+	}
+	bool hasAttribute(const std::string& attr)
+	{
+		for (int i = 0; i < attributes.size(); i++)
+		{
+			if (strcmp(attributes[i].name, attr.c_str()) == 0)
+				return true;
+		}
+		return false;
+	}
+	bool hasOwnership(uint32_t factionID)
+	{
+		return ownership & (1 << factionID);
+	}
+	void setOwnership(uint32_t factionID, bool set)
+	{
+		if (set)
+			ownership |= (1 << factionID);
+		else
+			ownership &= ~(1 << factionID);
+	}
+	std::string getPrimaryAnim()
+	{
+		if (!modelEntry->animations->primaryAnim)
+			return "";
+		return modelEntry->animations->primaryAnim->name;
+	}
+
+	std::string getSecondaryAnim()
+	{
+		if (!modelEntry->animations->secondaryAnim)
+			return "";
+		return modelEntry->animations->secondaryAnim->name;
+	}
+	bool getIsLegio()
+	{
+		return legio;
+	}
+	void setIsLegio(bool set)
+	{
+		legio = set;
+	}
+	bool getHideForest()
+	{
+		return hideForest;
+	}
+	void setHideForest(bool set)
+	{
+		hideForest = set;
+	}
+	bool getHideImprovedForest()
+	{
+		return hideImprovedForest;
+	}
+	void setHideImprovedForest(bool set)
+	{
+		hideImprovedForest = set;
+	}
+	bool getHideLongGrass()
+	{
+		return hideLongGrass;
+	}
+	void setHideLongGrass(bool set)
+	{
+		hideLongGrass = set;
+	}
+	bool getHideAnywhere()
+	{
+		return hideAnywhere;
+	}
+	void setHideAnywhere(bool set)
+	{
+		hideAnywhere = set;
+	}
+	bool getCanSwim()
+	{
+		return canSwim;
+	}
+	void setCanSwim(bool set)
+	{
+		canSwim = set;
+	}
+	bool getCanHorde()
+	{
+		return canHorde;
+	}
+	void setCanHorde(bool set)
+	{
+		canHorde = set;
+	}
+	bool getPowerCharge()
+	{
+		return powerCharge;
+	}
+	void setPowerCharge(bool set)
+	{
+		powerCharge = set;
+	}
+	bool getSeaFaring()
+	{
+		return seaFaring;
+	}
+	void setSeaFaring(bool set)
+	{
+		seaFaring = set;
+	}
+	bool getCommand()
+	{
+		return command;
+	}
+	void setCommand(bool set)
+	{
+		command = set;
+	}
+	bool getHeavyUnit()
+	{
+		return heavyUnit;
+	}
+	void setHeavyUnit(bool set)
+	{
+		heavyUnit = set;
+	}
+	bool getHardy()
+	{
+		return hardy;
+	}
+	void setHardy(bool set)
+	{
+		hardy = set;
+	}
+	bool getVeryHardy()
+	{
+		return veryHardy;
+	}
+	void setVeryHardy(bool set)
+	{
+		veryHardy = set;
+	}
+	bool getSlave()
+	{
+		return slave;
+	}
+	void setSlave(bool set)
+	{
+		slave = set;
+	}
+	bool getFrightenFoot()
+	{
+		return frightenFoot;
+	}
+	void setFrightenFoot(bool set)
+	{
+		frightenFoot = set;
+	}
+	bool getFrightenMounted()
+	{
+		return frightenMounted;
+	}
+	void setFrightenMounted(bool set)
+	{
+		frightenMounted = set;
+	}
+	bool getFreeUpkeepUnit()
+	{
+		return freeUpkeepUnit;
+	}
+	void setFreeUpkeepUnit(bool set)
+	{
+		freeUpkeepUnit = set;
+	}
+	bool getGunpowderUnit()
+	{
+		return gunpowderUnit;
+	}
+	void setGunpowderUnit(bool set)
+	{
+		gunpowderUnit = set;
+	}
+	bool getGunpowderArtillery()
+	{
+		return gunpowderArtillery;
+	}
+	void setGunpowderArtillery(bool set)
+	{
+		gunpowderArtillery = set;
+	}
+	bool getFireByRank()
+	{
+		return fireByRank;
+	}
+	void setFireByRank(bool set)
+	{
+		fireByRank = set;
+	}
+	bool getStartNotSkirmishing()
+	{
+		return startNotSkirmishing;
+	}
+	void setStartNotSkirmishing(bool set)
+	{
+		startNotSkirmishing = set;
+	}
+	bool getMercenaryUnit()
+	{
+		return mercenaryUnit;
+	}
+	void setMercenaryUnit(bool set)
+	{
+		mercenaryUnit = set;
+	}
+	bool getNoCustom()
+	{
+		return noCustom;
+	}
+	void setNoCustom(bool set)
+	{
+		noCustom = set;
+	}
+	bool getIsPeasant()
+	{
+		return isPeasant;
+	}
+	void setIsPeasant(bool set)
+	{
+		isPeasant = set;
+	}
+	bool getGeneralUnit()
+	{
+		return generalUnit;
+	}
+	void setGeneralUnit(bool set)
+	{
+		generalUnit = set;
+	}
+	bool getGeneralUnitUpgrade()
+	{
+		return generalUnitUpgrade;
+	}
+	void setGeneralUnitUpgrade(bool set)
+	{
+		generalUnitUpgrade = set;
+	}
+	bool getCantabrianCircle()
+	{
+		return cantabrianCircle;
+	}
+	void setCantabrianCircle(bool set)
+	{
+		cantabrianCircle = set;
+	}
+	bool getDruid()
+	{
+		return druid;
+	}
+	void setDruid(bool set)
+	{
+		druid = set;
+	}
+	bool getScreechingWomen()
+	{
+		return screechingWomen;
+	}
+	void setScreechingWomen(bool set)
+	{
+		screechingWomen = set;
+	}
+	bool getWarCry()
+	{
+		return warCry;
+	}
+	void setWarCry(bool set)
+	{
+		warCry = set;
+	}
+	bool getStakes()
+	{
+		return stakes;
+	}
+	void setStakes(bool set)
+	{
+		stakes = set;
+	}
+	bool getCanSkirmish()
+	{
+		return canSkirmish;
+	}
+	void setCanSkirmish(bool set)
+	{
+		canSkirmish = set;
+	}
 	
+};
+
 //unit data
 struct unit
 {
@@ -997,14 +1691,14 @@ struct unit
 	void* crusadeFinishedNotification;
 	int32_t aiActiveSet; //0x003C
 	gfxEntityStruct unitEntity; //0x0040
-	std::vector<gfxEntityStruct>generalAndOfficerEntities; //0x00F8
+	gameStdVector<gfxEntityStruct>generalAndOfficerEntities; //0x00F8
 	gfxEntityStruct mountEntity; //0x0104
 	gfxEntityStruct someOtherEntity; //0x01B8
 	void *unitGfxUpdateCallBack; //0x026C
 	void *sharedPointerForCallback; //0x0270
 	unitVerification unitVerification; //0x0274
 	struct unitPositionData* unitPositionData; //0x0280
-	struct stackStruct* army;//0x0284
+	struct armyStruct* army;//0x0284
 	struct unitGroup *unitGroup; //0x0288
 	struct settlementStruct *retrainingSettlement;
 	int32_t foodRequirement; //0x0290
@@ -1154,8 +1848,8 @@ struct unit
 	float animalPosY;
 	float animalRadius;
 	void *banner;
-	std::vector<buildingBattle*> mannedBuildings;
-	std::vector<void*> mannedBuildingBanners;
+	gameStdVector<buildingBattle*> mannedBuildings;
+	gameStdVector<void*> mannedBuildingBanners;
 	int32_t maxAmmo;
 	int32_t currentAmmo;
 	unsigned __int32 inPlayableArea : 1;
@@ -1190,7 +1884,7 @@ struct unit
 	struct UNICODE_STRING **alias;
 	void *torchAllocator;
 	void *currentWaypoint;
-	crusade *crusade;
+	struct crusade *crusade;
 	int8_t isOnCrusadeMaybe;
 	int8_t markedToKill;
 	int8_t taskMelee;
@@ -1225,7 +1919,7 @@ public:
 	const char* getActionStatus();
 	int getUnitFormation()
 	{
-		return CallVFunc<0x1, int>(formationsArray);
+		return callVFunc<0x1, int>(formationsArray);
 	}
 	int getExp()
 	{
@@ -1288,7 +1982,7 @@ public:
 	}
 	void setMovingFastSet(bool set)
 	{
-		if (eduEntry->Category == 0 && siegeEnNum > 0
+		if (eduEntry->category == 0 && siegeEnNum > 0
 			&& siegeEngines[0]->engineRecord->classID != engineType::ladder)
 		{
 			moveFast = 0;
@@ -1315,7 +2009,7 @@ public:
 	}
 	int getMountClass()
 	{
-		return CallVFunc<186, int>(this);
+		return callVFunc<186, int>(this);
 	}
 	unit* getNearbyUnit(const int index)
 	{
@@ -1331,7 +2025,7 @@ public:
 	}
 	siegeEngine* getSiegeEngine(const int index)
 	{
-		const auto category = eduEntry->Category;
+		const auto category = eduEntry->category;
 		if (category != 0 && category != 2)
 			return nullptr;
 		if (!siegeEngines)
@@ -1359,7 +2053,7 @@ public:
 	}
 	int getSiegeEngineNum()
 	{
-		if (eduEntry->Category != 0 && eduEntry->Category != 2)
+		if (eduEntry->category != 0 && eduEntry->category != 2)
 			return 0;
 		return siegeEnNum;
 	}
@@ -1451,10 +2145,22 @@ public:
 	{
 		unableToFire = set;
 	}
+	bool hasAttribute(const char* attributeName)
+	{
+		return eduEntry->hasAttribute(attributeName);
+	}
+};
+
+struct unitDb { /* structure with all edu entries */
+	UINT32 qq;
+	struct eduEntry unitEntries[500];
+	UINT32 numberOfEntries;
 };
 
 namespace unitHelpers
 {
+	unitDb* getEdu();
+	void initBaseUnitsLookup();
 	void setUnitMovePoints(unit* un, float movePoints);
 	void setSoldiersCountAndExp(unit* un, int count, int exp);
 	void setSoldiersCount(unit* un, int count);
@@ -1469,16 +2175,20 @@ namespace unitHelpers
 	void setUnitDescrShort(eduEntry* entry, const std::string& descr);
 	float getEngineAngle(const siegeEngine* engine);
 	void setEngineAngle(siegeEngine* engine, float angle);
-	unitGroup* getEmptyGroup(const stackStruct* army);
+	unitGroup* getEmptyGroup(const armyStruct* army);
 	const char* getGroupLabel(const unitGroup* group);
 	int16_t angleFloatToShort(float angle);
 	float angleShortToFloat(int16_t angle);
+	modelDbEntry* findBattleModel(const char* modelName);
 	
 	unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap);
 	unit* createUnitIdx(int index, int regionID, int facNum, int exp, int arm, int weap);
 	unit* createUnitEDB(int edb, int regionID, int facNum, int exp, int arm, int weap);
+	int getEduIndex(const char* type);
+	eduEntry* getEduEntryByName(const char* type);
+	eduEntry* getEDUEntryById(int id);
 	
-	unitGroup* defineUnitGroup(const stackStruct* army, const char* label, unit* un);
+	unitGroup* defineUnitGroup(const armyStruct* army, const char* label, unit* un);
 	void addUnitToGroup(unitGroup* group, unit* un);
 	unitGroup* getGroupByLabel(const char* label);
 	void undefineUnitGroup(const unitGroup* group);
@@ -1486,7 +2196,7 @@ namespace unitHelpers
 	void automateGroup(const unitGroup* group, bool automate);
 	void automateAttack(unitGroup* group, unit* targetUnit);
 	void automateDefense(unitGroup* group, float xCoord, float yCoord, float radius);
-    void addToLua(sol::state& luaState);
+    
 };
 
 namespace unitActions
