@@ -1,9 +1,13 @@
 ﻿#pragma once
+#include <filesystem>
 #include <string>
 
+#include "eopBuildings.h"
 #include "fastFunctsHelpers.h"
 #include "functionsOffsets.h"
+#include "m2tweopHelpers.h"
 #include "realGameTypes.h"
+#include "strategyMap.h"
 #include "lua/sol.hpp"
 
 enum class productionBias
@@ -642,7 +646,11 @@ public:
 	}
 	unitRQ* getUnitInQueue(int index)
 	{
-		return &unitQueue[startIndexRQ + index];
+		if (startIndexRQ + index > endIndexRQ)
+			index = endIndexRQ - startIndexRQ;
+		else
+			index = startIndexRQ + index;
+		return &unitQueue[index];
 	}
 	void setGuildStanding(int index, int amount)
 	{
@@ -650,12 +658,40 @@ public:
 	}
 };
 
+
+struct eopSettlementData
+{
+	int settlementID = -1;
+	std::array<int, 128> eopBuildingEntries{};
+	int modelId = 0;
+	std::string regionName;
+	std::string regionRebelsName;
+	nlohmann::json serialize()
+	{
+		nlohmann::json json;
+		json["eopBuildingEntries"] = eopBuildingEntries;
+		json["modelId"] = modelId;
+		json["regionName"] = regionName;
+		json["regionRebelsName"] = regionRebelsName;
+		json["settlementID"] = settlementID;
+		return json;
+	}
+	void deserialize(const nlohmann::json& json)
+	{
+		eopBuildingEntries = json["eopBuildingEntries"].get<std::array<int, 128>>();
+		modelId = json["modelId"];
+		regionName = json["regionName"];
+		regionRebelsName = json["regionRebelsName"];
+		settlementID = json["settlementID"];
+	}
+};
 namespace settlementHelpers
 {
 	void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner, bool convertGarrison);
 	void changeOwner(settlementStruct* sett, factionStruct* newOwner);
 	void upgradeSettlement(settlementStruct* sett);
 	std::string getSettlementName(settlementStruct* sett);
+	settlementStruct* getSettlementByRegionID(int index);
 	void changeSettlementName(settlementStruct* sett, const char* newName);
 	float getReligion(settlementStruct* sett, int index);
 	void setReligion(settlementStruct* sett, int index, float value);
@@ -737,4 +773,42 @@ namespace settlementHelpers
 		if (fieldIndex == guild_name)
 			fastFunctsHelpers::setCryptedString(&guild->name, newS.c_str());
 	}
+};
+
+
+class eopSettlementDataDb
+{
+public:
+	eopSettlementDataDb()
+	{
+		for (int i = 0; i < 200; i++)
+		{
+			eopSettData->at(i).settlementID = i;
+		}
+	}
+	static eopSettlementData& getSettlementData(int index)
+	{
+		return eopSettData->at(index);
+	}
+	static std::shared_ptr<std::array<eopSettlementData, 200>> eopSettData;
+	static nlohmann::json serialize()
+	{
+		nlohmann::json json;
+		for (int i = 0; i < 200; i++)
+		{
+			json[i] = eopSettData->at(i).serialize();
+		}
+		return json;
+	}
+	static void deserialize(const nlohmann::json& json)
+	{
+		for (int i = 0; i < 200; i++)
+			eopSettData->at(i).deserialize(json[i]);
+	}
+	static void clearData()
+	{
+		eopSettData = std::make_shared<std::array<eopSettlementData, 200>>();
+	}
+	static std::string onGameSave();
+	static void onGameLoad(const std::vector<std::string>& filePaths);
 };

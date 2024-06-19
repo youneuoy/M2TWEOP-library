@@ -316,24 +316,6 @@ namespace eopDuHelpers
 		@tfield getEduEntry getEduEntry
 		@tfield getEduEntryByType getEduEntryByType
 		@tfield getEduIndexByType getEduIndexByType
-		@tfield setEntryUnitCardTga setEntryUnitCardTga (only for eopdu units added by file!)
-		@tfield setEntryInfoCardTga setEntryInfoCardTga (only for eopdu units added by file!)
-		@tfield setEntrySoldierModel setEntrySoldierModel
-		@tfield getArmourUpgradeLevelsNum getArmourUpgradeLevelsNum
-		@tfield setArmourUpgradeLevelsNum setArmourUpgradeLevelsNum (only for eopdu units added by file!)
-		@tfield getArmourUpgradeLevel getArmourUpgradeLevel
-		@tfield setArmourUpgradeLevel setArmourUpgradeLevel (only for eopdu units added by file!)
-		@tfield getArmourUpgradeModelsNum getArmourUpgradeModelsNum
-		@tfield setArmourUpgradeModelsNum setArmourUpgradeModelsNum (only for eopdu units added by file!)
-		@tfield getArmourUpgradeModel getArmourUpgradeModel
-		@tfield setArmourUpgradeModel setArmourUpgradeModel (only for eopdu units added by file!)
-		@tfield setEntryAttackAttribute setEntryAttackAttribute
-		@tfield getEntryAttackAttribute getEntryAttackAttribute
-		@tfield setEntryStat setEntryStat
-		@tfield getEntryStat getEntryStat
-		@tfield setEntryLocalizedName setEntryLocalizedName
-		@tfield setEntryLocalizedDescr setEntryLocalizedDescr
-		@tfield setEntryLocalizedShortDescr setEntryLocalizedShortDescr
 		@table M2TWEOPDU
 		*/
 			

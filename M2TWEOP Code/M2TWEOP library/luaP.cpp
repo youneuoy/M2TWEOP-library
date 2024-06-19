@@ -198,10 +198,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield setEquipmentCosts setEquipmentCosts
 	@tfield isTileFree isTileFree
 	@tfield getGameTileCoordsWithCursor getGameTileCoordsWithCursor
-	@tfield getTileRegionID getTileRegionID
 	@tfield getTileVisibility getTileVisibility
 	@tfield setGuildCooldown setGuildCooldown
-	@tfield getRegionOwner getRegionOwner
 	@tfield setEDUUnitsSize setEDUUnitsSize
 	@tfield setBuildingChainLimit setBuildingChainLimit
 	@tfield getReligionName getReligionName
@@ -226,9 +224,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getCampaignDbExtra getCampaignDbExtra
 	@table M2TWEOP
 	*/
-
-
-
+	
 	tables.M2TWEOPTable = luaState.create_table("M2TWEOP");
 
 
@@ -538,15 +534,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	end
 	*/
 	tables.M2TWEOPTable.set_function("getTileVisibility", &m2tweopHelpers::getTileVisibility);
-	/***
-	Get the owner of a region by RegionID.
-	@function M2TWEOP.getRegionOwner
-	@tparam int regionID
-	@treturn factionStruct owner
-	@usage
-	local regionID = M2TWEOP.getTileRegionID(55,25);
-	local ownerFac = M2TWEOP.getRegionOwner(regionID);
-	*/
 	tables.M2TWEOPTable.set_function("getRegionOwner", &m2tweopHelpers::getRegionOwner);
 	/***
 	Get religion name by index.
@@ -933,7 +920,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield historicEvent historicEvent
 	@tfield scriptCommand scriptCommand
 	@tfield callConsole callConsole
-	@tfield getGuild getGuild
 
 	@table stratmap.game
 */
@@ -957,15 +943,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.gameTable.set_function("callConsole", &gameHelpers::callConsole);
 	tables.gameTable.set_function("getFactionsCount", &campaignHelpers::getFactionsCount);
 	tables.gameTable.set_function("getFaction", &campaignHelpers::getFaction);
-	/***
-	Get a guild by the index.
-	@function stratmap.game.getGuild
-	@tparam int index
-	@treturn guild guild
-	@usage
-	ourGuild=stratmap.game.getGuild(1);
-	*/
-	tables.gameTable.set_function("getGuild", &eopBuildings::getGuild);
 
 	/***
 	Create a new character at the specified coordinates. If you are not spawning an agent it is preferred to use spawnArmy instead.

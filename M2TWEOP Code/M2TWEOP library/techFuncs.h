@@ -36,6 +36,23 @@ namespace techFuncs
 		return reinterpret_cast<T*>(retMem);
 	}
 	
+	template<typename T>
+	T* createGameClass()
+	{
+		DWORD retMem = 0;
+		size_t amount = sizeof(T);
+		DWORD adrFunc = codes::offsets.allocMemFunc;
+		_asm
+		{
+			push amount
+			mov eax, adrFunc
+			call eax
+			add esp, 0x4
+			mov retMem, eax
+		}
+		return reinterpret_cast<T*>(retMem);
+	}
+	
 	std::vector<std::string>unzip(std::string const& zipFile, std::string const& path);
 	void zip(std::string const& zipFile, std::vector<std::string>& files,std::string saveFile,std::string nameOfSaveFile);
 

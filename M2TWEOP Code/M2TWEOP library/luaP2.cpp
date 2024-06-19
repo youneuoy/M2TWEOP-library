@@ -22,6 +22,8 @@ void luaP::initCampaign()
 {
 
 	stratMapHelpers::addToLua(luaState);
+	buildingHelpers::addToLua(luaState);
+	
 	struct
 	{
 		sol::usertype<options1> options1;

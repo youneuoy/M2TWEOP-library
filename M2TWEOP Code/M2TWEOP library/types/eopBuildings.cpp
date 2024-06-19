@@ -43,21 +43,21 @@ edbEntry* buildEntryDB::getEopBuildEntry(const int idx)
 			return &entry.baseEntry;
 		}
 	}
-	return eopBuildings::getBuildingByID(idx);
+	return nullptr;
 }
 
 void buildEntryDB::addCaps(buildingLevel* eopLevel, const buildingLevel* oldLevel)
 {
 	if (!oldLevel->capabilities)
 		return;
-	auto eopCap = techFuncs::allocateGameClass<BuildingLvlCapability>(sizeof(BuildingLvlCapability));
+	auto eopCap = techFuncs::allocateGameClass<buildingLevelCapability>(sizeof(buildingLevelCapability));
 	eopLevel->capabilities = eopCap;
-	const BuildingLvlCapability* oldCap = oldLevel->capabilities;
+	const buildingLevelCapability* oldCap = oldLevel->capabilities;
 	*eopCap = *oldCap;
 	oldCap = oldCap->nextCapability;
 	while (oldCap != nullptr)
 	{
-		eopCap->nextCapability = techFuncs::allocateGameClass<BuildingLvlCapability>(sizeof(BuildingLvlCapability));
+		eopCap->nextCapability = techFuncs::allocateGameClass<buildingLevelCapability>(sizeof(buildingLevelCapability));
 		eopCap = eopCap->nextCapability;
 		*eopCap = *oldCap;
 		oldCap = oldCap->nextCapability;
@@ -82,313 +82,309 @@ void buildEntryDB::addPools(buildingLevel* eopLevel, const buildingLevel* oldLev
 	}
 }
 
-namespace eopBuildings
+
+//add new building capability, bonus refers to bonus keyboard in edb
+void buildingLevel::addCapability(int capability, int16_t value, bool bonus, const std::string& condition)
 {
-
-	//unique per culture!
-	void setBuildingPic(edbEntry* entry, const char* newPic, int level, int cultureID)
+	const auto cap = techFuncs::createGameClass<buildingLevelCapability>();
+	cap->capabilityType = 0; //always 0 for normal capabilities
+	if (bonus)
 	{
-		buildingLevel* eoplevel = &entry->buildingLevel[level];
-		fastFunctsHelpers::setCryptedString(&eoplevel->buildingPic[cultureID].buildingPicPath, newPic);
+		cap->bonus = value;
+		cap->capabilityLvl = -1;
 	}
-
-	//unique per culture!
-	void setBuildingPicConstructed(edbEntry* entry, const char* newPic, int level, int cultureID)
+	else
 	{
-		buildingLevel* eoplevel = &entry->buildingLevel[level];
-
-		fastFunctsHelpers::setCryptedString(&eoplevel->buildingPicConstructed[cultureID].buildingPicPath, newPic);
+		cap->bonus = 0;
+		cap->capabilityLvl = value;
 	}
-
-	//unique per culture!
-	void setBuildingPicConstruction(edbEntry* entry, const char* newPic, int level, int cultureID)
+	cap->capabilityID = capability;
+	cap->funcPointer = 0;
+	cap->buildingLevel = this;
+	cap->EDBpointer = 0;
+	cap->buildingLevelCondition = nullptr;
+	cap->nextCapability = nullptr;
+	auto fakeText = make_shared<fakeTextInput>(condition.c_str(), 0);
+	const auto makeConditionFunc = codes::offsets.makeBuildingCondition;
+	auto conditionPtr = &buildingLevelCondition;
+	_asm
 	{
-		buildingLevel* eoplevel = &entry->buildingLevel[level];
-
-		fastFunctsHelpers::setCryptedString(&eoplevel->buildingPicConstruction[cultureID].buildingPicPath, newPic);
+		push 3
+		push conditionPtr
+		push fakeText
+		mov eax, makeConditionFunc
+		call eax
 	}
+	if (capabilities != nullptr)
+		cap->nextCapability = capabilities; //always inserting at start of capability linked list
+	capabilities = cap;
+}
 
-	//unique per faction!
-	void setBuildingLocalizedName(edbEntry* entry, const char* newName, int level, int facnum)
+//add new building capability, bonus refers to bonus keyboard in edb
+void buildingLevel::addFactionCapability(int capability, int16_t value, bool bonus, const std::string& condition)
+{
+	const auto cap = techFuncs::createGameClass<buildingLevelCapability>();
+	cap->capabilityType = 0; //always 0 for normal capabilities
+	if (bonus)
 	{
-		UNICODE_STRING*** nameMem = new UNICODE_STRING**;
-
-		buildingLevel* eoplevel = &entry->buildingLevel[level];
-		eoplevel->buildingName[facnum] = nameMem;
-
-		smallFuncs::createUniString(*eoplevel->buildingName[facnum], newName);
+		cap->bonus = value;
+		cap->capabilityLvl = -1;
 	}
-
-	//unique per faction!
-	void setBuildingLocalizedDescr(edbEntry* entry, const char* newName, int level, int facnum)
+	else
 	{
-		UNICODE_STRING*** nameMem = new UNICODE_STRING**;
-		buildingLevel* eoplevel = &entry->buildingLevel[level];
-		eoplevel->buildingDescr[facnum] = nameMem;
-
-
-		smallFuncs::createUniString(*eoplevel->buildingDescr[facnum], newName);
+		cap->bonus = 0;
+		cap->capabilityLvl = value;
 	}
-
-	//unique per faction!
-	void setBuildingLocalizedDescrShort(edbEntry* entry, const char* newName, int level, int facnum)
+	cap->capabilityID = capability;
+	cap->funcPointer = 0;
+	cap->buildingLevel = this;
+	cap->EDBpointer = 0;
+	cap->buildingLevelCondition = nullptr;
+	cap->nextCapability = nullptr;
+	auto fakeText = make_shared<fakeTextInput>(condition.c_str(), 0);
+	const auto makeConditionFunc = codes::offsets.makeBuildingCondition;
+	auto conditionPtr = &buildingLevelCondition;
+	_asm
 	{
-		UNICODE_STRING*** nameMem = new UNICODE_STRING**;
-		buildingLevel* eoplevel = &entry->buildingLevel[level];
-		eoplevel->buildingDescrShort[facnum] = nameMem;
-
-
-		smallFuncs::createUniString(*eoplevel->buildingDescrShort[facnum], newName);
+		push 3
+		push conditionPtr
+		push fakeText
+		mov eax, makeConditionFunc
+		call eax
 	}
+	if (factionCapabilities != nullptr)
+		cap->nextCapability = factionCapabilities; //always inserting at start of capability linked list
+	factionCapabilities = cap;
+}
 
-	//add new building capability, bonus refers to bonus keyboard in edb
-	void addBuildingCapability(edbEntry* entry, int level, int capability, int16_t value, bool bonus)
+void buildingLevel::addRecruitPool(int eduIndex, float initialSize, float gainPerTurn, float maxSize, int16_t exp, const std::string& condition)
+{
+	auto pool = techFuncs::createGameClass<recruitPool>();
+	pool->capabilityType = 5; //5 means normal unit, there are some other for agents I havent added yet
+	pool->experienceOrLevel = exp; //for units this always is xp, for agents this can be agent
+	pool->unitID = eduIndex;
+	pool->initialSize = initialSize;
+	pool->gainPerTurn = gainPerTurn;
+	pool->maxSize = maxSize;
+	pool->buildingLevelCondition = nullptr;
+	pool->nextPool = nullptr;
+	auto fakeText = make_shared<fakeTextInput>(condition.c_str(), 0);
+	const auto makeConditionFunc = codes::offsets.makeBuildingCondition;
+	auto conditionPtr = &pool->buildingLevelCondition;
+	_asm
 	{
-		DWORD funcPointer = (DWORD)0x008A955B; //I dont think this does anything but not 100% sure, havent checked disk version as I do not think this is needed
-		DWORD EDBpointer = dataOffsets::offsets.edbDataStart; //for some reason this is included, not sure if needed
-		BuildingLvlCapability* cap = reinterpret_cast<BuildingLvlCapability*>(techFuncs::allocateGameMem(0x20));
-		buildingLevel* eoplevel = &entry->buildingLevel[level];
-		cap->capabilityType = 0; //always 0 for normal capabilities
-		if (bonus)
+		push 3
+		push conditionPtr
+		push fakeText
+		mov eax, makeConditionFunc
+		call eax
+	}
+	if (recruitPools != nullptr)
+		pool->nextPool = recruitPools; //always insert at start of pools
+	recruitPools = pool;
+}
+
+
+void buildingLevel::removeBuildingCapability(int index)
+{
+	buildingLevelCapability* cap = capabilities;
+	if (const int capNum = getCapabilityNum(); index >= capNum || cap == nullptr)
+		return;
+	if (index == 0)
+	{
+		capabilities = nullptr;
+		if (cap->nextCapability != nullptr)
+			capabilities = cap->nextCapability;
+		return;
+	}
+	int i = 0;
+	while (cap != nullptr)
+	{
+		i++;
+		buildingLevelCapability* prevCap = cap;
+		cap = cap->nextCapability;
+		if(index == i)
 		{
-			cap->bonus = value;
-			cap->capabilityLvl = -1;
-		}
-		else
-		{
-			cap->bonus = 0;
-			cap->capabilityLvl = value;
-		}
-		cap->capabilityID = capability;
-		cap->funcPointer = funcPointer;
-		cap->buildingLevel = eoplevel;
-		cap->EDBpointer = EDBpointer;
-		cap->buildingLevelCondition = nullptr;
-		cap->nextCapability = nullptr;
-		if (eoplevel->capabilities != nullptr)
-		{
-			cap->nextCapability = eoplevel->capabilities; //always inserting at start of capability linked list
-		}
-		eoplevel->capabilities = cap;
-
-	}
-
-	void addBuildingPool(edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp, const char* condition)
-	{
-		recruitPool* pool = reinterpret_cast<recruitPool*>(techFuncs::allocateGameMem(0x20));
-		buildingLevel* eoplevel = &entry->buildingLevel[level];
-		pool->capabilityType = 5; //5 means normal unit, there are some other for agents I havent added yet
-		pool->capabilityLvlorExp = exp; //for units this always is xp, for agents this can be agent
-		pool->unitID = eduIndex;
-		pool->initialSize = initialSize;
-		pool->gainPerTurn = gainPerTurn;
-		pool->maxSize = maxSize;
-		pool->buildingLevelCondition = nullptr;
-		pool->nextPool = nullptr;
-		auto fakeText = make_shared<fakeTextInput>(condition, 0);
-		const auto makeConditionFunc = codes::offsets.makeBuildingCondition;
-		auto conditionPtr = &pool->buildingLevelCondition;
-		_asm
-		{
-			push 3
-			push conditionPtr
-			push fakeText
-			mov eax, makeConditionFunc
-			call eax
-		}
-		if (eoplevel->recruitPools != nullptr)
-		{
-			pool->nextPool = eoplevel->recruitPools; //always insert at start of pools
-		}
-		eoplevel->recruitPools = pool;
-	}
-
-
-	void removeBuildingCapability(edbEntry* entry, int level, int index)
-	{
-		buildingLevel* eoplevel = &entry->buildingLevel[level];
-		BuildingLvlCapability* cap = eoplevel->capabilities;
-		int capNum = getBuildingCapabilityNum(entry, level);
-		if (index >= capNum || cap == nullptr)
-		{
-			return;
-		}
-		if (index == 0)
-		{
-			eoplevel->capabilities = nullptr;
 			if (cap->nextCapability != nullptr)
 			{
-				eoplevel->capabilities = cap->nextCapability;
+				prevCap->nextCapability = cap->nextCapability;
 			}
-			return;
-		}
-		int i = 0;
-		while (cap != nullptr)
-		{
-			i++;
-			BuildingLvlCapability* prevCap = cap;
-			cap = cap->nextCapability;
-			if(index == i)
+			else
 			{
-				if (cap->nextCapability != nullptr)
-				{
-					prevCap->nextCapability = cap->nextCapability;
-				}
-				else
-				{
-					prevCap->nextCapability = nullptr;
-				}
-				cap = nullptr;
-				return;
+				prevCap->nextCapability = nullptr;
 			}
+			cap = nullptr;
+			return;
 		}
 	}
+}
 
-	void removeBuildingPool(edbEntry* entry, int level, int index)
+void buildingLevel::removeBuildingFactionCapability(const int index)
+{
+	buildingLevelCapability* cap = factionCapabilities;
+	if (const int capNum = getCapabilityNum(); index >= capNum || cap == nullptr)
+		return;
+	if (index == 0)
 	{
-		buildingLevel* eoplevel = &entry->buildingLevel[level];
-		recruitPool* pool = eoplevel->recruitPools;
-		int poolNum = getBuildingPoolNum(entry, level);
-		if (index >= poolNum || pool == nullptr)
+		factionCapabilities = nullptr;
+		if (cap->nextCapability != nullptr)
+			factionCapabilities = cap->nextCapability;
+		return;
+	}
+	int i = 0;
+	while (cap != nullptr)
+	{
+		i++;
+		buildingLevelCapability* prevCap = cap;
+		cap = cap->nextCapability;
+		if(index == i)
 		{
+			if (cap->nextCapability != nullptr)
+			{
+				prevCap->nextCapability = cap->nextCapability;
+			}
+			else
+			{
+				prevCap->nextCapability = nullptr;
+			}
+			cap = nullptr;
 			return;
 		}
-		if (index == 0)
+	}
+}
+
+void buildingLevel::removeBuildingPool(int index)
+{
+	recruitPool* pool = recruitPools;
+	if (const int poolNum = getPoolNum(); index >= poolNum || pool == nullptr)
+		return;
+	if (index == 0)
+	{
+		recruitPools = nullptr;
+		if (pool->nextPool != nullptr)
+			recruitPools = pool->nextPool;
+		return;
+	}
+	int i = 0;
+	while (pool != nullptr)
+	{
+		i++;
+		recruitPool* prevPool = pool;
+		pool = pool->nextPool;
+		if (index == i)
 		{
-			eoplevel->recruitPools = nullptr;
 			if (pool->nextPool != nullptr)
 			{
-				eoplevel->recruitPools = pool->nextPool;
+				prevPool->nextPool = pool->nextPool;
 			}
+			else
+			{
+				prevPool->nextPool = nullptr;
+			}
+			pool = nullptr;
 			return;
 		}
-		int i = 0;
-		while (pool != nullptr)
-		{
-			i++;
-			recruitPool* prevPool = pool;
-			pool = pool->nextPool;
-			if (index == i)
-			{
-				if (pool->nextPool != nullptr)
-				{
-					prevPool->nextPool = pool->nextPool;
-				}
-				else
-				{
-					prevPool->nextPool = nullptr;
-				}
-				pool = nullptr;
-				return;
-			}
-		}
 	}
+}
 
-	//get a capability to change some of its attributes or check them, like to remove it
-	BuildingLvlCapability* getBuildingCapability(edbEntry* entry, int level, int index)
+namespace eopBuildings
+{
+    ////////////////////// Legacy compatibility functions //////////////////////
+	
+	//unique per culture!
+	void setBuildingPic(const edbEntry* entry, const char* newPic, const int level, const int cultureID)
 	{
-		buildingLevel* eoplevel = &entry->buildingLevel[level];
-		BuildingLvlCapability* cap = eoplevel->capabilities;
-		int capNum = getBuildingCapabilityNum(entry, level);
-		if (index >= capNum || cap == nullptr)
-		{
-			return nullptr;
-		}
-		if (index == 0) //just return first one
-		{
-			return cap;
-		}
-		int i = 0;
-		while (cap != nullptr)
-		{
-			cap = cap->nextCapability;
-			i++;
-			if (index == i)
-			{
-				return cap;
-			}
-		}
-		return nullptr;
+		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		eopLevel->setBuildingPicPath(cultureID, newPic);
 	}
-
+	//unique per culture!
+	void setBuildingPicConstructed(const edbEntry* entry, const char* newPic, const int level, const int cultureID)
+	{
+		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		eopLevel->setBuildingPicConstructedPath(cultureID, newPic);
+	}
+	//unique per culture!
+	void setBuildingPicConstruction(const edbEntry* entry, const char* newPic, const int level, const int cultureID)
+	{
+		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		eopLevel->setBuildingPicConstructionPath(cultureID, newPic);
+	}
+	//unique per faction!
+	void setBuildingLocalizedName(const edbEntry* entry, const char* newName, const int level, const int factionID)
+	{
+		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		return eopLevel->setLocalizedName(factionID, newName);
+	}
+	//unique per faction!
+	void setBuildingLocalizedDescr(const edbEntry* entry, const char* newName, const int level, const int factionID)
+	{
+		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		return eopLevel->setLocalizedDescr(factionID, newName);
+	}
+	//unique per faction!
+	void setBuildingLocalizedDescrShort(const edbEntry* entry, const char* newName, const int level, const int factionID)
+	{
+		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		return eopLevel->setLocalizedDescrShort(factionID, newName);
+	}
+	void removeBuildingCapability(const edbEntry* entry, const int level, const int index)
+	{
+		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		eopLevel->removeBuildingCapability(index);
+	}
+	void removeBuildingPool(const edbEntry* entry, const int level, const int index)
+	{
+		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		eopLevel->removeBuildingPool(index);
+	}
+	//get a capability to change some of its attributes or check them, like to remove it
+	buildingLevelCapability* getBuildingCapability(const edbEntry* entry, const int level, const int index)
+	{
+		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		return eopLevel->getCapability(index);
+	}
 	exportDescrBuildings* getEdb()
 	{
 		return reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
 	}
-	recruitPool* getBuildingPool(edbEntry* entry, int level, int index)
+	
+	recruitPool* getBuildingPool(const edbEntry* entry, const int level, const int index)
 	{
-		buildingLevel* eoplevel = &entry->buildingLevel[level];
-		recruitPool* pool = eoplevel->recruitPools;
-		int poolNum = getBuildingPoolNum(entry, level);
-		if (index >= poolNum || pool == nullptr)
-		{
-			return nullptr;
-		}
-		if (index == 0)
-		{
-			return pool;
-		}
-		int i = 0;
-		while (pool != nullptr)
-		{
-			pool = pool->nextPool;
-			i++;
-			if (index == i)
-			{
-				return pool;
-			}
-		}
-		return nullptr;
+		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		return eopLevel->getPool(index);
 	}
-
+	void addBuildingCapability(edbEntry* entry, int level, int capability, int16_t value, bool bonus)
+	{
+		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		eopLevel->addCapability(capability, value, bonus, "");
+	}
+	
+	void addBuildingPool(edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp, const char* condition)
+	{
+		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		eopLevel->addRecruitPool(eduIndex, initialSize, gainPerTurn, maxSize, exp, condition);
+	}
+	
 	//get amount of capabilities, useful for iteration
-	int getBuildingCapabilityNum(edbEntry* entry, int level)
+	int getBuildingCapabilityNum(const edbEntry* entry, const int level)
 	{
 		if (entry == nullptr)
-		{
 			return 0;
-		}
-		buildingLevel* eoplevel = &entry->buildingLevel[level];
-		BuildingLvlCapability* cap = eoplevel->capabilities;
-		if (cap == nullptr)
-		{
-			return 0;
-		}
-		BuildingLvlCapability* nextcap = cap->nextCapability;
-		int capNum = 1;
-		while (nextcap != nullptr)
-		{
-			nextcap = nextcap->nextCapability;
-			capNum++;
-		}
-		return capNum;
+		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		return eopLevel->getCapabilityNum();
 	}
 
 	//get amount of pools, useful for iteration
-	int getBuildingPoolNum(edbEntry* entry, int level)
+	int getBuildingPoolNum(const edbEntry* entry, const int level)
 	{
 		if (entry == nullptr)
-		{
 			return 0;
-		}
-		buildingLevel* eoplevel = &entry->buildingLevel[level];
-		recruitPool* pool = eoplevel->recruitPools;
-		if (pool == nullptr)
-		{
-			return 0;
-		}
-		recruitPool* nextpool = pool->nextPool;
-		int poolNum = 1;
-		while (nextpool != nullptr)
-		{
-			nextpool = nextpool->nextPool;
-			poolNum++;
-		}
-		return poolNum;
+		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		return eopLevel->getPoolNum();
 	}
 
 	//not sure how useful this function is, basically just combines creating a building with switching its entry to eop building
-	void createEOPBuilding(settlementStruct* sett, int edbIdx, int level)
+	void createEOPBuilding(settlementStruct* sett, const int edbIdx, const int level)
 	{
 		edbEntry* entry = buildEntryDB::getEopBuildEntry(edbIdx);
 		buildingLevel* eoplevel = &entry->buildingLevel[level];
@@ -398,78 +394,32 @@ namespace eopBuildings
 	}
 
 	//get a building entry by its name, very useful to change some of the edb building attributes dynamically, does not save!
-	edbEntry* getBuildingByName(const char* name)
-	{
-		const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
-		const buildingListPointer* buildingsPtr = &edb->buildingsList;
-		while (buildingsPtr != nullptr)
-		{
-			const int buildingNum = buildingsPtr->arrayCount;
-			for (int i = 0; i < buildingNum; i++)
-			{
-				if (strcmp(buildingsPtr->buildingsArray->buildings[i].type, name) == 0)
-				{
-					return &buildingsPtr->buildingsArray->buildings[i];
-				}
-			}
-			buildingsPtr = buildingsPtr->nextBuildingsListPointer;
-		}
-		return nullptr;
-	}
 
-	edbEntry* getBuildingByID(int id)
+
+	gameList<guild>& getGuilds()
 	{
-		const auto* edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
-		const buildingListPointer* buildingsPointer = &edb->buildingsList;
-		while (buildingsPointer != nullptr)
-		{
-			const int buildingNum = buildingsPointer->arrayCount;
-			for (int i = 0; i < buildingNum; i++)
-			{
-				if (buildingsPointer->buildingsArray->buildings[i].buildingID == id)
-				{
-					return &buildingsPointer->buildingsArray->buildings[i];
-				}
-			}
-			buildingsPointer = buildingsPointer->nextBuildingsListPointer;
-		}
-		return nullptr;
+		return reinterpret_cast<gameList<guild>&>(dataOffsets::offsets.guildDataStart);
 	}
 	
-	guild* getGuild(unsigned char index)
+	guild* getGuild(const int index)
 	{
-		uintptr_t currentOffsett = dataOffsets::offsets.guildDataStart;
-		int count = 0;
-		UINT32 maxCount = 0;
-		UINT8 currID = 0;
+		return getGuilds().get(index);
+	}
 
-		do {
-			techFuncs::read(currentOffsett + 0x10, &count);
-			techFuncs::read(currentOffsett + 0xC, &maxCount);
-			uintptr_t guilds = *(uintptr_t*)currentOffsett;
-
-			if (guilds == 0)
-			{
-				return nullptr;
-			}
-
-			for (int i = 0; i < count; ++i)
-			{
-				if (index == currID)
-				{
-					return  (guild*)(guilds + 0x4C * i);
-				}
-				++currID;
-			}
-
-			if (count < (int)maxCount || *(uintptr_t*)(currentOffsett + 0x4) == 0)
-			{
-				return nullptr;
-			}
-			currentOffsett = *(uintptr_t*)(currentOffsett + 0x4);
-
-		} while (*(uintptr_t*)currentOffsett != 0);
-
+	int getGuildNum()
+	{
+		return getGuilds().size();
+	}
+	
+	guild* getGuildByName(const std::string& name)
+	{
+		auto guilds = getGuilds();
+		const int guildNum = guilds.size();
+		for (int i = 0; i < guildNum; i++)
+		{
+			if (const auto guild = guilds.get(i); strcmp(guild->name, name.c_str()) == 0)
+				return guild;
+		}
 		return nullptr;
 	}
 };
@@ -478,17 +428,13 @@ namespace buildingHelpers
 {
 	void addToLua(sol::state& luaState)
 	{
-		
-		struct
-		{
-			sol::table EDB;
-		}tables;
-		
 		struct
 		{
 			sol::usertype<edbEntry>edbEntry;
-			sol::usertype<BuildingLvlCapability>capability;
-			sol::usertype<recruitPool>recruitpool;
+			sol::usertype<buildingLevelCapability>capability;
+			sol::usertype<recruitPool>recruitPool;
+			sol::usertype<buildingLevel>buildingLevel;
+			sol::usertype<exportDescrBuildings>EDB;
 		}types;
 		
 		///EdbEntry
@@ -501,8 +447,8 @@ namespace buildingHelpers
 		@tfield int classification
 		@tfield int isCoreBuilding
 		@tfield int isPort
-		@tfield int isCoreBuilding2
-		@tfield int hasReligion
+		@tfield int isWallBuilding
+		@tfield int isTemple
 		@tfield int religionID
 		@tfield int isHinterland
 		@tfield int isFarm
@@ -516,16 +462,281 @@ namespace buildingHelpers
 		types.edbEntry.set("classification", &edbEntry::classification);
 		types.edbEntry.set("isCoreBuilding", &edbEntry::isCoreBuilding);
 		types.edbEntry.set("isPort", &edbEntry::isPort);
-		types.edbEntry.set("isCoreBuilding2", &edbEntry::isCoreBuilding2);
-		types.edbEntry.set("hasReligion", &edbEntry::hasReligion);
+		types.edbEntry.set("isWallBuilding", &edbEntry::isWallBuilding);
+		types.edbEntry.set("isTemple", &edbEntry::isTemple);
 		types.edbEntry.set("religionID", &edbEntry::religionID);
 		types.edbEntry.set("isHinterland", &edbEntry::isHinterland);
 		types.edbEntry.set("isFarm", &edbEntry::isFarm);
 		types.edbEntry.set("buildingLevelCount", &edbEntry::buildingLevelCount);
 
-		///Capability
-		//@section capability 
+		/***
+		Basic buildingLevel table.
 
+		@tfield string name
+		@tfield string genericBuildingPic
+		@tfield string genericBuildingPicConstructed
+		@tfield string genericBuildingPicConstruction
+		@tfield int buildCost
+		@tfield int buildTime
+		@tfield int capabilityNum
+		@tfield int recruitPoolNum
+		@tfield int factionCapabilityNum
+		@tfield int settlementMinLvl
+		@tfield bool availableCastle
+		@tfield bool availableCity
+		@tfield setBuildingPic setBuildingPic
+		@tfield getBuildingPic getBuildingPic
+		@tfield setBuildingPicConstructed setBuildingPicConstructed
+		@tfield getBuildingPicConstructed getBuildingPicConstructed
+		@tfield setBuildingPicConstruction setBuildingPicConstruction
+		@tfield getBuildingPicConstruction getBuildingPicConstruction
+		@tfield setLocalizedName setLocalizedName
+		@tfield getLocalizedName getLocalizedName
+		@tfield setLocalizedDescr setLocalizedDescr
+		@tfield getLocalizedDescr getLocalizedDescr
+		@tfield setLocalizedDescrShort setLocalizedDescrShort
+		@tfield getLocalizedDescrShort getLocalizedDescrShort
+		@tfield getCapability getCapability
+		@tfield getFactionCapability getFactionCapability
+		@tfield getRecruitPool getRecruitPool
+		@tfield addCapability addCapability
+		@tfield addFactionCapability addFactionCapability
+		@tfield addRecruitPool addRecruitPool
+		@tfield removeCapability removeCapability
+		@tfield removeFactionCapability removeFactionCapability
+		@tfield removeRecruitPool removeRecruitPool
+
+		@table buildingLevel
+		*/
+		types.buildingLevel = luaState.new_usertype<buildingLevel>("buildingLevel");
+		types.buildingLevel.set("name", sol::property(&buildingLevel::getName, &buildingLevel::setName));
+		types.buildingLevel.set("genericBuildingPic", sol::property(&buildingLevel::getGenericBuildingPic, &buildingLevel::setGenericBuildingPic));
+		types.buildingLevel.set("genericBuildingPicConstructed", sol::property(&buildingLevel::getGenericBuildingPicConstructed, &buildingLevel::setGenericBuildingPicConstructed));
+		types.buildingLevel.set("genericBuildingPicConstruction", sol::property(&buildingLevel::getGenericBuildingPicConstruction, &buildingLevel::setGenericBuildingPicConstruction));
+		types.buildingLevel.set("buildCost", &buildingLevel::buildCost);
+		types.buildingLevel.set("buildTime", &buildingLevel::buildTime);
+		types.buildingLevel.set("settlementMinLvl", &buildingLevel::settlementMinLvl);
+		types.buildingLevel.set("availableCastle", sol::property(&buildingLevel::availableCastle));
+		types.buildingLevel.set("availableCity", sol::property(&buildingLevel::availableCity));
+		types.buildingLevel.set("capabilityNum", sol::property(&buildingLevel::getCapabilityNum));
+		types.buildingLevel.set("recruitPoolNum", sol::property(&buildingLevel::getPoolNum));
+		types.buildingLevel.set("factionCapabilityNum", sol::property(&buildingLevel::getFactionCapabilityNum));
+		
+		/***
+		Set picture of building.
+		@function buildingLevel:setBuildingPic
+		@tparam int cultureID of the culture to set the pic for. Only cultures 0-6 are valid.
+		@tparam string path Path to the picture.
+		@usage
+			buildingLevel:setBuildingPic(0, "some path to pic")
+		*/
+		types.buildingLevel.set_function("setBuildingPic", &buildingLevel::setBuildingPicPath);
+		
+		/***
+		Get picture of building.
+		@function buildingLevel:getBuildingPic
+		@tparam int cultureID of the culture to set the pic for. Only cultures 0-6 are valid.
+		@treturn string path Path to the picture.
+		@usage
+			local path = buildingLevel:getBuildingPic(0)
+		*/
+		types.buildingLevel.set_function("getBuildingPic", &buildingLevel::getBuildingPicPath);
+		
+		/***
+		Set constructed picture of building.
+		@function buildingLevel:setBuildingPicConstructed
+		@tparam int cultureID of the culture to set the pic for. Only cultures 0-6 are valid.
+		@tparam string path Path to the picture.
+		@usage
+			buildingLevel:setBuildingPicConstructed(0, "some path to pic")
+		*/
+		types.buildingLevel.set_function("setBuildingPicConstructed", &buildingLevel::setBuildingPicConstructedPath);
+		
+		/***
+		Get constructed picture of building.
+		@function buildingLevel:getBuildingPicConstructed
+		@tparam int cultureID of the culture to set the pic for. Only cultures 0-6 are valid.
+		@treturn string path Path to the picture.
+		@usage
+			local path = buildingLevel:getBuildingPicConstructed(0)
+		*/
+		types.buildingLevel.set_function("getBuildingPicConstructed", &buildingLevel::getBuildingPicConstructedPath);
+		
+		/***
+		Set construction picture of building.
+		@function buildingLevel:setBuildingPicConstruction
+		@tparam int cultureID of the culture to set the pic for. Only cultures 0-6 are valid.
+		@tparam string path Path to the picture.
+		@usage
+			buildingLevel:setBuildingPicConstruction(0, "some path to pic")
+		*/
+		types.buildingLevel.set_function("setBuildingPicConstruction", &buildingLevel::setBuildingPicConstructionPath);
+		
+		/***
+		Get construction picture of building.
+		@function buildingLevel:getBuildingPicConstruction
+		@tparam int cultureID of the culture to set the pic for. Only cultures 0-6 are valid.
+		@treturn string path Path to the picture.
+		@usage
+			local path = buildingLevel:getBuildingPicConstruction(0)
+		*/
+		types.buildingLevel.set_function("getBuildingPicConstruction", &buildingLevel::getBuildingPicConstructionPath);
+		
+		/***
+		Set the name of the building level.
+		@function buildingLevel:setLocalizedName
+		@tparam int factionID of the faction to set the pic for.
+		@tparam string name New name.
+		@usage
+			buildingLevel:setLocalizedName(0, "some name")
+		*/
+		types.buildingLevel.set_function("setLocalizedName", &buildingLevel::setLocalizedName);
+		
+		/***
+		Get the name of the building level.
+		@function buildingLevel:getLocalizedName
+		@tparam int factionID
+		@treturn string descr 
+		@usage
+			local name = buildingLevel:getLocalizedName(0)
+		*/
+		types.buildingLevel.set_function("getLocalizedName", &buildingLevel::getLocalizedName);
+		
+		/***
+		Set the description of the building level.
+		@function buildingLevel:setLocalizedDescr
+		@tparam int factionID
+		@tparam string descr
+		@usage
+			buildingLevel:setLocalizedDescr(0, "some description")
+		*/
+		types.buildingLevel.set_function("setLocalizedDescr", &buildingLevel::setLocalizedDescr);
+		
+		/***
+		Get the description of the building level.
+		@function buildingLevel:getLocalizedDescr
+		@tparam int factionID
+		@treturn string descr 
+		@usage
+			local descr = buildingLevel:getLocalizedDescr(0)
+		*/
+		types.buildingLevel.set_function("getLocalizedDescr", &buildingLevel::getLocalizedDescr);
+		
+		/***
+		Set the description of the building level.
+		@function buildingLevel:setLocalizedDescrShort
+		@tparam int factionID
+		@tparam string descr
+		@usage
+			buildingLevel:setLocalizedDescrShort(0, "some description")
+		*/
+		types.buildingLevel.set_function("setLocalizedDescrShort", &buildingLevel::setLocalizedDescrShort);
+		
+		/***
+		Get the description of the building level.
+		@function buildingLevel:getLocalizedDescrShort
+		@tparam int factionID
+		@treturn string descr 
+		@usage
+			local descr = buildingLevel:getLocalizedDescrShort(0)
+		*/
+		types.buildingLevel.set_function("getLocalizedDescrShort", &buildingLevel::getLocalizedDescrShort);
+		
+		/***
+		Get a capability.
+		@function buildingLevel:getCapability
+		@tparam int index
+		@treturn capability cap 
+		@usage
+			local cap = buildingLevel:getCapability(0)
+		*/
+		types.buildingLevel.set_function("getCapability", &buildingLevel::getCapability);
+		
+		/***
+		Get a faction capability.
+		@function buildingLevel:getFactionCapability
+		@tparam int index
+		@treturn capability cap 
+		@usage
+			local cap = buildingLevel:getFactionCapability(0)
+		*/
+		types.buildingLevel.set_function("getFactionCapability", &buildingLevel::getFactionCapability);
+		
+		/***
+		Get a recruit pool.
+		@function buildingLevel:getRecruitPool
+		@tparam int index
+		@treturn recruitPool pool 
+		@usage
+			local pool = buildingLevel:getRecruitPool(0)
+		*/
+		types.buildingLevel.set_function("getRecruitPool", &buildingLevel::getPool);
+		
+		/***
+		Add a capability.
+		@function buildingLevel:addCapability
+		@tparam int capability use capabilities enum
+		@tparam int value
+		@tparam bool bonus
+		@tparam string condition
+		@usage
+			   buildingLevel:addCapability(buildingCapability.income_bonus, 500, true, "factions { england, france, }")
+		*/
+		types.buildingLevel.set_function("addCapability", &buildingLevel::addCapability);
+		
+		/***
+		Add a faction capability.
+		@function buildingLevel:addFactionCapability
+		@tparam int capability use capabilities enum
+		@tparam int value
+		@tparam bool bonus
+		@tparam string condition
+		@usage
+			   buildingLevel:addFactionCapability(buildingCapability.income_bonus, 500, true, "factions { england, france, }")
+		*/
+		types.buildingLevel.set_function("addFactionCapability", &buildingLevel::addFactionCapability);
+		
+		/***
+		Add a recruit pool.
+		@function buildingLevel:addRecruitPool
+		@tparam int eduIndex
+		@tparam float initialSize
+		@tparam float gainPerTurn
+		@tparam float maxSize
+		@tparam int exp
+		@tparam string condition
+		@usage
+			   buildingLevel:addRecruitPool(M2TWEOPDU.getEduIndexByType("Peasants"), 1, 0.1, 2, 1, "factions { england, france, }")
+		*/
+		types.buildingLevel.set_function("addRecruitPool", &buildingLevel::addRecruitPool);
+		
+		/***
+		Remove a capability.
+		@function buildingLevel:removeCapability
+		@tparam int index
+		@usage
+			   buildingLevel:removeCapability(0)
+		*/
+		types.buildingLevel.set_function("removeCapability", &buildingLevel::removeBuildingCapability);
+		
+		/***
+		Remove a faction capability.
+		@function buildingLevel:removeFactionCapability
+		@tparam int index
+		@usage
+			   buildingLevel:removeFactionCapability(0)
+		*/
+		types.buildingLevel.set_function("removeFactionCapability", &buildingLevel::removeBuildingFactionCapability);
+		
+		/***
+		Remove a recruit pool.
+		@function buildingLevel:removeRecruitPool
+		@tparam int index
+		@usage
+			   buildingLevel:removeRecruitPool(0)
+		*/
+		types.buildingLevel.set_function("removeRecruitPool", &buildingLevel::removeBuildingPool);
+		
 		/***
 		Basic capability table.
 
@@ -536,34 +747,37 @@ namespace buildingHelpers
 
 		@table capability
 		*/
-		types.capability = luaState.new_usertype<BuildingLvlCapability>("capability");
-		types.capability.set("capabilityType", &BuildingLvlCapability::capabilityType);
-		types.capability.set("capabilityLvl", &BuildingLvlCapability::capabilityLvl);
-		types.capability.set("bonus", &BuildingLvlCapability::bonus);
-		types.capability.set("capabilityID", &BuildingLvlCapability::capabilityID);
-
-		///RecruitPool
-		//@section recruitpool 
-
+		types.capability = luaState.new_usertype<buildingLevelCapability>("capability");
+		types.capability.set("capabilityType", &buildingLevelCapability::capabilityType);
+		types.capability.set("capabilityLvl", &buildingLevelCapability::capabilityLvl);
+		types.capability.set("bonus", &buildingLevelCapability::bonus);
+		types.capability.set("capabilityID", &buildingLevelCapability::capabilityID);
+		
 		/***
-		Basic recruitpool table.
+		Basic recruitPool table.
 
 		@tfield int capabilityType
-		@tfield int capabilityLvlorExp Difference is for agents
+		@tfield int experience
 		@tfield int unitID
+		@tfield int agentAmount
+		@tfield int agentLimit
+		@tfield int agentType
 		@tfield float initialSize
 		@tfield float gainPerTurn
 		@tfield float maxSize
 
-		@table recruitpool
+		@table recruitPool
 		*/
-		types.recruitpool = luaState.new_usertype<recruitPool>("recruitpool");
-		types.recruitpool.set("capabilityType", &recruitPool::capabilityType);
-		types.recruitpool.set("capabilityLvlorExp", &recruitPool::capabilityLvlorExp);
-		types.recruitpool.set("unitID", &recruitPool::unitID);
-		types.recruitpool.set("initialSize", &recruitPool::initialSize);
-		types.recruitpool.set("gainPerTurn", &recruitPool::gainPerTurn);
-		types.recruitpool.set("maxSize", &recruitPool::maxSize);
+		types.recruitPool = luaState.new_usertype<recruitPool>("recruitPool");
+		types.recruitPool.set("capabilityType", &recruitPool::capabilityType);
+		types.recruitPool.set("experience", sol::property(&recruitPool::getUnitExperience, &recruitPool::setUnitExperience));
+		types.recruitPool.set("unitID", sol::property(&recruitPool::getUnitID, &recruitPool::setUnitID));
+		types.recruitPool.set("agentAmount", sol::property(&recruitPool::getAgentAmount, &recruitPool::setAgentAmount));
+		types.recruitPool.set("agentLimit", sol::property(&recruitPool::getAgentLimit, &recruitPool::setAgentLimit));
+		types.recruitPool.set("agentType", sol::property(&recruitPool::getAgentType, &recruitPool::setAgentType));
+		types.recruitPool.set("initialSize", &recruitPool::initialSize);
+		types.recruitPool.set("gainPerTurn", &recruitPool::gainPerTurn);
+		types.recruitPool.set("maxSize", &recruitPool::maxSize);
 
 		///EDB
 		//@section EDB 
@@ -572,26 +786,26 @@ namespace buildingHelpers
 		Basic EDB table.
 
 		@tfield addEopBuildEntry addEopBuildEntry
-		@tfield getEopBuildEntry getEopBuildEntry
-		@tfield setBuildingPic setBuildingPic
-		@tfield setBuildingPicConstructed setBuildingPicConstructed
-		@tfield setBuildingPicConstruction setBuildingPicConstruction
-		@tfield setBuildingLocalizedName setBuildingLocalizedName
-		@tfield setBuildingLocalizedDescr setBuildingLocalizedDescr
-		@tfield setBuildingLocalizedDescrShort setBuildingLocalizedDescrShort
-		@tfield addBuildingCapability addBuildingCapability
-		@tfield removeBuildingCapability removeBuildingCapability
-		@tfield getBuildingCapability getBuildingCapability
-		@tfield getBuildingCapabilityNum getBuildingCapabilityNum
-		@tfield addBuildingPool addBuildingPool
-		@tfield removeBuildingPool removeBuildingPool
-		@tfield getBuildingPool getBuildingPool
-		@tfield getBuildingPoolNum getBuildingPoolNum
+		@tfield int hiddenResourceCount
+		@tfield edbEntry port
+		@tfield edbEntry castlePort
+		@tfield edbEntry coreCityBuilding
+		@tfield edbEntry coreCastleBuilding
 		@tfield getBuildingByName getBuildingByName
+		@tfield getBuildingByID getBuildingByID
+		@tfield getBuildingNum getBuildingNum
+		@tfield getGuildNum getGuildNum
+		@tfield getGuild getGuild
+		@tfield getGuildByName getGuildByName
 
 		@table EDB
 		*/
-		tables.EDB = luaState.create_table("EDB");
+		types.EDB = luaState.new_usertype<exportDescrBuildings>("EDB");
+		types.EDB.set("hiddenResourceCount", &exportDescrBuildings::hiddenResourceCount);
+		types.EDB.set("port", &exportDescrBuildings::port);
+		types.EDB.set("castlePort", &exportDescrBuildings::castlePort);
+		types.EDB.set("coreCityBuilding", &exportDescrBuildings::coreCityBuilding);
+		types.EDB.set("coreCastleBuilding", &exportDescrBuildings::coreCastleBuilding);
 
 		/***
 		Create new EOP Building entry
@@ -600,256 +814,84 @@ namespace buildingHelpers
 		@tparam int newIndex New index of new entry. Use index > 127!
 		@treturn edbEntry eopentry.
 		@usage
-		-- Basic Example
-		oldBuilding = EDB.getBuildingByName("market")
-		newBuilding = EDB.addEopBuildEntry(oldBuilding,150);
-
-		-- Full example
-		local oldBuilding = EDB.getBuildingByName("market");
-		local eopBuilding = EDB.addEopBuildEntry(oldBuilding, 150);
-
-		-- Set pictures, names and descriptions by culture and faction
-		for c = 0, 6 do --every culture
-			EDB.setBuildingPic(eopBuilding, 'some path to pic', 0, c)
-			EDB.setBuildingPicConstructed(eopBuilding,'some path to pic', 0, c)
-		end
-		for f = 0, 30 do --every faction
-			EDB.setBuildingLocalizedName(eopBuilding, 'some name', 0, f)
-			EDB.setBuildingLocalizedDescr(eopBuilding, 'some description', 0, f)
-		end
-
-		-- Add in an income bonus of 500
-		EDB.addBuildingCapability(eopBuilding, 0, buildingCapability.income_bonus, 500, true)
-
-		-- Add a recruit pool
-		EDB.addBuildingPool(eopBuilding, 0, M2TWEOPDU.getEduIndexByType("Peasants"), 1, 0.1, 2, 0, "");
-
-		-- Create a dummy building and get it
-		sett:createBuilding("market");; --just assuming you have got a sett with some loop or function
-
-		-- Set the existing building in the settlement to be the EOP building we just created
-		local dummyBuilding = sett:getBuilding(5)
-		dummyBuilding.edbEntry = eopBuilding
 		*/
-		tables.EDB.set_function("addEopBuildEntry", &buildEntryDB::addEopBuildEntry);
-
-		/***
-		Get EOP Building entry. Returns vanilla build entry if you use a vanilla building index (< 128).
-		@function EDB.getEopBuildEntry
-		@tparam int index Index of eop entry.
-		@treturn edbEntry eopentry.
-		@usage
-		building = EDB.getEopBuildEntry(150);
-		*/
-		tables.EDB.set_function("getEopBuildEntry", &buildEntryDB::getEopBuildEntry);
-
-		/***
-		Set picture of building.
-		@function EDB.setBuildingPic
-		@tparam edbEntry edbEntry Entry to set.
-		@tparam string newPic Path to new pic.
-		@tparam int level Building level to set pic for.
-		@tparam int culture ID of the culture to set the pic for.
-		@usage
-		building = EDB.getBuildingByName("market")
-		EDB.setBuildingPic(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
-		*/
-		tables.EDB.set_function("setBuildingPic", &eopBuildings::setBuildingPic);
-
-		/***
-		Set constructed picture of building.
-		@function EDB.setBuildingPicConstructed
-		@tparam edbEntry edbEntry Entry to set.
-		@tparam string newPic Path to new pic.
-		@tparam int level Building level to set pic for.
-		@tparam int culture ID of the culture to set the pic for.
-		@usage
-		building = EDB.getBuildingByName("market")
-		EDB.setBuildingPicConstructed(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
-		*/
-		tables.EDB.set_function("setBuildingPicConstructed", &eopBuildings::setBuildingPicConstructed);
-
-		/***
-		Set construction picture of building.
-		@function EDB.setBuildingPicConstruction
-		@tparam edbEntry edbEntry Entry to set.
-		@tparam string newPic Path to new pic.
-		@tparam int level Building level to set pic for.
-		@tparam int culture ID of the culture to set the pic for.
-		@usage
-		building = EDB.getBuildingByName("market")
-		EDB.setBuildingPicConstruction(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
-		*/
-		tables.EDB.set_function("setBuildingPicConstruction", &eopBuildings::setBuildingPicConstruction);
-
-		/***
-		Set name of a building.
-		@function EDB.setBuildingLocalizedName
-		@tparam edbEntry edbEntry Entry to set.
-		@tparam string newName New name.
-		@tparam int level Building level.
-		@tparam int facnum Faction ID of the faction to set it for (factionID).
-		@usage
-		building = EDB.getBuildingByName("market")
-		EDB.setBuildingLocalizedName(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
-		*/
-		tables.EDB.set_function("setBuildingLocalizedName", &eopBuildings::setBuildingLocalizedName);
-
-		/***
-		Set description of a building.
-		@function EDB.setBuildingLocalizedDescr
-		@tparam edbEntry edbEntry Entry to set.
-		@tparam string newName New description.
-		@tparam int level Building level.
-		@tparam int facnum Faction ID of the faction to set it for (factionID).
-		@usage
-		building = EDB.getBuildingByName("market")
-		EDB.setBuildingLocalizedDescr(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
-		*/
-		tables.EDB.set_function("setBuildingLocalizedDescr", &eopBuildings::setBuildingLocalizedDescr);
-
-		/***
-		Set short description of a building.
-		@function EDB.setBuildingLocalizedDescrShort
-		@tparam edbEntry edbEntry Entry to set.
-		@tparam string newName New short description.
-		@tparam int level Building level.
-		@tparam int facnum Faction ID of the faction to set it for (factionID).
-		@usage
-		building = EDB.getBuildingByName("market")
-		EDB.setBuildingLocalizedDescrShort(building, modPath .. mp_path_mods .. "data/ui/northern_european/buildings/#northern_european_vintner.tga", 0, 4);
-		*/
-		tables.EDB.set_function("setBuildingLocalizedDescrShort", &eopBuildings::setBuildingLocalizedDescrShort);
-
-		/***
-		Add a capability to a building.
-		@function EDB.addBuildingCapability
-		@tparam edbEntry edbEntry Entry to set.
-		@tparam int level Building level.
-		@tparam int capability ID of capability to set. Use buildingCapability enum.
-		@tparam int value Value to set.
-		@tparam bool bonus Is it bonus or not.
-		@usage
+		types.EDB.set_function("addEopBuildEntry", &buildEntryDB::addEopBuildEntry);
 		
-		building = EDB.getBuildingByName("market")
-
-		-- Add a population growth bonus to the market building
-		EDB.addBuildingCapability(building, 0, 0, 5, true);
-
-		-- Add a 500 income bonus to the market building
-		EDB.addBuildingCapability(building, 0, buildingCapability.income_bonus, 500, true)
-		*/
-		tables.EDB.set_function("addBuildingCapability", &eopBuildings::addBuildingCapability);
-
-		/***
-		Remove a capability from a building.
-		@function EDB.removeBuildingCapability
-		@tparam edbEntry edbEntry Entry to set.
-		@tparam int level Building level.
-		@tparam int index Which capability to remove (In order of iterating).
-		@usage
-		building = EDB.getBuildingByName("market")
-		EDB.removeBuildingCapability(building, 0, 3);
-		*/
-		tables.EDB.set_function("removeBuildingCapability", &eopBuildings::removeBuildingCapability);
-
-		/***
-
-		Get capability from a building at an index.
-		@function EDB.getBuildingCapability
-		@tparam edbEntry edbEntry Entry to set.
-		@tparam int level Building level.
-		@tparam int index
-		@treturn capability capability.
-		@usage
-		building = EDB.getBuildingByName("market")
-		cap = EDB.getBuildingCapability(building, 0, 3);
-		*/
-		tables.EDB.set_function("getBuildingCapability", &eopBuildings::getBuildingCapability);
-
-
-		/***
-
-		Get capability amount from a building.
-		@function EDB.getBuildingCapabilityNum
-		@tparam edbEntry edbEntry Entry to set.
-		@tparam int level Building level.
-		@treturn int capabilityNum.
-		@usage
-		building = EDB.getBuildingByName("market")
-		EDB.getBuildingCapabilityNum(building, 0);
-		*/
-		tables.EDB.set_function("getBuildingCapabilityNum", &eopBuildings::getBuildingCapabilityNum);
-
-		/***
-		Add a recruitment pool to a building.
-		@function EDB.addBuildingPool
-		@tparam edbEntry edbEntry Entry to set.
-		@tparam int level Building level.
-		@tparam int eduIndex edu index of unit to add.
-		@tparam float initialSize Initial pool.
-		@tparam float gainPerTurn Replenishment per turn.
-		@tparam float maxSize Maximum size.
-		@tparam int exp Initial experience.
-		@tparam string condition Like in export_descr_buildings but without "requires".
-		@usage
-		building = EDB.getBuildingByName("market")
-		EDB.addBuildingPool(building, 0, 55, 1, 0.1, 2, 0, "region_religion catholic 34");
-		*/
-		tables.EDB.set_function("addBuildingPool", &settlementHelpers::addBuildingPool);
-
-
-		/***
-		Remove a recruitment pool from a building.
-		@function EDB.removeBuildingPool
-		@tparam edbEntry edbEntry Entry to set.
-		@tparam int level Building level.
-		@tparam int index Which pool to remove (In order of iterating).
-		@usage
-		building = EDB.getBuildingByName("market")
-		EDB.removeBuildingPool(building, 0, 3);
-		*/
-		tables.EDB.set_function("removeBuildingPool", &eopBuildings::removeBuildingPool);
-
-
-		/***
-		Get a recruitment pool from a building by index.
-		@function EDB.getBuildingPool
-		@tparam edbEntry edbEntry Entry to set.
-		@tparam int level Building level.
-		@tparam int index Which pool to get (In order of iterating).
-		@treturn recruitpool pool.
-		@usage
-		building = EDB.getBuildingByName("market")
-		EDB.getBuildingPool(building, 0, 3);
-		*/
-		tables.EDB.set_function("getBuildingPool", &eopBuildings::getBuildingPool);
-
-
-		/***
-		Get a recruitment pool count.
-		@function EDB.getBuildingPoolNum
-		@tparam edbEntry edbEntry Entry to set.
-		@tparam int level Building level.
-		@treturn int poolNum.
-		@usage
-		building = EDB.getBuildingByName("market")
-		EDB.getBuildingPoolNum(building, 0);
-		*/
-		tables.EDB.set_function("getBuildingPoolNum", &eopBuildings::getBuildingPoolNum);
-
-
-		//tables.EDB.set_function("createEOPBuilding", &buildingStructHelpers::createEOPBuilding);
-
-
 		/***
 		Get a building edb entry by name.
-		@function EDB.getBuildingByName
+		@function EDB:getBuildingByName
 		@tparam string buildingname
 		@treturn edbEntry entry
 		@usage
-		building = EDB.getBuildingByName("market")
+		local building = EDB:getBuildingByName("market")
 		*/
-		tables.EDB.set_function("getBuildingByName", &eopBuildings::getBuildingByName);
+		types.EDB.set_function("getBuildingByName", &exportDescrBuildings::getBuildingByName);
+		
+		/***
+		Get a building edb entry by index (EOP buildings too).
+		@function EDB:getBuildingByID
+		@tparam int index
+		@treturn edbEntry entry
+		@usage
+		local building = EDB:getBuildingByID(22)
+		*/
+		types.EDB.set_function("getBuildingByID", &exportDescrBuildings::getBuildingByID);
+		
+		/***
+		Get number of vanilla buildings.
+		@function EDB:getBuildingNum
+		@treturn int num
+		@usage
+		local num = EDB:getBuildingNum()
+		*/
+		types.EDB.set_function("getBuildingNum", &exportDescrBuildings::getBuildingNum);
+		
+		/***
+		Get a guild by index.
+		@function EDB.getGuild
+		@tparam int index
+		@treturn guild guild
+		@usage
+		local guild = EDB.getGuild(0)
+		*/
+		types.EDB.set_function("getGuild", &eopBuildings::getGuild);
+		
+		/***
+		Get number of guilds.
+		@function EDB.getGuildNum
+		@treturn int num
+		@usage
+		local num = EDB.getGuildNum()
+		*/
+		types.EDB.set_function("getGuildNum", &eopBuildings::getGuildNum);
+		
+		/***
+		Get a guild by name.
+		@function EDB.getGuildByName
+		@tparam string name
+		@treturn guild guild
+		@usage
+		local guild = EDB.getGuildByName("assassins_guild")
+		*/
+		types.EDB.set_function("getGuildByName", &eopBuildings::getGuildByName);
+
+
+		
+		///Legacy functions///
+		types.EDB.set_function("getEopBuildEntry", &buildEntryDB::getEopBuildEntry);
+		types.EDB.set_function("setBuildingPic", &eopBuildings::setBuildingPic);
+		types.EDB.set_function("setBuildingPicConstructed", &eopBuildings::setBuildingPicConstructed);
+		types.EDB.set_function("setBuildingPicConstruction", &eopBuildings::setBuildingPicConstruction);
+		types.EDB.set_function("setBuildingLocalizedName", &eopBuildings::setBuildingLocalizedName);
+		types.EDB.set_function("setBuildingLocalizedDescr", &eopBuildings::setBuildingLocalizedDescr);
+		types.EDB.set_function("setBuildingLocalizedDescrShort", &eopBuildings::setBuildingLocalizedDescrShort);
+		types.EDB.set_function("addBuildingCapability", &eopBuildings::addBuildingCapability);
+		types.EDB.set_function("removeBuildingCapability", &eopBuildings::removeBuildingCapability);
+		types.EDB.set_function("getBuildingCapability", &eopBuildings::getBuildingCapability);
+		types.EDB.set_function("getBuildingCapabilityNum", &eopBuildings::getBuildingCapabilityNum);
+		types.EDB.set_function("addBuildingPool", &eopBuildings::addBuildingPool);
+		types.EDB.set_function("removeBuildingPool", &eopBuildings::removeBuildingPool);
+		types.EDB.set_function("getBuildingPool", &eopBuildings::getBuildingPool);
+		types.EDB.set_function("getBuildingPoolNum", &eopBuildings::getBuildingPoolNum);
 	}
 }

@@ -1352,6 +1352,8 @@ namespace unitHelpers
     //void addToLua(sol::state& luaState)
 	void luaP::initUnits()
     {
+	    eopDuHelpers::addToLua(luaState);
+	
         struct
         {
             sol::usertype<unit>unit;
@@ -1365,7 +1367,7 @@ namespace unitHelpers
         	sol::usertype<statArmour> defenseStats;
         	sol::usertype<unitStats> unitStats;
         }types;
-    	
+	
 		///Unit
 		//@section unitTable
 

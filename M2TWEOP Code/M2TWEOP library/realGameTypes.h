@@ -624,7 +624,6 @@ struct fireRate
 	int flaming;
 };
 
-
 struct statPri
 {
 	unsigned __int32 isValid : 1;
@@ -2371,72 +2370,6 @@ struct stratMod {
 	undefined field_0x2;
 	undefined field_0x3;
 };
-
-struct BuildingPicEntry
-{
-public:
-	char* buildingPicPath; //0x0000
-	int picHash;
-}; //Size: 0x0008
-
-//building draw info(pics, etc)
-struct buildingLevel { /* (name, tga's, models, etc) */
-	char* name;
-	int32_t buildingLevelNameHash; //0x0004
-	UNICODE_STRING*** buildingName[31]; //0x0008
-	UNICODE_STRING*** buildingDescr[31]; //0x0084
-	UNICODE_STRING*** buildingDescrShort[31]; //0x0100
-	struct BuildingPicEntry buildingPic[7]; //0x017C
-	char* GenericBuildingPic; //0x01B4
-	int32_t GenericBuildingPicHash; //0x01B8
-	struct BuildingPicEntry buildingPicConstructed[7]; //0x01BC
-	char* GenericbuildingPicConstructed; //0x01F4
-	int32_t GenericbuildingPicConstructedHash; //0x01F8
-	struct BuildingPicEntry buildingPicConstruction[7]; //0x01FC
-	char* GenericbuildingPicConstruction; //0x0234
-	int32_t GenericbuildingPicConstructionHash; //0x0238
-	void* buildingLevelCondition; //0x023C
-	int16_t buildCost; //0x0240
-	uint8_t buildTime; //0x0242
-	char pad_0243[1]; //0x0243
-	uint32_t settlementMinLvl; //0x0244
-	int8_t cityOneCastleMinusOne; //0x0248
-	char pad_0249[19]; //0x0249
-	struct BuildingLvlCapability* capabilities; //0x025C
-	struct recruitPool* recruitPools; //0x0260
-	int32_t factionCapabilities; //0x0264
-	void* upgrades; //0x0268
-};
-
-
-struct BuildingLvlCapability
-{
-public:
-	int32_t capabilityType; //0x0000
-	int16_t capabilityLvl; //0x0004
-	int16_t bonus; //0x0006
-	int32_t capabilityID; //0x0008
-	DWORD funcPointer;
-	struct buildingLevel* buildingLevel;
-	DWORD EDBpointer;
-	void* buildingLevelCondition; //0x0018
-	struct BuildingLvlCapability* nextCapability; //0x001C
-}; //Size: 0x0020
-
-
-struct recruitPool
-{
-public:
-	int32_t capabilityType; //0x0000
-	int32_t capabilityLvlorExp; //0x0004
-	int32_t unitID; //0x0006
-	float initialSize;
-	float gainPerTurn;
-	float maxSize;
-	void* buildingLevelCondition; //0x0018
-	struct recruitPool* nextPool; //0x001C
-}; //Size: 0x0020
-
 struct battlefieldEngines
 {
 public:
@@ -2446,145 +2379,6 @@ public:
 	int32_t enginesNum2; //0x000C
 	int32_t enginesNum3; //0x0010
 }; //Size: 0x0014
-
-//building data
-struct edbEntry { /* SETTLEMENT_CONDITION_SETTLEMENT_FACTION */
-	char pad_0000[20]; //0x0000
-	int32_t buildingID; //0x0014
-	int32_t classification; //0x0018
-	char pad_001C[68]; //0x001C
-	int8_t isCoreBuilding; //0x0060
-	int8_t isPort; //0x0061
-	int8_t isCoreBuilding2; //0x0062
-	int8_t hasReligion; //0x0063
-	int32_t religionID; //0x0064
-	int8_t isHinterland; //0x0068
-	int8_t isFarm; //0x0069
-	char pad_006A[6]; //0x006A
-	UNICODE_STRING** localizedName;
-	void* convertTo; //0x0074
-	char pad_0078[8]; //0x0078
-	char* type; /* type of building (core_building,barracks)  */
-	int typeHash;
-	struct buildingLevel* buildingLevel; /* name of building(stone_wall), tga's, etc */
-	char pad_008C[4]; //0x008C
-	int32_t buildingLevelCount; //0x0090
-	char pad_0094[8]; //0x0094
-};
-
-
-struct hiddenResource
-{
-public:
-	char* hiddenResName; //0x0000
-	int32_t hiddenResNameHash; //0x0004
-}; //Size: 0x0008
-
-struct buildingsArray
-{
-public:
-	struct edbEntry buildings[64]; //0x0000
-};
-
-struct buildingListPointer
-{
-public:
-	struct buildingsArray* buildingsArray; //0x0000
-	struct buildingListPointer* nextBuildingsListPointer; //0x0004
-	struct buildingListPointer* prevBuildingsListPointer; //0x0008
-	int32_t arraySize; //0x000C
-	int32_t arrayCount; //0x0010
-}; //Size: 0x0014
-
-struct lookupVariantNamesList
-{
-public:
-	struct stringWithHash *lookupVariantNames; //0x0000
-	struct lookupVariantNamesList *next; //0x0004
-	struct lookupVariantNamesList *previous; //0x0008
-	int32_t lookupVariantNamesSize; //0x000C
-	int32_t lookupVariantNamesNum; //0x0010
-}; //Size: 0x0014
-
-struct lookupVariant
-{
-public:
-	lookupVariantNamesList names;
-	char *name; //0x0014
-	int32_t nameHash; //0x0018
-}; //Size: 0x001C
-
-struct lookupVariantsVector
-{
-public:
-	struct lookupVariant *lookupVariants; //0x0000
-	struct lookupVariantsVector *next; //0x0004
-	struct lookupVariantsVector *prev; //0x0008
-	int32_t lookupVariantsSize; //0x000C
-	int32_t lookupVariantsNum; //0x0010
-}; //Size: 0x0014
-
-struct battleBuildingVector
-{
-public:
-	struct buildingBattleEntry *battleBuildings; //0x0000
-	struct battleBuildingVector *next; //0x0004
-	struct battleBuildingVector *prev; //0x0008
-	int32_t battleBuildingsSize; //0x000C
-	int32_t battleBuildingsNum; //0x0010
-}; //Size: 0x0014
-
-struct buildingBattleWallsVector
-{
-public:
-	struct buildingBattleWallEntry *buildingBattleWalls; //0x0000
-	struct buildingBattleWallsVector *next; //0x0004
-	struct buildingBattleWallsVector *prev; //0x0008
-	int32_t buildingBattleWallsSize; //0x000C
-	int32_t buildingBattleWallsNum; //0x0010
-}; //Size: 0x0014
-
-struct exportDescrBuildings
-{
-public:
-	struct hiddenResource hiddenresources[64]; //0x0000
-	int32_t hiddenResourceCount; //0x0200
-	int32_t field_204; //0x0204
-	void *stringLookupTable; //0x0208
-	int32_t field_20c; //0x020C
-	int32_t field_210; //0x0210
-	int32_t field_214; //0x0214
-	void *array_218; //0x0218
-	int32_t array_218Next; //0x021C
-	int32_t array_218NextPRev; //0x0220
-	int32_t array_218Size; //0x0224
-	int32_t array_218SizeNum; //0x0228
-	struct lookupVariantsVector lookupVariantsVector; //0x022C
-	void *stringTable1; //0x0240
-	void *stringTable2; //0x0244
-	struct edbEntry *port; //0x0248
-	struct edbEntry *castlePort; //0x024C
-	struct edbEntry *coreCityBuilding; //0x0250
-	struct edbEntry *coreCastleBuilding; //0x0254
-	struct battleBuildingVector battleBuildingVector; //0x0258
-	void *array_26c; //0x026C
-	void*array_26cNext; //0x0270
-	void*array_26cPrev; //0x0274
-	int32_t array_26cSize; //0x0278
-	int32_t array_26cNum; //0x027C
-	struct buildingListPointer buildingsList; //0x0280
-	void *array_294; //0x0294
-	void *array_294NExt; //0x0298
-	void*array_294Prev; //0x029C
-	int32_t array_294Size; //0x02A0
-	int32_t array_294Num; //0x02A4
-	struct buildingBattleWallsVector buildingBattleWallsVector; //0x02A8
-	void *uniRepairString1; //0x02BC
-	void*uniRepairString2; //0x02C0
-	void *uniRepairString3; //0x02C4
-	void*uniRepairString4; //0x02C8
-
-}; //Size: 0x0350
 
 struct oneSiege {
 	void* vtable;
@@ -2806,7 +2600,7 @@ struct buildingInfoScroll
 	char pad2[12];
 	struct building* building;
 	char pad3[12];
-	edbEntry* entry;
+	struct edbEntry* entry;
 };
 struct unitInfoScroll
 {

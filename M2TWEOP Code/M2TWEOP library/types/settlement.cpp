@@ -16,12 +16,109 @@
 #include "campaign.h"
 #include "strategyMap.h"
 
+std::shared_ptr<std::array<eopSettlementData, 200>> eopSettlementDataDb::eopSettData = std::make_shared<std::array<eopSettlementData, 200>>();
+std::string eopSettlementDataDb::onGameSave()
+{
+	const auto campaignData = campaignHelpers::getCampaignData();
+	for (int i = 0; i < campaignData->factionCount; i++)
+	{
+		const auto faction = campaignData->getFactionByOrder(i);
+		for (int s = 0; s < faction->settlementsNum; s++)
+		{
+			const auto settlement = faction->settlements[s];
+			for (int b = 0; b < settlement->buildingsNum; b++)
+			{
+				if (const auto building = settlement->buildings[b]; building->edbEntry->eopBuildingID != 0)
+				{
+					eopSettData->at(settlement->regionID).eopBuildingEntries[b] = building->edbEntry->eopBuildingID;
+				}
+			}
+		}
+	}
+	std::string fPath = m2tweopHelpers::getModPath();
+	fPath += "\\eopData\\TempSaveData";
+	filesystem::remove_all(fPath);
+	filesystem::create_directory(fPath);
+	std::string outFile = fPath;
+	outFile += "\\settlementData.json";
+	ofstream f1(outFile);
+	jsn::json json = serialize();
+	f1 << setw(4) << json;
+	f1.close();
+	return outFile;
+	
+}
+void eopSettlementDataDb::onGameLoad(const std::vector<std::string>& filePaths)
+{
+	bool success = false;
+	for (auto& path : filePaths)
+	{
+		if (path.find("settlementData.json") == string::npos)
+			continue;
+		jsn::json json;
+		try
+		{
+			std::ifstream file(path);
+			file >> json;
+			file.close();
+		}
+		catch (jsn::json::parse_error& e)
+		{
+			MessageBoxA(nullptr, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
+		try
+		{
+			deserialize(json);
+			success = true;
+		}
+		catch (jsn::json::exception& e)
+		{
+			MessageBoxA(nullptr, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
+	}
+	if (!success)
+		return;
+	for (int i = 0; i < 200; i++)
+	{
+		auto [settlementID, eopBuildingEntries, modelId, regionName, regionRebelsName] = eopSettData->at(i);
+		const auto region = stratMapHelpers::getRegion(settlementID);
+		if (!regionName.empty())
+			region->changeRegionName(regionName.c_str());
+		if (!regionRebelsName.empty())
+			region->changeRebelsName(regionRebelsName.c_str());
+		if (!region->settlement)
+			continue;
+		for (int j = 0; j < region->settlement->buildingsNum; j++)
+		{
+			if (const auto id = eopBuildingEntries[j]; id != 0)
+			{
+				if (const auto entry = buildEntryDB::getEopBuildEntry(id); entry)
+				{
+					if (const auto building = region->settlement->getBuilding(j); building)
+					{
+						building->edbEntry = entry;
+					}
+				}
+			}
+		}
+	}
+}
+
 namespace settlementHelpers
 {
 	/*----------------------------------------------------------------------------------------------------------------*\
 											 Settlement helpers
     \*----------------------------------------------------------------------------------------------------------------*/
 #pragma region Settlement helpers
+
+	settlementStruct* getSettlementByRegionID(int index)
+	{
+		const auto region = stratMapHelpers::getRegion(index);
+		if (!region)
+			return nullptr;
+		return region->settlement;
+	}
+	
 	void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner, bool convertGarrison)
 	{
 		armyStruct* garrison = nullptr;

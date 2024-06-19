@@ -40,20 +40,40 @@ oneTileDouble* oneTile::tileToDoubleTile()
 
 void regionStruct::changeRegionName(const char* newName)
 {
-
 	UNICODE_STRING** nameMem = new UNICODE_STRING*;
 	localizedRegionName = nameMem;
-
 	smallFuncs::createUniString(localizedRegionName, newName);
+	eopSettlementDataDb::getSettlementData(regionID).regionName = newName;
 }
 
 void regionStruct::changeRebelsName(const char* newName)
 {
-
 	UNICODE_STRING** nameMem = new UNICODE_STRING*;
 	localizedRebelsName = nameMem;
-
 	smallFuncs::createUniString(localizedRebelsName, newName);
+	eopSettlementDataDb::getSettlementData(regionID).regionRebelsName = newName;
+}
+
+bool regionStruct::hasHiddenResource(const char* newName)
+{
+	const auto edb = eopBuildings::getEdb();
+	if (!edb)
+		return false;
+	const int index = edb->getHiddenResourceIndex(newName);
+	if (index < 0)
+		return false;
+	return hasHiddenResourceId(index);
+}
+
+void regionStruct::setHiddenResource(const char* name, const bool enable)
+{
+	const auto edb = eopBuildings::getEdb();
+	if (!edb)
+		return;
+	const int index = edb->getHiddenResourceIndex(name);
+	if (index < 0)
+		return;
+	setHiddenResourceId(index, enable);
 }
 	
 int oneTile::getTileX()
@@ -1028,26 +1048,26 @@ namespace stratMapHelpers
 		/***
 		Check if a region has a hidden resource.
 		@function regionStruct:getHiddenResource
-		@tparam int index
+		@tparam string name
 		@treturn bool hr
 		@usage
 		local sMap = gameDataAll.get().stratMap;
 		local region = sMap.getRegion(2);
-		localhr = region:getHiddenResource(0)
+		localhr = region:getHiddenResource("resource_name")
 		*/
-		typeAll.regionStruct.set_function("getHiddenResource", &regionStruct::hasHiddenResourceId);
+		typeAll.regionStruct.set_function("getHiddenResource", &regionStruct::hasHiddenResource);
 
 		/***
 		Set a region's hidden resource (reset on game restart).
 		@function regionStruct:setHiddenResource
-		@tparam int index
+		@tparam string name
 		@tparam bool enable
 		@usage
 		local sMap = gameDataAll.get().stratMap;
 		local region = sMap.getRegion(2);
-		region:setHiddenResource(0, false)
+		region:setHiddenResource("resource_name", false)
 		*/
-		typeAll.regionStruct.set_function("setHiddenResource", &regionStruct::setHiddenResourceId);
+		typeAll.regionStruct.set_function("setHiddenResource", &regionStruct::setHiddenResource);
 
 		/***
 		Get a region that is reachable from this region.

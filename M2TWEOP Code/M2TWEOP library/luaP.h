@@ -65,7 +65,6 @@ public:
 	void initCampaignDb();
 	void initCampaign();
 	void initTech();
-	void initEopEdu();
 	void initUnits();
 	void initEopFbx();
 	void initEop3dObjects();

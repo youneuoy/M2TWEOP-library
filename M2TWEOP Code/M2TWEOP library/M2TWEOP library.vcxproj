@@ -413,7 +413,6 @@
     <ClCompile Include="graphicsD3D.cpp" />
     <ClCompile Include="Injects.cpp" />
     <ClCompile Include="luaEop3dObjects.cpp" />
-    <ClCompile Include="luaEopEdu.cpp" />
     <ClCompile Include="luaFbx.cpp" />
     <ClCompile Include="luaP.cpp" />
     <ClCompile Include="luaP2.cpp" />

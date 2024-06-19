@@ -4,6 +4,8 @@
 #include "unit.h"
 
 
+struct edbEntry;
+struct buildingLevel;
 struct regionStruct;
 struct aiFaction;
 

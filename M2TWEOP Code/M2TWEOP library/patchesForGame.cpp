@@ -8,6 +8,7 @@
 #include "events.h"
 #include "battleHandlerHelpers.h"
 #include "cultures.h"
+#include "eopBuildings.h"
 #include "onlineThings.h"
 #include "character.h"
 #include "faction.h"
@@ -324,32 +325,22 @@ char* __fastcall patchesForGame::getBrowserPicConstructed(int cultureID, edbEntr
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
 	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
-	auto lookUpVariants = &edb->lookupVariantsVector;
-	while(lookUpVariants)
+	const int variantNum = edb->lookupVariants.size();
+	for (int i = 0; i < variantNum; i++)
 	{
-		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		const auto variant = edb->lookupVariants.get(i);
+		const auto variantNamesSize = variant->names.size();
+		for (int j = 0; j < variantNamesSize; j++)
 		{
-			const auto variant = &lookUpVariants->lookupVariants[i];
-			if (strcmp(variant->name, cultureName.c_str()) == 0)
-			{
-				auto list = &variant->names;
-				while (list)
-				{
-					for (int j = 0; j < list->lookupVariantNamesNum; j++)
-					{
-						const auto variantString = list->lookupVariantNames[j].name;
-						FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-						FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-					}
-					list = list->next;
-				}
-			}
+			const auto variantName = variant->names.get(j);
+			const auto variantString = variantName->name;
+			FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
+			FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
 		}
-		lookUpVariants = lookUpVariants->next;
 	}
 	for (auto& i : level.buildingPicConstructed)
 	{
@@ -387,32 +378,22 @@ char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEnt
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
 	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
-	auto lookUpVariants = &edb->lookupVariantsVector;
-	while(lookUpVariants)
+	const int variantNum = edb->lookupVariants.size();
+	for (int i = 0; i < variantNum; i++)
 	{
-		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		const auto variant = edb->lookupVariants.get(i);
+		const auto variantNamesSize = variant->names.size();
+		for (int j = 0; j < variantNamesSize; j++)
 		{
-			const auto variant = &lookUpVariants->lookupVariants[i];
-			if (strcmp(variant->name, cultureName.c_str()) == 0)
-			{
-				auto list = &variant->names;
-				while (list)
-				{
-					for (int j = 0; j < list->lookupVariantNamesNum; j++)
-					{
-						const auto variantString = list->lookupVariantNames[j].name;
-						FILE_PATH = modPath + getBuildingPicConstructionPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-						FILE_PATH = GAME_PATH + getBuildingPicConstructionPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-					}
-					list = list->next;
-				}
-			}
+			const auto variantName = variant->names.get(j);
+			const auto variantString = variantName->name;
+			FILE_PATH = modPath + getBuildingPicConstructionPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
+			FILE_PATH = GAME_PATH + getBuildingPicConstructionPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
 		}
-		lookUpVariants = lookUpVariants->next;
 	}
 	for (auto& i : level.buildingPicConstruction)
 	{
@@ -449,32 +430,22 @@ char* __fastcall patchesForGame::getBuildingPic(buildingLevel* level, int cultur
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
 	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
-	auto lookUpVariants = &edb->lookupVariantsVector;
-	while(lookUpVariants)
+	const int variantNum = edb->lookupVariants.size();
+	for (int i = 0; i < variantNum; i++)
 	{
-		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		const auto variant = edb->lookupVariants.get(i);
+		const auto variantNamesSize = variant->names.size();
+		for (int j = 0; j < variantNamesSize; j++)
 		{
-			const auto variant = &lookUpVariants->lookupVariants[i];
-			if (strcmp(variant->name, cultureName.c_str()) == 0)
-			{
-				auto list = &variant->names;
-				while (list)
-				{
-					for (int j = 0; j < list->lookupVariantNamesNum; j++)
-					{
-						const auto variantString = list->lookupVariantNames[j].name;
-						FILE_PATH = modPath + getBuildingPicPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-						FILE_PATH = GAME_PATH + getBuildingPicPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-					}
-					list = list->next;
-				}
-			}
+			const auto variantName = variant->names.get(j);
+			const auto variantString = variantName->name;
+			FILE_PATH = modPath + getBuildingPicPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
+			FILE_PATH = GAME_PATH + getBuildingPicPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
 		}
-		lookUpVariants = lookUpVariants->next;
 	}
 	for (auto& i : level->buildingPic)
 	{
@@ -511,32 +482,22 @@ char* __fastcall patchesForGame::getBuildingPicConstructed(buildingLevel* level,
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
 	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
-	auto lookUpVariants = &edb->lookupVariantsVector;
-	while(lookUpVariants)
+	const int variantNum = edb->lookupVariants.size();
+	for (int i = 0; i < variantNum; i++)
 	{
-		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		const auto variant = edb->lookupVariants.get(i);
+		const auto variantNamesSize = variant->names.size();
+		for (int j = 0; j < variantNamesSize; j++)
 		{
-			const auto variant = &lookUpVariants->lookupVariants[i];
-			if (strcmp(variant->name, cultureName.c_str()) == 0)
-			{
-				auto list = &variant->names;
-				while (list)
-				{
-					for (int j = 0; j < list->lookupVariantNamesNum; j++)
-					{
-						const auto variantString = list->lookupVariantNames[j].name;
-						FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-						FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-					}
-					list = list->next;
-				}
-			}
+			const auto variantName = variant->names.get(j);
+			const auto variantString = variantName->name;
+			FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
+			FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
 		}
-		lookUpVariants = lookUpVariants->next;
 	}
 	for (auto& i : level->buildingPicConstructed)
 	{
@@ -573,32 +534,22 @@ char* __fastcall patchesForGame::getBuildingPicConstruction(buildingLevel* level
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
 	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
-	auto lookUpVariants = &edb->lookupVariantsVector;
-	while(lookUpVariants)
+	const int variantNum = edb->lookupVariants.size();
+	for (int i = 0; i < variantNum; i++)
 	{
-		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		const auto variant = edb->lookupVariants.get(i);
+		const auto variantNamesSize = variant->names.size();
+		for (int j = 0; j < variantNamesSize; j++)
 		{
-			const auto variant = &lookUpVariants->lookupVariants[i];
-			if (strcmp(variant->name, cultureName.c_str()) == 0)
-			{
-				auto list = &variant->names;
-				while (list)
-				{
-					for (int j = 0; j < list->lookupVariantNamesNum; j++)
-					{
-						const auto variantString = list->lookupVariantNames[j].name;
-						FILE_PATH = modPath + getBuildingPicConstructionPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-						FILE_PATH = GAME_PATH + getBuildingPicConstructionPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-					}
-					list = list->next;
-				}
-			}
+			const auto variantName = variant->names.get(j);
+			const auto variantString = variantName->name;
+			FILE_PATH = modPath + getBuildingPicConstructionPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
+			FILE_PATH = GAME_PATH + getBuildingPicConstructionPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
 		}
-		lookUpVariants = lookUpVariants->next;
 	}
 	for (auto& i : level->buildingPicConstruction)
 	{
@@ -647,32 +598,22 @@ char* patchesForGame::onGetGuildOfferPic(DWORD level, int cultureID)
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
 	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
-	auto lookUpVariants = &edb->lookupVariantsVector;
-	while(lookUpVariants)
+	const int variantNum = edb->lookupVariants.size();
+	for (int i = 0; i < variantNum; i++)
 	{
-		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		const auto variant = edb->lookupVariants.get(i);
+		const auto variantNamesSize = variant->names.size();
+		for (int j = 0; j < variantNamesSize; j++)
 		{
-			const auto variant = &lookUpVariants->lookupVariants[i];
-			if (strcmp(variant->name, cultureName.c_str()) == 0)
-			{
-				auto list = &variant->names;
-				while (list)
-				{
-					for (int j = 0; j < list->lookupVariantNamesNum; j++)
-					{
-						const auto variantString = list->lookupVariantNames[j].name;
-						FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-						FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-					}
-					list = list->next;
-				}
-			}
+			const auto variantName = variant->names.get(j);
+			const auto variantString = variantName->name;
+			FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
+			FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
 		}
-		lookUpVariants = lookUpVariants->next;
 	}
 	for (auto& i : lvl->buildingPicConstructed)
 	{
@@ -755,7 +696,6 @@ eduEntry* __fastcall patchesForGame::OnCreateMercUnit(char** entryName, eduEntry
 		eduEntry* eopEntry = eopDu::getEopEduEntry(*index);
 		return eopEntry;
 	}
-
 	return entry;
 }
 
@@ -1165,6 +1105,7 @@ void __stdcall patchesForGame::onNewGameStart()
 {
 	gameEvents::onNewGameStart();
 	plannedRetreatRoute::onNewGameStart();
+	eopSettlementDataDb::clearData();
 }
 
 //#define TESTPATCHES
@@ -1371,6 +1312,7 @@ void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
 	files = techFuncs::loadGameLoadArchive(files, savePath);
 	gameEvents::onLoadGamePl(&files);
 	plannedRetreatRoute::onGameLoad(files);
+	eopSettlementDataDb::onGameLoad(files);
 
 	techFuncs::deleteFiles(files);
 }
@@ -1385,14 +1327,11 @@ void __fastcall patchesForGame::onSaveGame(UNICODE_STRING**& savePath)
 	}
 
 	delete plugFiles;
-	std::string retreatsFile = plannedRetreatRoute::onGameSave();
-	if (!retreatsFile.empty())
-	{
+	if (const std::string retreatsFile = plannedRetreatRoute::onGameSave(); !retreatsFile.empty())
 		files.push_back(retreatsFile);
-	}
+	if (const std::string settlementData = eopSettlementDataDb::onGameSave(); !settlementData.empty())
+		files.push_back(settlementData);
 	techFuncs::saveGameMakeArchive(savePath, files);
-
-
 	techFuncs::deleteFiles(files);
 }
 

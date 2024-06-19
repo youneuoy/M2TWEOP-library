@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "eopBuildings.h"
 #include "realGameTypes.h"
 #include "lua/sol.hpp"
 
@@ -467,22 +468,24 @@ public:
 			return nullptr;
 		return resources[index];
 	}
+	bool hasHiddenResource(const char* name);
+	void setHiddenResource(const char* name, bool enable);
 	bool hasHiddenResourceId(const int index)
 	{
 		if (index < 0 || index >= 64)
 			return false;
-		const int64_t* hiddenResourcesPtr = reinterpret_cast<int64_t*>(&hiddenResources);
-		return *hiddenResourcesPtr & (1 << index);
+		const uint64_t* hiddenResourcesPtr = reinterpret_cast<uint64_t*>(&hiddenResources);
+		return *hiddenResourcesPtr & (1ULL << index);
 	}
 	void setHiddenResourceId(const int index, const bool enable)
 	{
 		if (index < 0 || index >= 64)
 			return;
-		const auto hiddenResourcesPtr = reinterpret_cast<int64_t*>(&hiddenResources);
+		const auto hiddenResourcesPtr = reinterpret_cast<uint64_t*>(&hiddenResources);
 		if (enable)
-			*hiddenResourcesPtr |= (1 << index);
+			*hiddenResourcesPtr |= (1ULL << index);
 		else
-			*hiddenResourcesPtr &= ~(1 << index);
+			*hiddenResourcesPtr &= ~(1ULL << index);
 	}
 	int getHostileArmiesStrength(const int factionId)
 	{

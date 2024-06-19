@@ -190,7 +190,6 @@ namespace plannedRetreatRoute
 				jsn::json json2;
 				try
 				{
-
 					std::ifstream f2(path);
 
 					if (f2.is_open() == false)
@@ -204,8 +203,6 @@ namespace plannedRetreatRoute
 				{
 					MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 				}
-
-
 				try
 				{
 					routes.data = json2.get<vector<retreatRoute>>();
@@ -214,9 +211,6 @@ namespace plannedRetreatRoute
 				{
 					MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 				}
-
-
-
 				return;
 			}
 		}
