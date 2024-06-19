@@ -1,4 +1,9 @@
-﻿#include "settlement.h"
+﻿///
+//![Lua logo](../Lua.png)
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
+#include "settlement.h"
 
 #include "dataOffsets.h"
 #include "character.h"

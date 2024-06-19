@@ -1,4 +1,9 @@
-﻿#include "characterRecord.h"
+﻿///
+//![Lua logo](../Lua.png)
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
+#include "characterRecord.h"
 
 #include "fastFunctsHelpers.h"
 #include "functionsOffsets.h"

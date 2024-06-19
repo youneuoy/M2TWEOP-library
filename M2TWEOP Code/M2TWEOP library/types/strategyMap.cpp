@@ -1,4 +1,9 @@
-﻿#include "strategyMap.h"
+﻿///
+//![Lua logo](../Lua.png)
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
+#include "strategyMap.h"
 
 #include <queue>
 

@@ -1,4 +1,9 @@
-﻿#include "unit.h"
+﻿///
+//![Lua logo](../Lua.png)
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
+#include "unit.h"
 
 #include "battleHandlerHelpers.h"
 #include "character.h"

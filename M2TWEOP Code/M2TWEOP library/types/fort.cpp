@@ -1,4 +1,9 @@
-﻿#include "fort.h"
+﻿///
+//![Lua logo](../Lua.png)
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
+#include "fort.h"
 
 #include "dataOffsets.h"
 #include "functionsOffsets.h"

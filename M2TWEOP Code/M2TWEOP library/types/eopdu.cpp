@@ -1,4 +1,9 @@
-﻿#include "eopdu.h"
+﻿///
+//![Lua logo](../Lua.png)
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
+#include "eopdu.h"
 #include "functionsOffsets.h"
 #include "m2tweopHelpers.h"
 

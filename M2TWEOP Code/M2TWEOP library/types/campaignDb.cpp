@@ -1,4 +1,9 @@
-﻿#include "campaignDb.h"
+﻿///
+//![Lua logo](../Lua.png)
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
+#include "campaignDb.h"
 
 #include "dataOffsets.h"
 #include "luaP.h"

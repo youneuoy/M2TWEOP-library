@@ -1,4 +1,9 @@
-﻿#include "faction.h"
+﻿///
+//![Lua logo](../Lua.png)
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
+#include "faction.h"
 
 #include "dataOffsets.h"
 #include "gameDataAllHelper.h"

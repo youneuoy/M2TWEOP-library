@@ -1,3 +1,8 @@
+///
+//![Lua logo](../Lua.png)
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
 #include "events.h"
 #include <unordered_map>
 #include "gameHelpers.h"

@@ -1,3 +1,8 @@
+///
+//![Lua logo](../Lua.png)
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
 #include "eopBuildings.h"
 
 #include "fastFunctsHelpers.h"

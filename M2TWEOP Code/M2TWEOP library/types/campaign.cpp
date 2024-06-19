@@ -1,4 +1,9 @@
-﻿#include "campaign.h"
+﻿///
+//![Lua logo](../Lua.png)
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
+#include "campaign.h"
 
 #include "eopdu.h"
 #include "gameDataAllHelper.h"
