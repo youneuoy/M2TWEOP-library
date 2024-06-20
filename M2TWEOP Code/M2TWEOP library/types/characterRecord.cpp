@@ -10,20 +10,22 @@
 #include "character.h"
 #include "faction.h"
 #include "unit.h"
-#include "technicalHelpers.h"
 
-#define namedChar_localizedFullName 1
-#define namedChar_localizedNameForSave 2
-#define namedChar_localizedNextNameForSave 3
-#define namedChar_localizedNicknameForSave 4
-#define characterRecord_shortName 1
-#define characterRecord_fullName 2
-#define characterRecord_label 3
-#define characterRecord_modelName 4
-#define characterRecord_portrait 5
-#define characterRecord_portrait2 6
-#define characterRecord_portrait_custom 7
-#define characterRecord_lastName 8
+enum
+{
+	namedChar_localizedFullName = 1,
+	namedChar_localizedNameForSave = 2,
+	namedChar_localizedNextNameForSave = 3,
+	namedChar_localizedNicknameForSave = 4,
+	characterRecord_shortName = 1,
+	characterRecord_fullName = 2,
+	characterRecord_label = 3,
+	characterRecord_modelName = 4,
+	characterRecord_portrait = 5,
+	characterRecord_portrait2 = 6,
+	characterRecord_portrait_custom = 7,
+	characterRecord_lastName = 8
+};
 
 namespace characterRecordHelpers
 {
@@ -84,13 +86,13 @@ namespace characterRecordHelpers
 	std::string namedCharUniStringToStr(characterRecord* genChar)
 	{
 		if (fieldIndex == namedChar_localizedFullName)
-			return technicalHelpers::uniStringToStr(genChar->localizedFullName);
+			return gameStringHelpers::uniStringToStr(genChar->localizedFullName);
 		if (fieldIndex == namedChar_localizedNameForSave)
-			return technicalHelpers::uniStringToStr(genChar->localizedNameForSave);
+			return gameStringHelpers::uniStringToStr(genChar->localizedNameForSave);
 		if (fieldIndex == namedChar_localizedNextNameForSave)
-			return technicalHelpers::uniStringToStr(genChar->localizedNextNameForSave);
+			return gameStringHelpers::uniStringToStr(genChar->localizedNextNameForSave);
 		if (fieldIndex == namedChar_localizedNicknameForSave)
-			return technicalHelpers::uniStringToStr(genChar->localizedNicknameForSave);
+			return gameStringHelpers::uniStringToStr(genChar->localizedNicknameForSave);
 		return "";
 	}
 	

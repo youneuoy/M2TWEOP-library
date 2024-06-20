@@ -5,6 +5,7 @@
 #include "realGameTypes.h"
 
 #include <random>
+struct armyStruct;
 using namespace micropather;
 
 namespace pathFinder

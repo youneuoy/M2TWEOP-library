@@ -13,7 +13,7 @@ typedef unsigned short ushort;
 #pragma pack(push,1)
 
 /*----------------------------------------------------------------------------------------------------------------*\
-										Firing game function helpers
+									Firing game function helpers
 \*----------------------------------------------------------------------------------------------------------------*/
 #pragma region Game function helpers
 
@@ -188,7 +188,238 @@ public:
 	char pad_0010[104]; //0x0010
 }; //Size: 0x0078
 
+struct coordPair
+{
+public:
+	int32_t xCoord; //0x0000
+	int32_t yCoord; //0x0004
+}; //Size: 0x0008
+
+struct trackedCharacter
+{
+public:
+	void* vtbl; //0x0000
+	struct character* character; //0x0004
+}; //Size: 0x0008
+
+struct characterArray
+{
+	character** characters;
+	int charactersSize = 8;
+	int charactersNum = 0;
+	characterArray()
+	{
+		characters = new character*[8];
+	}
+	~characterArray()
+	{
+		delete[] characters;
+	}
+};
+
+struct oneSiege {
+	void* vtable;
+	struct siegeS* siege;
+};
+
+struct trackedPointerUnit {
+	undefined field_0x0[4];
+	struct unit* unit;
+	undefined field_0x8[88];
+};
+
+struct trackedUnit {
+	undefined field_0x0[4];
+	struct unit* unit;
+};
+
+struct spyingInfo
+{
+public:
+	void *spyingInfo_vtbl; //0x0000
+	int8_t spyingInfoFactionArray[31]; //0x0004
+	char pad_0023[1]; //0x0023
+	int randomNumber; 
+	int randomSeed; 
+}; //Size: 0x002C
+
 #pragma endregion Game standard types
+
+/*----------------------------------------------------------------------------------------------------------------*\
+									 Strat models
+\*----------------------------------------------------------------------------------------------------------------*/
+#pragma region Strat models
+
+struct modelFlexiMixed
+{
+	char structsize[0x12c];
+};
+
+struct modelFlexi
+{
+	char structsize[0x11c];
+};
+
+struct casTextures
+{
+	int textureIndex;
+	int glossTextureIndex;
+};
+
+struct stratModelArrayEntry
+{
+public:
+	DWORD model_flexi_m; //0x0000
+	int32_t zeropoint; //0x0004
+	int32_t zeroarray[6]; //0x0008
+	float lodRange; //0x0020
+	int32_t zeroarray2[9]; //0x0024
+	struct casTextures modelTexturesFactionArray[31]; //0x0048
+	int32_t somearray[33]; //0x0140
+	int32_t somearray2[3]; //0x01C4
+	float lod2; //0x01D0
+	DWORD skeleton; //0x01D4
+	float scale; //0x01D8
+	int32_t modelCountNotShadow; //0x01DC
+	float indevRangeSquared; //0x01E0
+	DWORD shadow_model_flexi; //0x01E4
+	int32_t zeroarray3[7]; //0x01E8
+	float lod3; //0x0204
+	int32_t zeroarray4[7]; //0x0208
+	int32_t modelCountShadow; //0x0224
+	int32_t zeroint; //0x0228
+	char* typeName; //0x022C
+	int32_t N54788969; //0x0230
+
+}; //Size: 0x0234
+
+struct stratModelListEntry
+{
+public:
+	char* modelName; //0x0000
+	int32_t crypt; //0x0004
+	struct stratModelArrayEntry* stratModelEntry; //0x0008
+}; //Size: 0x000C
+
+struct descrCharacterStratModelArray
+{
+public:
+	struct stratModelListEntry stratModelsArray[16]; //0x0000
+}; //Size: 0x00C0
+
+//fort model struct on stratmap
+struct stratFortMod {
+	struct model_Rigid* centerModel;
+	struct model_Rigid* wallsModel;
+	char* centerModelPath;
+	int centerModelPathCrypt;
+	char* wallsModelPath;
+	int wallsModelPathCrypt;
+};
+
+//resource model struct on stratmap
+struct stratResMod {
+	struct model_Rigid* model;
+	char* patchToModel;
+	int pathHash;
+	int resource_num;
+	int resource_cost;
+	char* tga;
+	int tgaPath;
+	bool hasMine;
+	char pad[3];
+};
+
+/* rigid model(cas model for "static" objects - settlements, resources, etc) on stratmap! */
+struct model_Rigid { /* rigid model(cas model for "static" objects - settlements, resources, etc) on stratmap! */
+	undefined field_0x0[4];
+};
+
+//settlement model struct
+struct settMod {
+	struct model_Rigid* town;
+	struct model_Rigid* castle;
+	undefined field_0x8[924];
+};
+
+//models on the stratmap (settlements, resources, etc)
+struct stratMod {
+	undefined field_0x0;
+	undefined field_0x1;
+	undefined field_0x2;
+	undefined field_0x3;
+};
+
+#pragma endregion Strat models
+
+/*----------------------------------------------------------------------------------------------------------------*\
+									 Game Data All Struct
+\*----------------------------------------------------------------------------------------------------------------*/
+#pragma region Game Data
+
+struct gameDataAllStruct {
+	undefined field_0x0[40];
+	void* campaignData;
+	void* battleData;
+	void* uiData;
+	struct stratMap* stratMap;
+	struct stratMap* stratMap2;
+	struct stratMap* stratMap3;
+	struct stratMap** stratMapPtrPtr;
+	struct campaign* campaignStruct;
+	struct campaign** campaignPtrPTr;
+	struct campaign* campaign3;
+	struct battleDataS* battleHandler;
+	struct battleDataS** battleHandlerPtr;
+	struct battleDataS* battleHandler2;
+	int* localFactionID2;
+	int* localFactionID;
+	struct stratPathFinding* stratPathFinding;
+	struct stratPathFinding* stratPathFinding2;
+	struct stratPathFinding** stratPathFindingPtr;
+	void* field_40BCCPtr;
+	struct battleTerrainData* battleTerrainDataPtr;
+	struct battleTerrainData* battleTerrainData2;
+	struct battleSettlement* battleSettlement;
+	struct battleSettlement* battleSettlement2;
+	void* struct_40bd0Ptr;
+	void* struct_40bd0Ptr2;
+	void* battleGameHandler;
+	void* battleGameHandler2;
+	void* rtmHandler;
+	void* rtmHandler2;
+	void* stratMapGameHandler;
+	void* stratMapGameHandler2;
+	void* menuHandler;
+	void* menuHandler2;
+	void* battleMapStuff;
+	void* battleMapStuff2;
+	struct selectionInfo* selectInfo;
+	struct selectionInfo** selectionInfoPtr;
+	struct selectionInfo** selectionInfoPtr2;
+	void* gameOptions;
+	void* gameOptions2;
+	void* someArray;
+	void* someArray2;
+	void* resources;
+	void* resources2;
+	void* nonNetworkGameManager;
+	void* networkGameManager;
+	void* replayGameManager;
+	void* camControl;
+	void* waypointsDisplay;
+	struct uiCardManager* uiCardManager;
+	void* uiShortcuts;
+	struct uiCardManager* uiCardManager2;
+	void* uiMessageHandler;
+	struct uiManager* uiManager;
+};
+#pragma endregion Game Data
+
+/*----------------------------------------------------------------------------------------------------------------*\
+									 Shared stuff for units
+\*----------------------------------------------------------------------------------------------------------------*/
+#pragma region unit structs
 
 struct floatPosData
 {
@@ -208,21 +439,6 @@ public:
 	float minRadians; //0x0030
 	float maxRadians; //0x0034
 }; //Size: 0x0044
-
-struct coordPair
-{
-public:
-	int32_t xCoord; //0x0000
-	int32_t yCoord; //0x0004
-}; //Size: 0x0008
-
-struct movePath
-{
-public:
-	struct coordPair* tileCoords; //0x0000
-	int32_t tileCoordsSize; //0x0004
-	int32_t tileCoordsCount; //0x0008
-}; //Size: 0x000C
 
 struct statPri
 {
@@ -501,155 +717,6 @@ public:
 	}
 };
 
-struct religionDatabase
-{
-public:
-	void* religionDatabase_vtbl;//0x0000
-	struct rcString** religionNames; //0x0004
-	int32_t religionNamesSize; //0x0008
-	int32_t religionCount; //0x000C
-	struct rcString** religionPips; //0x0010
-	int32_t religionPipsSize; //0x0014
-	int32_t religionPipsCount; //0x0018
-	void* hashedStringTable; //0x001C
-
-}; //Size: 0x0020
-
-struct worldRecord {
-	undefined field_0x0[4];
-	char recordName[16]; /* pointer if allocatedNameLen>15 */
-	int nameLen;
-	int allocatedNameLen;
-	undefined field_0x1c[4];
-	char recordGroup[16]; /* pointer if allocatedGroupLen>15 */
-	int groupLen;
-	int allocatedGroupLen;
-	undefined field_0x38[40];
-};
-
-struct trackedCharacter
-{
-public:
-	void* vtbl; //0x0000
-	struct character* character; //0x0004
-}; //Size: 0x0008
-
-struct gameDataAllStruct {
-	undefined field_0x0[40];
-	void* campaignData;
-	void* battleData;
-	void* uiData;
-	struct stratMap* stratMap;
-	struct stratMap* stratMap2;
-	struct stratMap* stratMap3;
-	struct stratMap** stratMapPtrPtr;
-	struct campaign* campaignStruct;
-	struct campaign** campaignPtrPTr;
-	struct campaign* campaign3;
-	struct battleDataS* battleHandler;
-	struct battleDataS** battleHandlerPtr;
-	struct battleDataS* battleHandler2;
-	int* localFactionID2;
-	int* localFactionID;
-	struct stratPathFinding* stratPathFinding;
-	struct stratPathFinding* stratPathFinding2;
-	struct stratPathFinding** stratPathFindingPtr;
-	void* field_40BCCPtr;
-	struct battleTerrainData* battleTerrainDataPtr;
-	struct battleTerrainData* battleTerrainData2;
-	struct battleSettlement* battleSettlement;
-	struct battleSettlement* battleSettlement2;
-	void* struct_40bd0Ptr;
-	void* struct_40bd0Ptr2;
-	void* battleGameHandler;
-	void* battleGameHandler2;
-	void* rtmHandler;
-	void* rtmHandler2;
-	void* stratMapGameHandler;
-	void* stratMapGameHandler2;
-	void* menuHandler;
-	void* menuHandler2;
-	void* battleMapStuff;
-	void* battleMapStuff2;
-	struct selectionInfo* selectInfo;
-	struct selectionInfo** selectionInfoPtr;
-	struct selectionInfo** selectionInfoPtr2;
-	void* gameOptions;
-	void* gameOptions2;
-	void* someArray;
-	void* someArray2;
-	void* resources;
-	void* resources2;
-	void* nonNetworkGameManager;
-	void* networkGameManager;
-	void* replayGameManager;
-	void* camControl;
-	void* waypointsDisplay;
-	struct uiCardManager* uiCardManager;
-	void* uiShortcuts;
-	struct uiCardManager* uiCardManager2;
-	void* uiMessageHandler;
-	struct uiManager* uiManager;
-};
-
-struct modelFlexiMixed
-{
-	char structsize[0x12c];
-};
-
-struct modelFlexi
-{
-	char structsize[0x11c];
-};
-
-struct casTextures
-{
-	int textureIndex;
-	int glossTextureIndex;
-};
-
-struct stratModelArrayEntry
-{
-public:
-	DWORD model_flexi_m; //0x0000
-	int32_t zeropoint; //0x0004
-	int32_t zeroarray[6]; //0x0008
-	float lodRange; //0x0020
-	int32_t zeroarray2[9]; //0x0024
-	struct casTextures modelTexturesFactionArray[31]; //0x0048
-	int32_t somearray[33]; //0x0140
-	int32_t somearray2[3]; //0x01C4
-	float lod2; //0x01D0
-	DWORD skeleton; //0x01D4
-	float scale; //0x01D8
-	int32_t modelCountNotShadow; //0x01DC
-	float indevRangeSquared; //0x01E0
-	DWORD shadow_model_flexi; //0x01E4
-	int32_t zeroarray3[7]; //0x01E8
-	float lod3; //0x0204
-	int32_t zeroarray4[7]; //0x0208
-	int32_t modelCountShadow; //0x0224
-	int32_t zeroint; //0x0228
-	char* typeName; //0x022C
-	int32_t N54788969; //0x0230
-
-}; //Size: 0x0234
-
-struct stratModelListEntry
-{
-public:
-	char* modelName; //0x0000
-	int32_t crypt; //0x0004
-	struct stratModelArrayEntry* stratModelEntry; //0x0008
-}; //Size: 0x000C
-
-struct descrCharacterStratModelArray
-{
-public:
-	struct stratModelListEntry stratModelsArray[16]; //0x0000
-}; //Size: 0x00C0
-
-
 struct eduOfficer
 {
 	char* name;
@@ -658,201 +725,12 @@ struct eduOfficer
 	int modelGroup;
 	struct modelDbEntry* modelEntry;
 };
+#pragma endregion unit structs
 
-//fort model struct on stratmap
-struct stratFortMod {
-	struct model_Rigid* centerModel;
-	struct model_Rigid* wallsModel;
-	char* centerModelPath;
-	int centerModelPathCrypt;
-	char* wallsModelPath;
-	int wallsModelPathCrypt;
-};
-
-//resource model struct on stratmap
-struct stratResMod {
-	struct model_Rigid* model;
-	char* patchToModel;
-	int pathHash;
-	int resource_num;
-	int resource_cost;
-	char* tga;
-	int tgaPath;
-	bool hasMine;
-	char pad[3];
-};
-
-/* rigid model(cas model for "static" objects - settlements, resources, etc) on stratmap! */
-struct model_Rigid { /* rigid model(cas model for "static" objects - settlements, resources, etc) on stratmap! */
-	undefined field_0x0[4];
-};
-
-//settlement model struct
-struct settMod {
-	struct model_Rigid* town;
-	struct model_Rigid* castle;
-	undefined field_0x8[924];
-};
-
-//models on the stratmap (settlements, resources, etc)
-struct stratMod {
-	undefined field_0x0;
-	undefined field_0x1;
-	undefined field_0x2;
-	undefined field_0x3;
-};
-
-struct oneSiege {
-	void* vtable;
-	struct siegeS* siege;
-};
-
-/* I_CompareCounter script command */
-struct compareCounter { /* I_CompareCounter script command */
-	undefined field_0x0;
-	undefined field_0x1;
-	undefined field_0x2;
-	undefined field_0x3;
-	char* commandName; /* name of command(I_CompareCounter) */
-	int operation;
-	char* operandName; /* name of checked counter */
-	int operandNameCrypt; /* maybe crypt of the counter name */
-	int checkedValue; /* value for check */
-};
-
-struct trackedPointerUnit {
-	undefined field_0x0[4];
-	struct unit* unit;
-	undefined field_0x8[88];
-};
-
-struct trackedUnit {
-	undefined field_0x0[4];
-	struct unit* unit;
-};
-
-struct rebelUnitName
-{
-public:
-	char* unitName; //0x0000
-	char pad_0004[20]; //0x0004
-}; //Size: 0x0018
-
-struct descrRebelEntry
-{
-public:
-	int32_t index; //0x0000
-	char* name; //0x0004
-	int32_t nameHash; //0x0008
-	int32_t category; //0x000C
-	struct N00022A30* localizedName; //0x0010
-	int32_t chance; //0x0014
-	struct rebelUnitName unitNames[121]; //0x0018
-	int32_t unitCount; //0x0B70
-}; //Size: 0x0B74
-
-struct spyingInfo
-{
-public:
-	void *spyingInfo_vtbl; //0x0000
-	int8_t spyingInfoFactionArray[31]; //0x0004
-	char pad_0023[1]; //0x0023
-	int randomNumber; 
-	int randomSeed; 
-}; //Size: 0x002C
-
-struct aiResourcePrivate
-{
-	DWORD *vfTable /*VFT*/;
-	int resourceType;
-	void* trackedCharVtbl;
-	character* character;
-	void* trackedArmyVtbl;
-	struct armyStruct* army;
-	int priority;
-	void *aiController;
-	int regionID;
-	int lastOwner;
-	bool valid;
-	bool assigned;
-	bool used;
-	bool local;
-	bool canMerge;
-	char pad_2d[3];
-	void *newController;
-	int newPriority;
-	void *newController2;
-	int newPriority2;
-};
-
-//string
-struct someFactNameStruct {
-	undefined field_0x0;
-	undefined field_0x1;
-	undefined field_0x2;
-	undefined field_0x3;
-	char* name;
-};
-
-//pointer to ancillary
-struct ancData { /* data of the ancillary */
-	struct ancillary* dataAnc;
-};
-
-struct tradingResource {
-	char* name;
-	int nameCrypt;
-	int null1;
-	struct model_Rigid* model;
-	char* item;
-	int itemCrypt;
-	int null3;
-	int trade_value;
-	char* icon;
-	int iconCrypt;
-	int null4;//
-};
-
-struct tradingResources {
-	struct tradingResource resources[27];
-	char* mine;
-	int mineCrypt;
-};
-
-struct console_command { /* structure of console command */
-	bool(_stdcall** function)(const char*, char*);
-	char* name;
-	char* description;
-	int type;
-	int idk;
-};
-
-struct consoleCommands {
-	struct console_command** commands;
-	int reservedElements;
-	int size;
-};
-
-struct descr_sm_factions_list {
-	struct factionRecord* facDescrs;
-	int capacity;
-	int size;
-};
-struct characterArray
-{
-	character** characters;
-	int charactersSize = 8;
-	int charactersNum = 0;
-	characterArray()
-	{
-		characters = new character*[8];
-	}
-	~characterArray()
-	{
-		delete[] characters;
-	}
-};
-
+/*----------------------------------------------------------------------------------------------------------------*\
+									 Game Enums
+\*----------------------------------------------------------------------------------------------------------------*/
+#pragma region Game Enums
 
 enum class characterTypeStrat
 {
@@ -1118,6 +996,6 @@ inline bool operator !=(int a, buildingCapabilities b)
 {
 	return static_cast<buildingCapabilities>(a) != b;
 }
-
+#pragma endregion Game Enums
 
 #pragma pack(pop)

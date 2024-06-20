@@ -49,6 +49,14 @@ public:
 	struct descrCharacterEntry entries[12]; //0x0018
 }; //Size: 0x5A48
 
+struct movePath
+{
+public:
+	struct coordPair* tileCoords; //0x0000
+	int32_t tileCoordsSize; //0x0004
+	int32_t tileCoordsCount; //0x0008
+}; //Size: 0x000C
+
 struct character
 { 
 	DWORD* vtbl;

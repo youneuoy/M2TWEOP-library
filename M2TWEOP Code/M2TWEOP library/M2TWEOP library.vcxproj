@@ -316,7 +316,6 @@
     <ClInclude Include="tacticalMapViewer.h" />
     <ClInclude Include="tAutodeskMemoryStream.h" />
     <ClInclude Include="techFuncs.h" />
-    <ClInclude Include="technicalHelpers.h" />
     <ClInclude Include="technicalStringsFuncs.h" />
     <ClInclude Include="templateCh.h" />
     <ClInclude Include="texturesManager.h" />
@@ -431,7 +430,6 @@
     <ClCompile Include="plugData.cpp" />
     <ClCompile Include="luaPlugin.cpp" />
     <ClCompile Include="retreater.cpp" />
-    <ClCompile Include="technicalHelpers.cpp" />
     <ClCompile Include="themeManager.cpp" />
     <ClCompile Include="settlementConversionLvlSetter.cpp" />
     <ClCompile Include="singleFbxMesh.cpp" />

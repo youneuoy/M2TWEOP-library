@@ -1,5 +1,8 @@
 #pragma once
 #include"realGameTypes.h"
+struct smFactionsDb;
+struct consoleCommands;
+
 class dataOffsets
 {
 public:
@@ -70,7 +73,7 @@ public:
 		//game settings
 		int* gameUnit_size = nullptr;
 
-		descr_sm_factions_list* descr_sm_factionslist = nullptr;
+		smFactionsDb* descr_sm_factionslist = nullptr;
 		DWORD scriptCommandVFT = NULL;
 		DWORD battleMapData = NULL;
 		DWORD globalSett = NULL;

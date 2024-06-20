@@ -10,7 +10,6 @@
 #include "plugData.h"
 #include "stratModelsChange.h"
 #include "techFuncs.h"
-#include "technicalHelpers.h"
 #include "army.h"
 #include "fort.h"
 #include "settlement.h"
@@ -85,7 +84,7 @@ void campaign::setFactionTrade(factionStruct* factionOne, factionStruct* faction
 
 std::string campaign::getCampaignPath()
 {
-	return technicalHelpers::uniStringToStr(currentDescrFile);
+	return gameStringHelpers::uniStringToStr(currentDescrFile);
 }
 
 settlementStruct* campaign::getSettlementByName(const char* name)

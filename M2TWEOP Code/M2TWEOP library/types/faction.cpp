@@ -7,7 +7,6 @@
 
 #include "dataOffsets.h"
 #include "gameHelpers.h"
-#include "technicalHelpers.h"
 #include "fort.h"
 #include "unit.h"
 #include "army.h"
@@ -231,11 +230,10 @@ namespace factionHelpers
 	
 	std::string getLocalizedFactionName(factionStruct* fac)
 	{
-		UNICODE_STRING** localizedname = fac->localizedName;
-		UNICODE_STRING* name = *localizedname;
-		if (name->Length == 0)
-			localizedname = getFactionNameLocal(fac);
-		return technicalHelpers::uniStringToStr(localizedname);
+		UNICODE_STRING** localizedName = fac->localizedName;
+		if (const UNICODE_STRING* name = *localizedName; name->Length == 0)
+			localizedName = getFactionNameLocal(fac);
+		return gameStringHelpers::uniStringToStr(localizedName);
 	}
 
 	float distance(int x1, int y1, int x2, int y2)

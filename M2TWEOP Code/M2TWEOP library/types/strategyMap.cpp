@@ -10,7 +10,6 @@
 #include "character.h"
 #include "gameHelpers.h"
 #include "plugData.h"
-#include "technicalHelpers.h"
 #include "unit.h"
 #include "faction.h"
 #include "army.h"
@@ -204,12 +203,12 @@ oneTile* neighbourRegion::getBorderCrossing(const int index)
 
 std::string regionStruct::getLocalizedName()
 {
-	return technicalHelpers::uniStringToStr(localizedRegionName);
+	return gameStringHelpers::uniStringToStr(localizedRegionName);
 }
 
 std::string regionStruct::getLocalizedRebelsName()
 {
-	return technicalHelpers::uniStringToStr(localizedRebelsName);
+	return gameStringHelpers::uniStringToStr(localizedRebelsName);
 }
 
 oneTile* regionStruct::getPatrolPoint(const int index)

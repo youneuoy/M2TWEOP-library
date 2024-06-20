@@ -388,16 +388,6 @@ namespace eopBuildings
 		return eopLevel->getPoolNum();
 	}
 
-	//not sure how useful this function is, basically just combines creating a building with switching its entry to eop building
-	void createEOPBuilding(settlementStruct* sett, const int edbIdx, const int level)
-	{
-		edbEntry* entry = buildEntryDB::getEopBuildEntry(edbIdx);
-		buildingLevel* eoplevel = &entry->levels[level];
-		const char* building_level_id = (const char*)(eoplevel->name);
-		settlementHelpers::createBuilding(sett, building_level_id);
-		sett->buildings[sett->buildingsNum - 1]->edbEntry = entry;
-	}
-
 	//get a building entry by its name, very useful to change some of the edb building attributes dynamically, does not save!
 
 

@@ -4,6 +4,8 @@
 #include "imgui/imgui.h"
 #include "realGameTypes.h"
 
+struct armyStruct;
+
 enum class tileContent:uint8_t
 {
 	nothing,

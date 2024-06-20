@@ -3,6 +3,7 @@
 #include <d3d9.h>
 #include <filesystem>
 #include "realGameTypes.h"
+struct armyStruct;
 using namespace std;
 namespace battleCreator
 {

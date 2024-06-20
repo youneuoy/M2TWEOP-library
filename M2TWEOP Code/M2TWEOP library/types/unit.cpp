@@ -19,7 +19,6 @@
 
 #include "gameHelpers.h"
 #include "strategyMap.h"
-#include "technicalHelpers.h"
 
 
 std::unordered_map<int, const char*> actionTypes = {
@@ -841,7 +840,7 @@ namespace unitHelpers
 	
 	std::string unitUniStringToStr(unit* unit)
 	{
-		return technicalHelpers::uniStringToStr(unit->alias);
+		return gameStringHelpers::uniStringToStr(unit->alias);
 	}
 	void setUnitUniStr(unit* unit, const char* str)
 	{
@@ -1244,17 +1243,17 @@ namespace unitHelpers
 
 	std::string getLocalizedUnitName(const eduEntry* entry)
 	{
-		return technicalHelpers::uniStringToStr(*entry->localizedName);
+		return gameStringHelpers::uniStringToStr(*entry->localizedName);
 	}
 
 	std::string getLocalizedUnitDescr(const eduEntry* entry)
 	{
-		return technicalHelpers::uniStringToStr(*entry->localizedDescr);
+		return gameStringHelpers::uniStringToStr(*entry->localizedDescr);
 	}
 
 	std::string getLocalizedUnitDescrShort(const eduEntry* entry)
 	{
-		return technicalHelpers::uniStringToStr(*entry->localizedDescrShort);
+		return gameStringHelpers::uniStringToStr(*entry->localizedDescrShort);
 	}
 
 	void setUnitName(eduEntry* entry, const std::string& name)

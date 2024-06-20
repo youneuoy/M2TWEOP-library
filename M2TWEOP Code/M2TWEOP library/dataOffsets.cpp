@@ -1,4 +1,7 @@
 #include "dataOffsets.h"
+
+#include "faction.h"
+struct consoleCommands;
 dataOffsets::offsetsT dataOffsets::offsets;
 void dataOffsets::initDataOffsets(int gameVer)
 {
@@ -84,7 +87,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.buildingChainLimit = 0x008AB794;
 		offsets.guildCooldown = 0x004F57AB;
 
-		offsets.descr_sm_factionslist = reinterpret_cast<descr_sm_factions_list*>(0x01667288);
+		offsets.descr_sm_factionslist = reinterpret_cast<smFactionsDb*>(0x01667288);
 	}
 	else if (gameVer == 2) //steam
 	{
@@ -168,6 +171,6 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.audioMaster_vol = reinterpret_cast<int*>(0x01639f60);
 		offsets.gameUnit_size = reinterpret_cast<int*>(0x01639f4c);
 
-		offsets.descr_sm_factionslist = reinterpret_cast<descr_sm_factions_list*>(0x0161f3b0);
+		offsets.descr_sm_factionslist = reinterpret_cast<smFactionsDb*>(0x0161f3b0);
 	}
 }

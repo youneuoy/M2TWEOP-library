@@ -1,9 +1,8 @@
 #pragma once
 #include <string>
 
-#include "..\gameStringHelpers.h"
+#include "gameStringHelpers.h"
 #include "realGameTypes.h"
-#include "technicalHelpers.h"
 #include "lua/sol.hpp"
 
 enum
@@ -158,7 +157,7 @@ public:
 	std::string getLocalizedName(const int factionID)
 	{
 		if (buildingName[factionID] != nullptr)
-			return technicalHelpers::uniStringToStr(*buildingName[factionID]);
+			return gameStringHelpers::uniStringToStr(*buildingName[factionID]);
 		return "";
 	}
 	void setLocalizedName(const int factionID, const std::string& newName)
@@ -170,7 +169,7 @@ public:
 	std::string getLocalizedDescr(const int factionID)
 	{
 		if (buildingDescr[factionID] != nullptr)
-			return technicalHelpers::uniStringToStr(*buildingDescr[factionID]);
+			return gameStringHelpers::uniStringToStr(*buildingDescr[factionID]);
 		return "";
 	}
 	void setLocalizedDescr(const int factionID, const std::string& newName)
@@ -182,7 +181,7 @@ public:
 	std::string getLocalizedDescrShort(const int factionID)
 	{
 		if (buildingDescrShort[factionID] != nullptr)
-			return technicalHelpers::uniStringToStr(*buildingDescrShort[factionID]);
+			return gameStringHelpers::uniStringToStr(*buildingDescrShort[factionID]);
 		return "";
 	}
 	void setLocalizedDescrShort(const int factionID, const std::string& newName)
@@ -503,7 +502,6 @@ namespace eopBuildings
     recruitPool* getBuildingPool(const edbEntry* entry, int level, int index);
     int getBuildingCapabilityNum(const edbEntry* entry, int level);
     int getBuildingPoolNum(const edbEntry* entry, int level);
-    void createEOPBuilding(settlementStruct* sett, int edbIdx, int level);
     void addCaps(buildingLevel* oldLevel, buildingLevel* eopLevel, int lvlIdx);
     void addPools(buildingLevel* oldLevel, buildingLevel* eopLevel, int lvlIdx);
     edbEntry* getBuildingByName(const char* name);

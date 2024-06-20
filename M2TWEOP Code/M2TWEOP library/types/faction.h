@@ -3,6 +3,13 @@
 #include "realGameTypes.h"
 #include "settlement.h"
 
+
+struct smFactionsDb {
+	struct factionRecord* facDescrs;
+	int capacity;
+	int size;
+};
+
 struct militaryValuesLTGD
 {
 	int32_t totalPopulation; //0x0000

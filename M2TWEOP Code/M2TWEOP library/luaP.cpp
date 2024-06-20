@@ -13,7 +13,6 @@
 #include "realGameTypes.h"
 #include <windows.h>
 #include "gameHelpers.h"
-#include "technicalHelpers.h"
 #include "character.h"
 #include "settlement.h"
 #include "characterRecord.h"

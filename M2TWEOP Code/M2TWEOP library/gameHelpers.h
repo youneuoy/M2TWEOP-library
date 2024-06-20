@@ -15,6 +15,46 @@ struct loadGameHandler
 	struct UNICODE_STRING*** saveGameName;
 };
 
+/* I_CompareCounter script command */
+struct compareCounter { /* I_CompareCounter script command */
+	undefined field_0x0;
+	undefined field_0x1;
+	undefined field_0x2;
+	undefined field_0x3;
+	char* commandName; /* name of command(I_CompareCounter) */
+	int operation;
+	char* operandName; /* name of checked counter */
+	int operandNameCrypt; /* maybe crypt of the counter name */
+	int checkedValue; /* value for check */
+};
+
+struct console_command { /* structure of console command */
+	bool(_stdcall** function)(const char*, char*);
+	char* name;
+	char* description;
+	int type;
+	int idk;
+};
+
+struct consoleCommands {
+	struct console_command** commands;
+	int reservedElements;
+	int size;
+};
+
+struct religionDatabase
+{
+public:
+	void* religionDatabase_vtbl;//0x0000
+	struct rcString** religionNames; //0x0004
+	int32_t religionNamesSize; //0x0008
+	int32_t religionCount; //0x000C
+	struct rcString** religionPips; //0x0010
+	int32_t religionPipsSize; //0x0014
+	int32_t religionPipsCount; //0x0018
+	void* hashedStringTable; //0x001C
+}; //Size: 0x0020
+
 struct options1
 {
 	void* cursor; //0x0000

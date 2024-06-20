@@ -21,6 +21,71 @@ namespace campaignEnums
 		allianceState = 0
 	};
 }
+
+struct rebelUnitName
+{
+public:
+	char* unitName; //0x0000
+	char pad_0004[20]; //0x0004
+}; //Size: 0x0018
+
+struct descrRebelEntry
+{
+public:
+	int32_t index; //0x0000
+	char* name; //0x0004
+	int32_t nameHash; //0x0008
+	int32_t category; //0x000C
+	struct N00022A30* localizedName; //0x0010
+	int32_t chance; //0x0014
+	struct rebelUnitName unitNames[121]; //0x0018
+	int32_t unitCount; //0x0B70
+}; //Size: 0x0B74
+
+struct tradingResource {
+	char* name;
+	int nameCrypt;
+	int null1;
+	struct model_Rigid* model;
+	char* item;
+	int itemCrypt;
+	int null3;
+	int trade_value;
+	char* icon;
+	int iconCrypt;
+	int null4;//
+};
+
+struct tradingResources {
+	struct tradingResource resources[27];
+	char* mine;
+	int mineCrypt;
+};
+
+struct aiResourcePrivate
+{
+	DWORD *vfTable /*VFT*/;
+	int resourceType;
+	void* trackedCharVtbl;
+	character* character;
+	void* trackedArmyVtbl;
+	struct armyStruct* army;
+	int priority;
+	void *aiController;
+	int regionID;
+	int lastOwner;
+	bool valid;
+	bool assigned;
+	bool used;
+	bool local;
+	bool canMerge;
+	char pad_2d[3];
+	void *newController;
+	int newPriority;
+	void *newController2;
+	int newPriority2;
+};
+
 struct 	mercPoolUnit
 {
 public:

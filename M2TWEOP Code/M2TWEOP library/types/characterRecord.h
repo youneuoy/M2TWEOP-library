@@ -27,6 +27,11 @@ enum class deathType
 	denounced
 };
 
+//pointer to ancillary
+struct ancData { /* data of the ancillary */
+	struct ancillary* dataAnc;
+};
+
 struct traitLevel
 {
 	int32_t level;

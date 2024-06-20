@@ -11,5 +11,6 @@ namespace gameStringHelpers
 	std::string wstrToAnsiStr(const std::wstring& wstr);
 	std::wstring ansiStrToWstr(const std::string& str);
 	void createUniString(UNICODE_STRING**& newUniStringPointer, const char* nonUniStr);
+	std::string uniStringToStr(UNICODE_STRING**& uniString);
 };
 

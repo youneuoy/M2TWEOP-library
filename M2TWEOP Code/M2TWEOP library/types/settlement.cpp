@@ -12,7 +12,6 @@
 #include "gameStringHelpers.h"
 #include "functionsOffsets.h"
 #include "battle.h"
-#include "technicalHelpers.h"
 #include "faction.h"
 #include "unit.h"
 #include "army.h"
@@ -369,7 +368,7 @@ namespace settlementHelpers
 	
 	std::string getSettlementName(settlementStruct* sett)
 	{
-		return technicalHelpers::uniStringToStr(sett->localizedName);
+		return gameStringHelpers::uniStringToStr(sett->localizedName);
 	}
 	
 	void changeSettlementName(settlementStruct* sett, const char* newName)
