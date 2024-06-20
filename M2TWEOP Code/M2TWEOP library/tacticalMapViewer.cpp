@@ -4,7 +4,7 @@
 #include "strategyMap.h"
 #include "techFuncs.h"
 
-#include "TexturesManager.h"
+#include "texturesManager.h"
 void tacticalMapViewer::init(const int gameVer)
 {
 	state.isBattleGeneratorWorking = battleCreator::getIsGenerationNeeded();

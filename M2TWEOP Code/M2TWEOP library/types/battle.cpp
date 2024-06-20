@@ -8,13 +8,13 @@
 
 #include "dataOffsets.h"
 #include "functionsOffsets.h"
-#include "gameDataAllHelper.h"
 #include "globals.h"
 #include "fort.h"
 #include "settlement.h"
 #include "army.h"
 #include "unit.h"
 #include "character.h"
+#include "gameHelpers.h"
 
 
 float battleTile::getGroundHeight()
@@ -69,7 +69,7 @@ namespace battleHelpers
 {
 	battleResidence* getBattleResidence()
 	{
-		const auto gameData = gameDataAllHelper::get();
+		const auto gameData = gameHelpers::getGameDataAll();
 		if (const auto battleSettlement = gameData->battleSettlement; battleSettlement)
 			return battleSettlement->battleResidence;
 		return nullptr;
@@ -197,7 +197,7 @@ namespace battleHelpers
 	
 	battleDataS* getBattleData()
 	{
-		return gameDataAllHelper::get()->battleHandler;
+		return gameHelpers::getGameDataAll()->battleHandler;
 	}
 
 	int getBattleTileIndex(const float xCoord, const float yCoord)
@@ -244,7 +244,7 @@ namespace battleHelpers
 	
 	battleTerrainData* getBattleTerrainData()
 	{
-		return gameDataAllHelper::get()->battleTerrainDataPtr;
+		return gameHelpers::getGameDataAll()->battleTerrainDataPtr;
 	}
 
 	battleTile* getBattleTile(const float xCoord, const float yCoord)

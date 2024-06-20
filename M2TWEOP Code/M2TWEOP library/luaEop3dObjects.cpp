@@ -5,7 +5,7 @@
 //@author youneuoy
 //@license GPL-3.0
 #include "luaP.h"
-#include "MapTextDrawer.h"
+#include "mapTextDrawer.h"
 #include <d3dx9mesh.h>
 struct Text3DDrawable
 {

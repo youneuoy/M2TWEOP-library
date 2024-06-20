@@ -206,6 +206,7 @@ namespace armyHelpers
 		int armour
 		);
 	
+	float getMinimumMovePointsForArmy(const armyStruct* army);
 	int addUnitToArmy(armyStruct* army, unit* un);
 	void addToSettlement(armyStruct* army, settlementStruct* set);
 	void addToFort(armyStruct*army, fortStruct* fort);

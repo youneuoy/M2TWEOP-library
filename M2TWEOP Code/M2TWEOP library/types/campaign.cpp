@@ -6,10 +6,8 @@
 #include "campaign.h"
 
 #include "eopdu.h"
-#include "gameDataAllHelper.h"
 #include "gameHelpers.h"
 #include "plugData.h"
-#include "smallFuncs.h"
 #include "stratModelsChange.h"
 #include "techFuncs.h"
 #include "technicalHelpers.h"
@@ -39,11 +37,11 @@ void campaign::setDipStance(campaignEnums::dipRelEnum dipType, factionStruct* fa
 	const auto facTwoName = std::string(fac2->factionRecord->facName);
 	const std::string command = "diplomatic_stance " + facOneName + " " + facTwoName + " ";
 	if (dipType == war)
-		smallFuncs::scriptCommand("console_command", (command + "war").c_str());
+		gameHelpers::scriptCommand("console_command", (command + "war").c_str());
 	else if (dipType == peace)
-		smallFuncs::scriptCommand("console_command", (command + "neutral").c_str());
+		gameHelpers::scriptCommand("console_command", (command + "neutral").c_str());
 	else if (dipType == alliance)
-		smallFuncs::scriptCommand("console_command", (command + "allied").c_str());
+		gameHelpers::scriptCommand("console_command", (command + "allied").c_str());
 }
 
 	
@@ -193,7 +191,7 @@ namespace campaignHelpers
 	void setStringPropertyBD(stratResMod* stratMod, std::string newS)
 	{
 		if (fieldIndex == resource_dataStruct_type)
-			fastFunctsHelpers::setCryptedString(&stratMod->tga, newS.c_str());
+			gameStringHelpers::setHashedString(&stratMod->tga, newS.c_str());
 	}
 	
 	int getPoolIndex(const gameList<mercPoolUnit> *unitPtr)
@@ -201,6 +199,26 @@ namespace campaignHelpers
 		if (const auto nextUnitsPtr = unitPtr->next; nextUnitsPtr && nextUnitsPtr->currentCount )
 			return unitPtr->currentCount + getPoolIndex(nextUnitsPtr);
 		return unitPtr->currentCount;
+	}
+
+	campaignDifficulty1* getCampaignDifficulty1()
+	{
+		return reinterpret_cast<campaignDifficulty1*>(dataOffsets::offsets.campaignDiff1);
+	}
+
+	campaignDifficulty2* getCampaignDifficulty2()
+	{
+		return reinterpret_cast<campaignDifficulty2*>(dataOffsets::offsets.campaignDiff2);
+	}
+
+	void setPerfectSpy(const bool set)
+	{
+		*reinterpret_cast<bool*>(dataOffsets::offsets.perfectSpy) = set;
+	}
+
+	int getLocalFactionID()
+	{
+		return *gameHelpers::getGameDataAll()->localFactionID;
 	}
 
 	mercPoolUnit* getNewMercUnit(gameList<mercPoolUnit>* unitPtr)
@@ -256,7 +274,7 @@ namespace campaignHelpers
 	
     campaign* getCampaignData()
     {
-        const auto gameData = gameDataAllHelper::get();
+        const auto gameData = gameHelpers::getGameDataAll();
         if (!gameData)
             return nullptr;
         return gameData->campaignStruct;
@@ -450,7 +468,7 @@ namespace campaignHelpers
 		local campaign = gameDataAll.get().campaignStruct;
 		local unitSize = campaign.getUnitSize();
 		*/
-		typeAll.campaignTable.set_function("getUnitSize", &smallFuncs::getUnitSize);
+		typeAll.campaignTable.set_function("getUnitSize", &gameHelpers::getUnitSize);
 		/***
 		Get fort by index.
 		@function campaignStruct:getFort

@@ -53,8 +53,6 @@ void onLoadingFonts(LPDIRECT3DDEVICE9 pDevice)
 	}
 }
 
-
-
 void onChangeImGuiContext(ImGuiContext* imCtx, const ImGuiMemAllocFunc allocFunc, const ImGuiMemFreeFunc freeFunc, void* userData)
 {
 	if (plugData::data.luaAll.initDXFunc != nullptr)

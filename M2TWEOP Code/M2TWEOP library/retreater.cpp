@@ -1,8 +1,7 @@
 #include "retreater.h"
-#include "PlannedRetreatRoute.h"
-#include "PathMap.h"
-#include "smallFuncs.h"
-#include "MapTextDrawer.h"
+#include "plannedRetreatRoute.h"
+#include "pathMap.h"
+#include "mapTextDrawer.h"
 #include "character.h"
 #include "faction.h"
 #include <mutex>

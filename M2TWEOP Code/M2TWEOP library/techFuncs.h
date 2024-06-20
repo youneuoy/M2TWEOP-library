@@ -5,6 +5,8 @@
 
 #include "functionsOffsets.h"
 #include "realGameTypes.h"
+#include "imgui/ImFileDialog.h"
+
 namespace techFuncs
 {
 	void WriteData(void* ptr, DWORD to, size_t size);
@@ -12,6 +14,8 @@ namespace techFuncs
 	void nopBytes(DWORD address, size_t size);
 
 	DWORD allocateGameMem(size_t amount);
+	
+	std::string readFile(const std::filesystem::path& path);
 
 	template <typename  data>
 	void read(DWORD from, data* p, size_t size = 4)
@@ -19,7 +23,6 @@ namespace techFuncs
 		memset(p, 0, size);
 		memcpy(p, (LPVOID)from, size);
 	}
-	
 	template<typename T>
 	T* allocateGameClass(size_t amount)
 	{

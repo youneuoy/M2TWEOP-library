@@ -25,7 +25,7 @@ namespace discordManager
 	{
 		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true)
 		{
-			jsonManager::setJSONInFile(
+			jsonManager::setJsonInFile(
 				"\\eopData\\discordRichPresenceCfg.json",
 				"status",
 				"Fighting a battle ⚔️");
@@ -36,7 +36,7 @@ namespace discordManager
 	{
 		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true)
 		{
-			jsonManager::setJSONInFile(
+			jsonManager::setJsonInFile(
 				"\\eopData\\discordRichPresenceCfg.json",
 				"status",
 				"On the campaign map 🗺️");
@@ -47,7 +47,7 @@ namespace discordManager
 	{
 		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true)
 		{
-			jsonManager::setJSONInFile(
+			jsonManager::setJsonInFile(
 				"\\eopData\\discordRichPresenceCfg.json",
 				"turnNum",
 				std::to_string(num));
@@ -61,7 +61,7 @@ namespace discordManager
 		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true && fac->isPlayerControlled == 1)
 		{
 			const auto name = factionHelpers::getLocalizedFactionName(fac);
-			jsonManager::setJSONInFile(
+			jsonManager::setJsonInFile(
 				"\\eopData\\discordRichPresenceCfg.json",
 				"factionName",
 				name);

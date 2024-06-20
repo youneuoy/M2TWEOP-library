@@ -6384,9 +6384,9 @@ void onDecideRamAttacks::SetNewCode()
 	a->jnz(label);
 	//a->mov(eax, 0x6A328B);
 	if (m_adress == 0x006A324F)
-		a->jmp(0x2A424B);
+		a->jmp(0x29428B);
 	else
-		a->jmp(0x2A3D3B);
+		a->jmp(0x293D7B);
 	a->bind(label);
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();

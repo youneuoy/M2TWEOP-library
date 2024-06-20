@@ -1,4 +1,4 @@
-#include "DeveloperMode.h"
+#include "developerMode.h"
 
 #include "campaign.h"
 #include "globals.h"

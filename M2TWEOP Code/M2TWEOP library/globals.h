@@ -2,10 +2,10 @@
 #include "headersSTD.h"
 
 #include "battlemapWorker.h"
-#include "DeveloperMode.h"
-#include "MmbMover.h"
+#include "developerMode.h"
+#include "mmbMover.h"
 #include "tacticalMapViewer.h"
-#include "ContextMenuStrat.h"
+#include "contextMenuStrat.h"
 class globals
 {
 public:

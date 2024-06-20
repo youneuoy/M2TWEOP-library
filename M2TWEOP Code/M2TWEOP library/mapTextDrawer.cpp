@@ -1,4 +1,4 @@
-#include "MapTextDrawer.h"
+#include "mapTextDrawer.h"
 #include "techFuncs.h"
 
 #include "graphicsD3D.h"

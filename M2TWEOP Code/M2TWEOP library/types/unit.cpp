@@ -9,15 +9,15 @@
 #include "dataOffsets.h"
 #include "eopdu.h"
 #include "luaP.h"
-#include "fastFunctsHelpers.h"
+#include "gameStringHelpers.h"
 #include "functionsOffsets.h"
-#include "m2tweopHelpers.h"
-#include "smallFuncs.h"
 #include "faction.h"
 #include "army.h"
 #include "battle.h"
 #include "plugData.h"
 #include <map>
+
+#include "gameHelpers.h"
 #include "strategyMap.h"
 #include "technicalHelpers.h"
 
@@ -98,7 +98,7 @@ namespace unitActions
 	
     unit* getUnitByLabel(const char* label)
     {
-        const auto labelCrypt = fastFunctsHelpers::makeCryptedString(label);
+        const auto labelCrypt = gameStringHelpers::createHashedString(label);
         return GAME_FUNC(unit*(__cdecl*)(char**), getUnitByLabel)(labelCrypt);
     }
     
@@ -130,7 +130,7 @@ namespace unitActions
         if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<unitImmediatePlace>(un, xCoord, yCoord, angle, width);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitImmediatePlace);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitImmediatePlace);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -160,7 +160,7 @@ namespace unitActions
             return;
         unit->aiActiveSet = 2;
         const auto order = std::make_shared<unitOrderMove>(unit, xCoord, yCoord, run);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitOrderMove);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitOrderMove);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -190,7 +190,7 @@ namespace unitActions
             return;
         un->aiActiveSet = 2;
         const auto order = std::make_shared<unitAttackClosestUnit>(un, angle, run);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitAttackClosestUnit);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitAttackClosestUnit);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -218,7 +218,7 @@ namespace unitActions
             return;
         un->aiActiveSet = 2;
         const auto order = std::make_shared<unitAttackUnit>(un, targetUnit, run);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitAttackUnit);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitAttackUnit);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -238,7 +238,7 @@ namespace unitActions
         if (un == nullptr)
             return;
         const auto order = std::make_shared<unitDeployStakes>(un);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitDeployStakes);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitDeployStakes);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -259,7 +259,7 @@ namespace unitActions
         if (un == nullptr)
             return;
         const auto order = std::make_shared<unitChangeFormation>(un, formationType);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitChangeFormation);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitChangeFormation);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -279,7 +279,7 @@ namespace unitActions
         if (un == nullptr)
             return;
         const auto order = std::make_shared<unitHalt>(un);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitHalt);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitHalt);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -313,7 +313,7 @@ namespace unitActions
             return;
         un->aiActiveSet = 2;
         const auto order = std::make_shared<unitMoveToOrientation>(un, xCoord, yCoord, widthInMen, angle, run);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitMoveToOrientation);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitMoveToOrientation);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -341,7 +341,7 @@ namespace unitActions
             return;
         un->aiActiveSet = 2;
         const auto order = std::make_shared<unitMoveRelative>(un, xCoord, yCoord, run);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.moveRelative);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.moveRelative);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -369,7 +369,7 @@ namespace unitActions
             return;
         un->aiActiveSet = 2;
         const auto order = std::make_shared<unitMoveToMissileRange>(un, targetUnit, run);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.moveToMissileRange);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.moveToMissileRange);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -397,7 +397,7 @@ namespace unitActions
             return;
         un->aiActiveSet = 2;
         const auto order = std::make_shared<unitOrderTurn>(un, angle, isRelative);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitTurn);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitTurn);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -417,7 +417,7 @@ namespace unitActions
         if (un == nullptr)
             return;
         const auto order = std::make_shared<unitTaunt>(un);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitTaunt);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitTaunt);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -437,7 +437,7 @@ namespace unitActions
         if (un == nullptr)
             return;
         const auto order = std::make_shared<unitUseSpecialAbility>(un);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.useSpecialAbility);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.useSpecialAbility);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -508,7 +508,7 @@ namespace unitActions
         if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupChangeUnitFormation>(group, formationType);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupUnitChangeFormation);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupUnitChangeFormation);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -535,7 +535,7 @@ namespace unitActions
         if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupMoveToRangeOfGroup>(group, targetGroup, run);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupMoveToRangeOfGroup);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupMoveToRangeOfGroup);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -562,7 +562,7 @@ namespace unitActions
         if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupMoveToRangeOfUnit>(group, targetUnit, run);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupMoveToRangeOfUnit);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupMoveToRangeOfUnit);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -589,7 +589,7 @@ namespace unitActions
         if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupOrderAttackGroup>(group, targetGroup, run);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupAttackGroup);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupAttackGroup);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -611,7 +611,7 @@ namespace unitActions
         if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupOrderHalt>(group);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupHalt);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupHalt);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -640,7 +640,7 @@ namespace unitActions
         if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupOrderMoveFormed>(group, xCoord, yCoord, run);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupMoveFormed);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupMoveFormed);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -669,7 +669,7 @@ namespace unitActions
         if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupOrderMoveUnformed>(group, xCoord, yCoord, run);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupMoveUnformed);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupMoveUnformed);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -696,7 +696,7 @@ namespace unitActions
         if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupOrderRelativeMoveFormed>(group, xCoord, yCoord, run);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupRelativeMoveFormed);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupRelativeMoveFormed);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -723,7 +723,7 @@ namespace unitActions
         if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupOrderRelativeMoveUnformed>(group, xCoord, yCoord, run);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupRelativeMoveUnformed);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupRelativeMoveUnformed);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*\
@@ -752,7 +752,7 @@ namespace unitActions
         if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupOrderTurn>(group, angle, isRelative);
-        m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupTurn);
+        gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupTurn);
     }
     
     void collectEngine(unit* un, siegeEngine* engine)
@@ -845,7 +845,7 @@ namespace unitHelpers
 	}
 	void setUnitUniStr(unit* unit, const char* str)
 	{
-		smallFuncs::createUniString(unit->alias, str);
+		gameStringHelpers::createUniString(unit->alias, str);
 	}
 	
 	void setUnitMovePoints(unit* un, float movePoints)
@@ -960,11 +960,9 @@ namespace unitHelpers
 		return reinterpret_cast<groupLabels*>(dataOffsets::offsets.groupLabels);
 	}
 	
-	int getMaxSoldiersCount(unit* un)
+	int getMaxSoldiersCount(const unit* un)
 	{
-
-		int sizeMul = smallFuncs::getUnitSize();
-
+		const int sizeMul = gameHelpers::getUnitSize();
 		float mul = 2.5f;
 		switch (sizeMul)
 		{
@@ -982,12 +980,13 @@ namespace unitHelpers
 		}
 		return static_cast<int>(un->eduEntry->soldierCount) * mul;
 	}
-	int16_t angleFloatToShort(float angle)
+	
+	int16_t angleFloatToShort(const float angle)
 	{
 		return static_cast<int16_t>(angle * 182.044432904376f);
 	}
 
-	float angleShortToFloat(int16_t angle)
+	float angleShortToFloat(const int16_t angle)
 	{
 		return angle * 0.0054931640625f;
 	}
@@ -1008,8 +1007,8 @@ namespace unitHelpers
 			return nullptr;
 		for (int i = 0; i < army->maxUnitGroups; i++)
 		{
-			const auto group = &army->unitGroups[i];
-			if (group->unitsInFormationNum + group->unitsNotInFormationNum == 0)
+			if (const auto group = &army->unitGroups[i];
+				group->unitsInFormationNum + group->unitsNotInFormationNum == 0)
 				return group;
 		}
 		return nullptr;
@@ -1020,9 +1019,9 @@ namespace unitHelpers
 		DWORD funcOffset = codes::offsets.getGroupByLabel;
 		
 		auto groupLabels = getGroupLabels();
-		
-		stringWithHash* labelHash = new stringWithHash();
-		fastFunctsHelpers::setCryptedString(const_cast<char**>(&labelHash->name), label);
+
+		auto labelHash = new stringWithHash();
+		gameStringHelpers::setHashedString(const_cast<char**>(&labelHash->name), label);
 		unitGroup** group = nullptr;
 		__asm
 		{
@@ -1149,7 +1148,7 @@ namespace unitHelpers
 			DWORD removeUnusedLabel = codes::offsets.removeUnusedLabel;
 			auto labels = getGroupLabels();
 			auto labelHash = new stringWithHash();
-		    fastFunctsHelpers::setCryptedString(const_cast<char**>(&labelHash->name), label);
+		    gameStringHelpers::setHashedString(const_cast<char**>(&labelHash->name), label);
 			_asm
 			{
 				push labelHash
@@ -1180,7 +1179,7 @@ namespace unitHelpers
 		DWORD funcOffset = codes::offsets.defineUnitGroup;
 		auto labels = getGroupLabels();
 		stringWithHash* labelHash = new stringWithHash();
-		fastFunctsHelpers::setCryptedString(const_cast<char**>(&labelHash->name), label);
+		gameStringHelpers::setHashedString(const_cast<char**>(&labelHash->name), label);
 		unitGroup** groupPtr = &group;
 		__asm
 		{
@@ -1234,13 +1233,13 @@ namespace unitHelpers
 	void setStringPropertyEDU(eduEntry* eduEn, std::string newS)
 	{
 		if (fieldIndex == EduEntryStruct_Type)
-			fastFunctsHelpers::setCryptedString(&eduEn->eduType, newS.c_str());
+			gameStringHelpers::setHashedString(&eduEn->eduType, newS.c_str());
 		else if (fieldIndex == EduEntryStruct_Soldier)
-			fastFunctsHelpers::setCryptedString(&eduEn->soldier, newS.c_str());
+			gameStringHelpers::setHashedString(&eduEn->soldier, newS.c_str());
 		else if (fieldIndex == EduEntryStruct_UnitCardTga)
-			fastFunctsHelpers::setCryptedString(&eduEn->unitCardTga, newS.c_str());
+			gameStringHelpers::setHashedString(&eduEn->unitCardTga, newS.c_str());
 		else if (fieldIndex == EduEntryStruct_InfoCardTga)
-			fastFunctsHelpers::setCryptedString(&eduEn->infoCardTga, newS.c_str());
+			gameStringHelpers::setHashedString(&eduEn->infoCardTga, newS.c_str());
 	}
 
 	std::string getLocalizedUnitName(const eduEntry* entry)
@@ -1260,24 +1259,23 @@ namespace unitHelpers
 
 	void setUnitName(eduEntry* entry, const std::string& name)
 	{
-
-		UNICODE_STRING*** nameMem = new UNICODE_STRING**;
+		const auto nameMem = new UNICODE_STRING**;
 		entry->localizedName = nameMem;
-		smallFuncs::createUniString(*entry->localizedName, name.c_str());
+		gameStringHelpers::createUniString(*entry->localizedName, name.c_str());
 	}
 
 	void setUnitDescr(eduEntry* entry, const std::string& descr)
 	{
-		UNICODE_STRING*** descrMem = new UNICODE_STRING * *[4];
+		const auto descrMem = new UNICODE_STRING * *[4];
 		entry->localizedDescr = descrMem;
-		smallFuncs::createUniString(*entry->localizedDescr, descr.c_str());
+		gameStringHelpers::createUniString(*entry->localizedDescr, descr.c_str());
 	}
 
 	void setUnitDescrShort(eduEntry* entry, const std::string& descr)
 	{
-		UNICODE_STRING*** shDescrMem = new UNICODE_STRING * *[4];
+		const auto shDescrMem = new UNICODE_STRING * *[4];
 		entry->localizedDescrShort = shDescrMem;
-		smallFuncs::createUniString(*entry->localizedDescrShort, descr.c_str());
+		gameStringHelpers::createUniString(*entry->localizedDescrShort, descr.c_str());
 	}
 	
 	int getEduIndex(const char* type)

@@ -5,8 +5,9 @@
 #include <filesystem>
 
 #include "functionsOffsets.h"
+#include "gameStringHelpers.h"
 #include "globals.h"
-#include "smallFuncs.h"
+
 void techFuncs::WriteData(void* ptr, DWORD to, size_t size)
 {
     HANDLE h = GetCurrentProcess();
@@ -81,6 +82,20 @@ std::vector<std::string>techFuncs::unzip(std::string const& zipFile, std::string
     // Close the archive, freeing any resources it was using
     mz_zip_reader_end(&zip_archive);
     return files;
+}
+
+	
+std::string techFuncs::readFile(const std::filesystem::path& path)
+{
+    // Open the stream to 'lock' the file.
+    std::ifstream f(path, std::ios::in | std::ios::binary);
+    // Obtain the size of the file.
+    const auto sz = file_size(path);
+    // Create a buffer.
+    std::string result(sz, '\0');
+    // Read the whole file into the buffer.
+    f.read(result.data(), sz);
+    return result;
 }
 
 void techFuncs::zip(std::string const& zipFile, std::vector<std::string>& files, std::string saveFile, std::string nameOfSaveFile)
@@ -298,7 +313,7 @@ vector<string> techFuncs::loadGameLoadArchive(vector<string> files, UNICODE_STRI
             p += "/saves/M2TWEOPgameSaveDONTTOUCHTHISFILE.tmp";
             filesystem::remove(p);
             filesystem::copy_file(file, p);
-            smallFuncs::createUniString(savePath,p.string().c_str());
+            gameStringHelpers::createUniString(savePath,p.string().c_str());
           //  (*savePath)->something = 1;
         }
     }

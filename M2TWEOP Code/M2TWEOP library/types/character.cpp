@@ -6,11 +6,10 @@
 #include "character.h"
 
 #include "dataOffsets.h"
-#include "fastFunctsHelpers.h"
+#include "cultures.h"
+#include "gameStringHelpers.h"
 #include "functionsOffsets.h"
-#include "smallFuncs.h"
 #include "fort.h"
-#include "m2tweopHelpers.h"
 #include "characterRecord.h"
 #include "eopdu.h"
 #include "gameHelpers.h"
@@ -106,7 +105,7 @@ namespace characterHelpers
 
 		character* gen = nullptr;
 
-		char** cryptS = fastFunctsHelpers::makeCryptedString(type);
+		char** cryptS = gameStringHelpers::createHashedString(type);
 
 		DWORD adrType = reinterpret_cast<DWORD>(cryptS);
 		_asm
@@ -158,7 +157,7 @@ namespace characterHelpers
 
 		character* gen = nullptr;
 
-		char** cryptS = fastFunctsHelpers::makeCryptedString(type);
+		char** cryptS = gameStringHelpers::createHashedString(type);
 
 		DWORD adrType = reinterpret_cast<DWORD>(cryptS);
 		_asm
@@ -485,12 +484,12 @@ namespace characterHelpers
 			return;
 		if (gen->genType->type != characterTypeStrat::princess)
 		{
-			m2tweopHelpers::logFuncError("character.marry", "character is not princess");
+			gameHelpers::logFuncError("character.marry", "character is not princess");
 			return;
 		}
 		if (targetCharacter->genType->type != characterTypeStrat::namedCharacter)
 		{
-			m2tweopHelpers::logFuncError("character.marry", "target character is not family member");
+			gameHelpers::logFuncError("character.marry", "target character is not family member");
 			return;
 		}
 		targetCharacterAction(gen, targetCharacter, characterAction::marry);
@@ -638,7 +637,7 @@ namespace characterHelpers
 			return;
 		if (!gen->characterRecord->label || gen->characterRecord->labelCrypt == 0 || strcmp(gen->characterRecord->label, "") == 0)
 		{
-			m2tweopHelpers::logStringGame("character.sendOffMap: character has no label, you wont be able to get him back, command cancelled.");
+			gameHelpers::logStringGame("character.sendOffMap: character has no label, you wont be able to get him back, command cancelled.");
 			return;
 		}
 		if (gen->ifMarkedToKill == 1)
@@ -673,32 +672,32 @@ namespace characterHelpers
 		std::string functionName = "character.switchFaction";
 		if (!gen || !fac || !gen->genType)
 		{
-			m2tweopHelpers::logFuncError(functionName, "gen or fac or genType is nil");
+			gameHelpers::logFuncError(functionName, "gen or fac or genType is nil");
 			return;
 		}
 		if (gen->genType->type == characterTypeStrat::admiral)
 		{
-			m2tweopHelpers::logFuncError(functionName, "unsupported character type admiral");
+			gameHelpers::logFuncError(functionName, "unsupported character type admiral");
 			return;
 		}
 		if (gen->genType->type == characterTypeStrat::princess)
 		{
-			m2tweopHelpers::logFuncError(functionName, "unsupported character type princess");
+			gameHelpers::logFuncError(functionName, "unsupported character type princess");
 			return;
 		}
 		if (gen->armyNotLeaded)
 		{
-			m2tweopHelpers::logFuncError(functionName, "character is part of an army");
+			gameHelpers::logFuncError(functionName, "character is part of an army");
 			return;
 		}
 		if (gen->armyLeaded && (gen->armyLeaded->shipArmy || gen->armyLeaded->charactersNum != 0))
 		{
-			m2tweopHelpers::logFuncError(functionName, "character is boarded or has auxiliary characters");
+			gameHelpers::logFuncError(functionName, "character is boarded or has auxiliary characters");
 			return;
 		}
 		if (gen->genType->type == characterTypeStrat::namedCharacter && !gen->armyLeaded)
 		{
-			m2tweopHelpers::logFuncError(functionName, "character is in a residence or off-map");
+			gameHelpers::logFuncError(functionName, "character is in a residence or off-map");
 			return;
 		}
 		
@@ -819,7 +818,7 @@ namespace characterHelpers
 	{
 		if (gen->residence)
 		{
-			m2tweopHelpers::logStringGame("character.teleport: Character is in residence, cancelled to avoid bugs");
+			gameHelpers::logStringGame("character.teleport: Character is in residence, cancelled to avoid bugs");
 			return;
 		}
 		
@@ -849,9 +848,9 @@ namespace characterHelpers
 				mov eax, adrFunc
 				call eax
 			}
-			DWORD moveExtentThing = reinterpret_cast<DWORD>(smallFuncs::getGameDataAll()->stratPathFinding) + 0x88;
+			DWORD moveExtentThing = reinterpret_cast<DWORD>(gameHelpers::getGameDataAll()->stratPathFinding) + 0x88;
 		    GAME_FUNC(void(__thiscall*)(DWORD), deleteMoveExtents)(moveExtentThing);
-			auto selectInfoPtr = smallFuncs::getGameDataAll()->selectionInfoPtr2;
+			auto selectInfoPtr = gameHelpers::getGameDataAll()->selectionInfoPtr2;
 		    GAME_FUNC(void(__thiscall*)(selectionInfo**, character*), someSelectionStuff)(selectInfoPtr, gen);
 		    GAME_FUNC(void(__thiscall*)(character*), initPlaceCharacter)(gen);
 		}
@@ -863,7 +862,7 @@ namespace characterHelpers
 	{
 		if (gen->residence)
 		{
-			m2tweopHelpers::logStringGame("character.teleport: Character is in residence, cancelled to avoid bugs");
+			gameHelpers::logStringGame("character.teleport: Character is in residence, cancelled to avoid bugs");
 			return false;
 		}
 		bool isTeleported = false;
@@ -890,9 +889,9 @@ namespace characterHelpers
 				mov eax, adrFunc
 				call eax
 			}
-			DWORD moveExtentThing = reinterpret_cast<DWORD>(smallFuncs::getGameDataAll()->stratPathFinding) + 0x88;
+			DWORD moveExtentThing = reinterpret_cast<DWORD>(gameHelpers::getGameDataAll()->stratPathFinding) + 0x88;
 		    GAME_FUNC(void(__thiscall*)(DWORD), deleteMoveExtents)(moveExtentThing);
-			auto selectInfoPtr = smallFuncs::getGameDataAll()->selectionInfoPtr2;
+			auto selectInfoPtr = gameHelpers::getGameDataAll()->selectionInfoPtr2;
 		    GAME_FUNC(void(__thiscall*)(selectionInfo**, character*), someSelectionStuff)(selectInfoPtr, gen);
 		    GAME_FUNC(void(__thiscall*)(character*), initPlaceCharacter)(gen);
 			isTeleported = true;
@@ -907,7 +906,7 @@ namespace characterHelpers
 		if (!gen || !gen->characterRecord || !gen->characterRecord->faction || !gen->armyLeaded)
 			return nullptr;
 		if (auto faction = gen->characterRecord->faction;
-			faction->money < m2tweopHelpers::getCultureDb()->cultures[faction->cultureID].fortCost)
+			faction->money < cultures::getCultureDb()->cultures[faction->cultureID].fortCost)
 			return nullptr;
 		armyStruct* newArmy = gen->armyLeaded;
 		auto oldOption = campaignHelpers::getCampaignDb()->campaignDbSettlement.canBuildForts;
@@ -980,7 +979,7 @@ namespace characterHelpers
 	void setStringPropertyGen(character* gen, const std::string& newS)
 	{
 		if (fieldIndex == generalStruct_abilityID)
-			fastFunctsHelpers::setCryptedString(&gen->ability, newS.c_str());
+			gameStringHelpers::setHashedString(&gen->ability, newS.c_str());
 	}
 	
     void addToLua(sol::state& luaState)

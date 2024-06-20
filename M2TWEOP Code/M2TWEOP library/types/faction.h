@@ -779,6 +779,7 @@ namespace factionHelpers
 	std::string getLocalizedFactionName(factionStruct* fac);
 	void* disembark(armyStruct* army, int x, int y);
 	armyStruct* splitArmy(factionStruct *faction, const sol::table& units, int x, int y);
+	bool getTileVisibility(factionStruct* faction, int x, int y);
 
 	ltgdGlobals* getLtgdGlobals();
 	militaryValuesLTGD* getAiFactionValues(factionStruct* fac);

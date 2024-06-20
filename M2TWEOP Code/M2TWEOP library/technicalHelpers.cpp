@@ -1,6 +1,5 @@
 #include "technicalHelpers.h"
 #include "plugData.h"
-#include "smallFuncs.h"
 #include "unit.h"
 
 namespace technicalHelpers

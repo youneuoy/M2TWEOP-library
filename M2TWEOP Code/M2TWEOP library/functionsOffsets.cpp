@@ -9,7 +9,6 @@ void codes::initCodes(int gameVer)
 		offsets.loadStratCasModelFunc = 0x00a04380;
 		offsets.allocMemFunc = 0x012418d8;
 		offsets.createEduEntry = 0x008EECA0;
-		offsets.uniStrCustomTile = 0x00f018e0;
 
 		offsets.createSiegeSettlementGarrisonedFunc = 0x005b56c0;
 		offsets.createCadAttackSettlementFunc = 0x005B55B0;
@@ -20,6 +19,7 @@ void codes::initCodes(int gameVer)
 		offsets.decideEquipmentFunc = 0x0071C920;
 		offsets.getEquipmentPreferencesFunc = 0x00521520;
 		offsets.finalizeActionStrat = 0x0059e790;
+		offsets.saveGame = 0x00434da0;
 
 		offsets.createIdleActionFunc = 0x005aff40;
 
@@ -230,6 +230,10 @@ void codes::initCodes(int gameVer)
 		offsets.isZoneValid = 0x672EC0;
 		offsets.getZonePerimeter = 0xE0DC00;
 		offsets.getZoneID = 0xDF6050;
+		offsets.createUniString = 0x00f018e0;
+		offsets.getScriptCounter = 0x00489360;
+		offsets.setScriptCounter = 0x0048c8e0;
+		offsets.getUnitFullMovePoints = 0x00742380;
 	}
 
 
@@ -255,6 +259,7 @@ void codes::initCodes(int gameVer)
 		offsets.doHordeStuff = 0x0050B750;
 		offsets.doHordeStuff2 = 0x004EB020;
 		offsets.doHordeStuff3 = 0x00C56FC0;
+		offsets.saveGame = 0x004350e0;
 		
 		offsets.createCadAttackSettlementFunc = 0x00005B5A90;
 		offsets.createCadAssaultSettlementFunc = 0x005B5CB0;
@@ -458,9 +463,12 @@ void codes::initCodes(int gameVer)
 		offsets.isTileFree = 0x004c9220;
 		offsets.hideRevealedTile = 0x004baf80;
 		offsets.findBattleModel = 0x010e8ee0;
-		offsets.uniStrCustomTile = 0x00f01eb0;
 		offsets.isZoneValid = 0x6733A0;
 		offsets.getZonePerimeter = 0xE08290;
 		offsets.getZoneID = 0xDF0680;
+		offsets.createUniString = 0x00f01eb0;
+		offsets.getScriptCounter = 0x00489760;
+		offsets.setScriptCounter = 0x0048cce0;
+		offsets.getUnitFullMovePoints = 0x00742b10;
 	}
 }

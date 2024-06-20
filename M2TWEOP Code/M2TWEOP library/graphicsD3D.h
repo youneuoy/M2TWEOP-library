@@ -74,7 +74,8 @@ namespace graphicsExport
 
 	EOP_EXPORT const D3DXMATRIXA16* GetMatView();
 	EOP_EXPORT const D3DXMATRIXA16* GetMatProj();
-
+	std::tuple<int, int, void*> loadTextureToGame(const std::string& path);
+	void unloadTextureFromGame(void* texture);
 	EOP_EXPORT IDirect3DDevice9* GetDevice();
 	EOP_EXPORT LPDIRECT3DTEXTURE9 loadTexture(const char* path, int* x, int* y);
 	EOP_EXPORT void unloadTexture(LPDIRECT3DTEXTURE9 texture);

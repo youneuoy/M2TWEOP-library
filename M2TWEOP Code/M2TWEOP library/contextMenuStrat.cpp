@@ -1,6 +1,6 @@
-#include "ContextMenuStrat.h"
-#include "TexturesManager.h"
-#include "PlannedRetreatRoute.h"
+#include "contextMenuStrat.h"
+#include "texturesManager.h"
+#include "plannedRetreatRoute.h"
 #include "strategyMap.h"
 
 ContextMenuStrat::ContextMenuStrat()

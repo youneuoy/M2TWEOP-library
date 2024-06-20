@@ -1,4 +1,4 @@
-#include "MmbMover.h"
+#include "mmbMover.h"
 #include "dataOffsets.h"
 
 #define GET_X_LPARAM(lp)                        ((int)(short)LOWORD(lp))

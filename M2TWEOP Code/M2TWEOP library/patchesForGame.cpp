@@ -15,11 +15,9 @@
 #include "characterRecord.h"
 #include "strategyMap.h"
 
-#include "PlannedRetreatRoute.h"
+#include "plannedRetreatRoute.h"
 #include "discordManager.h"
 #include "eopdu.h"
-#include "m2tweopHelpers.h"
-#include "smallFuncs.h"
 #include "unit.h"
 #include "army.h"
 #include "campaign.h"
@@ -112,7 +110,7 @@ DWORD __fastcall patchesForGame::onSearchUnitType(char* typeName)
 {
 	if (const auto eopUnit = eopDu::getEopEduEntryByName(typeName); eopUnit != nullptr)
 	{
-		m2tweopHelpers::logStringGame("Unit found in M2TWEOP: " + std::string(typeName) + " index: " + std::to_string(eopUnit->index));
+		gameHelpers::logStringGame("Unit found in M2TWEOP: " + std::string(typeName) + " index: " + std::to_string(eopUnit->index));
 		GLOBAL_NAME_INDEX_COMBO = std::make_shared<nameIndexCombo>(typeName, eopUnit->index);
 		return reinterpret_cast<DWORD>(GLOBAL_NAME_INDEX_COMBO.get());
 	}
@@ -179,7 +177,7 @@ eduEntry* patchesForGame::onEvaluateUnit2(int eduIndex)
 		return eopUnit;
 }
 
-int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlement, bool* isCastle)
+int __fastcall patchesForGame::onFortificationLevelS(settlementStruct* settlement, bool* isCastle)
 {
 	int selectedLevel = -2;//magic value, mean not change anything
 	bool isChanged = false;
@@ -228,7 +226,7 @@ int __fastcall patchesForGame::onFindUnit(char* entry, int* eduIndex)
 	return *eduIndex;
 }
 
-int __fastcall patchesForGame::OnReligionCombatBonus(int religionID, characterRecord* namedChar)
+int __fastcall patchesForGame::onReligionCombatBonus(int religionID, characterRecord* namedChar)
 {
 	if (religionID > 9)
 		return 0;
@@ -306,7 +304,7 @@ char* __fastcall patchesForGame::getBrowserPicConstructed(int cultureID, edbEntr
 	if (cultureName.empty())
 		return nullptr;
 	const auto picPath = getBuildingPicConstructedPath(cultureName.c_str(), levelName);
-	const auto modPath = m2tweopHelpers::getModPath();
+	const auto modPath = gameHelpers::getModPath();
 	FILE_PATH = modPath + picPath;
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -341,7 +339,7 @@ char* __fastcall patchesForGame::getBrowserPicConstructed(int cultureID, edbEntr
 			return FILE_PATH.data();
 		}
 	}
-	m2tweopHelpers::logStringGame("getBrowserPicConstructed error: " + std::string(modPath + picPath));
+	gameHelpers::logStringGame("getBrowserPicConstructed error: " + std::string(modPath + picPath));
 	FILE_PATH = modPath + "/data/ui/generic/generic_constructed_building.tga";
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -359,7 +357,7 @@ char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEnt
 	if (cultureName.empty())
 		return nullptr;
 	const auto picPath = getBuildingPicConstructionPath(cultureName.c_str(), levelName);
-	const auto modPath = m2tweopHelpers::getModPath();
+	const auto modPath = gameHelpers::getModPath();
 	FILE_PATH = modPath + picPath;
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -394,7 +392,7 @@ char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEnt
 			return FILE_PATH.data();
 		}
 	}
-	m2tweopHelpers::logStringGame("getBrowserPicConstruction error: " + std::string(modPath + picPath));
+	gameHelpers::logStringGame("getBrowserPicConstruction error: " + std::string(modPath + picPath));
 	FILE_PATH = modPath + "/data/ui/generic/generic_preconstructed_building.tga";
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -411,7 +409,7 @@ char* __fastcall patchesForGame::getBuildingPic(buildingLevel* level, int cultur
 	if (cultureName.empty())
 		return nullptr;
 	const auto picPath = getBuildingPicPath(cultureName.c_str(), levelName);
-	const auto modPath = m2tweopHelpers::getModPath();
+	const auto modPath = gameHelpers::getModPath();
 	FILE_PATH = modPath + picPath;
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -446,7 +444,7 @@ char* __fastcall patchesForGame::getBuildingPic(buildingLevel* level, int cultur
 			return FILE_PATH.data();
 		}
 	}
-	m2tweopHelpers::logStringGame("getBuildingPic error: " + std::string(modPath + picPath));
+	gameHelpers::logStringGame("getBuildingPic error: " + std::string(modPath + picPath));
 	FILE_PATH = modPath + "/data/ui/generic/generic_building.tga";
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -463,7 +461,7 @@ char* __fastcall patchesForGame::getBuildingPicConstructed(buildingLevel* level,
 	if (cultureName.empty())
 		return nullptr;
 	const auto picPath = getBuildingPicConstructedPath(cultureName.c_str(), levelName);
-	const auto modPath = m2tweopHelpers::getModPath();
+	const auto modPath = gameHelpers::getModPath();
 	FILE_PATH = modPath + picPath;
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -498,7 +496,7 @@ char* __fastcall patchesForGame::getBuildingPicConstructed(buildingLevel* level,
 			return FILE_PATH.data();
 		}
 	}
-	m2tweopHelpers::logStringGame("getBuildingPicConstructed error: " + std::string(modPath + picPath));
+	gameHelpers::logStringGame("getBuildingPicConstructed error: " + std::string(modPath + picPath));
 	FILE_PATH = modPath + "/data/ui/generic/generic_constructed_building.tga";
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -515,7 +513,7 @@ char* __fastcall patchesForGame::getBuildingPicConstruction(buildingLevel* level
 	if (cultureName.empty())
 		return nullptr;
 	const auto picPath = getBuildingPicConstructionPath(cultureName.c_str(), levelName);
-	const auto modPath = m2tweopHelpers::getModPath();
+	const auto modPath = gameHelpers::getModPath();
 	FILE_PATH = modPath + picPath;
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -550,7 +548,7 @@ char* __fastcall patchesForGame::getBuildingPicConstruction(buildingLevel* level
 			return FILE_PATH.data();
 		}
 	}
-	m2tweopHelpers::logStringGame("getBuildingPicConstruction error: " + std::string(modPath + picPath));
+	gameHelpers::logStringGame("getBuildingPicConstruction error: " + std::string(modPath + picPath));
 	FILE_PATH = modPath + "/data/ui/generic/generic_preconstructed_building.tga";
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -579,7 +577,7 @@ char* patchesForGame::onGetGuildOfferPic(DWORD level, int cultureID)
 	if (cultureName.empty())
 		return nullptr;
 	const auto picPath = getBuildingPicConstructedPath(cultureName.c_str(), levelName);
-	const auto modPath = m2tweopHelpers::getModPath();
+	const auto modPath = gameHelpers::getModPath();
 	FILE_PATH = modPath + picPath;
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -614,7 +612,7 @@ char* patchesForGame::onGetGuildOfferPic(DWORD level, int cultureID)
 			return FILE_PATH.data();
 		}
 	}
-	m2tweopHelpers::logStringGame("onGetGuildOfferPic error: " + std::string(modPath + picPath));
+	gameHelpers::logStringGame("onGetGuildOfferPic error: " + std::string(modPath + picPath));
 	FILE_PATH = modPath + "/data/ui/generic/generic_preconstructed_building.tga";
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -650,15 +648,15 @@ char* patchesForGame::onGetCultureEndTurnSound(int cultureID)
 	return sound.data();
 }
 
-int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduindex)
+int __fastcall patchesForGame::onCreateMercUnitCheck(char** entryName, int eduIndex)
 {
-	if (eduindex == -1)
+	if (eduIndex == -1)
 	{
-		if (!eopDu::getEopEduEntry(eduindex))
+		if (!eopDu::getEopEduEntry(eduIndex))
 			return -1;
 		return 0;
 	}
-	return eduindex;
+	return eduIndex;
 }
 
 int __fastcall patchesForGame::onAttackGate(unit* un, void* tactic)
@@ -677,7 +675,7 @@ int __fastcall patchesForGame::onAttackGate(unit* un, void* tactic)
 	return 0;
 }
 
-eduEntry* __fastcall patchesForGame::OnCreateMercUnit(char** entryName, eduEntry* entry)
+eduEntry* __fastcall patchesForGame::onCreateMercUnit(char** entryName, eduEntry* entry)
 {
 	const DWORD entryAddr = reinterpret_cast<DWORD>(entry);
 	if (const DWORD mercEopValue = codes::offsets.mercEOPValue; entryAddr == mercEopValue)
@@ -688,14 +686,14 @@ eduEntry* __fastcall patchesForGame::OnCreateMercUnit(char** entryName, eduEntry
 	return entry;
 }
 
-eduEntry* __fastcall patchesForGame::OnCreateUnitWrapper(int eduindexBase, int removeValue)
+eduEntry* __fastcall patchesForGame::onCreateUnitWrapper(int eduIndexBase, int removeValue)
 {
-	const int eduIndex = eduindexBase - (removeValue * 8);
+	const int eduIndex = eduIndexBase - (removeValue * 8);
 	eduEntry* entry = eopDu::getEduEntry(eduIndex);
 	return entry;
 }
 
-DWORD __fastcall patchesForGame::OnUnitInfo(DWORD entryAddress)
+DWORD __fastcall patchesForGame::onUnitInfo(DWORD entryAddress)
 {
 	DWORD eduBaseAddress = dataOffsets::offsets.unitTypesStart;
 	int index = (entryAddress - eduBaseAddress) / 996; // 996 is the size of the eduEntry struct
@@ -707,7 +705,7 @@ DWORD __fastcall patchesForGame::OnUnitInfo(DWORD entryAddress)
 	return reinterpret_cast<DWORD>(entry);
 }
 
-eduEntry* __fastcall patchesForGame::OnGetRecruitPoolUnitEntry(int eduIndex)
+eduEntry* __fastcall patchesForGame::onGetRecruitPoolUnitEntry(int eduIndex)
 {
 	return eopDu::getEduEntry(eduIndex);
 }
@@ -734,70 +732,45 @@ float distance(const float x, const float y, const float x2, const float y2)
 
 void __fastcall patchesForGame::onPreBattlePlacement(aiTacticAssault* aiTactic)
 {
-	auto battle = battleHelpers::getBattleData();
-	if (!battle || battle->battleState >= 5)
+	if (const auto battle = battleHelpers::getBattleData(); !battle || battle->battleState >= 5)
 		return;
-	DWORD vFunc = getVFunc(aiTactic->vftable, 0x4C);
-	int tacticType = GAME_FUNC_RAW(int(__thiscall*)(aiTacticAssault*), vFunc)(aiTactic);
-	if (tacticType != 19)
+	const DWORD vFunc = getVFunc(aiTactic->vftable, 0x4C);
+	if (const int tacticType = GAME_FUNC_RAW(int(__thiscall*)(aiTacticAssault*), vFunc)(aiTactic); tacticType != 19)
 		return;
-	auto group1 = &aiTactic->aiUnitGroup;
-	auto group2 = &aiTactic->siegeUnitGroup;
-	DWORD funcAddr = codes::offsets.issueMoveOrder;
+	const auto group1 = &aiTactic->aiUnitGroup;
+	const auto group2 = &aiTactic->siegeUnitGroup;
+	const DWORD funcAddr = codes::offsets.issueMoveOrder;
 	GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, float*, int16_t, int, bool, bool), funcAddr)(
 		group1,
 		&aiTactic->advanceX,
 		aiTactic->angle,
-		(int)groupMoveType::formed,
+		static_cast<int>(groupMoveType::formed),
 		true,
 		true);
 	for (int i = 0; i < group1->unitsInFormationNum; i++)
 	{
-		auto unit = group1->unitsInFormation[i];
-		if (distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 150)
+		if (const auto unit = group1->unitsInFormation[i];
+			distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 150)
 			unitActions::placeUnit(unit, aiTactic->advanceX, aiTactic->advanceY, aiTactic->angle, 0);
 	}
 	GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, float*, int16_t, int, bool, bool), funcAddr)(
 		group2,
 		&aiTactic->advanceX,
 		aiTactic->angle,
-		(int)groupMoveType::formed,
+		static_cast<int>(groupMoveType::formed),
 		true,
 		true);
 	for (int i = 0; i < group2->unitsInFormationNum; i++)
 	{
-		auto unit = group2->unitsInFormation[i];
-		if (distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 150)
+		if (const auto unit = group2->unitsInFormation[i];
+			distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 150)
 			unitActions::placeUnit(unit, aiTactic->advanceX, aiTactic->advanceY, aiTactic->angle, 0);
 	}
-	/*
-	* 
-	for (int i = 0; i < group1.unitsInFormationNum; i++)
-	{
-		auto unit = group1.unitsInFormation[i];
-		unitActions::placeUnit(unit, posX, posY, (int)angle, 0);
-		unitActions::logStringGame("Unit placed at2: " + to_string(unit->positionX) + " " + to_string(unit->positionY) + " " + to_string(angle));
-		group1.xCoord = unit->positionX;
-		group1.yCoord = unit->positionY;
-		group1.angle = aiTactic->angle;
-	}
-	auto group2 = aiTactic->siegeUnitGroup;
-	for (int i = 0; i < group2.unitsInFormationNum; i++)
-	{
-		auto unit = group2.unitsInFormation[i];
-		unitActions::placeUnit(unit, posX, posY, (int)angle, 0);
-		group2.xCoord = unit->positionX;
-		group2.yCoord = unit->positionY;
-		group2.angle = aiTactic->angle;
-		unitActions::logStringGame("Siege unit placed at2: " + to_string(unit->positionX) + " " + to_string(unit->positionY) + " " + to_string(angle));
-		unitActions::placeUnit(unit, unit->positionX, unit->positionY, (int)angle, 0);
-	}
-	 */
 }
 
 bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetachment* detachment, int numRamsLeft)
 {
-	if (numRamsLeft == 0)
+	if (numRamsLeft <= 0)
 		return false;
 	int numLaddersTowers = 0;
 	int numRams = 0;
@@ -890,10 +863,10 @@ bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetac
 	return false;
 }
 
-bool __thiscall patchesForGame::onPreBattlePlacement2(aiUnitGroup* group, DWORD formationTemplate, bool force_issue_order)
+bool __thiscall patchesForGame::onPreBattlePlacement2(aiUnitGroup* group, DWORD formationTemplate, bool forceOrder)
 {
 	DWORD orderChangeFormation = codes::offsets.issueFormationOrder;
-	auto retBool = GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, DWORD, bool), orderChangeFormation)(group, formationTemplate, force_issue_order);
+	auto retBool = GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, DWORD, bool), orderChangeFormation)(group, formationTemplate, forceOrder);
 	auto battle = battleHelpers::getBattleData();
 	if (battle->battleType != 3)
 		return retBool;
@@ -917,7 +890,7 @@ bool __thiscall patchesForGame::onPreBattlePlacement2(aiUnitGroup* group, DWORD 
 	{
 		auto unit = group1.unitsInFormation[i];
 		unitActions::placeUnit(unit, posX, posY, aiTactic->angle, 0);
-		m2tweopHelpers::logStringGame("Unit placed at2: " + to_string(unit->positionX) + " " + to_string(unit->positionY) + " " + to_string(angle));
+		gameHelpers::logStringGame("Unit placed at2: " + to_string(unit->positionX) + " " + to_string(unit->positionY) + " " + to_string(angle));
 		group1.xCoord = unit->positionX;
 		group1.yCoord = unit->positionY;
 		group1.angle = aiTactic->angle;
@@ -930,7 +903,7 @@ bool __thiscall patchesForGame::onPreBattlePlacement2(aiUnitGroup* group, DWORD 
 		group2.xCoord = unit->positionX;
 		group2.yCoord = unit->positionY;
 		group2.angle = aiTactic->angle;
-		m2tweopHelpers::logStringGame("Siege unit placed at2: " + to_string(unit->positionX) + " " + to_string(unit->positionY) + " " + to_string(angle));
+		gameHelpers::logStringGame("Siege unit placed at2: " + to_string(unit->positionX) + " " + to_string(unit->positionY) + " " + to_string(angle));
 	}
 	return retBool;
 }
@@ -1059,7 +1032,7 @@ const char* __fastcall patchesForGame::onAutoSave()
 
 	return saveNames[currSaveID].c_str();
 }
-character* __fastcall patchesForGame::mercenaryMovepointsGetGeneral(armyStruct* army)
+character* __fastcall patchesForGame::mercenaryMovePointsGetGeneral(armyStruct* army)
 {
 	character* gen = army->gen;
 	if (gen == nullptr)
@@ -1099,7 +1072,7 @@ void __stdcall patchesForGame::onNewGameStart()
 }
 
 //#define TESTPATCHES
-void __stdcall patchesForGame::afterEDUread()
+void __stdcall patchesForGame::onEduParsed()
 {
 	unitHelpers::initBaseUnitsLookup();
 	gameEvents::onReadGameDbsAtStart();
@@ -1265,7 +1238,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	const DWORD eventCode = reinterpret_cast<DWORD>(vTab[0]);
 	gameEvents::onEventWrapper(eventCode, vTab);
 
-	const int gameVersion = smallFuncs::getGameVersion();
+	const int gameVersion = gameHelpers::getGameVersion();
 	const DWORD scrollOpenedCode = gameVersion == 1 ? 0x013719FC : 0x0132C9D4;
 	const DWORD factionTurnStartCode = gameVersion == 1 ? 0x0136931C : 0x013242F4;
 	const DWORD gameReloaded = gameVersion == 1 ? 0x013319E4 : 0x012EC9C4;
@@ -1428,13 +1401,13 @@ void __stdcall patchesForGame::onRetreat()
 	plannedRetreatRoute::onRetreat();
 }
 
-void __fastcall patchesForGame::OnStopCharacter(character* character)
+void __fastcall patchesForGame::onStopCharacter(character* character)
 {
 	if (const auto campaign = campaignHelpers::getCampaignData(); campaign->humanPlayers < 2)
 		character->isStopCharacterNeeded = 1;
 }
 
-eduEntry* __fastcall patchesForGame::recruitEOPunit(int eduIndex)
+eduEntry* __fastcall patchesForGame::recruitEopUnit(int eduIndex)
 {
 	eduEntry* entry = eopDu::getEduEntry(eduIndex);
 	if (entry == nullptr)
@@ -1444,7 +1417,7 @@ eduEntry* __fastcall patchesForGame::recruitEOPunit(int eduIndex)
 	return entry;
 }
 
-void __fastcall patchesForGame::recruitEOPunit2(int eduIndex)
+void __fastcall patchesForGame::recruitEopUnit2(int eduIndex)
 {
 	eduEntry* entry = eopDu::getEduEntry(eduIndex);
 	if (entry == nullptr)
@@ -1463,10 +1436,10 @@ eduEntry* __fastcall patchesForGame::onReadDescrRebel(DWORD value)
 	return eopDu::getEduEntry(eduIndex);
 }
 
-void __fastcall patchesForGame::recruitEopMercUnit(DWORD pad, DWORD pad2, regionStruct* region, int eduindex, int factionid, int exp)
+void __fastcall patchesForGame::recruitEopMercUnit(DWORD pad, DWORD pad2, regionStruct* region, int eduIndex, int factionID, int exp)
 {
 	int regionID = region->regionID;
-	unitHelpers::createUnitIdx(eduindex, regionID, factionid, exp, 0, 0);
+	unitHelpers::createUnitIdx(eduIndex, regionID, factionID, exp, 0, 0);
 }
 
 void WINAPI patchesForGame::onMoveRecruitQueue()
@@ -1511,7 +1484,7 @@ void __fastcall patchesForGame::onLoadDescrBattleCharacter(armyStruct* army, cha
 void __stdcall patchesForGame::onBattleStateChange()
 {
 	//results screen
-	if (const int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState; battleState == 9)
+	if (battleHelpers::getBattleData()->battleState == 9)
 	{
 		battleCreator::onBattleResultsScreen();
 	}
@@ -1538,17 +1511,17 @@ struct
 {
 	bool isComingFromConsole = false;
 }logonConsoleD;
-void __stdcall patchessForConsole::onGameConsoleCommandFromConsole()
+void __stdcall consolePatches::onGameConsoleCommandFromConsole()
 {
 	logonConsoleD.isComingFromConsole = true;
 }
 
-void __stdcall patchessForConsole::onGameConsoleCommandFromScript()
+void __stdcall consolePatches::onGameConsoleCommandFromScript()
 {
 	logonConsoleD.isComingFromConsole = false;
 }
 
-int __fastcall patchessForConsole::OnReadLogonOrLogoff(int isLogonNow)
+int __fastcall consolePatches::onReadLogonOrLogoff(int isLogonNow)
 {
 	if (logonConsoleD.isComingFromConsole == true)
 	{

@@ -8,10 +8,8 @@
 #include <queue>
 
 #include "character.h"
-#include "gameDataAllHelper.h"
 #include "gameHelpers.h"
 #include "plugData.h"
-#include "smallFuncs.h"
 #include "technicalHelpers.h"
 #include "unit.h"
 #include "faction.h"
@@ -36,8 +34,8 @@ void oneTile::setTileHeight(float height)
 	if (!doubleTile)
 		return;
 	doubleTile->height = height;
-	smallFuncs::scriptCommand("console_command", "toggle_fow");
-	smallFuncs::scriptCommand("console_command", "toggle_fow");
+	gameHelpers::scriptCommand("console_command", "toggle_fow");
+	gameHelpers::scriptCommand("console_command", "toggle_fow");
 }
 
 void oneTile::setTileGroundType(const int ground)
@@ -47,8 +45,8 @@ void oneTile::setTileGroundType(const int ground)
 	if (!doubleTile)
 		return;
 	doubleTile->groundType = static_cast<int8_t>(ground);
-	smallFuncs::scriptCommand("console_command", "toggle_fow");
-	smallFuncs::scriptCommand("console_command", "toggle_fow");
+	gameHelpers::scriptCommand("console_command", "toggle_fow");
+	gameHelpers::scriptCommand("console_command", "toggle_fow");
 }
 	
 void oneTile::setTileClimate(const int climate)
@@ -57,8 +55,8 @@ void oneTile::setTileClimate(const int climate)
 	if (!doubleTile)
 		return;
 	doubleTile->climate = static_cast<int8_t>(climate);
-	smallFuncs::scriptCommand("console_command", "toggle_fow");
-	smallFuncs::scriptCommand("console_command", "toggle_fow");
+	gameHelpers::scriptCommand("console_command", "toggle_fow");
+	gameHelpers::scriptCommand("console_command", "toggle_fow");
 }
 oneTileDouble* oneTile::tileToDoubleTile()
 {
@@ -75,17 +73,17 @@ oneTileDouble* oneTile::tileToDoubleTile()
 
 void regionStruct::changeRegionName(const char* newName)
 {
-	UNICODE_STRING** nameMem = new UNICODE_STRING*;
+	const auto nameMem = new UNICODE_STRING*;
 	localizedRegionName = nameMem;
-	smallFuncs::createUniString(localizedRegionName, newName);
+	gameStringHelpers::createUniString(localizedRegionName, newName);
 	eopSettlementDataDb::get()->getSettlementData(regionID).regionName = newName;
 }
 
 void regionStruct::changeRebelsName(const char* newName)
 {
-	UNICODE_STRING** nameMem = new UNICODE_STRING*;
+	const auto nameMem = new UNICODE_STRING*;
 	localizedRebelsName = nameMem;
-	smallFuncs::createUniString(localizedRebelsName, newName);
+	gameStringHelpers::createUniString(localizedRebelsName, newName);
 	eopSettlementDataDb::get()->getSettlementData(regionID).regionRebelsName = newName;
 }
 
@@ -316,7 +314,7 @@ namespace stratMapHelpers
 {
 	stratMap* getStratMap()
 	{
-		const auto gameData = gameDataAllHelper::get();
+		const auto gameData = gameHelpers::getGameDataAll();
 		if (!gameData)
 			return nullptr;
 		return gameData->stratMap;
@@ -454,6 +452,21 @@ namespace stratMapHelpers
 			return false;
 		return true;
 	}
+
+	std::tuple<int, int> getGameTileCoordsWithCursorLua()
+	{
+		int x = 0;
+		int y = 0;
+		getGameTileCoordsWithCursor(x, y);
+		return std::make_tuple(x, y);
+	}
+
+	float getDistanceInTiles(const int x, const int y, const int destX, const int destY)
+	{
+		const int dx = x - destX;
+		const int dy = y - destY;
+		return static_cast<float>(sqrt(static_cast<double>(dx * dx) + static_cast<double>(dy * dy)));
+	}
 	
 	void getGameTileCoordsWithCursor(int& x, int& y)
 	{
@@ -533,14 +546,10 @@ namespace stratMapHelpers
 			break;
 		case strategyObject::rallyPointSundry:
 			{
-				RallyPointSundry* ral = (RallyPointSundry*)baseObj;
-				if (ral->object == nullptr)
-				{
+				const auto ral = static_cast<rallyPointStruct*>(baseObj);
+				if (ral->nextObject == nullptr)
 					break;
-				}
-				return getMainStratObject(ral->object);
-
-				break;
+				return getMainStratObject(ral->nextObject);
 			}
 		default:
 			break;
@@ -559,6 +568,12 @@ namespace stratMapHelpers
 			mov retZ, al
 		}
 		return retZ;
+	}
+
+	//legacy
+	factionStruct* getRegionOwner(const int regionID)
+	{
+		return getStratMap()->regions[regionID].factionOwner;
 	}
 	
     void addToLua(sol::state& luaState)

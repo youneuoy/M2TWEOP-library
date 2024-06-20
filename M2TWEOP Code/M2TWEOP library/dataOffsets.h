@@ -15,6 +15,25 @@ public:
 		DWORD customTiles = NULL;
 		DWORD battleCamera = NULL;
 		DWORD battlePerimeters = NULL;
+		DWORD perfectSpy = NULL;
+		DWORD options1 = NULL;
+		DWORD options2 = NULL;
+		DWORD campaignDiff1 = NULL;
+		DWORD campaignDiff2 = NULL;
+		DWORD equipmentCosts = NULL;
+		DWORD saveGameHandler = NULL;
+		DWORD ancLimit = NULL;
+		DWORD maxUnitSize = NULL;
+		DWORD maxBgSize1 = NULL;
+		DWORD maxBgSize2 = NULL;
+		DWORD unlockConsoleCommands1 = NULL;
+		DWORD unlockConsoleCommands2 = NULL;
+		DWORD highlightUnits = NULL;
+		DWORD religionLimit = NULL;
+		DWORD scriptCounters = NULL;
+		DWORD scriptCountersSet = NULL;
+		DWORD buildingChainLimit = NULL;
+		DWORD guildCooldown = NULL;
 
 
 		DWORD unitTypesStart = NULL;

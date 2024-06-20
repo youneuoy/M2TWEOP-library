@@ -1,5 +1,5 @@
 #pragma once
-#include "MemWork.h"
+#include "memWork.h"
 #include <Windows.h>
 using namespace std;
 

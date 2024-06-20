@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "TemplateCh.h"
+#include "templateCh.h"
 
 #pragma region BasicClassTemplate
 

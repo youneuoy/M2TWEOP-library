@@ -743,10 +743,279 @@ struct portDockStrat {
 	struct armyStruct* dockedArmy;
 };
 
+struct watchTowerModel {
+	struct model_Rigid* modelP;
+	undefined field_0x4[26];
+};
+
+//watchtower
+struct watchTowerStruct {
+	DWORD* Vtable;
+	void* nextObject;
+	void* prevObject;
+	UINT32 xCoord;
+	UINT32 yCoord;
+	int fade;
+	bool render;
+	char pad0[3];
+	float opacity;
+	bool highlighted;
+	char pad1[3];
+	struct watchTowerModel* model;
+	int32_t regionID; //0x0028
+	struct factionStruct* faction; //0x002C
+	struct settlementStruct* settlement; //0x0030
+	void* trackedPointerArmyVtable; //0x0034
+	struct armyStruct* blockingArmy; //0x0038
+	int32_t factionID; //0x003C
+};
+
+struct campaignDifficulty1
+{
+	int orderFromGrowth;
+	int considerWarWithPlayer;
+	float difficultyFloat1_unused;
+	float brigandChanceAi;
+	float brigandChancePlayer;
+	int forceAttackDelay;
+	float taxIncomeModifierPlayer;
+	float farmingIncomeModifierPlayer;
+	float incomeModifierAi;
+	float playerRegionValueModifier;
+};
+
+struct campaignDifficulty2
+{
+public:
+	int32_t popGrowthBonusAi; //0x0000
+	int32_t publicOrderBonusAi; //0x0004
+	int32_t experienceBonusAi; //0x0008
+	int32_t difficultyInt4_unused; //0x000C
+	int32_t incomeBonusAi; //0x0010
+	int8_t wantsTargetPlayer; //0x0014
+	int8_t wantsTargetPlayerNaval; //0x0015
+	char pad_0016[6]; //0x0016
+	int32_t autoAttackPlayerIfCrusadeTarget; //0x001C
+	char pad_0020[32]; //0x0020
+}; //Size: 0x0040
+
+struct movePoint
+{
+	float float1;
+	int32_t field4;
+	float float2;
+	int32_t tileIndex;
+	int32_t xCoord;
+	int32_t yCoord;
+	struct movePoint *nextCoords;
+};
+
+struct movementExtentTile
+{
+	int tileIndex;
+	float movePoints;
+	int8_t turns;
+	int8_t inOpenList;
+	char pad[2];
+};
+
+struct characterMovementExtents
+{
+	void * vtbl;
+	int totalTiles;
+	int searchType;
+	int tileIndex;
+	int xCoordMin;
+	int yCoordMin;
+	int xCoordMax;
+	int yCoordMax;
+	gameStdVector<movementExtentTile> movementExtentTiles;
+	struct character *character;
+	int turns;
+	movementExtentTile* getTile(int xCoord, int yCoord)
+	{
+		if (xCoord < xCoordMin || xCoord > xCoordMax || yCoord < yCoordMin || yCoord > yCoordMax)
+			return nullptr;
+		return &movementExtentTiles[(yCoord - yCoordMin) * (xCoordMax - xCoordMin + 1) + (xCoord - xCoordMin)];
+	}
+};
+
+struct stratPathFinding
+{
+	float mpRelated;
+	struct trackedCharacter trackedPointerCharacter;
+	int characterType;
+	struct factionStruct *faction;
+	int invalidOrReached;
+	int8_t noSpeedUp;
+	int8_t bytex19;
+	int8_t bytex1A;
+	int8_t bytex1B;
+	int stratWaterCreatedMaybe;
+	int8_t bytex20;
+	int8_t someBoolCheckForCaptureStuff;
+	int8_t bytex22;
+	int8_t bytex23;
+	void *floatingGeneral1;
+	void *floatingGeneral2;
+	void *charVerification;
+	void *charVerificationPos;
+	int fieldx34;
+	int somethingBattleCapturedStatus;
+	int fieldx3C;
+	int fieldx40;
+	int fieldx44;
+	int fieldx48;
+	int fieldx4C;
+	int fieldx50;
+	int fieldx54;
+	int fieldx58_12;
+	int8_t fieldx5C;
+	int8_t fieldx5D;
+	int8_t fieldx5E;
+	int8_t fieldx5F;
+	int fieldx60;
+	int fieldx64;
+	int fieldx68;
+	int fieldx6C;
+	struct character **characterArray1;
+	int characterArray1Size;
+	int characterArray1Num;
+	struct character **characterArray2;
+	int characterArray2Size;
+	int characterArray2Num;
+	int fieldx88;
+	characterMovementExtents **characterMovementExtents;
+	int characterMovementExtentsEnd;
+	int characterMovementExtentsEnd2;
+	int fieldx98;
+	int fieldx9C;
+	int fieldxA0;
+	int fieldxA4;
+	struct coordPair *coords;
+	int coordsSize;
+	int coordsNum;
+};
+
+
+struct sundryStruct
+{
+	void* vtable; //0x0000
+	DWORD* nextObject; //0x0004
+	DWORD* previousObject; //0x0008
+	int xCoord;
+	int yCoord;
+	int somethingIdle;
+	bool inSettOrNotArmyLead;
+	char pad19[3];
+	float floatCheckedForLessThen1ForMove;
+	bool fieldx20;
+	char pad_0021[3]; //0x0021
+	int selectIndicators;
+	int field_28;
+	float xCoordFloat;
+	int field_30;
+	float yCoordFloat;
+	int8_t gap38[4];
+	struct character *selectedCharacter;
+	struct settlementStruct *selectedSettlement;
+	struct fortStruct *selectedFort;
+	int field_48;
+	float field_4C_rapidChange;
+	int field_50_init1_changeToMinusOne;
+	int selectionType;
+};
+
+struct rallyPointStruct : sundryStruct
+{
+	int field_58_initMinus1;
+};
+
+struct selectionInfo
+{
+	float floats[119];
+	struct sundryStruct *selectedLandUnitCard;
+	struct sundryStruct *selectedShipUnitCard;
+	struct sundryStruct *selectedCharacter;
+	struct sundryStruct *hoveredCharacter;
+	struct sundryStruct *selectedSettlement;
+	struct sundryStruct *hoveredSettlement;
+	struct sundryStruct *selectedRallyPoint;
+	struct sundryStruct *hoveredRallyPoint;
+	struct sundryStruct *selectedEnemyCharacter;
+	struct sundryStruct *selectedEnemySettlement;
+	struct rallyPointStruct **rallyPoints;
+	int32_t rallyPointsSize;
+	int32_t rallyPointsNum;
+	int32_t N0002DC9B;
+	void *array22;
+	int32_t array22Size;
+	int32_t array22Count;
+public:
+	character* getSelectedCharacter()
+	{
+		if (!selectedCharacter)
+			return nullptr;
+		return selectedCharacter->selectedCharacter;
+	}
+	character* getHoveredCharacter()
+	{
+		if (!hoveredCharacter)
+			return nullptr;
+		return hoveredCharacter->selectedCharacter;
+	}
+	character* getSelectedEnemyCharacter()
+	{
+		if (!selectedEnemyCharacter)
+			return nullptr;
+		return selectedEnemyCharacter->selectedCharacter;
+	}
+	settlementStruct* getSelectedSettlement()
+	{
+		if (!selectedSettlement)
+			return nullptr;
+		return selectedSettlement->selectedSettlement;
+	}
+	settlementStruct* getHoveredSettlement()
+	{
+		if (!hoveredSettlement)
+			return nullptr;
+		return hoveredSettlement->selectedSettlement;
+	}
+	settlementStruct* getSelectedEnemySettlement()
+	{
+		if (!selectedEnemySettlement)
+			return nullptr;
+		return selectedEnemySettlement->selectedSettlement;
+	}
+	fortStruct* getSelectedFort()
+	{
+		if (!selectedSettlement)
+			return nullptr;
+		return selectedSettlement->selectedFort;
+	}
+	fortStruct* getHoveredFort()
+	{
+		if (!hoveredSettlement)
+			return nullptr;
+		return hoveredSettlement->selectedFort;
+	}
+	fortStruct* getSelectedEnemyFort()
+	{
+		if (!selectedEnemySettlement)
+			return nullptr;
+		return selectedEnemySettlement->selectedFort;
+	}
+};
+
 namespace campaignHelpers
 {
     campaign* getCampaignData();
 	UINT32 getFactionsCount();
+	campaignDifficulty1* getCampaignDifficulty1();
+	campaignDifficulty2* getCampaignDifficulty2();
+	void setPerfectSpy(bool set);
+	int getLocalFactionID();
 	factionStruct* getFaction(int index);
 	int getPoolIndex(const gameList<mercPoolUnit> *unitPtr);
 	mercPoolUnit* getNewMercUnit(gameList<mercPoolUnit>* unitPtr);

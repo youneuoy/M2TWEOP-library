@@ -5,9 +5,8 @@
 //@license GPL-3.0
 #include "characterRecord.h"
 
-#include "fastFunctsHelpers.h"
+#include "gameStringHelpers.h"
 #include "functionsOffsets.h"
-#include "smallFuncs.h"
 #include "character.h"
 #include "faction.h"
 #include "unit.h"
@@ -64,21 +63,21 @@ namespace characterRecordHelpers
 	void setStringPropertyGenChar(characterRecord* genChar, std::string newS)
 	{
 		if (fieldIndex == characterRecord_shortName)
-			fastFunctsHelpers::setCryptedString(&genChar->shortName, newS.c_str());
+			gameStringHelpers::setHashedString(&genChar->shortName, newS.c_str());
 		else if (fieldIndex == characterRecord_fullName)
-			fastFunctsHelpers::setCryptedString(&genChar->fullName, newS.c_str());
+			gameStringHelpers::setHashedString(&genChar->fullName, newS.c_str());
 		else if (fieldIndex == characterRecord_label)
-			fastFunctsHelpers::setCryptedString(&genChar->label, newS.c_str());
+			gameStringHelpers::setHashedString(&genChar->label, newS.c_str());
 		else if (fieldIndex == characterRecord_modelName)
-			fastFunctsHelpers::setCryptedString(&genChar->modelName, newS.c_str());
+			gameStringHelpers::setHashedString(&genChar->modelName, newS.c_str());
 		else if (fieldIndex == characterRecord_portrait)
-			fastFunctsHelpers::setCryptedString(&genChar->portrait, newS.c_str());
+			gameStringHelpers::setHashedString(&genChar->portrait, newS.c_str());
 		else if (fieldIndex == characterRecord_portrait2)
-			fastFunctsHelpers::setCryptedString(&genChar->portrait2, newS.c_str());
+			gameStringHelpers::setHashedString(&genChar->portrait2, newS.c_str());
 		else if (fieldIndex == characterRecord_portrait_custom)
-			fastFunctsHelpers::setCryptedString(&genChar->portrait_custom, newS.c_str());
+			gameStringHelpers::setHashedString(&genChar->portrait_custom, newS.c_str());
 		else if (fieldIndex == characterRecord_lastName)
-			fastFunctsHelpers::setCryptedString(&genChar->lastName, newS.c_str());
+			gameStringHelpers::setHashedString(&genChar->lastName, newS.c_str());
 	}
 	
 	template <char fieldIndex>
@@ -97,22 +96,22 @@ namespace characterRecordHelpers
 	
 	void namedCharSetLocalizedFullName(characterRecord* genChar, const char* str)
 	{
-		smallFuncs::createUniString(genChar->localizedFullName, str);
+		gameStringHelpers::createUniString(genChar->localizedFullName, str);
 	}
 
 	void namedCharSetLocalizedNameForSave(characterRecord* genChar, const char* str)
 	{
-		smallFuncs::createUniString(genChar->localizedNameForSave, str);
+		gameStringHelpers::createUniString(genChar->localizedNameForSave, str);
 	}
 
 	void namedCharSetLocalizedNextNameForSave(characterRecord* genChar, const char* str)
 	{
-		smallFuncs::createUniString(genChar->localizedNextNameForSave, str);
+		gameStringHelpers::createUniString(genChar->localizedNextNameForSave, str);
 	}
 
 	void namedCharSetLocalizedNicknameForSave(characterRecord* genChar, const char* str)
 	{
-		smallFuncs::createUniString(genChar->localizedNicknameForSave, str);
+		gameStringHelpers::createUniString(genChar->localizedNicknameForSave, str);
 	}
 	
 	void setHeir(characterRecord* gen, bool isJustSet)
@@ -237,11 +236,11 @@ namespace characterRecordHelpers
 	void setStringPropertyAnc(ancillary* anc, std::string newS)
 	{
 		if (fieldIndex == ancillaryStruct_name)
-			fastFunctsHelpers::setCryptedString(&anc->ancName, newS.c_str());
+			gameStringHelpers::setHashedString(&anc->ancName, newS.c_str());
 		else if (fieldIndex == ancillaryStruct_imagePath)
-			fastFunctsHelpers::setCryptedString(&anc->patchToAncImage, newS.c_str());
+			gameStringHelpers::setHashedString(&anc->patchToAncImage, newS.c_str());
 		else if (fieldIndex == ancillaryStruct_ancType)
-			fastFunctsHelpers::setCryptedString(&anc->type, newS.c_str());
+			gameStringHelpers::setHashedString(&anc->type, newS.c_str());
 	}
 #pragma endregion Ancillary helpers
 	
@@ -274,7 +273,7 @@ namespace characterRecordHelpers
 	void addTrait(characterRecord* character, const char* traitName, int traitLevel)
 	{
 		DWORD adrFunc = codes::offsets.getTrait;
-		char** cryptS = fastFunctsHelpers::makeCryptedString(traitName);
+		char** cryptS = gameStringHelpers::createHashedString(traitName);
 		void* resTrait = nullptr;
 		auto oneArg = cryptS[0];
 		auto nextArg = cryptS[1];
@@ -308,7 +307,7 @@ namespace characterRecordHelpers
 	void removeTrait(characterRecord* character, const char* traitName)
 	{
 		DWORD adrFunc = codes::offsets.getTrait;
-		char** cryptS = fastFunctsHelpers::makeCryptedString(traitName);
+		char** cryptS = gameStringHelpers::createHashedString(traitName);
 		void* resTrait = nullptr;
 		auto oneArg = cryptS[0];
 		auto nextArg = cryptS[1];

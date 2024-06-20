@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "battle.h"
-#include "fastFunctsHelpers.h"
+#include "..\gameStringHelpers.h"
 #include "realGameTypes.h"
 #include "lua/sol.hpp"
 
@@ -192,151 +192,6 @@ public:
 	struct groupLabel *labels; //0x0004
 }; //Size: 0x0008
 
-struct arrayInUnitGroup
-{
-	int order;
-	float xCoord;
-	float yCoord;
-	int16_t angle;
-	bool run;
-	int8_t byte_e;
-	int movementType;
-	bool changeWidth;
-	bool changeFormation;
-	bool changeAngle;
-	int8_t byte_17;
-	int pathHandle;
-	void* startWaypoint;
-	void* endWaypoint;
-	int8_t isAiAutomated;
-	int8_t byte_25[3];
-	int isAiFormation;
-	int positionType;
-	int platform;
-	float pointX;
-	float pointZ;
-	float pointY;
-	int groupFormationID;
-	int attackType;
-};
-
-struct unitGroup
-{
-	void *vftable /*VFT*/;
-	bool useGroupFormation;
-	char field_5[3];
-	struct unit **unitsInFormation;
-	int32_t unitsSize;
-	int32_t unitsInFormationNum;
-	int unitsNumTotal;
-	void *blockPriorities;
-	int32_t blockPrioritiesSize;
-	int32_t blockPrioritiesNum;
-	bool *assignedUnits;
-	int32_t assignedUnitsSize;
-	int32_t assignedUnitsNum;
-	struct smthingUnitGroup *formationBlocks;
-	int32_t formationBlocksSize;
-	int32_t formationBlocksNum;
-	floatPosData *boundingBoxes;
-	int32_t boundingBoxesSize;
-	int32_t boundingBoxesNum;
-	void *descrFormationEntry;
-	char hasFormation;
-	char field_4d[3];
-	int formationState;
-	float width;
-	float height;
-	float distFrontToCentre;
-	float scaleFactorX;
-	float scaleFactorY;
-	float xCoord;
-	float yCoord;
-	float midPointX;
-	float midPointY;
-	int16_t angle;
-	int16_t field_7a;
-	float slowestSpeed;
-	float quickestSpeed;
-	char canRun;
-	char field_85[3];
-	int pendingFormation;
-	int alliance;
-	int status;
-	arrayInUnitGroup arrayInUnitGroupThing[8];
-	int groupOrdersStart;
-	int groupOrdersEnd;
-	int groupOrdersIndex;
-	unit **unitsNotInFormation;
-	int unitsNotInFormationSize;
-	int unitsNotInFormationNum;
-	float pathWidth;
-	unitGroup *thisGroup;
-	void *groupAutomationTasks;
-	int taskNum;
-	char gap2FC[4096];
-	char moveFast;
-	char orderStarted;
-	char orderCleared;
-	char field_12FF;
-	char automationEnabled;
-	char field_1301[3];
-	int automationType;
-	float defendXCoord;
-	float defendYCoord;
-	float defendRadius;
-	void* targetWorldData;
-	float targetX;
-	float targetZ;
-	float targetY;
-	unit* targetUnit;
-	int newAutomationType;
-	float newDefendXCoord;
-	float newDefendYCoord;
-	float newDefendRadius;
-	void* newField_targetWorldData;
-	float newField_targetX;
-	float newField_targetZ;
-	float newField_targetY;
-	unit *newTargetUnit;
-	battleResidence *targetSettlement;
-	void *targetCrossing;
-	int defensiveArea;
-	terrainFeatureHill *targetHill;
-public:
-	unit* getUnitInFormation(const int index)
-	{
-		if (index < 0 || index >= unitsInFormationNum)
-			return nullptr;
-		return unitsInFormation[index];
-	}
-	unit* getUnitNotInFormation(const int index)
-	{
-		if (index < 0 || index >= unitsNotInFormationNum)
-			return nullptr;
-		return unitsNotInFormation[index];
-	}
-};
-struct aiUnitGroup : unitGroup
-{
-	void *detachment;
-	struct aiDetachmentTactic *detachmentTactic;
-	unit **unitsInMelee;
-	int unitsInMeleeSize;
-	int unitsInMeleeNum;
-	battleGroup battleAiUnitGroup;
-	char gap14c8[92];
-	float centreFrontX;
-	float centreFrontY;
-	float centreX;
-	float centreY;
-	__int16 avgFacing;
-	__int16 field_1536;
-	int percentFormed;
-public:
-	
-};
-
 struct generalStats
 {
 public:
@@ -491,6 +346,80 @@ struct unitTaskMem
 	char field_1815;
 	char field_1816;
 	char field_1817;
+};
+
+struct projectile
+{
+	char pad_0000[4];
+	char *name;
+	int32_t nameHash;
+	int32_t specialType;
+	struct projectile *flamingProjectile;
+	int8_t shatterDust;
+	int8_t shatterDebris;
+	int8_t vanishDust;
+	int8_t vanishDebris;
+	int8_t fiery;
+	int8_t particleTrail;
+	int8_t aimed;
+	int8_t invertModelZ;
+	int8_t spin;
+	int8_t rocket;
+	int8_t explosive;
+	int8_t bool1f;
+	float spinAmount;
+	void *ptr24;
+	float minAngle;
+	float maxAngle;
+	int8_t preferHigh;
+	int8_t byte31;
+	int8_t byte32;
+	int8_t byte33;
+	char pad_0034[4];
+	float maxVelocity;
+	char pad_003C[12];
+	float minVelocity;
+	float float4c;
+	float float50;
+	char pad_0054[20];
+	float radius;
+	float mass;
+	float area;
+	float accuracyVsUnits;
+	float accuracyVsBuildings;
+	float accuracyVsTowers;
+	int8_t affectedByRain;
+	int8_t damageToTroops;
+	int8_t groundShatter;
+	int8_t bounce;
+	float bounceFloat1;
+	float bounceFloat2;
+	float bounceFloat3;
+	float bounceFloat4;
+	int8_t erratic;
+	int8_t isBodyPiercing;
+	int16_t short96;
+	int8_t destroyMaxRange;
+	int destroyMaxRangeVariation;
+	char pad_0098[20];
+	int32_t damage;
+	char end_effect1[32];
+	char *endEffect;
+	char pad_00DC[24];
+	char *endManEffect;
+	char pad_00F8[24];
+	char *endPackageEffect;
+	char pad_0114[24];
+	char *endShatterPackageEffect;
+	char pad_0130[24];
+	char *endShatterManEffect;
+	char pad_014C[24];
+	char *endShatterEffect;
+	char pad_0168[48];
+	char areaEffect[24];
+	char pad_01B0[48];
+	float EffectOffset;
+	char pad_01E4[588];
 };
 
 struct unitAiGroupData
@@ -1326,7 +1255,7 @@ public:
 	{
 		if (i < armourUpgradeModels.size())
 		{
-			fastFunctsHelpers::setCryptedString(const_cast<char**>(&armourUpgradeModels[i].name), newModel.c_str());
+			gameStringHelpers::setHashedString(const_cast<char**>(&armourUpgradeModels[i].name), newModel.c_str());
 		}
 	}
 	bool hasAttribute(const std::string& attr)
@@ -2105,7 +2034,7 @@ namespace unitHelpers
 	void setSoldiersCountAndExp(unit* un, int count, int exp);
 	void setSoldiersCount(unit* un, int count);
 	void killUnit(unit* un);
-	int getMaxSoldiersCount(unit* un);
+	int getMaxSoldiersCount(const unit* un);
 	groupLabels* getGroupLabels();
 	std::string getLocalizedUnitName(const eduEntry* entry);
 	std::string getLocalizedUnitDescr(const eduEntry* entry);

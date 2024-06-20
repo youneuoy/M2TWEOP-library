@@ -1,4 +1,4 @@
-#include "TexturesManager.h"
+#include "texturesManager.h"
 #include "graphicsD3D.h"
 namespace TexturesManager
 {

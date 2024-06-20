@@ -39,9 +39,7 @@ void luaP::initEopFbx()
 
 	@table M2TWEOPFBX
 	*/
-
-
-
+	
 	tables.M2TWEOPFBXTable = luaState.create_table("M2TWEOPFBX");
 
 

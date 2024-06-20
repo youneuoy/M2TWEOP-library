@@ -2,7 +2,7 @@
 #include<string>
 #include<vector>
 #include "realGameTypes.h"
-#include "RetreatRoutes.h"
+#include "retreatRoutes.h"
 namespace plannedRetreatRoute
 {
 	void startWork(int x, int y);
@@ -17,7 +17,7 @@ namespace plannedRetreatRoute
 
 	void onClickAtTile(int x, int y);
 
-	bool tryRetreatArmyWithRoute(battleArmy& army, std::pair<int, int>&resCoords);
+	bool tryRetreatArmyWithRoute(const battleArmy& army, std::pair<int, int>&resCoords);
 	void onRetreat();
 };
 

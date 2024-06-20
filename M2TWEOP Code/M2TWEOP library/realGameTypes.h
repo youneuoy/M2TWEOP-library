@@ -3,38 +3,41 @@
 #include <vector>
 #include <memory>
 #include <string>
-
-struct statPri;
-struct modelDbEntry;
-
-template<unsigned int IIdx, typename TRet, typename ... TArgs>
-TRet callVFunc(void* thisptr, TArgs ... argList)
-{
-	using Fn = TRet(__thiscall*)(void*, decltype(argList)...);
-	return (*static_cast<Fn**>(thisptr))[IIdx](thisptr, argList...);
-}
-
 #include <cstdint>
 #include <windows.h>
-#include <basetsd.h>
-typedef unsigned char   undefined;
-typedef unsigned int    uint;
-typedef unsigned char    uchar;
-typedef unsigned short    ushort;
+
+typedef unsigned char undefined;
+typedef unsigned int uint;
+typedef unsigned char uchar;
+typedef unsigned short ushort;
 #pragma pack(push,1)
-typedef struct settlementStruct settlementStruct, * PsettlementStruct;
+
+/*----------------------------------------------------------------------------------------------------------------*\
+										Firing game function helpers
+\*----------------------------------------------------------------------------------------------------------------*/
+#pragma region Game function helpers
 
 #define GAME_FUNC(funcType, funcAddr) reinterpret_cast<funcType>(codes::offsets.funcAddr)
 #define GAME_FUNC_RAW(funcType, funcAddr) reinterpret_cast<funcType>(funcAddr)
-
-
-template<typename classType, typename returnType, typename ... TArgs>
-returnType callClassFunc(classType instance, DWORD offset, TArgs ... args)
+template<unsigned int IIdx, typename TRet, typename ... TArgs>
+TRet callVFunc(void* thisPtr, TArgs ... argList)
+{
+	using Fn = TRet(__thiscall*)(void*, decltype(argList)...);
+	return (*static_cast<Fn**>(thisPtr))[IIdx](thisPtr, argList...);
+}
+template<typename ClassType, typename ReturnType, typename ... TArgs>
+ReturnType callClassFunc(ClassType instance, const DWORD offset, TArgs ... args)
 {
 	const DWORD vtable = *reinterpret_cast<DWORD*>(instance);
 	DWORD vFunc = *reinterpret_cast<DWORD*>(vtable + offset);
-	return GAME_FUNC_RAW(returnType(__thiscall*)(classType, TArgs...), vFunc)(instance, args...);
+	return GAME_FUNC_RAW(ReturnType(__thiscall*)(ClassType, TArgs...), vFunc)(instance, args...);
 }
+#pragma endregion Game function helpers
+
+/*----------------------------------------------------------------------------------------------------------------*\
+									 Game standard types and structures
+\*----------------------------------------------------------------------------------------------------------------*/
+#pragma region Game standard types
 
 struct basicStringGame
 {
@@ -185,6 +188,7 @@ public:
 	char pad_0010[104]; //0x0010
 }; //Size: 0x0078
 
+#pragma endregion Game standard types
 
 struct floatPosData
 {
@@ -205,198 +209,6 @@ public:
 	float maxRadians; //0x0034
 }; //Size: 0x0044
 
-struct battleGroup
-{
-	int index;
-	struct unit **units;
-	int unitsSize;
-	int unitCount;
-	bool infoValid;
-	char field_11[3];
-	float midPointX;
-	float midPointY;
-	float prevMidPointX;
-	float prevMidPointY;
-	int radius;
-	int16_t facing;
-	int16_t facpad;
-	struct floatPosData floatPosDataStart;
-	float velocityX;
-	float velocityY;
-	int8_t gap6C_positionFloats[172];
-	char field_118;
-	char field_119;
-	char field_11a;
-	char field_11b;
-	int16_t someAngle;
-	int16_t pad11e;
-	float speed;
-	bool onHill;
-	bool allInSameArea;
-	char field_126[2];
-	int positionID;
-	int cavalryRatio;
-	int missileRatio;
-	int routingRatio;
-	int forestRatio;
-	int soldierCounts;
-	int cavalryRatioVisible;
-	int missileRatioVisible;
-	int routingRatioVisible;
-	int forestRatioVisible;
-	int soldierCountsVisible;
-	int unitNumVisible;
-};
-
-struct cultureModels
-{
-public:
-	char pad_0000[5584]; //0x0000
-}; //Size: 0x15D0
-
-struct cultureAgent
-{
-public:
-	char *cardName;
-	int32_t cardNameHash;
-	char *infoCardName;
-	int32_t infoCardNameHash;
-	char *cardName2;
-	int32_t cardName2Hash;
-	int index1;
-	int index2;
-	int16_t cost;
-	int8_t time;
-	int8_t pad23;
-	int16_t popCost;
-	int16_t someOtherRomeShit;
-	int recruitBiasValue;
-}; //Size: 0x002C
-
-struct underlay
-{
-	char *name;
-	int nameHash;
-	char *path;
-	int pathHash;
-	float float10;
-	int field14;
-};
-
-struct cultureCasEntry
-{
-	int field_0;
-	int field_4;
-	char *casName;
-	int casNameHash;
-	int field_10;
-	int field_14;
-	int field_18;
-	int field_1C;
-	underlay *underlay;
-};
-
-struct cultureFort
-{
-	void *modelRigid;
-	void *stratModelArrayEntry;
-	stringWithHash fortCasName;
-	stringWithHash fortWallsCasName;
-	int array_18[31];
-	stringWithHash stringsHash_94[31];
-	char *strings_18c[31];
-	stringWithHash stringsHash_208[31];
-	stringWithHash uiGenericFort;
-	underlay *underlay;
-};
-
-struct smthingCult2
-{
-	int field_0;
-	int field_4;
-	stringWithHash field_8;
-	stringWithHash field_10;
-	int field_18;
-};
-
-struct cultureSettlement
-{
-	int field_0;
-	int field_4;
-	char *casNameCity;
-	int casNameCityHash;
-	void *casNameCastle;
-	int casNameCastleHash;
-	int field_18;
-	char *strings1C[31];
-	char *strings98[31];
-	stringWithHash stringHash114[31];
-	stringWithHash stringHash20c[31];
-	smthingCult2 field_304[5];
-	char *tgaFileCity;
-	int field_394;
-	char *tgaFileCastle;
-	int field_39C;
-	underlay *underlay;
-};
-
-struct culture
-{
-	int32_t cultureID;
-	char *cultureName;
-	int32_t cultureNameHash;
-	cultureFort fort;
-	cultureCasEntry fishingVillage;
-	cultureCasEntry portWalls[3];
-	cultureCasEntry portBuildings[3];
-	cultureCasEntry watchTower;
-	int cultureCasEntryCount;
-	int32_t fortCost;
-	int32_t watchTowerCost;
-	int field_444;
-	char *portraitMapping;
-	int field_44C;
-	int rebelStandardIndex;
-	struct cultureSettlement cultureSettlements[6];
-	struct cultureAgent cultureAgents[6];
-	int maxLevel;
-};
-
-struct culturesDB
-{
-	struct culture *cultures;
-	int32_t culturesSize;
-	int32_t culturesCount;
-};
-
-struct portraitsEntry
-{
-	int32_t count{}; //0x0000
-	int32_t *portraitIndexes{}; //0x0004
-	int32_t usageCount{}; //0x0008
-};
-
-struct portraitDdCharacterEntry
-{
-public:
-	portraitsEntry ages[3]; //0x0000
-}; //Size: 0x0024
-
-struct portraitDbEntry
-{
-public:
-	char *cultureName{}; //0x0000
-	int32_t cultureNameHash{}; //0x0004
-	struct portraitDdCharacterEntry portraits[9]; //0x0008
-}; //Size: 0x014C
-
-struct portraitDb
-{
-public:
-	struct portraitDbEntry cultures[7]; //0x0000
-}; //Size: 0x0914
-
-
 struct coordPair
 {
 public:
@@ -411,16 +223,6 @@ public:
 	int32_t tileCoordsSize; //0x0004
 	int32_t tileCoordsCount; //0x0008
 }; //Size: 0x000C
-struct weaponFX
-{
-	int field0;
-	char *name;
-	int field8;
-	int fieldC;
-	int field10;
-	int field14;
-	int field18;
-};
 
 struct statPri
 {
@@ -712,153 +514,6 @@ public:
 	void* hashedStringTable; //0x001C
 
 }; //Size: 0x0020
-struct uiElement {
-	undefined field_0x0[16];
-	int xSize;
-	int ySize;
-	undefined field_0x18[4];
-	char* elementName; /* can be nullptr */
-	undefined field_0x20[32];
-	int xPos;
-	int yPos;
-	undefined field_0x48[4];
-	struct uiElement** subElements;
-	undefined field_0x50[4];
-	int subElementsNum;
-	undefined field_0x58[112];
-};
-struct color
-{
-	int8_t r = 0;
-	int8_t g = 0;
-	int8_t b = 0;
-};
-
-#define GETBLUE(color) ((color) & 0xFF)
-#define GETGREEN(color) (((color) >> 8) & 0xFF)
-#define GETRED(color) (((color) >> 16) & 0xFF)
-#define GETALPHA(color) (((color) >> 24) & 0xFF)
-#define SETBLUE(color, red) ((color) = ((color) & 0xFFFFFF00) | (red))
-#define SETGREEN(color, green) ((color) = ((color) & 0xFFFF00FF) | ((green) << 8))
-#define SETRED(color, blue) ((color) = ((color) & 0xFF00FFFF) | ((blue) << 16))
-#define SETALPHA(color, alpha) ((color) = ((color) & 0x00FFFFFF) | ((alpha) << 24))
-#define MAKECOLOR(r, g, b, a) ((b) | ((g) << 8) | ((r) << 16) | ((a) << 24))
-
-struct tileColor
-{
-	tileColor() : color(0), coords({ 0,0 }) {}
-	tileColor(uint32_t colorA, int x, int y) : color(colorA), coords({ x,y }) {}
-	uint32_t color;
-	struct coordPair coords;
-};
-
-struct mapImage
-{
-	std::vector<tileColor> tiles = {};
-	bool useBlur = true;
-	float blurStrength = 1.0f;
-	bool adaptiveBlur = false;
-};
-struct projectile
-{
-	char pad_0000[4];
-	char *name;
-	int32_t nameHash;
-	int32_t specialType;
-	struct projectile *flamingProjectile;
-	int8_t shatterDust;
-	int8_t shatterDebris;
-	int8_t vanishDust;
-	int8_t vanishDebris;
-	int8_t fiery;
-	int8_t particleTrail;
-	int8_t aimed;
-	int8_t invertModelZ;
-	int8_t spin;
-	int8_t rocket;
-	int8_t explosive;
-	int8_t bool1f;
-	float spinAmount;
-	void *ptr24;
-	float minAngle;
-	float maxAngle;
-	int8_t preferHigh;
-	int8_t byte31;
-	int8_t byte32;
-	int8_t byte33;
-	char pad_0034[4];
-	float maxVelocity;
-	char pad_003C[12];
-	float minVelocity;
-	float float4c;
-	float float50;
-	char pad_0054[20];
-	float radius;
-	float mass;
-	float area;
-	float accuracyVsUnits;
-	float accuracyVsBuildings;
-	float accuracyVsTowers;
-	int8_t affectedByRain;
-	int8_t damageToTroops;
-	int8_t groundShatter;
-	int8_t bounce;
-	float bounceFloat1;
-	float bounceFloat2;
-	float bounceFloat3;
-	float bounceFloat4;
-	int8_t erratic;
-	int8_t isBodyPiercing;
-	int16_t short96;
-	int8_t destroyMaxRange;
-	int destroyMaxRangeVariation;
-	char pad_0098[20];
-	int32_t damage;
-	char end_effect1[32];
-	char *endEffect;
-	char pad_00DC[24];
-	char *endManEffect;
-	char pad_00F8[24];
-	char *endPackageEffect;
-	char pad_0114[24];
-	char *endShatterPackageEffect;
-	char pad_0130[24];
-	char *endShatterManEffect;
-	char pad_014C[24];
-	char *endShatterEffect;
-	char pad_0168[48];
-	char areaEffect[24];
-	char pad_01B0[48];
-	float EffectOffset;
-	char pad_01E4[588];
-};
-
-struct watchTowerModel {
-	struct model_Rigid* modelP;
-	undefined field_0x4[26];
-};
-
-//watchtower
-struct watchTowerStruct {
-	DWORD* Vtable;
-	void* nextObject;
-	void* prevObject;
-	UINT32 xCoord;
-	UINT32 yCoord;
-	int fade;
-	bool render;
-	char pad0[3];
-	float opacity;
-	bool highlighted;
-	char pad1[3];
-	struct watchTowerModel* model;
-	int32_t regionID; //0x0028
-	struct factionStruct* faction; //0x002C
-	struct settlementStruct* settlement; //0x0030
-	void* trackedPointerArmyVtable; //0x0034
-	struct armyStruct* blockingArmy; //0x0038
-	int32_t factionID; //0x003C
-};
 
 struct worldRecord {
 	undefined field_0x0[4];
@@ -872,207 +527,12 @@ struct worldRecord {
 	undefined field_0x38[40];
 };
 
-struct settlementList
-{
-	struct settlementStruct** settlements; //0x0000
-	struct settlementList* nextSettlements; //0x0004
-	struct settlementList* previousSettlements; //0x0008
-	int32_t settlementsSize; //0x000C
-	int32_t settlementsNum; //0x0010
-};
-
-struct movePoint
-{
-	float float1;
-	int32_t field4;
-	float float2;
-	int32_t tileIndex;
-	int32_t xCoord;
-	int32_t yCoord;
-	struct movePoint *nextCoords;
-};
-
-struct movementExtentTile
-{
-	int tileIndex;
-	float movePoints;
-	int8_t turns;
-	int8_t inOpenList;
-	char pad[2];
-};
-
-struct characterMovementExtents
-{
-	void * vtbl;
-	int totalTiles;
-	int searchType;
-	int tileIndex;
-	int xCoordMin;
-	int yCoordMin;
-	int xCoordMax;
-	int yCoordMax;
-	gameStdVector<movementExtentTile> movementExtentTiles;
-	struct character *character;
-	int turns;
-	movementExtentTile* getTile(int xCoord, int yCoord)
-	{
-		if (xCoord < xCoordMin || xCoord > xCoordMax || yCoord < yCoordMin || yCoord > yCoordMax)
-			return nullptr;
-		return &movementExtentTiles[(yCoord - yCoordMin) * (xCoordMax - xCoordMin + 1) + (xCoord - xCoordMin)];
-	}
-};
-
-struct trackedPointerCharacter
-{
-	void *vtbl /*VFT*/;
-	struct character *character;
-};
-
-struct sundryStruct
-{
-	void* vtable; //0x0000
-	DWORD* nextObject; //0x0004
-	DWORD* previousObject; //0x0008
-	int xCoord;
-	int yCoord;
-	int somethingIdle;
-	bool inSettOrNotArmyLead;
-	char pad19[3];
-	float floatCheckedForLessThen1ForMove;
-	bool fieldx20;
-	char pad_0021[3]; //0x0021
-	int selectIndicators;
-	int field_28;
-	float xCoordFloat;
-	int field_30;
-	float yCoordFloat;
-	int8_t gap38[4];
-	struct character *selectedCharacter;
-	struct settlementStruct *selectedSettlement;
-	struct fortStruct *selectedFort;
-	int field_48;
-	float field_4C_rapidChange;
-	int field_50_init1_changeToMinusOne;
-	int selectionType;
-};
-
-struct rallyPointStruct : sundryStruct
-{
-   int field_58_initMinus1;
-};
-
-
-struct selectionInfo
-{
-  float floats[119];
-  struct sundryStruct *selectedLandUnitCard;
-  struct sundryStruct *selectedShipUnitCard;
-  struct sundryStruct *selectedCharacter;
-  struct sundryStruct *hoveredCharacter;
-  struct sundryStruct *selectedSettlement;
-  struct sundryStruct *hoveredSettlement;
-  struct sundryStruct *selectedRallyPoint;
-  struct sundryStruct *hoveredRallyPoint;
-  struct sundryStruct *selectedEnemyCharacter;
-  struct sundryStruct *selectedEnemySettlement;
-  struct rallyPointStruct **rallyPoints;
-  int32_t rallyPointsSize;
-  int32_t rallyPointsNum;
-  int32_t N0002DC9B;
-  void *array22;
-  int32_t array22Size;
-  int32_t array22Count;
-};
-
 struct trackedCharacter
 {
 public:
 	void* vtbl; //0x0000
 	struct character* character; //0x0004
 }; //Size: 0x0008
-
-struct stratPathFinding
-{
-	float mpRelated;
-	struct trackedPointerCharacter trackedPointerCharacter;
-	int characterType;
-	struct factionStruct *faction;
-	int invalidOrReached;
-	int8_t noSpeedUp;
-	int8_t bytex19;
-	int8_t bytex1A;
-	int8_t bytex1B;
-	int stratWaterCreatedMaybe;
-	int8_t bytex20;
-	int8_t someBoolCheckForCaptureStuff;
-	int8_t bytex22;
-	int8_t bytex23;
-	void *floatingGeneral1;
-	void *floatingGeneral2;
-	void *charVerification;
-	void *charVerificationPos;
-	int fieldx34;
-	int somethingBattleCapturedStatus;
-	int fieldx3C;
-	int fieldx40;
-	int fieldx44;
-	int fieldx48;
-	int fieldx4C;
-	int fieldx50;
-	int fieldx54;
-	int fieldx58_12;
-	int8_t fieldx5C;
-	int8_t fieldx5D;
-	int8_t fieldx5E;
-	int8_t fieldx5F;
-	int fieldx60;
-	int fieldx64;
-	int fieldx68;
-	int fieldx6C;
-	struct character **characterArray1;
-	int characterArray1Size;
-	int characterArray1Num;
-	struct character **characterArray2;
-	int characterArray2Size;
-	int characterArray2Num;
-	int fieldx88;
-	characterMovementExtents **characterMovementExtents;
-	int characterMovementExtentsEnd;
-	int characterMovementExtentsEnd2;
-	int fieldx98;
-	int fieldx9C;
-	int fieldxA0;
-	int fieldxA4;
-	struct coordPair *coords;
-	int coordsSize;
-	int coordsNum;
-};
-
-struct uiUnitCard
-{
-public:
-	char pad_0000[900]; //0x0000
-	unit* unit; //0x0384
-};
-
-struct uiCardManager
-{
-public:
-	char pad_0000[16]; //0x0000
-	struct uiUnitCard** selectedUnitCards; //0x0010
-	int32_t selectedUnitCardsSize; //0x0014
-	int32_t selectedUnitCardsCount; //0x0018
-	char pad_001C[24]; //0x001C
-	struct uiUnitCard** unitCards; //0x0034
-	int32_t unitCardsSize; //0x0038
-	int32_t unitCardsCount; //0x003C
-	char pad_0060[328]; //0x0060
-	struct settlementStruct* selectedSettlement; //0x0188
-	char pad_018C[12]; //0x018C
-	struct character* selectedCharacter; //0x0198
-	char pad_019C[12]; //0x019C
-	struct fortStruct* selectedFort; //0x01A8
-};
 
 struct gameDataAllStruct {
 	undefined field_0x0[40];
@@ -1111,9 +571,9 @@ struct gameDataAllStruct {
 	void* menuHandler2;
 	void* battleMapStuff;
 	void* battleMapStuff2;
-	selectionInfo* selectInfo;
-	selectionInfo** selectionInfoPtr;
-	selectionInfo** selectionInfoPtr2;
+	struct selectionInfo* selectInfo;
+	struct selectionInfo** selectionInfoPtr;
+	struct selectionInfo** selectionInfoPtr2;
 	void* gameOptions;
 	void* gameOptions2;
 	void* someArray;
@@ -1130,234 +590,6 @@ struct gameDataAllStruct {
 	struct uiCardManager* uiCardManager2;
 	void* uiMessageHandler;
 	struct uiManager* uiManager;
-};
-
-
-struct options1
-{
-	void* cursor; //0x0000
-	int8_t N0003DD45; //0x0004
-	int8_t widescreen; //0x0005
-	char pad_0006[2]; //0x0006
-	int64_t antiAliasMode; //0x0008
-	int16_t subtitles; //0x0010
-	int8_t english; //0x0012
-	int8_t noBattleTimeLimit; //0x0013
-	char pad_0014[4]; //0x0014
-	int32_t useNewCursorActions; //0x0018
-	int32_t campaignNumTimesPlay; //0x001C
-	int8_t uiWinConditions; //0x0020
-	int8_t isScenario; //0x0021
-	char pad_0022[2]; //0x0022
-	int32_t isHotseatEnabled; //0x0024
-	int8_t hotseatAutosave; //0x0028
-	int8_t email; //0x0029
-	int8_t saveConfig; //0x002A
-	int8_t closeAfterSave; //0x002B
-	int8_t validateData; //0x002C
-	int8_t campaignMapSpeedUp; //0x002D
-	char pad_002E[2]; //0x002E
-	int32_t skipAiFactions; //0x0030
-	int8_t labelCharacters; //0x0034
-	int8_t noBackGroundFmv; //0x0035
-	int8_t disableArrowMarkers; //0x0036
-	int8_t arcadeBattles; //0x0037
-	int8_t disableEvents; //0x0038
-	int8_t isPrologue; //0x0039
-	int8_t updateAiCamera; //0x003A
-	int8_t hideCampaign; //0x003B
-	int32_t unlimitedMenOnBattlefield; //0x003C
-	char pad_0040[4]; //0x0040
-	void* prefFactionsPlayed; //0x0044
-	int32_t tgaReserveSpace; //0x0048
-	int32_t keysetUsed; //0x004C
-	class N0003DD67* descrShortcuts; //0x0050
-	int8_t muteAdvisor; //0x0054
-	int8_t advancedStatsAlways; //0x0055
-	int8_t microManageAllSettlements; //0x0056
-	int8_t blindAdvisor; //0x0057
-	int32_t terrainQuality; //0x0058
-	int32_t vegetationQuality; //0x005C
-	int8_t useQuickChat; //0x0060
-	int8_t someBoolNetworkManager; //0x0061
-	char pad_0062[1]; //0x0062
-	int8_t someBoolOnlinePlay; //0x0063
-	int32_t graphicsAdaptor; //0x0064
-	int8_t byte_2C6D86C; //0x0068
-	int8_t showDemeanour; //0x0069
-	char pad_006A[2]; //0x006A
-	int32_t radar; //0x006C
-	int32_t unitCards; //0x0070
-	int32_t sa_cards; //0x0074
-	int32_t buttons; //0x0078
-	int8_t tutorialBattlePlayed; //0x007C
-	int8_t disableVnVs; //0x007D
-	int8_t allUsers; //0x007E
-	char pad_007F[29]; //0x007F
-	int32_t unk_2C6D8A0; //0x009C
-	char pad_00A0[28]; //0x00A0
-	char* audioProvider; //0x00BC
-	char pad_00C0[20]; //0x00C0
-	struct UNICODE_STRING** campaignName; //0x00D4
-	char pad_00D8[4]; //0x00D8
-	struct UNICODE_STRING*** N0003DA7C; //0x00DC
-	struct UNICODE_STRING*** maybeGameSpyUsername; //0x00E0
-	struct UNICODE_STRING*** gameSpyPassword; //0x00E4
-	char pad_00E8[4]; //0x00E8
-	char* gameName; //0x00EC
-	char pad_00F0[24]; //0x00F0
-	char adminPassword[28]; //0x0108
-	char* tutorialPath; //0x0124
-}; //Size: 0x0128
-
-
-struct options2
-{
-	uint16_t defaultCampaignResolutionX; //0x0000
-	uint16_t defaultCampaignResolutionY; //0x0002
-	uint16_t campaignResolutionX; //0x0004
-	uint16_t campaignResolutionY; //0x0006
-	uint16_t defaultBattleResolutionX; //0x0008
-	uint16_t defaultBattleResolutionY; //0x000A
-	uint16_t battleResolutionX; //0x000C
-	uint16_t battleResolutionY; //0x000E
-	int8_t idk; //0x0010
-	int8_t vSync; //0x0011
-	char pad_0012[6]; //0x0012
-	int8_t uiIconBarCheck; //0x0018
-	int8_t uiRadarCheck; //0x0019
-	int8_t useMorale; //0x001A
-	int8_t uiAmmoCheck; //0x001B
-	int8_t useFatigue; //0x001C
-	int8_t uiSupplyCheck; //0x001D
-	int8_t toggleFowState; //0x001E
-	int8_t cameraRestrict; //0x001F
-	int8_t eventCutscenes; //0x0020
-	char pad_0021[3]; //0x0021
-	int32_t defaultCameraInBattle; //0x0024
-	int8_t splashes; //0x0028
-	int8_t vegetationVideo; //0x0029
-	int8_t byte_1639F1A; //0x002A
-	int8_t stencilShadows; //0x002B
-	int8_t byte_1639F1C; //0x002C
-	int8_t audioEnable; //0x002D
-	int8_t speechEnable; //0x002E
-	int8_t firstTimePlay; //0x002F
-	char* audioProviderName; //0x0030
-	char pad_0034[1]; //0x0034
-	int8_t byte_1639F25; //0x0035
-	char pad_0036[1]; //0x0036
-	int8_t toggleAutoSave; //0x0037
-	int8_t showBanners; //0x0038
-	int8_t passwords; //0x0039
-	int8_t hotseatTurns; //0x003A
-	int8_t hotseatScroll; //0x003B
-	int32_t allowValidationFeatures; //0x003C
-	int32_t campaignSpeed; //0x0040
-	int8_t labelSettlements; //0x0044
-	int8_t disablePapalElections; //0x0045
-	int8_t autoresolveAllBattles; //0x0046
-	int8_t savePrefs; //0x0047
-	int8_t disableConsole; //0x0048
-	int8_t validateDiplomacy; //0x0049
-	char pad_004A[2]; //0x004A
-	float someFloat; //0x004C
-	int32_t unitDetail; //0x0050
-	int32_t buildingDetail; //0x0054
-	int32_t maxSoldiersOnBattlefield; //0x0058
-	int32_t unitSize; //0x005C
-	int32_t cameraRotateSpeed; //0x0060
-	int32_t cameraMoveSpeed; //0x0064
-	float cameraSmoothing; //0x0068
-	int32_t somethingBasedOnBuildingDetail; //0x006C
-	int32_t masterVolume; //0x0070
-	int32_t musicVolume; //0x0074
-	int32_t speechVolume; //0x0078
-	int32_t sfxVolume; //0x007C
-	int32_t subFactionAccents; //0x0080
-	int32_t playerFactionId; //0x0084
-	int32_t campaignDifficulty; //0x0088
-	int32_t battleDifficulty; //0x008C
-	int32_t tgaWidth; //0x0090
-	float tgaAspect; //0x0094
-	int32_t tgaInputScale; //0x0098
-	int32_t scrollMinZoom; //0x009C
-	int32_t scrollMaxZoom; //0x00A0
-	int32_t advisorVerbosity; //0x00A4
-	int8_t useSomethingTgaTextures; //0x00A8
-	int8_t byte_1639F99; //0x00A9
-	char pad_00AA[2]; //0x00AA
-	int32_t effectQuality; //0x00AC
-	int32_t EnableCameraCampaignSmoothing; //0x00B0
-	int32_t chatMsgDuration; //0x00B4
-	int8_t N0003DDF9; //0x00B8
-	int8_t saveGameSpyPassword; //0x00B9
-	int8_t addDateToLogs; //0x00BA
-	int8_t showToolTips; //0x00BB
-	int8_t isNormalHud; //0x00BC
-	int8_t showPackageLitter; //0x00BD
-	char pad_00BE[2]; //0x00BE
-	char* normal; //0x00C0
-	char pad_00C4[8]; //0x00C4
-	int32_t effectNormal; //0x00CC
-	char pad_00D0[8]; //0x00D0
-	char* low; //0x00D8
-	char pad_00DC[8]; //0x00DC
-	int32_t effectLow; //0x00E4
-	char pad_00E8[8]; //0x00E8
-	char* high; //0x00F0
-	char pad_00F4[8]; //0x00F4
-	int32_t effectHigh; //0x00FC
-	char pad_0100[8]; //0x0100
-	char* lowest; //0x0108
-	char pad_010C[8]; //0x010C
-	int32_t effectLowest; //0x0114
-	char pad_0118[8]; //0x0118
-	char* highest; //0x0120
-	char pad_0124[8]; //0x0124
-	int32_t effectHighest; //0x012C
-	char pad_0130[8]; //0x0130
-	char* custom; //0x0138
-	char pad_013C[8]; //0x013C
-	int32_t effectCustom; //0x0144
-	char pad_0148[8]; //0x0148
-	char* lower; //0x0150
-	char pad_0154[8]; //0x0154
-	int32_t effectLower; //0x015C
-	char pad_0160[8]; //0x0160
-	char* higher; //0x0168
-	char pad_016C[8]; //0x016C
-	int32_t effectHigher; //0x0174
-	char pad_0178[8]; //0x0178
-	char* off; //0x0180
-	char pad_0184[8]; //0x0184
-	int32_t effectOff; //0x018C
-	char pad_0190[32]; //0x0190
-	int32_t maxSizeEduMaybe1; //0x01B0
-	float unitMultDefault; //0x01B4
-	int32_t unitMultDefaultId; //0x01B8
-	int32_t maxSizeEduMaybe2; //0x01BC
-	float unitSizeMultiplierLow; //0x01C0
-	int32_t unitMult1ID; //0x01C4
-	int32_t maxSizeEduMaybe3; //0x01C8
-	float unitSizeMultiplierMedium; //0x01CC
-	int32_t unitMult2ID; //0x01D0
-	int32_t maxSizeEduMaybe4; //0x01D4
-	float unitSizeMultiplierLarge; //0x01D8
-	int32_t unitMult3ID; //0x01DC
-	char pad_01E0[12]; //0x01E0
-	uint16_t word_163A0DC; //0x01EC
-	char pad_01EE[10]; //0x01EE
-	uint16_t word_163A0E8; //0x01F8
-	char pad_01FA[2]; //0x01FA
-	uint16_t word_163A0EC; //0x01FC
-	char pad_01FE[54]; //0x01FE
-	int16_t currentHotseatPlayerOrSomething; //0x0234
-	char pad_0236[2]; //0x0236
-	class N0003DF44* keysetPointer; //0x0238
-	char pad_023C[4]; //0x023C
-	int32_t keySetUsed; //0x0240
-	int32_t preferencesWereLoaded; //0x0244
 };
 
 struct modelFlexiMixed
@@ -1475,45 +707,8 @@ struct oneSiege {
 	struct siegeS* siege;
 };
 
-struct RallyPointSundry {
-	undefined field0_0x0[4];
-	void* object;
-	undefined field2_0x8[56];
-	void* object2;
-	undefined field4_0x44[16];
-};
-
-struct campaignDifficulty1
-{
-	int orderFromGrowth;
-	int considerWarWithPlayer;
-	float difficultyFloat1_unused;
-	float brigandChanceAi;
-	float brigandChancePlayer;
-	int forceAttackDelay;
-	float taxIncomeModifierPlayer;
-	float farmingIncomeModifierPlayer;
-	float incomeModifierAi;
-	float playerRegionValueModifier;
-};
-
-struct campaignDifficulty2
-{
-public:
-	int32_t popGrowthBonusAi; //0x0000
-	int32_t publicOrderBonusAi; //0x0004
-	int32_t experienceBonusAi; //0x0008
-	int32_t difficultyInt4_unused; //0x000C
-	int32_t incomeBonusAi; //0x0010
-	int8_t wantsTargetPlayer; //0x0014
-	int8_t wantsTargetPlayerNaval; //0x0015
-	char pad_0016[6]; //0x0016
-	int32_t autoAttackPlayerIfCrusadeTarget; //0x001C
-	char pad_0020[32]; //0x0020
-}; //Size: 0x0040
-
 /* I_CompareCounter script command */
-struct CompareCounter { /* I_CompareCounter script command */
+struct compareCounter { /* I_CompareCounter script command */
 	undefined field_0x0;
 	undefined field_0x1;
 	undefined field_0x2;
@@ -1523,12 +718,6 @@ struct CompareCounter { /* I_CompareCounter script command */
 	char* operandName; /* name of checked counter */
 	int operandNameCrypt; /* maybe crypt of the counter name */
 	int checkedValue; /* value for check */
-};
-
-struct loadGameHandler
-{
-	void* vtable;
-	struct UNICODE_STRING*** saveGameName;
 };
 
 struct trackedPointerUnit {
@@ -1572,10 +761,6 @@ public:
 	int randomSeed; 
 }; //Size: 0x002C
 
-struct coords {
-	int xCoord;
-	int yCoord;
-};
 struct aiResourcePrivate
 {
 	DWORD *vfTable /*VFT*/;
@@ -1583,7 +768,7 @@ struct aiResourcePrivate
 	void* trackedCharVtbl;
 	character* character;
 	void* trackedArmyVtbl;
-	armyStruct* army;
+	struct armyStruct* army;
 	int priority;
 	void *aiController;
 	int regionID;
@@ -1647,133 +832,12 @@ struct consoleCommands {
 	int reservedElements;
 	int size;
 };
-struct settlementUiTextStruct
-{
-public:
-	float ValueColumn; //0x0000
-	char pad_0004[4]; //0x0004
-	float yCoord; //0x0008
-	char pad_000C[20]; //0x000C
-	float zCoord; //0x0020
-}; //Size: 0x0024
-
 
 struct descr_sm_factions_list {
 	struct factionRecord* facDescrs;
 	int capacity;
 	int size;
 };
-
-struct uiManager
-{
-public:
-	char pad_0000[12]; //0x0000
-	char *N00009D87; //0x000C
-	char pad_0010[32]; //0x0010
-	void *dragObjectContainer; //0x0030
-	struct stratUIStruct *stratUI; //0x0034
-}; //Size: 0x00A0
-struct buildingInfoScroll
-{
-	char pad[812];
-	settlementStruct* settlement;
-	char pad2[12];
-	struct building* building;
-	char pad3[12];
-	struct edbEntry* entry;
-};
-struct unitInfoScroll
-{
-	char pad[772];
-	unit* unit;
-	char pad2[20];
-	struct eduEntry* entry;
-};
-
-// Settlement UI Stuff
-struct stratUIStruct
-{
-public:
-	char pad_0000[84]; //0x0000
-	struct settlementInfoScroll *settlementInfoScroll; //0x0054
-	int pad_0058[6]; //0x0000
-	buildingInfoScroll* buildingInfoScroll;
-	unitInfoScroll* unitInfoScroll;
-}; //Size: 0x0164
-
-
-struct settlementInfoScroll
-{
-public:
-	char pad_0000[40]; //0x0000
-	uint32_t N000218A6; //0x0028
-	char pad_002C[136]; //0x002C
-	float N000218C9; //0x00B4
-	float N000218CA; //0x00B8
-	float N000218CB; //0x00BC
-	float N000218CC; //0x00C0
-	char pad_00C4[576]; //0x00C4
-	struct settlementStruct *settlement; //0x0304
-	char pad_0308[12]; //0x0308
-	void *N00021961; //0x0314
-	char pad_0318[16]; //0x0318
-	void *uiTable; //0x0328
-	void *uiTable2; //0x032C
-	char pad_0330[12]; //0x0330
-	void *uiSettlementFrame; //0x033C
-	char pad_0340[4]; //0x0340
-	void *characterInfoFrame; //0x0344
-	void *uiCycleListTax; //0x0348
-	void *uiCycleList0; //0x034C
-	void *uiCycleList; //0x0350
-	char pad_0354[16]; //0x0354
-	void *uiCheckBox; //0x0364
-	void *uiCheckBox2; //0x0368
-	void *uiCheckBox3; //0x036C
-	void *N00021978; //0x0370
-	char pad_0374[16]; //0x0374
-	void *settlementRenameElement; //0x0384
-	struct settlementStatsTable *settlementStatsTable; //0x0388
-}; //Size: 0x0840
-
-struct settlementStatsTable
-{
-public:
-	char pad_0000[76]; //0x0000
-	struct settlementTextStrings *settlementTextStrings; //0x004C
-}; //Size: 0x0844
-
-struct settlementTextStrings
-{
-public:
-	struct uiString *incomeString; //0x0000
-	struct uiString *incomeValue; //0x0004
-	struct uiString *publicOrderString; //0x0008
-	struct uiString *publicOrderValue; //0x000C
-	struct uiString *populationString; //0x0010
-	struct uiString *populationValue; //0x0014
-	struct uiString *populationGrowthString; //0x0018
-	struct uiString *populationGrowthValue; //0x001C
-}; //Size: 0x0020
-
-struct uiString
-{
-public:
-	char pad_0000[72]; //0x0000
-	void *N00023379; //0x0048
-	void *N0002337A; //0x004C
-	char pad_0050[8]; //0x0050
-	void *N0002337D; //0x0058
-	char pad_005C[4]; //0x005C
-	void *settlementText; //0x0060
-	char pad_0064[4]; //0x0064
-	uint8_t thickness; //0x0068
-	uint8_t blue; //0x0069
-	uint8_t green; //0x006A
-	uint8_t red; //0x006B
-	char pad_006C[36]; //0x006C
-}; //Size: 0x0090
-
 struct characterArray
 {
 	character** characters;

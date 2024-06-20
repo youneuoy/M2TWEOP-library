@@ -1,6 +1,6 @@
 #pragma once
 #include "headersSTD.h"
-#include "BattleMapOverrider.h"
+#include "battleMapOverrider.h"
 
 class DeveloperMode
 {

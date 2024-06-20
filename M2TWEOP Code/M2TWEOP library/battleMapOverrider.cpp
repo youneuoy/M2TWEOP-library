@@ -1,4 +1,4 @@
-#include "BattleMapOverrider.h"
+#include "battleMapOverrider.h"
 #include "globals.h"
 
 bool BattleMapOverrider::Draw()

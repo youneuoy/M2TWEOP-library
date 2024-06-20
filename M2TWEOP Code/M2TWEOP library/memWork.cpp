@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "MemWork.h"
+#include "memWork.h"
 #include <fstream>
 #include <string>
 

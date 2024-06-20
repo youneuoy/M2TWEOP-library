@@ -5,14 +5,14 @@
 //@license GPL-3.0
 #include "eopBuildings.h"
 
-#include "fastFunctsHelpers.h"
-#include "smallFuncs.h"
+#include "gameStringHelpers.h"
 #include "settlement.h"
 
 #include <cstdio>
 
 #include "dataOffsets.h"
 #include "functionsOffsets.h"
+#include "gameHelpers.h"
 #include "techFuncs.h"
 
 std::vector<eopBuildEntry> buildEntryDB::eopEdb = {};

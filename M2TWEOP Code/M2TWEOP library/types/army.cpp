@@ -4,14 +4,13 @@
 #include <set>
 
 #include "campaign.h"
+#include "cultures.h"
 #include "dataOffsets.h"
 #include "eopdu.h"
 #include "faction.h"
 #include "fort.h"
 #include "gameHelpers.h"
-#include "m2tweopHelpers.h"
 #include "plugData.h"
-#include "smallFuncs.h"
 #include "strategyMap.h"
 
 settlementStruct* siegeS::getSiegedSettlement()
@@ -234,7 +233,7 @@ namespace armyHelpers
         if (!army->gen || !army->gen->characterRecord || !army->gen->characterRecord->faction)
             return;
         int cultureId = army->gen->characterRecord->faction->cultureID;
-        auto cultures = reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
+        auto cultures = cultures::getCultureDb();
         if (int cost = cultures->cultures[cultureId].watchTowerCost;
             army->gen->characterRecord->faction->money < cost)
             return;
@@ -380,7 +379,7 @@ namespace armyHelpers
 		set<std::pair<int, int>> visited;
 		q.emplace(x, y);
 		visited.insert({x, y});
-		stratMap* map = smallFuncs::getGameDataAll()->stratMap;
+		stratMap* map = stratMapHelpers::getStratMap();
 		auto spawnCoords = new coordPair;
 		spawnCoords->xCoord = x;
 		spawnCoords->yCoord = y;
@@ -400,7 +399,7 @@ namespace armyHelpers
 						if ((namedChar->status & 8) != 0)
 						{
 
-							char** cryptS = fastFunctsHelpers::makeCryptedString(typeName);
+							char** cryptS = gameStringHelpers::createHashedString(typeName);
 							DWORD adrType = reinterpret_cast<DWORD>(cryptS);
 							gen = GAME_FUNC(character*(__cdecl*)(DWORD, int, characterRecord*, const char*), respawnOffMapCharacterFunc)
 							(adrType, faction->factionID, namedChar, portrait);
@@ -530,7 +529,7 @@ namespace armyHelpers
 			}
 			delete spawnCoords;
 			if (army && label && strcmp(label, "") == 0)
-				fastFunctsHelpers::setCryptedString(&gen->characterRecord->label, label);
+				gameStringHelpers::setHashedString(&gen->characterRecord->label, label);
 			return army;
 		}
 		delete spawnCoords;
@@ -548,7 +547,7 @@ namespace armyHelpers
     	}
     	if (!army->gen)
     	{
-    		m2tweopHelpers::logStringGame("addToSettlement: army has no character");
+    		gameHelpers::logStringGame("addToSettlement: army has no character");
     		return;
     	}
     	GAME_FUNC(void(__thiscall*)(settlementStruct*, character*), addToSettlement)(set, army->gen);
@@ -565,12 +564,32 @@ namespace armyHelpers
 		}
 		if (!army->gen)
 		{
-			m2tweopHelpers::logStringGame("addToFort: army has no character");
+			gameHelpers::logStringGame("addToFort: army has no character");
 			return;
 		}
 		GAME_FUNC(void(__thiscall*)(fortStruct*, character*), addToFort)(fort, army->gen);
 	}
 #pragma endregion Army Creation
+
+	
+
+	float getMinimumMovePointsForArmy(const armyStruct* army)
+	{
+		if (!army)
+			return 0;
+		if (army->numOfUnits < 1)
+			return 0;
+		float minMp = GAME_FUNC(float(__thiscall*)(unit*), getUnitFullMovePoints)(army->units[0]);
+		for (int i = 1; i < army->numOfUnits; ++i)
+		{
+			if (const float unitFullMp = GAME_FUNC(float(__thiscall*)(unit*), getUnitFullMovePoints)(army->units[i]);
+				unitFullMp < minMp)
+			{
+				minMp = unitFullMp;
+			}
+		}
+		return minMp;
+	}
 	
     void addToLua(sol::state& luaState)
     {

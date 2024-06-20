@@ -16,6 +16,232 @@ struct gateEntry
 	float blockedLockoutRadous;
 };
 
+struct battleGroup
+{
+	int index;
+	struct unit **units;
+	int unitsSize;
+	int unitCount;
+	bool infoValid;
+	char field_11[3];
+	float midPointX;
+	float midPointY;
+	float prevMidPointX;
+	float prevMidPointY;
+	int radius;
+	int16_t facing;
+	int16_t facpad;
+	struct floatPosData floatPosDataStart;
+	float velocityX;
+	float velocityY;
+	int8_t gap6C_positionFloats[172];
+	char field_118;
+	char field_119;
+	char field_11a;
+	char field_11b;
+	int16_t someAngle;
+	int16_t pad11e;
+	float speed;
+	bool onHill;
+	bool allInSameArea;
+	char field_126[2];
+	int positionID;
+	int cavalryRatio;
+	int missileRatio;
+	int routingRatio;
+	int forestRatio;
+	int soldierCounts;
+	int cavalryRatioVisible;
+	int missileRatioVisible;
+	int routingRatioVisible;
+	int forestRatioVisible;
+	int soldierCountsVisible;
+	int unitNumVisible;
+};
+
+struct arrayInUnitGroup
+{
+	int order;
+	float xCoord;
+	float yCoord;
+	int16_t angle;
+	bool run;
+	int8_t byte_e;
+	int movementType;
+	bool changeWidth;
+	bool changeFormation;
+	bool changeAngle;
+	int8_t byte_17;
+	int pathHandle;
+	void* startWaypoint;
+	void* endWaypoint;
+	int8_t isAiAutomated;
+	int8_t byte_25[3];
+	int isAiFormation;
+	int positionType;
+	int platform;
+	float pointX;
+	float pointZ;
+	float pointY;
+	int groupFormationID;
+	int attackType;
+};
+
+struct unitGroup
+{
+	void *vftable /*VFT*/;
+	bool useGroupFormation;
+	char field_5[3];
+	struct unit **unitsInFormation;
+	int32_t unitsSize;
+	int32_t unitsInFormationNum;
+	int unitsNumTotal;
+	void *blockPriorities;
+	int32_t blockPrioritiesSize;
+	int32_t blockPrioritiesNum;
+	bool *assignedUnits;
+	int32_t assignedUnitsSize;
+	int32_t assignedUnitsNum;
+	struct smthingUnitGroup *formationBlocks;
+	int32_t formationBlocksSize;
+	int32_t formationBlocksNum;
+	floatPosData *boundingBoxes;
+	int32_t boundingBoxesSize;
+	int32_t boundingBoxesNum;
+	void *descrFormationEntry;
+	char hasFormation;
+	char field_4d[3];
+	int formationState;
+	float width;
+	float height;
+	float distFrontToCentre;
+	float scaleFactorX;
+	float scaleFactorY;
+	float xCoord;
+	float yCoord;
+	float midPointX;
+	float midPointY;
+	int16_t angle;
+	int16_t field_7a;
+	float slowestSpeed;
+	float quickestSpeed;
+	char canRun;
+	char field_85[3];
+	int pendingFormation;
+	int alliance;
+	int status;
+	struct arrayInUnitGroup arrayInUnitGroupThing[8];
+	int groupOrdersStart;
+	int groupOrdersEnd;
+	int groupOrdersIndex;
+	unit **unitsNotInFormation;
+	int unitsNotInFormationSize;
+	int unitsNotInFormationNum;
+	float pathWidth;
+	unitGroup *thisGroup;
+	void *groupAutomationTasks;
+	int taskNum;
+	char gap2FC[4096];
+	char moveFast;
+	char orderStarted;
+	char orderCleared;
+	char field_12FF;
+	char automationEnabled;
+	char field_1301[3];
+	int automationType;
+	float defendXCoord;
+	float defendYCoord;
+	float defendRadius;
+	void* targetWorldData;
+	float targetX;
+	float targetZ;
+	float targetY;
+	unit* targetUnit;
+	int newAutomationType;
+	float newDefendXCoord;
+	float newDefendYCoord;
+	float newDefendRadius;
+	void* newField_targetWorldData;
+	float newField_targetX;
+	float newField_targetZ;
+	float newField_targetY;
+	unit *newTargetUnit;
+	struct battleResidence *targetSettlement;
+	void *targetCrossing;
+	int defensiveArea;
+	struct terrainFeatureHill *targetHill;
+public:
+	unit* getUnitInFormation(const int index)
+	{
+		if (index < 0 || index >= unitsInFormationNum)
+			return nullptr;
+		return unitsInFormation[index];
+	}
+	unit* getUnitNotInFormation(const int index)
+	{
+		if (index < 0 || index >= unitsNotInFormationNum)
+			return nullptr;
+		return unitsNotInFormation[index];
+	}
+};
+struct aiUnitGroup : unitGroup
+{
+	void *detachment;
+	struct aiDetachmentTactic *detachmentTactic;
+	unit **unitsInMelee;
+	int unitsInMeleeSize;
+	int unitsInMeleeNum;
+	battleGroup battleAiUnitGroup;
+	char gap14c8[92];
+	float centreFrontX;
+	float centreFrontY;
+	float centreX;
+	float centreY;
+	__int16 avgFacing;
+	__int16 field_1536;
+	int percentFormed;
+public:
+	
+};
+struct aiTacticAssault
+{
+	DWORD *vftable /*VFT*/;
+	struct aiDetachment *aiDetachment;
+	char hasBeenConsidered;
+	char isExecuting;
+	char hasExecuted;
+	char field_B;
+	int phaseStarted;
+	int arrayOfTenRandomValues[10];
+	char startedTactic;
+	char differentUnitsThisUpdate;
+	char pad[2];
+	unit **units;
+	int unitsSize;
+	int unitNum;
+	void* fsm;
+	DWORD fsmState;
+	struct aiDetachment *detachment;
+	struct aiUnitGroup siegeUnitGroup;
+	struct aiUnitGroup aiUnitGroup;
+	bool started;
+	char field_2ACd[3];
+	struct buildingBattle *building;
+	struct unit *attackUnit;
+	int formationIndex;
+	float advanceX;
+	float advanceY;
+	int16_t angle;
+	int16_t angle2;
+	int advanceDirectionX;
+	float advanceDirectionY;
+	char firstAdvanceOrders;
+	char docking;
+	char engineLeft;
+	char finished;
+	float priority;
+};
+
 /* 1872 */
 struct wallEntry
 {

@@ -12,7 +12,10 @@ public:
 		DWORD allocMemFunc = NULL;
 		
 		DWORD createEduEntry = NULL;
-		DWORD uniStrCustomTile = NULL;
+		DWORD createUniString = NULL;
+		DWORD getScriptCounter = NULL;
+		DWORD setScriptCounter = NULL;
+		DWORD getUnitFullMovePoints = NULL;
 
 
 
@@ -22,6 +25,7 @@ public:
 		DWORD createCADTargetCharacter = NULL;
 		DWORD createCADTargetFort = NULL;
 		DWORD createCADTargetSettlement = NULL;
+		DWORD saveGame = NULL;
 
 
 		DWORD createSiegeSettlementGarrisonedFunc = NULL;

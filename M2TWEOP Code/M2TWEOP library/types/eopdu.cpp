@@ -5,7 +5,7 @@
 //@license GPL-3.0
 #include "eopdu.h"
 #include "functionsOffsets.h"
-#include "m2tweopHelpers.h"
+#include "gameHelpers.h"
 
 std::vector<std::shared_ptr<eopEduEntry>> eopDu::eopUnitDb{};
 std::unordered_map<std::string, std::shared_ptr<eopEduEntry>> eopDu::eopUnitLookup{};
@@ -91,7 +91,7 @@ static std::string replace_all(
 
 int eopDu::readEduFile(const std::string& fileName, eduEntry* entryForFilling)
 {
-	m2tweopHelpers::logStringGame("Reading EDU file: " + fileName);
+	gameHelpers::logStringGame("Reading EDU file: " + fileName);
 	std::string unitString;
 
 	std::ifstream eduFile;
@@ -140,7 +140,7 @@ eduEntry* eopDu::addEopEduEntryFromFile(const char* fileName, int newIdx)
 {
     if (getEduEntry(newIdx))
     {
-        m2tweopHelpers::logStringGame("Duplicate EOP index " + std::to_string(newIdx) + " in addEopEduEntryFromFile");
+        gameHelpers::logStringGame("Duplicate EOP index " + std::to_string(newIdx) + " in addEopEduEntryFromFile");
         return nullptr;
     }
     try
@@ -148,7 +148,7 @@ eduEntry* eopDu::addEopEduEntryFromFile(const char* fileName, int newIdx)
         const auto sharedP = std::make_shared<eopEduEntry>(fileName, newIdx);
         if (unitHelpers::getEduEntryByName(sharedP->originalTypeName.c_str()))
         {
-            m2tweopHelpers::logStringGame("Duplicate unit name " + sharedP->originalTypeName + " in addEopEduEntryFromFile");
+            gameHelpers::logStringGame("Duplicate unit name " + sharedP->originalTypeName + " in addEopEduEntryFromFile");
             std::string errS = "Can`t add: " + sharedP->originalTypeName + " Duplicate type name";
             MessageBoxA(NULL, errS.c_str(), "ERROR!", NULL);
             exit(0);
@@ -169,7 +169,7 @@ eduEntry* eopDu::addEopEduEntry(int baseIdx, int newIdx)
 {
     if (getEduEntry(newIdx))
     {
-        m2tweopHelpers::logStringGame("Duplicate EOP index " + to_string(newIdx) + " in addEopEduEntry");
+        gameHelpers::logStringGame("Duplicate EOP index " + to_string(newIdx) + " in addEopEduEntry");
         return nullptr;
     }
 	//auto newEntry = std::make_shared<eopEduEntry>(baseIdx, newIdx);
@@ -247,7 +247,7 @@ void eopEduEntry::setEntrySoldierModel(const char* newModel) const
 	entryInternal->eopSoldierString = newModel;
 
 	entry->modelEntry = unitHelpers::findBattleModel(newModel);
-	fastFunctsHelpers::setCryptedString(&entry->soldier, newModel);
+	gameStringHelpers::setHashedString(&entry->soldier, newModel);
 }
 
 namespace eopDuHelpers

@@ -5,17 +5,15 @@
 //@author youneuoy
 //@license GPL-3.0
 #include "luaP.h"
-#include "gameDataAllHelper.h"
 #include "gameHelpers.h"
-#include "gameSTDUIHelpers.h"
-#include "m2tweopHelpers.h"
-#include "smallFuncs.h"
 #include "characterRecord.h"
 #include "faction.h"
 #include "unit.h"
 #include "army.h"
 #include "strategyMap.h"
 #include "campaign.h"
+#include "gameUi.h"
+#include "m2tweopMapManager.h"
 
 
 void luaP::initCampaign()
@@ -25,6 +23,7 @@ void luaP::initCampaign()
 	campaignHelpers::addToLua(luaState);
 	buildingHelpers::addToLua(luaState);
 	battleHelpers::addToLua(luaState);
+	gameUiHelpers::addToLua(luaState);
 	
 	struct
 	{
@@ -32,11 +31,8 @@ void luaP::initCampaign()
 		sol::usertype<options2> options2;
 		sol::usertype<campaignDifficulty1> campaignDifficulty1;
 		sol::usertype<campaignDifficulty2> campaignDifficulty2;
-		sol::usertype<uiCardManager> uiCardManager;
 		sol::usertype<selectionInfo> selectionInfo;
 		sol::usertype<mapImage> mapImageStruct;
-		sol::usertype<buildingInfoScroll> buildingInfoScroll;
-		sol::usertype<unitInfoScroll> unitInfoScroll;
 	}typeAll;
 
 	///Game Options
@@ -353,7 +349,7 @@ void luaP::initCampaign()
 	@usage
 	local mapImage = mapImageStruct.makeMapImage();
 	*/
-	typeAll.mapImageStruct.set_function("makeMapImage", &m2tweopHelpers::makeMapImage);
+	typeAll.mapImageStruct.set_function("makeMapImage", &m2tweopMapManager::makeMapImage);
 	
 	/***
 	Reset image state.
@@ -362,7 +358,7 @@ void luaP::initCampaign()
 	local mapImage = mapImageStruct.makeMapImage();
 	mapImage:clearMapImage();
 	*/
-	typeAll.mapImageStruct.set_function("clearMapImage", &m2tweopHelpers::clearMapImage);
+	typeAll.mapImageStruct.set_function("clearMapImage", &m2tweopMapManager::clearMapImage);
 	
 	/***
 	Create a new map texture. Use an uncompressed(!) dds image that is some multiple of your map_regions size. The background must line up with map_regions for whatever scale you chose for it to display correctly.
@@ -376,7 +372,7 @@ void luaP::initCampaign()
 	local x, y, id = mapImage:loadMapTexture(M2TWEOP.getModPath() .. "map_regions.dds");
 	ImGui.Image(id, x, y);
 	*/
-	typeAll.mapImageStruct.set_function("loadMapTexture", &m2tweopHelpers::loadMapTexture);
+	typeAll.mapImageStruct.set_function("loadMapTexture", &m2tweopMapManager::loadMapTexture);
 	
 	/***
 	Fill a region with a color.
@@ -390,7 +386,7 @@ void luaP::initCampaign()
 	local mapImage = mapImageStruct.makeMapImage();
 	mapImage:fillRegionColor(50, 0, 255, 0, 255);
 	*/
-	typeAll.mapImageStruct.set_function("fillRegionColor", &m2tweopHelpers::fillRegionColor);
+	typeAll.mapImageStruct.set_function("fillRegionColor", &m2tweopMapManager::fillRegionColor);
 	
 	/***
 	Add a color to already filled region.
@@ -405,7 +401,7 @@ void luaP::initCampaign()
 	mapImage:fillRegionColor(50, 0, 255, 0, 255);
 	mapImage:addRegionColor(50, 10, -10, 10, 0);
 	*/
-	typeAll.mapImageStruct.set_function("addRegionColor", &m2tweopHelpers::addRegionColor);
+	typeAll.mapImageStruct.set_function("addRegionColor", &m2tweopMapManager::addRegionColor);
 	
 	/***
 	Fill a tile with a color.
@@ -421,7 +417,7 @@ void luaP::initCampaign()
 	local mapImage = mapImageStruct.makeMapImage();
 	mapImage:fillTileColor(153, 210, 0, 255, 0, 255);
 	*/
-	typeAll.mapImageStruct.set_function("fillTileColor", &m2tweopHelpers::fillTileColor);
+	typeAll.mapImageStruct.set_function("fillTileColor", &m2tweopMapManager::fillTileColor);
 	/***
 	Add a color to an already set tile.
 	@function mapImageStruct:addTileColor
@@ -437,98 +433,8 @@ void luaP::initCampaign()
 	mapImage:fillTileColor(153, 210, 0, 255, 0, 255);
 	mapImage:addTileColor(153, 210, 20, -10, 20, 0);
 	*/
-	typeAll.mapImageStruct.set_function("addTileColor", &m2tweopHelpers::addTileColor);
+	typeAll.mapImageStruct.set_function("addTileColor", &m2tweopMapManager::addTileColor);
 
-	///unitInfoScroll
-	//@section Info scrolls
-
-	/***
-	Basic unitInfoScroll table
-
-	@tfield unit unit If the scroll is about existing unit, this is set and eduEntry empty.
-	@tfield eduEntry eduEntry only for non-recruited units.
-
-	@table unitInfoScroll
-	*/
-	typeAll.unitInfoScroll = luaState.new_usertype<unitInfoScroll>("unitInfoScroll");
-	typeAll.unitInfoScroll.set("unit", &unitInfoScroll::unit);
-	typeAll.unitInfoScroll.set("eduEntry", &unitInfoScroll::entry);
-
-	/***
-	Basic buildingInfoScroll table
-
-	@tfield settlementStruct settlement
-	@tfield building building If the scroll is about existing building, this is set and edbEntry empty.
-	@tfield edbEntry edbEntry only for non-constructed buildings.
-
-	@table buildingInfoScroll
-	*/
-	typeAll.buildingInfoScroll = luaState.new_usertype<buildingInfoScroll>("buildingInfoScroll");
-	typeAll.buildingInfoScroll.set("settlement", &buildingInfoScroll::settlement);
-	typeAll.buildingInfoScroll.set("building", &buildingInfoScroll::building);
-	typeAll.buildingInfoScroll.set("edbEntry", &buildingInfoScroll::entry);
-
-	///uiCardManager
-	//@section uiCardManager
-
-	/***
-	Basic uiCardManager table
-
-	@tfield int selectedUnitCardsCount
-	@tfield int unitCardsCount
-	@tfield settlementStruct selectedSettlement
-	@tfield character selectedCharacter
-	@tfield fortStruct selectedFort
-	@tfield getSelectedUnitCard getSelectedUnitCard
-	@tfield getUnitCard getUnitCard
-	@tfield getBuildingInfoScroll getBuildingInfoScroll
-	@tfield getUnitInfoScroll getUnitInfoScroll
-
-	@table uiCardManager
-	*/
-	typeAll.uiCardManager = luaState.new_usertype<uiCardManager>("uiCardManager");
-	typeAll.uiCardManager.set("selectedUnitCardsCount", &uiCardManager::selectedUnitCardsCount);
-	typeAll.uiCardManager.set("unitCardsCount", &uiCardManager::unitCardsCount);
-	typeAll.uiCardManager.set("selectedSettlement", &uiCardManager::selectedSettlement);
-	typeAll.uiCardManager.set("selectedCharacter", &uiCardManager::selectedCharacter);
-	typeAll.uiCardManager.set("selectedFort", &uiCardManager::selectedFort);
-	/***
-	Get selected unit card by index.
-	@function uiCardManager:getSelectedUnitCard
-	@tparam int index
-	@treturn unit selectedUnit
-	@usage
-	local cardManager=gameDataAll.get().uiCardManager;
-	local selectedUnit=cardManager:getSelectedUnitCard(0);
-	*/
-	typeAll.uiCardManager.set_function("getSelectedUnitCard", &gameHelpers::getSelectedUnitCard);
-	/***
-	Get unit card by index (battle or strat).
-	@function uiCardManager:getUnitCard
-	@tparam int index
-	@treturn unit unit
-	@usage
-	local cardManager=gameDataAll.get().uiCardManager;
-	local unit=cardManager:getUnitCard(0);
-	*/
-	typeAll.uiCardManager.set_function("getUnitCard", &gameHelpers::getUnitCard);
-	/***
-	Get building info scroll.
-	@function uiCardManager.getBuildingInfoScroll
-	@treturn buildingInfoScroll scroll
-	@usage
-	local infoScroll = cardManager.getBuildingInfoScroll();
-	*/
-	typeAll.uiCardManager.set_function("getBuildingInfoScroll", &gameSTDUIHelpers::getBuildingInfoScroll);
-	/***
-	Get unit info scroll.
-	@function uiCardManager.getUnitInfoScroll
-	@treturn unitInfoScroll scroll
-	@usage
-	local infoScroll = cardManager.getUnitInfoScroll();
-	*/
-	typeAll.uiCardManager.set_function("getUnitInfoScroll", &gameSTDUIHelpers::getUnitInfoScroll);
-	
 	///selectionInfo
 	//@section Selection Info
 
@@ -548,15 +454,15 @@ void luaP::initCampaign()
 	@table selectionInfo
 	*/
 	typeAll.selectionInfo = luaState.new_usertype<selectionInfo>("selectionInfo");
-	typeAll.selectionInfo.set("selectedCharacter", sol::property(&gameDataAllHelper::getSelectedCharacter));
-	typeAll.selectionInfo.set("hoveredCharacter", sol::property(&gameDataAllHelper::getHoveredCharacter));
-	typeAll.selectionInfo.set("selectedEnemyCharacter", sol::property(&gameDataAllHelper::getSelectedEnemyCharacter));
-	typeAll.selectionInfo.set("selectedSettlement", sol::property(&gameDataAllHelper::getSelectedSettlement));
-	typeAll.selectionInfo.set("hoveredSettlement", sol::property(&gameDataAllHelper::getHoveredSettlement));
-	typeAll.selectionInfo.set("selectedEnemySettlement", sol::property(&gameDataAllHelper::getSelectedEnemySettlement));
-	typeAll.selectionInfo.set("selectedFort", sol::property(&gameDataAllHelper::getSelectedFort));
-	typeAll.selectionInfo.set("hoveredFort", sol::property(&gameDataAllHelper::getHoveredFort));
-	typeAll.selectionInfo.set("selectedEnemyFort", sol::property(&gameDataAllHelper::getSelectedEnemyFort));
+	typeAll.selectionInfo.set("selectedCharacter", sol::property(&selectionInfo::getSelectedCharacter));
+	typeAll.selectionInfo.set("hoveredCharacter", sol::property(&selectionInfo::getHoveredCharacter));
+	typeAll.selectionInfo.set("selectedEnemyCharacter", sol::property(&selectionInfo::getSelectedEnemyCharacter));
+	typeAll.selectionInfo.set("selectedSettlement", sol::property(&selectionInfo::getSelectedSettlement));
+	typeAll.selectionInfo.set("hoveredSettlement", sol::property(&selectionInfo::getHoveredSettlement));
+	typeAll.selectionInfo.set("selectedEnemySettlement", sol::property(&selectionInfo::getSelectedEnemySettlement));
+	typeAll.selectionInfo.set("selectedFort", sol::property(&selectionInfo::getSelectedFort));
+	typeAll.selectionInfo.set("hoveredFort", sol::property(&selectionInfo::getHoveredFort));
+	typeAll.selectionInfo.set("selectedEnemyFort", sol::property(&selectionInfo::getSelectedEnemyFort));
 
 }
 void luaP::initP2()
@@ -591,7 +497,7 @@ void luaP::initP2()
 	gameData=gameDataAll.get();
 	battleXCoord=gameData.battleStruct.xCoord;
 	*/
-	typeAll.gameDataAllTable.set_function("get", &gameDataAllHelper::get);
+	typeAll.gameDataAllTable.set_function("get", &gameHelpers::getGameDataAll);
 	typeAll.gameDataAllTable.set("battleStruct", &gameDataAllStruct::battleHandler);
 	typeAll.gameDataAllTable.set("campaignStruct", &gameDataAllStruct::campaignStruct);
 	typeAll.gameDataAllTable.set("uiCardManager", &gameDataAllStruct::uiCardManager);

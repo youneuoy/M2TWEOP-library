@@ -33,7 +33,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.consoleCommands = reinterpret_cast<consoleCommands*>(0x02cbce50);
 
 		offsets.guildDataStart = 0x018FD958;
-		offsets.battleCamera = 0x0193f34c;
+		offsets.battleCamera = 0x0198848c;
 
 		offsets.edbDataStart = 0x018AA5A8;
 		offsets.selectedEra = 0x2CB9210;
@@ -43,6 +43,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.scriptCommandVFT = 0x0134E3A0;
 		
 		offsets.religionDatabase = 0x016E9DC0;
+		offsets.perfectSpy = 0x016F0E5C;
 		
 		offsets.portraitDatabase = 0x18B0340;
 
@@ -64,6 +65,24 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.customTiles = 0x02C3BF50;
 		offsets.battlePerimeters = 0x16F0600;
 		offsets.battlefieldEngines = 0x02C8329C;
+		offsets.options1 = 0x02CB693C;
+		offsets.options2 = 0x016818A0;
+		offsets.campaignDiff1 = 0x016F4760;
+		offsets.campaignDiff2 = 0x0164BF18;
+		offsets.equipmentCosts = 0x01655BB0;
+		offsets.saveGameHandler = 0x02C649BC;
+		offsets.ancLimit = 0x005A57CD;
+		offsets.maxUnitSize = 0x008ef381;
+		offsets.maxBgSize1 = 0x008ebd95;
+		offsets.maxBgSize2 = 0x008ebd9a;
+		offsets.unlockConsoleCommands1 = 0x00d2d763;
+		offsets.unlockConsoleCommands2 = 0x00d329aa;
+		offsets.highlightUnits = 0x009e0ec4;
+		offsets.religionLimit = 0x0411C0E;
+		offsets.scriptCounters = 0x016F0BF0;
+		offsets.scriptCountersSet = 0x16F0BC8;
+		offsets.buildingChainLimit = 0x008AB794;
+		offsets.guildCooldown = 0x004F57AB;
 
 		offsets.descr_sm_factionslist = reinterpret_cast<descr_sm_factions_list*>(0x01667288);
 	}
@@ -105,6 +124,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.scriptCommandVFT = 0x013933D0;
 		
 		offsets.religionDatabase = 0x016A0B90;
+		offsets.perfectSpy = 0x016A7CC4;
 		
 		offsets.portraitDatabase = 0x018671D0;
 
@@ -125,6 +145,24 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.stratCursorCoords = 0x02c3da48;
 		offsets.modelsDb = 0x016a0b98;
 		offsets.battlefieldEngines = 0x02C3A254;
+		offsets.options1 = 0x02C6D804;
+		offsets.options2 = 0x01639EF0;
+		offsets.campaignDiff1 = 0x016AB5C8;
+		offsets.campaignDiff2 = 0x01604000;
+		offsets.equipmentCosts = 0x0160DCC8;
+		offsets.saveGameHandler = 0x02C1B904;
+		offsets.ancLimit = 0x005A5CAD;
+		offsets.maxUnitSize = 0x008efe01;
+		offsets.maxBgSize1 = 0x008ec815;
+		offsets.maxBgSize2 = 0x008ec81a;
+		offsets.unlockConsoleCommands1 = 0x00d27ae3;
+		offsets.unlockConsoleCommands2 = 0x00d2cd2a;
+		offsets.highlightUnits = 0x009e1a64;
+		offsets.religionLimit = 0x0411E0E;
+		offsets.scriptCounters = 0x016A7A58;
+		offsets.scriptCountersSet = 0x016A7A30;
+		offsets.buildingChainLimit = 0x008AC174;
+		offsets.guildCooldown = 0x004F5D7B;
 
 		offsets.audioEnable = reinterpret_cast<bool*>(0x01639f1d);
 		offsets.audioMaster_vol = reinterpret_cast<int*>(0x01639f60);

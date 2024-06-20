@@ -9,14 +9,13 @@
 #include <set>
 
 #include "globals.h"
-#include "smallFuncs.h"
 #include "character.h"
 #include "faction.h"
 #include "unit.h"
 #include "battle.h"
 #include "army.h"
 #include "characterRecord.h"
-#include "gameSTDUIHelpers.h"
+#include "gameUi.h"
 #include "imgui_notify.h"
 
 namespace battleCreator
@@ -394,7 +393,7 @@ namespace battleCreator
 	void initStructsForResults()
 	{
 		battleArmies.sides.clear();
-		battleDataS* battle = smallFuncs::getGameDataAll()->battleHandler;
+		battleDataS* battle = battleHelpers::getBattleData();
 		for (int i = 0; i < battle->sidesNum; i++)
 		{
 			addSide(battle->sides[i]);
@@ -473,7 +472,7 @@ namespace battleCreator
 
 	void writeSettlementJson(const std::string& filePath, const std::string& lastSettlementWorldRec)
 	{
-		battleDataS* battleData = smallFuncs::getGameDataAll()->battleHandler;
+		battleDataS* battleData = battleHelpers::getBattleData();
 		if (!battleData->isFortBattle)
 			battleSett.fort.isFort = false;
 		else
@@ -501,13 +500,12 @@ namespace battleCreator
 	bool doTransfer()
 	{
 		Sleep(200);
-		battleDataS* battle = smallFuncs::getGameDataAll()->battleHandler;
+		const battleDataS* battle = battleHelpers::getBattleData();
 
 		std::vector<std::pair<shared_ptr<unitDataS>, unit*>>transferPairs;
 		if (battleArmies.sides.size() != battle->sidesNum)
 		{
-			MessageBoxA(NULL, "The number of sides in the results file and in the battle does not match.", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
-			
+			MessageBoxA(nullptr, "The number of sides in the results file and in the battle does not match.", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 			clearStructs();
 			return false;
 		}
@@ -620,7 +618,7 @@ namespace battleCreator
 		if (selectedWinner != 2)//draw
 		{
 			setWinner(selectedWinner);
-			bool res = gameSTDUIHelpers::useButton("prebattle_auto_resolve_button");
+			bool res = gameUiHelpers::useButton("prebattle_auto_resolve_button");
 			if (res == false)
 			{
 				MessageBoxA(NULL, "Something goes wrong!", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);

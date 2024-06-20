@@ -1,18 +1,17 @@
-#include "PlannedRetreatRoute.h"
+#include "plannedRetreatRoute.h"
 #include "graphicsD3D.h"
 #include <iomanip>
 #include <mutex>
-#include "smallFuncs.h"
-#include "MapTextDrawer.h"
+#include "mapTextDrawer.h"
 #include "character.h"
 #include "faction.h"
 
-#include "PathMap.h"
+#include "pathMap.h"
 #include "imgui_notify.h"
 
 #include <filesystem>
 
-#include "m2tweopHelpers.h"
+#include "gameHelpers.h"
 #include "retreater.h"
 #include "strategyMap.h"
 
@@ -112,7 +111,7 @@ namespace plannedRetreatRoute
 		state.possibleCoords.clear();
 		state.possibleCoords.reserve(state.maxPathLenInTiles * state.maxPathLenInTiles);
 
-		float possibleMP = smallFuncs::getMinimumMovePointsForArmy(army) * 0.9;
+		float possibleMP = armyHelpers::getMinimumMovePointsForArmy(army) * 0.9;
 
 
 		int coordsMod = 1;
@@ -163,7 +162,7 @@ namespace plannedRetreatRoute
 	}
 	std::string onGameSave()
 	{
-		std::string fPath = m2tweopHelpers::getModPath();
+		std::string fPath = gameHelpers::getModPath();
 		
 		fPath += "\\eopData\\Temp_PlannedRetreatRoute";
 		filesystem::remove_all(fPath);
@@ -298,29 +297,21 @@ namespace plannedRetreatRoute
 		state.workingNow = false;
 	}
 
-	bool tryRetreatArmyWithRoute(battleArmy& army, std::pair<int, int>& resCoords)
+	bool tryRetreatArmyWithRoute(const battleArmy& army, std::pair<int, int>& resCoords)
 	{
 		auto* route = getRouteWithCoords(army.character->xCoord, army.character->yCoord);
 		if (route == nullptr)
-		{
 			return false;
-		}
-		int x = route->routeStart.x;
-		int y = route->routeStart.y;
-
-		int destx = route->routeEnd.x;
-		int desty = route->routeEnd.y;
-		float dist = smallFuncs::getDistanceInTiles(x, y, destx, desty);
-
-		float mp = smallFuncs::getMinimumMovePointsForArmy(army.army);
-		int maneurDistance = 3;
-		{
-			void* cashe = pathFinder::createCacheForArmy(army.army, dist + maneurDistance);
-			auto resCoords2 = pathFinder::GetNearestTileForArmyFromCashe(cashe,x,y, destx, desty);
-			characterHelpers::teleportCharacter(army.character, resCoords2.first, resCoords2.second);
-
-			pathFinder::deleteCacheForDistances(cashe);
-		}
+		const int x = route->routeStart.x;
+		const int y = route->routeStart.y;
+		const int destX = route->routeEnd.x;
+		const int destY = route->routeEnd.y;
+		const float dist = stratMapHelpers::getDistanceInTiles(x, y, destX, destY);
+		constexpr int distance = 3;
+		void* cache = pathFinder::createCacheForArmy(army.army, dist + distance);
+		const auto [xCoord, yCoord] = pathFinder::getNearestTileForArmyFromCache(cache, x, y, destX, destY);
+		characterHelpers::teleportCharacter(army.character, xCoord, yCoord);
+		pathFinder::deleteCacheForDistances(cache);
 
 		resCoords = { route->routeEnd.x ,route->routeEnd.y };
 		removeRoutesWithCoords(route->routeStart.x, route->routeStart.y);

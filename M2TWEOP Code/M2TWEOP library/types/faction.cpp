@@ -6,13 +6,10 @@
 #include "faction.h"
 
 #include "dataOffsets.h"
-#include "gameDataAllHelper.h"
 #include "gameHelpers.h"
-#include "smallFuncs.h"
 #include "technicalHelpers.h"
 #include "fort.h"
 #include "unit.h"
-#include "m2tweopHelpers.h"
 #include "army.h"
 #include "campaign.h"
 #include "strategyMap.h"
@@ -35,8 +32,8 @@ void factionStruct::setColor(const uint8_t r, const uint8_t g, const uint8_t b)
 	facRecord->primary_colour_red = r;
 	facRecord->primary_colour_green = g;
 	facRecord->primary_colour_blue = b;
-	smallFuncs::scriptCommand("console_command", "toggle_fow");
-	smallFuncs::scriptCommand("console_command", "toggle_fow");
+	gameHelpers::scriptCommand("console_command", "toggle_fow");
+	gameHelpers::scriptCommand("console_command", "toggle_fow");
 }
 
 void factionStruct::setSecondaryColor(const uint8_t r, const uint8_t g, const uint8_t b)
@@ -45,8 +42,8 @@ void factionStruct::setSecondaryColor(const uint8_t r, const uint8_t g, const ui
 	facRecord->secondary_colour_red = r;
 	facRecord->secondary_colour_green = g;
 	facRecord->secondary_colour_blue = b;;
-	smallFuncs::scriptCommand("console_command", "toggle_fow");
-	smallFuncs::scriptCommand("console_command", "toggle_fow");
+	gameHelpers::scriptCommand("console_command", "toggle_fow");
+	gameHelpers::scriptCommand("console_command", "toggle_fow");
 }
 
 void factionStruct::hideRevealedTile(const int x, const int y)
@@ -113,9 +110,9 @@ namespace factionHelpers
 	void setStringProperty(factionStruct* fac, std::string newS)
 	{
 		if (fieldIndex == factionStruct_ai_label)
-			fastFunctsHelpers::setCryptedString(&fac->aiLabel, newS.c_str());
+			gameStringHelpers::setHashedString(&fac->aiLabel, newS.c_str());
 		if (fieldIndex == factionStruct_name)
-			fastFunctsHelpers::setCryptedString(&fac->factionRecord->facName, newS.c_str());
+			gameStringHelpers::setHashedString(&fac->factionRecord->facName, newS.c_str());
 	}
 
 	std::string getFactionName(const factionStruct* fac)
@@ -128,17 +125,15 @@ namespace factionHelpers
 
 		UNICODE_STRING** nameMem = new UNICODE_STRING*;
 		fac->localizedName = nameMem;
-
-		smallFuncs::createUniString(fac->localizedName, newName);
+		gameStringHelpers::createUniString(fac->localizedName, newName);
 	}
 
 	UNICODE_STRING** getFactionNameLocal(factionStruct* fac)
 	{
-
-		std::string facname = fac->factionRecord->facName;
-		std::transform(facname.begin(), facname.end(), facname.begin(), ::toupper);
-		UNICODE_STRING** nameMem = new UNICODE_STRING*;
-		smallFuncs::createUniString(nameMem, facname.c_str());
+		std::string facName = fac->factionRecord->facName;
+		std::transform(facName.begin(), facName.end(), facName.begin(), ::toupper);
+		auto nameMem = new UNICODE_STRING*;
+		gameStringHelpers::createUniString(nameMem, facName.c_str());
 		UNICODE_STRING*** nameMem2 = &nameMem;
 		DWORD funcAddr = codes::offsets.getStringFromTable;
 		DWORD stringTable = dataOffsets::offsets.stringTable;
@@ -151,8 +146,13 @@ namespace factionHelpers
 			call eax
 			mov nameMem2, eax
 		}
-
 		return *nameMem2;
+	}
+	
+	//legacy
+	bool getTileVisibility(factionStruct* faction, const int x, const int y)
+	{
+		return faction->getTileVisibility(x,y);
 	}
 
 	bool hasMilitaryAccess(const factionStruct* fac1, const factionStruct* fac2)
@@ -193,7 +193,7 @@ namespace factionHelpers
 			add esp, 4
 		}
 		DWORD spawnCreatedObject = codes::offsets.spawnCreatedObject;
-		coords* spawnCoords = new coords();
+		auto spawnCoords = new coordPair();
 		spawnCoords->xCoord = x;
 		spawnCoords->yCoord = y;
 		_asm
@@ -270,7 +270,7 @@ namespace factionHelpers
 		const int unitCount = units.size();
 		if (unitCount > 20 || unitCount < 1)
 		{
-			m2tweopHelpers::logStringGame("factionStruct.splitArmy: unit count must be between 1 and 20.");
+			gameHelpers::logStringGame("factionStruct.splitArmy: unit count must be between 1 and 20.");
 			return nullptr;
 		}
 		auto tile = stratMapHelpers::getTile(x, y);
@@ -278,18 +278,18 @@ namespace factionHelpers
 		{
 			if (tileChar->armyLeaded && tileChar->armyLeaded->faction != faction)
 			{
-				m2tweopHelpers::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy.");
+				gameHelpers::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy.");
 				return nullptr;
 			}
 		}
 		if (auto tileSett = tile->getSettlement(); tileSett && tileSett->faction != faction)
 		{
-			m2tweopHelpers::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy settlement.");
+			gameHelpers::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy settlement.");
 			return nullptr;
 		}
 		if (auto tileFort = tile->getFort(); tileFort && tileFort->faction != faction)
 		{
-			m2tweopHelpers::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy fort.");
+			gameHelpers::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy fort.");
 			return nullptr;
 		}
 		armyStruct* stack = nullptr;
@@ -313,11 +313,11 @@ namespace factionHelpers
 			if (distance(stack->shipArmy->gen->xCoord, stack->shipArmy->gen->yCoord, x, y) > 1.5)
 				disembark(stack->shipArmy, x, y);
 		}
-		auto stratPathFind = gameDataAllHelper::get()->stratPathFinding; 
+		auto stratPathFind = gameHelpers::getGameDataAll()->stratPathFinding; 
 		if (!GAME_FUNC(bool(__thiscall*)(stratPathFinding*, unit**, int, coordPair*), canArmySplit)
 			(stratPathFind, &unitList[0], unitCount, &targetCoords))
 		{
-			m2tweopHelpers::logStringGame("factionStruct.splitArmy: can not split army.");
+			gameHelpers::logStringGame("factionStruct.splitArmy: can not split army.");
 			return nullptr;
 		}
 		DWORD splitArmy = codes::offsets.splitArmy;

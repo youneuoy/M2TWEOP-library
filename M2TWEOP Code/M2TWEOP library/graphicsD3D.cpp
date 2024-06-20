@@ -192,9 +192,29 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	d3d9_state_block->Release();
 
 }
+
+std::tuple<int, int, void*> graphicsExport::loadTextureToGame(const std::string& path)
+{
+	int x = 0;
+	int y = 0;
+	LPDIRECT3DTEXTURE9 retTexture = loadTexture(path.c_str(), &x, &y);
+
+	sol::as_table_t int2 = sol::as_table(std::vector<int>{
+		x, y
+	});
+
+	return std::make_tuple(x, y, reinterpret_cast<void*>(retTexture));
+}
+	
+void graphicsExport::unloadTextureFromGame(void* texture)
+{
+	unloadTexture(static_cast<LPDIRECT3DTEXTURE9>(texture));
+}
+
+
 void graphicsD3D::onDrawAllGameStuff()
 {
-	if (graphicsD3D::dataS.pDevice->BeginScene() < 0)
+	if (dataS.pDevice->BeginScene() < 0)
 	{
 		return;
 	}
@@ -206,23 +226,10 @@ void graphicsD3D::onDrawAllGameStuff()
 	auto& developerMode = globals::dataS.Modules.developerMode;
 	developerMode.Update();
 
-	drawOnEndScene(graphicsD3D::dataS.pDevice);
-
-
-	int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
-
-	//1-stratmap
-	//2-tactmap
-	int drawType = 2;
-	if (battleState == 0)
-	{
-		drawType = 1;
-	}
-
-	if (drawType == 1)
-	{
+	drawOnEndScene(dataS.pDevice);
+	
+	if (!battleHelpers::inBattle())
 		globals::dataS.Modules.contextMenuStrat.Draw();
-	}
 
 	//graphicsD3D::Draw(pDevice);
 	if (drawParams.drawEOPStartInfo == true)

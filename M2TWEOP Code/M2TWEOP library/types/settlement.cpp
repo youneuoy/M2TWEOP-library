@@ -9,17 +9,15 @@
 #include "character.h"
 #include "characterRecord.h"
 #include "eopBuildings.h"
-#include "fastFunctsHelpers.h"
+#include "gameStringHelpers.h"
 #include "functionsOffsets.h"
-#include "gameDataAllHelper.h"
 #include "battle.h"
-#include "smallFuncs.h"
 #include "technicalHelpers.h"
 #include "faction.h"
 #include "unit.h"
-#include "m2tweopHelpers.h"
 #include "army.h"
 #include "campaign.h"
+#include "gameHelpers.h"
 #include "strategyMap.h"
 #include "stratModelsChange.h"
 
@@ -42,7 +40,7 @@ std::string eopSettlementDataDb::onGameSave()
 			}
 		}
 	}
-	std::string fPath = m2tweopHelpers::getModPath();
+	std::string fPath = gameHelpers::getModPath();
 	fPath += "\\eopData\\TempSaveData";
 	filesystem::remove_all(fPath);
 	filesystem::create_directory(fPath);
@@ -89,7 +87,7 @@ void eopSettlementDataDb::onGameLoaded()
 	const auto stratMap = stratMapHelpers::getStratMap();
 	if (!stratMap)
 	{
-		m2tweopHelpers::logStringGame("eopSettlementDataDb.onGameLoaded: stratMap not found.");
+		gameHelpers::logStringGame("eopSettlementDataDb.onGameLoaded: stratMap not found.");
 		return;
 	}
 	for (int i = 0; i < stratMap->regionsNum; i++)
@@ -243,7 +241,7 @@ namespace settlementHelpers
 				if (!character->characterRecord->label || character->characterRecord->labelCrypt == 0)
 				{
 					auto label = std::string(character->characterRecord->shortName) + "_" + std::to_string(character->characterRecord->index);
-					fastFunctsHelpers::setCryptedString(&character->characterRecord->label, label.c_str());
+					gameStringHelpers::setHashedString(&character->characterRecord->label, label.c_str());
 				}
 				int unitId = character->bodyguards->eduEntry->index;
 				int xp = character->bodyguards->expScreen;
@@ -309,7 +307,7 @@ namespace settlementHelpers
 		}
 		if (!upgraded)
 		{
-			m2tweopHelpers::logStringGame("settlementStruct.upgrade: could not upgrade settlement.");
+			gameHelpers::logStringGame("settlementStruct.upgrade: could not upgrade settlement.");
 			return;
 		}
 		edbEntry* coreEntry;
@@ -376,11 +374,9 @@ namespace settlementHelpers
 	
 	void changeSettlementName(settlementStruct* sett, const char* newName)
 	{
-
-		UNICODE_STRING** nameMem = new UNICODE_STRING*;
+		const auto nameMem = new UNICODE_STRING*;
 		sett->localizedName = nameMem;
-
-		smallFuncs::createUniString(sett->localizedName, newName);
+		gameStringHelpers::createUniString(sett->localizedName, newName);
 	}
 	
 	void createBuilding(settlementStruct* sett, const char* building_level_id)
@@ -405,7 +401,7 @@ namespace settlementHelpers
 	{
 
 		DWORD adr = codes::offsets.destroyBuildingFunc;
-		char** buildTypeS = fastFunctsHelpers::makeCryptedString(typeName);
+		char** buildTypeS = gameStringHelpers::createHashedString(typeName);
 		if (buildTypeS == nullptr)return;
 		char* buildType = buildTypeS[0];
 		char* hash = buildTypeS[1];

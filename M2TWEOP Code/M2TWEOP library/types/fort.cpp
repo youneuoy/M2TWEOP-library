@@ -14,6 +14,7 @@
 #include "characterRecord.h"
 #include "army.h"
 #include "campaignDb.h"
+#include "cultures.h"
 #include "strategyMap.h"
 
 namespace fortHelpers
@@ -140,9 +141,8 @@ namespace fortHelpers
 		factionStruct* faction = fac;
 		character* newgen = characterHelpers::createCharacterWithoutSpawning("named character", faction, 30, "fort", "fort", 31, "default", x, y);
 		armyStruct* newarmy = armyHelpers::createArmy(newgen);
-		auto cultureID = fac->cultureID;
-		auto cultureDb = reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
-		auto culture = cultureDb->cultures[cultureID];
+		auto cultureDb = cultures::getCultureDb();
+		auto culture = cultureDb->cultures[fac->cultureID];
 		auto cost = culture.fortCost;
 		auto oldMoney = fac->money;
 		fac->money = cost;

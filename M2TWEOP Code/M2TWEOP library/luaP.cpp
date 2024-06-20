@@ -6,18 +6,14 @@
 
 #include "casModelsDrawer.h"
 #include "console.h"
-#include "gameDataAllHelper.h"
 #include "plugData.h"
 #include "settlementConversionLvlSetter.h"
-#include "smallFuncs.h"
 #include "stratModelsChange.h"
 #include "tilesChange.h"
 #include "realGameTypes.h"
 #include <windows.h>
 #include "gameHelpers.h"
-#include "m2tweopHelpers.h"
 #include "technicalHelpers.h"
-#include "gameSTDUIHelpers.h"
 #include "character.h"
 #include "settlement.h"
 #include "characterRecord.h"
@@ -27,8 +23,11 @@
 #include "battle.h"
 #include "campaign.h"
 #include "campaignDb.h"
-#include "DeveloperMode.h"
+#include "cultures.h"
+#include "developerMode.h"
 #include "eopBuildings.h"
+#include "gameUi.h"
+#include "graphicsD3D.h"
 #include "strategyMap.h"
 std::vector<std::string> luaP::logS;
 std::vector<std::string> luaP::logCommands;
@@ -99,16 +98,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		sol::table objectsTable;
 		sol::table cameraTable;
 		sol::table gameTable;
-		sol::table gameUITable;
 	}tables;
-
-	struct
-	{
-		sol::usertype<uiElement>uiElement;
-		sol::usertype<settlementInfoScroll>settlementInfoScroll;
-		sol::usertype<settlementTextStrings>settlementTextStrings;
-		sol::usertype<uiString>uiString;
-	}types;
 	
 	luaState = {};
 	luaPath = modPath + R"(\youneuoy_Data\plugins\lua)";
@@ -230,7 +220,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	print(mPath);
 	*/
 
-	tables.M2TWEOPTable.set_function("getModPath", &m2tweopHelpers::getModPath);
+	tables.M2TWEOPTable.set_function("getModPath", &gameHelpers::getModPath);
 	/***
 	Open/close the lua console.
 
@@ -282,7 +272,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	M2TWEOP.saveGame("mods/bare_geomod/saves/newsave.sav");
 	*/
-	tables.M2TWEOPTable.set_function("saveGame", &smallFuncs::saveGame);
+	tables.M2TWEOPTable.set_function("saveGame", &gameHelpers::saveGame);
 	/***
 	Function to get the game version.
 	@function M2TWEOP.getGameVersion
@@ -290,7 +280,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	M2TWEOP.getGameVersion();
 	*/
-	tables.M2TWEOPTable.set_function("getGameVersion", &smallFuncs::getGameVersion);
+	tables.M2TWEOPTable.set_function("getGameVersion", &gameHelpers::getGameVersion);
 	/***
 	Set perfect spy.
 	@function M2TWEOP.setPerfectSpy
@@ -298,7 +288,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 		M2TWEOP.setPerfectSpy(true);
 	*/
-	tables.M2TWEOPTable.set_function("setPerfectSpy", &m2tweopHelpers::setPerfectSpy);
+	tables.M2TWEOPTable.set_function("setPerfectSpy", &campaignHelpers::setPerfectSpy);
 	/***
 	Get local faction ID.
 	@function M2TWEOP.getLocalFactionID
@@ -306,7 +296,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 		local localFaction = M2TWEOP.getLocalFactionID();
 	*/
-	tables.M2TWEOPTable.set_function("getLocalFactionID", &m2tweopHelpers::getLocalFactionID);
+	tables.M2TWEOPTable.set_function("getLocalFactionID", &campaignHelpers::getLocalFactionID);
 	/***
 	Function to return the path to the plugin (location of your LUA files).
 	@function M2TWEOP.getPluginPath
@@ -315,7 +305,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	plPath=M2TWEOP.getPluginPath();
 	print(plPath);
 	*/
-	tables.M2TWEOPTable.set_function("getPluginPath", &m2tweopHelpers::getLuaPath);
+	tables.M2TWEOPTable.set_function("getPluginPath", &gameHelpers::getLuaPath);
 	/***
 	Log something to the game log.
 	@function M2TWEOP.logGame
@@ -323,7 +313,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	 M2TWEOP.logGame("log message");
 	*/
-	tables.M2TWEOPTable.set_function("logGame", &m2tweopHelpers::logStringGame);
+	tables.M2TWEOPTable.set_function("logGame", &gameHelpers::logStringGame);
 	/***
 	Load a savegame.
 	@function M2TWEOP.loadGame
@@ -331,7 +321,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	 M2TWEOP.loadGame("mods/bare_geomod/saves/test.sav");
 	*/
-	tables.M2TWEOPTable.set_function("loadGame", &m2tweopHelpers::loadSaveGame);
+	tables.M2TWEOPTable.set_function("loadGame", &gameHelpers::loadSaveGame);
 
 	/***
 	Load d3d texture
@@ -349,7 +339,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath().."/youneuoy_textures/test.dds");
 	*/
 
-	tables.M2TWEOPTable.set_function("loadTexture", &m2tweopHelpers::loadTextureToGame);
+	tables.M2TWEOPTable.set_function("loadTexture", &graphicsExport::loadTextureToGame);
 	/***
 	Unload d3d texture
 	@function M2TWEOP.unloadTexture
@@ -359,7 +349,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	testImage.x, testImage.y, testImage.img=M2TWEOP.loadTexture(M2TWEOP.getModPath().."/youneuoy_textures/test.dds");
 	M2TWEOP.unloadTexture(testImage.img);
 	*/
-	tables.M2TWEOPTable.set_function("unloadTexture", &m2tweopHelpers::unloadTextureFromGame);
+	tables.M2TWEOPTable.set_function("unloadTexture", &graphicsExport::unloadTextureFromGame);
 	/***
 	Sets the limit of ancillaries per character on the stratmap.
 	@function M2TWEOP.setAncillariesLimit
@@ -367,14 +357,14 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	M2TWEOP.setAncillariesLimit(15);
 	*/
-	tables.M2TWEOPTable.set_function("setAncillariesLimit", &smallFuncs::setAncLimit);
+	tables.M2TWEOPTable.set_function("setAncillariesLimit", &gameHelpers::setAncLimit);
 	/***
 	Unlocks all console commands, also allows the use of the 'control' command to change factions in singleplayer campaigns.
 	@function M2TWEOP.unlockGameConsoleCommands
 	@usage
 	M2TWEOP.unlockGameConsoleCommands();
 	*/
-	tables.M2TWEOPTable.set_function("unlockGameConsoleCommands", &smallFuncs::unlockConsoleCommands);
+	tables.M2TWEOPTable.set_function("unlockGameConsoleCommands", &gameHelpers::unlockConsoleCommands);
 	/***
 	Sets the maximum amount of soldiers a general's bodyguard unit can replenish to. The value is multiplied by the unit size modifiers (e.g Huge = 2.5 multiplier)
 	@function M2TWEOP.setMaxBgSize
@@ -384,7 +374,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	M2TWEOP.setMaxBgSize(150) -- On huge unit size, 150*2.5 = 300 max bodyguard size
 	M2TWEOP.setMaxBgSize(50)  -- On huge unit size, 50*2.5 = 125 max bodyguard size
 	*/
-	tables.M2TWEOPTable.set_function("setMaxBgSize", &smallFuncs::setMaxBgSize);
+	tables.M2TWEOPTable.set_function("setMaxBgSize", &gameHelpers::setMaxBgSize);
 
 	/***
 	Sets the new maximum soldier count.
@@ -394,7 +384,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	M2TWEOP.setEDUUnitsSize(1,300);
 	*/
-	tables.M2TWEOPTable.set_function("setEDUUnitsSize", &smallFuncs::setMaxUnitSize);
+	tables.M2TWEOPTable.set_function("setEDUUnitsSize", &gameHelpers::setMaxUnitSize);
 
 	/***
 	Gets a struct containing color information about the settlement info scroll.
@@ -407,7 +397,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	settlementInfoScroll:getUIStrings.incomeString.green = 0
 	settlementInfoScroll:getUIStrings.incomeString.blue = 0
 	*/
-	tables.M2TWEOPTable.set_function("getSettlementInfoScroll", &m2tweopHelpers::getSettlementInfoScroll);
+	tables.M2TWEOPTable.set_function("getSettlementInfoScroll", &gameUiHelpers::getSettlementInfoScroll);
 
 	/***
 	* Sets the new maximum amount of building levels within a chain.
@@ -417,7 +407,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	* M2TWEOP.setBuildingChainLimit(12);
 	*/
 
-	tables.M2TWEOPTable.set_function("setBuildingChainLimit", &smallFuncs::setBuildingChainLimit);
+	tables.M2TWEOPTable.set_function("setBuildingChainLimit", &gameHelpers::setBuildingChainLimit);
 
 	/***
 	* Sets which level of castle converts to which level of city.
@@ -446,7 +436,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	* @usage
 	* M2TWEOP.setGuildCooldown(5)
 	*/
-	tables.M2TWEOPTable.set_function("setGuildCooldown", &smallFuncs::setGuildCooldown);
+	tables.M2TWEOPTable.set_function("setGuildCooldown", &gameHelpers::setGuildCooldown);
 
 
 	/***
@@ -455,7 +445,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	M2TWEOP.toggleUnitsBMapHighlight();
 	*/
-	tables.M2TWEOPTable.set_function("toggleUnitsBMapHighlight", &smallFuncs::toggleUnitHighlight);
+	tables.M2TWEOPTable.set_function("toggleUnitsBMapHighlight", &gameHelpers::toggleUnitHighlight);
 
 	/***
 	Get the current x, y and z coords of the battlemap camera
@@ -475,7 +465,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	M2TWEOP.setReligionsLimit(25);
 	*/
-	tables.M2TWEOPTable.set_function("setReligionsLimit", &smallFuncs::setReligionsLimit);
+	tables.M2TWEOPTable.set_function("setReligionsLimit", &gameHelpers::setReligionsLimit);
 
 	/***
 	Set the siege points required to make different siege equipment.
@@ -485,7 +475,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 		M2TWEOP.setEquipmentCosts(0, 25);
 	*/
-	tables.M2TWEOPTable.set_function("setEquipmentCosts", &m2tweopHelpers::setEquipmentCosts);
+	tables.M2TWEOPTable.set_function("setEquipmentCosts", &gameHelpers::setEquipmentCosts);
 
 	/***
 	Checks if a tile is free.
@@ -505,7 +495,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	local x,y=M2TWEOP.getGameTileCoordsWithCursor();
 	*/
-	tables.M2TWEOPTable.set_function("getGameTileCoordsWithCursor", &m2tweopHelpers::getGameTileCoordsWithCursor);
+	tables.M2TWEOPTable.set_function("getGameTileCoordsWithCursor", &stratMapHelpers::getGameTileCoordsWithCursorLua);
 	tables.M2TWEOPTable.set_function("getTileRegionID", &stratMapHelpers::getTileRegionID);
 	/***
 	Get a specific tile's visibility according to faction (i.e can a faction see a tile) Note: Once the tile has been seen by a faction, it will always return true. e.g If you have spotted a settlement but it is now outside of the fog of war, it will still be classed as visible. 
@@ -523,8 +513,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 		print("Tile is not visible to faction "..faction.name)
 	end
 	*/
-	tables.M2TWEOPTable.set_function("getTileVisibility", &m2tweopHelpers::getTileVisibility);
-	tables.M2TWEOPTable.set_function("getRegionOwner", &m2tweopHelpers::getRegionOwner);
+	tables.M2TWEOPTable.set_function("getTileVisibility", &factionHelpers::getTileVisibility);
+	tables.M2TWEOPTable.set_function("getRegionOwner", &stratMapHelpers::getRegionOwner);
 	/***
 	Get religion name by index.
 	@function M2TWEOP.getReligionName
@@ -594,7 +584,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	local options = M2TWEOP.getOptions1();
 	*/
-	tables.M2TWEOPTable.set_function("getOptions1", &m2tweopHelpers::getOptions1);
+	tables.M2TWEOPTable.set_function("getOptions1", &gameHelpers::getOptions1);
 	/***
 	Get some game options.
 	@function M2TWEOP.getOptions2
@@ -602,7 +592,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	local options = M2TWEOP.getOptions2();
 	*/
-	tables.M2TWEOPTable.set_function("getOptions2", &m2tweopHelpers::getOptions2);
+	tables.M2TWEOPTable.set_function("getOptions2", &gameHelpers::getOptions2);
 	/***
 	Get the campaign difficulty modifiers.
 	@function M2TWEOP.getCampaignDifficulty1
@@ -610,7 +600,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	local modifiers = M2TWEOP.getCampaignDifficulty1();
 	*/
-	tables.M2TWEOPTable.set_function("getCampaignDifficulty1", &m2tweopHelpers::getCampaignDifficulty1);
+	tables.M2TWEOPTable.set_function("getCampaignDifficulty1", &campaignHelpers::getCampaignDifficulty1);
 	/***
 	Get the campaign difficulty modifiers.
 	@function M2TWEOP.getCampaignDifficulty2
@@ -618,7 +608,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	local modifiers = M2TWEOP.getCampaignDifficulty2();
 	*/
-	tables.M2TWEOPTable.set_function("getCampaignDifficulty2", &m2tweopHelpers::getCampaignDifficulty2);
+	tables.M2TWEOPTable.set_function("getCampaignDifficulty2", &campaignHelpers::getCampaignDifficulty2);
 	/***
 	Get the campaign options.
 	@function M2TWEOP.getCampaignDb
@@ -659,87 +649,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	local moveCost = M2TWEOP.getTileMoveCost(153, 245, 154, 245);
 	*/
 	tables.M2TWEOPTable.set_function("getTileMoveCost", &stratMapHelpers::getTileMoveCost);
-
-	/// GameUI
-	//@section gameSTDUITable
-
-	/***
-	Basic gameSTDUI table
-
-	@tfield getUiElement getUiElement
-
-	@table gameSTDUI
-	*/
-
-
-
-	tables.gameUITable = luaState.create_table("gameSTDUI");
-	/***
-	Get a game UI element, element must be opened.
-	@function gameSTDUI.getUiElement
-	@tparam string elementName
-	@treturn uiElementStruct element
-	@usage
-	function analyzeScroll(scrollName)
-		local scroll, uiList = gameSTDUI.getUiElement(scrollName), "UI elements of scroll: "..scrollName
-		if scroll ~= nil then
-			for i = 0, scroll.subElementsNum - 1, 1 do
-				uiList = uiList.."\n\t"..i.." "..scroll:getSubElement(i).elementName
-			end
-			print(uiList)
-		end
-	end
-	*/
-
-	tables.gameUITable.set_function("getUiElement", &gameSTDUIHelpers::getUiElement);
-
-	/// UIElement
-	//@section uiElementStructTable
-
-	/***
-	Basic uiElementStruct table
-
-	@tfield string elementName
-	@tfield int xSize
-	@tfield int ySize
-	@tfield int xPos
-	@tfield int yPos
-	@tfield int subElementsNum
-	@tfield getSubElement getSubElement
-	@tfield execute execute
-
-	@table uiElementStruct
-	*/
-	types.uiElement = luaState.new_usertype<uiElement>("uiElementStruct");
-	types.uiElement.set("elementName", sol::property(
-		&gameSTDUIHelpers::getUIElementName));
-	types.uiElement.set("xSize", &uiElement::xSize);
-	types.uiElement.set("ySize", &uiElement::ySize);
-	types.uiElement.set("xPos", &uiElement::xPos);
-	types.uiElement.set("yPos", &uiElement::yPos);
-	types.uiElement.set("subElementsNum", &uiElement::subElementsNum);
-	/***
-	Get a subelement of an UI element using the index.
-	@function uiElementStruct:getSubElement
-	@tparam int index Starts from 0.
-	@treturn uiElementStruct subelement
-	@usage
-	local financeScroll = gameSTDUI.getUiElement("finance_scroll");
-	local subElement1 = financeScroll:getSubElement(5);
-	*/
-	types.uiElement.set("getSubElement", &gameSTDUIHelpers::getSubElement);
-	/***
-	execute standard game UI element, use only for buttons
-	@function uiElementStruct:execute
-	@usage
-	local financeScroll = gameSTDUI.getUiElement("finance_scroll");
-	--at index 5 we have faction_listviews_button
-	local subElement1 = financeScroll:getSubElement(5);
-	subElement1:execute();
-	*/
-	types.uiElement.set("execute", &gameSTDUIHelpers::useUiElement);
-
-
 	///StratmapObjects
 	//@section objectsTable
 
@@ -996,7 +905,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	isExist, counterValue = stratmap.game.getScriptCounter("SomeCounter")
 	*/
-	tables.gameTable.set_function("getScriptCounter", &gameHelpers::getScriptCounter);
+	tables.gameTable.set_function("getScriptCounter", &gameHelpers::getScriptCounterLua);
 	/***
 	Set an event\_counter value, does not work for counters, only event\_counters.
 	@function stratmap.game.setScriptCounter
@@ -1005,7 +914,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	stratmap.game.setScriptCounter("SomeCounter", 25)
 	*/
-	tables.gameTable.set_function("setScriptCounter", &smallFuncs::setScriptCounter);
+	tables.gameTable.set_function("setScriptCounter", &gameHelpers::setScriptCounter);
 	/***
 	Fire a game event message. Picture needs to be provided in the ui folders as default.
 	@function stratmap.game.historicEvent
@@ -1015,7 +924,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	stratmap.game.historicEvent("my_event", "my title", "my description")
 	*/
-	tables.gameTable.set_function("historicEvent", &smallFuncs::historicEvent);
+	tables.gameTable.set_function("historicEvent", &gameHelpers::historicEvent);
 
 	/***
 	Fire any script command available from the game. It is always just 2 parameters in the function, the command name and all the arguments as 1 string in the second parameter.
@@ -1037,7 +946,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 
 	end_set_faction_banner]], facName))
 	*/
-	tables.gameTable.set_function("scriptCommand", &gameHelpers::scriptCommand);
+	tables.gameTable.set_function("scriptCommand", &gameHelpers::scriptCommandLua);
 	///Stratmap
 	//@section stratmapTable
 
@@ -1057,87 +966,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.stratmapTable.set("objects", tables.objectsTable);
 	tables.stratmapTable.set("camera", tables.cameraTable);
 	tables.stratmapTable.set("game", tables.gameTable);
-	///settlementTextStrings
-	//@section settlementTextStrings
-
-	/***
-	Basic settlementTextStrings table.
-
-	@tfield uiString incomeString
-	@tfield uiString incomeValue
-	@tfield uiString publicOrderString
-	@tfield uiString publicOrderValue
-	@tfield uiString populationString
-	@tfield uiString populationValue
-	@tfield uiString populationGrowthString
-	@tfield uiString populationGrowthValue
-
-	@table settlementTextStrings
-	*/
-	types.settlementTextStrings = luaState.new_usertype<settlementTextStrings>("settlementTextStrings");
-	types.settlementTextStrings.set("incomeString", &settlementTextStrings::incomeString);
-	types.settlementTextStrings.set("incomeValue", &settlementTextStrings::incomeValue);
-	types.settlementTextStrings.set("publicOrderString", &settlementTextStrings::publicOrderString);
-	types.settlementTextStrings.set("publicOrderValue", &settlementTextStrings::publicOrderValue);
-	types.settlementTextStrings.set("populationString", &settlementTextStrings::populationString);
-	types.settlementTextStrings.set("populationValue", &settlementTextStrings::populationValue);
-	types.settlementTextStrings.set("populationGrowthString", &settlementTextStrings::populationGrowthString);
-	types.settlementTextStrings.set("populationGrowthValue", &settlementTextStrings::populationGrowthValue);
-
-	///uiString
-	//@section uiString
-
-	/***
-	Basic uiString table.
-
-	@tfield int thickness (0-255)
-	@tfield int blue (0-255)
-	@tfield int green (0-255)
-	@tfield int red (0-255)
-
-	@table uiString
-	*/
-	types.uiString = luaState.new_usertype<uiString>("uiString");
-	types.uiString.set("thickness", &uiString::thickness);
-	types.uiString.set("blue", &uiString::blue);
-	types.uiString.set("green", &uiString::green);
-	types.uiString.set("red", &uiString::red);
-
-	///settlementInfoScroll
-	//@section settlementInfoScroll
-
-	/***
-	Basic settlementInfoScroll table.
-
-	@tfield settlementStruct settlement
-	@tfield getUIStrings getUIStrings
-
-	@table settlementInfoScroll
-	*/
-	types.settlementInfoScroll = luaState.new_usertype<settlementInfoScroll>("settlementInfoScroll");
-	types.settlementInfoScroll.set("settlement", &settlementInfoScroll::settlement);
-
-	/***
-	Get settlement text color info.
-	@function settlementInfoScroll:getUIStrings
-	@treturn settlementTextStrings getUIStrings
-	@usage
-	function onScrollOpened(eventData)
-    	local settlementInfoScroll = M2TWEOP.getSettlementInfoScroll();
-		if settlementInfoScroll then
-			settlementInfoScroll:getUIStrings().incomeString.red = 0
-			settlementInfoScroll:getUIStrings().incomeString.green = 0
-			settlementInfoScroll:getUIStrings().incomeString.blue = 0
-			settlementInfoScroll:getUIStrings().incomeString.thickness = 0
-
-			settlementInfoScroll:getUIStrings().incomeValue.red = 0
-			settlementInfoScroll:getUIStrings().incomeValue.green = 0
-			settlementInfoScroll:getUIStrings().incomeValue.blue = 0
-		end
-	end
-	*/
-	types.settlementInfoScroll.set_function("getUIStrings", &m2tweopHelpers::getUIStrings);
-	
 	return &luaState;
 }
 
@@ -1176,7 +1004,7 @@ void luaP::fillHashMaps()
 			religionIndex.insert_or_assign(std::string(religionName), i);
 		}
 	}
-	const auto cultureDb = m2tweopHelpers::getCultureDb();
+	const auto cultureDb = cultures::getCultureDb();
 	for (int i = 0; i < cultureDb->culturesCount; i++)
 	{
 		const auto culture = &cultureDb->cultures[i];
@@ -1192,5 +1020,5 @@ void luaP::fillHashMaps()
 		}
 	}
 	hashLoaded = true;
-	m2tweopHelpers::logStringGame("Hashmaps filled");
+	gameHelpers::logStringGame("Hashmaps filled");
 }

@@ -3,9 +3,8 @@
 #include <string>
 
 #include "eopBuildings.h"
-#include "fastFunctsHelpers.h"
+#include "gameStringHelpers.h"
 #include "functionsOffsets.h"
-#include "m2tweopHelpers.h"
 #include "realGameTypes.h"
 #include "strategyMap.h"
 #include "lua/sol.hpp"
@@ -744,7 +743,7 @@ namespace settlementHelpers
 	void setStringProperty(settlementStruct* sett, std::string newS)
 	{
 		if (fieldIndex == settlementStruct_name)
-			fastFunctsHelpers::setCryptedString(&sett->name, newS.c_str());
+			gameStringHelpers::setHashedString(&sett->name, newS.c_str());
 	}
 
 	
@@ -771,7 +770,7 @@ namespace settlementHelpers
 	void setGuildStringProperty(guild* guild, std::string newS)
 	{
 		if (fieldIndex == guild_name)
-			fastFunctsHelpers::setCryptedString(&guild->name, newS.c_str());
+			gameStringHelpers::setHashedString(&guild->name, newS.c_str());
 	}
 };
 

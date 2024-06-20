@@ -1,18 +1,18 @@
 #pragma once
 #include <string>
 
-#include "fastFunctsHelpers.h"
+#include "..\gameStringHelpers.h"
 #include "realGameTypes.h"
-#include "settlement.h"
-#include "smallFuncs.h"
 #include "technicalHelpers.h"
 #include "lua/sol.hpp"
 
-#define edbEntryStruct_type 1
-#define buildingLevelStruct_name 1
+enum
+{
+	edbEntryStruct_type = 1,
+	buildingLevelStruct_name = 1
+};
 
-
-
+struct settlementStruct;
 struct buildingLevelCapability
 {
 public:
@@ -153,7 +153,7 @@ public:
 	}
 	void setName(const std::string& newName)
 	{
-		fastFunctsHelpers::setCryptedString(&name, newName.c_str());
+		gameStringHelpers::setHashedString(&name, newName.c_str());
 	}
 	std::string getLocalizedName(const int factionID)
 	{
@@ -165,7 +165,7 @@ public:
 	{
 		const auto nameMem = new UNICODE_STRING**;
 		buildingName[factionID] = nameMem;
-		smallFuncs::createUniString(*buildingName[factionID], newName.c_str());
+		gameStringHelpers::createUniString(*buildingName[factionID], newName.c_str());
 	}
 	std::string getLocalizedDescr(const int factionID)
 	{
@@ -177,7 +177,7 @@ public:
 	{
 		const auto nameMem = new UNICODE_STRING**;
 		buildingDescr[factionID] = nameMem;
-		smallFuncs::createUniString(*buildingDescr[factionID], newName.c_str());
+		gameStringHelpers::createUniString(*buildingDescr[factionID], newName.c_str());
 	}
 	std::string getLocalizedDescrShort(const int factionID)
 	{
@@ -189,7 +189,7 @@ public:
 	{
 		const auto nameMem = new UNICODE_STRING**;
 		buildingDescrShort[factionID] = nameMem;
-		smallFuncs::createUniString(*buildingDescrShort[factionID], newName.c_str());
+		gameStringHelpers::createUniString(*buildingDescrShort[factionID], newName.c_str());
 	}
 	std::string getBuildingPicPath(const int index)
 	{
@@ -200,7 +200,7 @@ public:
 	void setBuildingPicPath(const int index, const std::string& newPath)
 	{
 		if (index < 7)
-			fastFunctsHelpers::setCryptedString(&buildingPic[index].buildingPicPath, newPath.c_str());
+			gameStringHelpers::setHashedString(&buildingPic[index].buildingPicPath, newPath.c_str());
 	}
 	std::string getGenericBuildingPic()
 	{
@@ -208,7 +208,7 @@ public:
 	}
 	void setGenericBuildingPic(const std::string& newPath)
 	{
-		fastFunctsHelpers::setCryptedString(&genericBuildingPic, newPath.c_str());
+		gameStringHelpers::setHashedString(&genericBuildingPic, newPath.c_str());
 	}
 	std::string getGenericBuildingPicConstructed()
 	{
@@ -216,7 +216,7 @@ public:
 	}
 	void setGenericBuildingPicConstructed(const std::string& newPath)
 	{
-		fastFunctsHelpers::setCryptedString(&genericBuildingPicConstructed, newPath.c_str());
+		gameStringHelpers::setHashedString(&genericBuildingPicConstructed, newPath.c_str());
 	}
 	std::string getGenericBuildingPicConstruction()
 	{
@@ -224,7 +224,7 @@ public:
 	}
 	void setGenericBuildingPicConstruction(const std::string& newPath)
 	{
-		fastFunctsHelpers::setCryptedString(&genericBuildingPicConstruction, newPath.c_str());
+		gameStringHelpers::setHashedString(&genericBuildingPicConstruction, newPath.c_str());
 	}
 	std::string getBuildingPicConstructedPath(const int index)
 	{
@@ -235,7 +235,7 @@ public:
 	void setBuildingPicConstructedPath(const int index, const std::string& newPath)
 	{
 		if (index < 7)
-			fastFunctsHelpers::setCryptedString(&buildingPicConstructed[index].buildingPicPath, newPath.c_str());
+			gameStringHelpers::setHashedString(&buildingPicConstructed[index].buildingPicPath, newPath.c_str());
 	}
 	std::string getBuildingPicConstructionPath(const int index)
 	{
@@ -246,7 +246,7 @@ public:
 	void setBuildingPicConstructionPath(const int index, const std::string& newPath)
 	{
 		if (index < 7)
-			fastFunctsHelpers::setCryptedString(&buildingPicConstruction[index].buildingPicPath, newPath.c_str());
+			gameStringHelpers::setHashedString(&buildingPicConstruction[index].buildingPicPath, newPath.c_str());
 	}
 	int getCapabilityNum()
 	{
@@ -536,7 +536,7 @@ namespace eopBuildings
     void setStringPropertyBDI(buildingLevel* bInfo, std::string newS)
     {
         if (fieldIndex == buildingLevelStruct_name)
-            fastFunctsHelpers::setCryptedString(&bInfo->name, newS.c_str());
+            gameStringHelpers::setHashedString(&bInfo->name, newS.c_str());
     }
 
 #pragma endregion
@@ -566,7 +566,7 @@ namespace eopBuildings
     void setStringPropertyBD(edbEntry* edbEntry, std::string newS)
     {
         if (fieldIndex == edbEntryStruct_type)
-            fastFunctsHelpers::setCryptedString(&edbEntry->type, newS.c_str());
+            gameStringHelpers::setHashedString(&edbEntry->type, newS.c_str());
     }
 
 #pragma endregion

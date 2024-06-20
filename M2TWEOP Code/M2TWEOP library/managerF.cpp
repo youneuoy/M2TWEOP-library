@@ -3,7 +3,7 @@
 
 #include "onlineThings.h"
 #include "settlementConversionLvlSetter.h"
-#include "fastFunctsHelpers.h"
+#include "gameStringHelpers.h"
 
 #include "jsonManager.h"
 
@@ -11,7 +11,7 @@
 #include "globals.h"
 #include "Injects.h"
 #include "luaPlugin.h"
-#include "MemWork.h"
+#include "memWork.h"
 #include "patchesForGame.h"
 
 void managerF::init()
@@ -85,7 +85,7 @@ void managerF::execPatches()
 
 	f1 << "Start applying stop_character patch" << endl;
 
-	OnStopCharacter* toStopCharacter = new OnStopCharacter(mem, (LPVOID)patchesForGame::OnStopCharacter, globals::dataS.gameVersion);
+	OnStopCharacter* toStopCharacter = new OnStopCharacter(mem, (LPVOID)patchesForGame::onStopCharacter, globals::dataS.gameVersion);
 	toStopCharacter->SetNewCode();
 	toStopCharacter->Enable();
 
@@ -123,13 +123,13 @@ void managerF::execPatches()
 	//f1 << "Done" << endl;
 
 	f1 << "Start applying recruit eop unit 1 patch" << endl;
-	recruitEOPunit* toRecruitEOPunit = new recruitEOPunit(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
+	recruitEOPunit* toRecruitEOPunit = new recruitEOPunit(mem, (LPVOID)patchesForGame::recruitEopUnit, globals::dataS.gameVersion);
 	toRecruitEOPunit->SetNewCode();
 	toRecruitEOPunit->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying recruit eop unit 2 patch" << endl;
-	recruitEOPunit2* toRecruitEOPunit2 = new recruitEOPunit2(mem, (LPVOID)patchesForGame::recruitEOPunit2, globals::dataS.gameVersion);
+	recruitEOPunit2* toRecruitEOPunit2 = new recruitEOPunit2(mem, (LPVOID)patchesForGame::recruitEopUnit2, globals::dataS.gameVersion);
 	toRecruitEOPunit2->SetNewCode();
 	toRecruitEOPunit2->Enable();
 	f1 << "Done" << endl;
@@ -164,7 +164,7 @@ void managerF::execPatches()
 
 	f1 << "Start applying unit types patch #1" << endl;
 
-	toReadEDU* ed = new toReadEDU(mem, (LPVOID)patchesForGame::afterEDUread, globals::dataS.gameVersion);
+	toReadEDU* ed = new toReadEDU(mem, (LPVOID)patchesForGame::onEduParsed, globals::dataS.gameVersion);
 	ed->SetlEDUCode();
 	ed->Enable();
 	f1 << "Done" << endl;
@@ -446,28 +446,28 @@ void managerF::execPatches()
 
 
 	f1 << "Start applying mercenaryMovepointsGetGeneral patch" << endl;
-	mercenaryMovepointsGetGeneral* mercP = new mercenaryMovepointsGetGeneral(mem, (LPVOID)patchesForGame::mercenaryMovepointsGetGeneral, globals::dataS.gameVersion);
+	mercenaryMovepointsGetGeneral* mercP = new mercenaryMovepointsGetGeneral(mem, (LPVOID)patchesForGame::mercenaryMovePointsGetGeneral, globals::dataS.gameVersion);
 	mercP->SetNewCode();
 	mercP->Enable();
 	f1 << "Done" << endl;
 
 
 	f1 << "Start applying onGameConsoleCommandFromConsole patch" << endl;
-	onGameConsoleCommandFromConsole* cons1 = new onGameConsoleCommandFromConsole(mem, (LPVOID)patchessForConsole::onGameConsoleCommandFromConsole, globals::dataS.gameVersion);
+	onGameConsoleCommandFromConsole* cons1 = new onGameConsoleCommandFromConsole(mem, (LPVOID)consolePatches::onGameConsoleCommandFromConsole, globals::dataS.gameVersion);
 	cons1->SetNewCode();
 	cons1->Enable();
 	f1 << "Done" << endl;
 
 
 	f1 << "Start applying onGameConsoleCommandFromScript patch" << endl;
-	onGameConsoleCommandFromScript* cons2 = new onGameConsoleCommandFromScript(mem, (LPVOID)patchessForConsole::onGameConsoleCommandFromScript, globals::dataS.gameVersion);
+	onGameConsoleCommandFromScript* cons2 = new onGameConsoleCommandFromScript(mem, (LPVOID)consolePatches::onGameConsoleCommandFromScript, globals::dataS.gameVersion);
 	cons2->SetNewCode();
 	cons2->Enable();
 	f1 << "Done" << endl;
 
 
 	f1 << "Start applying onGameConsoleCommandFromScript patch" << endl;
-	OnReadLogonOrLogoff* cons3 = new OnReadLogonOrLogoff(mem, (LPVOID)patchessForConsole::OnReadLogonOrLogoff, globals::dataS.gameVersion);
+	OnReadLogonOrLogoff* cons3 = new OnReadLogonOrLogoff(mem, (LPVOID)consolePatches::onReadLogonOrLogoff, globals::dataS.gameVersion);
 	cons3->SetNewCode();
 	cons3->Enable();
 	f1 << "Done" << endl;
@@ -480,7 +480,7 @@ void managerF::execPatches()
 	f1 << "Done" << endl;
 
 	f1 << "Start applying fortificationlevelS patch" << endl;
-	fortificationlevelS* fortificationlevel = new fortificationlevelS(mem, (LPVOID)patchesForGame::onfortificationlevelS, globals::dataS.gameVersion);
+	fortificationlevelS* fortificationlevel = new fortificationlevelS(mem, (LPVOID)patchesForGame::onFortificationLevelS, globals::dataS.gameVersion);
 	fortificationlevel->SetNewCode();
 	fortificationlevel->Enable();
 	f1 << "Done" << endl;
@@ -513,7 +513,7 @@ void managerF::execPatches()
 	*/
 
 	f1 << "Start applying OnCreateUnit2 patch" << endl;
-	OnCreateUnit2* onCreateUnit2 = new OnCreateUnit2(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
+	OnCreateUnit2* onCreateUnit2 = new OnCreateUnit2(mem, (LPVOID)patchesForGame::recruitEopUnit, globals::dataS.gameVersion);
 	onCreateUnit2->SetNewCode();
 	onCreateUnit2->Enable();
 	f1 << "Done" << endl;
@@ -525,43 +525,43 @@ void managerF::execPatches()
 	f1 << "Done" << endl;
 
 	f1 << "Start applying onReadDescrStrat patch" << endl;
-	onReadDescrStrat* toReadDescrStrat = new onReadDescrStrat(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
+	onReadDescrStrat* toReadDescrStrat = new onReadDescrStrat(mem, (LPVOID)patchesForGame::recruitEopUnit, globals::dataS.gameVersion);
 	toReadDescrStrat->SetNewCode();
 	toReadDescrStrat->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying onSpawnBrigands patch" << endl;
-	onSpawnBrigands* toSpawnBrigands = new onSpawnBrigands(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
+	onSpawnBrigands* toSpawnBrigands = new onSpawnBrigands(mem, (LPVOID)patchesForGame::recruitEopUnit, globals::dataS.gameVersion);
 	toSpawnBrigands->SetNewCode();
 	toSpawnBrigands->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying onSpawnBrigands2 patch" << endl;
-	onSpawnBrigands2* toSpawnBrigands2 = new onSpawnBrigands2(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
+	onSpawnBrigands2* toSpawnBrigands2 = new onSpawnBrigands2(mem, (LPVOID)patchesForGame::recruitEopUnit, globals::dataS.gameVersion);
 	toSpawnBrigands2->SetNewCode();
 	toSpawnBrigands2->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying onCustomBattleCost patch" << endl;
-	onCustomBattleCost* toCustomBattleCost = new onCustomBattleCost(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
+	onCustomBattleCost* toCustomBattleCost = new onCustomBattleCost(mem, (LPVOID)patchesForGame::recruitEopUnit, globals::dataS.gameVersion);
 	toCustomBattleCost->SetNewCode();
 	toCustomBattleCost->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying spawnUnitsSettGift patch" << endl;
-	spawnUnitsSettGift* toSpawnUnitsSettGift = new spawnUnitsSettGift(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
+	spawnUnitsSettGift* toSpawnUnitsSettGift = new spawnUnitsSettGift(mem, (LPVOID)patchesForGame::recruitEopUnit, globals::dataS.gameVersion);
 	toSpawnUnitsSettGift->SetNewCode();
 	toSpawnUnitsSettGift->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying spawnUnitsSettGift2 patch" << endl;
-	spawnUnitsSettGift2* toSpawnUnitsSettGift2 = new spawnUnitsSettGift2(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
+	spawnUnitsSettGift2* toSpawnUnitsSettGift2 = new spawnUnitsSettGift2(mem, (LPVOID)patchesForGame::recruitEopUnit, globals::dataS.gameVersion);
 	toSpawnUnitsSettGift2->SetNewCode();
 	toSpawnUnitsSettGift2->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying spawnUnitsSettGift3 patch" << endl;
-	spawnUnitsSettGift3* toSpawnUnitsSettGift3 = new spawnUnitsSettGift3(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
+	spawnUnitsSettGift3* toSpawnUnitsSettGift3 = new spawnUnitsSettGift3(mem, (LPVOID)patchesForGame::recruitEopUnit, globals::dataS.gameVersion);
 	toSpawnUnitsSettGift3->SetNewCode();
 	toSpawnUnitsSettGift3->Enable();
 	f1 << "Done" << endl;
@@ -598,7 +598,8 @@ void managerF::execPatches()
 	toNewGameLoaded->SetNewCode();
 	toNewGameLoaded->Enable();
 	f1 << "Done" << endl;
-	
+
+
 	f1 << "Start applying onPreBattlePlacement patch" << endl;
 	onPreBattlePlacement* toPreBattlePlacement = new onPreBattlePlacement(mem, (LPVOID)patchesForGame::onPreBattlePlacement, globals::dataS.gameVersion);
 	toPreBattlePlacement->SetNewCode();
@@ -611,6 +612,7 @@ void managerF::execPatches()
 	toDecideRamAttacks->Enable();
 	f1 << "Done" << endl;
 
+	
 	/*
 	f1 << "Start applying onPreBattlePlacement2 patch" << endl;
 	onPreBattlePlacement2* toPreBattlePlacement2 = new onPreBattlePlacement2(mem, (LPVOID)patchesForGame::onPreBattlePlacement2, globals::dataS.gamever);
@@ -619,13 +621,13 @@ void managerF::execPatches()
 	f1 << "Done" << endl;*/
 
 	f1 << "Start applying spawnUnitsSettGift4 patch" << endl;
-	spawnUnitsSettGift4* toSpawnUnitsSettGift4 = new spawnUnitsSettGift4(mem, (LPVOID)patchesForGame::recruitEOPunit, globals::dataS.gameVersion);
+	spawnUnitsSettGift4* toSpawnUnitsSettGift4 = new spawnUnitsSettGift4(mem, (LPVOID)patchesForGame::recruitEopUnit, globals::dataS.gameVersion);
 	toSpawnUnitsSettGift4->SetNewCode();
 	toSpawnUnitsSettGift4->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toCreateMercUnit patch" << endl;
-	OnCreateMercUnit* toCreateMercUnit = new OnCreateMercUnit(mem, (LPVOID)patchesForGame::OnCreateMercUnit, globals::dataS.gameVersion);
+	OnCreateMercUnit* toCreateMercUnit = new OnCreateMercUnit(mem, (LPVOID)patchesForGame::onCreateMercUnit, globals::dataS.gameVersion);
 	toCreateMercUnit->SetNewCode();
 	toCreateMercUnit->Enable();
 	f1 << "Done" << endl;
@@ -793,19 +795,19 @@ void managerF::execPatches()
 	f1 << "Done" << '\n';
 
 	f1 << "Start applying OnCreateUnitWrapper patch" << endl;
-	OnCreateUnitWrapper* toCreateUnitWrapper = new OnCreateUnitWrapper(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gameVersion);
+	OnCreateUnitWrapper* toCreateUnitWrapper = new OnCreateUnitWrapper(mem, (LPVOID)patchesForGame::onCreateUnitWrapper, globals::dataS.gameVersion);
 	toCreateUnitWrapper->SetNewCode();
 	toCreateUnitWrapper->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying OnFindUnitStrings patch" << endl;
-	OnFindUnitStrings* toFindUnitStrings = new OnFindUnitStrings(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gameVersion); //its same func as unit wrapper on purpose not error
+	OnFindUnitStrings* toFindUnitStrings = new OnFindUnitStrings(mem, (LPVOID)patchesForGame::onCreateUnitWrapper, globals::dataS.gameVersion); //its same func as unit wrapper on purpose not error
 	toFindUnitStrings->SetNewCode();
 	toFindUnitStrings->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toFindUnitStrings2 patch" << endl;
-	OnFindUnitStrings2* toFindUnitStrings2 = new OnFindUnitStrings2(mem, (LPVOID)patchesForGame::OnCreateUnitWrapper, globals::dataS.gameVersion); //its same func as unit wrapper on purpose not error
+	OnFindUnitStrings2* toFindUnitStrings2 = new OnFindUnitStrings2(mem, (LPVOID)patchesForGame::onCreateUnitWrapper, globals::dataS.gameVersion); //its same func as unit wrapper on purpose not error
 	toFindUnitStrings2->SetNewCode();
 	toFindUnitStrings2->Enable();
 	f1 << "Done" << endl;
@@ -817,7 +819,7 @@ void managerF::execPatches()
 	// f1 << "Done" << endl;
 
 	f1 << "Start applying OnReligionCombatBonus patch" << endl;
-	OnReligionCombatBonus* toReligionCombatBonus = new OnReligionCombatBonus(mem, (LPVOID)patchesForGame::OnReligionCombatBonus, globals::dataS.gameVersion);
+	OnReligionCombatBonus* toReligionCombatBonus = new OnReligionCombatBonus(mem, (LPVOID)patchesForGame::onReligionCombatBonus, globals::dataS.gameVersion);
 	toReligionCombatBonus->SetNewCode();
 	toReligionCombatBonus->Enable();
 	f1 << "Done" << endl;
@@ -829,31 +831,31 @@ void managerF::execPatches()
 	f1 << "Done" << endl;
 
 	f1 << "Start applying OnGetRecruitPoolUnitEntry patch" << endl;
-	OnGetRecruitPoolUnitEntry* toGetRecruitPoolUnitEntry = new OnGetRecruitPoolUnitEntry(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gameVersion);
+	OnGetRecruitPoolUnitEntry* toGetRecruitPoolUnitEntry = new OnGetRecruitPoolUnitEntry(mem, (LPVOID)patchesForGame::onGetRecruitPoolUnitEntry, globals::dataS.gameVersion);
 	toGetRecruitPoolUnitEntry->SetNewCode();
 	toGetRecruitPoolUnitEntry->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toLoadRecruitQueue patch" << endl;
-	loadRecruitQueue* toLoadRecruitQueue = new loadRecruitQueue(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gameVersion);
+	loadRecruitQueue* toLoadRecruitQueue = new loadRecruitQueue(mem, (LPVOID)patchesForGame::onGetRecruitPoolUnitEntry, globals::dataS.gameVersion);
 	toLoadRecruitQueue->SetNewCode();
 	toLoadRecruitQueue->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toLoadRecruitQueue2 patch" << endl;
-	loadRecruitQueue2* toLoadRecruitQueue2 = new loadRecruitQueue2(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gameVersion);
+	loadRecruitQueue2* toLoadRecruitQueue2 = new loadRecruitQueue2(mem, (LPVOID)patchesForGame::onGetRecruitPoolUnitEntry, globals::dataS.gameVersion);
 	toLoadRecruitQueue2->SetNewCode();
 	toLoadRecruitQueue2->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying OnGetRecruitPoolUnitEntry2 patch" << endl;
-	OnGetRecruitPoolUnitEntry2* toGetRecruitPoolUnitEntry2 = new OnGetRecruitPoolUnitEntry2(mem, (LPVOID)patchesForGame::OnGetRecruitPoolUnitEntry, globals::dataS.gameVersion);
+	OnGetRecruitPoolUnitEntry2* toGetRecruitPoolUnitEntry2 = new OnGetRecruitPoolUnitEntry2(mem, (LPVOID)patchesForGame::onGetRecruitPoolUnitEntry, globals::dataS.gameVersion);
 	toGetRecruitPoolUnitEntry2->SetNewCode();
 	toGetRecruitPoolUnitEntry2->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying toCreateMercUnitCheck patch" << endl;
-	OnCreateMercUnitCheck* toCreateMercUnitCheck = new OnCreateMercUnitCheck(mem, (LPVOID)patchesForGame::OnCreateMercUnitCheck, globals::dataS.gameVersion);
+	OnCreateMercUnitCheck* toCreateMercUnitCheck = new OnCreateMercUnitCheck(mem, (LPVOID)patchesForGame::onCreateMercUnitCheck, globals::dataS.gameVersion);
 	toCreateMercUnitCheck->SetNewCode();
 	toCreateMercUnitCheck->Enable();
 	f1 << "Done" << endl;
@@ -933,7 +935,7 @@ void managerF::loadJsonSettings()
 {
 	std::string fPath = globals::dataS.modPath;
 	fPath += "\\eopData\\gameCfg.json";
-	jsn::json json = fastFunctsHelpers::loadJsonFromFile(fPath);
+	jsn::json json = jsonManager::loadJsonFromFile(fPath);
 	bool jsonBoolValue;
 
 	try
@@ -971,7 +973,7 @@ void managerF::loadJsonSettings()
 
 	std::string uiPath = globals::dataS.modPath;
 	uiPath += "\\eopData\\uiCfg.json";
-	json = fastFunctsHelpers::loadJsonFromFile(uiPath);
+	json = jsonManager::loadJsonFromFile(uiPath);
 
 	try
 	{

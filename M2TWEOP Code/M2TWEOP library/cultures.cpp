@@ -6,7 +6,7 @@
 #include <random>
 
 #include "dataOffsets.h"
-#include "m2tweopHelpers.h"
+#include "gameHelpers.h"
 
 namespace cultures
 {
@@ -105,12 +105,17 @@ namespace cultures
     {
         return portraits[cultureID].get();
     }
+    	
+    culturesDB* getCultureDb()
+    {
+        return reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
+    }
     
     void eopPortraitDb::createEopPortraitDb()
     {
         const auto cultureDb = reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
         auto religions = *reinterpret_cast <religionDatabase**>(dataOffsets::offsets.religionDatabase);
-        auto modPath = m2tweopHelpers::getModPath();
+        auto modPath = gameHelpers::getModPath();
         for (int cultureID = 0; cultureID < cultureDb->culturesCount; cultureID++)
         {
             auto culture = cultureDb->cultures[cultureID];

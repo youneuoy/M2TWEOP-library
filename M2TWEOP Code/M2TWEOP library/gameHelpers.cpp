@@ -1,10 +1,16 @@
 #include "gameHelpers.h"
-#include "gameDataAllHelper.h"
 #include "plugData.h"
 #include <vector>
-#include "smallFuncs.h"
 #include "dataOffsets.h"
 #include "events.h"
+#include "globals.h"
+#include "MemWork.h"
+#include "techFuncs.h"
+
+scriptCommand::scriptCommand(const char* name) : className(name)
+{
+	this->vftable = dataOffsets::offsets.scriptCommandVFT;
+}
 
 namespace gameHelpers
 {
@@ -14,73 +20,117 @@ namespace gameHelpers
 	{
 		char buffer[100]{};
 		buffer[0] = '\0';
-		bool isOk = false;
 		if (va.size() == 0)
-		{
 			callGameConsoleCommand(cmdName.c_str(), "", buffer);
-		}
 		else
-		{
 			callGameConsoleCommand(cmdName.c_str(), va.begin()->as<std::string>().c_str(), buffer);
-		}
-
-		if (isOk == false && buffer[0] == '\0')
-		{
+		if (buffer[0] == '\0')
 			sprintf_s(buffer, "error");
-		}
 		return buffer;
 	}
 	
 	bool callGameConsoleCommand(const char* name, const char* arg, char* errorBuffer)
 	{
-		auto cmd = dataOffsets::offsets.consoleCommands;
+		const auto cmd = dataOffsets::offsets.consoleCommands;
 		for (int i = 0; i < cmd->size; i++)
 		{
-			auto currCom = cmd->commands[i];
+			const auto currCom = cmd->commands[i];
 			if (strcmp(currCom->name, name) != 0)
-			{
 				continue;
-			}
 			return (**currCom->function)(arg, errorBuffer);
 		}
 		return false;
 	}
 	
-	std::tuple<bool, int> getScriptCounter(const char* type)
+	int getScriptCounter(const char* counterName, bool& success)
+	{
+		auto eventsObject = reinterpret_cast<countersObjectS*>(dataOffsets::offsets.scriptCounters);
+		counterS* retS = nullptr;
+		int retValue = 0;
+		DWORD funcAdr = codes::offsets.getScriptCounter;
+		char** cryptS = gameStringHelpers::createHashedString(counterName);
+		_asm {
+			push cryptS
+			mov ecx, eventsObject
+			mov eax, funcAdr
+			call eax
+			mov retS, eax
+		}
+		if (retS == eventsObject->testCounterSValue)
+			success = false;
+		else
+		{
+			if (retS != nullptr)
+			{
+				if (retS->nameCrypt == reinterpret_cast<int>(cryptS[1]))
+				{
+					success = true;
+					return retS->counterValue;
+				}
+				else
+					success = false;
+			}
+		}
+		return 0;
+	}
+	
+	void setScriptCounter(const char* counterName, int counterValue)
+	{
+		DWORD eventsObject = dataOffsets::offsets.scriptCountersSet;
+		DWORD funcAdr = codes::offsets.setScriptCounter;
+		char** cryptS = gameStringHelpers::createHashedString(counterName);
+		_asm {
+			push counterValue
+			push cryptS
+			mov ecx, eventsObject
+			mov eax, funcAdr
+			call eax
+		}
+		return;
+	}
+	
+	std::tuple<bool, int> getScriptCounterLua(const char* type)
 	{
 		bool isExist = false;
-		int counterValue = smallFuncs::getScriptCounter(type, isExist);
-
+		int counterValue = getScriptCounter(type, isExist);
 		return std::make_tuple(isExist, counterValue);
 	}
 	
-	bool condition(const std::string& condition, const eventTrigger* eventData)
+	bool conditionLua(const std::string& condition, const eventTrigger* eventData)
 	{
 		const char* conditionC = condition.c_str();
-		return smallFuncs::condition(conditionC, eventData);
+		return gameHelpers::condition(conditionC, eventData);
+	}
+
+	int getGameVersion()
+	{
+		return globals::dataS.gameVersion;
 	}
 	
-	void scriptCommand(const std::string& command, sol::variadic_args va)
+	void scriptCommandLua(const std::string& command, sol::variadic_args va)
 	{
 		const char* commandC = command.c_str();
 		if (va.size() == 0)
-		{
-			smallFuncs::scriptCommand(commandC, "");
-		}
+			scriptCommand(commandC, "");
 		else
+			scriptCommand(commandC, va.begin()->as<std::string>().c_str());
+	}
+	
+	void saveGame(const char* path)
+	{
+		DWORD funcAddr = codes::offsets.saveGame;
+		DWORD offS = dataOffsets::offsets.saveGameHandler;
+		auto uni = new UNICODE_STRING*;
+		gameStringHelpers::createUniString(uni, path);
+		UNICODE_STRING*** ptrUni = &uni;
+		_asm
 		{
-			smallFuncs::scriptCommand(commandC, va.begin()->as<std::string>().c_str());
+			push 0
+			push ptrUni
+			mov ecx, offS
+			mov eax, funcAddr
+			call eax
 		}
-	}
-
-	unit* getSelectedUnitCard(const uiCardManager* cardManager, const int index)
-	{
-		return cardManager->selectedUnitCards[index]->unit;
-	}
-
-	unit* getUnitCard(const uiCardManager* cardManager, const int index)
-	{
-		return cardManager->unitCards[index]->unit;
 	}
 
 	const char* getReligionName2(const int index)
@@ -106,8 +156,7 @@ namespace gameHelpers
 
 	const char* getClimateName2(const int index)
 	{
-	    const gameDataAllStruct* gameData = gameDataAllHelper::get();
-	    const auto stratMap = gameData->stratMap;
+	    const auto stratMap = stratMapHelpers::getStratMap();
 		const wchar_t* name = stratMap->climates->climateArray[index].rcString->string;
 		// Determine the size of the required buffer
 		const int size = WideCharToMultiByte(CP_UTF8, 0, name, -1, nullptr, 0, nullptr, nullptr);
@@ -156,13 +205,14 @@ namespace gameHelpers
 		return name->second;
 	}
 
+	religionDatabase* getReligionDatabase()
+	{
+		return *reinterpret_cast <religionDatabase**>(dataOffsets::offsets.religionDatabase);
+	}
+
 	int getReligionCount()
 	{
-		const auto* religionDb = *reinterpret_cast <religionDatabase**>(0x016A0B90);
-		if (smallFuncs::getGameVersion() == 1)
-		{
-			religionDb = *reinterpret_cast <religionDatabase**>(0x016E9DC0);
-		}
+		const auto* religionDb = getReligionDatabase();
 		return religionDb->religionCount;
 	}
 
@@ -195,5 +245,300 @@ namespace gameHelpers
 			return -1;
 		return index->second;
 	}
+	
+	DWORD getScriptCommandByName(const char* cmdName)
+	{
+		DWORD func1 = codes::offsets.scriptCommandOne;
+		DWORD func2 = codes::offsets.scriptCommandTwo;
+		DWORD result = 0x0;
+		DWORD cmdNamePtr = reinterpret_cast<DWORD>(&cmdName);
 
+		_asm {
+			mov eax, func1
+			call eax
+			mov ecx, eax
+			push cmdNamePtr
+			mov eax, func2
+			call eax
+			mov result, eax
+		}
+		return result;
+	}
+	
+	bool condition(const char* condition, const eventTrigger* eventData)
+	{
+		auto fakeText = std::make_shared<fakeTextInput>(fakeTextInput(condition, 0));
+		auto rawText = fakeText.get();
+		const auto makeConditionFunc = reinterpret_cast<DWORD*>(0x00875310);
+		void* result = nullptr;
+		_asm
+		{
+			push rawText
+			mov ecx, rawText
+			mov eax, makeConditionFunc
+			call eax
+			mov result, eax
+			add esp, 0x4
+		}
+		if (result == nullptr)
+			return false;
+		return callVFunc<1, bool>(result, eventData);
+	}
+
+	void scriptCommand(const char* command, const char* args)
+	{
+		DWORD scriptClass = getScriptCommandByName(command);
+		if (scriptClass == 0x0)
+		{
+			return;
+		}
+		std::string fullCommand = std::string(command) + " " + args;
+		size_t start = strlen(command) + static_cast<int8_t>(0x8);
+		auto fakeText = std::make_shared<fakeTextInput>(fakeTextInput(fullCommand.c_str(), start));
+		DWORD classPointer = 0x0;
+		_asm
+		{
+			mov eax, scriptClass
+			mov eax, [eax]
+			mov classPointer, eax
+		}
+		fakeText->classPointer = classPointer;
+		DWORD funcAddr = scriptClass + static_cast<int8_t>(0x4);
+		DWORD scriptObject = 0x0;
+		_asm
+		{
+			push fakeText
+			mov eax, funcAddr
+			mov eax, [eax]
+			call eax
+			mov scriptObject, eax
+			add esp, 0x4
+		}
+		if (scriptObject == 0x0)
+			return;
+		_asm
+		{
+			mov ecx, scriptObject
+			mov eax, [ecx]
+			mov eax, [eax]
+			call eax
+		}
+	}
+	
+	void fireGameScriptFunc(void* scriptStruct, DWORD offset)
+	{
+		void* scriptStructPtr = scriptStruct;
+		DWORD func = offset;
+		_asm
+		{
+			mov ecx, scriptStructPtr
+			mov eax, func
+			call eax
+		}
+	}
+	
+	void logStringGame(const std::string& msg)
+	{
+		const auto flushRate = reinterpret_cast<int*>(dataOffsets::offsets.logFlushRate);
+		const int oldRate = *flushRate;
+		*flushRate = 1;
+		const auto order = std::make_shared<gameLogCommand>(msg.c_str());
+		fireGameScriptFunc(order.get(), codes::offsets.gameLogCommand);
+		*flushRate = oldRate;
+	}
+	
+	void logFuncError(const std::string& funcName, const std::string& error)
+	{
+		logStringGame(funcName + " error: " + error);
+	}
+	
+	void loadSaveGame(const char* saveName)
+	{
+		const auto nameMem = new UNICODE_STRING*;
+		const auto loadName = reinterpret_cast<UNICODE_STRING***>(dataOffsets::offsets.loadGameHandler + 0x4);
+		*loadName = nameMem;
+		gameStringHelpers::createUniString(*loadName, saveName);
+		const auto currentHandler = reinterpret_cast<DWORD*>(dataOffsets::offsets.currentGameHandler);
+		*currentHandler = dataOffsets::offsets.loadGameHandler;
+	}
+	
+	void historicEvent(const char* name, const char* title, const char* description)
+	{
+		DWORD funcAddr = codes::offsets.historicEventFunc;
+
+		UNICODE_STRING** titleUni = techFuncs::createGameClass<UNICODE_STRING*>();
+		gameStringHelpers::createUniString(titleUni, title);
+
+		UNICODE_STRING** bodyUni = techFuncs::createGameClass<UNICODE_STRING*>();
+		gameStringHelpers::createUniString(bodyUni, description);
+
+		UNICODE_STRING*** titleUniP = &titleUni;
+		UNICODE_STRING*** bodyUniP = &bodyUni;
+		
+		_asm
+		{
+			push 0x3FFFFFFF
+			push 0x0
+			push 0x0
+			push 0xFFFFFFFF
+			push 0xFFFFFFFF
+			push name
+			push bodyUniP
+			push titleUniP
+			mov eax, funcAddr
+			call eax
+			add esp, 0x20
+		}
+	}
+	
+	std::string getModPath()
+	{
+		return  plugData::data.modFolder;
+	}
+	std::string getLuaPath()
+	{
+		return plugData::data.luaAll.luaPath;
+	}
+	
+	std::string getModString(const std::string& path)
+	{
+		std::string ret;
+		const size_t pos = path.find("/mods/", 0);
+		for (UINT32 i = 0; i < path.size(); i++)
+		{
+			if (i > static_cast<UINT32>(pos))
+			{
+				ret.push_back(path[i]);
+			}
+		}
+		return ret;
+	}
+	
+	std::string getPathFromMods()
+	{
+		const std::string path = getModPath();
+		return getModString(path);
+	}
+
+	void setEquipmentCosts(const int equipType, const int cost)
+	{
+		struct equipmentCosts
+		{
+			int ram;
+			int ladder;
+			int siegeTower;
+		};
+		const auto costs = reinterpret_cast<equipmentCosts*>(dataOffsets::offsets.equipmentCosts);
+		switch (equipType)
+		{
+		case 0:
+			costs->ram = cost;
+			break;
+		case 1:
+			costs->ladder = cost;
+			break;
+		case 2:
+			costs->siegeTower = cost;
+			break;
+		default:
+			break;
+		}
+	}
+
+	options1* getOptions1()
+	{
+		return reinterpret_cast<options1*>(dataOffsets::offsets.options1);
+	}
+
+	options2* getOptions2()
+	{
+		return reinterpret_cast<options2*>(dataOffsets::offsets.options2);
+	}
+	
+	void setAncLimit(uint8_t limit)
+	{
+		const DWORD ancillariesOffset = dataOffsets::offsets.ancLimit;
+		MemWork::WriteData(&limit, ancillariesOffset, 1);
+	}
+
+	void setMaxUnitSize(signed short min, signed short max)
+	{
+		DWORD codeOffset = dataOffsets::offsets.maxUnitSize;
+		codeOffset += 0x82C;
+		MemWork::WriteData(&min, codeOffset, 2);
+		codeOffset += 6;
+		MemWork::WriteData(&max, codeOffset, 2);
+	}
+	
+	void setMaxBgSize(unsigned char size)
+	{
+		const DWORD cmpAdr = dataOffsets::offsets.maxBgSize1 + 2;
+		const DWORD retAdr = dataOffsets::offsets.maxBgSize2 + 1;
+		MemWork::WriteData(&size, cmpAdr, 1);
+		MemWork::WriteData(&size, retAdr, 1);
+	}
+
+	gameDataAllStruct* getGameDataAll()
+	{
+		return dataOffsets::offsets.gameDataAllOffset;
+	}
+	
+	void unlockConsoleCommands()
+	{
+		uchar nops[2] = { 0x90,0x90 };
+		DWORD cmd = dataOffsets::offsets.unlockConsoleCommands1;
+		//check checking code and change all jmps to nops
+		for (int i = 0; i < 53; i++, cmd++)
+		{
+			uchar ch;
+			MemWork::ReadData(cmd, &ch, 1);
+			if (ch == 0x74)
+				MemWork::WriteData(nops, cmd, 2);
+		}
+		//unlock change_faction
+		uchar nops1[6] = { 0x90,0x90,0x90,0x90,0x90,0x90 };
+		cmd = dataOffsets::offsets.unlockConsoleCommands2;
+		MemWork::WriteData(nops1, cmd, 6);
+	}
+	
+	bool HIGHLIGHT_ON = false;
+	void toggleUnitHighlight()
+	{
+		static unsigned char highLightOn = 0x8f;
+		static unsigned char highLightOff = 0x8e;
+		const DWORD codeAdr = dataOffsets::offsets.highlightUnits;
+		if (!HIGHLIGHT_ON)
+		{
+			MemWork::WriteData(&highLightOn, codeAdr + 0x1, 1);
+			HIGHLIGHT_ON = true;
+		}
+		else
+		{
+			MemWork::WriteData(&highLightOff, codeAdr + 0x1, 1);
+			HIGHLIGHT_ON = false;
+		}
+	}
+	
+	void setReligionsLimit(unsigned char limit)
+	{
+		MemWork::WriteData(&limit, dataOffsets::offsets.religionLimit, 1);
+	}
+	
+	void setBuildingChainLimit(unsigned int limit)
+	{
+		limit++;
+		const DWORD codeAdr = dataOffsets::offsets.buildingChainLimit;
+		MemWork::WriteData(&limit, codeAdr, 4);
+	}
+
+	void setGuildCooldown(unsigned char turns)
+	{
+		const DWORD codeAdr = dataOffsets::offsets.guildCooldown;
+		MemWork::WriteData(&turns, codeAdr, 1);
+	}
+
+	int getUnitSize()
+	{
+		return *dataOffsets::offsets.gameUnit_size;
+	}
 }

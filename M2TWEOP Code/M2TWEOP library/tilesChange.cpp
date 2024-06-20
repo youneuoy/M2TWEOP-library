@@ -2,6 +2,7 @@
 #include "realGameTypes.h"
 #include "dataOffsets.h"
 #include "functionsOffsets.h"
+#include "gameHelpers.h"
 #include "globals.h"
 #include "strategyMap.h"
 
@@ -98,12 +99,12 @@ namespace tilesChange
 		string f = "\\";
 		string r = "/";
 		replaceAll2(pathName, f, r);
-		pathName = m2tweopHelpers::getModString(pathName);
+		pathName = gameHelpers::getModString(pathName);
 		pathName = pathName + "/data/world/maps/campaign/imperial_campaign/custom_tiles/";
 		pathName = pathName + fileName;
 		auto pathTemp = new char[pathName.length() + 1];
 		memcpy(pathTemp, pathName.c_str(), pathName.length() + 1);
-		DWORD funcAdr = codes::offsets.uniStrCustomTile;
+		DWORD funcAdr = codes::offsets.createUniString;
 		newTile->pathToModel_UNICODE = reinterpret_cast<char**>(new char[(pathName.length() + 1) * 2]);
 		auto tileTest = (char**)newTile->pathToModel_UNICODE;
 		_asm {

@@ -10,7 +10,6 @@
 #include "characterRecord.h"
 
 #include "techFuncs.h"
-#include "smallFuncs.h"
 #include "imgui/imgui.h"
 #include "character.h"
 #include "faction.h"
@@ -113,7 +112,7 @@ namespace battleCreator
 	set<string>getFacsNamesInBattle()
 	{
 		set<string>retSet;
-		battleDataS* battleData = smallFuncs::getGameDataAll()->battleHandler;
+		battleDataS* battleData = battleHelpers::getBattleData();
 
 		for (int i = 0; i < battleData->sidesNum; i++)
 		{
@@ -337,7 +336,7 @@ namespace battleCreator
 	}
 	void createFactionsSection(vector<string>& fileStrings)
 	{
-		battleDataS* battleData = smallFuncs::getGameDataAll()->battleHandler;
+		battleDataS* battleData = battleHelpers::getBattleData();
 		string tempS;
 
 		fileStrings.push_back("; >>>> start of factions section <<<<\n");
@@ -401,7 +400,7 @@ namespace battleCreator
 	}
 	void createBattleSection(vector<string>& fileStrings)
 	{
-		battleDataS* battleData = smallFuncs::getGameDataAll()->battleHandler;
+		battleDataS* battleData = battleHelpers::getBattleData();
 		string tempS;
 
 		fileStrings.push_back("; >>>> start of battle section <<<<\n");
@@ -561,7 +560,7 @@ namespace battleCreator
 
 	void createObjectivesSection(vector<string>& fileStrings)
 	{
-		battleDataS* battleData = smallFuncs::getGameDataAll()->battleHandler;
+		battleDataS* battleData = battleHelpers::getBattleData();
 		string tempS;
 
 		fileStrings.push_back("; >>>> start of objectives scripting section <<<<\n");

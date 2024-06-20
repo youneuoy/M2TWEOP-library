@@ -6,7 +6,6 @@
 #include "events.h"
 #include <unordered_map>
 #include "gameHelpers.h"
-#include "smallFuncs.h"
 #include "character.h"
 #include "settlement.h"
 #include "faction.h"
@@ -14,7 +13,6 @@
 #include "characterRecord.h"
 #include "unit.h"
 #include "battle.h"
-#include "m2tweopHelpers.h"
 #include "strategyMap.h"
 using namespace std;
 
@@ -67,7 +65,7 @@ namespace gameEvents
 	
 	void initEvents()
 	{
-		const int gv = (smallFuncs::getGameVersion()) - 1;
+		const int gv = gameHelpers::getGameVersion() - 1;
 		DWORD newCode[] = { 0x0136BFE4, 0x01326FBC };
 		addEvent<EventType::standardEvent>(newCode[gv], "onCharacterTurnStart");
 
