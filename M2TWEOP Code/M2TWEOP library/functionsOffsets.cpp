@@ -227,7 +227,14 @@ void codes::initCodes(int gameVer)
 		offsets.isTileFree = 0x004c8c70;
 		offsets.hideRevealedTile = 0x004ba9f0;
 		offsets.findBattleModel = 0x010e86c0;
+		offsets.isZoneValid = 0x672EC0;
+		offsets.getZonePerimeter = 0xE0DC00;
+		offsets.getZoneID = 0xDF6050;
 	}
+
+
+	
+	/////////////////// STEAM ///////////////////////////////////
 	else if (gameVer == 2) //steam
 	{
 		offsets.stringCryptFunc = 0x00d47330;
@@ -452,5 +459,8 @@ void codes::initCodes(int gameVer)
 		offsets.hideRevealedTile = 0x004baf80;
 		offsets.findBattleModel = 0x010e8ee0;
 		offsets.uniStrCustomTile = 0x00f01eb0;
+		offsets.isZoneValid = 0x6733A0;
+		offsets.getZonePerimeter = 0xE08290;
+		offsets.getZoneID = 0xDF0680;
 	}
 }

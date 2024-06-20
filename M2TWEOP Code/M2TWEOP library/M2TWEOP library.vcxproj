@@ -252,7 +252,6 @@
     <ClInclude Include="..\3rd\logger\loguru.cpp" />
     <ClInclude Include="..\3rd\shortestPath\micropather.h" />
     <ClInclude Include="imgui\ImFileDialog.h" />
-    <ClInclude Include="battleHandlerHelpers.h" />
     <ClInclude Include="BattleMapOverrider.h" />
     <ClInclude Include="battlemapWorker.h" />
     <ClInclude Include="casModelsDrawer.h" />
@@ -329,6 +328,7 @@
     <ClInclude Include="ThemeManager.h" />
     <ClInclude Include="tilesChange.h" />
     <ClInclude Include="types\army.h" />
+    <ClInclude Include="types\battle.h" />
     <ClInclude Include="types\campaign.h" />
     <ClInclude Include="types\campaignDb.h" />
     <ClInclude Include="types\character.h" />
@@ -373,7 +373,6 @@
     <ClCompile Include="..\3rd\discord\voice_manager.cpp" />
     <ClCompile Include="..\3rd\miniz\miniz.c" />
     <ClCompile Include="..\3rd\shortestPath\micropather.cpp" />
-    <ClCompile Include="battleHandlerHelpers.cpp" />
     <ClCompile Include="BattleMapOverrider.cpp" />
     <ClCompile Include="battlemapWorker.cpp" />
     <ClCompile Include="casModelsDrawer.cpp" />
@@ -456,6 +455,7 @@
     <ClCompile Include="TexturesManager.cpp" />
     <ClCompile Include="tilesChange.cpp" />
     <ClCompile Include="types\army.cpp" />
+    <ClCompile Include="types\battle.cpp" />
     <ClCompile Include="types\campaign.cpp" />
     <ClCompile Include="types\campaignDb.cpp" />
     <ClCompile Include="types\character.cpp" />

@@ -58,7 +58,7 @@ public:
 	static void __fastcall onLoadSettlementWorldpkgdesc(worldRecord* selectedRecord);
 	static int __fastcall onfortificationlevelS(settlementStruct* settlement, bool* isCastle);
 	static char* __fastcall onSaveEDUStringS(eduEntry* eduEntry);
-	static int __fastcall onCreateUnit(char** entryName, int* edbIndex);
+	static int __fastcall onCreateUnit(char** entryName, int* eduIndex);
 	static int __fastcall OnCreateMercUnitCheck(char** entryName, int eduindex);
 	static void __fastcall onPreBattlePlacement(aiTacticAssault* aiTactic);
 	static bool __thiscall onPreBattlePlacement2(aiUnitGroup* group, DWORD formationTemplate, bool force_issue_order);
@@ -68,7 +68,7 @@ public:
 	static const char* __fastcall onQuickSave();
 	static const char* __fastcall onAutoSave();
 	static eduEntry* __fastcall OnGetRecruitPoolUnitEntry(int eduIndex);
-	static int __fastcall onFindUnit(char* entry, int* edbIndex);
+	static int __fastcall onFindUnit(char* entry, int* eduIndex);
 	static DWORD __fastcall OnUnitInfo(DWORD entryAddress);
 	static float __fastcall onCalculateUnitValue(eduEntry* entry, DWORD value);
 	static int __fastcall onEvaluateUnit(int eduIndex);
@@ -105,6 +105,7 @@ public:
 	static void WINAPI afterEDUread();
 	static void WINAPI onGameInit();
 	static void WINAPI onUnloadCampaign();
+	static void WINAPI onNewGameLoaded();
 	static void __fastcall onAiTurn(aiFaction* aiFac);
 	
 	//before start of a first faction turn

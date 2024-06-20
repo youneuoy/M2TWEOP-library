@@ -29,16 +29,46 @@ oneTile* landingPoint::getTile()
 		return nullptr;
 	return &map->tilesArr[tileIndex];
 }
+
+void oneTile::setTileHeight(float height)
+{
+	const auto doubleTile = tileToDoubleTile();
+	if (!doubleTile)
+		return;
+	doubleTile->height = height;
+	smallFuncs::scriptCommand("console_command", "toggle_fow");
+	smallFuncs::scriptCommand("console_command", "toggle_fow");
+}
+
+void oneTile::setTileGroundType(const int ground)
+{
+	const auto doubleTile = tileToDoubleTile();
+	groundType = ground;
+	if (!doubleTile)
+		return;
+	doubleTile->groundType = static_cast<int8_t>(ground);
+	smallFuncs::scriptCommand("console_command", "toggle_fow");
+	smallFuncs::scriptCommand("console_command", "toggle_fow");
+}
 	
+void oneTile::setTileClimate(const int climate)
+{
+	const auto doubleTile = tileToDoubleTile();
+	if (!doubleTile)
+		return;
+	doubleTile->climate = static_cast<int8_t>(climate);
+	smallFuncs::scriptCommand("console_command", "toggle_fow");
+	smallFuncs::scriptCommand("console_command", "toggle_fow");
+}
 oneTileDouble* oneTile::tileToDoubleTile()
 {
 	const stratMap* map = stratMapHelpers::getStratMap();
 	if (!map)
 		return nullptr;
-	const int mapWidth = map->mapWidth * 2 + 1;
-	const int x = getTileX() * 2;
-	const int y = getTileY() * 2;
-	if (x < 0 || y < 0 || x >= mapWidth || y >= mapWidth)
+	const int mapWidth = (map->mapWidth << 1) + 1;
+	const int x = (getTileX() << 1) + 1;
+	const int y = (getTileY() << 1) + 1;
+	if (x < 0 || y < 0 || x >= mapWidth * 2 + 1 || y >= map->mapHeight * 2 + 1)
 		return nullptr;
 	return &map->climateTileArray[y * mapWidth + x];
 }
@@ -48,7 +78,7 @@ void regionStruct::changeRegionName(const char* newName)
 	UNICODE_STRING** nameMem = new UNICODE_STRING*;
 	localizedRegionName = nameMem;
 	smallFuncs::createUniString(localizedRegionName, newName);
-	eopSettlementDataDb::getSettlementData(regionID).regionName = newName;
+	eopSettlementDataDb::get()->getSettlementData(regionID).regionName = newName;
 }
 
 void regionStruct::changeRebelsName(const char* newName)
@@ -56,7 +86,7 @@ void regionStruct::changeRebelsName(const char* newName)
 	UNICODE_STRING** nameMem = new UNICODE_STRING*;
 	localizedRebelsName = nameMem;
 	smallFuncs::createUniString(localizedRebelsName, newName);
-	eopSettlementDataDb::getSettlementData(regionID).regionRebelsName = newName;
+	eopSettlementDataDb::get()->getSettlementData(regionID).regionRebelsName = newName;
 }
 
 bool regionStruct::hasHiddenResource(const char* newName)
@@ -87,7 +117,8 @@ int oneTile::getTileX()
 	if (!map)
 		return -1;
 	const int index = this - map->tilesArr;
-	return index % map->mapWidth;
+	const int y = index / map->mapWidth;
+	return index - y * map->mapWidth;
 }
 	
 armyStruct* oneTile::getArmy()

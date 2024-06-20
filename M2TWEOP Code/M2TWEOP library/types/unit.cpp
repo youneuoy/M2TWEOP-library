@@ -5,7 +5,6 @@
 //@license GPL-3.0
 #include "unit.h"
 
-#include "battleHandlerHelpers.h"
 #include "character.h"
 #include "dataOffsets.h"
 #include "eopdu.h"
@@ -16,6 +15,7 @@
 #include "smallFuncs.h"
 #include "faction.h"
 #include "army.h"
+#include "battle.h"
 #include "plugData.h"
 #include <map>
 #include "strategyMap.h"
@@ -127,7 +127,7 @@ namespace unitActions
     {
         if (un == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<unitImmediatePlace>(un, xCoord, yCoord, angle, width);
         m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.unitImmediatePlace);
@@ -156,7 +156,7 @@ namespace unitActions
     {
         if (unit == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         unit->aiActiveSet = 2;
         const auto order = std::make_shared<unitOrderMove>(unit, xCoord, yCoord, run);
@@ -186,7 +186,7 @@ namespace unitActions
     {
         if (un == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         un->aiActiveSet = 2;
         const auto order = std::make_shared<unitAttackClosestUnit>(un, angle, run);
@@ -214,7 +214,7 @@ namespace unitActions
     {
         if (un == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         un->aiActiveSet = 2;
         const auto order = std::make_shared<unitAttackUnit>(un, targetUnit, run);
@@ -309,7 +309,7 @@ namespace unitActions
     {
         if (un == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         un->aiActiveSet = 2;
         const auto order = std::make_shared<unitMoveToOrientation>(un, xCoord, yCoord, widthInMen, angle, run);
@@ -337,7 +337,7 @@ namespace unitActions
     {
         if (un == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         un->aiActiveSet = 2;
         const auto order = std::make_shared<unitMoveRelative>(un, xCoord, yCoord, run);
@@ -365,7 +365,7 @@ namespace unitActions
     {
         if (un == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         un->aiActiveSet = 2;
         const auto order = std::make_shared<unitMoveToMissileRange>(un, targetUnit, run);
@@ -505,7 +505,7 @@ namespace unitActions
     {
         if (group == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupChangeUnitFormation>(group, formationType);
         m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupUnitChangeFormation);
@@ -532,7 +532,7 @@ namespace unitActions
     {
         if (group == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupMoveToRangeOfGroup>(group, targetGroup, run);
         m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupMoveToRangeOfGroup);
@@ -559,7 +559,7 @@ namespace unitActions
     {
         if (group == nullptr || targetUnit == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupMoveToRangeOfUnit>(group, targetUnit, run);
         m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupMoveToRangeOfUnit);
@@ -586,7 +586,7 @@ namespace unitActions
     {
         if (group == nullptr || targetGroup == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupOrderAttackGroup>(group, targetGroup, run);
         m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupAttackGroup);
@@ -608,7 +608,7 @@ namespace unitActions
     {
         if (group == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupOrderHalt>(group);
         m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupHalt);
@@ -637,7 +637,7 @@ namespace unitActions
     {
         if (group == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupOrderMoveFormed>(group, xCoord, yCoord, run);
         m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupMoveFormed);
@@ -666,7 +666,7 @@ namespace unitActions
     {
         if (group == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupOrderMoveUnformed>(group, xCoord, yCoord, run);
         m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupMoveUnformed);
@@ -693,7 +693,7 @@ namespace unitActions
     {
         if (group == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupOrderRelativeMoveFormed>(group, xCoord, yCoord, run);
         m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupRelativeMoveFormed);
@@ -720,7 +720,7 @@ namespace unitActions
     {
         if (group == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupOrderRelativeMoveUnformed>(group, xCoord, yCoord, run);
         m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupRelativeMoveUnformed);
@@ -749,7 +749,7 @@ namespace unitActions
     {
         if (group == nullptr)
             return;
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         const auto order = std::make_shared<groupOrderTurn>(group, angle, isRelative);
         m2tweopHelpers::fireGameScriptFunc(order.get(), codes::offsets.groupTurn);
@@ -757,7 +757,7 @@ namespace unitActions
     
     void collectEngine(unit* un, siegeEngine* engine)
     {
-        if (!battleHandlerHelpers::inBattle())
+        if (!battleHelpers::inBattle())
             return;
         if (!un || !engine || un->eduEntry->category != 0)
             return;
@@ -765,8 +765,8 @@ namespace unitActions
         un->aiActiveSet = 2;
         un->unitPositionData->targetArray[0].siegeEngine = engine;
         un->unitPositionData->targetArray[0].actionType = static_cast<int>(unitActionType::unitCollectEngine);
-        un->unitPositionData->isHalted = 0;
-        un->unitPositionData->hasTargets = 1;
+        un->unitPositionData->isHalted = false;
+        un->unitPositionData->hasTargets = true;
         un->unitPositionData->currentIndex = 1;
     }
 }
@@ -963,7 +963,7 @@ namespace unitHelpers
 	int getMaxSoldiersCount(unit* un)
 	{
 
-		int sizeMul = smallFuncs::GetUnitSize();
+		int sizeMul = smallFuncs::getUnitSize();
 
 		float mul = 2.5f;
 		switch (sizeMul)
@@ -1371,6 +1371,7 @@ namespace unitHelpers
         	sol::usertype<statPri> attackStats;
         	sol::usertype<statArmour> defenseStats;
         	sol::usertype<unitStats> unitStats;
+        	sol::usertype<unitAiGroupData> unitAiGroupData;
         }types;
 	
 		///Unit
@@ -1410,6 +1411,7 @@ namespace unitHelpers
 		@tfield unit flankRightThreat
 		@tfield unit flankLeftThreat
 		@tfield unit flankRearThreat
+		@tfield unitAiGroupData aiGroupData
 		@tfield int nearbyFriendlyUnitsNum
 		@tfield int nearbyEnemyUnitsNum
 		@tfield settlementStruct retrainingSettlement
@@ -1482,6 +1484,7 @@ namespace unitHelpers
 		types.unit.set("flankLeftThreat", &unit::flankLeftThreat);
 		types.unit.set("flankRearThreat", &unit::flankRearThreat);
 		types.unit.set("soldiersFled", &unit::soldiersFled);
+		types.unit.set("aiGroupData", &unit::unitAiGroupData);
 		types.unit.set("isInfighting", &unit::isInfighting);
 		types.unit.set("unitStats", &unit::battleStats);
 		types.unit.set("isCloseFormation", &unit::isCloseFormation);
@@ -1784,10 +1787,23 @@ namespace unitHelpers
 			unit:releaseUnit();
 		*/
 		types.unit.set_function("releaseUnit", &unit::releaseUnit);
-		
-		///Unit Position Data
-		//@section unitPositionData
 
+		/***
+
+		@tfield unitGroup group
+		@tfield battleObjective battleObjective
+		@tfield bool inMelee
+		@tfield bool isAvailable
+
+		@table unitAiGroupData
+	    */
+	 		
+	    types.unitAiGroupData = luaState.new_usertype<unitAiGroupData>("unitAiGroupData");
+	    types.unitAiGroupData.set("group", &unitAiGroupData::unitGroup);
+	    types.unitAiGroupData.set("battleObjective", &unitAiGroupData::battleObjective);
+	    types.unitAiGroupData.set("inMelee", &unitAiGroupData::inMelee);
+	    types.unitAiGroupData.set("isAvailable", &unitAiGroupData::isAvailable);
+	
 		/***
 
 		@tfield int engagedUnitsNum
@@ -1893,7 +1909,7 @@ namespace unitHelpers
 		@usage
 			local type = siegeEngineStruct:getType()
 		*/
-    	types.siegeEngineStruct.set_function("getType", &battleHandlerHelpers::getEngineType);
+    	types.siegeEngineStruct.set_function("getType", &siegeEngine::getEngineType);
     	
 		///unitGroup
 		//@section Unit Group

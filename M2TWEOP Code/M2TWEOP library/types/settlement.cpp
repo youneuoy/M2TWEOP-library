@@ -12,6 +12,7 @@
 #include "fastFunctsHelpers.h"
 #include "functionsOffsets.h"
 #include "gameDataAllHelper.h"
+#include "battle.h"
 #include "smallFuncs.h"
 #include "technicalHelpers.h"
 #include "faction.h"
@@ -20,8 +21,9 @@
 #include "army.h"
 #include "campaign.h"
 #include "strategyMap.h"
+#include "stratModelsChange.h"
 
-std::shared_ptr<std::array<eopSettlementData, 200>> eopSettlementDataDb::eopSettData = std::make_shared<std::array<eopSettlementData, 200>>();
+std::shared_ptr<eopSettlementDataDb> eopSettlementDataDb::instance = std::make_shared<eopSettlementDataDb>();
 std::string eopSettlementDataDb::onGameSave()
 {
 	const auto campaignData = campaignHelpers::getCampaignData();
@@ -55,7 +57,6 @@ std::string eopSettlementDataDb::onGameSave()
 }
 void eopSettlementDataDb::onGameLoad(const std::vector<std::string>& filePaths)
 {
-	bool success = false;
 	for (auto& path : filePaths)
 	{
 		if (path.find("settlementData.json") == string::npos)
@@ -74,38 +75,51 @@ void eopSettlementDataDb::onGameLoad(const std::vector<std::string>& filePaths)
 		try
 		{
 			deserialize(json);
-			success = true;
 		}
 		catch (jsn::json::exception& e)
 		{
 			MessageBoxA(nullptr, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 		}
-	}
-	if (!success)
 		return;
-	for (int i = 0; i < 200; i++)
+	}
+}
+
+void eopSettlementDataDb::onGameLoaded()
+{
+	const auto stratMap = stratMapHelpers::getStratMap();
+	if (!stratMap)
+	{
+		m2tweopHelpers::logStringGame("eopSettlementDataDb.onGameLoaded: stratMap not found.");
+		return;
+	}
+	for (int i = 0; i < stratMap->regionsNum; i++)
 	{
 		auto [settlementID, eopBuildingEntries, modelId, regionName, regionRebelsName] = eopSettData->at(i);
 		const auto region = stratMapHelpers::getRegion(settlementID);
+		if (!region)
+			continue;
 		if (!regionName.empty())
 			region->changeRegionName(regionName.c_str());
 		if (!regionRebelsName.empty())
 			region->changeRebelsName(regionRebelsName.c_str());
-		if (!region->settlement)
+		const auto sett = region->settlement;
+		if (!sett)
 			continue;
-		for (int j = 0; j < region->settlement->buildingsNum; j++)
+		for (int j = 0; j < sett->buildingsNum; j++)
 		{
 			if (const auto id = eopBuildingEntries[j]; id != 0)
 			{
 				if (const auto entry = buildEntryDB::getEopBuildEntry(id); entry)
 				{
-					if (const auto building = region->settlement->getBuilding(j); building)
+					if (const auto building = sett->getBuilding(j); building)
 					{
 						building->edbEntry = entry;
 					}
 				}
 			}
 		}
+		if (modelId != -1)
+			stratModelsChange::setModel(sett->xCoord, sett->yCoord, modelId, modelId);
 	}
 }
 
@@ -534,7 +548,7 @@ namespace settlementHelpers
 	}
 	std::string getName(building* build)
 	{
-		buildingLevel* level = &build->edbEntry->buildingLevel[build->level];
+		buildingLevel* level = &build->edbEntry->levels[build->level];
 		return level->name;
 	}
 	std::string getQueueType(buildingInQueue* build)
@@ -543,7 +557,7 @@ namespace settlementHelpers
 	}
 	std::string getQueueName(buildingInQueue* build)
 	{
-		buildingLevel* level = &build->edbEntry->buildingLevel[build->currentLevel];
+		buildingLevel* level = &build->edbEntry->levels[build->currentLevel];
 		return level->name;
 	}
 

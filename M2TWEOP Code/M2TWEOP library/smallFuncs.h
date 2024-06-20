@@ -5,13 +5,10 @@ struct eventTrigger;
 
 namespace smallFuncs
 {
-	void* getMainStratObject(void*baseObj);
 	void setAncLimit(unsigned char limit);
-	void setEDUUnitsSize(signed short min, signed short max);
+	void setMaxUnitSize(signed short min, signed short max);
 	void setMaxBgSize(unsigned char size);
 	void unlockConsoleCommands();
-	int getBattleCondCode(DWORD condObject);
-	std::string getWinConditionS(DWORD condObject);
 	int getGameVersion();
 	void saveGame(const char* path);
 
@@ -25,8 +22,6 @@ namespace smallFuncs
 
 	//toggle the highlighting of units on the tactical map.
 	void toggleUnitHighlight();
-	battleCameraStruct* getBattleCamCoords();
-	stratMap* getStratMap();
 
 	void setReligionsLimit(unsigned char limit);
 
@@ -38,10 +33,10 @@ namespace smallFuncs
 	void setGuildCooldown(unsigned char turns);
 
 
-	int GetUnitSize();
+	int getUnitSize();
 
-	float getMinimumPossibleMovepointsForArmy(armyStruct* army);
-	float GetDistanceInTiles(int x, int y, int destX, int destY);
+	float getMinimumMovePointsForArmy(armyStruct* army);
+	float getDistanceInTiles(int x, int y, int destX, int destY);
 };
 
 

@@ -73,20 +73,6 @@ namespace tilesChange
 		}
 	}
 
-	string getModString(string& path)
-	{
-		string ret;
-		const size_t pos = path.find("/mods/", 0);
-		for (UINT32 i = 0; i < path.size(); i++)
-		{
-			if (i > static_cast<UINT32>(pos))
-			{
-				ret.push_back(path[i]);
-			}
-		}
-		return ret;
-	}
-
 	void replaceTile(const char* tileLabel, int x, int y, const char* fileName, const char* weather, const char* dayTime)
 	{
 		auto newTile = new customTile();
@@ -112,7 +98,7 @@ namespace tilesChange
 		string f = "\\";
 		string r = "/";
 		replaceAll2(pathName, f, r);
-		pathName = getModString(pathName);
+		pathName = m2tweopHelpers::getModString(pathName);
 		pathName = pathName + "/data/world/maps/campaign/imperial_campaign/custom_tiles/";
 		pathName = pathName + fileName;
 		auto pathTemp = new char[pathName.length() + 1];

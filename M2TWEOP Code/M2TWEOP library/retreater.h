@@ -1,6 +1,7 @@
 #pragma once
 #include "realGameTypes.h"
 #include <vector>
+#include "battle.h"
 class retreater
 {
 private:

@@ -122,7 +122,7 @@ class typedField:
         self.confirmed = False
 
 
-filenames = ["luaP.cpp", "luaP2.cpp", "luaSounds.cpp", "luaFbx.cpp"]
+filenames = ["luaP.cpp", "luaP2.cpp", "luaSounds.cpp", "luaFbx.cpp", "luaEop3dObjects.cpp"]
 cwd = os.getcwd()
 eopPath = re.findall(r'(.+)documentationGenerator', cwd)[0]
 typesPath = eopPath + "M2TWEOP Code\\M2TWEOP library\\types\\"

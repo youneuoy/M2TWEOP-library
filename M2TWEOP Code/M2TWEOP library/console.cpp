@@ -79,6 +79,12 @@ namespace console
 			consoleData.pressAmount = 0;
 		}
 
+		if (ImGui::IsKeyPressed(ImGuiKey_Enter)
+			and ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
+		{
+			applyCommand();
+			consoleData.pressAmount = 0;
+		}
 
 		if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)
 			&& ((consoleData.commandNum - 1) - consoleData.pressAmount >= 0) )
@@ -94,7 +100,15 @@ namespace console
 			consoleData.input = luaP::logCommands[consoleData.commandNum - 1 - consoleData.pressAmount];
 		}
 
-		ImGui::InputTextMultiline("##console", &consoleData.input, ImVec2(-FLT_MIN, -FLT_MIN), ImGuiInputTextFlags_AllowTabInput);
+		if (ImGui::InputTextMultiline("##console", &consoleData.input, ImVec2(-FLT_MIN, -FLT_MIN),
+			ImGuiInputTextFlags_AllowTabInput | ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
+			{
+				applyCommand();
+				consoleData.pressAmount = 0;
+			}
+		}
 		ImGui::End();
 
 

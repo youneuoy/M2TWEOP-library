@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "battleHandlerHelpers.h"
+#include "battle.h"
 #include "fastFunctsHelpers.h"
 #include "realGameTypes.h"
 #include "lua/sol.hpp"
@@ -192,25 +192,6 @@ public:
 	struct groupLabel *labels; //0x0004
 }; //Size: 0x0008
 
-struct floatPosData
-{
-public:
-	float boundUpRightX; //0x0000
-	float boundUpRightY; //0x0004
-	float boundDownRightX; //0x0008
-	float boundDownRightY; //0x000C
-	float boundUpLeftX; //0x0010
-	float boundUpLeftY; //0x0014
-	float boundDownLeftX; //0x0018
-	float boundDownLeftY; //0x001C
-	float width; //0x0020
-	float height; //0x0024
-	float centreX; //0x0028
-	float centreY; //0x002C
-	float minRadians; //0x0030
-	float maxRadians; //0x0034
-}; //Size: 0x0044
-
 struct arrayInUnitGroup
 {
 	int order;
@@ -336,52 +317,6 @@ public:
 		return unitsNotInFormation[index];
 	}
 };
-
-struct battleGroup
-{
-	int index;
-	unit **units;
-	int unitsSize;
-	int unitCount;
-	char positionDataSet;
-	char field_11;
-	char field_12;
-	char field_13;
-	float midPointX;
-	float midPointY;
-	float prevmidPointX;
-	float prevmidPointY;
-	int radius;
-	int somthingRotation;
-	struct floatPosData floatPosDataStart;
-	float midPointDiffX;
-	float midPointDiffY;
-	int8_t gap6C_positionFloats[172];
-	char field_118;
-	char field_119;
-	char field_11a;
-	char field_11b;
-	int16_t someAngle;
-	int16_t pad11e;
-	float distRateOfChange;
-	char field_124;
-	char positionIDSet;
-	char field_126;
-	char field_127;
-	int positionID;
-	int cavalryRatio;
-	int missileRatio;
-	int routingRatio;
-	int soldierCountssmthingBattleMap;
-	int soldierCounts;
-	int cavalryRatioConditional;
-	int missileRatioConditional;
-	int routingRatioConditional;
-	int soldierCountssmthingBattleMapConditional;
-	int soldierCountsConditional;
-	int unitNumForStats;
-};
-
 struct aiUnitGroup : unitGroup
 {
 	void *detachment;
@@ -561,11 +496,11 @@ struct unitTaskMem
 struct unitAiGroupData
 {
 	struct aiUnitGroup *unitGroup;
-	int32_t unitAistatus;
+	int32_t unitAiStatus;
 	bool inMelee;
 	bool releasedFromMelee;
 	char pad[2];
-	struct aiBattleObjectiveBase *battleObjective;
+	struct aiBattleObjective *battleObjective;
 	bool isAvailable;
 	char pad2[3];
 	int meleeAnalyzerDetails;
@@ -994,7 +929,7 @@ public:
 	}
 	unit* getTargetUnit()
 	{
-		if (!battleHandlerHelpers::inBattle())
+		if (!battleHelpers::inBattle())
 			return nullptr;
 		if (!hasTargets || isHalted)
 		{
@@ -1043,7 +978,7 @@ struct siegeEngine
 	int field_74;
 	int ID;
 	int health;
-	struct engineRecord* engineRecord;
+	struct engineRecord* engineRec;
 	struct unit* currentUnit;
 	struct unit* lastUnit;
 	unitStats stats;
@@ -1178,6 +1113,11 @@ struct siegeEngine
 	int field_5F8;
 	int field_5FC;
 	int field_600;
+public:
+	int getEngineType()
+	{
+		return engineRec->classID;
+	}
 };
 
 struct mountEffect
@@ -1983,7 +1923,7 @@ public:
 	void setMovingFastSet(bool set)
 	{
 		if (eduEntry->category == 0 && siegeEnNum > 0
-			&& siegeEngines[0]->engineRecord->classID != engineType::ladder)
+			&& siegeEngines[0]->engineRec->classID != engineType::ladder)
 		{
 			moveFast = 0;
 			return;
@@ -2036,10 +1976,10 @@ public:
 	}
 	void releaseUnit()
 	{
-		if (!battleHandlerHelpers::inBattle())
+		if (!battleHelpers::inBattle())
 			return;
 		const auto stack = army;
-		const auto battleData = battleHandlerHelpers::getBattleData();
+		const auto battleData = battleHelpers::getBattleData();
 		for (int i = 0; i < battleData->playerArmyNum; i++)
 		{
 			const auto playerArmy = battleData->playerArmies[i].army;

@@ -303,7 +303,7 @@ namespace pathFinder
 			return;
 
 
-		float possibleMP = smallFuncs::getMinimumPossibleMovepointsForArmy(army);
+		float possibleMP = smallFuncs::getMinimumMovePointsForArmy(army);
 
 		//bitset wrapper, 1 bit per value
 		std::vector<bool>visited;
@@ -449,7 +449,7 @@ namespace pathFinder
 		float minResDistance = FLT_MAX;
 		for (auto& coord : possibleCoords)
 		{
-			float dist = smallFuncs::GetDistanceInTiles(destx, desty, coord.first, coord.second);
+			float dist = smallFuncs::getDistanceInTiles(destx, desty, coord.first, coord.second);
 			if (dist < minResDistance)
 			{
 				res = coord;
@@ -589,7 +589,7 @@ namespace pathFinder
 			}
 
 			//prefer long distances
-			safetyCost += smallFuncs::GetDistanceInTiles(x, y, evX, evY);
+			safetyCost += smallFuncs::getDistanceInTiles(x, y, evX, evY);
 			return safetyCost;
 		};
 
@@ -664,7 +664,7 @@ namespace pathFinder
 
 		auto& statenodeF = StateMap[(int)stateStart];
 		auto& statenodeE = StateMap[(int)stateEnd];
-		return smallFuncs::GetDistanceInTiles(statenodeF.X, statenodeF.Y, statenodeE.X, statenodeE.Y);
+		return smallFuncs::getDistanceInTiles(statenodeF.X, statenodeF.Y, statenodeE.X, statenodeE.Y);
 	}
 
 	void PathMap::AdjOne(int x, int y, int currX, int currY, MP_VECTOR<micropather::StateCost>*& adjacent)

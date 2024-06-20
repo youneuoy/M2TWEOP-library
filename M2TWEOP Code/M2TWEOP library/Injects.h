@@ -1595,6 +1595,19 @@ private:
 	LPVOID funcAddress;
 };
 
+class onNewGameLoaded
+	:public AATemplate
+{
+public:
+	onNewGameLoaded(MemWork* mem, LPVOID addr, int ver);
+	~onNewGameLoaded();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 
 class OnAutoSave
 	:public AATemplate

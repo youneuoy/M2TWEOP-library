@@ -13,6 +13,7 @@
 #include "character.h"
 #include "faction.h"
 #include "unit.h"
+#include "battle.h"
 #include "army.h"
 #include "characterRecord.h"
 #include "gameSTDUIHelpers.h"
@@ -492,9 +493,9 @@ namespace battleCreator
 		if (selectedWinner == 2)//draw
 			return;
 		if (selectedWinner == 0)
-			battleHandlerHelpers::autoWin("attacker");
+			battleHelpers::autoWin("attacker");
 		else if (selectedWinner == 1)
-			battleHandlerHelpers::autoWin("defender");
+			battleHelpers::autoWin("defender");
 	}
 	
 	bool doTransfer()

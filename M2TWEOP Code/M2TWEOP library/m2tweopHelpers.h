@@ -8,8 +8,11 @@
 namespace m2tweopHelpers
 {
 
+
 	std::string getModPath();
 	std::string getLuaPath();
+	std::string getPathFromMods();
+	std::string getModString(const std::string& path);
 	std::shared_ptr<mapImage> makeMapImage();
 	void clearMapImage(mapImage* img);
 	void loadSaveGame(const char* saveName);

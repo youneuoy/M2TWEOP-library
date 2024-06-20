@@ -23,9 +23,9 @@ public:
 class eopDu
 {
 public:
-    static std::vector<eopEduEntry> eopUnitDb;
-    static std::unordered_map<std::string, eopEduEntry*> eopUnitLookup;
-    static std::unordered_map<int, eopEduEntry*> eopUnitIndexLookup;
+    static std::vector<std::shared_ptr<eopEduEntry>> eopUnitDb;
+    static std::unordered_map<std::string, std::shared_ptr<eopEduEntry>> eopUnitLookup;
+    static std::unordered_map<int, std::shared_ptr<eopEduEntry>> eopUnitIndexLookup;
     static eduEntry* addEopEduEntryFromFile(const char* fileName, int newIdx);
     static eduEntry* getEopEduEntry(int idx);
     static int readEduFile(const std::string& fileName, eduEntry* entryForFilling);
@@ -34,15 +34,13 @@ public:
     static eopEduEntry* getEopEduEntryInternalIterating(int idx);
     static int getEopEntryNum();
     static char* getEopNameOfEduEntry(const eduEntry* entryAddress);
-    static int getDataEopEdu(int idx);
-    static int* tryFindDataEopEdu(const char* entryName);
     static eduEntry* getEopEduEntryByName(const char* entryName);
-    static int* tryFindDataEopEduIndex(char* entryName);
     static eduEntry* getEduEntry(int idx);
     static void setEntrySoldierModelLua(int idx, const char* newModel);
 };
 
 namespace eopDuHelpers
 {
+    int getEduEntryNum();
 	void addToLua(sol::state& luaState);
 };

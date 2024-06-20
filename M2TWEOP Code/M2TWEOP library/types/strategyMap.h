@@ -561,13 +561,7 @@ public:
 			return 0.0f;
 		return doubleTile->height;
 	}
-	void setTileHeight(float height)
-	{
-		const auto doubleTile = tileToDoubleTile();
-		if (!doubleTile)
-			return;
-		doubleTile->height = height;
-	}
+	void setTileHeight(float height);
 	DWORD* findObject(const int type)
 	{
 		DWORD* thisPtr = object;
@@ -621,31 +615,8 @@ public:
 			return 0;
 		return doubleTile->climate;
 	}
-	void setTileClimate(const int climate)
-	{
-		const auto doubleTile = tileToDoubleTile();
-		if (!doubleTile)
-			return;
-		doubleTile->climate = static_cast<int8_t>(climate);
-	}
-	void setTileGroundType(const int ground)
-	{
-		const auto doubleTile = tileToDoubleTile();
-		groundType = ground;
-		if (ground >= strategyGroundType::impassableLand
-			|| ground == strategyGroundType::lowMountains
-			|| ground == strategyGroundType::highMountains
-			|| ground == strategyGroundType::denseForest
-			|| ground >= strategyGroundType::ocean && ground < strategyGroundType::coast)
-		{
-			nonPassable = -1;
-			if (ground >= strategyGroundType::ocean && ground < strategyGroundType::coast)
-				isLand = 0;
-		}
-		if (!doubleTile)
-			return;
-		doubleTile->groundType = static_cast<int8_t>(ground);
-	}
+	void setTileClimate(int climate);
+	void setTileGroundType(int ground);
 	int getTileGroundType()
 	{
 		return groundType;

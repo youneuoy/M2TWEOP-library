@@ -6,7 +6,7 @@
 
 
 #include "events.h"
-#include "battleHandlerHelpers.h"
+#include "battle.h"
 #include "cultures.h"
 #include "eopBuildings.h"
 #include "onlineThings.h"
@@ -110,10 +110,10 @@ std::shared_ptr<nameIndexCombo> GLOBAL_NAME_INDEX_COMBO = std::make_shared<nameI
 
 DWORD __fastcall patchesForGame::onSearchUnitType(char* typeName)
 {
-	if (const auto eopUnit = eopDu::tryFindDataEopEduIndex(typeName); eopUnit != nullptr)
+	if (const auto eopUnit = eopDu::getEopEduEntryByName(typeName); eopUnit != nullptr)
 	{
-		m2tweopHelpers::logStringGame("Unit found in M2TWEOP: " + std::string(typeName) + " index: " + std::to_string(*eopUnit));
-		GLOBAL_NAME_INDEX_COMBO = std::make_shared<nameIndexCombo>(typeName, *eopUnit);
+		m2tweopHelpers::logStringGame("Unit found in M2TWEOP: " + std::string(typeName) + " index: " + std::to_string(eopUnit->index));
+		GLOBAL_NAME_INDEX_COMBO = std::make_shared<nameIndexCombo>(typeName, eopUnit->index);
 		return reinterpret_cast<DWORD>(GLOBAL_NAME_INDEX_COMBO.get());
 	}
 	return 0;
@@ -183,7 +183,7 @@ int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlemen
 {
 	int selectedLevel = -2;//magic value, mean not change anything
 	bool isChanged = false;
-	int tmpVal = gameEvents::onfortificationlevelS(settlement, isCastle, &isChanged);
+	int tmpVal = gameEvents::onFortificationLevelS(settlement, isCastle, &isChanged);
 	if (isChanged == true)
 	{
 		selectedLevel = tmpVal;
@@ -202,39 +202,30 @@ char* __fastcall patchesForGame::onSaveEDUStringS(eduEntry* eduEntry)
 	return retName;
 }
 
-int __fastcall patchesForGame::onCreateUnit(char** entryName, int* edbIndex)
+int __fastcall patchesForGame::onCreateUnit(char** entryName, int* eduIndex)
 {
-	if (edbIndex == nullptr)
+	if (eduIndex == nullptr)
 	{
-		int* newEdu = eopDu::tryFindDataEopEduIndex(*entryName);
-
+		const auto newEdu = eopDu::getEopEduEntryByName(*entryName);
 		if (newEdu == nullptr)
-		{
 			return -1;
-		}
-
-		return *newEdu;
+		return newEdu->index;
 	}
-
-	return *edbIndex;
+	return *eduIndex;
 }
 
-int __fastcall patchesForGame::onFindUnit(char* entry, int* edbIndex)
+int __fastcall patchesForGame::onFindUnit(char* entry, int* eduIndex)
 {
-	if (edbIndex == nullptr)
+	if (eduIndex == nullptr)
 	{
 		if (entry == nullptr)
 			return  -1;
-
-		int* newEdu = eopDu::tryFindDataEopEduIndex(entry);
-
+		const auto newEdu = eopDu::getEopEduEntryByName(entry);
 		if (newEdu == nullptr)
 			return  -1;
-
-		return *newEdu;
+		return newEdu->index;
 	}
-
-	return *edbIndex;
+	return *eduIndex;
 }
 
 int __fastcall patchesForGame::OnReligionCombatBonus(int religionID, characterRecord* namedChar)
@@ -307,7 +298,7 @@ std::string getGamePath(const std::string& modPath) {
 
 char* __fastcall patchesForGame::getBrowserPicConstructed(int cultureID, edbEntry* entry, int buildingLevel)
 {
-	const auto level = entry->buildingLevel[buildingLevel];
+	const auto level = entry->levels[buildingLevel];
 	const auto levelName = level.name;
 	if (levelName == nullptr)
 		return nullptr;
@@ -360,7 +351,7 @@ char* __fastcall patchesForGame::getBrowserPicConstructed(int cultureID, edbEntr
 
 char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEntry* entry, int buildingLevel)
 {
-	const auto level = entry->buildingLevel[buildingLevel];
+	const auto level = entry->levels[buildingLevel];
 	const auto levelName = level.name;
 	if (levelName == nullptr)
 		return nullptr;
@@ -663,11 +654,10 @@ int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduin
 {
 	if (eduindex == -1)
 	{
-		if (const int* newEdu = eopDu::tryFindDataEopEdu(*entryName); newEdu == nullptr)
-			return  -1;
+		if (!eopDu::getEopEduEntry(eduindex))
+			return -1;
 		return 0;
 	}
-
 	return eduindex;
 }
 
@@ -692,8 +682,7 @@ eduEntry* __fastcall patchesForGame::OnCreateMercUnit(char** entryName, eduEntry
 	const DWORD entryAddr = reinterpret_cast<DWORD>(entry);
 	if (const DWORD mercEopValue = codes::offsets.mercEOPValue; entryAddr == mercEopValue)
 	{
-		const int* index = eopDu::tryFindDataEopEduIndex(*entryName);
-		eduEntry* eopEntry = eopDu::getEopEduEntry(*index);
+		eduEntry* eopEntry = eopDu::getEopEduEntryByName(*entryName);
 		return eopEntry;
 	}
 	return entry;
@@ -745,7 +734,7 @@ float distance(const float x, const float y, const float x2, const float y2)
 
 void __fastcall patchesForGame::onPreBattlePlacement(aiTacticAssault* aiTactic)
 {
-	auto battle = battleHandlerHelpers::getBattleData();
+	auto battle = battleHelpers::getBattleData();
 	if (!battle || battle->battleState >= 5)
 		return;
 	DWORD vFunc = getVFunc(aiTactic->vftable, 0x4C);
@@ -827,12 +816,12 @@ bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetac
 		auto engine = unit->siegeEngines[0];
 		if (engine == nullptr)
 			continue;
-		if (engine->engineRecord->classID == engineType::ram)
+		if (engine->engineRec->classID == engineType::ram)
 			numRams++;
-		if (engine->engineRecord->classID == engineType::ladder || engine->engineRecord->classID == engineType::tower)
+		if (engine->engineRec->classID == engineType::ladder || engine->engineRec->classID == engineType::tower)
 			numLaddersTowers++;
 	}
-	auto battleData = battleHandlerHelpers::getBattleData();
+	auto battleData = battleHelpers::getBattleData();
 	battleSide* attacker = nullptr;
 	battleSide* defender = nullptr;
 	for (int i = 0; i < battleData->sidesNum; i++)
@@ -905,7 +894,7 @@ bool __thiscall patchesForGame::onPreBattlePlacement2(aiUnitGroup* group, DWORD 
 {
 	DWORD orderChangeFormation = codes::offsets.issueFormationOrder;
 	auto retBool = GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, DWORD, bool), orderChangeFormation)(group, formationTemplate, force_issue_order);
-	auto battle = battleHandlerHelpers::getBattleData();
+	auto battle = battleHelpers::getBattleData();
 	if (battle->battleType != 3)
 		return retBool;
 	if (battle->battleState >= 5)
@@ -1101,11 +1090,12 @@ void __stdcall patchesForGame::afterCampaignMapLoaded()
 	globals::dataS.Modules.tacticalMapViewer.unView();
 	gameEvents::onCampaignMapLoaded();
 }
+
 void __stdcall patchesForGame::onNewGameStart()
 {
+	eopSettlementDataDb::get()->clearData();
 	gameEvents::onNewGameStart();
 	plannedRetreatRoute::onNewGameStart();
-	eopSettlementDataDb::clearData();
 }
 
 //#define TESTPATCHES
@@ -1130,6 +1120,12 @@ void __stdcall patchesForGame::onGameInit()
 void __stdcall patchesForGame::onUnloadCampaign()
 {
 	gameEvents::onUnloadCampaign();
+}
+
+void __stdcall patchesForGame::onNewGameLoaded()
+{
+	plugData::data.luaAll.fillHashMaps();
+	gameEvents::onNewGameLoaded();
 }
 
 void __fastcall patchesForGame::onAiTurn(aiFaction* aiFac)
@@ -1272,6 +1268,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	const int gameVersion = smallFuncs::getGameVersion();
 	const DWORD scrollOpenedCode = gameVersion == 1 ? 0x013719FC : 0x0132C9D4;
 	const DWORD factionTurnStartCode = gameVersion == 1 ? 0x0136931C : 0x013242F4;
+	const DWORD gameReloaded = gameVersion == 1 ? 0x013319E4 : 0x012EC9C4;
 	if (eventCode == scrollOpenedCode)
 	{
 		char* str = reinterpret_cast<char*>(vTab[1]);
@@ -1294,6 +1291,10 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 		discordManager::onFactionTurnStart(fac);
 		plannedRetreatRoute::onFactionTurnStart(fac);
 	}
+	else if (eventCode == gameReloaded)
+	{
+		eopSettlementDataDb::get()->onGameLoaded();
+	}
 }
 
 void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
@@ -1312,7 +1313,7 @@ void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
 	files = techFuncs::loadGameLoadArchive(files, savePath);
 	gameEvents::onLoadGamePl(&files);
 	plannedRetreatRoute::onGameLoad(files);
-	eopSettlementDataDb::onGameLoad(files);
+	eopSettlementDataDb::get()->onGameLoad(files);
 
 	techFuncs::deleteFiles(files);
 }
@@ -1329,7 +1330,7 @@ void __fastcall patchesForGame::onSaveGame(UNICODE_STRING**& savePath)
 	delete plugFiles;
 	if (const std::string retreatsFile = plannedRetreatRoute::onGameSave(); !retreatsFile.empty())
 		files.push_back(retreatsFile);
-	if (const std::string settlementData = eopSettlementDataDb::onGameSave(); !settlementData.empty())
+	if (const std::string settlementData = eopSettlementDataDb::get()->onGameSave(); !settlementData.empty())
 		files.push_back(settlementData);
 	techFuncs::saveGameMakeArchive(savePath, files);
 	techFuncs::deleteFiles(files);
@@ -1459,24 +1460,13 @@ void __fastcall patchesForGame::recruitEOPunit2(int eduIndex)
 eduEntry* __fastcall patchesForGame::onReadDescrRebel(DWORD value)
 {
 	const DWORD eduIndex = (value * 4) / 996;
-	eduEntry* entry = eopDu::getEduEntry(eduIndex);
-	if (entry == nullptr)
-		entry = eopDu::getEopEduEntry(eduIndex);
-	return entry;
+	return eopDu::getEduEntry(eduIndex);
 }
 
 void __fastcall patchesForGame::recruitEopMercUnit(DWORD pad, DWORD pad2, regionStruct* region, int eduindex, int factionid, int exp)
 {
 	int regionID = region->regionID;
-	if (eduindex > 499)
-	{
-		int eopIDX = eopDu::getDataEopEdu(eduindex);
-		unitHelpers::createUnitEDB(eopIDX, regionID, factionid, exp, 0, 0);
-	}
-	else
-	{
-		unitHelpers::createUnitIdx(eduindex, regionID, factionid, exp, 0, 0);
-	}
+	unitHelpers::createUnitIdx(eduindex, regionID, factionid, exp, 0, 0);
 }
 
 void WINAPI patchesForGame::onMoveRecruitQueue()

@@ -33,6 +33,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.consoleCommands = reinterpret_cast<consoleCommands*>(0x02cbce50);
 
 		offsets.guildDataStart = 0x018FD958;
+		offsets.battleCamera = 0x0193f34c;
 
 		offsets.edbDataStart = 0x018AA5A8;
 		offsets.selectedEra = 0x2CB9210;
@@ -61,6 +62,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.stratCursorCoords = 0x02c86c28;
 		offsets.modelsDb = 0x016e9dc8;
 		offsets.customTiles = 0x02C3BF50;
+		offsets.battlePerimeters = 0x16F0600;
+		offsets.battlefieldEngines = 0x02C8329C;
 
 		offsets.descr_sm_factionslist = reinterpret_cast<descr_sm_factions_list*>(0x01667288);
 	}
@@ -86,6 +89,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.tgaDataBase = 0x0193E498;
 
 		offsets.stratModelArray = 0x01B186A8;
+		offsets.battleCamera = 0x0193f34c;
+		offsets.battlePerimeters = 0x016A7428;
 
 		offsets.getMovePath = 0x004D8390;
 		
@@ -119,6 +124,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.groupLabels = 0x01B60580;
 		offsets.stratCursorCoords = 0x02c3da48;
 		offsets.modelsDb = 0x016a0b98;
+		offsets.battlefieldEngines = 0x02C3A254;
 
 		offsets.audioEnable = reinterpret_cast<bool*>(0x01639f1d);
 		offsets.audioMaster_vol = reinterpret_cast<int*>(0x01639f60);

@@ -12,40 +12,6 @@
 #define buildingLevelStruct_name 1
 
 
-//building data
-struct edbEntry { /* SETTLEMENT_CONDITION_SETTLEMENT_FACTION */
-    int factionBitField;
-    int factionsRaw;
-    int cultures;
-    bool negate;
-    bool allFactions;
-    char field_12[2];
-    int32_t buildingID; //0x0014
-    int32_t classification; //0x0018
-    int material;
-    DWORD buildingPic[13];
-	DWORD pad;
-	DWORD eopBuildingID; //just using this mem to store if this is eop building entry
-    int genericPic;
-    int genericPicHash;
-    int8_t isWallBuilding; //0x0060
-    int8_t isPort; //0x0061
-    int8_t isCoreBuilding; //0x0062
-    int8_t isTemple; //0x0063
-    int32_t religionID; //0x0064
-    int8_t isHinterland; //0x0068
-    int8_t isFarm; //0x0069
-    char pad_006A[2]; //0x006A
-    UNICODE_STRING** localizedName;
-    gameStdVector<stringWithHash> converts;
-    char* type; /* type of building (core_building,barracks)  */
-    int typeHash;
-    struct buildingLevel* buildingLevel; /* name of building(stone_wall), tga's, etc */
-    uint32_t *levelFactions;
-    int32_t buildingLevelCount; //0x0090
-    void *plugins;
-    int pluginCount;
-};
 
 struct buildingLevelCapability
 {
@@ -362,6 +328,48 @@ public:
 	void addFactionCapability(int capability, int16_t value, bool bonus,  const std::string& condition);
 };
 
+//building data
+struct edbEntry { /* SETTLEMENT_CONDITION_SETTLEMENT_FACTION */
+	int factionBitField;
+	int factionsRaw;
+	int cultures;
+	bool negate;
+	bool allFactions;
+	char field_12[2];
+	int32_t buildingID; //0x0014
+	int32_t classification; //0x0018
+	int material;
+	DWORD buildingPic[13];
+	DWORD pad;
+	DWORD eopBuildingID; //just using this mem to store if this is eop building entry
+	int genericPic;
+	int genericPicHash;
+	int8_t isWallBuilding; //0x0060
+	int8_t isPort; //0x0061
+	int8_t isCoreBuilding; //0x0062
+	int8_t isTemple; //0x0063
+	int32_t religionID; //0x0064
+	int8_t isHinterland; //0x0068
+	int8_t isFarm; //0x0069
+	char pad_006A[2]; //0x006A
+	UNICODE_STRING** localizedName;
+	gameStdVector<stringWithHash> converts;
+	char* type; /* type of building (core_building,barracks)  */
+	int typeHash;
+	struct buildingLevel* levels; /* name of building(stone_wall), tga's, etc */
+	uint32_t *levelFactions;
+	int32_t buildingLevelCount; //0x0090
+	void *plugins;
+	int pluginCount;
+public:
+	buildingLevel* getBuildingLevel(const int index)
+	{
+		if (index < 0 || index >= buildingLevelCount)
+			return nullptr;
+		return &levels[index];
+	}
+};
+
 struct hiddenResource
 {
 public:
@@ -463,6 +471,7 @@ public:
 			if (const auto entry = buildings.get(i); entry->buildingID == id)
 				return entry;
 		}
+		return nullptr;
 	}
 	edbEntry* getBuildingByName(const char* name)
 	{

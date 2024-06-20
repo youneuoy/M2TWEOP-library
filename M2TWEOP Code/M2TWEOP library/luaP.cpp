@@ -24,6 +24,7 @@
 #include "faction.h"
 #include "unit.h"
 #include "army.h"
+#include "battle.h"
 #include "campaign.h"
 #include "campaignDb.h"
 #include "DeveloperMode.h"
@@ -33,32 +34,24 @@ std::vector<std::string> luaP::logS;
 std::vector<std::string> luaP::logCommands;
 
 
-static int ourP(lua_State* L) {
-	int n = lua_gettop(L);  /* number of arguments */
-	int i;
-	lua_getglobal(L, "tostring");
-	for (i = 1; i <= n; i++) {
+static int ourP(lua_State* l)
+{
+	const int n = lua_gettop(l);  /* number of arguments */
+	lua_getglobal(l, "tostring");
+	for (int i = 1; i <= n; i++) {
 		std::string newS;
-		const char* s;
-		lua_pushvalue(L, -1);  /* function to be called */
-		lua_pushvalue(L, i);   /* value to print */
-		lua_call(L, 1, 1);
-		s = lua_tostring(L, -1);  /* get result */
-		if (s == NULL)
-			return luaL_error(L, LUA_QL("tostring") " must return a string to "
-				LUA_QL("print"));
+		lua_pushvalue(l, -1);  /* function to be called */
+		lua_pushvalue(l, i);   /* value to print */
+		lua_call(l, 1, 1);
+		const char* s = lua_tostring(l, -1);  /* get result */
+		if (s == nullptr)
+			return luaL_error(l, LUA_QL("tostring") " must return a string to " LUA_QL("print"));
 		if (i > 1)
-		{
 			newS += '\t';
-			//fputs("\t", stdout);
-		}
 		newS += s;
 		luaP::logS.push_back(newS);
-		//fputs(s, stdout);
-		lua_pop(L, 1);  /* pop result */
+		lua_pop(l, 1);  /* pop result */
 	}
-	//luaP::logS += "\n";
-	//fputs("\n", stdout);
 	return 0;
 }
 
@@ -73,31 +66,29 @@ void replaceAll2(std::string& s, const std::string& search, const std::string& r
 	}
 }
 
-void luaP::runScriptS(std::string* script)
+void luaP::runScriptS(const std::string* script)
 {
-	const char* retS = nullptr;
-	plugData::data.luaAll.logS.push_back("\n== Output ==");
-	auto funcResult = luaState.script(*script);
-	if (!funcResult.valid())
-	{
-		sol::error luaError = funcResult;
-		plugData::data.luaAll.logS.push_back("\n== Error ==\n");
-		luaP::logS.push_back(luaError.what());
+	logS.emplace_back("\n== Output ==");
+	sol::load_result scriptResult = luaState.load(*script);
+	if (!scriptResult.valid()) {
+		const sol::error luaError = scriptResult;
+		logS.emplace_back("\n== Error ==\n");
+		logS.emplace_back(luaError.what());
+		return;
 	}
-	return;
+	if (const sol::protected_function_result result = scriptResult(); !result.valid()) {
+		const sol::error luaError = result;
+		logS.emplace_back("\n== Error ==\n");
+		logS.emplace_back(luaError.what());
+	}
 }
 
 bool luaP::checkVar(const char* gName, int variable)
 {
-	sol::optional<int> scriptVar = luaState[gName];
-	if (scriptVar)
-	{
+	if (sol::optional<int> scriptVar = luaState[gName])
 		return scriptVar.value() == variable;
-	}
 	return false;
 }
-
-
 
 sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 {
@@ -105,7 +96,6 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	{
 		sol::table M2TWEOPTable;
 		sol::table stratmapTable;
-		//this inside stratmap table
 		sol::table objectsTable;
 		sol::table cameraTable;
 		sol::table gameTable;
@@ -115,27 +105,26 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	struct
 	{
 		sol::usertype<uiElement>uiElement;
-		sol::usertype<buildingLevel>buildingLevel;
-		sol::usertype<battleCameraStruct>battleCameraStruct;
 		sol::usertype<settlementInfoScroll>settlementInfoScroll;
 		sol::usertype<settlementTextStrings>settlementTextStrings;
 		sol::usertype<uiString>uiString;
 	}types;
+	
 	luaState = {};
-	luaPath = modPath + "\\youneuoy_Data\\plugins\\lua";
+	luaPath = modPath + R"(\youneuoy_Data\plugins\lua)";
 	luaState.open_libraries(sol::lib::base, sol::lib::package, sol::lib::coroutine, sol::lib::string, sol::lib::os, sol::lib::math, sol::lib::table, sol::lib::bit32, sol::lib::io, sol::lib::ffi, sol::lib::jit, sol::lib::debug);
 
 	std::string packagePS = "package.path = '";
 	packagePS += modPath;
-	packagePS += "\\youneuoy_Data\\plugins\\lua\\?.lua;'";
+	packagePS += R"(\youneuoy_Data\plugins\lua\?.lua;')";
 
 	packagePS += "..'";
 	packagePS += modPath;
-	packagePS += "\\youneuoy_Data\\plugins\\lua\\redist\\?.lua;'..package.path ;";
+	packagePS += R"(\youneuoy_Data\plugins\lua\redist\?.lua;'..package.path ;)";
 
 	packagePS += "package.cpath = '";
 	packagePS += modPath;
-	packagePS += "\\youneuoy_Data\\plugins\\lua\\redist\\?.dll;'..package.cpath ;";
+	packagePS += R"(\youneuoy_Data\plugins\lua\redist\?.dll;'..package.cpath ;)";
 
 
 	std::string f = "\\";
@@ -143,24 +132,25 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	replaceAll2(packagePS, f, r);
 
 	luaState["print"] = &ourP;
-	auto funcResult = luaState.script(packagePS.c_str());
-	if (!funcResult.valid())
+	if (auto funcResult = luaState.script(packagePS); !funcResult.valid())
 	{
 		sol::error luaError = funcResult;
-		MessageBoxA(NULL, luaError.what(), "Lua package error!", NULL);
+		MessageBoxA(nullptr, luaError.what(), "Lua package error!", NULL);
 		return nullptr;
 	}
-
+	
+	// This checks the syntax of the script, but does not execute it
 	sol::load_result fileRes = luaState.load_file(luaFilePath);
-	if (!fileRes.valid()) { // This checks the syntax of your script, but does not execute it
+	if (!fileRes.valid())
+	{ 
 		sol::error luaError = fileRes;
-		MessageBoxA(NULL, luaError.what(), "Lua syntax error!", NULL);
+		MessageBoxA(nullptr, luaError.what(), "Lua syntax error!", NULL);
 		return nullptr;
 	}
-	sol::protected_function_result result1 = fileRes(); // this causes the script to execute
-	if (!result1.valid()) {
+	if (sol::protected_function_result result1 = fileRes(); !result1.valid())
+	{
 		sol::error luaError = result1;
-		MessageBoxA(NULL, luaError.what(), "Lua execution error!", NULL);
+		MessageBoxA(nullptr, luaError.what(), "Lua execution error!", NULL);
 		return nullptr;
 	}
 
@@ -213,7 +203,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@tfield condition condition
 	@tfield getOptions1 getOptions1
 	@tfield getOptions2 getOptions2
-	@tfield CalculateTileMovementCost CalculateTileMovementCost
+	@tfield getTileMoveCost getTileMoveCost
 	@tfield getCampaignDifficulty1 getCampaignDifficulty1
 	@tfield getCampaignDifficulty2 getCampaignDifficulty2
 	@tfield setConversionLvlFromCastle setConversionLvlFromCastle
@@ -404,7 +394,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	M2TWEOP.setEDUUnitsSize(1,300);
 	*/
-	tables.M2TWEOPTable.set_function("setEDUUnitsSize", &smallFuncs::setEDUUnitsSize);
+	tables.M2TWEOPTable.set_function("setEDUUnitsSize", &smallFuncs::setMaxUnitSize);
 
 	/***
 	Gets a struct containing color information about the settlement info scroll.
@@ -476,7 +466,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	-- Zoom out the camera beyond it's normal range
 	cameraCoords.zCoord = 500;
 	*/
-	tables.M2TWEOPTable.set_function("getBattleCamCoords", &smallFuncs::getBattleCamCoords);
+	tables.M2TWEOPTable.set_function("getBattleCamCoords", &battleHelpers::getBattleCamCoords);
 
 	/***
 	Set the maximum number of religions in the mod (per descr\_religions.txt). Do not use religions > 10 in CombatVsReligion attributes!
@@ -506,7 +496,7 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	M2TWEOP.isTileFree(55,25);
 	*/
-	tables.M2TWEOPTable.set_function("isTileFree", &stratMapHelpers::isTileFree);
+	tables.M2TWEOPTable.set_function("isTileFree", &stratMapHelpers::isTileFreeLua);
 	/***
 	Get the selected tile coords.
 	@function M2TWEOP.getGameTileCoordsWithCursor
@@ -659,33 +649,16 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	tables.M2TWEOPTable.set_function("condition", &gameHelpers::condition);
 	/***
 	Calculate movement point cost between two adjacent tiles.
-	@function M2TWEOP.CalculateTileMovementCost
+	@function M2TWEOP.getTileMoveCost
 	@tparam int originX
 	@tparam int originY
 	@tparam int targetX only adjacent tiles! Does not calculate paths just the cost of moving from one tile to another.
 	@tparam int targetY only adjacent tiles! Does not calculate paths just the cost of moving from one tile to another.
 	@treturn float moveCost
 	@usage
-	local moveCost = M2TWEOP.CalculateTileMovementCost(153, 245, 154, 245);
+	local moveCost = M2TWEOP.getTileMoveCost(153, 245, 154, 245);
 	*/
-	tables.M2TWEOPTable.set_function("CalculateTileMovementCost", &stratMapHelpers::getTileMoveCost);
-
-
-	/// BattleCamera
-	//@section gameSTDUITable
-
-	/***
-	Get information about the camera in a battle
-	@tfield float xCoord 
-	@tfield float yCoord 
-	@tfield float zCoord 
-	@table battleCameraStruct
-	*/
-	types.battleCameraStruct = luaState.new_usertype<battleCameraStruct>("battleCameraStruct");
-	types.battleCameraStruct.set("xCoord", &battleCameraStruct::xCoord);
-	types.battleCameraStruct.set("yCoord", &battleCameraStruct::yCoord);
-	types.battleCameraStruct.set("zCoord", &battleCameraStruct::zCoord);
-
+	tables.M2TWEOPTable.set_function("getTileMoveCost", &stratMapHelpers::getTileMoveCost);
 
 	/// GameUI
 	//@section gameSTDUITable
@@ -1171,19 +1144,8 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 void luaP::checkLuaFunc(sol::function** lRef)
 {
 	if ((*lRef)->valid() == false)
-	{
 		*lRef = nullptr;
-	}
 }
-
-void luaP::onChangeTurnNum(int num)
-{
-	if (onChangeTurnNumFunc != nullptr)
-	{
-		tryLua((*onChangeTurnNumFunc)(num));
-	}
-}
-
 
 void luaP::fillHashMaps()
 {
@@ -1230,4 +1192,5 @@ void luaP::fillHashMaps()
 		}
 	}
 	hashLoaded = true;
+	m2tweopHelpers::logStringGame("Hashmaps filled");
 }

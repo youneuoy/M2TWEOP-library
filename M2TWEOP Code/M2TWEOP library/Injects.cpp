@@ -4535,6 +4535,53 @@ void onReadDescrStrat::SetNewCode()
 	delete a;
 }
 
+onNewGameLoaded::onNewGameLoaded(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0047F9BD;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0047A320;
+}
+
+onNewGameLoaded::~onNewGameLoaded()
+{
+}
+
+void onNewGameLoaded::SetOriginalCode()
+{
+	Assembler* a = new Assembler();
+
+	a->test(eax, eax);
+	a->push(edx);
+	a->mov(eax, dword_ptr(eax));
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onNewGameLoaded::SetNewCode()
+{
+	Assembler* a = new Assembler();
+
+	a->mov(dword_ptr(esi, 0x24), 0);
+	a->pushf();
+	a->pushad();
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->popad();
+	a->popf();
+	
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+
 onCustomBattleCost::onCustomBattleCost(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

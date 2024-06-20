@@ -724,11 +724,7 @@ namespace characterHelpers
 			}
 			[[nodiscard]] unit* CreateUnit(const factionStruct* faction, const character* character) const
 			{
-				unit* newUnit;
-				if (eopDu::getDataEopEdu(eduType))
-					 newUnit = unitHelpers::createUnitEDB(eduType, character->regionID, faction->factionID, xp, armour, weapon);
-				else
-					 newUnit = unitHelpers::createUnitIdx(eduType, character->regionID, faction->factionID, xp, armour, weapon);
+				unit* newUnit = unitHelpers::createUnitIdx(eduType, character->regionID, faction->factionID, xp, armour, weapon);
 				newUnit->alias = alias;
 				newUnit->foodRequirement = supplies;
 				newUnit->SoldierCountStrat = soldierCount;

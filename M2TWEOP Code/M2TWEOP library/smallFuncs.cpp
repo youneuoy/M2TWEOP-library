@@ -8,6 +8,7 @@
 #include "globals.h"
 #include "army.h"
 #include "strategyMap.h"
+#include "techFuncs.h"
 
 
 namespace smallFuncs
@@ -65,7 +66,7 @@ namespace smallFuncs
 
 	};
 
-	void setEDUUnitsSize(signed short min, signed short max)
+	void setMaxUnitSize(signed short min, signed short max)
 	{
 		DWORD codeOffset = 0;
 		if (globals::dataS.gameVersion == 2)//steam
@@ -145,60 +146,6 @@ namespace smallFuncs
 
 		MemWork::WriteData(nops1, cmd, 6);
 	}
-	int getBattleCondCode(DWORD condObject)
-	{
-		if (condObject == 0)
-		{
-			return -1;
-		}
-
-		DWORD* objectPtr = reinterpret_cast<DWORD*>(condObject);
-		DWORD vtablePtr = *objectPtr;
-		if (globals::dataS.gameVersion == 2)//steam
-		{
-			switch (vtablePtr)
-			{
-			case 0x012ed814: return 0; break;//destroy_or_rout_enemy
-			case 0x012fe30c: return 1; break;//balance_of_strength_percent
-			case 0x012fe334: return 2; break;//destroy_enemy_strength_percent
-			case 0x012fe2bc: return 3; break;//capture_location
-			case 0x12fe9c4: return 4; break;//destroy_character
-			case 0x012ed7ec: return 5; break;//capture_major_settlement
-			case 0x012fe2e4: return 6; break;//capture_army_settlement
-			}
-		}
-		else//disk version
-		{
-			switch (vtablePtr)
-			{
-			case 0x01332834: return 0; break;//destroy_or_rout_enemy
-			case 0x0134332c: return 1; break;//balance_of_strength_percent
-			case 0x01343354: return 2; break;//destroy_enemy_strength_percent
-			case 0x013432dc: return 3; break;//capture_location
-			case 0x013439e4: return 4; break;//destroy_character
-			case 0x0133280c: return 5; break;//capture_major_settlement
-			case 0x01343304: return 6; break;//capture_army_settlement
-			}
-		}
-
-
-		return -1;
-	}
-	std::string getWinConditionS(DWORD condObject)
-	{
-		int conditionCode = getBattleCondCode(condObject);
-		switch (conditionCode)
-		{
-		case 0: return "destroy_or_rout_enemy"; break;
-		case 1: return "balance_of_strength_percent"; break;
-		case 2: return "destroy_enemy_strength_percent"; break;
-		case 3: return "capture_location"; break;
-		case 4: return "destroy_character"; break;
-		case 5: return "capture_major_settlement"; break;
-		case 6: return "capture_army_settlement"; break;
-		default: return "unknown_condition"; break;
-		}
-	}
 	void createUniString(UNICODE_STRING**& newUniStringPointer, const char* nonUniStr)
 	{
 		DWORD funcAdr = 0;
@@ -265,16 +212,15 @@ namespace smallFuncs
 	{
 		DWORD funcAddr = codes::offsets.historicEventFunc;
 
-		UNICODE_STRING** titleUni = new UNICODE_STRING*;
-		smallFuncs::createUniString(titleUni, title);
+		UNICODE_STRING** titleUni = techFuncs::createGameClass<UNICODE_STRING*>();
+		createUniString(titleUni, title);
 
-		UNICODE_STRING** bodyUni = new UNICODE_STRING*;
-		smallFuncs::createUniString(bodyUni, description);
+		UNICODE_STRING** bodyUni = techFuncs::createGameClass<UNICODE_STRING*>();
+		createUniString(bodyUni, description);
 
 		UNICODE_STRING*** titleUnip = &titleUni;
 		UNICODE_STRING*** bodyUnip = &bodyUni;
-
-
+		
 		_asm
 		{
 			push 0x3FFFFFFF
@@ -405,38 +351,6 @@ namespace smallFuncs
 		}
 
 		return;
-	}
-
-	battleCameraStruct* getBattleCamCoords()
-	{
-		int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
-
-		// If we aren't in a battle
-		if (battleState == 0)
-			return nullptr;
-
-		DWORD battleCameraAddress = 0;
-
-		if (globals::dataS.gameVersion == 2) //steam
-		{
-			battleCameraAddress = 0x0193f34c;
-		}
-		else // disk
-		{
-			battleCameraAddress = 0x0193f34c;
-		}
-
-		battleCameraStruct* battleCamData = reinterpret_cast<battleCameraStruct*>(battleCameraAddress);
-
-		return battleCamData;
-	}
-
-	stratMap* getStratMap()
-	{
-		const auto data = gameDataAllHelper::get();
-		if (!data)
-			return nullptr;
-		return data->stratMap;
 	}
 
 	void setReligionsLimit(unsigned char limit)
@@ -586,12 +500,12 @@ namespace smallFuncs
 		MemWork::WriteData(&turns, codeAdr, 1);
 	}
 
-	int GetUnitSize()
+	int getUnitSize()
 	{
 		return *dataOffsets::offsets.gameUnit_size;
 	}
 
-	float getMinimumPossibleMovepointsForArmy(armyStruct* army)
+	float getMinimumMovePointsForArmy(armyStruct* army)
 	{
 		if (army == nullptr)
 		{
@@ -626,7 +540,7 @@ namespace smallFuncs
 		return minMp;
 	}
 
-	float GetDistanceInTiles(int x, int y, int destX, int destY)
+	float getDistanceInTiles(int x, int y, int destX, int destY)
 	{
 		int dx = x - destX;
 		int dy = y - destY;

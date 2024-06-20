@@ -50,6 +50,26 @@ namespace m2tweopHelpers
 		}
 	}
 	
+	std::string getModString(const std::string& path)
+	{
+		std::string ret;
+		const size_t pos = path.find("/mods/", 0);
+		for (UINT32 i = 0; i < path.size(); i++)
+		{
+			if (i > static_cast<UINT32>(pos))
+			{
+				ret.push_back(path[i]);
+			}
+		}
+		return ret;
+	}
+	
+	std::string getPathFromMods()
+	{
+		const std::string path = getModPath();
+		return getModString(path);
+	}
+	
 	void logStringGame(const std::string& msg)
 	{
 		const auto flushRate = reinterpret_cast<int*>(dataOffsets::offsets.logFlushRate);
@@ -85,6 +105,7 @@ namespace m2tweopHelpers
 		// If the tile is visible
 		return true;
 	}
+	
 	factionStruct* getRegionOwner(int regionID)
 	{
 		return stratMapHelpers::getStratMap()->regions[regionID].factionOwner;

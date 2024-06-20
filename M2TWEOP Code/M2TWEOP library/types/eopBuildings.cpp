@@ -30,11 +30,11 @@ edbEntry* buildEntryDB::addEopBuildEntry(edbEntry* oldEntry, const int newIndex)
 	//making a complete copy of the building
 	for (int i = 0; i < levelNum; i++)
 	{
-		eopLevel[i] = oldEntry->buildingLevel[i];
-		addCaps(eopLevel, oldEntry->buildingLevel);
-		addPools(eopLevel, oldEntry->buildingLevel);
+		eopLevel[i] = oldEntry->levels[i];
+		addCaps(eopLevel, oldEntry->levels);
+		addPools(eopLevel, oldEntry->levels);
 	}
-	entry->buildingLevel = eopLevel;
+	entry->levels = eopLevel;
 	return entry;
 }
 
@@ -120,9 +120,9 @@ void buildingLevel::addCapability(int capability, int16_t value, bool bonus, con
 		mov eax, makeConditionFunc
 		call eax
 	}
-	if (capabilities != nullptr)
-		cap->nextCapability = capabilities; //always inserting at start of capability linked list
-	capabilities = cap;
+	int capabilityNum = getCapabilityNum();
+	auto lastCap = getCapability(capabilityNum - 1);
+	lastCap->nextCapability = cap;
 }
 
 //add new building capability, bonus refers to bonus keyboard in edb
@@ -157,9 +157,9 @@ void buildingLevel::addFactionCapability(int capability, int16_t value, bool bon
 		mov eax, makeConditionFunc
 		call eax
 	}
-	if (factionCapabilities != nullptr)
-		cap->nextCapability = factionCapabilities; //always inserting at start of capability linked list
-	factionCapabilities = cap;
+	int capabilityNum = getFactionCapabilityNum();
+	auto lastCap = getFactionCapability(capabilityNum - 1);
+	lastCap->nextCapability = cap;
 }
 
 void buildingLevel::addRecruitPool(int eduIndex, float initialSize, float gainPerTurn, float maxSize, int16_t exp, const std::string& condition)
@@ -184,9 +184,9 @@ void buildingLevel::addRecruitPool(int eduIndex, float initialSize, float gainPe
 		mov eax, makeConditionFunc
 		call eax
 	}
-	if (recruitPools != nullptr)
-		pool->nextPool = recruitPools; //always insert at start of pools
-	recruitPools = pool;
+	int capabilityNum = getPoolNum();
+	auto lastCap = getPool(capabilityNum - 1);
+	lastCap->nextPool = pool;
 }
 
 
@@ -299,53 +299,53 @@ namespace eopBuildings
 	//unique per culture!
 	void setBuildingPic(const edbEntry* entry, const char* newPic, const int level, const int cultureID)
 	{
-		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		buildingLevel* eopLevel = &entry->levels[level];
 		eopLevel->setBuildingPicPath(cultureID, newPic);
 	}
 	//unique per culture!
 	void setBuildingPicConstructed(const edbEntry* entry, const char* newPic, const int level, const int cultureID)
 	{
-		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		buildingLevel* eopLevel = &entry->levels[level];
 		eopLevel->setBuildingPicConstructedPath(cultureID, newPic);
 	}
 	//unique per culture!
 	void setBuildingPicConstruction(const edbEntry* entry, const char* newPic, const int level, const int cultureID)
 	{
-		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		buildingLevel* eopLevel = &entry->levels[level];
 		eopLevel->setBuildingPicConstructionPath(cultureID, newPic);
 	}
 	//unique per faction!
 	void setBuildingLocalizedName(const edbEntry* entry, const char* newName, const int level, const int factionID)
 	{
-		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		buildingLevel* eopLevel = &entry->levels[level];
 		return eopLevel->setLocalizedName(factionID, newName);
 	}
 	//unique per faction!
 	void setBuildingLocalizedDescr(const edbEntry* entry, const char* newName, const int level, const int factionID)
 	{
-		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		buildingLevel* eopLevel = &entry->levels[level];
 		return eopLevel->setLocalizedDescr(factionID, newName);
 	}
 	//unique per faction!
 	void setBuildingLocalizedDescrShort(const edbEntry* entry, const char* newName, const int level, const int factionID)
 	{
-		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		buildingLevel* eopLevel = &entry->levels[level];
 		return eopLevel->setLocalizedDescrShort(factionID, newName);
 	}
 	void removeBuildingCapability(const edbEntry* entry, const int level, const int index)
 	{
-		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		buildingLevel* eopLevel = &entry->levels[level];
 		eopLevel->removeBuildingCapability(index);
 	}
 	void removeBuildingPool(const edbEntry* entry, const int level, const int index)
 	{
-		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		buildingLevel* eopLevel = &entry->levels[level];
 		eopLevel->removeBuildingPool(index);
 	}
 	//get a capability to change some of its attributes or check them, like to remove it
 	buildingLevelCapability* getBuildingCapability(const edbEntry* entry, const int level, const int index)
 	{
-		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		buildingLevel* eopLevel = &entry->levels[level];
 		return eopLevel->getCapability(index);
 	}
 	exportDescrBuildings* getEdb()
@@ -355,18 +355,18 @@ namespace eopBuildings
 	
 	recruitPool* getBuildingPool(const edbEntry* entry, const int level, const int index)
 	{
-		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		buildingLevel* eopLevel = &entry->levels[level];
 		return eopLevel->getPool(index);
 	}
 	void addBuildingCapability(edbEntry* entry, int level, int capability, int16_t value, bool bonus)
 	{
-		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		buildingLevel* eopLevel = &entry->levels[level];
 		eopLevel->addCapability(capability, value, bonus, "");
 	}
 	
 	void addBuildingPool(edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp, const char* condition)
 	{
-		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		buildingLevel* eopLevel = &entry->levels[level];
 		eopLevel->addRecruitPool(eduIndex, initialSize, gainPerTurn, maxSize, exp, condition);
 	}
 	
@@ -375,7 +375,7 @@ namespace eopBuildings
 	{
 		if (entry == nullptr)
 			return 0;
-		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		buildingLevel* eopLevel = &entry->levels[level];
 		return eopLevel->getCapabilityNum();
 	}
 
@@ -384,7 +384,7 @@ namespace eopBuildings
 	{
 		if (entry == nullptr)
 			return 0;
-		buildingLevel* eopLevel = &entry->buildingLevel[level];
+		buildingLevel* eopLevel = &entry->levels[level];
 		return eopLevel->getPoolNum();
 	}
 
@@ -392,7 +392,7 @@ namespace eopBuildings
 	void createEOPBuilding(settlementStruct* sett, const int edbIdx, const int level)
 	{
 		edbEntry* entry = buildEntryDB::getEopBuildEntry(edbIdx);
-		buildingLevel* eoplevel = &entry->buildingLevel[level];
+		buildingLevel* eoplevel = &entry->levels[level];
 		const char* building_level_id = (const char*)(eoplevel->name);
 		settlementHelpers::createBuilding(sett, building_level_id);
 		sett->buildings[sett->buildingsNum - 1]->edbEntry = entry;
@@ -458,6 +458,7 @@ namespace buildingHelpers
 		@tfield int isHinterland
 		@tfield int isFarm
 		@tfield int buildingLevelCount
+		@tfield getBuildingLevel getBuildingLevel
 
 		@table edbEntry
 		*/
@@ -473,6 +474,16 @@ namespace buildingHelpers
 		types.edbEntry.set("isHinterland", &edbEntry::isHinterland);
 		types.edbEntry.set("isFarm", &edbEntry::isFarm);
 		types.edbEntry.set("buildingLevelCount", &edbEntry::buildingLevelCount);
+		
+		/***
+		Get a building level.
+		@function edbEntry:getBuildingLevel
+		@tparam int index
+		@treturn buildingLevel level
+		@usage
+			local level = edbEntry:getBuildingLevel(0)
+		*/
+		types.edbEntry.set_function("getBuildingLevel", &edbEntry::getBuildingLevel);
 
 		/***
 		Basic buildingLevel table.

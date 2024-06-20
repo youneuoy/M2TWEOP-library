@@ -28,7 +28,27 @@ void factionStruct::revealTile(const int x, const int y)
 	int coords[2] = {x, y};
 	GAME_FUNC(int*(__thiscall*)(void*, int*, int, float), revealTile)(tilesFac, coords, 1, -1.0);
 }
-	
+
+void factionStruct::setColor(const uint8_t r, const uint8_t g, const uint8_t b)
+{
+	const auto facRecord = factionRecord;
+	facRecord->primary_colour_red = r;
+	facRecord->primary_colour_green = g;
+	facRecord->primary_colour_blue = b;
+	smallFuncs::scriptCommand("console_command", "toggle_fow");
+	smallFuncs::scriptCommand("console_command", "toggle_fow");
+}
+
+void factionStruct::setSecondaryColor(const uint8_t r, const uint8_t g, const uint8_t b)
+{
+	const auto facRecord = factionRecord;
+	facRecord->secondary_colour_red = r;
+	facRecord->secondary_colour_green = g;
+	facRecord->secondary_colour_blue = b;;
+	smallFuncs::scriptCommand("console_command", "toggle_fow");
+	smallFuncs::scriptCommand("console_command", "toggle_fow");
+}
+
 void factionStruct::hideRevealedTile(const int x, const int y)
 {
 	if (stratMapHelpers::isStratMap() == false)
@@ -440,6 +460,12 @@ namespace factionHelpers
 		@tfield getInterFactionLTGD getInterFactionLTGD
 		@tfield splitArmy splitArmy
 		@tfield getSpottedCharacter getSpottedCharacter
+		@tfield getTileVisibility getTileVisibility
+		@tfield setTileVisibility setTileVisibility
+		@tfield revealTile revealTile
+		@tfield hideRevealedTile hideRevealedTile
+		@tfield setColor setColor
+		@tfield setSecondaryColor setSecondaryColor
 
 		@table factionStruct
 		*/
@@ -790,7 +816,71 @@ namespace factionHelpers
 		types.factionStruct.set_function("setCharacterNameFaction", &factionStruct::setCharacterNameFaction);
 
 		/***
-		Split an army.
+		Get faction tile visibility.
+		@function factionStruct:getTileVisibility
+		@tparam int x
+		@tparam int y
+		@treturn int visibility use tileVisibility enum
+		@usage
+		     local vis = fac:getTileVisibility(172, 293)
+		*/
+		types.factionStruct.set_function("getTileVisibility", &factionStruct::getTileVisibility);
+
+		/***
+		Set faction tile visibility.
+		@function factionStruct:setTileVisibility
+		@tparam int x
+		@tparam int y
+		@tparam int visibility use tileVisibility enum
+		@usage
+		     fac:setTileVisibility(172, 293, tileVisibility.seen)
+		*/
+		types.factionStruct.set_function("setTileVisibility", &factionStruct::setTileVisibility);
+
+		/***
+		Reveal a tile.
+		@function factionStruct:revealTile
+		@tparam int x
+		@tparam int y
+		@usage
+		     local vis = fac:revealTile(172, 293)
+		*/
+		types.factionStruct.set_function("revealTile", &factionStruct::revealTile);
+
+		/***
+		Hide revealed tile.
+		@function factionStruct:hideRevealedTile
+		@tparam int x
+		@tparam int y
+		@usage
+		     fac:hideRevealedTile(172, 293)
+		*/
+		types.factionStruct.set_function("hideRevealedTile", &factionStruct::hideRevealedTile);
+
+		/***
+		Set the faction's color.
+		@function factionStruct:setColor
+		@tparam int R
+		@tparam int G
+		@tparam int B
+		@usage
+		     fac:setColor(255, 255, 255)
+		*/
+		types.factionStruct.set_function("setColor", &factionStruct::setColor);
+		
+		/***
+		Set the faction's secondary color.
+		@function factionStruct:setSecondaryColor
+		@tparam int R
+		@tparam int G
+		@tparam int B
+		@usage
+		     fac:setSecondaryColor(255, 255, 255)
+		*/
+		types.factionStruct.set_function("setSecondaryColor", &factionStruct::setSecondaryColor);
+
+		/***
+		Split an army. If there is an army at target coords they merge. They embark/disembark. They enter and leave settlements.
 		@function factionStruct:splitArmy
 		@tparam table units
 		@tparam int targetX
@@ -840,6 +930,7 @@ namespace factionHelpers
 		@tfield int longTermPolicy
 		@tfield int longTermTroopStatus
 		@tfield getLongTermGoalValues getLongTermGoalValues
+		@tfield isTrustedAllyEnemy isTrustedAllyEnemy
 
 		@table aiLongTermGoalDirector
 		*/
@@ -864,6 +955,16 @@ namespace factionHelpers
 		local longTermGoalValues = LTGD:getLongTermGoalValues(2)
 		*/
 		types.aiLongTermGoalDirector.set_function("getLongTermGoalValues", &aiLongTermGoalDirector::getlongTermGoalValues);
+
+		/***
+		Check if another faction is an enemy of one the faction's trusted allies.
+		@function aiLongTermGoalDirector:isTrustedAllyEnemy
+		@tparam int targetFactionID
+		@treturn bool isAllyEnemy
+		@usage
+		local isAllyEnemy = LTGD:isTrustedAllyEnemy(2)
+		*/
+		types.aiLongTermGoalDirector.set_function("isTrustedAllyEnemy", &aiLongTermGoalDirector::isTrustedAllyEnemy);
 
 		///decisionValuesLTGD
 		//@section decisionValuesLTGD

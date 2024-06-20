@@ -1,4 +1,3 @@
-
 #include "cultures.h"
 
 #include <unordered_map>

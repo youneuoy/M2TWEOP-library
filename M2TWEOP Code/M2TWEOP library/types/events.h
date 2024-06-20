@@ -5,6 +5,7 @@
 
 #include "gameHelpers.h"
 #include "realGameTypes.h"
+struct buildingBattle;
 using namespace std;
 
 #define tryLuaBasicEventFunk(luaFunc)  \
@@ -208,19 +209,20 @@ namespace gameEvents
 	void onReadGameDbsAtStart();
 	void onGameInit();
 	void onUnloadCampaign();
-	void onAiTurn(aiFaction* aifaction);
+	void onNewGameLoaded();
+	void onAiTurn(aiFaction* aiFaction);
 	void onEndSiege(int x, int y);
 	void onStartSiege(int x, int y);
 
 
 	void onClickAtTile(int x, int y);
 	std::string * onSelectWorldpkgdesc(const char* selectedRec, const char* selectedGroup);
-	int onfortificationlevelS(settlementStruct * settlement, bool* isCastle, bool* isChanged);
+	int onFortificationLevelS(settlementStruct * settlement, bool* isCastle, bool* isChanged);
 	float onCalculateUnitValue(eduEntry* entry, float value);
 	void onChangeTurnNum(int num);
 	void onNewGameStart();
 	void onCampaignMapLoaded();
-	void onLoadGamePl(std::vector<std::string>*saveFiles);
+	void onLoadGamePl(const std::vector<std::string>*saveFiles);
 	std::vector<std::string>*onSaveGamePl(UNICODE_STRING * *&savePath);
 	void onEventWrapper(DWORD eventAddr, DWORD** vTab);
 	

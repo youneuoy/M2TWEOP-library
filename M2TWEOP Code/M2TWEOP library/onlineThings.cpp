@@ -20,6 +20,7 @@
 #include <set>
 #include <map>
 
+#include "battle.h"
 #include "campaign.h"
 #include "strategyMap.h"
 #include "imgui/ImFileDialog.h"
@@ -210,7 +211,7 @@ namespace battleCreator
 			fileStrings.push_back("	building");
 
 			string buildType = sett->buildings[bnum]->edbEntry->type;
-			buildingLevel level = sett->buildings[bnum]->edbEntry->buildingLevel[sett->buildings[bnum]->level];
+			buildingLevel level = sett->buildings[bnum]->edbEntry->levels[sett->buildings[bnum]->level];
 			string buildName = level.name;
 			fileStrings.push_back("	{");
 
@@ -230,7 +231,7 @@ namespace battleCreator
 		int age = (gen->characterRecord->age >> 3) & 0x7f;
 
 		string tempS = "character	";
-		if (gen->characterRecord->fullName == nullptr || string(gen->characterRecord->fullName).size() == 0)
+		if (gen->characterRecord->fullName == nullptr || string(gen->characterRecord->fullName).empty())
 		{
 			tempS.append("default");
 		}
@@ -581,7 +582,7 @@ namespace battleCreator
 				if (winCond != 0)
 				{
 					tempS = "condition ";
-					tempS.append(smallFuncs::getWinConditionS(winCond));
+					tempS.append(battleHelpers::getWinConditionS(winCond));
 					fileStrings.push_back(tempS);
 				}
 			}

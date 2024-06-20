@@ -8,6 +8,7 @@
 
 #include <d3d9.h>
 #include <d3dx9.h>
+#include "battle.h"
 
 #include "fbxModels.h"
 
@@ -147,15 +148,13 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	{
 		f();
 	}
-	int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
+	const bool battleState = battleHelpers::inBattle();
 
 	//1-stratmap
 	//2-tactmap
 	int drawType = 2;
-	if (battleState == 0)
-	{
+	if (!battleState)
 		drawType = 1;
-	}
 
 
 	//Backup the DX9 state

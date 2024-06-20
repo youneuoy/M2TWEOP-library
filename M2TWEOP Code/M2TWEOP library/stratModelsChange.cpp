@@ -71,7 +71,8 @@ namespace stratModelsChange
 
 	void setModel(const int x, const int y, const UINT32 modelId, const UINT32 modelId2)
 	{
-
+		if (stratModels.find(modelId) == stratModels.end())
+			return;
 		for (size_t i = 0; i < stratModelChangeList.size(); i++)
 		{
 			if (stratModelChangeList[i]->x == x
@@ -89,16 +90,16 @@ namespace stratModelsChange
 		rec->x = x;
 		rec->y = y;
 		rec->isFort = false;
-
-		if (stratMapHelpers::getTile(x, y)->getFort())
+		if (const auto tile = stratMapHelpers::getTile(x, y); tile->getFort())
 		{
 			fortEntryCount++;
 			rec->isFort = true;	
 		}
-
-
+		else if (tile->getSettlement())
+		{
+			eopSettlementDataDb::get()->getSettlementData(tile->regionId).modelId = modelId;
+		}
 		stratModelChangeList.push_back(rec);
-
 		changeModelsNeededNow = modelsChangeStatus::needChange;
 	}
 

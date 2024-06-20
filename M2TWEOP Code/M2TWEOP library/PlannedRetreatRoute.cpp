@@ -112,7 +112,7 @@ namespace plannedRetreatRoute
 		state.possibleCoords.clear();
 		state.possibleCoords.reserve(state.maxPathLenInTiles * state.maxPathLenInTiles);
 
-		float possibleMP = smallFuncs::getMinimumPossibleMovepointsForArmy(army) * 0.9;
+		float possibleMP = smallFuncs::getMinimumMovePointsForArmy(army) * 0.9;
 
 
 		int coordsMod = 1;
@@ -310,9 +310,9 @@ namespace plannedRetreatRoute
 
 		int destx = route->routeEnd.x;
 		int desty = route->routeEnd.y;
-		float dist = smallFuncs::GetDistanceInTiles(x, y, destx, desty);
+		float dist = smallFuncs::getDistanceInTiles(x, y, destx, desty);
 
-		float mp = smallFuncs::getMinimumPossibleMovepointsForArmy(army.army);
+		float mp = smallFuncs::getMinimumMovePointsForArmy(army.army);
 		int maneurDistance = 3;
 		{
 			void* cashe = pathFinder::createCacheForArmy(army.army, dist + maneurDistance);
@@ -329,7 +329,7 @@ namespace plannedRetreatRoute
 	
 	void onRetreat()
 	{
-		battleDataS* battle = battleHandlerHelpers::getBattleData();
+		battleDataS* battle = battleHelpers::getBattleData();
 		if (battle == nullptr)
 			return;
 		retreater retreater(battle);

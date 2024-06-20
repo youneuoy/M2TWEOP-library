@@ -355,6 +355,7 @@ namespace campaignHelpers
 		@tfield isExistingFaction isExistingFaction
 		@tfield getNumberOfMarriages getNumberOfMarriages
 		@tfield getSettlement getSettlement
+		@tfield getFactionDiplomacy getFactionDiplomacy
 
 		@table campaignStruct
 		*/
@@ -449,7 +450,7 @@ namespace campaignHelpers
 		local campaign = gameDataAll.get().campaignStruct;
 		local unitSize = campaign.getUnitSize();
 		*/
-		typeAll.campaignTable.set_function("getUnitSize", &smallFuncs::GetUnitSize);
+		typeAll.campaignTable.set_function("getUnitSize", &smallFuncs::getUnitSize);
 		/***
 		Get fort by index.
 		@function campaignStruct:getFort
@@ -628,6 +629,19 @@ namespace campaignHelpers
 		local marriages = campaign:getNumberOfMarriages(4, 8);
 		*/
 		typeAll.campaignTable.set_function("getNumberOfMarriages", &campaign::getNumberOfMarriages);
+		
+		/***
+		Get faction diplomacy data.
+		@function campaignStruct:getFactionDiplomacy
+		@tparam int factionIDOne
+		@tparam int factionIDTwo
+		@treturn factionDiplomacy diplomacy
+		@usage
+		local campaign = gameDataAll.get().campaignStruct;
+		local diplomacy = campaign:getFactionDiplomacy(4, 8);
+		*/
+		typeAll.campaignTable.set_function("getFactionDiplomacy", &campaign::getFactionDiplomacy);
+		
 		/***
 		Get settlement by index.
 		@function campaignStruct:getSettlement

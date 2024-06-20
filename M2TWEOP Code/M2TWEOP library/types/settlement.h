@@ -663,7 +663,7 @@ struct eopSettlementData
 {
 	int settlementID = -1;
 	std::array<int, 128> eopBuildingEntries{};
-	int modelId = 0;
+	int modelId = -1;
 	std::string regionName;
 	std::string regionRebelsName;
 	nlohmann::json serialize()
@@ -781,17 +781,23 @@ class eopSettlementDataDb
 public:
 	eopSettlementDataDb()
 	{
+		eopSettData = std::make_shared<std::array<eopSettlementData, 200>>();
 		for (int i = 0; i < 200; i++)
 		{
 			eopSettData->at(i).settlementID = i;
 		}
 	}
-	static eopSettlementData& getSettlementData(int index)
+	eopSettlementData& getSettlementData(int index)
 	{
 		return eopSettData->at(index);
 	}
-	static std::shared_ptr<std::array<eopSettlementData, 200>> eopSettData;
-	static nlohmann::json serialize()
+	static eopSettlementDataDb* get()
+	{
+		return instance.get();
+	}
+	std::shared_ptr<std::array<eopSettlementData, 200>> eopSettData;
+	static std::shared_ptr<eopSettlementDataDb> instance;
+	nlohmann::json serialize()
 	{
 		nlohmann::json json;
 		for (int i = 0; i < 200; i++)
@@ -800,15 +806,20 @@ public:
 		}
 		return json;
 	}
-	static void deserialize(const nlohmann::json& json)
+	void deserialize(const nlohmann::json& json)
 	{
 		for (int i = 0; i < 200; i++)
 			eopSettData->at(i).deserialize(json[i]);
 	}
-	static void clearData()
+	void clearData()
 	{
 		eopSettData = std::make_shared<std::array<eopSettlementData, 200>>();
+		for (int i = 0; i < 200; i++)
+		{
+			eopSettData->at(i).settlementID = i;
+		}
 	}
-	static std::string onGameSave();
-	static void onGameLoad(const std::vector<std::string>& filePaths);
+	std::string onGameSave();
+	void onGameLoad(const std::vector<std::string>& filePaths);
+	void onGameLoaded();
 };

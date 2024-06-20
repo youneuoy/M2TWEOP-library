@@ -231,6 +231,9 @@ public:
 		DWORD isTileFree = NULL;
 		DWORD hideRevealedTile = NULL;
 		DWORD findBattleModel = NULL;
+		DWORD isZoneValid = NULL;
+		DWORD getZonePerimeter = NULL;
+		DWORD getZoneID = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

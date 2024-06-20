@@ -592,6 +592,12 @@ void managerF::execPatches()
 	toBattleRams->SetNewCode();
 	toBattleRams->Enable();
 	f1 << "Done" << endl;
+
+	f1 << "Start applying onNewGameLoaded patch" << endl;
+	onNewGameLoaded* toNewGameLoaded = new onNewGameLoaded(mem, (LPVOID)patchesForGame::onNewGameLoaded, globals::dataS.gameVersion);
+	toNewGameLoaded->SetNewCode();
+	toNewGameLoaded->Enable();
+	f1 << "Done" << endl;
 	
 	f1 << "Start applying onPreBattlePlacement patch" << endl;
 	onPreBattlePlacement* toPreBattlePlacement = new onPreBattlePlacement(mem, (LPVOID)patchesForGame::onPreBattlePlacement, globals::dataS.gameVersion);

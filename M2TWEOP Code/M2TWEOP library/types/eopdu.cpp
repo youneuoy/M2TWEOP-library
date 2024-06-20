@@ -7,9 +7,9 @@
 #include "functionsOffsets.h"
 #include "m2tweopHelpers.h"
 
-std::vector<eopEduEntry> eopDu::eopUnitDb{};
-std::unordered_map<std::string, eopEduEntry*> eopDu::eopUnitLookup{};
-std::unordered_map<int, eopEduEntry*> eopDu::eopUnitIndexLookup{};
+std::vector<std::shared_ptr<eopEduEntry>> eopDu::eopUnitDb{};
+std::unordered_map<std::string, std::shared_ptr<eopEduEntry>> eopDu::eopUnitLookup{};
+std::unordered_map<int, std::shared_ptr<eopEduEntry>> eopDu::eopUnitIndexLookup{};
 
 //struct eduThingsG
 //{
@@ -143,22 +143,20 @@ eduEntry* eopDu::addEopEduEntryFromFile(const char* fileName, int newIdx)
         m2tweopHelpers::logStringGame("Duplicate EOP index " + std::to_string(newIdx) + " in addEopEduEntryFromFile");
         return nullptr;
     }
-
     try
     {
-       // auto newEntry = std::make_shared<eopEduEntry>(fileName, newIdx);
-    	eopEduEntry newEntry(fileName, newIdx);
-        if (unitHelpers::getEduEntryByName(newEntry.originalTypeName.c_str()))
+        const auto sharedP = std::make_shared<eopEduEntry>(fileName, newIdx);
+        if (unitHelpers::getEduEntryByName(sharedP->originalTypeName.c_str()))
         {
-            m2tweopHelpers::logStringGame("Duplicate unit name " + newEntry.originalTypeName + " in addEopEduEntryFromFile");
-            std::string errS = "Can`t add: " + newEntry.originalTypeName + " Duplicate type name";
+            m2tweopHelpers::logStringGame("Duplicate unit name " + sharedP->originalTypeName + " in addEopEduEntryFromFile");
+            std::string errS = "Can`t add: " + sharedP->originalTypeName + " Duplicate type name";
             MessageBoxA(NULL, errS.c_str(), "ERROR!", NULL);
             exit(0);
         }
-        eopUnitDb.push_back(std::move(newEntry));
-    	eopUnitLookup.insert_or_assign(eopUnitDb.back().originalTypeName, &eopUnitDb.back());
-    	eopUnitLookup.insert_or_assign(eopUnitDb.back().eopTypeName, &eopUnitDb.back());
-        eopUnitIndexLookup.insert_or_assign(newIdx, &eopUnitDb.back());
+        eopUnitDb.push_back(sharedP);
+    	eopUnitLookup.insert_or_assign(eopUnitDb.back()->originalTypeName, sharedP);
+    	eopUnitLookup.insert_or_assign(eopUnitDb.back()->eopTypeName, sharedP);
+        eopUnitIndexLookup.insert_or_assign(newIdx, sharedP);
     }
     catch (...)
     {
@@ -175,11 +173,10 @@ eduEntry* eopDu::addEopEduEntry(int baseIdx, int newIdx)
         return nullptr;
     }
 	//auto newEntry = std::make_shared<eopEduEntry>(baseIdx, newIdx);
-	eopEduEntry newEntry(baseIdx, newIdx);
-
-    eopUnitDb.push_back(std::move(newEntry));
-    eopUnitLookup.insert_or_assign(eopUnitDb.back().eopTypeName, &eopUnitDb.back());
-    eopUnitIndexLookup.insert_or_assign(newIdx, &eopUnitDb.back());
+    const auto sharedP = std::make_shared<eopEduEntry>(baseIdx, newIdx);
+	eopUnitDb.push_back(sharedP);
+    eopUnitLookup.insert_or_assign(eopUnitDb.back()->eopTypeName, sharedP);
+    eopUnitIndexLookup.insert_or_assign(newIdx, sharedP);
 
     return getEopEduEntry(newIdx);
 }
@@ -187,12 +184,12 @@ eduEntry* eopDu::addEopEduEntry(int baseIdx, int newIdx)
 eopEduEntry* eopDu::getEopEduEntryInternal(int idx)
 {
 	if (eopUnitIndexLookup.find(idx) != eopUnitIndexLookup.end())
-		return eopUnitIndexLookup[idx];
-	for (auto& entry : eopUnitDb)
+		return eopUnitIndexLookup[idx].get();
+	for (const auto& entry : eopUnitDb)
 	{
-		if (entry.data.edu.index == idx)
+		if (entry->data.edu.index == idx)
 		{
-			return &entry;
+			return entry.get();
 		}
 	}
 	return nullptr;
@@ -200,7 +197,7 @@ eopEduEntry* eopDu::getEopEduEntryInternal(int idx)
 
 eopEduEntry* eopDu::getEopEduEntryInternalIterating(int idx)
 {
-	return &eopUnitDb[idx];
+	return eopUnitDb[idx].get();
 }
 	
 int eopDu::getEopEntryNum()
@@ -215,60 +212,10 @@ char* eopDu::getEopNameOfEduEntry(const eduEntry* entryAddress)
 	return nullptr;
 }
 
-int eopDu::getDataEopEdu(int idx)
-{
-	if (eopUnitIndexLookup.find(idx) != eopUnitIndexLookup.end())
-		return reinterpret_cast<int>(&eopUnitIndexLookup[idx]->data);
-	for (auto& entry : eopUnitDb)
-	{
-		if (entry.data.edu.index == idx)
-		{
-			return (int)&entry.data;
-		}
-	}
-	return 0;
-}
-
-int* eopDu::tryFindDataEopEdu(const char* entryName)
-{
-	if (eopUnitLookup.find(entryName) != eopUnitLookup.end())
-		return reinterpret_cast<int*>(&eopUnitLookup[entryName]->data);
-	for (auto& entry : eopUnitDb)
-	{
-		if (strcmp(entry.eopTypeName.c_str(), entryName) == 0
-			|| (entry.isFileAdded && strcmp(entry.originalTypeName.c_str(), entryName) == 0))
-		{
-			return (int*)&entry.data;
-		}
-	}
-	return nullptr;
-}
-
 eduEntry* eopDu::getEopEduEntryByName(const char* entryName)
 {
 	if (eopUnitLookup.find(entryName) != eopUnitLookup.end())
 		return &eopUnitLookup[entryName]->data.edu;
-	/*for (auto& entry : eopUnitDb)
-	{
-		if (strcmp(entry.eopTypeName.c_str(), entryName) == 0
-			|| (entry.isFileAdded && strcmp(entry.originalTypeName.c_str(), entryName) == 0))
-		{
-			return &entry.data.edu;
-		}
-	}*/
-	return nullptr;
-}
-
-int* eopDu::tryFindDataEopEduIndex(char* entryName)
-{
-	if (eopUnitLookup.find(entryName) != eopUnitLookup.end())
-		return reinterpret_cast<int*>(&eopUnitLookup[entryName]->data.edu.index);
-	for (auto& entry : eopUnitDb)
-	{
-		if (strcmp(entry.eopTypeName.c_str(), entryName) == 0
-			|| (entry.isFileAdded && strcmp(entry.originalTypeName.c_str(), entryName) == 0))
-			return reinterpret_cast<int*>(&entry.data.edu.index);
-	}
 	return nullptr;
 }
 
@@ -285,6 +232,11 @@ void eopDu::setEntrySoldierModelLua(int idx, const char* newModel)
 {
 	const eopEduEntry* entry = getEopEduEntryInternal(idx);
 	entry->setEntrySoldierModel(newModel);
+}
+
+int eopDuHelpers::getEduEntryNum()
+{
+	return unitHelpers::getEdu()->numberOfEntries;
 }
 
 void eopEduEntry::setEntrySoldierModel(const char* newModel) const
@@ -321,6 +273,8 @@ namespace eopDuHelpers
 		@tfield getEduEntry getEduEntry
 		@tfield getEduEntryByType getEduEntryByType
 		@tfield getEduIndexByType getEduIndexByType
+		@tfield getEduEntryNum getEduEntryNum
+		@tfield getEopEntryNum getEopEntryNum
 		@table M2TWEOPDU
 		*/
 			
@@ -373,6 +327,24 @@ namespace eopDuHelpers
 		tables.M2TWEOPEDUTable.set_function("getEduEntry", &eopDu::getEduEntry);
 
 		/***
+		Get number of units in vanilla EDU.
+		@function M2TWEOPDU.getEduEntryNum
+		@treturn int entryNum
+		@usage
+		local num = M2TWEOPDU.getEduEntryNum();
+		*/
+		tables.M2TWEOPEDUTable.set_function("getEduEntryNum", &eopDuHelpers::getEduEntryNum);
+
+		/***
+		Get number of units in EOP EDU.
+		@function M2TWEOPDU.getEopEntryNum
+		@treturn int entryNum
+		@usage
+		local num = M2TWEOPDU.getEopEntryNum();
+		*/
+		tables.M2TWEOPEDUTable.set_function("getEopEntryNum", &eopDu::getEopEntryNum);
+
+		/***
 		Get eduEntry by edu type name. Needed to change many parameters of the entry.
 		@function M2TWEOPDU.getEduEntryByType
 		@tparam string type Unit type as in export_descr_unit.
@@ -394,16 +366,6 @@ namespace eopDuHelpers
 		M2TWEOPDU.setEntryStat(eduindex, eduStat.armour, 5, 1);
 		*/
 		tables.M2TWEOPEDUTable.set_function("getEduIndexByType", &unitHelpers::getEduIndex);
-		
-		/***
-		Get data of a M2TWEOPDU entry. You usually won't need this.
-		@function M2TWEOPDU.getDataEopDu
-		@tparam int eopEnryIndex Entry index in M2TWEOPDU.
-		@treturn int retEntry Usually you shouldn't use this value.
-		@usage
-		local eopEntry=M2TWEOPDU.getDataEopDu(1000);
-		*/
-		tables.M2TWEOPEDUTable.set_function("getDataEopDu", &eopDu::getDataEopEdu);
 		/***
 		Set unit info card for a M2TWEOPDU entry. Requirements for the location and parameters of the image are unchanged in relation to the game.
 		@function M2TWEOPDU.setEntrySoldierModel

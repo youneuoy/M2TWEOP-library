@@ -85,6 +85,45 @@ struct tileRevealer
 	float height;
 };
 
+enum class tileVisbility : int8_t
+{
+	notVisibleStart = 0,
+	notVisible = 1,
+	wasVisible = 2,
+	visible = 3
+};
+
+inline bool operator==(const int8_t val, tileVisbility vis)
+{
+	return val == static_cast<int8_t>(vis);
+}
+
+inline bool operator!=(const int8_t val, tileVisbility vis)
+{
+	return val != static_cast<int8_t>(vis);
+}
+
+inline bool operator >(const int8_t val, tileVisbility vis)
+{
+	return val > static_cast<int8_t>(vis);
+}
+
+inline bool operator <(const int8_t val, tileVisbility vis)
+{
+	return val < static_cast<int8_t>(vis);
+}
+
+inline bool operator >=(const int8_t val, tileVisbility vis)
+{
+	return val >= static_cast<int8_t>(vis);
+}
+
+inline bool operator <=(const int8_t val, tileVisbility vis)
+{
+	return val <= static_cast<int8_t>(vis);
+}
+
+
 struct factionTileStruct {
 	int8_t* tilesVisiblity;
 	int tilesXBound;
@@ -479,6 +518,8 @@ public:
 	{
 		tilesFac->tilesVisiblity[tilesFac->tilesXBound * y + x] = vis;
 	}
+	void setColor(uint8_t r, uint8_t g, uint8_t b);
+	void setSecondaryColor(uint8_t r, uint8_t g, uint8_t b);
 };
 
 struct factionRecord { /* see descr_sm_factions.txt */

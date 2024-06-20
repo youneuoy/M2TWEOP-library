@@ -13,6 +13,8 @@ public:
 		DWORD stringTable = NULL;
 		DWORD stratCursorCoords = NULL;
 		DWORD customTiles = NULL;
+		DWORD battleCamera = NULL;
+		DWORD battlePerimeters = NULL;
 
 
 		DWORD unitTypesStart = NULL;
@@ -59,6 +61,7 @@ public:
 		DWORD constructionItems = NULL;
 		DWORD recruitmentItems = NULL;
 		DWORD ltgdGlobals = NULL;
+		DWORD battlefieldEngines = NULL;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);

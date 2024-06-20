@@ -13,6 +13,7 @@
 #include "army.h"
 #include "characterRecord.h"
 #include "unit.h"
+#include "battle.h"
 #include "m2tweopHelpers.h"
 #include "strategyMap.h"
 using namespace std;
@@ -740,7 +741,15 @@ void onGameInit()
 {
 	if (plugData::data.luaAll.onGameInit != nullptr)
 	{
-		tryLua((*plugData::data.luaAll.onGameInit)());
+		tryLua((*plugData::data.luaAll.onGameInit)())
+	}
+}
+
+void onNewGameLoaded()
+{
+	if (plugData::data.luaAll.onNewGameLoaded != nullptr)
+	{
+		tryLua((*plugData::data.luaAll.onNewGameLoaded)())
 	}
 }
 
@@ -814,17 +823,17 @@ std::string* onSelectWorldpkgdesc(const char* selectedRec, const char* selectedG
 	return retS;
 }
 
-int onfortificationlevelS(settlementStruct* settlement, bool* isCastle, bool* isChanged)
+int onFortificationLevelS(settlementStruct* settlement, bool* isCastle, bool* isChanged)
 {
-	if (plugData::data.luaAll.onfortificationlevelS != nullptr)
+	if (plugData::data.luaAll.onFortificationLevelS != nullptr)
 	{
 
-		auto funcResult = (*plugData::data.luaAll.onfortificationlevelS)(settlement);
+		auto funcResult = (*plugData::data.luaAll.onFortificationLevelS)(settlement);
 		if (!funcResult.valid())
 		{
 
 			sol::error luaError = funcResult;
-			MessageBoxA(NULL, luaError.what(), "Lua exception in onfortificationlevelS() call!", NULL);
+			MessageBoxA(NULL, luaError.what(), "Lua exception in onFortificationLevelS() call!", NULL);
 		}
 		else
 		{
@@ -867,7 +876,10 @@ float onCalculateUnitValue(eduEntry* entry, float value)
 
 void onChangeTurnNum(const int num)
 {
-	plugData::data.luaAll.onChangeTurnNum(num);
+	if (plugData::data.luaAll.onChangeTurnNumFunc)
+	{
+		tryLua((*plugData::data.luaAll.onChangeTurnNumFunc)())
+	}
 }
 
 void onNewGameStart()
@@ -875,30 +887,27 @@ void onNewGameStart()
 	//initReligionNames();
 	if (plugData::data.luaAll.onNewGameStart != nullptr)
 	{
-		tryLua((*plugData::data.luaAll.onNewGameStart)());
+		tryLua((*plugData::data.luaAll.onNewGameStart)())
 	}
 }
-
-
+	
 void onCampaignMapLoaded()
 {
 	if (!plugData::data.luaAll.hashLoaded)
 	{
 		plugData::data.luaAll.fillHashMaps();
-		m2tweopHelpers::logStringGame("Hashmaps filled");
 	}
 	if (plugData::data.luaAll.onCampaignMapLoaded != nullptr)
 	{
-		tryLua((*plugData::data.luaAll.onCampaignMapLoaded)());
+		tryLua((*plugData::data.luaAll.onCampaignMapLoaded)())
 	}
 }
-
-void onLoadGamePl(std::vector<std::string>* saveFiles)
+void onLoadGamePl(const std::vector<std::string>* saveFiles)
 {
 	if (plugData::data.luaAll.onLoadSaveFile != nullptr)
 	{
 		sol::as_table_t<std::vector<std::string>> wrapped_vec = *saveFiles;
-		tryLua((*plugData::data.luaAll.onLoadSaveFile)(wrapped_vec));
+		tryLua((*plugData::data.luaAll.onLoadSaveFile)(wrapped_vec))
 	}
 }
 
@@ -933,7 +942,7 @@ void checkLuaFunc(sol::function** lRef)
 	}
 };
 
-std::unordered_map<int, const char*> disasterTypes = {
+std::unordered_map<int, const char*> DISASTER_TYPES = {
 	{0,"earthquake"},
 	{1,"flood"},
 	{2,"horde"},
@@ -946,13 +955,15 @@ std::unordered_map<int, const char*> disasterTypes = {
 	{9,"riot"},
 	{10,"fire"}
 };
-std::unordered_map<int, const char*> ransomTypes = {
+
+std::unordered_map<int, const char*> RANSOM_TYPES = {
 	{0,"ransom"},
 	{1,"execute"},
 	{2,"release"},
 	{3,"cannot_pay_ransom"}
 };
-std::unordered_map<int, const char*> missionSuccessLvl = {
+
+std::unordered_map<int, const char*> MISSION_SUCCESS_LVL = {
 	{0,"not_successful"},
 	{1,"slightly_successful"},
 	{2,"partly_successful"},
@@ -963,8 +974,8 @@ const char* eventTrigger::getEventType()
 {
 	auto eventType = "unknown";
 	if (const auto eventNumber = callVFunc<26, int>(this);
-		disasterTypes.find(eventNumber) != disasterTypes.end()) {
-		eventType = disasterTypes.at(eventNumber);
+		DISASTER_TYPES.find(eventNumber) != DISASTER_TYPES.end()) {
+		eventType = DISASTER_TYPES.at(eventNumber);
 	}
 	return eventType;
 }
@@ -973,8 +984,8 @@ const char* eventTrigger::getMissionSuccessLevel()
 {
 	auto level = "unknown";
 	if (const auto levelNumber = callVFunc<27, int>(this);
-		disasterTypes.find(levelNumber) != disasterTypes.end()) {
-		level = disasterTypes.at(levelNumber);
+		DISASTER_TYPES.find(levelNumber) != DISASTER_TYPES.end()) {
+		level = DISASTER_TYPES.at(levelNumber);
 	}
 	return level;
 }
@@ -984,8 +995,8 @@ const char* eventTrigger::getRansomType()
 {
 	auto ransomType = "unknown";
 	if (const auto ransom = callVFunc<42, int>(this);
-		ransomTypes.find(ransom) != ransomTypes.end()) {
-		ransomType = ransomTypes.at(ransom);
+		RANSOM_TYPES.find(ransom) != RANSOM_TYPES.end()) {
+		ransomType = RANSOM_TYPES.at(ransom);
 	}
 	return ransomType;
 }
@@ -1310,14 +1321,12 @@ void luaP::onPluginLoadF()
 	@tfield onLoadSaveFile onLoadSaveFile
 	@tfield onChangeTurnNum onChangeTurnNum
 	@tfield onSelectWorldpkgdesc onSelectWorldpkgdesc
-	@tfield onfortificationlevelS onfortificationlevelS
+	@tfield onFortificationLevelS onFortificationLevelS
 	@tfield onCalculateUnitValue onCalculateUnitValue
 	@tfield onEndSiege onEndSiege
 	@tfield onStartSiege onStartSiege
 	@tfield onPluginLoad onPluginLoad
-
-
-
+	@tfield onNewGameLoaded onNewGameLoaded
 
 	@table EventsFunctionsList
 	*/
@@ -4063,14 +4072,11 @@ void luaP::onPluginLoadF()
 	--something here
 	end
 	*/
-
-
-
 	onNewGameStart = new sol::function(luaState["onNewGameStart"]);
 	checkLuaFunc(&onNewGameStart);
 
 	/***
-	Called after the game loads various db`s (edu, etc) at startup.
+	Called after the game reads the EDU at startup (add units here).
 
 	@function onReadGameDbsAtStart
 
@@ -4079,14 +4085,11 @@ void luaP::onPluginLoadF()
 	--something here
 	end
 	*/
-
-
-
 	onReadGameDbsAtStart = new sol::function(luaState["onReadGameDbsAtStart"]);
 	checkLuaFunc(&onReadGameDbsAtStart);
 
 	/***
-	Called after the game loads various db`s (edu, etc) at startup.
+	Called after the game has loaded to the main menu.
 
 	@function onGameInit
 
@@ -4095,11 +4098,19 @@ void luaP::onPluginLoadF()
 	--something here
 	end
 	*/
-
-
-
 	onGameInit = new sol::function(luaState["onGameInit"]);
 	checkLuaFunc(&onGameInit);
+
+	/***
+	Called after a new campaign has been loaded first time.
+	@function onNewGameLoaded
+	@usage
+	function onNewGameLoaded()
+	--something here
+	end
+	*/
+	onNewGameLoaded = new sol::function(luaState["onNewGameLoaded"]);
+	checkLuaFunc(&onNewGameLoaded);
 
 	/***
 	Called after the campaignStruct gets unloaded (exit to menu, load save etc).
@@ -4111,9 +4122,6 @@ void luaP::onPluginLoadF()
 	--something here
 	end
 	*/
-
-
-
 	onUnloadCampaign = new sol::function(luaState["onUnloadCampaign"]);
 	checkLuaFunc(&onUnloadCampaign);
 
@@ -4297,21 +4305,21 @@ void luaP::onPluginLoadF()
 	/***
 	Called on specified fortificationlevel in a siege of a settlement.
 
-	@function onfortificationlevelS
+	@function onFortificationLevelS
 	@tparam settlementStruct siegedSettlement
 	@treturn int overridedFortificationlevel
 	@treturn bool isCastle override settlement type (siege equipment is slightly different between cities and castles of the same level)
 
 	@usage
-	function onfortificationlevelS(settlement)
+	function onFortificationLevelS(settlement)
 		if settlement.xCoord == 10 and settlement.yCoord == 25 then
 			return 3, false --override settlement under siege at these coordinates to level 3 city
 		end
 		return nil --else, do not override
 	end
 	*/
-	onfortificationlevelS = new sol::function(luaState["onfortificationlevelS"]);
-	checkLuaFunc(&onfortificationlevelS);
+	onFortificationLevelS = new sol::function(luaState["onFortificationLevelS"]);
+	checkLuaFunc(&onFortificationLevelS);
 	
 	/***
 	Called when the game calculates the value of a unit. For example, in battle, when it says 'Victory seems certain' when units are engaging each other it uses this, it uses this to decide which units to recruit, to evaluate army strength for attack decisions, for auto resolve balance and results, it is just the value that decides how strong it thinks a unit is. The long term goal director also uses this for the values you have in campaign_ai_db like military balance and free strength balance.
@@ -4360,8 +4368,7 @@ void luaP::onPluginLoadF()
 	*/
 	onStartSiege = new sol::function(luaState["onStartSiege"]);
 	checkLuaFunc(&onStartSiege);
-
-
+	
 	if (onPluginLoad != nullptr)
 	{
 		tryLua((*onPluginLoad)())

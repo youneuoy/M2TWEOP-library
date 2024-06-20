@@ -69,7 +69,7 @@ public:
 	void initEopFbx();
 	void initEop3dObjects();
 	void initEopSounds();
-	void runScriptS(std::string* script);
+	void runScriptS(const std::string* script);
 
 	//lua functions and events controllers
 	void onPluginLoadF();
@@ -108,7 +108,7 @@ public:
 	sol::function* onEndSiege = nullptr;
 	sol::function* onStartSiege = nullptr;
 	sol::function* onSelectWorldpkgdesc = nullptr;
-	sol::function* onfortificationlevelS = nullptr;
+	sol::function* onFortificationLevelS = nullptr;
 	sol::function* onCalculateUnitValue = nullptr;
 	sol::function* onChangeTurnNumFunc = nullptr;
 	sol::function* onClickAtTile = nullptr;
@@ -318,12 +318,13 @@ public:
 	sol::function* onCollegeOfCardinalsPanelOpen = nullptr;
 	sol::function* onDiplomaticStandingPanelOpen = nullptr;
 	sol::function* onBattleSpySuccess = nullptr;
+	sol::function* onNewGameLoaded = nullptr;
 
 	sol::function* drawLuaFunc = nullptr;
 	sol::function* resetDXFunc = nullptr;
 	sol::function* onLoadingFonts = nullptr;
 	sol::function* initDXFunc = nullptr;
-	void checkLuaFunc(sol::function** lRef);
+	static void checkLuaFunc(sol::function** lRef);
 	
 
 
