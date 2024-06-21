@@ -1,10 +1,10 @@
+#include "pch.h"
 #include "retreater.h"
 #include "plannedRetreatRoute.h"
 #include "pathMap.h"
 #include "mapTextDrawer.h"
 #include "character.h"
 #include "faction.h"
-#include <mutex>
 
 #include "army.h"
 #include "strategyMap.h"

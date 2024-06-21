@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "fbxModels.h"
 #include "singleFbxMesh.h"
 #include "fbxSdk.h"

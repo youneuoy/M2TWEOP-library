@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "stratModelsOptimise.h"
 
 #include <ctime>

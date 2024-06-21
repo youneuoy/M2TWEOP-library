@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(SolutionDir)\3rd\discord;$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\M2TWEOPBoost;$(SolutionDir)\3rd\sdl\include;$(SolutionDir)\3rd\ImNotify;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\IPC;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(SolutionDir)\3rd\discord;$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\M2TWEOPBoost;$(SolutionDir)\3rd\sdl\include;$(SolutionDir)\3rd\ImNotify;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\IPC;$(IncludePath);</IncludePath>
     <LibraryPath>$(SolutionDir)\3rd\discord\lib;$(SolutionDir)\3rd\sfml\lib;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)\3rd\M2TWEOPBoost\boostLibs;$(SolutionDir)\3rd\sdl\libs</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -99,7 +99,7 @@
       <PreprocessorDefinitions>SFML_STATIC;WIN32;WIN32_LEAN_AND_MEAN;_SILENCE_ALL_CXX23_DEPRECATION_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(SolutionDir)\3rd\sfml\include;..\3rd\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(SolutionDir)\3rd\sfml\include;..\3rd\glfw\include;%(AdditionalIncludeDirectories);$(SolutionDir)\M2TWEOP GUI;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -123,7 +123,7 @@
       <PreprocessorDefinitions>SFML_STATIC;WIN32;WIN32_LEAN_AND_MEAN;NDEBUG;_SILENCE_ALL_CXX23_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(SolutionDir)\3rd\sfml\include;..\3rd\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(SolutionDir)\3rd\sfml\include;..\3rd\glfw\include;%(AdditionalIncludeDirectories);$(SolutionDir)\M2TWEOP GUI;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -146,6 +146,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(_ZVcpkgCurrentInstalledDir)include;$(SolutionDir)\M2TWEOP GUI;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -161,6 +162,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(_ZVcpkgCurrentInstalledDir)include;$(SolutionDir)\M2TWEOP GUI;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -208,6 +210,7 @@
     <ClCompile Include="managerGHelpers.cpp" />
     <ClCompile Include="markdownHelper.cpp" />
     <ClCompile Include="modSettingsUI.cpp" />
+    <ClCompile Include="pch.cpp"/>
     <ClCompile Include="redistUI.cpp" />
     <ClCompile Include="themeManagerGUI.cpp" />
     <ClCompile Include="toolRoutine.cpp" />
@@ -264,6 +267,7 @@
     <ClInclude Include="managerGHelpers.h" />
     <ClInclude Include="markdownHelper.h" />
     <ClInclude Include="modSettingsUI.h" />
+    <ClInclude Include="pch.h" />
     <ClInclude Include="redistUI.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="toolRoutine.h" />

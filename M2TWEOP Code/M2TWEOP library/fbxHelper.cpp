@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "fbxHelper.h"
 namespace fbxHelper
 {

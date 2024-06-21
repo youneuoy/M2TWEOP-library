@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "mmbMover.h"
 #include "dataOffsets.h"
 

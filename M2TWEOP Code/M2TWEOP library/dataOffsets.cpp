@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "dataOffsets.h"
 
 #include "faction.h"

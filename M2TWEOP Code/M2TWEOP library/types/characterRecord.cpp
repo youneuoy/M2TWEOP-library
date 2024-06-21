@@ -3,8 +3,8 @@
 //@module LuaPlugin
 //@author Fynn
 //@license GPL-3.0
+#include "pch.h"
 #include "characterRecord.h"
-
 #include "gameStringHelpers.h"
 #include "functionsOffsets.h"
 #include "character.h"

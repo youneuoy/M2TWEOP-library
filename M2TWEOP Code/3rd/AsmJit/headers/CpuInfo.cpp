@@ -24,6 +24,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 // [Dependencies]
+#include "pch.h"
 #include "CpuInfo.h"
 
 #if defined(ASMJIT_WINDOWS)

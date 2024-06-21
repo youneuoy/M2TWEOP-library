@@ -1,5 +1,5 @@
+#include "pch.h"
 #include "gameStringHelpers.h"
-#include <filesystem>
 #include "globals.h"
 #include "functionsOffsets.h"
 #include "dataOffsets.h"

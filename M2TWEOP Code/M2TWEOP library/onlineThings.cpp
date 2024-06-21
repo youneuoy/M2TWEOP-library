@@ -1,9 +1,8 @@
+#include "pch.h"
 #include "onlineThings.h"
 #include "imgui_notify.h"
 
 #include "onlineThings2.h"
-#include <vector>
-#include <windows.h>
 #include "globals.h"
 #include "fort.h"
 #include "unit.h"
@@ -14,10 +13,6 @@
 #include "character.h"
 #include "faction.h"
 #include "army.h"
-#include <sstream>
-#include <thread>
-#include <set>
-#include <map>
 
 #include "battle.h"
 #include "campaign.h"

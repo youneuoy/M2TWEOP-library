@@ -1,16 +1,13 @@
+#include "pch.h"
 #include "pathMap.h"
 #include "realGameTypes.h"
 #include "fort.h"
 #include "dataOffsets.h"
-#include <map>
-#include "headersMEM.h"
 #include "character.h"
 #include "faction.h"
 #include "characterRecord.h"
 #include "army.h"
 #include "strategyMap.h"
-
-#include <mutex>
 #include "ring_buffer.h"
 namespace pathFinder
 {

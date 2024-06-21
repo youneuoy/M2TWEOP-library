@@ -3,9 +3,8 @@
 //@module LuaPlugin
 //@author Fynn
 //@license GPL-3.0
+#include "pch.h"
 #include "strategyMap.h"
-
-#include <queue>
 
 #include "character.h"
 #include "gameHelpers.h"

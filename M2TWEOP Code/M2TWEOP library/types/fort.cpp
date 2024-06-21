@@ -3,6 +3,7 @@
 //@module LuaPlugin
 //@author Fynn
 //@license GPL-3.0
+#include "pch.h"
 #include "fort.h"
 
 #include "dataOffsets.h"

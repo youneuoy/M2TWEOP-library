@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "luaPlugin.h"
 #include "army.h"
 #include "campaign.h"

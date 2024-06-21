@@ -3,9 +3,8 @@
 //@module LuaPlugin
 //@author Fynn
 //@license GPL-3.0
-
+#include "pch.h"
 #include "mapImage.h"
-#include <numbers>
 #include "campaign.h"
 #include "CImg.h"
 #include "dataOffsets.h"

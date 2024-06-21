@@ -1,15 +1,12 @@
+#include "pch.h"
 #include "plannedRetreatRoute.h"
 #include "graphicsD3D.h"
-#include <iomanip>
-#include <mutex>
 #include "mapTextDrawer.h"
 #include "character.h"
 #include "faction.h"
 
 #include "pathMap.h"
 #include "imgui_notify.h"
-
-#include <filesystem>
 
 #include "gameHelpers.h"
 #include "retreater.h"

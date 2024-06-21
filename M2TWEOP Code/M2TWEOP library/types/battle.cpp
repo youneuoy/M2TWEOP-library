@@ -4,6 +4,7 @@
 //@module LuaPlugin
 //@author Fynn
 //@license GPL-3.0
+#include "pch.h"
 #include "battle.h"
 
 #include "dataOffsets.h"

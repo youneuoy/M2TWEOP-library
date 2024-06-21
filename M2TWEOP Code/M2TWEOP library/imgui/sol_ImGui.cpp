@@ -2,6 +2,8 @@
 //@module LuaPluginImGui
 //@author youneuoy
 //@license GPL-3.0
+
+#include "pch.h"
 #include "sol_ImGui.h"
 
 namespace sol_ImGui

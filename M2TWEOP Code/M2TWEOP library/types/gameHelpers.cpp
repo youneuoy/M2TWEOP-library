@@ -3,10 +3,9 @@
 //@module LuaPlugin
 //@author Fynn
 //@license GPL-3.0
-
+#include "pch.h"
 #include "gameHelpers.h"
 #include "luaPlugin.h"
-#include <vector>
 #include "dataOffsets.h"
 #include "events.h"
 #include "globals.h"

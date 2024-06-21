@@ -1,8 +1,7 @@
+#include "pch.h"
 #include "singleFbxMesh.h"
 #include "assert.h"
-#include <fstream>
 #include "tAutodeskMemoryStream.h"
-#
 
 template<class T>
 constexpr const T& clamp(const T& v, const T& lo, const T& hi)

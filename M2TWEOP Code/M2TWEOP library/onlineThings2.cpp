@@ -1,12 +1,8 @@
+#include "pch.h"
 #include "onlineThings2.h"
 
-#include <vector>
-#include <windows.h>
 #include "imgui/imgui.h"
 #include <d3d9.h>
-#include <sstream>
-#include <thread>
-#include <set>
 
 #include "globals.h"
 #include "character.h"

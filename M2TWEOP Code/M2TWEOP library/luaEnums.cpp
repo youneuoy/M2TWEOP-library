@@ -4,6 +4,7 @@
 //@module LuaPlugin
 //@author youneuoy
 //@license GPL-3.0
+#include "pch.h"
 #include "luaPlugin.h"
 #include "gameHelpers.h"
 #include "unit.h"

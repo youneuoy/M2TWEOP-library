@@ -4,11 +4,8 @@
 //@module LuaPlugin
 //@author Fynn
 //@license GPL-3.0
+#include "pch.h"
 #include "army.h"
-
-#include <queue>
-#include <set>
-
 #include "campaign.h"
 #include "cultures.h"
 #include "dataOffsets.h"

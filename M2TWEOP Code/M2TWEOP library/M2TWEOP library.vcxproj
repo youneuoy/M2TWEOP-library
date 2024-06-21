@@ -64,24 +64,16 @@
   <ImportGroup Label="Shared">
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"
-      Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')"
-      Label="LocalAppDataPlatform" />
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"
-      Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')"
-      Label="LocalAppDataPlatform" />
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"
-      Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')"
-      Label="LocalAppDataPlatform" />
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props"
-      Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')"
-      Label="LocalAppDataPlatform" />
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -122,7 +114,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>BEA_ENGINE_STATIC;ASMJIT_EMBED;FBXSDK_SHARED;WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;M2TWEOPLIBRARY_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -145,13 +137,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>BEA_ENGINE_STATIC;ASMJIT_EMBED;ASMJIT_STATIC;FBXSDK_SHARED;WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;M2TWEOPLIBRARY_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>      
-	  <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-	  <CCppSupport>Cpp17Support</CCppSupport>
+      <CCppSupport>Cpp17Support</CCppSupport>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <Optimization>MaxSpeed</Optimization>
       <AdditionalIncludeDirectories>$(SolutionDir)\3rd\sfml\include;$(SolutionDir)\3rd\custom;%(AdditionalIncludeDirectories);$(SolutionDir)\3rd;../M2TWEOP Common/;$(SolutionDir)\M2TWEOP Code\M2TWEOP Library\lua\include;$(SolutionDir)\M2TWEOP Library\types;$(SolutionDir)\M2TWEOP Library;</AdditionalIncludeDirectories>
@@ -364,7 +356,10 @@
     <ClCompile Include="..\3rd\discord\types.cpp" />
     <ClCompile Include="..\3rd\discord\user_manager.cpp" />
     <ClCompile Include="..\3rd\discord\voice_manager.cpp" />
-    <ClCompile Include="..\3rd\miniz\miniz.c" />
+    <ClCompile Include="..\3rd\miniz\miniz.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="..\3rd\shortestPath\micropather.cpp" />
     <ClCompile Include="battleMapOverrider.cpp" />
     <ClCompile Include="battlemapWorker.cpp" />
@@ -444,14 +439,14 @@
     <ClCompile Include="types\campaignDb.cpp" />
     <ClCompile Include="types\character.cpp" />
     <ClCompile Include="types\characterRecord.cpp" />
-    <ClCompile Include="types\eopBuildings.cpp"/>
+    <ClCompile Include="types\eopBuildings.cpp" />
     <ClCompile Include="types\eopdu.cpp" />
-    <ClCompile Include="types\events.cpp"/>
+    <ClCompile Include="types\events.cpp" />
     <ClCompile Include="types\faction.cpp" />
     <ClCompile Include="types\fort.cpp" />
-    <ClCompile Include="types\gameHelpers.cpp"/>
+    <ClCompile Include="types\gameHelpers.cpp" />
     <ClCompile Include="types\gameUi.cpp" />
-    <ClCompile Include="types\mapImage.cpp"/>
+    <ClCompile Include="types\mapImage.cpp" />
     <ClCompile Include="types\strategyMap.cpp" />
     <ClCompile Include="types\settlement.cpp" />
     <ClCompile Include="types\unit.cpp" />

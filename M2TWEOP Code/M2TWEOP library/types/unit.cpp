@@ -3,6 +3,7 @@
 //@module LuaPlugin
 //@author Fynn
 //@license GPL-3.0
+#include "pch.h"
 #include "unit.h"
 
 #include "character.h"
@@ -14,7 +15,6 @@
 #include "faction.h"
 #include "army.h"
 #include "battle.h"
-#include <map>
 
 #include "gameHelpers.h"
 #include "strategyMap.h"

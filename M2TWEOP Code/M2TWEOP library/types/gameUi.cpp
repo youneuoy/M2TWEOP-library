@@ -3,6 +3,7 @@
 //@module LuaPlugin
 //@author Fynn
 //@license GPL-3.0
+#include "pch.h"
 #include "gameUi.h"
 
 #include "gameStringHelpers.h"

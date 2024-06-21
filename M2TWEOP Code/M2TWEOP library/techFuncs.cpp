@@ -2,7 +2,6 @@
 #include "techFuncs.h"
 
 #include "miniz.h"
-#include <filesystem>
 
 #include "functionsOffsets.h"
 #include "gameStringHelpers.h"

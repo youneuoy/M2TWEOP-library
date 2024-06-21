@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "discordManager.h"
 
 #include "globals.h"

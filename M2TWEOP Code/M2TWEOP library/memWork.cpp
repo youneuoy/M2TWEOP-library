@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "memWork.h"
-#include <fstream>
-#include <string>
 
 MemWork::MemWork(size_t bufSize) : m_bufSize(bufSize)
 {

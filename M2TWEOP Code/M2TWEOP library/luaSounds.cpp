@@ -4,6 +4,7 @@
 //@module LuaPlugin
 //@author youneuoy
 //@license GPL-3.0
+#include "pch.h"
 #include "eopSounds.h"
 #include "luaPlugin.h"
 

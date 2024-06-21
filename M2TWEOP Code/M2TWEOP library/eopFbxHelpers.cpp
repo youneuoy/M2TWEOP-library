@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "eopFbxHelpers.h"
 
 #include "fbxModels.h"

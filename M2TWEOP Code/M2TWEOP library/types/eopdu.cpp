@@ -3,6 +3,7 @@
 //@module LuaPlugin
 //@author Fynn
 //@license GPL-3.0
+#include "pch.h"
 #include "eopdu.h"
 #include "functionsOffsets.h"
 #include "gameHelpers.h"

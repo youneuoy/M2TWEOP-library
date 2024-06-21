@@ -1,9 +1,8 @@
+#include "pch.h"
 #include "mapTextDrawer.h"
 #include "techFuncs.h"
 
 #include "graphicsD3D.h"
-
-#include <mutex>
 
 #include "lua/sol.hpp"
 

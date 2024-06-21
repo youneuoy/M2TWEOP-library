@@ -22,7 +22,7 @@ must not be misrepresented as being the original software.
 3. This notice may not be removed or altered from any source 
 distribution.
 */
-
+#include "pch.h"
 #ifdef _MSC_VER
 #pragma warning( disable : 4786 )	// Debugger truncating names.
 #pragma warning( disable : 4530 )	// Exception handler isn't used
@@ -969,7 +969,7 @@ int MicroPather::Solve( void* startNode, void* endNode, MP_VECTOR< void* >* path
 }	
 
 
-int MicroPather::SolveForNearStates( void* startState, MP_VECTOR< StateCost >* near, float maxCost )
+int MicroPather::SolveForNearStates( void* startState, MP_VECTOR< StateCost >* nearV, float maxCost )
 {
 	/*	 http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
 
@@ -1051,7 +1051,7 @@ int MicroPather::SolveForNearStates( void* startState, MP_VECTOR< StateCost >* n
 			}
 		}
 	}	
-	near->clear();
+	nearV->clear();
 
 	for( PathNode* pNode=closedSentinel.next; pNode != &closedSentinel; pNode=pNode->next ) {
 		if ( pNode->totalCost <= maxCost ) {
@@ -1059,13 +1059,13 @@ int MicroPather::SolveForNearStates( void* startState, MP_VECTOR< StateCost >* n
 			sc.cost = pNode->totalCost;
 			sc.state = pNode->state;
 
-			near->push_back( sc );
+			nearV->push_back( sc );
 		}
 	}
 #ifdef DEBUG
-	for( unsigned i=0; i<near->size(); ++i ) {
-		for( unsigned k=i+1; k<near->size(); ++k ) {
-			MPASSERT( (*near)[i].state != (*near)[k].state );
+	for( unsigned i=0; i<nearV->size(); ++i ) {
+		for( unsigned k=i+1; k<nearV->size(); ++k ) {
+			MPASSERT( (*nearV)[i].state != (*nearV)[k].state );
 		}
 	}
 #endif

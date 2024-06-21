@@ -3,8 +3,8 @@
 //@module LuaPlugin
 //@author Fynn
 //@license GPL-3.0
+#include "pch.h"
 #include "faction.h"
-
 #include "dataOffsets.h"
 #include "gameHelpers.h"
 #include "fort.h"

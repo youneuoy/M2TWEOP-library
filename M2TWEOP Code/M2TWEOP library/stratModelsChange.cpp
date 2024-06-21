@@ -1,7 +1,5 @@
+#include "pch.h"
 #include "stratModelsChange.h"
-
-#include <map>
-
 #include "campaign.h"
 #include "functionsOffsets.h"
 #include "dataOffsets.h"

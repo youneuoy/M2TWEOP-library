@@ -2,11 +2,11 @@
 //@module LuaPlugin
 //@author youneuoy
 //@license GPL-3.0
+#include "pch.h"
 #include "luaPlugin.h"
 #include "console.h"
 #include "settlementConversionLvlSetter.h"
 #include "stratModelsChange.h"
-#include <windows.h>
 #include "gameHelpers.h"
 #include "character.h"
 #include "settlement.h"
