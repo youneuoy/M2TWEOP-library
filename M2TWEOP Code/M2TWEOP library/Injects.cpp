@@ -6094,163 +6094,6 @@ void blockLaunchWithoutEop::SetNewCode()
 	delete a;
 }
 
-/*
-OntryFindTypeIdInListRecruitPoolEDB::OntryFindTypeIdInListRecruitPoolEDB(MemWork* mem, LPVOID addr, int ver)
-	:AATemplate(mem), funcAddress(addr)
-{
-	if (ver == 2)//steam
-		m_adress = 0x0046e0e8;
-
-	else if (ver == 1)//kingdoms
-		m_adress = 0x0046dd28;
-}
-
-OntryFindTypeIdInListRecruitPoolEDB::~OntryFindTypeIdInListRecruitPoolEDB()
-{
-}
-
-void OntryFindTypeIdInListRecruitPoolEDB::SetOriginialCode()
-{
-	Assembler* a = new Assembler();
-
-	a->pop(edi);
-	a->pop(esi);
-	a->pop(ebp);
-	a->xor_(eax,eax);
-	//push pointer to "%S.sav" string
-
-	a->ret();
-	m_originalBytes = (unsigned char*)a->make();
-	m_originalSize = m_memory->GetASMSize(m_originalBytes);
-
-	delete a;
-}
-
-void OntryFindTypeIdInListRecruitPoolEDB::SetNewCode()
-{
-	Assembler* a = new Assembler();
-
-	a->pushad();
-	a->pushf();
-
-	a->mov(ecx, ebp);//just to indicate - string pointer in ebp
-	a->mov(eax, (DWORD)funcAddress);
-	a->call(eax);
-
-	a->popf();
-	a->mov(dword_ptr(esp, 0x1c), eax);//move eax to stored eax
-	a->popad();
-
-	a->pop(edi);
-	a->pop(esi);
-	a->pop(ebp);
-
-	a->ret();
-	m_cheatBytes = (unsigned char*)a->make();
-
-	delete a;
-}
-
-OnrecruitPoolFillFromFile::OnrecruitPoolFillFromFile(MemWork* mem, LPVOID addr, int ver)
-	:AATemplate(mem), funcAddress(addr)
-{
-	if (ver == 2)//steam
-		m_adress = 0x008a9ce5;
-
-	else if (ver == 1)//kingdoms
-		m_adress = 0x008a9305;
-}
-
-OnrecruitPoolFillFromFile::~OnrecruitPoolFillFromFile()
-{
-}
-
-void OnrecruitPoolFillFromFile::SetOriginialCode()
-{
-	Assembler* a = new Assembler();
-	a->xor_(eax, eax);
-	//        008a9ce5 8d  0c  85       LEA        this ,[typeId *0x4  + eduEntries ]
-
-	a->ret();
-	m_originalBytes = (unsigned char*)a->make();
-	m_originalSize = m_memory->GetASMSize(m_originalBytes);
-
-	delete a;
-}
-
-void OnrecruitPoolFillFromFile::SetNewCode()
-{
-	Assembler* a = new Assembler();
-
-	a->pushad();
-	a->pushf();
-
-	a->mov(ecx, edi);//just to indicate - string pointer in ecx
-	a->mov(eax, (DWORD)funcAddress);
-	a->call(eax);
-
-	a->popf();
-	a->mov(dword_ptr(esp, 0x18), eax);//move eax to stored ecx
-	a->popad();
-
-
-	a->ret();
-	m_cheatBytes = (unsigned char*)a->make();
-
-	delete a;
-}
-
-OnrecruitPoolFillFromFile2::OnrecruitPoolFillFromFile2(MemWork* mem, LPVOID addr, int ver)
-	:AATemplate(mem), funcAddress(addr)
-{
-	if (ver == 2)//steam
-		m_adress = 0x008a9c19;
-
-	else if (ver == 1)//kingdoms
-		m_adress = 0x008a9239;
-}
-
-OnrecruitPoolFillFromFile2::~OnrecruitPoolFillFromFile2()
-{
-}
-
-void OnrecruitPoolFillFromFile2::SetOriginialCode()
-{
-	Assembler* a = new Assembler();
-
-	//        008a9c19 8d  14  8d       LEA        EDX ,[this *0x4  + eduEntries ]
-	a->xor_(eax, eax);
-
-	a->ret();
-	m_originalBytes = (unsigned char*)a->make();
-	m_originalSize = m_memory->GetASMSize(m_originalBytes);
-
-	delete a;
-}
-
-void OnrecruitPoolFillFromFile2::SetNewCode()
-{
-	Assembler* a = new Assembler();
-
-	a->pushad();
-	a->pushf();
-
-	a->mov(ecx, edi);//just to indicate - string pointer in ecx
-	a->mov(eax, (DWORD)funcAddress);
-	a->call(eax);
-
-	a->popf();
-	a->mov(dword_ptr(esp, 0x14), eax);//move eax to stored edx
-	a->popad();
-
-
-	a->ret();
-	m_cheatBytes = (unsigned char*)a->make();
-
-	delete a;
-}
-*/
-
 OnStopCharacter::OnStopCharacter(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
@@ -6366,31 +6209,25 @@ void onDecideRamAttacks::SetOriginialCode()
 
 void onDecideRamAttacks::SetNewCode()
 {
-	Assembler* a = new Assembler();
-
-	auto label = a->newLabel();
-	
+	const auto a = new Assembler();
+	const auto label = a->newLabel();
 	a->push(edx);
 	a->push(ecx);
 	a->mov(ecx, dword_ptr(esp, 0x34));
 	a->push(ecx);
 	a->mov(edx, esi);
 	a->mov(ecx, edi);
-	a->mov(eax, (DWORD)funcAddress);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
 	a->call(eax);
 	a->pop(ecx);
 	a->pop(edx);
 	a->cmp(eax, 0);
 	a->jnz(label);
-	//a->mov(eax, 0x6A328B);
-	if (m_adress == 0x006A324F)
-		a->jmp(0x29428B);
-	else
-		a->jmp(0x293D7B);
+	a->mov(eax, m_adress + 0x3C);
+	a->jmp(eax);
 	a->bind(label);
 	a->ret();
-	m_cheatBytes = (unsigned char*)a->make();
-
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
 	delete a;
 }
 

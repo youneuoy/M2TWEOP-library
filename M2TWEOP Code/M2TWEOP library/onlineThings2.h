@@ -5,6 +5,7 @@
 
 #include <filesystem>
 #include "realGameTypes.h"
+struct armyStruct;
 using namespace std;
 namespace battleCreator
 {

@@ -218,7 +218,8 @@ void managerF::execPatches()
 	dsff2->SetlDsCheckCode();
 	dsff2->Enable();
 
-	f1 << "Done" << endl;*/
+	f1 << "Done" << endl;
+	*/
 
 
 	f1 << "Start applying spawn_army coords patch" << endl;
@@ -479,10 +480,10 @@ void managerF::execPatches()
 	loadWordSet->Enable();
 	f1 << "Done" << endl;
 
-	f1 << "Start applying fortificationlevelS patch" << endl;
-	fortificationlevelS* fortificationlevel = new fortificationlevelS(mem, (LPVOID)patchesForGame::onFortificationLevelS, globals::dataS.gameVersion);
-	fortificationlevel->SetNewCode();
-	fortificationlevel->Enable();
+	f1 << "Start applying fortificationLevelS patch" << endl;
+	fortificationlevelS* fortificationLevel = new fortificationlevelS(mem, (LPVOID)patchesForGame::onFortificationLevelS, globals::dataS.gameVersion);
+	fortificationLevel->SetNewCode();
+	fortificationLevel->Enable();
 	f1 << "Done" << endl;
 
 	f1 << "Start applying LimitRecruitmentQueueToSlots patch" << endl;
@@ -586,19 +587,19 @@ void managerF::execPatches()
 	toCustomBattleUnits->Enable();
 	f1 << "Done" << endl;
 
-
-	f1 << "Start applying onBattleRams patch" << endl;
-	onBattleRams* toBattleRams = new onBattleRams(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
-	toBattleRams->SetNewCode();
-	toBattleRams->Enable();
-	f1 << "Done" << endl;
-
 	f1 << "Start applying onNewGameLoaded patch" << endl;
 	onNewGameLoaded* toNewGameLoaded = new onNewGameLoaded(mem, (LPVOID)patchesForGame::onNewGameLoaded, globals::dataS.gameVersion);
 	toNewGameLoaded->SetNewCode();
 	toNewGameLoaded->Enable();
 	f1 << "Done" << endl;
 
+
+
+	f1 << "Start applying onBattleRams patch" << endl;
+	onBattleRams* toBattleRams = new onBattleRams(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toBattleRams->SetNewCode();
+	toBattleRams->Enable();
+	f1 << "Done" << endl;
 
 	f1 << "Start applying onPreBattlePlacement patch" << endl;
 	onPreBattlePlacement* toPreBattlePlacement = new onPreBattlePlacement(mem, (LPVOID)patchesForGame::onPreBattlePlacement, globals::dataS.gameVersion);
@@ -611,7 +612,6 @@ void managerF::execPatches()
 	toDecideRamAttacks->SetNewCode();
 	toDecideRamAttacks->Enable();
 	f1 << "Done" << endl;
-
 	
 	/*
 	f1 << "Start applying onPreBattlePlacement2 patch" << endl;
@@ -893,26 +893,6 @@ void managerF::execPatches()
 		onRetreat->SetNewCode();
 		onRetreat->Enable();
 	}
-
-	/*
-	f1 << "Start applying OntryFindTypeIdInListRecruitPoolEDB patch" << endl;
-	OntryFindTypeIdInListRecruitPoolEDB* ontryFindTypeIdInListRecruitPoolEDB = new OntryFindTypeIdInListRecruitPoolEDB(mem, (LPVOID)patchesForGame::ontryFindTypeIdInListRecruitPoolEDB, globals::dataS.gamever);
-	ontryFindTypeIdInListRecruitPoolEDB->SetNewCode();
-	ontryFindTypeIdInListRecruitPoolEDB->Enable();
-	f1 << "Done" << endl;
-
-	f1 << "Start applying OnrecruitPoolFillFromFile patch" << endl;
-	OnrecruitPoolFillFromFile* onrecruitPoolFillFromFile = new OnrecruitPoolFillFromFile(mem, (LPVOID)patchesForGame::onrecruitPoolFillFromFile, globals::dataS.gamever);
-	onrecruitPoolFillFromFile->SetNewCode();
-	onrecruitPoolFillFromFile->Enable();
-	f1 << "Done" << endl;
-
-	f1 << "Start applying OnrecruitPoolFillFromFile2 patch" << endl;
-	OnrecruitPoolFillFromFile2* onrecruitPoolFillFromFile2 = new OnrecruitPoolFillFromFile2(mem, (LPVOID)patchesForGame::onrecruitPoolFillFromFile, globals::dataS.gamever);
-	onrecruitPoolFillFromFile2->SetNewCode();
-	onrecruitPoolFillFromFile2->Enable();
-	f1 << "Done" << endl;
-	*/
 
 	if (globals::dataS.gameCfg.isBlockLaunchWithoutEop == true)
 	{

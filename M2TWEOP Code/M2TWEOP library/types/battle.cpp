@@ -83,7 +83,8 @@ namespace battleHelpers
 
 	battlefieldEngines* getBattlefieldEngines()
 	{
-		return reinterpret_cast<battlefieldEngines*>(dataOffsets::offsets.battlefieldEngines);
+		const auto battleFieldEngines = *reinterpret_cast<battlefieldEngines**>(dataOffsets::offsets.battlefieldEngines);
+		return battleFieldEngines;
 	}
 
 	int getBattleCondCode(const DWORD condObject)

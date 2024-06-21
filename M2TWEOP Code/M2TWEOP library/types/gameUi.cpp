@@ -1,4 +1,9 @@
-﻿#include "gameUi.h"
+﻿///
+//![Lua logo](../Lua.png)
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
+#include "gameUi.h"
 
 #include "gameStringHelpers.h"
 #include "functionsOffsets.h"
