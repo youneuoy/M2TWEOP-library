@@ -1061,7 +1061,6 @@ void __stdcall patchesForGame::afterCampaignMapLoaded()
 {
 	discordManager::onCampaignMapLoaded();
 	globals::dataS.Modules.tacticalMapViewer.unView();
-	plugData::data.luaAll.fillHashMaps();
 	gameEvents::onCampaignMapLoaded();
 }
 
@@ -1098,6 +1097,7 @@ void __stdcall patchesForGame::onUnloadCampaign()
 
 void __stdcall patchesForGame::onNewGameLoaded()
 {
+	plugData::data.luaAll.fillHashMaps();
 	gameEvents::onNewGameLoaded();
 }
 

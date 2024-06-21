@@ -136,7 +136,7 @@ public:
 	int32_t length; //0x0040
 	int32_t outcome; //0x0044
 	crusadeReward rewards[31];
-	std::map<int, tileRevealer> targetViewers;
+	char targetViewers[12];
 	uint32_t joinedFactions;
 	uint32_t joinedFactionsLastTurn;
 	uint32_t foughtFactions;
@@ -171,7 +171,7 @@ public:
 	int32_t length; //0x0040
 	int32_t outcome; //0x0044
 	crusadeReward rewards[31];
-	std::map<int, tileRevealer> targetViewers;
+	char targetViewers[12]; 
 	uint32_t joinedFactions;
 	uint32_t joinedFactionsLastTurn;
 	uint32_t foughtFactions;
