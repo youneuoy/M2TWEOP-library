@@ -9,14 +9,16 @@
 
 #include "character.h"
 #include "gameHelpers.h"
-#include "plugData.h"
+#include "luaPlugin.h"
 #include "unit.h"
 #include "faction.h"
 #include "army.h"
+#include "casModelsDrawer.h"
 #include "dataOffsets.h"
 #include "settlement.h"
 #include "fort.h"
 #include "globals.h"
+#include "tilesChange.h"
 
 
 oneTile* landingPoint::getTile()
@@ -313,10 +315,7 @@ namespace stratMapHelpers
 {
 	stratMap* getStratMap()
 	{
-		const auto gameData = gameHelpers::getGameDataAll();
-		if (!gameData)
-			return nullptr;
-		return gameData->stratMap;
+		return gameHelpers::getGameDataAll()->stratMap;
 	}
 
 	settlementStruct* getSettlement(const stratMap* map, const std::string& name)
@@ -588,24 +587,9 @@ namespace stratMapHelpers
             sol::usertype<seaConnectedRegion> seaConnectedRegion;
             sol::usertype<neighbourRegion> neighbourRegion;
         }typeAll;
-    	
-		/// coords
-		//@section coordPair
 
-		/***
-		Basic coordPair table.
-
-		@tfield int xCoord
-		@tfield int yCoord
-
-		@table coordPair
-		*/
-		typeAll.coordPair = luaState.new_usertype<coordPair>("coordPair");
-		typeAll.coordPair.set("xCoord", &coordPair::xCoord);
-		typeAll.coordPair.set("yCoord", &coordPair::yCoord);
-
-		/// Strat Map
-		//@section stratMap
+		///Strat Map
+		//@section Strat Map
 
 		/***
 		Basic strat map table.
@@ -623,6 +607,12 @@ namespace stratMapHelpers
 		@tfield getLandMass getLandMass
 		@tfield getSettlement getSettlement
 		@tfield getRegionByName getRegionByName
+		@tfield moveCamera moveCamera
+		@tfield jumpCamera jumpCamera
+		@tfield zoomCamera zoomCamera
+		@tfield startDrawModelAt startDrawModelAt
+		@tfield stopDrawModel stopDrawModel
+		@tfield replaceTile replaceTile
 
 		@table stratMap
 		*/
@@ -640,8 +630,7 @@ namespace stratMapHelpers
 		@tparam int index
 		@treturn regionStruct region
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local region = M2TW.stratMap.getRegion(2);
 		*/
 		typeAll.stratMap.set_function("getRegion", &getRegion);
 
@@ -652,8 +641,7 @@ namespace stratMapHelpers
 		@tparam int y
 		@treturn tileStruct tile
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local tile = sMap.getTile(182, 243);
+		local tile = M2TW.stratMap.getTile(182, 243)
 		*/
 		typeAll.stratMap.set_function("getTile", &getTile);
 
@@ -663,8 +651,7 @@ namespace stratMapHelpers
 		@tparam int index
 		@treturn coordPair tile
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local volcano = sMap:getVolcanoCoords(0);
+		local volcano = M2TW.stratMap:getVolcanoCoords(0)
 		*/
 		typeAll.stratMap.set_function("getVolcanoCoords", &stratMap::getVolcanoCoords);
 
@@ -674,8 +661,7 @@ namespace stratMapHelpers
 		@tparam int index
 		@treturn coordPair tile
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local connection = sMap:getLandConnection(0);
+		local connection = M2TW.stratMap:getLandConnection(0)
 		*/
 		typeAll.stratMap.set_function("getLandConnection", &stratMap::getLandConnection);
 
@@ -685,8 +671,7 @@ namespace stratMapHelpers
 		@tparam int index
 		@treturn landMass landMass
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local tile = sMap:getLandMass(0);
+		local land = M2TW.stratMap:getLandMass(0)
 		*/
 		typeAll.stratMap.set_function("getLandMass", &stratMap::getLandMass);
 
@@ -696,8 +681,7 @@ namespace stratMapHelpers
 		@tparam string name
 		@treturn settlementStruct settlement
 		@usage
-		local STRAT_MAP = gameDataAll.get().stratMap;
-		local london = STRAT_MAP:getSettlement("London");
+		local london = M2TW.stratMap:getSettlement("London")
 		*/
 		typeAll.stratMap.set_function("getSettlement", &getSettlement);
 
@@ -707,13 +691,88 @@ namespace stratMapHelpers
 		@tparam string name
 		@treturn regionStruct region
 		@usage
-		local STRAT_MAP = gameDataAll.get().stratMap;
-		local londonRegion = STRAT_MAP:getRegionByName("London_Province");
+		local region = M2TW.stratMap:getRegionByName("London_Province")
 		*/
 		typeAll.stratMap.set_function("getRegionByName", &getRegionByName);
 
-		/// landMass
-		//@section landMass
+		/***
+		Slowly move the camera to the specified tile.
+		@function stratMap.moveCamera
+		@tparam int xCoord
+		@tparam int yCoord
+		@usage
+		      M2TW.stratMap.moveCamera(1,2)
+		*/
+		typeAll.stratMap.set_function("moveCamera", &moveStratCameraSlow);
+
+		/***
+		Quickly move the camera to the specified tile.
+		@function stratMap.jumpCamera
+		@tparam int xCoord
+		@tparam int yCoord
+		@usage
+		      M2TW.stratMap.jumpCamera(1,2)
+		*/
+		typeAll.stratMap.set_function("jumpCamera", &moveStratCameraFast);
+
+		/***
+	    Set the zoom level of the camera.
+		@function stratMap.zoomCamera
+		@tparam float distance
+		@usage
+		      M2TW.stratMap.zoomCamera(0.12)
+		*/
+		typeAll.stratMap.set_function("zoomCamera", &zoomStratCamera);
+
+		/***
+		Start drawing .cas campaign strategy model with a unique ID in some coords. Can be used at any time.
+		@function stratMap.startDrawModelAt
+		@tparam int modelId Unique ID
+		@tparam int x
+		@tparam int y
+		@tparam int sizeMultiplier 1 is value with what it draw as same size as game objects
+		@usage
+		      M2TWEOP.addModelToGame("data/models_strat/residences/invisible.CAS", 1)
+		      M2TW.stratMap.startDrawModelAt(1, 50, 150, 2.25)
+		*/
+		typeAll.stratMap.set_function("startDrawModelAt", &casModelsDrawer::addCasModelToDrawList);
+
+		/***
+		Stop drawing .cas campaign strategy model with a unique ID. Can be used at any time.
+	    @function stratMap.stopDrawModel
+		@tparam int modelId Unique ID
+		@usage
+		      M2TWEOP.addModelToGame("data/models_strat/residences/invisible.CAS", 1)
+		      M2TW.stratMap.startDrawModelAt(1, 50, 150, 2.25)
+		      M2TW.stratMap.stopDrawModel(1)
+		*/
+		typeAll.stratMap.set_function("stopDrawModel", &casModelsDrawer::removeCasModelFromDrawList);
+
+		/***
+		Replace a custom tile. Change the custom battlefield on the specified coordinates.
+		@function stratMap.replaceTile
+		@tparam string label  Identifier.
+		@tparam int xCoord  X coordinate of tile.
+		@tparam int yCoord  Y coordinate of tile.
+		@tparam string filename  Just the name, not full path (.wfc)
+		@tparam string weather Weather on the battle map.
+		@tparam string dayTime Time of day.
+		@usage
+		M2TW.stratMap.replaceTile("Helms-Deep_Province",167,158,"hornburg_amb.wfc","clear","midday");
+		*/
+		typeAll.stratMap.set_function("replaceTile", &tilesChange::replaceTile);
+		
+		/***
+		Basic coordPair table.
+
+		@tfield int xCoord
+		@tfield int yCoord
+
+		@table coordPair
+		*/
+		typeAll.coordPair = luaState.new_usertype<coordPair>("coordPair");
+		typeAll.coordPair.set("xCoord", &coordPair::xCoord);
+		typeAll.coordPair.set("yCoord", &coordPair::yCoord);
 
 		/***
 		Basic landMass table.
@@ -738,8 +797,8 @@ namespace stratMapHelpers
 		*/
 		typeAll.landMass.set_function("getRegionID", &landMass::getRegion);
 
-		/// roadStruct
-		//@section roadStruct
+		///Road
+		//@section Road
 
 		/***
 		Basic roadStruct table.
@@ -773,7 +832,7 @@ namespace stratMapHelpers
 		typeAll.roadStruct.set_function("getCoord", &roadStruct::getCoord);
 
 		///Tile
-		//@section tileStruct
+		//@section Tile
 
 		/***
 		Basic tile table.
@@ -921,8 +980,8 @@ namespace stratMapHelpers
 		*/
 		typeAll.tileStruct.set_function("getTileCharacterAtIndex", &oneTile::getTileCharacterAtIndex);
 
-		///RegionStruct
-		//@section RegionStruct
+		///Region
+		//@section Region
 
 		/***
 		Basic regionStruct table.
@@ -1041,8 +1100,8 @@ namespace stratMapHelpers
 		@tparam int index
 		@treturn armyStruct army
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		local army = region:getStack(0)
 		*/
 		typeAll.regionStruct.set_function("getStack", &regionStruct::getArmy);
@@ -1053,8 +1112,8 @@ namespace stratMapHelpers
 		@tparam int index
 		@treturn fortStruct fort
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		local fort = region:getFort(0)
 		*/
 		typeAll.regionStruct.set_function("getFort", &regionStruct::getFort);
@@ -1065,8 +1124,8 @@ namespace stratMapHelpers
 		@tparam int index
 		@treturn watchtowerStruct watchtower
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		local watch = region:getWatchtower(0)
 		*/
 		typeAll.regionStruct.set_function("getWatchtower", &regionStruct::getWatchTower);
@@ -1077,8 +1136,8 @@ namespace stratMapHelpers
 		@tparam int index
 		@treturn tradeResource resource
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		local res = region:getResource(0)
 		*/
 		typeAll.regionStruct.set_function("getResource", &regionStruct::getResource);
@@ -1089,8 +1148,8 @@ namespace stratMapHelpers
 		@tparam int index
 		@treturn neighbourRegion nRegion
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		local nRegion = region:getNeighbour(0)
 		*/
 		typeAll.regionStruct.set_function("getNeighbour", &regionStruct::getNeighbourRegion);
@@ -1101,8 +1160,8 @@ namespace stratMapHelpers
 		@tparam string name
 		@treturn bool hr
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		localhr = region:getHiddenResource("resource_name")
 		*/
 		typeAll.regionStruct.set_function("getHiddenResource", &regionStruct::hasHiddenResource);
@@ -1113,8 +1172,8 @@ namespace stratMapHelpers
 		@tparam string name
 		@tparam bool enable
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		region:setHiddenResource("resource_name", false)
 		*/
 		typeAll.regionStruct.set_function("setHiddenResource", &regionStruct::setHiddenResource);
@@ -1125,8 +1184,8 @@ namespace stratMapHelpers
 		@tparam int index
 		@treturn seaConnectedRegion connectedRegion
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		local connectedRegion = region:getSeaConnectedRegion(0)
 		*/
 		typeAll.regionStruct.set_function("getSeaConnectedRegion", &regionStruct::getSeaConnectedRegion);
@@ -1137,8 +1196,8 @@ namespace stratMapHelpers
 		@tparam int index
 		@treturn seaConnectedRegion seaImportRegion
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		local seaImportRegion = region:getSeaImportRegion(0)
 		*/
 		typeAll.regionStruct.set_function("getSeaImportRegion", &regionStruct::getSeaImportRegion);
@@ -1149,8 +1208,8 @@ namespace stratMapHelpers
 		@tparam int index
 		@treturn tileStruct edge
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		local edge = region:getRegionSeaEdge(0)
 		*/
 		typeAll.regionStruct.set_function("getRegionSeaEdge", &regionStruct::getPatrolPoint);
@@ -1161,8 +1220,8 @@ namespace stratMapHelpers
 		@tparam int index
 		@treturn tileStruct tile
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		local tile = region:getDevastatedTile(0)
 		*/
 		typeAll.regionStruct.set_function("getDevastatedTile", &regionStruct::getDevastatedTile);
@@ -1173,8 +1232,8 @@ namespace stratMapHelpers
 		@tparam int index
 		@treturn tileStruct edge
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		local edge = region:getTileBorderingEdgeOfMap(0)
 		*/
 		typeAll.regionStruct.set_function("getTileBorderingEdgeOfMap", &regionStruct::getTileBorderingEdgeOfMap);
@@ -1185,8 +1244,8 @@ namespace stratMapHelpers
 		@tparam int index
 		@treturn tileStruct tile
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		local tile = region:getTile(0)
 		*/
 		typeAll.regionStruct.set_function("getTile", &regionStruct::getTile);
@@ -1197,8 +1256,8 @@ namespace stratMapHelpers
 		@tparam int index
 		@treturn tileStruct tile
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		local tile = region:getFertileTile(0)
 		*/
 		typeAll.regionStruct.set_function("getFertileTile", &regionStruct::getFertileTile);
@@ -1210,8 +1269,8 @@ namespace stratMapHelpers
 		@tparam int turnsAgo (max 19)
 		@treturn float religionAmount
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		local catholicThreeTurnsAgo = region:getReligionHistory(0, 3)
 		*/
 		typeAll.regionStruct.set_function("getReligionHistory", &regionStruct::getReligionHistory);
@@ -1222,8 +1281,8 @@ namespace stratMapHelpers
 		@tparam int resourceID
 		@treturn bool hasResource
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		local hasResource = region:hasResourceType(16)
 		*/
 		typeAll.regionStruct.set_function("hasResourceType", &regionStruct::hasResourceType);
@@ -1234,14 +1293,14 @@ namespace stratMapHelpers
 		@tparam int factionID
 		@treturn int totalStrength
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
 		local totalStrength = region:getHostileArmiesStrength(myFac.factionID)
 		*/
 		typeAll.regionStruct.set_function("getHostileArmiesStrength", &regionStruct::getHostileArmiesStrength);
 
-		///neighbourRegion
-		//@section neighbourRegion
+		///Neighbour Region
+		//@section Neighbour Region
 
 		/***
 		Basic neighbourRegion table.
@@ -1277,10 +1336,9 @@ namespace stratMapHelpers
 		*/
 		typeAll.neighbourRegion.set_function("getBorderTile", &neighbourRegion::getBorderTile);
 
-
-
-		///seaConnectedRegion
-		//@section seaConnectedRegion
+		
+		///Sea Connected Region
+		//@section Sea Connected Region
 
 		/***
 		Basic seaConnectedRegion table.

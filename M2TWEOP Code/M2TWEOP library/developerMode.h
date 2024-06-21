@@ -2,14 +2,15 @@
 #include "headersSTD.h"
 #include "battleMapOverrider.h"
 
-class DeveloperMode
+class developerMode
 {
 public:
-	void Update();
+	void update();
 	bool isDeveloperModeNeeded = true;
 	void toggleDeveloperModeBase();
+	static void toggleDeveloperMode();
 
-	string SelectWorldpkgdesc(const std::string& selectedRec, const std::string& selectedGroup);
+	string selectWorldpkgdesc(const std::string& selectedRec, const std::string& selectedGroup);
 private:
 	bool isWork = false;
 
@@ -23,6 +24,7 @@ private:
 	{
 		BattleMapOverrider battleMapOverrider;
 	}subs;
+
+	static bool draw();
 };
-void toggleDeveloperMode();
 

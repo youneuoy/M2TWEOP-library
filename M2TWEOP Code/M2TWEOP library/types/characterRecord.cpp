@@ -356,7 +356,7 @@ namespace characterRecordHelpers
 			sol::usertype<traitEffect> traitEffect;
 		}types;
 
-		///character Record
+		///Character Record
 		//@section Character record
 
 		/***
@@ -650,7 +650,7 @@ namespace characterRecordHelpers
 
 		
 		///Ancillary
-		//@section ancillaryTable
+		//@section Ancillary
 
 		/***
 		Basic ancillary table
@@ -690,7 +690,7 @@ namespace characterRecordHelpers
 		*/
 		types.ancillary.set_function("getEffect", &ancillary::getEffect);
 		
-		///capturedFactionInfo
+		///Captured Faction Info
 		//@section Captured Faction Info
 
 		/***
@@ -767,7 +767,7 @@ namespace characterRecordHelpers
 		types.capturedCharacter.set("namedChar", &capturedCharacter::namedChar);
 		types.capturedCharacter.set("capturedValue", &capturedCharacter::capturedValue);
 
-		/// Trait Container
+		///Traits
 		//@section Traits
 
 		/***

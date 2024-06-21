@@ -189,14 +189,15 @@ public:
 
 namespace gameUiHelpers
 {
-     settlementInfoScroll* getSettlementInfoScroll();
-     std::string getUIElementName(const uiElement* element);
-     uiElement* getSubElement(const uiElement* element, int index);
-     bool useButton(const char* buttonName);
-     uiElement* getUiElement(const char* elementName);
-     void useUiElement(uiElement* element);
-     unitInfoScroll* getUnitInfoScroll();
-     buildingInfoScroll* getBuildingInfoScroll();
-     stratUIStruct* getStratUi();
-     void addToLua(sol::state& luaState);   
+	settlementInfoScroll* getSettlementInfoScroll();
+	uiCardManager* getUiCardManager();
+	std::string getUIElementName(const uiElement* element);
+	uiElement* getSubElement(const uiElement* element, int index);
+	bool useButton(const char* buttonName);
+	uiElement* getUiElement(const char* elementName);
+	void useUiElement(uiElement* element);
+	unitInfoScroll* getUnitInfoScroll();
+	buildingInfoScroll* getBuildingInfoScroll();
+	stratUIStruct* getStratUi();
+	void addToLua(sol::state& luaState);   
 };

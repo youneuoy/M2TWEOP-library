@@ -7,7 +7,7 @@
 
 #include "dataOffsets.h"
 #include "functionsOffsets.h"
-#include "plugData.h"
+#include "luaPlugin.h"
 #include "faction.h"
 #include "unit.h"
 #include "character.h"
@@ -162,8 +162,8 @@ namespace fortHelpers
 	
 	void addToLua(sol::state& luaState)
     {
-		///FortStruct
-		//@section fortStructTable
+		///Fort
+		//@section Fort
 
 		/***
 		Basic fortStruct table

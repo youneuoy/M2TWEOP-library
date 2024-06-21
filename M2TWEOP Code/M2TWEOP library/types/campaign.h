@@ -1077,6 +1077,7 @@ namespace campaignHelpers
 {
     campaign* getCampaignData();
 	UINT32 getFactionsCount();
+	selectionInfo* getSelectionInfo();
 	campaignDifficulty1* getCampaignDifficulty1();
 	campaignDifficulty2* getCampaignDifficulty2();
 	void setPerfectSpy(bool set);

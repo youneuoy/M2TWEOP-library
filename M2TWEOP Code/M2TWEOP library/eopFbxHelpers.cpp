@@ -1,7 +1,7 @@
 #include "eopFbxHelpers.h"
 
 #include "fbxModels.h"
-#include "plugData.h"
+#include "luaPlugin.h"
 
 void eopFbxHelpers::setFbxObjectCoords(void* object, float x, float y, float z)
 {

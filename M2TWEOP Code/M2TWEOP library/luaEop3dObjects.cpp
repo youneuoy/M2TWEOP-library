@@ -4,10 +4,10 @@
 //@module LuaPlugin
 //@author youneuoy
 //@license GPL-3.0
-#include "luaP.h"
+#include "luaPlugin.h"
 #include "mapTextDrawer.h"
 #include <d3dx9mesh.h>
-struct Text3DDrawable
+struct text3DDrawable
 {
 	LPD3DXMESH textMesh;
 	DWORD color;
@@ -23,12 +23,12 @@ struct Text3DDrawable
 	bool isDrawOnce;
 	bool isDeleteNeeded;
 };
-void luaP::initEop3dObjects()
+void luaPlugin::initEop3dObjects()
 {
 	struct
 	{
 		sol::table M2TWEOP3dObjectsTable;
-		sol::usertype<Text3DDrawable> text3dDrawable;
+		sol::usertype<text3DDrawable> text3dDrawable;
 	}tables;
 
 	///M2TWEOP3dObjects
@@ -108,19 +108,19 @@ void luaP::initEop3dObjects()
 	@table Eop3dText
 	*/
 
-	tables.text3dDrawable = luaState.new_usertype<Text3DDrawable>("Eop3dText");
+	tables.text3dDrawable = luaState.new_usertype<text3DDrawable>("Eop3dText");
 
-	tables.text3dDrawable.set("xSize", &Text3DDrawable::xSize);
-	tables.text3dDrawable.set("ySize", &Text3DDrawable::ySize);
-	tables.text3dDrawable.set("zSize", &Text3DDrawable::zSize);
+	tables.text3dDrawable.set("xSize", &text3DDrawable::xSize);
+	tables.text3dDrawable.set("ySize", &text3DDrawable::ySize);
+	tables.text3dDrawable.set("zSize", &text3DDrawable::zSize);
 
-	tables.text3dDrawable.set("xRoll", &Text3DDrawable::xRoll);
-	tables.text3dDrawable.set("yRoll", &Text3DDrawable::yRoll);
-	tables.text3dDrawable.set("zRoll", &Text3DDrawable::zRoll);
+	tables.text3dDrawable.set("xRoll", &text3DDrawable::xRoll);
+	tables.text3dDrawable.set("yRoll", &text3DDrawable::yRoll);
+	tables.text3dDrawable.set("zRoll", &text3DDrawable::zRoll);
 
-	tables.text3dDrawable.set("xCoord", &Text3DDrawable::xCoord);
-	tables.text3dDrawable.set("yCoord", &Text3DDrawable::yCoord);
-	tables.text3dDrawable.set("zCoord", &Text3DDrawable::zCoord);
+	tables.text3dDrawable.set("xCoord", &text3DDrawable::xCoord);
+	tables.text3dDrawable.set("yCoord", &text3DDrawable::yCoord);
+	tables.text3dDrawable.set("zCoord", &text3DDrawable::zCoord);
 	/***
 	Scale 3d text.
 	@function Eop3dText:Scale

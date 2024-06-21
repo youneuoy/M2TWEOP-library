@@ -3,17 +3,12 @@
 
 class managerF
 {
-public:
-	static void init();
-
+public:;
+	static void initThread();
 	static void debug();
 	static void loadJsonSettings();
 private:
 	static void execPatches();
-
-	static void initThread();
-
-
 };
 
 namespace managerExport

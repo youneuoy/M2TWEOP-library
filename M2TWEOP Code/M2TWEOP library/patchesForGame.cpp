@@ -6,6 +6,7 @@
 
 
 #include "events.h"
+#include "fort.h"
 #include "battle.h"
 #include "cultures.h"
 #include "eopBuildings.h"
@@ -42,7 +43,7 @@ worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, world
 		selectedWorld = battleCreator::selectWorldpkgdesc(selectRecordS, selectRecordG);
 		if (selectedWorld.empty() || selectedWorld == selectRecordS)
 		{
-			selectedWorld = globals::dataS.Modules.developerMode.SelectWorldpkgdesc(selectRecordS, selectRecordG);
+			selectedWorld = globals::dataS.Modules.developerMode.selectWorldpkgdesc(selectRecordS, selectRecordG);
 		}
 	}
 

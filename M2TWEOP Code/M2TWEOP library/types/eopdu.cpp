@@ -261,7 +261,7 @@ namespace eopDuHelpers
 		}tables;
 		
 		///M2TWEOPDU
-		//@section M2TWEOPDUTable
+		//@section M2TWEOPDU
 
 		/***
 		Basic M2TWEOPDU table. Contains descriptions of M2TWEOP unit types.

@@ -990,7 +990,7 @@ namespace characterHelpers
         }types;
     	
 	///Character
-	//@section Character Table
+	//@section Character
 
 	/***
 	characters as they exist on the strategy map - dead characters, wives, children, and off-map characters do not have these fields.

@@ -1,5 +1,11 @@
+///
+//![Lua logo](../Lua.png)
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
+
 #include "gameHelpers.h"
-#include "plugData.h"
+#include "luaPlugin.h"
 #include <vector>
 #include "dataOffsets.h"
 #include "events.h"
@@ -96,6 +102,13 @@ namespace gameHelpers
 		return std::make_tuple(isExist, counterValue);
 	}
 	
+	int getScriptCounterNoBool(const char* type)
+	{
+		bool isExist = false;
+		const int counterValue = getScriptCounter(type, isExist);
+		return isExist ? counterValue : 0;
+	}
+	
 	bool conditionLua(const std::string& condition, const eventTrigger* eventData)
 	{
 		const char* conditionC = condition.c_str();
@@ -106,7 +119,7 @@ namespace gameHelpers
 	{
 		return globals::dataS.gameVersion;
 	}
-	
+
 	void scriptCommandLua(const std::string& command, sol::variadic_args va)
 	{
 		const char* commandC = command.c_str();
@@ -269,7 +282,7 @@ namespace gameHelpers
 	{
 		auto fakeText = std::make_shared<fakeTextInput>(fakeTextInput(condition, 0));
 		auto rawText = fakeText.get();
-		const auto makeConditionFunc = reinterpret_cast<DWORD*>(0x00875310);
+		const auto makeConditionFunc = reinterpret_cast<DWORD*>(codes::offsets.parseCondition);
 		void* result = nullptr;
 		_asm
 		{
@@ -393,7 +406,7 @@ namespace gameHelpers
 	
 	std::string getModPath()
 	{
-		return  plugData::data.modFolder;
+		return  globals::dataS.modPath;
 	}
 	std::string getLuaPath()
 	{
@@ -541,4 +554,247 @@ namespace gameHelpers
 	{
 		return *dataOffsets::offsets.gameUnit_size;
 	}
+	
+	void addToLua(sol::state& luaState)
+	{
+		struct
+		{
+			sol::usertype<options1> options1;
+			sol::usertype<options2> options2;
+		}typeAll;
+		
+		///Game Options
+		//@section options1
+
+		/***
+		Basic options1 table
+
+		@tfield int widescreen
+		@tfield int antiAliasMode
+		@tfield int subtitles
+		@tfield int english
+		@tfield int noBattleTimeLimit
+		@tfield int useNewCursorActions
+		@tfield int campaignNumTimesPlay
+		@tfield int uiWinConditions
+		@tfield int isScenario
+		@tfield int isHotseatEnabled
+		@tfield int hotseatAutosave
+		@tfield int email
+		@tfield int saveConfig
+		@tfield int closeAfterSave
+		@tfield int validateData
+		@tfield int campaignMapSpeedUp
+		@tfield int skipAiFactions
+		@tfield int labelCharacters
+		@tfield int noBackGroundFmv
+		@tfield int disableArrowMarkers
+		@tfield int arcadeBattles
+		@tfield int disableEvents
+		@tfield int isPrologue
+		@tfield int updateAiCamera
+		@tfield int hideCampaign
+		@tfield int unlimitedMenOnBattlefield
+		@tfield int tgaReserveSpace
+		@tfield int keysetUsed
+		@tfield int muteAdvisor
+		@tfield int advancedStatsAlways
+		@tfield int microManageAllSettlements
+		@tfield int blindAdvisor
+		@tfield int terrainQuality
+		@tfield int vegetationQuality
+		@tfield int useQuickChat
+		@tfield int graphicsAdaptor
+		@tfield int showDemeanour
+		@tfield int radar
+		@tfield int unitCards
+		@tfield int sa_cards
+		@tfield int buttons
+		@tfield int tutorialBattlePlayed
+		@tfield int disableVnVs
+		@tfield int allUsers
+
+		@table options1
+		*/
+		typeAll.options1 = luaState.new_usertype<options1>("options1");
+		typeAll.options1.set("widescreen", &options1::widescreen);
+		typeAll.options1.set("antiAliasMode", &options1::antiAliasMode);
+		typeAll.options1.set("subtitles", &options1::subtitles);
+		typeAll.options1.set("english", &options1::english);
+		typeAll.options1.set("noBattleTimeLimit", &options1::noBattleTimeLimit);
+		typeAll.options1.set("useNewCursorActions", &options1::useNewCursorActions);
+		typeAll.options1.set("campaignNumTimesPlay", &options1::campaignNumTimesPlay);
+		typeAll.options1.set("uiWinConditions", &options1::uiWinConditions);
+		typeAll.options1.set("isScenario", &options1::isScenario);
+		typeAll.options1.set("isHotseatEnabled", &options1::isHotseatEnabled);
+		typeAll.options1.set("hotseatAutosave", &options1::hotseatAutosave);
+		typeAll.options1.set("email", &options1::email);
+		typeAll.options1.set("saveConfig", &options1::saveConfig);
+		typeAll.options1.set("closeAfterSave", &options1::closeAfterSave);
+		typeAll.options1.set("validateData", &options1::validateData);
+		typeAll.options1.set("campaignMapSpeedUp", &options1::campaignMapSpeedUp);
+		typeAll.options1.set("skipAiFactions", &options1::skipAiFactions);
+		typeAll.options1.set("labelCharacters", &options1::labelCharacters);
+		typeAll.options1.set("noBackGroundFmv", &options1::noBackGroundFmv);
+		typeAll.options1.set("disableArrowMarkers", &options1::disableArrowMarkers);
+		typeAll.options1.set("arcadeBattles", &options1::arcadeBattles);
+		typeAll.options1.set("disableEvents", &options1::disableEvents);
+		typeAll.options1.set("isPrologue", &options1::isPrologue);
+		typeAll.options1.set("updateAiCamera", &options1::updateAiCamera);
+		typeAll.options1.set("hideCampaign", &options1::hideCampaign);
+		typeAll.options1.set("unlimitedMenOnBattlefield", &options1::unlimitedMenOnBattlefield);
+		typeAll.options1.set("tgaReserveSpace", &options1::tgaReserveSpace);
+		typeAll.options1.set("keysetUsed", &options1::keysetUsed);
+		typeAll.options1.set("muteAdvisor", &options1::muteAdvisor);
+		typeAll.options1.set("advancedStatsAlways", &options1::advancedStatsAlways);
+		typeAll.options1.set("microManageAllSettlements", &options1::microManageAllSettlements);
+		typeAll.options1.set("blindAdvisor", &options1::blindAdvisor);
+		typeAll.options1.set("terrainQuality", &options1::terrainQuality);
+		typeAll.options1.set("vegetationQuality", &options1::vegetationQuality);
+		typeAll.options1.set("useQuickChat", &options1::useQuickChat);
+		typeAll.options1.set("graphicsAdaptor", &options1::graphicsAdaptor);
+		typeAll.options1.set("showDemeanour", &options1::showDemeanour);
+		typeAll.options1.set("radar", &options1::radar);
+		typeAll.options1.set("unitCards", &options1::unitCards);
+		typeAll.options1.set("sa_cards", &options1::sa_cards);
+		typeAll.options1.set("buttons", &options1::buttons);
+		typeAll.options1.set("tutorialBattlePlayed", &options1::tutorialBattlePlayed);
+		typeAll.options1.set("disableVnVs", &options1::disableVnVs);
+		typeAll.options1.set("allUsers", &options1::allUsers);
+
+
+		/***
+		Basic options2 table
+		
+		@tfield int campaignResolutionX
+		@tfield int campaignResolutionY
+		@tfield int battleResolutionX
+		@tfield int battleResolutionY
+		@tfield int vSync
+		@tfield int uiIconBarCheck
+		@tfield int uiRadarCheck
+		@tfield int useMorale
+		@tfield int uiAmmoCheck
+		@tfield int useFatigue
+		@tfield int uiSupplyCheck
+		@tfield int toggleFowState this does not toggle fow just remembers if it was on or off
+		@tfield int cameraRestrict
+		@tfield int eventCutscenes
+		@tfield int defaultCameraInBattle
+		@tfield int splashes
+		@tfield int stencilShadows
+		@tfield int audioEnable
+		@tfield int speechEnable
+		@tfield int firstTimePlay
+		@tfield int toggleAutoSave
+		@tfield int showBanners
+		@tfield int passwords
+		@tfield int hotseatTurns
+		@tfield int hotseatScroll
+		@tfield int allowValidationFeatures
+		@tfield int campaignSpeed
+		@tfield int labelSettlements
+		@tfield int disablePapalElections
+		@tfield int autoresolveAllBattles
+		@tfield int savePrefs
+		@tfield int disableConsole
+		@tfield int validateDiplomacy
+		@tfield int unitDetail
+		@tfield int buildingDetail
+		@tfield int maxSoldiersOnBattlefield if limited
+		@tfield int unitSize
+		@tfield int cameraRotateSpeed
+		@tfield int cameraMoveSpeed
+		@tfield float cameraSmoothing
+		@tfield int masterVolume
+		@tfield int musicVolume
+		@tfield int speechVolume
+		@tfield int sfxVolume
+		@tfield int subFactionAccents
+		@tfield int tgaWidth
+		@tfield float tgaAspect
+		@tfield int tgaInputScale
+		@tfield int scrollMinZoom
+		@tfield int scrollMaxZoom
+		@tfield int advisorVerbosity
+		@tfield int effectQuality
+		@tfield int EnableCameraCampaignSmoothing
+		@tfield int chatMsgDuration
+		@tfield int saveGameSpyPassword
+		@tfield int addDateToLogs
+		@tfield int showToolTips
+		@tfield int isNormalHud
+		@tfield int showPackageLitter
+		@tfield float unitSizeMultiplierLow
+		@tfield float unitSizeMultiplierMedium
+		@tfield float unitSizeMultiplierLarge
+
+		@table options2
+		*/
+		typeAll.options2 = luaState.new_usertype<options2>("options2");
+		typeAll.options2.set("campaignResolutionX", &options2::campaignResolutionX);
+		typeAll.options2.set("campaignResolutionY", &options2::campaignResolutionY);
+		typeAll.options2.set("battleResolutionX", &options2::battleResolutionX);
+		typeAll.options2.set("battleResolutionY", &options2::battleResolutionY);
+		typeAll.options2.set("vSync", &options2::vSync);
+		typeAll.options2.set("uiIconBarCheck", &options2::uiIconBarCheck);
+		typeAll.options2.set("uiRadarCheck", &options2::uiRadarCheck);
+		typeAll.options2.set("useMorale", &options2::useMorale);
+		typeAll.options2.set("uiAmmoCheck", &options2::uiAmmoCheck);
+		typeAll.options2.set("useFatigue", &options2::useFatigue);
+		typeAll.options2.set("uiSupplyCheck", &options2::uiSupplyCheck);
+		typeAll.options2.set("toggleFowState", &options2::toggleFowState);
+		typeAll.options2.set("cameraRestrict", &options2::cameraRestrict);
+		typeAll.options2.set("eventCutscenes", &options2::eventCutscenes);
+		typeAll.options2.set("defaultCameraInBattle", &options2::defaultCameraInBattle);
+		typeAll.options2.set("splashes", &options2::splashes);
+		typeAll.options2.set("stencilShadows", &options2::stencilShadows);
+		typeAll.options2.set("audioEnable", &options2::audioEnable);
+		typeAll.options2.set("speechEnable", &options2::speechEnable);
+		typeAll.options2.set("firstTimePlay", &options2::firstTimePlay);
+		typeAll.options2.set("toggleAutoSave", &options2::toggleAutoSave);
+		typeAll.options2.set("showBanners", &options2::showBanners);
+		typeAll.options2.set("passwords", &options2::passwords);
+		typeAll.options2.set("hotseatTurns", &options2::hotseatTurns);
+		typeAll.options2.set("hotseatScroll", &options2::hotseatScroll);
+		typeAll.options2.set("allowValidationFeatures", &options2::allowValidationFeatures);
+		typeAll.options2.set("campaignSpeed", &options2::campaignSpeed);
+		typeAll.options2.set("labelSettlements", &options2::labelSettlements);
+		typeAll.options2.set("disablePapalElections", &options2::disablePapalElections);
+		typeAll.options2.set("autoresolveAllBattles", &options2::autoresolveAllBattles);
+		typeAll.options2.set("savePrefs", &options2::savePrefs);
+		typeAll.options2.set("disableConsole", &options2::disableConsole);
+		typeAll.options2.set("validateDiplomacy", &options2::validateDiplomacy);
+		typeAll.options2.set("unitDetail", &options2::unitDetail);
+		typeAll.options2.set("buildingDetail", &options2::buildingDetail);
+		typeAll.options2.set("maxSoldiersOnBattlefield", &options2::maxSoldiersOnBattlefield);
+		typeAll.options2.set("unitSize", &options2::unitSize);
+		typeAll.options2.set("cameraRotateSpeed", &options2::cameraRotateSpeed);
+		typeAll.options2.set("cameraMoveSpeed", &options2::cameraMoveSpeed);
+		typeAll.options2.set("cameraSmoothing", &options2::cameraSmoothing);
+		typeAll.options2.set("masterVolume", &options2::masterVolume);
+		typeAll.options2.set("musicVolume", &options2::musicVolume);
+		typeAll.options2.set("speechVolume", &options2::speechVolume);
+		typeAll.options2.set("sfxVolume", &options2::sfxVolume);
+		typeAll.options2.set("subFactionAccents", &options2::subFactionAccents);
+		typeAll.options2.set("tgaWidth", &options2::tgaWidth);
+		typeAll.options2.set("tgaAspect", &options2::tgaAspect);
+		typeAll.options2.set("tgaInputScale", &options2::tgaInputScale);
+		typeAll.options2.set("scrollMinZoom", &options2::scrollMinZoom);
+		typeAll.options2.set("scrollMaxZoom", &options2::scrollMaxZoom);
+		typeAll.options2.set("advisorVerbosity", &options2::advisorVerbosity);
+		typeAll.options2.set("effectQuality", &options2::effectQuality);
+		typeAll.options2.set("EnableCameraCampaignSmoothing", &options2::EnableCameraCampaignSmoothing);
+		typeAll.options2.set("chatMsgDuration", &options2::chatMsgDuration);
+		typeAll.options2.set("saveGameSpyPassword", &options2::saveGameSpyPassword);
+		typeAll.options2.set("addDateToLogs", &options2::addDateToLogs);
+		typeAll.options2.set("showToolTips", &options2::showToolTips);
+		typeAll.options2.set("isNormalHud", &options2::isNormalHud);
+		typeAll.options2.set("showPackageLitter", &options2::showPackageLitter);
+		typeAll.options2.set("unitSizeMultiplierLow", &options2::unitSizeMultiplierLow);
+		typeAll.options2.set("unitSizeMultiplierMedium", &options2::unitSizeMultiplierMedium);
+		typeAll.options2.set("unitSizeMultiplierLarge", &options2::unitSizeMultiplierLarge);
+	
+	}
+	
 }

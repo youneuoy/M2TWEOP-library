@@ -1,4 +1,10 @@
-﻿#include "army.h"
+﻿///
+//![Lua logo](../Lua.png)
+//M2TWEOP structures and functions. There are not many examples and descriptions here. Also note that the examples do not include many of the checks that would be required when creating modifications.
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
+#include "army.h"
 
 #include <queue>
 #include <set>
@@ -10,7 +16,7 @@
 #include "faction.h"
 #include "fort.h"
 #include "gameHelpers.h"
-#include "plugData.h"
+#include "luaPlugin.h"
 #include "strategyMap.h"
 
 settlementStruct* siegeS::getSiegedSettlement()
@@ -291,7 +297,7 @@ namespace armyHelpers
     {
         armyStruct* stack = nullptr;
         factionStruct* fac = character->characterRecord->faction;
-        bool isAdmiral = character->genType->type == 3;
+        int isAdmiral = character->genType->type == 3 ? 1 : 0;
         DWORD adrFunc = codes::offsets.createArmyFunc;
         _asm
         {
@@ -600,7 +606,7 @@ namespace armyHelpers
             sol::usertype<siegeEquipmentQueueItem>siegeEquipmentQueueItem;
         }types;
 		
-		///armyStruct
+		///Army
 		//@section Army
 
 		/***
@@ -658,7 +664,6 @@ namespace armyHelpers
 		@tfield sortStack sortStack
 		@tfield mergeArmies mergeArmies
 		@tfield createUnitByIDX createUnitByIDX
-		@tfield siegeSettlement siegeSettlement
 		@tfield siegeFort siegeFort
 		@tfield blockadePort blockadePort
 		@tfield attackArmy attackArmy
@@ -671,6 +676,7 @@ namespace armyHelpers
 		@tfield buildWatchTower buildWatchTower
 		@tfield liftSiege liftSiege
 		@tfield liftBlockade liftBlockade
+		@tfield siegeSettlement siegeSettlement
 
 
 		@table armyStruct
@@ -724,20 +730,20 @@ namespace armyHelpers
 		function onFactionTurnStart(eventData)
 		local faction = eventData.faction
 	    -- If it's not the players turn, don't sort
-	    if faction.isPlayerControlled == 0 then return end;
+	    if faction.isPlayerControlled == 0 then return end
 
 		function onFactionTurnStart(eventData)
-			CAMPAIGN = gameDataAll.get().campaignStruct
+			CAMPAIGN = M2TW.campaign
 			local faction = eventData.faction
 			-- If it's not the players turn, don't sort
-			if faction.isPlayerControlled == 0 then return end;
+			if faction.isPlayerControlled == 0 then return end
 
 			-- Sort all the stacks on the map right before the turn starts
 			local factionsNum = CAMPAIGN.numberOfFactions;
 			for i = 1, #factionsNum do
-				local fac = CAMPAIGN.factionsSortedByDescrStrat[i];
+				local fac = CAMPAIGN.factionsSortedByDescrStrat[i]
 				for j = 0, fac.stacksNum - 1 do
-					local stack = fac:getStack(j);
+					local stack = fac:getStack(j)
 					if stack then
 						-- Sort the stack by category + class, then by soldier count, then by experience
 						stack:sortStack(sortType.categoryClass, sortType.soldierCount, sortType.experience)
@@ -755,8 +761,8 @@ namespace armyHelpers
 		@tparam int number
 		@treturn unit retUnit
 		@usage
-		ourUnit=armyStruct:getUnit(0);
-		ourUnit:kill();
+		local ourUnit = army:getUnit(0)
+		ourUnit:kill()
 		*/
 		types.armyStruct.set_function("getUnit", &armyStruct::getUnit);
 		types.armyStruct.set("numOfUnits", &armyStruct::numOfUnits);
@@ -766,8 +772,7 @@ namespace armyHelpers
 		@tparam int number
 		@treturn character retCharacter
 		@usage
-		ourChar=armyStruct:getCharacter(0);
-		ourChar:kill();
+		ourChar = army:getCharacter(0)
 		*/
 		types.armyStruct.set_function("getCharacter", &armyStruct::getCharacter);
 		types.armyStruct.set("numOfCharacters", &armyStruct::charactersNum);
@@ -783,9 +788,8 @@ namespace armyHelpers
 		@function armyStruct:findInSettlement
 		@treturn  settlementStruct  settlement
 		@usage
-		ourSett=armyStruct:findInSettlement();
-		if(ourSett~=nil)
-		then
+		local ourSett = army:findInSettlement()
+		if (ourSett ~= nil) then
 			--something
 		end
 		*/
@@ -798,9 +802,8 @@ namespace armyHelpers
 		@function armyStruct:findInFort
 		@treturn  fortStruct  fort
 		@usage
-		ourFort=armyStruct:findInFort();
-		if(ourFort~=nil)
-		then
+		local ourFort = army:findInFort()
+		if (ourFort ~= nil) then
 			--something
 		end
 		*/
@@ -808,19 +811,8 @@ namespace armyHelpers
 		types.armyStruct.set("totalStrength", &armyStruct::totalStrength);
 		types.armyStruct.set("reform_point_x", &armyStruct::reform_point_x);
 		types.armyStruct.set("reform_point_y", &armyStruct::reform_point_y);
-
-		/***
-		Create a unit in the army by index from M2TWEOP units DB (M2TWEOPDU).
-		@function armyStruct:createEOPUnit
-		@tparam int index
-		@tparam int exp
-		@tparam int armor
-		@tparam int weapon
-		@treturn unit newUnit
-		@usage
-		local newUnit=armyStruct:createEOPUnit(1000,1,1,1);
-		*/
 		types.armyStruct.set_function("createEOPUnit", &armyStruct::createEopUnit);
+		
 		/***
 		Create a unit in the army by type from export\_descr\_unit.txt
 		@function armyStruct:createUnit
@@ -830,7 +822,7 @@ namespace armyHelpers
 		@tparam int weapon Weapon upgrade. Maximum: 1.
 		@treturn unit newUnit
 		@usage
-		local newUnit=armyStruct:createUnit("Axemen of Lossarnach",1,1,1);
+		local newUnit = army:createUnit("Axemen of Lossarnach",1,1,1);
 		*/
 		types.armyStruct.set_function("createUnit", &armyStruct::createUnit);
 
@@ -843,7 +835,7 @@ namespace armyHelpers
 		@tparam int weapon Weapon upgrade. Maximum: 1.
 		@treturn unit newUnit
 		@usage
-		local newUnit=armyStruct:createUnitByIDX(255,1,1,1);
+		local newUnit = army:createUnitByIDX(255,1,1,1)
 		*/
 		types.armyStruct.set_function("createUnitByIDX", &armyStruct::createUnitByIndex);
 
@@ -854,7 +846,7 @@ namespace armyHelpers
 		@tparam armyStruct targetArmy
 		@tparam bool force optional
 		@usage
-		army:mergeArmies(anotherArmy);
+		army:mergeArmies(anotherArmy)
 		*/
 		types.armyStruct.set_function("mergeArmies", sol::overload(
 				sol::resolve<void(armyStruct*)>(&armyStruct::mergeArmiesLua),
@@ -867,7 +859,7 @@ namespace armyHelpers
 		@tparam settlementStruct settlement
 		@tparam bool isAttack if this is false it makes the army maintain a siege
 		@usage
-		armyStruct:siegeSettlement(settlement);
+		army:siegeSettlement(settlement, true)
 		*/
 		types.armyStruct.set_function("siegeSettlement", &characterHelpers::siegeSettlement);
 
@@ -877,7 +869,7 @@ namespace armyHelpers
 		@tparam fortStruct fort
 		@tparam bool isAttack if this is false it makes the army maintain a siege
 		@usage
-		armyStruct:siegeFort(fort);
+		army:siegeFort(fort)
 		*/
 		types.armyStruct.set_function("siegeFort", &characterHelpers::siegeFort);
 
@@ -887,7 +879,7 @@ namespace armyHelpers
 		@tparam portStruct port
 		@treturn bool success
 		@usage
-		local success = armyStruct:blockadePort(port);
+		local success = army:blockadePort(port)
 		*/
 		types.armyStruct.set_function("blockadePort", &blockadePort);
 
@@ -895,7 +887,7 @@ namespace armyHelpers
 		Lift an active siege.
 		@function armyStruct:liftSiege
 		@usage
-			armyStruct:liftSiege();
+			army:liftSiege()
 		*/
 		types.armyStruct.set_function("liftSiege", &stopSiege);
 
@@ -903,7 +895,7 @@ namespace armyHelpers
 		Lift an active blockade.
 		@function armyStruct:liftBlockade
 		@usage
-			armyStruct:liftBlockade();
+			army:liftBlockade()
 		*/
 		types.armyStruct.set_function("liftBlockade", &stopBlockPort);
 		
@@ -914,9 +906,8 @@ namespace armyHelpers
 		@tparam armyStruct defender
 		@treturn  int Success Failed = 0.
 		@usage
-		sucess=armyStruct:attackArmy(defenderArmy);
-		if(sucess~=0)
-		then
+		local success = army:attackArmy(defenderArmy)
+		if (success ~= 0) then
 			--something
 		end
 		*/
@@ -928,7 +919,7 @@ namespace armyHelpers
 		@tparam int index
 		@treturn unit deadUnit
 		@usage
-		    local unit =armyStruct:getDeadUnit(0);
+		    local unit = army:getDeadUnit(0)
 		*/
 		types.armyStruct.set_function("getDeadUnit", &armyStruct::getDeadUnit);
 		
@@ -938,7 +929,7 @@ namespace armyHelpers
 		@tparam int index
 		@treturn unitGroup group
 		@usage
-		    local group =armyStruct:getGroup(0);
+		    local group = army:getGroup(0)
 		*/
 		types.armyStruct.set_function("getGroup", &armyStruct::getGroup);
 		
@@ -949,7 +940,7 @@ namespace armyHelpers
 		@tparam unit unit
 		@treturn unitGroup group
 		@usage
-		    local group =armyStruct:defineUnitGroup("group1", unit);
+		    local group = army:defineUnitGroup("group1", unit)
 		*/
 		types.armyStruct.set_function("defineUnitGroup", &unitHelpers::defineUnitGroup);
 		
@@ -958,7 +949,7 @@ namespace armyHelpers
 		@function armyStruct:setAiActiveSet
 		@tparam int activeSet
 		@usage
-		     armyStruct:setAiActiveSet(1);
+		     army:setAiActiveSet(1)
 		*/
 		types.armyStruct.set_function("setAiActiveSet", &armyStruct::setAiActiveSet);
 		
@@ -966,7 +957,7 @@ namespace armyHelpers
 		Set ai active set to on or off depending if army is player controlled
 		@function armyStruct:releaseUnits
 		@usage
-		     armyStruct:releaseUnits();
+		     army:releaseUnits()
 		*/
 		types.armyStruct.set_function("releaseUnits", &armyStruct::releaseUnits);
 		
@@ -974,12 +965,12 @@ namespace armyHelpers
 		Build a watchtower (payment applies)
 		@function armyStruct:buildWatchTower
 		@usage
-		     armyStruct:buildWatchTower();
+		     army:buildWatchTower()
 		*/
 		types.armyStruct.set_function("buildWatchTower", &buildWatchTower);
 		
-		///SiegeStruct
-		//@section siegeStruct
+		///Siege
+		//@section Siege
 
 		/***
 		Basic siegeStruct table
@@ -1016,7 +1007,7 @@ namespace armyHelpers
 		@tparam int index
 		@treturn siegeEquipmentQueueItem item
 		@usage
-		     local item = siegeStruct:getQueueItem(0);
+		     local item = siege:getQueueItem(0)
 		*/
 		types.siege.set_function("getQueueItem", &siegeS::getQueueItem);
 		

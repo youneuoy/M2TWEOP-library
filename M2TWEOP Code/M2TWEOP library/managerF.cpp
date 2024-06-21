@@ -14,11 +14,6 @@
 #include "memWork.h"
 #include "patchesForGame.h"
 
-void managerF::init()
-{
-	initThread();
-}
-
 void managerF::debug()
 {
 	//MessageBoxA(NULL, "TEST", "TEST", NULL);
@@ -31,23 +26,6 @@ void managerF::execPatches()
 	ofstream f1("logs\\applyingPatches.youneuoylog");
 	f1 << "Log:" << endl;
 	MemWork* mem = new MemWork();
-
-	//f1 << "Start applying age patch" << endl;
-/*	f1 << "first step" << endl;
-	Age* inj = new Age(mem, (LPVOID)ageFunc, globals::dataS.gamever);
-	f1 << "step 2" << endl;
-	inj->SetlAgeCode();
-	f1 << "step 3" << endl;
-	inj->Enable();
-	f1 << "Done" << endl;
-
-	f1 << "Start applying visual age patch" << endl;
-
-	AgeVisual* agV = new AgeVisual(mem, (LPVOID)ageVisualFunc, globals::dataS.gamever);
-	agV->SetlAgeCode();
-	agV->Enable();
-	f1 << "Done" << endl;*/
-
 
 	f1 << "Start applying berserkers patch" << endl;
 
@@ -177,51 +155,6 @@ void managerF::execPatches()
 	tcptc->Enable();
 	f1 << "Done" << endl;
 
-	//f1 << "Start applying label script patch" << endl;
-	//toCheckLabelResults* labResults = new toCheckLabelResults(mem, (LPVOID)patchesForGame::onGiveTrait, globals::dataS.gamever);
-	//labResults->SetlCheckLabCode();
-	//labResults->Enable();
-//
-	//f1 << "Done" << endl;
-//
-	//f1 << "Start applying start campaign and battle start patch" << endl;
-	//toCreateMap* stCampaign = new toCreateMap(mem, (LPVOID)patchesForGame::afterLoadGameData, globals::dataS.gamever);
-	//stCampaign->SetlCreateCode();
-	//stCampaign->Enable();
-//
-	//f1 << "Done" << endl;
-//
-	//f1 << "Start applying I_CompareCounter command patch" << endl;
-	//toI_CompareCounter* iccmp = new toI_CompareCounter(mem, (LPVOID)patchesForGame::afterI_CompareCounter, globals::dataS.gamever);
-	//iccmp->SetltoI_CompareCounterCode();
-	//iccmp->Enable();
-//
-	//f1 << "Done" << endl;
-
-
-	/*f1 << "Start applying fort patch" << endl;
-	toFortsDelCheck* frt = new toFortsDelCheck(mem, (LPVOID)patchesForGame::checkFort, globals::dataS.gamever);
-	frt->SetlFortsDelCode();
-	frt->Enable();
-
-	f1 << "Done" << endl;
-
-	f1 << "Start applying DiplomaticStanceFromFaction patch #1" << endl;
-	toDSFromFacCh* dsff1 = new toDSFromFacCh(mem, (LPVOID)patchesForGame::checkDipString, globals::dataS.gamever);
-	dsff1->SetlDsFromFacCode();
-	dsff1->Enable();
-
-	f1 << "Done" << endl;
-
-	/*f1 << "Start applying DiplomaticStanceFromFaction patch #2" << endl;
-	toDiplomaticStanceCheck* dsff2 = new toDiplomaticStanceCheck(mem, (LPVOID)patchesForGame::checkFacDip, globals::dataS.gamever);
-	dsff2->SetlDsCheckCode();
-	dsff2->Enable();
-
-	f1 << "Done" << endl;
-	*/
-
-
 	f1 << "Start applying spawn_army coords patch" << endl;
 	toSpawnArmy* spwnArm = new toSpawnArmy(mem, (LPVOID)patchesForGame::spawnArmyCoords, globals::dataS.gameVersion);
 	spwnArm->SetlSpawnCode();
@@ -251,17 +184,7 @@ void managerF::execPatches()
 	bstart->Enable();
 
 	f1 << "Done" << endl;
-
-
-
-	/*f1 << "Start applying strat models onload patch" << endl;
-	toStartReadCas* readCas = new toStartReadCas(mem, (LPVOID)stratModelsPatch::readModel, globals::dataS.gamever);
-	readCas->SetlStReadCasCode();
-	readCas->Enable();
-
-	f1 << "Done" << endl;*/
-
-
+	
 	f1 << "Start applying models load patch #1" << endl;
 	toStartReadModels* readModelsStart = new toStartReadModels(mem, (LPVOID)stratModelsChange::disableChecker, globals::dataS.gameVersion);
 	readModelsStart->SetlStReadModelsCode();
@@ -370,14 +293,6 @@ void managerF::execPatches()
 
 	f1 << "Done" << endl;
 
-	//f1 << "Start applying toReadGameDBsAtGameStart patch" << endl;
-	//toReadGameDBsAtGameStart* toReadGameDbsAtStart = new toReadGameDBsAtGameStart(mem, (LPVOID)patchesForGame::toReadGameDbsAtStart, globals::dataS.gamever);
-	//toReadGameDbsAtStart->SetlReadCode();
-	//totoReadGameDBsAtGameStartDbsAtStart->Enable();
-
-	//f1 << "Done" << endl;
-
-
 	f1 << "Start applying toDrawPartsOfStratObjects patch" << endl;
 	toDrawPartsOfStratObjects* toDrawPartsOfStratO = new toDrawPartsOfStratObjects(mem, (LPVOID)patchesForGame::onDrawPartsOfStratObjects, globals::dataS.gameVersion);
 	toDrawPartsOfStratO->SetlDrawCode();
@@ -400,14 +315,6 @@ void managerF::execPatches()
 	toStartSiegSett->Enable();
 
 	f1 << "Done" << endl;
-
-	/*f1 << "Start replacing cas loading function" << endl;
-	toLoadCas* loadCasF = new toLoadCas(mem, (LPVOID)stratModelsOptimise::loadCasProc, globals::dataS.gamever);
-	loadCasF->SetlCasCode();
-	loadCasF->Enable(true);
-
-	f1 << "Done" << endl;*/
-
 
 	f1 << "Start applying CastleConversionLvl patch" << endl;
 	CastleConversionLvlSetter* castleConversionLvlSetter = new CastleConversionLvlSetter(mem, (LPVOID)settlementConversionLvlSetter::getConversionLvlFromCastle, globals::dataS.gameVersion);
@@ -504,15 +411,7 @@ void managerF::execPatches()
 	eduStringsSaveOn2->SetNewCode();
 	eduStringsSaveOn2->Enable();
 	f1 << "Done" << endl;
-
-    /*
-	f1 << "Start applying OnCreateUnit patch" << endl;
-	OnCreateUnit* onCreateUnit = new OnCreateUnit(mem, (LPVOID)patchesForGame::onCreateUnit, globals::dataS.gamever);
-	onCreateUnit->SetNewCode();
-	onCreateUnit->Enable();
-	f1 << "Done" << endl;
-	*/
-
+	
 	f1 << "Start applying OnCreateUnit2 patch" << endl;
 	OnCreateUnit2* onCreateUnit2 = new OnCreateUnit2(mem, (LPVOID)patchesForGame::recruitEopUnit, globals::dataS.gameVersion);
 	onCreateUnit2->SetNewCode();
@@ -613,12 +512,6 @@ void managerF::execPatches()
 	toDecideRamAttacks->Enable();
 	f1 << "Done" << endl;
 	
-	/*
-	f1 << "Start applying onPreBattlePlacement2 patch" << endl;
-	onPreBattlePlacement2* toPreBattlePlacement2 = new onPreBattlePlacement2(mem, (LPVOID)patchesForGame::onPreBattlePlacement2, globals::dataS.gamever);
-	toPreBattlePlacement2->SetNewCode();
-	toPreBattlePlacement2->Enable();
-	f1 << "Done" << endl;*/
 
 	f1 << "Start applying spawnUnitsSettGift4 patch" << endl;
 	spawnUnitsSettGift4* toSpawnUnitsSettGift4 = new spawnUnitsSettGift4(mem, (LPVOID)patchesForGame::recruitEopUnit, globals::dataS.gameVersion);
@@ -812,12 +705,6 @@ void managerF::execPatches()
 	toFindUnitStrings2->Enable();
 	f1 << "Done" << endl;
 
-	// f1 << "Start applying OnUnitInfo patch" << endl;
-	// OnUnitInfo* toUnitInfo = new OnUnitInfo(mem, (LPVOID)patchesForGame::OnUnitInfo, globals::dataS.gamever);
-	// toUnitInfo->SetNewCode();
-	// toUnitInfo->Enable();
-	// f1 << "Done" << endl;
-
 	f1 << "Start applying OnReligionCombatBonus patch" << endl;
 	OnReligionCombatBonus* toReligionCombatBonus = new OnReligionCombatBonus(mem, (LPVOID)patchesForGame::onReligionCombatBonus, globals::dataS.gameVersion);
 	toReligionCombatBonus->SetNewCode();
@@ -893,20 +780,15 @@ void managerF::execPatches()
 		onRetreat->SetNewCode();
 		onRetreat->Enable();
 	}
-
 	if (globals::dataS.gameCfg.isBlockLaunchWithoutEop == true)
 	{
-
-		f1 << "Start applying isBlockLaunchWithoutEop patch" << endl;
-		blockLaunchWithoutEop* blockLaunch = new blockLaunchWithoutEop(mem, globals::dataS.gameVersion);
+		f1 << "Start applying isBlockLaunchWithoutEop patch" << '\n';
+		auto blockLaunch = new blockLaunchWithoutEop(mem, globals::dataS.gameVersion);
 		blockLaunch->SetNewCode();
 		blockLaunch->Enable();
-		f1 << "Done" << endl;
+		f1 << "Done" << '\n';
 	}
-
-
-	f1 << "End." << endl;
-
+	f1 << "End." << '\n';
 	f1.close();
 }
 
@@ -914,94 +796,76 @@ void managerF::execPatches()
 void managerF::loadJsonSettings()
 {
 	std::string fPath = globals::dataS.modPath;
-	fPath += "\\eopData\\config\\gameCfg.json";
+	fPath += R"(\eopData\config\gameCfg.json)";
 	jsn::json json = jsonManager::loadJsonFromFile(fPath);
-	bool jsonBoolValue;
-
 	try
 	{
+		bool jsonBoolValue;
 		if (json.contains("isContextMenuNeeded"))
 		{
-			getJson(jsonBoolValue, "isContextMenuNeeded");
+			getJson(jsonBoolValue, "isContextMenuNeeded")
 			globals::dataS.Modules.contextMenuStrat.isContextMenuNeeded = jsonBoolValue;
 		}
 		if (json.contains("isTacticalMapViewerNeeded"))
 		{
-			getJson(jsonBoolValue, "isTacticalMapViewerNeeded");
+			getJson(jsonBoolValue, "isTacticalMapViewerNeeded")
 			globals::dataS.Modules.tacticalMapViewer.isTacticalMapViewerNeeded = jsonBoolValue;
 		}
 		if (json.contains("isDeveloperModeNeeded"))
 		{
-			getJson(jsonBoolValue, "isDeveloperModeNeeded");
+			getJson(jsonBoolValue, "isDeveloperModeNeeded")
 			globals::dataS.Modules.developerMode.isDeveloperModeNeeded = jsonBoolValue;
 		}
 		if (json.contains("isBlockLaunchWithoutEop"))
 		{
-			getJson(jsonBoolValue, "isBlockLaunchWithoutEop");
+			getJson(jsonBoolValue, "isBlockLaunchWithoutEop")
 			globals::dataS.gameCfg.isBlockLaunchWithoutEop = jsonBoolValue;
 		}
 		if (json.contains("isDiscordRichPresenceEnabled"))
 		{
-			getJson(jsonBoolValue, "isDiscordRichPresenceEnabled");
+			getJson(jsonBoolValue, "isDiscordRichPresenceEnabled")
 			globals::dataS.gameCfg.isDiscordRichPresenceEnabled = jsonBoolValue;
 		}
 	}
 	catch (jsn::json::type_error &e)
 	{
-		MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+		MessageBoxA(nullptr, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 	}
 
 	std::string uiPath = globals::dataS.modPath;
-	uiPath += "\\eopData\\config\\uiCfg.json";
+	uiPath += R"(\eopData\config\uiCfg.json)";
 	json = jsonManager::loadJsonFromFile(uiPath);
-
 	try
 	{
 		if (json.contains("launcherTheme"))
 		{
-			getJson(globals::dataS.gameCfg.launcherTheme, "launcherTheme");
+			getJson(globals::dataS.gameCfg.launcherTheme, "launcherTheme")
 		}
 	}
 	catch (jsn::json::type_error& e)
 	{
-		MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+		MessageBoxA(nullptr, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 	}
 }
-//#include "tests.h"
+
 void managerF::initThread()
 {
 	std::srand(std::time(nullptr));
-
 	battleCreator::readParams();
-
-	//read_modConfig();
 	codes::initCodes(globals::dataS.gameVersion);
 	dataOffsets::initDataOffsets(globals::dataS.gameVersion);
-	//read_limits();
-
-
-
 	execPatches();
-
-	plugData::data.modFolder = globals::dataS.modPath;
 	initLuaPlugin();
-	
 	globals::dataS.Modules.tacticalMapViewer.init(globals::dataS.gameVersion);
-	//stratResTest::test();
 }
 
-
-EOP_EXPORT void managerExport::initEOP(const char* modPath, int gameVer)
-{	// Initialize MinHook.
+EOP_EXPORT void managerExport::initEOP(const char* modPath, const int gameVer)
+{
+	// Initialize MinHook.
 	if (MH_Initialize() != MH_OK)
-	{
 		return;
-	}
-
 	globals::dataS.gameVersion = gameVer;
 	globals::dataS.modPath = modPath;
-
-	CreateDirectoryA("logs", NULL);
-
-	managerF::init();
+	CreateDirectoryA("logs", nullptr);
+	managerF::initThread();
 }

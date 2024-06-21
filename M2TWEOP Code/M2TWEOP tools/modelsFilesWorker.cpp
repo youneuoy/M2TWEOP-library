@@ -109,7 +109,7 @@ void modelsFilesWorker::convertCustomTiles(string& oldFile, string& newFile)
 
 	for (tileRecordS& tile : tiles)
 	{
-		f2 << "	stratmap.objects.replaceTile(\""
+		f2 << "	M2TW.stratMap.replaceTile(\""
 			<< tile.tileName << "\","
 			<< tile.tileX << ","
 			<< tile.tileY << ",\""
@@ -187,14 +187,14 @@ void modelsFilesWorker::convertCustomForts(string& oldFile, string& newFile)
 	f2 << endl ;
 	for (modelS& model : models)
 	{
-		f2 << "	stratmap.objects.addModelToGame(\"" << model.path << "\"," << model.varName << ");" << endl;
+		f2 << "	M2TWEOP.addModelToGame(\"" << model.path << "\"," << model.varName << ");" << endl;
 	}
 	f2 << endl;
 
 
 	for (fortRecordS& frt : forts)
 	{
-		f2 << "	stratmap.objects.setModel("
+		f2 << "	M2TWEOP.setModel("
 			<< frt.tileX << ","
 			<< frt.tileY << ","
 			<< frt.Center_path.varName << ","
@@ -264,14 +264,14 @@ void modelsFilesWorker::convertCustomStratModels(string& oldFile, string& newFil
 	f2 << endl;
 	for (modelS& model : models)
 	{
-		f2 << "	stratmap.objects.addModelToGame(\"" << model.path << "\"," << model.varName << ");" << endl;
+		f2 << "	M2TWEOP.addModelToGame(\"" << model.path << "\"," << model.varName << ");" << endl;
 	}
 	f2 << endl;
 
 
 	for (startModelRecordS& mod : stratModels)
 	{
-		f2 << "	stratmap.objects.setModel("
+		f2 << "	M2TWEOP.setModel("
 			<< mod.tileX << ","
 			<< mod.tileY << ","
 			<< mod.Model_path.varName << ");"
@@ -347,14 +347,14 @@ void modelsFilesWorker::convertCustomPortModels(string& oldFile, string& newFile
 	f2 << endl;
 	for (modelS& model : models)
 	{
-		f2 << "	stratmap.objects.addModelToGame(\"" << model.path << "\"," << model.varName << ");" << endl;
+		f2 << "	M2TWEOP.addModelToGame(\"" << model.path << "\"," << model.varName << ");" << endl;
 	}
 	f2 << endl;
 
 
 	for (portRecordS& port : ports)
 	{
-		f2 << "	stratmap.objects.setModel("
+		f2 << "	M2TWEOP.setModel("
 			<< port.tileX << ","
 			<< port.tileY << ","
 			<< port.Center_path.varName << ","

@@ -20,6 +20,7 @@ void codes::initCodes(int gameVer)
 		offsets.getEquipmentPreferencesFunc = 0x00521520;
 		offsets.finalizeActionStrat = 0x0059e790;
 		offsets.saveGame = 0x00434da0;
+		offsets.parseCondition = 0x874920;
 
 		offsets.createIdleActionFunc = 0x005aff40;
 
@@ -470,5 +471,6 @@ void codes::initCodes(int gameVer)
 		offsets.getScriptCounter = 0x00489760;
 		offsets.setScriptCounter = 0x0048cce0;
 		offsets.getUnitFullMovePoints = 0x00742b10;
+		offsets.parseCondition = 0x00875310;
 	}
 }

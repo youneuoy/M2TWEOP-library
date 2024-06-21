@@ -90,6 +90,7 @@ public:
 		DWORD createBuildingFunc = NULL;
 		DWORD autoWinFunc = NULL;
 		DWORD historicEventFunc = NULL;
+		DWORD parseCondition = NULL;
 		DWORD getStringFromTable = NULL;
 		DWORD scriptCommandOne = NULL;
 		DWORD scriptCommandTwo = NULL;

@@ -25,7 +25,7 @@ public:
 		struct modulesS
 		{
 			tacticalMapViewer tacticalMapViewer;
-			DeveloperMode developerMode;
+			developerMode developerMode;
 			battlemapWorker battleMapWorker;
 			MmbMover mmbMover;
 			ContextMenuStrat contextMenuStrat;

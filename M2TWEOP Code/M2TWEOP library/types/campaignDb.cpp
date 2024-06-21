@@ -6,7 +6,7 @@
 #include "campaignDb.h"
 
 #include "dataOffsets.h"
-#include "luaP.h"
+#include "luaPlugin.h"
 
 namespace campaignHelpers
 {
@@ -21,7 +21,7 @@ namespace campaignHelpers
 	}
 }
 
-void luaP::initCampaignDb()
+void luaPlugin::initCampaignDb()
 {
 	struct
 	{

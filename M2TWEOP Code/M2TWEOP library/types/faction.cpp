@@ -261,6 +261,21 @@ namespace factionHelpers
 		}
 	}
 
+	character* factionCreateCharacter(
+		factionStruct* fac,
+		const std::string& type,
+		const int age,
+		const std::string& name,
+		const std::string& lastName,
+		const int subFaction,
+		const std::string& portrait,
+		const int x,
+		const int y
+		)
+	{
+		return characterHelpers::createCharacter(type.c_str(), fac, age, name.c_str(), lastName.c_str(), subFaction, portrait.c_str(), x, y);
+	}
+
 	armyStruct* splitArmy(factionStruct *faction, const sol::table& units, int x, int y)
 	{
 		unit* unitList[20]{};
@@ -376,8 +391,8 @@ namespace factionHelpers
         	sol::usertype<battleFactionCounter>battleFactionCounter;
         }types;
     	
-		///FactionStruct
-		//@section factionStructTable
+		///Faction
+		//@section Faction
 
 		/***
 		Basic factionStruct table
@@ -464,6 +479,8 @@ namespace factionHelpers
 		@tfield hideRevealedTile hideRevealedTile
 		@tfield setColor setColor
 		@tfield setSecondaryColor setSecondaryColor
+		@tfield spawnArmy spawnArmy
+		@tfield createCharacter createCharacter
 
 		@table factionStruct
 		*/
@@ -530,7 +547,7 @@ namespace factionHelpers
 		@tparam int number
 		@treturn characterRecord retCharacter
 		@usage
-		ourNamedCharacter = stratmap.game.getFaction(0):getCharacterRecord(0)
+		ourNamedCharacter = M2TW.campaign:getFaction("england"):getCharacterRecord(0)
 		if ourNamedCharacter.command > 5 then
 			ourFac.money = ourFac.money - (ourNamedCharacter.command * 10)
 		end
@@ -543,7 +560,7 @@ namespace factionHelpers
 		@tparam int number
 		@treturn character retCharacter
 		@usage
-		ourCharacter = stratmap.game.getFaction(0):getCharacter(0)
+		ourCharacter = M2TW.campaign:getFaction("england"):getCharacter(0)
 		if ourCharacter.xCoord > 150 and ourCharacter.movePoints < 10 then
 			ourCharacter:kill()
 		end
@@ -555,7 +572,7 @@ namespace factionHelpers
 		@tparam int number
 		@treturn character retCharacter
 		@usage
-		ourCharacter = stratmap.game.getFaction(0):getSpottedCharacter(0)
+		ourCharacter = M2TW.campaign:getFaction("england"):getSpottedCharacter(0)
 		if ourCharacter.xCoord > 150 and ourCharacter.movePoints < 10 then
 			ourCharacter:kill()
 		end
@@ -569,9 +586,8 @@ namespace factionHelpers
 		@treturn armyStruct army
 		@usage
 		function FindArmy(x,y)
-			CAMPAIGN = gameDataAll.get().campaignStruct
-			for i = 1, #CAMPAIGN.numberOfFactions do
-				local faction = CAMPAIGN.factionsSortedByDescrStrat[i]
+			for i = 0, M2TW.campaign.numberOfFactions - 1 do
+				local faction =  M2TW.campaign:getFactionByOrder(i)
 				if not faction then
 					return nil
 				end
@@ -636,7 +652,7 @@ namespace factionHelpers
 		@tparam int number
 		@treturn portStruct port
 		@usage
-		local thisFac, portList = gameDataAll.get().campaignStruct.currentFaction, "Ports:"
+		local thisFac, portList = M2TW.campaign.currentFaction, "Ports:"
 		for i = 0, thisFac.portsNum - 1, 1 do
 			local thisPort = thisFac:getPort(i)
 			local thisDock = thisPort.dock
@@ -655,7 +671,7 @@ namespace factionHelpers
 		@tparam int number
 		@treturn watchtowerStruct watchtower
 		@usage
-		local thisFac, watchtowerList = gameDataAll.get().campaignStruct.currentFaction, "Watchtowers:"
+		local thisFac, watchtowerList = M2TW.campaign.currentFaction, "Watchtowers:"
 		for i = 0, thisFac.watchtowersNum - 1, 1 do
 			local thisTower = thisFac:getWatchtower(i)
 			watchtowerList = watchtowerList.."\n\t"..i.." ("..thisTower.xCoord..", "..thisTower.yCoord..") "
@@ -876,7 +892,55 @@ namespace factionHelpers
 		     fac:setSecondaryColor(255, 255, 255)
 		*/
 		types.factionStruct.set_function("setSecondaryColor", &factionStruct::setSecondaryColor);
-
+		
+		/***
+		Create a new character at the specified coordinates. If you are not spawning an agent it is preferred to use spawnArmy instead.
+		@function factionStruct:createCharacter
+		@tparam string type Character type, for example "named character".
+		@tparam int age The character's age
+		@tparam string name The short name of the character.
+		@tparam string name2 The full name of the character.
+		@tparam int subFaction Set to 31 to disable.
+		@tparam string portrait_custom cannot be nil Name of the folder inside 'data/ui/custom_portraits folder. Can not be nil!
+		@tparam int xCoord X coordinate of the new character
+		@tparam int yCoord Y coordinate of the new character
+		@treturn character newCharacter Returns a character class, not a named character class!
+		@usage
+		local newCharacter = myFaction:createCharacter("named character", 18, "Name1", "Name2", 31, "custom_portrait_name", 263, 182)
+		*/
+		types.factionStruct.set_function("createCharacter", &factionCreateCharacter);
+		/***
+		Create a new army at the specified coordinates. Works similarly to the script command spawn_army. You can respawn off-map characters using it. You can not re-use labels!
+		@function factionStruct:spawnArmy
+		@tparam string name The short name of the character. Use random_name to pick a random name.
+		@tparam string name2 The full name of the character.
+		@tparam int type characterType.named_character or characterType.general or characterType.admiral.
+		@tparam string label label of the character, has to be unique!. Can be nil.
+		@tparam string portrait Name of the folder inside 'data/ui/custom_portraits folder.
+		@tparam int x X coordinate of the new character
+		@tparam int y Y coordinate of the new character
+		@tparam int age The character's age
+		@tparam bool family should character be auto adopted?
+		@tparam int subFaction Set to 31 to disable.
+		@tparam int unitIndex Index of the unit in the unit list. Can be EOP or normal.
+		@tparam int exp
+		@tparam int wpn
+		@tparam int armour
+		@treturn armyStruct newArmy
+		@usage
+		local army = myFaction:spawnArmy(
+		"Rufus",
+		"",
+		characterType.named_character,
+		"rufus_1",
+		"",
+		106, 149,
+		18, false, 31,
+		M2TWEOPDU.getEduIndexByType("Peasants"), 3, 0, 0
+		)
+		*/
+		types.factionStruct.set_function("spawnArmy", &armyHelpers::spawnArmy);
+		
 		/***
 		Split an army. If there is an army at target coords they merge. They embark/disembark. They enter and leave settlements.
 		@function factionStruct:splitArmy
@@ -891,6 +955,130 @@ namespace factionHelpers
 		     fac:splitArmy(units, 154, 84)
 		*/
 		types.factionStruct.set_function("splitArmy", &splitArmy);
+
+		/***
+		Basic battleFactionCounter table
+
+		@tfield int battlesWon
+		@tfield int battlesLost
+		@tfield int lastResult 0 - lose, 1 - draw, 2 - win
+
+		@table battleFactionCounter
+		*/
+		types.battleFactionCounter = luaState.new_usertype<battleFactionCounter>("battleFactionCounter");
+		types.battleFactionCounter.set("battlesWon", &battleFactionCounter::battlesWon);
+		types.battleFactionCounter.set("battlesLost", &battleFactionCounter::battlesLost);
+		types.battleFactionCounter.set("lastResult", &battleFactionCounter::lastResult);
+
+		/***
+		Basic holdRegionsWinCondition table
+
+		@tfield int regionsToHoldCount
+		@tfield int numberOfRegions
+		@tfield getRegionToHoldName getRegionToHoldName
+		@tfield getRegionToHoldLength getRegionToHoldLength
+		
+		@table holdRegionsWinCondition
+		*/
+		types.holdRegionsWinCondition = luaState.new_usertype<holdRegionsWinCondition>("holdRegionsWinCondition");
+		types.holdRegionsWinCondition.set("regionsToHoldCount", &holdRegionsWinCondition::regionsToHoldCount);
+		types.holdRegionsWinCondition.set("numberOfRegions", &holdRegionsWinCondition::numberOfRegions);
+
+		/***
+		Get the name of the region that has to be held to win the campaign.
+		@function holdRegionsWinCondition:getRegionToHoldName
+		@tparam int index
+		@treturn string regionName
+		@usage
+		local regionName = fac.winCondition:getRegionToHoldName(0)
+		*/
+		types.holdRegionsWinCondition.set_function("getRegionToHoldName", &holdRegionsWinCondition::getRegionToHoldName);
+
+		/***
+		Get the number of turns the region has to be held to win the campaign.
+		@function holdRegionsWinCondition:getRegionToHoldLength
+		@tparam int index
+		@treturn int turnsToHold
+		@usage
+		local turnsToHold = fac.winCondition:getRegionToHoldLength(0)
+		*/
+		types.holdRegionsWinCondition.set_function("getRegionToHoldLength", &holdRegionsWinCondition::getRegionToHoldLength);
+		
+		/***
+		Basic factionEconomy table
+
+		@tfield int farmingIncome
+		@tfield int taxesIncome
+		@tfield int miningIncome
+		@tfield int tradeIncome
+		@tfield int merchantIncome
+		@tfield int constructionIncome
+		@tfield int lootingIncome
+		@tfield int missionIncome
+		@tfield int diplomacyIncome
+		@tfield int tributesIncome
+		@tfield int adminIncome
+		@tfield int kingsPurseIncome
+		@tfield int wagesExpense
+		@tfield int upkeepExpense
+		@tfield int constructionExpenseBuildings
+		@tfield int constructionExpenseField
+		@tfield int recruitmentExpenseBuildings
+		@tfield int recruitmentExpenseMercs
+		@tfield int corruptionExpense
+		@tfield int diplomacyExpense
+		@tfield int tributesExpense
+		@tfield int disasterExpense
+		@tfield int entertainmentExpense
+		@tfield int devastationExpense
+
+		@table factionEconomy
+		*/
+		types.factionEconomy = luaState.new_usertype<factionEconomy>("factionEconomy");
+		types.factionEconomy.set("farmingIncome", &factionEconomy::farmingIncome);
+		types.factionEconomy.set("taxesIncome", &factionEconomy::taxesIncome);
+		types.factionEconomy.set("miningIncome", &factionEconomy::miningIncome);
+		types.factionEconomy.set("tradeIncome", &factionEconomy::tradeIncome);
+		types.factionEconomy.set("merchantIncome", &factionEconomy::merchantIncome);
+		types.factionEconomy.set("constructionIncome", &factionEconomy::constructionIncome);
+		types.factionEconomy.set("lootingIncome", &factionEconomy::lootingIncome);
+		types.factionEconomy.set("missionIncome", &factionEconomy::missionIncome);
+		types.factionEconomy.set("diplomacyIncome", &factionEconomy::diplomacyIncome);
+		types.factionEconomy.set("tributesIncome", &factionEconomy::tributesIncome);
+		types.factionEconomy.set("adminIncome", &factionEconomy::adminIncome);
+		types.factionEconomy.set("kingsPurseIncome", &factionEconomy::kingsPurseIncome);
+		types.factionEconomy.set("wagesExpense", &factionEconomy::wagesExpense);
+		types.factionEconomy.set("upkeepExpense", &factionEconomy::upkeepExpense);
+		types.factionEconomy.set("constructionExpenseBuildings", &factionEconomy::constructionExpenseBuildings);
+		types.factionEconomy.set("constructionExpenseField", &factionEconomy::constructionExpenseField);
+		types.factionEconomy.set("recruitmentExpenseBuildings", &factionEconomy::recruitmentExpenseBuildings);
+		types.factionEconomy.set("recruitmentExpenseMercs", &factionEconomy::recruitmentExpenseMercs);
+		types.factionEconomy.set("corruptionExpense", &factionEconomy::corruptionExpense);
+		types.factionEconomy.set("diplomacyExpense", &factionEconomy::diplomacyExpense);
+		types.factionEconomy.set("tributesExpense", &factionEconomy::tributesExpense);
+		types.factionEconomy.set("disasterExpense", &factionEconomy::disasterExpense);
+		types.factionEconomy.set("entertainmentExpense", &factionEconomy::entertainmentExpense);
+		types.factionEconomy.set("devastationExpense", &factionEconomy::devastationExpense);
+		
+		/***
+		Basic factionRanking table
+
+		@tfield float totalRankingScore
+		@tfield float militaryRankingScore
+		@tfield float productionRankingScore
+		@tfield float territoryRankingScore
+		@tfield float financialRankingScore
+		@tfield float populationRankingScore
+
+		@table factionRanking
+		*/
+		types.factionRanking = luaState.new_usertype<factionRanking>("factionRanking");
+		types.factionRanking.set("totalRankingScore", &factionRanking::totalRanking);
+		types.factionRanking.set("militaryRankingScore", &factionRanking::militaryRanking);
+		types.factionRanking.set("productionRankingScore", &factionRanking::productionRanking);
+		types.factionRanking.set("territoryRankingScore", &factionRanking::territoryRanking);
+		types.factionRanking.set("financialRankingScore", &factionRanking::financialRanking);
+		types.factionRanking.set("populationRankingScore", &factionRanking::populationRanking);
 
 		///aiFaction
 		//@section aiFaction
@@ -911,8 +1099,8 @@ namespace factionHelpers
 		types.aiFaction.set("LTGD", &aiFaction::aiLongTermGoalDirector);
 		types.aiFaction.set("aiPersonality", &aiFaction::aiProductionControllers);
 
-		///aiLongTermGoalDirector
-		//@section aiLongTermGoalDirector
+		///Long Term Goal Director
+		//@section Long Term Goal Director
 
 		/***
 		Basic aiLongTermGoalDirector table
@@ -963,10 +1151,7 @@ namespace factionHelpers
 		local isAllyEnemy = LTGD:isTrustedAllyEnemy(2)
 		*/
 		types.aiLongTermGoalDirector.set_function("isTrustedAllyEnemy", &aiLongTermGoalDirector::isTrustedAllyEnemy);
-
-		///decisionValuesLTGD
-		//@section decisionValuesLTGD
-
+		
 		/***
 		Basic decisionValuesLTGD table
 
@@ -1006,10 +1191,7 @@ namespace factionHelpers
 		types.decisionValuesLTGD.set("forceInvade", &decisionValuesLTGD::forceInvade);
 		types.decisionValuesLTGD.set("pointsInvasion", &decisionValuesLTGD::pointsInvasion);
 		types.decisionValuesLTGD.set("pointsDefense", &decisionValuesLTGD::pointsDefense);
-
-		///aiFactionValues
-		//@section aiFactionValues
-
+		
 		/***
 		Basic aiFactionValues table
 
@@ -1050,10 +1232,6 @@ namespace factionHelpers
 		types.aiFactionValues.set("immediateEnemyStrength", &militaryValuesLTGD::immediateEnemyStrength);
 		types.aiFactionValues.set("protectorateOf", &militaryValuesLTGD::protectorateOf);
 
-
-		///interFactionLTGD
-		//@section interFactionLTGD
-
 		/***
 		Basic interFactionLTGD table
 
@@ -1071,10 +1249,9 @@ namespace factionHelpers
 		types.interFactionLTGD.set("hasAllianceAgainst", &interFactionLTGD::hasAllianceAgainst);
 		types.interFactionLTGD.set("isStrongestNeighbour", &interFactionLTGD::isStrongestNeighbour);
 		types.interFactionLTGD.set("isWeakestNeighbour", &interFactionLTGD::isWeakestNeighbour);
-
-
-		///aiPersonality
-		//@section aiPersonality
+		
+		///AI Personality
+		//@section AI Personality
 
 		/***
 		Basic aiPersonality table
@@ -1212,145 +1389,8 @@ namespace factionHelpers
 		*/
 		types.aiPersonality.set_function("getProductionController", &aiPersonalityValues::getProductionController);
 
-		///battleFactionCounter
-		//@section battleFactionCounter
-
-		/***
-		Basic battleFactionCounter table
-
-		@tfield int battlesWon
-		@tfield int battlesLost
-		@tfield int lastResult 0 - lose, 1 - draw, 2 - win
-
-		@table battleFactionCounter
-		*/
-		types.battleFactionCounter = luaState.new_usertype<battleFactionCounter>("battleFactionCounter");
-		types.battleFactionCounter.set("battlesWon", &battleFactionCounter::battlesWon);
-		types.battleFactionCounter.set("battlesLost", &battleFactionCounter::battlesLost);
-		types.battleFactionCounter.set("lastResult", &battleFactionCounter::lastResult);
-
-		///holdRegionsWinCondition
-		//@section holdRegionsWinCondition
-
-		/***
-		Basic holdRegionsWinCondition table
-
-		@tfield int regionsToHoldCount
-		@tfield int numberOfRegions
-		@tfield getRegionToHoldName getRegionToHoldName
-		@tfield getRegionToHoldLength getRegionToHoldLength
-		
-		@table holdRegionsWinCondition
-		*/
-		types.holdRegionsWinCondition = luaState.new_usertype<holdRegionsWinCondition>("holdRegionsWinCondition");
-		types.holdRegionsWinCondition.set("regionsToHoldCount", &holdRegionsWinCondition::regionsToHoldCount);
-		types.holdRegionsWinCondition.set("numberOfRegions", &holdRegionsWinCondition::numberOfRegions);
-
-		/***
-		Get the name of the region that has to be held to win the campaign.
-		@function holdRegionsWinCondition:getRegionToHoldName
-		@tparam int index
-		@treturn string regionName
-		@usage
-		local regionName = fac.winCondition:getRegionToHoldName(0)
-		*/
-		types.holdRegionsWinCondition.set_function("getRegionToHoldName", &holdRegionsWinCondition::getRegionToHoldName);
-
-		/***
-		Get the number of turns the region has to be held to win the campaign.
-		@function holdRegionsWinCondition:getRegionToHoldLength
-		@tparam int index
-		@treturn int turnsToHold
-		@usage
-		local turnsToHold = fac.winCondition:getRegionToHoldLength(0)
-		*/
-		types.holdRegionsWinCondition.set_function("getRegionToHoldLength", &holdRegionsWinCondition::getRegionToHoldLength);
-
-
-		///FactionEconomy
-		//@section factionEconomy
-
-		/***
-		Basic factionEconomy table
-
-		@tfield int farmingIncome
-		@tfield int taxesIncome
-		@tfield int miningIncome
-		@tfield int tradeIncome
-		@tfield int merchantIncome
-		@tfield int constructionIncome
-		@tfield int lootingIncome
-		@tfield int missionIncome
-		@tfield int diplomacyIncome
-		@tfield int tributesIncome
-		@tfield int adminIncome
-		@tfield int kingsPurseIncome
-		@tfield int wagesExpense
-		@tfield int upkeepExpense
-		@tfield int constructionExpenseBuildings
-		@tfield int constructionExpenseField
-		@tfield int recruitmentExpenseBuildings
-		@tfield int recruitmentExpenseMercs
-		@tfield int corruptionExpense
-		@tfield int diplomacyExpense
-		@tfield int tributesExpense
-		@tfield int disasterExpense
-		@tfield int entertainmentExpense
-		@tfield int devastationExpense
-
-		@table factionEconomy
-		*/
-		types.factionEconomy = luaState.new_usertype<factionEconomy>("factionEconomy");
-		types.factionEconomy.set("farmingIncome", &factionEconomy::farmingIncome);
-		types.factionEconomy.set("taxesIncome", &factionEconomy::taxesIncome);
-		types.factionEconomy.set("miningIncome", &factionEconomy::miningIncome);
-		types.factionEconomy.set("tradeIncome", &factionEconomy::tradeIncome);
-		types.factionEconomy.set("merchantIncome", &factionEconomy::merchantIncome);
-		types.factionEconomy.set("constructionIncome", &factionEconomy::constructionIncome);
-		types.factionEconomy.set("lootingIncome", &factionEconomy::lootingIncome);
-		types.factionEconomy.set("missionIncome", &factionEconomy::missionIncome);
-		types.factionEconomy.set("diplomacyIncome", &factionEconomy::diplomacyIncome);
-		types.factionEconomy.set("tributesIncome", &factionEconomy::tributesIncome);
-		types.factionEconomy.set("adminIncome", &factionEconomy::adminIncome);
-		types.factionEconomy.set("kingsPurseIncome", &factionEconomy::kingsPurseIncome);
-		types.factionEconomy.set("wagesExpense", &factionEconomy::wagesExpense);
-		types.factionEconomy.set("upkeepExpense", &factionEconomy::upkeepExpense);
-		types.factionEconomy.set("constructionExpenseBuildings", &factionEconomy::constructionExpenseBuildings);
-		types.factionEconomy.set("constructionExpenseField", &factionEconomy::constructionExpenseField);
-		types.factionEconomy.set("recruitmentExpenseBuildings", &factionEconomy::recruitmentExpenseBuildings);
-		types.factionEconomy.set("recruitmentExpenseMercs", &factionEconomy::recruitmentExpenseMercs);
-		types.factionEconomy.set("corruptionExpense", &factionEconomy::corruptionExpense);
-		types.factionEconomy.set("diplomacyExpense", &factionEconomy::diplomacyExpense);
-		types.factionEconomy.set("tributesExpense", &factionEconomy::tributesExpense);
-		types.factionEconomy.set("disasterExpense", &factionEconomy::disasterExpense);
-		types.factionEconomy.set("entertainmentExpense", &factionEconomy::entertainmentExpense);
-		types.factionEconomy.set("devastationExpense", &factionEconomy::devastationExpense);
-
-		///FactionRankings
-		//@section factionRanking
-
-		/***
-		Basic factionRanking table
-
-		@tfield float totalRankingScore
-		@tfield float militaryRankingScore
-		@tfield float productionRankingScore
-		@tfield float territoryRankingScore
-		@tfield float financialRankingScore
-		@tfield float populationRankingScore
-
-		@table factionRanking
-		*/
-		types.factionRanking = luaState.new_usertype<factionRanking>("factionRanking");
-		types.factionRanking.set("totalRankingScore", &factionRanking::totalRanking);
-		types.factionRanking.set("militaryRankingScore", &factionRanking::militaryRanking);
-		types.factionRanking.set("productionRankingScore", &factionRanking::productionRanking);
-		types.factionRanking.set("territoryRankingScore", &factionRanking::territoryRanking);
-		types.factionRanking.set("financialRankingScore", &factionRanking::financialRanking);
-		types.factionRanking.set("populationRankingScore", &factionRanking::populationRanking);
-
-		///factionRecord
-		//@section Faction record
+		///Faction Record
+		//@section Faction Record
 
 		/***
 		Basic factionRecord table

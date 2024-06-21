@@ -262,7 +262,6 @@
     <ClInclude Include="developerMode.h" />
     <ClInclude Include="discordManager.h" />
     <ClInclude Include="eopFbxHelpers.h" />
-    <ClInclude Include="gameHelpers.h" />
     <ClInclude Include="graphicsEvents.h" />
     <ClInclude Include="imgui\eopImgui.h" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -289,9 +288,8 @@
     <ClInclude Include="headersMEM.h" />
     <ClInclude Include="headersSTD.h" />
     <ClInclude Include="Injects.h" />
-    <ClInclude Include="luaP.h" />
+    <ClInclude Include="luaPlugin.h" />
     <ClInclude Include="m2tweopMap.h" />
-    <ClInclude Include="m2tweopMapManager.h" />
     <ClInclude Include="m2tweopTile.h" />
     <ClInclude Include="managerF.h" />
     <ClInclude Include="mapTextDrawer.h" />
@@ -303,8 +301,6 @@
     <ClInclude Include="pathMap.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="plannedRetreatRoute.h" />
-    <ClInclude Include="plugData.h" />
-    <ClInclude Include="luaPlugin.h" />
     <ClInclude Include="realGameTypes.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="retreater.h" />
@@ -332,7 +328,9 @@
     <ClInclude Include="types\events.h" />
     <ClInclude Include="types\faction.h" />
     <ClInclude Include="types\fort.h" />
+    <ClInclude Include="types\gameHelpers.h" />
     <ClInclude Include="types\gameUi.h" />
+    <ClInclude Include="types\mapImage.h" />
     <ClInclude Include="types\strategyMap.h" />
     <ClInclude Include="types\settlement.h" />
     <ClInclude Include="types\unit.h" />
@@ -379,7 +377,6 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="discordManager.cpp" />
     <ClCompile Include="eopFbxHelpers.cpp" />
-    <ClCompile Include="gameHelpers.cpp" />
     <ClCompile Include="graphicsEvents.cpp" />
     <ClCompile Include="imgui\eopImgui.cpp" />
     <ClCompile Include="imgui\ImFileDialog.cpp" />
@@ -406,11 +403,11 @@
     <ClCompile Include="Injects.cpp" />
     <ClCompile Include="luaEop3dObjects.cpp" />
     <ClCompile Include="luaFbx.cpp" />
-    <ClCompile Include="luaP.cpp" />
-    <ClCompile Include="luaP2.cpp" />
+    <ClCompile Include="luaLegacy.cpp" />
+    <ClCompile Include="luaPlugin.cpp" />
+    <ClCompile Include="luaEnums.cpp" />
     <ClCompile Include="luaSounds.cpp" />
     <ClCompile Include="m2tweopMap.cpp" />
-    <ClCompile Include="m2tweopMapManager.cpp" />
     <ClCompile Include="m2tweopTile.cpp" />
     <ClCompile Include="managerF.cpp" />
     <ClCompile Include="mapTextDrawer.cpp" />
@@ -427,8 +424,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="plannedRetreatRoute.cpp" />
-    <ClCompile Include="plugData.cpp" />
-    <ClCompile Include="luaPlugin.cpp" />
     <ClCompile Include="retreater.cpp" />
     <ClCompile Include="themeManager.cpp" />
     <ClCompile Include="settlementConversionLvlSetter.cpp" />
@@ -454,7 +449,9 @@
     <ClCompile Include="types\events.cpp"/>
     <ClCompile Include="types\faction.cpp" />
     <ClCompile Include="types\fort.cpp" />
+    <ClCompile Include="types\gameHelpers.cpp"/>
     <ClCompile Include="types\gameUi.cpp" />
+    <ClCompile Include="types\mapImage.cpp"/>
     <ClCompile Include="types\strategyMap.cpp" />
     <ClCompile Include="types\settlement.cpp" />
     <ClCompile Include="types\unit.cpp" />

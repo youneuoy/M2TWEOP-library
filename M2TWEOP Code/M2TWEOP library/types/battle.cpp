@@ -2,7 +2,7 @@
 //![Lua logo](../Lua.png)
 //M2TWEOP structures and functions. There are not many examples and descriptions here. Also note that the examples do not include many of the checks that would be required when creating modifications.
 //@module LuaPlugin
-//@author youneuoy
+//@author Fynn
 //@license GPL-3.0
 #include "battle.h"
 
@@ -203,7 +203,7 @@ namespace battleHelpers
 
 	int getBattleTileIndex(const float xCoord, const float yCoord)
 	{
-		return (roundf(xCoord + 1000 - 0.5f) / 2) + 1000 * (roundf(yCoord + 1000 - 0.5f) / 2);
+		return static_cast<int>((roundf(xCoord + 1000 - 0.5f) / 2) + 1000 * (roundf(yCoord + 1000 - 0.5f) / 2));
 	}
 	
 	bool inBattle()
@@ -291,8 +291,8 @@ namespace battleHelpers
             sol::usertype<battleCameraStruct>battleCameraStruct;
         }typeAll;
     	
-		///BattleStruct
-		//@section battleStruct
+		///Battle Data
+		//@section Battle Data
 
 		/***
 		basic battleStruct table
@@ -484,9 +484,50 @@ namespace battleHelpers
 		     local valid = BATTLE.isZoneValid(3);
 		*/
 		typeAll.battleTable.set_function("isZoneValid", &isZoneValid);
+		
+		/***
+		Basic battlefieldEngines table
 
-		///BattleSide
-		//@section battleSide
+		@tfield int engineNum
+		@tfield getEngine getEngine
+
+		@table battlefieldEngines
+		*/
+		typeAll.battlefieldEngines = luaState.new_usertype<battlefieldEngines>("battlefieldEngines");
+		typeAll.battlefieldEngines.set("engineNum", &battlefieldEngines::enginesNum);
+
+		/***
+		Get an engine from the battlefield.
+		@function battlefieldEngines:getEngine
+		@tparam int index
+		@treturn siegeEngineStruct engine
+		@usage
+			local engine = battlefieldEngines:getEngine(0)
+		*/
+		typeAll.battlefieldEngines.set_function("getEngine", &battlefieldEngines::getSiegeEngine);
+		
+		/***
+		Basic fortBattleInfo table
+
+		@tfield fortStruct fort
+		@tfield armyStruct garrison
+		@tfield factionStruct faction
+		@tfield int ownerFactionID
+		@tfield int creatorFactionID
+		@tfield int fortFortificationLevel
+
+		@table fortBattleInfo
+		*/
+		typeAll.fortBattleInfo = luaState.new_usertype<fortBattleInfo>("fortBattleInfo");
+		typeAll.fortBattleInfo.set("fort", &fortBattleInfo::fort);
+		typeAll.fortBattleInfo.set("garrison", &fortBattleInfo::garrison);
+		typeAll.fortBattleInfo.set("faction", &fortBattleInfo::faction);
+		typeAll.fortBattleInfo.set("ownerFactionID", &fortBattleInfo::ownerFactionID);
+		typeAll.fortBattleInfo.set("creatorFactionID", &fortBattleInfo::creatorFactionID);
+		typeAll.fortBattleInfo.set("fortFortificationLevel", &fortBattleInfo::fortFortificationLevel);
+		
+		///Battle Side
+		//@section Battle Side
 
 		/***
 		Basic battleSide table
@@ -544,7 +585,7 @@ namespace battleHelpers
 		end
 
 		function getBattleData()
-			local thisBattle, battleList = gameDataAll.get().battleStruct, "Function: getBattleData()"
+			local thisBattle, battleList = M2TW.battle, "Function: getBattleData()"
 			for i = 1, thisBattle.sidesNum, 1 do
 				local thisSide = thisBattle.sides[i]
 				battleList = battleList.."\n\tSide "..i.."\n\t\tisDefender: "..tostring(thisSide.isDefender).."\n\t\tisCanDeploy: "..tostring(thisSide.canDeploy).."\n\t\tarmiesNum: "..thisSide.armiesNum.."\n\t\twinConditions:"
@@ -615,10 +656,6 @@ namespace battleHelpers
 		*/
 		typeAll.battleSideTable.set_function("hasFaction", &battleSide::hasFaction);
 
-
-		///battleSideArmy
-		//@section battleSideArmy
-
 		/***
 		Basic battleSideArmy table
 
@@ -647,9 +684,6 @@ namespace battleHelpers
 		*/
 		typeAll.battleSideArmyTable.set_function("getDeployArea", &battleSideArmy::getDeployArea);
 
-		///DeploymentAreaS
-		//@section deploymentAreaS
-
 		/***
 		Basic DeploymentAreaS table
 
@@ -676,9 +710,7 @@ namespace battleHelpers
 		@tparam int index
 		@treturn battlePos position
 		@usage
-		local gameData = gameDataAll.get();
-		local battleS = gameData.battleStruct;
-		local side1 = gameData.battleStruct.sides[1];
+		local side1 = M2TW.battle.sides[1];
 		local deployArea1 = side1.armies[1]:getDeployArea(0);
 
 		for i = 0, deployArea1.coordsNum-1 do
@@ -701,8 +733,8 @@ namespace battleHelpers
 		typeAll.battlePos.set("xCoord", &battlePos::xCoord);
 		typeAll.battlePos.set("yCoord", &battlePos::yCoord);
 
-		///BattleAI
-		//@section battleAI
+		///Battle AI
+		//@section Battle AI
 
 		/***
 		Basic Battle AI table
@@ -860,6 +892,7 @@ namespace battleHelpers
 
 		/***
 		Basic battleObjective table
+		
 		@tfield int priority
 		@tfield battleAI battleAi
 		@tfield int unitCount
@@ -902,8 +935,8 @@ namespace battleHelpers
 		*/
 		typeAll.battleObjective.set_function("getType", &aiBattleObjective::getType);
 
-		///BattleArmy
-		//@section battleArmy
+		///Battle Army
+		//@section Battle Army
 
 		/***
 		Basic battleArmy table
@@ -986,8 +1019,8 @@ namespace battleHelpers
 		typeAll.battleUnit.set("shipsSunk", &battleUnit::shipsSunk);
 		typeAll.battleUnit.set("shipDamage", &battleUnit::shipDamage);
 
-		/// battleResidence
-		//@section Battle residence
+		///Battle Residence
+		//@section Battle Residence
 
 		/***
 		Basic battleResidence table
@@ -1025,7 +1058,69 @@ namespace battleHelpers
 			local pos = battleResidence:getStreetPosition(0)
 		*/
 		typeAll.battleResidence.set_function("getStreetPosition", &getStreetPosition);
+		
+		/***
+		Basic battleBuildings table
 
+		@tfield int buildingCount
+		@tfield int perimeterCount
+		@tfield getBuilding getBuilding
+		@tfield getPerimeter getPerimeter
+
+		@table battleBuildings
+		*/
+		typeAll.battleBuildings = luaState.new_usertype<battleBuildings>("battleBuildings");
+		typeAll.battleBuildings.set("buildingCount", &battleBuildings::allBuildingsNum);
+		typeAll.battleBuildings.set("perimeterCount", &battleBuildings::perimetersNum);
+
+		/***
+		Get a battle building by it's index.
+		@function battleBuildings:getBuilding
+		@tparam int index
+		@treturn buildingBattle building
+		@usage
+
+			local building = battleBuildings:getBuilding(0)
+
+		*/
+		typeAll.battleBuildings.set_function("getBuilding", &battleBuildings::getBattleBuilding);
+
+		/***
+		Get a perimeter by it's index.
+		@function battleBuildings:getPerimeter
+		@tparam int index
+		@treturn perimeterBuildings perimeter
+		@usage
+
+			local perimeter = battleBuildings:getPerimeter(0)
+
+		*/
+		typeAll.battleBuildings.set_function("getPerimeter", &battleBuildings::getPerimeter);
+
+		/***
+		Basic perimeterBuildings table
+
+		@tfield int buildingCount
+		@tfield getBuilding getBuilding
+
+		@table perimeterBuildings
+		*/
+		typeAll.perimeterBuildings = luaState.new_usertype<perimeterBuildings>("perimeterBuildings");
+		typeAll.perimeterBuildings.set("buildingCount", &perimeterBuildings::buildingNum);
+
+		/***
+		Get a battle building in a perimiter by it's index.
+		@function perimeterBuildings:getBuilding
+		@tparam int index
+		@treturn buildingBattle building
+		@usage
+
+			local building = perimeterBuildings:getBuilding(0)
+
+		*/
+		typeAll.perimeterBuildings.set_function("getBuilding", &perimeterBuildings::getBuilding);
+
+		
 		/***
 		Basic streetPosition table
 
@@ -1082,8 +1177,8 @@ namespace battleHelpers
 		*/
 		typeAll.plazaData.set_function("getSoldierCount", &plazaStuff::getSoldierCount);
 		
-		/// terrainFeatures
-		//@section Terrain features
+		///Terrain Features
+		//@section Terrain Features
 
 		/***
 		Basic terrainFeatures table
@@ -1175,8 +1270,8 @@ namespace battleHelpers
 		typeAll.terrainFeatureHill.set("terrainLinesStart", &terrainFeatureHill::terrainLineSegmentStart);
 		typeAll.terrainFeatureHill.set("area", &terrainFeatureHill::area);
 
-		/// buildingBattle
-		//@section buildingBattle
+		///Battle Building
+		//@section Battle Building
 
 		/***
 		Basic buildingBattle table
@@ -1303,125 +1398,9 @@ namespace battleHelpers
 		typeAll.battleTile.set("height", sol::property(&battleTile::getGroundHeight));
 		typeAll.battleTile.set("waterHeight", sol::property(&battleTile::getWaterHeight));
 
-		///Battlefield Engines
-		//@section Battlefield engines
 
-		/***
-		Basic battlefieldEngines table
-
-		@tfield int engineNum
-		@tfield getEngine getEngine
-
-		@table battlefieldEngines
-		*/
-		typeAll.battlefieldEngines = luaState.new_usertype<battlefieldEngines>("battlefieldEngines");
-		typeAll.battlefieldEngines.set("engineNum", &battlefieldEngines::enginesNum);
-
-		/***
-		Get an engine from the battlefield.
-		@function battlefieldEngines:getEngine
-		@tparam int index
-		@treturn siegeEngineStruct engine
-		@usage
-			local engine = battlefieldEngines:getEngine(0)
-		*/
-		typeAll.battlefieldEngines.set_function("getEngine", &battlefieldEngines::getSiegeEngine);
-
-
-		/// battleBuildings
-		//@section battleBuildings
-
-		/***
-		Basic battleBuildings table
-
-		@tfield int buildingCount
-		@tfield int perimeterCount
-		@tfield getBuilding getBuilding
-		@tfield getPerimeter getPerimeter
-
-		@table battleBuildings
-		*/
-		typeAll.battleBuildings = luaState.new_usertype<battleBuildings>("battleBuildings");
-		typeAll.battleBuildings.set("buildingCount", &battleBuildings::allBuildingsNum);
-		typeAll.battleBuildings.set("perimeterCount", &battleBuildings::perimetersNum);
-
-		/***
-		Get a battle building by it's index.
-		@function battleBuildings:getBuilding
-		@tparam int index
-		@treturn buildingBattle building
-		@usage
-
-			local building = battleBuildings:getBuilding(0)
-
-		*/
-		typeAll.battleBuildings.set_function("getBuilding", &battleBuildings::getBattleBuilding);
-
-		/***
-		Get a perimeter by it's index.
-		@function battleBuildings:getPerimeter
-		@tparam int index
-		@treturn perimeterBuildings perimeter
-		@usage
-
-			local perimeter = battleBuildings:getPerimeter(0)
-
-		*/
-		typeAll.battleBuildings.set_function("getPerimeter", &battleBuildings::getPerimeter);
-		
-		/// perimeterBuildings
-		//@section Perimeter Buildings
-
-		/***
-		Basic perimeterBuildings table
-
-		@tfield int buildingCount
-		@tfield getBuilding getBuilding
-
-		@table perimeterBuildings
-		*/
-		typeAll.perimeterBuildings = luaState.new_usertype<perimeterBuildings>("perimeterBuildings");
-		typeAll.perimeterBuildings.set("buildingCount", &perimeterBuildings::buildingNum);
-
-		/***
-		Get a battle building in a perimiter by it's index.
-		@function perimeterBuildings:getBuilding
-		@tparam int index
-		@treturn buildingBattle building
-		@usage
-
-			local building = perimeterBuildings:getBuilding(0)
-
-		*/
-		typeAll.perimeterBuildings.set_function("getBuilding", &perimeterBuildings::getBuilding);
-
-
-		/// fortBattleInfo
-		//@section Fort battle info
-
-		/***
-		Basic fortBattleInfo table
-
-		@tfield fortStruct fort
-		@tfield armyStruct garrison
-		@tfield factionStruct faction
-		@tfield int ownerFactionID
-		@tfield int creatorFactionID
-		@tfield int fortFortificationLevel
-
-		@table fortBattleInfo
-		*/
-		typeAll.fortBattleInfo = luaState.new_usertype<fortBattleInfo>("fortBattleInfo");
-		typeAll.fortBattleInfo.set("fort", &fortBattleInfo::fort);
-		typeAll.fortBattleInfo.set("garrison", &fortBattleInfo::garrison);
-		typeAll.fortBattleInfo.set("faction", &fortBattleInfo::faction);
-		typeAll.fortBattleInfo.set("ownerFactionID", &fortBattleInfo::ownerFactionID);
-		typeAll.fortBattleInfo.set("creatorFactionID", &fortBattleInfo::creatorFactionID);
-		typeAll.fortBattleInfo.set("fortFortificationLevel", &fortBattleInfo::fortFortificationLevel);
-
-
-		/// BattleCamera
-		//@section gameSTDUITable
+		///Battle Camera
+		//@section Battle Camera
 
 		/***
 		Get information about the camera in a battle

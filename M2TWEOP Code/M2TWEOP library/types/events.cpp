@@ -8,7 +8,9 @@
 #include "gameHelpers.h"
 #include "character.h"
 #include "settlement.h"
+#include "luaPlugin.h"
 #include "faction.h"
+#include "fort.h"
 #include "army.h"
 #include "characterRecord.h"
 #include "unit.h"
@@ -1000,7 +1002,7 @@ const char* eventTrigger::getRansomType()
 }
 	
 
-void luaP::onPluginLoadF()
+void luaPlugin::onPluginLoadF()
 {
 
 	struct
@@ -1008,8 +1010,8 @@ void luaP::onPluginLoadF()
 		sol::usertype<eventTrigger> eventTrigger;
 	}typeAll;
 	
-	///eventTrigger
-	//@section eventTrigger
+	///Event Data
+	//@section Event Data
 
 	/***
 	This is data that comes with game events. You need to check the event documentation to see what data is available under "Exports". The rest of the fields not stated inside "Exports" will return nil! 
@@ -1093,7 +1095,7 @@ void luaP::onPluginLoadF()
 	typeAll.eventTrigger.set("unit", sol::property(&eventTrigger::getUnit));
 	
 	///EOP Events
-	//@section eventsList
+	//@section EOP Events
 
 	/***
 	Events functions list.
@@ -4179,9 +4181,7 @@ void luaP::onPluginLoadF()
 	--something here
 	end
 	*/
-
-
-
+	
 	onCampaignMapLoaded = new sol::function(luaState["onCampaignMapLoaded"]);
 	checkLuaFunc(&onCampaignMapLoaded);
 

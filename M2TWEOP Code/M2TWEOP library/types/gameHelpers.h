@@ -333,6 +333,7 @@ namespace gameHelpers
 	std::string getPathFromMods();
 	std::string getModString(const std::string& path);
 	int getGameVersion();
+	void addToLua(sol::state& luaState);
 	
 	std::string callConsole(const std::string& cmdName, sol::variadic_args va);
 	bool callGameConsoleCommand(const char* name, const char* arg, char* errorBuffer);
@@ -347,6 +348,7 @@ namespace gameHelpers
 	void fireGameScriptFunc(void* scriptStruct, DWORD offset);
 	void logStringGame(const std::string& msg);
 	void logFuncError(const std::string& funcName, const std::string& error);
+	int getScriptCounterNoBool(const char* type);
 
 	void historicEvent(const char* name, const char* title, const char* description);
 	

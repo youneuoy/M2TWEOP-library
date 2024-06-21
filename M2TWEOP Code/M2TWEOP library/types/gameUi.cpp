@@ -23,7 +23,12 @@ namespace gameUiHelpers
 			return nullptr;
 		return ui->settlementInfoScroll;
 	}
-	
+
+	uiCardManager* getUiCardManager()
+	{
+		return gameHelpers::getGameDataAll()->uiCardManager;
+	}
+
 	std::string getUIElementName(const uiElement* element)
 	{
 		if (element->elementName)
@@ -135,8 +140,8 @@ namespace gameUiHelpers
         	sol::usertype<unitInfoScroll> unitInfoScroll;
         }types;
 
-		/// GameUI
-		//@section gameSTDUITable
+		///GameUI
+		//@section GameUI
 
 		/***
 		Basic gameSTDUI table
@@ -145,9 +150,7 @@ namespace gameUiHelpers
 
 		@table gameSTDUI
 		*/
-
-
-
+		
 		tables.gameUITable = luaState.create_table("gameSTDUI");
 		/***
 		Get a game UI element, element must be opened.
@@ -213,10 +216,7 @@ namespace gameUiHelpers
 		subElement1:execute();
 		*/
 		types.uiElement.set("execute", &useUiElement);
-    	
-		///settlementTextStrings
-		//@section settlementTextStrings
-
+		
 		/***
 		Basic settlementTextStrings table.
 
@@ -240,10 +240,7 @@ namespace gameUiHelpers
 		types.settlementTextStrings.set("populationValue", &settlementTextStrings::populationValue);
 		types.settlementTextStrings.set("populationGrowthString", &settlementTextStrings::populationGrowthString);
 		types.settlementTextStrings.set("populationGrowthValue", &settlementTextStrings::populationGrowthValue);
-
-		///uiString
-		//@section uiString
-
+		
 		/***
 		Basic uiString table.
 
@@ -259,9 +256,6 @@ namespace gameUiHelpers
 		types.uiString.set("blue", &uiString::blue);
 		types.uiString.set("green", &uiString::green);
 		types.uiString.set("red", &uiString::red);
-
-		///settlementInfoScroll
-		//@section settlementInfoScroll
 
 		/***
 		Basic settlementInfoScroll table.
@@ -294,10 +288,69 @@ namespace gameUiHelpers
 		end
 		*/
 		types.settlementInfoScroll.set_function("getUIStrings", &settlementInfoScroll::getUIStrings);
-	
-		///unitInfoScroll
-		//@section Info scrolls
 
+		///UI Card Manager
+		//@section UI Card Manager
+
+		/***
+		Basic uiCardManager table
+
+		@tfield int selectedUnitCardsCount
+		@tfield int unitCardsCount
+		@tfield settlementStruct selectedSettlement
+		@tfield character selectedCharacter
+		@tfield fortStruct selectedFort
+		@tfield getSelectedUnitCard getSelectedUnitCard
+		@tfield getUnitCard getUnitCard
+		@tfield getBuildingInfoScroll getBuildingInfoScroll
+		@tfield getUnitInfoScroll getUnitInfoScroll
+
+		@table uiCardManager
+		*/
+		types.uiCardManager = luaState.new_usertype<uiCardManager>("uiCardManager");
+		types.uiCardManager.set("selectedUnitCardsCount", &uiCardManager::selectedUnitCardsCount);
+		types.uiCardManager.set("unitCardsCount", &uiCardManager::unitCardsCount);
+		types.uiCardManager.set("selectedSettlement", &uiCardManager::selectedSettlement);
+		types.uiCardManager.set("selectedCharacter", &uiCardManager::selectedCharacter);
+		types.uiCardManager.set("selectedFort", &uiCardManager::selectedFort);
+		
+		/***
+		Get selected unit card by index.
+		@function uiCardManager:getSelectedUnitCard
+		@tparam int index
+		@treturn unit selectedUnit
+		@usage
+		local cardManager = M2TW.uiCardManager
+		local selectedUnit=cardManager:getSelectedUnitCard(0)
+		*/
+		types.uiCardManager.set_function("getSelectedUnitCard", &uiCardManager::getSelectedUnitCard);
+		/***
+		Get unit card by index (battle or strat).
+		@function uiCardManager:getUnitCard
+		@tparam int index
+		@treturn unit unit
+		@usage
+		local cardManager = M2TW.uiCardManager
+		local unit = cardManager:getUnitCard(0)
+		*/
+		types.uiCardManager.set_function("getUnitCard", &uiCardManager::getUnitCard);
+		/***
+		Get building info scroll.
+		@function uiCardManager.getBuildingInfoScroll
+		@treturn buildingInfoScroll scroll
+		@usage
+		local infoScroll = M2TW.uiCardManager.getBuildingInfoScroll()
+		*/
+		types.uiCardManager.set_function("getBuildingInfoScroll", &getBuildingInfoScroll);
+		/***
+		Get unit info scroll.
+		@function uiCardManager.getUnitInfoScroll
+		@treturn unitInfoScroll scroll
+		@usage
+		local infoScroll = M2TW.uiCardManager.getUnitInfoScroll()
+		*/
+		types.uiCardManager.set_function("getUnitInfoScroll", &getUnitInfoScroll);
+		
 		/***
 		Basic unitInfoScroll table
 
@@ -323,66 +376,5 @@ namespace gameUiHelpers
 		types.buildingInfoScroll.set("settlement", &buildingInfoScroll::settlement);
 		types.buildingInfoScroll.set("building", &buildingInfoScroll::building);
 		types.buildingInfoScroll.set("edbEntry", &buildingInfoScroll::entry);
-
-		///uiCardManager
-		//@section uiCardManager
-
-		/***
-		Basic uiCardManager table
-
-		@tfield int selectedUnitCardsCount
-		@tfield int unitCardsCount
-		@tfield settlementStruct selectedSettlement
-		@tfield character selectedCharacter
-		@tfield fortStruct selectedFort
-		@tfield getSelectedUnitCard getSelectedUnitCard
-		@tfield getUnitCard getUnitCard
-		@tfield getBuildingInfoScroll getBuildingInfoScroll
-		@tfield getUnitInfoScroll getUnitInfoScroll
-
-		@table uiCardManager
-		*/
-		types.uiCardManager = luaState.new_usertype<uiCardManager>("uiCardManager");
-		types.uiCardManager.set("selectedUnitCardsCount", &uiCardManager::selectedUnitCardsCount);
-		types.uiCardManager.set("unitCardsCount", &uiCardManager::unitCardsCount);
-		types.uiCardManager.set("selectedSettlement", &uiCardManager::selectedSettlement);
-		types.uiCardManager.set("selectedCharacter", &uiCardManager::selectedCharacter);
-		types.uiCardManager.set("selectedFort", &uiCardManager::selectedFort);
-		/***
-		Get selected unit card by index.
-		@function uiCardManager:getSelectedUnitCard
-		@tparam int index
-		@treturn unit selectedUnit
-		@usage
-		local cardManager=gameDataAll.get().uiCardManager;
-		local selectedUnit=cardManager:getSelectedUnitCard(0);
-		*/
-		types.uiCardManager.set_function("getSelectedUnitCard", &uiCardManager::getSelectedUnitCard);
-		/***
-		Get unit card by index (battle or strat).
-		@function uiCardManager:getUnitCard
-		@tparam int index
-		@treturn unit unit
-		@usage
-		local cardManager=gameDataAll.get().uiCardManager;
-		local unit=cardManager:getUnitCard(0);
-		*/
-		types.uiCardManager.set_function("getUnitCard", &uiCardManager::getUnitCard);
-		/***
-		Get building info scroll.
-		@function uiCardManager.getBuildingInfoScroll
-		@treturn buildingInfoScroll scroll
-		@usage
-		local infoScroll = cardManager.getBuildingInfoScroll();
-		*/
-		types.uiCardManager.set_function("getBuildingInfoScroll", &getBuildingInfoScroll);
-		/***
-		Get unit info scroll.
-		@function uiCardManager.getUnitInfoScroll
-		@treturn unitInfoScroll scroll
-		@usage
-		local infoScroll = cardManager.getUnitInfoScroll();
-		*/
-		types.uiCardManager.set_function("getUnitInfoScroll", &getUnitInfoScroll);
     }
 }

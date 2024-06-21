@@ -432,8 +432,8 @@ namespace buildingHelpers
 			sol::usertype<exportDescrBuildings>EDB;
 		}types;
 		
-		///EdbEntry
-		//@section edbEntry
+		///Buildings
+		//@section Buildings
 
 		/***
 		Basic edbEntry table.

@@ -1,5 +1,4 @@
 #include "console.h"
-#include "plugData.h"
 #include "luaPlugin.h"
 
 #include "imgui/imgui.h"
@@ -22,8 +21,8 @@ namespace console
 	{
 		if (!consoleData.input.empty())
 		{
-			luaP::logS.push_back("\n== Command == \n" + consoleData.input);
-			luaP::logCommands.push_back(consoleData.input);
+			luaPlugin::logS.push_back("\n== Command == \n" + consoleData.input);
+			luaPlugin::logCommands.push_back(consoleData.input);
 		}
 		else
 		{
@@ -70,7 +69,7 @@ namespace console
 		constexpr ImGuiWindowFlags iwf = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollWithMouse;
 		ImGui::SetNextWindowSize(ImVec2(800, 400), ImGuiCond_Once);
 		ImGui::SetNextWindowPos(ImVec2(0.5f, 0.5f), ImGuiCond_Always, ImVec2(0.0f, 0.0f));
-		consoleData.commandNum = luaP::logCommands.size();
+		consoleData.commandNum = luaPlugin::logCommands.size();
 
 		ImGui::Begin("##consoleInWindow", nullptr, iwf);
 		if (ImGui::Button("Run script"))
@@ -89,7 +88,7 @@ namespace console
 		if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)
 			&& ((consoleData.commandNum - 1) - consoleData.pressAmount >= 0) )
 		{
-			consoleData.input = luaP::logCommands[consoleData.commandNum - 1 - consoleData.pressAmount];
+			consoleData.input = luaPlugin::logCommands[consoleData.commandNum - 1 - consoleData.pressAmount];
 			consoleData.pressAmount++;
 		}
 
@@ -97,7 +96,7 @@ namespace console
 			&& consoleData.pressAmount > 0)
 		{
 			consoleData.pressAmount--;
-			consoleData.input = luaP::logCommands[consoleData.commandNum - 1 - consoleData.pressAmount];
+			consoleData.input = luaPlugin::logCommands[consoleData.commandNum - 1 - consoleData.pressAmount];
 		}
 
 		if (ImGui::InputTextMultiline("##console", &consoleData.input, ImVec2(-FLT_MIN, -FLT_MIN),
@@ -120,7 +119,7 @@ namespace console
 
 		std::string outputs;
 
-		for (const auto& str : luaP::logS)
+		for (const auto& str : luaPlugin::logS)
 		{
 			outputs += str;
 			outputs += "\n";

@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <d3d9.h>
 #include "realGameTypes.h"
+#include "lua/sol.hpp"
 
 struct color
 {
@@ -26,9 +27,10 @@ struct mapImage
 	bool adaptiveBlur = false;
 };
 
-namespace m2tweopMapManager
+namespace mapImageManager
 {
 	std::shared_ptr<mapImage> makeMapImage();
+	void addToLua(sol::state& luaState);
 	void clearMapImage(mapImage* img);
 	void createImage(mapImage* image);
 	std::tuple<int, int, void*> loadMapTexture(mapImage* mapImage, const std::string& path);
@@ -38,6 +40,5 @@ namespace m2tweopMapManager
 	void addTileColor(mapImage* img, int x, int y, int r, int g, int b, int a);
 	DWORD interpolateColors(DWORD color1, DWORD color2, float weight);
 	IDirect3DTexture9* updateRegionColors(mapImage* img, IDirect3DTexture9* regionDataTexture, int width, int height);
-	bool draw();
 };
 

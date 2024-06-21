@@ -1,6 +1,6 @@
 #include "graphicsEvents.h"
 #include "console.h"
-#include "plugData.h"
+#include "luaPlugin.h"
 
 struct
 {

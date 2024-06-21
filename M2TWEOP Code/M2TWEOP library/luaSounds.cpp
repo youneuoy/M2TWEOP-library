@@ -5,9 +5,9 @@
 //@author youneuoy
 //@license GPL-3.0
 #include "eopSounds.h"
-#include "luaP.h"
+#include "luaPlugin.h"
 
-void luaP::initEopSounds()
+void luaPlugin::initEopSounds()
 {
 	struct
 	{

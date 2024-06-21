@@ -7,7 +7,7 @@
 
 #include "eopdu.h"
 #include "gameHelpers.h"
-#include "plugData.h"
+#include "luaPlugin.h"
 #include "stratModelsChange.h"
 #include "techFuncs.h"
 #include "army.h"
@@ -263,6 +263,11 @@ namespace campaignHelpers
 		return campaign->factionCount;
 	}
 
+	selectionInfo* getSelectionInfo()
+	{
+		return gameHelpers::getGameDataAll()->selectInfo;
+	}
+
 	factionStruct* getFaction(const int index)
 	{
 		const campaign* campaign =  getCampaignData();
@@ -273,10 +278,7 @@ namespace campaignHelpers
 	
     campaign* getCampaignData()
     {
-        const auto gameData = gameHelpers::getGameDataAll();
-        if (!gameData)
-            return nullptr;
-        return gameData->campaignStruct;
+        return gameHelpers::getGameDataAll()->campaignStruct;
     }
 
     void addToLua(sol::state& luaState)
@@ -295,11 +297,14 @@ namespace campaignHelpers
             sol::usertype<resourceStruct>tradeResource;
             sol::usertype<mercPool> mercPool;
             sol::usertype<mercPoolUnit> mercPoolUnit;
-            sol::usertype<factionDiplomacy> factionDiplomacy;
+        	sol::usertype<factionDiplomacy> factionDiplomacy;
+        	sol::usertype<campaignDifficulty1> campaignDifficulty1;
+        	sol::usertype<campaignDifficulty2> campaignDifficulty2;
+        	sol::usertype<selectionInfo> selectionInfo;
         }typeAll;
     	
 		///Campaign
-		//@section campaignStruct
+		//@section Campaign
 
 		/***
 		Basic campaign table.
@@ -373,6 +378,8 @@ namespace campaignHelpers
 		@tfield getNumberOfMarriages getNumberOfMarriages
 		@tfield getSettlement getSettlement
 		@tfield getFactionDiplomacy getFactionDiplomacy
+		@tfield historicEvent historicEvent
+		@tfield addCharacterCas addCharacterCas
 
 		@table campaignStruct
 		*/
@@ -440,7 +447,7 @@ namespace campaignHelpers
 		@tparam factionStruct fac2 Another faction.
 		@treturn bool checkResult
 		@usage
-		local campaign = gameDataAll.get().campaignStruct;
+		local campaign = M2TW.campaign
 		local england = campaign:getFaction("england")
 		local france = campaign:getFaction("france")
 		local isAtWar = campaign:checkDipStance(dipRelType.war, england, france);
@@ -453,7 +460,7 @@ namespace campaignHelpers
 		@tparam factionStruct fac1 A faction.
 		@tparam factionStruct fac2 Another faction.
     	@usage
-		local campaign = gameDataAll.get().campaignStruct;
+		local campaign = M2TW.campaign
 		local england = campaign:getFaction("england")
 		local france = campaign:getFaction("france")
 		campaign:setDipStance(dipRelType.war, england, france);
@@ -464,7 +471,7 @@ namespace campaignHelpers
 		@function campaignStruct.getUnitSize
 		@treturn int unitSize
 		@usage
-		local campaign = gameDataAll.get().campaignStruct;
+		local campaign = M2TW.campaign
 		local unitSize = campaign.getUnitSize();
 		*/
 		typeAll.campaignTable.set_function("getUnitSize", &gameHelpers::getUnitSize);
@@ -474,7 +481,7 @@ namespace campaignHelpers
 		@tparam int index
 		@treturn fortStruct fort
 		@usage
-    	local campaign = gameDataAll.get().campaignStruct
+    	local campaign = M2TW.campaign
 		for i = 0, campaign.fortNum - 1 do
 			local fort = campaign:getFort(i)
 		end
@@ -486,7 +493,7 @@ namespace campaignHelpers
 		@tparam int index
 		@treturn portStruct port
 		@usage
-    	local campaign = gameDataAll.get().campaignStruct
+    	local campaign = M2TW.campaign
 		for i = 0, campaign.portNum - 1 do
 			local port = campaign:getPort(i)
 		end
@@ -498,7 +505,7 @@ namespace campaignHelpers
 		@tparam int index
 		@treturn watchtowerStruct watchtower
 		@usage
-		local campaign = gameDataAll.get().campaignStruct
+		local campaign = M2TW.campaign
 		for i = 0, campaign.watchTowerNum - 1 do
 			local watchtower = campaign:getWatchTower(i)
 		end
@@ -510,7 +517,7 @@ namespace campaignHelpers
 		@tparam string name
 		@treturn settlementStruct settlement
 		@usage
-		local campaign = gameDataAll.get().campaignStruct
+		local campaign = M2TW.campaign
 		local sett = campaign:getSettlementByName("London")
 		*/
 		typeAll.campaignTable.set_function("getSettlementByName", &campaign::getSettlementByName);
@@ -520,7 +527,7 @@ namespace campaignHelpers
 		@tparam string name
 		@treturn factionStruct faction
 		@usage
-		local CAMPAIGN = gameDataAll.get().campaignStruct
+		local CAMPAIGN = M2TW.campaign
 		local fac = CAMPAIGN:getFaction("england")
 		*/
 		typeAll.campaignTable.set_function("getFaction", &campaign::getFactionHashed);
@@ -529,7 +536,7 @@ namespace campaignHelpers
 		@function campaignStruct:getCampaignPath
 		@treturn string path
 		@usage
-		local campaign = gameDataAll.get().campaignStruct;
+		local campaign = M2TW.campaign
 		local path = campaign:getCampaignPath();
 		*/
 		typeAll.campaignTable.set_function("getCampaignPath", &campaign::getCampaignPath);
@@ -539,7 +546,7 @@ namespace campaignHelpers
 		@tparam int index
 		@treturn mercPool pool
 		@usage
-    	local campaign = gameDataAll.get().campaignStruct;
+    	local campaign = M2TW.campaign
 		for i = 0, campaign.mercPoolNum - 1 do
 			local pool = campaign:getMercPool(i)
 		end
@@ -551,7 +558,7 @@ namespace campaignHelpers
 		@tparam string name
 		@treturn mercPool pool
 		@usage
-		local campaign = gameDataAll.get().campaignStruct;
+		local campaign = M2TW.campaign
 		local pool = campaign:getMercPoolByName("mercpool1");
 		*/
 		typeAll.campaignTable.set_function("getMercPoolByName", &campaign::getMercPoolByName);
@@ -561,7 +568,7 @@ namespace campaignHelpers
 		@tparam int index
 		@treturn roadStruct road
 		@usage
-    	local campaign = gameDataAll.get().campaignStruct
+    	local campaign = M2TW.campaign
 		for i = 0, campaign.roadsNum - 1 do
 			local road = campaign:getRoad(i)
 		end
@@ -573,7 +580,7 @@ namespace campaignHelpers
 		@tparam int index
 		@treturn factionStruct playerFac
 		@usage
-		local campaign = gameDataAll.get().campaignStruct;
+		local campaign = M2TW.campaign
 		local fac = campaign:getPlayerFaction(0);
 		*/
 		typeAll.campaignTable.set_function("getPlayerFaction", &campaign::getPlayerFaction);
@@ -583,7 +590,7 @@ namespace campaignHelpers
 		@tparam int factionID
 		@treturn factionStruct fac
 		@usage
-		local campaign = gameDataAll.get().campaignStruct;
+		local campaign = M2TW.campaign
 		local fac = campaign:getFactionByID(0);
 		*/
 		typeAll.campaignTable.set_function("getFactionByID", &campaign::getFactionById);
@@ -593,7 +600,7 @@ namespace campaignHelpers
 		@tparam int index
 		@treturn factionStruct fac
 		@usage
-		local campaign = gameDataAll.get().campaignStruct;
+		local campaign = M2TW.campaign
 		for i = 0, campaign.numberOfFactions - 1 do
 			local fac = campaign:getFactionByOrder(i);
 		end
@@ -605,7 +612,7 @@ namespace campaignHelpers
 		@tparam int factionID
 		@treturn bool isPlayable
 		@usage
-		local campaign = gameDataAll.get().campaignStruct;
+		local campaign = M2TW.campaign
 		for i = 0, campaign.numberOfFactions - 1 do
 			local fac = campaign:getFactionByOrder(i);
     	    local playable = campaign:isPlayableFaction(fac.factionID);
@@ -618,7 +625,7 @@ namespace campaignHelpers
 		@tparam int factionID
 		@treturn bool isPlayer
     	@usage
-		local campaign = gameDataAll.get().campaignStruct;
+		local campaign = M2TW.campaign
 		for i = 0, campaign.numberOfFactions - 1 do
 			local fac = campaign:getFactionByOrder(i);
 			local isPlayer = campaign:isPlayerFaction(fac.factionID);
@@ -631,7 +638,7 @@ namespace campaignHelpers
 		@tparam int factionID
 		@treturn bool exists
 		@usage
-		local campaign = gameDataAll.get().campaignStruct;
+		local campaign = M2TW.campaign
 		local fac = campaign:isExistingFaction(4);
 		*/
 		typeAll.campaignTable.set_function("isExistingFaction", &campaign::isExistingFaction);
@@ -642,8 +649,8 @@ namespace campaignHelpers
 		@tparam int factionIDTwo
 		@treturn int marriageNum
 		@usage
-		local campaign = gameDataAll.get().campaignStruct;
-		local marriages = campaign:getNumberOfMarriages(4, 8);
+		local campaign = M2TW.campaign
+		local marriages = campaign:getNumberOfMarriages(4, 8)
 		*/
 		typeAll.campaignTable.set_function("getNumberOfMarriages", &campaign::getNumberOfMarriages);
 		
@@ -654,8 +661,8 @@ namespace campaignHelpers
 		@tparam int factionIDTwo
 		@treturn factionDiplomacy diplomacy
 		@usage
-		local campaign = gameDataAll.get().campaignStruct;
-		local diplomacy = campaign:getFactionDiplomacy(4, 8);
+		local campaign = M2TW.campaign
+		local diplomacy = campaign:getFactionDiplomacy(4, 8)
 		*/
 		typeAll.campaignTable.set_function("getFactionDiplomacy", &campaign::getFactionDiplomacy);
 		
@@ -665,14 +672,44 @@ namespace campaignHelpers
 		@tparam int index
 		@treturn settlementStruct sett
 		@usage
-    	local campaign = gameDataAll.get().campaignStruct;
+    	local campaign = M2TW.campaign
 		for i = 0, campaign.settlementNum - 1 do
 			local sett = campaign:getSettlement(i);
 		end
 		*/
 		typeAll.campaignTable.set_function("getSettlement", &campaign::getSettlement);
+		/***
+		Add a new .cas character strategy model to the game with a unique name. Only add it after loading to campaign map!
+		@function campaignStruct.addCharacterCas
+		@tparam string skeleton name of skeleton used.
+		@tparam string caspath Relative path from the mods folder (starting with "mods/").
+		@tparam string shadowcaspath Relative path from the mods folder (starting with "mods/").
+		@tparam string typename Name of the new model used to assign.
+		@tparam string texturepath Relative path from the mods folder (starting with "mods/").
+		@tparam float scale
+		@usage
+		M2TW.campaign.addCharacterCas(
+			"strat_named_with_army",
+			"mods/Bare_Geomod/data/models_strat/islamic_general2.cas",
+			"mods/Bare_Geomod/data/models_strat/shadow_sword2.cas",
+			"islamic_general2",
+			"mods/Bare_Geomod/data/models_strat/textures/islamic_general_turks.tga",
+			0.7
+		);
+		*/
+		typeAll.campaignTable.set_function("addCharacterCas", &stratModelsChange::addCharacterCas);
+		/***
+		Fire a game event message. Picture needs to be provided in the ui folders as default.
+		@function campaignStruct.historicEvent
+		@tparam string eventName
+		@tparam string title
+		@tparam string body
+		@usage
+		    M2TW.campaign.historicEvent("my_event", "my title", "my description")
+		*/
+		typeAll.campaignTable.set_function("historicEvent", &gameHelpers::historicEvent);
 
-		///factionDiplomacy
+		///Faction Diplomacy
 		//@section Faction diplomacy
 
 		/***
@@ -746,7 +783,7 @@ namespace campaignHelpers
     	typeAll.factionDiplomacy.set("numTurnsCeasefire", &factionDiplomacy::numTurnsCeasefire);
     	
     	
-		///CollegeofCardinals
+		///College of Cardinals
 		//@section College of cardinals
 
 		/***
@@ -811,7 +848,7 @@ namespace campaignHelpers
     	typeAll.cardinal.set("voteFactionID", &cardinal::voteFactionID);
     	typeAll.cardinal.set("isPreferati", &cardinal::isPreferati);
 
-		/// Crusade
+		///Crusades
 		//@section Crusades
 
 		/***
@@ -980,7 +1017,7 @@ namespace campaignHelpers
     	typeAll.crusadeReward.set("money", &crusadeReward::money);
     	typeAll.crusadeReward.set("experience", &crusadeReward::experience);
     	
-		///MercPools
+		///Mercenaries
 		//@section Mercenaries
 
 		/***
@@ -1001,8 +1038,8 @@ namespace campaignHelpers
 		@function mercPool:getMercUnitNum
 		@treturn int mercUnitNum
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
+		local map = M2TW.stratMap;
+		local region = map.getRegion(2);
 		local mercpool = region.mercPool;
 		local mercNum = mercpool:getMercUnitNum();
 		*/
@@ -1023,10 +1060,10 @@ namespace campaignHelpers
 		@tparam int crusading
 		@treturn mercPoolUnit mercunit
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
-		local mercpool = region.mercPool;
-		local mercUnit = mercpool:addMercUnit(1907, 0, 570, 0.15, 0.35, 3, 3, 0, 0, 0);
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
+		local mercpool = region.mercPool
+		local mercUnit = mercpool:addMercUnit(1907, 0, 570, 0.15, 0.35, 3, 3, 0, 0, 0)
 		*/
 		typeAll.mercPool.set_function("addMercUnit", &mercPool::addMercUnit);
 
@@ -1036,20 +1073,16 @@ namespace campaignHelpers
 		@tparam int idx
 		@treturn mercPoolUnit mercUnit
 		@usage
-		local sMap = gameDataAll.get().stratMap;
-		local region = sMap.getRegion(2);
-		local mercpool = region.mercPool;
-		local mercNum = mercPool:getMercUnitNum();
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
+		local mercpool = region.mercPool
+		local mercNum = mercPool:getMercUnitNum()
 		for i = 0, mercNum-1 do
-			local mercUnit = mercpool:getMercUnit(i);
+			local mercUnit = mercpool:getMercUnit(i)
 		end
 		*/
 		typeAll.mercPool.set_function("getMercUnit", &mercPool::getMercUnit);
-
-
-		///MercenaryUnits
-		//@section mercPoolUnit
-
+		
 		/***
 		Basic mercenary unit table.
 
@@ -1091,19 +1124,19 @@ namespace campaignHelpers
 		@tparam int religion
 		@tparam bool set True means enable this religion requirement, False means disable.
 		@usage
-		local stratmap = gameDataAll.get().stratMap;
-		local region = stratMap.getRegion(2);
-		local mercpool = region.mercPool;
-		local mercNum = mercPool:getMercUnitNum();
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
+		local mercpool = region.mercPool
+		local mercNum = mercPool:getMercUnitNum()
 		for i = 0, mercNum-1 do
-			local mercUnit = mercPool:getMercUnit(i);
+			local mercUnit = mercPool:getMercUnit(i)
 			mercUnit:setMercReligion(3, true)
 		end
 		*/
 		typeAll.mercPoolUnit.set_function("setMercReligion", &mercPoolUnit::setMercReligion);
 	
-		///WatchtowerStruct
-		//@section watchtowerStructTable
+		///Watchtower
+		//@section Watchtower
 
 		/***
 		Basic watchtowerStruct table
@@ -1128,8 +1161,8 @@ namespace campaignHelpers
 		typeAll.watchtowerStruct.set("blockingArmy", &watchTowerStruct::blockingArmy);
 
 			
-		///PortStruct
-		//@section portStructTable
+		///Port
+		//@section Port
 
 		/***
 		Basic portStruct table
@@ -1158,10 +1191,6 @@ namespace campaignHelpers
 		typeAll.portStruct.set("numTurnsBlocked", &portBuildingStruct::numTurnsBlocked);
 		typeAll.portStruct.set("cultureID", &portBuildingStruct::subFactionCultureID);
 
-
-		///DockStruct
-		//@section dockStructTable
-
 		/***
 		Basic dockStruct table
 
@@ -1189,8 +1218,8 @@ namespace campaignHelpers
 		typeAll.dockStruct.set("port", &portDockStrat::port);
 		typeAll.dockStruct.set("dockedArmy", &portDockStrat::dockedArmy);
 
-		///TradeResource
-		//@section tradeResource
+		///Trade Resource
+		//@section Trade Resource
 
 		/***
 		Basic tradeResource table
@@ -1217,7 +1246,7 @@ namespace campaignHelpers
 		/***
 		Set the resource's strat model.
 		@function tradeResource:setStratModel
-		@tparam int modelId Added with stratmap.objects.addModelToGame
+		@tparam int modelId Added with M2TWEOP.addModelToGame
 		@usage
 		tradeResource:setStratModel(5);
 		*/
@@ -1270,5 +1299,87 @@ namespace campaignHelpers
 		end
 		*/
 		typeAll.tradeResource.set_function("getResourceImage", &resourceStruct::getImage);
+		
+		///Campaign Difficulty Modifiers
+		//@section campaignDifficulty1
+
+		/***
+		Basic campaignDifficulty1 table.
+
+		@tfield int orderFromGrowth
+		@tfield int considerWarWithPlayer
+		@tfield float brigandChanceAi
+		@tfield float brigandChancePlayer
+		@tfield int forceAttackDelay
+		@tfield float taxIncomeModifierPlayer
+		@tfield float farmingIncomeModifierPlayer
+		@tfield float incomeModifierAi
+		@tfield float playerRegionValueModifier
+
+		@table campaignDifficulty1
+		*/
+
+		typeAll.campaignDifficulty1 = luaState.new_usertype<campaignDifficulty1>("campaignDifficulty1");
+		typeAll.campaignDifficulty1.set("orderFromGrowth", &campaignDifficulty1::orderFromGrowth);
+		typeAll.campaignDifficulty1.set("considerWarWithPlayer", &campaignDifficulty1::considerWarWithPlayer);
+		typeAll.campaignDifficulty1.set("brigandChanceAi", &campaignDifficulty1::brigandChanceAi);
+		typeAll.campaignDifficulty1.set("brigandChancePlayer", &campaignDifficulty1::brigandChancePlayer);
+		typeAll.campaignDifficulty1.set("forceAttackDelay", &campaignDifficulty1::forceAttackDelay);
+		typeAll.campaignDifficulty1.set("taxIncomeModifierPlayer", &campaignDifficulty1::taxIncomeModifierPlayer);
+		typeAll.campaignDifficulty1.set("farmingIncomeModifierPlayer", &campaignDifficulty1::farmingIncomeModifierPlayer);
+		typeAll.campaignDifficulty1.set("incomeModifierAi", &campaignDifficulty1::incomeModifierAi);
+		typeAll.campaignDifficulty1.set("playerRegionValueModifier", &campaignDifficulty1::playerRegionValueModifier);
+
+		/***
+		Basic campaignDifficulty2 table.
+
+		@tfield int popGrowthBonusAi
+		@tfield int publicOrderBonusAi
+		@tfield int experienceBonusAi
+		@tfield int incomeBonusAi
+		@tfield int wantsTargetPlayer
+		@tfield int wantsTargetPlayerNaval
+		@tfield int autoAttackPlayerIfCrusadeTarget
+
+		@table campaignDifficulty2
+		*/
+
+		typeAll.campaignDifficulty2 = luaState.new_usertype<campaignDifficulty2>("campaignDifficulty2");
+		typeAll.campaignDifficulty2.set("popGrowthBonusAi", &campaignDifficulty2::popGrowthBonusAi);
+		typeAll.campaignDifficulty2.set("publicOrderBonusAi", &campaignDifficulty2::publicOrderBonusAi);
+		typeAll.campaignDifficulty2.set("experienceBonusAi", &campaignDifficulty2::experienceBonusAi);
+		typeAll.campaignDifficulty2.set("incomeBonusAi", &campaignDifficulty2::incomeBonusAi);
+		typeAll.campaignDifficulty2.set("wantsTargetPlayer", &campaignDifficulty2::wantsTargetPlayer);
+		typeAll.campaignDifficulty2.set("wantsTargetPlayerNaval", &campaignDifficulty2::wantsTargetPlayerNaval);
+		typeAll.campaignDifficulty2.set("autoAttackPlayerIfCrusadeTarget", &campaignDifficulty2::autoAttackPlayerIfCrusadeTarget);
+		
+		///Selection Info
+		//@section Selection Info
+
+		/***
+		Basic selectionInfo table
+	
+		@tfield character selectedCharacter (Get only)
+		@tfield character hoveredCharacter (Get only)
+		@tfield character selectedEnemyCharacter You can only select non-player characters with zoom to location button (Get only)
+		@tfield settlementStruct selectedSettlement (Get only)
+		@tfield settlementStruct hoveredSettlement (Get only)
+		@tfield settlementStruct selectedEnemySettlement You can only select non-player settlements with zoom to location button (Get only)
+		@tfield fortStruct selectedFort (Get only)
+		@tfield fortStruct hoveredFort (Get only)
+		@tfield fortStruct selectedEnemyFort You can only select non-player forts with zoom to location button (Get only)
+	
+		@table selectionInfo
+		*/
+		typeAll.selectionInfo = luaState.new_usertype<selectionInfo>("selectionInfo");
+		typeAll.selectionInfo.set("selectedCharacter", sol::property(&selectionInfo::getSelectedCharacter));
+		typeAll.selectionInfo.set("hoveredCharacter", sol::property(&selectionInfo::getHoveredCharacter));
+		typeAll.selectionInfo.set("selectedEnemyCharacter", sol::property(&selectionInfo::getSelectedEnemyCharacter));
+		typeAll.selectionInfo.set("selectedSettlement", sol::property(&selectionInfo::getSelectedSettlement));
+		typeAll.selectionInfo.set("hoveredSettlement", sol::property(&selectionInfo::getHoveredSettlement));
+		typeAll.selectionInfo.set("selectedEnemySettlement", sol::property(&selectionInfo::getSelectedEnemySettlement));
+		typeAll.selectionInfo.set("selectedFort", sol::property(&selectionInfo::getSelectedFort));
+		typeAll.selectionInfo.set("hoveredFort", sol::property(&selectionInfo::getHoveredFort));
+		typeAll.selectionInfo.set("selectedEnemyFort", sol::property(&selectionInfo::getSelectedEnemyFort));
     }
 };

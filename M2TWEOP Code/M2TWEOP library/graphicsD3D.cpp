@@ -24,7 +24,7 @@ graphicsD3D::dataT graphicsD3D::dataS;
 
 #include "onlineThings.h"
 
-#include "m2tweopMapManager.h"
+#include "mapImage.h"
 
 #include "../../M2TWEOP Common/m2tweopConstData.h"
 #include <windowsx.h>
@@ -224,7 +224,7 @@ void graphicsD3D::onDrawAllGameStuff()
 	ImGui::NewFrame();
 
 	auto& developerMode = globals::dataS.Modules.developerMode;
-	developerMode.Update();
+	developerMode.update();
 
 	drawOnEndScene(dataS.pDevice);
 	

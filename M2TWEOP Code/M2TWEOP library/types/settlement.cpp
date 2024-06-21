@@ -696,107 +696,8 @@ namespace settlementHelpers
 			sol::usertype<aiProductionController> aiProductionController;
 		}types;
 		
-		///aiProductionController
-		//@section aiProductionController
-
-		/***
-		Basic aiProductionController table
-
-		@tfield aiFaction aiFaction
-		@tfield int regionID
-		@tfield settlementStruct settlement
-		@tfield int autoManagePolicy
-		@tfield bool isAutoManaged
-		@tfield bool isAutoManagedRecruitment
-		@tfield bool isAutoManagedConstruction
-		@tfield bool isAutoManagedTaxes
-		@tfield int spyBias
-		@tfield int assassinBias
-		@tfield int diplomatBias
-		@tfield int admiralBias
-		@tfield int priestBias
-		@tfield int merchantBias
-		@tfield setConstructionValue setConstructionValue
-		@tfield setRecruitmentValue setRecruitmentValue
-		@tfield getConstructionValue getConstructionValue
-		@tfield getRecruitmentValue getRecruitmentValue
-		@tfield setExtraBias setExtraBias
-		@tfield getExtraBias getExtraBias
-
-		@table aiProductionController
-		*/
-		types.aiProductionController = luaState.new_usertype<aiProductionController>("aiProductionController");
-		types.aiProductionController.set("aiFaction", &aiProductionController::aiFaction);
-		types.aiProductionController.set("regionID", &aiProductionController::regionID);
-		types.aiProductionController.set("settlement", &aiProductionController::settlement);
-		types.aiProductionController.set("autoManagePolicy", &aiProductionController::autoManagePolicy);
-		types.aiProductionController.set("isAutoManaged", &aiProductionController::isAutoManaged);
-		types.aiProductionController.set("isAutoManagedRecruitment", &aiProductionController::isAutoManagedRecruitment);
-		types.aiProductionController.set("isAutoManagedConstruction", &aiProductionController::isAutoManagedConstruction);
-		types.aiProductionController.set("isAutoManagedTaxes", &aiProductionController::isAutoManagedTaxes);
-		types.aiProductionController.set("spyBias", &aiProductionController::spyBias);
-		types.aiProductionController.set("assassinBias", &aiProductionController::assassinBias);
-		types.aiProductionController.set("diplomatBias", &aiProductionController::diplomatBias);
-		types.aiProductionController.set("admiralBias", &aiProductionController::admiralBias);
-		types.aiProductionController.set("priestBias", &aiProductionController::priestBias);
-		types.aiProductionController.set("merchantBias", &aiProductionController::merchantBias);
-		/***
-		Set bias value of the ai personality for a capability.
-		@function aiProductionController:setConstructionValue
-		@tparam int type use building capabilities enum
-		@tparam int value
-		@usage
-			 aiProductionController:setConstructionValue(buildingCapability.law_bonus, 100)
-		*/
-		types.aiProductionController.set_function("setConstructionValue", &aiProductionController::setConstructionValueSett);
-		/***
-		Set bias value of the ai personality for a recruitment class.
-		@function aiProductionController:setRecruitmentValue
-		@tparam int type use unitCategoryClass enum
-		@tparam int value
-		@usage
-			 aiProductionController:setRecruitmentValue(unitCategoryClass.heavyCavalry, 100)
-		*/
-		types.aiProductionController.set_function("setRecruitmentValue", &aiProductionController::setRecruitmentValueSett);
-		/***
-		Set bias value of the ai personality.
-		@function aiProductionController:setExtraBias
-		@tparam int type use productionBias enum
-		@tparam int value
-		@usage
-			 aiProductionController:setExtraBias(productionBias.trade, 100)
-		*/
-		types.aiProductionController.set_function("setExtraBias", &aiProductionController::setExtraBias);
-		/***
-		Get bias value of the ai personality.
-		@function aiProductionController:getExtraBias
-		@tparam int type use productionBias enum
-		@treturn int value
-		@usage
-			 aiProductionController:getExtraBias(productionBias.trade)
-		*/
-		types.aiProductionController.set_function("getExtraBias", &aiProductionController::getExtraBias);
-		/***
-		Get bias value of the ai personality for a capability.
-		@function aiProductionController:getConstructionValue
-		@tparam int type use building capabilities enum
-		@treturn int value
-		@usage
-			local value = aiProductionController:setConstructionValue(buildingCapability.law_bonus)
-		*/
-		types.aiProductionController.set_function("getConstructionValue", &aiProductionController::getConstructionValueSett);
-		/***
-		Get bias value of the ai personality for a recruitment class.
-		@function aiProductionController:getRecruitmentValue
-		@tparam int type use unitCategoryClass enum
-		@treturn int value
-		@usage
-			local value = aiProductionController:setRecruitmentValue(unitCategoryClass.heavyCavalry)
-		*/
-		types.aiProductionController.set_function("getRecruitmentValue", &aiProductionController::getRecruitmentValueSett);
-			
-		///SettlementStruct
-		//@section settlementStructTable
+		///Settlement
+		//@section Settlement
 
 		/***
 		Basic settlementStruct table
@@ -908,10 +809,9 @@ namespace settlementHelpers
 		@tparam factionStruct newOwner Faction to change ownership to.
 		@tparam bool convertGarrison
 		@usage
-		local campaign=gameDataAll.get().campaignStruct;
-		local fac1=campaign.factionsSortedByDescrStrat[1];
-		currSet:changeOwner(fac1);
-		end
+		local campaign = M2TW.campaign
+		local fac1 = campaign:getFaction("england")
+		currSet:changeOwner(fac1, true)
 		*/
 		types.settlementStruct.set_function("changeOwner", sol::overload(
 				sol::resolve<void(settlementStruct*, factionStruct*)>(changeOwner),
@@ -1144,116 +1044,18 @@ namespace settlementHelpers
 		      local item = settlement:getUnitInQueue(1)
 		*/
 		types.settlementStruct.set_function("getUnitInQueue", &settlementStruct::getUnitInQueue);
-		
-
-		///construction options
-		//@section Construction Options
-
 		/***
-		Basic constructionOptions table
-		
-		@tfield int buildingNum
-		@tfield int totalCost
-		@tfield int totalTime
-		@tfield getConstructionOption getConstructionOption
-		
-		@table constructionOptions
-		*/
-		types.constructionOptions = luaState.new_usertype<settlementBuildingOptions>("constructionOptions");
-		types.constructionOptions.set("buildingNum", &settlementBuildingOptions::count);
-		types.constructionOptions.set("totalCost", &settlementBuildingOptions::totalCost);
-		types.constructionOptions.set("totalTime", &settlementBuildingOptions::totalTime);
-		
-		/***
-		Get an available construction item.
-		@function constructionOptions:getConstructionOption
-		@tparam int index
-		@treturn buildingInQueue building
+		Create an army in a settlement (don't need a character). Used to add units to an empty settlement.
+		@function settlementStruct:createArmyInSettlement
+		@tparam settlementStruct settlement
+		@treturn armyStruct army
 		@usage
-			 local building = constructionOptions:getConstructionOption(0)
+		if sett.army == nil then
+		      local army = sett:createArmyInSettlement();
+		end
 		*/
-		types.constructionOptions.set_function("getConstructionOption", &getBuildingOptionFromDb);
+		types.settlementStruct.set_function("createArmyInSettlement", &armyHelpers::createArmyInSettlement);
 		
-	
-		///recruitment options
-		//@section Recruitment Options
-
-		/***
-		Basic recruitmentOptions table
-	
-		@tfield int unitNum
-		@tfield int totalCost
-		@tfield int totalTime
-		@tfield getRecruitmentOption getRecruitmentOption
-	
-		@table recruitmentOptions
-		*/
-		types.recruitmentOptions = luaState.new_usertype<settlementRecruitmentOptions>("recruitmentOptions");
-		types.recruitmentOptions.set("unitNum", &settlementRecruitmentOptions::count);
-		types.recruitmentOptions.set("totalCost", &settlementRecruitmentOptions::totalCost);
-		types.recruitmentOptions.set("totalTime", &settlementRecruitmentOptions::totalTime);
-	
-		/***
-		Get an available recruitment item.
-		@function recruitmentOptions:getRecruitmentOption
-		@tparam int index
-		@treturn unitInQueue item
-		@usage
-			 local item = recruitmentOptions:getRecruitmentOption(0)
-		*/
-		types.recruitmentOptions.set_function("getRecruitmentOption", &getRecruitOptionFromDb);
-
-		///Unit in queue
-		//@section Unit in queue
-
-		/***
-		Basic unitInQueue table
-
-		@tfield int recruitType 0 = normal, 1 = ship, 2 = agent, 3 = retraining 4 = retraining ship
-		@tfield int experience
-		@tfield int armourUpg
-		@tfield int weaponUpg
-		@tfield eduEntry eduEntry
-		@tfield int agentType
-		@tfield int soldierCount
-		@tfield int cost
-		@tfield int recruitTime
-		@tfield int turnsTrained
-		@tfield settlementStruct settlement
-		@tfield int turnNumber
-		@tfield int isMercenary
-		@tfield addUnitToQueue addUnitToQueue
-
-		@table unitInQueue
-		*/
-		types.unitInQueue = luaState.new_usertype<unitRQ>("unitInQueue");
-		types.unitInQueue.set("recruitType", &unitRQ::recruitType);
-		types.unitInQueue.set("experience", &unitRQ::experience);
-		types.unitInQueue.set("armourUpg", &unitRQ::armourUpg);
-		types.unitInQueue.set("weaponUpg", &unitRQ::weaponUpgrade);
-		types.unitInQueue.set("eduEntry", sol::property(&unitRQ::getUnitEntry, &unitRQ::setUnitEntry));
-		types.unitInQueue.set("agentType", sol::property(&unitRQ::getAgentType, &unitRQ::setAgentType));
-		types.unitInQueue.set("soldierCount", &unitRQ::soldierCount);
-		types.unitInQueue.set("cost", &unitRQ::cost);
-		types.unitInQueue.set("recruitTime", &unitRQ::turnsToTrain);
-		types.unitInQueue.set("turnsTrained", &unitRQ::turnsTrainedAlready);
-		types.unitInQueue.set("settlement", &unitRQ::settlement);
-		types.unitInQueue.set("turnNumber", &unitRQ::turnNumber);
-		types.unitInQueue.set("isMercenary", &unitRQ::isMercenary);
-		
-		/***
-		Add a unit to the recruitment queue.
-		@function unitInQueue:addUnitToQueue
-		@treturn bool success
-		@usage
-			unitOption:addUnitToQueue()
-		*/
-		types.unitInQueue.set_function("addUnitToQueue", &addUnitToQueue);
-
-
-		///settlementStats
-		//@section settlementStats
-
 		/***
 		Basic settlementStats table
 
@@ -1364,10 +1166,6 @@ namespace settlementHelpers
 		types.settlementStats.set("TotalIncomeWithoutAdmin", &settlementStats::TotalIncomeWithoutAdmin);
 		types.settlementStats.set("majorityReligionID", &settlementStats::TotalIncomeWithoutAdmin);
 
-
-		///settlementCapability
-		//@section settlementCapability
-
 		/***
 		Basic settlementCapability table
 
@@ -1379,9 +1177,6 @@ namespace settlementHelpers
 		types.settlementCapability = luaState.new_usertype<settlementCapability>("settlementCapability");
 		types.settlementCapability.set("value", &settlementCapability::value);
 		types.settlementCapability.set("bonus", &settlementCapability::bonus);
-
-		///recruitmentCapability
-		//@section recruitmentCapability
 
 		/***
 		Basic recruitmentCapability table
@@ -1400,10 +1195,7 @@ namespace settlementHelpers
 		types.recruitmentCapability.set("initialSize", &recruitmentCapability::initialSize);
 		types.recruitmentCapability.set("replenishRate", &recruitmentCapability::replenishRate);
 		types.recruitmentCapability.set("maxSize", &recruitmentCapability::maxSize);
-
-		///settlementRecruitmentPool
-		//@section settlementRecruitmentPool
-
+		
 		/***
 		Basic settlementRecruitmentPool table
 
@@ -1415,59 +1207,7 @@ namespace settlementHelpers
 		types.settlementRecruitmentPool = luaState.new_usertype<settlementRecruitmentPool>("settlementRecruitmentPool");
 		types.settlementRecruitmentPool.set("eduIndex", &settlementRecruitmentPool::eduIndex);
 		types.settlementRecruitmentPool.set("availablePool", &settlementRecruitmentPool::availablePool);
-
-
-		///Building
-		//@section buildingTable
-
-		/***
-		Basic building table
-
-		@tfield int level
-		@tfield int hp
-		@tfield int factionID
-		@tfield settlementStruct settlement
-		@tfield edbEntry edbEntry
-		@tfield getType getType
-		@tfield getName getName
-
-		@table building
-		*/
-		types.building = luaState.new_usertype<building>("building");
-		types.building.set("level", &building::level);
-		types.building.set("hp", sol::property( &building::getBuildingHealth,  &building::setBuildingHealth));
-		types.building.set("settlement", &building::settlement);
-		types.building.set("edbEntry", &building::edbEntry);
-		types.building.set("factionID", &building::factionID);
-		/***
-		Get the name of the building type (the building chain in export\_descr\_buildings.txt).
-
-		@function building:getType
-		@treturn string buildingType (building chain name)
-		@usage
-		if building:getType() == "core_building" then
-			--do stuff
-		end
-		*/
-		types.building.set_function("getType", &getType);
-		/***
-		Get name of building level (as per export\_descr\_buildings.txt).
-
-		@function building:getName
-		@treturn string buildingName
-		@usage
-		if building:getName() == "large_stone_wall" then
-			--do stuff
-		end
-		*/
-		types.building.set_function("getName", &getName);
-
-		//types.building.set_function("addCapability", &buildingStructHelpers::addCapability);
-
-
-		///BuildingsQueue
-		//@section buildingsQueueTable
-
+		
 		/***
 		Basic buildingsQueue table
 
@@ -1497,11 +1237,35 @@ namespace settlementHelpers
 		end
 		*/
 		types.buildingsQueue.set_function("getBuildingInQueue", &getBuildingInQueue);
+		
+		///Construction Options
+		//@section Construction Options
 
-
-		///BuildingInQueue
-		//@section buildingInQueueTable
-
+		/***
+		Basic constructionOptions table
+		
+		@tfield int buildingNum
+		@tfield int totalCost
+		@tfield int totalTime
+		@tfield getConstructionOption getConstructionOption
+		
+		@table constructionOptions
+		*/
+		types.constructionOptions = luaState.new_usertype<settlementBuildingOptions>("constructionOptions");
+		types.constructionOptions.set("buildingNum", &settlementBuildingOptions::count);
+		types.constructionOptions.set("totalCost", &settlementBuildingOptions::totalCost);
+		types.constructionOptions.set("totalTime", &settlementBuildingOptions::totalTime);
+		
+		/***
+		Get an available construction item.
+		@function constructionOptions:getConstructionOption
+		@tparam int index
+		@treturn buildingInQueue building
+		@usage
+			 local building = constructionOptions:getConstructionOption(0)
+		*/
+		types.constructionOptions.set_function("getConstructionOption", &getBuildingOptionFromDb);
+		
 		/***
 		Basic buildingInQueue table
 
@@ -1562,10 +1326,228 @@ namespace settlementHelpers
 			build:addBuildingToQueue()
 		*/
 		types.buildingInQueue.set_function("addBuildingToQueue", &addBuildingToQueue);
+		
+		///Recruitment Options
+		//@section Recruitment Options
 
+		/***
+		Basic recruitmentOptions table
+	
+		@tfield int unitNum
+		@tfield int totalCost
+		@tfield int totalTime
+		@tfield getRecruitmentOption getRecruitmentOption
+	
+		@table recruitmentOptions
+		*/
+		types.recruitmentOptions = luaState.new_usertype<settlementRecruitmentOptions>("recruitmentOptions");
+		types.recruitmentOptions.set("unitNum", &settlementRecruitmentOptions::count);
+		types.recruitmentOptions.set("totalCost", &settlementRecruitmentOptions::totalCost);
+		types.recruitmentOptions.set("totalTime", &settlementRecruitmentOptions::totalTime);
+	
+		/***
+		Get an available recruitment item.
+		@function recruitmentOptions:getRecruitmentOption
+		@tparam int index
+		@treturn unitInQueue item
+		@usage
+			 local item = recruitmentOptions:getRecruitmentOption(0)
+		*/
+		types.recruitmentOptions.set_function("getRecruitmentOption", &getRecruitOptionFromDb);
 
+		/***
+		Basic unitInQueue table
+
+		@tfield int recruitType 0 = normal, 1 = ship, 2 = agent, 3 = retraining 4 = retraining ship
+		@tfield int experience
+		@tfield int armourUpg
+		@tfield int weaponUpg
+		@tfield eduEntry eduEntry
+		@tfield int agentType
+		@tfield int soldierCount
+		@tfield int cost
+		@tfield int recruitTime
+		@tfield int turnsTrained
+		@tfield settlementStruct settlement
+		@tfield int turnNumber
+		@tfield int isMercenary
+		@tfield addUnitToQueue addUnitToQueue
+
+		@table unitInQueue
+		*/
+		types.unitInQueue = luaState.new_usertype<unitRQ>("unitInQueue");
+		types.unitInQueue.set("recruitType", &unitRQ::recruitType);
+		types.unitInQueue.set("experience", &unitRQ::experience);
+		types.unitInQueue.set("armourUpg", &unitRQ::armourUpg);
+		types.unitInQueue.set("weaponUpg", &unitRQ::weaponUpgrade);
+		types.unitInQueue.set("eduEntry", sol::property(&unitRQ::getUnitEntry, &unitRQ::setUnitEntry));
+		types.unitInQueue.set("agentType", sol::property(&unitRQ::getAgentType, &unitRQ::setAgentType));
+		types.unitInQueue.set("soldierCount", &unitRQ::soldierCount);
+		types.unitInQueue.set("cost", &unitRQ::cost);
+		types.unitInQueue.set("recruitTime", &unitRQ::turnsToTrain);
+		types.unitInQueue.set("turnsTrained", &unitRQ::turnsTrainedAlready);
+		types.unitInQueue.set("settlement", &unitRQ::settlement);
+		types.unitInQueue.set("turnNumber", &unitRQ::turnNumber);
+		types.unitInQueue.set("isMercenary", &unitRQ::isMercenary);
+		
+		/***
+		Add a unit to the recruitment queue.
+		@function unitInQueue:addUnitToQueue
+		@treturn bool success
+		@usage
+			unitOption:addUnitToQueue()
+		*/
+		types.unitInQueue.set_function("addUnitToQueue", &addUnitToQueue);
+		
+		///Building
+		//@section Building
+
+		/***
+		Basic building table
+
+		@tfield int level
+		@tfield int hp
+		@tfield int factionID
+		@tfield settlementStruct settlement
+		@tfield edbEntry edbEntry
+		@tfield getType getType
+		@tfield getName getName
+
+		@table building
+		*/
+		types.building = luaState.new_usertype<building>("building");
+		types.building.set("level", &building::level);
+		types.building.set("hp", sol::property( &building::getBuildingHealth,  &building::setBuildingHealth));
+		types.building.set("settlement", &building::settlement);
+		types.building.set("edbEntry", &building::edbEntry);
+		types.building.set("factionID", &building::factionID);
+		
+		/***
+		Get the name of the building type (the building chain in export\_descr\_buildings.txt).
+
+		@function building:getType
+		@treturn string buildingType (building chain name)
+		@usage
+		if building:getType() == "core_building" then
+			--do stuff
+		end
+		*/
+		types.building.set_function("getType", &getType);
+		/***
+		Get name of building level (as per export\_descr\_buildings.txt).
+
+		@function building:getName
+		@treturn string buildingName
+		@usage
+		if building:getName() == "large_stone_wall" then
+			--do stuff
+		end
+		*/
+		types.building.set_function("getName", &getName);
+
+		//types.building.set_function("addCapability", &buildingStructHelpers::addCapability);
+		
+		///AI Production Controller
+		//@section AI Production Controller
+
+		/***
+		Basic aiProductionController table
+
+		@tfield aiFaction aiFaction
+		@tfield int regionID
+		@tfield settlementStruct settlement
+		@tfield int autoManagePolicy
+		@tfield bool isAutoManaged
+		@tfield bool isAutoManagedRecruitment
+		@tfield bool isAutoManagedConstruction
+		@tfield bool isAutoManagedTaxes
+		@tfield int spyBias
+		@tfield int assassinBias
+		@tfield int diplomatBias
+		@tfield int admiralBias
+		@tfield int priestBias
+		@tfield int merchantBias
+		@tfield setConstructionValue setConstructionValue
+		@tfield setRecruitmentValue setRecruitmentValue
+		@tfield getConstructionValue getConstructionValue
+		@tfield getRecruitmentValue getRecruitmentValue
+		@tfield setExtraBias setExtraBias
+		@tfield getExtraBias getExtraBias
+
+		@table aiProductionController
+		*/
+		types.aiProductionController = luaState.new_usertype<aiProductionController>("aiProductionController");
+		types.aiProductionController.set("aiFaction", &aiProductionController::aiFaction);
+		types.aiProductionController.set("regionID", &aiProductionController::regionID);
+		types.aiProductionController.set("settlement", &aiProductionController::settlement);
+		types.aiProductionController.set("autoManagePolicy", &aiProductionController::autoManagePolicy);
+		types.aiProductionController.set("isAutoManaged", &aiProductionController::isAutoManaged);
+		types.aiProductionController.set("isAutoManagedRecruitment", &aiProductionController::isAutoManagedRecruitment);
+		types.aiProductionController.set("isAutoManagedConstruction", &aiProductionController::isAutoManagedConstruction);
+		types.aiProductionController.set("isAutoManagedTaxes", &aiProductionController::isAutoManagedTaxes);
+		types.aiProductionController.set("spyBias", &aiProductionController::spyBias);
+		types.aiProductionController.set("assassinBias", &aiProductionController::assassinBias);
+		types.aiProductionController.set("diplomatBias", &aiProductionController::diplomatBias);
+		types.aiProductionController.set("admiralBias", &aiProductionController::admiralBias);
+		types.aiProductionController.set("priestBias", &aiProductionController::priestBias);
+		types.aiProductionController.set("merchantBias", &aiProductionController::merchantBias);
+		/***
+		Set bias value of the ai personality for a capability.
+		@function aiProductionController:setConstructionValue
+		@tparam int type use building capabilities enum
+		@tparam int value
+		@usage
+			 aiProductionController:setConstructionValue(buildingCapability.law_bonus, 100)
+		*/
+		types.aiProductionController.set_function("setConstructionValue", &aiProductionController::setConstructionValueSett);
+		/***
+		Set bias value of the ai personality for a recruitment class.
+		@function aiProductionController:setRecruitmentValue
+		@tparam int type use unitCategoryClass enum
+		@tparam int value
+		@usage
+			 aiProductionController:setRecruitmentValue(unitCategoryClass.heavyCavalry, 100)
+		*/
+		types.aiProductionController.set_function("setRecruitmentValue", &aiProductionController::setRecruitmentValueSett);
+		/***
+		Set bias value of the ai personality.
+		@function aiProductionController:setExtraBias
+		@tparam int type use productionBias enum
+		@tparam int value
+		@usage
+			 aiProductionController:setExtraBias(productionBias.trade, 100)
+		*/
+		types.aiProductionController.set_function("setExtraBias", &aiProductionController::setExtraBias);
+		/***
+		Get bias value of the ai personality.
+		@function aiProductionController:getExtraBias
+		@tparam int type use productionBias enum
+		@treturn int value
+		@usage
+			 aiProductionController:getExtraBias(productionBias.trade)
+		*/
+		types.aiProductionController.set_function("getExtraBias", &aiProductionController::getExtraBias);
+		/***
+		Get bias value of the ai personality for a capability.
+		@function aiProductionController:getConstructionValue
+		@tparam int type use building capabilities enum
+		@treturn int value
+		@usage
+			local value = aiProductionController:setConstructionValue(buildingCapability.law_bonus)
+		*/
+		types.aiProductionController.set_function("getConstructionValue", &aiProductionController::getConstructionValueSett);
+		/***
+		Get bias value of the ai personality for a recruitment class.
+		@function aiProductionController:getRecruitmentValue
+		@tparam int type use unitCategoryClass enum
+		@treturn int value
+		@usage
+			local value = aiProductionController:setRecruitmentValue(unitCategoryClass.heavyCavalry)
+		*/
+		types.aiProductionController.set_function("getRecruitmentValue", &aiProductionController::getRecruitmentValueSett);
+		
 		///Guild
-		//@section guildTable
+		//@section Guild
 
 		/***
 		Basic guild table

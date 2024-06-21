@@ -1,10 +1,12 @@
-#include "m2tweopMapManager.h"
+///
+//![Lua logo](../Lua.png)
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
 
+#include "mapImage.h"
 #include <numbers>
-
 #include "campaign.h"
-#include "imgui/imgui.h"
-
 #include "CImg.h"
 #include "dataOffsets.h"
 #include "graphicsD3D.h"
@@ -21,7 +23,7 @@
 #define SETALPHA(color, alpha) ((color) = ((color) & 0x00FFFFFF) | ((alpha) << 24))
 #define MAKECOLOR(r, g, b, a) ((b) | ((g) << 8) | ((r) << 16) | ((a) << 24))
 
-namespace m2tweopMapManager
+namespace mapImageManager
 {
 	
 	std::shared_ptr<mapImage> makeMapImage()
@@ -131,15 +133,6 @@ namespace m2tweopMapManager
 		a = max(0, min(255, GETALPHA(img->tiles[tileIndex].color) + a));
 		img->tiles[tileIndex] = tileColor(MAKECOLOR(r, g, b, a), x, y);
 	}
-	
-	struct
-	{
-		m2tweopMap currentMap;
-		ImVec2 tileSize = {7.f,7.f};
-		bool isShowMap = false;
-		bool isShowBattleMap = false;
-		bool showBattleStats = false;
-	}managerData;
 
 	// Helper function to extract individual color components from a pixel
 	inline int getRed(DWORD pixel) { return (pixel >> 16) & 0xFF; }
@@ -346,75 +339,129 @@ namespace m2tweopMapManager
 		return D3DCOLOR_ARGB(255, r, g, b);
 	}
 	
-	void m2tweopMapManager::createImage(mapImage* image)
+	void mapImageManager::createImage(mapImage* image)
 	{
 	}
 	
-	bool draw()
+	void addToLua(sol::state& luaState)
 	{
-		bool isWork = true;
-
-		ImGui::SetNextWindowPos({ 0,0 }, ImGuiCond_Always);
-		if (managerData.isShowMap == true)
+		struct
 		{
-			ImGui::SetNextWindowSize(ImGui::GetMainViewport()->WorkSize, ImGuiCond_Always);
-		}
-		else
-		{
-			ImGui::SetNextWindowSize({ 0,0 }, ImGuiCond_Always);
-		}
-		ImGui::Begin("Map manager",nullptr, ImGuiWindowFlags_NoTitleBar| ImGuiWindowFlags_NoResize| ImGuiWindowFlags_NoMove);
+			sol::usertype<mapImage> mapImageStruct;
+		}typeAll;
+		
+		///mapImage
+		//@section mapImageStruct
 
-
-		if (ImGui::Button("Close"))
-		{
-			isWork = false;
-		}
-		if (managerData.isShowMap == false)
-		{
-			if (ImGui::Button("Open map manager"))
-			{
-				managerData.currentMap.buildMap();
-				managerData.isShowMap = true;
-			}
-		}
-		else
-		{
-			if (ImGui::Button("Hide map manager"))
-			{
-				managerData.isShowMap = false;
-			}
-		}
-
-
-		if (managerData.isShowMap == true)
-		{
-			ImGui::SetNextItemWidth(200.f);
-			if (ImGui::SliderFloat("Map scale", &managerData.tileSize.x, 2.0f, 100.0f, "%.0f"))
-			{
-			}
-			managerData.tileSize.y = managerData.tileSize.x;
-
-			ImVec2 mapImageSize = ImGui::GetMainViewport()->WorkSize;
-			mapImageSize.x -= mapImageSize.x / 5;
-			mapImageSize.y -= mapImageSize.y / 8;
-			ImGui::BeginChild("mapImage", mapImageSize,true, ImGuiWindowFlags_HorizontalScrollbar);
-			managerData.currentMap.drawMap(managerData.tileSize);
-			ImGui::EndChild();
-
-
-			ImGui::SameLine();
-			ImVec2 mapInteractSize;
-			mapInteractSize.x = ImGui::GetMainViewport()->WorkSize.x - mapImageSize.x;
-			mapInteractSize.y = mapImageSize.y;
-
-			ImGui::BeginChild("mapInteract", mapInteractSize, true, ImGuiWindowFlags_HorizontalScrollbar);
-			managerData.currentMap.drawInteract();
-			ImGui::EndChild();
-		}
-
-		ImGui::End();
-
-		return isWork;
+		/***
+		@tfield float blurStrength
+		@tfield bool useBlur
+		@tfield bool adaptiveBlur Can be slow on large or frequently updated images! needs use blur also true.
+		@tfield makeMapImage makeMapImage
+		@tfield clearMapImage clearMapImage
+		@tfield loadMapTexture loadMapTexture
+		@tfield fillRegionColor fillRegionColor
+		@tfield addRegionColor addRegionColor
+		@tfield fillTileColor fillTileColor
+		@tfield addTileColor addTileColor
+		@table mapImageStruct
+		*/
+		typeAll.mapImageStruct = luaState.new_usertype<mapImage>("mapImageStruct");
+		typeAll.mapImageStruct.set("useBlur", &mapImage::useBlur);
+		typeAll.mapImageStruct.set("adaptiveBlur", &mapImage::adaptiveBlur);
+		typeAll.mapImageStruct.set("blurStrength", &mapImage::blurStrength);
+		
+		/***
+		Create a new image you want to determine region colors.
+		@function mapImageStruct.makeMapImage
+		@treturn mapImageStruct mapImage
+		@usage
+		local mapImage = mapImageStruct.makeMapImage();
+		*/
+		typeAll.mapImageStruct.set_function("makeMapImage", &makeMapImage);
+		
+		/***
+		Reset image state.
+		@function mapImageStruct:clearMapImage
+		@usage
+		local mapImage = mapImageStruct.makeMapImage();
+		mapImage:clearMapImage();
+		*/
+		typeAll.mapImageStruct.set_function("clearMapImage", &clearMapImage);
+		
+		/***
+		Create a new map texture. Use an uncompressed(!) dds image that is some multiple of your map_regions size. The background must line up with map_regions for whatever scale you chose for it to display correctly.
+		@function mapImageStruct:loadMapTexture
+		@tparam string path full path to texture
+		@treturn int x size of the image
+		@treturn int y size of the image
+		@treturn int id of the image
+		@usage
+		local mapImage = mapImageStruct.makeMapImage();
+		local x, y, id = mapImage:loadMapTexture(M2TWEOP.getModPath() .. "map_regions.dds");
+		ImGui.Image(id, x, y);
+		*/
+		typeAll.mapImageStruct.set_function("loadMapTexture", &loadMapTexture);
+		
+		/***
+		Fill a region with a color.
+		@function mapImageStruct:fillRegionColor
+		@tparam int id region ID
+		@tparam int r red
+		@tparam int g green
+		@tparam int b blue
+		@tparam int a alpha
+		@usage
+		local mapImage = mapImageStruct.makeMapImage();
+		mapImage:fillRegionColor(50, 0, 255, 0, 255);
+		*/
+		typeAll.mapImageStruct.set_function("fillRegionColor", &fillRegionColor);
+		
+		/***
+		Add a color to already filled region.
+		@function mapImageStruct:addRegionColor
+		@tparam int id region ID
+		@tparam int r red
+		@tparam int g green
+		@tparam int b blue
+		@tparam int a alpha
+		@usage
+		local mapImage = mapImageStruct.makeMapImage();
+		mapImage:fillRegionColor(50, 0, 255, 0, 255);
+		mapImage:addRegionColor(50, 10, -10, 10, 0);
+		*/
+		typeAll.mapImageStruct.set_function("addRegionColor", &addRegionColor);
+		
+		/***
+		Fill a tile with a color.
+		@function mapImageStruct:fillTileColor
+		@tparam int x x coordinate
+		@tparam int y y coordinate
+		@tparam int r red
+		@tparam int g green
+		@tparam int b blue
+		@tparam int a alpha
+		@treturn mapImageStruct mapImage
+		@usage
+		local mapImage = mapImageStruct.makeMapImage();
+		mapImage:fillTileColor(153, 210, 0, 255, 0, 255);
+		*/
+		typeAll.mapImageStruct.set_function("fillTileColor", &fillTileColor);
+		/***
+		Add a color to an already set tile.
+		@function mapImageStruct:addTileColor
+		@tparam int x x coordinate
+		@tparam int y y coordinate
+		@tparam int r red
+		@tparam int g green
+		@tparam int b blue
+		@tparam int a alpha
+		@treturn mapImageStruct mapImage
+		@usage
+		local mapImage = mapImageStruct.makeMapImage();
+		mapImage:fillTileColor(153, 210, 0, 255, 0, 255);
+		mapImage:addTileColor(153, 210, 20, -10, 20, 0);
+		*/
+		typeAll.mapImageStruct.set_function("addTileColor", &addTileColor);
 	}
 };
