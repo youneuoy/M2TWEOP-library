@@ -62,26 +62,26 @@ namespace graphicsExport
 		D3DXMATRIX view;
 		D3DXMATRIX projection;
 	};
-	NOINLINE EOP_EXPORT D3dState GetD3dState();
+	D3dState GetD3dState();
 
-	NOINLINE EOP_EXPORT void AddStratmapDrawCallback(EOPDrawCallback callFunk);
-	NOINLINE EOP_EXPORT void AddImGuiDrawCallback(EOPDrawCallback callFunk);
+	EOP_EXPORT void AddStratmapDrawCallback(EOPDrawCallback callFunk);
+	EOP_EXPORT void AddImGuiDrawCallback(EOPDrawCallback callFunk);
 
-	NOINLINE EOP_EXPORT void SetClearD3dState();
-	NOINLINE EOP_EXPORT void SetD3dState(D3dState& state);
-	NOINLINE EOP_EXPORT void ReleaseD3dState(D3dState& state);
-
-
-	NOINLINE EOP_EXPORT const D3DXMATRIXA16* GetMatView();
-	NOINLINE EOP_EXPORT const D3DXMATRIXA16* GetMatProj();
-
-	NOINLINE EOP_EXPORT IDirect3DDevice9* GetDevice();
-	NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 loadTexture(const char* path, int* x, int* y);
-	NOINLINE EOP_EXPORT void unloadTexture(LPDIRECT3DTEXTURE9 texture);
+	EOP_EXPORT void SetClearD3dState();
+	EOP_EXPORT void SetD3dState(D3dState& state);
+	EOP_EXPORT void ReleaseD3dState(D3dState& state);
 
 
-	NOINLINE EOP_EXPORT void onCreateDevice(IDirect3DDevice9* pDevice);
-	NOINLINE EOP_EXPORT void onEndScene(IDirect3DDevice9* pDevice);
-	NOINLINE EOP_EXPORT void onReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters);
-	NOINLINE EOP_EXPORT void afterReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters);
+	EOP_EXPORT const D3DXMATRIXA16* GetMatView();
+	EOP_EXPORT const D3DXMATRIXA16* GetMatProj();
+	std::tuple<int, int, void*> loadTextureToGame(const std::string& path);
+	void unloadTextureFromGame(void* texture);
+	EOP_EXPORT IDirect3DDevice9* GetDevice();
+	EOP_EXPORT LPDIRECT3DTEXTURE9 loadTexture(const char* path, int* x, int* y);
+	EOP_EXPORT void unloadTexture(LPDIRECT3DTEXTURE9 texture);
+
+	EOP_EXPORT void onEndScene(IDirect3DDevice9* pDevice);
+	EOP_EXPORT void onCreateDevice(IDirect3DDevice9* pDevice);
+	EOP_EXPORT void onReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters);
+	EOP_EXPORT void afterReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters);
 };

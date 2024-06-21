@@ -1,5 +1,5 @@
 #pragma once
-#include "TemplateCh.h"
+#include "templateCh.h"
 //asm
 #include <AsmJit.h>
 #include <Windows.h>
@@ -1461,6 +1461,62 @@ private:
 	LPVOID funcAddress;
 };
 
+
+class onBattleRams
+	:public AATemplate
+{
+public:
+	onBattleRams(MemWork* mem, LPVOID addr, int ver);
+	~onBattleRams();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+
+class onPreBattlePlacement
+	:public AATemplate
+{
+public:
+	onPreBattlePlacement(MemWork* mem, LPVOID addr, int ver);
+	~onPreBattlePlacement();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+
+class onPreBattlePlacement2
+	:public AATemplate
+{
+public:
+	onPreBattlePlacement2(MemWork* mem, LPVOID addr, int ver);
+	~onPreBattlePlacement2();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+
+class onDecideRamAttacks
+	:public AATemplate
+{
+public:
+	onDecideRamAttacks(MemWork* mem, LPVOID addr, int ver);
+	~onDecideRamAttacks();
+
+	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class OnGetRecruitPoolUnitEntry
 	:public AATemplate
 {
@@ -1534,6 +1590,19 @@ public:
 	~OnQuickSave();
 
 	void SetOriginialCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onNewGameLoaded
+	:public AATemplate
+{
+public:
+	onNewGameLoaded(MemWork* mem, LPVOID addr, int ver);
+	~onNewGameLoaded();
+
+	void SetOriginalCode();
 	void SetNewCode();
 private:
 	LPVOID funcAddress;

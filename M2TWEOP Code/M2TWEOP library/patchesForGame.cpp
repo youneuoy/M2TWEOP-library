@@ -2,35 +2,47 @@
 #include "patchesForGame.h"
 #include "tilesChange.h"
 #include "graphicsD3D.h"
-#include <functional>
 
 
+#include "events.h"
+#include "fort.h"
+#include "battle.h"
 #include "cultures.h"
+#include "eopBuildings.h"
 #include "onlineThings.h"
+#include "character.h"
+#include "faction.h"
+#include "characterRecord.h"
+#include "strategyMap.h"
 
-#include "eduThings.h"
-#include "fastFunctsHelpers.h"
-#include "PlannedRetreatRoute.h"
+#include "plannedRetreatRoute.h"
 #include "discordManager.h"
-#include "unitActions.h"
+#include "eopdu.h"
+#include "unit.h"
+#include "army.h"
+#include "campaign.h"
 
 
 worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, worldRecord* selectedRecord)
 {
-	auto& battlemapWorker = globals::dataS.Modules.battlemapWorker;
+	auto& battlemapWorker = globals::dataS.Modules.battleMapWorker;
 
 
 	battlemapWorker.TryCreateRecodsList(reinterpret_cast<battlemapWorker::dataBaseWorlds*>(database));
 
 	string selectRecordS = battlemapWorker.getRecordName(selectedRecord);
 	string selectRecordG = battlemapWorker.getRecordGroup(selectedRecord);
-	string selectedWorld = plugins::onSelectWorldpkgdesc(selectRecordS.c_str(), selectRecordG.c_str());
+	
+	std::string retVal;
+	std::string* tmpVal = gameEvents::onSelectWorldpkgdesc(selectRecordS.c_str(), selectRecordG.c_str());
+	string selectedWorld = *tmpVal;
+	delete tmpVal;
 	if (selectedWorld.empty() || selectedWorld == selectRecordS)
 	{
 		selectedWorld = battleCreator::selectWorldpkgdesc(selectRecordS, selectRecordG);
 		if (selectedWorld.empty() || selectedWorld == selectRecordS)
 		{
-			selectedWorld = globals::dataS.Modules.developerMode.SelectWorldpkgdesc(selectRecordS, selectRecordG);
+			selectedWorld = globals::dataS.Modules.developerMode.selectWorldpkgdesc(selectRecordS, selectRecordG);
 		}
 	}
 
@@ -50,7 +62,7 @@ worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, world
 		worldRecord* recordsEnd;
 	};
 
-	dataBaseS* db = (dataBaseS*)database;
+	const dataBaseS* db = reinterpret_cast<dataBaseS*>(database);
 
 	worldRecord* currRecord = db->records;
 	do
@@ -68,58 +80,58 @@ worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, world
 
 	return nullptr;
 }
-void __fastcall patchesForGame::OnLoadSettlementWorldpkgdesc(worldRecord* selectedRecord)
+void __fastcall patchesForGame::onLoadSettlementWorldpkgdesc(worldRecord* selectedRecord)
 {
-	auto& battlemapWorker = globals::dataS.Modules.battlemapWorker;
+	auto& battleMapWorker = globals::dataS.Modules.battleMapWorker;
 
-	string selectRecordS = battlemapWorker.getRecordName(selectedRecord);
-	string selectRecordG = battlemapWorker.getRecordGroup(selectedRecord);
+	const string selectRecordS = battleMapWorker.getRecordName(selectedRecord);
+	const string selectRecordG = battleMapWorker.getRecordGroup(selectedRecord);
 	battleCreator::OnLoadSettlementWorldpkgdesc(selectRecordS, selectRecordG);
 }
 
-float __fastcall patchesForGame::OnCalculateUnitValue(eduEntry* entry, const DWORD value)
+float __fastcall patchesForGame::onCalculateUnitValue(eduEntry* entry, const DWORD value)
 {
 	float floatValue;
 	std::memcpy(&floatValue, &value, sizeof(float));
-	return plugins::OnCalculateUnitValue(entry, floatValue);
+	return gameEvents::onCalculateUnitValue(entry, floatValue);
 }
 
-struct nameIndex
+struct nameIndexCombo
 {
-	nameIndex(char* n, int i) : name(n), index(i) {}
-	char* name;
-	int index;
+	nameIndexCombo(char* n, int i) : name(n), index(i) {}
+	char* name{};
+	int index{};
+	nameIndexCombo() = default;
 };
+
+std::shared_ptr<nameIndexCombo> GLOBAL_NAME_INDEX_COMBO = std::make_shared<nameIndexCombo>();
 
 DWORD __fastcall patchesForGame::onSearchUnitType(char* typeName)
 {
-	if (const auto eopUnit = eduThings::tryFindDataEopEduIndex(typeName); eopUnit != nullptr)
+	if (const auto eopUnit = eopDu::getEopEduEntryByName(typeName); eopUnit != nullptr)
 	{
-		unitActions::logStringGame("Unit found in M2TWEOP: " + std::string(typeName) + " index: " + std::to_string(*eopUnit));
-		auto newIndex = new nameIndex(typeName, *eopUnit);
-		return reinterpret_cast<DWORD>(newIndex);
+		gameHelpers::logStringGame("Unit found in M2TWEOP: " + std::string(typeName) + " index: " + std::to_string(eopUnit->index));
+		GLOBAL_NAME_INDEX_COMBO = std::make_shared<nameIndexCombo>(typeName, eopUnit->index);
+		return reinterpret_cast<DWORD>(GLOBAL_NAME_INDEX_COMBO.get());
 	}
 	return 0;
 }
 
-int patchesForGame::onEvaluateUnit(int eduIndex)
+int patchesForGame::onEvaluateUnit(const int eduIndex)
 {
-	if (const auto eopUnit = eduThings::getEopEduEntry(eduIndex); eopUnit == nullptr)
-		return eduThings::getEduEntry(eduIndex)->categoryClassCombinationForAI;
-	else
-		return eopUnit->categoryClassCombinationForAI;
+	return eopDu::getEduEntry(eduIndex)->unitProductionClass;
 }
 
 DWORD __fastcall patchesForGame::onCustomBattleUnitCards(DWORD cardArrayThing, int factionID)
 {
-	const int eopUnitNum = eduThings::getEopEntryNum();
+	const int eopUnitNum = eopDu::getEopEntryNum();
 	for (int i = 0; i < eopUnitNum; i++)
 	{
-		const auto eopUnit = eduThings::getEopEduEntryInternalIterating(i);
+		const auto eopUnit = eopDu::getEopEduEntryInternalIterating(i);
 		if (!eopUnit->isFileAdded)
 			continue;
 		const auto entry = &eopUnit->data.edu;
-		if (entry->Category == 3 || entry->Category == 4)
+		if (entry->category == unitCategory::nonCombatant || entry->category == unitCategory::ship)
 			continue;
 		if (GAME_FUNC(bool(__thiscall*)(eduEntry*, int, int), checkOwnershipCustom)(entry, factionID, 3))
 		{
@@ -133,16 +145,18 @@ DWORD __fastcall patchesForGame::onCustomBattleUnitCards(DWORD cardArrayThing, i
 
 int __fastcall patchesForGame::onCustomBattleUnits(eduEntry** unitArray, int currentCount, int factionID)
 {
-	const int eopUnitNum = eduThings::getEopEntryNum();
+	const int eopUnitNum = eopDu::getEopEntryNum();
 	for (int i = 0; i < eopUnitNum; i++)
 	{
 		if (currentCount >= 200)
 			break;
-		const auto eopUnit = eduThings::getEopEduEntryInternalIterating(i);
+		const auto eopUnit = eopDu::getEopEduEntryInternalIterating(i);
 		if (!eopUnit->isFileAdded)
 			continue;
 		const auto entry = &eopUnit->data.edu;
-		if (entry->Category == 3 || entry->Category == 4 || ((entry->Attributes5 & 8) != 0))
+		if (entry->category == unitCategory::nonCombatant
+			|| entry->category == unitCategory::ship
+			|| entry->noCustom != 0)
 			continue;
 		if (const int era = *reinterpret_cast<int*>(dataOffsets::offsets.selectedEra);
 			GAME_FUNC(bool(__thiscall*)(eduEntry*, int, int), checkOwnershipCustom)(entry, factionID, era))
@@ -157,15 +171,21 @@ int __fastcall patchesForGame::onCustomBattleUnits(eduEntry** unitArray, int cur
 
 eduEntry* patchesForGame::onEvaluateUnit2(int eduIndex)
 {
-	if (const auto eopUnit = eduThings::getEopEduEntry(eduIndex); eopUnit == nullptr)
-		return eduThings::getEduEntry(eduIndex);
+	if (const auto eopUnit = eopDu::getEopEduEntry(eduIndex); eopUnit == nullptr)
+		return eopDu::getEduEntry(eduIndex);
 	else
 		return eopUnit;
 }
 
-int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlement, bool* isCastle)
+int __fastcall patchesForGame::onFortificationLevelS(settlementStruct* settlement, bool* isCastle)
 {
-	int selectedLevel = plugins::onfortificationlevelS(settlement, isCastle);
+	int selectedLevel = -2;//magic value, mean not change anything
+	bool isChanged = false;
+	int tmpVal = gameEvents::onFortificationLevelS(settlement, isCastle, &isChanged);
+	if (isChanged == true)
+	{
+		selectedLevel = tmpVal;
+	}
 	if (selectedLevel == -2)
 	{
 		*isCastle = settlement->isCastle;
@@ -174,50 +194,39 @@ int __fastcall patchesForGame::onfortificationlevelS(settlementStruct* settlemen
 }
 char* __fastcall patchesForGame::onSaveEDUStringS(eduEntry* eduEntry)
 {
-	char* retName = eduThings::getEopNameOfEduEntry(eduEntry);
+	char* retName = eopDu::getEopNameOfEduEntry(eduEntry);
 	if (retName == nullptr)
-	{
-		return eduEntry->Type;
-	}
-
+		return eduEntry->eduType;
 	return retName;
 }
-int __fastcall patchesForGame::onCreateUnit(char** entryName, int* edbIndex)
+
+int __fastcall patchesForGame::onCreateUnit(char** entryName, int* eduIndex)
 {
-	if (edbIndex == nullptr)
+	if (eduIndex == nullptr)
 	{
-		int* newEdu = eduThings::tryFindDataEopEduIndex(*entryName);
-
+		const auto newEdu = eopDu::getEopEduEntryByName(*entryName);
 		if (newEdu == nullptr)
-		{
-			return  -1;
-		}
-
-		return *newEdu;
+			return -1;
+		return newEdu->index;
 	}
-
-	return *edbIndex;
+	return *eduIndex;
 }
 
-int __fastcall patchesForGame::onFindUnit(char* entry, int* edbIndex)
+int __fastcall patchesForGame::onFindUnit(char* entry, int* eduIndex)
 {
-	if (edbIndex == nullptr)
+	if (eduIndex == nullptr)
 	{
 		if (entry == nullptr)
 			return  -1;
-
-		int* newEdu = eduThings::tryFindDataEopEduIndex(entry);
-
+		const auto newEdu = eopDu::getEopEduEntryByName(entry);
 		if (newEdu == nullptr)
 			return  -1;
-
-		return *newEdu;
+		return newEdu->index;
 	}
-
-	return *edbIndex;
+	return *eduIndex;
 }
 
-int __fastcall patchesForGame::OnReligionCombatBonus(int religionID, namedCharacter* namedChar)
+int __fastcall patchesForGame::onReligionCombatBonus(int religionID, characterRecord* namedChar)
 {
 	if (religionID > 9)
 		return 0;
@@ -287,7 +296,7 @@ std::string getGamePath(const std::string& modPath) {
 
 char* __fastcall patchesForGame::getBrowserPicConstructed(int cultureID, edbEntry* entry, int buildingLevel)
 {
-	const auto level = entry->buildingLevel[buildingLevel];
+	const auto level = entry->levels[buildingLevel];
 	const auto levelName = level.name;
 	if (levelName == nullptr)
 		return nullptr;
@@ -295,7 +304,7 @@ char* __fastcall patchesForGame::getBrowserPicConstructed(int cultureID, edbEntr
 	if (cultureName.empty())
 		return nullptr;
 	const auto picPath = getBuildingPicConstructedPath(cultureName.c_str(), levelName);
-	const auto modPath = fastFuncts::GetModPath();
+	const auto modPath = gameHelpers::getModPath();
 	FILE_PATH = modPath + picPath;
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -305,49 +314,42 @@ char* __fastcall patchesForGame::getBrowserPicConstructed(int cultureID, edbEntr
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
 	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
-	auto lookUpVariants = &edb->lookupVariantsVector;
-	while(lookUpVariants)
+	const int variantNum = edb->lookupVariants.size();
+	for (int i = 0; i < variantNum; i++)
 	{
-		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		const auto variant = edb->lookupVariants.get(i);
+		const auto variantNamesSize = variant->names.size();
+		for (int j = 0; j < variantNamesSize; j++)
 		{
-			const auto variant = &lookUpVariants->lookupVariants[i];
-			if (strcmp(variant->name, cultureName.c_str()) == 0)
-			{
-				auto list = &variant->names;
-				while (list)
-				{
-					for (int j = 0; j < list->lookupVariantNamesNum; j++)
-					{
-						const auto variantString = list->lookupVariantNames[j].name;
-						FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-						FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-					}
-					list = list->next;
-				}
-			}
+			const auto variantName = variant->names.get(j);
+			const auto variantString = variantName->name;
+			FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
+			FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
 		}
-		lookUpVariants = lookUpVariants->next;
 	}
 	for (auto& i : level.buildingPicConstructed)
 	{
-		if (i.buildingPicPath != nullptr)
+		if (i.buildingPicPath != nullptr && i.picHash != 0)
 		{
 			FILE_PATH = i.buildingPicPath;
 			return FILE_PATH.data();
 		}
 	}
-	unitActions::logStringGame("getBrowserPicConstructed error: " + std::string(modPath + picPath));
+	gameHelpers::logStringGame("getBrowserPicConstructed error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_constructed_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_constructed_building.tga";
 	return FILE_PATH.data();
 }
 
 char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEntry* entry, int buildingLevel)
 {
-	const auto level = entry->buildingLevel[buildingLevel];
+	const auto level = entry->levels[buildingLevel];
 	const auto levelName = level.name;
 	if (levelName == nullptr)
 		return nullptr;
@@ -355,7 +357,7 @@ char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEnt
 	if (cultureName.empty())
 		return nullptr;
 	const auto picPath = getBuildingPicConstructionPath(cultureName.c_str(), levelName);
-	const auto modPath = fastFuncts::GetModPath();
+	const auto modPath = gameHelpers::getModPath();
 	FILE_PATH = modPath + picPath;
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -365,42 +367,35 @@ char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEnt
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
 	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
-	auto lookUpVariants = &edb->lookupVariantsVector;
-	while(lookUpVariants)
+	const int variantNum = edb->lookupVariants.size();
+	for (int i = 0; i < variantNum; i++)
 	{
-		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		const auto variant = edb->lookupVariants.get(i);
+		const auto variantNamesSize = variant->names.size();
+		for (int j = 0; j < variantNamesSize; j++)
 		{
-			const auto variant = &lookUpVariants->lookupVariants[i];
-			if (strcmp(variant->name, cultureName.c_str()) == 0)
-			{
-				auto list = &variant->names;
-				while (list)
-				{
-					for (int j = 0; j < list->lookupVariantNamesNum; j++)
-					{
-						const auto variantString = list->lookupVariantNames[j].name;
-						FILE_PATH = modPath + getBuildingPicConstructionPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-						FILE_PATH = GAME_PATH + getBuildingPicConstructionPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-					}
-					list = list->next;
-				}
-			}
+			const auto variantName = variant->names.get(j);
+			const auto variantString = variantName->name;
+			FILE_PATH = modPath + getBuildingPicConstructionPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
+			FILE_PATH = GAME_PATH + getBuildingPicConstructionPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
 		}
-		lookUpVariants = lookUpVariants->next;
 	}
 	for (auto& i : level.buildingPicConstruction)
 	{
-		if (i.buildingPicPath != nullptr)
+		if (i.buildingPicPath != nullptr && i.picHash != 0)
 		{
 			FILE_PATH = i.buildingPicPath;
 			return FILE_PATH.data();
 		}
 	}
-	unitActions::logStringGame("getBrowserPicConstruction error: " + std::string(modPath + picPath));
+	gameHelpers::logStringGame("getBrowserPicConstruction error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_preconstructed_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_preconstructed_building.tga";
 	return FILE_PATH.data();
 }
@@ -414,7 +409,7 @@ char* __fastcall patchesForGame::getBuildingPic(buildingLevel* level, int cultur
 	if (cultureName.empty())
 		return nullptr;
 	const auto picPath = getBuildingPicPath(cultureName.c_str(), levelName);
-	const auto modPath = fastFuncts::GetModPath();
+	const auto modPath = gameHelpers::getModPath();
 	FILE_PATH = modPath + picPath;
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -424,42 +419,35 @@ char* __fastcall patchesForGame::getBuildingPic(buildingLevel* level, int cultur
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
 	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
-	auto lookUpVariants = &edb->lookupVariantsVector;
-	while(lookUpVariants)
+	const int variantNum = edb->lookupVariants.size();
+	for (int i = 0; i < variantNum; i++)
 	{
-		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		const auto variant = edb->lookupVariants.get(i);
+		const auto variantNamesSize = variant->names.size();
+		for (int j = 0; j < variantNamesSize; j++)
 		{
-			const auto variant = &lookUpVariants->lookupVariants[i];
-			if (strcmp(variant->name, cultureName.c_str()) == 0)
-			{
-				auto list = &variant->names;
-				while (list)
-				{
-					for (int j = 0; j < list->lookupVariantNamesNum; j++)
-					{
-						const auto variantString = list->lookupVariantNames[j].name;
-						FILE_PATH = modPath + getBuildingPicPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-						FILE_PATH = GAME_PATH + getBuildingPicPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-					}
-					list = list->next;
-				}
-			}
+			const auto variantName = variant->names.get(j);
+			const auto variantString = variantName->name;
+			FILE_PATH = modPath + getBuildingPicPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
+			FILE_PATH = GAME_PATH + getBuildingPicPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
 		}
-		lookUpVariants = lookUpVariants->next;
 	}
 	for (auto& i : level->buildingPic)
 	{
-		if (i.buildingPicPath != nullptr)
+		if (i.buildingPicPath != nullptr && i.picHash != 0)
 		{
 			FILE_PATH = i.buildingPicPath;
 			return FILE_PATH.data();
 		}
 	}
-	unitActions::logStringGame("getBuildingPic error: " + std::string(modPath + picPath));
+	gameHelpers::logStringGame("getBuildingPic error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_building.tga";
 	return FILE_PATH.data();
 }
@@ -473,7 +461,7 @@ char* __fastcall patchesForGame::getBuildingPicConstructed(buildingLevel* level,
 	if (cultureName.empty())
 		return nullptr;
 	const auto picPath = getBuildingPicConstructedPath(cultureName.c_str(), levelName);
-	const auto modPath = fastFuncts::GetModPath();
+	const auto modPath = gameHelpers::getModPath();
 	FILE_PATH = modPath + picPath;
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -483,42 +471,35 @@ char* __fastcall patchesForGame::getBuildingPicConstructed(buildingLevel* level,
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
 	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
-	auto lookUpVariants = &edb->lookupVariantsVector;
-	while(lookUpVariants)
+	const int variantNum = edb->lookupVariants.size();
+	for (int i = 0; i < variantNum; i++)
 	{
-		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		const auto variant = edb->lookupVariants.get(i);
+		const auto variantNamesSize = variant->names.size();
+		for (int j = 0; j < variantNamesSize; j++)
 		{
-			const auto variant = &lookUpVariants->lookupVariants[i];
-			if (strcmp(variant->name, cultureName.c_str()) == 0)
-			{
-				auto list = &variant->names;
-				while (list)
-				{
-					for (int j = 0; j < list->lookupVariantNamesNum; j++)
-					{
-						const auto variantString = list->lookupVariantNames[j].name;
-						FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-						FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-					}
-					list = list->next;
-				}
-			}
+			const auto variantName = variant->names.get(j);
+			const auto variantString = variantName->name;
+			FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
+			FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
 		}
-		lookUpVariants = lookUpVariants->next;
 	}
 	for (auto& i : level->buildingPicConstructed)
 	{
-		if (i.buildingPicPath != nullptr)
+		if (i.buildingPicPath != nullptr && i.picHash != 0)
 		{
 			FILE_PATH = i.buildingPicPath;
 			return FILE_PATH.data();
 		}
 	}
-	unitActions::logStringGame("getBuildingPicConstructed error: " + std::string(modPath + picPath));
+	gameHelpers::logStringGame("getBuildingPicConstructed error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_constructed_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_constructed_building.tga";
 	return FILE_PATH.data();
 }
@@ -532,7 +513,7 @@ char* __fastcall patchesForGame::getBuildingPicConstruction(buildingLevel* level
 	if (cultureName.empty())
 		return nullptr;
 	const auto picPath = getBuildingPicConstructionPath(cultureName.c_str(), levelName);
-	const auto modPath = fastFuncts::GetModPath();
+	const auto modPath = gameHelpers::getModPath();
 	FILE_PATH = modPath + picPath;
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -542,42 +523,35 @@ char* __fastcall patchesForGame::getBuildingPicConstruction(buildingLevel* level
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
 	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
-	auto lookUpVariants = &edb->lookupVariantsVector;
-	while(lookUpVariants)
+	const int variantNum = edb->lookupVariants.size();
+	for (int i = 0; i < variantNum; i++)
 	{
-		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		const auto variant = edb->lookupVariants.get(i);
+		const auto variantNamesSize = variant->names.size();
+		for (int j = 0; j < variantNamesSize; j++)
 		{
-			const auto variant = &lookUpVariants->lookupVariants[i];
-			if (strcmp(variant->name, cultureName.c_str()) == 0)
-			{
-				auto list = &variant->names;
-				while (list)
-				{
-					for (int j = 0; j < list->lookupVariantNamesNum; j++)
-					{
-						const auto variantString = list->lookupVariantNames[j].name;
-						FILE_PATH = modPath + getBuildingPicConstructionPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-						FILE_PATH = GAME_PATH + getBuildingPicConstructionPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-					}
-					list = list->next;
-				}
-			}
+			const auto variantName = variant->names.get(j);
+			const auto variantString = variantName->name;
+			FILE_PATH = modPath + getBuildingPicConstructionPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
+			FILE_PATH = GAME_PATH + getBuildingPicConstructionPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
 		}
-		lookUpVariants = lookUpVariants->next;
 	}
 	for (auto& i : level->buildingPicConstruction)
 	{
-		if (i.buildingPicPath != nullptr)
+		if (i.buildingPicPath != nullptr && i.picHash != 0)
 		{
 			FILE_PATH = i.buildingPicPath;
 			return FILE_PATH.data();
 		}
 	}
-	unitActions::logStringGame("getBuildingPicConstruction error: " + std::string(modPath + picPath));
+	gameHelpers::logStringGame("getBuildingPicConstruction error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_preconstructed_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_preconstructed_building.tga";
 	return FILE_PATH.data();
 }
@@ -603,7 +577,7 @@ char* patchesForGame::onGetGuildOfferPic(DWORD level, int cultureID)
 	if (cultureName.empty())
 		return nullptr;
 	const auto picPath = getBuildingPicConstructedPath(cultureName.c_str(), levelName);
-	const auto modPath = fastFuncts::GetModPath();
+	const auto modPath = gameHelpers::getModPath();
 	FILE_PATH = modPath + picPath;
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
@@ -613,42 +587,35 @@ char* patchesForGame::onGetGuildOfferPic(DWORD level, int cultureID)
 	if (std::filesystem::exists(FILE_PATH))
 		return FILE_PATH.data();
 	const auto edb = reinterpret_cast<exportDescrBuildings*>(dataOffsets::offsets.edbDataStart);
-	auto lookUpVariants = &edb->lookupVariantsVector;
-	while(lookUpVariants)
+	const int variantNum = edb->lookupVariants.size();
+	for (int i = 0; i < variantNum; i++)
 	{
-		for (int i = 0; i < lookUpVariants->lookupVariantsNum; i++)
+		const auto variant = edb->lookupVariants.get(i);
+		const auto variantNamesSize = variant->names.size();
+		for (int j = 0; j < variantNamesSize; j++)
 		{
-			const auto variant = &lookUpVariants->lookupVariants[i];
-			if (strcmp(variant->name, cultureName.c_str()) == 0)
-			{
-				auto list = &variant->names;
-				while (list)
-				{
-					for (int j = 0; j < list->lookupVariantNamesNum; j++)
-					{
-						const auto variantString = list->lookupVariantNames[j].name;
-						FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-						FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
-						if (std::filesystem::exists(FILE_PATH))
-							return FILE_PATH.data();
-					}
-					list = list->next;
-				}
-			}
+			const auto variantName = variant->names.get(j);
+			const auto variantString = variantName->name;
+			FILE_PATH = modPath + getBuildingPicConstructedPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
+			FILE_PATH = GAME_PATH + getBuildingPicConstructedPath(variantString, levelName);
+			if (std::filesystem::exists(FILE_PATH))
+				return FILE_PATH.data();
 		}
-		lookUpVariants = lookUpVariants->next;
 	}
 	for (auto& i : lvl->buildingPicConstructed)
 	{
-		if (i.buildingPicPath != nullptr)
+		if (i.buildingPicPath != nullptr && i.picHash != 0)
 		{
 			FILE_PATH = i.buildingPicPath;
 			return FILE_PATH.data();
 		}
 	}
-	unitActions::logStringGame("onGetGuildOfferPic error: " + std::string(modPath + picPath));
+	gameHelpers::logStringGame("onGetGuildOfferPic error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_preconstructed_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_constructed_building.tga";
 	return FILE_PATH.data();
 }
@@ -681,26 +648,20 @@ char* patchesForGame::onGetCultureEndTurnSound(int cultureID)
 	return sound.data();
 }
 
-int __fastcall patchesForGame::OnCreateMercUnitCheck(char** entryName, int eduindex)
+int __fastcall patchesForGame::onCreateMercUnitCheck(char** entryName, int eduIndex)
 {
-	if (eduindex == -1)
+	if (eduIndex == -1)
 	{
-		int* newEdu = eduThings::tryFindDataEopEdu(*entryName);
-
-		if (newEdu == nullptr)
-		{
-			return  -1;
-		}
-
+		if (!eopDu::getEopEduEntry(eduIndex))
+			return -1;
 		return 0;
 	}
-
-	return eduindex;
+	return eduIndex;
 }
 
 int __fastcall patchesForGame::onAttackGate(unit* un, void* tactic)
 {
-	auto eduEntry = un->eduEntry;
+	const auto eduEntry = un->eduEntry;
 	if (eduEntry == nullptr)
 		return 0;
 	if (eduEntry->mountedEngine)
@@ -714,52 +675,237 @@ int __fastcall patchesForGame::onAttackGate(unit* un, void* tactic)
 	return 0;
 }
 
-eduEntry* __fastcall patchesForGame::OnCreateMercUnit(char** entryName, eduEntry* entry)
+eduEntry* __fastcall patchesForGame::onCreateMercUnit(char** entryName, eduEntry* entry)
 {
-	DWORD entryAddr = (DWORD)entry;
-	DWORD mercEOPValue = codes::offsets.mercEOPValue;//this is some weird address made by subtracting a value from edu start or something I dont really remember but its necesarry
-	if (entryAddr == mercEOPValue)
+	const DWORD entryAddr = reinterpret_cast<DWORD>(entry);
+	if (const DWORD mercEopValue = codes::offsets.mercEOPValue; entryAddr == mercEopValue)
 	{
-		int* eduindex = eduThings::tryFindDataEopEduIndex(*entryName);
-		eduEntry* eopentry = eduThings::getEopEduEntry(*eduindex);
-		return eopentry;
-	}
-
-	return entry;
-}
-
-eduEntry* __fastcall patchesForGame::OnCreateUnitWrapper(int eduindexBase, int removeValue)
-{
-	int eduindex = eduindexBase - (removeValue * 8);
-	eduEntry* entry = eduThings::getEduEntry(eduindex);
-	if (entry == nullptr)
-	{
-		entry = eduThings::getEopEduEntry(eduindex);
+		eduEntry* eopEntry = eopDu::getEopEduEntryByName(*entryName);
+		return eopEntry;
 	}
 	return entry;
 }
 
-DWORD __fastcall patchesForGame::OnUnitInfo(DWORD entryAddress)
+eduEntry* __fastcall patchesForGame::onCreateUnitWrapper(int eduIndexBase, int removeValue)
 {
+	const int eduIndex = eduIndexBase - (removeValue * 8);
+	eduEntry* entry = eopDu::getEduEntry(eduIndex);
+	return entry;
+}
 
+DWORD __fastcall patchesForGame::onUnitInfo(DWORD entryAddress)
+{
 	DWORD eduBaseAddress = dataOffsets::offsets.unitTypesStart;
 	int index = (entryAddress - eduBaseAddress) / 996; // 996 is the size of the eduEntry struct
 	if (index < 500)
 	{
 		return entryAddress;
 	}
-	auto entry = eduThings::getEopEduEntry(index);
+	auto entry = eopDu::getEopEduEntry(index);
 	return reinterpret_cast<DWORD>(entry);
 }
 
-eduEntry* __fastcall patchesForGame::OnGetRecruitPoolUnitEntry(int eduIndex)
+eduEntry* __fastcall patchesForGame::onGetRecruitPoolUnitEntry(int eduIndex)
 {
-	eduEntry* entry = eduThings::getEduEntry(eduIndex);
-	if (entry == nullptr)
+	return eopDu::getEduEntry(eduIndex);
+}
+
+DWORD getVFunc(DWORD* addr, DWORD offset)
+{
+	DWORD vtbl = reinterpret_cast<DWORD>(addr);
+	return *reinterpret_cast<DWORD*>(vtbl + offset);
+}
+
+enum class groupMoveType
+{
+	formedStatic,
+	formed,						
+	unformedUnitsFormed,		
+	unformedUnitsUnformed,	
+};
+
+
+float distance(const float x, const float y, const float x2, const float y2)
+{
+	return static_cast<float>(sqrt(pow(x - x2, 2) + pow(y - y2, 2)));
+}
+
+void __fastcall patchesForGame::onPreBattlePlacement(aiTacticAssault* aiTactic)
+{
+	if (const auto battle = battleHelpers::getBattleData(); !battle || battle->battleState >= 5)
+		return;
+	const DWORD vFunc = getVFunc(aiTactic->vftable, 0x4C);
+	if (const int tacticType = GAME_FUNC_RAW(int(__thiscall*)(aiTacticAssault*), vFunc)(aiTactic); tacticType != 19)
+		return;
+	const auto group1 = &aiTactic->aiUnitGroup;
+	const auto group2 = &aiTactic->siegeUnitGroup;
+	const DWORD funcAddr = codes::offsets.issueMoveOrder;
+	GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, float*, int16_t, int, bool, bool), funcAddr)(
+		group1,
+		&aiTactic->advanceX,
+		aiTactic->angle,
+		static_cast<int>(groupMoveType::formed),
+		true,
+		true);
+	for (int i = 0; i < group1->unitsInFormationNum; i++)
 	{
-		entry = eduThings::getEopEduEntry(eduIndex);
+		if (const auto unit = group1->unitsInFormation[i];
+			distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 150)
+			unitActions::placeUnit(unit, aiTactic->advanceX, aiTactic->advanceY, aiTactic->angle, 0);
 	}
-	return entry;
+	GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, float*, int16_t, int, bool, bool), funcAddr)(
+		group2,
+		&aiTactic->advanceX,
+		aiTactic->angle,
+		static_cast<int>(groupMoveType::formed),
+		true,
+		true);
+	for (int i = 0; i < group2->unitsInFormationNum; i++)
+	{
+		if (const auto unit = group2->unitsInFormation[i];
+			distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 150)
+			unitActions::placeUnit(unit, aiTactic->advanceX, aiTactic->advanceY, aiTactic->angle, 0);
+	}
+}
+
+bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetachment* detachment, int numRamsLeft)
+{
+	if (numRamsLeft <= 0)
+		return false;
+	int numLaddersTowers = 0;
+	int numRams = 0;
+	int infCavNum = 0;
+	for (int i = 0; i < detachment->aiDetachUnitsCount; i++)
+	{
+		auto unit = detachment->aiDetachUnits[i].unit;
+		if (unit->eduEntry->category != unitCategory::siege
+			&& unit->eduEntry->unitClass != unitClass::missile
+			&& unit->eduEntry->unitClass != unitClass::skirmish)
+			infCavNum++;
+		if (unit->eduEntry->category != unitCategory::infantry)
+			continue;
+		if (unit->siegeEnNum == 0)
+			continue;
+		auto engine = unit->siegeEngines[0];
+		if (engine == nullptr)
+			continue;
+		if (engine->engineRec->classID == engineType::ram)
+			numRams++;
+		if (engine->engineRec->classID == engineType::ladder || engine->engineRec->classID == engineType::tower)
+			numLaddersTowers++;
+	}
+	auto battleData = battleHelpers::getBattleData();
+	battleSide* attacker = nullptr;
+	battleSide* defender = nullptr;
+	for (int i = 0; i < battleData->sidesNum; i++)
+	{
+		auto side = battleData->sides[i];
+		if (side.isDefender)
+			defender = &side;
+		else
+			attacker = &side;
+	}
+	auto defenderArmy = defender->armies[0].stack;
+	int infCavNumDef = 0;
+	if (defenderArmy)
+	{
+		for (int i = 0; i < defenderArmy->numOfUnits; i++)
+		{
+			if (auto unit = defenderArmy->units[i];
+				unit->eduEntry->category != unitCategory::siege
+			&& unit->eduEntry->unitClass != unitClass::missile
+			&& unit->eduEntry->unitClass != unitClass::skirmish)
+				infCavNumDef++;
+		}
+	}
+	auto battleSideArmy = attacker->armies[0];
+	auto deployArea = &battleSideArmy.deploymentAreas.get(0)->area;
+	auto areaX = deployArea->centreX;
+	auto areaY = deployArea->centreY;
+	int bonus = std::clamp(infCavNum - infCavNumDef, -3, 3);
+	int ramsNeeded = (infCavNum - numLaddersTowers) / (4 - bonus);
+	std::vector<buildingBattle*> gates{};
+	auto buildings = gate->battleResidence->battleBuildings;
+	for (int i = 0; i < buildings->allBuildingsNum; i++)
+	{
+		if (auto building = buildings->allBuildings[i]; building->type == 3)
+			gates.push_back(building);
+	}
+	std::sort(gates.begin(), gates.end(), [areaX, areaY](buildingBattle* a, buildingBattle* b)
+		{
+			return distance(a->xCoord, a->yCoord, areaX, areaY) < distance(b->xCoord, b->yCoord, areaX, areaY);
+		});
+	if (gate == gates[0])
+		return true;
+	int gateNum = static_cast<int>(gates.size());
+	ramsNeeded = std::clamp(ramsNeeded, 1, gateNum);
+	if (int ramsUsed = numRams - numRamsLeft; ramsUsed >= ramsNeeded)
+		return false;
+	if (ramsNeeded < gateNum)
+	{
+		for (int i = 0; i < gateNum - ramsNeeded; i++)
+			gates.pop_back();
+	}
+	bool isCloseEnough = false;
+	for (int i = 0; i < deployArea->coordsNum; i++)
+	{
+		if (distance(deployArea->coordsPairs[i].xCoord, deployArea->coordsPairs[i].yCoord, gate->xCoord, gate->yCoord) < 200)
+			isCloseEnough = true;
+		if (!gates.empty() && distance(gates[0]->xCoord, gates[0]->yCoord, gate->xCoord, gate->yCoord) < 125)
+			isCloseEnough = true;
+		if (isCloseEnough)
+			break;
+	}
+	if (!isCloseEnough)
+		return false;
+	if (std::any_of(gates.begin(), gates.end(), [gate](const buildingBattle* gt){return gate == gt;}))
+		return true;
+	return false;
+}
+
+bool __thiscall patchesForGame::onPreBattlePlacement2(aiUnitGroup* group, DWORD formationTemplate, bool forceOrder)
+{
+	DWORD orderChangeFormation = codes::offsets.issueFormationOrder;
+	auto retBool = GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, DWORD, bool), orderChangeFormation)(group, formationTemplate, forceOrder);
+	auto battle = battleHelpers::getBattleData();
+	if (battle->battleType != 3)
+		return retBool;
+	if (battle->battleState >= 5)
+		return retBool;
+	auto tactic = group->detachmentTactic;
+	if (!tactic)
+		return retBool;
+	DWORD vFunc = getVFunc(tactic->vftable, 0x4C);
+	int tacticType = GAME_FUNC_RAW(int(__thiscall*)(aiDetachmentTactic*), vFunc)(tactic);
+	if (tacticType != 19)
+		return retBool;
+	auto aiTactic = reinterpret_cast<aiTacticAssault*>(tactic);
+	float posX = aiTactic->building->xCoord;
+	float posY = aiTactic->building->yCoord;
+	aiTactic->advanceX = posX;
+	aiTactic->advanceY = posY;
+	auto group1 = aiTactic->aiUnitGroup;
+	auto angle = unitHelpers::angleShortToFloat(aiTactic->angle);
+	for (int i = 0; i < group1.unitsInFormationNum; i++)
+	{
+		auto unit = group1.unitsInFormation[i];
+		unitActions::placeUnit(unit, posX, posY, aiTactic->angle, 0);
+		gameHelpers::logStringGame("Unit placed at2: " + to_string(unit->positionX) + " " + to_string(unit->positionY) + " " + to_string(angle));
+		group1.xCoord = unit->positionX;
+		group1.yCoord = unit->positionY;
+		group1.angle = aiTactic->angle;
+	}
+	auto group2 = aiTactic->siegeUnitGroup;
+	for (int i = 0; i < group2.unitsInFormationNum; i++)
+	{
+		auto unit = group2.unitsInFormation[i];
+		unitActions::placeUnit(unit, posX, posY, aiTactic->angle, 0);
+		group2.xCoord = unit->positionX;
+		group2.yCoord = unit->positionY;
+		group2.angle = aiTactic->angle;
+		gameHelpers::logStringGame("Siege unit placed at2: " + to_string(unit->positionX) + " " + to_string(unit->positionY) + " " + to_string(angle));
+	}
+	return retBool;
 }
 
 const char* __fastcall patchesForGame::onQuickSave()
@@ -767,7 +913,7 @@ const char* __fastcall patchesForGame::onQuickSave()
 	static std::vector<std::string> saveNames = { u8"%S-1.sav" ,u8"%S-2.sav", u8"%S-3.sav" };
 	jsn::json json;
 
-	std::string fPath = globals::dataS.modPatch;
+	std::string fPath = globals::dataS.modPath;
 	fPath += "\\saves\\quickSavesM2TWEOP.json";
 
 	int currSaveID = 0;
@@ -830,7 +976,7 @@ const char* __fastcall patchesForGame::onAutoSave()
 	};
 	jsn::json json;
 
-	std::string fPath = globals::dataS.modPatch;
+	std::string fPath = globals::dataS.modPath;
 	fPath += "\\saves\\autoSavesM2TWEOP.json";
 
 	int currSaveID = 0;
@@ -886,41 +1032,50 @@ const char* __fastcall patchesForGame::onAutoSave()
 
 	return saveNames[currSaveID].c_str();
 }
-general* __fastcall patchesForGame::mercenaryMovepointsGetGeneral(stackStruct* army)
+character* __fastcall patchesForGame::mercenaryMovePointsGetGeneral(armyStruct* army)
 {
-	general* gen = army->gen;
+	character* gen = army->gen;
 	if (gen == nullptr)
 	{
 		if (army->settlement != nullptr)
 		{
-			fortStruct* ourFort = fastFuncts::findFort(army->settlement->xCoord, army->settlement->yCoord);
-			gen = ourFort->gubernator;
+			fortStruct* ourFort = reinterpret_cast<fortStruct*>(army->settlement);
+			const auto nextObject = ourFort->nextObject;
+			if (nextObject == nullptr)
+				return nullptr;
+			if (const int objectType = callVFunc<4, int>(nextObject); objectType == 4)
+			{
+				gen = static_cast<character*>(nextObject);
+			}
 		}
 
 	}
 	return gen;
 }
-void __fastcall patchesForGame::clickAtTile(int* xy)
+void __fastcall patchesForGame::clickAtTile(coordPair* xy)
 {
-	plugins::onClickAtTile(xy[0], xy[1]);
+	gameEvents::onClickAtTile(xy->xCoord, xy->yCoord);
+	plannedRetreatRoute::onClickAtTile(xy->xCoord, xy->yCoord);
 }
 void __stdcall patchesForGame::afterCampaignMapLoaded()
 {
-	plugins::onCampaignMapLoaded();
+	discordManager::onCampaignMapLoaded();
+	globals::dataS.Modules.tacticalMapViewer.unView();
+	gameEvents::onCampaignMapLoaded();
 }
+
 void __stdcall patchesForGame::onNewGameStart()
 {
-	plugins::onNewGameStart();
-
-
-	PlannedRetreatRoute::OnNewGameStart();
-
-
+	eopSettlementDataDb::get()->clearData();
+	gameEvents::onNewGameStart();
+	plannedRetreatRoute::onNewGameStart();
 }
+
 //#define TESTPATCHES
-void __stdcall patchesForGame::afterEDUread()
+void __stdcall patchesForGame::onEduParsed()
 {
-	plugins::onReadGameDbsAtStart();
+	unitHelpers::initBaseUnitsLookup();
+	gameEvents::onReadGameDbsAtStart();
 #if defined TESTPATCHES
 	ofstream f1("logs\\TESTPATCHES.log", ios::app);
 
@@ -931,17 +1086,24 @@ void __stdcall patchesForGame::afterEDUread()
 
 void __stdcall patchesForGame::onGameInit()
 {
-	plugins::onGameInit();
+	cultures::eopPortraitDb::createEopPortraitDb();
+	gameEvents::onGameInit();
 }
 
 void __stdcall patchesForGame::onUnloadCampaign()
 {
-	plugins::onUnloadCampaign();
+	gameEvents::onUnloadCampaign();
 }
 
-void __fastcall patchesForGame::onAiTurn(aiFaction* aifaction)
+void __stdcall patchesForGame::onNewGameLoaded()
 {
-	plugins::onAiTurn(aifaction);
+	plugData::data.luaAll.fillHashMaps();
+	gameEvents::onNewGameLoaded();
+}
+
+void __fastcall patchesForGame::onAiTurn(aiFaction* aiFac)
+{
+	gameEvents::onAiTurn(aiFac);
 }
 
 void __stdcall patchesForGame::onChangeTurnNum()
@@ -951,11 +1113,10 @@ void __stdcall patchesForGame::onChangeTurnNum()
 
 	f1 << "onChangeTurnNum" << endl;
 	f1.close();
-
-
 #endif
-
-	plugins::onChangeTurnNum();
+	const int num = campaignHelpers::getCampaignData()->turnNumber;
+	discordManager::onChangeTurnNum(num);
+	gameEvents::onChangeTurnNum(num);
 }
 
 void __stdcall patchesForGame::onGiveTrait()
@@ -1073,17 +1234,79 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	f1 << "onEvent" << endl;
 	f1.close();
 #endif
-	plugins::onEvent(vTab, arg2);
+
+	const DWORD eventCode = reinterpret_cast<DWORD>(vTab[0]);
+	gameEvents::onEventWrapper(eventCode, vTab);
+
+	const int gameVersion = gameHelpers::getGameVersion();
+	const DWORD scrollOpenedCode = gameVersion == 1 ? 0x013719FC : 0x0132C9D4;
+	const DWORD factionTurnStartCode = gameVersion == 1 ? 0x0136931C : 0x013242F4;
+	const DWORD gameReloaded = gameVersion == 1 ? 0x013319E4 : 0x012EC9C4;
+	if (eventCode == scrollOpenedCode)
+	{
+		char* str = reinterpret_cast<char*>(vTab[1]);
+		if (strcmp(str, "prebattle_scroll") == 0)
+		{
+			battleCreator::onBattleStratScreen();
+		}
+		else if (strcmp(str, "post_battle_scroll") == 0)
+		{
+			battleCreator::onPostBattleStratScreen();
+		}
+		else if (strcmp(str, "hotseat_scroll") == 0)
+		{
+			battleCreator::onHotseatScreen();
+		}
+	}
+	else if (eventCode == factionTurnStartCode)
+	{
+		factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
+		discordManager::onFactionTurnStart(fac);
+		plannedRetreatRoute::onFactionTurnStart(fac);
+	}
+	else if (eventCode == gameReloaded)
+	{
+		eopSettlementDataDb::get()->onGameLoaded();
+	}
 }
 
 void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
 {
-	plugins::onLoadGame(savePath);
+	const string relativePath = techFuncs::uniToANSI(savePath);
+	vector<string> files = techFuncs::getEopArchiveFiles(relativePath);
+	if (files.empty())
+	{
+		onSaveGame(savePath);
+		vector<string> newFiles = techFuncs::getEopArchiveFiles(relativePath);
+		for (string& path : newFiles)
+		{
+			files.push_back(path);
+		}
+	}
+	files = techFuncs::loadGameLoadArchive(files, savePath);
+	gameEvents::onLoadGamePl(&files);
+	plannedRetreatRoute::onGameLoad(files);
+	eopSettlementDataDb::get()->onGameLoad(files);
+
+	techFuncs::deleteFiles(files);
 }
 
 void __fastcall patchesForGame::onSaveGame(UNICODE_STRING**& savePath)
 {
-	plugins::onSaveGame(savePath);
+	vector<string>files;
+	vector<string>* plugFiles = gameEvents::onSaveGamePl(savePath);
+	for (string& path : *plugFiles)
+	{
+		files.push_back(path);
+	}
+
+	delete plugFiles;
+	if (const std::string retreatsFile = plannedRetreatRoute::onGameSave(); !retreatsFile.empty())
+		files.push_back(retreatsFile);
+	if (const std::string settlementData = eopSettlementDataDb::get()->onGameSave(); !settlementData.empty())
+		files.push_back(settlementData);
+	techFuncs::saveGameMakeArchive(savePath, files);
+	techFuncs::deleteFiles(files);
 }
 
 void __fastcall patchesForGame::onTileCheck(int* coords)
@@ -1175,97 +1398,81 @@ void __stdcall patchesForGame::onStartOfDrawFunction()
 
 void __stdcall patchesForGame::onRetreat()
 {
-	PlannedRetreatRoute::OnRetreat();
+	plannedRetreatRoute::onRetreat();
 }
 
-void __fastcall patchesForGame::OnStopCharacter(general* character)
+void __fastcall patchesForGame::onStopCharacter(character* character)
 {
-	auto& campaign = smallFuncs::getGameDataAll()->campaignData;
-	if (campaign->humanPlayers < 2)
-	{
+	if (const auto campaign = campaignHelpers::getCampaignData(); campaign->humanPlayers < 2)
 		character->isStopCharacterNeeded = 1;
-	}
 }
 
-eduEntry* __fastcall patchesForGame::recruitEOPunit(int eduIndex)
+eduEntry* __fastcall patchesForGame::recruitEopUnit(int eduIndex)
 {
-	eduEntry* entry = eduThings::getEduEntry(eduIndex);
+	eduEntry* entry = eopDu::getEduEntry(eduIndex);
 	if (entry == nullptr)
 	{
-		entry = eduThings::getEopEduEntry(eduIndex);
+		entry = eopDu::getEopEduEntry(eduIndex);
 	}
 	return entry;
 }
 
-void __fastcall patchesForGame::recruitEOPunit2(int eduIndex)
+void __fastcall patchesForGame::recruitEopUnit2(int eduIndex)
 {
-	eduEntry* entry = eduThings::getEduEntry(eduIndex);
+	eduEntry* entry = eopDu::getEduEntry(eduIndex);
 	if (entry == nullptr)
 	{
-		entry = eduThings::getEopEduEntry(eduIndex);
+		entry = eopDu::getEopEduEntry(eduIndex);
 	}
 	if (entry)
 	{
-		entry->UnitCreatedCounter++;
+		entry->unitCreatedCounter++;
 	}
 }
 
 eduEntry* __fastcall patchesForGame::onReadDescrRebel(DWORD value)
 {
 	const DWORD eduIndex = (value * 4) / 996;
-	eduEntry* entry = eduThings::getEduEntry(eduIndex);
-	if (entry == nullptr)
-		entry = eduThings::getEopEduEntry(eduIndex);
-	return entry;
+	return eopDu::getEduEntry(eduIndex);
 }
 
-void __fastcall patchesForGame::recruitEOPMercunit(DWORD pad, DWORD pad2, regionStruct* region, int eduindex, int factionid, int exp)
+void __fastcall patchesForGame::recruitEopMercUnit(DWORD pad, DWORD pad2, regionStruct* region, int eduIndex, int factionID, int exp)
 {
 	int regionID = region->regionID;
-	if (eduindex > 499)
-	{
-		int eopIDX = eduThings::getDataEopEdu(eduindex);
-		fastFuncts::createUnitEDB(eopIDX, regionID, factionid, exp, 0, 0);
-	}
-	else
-	{
-		fastFuncts::createUnitIdx(eduindex, regionID, factionid, exp, 0, 0);
-	}
+	unitHelpers::createUnitIdx(eduIndex, regionID, factionID, exp, 0, 0);
 }
 
-void WINAPI patchesForGame::OnMoveRecruitQueue()
+void WINAPI patchesForGame::onMoveRecruitQueue()
 {
-	auto& campaign = smallFuncs::getGameDataAll()->campaignData;
-	if (campaign->humanPlayers < 2)
-	{
+	if (const auto campaign = campaignHelpers::getCampaignData(); campaign->humanPlayers < 2)
 		return;
-	}
-
-	MessageBoxA(NULL, "Moving queue disabled in hotseat mode. EXIT NOW!!!!!", "ATTENTION!", NULL);
+	MessageBoxA(nullptr, "Moving queue disabled in hotseat mode. EXIT NOW!!!!!", "ATTENTION!", NULL);
 	std::terminate();
 }
 
 void __fastcall patchesForGame::onEndSiege(settlementStruct* sett)
 {
-	plugins::onEndSiege(sett);
+	const int x = sett->xCoord;
+	const int y = sett->yCoord;
+	gameEvents::onEndSiege(x, y);
 }
 
 void __fastcall patchesForGame::onStartSiege(settlementStruct* sett)
 {
-	if (sett->siegesNumber == 0)
+	if (sett->siegeNum == 0)
 	{
 		return;
 	}
-	plugins::onStartSiege(sett);
+	const int x = sett->xCoord;
+	const int y = sett->yCoord;
+	gameEvents::onStartSiege(x, y);
 }
 
-
-
-void __fastcall patchesForGame::onLoadDescrBattleCharacter(stackStruct* army, general* goalGen)
+void __fastcall patchesForGame::onLoadDescrBattleCharacter(armyStruct* army, character* goalGen)
 {
-	fastFuncts::setBodyguardStart(goalGen, army->units[0]);//we replace game function what set army leader character.
+	characterHelpers::setBodyguard(goalGen, army->units[0]);//we replace game function what set army leader character.
 
-	std::string relativePath = techFuncs::uniToANSI(smallFuncs::getGameDataAll()->campaignData->currentDescrFile);
+	std::string relativePath = techFuncs::uniToANSI(campaignHelpers::getCampaignData()->currentDescrFile);
 
 	if (relativePath.find("battle") != std::string::npos)
 	{
@@ -1276,9 +1483,8 @@ void __fastcall patchesForGame::onLoadDescrBattleCharacter(stackStruct* army, ge
 
 void __stdcall patchesForGame::onBattleStateChange()
 {
-	int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
 	//results screen
-	if (battleState == 9)
+	if (battleHelpers::getBattleData()->battleState == 9)
 	{
 		battleCreator::onBattleResultsScreen();
 	}
@@ -1305,17 +1511,17 @@ struct
 {
 	bool isComingFromConsole = false;
 }logonConsoleD;
-void __stdcall patchessForConsole::onGameConsoleCommandFromConsole()
+void __stdcall consolePatches::onGameConsoleCommandFromConsole()
 {
 	logonConsoleD.isComingFromConsole = true;
 }
 
-void __stdcall patchessForConsole::onGameConsoleCommandFromScript()
+void __stdcall consolePatches::onGameConsoleCommandFromScript()
 {
 	logonConsoleD.isComingFromConsole = false;
 }
 
-int __fastcall patchessForConsole::OnReadLogonOrLogoff(int isLogonNow)
+int __fastcall consolePatches::onReadLogonOrLogoff(int isLogonNow)
 {
 	if (logonConsoleD.isComingFromConsole == true)
 	{

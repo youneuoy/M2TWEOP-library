@@ -1,16 +1,17 @@
+#include "pch.h"
 #include "fbxHelper.h"
 namespace fbxHelper
 {
     struct
     {
-        fbxsdk::FbxManager* sdkManager=nullptr;
+        FbxManager* sdkManager=nullptr;
     }data;
-    static  fbxsdk::FbxManager* initFbxManager()
+    static  FbxManager* initFbxManager()
     {
-        fbxsdk::FbxManager*fbxMan= FbxManager::Create();
+        FbxManager*fbxMan= FbxManager::Create();
 
         // Create an IOSettings object. This object holds all import settings.
-        fbxsdk::FbxIOSettings* ioSettingsPtr = FbxIOSettings::Create(fbxMan, IOSROOT);
+        FbxIOSettings* ioSettingsPtr = FbxIOSettings::Create(fbxMan, IOSROOT);
         fbxMan->SetIOSettings(ioSettingsPtr);
 
         // I probably could have made more things false for this example. You might want
@@ -27,7 +28,7 @@ namespace fbxHelper
 
         return fbxMan;
     }
-    fbxsdk::FbxManager*getFbxManager()
+    FbxManager* getFbxManager()
     {
         if (data.sdkManager == nullptr)
         {

@@ -168,20 +168,8 @@
     <ClInclude Include="themeManager.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="textEditor.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="functionsOffsets.h">
       <Filter>Source Files\data</Filter>
-    </ClInclude>
-    <ClInclude Include="plugins.h">
-      <Filter>Source Files\plugins</Filter>
-    </ClInclude>
-    <ClInclude Include="eventsCodes.h">
-      <Filter>Source Files\data</Filter>
-    </ClInclude>
-    <ClInclude Include="fastFuncts.h">
-      <Filter>Source Files\functions</Filter>
     </ClInclude>
     <ClInclude Include="dataOffsets.h">
       <Filter>Source Files\data</Filter>
@@ -192,47 +180,14 @@
     <ClInclude Include="stratModelsChange.h">
       <Filter>Features\stratModels</Filter>
     </ClInclude>
-    <ClInclude Include="tests.h">
-      <Filter>Source Files\test</Filter>
-    </ClInclude>
-    <ClInclude Include="actionsStrat.h">
-      <Filter>Source Files\functions\stratActions</Filter>
-    </ClInclude>
     <ClInclude Include="tilesChange.h">
       <Filter>Features\customTiles</Filter>
-    </ClInclude>
-    <ClInclude Include="fastFunctsHelpers.h">
-      <Filter>Source Files\functions\helpers</Filter>
     </ClInclude>
     <ClInclude Include="graphicsD3D.h">
       <Filter>3rd\dif</Filter>
     </ClInclude>
     <ClInclude Include="exportHeader.h">
       <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imconfig.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imgui.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imgui_impl_dx9.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imgui_impl_win32.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imgui_internal.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imstb_rectpack.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imstb_textedit.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imstb_truetype.h">
-      <Filter>3rd\imgui</Filter>
     </ClInclude>
     <ClInclude Include="headersMEM.h">
       <Filter>Source Files\headers</Filter>
@@ -245,12 +200,6 @@
     </ClInclude>
     <ClInclude Include="technicalStringsFuncs.h">
       <Filter>Source Files\functions</Filter>
-    </ClInclude>
-    <ClInclude Include="smallFuncs.h">
-      <Filter>Source Files\functions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\eopImgui.h">
-      <Filter>3rd\imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\3rd\miniz\miniz.h">
       <Filter>3rd\miniz</Filter>
@@ -282,12 +231,6 @@
     <ClInclude Include="..\3rd\ImNotify\imgui_notify.h">
       <Filter>3rd\ImNotify</Filter>
     </ClInclude>
-    <ClInclude Include="eduThings.h">
-      <Filter>Features\eduThings</Filter>
-    </ClInclude>
-    <ClInclude Include="eduFastFuncts.h">
-      <Filter>Features\eduThings</Filter>
-    </ClInclude>
     <ClInclude Include="discordManager.h">
       <Filter>Features\eduThings</Filter>
     </ClInclude>
@@ -300,22 +243,10 @@
     <ClInclude Include="onlineThings2.h">
       <Filter>Features\onlineThings</Filter>
     </ClInclude>
-    <ClInclude Include="..\3rd\imgui\ImFileDialog.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\stb_image.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imgui_stdlib.h">
-      <Filter>3rd\imgui</Filter>
-    </ClInclude>
     <ClInclude Include="m2tweopMap.h">
       <Filter>Features\interactiveMap</Filter>
     </ClInclude>
     <ClInclude Include="m2tweopTile.h">
-      <Filter>Features\interactiveMap</Filter>
-    </ClInclude>
-    <ClInclude Include="m2tweopMapManager.h">
       <Filter>Features\interactiveMap</Filter>
     </ClInclude>
     <ClInclude Include="settlementConversionLvlSetter.h">
@@ -414,14 +345,8 @@
     <ClInclude Include="BattleMapOverrider.h">
       <Filter>Features\DeveloperMode\BattleMapOverrider</Filter>
     </ClInclude>
-    <ClInclude Include="RecruitSystem.h">
-      <Filter>Features\RecruitSystem</Filter>
-    </ClInclude>
     <ClInclude Include="MmbMover.h">
       <Filter>Features\mmbMover</Filter>
-    </ClInclude>
-    <ClInclude Include="TacticalMapVeiwer.h">
-      <Filter>Features\tacticalMapVeiwer</Filter>
     </ClInclude>
     <ClInclude Include="Injects.h">
       <Filter>Source Files\injections</Filter>
@@ -429,14 +354,8 @@
     <ClInclude Include="ContextMenuStrat.h">
       <Filter>Features\ContextMenuStrat</Filter>
     </ClInclude>
-    <ClInclude Include="RSExport.h">
-      <Filter>Features\RecruitSystem</Filter>
-    </ClInclude>
     <ClInclude Include="casModelsDrawer.h">
       <Filter>Features\casModelsDrawer</Filter>
-    </ClInclude>
-    <ClInclude Include="eopBuildings.h">
-      <Filter>Features\eopBuildings</Filter>
     </ClInclude>
     <ClInclude Include="..\3rd\discord\achievement_manager.h">
       <Filter>3rd\discord</Filter>
@@ -452,9 +371,6 @@
     </ClInclude>
     <ClInclude Include="..\3rd\discord\discord.h">
       <Filter>3rd\discord</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\cpptoml\cpptoml.h">
-      <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="..\3rd\discord\event.h">
       <Filter>3rd\discord</Filter>
@@ -513,7 +429,118 @@
     <ClInclude Include="Retreater.h">
       <Filter>Features\Retreats\Retreater</Filter>
     </ClInclude>
-    <ClInclude Include="MasterDefines.h">
+    <ClInclude Include="..\3rd\cpptoml\cpptoml.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\ImFileDialog.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="console.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cultures.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="eopFbxHelpers.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsEvents.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\eopImgui.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_dx9.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_win32.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_stdlib.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\sol_ImGui.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="gameStringHelpers.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="luaPlugin.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="tacticalMapViewer.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\army.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\battle.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\campaign.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\campaignDb.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\character.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\characterRecord.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\eopBuildings.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\eopdu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\events.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\faction.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\fort.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\gameHelpers.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\gameUi.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\mapImage.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\strategyMap.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\settlement.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\unit.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -533,12 +560,6 @@
     <ClCompile Include="functionsOffsets.cpp">
       <Filter>Source Files\data</Filter>
     </ClCompile>
-    <ClCompile Include="plugins.cpp">
-      <Filter>Source Files\plugins</Filter>
-    </ClCompile>
-    <ClCompile Include="fastFuncts.cpp">
-      <Filter>Source Files\functions</Filter>
-    </ClCompile>
     <ClCompile Include="dataOffsets.cpp">
       <Filter>Source Files\data</Filter>
     </ClCompile>
@@ -551,53 +572,20 @@
     <ClCompile Include="stratModelsHelper.cpp">
       <Filter>Features\stratModels</Filter>
     </ClCompile>
-    <ClCompile Include="actionsStrat.cpp">
-      <Filter>Source Files\functions\stratActions</Filter>
-    </ClCompile>
     <ClCompile Include="discordManager.cpp">
       <Filter>Source Files\functions\stratActions</Filter>
     </ClCompile>
     <ClCompile Include="jsonManager.cpp">
       <Filter>Source Files\functions\stratActions</Filter>
     </ClCompile>
-    <ClCompile Include="actionsStratHelpers.cpp">
-      <Filter>Source Files\functions\stratActions</Filter>
-    </ClCompile>
     <ClCompile Include="tilesChange.cpp">
       <Filter>Features\customTiles</Filter>
-    </ClCompile>
-    <ClCompile Include="fastFunctsHelpers.cpp">
-      <Filter>Source Files\functions\helpers</Filter>
     </ClCompile>
     <ClCompile Include="graphicsD3D.cpp">
       <Filter>3rd\dif</Filter>
     </ClCompile>
-    <ClCompile Include="..\3rd\imgui\imgui.cpp">
-      <Filter>3rd\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\imgui\imgui_draw.cpp">
-      <Filter>3rd\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\imgui\imgui_impl_dx9.cpp">
-      <Filter>3rd\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\imgui\imgui_impl_win32.cpp">
-      <Filter>3rd\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\imgui\imgui_tables.cpp">
-      <Filter>3rd\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\imgui\imgui_widgets.cpp">
-      <Filter>3rd\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="technicalStringsFuncs.cpp">
       <Filter>Source Files\functions</Filter>
-    </ClCompile>
-    <ClCompile Include="smallFuncs.cpp">
-      <Filter>Source Files\functions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\imgui\eopImgui.cpp">
-      <Filter>3rd\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\3rd\miniz\miniz.c">
       <Filter>3rd\miniz</Filter>
@@ -608,35 +596,17 @@
     <ClCompile Include="onlineThings.cpp">
       <Filter>Features\onlineThings</Filter>
     </ClCompile>
-    <ClCompile Include="eduThings.cpp">
-      <Filter>Features\eduThings</Filter>
-    </ClCompile>
-    <ClCompile Include="eduFastFuncts.cpp">
-      <Filter>Features\eduThings</Filter>
-    </ClCompile>
     <ClCompile Include="fbxModels.cpp">
       <Filter>Features\fbxModels</Filter>
     </ClCompile>
     <ClCompile Include="onlineThings2.cpp">
       <Filter>Features\onlineThings</Filter>
     </ClCompile>
-    <ClCompile Include="..\3rd\imgui\ImFileDialog.cpp">
-      <Filter>3rd\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\imgui\imgui_stdlib.cpp">
-      <Filter>3rd\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="m2tweopMap.cpp">
       <Filter>Features\interactiveMap</Filter>
     </ClCompile>
     <ClCompile Include="m2tweopTile.cpp">
       <Filter>Features\interactiveMap</Filter>
-    </ClCompile>
-    <ClCompile Include="m2tweopMapManager.cpp">
-      <Filter>Features\interactiveMap</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rd\imgui\imgui_demo.cpp">
-      <Filter>3rd\imgui</Filter>
     </ClCompile>
     <ClCompile Include="settlementConversionLvlSetter.cpp">
       <Filter>Features\settlementConversionLvlSetter</Filter>
@@ -713,14 +683,8 @@
     <ClCompile Include="BattleMapOverrider.cpp">
       <Filter>Features\DeveloperMode\BattleMapOverrider</Filter>
     </ClCompile>
-    <ClCompile Include="RecruitSystem.cpp">
-      <Filter>Features\RecruitSystem</Filter>
-    </ClCompile>
     <ClCompile Include="MmbMover.cpp">
       <Filter>Features\mmbMover</Filter>
-    </ClCompile>
-    <ClCompile Include="TacticalMapVeiwer.cpp">
-      <Filter>Features\tacticalMapVeiwer</Filter>
     </ClCompile>
     <ClCompile Include="Injects.cpp">
       <Filter>Source Files\injections</Filter>
@@ -728,14 +692,8 @@
     <ClCompile Include="ContextMenuStrat.cpp">
       <Filter>Features\ContextMenuStrat</Filter>
     </ClCompile>
-    <ClCompile Include="RSExport.cpp">
-      <Filter>Features\RecruitSystem</Filter>
-    </ClCompile>
     <ClCompile Include="casModelsDrawer.cpp">
       <Filter>Features\casModelsDrawer</Filter>
-    </ClCompile>
-    <ClCompile Include="eopBuildings.cpp">
-      <Filter>Features\eopBuildings</Filter>
     </ClCompile>
     <ClCompile Include="..\3rd\discord\achievement_manager.cpp">
       <Filter>3rd\discord</Filter>
@@ -800,7 +758,133 @@
     <ClCompile Include="themeManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="textEditor.cpp">
+    <ClCompile Include="console.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cultures.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="eopFbxHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="graphicsEvents.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\eopImgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\ImFileDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_dx9.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_win32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_stdlib.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\sol_ImGui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\sol_ImGui_enums.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\sol_ImGui_enums2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\sol_ImGui_keys.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gameStringHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="luaEop3dObjects.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="luaFbx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="luaLegacy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="luaPlugin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="luaEnums.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="luaSounds.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tacticalMapViewer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\army.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\battle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\campaign.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\campaignDb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\character.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\characterRecord.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\eopBuildings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\eopdu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\events.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\faction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\fort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\gameHelpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\gameUi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\mapImage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\strategyMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\settlement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\unit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

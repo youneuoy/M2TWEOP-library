@@ -1,7 +1,14 @@
 #pragma once
-#include "plugins.h"
 #include "stratModelsChange.h"
 #include "graphicsD3D.h"
+#include "cultures.h"
+#include "unit.h"
+
+struct regionStruct;
+struct aiFaction;
+struct buildingLevel;
+struct edbEntry;
+
 class patchesForGame
 {
 public:
@@ -9,19 +16,22 @@ public:
 	static worldRecord* __fastcall selectWorldpkgdesc(char* database, worldRecord* selectedRecord);
 
 
-	static void __fastcall OnLoadSettlementWorldpkgdesc(worldRecord* selectedRecord);
-	static int __fastcall onfortificationlevelS(settlementStruct* settlement, bool* isCastle);
+	static void __fastcall onLoadSettlementWorldpkgdesc(worldRecord* selectedRecord);
+	static int __fastcall onFortificationLevelS(settlementStruct* settlement, bool* isCastle);
 	static char* __fastcall onSaveEDUStringS(eduEntry* eduEntry);
-	static int __fastcall onCreateUnit(char** entryName, int* edbIndex);
-	static int __fastcall OnCreateMercUnitCheck(char** entryName, int eduindex);
-	static eduEntry* __fastcall OnCreateMercUnit(char** entryName, eduEntry* entry);
-	static eduEntry* __fastcall OnCreateUnitWrapper(int eduindexBase, int removeValue);
+	static int __fastcall onCreateUnit(char** entryName, int* eduIndex);
+	static int __fastcall onCreateMercUnitCheck(char** entryName, int eduIndex);
+	static void __fastcall onPreBattlePlacement(aiTacticAssault* aiTactic);
+	static bool __thiscall onPreBattlePlacement2(aiUnitGroup* group, DWORD formationTemplate, bool forceOrder);
+	static eduEntry* __fastcall onCreateMercUnit(char** entryName, eduEntry* entry);
+	static eduEntry* __fastcall onCreateUnitWrapper(int eduIndexBase, int removeValue);
+	static bool __fastcall onDecideRamAttacks(buildingBattle* gate, aiDetachment* detachment, int numRamsLeft);
 	static const char* __fastcall onQuickSave();
 	static const char* __fastcall onAutoSave();
-	static eduEntry* __fastcall OnGetRecruitPoolUnitEntry(int eduIndex);
-	static int __fastcall onFindUnit(char* entry, int* edbIndex);
-	static DWORD __fastcall OnUnitInfo(DWORD entryAddress);
-	static float __fastcall OnCalculateUnitValue(eduEntry* entry, DWORD value);
+	static eduEntry* __fastcall onGetRecruitPoolUnitEntry(int eduIndex);
+	static int __fastcall onFindUnit(char* entry, int* eduIndex);
+	static DWORD __fastcall onUnitInfo(DWORD entryAddress);
+	static float __fastcall onCalculateUnitValue(eduEntry* entry, DWORD value);
 	static int __fastcall onEvaluateUnit(int eduIndex);
 	static DWORD __fastcall onCustomBattleUnitCards(DWORD cardArrayThing, int factionID);
 	static int __fastcall onCustomBattleUnits(eduEntry** unitArray, int currentCount, int factionID);
@@ -29,7 +39,7 @@ public:
 	static eduEntry* __fastcall onEvaluateUnit2(int eduIndex);
 	static eduEntry* __fastcall onReadDescrRebel(DWORD value);
 	static DWORD __fastcall onSearchUnitType(char* typeName);
-	static int __fastcall OnReligionCombatBonus(int religionID, namedCharacter* namedChar);
+	static int __fastcall onReligionCombatBonus(int religionID, characterRecord* namedChar);
 	static char* __fastcall getBrowserPicConstructed(int cultureID, edbEntry* entry, int buildingLevel);
 	static char* __fastcall getBrowserPicConstruction(int cultureID, edbEntry* entry, int buildingLevel);
 	static char* __fastcall getBuildingPic(buildingLevel* level, int cultureID);
@@ -42,10 +52,10 @@ public:
 	static char* __fastcall onGetCultureEndTurnSound(int cultureID);
 
 
-	static general* __fastcall mercenaryMovepointsGetGeneral(stackStruct* army);
+	static character* __fastcall mercenaryMovePointsGetGeneral(armyStruct* army);
 
 	//click at tile
-	static void __fastcall clickAtTile(int* xy);
+	static void __fastcall clickAtTile(coordPair* xy);
 
 	//after loading of campaign map
 	static void WINAPI afterCampaignMapLoaded();
@@ -53,12 +63,12 @@ public:
 	//after new game start
 	static void WINAPI onNewGameStart();
 	//after reading EDU
-	static void WINAPI afterEDUread();
+	static void WINAPI onEduParsed();
 	static void WINAPI onGameInit();
 	static void WINAPI onUnloadCampaign();
-	static void __fastcall onAiTurn(aiFaction* aifaction);
-
-
+	static void WINAPI onNewGameLoaded();
+	static void __fastcall onAiTurn(aiFaction* aiFac);
+	
 	//before start of a first faction turn
 	static void WINAPI onChangeTurnNum();
 
@@ -109,45 +119,37 @@ public:
 	//moment before game start select stratmap models for drawing
 	//replace models for the settlements, forts, ports, etc here without craches
 	static void WINAPI checkAndChangeModels();
-
-
-
+	
 	static void WINAPI battleLoaded();
 	static void WINAPI toReadGameDbsAtStart();
-
-
+	
 	static void WINAPI onDrawPartsOfStratObjects();
 	static void WINAPI onDrawAll();
 	static void WINAPI onStartOfDrawFunction();
 	static void WINAPI onRetreat();
 
 
-	static void __fastcall OnStopCharacter(general* character);
-	static void WINAPI OnMoveRecruitQueue();
-	static eduEntry* __fastcall recruitEOPunit(int eduIndex);
-	static void __fastcall recruitEOPunit2(int eduIndex);
-	static void __fastcall recruitEOPMercunit(DWORD pad, DWORD pad2, regionStruct* region, int eduindex, int factionid, int exp);
+	static void __fastcall onStopCharacter(character* character);
+	static void WINAPI onMoveRecruitQueue();
+	static eduEntry* __fastcall recruitEopUnit(int eduIndex);
+	static void __fastcall recruitEopUnit2(int eduIndex);
+	static void __fastcall recruitEopMercUnit(DWORD pad, DWORD pad2, regionStruct* region, int eduIndex, int factionID, int exp);
 
 
 	static void __fastcall onEndSiege(settlementStruct* sett);
 	static void __fastcall onStartSiege(settlementStruct* sett);
-	static void __fastcall onLoadDescrBattleCharacter(stackStruct* army, general* goalGen);
+	static void __fastcall onLoadDescrBattleCharacter(armyStruct* army, character* goalGen);
 
 
 	//called not in all cases!
 	static void WINAPI onBattleStateChange();
-
-	/*
-	static int* __fastcall ontryFindTypeIdInListRecruitPoolEDB(char* unitTypeString);
-	static EduEntry* __fastcall onrecruitPoolFillFromFile(int eduIndex);
-	*/
 };
 
-class patchessForConsole
+class consolePatches
 {
 public:
 	static void WINAPI onGameConsoleCommandFromConsole();
 	static void WINAPI onGameConsoleCommandFromScript();
 
-	static int __fastcall OnReadLogonOrLogoff(int isLogonNow);
+	static int __fastcall onReadLogonOrLogoff(int isLogonNow);
 };

@@ -1,7 +1,19 @@
+#include "pch.h"
 #include "onlineThings2.h"
 
+#include "imgui/imgui.h"
+#include <d3d9.h>
+
+#include "globals.h"
+#include "character.h"
+#include "faction.h"
+#include "unit.h"
+#include "battle.h"
+#include "army.h"
+#include "characterRecord.h"
+#include "gameUi.h"
 #include "imgui_notify.h"
-#include "fastFunctsHelpers.h"
+
 namespace battleCreator
 {
 	struct genDataS
@@ -21,11 +33,11 @@ namespace battleCreator
 
 	struct unitDataS
 	{
-		unitDataS() {};
+		unitDataS() {}
 		unitDataS(unit*un,int pnumberInArmy)
 		{
 			numberInArmy = pnumberInArmy;
-			type = un->eduEntry->Type;
+			type = un->eduEntry->eduType;
 			soldiersNumber = un->SoldierCountStrat;
 			exp = un->expScreen;
 
@@ -94,7 +106,7 @@ namespace battleCreator
 			shared_ptr<unitDataS> retUn = nullptr;
 			for (auto& un : unitsForTransfer)
 			{
-				if (un->numberInArmy == id)
+				if (un->numberInArmy == static_cast<size_t>(id))
 				{
 					retUn = un;
 					break;
@@ -105,7 +117,7 @@ namespace battleCreator
 	};
 
 
-	jsn::json addCharacter(general* gen)
+	jsn::json addCharacter(character* gen)
 	{
 		jsn::json genJson;
 
@@ -119,26 +131,26 @@ namespace battleCreator
 		}
 
 		std::string genName;
-		if (gen->genChar->fullName == nullptr || string(gen->genChar->fullName).size() == 0)
+		if (gen->characterRecord->fullName == nullptr || string(gen->characterRecord->fullName).size() == 0)
 		{
 			genName="default";
 		}
 		else
 		{
-			genName=gen->genChar->fullName;
+			genName=gen->characterRecord->fullName;
 		}
 		genJson["name"] = genName;
 		
-		int age = (gen->genChar->age >> 3) & 0x7f;
-		genJson["index"] = gen->genChar->index;
+		int age = (gen->characterRecord->age >> 3) & 0x7f;
+		genJson["index"] = gen->characterRecord->index;
 		genJson["age"] = age;
-		genJson["faction"] = gen->genChar->faction->factSmDescr->facName;
-		genJson["subfaction"] = gen->genChar->subFaction;
+		genJson["faction"] = gen->characterRecord->faction->factionRecord->facName;
+		genJson["subfaction"] = gen->characterRecord->originalFaction;
 
 		std::string portrait;
-		if (gen->genChar->portrait_custom)
+		if (gen->characterRecord->portrait_custom)
 		{
-			portrait = gen->genChar->portrait_custom;
+			portrait = gen->characterRecord->portrait_custom;
 		}
 		else
 		{
@@ -147,9 +159,9 @@ namespace battleCreator
 		genJson["portrait"] = portrait;
 
 		std::string battle_model;
-		if (gen->genChar->modelName)
+		if (gen->characterRecord->modelName)
 		{
-			battle_model = gen->genChar->modelName;
+			battle_model = gen->characterRecord->modelName;
 		}
 		else
 		{
@@ -169,11 +181,11 @@ namespace battleCreator
 		genJson["hero_ability"] = hero_ability;
 
 
-		if (gen->genChar->traits != nullptr)
+		if (gen->characterRecord->traits != nullptr)
 		{
 			jsn::json jTraits=jsn::json::array();
 
-			traitContainer* traitCont = gen->genChar->traits;
+			traitContainer* traitCont = gen->characterRecord->traits;
 			while (traitCont != nullptr)
 			{
 				jsn::json traitArray = jsn::json::array({ traitCont->trait->traitEntry->name, traitCont->trait->level->level });
@@ -190,14 +202,14 @@ namespace battleCreator
 		}
 
 
-		if (gen->genChar->ancNum != 0)
+		if (gen->characterRecord->ancNum != 0)
 		{
 			jsn::json jAncs= jsn::json::array();
 
-			UINT32 ancNum = gen->genChar->ancNum;
+			UINT32 ancNum = gen->characterRecord->ancNum;
 			for (UINT32 i = 0; i < ancNum; i++)
 			{
-				jAncs.push_back(gen->genChar->ancillaries[i]->dataAnc->ancName);
+				jAncs.push_back(gen->characterRecord->ancillaries[i]->dataAnc->ancName);
 			}
 
 			genJson["ancillaries"] = jAncs;
@@ -222,7 +234,7 @@ namespace battleCreator
 
 			unitJson["number in army"] = i;
 			unitJson["index"] = unit->ID;
-			unitJson["type"] = unit->eduEntry->Type;
+			unitJson["type"] = unit->eduEntry->eduType;
 			if (unit->general != nullptr)
 			{
 				unitJson["general"] = addCharacter(unit->general);
@@ -377,7 +389,7 @@ namespace battleCreator
 	void initStructsForResults()
 	{
 		battleArmies.sides.clear();
-		battleDataS* battle = smallFuncs::getGameDataAll()->battleHandler;
+		battleDataS* battle = battleHelpers::getBattleData();
 		for (int i = 0; i < battle->sidesNum; i++)
 		{
 			addSide(battle->sides[i]);
@@ -403,8 +415,8 @@ namespace battleCreator
 
 	void doResultsFileCreating()
 	{
-		std::string fPath = globals::dataS.modPatch;
-		fPath += "\\eopBattles";
+		std::string fPath = globals::dataS.modPath;
+		fPath += "\\eopData\\config";
 		filesystem::create_directory(fPath);
 		fPath += "\\lastBattleResult";
 		filesystem::remove_all(fPath);
@@ -456,12 +468,9 @@ namespace battleCreator
 
 	void writeSettlementJson(const std::string& filePath, const std::string& lastSettlementWorldRec)
 	{
-		battleDataS* battleData = smallFuncs::getGameDataAll()->battleHandler;
-		fortStruct* isFort = fastFuncts::findFort(battleData->xCoord, battleData->yCoord);
-		if (isFort == nullptr)
-		{
+		battleDataS* battleData = battleHelpers::getBattleData();
+		if (!battleData->isFortBattle)
 			battleSett.fort.isFort = false;
-		}
 		else
 		{
 			battleSett.fort.isFort = true;
@@ -477,31 +486,22 @@ namespace battleCreator
 	void setWinner(int selectedWinner)
 	{
 		if (selectedWinner == 2)//draw
-		{
 			return;
-		}
-
-		else if (selectedWinner == 0)
-		{
-			fastFuncts::autoWin("attacker");
-		}
+		if (selectedWinner == 0)
+			battleHelpers::autoWin("attacker");
 		else if (selectedWinner == 1)
-		{
-			fastFuncts::autoWin("defender");
-		}
+			battleHelpers::autoWin("defender");
 	}
-
-
+	
 	bool doTransfer()
 	{
 		Sleep(200);
-		battleDataS* battle = smallFuncs::getGameDataAll()->battleHandler;
+		const battleDataS* battle = battleHelpers::getBattleData();
 
 		std::vector<std::pair<shared_ptr<unitDataS>, unit*>>transferPairs;
 		if (battleArmies.sides.size() != battle->sidesNum)
 		{
-			MessageBoxA(NULL, "The number of sides in the results file and in the battle does not match.", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
-			
+			MessageBoxA(nullptr, "The number of sides in the results file and in the battle does not match.", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 			clearStructs();
 			return false;
 		}
@@ -542,7 +542,7 @@ namespace battleCreator
 						clearStructs();
 						return false;
 					}
-					if (strcmp(ourUnit->type.c_str(), gameUnit->eduEntry->Type) != 0)
+					if (strcmp(ourUnit->type.c_str(), gameUnit->eduEntry->eduType) != 0)
 					{
 						MessageBoxA(NULL, "The unit types in the results file and in the battle does not match.", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 
@@ -561,11 +561,11 @@ namespace battleCreator
 			auto& gameUnit = unitPair.second;
 			if (gameUnit->general!=nullptr&& unit->gen.isCharacterDied)
 			{
-				fastFuncts::setSoldiersCountAndExp(gameUnit, 0, unit->exp);
+				unitHelpers::setSoldiersCountAndExp(gameUnit, 0, unit->exp);
 			}				
 			else
 			{
-				fastFuncts::setSoldiersCountAndExp(gameUnit, unit->soldiersNumber, unit->exp);
+				unitHelpers::setSoldiersCountAndExp(gameUnit, unit->soldiersNumber, unit->exp);
 			}
 		}
 		transferPairs.clear();
@@ -614,7 +614,7 @@ namespace battleCreator
 		if (selectedWinner != 2)//draw
 		{
 			setWinner(selectedWinner);
-			bool res = fastFuncts::useButton("prebattle_auto_resolve_button");
+			bool res = gameUiHelpers::useButton("prebattle_auto_resolve_button");
 			if (res == false)
 			{
 				MessageBoxA(NULL, "Something goes wrong!", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
@@ -627,6 +627,8 @@ namespace battleCreator
 		}
 
 		return true;
+		/*
+		* 
 		bool transferResult = doTransfer();
 		if (transferResult == false)
 		{
@@ -634,6 +636,7 @@ namespace battleCreator
 			return false;
 		}
 		return transferResult;
+		 */
 	}
 
 	void transferResults2()
@@ -643,7 +646,7 @@ namespace battleCreator
 		thrUrl.detach();
 	}
 
-	void onLoadCharacter(stackStruct* army, const std::filesystem::path& relativePath)
+	void onLoadCharacter(armyStruct* army, const std::filesystem::path& relativePath)
 	{
 		charactersParams.numOfArmy++;
 		jsn::json json2;
@@ -691,7 +694,7 @@ namespace battleCreator
 					}
 					if (army->units[0]->general != nullptr)
 					{
-						army->units[0]->general->genChar->index = armySide->unitsForTransfer[0]->numberInArmy;
+						army->units[0]->general->characterRecord->index = armySide->unitsForTransfer[0]->numberInArmy;
 					}
 
 					for (int i = 0; i < army->numOfUnits; i++)
@@ -704,7 +707,7 @@ namespace battleCreator
 					}
 					for (int i = 1; i < army->numOfUnits; i++)
 					{
-						if (strcmp(army->units[i]->eduEntry->Type, armySide->unitsForTransfer[i]->type.c_str()) != 0)
+						if (strcmp(army->units[i]->eduEntry->eduType, armySide->unitsForTransfer[i]->type.c_str()) != 0)
 						{
 							MessageBoxA(NULL, "M2TWEOP characters creating error!", "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 							return;
@@ -723,11 +726,11 @@ namespace battleCreator
 							portrait = newGen.portrait.c_str();
 						}
 	
-						general*newGeneral=fastFuncts::createCharacterWithoutSpawning("named character",army->faction, newGen.age
+						character*newGeneral=characterHelpers::createCharacterWithoutSpawning("named character",army->faction, newGen.age
 							, newGen.genName.c_str(), newGen.genName.c_str(), newGen.subfaction
 							, portrait, 0,0);
-						fastFuncts::setBodyguard(newGeneral, army->units[i]);
-						newGeneral->genChar->index = armySide->unitsForTransfer[i]->numberInArmy;
+						characterHelpers::setBodyguard(newGeneral, army->units[i]);
+						newGeneral->characterRecord->index = armySide->unitsForTransfer[i]->numberInArmy;
 						if (!newGen.hero_ability.empty())
 						{
 							std::string heroAbility = newGen.hero_ability;
@@ -736,16 +739,11 @@ namespace battleCreator
 						}
 						for (std::string& anc : newGen.ancillaries)
 						{
-							auto* resAnc=fastFuncts::findAncillary((char*)anc.c_str());
-							if (resAnc != nullptr)
-							{
-								fastFuncts::addAncillary(newGeneral->genChar, resAnc);
-							}
+							characterRecordHelpers::addAncillaryName(newGeneral->characterRecord, anc.c_str());
 						}
-
 						for (auto& trait : newGen.traits)
 						{
-							fastFuncts::addTrait(newGeneral->genChar, trait.first.c_str(), trait.second);
+							characterRecordHelpers::addTrait(newGeneral->characterRecord, trait.first.c_str(), trait.second);
 						}
 					}
 

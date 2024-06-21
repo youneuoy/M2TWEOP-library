@@ -18,7 +18,9 @@ void codes::initCodes(int gameVer)
 		offsets.getReadySiegeCharacterGarrisonedFunc = 0x005a18e0;
 		offsets.decideEquipmentFunc = 0x0071C920;
 		offsets.getEquipmentPreferencesFunc = 0x00521520;
-		offsets.finalyzeActionStratmapFunc = 0x0059e790;
+		offsets.finalizeActionStrat = 0x0059e790;
+		offsets.saveGame = 0x00434da0;
+		offsets.parseCondition = 0x874920;
 
 		offsets.createIdleActionFunc = 0x005aff40;
 
@@ -29,7 +31,7 @@ void codes::initCodes(int gameVer)
 		offsets.setFactionLeaderFunc = 0x004E8FE0;
 		offsets.findParentForAdoptionFunc = 0x004EA4E0;
 		offsets.setArmyRegionEntriesFunc = 0x004A40E0;
-		offsets.factionRessurectStuffFunc = 0x004F4C80;
+		offsets.factionResurrectStuffFunc = 0x004F4C80;
 		offsets.doHordeStuff = 0x0050B170;
 		offsets.doHordeStuff2 = 0x004EAA10;
 		offsets.doHordeStuff3 = 0x00C5CBC0;
@@ -78,11 +80,11 @@ void codes::initCodes(int gameVer)
 
 		offsets.replenishUnitFunc = 0x00748e20;
 		offsets.setUnitArmorFunc = 0x0073bce0;
-		offsets.setUnitWeapFunc = 0x0073bb00;
+		offsets.setUnitWeaponFunc = 0x0073bb00;
 
 
 		offsets.createCharacterFunc = 0x008b5d60;
-		offsets.spawnCreatedCharacterFunc = 0x004cd240;
+		offsets.spawnCreatedObject = 0x004cd240;
 		offsets.doSomeWithCharacterFunc = 0x004bafa0;
 
 		offsets.createArmyFunc = 0x004f40d0;
@@ -178,7 +180,66 @@ void codes::initCodes(int gameVer)
 		//offsets.unitPlace = 0x00770A70;
 		offsets.unitMove = 0x0759B70;
 		offsets.gameLogCommand = 0xA8FAC0;
+		offsets.sabotageBuilding = 0xAAB280;
+		offsets.setCharacterType = 0x008b3810;
+		offsets.addAncillary = 0x005a5870;
+		offsets.getTrait = 0x008b6680;
+		offsets.addTrait = 0x005a7710;
+		offsets.removeTrait = 0x005a53a0;
+		offsets.removeAncillary = 0x005a5990;
+		offsets.issueMoveOrder = 0x692CD0;
+		offsets.issueFormationOrder = 0x692230;
+		offsets.repairBuilding = 0x005F89D0;
+		offsets.addBuildingToQueue = 0x5E4190;
+		offsets.addUnitToQueue = 0x5E40A0;
+		offsets.createBuildInSett = 0x008A32F0;
+		offsets.upgradeBuildInSett = 0x005F7CB0;
+		offsets.upgradeSett = 0x005DB560;
+		offsets.getRecruitmentOptions = 0x005E7A40;
+		offsets.getRetrainingOptions = 0x005E6140;
+		offsets.resetBuildingsMem = 0x005FA320;
+		offsets.getConstructionOptions = 0x005E1730;
+		offsets.makeWatchTower = 0x008B8DC0;
+		offsets.addToWatchtowerList = 0x004DD390;
+		offsets.updateBlockades = 0x004DCD40;
+		offsets.createCadDisembark = 0x5B01F0;
+		offsets.setCadClass = 0xAAB050;
+		offsets.canArmySplit = 0x4D5C30;
+		offsets.splitArmy = 0x4F9740;
+		offsets.setUnitMovePoints = 0x00597770;
+		offsets.automateGroup = 0x00721410;
+		offsets.placeGroup = 0x0071DEE0;
+		offsets.clearUnitGroup = 0x0071E590;
+		offsets.removeUnusedLabel = 0x00A92320;
+		offsets.defineUnitGroup = 0x00A91BD0;
+		offsets.findAncillary = 0x008b1340;
+		offsets.mergeArmies = 0x00714EF0;
+		
+		offsets.stopBlockade = 0x00711310;
+		offsets.stopSiege = 0x007110f0;
+		offsets.addToSettlement = 0x005e18f0;
+		offsets.addToFort = 0x004bc690;
+		offsets.ungarrisonResidence = 0x004bf9c0;
+		offsets.attackArmy = 0x718E80;
+		offsets.getTileMoveCost = 0x004c7620;
+		offsets.revealTile = 0x004ba910;
+		offsets.setFactionTrade = 0x00502EE0;
+		offsets.setProtectorate = 0x00504980;
+		offsets.isTileFree = 0x004c8c70;
+		offsets.hideRevealedTile = 0x004ba9f0;
+		offsets.findBattleModel = 0x010e86c0;
+		offsets.isZoneValid = 0x672EC0;
+		offsets.getZonePerimeter = 0xE0DC00;
+		offsets.getZoneID = 0xDF6050;
+		offsets.createUniString = 0x00f018e0;
+		offsets.getScriptCounter = 0x00489360;
+		offsets.setScriptCounter = 0x0048c8e0;
+		offsets.getUnitFullMovePoints = 0x00742380;
 	}
+
+
+	
+	/////////////////// STEAM ///////////////////////////////////
 	else if (gameVer == 2) //steam
 	{
 		offsets.stringCryptFunc = 0x00d47330;
@@ -199,6 +260,7 @@ void codes::initCodes(int gameVer)
 		offsets.doHordeStuff = 0x0050B750;
 		offsets.doHordeStuff2 = 0x004EB020;
 		offsets.doHordeStuff3 = 0x00C56FC0;
+		offsets.saveGame = 0x004350e0;
 		
 		offsets.createCadAttackSettlementFunc = 0x00005B5A90;
 		offsets.createCadAssaultSettlementFunc = 0x005B5CB0;
@@ -207,7 +269,7 @@ void codes::initCodes(int gameVer)
 		offsets.decideEquipmentFunc = 0x0071D050;
 		offsets.getEquipmentPreferencesFunc = 0x00521B10;
 		
-		offsets.finalyzeActionStratmapFunc = 0x0059ec70;
+		offsets.finalizeActionStrat = 0x0059ec70;
 		
 
 		offsets.createIdleActionFunc = 0x005b0420;
@@ -219,7 +281,7 @@ void codes::initCodes(int gameVer)
 		offsets.setFactionLeaderFunc = 0x004E95F0;
 		offsets.findParentForAdoptionFunc = 0x004EAAF0;
 		offsets.setArmyRegionEntriesFunc = 0x004A4580;
-		offsets.factionRessurectStuffFunc = 0x004F5250;
+		offsets.factionResurrectStuffFunc = 0x004F5250;
 
 		offsets.getReadyForMovingFunc = 0x005b0540;
 		offsets.getReadyForMoving2Func = 0x005a0d50;
@@ -256,11 +318,11 @@ void codes::initCodes(int gameVer)
 
 		offsets.replenishUnitFunc = 0x007495a0;
 		offsets.setUnitArmorFunc = 0x0073c470;
-		offsets.setUnitWeapFunc = 0x0073c290;
+		offsets.setUnitWeaponFunc = 0x0073c290;
 
 
 		offsets.createCharacterFunc = 0x008b6750;
-		offsets.spawnCreatedCharacterFunc = 0x004cd800;
+		offsets.spawnCreatedObject = 0x004cd800;
 		offsets.doSomeWithCharacterFunc = 0x004bb530;
 
 		offsets.createArmyFunc = 0x004f46a0;
@@ -354,5 +416,61 @@ void codes::initCodes(int gameVer)
 		//offsets.unitPlace = 0x00770A70;
 		offsets.unitMove = 0x075A320;
 		offsets.gameLogCommand = 0x0A90B20;
+		offsets.sabotageBuilding = 0xAAC2B0;
+		offsets.setCharacterType = 0x008b4200;
+		offsets.addAncillary = 0x005a5d50;
+		offsets.getTrait = 0x008b7070;
+		offsets.addTrait = 0x005a7bf0;
+		offsets.removeTrait = 0x005a5880;
+		offsets.removeAncillary = 0x005a5e70;
+		offsets.issueMoveOrder = 0x6931C0;
+		offsets.issueFormationOrder = 0x692720;
+		offsets.repairBuilding = 0x005F8DC0;
+		offsets.addBuildingToQueue = 0x005E4600;
+		offsets.addUnitToQueue = 0x005E4510;
+		offsets.createBuildInSett = 0x008A3CE0;
+		offsets.upgradeBuildInSett = 0x005F80A0;
+		offsets.upgradeSett = 0x005DBA20;
+		offsets.getRecruitmentOptions = 0x005E7EA0;
+		offsets.getRetrainingOptions = 0x005E65A0;
+		offsets.resetBuildingsMem = 0x5FA710;
+		offsets.getConstructionOptions = 0x005E1C00;
+		offsets.makeWatchTower = 0x008B97B0;
+		offsets.addToWatchtowerList = 0x004DD940;
+		offsets.updateBlockades = 0x004DD2F0;
+		offsets.createCadDisembark = 0x005B06D0;
+		offsets.setCadClass = 0xAAC080;
+		offsets.canArmySplit = 0x4D61F0;
+		offsets.splitArmy = 0x4F9C90;
+		offsets.setUnitMovePoints = 0x00597c60;
+		offsets.automateGroup = 0x00721B50;
+		offsets.placeGroup = 0x0071E620;
+		offsets.clearUnitGroup = 0x0071ECD0;
+		offsets.removeUnusedLabel = 0x00A93380;
+		offsets.defineUnitGroup = 0x00A92C30;
+		offsets.findAncillary = 0x008b1d30;
+		offsets.mergeArmies = 0x007155F0;
+		
+		offsets.stopBlockade = 0x00711a50;
+		offsets.stopSiege = 0x00711830;
+		offsets.addToSettlement = 0x005e1dc0;
+		offsets.addToFort = 0x004bcc20;
+		offsets.ungarrisonResidence = 0x004bff50;
+		offsets.attackArmy = 0x007195A0;
+		offsets.getTileMoveCost = 0x004c7bd0;
+		offsets.revealTile = 0x004baea0;
+		offsets.setFactionTrade = 0x00503480;
+		offsets.setProtectorate = 0x00504F20;
+		offsets.isTileFree = 0x004c9220;
+		offsets.hideRevealedTile = 0x004baf80;
+		offsets.findBattleModel = 0x010e8ee0;
+		offsets.isZoneValid = 0x6733A0;
+		offsets.getZonePerimeter = 0xE08290;
+		offsets.getZoneID = 0xDF0680;
+		offsets.createUniString = 0x00f01eb0;
+		offsets.getScriptCounter = 0x00489760;
+		offsets.setScriptCounter = 0x0048cce0;
+		offsets.getUnitFullMovePoints = 0x00742b10;
+		offsets.parseCondition = 0x00875310;
 	}
 }

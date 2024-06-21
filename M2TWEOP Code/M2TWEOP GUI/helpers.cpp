@@ -465,7 +465,7 @@ vector<std::string> helpers::getTomlFilesInFolder()
 {
 	string path;
 	getCurrentPath(path);
-	path += ".\\eopData\\themes\\*.toml";
+	path += ".\\eopData\\resources\\themes\\*.toml";
 
 	WIN32_FIND_DATAA findFileData;
 	HANDLE hFind = FindFirstFileA(path.c_str(), &findFileData);

@@ -12,6 +12,10 @@ public:
 		DWORD allocMemFunc = NULL;
 		
 		DWORD createEduEntry = NULL;
+		DWORD createUniString = NULL;
+		DWORD getScriptCounter = NULL;
+		DWORD setScriptCounter = NULL;
+		DWORD getUnitFullMovePoints = NULL;
 
 
 
@@ -21,6 +25,7 @@ public:
 		DWORD createCADTargetCharacter = NULL;
 		DWORD createCADTargetFort = NULL;
 		DWORD createCADTargetSettlement = NULL;
+		DWORD saveGame = NULL;
 
 
 		DWORD createSiegeSettlementGarrisonedFunc = NULL;
@@ -28,7 +33,7 @@ public:
 		DWORD createCadAssaultSettlementFunc = NULL;
 		DWORD createCadSiegeSettlementFunc = NULL;
 		DWORD createCadAttackSettlementFunc = NULL;
-		DWORD finalyzeActionStratmapFunc = NULL;
+		DWORD finalizeActionStrat = NULL;
 
 
 		DWORD getReadyForMovingFunc = NULL;
@@ -42,7 +47,7 @@ public:
 		DWORD somethingWithTrackedPointerFortFunc = NULL;
 
 
-		//strat camera funcs
+		//strat camera functions
 		//params - x,y at stack
 		//restore stack after call it
 		DWORD moveStratCameraSlowFunc = NULL;
@@ -58,11 +63,11 @@ public:
 		//@replenishUnit(unit *un,int howManyAdd,int exp)
 		DWORD replenishUnitFunc = NULL;
 		DWORD setUnitArmorFunc = NULL;
-		DWORD setUnitWeapFunc = NULL;
+		DWORD setUnitWeaponFunc = NULL;
 
 		//create character
 		DWORD createCharacterFunc = NULL;
-		DWORD spawnCreatedCharacterFunc = NULL;
+		DWORD spawnCreatedObject = NULL;
 		DWORD doSomeWithCharacterFunc = NULL;
 
 		//create army
@@ -74,9 +79,9 @@ public:
 
 		DWORD setBodyguard = NULL;
 
-		//kill character on stratmap
+		//kill character on strat map
 		DWORD killCharStratMapFunc = NULL;
-		//kill unit on stratmap
+		//kill unit on strat map
 		DWORD killUnitStratMapFunc = NULL;
 
 		//destroy all building of type in settlement
@@ -85,6 +90,7 @@ public:
 		DWORD createBuildingFunc = NULL;
 		DWORD autoWinFunc = NULL;
 		DWORD historicEventFunc = NULL;
+		DWORD parseCondition = NULL;
 		DWORD getStringFromTable = NULL;
 		DWORD scriptCommandOne = NULL;
 		DWORD scriptCommandTwo = NULL;
@@ -124,7 +130,7 @@ public:
 		DWORD setFactionLeaderFunc = NULL;
 		DWORD findParentForAdoptionFunc = NULL;
 		DWORD setArmyRegionEntriesFunc = NULL;
-		DWORD factionRessurectStuffFunc = NULL;
+		DWORD factionResurrectStuffFunc = NULL;
 
 		DWORD unitMove = NULL;
 		DWORD unitOrderMove = NULL;
@@ -183,6 +189,56 @@ public:
 		DWORD getUnitCard = NULL;
 		DWORD addToCardArray = NULL;
 		DWORD buildWatchtower = NULL;
+		DWORD sabotageBuilding = NULL;
+		DWORD setCharacterType = NULL;
+		DWORD addAncillary = NULL;
+		DWORD getTrait = NULL;
+		DWORD addTrait = NULL;
+		DWORD removeTrait = NULL;
+		DWORD removeAncillary = NULL;
+		DWORD issueMoveOrder = NULL;
+		DWORD issueFormationOrder = NULL;
+		DWORD repairBuilding = NULL;
+		DWORD addBuildingToQueue = NULL;
+		DWORD addUnitToQueue = NULL;
+		DWORD createBuildInSett = NULL;
+		DWORD upgradeBuildInSett = NULL;
+		DWORD upgradeSett = NULL;
+		DWORD getRecruitmentOptions = NULL;
+		DWORD getRetrainingOptions = NULL;
+		DWORD resetBuildingsMem = NULL;
+		DWORD getConstructionOptions = NULL;
+		DWORD makeWatchTower = NULL;
+		DWORD addToWatchtowerList = NULL;
+		DWORD updateBlockades = NULL;
+		DWORD createCadDisembark = NULL;
+		DWORD setCadClass = NULL;
+		DWORD canArmySplit = NULL;
+		DWORD splitArmy = NULL;
+		DWORD setUnitMovePoints = NULL;
+		DWORD automateGroup = NULL;
+		DWORD placeGroup = NULL;
+		DWORD clearUnitGroup = NULL;
+		DWORD removeUnusedLabel = NULL;
+		DWORD defineUnitGroup = NULL;
+		DWORD findAncillary = NULL;
+		DWORD mergeArmies = NULL;
+		DWORD stopBlockade = NULL;
+		DWORD stopSiege = NULL;
+		DWORD addToSettlement = NULL;
+		DWORD addToFort = NULL;
+		DWORD ungarrisonResidence = NULL;
+		DWORD attackArmy = NULL;
+		DWORD getTileMoveCost = NULL;
+		DWORD revealTile = NULL;
+		DWORD setFactionTrade = NULL;
+		DWORD setProtectorate = NULL;
+		DWORD isTileFree = NULL;
+		DWORD hideRevealedTile = NULL;
+		DWORD findBattleModel = NULL;
+		DWORD isZoneValid = NULL;
+		DWORD getZonePerimeter = NULL;
+		DWORD getZoneID = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

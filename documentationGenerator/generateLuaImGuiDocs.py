@@ -118,11 +118,11 @@ class param:
         self.name = name
         self.comment = comment
 
-filenames = ["imgui\\sol_ImGui.cpp"]
+filenames = ["imgui\\sol_ImGui.cpp", "imgui\\sol_ImGui_enums.cpp", "imgui\\sol_ImGui_enums2.cpp", "imgui\\sol_ImGui_keys.cpp"]
 cwd = os.getcwd()
 eopPath = re.findall(r'(.+)documentationGenerator', cwd)[0]
-luaPluginPath = eopPath + "M2TWEOP-luaPlugin\\luaPlugin\\"
-outputfile = open(eopPath + "M2TWEOP DataFiles\\youneuoy_Data\\plugins\\lua\\LuaImGuiDocs.lua", 'w')
+luaPluginPath = eopPath + "M2TWEOP Code\\M2TWEOP library\\"
+outputfile = open(eopPath + "M2TWEOP DataFiles\\eopData\\eopScripts\\LuaImGuiDocs.lua", 'w')
 outputfile.write("---@diagnostic disable: missing-return, lowercase-global\n")
 
 for name in filenames:

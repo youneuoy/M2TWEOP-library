@@ -2,9 +2,11 @@
 #include "techFuncs.h"
 
 #include "miniz.h"
-#include <filesystem>
+
+#include "functionsOffsets.h"
+#include "gameStringHelpers.h"
 #include "globals.h"
-#include "smallFuncs.h"
+
 void techFuncs::WriteData(void* ptr, DWORD to, size_t size)
 {
     HANDLE h = GetCurrentProcess();
@@ -15,7 +17,7 @@ void techFuncs::WriteData(void* ptr, DWORD to, size_t size)
 
     CloseHandle(h);
 }
-void techFuncs::NopBytes(DWORD address, size_t size)
+void techFuncs::nopBytes(DWORD address, size_t size)
 {
     std::vector<uint8_t> nops(size, 0x90);
     WriteData(nops.data(), address, size);
@@ -79,6 +81,20 @@ std::vector<std::string>techFuncs::unzip(std::string const& zipFile, std::string
     // Close the archive, freeing any resources it was using
     mz_zip_reader_end(&zip_archive);
     return files;
+}
+
+	
+std::string techFuncs::readFile(const std::filesystem::path& path)
+{
+    // Open the stream to 'lock' the file.
+    std::ifstream f(path, std::ios::in | std::ios::binary);
+    // Obtain the size of the file.
+    const auto sz = file_size(path);
+    // Create a buffer.
+    std::string result(sz, '\0');
+    // Read the whole file into the buffer.
+    f.read(result.data(), sz);
+    return result;
 }
 
 void techFuncs::zip(std::string const& zipFile, std::vector<std::string>& files, std::string saveFile, std::string nameOfSaveFile)
@@ -164,8 +180,6 @@ void techFuncs::deleteFiles(vector<string>& files)
     }
 }
 
-
-
 static string uniToACP(UNICODE_STRING**& uniStr)
 {
     if (uniStr == nullptr || *uniStr == nullptr)
@@ -191,11 +205,11 @@ static string uniToACP(UNICODE_STRING**& uniStr)
 void techFuncs::saveGameMakeArchive(UNICODE_STRING**& savePath, vector<string>& files)
 {
     string relativePath = uniToACP(savePath);
-    string packPath = globals::dataS.modPatch;
+    string packPath = globals::dataS.modPath;
 
 
 
-    packPath += "\\youneuoy_Data";
+    packPath += "\\eopData";
 
 
     if (!create_directory(filesystem::path(packPath))) // creates the directory
@@ -228,19 +242,18 @@ void techFuncs::saveGameMakeArchive(UNICODE_STRING**& savePath, vector<string>& 
 
 }
 
-vector<string> techFuncs::loadGameLoadArchive(UNICODE_STRING**& savePath)
+vector<string> techFuncs::getEopArchiveFiles(const string& savePath)
 {
-	vector<string> archiveFiles;
+    vector<string> archiveFiles;
 
-    string relativePath = uniToANSI(savePath);
-    if (std::filesystem::exists(relativePath) == false)
+    if (std::filesystem::exists(savePath) == false)
     {
         return archiveFiles;
     }
-    string unpackPath = globals::dataS.modPatch;
+    string unpackPath = globals::dataS.modPath;
 
 
-    unpackPath += "\\youneuoy_Data";
+    unpackPath += "\\eopData";
 
 
     if (!create_directory(filesystem::path(unpackPath))) // creates the directory
@@ -258,14 +271,35 @@ vector<string> techFuncs::loadGameLoadArchive(UNICODE_STRING**& savePath)
 
     }
 
-    archiveFiles=unzip(relativePath, unpackPath);
-    if (archiveFiles.size() == 0)
+    archiveFiles = techFuncs::unzip(savePath, unpackPath);
+}
+
+DWORD techFuncs::allocateGameMem(size_t amount)
+{
+    DWORD retMem = 0;
+    DWORD adrFunc = codes::offsets.allocMemFunc;
+    _asm
+    {
+        push amount
+        mov eax, adrFunc
+        call eax
+        add esp, 0x4
+        mov retMem, eax
+    }
+    return retMem;
+}
+
+
+vector<string> techFuncs::loadGameLoadArchive(vector<string> files, UNICODE_STRING**& savePath)
+{
+    if (files.empty())
     {
         MessageBoxA(NULL, "You have attempted to load a non-EOP save with EOP. This is not supported and the game will now exit. You can find instructions on converting a non-EOP save to an EOP save in our Discord.", "ERROR", NULL);
         exit(0);
     }
-
-    for (string& file : archiveFiles)
+    string relativePath = techFuncs::uniToANSI(savePath);
+    
+    for (string& file : files)
     {
         if (filesystem::path(file).filename()=="M2TWEOPTEMPgameSaveDONTTOUCHTHISFILE.sav")
         {
@@ -278,14 +312,9 @@ vector<string> techFuncs::loadGameLoadArchive(UNICODE_STRING**& savePath)
             p += "/saves/M2TWEOPgameSaveDONTTOUCHTHISFILE.tmp";
             filesystem::remove(p);
             filesystem::copy_file(file, p);
-            smallFuncs::createUniString(savePath,p.string().c_str());
+            gameStringHelpers::createUniString(savePath,p.string().c_str());
           //  (*savePath)->something = 1;
         }
     }
-
-
-
-
-
-    return archiveFiles;
+    return files;
 }

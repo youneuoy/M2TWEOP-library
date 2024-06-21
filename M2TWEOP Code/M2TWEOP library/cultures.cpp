@@ -1,18 +1,13 @@
-
+#include "pch.h"
 #include "cultures.h"
 
-#include <unordered_map>
-#include <string>
-#include <memory>
-#include <random>
-
-#include "fastFuncts.h"
-#include "smallFuncs.h"
+#include "dataOffsets.h"
+#include "gameHelpers.h"
 
 namespace cultures
 {
 
-    std::vector<shared_ptr<portraitDbEntry>> eopPortraitDb::portraits{};
+    std::vector<std::shared_ptr<portraitDbEntry>> eopPortraitDb::portraits{};
     int eopPortraitDb::entryCount = 0;
     
     std::unordered_map<portraitType, std::string> folderNames = {
@@ -106,12 +101,17 @@ namespace cultures
     {
         return portraits[cultureID].get();
     }
+    	
+    culturesDB* getCultureDb()
+    {
+        return reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
+    }
     
     void eopPortraitDb::createEopPortraitDb()
     {
         const auto cultureDb = reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
         auto religions = *reinterpret_cast <religionDatabase**>(dataOffsets::offsets.religionDatabase);
-        auto modPath = fastFuncts::GetModPath();
+        auto modPath = gameHelpers::getModPath();
         for (int cultureID = 0; cultureID < cultureDb->culturesCount; cultureID++)
         {
             auto culture = cultureDb->cultures[cultureID];
@@ -228,6 +228,4 @@ namespace cultures
             }
         }
     }
-    
-    
 }

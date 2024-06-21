@@ -1,41 +1,23 @@
+#include "pch.h"
 #include "discordManager.h"
+
+#include "globals.h"
 #include "jsonManager.h"
 #include "techFuncs.h"
-#include "smallFuncs.h"
+#include "faction.h"
 
 namespace discordManager
 {
-	std::string uniStringToStr(UNICODE_STRING **&uniString)
-	{
-		UNICODE_STRING *uniS = *uniString;
-		wchar_t *wstr = (wchar_t *)&uniS->Buffer;
-
-		std::string strTo;
-		int wchars_num = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL);
-		if (wchars_num <= 0)
-		{
-			return strTo;
-		}
-		char *szTo = new char[wchars_num];
-		szTo[wchars_num - 1] = '\0';
-		WideCharToMultiByte(CP_UTF8, 0, wstr, -1, szTo, wchars_num, NULL, NULL);
-
-		strTo = szTo;
-		delete[] szTo;
-
-		return strTo;
-	}
-
 	template <typename... Args>
 	std::string string_format(const std::string &format, Args... args)
 	{
-		int size_s = std::snprintf(nullptr, 0, format.c_str(), args...) + 1; // Extra space for '\0'
-		if (size_s <= 0)
+		const int sizeS = std::snprintf(nullptr, 0, format.c_str(), args...) + 1; // Extra space for '\0'
+		if (sizeS <= 0)
 		{
 			throw std::runtime_error("Error during formatting.");
 		}
-		auto size = static_cast<size_t>(size_s);
-		std::unique_ptr<char[]> buf(new char[size]);
+		const auto size = static_cast<size_t>(sizeS);
+		const std::unique_ptr<char[]> buf(new char[size]);
 		std::snprintf(buf.get(), size, format.c_str(), args...);
 		return std::string(buf.get(), buf.get() + size - 1); // We don't want the '\0' inside
 	}
@@ -44,8 +26,8 @@ namespace discordManager
 	{
 		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true)
 		{
-			jsonManager::setJSONInFile(
-				"\\eopData\\discordRichPresenceCfg.json",
+			jsonManager::setJsonInFile(
+				"\\eopData\\config\\discordRichPresenceCfg.json",
 				"status",
 				"Fighting a battle ⚔️");
 		}
@@ -55,44 +37,35 @@ namespace discordManager
 	{
 		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true)
 		{
-			jsonManager::setJSONInFile(
-				"\\eopData\\discordRichPresenceCfg.json",
+			jsonManager::setJsonInFile(
+				"\\eopData\\config\\discordRichPresenceCfg.json",
 				"status",
 				"On the campaign map 🗺️");
 		}
 	}
 
-	void OnChangeTurnNum(int num)
+	void onChangeTurnNum(const int num)
 	{
 		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true)
 		{
-			jsonManager::setJSONInFile(
-				"\\eopData\\discordRichPresenceCfg.json",
+			jsonManager::setJsonInFile(
+				"\\eopData\\config\\discordRichPresenceCfg.json",
 				"turnNum",
 				std::to_string(num));
 		}
 	}
 
-	void OnFactionTurnStart(factionStruct *fac)
+	void onFactionTurnStart(factionStruct *fac)
 	{
 		if (fac == nullptr)
-		{
 			return;
-		}
-
 		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true && fac->isPlayerControlled == 1)
 		{
-			UNICODE_STRING **factionName = fac->localizedName;
-			UNICODE_STRING *name = *factionName;
-			if (name->Length == 0)
-			{
-				factionName = (*(*smallFuncs::getFactionName))(fac);
-			}
-
-			jsonManager::setJSONInFile(
-				"\\eopData\\discordRichPresenceCfg.json",
+			const auto name = factionHelpers::getLocalizedFactionName(fac);
+			jsonManager::setJsonInFile(
+				"\\eopData\\config\\discordRichPresenceCfg.json",
 				"factionName",
-				uniStringToStr(factionName));
+				name);
 		}
 	}
 }

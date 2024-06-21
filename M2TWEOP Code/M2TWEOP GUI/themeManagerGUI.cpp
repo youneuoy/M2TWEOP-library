@@ -26,11 +26,11 @@ void tomlToStyle(std::string themeName)
 	// Load the TOML file
 	if (themeName.find(".toml") != std::string::npos)
 	{
-		fPath = ".\\eopData\\themes\\" + themeName;
+		fPath = ".\\eopData\\resources\\themes\\" + themeName;
 	}
 	else
 	{
-		fPath = ".\\eopData\\themes\\" + themeName + ".toml";
+		fPath = ".\\eopData\\resources\\themes\\" + themeName + ".toml";
 	}
 
 	auto config = cpptoml::parse_file(fPath);

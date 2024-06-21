@@ -2,11 +2,10 @@
 #include "headersSTD.h"
 
 #include "battlemapWorker.h"
-#include "DeveloperMode.h"
-#include "RecruitSystem.h"
-#include "MmbMover.h"
-#include "TacticalMapVeiwer.h"
-#include "ContextMenuStrat.h"
+#include "developerMode.h"
+#include "mmbMover.h"
+#include "tacticalMapViewer.h"
+#include "contextMenuStrat.h"
 class globals
 {
 public:
@@ -25,17 +24,16 @@ public:
 		}gameCfg;
 		struct modulesS
 		{
-			TacticalMapViewer tacticalMapVeiwer;
-			DeveloperMode developerMode;
-			battlemapWorker battlemapWorker;
-			RecruitSystem recruitSystem;
+			tacticalMapViewer tacticalMapViewer;
+			developerMode developerMode;
+			battlemapWorker battleMapWorker;
 			MmbMover mmbMover;
 			ContextMenuStrat contextMenuStrat;
 		}Modules;
 
 		//steam =2, kingdoms=1
-		UINT32 gamever;
-		string modPatch;
+		UINT32 gameVersion;
+		string modPath;
 
 		struct
 		{
@@ -104,10 +102,6 @@ public:
 		{
 			int32_t bLimitRecruitmentToSlotsAndByMoney = 0;
 		}eopGameplaySettings;
-
-
-
-
 
 	}dataS;
 };

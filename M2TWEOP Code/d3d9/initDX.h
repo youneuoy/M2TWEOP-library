@@ -33,7 +33,7 @@ void initDX9()
 	std::wstring libPath;
 
 	// Check if DXVK is enabled
-	std::string cfgPath = "\\eopData\\gameCfg.json";
+	std::string cfgPath = "\\eopData\\config\\gameCfg.json";
 	std::string modPath = helpers::getModPathFromSharedMemory();
 	modPath += cfgPath;
 

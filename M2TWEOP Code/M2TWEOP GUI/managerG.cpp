@@ -43,7 +43,7 @@ namespace managerG
 
 	void loadBattleConfig()
 	{
-		std::string fPath = ".\\eopBattles\\battlesCfg.json";
+		std::string fPath = ".\\eopData\\config\\battlesCfg.json";
 		jsn::json json= loadJsonFromFile(fPath);
 
 		try
@@ -70,7 +70,7 @@ namespace managerG
 	void loadGameConfig()
 	{
 
-		std::string fPath = ".\\eopData\\gameCfg.json";
+		std::string fPath = ".\\eopData\\config\\gameCfg.json";
 		jsn::json json = loadJsonFromFile(fPath);
 
 		try
@@ -112,7 +112,7 @@ namespace managerG
 
 	void loadUIConfig()
 	{
-		std::string fPath = ".\\eopData\\uiCfg.json";
+		std::string fPath = ".\\eopData\\config\\uiCfg.json";
 		std::regex regex{ R"([\,\s]+)" };
 		jsn::json json = loadJsonFromFile(fPath);
 		std::string jsonStringValue;
@@ -209,7 +209,7 @@ namespace managerG
 		std::string fPath;
 
 		// Save battle config
-		fPath = ".\\eopBattles\\battlesCfg.json";
+		fPath = ".\\eopData\\config\\battlesCfg.json";
 		setJson("enableAutoGeneration", dataG::data.battlesData.isGenerationNeeded);
 		setJson("enableResultsTransfer", dataG::data.battlesData.isResultTransferNeeded);
 		setJson("isPlannedRetreatRoute", dataG::data.battlesData.isPlannedRetreatRoute);
@@ -217,7 +217,7 @@ namespace managerG
 		json.clear();
 
 		// Save game config
-		fPath = ".\\eopData\\gameCfg.json";
+		fPath = ".\\eopData\\config\\gameCfg.json";
 		setJson("isDXVKEnabled", dataG::data.modulesData.isDXVKEnabled);
 		setJson("isContextMenuNeeded", dataG::data.modulesData.isContextMenuNeeded);
 		setJson("isTacticalMapViewerNeeded", dataG::data.modulesData.isTacticalMapViewerNeeded);
@@ -229,7 +229,7 @@ namespace managerG
 		json.clear();
 
 		// Save UI config
-		fPath = ".\\eopData\\uiCfg.json";
+		fPath = ".\\eopData\\config\\uiCfg.json";
 		setJson("useVanillaCfg", dataG::data.modData.useVanillaConfig);
 		setJson("modCfgFile", dataG::data.modData.configName);
 		setJson("useM2TWEOP", dataG::data.modData.useM2TWEOP);

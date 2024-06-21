@@ -1,6 +1,7 @@
 ﻿// dllmain.cpp : Определяет точку входа для приложения DLL.
 #include "pch.h"
 #include "managerF.h"
+#include <windows.h>
 
 //sfml(for audio)
 #if _DEBUG

@@ -168,7 +168,7 @@ namespace micropather
 			map. If you pathfinding is based on minimum time, it is the minimal travel time 
 			between 2 points given the best possible terrain.
 		*/
-		virtual float LeastCostEstimate( void* stateStart, void* stateEnd ) = 0;
+		virtual float leastCostEstimate( void* stateStart, void* stateEnd ) = 0;
 
 		/** 
 			Return the exact cost from the given state to all its neighboring states. This
@@ -176,14 +176,14 @@ namespace micropather
 			exact values for every call to MicroPather::Solve(). It should generally be a simple,
 			fast function with no callbacks into the pather.
 		*/	
-		virtual void AdjacentCost( void* state, MP_VECTOR< micropather::StateCost > *adjacent ) = 0;
+		virtual void adjacentCost( void* state, MP_VECTOR< micropather::StateCost > *adjacent ) = 0;
 
 		/**
 			This function is only used in DEBUG mode - it dumps output to stdout. Since void* 
 			aren't really human readable, normally you print out some concise info (like "(1,2)") 
 			without an ending newline.
 		*/
-		virtual void  PrintStateInfo( void* state ) = 0;
+		virtual void  printStateInfo( void* state ) = 0;
 	};
 
 

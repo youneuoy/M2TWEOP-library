@@ -38,7 +38,7 @@ runs:
     #    key:  code-cache
 
     # Run build script
-    - name: Run buildEOPNew.ps1
+    - name: Run buildEOP.ps1
       run: |
        ./buildEOP.ps1 -shouldZip "True"
       shell: pwsh

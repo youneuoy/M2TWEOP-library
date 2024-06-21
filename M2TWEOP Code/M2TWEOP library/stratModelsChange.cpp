@@ -1,10 +1,11 @@
+#include "pch.h"
 #include "stratModelsChange.h"
-
-#include <map>
-
-#include "fastFuncts.h"
+#include "campaign.h"
 #include "functionsOffsets.h"
 #include "dataOffsets.h"
+#include "character.h"
+#include "strategyMap.h"
+
 namespace stratModelsChange
 {
 	enum class modelsChangeStatus
@@ -56,7 +57,7 @@ namespace stratModelsChange
 
 	struct stratModelCharacterRecordChange
 	{
-		general* gen;
+		character* gen;
 
 		const char* modelId;
 	};
@@ -68,7 +69,8 @@ namespace stratModelsChange
 
 	void setModel(const int x, const int y, const UINT32 modelId, const UINT32 modelId2)
 	{
-
+		if (stratModels.find(modelId) == stratModels.end())
+			return;
 		for (size_t i = 0; i < stratModelChangeList.size(); i++)
 		{
 			if (stratModelChangeList[i]->x == x
@@ -86,18 +88,22 @@ namespace stratModelsChange
 		rec->x = x;
 		rec->y = y;
 		rec->isFort = false;
-
-		auto tile = fastFuncts::getTileStruct(x, y);
-		if (fastFuncts::getTileObject(tile, 30))
+		if (const auto tile = stratMapHelpers::getTile(x, y); tile->getFort())
 		{
 			fortEntryCount++;
 			rec->isFort = true;	
 		}
-
-
+		else if (tile->getSettlement())
+		{
+			eopSettlementDataDb::get()->getSettlementData(tile->regionId).modelId = modelId;
+		}
 		stratModelChangeList.push_back(rec);
-
 		changeModelsNeededNow = modelsChangeStatus::needChange;
+	}
+
+	void setModelOneVar(int x, int y, UINT32 modelId)
+	{
+		setModel(x, y, modelId, modelId);
 	}
 
 	stratModelRecord* findStratModel(const UINT32 modelId)
@@ -127,14 +133,14 @@ namespace stratModelsChange
 	struct visibilityCrashFixS
 	{
 		visibilityCrashFixS(int x, int y, factionStruct* fac, int8_t vis)
-			:X(x), Y(y), Fac(fac), Vis(vis)
+			:xCoord(x), yCoord(y), fac(fac), vis(vis)
 		{
 
 		}
-		int X;
-		int Y;
-		factionStruct* Fac = nullptr;
-		int8_t Vis = 0;
+		int xCoord;
+		int yCoord;
+		factionStruct* fac = nullptr;
+		int8_t vis = 0;
 	};
 	vector<visibilityCrashFixS> crashFixAr;
 
@@ -142,9 +148,9 @@ namespace stratModelsChange
 	{
 		if (changeModelsNeededNow == modelsChangeStatus::needFixHiding)
 		{
-			for (auto& visFix : crashFixAr)
+			for (const auto& visFix : crashFixAr)
 			{
-				fastFuncts::hideRevealedTile(visFix.Fac, visFix.X, visFix.Y);
+				visFix.fac->hideRevealedTile(visFix.xCoord, visFix.yCoord);
 			}
 			crashFixAr.clear();
 			changeModelsNeededNow = modelsChangeStatus::changed;
@@ -157,15 +163,14 @@ namespace stratModelsChange
 
 		if (fortEntryCount > 0)
 			crashFixAr.reserve(fortEntryCount);
-		UINT32 numFac = fastFuncts::getFactionsCount();
-		factionStruct** listFac = fastFuncts::getFactionsList();
-
+		
+		const auto campaignData = campaignHelpers::getCampaignData();
 		changeModelsNeededNow = modelsChangeStatus::changed;
-
 		for (stratModelChangeRecord* changeMod : stratModelChangeList) //static models
 		{
 			stratModelRecord* mod1 = findStratModel(changeMod->modelId);
-			if (mod1 == nullptr)continue;
+			if (mod1 == nullptr)
+				continue;
 
 			stratModelRecord* mod2 = nullptr;
 			 
@@ -175,23 +180,17 @@ namespace stratModelsChange
 			{
 				if (changeMod->isFort)
 				{
-					for (UINT32 i = 0; i < numFac; i++)
+					for (int i = 0; i < campaignData->factionCount; i++)
 					{
-						auto vis = fastFuncts::getTileVisibility(listFac[i], changeMod->x, changeMod->y);
-
+						auto fac = campaignData->getFactionByOrder(i);
+						auto vis = fac->getTileVisibility(changeMod->x, changeMod->y);
 						if (vis == 0)
 							continue;
-
-						crashFixAr.emplace_back(changeMod->x, changeMod->y, listFac[i], vis);
-
-						fastFuncts::revealTile(listFac[i], changeMod->x, changeMod->y);
-
-						//fastFuncts::setTileVisibility(listFac[i], changeMod->x, changeMod->y, 5);
+						crashFixAr.emplace_back(changeMod->x, changeMod->y, fac, vis);
+						fac->revealTile(changeMod->x, changeMod->y);
 					}
-
 					changeModelsNeededNow = modelsChangeStatus::needFixHiding;
 				}
-
 			}
 		}
 		for (const stratModelCharacterRecordChange* changeMod : stratModelCharacterChangeList) //character models
@@ -266,7 +265,7 @@ namespace stratModelsChange
 		return reinterpret_cast<model_Rigid*>(res);
 	}
 
-	void setCharacterModel(general* gen, const char* model) //add character to be changed to the queue
+	void setCharacterModel(character* gen, const char* model) //add character to be changed to the queue
 	{
 		const size_t stringsize = strlen(model);
 		for (UINT32 i = 0; i < stratModelCharacterChangeList.size(); i++)
@@ -288,7 +287,7 @@ namespace stratModelsChange
 		changeModelsNeededNow = modelsChangeStatus::needChange;
 	}
 
-	void changeStratModel(general* gen, const char* model)
+	void changeStratModel(character* gen, const char* model)
 	{
 		if (gen == nullptr) { //maybe captain dont exist anymore
 			return;

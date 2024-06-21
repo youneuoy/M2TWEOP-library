@@ -6,9 +6,6 @@ set /p userResponse=Do you really want to uninstall all EOP files? (Y/N):
 if /i "%userResponse%"=="Y" (
     echo You chose to continue.
     rmdir /s /q  "eopData"
-    rmdir /s /q  "youneuoy_Data"
-    rmdir /s /q "eopBattles"
-    rmdir /s /q "eopRedistributables"
     DEL /F /Q "M2TWEOP GUI.exe"
     DEL /F /Q "d3d9.dll"
     DEL /F /Q "discord_game_sdk.dll"
