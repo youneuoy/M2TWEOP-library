@@ -398,7 +398,6 @@ namespace factionHelpers
 		Basic factionStruct table
 
 		@tfield int factionID
-		@tfield getFactionName getFactionName
 		@tfield int cultureID
 		@tfield int aiPersonalityType
 		@tfield int aiPersonalityName
@@ -443,10 +442,10 @@ namespace factionHelpers
 		@tfield getCharacterRecord getCharacterRecord
 		@tfield int numOfCharacters includes all the characters present on the strat map
 		@tfield getCharacter getCharacter
-		@tfield int stacksNum
+		@tfield int armiesNum
 		@tfield int deadStatus
 		@tfield int revoltReason
-		@tfield getStack getStack
+		@tfield getArmy getArmy
 		@tfield int settlementsNum
 		@tfield getSettlement getSettlement
 		@tfield int fortsNum
@@ -578,10 +577,11 @@ namespace factionHelpers
 		end
 		*/
 		types.factionStruct.set_function("getSpottedCharacter", &factionStruct::getSpottedCharacter);
+		types.factionStruct.set("armiesNum", &factionStruct::stackNum);
 		types.factionStruct.set("stacksNum", &factionStruct::stackNum);
 		/***
 		Get an army using it's index.
-		@function factionStruct:getStack
+		@function factionStruct:getArmy
 		@tparam int number
 		@treturn armyStruct army
 		@usage
@@ -591,9 +591,9 @@ namespace factionHelpers
 				if not faction then
 					return nil
 				end
-				local armiesNum = faction.stacksNum
+				local armiesNum = faction.armiesNum
 				for j = 0, armiesNum - 1 do
-					local army = faction:getStack(j)
+					local army = faction:getArmy(j)
 					local x2, y2 = 0, 0
 					if (army.leader) then
 						x2 = army.leader.xCoord
@@ -618,6 +618,7 @@ namespace factionHelpers
 			return nil
 		end
 		*/
+		types.factionStruct.set_function("getArmy", &factionStruct::getArmy);
 		types.factionStruct.set_function("getStack", &factionStruct::getArmy);
 		types.factionStruct.set("settlementsNum", &factionStruct::settlementsNum);
 		/***
@@ -1080,8 +1081,8 @@ namespace factionHelpers
 		types.factionRanking.set("financialRankingScore", &factionRanking::financialRanking);
 		types.factionRanking.set("populationRankingScore", &factionRanking::populationRanking);
 
-		///aiFaction
-		//@section aiFaction
+		///AI Faction
+		//@section AI Faction
 
 		/***
 		Basic aiFaction table

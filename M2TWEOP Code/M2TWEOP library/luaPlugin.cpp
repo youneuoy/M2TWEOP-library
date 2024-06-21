@@ -176,7 +176,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	Basic M2TWEOP table
 
 	@tfield getModPath getModPath
-	@tfield getRelativePath getRelativePath
+	@tfield getModFolderName getModFolderName
 	@tfield toggleConsole toggleConsole
 	@tfield reloadScript reloadScript
 	@tfield restartLua restartLua
@@ -245,13 +245,13 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	
 	/***
 	Get relative path from the 'mods' folder.
-	@function M2TWEOP.getRelativePath
+	@function M2TWEOP.getModFolderName
 	@treturn string mod path
 	@usage
-	mPath=M2TWEOP.getRelativePath();
+	mPath=M2TWEOP.getModFolderName();
 	print(mPath);
 	*/
-	tables.M2TWEOP.set_function("getRelativePath", &gameHelpers::getPathFromMods);
+	tables.M2TWEOP.set_function("getModFolderName", &gameHelpers::getModFolderName);
 	
 	/***
 	Open/close the lua console.

@@ -3,6 +3,7 @@
 #include "realGameTypes.h"
 #include "lua/sol.hpp"
 
+struct oneTile;
 struct portBuildingStruct;
 
 enum class strategyObject :int
@@ -83,6 +84,7 @@ struct landingTile
 public:
     uint32_t tileId; //0x0000
     float moveCost; //0x0004
+	oneTile* getTile();
 }; //Size: 0x0008
 
 struct customTile {

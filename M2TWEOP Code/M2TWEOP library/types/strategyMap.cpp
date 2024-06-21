@@ -19,6 +19,13 @@
 #include "globals.h"
 #include "tilesChange.h"
 
+oneTile* landingTile::getTile()
+{
+	const auto map = stratMapHelpers::getStratMap();
+	if (!map)
+		return nullptr;
+	return &map->tilesArr[tileId];
+}
 
 oneTile* landingPoint::getTile()
 {
@@ -583,6 +590,8 @@ namespace stratMapHelpers
             sol::usertype<coordPair> coordPair;
             sol::usertype<landMass> landMass;
             sol::usertype<roadStruct> roadStruct;
+            sol::usertype<landingTile> landingTile;
+            sol::usertype<landingPoint> landingPoint;
             sol::usertype<seaConnectedRegion> seaConnectedRegion;
             sol::usertype<neighbourRegion> neighbourRegion;
         }typeAll;
@@ -1025,6 +1034,7 @@ namespace stratMapHelpers
 		@tfield string localizedRebelsName
 		@tfield int triumphValue
 		@tfield int totalTradeValue
+		@tfield int landingPointsCount
 		@tfield int patrolPointsCount
 		@tfield getStack getStack
 		@tfield getFort getFort
@@ -1043,6 +1053,7 @@ namespace stratMapHelpers
 		@tfield getDevastatedTile getDevastatedTile
 		@tfield getHostileArmiesStrength getHostileArmiesStrength
 		@tfield hasResourceType hasResourceType
+		@tfield getLandingPoint getLandingPoint
 
 		@table regionStruct
 		*/
@@ -1057,6 +1068,7 @@ namespace stratMapHelpers
 		typeAll.regionStruct.set("colorGreen", &regionStruct::colorGreen);
 		typeAll.regionStruct.set("colorBlue", &regionStruct::colorBlue);
 		typeAll.regionStruct.set("regionID", &regionStruct::regionID);
+		typeAll.regionStruct.set("landingPointsCount", &regionStruct::landingPointsCount);
 		typeAll.regionStruct.set("loyaltyFactionID", &regionStruct::loyaltyFactionID);
 		typeAll.regionStruct.set("roadLevel", &regionStruct::roadLevel);
 		typeAll.regionStruct.set("farmingLevel", &regionStruct::farmingLevel);
@@ -1250,6 +1262,17 @@ namespace stratMapHelpers
 		typeAll.regionStruct.set_function("getTile", &regionStruct::getTile);
 
 		/***
+		Get a landing point by index.
+		@function regionStruct:getTile
+		@tparam int index
+		@treturn landingPoint point
+		@usage
+		local region = M2TW.stratMap.getRegion(2)
+		local point = region:getLandingPoint(0)
+		*/
+		typeAll.regionStruct.set_function("getLandingPoint", &regionStruct::getLandingPoint);
+
+		/***
 		Get a fertile tile by index.
 		@function regionStruct:getFertileTile
 		@tparam int index
@@ -1297,6 +1320,20 @@ namespace stratMapHelpers
 		local totalStrength = region:getHostileArmiesStrength(myFac.factionID)
 		*/
 		typeAll.regionStruct.set_function("getHostileArmiesStrength", &regionStruct::getHostileArmiesStrength);
+		
+		/***
+		Basic landingPoint table.
+
+		@tfield tileStruct landTile
+		@tfield float moveCost From water to land
+		@tfield tileStruct seaTile
+
+		@table landingPoint
+		*/
+		typeAll.landingPoint = luaState.new_usertype<landingPoint>("landingPoint");
+		typeAll.landingPoint.set("landTile", sol::property(&landingPoint::getTile));
+		typeAll.landingPoint.set("moveCost", &landingPoint::moveCost);
+		typeAll.landingPoint.set("seaTile", sol::property(&landingPoint::getSeaTile));
 
 		///Neighbour Region
 		//@section Neighbour Region
@@ -1308,9 +1345,18 @@ namespace stratMapHelpers
 		@tfield regionStruct region
 		@tfield int tradeValue
 		@tfield bool isBlocked
-		@tfield float moveCost
+		@tfield float moveCost from settlement to settlement
 		@tfield int borderTilesCount
+		@tfield int frontierTilesCount
+		@tfield int ambushTilesCount
+		@tfield int deepFrontierTilesCount
+		@tfield int borderCrossingCount
 		@tfield roadStruct connectingRoad
+		@tfield getBorderTile getBorderTile
+		@tfield getBorderCrossing getBorderCrossing
+		@tfield getDeepFrontierTile getDeepFrontierTile
+		@tfield getAmbushTile getAmbushTile
+		@tfield getFrontierTile getFrontierTile
 		@tfield getBorderTile getBorderTile
 
 
@@ -1321,6 +1367,10 @@ namespace stratMapHelpers
 		typeAll.neighbourRegion.set("tradeValue", &neighbourRegion::tradeValue);
 		typeAll.neighbourRegion.set("region", &neighbourRegion::region);
 		typeAll.neighbourRegion.set("borderTilesCount", &neighbourRegion::borderTilesCount);
+		typeAll.neighbourRegion.set("frontierTilesCount", &neighbourRegion::frontierTilesCount);
+		typeAll.neighbourRegion.set("ambushTilesCount", &neighbourRegion::ambushTilesCount);
+		typeAll.neighbourRegion.set("deepFrontierTilesCount", &neighbourRegion::deepFrontierTilesCount);
+		typeAll.neighbourRegion.set("borderCrossingCount", &neighbourRegion::passableTilesCount);
 		typeAll.neighbourRegion.set("connectingRoad", &neighbourRegion::connectingRoad);
 		typeAll.neighbourRegion.set("isBlocked", &neighbourRegion::isBlocked);
 		typeAll.neighbourRegion.set("moveCost", &neighbourRegion::moveCost);
@@ -1334,6 +1384,46 @@ namespace stratMapHelpers
 		local tile = nRegion:getBorderTile(0)
 		*/
 		typeAll.neighbourRegion.set_function("getBorderTile", &neighbourRegion::getBorderTile);
+
+		/***
+		Get a frontier tile by index.
+		@function neighbourRegion:getFrontierTile
+		@tparam int index
+		@treturn tileStruct tile
+		@usage
+		local tile = nRegion:getFrontierTile(0)
+		*/
+		typeAll.neighbourRegion.set_function("getFrontierTile", &neighbourRegion::getFrontierTile);
+
+		/***
+		Get an ambush tile by index.
+		@function neighbourRegion:getAmbushTile
+		@tparam int index
+		@treturn tileStruct tile
+		@usage
+		local tile = nRegion:getAmbushTile(0)
+		*/
+		typeAll.neighbourRegion.set_function("getAmbushTile", &neighbourRegion::getAmbushTile);
+
+		/***
+		Get a deep frontier tile by index.
+		@function neighbourRegion:getDeepFrontierTile
+		@tparam int index
+		@treturn tileStruct tile
+		@usage
+		local tile = nRegion:getDeepFrontierTile(0)
+		*/
+		typeAll.neighbourRegion.set_function("getDeepFrontierTile", &neighbourRegion::getDeepFrontierTile);
+
+		/***
+		Get a border tile that is passable to other region.
+		@function neighbourRegion:getBorderCrossing
+		@tparam int index
+		@treturn tileStruct tile
+		@usage
+		local tile = nRegion:getBorderCrossing(0)
+		*/
+		typeAll.neighbourRegion.set_function("getBorderCrossing", &neighbourRegion::getBorderCrossing);
 
 		
 		///Sea Connected Region
@@ -1364,7 +1454,7 @@ namespace stratMapHelpers
 		Get a reachable tile by index.
 		@function seaConnectedRegion:getReachableTile
 		@tparam int index
-		@treturn tileStruct tile
+		@treturn landingTile tile
 		@usage
 		local tile = seaRegion:getReachableTile(0)
 		*/
@@ -1379,6 +1469,18 @@ namespace stratMapHelpers
 		local coords = seaRegion:getTradeLaneCoord(0)
 		*/
 		typeAll.seaConnectedRegion.set_function("getTradeLaneCoord", &seaConnectedRegion::getTradeLanePath);
+		
+		/***
+		Basic landingTile table.
+
+		@tfield tileStruct tile
+		@tfield float moveCost Move points required to reach this tile
+		
+		@table landingTile
+		*/
+		typeAll.landingTile = luaState.new_usertype<landingTile>("landingTile");
+		typeAll.landingTile.set("tile", sol::property(&landingTile::getTile));
+		typeAll.landingTile.set("moveCost", &landingTile::moveCost);
 
     }
 };

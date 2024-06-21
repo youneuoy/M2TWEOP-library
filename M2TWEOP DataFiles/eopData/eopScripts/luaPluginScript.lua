@@ -3,9 +3,6 @@ require('myconfigs')
 -- Helper for managing persistence of tables across save/load
 require('helpers/tableSave')
 
--- Uncomment to use EOP Helper functions
--- require('helpers/EopLuaHelpers')
-
 -- Uncomment to use external debugger
 -- require('helpers/mobdebug').start()
 
@@ -52,11 +49,10 @@ end
 
 --- Called after loading the campaign map
 function onCampaignMapLoaded() 
-    GAME_DATA = gameDataAll.get()
-    CAMPAIGN = GAME_DATA.campaignStruct
-    STRAT_MAP = GAME_DATA.stratMap
-    BATTLE = GAME_DATA.battleStruct
-    UI_MANAGER = GAME_DATA.uiCardManager
+    CAMPAIGN = M2TW.campaign
+    STRAT_MAP = M2TW.stratMap
+    BATTLE = M2TW.battle
+    UI_MANAGER = M2TW.uiCardManager
 end
 
 

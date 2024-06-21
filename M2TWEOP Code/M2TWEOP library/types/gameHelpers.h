@@ -330,7 +330,7 @@ namespace gameHelpers
 {
 	std::string getModPath();
 	std::string getLuaPath();
-	std::string getPathFromMods();
+	std::string getModFolderName();
 	std::string getModString(const std::string& path);
 	int getGameVersion();
 	void addToLua(sol::state& luaState);

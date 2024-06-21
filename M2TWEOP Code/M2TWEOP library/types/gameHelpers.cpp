@@ -426,10 +426,18 @@ namespace gameHelpers
 		return ret;
 	}
 	
-	std::string getPathFromMods()
+	std::string getModFolderName()
 	{
 		const std::string path = getModPath();
-		return getModString(path);
+		size_t pos = path.length();
+		if (path.back() == '/' || path.back() == '\\')
+			pos--;
+		for (; pos > 0; pos--)
+		{
+			if (path[pos] == '/' || path[pos] == '\\')
+				break;
+		}
+		return path.substr(pos + 1, path.length() - pos);
 	}
 
 	void setEquipmentCosts(const int equipType, const int cost)

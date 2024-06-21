@@ -850,9 +850,6 @@ namespace characterRecordHelpers
 			local effect = level:getTraitEffect(0);
 		*/
 		types.traitLevel.set_function("getTraitEffect", &getTraitEffect);
-		
-		/// Trait Effect Struct
-		//@section traitEffect
 
 		/***
 		Basic traitEffect table
