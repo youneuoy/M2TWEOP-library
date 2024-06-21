@@ -420,7 +420,7 @@ namespace battleCreator
 	void doResultsFileCreating()
 	{
 		std::string fPath = globals::dataS.modPath;
-		fPath += "\\eopBattles";
+		fPath += "\\eopData\\config";
 		filesystem::create_directory(fPath);
 		fPath += "\\lastBattleResult";
 		filesystem::remove_all(fPath);

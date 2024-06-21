@@ -243,7 +243,7 @@ void graphicsD3D::onDrawAllGameStuff()
 		{
 			if (logoEOP == nullptr)
 			{
-				//logoEOP=graphicsExport::loadTexture(std::string(globals::dataS.modPatch+ "/eopData/images/logoAbout.png").c_str(),&logoX,&logoY);
+				//logoEOP=graphicsExport::loadTexture(std::string(globals::dataS.modPatch+ "/eopData/resources/images/logoAbout.png").c_str(),&logoX,&logoY);
 				//ImGui::OpenPopup("M2TWEOP");
 			}
 
@@ -365,7 +365,7 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 		MessageBoxA(NULL, "graphics init error", "Error", NULL);
 		exit(0);
 	}
-	f = f + "\\eopData\\fonts\\mainFont.ttf";
+	f = f + "\\eopData\\resources\\fonts\\mainFont.ttf";
 
 	// ImGui::StyleGrey();
 	setStyle(globals::dataS.gameCfg.launcherTheme);

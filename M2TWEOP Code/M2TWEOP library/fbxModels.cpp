@@ -149,7 +149,7 @@ namespace fbxModels
 	bool addFbxModel(const char* path, const char* texture, int modelID)
 	{
 		std::string fPath = globals::dataS.modPath;
-		fPath += "\\eopData\\shaders\\skinned.fx";
+		fPath += "\\eopData\\resources\\shaders\\skinned.fx";
 
 
 		data.models.push_back(new SingleFbxMesh(modelID));

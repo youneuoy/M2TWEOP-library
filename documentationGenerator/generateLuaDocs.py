@@ -130,7 +130,7 @@ for file in os.listdir(typesPath):
     if file.endswith(".cpp"):
         filenames.append("types/" + file)
 luaPluginPath = eopPath + "M2TWEOP Code\\M2TWEOP library\\"
-outputfile = open(eopPath + "M2TWEOP DataFiles\\youneuoy_Data\\plugins\\lua\\LuaDocs.lua", 'w')
+outputfile = open(eopPath + "M2TWEOP DataFiles\\eopData\\eopScripts\\LuaDocs.lua", 'w')
 outputfile.write("---@diagnostic disable: missing-return, lowercase-global\n")
 
 classes = {}

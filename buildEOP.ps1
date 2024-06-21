@@ -51,7 +51,6 @@ Copy-Item -Path  "M2TWEOP DataFiles\*" -Destination "./M2TWEOPGenerated" -recurs
 Get-ChildItem -Path "documentationGenerator\EOPDocs\build\html\*" -erroraction 'continue'
 CopyFilesToFolder "documentationGenerator\EOPDocs\build\html" "./M2TWEOPGenerated/eopData/helpPages"
 
-Copy-Item -Path  "M2TWEOP-luaPlugin\Release\luaPlugin.dll" -Destination "./M2TWEOPGenerated/youneuoy_Data/plugins"
 Copy-Item -Path  "M2TWEOP Code\Release\d3d9.dll" -Destination "./M2TWEOPGenerated"
 Copy-Item -Path  "M2TWEOP Code\Release\M2TWEOP GUI.exe" -Destination "./M2TWEOPGenerated"
 # Copy-Item -Path  "M2TWEOP Code\Release\M2TWEOP tools.exe" -Destination "./M2TWEOPGenerated"

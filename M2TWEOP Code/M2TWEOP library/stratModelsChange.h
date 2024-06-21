@@ -15,7 +15,7 @@ namespace stratModelsChange
 
 	//add model to a game
 	//pass path to model and its id(used for change models)
-	//example of path - youneuoy_Data/models_strat/northern_european_large_castle.CAS
+	//example of path - eopData/models_strat/northern_european_large_castle.CAS
 	void addModelToGame(const char* path, UINT32 modelId);
 	void setModel(int x, int y, UINT32 modelId, UINT32 modelId2);
 	void setModelOneVar(int x, int y, UINT32 modelId);

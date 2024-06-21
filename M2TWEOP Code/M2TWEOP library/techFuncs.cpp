@@ -210,7 +210,7 @@ void techFuncs::saveGameMakeArchive(UNICODE_STRING**& savePath, vector<string>& 
 
 
 
-    packPath += "\\youneuoy_Data";
+    packPath += "\\eopData";
 
 
     if (!create_directory(filesystem::path(packPath))) // creates the directory
@@ -254,7 +254,7 @@ vector<string> techFuncs::getEopArchiveFiles(const string& savePath)
     string unpackPath = globals::dataS.modPath;
 
 
-    unpackPath += "\\youneuoy_Data";
+    unpackPath += "\\eopData";
 
 
     if (!create_directory(filesystem::path(unpackPath))) // creates the directory

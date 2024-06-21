@@ -914,7 +914,7 @@ void managerF::execPatches()
 void managerF::loadJsonSettings()
 {
 	std::string fPath = globals::dataS.modPath;
-	fPath += "\\eopData\\gameCfg.json";
+	fPath += "\\eopData\\config\\gameCfg.json";
 	jsn::json json = jsonManager::loadJsonFromFile(fPath);
 	bool jsonBoolValue;
 
@@ -952,7 +952,7 @@ void managerF::loadJsonSettings()
 	}
 
 	std::string uiPath = globals::dataS.modPath;
-	uiPath += "\\eopData\\uiCfg.json";
+	uiPath += "\\eopData\\config\\uiCfg.json";
 	json = jsonManager::loadJsonFromFile(uiPath);
 
 	try

@@ -8,12 +8,12 @@
 <p>
   The current bindings are based on <a href="https://github.com/ocornut/imgui/releases/tag/v1.90.2">ImGUI version 1.90.2</a>
 
-  You can find all the supported bindings in <a href="https://github.com/youneuoy/M2TWEOP-library/blob/master/M2TWEOP%20DataFiles/youneuoy_Data/plugins/lua/LuaImGuiDocs.lua">LuaImGuiDocs.lua</a>
+  You can find all the supported bindings in <a href="https://github.com/youneuoy/M2TWEOP-library/blob/master/M2TWEOP%20DataFiles/eopData/eopScripts/LuaImGuiDocs.lua">LuaImGuiDocs.lua</a>
 </p>
 
 <p>
   The examples that you can find below were based on <a
-    href="https://github.com/ocornut/imgui/releases/tag/v1.86">ImGUI version 1.86</a>. They exist as samples and general guidance but you should always reference the <a href="https://github.com/youneuoy/M2TWEOP-library/blob/master/M2TWEOP%20DataFiles/youneuoy_Data/plugins/lua/LuaImGuiDocs.lua">LuaImGuiDocs.lua</a> for the latest changes.
+    href="https://github.com/ocornut/imgui/releases/tag/v1.86">ImGUI version 1.86</a>. They exist as samples and general guidance but you should always reference the <a href="https://github.com/youneuoy/M2TWEOP-library/blob/master/M2TWEOP%20DataFiles/eopData/eopScripts/LuaImGuiDocs.lua">LuaImGuiDocs.lua</a> for the latest changes.
 
   This file is included as part of EOP and aso enables Intellisense when writing writing EOP code, assuming you are using VSCode and the Lua Language Server extension.
 </p>
@@ -307,7 +307,7 @@ GUI_OPEN, shouldDraw = ImGui.Begin("BACKGROUND_SCROLL", GUI_OPEN, ImGuiWindowFla
 
   -- Load the image
   BANNER_IMAGE = { x = 0, y = 0, img = nil }
-  BANNER_IMAGE.x, BANNER_IMAGE.y, BANNER_IMAGE.img = M2TWEOP.loadTexture(M2TWEOP.getModPath()..'\\eopData\\images\\SCROLL_BACKGROUND.png')
+  BANNER_IMAGE.x, BANNER_IMAGE.y, BANNER_IMAGE.img = M2TWEOP.loadTexture(M2TWEOP.getModPath()..'\\eopData\\resources\\images\\SCROLL_BACKGROUND.png')
 
   -- Draw the image in our centered window
   ImGui.Image(BANNER_IMAGE.img, scrollBackgroundWidth, scrollBackgroundHeight)

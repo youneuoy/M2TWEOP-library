@@ -132,7 +132,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     filesGenerator.startConvertation("test.xlsx","testPath",std::ref(isGenEnd));
     initRender();
 
-    /*dataG::data.screen.programIcon[0].pixels= stbi_load("eopData/EOPIcon.png",
+    /*dataG::data.screen.programIcon[0].pixels= stbi_load("eopData/resources/images/EOPIcon.png",
         &dataG::data.screen.programIcon[0].width,
         &dataG::data.screen.programIcon[0].height, 0, 4);
         */

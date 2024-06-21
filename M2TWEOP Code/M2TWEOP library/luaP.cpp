@@ -100,20 +100,20 @@ sol::state* luaP::init(std::string& luaFilePath, std::string& modPath)
 	}tables;
 	
 	luaState = {};
-	luaPath = modPath + R"(\youneuoy_Data\plugins\lua)";
+	luaPath = modPath + R"(\eopData\eopScripts)";
 	luaState.open_libraries(sol::lib::base, sol::lib::package, sol::lib::coroutine, sol::lib::string, sol::lib::os, sol::lib::math, sol::lib::table, sol::lib::bit32, sol::lib::io, sol::lib::ffi, sol::lib::jit, sol::lib::debug);
 
 	std::string packagePS = "package.path = '";
 	packagePS += modPath;
-	packagePS += R"(\youneuoy_Data\plugins\lua\?.lua;')";
+	packagePS += R"(\eopData\eopScripts\?.lua;')";
 
 	packagePS += "..'";
 	packagePS += modPath;
-	packagePS += R"(\youneuoy_Data\plugins\lua\redist\?.lua;'..package.path ;)";
+	packagePS += R"(\eopData\eopScripts\redist\?.lua;'..package.path ;)";
 
 	packagePS += "package.cpath = '";
 	packagePS += modPath;
-	packagePS += R"(\youneuoy_Data\plugins\lua\redist\?.dll;'..package.cpath ;)";
+	packagePS += R"(\eopData\eopScripts\redist\?.dll;'..package.cpath ;)";
 
 
 	std::string f = "\\";

@@ -43,10 +43,10 @@ new-item ./M2TWEOPGenerated  -itemtype directory -erroraction 'silentlycontinue'
 
 Copy-Item -Path  "M2TWEOP DataFiles\*" -Destination "./M2TWEOPGenerated" -recurse
 
-Remove-Item -Path "./M2TWEOPGenerated/youneuoy_Data/plugins/lua/luaPluginScript.lua" -Force
+Remove-Item -Path "./M2TWEOPGenerated/eopData/eopScripts/luaPluginScript.lua" -Force
 
 Get-ChildItem -Path "documentationGenerator\EOPDocs\build\html\*" -erroraction 'continue'
-CopyFilesToFolder "documentationGenerator\EOPDocs\build\html" "./M2TWEOPGenerated/eopData/helpPages"
+CopyFilesToFolder "documentationGenerator\EOPDocs\build\html" "./M2TWEOPGenerated/eopData/documentation"
 
 Copy-Item -Path  "M2TWEOP Code\Release\d3d9.dll" -Destination "./M2TWEOPGenerated"
 Copy-Item -Path  "M2TWEOP Code\Release\M2TWEOP GUI.exe" -Destination "./M2TWEOPGenerated"

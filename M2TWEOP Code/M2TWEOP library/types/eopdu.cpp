@@ -287,7 +287,7 @@ namespace eopDuHelpers
 		@tparam int eopEnryIndex Entry index, which will be assigned to a new record in DU (recommend starting from 1000, so that there is no confusion with records from EDU).
 		@treturn eduEntry retEntry Usually you shouldn't use this value.
 		@usage
-		M2TWEOPDU.addEopEduEntryFromFile(M2TWEOP.getModPath().."/youneuoy_Data/unitTypes/myTestType.txt",1000);
+		M2TWEOPDU.addEopEduEntryFromFile(M2TWEOP.getModPath().."/eopData/unitTypes/myTestType.txt",1000);
 		*/
 		tables.M2TWEOPEDUTable.set_function("addEopEduEntryFromFile", &eopDu::addEopEduEntryFromFile);
 

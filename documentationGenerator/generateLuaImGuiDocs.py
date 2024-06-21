@@ -122,7 +122,7 @@ filenames = ["imgui\\sol_ImGui.cpp", "imgui\\sol_ImGui_enums.cpp", "imgui\\sol_I
 cwd = os.getcwd()
 eopPath = re.findall(r'(.+)documentationGenerator', cwd)[0]
 luaPluginPath = eopPath + "M2TWEOP Code\\M2TWEOP library\\"
-outputfile = open(eopPath + "M2TWEOP DataFiles\\youneuoy_Data\\plugins\\lua\\LuaImGuiDocs.lua", 'w')
+outputfile = open(eopPath + "M2TWEOP DataFiles\\eopData\\eopScripts\\LuaImGuiDocs.lua", 'w')
 outputfile.write("---@diagnostic disable: missing-return, lowercase-global\n")
 
 for name in filenames:

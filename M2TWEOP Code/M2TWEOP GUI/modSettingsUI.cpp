@@ -192,7 +192,7 @@ namespace modSettingsUI
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable EOP when launching the mod");}
 
 		ImGui::Checkbox("Hide launcher on startup", &dataG::data.modData.hideLauncherAtStart);
-		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Hide the launcher when starting up. Can be shown again in eopData/uiCfg.json");}
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Hide the launcher when starting up. Can be shown again in eopData/config/uiCfg.json");}
 	}
 
 	void drawLauncherSettigs()
@@ -219,7 +219,7 @@ namespace modSettingsUI
 		}
 		ImGui::NewLine();
 
-		// Get all the TOML files in the eopData/themes folder
+		// Get all the TOML files in the eopData/resources/themes folder
 		std::vector<std::string> tomlFiles = helpers::getTomlFilesInFolder();
 		
 		// Check for the selected item
@@ -256,7 +256,7 @@ namespace modSettingsUI
 
 		if (ImGui::Button("Open Theme Editor", helpers::getScreen().centerXButton))
 		{
-			std::wstring exePath = L".\\eopData\\themes\\ImTheme\\ImThemes-0.2.6-amd64.exe";
+			std::wstring exePath = L".\\eopData\\resources\\themes\\ImTheme\\ImThemes-0.2.6-amd64.exe";
 			LPSTR lpwstr = ConvertWideStringToLPSTR(exePath);
 			helpers::openProcess(lpwstr);
 		}

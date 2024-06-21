@@ -131,7 +131,7 @@ namespace gameRunnerUI
 			(ImGui::GetTime() > startProcess.sendingEndTime || (startProcess.isRunEnded == true && startProcess.isGetResponse == false)))
 		{
 			const std::string badMSG = R"(
-![badLogo](eopData/images/deathDance.png)
+![badLogo](eopData/resources/images/deathDance.png)
 ## Perhaps something is wrong, read this text carefully and follow the indicated points **in the order in which they are indicated, each time restarting everything to check the solution** if:
 * If the game won't start
 * If the game starts, but no text appears in the upper left corner indicating the M2TWEOP version

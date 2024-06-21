@@ -194,7 +194,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     dataG::data.audio.bkgMusic.music = new sf::Music();
     if (dataG::data.modData.hideLauncherAtStart == false)
     {
-        dataG::data.audio.bkgMusic.musicLoaded=dataG::data.audio.bkgMusic.music->openFromFile("eopData/music/bkg.flac");
+        dataG::data.audio.bkgMusic.musicLoaded=dataG::data.audio.bkgMusic.music->openFromFile("eopData/resources/music/bkg.flac");
 
             if (dataG::data.audio.bkgMusic.musicLoaded == true)
             {

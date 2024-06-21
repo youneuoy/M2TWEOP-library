@@ -115,7 +115,7 @@ void ContextMenuStrat::Draw()
 	auto currPos = ImGui::GetCursorPos();
 	if (image == nullptr)
 	{
-		//TexturesManager::LoadTexture(99, "/eopData/images/SMALL_SCROLL_BACKGROUND.png");
+		//TexturesManager::LoadTexture(99, "/eopData/resources/images/SMALL_SCROLL_BACKGROUND.png");
 	}
 	else
 	{

@@ -61,7 +61,7 @@ namespace battleCreator
 		jsn::json json;
 
 		std::string fPath = globals::dataS.modPath;
-		fPath += "\\eopBattles\\battlesCfg.json";
+		fPath += "\\eopData\\config\\battlesCfg.json";
 
 
 		std::ifstream f1(fPath);
@@ -637,7 +637,7 @@ namespace battleCreator
 		ImGui::InsertNotification(bMsg);
 
 		std::string fPath = globals::dataS.modPath;
-		fPath += "\\eopBattles";
+		fPath += "\\eopData\\config";
 		filesystem::create_directory(fPath);
 		fPath += "\\lastBattle";
 		filesystem::remove_all(fPath);

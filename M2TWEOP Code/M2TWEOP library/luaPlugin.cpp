@@ -10,7 +10,7 @@
 
 int initLuaPlugin()
 {
-	std::string luaFile = plugData::data.modFolder + R"(\youneuoy_Data\plugins\lua\luaPluginScript.lua)";
+	std::string luaFile = plugData::data.modFolder + R"(\eopData\eopScripts\luaPluginScript.lua)";
 
 	sol::state* luaState = plugData::data.luaAll.init(luaFile, plugData::data.modFolder);
 	plugData::data.luaAll.initCampaign();
@@ -34,7 +34,7 @@ int initLuaPlugin()
 
 void reloadLua()
 {
-	const std::string luaFile = plugData::data.modFolder + R"(\youneuoy_Data\plugins\lua\luaPluginScript.lua)";
+	const std::string luaFile = plugData::data.modFolder + R"(\eopData\eopScripts\luaPluginScript.lua)";
 	auto script = plugData::data.luaAll.luaState.load_file(luaFile);
 	script();
 }
