@@ -571,7 +571,7 @@ public:
 		{
 			if (const int objectType = callVFunc<4, int>(thisPtr); objectType == type || (type == 0 && objectType < 28))
 				return thisPtr;
-			thisPtr = reinterpret_cast<DWORD*>(*(thisPtr + 1));  // NOLINT(performance-no-int-to-ptr)
+			thisPtr = *reinterpret_cast<DWORD**>((reinterpret_cast<DWORD>(thisPtr) + 0x4));  // NOLINT(performance-no-int-to-ptr)
 		}
 		return nullptr;
 	}

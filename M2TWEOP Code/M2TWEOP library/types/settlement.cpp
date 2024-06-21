@@ -1048,7 +1048,6 @@ namespace settlementHelpers
 		/***
 		Create an army in a settlement (don't need a character). Used to add units to an empty settlement.
 		@function settlementStruct:createArmyInSettlement
-		@tparam settlementStruct settlement
 		@treturn armyStruct army
 		@usage
 		if sett.army == nil then

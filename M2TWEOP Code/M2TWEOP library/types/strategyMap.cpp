@@ -1263,7 +1263,7 @@ namespace stratMapHelpers
 
 		/***
 		Get a landing point by index.
-		@function regionStruct:getTile
+		@function regionStruct:getLandingPoint
 		@tparam int index
 		@treturn landingPoint point
 		@usage
@@ -1357,7 +1357,6 @@ namespace stratMapHelpers
 		@tfield getDeepFrontierTile getDeepFrontierTile
 		@tfield getAmbushTile getAmbushTile
 		@tfield getFrontierTile getFrontierTile
-		@tfield getBorderTile getBorderTile
 
 
 		@table neighbourRegion
