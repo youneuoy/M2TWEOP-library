@@ -19,6 +19,10 @@
 #include "globals.h"
 #include "tilesChange.h"
 
+extentColor extentColors::m_Own =         { 0   , 0xFF, 0x20, 0x28, 0xFF };
+extentColor extentColors::m_Enemy =       { 0xFF, 0xFF, 0   , 0x28, 0xFF };
+extentColor extentColors::m_Zoc =         { 0xA0, 0x00, 0   , 0x00, 0xc8 };
+
 oneTile* landingTile::getTile()
 {
 	const auto map = stratMapHelpers::getStratMap();
@@ -73,7 +77,7 @@ oneTileDouble* oneTile::tileToDoubleTile()
 	const int mapWidth = (map->mapWidth << 1) + 1;
 	const int x = (getTileX() << 1) + 1;
 	const int y = (getTileY() << 1) + 1;
-	if (x < 0 || y < 0 || x >= mapWidth * 2 + 1 || y >= map->mapHeight * 2 + 1)
+	if (x < 0 || y < 0 || x >= mapWidth + 1 || y >= map->mapHeight * 2 + 1)
 		return nullptr;
 	return &map->climateTileArray[y * mapWidth + x];
 }
@@ -403,25 +407,25 @@ namespace stratMapHelpers
 	std::queue<std::pair<int, int>> getNeighbourTiles(int x, int y)
 	{
 		std::queue<std::pair<int, int>> neighbours;
-		neighbours.push({ x - 1, y });
-		neighbours.push({ x + 1, y });
-		neighbours.push({ x, y - 1 });
-		neighbours.push({ x, y + 1 });
-		neighbours.push({ x - 1, y + 1 });
-		neighbours.push({ x - 1, y - 1 });
-		neighbours.push({ x + 1, y + 1 });
-		neighbours.push({ x + 1, y - 1 });
+		neighbours.emplace(x - 1, y);
+		neighbours.emplace(x + 1, y);
+		neighbours.emplace(x, y - 1);
+		neighbours.emplace(x, y + 1);
+		neighbours.emplace(x - 1, y + 1);
+		neighbours.emplace(x - 1, y - 1);
+		neighbours.emplace(x + 1, y + 1);
+		neighbours.emplace(x + 1, y - 1);
 		return neighbours;
 	}
 
-	bool isTileValidForCharacterType(int charType, coordPair* coords)
+	bool isTileValidForCharacterType(const int charType, coordPair* coords)
 	{
 		if (!GAME_FUNC(bool(__stdcall*)(coordPair*, int, int), isTileValidForCharacter)(coords, charType, 1))
 			return false;
 		return isTileFree(&coords->xCoord);
 	}
 
-	coordPair* findValidTileNearTile(coordPair* coords, int charType)
+	coordPair* findValidTileNearTile(coordPair* coords, const int charType)
 	{
 		if (isTileValidForCharacterType(charType, coords))
 			return coords;
@@ -633,6 +637,9 @@ namespace stratMapHelpers
 		@tfield startDrawModelAt startDrawModelAt
 		@tfield stopDrawModel stopDrawModel
 		@tfield replaceTile replaceTile
+		@tfield setOwnExtentsColor setOwnExtentsColor
+		@tfield setEnemyExtentsColor setEnemyExtentsColor
+		@tfield setZocColor setZocColor
 
 		@table stratMap
 		*/
@@ -781,6 +788,44 @@ namespace stratMapHelpers
 		M2TW.stratMap.replaceTile("Helms-Deep_Province",167,158,"hornburg_amb.wfc","clear","midday");
 		*/
 		typeAll.stratMap.set_function("replaceTile", &tilesChange::replaceTile);
+
+		/***
+		Set movement extents color.
+		@function stratMap.setOwnExtentsColor
+		@tparam int r Red
+		@tparam int g Green
+		@tparam int b Blue
+		@tparam int a Alpha
+		@tparam int border borderAlpha
+		@usage
+		     M2TW.stratMap.setOwnExtentsColor(0, 255, 32, 40, 255)
+		*/
+		typeAll.stratMap.set_function("setOwnExtentsColor", &extentColors::setOwnColor);
+
+		/***
+		Set enemy movement extents color.
+		@function stratMap.setEnemyExtentsColor
+		@tparam int r Red
+		@tparam int g Green
+		@tparam int b Blue
+		@tparam int a Alpha
+		@tparam int border borderAlpha
+		@usage
+		     M2TW.stratMap.setEnemyExtentsColor(255, 255, 0, 40, 255)
+		*/
+		typeAll.stratMap.set_function("setEnemyExtentsColor", &extentColors::setEnemyColor);
+
+		/***
+		Set Zone of Control color.
+		@function stratMap.setZocColor
+		@tparam int r Red
+		@tparam int g Green
+		@tparam int b Blue
+		@tparam int a Alpha
+		@usage
+		     M2TW.stratMap.setZocColor(160, 0, 0, 200)
+		*/
+		typeAll.stratMap.set_function("setZocColor", &extentColors::setZocColor);
 		
 		/***
 		Basic coordPair table.

@@ -830,6 +830,78 @@ public:
 	}
 };
 
+struct extentColor
+{
+	uint8_t red{};
+	uint8_t green{};
+	uint8_t blue{};
+	uint8_t alpha{};
+	uint8_t borderAlpha{};
+};
+
+class extentColors
+{
+public:
+	static extentColor getOwnColor() { return m_Own; }
+	static extentColor getEnemyColor() { return m_Enemy; }
+	static extentColor getZocColor() { return m_Zoc; }
+	static void setOwnColorFull(const extentColor& color) { m_Own = color; }
+	static void setEnemyColorFull(const extentColor& color) { m_Enemy = color; }
+	static uint32_t getOwnColorHex()
+	{
+		return (m_Own.alpha << 24) | (m_Own.red << 16) | (m_Own.green << 8) | m_Own.blue;
+	}
+	static uint32_t getEnemyColorHex()
+	{
+		return (m_Enemy.alpha << 24) | (m_Enemy.red << 16) | (m_Enemy.green << 8) | m_Enemy.blue;
+	}
+	static uint32_t getZocColorHex()
+	{
+		return (m_Zoc.alpha << 24) | (m_Zoc.red << 16) | (m_Zoc.green << 8) | m_Zoc.blue;
+	}
+	static void setOwnColorHex(const uint32_t color)
+	{
+		m_Own.alpha = (color >> 24) & 0xFF;
+		m_Own.red = (color >> 16) & 0xFF;
+		m_Own.green = (color >> 8) & 0xFF;
+		m_Own.blue = color & 0xFF;
+	}
+	static void setEnemyColorHex(const uint32_t color)
+	{
+		m_Enemy.alpha = (color >> 24) & 0xFF;
+		m_Enemy.red = (color >> 16) & 0xFF;
+		m_Enemy.green = (color >> 8) & 0xFF;
+		m_Enemy.blue = color & 0xFF;
+	}
+	static void setOwnColor(const uint8_t red, const uint8_t green, const uint8_t blue, const uint8_t alpha, const uint8_t borderAlpha)
+	{
+		m_Own.red = red;
+		m_Own.green = green;
+		m_Own.blue = blue;
+		m_Own.alpha = alpha;
+		m_Own.borderAlpha = borderAlpha;
+	}
+	static void setZocColor(const uint8_t red, const uint8_t green, const uint8_t blue, const uint8_t alpha)
+	{
+		m_Zoc.red = red;
+		m_Zoc.green = green;
+		m_Zoc.blue = blue;
+		m_Zoc.borderAlpha = alpha;
+	}
+	static void setEnemyColor(const uint8_t red, const uint8_t green, const uint8_t blue, const uint8_t alpha, const uint8_t borderAlpha)
+	{
+		m_Enemy.red = red;
+		m_Enemy.green = green;
+		m_Enemy.blue = blue;
+		m_Enemy.alpha = alpha;
+		m_Enemy.borderAlpha = borderAlpha;
+	}
+private:
+	static extentColor m_Own;
+	static extentColor m_Enemy;
+	static extentColor m_Zoc;
+};
+
 
 namespace stratMapHelpers
 {

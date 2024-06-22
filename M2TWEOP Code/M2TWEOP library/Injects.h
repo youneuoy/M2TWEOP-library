@@ -1233,6 +1233,57 @@ private:
 	LPVOID funcAddress;
 };
 
+class onSetExtentsTexture
+	:public AATemplate
+{
+public:
+	onSetExtentsTexture(MemWork* mem, LPVOID addr, int ver);
+	~onSetExtentsTexture();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onSetExtentsTextureBorder
+	:public AATemplate
+{
+public:
+	onSetExtentsTextureBorder(MemWork* mem, LPVOID addr, int ver);
+	~onSetExtentsTextureBorder();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onSetExtentsTextureZOC
+	:public AATemplate
+{
+public:
+	onSetExtentsTextureZOC(MemWork* mem, LPVOID addr, int ver);
+	~onSetExtentsTextureZOC();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onSetExtentsTextureZOCAlpha
+	:public AATemplate
+{
+public:
+	onSetExtentsTextureZOCAlpha(MemWork* mem, LPVOID addr, int ver);
+	~onSetExtentsTextureZOCAlpha();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
 
 
 class OnLoadSettlementWorldpkgdesc

@@ -226,6 +226,38 @@ int __fastcall patchesForGame::onFindUnit(char* entry, int* eduIndex)
 	return *eduIndex;
 }
 
+uint32_t __fastcall patchesForGame::onSetExtentsTexture(bool isEnemy)
+{
+	if (isEnemy)
+		return extentColors::getEnemyColorHex();
+	return extentColors::getOwnColorHex();
+}
+
+uint8_t __fastcall patchesForGame::onSetExtentsBorder(uint8_t isBorder, DWORD extentsDisplay)
+{
+	if (isBorder == 0)
+		return 0;
+	const DWORD extents = extentsDisplay - 0x24;
+	const bool isEnemy = *reinterpret_cast<bool*>(extents + 0x80034);
+	const bool border = isBorder == static_cast<uint8_t>(0xFF);
+	if (isEnemy)
+	{
+		return border ? extentColors::getEnemyColor().borderAlpha : extentColors::getEnemyColor().alpha;
+	}
+	return border ? extentColors::getOwnColor().borderAlpha : extentColors::getOwnColor().alpha;
+}
+
+uint32_t __fastcall patchesForGame::onSetExtentsZoc()
+{
+	return extentColors::getZocColorHex();
+}
+
+uint8_t __fastcall patchesForGame::onSetExtentsZocAlpha(uint8_t oldAlpha)
+{
+	const float alphaDiff = oldAlpha / 200.0f;
+	return extentColors::getZocColor().borderAlpha * alphaDiff;
+}
+
 int __fastcall patchesForGame::onReligionCombatBonus(int religionID, characterRecord* namedChar)
 {
 	if (religionID > 9)
