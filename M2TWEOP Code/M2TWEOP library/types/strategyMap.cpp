@@ -400,9 +400,9 @@ namespace stratMapHelpers
 		return GAME_FUNC(float(__stdcall*)(int*, int*), getTileMoveCost)(start, end);
 	}
 	
-	std::queue<coordPair> getNeighbourTiles(int x, int y)
+	std::queue<std::pair<int, int>> getNeighbourTiles(int x, int y)
 	{
-		std::queue<coordPair> neighbours;
+		std::queue<std::pair<int, int>> neighbours;
 		neighbours.push({ x - 1, y });
 		neighbours.push({ x + 1, y });
 		neighbours.push({ x, y - 1 });
@@ -426,19 +426,20 @@ namespace stratMapHelpers
 		if (isTileValidForCharacterType(charType, coords))
 			return coords;
 		const auto startCoords = *coords;
-		std::queue<coordPair> neighbours = getNeighbourTiles(coords->xCoord, coords->yCoord);
-		std::vector<coordPair> visited = { *coords };
+		std::queue<std::pair<int, int>> neighbours = getNeighbourTiles(coords->xCoord, coords->yCoord);
+		const std::pair<int, int> start = { coords->xCoord, coords->yCoord };
+		std::vector<std::pair<int, int>> visited = { start };
 		while (true)
 		{
 			if (neighbours.empty())
 				break;
-			coordPair checkCoord = neighbours.front();
-			*coords = { checkCoord.xCoord, checkCoord.yCoord };
+			std::pair<int, int> checkCoord = neighbours.front();
+			*coords = { checkCoord.first, checkCoord.second };
 			neighbours.pop();
 			visited.push_back(checkCoord);
 			if (isTileValidForCharacterType(charType, coords))
 				return coords;
-			queue<coordPair> newNeighbours = getNeighbourTiles(checkCoord.xCoord, checkCoord.yCoord);
+			std::queue<std::pair<int, int>>  newNeighbours = getNeighbourTiles(checkCoord.first, checkCoord.second);
 			while (!newNeighbours.empty())
 			{
 				auto newCoord = newNeighbours.front();
@@ -446,7 +447,7 @@ namespace stratMapHelpers
 				bool isVisited = false;
 				for (const auto& [xCoord, yCoord] : visited)
 				{
-					if (xCoord == newCoord.xCoord && yCoord == newCoord.yCoord)
+					if (xCoord == newCoord.first && yCoord == newCoord.second)
 						isVisited = true;
 				}
 				if (isVisited)

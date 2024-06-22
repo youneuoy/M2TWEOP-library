@@ -27,35 +27,145 @@ characterMoveData::characterMoveData(character* charPtr, const int searchType, c
 	this->searchType = searchType;
 	this->turns = turns;
 	moveExtents = charPtr->getMoveExtents(searchType, turns);
+	auto actualMinX = 100000000;
+	auto actualMaxX = -100000000;
+	auto actualMinY = 100000000;
+	auto actualMaxY = -100000000;
 	for (int x = moveExtents->xCoordMin; x <= moveExtents->xCoordMax; x++)
 	{
 		for (int y = moveExtents->yCoordMin; y <= moveExtents->yCoordMax; y++)
 		{
 			if (x == xCoord && y == yCoord)
 				continue;
-			
-			const auto tileEx = moveExtents->getTile(x, y); 
-			if (tileEx && tileEx->movePoints <= 50000)
+			if (const auto tileEx = moveExtents->getTile(x, y); tileEx->movePoints <= 50000)
 				tiles.emplace_back(tileEx);
 			else
 				continue;
-			
-			const auto tile = tileEx->getTile();
-			
+			if (x < actualMinX)
+				actualMinX = x;
+			if (x > actualMaxX)
+				actualMaxX = x;
+			if (y < actualMinY)
+				actualMinY = y;
+			if (y > actualMaxY)
+				actualMaxY = y;
+		}
+	}
+	for (int x = actualMinX; x <= actualMaxX; x++)
+	{
+		for (int y = actualMinY; y <= actualMaxY; y++)
+		{
+			if (x == xCoord && y == yCoord)
+				continue;
+			const auto tileEx = moveExtents->getTile(x, y);
+			if (!tileEx)
+				continue;
+			const auto tile = stratMapHelpers::getTile(x, y);
+			auto comp = [this](const std::pair<int, int>& a, const std::pair<int, int>& b) {
+				return stratMapHelpers::getDistanceInTiles(a.first, a.second, xCoord, yCoord)
+					> stratMapHelpers::getDistanceInTiles(b.first, b.second, xCoord, yCoord);
+			};
 			if (const auto settlement = tile->getSettlement(); settlement)
-				settlements.emplace_back(settlement, tileEx, settlement->faction->factionID == thisChar->getFaction()->factionID);
+			{
+				if (tileEx->turns > 0 && tileEx->turns <= turns)
+					settlements.emplace_back(settlement, tileEx, settlement->faction->factionID == thisChar->getFaction()->factionID);
+				else
+				{
+					std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, decltype(comp)> neighbours(comp);
+					auto nTiles = stratMapHelpers::getNeighbourTiles(settlement->xCoord, settlement->yCoord);
+					while(!nTiles.empty())
+					{
+						neighbours.push(nTiles.front());
+						nTiles.pop();
+					}
+					while(!neighbours.empty())
+					{
+						const auto [nX, nY] = neighbours.top();
+						neighbours.pop();
+						if (const auto neighbourTileEx = moveExtents->getTile(nX, nY);neighbourTileEx && neighbourTileEx->turns > 0 && neighbourTileEx->turns <= turns)
+						{
+							settlements.emplace_back(settlement, tileEx, settlement->faction->factionID == thisChar->getFaction()->factionID);
+							settlements.back().turns = neighbourTileEx->turns;
+							settlements.back().moveCost = neighbourTileEx->movePoints + stratMapHelpers::getTileMoveCost(nX, nY, settlement->xCoord, settlement->yCoord);
+							break;
+						}
+					}
+				}
+			}
 			if (const auto fort = tile->getFort(); fort)
-				forts.emplace_back(fort, tileEx, fort->faction->factionID == thisChar->getFaction()->factionID);
-			if (const auto resource = tile->getResource(); resource)
+			{
+				if (tileEx->turns > 0 && tileEx->turns <= turns)
+					forts.emplace_back(fort, tileEx, fort->faction->factionID == thisChar->getFaction()->factionID);
+				else
+				{
+					std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, decltype(comp)> neighbours(comp);
+					auto nTiles = stratMapHelpers::getNeighbourTiles(fort->xCoord, fort->yCoord);
+					while(!nTiles.empty())
+					{
+						neighbours.push(nTiles.front());
+						nTiles.pop();
+					}
+					while(!neighbours.empty())
+					{
+						const auto [nX, nY] = neighbours.top();
+						neighbours.pop();
+						if (const auto neighbourTileEx = moveExtents->getTile(nX, nY);neighbourTileEx && neighbourTileEx->turns > 0 && neighbourTileEx->turns <= turns)
+						{
+							forts.emplace_back(fort, tileEx, fort->faction->factionID == thisChar->getFaction()->factionID);
+							forts.back().turns = neighbourTileEx->turns;
+							forts.back().moveCost = neighbourTileEx->movePoints + stratMapHelpers::getTileMoveCost(nX, nY, fort->xCoord, fort->yCoord);
+							break;
+						}
+					}
+				}
+			}
+			if (const auto resource = tile->getResource(); resource && tileEx->turns > 0 && tileEx->turns <= turns)
+			{
 				resources.emplace_back(resource, tileEx, tile->factionId == thisChar->getFaction()->factionID);
+			}
 			if (const int characterNum = tile->getTileCharacterCount(); characterNum > 0)
 			{
-				for (int i = 0; i < characterNum; i++)
+				if (tileEx->turns > 0 && tileEx->turns <= turns)
 				{
-					const auto tileChar = tile->getTileCharacterAtIndex(i);
-					characters.emplace_back(charPtr, tileEx, charPtr->getFaction()->factionID == thisChar->getFaction()->factionID);
-					if (tileChar->armyLeaded)
-						armies.emplace_back(tileChar->armyLeaded, tileEx, tileChar->armyLeaded->faction->factionID == thisChar->getFaction()->factionID);
+					for (int i = 0; i < characterNum; i++)
+					{
+						const auto tileChar = tile->getTileCharacterAtIndex(i);
+						characters.emplace_back(tileChar, tileEx, tileChar->getFaction()->factionID == thisChar->getFaction()->factionID);
+						if (tileChar->armyLeaded)
+							armies.emplace_back(tileChar->armyLeaded, tileEx, tileChar->armyLeaded->faction->factionID == thisChar->getFaction()->factionID);
+					}
+				}
+				else
+				{
+					std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, decltype(comp)> neighbours(comp);
+					auto nTiles = stratMapHelpers::getNeighbourTiles(tile->getTileX(), tile->getTileY());
+					while(!nTiles.empty())
+					{
+						neighbours.push(nTiles.front());
+						nTiles.pop();
+					}
+					while(!neighbours.empty())
+					{
+						const auto [nX, nY] = neighbours.top();
+						neighbours.pop();
+						if (const auto neighbourTileEx = moveExtents->getTile(nX, nY);neighbourTileEx && neighbourTileEx->turns > 0 && neighbourTileEx->turns <= turns)
+						{
+							for (int i = 0; i < characterNum; i++)
+							{
+								const auto tileChar = tile->getTileCharacterAtIndex(i);
+								characters.emplace_back(tileChar, tileEx, charPtr->getFaction()->factionID == thisChar->getFaction()->factionID);
+								characters.back().turns = neighbourTileEx->turns;
+								characters.back().moveCost = neighbourTileEx->movePoints + stratMapHelpers::getTileMoveCost(nX, nY, tileChar->xCoord, tileChar->yCoord);
+								if (tileChar->armyLeaded)
+								{
+									armies.emplace_back(tileChar->armyLeaded, tileEx, tileChar->armyLeaded->faction->factionID == thisChar->getFaction()->factionID);
+									armies.back().turns = neighbourTileEx->turns;
+									armies.back().moveCost = neighbourTileEx->movePoints + stratMapHelpers::getTileMoveCost(nX, nY, tileChar->xCoord, tileChar->yCoord);
+								}
+							}
+							break;
+						}
+					}
 				}
 			}
 		}

@@ -857,6 +857,7 @@ namespace stratMapHelpers
 	settlementStruct* getSettlement(const stratMap* map, const std::string& name);
 	regionStruct* getRegionByName(stratMap* map, const std::string& name);
 	std::pair<int, int> convertTileCoords(const DWORD arrayIndex);
+	std::queue<std::pair<int, int>> getNeighbourTiles(int x, int y);
 	oneTile* getTile(int x, int y);
 	regionStruct* getRegion(int index);
 	float getDistanceInTiles(const int x, const int y, const int destX, const int destY);
