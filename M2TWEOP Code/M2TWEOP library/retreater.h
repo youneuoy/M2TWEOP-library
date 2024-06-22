@@ -8,7 +8,7 @@ private:
 	battleDataS* Battle;
 
 	void retreatArmy(battleArmy& battleArmy);
-	void retreatSide(battleSide& bside);
+	void retreatSide(const battleSide& bside);
 
 	void startPostWork();
 	bool isPlayerInvolved = false;

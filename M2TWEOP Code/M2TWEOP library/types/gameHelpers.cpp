@@ -81,6 +81,14 @@ namespace gameHelpers
 	
 	void setScriptCounter(const char* counterName, int counterValue)
 	{
+		bool isExist = false;
+		const int value = getScriptCounter(counterName, isExist);
+		if (!isExist)
+		{
+			const std::string commandArgs = std::string(counterName) + " " + std::to_string(counterValue);
+			scriptCommand("set_event_counter", commandArgs.c_str());
+			return;
+		}
 		DWORD eventsObject = dataOffsets::offsets.scriptCountersSet;
 		DWORD funcAdr = codes::offsets.setScriptCounter;
 		char** cryptS = gameStringHelpers::createHashedString(counterName);

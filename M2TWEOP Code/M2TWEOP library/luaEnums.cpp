@@ -718,6 +718,30 @@ void luaPlugin::initLuaEnums()
 	);
 	
 	/***
+	Enum of strategy pathfinding types
+
+	@tfield int avoidZoc
+	@tfield int ignoreZoc
+	@tfield int direct
+	@tfield int militaryAccess
+	@tfield int landingPoints
+	@tfield int region
+	@tfield int strategic
+
+	@table searchType
+	*/
+	luaState.new_enum(
+		"searchType",
+		"avoidZoc", 0,
+		"ignoreZoc", 1,
+		"direct", 2,
+		"militaryAccess", 3,
+		"landingPoints", 4,
+		"region", 5,
+		"strategic", 6
+	);
+	
+	/***
 	Enum of production controller extra bias
 
 	@tfield int frontier

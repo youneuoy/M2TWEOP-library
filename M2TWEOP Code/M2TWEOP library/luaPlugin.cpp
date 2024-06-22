@@ -117,12 +117,17 @@ bool luaPlugin::checkVar(const char* gName, int variable)
 	return false;
 }
 
+struct M2TW
+{
+	
+};
+
 sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 {
 	struct
 	{
 		sol::table M2TWEOP;
-		sol::table M2TW;
+		sol::usertype<M2TW> M2TW;
 	}tables;
 	
 	luaState = {};
@@ -750,7 +755,6 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	Get a script counter value, works for counters and for event\_counters
 	@function M2TWEOP.getScriptCounter
 	@tparam string counterName The name of the counter
-	@treturn bool isExist Returns true if the counter exists i.e it has been used at least once in any way in the campaign\_script
 	@treturn int counterValue Returns the value of the counter
 	@usage
 	isExist, counterValue =  M2TWEOP.getScriptCounter("SomeCounter")
@@ -793,7 +797,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	
 	@table M2TW
 	*/
-	tables.M2TW = luaState.create_table("M2TW");
+	tables.M2TW = luaState.new_usertype<M2TW>("M2TW");
 	tables.M2TW.set("battle", sol::property(&battleHelpers::getBattleData));
 	tables.M2TW.set("campaign", sol::property(&campaignHelpers::getCampaignData));
 	tables.M2TW.set("stratMap", sol::property(&stratMapHelpers::getStratMap));

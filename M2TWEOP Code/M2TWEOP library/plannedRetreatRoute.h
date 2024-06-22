@@ -10,9 +10,9 @@ namespace plannedRetreatRoute
 	//reset routes
 	void onNewGameStart();
 	
-	void onFactionTurnStart(factionStruct*fac);
+	void onFactionTurnStart(const factionStruct*fac);
 	std::string onGameSave();
-	void onGameLoad(const std::vector<std::string>& filePathes);
+	void onGameLoad(const std::vector<std::string>& filePaths);
 
 
 	void onClickAtTile(int x, int y);

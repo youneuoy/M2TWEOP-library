@@ -976,7 +976,7 @@ namespace unitHelpers
 		default:
 			break;
 		}
-		return static_cast<int>(un->eduEntry->soldierCount) * mul;
+		return static_cast<int>(un->eduEntry->soldierCount * mul);
 	}
 	
 	int16_t angleFloatToShort(const float angle)
@@ -1063,9 +1063,10 @@ namespace unitHelpers
 		if (!group)
 			return;
 		DWORD funcAddr = codes::offsets.automateGroup;
+		int isAuto = automate ? 1 : 0;
 		_asm
 		{
-			push automate
+			push isAuto
 			mov ecx, group
 			mov eax, funcAddr
 			call eax

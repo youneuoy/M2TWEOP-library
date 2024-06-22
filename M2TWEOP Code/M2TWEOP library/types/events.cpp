@@ -878,7 +878,7 @@ void onChangeTurnNum(const int num)
 {
 	if (plugData::data.luaAll.onChangeTurnNumFunc)
 	{
-		tryLua((*plugData::data.luaAll.onChangeTurnNumFunc)())
+		tryLua((*plugData::data.luaAll.onChangeTurnNumFunc)(num))
 	}
 }
 

@@ -75,25 +75,25 @@ void retreater::retreatArmy(battleArmy& battleArmy)
 	}
 }
 
-void retreater::retreatSide(battleSide& bside)
+void retreater::retreatSide(const battleSide& bSide)
 {
 
-	for (int i = 0; i < bside.armiesNum; ++i)
+	for (int i = 0; i < bSide.armiesNum; ++i)
 	{
-		if (bside.forces[i].army->faction->isPlayerControlled == true)
+		if (bSide.forces[i].army->faction->isPlayerControlled == 1)
 		{
 			isPlayerInvolved = true;
 		}
-		if (bside.wonBattle != 0)//0 - lost
+		if (bSide.wonBattle != 0)//0 - lost
 		{
 			continue;
 		}
-		if (bside.forces[i].army->settlement != nullptr)
+		if (bSide.forces[i].army->settlement != nullptr)
 		{
 			continue;
 		}
 
-		retreatArmy(bside.forces[i]);
+		retreatArmy(bSide.forces[i]);
 	}
 }
 
@@ -117,25 +117,24 @@ void retreater::startPostWork()
 		auto* text = mapTextDrawer::makeText(font, "o");
 		if (text == nullptr)
 		{
-			MessageBoxA(NULL, "Cannot create text for PlannedRetreatRoute", "ATTENTION! Exit now!", NULL);
+			MessageBoxA(nullptr, "Cannot create text for PlannedRetreatRoute", "ATTENTION! Exit now!", NULL);
 			std::terminate();
 		}
-		int stX = std::get<0>(txt);
-		int stY = std::get<1>(txt);
+		const int stX = std::get<0>(txt);
+		const int stY = std::get<1>(txt);
 
-		int enX = std::get<2>(txt);
-		int enY = std::get<3>(txt);
+		const int enX = std::get<2>(txt);
+		const int enY = std::get<3>(txt);
 
-		text->xCoord = enX;
-		text->yCoord = enY;
+		text->xCoord = static_cast<float>(enX);
+		text->yCoord = static_cast<float>(enY);
 		text->zCoord = 0.2f;
 		text->xSize = 4;
 		text->ySize = 0.6f;
 		text->zSize = 4;
 
-		mapTextDrawer::coordsVText* cvt = new mapTextDrawer::coordsVText(stX, stY, text);
-
-		cvt->SetTileToLive(30.f);
+		const auto cvt = new mapTextDrawer::coordsVText(stX, stY, text);
+		cvt->setTileToLive(30.f);
 	}
 
 	mapTextDrawer::deleteTextFont(font);

@@ -18,10 +18,216 @@
 #include "strategyMap.h"
 #include "unit.h"
 
+characterMoveData::characterMoveData(character* charPtr, const int searchType, const int turns)
+: thisChar(charPtr)
+{
+	movePoints = charPtr->movePointsArmy;
+	xCoord = charPtr->xCoord;
+	yCoord = charPtr->yCoord;
+	this->searchType = searchType;
+	this->turns = turns;
+	moveExtents = charPtr->getMoveExtents(searchType, turns);
+	auto actualMinX = 100000000;
+	auto actualMaxX = -100000000;
+	auto actualMinY = 100000000;
+	auto actualMaxY = -100000000;
+	for (int x = moveExtents->xCoordMin; x <= moveExtents->xCoordMax; x++)
+	{
+		for (int y = moveExtents->yCoordMin; y <= moveExtents->yCoordMax; y++)
+		{
+			if (x == xCoord && y == yCoord)
+				continue;
+			if (const auto tileEx = moveExtents->getTile(x, y); tileEx->movePoints <= 50000)
+				tiles.emplace_back(tileEx);
+			else
+				continue;
+			if (x < actualMinX)
+				actualMinX = x;
+			if (x > actualMaxX)
+				actualMaxX = x;
+			if (y < actualMinY)
+				actualMinY = y;
+			if (y > actualMaxY)
+				actualMaxY = y;
+		}
+	}
+	for (int x = actualMinX; x <= actualMaxX; x++)
+	{
+		for (int y = actualMinY; y <= actualMaxY; y++)
+		{
+			if (x == xCoord && y == yCoord)
+				continue;
+			const auto tileEx = moveExtents->getTile(x, y);
+			if (!tileEx)
+				continue;
+			const auto tile = stratMapHelpers::getTile(x, y);
+			auto comp = [this](const std::pair<int, int>& a, const std::pair<int, int>& b) {
+				return stratMapHelpers::getDistanceInTiles(a.first, a.second, xCoord, yCoord)
+					> stratMapHelpers::getDistanceInTiles(b.first, b.second, xCoord, yCoord);
+			};
+			if (const auto settlement = tile->getSettlement(); settlement)
+			{
+				if (tileEx->turns > 0 && tileEx->turns <= turns)
+					settlements.emplace_back(settlement, tileEx, settlement->faction->factionID == thisChar->getFaction()->factionID);
+				else
+				{
+					std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, decltype(comp)> neighbours(comp);
+					auto nTiles = stratMapHelpers::getNeighbourTiles(settlement->xCoord, settlement->yCoord);
+					while(!nTiles.empty())
+					{
+						neighbours.push(nTiles.front());
+						nTiles.pop();
+					}
+					while(!neighbours.empty())
+					{
+						const auto [nX, nY] = neighbours.top();
+						neighbours.pop();
+						if (const auto neighbourTileEx = moveExtents->getTile(nX, nY);neighbourTileEx && neighbourTileEx->turns > 0 && neighbourTileEx->turns <= turns)
+						{
+							settlements.emplace_back(settlement, tileEx, settlement->faction->factionID == thisChar->getFaction()->factionID);
+							settlements.back().turns = neighbourTileEx->turns;
+							settlements.back().moveCost = neighbourTileEx->movePoints + stratMapHelpers::getTileMoveCost(nX, nY, settlement->xCoord, settlement->yCoord);
+							break;
+						}
+					}
+				}
+			}
+			if (const auto fort = tile->getFort(); fort)
+			{
+				if (tileEx->turns > 0 && tileEx->turns <= turns)
+					forts.emplace_back(fort, tileEx, fort->faction->factionID == thisChar->getFaction()->factionID);
+				else
+				{
+					std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, decltype(comp)> neighbours(comp);
+					auto nTiles = stratMapHelpers::getNeighbourTiles(fort->xCoord, fort->yCoord);
+					while(!nTiles.empty())
+					{
+						neighbours.push(nTiles.front());
+						nTiles.pop();
+					}
+					while(!neighbours.empty())
+					{
+						const auto [nX, nY] = neighbours.top();
+						neighbours.pop();
+						if (const auto neighbourTileEx = moveExtents->getTile(nX, nY);neighbourTileEx && neighbourTileEx->turns > 0 && neighbourTileEx->turns <= turns)
+						{
+							forts.emplace_back(fort, tileEx, fort->faction->factionID == thisChar->getFaction()->factionID);
+							forts.back().turns = neighbourTileEx->turns;
+							forts.back().moveCost = neighbourTileEx->movePoints + stratMapHelpers::getTileMoveCost(nX, nY, fort->xCoord, fort->yCoord);
+							break;
+						}
+					}
+				}
+			}
+			if (const auto resource = tile->getResource(); resource && tileEx->turns > 0 && tileEx->turns <= turns)
+			{
+				resources.emplace_back(resource, tileEx, tile->factionId == thisChar->getFaction()->factionID);
+			}
+			if (const int characterNum = tile->getTileCharacterCount(); characterNum > 0)
+			{
+				if (tileEx->turns > 0 && tileEx->turns <= turns)
+				{
+					for (int i = 0; i < characterNum; i++)
+					{
+						const auto tileChar = tile->getTileCharacterAtIndex(i);
+						characters.emplace_back(tileChar, tileEx, tileChar->getFaction()->factionID == thisChar->getFaction()->factionID);
+						if (tileChar->armyLeaded)
+							armies.emplace_back(tileChar->armyLeaded, tileEx, tileChar->armyLeaded->faction->factionID == thisChar->getFaction()->factionID);
+					}
+				}
+				else
+				{
+					std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, decltype(comp)> neighbours(comp);
+					auto nTiles = stratMapHelpers::getNeighbourTiles(tile->getTileX(), tile->getTileY());
+					while(!nTiles.empty())
+					{
+						neighbours.push(nTiles.front());
+						nTiles.pop();
+					}
+					while(!neighbours.empty())
+					{
+						const auto [nX, nY] = neighbours.top();
+						neighbours.pop();
+						if (const auto neighbourTileEx = moveExtents->getTile(nX, nY);neighbourTileEx && neighbourTileEx->turns > 0 && neighbourTileEx->turns <= turns)
+						{
+							for (int i = 0; i < characterNum; i++)
+							{
+								const auto tileChar = tile->getTileCharacterAtIndex(i);
+								characters.emplace_back(tileChar, tileEx, charPtr->getFaction()->factionID == thisChar->getFaction()->factionID);
+								characters.back().turns = neighbourTileEx->turns;
+								characters.back().moveCost = neighbourTileEx->movePoints + stratMapHelpers::getTileMoveCost(nX, nY, tileChar->xCoord, tileChar->yCoord);
+								if (tileChar->armyLeaded)
+								{
+									armies.emplace_back(tileChar->armyLeaded, tileEx, tileChar->armyLeaded->faction->factionID == thisChar->getFaction()->factionID);
+									armies.back().turns = neighbourTileEx->turns;
+									armies.back().moveCost = neighbourTileEx->movePoints + stratMapHelpers::getTileMoveCost(nX, nY, tileChar->xCoord, tileChar->yCoord);
+								}
+							}
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+	sortSettlementsDistance();
+	sortFortsDistance();
+	sortResourcesDistance();
+	sortCharactersDistance();
+	sortArmiesDistance();
+	sortTilesDistance();
+}
+
+void characterMoveData::sortArmiesStrength()
+{
+	std::sort(armies.begin(), armies.end(), [](const moveDataArmy& a, const moveDataArmy& b) { return a.army->totalStrength > b.army->totalStrength; });
+}
+
+void characterMoveData::sortSettlementsStrength()
+{
+	std::sort(settlements.begin(), settlements.end(), [](const moveDataSettlement& a, const moveDataSettlement& b)
+	{
+		int aStrength = 0;
+		int bStrength = 0;
+		if (a.settlement->army)
+			aStrength = a.settlement->army->totalStrength;
+		if (b.settlement->army)
+			bStrength = b.settlement->army->totalStrength;
+		return aStrength > bStrength;
+	});
+}
+
+void characterMoveData::sortFortsStrength()
+{
+	std::sort(forts.begin(), forts.end(), [](const moveDataFort& a, const moveDataFort& b)
+	{
+		int aStrength = 0;
+		int bStrength = 0;
+		if (a.fort->army)
+			aStrength = a.fort->army->totalStrength;
+		if (b.fort->army)
+			bStrength = b.fort->army->totalStrength;
+		return aStrength > bStrength;
+	});
+}
 
 void resourceStruct::setModel(UINT32 modelId)
 {
 	stratModelsChange::setModel(xCoord, yCoord, modelId, modelId);
+}
+
+oneTile* movementExtentTile::getTile()
+{
+	const auto stratMap = stratMapHelpers::getStratMap();
+	if (!stratMap)
+		return nullptr;
+	return &stratMap->tilesArr[tileIndex];
+}
+
+characterMovementExtents* moveExtentsManager::createMoveExtents(character* searchChar, const int searchType, const int numTurns)
+{
+	return GAME_FUNC(characterMovementExtents*(__thiscall*)(moveExtentsManager*, int, character*, characterAction, int),
+		createMoveExtents)(this, searchType, searchChar, characterAction::movingNormal, numTurns);
 }
 
 void campaign::setDipStance(campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2)
@@ -71,7 +277,7 @@ void campaign::setFactionTrade(factionStruct* factionOne, factionStruct* faction
 	auto diplomaticStuff = &diplomaticStandings;
 	int facIdOne = factionOne->factionID;
 	int facIdTwo = factionTwo->factionID;
-	auto set = diplomaticStandings[facIdOne][facIdTwo].hasTradeRights == 0;
+	auto set = diplomaticStandings[facIdOne][facIdTwo].hasTradeRights == 0 ? 1 : 0;
 	_asm
 	{
 		push set
@@ -282,6 +488,11 @@ namespace campaignHelpers
         return gameHelpers::getGameDataAll()->campaignStruct;
     }
 
+	stratPathFinding* getStratPathFinding()
+	{
+		return gameHelpers::getGameDataAll()->stratPathFinding;
+	}
+
     void addToLua(sol::state& luaState)
     {
         struct
@@ -302,6 +513,15 @@ namespace campaignHelpers
         	sol::usertype<campaignDifficulty1> campaignDifficulty1;
         	sol::usertype<campaignDifficulty2> campaignDifficulty2;
         	sol::usertype<selectionInfo> selectionInfo;
+        	sol::usertype<characterMovementExtents> characterMovementExtents;
+        	sol::usertype<movementExtentTile> movementExtentTile;
+        	sol::usertype<characterMoveData> characterMoveData;
+        	sol::usertype<moveDataTile> moveDataTile;
+        	sol::usertype<moveDataFort> moveDataFort;
+        	sol::usertype<moveDataResource> moveDataResource;
+        	sol::usertype<moveDataArmy> moveDataArmy;
+        	sol::usertype<moveDataCharacter> moveDataCharacter;
+        	sol::usertype<moveDataSettlement> moveDataSettlement;
         }typeAll;
     	
 		///Campaign
@@ -1382,5 +1602,309 @@ namespace campaignHelpers
 		typeAll.selectionInfo.set("selectedFort", sol::property(&selectionInfo::getSelectedFort));
 		typeAll.selectionInfo.set("hoveredFort", sol::property(&selectionInfo::getHoveredFort));
 		typeAll.selectionInfo.set("selectedEnemyFort", sol::property(&selectionInfo::getSelectedEnemyFort));
+
+		///Character Movement
+		//@Character Movement
+
+		/***
+		Basic characterMovementExtents table
+	
+		@tfield int searchType (only get)
+		@tfield int totalTiles
+		@tfield int xCoordMin
+		@tfield int yCoordMin
+		@tfield int xCoordMax
+		@tfield int yCoordMax
+		@tfield int turns
+		@tfield character character
+		@tfield getTile getTile
+	
+		@table characterMovementExtents
+		*/
+		typeAll.characterMovementExtents = luaState.new_usertype<characterMovementExtents>("characterMovementExtents");
+		typeAll.characterMovementExtents.set("searchType", &characterMovementExtents::searchType);
+		typeAll.characterMovementExtents.set("totalTiles", &characterMovementExtents::totalTiles);
+		typeAll.characterMovementExtents.set("xCoordMin", &characterMovementExtents::xCoordMin);
+		typeAll.characterMovementExtents.set("yCoordMin", &characterMovementExtents::yCoordMin);
+		typeAll.characterMovementExtents.set("xCoordMax", &characterMovementExtents::xCoordMax);
+		typeAll.characterMovementExtents.set("yCoordMax", &characterMovementExtents::yCoordMax);
+		typeAll.characterMovementExtents.set("turns", &characterMovementExtents::turns);
+		typeAll.characterMovementExtents.set("character", &characterMovementExtents::character);
+		
+		/***
+		Get a movement extent tile.
+		@function characterMovementExtents:getTile
+		@tparam int xCoord
+		@tparam int yCoord
+		@treturn movementExtentTile extentTile
+		@usage
+		     local extentTile = extents:getTile(234, 245)
+		*/
+		typeAll.characterMovementExtents.set_function("getTile", &characterMovementExtents::getTile);
+
+		/***
+		Basic movementExtentTile table
+	
+		@tfield tileStruct tile
+		@tfield float moveCost
+		@tfield int turns
+	
+		@table movementExtentTile
+		*/
+		typeAll.movementExtentTile = luaState.new_usertype<movementExtentTile>("movementExtentTile");
+		typeAll.movementExtentTile.set("tile", sol::property(&movementExtentTile::getTile));
+		typeAll.movementExtentTile.set("moveCost", &movementExtentTile::movePoints);
+		typeAll.movementExtentTile.set("turns", &movementExtentTile::turns);
+
+		/***
+		Basic characterMoveData table
+	
+		@tfield character character
+		@tfield int xCoord
+		@tfield int yCoord
+		@tfield int searchType
+		@tfield int turns
+		@tfield int settlementCount
+		@tfield int fortCount
+		@tfield int tileCount
+		@tfield int armyCount
+		@tfield int resourceCount
+		@tfield int characterCount
+		@tfield characterMovementExtents moveExtents
+		@tfield getSettlement getSettlement
+		@tfield getCharacter getCharacter
+		@tfield getArmy getArmy
+		@tfield getResource getResource
+		@tfield getFort getFort
+		@tfield getTile getTile
+		@tfield sortSettlementsDistance sortSettlementsDistance
+		@tfield sortSettlementsStrength sortSettlementsStrength
+		@tfield sortArmiesDistance sortArmiesDistance
+		@tfield sortArmiesStrength sortArmiesStrength
+		@tfield sortFortsDistance sortFortsDistance
+		@tfield sortFortsStrength sortFortsStrength
+	
+		@table characterMoveData
+		*/
+		typeAll.characterMoveData = luaState.new_usertype<characterMoveData>("characterMoveData");
+		typeAll.characterMoveData.set("character", &characterMoveData::thisChar);
+		typeAll.characterMoveData.set("xCoord", &characterMoveData::xCoord);
+		typeAll.characterMoveData.set("yCoord", &characterMoveData::yCoord);
+		typeAll.characterMoveData.set("searchType", &characterMoveData::searchType);
+		typeAll.characterMoveData.set("turns", &characterMoveData::turns);
+		typeAll.characterMoveData.set("moveExtents", &characterMoveData::moveExtents);
+		typeAll.characterMoveData.set("settlementCount", sol::property(&characterMoveData::getSettlementCount));
+		typeAll.characterMoveData.set("fortCount", sol::property(&characterMoveData::getFortCount));
+		typeAll.characterMoveData.set("tileCount", sol::property(&characterMoveData::getTileCount));
+		typeAll.characterMoveData.set("armyCount", sol::property(&characterMoveData::getArmyCount));
+		typeAll.characterMoveData.set("resourceCount", sol::property(&characterMoveData::getResourceCount));
+		typeAll.characterMoveData.set("characterCount", sol::property(&characterMoveData::getCharacterCount));
+		
+		/***
+		Get a settlement.
+		@function characterMoveData:getSettlement
+		@tparam int index
+		@treturn moveDataSettlement settlement
+		@usage
+			 local settlement = moveData:getSettlement(0)
+		*/
+		typeAll.characterMoveData.set_function("getSettlement", &characterMoveData::getSettlement);
+		
+		/***
+		Get a character.
+		@function characterMoveData:getCharacter
+		@tparam int index
+		@treturn moveDataCharacter foundChar
+		@usage
+			 local foundChar = moveData:getCharacter(0)
+		*/
+		typeAll.characterMoveData.set_function("getCharacter", &characterMoveData::getCharacter);
+		
+		/***
+		Get an army.
+		@function characterMoveData:getArmy
+		@tparam int index
+		@treturn moveDataArmy army
+		@usage
+			 local army = moveData:getArmy(0)
+		*/
+		typeAll.characterMoveData.set_function("getArmy", &characterMoveData::getArmy);
+		
+		/***
+		Get a resource.
+		@function characterMoveData:getResource
+		@tparam int index
+		@treturn moveDataResource resource
+		@usage
+			 local resource = moveData:getResource(0)
+		*/
+		typeAll.characterMoveData.set_function("getResource", &characterMoveData::getResource);
+		
+		/***
+		Get a fort.
+		@function characterMoveData:getFort
+		@tparam int index
+		@treturn moveDataFort fort
+		@usage
+			 local fort = moveData:getFort(0)
+		*/
+		typeAll.characterMoveData.set_function("getFort", &characterMoveData::getFort);
+		
+		/***
+		Get a tile.
+		@function characterMoveData:getTile
+		@tparam int index
+		@treturn moveDataTile tile
+		@usage
+			 local tile = moveData:getTile(0)
+		*/
+		typeAll.characterMoveData.set_function("getTile", &characterMoveData::getTile);
+		
+		/***
+		Sort settlements by distance (already sorted by default).
+		@function characterMoveData:sortSettlementsDistance
+		@usage
+			 moveData:sortSettlementsDistance()
+		*/
+		typeAll.characterMoveData.set_function("sortSettlementsDistance", &characterMoveData::sortSettlementsDistance);
+		
+		/***
+		Sort settlements by strength.
+		@function characterMoveData:sortSettlementsStrength
+		@usage
+			 moveData:sortSettlementsStrength()
+		*/
+		typeAll.characterMoveData.set_function("sortSettlementsStrength", &characterMoveData::sortSettlementsStrength);
+		
+		/***
+		Sort armies by distance (already sorted by default).
+		@function characterMoveData:sortArmiesDistance
+		@usage
+			 moveData:sortArmiesDistance()
+		*/
+		typeAll.characterMoveData.set_function("sortArmiesDistance", &characterMoveData::sortArmiesDistance);
+		
+		/***
+		Sort armies by strength.
+		@function characterMoveData:sortArmiesStrength
+		@usage
+			 moveData:sortArmiesStrength()
+		*/
+		typeAll.characterMoveData.set_function("sortArmiesStrength", &characterMoveData::sortArmiesStrength);
+		
+		/***
+		Sort forts by distance (already sorted by default).
+		@function characterMoveData:sortFortsDistance
+		@usage
+			 moveData:sortFortsDistance()
+		*/
+		typeAll.characterMoveData.set_function("sortFortsDistance", &characterMoveData::sortFortsDistance);
+		
+		/***
+		Sort forts by strength.
+		@function characterMoveData:sortFortsStrength
+		@usage
+			 moveData:sortFortsStrength()
+		*/
+		typeAll.characterMoveData.set_function("sortFortsStrength", &characterMoveData::sortFortsStrength);
+
+		/***
+		Basic moveDataSettlement table
+	
+		@tfield settlementStruct settlement
+		@tfield float moveCost
+		@tfield int turns
+		@tfield bool ownFaction
+	
+		@table moveDataSettlement
+		*/
+		typeAll.moveDataSettlement = luaState.new_usertype<moveDataSettlement>("moveDataSettlement");
+		typeAll.moveDataSettlement.set("settlement", &moveDataSettlement::settlement);
+		typeAll.moveDataSettlement.set("moveCost", &moveDataSettlement::moveCost);
+		typeAll.moveDataSettlement.set("turns", &moveDataSettlement::turns);
+		typeAll.moveDataSettlement.set("ownFaction", &moveDataSettlement::ownFaction);
+
+		/***
+		Basic moveDataCharacter table
+	
+		@tfield character character
+		@tfield float moveCost
+		@tfield int turns
+		@tfield bool ownFaction
+	
+		@table moveDataCharacter
+		*/
+		typeAll.moveDataCharacter = luaState.new_usertype<moveDataCharacter>("moveDataCharacter");
+		typeAll.moveDataCharacter.set("character", &moveDataCharacter::thisChar);
+		typeAll.moveDataCharacter.set("moveCost", &moveDataCharacter::moveCost);
+		typeAll.moveDataCharacter.set("turns", &moveDataCharacter::turns);
+		typeAll.moveDataCharacter.set("ownFaction", &moveDataCharacter::ownFaction);
+
+		/***
+		Basic moveDataArmy table
+	
+		@tfield armyStruct army
+		@tfield float moveCost
+		@tfield int turns
+		@tfield bool ownFaction
+	
+		@table moveDataArmy
+		*/
+		typeAll.moveDataArmy = luaState.new_usertype<moveDataArmy>("moveDataArmy");
+		typeAll.moveDataArmy.set("army", &moveDataArmy::army);
+		typeAll.moveDataArmy.set("moveCost", &moveDataArmy::moveCost);
+		typeAll.moveDataArmy.set("turns", &moveDataArmy::turns);
+		typeAll.moveDataArmy.set("ownFaction", &moveDataArmy::ownFaction);
+
+		/***
+		Basic moveDataResource table
+	
+		@tfield tradingResource resource
+		@tfield float moveCost
+		@tfield int turns
+		@tfield bool ownFaction
+	
+		@table moveDataResource
+		*/
+		typeAll.moveDataResource = luaState.new_usertype<moveDataResource>("moveDataResource");
+		typeAll.moveDataResource.set("resource", &moveDataResource::resource);
+		typeAll.moveDataResource.set("moveCost", &moveDataResource::moveCost);
+		typeAll.moveDataResource.set("turns", &moveDataResource::turns);
+		typeAll.moveDataResource.set("ownFaction", &moveDataResource::ownFaction);
+
+		/***
+		Basic moveDataFort table
+	
+		@tfield fortStruct fort
+		@tfield float moveCost
+		@tfield int turns
+		@tfield bool ownFaction
+	
+		@table moveDataFort
+		*/
+		typeAll.moveDataFort = luaState.new_usertype<moveDataFort>("moveDataFort");
+		typeAll.moveDataFort.set("fort", &moveDataFort::fort);
+		typeAll.moveDataFort.set("moveCost", &moveDataFort::moveCost);
+		typeAll.moveDataFort.set("turns", &moveDataFort::turns);
+		typeAll.moveDataFort.set("ownFaction", &moveDataFort::ownFaction);
+
+		/***
+		Basic moveDataTile table
+	
+		@tfield tileStruct tile
+		@tfield float moveCost
+		@tfield int turns
+		@tfield int xCoord
+		@tfield int yCoord
+	
+		@table moveDataTile
+		*/
+		typeAll.moveDataTile = luaState.new_usertype<moveDataTile>("moveDataTile");
+		typeAll.moveDataTile.set("tile", &moveDataTile::tile);
+		typeAll.moveDataTile.set("moveCost", &moveDataTile::moveCost);
+		typeAll.moveDataTile.set("turns", &moveDataTile::turns);
+		typeAll.moveDataTile.set("xCoord", &moveDataTile::xCoord);
+		typeAll.moveDataTile.set("yCoord", &moveDataTile::yCoord);
+		
     }
 };

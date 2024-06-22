@@ -5,6 +5,9 @@
 #include "settlement.h"
 #define generalStruct_abilityID 1
 
+struct characterMoveData;
+struct characterMovementExtents;
+
 struct genMod {
 	int type; /* 0-spy, 2 - diplomat, etc */
 	struct descrCharacterStratModelArray* stratInfo;
@@ -178,6 +181,8 @@ public:
 	}
 	settlementStruct* getSettlement();
 	fortStruct* getFort();
+	characterMovementExtents* getMoveExtents(int searchType, int numTurns);
+	std::shared_ptr<characterMoveData> createMoveData(int searchType, int numTurns);
 };
 
 namespace characterHelpers

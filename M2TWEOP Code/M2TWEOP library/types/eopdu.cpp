@@ -270,7 +270,6 @@ namespace eopDuHelpers
 		@tfield addEopEduEntryFromFile addEopEduEntryFromFile
 		@tfield addEopEduEntryFromEDUID addEopEduEntryFromEDUID
 		@tfield getEopEduEntryByID getEopEduEntryByID Needed for change many parameters of entry.
-		@tfield getDataEopDu getDataEopDu
 		@tfield getEduEntry getEduEntry
 		@tfield getEduEntryByType getEduEntryByType
 		@tfield getEduIndexByType getEduIndexByType

@@ -12,13 +12,10 @@ namespace TexturesManager
 			textures[id] = tex;
 			return tex;
 		}
-		catch (int ex)
-		{
-			//cannot load, ignore
-		}
-
+		catch (int){}
 		return nullptr;
 	}
+	
 	void UnloadTexture(uint32_t id)
 	{
 		textures.erase(id);

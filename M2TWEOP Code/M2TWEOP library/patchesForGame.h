@@ -30,6 +30,10 @@ public:
 	static const char* __fastcall onAutoSave();
 	static eduEntry* __fastcall onGetRecruitPoolUnitEntry(int eduIndex);
 	static int __fastcall onFindUnit(char* entry, int* eduIndex);
+	static uint32_t __fastcall onSetExtentsTexture(bool isEnemy);
+	static uint8_t __fastcall onSetExtentsBorder(uint8_t isBorder, DWORD extentsDisplay);
+	static uint32_t __fastcall onSetExtentsZoc();
+	static uint8_t __fastcall onSetExtentsZocAlpha(uint8_t oldAlpha);
 	static DWORD __fastcall onUnitInfo(DWORD entryAddress);
 	static float __fastcall onCalculateUnitValue(eduEntry* entry, DWORD value);
 	static int __fastcall onEvaluateUnit(int eduIndex);

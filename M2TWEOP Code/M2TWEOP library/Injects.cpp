@@ -3803,6 +3803,186 @@ void OnReadLogonOrLogoff::SetNewCode()
 	delete a;
 }
 
+onSetExtentsTexture::onSetExtentsTexture(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00991068;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x009904C0;
+}
+
+onSetExtentsTexture::~onSetExtentsTexture()
+{
+}
+
+void onSetExtentsTexture::SetOriginalCode()
+{
+	auto a = new Assembler();
+
+	a->lea(ecx, dword_ptr(esp, 0xC));
+	a->movzx(edx, byte_ptr(ecx));
+
+	a->ret();
+	m_originalBytes = static_cast<unsigned char*>(a->make());
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onSetExtentsTexture::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(ecx, byte_ptr(esi, 0x80034));
+	a->push(eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(dword_ptr(esp, 0x10), eax);
+	a->pop(eax);
+	a->lea(ecx, dword_ptr(esp, 0xC));
+	a->movzx(edx, byte_ptr(ecx));
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onSetExtentsTextureBorder::onSetExtentsTextureBorder(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00990710;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0098FBA0;
+}
+
+onSetExtentsTextureBorder::~onSetExtentsTextureBorder()
+{
+}
+
+void onSetExtentsTextureBorder::SetOriginalCode()
+{
+	auto a = new Assembler();
+
+	a->mov(byte_ptr(edi), al);
+	a->add(ebp, 1);
+
+	a->ret();
+	m_originalBytes = static_cast<unsigned char*>(a->make());
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onSetExtentsTextureBorder::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ecx);
+	a->push(edx);
+	a->mov(edx, dword_ptr(esp, 0x8));
+	a->mov(ecx, al);
+	a->pushf();
+	a->push(eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(byte_ptr(edi), al);
+	a->pop(eax);
+	a->popf();
+	a->pop(edx);
+	a->pop(ecx);
+	a->add(ebp, 1);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onSetExtentsTextureZOC::onSetExtentsTextureZOC(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00991201;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00990691;
+}
+
+onSetExtentsTextureZOC::~onSetExtentsTextureZOC()
+{
+}
+
+void onSetExtentsTextureZOC::SetOriginalCode()
+{
+	auto a = new Assembler();
+
+	a->mov(byte_ptr(eax, 0x3), 0);
+	a->mov(byte_ptr(eax, 0x2), 0xa0);
+	a->mov(byte_ptr(eax, 0x1), 0);
+
+	a->ret();
+	m_originalBytes = static_cast<unsigned char*>(a->make());
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onSetExtentsTextureZOC::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ecx);
+	a->push(eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(ecx, eax);
+	a->pop(eax);
+	a->mov(dword_ptr(eax), ecx);
+	a->pop(ecx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onSetExtentsTextureZOCAlpha::onSetExtentsTextureZOCAlpha(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00991321;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x009907B1;
+}
+
+onSetExtentsTextureZOCAlpha::~onSetExtentsTextureZOCAlpha()
+{
+}
+
+void onSetExtentsTextureZOCAlpha::SetOriginalCode()
+{
+	auto a = new Assembler();
+
+	a->cmp(ebx, dword_ptr(esp, 0x10));
+	a->mov(byte_ptr(esi, 3), al);
+
+	a->ret();
+	m_originalBytes = static_cast<unsigned char*>(a->make());
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onSetExtentsTextureZOCAlpha::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(ecx, al);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(byte_ptr(esi, 3), al);
+	a->cmp(ebx, dword_ptr(esp, 0x10));
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 OnLoadSettlementWorldpkgdesc::OnLoadSettlementWorldpkgdesc(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

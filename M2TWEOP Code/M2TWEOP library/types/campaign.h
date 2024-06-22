@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include "character.h"
+#include "characterRecord.h"
 #include "realGameTypes.h"
 #include "lua/sol.hpp"
 #include "faction.h"
@@ -882,6 +884,7 @@ struct movementExtentTile
 	int8_t turns;
 	int8_t inOpenList;
 	char pad[2];
+	oneTile* getTile();
 };
 
 struct characterMovementExtents
@@ -897,7 +900,7 @@ struct characterMovementExtents
 	gameStdVector<movementExtentTile> movementExtentTiles;
 	struct character *character;
 	int turns;
-	movementExtentTile* getTile(int xCoord, int yCoord)
+	movementExtentTile* getTile(const int xCoord, const int yCoord)
 	{
 		if (xCoord < xCoordMin || xCoord > xCoordMax || yCoord < yCoordMin || yCoord > yCoordMax)
 			return nullptr;
@@ -905,58 +908,256 @@ struct characterMovementExtents
 	}
 };
 
+
+enum class searchType
+{
+	avoidZoc,
+	ignoreZoc,
+	direct,
+	militaryAccess,
+	landingPoints,
+	region,
+	strategic
+};
+
+inline bool operator == (const searchType& a, const int& b)
+{
+	return static_cast<int>(a) == b;
+}
+
+inline bool operator != (const searchType& a, const int& b)
+{
+	return static_cast<int>(a) != b;
+}
+
+struct moveDataSettlement
+{
+	settlementStruct* settlement;
+	float moveCost;
+	int8_t turns;
+	bool ownFaction;
+	moveDataSettlement(settlementStruct* foundObj, const movementExtentTile* tileEx, const bool ownFaction)
+		: settlement(foundObj), moveCost(tileEx->movePoints), turns(tileEx->turns), ownFaction(ownFaction)
+	{}
+};
+
+struct moveDataCharacter
+{
+	character* thisChar;
+	float moveCost;
+	int8_t turns;
+	bool ownFaction;
+	moveDataCharacter(character* foundObj, const movementExtentTile* tileEx, const bool ownFaction)
+		: thisChar(foundObj), moveCost(tileEx->movePoints), turns(tileEx->turns), ownFaction(ownFaction)
+	{}
+};
+
+struct moveDataArmy
+{
+	armyStruct* army;
+	float moveCost;
+	int8_t turns;
+	bool ownFaction;
+	moveDataArmy(armyStruct* foundObj, const movementExtentTile* tileEx, const bool ownFaction)
+		: army(foundObj), moveCost(tileEx->movePoints), turns(tileEx->turns), ownFaction(ownFaction)
+	{}
+};
+
+struct moveDataResource
+{
+	resourceStruct* resource;
+	float moveCost;
+	int8_t turns;
+	bool ownFaction;
+	moveDataResource(resourceStruct* foundObj, const movementExtentTile* tileEx, const bool ownFaction)
+		: resource(foundObj), moveCost(tileEx->movePoints), turns(tileEx->turns), ownFaction(ownFaction)
+	{}
+};
+
+struct moveDataFort
+{
+	fortStruct* fort;
+	float moveCost;
+	int8_t turns;
+	bool ownFaction;
+	moveDataFort(fortStruct* foundFort, const movementExtentTile* tileEx, const bool ownFaction)
+		: fort(foundFort), moveCost(tileEx->movePoints), turns(tileEx->turns), ownFaction(ownFaction)
+	{}
+};
+
+struct moveDataTile
+{
+	oneTile* tile;
+	int xCoord;
+	int yCoord;
+	float moveCost;
+	int8_t turns;
+	moveDataTile(movementExtentTile* tileEx)
+	{
+		tile = tileEx->getTile();
+		auto [x, y] = tile->getTileCoords();
+		xCoord = x;
+		yCoord = y;
+		moveCost = tileEx->movePoints;
+		turns = tileEx->turns;
+	}
+};
+
+struct characterMoveData
+{
+	character* thisChar{};
+	int xCoord{};
+	int yCoord{};
+	float movePoints{};
+	int searchType{};
+	int turns{};
+	characterMovementExtents* moveExtents{};
+	std::vector<moveDataSettlement> settlements{};
+	std::vector<moveDataCharacter> characters{};
+	std::vector<moveDataArmy> armies{};
+	std::vector<moveDataResource> resources{};
+	std::vector<moveDataFort> forts{};
+	std::vector<moveDataTile> tiles{};
+	characterMoveData(character* charPtr, int searchType, int turns);
+	int getSettlementCount() const { return settlements.size(); }
+	int getCharacterCount() const { return characters.size(); }
+	int getArmyCount() const { return armies.size(); }
+	int getResourceCount() const { return resources.size(); }
+	int getFortCount() const { return forts.size(); }
+	int getTileCount() const { return tiles.size(); }
+	moveDataSettlement* getSettlement(const int index)
+	{
+		if (index < 0 || index >= static_cast<int>(settlements.size()))
+			return nullptr;
+		return &settlements[index];
+	}
+	moveDataCharacter* getCharacter(const int index)
+	{
+		if (index < 0 || index >= static_cast<int>(characters.size()))
+			return nullptr;
+		return &characters[index];
+	}
+	moveDataArmy* getArmy(const int index)
+	{
+		if (index < 0 || index >= static_cast<int>(armies.size()))
+			return nullptr;
+		return &armies[index];
+	}
+	moveDataResource* getResource(const int index)
+	{
+		if (index < 0 || index >= static_cast<int>(resources.size()))
+			return nullptr;
+		return &resources[index];
+	}
+	moveDataFort* getFort(const int index)
+	{
+		if (index < 0 || index >= static_cast<int>(forts.size()))
+			return nullptr;
+		return &forts[index];
+	}
+	moveDataTile* getTile(const int index)
+	{
+		if (index < 0 || index >= static_cast<int>(tiles.size()))
+			return nullptr;
+		return &tiles[index];
+	}
+	void sortSettlementsDistance()
+	{
+		std::sort(settlements.begin(), settlements.end(), [](const moveDataSettlement& a, const moveDataSettlement& b)
+			{
+				return a.moveCost < b.moveCost;
+			});
+	}
+	void sortSettlementsStrength();
+	void sortCharactersDistance()
+	{
+		std::sort(characters.begin(), characters.end(), [](const moveDataCharacter& a, const moveDataCharacter& b)
+			{
+				return a.moveCost < b.moveCost;
+			});
+	}
+	void sortArmiesDistance()
+	{
+		std::sort(armies.begin(), armies.end(), [](const moveDataArmy& a, const moveDataArmy& b)
+			{
+				return a.moveCost < b.moveCost;
+			});
+	}
+	void sortArmiesStrength();
+	void sortResourcesDistance()
+	{
+		std::sort(resources.begin(), resources.end(), [](const moveDataResource& a, const moveDataResource& b)
+			{
+				return a.moveCost < b.moveCost;
+			});
+	}
+	void sortFortsDistance()
+	{
+		std::sort(forts.begin(), forts.end(), [](const moveDataFort& a, const moveDataFort& b)
+			{
+				return a.moveCost < b.moveCost;
+			});
+	}
+	void sortFortsStrength();
+	void sortTilesDistance()
+	{
+		std::sort(tiles.begin(), tiles.end(), [](const moveDataTile& a, const moveDataTile& b)
+			{
+				return a.moveCost < b.moveCost;
+			});
+	}
+};
+
+struct moveExtentsManager
+{
+	gameStdVector<characterMovementExtents> moveExtents;
+	gameStdVector<characterMovementExtents> smpExtents;
+	characterMovementExtents* createMoveExtents(character* searchChar, int searchType, int numTurns);
+};
+
 struct stratPathFinding
 {
-	float mpRelated;
+	float minMpCost;
 	struct trackedCharacter trackedPointerCharacter;
 	int characterType;
 	struct factionStruct *faction;
 	int invalidOrReached;
-	int8_t noSpeedUp;
-	int8_t bytex19;
-	int8_t bytex1A;
-	int8_t bytex1B;
-	int stratWaterCreatedMaybe;
-	int8_t bytex20;
-	int8_t someBoolCheckForCaptureStuff;
-	int8_t bytex22;
+	bool followCharacters;
+	bool displayStandards;
+	int8_t bytex1A[2];
+	int cameraMode;
+	bool exchangeScroll;
+	bool waitingForScroll;
+	bool waitingForScrollInTurnEnd;
 	int8_t bytex23;
 	void *floatingGeneral1;
-	void *floatingGeneral2;
+	struct character *someCharacter;
 	void *charVerification;
 	void *charVerificationPos;
-	int fieldx34;
-	int somethingBattleCapturedStatus;
-	int fieldx3C;
-	int fieldx40;
-	int fieldx44;
-	int fieldx48;
-	int fieldx4C;
-	int fieldx50;
-	int fieldx54;
-	int fieldx58_12;
-	int8_t fieldx5C;
-	int8_t fieldx5D;
-	int8_t fieldx5E;
-	int8_t fieldx5F;
-	int fieldx60;
-	int fieldx64;
-	int fieldx68;
-	int fieldx6C;
-	struct character **characterArray1;
-	int characterArray1Size;
-	int characterArray1Num;
-	struct character **characterArray2;
-	int characterArray2Size;
-	int characterArray2Num;
-	int fieldx88;
-	characterMovementExtents **characterMovementExtents;
-	int characterMovementExtentsEnd;
-	int characterMovementExtentsEnd2;
-	int fieldx98;
-	int fieldx9C;
-	int fieldxA0;
-	int fieldxA4;
+	int charVerThing;
+	int battleResolution;
+	int endTurnX;
+	int endTurnY;
+	int stratToBattleX;
+	int stratToBattleY;
+	struct character *lastSelectedCharacter;
+	struct settlementStruct *lastSelectedSettlement;
+	struct fortStruct *lastSelectedFort;
+	int conflictType;
+	int8_t isNightBattle;
+	int8_t fieldx5D[3];
+	armyStruct *attackingArmy;
+	armyStruct *defendingArmy;
+	int campaignBattlePhase;
+	bool hideDisplay;
+	char padHide[3];
+	struct character **displacedCharacters;
+	int displacedCharactersSize;
+	int displacedCharactersNum;
+	struct character **nextTurnCharacters; 
+	int nextTurnCharactersSize;
+	int nextTurnCharactersNum;
+	moveExtentsManager extentsManager;
 	struct coordPair *coords;
 	int coordsSize;
 	int coordsNum;
@@ -1077,6 +1278,7 @@ namespace campaignHelpers
 {
     campaign* getCampaignData();
 	UINT32 getFactionsCount();
+	stratPathFinding* getStratPathFinding();
 	selectionInfo* getSelectionInfo();
 	campaignDifficulty1* getCampaignDifficulty1();
 	campaignDifficulty2* getCampaignDifficulty2();

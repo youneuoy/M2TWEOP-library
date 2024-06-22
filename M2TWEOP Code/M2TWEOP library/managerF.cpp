@@ -585,6 +585,30 @@ void managerF::execPatches()
 	toAttackGate->Enable();
 	f1 << "Done" << endl;
 	
+	f1 << "Start applying onSetExtentsTexture patch" << endl;
+	onSetExtentsTexture* toSetExtentsTexture = new onSetExtentsTexture(mem, (LPVOID)patchesForGame::onSetExtentsTexture, globals::dataS.gameVersion);
+	toSetExtentsTexture->SetNewCode();
+	toSetExtentsTexture->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onSetExtentsTextureBorder patch" << endl;
+	onSetExtentsTextureBorder* toSetExtentsTextureBorder = new onSetExtentsTextureBorder(mem, (LPVOID)patchesForGame::onSetExtentsBorder, globals::dataS.gameVersion);
+	toSetExtentsTextureBorder->SetNewCode();
+	toSetExtentsTextureBorder->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onSetExtentsTextureZOCAlpha patch" << endl;
+	onSetExtentsTextureZOCAlpha* toSetExtentsTextureZOCAlpha = new onSetExtentsTextureZOCAlpha(mem, (LPVOID)patchesForGame::onSetExtentsZocAlpha, globals::dataS.gameVersion);
+	toSetExtentsTextureZOCAlpha->SetNewCode();
+	toSetExtentsTextureZOCAlpha->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onSetExtentsTextureZOC patch" << endl;
+	onSetExtentsTextureZOC* toSetExtentsTextureZOC = new onSetExtentsTextureZOC(mem, (LPVOID)patchesForGame::onSetExtentsZoc, globals::dataS.gameVersion);
+	toSetExtentsTextureZOC->SetNewCode();
+	toSetExtentsTextureZOC->Enable();
+	f1 << "Done" << endl;
+	
 	f1 << "Start applying onGetBrowserPicConstructed patch" << endl;
 	onGetBrowserPicConstructed* toGetBrowserPicConstructed= new onGetBrowserPicConstructed(mem, (LPVOID)patchesForGame::getBrowserPicConstructed, globals::dataS.gameVersion);
 	toGetBrowserPicConstructed->SetNewCode();
@@ -850,7 +874,8 @@ void managerF::loadJsonSettings()
 
 void managerF::initThread()
 {
-	std::srand(std::time(nullptr));
+	std::random_device dev;
+	std::srand(dev());
 	battleCreator::readParams();
 	codes::initCodes(globals::dataS.gameVersion);
 	dataOffsets::initDataOffsets(globals::dataS.gameVersion);

@@ -494,8 +494,8 @@ namespace eopBuildings
     void setBuildingLocalizedName(const edbEntry* entry, const char* newName, int level, int factionID);
     void setBuildingLocalizedDescr(const edbEntry* entry, const char* newName, int level, int factionID);
     void setBuildingLocalizedDescrShort(const edbEntry* entry, const char* newName, int level, int factionID);
-    void addBuildingCapability(edbEntry* entry, int level, int capability, int16_t value, bool bonus);
-    void addBuildingPool(edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp, const char* condition);
+    void addBuildingCapability(const edbEntry* entry, int level, int capability, int16_t value, bool bonus);
+    void addBuildingPool(const edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp, const char* condition);
     void removeBuildingCapability(const edbEntry* entry, int level, int index);
     void removeBuildingPool(const edbEntry* entry, int level, int index);
     buildingLevelCapability* getBuildingCapability(const edbEntry* entry, int level, int index);
@@ -572,5 +572,5 @@ namespace eopBuildings
 
 namespace buildingHelpers
 {
-    void addToLua(sol::state& luaState);
+	void addToLua(sol::state& luaState);
 }

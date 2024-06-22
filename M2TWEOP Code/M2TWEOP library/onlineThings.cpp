@@ -888,7 +888,7 @@ namespace battleCreator
 		if (campaign->currentDescrFile == nullptr)
 			return "";
 
-		std::string relativePath = techFuncs::uniToANSI(campaign->currentDescrFile);
+		std::string relativePath = techFuncs::uniToAnsi(campaign->currentDescrFile);
 
 		if (relativePath.find("battle") != std::string::npos)//need load/
 		{

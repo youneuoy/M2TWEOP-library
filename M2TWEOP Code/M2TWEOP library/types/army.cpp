@@ -138,8 +138,6 @@ unit* armyStruct::createUnitByIndex(const int eduIndex, const int exp, const int
 {
 	unit *newUnit = unitHelpers::createUnitIdx(eduIndex, regionID, faction->factionID, exp, arm, weapon);
 	if (newUnit == nullptr)
-		newUnit = createEopUnit(eduIndex, exp, arm, weapon);
-	if (newUnit == nullptr)
 		return newUnit;
 	armyHelpers::addUnitToArmy(this, newUnit);
 	return newUnit;
@@ -656,7 +654,6 @@ namespace armyHelpers
 		@tfield int hiddenUnitCount
 		@tfield float reform_point_x X coordinate to which the retreating units will go.
 		@tfield float reform_point_y Y coordinate to which the retreating units will go.
-		@tfield createEOPUnit createEOPUnit
 		@tfield createUnit createUnit
 		@tfield sortStack sortStack
 		@tfield mergeArmies mergeArmies

@@ -405,8 +405,9 @@ namespace settlementHelpers
 		if (buildTypeS == nullptr)return;
 		char* buildType = buildTypeS[0];
 		char* hash = buildTypeS[1];
+		int returnMoney = isReturnMoney ? 1 : 0;
 		_asm {
-			push isReturnMoney
+			push returnMoney
 			push hash
 			push buildType
 			mov ecx, [sett]
@@ -1048,7 +1049,6 @@ namespace settlementHelpers
 		/***
 		Create an army in a settlement (don't need a character). Used to add units to an empty settlement.
 		@function settlementStruct:createArmyInSettlement
-		@tparam settlementStruct settlement
 		@treturn armyStruct army
 		@usage
 		if sett.army == nil then

@@ -1,9 +1,5 @@
 #pragma once
 
-//disasm
-#define BEA_ENGINE_STATIC
-
-
 #include <windows.h>
 #include <TlHelp32.h>
 #include <BeaEngine.h>
