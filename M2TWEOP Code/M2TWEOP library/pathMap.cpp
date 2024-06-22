@@ -16,22 +16,20 @@ namespace pathFinder
 		Pather = nullptr;
 	}
 
-	pathMap::pathMap(int xCenter, int yCenter, int radius) :pathMap()
+	pathMap::pathMap(const int xCenter, const int yCenter, const int radius) :pathMap()
 	{
 		Diameter = radius * 2;
 		Pather = new MicroPather(this, (Diameter * Diameter), Diameter);
 
 		if (isCoordsValid(xCenter, yCenter) == false)
-		{
 			return;
-		}
+		
 		XCenter = xCenter - radius;
 		YCenter = yCenter - radius;
-
 		StateMap.resize(Diameter * Diameter + Diameter + 1);
-		for (int x = 0; x <= Diameter; ++x)
+		for (size_t x = 0; x <= Diameter; ++x)
 		{
-			for (int y = 0; y <= Diameter; ++y)
+			for (size_t y = 0; y <= Diameter; ++y)
 			{
 				if (isCoordsValid(x + XCenter, y + YCenter))
 				{
@@ -40,16 +38,14 @@ namespace pathFinder
 			}
 		}
 	}
-	pathMap::pathMap(armyStruct* army, int radius) :pathMap()
+	
+	pathMap::pathMap(const armyStruct* army, const int radius) :pathMap()
 	{
+		if (army == nullptr)
+			return;
+		
 		Diameter = radius * 2;
 		Pather = new MicroPather(this, (Diameter * Diameter), Diameter);
-
-
-		if (army == nullptr)
-		{
-			return;
-		}
 		int xCenter = -1;
 		int yCenter = -1;
 		if (army->gen != nullptr)
@@ -64,14 +60,10 @@ namespace pathFinder
 		}
 
 		if (isCoordsValid(xCenter, yCenter) == false)
-		{
 			return;
-		}
 
-		bool isAtLand = stratMapHelpers::getTile(xCenter, yCenter)->isLand;
-
-
-		std::map<strategyGroundType, bool> pathableGround = {
+		const bool isAtLand = stratMapHelpers::getTile(xCenter, yCenter)->isLand;
+		std::map<strategyGroundType, bool> validGroundTypes = {
 			{strategyGroundType::lowFertility, isAtLand == true},
 			{strategyGroundType::mediumFertility, isAtLand == true},
 			{strategyGroundType::highFertility, isAtLand == true},
@@ -89,27 +81,23 @@ namespace pathFinder
 			{strategyGroundType::impassableLand, false},
 			{strategyGroundType::impassableSea, false}
 		};
-
-
-
-		auto isAcceptableTile = [&](int xDest, int yDest)
+		
+		auto isAcceptableTile = [&](const int xDest, const int yDest)
 		{
 			if (xDest == xCenter && yDest == yCenter)
 			{
 				return true;
 			}
-			auto prohibitNeigbourTiles = [&]()
+			auto prohibitNeighbourTiles = [&]()
 			{
-				auto prohibitTile = [&](int x, int y)
+				auto prohibitTile = [&](const int x, const int y)
 				{
-					int idx = (int)getState(x, y);
+					const int idx = reinterpret_cast<int>(getState(x, y));
 					if (idx == -1)
-					{
 						return;
-					}
-
 					StateMap[idx] = PathNode(0, 0, 0, true);
 				};
+				
 				prohibitTile(xDest - 1, yDest - 1);
 				prohibitTile(xDest, yDest - 1);
 				prohibitTile(xDest + 1, yDest - 1);
@@ -122,94 +110,72 @@ namespace pathFinder
 				prohibitTile(xDest + 1, yDest);
 			};
 
-			auto* destDile = stratMapHelpers::getTile(xDest, yDest);
+			auto* destinationTile = stratMapHelpers::getTile(xDest, yDest);
 
-			if (destDile->isLand != isAtLand)
-			{
+			if (destinationTile->isLand != static_cast<int8_t>(isAtLand))
 				return false;
-			}
-			//river
-			if (destDile->factionId > 0 && destDile->factionId & 0x60)
-			{
+			if (destinationTile->isRiver())
 				return false;
-			}
-			strategyGroundType currGround = strategyGroundType(destDile->groundType);
-
-
-			if (destDile->object != nullptr)
+			
+			const auto currGround = static_cast<strategyGroundType>(destinationTile->groundType);
+			if (destinationTile->object != nullptr)
 			{
-
-				void* endObj = stratMapHelpers::getMainStratObject(destDile->object);
-
-				strategyObject objT = callVFunc<4, strategyObject>(endObj);
-				switch (objT)
+				switch (void* endObj = stratMapHelpers::getMainStratObject(destinationTile->object); callVFunc<4, strategyObject>(endObj))
 				{
 				case strategyObject::floatingGeneral:
 				{
-					prohibitNeigbourTiles();
+					prohibitNeighbourTiles();
 					return false;
-					break;
 				}
 				case strategyObject::character:
 				{
-					character* gen = (character*)endObj;
-					if (gen->characterRecord->faction->factionID == army->faction->factionID)
+					if (const auto gen = static_cast<character*>(endObj);
+						gen->characterRecord->faction->factionID == army->faction->factionID)
 					{
 						return true;
 					}
 					else
 					{
-						if (gen->genType->type == 6 || gen->genType->type == 7 || gen->genType->type == 3)
+						if (gen->genType->type == characterTypeStrat::general
+							|| gen->genType->type == characterTypeStrat::namedCharacter
+							|| gen->genType->type == characterTypeStrat::admiral)
 						{
-							//prohibitNeigbourTiles();
 							return false;
 						}
-						else
-						{
-							return true;
-						}
+						return true;
 					}
-					break;
 				}
 				case strategyObject::settlement:
 				{
-					settlementStruct* set = (settlementStruct*)endObj;
-
-					if (set->faction->factionID == army->faction->factionID)
+					if (const auto sett = static_cast<settlementStruct*>(endObj);
+						sett->faction->factionID == army->faction->factionID)
 					{
 						return true;
 					}
-					else
-					{
-						prohibitNeigbourTiles();
-						return false;
-					}
-					break;
+					prohibitNeighbourTiles();
+					return false;
 				}
 				case strategyObject::fort:
 				{
-					fortStruct* fort = (fortStruct*)endObj;
-
-					if (fort->faction->factionID == army->faction->factionID)
+					if (const auto fort = static_cast<fortStruct*>(endObj);
+						fort->faction->factionID == army->faction->factionID)
 					{
 						return true;
 					}
-					else
-					{
-						prohibitNeigbourTiles();
-						return false;
-					}
-					break;
+					prohibitNeighbourTiles();
+					return false;
 				}
 				//for port and also for port dock
 				//need check ground type etc
 				case strategyObject::port:
-					break;
-				default:
+				case strategyObject::watchtower:
+				case strategyObject::sundry:
+				case strategyObject::rallyPointSundry:
+				case strategyObject::battleSiteMarker:
 					break;
 				}
 			}
-			if (pathableGround[currGround] == true)
+			if (validGroundTypes[currGround] == true)
 			{
 				return true;
 			}
@@ -219,114 +185,61 @@ namespace pathFinder
 		XCenter = xCenter - radius;
 		YCenter = yCenter - radius;
 
-		gameDataAllStruct* gameDataAll = reinterpret_cast<gameDataAllStruct*>(dataOffsets::offsets.gameDataAllOffset);
-
 		StateMap.resize(Diameter * Diameter + Diameter + 1);
-		for (int x = 0; x <= Diameter; ++x)
+		for (size_t x = 0; x <= Diameter; ++x)
 		{
-			for (int y = 0; y <= Diameter; ++y)
+			for (size_t y = 0; y <= Diameter; ++y)
 			{
-				if (x + XCenter == 170 && y + YCenter == 266)
-				{
-					int i = 0;
-				}
 				if (isCoordsValid(x + XCenter, y + YCenter) == false)
-				{
 					continue;
-				}
 				if (StateMap[x * Diameter + y].Inited == true)
-				{
 					continue;
-				}
-
 				if (isAcceptableTile(x + XCenter, y + YCenter))
-				{
 					StateMap[x * Diameter + y] = PathNode(x + XCenter, y + YCenter, 1, true);
-				}
 			}
 		}
-
-
-		int idx = (int)getState(xCenter, yCenter);
+		const int idx = reinterpret_cast<int>(getState(xCenter, yCenter));
 		if (idx == -1)
-		{
 			return;
-		}
 		StateMap[idx] = PathNode(xCenter, yCenter, 1, true);
 	}
-	float pathMap::calculateDistance(int x, int y, int destX, int destY)
+	
+	float pathMap::calculateDistance(const int x, const int y, const int destX, const int destY)
 	{
 		MPVector<void*> path;
-
 		float totalCost;
-		int succ = Pather->Solve(getState(x, y), getState(destX, destY), &path, &totalCost);
-		if (succ != 0)
-		{
+		if (Pather->Solve(getState(x, y), getState(destX, destY), &path, &totalCost) != 0)
 			totalCost = -1.f;
-		}
-		else
-		{
-
-		}
 		return totalCost;
 	}
 	
-	float pathMap::calculateDistance(int x, int y, int destX, int destY, std::vector<std::pair<int, int>>& path)
+	float pathMap::calculateDistance(const int x, const int y, const int destX, const int destY, std::vector<std::pair<int, int>>& path)
 	{
 		MPVector<void*> gpath;
-
 		float totalCost;
-		int succ = Pather->Solve(getState(x, y), getState(destX, destY), &gpath, &totalCost);
-		if (succ != 0)
-		{
+		if (Pather->Solve(getState(x, y), getState(destX, destY), &gpath, &totalCost) != 0)
 			totalCost = -1.f;
-		}
 		else
 		{
-			for (int i = 0; i < gpath.size(); ++i)
+			for (uint32_t i = 0; i < gpath.size(); ++i)
 			{
-				int idxInMap = (int)gpath[i];
-
+				const int idxInMap = reinterpret_cast<int>(gpath[i]);
 				path.emplace_back(StateMap[idxInMap].X, StateMap[idxInMap].Y);
 			}
 		}
 		return totalCost;
 	}
-	void pathMap::getPossibleTilesForArmy(int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords)
+	
+	void pathMap::getPossibleTilesForArmy(const int x, const int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords)
 	{
 		const auto tile = stratMapHelpers::getTile(x, y);
-		auto* army = tile->getArmy();
+		const auto* army = tile->getArmy();
 		if (army == nullptr)
 			return;
-
-
 		const float possibleMp = armyHelpers::getMinimumMovePointsForArmy(army);
-
 		//bitset wrapper, 1 bit per value
 		std::vector<bool>visited;
 		visited.resize(StateMap.size(), false);
-		auto checkDone = [&](int xDest, int yDest)
-		{
-			//enabling this give very very little performance win
-			//but give wrong result - we skipped some tiles with high cost
-			return false;
-			if (xDest == 406 && yDest == 245)
-			{
-				int i = 0;
-			}
-			int idx = (int)getState(xDest, yDest);
-			if (idx == -1)
-			{
-				return false;
-			}
-
-			if (visited[idx] == true)
-			{
-				return true;
-			}
-			return false;
-		};
-
 		int coordsMod = Diameter / 2;
 		do
 		{
@@ -335,49 +248,36 @@ namespace pathFinder
 			{
 				bool isAdded = false;
 
-				int xMin = x - currCoordsMod;
-				int xMax = x + currCoordsMod;
-				int yMin = y - currCoordsMod;
-				int yMax = y + currCoordsMod;
-
+				const int xMin = x - currCoordsMod;
+				const int xMax = x + currCoordsMod;
+				const int yMin = y - currCoordsMod;
+				const int yMax = y + currCoordsMod;
 				for (int yDest = yMin, xDest = xMin; yDest < yMax; ++yDest)
 				{
-					if (checkDone(xDest, yDest) == true)
-					{
-						continue;
-					}
-
 					std::vector<std::pair<int, int>> currPath;
-					float distance = calculateDistance(x, y, xDest, yDest, currPath);
-					if (distance >= 0 && distance < possibleMp)
+					if (const float distance = calculateDistance(x, y, xDest, yDest, currPath); distance >= 0 && distance < possibleMp)
 					{
 						isAdded = true;
-						visited[(int)getState(xDest, yDest)] = true;
-						for (auto& pathP : currPath)
+						visited[reinterpret_cast<int>(getState(xDest, yDest))] = true;
+						for (auto& [fst, snd] : currPath)
 						{
-							visited[(int)getState(pathP.first, pathP.second)] = true;
-							possibleCoords.emplace(pathP.first, pathP.second);
+							visited[reinterpret_cast<int>(getState(fst, snd))] = true;
+							possibleCoords.emplace(fst, snd);
 						}
 					}
 				}
 
 				for (int yDest = yMin, xDest = xMax; yDest <= yMax; ++yDest)
 				{
-					if (checkDone(xDest, yDest) == true)
-					{
-						continue;
-					}
-
 					std::vector<std::pair<int, int>> currPath;
-					float distance = calculateDistance(x, y, xDest, yDest, currPath);
-					if (distance >= 0 && distance < possibleMp)
+					if (const float distance = calculateDistance(x, y, xDest, yDest, currPath); distance >= 0 && distance < possibleMp)
 					{
 						isAdded = true;
-						visited[(int)getState(xDest, yDest)] = true;
-						for (auto& pathP : currPath)
+						visited[reinterpret_cast<int>(getState(xDest, yDest))] = true;
+						for (auto& [fst, snd] : currPath)
 						{
-							visited[(int)getState(pathP.first, pathP.second)] = true;
-							possibleCoords.emplace(pathP.first, pathP.second);
+							visited[reinterpret_cast<int>(getState(fst, snd))] = true;
+							possibleCoords.emplace(fst, snd);
 						}
 					}
 				}
@@ -385,42 +285,30 @@ namespace pathFinder
 
 				for (int xDest = xMin + 1, yDest = yMin; xDest < xMax; ++xDest)
 				{
-					if (checkDone(xDest, yDest) == true)
-					{
-						continue;
-					}
-
 					std::vector<std::pair<int, int>> currPath;
-					float distance = calculateDistance(x, y, xDest, yDest, currPath);
-					if (distance >= 0 && distance < possibleMp)
+					if (const float distance = calculateDistance(x, y, xDest, yDest, currPath); distance >= 0 && distance < possibleMp)
 					{
 						isAdded = true;
-						visited[(int)getState(xDest, yDest)] = true;
-						for (auto& pathP : currPath)
+						visited[reinterpret_cast<int>(getState(xDest, yDest))] = true;
+						for (auto& [fst, snd] : currPath)
 						{
-							visited[(int)getState(pathP.first, pathP.second)] = true;
-							possibleCoords.emplace(pathP.first, pathP.second);
+							visited[reinterpret_cast<int>(getState(fst, snd))] = true;
+							possibleCoords.emplace(fst, snd);
 						}
 					}
 				}
 
 				for (int xDest = xMin, yDest = yMax; xDest < xMax; ++xDest)
 				{
-					if (checkDone(xDest, yDest) == true)
-					{
-						continue;
-					}
-
 					std::vector<std::pair<int, int>> currPath;
-					float distance = calculateDistance(x, y, xDest, yDest, currPath);
-					if (distance >= 0 && distance < possibleMp)
+					if (const float distance = calculateDistance(x, y, xDest, yDest, currPath); distance >= 0 && distance < possibleMp)
 					{
 						isAdded = true;
-						visited[(int)getState(xDest, yDest)] = true;
-						for (auto& pathP : currPath)
+						visited[reinterpret_cast<int>(getState(xDest, yDest))] = true;
+						for (auto& [fst, snd] : currPath)
 						{
-							visited[(int)getState(pathP.first, pathP.second)] = true;
-							possibleCoords.emplace(pathP.first, pathP.second);
+							visited[reinterpret_cast<int>(getState(fst, snd))] = true;
+							possibleCoords.emplace(fst, snd);
 						}
 					}
 				}
@@ -436,7 +324,7 @@ namespace pathFinder
 		} while (coordsMod != 0);
 	}
 
-	std::pair<int, int> pathMap::getNearestTileForArmy(int x, int y, int destx, int desty)
+	std::pair<int, int> pathMap::getNearestTileForArmy(int x, int y, const int destX, const int destY)
 	{
 		std::unordered_set<std::pair<int, int>, pathFinder::pathPairHash> possibleCoords;
 		getPossibleTilesForArmy(x, y, possibleCoords);
@@ -446,8 +334,8 @@ namespace pathFinder
 		float minResDistance = FLT_MAX;
 		for (auto& coord : possibleCoords)
 		{
-			float dist = stratMapHelpers::getDistanceInTiles(destx, desty, coord.first, coord.second);
-			if (dist < minResDistance)
+			if (const float dist = stratMapHelpers::getDistanceInTiles(destX, destY, coord.first, coord.second);
+				dist < minResDistance)
 			{
 				res = coord;
 				minResDistance = dist;
@@ -456,7 +344,7 @@ namespace pathFinder
 		return res;
 	}
 
-	std::pair<int, int> pathMap::getSafestTileForArmy(armyStruct* army)
+	std::pair<int, int> pathMap::getSafestTileForArmy(const armyStruct* army)
 	{
 
 		int x = 0;
@@ -473,125 +361,85 @@ namespace pathFinder
 		}
 		else
 		{
-			MessageBoxA(NULL, "GetSafestTileForArmy error", "ERROR", NULL);
+			MessageBoxA(nullptr, "GetSafestTileForArmy error", "ERROR", NULL);
 		}
-		auto evaluateSafety = [&](int evX, int evY)
+		auto evaluateSafety = [&](const int evX, const int evY)
 		{
 			int safetyCost = 0;
 			auto* destDile = stratMapHelpers::getTile(evX, evY);
 
-			strategyGroundType currGround = strategyGroundType(destDile->groundType);
+			const auto currGround = static_cast<strategyGroundType>(destDile->groundType);
 
 			if (destDile->object != nullptr)
 			{
-				void* endObj = stratMapHelpers::getMainStratObject(destDile->object);
-
-				strategyObject objT = callVFunc<4, strategyObject>(endObj);
-
-				switch (objT)
+				switch (void* endObj = stratMapHelpers::getMainStratObject(destDile->object); callVFunc<4, strategyObject>(endObj))
 				{
 				case strategyObject::floatingGeneral:
 					break;
 				case strategyObject::settlement:
 				{
-					settlementStruct* set = (settlementStruct*)endObj;
-
-					if (set->faction->factionID == army->faction->factionID)
+					if (const auto sett = static_cast<settlementStruct*>(endObj); sett->faction->factionID == army->faction->factionID)
 					{
-						if (set->army == nullptr)
-						{
+						if (!sett->army)
 							safetyCost += 999;
-						}
-						else
-						{
-							if (set->army->numOfUnits + army->numOfUnits <= 20)
-							{
-								safetyCost += 599;
-							}
-						}
+						else if (sett->army->numOfUnits + army->numOfUnits <= 20)
+							safetyCost += 599;
 					}
 					break;
 				}
 				case strategyObject::fort:
 				{
-					fortStruct* fort = (fortStruct*)endObj;
-
-					if (fort->faction->factionID == army->faction->factionID)
+					if (const auto fort = static_cast<fortStruct*>(endObj); fort->faction->factionID == army->faction->factionID)
 					{
-						if (fort->army == nullptr)
-						{
+						if (!fort->army)
 							safetyCost += 899;
-						}
-						else
-						{
-							if (fort->army->numOfUnits + army->numOfUnits <= 20)
-							{
-								safetyCost += 499;
-							}
-						}
+						else if (fort->army->numOfUnits + army->numOfUnits <= 20)
+							safetyCost += 499;
 					}
 					break;
 				}
 				case strategyObject::port:
-					break;
 				case strategyObject::character:
-					break;
 				case strategyObject::rallyPointSundry:
-					break;
-				default:
+				case strategyObject::watchtower:
+				case strategyObject::sundry:
+				case strategyObject::battleSiteMarker:
 					break;
 				}
 			}
 			switch (currGround)
 			{
-			case strategyGroundType::lowFertility:
-				break;
-			case strategyGroundType::mediumFertility:
-				break;
-			case strategyGroundType::highFertility:
-				break;
-			case strategyGroundType::wilderness:
-				break;
-			case strategyGroundType::highMountains:
-				break;
-			case strategyGroundType::lowMountains:
-				break;
-			case strategyGroundType::hills:
-				break;
-			case strategyGroundType::denseForest:
-				break;
 			case strategyGroundType::woodland:
 			{
 				//we can hide army here
 				safetyCost += 199;
 				break;
 			}
-
+			case strategyGroundType::lowFertility:
+			case strategyGroundType::mediumFertility:
+			case strategyGroundType::highFertility:
+			case strategyGroundType::wilderness:
+			case strategyGroundType::highMountains:
+			case strategyGroundType::lowMountains:
+			case strategyGroundType::hills:
+			case strategyGroundType::denseForest:
 			case strategyGroundType::swamp:
-				break;
 			case strategyGroundType::ocean:
-				break;
 			case strategyGroundType::deepSea:
-				break;
 			case strategyGroundType::shallowSea:
-				break;
 			case strategyGroundType::coast:
-				break;
 			case strategyGroundType::impassableLand:
-				break;
 			case strategyGroundType::impassableSea:
-				break;
-			default:
 				break;
 			}
 
 			//prefer long distances
-			safetyCost += stratMapHelpers::getDistanceInTiles(x, y, evX, evY);
+			safetyCost += static_cast<int>(stratMapHelpers::getDistanceInTiles(x, y, evX, evY));
 			return safetyCost;
 		};
 
 
-		std::unordered_set<std::pair<int, int>, pathFinder::pathPairHash> possibleCoords;
+		std::unordered_set<std::pair<int, int>, pathPairHash> possibleCoords;
 		getPossibleTilesForArmy(x, y, possibleCoords);
 		std::pair<int, int> res = std::make_pair(x, y);
 		int currSafety = -1;
@@ -599,8 +447,7 @@ namespace pathFinder
 		ring_buffer<std::pair<int, int>> bestOnes(5);
 		for (auto& coord : possibleCoords)
 		{
-			int safety = evaluateSafety(coord.first, coord.second);
-			if (safety > currSafety)
+			if (const int safety = evaluateSafety(coord.first, coord.second); safety > currSafety)
 			{
 				bestOnes.push_back(coord);
 				currSafety = safety;
@@ -609,94 +456,65 @@ namespace pathFinder
 
 		if (bestOnes.size() > 0)
 		{
-			int rnd = std::rand() % bestOnes.size();
+			const int rnd = std::rand() % bestOnes.size();
 			res = bestOnes.at(rnd);
 		}
 
 		return res;
 	}
 
-	void* pathMap::getState(int x, int y)
+	void* pathMap::getState(const int x, const int y)
 	{
 		if (x < 0 || y < 0)
-		{
-			return (void*)-1;
-		}
+			return reinterpret_cast<void*>(-1);
 		if (x - XCenter < 0 || y - YCenter < 0)
-		{
-			return (void*)-1;
-		}
-		int idx = (x - XCenter) * Diameter + y - YCenter;
+			return reinterpret_cast<void*>(-1);
+		const uint32_t idx = (x - XCenter) * Diameter + y - YCenter;
 		if (idx >= StateMap.size())
 		{
-			return (void*)-1;
+			return reinterpret_cast<void*>(-1);
 		}
-
-		return (void*)idx;
-		//return (void*)(y * Diameter + x);
-		int res;
-		//auto f = StateMap.find(idx);
-		//if (f == StateMap.end())
-		//{
-		//	res = -1;
-		//}
-		//else
-		//{
-		//	res = f->first;
-		//}
-
-		//return (void*)res;
+		return reinterpret_cast<void*>(idx);
 	}
 
 	float pathMap::leastCostEstimate(void* stateStart, void* stateEnd)
 	{
-		if ((int)stateStart == -1)
-		{
+		if (reinterpret_cast<int>(stateStart) == -1)
 			return 9999999.f;
-		}
-		if ((int)stateEnd == -1)
-		{
+		if (reinterpret_cast<int>(stateEnd) == -1)
 			return 9999999.f;
-		}
-
-		auto& statenodeF = StateMap[(int)stateStart];
-		auto& statenodeE = StateMap[(int)stateEnd];
-		return stratMapHelpers::getDistanceInTiles(statenodeF.X, statenodeF.Y, statenodeE.X, statenodeE.Y);
+		const auto& stateNodeF = StateMap[reinterpret_cast<int>(stateStart)];
+		const auto& stateNodeE = StateMap[reinterpret_cast<int>(stateEnd)];
+		return stratMapHelpers::getDistanceInTiles(stateNodeF.X, stateNodeF.Y, stateNodeE.X, stateNodeE.Y);
 	}
 
-	void pathMap::adjOne(int x, int y, int currX, int currY, MP_VECTOR<micropather::StateCost>*& adjacent)
+	void pathMap::adjOne(const int x, const int y, const int currX, const int currY, MP_VECTOR<micropather::StateCost>*& adjacent)
 	{
 		if (isCoordsValid(currX, currY) && isSameTypeOfGround(x, y, currX, currY))
 		{
 			void* statEn = getState(currX, currY);
-			if ((int)statEn == -1)
-			{
+			
+			if (reinterpret_cast<int>(statEn) == -1)
 				return;
-			}
-			if (StateMap[(int)statEn].W == 0)
-			{
+			if (StateMap[reinterpret_cast<int>(statEn)].W <= 0.0001f)
 				return;
-			}
-
-			float distance = stratMapHelpers::getTileMoveCost(x, y, currX, currY);
-			if (distance >= 0)
+			
+			if (const float distance = stratMapHelpers::getTileMoveCost(x, y, currX, currY); distance >= 0)
 			{
-				StateCost nodeCost = { statEn, distance };
+				const StateCost nodeCost = { statEn, distance };
 				adjacent->push_back(nodeCost);
 			}
 		}
 	}
+	
 	void pathMap::adjacentCost(void* state, MP_VECTOR<micropather::StateCost>* adjacent)
 	{
-
-		if ((int)state == -1)
-		{
+		if (reinterpret_cast<int>(state) == -1)
 			return;
-		}
-		auto& statenode = StateMap[(int)state];
-		int x = statenode.X;
-		int y = statenode.Y;
-
+		
+		const auto& stateNode = StateMap[reinterpret_cast<int>(state)];
+		const int x = stateNode.X;
+		const int y = stateNode.Y;
 		adjOne(x, y, x - 1, y - 1, adjacent);
 		adjOne(x, y, x, y - 1, adjacent);
 		adjOne(x, y, x + 1, y - 1, adjacent);
@@ -708,6 +526,7 @@ namespace pathFinder
 		adjOne(x, y, x - 1, y, adjacent);
 		adjOne(x, y, x + 1, y, adjacent);
 	}
+	
 	void pathMap::printStateInfo(void* state)
 	{
 		//empty
@@ -734,25 +553,25 @@ namespace pathFinder
 		return fTile->isLand == nTile->isLand;
 	}
 	
-	void getPossibleTilesForArmyFromCache(void* cache, int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords)
+	void getPossibleTilesForArmyFromCache(void* cache, const int x, const int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords)
 	{
 		const auto map = static_cast<pathMap*>(cache);
 		map->getPossibleTilesForArmy(x, y, possibleCoords);
 	}
 	
-	std::pair<int, int> getNearestTileForArmyFromCache(void* cache, int x, int y, int destX, int destY)
+	std::pair<int, int> getNearestTileForArmyFromCache(void* cache, const int x, const int y, const int destX, const int destY)
 	{
 		const auto map = static_cast<pathMap*>(cache);
 		return map->getNearestTileForArmy(x, y, destX, destY);
 	}
 	
-	std::pair<int, int> getSafestTileForArmyFromCache(void* cache, armyStruct* army)
+	std::pair<int, int> getSafestTileForArmyFromCache(void* cache, const armyStruct* army)
 	{
 		const auto map = static_cast<pathMap*>(cache);
 		return map->getSafestTileForArmy(army);
 	}
 	
-	void* createCacheForArmy(armyStruct* army, const int radius)
+	void* createCacheForArmy(const armyStruct* army, const int radius)
 	{
 		const auto map = new pathMap(army, radius);
 		return map;

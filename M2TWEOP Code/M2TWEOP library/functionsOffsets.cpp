@@ -235,6 +235,7 @@ void codes::initCodes(int gameVer)
 		offsets.getScriptCounter = 0x00489360;
 		offsets.setScriptCounter = 0x0048c8e0;
 		offsets.getUnitFullMovePoints = 0x00742380;
+		offsets.createMoveExtents = 0x4B60E0;
 	}
 
 
@@ -472,5 +473,6 @@ void codes::initCodes(int gameVer)
 		offsets.setScriptCounter = 0x0048cce0;
 		offsets.getUnitFullMovePoints = 0x00742b10;
 		offsets.parseCondition = 0x00875310;
+		offsets.createMoveExtents = 0x004B6670;
 	}
 }

@@ -8,284 +8,240 @@
 
 namespace mapTextDrawer
 {
-	coordsVText::dataS coordsVText::Data;
+	coordsVText::dataS coordsVText::m_Data;
 
 	struct
 	{
 		std::list<Text3DDrawable*> textForDrawing;
 		bool initialized = false;
-	}data;
+	}DATA;
 
-
-	static void DrawTextDrawable(Text3DDrawable* text)
+	namespace
 	{
-		auto device = graphicsExport::GetDevice();
-
-		D3DXMATRIX matRotate;
-		float xR = D3DXToRadian(text->xRoll);
-		float yR = D3DXToRadian(text->yRoll);
-		float zR = D3DXToRadian(text->zRoll);
-		D3DXMatrixRotationYawPitchRoll(&matRotate, xR, yR, zR);
-
-		D3DXMATRIX matScale;
-
-		D3DXMatrixScaling(&matScale, text->xSize, text->ySize, text->zSize);
-
-
-
-		D3DXMATRIXA16 matWorld;
-		D3DXMatrixIdentity(&matWorld);
-		matWorld[12] = text->xCoord;
-		matWorld[13] = text->zCoord;
-		matWorld[14] = text->yCoord;
-
-
-		D3DXMATRIX wstate = (matRotate * matScale * matWorld);
-
-		device->SetTransform(D3DTS_WORLD, &wstate);
-		device->SetTextureStageState(0, D3DTSS_CONSTANT, text->color);
-
-		text->textMesh->DrawSubset(0);
-	}
-
-	void DrawTexts()
-	{
-		auto device = graphicsExport::GetDevice();
-		if (device == nullptr)
+		void drawTextDrawable(const Text3DDrawable* text)
 		{
-			return;
+			const auto device = graphicsExport::GetDevice();
+
+			D3DXMATRIX matRotate;
+			const float xR = D3DXToRadian(text->xRoll);
+			const float yR = D3DXToRadian(text->yRoll);
+			const float zR = D3DXToRadian(text->zRoll);
+			D3DXMatrixRotationYawPitchRoll(&matRotate, xR, yR, zR);
+			D3DXMATRIX matScale;
+			D3DXMatrixScaling(&matScale, text->xSize, text->ySize, text->zSize);
+		
+			D3DXMATRIXA16 matWorld;
+			D3DXMatrixIdentity(&matWorld);
+			matWorld[12] = text->xCoord;
+			matWorld[13] = text->zCoord;
+			matWorld[14] = text->yCoord;
+		
+			const D3DXMATRIX wState = (matRotate * matScale * matWorld);
+
+			device->SetTransform(D3DTS_WORLD, &wState);
+			device->SetTextureStageState(0, D3DTSS_CONSTANT, text->color);
+
+			text->textMesh->DrawSubset(0);
 		}
+	}
+	
+	void drawTexts()
+	{
+		const auto device = graphicsExport::GetDevice();
+		if (device == nullptr)
+			return;
+		
 		auto state = graphicsExport::GetD3dState();
 		graphicsExport::SetClearD3dState();
 
 		device->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
 		device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 		device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
 		device->SetTransform(D3DTS_VIEW, graphicsExport::GetMatView());
 		device->SetTransform(D3DTS_PROJECTION, graphicsExport::GetMatProj());
-
 		device->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
 		device->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
 		device->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_CONSTANT);
 		device->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_CONSTANT);
-
-
-		auto it = data.textForDrawing.begin();
-		while (it != data.textForDrawing.end())
+		
+		auto it = DATA.textForDrawing.begin();
+		while (it != DATA.textForDrawing.end())
 		{
-			DrawTextDrawable(*it);
-
+			drawTextDrawable(*it);
 			if ((*it)->isDrawOnce==true)
-			{
-				it = data.textForDrawing.erase(it);
-			}
+				it = DATA.textForDrawing.erase(it);
 			else
-			{
 				++it;
-			}
 		}
-
 		graphicsExport::SetD3dState(state);
 		graphicsExport::ReleaseD3dState(state);
 	}
 
-	void* MakeTextFontLua(const char* fontName, sol::optional<int> weight, sol::optional<bool> isItalic)
+	void* makeTextFontLua(const char* fontName, const sol::optional<int> weight, const sol::optional<bool> isItalic)
 	{
 		return makeTextFont(fontName, weight.value_or(400), isItalic.value_or(1));
 	}
 
-	void* makeTextFont(const char* fontName, int weight, int isItalic)
+	void* makeTextFont(const char* fontName, const int weight, const int isItalic)
 	{
 		if (fontName == nullptr)
-		{
 			return nullptr;
-		}
-
-		if (data.initialized == false)
-		{
-			graphicsExport::AddStratmapDrawCallback(DrawTexts);
-		}
-		data.initialized = true;
-
-
-		std::wstring fontWname = techFuncs::ConvertUtf8ToWide(fontName);
-		HFONT hFont;
-
-		hFont = CreateFontW(0, 0, 0, 0, weight, isItalic, NULL, NULL, NULL, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
-			fontWname.c_str());
-		//L"Times New Roman");
-
-
+		
+		if (DATA.initialized == false)
+			graphicsExport::AddStratmapDrawCallback(drawTexts);
+		
+		DATA.initialized = true;
+		const std::wstring fontWName = techFuncs::convertUtf8ToWide(fontName);
+		
+		const HFONT hFont = CreateFontW(0, 0, 0, 0, weight, isItalic,
+			NULL, NULL, NULL, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+		                                ANTIALIASED_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
+		                                fontWName.c_str());
 		return hFont;
 	}
 
-	void deleteTextFont(void* fontID)
+	void deleteTextFont(void* fontId)
 	{
-		HFONT hFont = reinterpret_cast<HFONT>(fontID);
+		const auto hFont = static_cast<HFONT>(fontId);
 		DeleteObject(hFont);
 	}
 
-	Text3DDrawable* makeText(void* fontID, const char* utf8Text)
+	Text3DDrawable* makeText(void* fontId, const char* utf8Text)
 	{
-		if (utf8Text == nullptr)
-		{
+		if (!utf8Text || !fontId)
 			return nullptr;
-		}
-		if (fontID == nullptr)
-		{
-			return nullptr;
-		}
-		std::wstring utf16Text = techFuncs::ConvertUtf8ToWide(utf8Text);
-
-		Text3DDrawable* newText = new Text3DDrawable();
-		ChangeTextColor(newText, 255, 255, 255, 255);
-
-		HDC hdc = CreateCompatibleDC(0);
-
-		HFONT hFont;
-		HFONT hFontOld;
-		hFont = reinterpret_cast<HFONT>(fontID);
-		hFontOld = (HFONT)SelectObject(hdc, hFont);
-		HRESULT res = D3DXCreateTextW(graphicsExport::GetDevice(), hdc, utf16Text.c_str(), 0.001f, 0.4f, &newText->textMesh, NULL, NULL);
+		
+		const std::wstring utf16Text = techFuncs::convertUtf8ToWide(utf8Text);
+		auto newText = new Text3DDrawable();
+		changeTextColor(newText, 255, 255, 255, 255);
+		const HDC hdc = CreateCompatibleDC(nullptr);
+		const auto hFont = static_cast<HFONT>(fontId);
+		const auto hFontOld = static_cast<HFONT>(SelectObject(hdc, hFont));
+		HRESULT res = D3DXCreateTextW(graphicsExport::GetDevice(), hdc, utf16Text.c_str(), 0.001f, 0.4f,
+			&newText->textMesh, nullptr, nullptr);
 
 		SelectObject(hdc, hFontOld);
 		DeleteDC(hdc);
-
 		if (newText->textMesh == nullptr)
 		{
 			delete newText;
 			newText = nullptr;
 		}
-
 		return newText;
 	}
-	void Delete3dText(Text3DDrawable* text)
+	
+	void delete3dText(Text3DDrawable* text)
 	{
 		if (text == nullptr)
-		{
 			return;
-		}
 		text->isDeleteNeeded = true;
-		data.textForDrawing.remove(text);
+		DATA.textForDrawing.remove(text);
 		text->textMesh->Release();
 		delete text;
 	}
-	void ScaleText(Text3DDrawable* text, float scale)
+	
+	void scaleText(const Text3DDrawable* text, const float scale)
 	{
 		if (text == nullptr)
-		{
 			return;
-		}
-		LPD3DXMESH TextMesh = text->textMesh;
-
-		D3DXVECTOR3* data = NULL;
-		DWORD vSize = TextMesh->GetNumBytesPerVertex();
-		DWORD vCount = TextMesh->GetNumVertices();
-		TextMesh->LockVertexBuffer(0, (void**)&data);
-
+		const LPD3DXMESH textMesh = text->textMesh;
+		D3DXVECTOR3* data = nullptr;
+		const DWORD vSize = textMesh->GetNumBytesPerVertex();
+		const DWORD vCount = textMesh->GetNumVertices();
+		textMesh->LockVertexBuffer(0, reinterpret_cast<void**>(&data));
 		for (DWORD i = 0; i < vCount; ++i)
 		{
 			*data *= scale;
-			data = (D3DXVECTOR3*)((BYTE*)data + vSize);
+			data = reinterpret_cast<D3DXVECTOR3*>(reinterpret_cast<BYTE*>(data) + vSize);
 		}
-
-		TextMesh->UnlockVertexBuffer();
+		textMesh->UnlockVertexBuffer();
 	}
-	void SetDimensionsTextXYZ(Text3DDrawable* text, float scaleX, float scaleY, float scaleZ)
+	
+	void setDimensionsTextXyz(Text3DDrawable* text, const float scaleX, const float scaleY, const float scaleZ)
 	{
 		if (text == nullptr)
-		{
 			return;
-		}
-
 		text->xSize = scaleX;
 		text->ySize = scaleY;
 		text->zSize = scaleZ;
 	}
-	void SetRotationTextXYZ(Text3DDrawable* text, float rotX, float rotY, float rotZ)
+	
+	void setRotationTextXyz(Text3DDrawable* text, const float rotX, const float rotY, const float rotZ)
 	{
 		if (text == nullptr)
-		{
 			return;
-		}
-
 		text->xRoll = rotX;
 		text->xRoll = rotY;
 		text->zRoll = rotZ;
 	}
-	void ChangeTextColor(Text3DDrawable* text, unsigned char a, unsigned char r, unsigned char g, unsigned char b)
+	
+	void changeTextColor(Text3DDrawable* text, const unsigned char a, const unsigned char r, const unsigned char g, const unsigned char b)
 	{
 		if (text == nullptr)
-		{
 			return;
-		}
-
 		text->color = D3DCOLOR_ARGB(a, r, g, b);
 	}
-	void SetTextDrawingCoords(Text3DDrawable* text, float x, float y, float z)
+	
+	void setTextDrawingCoords(Text3DDrawable* text, const float x, const float y, const float z)
 	{
 		if (text == nullptr)
-		{
 			return;
-		}
-		
 		text->xCoord = x;
 		text->yCoord = y;
 		text->zCoord = z;
 	}
-
-
-	void StartDrawingText(Text3DDrawable* text)
+	
+	void startDrawingText(Text3DDrawable* text)
 	{
 		text->isDrawOnce = false;
-		data.textForDrawing.push_back(text);
+		DATA.textForDrawing.push_back(text);
 	}
-	void StopDrawingText(Text3DDrawable* text)
+	
+	void stopDrawingText(Text3DDrawable* text)
 	{
-		data.textForDrawing.remove(text);
+		DATA.textForDrawing.remove(text);
 	}
+	
 	void drawingTextOnce(Text3DDrawable* text)
 	{
 		text->isDrawOnce = true;
-		data.textForDrawing.push_back(text);
+		DATA.textForDrawing.push_back(text);
 	}
-	coordsVText::coordsVText(int x, int y, mapTextDrawer::Text3DDrawable* pointText)
+	
+	coordsVText::coordsVText(const int x, const int y, Text3DDrawable* pointText)
 		:PointText(pointText), X(x), Y(y)
 	{
-		static std::once_flag initFLAG;
-		std::call_once(initFLAG, TryInit);
+		static std::once_flag initFlag;
+		std::call_once(initFlag, tryInit);
 	}
+	
 	coordsVText::~coordsVText()
 	{
-		mapTextDrawer::Delete3dText(PointText);
+		delete3dText(PointText);
 	}
-	void coordsVText::SetTileToLive(float seconds)
+	
+	void coordsVText::setTileToLive(const float seconds)
 	{
-		LiveTimeEnd = Data.CurrTime + seconds;
-		Data.SelfControlled.emplace_back(this);
+		LiveTimeEnd = m_Data.CurrTime + seconds;
+		m_Data.SelfControlled.emplace_back(this);
 	}
-	void coordsVText::TryInit()
+	
+	void coordsVText::tryInit()
 	{
-		graphicsExport::AddImGuiDrawCallback(Draw);
+		graphicsExport::AddImGuiDrawCallback(draw);
 	}
-	void coordsVText::Draw()
+	
+	void coordsVText::draw()
 	{
-		Data.CurrTime = ImGui::GetTime();
-
-		auto it = Data.SelfControlled.begin();
-		while (it != Data.SelfControlled.end())
+		m_Data.CurrTime = static_cast<float>(ImGui::GetTime());
+		auto it = m_Data.SelfControlled.begin();
+		while (it != m_Data.SelfControlled.end())
 		{
 			drawingTextOnce((*it)->PointText);
-
-			if ((*it)->LiveTimeEnd < Data.CurrTime)
-			{
-				it = Data.SelfControlled.erase(it);
-			}
+			if ((*it)->LiveTimeEnd < m_Data.CurrTime)
+				it = m_Data.SelfControlled.erase(it);
 			else
-			{
 				++it;
-			}
 		}
 	}
 };

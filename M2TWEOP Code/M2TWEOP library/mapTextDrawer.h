@@ -23,28 +23,28 @@ namespace mapTextDrawer
 		bool isDrawOnce;
 		bool isDeleteNeeded;
 	};
-	void DrawTexts();
+	void drawTexts();
 
 	//returns "id" of font, which is pointer to object
 	void* makeTextFont(const char* fontName, int weight, int isItalic);
-	void* MakeTextFontLua(const char* fontName, sol::optional<int> weight, sol::optional<bool> isItalic);
+	void* makeTextFontLua(const char* fontName, sol::optional<int> weight, sol::optional<bool> isItalic);
 	
-	void deleteTextFont(void*  fontID);
+	void deleteTextFont(void*  fontId);
 
 	//returns "id" of text, which is pointer to object
-	Text3DDrawable* makeText(void* fontID,const char* utf8Text);
-	void Delete3dText(Text3DDrawable*text);
+	Text3DDrawable* makeText(void* fontId,const char* utf8Text);
+	void delete3dText(Text3DDrawable*text);
 
-	void ScaleText(Text3DDrawable* text,float scale);
-	void SetDimensionsTextXYZ(Text3DDrawable* text,float scaleX, float scaleY, float scaleZ);
-	void SetRotationTextXYZ(Text3DDrawable* text,float rotX, float rotY, float rotZ);
-	void ChangeTextColor(Text3DDrawable* text, unsigned char a, unsigned char r, unsigned char g, unsigned char b);
+	void scaleText(const Text3DDrawable* text,float scale);
+	void setDimensionsTextXyz(Text3DDrawable* text,float scaleX, float scaleY, float scaleZ);
+	void setRotationTextXyz(Text3DDrawable* text,float rotX, float rotY, float rotZ);
+	void changeTextColor(Text3DDrawable* text, unsigned char a, unsigned char r, unsigned char g, unsigned char b);
 
 
-	void SetTextDrawingCoords(Text3DDrawable* text,float x, float y, float z);
+	void setTextDrawingCoords(Text3DDrawable* text,float x, float y, float z);
 
-	void StartDrawingText(Text3DDrawable* text);
-	void StopDrawingText(Text3DDrawable* text);
+	void startDrawingText(Text3DDrawable* text);
+	void stopDrawingText(Text3DDrawable* text);
 	void drawingTextOnce(Text3DDrawable* text);
 
 	struct coordsVText
@@ -58,15 +58,15 @@ namespace mapTextDrawer
 		int Y = 0;
 
 		//it self-delete then
-		void SetTileToLive(float seconds);
+		void setTileToLive(float seconds);
 
-		static void TryInit();
-		static void Draw();
+		static void tryInit();
+		static void draw();
 	private:
 		static struct dataS{
 			float CurrTime = 0;
 			std::list<std::shared_ptr<coordsVText>> SelfControlled;
-		}Data;
+		}m_Data;
 		float LiveTimeEnd=0;
 	};
 };

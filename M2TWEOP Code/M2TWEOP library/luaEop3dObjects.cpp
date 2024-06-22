@@ -58,7 +58,7 @@ void luaPlugin::initEop3dObjects()
 	@usage
 	newFont = M2TWEOP3dObjects.MakeTextFont("Times New Roman");
 	*/
-	tables.M2TWEOP3dObjectsTable.set_function("MakeTextFont", &mapTextDrawer::MakeTextFontLua);
+	tables.M2TWEOP3dObjectsTable.set_function("MakeTextFont", &mapTextDrawer::makeTextFontLua);
 	/***
 	Delete 3d text font. Do it where not need anymore
 	@function M2TWEOP3dObjects.DeleteTextFont
@@ -131,7 +131,7 @@ void luaPlugin::initEop3dObjects()
 	newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
 	newText:Scale(0.3);
 	*/
-	tables.text3dDrawable.set_function("Scale", &mapTextDrawer::ScaleText);
+	tables.text3dDrawable.set_function("Scale", &mapTextDrawer::scaleText);
 
 	/***
 	Set 3d text color.
@@ -145,7 +145,7 @@ void luaPlugin::initEop3dObjects()
 	newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
 	newText:ChangeColor(255,0,255,177);
 	*/
-	tables.text3dDrawable.set_function("ChangeColor", &mapTextDrawer::ChangeTextColor);
+	tables.text3dDrawable.set_function("ChangeColor", &mapTextDrawer::changeTextColor);
 	/***
 	Set 3d text coords.
 	@function Eop3dText:SetCoords
@@ -157,7 +157,7 @@ void luaPlugin::initEop3dObjects()
 	newText = M2TWEOP3dObjects.Make3dText(newFont, "Some text");
 	newText:SetCoords(10,20,0.2);
 	*/
-	tables.text3dDrawable.set_function("SetCoords", &mapTextDrawer::SetTextDrawingCoords);
+	tables.text3dDrawable.set_function("SetCoords", &mapTextDrawer::setTextDrawingCoords);
 	/***
 	Start draw text. Text go on display until stop function called
 	@function Eop3dText:StartDrawing
@@ -167,7 +167,7 @@ void luaPlugin::initEop3dObjects()
 	newText:SetCoords(10,20,0.2);
 	newText:StartDrawing();
 	*/
-	tables.text3dDrawable.set_function("StartDrawing", &mapTextDrawer::StartDrawingText);
+	tables.text3dDrawable.set_function("StartDrawing", &mapTextDrawer::startDrawingText);
 	/***
 	Stop draw text.
 	@function Eop3dText:StopDrawing
@@ -179,7 +179,7 @@ void luaPlugin::initEop3dObjects()
 	--some time we draw
 	newText:StopDrawing();
 	*/
-	tables.text3dDrawable.set_function("StopDrawing", &mapTextDrawer::StopDrawingText);
+	tables.text3dDrawable.set_function("StopDrawing", &mapTextDrawer::stopDrawingText);
 	/***
 	Draw text once(at one frame only). Can be called in draw loop. Not need call stop after it.
 	@function Eop3dText:DrawOnce
@@ -200,5 +200,5 @@ void luaPlugin::initEop3dObjects()
 	newText:DrawOnce();
 	newText:Delete();
 	*/
-	tables.text3dDrawable.set_function("Delete", &mapTextDrawer::Delete3dText);
+	tables.text3dDrawable.set_function("Delete", &mapTextDrawer::delete3dText);
 }

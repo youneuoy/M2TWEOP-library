@@ -553,6 +553,7 @@ public:
 	oneTileDouble* tileToDoubleTile();
 	int getTileX();
 	int getTileY();
+	std::pair<int, int> getTileCoords();
 	int getTileCharacterCount();
 	character* getTileCharacterAtIndex(int index);
 	int getTileHeatValue();

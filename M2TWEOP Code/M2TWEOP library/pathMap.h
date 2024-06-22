@@ -51,7 +51,7 @@ namespace pathFinder
 		pathMap(int xCenter, int yCenter, int radius);
 		//build map with army specific
 		//for example for sea one we add only sea tiles, etc
-		pathMap(armyStruct* army, int radius);
+		pathMap(const armyStruct* army, int radius);
 		virtual ~pathMap() {
 			delete Pather;
 		}
@@ -59,8 +59,8 @@ namespace pathFinder
 		float calculateDistance(int x, int y, int destX, int destY);
 		float calculateDistance(int x, int y, int destX, int destY, std::vector<std::pair<int, int>>& path);
 		void getPossibleTilesForArmy(int x, int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords);
-		std::pair<int, int> getNearestTileForArmy(int x, int y, int destx, int desty);
-		std::pair<int, int> getSafestTileForArmy(armyStruct* army);
+		std::pair<int, int> getNearestTileForArmy(int x, int y, int destX, int destY);
+		std::pair<int, int> getSafestTileForArmy(const armyStruct* army);
 	private:
 		pathMap();
 		MicroPather* Pather;
@@ -86,9 +86,9 @@ namespace pathFinder
 	std::pair<int, int> getNearestTileForArmyFromCache(void* cache, int x, int y, int destX, int destY);
 
 	//for retreats, etc
-	std::pair<int, int> getSafestTileForArmyFromCache(void* cache, armyStruct* army);
+	std::pair<int, int> getSafestTileForArmyFromCache(void* cache, const armyStruct* army);
 
-	void* createCacheForArmy(armyStruct* army, int radius);
+	void* createCacheForArmy(const armyStruct* army, int radius);
 	void* createCacheForDistances(int x, int y, int radius);
 	void deleteCacheForDistances(void* cache); 
 	float getMovePointsForReachTileFromCache(void* cache, int x, int y, int destX, int destY);

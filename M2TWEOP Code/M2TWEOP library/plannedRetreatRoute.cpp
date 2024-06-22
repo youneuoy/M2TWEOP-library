@@ -18,7 +18,7 @@ namespace plannedRetreatRoute
 	struct
 	{
 		vector<retreatRoute>data;
-	}routes;
+	}ROUTES;
 	
 	struct stateS
 	{
@@ -29,120 +29,107 @@ namespace plannedRetreatRoute
 
 		coordsVText selectedCoord{ 0,0,nullptr };
 
-		int StartX = 0;
-		int StartY = 0;
-	}state;
+		int startX = 0;
+		int startY = 0;
+	}STATE;
 
-	static void Draw()
+	namespace
 	{
-		if (state.workingNow == false)
+		void draw()
 		{
-			return;
-		}
-		int cursorX = 0;
-		int cursorY = 0;
-		stratMapHelpers::getGameTileCoordsWithCursor(cursorX, cursorY);
-		for (auto& txt : state.possibleCoords)
-		{
-			drawingTextOnce(txt.PointText);
-		}
-
-		state.selectedCoord.PointText->xCoord = cursorX;
-		state.selectedCoord.PointText->yCoord = cursorY;
-		state.selectedCoord.PointText->zCoord = 0.2f;
-		drawingTextOnce(state.selectedCoord.PointText);
-	}
-	static void makeTexts(stateS& st)
-	{
-		void* font = mapTextDrawer::makeTextFont("Times New Roman", 400, 1);
-		if (font == nullptr)
-		{
-			MessageBoxA(NULL, "Cannot create text font for PlannedRetreatRoute", "ATTENTION! Exit now!", NULL);
-			std::terminate();
-		}
-
-		for (auto& txt : state.possibleCoords)
-		{
-			txt.PointText = mapTextDrawer::makeText(font, "+");
-			if (txt.PointText == nullptr)
+			if (STATE.workingNow == false)
+				return;
+			int cursorX = 0;
+			int cursorY = 0;
+			stratMapHelpers::getGameTileCoordsWithCursor(cursorX, cursorY);
+			for (const auto& txt : STATE.possibleCoords)
 			{
-				MessageBoxA(NULL, "Cannot create text for PlannedRetreatRoute", "ATTENTION! Exit now!", NULL);
+				drawingTextOnce(txt.PointText);
+			}
+			STATE.selectedCoord.PointText->xCoord = static_cast<float>(cursorX);
+			STATE.selectedCoord.PointText->yCoord = static_cast<float>(cursorY);
+			STATE.selectedCoord.PointText->zCoord = 0.2f;
+			drawingTextOnce(STATE.selectedCoord.PointText);
+		}
+		
+		void makeTexts(stateS& st)
+		{
+			void* font = mapTextDrawer::makeTextFont("Times New Roman", 400, 1);
+			if (font == nullptr)
+			{
+				MessageBoxA(nullptr, "Cannot create text font for PlannedRetreatRoute", "ATTENTION! Exit now!", NULL);
 				std::terminate();
 			}
-			txt.PointText->xCoord = txt.X;
-			txt.PointText->yCoord = txt.Y;
-			txt.PointText->zCoord = 0.2f;
+			for (auto& txt : STATE.possibleCoords)
+			{
+				txt.PointText = makeText(font, "+");
+				if (txt.PointText == nullptr)
+				{
+					MessageBoxA(nullptr, "Cannot create text for PlannedRetreatRoute", "ATTENTION! Exit now!", NULL);
+					std::terminate();
+				}
+				txt.PointText->xCoord = static_cast<float>(txt.X);
+				txt.PointText->yCoord = static_cast<float>(txt.Y);
+				txt.PointText->zCoord = 0.2f;
+			}
+			mapTextDrawer::deleteTextFont(font);
 		}
-
-		mapTextDrawer::deleteTextFont(font);
-	}
-	static void tryInit()
-	{
-		graphicsExport::AddImGuiDrawCallback(Draw);
-
-
-		void* font = mapTextDrawer::makeTextFont("Times New Roman", 400, 1);
-		if (font == nullptr)
+		
+		void tryInit()
 		{
-			MessageBoxA(NULL, "Cannot create text font for PlannedRetreatRoute selectedCoord", "ATTENTION! Exit now!", NULL);
-			std::terminate();
+			graphicsExport::AddImGuiDrawCallback(draw);
+			void* font = mapTextDrawer::makeTextFont("Times New Roman", 400, 1);
+			if (font == nullptr)
+			{
+				MessageBoxA(nullptr, "Cannot create text font for PlannedRetreatRoute selectedCoord", "ATTENTION! Exit now!", NULL);
+				std::terminate();
+			}
+			STATE.selectedCoord.PointText = mapTextDrawer::makeText(font, "+");
+			mapTextDrawer::changeTextColor(STATE.selectedCoord.PointText, 255, 255, 0, 0);
+			mapTextDrawer::deleteTextFont(font);
 		}
-
-		state.selectedCoord.PointText = mapTextDrawer::makeText(font, "+");
-		mapTextDrawer::ChangeTextColor(state.selectedCoord.PointText, 255, 255, 0, 0);
-		mapTextDrawer::deleteTextFont(font);
 	}
 
-	void startWork(int x, int y)
+	void startWork(const int x, const int y)
 	{
-		static std::once_flag initFLAG;
-		std::call_once(initFLAG, tryInit);
+		static std::once_flag initFlag;
+		std::call_once(initFlag, tryInit);
 
 		const auto tile = stratMapHelpers::getTile(x, y);
-		auto* army = tile->getArmy();
+		const auto* army = tile->getArmy();
 		if (army == nullptr)
 			return;
-		state.StartX = x;
-		state.StartY = y;
+		STATE.startX = x;
+		STATE.startY = y;
 
-		state.possibleCoords.clear();
-		state.possibleCoords.reserve(state.maxPathLenInTiles * state.maxPathLenInTiles);
-
-		float possibleMP = armyHelpers::getMinimumMovePointsForArmy(army) * 0.9;
-
-
-		int coordsMod = 1;
-
-		//void* cashe = PathFinder::CreateCasheForDistances(x, y, 50);
-		void* cashe = pathFinder::createCacheForArmy(army, 50);
-
-
+		STATE.possibleCoords.clear();
+		STATE.possibleCoords.reserve(STATE.maxPathLenInTiles * STATE.maxPathLenInTiles);
+		
+		void* cache = pathFinder::createCacheForArmy(army, 50);
 		std::unordered_set<std::pair<int, int>, pathFinder::pathPairHash> testCoords;
-		pathFinder::getPossibleTilesForArmyFromCache(cashe, x, y, testCoords);
-		pathFinder::deleteCacheForDistances(cashe);
+		pathFinder::getPossibleTilesForArmyFromCache(cache, x, y, testCoords);
+		pathFinder::deleteCacheForDistances(cache);
 
-		for (auto& coord : testCoords)
+		for (const auto& [xCoord, yCoord] : testCoords)
 		{
-			state.possibleCoords.emplace_back(coord.first, coord.second, nullptr);
+			STATE.possibleCoords.emplace_back(xCoord, yCoord, nullptr);
 		}
-		makeTexts(state);
+		makeTexts(STATE);
 
-		state.workingNow = true;
-		return;
+		STATE.workingNow = true;
 	}
+	
 	void onNewGameStart()
 	{
-		state.possibleCoords.clear();
-		routes.data.clear();
+		STATE.possibleCoords.clear();
+		ROUTES.data.clear();
 	}
-	void onFactionTurnStart(factionStruct* fac)
+	
+	void onFactionTurnStart(const factionStruct* fac)
 	{
 		if (fac == nullptr)
-		{
 			return;
-		}
-
-		routes.data.erase(std::remove_if(routes.data.begin(), routes.data.end(), [&](retreatRoute& route)
+		ROUTES.data.erase(std::remove_if(ROUTES.data.begin(), ROUTES.data.end(), [&](const retreatRoute& route)
 			{
 				if (route.factionID == fac->factionID)
 				{
@@ -153,10 +140,10 @@ namespace plannedRetreatRoute
 				{
 					return true;
 				}
-
 				return false;
-			}), routes.data.end());
+			}), ROUTES.data.end());
 	}
+	
 	std::string onGameSave()
 	{
 		std::string fPath = gameHelpers::getModPath();
@@ -167,19 +154,17 @@ namespace plannedRetreatRoute
 
 		std::string outFile = fPath;
 		outFile += "\\RetreatRoutes.json";
-
-
+		
 		ofstream f1(outFile);
-		jsn::json json = routes.data;
+		const jsn::json json = ROUTES.data;
 		f1 << setw(4) << json;
 		f1.close();
-
-
 		return outFile;
 	}
-	void onGameLoad(const std::vector<std::string>& filePathes)
+	
+	void onGameLoad(const std::vector<std::string>& filePaths)
 	{
-		for (auto& path : filePathes)
+		for (auto& path : filePaths)
 		{
 			if (path.find("RetreatRoutes.json") != string::npos)
 			{
@@ -187,57 +172,51 @@ namespace plannedRetreatRoute
 				try
 				{
 					std::ifstream f2(path);
-
-					if (f2.is_open() == false)
-					{
-					}
 					f2 >> json2;
-
 					f2.close();
 				}
 				catch (jsn::json::parse_error& e)
 				{
-					MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+					MessageBoxA(nullptr, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 				}
 				try
 				{
-					routes.data = json2.get<vector<retreatRoute>>();
+					ROUTES.data = json2.get<vector<retreatRoute>>();
 				}
 				catch (jsn::json::exception& e)
 				{
-					MessageBoxA(NULL, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+					MessageBoxA(nullptr, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
 				}
 				return;
 			}
 		}
 	}
 
-	void removeRoutesWithCoords(int x, int y)
+	void removeRoutesWithCoords(const int x, const int y)
 	{
-		routes.data.erase(std::remove_if(routes.data.begin(), routes.data.end(), [&](retreatRoute& route)
+		ROUTES.data.erase(std::remove_if(ROUTES.data.begin(), ROUTES.data.end(), [&](const retreatRoute& route)
 			{
 				if (route.routeStart.x == x && route.routeStart.y == y)
 				{
 					return true;
 				}
-
 				return false;
-			}), routes.data.end());
+			}), ROUTES.data.end());
 	}
 
-	retreatRoute* getRouteWithCoords(int x, int y)
+	retreatRoute* getRouteWithCoords(const int x, const int y)
 	{
-		auto res = std::find_if(routes.data.begin(), routes.data.end(), [&](retreatRoute& route)
+		const auto res = std::find_if(ROUTES.data.begin(), ROUTES.data.end(), [&](const retreatRoute& route)
+		{
+			if (route.routeStart.x == x && route.routeStart.y == y)
 			{
-				if (route.routeStart.x == x && route.routeStart.y == y)
-				{
-					return true;
-				}
+				return true;
+			}
 
-				return false;
-			});
+			return false;
+		});
 
-		if (res == routes.data.end())
+		if (res == ROUTES.data.end())
 		{
 			return nullptr;
 		}
@@ -245,27 +224,27 @@ namespace plannedRetreatRoute
 	}
 	void onClickAtTile(int x, int y)
 	{
-		if (state.workingNow == false)
+		if (STATE.workingNow == false)
 		{
 			return;
 		}
-		auto routeSelected = std::find_if(begin(state.possibleCoords), end(state.possibleCoords), [&](coordsVText& txt)
+		if (const auto routeSelected = std::find_if(begin(STATE.possibleCoords),
+			end(STATE.possibleCoords), [&](const coordsVText& txt)
+		{
+			if (txt.X == x && txt.Y == y)
 			{
-				if (txt.X == x && txt.Y == y)
-				{
-					return true;
-				}
-				return false;
-			});
-		if (routeSelected != std::end(state.possibleCoords))
+				return true;
+			}
+			return false;
+		}); routeSelected != std::end(STATE.possibleCoords))
 		{
 			try
 			{
-				retreatRoute route(state.StartX, state.StartY, x, y);
+				retreatRoute route(STATE.startX, STATE.startY, x, y);
 
-				removeRoutesWithCoords(state.StartX, state.StartY);
+				removeRoutesWithCoords(STATE.startX, STATE.startY);
 
-				routes.data.emplace_back(route);
+				ROUTES.data.emplace_back(route);
 				ImGuiToast bMsg(ImGuiToastType_Success, 25000);
 
 				bMsg.set_title("Retreat route");
@@ -290,8 +269,8 @@ namespace plannedRetreatRoute
 			ImGui::InsertNotification(bMsg);
 		}
 
-		state.possibleCoords.clear();
-		state.workingNow = false;
+		STATE.possibleCoords.clear();
+		STATE.workingNow = false;
 	}
 
 	bool tryRetreatArmyWithRoute(const battleArmy& army, std::pair<int, int>& resCoords)
@@ -304,12 +283,11 @@ namespace plannedRetreatRoute
 		const int destX = route->routeEnd.x;
 		const int destY = route->routeEnd.y;
 		const float dist = stratMapHelpers::getDistanceInTiles(x, y, destX, destY);
-		constexpr int distance = 3;
-		void* cache = pathFinder::createCacheForArmy(army.army, dist + distance);
+		constexpr float distance = 3.f;
+		void* cache = pathFinder::createCacheForArmy(army.army, static_cast<int>(dist + distance));
 		const auto [xCoord, yCoord] = pathFinder::getNearestTileForArmyFromCache(cache, x, y, destX, destY);
 		characterHelpers::teleportCharacter(army.character, xCoord, yCoord);
 		pathFinder::deleteCacheForDistances(cache);
-
 		resCoords = { route->routeEnd.x ,route->routeEnd.y };
 		removeRoutesWithCoords(route->routeStart.x, route->routeStart.y);
 		return true;

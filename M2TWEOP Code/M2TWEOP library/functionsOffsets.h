@@ -16,6 +16,7 @@ public:
 		DWORD getScriptCounter = NULL;
 		DWORD setScriptCounter = NULL;
 		DWORD getUnitFullMovePoints = NULL;
+		DWORD createMoveExtents = NULL;
 
 
 

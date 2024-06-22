@@ -115,6 +115,17 @@ void regionStruct::setHiddenResource(const char* name, const bool enable)
 		return;
 	setHiddenResourceId(index, enable);
 }
+
+std::pair<int, int> oneTile::getTileCoords()
+{
+	const stratMap* map = stratMapHelpers::getStratMap();
+	if (!map)
+		return {-1, -1};
+	const int index = this - map->tilesArr;
+	const int y = index / map->mapWidth;
+	const int x = index - y * map->mapWidth;
+	return {x, y};
+}
 	
 int oneTile::getTileX()
 {

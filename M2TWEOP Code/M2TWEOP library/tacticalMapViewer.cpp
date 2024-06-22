@@ -47,7 +47,7 @@ void tacticalMapViewer::view(const int x, const int y)
 void tacticalMapViewer::unView()
 {
 	battleCreator::setCreationNeeded(state.isBattleGeneratorWorking);
-	techFuncs::WriteData(state.backupData.data(), reinterpret_cast<DWORD>(functions.startTransitionToMapView),500);
+	techFuncs::writeData(state.backupData.data(), reinterpret_cast<DWORD>(functions.startTransitionToMapView),500);
 }
 
 void tacticalMapViewer::draw()

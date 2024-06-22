@@ -850,7 +850,8 @@ void managerF::loadJsonSettings()
 
 void managerF::initThread()
 {
-	std::srand(std::time(nullptr));
+	std::random_device dev;
+	std::srand(dev());
 	battleCreator::readParams();
 	codes::initCodes(globals::dataS.gameVersion);
 	dataOffsets::initDataOffsets(globals::dataS.gameVersion);

@@ -22,6 +22,19 @@
 #include "strategyMap.h"
 #include "techFuncs.h"
 
+characterMovementExtents* character::getMoveExtents(const int searchType, const int numTurns)
+{
+	const auto pathfinding = campaignHelpers::getStratPathFinding();
+	if (!pathfinding)
+		return nullptr;
+	return pathfinding->extentsManager.createMoveExtents(this, searchType, numTurns);
+}
+
+std::shared_ptr<characterMoveData> character::createMoveData(const int searchType, const int numTurns)
+{
+	return std::make_shared<characterMoveData>(this, searchType, numTurns);
+}
+
 namespace characterHelpers
 {
 	std::unordered_map<int, const char*> characterTypes = {
@@ -1063,6 +1076,8 @@ namespace characterHelpers
 	@tfield bribeSettlement bribeSettlement
 	@tfield spySettlement spySettlement
 	@tfield sabotageSettlement sabotageSettlement
+	@tfield getMovementExtents getMovementExtents
+	@tfield createMoveData createMoveData
 
 	@table character
 	*/
@@ -1329,6 +1344,27 @@ namespace characterHelpers
 	       ourCharacter:sendOffMap();
 	*/
 	types.character.set_function("sendOffMap", &sendOffMap);
+	/***
+	Get the movement extents for the character.
+	@function character:getMovementExtents
+	@tparam int searchType
+	@tparam int turns
+	@treturn characterMovementExtents extents
+	@usage
+	       local extents = ourCharacter:getMovementExtents(searchType.avoidZoc, 1)
+	*/
+	types.character.set_function("getMovementExtents", &character::getMoveExtents);
+		
+	/***
+	Get pathfinding information for this character (try to create and then assign to a variable and use it, not constantly call). But beware the info is out of data quickly if any movement happens on the strategy map.
+	@function character:createMoveData
+	@tparam int searchType
+	@tparam int turns
+	@treturn characterMoveData moveData
+	@usage
+	       local moveData = ourCharacter:createMoveData(searchType.avoidZoc, 1)
+	*/
+	types.character.set_function("createMoveData", &character::createMoveData);
 		
     }
 }

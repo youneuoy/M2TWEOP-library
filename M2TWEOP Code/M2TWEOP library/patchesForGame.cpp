@@ -959,12 +959,10 @@ const char* __fastcall patchesForGame::onQuickSave()
 	{
 		currSaveID = 0;
 		json["saveID"] = 0;
-
 		std::ofstream f2(fPath);
-
 		f2 << json;
-
 		f2.close();
+		gameHelpers::logStringGame("Error in quickSave " + std::string(e.what()));
 	}
 
 	return saveNames[currSaveID].c_str();
@@ -1022,12 +1020,10 @@ const char* __fastcall patchesForGame::onAutoSave()
 	{
 		currSaveID = 0;
 		json["saveID"] = 0;
-
 		std::ofstream f2(fPath);
-
 		f2 << json;
-
 		f2.close();
+		gameHelpers::logStringGame("Error in autoSave " + std::string(e.what()));
 	}
 
 	return saveNames[currSaveID].c_str();
@@ -1039,7 +1035,7 @@ character* __fastcall patchesForGame::mercenaryMovePointsGetGeneral(armyStruct* 
 	{
 		if (army->settlement != nullptr)
 		{
-			fortStruct* ourFort = reinterpret_cast<fortStruct*>(army->settlement);
+			const auto ourFort = reinterpret_cast<fortStruct*>(army->settlement);
 			const auto nextObject = ourFort->nextObject;
 			if (nextObject == nullptr)
 				return nullptr;
@@ -1048,15 +1044,16 @@ character* __fastcall patchesForGame::mercenaryMovePointsGetGeneral(armyStruct* 
 				gen = static_cast<character*>(nextObject);
 			}
 		}
-
 	}
 	return gen;
 }
+
 void __fastcall patchesForGame::clickAtTile(coordPair* xy)
 {
 	gameEvents::onClickAtTile(xy->xCoord, xy->yCoord);
 	plannedRetreatRoute::onClickAtTile(xy->xCoord, xy->yCoord);
 }
+
 void __stdcall patchesForGame::afterCampaignMapLoaded()
 {
 	discordManager::onCampaignMapLoaded();
@@ -1272,7 +1269,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 
 void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
 {
-	const string relativePath = techFuncs::uniToANSI(savePath);
+	const string relativePath = techFuncs::uniToAnsi(savePath);
 	vector<string> files = techFuncs::getEopArchiveFiles(relativePath);
 	if (files.empty())
 	{
@@ -1472,7 +1469,7 @@ void __fastcall patchesForGame::onLoadDescrBattleCharacter(armyStruct* army, cha
 {
 	characterHelpers::setBodyguard(goalGen, army->units[0]);//we replace game function what set army leader character.
 
-	std::string relativePath = techFuncs::uniToANSI(campaignHelpers::getCampaignData()->currentDescrFile);
+	std::string relativePath = techFuncs::uniToAnsi(campaignHelpers::getCampaignData()->currentDescrFile);
 
 	if (relativePath.find("battle") != std::string::npos)
 	{

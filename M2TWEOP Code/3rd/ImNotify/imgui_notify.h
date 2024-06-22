@@ -114,21 +114,32 @@ public:
 
 	NOTIFY_INLINE auto get_type() -> const ImGuiToastType& { return this->type; };
 
+	ImVec4 retColor = {};
+
 	NOTIFY_INLINE auto get_color() -> const ImVec4&
 	{
 		switch (this->type)
 		{
 		case ImGuiToastType_None:
-			return { 255, 255, 255, 255 }; // White
+			retColor = { 255, 255, 255, 255 }; // White
+			break;
 		case ImGuiToastType_Success:
-			return { 0, 255, 0, 255 }; // Green
+			retColor = { 0, 255, 0, 255 }; // Green
+			break;
 		case ImGuiToastType_Warning:
-			return { 255, 255, 0, 255 }; // Yellow
+			retColor = { 255, 255, 0, 255 }; // Yellow
+			break;
 		case ImGuiToastType_Error:
-			return { 255, 0, 0, 255 }; // Error
+			retColor = { 255, 0, 0, 255 }; // Error
+			break;
 		case ImGuiToastType_Info:
-			return { 0, 157, 255, 255 }; // Blue
+			retColor = { 0, 157, 255, 255 }; // Blue
+			break;
+		default:
+			retColor = { 255, 255, 255, 255 }; // White
+			break;
 		}
+		return retColor;
 	}
 
 	NOTIFY_INLINE auto get_icon() -> const char*
@@ -136,7 +147,7 @@ public:
 		switch (this->type)
 		{
 		case ImGuiToastType_None:
-			return NULL;
+			return nullptr;
 		case ImGuiToastType_Success:
 			return ICON_FA_CHECK_CIRCLE;
 		case ImGuiToastType_Warning:
@@ -145,6 +156,8 @@ public:
 			return ICON_FA_TIMES_CIRCLE;
 		case ImGuiToastType_Info:
 			return ICON_FA_INFO_CIRCLE;
+		default:
+			return nullptr;
 		}
 	}
 
@@ -152,26 +165,29 @@ public:
 
 	NOTIFY_INLINE auto get_elapsed_time() { return GetTickCount64() - this->creation_time; }
 
+	ImGuiToastPhase phase;
+	
 	NOTIFY_INLINE auto get_phase() -> const ImGuiToastPhase&
 	{
 		const auto elapsed = get_elapsed_time();
 
 		if (elapsed > NOTIFY_FADE_IN_OUT_TIME + this->dismiss_time + NOTIFY_FADE_IN_OUT_TIME)
 		{
-			return ImGuiToastPhase_Expired;
+			phase = ImGuiToastPhase_Expired;
+			return phase;
 		}
-		else if (elapsed > NOTIFY_FADE_IN_OUT_TIME + this->dismiss_time)
+		if (elapsed > NOTIFY_FADE_IN_OUT_TIME + this->dismiss_time)
 		{
-			return ImGuiToastPhase_FadeOut;
+			phase = ImGuiToastPhase_FadeOut;
+			return phase;
 		}
-		else if (elapsed > NOTIFY_FADE_IN_OUT_TIME)
+		if (elapsed > NOTIFY_FADE_IN_OUT_TIME)
 		{
-			return ImGuiToastPhase_Wait;
+			phase = ImGuiToastPhase_Wait;
+			return phase;
 		}
-		else
-		{
-			return ImGuiToastPhase_FadeIn;
-		}
+		phase = ImGuiToastPhase_FadeIn;
+		return phase;
 	}
 
 	NOTIFY_INLINE auto get_fade_percent() -> const float

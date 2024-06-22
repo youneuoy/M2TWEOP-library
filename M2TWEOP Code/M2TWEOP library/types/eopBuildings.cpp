@@ -5,7 +5,6 @@
 //@license GPL-3.0
 #include "pch.h"
 #include "eopBuildings.h"
-#include "gameStringHelpers.h"
 #include "settlement.h"
 #include "dataOffsets.h"
 #include "functionsOffsets.h"
@@ -35,7 +34,7 @@ edbEntry* buildEntryDB::addEopBuildEntry(edbEntry* oldEntry, const int newIndex)
 	return entry;
 }
 
-//get data from an existing eop build entry, in edbentry format
+//get data from an existing eop build entry, in edb entry format
 edbEntry* buildEntryDB::getEopBuildEntry(const int idx)
 {
 	for (eopBuildEntry& entry : eopEdb)
@@ -162,7 +161,7 @@ void buildingLevel::addFactionCapability(int capability, int16_t value, bool bon
 void buildingLevel::addRecruitPool(int eduIndex, float initialSize, float gainPerTurn, float maxSize, int16_t exp, const std::string& condition)
 {
 	auto pool = techFuncs::createGameClass<recruitPool>();
-	pool->capabilityType = 5; //5 means normal unit, there are some other for agents I havent added yet
+	pool->capabilityType = 5; //5 means normal unit, there are some other for agents I haven't added yet
 	pool->experienceOrLevel = exp; //for units this always is xp, for agents this can be agent
 	pool->unitID = eduIndex;
 	pool->initialSize = initialSize;
@@ -355,13 +354,14 @@ namespace eopBuildings
 		buildingLevel* eopLevel = &entry->levels[level];
 		return eopLevel->getPool(index);
 	}
-	void addBuildingCapability(edbEntry* entry, int level, int capability, int16_t value, bool bonus)
+	void addBuildingCapability(const edbEntry* entry, const int level, const int capability, const int16_t value, const bool bonus)
 	{
 		buildingLevel* eopLevel = &entry->levels[level];
 		eopLevel->addCapability(capability, value, bonus, "");
 	}
 	
-	void addBuildingPool(edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp, const char* condition)
+	void addBuildingPool(const edbEntry* entry, const int level, const int eduIndex, const float initialSize, const float gainPerTurn,
+	                     const float maxSize, const int32_t exp, const char* condition)
 	{
 		buildingLevel* eopLevel = &entry->levels[level];
 		eopLevel->addRecruitPool(eduIndex, initialSize, gainPerTurn, maxSize, exp, condition);

@@ -405,8 +405,9 @@ namespace settlementHelpers
 		if (buildTypeS == nullptr)return;
 		char* buildType = buildTypeS[0];
 		char* hash = buildTypeS[1];
+		int returnMoney = isReturnMoney ? 1 : 0;
 		_asm {
-			push isReturnMoney
+			push returnMoney
 			push hash
 			push buildType
 			mov ecx, [sett]

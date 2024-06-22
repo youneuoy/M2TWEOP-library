@@ -12,15 +12,12 @@
 #include "m2tweopMap.h"
 #include "strategyMap.h"
 
-#define GETBLUE(color) ((color) & 0xFF)
-#define GETGREEN(color) (((color) >> 8) & 0xFF)
-#define GETRED(color) (((color) >> 16) & 0xFF)
-#define GETALPHA(color) (((color) >> 24) & 0xFF)
-#define SETBLUE(color, red) ((color) = ((color) & 0xFFFFFF00) | (red))
-#define SETGREEN(color, green) ((color) = ((color) & 0xFFFF00FF) | ((green) << 8))
-#define SETRED(color, blue) ((color) = ((color) & 0xFF00FFFF) | ((blue) << 16))
-#define SETALPHA(color, alpha) ((color) = ((color) & 0x00FFFFFF) | ((alpha) << 24))
-#define MAKECOLOR(r, g, b, a) ((b) | ((g) << 8) | ((r) << 16) | ((a) << 24))
+#define GET_BLUE(color) ((color) & 0xFF)
+#define GET_GREEN(color) (((color) >> 8) & 0xFF)
+#define GET_RED(color) (((color) >> 16) & 0xFF)
+#define GET_ALPHA(color) (((color) >> 24) & 0xFF)
+#define SET_ALPHA(color, alpha) ((color) = ((color) & 0x00FFFFFF) | ((alpha) << 24))
+#define MAKE_COLOR(r, g, b, a) ((b) | ((g) << 8) | ((r) << 16) | ((a) << 24))
 
 namespace mapImageManager
 {
@@ -35,7 +32,7 @@ namespace mapImageManager
 		img->tiles.clear();
 	}
 	
-	std::tuple<int, int, void*> loadMapTexture(mapImage* mapImage, const std::string& path)
+	std::tuple<int, int, void*> loadMapTexture(const mapImage* mapImage, const std::string& path)
 	{
 		int x = 0;
 		int y = 0;
@@ -64,9 +61,9 @@ namespace mapImageManager
 		for (int i = 0; i < region->tileCount; i++)
 		{
 			const int tileIndex = region->tiles[i];
-			const uint32_t color = MAKECOLOR(r, g, b, a);
+			const uint32_t color = MAKE_COLOR(r, g, b, a);
 			auto [xCoord, yCoord] = stratMapHelpers::convertTileCoords(tileIndex);
-			if (tileIndex >= img->tiles.size())
+			if (tileIndex >= static_cast<int>(img->tiles.size()))
 				img->tiles.resize(tileIndex + 1);
 			img->tiles[tileIndex] = tileColor(color, xCoord, yCoord);
 		}
@@ -84,13 +81,13 @@ namespace mapImageManager
 		{
 			const int tileIndex = region->tiles[i];
 			const auto [xCoord, yCoord] = stratMapHelpers::convertTileCoords(tileIndex);
-			if (tileIndex >= img->tiles.size())
+			if (tileIndex >= static_cast<int>(img->tiles.size()))
 				img->tiles.resize(tileIndex + 1);
-			const auto newR = max(0, min(255, GETRED(img->tiles[tileIndex].color) + r));
-			const auto newG = max(0, min(255, GETGREEN(img->tiles[tileIndex].color) + g));
-			const auto newB = max(0, min(255, GETBLUE(img->tiles[tileIndex].color) + b));
-			const auto newA = max(0, min(255, GETALPHA(img->tiles[tileIndex].color) + a));
-			const uint32_t color = MAKECOLOR(newR, newG, newB, newA);
+			const auto newR = max(0, min(255, GET_RED(img->tiles[tileIndex].color) + r));
+			const auto newG = max(0, min(255, GET_GREEN(img->tiles[tileIndex].color) + g));
+			const auto newB = max(0, min(255, GET_BLUE(img->tiles[tileIndex].color) + b));
+			const auto newA = max(0, min(255, GET_ALPHA(img->tiles[tileIndex].color) + a));
+			const uint32_t color = MAKE_COLOR(newR, newG, newB, newA);
 			img->tiles[tileIndex] = tileColor(color, xCoord, yCoord);
 		}
 	}
@@ -109,9 +106,9 @@ namespace mapImageManager
 		b = max(0, min(255, b));
 		a = max(0, min(255, a));
 		const int tileIndex = sMap->mapWidth * y + x;
-		if (tileIndex >= img->tiles.size())
+		if (tileIndex >= static_cast<int>(img->tiles.size()))
 			img->tiles.resize(tileIndex + 1);
-		img->tiles[tileIndex] = tileColor(MAKECOLOR(r, g, b, a), x, y);
+		img->tiles[tileIndex] = tileColor(MAKE_COLOR(r, g, b, a), x, y);
 	}
 	
 	void addTileColor(mapImage* img, const int x, const int y, int r, int g, int b, int a)
@@ -124,30 +121,30 @@ namespace mapImageManager
 		if (x < 0 || y < 0) 
 			return;
 		const int tileIndex = sMap->mapWidth * y + x;
-		if (tileIndex >= img->tiles.size())
+		if (tileIndex >= static_cast<int>(img->tiles.size()))
 			img->tiles.resize(tileIndex + 1);
-		r = max(0, min(255, GETRED(img->tiles[tileIndex].color) + r));
-		g = max(0, min(255, GETGREEN(img->tiles[tileIndex].color) + g));
-		b = max(0, min(255, GETBLUE(img->tiles[tileIndex].color) + b));
-		a = max(0, min(255, GETALPHA(img->tiles[tileIndex].color) + a));
-		img->tiles[tileIndex] = tileColor(MAKECOLOR(r, g, b, a), x, y);
+		r = max(0, min(255, GET_RED(img->tiles[tileIndex].color) + r));
+		g = max(0, min(255, GET_GREEN(img->tiles[tileIndex].color) + g));
+		b = max(0, min(255, GET_BLUE(img->tiles[tileIndex].color) + b));
+		a = max(0, min(255, GET_ALPHA(img->tiles[tileIndex].color) + a));
+		img->tiles[tileIndex] = tileColor(MAKE_COLOR(r, g, b, a), x, y);
 	}
 
 	// Helper function to extract individual color components from a pixel
-	inline int getRed(DWORD pixel) { return (pixel >> 16) & 0xFF; }
-	inline int getGreen(DWORD pixel) { return (pixel >> 8) & 0xFF; }
-	inline int getBlue(DWORD pixel) { return pixel & 0xFF; }
+	inline int getRed(const DWORD pixel) { return (pixel >> 16) & 0xFF; }
+	inline int getGreen(const DWORD pixel) { return (pixel >> 8) & 0xFF; }
+	inline int getBlue(const DWORD pixel) { return pixel & 0xFF; }
 
-	float calculateLocalContrast(const std::vector<DWORD>& pixels, int x, int y, int width, int height) {
+	float calculateLocalContrast(const std::vector<DWORD>& pixels, const int x, const int y, const int width, const int height) {
 		int maxR = 0, maxG = 0, maxB = 0;
 		int minR = 255, minG = 255, minB = 255;
 
 		for (int ky = -1; ky <= 1; ky++) {
 			for (int kx = -1; kx <= 1; kx++) {
-				int px = x + kx;
-				int py = y + ky;
+				const int px = x + kx;
+				const int py = y + ky;
 				if (px >= 0 && px < width && py >= 0 && py < height) {
-					DWORD pixel = pixels[py * width + px];
+					const DWORD pixel = pixels[py * width + px];
 					int r = getRed(pixel);
 					int g = getGreen(pixel);
 					int b = getBlue(pixel);
@@ -162,16 +159,15 @@ namespace mapImageManager
 			}
 		}
 		// Calculate contrast for each channel and use the maximum as the overall contrast
-		int contrastR = maxR - minR;
-		int contrastG = maxG - minG;
-		int contrastB = maxB - minB;
-
-		return max(contrastR, max(contrastG, contrastB));
+		const int contrastR = maxR - minR;
+		const int contrastG = maxG - minG;
+		const int contrastB = maxB - minB;
+		return static_cast<float>(max(contrastR, max(contrastG, contrastB)));
 	}
 
-	void applyAdaptiveGaussianBlur(DWORD* pixels, int width, int height, float strength) {
-		std::vector<DWORD> temp(pixels, pixels + width * height);
-
+	void applyAdaptiveGaussianBlur(DWORD* pixels, const int width, const int height, const float strength)
+	{
+		const std::vector<DWORD> temp(pixels, pixels + width * height);
 		for (int y = 1; y < height - 1; y++) {
 			for (int x = 1; x < width - 1; x++) {
 				const float contrast = calculateLocalContrast(temp, x, y, width, height);
@@ -187,49 +183,44 @@ namespace mapImageManager
 						kernelSum += kernel[ky + 1][kx + 1];
 					}
 				}
-
 				// Normalize the kernel
 				for (int ky = 0; ky < 3; ky++) {
 					for (int kx = 0; kx < 3; kx++) {
 						kernel[ky][kx] /= kernelSum;
 					}
 				}
-
 				float sumR = 0, sumG = 0, sumB = 0;
 				for (int ky = -1; ky <= 1; ky++) {
 					for (int kx = -1; kx <= 1; kx++) {
-						int px = x + kx;
-						int py = y + ky;
+						const int px = x + kx;
+						const int py = y + ky;
 						const DWORD pixel = temp[py * width + px];
-
 						sumR += ((pixel >> 16) & 0xFF) * kernel[ky + 1][kx + 1];
 						sumG += ((pixel >> 8) & 0xFF) * kernel[ky + 1][kx + 1];
 						sumB += (pixel & 0xFF) * kernel[ky + 1][kx + 1];
 					}
 				}
 
-				int newR = min(max(int(sumR), 0), 255);
-				int newG = min(max(int(sumG), 0), 255);
-				int newB = min(max(int(sumB), 0), 255);
-				pixels[y * width + x] = (0xFF << 24) | (newR << 16) | (newG << 8) | newB;
+				const int newR = min(max(int(sumR), 0), 255);
+				const int newG = min(max(int(sumG), 0), 255);
+				const int newB = min(max(int(sumB), 0), 255);
+				pixels[y * width + x] = (0xFFu << 24u) | (newR << 16) | (newG << 8) | newB;
 			}
 		}
 	}
 
-	void generateGaussianKernel(float kernel[3][3], float sigma) {
+	void generateGaussianKernel(float kernel[3][3], const float sigma) {
 		float sum = 0.0f;
-		int size = 3;  // Kernel size
-		int kCenter = size / 2;
-		float twoSigmaSquare = 2.0f * sigma * sigma;
-
+		constexpr int size = 3;  // Kernel size
+		constexpr int kCenter = size / 2;
+		const float twoSigmaSquare = 2.0f * sigma * sigma;
 		for (int y = -kCenter; y <= kCenter; y++) {
 			for (int x = -kCenter; x <= kCenter; x++) {
-				float exponent = -(x * x + y * y) / twoSigmaSquare;
-				kernel[y + kCenter][x + kCenter] = exp(exponent) / (cimg_library::cimg::PI * twoSigmaSquare);
+				const float exponent = -(x * x + y * y) / twoSigmaSquare;
+				kernel[y + kCenter][x + kCenter] = exp(exponent) / static_cast<float>(cimg_library::cimg::PI * twoSigmaSquare);
 				sum += kernel[y + kCenter][x + kCenter];
 			}
 		}
-
 		// Normalize the kernel
 		for (int y = 0; y < size; y++) {
 			for (int x = 0; x < size; x++) {
@@ -238,8 +229,8 @@ namespace mapImageManager
 		}
 	}
 
-	void applyGaussianBlur(DWORD* pixels, int width, int height, float strength) {
-		std::vector<DWORD> temp(pixels, pixels + width * height);  // Copy original pixels to temp
+	void applyGaussianBlur(DWORD* pixels, const int width, const int height, const float strength) {
+		const std::vector<DWORD> temp(pixels, pixels + width * height);  // Copy original pixels to temp
 
 		float kernel[3][3];
 		generateGaussianKernel(kernel, strength);
@@ -250,28 +241,27 @@ namespace mapImageManager
 
 				for (int ky = -1; ky <= 1; ky++) {
 					for (int kx = -1; kx <= 1; kx++) {
-						int px = x + kx;
-						int py = y + ky;
-						DWORD pixel = temp[py * width + px];
-
+						const int px = x + kx;
+						const int py = y + ky;
+						const DWORD pixel = temp[py * width + px];
 						sumR += ((pixel >> 16) & 0xFF) * kernel[ky + 1][kx + 1];
 						sumG += ((pixel >> 8) & 0xFF) * kernel[ky + 1][kx + 1];
 						sumB += (pixel & 0xFF) * kernel[ky + 1][kx + 1];
 					}
 				}
 
-				int newR = min(max(int(sumR), 0), 255);
-				int newG = min(max(int(sumG), 0), 255);
-				int newB = min(max(int(sumB), 0), 255);
-				pixels[y * width + x] = (0xFF << 24) | (newR << 16) | (newG << 8) | newB;
+				const int newR = min(max(int(sumR), 0), 255);
+				const int newG = min(max(int(sumG), 0), 255);
+				const int newB = min(max(int(sumB), 0), 255);
+				pixels[y * width + x] = (0xFFu << 24u) | (newR << 16) | (newG << 8) | newB;
 			}
 		}
 	}
 	
-	IDirect3DTexture9* updateRegionColors(mapImage* img, IDirect3DTexture9* regionDataTexture, int width, int height) {
-		ofstream f1("logs\\lol.youneuoylog");
+	IDirect3DTexture9* updateRegionColors(const mapImage* img, IDirect3DTexture9* regionDataTexture, const int width, const int height)
+	{
 		D3DLOCKED_RECT lockedRect;
-		auto success = regionDataTexture->LockRect(0, &lockedRect, NULL, D3DLOCK_DISCARD);
+		auto success = regionDataTexture->LockRect(0, &lockedRect, nullptr, D3DLOCK_DISCARD);
 		if (FAILED(success)) {
 			regionDataTexture->Release();
 			return nullptr;
@@ -286,8 +276,8 @@ namespace mapImageManager
 		{
 			if (tileCol.color == 0)
 				continue;
-			const float weight = GETALPHA(tileCol.color) / 255.0f;
-			SETALPHA(tileCol.color, 255);
+			const float weight = GET_ALPHA(tileCol.color) / 255.0f;
+			SET_ALPHA(tileCol.color, 255);
 			const int gameX = tileCol.coords.xCoord;
 			const int gameY = tileCol.coords.yCoord;
 			for (int i = 0, imageX = gameX * xScale; i < xScale; i++, imageX++)
@@ -295,8 +285,6 @@ namespace mapImageManager
 				{
 					imageX = max(0, min(width - 1, imageX));
 					imageY = max(0, min(height - 1, imageY));
-					//auto formattedString = "imageX:" + std::to_string(imageX) + " imageY:" + std::to_string(imageY) + " gameX:" + std::to_string(gameX) + " gameY:" + std::to_string(gameY);
-					//f1 << formattedString << '\n';
 					DWORD* pPixel = pTexels + imageY * lockedRect.Pitch / sizeof(DWORD) + imageX;
 					*pPixel = interpolateColors(*pPixel, tileCol.color, weight);
 				}
@@ -318,7 +306,7 @@ namespace mapImageManager
 		return regionDataTexture;
 	}
 
-	DWORD interpolateColors(DWORD color1, DWORD color2, float weight) {
+	DWORD interpolateColors(const DWORD color1, const DWORD color2, const float weight) {
 		const int r1 = (color1 >> 16) & 0xFF;
 		const int g1 = (color1 >> 8) & 0xFF;
 		const int b1 = color1 & 0xFF;
@@ -336,10 +324,6 @@ namespace mapImageManager
 		b = std::clamp(b, 0, 255);
 		
 		return D3DCOLOR_ARGB(255, r, g, b);
-	}
-	
-	void mapImageManager::createImage(mapImage* image)
-	{
 	}
 	
 	void addToLua(sol::state& luaState)
