@@ -3854,7 +3854,7 @@ onSetExtentsTextureBorder::onSetExtentsTextureBorder(MemWork* mem, LPVOID addr, 
 		m_adress = 0x00990710;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x009904C0;
+		m_adress = 0x0098FBA0;
 }
 
 onSetExtentsTextureBorder::~onSetExtentsTextureBorder()
@@ -3904,7 +3904,7 @@ onSetExtentsTextureZOC::onSetExtentsTextureZOC(MemWork* mem, LPVOID addr, int ve
 		m_adress = 0x00991201;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x009904C0;
+		m_adress = 0x00990691;
 }
 
 onSetExtentsTextureZOC::~onSetExtentsTextureZOC()
@@ -3949,7 +3949,7 @@ onSetExtentsTextureZOCAlpha::onSetExtentsTextureZOCAlpha(MemWork* mem, LPVOID ad
 		m_adress = 0x00991321;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x009904C0;
+		m_adress = 0x009907B1;
 }
 
 onSetExtentsTextureZOCAlpha::~onSetExtentsTextureZOCAlpha()
