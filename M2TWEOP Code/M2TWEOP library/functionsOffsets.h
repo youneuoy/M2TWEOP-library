@@ -262,6 +262,12 @@ public:
 		DWORD addNavalTargetRegion = NULL;
 		DWORD removeNavalTargetRegion = NULL;
 		DWORD createHordeController = NULL;
+		DWORD createRegionController = NULL;
+		DWORD addToRegionControllers = NULL;
+		DWORD releaseResource = NULL;
+		DWORD getRequiredGarrisonStrength = NULL;
+		DWORD recalcRegionGroupStrengths = NULL;
+		DWORD manageRegionGroups = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

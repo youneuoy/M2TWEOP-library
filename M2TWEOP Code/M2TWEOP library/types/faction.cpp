@@ -17,6 +17,30 @@
 #define factionStruct_ai_label 1
 #define factionStruct_name 2
 
+void aiRegionController::initialize()
+{
+	if (!region->hasFaction(aiFaction->factionID))
+	{
+		if (garrison)
+			aiFaction->aiResourceManager->releaseResource(garrison);
+		garrison = nullptr;
+	}
+	armyStruct* army = nullptr;
+	if (garrison)
+	{
+		army = garrison->army;
+	}
+	requiredGarrisonStrength = GAME_FUNC(int(__cdecl*)(aiRegionData*, factionStruct*, settlementStruct*, armyStruct*),
+		getRequiredGarrisonStrength)(gsdData, aiFaction->faction, settlement, army);
+	if (gsdData && garrison)
+	{
+		if (gsdData->strength.enemyStrength == 0 || (gsdData->strength.ownStrength / gsdData->strength.enemyStrength > 0.9))
+		{
+			garrisonType = 1;
+		}
+	}
+}
+
 void factionStruct::updateNeighbours()
 {
 	if (settlementsNum == 0)
@@ -95,6 +119,11 @@ void factionStruct::setSecondaryColor(const uint8_t r, const uint8_t g, const ui
 void clearRegionData(aiRegionData** regionList)
 {
 	GAME_FUNC(void(__thiscall*)(aiRegionData**), clearAiRegionData)(regionList);
+}
+
+void aiResourceManager::releaseResource(aiResourcePrivate* res)
+{
+	GAME_FUNC(void(__thiscall*)(aiResourceManager*, aiResourcePrivate*), releaseResource)(this, res);
 }
 
 bool aiLongTermGoalDirector::regionsBordersOnlyTrusted(int regionId)
@@ -302,14 +331,50 @@ float aiPersonalityValues::getPolicyPriority(const settlementPolicy policyType)
 
 void aiGlobalStrategyDirector::initialize()
 {
-	const auto ltgd = aiFaction->aiLongTermGoalDirector;
 	initOwnRegions();
 	initNeighbourRegions();
 	initNavalRegions();
 	GAME_FUNC(void(__thiscall*)(aiGlobalStrategyDirector*), createHordeController)(this);
 	if (hordeController)
 		return;
-	
+	updateRegionControllers();
+	GAME_FUNC(void(__cdecl*)(), recalcRegionGroupStrengths)();
+	GAME_FUNC(void(__thiscall*)(aiGlobalStrategyDirector*), manageRegionGroups)(this);
+	int maxValue = -100000;
+	int minValue = 100000;
+	for (int i = 0; i < ownRegionsCount; i++)
+	{
+		const auto regionData = &ownRegions[i];
+		if (regionData->regionValue > maxValue)
+			maxValue = regionData->regionValue;
+		if (regionData->regionValue < minValue)
+			minValue = regionData->regionValue;
+	}
+	for (int i = 0; i < allNeighbourRegionsCount; i++)
+	{
+		const auto regionData = &allNeighbourRegions[i];
+		if (regionData->regionValue > maxValue)
+			maxValue = regionData->regionValue;
+		if (regionData->regionValue < minValue)
+			minValue = regionData->regionValue;
+	}
+	const float scale = 1000.f / (maxValue - minValue);
+	for (int i = 0; i < ownRegionsCount; i++)
+	{
+		const auto regionData = &ownRegions[i];
+		if (minValue == maxValue)
+			regionData->priority = 650;
+		else
+			regionData->priority = static_cast<int>((regionData->regionValue - minValue) * scale);
+	}
+	for (int i = 0; i < allNeighbourRegionsCount; i++)
+	{
+		const auto regionData = &allNeighbourRegions[i];
+		if (minValue == maxValue)
+			regionData->priority = 650;
+		else
+			regionData->priority = static_cast<int>((regionData->regionValue - minValue) * scale);
+	}
 }
 
 int calculateBorderChange(aiGlobalStrategyDirector* director, const aiRegionData* regionData)
@@ -530,6 +595,14 @@ void aiGlobalStrategyDirector::initNavalRegions()
 	}
 }
 
+aiRegionController* createNewRegionController(aiFaction* aiFac, settlementStruct* sett)
+{
+	const auto controller = techFuncs::createGameClass<aiRegionController>();
+	GAME_FUNC(aiRegionController*(__thiscall*)(aiRegionController*, aiFaction*, int), createRegionController)(controller, aiFac, sett->regionID);
+	controller->settlement = sett;
+	return controller;
+}
+
 
 void aiGlobalStrategyDirector::updateRegionControllers()
 {
@@ -571,18 +644,60 @@ void aiGlobalStrategyDirector::updateRegionControllers()
 				}
 			}
 			--regionControllersNum;
-			aiRegionController** v19;
-			aiRegionController** elements;
-			aiRegionController* v18;
-			for (int k = i; k < this->regionControllersNum; *v19 = v18 )
+			aiRegionController** rc1;
+			aiRegionController* rc2;
+			for (int j = i; j < regionControllersNum; *rc1 = rc2 )
 			{
-				elements = this->regionControllers;
-				v18 = elements[k + 1];
-				v19 = &elements[k++];
+				rc2 = regionControllers[j + 1];
+				rc1 = &regionControllers[j++];
 			}
 			callClassFunc<aiRegionController*, void, int>(controller, 0, 1);
 		}
 	}
+	for (int i = 0; i < ownRegionsCount; i++)
+	{
+		bool found = false;
+		for (int j = 0; j < regionControllersNum; j++)
+		{
+			const auto controller = regionControllers[j];
+			if ((controller->settlement->regionID == ownRegions[i].regionID)
+				&& (controller->settlement->getMinorSettlementIndex() == ownRegions[i].settlementIndex))
+			{
+				ownRegions[i].regionController = controller;
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+		{
+			const auto sett = minorSettlementDb::getSettlement(ownRegions[i].regionID, ownRegions[i].settlementIndex);
+			auto newController = createNewRegionController(aiFaction, sett);
+			newController->gsdData = &ownRegions[i];
+			GAME_FUNC(void(__thiscall*)(aiRegionController***, aiRegionController**),
+				addToRegionControllers)(&regionControllers, &newController);
+			ownRegions[i].regionController = newController;
+			const auto region = stratMapHelpers::getRegion(sett->regionID);
+			const int settlementCount = region->settlementCount();
+			for (int j = 0; j < settlementCount; j++)
+			{
+				if (const auto sett2 = region->getSettlement(j); sett->faction == faction)
+					aiFaction->aiProductionControllers->evaluatePolicies(sett->regionID, sett->getMinorSettlementIndex());
+			}
+			for (int j = 0; j < region->neighbourRegionsNum; j++)
+			{
+				const auto nRegion = region->neighbourRegions[j].region;
+				const int nSettCount = nRegion->settlementCount();
+				for (int n = 0; n < nSettCount; n++)
+				{
+					if (const auto sett2 = nRegion->getSettlement(n); sett->faction == faction)
+						aiFaction->aiProductionControllers->evaluatePolicies(sett->regionID, sett->getMinorSettlementIndex());
+				}
+			}
+		}
+	}
+	
+	for( int i = 0; i < regionControllersNum; i++ )
+		regionControllers[i]->initialize();
 }
 
 void factionStruct::hideRevealedTile(const int x, const int y)

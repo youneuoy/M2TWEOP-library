@@ -272,6 +272,7 @@ struct aiRegionController
 	struct aiResourcePrivate *garrison;
 	int garrisonType;
 	int requiredGarrisonStrength;
+	void initialize();
 };
 
 struct holdRegionsWinCondition
@@ -717,6 +718,30 @@ struct factionRecord { /* see descr_sm_factions.txt */
 	bool canBuildSiegeTowers; //0x00DB
 	bool canTransmitPlague; //0x00DC
 	char pad_00DD[3]; //0x00DD
+};
+
+struct aiResourceArray
+{
+	aiResourcePrivate* resources;
+	int size;
+	int num;
+};
+
+struct aiResourceManager
+{
+	struct aiFaction *aiFaction;
+	struct factionStruct *faction;
+	int field_C;
+	int32_t field_10;
+	int field_14;
+	int field_18;
+	aiResourceArray resourceArrays[10];
+	void* aiControllers;
+	int32_t aiControllersSize;
+	int32_t aiControllersNum;
+	bool update;
+	char pad[3]{};
+	void releaseResource(aiResourcePrivate* res);
 };
 
 struct aiFaction

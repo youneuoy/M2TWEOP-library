@@ -258,6 +258,12 @@ void codes::initCodes(int gameVer)
 		offsets.addNavalTargetRegion = 0x00534B00;
 		offsets.removeNavalTargetRegion = 0x00534C40;
 		offsets.createHordeController = 0x00536720;
+		offsets.createRegionController = 0x00550030;
+		offsets.addToRegionControllers = 0x00533850;
+		offsets.releaseResource = 0x00551B50;
+		offsets.getRequiredGarrisonStrength = 0x00515580;
+		offsets.recalcRegionGroupStrengths = 0x518DA0;
+		offsets.manageRegionGroups = 0x533EE0;
 	}
 
 
@@ -518,5 +524,11 @@ void codes::initCodes(int gameVer)
 		offsets.addNavalTargetRegion = 0x00535130;
 		offsets.removeNavalTargetRegion = 0x00535270;
 		offsets.createHordeController = 0x00536D50;
+		offsets.createRegionController = 0x005504C0;
+		offsets.addToRegionControllers = 0x00533E70;
+		offsets.releaseResource = 0x00551FE0;
+		offsets.getRequiredGarrisonStrength = 0x00515B70;
+		offsets.recalcRegionGroupStrengths = 0x519390;
+		offsets.manageRegionGroups = 0x534500;
 	}
 }
