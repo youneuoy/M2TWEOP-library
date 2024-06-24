@@ -268,6 +268,7 @@ public:
 		DWORD getRequiredGarrisonStrength = NULL;
 		DWORD recalcRegionGroupStrengths = NULL;
 		DWORD manageRegionGroups = NULL;
+		DWORD initGsdFactionData = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

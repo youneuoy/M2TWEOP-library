@@ -215,7 +215,7 @@ namespace settlementHelpers
 	    	createBuilding(settlement, coreBuildingName.c_str());
 	    settlement->recalculate(true);
 		minorSettlementDb::addToMinorSettlements(settlement->regionID, settlement);
-		settlement->minorSettlementIndex += static_cast<int>(minorSettlementDb::regionMinorSettlements[settlement->regionID].size());
+		settlement->minorSettlementIndex = static_cast<int>(minorSettlementDb::regionMinorSettlements[settlement->regionID].size()) + 100;
 		faction->updateNeighbours();
 		return settlement;
 	}

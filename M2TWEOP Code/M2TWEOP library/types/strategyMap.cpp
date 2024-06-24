@@ -78,7 +78,7 @@ settlementStruct* minorSettlementDb::getSettlement(const int regionId, const int
 	const auto setts = regionMinorSettlements[regionId];
 	for (const auto& sett : setts)
 	{
-		if (sett->minorSettlementIndex == settlementIndex)
+		if (sett->getMinorSettlementIndex() == settlementIndex)
 			return sett;
 	}
 	return nullptr;
@@ -95,7 +95,7 @@ settlementStruct* minorSettlementDb::getSettlementAtIndex(const int regionId, co
 		return nullptr;
 	if (index == 0)
 		return stratMapHelpers::getRegion(regionId)->settlement;
-	return regionMinorSettlements[regionId][index];
+	return regionMinorSettlements[regionId][index - 1];
 }
 
 void oneTile::setTileClimate(const int climate)

@@ -375,6 +375,7 @@ void aiGlobalStrategyDirector::initialize()
 		else
 			regionData->priority = static_cast<int>((regionData->regionValue - minValue) * scale);
 	}
+	GAME_FUNC(void(__thiscall*)(aiGlobalStrategyDirector*), initGsdFactionData)(this);
 }
 
 int calculateBorderChange(aiGlobalStrategyDirector* director, const aiRegionData* regionData)

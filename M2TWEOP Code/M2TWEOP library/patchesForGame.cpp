@@ -161,6 +161,11 @@ portBuildingStruct* __fastcall patchesForGame::onTransferSettlementPort(const se
 	return settlement->port;
 }
 
+void __fastcall patchesForGame::onInitGsd(aiGlobalStrategyDirector* director)
+{
+	director->initialize();
+}
+
 void __fastcall patchesForGame::onTransferSettlement(const settlementStruct* settlement, const int reason, factionStruct* faction)
 {
 	if (settlement->isMinorSettlement)

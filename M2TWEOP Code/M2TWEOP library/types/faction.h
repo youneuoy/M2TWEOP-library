@@ -4,6 +4,7 @@
 #include "settlement.h"
 
 
+struct aiResourcePrivate;
 struct aiRegionController;
 
 struct smFactionsDb {
@@ -239,6 +240,16 @@ public:
 	}
 };
 
+struct aiMilitaryControllerWorldWide
+{
+	DWORD vfTable;
+	aiFaction* aiFaction;
+	aiResourcePrivate** resources;
+	int resourcesSize;
+	int resourcesNum;
+	int targetId;
+};
+
 struct aiMilitaryDirector
 {
 	struct aiFaction* aiFaction;
@@ -256,7 +267,7 @@ struct aiMilitaryDirector
 	int32_t aiBrigandControllersSize;
 	int32_t aiBrigandControllersNum;
 	void* lastResortController;
-	void* aiMilitaryControllerWorldWide;
+	aiMilitaryControllerWorldWide worldwideController;
 };
 
 struct aiRegionController

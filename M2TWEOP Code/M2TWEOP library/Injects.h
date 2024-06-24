@@ -1344,6 +1344,17 @@ private:
 	LPVOID funcAddress;
 };
 
+class onInitGsd
+	:public AATemplate
+{
+public:
+	onInitGsd(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 
 class OnLoadSettlementWorldpkgdesc
 	:public AATemplate

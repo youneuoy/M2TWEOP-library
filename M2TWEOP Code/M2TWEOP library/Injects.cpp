@@ -4145,6 +4145,26 @@ void onCheckConstructionItem::SetNewCode()
 	delete a;
 }
 
+onInitGsd::onInitGsd(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0052B067;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0052AA67;
+}
+
+void onInitGsd::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 OnLoadSettlementWorldpkgdesc::OnLoadSettlementWorldpkgdesc(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

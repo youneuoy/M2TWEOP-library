@@ -264,6 +264,7 @@ void codes::initCodes(int gameVer)
 		offsets.getRequiredGarrisonStrength = 0x00515580;
 		offsets.recalcRegionGroupStrengths = 0x518DA0;
 		offsets.manageRegionGroups = 0x533EE0;
+		offsets.initGsdFactionData = 0x532CF0;
 	}
 
 
@@ -530,5 +531,6 @@ void codes::initCodes(int gameVer)
 		offsets.getRequiredGarrisonStrength = 0x00515B70;
 		offsets.recalcRegionGroupStrengths = 0x519390;
 		offsets.manageRegionGroups = 0x534500;
+		offsets.initGsdFactionData = 0x533310;
 	}
 }

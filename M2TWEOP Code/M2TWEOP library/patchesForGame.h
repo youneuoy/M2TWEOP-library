@@ -42,6 +42,7 @@ public:
 	static uint32_t __fastcall onSetExtentsZoc();
 	static uint8_t __fastcall onSetExtentsZocAlpha(uint8_t oldAlpha);
 	static void __fastcall onDecideNeighbours(factionStruct* faction);
+	static void __fastcall onInitGsd(aiGlobalStrategyDirector* director);
 	static aiProductionController* __fastcall onCreateProductionController(aiProductionController* controller, settlementStruct* sett);
 	static DWORD __fastcall onUnitInfo(DWORD entryAddress);
 	static void __fastcall onTransferSettlement(const settlementStruct* settlement, int reason, factionStruct* faction);

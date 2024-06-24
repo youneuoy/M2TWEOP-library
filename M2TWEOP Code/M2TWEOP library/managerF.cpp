@@ -639,6 +639,12 @@ void managerF::execPatches()
 	toCheckConstructionItem->Enable();
 	f1 << "Done" << endl;
 	
+	f1 << "Start applying onInitGsd patch" << endl;
+	onInitGsd* toInitGsd = new onInitGsd(mem, (LPVOID)patchesForGame::onInitGsd, globals::dataS.gameVersion);
+	toInitGsd->SetNewCode();
+	toInitGsd->Enable();
+	f1 << "Done" << endl;
+	
 	f1 << "Start applying onGetBrowserPicConstructed patch" << endl;
 	onGetBrowserPicConstructed* toGetBrowserPicConstructed= new onGetBrowserPicConstructed(mem, (LPVOID)patchesForGame::getBrowserPicConstructed, globals::dataS.gameVersion);
 	toGetBrowserPicConstructed->SetNewCode();
