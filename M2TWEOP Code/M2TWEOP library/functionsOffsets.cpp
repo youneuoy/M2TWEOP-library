@@ -236,6 +236,28 @@ void codes::initCodes(int gameVer)
 		offsets.setScriptCounter = 0x0048c8e0;
 		offsets.getUnitFullMovePoints = 0x00742380;
 		offsets.createMoveExtents = 0x4B60E0;
+		offsets.createSettlement = 0x005E4500;
+		offsets.createRallyPointSundry = 0x005D8C80;
+		offsets.initRallyPoint = 0x005D8D00;
+		offsets.settAttachFaction = 0x005DB000;
+		offsets.areaOfInfluence = 0x004C9600;
+		offsets.addToSettlementList = 0x005F0480;
+		offsets.residenceTileCharacterCheck = 0x004BF880;
+		offsets.recalculateSettlement = 0x005F41D0;
+		offsets.setPop = 0x005F0EE0;
+		offsets.addToArrayInt = 0x00464820;
+		offsets.changeWatchTowerFaction = 0x004DCE80;
+		offsets.setRegionFaction = 0x0049FA50;
+		offsets.clearAiRegionData = 0x533760;
+		offsets.createRegionInArray = 0x533660;
+		offsets.getRegionIsolationScore = 0x514AC0;
+		offsets.calculateRegionStrengths = 0x5160B0;
+		offsets.calculateBackupRegionStrengths = 0x00516140;
+		offsets.isTrustedAlly = 0x0053CA60;
+		offsets.resetRegionGroupControllers = 0x00518D20;
+		offsets.addNavalTargetRegion = 0x00534B00;
+		offsets.removeNavalTargetRegion = 0x00534C40;
+		offsets.createHordeController = 0x00536720;
 	}
 
 
@@ -474,5 +496,27 @@ void codes::initCodes(int gameVer)
 		offsets.getUnitFullMovePoints = 0x00742b10;
 		offsets.parseCondition = 0x00875310;
 		offsets.createMoveExtents = 0x004B6670;
+		offsets.createSettlement = 0x005E4970;
+		offsets.createRallyPointSundry = 0x005D9140;
+		offsets.initRallyPoint = 0x005D91C0;
+		offsets.settAttachFaction = 0x005DB4C0;
+		offsets.areaOfInfluence = 0x004C9BB0;
+		offsets.addToSettlementList = 0x005F0870;
+		offsets.residenceTileCharacterCheck = 0x004BFE10;
+		offsets.recalculateSettlement = 0x005F45C0;
+		offsets.setPop = 0x005F12D0;
+		offsets.addToArrayInt = 0x00464BA0;
+		offsets.changeWatchTowerFaction = 0x004DD430;
+		offsets.setRegionFaction = 0x0049FEC0;
+		offsets.clearAiRegionData = 0x00533D80;
+		offsets.createRegionInArray = 0x533C80;
+		offsets.getRegionIsolationScore = 0x5150B0;
+		offsets.calculateRegionStrengths = 0x005166A0;
+		offsets.calculateBackupRegionStrengths = 0x00516730;
+		offsets.isTrustedAlly = 0x0053CE80;
+		offsets.resetRegionGroupControllers = 0x00519310;
+		offsets.addNavalTargetRegion = 0x00535130;
+		offsets.removeNavalTargetRegion = 0x00535270;
+		offsets.createHordeController = 0x00536D50;
 	}
 }

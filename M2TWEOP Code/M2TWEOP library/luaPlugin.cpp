@@ -33,7 +33,6 @@ int initLuaPlugin()
 {
 	std::string luaFile = globals::dataS.modPath + R"(\eopData\eopScripts\luaPluginScript.lua)";
 	sol::state* luaState = plugData::data.luaAll.init(luaFile, globals::dataS.modPath);
-	plugData::data.luaAll.addLegacy();
 	plugData::data.luaAll.initCampaign();
 	plugData::data.luaAll.initLuaEnums();
 	plugData::data.luaAll.initCampaignDb();
@@ -49,6 +48,7 @@ int initLuaPlugin()
 		MessageBoxA(nullptr, "LUA loading error!", "Error!", NULL);
 		exit(0);
 	}
+	plugData::data.luaAll.addLegacy();
 	plugData::data.luaAll.onPluginLoadF();
 	return 1;
 }

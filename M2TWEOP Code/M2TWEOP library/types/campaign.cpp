@@ -601,6 +601,7 @@ namespace campaignHelpers
 		@tfield getFactionDiplomacy getFactionDiplomacy
 		@tfield historicEvent historicEvent
 		@tfield addCharacterCas addCharacterCas
+		@tfield getMinorSettlementManager getMinorSettlementManager
 
 		@table campaignStruct
 		*/

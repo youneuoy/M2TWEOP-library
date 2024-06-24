@@ -3983,6 +3983,168 @@ void onSetExtentsTextureZOCAlpha::SetNewCode()
 	delete a;
 }
 
+onCreateProductionController::onCreateProductionController(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005321E6;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00531BD6;
+}
+
+onCreateProductionController::~onCreateProductionController()
+{
+}
+
+void onCreateProductionController::SetOriginalCode()
+{
+	auto a = new Assembler();
+
+	a->mov(ebp, eax);
+	a->mov(ecx, dword_ptr(esi));
+	a->shl(ebx, 4);
+
+	a->ret();
+	m_originalBytes = static_cast<unsigned char*>(a->make());
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onCreateProductionController::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(edx, dword_ptr(esp, 0x1C));
+	a->mov(ecx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(ebp, eax);
+	a->mov(ecx, dword_ptr(esi));
+	a->shl(ebx, 4);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onDecideNeighbours::onDecideNeighbours(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x004EFFCE;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x004EF9BE;
+}
+
+onDecideNeighbours::~onDecideNeighbours()
+{
+}
+
+void onDecideNeighbours::SetOriginalCode()
+{
+	auto a = new Assembler();
+
+	a->pop(edi);
+	a->pop(esi);
+	a->add(esp, 0x10);
+
+	a->ret();
+	m_originalBytes = static_cast<unsigned char*>(a->make());
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void onDecideNeighbours::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(edi);
+	a->pop(esi);
+	a->add(esp, 0x10);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onTransferSettlement::onTransferSettlement(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005E5A4F;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005E55DF;
+}
+
+void onTransferSettlement::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(edx, dword_ptr(esp, 0x874));
+	a->push(ecx);
+	a->push(ebx);
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(ecx);
+	if (m_adress == 0x005E5A4F)
+		a->mov(eax, 0x005E5AC4);
+	else
+		a->mov(eax, 0x005E5654);
+	a->jmp(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onTransferSettlementPort::onTransferSettlementPort(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005E5AE4;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x5E5674;
+}
+
+void onTransferSettlementPort::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ecx);
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(ecx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onCheckConstructionItem::onCheckConstructionItem(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005EB563;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EB103;
+}
+
+void onCheckConstructionItem::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(edx, dword_ptr(esp, 0x8));
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->cmp(eax, 0);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 OnLoadSettlementWorldpkgdesc::OnLoadSettlementWorldpkgdesc(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

@@ -3,6 +3,7 @@
 #include "realGameTypes.h"
 #include "lua/sol.hpp"
 
+struct regionStrengths;
 struct oneTile;
 struct portBuildingStruct;
 
@@ -405,6 +406,14 @@ struct regionStruct {
 public:
 	std::string getLocalizedName();
 	std::string getLocalizedRebelsName();
+	int settlementCount();
+	int getResourcesValue();
+	void calculateRegionStrengths(int factionId, regionStrengths* strengths);
+	void calculateBackupRegionStrengths(regionStrengths* strengths, int* enemyNum, int* neutralNum);
+	settlementStruct* getSettlement(int index);
+	bool hasFaction(int factionId);
+	int hasEnemiesToFaction(int factionId);
+	int hasOthersToFaction(int factionId);
 	void changeRegionName(const char* newName);
 	void changeRebelsName(const char* newName);
 	oneTile* getPatrolPoint(int index);
@@ -900,6 +909,17 @@ private:
 	static extentColor m_Own;
 	static extentColor m_Enemy;
 	static extentColor m_Zoc;
+};
+
+class minorSettlementDb
+{
+public:
+	static std::vector<settlementStruct*> getMinorSettlements(int regionId);
+	static void addToMinorSettlements(int regionId, settlementStruct* settlement);
+	static settlementStruct* getSettlement(int regionId, int settlementIndex);
+	static int getSettlementCount(int regionId);
+	static settlementStruct* getSettlementAtIndex(int regionId, int index);
+	static std::array<std::vector<settlementStruct*>, 200> regionMinorSettlements;
 };
 
 

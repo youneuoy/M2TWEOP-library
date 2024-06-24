@@ -355,6 +355,8 @@ namespace gameHelpers
 	options1* getOptions1();
 	options2* getOptions2();
 	
+	void addToIntArray(int** array, int* value);
+	
 	void saveGame(const char* path);
 	void loadSaveGame(const char* saveName);
 	

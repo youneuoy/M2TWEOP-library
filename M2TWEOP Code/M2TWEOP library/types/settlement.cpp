@@ -20,8 +20,39 @@
 #include "gameHelpers.h"
 #include "strategyMap.h"
 #include "stratModelsChange.h"
+#include "techFuncs.h"
 
 std::shared_ptr<eopSettlementDataDb> eopSettlementDataDb::instance = std::make_shared<eopSettlementDataDb>();
+
+void settlementStatsManager::recalculate(const bool recalculateFacEconomy)
+{
+	GAME_FUNC(void(__thiscall*)(settlementStatsManager*, bool), recalculateSettlement)(this, recalculateFacEconomy);
+}
+void settlementStatsManager::setPopulation(const int newPop)
+{
+	GAME_FUNC(void(__thiscall*)(settlementStatsManager*, int), setPop)(this, newPop);
+}
+
+int settlementStruct::getSettlementValue()
+{
+	const int settlementLevelValues[] = {5, 30, 60, 80, 100, 120};
+	int value = settlementLevelValues[level];
+	int popVal = stats.settlementStats.population / 50;
+	if (popVal > 40)
+		popVal = 40;
+	value += popVal;
+	if (isCapital)
+		value += 50;
+	if (!isMinorSettlement)
+		value = value << 1;
+	return value;
+}
+
+bool settlementStruct::isPlayerControlled()
+{
+	return faction->isPlayerControlled == 1;
+}
+
 std::string eopSettlementDataDb::onGameSave()
 {
 	const auto campaignData = campaignHelpers::getCampaignData();
@@ -127,6 +158,68 @@ namespace settlementHelpers
 											 Settlement helpers
     \*----------------------------------------------------------------------------------------------------------------*/
 #pragma region Settlement helpers
+
+	settlementStruct* createSettlement(factionStruct* faction, const int xCoord, const int yCoord, const std::string& name,
+		const int level, const bool castle)
+	{
+	    settlementStruct* settlement = techFuncs::createGameClass<settlementStruct>();
+	    const auto tile = stratMapHelpers::getTile(xCoord, yCoord);
+	    const auto region = stratMapHelpers::getRegion(tile->regionId);
+	    GAME_FUNC(settlementStruct*(__thiscall*)(settlementStruct*, int, int, int, bool),
+	    	createSettlement)(settlement, level, -1, region->loyaltyFactionID, castle);
+		
+	    gameStringHelpers::setHashedString(&settlement->name, name.c_str());
+	    coordPair coords { xCoord, yCoord };
+	    GAME_FUNC(void(__thiscall*)(stratPathFinding*, void*, coordPair*),
+	    	spawnCreatedObject)(campaignHelpers::getStratPathFinding(), settlement, &coords);
+		
+	    changeSettlementName(settlement, name.c_str());
+	    GAME_FUNC(void(__thiscall*)(settlementStruct*, factionStruct*), settAttachFaction)(settlement, faction);
+	    settlement->factionID = faction->factionID; 
+	    settlement->stats.faction = faction; 
+	    settlement->faction = faction; 
+	    settlement->yearFounded = static_cast<int>(campaignHelpers::getCampaignData()->currentDate);
+	    settlement->smthingPosX = static_cast<float>(xCoord) + 0.5f;
+	    settlement->smthingPosY = static_cast<float>(yCoord) + 0.5f;
+	    settlement->regionID = tile->regionId;
+	    settlement->subFactionID = region->loyaltyFactionID;
+	    settlement->turnsOwned = 10; 
+	    settlement->settlementTaxLevel = 1;
+	    settlement->triumph = 0;
+	    settlement->fac_creatorModNum = faction->factionID; 
+	    settlement->cultureID = faction->cultureID;
+	    settlement->stats.setPopulation(500);
+	    settlement->isMinorSettlement = true;
+	    GAME_FUNC(void(__thiscall*)(settlementStruct*), createRallyPointSundry)(settlement);
+	    GAME_FUNC(void(__thiscall*)(settlementStruct*, unsigned int*), initRallyPoint)(settlement, &settlement->xCoord);
+
+	    GAME_FUNC(void(__thiscall*)(stratPathFinding*, settlementStruct*),
+	    	areaOfInfluence)(campaignHelpers::getStratPathFinding(), settlement);
+		
+	    GAME_FUNC(void(__thiscall*)(gameList<settlementStruct*>*, settlementStruct*),
+	    	addToSettlementList)(&campaignHelpers::getCampaignData()->settlements, settlement);
+		
+	    GAME_FUNC(char(__thiscall*)(settlementStruct*), residenceTileCharacterCheck)(settlement);
+	    const auto edb = eopBuildings::getEdb();
+	    std::string coreBuildingName;
+	    const edbEntry* entry = castle ? edb->coreCastleBuilding : edb->coreCityBuilding;
+	    for (int i = 0; i < entry->buildingLevelCount; i++)
+	    {
+	        if (entry->levels[i].settlementMinLvl == static_cast<uint32_t>(level))
+	        {
+	            coreBuildingName = entry->levels[i].name;
+	            break;
+	        }
+	    }
+	    if (!coreBuildingName.empty())
+	    	createBuilding(settlement, coreBuildingName.c_str());
+	    settlement->recalculate(true);
+		minorSettlementDb::addToMinorSettlements(settlement->regionID, settlement);
+		settlement->minorSettlementIndex += static_cast<int>(minorSettlementDb::regionMinorSettlements[settlement->regionID].size());
+		faction->updateNeighbours();
+		return settlement;
+	}
+
 
 	settlementStruct* getSettlementByRegionID(int index)
 	{
@@ -379,12 +472,12 @@ namespace settlementHelpers
 		gameStringHelpers::createUniString(sett->localizedName, newName);
 	}
 	
-	void createBuilding(settlementStruct* sett, const char* building_level_id)
+	void createBuilding(settlementStruct* sett, const char* buildingLevelId)
 	{
 		DWORD adrFunc = codes::offsets.createBuildingFunc;
 		string command = sett->name;
 		command.push_back(' ');
-		command += building_level_id;
+		command += buildingLevelId;
 		char buffer[100]{};
 		const char* cmdC = command.c_str();
 		_asm
@@ -681,6 +774,7 @@ namespace settlementHelpers
 
 	void addToLua(sol::state& luaState)
 	{
+		
 		struct
 		{
 			sol::usertype<settlementStruct>settlementStruct;
@@ -826,7 +920,6 @@ namespace settlementHelpers
 		types.settlementStruct.set("regionID", &settlementStruct::regionID);
 		types.settlementStruct.set("level", &settlementStruct::level);
 		types.settlementStruct.set("isCastle", &settlementStruct::isCastle);
-		types.settlementStruct.set("loyaltyLastTurn", &settlementStruct::loyalty);
 		types.settlementStruct.set("publicHealth", &settlementStruct::publicHealth);
 		types.settlementStruct.set("scriptRebel", &settlementStruct::scriptRebel);
 		types.settlementStruct.set("governorDuration", &settlementStruct::governorDuration);
@@ -860,8 +953,8 @@ namespace settlementHelpers
 		types.settlementStruct.set("isCapital", &settlementStruct::isCapital);
 		types.settlementStruct.set("aiProductionController", &settlementStruct::aiProductionController);
 		types.settlementStruct.set("harvestSuccess", &settlementStruct::harvestSuccess);
-		types.settlementStruct.set("baseFertility", &settlementStruct::baseFertilityValue);
-		types.settlementStruct.set("rebelFactionChance", &settlementStruct::rebelFactionChance);
+		types.settlementStruct.set("baseFertility", sol::property(&settlementStruct::getBaseFertility, &settlementStruct::setBaseFertility));
+		types.settlementStruct.set("rebelFactionChance",sol::property(&settlementStruct::getRebelFactionChance, &settlementStruct::setRebelFactionChance));
 		types.settlementStruct.set("plagued", &settlementStruct::plagued);
 		types.settlementStruct.set("plagueDeaths", &settlementStruct::plagueDeaths);
 		types.settlementStruct.set("populationSiegeStart", &settlementStruct::preSiegePopulation);
@@ -875,9 +968,9 @@ namespace settlementHelpers
 		types.settlementStruct.set("admiralsInRecruitmentQueue", &settlementStruct::admiralsInRecruitmentQueue);
 		types.settlementStruct.set("merchantsInRecruitmentQueue", &settlementStruct::merchantsInRecruitmentQueue);
 		types.settlementStruct.set("priestsInRecruitmentQueue", &settlementStruct::priestsInRecruitmentQueue);
-		types.settlementStruct.set("settlementStats", &settlementStruct::settlementStats);
-		types.settlementStruct.set("settlementStatsLastTurn", &settlementStruct::settlementStatsLastTurn);
-		types.settlementStruct.set("turmoil", &settlementStruct::turmoil);
+		types.settlementStruct.set("settlementStats", sol::property(&settlementStruct::getSettlementStats));
+		types.settlementStruct.set("settlementStatsLastTurn", sol::property(&settlementStruct::getSettlementStatsLastTurn));
+		types.settlementStruct.set("turmoil", sol::property(&settlementStruct::getTurmoil, &settlementStruct::setTurmoil));
 		/***
 		Get the settlement's specific regligion's value
 		@function settlementStruct:getReligion

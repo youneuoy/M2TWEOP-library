@@ -482,7 +482,12 @@ namespace gameHelpers
 	{
 		return reinterpret_cast<options2*>(dataOffsets::offsets.options2);
 	}
-	
+
+	void addToIntArray(int** array, int* value)
+	{
+		GAME_FUNC(void(__thiscall*)(int**, int*), addToArrayInt)(array, value);
+	}
+
 	void setAncLimit(uint8_t limit)
 	{
 		const DWORD ancillariesOffset = dataOffsets::offsets.ancLimit;

@@ -1285,6 +1285,65 @@ private:
 	LPVOID funcAddress;
 };
 
+class onCreateProductionController
+	:public AATemplate
+{
+public:
+	onCreateProductionController(MemWork* mem, LPVOID addr, int ver);
+	~onCreateProductionController();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onDecideNeighbours
+	:public AATemplate
+{
+public:
+	onDecideNeighbours(MemWork* mem, LPVOID addr, int ver);
+	~onDecideNeighbours();
+
+	void SetOriginalCode();
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onTransferSettlement
+	:public AATemplate
+{
+public:
+	onTransferSettlement(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onTransferSettlementPort
+	:public AATemplate
+{
+public:
+	onTransferSettlementPort(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCheckConstructionItem
+	:public AATemplate
+{
+public:
+	onCheckConstructionItem(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 
 class OnLoadSettlementWorldpkgdesc
 	:public AATemplate

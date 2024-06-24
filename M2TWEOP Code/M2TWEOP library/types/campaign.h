@@ -31,6 +31,43 @@ public:
 	char pad_0004[20]; //0x0004
 }; //Size: 0x0018
 
+enum class dipStance
+{
+	alliance = 0,
+	peace = 200,
+	war = 600
+};
+
+inline bool operator == (int a, dipStance b)
+{
+	return a == static_cast<int>(b);
+}
+
+inline bool operator != (int a, dipStance b)
+{
+	return a != static_cast<int>(b);
+}
+
+inline bool operator > (int a, dipStance b)
+{
+	return a > static_cast<int>(b);
+}
+
+inline bool operator < (int a, dipStance b)
+{
+	return a < static_cast<int>(b);
+}
+
+inline bool operator >= (int a, dipStance b)
+{
+	return a >= static_cast<int>(b);
+}
+
+inline bool operator <= (int a, dipStance b)
+{
+	return a <= static_cast<int>(b);
+}
+
 struct descrRebelEntry
 {
 public:

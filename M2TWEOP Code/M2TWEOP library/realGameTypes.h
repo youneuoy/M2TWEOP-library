@@ -235,7 +235,7 @@ struct trackedUnit {
 struct spyingInfo
 {
 public:
-	void *spyingInfo_vtbl; //0x0000
+	DWORD *spyingInfo_vtbl; //0x0000
 	int8_t spyingInfoFactionArray[31]; //0x0004
 	char pad_0023[1]; //0x0023
 	int randomNumber; 

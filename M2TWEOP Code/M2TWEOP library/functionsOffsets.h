@@ -205,6 +205,9 @@ public:
 		DWORD createBuildInSett = NULL;
 		DWORD upgradeBuildInSett = NULL;
 		DWORD upgradeSett = NULL;
+		DWORD createSettlement = NULL;
+		DWORD createRallyPointSundry = NULL;
+		DWORD initRallyPoint = NULL;
 		DWORD getRecruitmentOptions = NULL;
 		DWORD getRetrainingOptions = NULL;
 		DWORD resetBuildingsMem = NULL;
@@ -240,6 +243,25 @@ public:
 		DWORD isZoneValid = NULL;
 		DWORD getZonePerimeter = NULL;
 		DWORD getZoneID = NULL;
+		DWORD settAttachFaction = NULL;
+		DWORD areaOfInfluence = NULL;
+		DWORD addToSettlementList = NULL;
+		DWORD residenceTileCharacterCheck = NULL;
+		DWORD recalculateSettlement = NULL;
+		DWORD setPop = NULL;
+		DWORD addToArrayInt = NULL;
+		DWORD changeWatchTowerFaction = NULL;
+		DWORD setRegionFaction = NULL;
+		DWORD clearAiRegionData = NULL;
+		DWORD createRegionInArray = NULL;
+		DWORD getRegionIsolationScore = NULL;
+		DWORD calculateRegionStrengths = NULL;
+		DWORD calculateBackupRegionStrengths = NULL;
+		DWORD isTrustedAlly = NULL;
+		DWORD resetRegionGroupControllers = NULL;
+		DWORD addNavalTargetRegion = NULL;
+		DWORD removeNavalTargetRegion = NULL;
+		DWORD createHordeController = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

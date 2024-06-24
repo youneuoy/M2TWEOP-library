@@ -144,17 +144,7 @@ unit* armyStruct::createUnitByIndex(const int eduIndex, const int exp, const int
 }
 unit* armyStruct::createEopUnit(const int eduIndex, const int exp, const int arm, const int weapon)
 {
-	unit *newUnit = createUnitByIndex(eduIndex, exp, arm, weapon);
-	if (newUnit == nullptr)
-		return newUnit;
-	/*const int eopIdx = eopDu::getDataEopEdu(eduIndex);
-	if (eopIdx == 0)
-		return nullptr;
-	unit *newUnit = unitHelpers::createUnitEDB(eopIdx, regionID, faction->factionID, exp, arm, weapon);
-	if (newUnit == nullptr)
-		return newUnit;*/
-	armyHelpers::addUnitToArmy(this, newUnit);
-	return newUnit;
+	return createUnitByIndex(eduIndex, exp, arm, weapon);
 }
 void armyStruct::setAiActiveSet(int set)
 {

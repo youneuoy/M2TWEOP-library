@@ -143,6 +143,58 @@ DWORD __fastcall patchesForGame::onCustomBattleUnitCards(DWORD cardArrayThing, i
 	return cardArrayThing;
 }
 
+aiProductionController* __fastcall patchesForGame::onCreateProductionController(aiProductionController* controller, settlementStruct* sett)
+{
+	controller->settlement = sett;
+	return controller;
+}
+
+void __fastcall patchesForGame::onDecideNeighbours(factionStruct* faction)
+{
+	faction->updateNeighbours();
+}
+
+portBuildingStruct* __fastcall patchesForGame::onTransferSettlementPort(const settlementStruct* settlement)
+{
+	if (settlement->isMinorSettlement)
+		return nullptr;
+	return settlement->port;
+}
+
+void __fastcall patchesForGame::onTransferSettlement(const settlementStruct* settlement, const int reason, factionStruct* faction)
+{
+	if (settlement->isMinorSettlement)
+		return;
+	const int watchTowerNum = stratMapHelpers::getRegion(settlement->regionID)->watchtowersNum;
+	for (int i = 0; i < watchTowerNum; i++)
+	{
+		if (const auto watchTower = stratMapHelpers::getRegion(settlement->regionID)->watchtowers[i];
+			!watchTower->blockingArmy)
+		{
+			GAME_FUNC(void(__thiscall*)(watchTowerStruct*, bool, factionStruct*, int)
+				, changeWatchTowerFaction)(watchTower, reason != 1, faction, 0);
+		}
+	}
+	GAME_FUNC(void(__thiscall*)(stratMap*, int, factionStruct*),
+		setRegionFaction)(stratMapHelpers::getStratMap(), settlement->regionID, faction);
+}
+
+int __fastcall patchesForGame::onCheckConstructionItem(const buildingsQueue* queue, const buildingInQueue* constructionItem)
+{
+	const auto entry = constructionItem->edbEntry;
+	if (queue->settlement->isMinorSettlement)
+	{
+		if (entry->isFarm || entry->isPort  || entry->isTemple || (entry->isHinterland && !entry->isCoreBuilding))
+			return 1; 
+	}
+	return queue->conversion > 0 ? 1 : 0;
+}
+
+void __fastcall patchesForGame::initGlobalStrategyDirector(aiGlobalStrategyDirector* gsd)
+{
+	
+}
+
 int __fastcall patchesForGame::onCustomBattleUnits(eduEntry** unitArray, int currentCount, int factionID)
 {
 	const int eopUnitNum = eopDu::getEopEntryNum();
@@ -1103,6 +1155,7 @@ void __stdcall patchesForGame::onNewGameStart()
 //#define TESTPATCHES
 void __stdcall patchesForGame::onEduParsed()
 {
+	*reinterpret_cast<bool*>(dataOffsets::offsets.bugReport) = true;
 	unitHelpers::initBaseUnitsLookup();
 	gameEvents::onReadGameDbsAtStart();
 #if defined TESTPATCHES

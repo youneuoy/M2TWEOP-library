@@ -63,9 +63,12 @@ public:
 		DWORD campaignDb = NULL;
 		DWORD campaignDbExtra = NULL;
 		DWORD groupLabels = NULL;
-
-
-
+		
+		DWORD fortVtbl = NULL;
+		DWORD fortSpyingVtbl = NULL;
+		DWORD settlementVtbl = NULL;
+		DWORD settlementSpyingVtbl = NULL;
+		
 		//audio settings
 		bool* audioEnable = nullptr;
 		int* audioMaster_vol = nullptr;
@@ -84,6 +87,7 @@ public:
 		DWORD recruitmentItems = NULL;
 		DWORD ltgdGlobals = NULL;
 		DWORD battlefieldEngines = NULL;
+		DWORD bugReport = NULL;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);

@@ -609,6 +609,36 @@ void managerF::execPatches()
 	toSetExtentsTextureZOC->Enable();
 	f1 << "Done" << endl;
 	
+	f1 << "Start applying onCreateProductionController patch" << endl;
+	onCreateProductionController* toCreateProductionController = new onCreateProductionController(mem, (LPVOID)patchesForGame::onCreateProductionController, globals::dataS.gameVersion);
+	toCreateProductionController->SetNewCode();
+	toCreateProductionController->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onDecideNeighbours patch" << endl;
+	onDecideNeighbours* toDecideNeighbours = new onDecideNeighbours(mem, (LPVOID)patchesForGame::onDecideNeighbours, globals::dataS.gameVersion);
+	toDecideNeighbours->SetNewCode();
+	toDecideNeighbours->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onTransferSettlement patch" << endl;
+	onTransferSettlement* toTransferSettlement = new onTransferSettlement(mem, (LPVOID)patchesForGame::onTransferSettlement, globals::dataS.gameVersion);
+	toTransferSettlement->SetNewCode();
+	toTransferSettlement->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onTransferSettlementPort patch" << endl;
+	onTransferSettlementPort* toTransferSettlementPort = new onTransferSettlementPort(mem, (LPVOID)patchesForGame::onTransferSettlementPort, globals::dataS.gameVersion);
+	toTransferSettlementPort->SetNewCode();
+	toTransferSettlementPort->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onCheckConstructionItem patch" << endl;
+	onCheckConstructionItem* toCheckConstructionItem = new onCheckConstructionItem(mem, (LPVOID)patchesForGame::onCheckConstructionItem, globals::dataS.gameVersion);
+	toCheckConstructionItem->SetNewCode();
+	toCheckConstructionItem->Enable();
+	f1 << "Done" << endl;
+	
 	f1 << "Start applying onGetBrowserPicConstructed patch" << endl;
 	onGetBrowserPicConstructed* toGetBrowserPicConstructed= new onGetBrowserPicConstructed(mem, (LPVOID)patchesForGame::getBrowserPicConstructed, globals::dataS.gameVersion);
 	toGetBrowserPicConstructed->SetNewCode();
@@ -814,6 +844,10 @@ void managerF::execPatches()
 	}
 	f1 << "End." << '\n';
 	f1.close();
+
+	//DWORD instruction = 0x191468;
+	//MemWork::WriteData(&instruction, 0x008B963E, 3);
+	//MemWork::WriteData(&instruction, 0x004BD9C0, 3);
 }
 
 

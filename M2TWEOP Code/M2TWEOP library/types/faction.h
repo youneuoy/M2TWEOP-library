@@ -4,6 +4,8 @@
 #include "settlement.h"
 
 
+struct aiRegionController;
+
 struct smFactionsDb {
 	struct factionRecord* facDescrs;
 	int capacity;
@@ -164,6 +166,55 @@ struct factionDataStrategy
 	int8_t pad;
 };
 
+struct regionStrengths
+{
+	int ownStrength;
+	int ownCount;
+	int enemyStrength;
+	int enemyCount;
+	int neutralStrength;
+	int neutralCount;
+};
+
+enum class regionRisk
+{
+	safe,
+	lowRisk,
+	mediumRisk,
+	highRisk,
+	extremeRisk
+};
+
+inline bool operator==(const int val, regionRisk vis)
+{
+	return val == static_cast<int>(vis);
+}
+
+inline bool operator!=(const int val, regionRisk vis)
+{
+	return val != static_cast<int>(vis);
+}
+
+inline bool operator >(const int val, regionRisk vis)
+{
+	return val > static_cast<int>(vis);
+}
+
+inline bool operator <(const int val, regionRisk vis)
+{
+	return val < static_cast<int>(vis);
+}
+
+inline bool operator >=(const int val, regionRisk vis)
+{
+	return val >= static_cast<int>(vis);
+}
+
+inline bool operator <=(const int val, regionRisk vis)
+{
+	return val <= static_cast<int>(vis);
+}
+
 struct aiRegionData
 {
 	trackedObject obj;
@@ -176,21 +227,16 @@ struct aiRegionData
 	int priority;
 	int neighbourEnemyNum;
 	int neighbourOtherNum;
-	int troopProductionType;
-	int ownArmiesTotalStrength;
-	int ownArmiesTotalCount;
-	int enemyArmiesTotalStrength;
-	int enemyArmiesTotalCount;
-	int neutralArmiesTotalStrength;
-	int neutralArmiesTotalCount;
-	int neighbourRegionsOwnArmyStrength;
-	int neighbourRegionsOwnArmyNum;
-	int neighbourRegionsEnemyArmyStrength;
-	int neighbourRegionsEnemyArmyNum;
-	int neighbourRegionsNeutralArmyStrength;
-	int neighbourRegionsNeutralArmyNum;
+	int settlementIndex;
+	regionStrengths strength;
+	regionStrengths neighboursStrength;
 	int regionRisk;
-	void* regionController;
+	aiRegionController* regionController;
+public:
+	void setRisk(enum regionRisk risk)
+	{
+		regionRisk = static_cast<int>(risk);
+	}
 };
 
 struct aiMilitaryDirector
@@ -211,6 +257,21 @@ struct aiMilitaryDirector
 	int32_t aiBrigandControllersNum;
 	void* lastResortController;
 	void* aiMilitaryControllerWorldWide;
+};
+
+struct aiRegionController
+{
+	DWORD vfTable;
+	aiFaction* aiFaction;
+	int regionID;
+	struct regionStruct *region;
+	struct aiRegionData *gsdData;
+	struct settlementStruct *settlement;
+	int unitNeed;
+	struct aiProductionController *productionController;
+	struct aiResourcePrivate *garrison;
+	int garrisonType;
+	int requiredGarrisonStrength;
 };
 
 struct holdRegionsWinCondition
@@ -456,6 +517,7 @@ struct factionStruct {
 	int32_t unitsLost; //0x0EEC
 	int32_t lastOpponentId; //0x0EEC
 public:
+	void updateNeighbours();
 	characterRecord* getCharacterRecord(int index)
 	{
 		return characterRecords[index];
@@ -515,6 +577,15 @@ public:
 			turnIndex += maxTurnsTillReset;
 		return &factionEconomyTable[turnIndex];
 	}
+	bool isInNeighbourArray(const int regionId)
+	{
+		for (int i = 0; i < neighBourRegionsNum; ++i)
+		{
+			if (neighBourRegions[i] == regionId)
+				return true;
+		}
+		return false;
+	}
 	void revealTile(int x, int y);
 	void hideRevealedTile(int x, int y);
 	int8_t getTileVisibility(const int x, const int y)
@@ -528,6 +599,49 @@ public:
 	void setColor(uint8_t r, uint8_t g, uint8_t b);
 	void setSecondaryColor(uint8_t r, uint8_t g, uint8_t b);
 };
+
+struct aiMilitaryController
+{
+	DWORD vfTable;
+	aiFaction* aiFaction;
+	struct factionStruct *faction;
+	void *objectives;
+	void* currentMission;
+	void *resources;
+	int resourcesSize;
+	int resourcesNum;
+	bool merge;
+	char pad_0x21[3];
+	int minStrengthReq;
+	int highestEnemyStrength;
+	int lowestEnemyStrength;
+};
+
+struct aiCampaignController : aiMilitaryController
+{
+	int targetRegionID;
+	aiRegionData* regionData;
+	int factionID;
+	bool attacking;
+	bool canRequestMore;
+	bool canAttack;
+	bool fieldx3F;
+	int strategyType;
+	int lastStrategyType;
+	int nextStrategyType;
+	int strengthRequiredType;
+	int totalStrengthRequired;
+	int strengthThreshold;
+	int totalAllocated;
+	int totalFree;
+	int highestEnemyStrength;
+	int lowestEnemyStrength;
+	int *neighboursForDefense;
+	int neighboursForDefenseSize;
+	int neighboursForDefenseNum;
+};
+
+
 
 struct factionRecord { /* see descr_sm_factions.txt */
 	int id;
@@ -658,7 +772,49 @@ public:
 	{
 		return trustedAllyEnemies & (1 << fac->factionID);
 	}
+	bool regionsBordersOnlyTrusted(int regionId);
+	bool isTrustedAlly(int targetFactionId);
 }; //Size: 0x0604
+
+enum class settlementPolicy
+{
+	balanced,
+	financial,
+	military,
+	growth,
+	cultural,
+	none
+};
+
+inline bool operator==(const int val, settlementPolicy vis)
+{
+	return val == static_cast<int>(vis);
+}
+
+inline bool operator!=(const int val, settlementPolicy vis)
+{
+	return val != static_cast<int>(vis);
+}
+
+enum class settlementTroopPolicy
+{
+	infantry,
+	cavalry,
+	missile,
+	spearmen,
+	siege,
+	none
+};
+
+inline bool operator==(const int val, settlementTroopPolicy vis)
+{
+	return val == static_cast<int>(vis);
+}
+
+inline bool operator!=(const int val, settlementTroopPolicy vis)
+{
+	return val != static_cast<int>(vis);
+}
 
 struct aiPersonalityValues
 {
@@ -732,6 +888,33 @@ public:
 	{
 		return aiProductionControllers[index];
 	}
+	void evaluatePolicies(int regionId, int settlementIndex);
+	settlementPolicy decideSettlementPolicy(const settlementStruct* settlement);
+	settlementTroopPolicy decideSettlementTroopPolicy(const settlementStruct* settlement);
+	float getPolicyPriority(settlementPolicy policyType);
+};
+
+struct aiNavalRegion
+{
+	aiRegionData regionData;
+	int stagingId;
+	int duration;
+	bool active;
+	bool highPriority;
+	char pad[2]{};
+};
+
+struct aiNavalTransportRegion
+{
+	int regionId;
+	int powerBalance;
+	int capacityAllocated;
+	int powerAllocated;
+	int* armies;
+	int armiesSize;
+	int armiesNum;
+	gameStdVector<character* > transportCharacters;
+	regionStruct* targetRegion;
 };
 
 struct aiGlobalStrategyDirector
@@ -750,13 +933,13 @@ struct aiGlobalStrategyDirector
 	int32_t targetRegionsSize;
 	int32_t targetRegionsCount;
 	struct aiRegionData targetRegionCrusade;
-	void* navalInvasionTargets;
+	aiNavalRegion* navalInvasionTargets;
 	int32_t navalInvasionTargetsSize;
 	int32_t navalInvasionTargetsNum;
-	void* navalTransportTargets;
+	aiNavalTransportRegion* navalTransportTargets;
 	int32_t navalTransportTargetsSize;
 	int32_t navalTransportTargetsNum;
-	void* regionControllers;
+	aiRegionController** regionControllers;
 	int32_t regionControllersSize;
 	int32_t regionControllersNum;
 	struct aiMilitaryDirector militaryDirector;
@@ -770,6 +953,11 @@ struct aiGlobalStrategyDirector
 	void* hordeController;
 	int hordeTargetFactions[2];
 	void* crusadeController;
+	void initialize();
+	void initOwnRegions();
+	void initNeighbourRegions();
+	void initNavalRegions();
+	void updateRegionControllers();
 };
 
 namespace factionHelpers

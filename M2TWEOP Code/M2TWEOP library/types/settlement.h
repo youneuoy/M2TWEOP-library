@@ -145,9 +145,10 @@ struct building { /* building structure */
 	struct settlementStruct* settlement;
 	int constructType;
 	int constructionPercent;
-	void setBuildingHealth(int health)
+	void setBuildingHealth(const int health)
 	{
-		GAME_FUNC(void(__thiscall*)(building*, int), repairBuilding)(this, health);
+		const int hp = health;
+		GAME_FUNC(void(__thiscall*)(building*, int), repairBuilding)(this, hp);
 	}
 	int getBuildingHealth()
 	{
@@ -195,11 +196,16 @@ struct buildingInQueue { /* building in settlement queue */
 };
 
 struct buildingsQueue {
+	char smthingBuildingIdInQueue[128][2];
+	int16_t somethingTemple;
+	int16_t conversion;
 	struct buildingInQueue items[6];
 	int firstIndex;
 	int lastIndex;
 	int buildingsInQueue;
 	int currentBuildingIndex;
+	struct settlementStruct *settlement;
+	struct factionStruct **faction;
 };
 
 struct availableBuildings
@@ -279,7 +285,7 @@ struct aiProductionController
 	int extraX;
 	int extraY;
 	int priority;
-	int controllerIndex;
+	int notControlledDuration;
 	bool isAutoManaged;
 	bool isAutoManagedRecruitment;
 	bool isAutoManagedConstruction;
@@ -393,6 +399,38 @@ struct settlementStats
 	int32_t majorityReligionID;
 };
 
+struct settlementStatsManager
+{
+	factionStruct* faction;
+	settlementStruct* settlement;
+	int32_t baseFertilityValue; //0x16F8
+	int32_t rebelFactionChance; //0x16FC
+	int32_t turmoil; //0x1700
+	int32_t popGainedDisbands; //0x1704
+	int32_t popGainedSlaves; //0x1708
+	int32_t popLostRecruits; //0x170C
+	int32_t popLostDisaster; //0x1710
+	int32_t popLostRiots; //0x1714
+	int32_t popLostExtermination; //0x1718
+	int32_t popLostEnslaved; //0x171C
+	int32_t demolitionIncome; //0x1720
+	int32_t diplomacyIncome; //0x1724
+	int32_t lootingIncome; //0x1728
+	int32_t wages; //0x172C
+	int32_t upkeep; //0x1730
+	int constructionExpense; //0x1734
+	int recruitmentExpense; //0x1738
+	int diplomacyExpense;
+	int disasterExpense;
+	int entertainmentExpense;
+	settlementStats settlementStatsLastTurn;
+	settlementStats settlementStats;
+	bool doingTempCalc; //0x1910
+	char pad[3]{}; //0x1911
+	void recalculate(bool recalculateFacEconomy);
+	void setPopulation(int newPop);
+};
+
 struct buildingDamage
 {
 	int perimeter;
@@ -466,7 +504,7 @@ struct settlementStruct {
 	BYTE isCastle; /* castle or settlement */
 	undefined field21_0x1a5[1];
 	int16_t turnsOwned; /* start at 10 for settlements owned at game start without specification in descr_strat */
-	UINT32 regionID; /* number of region */
+	int regionID; /* number of region */
 	int32_t factionID; //0x01AC
 	int32_t yearFounded; //0x01B0
 	int32_t triumph; //0x01B4
@@ -481,11 +519,7 @@ struct settlementStruct {
 	int32_t recruitmentPoints;
 	struct settlementStruct *thisBeforeBuildings;
 	struct factionStruct **pointerToSelfFaction2;
-	char smthingBuildingIdInQueue[128][2];
-	int hasReligiousBuildingBitfield;
 	struct buildingsQueue buildingsQueueArray;
-	struct settlementStruct *thisBeforeBuildings2;
-	struct factionStruct **pointerToSelfFaction3;
 	struct building* buildingsByIndex[128];
 	struct building* buildings[128];
 	int buildingsNum; /* number of the buildings in the settlement */
@@ -514,7 +548,7 @@ struct settlementStruct {
 	int32_t plagueDeaths; //0x0E00
 	int8_t scriptRebel; //0x0E04
 	uchar isProvokedRebellion;//0x0E05
-	int8_t rebelAgainstRome;
+	bool isMinorSettlement;
 	int8_t pad3[1];
 	int timeSinceLastRebellion;
 	int entertainmentType;
@@ -532,7 +566,7 @@ struct settlementStruct {
 	void* governorTrackedVtbl3;
 	struct character* portAdmiral;//0x0E20
 	int32_t publicHealth; //0x0E34
-	int32_t loyalty; //0x0E38
+	int32_t minorSettlementIndex; //0x0E38
 	int32_t lastPopulation; //0x0E3C
 	int32_t harvestSuccess; //0x0E40
 	struct resourceStruct** resources;
@@ -565,31 +599,7 @@ struct settlementStruct {
 	basicStringGame packagePath;
 	float foundingConversionRate;
 	float ownerConversionRate;
-	factionStruct* factionMechanics;
-	settlementStruct* settlementMechanics;
-	int32_t baseFertilityValue; //0x16F8
-	int32_t rebelFactionChance; //0x16FC
-	int32_t turmoil; //0x1700
-	int32_t popGainedDisbands; //0x1704
-	int32_t popGainedSlaves; //0x1708
-	int32_t popLostRecruits; //0x170C
-	int32_t popLostDisaster; //0x1710
-	int32_t popLostRiots; //0x1714
-	int32_t popLostExtermination; //0x1718
-	int32_t popLostEnslaved; //0x171C
-	int32_t demolitionIncome; //0x1720
-	int32_t diplomacyIncome; //0x1724
-	int32_t lootingIncome; //0x1728
-	int32_t wages; //0x172C
-	int32_t upkeep; //0x1730
-	int constructionExpense; //0x1734
-	int recruitmentExpense; //0x1738
-	int diplomacyExpense;
-	int disasterExpense;
-	int entertainmentExpense;
-	struct settlementStats settlementStatsLastTurn;
-	struct settlementStats settlementStats;
-	int32_t doingTempCalc; //0x1910
+	settlementStatsManager stats;
 public:
 	siegeS* getSiege(int index)
 	{
@@ -629,19 +639,58 @@ public:
 	}
 	int getPopulation()
 	{
-		return settlementStats.population;
+		return stats.settlementStats.population;
 	}
 	void setPopulation(int newPop)
 	{
-		settlementStats.population = newPop;
+		stats.settlementStats.population = newPop;
 	}
 	settlementRecruitmentPool* getSettlementRecruitmentPool(int index)
 	{
 		return &recruitmentPools[index];
 	}
+	int getTurmoil()
+	{
+		return stats.turmoil;
+	}
+	void setTurmoil(const int turmoil)
+	{
+		stats.turmoil = turmoil;
+	}
+	int getBaseFertility()
+	{
+		return stats.baseFertilityValue;
+	}
+	void setBaseFertility(const int fertility)
+	{
+		stats.baseFertilityValue = fertility;
+	}
+	int getRebelFactionChance()
+	{
+		return stats.rebelFactionChance;
+	}
+	void setRebelFactionChance(const int chance)
+	{
+		stats.rebelFactionChance = chance;
+	}
+	settlementStats* getSettlementStats()
+	{
+		return &stats.settlementStats;
+	}
+	settlementStats* getSettlementStatsLastTurn()
+	{
+		return &stats.settlementStatsLastTurn;
+	}
 	int getGuildStanding(int index)
 	{
 		return guildStandings[index];
+	}
+	int getSettlementValue();
+	int getMinorSettlementIndex()
+	{
+		if (isMinorSettlement)
+			return minorSettlementIndex - 100;
+		return 0;
 	}
 	unitRQ* getUnitInQueue(int index)
 	{
@@ -651,10 +700,15 @@ public:
 			index = startIndexRQ + index;
 		return &unitQueue[index];
 	}
-	void setGuildStanding(int index, int amount)
+	void setGuildStanding(const int index, const int amount)
 	{
 		guildStandings[index] = amount;
 	}
+	void recalculate(const bool recalculateFacEconomy)
+	{
+		stats.recalculate(recalculateFacEconomy);
+	}
+	bool isPlayerControlled();
 };
 
 
@@ -688,6 +742,8 @@ namespace settlementHelpers
 {
 	void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner, bool convertGarrison);
 	void changeOwner(settlementStruct* sett, factionStruct* newOwner);
+	settlementStruct* createSettlement(factionStruct* faction, int xCoord, int yCoord, const std::string& name,
+		int level, bool castle);
 	void upgradeSettlement(settlementStruct* sett);
 	std::string getSettlementName(settlementStruct* sett);
 	settlementStruct* getSettlementByRegionID(int index);
@@ -695,18 +751,18 @@ namespace settlementHelpers
 	float getReligion(settlementStruct* sett, int index);
 	void setReligion(settlementStruct* sett, int index, float value);
 	void addToLua(sol::state& luaState);
-	void createBuilding(settlementStruct* sett, const char* building_level_id);
+	void createBuilding(settlementStruct* sett, const char* buildingLevelId);
 	void destroyBuilding(settlementStruct* sett, const char* typeName, bool isReturnMoney);
 	
 	bool addBuildingToQueue(buildingInQueue* building);
 	int getAvailableBuildingsCount(const availableBuildings* list);
 	buildingInQueue* getBuildingInQueue(buildingsQueue* queue, int position);
-	buildingInQueue* getBuildingOption(const availableBuildings* list, const int index);
+	buildingInQueue* getBuildingOption(const availableBuildings* list, int index);
 	availableBuildings* getAvailableBuildingsMem();
 	availableBuildings* getAvailableBuildings(settlementStruct* sett);
 	int makeBuildOptionsHash(const settlementStruct* sett);
 	settlementBuildingOptions* getBuildingOptions(settlementStruct* sett);
-	buildingInQueue* getBuildingOptionFromDb(const settlementBuildingOptions* list, const int index);
+	buildingInQueue* getBuildingOptionFromDb(const settlementBuildingOptions* list, int index);
 	void addBuildingPool(edbEntry* entry, int level, int eduIndex, float initialSize, float gainPerTurn, float maxSize, int32_t exp, std::string condition);
 	bool addUnitToQueue(unitRQ* unit);
 	recruitmentOptions* getAvailableUnitsMem();

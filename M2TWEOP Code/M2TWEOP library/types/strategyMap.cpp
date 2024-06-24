@@ -22,6 +22,7 @@
 extentColor extentColors::m_Own =         { 0   , 0xFF, 0x20, 0x28, 0xFF };
 extentColor extentColors::m_Enemy =       { 0xFF, 0xFF, 0   , 0x28, 0xFF };
 extentColor extentColors::m_Zoc =         { 0xA0, 0x00, 0   , 0x00, 0xc8 };
+std::array<std::vector<settlementStruct*>, 200> minorSettlementDb::regionMinorSettlements = {};
 
 oneTile* landingTile::getTile()
 {
@@ -59,7 +60,44 @@ void oneTile::setTileGroundType(const int ground)
 	gameHelpers::scriptCommand("console_command", "toggle_fow");
 	gameHelpers::scriptCommand("console_command", "toggle_fow");
 }
-	
+
+std::vector<settlementStruct*> minorSettlementDb::getMinorSettlements(const int regionId)
+{
+	return regionMinorSettlements[regionId];
+}
+
+void minorSettlementDb::addToMinorSettlements(const int regionId, settlementStruct* settlement)
+{
+	regionMinorSettlements[regionId].push_back(settlement);
+}
+
+settlementStruct* minorSettlementDb::getSettlement(const int regionId, const int settlementIndex)
+{
+	if (settlementIndex == 0)
+		return stratMapHelpers::getRegion(regionId)->settlement;
+	const auto setts = regionMinorSettlements[regionId];
+	for (const auto& sett : setts)
+	{
+		if (sett->minorSettlementIndex == settlementIndex)
+			return sett;
+	}
+	return nullptr;
+}
+
+int minorSettlementDb::getSettlementCount(const int regionId)
+{
+	return static_cast<int>(regionMinorSettlements[regionId].size()) + (stratMapHelpers::getRegion(regionId)->settlement ? 1 : 0);
+}
+
+settlementStruct* minorSettlementDb::getSettlementAtIndex(const int regionId, const int index)
+{
+	if (index < 0 || index >= getSettlementCount(regionId))
+		return nullptr;
+	if (index == 0)
+		return stratMapHelpers::getRegion(regionId)->settlement;
+	return regionMinorSettlements[regionId][index];
+}
+
 void oneTile::setTileClimate(const int climate)
 {
 	const auto doubleTile = tileToDoubleTile();
@@ -232,6 +270,88 @@ std::string regionStruct::getLocalizedName()
 std::string regionStruct::getLocalizedRebelsName()
 {
 	return gameStringHelpers::uniStringToStr(localizedRebelsName);
+}
+
+int regionStruct::settlementCount()
+{
+	return minorSettlementDb::getSettlementCount(regionID);
+}
+
+int regionStruct::getResourcesValue()
+{
+	int value = 0;
+	for (int i = 0; i < resourcesNum; i++)
+		value += resources[i]->stratMod->resource_cost;
+	return value;
+}
+
+void regionStruct::calculateRegionStrengths(const int factionId, regionStrengths* strengths)
+{
+	GAME_FUNC(void(__cdecl*)(int, int, regionStrengths*),
+		calculateRegionStrengths)(factionId, regionID, strengths);
+}
+
+void regionStruct::calculateBackupRegionStrengths(regionStrengths* strengths, int* enemyNum, int* neutralNum)
+{
+	GAME_FUNC(void(__cdecl*)(int, regionStrengths*, int*, int*),
+		calculateBackupRegionStrengths)(regionID, strengths, enemyNum, neutralNum);
+}
+
+settlementStruct* regionStruct::getSettlement(const int index)
+{
+	return minorSettlementDb::getSettlementAtIndex(regionID, index);
+}
+
+bool regionStruct::hasFaction(const int factionId)
+{
+	const int settCount = settlementCount();
+	if (settCount == 1)
+		return factionOwner->factionID == factionId;
+	for (int i = 0; i < settCount; i++)
+	{
+		if (const auto sett = getSettlement(i); sett)
+		{
+			if (sett->faction->factionID == factionId)
+				return true;
+		}
+	}
+	return false;
+}
+
+int regionStruct::hasEnemiesToFaction(int factionId)
+{
+	const auto campaign = campaignHelpers::getCampaignData();
+	const int settCount = settlementCount();
+	if (settCount == 1)
+		return campaign->getFactionDiplomacy(factionId, factionOwner->factionID)->state > dipStance::peace ? 1 : 0;
+	int enemyNum = 0;
+	for (int i = 0; i < settCount; i++)
+	{
+		if (const auto sett = getSettlement(i); sett)
+		{
+			if (campaign->getFactionDiplomacy(factionId, sett->faction->factionID)->state > dipStance::peace)
+				enemyNum++;
+		}
+	}
+	return enemyNum;
+}
+
+int regionStruct::hasOthersToFaction(int factionId)
+{
+	const auto campaign = campaignHelpers::getCampaignData();
+	const int settCount = settlementCount();
+	if (settCount == 1)
+		return factionOwner->factionID != factionId ? 1 : 0;
+	int facNum = 0;
+	for (int i = 0; i < settCount; i++)
+	{
+		if (const auto sett = getSettlement(i); sett)
+		{
+			if (sett->faction->factionID != factionId)
+				facNum++;
+		}
+	}
+	return facNum;
 }
 
 oneTile* regionStruct::getPatrolPoint(const int index)

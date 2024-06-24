@@ -4,10 +4,16 @@
 #include "cultures.h"
 #include "unit.h"
 
+struct aiGlobalStrategyDirector;
+struct buildingsQueue;
+struct buildingInQueue;
+struct portBuildingStruct;
+struct aiProductionController;
 struct regionStruct;
 struct aiFaction;
 struct buildingLevel;
 struct edbEntry;
+struct settlementStruct;
 
 class patchesForGame
 {
@@ -19,6 +25,7 @@ public:
 	static void __fastcall onLoadSettlementWorldpkgdesc(worldRecord* selectedRecord);
 	static int __fastcall onFortificationLevelS(settlementStruct* settlement, bool* isCastle);
 	static char* __fastcall onSaveEDUStringS(eduEntry* eduEntry);
+	static void __fastcall initGlobalStrategyDirector(aiGlobalStrategyDirector* gsd);
 	static int __fastcall onCreateUnit(char** entryName, int* eduIndex);
 	static int __fastcall onCreateMercUnitCheck(char** entryName, int eduIndex);
 	static void __fastcall onPreBattlePlacement(aiTacticAssault* aiTactic);
@@ -34,7 +41,12 @@ public:
 	static uint8_t __fastcall onSetExtentsBorder(uint8_t isBorder, DWORD extentsDisplay);
 	static uint32_t __fastcall onSetExtentsZoc();
 	static uint8_t __fastcall onSetExtentsZocAlpha(uint8_t oldAlpha);
+	static void __fastcall onDecideNeighbours(factionStruct* faction);
+	static aiProductionController* __fastcall onCreateProductionController(aiProductionController* controller, settlementStruct* sett);
 	static DWORD __fastcall onUnitInfo(DWORD entryAddress);
+	static void __fastcall onTransferSettlement(const settlementStruct* settlement, int reason, factionStruct* faction);
+	static portBuildingStruct* __fastcall onTransferSettlementPort(const settlementStruct* settlement);
+	static int __fastcall onCheckConstructionItem(const buildingsQueue* queue, const buildingInQueue* constructionItem);
 	static float __fastcall onCalculateUnitValue(eduEntry* entry, DWORD value);
 	static int __fastcall onEvaluateUnit(int eduIndex);
 	static DWORD __fastcall onCustomBattleUnitCards(DWORD cardArrayThing, int factionID);
