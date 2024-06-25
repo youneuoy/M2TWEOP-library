@@ -760,6 +760,74 @@ int __fastcall patchesForGame::onCreateMercUnitCheck(char** entryName, int eduIn
 	return eduIndex;
 }
 
+void patchesForGame::onAttachRegionSettlement(settlementStruct* sett, int regionId)
+{
+	sett->regionID = regionId;
+	const auto map = stratMapHelpers::getStratMap();
+	const auto region = &map->regions[regionId];
+	if ((region->settlement && region->settlement != sett) || sett->isMinorSettlement || sett->minorSettlementIndex > 0)
+		return;
+	region->settlement = sett;
+	GAME_FUNC(void(__thiscall*)(stratMap*, int, factionStruct*),
+		setRegionFaction)(map, sett->regionID, sett->faction);
+	for (int i = 0; i < region->resourcesNum; i++)
+	{
+		GAME_FUNC(void(__thiscall*)(resourceStruct*, settlementStruct*),
+			attachResourceSett)(region->resources[i], sett);
+	}
+}
+
+void patchesForGame::onCalculateSettlement(settlementStruct* sett)
+{
+	if(!sett->isMinorSettlement)
+		return;
+	const auto stats = &sett->stats.settlementStats;
+	if (const auto region = stratMapHelpers::getRegion(sett->regionID); region->factionOwner->factionID != sett->faction->factionID)
+	{
+		const auto facDip = campaignHelpers::getCampaignData()->getFactionDiplomacy(region->factionOwner->factionID, sett->faction->factionID);
+		float modifierIncome = 0.0f;
+		float modifierGrowth = 0.0f;
+		if (facDip->state == dipStance::alliance)
+		{
+			modifierIncome += 0.30f;
+			modifierGrowth += 0.6f;
+		}
+		if (facDip->hasTradeRights)
+		{
+			modifierIncome += 0.30f;
+			modifierGrowth += 0.2f;
+		}
+		else if (facDip->state < dipStance::war)
+		{
+			modifierIncome += 0.15f;
+			modifierGrowth += 0.4f;
+		}
+		stats->TradeIncome = static_cast<int>(round(stats->TradeIncome * modifierIncome));
+		stats->FarmsIncome = static_cast<int>(round(stats->FarmsIncome * modifierIncome));
+		stats->MiningIncome = static_cast<int>(round(stats->MiningIncome * modifierIncome));
+		stats->PopGrowthFarms = static_cast<int>(round(stats->PopGrowthFarms * modifierGrowth));
+		stats->PopGrowthBaseFarm = static_cast<int>(round(stats->PopGrowthBaseFarm * modifierGrowth));
+		stats->PopGrowthTrade = static_cast<int>(round(stats->PopGrowthTrade * modifierGrowth));
+	}
+	else
+	{
+		stats->TradeIncome = static_cast<int>(round(stats->TradeIncome * 0.7f));
+		stats->FarmsIncome = static_cast<int>(round(stats->FarmsIncome * 0.7f));
+		stats->MiningIncome = static_cast<int>(round(stats->MiningIncome * 0.7f));
+		stats->PopGrowthFarms = static_cast<int>(round(stats->PopGrowthFarms * 0.8f));
+		stats->PopGrowthBaseFarm = static_cast<int>(round(stats->PopGrowthBaseFarm * 0.8f));
+		stats->PopGrowthTrade = static_cast<int>(round(stats->PopGrowthTrade * 0.8f));
+	}
+	stats->TotalIncomeWithoutAdmin = stats->TradeIncome + stats->FarmsIncome + stats->MiningIncome + stats->TaxesIncome;
+}
+
+int patchesForGame::onScoreBestCapital(const settlementStruct* sett)
+{
+	if (sett->isMinorSettlement)
+		return 0;
+	return 1;
+}
+
 int __fastcall patchesForGame::onAttackGate(unit* un, void* tactic)
 {
 	const auto eduEntry = un->eduEntry;
@@ -1194,6 +1262,7 @@ void __stdcall patchesForGame::onUnloadCampaign()
 	gameEvents::onUnloadCampaign();
 }
 
+
 void __stdcall patchesForGame::onNewGameLoaded()
 {
 	plugData::data.luaAll.fillHashMaps();
@@ -1377,6 +1446,13 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	else if (eventCode == gameReloaded)
 	{
 		eopSettlementDataDb::get()->onGameLoaded();
+		const auto campaignData = campaignHelpers::getCampaignData();
+		const int settlementCount = campaignData->getSettlementNum();
+		for (int i = 0; i < settlementCount; i++)
+		{
+			const auto settlement = campaignData->getSettlement(i);
+			minorSettlementDb::addToMinorSettlements(settlement->regionID, settlement);
+		}
 	}
 	else if (eventCode == settlementTurnStart)
 	{

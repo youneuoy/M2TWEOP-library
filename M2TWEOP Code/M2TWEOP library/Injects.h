@@ -1377,6 +1377,38 @@ private:
 	LPVOID funcAddress;
 };
 
+class onAttachRegionSettlement
+	:public AATemplate
+{
+public:
+	onAttachRegionSettlement(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCalculateSettlement
+	:public AATemplate
+{
+public:
+	onCalculateSettlement(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onScoreBestCapital
+	:public AATemplate
+{
+public:
+	onScoreBestCapital(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
 
 class OnLoadSettlementWorldpkgdesc
 	:public AATemplate

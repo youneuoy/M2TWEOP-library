@@ -278,6 +278,7 @@ void codes::initCodes(int gameVer)
 		offsets.destroyFaction = 0x55F4A0;
 		offsets.reduceUnitProduction = 0x0055F610;
 		offsets.reduceEconomicProduction = 0x55F6D0;
+		offsets.attachResourceSett = 0x4C4250;
 	}
 
 
@@ -558,5 +559,6 @@ void codes::initCodes(int gameVer)
 		offsets.destroyFaction = 0x55F930;
 		offsets.reduceUnitProduction = 0x0055FAA0;
 		offsets.reduceEconomicProduction = 0x55FB60;
+		offsets.attachResourceSett = 0x4C47F0;
 	}
 }

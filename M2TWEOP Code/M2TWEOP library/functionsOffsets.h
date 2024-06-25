@@ -282,6 +282,7 @@ public:
 		DWORD destroyFaction = NULL;
 		DWORD reduceUnitProduction = NULL;
 		DWORD reduceEconomicProduction = NULL;
+		DWORD attachResourceSett = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

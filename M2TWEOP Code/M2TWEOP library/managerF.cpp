@@ -657,6 +657,24 @@ void managerF::execPatches()
 	toInitGsd2->Enable();
 	f1 << "Done" << endl;
 	
+	f1 << "Start applying onAttachRegionSettlement patch" << endl;
+	onAttachRegionSettlement* toAttachRegionSettlement = new onAttachRegionSettlement(mem, (LPVOID)patchesForGame::onAttachRegionSettlement, globals::dataS.gameVersion);
+	toAttachRegionSettlement->SetNewCode();
+	toAttachRegionSettlement->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onCalculateSettlement patch" << endl;
+	onCalculateSettlement* toCalculateSettlement = new onCalculateSettlement(mem, (LPVOID)patchesForGame::onCalculateSettlement, globals::dataS.gameVersion);
+	toCalculateSettlement->SetNewCode();
+	toCalculateSettlement->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onScoreBestCapital patch" << endl;
+	onScoreBestCapital* toScoreBestCapital = new onScoreBestCapital(mem, (LPVOID)patchesForGame::onScoreBestCapital, globals::dataS.gameVersion);
+	toScoreBestCapital->SetNewCode();
+	toScoreBestCapital->Enable();
+	f1 << "Done" << endl;
+	
 	f1 << "Start applying onGetBrowserPicConstructed patch" << endl;
 	onGetBrowserPicConstructed* toGetBrowserPicConstructed= new onGetBrowserPicConstructed(mem, (LPVOID)patchesForGame::getBrowserPicConstructed, globals::dataS.gameVersion);
 	toGetBrowserPicConstructed->SetNewCode();

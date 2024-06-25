@@ -4210,6 +4210,98 @@ void onCreateTakeResidenceObjective::SetNewCode()
 	delete a;
 }
 
+onAttachRegionSettlement::onAttachRegionSettlement(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x004A450F;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x004A406F;
+}
+
+void onAttachRegionSettlement::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(edx, dword_ptr(esp, 0x14));
+	a->mov(ecx, dword_ptr(esp, 0x18));
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	if (m_adress == 0x004A450F)
+		a->mov(eax, 0x004A456A);
+	else
+		a->mov(eax, 0x004A40CA);
+	a->jmp(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onCalculateSettlement::onCalculateSettlement(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005F464D;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005F425D;
+}
+
+void onCalculateSettlement::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(ecx, dword_ptr(esi, 0x4));
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(ecx, dword_ptr(esi, 0x4));
+	a->push(ecx);
+	if (m_adress == 0x005F464D)
+		a->mov(ecx, 0x2C1B8D8);
+	else
+		a->mov(ecx, 0x2C64990);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onScoreBestCapital::onScoreBestCapital(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0053D61A;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0053D1FA;
+}
+
+void onScoreBestCapital::SetNewCode()
+{
+	const auto a = new Assembler();
+	const auto label = a->newLabel();
+	a->mov(ecx, dword_ptr(eax, 0x4));
+	a->push(eax);
+	a->push(ecx);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->cmp(eax, 0);
+	a->jnz(label);
+	a->pop(edi);
+	a->pop(edi);
+	if (m_adress == 0x0053D61A)
+		a->mov(edi, 0x53D919);
+	else
+		a->mov(edi, 0x53D4F9);
+	a->jmp(edi);
+	a->bind(label);
+	a->pop(ecx);
+	a->pop(eax);
+	a->mov(edi, dword_ptr(eax, 0x4));
+	a->xor_(ebx, ebx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 OnLoadSettlementWorldpkgdesc::OnLoadSettlementWorldpkgdesc(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

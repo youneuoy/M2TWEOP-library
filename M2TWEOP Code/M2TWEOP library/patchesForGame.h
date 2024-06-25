@@ -29,6 +29,9 @@ public:
 	static void __fastcall initGlobalStrategyDirector(aiGlobalStrategyDirector* gsd);
 	static int __fastcall onCreateUnit(char** entryName, int* eduIndex);
 	static int __fastcall onCreateMercUnitCheck(char** entryName, int eduIndex);
+	static void __fastcall onAttachRegionSettlement(settlementStruct* sett, int regionId);
+	static void __fastcall onCalculateSettlement(settlementStruct* sett);
+	static int __fastcall onScoreBestCapital(const settlementStruct* sett);
 	static DWORD* __fastcall onCreateTakeResidenceObjective(const aiCampaignController* campaignController, DWORD* oldResidence);
 	static void __fastcall onPreBattlePlacement(aiTacticAssault* aiTactic);
 	static bool __thiscall onPreBattlePlacement2(aiUnitGroup* group, DWORD formationTemplate, bool forceOrder);

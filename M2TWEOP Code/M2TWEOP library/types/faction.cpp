@@ -103,7 +103,13 @@ int calculateRegionValue(aiGlobalStrategyDirector* director, aiRegionData* regio
 	const auto region = stratMapHelpers::getRegion(regionData->regionID);
 	int value = calculateBorderChange(director, regionData);
 	value += settlement->stats.settlementStats.TotalIncomeWithoutAdmin;
-	value += region->getResourcesValue();
+	const int resourceValue = region->getResourcesValue();
+	if (!settlement->isMinorSettlement
+		|| region->factionOwner == director->faction
+		|| campaignHelpers::getCampaignData()->getFactionDiplomacy(director->faction->factionID, region->factionOwner->factionID)->hasTradeRights)
+	{
+		value += resourceValue;
+	}
 	value += GAME_FUNC(int(__cdecl*)(int), getRegionIsolationScore)(region->regionID);
 	value += settlement->getSettlementValue();
 	return value;
@@ -229,6 +235,7 @@ void aiMilitaryDirector::initialize()
 			continue;
 		}
 		removeCampaign(&defensiveCampaigns, i);
+		defCampaign->attacking = true;
 		addCampaign(&offensiveCampaigns, defCampaign);
 	}
 	i = 0;
@@ -241,6 +248,7 @@ void aiMilitaryDirector::initialize()
 			continue;
 		}
 		removeCampaign(&offensiveCampaigns, i);
+		offCampaign->attacking = false;
 		addCampaign(&defensiveCampaigns, offCampaign);
 	}
 	checkDefensiveCampaigns(aiFaction->aiGlobalStrategyDirector);
@@ -688,6 +696,7 @@ bool aiCampaignController::isDefensive()
 void aiCampaignController::initialize()
 {
 	currentMission = nullptr;
+	isDefensive();
 	if (nextStrategyType != aiCampaignStrategy::dormant && strategyType == aiCampaignStrategy::dormant)
 	{
 		strategyType = static_cast<int>(attacking ? aiCampaignStrategy::gathering : aiCampaignStrategy::defendBorder);
@@ -1125,6 +1134,8 @@ void aiGlobalStrategyDirector::initNeighbourRegions()
 				regionData->regionValue = static_cast<int>(regionData->regionValue * campaignHelpers::getCampaignDifficulty1()->playerRegionValueModifier);
 			if (faction->factionRecord->shadowFactionId == sett->faction->factionID)
 				regionData->regionValue += 500;
+			if (sett->isMinorSettlement && nRegion->factionOwner->factionID == faction->factionID)
+				regionData->regionValue += 500;
 			if(sett->faction->factionRecord->slave)
 				regionData->regionValue += campaignHelpers::getCampaignData()->turnNumber < 30 ? 500 : 250;
 			if (regionData->regionValue < 0)
@@ -1476,16 +1487,13 @@ void factionStruct::updateNeighbours()
 	{
 		const auto settlement = settlements[i];
 		const auto region = stratMapHelpers::getRegion(settlement->regionID);
-		if (region->factionOwner && region->factionOwner->factionID != factionID && !isInNeighbourArray(settlement->regionID))
-		{
-			gameHelpers::addToIntArray(&neighBourRegions, reinterpret_cast<int*>(&settlement->regionID));
-			neighBourFactionsBitmap |= (1 << region->factionOwner->factionID);
-		}
 		auto minorSetts = minorSettlementDb::getMinorSettlements(region->regionID);
 		for (const auto minorSett : minorSetts)
 		{
 			if (minorSett->factionID != factionID)
 			{
+				if (!isInNeighbourArray(settlement->regionID))
+					gameHelpers::addToIntArray(&neighBourRegions, &settlement->regionID);
 				neighBourFactionsBitmap |= (1 << minorSett->factionID);
 			}
 		}
@@ -1501,14 +1509,6 @@ void factionStruct::updateNeighbours()
 						gameHelpers::addToIntArray(&neighBourRegions, reinterpret_cast<int*>(&minorSett->regionID));
 					neighBourFactionsBitmap |= (1 << minorSett->factionID);
 				}
-			}
-			if (!neighbour.region->settlement)
-				continue;
-			if (neighbour.region->settlement->factionID != factionID && !isInNeighbourArray(neighbour.region->regionID))
-			{
-				if (neighbour.region->factionOwner->factionID != factionID)
-					gameHelpers::addToIntArray(&neighBourRegions, &neighbour.region->regionID);
-				neighBourFactionsBitmap |= (1 << neighbour.region->settlement->factionID);
 			}
 		}
 	}
