@@ -639,10 +639,22 @@ void managerF::execPatches()
 	toCheckConstructionItem->Enable();
 	f1 << "Done" << endl;
 	
+	f1 << "Start applying onCreateTakeResidenceObjective patch" << endl;
+	onCreateTakeResidenceObjective* toCreateTakeResidenceObjective = new onCreateTakeResidenceObjective(mem, (LPVOID)patchesForGame::onCreateTakeResidenceObjective, globals::dataS.gameVersion);
+	toCreateTakeResidenceObjective->SetNewCode();
+	toCreateTakeResidenceObjective->Enable();
+	f1 << "Done" << endl;
+	
 	f1 << "Start applying onInitGsd patch" << endl;
 	onInitGsd* toInitGsd = new onInitGsd(mem, (LPVOID)patchesForGame::onInitGsd, globals::dataS.gameVersion);
 	toInitGsd->SetNewCode();
 	toInitGsd->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onInitGsd2 patch" << endl;
+	onInitGsd2* toInitGsd2 = new onInitGsd2(mem, (LPVOID)patchesForGame::onInitGsd2, globals::dataS.gameVersion);
+	toInitGsd2->SetNewCode();
+	toInitGsd2->Enable();
 	f1 << "Done" << endl;
 	
 	f1 << "Start applying onGetBrowserPicConstructed patch" << endl;

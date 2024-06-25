@@ -166,6 +166,11 @@ void __fastcall patchesForGame::onInitGsd(aiGlobalStrategyDirector* director)
 	director->initialize();
 }
 
+void __fastcall patchesForGame::onInitGsd2(aiGlobalStrategyDirector* director)
+{
+	director->initialize2();
+}
+
 void __fastcall patchesForGame::onTransferSettlement(const settlementStruct* settlement, const int reason, factionStruct* faction)
 {
 	if (settlement->isMinorSettlement)
@@ -193,6 +198,13 @@ int __fastcall patchesForGame::onCheckConstructionItem(const buildingsQueue* que
 			return 1; 
 	}
 	return queue->conversion > 0 ? 1 : 0;
+}
+
+DWORD* __fastcall patchesForGame::onCreateTakeResidenceObjective(const aiCampaignController* campaignController, DWORD* oldResidence)
+{
+	if (*oldResidence == dataOffsets::offsets.settlementVtbl)
+		return reinterpret_cast<DWORD*>(campaignController->regionData->getSettlement());
+	return oldResidence;
 }
 
 void __fastcall patchesForGame::initGlobalStrategyDirector(aiGlobalStrategyDirector* gsd)
@@ -1185,6 +1197,16 @@ void __stdcall patchesForGame::onUnloadCampaign()
 void __stdcall patchesForGame::onNewGameLoaded()
 {
 	plugData::data.luaAll.fillHashMaps();
+	const auto stratMapData = stratMapHelpers::getStratMap();
+	for (int i = 0; i < stratMapData->regionsNum; i++)
+	{
+		const auto settlement = stratMapData->regions[i].settlement;
+		if (!settlement)
+			continue;
+		settlement->minorSettlementIndex = 0;
+		settlement->isMinorSettlement = false;
+		minorSettlementDb::addToMinorSettlements(i, stratMapData->regions[i].settlement);
+	}
 	gameEvents::onNewGameLoaded();
 }
 
@@ -1329,6 +1351,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	const DWORD scrollOpenedCode = gameVersion == 1 ? 0x013719FC : 0x0132C9D4;
 	const DWORD factionTurnStartCode = gameVersion == 1 ? 0x0136931C : 0x013242F4;
 	const DWORD gameReloaded = gameVersion == 1 ? 0x013319E4 : 0x012EC9C4;
+	const DWORD settlementTurnStart = gameVersion == 1 ? 0x0136E2B4 : 0x0132928C;
 	if (eventCode == scrollOpenedCode)
 	{
 		char* str = reinterpret_cast<char*>(vTab[1]);
@@ -1354,6 +1377,22 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	else if (eventCode == gameReloaded)
 	{
 		eopSettlementDataDb::get()->onGameLoaded();
+	}
+	else if (eventCode == settlementTurnStart)
+	{
+		const auto sett = reinterpret_cast<settlementStruct*>(vTab[1]);
+		if (sett->minorSettlementIndex > 3 || sett->minorSettlementIndex < 0)
+		{
+			const std::string str = "minorSettlementIndex failed to verify " + string(sett->name);
+			gameHelpers::logStringGame(str);
+			MessageBoxA(nullptr, "minorSettlementIndex failed to verify", "Attention", NULL);
+		}
+		if (static_cast<int8_t>(sett->isMinorSettlement) < 0 || static_cast<int8_t>(sett->isMinorSettlement) > 1)
+		{
+			const std::string str = "isMinorSettlement failed to verify " + string(sett->name);
+			gameHelpers::logStringGame(str);
+			MessageBoxA(nullptr, "isMinorSettlement failed to verify", "Attention", NULL);
+		}
 	}
 }
 

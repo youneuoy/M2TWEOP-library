@@ -1355,6 +1355,28 @@ private:
 	LPVOID funcAddress;
 };
 
+class onInitGsd2
+	:public AATemplate
+{
+public:
+	onInitGsd2(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCreateTakeResidenceObjective
+	:public AATemplate
+{
+public:
+	onCreateTakeResidenceObjective(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 
 class OnLoadSettlementWorldpkgdesc
 	:public AATemplate

@@ -269,6 +269,19 @@ public:
 		DWORD recalcRegionGroupStrengths = NULL;
 		DWORD manageRegionGroups = NULL;
 		DWORD initGsdFactionData = NULL;
+		DWORD clearTransports = NULL;
+		DWORD addGsdRegion = NULL;
+		DWORD aiCrusadeController = NULL;
+		DWORD addCampaignController = NULL;
+		DWORD createCampaignController = NULL;
+		DWORD sortControllers = NULL;
+		DWORD calculateCampaignControllerStrengths = NULL;
+		DWORD manageNavalTransports = NULL;
+		DWORD balanceRegionGroups = NULL;
+		DWORD initNavalController = NULL;
+		DWORD destroyFaction = NULL;
+		DWORD reduceUnitProduction = NULL;
+		DWORD reduceEconomicProduction = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

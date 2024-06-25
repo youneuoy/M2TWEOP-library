@@ -56,21 +56,21 @@ bool settlementStruct::isPlayerControlled()
 std::string eopSettlementDataDb::onGameSave()
 {
 	const auto campaignData = campaignHelpers::getCampaignData();
-	for (int i = 0; i < campaignData->factionCount; i++)
-	{
-		const auto faction = campaignData->getFactionByOrder(i);
-		for (int s = 0; s < faction->settlementsNum; s++)
-		{
-			const auto settlement = faction->settlements[s];
-			for (int b = 0; b < settlement->buildingsNum; b++)
-			{
-				if (const auto building = settlement->buildings[b]; building->edbEntry->eopBuildingID != 0)
-				{
-					eopSettData->at(settlement->regionID).eopBuildingEntries[b] = building->edbEntry->eopBuildingID;
-				}
-			}
-		}
-	}
+	//for (int i = 0; i < campaignData->factionCount; i++)
+	//{
+	//	const auto faction = campaignData->getFactionByOrder(i);
+	//	for (int s = 0; s < faction->settlementsNum; s++)
+	//	{
+	//		const auto settlement = faction->settlements[s];
+	//		for (int b = 0; b < settlement->buildingsNum; b++)
+	//		{
+	//			if (const auto building = settlement->buildings[b]; building->edbEntry->eopBuildingID != 0)
+	//			{
+	//				eopSettData->at(settlement->regionID).eopBuildingEntries[b] = building->edbEntry->eopBuildingID;
+	//			}
+	//		}
+	//	}
+	//}
 	std::string fPath = gameHelpers::getModPath();
 	fPath += "\\eopData\\TempSaveData";
 	filesystem::remove_all(fPath);
@@ -185,7 +185,6 @@ namespace settlementHelpers
 	    settlement->subFactionID = region->loyaltyFactionID;
 	    settlement->turnsOwned = 10; 
 	    settlement->settlementTaxLevel = 1;
-	    settlement->triumph = 0;
 	    settlement->fac_creatorModNum = faction->factionID; 
 	    settlement->cultureID = faction->cultureID;
 	    settlement->stats.setPopulation(500);
@@ -214,8 +213,8 @@ namespace settlementHelpers
 	    if (!coreBuildingName.empty())
 	    	createBuilding(settlement, coreBuildingName.c_str());
 	    settlement->recalculate(true);
+		settlement->minorSettlementIndex = static_cast<int>(minorSettlementDb::regionMinorSettlements[settlement->regionID].size());
 		minorSettlementDb::addToMinorSettlements(settlement->regionID, settlement);
-		settlement->minorSettlementIndex = static_cast<int>(minorSettlementDb::regionMinorSettlements[settlement->regionID].size()) + 100;
 		faction->updateNeighbours();
 		return settlement;
 	}

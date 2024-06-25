@@ -4165,6 +4165,51 @@ void onInitGsd::SetNewCode()
 	delete a;
 }
 
+onInitGsd2::onInitGsd2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0052B07F;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00537B50;
+}
+
+void onInitGsd2::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onCreateTakeResidenceObjective::onCreateTakeResidenceObjective(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0052731F;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00526D1F;
+}
+
+void onCreateTakeResidenceObjective::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(edx, dword_ptr(esp, 0x1C));
+	a->mov(ecx, dword_ptr(esp, 0x20));
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(dword_ptr(esp, 0x1C), eax);
+	a->mov(edi, eax);
+	a->mov(eax, dword_ptr(edi));
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 OnLoadSettlementWorldpkgdesc::OnLoadSettlementWorldpkgdesc(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

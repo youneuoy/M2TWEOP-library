@@ -507,7 +507,7 @@ struct settlementStruct {
 	int regionID; /* number of region */
 	int32_t factionID; //0x01AC
 	int32_t yearFounded; //0x01B0
-	int32_t triumph; //0x01B4
+	int32_t minorSettlementIndex; //0x01B4
 	int32_t moneySpentConstruction;//0x01B8
 	int32_t moneySpentTraining;//0x01BC
 	int32_t moneySpentRecruitment;//0x01C0
@@ -566,7 +566,7 @@ struct settlementStruct {
 	void* governorTrackedVtbl3;
 	struct character* portAdmiral;//0x0E20
 	int32_t publicHealth; //0x0E34
-	int32_t minorSettlementIndex; //0x0E38
+	int32_t publicOrderLastTurn; //0x0E38
 	int32_t lastPopulation; //0x0E3C
 	int32_t harvestSuccess; //0x0E40
 	struct resourceStruct** resources;
@@ -688,9 +688,7 @@ public:
 	int getSettlementValue();
 	int getMinorSettlementIndex()
 	{
-		if (isMinorSettlement)
-			return minorSettlementIndex - 100;
-		return 0;
+		return minorSettlementIndex;
 	}
 	unitRQ* getUnitInQueue(int index)
 	{

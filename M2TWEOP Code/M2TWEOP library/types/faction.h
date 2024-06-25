@@ -4,8 +4,70 @@
 #include "settlement.h"
 
 
+struct aiCampaignController;
 struct aiResourcePrivate;
 struct aiRegionController;
+
+enum class aiCampaignStrategy
+{
+	dormant = 0,
+	gathering = 1,
+	attackNormal = 2,
+	attackBlitz = 3,
+	attackGrind = 4,
+	attackRaid = 5,
+	defendBorder = 6,
+	defendFortified = 7,
+	defendHidden = 8,
+	defendDeep = 9,
+	attackAid = 10,
+	count = 11,
+};
+
+inline bool operator==(const int val, aiCampaignStrategy strat)
+{
+	return val == static_cast<int>(strat);
+}
+inline bool operator<(const int val, aiCampaignStrategy strat)
+{
+	return val < static_cast<int>(strat);
+}
+inline bool operator>(const int val, aiCampaignStrategy strat)
+{
+	return val > static_cast<int>(strat);
+}
+inline bool operator<=(const int val, aiCampaignStrategy strat)
+{
+	return val <= static_cast<int>(strat);
+}
+inline bool operator>=(const int val, aiCampaignStrategy strat)
+{
+	return val >= static_cast<int>(strat);
+}
+inline bool operator!=(const int val, aiCampaignStrategy strat)
+{
+	return val != static_cast<int>(strat);
+}
+
+enum class aiCampaignStrength
+{
+	veryLow = 0,
+	low = 1,
+	medium = 2,
+	high = 3,
+	veryHigh = 4,
+	count = 5,
+};
+
+inline bool operator==(const int val, aiCampaignStrength strat)
+{
+	return val == static_cast<int>(strat);
+}
+
+inline bool operator!=(const int val, aiCampaignStrength strat)
+{
+	return val != static_cast<int>(strat);
+}
 
 struct smFactionsDb {
 	struct factionRecord* facDescrs;
@@ -238,6 +300,12 @@ public:
 	{
 		regionRisk = static_cast<int>(risk);
 	}
+	settlementStruct* getSettlement();
+	factionStruct* getTargetFaction();
+	bool targetsSameSettlement(const aiRegionData* other)
+	{
+		return other->regionID == regionID && other->settlementIndex == settlementIndex;
+	}
 };
 
 struct aiMilitaryControllerWorldWide
@@ -250,25 +318,6 @@ struct aiMilitaryControllerWorldWide
 	int targetId;
 };
 
-struct aiMilitaryDirector
-{
-	struct aiFaction* aiFaction;
-	struct factionStruct* faction;
-	void* defensiveCampaigns;
-	int32_t defensiveCampaignsSize;
-	int32_t defensiveCampaignsNum;
-	void* offensiveCampaigns;
-	int32_t offensiveCampaignsSize;
-	int32_t offensiveCampaignsNum;
-	void* aidingCampaigns;
-	int32_t aidingCampaignsSize;
-	int32_t aidingCampaignsNum;
-	void* aiBrigandControllers;
-	int32_t aiBrigandControllersSize;
-	int32_t aiBrigandControllersNum;
-	void* lastResortController;
-	aiMilitaryControllerWorldWide worldwideController;
-};
 
 struct aiRegionController
 {
@@ -376,7 +425,24 @@ public:
 	float territoryRanking; //0x000C
 	float financialRanking; //0x0010
 	float populationRanking; //0x0014
-}; //Size: 0x0018
+}; //Size: 
+
+struct aiSubterfugeController
+{
+	DWORD vfTable;
+	aiFaction* aiFac;
+	bool missionsExist;
+	char pad1[3];
+	void* missions;
+	bool missionsActiveExist;
+	char pad2[3];
+	void* missionsActive;
+	gameLinkedList<aiResourcePrivate*> resources;
+	gameLinkedList<void*> missionsList;
+	void destroyFaction(factionStruct* fac, int value);
+	void reduceUnitProduction(factionStruct* fac, int category, int value);
+	void reduceEconomicProduction(factionStruct* fac, int value);
+};
 
 //faction
 struct factionStruct {
@@ -530,6 +596,7 @@ struct factionStruct {
 	int32_t lastOpponentId; //0x0EEC
 public:
 	void updateNeighbours();
+	int getAliveCharacterNumOfType(characterTypeStrat charType);
 	characterRecord* getCharacterRecord(int index)
 	{
 		return characterRecords[index];
@@ -612,14 +679,31 @@ public:
 	void setSecondaryColor(uint8_t r, uint8_t g, uint8_t b);
 };
 
+struct aiCampaignObjective
+{
+	DWORD vfTable;
+	aiFaction* aiFaction;
+	int type;
+	int priority;
+	aiCampaignObjective* next;
+};
+
+struct aiCampaignMission
+{
+	DWORD vfTable;
+	aiFaction* aiFaction;
+	aiResourcePrivate* resource;
+	int priority;
+};
+
 struct aiMilitaryController
 {
 	DWORD vfTable;
 	aiFaction* aiFaction;
 	struct factionStruct *faction;
-	void *objectives;
-	void* currentMission;
-	void *resources;
+	aiCampaignObjective *objectives;
+	aiCampaignMission* currentMission;
+	aiResourcePrivate *resources;
 	int resourcesSize;
 	int resourcesNum;
 	bool merge;
@@ -633,7 +717,7 @@ struct aiCampaignController : aiMilitaryController
 {
 	int targetRegionID;
 	aiRegionData* regionData;
-	int factionID;
+	int targetFactionId;
 	bool attacking;
 	bool canRequestMore;
 	bool canAttack;
@@ -646,14 +730,22 @@ struct aiCampaignController : aiMilitaryController
 	int strengthThreshold;
 	int totalAllocated;
 	int totalFree;
-	int highestEnemyStrength;
-	int lowestEnemyStrength;
+	int maxEnemyPower;
+	int minEnemyPower;
 	int *neighboursForDefense;
 	int neighboursForDefenseSize;
 	int neighboursForDefenseNum;
+	bool isDefensive();
+	void initialize();
+	void setStrategy(aiCampaignStrategy strategy);
 };
 
-
+struct aiBrigandController : aiMilitaryController
+{
+	regionStruct* region;
+	int strongestArmy;
+	int weakestArmy;
+};
 
 struct factionRecord { /* see descr_sm_factions.txt */
 	int id;
@@ -768,14 +860,14 @@ public:
 	char pad_0013[1]; //0x0013
 	factionStruct* factionFleeingFrom; //0x0014
 	int hordeEndTargets[2];
-	struct aiLongTermGoalDirector* aiLongTermGoalDirector; //0x0020
+	struct aiLongTermGoalDirector* ltgd; //0x0020
 	struct aiDiplomacyManager* aiDiplomacyManager; //0x0024
 	struct aiActionRequestController* aiActionRequestController; //0x0028
 	struct aiResourceManager* aiResourceManager; //0x002C
 	struct AiFinanceManager* AiFinanceManager; //0x0030
 	struct aiPersonalityValues* aiProductionControllers; //0x0034
 	struct aiGlobalStrategyDirector* aiGlobalStrategyDirector; //0x0038
-	struct aiSubterFugeController* aiSubterFugeController; //0x003C
+	aiSubterfugeController* subterfugeController; //0x003C
 	struct aiNamedCharacterController* aiNamedCharacterController; //0x0040
 	struct aiPriestController* aiPriestController; //0x0044
 	struct aiMerchantController* aiMerchantController; //0x0048
@@ -808,6 +900,8 @@ public:
 	{
 		return trustedAllyEnemies & (1 << fac->factionID);
 	}
+	int getInvasionTargetNum(int regionId);
+	int getInvasionTargetPriority(int regionId);
 	bool regionsBordersOnlyTrusted(int regionId);
 	bool isTrustedAlly(int targetFactionId);
 }; //Size: 0x0604
@@ -926,7 +1020,7 @@ public:
 	}
 	void evaluatePolicies(int regionId, int settlementIndex);
 	settlementPolicy decideSettlementPolicy(const settlementStruct* settlement);
-	settlementTroopPolicy decideSettlementTroopPolicy(const settlementStruct* settlement);
+	static settlementTroopPolicy decideSettlementTroopPolicy(const settlementStruct* settlement);
 	float getPolicyPriority(settlementPolicy policyType);
 };
 
@@ -953,12 +1047,126 @@ struct aiNavalTransportRegion
 	regionStruct* targetRegion;
 };
 
+struct campaignControllerArray
+{
+	aiCampaignController** campaigns;
+	int size;
+	int count;
+};
+
+enum class defendTypes
+{
+	minimal,
+	normal,
+	raid,
+	frontline,
+	fortified,
+	deep,
+	count
+};
+
+inline bool operator==(const int val, defendTypes vis)
+{
+	return val == static_cast<int>(vis);
+}
+
+inline bool operator!=(const int val, defendTypes vis)
+{
+	return val != static_cast<int>(vis);
+}
+
+inline bool operator >(const int val, defendTypes vis)
+{
+	return val > static_cast<int>(vis);
+}
+
+inline bool operator <(const int val, defendTypes vis)
+{
+	return val < static_cast<int>(vis);
+}
+
+inline bool operator >=(const int val, defendTypes vis)
+{
+	return val >= static_cast<int>(vis);
+}
+
+inline bool operator <=(const int val, defendTypes vis)
+{
+	return val <= static_cast<int>(vis);
+}
+
+enum class invasionTypes
+{
+	buildup,
+	immediate,
+	raids,
+	opportunistic,
+	start,
+	none,
+	count
+};
+
+inline bool operator==(const int val, invasionTypes vis)
+{
+	return val == static_cast<int>(vis);
+}
+
+inline bool operator!=(const int val, invasionTypes vis)
+{
+	return val != static_cast<int>(vis);
+}
+
+inline bool operator >(const int val, invasionTypes vis)
+{
+	return val > static_cast<int>(vis);
+}
+
+inline bool operator <(const int val, invasionTypes vis)
+{
+	return val < static_cast<int>(vis);
+}
+
+inline bool operator >=(const int val, invasionTypes vis)
+{
+	return val >= static_cast<int>(vis);
+}
+
+inline bool operator <=(const int val, invasionTypes vis)
+{
+	return val <= static_cast<int>(vis);
+}
+
+struct aiMilitaryDirector
+{
+	struct aiFaction* aiFaction;
+	struct factionStruct* faction;
+	campaignControllerArray defensiveCampaigns;
+	campaignControllerArray offensiveCampaigns;
+	campaignControllerArray aidingCampaigns;
+	aiBrigandController** aiBrigandControllers;
+	int32_t aiBrigandControllersSize;
+	int32_t aiBrigandControllersNum;
+	aiCampaignController* lastResortController;
+	aiMilitaryControllerWorldWide worldwideController;
+	void initialize();
+	static void removeCampaign(campaignControllerArray* array, int index);
+	static void addCampaign(campaignControllerArray* array, aiCampaignController* controller);
+	void checkDefensiveCampaigns(const aiGlobalStrategyDirector* director);
+	void checkOffensiveCampaigns(const aiGlobalStrategyDirector* director);
+	void checkAidingCampaigns(const aiGlobalStrategyDirector* director);
+	void decideStrategies();
+	void decideDefensiveStrategy(aiCampaignController* controller);
+	void decideOffensiveStrategy(aiCampaignController* controller);
+	aiCampaignController* createCampaignController(aiRegionData* regionData);
+};
+
+
 struct aiGlobalStrategyDirector
 {
 	void* vftable /*VFT*/;
 	struct aiFaction* aiFaction;
 	struct factionStruct* faction;
-	struct factionDataStrategy someFactionData[31];
+	struct factionDataStrategy stratFacData[31];
 	struct aiRegionData* ownRegions;
 	int32_t ownRegionsSize;
 	int32_t ownRegionsCount;
@@ -979,10 +1187,10 @@ struct aiGlobalStrategyDirector
 	int32_t regionControllersSize;
 	int32_t regionControllersNum;
 	struct aiMilitaryDirector militaryDirector;
-	void* aiNavalControllers;
+	void** aiNavalControllers;
 	int32_t aiNavalControllersSize;
 	int32_t aiNavalControllersNum;
-	void* regionGroupControllers;
+	void** regionGroupControllers;
 	int32_t regionGroupControllersSize;
 	int32_t regionGroupControllersNum;
 	int hordeTargetRegionID;
@@ -990,9 +1198,11 @@ struct aiGlobalStrategyDirector
 	int hordeTargetFactions[2];
 	void* crusadeController;
 	void initialize();
+	void initialize2();
 	void initOwnRegions();
 	void initNeighbourRegions();
 	void initNavalRegions();
+	void initTargetRegions();
 	void updateRegionControllers();
 };
 

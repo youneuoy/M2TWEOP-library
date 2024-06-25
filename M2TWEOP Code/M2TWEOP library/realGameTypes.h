@@ -122,6 +122,52 @@ struct gameList
 	}
 };
 
+template<typename T>
+struct gameLinkedNode
+{
+	T* element;
+	gameLinkedNode<T>* next;
+	gameLinkedNode<T>* prev;
+};
+
+template<typename T>
+struct gameLinkedList
+{
+	gameLinkedNode<T>* head;
+	gameLinkedNode<T>* tail;
+	int size()
+	{
+		int total = 0;
+		gameLinkedNode<T>* current = head;
+		while (current)
+		{
+			total++;
+			current = current->next;
+		}
+		return total;
+	}
+	bool empty()
+	{
+		return head == nullptr;
+	}
+	T* get(int index)
+	{
+		gameLinkedNode<T>* current = head;
+		while (current && index > 0)
+		{
+			index--;
+			current = current->next;
+		}
+		if (current)
+			return current->element;
+		return nullptr;
+	}
+	T& operator[](int index)
+	{
+		return *get(index);
+	}
+};
+
 struct scriptCommand
 {
 	DWORD vftable /*VFT*/;

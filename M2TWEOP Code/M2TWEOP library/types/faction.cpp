@@ -14,8 +14,153 @@
 #include "strategyMap.h"
 #include "techFuncs.h"
 
-#define factionStruct_ai_label 1
-#define factionStruct_name 2
+enum
+{
+	factionStruct_ai_label = 1,
+	factionStruct_name = 2
+};
+
+/*--------------------------------------------------------------------------------------------------------------------*\
+									   Campaign AI Helpers
+\*--------------------------------------------------------------------------------------------------------------------*/
+#pragma region Campaign AI Helpers
+
+void sortCampaigns(campaignControllerArray* array)
+{
+	auto comparison = [](const aiCampaignController* a, const aiCampaignController* b)
+	{
+		if (!a->regionData || !b->regionData)
+			return false;
+		return a->regionData->priority > b->regionData->priority;
+	};
+	std::stable_sort(array->campaigns, array->campaigns + array->count, comparison);
+}
+
+void clearRegionData(aiRegionData** regionList)
+{
+	GAME_FUNC(void(__thiscall*)(aiRegionData**), clearAiRegionData)(regionList);
+}
+
+aiNavalRegion* addToNavalTargets(aiNavalRegion** list)
+{
+	return GAME_FUNC(aiNavalRegion*(__thiscall*)(aiNavalRegion**), addNavalTargetRegion)(list);
+}
+
+void removeNavalTarget(aiNavalRegion** list, const int index)
+{
+	GAME_FUNC(void(__thiscall*)(aiNavalRegion**, int), removeNavalTargetRegion)(list, index);
+}
+
+int calculateBorderChange(aiGlobalStrategyDirector* director, aiRegionData* regionData)
+{
+	int borderGained = 0;
+	int borderLost = 0;
+	const auto region = stratMapHelpers::getRegion(regionData->regionID);
+	const auto settlement = regionData->getSettlement();
+	const auto settlementFaction = settlement->faction;
+	const auto directorFaction = director->faction;
+	const int enemyNum = region->hasEnemiesToFaction(directorFaction->factionID);
+	borderGained += region->tileCount * enemyNum;
+	if (settlementFaction->factionID == directorFaction->factionID)
+	{
+		for (int i = 0; i < region->neighbourRegionsNum; i++)
+		{
+			const auto nRegion = region->neighbourRegions[i];
+			if (nRegion.isBlocked || nRegion.region->isSea || !nRegion.region->settlement)
+				continue;
+			const int borderTiles = nRegion.borderTilesCount;
+			if (const int enemyNum2 = nRegion.region->hasEnemiesToFaction(directorFaction->factionID))
+				borderGained += borderTiles * enemyNum2;
+			else
+				borderLost += borderTiles;
+		}
+	}
+	else
+	{
+		for (int i = 0; i < region->neighbourRegionsNum; i++)
+		{
+			const auto nRegion = region->neighbourRegions[i];
+			const int borderTiles = nRegion.borderTilesCount;
+			if (nRegion.isBlocked || nRegion.region->isSea || !nRegion.region->settlement)
+				continue;
+			if (nRegion.region->hasFaction(directorFaction->factionID))
+				borderLost += borderTiles;
+			if (const int enemyNum2 = nRegion.region->hasEnemiesToFaction(directorFaction->factionID))
+				borderGained += borderTiles * enemyNum2;
+		}
+	}
+	int value =  borderGained - borderLost;
+	if (region->hasFaction(directorFaction->factionID) && enemyNum == 0)
+		value *= 3;
+	else
+		value *= -3;
+	return value;
+}
+
+int calculateRegionValue(aiGlobalStrategyDirector* director, aiRegionData* regionData)
+{
+	const auto settlement = regionData->getSettlement();
+	const auto region = stratMapHelpers::getRegion(regionData->regionID);
+	int value = calculateBorderChange(director, regionData);
+	value += settlement->stats.settlementStats.TotalIncomeWithoutAdmin;
+	value += region->getResourcesValue();
+	value += GAME_FUNC(int(__cdecl*)(int), getRegionIsolationScore)(region->regionID);
+	value += settlement->getSettlementValue();
+	return value;
+}
+
+aiRegionData* createRegionInArray(aiGlobalStrategyDirector* director, settlementStruct* sett, aiRegionData** regionList)
+{
+	const auto regionData = GAME_FUNC(aiRegionData*(__thiscall*)(aiRegionData**), createRegionInArray)(regionList);
+	const auto region = stratMapHelpers::getRegion(sett->regionID);
+	regionData->navalTarget = false;
+	regionData->isLastResort = false;
+	regionData->regionController = nullptr;
+	regionData->factionID = director->faction->factionID;
+	regionData->regionID = sett->regionID;
+	regionData->regionRisk = 0;
+	regionData->settlementIndex = sett->getMinorSettlementIndex();
+	regionData->regionValue = calculateRegionValue(director, regionData);
+	region->calculateRegionStrengths(director->faction->factionID, &regionData->strength);
+	int enemyNum = 0;
+	int neutralNum = 0;
+	region->calculateBackupRegionStrengths(&regionData->neighboursStrength, &enemyNum, &neutralNum);
+	regionData->neighbourEnemyNum = enemyNum;
+	regionData->neighbourOtherNum = neutralNum;
+	return regionData;
+}
+
+aiRegionController* createNewRegionController(aiFaction* aiFac, settlementStruct* sett)
+{
+	const auto controller = techFuncs::createGameClass<aiRegionController>();
+	GAME_FUNC(aiRegionController*(__thiscall*)(aiRegionController*, aiFaction*, int), createRegionController)(controller, aiFac, sett->regionID);
+	controller->settlement = sett;
+	return controller;
+}
+#pragma endregion Campaign AI Helpers
+
+/*--------------------------------------------------------------------------------------------------------------------*\
+									   aiRegionData methods
+\*--------------------------------------------------------------------------------------------------------------------*/
+#pragma region aiRegionData methods
+
+settlementStruct* aiRegionData::getSettlement()
+{
+	return minorSettlementDb::getSettlement(regionID, settlementIndex);
+}
+
+factionStruct* aiRegionData::getTargetFaction()
+{
+	if (const auto settlement = getSettlement(); settlement)
+		return settlement->faction;
+	return stratMapHelpers::getRegion(regionID)->factionOwner;
+}
+#pragma endregion aiRegionData methods
+
+/*--------------------------------------------------------------------------------------------------------------------*\
+									   aiRegionController methods
+\*--------------------------------------------------------------------------------------------------------------------*/
+#pragma region aiRegionController methods
 
 void aiRegionController::initialize()
 {
@@ -34,96 +179,606 @@ void aiRegionController::initialize()
 		getRequiredGarrisonStrength)(gsdData, aiFaction->faction, settlement, army);
 	if (gsdData && garrison)
 	{
-		if (gsdData->strength.enemyStrength == 0 || (gsdData->strength.ownStrength / gsdData->strength.enemyStrength > 0.9))
+		if (gsdData->strength.enemyStrength == 0
+			|| (gsdData->strength.ownStrength / static_cast<float>(gsdData->strength.enemyStrength) > 0.9))
 		{
 			garrisonType = 1;
 		}
 	}
 }
+#pragma endregion aiRegionController methods
 
-void factionStruct::updateNeighbours()
+/*--------------------------------------------------------------------------------------------------------------------*\
+									   aiSubterfugeController methods
+\*--------------------------------------------------------------------------------------------------------------------*/
+#pragma region aiSubterfugeController methods
+
+void aiSubterfugeController::destroyFaction(factionStruct* fac, const int value)
 {
-	if (settlementsNum == 0)
-		return;
-	for (int i = 0; i < settlementsNum; i++)
+	GAME_FUNC(void(__thiscall*)(aiSubterfugeController*, factionStruct*, int),
+		destroyFaction)(this, fac, value);
+}
+
+void aiSubterfugeController::reduceUnitProduction(factionStruct* fac, int category, int value)
+{
+	GAME_FUNC(void(__thiscall*)(aiSubterfugeController*, factionStruct*, int, int),
+		reduceEconomicProduction)(this, fac, category, value);
+}
+
+void aiSubterfugeController::reduceEconomicProduction(factionStruct* fac, int value)
+{
+	GAME_FUNC(void(__thiscall*)(aiSubterfugeController*, factionStruct*, int),
+		reduceEconomicProduction)(this, fac, value);
+}
+#pragma endregion aiSubterfugeController methods
+
+/*--------------------------------------------------------------------------------------------------------------------*\
+									   aiMilitaryDirector methods
+\*--------------------------------------------------------------------------------------------------------------------*/
+#pragma region aiMilitaryDirector methods
+
+void aiMilitaryDirector::initialize()
+{
+	int i = 0;
+	while (i < defensiveCampaigns.count)
 	{
-		const auto settlement = settlements[i];
-		const auto region = stratMapHelpers::getRegion(settlement->regionID);
-		if (region->factionOwner && region->factionOwner->factionID != factionID && !isInNeighbourArray(settlement->regionID))
+		const auto defCampaign = defensiveCampaigns.campaigns[i];
+		if (defCampaign->isDefensive())
 		{
-			gameHelpers::addToIntArray(&neighBourRegions, reinterpret_cast<int*>(&settlement->regionID));
-			neighBourFactionsBitmap |= (1 << region->factionOwner->factionID);
+			++i;
+			continue;
 		}
-		auto minorSetts = minorSettlementDb::getMinorSettlements(region->regionID);
-		for (const auto minorSett : minorSetts)
+		removeCampaign(&defensiveCampaigns, i);
+		addCampaign(&offensiveCampaigns, defCampaign);
+	}
+	i = 0;
+	while (i < offensiveCampaigns.count)
+	{
+		const auto offCampaign = offensiveCampaigns.campaigns[i];
+		if (!offCampaign->isDefensive())
 		{
-			if (minorSett->factionID != factionID)
+			++i;
+			continue;
+		}
+		removeCampaign(&offensiveCampaigns, i);
+		addCampaign(&defensiveCampaigns, offCampaign);
+	}
+	checkDefensiveCampaigns(aiFaction->aiGlobalStrategyDirector);
+	checkOffensiveCampaigns(aiFaction->aiGlobalStrategyDirector);
+	checkAidingCampaigns(aiFaction->aiGlobalStrategyDirector);
+	decideStrategies();
+	
+	for (i = 0; i < defensiveCampaigns.count; i++)
+		defensiveCampaigns.campaigns[i]->initialize();
+	
+	for (i = 0; i < offensiveCampaigns.count; i++)
+		offensiveCampaigns.campaigns[i]->initialize();
+	
+	for (i = 0; i < aidingCampaigns.count; i++)
+		aidingCampaigns.campaigns[i]->initialize();
+	
+	for (i = 0; i < aiBrigandControllersNum; i++)
+		callClassFunc<aiBrigandController*, void>(aiBrigandControllers[i], 0x4); //initialize
+}
+
+void aiMilitaryDirector::removeCampaign(campaignControllerArray* array, int index)
+{
+	if (const auto newCount = --array->count; index < newCount)
+	{
+		do
+		{
+			const auto c1 = array->campaigns[index + 1];
+			const auto c2 = &array->campaigns[index++];
+			*c2 = c1;
+		}
+		while (index < array->count);
+	}
+}
+
+aiCampaignController* aiMilitaryDirector::createCampaignController(aiRegionData* regionData)
+{
+	const auto newController = techFuncs::createGameClass<aiCampaignController>();
+	GAME_FUNC(aiCampaignController*(__thiscall*)(aiCampaignController*, int, aiRegionData*, struct aiFaction*),
+		createCampaignController)(newController, regionData->regionID, regionData, aiFaction);
+	return newController;
+}
+
+void aiMilitaryDirector::addCampaign(campaignControllerArray* array, aiCampaignController* controller)
+{
+	GAME_FUNC(void(__thiscall*)(campaignControllerArray*, aiCampaignController**), addCampaignController)(array, &controller);
+}
+
+void aiMilitaryDirector::checkDefensiveCampaigns(const aiGlobalStrategyDirector* director)
+{
+	for (int i = defensiveCampaigns.count - 1; i >= 0; --i)
+	{
+		const auto defCampaign = defensiveCampaigns.campaigns[i];
+		bool found = false;
+		for (int j = 0; j < director->ownRegionsCount; j++)
+		{
+			if (const auto ownRegion = &director->ownRegions[j];
+				defCampaign->regionData->targetsSameSettlement(ownRegion))
 			{
-				neighBourFactionsBitmap |= (1 << minorSett->factionID);
+				defCampaign->regionData = ownRegion;
+				found = true;
 			}
 		}
-		for (int j = 0; j < region->neighbourRegionsNum; j++)
+		if (!found)
 		{
-			const auto neighbour = region->neighbourRegions[j];
-			minorSetts = minorSettlementDb::getMinorSettlements(neighbour.regionID);
-			for (const auto minorSett : minorSetts)
+			removeCampaign(&defensiveCampaigns, i);
+			if (defCampaign)
+				callClassFunc<aiCampaignController*, void, int>(defCampaign, 0x0, 1); //destructor
+		}
+	}
+	for (int i = 0; i < director->ownRegionsCount; i++)
+	{
+		const auto ownRegion = &director->ownRegions[i];
+		bool found = false;
+		for (int j = 0; j < defensiveCampaigns.count; j++)
+		{
+			if (const auto defRegion = defensiveCampaigns.campaigns[j]->regionData;
+				defRegion->targetsSameSettlement(ownRegion))
 			{
-				if (minorSett->factionID != factionID && !isInNeighbourArray(minorSett->regionID))
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+		{
+			const auto newController = createCampaignController(ownRegion);
+			addCampaign(&defensiveCampaigns, newController);
+		}
+	}
+	
+	if (defensiveCampaigns.count > 1)
+		sortCampaigns(&defensiveCampaigns);
+}
+
+void aiMilitaryDirector::checkOffensiveCampaigns(const aiGlobalStrategyDirector* director)
+{
+	for (int i = offensiveCampaigns.count - 1; i >= 0; --i)
+	{
+		const auto offCampaign = offensiveCampaigns.campaigns[i];
+		bool found = false;
+		for (int j = 0; j < director->targetRegionsCount; j++)
+		{
+			if (const auto targetRegion = &director->targetRegions[j];
+				offCampaign->regionData->targetsSameSettlement(targetRegion))
+			{
+				offCampaign->regionData = targetRegion;
+				found = true;
+			}
+		}
+		if (!found)
+		{
+			removeCampaign(&offensiveCampaigns, i);
+			if (offCampaign)
+				callClassFunc<aiCampaignController*, void, int>(offCampaign, 0x0, 1); //destructor
+		}
+	}
+	for (int i = 0; i < director->targetRegionsCount; i++)
+	{
+		const auto targetRegion = &director->targetRegions[i];
+		bool found = false;
+		for (int j = 0; j < offensiveCampaigns.count; j++)
+		{
+			if (const auto offRegion = offensiveCampaigns.campaigns[j]->regionData;
+				offRegion->targetsSameSettlement(targetRegion))
+			{
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+		{
+			const auto newController = createCampaignController(targetRegion);
+			addCampaign(&offensiveCampaigns, newController);
+		}
+	}
+	if (offensiveCampaigns.count > 1)
+		sortCampaigns(&offensiveCampaigns);
+}
+
+void aiMilitaryDirector::checkAidingCampaigns(const aiGlobalStrategyDirector* director)
+{
+	for (int i = aidingCampaigns.count - 1; i >= 0; --i)
+	{
+		const auto aidCampaign = aidingCampaigns.campaigns[i];
+		bool found = false;
+		if (aiFaction->ltgd->isTrustedAlly(aidCampaign->regionData->getTargetFaction()->factionID))
+		{
+			for (int j = 0; j < director->allNeighbourRegionsCount; j++)
+			{
+				if (const auto targetRegion = &director->allNeighbourRegions[j];
+					aidCampaign->regionData->targetsSameSettlement(targetRegion))
 				{
-					if (neighbour.region->factionOwner->factionID != factionID)
-						gameHelpers::addToIntArray(&neighBourRegions, reinterpret_cast<int*>(&minorSett->regionID));
-					neighBourFactionsBitmap |= (1 << minorSett->factionID);
+					aidCampaign->regionData = targetRegion;
+					found = true;
 				}
 			}
-			if (!neighbour.region->settlement)
-				continue;
-			if (neighbour.region->settlement->factionID != factionID && !isInNeighbourArray(neighbour.region->regionID))
+		}
+		if (!found)
+		{
+			removeCampaign(&aidingCampaigns, i);
+			if (aidCampaign)
+				callClassFunc<aiCampaignController*, void, int>(aidCampaign, 0x0, 1); //destructor
+		}
+	}
+	for (int i = 0; i < director->allNeighbourRegionsCount; i++)
+	{
+		const auto targetRegion = &director->allNeighbourRegions[i];
+		bool found = false;
+		if (!aiFaction->ltgd->isTrustedAlly(targetRegion->getTargetFaction()->factionID))
+			continue;
+		for (int j = 0; j < aidingCampaigns.count; j++)
+		{
+			if (const auto aidRegion = aidingCampaigns.campaigns[j]->regionData;
+				aidRegion->targetsSameSettlement(targetRegion))
 			{
-				if (neighbour.region->factionOwner->factionID != factionID)
-					gameHelpers::addToIntArray(&neighBourRegions, &neighbour.region->regionID);
-				neighBourFactionsBitmap |= (1 << neighbour.region->settlement->factionID);
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+		{
+			const auto newController = createCampaignController(targetRegion);
+			newController->setStrategy(aiCampaignStrategy::attackAid);
+			newController->strengthRequiredType = static_cast<int>(aiCampaignStrength::medium);
+			addCampaign(&aidingCampaigns, newController);
+		}
+	}
+	if (aidingCampaigns.count > 1)
+		sortCampaigns(&aidingCampaigns);
+}
+
+void aiMilitaryDirector::decideStrategies()
+{
+	int highestStagingValue = 0;
+	int mostImportantRegion = -1;
+	for (int i = 0; i < defensiveCampaigns.count; i++)
+	{
+		const auto defCampaign = defensiveCampaigns.campaigns[i];
+		decideDefensiveStrategy(defCampaign);
+		defCampaign->canRequestMore = false;
+		if (const int stageValue = aiFaction->ltgd->getInvasionTargetPriority(defCampaign->regionData->regionID);
+			stageValue > 0 && (stageValue + defCampaign->regionData->regionValue > highestStagingValue))
+		{
+			highestStagingValue = stageValue + defCampaign->regionData->regionValue;
+			mostImportantRegion = i;
+		}
+	}
+	if (mostImportantRegion > -1)
+		defensiveCampaigns.campaigns[mostImportantRegion]->canRequestMore = true;
+	
+	for (int i = 0; i < offensiveCampaigns.count; i++)
+	{
+		const auto offCampaign = offensiveCampaigns.campaigns[i];
+		if (offCampaign->regionData->isLastResort)
+		{
+			offCampaign->setStrategy(aiCampaignStrategy::attackNormal);
+			offCampaign->strengthRequiredType = static_cast<int>(aiCampaignStrength::medium);
+			offCampaign->canAttack = true;
+			continue;
+		}
+		decideOffensiveStrategy(offCampaign);
+	}
+
+	const auto campaign = campaignHelpers::getCampaignData();
+	for (int i = 0; i < campaign->factionCount; i++)
+	{
+		const int targetId = campaign->factionsSortedByTurnOrder[i]->factionID;
+		const auto factionData = aiFaction->aiGlobalStrategyDirector->stratFacData[targetId];
+		const auto ltgdData = aiFaction->ltgd->longTermGoalValues[targetId];
+		if (factionData.activeWar)
+		{
+			bool authorized = false;
+			if(ltgdData.forceInvade)
+				authorized = true;
+			else
+			{
+				switch (static_cast<invasionTypes>(ltgdData.invasionType))
+				{
+				case invasionTypes::buildup:
+					{
+						int offCampaignCount = 0;
+						int readyCampaignCount = 0;
+						for (int j = 0; j < offensiveCampaigns.count; j++)
+						{
+							if (const auto offCampaign = offensiveCampaigns.campaigns[j];
+								offCampaign->regionData->getTargetFaction()->factionID == targetId)
+							{
+								offCampaignCount++;
+								if (offCampaign->totalAllocated >= offCampaign->totalStrengthRequired)
+									readyCampaignCount++;
+							}
+						}
+						if (readyCampaignCount >= offCampaignCount >> 1 || readyCampaignCount >= 2)
+							authorized = true;
+						break;
+					}
+				case invasionTypes::immediate:
+				case invasionTypes::raids:
+				case invasionTypes::opportunistic:
+					{
+						authorized = true;
+						break;
+					}
+				case invasionTypes::start:
+				case invasionTypes::none:
+				case invasionTypes::count:
+				default:
+					break;
+				}
+			}
+			if (authorized)
+			{
+				for (int j = 0; j < offensiveCampaigns.count; j++)
+				{
+					if (const auto offCampaign = offensiveCampaigns.campaigns[j];
+						offCampaign->regionData->getTargetFaction()->factionID == targetId)
+					{
+						offCampaign->canAttack = true;
+					}
+				}
+			}
+		}
+		else
+		{
+			for (int j = 0; j < offensiveCampaigns.count; j++)
+			{
+				if (const auto offCampaign = offensiveCampaigns.campaigns[j];
+					offCampaign->regionData->getTargetFaction()->factionID == targetId)
+				{
+					offCampaign->canAttack = false;
+				}
 			}
 		}
 	}
 }
 
-
-void factionStruct::revealTile(const int x, const int y)
+void aiMilitaryDirector::decideOffensiveStrategy(aiCampaignController* controller)
 {
-	if (stratMapHelpers::isStratMap() == false)
-		return;
-	int coords[2] = {x, y};
-	GAME_FUNC(int*(__thiscall*)(void*, int*, int, float), revealTile)(tilesFac, coords, 1, -1.0);
+	const auto targetValues = aiFaction->ltgd->longTermGoalValues[controller->regionData->getTargetFaction()->factionID];
+	switch (static_cast<invasionTypes>(targetValues.invasionType))
+	{
+	case invasionTypes::buildup:
+		{
+			controller->setStrategy(aiCampaignStrategy::attackGrind);
+			controller->strengthRequiredType = static_cast<int>(aiCampaignStrength::high);
+			break;
+		}
+	case invasionTypes::immediate:
+		{
+			controller->setStrategy(aiCampaignStrategy::attackNormal);
+			controller->strengthRequiredType = static_cast<int>(aiCampaignStrength::high);
+			break;
+		}
+	case invasionTypes::raids:
+		{
+			controller->setStrategy(aiCampaignStrategy::attackRaid);
+			controller->strengthRequiredType = static_cast<int>(aiCampaignStrength::medium);
+			break;
+		}
+	case invasionTypes::opportunistic:
+		{
+			controller->setStrategy(aiCampaignStrategy::attackBlitz);
+			controller->strengthRequiredType = static_cast<int>(aiCampaignStrength::high);
+			break;
+		}
+	case invasionTypes::start:
+		{
+			controller->setStrategy(aiCampaignStrategy::attackNormal);
+			controller->strengthRequiredType = static_cast<int>(aiCampaignStrength::medium);
+			break;
+		}
+	case invasionTypes::none:
+	case invasionTypes::count:
+	default:
+		{
+			controller->setStrategy(aiCampaignStrategy::dormant);
+			controller->strengthRequiredType = static_cast<int>(aiCampaignStrength::veryLow);
+			break;
+		}
+	}
+	if (controller->regionData->navalTarget)
+		controller->strengthRequiredType = static_cast<int>(aiCampaignStrength::veryLow);
 }
 
-void factionStruct::setColor(const uint8_t r, const uint8_t g, const uint8_t b)
+void aiMilitaryDirector::decideDefensiveStrategy(aiCampaignController* controller)
 {
-	const auto facRecord = factionRecord;
-	facRecord->primary_colour_red = r;
-	facRecord->primary_colour_green = g;
-	facRecord->primary_colour_blue = b;
-	gameHelpers::scriptCommand("console_command", "toggle_fow");
-	gameHelpers::scriptCommand("console_command", "toggle_fow");
+	const auto region = stratMapHelpers::getRegion(controller->regionData->regionID);
+	auto chosenType = defendTypes::minimal;
+	const auto settCount = region->settlementCount();
+	for (int i = 0; i < settCount; i++)
+	{
+		const auto settlement = region->getSettlement(i);
+		if (!settlement || settlement->faction->factionID == aiFaction->factionID)
+			continue;
+		if (const auto facDefendType = static_cast<defendTypes>(aiFaction->ltgd->longTermGoalValues[settlement->faction->factionID].defendType);
+			facDefendType > chosenType)
+		{
+			chosenType = facDefendType;
+		}
+	}
+	for (int i = 0; i < region->neighbourRegionsNum; i++)
+	{
+		const auto nRegion = region->neighbourRegions[i];
+		if (nRegion.region->isSea || nRegion.isBlocked || !nRegion.region->settlement)
+			continue;
+		const int nSettCount = nRegion.region->settlementCount();
+		for (int j = 0; j < nSettCount; j++)
+		{
+			const auto nSett = nRegion.region->getSettlement(j);
+			if (!nSett || nSett->faction->factionID == aiFaction->factionID)
+				continue;
+			if (const auto facDefendType = static_cast<defendTypes>(aiFaction->ltgd->longTermGoalValues[nSett->faction->factionID].defendType);
+				facDefendType > chosenType)
+			{
+				chosenType = facDefendType;
+			}
+		}
+	}
+	switch(chosenType)
+	{
+		case defendTypes::minimal:
+			{
+				controller->setStrategy(aiCampaignStrategy::defendHidden);
+				controller->strengthRequiredType = static_cast<int>(aiCampaignStrength::low);
+				return;
+			}
+		case defendTypes::normal:
+			{
+				controller->setStrategy(aiCampaignStrategy::defendHidden);
+				controller->strengthRequiredType = static_cast<int>(aiCampaignStrength::medium);
+				return;
+			}
+		case defendTypes::raid:
+			{
+				controller->setStrategy(aiCampaignStrategy::defendBorder);
+				controller->strengthRequiredType = static_cast<int>(aiCampaignStrength::medium);
+				return;
+			}
+		case defendTypes::frontline:
+			{
+				controller->setStrategy(aiCampaignStrategy::defendBorder);
+				controller->strengthRequiredType = static_cast<int>(aiCampaignStrength::high);
+				return;
+			}
+		case defendTypes::fortified:
+			{
+				controller->setStrategy(aiCampaignStrategy::defendFortified);
+				controller->strengthRequiredType = static_cast<int>(aiCampaignStrength::medium);
+				return;
+			}
+		case defendTypes::deep:
+			{
+				controller->setStrategy(aiCampaignStrategy::defendDeep);
+				controller->strengthRequiredType = static_cast<int>(aiCampaignStrength::medium);
+				return;
+			}
+		case defendTypes::count:
+		default:
+			return;
+	}
+}
+#pragma endregion aiMilitaryDirector methods
+
+/*--------------------------------------------------------------------------------------------------------------------*\
+									   aiCampaignController methods
+\*--------------------------------------------------------------------------------------------------------------------*/
+#pragma region aiCampaignController methods
+
+bool aiCampaignController::isDefensive()
+{
+	if (const auto factionId = regionData->getTargetFaction()->factionID; factionId == aiFaction->faction->factionID)
+	{
+		attacking = false;
+		targetFactionId = 31;
+		return true;
+	}
+	else 
+	{
+		attacking = true;
+		if (aiFaction->aiGlobalStrategyDirector->stratFacData[factionId].plannedWar)
+			targetFactionId = factionId;
+		return false;
+	}
 }
 
-void factionStruct::setSecondaryColor(const uint8_t r, const uint8_t g, const uint8_t b)
+void aiCampaignController::initialize()
 {
-	const auto facRecord = factionRecord;
-	facRecord->secondary_colour_red = r;
-	facRecord->secondary_colour_green = g;
-	facRecord->secondary_colour_blue = b;;
-	gameHelpers::scriptCommand("console_command", "toggle_fow");
-	gameHelpers::scriptCommand("console_command", "toggle_fow");
+	currentMission = nullptr;
+	if (nextStrategyType != aiCampaignStrategy::dormant && strategyType == aiCampaignStrategy::dormant)
+	{
+		strategyType = static_cast<int>(attacking ? aiCampaignStrategy::gathering : aiCampaignStrategy::defendBorder);
+	}
+	else if (attacking && nextStrategyType != aiCampaignStrategy::attackAid
+		&& !aiFaction->aiGlobalStrategyDirector->stratFacData[regionData->getTargetFaction()->factionID].atWar
+		&& !regionData->navalTarget)
+	{
+		canRequestMore = false;
+		canAttack = false;
+		nextStrategyType = static_cast<int>(aiCampaignStrategy::dormant);
+	}
+	else if (!attacking && strategyType < aiCampaignStrategy::defendBorder)
+	{
+		strategyType = static_cast<int>(aiCampaignStrategy::defendBorder);
+	}
+	
+	GAME_FUNC(void(__thiscall*)(aiCampaignController*), calculateCampaignControllerStrengths)(this);
+	
+	for ( auto objective = objectives; objective; objective = objective->next )
+		callClassFunc<aiCampaignObjective*, void>(objective, 0x18);
 }
 
-void clearRegionData(aiRegionData** regionList)
+void aiCampaignController::setStrategy(aiCampaignStrategy strategy)
 {
-	GAME_FUNC(void(__thiscall*)(aiRegionData**), clearAiRegionData)(regionList);
+	if (strategyType == aiCampaignStrategy::dormant)
+		strategyType = static_cast<int>(aiCampaignStrategy::gathering);
+	nextStrategyType = static_cast<int>(strategy);
 }
+#pragma endregion aiCampaignController methods
 
-void aiResourceManager::releaseResource(aiResourcePrivate* res)
+/*--------------------------------------------------------------------------------------------------------------------*\
+									   aiLongTermGoalDirector methods
+\*--------------------------------------------------------------------------------------------------------------------*/
+#pragma region aiLongTermGoalDirector methods
+
+int aiLongTermGoalDirector::getInvasionTargetNum(const int regionId)
 {
-	GAME_FUNC(void(__thiscall*)(aiResourceManager*, aiResourcePrivate*), releaseResource)(this, res);
+	int num = 0;
+	const auto region = stratMapHelpers::getRegion(regionId);
+	const int settCount = region->settlementCount();
+	for (int i = 0; i < settCount; i++)
+	{
+		const auto settlement = region->getSettlement(i);
+		if (!settlement || settlement->faction->factionID == faction->factionID)
+			continue;
+		if (longTermGoalValues[settlement->faction->factionID].invasionType < invasionTypes::none)
+			num++;
+	}
+	for (int i = 0; i < region->neighbourRegionsNum; i++)
+	{
+		const auto nRegion = region->neighbourRegions[i];
+		const int nSettCount = nRegion.region->settlementCount();
+		for (int j = 0; j < nSettCount; j++)
+		{
+			const auto settlement = nRegion.region->getSettlement(j);
+			if (!settlement || settlement->faction->factionID == faction->factionID)
+				continue;
+			if (longTermGoalValues[settlement->faction->factionID].invasionType < invasionTypes::none)
+				num++;
+		}
+	}
+	return num;
+}
+int aiLongTermGoalDirector::getInvasionTargetPriority(const int regionId)
+{
+	int num = 0;
+	const auto region = stratMapHelpers::getRegion(regionId);
+	const int settCount = region->settlementCount();
+	for (int i = 0; i < settCount; i++)
+	{
+		const auto settlement = region->getSettlement(i);
+		if (!settlement || settlement->faction->factionID == faction->factionID)
+			continue;
+		if (longTermGoalValues[settlement->faction->factionID].invasionType < invasionTypes::none)
+			num += longTermGoalValues[settlement->faction->factionID].invadePriority;
+	}
+	for (int i = 0; i < region->neighbourRegionsNum; i++)
+	{
+		const auto nRegion = region->neighbourRegions[i];
+		const int nSettCount = nRegion.region->settlementCount();
+		for (int j = 0; j < nSettCount; j++)
+		{
+			const auto settlement = nRegion.region->getSettlement(j);
+			if (!settlement || settlement->faction->factionID == faction->factionID)
+				continue;
+			if (longTermGoalValues[settlement->faction->factionID].invasionType < invasionTypes::none)
+				num += longTermGoalValues[settlement->faction->factionID].invadePriority;
+		}
+	}
+	return num;
 }
 
 bool aiLongTermGoalDirector::regionsBordersOnlyTrusted(int regionId)
@@ -158,8 +813,14 @@ bool aiLongTermGoalDirector::isTrustedAlly(int targetFactionId)
 {
 	return GAME_FUNC(bool(__thiscall*)(aiLongTermGoalDirector*, int), isTrustedAlly)(this, targetFactionId);
 }
+#pragma endregion aiLongTermGoalDirector methods
 
-void aiPersonalityValues::evaluatePolicies(int regionId, int settlementIndex)
+/*--------------------------------------------------------------------------------------------------------------------*\
+									   aiPersonalityValues methods
+\*--------------------------------------------------------------------------------------------------------------------*/
+#pragma region aiPersonalityValues methods
+
+void aiPersonalityValues::evaluatePolicies(const int regionId, const int settlementIndex)
 {
 	if (settlementPoliciesCount == 0)
 		return;
@@ -171,7 +832,7 @@ void aiPersonalityValues::evaluatePolicies(int regionId, int settlementIndex)
 			regionPolicies.push_back(i);
 		}
 	}
-	if (settlementIndex < regionPolicies.size())
+	if (settlementIndex < static_cast<int>(regionPolicies.size()))
 	{
 		const auto settlement = minorSettlementDb::getSettlement(regionId, settlementIndex);
 		const int policyIndex = regionPolicies[settlementIndex];
@@ -182,8 +843,6 @@ void aiPersonalityValues::evaluatePolicies(int regionId, int settlementIndex)
 		settlement->aiProductionController->secondaryPolicy = policy->secondaryPolicy;
 	}
 }
-
-
 
 settlementPolicy aiPersonalityValues::decideSettlementPolicy(const settlementStruct* settlement)
 {
@@ -212,7 +871,7 @@ settlementPolicy aiPersonalityValues::decideSettlementPolicy(const settlementStr
 	{
 		if (priorities[i] > highest)
 		{
-			if ((oldPolicy != settlementPolicy::balanced && oldPolicy != settlementTroopPolicy::none)
+			if ((oldPolicy != settlementPolicy::balanced && oldPolicy != settlementPolicy::none)
 				&& priorities[oldPolicy] + 0.4f > priorities[i])
 				continue;
 			highest = priorities[i];
@@ -328,6 +987,12 @@ float aiPersonalityValues::getPolicyPriority(const settlementPolicy policyType)
 	}
 	return 0.0f;
 }
+#pragma endregion aiPersonalityValues methods
+
+/*--------------------------------------------------------------------------------------------------------------------*\
+									   aiGlobalStrategyDirector methods
+\*--------------------------------------------------------------------------------------------------------------------*/
+#pragma region aiGlobalStrategyDirector methods
 
 void aiGlobalStrategyDirector::initialize()
 {
@@ -378,84 +1043,46 @@ void aiGlobalStrategyDirector::initialize()
 	GAME_FUNC(void(__thiscall*)(aiGlobalStrategyDirector*), initGsdFactionData)(this);
 }
 
-int calculateBorderChange(aiGlobalStrategyDirector* director, const aiRegionData* regionData)
+void aiGlobalStrategyDirector::initialize2()
 {
-	int borderGained = 0;
-	int borderLost = 0;
-	const auto region = stratMapHelpers::getRegion(regionData->regionID);
-	const auto settlement = minorSettlementDb::getSettlement(regionData->regionID, regionData->settlementIndex);
-	const auto settlementFaction = settlement->faction;
-	const auto directorFaction = director->faction;
-	const int enemyNum = region->hasEnemiesToFaction(directorFaction->factionID);
-	borderGained += region->tileCount * enemyNum;
-	if (settlementFaction->factionID == directorFaction->factionID)
+	GAME_FUNC(void(__thiscall*)(aiNavalTransportRegion**), clearTransports)(&navalTransportTargets);
+	if (hordeController)
+		callClassFunc<void*, void>(hordeController, 0x4);
+	else
 	{
-		for (int i = 0; i < region->neighbourRegionsNum; i++)
+		initTargetRegions();
+		GAME_FUNC(void(__thiscall*)(aiGlobalStrategyDirector*), aiCrusadeController)(this);
+		militaryDirector.initialize();
+		if (crusadeController)
+			callClassFunc<void*, void>(crusadeController, 0x4);
+		GAME_FUNC(bool(__thiscall*)(aiGlobalStrategyDirector*), manageNavalTransports)(this);
+		GAME_FUNC(bool(__thiscall*)(aiGlobalStrategyDirector*), balanceRegionGroups)(this);
+		
+		for (int i = 0; i < regionGroupControllersNum; i++)
+			callClassFunc<void*, void>(regionGroupControllers[i], 0x4);
+	}
+	
+	for (int i = 0; i < aiNavalControllersNum; i++)
+		GAME_FUNC(void(__thiscall*)(void*, aiRegionData**), initNavalController)(aiNavalControllers[i], &ownRegions);
+
+	const auto campaign = campaignHelpers::getCampaignData();
+	for (int i = 0; i < campaign->factionCount; i++)
+	{
+		const auto fac = campaign->factionsSortedByTurnOrder[i];
+		const auto facId = faction->factionID;
+		if (facId == campaign->slaveFactionID || fac->deadStatus > 0)
+			continue;
+		const auto stratData = stratFacData[facId];
+		if (stratData.atWar && fac->getAliveCharacterNumOfType(characterTypeStrat::namedCharacter) < 6)
+			aiFaction->subterfugeController->destroyFaction(fac, stratFacData->desire + 500);
+		if (stratData.activeWar)
 		{
-			const auto nRegion = region->neighbourRegions[i];
-			if (nRegion.isBlocked || nRegion.region->isSea || !nRegion.region->settlement)
-				continue;
-			const int borderTiles = nRegion.borderTilesCount;
-			if (const int enemyNum2 = nRegion.region->hasEnemiesToFaction(directorFaction->factionID))
-				borderGained += borderTiles * enemyNum2;
+			if (aiFaction->faction->incomeDoubled > fac->incomeDoubled)
+				aiFaction->subterfugeController->reduceEconomicProduction(fac, stratFacData->desire);
 			else
-				borderLost += borderTiles;
+				aiFaction->subterfugeController->reduceUnitProduction(fac, static_cast<int>(unitCategory::infantry) ,stratFacData->desire);
 		}
 	}
-	else
-	{
-		for (int i = 0; i < region->neighbourRegionsNum; i++)
-		{
-			const auto nRegion = region->neighbourRegions[i];
-			const int borderTiles = nRegion.borderTilesCount;
-			if (nRegion.isBlocked || nRegion.region->isSea || !nRegion.region->settlement)
-				continue;
-			if (nRegion.region->hasFaction(directorFaction->factionID))
-				borderLost += borderTiles;
-			if (const int enemyNum2 = nRegion.region->hasEnemiesToFaction(directorFaction->factionID))
-				borderGained += borderTiles * enemyNum2;
-		}
-	}
-	int value =  borderGained - borderLost;
-	if (region->hasFaction(directorFaction->factionID) && enemyNum == 0)
-		value *= 3;
-	else
-		value *= -3;
-	return value;
-}
-
-int calculateRegionValue(aiGlobalStrategyDirector* director, aiRegionData* regionData)
-{
-	const auto settlement = minorSettlementDb::getSettlement(regionData->regionID, regionData->settlementIndex);
-	const auto region = stratMapHelpers::getRegion(regionData->regionID);
-	int value = calculateBorderChange(director, regionData);
-	value += settlement->stats.settlementStats.TotalIncomeWithoutAdmin;
-	value += region->getResourcesValue();
-	value += GAME_FUNC(int(__cdecl*)(int), getRegionIsolationScore)(region->regionID);
-	value += settlement->getSettlementValue();
-	return value;
-}
-
-
-aiRegionData* createRegionInArray(aiGlobalStrategyDirector* director, settlementStruct* sett, aiRegionData** regionList)
-{
-	const auto regionData = GAME_FUNC(aiRegionData*(__thiscall*)(aiRegionData**), createRegionInArray)(regionList);
-	const auto region = stratMapHelpers::getRegion(sett->regionID);
-	regionData->navalTarget = false;
-	regionData->isLastResort = false;
-	regionData->regionController = nullptr;
-	regionData->factionID = director->faction->factionID;
-	regionData->regionID = sett->regionID;
-	regionData->regionRisk = 0;
-	regionData->settlementIndex = sett->getMinorSettlementIndex();
-	regionData->regionValue = calculateRegionValue(director, regionData);
-	region->calculateRegionStrengths(director->faction->factionID, &regionData->strength);
-	int enemyNum = 0;
-	int neutralNum = 0;
-	region->calculateBackupRegionStrengths(&regionData->neighboursStrength, &enemyNum, &neutralNum);
-	regionData->neighbourEnemyNum = enemyNum;
-	regionData->neighbourOtherNum = neutralNum;
-	return regionData;
 }
 
 void aiGlobalStrategyDirector::initOwnRegions()
@@ -470,7 +1097,7 @@ void aiGlobalStrategyDirector::initOwnRegions()
 			if (regionData->neighboursStrength.enemyStrength > 0 && regionData->neighbourEnemyNum > 0)
 				regionData->setRisk(regionRisk::mediumRisk);
 			else if (regionData->neighbourOtherNum > 0
-				&& !aiFaction->aiLongTermGoalDirector->regionsBordersOnlyTrusted(sett->regionID))
+				&& !aiFaction->ltgd->regionsBordersOnlyTrusted(sett->regionID))
 				regionData->setRisk(regionRisk::lowRisk);
 		}
 		else
@@ -509,19 +1136,195 @@ void aiGlobalStrategyDirector::initNeighbourRegions()
 	}
 }
 
-aiNavalRegion* addToNavalTargets(aiNavalRegion** list)
+void aiGlobalStrategyDirector::updateRegionControllers()
 {
-	return GAME_FUNC(aiNavalRegion*(__thiscall*)(aiNavalRegion**), addNavalTargetRegion)(list);
+	if (hordeController)
+		return;
+	for (int i = regionControllersNum - 1; i >= 0; --i)
+	{
+		const auto controller = regionControllers[i];
+		const auto settlement = controller->settlement;
+		const auto region = stratMapHelpers::getRegion(settlement->regionID);
+		if (settlement->faction == faction)
+		{
+			for (int j = 0; j < ownRegionsCount; j++)
+			{
+				auto regData = ownRegions[j];
+				if (regData.regionID == settlement->regionID && settlement->getMinorSettlementIndex() == regData.settlementIndex)
+				{
+					controller->gsdData = &regData;
+					break;
+				}
+			}
+		}
+		else
+		{
+			const int settlementCount = region->settlementCount();
+			for (int j = 0; j < settlementCount; j++)
+			{
+				if (const auto sett = region->getSettlement(j); sett->faction == faction)
+					aiFaction->aiProductionControllers->evaluatePolicies(sett->regionID, sett->getMinorSettlementIndex());
+			}
+			for (int j = 0; j < region->neighbourRegionsNum; j++)
+			{
+				const auto nRegion = region->neighbourRegions[j].region;
+				const int nSettCount = nRegion->settlementCount();
+				for (int n = 0; n < nSettCount; n++)
+				{
+					if (const auto sett = nRegion->getSettlement(n); sett->faction == faction)
+						aiFaction->aiProductionControllers->evaluatePolicies(sett->regionID, sett->getMinorSettlementIndex());
+				}
+			}
+			--regionControllersNum;
+			aiRegionController** rc1;
+			aiRegionController* rc2;
+			for (int j = i; j < regionControllersNum; *rc1 = rc2 )
+			{
+				rc2 = regionControllers[j + 1];
+				rc1 = &regionControllers[j++];
+			}
+			callClassFunc<aiRegionController*, void, int>(controller, 0, 1);
+		}
+	}
+	for (int i = 0; i < ownRegionsCount; i++)
+	{
+		bool found = false;
+		for (int j = 0; j < regionControllersNum; j++)
+		{
+			const auto controller = regionControllers[j];
+			if ((controller->settlement->regionID == ownRegions[i].regionID)
+				&& (controller->settlement->getMinorSettlementIndex() == ownRegions[i].settlementIndex))
+			{
+				ownRegions[i].regionController = controller;
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+		{
+			const auto sett = ownRegions[i].getSettlement();
+			auto newController = createNewRegionController(aiFaction, sett);
+			newController->gsdData = &ownRegions[i];
+			GAME_FUNC(void(__thiscall*)(aiRegionController***, aiRegionController**),
+				addToRegionControllers)(&regionControllers, &newController);
+			ownRegions[i].regionController = newController;
+			const auto region = stratMapHelpers::getRegion(sett->regionID);
+			const int settlementCount = region->settlementCount();
+			for (int j = 0; j < settlementCount; j++)
+			{
+				if (const auto sett2 = region->getSettlement(j); sett2->faction == faction)
+					aiFaction->aiProductionControllers->evaluatePolicies(sett2->regionID, sett2->getMinorSettlementIndex());
+			}
+			for (int j = 0; j < region->neighbourRegionsNum; j++)
+			{
+				const auto nRegion = region->neighbourRegions[j].region;
+				const int nSettCount = nRegion->settlementCount();
+				for (int n = 0; n < nSettCount; n++)
+				{
+					if (const auto sett2 = nRegion->getSettlement(n); sett2->faction == faction)
+						aiFaction->aiProductionControllers->evaluatePolicies(sett2->regionID, sett2->getMinorSettlementIndex());
+				}
+			}
+		}
+	}
+	
+	for( int i = 0; i < regionControllersNum; i++ )
+		regionControllers[i]->initialize();
 }
 
-void removeNavalTarget(aiNavalRegion** list, const int index)
+void aiGlobalStrategyDirector::initTargetRegions()
 {
-	GAME_FUNC(void(__thiscall*)(aiNavalRegion**, int), removeNavalTargetRegion)(list, index);
+	clearRegionData(&targetRegions);
+	const auto campaign = campaignHelpers::getCampaignData();
+	if (faction->factionID == campaign->slaveFactionID)
+		return;
+	for (int i = 0; i < allNeighbourRegionsCount; i++)
+	{
+		const auto targetFaction = allNeighbourRegions[i].getTargetFaction();
+		const int targetId = targetFaction->factionID;
+		if ((stratFacData[targetId].activeWar && !aiFaction->ltgd->longTermGoalValues[targetId].wantPeace)
+			|| targetId == campaign->slaveFactionID)
+		{
+			const auto regionData = &allNeighbourRegions[i];
+			GAME_FUNC(void(__thiscall*)(aiRegionData**, aiRegionData*), addGsdRegion)(&targetRegions, regionData);
+		}
+	}
+	for (int i = 0; i < navalInvasionTargetsNum; i++)
+	{
+		const auto regionData = &navalInvasionTargets[i].regionData;
+		GAME_FUNC(void(__thiscall*)(aiRegionData**, aiRegionData*), addGsdRegion)(&targetRegions, regionData);
+	}
+	if (!faction->leader)
+		return;
+	if (targetRegionsCount == 0 && ownRegionsCount == 0 && faction->leader->isAlive && !faction->leader->isOffMap())
+	{
+		float closestEnemySett = 100000.f;
+		settlementStruct* closestSett = nullptr;
+		const auto leaderChar = faction->leader->gen;
+		const auto leaderRegion = stratMapHelpers::getRegion(leaderChar->regionID);
+		if (!leaderRegion->hasEnemiesToFaction(faction->factionID))
+		{
+			for (int i = 0; i < leaderRegion->neighbourRegionsNum; i++)
+			{
+				const auto nRegion = leaderRegion->neighbourRegions[i];
+				if (nRegion.isBlocked || nRegion.region->isSea || !nRegion.region->settlement || !nRegion.region->hasEnemiesToFaction(faction->factionID))
+					continue;
+				const int settCount = nRegion.region->settlementCount();
+				for (int j = 0; j < settCount; j++)
+				{
+					const auto sett = nRegion.region->getSettlement(j);
+					if (campaign->getFactionDiplomacy(faction->factionID, sett->faction->factionID)->state <= dipStance::peace)
+						continue;
+					const auto distance = stratMapHelpers::getDistanceInTiles(leaderChar->xCoord, leaderChar->yCoord, sett->xCoord, sett->yCoord);
+					if (distance < closestEnemySett)
+					{
+						closestEnemySett = distance;
+						closestSett = sett;
+					}
+				}
+			}
+		}
+		else
+		{
+			const int settCount = leaderRegion->settlementCount();
+			for (int j = 0; j < settCount; j++)
+			{
+				const auto sett = leaderRegion->getSettlement(j);
+				if (campaign->getFactionDiplomacy(faction->factionID, sett->faction->factionID)->state <= dipStance::peace)
+					continue;
+				const auto distance = stratMapHelpers::getDistanceInTiles(leaderChar->xCoord, leaderChar->yCoord, sett->xCoord, sett->yCoord);
+				if (distance < closestEnemySett)
+				{
+					closestEnemySett = distance;
+					closestSett = sett;
+				}
+			}
+		}
+		if (closestSett != nullptr)
+		{
+			const auto regionData = GAME_FUNC(aiRegionData*(__thiscall*)(aiRegionData**), createRegionInArray)(&targetRegions);
+			const auto region = stratMapHelpers::getRegion(closestSett->regionID);
+			regionData->navalTarget = false;
+			regionData->isLastResort = false;
+			regionData->regionController = nullptr;
+			regionData->factionID = faction->factionID;
+			regionData->regionID = closestSett->regionID;
+			regionData->settlementIndex = closestSett->getMinorSettlementIndex();
+			regionData->regionValue = 400;
+			regionData->priority = 650;
+			region->calculateRegionStrengths(faction->factionID, &regionData->strength);
+			int enemyNum = 0;
+			int neutralNum = 0;
+			region->calculateBackupRegionStrengths(&regionData->neighboursStrength, &enemyNum, &neutralNum);
+			regionData->setRisk(regionRisk::safe);
+		}
+	}
 }
+
 
 void aiGlobalStrategyDirector::initNavalRegions()
 {
-	const auto ltgd = aiFaction->aiLongTermGoalDirector;
+	const auto ltgd = aiFaction->ltgd;
 	for (int i = 0; i < navalInvasionTargetsNum; i++)
 	{
 		const auto target = &navalInvasionTargets[i];
@@ -595,111 +1398,23 @@ void aiGlobalStrategyDirector::initNavalRegions()
 		}
 	}
 }
+#pragma endregion aiGlobalStrategyDirector methods
 
-aiRegionController* createNewRegionController(aiFaction* aiFac, settlementStruct* sett)
+/*--------------------------------------------------------------------------------------------------------------------*\
+									   aiResourceManager methods
+\*--------------------------------------------------------------------------------------------------------------------*/
+#pragma region aiResourceManager methods
+
+void aiResourceManager::releaseResource(aiResourcePrivate* res)
 {
-	const auto controller = techFuncs::createGameClass<aiRegionController>();
-	GAME_FUNC(aiRegionController*(__thiscall*)(aiRegionController*, aiFaction*, int), createRegionController)(controller, aiFac, sett->regionID);
-	controller->settlement = sett;
-	return controller;
+	GAME_FUNC(void(__thiscall*)(aiResourceManager*, aiResourcePrivate*), releaseResource)(this, res);
 }
+#pragma endregion aiResourceManager methods
 
-
-void aiGlobalStrategyDirector::updateRegionControllers()
-{
-	if (hordeController)
-		return;
-	for (int i = regionControllersNum - 1; i >= 0; --i)
-	{
-		const auto controller = regionControllers[i];
-		const auto settlement = controller->settlement;
-		const auto region = stratMapHelpers::getRegion(settlement->regionID);
-		if (settlement->faction == faction)
-		{
-			for (int j = 0; j < ownRegionsCount; j++)
-			{
-				auto regData = ownRegions[j];
-				if (regData.regionID == settlement->regionID && settlement->getMinorSettlementIndex() == regData.settlementIndex)
-				{
-					controller->gsdData = &regData;
-					break;
-				}
-			}
-		}
-		else
-		{
-			const int settlementCount = region->settlementCount();
-			for (int j = 0; j < settlementCount; j++)
-			{
-				if (const auto sett = region->getSettlement(j); sett->faction == faction)
-					aiFaction->aiProductionControllers->evaluatePolicies(sett->regionID, sett->getMinorSettlementIndex());
-			}
-			for (int j = 0; j < region->neighbourRegionsNum; j++)
-			{
-				const auto nRegion = region->neighbourRegions[j].region;
-				const int nSettCount = nRegion->settlementCount();
-				for (int n = 0; n < nSettCount; n++)
-				{
-					if (const auto sett = nRegion->getSettlement(n); sett->faction == faction)
-						aiFaction->aiProductionControllers->evaluatePolicies(sett->regionID, sett->getMinorSettlementIndex());
-				}
-			}
-			--regionControllersNum;
-			aiRegionController** rc1;
-			aiRegionController* rc2;
-			for (int j = i; j < regionControllersNum; *rc1 = rc2 )
-			{
-				rc2 = regionControllers[j + 1];
-				rc1 = &regionControllers[j++];
-			}
-			callClassFunc<aiRegionController*, void, int>(controller, 0, 1);
-		}
-	}
-	for (int i = 0; i < ownRegionsCount; i++)
-	{
-		bool found = false;
-		for (int j = 0; j < regionControllersNum; j++)
-		{
-			const auto controller = regionControllers[j];
-			if ((controller->settlement->regionID == ownRegions[i].regionID)
-				&& (controller->settlement->getMinorSettlementIndex() == ownRegions[i].settlementIndex))
-			{
-				ownRegions[i].regionController = controller;
-				found = true;
-				break;
-			}
-		}
-		if (!found)
-		{
-			const auto sett = minorSettlementDb::getSettlement(ownRegions[i].regionID, ownRegions[i].settlementIndex);
-			auto newController = createNewRegionController(aiFaction, sett);
-			newController->gsdData = &ownRegions[i];
-			GAME_FUNC(void(__thiscall*)(aiRegionController***, aiRegionController**),
-				addToRegionControllers)(&regionControllers, &newController);
-			ownRegions[i].regionController = newController;
-			const auto region = stratMapHelpers::getRegion(sett->regionID);
-			const int settlementCount = region->settlementCount();
-			for (int j = 0; j < settlementCount; j++)
-			{
-				if (const auto sett2 = region->getSettlement(j); sett->faction == faction)
-					aiFaction->aiProductionControllers->evaluatePolicies(sett->regionID, sett->getMinorSettlementIndex());
-			}
-			for (int j = 0; j < region->neighbourRegionsNum; j++)
-			{
-				const auto nRegion = region->neighbourRegions[j].region;
-				const int nSettCount = nRegion->settlementCount();
-				for (int n = 0; n < nSettCount; n++)
-				{
-					if (const auto sett2 = nRegion->getSettlement(n); sett->faction == faction)
-						aiFaction->aiProductionControllers->evaluatePolicies(sett->regionID, sett->getMinorSettlementIndex());
-				}
-			}
-		}
-	}
-	
-	for( int i = 0; i < regionControllersNum; i++ )
-		regionControllers[i]->initialize();
-}
+/*--------------------------------------------------------------------------------------------------------------------*\
+										factionStruct methods
+\*--------------------------------------------------------------------------------------------------------------------*/
+#pragma region factionStruct methods
 
 void factionStruct::hideRevealedTile(const int x, const int y)
 {
@@ -725,8 +1440,105 @@ void factionStruct::hideRevealedTile(const int x, const int y)
 	}
 }
 
+void factionStruct::revealTile(const int x, const int y)
+{
+	if (stratMapHelpers::isStratMap() == false)
+		return;
+	int coords[2] = {x, y};
+	GAME_FUNC(int*(__thiscall*)(void*, int*, int, float), revealTile)(tilesFac, coords, 1, -1.0);
+}
+
+void factionStruct::setColor(const uint8_t r, const uint8_t g, const uint8_t b)
+{
+	const auto facRecord = factionRecord;
+	facRecord->primary_colour_red = r;
+	facRecord->primary_colour_green = g;
+	facRecord->primary_colour_blue = b;
+	gameHelpers::scriptCommand("console_command", "toggle_fow");
+	gameHelpers::scriptCommand("console_command", "toggle_fow");
+}
+
+void factionStruct::setSecondaryColor(const uint8_t r, const uint8_t g, const uint8_t b)
+{
+	const auto facRecord = factionRecord;
+	facRecord->secondary_colour_red = r;
+	facRecord->secondary_colour_green = g;
+	facRecord->secondary_colour_blue = b;
+	gameHelpers::scriptCommand("console_command", "toggle_fow");
+	gameHelpers::scriptCommand("console_command", "toggle_fow");
+}
+
+void factionStruct::updateNeighbours()
+{
+	if (settlementsNum == 0)
+		return;
+	for (int i = 0; i < settlementsNum; i++)
+	{
+		const auto settlement = settlements[i];
+		const auto region = stratMapHelpers::getRegion(settlement->regionID);
+		if (region->factionOwner && region->factionOwner->factionID != factionID && !isInNeighbourArray(settlement->regionID))
+		{
+			gameHelpers::addToIntArray(&neighBourRegions, reinterpret_cast<int*>(&settlement->regionID));
+			neighBourFactionsBitmap |= (1 << region->factionOwner->factionID);
+		}
+		auto minorSetts = minorSettlementDb::getMinorSettlements(region->regionID);
+		for (const auto minorSett : minorSetts)
+		{
+			if (minorSett->factionID != factionID)
+			{
+				neighBourFactionsBitmap |= (1 << minorSett->factionID);
+			}
+		}
+		for (int j = 0; j < region->neighbourRegionsNum; j++)
+		{
+			const auto neighbour = region->neighbourRegions[j];
+			minorSetts = minorSettlementDb::getMinorSettlements(neighbour.regionID);
+			for (const auto minorSett : minorSetts)
+			{
+				if (minorSett->factionID != factionID && !isInNeighbourArray(minorSett->regionID))
+				{
+					if (neighbour.region->factionOwner->factionID != factionID)
+						gameHelpers::addToIntArray(&neighBourRegions, reinterpret_cast<int*>(&minorSett->regionID));
+					neighBourFactionsBitmap |= (1 << minorSett->factionID);
+				}
+			}
+			if (!neighbour.region->settlement)
+				continue;
+			if (neighbour.region->settlement->factionID != factionID && !isInNeighbourArray(neighbour.region->regionID))
+			{
+				if (neighbour.region->factionOwner->factionID != factionID)
+					gameHelpers::addToIntArray(&neighBourRegions, &neighbour.region->regionID);
+				neighBourFactionsBitmap |= (1 << neighbour.region->settlement->factionID);
+			}
+		}
+	}
+}
+
+int factionStruct::getAliveCharacterNumOfType(characterTypeStrat charType)
+{
+	int num = 0;
+	for (int i = 0; i < characterRecordNum; i++)
+	{
+		if (const auto record = characterRecords[i];
+			record->gen
+			&& record->gen->genType->type == charType
+			&& record->isAlive && !record->gen->ifMarkedToKill)
+		{
+			num++;
+		}
+	}
+	return num;
+}
+
+#pragma endregion factionStruct methods
+
 namespace factionHelpers
 {
+	
+	/*----------------------------------------------------------------------------------------------------------------*\
+											 Faction helpers
+	\*----------------------------------------------------------------------------------------------------------------*/
+#pragma region Faction helpers
 	
 	factionRecord* getFactionRecord(const int id)
 	{
@@ -741,11 +1553,6 @@ namespace factionHelpers
 		}
 		return nullptr;
 	}
-	
-	/*----------------------------------------------------------------------------------------------------------------*\
-											 Faction helpers
-	\*----------------------------------------------------------------------------------------------------------------*/
-#pragma region Faction helpers
 
 	template <char fieldIndex>
 	std::string getStringProperty(const factionStruct* fac)
@@ -1767,7 +2574,7 @@ namespace factionHelpers
 		types.aiFaction = luaState.new_usertype<aiFaction>("aiFaction");
 		types.aiFaction.set("faction", &aiFaction::faction);
 		types.aiFaction.set("factionID", &aiFaction::factionID);
-		types.aiFaction.set("LTGD", &aiFaction::aiLongTermGoalDirector);
+		types.aiFaction.set("LTGD", &aiFaction::ltgd);
 		types.aiFaction.set("aiPersonality", &aiFaction::aiProductionControllers);
 
 		///Long Term Goal Director

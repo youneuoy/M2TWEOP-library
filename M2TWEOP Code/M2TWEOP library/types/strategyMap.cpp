@@ -73,29 +73,30 @@ void minorSettlementDb::addToMinorSettlements(const int regionId, settlementStru
 
 settlementStruct* minorSettlementDb::getSettlement(const int regionId, const int settlementIndex)
 {
-	if (settlementIndex == 0)
-		return stratMapHelpers::getRegion(regionId)->settlement;
 	const auto setts = regionMinorSettlements[regionId];
 	for (const auto& sett : setts)
 	{
 		if (sett->getMinorSettlementIndex() == settlementIndex)
 			return sett;
 	}
+	gameHelpers::logStringGame("Minor settlement not found " + std::to_string(settlementIndex) + " regionId: " + std::to_string(regionId));
 	return nullptr;
 }
 
 int minorSettlementDb::getSettlementCount(const int regionId)
 {
-	return static_cast<int>(regionMinorSettlements[regionId].size()) + (stratMapHelpers::getRegion(regionId)->settlement ? 1 : 0);
+	return static_cast<int>(regionMinorSettlements[regionId].size());
 }
 
 settlementStruct* minorSettlementDb::getSettlementAtIndex(const int regionId, const int index)
 {
-	if (index < 0 || index >= getSettlementCount(regionId))
+	const auto setts = regionMinorSettlements[regionId];
+	if (index < 0 || index >= static_cast<int>(setts.size()))
+	{
+		gameHelpers::logStringGame("Minor settlement index out of bounds " + std::to_string(index) + " regionId: " + std::to_string(regionId));
 		return nullptr;
-	if (index == 0)
-		return stratMapHelpers::getRegion(regionId)->settlement;
-	return regionMinorSettlements[regionId][index - 1];
+	}
+	return regionMinorSettlements[regionId][index];
 }
 
 void oneTile::setTileClimate(const int climate)

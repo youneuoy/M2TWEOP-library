@@ -265,6 +265,19 @@ void codes::initCodes(int gameVer)
 		offsets.recalcRegionGroupStrengths = 0x518DA0;
 		offsets.manageRegionGroups = 0x533EE0;
 		offsets.initGsdFactionData = 0x532CF0;
+		offsets.clearTransports = 0x005363E0;
+		offsets.addGsdRegion = 0x005335C0;
+		offsets.aiCrusadeController = 0x00535770;
+		offsets.addCampaignController = 0x005452F0;
+		offsets.createCampaignController = 0x0051AC70;
+		offsets.sortControllers = 0x005454E0;
+		offsets.calculateCampaignControllerStrengths = 0x0051BE00;
+		offsets.manageNavalTransports = 0x00537280;
+		offsets.balanceRegionGroups = 0x00537390;
+		offsets.initNavalController = 0x0054A770;
+		offsets.destroyFaction = 0x55F4A0;
+		offsets.reduceUnitProduction = 0x0055F610;
+		offsets.reduceEconomicProduction = 0x55F6D0;
 	}
 
 
@@ -532,5 +545,18 @@ void codes::initCodes(int gameVer)
 		offsets.recalcRegionGroupStrengths = 0x519390;
 		offsets.manageRegionGroups = 0x534500;
 		offsets.initGsdFactionData = 0x533310;
+		offsets.clearTransports = 0x00536A10;
+		offsets.addGsdRegion = 0x00533BE0;
+		offsets.aiCrusadeController = 0x00535DA0;
+		offsets.addCampaignController = 0x00545730;
+		offsets.createCampaignController = 0x0051B260;
+		offsets.sortControllers = 0x00545920;
+		offsets.calculateCampaignControllerStrengths = 0x0051C3F0;
+		offsets.manageNavalTransports = 0x005378B0;
+		offsets.balanceRegionGroups = 0x005379C0;
+		offsets.initNavalController = 0x0054ABF0;
+		offsets.destroyFaction = 0x55F930;
+		offsets.reduceUnitProduction = 0x0055FAA0;
+		offsets.reduceEconomicProduction = 0x55FB60;
 	}
 }

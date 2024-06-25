@@ -4,6 +4,7 @@
 #include "cultures.h"
 #include "unit.h"
 
+struct aiCampaignController;
 struct aiGlobalStrategyDirector;
 struct buildingsQueue;
 struct buildingInQueue;
@@ -28,6 +29,7 @@ public:
 	static void __fastcall initGlobalStrategyDirector(aiGlobalStrategyDirector* gsd);
 	static int __fastcall onCreateUnit(char** entryName, int* eduIndex);
 	static int __fastcall onCreateMercUnitCheck(char** entryName, int eduIndex);
+	static DWORD* __fastcall onCreateTakeResidenceObjective(const aiCampaignController* campaignController, DWORD* oldResidence);
 	static void __fastcall onPreBattlePlacement(aiTacticAssault* aiTactic);
 	static bool __thiscall onPreBattlePlacement2(aiUnitGroup* group, DWORD formationTemplate, bool forceOrder);
 	static eduEntry* __fastcall onCreateMercUnit(char** entryName, eduEntry* entry);
@@ -43,6 +45,7 @@ public:
 	static uint8_t __fastcall onSetExtentsZocAlpha(uint8_t oldAlpha);
 	static void __fastcall onDecideNeighbours(factionStruct* faction);
 	static void __fastcall onInitGsd(aiGlobalStrategyDirector* director);
+	static void __fastcall onInitGsd2(aiGlobalStrategyDirector* director);
 	static aiProductionController* __fastcall onCreateProductionController(aiProductionController* controller, settlementStruct* sett);
 	static DWORD __fastcall onUnitInfo(DWORD entryAddress);
 	static void __fastcall onTransferSettlement(const settlementStruct* settlement, int reason, factionStruct* faction);
