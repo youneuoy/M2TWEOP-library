@@ -204,6 +204,9 @@ struct factionTileStruct {
 	tileRevealer* tileRevealers;
 	int tileRevealersSize;
 	int tileRevealersNum;
+public:
+	void updateFromObject(void* object);
+	void update(factionStruct* fromFaction);
 };
 
 struct battleFactionCounter
@@ -597,6 +600,10 @@ struct factionStruct {
 public:
 	void updateNeighbours();
 	int getAliveCharacterNumOfType(characterTypeStrat charType);
+	int getCharacterCountOfType(int characterType)
+	{
+		return getAliveCharacterNumOfType(static_cast<characterTypeStrat>(characterType));
+	}
 	characterRecord* getCharacterRecord(int index)
 	{
 		return characterRecords[index];
@@ -666,6 +673,10 @@ public:
 		return false;
 	}
 	void revealTile(int x, int y);
+	void getMapInfo(factionStruct* fromFaction)
+	{
+		tilesFac->update(fromFaction);
+	}
 	void hideRevealedTile(int x, int y);
 	int8_t getTileVisibility(const int x, const int y)
 	{
@@ -675,6 +686,7 @@ public:
 	{
 		tilesFac->tilesVisiblity[tilesFac->tilesXBound * y + x] = vis;
 	}
+	
 	void setColor(uint8_t r, uint8_t g, uint8_t b);
 	void setSecondaryColor(uint8_t r, uint8_t g, uint8_t b);
 };
@@ -1204,6 +1216,179 @@ struct aiGlobalStrategyDirector
 	void initNavalRegions();
 	void initTargetRegions();
 	void updateRegionControllers();
+};
+
+struct armyResource;
+
+struct armySupportResource
+{
+	armyStruct* army{};
+	armyResource* resource{};
+	float moveCost{};
+	armySupportResource(armyStruct* army) : army(army) {}
+};
+struct armyResource
+{
+	armyStruct* army{};
+	std::vector<armyResource*> nearResources{};
+	int positionPower{};
+	float value = 0.f;
+	int totalThreatReceiving{};
+	int totalThreatGiving{};
+	int totalSupportReceiving{};
+	int totalSupportGiving{};
+	bool used = false;
+	bool searched = false;
+	bool own = true;
+	bool enemy = false;
+	float moveCost{};
+	armyResource(armyStruct* army) : army(army) {}
+	void calculatePositionPower();
+};
+
+struct settlementResource
+{
+	settlementStruct* settlement{};
+	std::vector<armyResource*> nearResources{};
+	int positionPower{};
+	float value = 0.f;
+	int totalThreatReceiving{};
+	int totalSupportReceiving{};
+	bool used = false;
+	bool searched = false;
+	bool own = true;
+	bool enemy = false;
+	float moveCost{};
+	settlementResource(settlementStruct* sett) : settlement(sett) {}
+	void calculatePositionPower();
+};
+
+struct aiOrder
+{
+	float priority{};
+	std::vector<armyResource*> assignedArmies{};
+	std::vector<std::pair<int, int>> validTiles{};
+	void setTiles(int x, int y);
+	void sortArmies();
+	bool executed = false;
+	void removeUsedResources();
+	std::vector<int> tileNums{};
+	virtual bool evaluate() = 0;
+	virtual bool execute() = 0;
+	virtual std::string toString() = 0;
+};
+
+struct attackSettlementOrder : aiOrder
+{
+	settlementResource* targetSettlement{};
+	int attackX = -1;
+	int attackY = -1;
+	attackSettlementOrder(settlementResource* sett) : targetSettlement(sett) {}
+	bool evaluate() override;
+	bool evaluateAttack();
+	bool execute() override;
+	std::string toString() override;
+};
+
+struct attackArmyOrder : aiOrder
+{
+	armyResource* targetArmy{};
+	attackArmyOrder(armyResource* army) : targetArmy(army) {}
+	bool evaluate() override;
+	bool evaluateAttack();
+	bool execute() override;
+	std::string toString() override;
+};
+
+struct defendSettlementOrder : aiOrder
+{
+	settlementResource* targetSettlement{};
+	defendSettlementOrder(settlementResource* sett) : targetSettlement(sett) {}
+	bool evaluate() override;
+	bool execute() override;
+	std::string toString() override;
+};
+
+struct defendArmyOrder : aiOrder
+{
+	armyResource* targetArmy{};
+	defendArmyOrder(armyResource* army) : targetArmy(army) {}
+	bool evaluate() override;
+	bool execute() override;
+	std::string toString() override;
+};
+
+struct mergeArmiesOrder : aiOrder
+{
+	armyStruct* targetArmy{};
+	armyResource* targetRes{};
+	mergeArmiesOrder(armyStruct* army) : targetArmy(army) {}
+	bool evaluate() override;
+	bool execute() override;
+	std::string toString() override;
+};
+
+class globalEopAiConfig
+{
+public:
+	bool enabled = true;
+	float aggressionFactor = 1.f;
+	float defenseFactor = 1.f;
+	float aidFactor = 0.5f;
+	static factionStruct* getCurrentFaction() { return getInstance()->m_Faction; }
+	static std::shared_ptr<globalEopAiConfig> getInstance() { return m_Instance; }
+	void turnEndMove(factionStruct* fac);
+	void assignOrders(factionStruct* fac);
+	void turnEndAttack(factionStruct* fac);
+	bool m_IsFirst = true;
+private:
+	static std::shared_ptr<globalEopAiConfig> m_Instance;
+	factionStruct* m_Faction{};
+	float m_MoveCostFactor = 0.5f;
+	float m_PowerFactor = 1.f;
+	void checkRegion(int regionId);
+	armyResource* findArmyResource(armyStruct* army);
+	void getData(factionStruct* fac);
+	settlementResource* findSettResource(settlementStruct* sett);
+	void clearData()
+	{
+		m_Armies.clear();
+		m_AllyArmies.clear();
+		m_TargetArmies.clear();
+		m_Settlements.clear();
+		m_AllySettlements.clear();
+		m_TargetSettlements.clear();
+		m_Orders.clear();
+		m_CheckedRegions.clear();
+		m_SearchedRegions.clear();
+	}
+	std::vector<int> m_CheckedRegions;
+	std::vector<int> m_SearchedRegions;
+	std::vector<armyResource> m_Armies{};
+	std::vector<armyResource> m_AllyArmies{};
+	std::vector<armyResource> m_TargetArmies{};
+	std::vector<settlementResource> m_Settlements{};
+	std::vector<settlementResource> m_AllySettlements{};
+	std::vector<settlementResource> m_TargetSettlements{};
+	std::vector<aiOrder*> m_Orders;
+};
+
+struct eopAiFactionConfig
+{
+	float aggressionFactor{};
+	float mergeFactor{};
+	float aidFactor{};
+};
+
+class eopFactionData
+{
+public:
+	int8_t primaryColorR{};
+	int8_t primaryColorG{};
+	int8_t primaryColorB{};
+	int8_t secondaryColorR{};
+	int8_t secondaryColorG{};
+	int8_t secondaryColorB{};
 };
 
 namespace factionHelpers

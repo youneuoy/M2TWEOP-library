@@ -4,6 +4,8 @@
 #include "cultures.h"
 #include "unit.h"
 
+struct settlementStats;
+struct settlementStatsManager;
 struct aiCampaignController;
 struct aiGlobalStrategyDirector;
 struct buildingsQueue;
@@ -31,6 +33,7 @@ public:
 	static int __fastcall onCreateMercUnitCheck(char** entryName, int eduIndex);
 	static void __fastcall onAttachRegionSettlement(settlementStruct* sett, int regionId);
 	static void __fastcall onCalculateSettlement(settlementStruct* sett);
+	static void __fastcall onPredictedStats(settlementStats* statsManager);
 	static int __fastcall onScoreBestCapital(const settlementStruct* sett);
 	static DWORD* __fastcall onCreateTakeResidenceObjective(const aiCampaignController* campaignController, DWORD* oldResidence);
 	static void __fastcall onPreBattlePlacement(aiTacticAssault* aiTactic);

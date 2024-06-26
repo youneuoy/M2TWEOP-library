@@ -88,6 +88,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.buildingChainLimit = 0x008AB794;
 		offsets.guildCooldown = 0x004F57AB;
 		offsets.bugReport = 0x16EBB30;
+		offsets.uiNotify = 0x2C75000;
+		offsets.mapTilesDb = 0x019B3134;
 
 		
 		offsets.fortVtbl = 0x13362F4;
@@ -179,6 +181,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.fortSpyingVtbl = 0x012F12B0;
 		offsets.settlementVtbl = 0x012FCF34;
 		offsets.settlementSpyingVtbl = 0x012FCF14;
+		offsets.uiNotify = 0x2C2BF48;
+		offsets.mapTilesDb = 0x0196A004;
 
 		offsets.audioEnable = reinterpret_cast<bool*>(0x01639f1d);
 		offsets.audioMaster_vol = reinterpret_cast<int*>(0x01639f60);

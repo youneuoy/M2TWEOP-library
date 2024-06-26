@@ -155,6 +155,7 @@ void codes::initCodes(int gameVer)
 		offsets.isTileValidForCharacter = 0x004CCA10;
 		offsets.deleteMoveExtents = 0x004B6250;
 		offsets.someSelectionStuff = 0x004DAE80;
+		offsets.clearPaths = 0x4DAC10;
 
 		//Group commands
 		offsets.groupUnitChangeFormation = 0x00A78FA0;
@@ -279,6 +280,11 @@ void codes::initCodes(int gameVer)
 		offsets.reduceUnitProduction = 0x0055F610;
 		offsets.reduceEconomicProduction = 0x55F6D0;
 		offsets.attachResourceSett = 0x4C4250;
+		offsets.updateFowTableObject = 0x4BB330;
+		offsets.updateFowTable = 0x4BB790;
+		offsets.updateTerrain = 0x98D640;
+		offsets.updateRadar = 0xBB4E40;
+		offsets.clearMapPath = 0x98DC00;
 	}
 
 
@@ -358,6 +364,7 @@ void codes::initCodes(int gameVer)
 		offsets.isTileValidForCharacter = 0x004CCFD0;
 		offsets.deleteMoveExtents = 0x004B67E0;
 		offsets.someSelectionStuff = 0x004DB420;
+		offsets.clearPaths = 0x4DB1B0;
 		
 
 		offsets.replenishUnitFunc = 0x007495a0;
@@ -560,5 +567,10 @@ void codes::initCodes(int gameVer)
 		offsets.reduceUnitProduction = 0x0055FAA0;
 		offsets.reduceEconomicProduction = 0x55FB60;
 		offsets.attachResourceSett = 0x4C47F0;
+		offsets.updateFowTableObject = 0x4BB8C0;
+		offsets.updateFowTable = 0x4BBD20;
+		offsets.updateTerrain = 0x98E1C0;
+		offsets.updateRadar = 0xBAF1B0;
+		offsets.clearMapPath = 0x98E780;
 	}
 }

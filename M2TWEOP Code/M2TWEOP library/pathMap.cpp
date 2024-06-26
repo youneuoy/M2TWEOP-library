@@ -233,7 +233,7 @@ namespace pathFinder
 	void pathMap::getPossibleTilesForArmy(const int x, const int y, std::unordered_set<std::pair<int, int>, pathPairHash>& possibleCoords)
 	{
 		const auto tile = stratMapHelpers::getTile(x, y);
-		const auto* army = tile->getArmy();
+		const auto* army = tile->getArmy(false);
 		if (army == nullptr)
 			return;
 		const float possibleMp = armyHelpers::getMinimumMovePointsForArmy(army);

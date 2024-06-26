@@ -1410,6 +1410,17 @@ private:
 	LPVOID funcAddress;
 };
 
+class onPredictedStats
+	:public AATemplate
+{
+public:
+	onPredictedStats(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class OnLoadSettlementWorldpkgdesc
 	:public AATemplate
 {

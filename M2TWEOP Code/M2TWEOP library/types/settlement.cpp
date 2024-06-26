@@ -53,6 +53,22 @@ bool settlementStruct::isPlayerControlled()
 	return faction->isPlayerControlled == 1;
 }
 
+bool settlementStruct::isEnemyToFaction(factionStruct* otherFac)
+{
+	if (faction->factionID == otherFac->factionID)
+		return false;
+	const auto facDip = campaignHelpers::getCampaignData()->getFactionDiplomacy(faction->factionID, otherFac->factionID);
+	return facDip->state == dipStance::war;
+}
+
+bool settlementStruct::isAllyToFaction(factionStruct* otherFac)
+{
+	if (faction->factionID == otherFac->factionID)
+		return true;
+	const auto facDip = campaignHelpers::getCampaignData()->getFactionDiplomacy(faction->factionID, otherFac->factionID);
+	return facDip->state == dipStance::alliance;
+}
+
 std::string eopSettlementDataDb::onGameSave()
 {
 	const auto campaignData = campaignHelpers::getCampaignData();
@@ -165,6 +181,7 @@ namespace settlementHelpers
 	    settlementStruct* settlement = techFuncs::createGameClass<settlementStruct>();
 	    const auto tile = stratMapHelpers::getTile(xCoord, yCoord);
 	    const auto region = stratMapHelpers::getRegion(tile->regionId);
+		const auto campaign = campaignHelpers::getCampaignData();
 	    GAME_FUNC(settlementStruct*(__thiscall*)(settlementStruct*, int, int, int, bool),
 	    	createSettlement)(settlement, level, -1, region->loyaltyFactionID, castle);
 		
@@ -178,7 +195,7 @@ namespace settlementHelpers
 	    settlement->factionID = faction->factionID; 
 	    settlement->stats.faction = faction; 
 	    settlement->faction = faction; 
-	    settlement->yearFounded = static_cast<int>(campaignHelpers::getCampaignData()->currentDate);
+	    settlement->yearFounded = static_cast<int>(campaign->currentDate);
 	    settlement->smthingPosX = static_cast<float>(xCoord) + 0.5f;
 	    settlement->smthingPosY = static_cast<float>(yCoord) + 0.5f;
 	    settlement->regionID = tile->regionId;
@@ -196,7 +213,7 @@ namespace settlementHelpers
 	    	areaOfInfluence)(campaignHelpers::getStratPathFinding(), settlement);
 		
 	    GAME_FUNC(void(__thiscall*)(gameList<settlementStruct*>*, settlementStruct*),
-	    	addToSettlementList)(&campaignHelpers::getCampaignData()->settlements, settlement);
+	    	addToSettlementList)(&campaign->settlements, settlement);
 		
 	    GAME_FUNC(char(__thiscall*)(settlementStruct*), residenceTileCharacterCheck)(settlement);
 	    const auto edb = eopBuildings::getEdb();
@@ -215,11 +232,14 @@ namespace settlementHelpers
 	    settlement->recalculate(true);
 		settlement->minorSettlementIndex = static_cast<int>(minorSettlementDb::regionMinorSettlements[settlement->regionID].size());
 		minorSettlementDb::addToMinorSettlements(settlement->regionID, settlement);
-		faction->updateNeighbours();
+		
+		for (int i = 0; i < campaign->factionCount; i++)
+			campaign->getFactionByOrder(i)->updateNeighbours();
+		
+		faction->tilesFac->updateFromObject(settlement);
 		return settlement;
 	}
-
-
+	
 	settlementStruct* getSettlementByRegionID(int index)
 	{
 		const auto region = stratMapHelpers::getRegion(index);
@@ -883,6 +903,7 @@ namespace settlementHelpers
 		@tfield getConstructionOptions getConstructionOptions
 		@tfield getRecruitmentOptions getRecruitmentOptions
 		@tfield getUnitInQueue getUnitInQueue
+		@tfield createArmyInSettlement createArmyInSettlement
 
 		@table settlementStruct
 		*/
@@ -935,6 +956,7 @@ namespace settlementHelpers
 		types.settlementStruct.set("moneySpentTraining", &settlementStruct::moneySpentTraining);
 		types.settlementStruct.set("moneySpentRecruitment", &settlementStruct::moneySpentRecruitment);
 		types.settlementStruct.set("lastHordeFaction", &settlementStruct::lastHordeFaction);
+		types.settlementStruct.set("loyaltyLastTurn", &settlementStruct::publicOrderLastTurn);
 		types.settlementStruct.set("settlementTaxLevel", &settlementStruct::settlementTaxLevel);
 		types.settlementStruct.set("salliedOut", &settlementStruct::salliedOut);
 		types.settlementStruct.set("readyToSurrender", &settlementStruct::readyToSurrender);

@@ -777,11 +777,8 @@ void patchesForGame::onAttachRegionSettlement(settlementStruct* sett, int region
 	}
 }
 
-void patchesForGame::onCalculateSettlement(settlementStruct* sett)
+void balanceMinorSettStats(settlementStats* stats, settlementStruct* sett)
 {
-	if(!sett->isMinorSettlement)
-		return;
-	const auto stats = &sett->stats.settlementStats;
 	if (const auto region = stratMapHelpers::getRegion(sett->regionID); region->factionOwner->factionID != sett->faction->factionID)
 	{
 		const auto facDip = campaignHelpers::getCampaignData()->getFactionDiplomacy(region->factionOwner->factionID, sett->faction->factionID);
@@ -790,17 +787,17 @@ void patchesForGame::onCalculateSettlement(settlementStruct* sett)
 		if (facDip->state == dipStance::alliance)
 		{
 			modifierIncome += 0.30f;
-			modifierGrowth += 0.6f;
-		}
-		if (facDip->hasTradeRights)
-		{
-			modifierIncome += 0.30f;
-			modifierGrowth += 0.2f;
+			modifierGrowth += 0.50f;
 		}
 		else if (facDip->state < dipStance::war)
 		{
 			modifierIncome += 0.15f;
-			modifierGrowth += 0.4f;
+			modifierGrowth += 0.30f;
+		}
+		if (facDip->hasTradeRights)
+		{
+			modifierIncome += 0.30f;
+			modifierGrowth += 0.15f;
 		}
 		stats->TradeIncome = static_cast<int>(round(stats->TradeIncome * modifierIncome));
 		stats->FarmsIncome = static_cast<int>(round(stats->FarmsIncome * modifierIncome));
@@ -811,14 +808,28 @@ void patchesForGame::onCalculateSettlement(settlementStruct* sett)
 	}
 	else
 	{
-		stats->TradeIncome = static_cast<int>(round(stats->TradeIncome * 0.7f));
-		stats->FarmsIncome = static_cast<int>(round(stats->FarmsIncome * 0.7f));
-		stats->MiningIncome = static_cast<int>(round(stats->MiningIncome * 0.7f));
-		stats->PopGrowthFarms = static_cast<int>(round(stats->PopGrowthFarms * 0.8f));
-		stats->PopGrowthBaseFarm = static_cast<int>(round(stats->PopGrowthBaseFarm * 0.8f));
-		stats->PopGrowthTrade = static_cast<int>(round(stats->PopGrowthTrade * 0.8f));
+		stats->TradeIncome = static_cast<int>(round(stats->TradeIncome * 0.75f));
+		stats->FarmsIncome = static_cast<int>(round(stats->FarmsIncome * 0.75f));
+		stats->MiningIncome = static_cast<int>(round(stats->MiningIncome * 0.75f));
+		stats->PopGrowthFarms = static_cast<int>(round(stats->PopGrowthFarms * 0.75f));
+		stats->PopGrowthBaseFarm = static_cast<int>(round(stats->PopGrowthBaseFarm * 0.75f));
+		stats->PopGrowthTrade = static_cast<int>(round(stats->PopGrowthTrade * 0.75f));
 	}
 	stats->TotalIncomeWithoutAdmin = stats->TradeIncome + stats->FarmsIncome + stats->MiningIncome + stats->TaxesIncome;
+}
+
+void patchesForGame::onCalculateSettlement(settlementStruct* sett)
+{
+	if(!sett->isMinorSettlement)
+		return;
+	balanceMinorSettStats(&sett->stats.settlementStats, sett);
+}
+
+void patchesForGame::onPredictedStats(settlementStats* statsManager)
+{
+	if(!statsManager->settlement->isMinorSettlement)
+		return;
+	balanceMinorSettStats(statsManager, statsManager->settlement);
 }
 
 int patchesForGame::onScoreBestCapital(const settlementStruct* sett)
@@ -1259,6 +1270,7 @@ void __stdcall patchesForGame::onGameInit()
 
 void __stdcall patchesForGame::onUnloadCampaign()
 {
+	minorSettlementDb::clear();
 	gameEvents::onUnloadCampaign();
 }
 
@@ -1404,6 +1416,8 @@ void __stdcall patchesForGame::onBattleStratScreen()
 
 }
 
+bool FIRST_END = true;
+
 void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 {
 #if defined TESTPATCHES
@@ -1414,13 +1428,14 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 #endif
 
 	const DWORD eventCode = reinterpret_cast<DWORD>(vTab[0]);
-	gameEvents::onEventWrapper(eventCode, vTab);
 
 	const int gameVersion = gameHelpers::getGameVersion();
 	const DWORD scrollOpenedCode = gameVersion == 1 ? 0x013719FC : 0x0132C9D4;
 	const DWORD factionTurnStartCode = gameVersion == 1 ? 0x0136931C : 0x013242F4;
 	const DWORD gameReloaded = gameVersion == 1 ? 0x013319E4 : 0x012EC9C4;
 	const DWORD settlementTurnStart = gameVersion == 1 ? 0x0136E2B4 : 0x0132928C;
+	const DWORD settlementTurnEnd = gameVersion == 1 ? 0x0136FADC : 0x0132AAB4;
+	const DWORD factionTurnEnd = gameVersion == 1 ? 0x01369D74 : 0x01324D4C;
 	if (eventCode == scrollOpenedCode)
 	{
 		char* str = reinterpret_cast<char*>(vTab[1]);
@@ -1440,6 +1455,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	else if (eventCode == factionTurnStartCode)
 	{
 		factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
+		globalEopAiConfig::getInstance()->turnEndAttack(fac);
 		discordManager::onFactionTurnStart(fac);
 		plannedRetreatRoute::onFactionTurnStart(fac);
 	}
@@ -1454,22 +1470,34 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 			minorSettlementDb::addToMinorSettlements(settlement->regionID, settlement);
 		}
 	}
-	else if (eventCode == settlementTurnStart)
+	else if (eventCode == settlementTurnEnd && FIRST_END)
 	{
-		const auto sett = reinterpret_cast<settlementStruct*>(vTab[1]);
-		if (sett->minorSettlementIndex > 3 || sett->minorSettlementIndex < 0)
-		{
-			const std::string str = "minorSettlementIndex failed to verify " + string(sett->name);
-			gameHelpers::logStringGame(str);
-			MessageBoxA(nullptr, "minorSettlementIndex failed to verify", "Attention", NULL);
-		}
-		if (static_cast<int8_t>(sett->isMinorSettlement) < 0 || static_cast<int8_t>(sett->isMinorSettlement) > 1)
-		{
-			const std::string str = "isMinorSettlement failed to verify " + string(sett->name);
-			gameHelpers::logStringGame(str);
-			MessageBoxA(nullptr, "isMinorSettlement failed to verify", "Attention", NULL);
-		}
+		FIRST_END = false;
 	}
+	else if (eventCode == factionTurnEnd)
+	{
+		const auto fac = reinterpret_cast<factionStruct*>(vTab[1]);
+		globalEopAiConfig::getInstance()->turnEndMove(fac);
+		FIRST_END = true;
+	}
+	//else if (eventCode == settlementTurnStart)
+	//{
+	//	const auto sett = reinterpret_cast<settlementStruct*>(vTab[1]);
+	//	if (sett->minorSettlementIndex > 3 || sett->minorSettlementIndex < 0)
+	//	{
+	//		const std::string str = "minorSettlementIndex failed to verify " + string(sett->name);
+	//		gameHelpers::logStringGame(str);
+	//		MessageBoxA(nullptr, "minorSettlementIndex failed to verify", "Attention", NULL);
+	//	}
+	//	if (static_cast<int8_t>(sett->isMinorSettlement) < 0 || static_cast<int8_t>(sett->isMinorSettlement) > 1)
+	//	{
+	//		const std::string str = "isMinorSettlement failed to verify " + string(sett->name);
+	//		gameHelpers::logStringGame(str);
+	//		MessageBoxA(nullptr, "isMinorSettlement failed to verify", "Attention", NULL);
+	//	}
+	//}
+	
+	gameEvents::onEventWrapper(eventCode, vTab);
 }
 
 void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)

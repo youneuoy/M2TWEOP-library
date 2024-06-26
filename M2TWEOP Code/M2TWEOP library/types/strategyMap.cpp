@@ -46,8 +46,7 @@ void oneTile::setTileHeight(float height)
 	if (!doubleTile)
 		return;
 	doubleTile->height = height;
-	gameHelpers::scriptCommand("console_command", "toggle_fow");
-	gameHelpers::scriptCommand("console_command", "toggle_fow");
+	stratMapHelpers::updateTerrain();
 }
 
 void oneTile::setTileGroundType(const int ground)
@@ -57,8 +56,7 @@ void oneTile::setTileGroundType(const int ground)
 	if (!doubleTile)
 		return;
 	doubleTile->groundType = static_cast<int8_t>(ground);
-	gameHelpers::scriptCommand("console_command", "toggle_fow");
-	gameHelpers::scriptCommand("console_command", "toggle_fow");
+	stratMapHelpers::updateTerrain();
 }
 
 std::vector<settlementStruct*> minorSettlementDb::getMinorSettlements(const int regionId)
@@ -105,8 +103,7 @@ void oneTile::setTileClimate(const int climate)
 	if (!doubleTile)
 		return;
 	doubleTile->climate = static_cast<int8_t>(climate);
-	gameHelpers::scriptCommand("console_command", "toggle_fow");
-	gameHelpers::scriptCommand("console_command", "toggle_fow");
+	stratMapHelpers::updateTerrain();
 }
 oneTileDouble* oneTile::tileToDoubleTile()
 {
@@ -180,15 +177,17 @@ int oneTile::getTileX()
 	return index - y * map->mapWidth;
 }
 	
-armyStruct* oneTile::getArmy()
+armyStruct* oneTile::getArmy(const bool onlyLead)
 {
 	if (const auto tileChar = getCharacter(); tileChar)
 	{
-		if (tileChar->armyLeaded)
+		if (tileChar->armyLeaded || onlyLead)
 			return tileChar->armyLeaded;
 		if (tileChar->armyNotLeaded)
 			return tileChar->armyNotLeaded;
 	}
+	if (onlyLead)
+		return nullptr;
 	if (const auto settPtr = getSettlement(); settPtr)
 		return settPtr->army;
 	if (const auto fortPtr = getFort(); fortPtr)
@@ -319,7 +318,7 @@ bool regionStruct::hasFaction(const int factionId)
 	return false;
 }
 
-int regionStruct::hasEnemiesToFaction(int factionId)
+int regionStruct::getEnemySettsToFaction(int factionId)
 {
 	const auto campaign = campaignHelpers::getCampaignData();
 	const int settCount = settlementCount();
@@ -337,7 +336,7 @@ int regionStruct::hasEnemiesToFaction(int factionId)
 	return enemyNum;
 }
 
-int regionStruct::hasOthersToFaction(int factionId)
+int regionStruct::getNeutralSettsToFaction(int factionId)
 {
 	const auto campaign = campaignHelpers::getCampaignData();
 	const int settCount = settlementCount();
@@ -460,6 +459,12 @@ namespace stratMapHelpers
 		return gameHelpers::getGameDataAll()->stratMap;
 	}
 
+	void updateTerrain()
+	{
+		GAME_FUNC(void(__cdecl*)(), updateTerrain)();
+		GAME_FUNC(void(__thiscall*)(DWORD), updateRadar)(dataOffsets::offsets.uiNotify);
+	}
+
 	settlementStruct* getSettlement(const stratMap* map, const std::string& name)
 	{
 		if (!plugData::data.luaAll.hashLoaded)
@@ -539,6 +544,28 @@ namespace stratMapHelpers
 		return neighbours;
 	}
 
+	mapTilesDb* getMapTilesDb()
+	{
+		return *reinterpret_cast<mapTilesDb**>(dataOffsets::offsets.mapTilesDb);
+	}
+
+	void clearAllMapArrows()
+	{
+		const auto mapTiles = getMapTilesDb();
+		const auto arrows = mapTiles->mapArrows;
+		for (uint32_t i = 0; i < arrows->pathsNum; i++)
+		{
+			GAME_FUNC(void(__cdecl*)(uint32_t), clearMapPath)(i);
+		}
+	}
+	
+	void clearSundries()
+	{
+		const auto selectInfoPtr = gameHelpers::getGameDataAll()->selectInfo;
+		GAME_FUNC(void(__thiscall*)(selectionInfo*), clearPaths)(selectInfoPtr);
+		clearAllMapArrows();
+	}
+	
 	bool isTileValidForCharacterType(const int charType, coordPair* coords)
 	{
 		if (!GAME_FUNC(bool(__stdcall*)(coordPair*, int, int), isTileValidForCharacter)(coords, charType, 1))
@@ -1181,12 +1208,14 @@ namespace stratMapHelpers
 		@tfield int farmingLevel as set in descr_strat
 		@tfield int famineThreat
 		@tfield int harvestSuccess
-		@tfield int stacksNum
-		@tfield int fortsNum
+		@tfield int armyCount
+		@tfield int settlementCount
+		@tfield int watchtowerCount
+		@tfield int resourceCount
+		@tfield int fortCount
 		@tfield int colorRed
 		@tfield int colorGreen
 		@tfield int colorBlue
-		@tfield int watchtowersNum
 		@tfield bool isSea
 		@tfield bool peninsular
 		@tfield landMass landMass
@@ -1196,14 +1225,13 @@ namespace stratMapHelpers
 		@tfield int seaImportRegionsCount
 		@tfield int tilesBorderingEdgeOfMapCount
 		@tfield int devastatedTilesCount
-		@tfield settlementStruct settlement
+		@tfield settlementStruct regionCapital
 		@tfield int tileCount
 		@tfield int fertileTilesCount
 		@tfield int neighbourRegionsNum
-		@tfield int resourcesNum
 		@tfield int resourceTypesBitMap
-		@tfield int settlementXCoord
-		@tfield int settlementYCoord
+		@tfield int regionCapitalX
+		@tfield int regionCapitalY
 		@tfield int portEntranceXCoord
 		@tfield int portEntranceYCoord
 		@tfield factionStruct faction
@@ -1215,6 +1243,7 @@ namespace stratMapHelpers
 		@tfield int landingPointsCount
 		@tfield int patrolPointsCount
 		@tfield getStack getStack
+		@tfield getArmy getArmy
 		@tfield getFort getFort
 		@tfield getWatchtower getWatchtower
 		@tfield getResource getResource
@@ -1232,6 +1261,11 @@ namespace stratMapHelpers
 		@tfield getHostileArmiesStrength getHostileArmiesStrength
 		@tfield hasResourceType hasResourceType
 		@tfield getLandingPoint getLandingPoint
+		@tfield getSettlement getSettlement
+		@tfield getResourcesValue getResourcesValue
+		@tfield hasFaction hasFaction
+		@tfield getEnemySettsToFaction getEnemySettsToFaction
+		@tfield getNeutralSettsToFaction getNeutralSettsToFaction
 
 		@table regionStruct
 		*/
@@ -1263,17 +1297,25 @@ namespace stratMapHelpers
 		typeAll.regionStruct.set("fertileTilesCount", &regionStruct::fertileTilesCount);
 		typeAll.regionStruct.set("resourceTypesBitMap", &regionStruct::resourceTypesBitMap);
 		typeAll.regionStruct.set("stacksNum", &regionStruct::stacksNum);
+		typeAll.regionStruct.set("armyCount", &regionStruct::stacksNum);
 		typeAll.regionStruct.set("fortsNum", &regionStruct::fortsNum);
+		typeAll.regionStruct.set("fortCount", &regionStruct::fortsNum);
 		typeAll.regionStruct.set("watchtowersNum", &regionStruct::watchtowersNum);
+		typeAll.regionStruct.set("watchtowerCount", &regionStruct::watchtowersNum);
+		typeAll.regionStruct.set("settlementCount", sol::property(&regionStruct::settlementCount));
 		typeAll.regionStruct.set("isSea", &regionStruct::isSea);
 		typeAll.regionStruct.set("peninsular", &regionStruct::peninsular);
 		typeAll.regionStruct.set("mercPool", &regionStruct::mercPool);
 		typeAll.regionStruct.set("settlement", &regionStruct::settlement);
+		typeAll.regionStruct.set("regionCapital", &regionStruct::settlement);
 		typeAll.regionStruct.set("tileCount", &regionStruct::tileCount);
 		typeAll.regionStruct.set("neighbourRegionsNum", &regionStruct::neighbourRegionsNum);
 		typeAll.regionStruct.set("resourcesNum", &regionStruct::resourcesNum);
+		typeAll.regionStruct.set("resourceCount", &regionStruct::resourcesNum);
 		typeAll.regionStruct.set("settlementXCoord", &regionStruct::settlementXCoord);
 		typeAll.regionStruct.set("settlementYCoord", &regionStruct::settlementYCoord);
+		typeAll.regionStruct.set("regionCapitalX", &regionStruct::settlementXCoord);
+		typeAll.regionStruct.set("regionCapitalY", &regionStruct::settlementYCoord);
 		typeAll.regionStruct.set("portEntranceXCoord", &regionStruct::portEntranceXCoord);
 		typeAll.regionStruct.set("portEntranceYCoord", &regionStruct::portEntranceYCoord);
 		typeAll.regionStruct.set("faction", &regionStruct::factionOwner);
@@ -1285,14 +1327,15 @@ namespace stratMapHelpers
 
 		/***
 		Get an army by it's index.
-		@function regionStruct:getStack
+		@function regionStruct:getArmy
 		@tparam int index
 		@treturn armyStruct army
 		@usage
 		local map = M2TW.stratMap
 		local region = map.getRegion(2)
-		local army = region:getStack(0)
+		local army = region:getArmy(0)
 		*/
+		typeAll.regionStruct.set_function("getArmy", &regionStruct::getArmy);
 		typeAll.regionStruct.set_function("getStack", &regionStruct::getArmy);
 
 		/***
@@ -1306,6 +1349,18 @@ namespace stratMapHelpers
 		local fort = region:getFort(0)
 		*/
 		typeAll.regionStruct.set_function("getFort", &regionStruct::getFort);
+
+		/***
+		Get a settlement by it's index (iterating).
+		@function regionStruct:getSettlement
+		@tparam int index
+		@treturn settlementStruct sett
+		@usage
+		local map = M2TW.stratMap
+		local region = map.getRegion(2)
+		local sett = region:getSettlement(0)
+		*/
+		typeAll.regionStruct.set_function("getSettlement", &regionStruct::getSettlement);
 
 		/***
 		Get a watchtower by it's index.
@@ -1486,6 +1541,53 @@ namespace stratMapHelpers
 		local hasResource = region:hasResourceType(16)
 		*/
 		typeAll.regionStruct.set_function("hasResourceType", &regionStruct::hasResourceType);
+
+		/***
+		Get total value of all resources in the region.
+		@function regionStruct:getResourcesValue
+		@treturn int value
+		@usage
+		local map = M2TW.stratMap
+		local region = map.getRegion(5)
+		local value = region:getResourcesValue()
+		*/
+		typeAll.regionStruct.set_function("getResourcesValue", &regionStruct::getResourcesValue);
+
+		/***
+		Check if the region contains a settlement owned by the specified faction.
+		@function regionStruct:hasFaction
+		@tparam int factionID
+		@treturn bool result
+		@usage
+		local map = M2TW.stratMap
+		local region = map.getRegion(5)
+		local check = region:hasFaction(3)
+		*/
+		typeAll.regionStruct.set_function("hasFaction", &regionStruct::hasFaction);
+
+		/***
+		Get number of settlements in the region that are hostile to specified faction.
+		@function regionStruct:getEnemySettsToFaction
+		@tparam int factionID
+		@treturn int num
+		@usage
+		local map = M2TW.stratMap
+		local region = map.getRegion(5)
+		local num = region:getEnemySettsToFaction(3)
+		*/
+		typeAll.regionStruct.set_function("getEnemySettsToFaction", &regionStruct::getEnemySettsToFaction);
+		
+		/***
+		Get number of settlements in the region that are neutral to specified faction.
+		@function regionStruct:getNeutralSettsToFaction
+		@tparam int factionID
+		@treturn int num
+		@usage
+		local map = M2TW.stratMap
+		local region = map.getRegion(5)
+		local num = region:getNeutralSettsToFaction(3)
+		*/
+		typeAll.regionStruct.set_function("getNeutralSettsToFaction", &regionStruct::getNeutralSettsToFaction);
 
 		/***
 		Get the strength total of all armies in this region that are hostile to a specific faction.

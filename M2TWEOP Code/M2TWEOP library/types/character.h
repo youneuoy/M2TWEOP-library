@@ -181,6 +181,8 @@ public:
 	}
 	settlementStruct* getSettlement();
 	fortStruct* getFort();
+	int getTypeID();
+	void setTypeID(int charType);
 	characterMovementExtents* getMoveExtents(int searchType, int numTurns);
 	std::shared_ptr<characterMoveData> createMoveData(int searchType, int numTurns);
 };

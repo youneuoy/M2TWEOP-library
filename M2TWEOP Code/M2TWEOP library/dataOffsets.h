@@ -88,6 +88,8 @@ public:
 		DWORD ltgdGlobals = NULL;
 		DWORD battlefieldEngines = NULL;
 		DWORD bugReport = NULL;
+		DWORD uiNotify = NULL;
+		DWORD mapTilesDb = NULL;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);

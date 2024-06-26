@@ -412,8 +412,8 @@ public:
 	void calculateBackupRegionStrengths(regionStrengths* strengths, int* enemyNum, int* neutralNum);
 	settlementStruct* getSettlement(int index);
 	bool hasFaction(int factionId);
-	int hasEnemiesToFaction(int factionId);
-	int hasOthersToFaction(int factionId);
+	int getEnemySettsToFaction(int factionId);
+	int getNeutralSettsToFaction(int factionId);
 	void changeRegionName(const char* newName);
 	void changeRebelsName(const char* newName);
 	oneTile* getPatrolPoint(int index);
@@ -595,7 +595,7 @@ public:
 	{
 		return reinterpret_cast<T*>(findObject(type));
 	}
-	armyStruct* getArmy();
+	armyStruct* getArmy(bool onlyLead = false);
 	resourceStruct* getResource()
 	{
 		return getTileObject<resourceStruct>(0);
@@ -911,6 +911,21 @@ private:
 	static extentColor m_Zoc;
 };
 
+struct mapArrows
+{
+	int fogOfWar;
+	void* paths;
+	int pathsSize;
+	uint32_t pathsNum;
+	void clearAll();
+};
+
+struct mapTilesDb
+{
+	char pad[0x7188];
+	mapArrows* mapArrows;
+};
+
 class minorSettlementDb
 {
 public:
@@ -918,6 +933,7 @@ public:
 	static void addToMinorSettlements(int regionId, settlementStruct* settlement);
 	static settlementStruct* getSettlement(int regionId, int settlementIndex);
 	static int getSettlementCount(int regionId);
+	static void clear() { regionMinorSettlements.fill({}); }
 	static settlementStruct* getSettlementAtIndex(int regionId, int index);
 	static std::array<std::vector<settlementStruct*>, 200> regionMinorSettlements;
 };
@@ -931,11 +947,12 @@ namespace stratMapHelpers
 	void moveStratCameraFast(int x, int y);
 	//zoom stratmap camera
 	void zoomStratCamera(float zoom);
-	
+	void clearSundries();
 	stratMap* getStratMap();
 	bool isTileFree(int* xy);
 	bool isTileFreeLua(int x, int y);
 	bool isStratMap();
+	void updateTerrain();
 	void* getMainStratObject(void* baseObj);
 	UINT32 getTileRegionID(int x, int y);
 	factionStruct* getRegionOwner(int regionID);

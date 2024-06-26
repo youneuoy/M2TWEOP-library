@@ -151,6 +151,11 @@ public:
 			return nullptr;
 		return characters[index];
 	}
+	bool isEnemyTo(const armyStruct* other);
+	bool isAllyTo(const armyStruct* other);
+	bool isEnemyToFaction(const factionStruct* other);
+	bool isAllyToFaction(const factionStruct* other);
+	armyStruct* moveTactical(int x, int y, bool forceMerge = false);
 	unitGroup* getGroup(const int index)
 	{
 		if (index < 0 || index >= maxUnitGroups)
@@ -172,8 +177,8 @@ public:
 	unit* createUnit(const char* type, int exp, int arm, int weapon);
 	unit* createUnitByIndex(int eduIndex, int exp, int arm, int weapon);
 	unit* createEopUnit(int eduIndex, int exp, int arm, int weapon);
-	void mergeArmiesLua(armyStruct* targetArmy, bool force = true);
-	void mergeArmiesLua(armyStruct* targetArmy);
+	armyStruct* mergeArmies(armyStruct* targetArmy, bool force = true);
+	armyStruct* mergeArmies(armyStruct* targetArmy);
 };
 
 namespace armyHelpers

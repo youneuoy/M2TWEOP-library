@@ -35,6 +35,21 @@ std::shared_ptr<characterMoveData> character::createMoveData(const int searchTyp
 	return std::make_shared<characterMoveData>(this, searchType, numTurns);
 }
 
+
+int character::getTypeID()
+{
+	return genType->type;
+}
+
+void character::setTypeID(int charType)
+{
+	const int subFac = characterRecord->originalFaction;
+	const auto fac = *faction;
+	if (!fac)
+		return;
+	const int factionDipNum = fac->factionID;
+	characterHelpers::setCharacterType(this, charType, subFac, factionDipNum);
+}
 namespace characterHelpers
 {
 	std::unordered_map<int, const char*> characterTypes = {
@@ -81,11 +96,6 @@ namespace characterHelpers
 	{
 		return gen->movePointsArmy;
 	}
-
-	int getTypeID(const character* gen)
-	{
-		return gen->genType->type;
-	}
 	
 	void setCharacterType(character* character, int typeID, int subFaction, int factionID)
 	{
@@ -101,16 +111,6 @@ namespace characterHelpers
 			mov retVal, eax
 		}
 		character->genType = retVal;
-	}
-
-	void setTypeID(character* gen, int typeID)
-	{
-		const int subFac = gen->characterRecord->originalFaction;
-		const auto faction = *gen->faction;
-		if (!faction)
-			return;
-		const int factionDipNum = faction->factionID;
-		setCharacterType(gen, typeID, subFac, factionDipNum);
 	}
 	
 	character* createCharacterWithoutSpawning(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
@@ -293,6 +293,7 @@ namespace characterHelpers
 			call eax
 		}
 		callVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); //Destructor
+		stratMapHelpers::clearSundries();
 	}
 	
 	void siegeFort(character* gen, fortStruct* fort, bool isAttack)
@@ -371,6 +372,7 @@ namespace characterHelpers
 			mov eax, adrFunc
 			call eax
 		}
+		stratMapHelpers::clearSundries();
 	}
 	
 	void attackCharacter(character* attacker, character* defender)
@@ -403,6 +405,7 @@ namespace characterHelpers
 		}
 		//Destructor -- game doesnt call it, but I think it might be a bug
 		callVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); 
+		stratMapHelpers::clearSundries();
 	}
 
 	void moveNormal(character* gen, int x, int y)
@@ -430,6 +433,7 @@ namespace characterHelpers
 			call eax
 		}
 		callVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); //Destructor
+		stratMapHelpers::clearSundries();
 	}
 
 	///Target character
@@ -455,6 +459,7 @@ namespace characterHelpers
 			mov eax, adrFunc
 			call eax
 		}
+		stratMapHelpers::clearSundries();
 	}
 
 	void denounce(character* gen, character* targetCharacter)
@@ -539,6 +544,7 @@ namespace characterHelpers
 			mov eax, adrFunc
 			call eax
 		}
+		stratMapHelpers::clearSundries();
 	}
 
 	void bribeSettlement(character* gen, settlementStruct* targetSettlement)
@@ -593,6 +599,7 @@ namespace characterHelpers
 			mov eax, finalize
 			call eax
 		}
+		stratMapHelpers::clearSundries();
 	}
 
 	//Target fort
@@ -618,6 +625,7 @@ namespace characterHelpers
 			mov eax, adrFunc
 			call eax
 		}
+		stratMapHelpers::clearSundries();
 	}
 
 	void diplomacyFort(character* gen, fortStruct* targetFort)
@@ -1082,7 +1090,7 @@ namespace characterHelpers
 	@table character
 	*/
 	types.character = luaState.new_usertype<character>("character");
-	types.character.set("characterType", sol::property(&getTypeID, &setTypeID));
+	types.character.set("characterType", sol::property(&character::getTypeID, &character::setTypeID));
 	types.character.set("xCoord", &character::xCoord);
 	types.character.set("yCoord", &character::yCoord);
 	types.character.set("namedCharacter", &character::characterRecord);
@@ -1131,7 +1139,7 @@ namespace characterHelpers
 	@usage
 	local ourType=ourCharacter:getTypeID();
 	*/
-	types.character.set_function("getTypeID", &getTypeID);
+	types.character.set_function("getTypeID", &character::getTypeID);
 	/***
 	Get the character type. Use characterType enum.
 	@function character:getTypeName
@@ -1147,7 +1155,7 @@ namespace characterHelpers
 	@usage
 	ourCharacter:setTypeID(2);
 	*/
-	types.character.set_function("setTypeID", &setTypeID);
+	types.character.set_function("setTypeID", &character::setTypeID);
 	/***
 	Issue regular move command, character must have movement points.
 	@function character:moveToTile

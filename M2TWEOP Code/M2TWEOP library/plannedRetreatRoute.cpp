@@ -96,7 +96,7 @@ namespace plannedRetreatRoute
 		std::call_once(initFlag, tryInit);
 
 		const auto tile = stratMapHelpers::getTile(x, y);
-		const auto* army = tile->getArmy();
+		const auto* army = tile->getArmy(false);
 		if (army == nullptr)
 			return;
 		STATE.startX = x;

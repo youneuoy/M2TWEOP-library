@@ -707,6 +707,8 @@ public:
 		stats.recalculate(recalculateFacEconomy);
 	}
 	bool isPlayerControlled();
+	bool isEnemyToFaction(factionStruct* otherFac);
+	bool isAllyToFaction(factionStruct* otherFac);
 };
 
 

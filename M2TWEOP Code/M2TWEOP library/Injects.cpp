@@ -4264,6 +4264,28 @@ void onCalculateSettlement::SetNewCode()
 	delete a;
 }
 
+onPredictedStats::onPredictedStats(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005F4577;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005F425D;
+}
+
+void onPredictedStats::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(eax, dword_ptr(esp, 0xe4));
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onScoreBestCapital::onScoreBestCapital(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

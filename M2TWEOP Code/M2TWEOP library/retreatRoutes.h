@@ -30,7 +30,7 @@ public:
 		routeEnd.y = endY;
 		const auto campaignData = campaignHelpers::getCampaignData();
 		const auto tile = stratMapHelpers::getTile(x, y);
-		auto* army = tile->getArmy();
+		auto* army = tile->getArmy(false);
 		if (army == nullptr)
 		{
 			factionID = -1;

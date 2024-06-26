@@ -21,6 +21,71 @@ settlementStruct* siegeS::getSiegedSettlement()
     return stratMapHelpers::getTile(goal->xCoord, goal->yCoord)->getSettlement();
 }
 
+float distance(const int x1, const int y1, const int x2, const int y2)
+{
+	return static_cast<float>(sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2)));
+}
+
+armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
+{
+	coordPair targetCoords = {x, y};
+	unit* unitList[20]{};
+	for (int i = 0; i < numOfUnits; i++)
+		unitList[i] = units[i];
+	auto tile = stratMapHelpers::getTile(x, y);
+	const auto stratPathFind = gameHelpers::getGameDataAll()->stratPathFinding; 
+	if (forceMerge)
+	{
+		const auto target = tile->getArmy(false);
+		if (target && target->faction == faction)
+		{
+			if (!GAME_FUNC(bool(__thiscall*)(stratPathFinding*, unit**, int, coordPair*),
+				canArmySplit)(stratPathFind, &unitList[0], numOfUnits, &targetCoords))
+			{
+				gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
+				return nullptr;
+			}
+			mergeArmies(target, true);
+		}
+		return this;
+	}
+	const auto fac = faction;
+	if (auto tileSett = tile->getSettlement(); tileSett && tileSett->faction != faction)
+		targetCoords = *stratMapHelpers::findValidTileNearTile(&targetCoords, isAdmiral ? 3 : 7);  // NOLINT(bugprone-branch-clone)
+	else if (auto tileFort = tile->getFort(); tileFort && tileFort->faction != faction)
+		targetCoords = *stratMapHelpers::findValidTileNearTile(&targetCoords, isAdmiral ? 3 : 7);
+	else if (auto tileChar = tile->getCharacter(); tileChar
+		&& tileChar->armyLeaded
+		&& (tileChar->armyLeaded->faction != faction || tileChar->armyLeaded->numOfUnits + numOfUnits > 20))
+		targetCoords = *stratMapHelpers::findValidTileNearTile(&targetCoords, isAdmiral ? 3 : 7);
+	if (shipArmy && distance(shipArmy->gen->xCoord, shipArmy->gen->yCoord, x, y) > 1.5)
+	{
+		factionHelpers::disembark(shipArmy, x, y);
+		return this;
+	}
+	if (!GAME_FUNC(bool(__thiscall*)(stratPathFinding*, unit**, int, coordPair*),
+		canArmySplit)(stratPathFind, &unitList[0], numOfUnits, &targetCoords))
+	{
+		gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
+		return nullptr;
+	}
+	DWORD splitArmy = codes::offsets.splitArmy;
+	auto coordsPtr = &targetCoords;
+	auto listPtr = &unitList[0];
+	int unitCount = numOfUnits;
+	_asm
+	{
+		push coordsPtr
+		push unitCount
+		push listPtr
+		mov ecx, fac
+		mov eax, splitArmy
+		call eax
+	}
+	stratMapHelpers::clearSundries();
+	return unitList[0]->army;
+}
+
 fortStruct* siegeS::getSiegedFort()
 {
     return stratMapHelpers::getTile(goal->xCoord, goal->yCoord)->getFort();
@@ -41,6 +106,32 @@ void armyStruct::nullifyMovePoints()
 		unitHelpers::setUnitMovePoints(units[i], 0);
 }
 
+bool armyStruct::isEnemyTo(const armyStruct* other)
+{
+	return isEnemyToFaction(other->faction);
+}
+
+bool armyStruct::isEnemyToFaction(const factionStruct* other)
+{
+	if (faction->factionID == other->factionID)
+		return false;
+	const auto facDip = campaignHelpers::getCampaignData()->getFactionDiplomacy(faction->factionID, other->factionID);
+	return facDip->state == dipStance::war;
+}
+
+bool armyStruct::isAllyTo(const armyStruct* other)
+{
+	return isAllyToFaction(other->faction);
+}
+
+bool armyStruct::isAllyToFaction(const factionStruct* other)
+{
+	if (faction->factionID == other->factionID)
+		return true;
+	const auto facDip = campaignHelpers::getCampaignData()->getFactionDiplomacy(faction->factionID, other->factionID);
+	return facDip->state == dipStance::alliance;
+}
+
 int armyStruct::attackArmy(armyStruct* defender)
 {
 	if (!defender || defender->settlement)
@@ -54,6 +145,7 @@ int armyStruct::attackArmy(armyStruct* defender)
 		mov eax, funcAddr
 		call eax
 	}
+	stratMapHelpers::clearSundries();
 	return 1;
 }
 settlementStruct* armyStruct::findInSettlement()
@@ -156,11 +248,12 @@ void armyStruct::releaseUnits()
 	for (int i = 0; i < numOfUnits; i++)
 		units[i]->releaseUnit();
 }
-void armyStruct::mergeArmiesLua(armyStruct* targetArmy, const bool force)
+armyStruct* armyStruct::mergeArmies(armyStruct* targetArmy, bool force)
 {
 	if (!targetArmy)
-		return;
-	
+		return nullptr;
+	if (numOfUnits + targetArmy->numOfUnits > 20)
+		return nullptr;
 	if (force)
 	{
 		armyHelpers::mergeArmies(this, targetArmy);
@@ -179,20 +272,15 @@ void armyStruct::mergeArmiesLua(armyStruct* targetArmy, const bool force)
 			targetY = targetArmy->settlement->yCoord;
 		}
 		else
-			return;
-		sol::table unitTable = sol::state_view(plugData::data.luaAll.luaState).create_table();
-		for (int i = 0; i < numOfUnits; i++)
-		{
-			unitTable.add(units[i]);
-		}
-		factionHelpers::splitArmy(faction, unitTable, targetX, targetY);
-		unitTable.clear();
+			return nullptr;
+		return moveTactical(targetX, targetY);
 	}
+	return nullptr;
 }
 
-void armyStruct::mergeArmiesLua(armyStruct* targetArmy)
+armyStruct* armyStruct::mergeArmies(armyStruct* targetArmy)
 {
-	mergeArmiesLua(targetArmy, true);
+	return mergeArmies(targetArmy, true);
 }
 
 namespace armyHelpers
@@ -829,12 +917,13 @@ namespace armyHelpers
 		@function armyStruct:mergeArmies
 		@tparam armyStruct targetArmy
 		@tparam bool force optional
+		@treturn armyStruct army
 		@usage
 		army:mergeArmies(anotherArmy)
 		*/
 		types.armyStruct.set_function("mergeArmies", sol::overload(
-				sol::resolve<void(armyStruct*)>(&armyStruct::mergeArmiesLua),
-				sol::resolve<void(armyStruct*, bool)>(&armyStruct::mergeArmiesLua)
+				sol::resolve<armyStruct*(armyStruct*)>(&armyStruct::mergeArmies),
+				sol::resolve<armyStruct*(armyStruct*, bool)>(&armyStruct::mergeArmies)
 			));
 
 		/***

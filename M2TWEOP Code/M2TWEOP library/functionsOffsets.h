@@ -182,6 +182,8 @@ public:
 		DWORD isTileValidForCharacter = NULL;
 		DWORD deleteMoveExtents = NULL;
 		DWORD someSelectionStuff = NULL;
+		DWORD clearPaths = NULL;
+		DWORD clearMapPath = NULL;
 		DWORD doHordeStuff2 = NULL;
 		DWORD doHordeStuff3 = NULL;
 		DWORD sendCharacterOffMap = NULL;
@@ -283,6 +285,10 @@ public:
 		DWORD reduceUnitProduction = NULL;
 		DWORD reduceEconomicProduction = NULL;
 		DWORD attachResourceSett = NULL;
+		DWORD updateFowTableObject = NULL;
+		DWORD updateFowTable = NULL;
+		DWORD updateTerrain = NULL;
+		DWORD updateRadar = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);
