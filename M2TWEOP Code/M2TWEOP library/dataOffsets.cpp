@@ -90,6 +90,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.bugReport = 0x16EBB30;
 		offsets.uiNotify = 0x2C75000;
 		offsets.mapTilesDb = 0x019B3134;
+		offsets.campaignControllerVtbl = 0x13380AC;
 
 		
 		offsets.fortVtbl = 0x13362F4;
@@ -183,6 +184,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.settlementSpyingVtbl = 0x012FCF14;
 		offsets.uiNotify = 0x2C2BF48;
 		offsets.mapTilesDb = 0x0196A004;
+		offsets.campaignControllerVtbl = 0x12F308C;
 
 		offsets.audioEnable = reinterpret_cast<bool*>(0x01639f1d);
 		offsets.audioMaster_vol = reinterpret_cast<int*>(0x01639f60);

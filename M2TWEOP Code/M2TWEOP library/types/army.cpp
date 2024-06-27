@@ -28,12 +28,17 @@ float distance(const int x1, const int y1, const int x2, const int y2)
 
 armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 {
+	if (shipArmy && distance(shipArmy->gen->xCoord, shipArmy->gen->yCoord, x, y) > 1.5)
+	{
+		factionHelpers::disembark(shipArmy, x, y);
+		return this;
+	}
 	coordPair targetCoords = {x, y};
 	unit* unitList[20]{};
 	for (int i = 0; i < numOfUnits; i++)
 		unitList[i] = units[i];
 	auto tile = stratMapHelpers::getTile(x, y);
-	const auto stratPathFind = gameHelpers::getGameDataAll()->stratPathFinding; 
+	const auto stratPathFind = gameHelpers::getGameDataAll()->stratPathFinding;
 	if (forceMerge)
 	{
 		const auto target = tile->getArmy(false);
@@ -50,19 +55,13 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 		return this;
 	}
 	const auto fac = faction;
-	if (auto tileSett = tile->getSettlement(); tileSett && tileSett->faction != faction)
+	if (auto tileArmy = tile->getArmy(); tileArmy && (tileArmy->faction != faction || tileArmy->numOfUnits + numOfUnits > 20))
 		targetCoords = *stratMapHelpers::findValidTileNearTile(&targetCoords, isAdmiral ? 3 : 7);  // NOLINT(bugprone-branch-clone)
+	else if (auto tileSett = tile->getSettlement(); tileSett && tileSett->faction != faction)
+		targetCoords = *stratMapHelpers::findValidTileNearTile(&targetCoords, isAdmiral ? 3 : 7);
 	else if (auto tileFort = tile->getFort(); tileFort && tileFort->faction != faction)
 		targetCoords = *stratMapHelpers::findValidTileNearTile(&targetCoords, isAdmiral ? 3 : 7);
-	else if (auto tileChar = tile->getCharacter(); tileChar
-		&& tileChar->armyLeaded
-		&& (tileChar->armyLeaded->faction != faction || tileChar->armyLeaded->numOfUnits + numOfUnits > 20))
-		targetCoords = *stratMapHelpers::findValidTileNearTile(&targetCoords, isAdmiral ? 3 : 7);
-	if (shipArmy && distance(shipArmy->gen->xCoord, shipArmy->gen->yCoord, x, y) > 1.5)
-	{
-		factionHelpers::disembark(shipArmy, x, y);
-		return this;
-	}
+	
 	if (!GAME_FUNC(bool(__thiscall*)(stratPathFinding*, unit**, int, coordPair*),
 		canArmySplit)(stratPathFind, &unitList[0], numOfUnits, &targetCoords))
 	{
@@ -454,10 +453,6 @@ namespace armyHelpers
 			portrait = nullptr;
 		if (label != nullptr && strlen(label) == 0)
 			label = nullptr;
-		queue<std::pair<int, int>> q;
-		set<std::pair<int, int>> visited;
-		q.emplace(x, y);
-		visited.insert({x, y});
 		stratMap* map = stratMapHelpers::getStratMap();
 		auto spawnCoords = new coordPair;
 		spawnCoords->xCoord = x;

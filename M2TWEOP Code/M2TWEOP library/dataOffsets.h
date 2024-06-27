@@ -90,6 +90,7 @@ public:
 		DWORD bugReport = NULL;
 		DWORD uiNotify = NULL;
 		DWORD mapTilesDb = NULL;
+		DWORD campaignControllerVtbl = NULL;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);

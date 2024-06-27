@@ -219,14 +219,8 @@ namespace settlementHelpers
 	    const auto edb = eopBuildings::getEdb();
 	    std::string coreBuildingName;
 	    const edbEntry* entry = castle ? edb->coreCastleBuilding : edb->coreCityBuilding;
-	    for (int i = 0; i < entry->buildingLevelCount; i++)
-	    {
-	        if (entry->levels[i].settlementMinLvl == static_cast<uint32_t>(level))
-	        {
-	            coreBuildingName = entry->levels[i].name;
-	            break;
-	        }
-	    }
+		if (castle || level > 0)
+			coreBuildingName = entry->levels[castle ? level : level - 1].name;
 	    if (!coreBuildingName.empty())
 	    	createBuilding(settlement, coreBuildingName.c_str());
 	    settlement->recalculate(true);

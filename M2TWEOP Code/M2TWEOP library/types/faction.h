@@ -305,6 +305,7 @@ public:
 	}
 	settlementStruct* getSettlement();
 	factionStruct* getTargetFaction();
+	void calculateRegionStrengths();
 	bool targetsSameSettlement(const aiRegionData* other)
 	{
 		return other->regionID == regionID && other->settlementIndex == settlementIndex;
@@ -749,6 +750,7 @@ struct aiCampaignController : aiMilitaryController
 	int neighboursForDefenseNum;
 	bool isDefensive();
 	void initialize();
+	void updateAllocation();
 	void setStrategy(aiCampaignStrategy strategy);
 };
 
@@ -1223,14 +1225,14 @@ struct armyResource;
 struct armySupportResource
 {
 	armyStruct* army{};
-	armyResource* resource{};
+	std::shared_ptr<armyResource> resource{};
 	float moveCost{};
 	armySupportResource(armyStruct* army) : army(army) {}
 };
 struct armyResource
 {
 	armyStruct* army{};
-	std::vector<armyResource*> nearResources{};
+	std::vector<std::shared_ptr<armyResource>> nearResources{};
 	int positionPower{};
 	float value = 0.f;
 	int totalThreatReceiving{};
@@ -1249,7 +1251,7 @@ struct armyResource
 struct settlementResource
 {
 	settlementStruct* settlement{};
-	std::vector<armyResource*> nearResources{};
+	std::vector<std::shared_ptr<armyResource>> nearResources{};
 	int positionPower{};
 	float value = 0.f;
 	int totalThreatReceiving{};
@@ -1266,7 +1268,7 @@ struct settlementResource
 struct aiOrder
 {
 	float priority{};
-	std::vector<armyResource*> assignedArmies{};
+	std::vector<std::shared_ptr<armyResource>> assignedArmies{};
 	std::vector<std::pair<int, int>> validTiles{};
 	void setTiles(int x, int y);
 	void sortArmies();
@@ -1280,10 +1282,10 @@ struct aiOrder
 
 struct attackSettlementOrder : aiOrder
 {
-	settlementResource* targetSettlement{};
+	std::shared_ptr<settlementResource> targetSettlement{};
 	int attackX = -1;
 	int attackY = -1;
-	attackSettlementOrder(settlementResource* sett) : targetSettlement(sett) {}
+	attackSettlementOrder(std::shared_ptr<settlementResource> sett) : targetSettlement(std::move(sett)) {}
 	bool evaluate() override;
 	bool evaluateAttack();
 	bool execute() override;
@@ -1292,8 +1294,8 @@ struct attackSettlementOrder : aiOrder
 
 struct attackArmyOrder : aiOrder
 {
-	armyResource* targetArmy{};
-	attackArmyOrder(armyResource* army) : targetArmy(army) {}
+	std::shared_ptr<armyResource> targetArmy{};
+	attackArmyOrder(std::shared_ptr<armyResource> army) : targetArmy(std::move(army)) {}
 	bool evaluate() override;
 	bool evaluateAttack();
 	bool execute() override;
@@ -1302,8 +1304,8 @@ struct attackArmyOrder : aiOrder
 
 struct defendSettlementOrder : aiOrder
 {
-	settlementResource* targetSettlement{};
-	defendSettlementOrder(settlementResource* sett) : targetSettlement(sett) {}
+	std::shared_ptr<settlementResource> targetSettlement{};
+	defendSettlementOrder(std::shared_ptr<settlementResource> sett) : targetSettlement(std::move(sett)) {}
 	bool evaluate() override;
 	bool execute() override;
 	std::string toString() override;
@@ -1311,8 +1313,8 @@ struct defendSettlementOrder : aiOrder
 
 struct defendArmyOrder : aiOrder
 {
-	armyResource* targetArmy{};
-	defendArmyOrder(armyResource* army) : targetArmy(army) {}
+	std::shared_ptr<armyResource> targetArmy{};
+	defendArmyOrder(std::shared_ptr<armyResource> army) : targetArmy(std::move(army)) {}
 	bool evaluate() override;
 	bool execute() override;
 	std::string toString() override;
@@ -1321,8 +1323,8 @@ struct defendArmyOrder : aiOrder
 struct mergeArmiesOrder : aiOrder
 {
 	armyStruct* targetArmy{};
-	armyResource* targetRes{};
-	mergeArmiesOrder(armyStruct* army) : targetArmy(army) {}
+	std::shared_ptr<armyResource> targetRes{};
+	mergeArmiesOrder(armyStruct* army) : targetArmy(std::move(army)) {}
 	bool evaluate() override;
 	bool execute() override;
 	std::string toString() override;
@@ -1331,7 +1333,7 @@ struct mergeArmiesOrder : aiOrder
 class globalEopAiConfig
 {
 public:
-	bool enabled = true;
+	bool enabled = false; //crashes rn dont enable for actual eop use!
 	float aggressionFactor = 1.f;
 	float defenseFactor = 1.f;
 	float aidFactor = 0.5f;
@@ -1347,9 +1349,9 @@ private:
 	float m_MoveCostFactor = 0.5f;
 	float m_PowerFactor = 1.f;
 	void checkRegion(int regionId);
-	armyResource* findArmyResource(armyStruct* army);
+	std::shared_ptr<armyResource> findArmyResource(armyStruct* army);
 	void getData(factionStruct* fac);
-	settlementResource* findSettResource(settlementStruct* sett);
+	std::shared_ptr<settlementResource> findSettResource(settlementStruct* sett);
 	void clearData()
 	{
 		m_Armies.clear();
@@ -1364,13 +1366,13 @@ private:
 	}
 	std::vector<int> m_CheckedRegions;
 	std::vector<int> m_SearchedRegions;
-	std::vector<armyResource> m_Armies{};
-	std::vector<armyResource> m_AllyArmies{};
-	std::vector<armyResource> m_TargetArmies{};
-	std::vector<settlementResource> m_Settlements{};
-	std::vector<settlementResource> m_AllySettlements{};
-	std::vector<settlementResource> m_TargetSettlements{};
-	std::vector<aiOrder*> m_Orders;
+	std::vector<std::shared_ptr<armyResource>> m_Armies{};
+	std::vector<std::shared_ptr<armyResource>> m_AllyArmies{};
+	std::vector<std::shared_ptr<armyResource>> m_TargetArmies{};
+	std::vector<std::shared_ptr<settlementResource>> m_Settlements{};
+	std::vector<std::shared_ptr<settlementResource>> m_AllySettlements{};
+	std::vector<std::shared_ptr<settlementResource>> m_TargetSettlements{};
+	std::vector<std::shared_ptr<aiOrder>> m_Orders;
 };
 
 struct eopAiFactionConfig
@@ -1390,6 +1392,11 @@ public:
 	int8_t secondaryColorG{};
 	int8_t secondaryColorB{};
 };
+
+namespace campaignAi
+{
+	int assessGarrisonStrength(const aiRegionData* gsdData, const settlementStruct* settlement, const factionStruct* faction);
+}
 
 namespace factionHelpers
 {

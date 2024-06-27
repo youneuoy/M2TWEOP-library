@@ -43,7 +43,7 @@ ContextMenuStrat::ContextMenuStrat()
 			},
 			[](int posAtMap[2])
 			{
-				if (const auto tile = stratMapHelpers::getTile(posAtMap[0], posAtMap[1]); tile->getArmy())
+				if (const auto tile = stratMapHelpers::getTile(posAtMap[0], posAtMap[1]); tile->getArmy(false))
 					return true;
 
 				return false;

@@ -4286,6 +4286,222 @@ void onPredictedStats::SetNewCode()
 	delete a;
 }
 
+onEvalAttObjective::onEvalAttObjective(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0051B590;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0051AFA0;
+}
+
+void onEvalAttObjective::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(edx);
+	a->push(ecx);
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(ecx);
+	a->pop(edx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onEvalAttObjective2::onEvalAttObjective2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0051B450;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0051AE60;
+}
+
+void onEvalAttObjective2::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(edx);
+	a->push(ecx);
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(ecx);
+	a->pop(edx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onEvalAttObjective3::onEvalAttObjective3(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0051BA60;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0051B470;
+}
+
+void onEvalAttObjective3::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(edx);
+	a->push(ecx);
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(ecx);
+	a->pop(edx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onEvalAttObjective4::onEvalAttObjective4(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0051B8D0;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0051B2E0;
+}
+
+void onEvalAttObjective4::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(edx);
+	a->push(ecx);
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(ecx);
+	a->pop(edx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onEvalAttObjective5::onEvalAttObjective5(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0051B720;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x0051B130;
+}
+
+void onEvalAttObjective5::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(edx);
+	a->push(ecx);
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(ecx);
+	a->pop(edx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onUpdateControllerAlloc::onUpdateControllerAlloc(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0051C77E;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x51C18E;
+}
+
+void onUpdateControllerAlloc::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(ecx, dword_ptr(esp, 0x14));
+	a->pop(edi);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onCalcGarrisonStr::onCalcGarrisonStr(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00515B70;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x515580;
+}
+
+void onCalcGarrisonStr::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ecx);
+	a->push(ebx);
+	a->push(ebp);
+	a->push(esi);
+	a->push(edi);
+	a->mov(ecx, dword_ptr(esp, 0x18));
+	a->mov(edx, dword_ptr(esp, 0x1C));
+	a->push(dword_ptr(esp, 0x20));
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(ecx, eax);
+	if (m_adress == 0x00515B70)
+		a->mov(eax, 0x00515D20);
+	else
+		a->mov(eax, 0x00515730);
+	a->jmp(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onAssessRequiredStrength::onAssessRequiredStrength(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005505D0;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x550140;
+}
+
+void onAssessRequiredStrength::SetNewCode()
+{
+	const auto a = new Assembler();
+	const auto label = a->newLabel();
+	a->push(ecx);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(ecx);
+	a->cmp(eax, 0);
+	a->jnz(label);
+	if (m_adress == 0x005505D0)
+		a->mov(ecx, 0x55061D);
+	else
+		a->mov(ecx, 0x55018D);
+	a->jmp(ecx);
+	a->bind(label);
+	a->push(esi);
+	a->mov(esi, ecx);
+	a->mov(eax, dword_ptr(esi, 0x20));
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onScoreBestCapital::onScoreBestCapital(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

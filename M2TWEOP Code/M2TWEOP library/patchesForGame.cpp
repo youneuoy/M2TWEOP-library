@@ -200,8 +200,10 @@ int __fastcall patchesForGame::onCheckConstructionItem(const buildingsQueue* que
 	return queue->conversion > 0 ? 1 : 0;
 }
 
-DWORD* __fastcall patchesForGame::onCreateTakeResidenceObjective(const aiCampaignController* campaignController, DWORD* oldResidence)
+DWORD* __fastcall patchesForGame::onCreateTakeResidenceObjective(aiCampaignController* campaignController, DWORD* oldResidence)
 {
+	if (*reinterpret_cast<DWORD*>(campaignController) != dataOffsets::offsets.campaignControllerVtbl)
+		return oldResidence;
 	if (*oldResidence == dataOffsets::offsets.settlementVtbl)
 		return reinterpret_cast<DWORD*>(campaignController->regionData->getSettlement());
 	return oldResidence;
@@ -832,11 +834,34 @@ void patchesForGame::onPredictedStats(settlementStats* statsManager)
 	balanceMinorSettStats(statsManager, statsManager->settlement);
 }
 
+int patchesForGame::onEvalAttObjective(const aiCampaignController* controller)
+{
+	return controller->regionData->getTargetFaction()->factionID;
+}
+
+void patchesForGame::onUpdateControllerAlloc(aiCampaignController* controller)
+{
+	controller->updateAllocation();
+}
+
 int patchesForGame::onScoreBestCapital(const settlementStruct* sett)
 {
 	if (sett->isMinorSettlement)
 		return 0;
 	return 1;
+}
+
+int patchesForGame::onAssessRequiredStrength(const aiRegionController* controller)
+{
+	if (!controller)
+		return 0;
+	return 1;
+}
+
+int patchesForGame::onCalcGarrisonStr(const aiRegionData* regData, const factionStruct* fac,
+	const settlementStruct* sett)
+{
+	return campaignAi::assessGarrisonStrength(regData, sett, fac);
 }
 
 int __fastcall patchesForGame::onAttackGate(unit* un, void* tactic)
@@ -1291,8 +1316,12 @@ void __stdcall patchesForGame::onNewGameLoaded()
 	gameEvents::onNewGameLoaded();
 }
 
+bool AI_ACTIVE = false;
 void __fastcall patchesForGame::onAiTurn(aiFaction* aiFac)
 {
+	if (AI_ACTIVE)
+		globalEopAiConfig::getInstance()->turnEndAttack(aiFac->faction);
+	AI_ACTIVE = false;
 	gameEvents::onAiTurn(aiFac);
 }
 
@@ -1455,9 +1484,10 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	else if (eventCode == factionTurnStartCode)
 	{
 		factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
-		globalEopAiConfig::getInstance()->turnEndAttack(fac);
+		gameHelpers::logStringGame("Faction turn start: " + string(fac->factionRecord->facName));
 		discordManager::onFactionTurnStart(fac);
 		plannedRetreatRoute::onFactionTurnStart(fac);
+		AI_ACTIVE = true;
 	}
 	else if (eventCode == gameReloaded)
 	{
@@ -1477,7 +1507,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	else if (eventCode == factionTurnEnd)
 	{
 		const auto fac = reinterpret_cast<factionStruct*>(vTab[1]);
-		globalEopAiConfig::getInstance()->turnEndMove(fac);
+		//globalEopAiConfig::getInstance()->turnEndMove(fac);
 		FIRST_END = true;
 	}
 	//else if (eventCode == settlementTurnStart)

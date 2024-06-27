@@ -23,6 +23,51 @@ enum
 
 std::shared_ptr<globalEopAiConfig> globalEopAiConfig::m_Instance = std::make_shared<globalEopAiConfig>();
 
+namespace campaignAi
+{
+	int assessGarrisonStrength(const aiRegionData* gsdData, const settlementStruct* settlement, const factionStruct* faction)
+	{
+		int requiredGarrisonStrength = 0;
+		int ownStr = settlement->army ? settlement->army->totalStrength : 0;
+		int enemyStr = 0;
+		const auto reg = stratMapHelpers::getRegion(settlement->regionID);
+		for (int i = 0; i < reg->stacksNum; i++)
+		{
+			if (const auto army = reg->getArmy(i);
+				army->faction->factionID == faction->factionID && army != settlement->army)
+				ownStr += army->settlement ? army->totalStrength / 2 : army->totalStrength;
+			else if (army->isEnemyToFaction(faction))
+				enemyStr += army->settlement ? army->totalStrength / 2 : army->totalStrength;
+			else if (!army->isAllyToFaction(faction))
+				enemyStr += army->settlement ? army->totalStrength / 4 : army->totalStrength / 2;
+		}
+		for (int i = 0; i < reg->neighbourRegionsNum; i++)
+		{
+			const auto nRegion = reg->neighbourRegions[i];
+			if (nRegion.isBlocked || nRegion.region->isSea || !nRegion.region->settlement)
+				continue;
+			for (int j = 0; j < nRegion.region->stacksNum; j++)
+			{
+				if (const auto army = nRegion.region->getArmy(j);
+					army->faction->factionID == faction->factionID && army != settlement->army)
+					ownStr += army->settlement ? army->totalStrength / 4 : army->totalStrength / 2;
+				else if (army->isEnemyToFaction(faction))
+					enemyStr += army->settlement ? army->totalStrength / 4 : army->totalStrength / 2;
+				else if (!army->isAllyToFaction(faction))
+					enemyStr += army->settlement ? army->totalStrength / 8 : army->totalStrength / 4;
+			}
+		}
+		int balance = enemyStr - ownStr;
+		if (const int po = settlement->stats.settlementStats.PublicOrder; po < 80)
+			balance += 1000 - po * 10;
+		if (balance > 100)
+			return requiredGarrisonStrength;
+		balance += clamp(settlement->stats.settlementStats.TotalIncomeWithoutAdmin / 10, 0, 2000);
+		balance += clamp(gsdData->regionValue / 5, 0, 1000);
+		requiredGarrisonStrength = clamp(balance, 0, 50000);
+		return requiredGarrisonStrength;
+	}
+}
 
 void armyResource::calculatePositionPower()
 {
@@ -94,7 +139,7 @@ void aiOrder::setTiles(const int x, const int y)
 		}
 		if (validTiles.empty())
 			return;
-		const auto armySort = [](const armyResource* a, const armyResource* b)
+		const auto armySort = [](const std::shared_ptr<armyResource>& a, const std::shared_ptr<armyResource>& b)
 		{
 			return a->moveCost < b->moveCost;
 		};
@@ -110,7 +155,7 @@ void aiOrder::setTiles(const int x, const int y)
 
 void aiOrder::sortArmies()
 {
-	const auto armySort = [](const armyResource* a, const armyResource* b)
+	const auto armySort = [](const std::shared_ptr<armyResource>& a, const std::shared_ptr<armyResource>& b)
 	{
 		return a->army->totalStrength > b->army->totalStrength;
 	};
@@ -119,7 +164,7 @@ void aiOrder::sortArmies()
 
 void aiOrder::removeUsedResources()
 {
-	assignedArmies.erase(std::remove_if(assignedArmies.begin(), assignedArmies.end(), [](const armyResource* army)
+	assignedArmies.erase(std::remove_if(assignedArmies.begin(), assignedArmies.end(), [](const std::shared_ptr<armyResource>& army)
 	{
 		return army->used;
 	}), assignedArmies.end());
@@ -208,7 +253,7 @@ bool attackSettlementOrder::execute()
 			}
 			if (assignedArmy->used)
 				continue;
-			if (assignedArmy->army->siege || !targetSettlement->settlement->army)
+			if (assignedArmy->army->siege || !targetSettlement->settlement->army || (!targetSettlement->settlement->isCastle && targetSettlement->settlement->level == 0))
 				characterHelpers::siegeSettlement(assignedArmy->army->gen, targetSettlement->settlement, true);
 			else
 				characterHelpers::siegeSettlement(assignedArmy->army->gen, targetSettlement->settlement, false);
@@ -549,7 +594,7 @@ void globalEopAiConfig::checkRegion(int regionId)
 		const auto regionArmy = region->armies[j];
 		if ( !regionArmy->gen || regionArmy->isAdmiral || !regionArmy->isEnemyToFaction(m_Faction))
 			continue;
-		const auto regionArmyRes = findArmyResource(regionArmy);
+		auto regionArmyRes = findArmyResource(regionArmy);
 		const auto moveData = regionArmy->gen->createMoveData(static_cast<int>(searchType::avoidZoc), 1);
 		for (const auto& nearSettlement : moveData->settlements)
 		{
@@ -598,7 +643,7 @@ void globalEopAiConfig::checkRegion(int regionId)
 	}
 }
 
-armyResource* globalEopAiConfig::findArmyResource(armyStruct* army)
+std::shared_ptr<armyResource> globalEopAiConfig::findArmyResource(armyStruct* army)
 {
 	if (!army->gen)
 		return nullptr;
@@ -606,84 +651,84 @@ armyResource* globalEopAiConfig::findArmyResource(armyStruct* army)
 	{
 		for (auto& armyRes : m_Armies)
 		{
-			if (armyRes.army == army)
-				return &armyRes;
+			if (armyRes->army == army)
+				return armyRes;
 		}
-		m_Armies.emplace_back(army);
-		m_Armies.back().own = true;
-		m_Armies.back().enemy = false;
-		m_Armies.back().calculatePositionPower();
-		return &m_Armies.back();
+		m_Armies.emplace_back(make_shared<armyResource>(army));
+		m_Armies.back()->own = true;
+		m_Armies.back()->enemy = false;
+		m_Armies.back()->calculatePositionPower();
+		return m_Armies.back();
 	}
 	if (army->isEnemyToFaction(m_Faction))
 	{
 		for (auto& armyRes : m_TargetArmies)
 		{
-			if (armyRes.army == army)
-				return &armyRes;
+			if (armyRes->army == army)
+				return armyRes;
 		}
-		m_TargetArmies.emplace_back(army);
-		m_TargetArmies.back().own = false;
-		m_TargetArmies.back().enemy = true;
-		m_TargetArmies.back().calculatePositionPower();
-		return &m_TargetArmies.back();
+		m_TargetArmies.emplace_back(make_shared<armyResource>(army));
+		m_TargetArmies.back()->own = false;
+		m_TargetArmies.back()->enemy = true;
+		m_TargetArmies.back()->calculatePositionPower();
+		return m_TargetArmies.back();
 	}
 	if (army->isAllyToFaction(m_Faction))
 	{
 		for (auto& armyRes : m_AllyArmies)
 		{
-			if (armyRes.army == army)
-				return &armyRes;
+			if (armyRes->army == army)
+				return armyRes;
 		}
-		m_AllyArmies.emplace_back(army);
-		m_AllyArmies.back().own = false;
-		m_AllyArmies.back().enemy = false;
-		m_AllyArmies.back().calculatePositionPower();
-		return &m_AllyArmies.back();
+		m_AllyArmies.emplace_back(make_shared<armyResource>(army));
+		m_AllyArmies.back()->own = false;
+		m_AllyArmies.back()->enemy = false;
+		m_AllyArmies.back()->calculatePositionPower();
+		return m_AllyArmies.back();
 	}
 	return nullptr;
 }
 
-settlementResource* globalEopAiConfig::findSettResource(settlementStruct* sett)
+std::shared_ptr<settlementResource> globalEopAiConfig::findSettResource(settlementStruct* sett)
 {
 	if (sett->faction->factionID == m_Faction->factionID)
 	{
 		for (auto& settRes : m_Settlements)
 		{
-			if (settRes.settlement == sett)
-				return &settRes;
+			if (settRes->settlement == sett)
+				return settRes;
 		}
-		m_Settlements.emplace_back(sett);
-		m_Settlements.back().own = true;
-		m_Settlements.back().enemy = false;
-		m_Settlements.back().calculatePositionPower();
-		return &m_Settlements.back();
+		m_Settlements.emplace_back(make_shared<settlementResource>(sett));
+		m_Settlements.back()->own = true;
+		m_Settlements.back()->enemy = false;
+		m_Settlements.back()->calculatePositionPower();
+		return m_Settlements.back();
 	}
 	if (sett->isEnemyToFaction(m_Faction))
 	{
 		for (auto& settRes : m_TargetSettlements)
 		{
-			if (settRes.settlement == sett)
-				return &settRes;
+			if (settRes->settlement == sett)
+				return settRes;
 		}
-		m_TargetSettlements.emplace_back(sett);
-		m_TargetSettlements.back().own = false;
-		m_TargetSettlements.back().enemy = true;
-		m_TargetSettlements.back().calculatePositionPower();
-		return &m_TargetSettlements.back();
+		m_TargetSettlements.emplace_back(make_shared<settlementResource>(sett));
+		m_TargetSettlements.back()->own = false;
+		m_TargetSettlements.back()->enemy = true;
+		m_TargetSettlements.back()->calculatePositionPower();
+		return m_TargetSettlements.back();
 	}
 	if (sett->isAllyToFaction(m_Faction))
 	{
 		for (auto& settRes : m_AllySettlements)
 		{
-			if (settRes.settlement == sett)
-				return &settRes;
+			if (settRes->settlement == sett)
+				return settRes;
 		}
-		m_AllySettlements.emplace_back(sett);
-		m_AllySettlements.back().own = false;
-		m_AllySettlements.back().enemy = false;
-		m_AllySettlements.back().calculatePositionPower();
-		return &m_AllySettlements.back();
+		m_AllySettlements.emplace_back(make_shared<settlementResource>(sett));
+		m_AllySettlements.back()->own = false;
+		m_AllySettlements.back()->enemy = false;
+		m_AllySettlements.back()->calculatePositionPower();
+		return m_AllySettlements.back();
 	}
 	return nullptr;
 }
@@ -691,66 +736,66 @@ settlementResource* globalEopAiConfig::findSettResource(settlementStruct* sett)
 void globalEopAiConfig::assignOrders(factionStruct* fac)
 {
 	const auto campaignDbAi = campaignHelpers::getCampaignDb()->campaignDbAi;
-	const auto orderSort = [](const auto* a, const auto* b)
+	const auto orderSort = [](const std::shared_ptr<aiOrder>& a, const std::shared_ptr<aiOrder>& b)
 	{
 		return a->priority > b->priority;
 	};
-	const auto threatSort = [](const settlementResource& a, const settlementResource& b)
+	const auto threatSort = [](const std::shared_ptr<settlementResource>& a, const std::shared_ptr<settlementResource>& b)
 	{
-		return (a.totalThreatReceiving - a.positionPower) > (b.totalThreatReceiving- b.positionPower);
+		return (a->totalThreatReceiving - a->positionPower) > (b->totalThreatReceiving- b->positionPower);
 	};
-	const auto threatSort2 = [](const armyResource& a, const armyResource& b)
+	const auto threatSort2 = [](const std::shared_ptr<armyResource>& a, const std::shared_ptr<armyResource>& b)
 	{
-		return (a.totalThreatReceiving - a.positionPower) > (b.totalThreatReceiving- b.positionPower);
+		return (a->totalThreatReceiving - a->positionPower) > (b->totalThreatReceiving- b->positionPower);
 	};
 	std::stable_sort(m_Settlements.begin(), m_Settlements.end(), threatSort);
-	for (auto& settRes : m_Settlements)
+	for (const auto& settRes : m_Settlements)
 	{
-		const float balance = (settRes.totalThreatReceiving - (settRes.positionPower * campaignDbAi.siegeAttStrModifier));
+		const float balance = (settRes->totalThreatReceiving - (settRes->positionPower * campaignDbAi.siegeAttStrModifier));
 		if (balance < 1)
 			continue;
-		m_Orders.emplace_back(new defendSettlementOrder(&settRes));
+		m_Orders.emplace_back(make_shared<defendSettlementOrder>(settRes));
 		m_Orders.back()->priority += balance * 2 * m_PowerFactor;
-		if (!settRes.settlement->army)
+		if (!settRes->settlement->army)
 			m_Orders.back()->priority *= 20;
-		m_Orders.back()->priority += settRes.settlement->getSettlementValue();
-		m_Orders.back()->priority += settRes.settlement->stats.settlementStats.TotalIncomeWithoutAdmin;
-		if (settRes.settlement->governor && settRes.settlement->governor->getTypeID() == characterTypeStrat::namedCharacter)
+		m_Orders.back()->priority += settRes->settlement->getSettlementValue();
+		m_Orders.back()->priority += settRes->settlement->stats.settlementStats.TotalIncomeWithoutAdmin;
+		if (settRes->settlement->governor && settRes->settlement->governor->getTypeID() == characterTypeStrat::namedCharacter)
 		{
 			m_Orders.back()->priority *= 1.5f;
-			if (settRes.settlement->governor->characterRecord->isFamily)
+			if (settRes->settlement->governor->characterRecord->isFamily)
 				m_Orders.back()->priority *= 1.5f;
 		}
-		if (settRes.settlement->siegeNum > 0)
+		if (settRes->settlement->siegeNum > 0)
 			m_Orders.back()->priority *= 5;
-		for (const auto army : settRes.nearResources)
+		for (const auto& nearArmy : settRes->nearResources)
 		{
-			if (!army || !army->own || army->used || !army->army || army->army->siege)
+			if (!nearArmy || !nearArmy->own || nearArmy->used || !nearArmy->army || nearArmy->army->siege)
 				continue;
-			m_Orders.back()->assignedArmies.emplace_back(army);
-			m_Orders.back()->priority -= army->moveCost * m_MoveCostFactor;
+			m_Orders.back()->assignedArmies.emplace_back(nearArmy);
+			m_Orders.back()->priority -= nearArmy->moveCost * m_MoveCostFactor;
 		}
 		m_Orders.back()->priority *= defenseFactor;
 	}
 	std::stable_sort(m_Armies.begin(), m_Armies.end(), threatSort2);
-	for (auto& armyRes : m_Armies)
+	for (const auto& armyRes : m_Armies)
 	{
-		const float balance = (armyRes.totalThreatReceiving - (armyRes.positionPower * campaignDbAi.attStrModifier));
+		const float balance = (armyRes->totalThreatReceiving - (armyRes->positionPower * campaignDbAi.attStrModifier));
 		if (balance < 1)
 			continue;
-		m_Orders.emplace_back(new defendArmyOrder(&armyRes));
+		m_Orders.emplace_back(make_shared<defendArmyOrder>(armyRes));
 		m_Orders.back()->priority += balance * m_PowerFactor;
-		m_Orders.back()->priority += armyRes.totalThreatGiving;
-		m_Orders.back()->priority += armyRes.army->totalStrength / 2.f;
-		if (armyRes.army->gen && armyRes.army->gen->getTypeID() == characterTypeStrat::namedCharacter)
+		m_Orders.back()->priority += armyRes->totalThreatGiving;
+		m_Orders.back()->priority += armyRes->army->totalStrength / 2.f;
+		if (armyRes->army->gen && armyRes->army->gen->getTypeID() == characterTypeStrat::namedCharacter)
 		{
 			m_Orders.back()->priority *= 2.5f;
-			if (armyRes.army->gen->characterRecord->isFamily)
+			if (armyRes->army->gen->characterRecord->isFamily)
 				m_Orders.back()->priority *= 2.5f;
 		}
-		if (armyRes.army->siege && armyRes.army->siege->goal)
+		if (armyRes->army->siege && armyRes->army->siege->goal)
 			m_Orders.back()->priority *= 3;
-		for (const auto& army : armyRes.nearResources)
+		for (const auto& army : armyRes->nearResources)
 		{
 			if (!army->own || army->used || !army->army || army->army->siege)
 				continue;
@@ -760,32 +805,32 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 		m_Orders.back()->priority *= defenseFactor;
 	}
 	std::stable_sort(m_TargetSettlements.begin(), m_TargetSettlements.end(), threatSort);
-	for (auto& targetSett : m_TargetSettlements)
+	for (const auto& targetSett : m_TargetSettlements)
 	{
-		if (targetSett.settlement->siegeNum > 0 && !targetSett.settlement->getSiege(0)->army->isAllyToFaction(m_Faction))
+		if (targetSett->settlement->siegeNum > 0 && !targetSett->settlement->getSiege(0)->army->isAllyToFaction(m_Faction))
 			continue;
-		const float balance = (targetSett.totalThreatReceiving * campaignDbAi.siegeAttStrModifier) - targetSett.positionPower;
+		const float balance = (targetSett->totalThreatReceiving * campaignDbAi.siegeAttStrModifier) - targetSett->positionPower;
 		if (balance < 1)
 			continue;
-		m_Orders.emplace_back(new attackSettlementOrder(&targetSett));
+		m_Orders.emplace_back(make_shared<attackSettlementOrder>(targetSett));
 		m_Orders.back()->priority += balance * 2 * m_PowerFactor;
-		m_Orders.back()->priority += targetSett.settlement->getSettlementValue();
-		m_Orders.back()->priority += targetSett.settlement->stats.settlementStats.TotalIncomeWithoutAdmin / 2.f;
-		if (targetSett.settlement->governor && targetSett.settlement->governor->getTypeID() == characterTypeStrat::namedCharacter)
+		m_Orders.back()->priority += targetSett->settlement->getSettlementValue();
+		m_Orders.back()->priority += targetSett->settlement->stats.settlementStats.TotalIncomeWithoutAdmin / 2.f;
+		if (targetSett->settlement->governor && targetSett->settlement->governor->getTypeID() == characterTypeStrat::namedCharacter)
 		{
 			m_Orders.back()->priority *= 1.5f;
-			if (targetSett.settlement->governor->characterRecord->isFamily)
+			if (targetSett->settlement->governor->characterRecord->isFamily)
 				m_Orders.back()->priority *= 1.5f;
 		}
-		if (!targetSett.settlement->army)
+		if (!targetSett->settlement->army)
 			m_Orders.back()->priority *= 10;
-		for (const auto& army : targetSett.nearResources)
+		for (const auto& army : targetSett->nearResources)
 		{
 			if (!army->own || army->used || !army->army)
 				continue;
 			if (army->army->siege)
 			{
-				if (army->army->siege->goal != targetSett.settlement)
+				if (army->army->siege->goal != targetSett->settlement)
 					continue;
 			}
 			m_Orders.back()->assignedArmies.emplace_back(army);
@@ -794,30 +839,30 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 		m_Orders.back()->priority *= aggressionFactor;
 	}
 	std::stable_sort(m_TargetArmies.begin(), m_TargetArmies.end(), threatSort2);
-	for (auto& targetArmy : m_TargetArmies)
+	for (const auto& targetArmy : m_TargetArmies)
 	{
-		const int balance = (targetArmy.totalThreatReceiving * campaignDbAi.attStrModifier) - targetArmy.positionPower;
+		const int balance = (targetArmy->totalThreatReceiving * campaignDbAi.attStrModifier) - targetArmy->positionPower;
 		if (balance < 1)
 			continue;
-		m_Orders.emplace_back(new attackArmyOrder(&targetArmy));
+		m_Orders.emplace_back(make_shared<attackArmyOrder>(targetArmy));
 		m_Orders.back()->priority += balance * m_PowerFactor;
-		m_Orders.back()->priority += targetArmy.totalThreatGiving;
-		if (targetArmy.army->gen && targetArmy.army->gen->getTypeID() == characterTypeStrat::namedCharacter)
+		m_Orders.back()->priority += targetArmy->totalThreatGiving;
+		if (targetArmy->army->gen && targetArmy->army->gen->getTypeID() == characterTypeStrat::namedCharacter)
 		{
 			m_Orders.back()->priority += 2.5f;
-			if (targetArmy.army->gen->characterRecord->isFamily)
+			if (targetArmy->army->gen->characterRecord->isFamily)
 				m_Orders.back()->priority += 2.5f;
 		}
-		if (targetArmy.army->siege && targetArmy.army->siege->goal)
+		if (targetArmy->army->siege && targetArmy->army->siege->goal)
 		{
-			if (targetArmy.army->siege->goal->isAllyToFaction(m_Faction))
+			if (targetArmy->army->siege->goal->isAllyToFaction(m_Faction))
 				m_Orders.back()->priority *= 5;
-			else if (!targetArmy.army->siege->goal->isEnemyToFaction(m_Faction))
+			else if (!targetArmy->army->siege->goal->isEnemyToFaction(m_Faction))
 				m_Orders.back()->priority *= 2;
 			else
 				m_Orders.back()->priority -= 2000;
 		}
-		for (const auto& army : targetArmy.nearResources)
+		for (const auto& army : targetArmy->nearResources)
 		{
 			if (!army->own || army->used || !army->army || army->army->siege)
 				continue;
@@ -827,29 +872,29 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 		m_Orders.back()->priority *= aggressionFactor;
 	}
 	std::stable_sort(m_AllySettlements.begin(), m_AllySettlements.end(), threatSort);
-	for (auto& settRes : m_AllySettlements)
+	for (const auto& settRes : m_AllySettlements)
 	{
-		const float balance = (settRes.totalThreatReceiving - (settRes.positionPower * campaignDbAi.siegeAttStrModifier));
+		const float balance = (settRes->totalThreatReceiving - (settRes->positionPower * campaignDbAi.siegeAttStrModifier));
 		if (balance < 1)
 			continue;
-		m_Orders.emplace_back(new defendSettlementOrder(&settRes));
+		m_Orders.emplace_back(make_shared<defendSettlementOrder>(settRes));
 		m_Orders.back()->priority += balance * 2 * m_PowerFactor;
-		m_Orders.back()->priority += settRes.settlement->getSettlementValue();
-		m_Orders.back()->priority += settRes.settlement->stats.settlementStats.TotalIncomeWithoutAdmin;
-		if (settRes.settlement->siegeNum > 0)
+		m_Orders.back()->priority += settRes->settlement->getSettlementValue();
+		m_Orders.back()->priority += settRes->settlement->stats.settlementStats.TotalIncomeWithoutAdmin;
+		if (settRes->settlement->siegeNum > 0)
 		{
-			if (settRes.settlement->getSiege(0)->goal && settRes.settlement->getSiege(0)->goal->isEnemyToFaction(m_Faction))
+			if (settRes->settlement->getSiege(0)->goal && settRes->settlement->getSiege(0)->goal->isEnemyToFaction(m_Faction))
 				m_Orders.back()->priority *= 3;
 			else
 				m_Orders.back()->priority /= 2;
 		}
-		if (settRes.settlement->governor && settRes.settlement->governor->getTypeID() == characterTypeStrat::namedCharacter)
+		if (settRes->settlement->governor && settRes->settlement->governor->getTypeID() == characterTypeStrat::namedCharacter)
 		{
 			m_Orders.back()->priority *= 1.5f;
-			if (settRes.settlement->governor->characterRecord->isFamily)
+			if (settRes->settlement->governor->characterRecord->isFamily)
 				m_Orders.back()->priority *= 1.5f;
 		}
-		for (const auto& army : settRes.nearResources)
+		for (const auto& army : settRes->nearResources)
 		{
 			if (!army->own || army->used || !army->army || army->army->siege)
 				continue;
@@ -859,31 +904,31 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 		m_Orders.back()->priority *= aidFactor;
 	}
 	std::stable_sort(m_AllyArmies.begin(), m_AllyArmies.end(), threatSort2);
-	for (auto& armyRes : m_AllyArmies)
+	for (const auto& armyRes : m_AllyArmies)
 	{
-		if (armyRes.army->isAdmiral)
+		if (armyRes->army->isAdmiral)
 			return;
-		const float balance = (armyRes.totalThreatReceiving - (armyRes.positionPower * campaignDbAi.attStrModifier));
+		const float balance = (armyRes->totalThreatReceiving - (armyRes->positionPower * campaignDbAi.attStrModifier));
 		if (balance < 1)
 			continue;
-		m_Orders.emplace_back(new defendArmyOrder(&armyRes));
+		m_Orders.emplace_back(new defendArmyOrder(armyRes));
 		m_Orders.back()->priority += balance * m_PowerFactor;
-		m_Orders.back()->priority += armyRes.totalThreatGiving;
-		m_Orders.back()->priority += armyRes.army->totalStrength / 2.f;
-		if (armyRes.army->gen && armyRes.army->gen->getTypeID() == characterTypeStrat::namedCharacter)
+		m_Orders.back()->priority += armyRes->totalThreatGiving;
+		m_Orders.back()->priority += armyRes->army->totalStrength / 2.f;
+		if (armyRes->army->gen && armyRes->army->gen->getTypeID() == characterTypeStrat::namedCharacter)
 		{
 			m_Orders.back()->priority *= 2.5f;
-			if (armyRes.army->gen->characterRecord->isFamily)
+			if (armyRes->army->gen->characterRecord->isFamily)
 				m_Orders.back()->priority *= 2.5f;
 		}
-		if (armyRes.army->siege)
+		if (armyRes->army->siege)
 		{
-			if (armyRes.army->siege->goal && armyRes.army->siege->goal->isEnemyToFaction(m_Faction))
+			if (armyRes->army->siege->goal && armyRes->army->siege->goal->isEnemyToFaction(m_Faction))
 				m_Orders.back()->priority *= 2;
 			else
 				m_Orders.back()->priority /= 2;
 		}
-		for (const auto& army : armyRes.nearResources)
+		for (const auto& army : armyRes->nearResources)
 		{
 			if (!army->own || army->used || !army->army || army->army->siege)
 				continue;
@@ -901,9 +946,9 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 		gameHelpers::logStringGame(order->toString());
 		order->executed = true;
 	}
-	m_Armies.erase(std::remove_if(m_Armies.begin(), m_Armies.end(), [](const armyResource& army)
+	m_Armies.erase(std::remove_if(m_Armies.begin(), m_Armies.end(), [](const std::shared_ptr<armyResource> army)
 	{
-		return army.used || army.army->siege;
+		return army->used || army->army->siege;
 	}), m_Armies.end());
 }
 
@@ -913,9 +958,9 @@ void globalEopAiConfig::turnEndMove(factionStruct* fac)
 		return;
 	getData(fac);
 	assignOrders(fac);
-	const auto strengthSort = [](const armyResource& a, const armyResource& b)
+	const auto strengthSort = [](const std::shared_ptr<armyResource>& a, const std::shared_ptr<armyResource>& b)
 	{
-		return a.army->totalStrength > b.army->totalStrength;
+		return a->army->totalStrength > b->army->totalStrength;
 	};
 	std::stable_sort(m_Armies.begin(), m_Armies.end(), strengthSort);
 	//int twoTurnOrders = 0;
@@ -980,19 +1025,19 @@ void globalEopAiConfig::turnEndMove(factionStruct* fac)
 	std::stable_sort(m_Armies.begin(), m_Armies.end(), strengthSort);
 	for (auto& armyRes : m_Armies)
 	{
-		if (armyRes.used || armyRes.army->siege || !armyRes.army)
+		if (armyRes->used || armyRes->army->siege || !armyRes->army)
 			continue;
-		for (const auto& nearRes : armyRes.nearResources)
+		for (const auto& nearRes : armyRes->nearResources)
 		{
 			if (nearRes->used || !nearRes->own || nearRes->army->isAdmiral || nearRes->army->faction->factionID != m_Faction->factionID)
 				continue;
-			if (nearRes->army->numOfUnits + armyRes.army->numOfUnits <= 20)
+			if (nearRes->army->numOfUnits + armyRes->army->numOfUnits <= 20)
 			{
 				const auto [xCoord, yCoord] = nearRes->army->getCoords();
 				if (xCoord == -1)
 					continue;
-				armyRes.army->moveTactical(xCoord, yCoord, false);
-				armyRes.used = true;
+				armyRes->army->moveTactical(xCoord, yCoord, false);
+				armyRes->used = true;
 				break;
 			}
 		}
@@ -1044,8 +1089,9 @@ void globalEopAiConfig::getData(factionStruct* fac)
 		if (!currentChar->armyLeaded)
 			continue;
 		const auto res = findArmyResource(currentChar->armyLeaded);
-		if (!res || res->searched)
+		if (!res || res->searched || !res->army || !res->army->gen || res->used)
 			continue;
+		gameHelpers::logStringGame("Found army resource: " + std::string(res->army->gen->characterRecord->fullName));
 		res->searched = true;
 		if (m_SearchedRegions.end() == std::find(m_SearchedRegions.begin(), m_SearchedRegions.end(), currentChar->regionID))
 		{
@@ -1081,6 +1127,11 @@ void globalEopAiConfig::getData(factionStruct* fac)
 				}
 				settRes->nearResources.back()->moveCost = nearSettlement.moveCost;
 			}
+		}
+		const auto aztecId = campaignHelpers::getCampaignData()->getFactionHashed("aztecs");
+		if (m_Faction->factionID == aztecId->factionID)
+		{
+			gameHelpers::logStringGame("aztecs");
 		}
 		for (const auto& nearArmy : moveData->armies)
 		{
@@ -1141,53 +1192,38 @@ void removeNavalTarget(aiNavalRegion** list, const int index)
 
 int calculateBorderChange(aiGlobalStrategyDirector* director, aiRegionData* regionData)
 {
-	int borderGained = 0;
-	int borderLost = 0;
+	if (!regionData)
+		return 0;
+	int border = 0;
 	const auto region = stratMapHelpers::getRegion(regionData->regionID);
 	const auto settlement = regionData->getSettlement();
-	const auto settlementFaction = settlement->faction;
+	if (!settlement)
+		return 0;
 	const auto directorFaction = director->faction;
 	const int enemyNum = region->getEnemySettsToFaction(directorFaction->factionID);
-	borderGained += region->tileCount * enemyNum;
-	if (settlementFaction->factionID == directorFaction->factionID)
+	if (const int settCount = region->settlementCount(); settCount > 0)
+		border -= (region->tileCount * enemyNum) / settCount;
+	for (int i = 0; i < region->neighbourRegionsNum; i++)
 	{
-		for (int i = 0; i < region->neighbourRegionsNum; i++)
-		{
-			const auto nRegion = region->neighbourRegions[i];
-			if (nRegion.isBlocked || nRegion.region->isSea || !nRegion.region->settlement)
-				continue;
-			const int borderTiles = nRegion.borderTilesCount;
-			if (const int enemyNum2 = nRegion.region->getEnemySettsToFaction(directorFaction->factionID))
-				borderGained += borderTiles * enemyNum2;
-			else
-				borderLost += borderTiles;
-		}
+		const auto nRegion = region->neighbourRegions[i];
+		const int borderTiles = nRegion.borderTilesCount;
+		if (nRegion.isBlocked || nRegion.region->isSea || !nRegion.region->settlement)
+			continue;
+		if (nRegion.region->hasFaction(directorFaction->factionID))
+			border += borderTiles;
+		if (const int enemyNum2 = nRegion.region->getEnemySettsToFaction(directorFaction->factionID))
+			border -= (borderTiles * enemyNum2) / nRegion.region->settlementCount();
 	}
-	else
-	{
-		for (int i = 0; i < region->neighbourRegionsNum; i++)
-		{
-			const auto nRegion = region->neighbourRegions[i];
-			const int borderTiles = nRegion.borderTilesCount;
-			if (nRegion.isBlocked || nRegion.region->isSea || !nRegion.region->settlement)
-				continue;
-			if (nRegion.region->hasFaction(directorFaction->factionID))
-				borderLost += borderTiles;
-			if (const int enemyNum2 = nRegion.region->getEnemySettsToFaction(directorFaction->factionID))
-				borderGained += borderTiles * enemyNum2;
-		}
-	}
-	int value =  borderGained - borderLost;
-	if (region->hasFaction(directorFaction->factionID) && enemyNum == 0)
-		value *= 3;
-	else
-		value *= -3;
-	return value;
+	return border;
 }
 
 int calculateRegionValue(aiGlobalStrategyDirector* director, aiRegionData* regionData)
 {
+	if (!regionData)
+		return 0;
 	const auto settlement = regionData->getSettlement();
+	if (!settlement)
+		return 0;
 	const auto region = stratMapHelpers::getRegion(regionData->regionID);
 	int value = calculateBorderChange(director, regionData);
 	value += settlement->stats.settlementStats.TotalIncomeWithoutAdmin / 50;
@@ -1198,6 +1234,10 @@ int calculateRegionValue(aiGlobalStrategyDirector* director, aiRegionData* regio
 		value += (resourceValue >> 1);
 	value += GAME_FUNC(int(__cdecl*)(int), getRegionIsolationScore)(region->regionID);
 	value += settlement->getSettlementValue();
+	if (value < 0)
+		value = 0;
+	if (regionData->getTargetFaction()->factionID != director->faction->factionID)
+		value = static_cast<int>(round(value * 1.5));
 	return value;
 }
 
@@ -1213,10 +1253,37 @@ aiRegionData* createRegionInArray(aiGlobalStrategyDirector* director, settlement
 	regionData->regionRisk = 0;
 	regionData->settlementIndex = sett->getMinorSettlementIndex();
 	regionData->regionValue = calculateRegionValue(director, regionData);
-	region->calculateRegionStrengths(director->faction->factionID, &regionData->strength);
+	regionData->calculateRegionStrengths();
 	int enemyNum = 0;
 	int neutralNum = 0;
-	region->calculateBackupRegionStrengths(&regionData->neighboursStrength, &enemyNum, &neutralNum);
+	const int settCount = region->settlementCount();
+	for (int i = 0; i < settCount; i++)
+	{
+		const auto settlement = region->getSettlement(i);
+		if (!settlement || settlement->faction->factionID == director->faction->factionID)
+			continue;
+		if (settlement->isEnemyToFaction(director->faction))
+			enemyNum++;
+		else if (!settlement->isAllyToFaction(director->faction))
+			neutralNum++;
+	}
+	for (int i = 0; i < region->neighbourRegionsNum; i++)
+	{
+		const auto nRegion = region->neighbourRegions[i];
+		if (nRegion.isBlocked || nRegion.region->isSea || !nRegion.region->settlement)
+			continue;
+		const int settCount2 = nRegion.region->settlementCount();
+		for (int j = 0; j < settCount2; j++)
+		{
+			const auto settlement = nRegion.region->getSettlement(j);
+			if (!settlement || settlement->faction->factionID == director->faction->factionID)
+				continue;
+			if (settlement->isEnemyToFaction(director->faction))
+				enemyNum++;
+			else if (!settlement->isAllyToFaction(director->faction))
+				neutralNum++;
+		}
+	}
 	regionData->neighbourEnemyNum = enemyNum;
 	regionData->neighbourOtherNum = neutralNum;
 	return regionData;
@@ -1238,6 +1305,10 @@ aiRegionController* createNewRegionController(aiFaction* aiFac, settlementStruct
 
 settlementStruct* aiRegionData::getSettlement()
 {
+	if (reinterpret_cast<DWORD>(this) == 0x2896)
+	{
+		gameHelpers::logStringGame("error");
+	}
 	return minorSettlementDb::getSettlement(regionID, settlementIndex);
 }
 
@@ -1246,6 +1317,80 @@ factionStruct* aiRegionData::getTargetFaction()
 	if (const auto settlement = getSettlement(); settlement)
 		return settlement->faction;
 	return stratMapHelpers::getRegion(regionID)->factionOwner;
+}
+
+void aiRegionData::calculateRegionStrengths()
+{
+	strength.ownStrength = 0;
+	strength.ownCount = 0;
+	strength.enemyStrength = 0;
+	strength.enemyCount = 0;
+	strength.neutralStrength = 0;
+	strength.neutralCount = 0;
+	neighboursStrength.ownStrength = 0;
+	neighboursStrength.ownCount = 0;
+	neighboursStrength.enemyStrength = 0;
+	neighboursStrength.enemyCount = 0;
+	neighboursStrength.neutralStrength = 0;
+	neighboursStrength.neutralCount = 0;
+	const auto reg = stratMapHelpers::getRegion(regionID);
+	const auto sett = getSettlement();
+	const auto fac = campaignHelpers::getCampaignData()->getFactionById(factionID);
+	const int slaveId = campaignHelpers::getCampaignData()->slaveFactionID;
+	for (int i = 0; i < reg->stacksNum; i++)
+	{
+		if (const auto army = reg->getArmy(i); army->faction->factionID == factionID)
+		{
+			const int val = (army->settlement && army->settlement != sett) ? army->totalStrength / 2 : army->totalStrength;
+			strength.ownStrength += army->faction->factionID == slaveId ? val / 2 : val;
+			strength.ownCount++;
+		}
+		else if (army->isEnemyToFaction(fac))
+		{
+			if (army->settlement && army->settlement == sett)
+			{
+				strength.enemyStrength += army->totalStrength;
+				strength.enemyCount++;
+				continue;
+			}
+			const int val = army->settlement ? army->totalStrength / 2 : army->totalStrength;
+			strength.enemyStrength += army->faction->factionID == slaveId ? val / 2 : val;
+			strength.enemyCount++;
+		}
+		else if (!army->isAllyToFaction(fac))
+		{
+			const int val = (army->settlement && army->settlement != sett) ? army->totalStrength / 2 : army->totalStrength;
+			strength.neutralStrength += army->faction->factionID == slaveId ? val / 2 : val;
+			strength.neutralCount++;
+		}
+	}
+	for (int i = 0; i < reg->neighbourRegionsNum; i++)
+	{
+		const auto nRegion = reg->neighbourRegions[i];
+		if (nRegion.isBlocked || nRegion.region->isSea || !nRegion.region->settlement)
+				continue;
+		for (int j = 0; j < nRegion.region->stacksNum; j++)
+		{
+			if (const auto army = nRegion.region->getArmy(j); army->faction->factionID == fac->factionID)
+			{
+				const int val = army->settlement ? army->totalStrength / 2 : army->totalStrength;
+				neighboursStrength.ownStrength += army->faction->factionID == slaveId ? val / 2 : val;
+				neighboursStrength.ownCount++;
+			}
+			else if (army->isEnemyToFaction(fac))
+			{
+				const int val = army->settlement ? army->totalStrength / 2 : army->totalStrength;
+				neighboursStrength.enemyStrength += army->faction->factionID == slaveId ? val / 2 : val;
+				neighboursStrength.enemyCount++;
+			}
+			else if (!army->isAllyToFaction(fac))
+			{
+				const int val = army->settlement ? army->totalStrength / 2 : army->totalStrength;
+				neighboursStrength.neutralStrength += army->faction->factionID == slaveId ? val / 2 : val;
+				neighboursStrength.neutralCount++;
+			}
+		}
+	}
 }
 #pragma endregion aiRegionData methods
 
@@ -1262,13 +1407,7 @@ void aiRegionController::initialize()
 			aiFaction->aiResourceManager->releaseResource(garrison);
 		garrison = nullptr;
 	}
-	armyStruct* army = nullptr;
-	if (garrison)
-	{
-		army = garrison->army;
-	}
-	requiredGarrisonStrength = GAME_FUNC(int(__cdecl*)(aiRegionData*, factionStruct*, settlementStruct*, armyStruct*),
-		getRequiredGarrisonStrength)(gsdData, aiFaction->faction, settlement, army);
+	requiredGarrisonStrength = campaignAi::assessGarrisonStrength(gsdData, settlement, aiFaction->faction);
 	if (gsdData && garrison)
 	{
 		if (gsdData->strength.enemyStrength == 0
@@ -1342,11 +1481,11 @@ void aiMilitaryDirector::initialize()
 	checkAidingCampaigns(aiFaction->aiGlobalStrategyDirector);
 	decideStrategies();
 	
-	for (i = 0; i < defensiveCampaigns.count; i++)
-		defensiveCampaigns.campaigns[i]->initialize();
-	
 	for (i = 0; i < offensiveCampaigns.count; i++)
 		offensiveCampaigns.campaigns[i]->initialize();
+	
+	for (i = 0; i < defensiveCampaigns.count; i++)
+		defensiveCampaigns.campaigns[i]->initialize();
 	
 	for (i = 0; i < aidingCampaigns.count; i++)
 		aidingCampaigns.campaigns[i]->initialize();
@@ -1541,7 +1680,7 @@ void aiMilitaryDirector::decideStrategies()
 			mostImportantRegion = i;
 		}
 	}
-	if (mostImportantRegion > -1)
+	if (mostImportantRegion > -1 && aiFaction->faction->settlementsNum > 5)
 		defensiveCampaigns.campaigns[mostImportantRegion]->canRequestMore = true;
 	
 	for (int i = 0; i < offensiveCampaigns.count; i++)
@@ -1621,7 +1760,8 @@ void aiMilitaryDirector::decideStrategies()
 			for (int j = 0; j < offensiveCampaigns.count; j++)
 			{
 				if (const auto offCampaign = offensiveCampaigns.campaigns[j];
-					offCampaign->regionData->getTargetFaction()->factionID == targetId)
+					offCampaign->regionData->getTargetFaction()->factionID == targetId
+					&& !offCampaign->regionData->navalTarget)
 				{
 					offCampaign->canAttack = false;
 				}
@@ -1764,7 +1904,8 @@ void aiMilitaryDirector::decideDefensiveStrategy(aiCampaignController* controlle
 
 bool aiCampaignController::isDefensive()
 {
-	if (const auto factionId = regionData->getTargetFaction()->factionID; factionId == aiFaction->faction->factionID)
+	if (const auto factionId = regionData->getTargetFaction()->factionID;
+		!regionData->navalTarget && factionId == aiFaction->faction->factionID)
 	{
 		attacking = false;
 		targetFactionId = 31;
@@ -1799,11 +1940,39 @@ void aiCampaignController::initialize()
 	{
 		strategyType = static_cast<int>(aiCampaignStrategy::defendBorder);
 	}
+	if (!regionData->regionController)
+		attacking = true;
+
+	merge = true;
 	
 	GAME_FUNC(void(__thiscall*)(aiCampaignController*), calculateCampaignControllerStrengths)(this);
 	
 	for ( auto objective = objectives; objective; objective = objective->next )
+	{
+		if (attacking)
+			objective->priority *= 2;
 		callClassFunc<aiCampaignObjective*, void>(objective, 0x18);
+	}
+}
+
+void aiCampaignController::updateAllocation()
+{
+	if (!regionData)
+		return;
+	if (attacking)
+	{
+		regionData->calculateRegionStrengths();
+		totalStrengthRequired = regionData->strength.enemyStrength - regionData->strength.ownStrength / 2;
+		totalStrengthRequired += regionData->neighboursStrength.enemyStrength / 4 - regionData->neighboursStrength.ownStrength / 8;
+		if (const auto targetSett = regionData->getSettlement(); targetSett && targetSett->army)
+		{
+			if (const int settStrength = static_cast<int>(targetSett->army->totalStrength * 1.5f); totalStrengthRequired < settStrength)
+				totalStrengthRequired = settStrength;
+		}
+		if (totalStrengthRequired < 0)
+			totalStrengthRequired = 500;
+		strengthThreshold = static_cast<int>(totalStrengthRequired * 0.66f);
+	}
 }
 
 void aiCampaignController::setStrategy(aiCampaignStrategy strategy)
@@ -2133,13 +2302,14 @@ void aiGlobalStrategyDirector::initialize()
 		if (minValue == maxValue)
 			regionData->priority = 650;
 		else
-			regionData->priority = static_cast<int>((regionData->regionValue - minValue) * scale);
+			regionData->priority = static_cast<int>(((regionData->regionValue - minValue) * scale) * 1.75f);
 	}
 	GAME_FUNC(void(__thiscall*)(aiGlobalStrategyDirector*), initGsdFactionData)(this);
 }
 
 void aiGlobalStrategyDirector::initialize2()
 {
+	const auto campaign = campaignHelpers::getCampaignData();
 	GAME_FUNC(void(__thiscall*)(aiNavalTransportRegion**), clearTransports)(&navalTransportTargets);
 	if (hordeController)
 		callClassFunc<void*, void>(hordeController, 0x4);
@@ -2147,6 +2317,16 @@ void aiGlobalStrategyDirector::initialize2()
 	{
 		initTargetRegions();
 		GAME_FUNC(void(__thiscall*)(aiGlobalStrategyDirector*), aiCrusadeController)(this);
+		for (int i = 0; i < campaign->factionCount; i++)
+		{
+			const auto fac = campaign->getFactionByOrder(i);
+			const auto facDip = campaign->getFactionDiplomacy(faction->factionID, fac->factionID);
+			if (faction->isNeighbourFaction(fac) && facDip->state == dipStance::war)
+			{
+				stratFacData[fac->factionID].atWar = true;
+				stratFacData[fac->factionID].activeWar = true;
+			}
+		}
 		militaryDirector.initialize();
 		if (crusadeController)
 			callClassFunc<void*, void>(crusadeController, 0x4);
@@ -2160,7 +2340,6 @@ void aiGlobalStrategyDirector::initialize2()
 	for (int i = 0; i < aiNavalControllersNum; i++)
 		GAME_FUNC(void(__thiscall*)(void*, aiRegionData**), initNavalController)(aiNavalControllers[i], &ownRegions);
 
-	const auto campaign = campaignHelpers::getCampaignData();
 	for (int i = 0; i < campaign->factionCount; i++)
 	{
 		const auto fac = campaign->factionsSortedByTurnOrder[i];
@@ -2172,7 +2351,7 @@ void aiGlobalStrategyDirector::initialize2()
 			aiFaction->subterfugeController->destroyFaction(fac, stratFacData->desire + 500);
 		if (stratData.activeWar)
 		{
-			if (aiFaction->faction->incomeDoubled > fac->incomeDoubled)
+			if (aiFaction->faction->incomeDoubled < fac->incomeDoubled)
 				aiFaction->subterfugeController->reduceEconomicProduction(fac, stratFacData->desire);
 			else
 				aiFaction->subterfugeController->reduceUnitProduction(fac, static_cast<int>(unitCategory::infantry) ,stratFacData->desire);
@@ -2411,10 +2590,7 @@ void aiGlobalStrategyDirector::initTargetRegions()
 			regionData->settlementIndex = closestSett->getMinorSettlementIndex();
 			regionData->regionValue = 400;
 			regionData->priority = 650;
-			region->calculateRegionStrengths(faction->factionID, &regionData->strength);
-			int enemyNum = 0;
-			int neutralNum = 0;
-			region->calculateBackupRegionStrengths(&regionData->neighboursStrength, &enemyNum, &neutralNum);
+			regionData->calculateRegionStrengths();
 			regionData->setRisk(regionRisk::safe);
 		}
 	}
@@ -2471,10 +2647,7 @@ void aiGlobalStrategyDirector::initNavalRegions()
 		if (target->regionData.regionValue < 0)
 			target->regionData.regionValue = 0;
 		target->regionData.priority = 650;
-		targetRegion->calculateRegionStrengths(faction->factionID, &target->regionData.strength);
-		int enemyNum = 0;
-		int neutralNum = 0;
-		targetRegion->calculateBackupRegionStrengths(&target->regionData.neighboursStrength, &enemyNum, &neutralNum);
+		target->regionData.calculateRegionStrengths();
 		target->regionData.neighbourEnemyNum = -1;
 		target->regionData.neighbourOtherNum = -1;
 		target->regionData.setRisk(regionRisk::safe);
@@ -2607,7 +2780,7 @@ int factionStruct::getAliveCharacterNumOfType(characterTypeStrat charType)
 	{
 		if (const auto record = characterRecords[i];
 			record->gen
-			&& record->gen->genType->type == charType
+			&& record->gen->getTypeID() == charType
 			&& record->isAlive && !record->gen->ifMarkedToKill)
 		{
 			num++;
@@ -3457,6 +3630,7 @@ namespace factionHelpers
 		@tparam string name
 		@tparam int level
 		@tparam bool castle
+		@treturn settlementStruct newSett
 		@usage
 		     fac:addSettlement(123, 234, "coolSettlement", 1, false)
 		*/

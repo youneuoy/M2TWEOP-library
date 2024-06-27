@@ -1410,11 +1410,99 @@ private:
 	LPVOID funcAddress;
 };
 
+class onEvalAttObjective
+	:public AATemplate
+{
+public:
+	onEvalAttObjective(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onEvalAttObjective2
+	:public AATemplate
+{
+public:
+	onEvalAttObjective2(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onEvalAttObjective3
+	:public AATemplate
+{
+public:
+	onEvalAttObjective3(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onEvalAttObjective4
+	:public AATemplate
+{
+public:
+	onEvalAttObjective4(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onAssessRequiredStrength
+	:public AATemplate
+{
+public:
+	onAssessRequiredStrength(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCalcGarrisonStr
+	:public AATemplate
+{
+public:
+	onCalcGarrisonStr(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onEvalAttObjective5
+	:public AATemplate
+{
+public:
+	onEvalAttObjective5(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onPredictedStats
 	:public AATemplate
 {
 public:
 	onPredictedStats(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onUpdateControllerAlloc
+	:public AATemplate
+{
+public:
+	onUpdateControllerAlloc(MemWork* mem, LPVOID addr, int ver);
 	void SetOriginalCode(){}
 	void SetNewCode();
 private:

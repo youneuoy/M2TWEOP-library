@@ -681,6 +681,43 @@ void managerF::execPatches()
 	toPredictedStats->Enable();
 	f1 << "Done" << endl;
 	
+	f1 << "Start applying onEvalAttObjective patch" << endl;
+	onEvalAttObjective* toEvalAttObjective = new onEvalAttObjective(mem, (LPVOID)patchesForGame::onEvalAttObjective, globals::dataS.gameVersion);
+	toEvalAttObjective->SetNewCode();
+	toEvalAttObjective->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onEvalAttObjective2 patch" << endl;
+	onEvalAttObjective2* toEvalAttObjective2 = new onEvalAttObjective2(mem, (LPVOID)patchesForGame::onEvalAttObjective, globals::dataS.gameVersion);
+	toEvalAttObjective2->SetNewCode();
+	toEvalAttObjective2->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onEvalAttObjective patch" << endl;
+	onEvalAttObjective3* toEvalAttObjective3 = new onEvalAttObjective3(mem, (LPVOID)patchesForGame::onEvalAttObjective, globals::dataS.gameVersion);
+	toEvalAttObjective3->SetNewCode();
+	toEvalAttObjective3->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onUpdateControllerAlloc patch" << endl;
+	onUpdateControllerAlloc* toUpdateControllerAlloc = new onUpdateControllerAlloc(mem, (LPVOID)patchesForGame::onUpdateControllerAlloc, globals::dataS.gameVersion);
+	toUpdateControllerAlloc->SetNewCode();
+	toUpdateControllerAlloc->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onAssessRequiredStrength patch" << endl;
+	onAssessRequiredStrength* toAssessRequiredStrength = new onAssessRequiredStrength(mem, (LPVOID)patchesForGame::onAssessRequiredStrength, globals::dataS.gameVersion);
+	toAssessRequiredStrength->SetNewCode();
+	toAssessRequiredStrength->Enable();
+	f1 << "Done" << endl;
+	
+	
+	f1 << "Start applying onCalcGarrisonStr patch" << endl;
+	onCalcGarrisonStr* toCalcGarrisonStr = new onCalcGarrisonStr(mem, (LPVOID)patchesForGame::onCalcGarrisonStr, globals::dataS.gameVersion);
+	toCalcGarrisonStr->SetNewCode();
+	toCalcGarrisonStr->Enable();
+	f1 << "Done" << endl;
+	
 	f1 << "Start applying onGetBrowserPicConstructed patch" << endl;
 	onGetBrowserPicConstructed* toGetBrowserPicConstructed= new onGetBrowserPicConstructed(mem, (LPVOID)patchesForGame::getBrowserPicConstructed, globals::dataS.gameVersion);
 	toGetBrowserPicConstructed->SetNewCode();
