@@ -86,7 +86,7 @@ characterMoveData::characterMoveData(character* charPtr, const int searchType, c
 						{
 							settlements.emplace_back(settlement, tileEx, settlement->faction->factionID == thisChar->getFaction()->factionID);
 							settlements.back().turns = neighbourTileEx->turns;
-							settlements.back().moveCost = neighbourTileEx->movePoints + stratMapHelpers::getTileMoveCost(nX, nY, settlement->xCoord, settlement->yCoord);
+							settlements.back().moveCost = neighbourTileEx->movePoints;
 							break;
 						}
 					}
@@ -113,7 +113,7 @@ characterMoveData::characterMoveData(character* charPtr, const int searchType, c
 						{
 							forts.emplace_back(fort, tileEx, fort->faction->factionID == thisChar->getFaction()->factionID);
 							forts.back().turns = neighbourTileEx->turns;
-							forts.back().moveCost = neighbourTileEx->movePoints + stratMapHelpers::getTileMoveCost(nX, nY, fort->xCoord, fort->yCoord);
+							forts.back().moveCost = neighbourTileEx->movePoints;
 							break;
 						}
 					}
@@ -155,12 +155,12 @@ characterMoveData::characterMoveData(character* charPtr, const int searchType, c
 								const auto tileChar = tile->getTileCharacterAtIndex(i);
 								characters.emplace_back(tileChar, tileEx, charPtr->getFaction()->factionID == thisChar->getFaction()->factionID);
 								characters.back().turns = neighbourTileEx->turns;
-								characters.back().moveCost = neighbourTileEx->movePoints + stratMapHelpers::getTileMoveCost(nX, nY, tileChar->xCoord, tileChar->yCoord);
+								characters.back().moveCost = neighbourTileEx->movePoints;
 								if (tileChar->armyLeaded)
 								{
 									armies.emplace_back(tileChar->armyLeaded, tileEx, tileChar->armyLeaded->faction->factionID == thisChar->getFaction()->factionID);
 									armies.back().turns = neighbourTileEx->turns;
-									armies.back().moveCost = neighbourTileEx->movePoints + stratMapHelpers::getTileMoveCost(nX, nY, tileChar->xCoord, tileChar->yCoord);
+									armies.back().moveCost = neighbourTileEx->movePoints;
 								}
 							}
 							break;

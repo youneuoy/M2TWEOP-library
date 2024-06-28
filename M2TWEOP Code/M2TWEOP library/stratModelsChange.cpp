@@ -93,9 +93,9 @@ namespace stratModelsChange
 			fortEntryCount++;
 			rec->isFort = true;	
 		}
-		else if (tile->getSettlement())
+		else if (const auto sett = tile->getSettlement(); sett)
 		{
-			eopSettlementDataDb::get()->getSettlementData(tile->regionId).modelId = modelId;
+			eopSettlementDataDb::get()->getSettlementData(tile->regionId, sett->minorSettlementIndex)->modelId = modelId;
 		}
 		stratModelChangeList.push_back(rec);
 		changeModelsNeededNow = modelsChangeStatus::needChange;

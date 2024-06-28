@@ -711,13 +711,14 @@ public:
 	bool isAllyToFaction(factionStruct* otherFac);
 };
 
-
 struct eopSettlementData
 {
 	int settlementID = -1;
+	int regionID = -1;
 	std::array<int, 128> eopBuildingEntries{};
 	int modelId = -1;
 	std::string regionName;
+	std::string settlementLabel;
 	std::string regionRebelsName;
 	nlohmann::json serialize()
 	{
@@ -725,8 +726,10 @@ struct eopSettlementData
 		json["eopBuildingEntries"] = eopBuildingEntries;
 		json["modelId"] = modelId;
 		json["regionName"] = regionName;
+		json["settlementLabel"] = settlementLabel;
 		json["regionRebelsName"] = regionRebelsName;
 		json["settlementID"] = settlementID;
+		json["regionID"] = regionID;
 		return json;
 	}
 	void deserialize(const nlohmann::json& json)
@@ -734,8 +737,10 @@ struct eopSettlementData
 		eopBuildingEntries = json["eopBuildingEntries"].get<std::array<int, 128>>();
 		modelId = json["modelId"];
 		regionName = json["regionName"];
+		settlementLabel = json["settlementLabel"];
 		regionRebelsName = json["regionRebelsName"];
 		settlementID = json["settlementID"];
+		regionID = json["regionID"];
 	}
 };
 namespace settlementHelpers
@@ -836,43 +841,39 @@ class eopSettlementDataDb
 public:
 	eopSettlementDataDb()
 	{
-		eopSettData = std::make_shared<std::array<eopSettlementData, 200>>();
-		for (int i = 0; i < 200; i++)
-		{
-			eopSettData->at(i).settlementID = i;
-		}
+		eopSettData = std::make_shared<std::vector<std::shared_ptr<eopSettlementData>>>();
 	}
-	eopSettlementData& getSettlementData(int index)
-	{
-		return eopSettData->at(index);
-	}
+	void newGameLoaded();
+	std::shared_ptr<eopSettlementData> getSettlementData(int regionId, int settlementId);
+	
 	static eopSettlementDataDb* get()
 	{
 		return instance.get();
 	}
-	std::shared_ptr<std::array<eopSettlementData, 200>> eopSettData;
+	std::shared_ptr<std::vector<std::shared_ptr<eopSettlementData>>> eopSettData{};
 	static std::shared_ptr<eopSettlementDataDb> instance;
 	nlohmann::json serialize()
 	{
 		nlohmann::json json;
-		for (int i = 0; i < 200; i++)
+		for (auto& data : *eopSettData)
 		{
-			json[i] = eopSettData->at(i).serialize();
+			json.push_back(data.get()->serialize());
 		}
 		return json;
 	}
 	void deserialize(const nlohmann::json& json)
 	{
-		for (int i = 0; i < 200; i++)
-			eopSettData->at(i).deserialize(json[i]);
+		eopSettData = std::make_shared<std::vector<std::shared_ptr<eopSettlementData>>>();
+		for (const auto& item : json)
+		{
+			std::shared_ptr<eopSettlementData> data = std::make_shared<eopSettlementData>();
+			data->deserialize(item);
+			eopSettData->push_back(data);
+		}
 	}
 	void clearData()
 	{
-		eopSettData = std::make_shared<std::array<eopSettlementData, 200>>();
-		for (int i = 0; i < 200; i++)
-		{
-			eopSettData->at(i).settlementID = i;
-		}
+		eopSettData = std::make_shared<std::vector<std::shared_ptr<eopSettlementData>>>();
 	}
 	std::string onGameSave();
 	void onGameLoad(const std::vector<std::string>& filePaths);

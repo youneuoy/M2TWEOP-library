@@ -155,6 +155,7 @@ public:
 	bool isAllyTo(const armyStruct* other);
 	bool isEnemyToFaction(const factionStruct* other);
 	bool isAllyToFaction(const factionStruct* other);
+	int getNumberOfCategory(unitCategory category);
 	armyStruct* moveTactical(int x, int y, bool forceMerge = false);
 	unitGroup* getGroup(const int index)
 	{

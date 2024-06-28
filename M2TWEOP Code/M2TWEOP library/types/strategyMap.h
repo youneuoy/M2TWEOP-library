@@ -412,6 +412,7 @@ public:
 	void calculateBackupRegionStrengths(regionStrengths* strengths, int* enemyNum, int* neutralNum);
 	settlementStruct* getSettlement(int index);
 	bool hasFaction(int factionId);
+	bool hasAlliesToFaction(int factionId, bool trustedOnly);
 	int getEnemySettsToFaction(int factionId);
 	int getNeutralSettsToFaction(int factionId);
 	void changeRegionName(const char* newName);
@@ -963,7 +964,7 @@ namespace stratMapHelpers
 	void getGameTileCoordsWithCursor(int& x, int& y);
 	std::tuple<int, int> getGameTileCoordsWithCursorLua();
 	factionStruct* getFactionHashed(const campaign* campaign, const std::string& name);
-	settlementStruct* getSettlement(const stratMap* map, const std::string& name);
+	settlementStruct* getSettlement(stratMap* map, const std::string& name);
 	regionStruct* getRegionByName(stratMap* map, const std::string& name);
 	std::pair<int, int> convertTileCoords(const DWORD arrayIndex);
 	std::queue<std::pair<int, int>> getNeighbourTiles(int x, int y);

@@ -17,7 +17,9 @@
 #include "unit.h"
 #include "army.h"
 #include "campaign.h"
+#include "campaignAi.h"
 #include "gameHelpers.h"
+#include "luaPlugin.h"
 #include "strategyMap.h"
 #include "stratModelsChange.h"
 #include "techFuncs.h"
@@ -69,24 +71,58 @@ bool settlementStruct::isAllyToFaction(factionStruct* otherFac)
 	return facDip->state == dipStance::alliance;
 }
 
+void eopSettlementDataDb::newGameLoaded()
+{
+	const auto map = stratMapHelpers::getStratMap();
+	eopSettData->clear();
+	for (int i = 0; i < map->regionsNum; i++)
+	{
+		const int settCount = map->regions[i].settlementCount();
+		for (int j = 0; j < settCount; j++)
+		{
+			const auto sett = map->regions[i].getSettlement(j);
+			if (!sett)
+				continue;
+			auto data = std::make_shared<eopSettlementData>();
+			data->settlementID = sett->minorSettlementIndex;
+			data->regionID = sett->regionID;
+			eopSettData->push_back(data);
+		}
+	}
+	
+}
+
+std::shared_ptr<eopSettlementData> eopSettlementDataDb::getSettlementData(const int regionId, const int settlementId)
+{
+	for (const auto& settData : *eopSettData)
+	{
+		if (settData->regionID == regionId && settData->settlementID == settlementId)
+			return settData;
+	}
+	gameHelpers::logStringGame("Settlement data not found! RegionID: " + std::to_string(regionId) + " SettlementID: " + std::to_string(settlementId));
+	return nullptr;
+}
+
 std::string eopSettlementDataDb::onGameSave()
 {
 	const auto campaignData = campaignHelpers::getCampaignData();
-	//for (int i = 0; i < campaignData->factionCount; i++)
-	//{
-	//	const auto faction = campaignData->getFactionByOrder(i);
-	//	for (int s = 0; s < faction->settlementsNum; s++)
-	//	{
-	//		const auto settlement = faction->settlements[s];
-	//		for (int b = 0; b < settlement->buildingsNum; b++)
-	//		{
-	//			if (const auto building = settlement->buildings[b]; building->edbEntry->eopBuildingID != 0)
-	//			{
-	//				eopSettData->at(settlement->regionID).eopBuildingEntries[b] = building->edbEntry->eopBuildingID;
-	//			}
-	//		}
-	//	}
-	//}
+	for (int i = 0; i < campaignData->factionCount; i++)
+	{
+		const auto faction = campaignData->getFactionByOrder(i);
+		for (int s = 0; s < faction->settlementsNum; s++)
+		{
+			const auto settlement = faction->settlements[s];
+			const auto eopData = getSettlementData(settlement->regionID, settlement->minorSettlementIndex);
+			eopData->settlementLabel = string(settlement->name);
+			for (int b = 0; b < settlement->buildingsNum; b++)
+			{
+				if (const auto building = settlement->buildings[b]; building->edbEntry->eopBuildingID != 0)
+				{
+					eopData->eopBuildingEntries[b] = building->edbEntry->eopBuildingID;
+				}
+			}
+		}
+	}
 	std::string fPath = gameHelpers::getModPath();
 	fPath += "\\eopData\\TempSaveData";
 	filesystem::remove_all(fPath);
@@ -139,32 +175,39 @@ void eopSettlementDataDb::onGameLoaded()
 	}
 	for (int i = 0; i < stratMap->regionsNum; i++)
 	{
-		auto [settlementID, eopBuildingEntries, modelId, regionName, regionRebelsName] = eopSettData->at(i);
-		const auto region = stratMapHelpers::getRegion(settlementID);
-		if (!region)
-			continue;
-		if (!regionName.empty())
-			region->changeRegionName(regionName.c_str());
-		if (!regionRebelsName.empty())
-			region->changeRebelsName(regionRebelsName.c_str());
-		const auto sett = region->settlement;
-		if (!sett)
-			continue;
-		for (int j = 0; j < sett->buildingsNum; j++)
+		const auto region = &stratMap->regions[i];
+		const int settCount = stratMap->regions[i].settlementCount();
+		for (int j = 0; j < settCount; j++)
 		{
-			if (const auto id = eopBuildingEntries[j]; id != 0)
+			const auto sett = stratMap->regions[i].getSettlement(j);
+			if (!sett)
+				continue;
+			auto settData = getSettlementData(i, sett->minorSettlementIndex);
+			if (sett->minorSettlementIndex == 0)
 			{
-				if (const auto entry = buildEntryDB::getEopBuildEntry(id); entry)
+				if (!settData->regionName.empty())
+					region->changeRegionName(settData->regionName.c_str());
+				if (!settData->regionRebelsName.empty())
+					region->changeRebelsName(settData->regionRebelsName.c_str());
+			}
+			if (!settData->settlementLabel.empty())
+				gameStringHelpers::setHashedString(&sett->name, settData->settlementLabel.c_str());
+			for (int k = 0; k < sett->buildingsNum; k++)
+			{
+				if (const auto id = settData->eopBuildingEntries[k]; id != 0)
 				{
-					if (const auto building = sett->getBuilding(j); building)
+					if (const auto entry = buildEntryDB::getEopBuildEntry(id); entry)
 					{
-						building->edbEntry = entry;
+						if (const auto building = sett->getBuilding(k); building)
+						{
+							building->edbEntry = entry;
+						}
 					}
 				}
 			}
+			if (settData->modelId != -1)
+				stratModelsChange::setModel(sett->xCoord, sett->yCoord, settData->modelId, settData->modelId);
 		}
-		if (modelId != -1)
-			stratModelsChange::setModel(sett->xCoord, sett->yCoord, modelId, modelId);
 	}
 }
 
@@ -178,8 +221,18 @@ namespace settlementHelpers
 	settlementStruct* createSettlement(factionStruct* faction, const int xCoord, const int yCoord, const std::string& name,
 		const int level, const bool castle)
 	{
-	    settlementStruct* settlement = techFuncs::createGameClass<settlementStruct>();
 	    const auto tile = stratMapHelpers::getTile(xCoord, yCoord);
+		if (tile->settlement || tile->fort || tile->port || !tile->isLand)
+		{
+			gameHelpers::logStringGame("settlementHelpers.createSettlement: tile is not suitable for settlement.");
+			return nullptr;
+		}
+		if (stratMapHelpers::getSettlement(stratMapHelpers::getStratMap(), name))
+		{
+			gameHelpers::logStringGame("settlementHelpers.createSettlement: settlement with this name already exists.");
+			return nullptr;
+		}
+	    settlementStruct* settlement = techFuncs::createGameClass<settlementStruct>();
 	    const auto region = stratMapHelpers::getRegion(tile->regionId);
 		const auto campaign = campaignHelpers::getCampaignData();
 	    GAME_FUNC(settlementStruct*(__thiscall*)(settlementStruct*, int, int, int, bool),
@@ -231,6 +284,11 @@ namespace settlementHelpers
 			campaign->getFactionByOrder(i)->updateNeighbours();
 		
 		faction->tilesFac->updateFromObject(settlement);
+	    const auto data = std::make_shared<eopSettlementData>();
+		data->regionID = settlement->regionID;
+		data->settlementID = settlement->minorSettlementIndex;
+		eopSettlementDataDb::get()->eopSettData->push_back(data);
+		plugData::data.luaAll.settlements.insert_or_assign(std::string(settlement->name), settlement->regionID);
 		return settlement;
 	}
 	

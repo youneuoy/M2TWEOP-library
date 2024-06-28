@@ -2,9 +2,12 @@
 #include <lua/sol.hpp>
 
 #include "realGameTypes.h"
-#include "settlement.h"
 #define generalStruct_abilityID 1
 
+struct portBuildingStruct;
+struct factionStruct;
+struct fortStruct;
+struct building;
 struct characterMoveData;
 struct characterMovementExtents;
 

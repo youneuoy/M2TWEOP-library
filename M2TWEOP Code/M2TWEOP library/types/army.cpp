@@ -131,6 +131,17 @@ bool armyStruct::isAllyToFaction(const factionStruct* other)
 	return facDip->state == dipStance::alliance;
 }
 
+int armyStruct::getNumberOfCategory(unitCategory category)
+{
+	int num = 0;
+	for (int i = 0; i < numOfUnits; i++)
+	{
+		if (units[i]->eduEntry->category == category)
+			num++;
+	}
+	return num;
+}
+
 int armyStruct::attackArmy(armyStruct* defender)
 {
 	if (!defender || defender->settlement)

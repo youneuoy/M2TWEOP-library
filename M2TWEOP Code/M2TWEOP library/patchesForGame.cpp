@@ -14,6 +14,7 @@
 #include "faction.h"
 #include "characterRecord.h"
 #include "strategyMap.h"
+#include "campaignAi.h"
 
 #include "plannedRetreatRoute.h"
 #include "discordManager.h"
@@ -1298,8 +1299,6 @@ void __stdcall patchesForGame::onUnloadCampaign()
 	minorSettlementDb::clear();
 	gameEvents::onUnloadCampaign();
 }
-
-
 void __stdcall patchesForGame::onNewGameLoaded()
 {
 	plugData::data.luaAll.fillHashMaps();
@@ -1313,15 +1312,13 @@ void __stdcall patchesForGame::onNewGameLoaded()
 		settlement->isMinorSettlement = false;
 		minorSettlementDb::addToMinorSettlements(i, stratMapData->regions[i].settlement);
 	}
+	eopSettlementDataDb::get()->newGameLoaded();
 	gameEvents::onNewGameLoaded();
 }
 
 bool AI_ACTIVE = false;
 void __fastcall patchesForGame::onAiTurn(aiFaction* aiFac)
 {
-	if (AI_ACTIVE)
-		globalEopAiConfig::getInstance()->turnEndAttack(aiFac->faction);
-	AI_ACTIVE = false;
 	gameEvents::onAiTurn(aiFac);
 }
 
@@ -1484,6 +1481,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	else if (eventCode == factionTurnStartCode)
 	{
 		factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
+		globalEopAiConfig::getInstance()->turnStartMove(fac);
 		gameHelpers::logStringGame("Faction turn start: " + string(fac->factionRecord->facName));
 		discordManager::onFactionTurnStart(fac);
 		plannedRetreatRoute::onFactionTurnStart(fac);
@@ -1491,7 +1489,6 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	}
 	else if (eventCode == gameReloaded)
 	{
-		eopSettlementDataDb::get()->onGameLoaded();
 		const auto campaignData = campaignHelpers::getCampaignData();
 		const int settlementCount = campaignData->getSettlementNum();
 		for (int i = 0; i < settlementCount; i++)
@@ -1499,6 +1496,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 			const auto settlement = campaignData->getSettlement(i);
 			minorSettlementDb::addToMinorSettlements(settlement->regionID, settlement);
 		}
+		eopSettlementDataDb::get()->onGameLoaded();
 	}
 	else if (eventCode == settlementTurnEnd && FIRST_END)
 	{
@@ -1507,7 +1505,11 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	else if (eventCode == factionTurnEnd)
 	{
 		const auto fac = reinterpret_cast<factionStruct*>(vTab[1]);
-		//globalEopAiConfig::getInstance()->turnEndMove(fac);
+		
+		if (globalEopAiConfig::getInstance()->enableLogging && !fac->isPlayerControlled)
+			fac->aiFaction->aiGlobalStrategyDirector->militaryDirector.logData();
+		//globalEopAiConfig::getInstance()->turnEndMerge(fac);
+		
 		FIRST_END = true;
 	}
 	//else if (eventCode == settlementTurnStart)

@@ -699,6 +699,18 @@ void managerF::execPatches()
 	toEvalAttObjective3->Enable();
 	f1 << "Done" << endl;
 	
+	f1 << "Start applying onEvalAttObjective patch" << endl;
+	onEvalAttObjective4* toEvalAttObjective4 = new onEvalAttObjective4(mem, (LPVOID)patchesForGame::onEvalAttObjective, globals::dataS.gameVersion);
+	toEvalAttObjective4->SetNewCode();
+	toEvalAttObjective4->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onEvalAttObjective patch" << endl;
+	onEvalAttObjective5* toEvalAttObjective5 = new onEvalAttObjective5(mem, (LPVOID)patchesForGame::onEvalAttObjective, globals::dataS.gameVersion);
+	toEvalAttObjective5->SetNewCode();
+	toEvalAttObjective5->Enable();
+	f1 << "Done" << endl;
+	
 	f1 << "Start applying onUpdateControllerAlloc patch" << endl;
 	onUpdateControllerAlloc* toUpdateControllerAlloc = new onUpdateControllerAlloc(mem, (LPVOID)patchesForGame::onUpdateControllerAlloc, globals::dataS.gameVersion);
 	toUpdateControllerAlloc->SetNewCode();

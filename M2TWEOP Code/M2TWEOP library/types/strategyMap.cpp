@@ -12,6 +12,7 @@
 #include "unit.h"
 #include "faction.h"
 #include "army.h"
+#include "campaignAi.h"
 #include "casModelsDrawer.h"
 #include "dataOffsets.h"
 #include "settlement.h"
@@ -123,7 +124,7 @@ void regionStruct::changeRegionName(const char* newName)
 	const auto nameMem = new UNICODE_STRING*;
 	localizedRegionName = nameMem;
 	gameStringHelpers::createUniString(localizedRegionName, newName);
-	eopSettlementDataDb::get()->getSettlementData(regionID).regionName = newName;
+	eopSettlementDataDb::get()->getSettlementData(regionID, 0)->regionName = newName;
 }
 
 void regionStruct::changeRebelsName(const char* newName)
@@ -131,7 +132,7 @@ void regionStruct::changeRebelsName(const char* newName)
 	const auto nameMem = new UNICODE_STRING*;
 	localizedRebelsName = nameMem;
 	gameStringHelpers::createUniString(localizedRebelsName, newName);
-	eopSettlementDataDb::get()->getSettlementData(regionID).regionRebelsName = newName;
+	eopSettlementDataDb::get()->getSettlementData(regionID, 0)->regionRebelsName = newName;
 }
 
 bool regionStruct::hasHiddenResource(const char* newName)
@@ -318,6 +319,25 @@ bool regionStruct::hasFaction(const int factionId)
 	return false;
 }
 
+bool regionStruct::hasAlliesToFaction(int factionId, bool trustedOnly)
+{
+	const int settCount = settlementCount();
+	const auto campaignData = campaignHelpers::getCampaignData();
+	const auto fac = campaignData->getFactionById(factionId);
+	for (int i = 0; i < settCount; i++)
+	{
+		if (const auto sett = getSettlement(i); sett)
+		{
+			if (sett->faction->factionID == factionId)
+				return true;
+			if (trustedOnly)
+				return fac->aiFaction->ltgd->isTrustedAlly(sett->faction->factionID);
+			return sett->isAllyToFaction(fac);
+		}
+	}
+	return false;
+}
+
 int regionStruct::getEnemySettsToFaction(int factionId)
 {
 	const auto campaign = campaignHelpers::getCampaignData();
@@ -465,14 +485,22 @@ namespace stratMapHelpers
 		GAME_FUNC(void(__thiscall*)(DWORD), updateRadar)(dataOffsets::offsets.uiNotify);
 	}
 
-	settlementStruct* getSettlement(const stratMap* map, const std::string& name)
+	settlementStruct* getSettlement(stratMap* map, const std::string& name)
 	{
 		if (!plugData::data.luaAll.hashLoaded)
 			plugData::data.luaAll.fillHashMaps();
 		const auto regionId = plugData::data.luaAll.settlements.find(name);
 		if (regionId == plugData::data.luaAll.settlements.end()) 
 			return nullptr;
-		return map->regions[regionId->second].settlement;
+		const auto region = &map->regions[regionId->second];
+		const int settCount = region->settlementCount();
+		for (int j = 0; j < settCount; j++)
+		{
+			if (const auto settlement = region->getSettlement(j);
+				settlement && strcmp(settlement->name, name.c_str()) == 0)
+				return settlement;
+		}
+		return nullptr;
 	}
 
 	regionStruct* getRegionByName(stratMap* map, const std::string& name)

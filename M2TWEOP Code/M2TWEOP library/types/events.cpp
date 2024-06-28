@@ -16,6 +16,7 @@
 #include "unit.h"
 #include "battle.h"
 #include "strategyMap.h"
+#include "campaignAi.h"
 using namespace std;
 
 namespace gameEvents

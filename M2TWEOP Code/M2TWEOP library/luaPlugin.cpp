@@ -24,6 +24,7 @@
 #include "graphicsD3D.h"
 #include "mapImage.h"
 #include "strategyMap.h"
+#include "campaignAi.h"
 #include "imgui/sol_ImGui.h"
 plugData::pDat plugData::data;
 std::vector<std::string> luaPlugin::logS;
@@ -232,6 +233,8 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield setScriptCounter setScriptCounter
 	@tfield getScriptCounter getScriptCounter
 	@tfield scriptCommand scriptCommand
+	@tfield enableAiLogging enableAiLogging
+	@tfield enableEopAi enableEopAi
 	@table M2TWEOP
 	*/
 	
@@ -762,6 +765,24 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	tables.M2TWEOP.set_function("getScriptCounter", &gameHelpers::getScriptCounterNoBool);
 	
 	/***
+	Enable AI logging.
+	@function M2TWEOP.enableAiLogging
+	@tparam bool set
+	@usage
+		M2TWEOP.enableAiLogging(true)
+	*/
+	tables.M2TWEOP.set_function("enableAiLogging", &globalEopAiConfig::setLogging);
+	
+	/***
+	Enable AI.
+	@function M2TWEOP.enableEopAi
+	@tparam bool set
+	@usage
+		M2TWEOP.enableEopAi(true)
+	*/
+	tables.M2TWEOP.set_function("enableEopAi", &globalEopAiConfig::toggleAi);
+	
+	/***
 	Fire any script command available from the game. It is always just 2 parameters in the function, the command name and all the arguments as 1 string in the second parameter.
 	Do not use inc_counter, set_counter, declare_counter! they crash!
 	@function M2TWEOP.scriptCommand
@@ -848,8 +869,12 @@ void luaPlugin::fillHashMaps()
 		const auto region = &stratMap->regions[i];
 		if (region)
 			regions.insert_or_assign(std::string(region->regionName), i);
-		if(region->settlement)
-			settlements.insert_or_assign(std::string(region->settlement->name), i);
+		const int settCount = region->settlementCount();
+		for (int j = 0; j < settCount; j++)
+		{
+			if (const auto settlement = region->getSettlement(j))
+				settlements.insert_or_assign(std::string(settlement->name), i);
+		}
 	}
 	for (int i = 0; i < gameHelpers::getReligionCount(); i++)
 	{

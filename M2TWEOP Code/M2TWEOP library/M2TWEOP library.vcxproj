@@ -312,6 +312,7 @@
     <ClInclude Include="types\army.h" />
     <ClInclude Include="types\battle.h" />
     <ClInclude Include="types\campaign.h" />
+    <ClInclude Include="types\campaignAi.h" />
     <ClInclude Include="types\campaignDb.h" />
     <ClInclude Include="types\character.h" />
     <ClInclude Include="types\characterRecord.h" />
@@ -436,6 +437,7 @@
     <ClCompile Include="types\army.cpp" />
     <ClCompile Include="types\battle.cpp" />
     <ClCompile Include="types\campaign.cpp" />
+    <ClCompile Include="types\campaignAi.cpp" />
     <ClCompile Include="types\campaignDb.cpp" />
     <ClCompile Include="types\character.cpp" />
     <ClCompile Include="types\characterRecord.cpp" />
