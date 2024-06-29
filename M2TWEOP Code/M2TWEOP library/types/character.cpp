@@ -41,6 +41,11 @@ int character::getTypeID()
 	return genType->type;
 }
 
+bool character::hasFreeTilesToMove()
+{
+	return GAME_FUNC(bool(__thiscall*)(character*), hasFreeTilesToMove)(this);
+}
+
 void character::setTypeID(int charType)
 {
 	const int subFac = characterRecord->originalFaction;
@@ -50,6 +55,7 @@ void character::setTypeID(int charType)
 	const int factionDipNum = fac->factionID;
 	characterHelpers::setCharacterType(this, charType, subFac, factionDipNum);
 }
+
 namespace characterHelpers
 {
 	std::unordered_map<int, const char*> characterTypes = {
@@ -411,6 +417,8 @@ namespace characterHelpers
 	void moveNormal(character* gen, int x, int y)
 	{
 		if (!gen)
+			return;
+		if (!gen->hasFreeTilesToMove())
 			return;
 		DWORD cadClass = techFuncs::allocateGameMem(0x301C);
 		if (cadClass == 0) return;

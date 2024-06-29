@@ -1297,11 +1297,11 @@ void __stdcall patchesForGame::onGameInit()
 void __stdcall patchesForGame::onUnloadCampaign()
 {
 	minorSettlementDb::clear();
+	globalEopAiConfig::clearFactionData();
 	gameEvents::onUnloadCampaign();
 }
 void __stdcall patchesForGame::onNewGameLoaded()
 {
-	plugData::data.luaAll.fillHashMaps();
 	const auto stratMapData = stratMapHelpers::getStratMap();
 	for (int i = 0; i < stratMapData->regionsNum; i++)
 	{
@@ -1313,6 +1313,7 @@ void __stdcall patchesForGame::onNewGameLoaded()
 		minorSettlementDb::addToMinorSettlements(i, stratMapData->regions[i].settlement);
 	}
 	eopSettlementDataDb::get()->newGameLoaded();
+	plugData::data.luaAll.fillHashMaps();
 	gameEvents::onNewGameLoaded();
 }
 

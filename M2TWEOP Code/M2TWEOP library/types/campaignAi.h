@@ -695,6 +695,26 @@ struct aiMilitaryDirector
 	aiCampaignController* createCampaignController(aiRegionData* regionData);
 };
 
+struct ltgdConfig
+{
+	float trustedFsThreshold;
+	float trustedTargetFsThreshold;
+	float trustedGsThreshold;
+	float trustedTargetGsThreshold;
+	int minInvadePriority;
+	int maxInvadePriority;
+	float invPriorityFsModifier;
+	bool useCheatOverride;
+	char pad[3];
+	int assistanceOffset;
+	float scalePriority(int priority)
+	{
+		return ((priority - minInvadePriority) / static_cast<float>(maxInvadePriority - minInvadePriority)) * 100.f;
+	}
+	float getPriorityScaled(const factionStruct* fac1, const factionStruct* fac2);
+	float getPriorityMod(const factionStruct* fac1, const factionStruct* fac2);
+};
+
 
 struct aiGlobalStrategyDirector
 {
@@ -761,12 +781,13 @@ struct armyResource
 	int totalThreatGiving{};
 	int totalSupportReceiving{};
 	int totalSupportGiving{};
+	int unitCount{};
 	bool used = false;
 	bool searched = false;
 	bool own = true;
 	bool enemy = false;
 	float moveCost{};
-	armyResource(armyStruct* army) : army(army) {}
+	armyResource(armyStruct* army) : army(army), unitCount(army->numOfUnits) {}
 	void calculatePositionPower();
 };
 
@@ -785,6 +806,7 @@ struct settlementResource
 	float moveCost{};
 	settlementResource(settlementStruct* sett) : settlement(sett) {}
 	void calculatePositionPower();
+	int calculatePriority(bool isOwn);
 };
 
 struct aiOrder
@@ -857,15 +879,27 @@ struct aiFactionData
 	int noActionTurns{};
 };
 
+enum priorityType
+{
+	priType_own,
+	priType_target,
+	priType_aid
+};
+
 class globalEopAiConfig
 {
 public:
 	globalEopAiConfig();
-	bool enabled = true; //crashes rn dont enable for actual eop use!
+	bool enabled = true;
 	bool enableLogging = false;
 	float aggressionFactor = 1.f;
 	float defenseFactor = 1.f;
+	float residenceFactor = 2.f;
 	float aidFactor = 0.5f;
+	float moveCostFactor = 1.0f;
+	float powerFactor = 1.f;
+	float invadePriorityFactor = 1.f;
+	int maxTurnSearchCount = 4;
 	static factionStruct* getCurrentFaction() { return getInstance()->m_Faction; }
 	static std::shared_ptr<aiFactionData> getCurrentFactionData() { return getInstance()->m_CurrentFacData; }
 	static void increaseActionCount() { getInstance()->m_CurrentFacData->noActionTurns++; }
@@ -875,20 +909,21 @@ public:
 	void turnStartMove(factionStruct* fac);
 	void assignOrders(factionStruct* fac);
 	void turnEndMerge(factionStruct* fac);
+	std::shared_ptr<armyResource> findArmyResource(armyStruct* army);
+	std::shared_ptr<settlementResource> findSettResource(settlementStruct* sett);
+	static void clearFactionData() { m_Instance = std::make_shared<globalEopAiConfig>(); }
 	bool m_IsFirst = true;
-private:
+protected:
 	static std::shared_ptr<globalEopAiConfig> m_Instance;
 	factionStruct* m_Faction{};
-	float m_MoveCostFactor = 1.0f;
 	std::shared_ptr<aiFactionData> getFactionData(const factionStruct* fac) {return m_FactionData[fac->factionID];}
 	std::shared_ptr<aiFactionData> m_CurrentFacData{};
 	std::array<std::shared_ptr<aiFactionData>, 31> m_FactionData{};
-	float m_PowerFactor = 1.f;
+	float calculateSettPriority(const std::shared_ptr<settlementResource>& settRes, priorityType priType);
+	float calculateArmyPriority(const std::shared_ptr<armyResource>& armyRes, priorityType priType);
 	void checkRegion(int regionId);
 	void characterTurnStart(character* currentChar);
-	std::shared_ptr<armyResource> findArmyResource(armyStruct* army);
 	void getData(factionStruct* fac);
-	std::shared_ptr<settlementResource> findSettResource(settlementStruct* sett);
 	void clearData()
 	{
 		m_Armies.clear();
@@ -923,6 +958,8 @@ namespace campaignAi
 {
 	int assessGarrisonStrength(const aiRegionData* gsdData, const settlementStruct* settlement, const factionStruct* faction);
 	ltgdGlobals* getLtgdGlobals();
+	ltgdConfig* getLtgdConfig();
 	militaryValuesLTGD* getAiFactionValues(factionStruct* fac);
 	interFactionLTGD* getInterFactionLTGD(factionStruct* fac, factionStruct* targetFac);
+	void addToLua(sol::state& luaState);
 }

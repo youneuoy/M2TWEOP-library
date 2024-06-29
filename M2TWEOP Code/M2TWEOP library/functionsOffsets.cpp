@@ -285,6 +285,11 @@ void codes::initCodes(int gameVer)
 		offsets.updateTerrain = 0x98D640;
 		offsets.updateRadar = 0xBB4E40;
 		offsets.clearMapPath = 0x98DC00;
+		offsets.canMerge = 0x717C60;
+		offsets.hasFreeTilesToMove = 0x596420;
+		offsets.canStartSiege = 0x005212F0;
+		offsets.canStartAssault = 0x711620;
+		offsets.getNumEnginesCanPenetrateWalls = 0x710D00;
 	}
 
 
@@ -572,5 +577,10 @@ void codes::initCodes(int gameVer)
 		offsets.updateTerrain = 0x98E1C0;
 		offsets.updateRadar = 0xBAF1B0;
 		offsets.clearMapPath = 0x98E780;
+		offsets.canMerge = 0x718380;
+		offsets.hasFreeTilesToMove = 0x00596910;
+		offsets.canStartSiege = 0x005218E0;
+		offsets.canStartAssault = 0x711D60;
+		offsets.getNumEnginesCanPenetrateWalls = 0x711440;
 	}
 }

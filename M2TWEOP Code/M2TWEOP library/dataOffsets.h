@@ -87,6 +87,7 @@ public:
 		DWORD recruitmentItems = NULL;
 		DWORD ltgdGlobals = NULL;
 		DWORD battlefieldEngines = NULL;
+		DWORD ltgdConfig = NULL;
 		DWORD bugReport = NULL;
 		DWORD uiNotify = NULL;
 		DWORD mapTilesDb = NULL;

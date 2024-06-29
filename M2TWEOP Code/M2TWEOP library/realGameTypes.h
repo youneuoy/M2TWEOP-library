@@ -238,6 +238,8 @@ struct coordPair
 public:
 	int32_t xCoord; //0x0000
 	int32_t yCoord; //0x0004
+	coordPair(int32_t x, int32_t y) : xCoord(x), yCoord(y) {}
+	coordPair() : xCoord(0), yCoord(0) {}
 }; //Size: 0x0008
 
 struct trackedCharacter

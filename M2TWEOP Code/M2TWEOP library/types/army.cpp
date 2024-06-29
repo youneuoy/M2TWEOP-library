@@ -33,8 +33,8 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 		factionHelpers::disembark(shipArmy, x, y);
 		return this;
 	}
-	coordPair targetCoords = {x, y};
-	unit* unitList[20]{};
+	auto targetCoords = new coordPair(x, y);
+	auto unitList = new unit*[numOfUnits];
 	for (int i = 0; i < numOfUnits; i++)
 		unitList[i] = units[i];
 	auto tile = stratMapHelpers::getTile(x, y);
@@ -44,10 +44,11 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 		const auto target = tile->getArmy(false);
 		if (target && target->faction == faction)
 		{
-			if (!GAME_FUNC(bool(__thiscall*)(stratPathFinding*, unit**, int, coordPair*),
-				canArmySplit)(stratPathFind, &unitList[0], numOfUnits, &targetCoords))
+			if (!target->canReceiveMerge(this))
 			{
 				gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
+				delete targetCoords;
+				delete[] unitList;
 				return nullptr;
 			}
 			mergeArmies(target, true);
@@ -55,26 +56,68 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 		return this;
 	}
 	const auto fac = faction;
-	if (auto tileArmy = tile->getArmy(); tileArmy && (tileArmy->faction != faction || tileArmy->numOfUnits + numOfUnits > 20))
-		targetCoords = *stratMapHelpers::findValidTileNearTile(&targetCoords, isAdmiral ? 3 : 7);  // NOLINT(bugprone-branch-clone)
+	if (auto tileArmy = tile->getArmy(); tileArmy && !tileArmy->canReceiveMerge(this))
+	{
+		targetCoords = stratMapHelpers::findValidTileNearTile(targetCoords, isAdmiral ? 3 : 7);
+		gameHelpers::logStringGame("New tile: " + std::to_string(targetCoords->xCoord) + " " + std::to_string(targetCoords->yCoord));
+		if (x== targetCoords->xCoord && y == targetCoords->yCoord)
+		{
+			gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
+			delete targetCoords;
+			delete[] unitList;
+			return nullptr;
+		}
+		const auto army = moveTactical(targetCoords->xCoord, targetCoords->yCoord, false);
+		delete targetCoords;
+		delete[] unitList;
+		return army;
+	}
 	else if (auto tileSett = tile->getSettlement(); tileSett && tileSett->faction != faction)
-		targetCoords = *stratMapHelpers::findValidTileNearTile(&targetCoords, isAdmiral ? 3 : 7);
+	{
+		targetCoords = stratMapHelpers::findValidTileNearTile(targetCoords, isAdmiral ? 3 : 7);
+		gameHelpers::logStringGame("New tile: " + std::to_string(targetCoords->xCoord) + " " + std::to_string(targetCoords->yCoord));
+		if (x== targetCoords->xCoord && y == targetCoords->yCoord)
+		{
+			gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
+			delete targetCoords;
+			delete[] unitList;
+			return nullptr;
+		}
+		const auto army = moveTactical(targetCoords->xCoord, targetCoords->yCoord, false);
+		delete targetCoords;
+		delete[] unitList;
+		return army;
+	}
 	else if (auto tileFort = tile->getFort(); tileFort && tileFort->faction != faction)
-		targetCoords = *stratMapHelpers::findValidTileNearTile(&targetCoords, isAdmiral ? 3 : 7);
-	
+	{
+		targetCoords = stratMapHelpers::findValidTileNearTile(targetCoords, isAdmiral ? 3 : 7);
+		gameHelpers::logStringGame("New tile: " + std::to_string(targetCoords->xCoord) + " " + std::to_string(targetCoords->yCoord));
+		if (x== targetCoords->xCoord && y == targetCoords->yCoord)
+		{
+			gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
+			delete targetCoords;
+			delete[] unitList;
+			return nullptr;
+		}
+		const auto army = moveTactical(targetCoords->xCoord, targetCoords->yCoord, false);
+		delete targetCoords;
+		delete[] unitList;
+		return army;
+	}
 	if (!GAME_FUNC(bool(__thiscall*)(stratPathFinding*, unit**, int, coordPair*),
-		canArmySplit)(stratPathFind, &unitList[0], numOfUnits, &targetCoords))
+		canArmySplit)(stratPathFind, unitList, numOfUnits, targetCoords))
 	{
 		gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
+		delete targetCoords;
+		delete[] unitList;
 		return nullptr;
 	}
 	DWORD splitArmy = codes::offsets.splitArmy;
-	auto coordsPtr = &targetCoords;
-	auto listPtr = &unitList[0];
+	auto listPtr = unitList;
 	int unitCount = numOfUnits;
 	_asm
 	{
-		push coordsPtr
+		push targetCoords
 		push unitCount
 		push listPtr
 		mov ecx, fac
@@ -82,7 +125,10 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 		call eax
 	}
 	stratMapHelpers::clearSundries();
-	return unitList[0]->army;
+	const auto army = unitList[0]->army;
+	delete targetCoords;
+	delete[] unitList;
+	return army;
 }
 
 fortStruct* siegeS::getSiegedFort()
@@ -103,6 +149,51 @@ void armyStruct::nullifyMovePoints()
 {
 	for (int i = 0; i < numOfUnits; ++i)
 		unitHelpers::setUnitMovePoints(units[i], 0);
+}
+
+bool armyStruct::canStartSiege(settlementStruct* sett)
+{
+	if (!sett || sett->faction->factionID == faction->factionID)
+		return false;
+	if (canStartAssault(sett))
+		return true;
+	return GAME_FUNC(bool(__cdecl*)(armyStruct*, settlementStruct*), canStartSiege)(this, sett);
+}
+
+bool armyStruct::canStartSiegeFort(fortStruct* fort)
+{
+	if (!fort)
+		return false;
+	return GAME_FUNC(bool(__cdecl*)(armyStruct*, fortStruct*), canStartSiege)(this, fort);
+}
+
+bool armyStruct::canStartAssault(settlementStruct* sett)
+{
+	if (!sett || sett->faction->factionID == faction->factionID)
+		return false;
+	if (!sett->army || sett->army->numOfUnits == 0)
+		return true;
+	if (siege && siege->goal == sett)
+		return GAME_FUNC(int(__thiscall*)(armyStruct*), canStartAssault)(this) == 0;
+	const int fortificationLevel = sett->getFortificationLevel();
+	return fortificationLevel == 0 || getNumEnginesCanPenetrateWalls(sett) > fortificationLevel;
+}
+
+int armyStruct::getNumEnginesCanPenetrateWalls(settlementStruct* sett)
+{
+	if (!sett)
+		return 0;
+	const int fortificationLevel = sett->getFortificationLevel();
+	return GAME_FUNC(int(__thiscall*)(armyStruct*, int), getNumEnginesCanPenetrateWalls)(this, fortificationLevel);
+}
+
+bool armyStruct::canReceiveMerge(armyStruct* other, bool checkZoc)
+{
+	if (!other)
+		return false;
+	if (numOfUnits + other->numOfUnits > 20)
+		return false;
+	return GAME_FUNC(bool(__thiscall*)(armyStruct*, armyStruct*, bool), canMerge)(this, other, checkZoc);
 }
 
 bool armyStruct::isEnemyTo(const armyStruct* other)

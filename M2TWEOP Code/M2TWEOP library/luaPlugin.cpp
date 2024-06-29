@@ -233,8 +233,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield setScriptCounter setScriptCounter
 	@tfield getScriptCounter getScriptCounter
 	@tfield scriptCommand scriptCommand
-	@tfield enableAiLogging enableAiLogging
-	@tfield enableEopAi enableEopAi
+	@tfield getEopAiConfig getEopAiConfig
 	@table M2TWEOP
 	*/
 	
@@ -774,13 +773,13 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	tables.M2TWEOP.set_function("enableAiLogging", &globalEopAiConfig::setLogging);
 	
 	/***
-	Enable AI.
-	@function M2TWEOP.enableEopAi
-	@tparam bool set
+	Get AI config.
+	@function M2TWEOP.getEopAiConfig
+	@treturn eopAiConfig config
 	@usage
-		M2TWEOP.enableEopAi(true)
+		local config = M2TWEOP.getEopAiConfig()
 	*/
-	tables.M2TWEOP.set_function("enableEopAi", &globalEopAiConfig::toggleAi);
+	tables.M2TWEOP.set_function("getEopAiConfig", &globalEopAiConfig::getInstance);
 	
 	/***
 	Fire any script command available from the game. It is always just 2 parameters in the function, the command name and all the arguments as 1 string in the second parameter.

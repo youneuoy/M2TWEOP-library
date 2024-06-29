@@ -645,6 +645,7 @@ public:
 	{
 		stats.settlementStats.population = newPop;
 	}
+	int getFortificationLevel();
 	settlementRecruitmentPool* getSettlementRecruitmentPool(int index)
 	{
 		return &recruitmentPools[index];

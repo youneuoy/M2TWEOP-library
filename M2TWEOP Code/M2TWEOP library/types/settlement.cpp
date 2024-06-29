@@ -35,6 +35,11 @@ void settlementStatsManager::setPopulation(const int newPop)
 	GAME_FUNC(void(__thiscall*)(settlementStatsManager*, int), setPop)(this, newPop);
 }
 
+int settlementStruct::getFortificationLevel()
+{
+	return callClassFunc<settlementStruct*, int>(this, 0xB0);
+}
+
 int settlementStruct::getSettlementValue()
 {
 	const int settlementLevelValues[] = {5, 30, 60, 80, 100, 120};

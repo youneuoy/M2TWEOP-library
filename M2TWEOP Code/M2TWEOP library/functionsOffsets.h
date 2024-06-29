@@ -35,6 +35,10 @@ public:
 		DWORD createCadSiegeSettlementFunc = NULL;
 		DWORD createCadAttackSettlementFunc = NULL;
 		DWORD finalizeActionStrat = NULL;
+		DWORD hasFreeTilesToMove = NULL;
+		DWORD canStartSiege = NULL;
+		DWORD canStartAssault = NULL;
+		DWORD getNumEnginesCanPenetrateWalls = NULL;
 
 
 		DWORD getReadyForMovingFunc = NULL;
@@ -289,6 +293,7 @@ public:
 		DWORD updateFowTable = NULL;
 		DWORD updateTerrain = NULL;
 		DWORD updateRadar = NULL;
+		DWORD canMerge = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);
