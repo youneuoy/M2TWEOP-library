@@ -62,17 +62,25 @@ bool settlementStruct::isPlayerControlled()
 
 bool settlementStruct::isEnemyToFaction(factionStruct* otherFac)
 {
+	if (!faction || !otherFac)
+		return false;
 	if (faction->factionID == otherFac->factionID)
 		return false;
 	const auto facDip = campaignHelpers::getCampaignData()->getFactionDiplomacy(faction->factionID, otherFac->factionID);
+	if (!facDip)
+		return false;
 	return facDip->state == dipStance::war;
 }
 
 bool settlementStruct::isAllyToFaction(factionStruct* otherFac)
 {
+	if (!faction || !otherFac)
+		return false;
 	if (faction->factionID == otherFac->factionID)
 		return true;
 	const auto facDip = campaignHelpers::getCampaignData()->getFactionDiplomacy(faction->factionID, otherFac->factionID);
+	if (!facDip)
+		return false;
 	return facDip->state == dipStance::alliance;
 }
 

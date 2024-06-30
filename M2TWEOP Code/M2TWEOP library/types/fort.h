@@ -57,6 +57,8 @@ public :
 	{
 		return sieges[index].siege;
 	}
+	bool isAllyToFaction(factionStruct* otherFac);
+	bool isEnemyToFaction(factionStruct* otherFac);
 	character* getGovernor(const int index)
 	{
 		if (!nextObject)

@@ -261,14 +261,17 @@ float globalEopAiConfig::calculateArmyPriority(const std::shared_ptr<armyResourc
 				priority *= 5;
 		}
 	}
-	if (armyRes->army->siege && armyRes->army->siege->goal)
+	if (armyRes->army->siege)
 	{
-		if (armyRes->army->siege->goal->isAllyToFaction(m_Faction))
-			priority *= 5;
-		else if (!armyRes->army->siege->goal->isEnemyToFaction(m_Faction))
-			priority *= 2;
-		else
-			priority /= 2;
+		if (const auto targetSett = armyRes->army->siege->getSiegedSettlement(); targetSett)
+		{
+			if (targetSett->isAllyToFaction(m_Faction))
+				priority *= 5;
+			else if (!targetSett->isEnemyToFaction(m_Faction))
+				priority *= 2;
+			else
+				priority /= 2;
+		}
 	}
 	if (armyRes->army->faction->factionRecord->slave)
 		priority *= 0.25f;
@@ -1101,7 +1104,7 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 				continue;
 			if (army->army->siege)
 			{
-				if (army->army->siege->goal != targetSett->settlement)
+				if (army->army->siege->getSiegedSettlement() != targetSett->settlement)
 					continue;
 			}
 			m_Orders.back()->assignedArmies.emplace_back(army);

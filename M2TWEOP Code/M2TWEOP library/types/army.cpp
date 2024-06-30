@@ -196,10 +196,10 @@ bool armyStruct::canStartAssault(settlementStruct* sett)
 		return false;
 	if (!sett->army || sett->army->numOfUnits == 0)
 		return true;
-	if (siege && siege->goal == sett)
+	if (siege && siege->getSiegedSettlement() == sett)
 		return GAME_FUNC(int(__thiscall*)(armyStruct*), canStartAssault)(this) == 0;
 	const int fortificationLevel = sett->getFortificationLevel();
-	return fortificationLevel == 0 || getNumEnginesCanPenetrateWalls(sett) > fortificationLevel;
+	return fortificationLevel == 0 || (getNumEnginesCanPenetrateWalls(sett) > fortificationLevel);
 }
 
 int armyStruct::getNumEnginesCanPenetrateWalls(settlementStruct* sett)

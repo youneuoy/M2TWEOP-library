@@ -240,7 +240,7 @@ namespace characterHelpers
 			return;
 
 		//if maintain option is on and general is leading an army and the army is sieging the settlement then do maintain stuff
-		if (!isAttack && gen->armyLeaded && gen->armyLeaded->siege && gen->armyLeaded->siege->goal == sett)
+		if (!isAttack && gen->armyLeaded && gen->armyLeaded->siege && gen->armyLeaded->siege->getSiegedSettlement() == sett)
 		{
 			//Some array where it will put what kind of siege equipment it wants
 			DWORD pref[5] {};
@@ -310,7 +310,7 @@ namespace characterHelpers
 			return;
 
 		//if maintain option is on and general is leading an army and the army is sieging the settlement then do maintain stuff
-		if (!isAttack && gen->armyLeaded && gen->armyLeaded->siege && reinterpret_cast<fortStruct*>(gen->armyLeaded->siege->goal) == fort)
+		if (!isAttack && gen->armyLeaded && gen->armyLeaded->siege && gen->armyLeaded->siege->getSiegedFort() == fort)
 		{
 			//Some array where it will put what kind of siege equipment it wants
 			DWORD pref[5] {};
