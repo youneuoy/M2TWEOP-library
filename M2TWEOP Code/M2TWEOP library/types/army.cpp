@@ -33,12 +33,7 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 		factionHelpers::disembark(shipArmy, x, y);
 		return this;
 	}
-	auto targetCoords = new coordPair(x, y);
-	auto unitList = new unit*[numOfUnits];
-	for (int i = 0; i < numOfUnits; i++)
-		unitList[i] = units[i];
 	auto tile = stratMapHelpers::getTile(x, y);
-	const auto stratPathFind = gameHelpers::getGameDataAll()->stratPathFinding;
 	if (forceMerge)
 	{
 		const auto target = tile->getArmy(false);
@@ -47,14 +42,17 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 			if (!target->canReceiveMerge(this))
 			{
 				gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
-				delete targetCoords;
-				delete[] unitList;
 				return nullptr;
 			}
 			mergeArmies(target, true);
 		}
 		return this;
 	}
+	const auto stratPathFind = gameHelpers::getGameDataAll()->stratPathFinding;
+	auto targetCoords = new coordPair(x, y);
+	auto unitList = new unit*[numOfUnits];
+	for (int i = 0; i < numOfUnits; i++)
+		unitList[i] = units[i];
 	const auto fac = faction;
 	if (auto tileArmy = tile->getArmy(); tileArmy && !tileArmy->canReceiveMerge(this))
 	{
@@ -151,6 +149,31 @@ void armyStruct::nullifyMovePoints()
 		unitHelpers::setUnitMovePoints(units[i], 0);
 }
 
+int armyStruct::calculatePositionPower()
+{
+	int positionPower = totalStrength;
+	const auto [xCoord, yCoord] = getCoords();
+	auto neighbourTiles = stratMapHelpers::getNeighbourTiles(xCoord, yCoord);
+	while (true)
+	{
+		if (neighbourTiles.empty())
+			break;
+		const auto [checkX, checkY] = neighbourTiles.front();
+		neighbourTiles.pop();
+		const auto tile = stratMapHelpers::getTile(checkX, checkY);
+		if (!tile)
+			continue;
+		const auto tileArmy = tile->getArmy(false);
+		if (!tileArmy || tileArmy->isAdmiral)
+			continue;
+		if (tileArmy->isAllyTo(this))
+			positionPower += tileArmy->totalStrength;
+		if (tileArmy->isEnemyTo(this))
+			positionPower -= tileArmy->totalStrength;
+	}
+	return positionPower;
+}
+
 bool armyStruct::canStartSiege(settlementStruct* sett)
 {
 	if (!sett || sett->faction->factionID == faction->factionID)
@@ -187,13 +210,42 @@ int armyStruct::getNumEnginesCanPenetrateWalls(settlementStruct* sett)
 	return GAME_FUNC(int(__thiscall*)(armyStruct*, int), getNumEnginesCanPenetrateWalls)(this, fortificationLevel);
 }
 
-bool armyStruct::canReceiveMerge(armyStruct* other, bool checkZoc)
+bool armyStruct::canReceiveMerge(armyStruct* other)
 {
 	if (!other)
 		return false;
+	if (faction->factionID != other->faction->factionID)
+		return false;
 	if (numOfUnits + other->numOfUnits > 20)
 		return false;
-	return GAME_FUNC(bool(__thiscall*)(armyStruct*, armyStruct*, bool), canMerge)(this, other, checkZoc);
+	if (!isAdmiral)
+	{
+		if (other->isAdmiral && other->boardedArmy && other->boardedArmy->numOfUnits + numOfUnits > 20)
+			return false;
+	}
+	else
+	{
+		if (other->isAdmiral && boardedArmy && other->boardedArmy && boardedArmy->numOfUnits + other->boardedArmy->numOfUnits > 20)
+			return false;
+	}
+	if (charactersNum + other->charactersNum > 20)
+		return false;
+	if (settlement)
+	{
+		const auto tile = stratMapHelpers::getTile(settlement->xCoord, settlement->yCoord);
+		const int settCharacterCount = tile->getTileCharacterCount();
+		if (settCharacterCount + other->charactersNum > 20)
+			return false;
+	}
+	if (other->settlement)
+	{
+		const auto tile = stratMapHelpers::getTile(other->settlement->xCoord, other->settlement->yCoord);
+		const int settCharacterCount = tile->getTileCharacterCount();
+		if (settCharacterCount + charactersNum > 20)
+			return false;
+	}
+	return true;
+	//return GAME_FUNC(bool(__thiscall*)(armyStruct*, armyStruct*, bool), canMerge)(this, other, checkZoc);
 }
 
 bool armyStruct::isEnemyTo(const armyStruct* other)
@@ -353,7 +405,7 @@ armyStruct* armyStruct::mergeArmies(armyStruct* targetArmy, bool force)
 {
 	if (!targetArmy)
 		return nullptr;
-	if (numOfUnits + targetArmy->numOfUnits > 20)
+	if (!targetArmy->canReceiveMerge(this))
 		return nullptr;
 	if (force)
 	{
@@ -556,9 +608,7 @@ namespace armyHelpers
 		if (label != nullptr && strlen(label) == 0)
 			label = nullptr;
 		stratMap* map = stratMapHelpers::getStratMap();
-		auto spawnCoords = new coordPair;
-		spawnCoords->xCoord = x;
-		spawnCoords->yCoord = y;
+		auto spawnCoords = new coordPair(x, y);
 		spawnCoords = stratMapHelpers::findValidTileNearTile(spawnCoords, characterType);
 		character* gen = nullptr;
 		const char* typeName = characterTypes.find(characterType)->second;
@@ -572,7 +622,7 @@ namespace armyHelpers
 				{
 					if (auto namedChar = fac->characterRecords[j]; namedChar->label != nullptr && std::string(namedChar->label) == std::string(label))
 					{
-						if ((namedChar->status & 8) != 0)
+						if (namedChar->isOffMap())
 						{
 
 							char** cryptS = gameStringHelpers::createHashedString(typeName);
@@ -693,7 +743,7 @@ namespace armyHelpers
 				bgUnit = unitHelpers::createUnitIdx(0, regionId, faction->factionID, exp, armour, wpn);
 			}
 			addUnitToArmy(army, bgUnit);
-			if (characterType == 7)
+			if (characterType == characterTypeStrat::namedCharacter)
 				characterHelpers::setBodyguard(gen, bgUnit);
 			adrFunc = codes::offsets.factionResurrectStuffFunc;
 			_asm

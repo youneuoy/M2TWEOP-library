@@ -49,6 +49,7 @@ public:
 	static bool __fastcall onDecideRamAttacks(buildingBattle* gate, aiDetachment* detachment, int numRamsLeft);
 	static const char* __fastcall onQuickSave();
 	static const char* __fastcall onAutoSave();
+	static void balanceMinorSettStats(settlementStats* stats, settlementStruct* sett);
 	static eduEntry* __fastcall onGetRecruitPoolUnitEntry(int eduIndex);
 	static int __fastcall onFindUnit(char* entry, int* eduIndex);
 	static uint32_t __fastcall onSetExtentsTexture(bool isEnemy);

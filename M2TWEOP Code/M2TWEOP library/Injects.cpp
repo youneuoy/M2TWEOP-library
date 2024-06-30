@@ -4411,6 +4411,36 @@ void onEvalAttObjective5::SetNewCode()
 	delete a;
 }
 
+onRegionGroupStuff::onRegionGroupStuff(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00537B09;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005374D9;
+}
+
+void onRegionGroupStuff::SetNewCode()
+{
+	const auto a = new Assembler();
+	const auto label = a->newLabel();
+	a->test(eax, eax);
+	a->jne(label);
+	if (m_adress == 0x00537B09)
+		a->mov(eax, 0x537D13);
+	else
+		a->mov(eax, 0x5376E3);
+	a->jmp(eax);
+	a->bind(label);
+	a->mov(esi, eax);
+	a->mov(edx, dword_ptr(esi));
+	a->mov(ecx, esi);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onUpdateControllerAlloc::onUpdateControllerAlloc(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

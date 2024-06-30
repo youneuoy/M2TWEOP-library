@@ -39,6 +39,7 @@ public:
 		DWORD canStartSiege = NULL;
 		DWORD canStartAssault = NULL;
 		DWORD getNumEnginesCanPenetrateWalls = NULL;
+		DWORD canSeeCharacter = NULL;
 
 
 		DWORD getReadyForMovingFunc = NULL;

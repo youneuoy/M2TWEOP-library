@@ -58,6 +58,12 @@ void factionStruct::revealTile(const int x, const int y)
 	GAME_FUNC(int*(__thiscall*)(void*, int*, int, float), revealTile)(tilesFac, coords, 1, -1.0);
 }
 
+bool factionStruct::canSeeCharacter(character* candidate)
+{
+	return GAME_FUNC(bool(__thiscall*)(stratPathFinding*, factionStruct*, character*)
+		, canSeeCharacter)(campaignHelpers::getStratPathFinding(), this, candidate);
+}
+
 void factionStruct::setColor(const uint8_t r, const uint8_t g, const uint8_t b)
 {
 	const auto facRecord = factionRecord;

@@ -4,6 +4,7 @@
 #include "army.h"
 #include "realGameTypes.h"
 
+struct settlementResource;
 struct aiCampaignController;
 struct aiResourcePrivate;
 struct aiRegionController;
@@ -775,6 +776,7 @@ struct armyResource
 {
 	armyStruct* army{};
 	std::vector<std::shared_ptr<armyResource>> nearResources{};
+	std::vector<std::shared_ptr<settlementResource>> nearSetts{};
 	int positionPower{};
 	float value = 0.f;
 	int totalThreatReceiving{};
@@ -787,6 +789,7 @@ struct armyResource
 	bool own = true;
 	bool enemy = false;
 	float moveCost{};
+	bool validate();
 	armyResource(armyStruct* army) : army(army), unitCount(army->numOfUnits) {}
 	void calculatePositionPower();
 };
@@ -832,6 +835,7 @@ struct attackSettlementOrder : aiOrder
 	attackSettlementOrder(std::shared_ptr<settlementResource> sett) : targetSettlement(std::move(sett)) {}
 	bool evaluate() override;
 	bool evaluateAttack();
+	void sortAssigned();
 	bool execute() override;
 	std::string toString() override;
 };
@@ -900,19 +904,41 @@ public:
 	float powerFactor = 1.f;
 	float invadePriorityFactor = 1.f;
 	int maxTurnSearchCount = 4;
+	static bool getEnabled() { return getInstance()->enabled; }
+	static bool getLoggingEnabled() { return getInstance()->enableLogging; }
+	static float getAggressionFactor() { return getInstance()->aggressionFactor; }
+	static float getDefenseFactor() { return getInstance()->defenseFactor; }
+	static float getResidenceFactor() { return getInstance()->residenceFactor; }
+	static float getAidFactor() { return getInstance()->aidFactor; }
+	static float getMoveCostFactor() { return getInstance()->moveCostFactor; }
+	static float getPowerFactor() { return getInstance()->powerFactor; }
+	static float getInvadePriorityFactor() { return getInstance()->invadePriorityFactor; }
+	static int getMaxTurnSearchCount() { return getInstance()->maxTurnSearchCount; }
+	static void setEnabled(bool set) { getInstance()->enabled = set; }
+	static void setLoggingEnabled(bool set) { getInstance()->enableLogging = set; }
+	static void setAggressionFactor(float set) { getInstance()->aggressionFactor = set; }
+	static void setDefenseFactor(float set) { getInstance()->defenseFactor = set; }
+	static void setResidenceFactor(float set) { getInstance()->residenceFactor = set; }
+	static void setAidFactor(float set) { getInstance()->aidFactor = set; }
+	static void setMoveCostFactor(float set) { getInstance()->moveCostFactor = set; }
+	static void setPowerFactor(float set) { getInstance()->powerFactor = set; }
+	static void setInvadePriorityFactor(float set) { getInstance()->invadePriorityFactor = set; }
+	static void setMaxTurnSearchCount(int set) { getInstance()->maxTurnSearchCount = set; }
 	static factionStruct* getCurrentFaction() { return getInstance()->m_Faction; }
 	static std::shared_ptr<aiFactionData> getCurrentFactionData() { return getInstance()->m_CurrentFacData; }
 	static void increaseActionCount() { getInstance()->m_CurrentFacData->noActionTurns++; }
 	static void setLogging(bool log) { getInstance()->enableLogging = log; }
 	static void toggleAi(bool set) { getInstance()->enabled = set; }
 	static std::shared_ptr<globalEopAiConfig> getInstance() { return m_Instance; }
-	void turnStartMove(factionStruct* fac);
+	static globalEopAiConfig* getInstanceLua() { return m_Instance.get(); }
+	void turnStartMove(factionStruct* fac, bool isEnd = false);
 	void assignOrders(factionStruct* fac);
 	void turnEndMerge(factionStruct* fac);
 	std::shared_ptr<armyResource> findArmyResource(armyStruct* army);
 	std::shared_ptr<settlementResource> findSettResource(settlementStruct* sett);
 	static void clearFactionData() { m_Instance = std::make_shared<globalEopAiConfig>(); }
-	bool m_IsFirst = true;
+	bool isEndTurn = false;
+	void characterTurnStart(character* currentChar);
 protected:
 	static std::shared_ptr<globalEopAiConfig> m_Instance;
 	factionStruct* m_Faction{};
@@ -922,7 +948,6 @@ protected:
 	float calculateSettPriority(const std::shared_ptr<settlementResource>& settRes, priorityType priType);
 	float calculateArmyPriority(const std::shared_ptr<armyResource>& armyRes, priorityType priType);
 	void checkRegion(int regionId);
-	void characterTurnStart(character* currentChar);
 	void getData(factionStruct* fac);
 	void clearData()
 	{

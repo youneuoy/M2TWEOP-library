@@ -330,9 +330,10 @@ bool regionStruct::hasAlliesToFaction(int factionId, bool trustedOnly)
 		{
 			if (sett->faction->factionID == factionId)
 				return true;
-			if (trustedOnly)
-				return fac->aiFaction->ltgd->isTrustedAlly(sett->faction->factionID);
-			return sett->isAllyToFaction(fac);
+			if (trustedOnly && fac->aiFaction->ltgd->isTrustedAlly(sett->faction->factionID))
+				return true;
+			if (!trustedOnly && sett->isAllyToFaction(fac))
+				return true;
 		}
 	}
 	return false;

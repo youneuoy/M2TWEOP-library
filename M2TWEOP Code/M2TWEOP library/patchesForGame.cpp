@@ -780,22 +780,29 @@ void patchesForGame::onAttachRegionSettlement(settlementStruct* sett, int region
 	}
 }
 
-void balanceMinorSettStats(settlementStats* stats, settlementStruct* sett)
+void patchesForGame::onCalculateSettlement(settlementStruct* sett)
+{
+	if(!sett->isMinorSettlement)
+		return;
+	balanceMinorSettStats(&sett->stats.settlementStats, sett);
+}
+
+void patchesForGame::balanceMinorSettStats(settlementStats* stats, settlementStruct* sett)
 {
 	if (const auto region = stratMapHelpers::getRegion(sett->regionID); region->factionOwner->factionID != sett->faction->factionID)
 	{
 		const auto facDip = campaignHelpers::getCampaignData()->getFactionDiplomacy(region->factionOwner->factionID, sett->faction->factionID);
 		float modifierIncome = 0.0f;
-		float modifierGrowth = 0.0f;
+		float modifierGrowth = 0.25f;
 		if (facDip->state == dipStance::alliance)
 		{
 			modifierIncome += 0.30f;
-			modifierGrowth += 0.50f;
+			modifierGrowth += 0.40f;
 		}
 		else if (facDip->state < dipStance::war)
 		{
 			modifierIncome += 0.15f;
-			modifierGrowth += 0.30f;
+			modifierGrowth += 0.20f;
 		}
 		if (facDip->hasTradeRights)
 		{
@@ -821,13 +828,6 @@ void balanceMinorSettStats(settlementStats* stats, settlementStruct* sett)
 	stats->TotalIncomeWithoutAdmin = stats->TradeIncome + stats->FarmsIncome + stats->MiningIncome + stats->TaxesIncome;
 }
 
-void patchesForGame::onCalculateSettlement(settlementStruct* sett)
-{
-	if(!sett->isMinorSettlement)
-		return;
-	balanceMinorSettStats(&sett->stats.settlementStats, sett);
-}
-
 void patchesForGame::onPredictedStats(settlementStats* statsManager)
 {
 	if(!statsManager->settlement->isMinorSettlement)
@@ -837,7 +837,13 @@ void patchesForGame::onPredictedStats(settlementStats* statsManager)
 
 int patchesForGame::onEvalAttObjective(const aiCampaignController* controller)
 {
-	return controller->regionData->getTargetFaction()->factionID;
+	int factionId = controller->regionData->getTargetFaction()->factionID;
+	if (factionId != controller->regionData->factionID || !controller->attacking)
+		return factionId;
+	factionId = controller->targetFactionId;
+	if (factionId == controller->regionData->factionID && controller->attacking)
+		factionId = campaignHelpers::getCampaignData()->slaveFactionID;
+	return factionId;
 }
 
 void patchesForGame::onUpdateControllerAlloc(aiCampaignController* controller)
@@ -1463,6 +1469,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	const DWORD settlementTurnStart = gameVersion == 1 ? 0x0136E2B4 : 0x0132928C;
 	const DWORD settlementTurnEnd = gameVersion == 1 ? 0x0136FADC : 0x0132AAB4;
 	const DWORD factionTurnEnd = gameVersion == 1 ? 0x01369D74 : 0x01324D4C;
+	const DWORD characterTurnEnd = gameVersion == 1 ? 0x0136C0B4 : 0x0132708C;
 	if (eventCode == scrollOpenedCode)
 	{
 		char* str = reinterpret_cast<char*>(vTab[1]);
@@ -1482,7 +1489,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	else if (eventCode == factionTurnStartCode)
 	{
 		factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
-		globalEopAiConfig::getInstance()->turnStartMove(fac);
+		globalEopAiConfig::getInstance()->turnStartMove(fac, false);
 		gameHelpers::logStringGame("Faction turn start: " + string(fac->factionRecord->facName));
 		discordManager::onFactionTurnStart(fac);
 		plannedRetreatRoute::onFactionTurnStart(fac);
@@ -1499,9 +1506,16 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 		}
 		eopSettlementDataDb::get()->onGameLoaded();
 	}
-	else if (eventCode == settlementTurnEnd && FIRST_END)
+	else if (eventCode == characterTurnEnd)
 	{
-		FIRST_END = false;
+		if (const auto record = reinterpret_cast<characterRecord*>(vTab[1]);
+			record->gen
+			&& record->faction->isPlayerControlled == 0
+			&& record->gen->isGeneral()
+			&& record->gen->armyLeaded)
+		{
+			globalEopAiConfig::getInstance()->characterTurnStart(record->gen);
+		}
 	}
 	else if (eventCode == factionTurnEnd)
 	{
@@ -1509,7 +1523,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 		
 		if (globalEopAiConfig::getInstance()->enableLogging && !fac->isPlayerControlled)
 			fac->aiFaction->aiGlobalStrategyDirector->militaryDirector.logData();
-		//globalEopAiConfig::getInstance()->turnEndMerge(fac);
+		//globalEopAiConfig::getInstance()->turnStartMove(fac, true);
 		
 		FIRST_END = true;
 	}

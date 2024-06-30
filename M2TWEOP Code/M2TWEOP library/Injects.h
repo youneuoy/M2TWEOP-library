@@ -1509,6 +1509,17 @@ private:
 	LPVOID funcAddress;
 };
 
+class onRegionGroupStuff
+	:public AATemplate
+{
+public:
+	onRegionGroupStuff(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class OnLoadSettlementWorldpkgdesc
 	:public AATemplate
 {

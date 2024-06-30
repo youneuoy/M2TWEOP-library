@@ -139,6 +139,7 @@ struct armyStruct { /* structure of stack */
 public:
 	std::pair<int, int> getCoords();
 	void nullifyMovePoints();
+	int calculatePositionPower();
 	bool canStartSiege(settlementStruct* sett);
 	bool canStartSiegeFort(fortStruct* fort);
 	bool canStartAssault(settlementStruct* sett);
@@ -155,7 +156,7 @@ public:
 			return nullptr;
 		return characters[index];
 	}
-	bool canReceiveMerge(armyStruct* other, bool checkZoc = true);
+	bool canReceiveMerge(armyStruct* other);
 	bool isEnemyTo(const armyStruct* other);
 	bool isAllyTo(const armyStruct* other);
 	bool isEnemyToFaction(const factionStruct* other);

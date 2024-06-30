@@ -236,7 +236,7 @@ namespace characterHelpers
 	void siegeSettlement(character* gen, settlementStruct* sett, bool isAttack)
 	{
 		//if general or namedchar or sett is nil or general isnt alive return
-		if (!gen || !gen->characterRecord || !sett || (gen->characterRecord->age & 1) == 0)
+		if (!gen || !gen->characterRecord || !sett || !gen->characterRecord->isAlive || gen->characterRecord->faction->factionID == sett->faction->factionID)
 			return;
 
 		//if maintain option is on and general is leading an army and the army is sieging the settlement then do maintain stuff

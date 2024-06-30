@@ -76,6 +76,12 @@ bool settlementStruct::isAllyToFaction(factionStruct* otherFac)
 	return facDip->state == dipStance::alliance;
 }
 
+int settlementStruct::characterCount()
+{
+	const auto tile = stratMapHelpers::getTile(xCoord, yCoord);
+	return tile->getTileCharacterCount();
+}
+
 void eopSettlementDataDb::newGameLoaded()
 {
 	const auto map = stratMapHelpers::getStratMap();

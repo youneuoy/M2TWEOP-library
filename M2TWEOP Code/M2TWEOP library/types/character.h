@@ -185,6 +185,10 @@ public:
 	settlementStruct* getSettlement();
 	fortStruct* getFort();
 	int getTypeID();
+	bool isGeneral()
+	{
+		return getTypeID() == characterTypeStrat::namedCharacter || getTypeID() == characterTypeStrat::general;
+	}
 	bool hasFreeTilesToMove();
 	void setTypeID(int charType);
 	characterMovementExtents* getMoveExtents(int searchType, int numTurns);

@@ -723,6 +723,12 @@ void managerF::execPatches()
 	toAssessRequiredStrength->Enable();
 	f1 << "Done" << endl;
 	
+	f1 << "Start applying onRegionGroupStuff patch" << endl;
+	onRegionGroupStuff* toRegionGroupStuff = new onRegionGroupStuff(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toRegionGroupStuff->SetNewCode();
+	toRegionGroupStuff->Enable();
+	f1 << "Done" << endl;
+	
 	
 	f1 << "Start applying onCalcGarrisonStr patch" << endl;
 	onCalcGarrisonStr* toCalcGarrisonStr = new onCalcGarrisonStr(mem, (LPVOID)patchesForGame::onCalcGarrisonStr, globals::dataS.gameVersion);

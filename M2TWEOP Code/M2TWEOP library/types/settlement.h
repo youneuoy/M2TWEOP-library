@@ -710,6 +710,7 @@ public:
 	bool isPlayerControlled();
 	bool isEnemyToFaction(factionStruct* otherFac);
 	bool isAllyToFaction(factionStruct* otherFac);
+	int characterCount();
 };
 
 struct eopSettlementData

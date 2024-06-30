@@ -779,7 +779,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 		local config = M2TWEOP.getEopAiConfig()
 	*/
-	tables.M2TWEOP.set_function("getEopAiConfig", &globalEopAiConfig::getInstance);
+	tables.M2TWEOP.set_function("getEopAiConfig", &globalEopAiConfig::getInstanceLua);
 	
 	/***
 	Fire any script command available from the game. It is always just 2 parameters in the function, the command name and all the arguments as 1 string in the second parameter.
@@ -830,6 +830,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	settlementHelpers::addToLua(luaState);
 	fortHelpers::addToLua(luaState);
 	armyHelpers::addToLua(luaState);
+	campaignAi::addToLua(luaState);
 	return &luaState;
 }
 

@@ -406,6 +406,7 @@ public:
 	{
 		tilesFac->tilesVisiblity[tilesFac->tilesXBound * y + x] = vis;
 	}
+	bool canSeeCharacter(character* candidate);
 	
 	void setColor(uint8_t r, uint8_t g, uint8_t b);
 	void setSecondaryColor(uint8_t r, uint8_t g, uint8_t b);
