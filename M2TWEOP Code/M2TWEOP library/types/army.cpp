@@ -138,6 +138,8 @@ std::pair<int, int> armyStruct::getCoords()
 {
 	if (gen != nullptr)
 		return { gen->xCoord, gen->yCoord };
+	if (shipArmy != nullptr)
+		return { shipArmy->gen->xCoord, shipArmy->gen->yCoord };
 	if (settlement != nullptr)
 		return { settlement->xCoord, settlement->yCoord };
 	return { -1,-1 };
@@ -147,6 +149,11 @@ void armyStruct::nullifyMovePoints()
 {
 	for (int i = 0; i < numOfUnits; ++i)
 		unitHelpers::setUnitMovePoints(units[i], 0);
+}
+
+coordPair* armyStruct::getCoordPair()
+{
+	return GAME_FUNC(coordPair*(__thiscall*)(armyStruct*), getArmyCoords)(this);
 }
 
 void armyStruct::siegeSettlement(settlementStruct* sett, const bool isAttack)
@@ -230,12 +237,30 @@ bool armyStruct::canStartAssault(settlementStruct* sett)
 	return fortificationLevel == 0 || (getNumEnginesCanPenetrateWalls(sett) > fortificationLevel);
 }
 
+bool armyStruct::canStartAssaultFort(const fortStruct* fort)
+{
+	if (!fort || fort->faction->factionID == faction->factionID)
+		return false;
+	if (!fort->army || fort->army->numOfUnits == 0)
+		return true;
+	if (siege && siege->getSiegedFort() == fort)
+		return GAME_FUNC(int(__thiscall*)(armyStruct*), canStartAssault)(this) == 0;
+	const int fortificationLevel = fort->fortFortificationLevel;
+	return fortificationLevel == 0 || (getNumEnginesCanPenetrateWallsLevel(fortificationLevel) > fortificationLevel);
+}
+
 int armyStruct::getNumEnginesCanPenetrateWalls(settlementStruct* sett)
 {
 	if (!sett)
 		return 0;
 	const int fortificationLevel = sett->getFortificationLevel();
 	return GAME_FUNC(int(__thiscall*)(armyStruct*, int), getNumEnginesCanPenetrateWalls)(this, fortificationLevel);
+}
+
+int armyStruct::getNumEnginesCanPenetrateWallsLevel(const int level)
+{
+	const int fLevel = level;
+	return GAME_FUNC(int(__thiscall*)(armyStruct*, int), getNumEnginesCanPenetrateWalls)(this, fLevel);
 }
 
 bool armyStruct::canReceiveMerge(armyStruct* other)
@@ -868,6 +893,13 @@ namespace armyHelpers
 		@tfield bool canRetreat
 		@tfield int supportingArmiesCampaign
 		@tfield int ladders
+		@tfield int bannerRed
+		@tfield int bannerGreen
+		@tfield int bannerBlue
+		@tfield bool bannerSet
+		@tfield int xCoord
+		@tfield int yCoord
+		@tfield int ladders
 		@tfield int rams
 		@tfield int towers
 		@tfield int battleLadders How many left in battle.
@@ -924,6 +956,16 @@ namespace armyHelpers
 		@tfield liftSiege liftSiege
 		@tfield liftBlockade liftBlockade
 		@tfield siegeSettlement siegeSettlement
+		@tfield isEnemyTo isEnemyTo
+		@tfield isAllyTo isAllyTo
+		@tfield isEnemyToFaction isEnemyToFaction
+		@tfield isAllyToFaction isAllyToFaction
+		@tfield getNumberOfCategory getNumberOfCategory
+		@tfield moveTactical moveTactical
+		@tfield canStartAssault canStartAssault
+		@tfield canStartSiege canStartSiege
+		@tfield canStartSiegeFort canStartSiegeFort
+		@tfield canStartAssaultFort canStartAssaultFort
 
 
 		@table armyStruct
@@ -938,8 +980,14 @@ namespace armyHelpers
 		types.armyStruct.set("battleOutcome", &armyStruct::battleOutcome);
 		types.armyStruct.set("battleTowers", &armyStruct::battleTowers);
 		types.armyStruct.set("deadUnitsNum", &armyStruct::deadUnitsNum);
+		types.armyStruct.set("xCoord", sol::property(&armyStruct::getX));
+		types.armyStruct.set("yCoord", sol::property(&armyStruct::getY));
 		types.armyStruct.set("ladders", &armyStruct::ladders);
 		types.armyStruct.set("rams", &armyStruct::rams);
+		types.armyStruct.set("bannerRed", &armyStruct::bannerRed);
+		types.armyStruct.set("bannerBlue", &armyStruct::bannerBlue);
+		types.armyStruct.set("bannerGreen", &armyStruct::bannerGreen);
+		types.armyStruct.set("bannerSet", &armyStruct::bannerSet);
 		types.armyStruct.set("hiddenUnitCount", &armyStruct::hiddenUnitCount);
 		types.armyStruct.set("maxGroups", &armyStruct::maxUnitGroups);
 		types.armyStruct.set("towers", &armyStruct::towers);
@@ -1216,6 +1264,108 @@ namespace armyHelpers
 		     army:buildWatchTower()
 		*/
 		types.armyStruct.set_function("buildWatchTower", &buildWatchTower);
+		
+		/***
+		Does army have the capability to start a siege? (infantry units to carry equipment or siege engines)
+		@function armyStruct:canStartSiege
+		@tparam settlementStruct target
+		@treturn bool canSiege
+		@usage
+		    local canSiege = army:canStartSiege(settlement)
+		*/
+		types.armyStruct.set_function("canStartSiege", &armyStruct::canStartSiege);
+		
+		/***
+		Does army have the capability to start a siege? (infantry units to carry equipment or siege engines)
+		@function armyStruct:canStartSiegeFort
+		@tparam fortStruct target
+		@treturn bool canSiege
+		@usage
+		    local canSiege = army:canStartSiegeFort(fort)
+		*/
+		types.armyStruct.set_function("canStartSiegeFort", &armyStruct::canStartSiegeFort);
+		
+		/***
+		Does army have the capability to start an assault?
+		@function armyStruct:canStartAssault
+		@tparam settlementStruct target
+		@treturn bool canAssault
+		@usage
+		    local canSiege = army:canStartAssault(settlement)
+		*/
+		types.armyStruct.set_function("canStartAssault", &armyStruct::canStartAssault);
+		
+		/***
+		Does army have the capability to start an assault?
+		@function armyStruct:canStartAssaultFort
+		@tparam fortStruct target
+		@treturn bool canAssault
+		@usage
+		    local canSiege = army:canStartAssaultFort(fort)
+		*/
+		types.armyStruct.set_function("canStartAssaultFort", &armyStruct::canStartAssaultFort);
+		
+		/***
+		Is another army at war with this army?
+		@function armyStruct:isEnemyTo
+		@tparam armyStruct other
+		@treturn bool isEnemy
+		@usage
+		    local result = army:isEnemyTo(otherArmy)
+		*/
+		types.armyStruct.set_function("isEnemyTo", &armyStruct::isEnemyTo);
+		
+		/***
+		Is another army allied to this army?
+		@function armyStruct:isAllyTo
+		@tparam armyStruct other
+		@treturn bool isAlly
+		@usage
+		    local result = army:isAllyTo(otherArmy)
+		*/
+		types.armyStruct.set_function("isAllyTo", &armyStruct::isAllyTo);
+		
+		/***
+		Is this army at war with this faction?
+		@function armyStruct:isEnemyToFaction
+		@tparam factionStruct fac
+		@treturn bool isEnemy
+		@usage
+		    local result = army:isEnemyToFaction(fac)
+		*/
+		types.armyStruct.set_function("isEnemyToFaction", &armyStruct::isEnemyToFaction);
+		
+		/***
+		Is this army allied to this faction?
+		@function armyStruct:isAllyToFaction
+		@tparam factionStruct fac
+		@treturn bool isAlly
+		@usage
+		    local result = army:isAllyToFaction(fac)
+		*/
+		types.armyStruct.set_function("isAllyToFaction", &armyStruct::isAllyToFaction);
+		
+		/***
+		Move to specified position, merge with other armies if they occupy the same tile, find close tile if the target is occupied.
+		@function armyStruct:moveTactical
+		@tparam int x
+		@tparam int y
+		@tparam bool forceMerge Merge automatically instead of by movement if an army occupies
+		@treturn armyStruct army
+		@usage
+		    local result = army:moveTactical(123, 245, false)
+		*/
+		types.armyStruct.set_function("moveTactical", &armyStruct::moveTactical);
+		
+		/***
+		Get number of units in this army of a specific category
+		@function armyStruct:moveTactical
+		@tparam int category use unitCategory enum
+		@treturn int num
+		@usage
+		    local num = army:getNumberOfCategory(unitCategory.infantry)
+		*/
+		types.armyStruct.set_function("getNumberOfCategory", &armyStruct::getNumberOfCategory);
 		
 		///Siege
 		//@section Siege

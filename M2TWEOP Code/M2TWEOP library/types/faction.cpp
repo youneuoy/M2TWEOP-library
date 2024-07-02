@@ -368,7 +368,7 @@ namespace factionHelpers
 		auto tile = stratMapHelpers::getTile(x, y);
 		if (auto tileChar = tile->getCharacter(); tileChar)
 		{
-			if (tileChar->armyLeaded && tileChar->armyLeaded->faction != faction)
+			if (tileChar->army && tileChar->army->faction != faction)
 			{
 				gameHelpers::logStringGame("factionStruct.splitArmy: can not split army, tile is occupied by enemy.");
 				return nullptr;

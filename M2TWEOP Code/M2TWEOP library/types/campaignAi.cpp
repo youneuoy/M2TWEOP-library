@@ -114,6 +114,8 @@ namespace campaignAi
 		@tfield float aidFactor
 		@tfield float moveCostFactor
 		@tfield float powerFactor
+		@tfield float nonBorderFactor
+		@tfield float invadePriorityFactor
 		@tfield int maxTurnSearchCount
 		@tfield getFactionData getFactionData
 
@@ -128,6 +130,8 @@ namespace campaignAi
 		typeAll.eopAiConfig.set("aidFactor", sol::property(&globalEopAiConfig::getAidFactor, &globalEopAiConfig::setAidFactor));
 		typeAll.eopAiConfig.set("moveCostFactor", sol::property(&globalEopAiConfig::getMoveCostFactor, &globalEopAiConfig::setMoveCostFactor));
 		typeAll.eopAiConfig.set("powerFactor", sol::property(&globalEopAiConfig::getPowerFactor, &globalEopAiConfig::setPowerFactor));
+		typeAll.eopAiConfig.set("nonBorderFactor", sol::property(&globalEopAiConfig::getNonBorderFactor, &globalEopAiConfig::setNonBorderFactor));
+		typeAll.eopAiConfig.set("invadePriorityFactor", sol::property(&globalEopAiConfig::getInvadePriorityFactor, &globalEopAiConfig::setInvadePriorityFactor));
 		typeAll.eopAiConfig.set("maxTurnSearchCount", sol::property(&globalEopAiConfig::getMaxTurnSearchCount, &globalEopAiConfig::setMaxTurnSearchCount));
 		
 		/***
@@ -551,6 +555,7 @@ bool attackSettlementOrder::execute()
 					if (siege->army->faction->factionID == assignedArmy->army->faction->factionID
 						&& siege->army->canReceiveMerge(assignedArmy->army))
 					{
+						assignedArmy->army->gen->hasEopOrders = true;
 						const auto [xCoord, yCoord] = siege->army->getCoords();
 						if (assignedArmy->army->moveTactical(xCoord, yCoord, true))
 						{
@@ -571,11 +576,13 @@ bool attackSettlementOrder::execute()
 			{
 				if (assignedArmy->army->canStartAssault(targetSettlement->settlement))
 				{
+					assignedArmy->army->gen->hasEopOrders = true;
 					assignedArmy->army->siegeSettlement(targetSettlement->settlement, true);
 					break;
 				}
 				if (targetSettlement->settlement->siegeNum < 8 || assignedArmy->army->siege)
 				{
+					assignedArmy->army->gen->hasEopOrders = true;
 					assignedArmy->army->siegeSettlement(targetSettlement->settlement, false);
 					hasAssaulted = true;
 					assignedArmy->army->gen->movePointsArmy = 0;
@@ -583,6 +590,7 @@ bool attackSettlementOrder::execute()
 			}
 			else if (assignedArmy->army->isBorderingSettlement(targetSettlement->settlement))
 			{
+				assignedArmy->army->gen->hasEopOrders = true;
 				assignedArmy->army->gen->movePointsArmy = 1;
 			}
 		}
@@ -611,12 +619,14 @@ bool attackSettlementOrder::execute()
 			totalCommitted += assignedArmy->army->totalStrength;
 			if (assignedArmy->moveCost > assignedArmy->army->gen->movePointsArmy)
 			{
+				assignedArmy->army->gen->hasEopOrders = true;
 				coordPair coords = {validTiles[tileIndex].first, validTiles[tileIndex].second};
 				coords = *stratMapHelpers::findValidTileNearTile(&coords, 7);
 				characterHelpers::moveNormal(assignedArmy->army->gen, coords.xCoord, coords.yCoord);
 			}
 			else
 			{
+				assignedArmy->army->gen->hasEopOrders = true;
 				assignedArmy->army->moveTactical(validTiles[tileIndex].first, validTiles[tileIndex].second);
 			}
 			if ((totalCommitted >> 1) > targetSettlement->positionPower)
@@ -754,6 +764,7 @@ bool attackArmyOrder::execute()
 			gameHelpers::logStringGame(logString2);
 			if (assignedArmy->army->attackArmy(targetArmy->army))
 			{
+				assignedArmy->army->gen->hasEopOrders = true;
 				assignedArmy->used = true;
 				TURN_HAD_ACTION = true;
 				break;
@@ -779,6 +790,7 @@ bool attackArmyOrder::execute()
 			}
 			if (!assignedArmy->validate() || tileIndex >= static_cast<int>(validTiles.size()))
 				continue;
+			assignedArmy->army->gen->hasEopOrders = true;
 			assignedArmy->used = true;
 			const std::string logString2 = "General: " + string(assignedArmy->army->gen->characterRecord->fullName);
 			gameHelpers::logStringGame(logString2);
@@ -836,6 +848,7 @@ bool defendSettlementOrder::execute()
 		if (!assignedArmy->validate())
 			continue;
 		gameHelpers::logStringGame("character: " + string(assignedArmy->army->gen->characterRecord->fullName));
+		assignedArmy->army->gen->hasEopOrders = true;
 		assignedArmy->used = true;
 		if (assignedArmy->moveCost > assignedArmy->army->gen->movePointsArmy || !targetSettlement->own || targetSettlement->settlement->siegeNum > 0)
 		{
@@ -896,6 +909,7 @@ bool defendArmyOrder::execute()
 		gameHelpers::logStringGame("startX: " + std::to_string(assignedArmy->army->gen->xCoord) + " startY: " + std::to_string(assignedArmy->army->gen->yCoord));
 		gameHelpers::logStringGame("endX: " + std::to_string(targetArmy->army->gen->xCoord) + " endY: " + std::to_string(targetArmy->army->gen->yCoord));
 		 */
+		assignedArmy->army->gen->hasEopOrders = true;
 		assignedArmy->used = true;
 		totalCommitted += assignedArmy->army->totalStrength;
 		if (assignedArmy->moveCost > assignedArmy->army->gen->movePointsArmy)
@@ -937,6 +951,7 @@ bool mergeArmiesOrder::execute()
 	const auto [xCoord, yCoord] = targetArmy->getCoords();
 	assignedArmies.front()->army->moveTactical(xCoord, yCoord, true);
 	assignedArmies.front()->used = true;
+	assignedArmies.front()->army->gen->hasEopOrders = true;
 	gameHelpers::logStringGame("Executed merge army order for faction: " + std::to_string(globalEopAiConfig::getCurrentFaction()->factionID));
 	return true;
 }
@@ -1011,9 +1026,9 @@ void globalEopAiConfig::checkRegion(int regionId)
 void globalEopAiConfig::characterTurnStart(character* currentChar)
 {
 	m_Faction = currentChar->characterRecord->faction;
-	if (!m_Faction || m_Faction->factionRecord->slave || m_Faction->isHorde || !currentChar->armyLeaded || !currentChar->isGeneral() || currentChar->ifMarkedToKill)
+	if (!m_Faction || m_Faction->factionRecord->slave || m_Faction->isHorde || !currentChar->army || !currentChar->isGeneral() || currentChar->ifMarkedToKill)
 		return; 
-	const auto army = currentChar->armyLeaded;
+	const auto army = currentChar->army;
 	if (army->siege)
 		return;
 	bool used = false;
@@ -1143,7 +1158,7 @@ std::shared_ptr<settlementResource> globalEopAiConfig::findSettResource(settleme
 	return nullptr;
 }
 
-const auto orderSort = [](const std::shared_ptr<aiOrder>& a, const std::shared_ptr<aiOrder>& b)
+const auto C_ORDER_SORT = [](const std::shared_ptr<aiOrder>& a, const std::shared_ptr<aiOrder>& b)
 {
 	return a->priority > b->priority;
 };
@@ -1268,7 +1283,7 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 		if (m_Orders.back()->priority < 0)
 			m_Orders.erase(m_Orders.end() - 1);
 	}
-	std::stable_sort(m_Orders.begin(), m_Orders.end(), orderSort);
+	std::stable_sort(m_Orders.begin(), m_Orders.end(), C_ORDER_SORT);
 	for (const auto& order : m_Orders)
 	{
 		if (order->executed || order->priority < 1)
@@ -1512,12 +1527,13 @@ void globalEopAiConfig::getData(factionStruct* fac)
 	for (int i = 0; i < fac->numOfCharacters; i++)
 	{
 		const auto currentChar = fac->characters[i];
+		currentChar->hasEopOrders = false;
 		if (currentChar->getTypeID() != characterTypeStrat::general
 			&& currentChar->getTypeID() != characterTypeStrat::namedCharacter)
 			continue;
-		if (!currentChar->armyLeaded)
+		if (!currentChar->army)
 			continue;
-		const auto res = findArmyResource(currentChar->armyLeaded);
+		const auto res = findArmyResource(currentChar->army);
 		if (!res || res->searched || !res->army || !res->army->gen || res->used || res->army->gen->crusade)
 			continue;
 		//gameHelpers::logStringGame("Found army resource: " + std::string(res->army->gen->characterRecord->fullName));
@@ -1595,7 +1611,7 @@ void globalEopAiConfig::getData(factionStruct* fac)
 \*--------------------------------------------------------------------------------------------------------------------*/
 #pragma region Campaign AI Helpers
 
-void sortCampaigns(campaignControllerArray* array)
+void sortCampaigns(const campaignControllerArray* array)
 {
 	auto comparison = [](const aiCampaignController* a, const aiCampaignController* b)
 	{
@@ -1665,7 +1681,7 @@ int calculateBorderChange(const aiGlobalStrategyDirector* director, aiRegionData
 	return border;
 }
 
-int calculateRegionValue(aiGlobalStrategyDirector* director, aiRegionData* regionData)
+int calculateRegionValue(const aiGlobalStrategyDirector* director, aiRegionData* regionData)
 {
 	if (!regionData)
 		return 0;
@@ -2502,7 +2518,7 @@ std::string strategyTypeToString(aiCampaignStrategy strategy)
 
 void aiCampaignController::logData()
 {
-	const std::string facName = string(aiFaction->faction->factionRecord->facName);
+	const auto facName = string(aiFaction->faction->factionRecord->facName);
 	std::string logString = "Campaign Controller Data: ";
 	logString += "\nFaction: " + facName;
 	logString += "\nSettlement: " + string(regionData->getSettlement()->name);

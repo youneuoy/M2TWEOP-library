@@ -122,14 +122,14 @@ struct character
 	portBuildingStruct* dockedPort;
 	portBuildingStruct* blockadedPort;
 	DWORD armyLeadedVtbl;
-	struct armyStruct* armyLeaded; /* army of the general */
+	struct armyStruct* army; /* army of the general */
 	DWORD bodyguardsVtbl;
 	struct unit* bodyguards; /* unit of general */
-	struct armyStruct* armyNotLeaded; /* army, if not leader */
+	struct armyStruct* visitingArmy; /* army, if not leader */
 	character *surrenderToCharacter;
 	character *surrenderTile;
 	factionStruct *captor;
-	int8_t isHostage;
+	bool hasEopOrders;
 	int8_t turnExecuting;
 	int16_t additionalRot;
 	int timer;

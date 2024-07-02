@@ -52,10 +52,10 @@ struct armyStruct { /* structure of stack */
 	DWORD armyVerification1;
 	DWORD armyVerification2;
 	DWORD armyVerification3;
-	bool damageEnemyObj;
-	bool damageTileObj;
-	bool destroySupplyObj;
-	bool destroyCampObj;
+	uint8_t bannerRed;
+	uint8_t bannerGreen;
+	uint8_t bannerBlue;
+	bool bannerSet;
 	void* battleSoldiers;
 	struct factionStruct* faction;
 	int regionID;
@@ -138,14 +138,19 @@ struct armyStruct { /* structure of stack */
 	int32_t subFactionID; //0x0160
 public:
 	std::pair<int, int> getCoords();
+	int getX(){return getCoordPair()->xCoord;}
+	int getY(){return getCoordPair()->yCoord;}
 	void nullifyMovePoints();
+	coordPair* getCoordPair();
 	void siegeSettlement(settlementStruct* sett, bool isAttack);
 	bool isBorderingSettlement(const settlementStruct* sett);
 	int calculatePositionPower();
 	bool canStartSiege(settlementStruct* sett);
 	bool canStartSiegeFort(fortStruct* fort);
 	bool canStartAssault(settlementStruct* sett);
+	bool canStartAssaultFort(const fortStruct* fort);
 	int getNumEnginesCanPenetrateWalls(settlementStruct* sett);
+	int getNumEnginesCanPenetrateWallsLevel(int level);
 	unit* getUnit(const int index)
 	{
 		if (index < 0 || index >= numOfUnits)
@@ -164,6 +169,7 @@ public:
 	bool isEnemyToFaction(const factionStruct* other);
 	bool isAllyToFaction(const factionStruct* other);
 	int getNumberOfCategory(unitCategory category);
+	int getNumberOfCategoryLua(int category){return getNumberOfCategory(static_cast<unitCategory>(category));}
 	armyStruct* moveTactical(int x, int y, bool forceMerge = false);
 	unitGroup* getGroup(const int index)
 	{

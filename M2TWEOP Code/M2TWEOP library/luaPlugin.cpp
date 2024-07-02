@@ -764,15 +764,6 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	tables.M2TWEOP.set_function("getScriptCounter", &gameHelpers::getScriptCounterNoBool);
 	
 	/***
-	Enable AI logging.
-	@function M2TWEOP.enableAiLogging
-	@tparam bool set
-	@usage
-		M2TWEOP.enableAiLogging(true)
-	*/
-	tables.M2TWEOP.set_function("enableAiLogging", &globalEopAiConfig::setLogging);
-	
-	/***
 	Get AI config.
 	@function M2TWEOP.getEopAiConfig
 	@treturn eopAiConfig config

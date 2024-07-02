@@ -53,7 +53,7 @@ namespace gameEvents
 			fortStruct* fort = nullptr;
 			auto eventData = reinterpret_cast<eventTrigger*>(vTab);
 			const auto character = eventData->getEventCharacterRecord();
-			if (const auto army = character->gen->armyLeaded; army && army->siege)
+			if (const auto army = character->gen->army; army && army->siege)
 			{
 				settlement = army->siege->getSiegedSettlement();
 				fort = army->siege->getSiegedFort();

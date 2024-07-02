@@ -240,20 +240,20 @@ namespace characterHelpers
 			return;
 
 		//if maintain option is on and general is leading an army and the army is sieging the settlement then do maintain stuff
-		if (!isAttack && gen->armyLeaded && gen->armyLeaded->siege && gen->armyLeaded->siege->getSiegedSettlement() == sett)
+		if (!isAttack && gen->army && gen->army->siege && gen->army->siege->getSiegedSettlement() == sett)
 		{
 			//Some array where it will put what kind of siege equipment it wants
 			DWORD pref[5] {};
 			
 			//Game function to fill that array
 			if (!GAME_FUNC(bool(__cdecl*)(armyStruct* armyP, DWORD* prefP, settlementStruct* settlementP),
-				getEquipmentPreferencesFunc)(gen->armyLeaded, &pref[0], sett))
+				getEquipmentPreferencesFunc)(gen->army, &pref[0], sett))
 			{
 				//Loop through the array and decide what equipment to use
 				for (int i = 0; pref[i] != 3 && i < 5; i++)
 				{
 					GAME_FUNC(char(__thiscall*)(siegeS* siegeP, DWORD currPrefP),
-						decideEquipmentFunc)(gen->armyLeaded->siege, pref[i]);
+						decideEquipmentFunc)(gen->army->siege, pref[i]);
 				}
 			}
 			return;
@@ -310,20 +310,20 @@ namespace characterHelpers
 			return;
 
 		//if maintain option is on and general is leading an army and the army is sieging the settlement then do maintain stuff
-		if (!isAttack && gen->armyLeaded && gen->armyLeaded->siege && gen->armyLeaded->siege->getSiegedFort() == fort)
+		if (!isAttack && gen->army && gen->army->siege && gen->army->siege->getSiegedFort() == fort)
 		{
 			//Some array where it will put what kind of siege equipment it wants
 			DWORD pref[5] {};
 			
 			//Game function to fill that array
 			if (!GAME_FUNC(bool(__cdecl*)(armyStruct*, DWORD*, fortStruct*),
-				getEquipmentPreferencesFunc)(gen->armyLeaded, &pref[0], fort))
+				getEquipmentPreferencesFunc)(gen->army, &pref[0], fort))
 			{
 				//Loop through the array and decide what equipment to use
 				for (int i = 0; pref[i] != 3 && i < 5; i++)
 				{
 					GAME_FUNC(char(__thiscall*)(siegeS* siegeP, DWORD currPrefP),
-						decideEquipmentFunc)(gen->armyLeaded->siege, pref[i]);
+						decideEquipmentFunc)(gen->army->siege, pref[i]);
 				}
 			}
 			return;
@@ -451,12 +451,12 @@ namespace characterHelpers
 		if (!gen || !targetCharacter)
 			return;
 		armyStruct* army = nullptr;
-		if (gen->armyLeaded)
-			army = gen->armyLeaded;
-		gen->armyLeaded = nullptr;
+		if (gen->army)
+			army = gen->army;
+		gen->army = nullptr;
 		GAME_FUNC(DWORD(__thiscall*)(character**, character**, characterAction, int),
 		createCADTargetCharacter)(&gen, &targetCharacter, type, 0);
-		gen->armyLeaded = army;
+		gen->army = army;
 		DWORD cadClass = dataOffsets::offsets.globalCadClass;
 		cadClass = *reinterpret_cast<DWORD*>(cadClass);
 		DWORD adrFunc = codes::offsets.finalizeActionStrat;
@@ -535,13 +535,13 @@ namespace characterHelpers
 		if (!gen || !targetSettlement)
 			return;
 		armyStruct* army = nullptr;
-		if (gen->armyLeaded)
-			army = gen->armyLeaded;
+		if (gen->army)
+			army = gen->army;
 		if (type != characterAction::besiege && type != characterAction::assault && type != characterAction::captureResidence)
-			gen->armyLeaded = nullptr;
+			gen->army = nullptr;
 		GAME_FUNC(DWORD(__thiscall*)(character**, settlementStruct**, characterAction, int),
 		createCADTargetSettlement)(&gen, &targetSettlement, type, 0);
-		gen->armyLeaded = army;
+		gen->army = army;
 		DWORD cadClass = dataOffsets::offsets.globalCadClass;
 		cadClass = *reinterpret_cast<DWORD*>(cadClass);
 		DWORD adrFunc = codes::offsets.finalizeActionStrat;
@@ -616,13 +616,13 @@ namespace characterHelpers
 		if (!gen || !targetFort)
 			return;
 		armyStruct* army = nullptr;
-		if (gen->armyLeaded)
-			army = gen->armyLeaded;
+		if (gen->army)
+			army = gen->army;
 		if (type != characterAction::besiege && type != characterAction::assault && type != characterAction::captureResidence)
-			gen->armyLeaded = nullptr;
+			gen->army = nullptr;
 		GAME_FUNC(DWORD(__thiscall*)(character**, fortStruct**, characterAction, int),
 		createCADTargetFort)(&gen, &targetFort, type, 0);
-		gen->armyLeaded = army;
+		gen->army = army;
 		DWORD cadClass = dataOffsets::offsets.globalCadClass;
 		cadClass = *reinterpret_cast<DWORD*>(cadClass);
 		DWORD adrFunc = codes::offsets.finalizeActionStrat;
@@ -675,11 +675,11 @@ namespace characterHelpers
 		if ((gen->characterRecord->status & 8) != 0)
 			return;
 		unit* newUnit = nullptr;
-		if (gen->armyLeaded && gen->armyLeaded->numOfUnits == 1)
+		if (gen->army && gen->army->numOfUnits == 1)
 		{
 			const auto id = gen->bodyguards->eduEntry->index;
-			newUnit = unitHelpers::createUnitIdx(id, gen->regionID, gen->armyLeaded->faction->factionID, 0, 0, 0);
-			armyHelpers::addUnitToArmy(gen->armyLeaded, newUnit);
+			newUnit = unitHelpers::createUnitIdx(id, gen->regionID, gen->army->faction->factionID, 0, 0, 0);
+			armyHelpers::addUnitToArmy(gen->army, newUnit);
 		}
 		DWORD funcAddr = codes::offsets.sendCharacterOffMap;
 		auto faction = gen->characterRecord->faction;
@@ -715,17 +715,17 @@ namespace characterHelpers
 			gameHelpers::logFuncError(functionName, "unsupported character type princess");
 			return;
 		}
-		if (gen->armyNotLeaded)
+		if (gen->visitingArmy)
 		{
 			gameHelpers::logFuncError(functionName, "character is part of an army");
 			return;
 		}
-		if (gen->armyLeaded && (gen->armyLeaded->shipArmy || gen->armyLeaded->charactersNum != 0))
+		if (gen->army && (gen->army->shipArmy || gen->army->charactersNum != 0))
 		{
 			gameHelpers::logFuncError(functionName, "character is boarded or has auxiliary characters");
 			return;
 		}
-		if (gen->genType->type == characterTypeStrat::namedCharacter && !gen->armyLeaded)
+		if (gen->genType->type == characterTypeStrat::namedCharacter && !gen->army)
 		{
 			gameHelpers::logFuncError(functionName, "character is in a residence or off-map");
 			return;
@@ -764,15 +764,15 @@ namespace characterHelpers
 		unitInfo bgInfo{};
 		std::vector<unitInfo> unitsInfo;
 		if ((gen->genType->type == characterTypeStrat::namedCharacter
-			|| gen->genType->type == characterTypeStrat::general) && gen->armyLeaded)
+			|| gen->genType->type == characterTypeStrat::general) && gen->army)
 		{
 			if (keepBg && gen->bodyguards)
 				bgInfo = unitInfo(gen->bodyguards);
 			if (keepArmy)
 			{
-				for (int i = 0; i < gen->armyLeaded->numOfUnits; ++i)
+				for (int i = 0; i < gen->army->numOfUnits; ++i)
 				{
-					auto un = gen->armyLeaded->units[i];
+					auto un = gen->army->units[i];
 					if (un->generalInfo || un == gen->bodyguards)
 						continue;
 					if ((un->eduEntry->ownership & (1 << fac->factionID)) == 0)
@@ -808,25 +808,25 @@ namespace characterHelpers
 		}
 		
 		if ((gen->genType->type == characterTypeStrat::namedCharacter
-			|| gen->genType->type == characterTypeStrat::general) && gen->armyLeaded)
+			|| gen->genType->type == characterTypeStrat::general) && gen->army)
 		{
 			if (keepBg && gen->genType->type == characterTypeStrat::namedCharacter)
 			{
 				auto newUnit = bgInfo.CreateUnit(fac, gen);
-				if (gen->armyLeaded && gen->armyLeaded->numOfUnits >= 20)
+				if (gen->army && gen->army->numOfUnits >= 20)
 				{
 					auto bodyguard = gen->bodyguards;
-					auto randomUnit = gen->armyLeaded->units[17];
+					auto randomUnit = gen->army->units[17];
 					setBodyguard(gen, randomUnit);
 					unitHelpers::killUnit(bodyguard);
-					armyHelpers::addUnitToArmy(gen->armyLeaded, newUnit);
+					armyHelpers::addUnitToArmy(gen->army, newUnit);
 					setBodyguard(gen, newUnit);
 				}
 				else
 				{
 					auto bodyguard = gen->bodyguards;
 					setBodyguard(gen, newUnit);
-					armyHelpers::addUnitToArmy(gen->armyLeaded, newUnit);
+					armyHelpers::addUnitToArmy(gen->army, newUnit);
 					unitHelpers::killUnit(bodyguard);
 				}
 			}
@@ -835,13 +835,13 @@ namespace characterHelpers
 				for (auto& un : unitsInfo)
 				{
 					auto newUnit = un.CreateUnit(fac, gen);
-					armyHelpers::addUnitToArmy(gen->armyLeaded, newUnit);
+					armyHelpers::addUnitToArmy(gen->army, newUnit);
 				}
 			}
 		}
 		GAME_FUNC(void(__thiscall*)(character*), initPlaceCharacter)(gen);
-		if (gen->armyLeaded)
-			gen->armyLeaded->sortStack(6, 7, 4);
+		if (gen->army)
+			gen->army->sortStack(6, 7, 4);
 	}
 	
 	void teleportCharacter(character* gen, int x, int y)
@@ -852,10 +852,10 @@ namespace characterHelpers
 			return;
 		}
 		
-		if (gen->armyLeaded != nullptr)
+		if (gen->army != nullptr)
 		{
-			armyHelpers::stopSiege(gen->armyLeaded);
-			armyHelpers::stopBlockPort(gen->armyLeaded);
+			armyHelpers::stopSiege(gen->army);
+			armyHelpers::stopBlockPort(gen->army);
 		}
 
 		auto targetCoords = new coordPair{ x,y };
@@ -896,10 +896,10 @@ namespace characterHelpers
 			return false;
 		}
 		bool isTeleported = false;
-		if (gen->armyLeaded != nullptr)
+		if (gen->army != nullptr)
 		{
-			armyHelpers::stopSiege(gen->armyLeaded);
-			armyHelpers::stopBlockPort(gen->armyLeaded);
+			armyHelpers::stopSiege(gen->army);
+			armyHelpers::stopBlockPort(gen->army);
 		}
 
 		auto targetCoords = new coordPair{ x,y };
@@ -933,12 +933,12 @@ namespace characterHelpers
 	
 	fortStruct* createFort(character* gen)
 	{
-		if (!gen || !gen->characterRecord || !gen->characterRecord->faction || !gen->armyLeaded)
+		if (!gen || !gen->characterRecord || !gen->characterRecord->faction || !gen->army)
 			return nullptr;
 		if (auto faction = gen->characterRecord->faction;
 			faction->money < cultures::getCultureDb()->cultures[faction->cultureID].fortCost)
 			return nullptr;
-		armyStruct* newArmy = gen->armyLeaded;
+		armyStruct* newArmy = gen->army;
 		auto oldOption = campaignHelpers::getCampaignDb()->campaignDbSettlement.canBuildForts;
 		campaignHelpers::getCampaignDb()->campaignDbSettlement.canBuildForts = true;
 		DWORD adrFunc = codes::offsets.createFortFunc;
@@ -1035,10 +1035,11 @@ namespace characterHelpers
 	@tfield bool inEnemyTerritory
 	@tfield int sedentaryTurns
 	@tfield bool isPlagued
+	@tfield bool hasEopOrders
 	@tfield int plaguedDuration
 	@tfield unit bodyguards
-	@tfield armyStruct armyLeaded
-	@tfield armyStruct armyNotLeaded in the stack but not leading it
+	@tfield armyStruct army
+	@tfield armyStruct visitingArmy in the army but not leading it
 	@tfield int actionType
 	@tfield bool unusedMovePoints
 	@tfield bool infiniteMovePoints
@@ -1117,6 +1118,7 @@ namespace characterHelpers
 	types.character.set("movePointsCharacter", &character::movePointsCharacter);
 	types.character.set("numTurnsIdle", &character::numTurnsIdle);
 	types.character.set("regionID", &character::regionID);
+	types.character.set("hasEopOrders", &character::hasEopOrders);
 	types.character.set("percentCharacterReligionInRegion", &character::percentCharacterReligionInRegion);
     types.character.set("popConvertedThisTurn", &character::popConvertedThisTurn);
     types.character.set("timeInRegion", &character::timeInRegion);
@@ -1125,9 +1127,11 @@ namespace characterHelpers
     types.character.set("fort", sol::property(&character::getFort));
     types.character.set("dockedPort", &character::dockedPort);
     types.character.set("blockedPort", &character::blockadedPort);
-    types.character.set("armyLeaded", &character::armyLeaded);
+    types.character.set("army", &character::army);
+    types.character.set("armyLeaded", &character::army);
     types.character.set("bodyguards", &character::bodyguards);
-    types.character.set("armyNotLeaded", &character::armyNotLeaded);
+    types.character.set("armyNotLeaded", &character::visitingArmy);
+    types.character.set("visitingArmy", &character::visitingArmy);
     types.character.set("movePointsModifier", &character::movePointsModifier);
     types.character.set("movePointsMaxArmy", &character::movePointsMaxArmy);
     types.character.set("movePointsMaxCharacter", &character::movePointsMax);

@@ -787,6 +787,44 @@ void patchesForGame::onCalculateSettlement(settlementStruct* sett)
 	balanceMinorSettStats(&sett->stats.settlementStats, sett);
 }
 
+//Sally out fix, consider armies around settlement not defender
+int* patchesForGame::onGetSupportingArmies(armyStruct* defender, armyStruct* attacker)
+{
+	if (!defender->siege || !attacker->settlement)
+		return reinterpret_cast<int*>(defender->getCoordPair());
+	
+	const auto attSett = attacker->findInSettlement();
+	if (const auto sett = defender->siege->getSiegedSettlement(); attSett && sett)
+	{
+		if (sett->xCoord == attSett->xCoord && sett->yCoord == attSett->yCoord)
+			return reinterpret_cast<int*>(&sett->xCoord);
+	}
+	const auto attFort= attacker->findInFort();
+	if (const auto fort = defender->siege->getSiegedFort(); attFort && fort)
+	{
+		if (fort->xCoord == attFort->xCoord && fort->yCoord == attFort->yCoord)
+			return reinterpret_cast<int*>(&fort->xCoord);
+	}
+	
+	return reinterpret_cast<int*>(defender->getCoordPair());
+}
+
+uint32_t makeColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
+{
+	return (alpha << 24) | (red << 16) | (green << 8) | blue;
+}
+
+uint32_t patchesForGame::onDrawBanner(const trackedArmy* army)
+{
+	const auto stack = army->army;
+	if (!stack->bannerSet)
+	{
+		const auto factionRec = stack->faction->factionRecord;
+		return makeColor(factionRec->primary_colour_red, factionRec->primary_colour_green, factionRec->primary_colour_blue, 0xFF);
+	}
+	return makeColor(stack->bannerRed, stack->bannerGreen, stack->bannerBlue, 0xFF);
+}
+
 void patchesForGame::balanceMinorSettStats(settlementStats* stats, settlementStruct* sett)
 {
 	if (const auto region = stratMapHelpers::getRegion(sett->regionID); region->factionOwner->factionID != sett->faction->factionID)
@@ -1490,7 +1528,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 			record->gen
 			&& record->faction->isPlayerControlled == 0
 			&& record->gen->isGeneral()
-			&& record->gen->armyLeaded
+			&& record->gen->army
 			)
 		{
 			globalEopAiConfig::getInstance()->characterTurnStart(record->gen);

@@ -1520,6 +1520,39 @@ private:
 	LPVOID funcAddress;
 };
 
+class onGetSupportingArmies
+	:public AATemplate
+{
+public:
+	onGetSupportingArmies(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetSupportingArmies2
+	:public AATemplate
+{
+public:
+	onGetSupportingArmies2(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onDrawBanner
+	:public AATemplate
+{
+public:
+	onDrawBanner(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class OnLoadSettlementWorldpkgdesc
 	:public AATemplate
 {

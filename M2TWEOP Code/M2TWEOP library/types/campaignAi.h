@@ -933,6 +933,7 @@ public:
 	static float getMoveCostFactor() { return getInstance()->moveCostFactor; }
 	static float getPowerFactor() { return getInstance()->powerFactor; }
 	static float getInvadePriorityFactor() { return getInstance()->invadePriorityFactor; }
+	static float getNonBorderFactor() { return getInstance()->nonBorderFactor; }
 	static int getMaxTurnSearchCount() { return getInstance()->maxTurnSearchCount; }
 	static void setEnabled(bool set) { getInstance()->enabled = set; }
 	static void setLoggingEnabled(bool set) { getInstance()->enableLogging = set; }
@@ -942,6 +943,7 @@ public:
 	static void setAidFactor(float set) { getInstance()->aidFactor = set; }
 	static void setMoveCostFactor(float set) { getInstance()->moveCostFactor = set; }
 	static void setPowerFactor(float set) { getInstance()->powerFactor = set; }
+	static void setNonBorderFactor(float set) { getInstance()->nonBorderFactor = set; }
 	static void setInvadePriorityFactor(float set) { getInstance()->invadePriorityFactor = set; }
 	static void setMaxTurnSearchCount(int set) { getInstance()->maxTurnSearchCount = set; }
 	static factionStruct* getCurrentFaction() { return getInstance()->m_Faction; }

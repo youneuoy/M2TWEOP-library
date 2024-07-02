@@ -38,9 +38,9 @@ void m2tweopTile::buildTile(int x, int y)
 		return;
 	}
 	const auto* character = tile->getCharacter();
-	if (character && character->armyLeaded)
+	if (character && character->army)
 	{
-		buildAsArmyTile(character->armyLeaded);
+		buildAsArmyTile(character->army);
 		return;
 	}
 	if (owner != nullptr)

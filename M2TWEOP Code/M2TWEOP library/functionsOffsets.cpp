@@ -291,6 +291,7 @@ void codes::initCodes(int gameVer)
 		offsets.canStartAssault = 0x711620;
 		offsets.getNumEnginesCanPenetrateWalls = 0x710D00;
 		offsets.canSeeCharacter = 0x4D3A90;
+		offsets.getArmyCoords = 0x712FA0;
 	}
 
 
@@ -584,5 +585,6 @@ void codes::initCodes(int gameVer)
 		offsets.canStartAssault = 0x711D60;
 		offsets.getNumEnginesCanPenetrateWalls = 0x711440;
 		offsets.canSeeCharacter = 0x4D4040;
+		offsets.getArmyCoords = 0x7136A0;
 	}
 }

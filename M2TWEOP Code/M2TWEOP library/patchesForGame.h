@@ -20,6 +20,12 @@ struct buildingLevel;
 struct edbEntry;
 struct settlementStruct;
 
+struct trackedArmy
+{
+	DWORD vfTable;
+	armyStruct* army;
+};
+
 class patchesForGame
 {
 public:
@@ -35,6 +41,8 @@ public:
 	static int __fastcall onCreateMercUnitCheck(char** entryName, int eduIndex);
 	static void __fastcall onAttachRegionSettlement(settlementStruct* sett, int regionId);
 	static void __fastcall onCalculateSettlement(settlementStruct* sett);
+	static int* __fastcall onGetSupportingArmies(armyStruct* defender, armyStruct* attacker);
+	static uint32_t __fastcall onDrawBanner(const trackedArmy* army);
 	static void __fastcall onPredictedStats(settlementStats* statsManager);
 	static int __fastcall onEvalAttObjective(const aiCampaignController* controller);
 	static void __fastcall onUpdateControllerAlloc(aiCampaignController* controller);

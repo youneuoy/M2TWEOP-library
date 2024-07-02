@@ -131,8 +131,8 @@ characterMoveData::characterMoveData(character* charPtr, const int searchType, c
 					{
 						const auto tileChar = tile->getTileCharacterAtIndex(i);
 						characters.emplace_back(tileChar, tileEx, tileChar->getFaction()->factionID == thisChar->getFaction()->factionID);
-						if (tileChar->armyLeaded)
-							armies.emplace_back(tileChar->armyLeaded, tileEx, tileChar->armyLeaded->faction->factionID == thisChar->getFaction()->factionID);
+						if (tileChar->army)
+							armies.emplace_back(tileChar->army, tileEx, tileChar->army->faction->factionID == thisChar->getFaction()->factionID);
 					}
 				}
 				else
@@ -156,9 +156,9 @@ characterMoveData::characterMoveData(character* charPtr, const int searchType, c
 								characters.emplace_back(tileChar, tileEx, charPtr->getFaction()->factionID == thisChar->getFaction()->factionID);
 								characters.back().turns = neighbourTileEx->turns;
 								characters.back().moveCost = neighbourTileEx->movePoints;
-								if (tileChar->armyLeaded)
+								if (tileChar->army)
 								{
-									armies.emplace_back(tileChar->armyLeaded, tileEx, tileChar->armyLeaded->faction->factionID == thisChar->getFaction()->factionID);
+									armies.emplace_back(tileChar->army, tileEx, tileChar->army->faction->factionID == thisChar->getFaction()->factionID);
 									armies.back().turns = neighbourTileEx->turns;
 									armies.back().moveCost = neighbourTileEx->movePoints;
 								}

@@ -208,10 +208,10 @@ armyStruct* oneTile::getArmy(const bool onlyLead)
 {
 	if (const auto tileChar = getCharacter(); tileChar)
 	{
-		if (tileChar->armyLeaded || onlyLead)
-			return tileChar->armyLeaded;
-		if (tileChar->armyNotLeaded)
-			return tileChar->armyNotLeaded;
+		if (tileChar->army || onlyLead)
+			return tileChar->army;
+		if (tileChar->visitingArmy)
+			return tileChar->visitingArmy;
 	}
 	if (onlyLead)
 		return nullptr;

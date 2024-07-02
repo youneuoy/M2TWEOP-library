@@ -729,6 +729,24 @@ void managerF::execPatches()
 	toRegionGroupStuff->Enable();
 	f1 << "Done" << endl;
 	
+	f1 << "Start applying onDrawBanner patch" << endl;
+	onDrawBanner* toDrawBanner = new onDrawBanner(mem, (LPVOID)patchesForGame::onDrawBanner, globals::dataS.gameVersion);
+	toDrawBanner->SetNewCode();
+	toDrawBanner->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onGetSupportingArmies patch" << endl;
+	onGetSupportingArmies* toGetSupportingArmies = new onGetSupportingArmies(mem, (LPVOID)patchesForGame::onGetSupportingArmies, globals::dataS.gameVersion);
+	toGetSupportingArmies->SetNewCode();
+	toGetSupportingArmies->Enable();
+	f1 << "Done" << endl;
+	
+	f1 << "Start applying onGetSupportingArmies2 patch" << endl;
+	onGetSupportingArmies2* toGetSupportingArmies2 = new onGetSupportingArmies2(mem, (LPVOID)patchesForGame::onGetSupportingArmies, globals::dataS.gameVersion);
+	toGetSupportingArmies2->SetNewCode();
+	toGetSupportingArmies2->Enable();
+	f1 << "Done" << endl;
+	
 	
 	f1 << "Start applying onCalcGarrisonStr patch" << endl;
 	onCalcGarrisonStr* toCalcGarrisonStr = new onCalcGarrisonStr(mem, (LPVOID)patchesForGame::onCalcGarrisonStr, globals::dataS.gameVersion);
