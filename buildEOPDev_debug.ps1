@@ -44,6 +44,8 @@ new-item ./M2TWEOPGenerated  -itemtype directory -erroraction 'silentlycontinue'
 Copy-Item -Path  "M2TWEOP DataFiles\*" -Destination "./M2TWEOPGenerated" -recurse
 
 Remove-Item -Path "./M2TWEOPGenerated/eopData/eopScripts/luaPluginScript.lua" -Force
+Remove-Item -Path "./M2TWEOPGenerated/eopData/config" -recurse -erroraction 'silentlycontinue' -Force
+Remove-Item -Path "./.vs" -recurse -erroraction 'silentlycontinue' -Force
 
 Get-ChildItem -Path "documentationGenerator\EOPDocs\build\html\*" -erroraction 'continue'
 CopyFilesToFolder "documentationGenerator\EOPDocs\build\html" "./M2TWEOPGenerated/eopData/documentation"

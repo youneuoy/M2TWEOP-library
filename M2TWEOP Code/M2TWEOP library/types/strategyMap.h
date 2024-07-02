@@ -934,9 +934,13 @@ public:
 	static void addToMinorSettlements(int regionId, settlementStruct* settlement);
 	static settlementStruct* getSettlement(int regionId, int settlementIndex);
 	static int getSettlementCount(int regionId);
-	static void clear() { regionMinorSettlements.fill({}); }
+	static void clear() { regionMinorSettlements.fill({}); m_Loaded = false;}
 	static settlementStruct* getSettlementAtIndex(int regionId, int index);
 	static std::array<std::vector<settlementStruct*>, 200> regionMinorSettlements;
+	static bool isLoaded() { return m_Loaded; }
+	static void load();
+private:
+	static bool m_Loaded;
 };
 
 

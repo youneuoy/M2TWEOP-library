@@ -754,12 +754,12 @@ char* patchesForGame::onGetCultureEndTurnSound(int cultureID)
 
 int __fastcall patchesForGame::onCreateMercUnitCheck(char** entryName, int eduIndex)
 {
-	if (eduIndex == -1)
-	{
-		if (!eopDu::getEopEduEntry(eduIndex))
-			return -1;
-		return 0;
-	}
+	//if (eduIndex == -1)
+	//{
+	//	if (!eopDu::getEopEduEntry(eduIndex))
+	//		return -1;
+	//	return 0;
+	//}
 	return eduIndex;
 }
 
@@ -889,13 +889,7 @@ int __fastcall patchesForGame::onAttackGate(unit* un, void* tactic)
 
 eduEntry* __fastcall patchesForGame::onCreateMercUnit(char** entryName, eduEntry* entry)
 {
-	const DWORD entryAddr = reinterpret_cast<DWORD>(entry);
-	if (const DWORD mercEopValue = codes::offsets.mercEOPValue; entryAddr == mercEopValue)
-	{
-		eduEntry* eopEntry = eopDu::getEopEduEntryByName(*entryName);
-		return eopEntry;
-	}
-	return entry;
+	return unitHelpers::getEduEntryByName(*entryName);
 }
 
 eduEntry* __fastcall patchesForGame::onCreateUnitWrapper(int eduIndexBase, int removeValue)
@@ -1308,16 +1302,7 @@ void __stdcall patchesForGame::onUnloadCampaign()
 }
 void __stdcall patchesForGame::onNewGameLoaded()
 {
-	const auto stratMapData = stratMapHelpers::getStratMap();
-	for (int i = 0; i < stratMapData->regionsNum; i++)
-	{
-		const auto settlement = stratMapData->regions[i].settlement;
-		if (!settlement)
-			continue;
-		settlement->minorSettlementIndex = 0;
-		settlement->isMinorSettlement = false;
-		minorSettlementDb::addToMinorSettlements(i, stratMapData->regions[i].settlement);
-	}
+	minorSettlementDb::load();
 	eopSettlementDataDb::get()->newGameLoaded();
 	plugData::data.luaAll.fillHashMaps();
 	gameEvents::onNewGameLoaded();
@@ -1489,21 +1474,14 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	else if (eventCode == factionTurnStartCode)
 	{
 		factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
-		globalEopAiConfig::getInstance()->turnStartMove(fac, false);
 		gameHelpers::logStringGame("Faction turn start: " + string(fac->factionRecord->facName));
+		globalEopAiConfig::getInstance()->turnStartMove(fac, false);
 		discordManager::onFactionTurnStart(fac);
 		plannedRetreatRoute::onFactionTurnStart(fac);
 		AI_ACTIVE = true;
 	}
 	else if (eventCode == gameReloaded)
 	{
-		const auto campaignData = campaignHelpers::getCampaignData();
-		const int settlementCount = campaignData->getSettlementNum();
-		for (int i = 0; i < settlementCount; i++)
-		{
-			const auto settlement = campaignData->getSettlement(i);
-			minorSettlementDb::addToMinorSettlements(settlement->regionID, settlement);
-		}
 		eopSettlementDataDb::get()->onGameLoaded();
 	}
 	else if (eventCode == characterTurnEnd)
@@ -1512,7 +1490,8 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 			record->gen
 			&& record->faction->isPlayerControlled == 0
 			&& record->gen->isGeneral()
-			&& record->gen->armyLeaded)
+			&& record->gen->armyLeaded
+			)
 		{
 			globalEopAiConfig::getInstance()->characterTurnStart(record->gen);
 		}
@@ -1561,10 +1540,9 @@ void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
 		}
 	}
 	files = techFuncs::loadGameLoadArchive(files, savePath);
+	eopSettlementDataDb::get()->onGameLoad(files);
 	gameEvents::onLoadGamePl(&files);
 	plannedRetreatRoute::onGameLoad(files);
-	eopSettlementDataDb::get()->onGameLoad(files);
-
 	techFuncs::deleteFiles(files);
 }
 

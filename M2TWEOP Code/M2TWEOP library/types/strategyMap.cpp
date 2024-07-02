@@ -24,6 +24,7 @@ extentColor extentColors::m_Own =         { 0   , 0xFF, 0x20, 0x28, 0xFF };
 extentColor extentColors::m_Enemy =       { 0xFF, 0xFF, 0   , 0x28, 0xFF };
 extentColor extentColors::m_Zoc =         { 0xA0, 0x00, 0   , 0x00, 0xc8 };
 std::array<std::vector<settlementStruct*>, 200> minorSettlementDb::regionMinorSettlements = {};
+bool minorSettlementDb::m_Loaded = false;
 
 oneTile* landingTile::getTile()
 {
@@ -62,16 +63,22 @@ void oneTile::setTileGroundType(const int ground)
 
 std::vector<settlementStruct*> minorSettlementDb::getMinorSettlements(const int regionId)
 {
+	if (!m_Loaded)
+		load();
 	return regionMinorSettlements[regionId];
 }
 
 void minorSettlementDb::addToMinorSettlements(const int regionId, settlementStruct* settlement)
 {
+	if (!m_Loaded)
+		load();
 	regionMinorSettlements[regionId].push_back(settlement);
 }
 
 settlementStruct* minorSettlementDb::getSettlement(const int regionId, const int settlementIndex)
 {
+	if (!m_Loaded)
+		load();
 	const auto setts = regionMinorSettlements[regionId];
 	for (const auto& sett : setts)
 	{
@@ -84,11 +91,15 @@ settlementStruct* minorSettlementDb::getSettlement(const int regionId, const int
 
 int minorSettlementDb::getSettlementCount(const int regionId)
 {
+	if (!m_Loaded)
+		load();
 	return static_cast<int>(regionMinorSettlements[regionId].size());
 }
 
 settlementStruct* minorSettlementDb::getSettlementAtIndex(const int regionId, const int index)
 {
+	if (!m_Loaded)
+		load();
 	const auto setts = regionMinorSettlements[regionId];
 	if (index < 0 || index >= static_cast<int>(setts.size()))
 	{
@@ -96,6 +107,21 @@ settlementStruct* minorSettlementDb::getSettlementAtIndex(const int regionId, co
 		return nullptr;
 	}
 	return regionMinorSettlements[regionId][index];
+}
+
+void minorSettlementDb::load()
+{
+	const auto campaignData = campaignHelpers::getCampaignData();
+	m_Loaded = true;
+	for (int i = 0; i < campaignData->factionCount; i++)
+	{
+		const auto fac = campaignData->getFactionByOrder(i);
+		for (int j = 0; j < fac->settlementsNum; j++)
+		{
+			const auto sett = fac->settlements[j];
+			addToMinorSettlements(sett->regionID, sett);
+		}
+	}
 }
 
 void oneTile::setTileClimate(const int climate)

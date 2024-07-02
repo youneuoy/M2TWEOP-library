@@ -29,7 +29,7 @@ namespace campaignAi
 		return reinterpret_cast<ltgdConfig*>(dataOffsets::offsets.ltgdConfig);
 	}
 
-	militaryValuesLTGD* getAiFactionValues(factionStruct* fac)
+	militaryValuesLTGD* getAiFactionValues(const factionStruct* fac)
 	{
 		ltgdGlobals* ltgd = getLtgdGlobals();
 		if (!ltgd)
@@ -37,7 +37,7 @@ namespace campaignAi
 		return &ltgd->ltgdFactionValues[fac->factionID];
 	}
 
-	interFactionLTGD* getInterFactionLTGD(factionStruct* fac, factionStruct* targetFac)
+	interFactionLTGD* getInterFactionLTGD(const factionStruct* fac, const factionStruct* targetFac)
 	{
 		ltgdGlobals* ltgd = getLtgdGlobals();
 		if (!ltgd)
@@ -98,6 +98,7 @@ namespace campaignAi
 		struct
 		{
 			sol::usertype<globalEopAiConfig> eopAiConfig;
+			sol::usertype<aiFactionData> aiFactionData;
 		}typeAll;
 		
 		///EOP AI
@@ -114,6 +115,7 @@ namespace campaignAi
 		@tfield float moveCostFactor
 		@tfield float powerFactor
 		@tfield int maxTurnSearchCount
+		@tfield getFactionData getFactionData
 
 		@table eopAiConfig
 		*/
@@ -127,6 +129,78 @@ namespace campaignAi
 		typeAll.eopAiConfig.set("moveCostFactor", sol::property(&globalEopAiConfig::getMoveCostFactor, &globalEopAiConfig::setMoveCostFactor));
 		typeAll.eopAiConfig.set("powerFactor", sol::property(&globalEopAiConfig::getPowerFactor, &globalEopAiConfig::setPowerFactor));
 		typeAll.eopAiConfig.set("maxTurnSearchCount", sol::property(&globalEopAiConfig::getMaxTurnSearchCount, &globalEopAiConfig::setMaxTurnSearchCount));
+		
+		/***
+		Get faction specific data.
+		@function eopAiConfig.getFactionData
+		@tparam factionStruct fac
+		@treturn aiFactionData data
+		@usage
+			  local data = eopAiConfig.getFactionData(fac)
+		*/
+		typeAll.eopAiConfig.set_function("getFactionData", &globalEopAiConfig::getFactionDataLua);
+		
+		/***
+		Basic aiFactionData table
+		@tfield setTargetFactionFactor setTargetFactionFactor
+		@tfield setAidFactionFactor setAidFactionFactor
+		@tfield setSettlementFactor setSettlementFactor
+		@tfield setTargetReligionFactor setTargetReligionFactor
+		@tfield setAidReligionFactor setAidReligionFactor
+
+		@table aiFactionData
+		*/
+		typeAll.aiFactionData = luaState.new_usertype<aiFactionData>("aiFactionData");
+		
+		/***
+		Set factor for targetting a faction.
+		@function aiFactionData:setTargetFactionFactor
+		@tparam factionStruct fac
+		@tparam float factor
+		@usage
+		      facData:setTargetFactionFactor(otherFac, 1.5)
+		*/
+		typeAll.aiFactionData.set_function("setTargetFactionFactor", &aiFactionData::setTargetFactionFactor);
+		
+		/***
+		Set factor for aiding a faction.
+		@function aiFactionData:setAidFactionFactor
+		@tparam factionStruct fac
+		@tparam float factor
+		@usage
+		      facData:setAidFactionFactor(otherFac, 1.5)
+		*/
+		typeAll.aiFactionData.set_function("setAidFactionFactor", &aiFactionData::setAidFactionFactor);
+		
+		/***
+		Set factor for a specific settlement (defense or attack).
+		@function aiFactionData:setSettlementFactor
+		@tparam settlementStruct sett
+		@tparam float factor
+		@usage
+		      facData:setSettlementFactor(someSett)
+		*/
+		typeAll.aiFactionData.set_function("setSettlementFactor", &aiFactionData::setSettlementFactor);
+		
+		/***
+		Set factor for targetting a religion.
+		@function aiFactionData:setTargetReligionFactor
+		@tparam int religionID
+		@tparam float factor
+		@usage
+			  facData:setTargetReligionFactor(3, 1.5)
+		*/
+		typeAll.aiFactionData.set_function("setTargetReligionFactor", &aiFactionData::setTargetReligionFactor);
+		
+		/***
+		Set factor for aiding a religion.
+		@function aiFactionData:setAidReligionFactor
+		@tparam int religionID
+		@tparam float factor
+		@usage
+			  facData:setAidReligionFactor(3, 1.5)
+		*/
+		typeAll.aiFactionData.set_function("setAidReligionFactor", &aiFactionData::setAidReligionFactor);
 	}
 }
 
@@ -173,17 +247,20 @@ float globalEopAiConfig::calculateSettPriority(const std::shared_ptr<settlementR
 	const float balance = (settRes->totalThreatReceiving - (settRes->positionPower * campaignDbAi.siegeAttStrModifier));
 	if (balance < 1.f && !empty)
 		return 0.f;
+	const auto facData = getCurrentFactionData();
 	float priority = 0;
 	if (empty)
 		priority = 10000;
-	priority += balance * powerFactor;
+	priority += clamp(balance, 0.f, 10000.f) * powerFactor;
 	priority *= residenceFactor;
 	if (priType != priType_target)
-		priority += settRes->totalThreatReceiving / 2.f;
+		priority += clamp(settRes->totalThreatReceiving / 2.f, 0.f, 10000.f);
 	else
-		priority -= settRes->totalSupportReceiving;
+		priority -= clamp(settRes->totalSupportReceiving * 1.f, 0.f, 10000.f);
+	if (priority < 1)
+		return 0.f;
 	priority += settRes->settlement->getSettlementValue();
-	priority += settRes->settlement->stats.settlementStats.TotalIncomeWithoutAdmin;
+	priority += clamp(settRes->settlement->stats.settlementStats.TotalIncomeWithoutAdmin, 0, 10000);
 	if (settRes->settlement->governor && settRes->settlement->governor->getTypeID() == characterTypeStrat::namedCharacter)
 	{
 		priority *= 1.25f;
@@ -191,7 +268,7 @@ float globalEopAiConfig::calculateSettPriority(const std::shared_ptr<settlementR
 		{
 			priority *= 1.5f;
 			if (settRes->settlement->faction->getAliveCharacterNumOfType(characterTypeStrat::namedCharacter) < 3)
-				priority *= 5;
+				priority *= 2.0f;
 		}
 	}
 	const auto config = campaignAi::getLtgdConfig();
@@ -200,7 +277,7 @@ float globalEopAiConfig::calculateSettPriority(const std::shared_ptr<settlementR
 	case priType_own:
 		{
 			if (settRes->settlement->siegeNum > 0)
-				priority *= 5.f;
+				priority *= 2.5f;
 			if (m_Faction->settlementsNum < 4)
 				priority *= 6 - m_Faction->settlementsNum;
 			priority *= defenseFactor;
@@ -218,6 +295,8 @@ float globalEopAiConfig::calculateSettPriority(const std::shared_ptr<settlementR
 					priority /= 4;
 			}
 			priority *= (config->getPriorityMod(m_Faction, settRes->settlement->faction) * invadePriorityFactor);
+			priority *= facData->getTargetFactionFactor(settRes->settlement->faction);
+			priority *= facData->getTargetReligionFactor(settRes->settlement->faction->religion);
 			priority *= aggressionFactor;
 			break;
 		}
@@ -232,11 +311,16 @@ float globalEopAiConfig::calculateSettPriority(const std::shared_ptr<settlementR
 				else
 					priority /= 3;
 			}
+			priority *= facData->getAidFactionFactor(settRes->settlement->faction);
+			priority *= facData->getAidReligionFactor(settRes->settlement->faction->religion);
 			const auto fs = factionHelpers::getFactionStanding(m_Faction, settRes->settlement->faction);
 			priority *= (aidFactor * fs);
 		}
 		break;
 	}
+	priority *= facData->getSettlementFactor(settRes->settlement);
+	if (!m_Faction->isInNeighbourArray(settRes->settlement->regionID))
+		priority *= nonBorderFactor;
 	return priority;
 }
 
@@ -246,19 +330,22 @@ float globalEopAiConfig::calculateArmyPriority(const std::shared_ptr<armyResourc
 	const float balance = (armyRes->totalThreatReceiving - (armyRes->positionPower * campaignDbAi.attStrModifier));
 	if (balance < 1)
 		return 0.f;
-	float priority = balance * powerFactor;
-	priority += armyRes->totalThreatGiving * (priType == priType_target ? 2.f : 1.f);
-	priority += armyRes->army->totalStrength / 2.f;
+	const auto facData = getCurrentFactionData();
+	float priority = clamp(balance, 0.f, 10000.f) * powerFactor;
+	priority += clamp(armyRes->totalThreatGiving * (priType == priType_target ? 2.f : 1.f), 0.f, 10000.f);
+	priority += clamp(armyRes->army->totalStrength / 2.f, 0.f, 10000.f) * powerFactor;
 	if (priType == priType_target)
-		priority -= armyRes->totalSupportReceiving;
+		priority -= clamp(armyRes->totalSupportReceiving, 0, 10000) ;
+	if (priority < 1)
+		return 0.f;
 	if (armyRes->army->gen && armyRes->army->gen->getTypeID() == characterTypeStrat::namedCharacter)
 	{
-		priority *= 1.5f;
+		priority *= 1.25f;
 		if (armyRes->army->gen->characterRecord->isFamily)
 		{
-			priority *= 2.5f;
+			priority *= 1.5f;
 			if (armyRes->army->faction->getAliveCharacterNumOfType(characterTypeStrat::namedCharacter) < 3)
-				priority *= 5;
+				priority *= 2.0f;
 		}
 	}
 	if (armyRes->army->siege)
@@ -266,15 +353,15 @@ float globalEopAiConfig::calculateArmyPriority(const std::shared_ptr<armyResourc
 		if (const auto targetSett = armyRes->army->siege->getSiegedSettlement(); targetSett)
 		{
 			if (targetSett->isAllyToFaction(m_Faction))
-				priority *= 5;
+				priority *= 2.5f;
 			else if (!targetSett->isEnemyToFaction(m_Faction))
-				priority *= 2;
+				priority *= 1.25f;
 			else
-				priority /= 2;
+				priority /= 2.f;
 		}
 	}
 	if (armyRes->army->faction->factionRecord->slave)
-		priority *= 0.25f;
+		priority *= 0.50f;
 	const auto config = campaignAi::getLtgdConfig();
 	switch(priType)
 	{
@@ -290,6 +377,8 @@ float globalEopAiConfig::calculateArmyPriority(const std::shared_ptr<armyResourc
 			if (!stratMapHelpers::getRegion(armyRes->army->gen->regionID)->hasAlliesToFaction(m_Faction->factionID, false))
 				priority *= 0.50f;
 			priority *= (config->getPriorityMod(m_Faction, armyRes->army->faction) * invadePriorityFactor);
+			priority *= facData->getTargetFactionFactor(armyRes->army->faction);
+			priority *= facData->getTargetReligionFactor(armyRes->army->faction->religion);
 			priority *= aggressionFactor;
 			break;
 		}
@@ -297,7 +386,10 @@ float globalEopAiConfig::calculateArmyPriority(const std::shared_ptr<armyResourc
 		{
 			if (!stratMapHelpers::getRegion(armyRes->army->gen->regionID)->hasAlliesToFaction(m_Faction->factionID, false))
 				priority *= 0.33f;
-			priority *= aidFactor;
+			priority *= facData->getAidFactionFactor(armyRes->army->faction);
+			priority *= facData->getAidReligionFactor(armyRes->army->faction->religion);
+			const auto fs = factionHelpers::getFactionStanding(m_Faction, armyRes->army->faction);
+			priority *= (aidFactor * fs);
 		}
 		break;
 	}
@@ -471,21 +563,27 @@ bool attackSettlementOrder::execute()
 					}
 				}
 			}
-			if (assignedArmy->used || hasAssaulted)
+			if (assignedArmy->used)
 				continue;
 			assignedArmy->used = true;
 			TURN_HAD_ACTION = true;
-			if (assignedArmy->army->canStartAssault(targetSettlement->settlement))
+			if (!hasAssaulted)
 			{
-				characterHelpers::siegeSettlement(assignedArmy->army->gen, targetSettlement->settlement, true);
-				break;
+				if (assignedArmy->army->canStartAssault(targetSettlement->settlement))
+				{
+					assignedArmy->army->siegeSettlement(targetSettlement->settlement, true);
+					break;
+				}
+				if (targetSettlement->settlement->siegeNum < 8 || assignedArmy->army->siege)
+				{
+					assignedArmy->army->siegeSettlement(targetSettlement->settlement, false);
+					hasAssaulted = true;
+					assignedArmy->army->gen->movePointsArmy = 0;
+				}
 			}
-			if (targetSettlement->settlement->siegeNum < 8 || assignedArmy->army->siege)
+			else if (assignedArmy->army->isBorderingSettlement(targetSettlement->settlement))
 			{
-				characterHelpers::siegeSettlement(assignedArmy->army->gen, targetSettlement->settlement, false);
 				assignedArmy->army->gen->movePointsArmy = 1;
-				hasAssaulted = true;
-				break;
 			}
 		}
 		gameHelpers::logStringGame("Executed attack settlement order for faction: " + std::to_string(globalEopAiConfig::getCurrentFaction()->factionID));
@@ -876,6 +974,7 @@ void globalEopAiConfig::checkRegion(int regionId)
 					settRes->totalSupportReceiving += regionArmy->totalStrength / nearSettlement.turns;
 				}
 				settRes->nearResources.back()->moveCost = nearSettlement.moveCost;
+				settRes->nearResources.back()->turns = nearSettlement.turns;
 			}
 		}
 		for (auto& nearArmy : moveData->armies)
@@ -903,6 +1002,7 @@ void globalEopAiConfig::checkRegion(int regionId)
 					armyRes->totalSupportReceiving += regionArmy->totalStrength / nearArmy.turns;
 				}
 				armyRes->nearResources.back()->moveCost = nearArmy.moveCost;
+				armyRes->nearResources.back()->turns = nearArmy.turns;
 			}
 		}
 	}
@@ -910,8 +1010,9 @@ void globalEopAiConfig::checkRegion(int regionId)
 
 void globalEopAiConfig::characterTurnStart(character* currentChar)
 {
-	if (!currentChar->armyLeaded || !currentChar->isGeneral() || currentChar->ifMarkedToKill)
-		return;
+	m_Faction = currentChar->characterRecord->faction;
+	if (!m_Faction || m_Faction->factionRecord->slave || m_Faction->isHorde || !currentChar->armyLeaded || !currentChar->isGeneral() || currentChar->ifMarkedToKill)
+		return; 
 	const auto army = currentChar->armyLeaded;
 	if (army->siege)
 		return;
@@ -919,6 +1020,8 @@ void globalEopAiConfig::characterTurnStart(character* currentChar)
 	const auto moveData = currentChar->createMoveData(static_cast<int>(searchType::avoidZoc), 1);
 	for (const auto& nearSett : moveData->settlements)
 	{
+		if (!nearSett.settlement->faction)
+			continue;
 		if (nearSett.settlement->faction->factionID == m_Faction->factionID)
 		{
 			if ((!nearSett.settlement->army || nearSett.settlement->army->numOfUnits == 0) && nearSett.settlement->siegeNum == 0)
@@ -1055,6 +1158,7 @@ const auto threatSort2 = [](const std::shared_ptr<armyResource>& a, const std::s
 
 void globalEopAiConfig::assignOrders(factionStruct* fac)
 {
+	const float turnsFactor = 1.f / maxTurnSearchCount;
 	for (const auto& settRes : m_Settlements)
 	{
 		const float priority = calculateSettPriority(settRes, priType_own);
@@ -1067,7 +1171,7 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 			if (!nearArmy || !nearArmy->own || nearArmy->used || !nearArmy->army || nearArmy->army->siege)
 				continue;
 			m_Orders.back()->assignedArmies.emplace_back(nearArmy);
-			m_Orders.back()->priority -= nearArmy->moveCost * moveCostFactor;
+			m_Orders.back()->priority -= nearArmy->moveCost * (moveCostFactor * nearArmy->turns);
 		}
 		if (m_Orders.back()->priority < 0)
 			m_Orders.erase(m_Orders.end() - 1);
@@ -1084,7 +1188,7 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 			if (!army->own || army->used || !army->army || army->army->siege)
 				continue;
 			m_Orders.back()->assignedArmies.emplace_back(army);
-			m_Orders.back()->priority -= army->moveCost * moveCostFactor;
+			m_Orders.back()->priority -= army->moveCost * (moveCostFactor * army->turns);
 		}
 		if (m_Orders.back()->priority < 0)
 			m_Orders.erase(m_Orders.end() - 1);
@@ -1108,7 +1212,7 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 					continue;
 			}
 			m_Orders.back()->assignedArmies.emplace_back(army);
-			m_Orders.back()->priority -= army->moveCost * moveCostFactor;
+			m_Orders.back()->priority -= (army->moveCost * (moveCostFactor * army->turns));
 		}
 		if (m_Orders.back()->priority < 0)
 			m_Orders.erase(m_Orders.end() - 1);
@@ -1125,7 +1229,7 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 			if (!army->own || army->used || !army->army || army->army->siege)
 				continue;
 			m_Orders.back()->assignedArmies.emplace_back(army);
-			m_Orders.back()->priority -= army->moveCost * moveCostFactor;
+			m_Orders.back()->priority -= army->moveCost * (moveCostFactor * army->turns);
 		}
 		if (m_Orders.back()->priority < 0)
 			m_Orders.erase(m_Orders.end() - 1);
@@ -1142,7 +1246,7 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 			if (!army->own || army->used || !army->army || army->army->siege)
 				continue;
 			m_Orders.back()->assignedArmies.emplace_back(army);
-			m_Orders.back()->priority -= army->moveCost * moveCostFactor;
+			m_Orders.back()->priority -= army->moveCost * (moveCostFactor * army->turns);
 		}
 		if (m_Orders.back()->priority < 0)
 			m_Orders.erase(m_Orders.end() - 1);
@@ -1159,7 +1263,7 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 			if (!army->own || army->used || !army->army || army->army->siege)
 				continue;
 			m_Orders.back()->assignedArmies.emplace_back(army);
-			m_Orders.back()->priority -= army->moveCost * moveCostFactor;
+			m_Orders.back()->priority -= army->moveCost * (moveCostFactor * army->turns);
 		}
 		if (m_Orders.back()->priority < 0)
 			m_Orders.erase(m_Orders.end() - 1);
@@ -1167,7 +1271,7 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 	std::stable_sort(m_Orders.begin(), m_Orders.end(), orderSort);
 	for (const auto& order : m_Orders)
 	{
-		if (order->executed)
+		if (order->executed || order->priority < 1)
 			continue;
 		order->execute();
 		order->executed = true;
@@ -1180,9 +1284,89 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 	}), m_Armies.end());
 }
 
+float aiFactionData::getTargetFactionFactor(const factionStruct* faction)
+{
+	return targetFactionFactors.at(faction->factionID);
+}
+
+float aiFactionData::getAidFactionFactor(const factionStruct* faction)
+{
+	return aidFactionFactors.at(faction->factionID);
+}
+
+float aiFactionData::getSettlementFactor(const settlementStruct* settlement)
+{
+	for (const auto& [indexes, value] : settlementFactors)
+	{
+		if (const auto [regionId, settIndex] = indexes; regionId == settlement->regionID && settIndex == settlement->minorSettlementIndex)
+			return value;
+	}
+	return 1.f;
+}
+
+float aiFactionData::getTargetReligionFactor(const int religion)
+{
+	if (const auto it = targetReligionFactors.find(religion); it != targetReligionFactors.end())
+		return it->second;
+	return 1.f;
+}
+
+float aiFactionData::getAidReligionFactor(const int religion)
+{
+	if (const auto it = aidReligionFactors.find(religion); it != aidReligionFactors.end())
+		return it->second;
+	return 1.f;
+}
+
+void aiFactionData::setTargetFactionFactor(const factionStruct* faction, const float factor)
+{
+	targetFactionFactors[faction->factionID] = factor;
+}
+
+void aiFactionData::setAidFactionFactor(const factionStruct* faction, const float factor)
+{
+	aidFactionFactors[faction->factionID] = factor;
+}
+
+void aiFactionData::setSettlementFactor(const settlementStruct* settlement, float factor)
+{
+	for (auto& [indexes, value] : settlementFactors)
+	{
+		if (const auto [regionId, settIndex] = indexes; regionId == settlement->regionID && settIndex == settlement->minorSettlementIndex)
+		{
+			value = factor;
+			return;
+		}
+	}
+	settlementFactors.emplace_back(std::make_pair(settlement->regionID, settlement->minorSettlementIndex), factor);
+}
+
+void aiFactionData::setTargetReligionFactor(const int religion, float factor)
+{
+	targetReligionFactors.insert_or_assign(religion, factor);
+}
+
+void aiFactionData::setAidReligionFactor(const int religion, float factor)
+{
+	aidReligionFactors.insert_or_assign(religion, factor);
+}
+
 globalEopAiConfig::globalEopAiConfig()
 {
 	m_FactionData.fill(std::make_shared<aiFactionData>());
+}
+
+aiFactionData* globalEopAiConfig::getFactionDataLua(const factionStruct* fac)
+{
+	if (!fac)
+		return nullptr;
+	const auto instance = getInstance();
+	if (!instance)
+		return nullptr;
+	const auto factionData = instance->m_FactionData.at(fac->factionID);
+	if (!factionData)
+		return nullptr;
+	return factionData.get();
 }
 
 float distanceRaw(int x1, int y1, int x2, int y2)
@@ -1228,7 +1412,7 @@ void globalEopAiConfig::turnStartMove(factionStruct* fac, const bool isEnd)
 		{
 			if (nearRes->used || nearRes->army->isAdmiral || nearRes->army->faction->factionID != m_Faction->factionID)
 				continue;
-			if (nearRes->army->numOfUnits + armyRes->army->numOfUnits <= 20)
+			if (nearRes->army->canReceiveMerge(armyRes->army))
 			{
 				const auto [xCoord, yCoord] = nearRes->army->getCoords();
 				if (xCoord == -1)
@@ -1363,6 +1547,7 @@ void globalEopAiConfig::getData(factionStruct* fac)
 				settRes->nearResources.back()->moveCost = nearSettlement.moveCost;
 				if (nearSettlement.turns == 0)
 					nearSettlement.turns = 1;
+				settRes->nearResources.back()->turns = nearSettlement.turns;
 				if (nearSettlement.settlement->isEnemyToFaction(m_Faction))
 				{
 					res->totalThreatGiving += res->army->totalStrength / nearSettlement.turns;
@@ -1396,6 +1581,7 @@ void globalEopAiConfig::getData(factionStruct* fac)
 					armyRes->totalSupportReceiving += res->army->totalStrength / nearArmy.turns;
 				}
 				armyRes->nearResources.back()->moveCost = nearArmy.moveCost;
+				armyRes->nearResources.back()->turns = nearArmy.turns;
 			}
 		}
 	}
@@ -1906,7 +2092,8 @@ void aiMilitaryDirector::checkAidingCampaigns(const aiGlobalStrategyDirector* di
 	{
 		const auto aidCampaign = aidingCampaigns.campaigns[i];
 		bool found = false;
-		if (aiFaction->ltgd->isTrustedAlly(aidCampaign->regionData->getTargetFaction()->factionID))
+		if (aiFaction->ltgd->isTrustedAlly(aidCampaign->regionData->getTargetFaction()->factionID)
+			&& aidCampaign->regionData->strength.enemyStrength > 1500)
 		{
 			for (int j = 0; j < director->allNeighbourRegionsCount; j++)
 			{
@@ -1940,7 +2127,7 @@ void aiMilitaryDirector::checkAidingCampaigns(const aiGlobalStrategyDirector* di
 				break;
 			}
 		}
-		if (!found)
+		if (!found && targetRegion->strength.enemyStrength > 1500)
 		{
 			const auto newController = createCampaignController(targetRegion);
 			newController->setStrategy(aiCampaignStrategy::attackAid);
@@ -2237,8 +2424,6 @@ void aiCampaignController::initialize()
 	
 	for ( auto objective = objectives; objective; objective = objective->next )
 	{
-		if (attacking)
-			objective->priority *= 2;
 		callClassFunc<aiCampaignObjective*, void>(objective, 0x18);
 	}
 }
@@ -2678,7 +2863,7 @@ void aiGlobalStrategyDirector::initialize()
 		if (minValue == maxValue)
 			regionData->priority = 650;
 		else
-			regionData->priority = static_cast<int>(((regionData->regionValue - minValue) * scale) * 1.75f);
+			regionData->priority = static_cast<int>(((regionData->regionValue - minValue) * scale));
 	}
 	GAME_FUNC(void(__thiscall*)(aiGlobalStrategyDirector*), initGsdFactionData)(this);
 }

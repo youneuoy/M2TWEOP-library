@@ -139,6 +139,8 @@ struct armyStruct { /* structure of stack */
 public:
 	std::pair<int, int> getCoords();
 	void nullifyMovePoints();
+	void siegeSettlement(settlementStruct* sett, bool isAttack);
+	bool isBorderingSettlement(const settlementStruct* sett);
 	int calculatePositionPower();
 	bool canStartSiege(settlementStruct* sett);
 	bool canStartSiegeFort(fortStruct* fort);

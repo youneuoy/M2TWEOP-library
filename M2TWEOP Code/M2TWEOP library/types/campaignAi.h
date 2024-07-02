@@ -789,6 +789,7 @@ struct armyResource
 	bool own = true;
 	bool enemy = false;
 	float moveCost{};
+	int8_t turns = 1;
 	bool validate();
 	armyResource(armyStruct* army) : army(army), unitCount(army->numOfUnits) {}
 	void calculatePositionPower();
@@ -872,7 +873,7 @@ struct mergeArmiesOrder : aiOrder
 {
 	armyStruct* targetArmy{};
 	std::shared_ptr<armyResource> targetRes{};
-	mergeArmiesOrder(armyStruct* army) : targetArmy(std::move(army)) {}
+	mergeArmiesOrder(armyStruct* army) : targetArmy(army) {}
 	bool evaluate() override;
 	bool execute() override;
 	std::string toString() override;
@@ -880,7 +881,23 @@ struct mergeArmiesOrder : aiOrder
 
 struct aiFactionData
 {
+	aiFactionData() {targetFactionFactors.fill(1.f); aidFactionFactors.fill(1.f);}
 	int noActionTurns{};
+	std::array<float, 31> targetFactionFactors{};
+	std::array<float, 31> aidFactionFactors{};
+	std::vector<std::pair<std::pair<int, int>, float>> settlementFactors{};
+	std::unordered_map<int, float> targetReligionFactors{};
+	std::unordered_map<int, float> aidReligionFactors{};
+	float getTargetFactionFactor(const factionStruct* faction);
+	float getAidFactionFactor(const factionStruct* faction);
+	float getSettlementFactor(const settlementStruct* settlement);
+	float getTargetReligionFactor(int religion);
+	float getAidReligionFactor(int religion);
+	void setTargetFactionFactor(const factionStruct* faction, float factor);
+	void setAidFactionFactor(const factionStruct* faction, float factor);
+	void setSettlementFactor(const settlementStruct* settlement, float factor);
+	void setTargetReligionFactor(int religion, float factor);
+	void setAidReligionFactor(int religion, float factor);
 };
 
 enum priorityType
@@ -898,12 +915,15 @@ public:
 	bool enableLogging = false;
 	float aggressionFactor = 1.f;
 	float defenseFactor = 1.f;
-	float residenceFactor = 2.f;
+	float nonBorderFactor = 0.33f;
+	float residenceFactor = 1.f;
 	float aidFactor = 0.5f;
 	float moveCostFactor = 1.0f;
 	float powerFactor = 1.f;
 	float invadePriorityFactor = 1.f;
 	int maxTurnSearchCount = 4;
+	static std::shared_ptr<aiFactionData> getFactionData(const factionStruct* fac) {return getInstance()->m_FactionData[fac->factionID];}
+	static aiFactionData* getFactionDataLua(const factionStruct* fac);
 	static bool getEnabled() { return getInstance()->enabled; }
 	static bool getLoggingEnabled() { return getInstance()->enableLogging; }
 	static float getAggressionFactor() { return getInstance()->aggressionFactor; }
@@ -942,7 +962,6 @@ public:
 protected:
 	static std::shared_ptr<globalEopAiConfig> m_Instance;
 	factionStruct* m_Faction{};
-	std::shared_ptr<aiFactionData> getFactionData(const factionStruct* fac) {return m_FactionData[fac->factionID];}
 	std::shared_ptr<aiFactionData> m_CurrentFacData{};
 	std::array<std::shared_ptr<aiFactionData>, 31> m_FactionData{};
 	float calculateSettPriority(const std::shared_ptr<settlementResource>& settRes, priorityType priType);
@@ -984,7 +1003,7 @@ namespace campaignAi
 	int assessGarrisonStrength(const aiRegionData* gsdData, const settlementStruct* settlement, const factionStruct* faction);
 	ltgdGlobals* getLtgdGlobals();
 	ltgdConfig* getLtgdConfig();
-	militaryValuesLTGD* getAiFactionValues(factionStruct* fac);
-	interFactionLTGD* getInterFactionLTGD(factionStruct* fac, factionStruct* targetFac);
+	militaryValuesLTGD* getAiFactionValues(const factionStruct* fac);
+	interFactionLTGD* getInterFactionLTGD(const factionStruct* fac, const factionStruct* targetFac);
 	void addToLua(sol::state& luaState);
 }

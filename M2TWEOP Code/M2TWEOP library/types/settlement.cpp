@@ -94,6 +94,9 @@ void eopSettlementDataDb::newGameLoaded()
 {
 	const auto map = stratMapHelpers::getStratMap();
 	eopSettData->clear();
+	if (map->regionsNum < 1)
+		return;
+	m_Loaded = true;
 	for (int i = 0; i < map->regionsNum; i++)
 	{
 		const int settCount = map->regions[i].settlementCount();
@@ -113,6 +116,8 @@ void eopSettlementDataDb::newGameLoaded()
 
 std::shared_ptr<eopSettlementData> eopSettlementDataDb::getSettlementData(const int regionId, const int settlementId)
 {
+	if (m_Loaded == false)
+		newGameLoaded();
 	for (const auto& settData : *eopSettData)
 	{
 		if (settData->regionID == regionId && settData->settlementID == settlementId)
@@ -175,6 +180,7 @@ void eopSettlementDataDb::onGameLoad(const std::vector<std::string>& filePaths)
 		try
 		{
 			deserialize(json);
+			m_Loaded = true;
 		}
 		catch (jsn::json::exception& e)
 		{
@@ -190,6 +196,11 @@ void eopSettlementDataDb::onGameLoaded()
 	if (!stratMap)
 	{
 		gameHelpers::logStringGame("eopSettlementDataDb.onGameLoaded: stratMap not found.");
+		return;
+	}
+	if (!m_Loaded)
+	{
+		newGameLoaded();
 		return;
 	}
 	for (int i = 0; i < stratMap->regionsNum; i++)

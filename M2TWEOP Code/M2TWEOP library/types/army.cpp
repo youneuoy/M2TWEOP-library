@@ -149,6 +149,34 @@ void armyStruct::nullifyMovePoints()
 		unitHelpers::setUnitMovePoints(units[i], 0);
 }
 
+void armyStruct::siegeSettlement(settlementStruct* sett, const bool isAttack)
+{
+	if (!gen)
+		return;
+	characterHelpers::siegeSettlement(gen, sett, isAttack);
+}
+
+bool armyStruct::isBorderingSettlement(const settlementStruct* sett)
+{
+	const auto [xCoord, yCoord] = getCoords();
+	if (xCoord == -1 || yCoord == -1)
+		return false;
+	auto neighbourTiles = stratMapHelpers::getNeighbourTiles(xCoord, yCoord);
+	while (true)
+	{
+		if (neighbourTiles.empty())
+			break;
+		const auto [checkX, checkY] = neighbourTiles.front();
+		neighbourTiles.pop();
+		const auto tile = stratMapHelpers::getTile(checkX, checkY);
+		if (!tile)
+			continue;
+		if (const auto tileSett = tile->getSettlement(); tileSett && tileSett == sett)
+			return true;
+	}
+	return false;
+}
+
 int armyStruct::calculatePositionPower()
 {
 	int positionPower = totalStrength;
@@ -1081,7 +1109,7 @@ namespace armyHelpers
 		@usage
 		army:siegeSettlement(settlement, true)
 		*/
-		types.armyStruct.set_function("siegeSettlement", &characterHelpers::siegeSettlement);
+		types.armyStruct.set_function("siegeSettlement", &armyStruct::siegeSettlement);
 
 		/***
 		Besiege the specified fort, or attack it if already besieging it. Requires movement points.

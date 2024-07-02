@@ -227,8 +227,8 @@ struct guild
 	int32_t level1Threshold; //0x0010
 	int32_t level2Threshold; //0x0014
 	int32_t level3Threshold; //0x0018
-	std::vector<int8_t> excludedGuilds; //0x001C
-	std::vector<std::pair<stringWithHash,int>> scores;
+	gameStdVector<int8_t> excludedGuilds; //0x001C
+	gameStdVector<std::pair<stringWithHash,int>> scores;
 }; //Size: 0x004C
 
 struct settlementBuildingOptions
@@ -876,8 +876,11 @@ public:
 	void clearData()
 	{
 		eopSettData = std::make_shared<std::vector<std::shared_ptr<eopSettlementData>>>();
+		m_Loaded = false;
 	}
 	std::string onGameSave();
 	void onGameLoad(const std::vector<std::string>& filePaths);
 	void onGameLoaded();
+private:
+	bool m_Loaded = false;
 };

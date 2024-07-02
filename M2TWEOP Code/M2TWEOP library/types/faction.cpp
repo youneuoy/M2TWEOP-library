@@ -103,13 +103,14 @@ void factionStruct::updateNeighbours()
 		for (int j = 0; j < region->neighbourRegionsNum; j++)
 		{
 			const auto neighbour = region->neighbourRegions[j];
+			if (neighbour.isBlocked || neighbour.region->isSea || !neighbour.region->factionOwner)
+				continue;
 			minorSetts = minorSettlementDb::getMinorSettlements(neighbour.regionID);
 			for (const auto minorSett : minorSetts)
 			{
 				if (minorSett->factionID != factionID && !isInNeighbourArray(minorSett->regionID))
 				{
-					if (neighbour.region->factionOwner->factionID != factionID)
-						gameHelpers::addToIntArray(&neighBourRegions, reinterpret_cast<int*>(&minorSett->regionID));
+					gameHelpers::addToIntArray(&neighBourRegions, reinterpret_cast<int*>(&minorSett->regionID));
 					neighBourFactionsBitmap |= (1 << minorSett->factionID);
 				}
 			}
