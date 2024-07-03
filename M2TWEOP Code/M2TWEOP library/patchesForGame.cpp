@@ -755,12 +755,12 @@ char* patchesForGame::onGetCultureEndTurnSound(int cultureID)
 
 int __fastcall patchesForGame::onCreateMercUnitCheck(char** entryName, int eduIndex)
 {
-	//if (eduIndex == -1)
-	//{
-	//	if (!eopDu::getEopEduEntry(eduIndex))
-	//		return -1;
-	//	return 0;
-	//}
+	if (eduIndex == -1)
+	{
+		if (!eopDu::getEopEduEntryByName(*entryName))
+			return -1;
+		return 0;
+	}
 	return eduIndex;
 }
 
