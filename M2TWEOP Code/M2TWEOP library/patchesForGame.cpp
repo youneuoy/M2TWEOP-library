@@ -1516,6 +1516,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	const DWORD settlementTurnEnd = gameVersion == 1 ? 0x0136FADC : 0x0132AAB4;
 	const DWORD factionTurnEnd = gameVersion == 1 ? 0x01369D74 : 0x01324D4C;
 	const DWORD characterTurnEnd = gameVersion == 1 ? 0x0136C0B4 : 0x0132708C;
+	const DWORD characterTurnStart = gameVersion == 1 ? 0x0136BFE4 : 0x01326FBC;
 	if (eventCode == scrollOpenedCode)
 	{
 		char* str = reinterpret_cast<char*>(vTab[1]);
@@ -1544,6 +1545,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	else if (eventCode == gameReloaded)
 	{
 		eopSettlementDataDb::get()->onGameLoaded();
+		eopCharacterDataDb::get()->onGameLoaded();
 	}
 	else if (eventCode == characterTurnEnd)
 	{
@@ -1555,6 +1557,27 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 			)
 		{
 			globalEopAiConfig::getInstance()->characterTurnStart(record->gen);
+		}
+	}
+	else if (eventCode == characterTurnStart)
+	{
+		if (const auto record = reinterpret_cast<characterRecord*>(vTab[1]);
+			record->gen
+			&& record->faction->factionID == campaignHelpers::getCampaignData()->slaveFactionID
+			&& record->gen->getTypeID() == characterTypeStrat::general
+			&& record->gen->army
+			&& (!record->labelCrypt || !eopCharacterDataDb::get()->getCharacterData(record->label))
+			)
+		{
+			const auto rebelFac = eopRebelFactionDb::getRebelFaction(record->gen->army->descrRebel->name);
+			if (rebelFac && !rebelFac->characterModels.empty())
+			{
+				std::random_device rd;
+				std::mt19937 g(rd());
+				std::shuffle(rebelFac->characterModels.begin(), rebelFac->characterModels.end(), g);
+				const auto randomModel = rebelFac->characterModels.front();
+				stratModelsChange::setCharacterModel(record->gen, randomModel.c_str());
+			}
 		}
 	}
 	else if (eventCode == factionTurnEnd)
@@ -1602,6 +1625,7 @@ void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
 	}
 	files = techFuncs::loadGameLoadArchive(files, savePath);
 	eopSettlementDataDb::get()->onGameLoad(files);
+	eopCharacterDataDb::get()->onGameLoad(files);
 	gameEvents::onLoadGamePl(&files);
 	plannedRetreatRoute::onGameLoad(files);
 	techFuncs::deleteFiles(files);
@@ -1621,6 +1645,8 @@ void __fastcall patchesForGame::onSaveGame(UNICODE_STRING**& savePath)
 		files.push_back(retreatsFile);
 	if (const std::string settlementData = eopSettlementDataDb::get()->onGameSave(); !settlementData.empty())
 		files.push_back(settlementData);
+	if (const std::string characterData = eopCharacterDataDb::get()->onGameSave(); !characterData.empty())
+		files.push_back(characterData);
 	techFuncs::saveGameMakeArchive(savePath, files);
 	techFuncs::deleteFiles(files);
 }

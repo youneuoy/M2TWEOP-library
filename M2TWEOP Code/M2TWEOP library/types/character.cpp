@@ -858,17 +858,17 @@ namespace characterHelpers
 			armyHelpers::stopBlockPort(gen->army);
 		}
 
-		auto targetCoords = new coordPair{ x,y };
 		auto charArray = new characterArray();
-		GAME_FUNC(void(__stdcall*)(coordPair*, characterArray*, int), getTileCharactersFunc)(targetCoords, charArray, 12);
-		if ((!charArray->charactersNum && stratMapHelpers::isTileValidForCharacterType(gen->genType->type, targetCoords)) ||
-			GAME_FUNC(bool(__thiscall*)(regionStruct*, coordPair*, char), getValidRegionTile)(stratMapHelpers::getRegion(stratMapHelpers::getTile(x, y)->regionId), &targetCoords[0], 0))
+		auto targetCoords = new int[2]{x,y};
+		GAME_FUNC(void(__stdcall*)(int*, characterArray*, int), getTileCharactersFunc)(targetCoords, charArray, 12);
+		if ((!charArray->charactersNum && stratMapHelpers::isTileValidForCharacterType(gen->genType->type, x, y)) ||
+			GAME_FUNC(bool(__thiscall*)(regionStruct*, int*, char), getValidRegionTile)(stratMapHelpers::getRegion(stratMapHelpers::getTile(x, y)->regionId), &targetCoords[0], 0))
 		{
 			
 			GAME_FUNC(void(__thiscall*)(character*), changeCharacterTileStuff)(gen);
 			DWORD adrFunc = codes::offsets.teleportCharacterFunc;
-			int xCoord = targetCoords->xCoord;
-			int yCoord = targetCoords->yCoord;
+			int xCoord = targetCoords[0];
+			int yCoord = targetCoords[1];
 			_asm
 			{
 				push yCoord
@@ -884,7 +884,7 @@ namespace characterHelpers
 		    GAME_FUNC(void(__thiscall*)(selectionInfo**, character*), someSelectionStuff)(selectInfoPtr, gen);
 		    GAME_FUNC(void(__thiscall*)(character*), initPlaceCharacter)(gen);
 		}
-		delete targetCoords;
+		delete[] targetCoords;
 		delete charArray;
 	}
 
@@ -902,14 +902,13 @@ namespace characterHelpers
 			armyHelpers::stopBlockPort(gen->army);
 		}
 
-		auto targetCoords = new coordPair{ x,y };
-		if (targetCoords = stratMapHelpers::findValidTileNearTile(targetCoords, gen->genType->type);
-			stratMapHelpers::isTileValidForCharacterType(gen->genType->type, targetCoords))
+		if (const auto [newX, newY] = stratMapHelpers::findValidTileNearTile(x, y, gen->genType->type);
+			stratMapHelpers::isTileValidForCharacterType(gen->genType->type, newX, newY))
 		{
 			GAME_FUNC(void(__thiscall*)(character*), changeCharacterTileStuff)(gen);
 			DWORD adrFunc = codes::offsets.teleportCharacterFunc;
-			int xCoord = targetCoords->xCoord;
-			int yCoord = targetCoords->yCoord;
+			int xCoord = newX;
+			int yCoord = newY;
 			_asm
 			{
 				push yCoord
@@ -926,7 +925,6 @@ namespace characterHelpers
 		    GAME_FUNC(void(__thiscall*)(character*), initPlaceCharacter)(gen);
 			isTeleported = true;
 		}
-		delete targetCoords;
 		return isTeleported;
 	}
 

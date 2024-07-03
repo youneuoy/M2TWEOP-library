@@ -230,6 +230,17 @@ characterMovementExtents* moveExtentsManager::createMoveExtents(character* searc
 		createMoveExtents)(this, searchType, searchChar, characterAction::movingNormal, numTurns);
 }
 
+characterRecord* campaign::getCharacterByLabel(const std::string& label)
+{
+	for (int i = 0; i < factionCount; i++)
+	{
+		const auto fac = getFactionByOrder(i);
+		if (const auto rec = fac->getCharacterByLabel(label); rec)
+			return rec;
+	}
+	return nullptr;
+}
+
 void campaign::setDipStance(campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2)
 {
 	using namespace campaignEnums;

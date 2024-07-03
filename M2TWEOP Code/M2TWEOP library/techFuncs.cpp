@@ -160,7 +160,8 @@ void techFuncs::deleteFiles(vector<string>& files)
 {
     for (string& file : files)
     {
-        filesystem::remove(filesystem::path(file));
+        if (filesystem::exists(file))
+            filesystem::remove(filesystem::path(file));
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "json.hpp"
 #include "realGameTypes.h"
 #include "lua/sol.hpp"
 
@@ -234,6 +235,7 @@ struct characterRecord { /* many important info about character */
 	unsigned __int32 isFamilyHead : 1;
 	bool wasMarriageAlliance;
 public:
+	std::string giveValidLabel();
 	traitContainer* getTraits() const
 	{
 		return traits;
@@ -358,6 +360,83 @@ public:
 	{
 		return &capturedCharacters[index];
 	}
+};
+
+class eopCharacterData
+{
+public:
+	std::string model;
+	nlohmann::json serialize()
+	{
+		nlohmann::json json;
+		json["model"] = model;
+		return json;
+	}
+	void deserialize(const nlohmann::json& json)
+	{
+		model = json["model"];
+	}
+};
+
+class eopCharacterDataDb
+{
+public:
+	eopCharacterDataDb()
+	{
+		eopCharData = std::make_shared<std::unordered_map<std::string, std::shared_ptr<eopCharacterData>>>();
+	}
+	std::shared_ptr<eopCharacterData> getCharacterData(const std::string& label)
+	{
+		if (eopCharData->find(label) == eopCharData->end())
+			return nullptr;
+		return (*eopCharData)[label];
+	}
+	std::shared_ptr<eopCharacterData> getOrCreateData(const std::string& label)
+	{
+		if (eopCharData->find(label) == eopCharData->end())
+			(*eopCharData)[label] = std::make_shared<eopCharacterData>();
+		return (*eopCharData)[label];
+	}
+	void createCharacterData(const std::string& label)
+	{
+		if (eopCharData->find(label) == eopCharData->end())
+			(*eopCharData)[label] = std::make_shared<eopCharacterData>();
+	}
+	static eopCharacterDataDb* get()
+	{
+		return instance.get();
+	}
+	std::shared_ptr<std::unordered_map<std::string, std::shared_ptr<eopCharacterData>>> eopCharData{};
+	static std::shared_ptr<eopCharacterDataDb> instance;
+	nlohmann::json serialize()
+	{
+		nlohmann::json json;
+		for (auto& [label, data] : *eopCharData)
+		{
+			json[label] = data->serialize();
+		}
+		return json;
+	}
+	void deserialize(const nlohmann::json& json)
+	{
+		eopCharData = std::make_shared<std::unordered_map<std::string, std::shared_ptr<eopCharacterData>>>();
+		for (auto it = json.begin(); it != json.end(); ++it)
+		{
+			const auto data = std::make_shared<eopCharacterData>();
+			data->deserialize(it.value());
+			(*eopCharData)[it.key()] = data;
+		}
+	}
+	void clearData()
+	{
+		eopCharData = std::make_shared<std::unordered_map<std::string, std::shared_ptr<eopCharacterData>>>();
+		m_Loaded = false;
+	}
+	std::string onGameSave();
+	void onGameLoad(const std::vector<std::string>& filePaths);
+	void onGameLoaded();
+private:
+	bool m_Loaded = false;
 };
 
 namespace characterRecordHelpers

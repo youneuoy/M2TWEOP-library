@@ -318,6 +318,7 @@ struct factionStruct {
 	int32_t unitsLost; //0x0EEC
 	int32_t lastOpponentId; //0x0EEC
 public:
+	characterRecord* getCharacterByLabel(const std::string& label);
 	void updateNeighbours();
 	int getAliveCharacterNumOfType(characterTypeStrat charType);
 	int getCharacterCountOfType(int characterType)

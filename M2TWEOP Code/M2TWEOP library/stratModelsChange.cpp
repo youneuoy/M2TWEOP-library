@@ -283,6 +283,7 @@ namespace stratModelsChange
 		strcpy(modelNameCopy, model);
 		rec->modelId = modelNameCopy;
 		stratModelCharacterChangeList.push_back(rec);
+		eopCharacterDataDb::get()->getOrCreateData(gen->characterRecord->giveValidLabel())->model = model;
 
 		changeModelsNeededNow = modelsChangeStatus::needChange;
 	}

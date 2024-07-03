@@ -82,6 +82,17 @@ void factionStruct::setSecondaryColor(const uint8_t r, const uint8_t g, const ui
 	stratMapHelpers::updateTerrain();
 }
 
+characterRecord* factionStruct::getCharacterByLabel(const std::string& label)
+{
+	const int recordCount = characterRecordNum;
+	for (int i = 0; i < recordCount; i++)
+	{
+		if (const auto rec = characterRecords[i]; rec->labelCrypt != 0 && rec->label && strcmp(rec->label, label.c_str()) == 0)
+			return rec;
+	}
+	return nullptr;
+}
+
 void factionStruct::updateNeighbours()
 {
 	if (settlementsNum == 0)

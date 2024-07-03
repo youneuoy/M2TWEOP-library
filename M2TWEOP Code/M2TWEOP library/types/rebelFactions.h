@@ -67,8 +67,13 @@ struct eopRebelFaction
     uint8_t bannerBlue{};
     bool bannerSet = false;
     std::shared_ptr<bannerData> banner{};
+    std::vector<std::string> characterModels{};
     bool bannerSymbolSet = false;
     void setBanner(const std::string& bannerName);
+    void addCharacterModel(const std::string& modelName)
+    {
+        characterModels.push_back(modelName);
+    }
 };
 
 class eopRebelFactionDb

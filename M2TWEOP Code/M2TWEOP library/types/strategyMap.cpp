@@ -630,38 +630,35 @@ namespace stratMapHelpers
 		clearAllMapArrows();
 	}
 	
-	bool isTileValidForCharacterType(const int charType, coordPair* coords)
+	bool isTileValidForCharacterType(const int charType, int x, int y)
 	{
-		if (!GAME_FUNC(bool(__stdcall*)(coordPair*, int, int), isTileValidForCharacter)(coords, charType, 1))
+		const auto coords = std::make_shared<coordPair>(x, y);
+		if (!GAME_FUNC(bool(__stdcall*)(coordPair*, int, int), isTileValidForCharacter)(coords.get(), charType, 1))
 			return false;
 		return isTileFree(&coords->xCoord);
 	}
 
-	coordPair* findValidTileNearTileLua(const int x, const int y, const int charType)
+	std::pair<int, int> findValidTileNearTileLua(const int x, const int y, const int charType)
 	{
-		const auto coords = std::make_shared<coordPair>(x, y);
-		const auto newCoords = findValidTileNearTile(coords.get(), charType);
-		return newCoords;
+		return findValidTileNearTile(x, y, charType);
 	}
 
-	coordPair* findValidTileNearTile(coordPair* coords, const int charType)
+	std::pair<int, int> findValidTileNearTile(int x, int y, const int charType)
 	{
-		if (isTileValidForCharacterType(charType, coords))
-			return coords;
-		const auto startCoords = *coords;
-		std::queue<std::pair<int, int>> neighbours = getNeighbourTiles(coords->xCoord, coords->yCoord);
-		const std::pair<int, int> start = { coords->xCoord, coords->yCoord };
+		if (isTileValidForCharacterType(charType, x, y))
+			return {x, y};
+		std::queue<std::pair<int, int>> neighbours = getNeighbourTiles(x, y);
+		const std::pair<int, int> start = { x, y };
 		std::vector<std::pair<int, int>> visited = { start };
 		while (true)
 		{
 			if (neighbours.empty())
 				break;
 			std::pair<int, int> checkCoord = neighbours.front();
-			*coords = { checkCoord.first, checkCoord.second };
 			neighbours.pop();
 			visited.push_back(checkCoord);
-			if (isTileValidForCharacterType(charType, coords))
-				return coords;
+			if (isTileValidForCharacterType(charType, checkCoord.first, checkCoord.second))
+				return {checkCoord.first, checkCoord.second};
 			std::queue<std::pair<int, int>>  newNeighbours = getNeighbourTiles(checkCoord.first, checkCoord.second);
 			while (!newNeighbours.empty())
 			{
@@ -678,8 +675,7 @@ namespace stratMapHelpers
 				neighbours.push(newCoord);
 			}
 		}
-		*coords = startCoords;
-		return coords;
+		return {x,y};
 	}
 	
 	bool isStratMap()
@@ -1053,9 +1049,10 @@ namespace stratMapHelpers
 		@tparam int x
 		@tparam int y
 		@tparam int characterType use characterType enum
-		@treturn coordPair coords
+		@treturn int newX
+		@treturn int newY
 		@usage
-		     local coords = M2TW.stratMap.findValidTileNearTile(160, 125, characterType.general)
+		     local x, y = M2TW.stratMap.findValidTileNearTile(160, 125, characterType.general)
 		*/
 		typeAll.stratMap.set_function("findValidTileNearTile", &findValidTileNearTileLua);
 		

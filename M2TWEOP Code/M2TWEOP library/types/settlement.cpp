@@ -23,6 +23,7 @@
 #include "strategyMap.h"
 #include "stratModelsChange.h"
 #include "techFuncs.h"
+#include "rebelFactions.h"
 
 std::shared_ptr<eopSettlementDataDb> eopSettlementDataDb::instance = std::make_shared<eopSettlementDataDb>();
 
@@ -955,6 +956,7 @@ namespace settlementHelpers
 		@tfield aiProductionController aiProductionController
 		@tfield int unitInQueueCount
 		@tfield int turmoil
+		@tfield rebelFaction rebelEntry
 		@tfield int governorDuration
 		@tfield int isProvokedRebellion
 		@tfield int publicHealth
@@ -994,6 +996,7 @@ namespace settlementHelpers
 		types.settlementStruct.set("yCoord", &settlementStruct::yCoord);
 		types.settlementStruct.set("governor", &settlementStruct::governor);
 		types.settlementStruct.set("army", &settlementStruct::army);
+		types.settlementStruct.set("rebelEntry", &settlementStruct::descrRebel);
 		types.settlementStruct.set("name", sol::property(
 			&settlementHelpers::getStringProperty<settlementStruct_name>, &settlementHelpers::setStringProperty<settlementStruct_name>
 			));

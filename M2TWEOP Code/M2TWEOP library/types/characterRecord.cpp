@@ -5,10 +5,14 @@
 //@license GPL-3.0
 #include "pch.h"
 #include "characterRecord.h"
+
+#include "campaign.h"
 #include "gameStringHelpers.h"
 #include "functionsOffsets.h"
 #include "character.h"
 #include "faction.h"
+#include "gameHelpers.h"
+#include "stratModelsChange.h"
 #include "unit.h"
 
 enum
@@ -26,7 +30,7 @@ enum
 	characterRecord_portrait_custom = 7,
 	characterRecord_lastName = 8
 };
-
+std::shared_ptr<eopCharacterDataDb> eopCharacterDataDb::instance = std::make_shared<eopCharacterDataDb>();
 namespace characterRecordHelpers
 {
 
@@ -863,5 +867,92 @@ namespace characterRecordHelpers
 		types.traitEffect.set("id", &traitEffect::effectID);
 		types.traitEffect.set("value", &traitEffect::value);
 
+	}
+}
+
+std::string characterRecord::giveValidLabel()
+{
+	if (labelCrypt != 0 && label)
+		return label;
+	std::string name = shortName;
+	if (name.empty())
+		name = "unnamed";
+	int nameCount = 1;
+	std::string testLabel;
+	const auto campData = campaignHelpers::getCampaignData();
+	while (true)
+	{
+		testLabel = name + "_eop_" + std::to_string(nameCount);
+		if (campData->getCharacterByLabel(testLabel))
+			nameCount++;
+		else
+			break;
+	}
+	gameStringHelpers::setHashedString(&label, testLabel.c_str());
+	return label;
+}
+
+std::string eopCharacterDataDb::onGameSave()
+{
+	std::string fPath = gameHelpers::getModPath();
+	fPath += "\\eopData\\TempSaveData";
+	std::string outFile = fPath;
+	outFile += "\\characterData.json";
+	ofstream f1(outFile);
+	jsn::json json = serialize();
+	f1 << setw(4) << json;
+	f1.close();
+	return outFile;
+}
+
+void eopCharacterDataDb::onGameLoad(const std::vector<std::string>& filePaths)
+{
+	for (auto& path : filePaths)
+	{
+		if (path.find("characterData.json") == string::npos)
+			continue;
+		jsn::json json;
+		try
+		{
+			std::ifstream file(path);
+			file >> json;
+			file.close();
+		}
+		catch (jsn::json::parse_error& e)
+		{
+			MessageBoxA(nullptr, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
+		try
+		{
+			deserialize(json);
+			m_Loaded = true;
+		}
+		catch (jsn::json::exception& e)
+		{
+			MessageBoxA(nullptr, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
+		return;
+	}
+}
+
+void eopCharacterDataDb::onGameLoaded()
+{
+	const auto campaign = campaignHelpers::getCampaignData();
+	if (!campaign)
+		return;
+	const auto facCount = campaign->factionCount;
+	for (int i = 0; i < facCount; i++)
+	{
+		const auto fac = campaign->getFactionByOrder(i);
+		const int charNum = fac->numOfCharacters;
+		for (int c = 0; c < charNum; c++)
+		{
+			const auto thisChar = fac->characters[c];
+			if (const auto rec = thisChar->characterRecord; rec && rec->labelCrypt != 0 && rec->label)
+			{
+				if (const auto data = getCharacterData(rec->label); data && !data->model.empty())
+					stratModelsChange::setCharacterModel(thisChar, data->model.c_str());
+			}
+		}
 	}
 }

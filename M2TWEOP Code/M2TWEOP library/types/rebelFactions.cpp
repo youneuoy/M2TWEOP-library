@@ -106,6 +106,15 @@ namespace rebels
         types.eopRebelFaction.set_function("setBannerSymbol", &eopRebelFaction::setBanner);
 
         /***
+        Add a character model for this rebel faction's captains.
+        @function eopRebelFaction:addCharacterModel
+        @tparam string modelName
+        @usage
+             eopRebelFaction:addCharacterModel("my_model")
+        */
+        types.eopRebelFaction.set_function("addCharacterModel", &eopRebelFaction::addCharacterModel);
+
+        /***
         Basic rebelFaction table
         
         @tfield int index

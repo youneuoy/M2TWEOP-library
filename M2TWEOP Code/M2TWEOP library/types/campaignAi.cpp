@@ -413,8 +413,7 @@ void aiOrder::setTiles(const int x, const int y)
 				break;
 			const auto [checkX, checkY] = neighbours.front();
 			neighbours.pop();
-			auto coords = coordPair {checkX, checkY};
-			if (stratMapHelpers::isTileValidForCharacterType(7, &coords))
+			if (stratMapHelpers::isTileValidForCharacterType(7, checkX, checkY))
 			{
 				validTiles.emplace_back(checkX, checkY);
 				tileNums.emplace_back(0);
@@ -557,7 +556,7 @@ bool attackSettlementOrder::execute()
 					{
 						assignedArmy->army->gen->hasEopOrders = true;
 						const auto [xCoord, yCoord] = siege->army->getCoords();
-						if (assignedArmy->army->moveTactical(xCoord, yCoord, true))
+						if (assignedArmy->army->moveTactical(xCoord, yCoord, false))
 						{
 							if (const auto& armyRes = globalEopAiConfig::getInstance()->findArmyResource(siege->army))
 								armyRes->unitCount += assignedArmy->army->numOfUnits;
@@ -623,9 +622,8 @@ bool attackSettlementOrder::execute()
 			if (assignedArmy->moveCost > assignedArmy->army->gen->movePointsArmy)
 			{
 				assignedArmy->army->gen->hasEopOrders = true;
-				coordPair coords = {validTiles[tileIndex].first, validTiles[tileIndex].second};
-				coords = *stratMapHelpers::findValidTileNearTile(&coords, 7);
-				characterHelpers::moveNormal(assignedArmy->army->gen, coords.xCoord, coords.yCoord);
+				auto [newX, newY] = stratMapHelpers::findValidTileNearTile(validTiles[tileIndex].first, validTiles[tileIndex].second, 7);
+				characterHelpers::moveNormal(assignedArmy->army->gen, newX, newY);
 			}
 			else
 			{
@@ -802,9 +800,8 @@ bool attackArmyOrder::execute()
 			totalCommitted += assignedArmy->army->totalStrength;
 			if (assignedArmy->moveCost > assignedArmy->army->gen->movePointsArmy)
 			{
-				coordPair coords = {validTiles[tileIndex].first, validTiles[tileIndex].second};
-				coords = *stratMapHelpers::findValidTileNearTile(&coords, 7);
-				characterHelpers::moveNormal(assignedArmy->army->gen, coords.xCoord, coords.yCoord);
+				auto [newX, newY] = stratMapHelpers::findValidTileNearTile(validTiles[tileIndex].first, validTiles[tileIndex].second, 7);
+				characterHelpers::moveNormal(assignedArmy->army->gen, newX, newY);
 			}
 			else
 				assignedArmy->army->moveTactical(validTiles[tileIndex].first, validTiles[tileIndex].second);
@@ -855,9 +852,8 @@ bool defendSettlementOrder::execute()
 		assignedArmy->used = true;
 		if (assignedArmy->moveCost > assignedArmy->army->gen->movePointsArmy || !targetSettlement->own || targetSettlement->settlement->siegeNum > 0)
 		{
-			coordPair coords = {static_cast<int>(targetSettlement->settlement->xCoord), static_cast<int>(targetSettlement->settlement->yCoord)};
-			coords = *stratMapHelpers::findValidTileNearTile(&coords, 7);
-			characterHelpers::moveNormal(assignedArmy->army->gen, coords.xCoord, coords.yCoord);
+			const auto [newX, newY] = stratMapHelpers::findValidTileNearTile(static_cast<int>(targetSettlement->settlement->xCoord), static_cast<int>(targetSettlement->settlement->yCoord), 7);
+			characterHelpers::moveNormal(assignedArmy->army->gen, newX, newY);
 		}
 		else
 			assignedArmy->army->moveTactical(targetSettlement->settlement->xCoord, targetSettlement->settlement->yCoord);
@@ -917,9 +913,8 @@ bool defendArmyOrder::execute()
 		totalCommitted += assignedArmy->army->totalStrength;
 		if (assignedArmy->moveCost > assignedArmy->army->gen->movePointsArmy)
 		{
-			coordPair coords = {targetArmy->army->gen->xCoord, targetArmy->army->gen->yCoord};
-			coords = *stratMapHelpers::findValidTileNearTile(&coords, 7);
-			characterHelpers::moveNormal(assignedArmy->army->gen, coords.xCoord, coords.yCoord);
+			auto [newX, newY] = stratMapHelpers::findValidTileNearTile(targetArmy->army->gen->xCoord, targetArmy->army->gen->yCoord, 7);
+			characterHelpers::moveNormal(assignedArmy->army->gen, newX, newY);
 		}
 		else
 		{
@@ -1435,8 +1430,9 @@ void globalEopAiConfig::turnStartMove(factionStruct* fac, const bool isEnd)
 				const auto [xCoord, yCoord] = nearRes->army->getCoords();
 				if (xCoord == -1)
 					continue;
-				armyRes->army->moveTactical(xCoord, yCoord, false);
+				armyRes->army->moveTactical(xCoord, yCoord, true);
 				armyRes->used = true;
+				nearRes->used = true;
 				break;
 			}
 		}
@@ -1446,7 +1442,7 @@ void globalEopAiConfig::turnStartMove(factionStruct* fac, const bool isEnd)
 			if (armyRes->totalThreatReceiving > armyRes->positionPower && !armyRes->nearSetts.empty())
 			{
 				std::stable_sort(armyRes->nearSetts.begin(), armyRes->nearSetts.end(), distanceSort2);
-				armyRes->army->moveTactical(armyRes->nearSetts.front()->settlement->xCoord, armyRes->nearSetts.front()->settlement->yCoord, false);
+				armyRes->army->moveTactical(armyRes->nearSetts.front()->settlement->xCoord, armyRes->nearSetts.front()->settlement->yCoord, true);
 			}
 		}
 	}

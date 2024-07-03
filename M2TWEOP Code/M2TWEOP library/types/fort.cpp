@@ -17,6 +17,7 @@
 #include "campaignDb.h"
 #include "cultures.h"
 #include "strategyMap.h"
+#include "rebelFactions.h"
 
 namespace fortHelpers
 {
@@ -92,15 +93,14 @@ namespace fortHelpers
 			
 		if (!convertGarrison && fort->army)
 		{
-			auto oldCoords = coordPair{static_cast<int>(fort->xCoord), static_cast<int>(fort->yCoord)};
-			if (const auto coords = stratMapHelpers::findValidTileNearTile(&oldCoords, 7);
-				stratMapHelpers::isTileValidForCharacterType(static_cast<int>(characterTypeStrat::namedCharacter), coords))
+			if (const auto [newX, newY] = stratMapHelpers::findValidTileNearTile(fort->xCoord, fort->yCoord, 7);
+				stratMapHelpers::isTileValidForCharacterType(static_cast<int>(characterTypeStrat::namedCharacter), newX, newY))
 			{
 				sol::table units = sol::state_view(plugData::data.luaAll.luaState).create_table();
 				for (int i = 0; i < fort->army->numOfUnits; i++)
 					units.add(fort->army->units[i]);
 				const auto faction = fort->army->faction;
-				if (const auto army = factionHelpers::splitArmy(faction, units, coords->xCoord, coords->yCoord); !army)
+				if (const auto army = factionHelpers::splitArmy(faction, units, newX, newY); !army)
 				{
 					if (fort->army)
 					{
@@ -186,6 +186,7 @@ namespace fortHelpers
 		@tfield int plagued
 		@tfield int subFactionID
 		@tfield int regionID
+        @tfield rebelFaction rebelEntry
 		@tfield int creatorFactionID
 		@tfield int creatorCultureID
 		@tfield int gatesAreOpened
@@ -221,6 +222,7 @@ namespace fortHelpers
 		luaType.fortStruct.set("regionID", &fortStruct::regionID);
 		luaType.fortStruct.set("creatorFactionID", &fortStruct::creatorFactionID);
 		luaType.fortStruct.set("creatorCultureID", &fortStruct::creatorCultureID);
+		luaType.fortStruct.set("rebelEntry", &fortStruct::descrRebel);
 		luaType.fortStruct.set("fortFortificationLevel", &fortStruct::fortFortificationLevel);
 
 		/***

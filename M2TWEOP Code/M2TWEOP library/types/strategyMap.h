@@ -962,8 +962,8 @@ namespace stratMapHelpers
 	UINT32 getTileRegionID(int x, int y);
 	factionStruct* getRegionOwner(int regionID);
 	float getTileMoveCost(int x, int y, int destX, int destY);
-	coordPair* findValidTileNearTile(coordPair* coords, int charType);
-	bool isTileValidForCharacterType(int charType, coordPair* coords);
+	std::pair<int, int> findValidTileNearTile(int x, int y, int charType);
+	bool isTileValidForCharacterType(int charType, int x, int y);
 	void viewTacticalMap(int x, int y);
 	void getGameTileCoordsWithCursor(int& x, int& y);
 	std::tuple<int, int> getGameTileCoordsWithCursorLua();

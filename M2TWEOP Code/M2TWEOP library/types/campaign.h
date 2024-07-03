@@ -589,6 +589,7 @@ struct campaign {
 	struct UNICODE_STRING **campaignString;
 	struct UNICODE_STRING **campaignDirString;
 public:
+	characterRecord* getCharacterByLabel(const std::string& label);
 	factionStruct* getPlayerFaction(int index)
 	{
 		if (index < 0 || index >= humanPlayers)

@@ -4327,14 +4327,13 @@ void onDrawBanner::SetNewCode()
 {
 	const auto a = new Assembler();
 	a->push(ecx);
-	a->push(edx);
 	a->push(eax);
 	a->mov(ecx, eax);
 	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
 	a->call(eax);
-	a->mov(dword_ptr(esp, 0x20), eax);
+	a->mov(dword_ptr(esp, 0x1C), eax);
+	a->mov(dl, byte_ptr(esp, 0x1E));
 	a->pop(eax);
-	a->pop(edx);
 	a->pop(ecx);
 	a->ret();
 	m_cheatBytes = static_cast<unsigned char*>(a->make());
@@ -4348,7 +4347,7 @@ onGetRebelSymbol::onGetRebelSymbol(MemWork* mem, LPVOID addr, int ver)
 		m_adress = 0x9D3893;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x9D2655;
+		m_adress = 0x9D2CF3;
 }
 
 void onGetRebelSymbol::SetNewCode()

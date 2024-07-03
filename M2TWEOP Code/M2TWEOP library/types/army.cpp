@@ -15,6 +15,7 @@
 #include "gameHelpers.h"
 #include "luaPlugin.h"
 #include "strategyMap.h"
+#include "rebelFactions.h"
 
 std::unordered_map<std::string, std::shared_ptr<bannerData>> eopBannerSymbols::banners = {};
 
@@ -51,64 +52,58 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 		return this;
 	}
 	const auto stratPathFind = gameHelpers::getGameDataAll()->stratPathFinding;
-	auto targetCoords = new coordPair(x, y);
 	auto unitList = new unit*[numOfUnits];
 	for (int i = 0; i < numOfUnits; i++)
 		unitList[i] = units[i];
 	const auto fac = faction;
 	if (auto tileArmy = tile->getArmy(); tileArmy && !tileArmy->canReceiveMerge(this))
 	{
-		targetCoords = stratMapHelpers::findValidTileNearTile(targetCoords, isAdmiral ? 3 : 7);
-		gameHelpers::logStringGame("New tile: " + std::to_string(targetCoords->xCoord) + " " + std::to_string(targetCoords->yCoord));
-		if (x== targetCoords->xCoord && y == targetCoords->yCoord)
+		const auto [newX, newY] = stratMapHelpers::findValidTileNearTile(x, y, isAdmiral ? 3 : 7);
+		gameHelpers::logStringGame("New tile: " + std::to_string(newX) + " " + std::to_string(newY));
+		if (x== newX && y == newY)
 		{
 			gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
-			delete targetCoords;
 			delete[] unitList;
 			return nullptr;
 		}
-		const auto army = moveTactical(targetCoords->xCoord, targetCoords->yCoord, false);
-		delete targetCoords;
+		const auto army = moveTactical(newX, newY, false);
 		delete[] unitList;
 		return army;
 	}
 	else if (auto tileSett = tile->getSettlement(); tileSett && tileSett->faction != faction)
 	{
-		targetCoords = stratMapHelpers::findValidTileNearTile(targetCoords, isAdmiral ? 3 : 7);
-		gameHelpers::logStringGame("New tile: " + std::to_string(targetCoords->xCoord) + " " + std::to_string(targetCoords->yCoord));
-		if (x== targetCoords->xCoord && y == targetCoords->yCoord)
+		const auto [newX, newY] = stratMapHelpers::findValidTileNearTile(x, y, isAdmiral ? 3 : 7);
+		gameHelpers::logStringGame("New tile: " + std::to_string(newX) + " " + std::to_string(newY));
+		if (x== newX && y == newY)
 		{
 			gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
-			delete targetCoords;
 			delete[] unitList;
 			return nullptr;
 		}
-		const auto army = moveTactical(targetCoords->xCoord, targetCoords->yCoord, false);
-		delete targetCoords;
+		const auto army = moveTactical(newX, newY, false);
 		delete[] unitList;
 		return army;
 	}
 	else if (auto tileFort = tile->getFort(); tileFort && tileFort->faction != faction)
 	{
-		targetCoords = stratMapHelpers::findValidTileNearTile(targetCoords, isAdmiral ? 3 : 7);
-		gameHelpers::logStringGame("New tile: " + std::to_string(targetCoords->xCoord) + " " + std::to_string(targetCoords->yCoord));
-		if (x== targetCoords->xCoord && y == targetCoords->yCoord)
+		const auto [newX, newY] = stratMapHelpers::findValidTileNearTile(x, y, isAdmiral ? 3 : 7);
+		gameHelpers::logStringGame("New tile: " + std::to_string(newX) + " " + std::to_string(newY));
+		if (x== newX && y == newY)
 		{
 			gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
-			delete targetCoords;
 			delete[] unitList;
 			return nullptr;
 		}
-		const auto army = moveTactical(targetCoords->xCoord, targetCoords->yCoord, false);
-		delete targetCoords;
+		const auto army = moveTactical(newX, newY, false);
 		delete[] unitList;
 		return army;
 	}
-	if (!GAME_FUNC(bool(__thiscall*)(stratPathFinding*, unit**, int, coordPair*),
+	int* targetCoords = new int[2]{ x, y };
+	if (!GAME_FUNC(bool(__thiscall*)(stratPathFinding*, unit**, int, int*),
 		canArmySplit)(stratPathFind, unitList, numOfUnits, targetCoords))
 	{
 		gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
-		delete targetCoords;
+		delete[] targetCoords;
 		delete[] unitList;
 		return nullptr;
 	}
@@ -124,11 +119,10 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 		mov eax, splitArmy
 		call eax
 	}
+	delete[] targetCoords;
 	stratMapHelpers::clearSundries();
-	const auto army = unitList[0]->army;
-	delete targetCoords;
 	delete[] unitList;
-	return army;
+	return this;
 }
 
 fortStruct* siegeS::getSiegedFort()
@@ -686,8 +680,7 @@ namespace armyHelpers
 		if (label != nullptr && strlen(label) == 0)
 			label = nullptr;
 		stratMap* map = stratMapHelpers::getStratMap();
-		auto spawnCoords = new coordPair(x, y);
-		spawnCoords = stratMapHelpers::findValidTileNearTile(spawnCoords, characterType);
+		auto [spawnX, spawnY] = stratMapHelpers::findValidTileNearTile(x, y, characterType);
 		character* gen = nullptr;
 		const char* typeName = characterTypes.find(characterType)->second;
 		campaign* campaign = campaignHelpers::getCampaignData();
@@ -707,6 +700,7 @@ namespace armyHelpers
 							DWORD adrType = reinterpret_cast<DWORD>(cryptS);
 							gen = GAME_FUNC(character*(__cdecl*)(DWORD, int, characterRecord*, const char*), respawnOffMapCharacterFunc)
 							(adrType, faction->factionID, namedChar, portrait);
+							auto spawnCoords = new int[2]{ spawnX, spawnY };
 							if (gen)
 							{
 								DWORD adrFunc = codes::offsets.spawnCreatedObject;
@@ -719,9 +713,9 @@ namespace armyHelpers
 									call eax
 								}
 							}
+							delete[] spawnCoords;
 							break;
 						}
-						delete spawnCoords;
 						return nullptr;
 					}
 				}
@@ -808,7 +802,7 @@ namespace armyHelpers
 			}
 				
 			armyStruct* army = createArmy(gen);
-			const oneTile* tile = stratMapHelpers::getTile(spawnCoords->xCoord, spawnCoords->yCoord);
+			const oneTile* tile = stratMapHelpers::getTile(spawnX, spawnY);
 			int regionId = tile->regionId;
 			GAME_FUNC(void(__thiscall*)(stratMap*, armyStruct*, int), setArmyRegionEntriesFunc)(map, army, regionId);
 			unit* bgUnit = nullptr;
@@ -823,6 +817,7 @@ namespace armyHelpers
 			addUnitToArmy(army, bgUnit);
 			if (characterType == characterTypeStrat::namedCharacter)
 				characterHelpers::setBodyguard(gen, bgUnit);
+			auto spawnCoords = new int[2]{ spawnX, spawnY };
 			adrFunc = codes::offsets.factionResurrectStuffFunc;
 			_asm
 			{
@@ -831,12 +826,11 @@ namespace armyHelpers
 				mov eax, adrFunc
 				call eax
 			}
-			delete spawnCoords;
+			delete[] spawnCoords;
 			if (army && label && strcmp(label, "") == 0)
 				gameStringHelpers::setHashedString(&gen->characterRecord->label, label);
 			return army;
 		}
-		delete spawnCoords;
 		return nullptr;
 	}
     
@@ -962,6 +956,7 @@ namespace armyHelpers
 		@tfield int reformPointY
 		@tfield int maxGroups
 		@tfield int hiddenUnitCount
+		@tfield rebelFaction rebelEntry
 		@tfield float reform_point_x X coordinate to which the retreating units will go.
 		@tfield float reform_point_y Y coordinate to which the retreating units will go.
 		@tfield createUnit createUnit
@@ -1011,6 +1006,7 @@ namespace armyHelpers
 		types.armyStruct.set("rams", &armyStruct::rams);
 		types.armyStruct.set("bannerRed", &armyStruct::bannerRed);
 		types.armyStruct.set("bannerBlue", &armyStruct::bannerBlue);
+		types.armyStruct.set("rebelEntry", &armyStruct::descrRebel);
 		types.armyStruct.set("bannerGreen", &armyStruct::bannerGreen);
 		types.armyStruct.set("bannerSet", &armyStruct::bannerSet);
 		types.armyStruct.set("hiddenUnitCount", &armyStruct::hiddenUnitCount);
