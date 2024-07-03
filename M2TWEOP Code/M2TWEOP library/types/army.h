@@ -45,6 +45,52 @@ public:
 	}
 };
 
+struct textureDetails
+{
+	char* name;
+	char pad[76];
+};
+
+struct tgaDatabase
+{
+	textureDetails* textures;
+	int texturesSize;
+	int textureCount;
+};
+
+struct bannerTexture
+{
+	float topLeftX{};
+	float topLeftY{};
+	float bottomRightX{};
+	float bottomRightY{};
+	float deltaY{};
+	int textureIndex{};
+};
+
+struct bannerData
+{
+	bannerTexture tex{};
+	uint8_t blue{};
+	uint8_t green{};
+	uint8_t red{};
+	uint8_t alpha{};
+};
+
+class eopBannerSymbols
+{
+public:
+	static void addBanner(const std::string& name, const std::string& filePath, float topLeftX, float topLeftY, float bottomRightX, float bottomRightY);
+	static std::shared_ptr<bannerData> getBanner(const std::string& name)
+	{
+		const auto it = banners.find(name);
+		if (it == banners.end())
+			return nullptr;
+		return it->second;
+	}
+	static std::unordered_map<std::string, std::shared_ptr<bannerData>> banners;
+};
+
 //army data
 struct armyStruct { /* structure of stack */
 	trackedObject object;

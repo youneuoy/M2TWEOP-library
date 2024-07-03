@@ -1059,7 +1059,7 @@ namespace factionHelpers
 		Count amount of alive characters of a specified type inside this faction.
 		@function factionStruct:getCharacterCountOfType
 		@tparam int charType
-		@tparam int count
+		@treturn int count
 		@usage
 		     local count = fac:getCharacterCountOfType(characterType.general)
 		*/

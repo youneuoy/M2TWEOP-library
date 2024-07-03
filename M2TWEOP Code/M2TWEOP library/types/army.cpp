@@ -16,6 +16,8 @@
 #include "luaPlugin.h"
 #include "strategyMap.h"
 
+std::unordered_map<std::string, std::shared_ptr<bannerData>> eopBannerSymbols::banners = {};
+
 settlementStruct* siegeS::getSiegedSettlement()
 {
     return stratMapHelpers::getTile(goal->xCoord, goal->yCoord)->getSettlement();
@@ -133,7 +135,30 @@ fortStruct* siegeS::getSiegedFort()
 {
     return stratMapHelpers::getTile(goal->xCoord, goal->yCoord)->getFort();
 }
-    
+
+void eopBannerSymbols::addBanner(const std::string& name, const std::string& filePath, const float topLeftX,
+	const float topLeftY, const float bottomRightX, const float bottomRightY)
+{
+	auto tgaDb = reinterpret_cast<tgaDatabase*>(dataOffsets::offsets.tgaDataBase);
+	const int texCount = tgaDb->textureCount;
+	for (int i = 0; i < texCount; i++)
+	{
+		tgaDb = reinterpret_cast<tgaDatabase*>(dataOffsets::offsets.tgaDataBase);
+		if (const auto tex = &tgaDb->textures[i]; tex && tex->name && strcmp(tex->name, filePath.c_str()) == 0)
+		{
+			const int texIndex = i;
+			const auto banner = std::make_shared<bannerData>();
+			banner->tex.textureIndex = texIndex;
+			banner->tex.topLeftX = topLeftX;
+			banner->tex.topLeftY = topLeftY;
+			banner->tex.bottomRightX = bottomRightX;
+			banner->tex.bottomRightY = bottomRightY;
+			banners.insert_or_assign(name, banner);
+			break;
+		}
+	}
+}
+
 std::pair<int, int> armyStruct::getCoords()
 {
 	if (gen != nullptr)
@@ -1359,7 +1384,7 @@ namespace armyHelpers
 		
 		/***
 		Get number of units in this army of a specific category
-		@function armyStruct:moveTactical
+		@function armyStruct:getNumberOfCategory
 		@tparam int category use unitCategory enum
 		@treturn int num
 		@usage

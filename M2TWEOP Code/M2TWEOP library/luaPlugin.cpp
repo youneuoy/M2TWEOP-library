@@ -26,6 +26,7 @@
 #include "strategyMap.h"
 #include "campaignAi.h"
 #include "imgui/sol_ImGui.h"
+#include "rebelFactions.h"
 plugData::pDat plugData::data;
 std::vector<std::string> luaPlugin::logS;
 std::vector<std::string> luaPlugin::logCommands;
@@ -234,6 +235,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getScriptCounter getScriptCounter
 	@tfield scriptCommand scriptCommand
 	@tfield getEopAiConfig getEopAiConfig
+	@tfield getRebelFaction getRebelFaction
 	@table M2TWEOP
 	*/
 	
@@ -773,6 +775,30 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	tables.M2TWEOP.set_function("getEopAiConfig", &globalEopAiConfig::getInstanceLua);
 	
 	/***
+	Get a rebel faction.
+	@function M2TWEOP.getRebelFaction
+	@tparam string name
+	@treturn eopRebelFaction rebelFac
+	@usage
+		local bandits = M2TWEOP.getRebelFaction("Bandits")
+	*/
+	tables.M2TWEOP.set_function("getRebelFaction", &eopRebelFactionDb::getRebelFactionLua);
+	
+	/***
+	Add a banner symbol. Add them onCampaignMapLoaded or later!
+	@function M2TWEOP.addBanner
+	@tparam string name
+	@tparam string filePath starting from mods, path to the tga file containing the symbol. You need to add this file to descr_standards.txt so the game loads it!
+	@tparam float topLeftX As percentage of the picture width, for example 0.5 for the middle
+	@tparam float topLeftY As percentage of the picture width, for example 0.5 for the middle
+	@tparam float bottomRightX As percentage of the picture width, for example 0.5 for the middle
+	@tparam float bottomRightY As percentage of the picture width, for example 0.5 for the middle
+	@usage
+		   M2TWEOP.addBanner("Bandits_Banner", "mods/ago_beta/data/banners/symbols10.tga", 0.0, 0.0, 0.5, 0.5)
+	*/
+	tables.M2TWEOP.set_function("addBanner", &eopBannerSymbols::addBanner);
+	
+	/***
 	Fire any script command available from the game. It is always just 2 parameters in the function, the command name and all the arguments as 1 string in the second parameter.
 	Do not use inc_counter, set_counter, declare_counter! they crash!
 	@function M2TWEOP.scriptCommand
@@ -822,6 +848,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	fortHelpers::addToLua(luaState);
 	armyHelpers::addToLua(luaState);
 	campaignAi::addToLua(luaState);
+	rebels::addToLua(luaState);
 	return &luaState;
 }
 

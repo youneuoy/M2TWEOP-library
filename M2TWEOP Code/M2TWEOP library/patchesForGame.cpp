@@ -22,6 +22,7 @@
 #include "unit.h"
 #include "army.h"
 #include "campaign.h"
+#include "rebelFactions.h"
 
 
 worldRecord* __fastcall patchesForGame::selectWorldpkgdesc(char* database, worldRecord* selectedRecord)
@@ -817,15 +818,35 @@ uint32_t makeColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 uint32_t patchesForGame::onDrawBanner(const trackedArmy* army)
 {
 	const auto stack = army->army;
-	if (!stack->bannerSet)
+	if (stack->bannerSet)
 	{
-		const auto factionRec = stack->faction->factionRecord;
-		return makeColor(factionRec->primary_colour_red, factionRec->primary_colour_green, factionRec->primary_colour_blue, 0xFF);
+		return makeColor(stack->bannerRed, stack->bannerGreen, stack->bannerBlue, 0xFF);
 	}
-	return makeColor(stack->bannerRed, stack->bannerGreen, stack->bannerBlue, 0xFF);
+	if (stack->descrRebel && stack->faction->factionID == campaignHelpers::getCampaignData()->slaveFactionID)
+	{
+		if (const auto rebelFac = eopRebelFactionDb::getRebelFaction(stack->descrRebel->getName()); rebelFac && rebelFac->bannerSet)
+		{
+			return makeColor(rebelFac->bannerRed, rebelFac->bannerGreen, rebelFac->bannerBlue, 0xFF);
+		}
+	}
+	const auto factionRec = stack->faction->factionRecord;
+	return makeColor(factionRec->primary_colour_red, factionRec->primary_colour_green, factionRec->primary_colour_blue, 0xFF);
 }
 
-void patchesForGame::balanceMinorSettStats(settlementStats* stats, settlementStruct* sett)
+bannerData* patchesForGame::onGetRebelSymbol(const trackedArmy* army, bannerData* oldData)
+{
+	const auto stack = army->army;
+	if (!stack->descrRebel)
+		return oldData;
+	const auto rebelFac = eopRebelFactionDb::getRebelFaction(stack->descrRebel->getName());
+	if (!rebelFac)
+		return oldData;
+	if (rebelFac->bannerSymbolSet)
+		return rebelFac->banner.get();
+	return oldData;
+}
+
+void patchesForGame::balanceMinorSettStats(settlementStats* stats, const settlementStruct* sett)
 {
 	if (const auto region = stratMapHelpers::getRegion(sett->regionID); region->factionOwner->factionID != sett->faction->factionID)
 	{
@@ -1335,6 +1356,7 @@ void __stdcall patchesForGame::onGameInit()
 void __stdcall patchesForGame::onUnloadCampaign()
 {
 	minorSettlementDb::clear();
+	eopRebelFactionDb::clear();
 	globalEopAiConfig::clearFactionData();
 	gameEvents::onUnloadCampaign();
 }
@@ -1342,6 +1364,7 @@ void __stdcall patchesForGame::onNewGameLoaded()
 {
 	minorSettlementDb::load();
 	eopSettlementDataDb::get()->newGameLoaded();
+	eopRebelFactionDb::loadData();
 	plugData::data.luaAll.fillHashMaps();
 	gameEvents::onNewGameLoaded();
 }

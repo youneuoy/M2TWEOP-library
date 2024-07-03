@@ -4,6 +4,7 @@
 #include "cultures.h"
 #include "unit.h"
 
+struct bannerData;
 struct aiRegionData;
 struct aiRegionController;
 struct settlementStats;
@@ -43,6 +44,7 @@ public:
 	static void __fastcall onCalculateSettlement(settlementStruct* sett);
 	static int* __fastcall onGetSupportingArmies(armyStruct* defender, armyStruct* attacker);
 	static uint32_t __fastcall onDrawBanner(const trackedArmy* army);
+	static bannerData* __fastcall onGetRebelSymbol(const trackedArmy* army, bannerData* oldData);
 	static void __fastcall onPredictedStats(settlementStats* statsManager);
 	static int __fastcall onEvalAttObjective(const aiCampaignController* controller);
 	static void __fastcall onUpdateControllerAlloc(aiCampaignController* controller);
@@ -57,7 +59,7 @@ public:
 	static bool __fastcall onDecideRamAttacks(buildingBattle* gate, aiDetachment* detachment, int numRamsLeft);
 	static const char* __fastcall onQuickSave();
 	static const char* __fastcall onAutoSave();
-	static void balanceMinorSettStats(settlementStats* stats, settlementStruct* sett);
+	static void balanceMinorSettStats(settlementStats* stats, const settlementStruct* sett);
 	static eduEntry* __fastcall onGetRecruitPoolUnitEntry(int eduIndex);
 	static int __fastcall onFindUnit(char* entry, int* eduIndex);
 	static uint32_t __fastcall onSetExtentsTexture(bool isEnemy);

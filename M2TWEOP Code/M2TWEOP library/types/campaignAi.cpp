@@ -576,12 +576,14 @@ bool attackSettlementOrder::execute()
 			{
 				if (assignedArmy->army->canStartAssault(targetSettlement->settlement))
 				{
+					gameHelpers::logStringGame("Assaulted");
 					assignedArmy->army->gen->hasEopOrders = true;
 					assignedArmy->army->siegeSettlement(targetSettlement->settlement, true);
 					break;
 				}
 				if (targetSettlement->settlement->siegeNum < 8 || assignedArmy->army->siege)
 				{
+					gameHelpers::logStringGame("Maintained siege");
 					assignedArmy->army->gen->hasEopOrders = true;
 					assignedArmy->army->siegeSettlement(targetSettlement->settlement, false);
 					hasAssaulted = true;
@@ -590,6 +592,7 @@ bool attackSettlementOrder::execute()
 			}
 			else if (assignedArmy->army->isBorderingSettlement(targetSettlement->settlement))
 			{
+				gameHelpers::logStringGame("Supported siege");
 				assignedArmy->army->gen->hasEopOrders = true;
 				assignedArmy->army->gen->movePointsArmy = 1;
 			}

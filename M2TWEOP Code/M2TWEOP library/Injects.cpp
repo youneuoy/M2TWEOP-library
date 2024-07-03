@@ -4341,6 +4341,33 @@ void onDrawBanner::SetNewCode()
 	delete a;
 }
 
+onGetRebelSymbol::onGetRebelSymbol(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x9D3893;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x9D2655;
+}
+
+void onGetRebelSymbol::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(edx);
+	a->mov(edx, eax);
+	a->mov(ecx, dword_ptr(esp, 0x30));
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(edx);
+	a->mov(ecx, dword_ptr(eax));
+	a->mov(dword_ptr(ebx), ecx);
+	a->mov(edx, dword_ptr(eax, 0x4));
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onGetSupportingArmies2::onGetSupportingArmies2(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

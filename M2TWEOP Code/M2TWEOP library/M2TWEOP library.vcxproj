@@ -324,6 +324,7 @@
     <ClInclude Include="types\gameHelpers.h" />
     <ClInclude Include="types\gameUi.h" />
     <ClInclude Include="types\mapImage.h" />
+    <ClInclude Include="types\rebelFactions.h" />
     <ClInclude Include="types\strategyMap.h" />
     <ClInclude Include="types\settlement.h" />
     <ClInclude Include="types\unit.h" />
@@ -449,6 +450,7 @@
     <ClCompile Include="types\gameHelpers.cpp" />
     <ClCompile Include="types\gameUi.cpp" />
     <ClCompile Include="types\mapImage.cpp" />
+    <ClCompile Include="types\rebelFactions.cpp" />
     <ClCompile Include="types\strategyMap.cpp" />
     <ClCompile Include="types\settlement.cpp" />
     <ClCompile Include="types\unit.cpp" />

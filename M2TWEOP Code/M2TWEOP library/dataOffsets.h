@@ -68,6 +68,7 @@ public:
 		DWORD fortSpyingVtbl = NULL;
 		DWORD settlementVtbl = NULL;
 		DWORD settlementSpyingVtbl = NULL;
+		DWORD descrRebels = NULL;
 		
 		//audio settings
 		bool* audioEnable = nullptr;

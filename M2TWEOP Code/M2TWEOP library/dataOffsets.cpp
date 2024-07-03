@@ -92,6 +92,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.mapTilesDb = 0x019B3134;
 		offsets.campaignControllerVtbl = 0x13380AC;
 		offsets.ltgdConfig = 0x0164D04C;
+		offsets.descrRebels = 0x16673F0;
 
 		
 		offsets.fortVtbl = 0x13362F4;
@@ -187,6 +188,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.mapTilesDb = 0x0196A004;
 		offsets.campaignControllerVtbl = 0x12F308C;
 		offsets.ltgdConfig = 0x01605134;
+		offsets.descrRebels = 0x161F518;
 
 		offsets.audioEnable = reinterpret_cast<bool*>(0x01639f1d);
 		offsets.audioMaster_vol = reinterpret_cast<int*>(0x01639f60);

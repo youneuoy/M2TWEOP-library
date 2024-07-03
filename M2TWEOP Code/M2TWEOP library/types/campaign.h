@@ -24,13 +24,6 @@ namespace campaignEnums
 	};
 }
 
-struct rebelUnitName
-{
-public:
-	char* unitName; //0x0000
-	char pad_0004[20]; //0x0004
-}; //Size: 0x0018
-
 enum class dipStance
 {
 	alliance = 0,
@@ -68,18 +61,6 @@ inline bool operator <= (int a, dipStance b)
 	return a <= static_cast<int>(b);
 }
 
-struct descrRebelEntry
-{
-public:
-	int32_t index; //0x0000
-	char* name; //0x0004
-	int32_t nameHash; //0x0008
-	int32_t category; //0x000C
-	struct N00022A30* localizedName; //0x0010
-	int32_t chance; //0x0014
-	struct rebelUnitName unitNames[121]; //0x0018
-	int32_t unitCount; //0x0B70
-}; //Size: 0x0B74
 
 struct tradingResource {
 	char* name;

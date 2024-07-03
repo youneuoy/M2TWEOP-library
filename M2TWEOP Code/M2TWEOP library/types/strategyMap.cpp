@@ -587,15 +587,24 @@ namespace stratMapHelpers
 	
 	std::queue<std::pair<int, int>> getNeighbourTiles(int x, int y)
 	{
+		const auto map = getStratMap();
 		std::queue<std::pair<int, int>> neighbours;
-		neighbours.emplace(x - 1, y);
-		neighbours.emplace(x + 1, y);
-		neighbours.emplace(x, y - 1);
-		neighbours.emplace(x, y + 1);
-		neighbours.emplace(x - 1, y + 1);
-		neighbours.emplace(x - 1, y - 1);
-		neighbours.emplace(x + 1, y + 1);
-		neighbours.emplace(x + 1, y - 1);
+		if (x - 1 < map->mapWidth - 1 && x - 1 >= 0)
+			neighbours.emplace(x - 1, y);
+		if (x + 1 < map->mapWidth - 1 && x + 1 >= 0)
+			neighbours.emplace(x + 1, y);
+		if (y - 1 < map->mapHeight - 1 && y - 1 >= 0)
+			neighbours.emplace(x, y - 1);
+		if (y + 1 < map->mapHeight - 1 && y + 1 >= 0)
+			neighbours.emplace(x, y + 1);
+		if (x - 1 < map->mapWidth - 1 && x - 1 >= 0 && y - 1 < map->mapHeight - 1 && y - 1 >= 0)
+			neighbours.emplace(x - 1, y - 1);
+		if (x + 1 < map->mapWidth - 1 && x + 1 >= 0 && y + 1 < map->mapHeight - 1 && y + 1 >= 0)
+			neighbours.emplace(x + 1, y + 1);
+		if (x - 1 < map->mapWidth - 1 && x - 1 >= 0 && y + 1 < map->mapHeight - 1 && y + 1 >= 0)
+			neighbours.emplace(x - 1, y + 1);
+		if (x + 1 < map->mapWidth - 1 && x + 1 >= 0 && y - 1 < map->mapHeight - 1 && y - 1 >= 0)
+			neighbours.emplace(x + 1, y - 1);
 		return neighbours;
 	}
 
@@ -626,6 +635,13 @@ namespace stratMapHelpers
 		if (!GAME_FUNC(bool(__stdcall*)(coordPair*, int, int), isTileValidForCharacter)(coords, charType, 1))
 			return false;
 		return isTileFree(&coords->xCoord);
+	}
+
+	coordPair* findValidTileNearTileLua(const int x, const int y, const int charType)
+	{
+		const auto coords = std::make_shared<coordPair>(x, y);
+		const auto newCoords = findValidTileNearTile(coords.get(), charType);
+		return newCoords;
 	}
 
 	coordPair* findValidTileNearTile(coordPair* coords, const int charType)
@@ -843,6 +859,7 @@ namespace stratMapHelpers
 		@tfield setOwnExtentsColor setOwnExtentsColor
 		@tfield setEnemyExtentsColor setEnemyExtentsColor
 		@tfield setZocColor setZocColor
+		@tfield findValidTileNearTile findValidTileNearTile
 
 		@table stratMap
 		*/
@@ -1029,6 +1046,18 @@ namespace stratMapHelpers
 		     M2TW.stratMap.setZocColor(160, 0, 0, 200)
 		*/
 		typeAll.stratMap.set_function("setZocColor", &extentColors::setZocColor);
+
+		/***
+		Find a valid tile near a location (or on location if its valid).
+		@function stratMap.findValidTileNearTile
+		@tparam int x
+		@tparam int y
+		@tparam int characterType use characterType enum
+		@treturn coordPair coords
+		@usage
+		     local coords = M2TW.stratMap.findValidTileNearTile(160, 125, characterType.general)
+		*/
+		typeAll.stratMap.set_function("findValidTileNearTile", &findValidTileNearTileLua);
 		
 		/***
 		Basic coordPair table.

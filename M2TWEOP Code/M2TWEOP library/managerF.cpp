@@ -735,6 +735,12 @@ void managerF::execPatches()
 	toDrawBanner->Enable();
 	f1 << "Done" << endl;
 	
+	f1 << "Start applying onGetRebelSymbol patch" << endl;
+	onGetRebelSymbol* toGetRebelSymbol = new onGetRebelSymbol(mem, (LPVOID)patchesForGame::onGetRebelSymbol, globals::dataS.gameVersion);
+	toGetRebelSymbol->SetNewCode();
+	toGetRebelSymbol->Enable();
+	f1 << "Done" << endl;
+	
 	f1 << "Start applying onGetSupportingArmies patch" << endl;
 	onGetSupportingArmies* toGetSupportingArmies = new onGetSupportingArmies(mem, (LPVOID)patchesForGame::onGetSupportingArmies, globals::dataS.gameVersion);
 	toGetSupportingArmies->SetNewCode();
