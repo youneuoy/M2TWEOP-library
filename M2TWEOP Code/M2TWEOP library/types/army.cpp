@@ -730,7 +730,7 @@ namespace armyHelpers
 				nameFaction = subFaction;
 			if (const auto nameS = std::string(name); nameS == "random_name")
 			{
-				const int checkCountMax = faction->characterRecordNum * 2;
+				const int checkCountMax = faction->characterRecordNum * 10;
 				int checkCount = 0;
 				int firstNameIndex = 0;
 				int secondNameIndex = 0;

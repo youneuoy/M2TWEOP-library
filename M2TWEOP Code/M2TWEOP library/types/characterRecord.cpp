@@ -961,7 +961,9 @@ std::string characterRecord::giveValidLabel()
 {
 	if (labelCrypt != 0 && label)
 		return label;
-	std::string name = shortName;
+	std::string name;
+	if (shortName)
+		name = shortName;
 	if (name.empty())
 		name = "unnamed";
 	int nameCount = 1;
