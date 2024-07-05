@@ -292,6 +292,11 @@ void codes::initCodes(int gameVer)
 		offsets.getNumEnginesCanPenetrateWalls = 0x710D00;
 		offsets.canSeeCharacter = 0x4D3A90;
 		offsets.getArmyCoords = 0x712FA0;
+		offsets.generalJoinCrusade = 0x5A0AA0;
+		offsets.generalLeaveCrusade = 0x5A0CB0;
+		offsets.addTraitPoints = 0x5A6710;
+		offsets.incEventCounter = 0x48C810;
+		offsets.createEventAcceptObj = 0xA7FBE0;
 	}
 
 
@@ -586,5 +591,10 @@ void codes::initCodes(int gameVer)
 		offsets.getNumEnginesCanPenetrateWalls = 0x711440;
 		offsets.canSeeCharacter = 0x4D4040;
 		offsets.getArmyCoords = 0x7136A0;
+		offsets.generalJoinCrusade = 0x5A0F80;
+		offsets.generalLeaveCrusade = 0x5A1190;
+		offsets.addTraitPoints = 0x5A6BF0;
+		offsets.incEventCounter = 0x48CC10;
+		offsets.createEventAcceptObj = 0xA80C40;
 	}
 }

@@ -48,6 +48,7 @@ public:
 		DWORD stratModelArray = NULL;
 		DWORD getMovePath = NULL;
 		DWORD modelsDb = NULL;
+		DWORD eventManager = NULL;
 
 		gameDataAllStruct* gameDataAllOffset = nullptr;
 		consoleCommands* consoleCommands = nullptr;

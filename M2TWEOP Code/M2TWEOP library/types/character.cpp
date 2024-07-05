@@ -1059,6 +1059,7 @@ namespace characterHelpers
 	@tfield portStruct dockedPort
 	@tfield portStruct blockedPort
 	@tfield crusadeStruct crusade
+	@tfield jihadStruct jihad
 	@tfield int currentTurn
 	@tfield float distanceToCrusadeTarget
 	@tfield int disbandProgress
@@ -1093,6 +1094,12 @@ namespace characterHelpers
 	@tfield sabotageSettlement sabotageSettlement
 	@tfield getMovementExtents getMovementExtents
 	@tfield createMoveData createMoveData
+	@tfield joinCrusade joinCrusade
+	@tfield leaveCrusade leaveCrusade
+	@tfield joinJihad joinJihad
+	@tfield leaveJihad leaveJihad
+	@tfield hasFreeTilesToMove hasFreeTilesToMove
+	@tfield isGeneral isGeneral
 
 	@table character
 	*/
@@ -1126,6 +1133,7 @@ namespace characterHelpers
     types.character.set("dockedPort", &character::dockedPort);
     types.character.set("blockedPort", &character::blockadedPort);
     types.character.set("army", &character::army);
+    types.character.set("jihad", sol::property(&character::getJihad));
     types.character.set("armyLeaded", &character::army);
     types.character.set("bodyguards", &character::bodyguards);
     types.character.set("armyNotLeaded", &character::visitingArmy);
@@ -1135,7 +1143,7 @@ namespace characterHelpers
     types.character.set("movePointsMaxCharacter", &character::movePointsMax);
     types.character.set("movePointsArmy", &character::movePointsArmy);
     types.character.set("movePoints", sol::property(&getMovePoints, &setMovePoints));
-	types.character.set("crusade", &character::crusade);
+	types.character.set("crusade", &character::currentCrusade);
 	types.character.set("turnJoinedCrusade", &character::turnJoinedCrusade);
 	types.character.set("currentTurn", &character::currentTurn);
 	types.character.set("distanceToCrusadeTarget", &character::distanceToCrusadeTarget);
@@ -1384,10 +1392,84 @@ namespace characterHelpers
 	*/
 	types.character.set_function("createMoveData", &character::createMoveData);
 		
+	/***
+	Join an ongoing crusade.
+	@function character:joinCrusade
+	@usage
+	       ourCharacter:joinCrusade()
+	*/
+	types.character.set_function("joinCrusade", &character::joinCrusade);
+		
+	/***
+	Abandon a joined crusade.
+	@function character:leaveCrusade
+	@tparam bool triggerEvent Fire general abandons crusade event
+	@usage
+	       ourCharacter:leaveCrusade(true)
+	*/
+	types.character.set_function("leaveCrusade", &character::leaveCrusade);
+		
+	/***
+	Join an ongoing jihad.
+	@function character:joinJihad
+	@usage
+	       ourCharacter:joinJihad()
+	*/
+	types.character.set_function("joinJihad", &character::joinJihad);
+		
+	/***
+	Abandon a joined jihad.
+	@function character:leaveJihad
+	@tparam bool triggerEvent Fire general abandons crusade event
+	@usage
+	       ourCharacter:leaveJihad(true)
+	*/
+	types.character.set_function("leaveJihad", &character::leaveJihad);
+		
+	/***
+	Check if character can move out of his position.
+	@function character:hasFreeTilesToMove
+	@treturn bool canMove
+	@usage
+	       local canMove = ourCharacter:hasFreeTilesToMove()
+	*/
+	types.character.set_function("hasFreeTilesToMove", &character::hasFreeTilesToMove);
+		
+	/***
+	Checks if character is either named_character or general.
+	@function character:isGeneral
+	@treturn bool isGen
+	@usage
+	       local isGen = ourCharacter:isGeneral()
+	*/
+	types.character.set_function("isGeneral", &character::isGeneral);
+		
     }
 }
 
-	
+
+void character::joinCrusade()
+{
+	const auto newCrusade = &campaignHelpers::getCampaignData()->crusade;
+	GAME_FUNC(void(__thiscall*)(character*, crusade*), generalJoinCrusade)(this, newCrusade);
+}
+
+void character::leaveCrusade(bool triggerEvent)
+{
+	GAME_FUNC(void(__thiscall*)(character*, bool), generalLeaveCrusade)(this, triggerEvent);
+}
+
+void character::joinJihad()
+{
+	const auto newJihad = &campaignHelpers::getCampaignData()->jihad;
+	GAME_FUNC(void(__thiscall*)(character*, jihad*), generalJoinCrusade)(this, newJihad);
+}
+
+void character::leaveJihad(bool triggerEvent)
+{
+	GAME_FUNC(void(__thiscall*)(character*, bool), generalLeaveCrusade)(this, triggerEvent);
+}
+
 settlementStruct* character::getSettlement()
 {
 	const auto tile = stratMapHelpers::getTile(xCoord, yCoord);

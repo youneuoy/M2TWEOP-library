@@ -1,4 +1,9 @@
-﻿#include "pch.h"
+﻿///
+//![Lua logo](../Lua.png)
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
+#include "pch.h"
 #include "rebelFactions.h"
 
 #include "dataOffsets.h"
@@ -85,6 +90,7 @@ namespace rebels
         @tfield int bannerBlue
         @tfield bool bannerSet
         @tfield setBannerSymbol setBannerSymbol
+        @tfield addCharacterModel addCharacterModel
 
         @table eopRebelFaction
         */
@@ -141,7 +147,7 @@ namespace rebels
         @usage
              local cat = rebelFaction:getCategory(0)
         */
-        types.descrRebelEntry.set_function("getUnit", &descrRebelEntry::getCategory);
+        types.descrRebelEntry.set_function("getCategory", &descrRebelEntry::getCategory);
 
         /***
         Basic rebelCategory table

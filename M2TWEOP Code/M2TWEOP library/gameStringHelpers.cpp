@@ -3,10 +3,21 @@
 #include "globals.h"
 #include "functionsOffsets.h"
 #include "dataOffsets.h"
+#include "techFuncs.h"
 
 namespace gameStringHelpers
 {
 	void setHashedString(char** targetS, const char* newS)
+	{
+		UINT32 functionOffset = codes::offsets.stringCryptFunc;
+		_asm {
+			push newS
+			mov ecx, targetS
+			mov eax, functionOffset
+			call eax
+		}
+	}
+	void setHashedString(const char** targetS, const char* newS)
 	{
 		UINT32 functionOffset = codes::offsets.stringCryptFunc;
 		_asm {

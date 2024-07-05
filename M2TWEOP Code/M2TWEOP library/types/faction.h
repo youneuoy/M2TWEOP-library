@@ -320,6 +320,7 @@ struct factionStruct {
 public:
 	characterRecord* getCharacterByLabel(const std::string& label);
 	void updateNeighbours();
+	characterRecord* ancillaryExists(const std::string& ancName);
 	int getAliveCharacterNumOfType(characterTypeStrat charType);
 	int getCharacterCountOfType(int characterType)
 	{

@@ -177,6 +177,8 @@ public:
 			return nullptr;
 		return &rewards[factionId];
 	}
+	void start(settlementStruct* target, int timeToJoin, character* caller);
+	void stop(int result);
 }; //Size: 0x0174
 
 struct jihad
@@ -210,6 +212,8 @@ public:
 			return nullptr;
 		return &rewards[factionId];
 	}
+	void start(settlementStruct* target, int timeToJoin, character* caller);
+	void stop(int result);
 }; //Size: 0x016C
 
 struct mercPool
@@ -590,6 +594,7 @@ struct campaign {
 	struct UNICODE_STRING **campaignDirString;
 public:
 	characterRecord* getCharacterByLabel(const std::string& label);
+	characterRecord* worldwideAncillaryExists(const std::string& ancName);
 	factionStruct* getPlayerFaction(int index)
 	{
 		if (index < 0 || index >= humanPlayers)

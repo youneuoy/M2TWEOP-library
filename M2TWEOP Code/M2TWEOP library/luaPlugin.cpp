@@ -236,6 +236,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield scriptCommand scriptCommand
 	@tfield getEopAiConfig getEopAiConfig
 	@tfield getRebelFaction getRebelFaction
+	@tfield addBanner addBanner
 	@table M2TWEOP
 	*/
 	

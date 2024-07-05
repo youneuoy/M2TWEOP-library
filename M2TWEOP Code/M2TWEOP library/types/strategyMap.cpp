@@ -1323,7 +1323,6 @@ namespace stratMapHelpers
 		@tfield int totalTradeValue
 		@tfield int landingPointsCount
 		@tfield int patrolPointsCount
-		@tfield getStack getStack
 		@tfield getArmy getArmy
 		@tfield getFort getFort
 		@tfield getWatchtower getWatchtower

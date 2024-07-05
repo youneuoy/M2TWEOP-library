@@ -967,7 +967,6 @@ namespace stratMapHelpers
 	void viewTacticalMap(int x, int y);
 	void getGameTileCoordsWithCursor(int& x, int& y);
 	std::tuple<int, int> getGameTileCoordsWithCursorLua();
-	factionStruct* getFactionHashed(const campaign* campaign, const std::string& name);
 	settlementStruct* getSettlement(stratMap* map, const std::string& name);
 	regionStruct* getRegionByName(stratMap* map, const std::string& name);
 	std::pair<int, int> convertTileCoords(const DWORD arrayIndex);

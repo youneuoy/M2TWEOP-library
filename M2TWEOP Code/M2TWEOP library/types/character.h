@@ -4,10 +4,12 @@
 #include "realGameTypes.h"
 #define generalStruct_abilityID 1
 
+struct jihad;
 struct portBuildingStruct;
 struct factionStruct;
 struct fortStruct;
 struct building;
+struct crusade;
 struct characterMoveData;
 struct characterMovementExtents;
 
@@ -144,7 +146,7 @@ struct character
 	float movePointsMax;
 	float movePointsArmy;
 	float movePointsMaxArmy; //0x01F0
-	struct crusade* crusade; //0x01F4
+	struct crusade* currentCrusade; //0x01F4
 	int32_t turnJoinedCrusade; //0x01F8
 	int32_t currentTurn; //0x01FC
 	float distanceToCrusadeTarget[10];
@@ -180,10 +182,17 @@ public:
 	//methods
 	factionStruct* getFaction()
 	{
-		return *faction;
+		if (faction)
+			return *faction;
+		return nullptr;
 	}
+	void joinCrusade();
+	void leaveCrusade(bool triggerEvent);
+	void joinJihad();
+	void leaveJihad(bool triggerEvent);
 	settlementStruct* getSettlement();
 	fortStruct* getFort();
+	jihad* getJihad() { return currentCrusade ? reinterpret_cast<jihad*>(currentCrusade) : nullptr; }
 	int getTypeID();
 	bool isGeneral()
 	{

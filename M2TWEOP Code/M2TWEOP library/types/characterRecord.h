@@ -199,8 +199,7 @@ struct characterRecord { /* many important info about character */
 	int32_t hitpoints; //0x01D8
 	int32_t trainingAnimalUnits; //0x01DC
 	int32_t battleSurgery; //0x01E0
-	struct traitContainer* traits; /* Linked list*/
-	struct traitContainer* traitLast; /* Linked list*/
+	gameLinkedList<trait> traitList; /* traits of the character */
 	struct ancData** ancillaries; /* pointers to character ancillaries, names at  [item number] -0-0c-here) */
 	int ancillariesSize;
 	UINT32 ancNum; /* number of character  ancillaries */
@@ -236,10 +235,21 @@ struct characterRecord { /* many important info about character */
 	bool wasMarriageAlliance;
 public:
 	std::string giveValidLabel();
+	bool hasAncillary(const std::string& ancName);
+	std::string getEopSetModel();
 	traitContainer* getTraits() const
 	{
-		return traits;
+		return reinterpret_cast<traitContainer*>(traitList.head);
 	}
+	int getTraitCount()
+	{
+		return traitList.size();
+	}
+	trait* getTrait(const int i)
+	{
+		return traitList.get(i);
+	}
+	int getTraitLevel(const std::string& traitName);
 	ancillary* getAncillary(const int ancIndex) const
 	{
 		return ancillaries[ancIndex]->dataAnc;
@@ -267,6 +277,10 @@ public:
 	bool isLeader() const
 	{
 		return status & 1;
+	}
+	bool isHeir() const
+	{
+		return status & 2;
 	}
 	bool wasLeader() const
 	{
@@ -316,6 +330,7 @@ public:
 	{
 		isFamilyHead = set;
 	}
+	void addTraitPoints(const std::string& trait, int points);
 };
 
 struct capturedCharacter
@@ -449,6 +464,7 @@ namespace characterRecordHelpers
 	void namedCharSetLocalizedNextNameForSave(characterRecord* genChar, const char* str);
 	void namedCharSetLocalizedNicknameForSave(characterRecord* genChar, const char* str);
 	void setHeir(characterRecord* gen, bool isJustSet);
+	std::string getEopSetModel();
 	
 	int addAncillaryName(characterRecord* character, const std::string& ancName);
 	int addAncillary(characterRecord* character, ancillary* anc);

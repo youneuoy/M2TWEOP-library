@@ -244,10 +244,7 @@ int __fastcall patchesForGame::onCustomBattleUnits(eduEntry** unitArray, int cur
 
 eduEntry* patchesForGame::onEvaluateUnit2(int eduIndex)
 {
-	if (const auto eopUnit = eopDu::getEopEduEntry(eduIndex); eopUnit == nullptr)
-		return eopDu::getEduEntry(eduIndex);
-	else
-		return eopUnit;
+	return eopDu::getEduEntry(eduIndex);
 }
 
 int __fastcall patchesForGame::onFortificationLevelS(settlementStruct* settlement, bool* isCastle)
@@ -1751,22 +1748,12 @@ void __fastcall patchesForGame::onStopCharacter(character* character)
 
 eduEntry* __fastcall patchesForGame::recruitEopUnit(int eduIndex)
 {
-	eduEntry* entry = eopDu::getEduEntry(eduIndex);
-	if (entry == nullptr)
-	{
-		entry = eopDu::getEopEduEntry(eduIndex);
-	}
-	return entry;
+	return eopDu::getEduEntry(eduIndex);
 }
 
 void __fastcall patchesForGame::recruitEopUnit2(int eduIndex)
 {
-	eduEntry* entry = eopDu::getEduEntry(eduIndex);
-	if (entry == nullptr)
-	{
-		entry = eopDu::getEopEduEntry(eduIndex);
-	}
-	if (entry)
+	if (eduEntry* entry = eopDu::getEduEntry(eduIndex))
 	{
 		entry->unitCreatedCounter++;
 	}
@@ -1831,23 +1818,6 @@ void __stdcall patchesForGame::onBattleStateChange()
 		battleCreator::onBattleResultsScreen();
 	}
 }
-/*
-int* __fastcall patchesForGame::ontryFindTypeIdInListRecruitPoolEDB(char* unitTypeString)
-{
-	return  eduThings::tryFindDataEopEduIndex(unitTypeString);
-}
-
-EduEntry* __fastcall patchesForGame::onrecruitPoolFillFromFile(int eduIndex)
-{
-	EduEntry*retEntry =	fastFunctsHelpers::getEDUEntryById(eduIndex);
-	if (retEntry != nullptr)
-	{
-		return retEntry;
-	}
-
-	return eduThings::getEopEduEntry(eduIndex);
-}
-*/
 
 struct
 {

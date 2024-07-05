@@ -129,6 +129,17 @@ void factionStruct::updateNeighbours()
 	}
 }
 
+characterRecord* factionStruct::ancillaryExists(const std::string& ancName)
+{
+	for (int i = 0; i < characterRecordNum; i++)
+	{
+		if (const auto record = characterRecords[i];
+			record->hasAncillary(ancName))
+			return record;
+	}
+	return nullptr;
+}
+
 int factionStruct::getAliveCharacterNumOfType(characterTypeStrat charType)
 {
 	int num = 0;
@@ -556,6 +567,9 @@ namespace factionHelpers
 		@tfield isNeighbourRegion isNeighbourRegion
 		@tfield getCharacterCountOfType getCharacterCountOfType
 		@tfield getMapInfo getMapInfo
+		@tfield getCharacterByLabel getCharacterByLabel
+		@tfield canSeeCharacter canSeeCharacter
+		@tfield ancillaryExists ancillaryExists
 
 		@table factionStruct
 		*/
@@ -958,6 +972,16 @@ namespace factionHelpers
 		types.factionStruct.set_function("getMapInfo", &factionStruct::getMapInfo);
 
 		/***
+		Get the first character it finds holding an ancillary if it exists in the faction.
+		@function factionStruct:ancillaryExists
+		@tparam string ancName
+		@treturn characterRecord charWithAnc
+		@usage
+			 charWithAnc = fac:ancillaryExists("ancillary_name")
+		*/
+		types.factionStruct.set_function("ancillaryExists", &factionStruct::ancillaryExists);
+
+		/***
 		Add a settlement.
 		@function factionStruct:addSettlement
 		@tparam int xCoord
@@ -1075,6 +1099,26 @@ namespace factionHelpers
 		     local count = fac:getCharacterCountOfType(characterType.general)
 		*/
 		types.factionStruct.set_function("getCharacterCountOfType", &factionStruct::getCharacterCountOfType);
+		
+		/***
+		Check if the faction can see a certain character (not in ambush stance or has been spotted).
+		@function factionStruct:canSeeCharacter
+		@tparam character candidate
+		@treturn bool canSee
+		@usage
+		     local canSee = fac:canSeeCharacter(someCharacter)
+		*/
+		types.factionStruct.set_function("canSeeCharacter", &factionStruct::canSeeCharacter);
+		
+		/***
+		Get a character by script label.
+		@function factionStruct:getCharacterByLabel
+		@tparam string label
+		@treturn characterRecord charRecord
+		@usage
+		     local myChar = fac:getCharacterByLabel("rufus_1")
+		*/
+		types.factionStruct.set_function("getCharacterByLabel", &factionStruct::getCharacterByLabel);
 
 		/***
 		Basic battleFactionCounter table

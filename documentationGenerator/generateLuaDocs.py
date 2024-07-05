@@ -51,7 +51,9 @@ def writeClass(userType):
             thisType = fixTypes(paramfield.type)
             if (function.name == "scriptCommand" or function.name == "callConsole") and paramfield.name == "args":
                 thisType += "?"
-            if (function.name == "condition") and paramfield.name == "eventData":
+            elif (function.name == "condition") and paramfield.name == "eventData":
+                thisType += "?"
+            elif re.search(r'optional', paramfield.comment) is not None:
                 thisType += "?"
             outputfile.write("---@param " + paramfield.name + " " + thisType + " " +  paramfield.comment.strip() + "\n")
             if firstParamBool == False:
@@ -132,6 +134,55 @@ for file in os.listdir(typesPath):
 luaPluginPath = eopPath + "M2TWEOP Code\\M2TWEOP library\\"
 outputfile = open(eopPath + "M2TWEOP DataFiles\\eopData\\eopScripts\\LuaDocs.lua", 'w')
 outputfile.write("---@diagnostic disable: missing-return, lowercase-global\n")
+legacyNames = ["getTileRegionID",
+                "getRegionOwner", 
+                "createEOPUnit", 
+                "mapWidthDoubled",
+                "mapHeightDoubled",
+                "deploymentArea",
+                "unitsRouted",
+                "passedTurnsNum",
+                "namedCharacter",
+                "ambushState",
+                "armyLeaded",
+                "armyNotLeaded",
+                "crusadeNoProgressTurns",
+                "noCrusadeProgressThisTurn",
+                "childs",
+                "getEopBuildEntry",
+                "setBuildingPic",
+                "setBuildingPicConstructed",
+                "setBuildingPicConstruction",
+                "setBuildingLocalizedName",
+                "setBuildingLocalizedDescr",
+                "setBuildingLocalizedDescrShort",
+                "addBuildingCapability",
+                "removeBuildingCapability",
+                "getBuildingCapability",
+                "getBuildingCapabilityNum",
+                "addBuildingPool",
+                "removeBuildingPool",
+                "getBuildingPool",
+                "getBuildingPoolNum",
+                "setEntrySoldierModel",
+                "dipNum",
+                "getFactionName",
+                "numOfNamedCharacters",
+                "getNamedCharacter",
+                "stacksNum",
+                "getStack",
+                "turnsSieged",
+                "stacksNum",
+                "fortsNum",
+                "watchtowersNum",
+                "settlement",
+                "resourcesNum",
+                "settlementXCoord",
+                "settlementYCoord",
+                "siegeHoldoutTurns",
+                "haveAttributeLegio",
+                "isCanDeploy"
+                ]
 
 classes = {}
 internalClasses = {}
@@ -214,7 +265,7 @@ for name in filenames:
                         field.type = "function"
                         functionFound = True
                         break
-            if functionFound == False:
+            if functionFound == False and newFunction.name not in legacyNames:
                 print("[Warning]  Function " + newFunction.name + " not found in class " + newFunction.typeName)
             commentCache = ""
             classes[newFunction.typeName].functions[newFunction.name] = luaFunction()
@@ -300,7 +351,7 @@ for name in filenames:
                         fieldFound = True
                         field.confirmed = True
                         break
-            if fieldFound == False:
+            if fieldFound == False and fieldName not in legacyNames:
                 print("[Warning]  Field " + fieldName + " not found in class " + className)
             continue
         if re.search(r'\.set_function\(\"(\S+)\"', line) is not None:
@@ -324,7 +375,7 @@ for name in filenames:
                         fieldFound = True
                         field.confirmed = True
                         break
-            if functionFound == False:
+            if functionFound == False and functionName not in legacyNames:
                 print("[Warning]  function " + functionName + " not found in class " + className)
             continue
         if re.search(r'luaState.new_enum', line) is not None:

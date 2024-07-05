@@ -1,4 +1,9 @@
-﻿#include "pch.h"
+﻿///
+//![Lua logo](../Lua.png)
+//@module LuaPlugin
+//@author Fynn
+//@license GPL-3.0
+#include "pch.h"
 #include "campaignAi.h"
 
 #include "faction.h"
@@ -50,6 +55,7 @@ namespace campaignAi
 		int requiredGarrisonStrength = 0;
 		int ownStr = settlement->army ? settlement->army->totalStrength : 0;
 		int enemyStr = 0;
+		const auto strModifier = campaignHelpers::getCampaignDb()->campaignDbAi.siegeAttStrModifier;
 		const auto reg = stratMapHelpers::getRegion(settlement->regionID);
 		for (int i = 0; i < reg->stacksNum; i++)
 		{
@@ -77,7 +83,7 @@ namespace campaignAi
 					enemyStr += army->settlement ? army->totalStrength / 8 : army->totalStrength / 4;
 			}
 		}
-		int balance = enemyStr - ownStr;
+		int balance = enemyStr - (ownStr * strModifier);
 		if (const int po = settlement->stats.settlementStats.PublicOrder; po < 80)
 			balance += 1000 - po * 10;
 		if (balance < -100)
@@ -86,8 +92,8 @@ namespace campaignAi
 				return 1000;
 			return 0;
 		}
-		balance += clamp(settlement->stats.settlementStats.TotalIncomeWithoutAdmin / 10, 0, 2000);
-		balance += clamp(gsdData->regionValue / 5, 0, 1000);
+		balance += clamp(settlement->stats.settlementStats.TotalIncomeWithoutAdmin / 10, 0, 5000);
+		balance += clamp(gsdData->regionValue / 5, 0, 5000);
 		requiredGarrisonStrength = clamp(balance, 0, 50000);
 		return requiredGarrisonStrength;
 	}
@@ -1533,7 +1539,7 @@ void globalEopAiConfig::getData(factionStruct* fac)
 		if (!currentChar->army)
 			continue;
 		const auto res = findArmyResource(currentChar->army);
-		if (!res || res->searched || !res->army || !res->army->gen || res->used || res->army->gen->crusade)
+		if (!res || res->searched || !res->army || !res->army->gen || res->used || res->army->gen->currentCrusade)
 			continue;
 		//gameHelpers::logStringGame("Found army resource: " + std::string(res->army->gen->characterRecord->fullName));
 		res->searched = true;

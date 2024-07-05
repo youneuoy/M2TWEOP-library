@@ -5,6 +5,8 @@
 //@license GPL-3.0
 #include "pch.h"
 #include "gameHelpers.h"
+
+#include "campaign.h"
 #include "luaPlugin.h"
 #include "dataOffsets.h"
 #include "events.h"
@@ -381,11 +383,56 @@ namespace gameHelpers
 		const auto currentHandler = reinterpret_cast<DWORD*>(dataOffsets::offsets.currentGameHandler);
 		*currentHandler = dataOffsets::offsets.loadGameHandler;
 	}
+
+	stringWithHash* LOOKUP_EVENT = new stringWithHash();
 	
-	void historicEvent(const char* name, const char* title, const char* description)
+	int incrementEventCounter(const std::string& name, const int value)
+	{
+		gameStringHelpers::setHashedString(&LOOKUP_EVENT->name, name.c_str());
+		const int newVal = value;
+		return GAME_FUNC(int(__thiscall*)(DWORD, stringWithHash*, int)
+			, incEventCounter)(dataOffsets::offsets.eventManager, LOOKUP_EVENT, newVal);
+	}
+
+	eventAcceptDecline* createEventAcceptDecline(const std::string& name)
+	{
+		gameStringHelpers::setHashedString(&LOOKUP_EVENT->name, name.c_str());
+		const auto obj = techFuncs::createGameClass<eventAcceptDecline>();
+		GAME_FUNC(eventAcceptDecline*(__thiscall*)(eventAcceptDecline*, const char*, int)
+			, createEventAcceptObj)(obj, LOOKUP_EVENT->name, LOOKUP_EVENT->hash);
+		return obj;
+	}
+
+	void historicEvent(const std::string& name, const std::string& title, const std::string& description, const bool isChoice, const int xCoord,
+					   const int yCoord, const sol::table& factions)
+	{
+		uint32_t facMask = 0;
+		if (const int facCount = factions.size(); facCount)
+		{
+			for (int i{ 1 }; i <= facCount; i++)
+			{
+				const auto& fac = factions.get<sol::optional<std::string>>(i);
+				if (!fac)
+					break;
+				auto faction = fac.value_or("");
+				if (faction.empty())
+					break;
+				if (const auto foundFac = campaignHelpers::getCampaignData()->getFactionHashed(faction); foundFac)
+					facMask |= 1 << foundFac->factionID;
+			}
+		}
+		else
+		{
+			facMask = 0x3FFFFFFF;
+		}
+		historicEventRaw(name.c_str(), title.c_str(), description.c_str(), isChoice, facMask, xCoord, yCoord);
+	}
+	
+	void historicEventRaw(const char* name, const char* title, const char* description, bool isChoice, uint32_t factions, int xCoord, int yCoord)
 	{
 		DWORD funcAddr = codes::offsets.historicEventFunc;
-
+		incrementEventCounter(name, 1);
+		
 		UNICODE_STRING** titleUni = techFuncs::createGameClass<UNICODE_STRING*>();
 		gameStringHelpers::createUniString(titleUni, title);
 
@@ -394,14 +441,20 @@ namespace gameHelpers
 
 		UNICODE_STRING*** titleUniP = &titleUni;
 		UNICODE_STRING*** bodyUniP = &bodyUni;
-		
+
+		eventAcceptDecline* obj = nullptr;
+		if (isChoice)
+			obj = createEventAcceptDecline(name);
+		int x = xCoord;
+		int y = yCoord;
+		uint32_t facMask = factions;
 		_asm
 		{
-			push 0x3FFFFFFF
+			push facMask
 			push 0x0
-			push 0x0
-			push 0xFFFFFFFF
-			push 0xFFFFFFFF
+			push obj
+			push yCoord
+			push xCoord
 			push name
 			push bodyUniP
 			push titleUniP
@@ -409,6 +462,22 @@ namespace gameHelpers
 			call eax
 			add esp, 0x20
 		}
+	}
+	
+	void historicEvent(const std::string& name, const std::string& title, const std::string& description, const bool isChoice)
+	{
+		historicEventRaw(name.c_str(), title.c_str(), description.c_str(), isChoice, 0x3FFFFFFF, -1, -1);
+	}
+	
+	void historicEvent(const std::string& name, const std::string& title, const std::string& description, const bool isChoice, const int xCoord,
+					   const int yCoord)
+	{
+		historicEventRaw(name.c_str(), title.c_str(), description.c_str(), isChoice, 0x3FFFFFFF, xCoord, yCoord);
+	}
+	
+	void historicEvent(const std::string& name, const std::string& title, const std::string& description)
+	{
+		historicEventRaw(name.c_str(), title.c_str(), description.c_str(), false, 0x3FFFFFFF, -1, -1);
 	}
 	
 	std::string getModPath()

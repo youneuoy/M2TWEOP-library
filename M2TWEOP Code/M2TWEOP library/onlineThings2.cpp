@@ -181,14 +181,14 @@ namespace battleCreator
 		genJson["hero_ability"] = hero_ability;
 
 
-		if (gen->characterRecord->traits != nullptr)
+		if (gen->characterRecord->traitList.head != nullptr)
 		{
 			jsn::json jTraits=jsn::json::array();
 
-			traitContainer* traitCont = gen->characterRecord->traits;
+			auto traitCont = gen->characterRecord->traitList.head;
 			while (traitCont != nullptr)
 			{
-				jsn::json traitArray = jsn::json::array({ traitCont->trait->traitEntry->name, traitCont->trait->level->level });
+				jsn::json traitArray = jsn::json::array({ traitCont->element->traitEntry->name, traitCont->element->level->level });
 
 				jTraits.push_back(traitArray);
 

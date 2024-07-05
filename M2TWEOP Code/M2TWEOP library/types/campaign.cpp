@@ -241,6 +241,19 @@ characterRecord* campaign::getCharacterByLabel(const std::string& label)
 	return nullptr;
 }
 
+characterRecord* campaign::worldwideAncillaryExists(const std::string& ancName)
+{
+	for (int i = 0; i < factionCount; i++)
+	{
+		if (const auto fac = getFactionByOrder(i); fac)
+		{
+			if (const auto rec = fac->ancillaryExists(ancName); rec)
+				return rec;
+		}
+	}
+	return nullptr;
+}
+
 void campaign::setDipStance(campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2)
 {
 	using namespace campaignEnums;
@@ -345,8 +358,28 @@ void campaign::setFactionProtectorate(factionStruct* factionOne, factionStruct* 
 	}
 }
 
+void crusade::start(settlementStruct* target, const int timeToJoin, character* caller)
+{
+	callClassFunc<crusade*, void, settlementStruct*, int, character*>(this, 0x8, target, timeToJoin, caller);
+}
+
+void crusade::stop(const int result)
+{
+	callClassFunc<crusade*, void, int>(this, 0xC, result);
+}
+
+void jihad::start(settlementStruct* target, const int timeToJoin, character* caller)
+{
+	callClassFunc<jihad*, void, settlementStruct*, int, character*>(this, 0x8, target, timeToJoin, caller);
+}
+
+void jihad::stop(const int result)
+{
+	callClassFunc<jihad*, void, int>(this, 0xC, result);
+}
+
 mercPoolUnit* mercPool::addMercUnit(const int idx, const int exp, const int cost, const float repMin, const float repMax,
-	const int maxUnits, const float startPool, const float startYear, const float endYear, const int crusading)
+                                    const int maxUnits, const float startPool, const float startYear, const float endYear, const int crusading)
 {
 	int16_t mercPoolUnitIndex = mercenaryUnits.currentCount;
 	int16_t poolIndex = 0;
@@ -612,6 +645,8 @@ namespace campaignHelpers
 		@tfield getFactionDiplomacy getFactionDiplomacy
 		@tfield historicEvent historicEvent
 		@tfield addCharacterCas addCharacterCas
+		@tfield getCharacterByLabel getCharacterByLabel
+		@tfield worldwideAncillaryExists worldwideAncillaryExists
 
 		@table campaignStruct
 		*/
@@ -936,10 +971,37 @@ namespace campaignHelpers
 		@tparam string eventName
 		@tparam string title
 		@tparam string body
+		@tparam bool isChoice optional
+		@tparam int xCoord optional, -1 to disable
+		@tparam int yCoord optional, -1 to disable
+		@tparam table factions optional
 		@usage
 		    M2TW.campaign.historicEvent("my_event", "my title", "my description")
 		*/
-		typeAll.campaignTable.set_function("historicEvent", &gameHelpers::historicEvent);
+		typeAll.campaignTable.set_function("historicEvent", sol::overload(
+			sol::resolve<void(const std::string&, const std::string&, const std::string&)>(gameHelpers::historicEvent),
+			sol::resolve<void(const std::string&, const std::string&, const std::string&, bool)>(gameHelpers::historicEvent),
+			sol::resolve<void(const std::string&, const std::string&, const std::string&, bool, int, int)>(gameHelpers::historicEvent),
+			sol::resolve<void(const std::string&, const std::string&, const std::string&, bool, int, int, const sol::table&)>(gameHelpers::historicEvent)
+		));
+		/***
+		Get a character by script label.
+		@function campaignStruct:getCharacterByLabel
+		@tparam string label
+		@treturn characterRecord charRecord
+		@usage
+		    M2TW.campaign:getCharacterByLabel("rufus_1")
+		*/
+		typeAll.campaignTable.set_function("getCharacterByLabel", &campaign::getCharacterByLabel);
+        /***
+		Get the first character it finds holding an ancillary, or nil if it doesn't exist in the campaign.
+		@function campaignStruct:worldwideAncillaryExists
+		@tparam string ancName
+		@treturn characterRecord characterWithAnc
+		@usage
+		    local ringHolder = M2TW.campaign:worldwideAncillaryExists("one_ring")
+		*/
+		typeAll.campaignTable.set_function("worldwideAncillaryExists", &campaign::worldwideAncillaryExists);
 
 		///Faction Diplomacy
 		//@section Faction diplomacy
@@ -1099,6 +1161,8 @@ namespace campaignHelpers
 		@tfield factionFought factionFought
 		@tfield factionInTarget factionInTarget
 		@tfield getReward getReward
+		@tfield start start
+		@tfield stop stop
 
 		@table crusadeStruct
 		*/
@@ -1160,7 +1224,27 @@ namespace campaignHelpers
 		@usage
 		local reward = crusadeStruct:getReward(2);
 		*/
-    	typeAll.crusadeStruct.set_function("getReward", &crusade::getReward);
+		typeAll.crusadeStruct.set_function("getReward", &crusade::getReward);
+
+		/***
+		Start a new crusade.
+		@function crusadeStruct:start
+		@tparam settlementStruct target
+		@tparam int timeToJoin (Game uses 10).
+		@tparam character caller
+		@usage
+				crusade:start(someSett, 10, someChar);
+		*/
+		typeAll.crusadeStruct.set_function("start", &crusade::start);
+
+		/***
+		Stop an ongoing crusade.
+		@function crusadeStruct:stop
+		@tparam int result none = 0, success = 1, failure = 2, cancelled = 3
+		@usage
+				crusade:stop(3);
+		*/
+		typeAll.crusadeStruct.set_function("stop", &crusade::stop);
     	
 		/***
 		Basic jihad table.
@@ -1176,6 +1260,8 @@ namespace campaignHelpers
 		@tfield factionFought factionFought
 		@tfield factionInTarget factionInTarget
 		@tfield getReward getReward
+		@tfield start start
+		@tfield stop stop
 
 		@table jihadStruct
 		*/
@@ -1236,6 +1322,26 @@ namespace campaignHelpers
 		local reward = jihadStruct:getReward(2);
 		*/
     	typeAll.jihadStruct.set_function("getReward", &jihad::getReward);
+
+    	/***
+		Start a new jihad.
+		@function jihadStruct:start
+		@tparam settlementStruct target
+		@tparam int timeToJoin (Game uses 10).
+		@tparam character caller
+		@usage
+			    jihad:start(someSett, 10, someChar);
+		*/
+    	typeAll.jihadStruct.set_function("start", &jihad::start);
+
+    	/***
+		Stop an ongoing jihad.
+		@function jihadStruct:stop
+		@tparam int result none = 0, success = 1, failure = 2, cancelled = 3
+		@usage
+			    jihad:stop(3);
+		*/
+    	typeAll.jihadStruct.set_function("stop", &jihad::stop);
     	
     	/***
 		Basic crusadeReward table.
@@ -1870,7 +1976,7 @@ namespace campaignHelpers
 		/***
 		Basic moveDataResource table
 	
-		@tfield tradingResource resource
+		@tfield tradeResource resource
 		@tfield float moveCost
 		@tfield int turns
 		@tfield bool ownFaction

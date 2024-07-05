@@ -275,6 +275,12 @@ namespace characterRecordHelpers
 	{
 		return &level->effects[index];
 	}
+
+	traitEntry* findTrait(const std::string& name)
+	{
+		const auto hashed = reinterpret_cast<stringWithHash*>(gameStringHelpers::createHashedString(name.c_str()));
+		return GAME_FUNC(traitEntry*(__cdecl*)(const char*, int), getTrait)(hashed->name, hashed->hash);
+	}
 	
 	void addTrait(characterRecord* character, const char* traitName, int traitLevel)
 	{
@@ -386,6 +392,7 @@ namespace characterRecordHelpers
 		@tfield isOffMap isOffMap
 		@tfield bool isChild
 		@tfield int age
+		@tfield int traitCount
 		@tfield float yearOfBirth For example with 4 turns per year, the yearOfBirth could be 1840.25
 		@tfield int seasonOfBirth
 		@tfield float yearOfDeath
@@ -473,12 +480,21 @@ namespace characterRecordHelpers
 		@tfield int portraitIndex
 		@tfield int[10] combatVsReligion Maximum 10. EVEN IF YOU SET RELIGION LIMIT.
 		@tfield int[31] combatVsFaction Maximum 31.
+		@tfield getEopSetModel getEopSetModel
+		@tfield giveValidLabel giveValidLabel
+		@tfield isLeader isLeader
+		@tfield isHeir isHeir
+		@tfield hasAncillary hasAncillary
+		@tfield getTrait getTrait
+		@tfield addTraitPoints addTraitPoints
+		@tfield getTraitLevel getTraitLevel
 
 		@table characterRecord
 		*/
 		types.characterRecord = luaState.new_usertype<characterRecord>("characterRecord");
 		types.characterRecord.set("index", &characterRecord::index);
 		types.characterRecord.set("character", &characterRecord::gen);
+		types.characterRecord.set("traitCount", sol::property(&characterRecord::getTraitCount));
 		types.characterRecord.set("shortName", sol::property(&getStringPropertyGenChar<characterRecord_shortName>, &setStringPropertyGenChar<characterRecord_shortName>));
 		types.characterRecord.set("lastName", sol::property(&getStringPropertyGenChar<characterRecord_lastName>, &setStringPropertyGenChar<characterRecord_lastName>));
 		types.characterRecord.set("fullName", sol::property(&getStringPropertyGenChar<characterRecord_fullName>, &setStringPropertyGenChar<characterRecord_fullName>));
@@ -588,6 +604,77 @@ namespace characterRecordHelpers
 		ourNamedCharacter:removeAncillary(ourAnc);
 		*/
 		types.characterRecord.set_function("removeAncillary", &removeAncillary);
+		/***
+		Get the model set with eop.
+		@function characterRecord:getEopSetModel
+		@treturn string modelName empty if no model set.
+		@usage
+		      local model = record:getEopSetModel()
+		      if model == "" then
+				  --do something
+		      end
+		*/
+		types.characterRecord.set_function("getEopSetModel", &characterRecord::getEopSetModel);
+		/***
+		Give an unused label based on shortName + _eop_number.
+		@function characterRecord:giveValidLabel
+		@treturn string newLabel
+		@usage
+		      local newLabel = record:giveValidLabel()
+		*/
+		types.characterRecord.set_function("giveValidLabel", &characterRecord::giveValidLabel);
+		/***
+		Check if character is a faction leader.
+		@function characterRecord:isLeader
+		@treturn bool isLeader
+		@usage
+		      local isLeader = record:isLeader()
+		*/
+		types.characterRecord.set_function("isLeader", &characterRecord::isLeader);
+		/***
+		Check if character is a faction heir.
+		@function characterRecord:isHeir
+		@treturn bool isHeir
+		@usage
+		      local isHeir = record:isHeir()
+		*/
+		types.characterRecord.set_function("isHeir", &characterRecord::isHeir);
+		/***
+		Check if the character has a certain ancillary.
+		@function characterRecord:hasAncillary
+		@tparam string ancName
+		@treturn bool hasAnc
+		@usage
+		      local hasAnc = record:hasAncillary("one_ring")
+		*/
+		types.characterRecord.set_function("hasAncillary", &characterRecord::hasAncillary);
+		/***
+		Get a character trait.
+		@function characterRecord:getTrait
+		@tparam int index
+		@treturn traitStruct trait
+		@usage
+		      local trait = record:getTrait(0)
+		*/
+		types.characterRecord.set_function("getTrait", &characterRecord::getTrait);
+		/***
+		Get the level of a trait the character has (or 0 if the character does not have the trait).
+		@function characterRecord:getTraitLevel
+		@tparam string traitName
+		@treturn int level
+		@usage
+		      local level = record:getTraitLevel("GoodCommander")
+		*/
+		types.characterRecord.set_function("getTraitLevel", &characterRecord::getTraitLevel);
+		/***
+		Add trait points to a trait, will upgrade/downgrade the level if it passes the thresholds.
+		@function characterRecord:addTraitPoints
+		@tparam string traitName
+		@tparam int points
+		@usage
+		      record:addTraitPoints("GoodCommander", 3)
+		*/
+		types.characterRecord.set_function("addTraitPoints", &characterRecord::addTraitPoints);
 			
 		types.characterRecord.set("level", &characterRecord::level);
 		types.characterRecord.set("authority", &characterRecord::authority);
@@ -890,6 +977,51 @@ std::string characterRecord::giveValidLabel()
 	}
 	gameStringHelpers::setHashedString(&label, testLabel.c_str());
 	return label;
+}
+
+stringWithHash* LOOKUP_STRING_ANC = new stringWithHash();
+
+bool characterRecord::hasAncillary(const std::string& ancName)
+{
+	gameStringHelpers::setHashedString(&LOOKUP_STRING_ANC->name, ancName.c_str());
+	for (uint32_t i = 0; i < ancNum; i++)
+	{
+		if (const auto anc = ancillaries[i]; anc->dataAnc->ancNameHash == LOOKUP_STRING_ANC->hash)
+			return true;
+	}
+	return false;
+}
+
+std::string characterRecord::getEopSetModel()
+{
+	if (const auto data = eopCharacterDataDb::get()->getCharacterData(label);
+		data && !data->model.empty())
+		return data->model;
+	return "";
+}
+
+stringWithHash* LOOKUP_STRING = new stringWithHash();
+
+int characterRecord::getTraitLevel(const std::string& traitName)
+{
+	gameStringHelpers::setHashedString(&LOOKUP_STRING->name, traitName.c_str());
+	const int traitCount = getTraitCount();
+	for (int i = 0; i < traitCount; i++)
+	{
+		if (const auto trait = &traitList[i]; trait->traitEntry->nameHash == LOOKUP_STRING->hash)
+			return trait->level->level;
+	}
+	return 0;
+}
+
+void characterRecord::addTraitPoints(const std::string& trait, const int points)
+{
+	const auto entry = characterRecordHelpers::findTrait(trait);
+	if (!entry)
+		return;
+	const int addPoints = points;
+	GAME_FUNC(void(__thiscall*)(characterRecord*, traitEntry*, int, bool),
+		addTraitPoints)(this, entry, addPoints, true);
 }
 
 std::string eopCharacterDataDb::onGameSave()

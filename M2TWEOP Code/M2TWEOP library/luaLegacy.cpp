@@ -42,7 +42,12 @@ void luaPlugin::addLegacy()
 	tables.game.set_function("spawnArmy", &armyHelpers::spawnArmy);
 	tables.game.set_function("createArmy", &armyHelpers::createArmy);
 	tables.game.set_function("createArmyInSettlement", &armyHelpers::createArmyInSettlement);
-	tables.game.set_function("historicEvent", &gameHelpers::historicEvent);
+	tables.game.set_function("historicEvent", sol::overload(
+			sol::resolve<void(const std::string&, const std::string&, const std::string&)>(gameHelpers::historicEvent),
+			sol::resolve<void(const std::string&, const std::string&, const std::string&, bool)>(gameHelpers::historicEvent),
+			sol::resolve<void(const std::string&, const std::string&, const std::string&, bool, int, int)>(gameHelpers::historicEvent),
+			sol::resolve<void(const std::string&, const std::string&, const std::string&, bool, int, int, const sol::table&)>(gameHelpers::historicEvent)
+		));
 	tables.game.set_function("setScriptCounter", &gameHelpers::setScriptCounter);
 	tables.game.set_function("getScriptCounter", &gameHelpers::getScriptCounterLua);
 	tables.game.set_function("scriptCommand", &gameHelpers::scriptCommandLua);

@@ -3810,7 +3810,7 @@ onSetExtentsTexture::onSetExtentsTexture(MemWork* mem, LPVOID addr, int ver)
 		m_adress = 0x00991068;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x009904C0;
+		m_adress = 0x09904F8;
 }
 
 onSetExtentsTexture::~onSetExtentsTexture()
@@ -4172,7 +4172,7 @@ onInitGsd2::onInitGsd2(MemWork* mem, LPVOID addr, int ver)
 		m_adress = 0x0052B07F;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x00537B50;
+		m_adress = 0x0052AA7F;
 }
 
 void onInitGsd2::SetNewCode()
@@ -4271,7 +4271,7 @@ onPredictedStats::onPredictedStats(MemWork* mem, LPVOID addr, int ver)
 		m_adress = 0x005F4577;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005F425D;
+		m_adress = 0x005F4187;
 }
 
 void onPredictedStats::SetNewCode()
@@ -5417,7 +5417,7 @@ onNewGameLoaded::onNewGameLoaded(MemWork* mem, LPVOID addr, int ver)
 		m_adress = 0x0047F9BD;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x0047A320;
+		m_adress = 0x0047F5DD;
 }
 
 onNewGameLoaded::~onNewGameLoaded()

@@ -202,6 +202,7 @@ public:
 		DWORD setCharacterType = NULL;
 		DWORD addAncillary = NULL;
 		DWORD getTrait = NULL;
+		DWORD addTraitPoints = NULL;
 		DWORD addTrait = NULL;
 		DWORD removeTrait = NULL;
 		DWORD removeAncillary = NULL;
@@ -296,6 +297,10 @@ public:
 		DWORD updateTerrain = NULL;
 		DWORD updateRadar = NULL;
 		DWORD canMerge = NULL;
+		DWORD generalJoinCrusade = NULL;
+		DWORD generalLeaveCrusade = NULL;
+		DWORD incEventCounter = NULL;
+		DWORD createEventAcceptObj = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

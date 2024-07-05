@@ -267,13 +267,13 @@ namespace battleCreator
 
 		fileStrings.push_back(tempS);
 
-		if (gen->characterRecord->traits != nullptr)
+		if (gen->characterRecord->traitList.head != nullptr)
 		{
 			tempS = "traits";
-			traitContainer* traitCont = gen->characterRecord->traits;
+			auto traitCont = gen->characterRecord->traitList.head;
 			while (traitCont != nullptr)
 			{
-				tempS.append(" ").append(traitCont->trait->traitEntry->name).append(" ").append(to_string(traitCont->trait->level->level)).append(" ,");
+				tempS.append(" ").append(traitCont->element->traitEntry->name).append(" ").append(to_string(traitCont->element->level->level)).append(" ,");
 
 				traitCont = traitCont->next;
 			};

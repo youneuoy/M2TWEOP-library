@@ -253,7 +253,7 @@ bool armyStruct::canStartAssault(settlementStruct* sett)
 	if (siege && siege->getSiegedSettlement() == sett)
 		return GAME_FUNC(int(__thiscall*)(armyStruct*), canStartAssault)(this) == 0;
 	const int fortificationLevel = sett->getFortificationLevel();
-	return fortificationLevel == 0 || (getNumEnginesCanPenetrateWalls(sett) > fortificationLevel);
+	return fortificationLevel < 0 || (getNumEnginesCanPenetrateWalls(sett) > fortificationLevel + 1);
 }
 
 bool armyStruct::canStartAssaultFort(const fortStruct* fort)
@@ -911,7 +911,6 @@ namespace armyHelpers
 		@tfield bool isAdmiral
 		@tfield bool canRetreat
 		@tfield int supportingArmiesCampaign
-		@tfield int ladders
 		@tfield int bannerRed
 		@tfield int bannerGreen
 		@tfield int bannerBlue

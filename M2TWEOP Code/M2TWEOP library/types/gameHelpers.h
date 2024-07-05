@@ -15,6 +15,13 @@ struct loadGameHandler
 	struct UNICODE_STRING*** saveGameName;
 };
 
+struct eventAcceptDecline
+{
+	DWORD vfTable;
+	char* name;
+	int hash;
+};
+
 /* I_CompareCounter script command */
 struct compareCounter { /* I_CompareCounter script command */
 	undefined field_0x0;
@@ -350,7 +357,13 @@ namespace gameHelpers
 	void logFuncError(const std::string& funcName, const std::string& error);
 	int getScriptCounterNoBool(const char* type);
 
-	void historicEvent(const char* name, const char* title, const char* description);
+	void historicEvent(const std::string& name, const std::string& title, const std::string& description);
+	void historicEvent(const std::string& name, const std::string& title, const std::string& description, bool isChoice);
+	void historicEvent(const std::string& name, const std::string& title, const std::string& description, bool isChoice, int xCoord, int yCoord);
+	void historicEvent(const std::string& name, const std::string& title, const std::string& description, bool isChoice, int xCoord, int yCoord, const sol::table& factions);
+	void historicEventRaw(const char* name, const char* title, const char* description, bool isChoice, uint32_t factions, int xCoord, int yCoord);
+	eventAcceptDecline* createEventAcceptDecline(const std::string& name);
+	int incrementEventCounter(const std::string& name, int value);
 	
 	options1* getOptions1();
 	options2* getOptions2();
