@@ -5346,10 +5346,10 @@ OnCreateUnit2::OnCreateUnit2(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
 	if (ver == 2)//steam
-		m_adress = 0x008EEB10;
+		m_adress = 0x8EEB0D;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x008EE090;
+		m_adress = 0x8EE08D;
 }
 
 OnCreateUnit2::~OnCreateUnit2()
@@ -5375,14 +5375,12 @@ void OnCreateUnit2::SetNewCode()
 {
 	Assembler* a = new Assembler();
 
-	a->push(ecx);
-	a->push(eax);
+	a->pushf();
 	a->mov(ecx, ebx);
 	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
 	a->call(eax);
 	a->mov(edi, eax);
-	a->pop(eax);
-	a->pop(ecx);
+	a->popf();
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();
 

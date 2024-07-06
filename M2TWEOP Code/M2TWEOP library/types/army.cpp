@@ -443,7 +443,7 @@ void armyStruct::sortStack(int sortType, int sortType2, int sortType3)
 		// Stable sort the units
 		std::stable_sort(units, units + numOfUnits, compareUnits);
 }
-unit* armyStruct::createUnit(const char* type, const int exp, const int arm, const int weapon)
+unit* armyStruct::createUnit(const char* type, const int exp, const int arm, const int weapon, int soldierCount)
 {
 	unit *newUnit = unitHelpers::createUnitN(type, regionID, faction->factionID, exp, arm, weapon);
 	if (newUnit == nullptr)
@@ -451,9 +451,19 @@ unit* armyStruct::createUnit(const char* type, const int exp, const int arm, con
 	armyHelpers::addUnitToArmy(this, newUnit);
 	return newUnit;
 }
+
+unit* armyStruct::createUnit(const char* type, const int exp, const int arm, const int weapon)
+{
+	return createUnit(type, exp, arm, weapon, -1);
+}
+
 unit* armyStruct::createUnitByIndex(const int eduIndex, const int exp, const int arm, const int weapon)
 {
-	unit *newUnit = unitHelpers::createUnitIdx(eduIndex, regionID, faction->factionID, exp, arm, weapon);
+	return createUnitByIndex(eduIndex, exp, arm, weapon, -1);
+}
+unit* armyStruct::createUnitByIndex(const int eduIndex, const int exp, const int arm, const int weapon, int soldierCount)
+{
+	unit *newUnit = unitHelpers::createUnitIdx2(eduIndex, regionID, faction->factionID, exp, arm, weapon, soldierCount);
 	if (newUnit == nullptr)
 		return newUnit;
 	armyHelpers::addUnitToArmy(this, newUnit);
@@ -654,7 +664,7 @@ namespace armyHelpers
 		{11,"inquisitor"},
 		{13,"pope"}
 	};
-	
+
 	armyStruct* spawnArmy(
 		factionStruct* faction,
 		const char* name,
@@ -671,6 +681,28 @@ namespace armyHelpers
 		int exp,
 		int wpn,
 		int armour
+		)
+	{
+		return spawnArmy(faction, name, name2, characterType, label, portrait, x, y, age, family, subFaction, unitIndex, exp, wpn, armour, -1);
+	}
+	
+	armyStruct* spawnArmy(
+		factionStruct* faction,
+		const char* name,
+		const char* name2,
+		int characterType,
+		const char* label,
+		const char* portrait,
+		int x,
+		int y,
+		int age,
+		bool family,
+		int subFaction,
+		int unitIndex,
+		int exp,
+		int wpn,
+		int armour,
+		int soldierCount
 		)
 	{
 		if (!faction)
@@ -808,11 +840,11 @@ namespace armyHelpers
 			unit* bgUnit = nullptr;
 			if (eopDu::getEduEntry(unitIndex))
 			{
-				bgUnit = unitHelpers::createUnitIdx(unitIndex, regionId, faction->factionID, exp, armour, wpn);
+				bgUnit = unitHelpers::createUnitIdx2(unitIndex, regionId, faction->factionID, exp, armour, wpn, soldierCount);
 			}
 			else
 			{
-				bgUnit = unitHelpers::createUnitIdx(0, regionId, faction->factionID, exp, armour, wpn);
+				bgUnit = unitHelpers::createUnitIdx2(0, regionId, faction->factionID, exp, armour, wpn, soldierCount);
 			}
 			addUnitToArmy(army, bgUnit);
 			if (characterType == characterTypeStrat::namedCharacter)
@@ -1135,11 +1167,15 @@ namespace armyHelpers
 		@tparam int exp Experience. Maximum: 9.
 		@tparam int armor Armour level.
 		@tparam int weapon Weapon upgrade. Maximum: 1.
+		@tparam int soldiers optional
 		@treturn unit newUnit
 		@usage
 		local newUnit = army:createUnit("Axemen of Lossarnach",1,1,1);
 		*/
-		types.armyStruct.set_function("createUnit", &armyStruct::createUnit);
+		types.armyStruct.set_function("createUnit", sol::overload(
+				sol::resolve<unit*(const char*, int, int, int)>(&armyStruct::createUnit),
+				sol::resolve<unit*(const char*, int, int, int, int)>(&armyStruct::createUnit)
+			));
 
 		/***
 		Create a unit in the army by index from export\_descr\_unit.txt
@@ -1148,11 +1184,15 @@ namespace armyHelpers
 		@tparam int exp Experience. Maximum: 9.
 		@tparam int armor Armour level.
 		@tparam int weapon Weapon upgrade. Maximum: 1.
+		@tparam int soldiers optional
 		@treturn unit newUnit
 		@usage
 		local newUnit = army:createUnitByIDX(255,1,1,1)
 		*/
-		types.armyStruct.set_function("createUnitByIDX", &armyStruct::createUnitByIndex);
+		types.armyStruct.set_function("createUnitByIDX", sol::overload(
+				sol::resolve<unit*(int, int, int, int)>(&armyStruct::createUnitByIndex),
+				sol::resolve<unit*(int, int, int, int, int)>(&armyStruct::createUnitByIndex)
+			));
 
 
 		/***

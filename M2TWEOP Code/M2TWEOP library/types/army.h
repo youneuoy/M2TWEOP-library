@@ -237,6 +237,8 @@ public:
 	void releaseUnits();
 	unit* createUnit(const char* type, int exp, int arm, int weapon);
 	unit* createUnitByIndex(int eduIndex, int exp, int arm, int weapon);
+	unit* createUnit(const char* type, int exp, int arm, int weapon, int soldierCount);
+	unit* createUnitByIndex(int eduIndex, int exp, int arm, int weapon, int soldierCount);
 	unit* createEopUnit(int eduIndex, int exp, int arm, int weapon);
 	armyStruct* mergeArmies(armyStruct* targetArmy, bool force = true);
 	armyStruct* mergeArmies(armyStruct* targetArmy);
@@ -270,6 +272,24 @@ namespace armyHelpers
 		int exp,
 		int wpn,
 		int armour
+		);
+	armyStruct* spawnArmy(
+		factionStruct* faction,
+		const char* name,
+		const char* name2,
+		int characterType,
+		const char* label,
+		const char* portrait,
+		int x,
+		int y,
+		int age,
+		bool family,
+		int subFaction,
+		int unitIndex,
+		int exp,
+		int wpn,
+		int armour,
+		int soldierCount
 		);
 	
 	float getMinimumMovePointsForArmy(const armyStruct* army);

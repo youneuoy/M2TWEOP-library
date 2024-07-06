@@ -123,26 +123,14 @@ namespace characterRecordHelpers
 	void setHeir(characterRecord* gen, bool isJustSet)
 	{
 		factionStruct* fac = gen->faction;
-		if (isJustSet == true)
+		if (isJustSet)
 		{
 			for (int i = 0; i < fac->numOfCharacters; i++)
 				fac->characters[i]->characterRecord->status &= ~2;
 			fac->heir = gen;
 			gen->status |= 2;
 		}
-		else
-		{
-			_asm
-			{
-				push gen
-				mov ecx, fac
-				mov eax, [fac]
-				mov eax, [eax]
-				mov eax, [eax + 0x20]
-				call eax
-			}
-		}
-		return;
+		callClassFunc<factionStruct*, void, characterRecord*>(fac, 0x20, gen);
 	}
 
 #pragma endregion Character Record helpers

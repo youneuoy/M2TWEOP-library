@@ -155,6 +155,7 @@ void managerF::execPatches()
 	tcptc->Enable();
 	f1 << "Done" << endl;
 
+	/*
 	f1 << "Start applying spawn_army coords patch" << endl;
 	toSpawnArmy* spwnArm = new toSpawnArmy(mem, (LPVOID)patchesForGame::spawnArmyCoords, globals::dataS.gameVersion);
 	spwnArm->SetlSpawnCode();
@@ -174,7 +175,7 @@ void managerF::execPatches()
 	toSpawnCharacter* spwnChar = new toSpawnCharacter(mem, (LPVOID)patchesForGame::spawnCharacterCoords, globals::dataS.gameVersion);
 	spwnChar->SetlSpawnCode();
 	spwnChar->Enable();
-
+	*/
 	f1 << "Done" << endl;
 
 

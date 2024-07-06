@@ -1806,6 +1806,8 @@ public:
 	{
 		return avgWeaponUpg;
 	}
+	void setArmour(uint8_t armour);
+	void setWeapon(uint8_t wpn);
 	void setarmourLVL(int lvl)
 	{
 		setUnitParams(SoldierCountStrat, expScreen, lvl, avgWeaponUpg);
@@ -2051,7 +2053,9 @@ namespace unitHelpers
 	modelDbEntry* findBattleModel(const char* modelName);
 	
 	unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap);
+	unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap, int soldierCount);
 	unit* createUnitIdx(int index, int regionID, int facNum, int exp, int arm, int weap);
+	unit* createUnitIdx2(int index, int regionId, int facNum, int exp, uint8_t arm, uint8_t weapon, int soldiers);
 	unit* createUnitEDB(int edb, int regionID, int facNum, int exp, int arm, int weap);
 	int getEduIndex(const char* type);
 	eduEntry* getEduEntryByName(const char* type);

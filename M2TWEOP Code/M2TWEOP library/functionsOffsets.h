@@ -81,8 +81,10 @@ public:
 		DWORD createArmyFunc = NULL;
 		DWORD createArmyInSettlementFunc = NULL;
 		DWORD createUnitFunc = NULL;
+		DWORD createUnitFunc2 = NULL;
 		DWORD addUnitToArmyFunc = NULL;
 		DWORD makeBuildingCondition = NULL;
+		DWORD switchFactionLeader = NULL;
 
 		DWORD setBodyguard = NULL;
 

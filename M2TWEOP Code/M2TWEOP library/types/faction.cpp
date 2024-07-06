@@ -94,6 +94,23 @@ characterRecord* factionStruct::getCharacterByLabel(const std::string& label)
 	return nullptr;
 }
 
+void factionStruct::setLeader(characterRecord* newLeader, bool onlyLeader)
+{
+	if (onlyLeader)
+	{
+		for (int i = 0; i < characterRecordNum; i++)
+		{
+			if (const auto record = characterRecords[i];
+				record->isLeader())
+			{
+				record->status &= ~1;
+				record->status |= 4;
+			}
+		}
+	}
+	GAME_FUNC(void(__thiscall*)(factionStruct*, characterRecord*), switchFactionLeader)(this, newLeader);
+}
+
 void factionStruct::updateNeighbours()
 {
 	if (settlementsNum == 0)
@@ -594,6 +611,7 @@ namespace factionHelpers
 		@tfield canSeeCharacter canSeeCharacter
 		@tfield ancillaryExists ancillaryExists
 		@tfield setFactionBanner setFactionBanner
+		@tfield setLeader setLeader
 
 		@table factionStruct
 		*/
@@ -1074,6 +1092,7 @@ namespace factionHelpers
 		@tparam int exp
 		@tparam int wpn
 		@tparam int armour
+		@tparam int soldiers optional
 		@treturn armyStruct newArmy
 		@usage
 		local army = myFaction:spawnArmy(
@@ -1087,7 +1106,41 @@ namespace factionHelpers
 		M2TWEOPDU.getEduIndexByType("Peasants"), 3, 0, 0
 		)
 		*/
-		types.factionStruct.set_function("spawnArmy", &armyHelpers::spawnArmy);
+		types.factionStruct.set_function("spawnArmy", sol::overload(
+				sol::resolve<armyStruct*(
+					factionStruct*,
+					const char*,
+					const char*,
+					int,
+					const char*,
+					const char*,
+					int,
+					int,
+					int,
+					bool,
+					int,
+					int,
+					int,
+					int,
+					int)>(&armyHelpers::spawnArmy),
+					sol::resolve<armyStruct*(
+						factionStruct*,
+						const char*,
+						const char*,
+						int,
+						const char*,
+						const char*,
+						int,
+						int,
+						int,
+						bool,
+						int,
+						int,
+						int,
+						int,
+						int,
+						int)>(&armyHelpers::spawnArmy)
+			));
 		
 		/***
 		Split an army. If there is an army at target coords they merge. They embark/disembark. They enter and leave settlements.
@@ -1152,6 +1205,16 @@ namespace factionHelpers
 			fac:setFactionBanner("scotland")
 		*/
 		types.factionStruct.set_function("setFactionBanner", &factionStruct::setFactionBanner);
+		
+		/***
+		Set a new faction leader.
+		@function factionStruct:setLeader
+		@tparam characterRecord newLeader
+		@tparam bool onlyLeader
+		@usage
+			fac:setLeader(myChar, true)
+		*/
+		types.factionStruct.set_function("setLeader", &factionStruct::setLeader);
 
 		/***
 		Basic battleFactionCounter table

@@ -91,6 +91,18 @@ const char* unit::getActionStatus()
 	return "unknown";
 }
 
+void unit::setArmour(const uint8_t armour)
+{
+	const auto arm = armour;
+	GAME_FUNC(void(__thiscall*)(unit*, uint8_t), setUnitArmorFunc)(this, arm);
+}
+
+void unit::setWeapon(uint8_t wpn)
+{
+	const auto weapon = wpn;
+	GAME_FUNC(void(__thiscall*)(unit*, uint8_t), setUnitWeaponFunc)(this, weapon);
+}
+
 namespace unitActions
 {
 	
@@ -776,7 +788,13 @@ namespace unitHelpers
 	unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap)
 	{
 		const int unitIndex = getEduIndex(type);
-		return createUnitIdx(unitIndex, regionID, facNum, exp, arm, weap);
+		return createUnitIdx2(unitIndex, regionID, facNum, exp, arm, weap, -1);
+	}
+	
+	unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap, int soldierCount)
+	{
+		const int unitIndex = getEduIndex(type);
+		return createUnitIdx2(unitIndex, regionID, facNum, exp, arm, weap, soldierCount);
 	}
 
 	unit* createUnitIdx(int index, int regionID, int facNum, int exp, int arm, int weap)
@@ -808,6 +826,24 @@ namespace unitHelpers
 
 		return res;
 	}
+
+	unit* createUnitIdx2(const int index, const int regionId, const int facNum, const int exp, const uint8_t arm, const uint8_t weapon, const int soldiers)
+	{
+		if (!eopDu::getEduEntry(index))
+			return nullptr;
+		
+		regionStruct* region = stratMapHelpers::getRegion(regionId);
+		const auto un = GAME_FUNC(unit*(__stdcall*)(regionStruct*, int, int, int, int), createUnitFunc2)(region, index, facNum, exp, soldiers);
+		if (un)
+		{
+			un->setArmour(arm);
+			un->setWeapon(weapon);
+			un->expScreen = exp;
+		}
+		return un;
+	}
+
+	
 
 	unit* createUnitEDB(int edb, int regionID, int facNum, int exp, int arm, int weap)
 	{

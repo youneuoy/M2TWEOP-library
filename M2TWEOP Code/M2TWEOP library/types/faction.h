@@ -319,6 +319,7 @@ struct factionStruct {
 	int32_t lastOpponentId; //0x0EEC
 public:
 	characterRecord* getCharacterByLabel(const std::string& label);
+	void setLeader(characterRecord* newLeader, bool onlyLeader);
 	void updateNeighbours();
 	void setFactionBanner(const std::string& newFac);
 	characterRecord* ancillaryExists(const std::string& ancName);

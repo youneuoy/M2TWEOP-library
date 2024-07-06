@@ -297,6 +297,8 @@ void codes::initCodes(int gameVer)
 		offsets.addTraitPoints = 0x5A6710;
 		offsets.incEventCounter = 0x48C810;
 		offsets.createEventAcceptObj = 0xA7FBE0;
+		offsets.createUnitFunc2 = 0x8EC560;
+		offsets.switchFactionLeader = 0x4E8FE0;
 	}
 
 
@@ -391,6 +393,7 @@ void codes::initCodes(int gameVer)
 		offsets.createArmyFunc = 0x004f46a0;
 		offsets.createArmyInSettlementFunc = 0x005dc290;
 		offsets.createUnitFunc = 0x008ee9e0;
+		offsets.createUnitFunc2 = 0x8ECFE0;
 		offsets.addUnitToArmyFunc = 0x00719ab0;
 		offsets.setBodyguard = 0x00599400;
 		offsets.makeConditionFunc = 0x00875310;
@@ -596,5 +599,6 @@ void codes::initCodes(int gameVer)
 		offsets.addTraitPoints = 0x5A6BF0;
 		offsets.incEventCounter = 0x48CC10;
 		offsets.createEventAcceptObj = 0xA80C40;
+		offsets.switchFactionLeader = 0x4E95F0;
 	}
 }

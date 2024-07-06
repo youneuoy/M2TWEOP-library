@@ -39,7 +39,41 @@ void luaPlugin::addLegacy()
 	tables.game.set_function("getFaction", &campaignHelpers::getFaction);
 	tables.game.set_function("callConsole", &gameHelpers::callConsole);
 	tables.game.set_function("createCharacterByString", &characterHelpers::createCharacter);
-	tables.game.set_function("spawnArmy", &armyHelpers::spawnArmy);
+	tables.game.set_function("spawnArmy", sol::overload(
+				sol::resolve<armyStruct*(
+					factionStruct*,
+					const char*,
+					const char*,
+					int,
+					const char*,
+					const char*,
+					int,
+					int,
+					int,
+					bool,
+					int,
+					int,
+					int,
+					int,
+					int)>(&armyHelpers::spawnArmy),
+					sol::resolve<armyStruct*(
+						factionStruct*,
+						const char*,
+						const char*,
+						int,
+						const char*,
+						const char*,
+						int,
+						int,
+						int,
+						bool,
+						int,
+						int,
+						int,
+						int,
+						int,
+						int)>(&armyHelpers::spawnArmy)
+			));
 	tables.game.set_function("createArmy", &armyHelpers::createArmy);
 	tables.game.set_function("createArmyInSettlement", &armyHelpers::createArmyInSettlement);
 	tables.game.set_function("historicEvent", sol::overload(
