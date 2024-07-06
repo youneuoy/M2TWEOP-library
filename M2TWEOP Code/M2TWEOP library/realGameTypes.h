@@ -126,8 +126,8 @@ template<typename T>
 struct gameLinkedNode
 {
 	T* element;
-	gameLinkedNode<T>* next;
 	gameLinkedNode<T>* prev;
+	gameLinkedNode<T>* next;
 };
 
 template<typename T>

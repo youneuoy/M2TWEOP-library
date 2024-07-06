@@ -735,6 +735,12 @@ void managerF::execPatches()
 	toDrawBanner->Enable();
 	f1 << "Done" << endl;
 	
+	f1 << "Start applying onSetupBattleFromStrat patch" << endl;
+	onSetupBattleFromStrat* toSetupBattleFromStrat = new onSetupBattleFromStrat(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toSetupBattleFromStrat->SetNewCode();
+	toSetupBattleFromStrat->Enable();
+	f1 << "Done" << endl;
+	
 	f1 << "Start applying onGetRebelSymbol patch" << endl;
 	onGetRebelSymbol* toGetRebelSymbol = new onGetRebelSymbol(mem, (LPVOID)patchesForGame::onGetRebelSymbol, globals::dataS.gameVersion);
 	toGetRebelSymbol->SetNewCode();

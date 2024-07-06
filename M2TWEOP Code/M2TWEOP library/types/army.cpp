@@ -736,8 +736,8 @@ namespace armyHelpers
 				int secondNameIndex = 0;
 				while (checkCount < checkCountMax)
 				{
-					GAME_FUNC(int(__cdecl*)(int*, int, int, int*, int*), getRandomNameFunc)
-					(&campaign->lastRandomSeed, nameFaction, 0, &firstNameIndex, &secondNameIndex);
+					GAME_FUNC(int(__cdecl*)(int*, int, bool, int*, int*), getRandomNameFunc)
+					(&campaign->lastRandomSeed, nameFaction, true, &firstNameIndex, &secondNameIndex);
 					bool research = false;
 					for(int i = 0; i < faction->characterRecordNum; i++)
 					{
@@ -754,7 +754,7 @@ namespace armyHelpers
 					break;
 				}
 
-				name = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(0, nameFaction, firstNameIndex);
+				name = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(characterType == characterTypeStrat::princess ? 1 : 0 , nameFaction, firstNameIndex);
 				name2 = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(2, nameFaction, secondNameIndex);
 			}
 			gen = characterHelpers::createCharacterWithoutSpawning(typeName, faction, age, name, name2, subFaction, portrait, x, y);

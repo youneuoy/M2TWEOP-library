@@ -14,6 +14,7 @@
 #include "strategyMap.h"
 #include "techFuncs.h"
 #include "campaignAi.h"
+#include "gameUi.h"
 
 enum
 {
@@ -126,6 +127,28 @@ void factionStruct::updateNeighbours()
 				}
 			}
 		}
+	}
+}
+
+void factionStruct::setFactionBanner(const std::string& newFac)
+{
+	int newId = -1;
+	const int facNum = dataOffsets::offsets.descr_sm_factionslist->size;
+	for (int i = 0; i < facNum; ++i)
+	{
+		if (const auto facRecord = &dataOffsets::offsets.descr_sm_factionslist->facDescrs[i]; strcmp(facRecord->facName, newFac.c_str()) == 0)
+			newId = facRecord->id;
+	}
+	if (newId == -1)
+	{
+		gameHelpers::logStringGame("factionStruct.setFactionBanner: faction not found.");
+		return;
+	}
+	factionBannerIndex = newId;
+	if (const auto ui = gameUiHelpers::getStratUi(); ui)
+	{
+		if (const auto hud = ui->hud; hud && hud->facButton)
+			callClassFunc<DWORD*, void, int>(hud->facButton, 0x1A4, newId);
 	}
 }
 
@@ -570,6 +593,7 @@ namespace factionHelpers
 		@tfield getCharacterByLabel getCharacterByLabel
 		@tfield canSeeCharacter canSeeCharacter
 		@tfield ancillaryExists ancillaryExists
+		@tfield setFactionBanner setFactionBanner
 
 		@table factionStruct
 		*/
@@ -1119,6 +1143,15 @@ namespace factionHelpers
 		     local myChar = fac:getCharacterByLabel("rufus_1")
 		*/
 		types.factionStruct.set_function("getCharacterByLabel", &factionStruct::getCharacterByLabel);
+		
+		/***
+		Change faction banner to another faction's.
+		@function factionStruct:setFactionBanner
+		@tparam string facName
+		@usage
+			fac:setFactionBanner("scotland")
+		*/
+		types.factionStruct.set_function("setFactionBanner", &factionStruct::setFactionBanner);
 
 		/***
 		Basic battleFactionCounter table

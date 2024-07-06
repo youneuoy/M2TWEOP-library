@@ -42,11 +42,19 @@ struct unitInfoScroll
 	struct eduEntry* entry;
 };
 
+struct campaignMapHud
+{
+	char pad[0x1e8];
+	DWORD* facButton;
+};
+
 // Settlement UI Stuff
 struct stratUIStruct
 {
 public:
-	char pad_0000[84]; //0x0000
+	char pad_0000[104]; //0x0000
+	campaignMapHud* hud;
+	char pad_1[76]; //0x0000
 	struct settlementInfoScroll *settlementInfoScroll; //0x0054
 	int pad_0058[6]; //0x0000
 	buildingInfoScroll* buildingInfoScroll;

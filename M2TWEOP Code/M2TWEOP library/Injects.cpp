@@ -4367,6 +4367,34 @@ void onGetRebelSymbol::SetNewCode()
 	delete a;
 }
 
+onSetupBattleFromStrat::onSetupBattleFromStrat(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x61DFC9;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x61DC19;
+}
+
+void onSetupBattleFromStrat::SetNewCode()
+{
+	const auto a = new Assembler();
+	const auto label = a->newLabel();
+	a->cmp(ecx, 0);
+	a->mov(al, 0);
+	a->jz(label);
+	if (m_adress == 0x61DFC9)
+		a->mov(eax, 0x718D70);
+	else
+		a->mov(eax, 0x718650);
+	a->call(eax);
+	a->bind(label);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onGetSupportingArmies2::onGetSupportingArmies2(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

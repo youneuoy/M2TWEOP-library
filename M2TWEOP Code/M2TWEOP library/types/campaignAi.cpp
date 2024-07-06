@@ -546,6 +546,7 @@ bool attackSettlementOrder::execute()
 		{
 			if (!assignedArmy->validate() || !targetSettlement->settlement
 				|| !targetSettlement->settlement->isEnemyToFaction(assignedArmy->army->faction)
+				|| assignedArmy->army->gen->visitingArmy
 				|| !assignedArmy->army->canStartSiege(targetSettlement->settlement))
 				continue;
 			const std::string logString2 = "General: " + string(assignedArmy->army->gen->characterRecord->fullName);
@@ -569,6 +570,7 @@ bool attackSettlementOrder::execute()
 						}
 						assignedArmy->used = true;
 						TURN_HAD_ACTION = true;
+						hasAssaulted = true;
 						break;
 					}
 				}

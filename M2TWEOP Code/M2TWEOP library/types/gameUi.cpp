@@ -12,6 +12,7 @@
 #include "settlement.h"
 #include "fort.h"
 #include "character.h"
+#include "dataOffsets.h"
 #include "unit.h"
 
 namespace gameUiHelpers
@@ -101,10 +102,10 @@ namespace gameUiHelpers
 
 	stratUIStruct* getStratUi()
 	{
-		const auto gameData = gameHelpers::getGameDataAll();
-		if (!gameData->uiManager) 
+		const auto uiPtr = reinterpret_cast<stratUIStruct**>(dataOffsets::offsets.uiStratUiV2);
+		if (!uiPtr)
 			return nullptr;
-		return gameData->uiManager->stratUI;
+		return *uiPtr;
 	}
 
 	buildingInfoScroll* getBuildingInfoScroll()

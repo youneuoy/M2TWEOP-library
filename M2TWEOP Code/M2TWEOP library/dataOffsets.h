@@ -70,6 +70,7 @@ public:
 		DWORD settlementVtbl = NULL;
 		DWORD settlementSpyingVtbl = NULL;
 		DWORD descrRebels = NULL;
+		DWORD uiStratUiV2 = NULL;
 		
 		//audio settings
 		bool* audioEnable = nullptr;

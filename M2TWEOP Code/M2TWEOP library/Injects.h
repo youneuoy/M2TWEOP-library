@@ -1564,6 +1564,17 @@ private:
 	LPVOID funcAddress;
 };
 
+class onSetupBattleFromStrat
+	:public AATemplate
+{
+public:
+	onSetupBattleFromStrat(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class OnLoadSettlementWorldpkgdesc
 	:public AATemplate
 {
