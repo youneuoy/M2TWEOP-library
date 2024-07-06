@@ -1347,6 +1347,7 @@ void __stdcall patchesForGame::onEduParsed()
 void __stdcall patchesForGame::onGameInit()
 {
 	cultures::eopPortraitDb::createEopPortraitDb();
+	discordManager::menuLoaded();
 	gameEvents::onGameInit();
 }
 
@@ -1355,6 +1356,7 @@ void __stdcall patchesForGame::onUnloadCampaign()
 	minorSettlementDb::clear();
 	eopRebelFactionDb::clear();
 	globalEopAiConfig::clearFactionData();
+	discordManager::menuLoaded();
 	gameEvents::onUnloadCampaign();
 }
 void __stdcall patchesForGame::onNewGameLoaded()

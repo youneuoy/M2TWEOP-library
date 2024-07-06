@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "discordManager.h"
 
+#include "campaign.h"
 #include "globals.h"
 #include "jsonManager.h"
 #include "techFuncs.h"
@@ -27,9 +28,30 @@ namespace discordManager
 		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true)
 		{
 			jsonManager::setJsonInFile(
-				"\\eopData\\config\\discordRichPresenceCfg.json",
+				R"(\eopData\config\discordRichPresenceCfg.json)",
 				"status",
 				"Fighting a battle ⚔️");
+		}
+	}
+
+	void menuLoaded()
+	{
+		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true)
+		{
+			jsonManager::setJsonInFile(
+				R"(\eopData\config\discordRichPresenceCfg.json)",
+				"status",
+				"At the main menu 🏰");
+			
+			jsonManager::setJsonInFile(
+				R"(\eopData\config\discordRichPresenceCfg.json)",
+				"factionName",
+				"");
+			
+			jsonManager::setJsonInFile(
+				R"(\eopData\config\discordRichPresenceCfg.json)",
+				"turnNum",
+				"0");
 		}
 	}
 
@@ -38,9 +60,16 @@ namespace discordManager
 		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true)
 		{
 			jsonManager::setJsonInFile(
-				"\\eopData\\config\\discordRichPresenceCfg.json",
+				R"(\eopData\config\discordRichPresenceCfg.json)",
 				"status",
 				"On the campaign map 🗺️");
+			if (const auto campaignData = campaignHelpers::getCampaignData())
+			{
+				jsonManager::setJsonInFile(
+					R"(\eopData\config\discordRichPresenceCfg.json)",
+					"turnNum",
+					std::to_string(campaignData->turnNumber + 1));
+			}
 		}
 	}
 
@@ -49,9 +78,9 @@ namespace discordManager
 		if (globals::dataS.gameCfg.isDiscordRichPresenceEnabled == true)
 		{
 			jsonManager::setJsonInFile(
-				"\\eopData\\config\\discordRichPresenceCfg.json",
+				R"(\eopData\config\discordRichPresenceCfg.json)",
 				"turnNum",
-				std::to_string(num));
+				std::to_string(num + 1));
 		}
 	}
 
@@ -63,7 +92,7 @@ namespace discordManager
 		{
 			const auto name = factionHelpers::getLocalizedFactionName(fac);
 			jsonManager::setJsonInFile(
-				"\\eopData\\config\\discordRichPresenceCfg.json",
+				R"(\eopData\config\discordRichPresenceCfg.json)",
 				"factionName",
 				name);
 		}
