@@ -103,7 +103,7 @@ namespace managerG
 			{
 				getJson(dataG::data.gameData.isDiscordRichPresenceEnabled, "isDiscordRichPresenceEnabled");
 			}
-			if (json.contains("freecamIntegration"))
+			if (json.contains("isFreecamIntegrationEnabled"))
 			{
 				getJson(dataG::data.gameData.freecamIntegration, "isFreecamIntegrationEnabled");
 			}
