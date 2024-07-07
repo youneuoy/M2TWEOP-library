@@ -71,7 +71,7 @@ namespace mainUI
 		}
 		else if (childs.isDiscordUIOpen == true)
 		{
-			gameRunnerUI::maintainDiscordRichPresence();
+			gameRunnerUI::maintainGUI();
 			return 0;
 		}
 		ImVec2 windowSize = ImGui::CalcTextSize("Run Vanilla or DLC without M2TWEOP");

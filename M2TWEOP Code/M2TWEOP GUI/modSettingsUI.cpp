@@ -6,6 +6,10 @@
 #include "themeManagerGUI.h"
 #include "../M2TWEOP Common/m2tweopConstData.h"
 #include <cstdlib>  
+#include <iostream>
+#include <locale>
+#include <codecvt>
+#include <string>
 
 namespace modSettingsUI
 {
@@ -36,34 +40,6 @@ namespace modSettingsUI
 		ImVec2 selectablesSize{};
 	}settingsUIData;
 
-	std::string remove_extension(const std::string &filename)
-	{
-		size_t lastdot = filename.find_last_of(".");
-		if (lastdot == std::string::npos)
-			return filename;
-		return filename.substr(0, lastdot);
-	}
-
-	// Function to convert std::wstring to LPSTR
-	LPSTR ConvertWideStringToLPSTR(const std::wstring &wideString)
-	{
-		int bufferSize = WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, NULL, 0, NULL, NULL);
-		if (bufferSize == 0)
-		{
-			// Handle error, e.g., GetLastError()
-			return nullptr;
-		}
-
-		LPSTR narrowString = new char[bufferSize];
-		if (WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, narrowString, bufferSize, NULL, NULL) == 0)
-		{
-			// Handle error, e.g., GetLastError()
-			delete[] narrowString;
-			return nullptr;
-		}
-
-		return narrowString;
-	}
 
 	void initSettingsUI()
 	{
@@ -195,11 +171,13 @@ namespace modSettingsUI
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Hide the launcher when starting up. Can be shown again in eopData/config/uiCfg.json");}
 	}
 
-	void drawLauncherSettigs()
-	{
+	void drawLauncherSettings()
+	{	
+		// Discord Rich Presence settings
 		ImGui::Checkbox("Discord Rich Presence", &dataG::data.gameData.isDiscordRichPresenceEnabled);
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Update your Discord status/presence with details about what mod you are playing");}
 
+		// Misc. Settings
 		if (ImGui::Checkbox("Play background music", &dataG::data.audio.bkgMusic.isMusicNeeded))
 		{
 			if (dataG::data.audio.bkgMusic.isMusicNeeded == false)
@@ -235,7 +213,7 @@ namespace modSettingsUI
 			for (int i = 0; i < tomlFiles.size(); i++)
 			{
 				bool isSelected = (selectedItem == i);
-				tomlFiles[i] = remove_extension(tomlFiles[i]);
+				tomlFiles[i] = helpers::remove_extension(tomlFiles[i]);
 				if (ImGui::Selectable(tomlFiles[i].c_str(), isSelected))
 				{
 					selectedItem = i;
@@ -256,9 +234,11 @@ namespace modSettingsUI
 
 		if (ImGui::Button("Open Theme Editor", helpers::getScreen().centerXButton))
 		{
+			std::wstring folderPath = L".\\eopData\\resources\\themes\\ImTheme";
 			std::wstring exePath = L".\\eopData\\resources\\themes\\ImTheme\\ImThemes-0.2.6-amd64.exe";
-			LPSTR lpwstr = ConvertWideStringToLPSTR(exePath);
-			helpers::openProcess(lpwstr);
+			LPSTR lpwstr = helpers::ConvertWideStringToLPSTR(exePath);
+			LPSTR lpwstr_folder = helpers::ConvertWideStringToLPSTR(folderPath);
+			helpers::openProcess(lpwstr, lpwstr_folder);
 		}
 		if (ImGui::Button("Refresh theme", helpers::getScreen().centerXButton))
 		{
@@ -300,8 +280,14 @@ namespace modSettingsUI
 		ImGui::Checkbox("Block modification launch without EOP", &dataG::data.gameData.isBlockLaunchWithoutEop);
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Prevent your mod from starting without EOP enabled. See FAQ for more details.");}
 		
-		// ImGui::Checkbox("Override battle camera and controls", &dataG::data.gameData.IsOverrideBattleCamera);
-		// if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("For hotseat online play");}
+		// Freecam Settings
+		ImGui::Checkbox("Freecam Integration", &dataG::data.gameData.freecamIntegration);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Automatically start and close the Freecam application when the game is launched");}
+
+		ImGui::Text("Freecam Folder");
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Path to where you have Freecam installed (e.g  C:\\Users\\stead\\Documents\\Modding Tools\\Med2 Modding Tools\\Freecam)");}
+		ImGui::InputText("", &dataG::data.gameData.freecamFolder);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Path to where you have Freecam installed (e.g  C:\\Users\\stead\\Documents\\Modding Tools\\Med2 Modding Tools\\Freecam)");}
 	}
 	
 	void drawModSettingsUI(bool* isOpen)
@@ -351,7 +337,7 @@ namespace modSettingsUI
 			}
 			else if (settingsUIData.selectedPage == selectedSettingsPage_launcher)
 			{
-				drawLauncherSettigs();
+				drawLauncherSettings();
 			}
 			else if (settingsUIData.selectedPage == selectedSettingsPage_rules)
 			{
