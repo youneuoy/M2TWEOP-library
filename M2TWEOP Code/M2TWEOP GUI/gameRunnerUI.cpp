@@ -9,6 +9,9 @@
 
 #include <thread>
 #include "markdownHelper.h"
+#include <iostream>
+#include <sstream>
+
 namespace gameRunnerUI
 {
 	void TextAtCenter(const char *text)
@@ -90,13 +93,19 @@ namespace gameRunnerUI
 		isGetResponse = true;
 	}
 
-	void maintainDiscordRichPresence()
+	void maintainGUI()
 	{
 		if ((startProcess.isRunEnded == true && startProcess.isGetResponse == true))
 		{
 			std::this_thread::sleep_for(std::chrono::seconds(3));
 			if (helpers::isProcessRunning(dataG::data.gameData.exeName) == false)
 			{
+				// Close Freecam if we are using the integration
+				if (dataG::data.gameData.freecamIntegration == true)
+				{
+					helpers::closeProcess(dataG::data.gameData.freecamExeName);
+				}
+
 				exit(0);
 			}
 		}
@@ -156,6 +165,19 @@ namespace gameRunnerUI
 				runGameThread, std::ref(startProcess.isRunStarted), std::ref(startProcess.isRunEnded), std::ref(startProcess.isGetResponse), std::ref(startProcess.exePath), std::ref(startProcess.exeArgs), std::ref(startProcess.eopArgs), startProcess.isEopNeeded);
 			thrUrl.detach();
 
+			// Open Freecam if we are using the integration
+			if (dataG::data.gameData.freecamIntegration == true)
+			{
+				std::string exePath = dataG::data.gameData.freecamFolder + "\\Freecam.exe";
+
+				std::wstring wideFolderPath = helpers::stringToWstring(dataG::data.gameData.freecamFolder);
+				std::wstring wideExePath = helpers::stringToWstring(exePath);
+
+				LPSTR lpstr = helpers::ConvertWideStringToLPSTR(wideExePath);
+				LPSTR lpstr_folder = helpers::ConvertWideStringToLPSTR(wideFolderPath);
+				helpers::openProcess(lpstr, lpstr_folder);
+			}
+
 			startProcess.sendingEndTime = ImGui::GetTime() + 34.5f;
 		}
 
@@ -165,7 +187,7 @@ namespace gameRunnerUI
 			{
 				helpers::closeProcess(dataG::data.gameData.exeName);
 			}
-			if (dataG::data.gameData.isDiscordRichPresenceEnabled == false)
+			if (dataG::data.gameData.isDiscordRichPresenceEnabled == false && dataG::data.gameData.freecamIntegration == false)
 			{
 				exit(0);
 			}

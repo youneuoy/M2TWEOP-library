@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "console.h"
 #include "luaPlugin.h"
+#include "gameHelpers.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_stdlib.h"
@@ -16,6 +17,7 @@ namespace console
 		int commandNum = 0;
 		bool shouldRestartLua   = false;
 		bool shouldReloadScript = false;
+		bool controlsDisabled = true;
 	}consoleData;
 
 	void applyCommand()
@@ -64,6 +66,11 @@ namespace console
 	{
 		if (consoleData.isDraw == false)
 		{
+			if (consoleData.controlsDisabled == true)
+			{
+				gameHelpers::scriptCommand("disable_shortcuts", "false");
+				consoleData.controlsDisabled = false;
+			}
 			return;
 		}
 
@@ -73,6 +80,19 @@ namespace console
 		consoleData.commandNum = luaPlugin::logCommands.size();
 
 		ImGui::Begin("##consoleInWindow", nullptr, iwf);
+
+		if (ImGui::IsWindowFocused() && consoleData.controlsDisabled == false)
+		{
+			gameHelpers::scriptCommand("disable_shortcuts", "true");
+			consoleData.controlsDisabled = true;
+		}
+
+		if (!ImGui::IsWindowFocused() && consoleData.controlsDisabled == true)
+		{
+			gameHelpers::scriptCommand("disable_shortcuts", "false");
+			consoleData.controlsDisabled = false;
+		}	
+		
 		if (ImGui::Button("Run script"))
 		{
 			applyCommand();

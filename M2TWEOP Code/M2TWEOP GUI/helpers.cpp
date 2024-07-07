@@ -1,6 +1,12 @@
 #include "helpers.h"
 #include "dataG.h"
 #include <Windows.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <locale>   // for setlocale
+#include <stdexcept> // for std::runtime_error
+#include <cwchar>   // for mbstowcs_s
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -64,7 +70,7 @@ bool helpers::loadTexture(const char* filename, GLuint* out_texture, int* out_wi
 	return true;
 }
 
-void helpers::openProcess(LPSTR& exePath)
+void helpers::openProcess(LPSTR& exePath, LPSTR& workingDir)
 {
 	// Create process information
 	PROCESS_INFORMATION processInfo;
@@ -84,7 +90,7 @@ void helpers::openProcess(LPSTR& exePath)
 			FALSE,	 // Inherit handles from the calling process
 			0,		 // Creation flags
 			NULL,	 // Use parent's environment block
-			NULL,	 // Use parent's starting directory
+			workingDir,	 // Use parent's starting directory
 			&startupInfo,
 			&processInfo))
 	{
@@ -560,4 +566,68 @@ std::string helpers::extractModPathFromLine(const std::string& line)
 		return ""; 
 	
 	return line.substr(pos + 4);
+}
+
+std::string helpers::remove_extension(const std::string &filename)
+{
+	size_t lastdot = filename.find_last_of(".");
+	if (lastdot == std::string::npos)
+		return filename;
+	return filename.substr(0, lastdot);
+}
+
+// StringtoWstring function
+std::wstring helpers::stringToWstring(const std::string& str) {
+    // Set the locale to the user's default locale
+    setlocale(LC_ALL, "");
+
+    // Determine the required length of the destination buffer
+    size_t requiredSize = 0;
+    mbstowcs_s(&requiredSize, nullptr, 0, str.c_str(), str.size());
+
+    // Create a buffer with the required size (including null terminator)
+    std::vector<wchar_t> buffer(requiredSize);
+
+    // Perform the conversion
+    size_t convertedChars = 0;
+    errno_t err = mbstowcs_s(&convertedChars, buffer.data(), buffer.size(), str.c_str(), str.size());
+
+    if (err != 0) {
+        throw std::runtime_error("Error in string conversion");
+    }
+
+    // Return the result as a std::wstring
+    return std::wstring(buffer.data(), convertedChars);
+}
+
+// Function to convert std::wstring to LPSTR
+LPSTR helpers::ConvertWideStringToLPSTR(const std::wstring &wideString)
+{
+	int bufferSize = WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, NULL, 0, NULL, NULL);
+	if (bufferSize == 0)
+	{
+		// Handle error, e.g., GetLastError()
+		return nullptr;
+	}
+
+	LPSTR narrowString = new char[bufferSize];
+	if (WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, narrowString, bufferSize, NULL, NULL) == 0)
+	{
+		// Handle error, e.g., GetLastError()
+		delete[] narrowString;
+		return nullptr;
+	}
+
+	return narrowString;
+}
+
+// Function to convert a std::wstring to LPWSTR
+LPWSTR ConvertStdWStringToLPWSTR(const std::wstring &wideString) {
+    // Allocate memory for LPWSTR (wchar_t*)
+    LPWSTR lpwstr = new wchar_t[wideString.length() + 1]; // +1 for null terminator
+    
+    // Copy the std::wstring to LPWSTR
+    wcscpy_s(lpwstr, wideString.length() + 1, wideString.c_str());
+    
+    return lpwstr;
 }
