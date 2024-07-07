@@ -12,9 +12,8 @@
 
 <!-- ### **Library** -->
 
-
-<!-- ### **Lua Plugin** -->
-
+### **Lua Plugin**
+- Stopped the game still receiving keyboard/mouse inputs when the EOP Console was open
 
 <!-- ### **ImGUI** -->
 
