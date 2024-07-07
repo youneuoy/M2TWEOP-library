@@ -14,6 +14,8 @@
 #include "MemWork.h"
 #include "techFuncs.h"
 
+bool m2tweopOptions::hideUnknownUnitTooltips = true;
+
 scriptCommand::scriptCommand(const char* name) : className(name)
 {
 	this->vftable = dataOffsets::offsets.scriptCommandVFT;

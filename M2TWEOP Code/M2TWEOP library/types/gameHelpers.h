@@ -333,6 +333,14 @@ struct countersObjectS
 	void* testCounterSValue;
 };
 
+class m2tweopOptions
+{
+public:
+	static void setHideUnknownUnitTooltips(bool value) { hideUnknownUnitTooltips = value; }
+	static bool getHideUnknownUnitTooltips() { return hideUnknownUnitTooltips; }
+	static bool hideUnknownUnitTooltips;
+};
+
 namespace gameHelpers
 {
 	std::string getModPath();

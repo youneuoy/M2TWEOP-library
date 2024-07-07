@@ -3,6 +3,10 @@
 #include "lua/sol.hpp"
 
 
+struct fortStruct;
+struct armyStruct;
+struct uiElement;
+
 struct settlementUiTextStruct
 {
 public:
@@ -34,6 +38,62 @@ struct buildingInfoScroll
 	struct edbEntry* entry;
 };
 
+struct uiKeyControlled
+{
+	DWORD vfTable /*VFT*/;
+	char* name;
+	int nameHash;
+	bool hasInput;
+	char stealInput;
+	char hasShortcut;
+	char field_F;
+};
+
+struct uiElement2
+{
+	DWORD vfTable /*VFT*/;
+	int uiType;
+	int posX;
+	int posY;
+	int width;
+	int height;
+	uiKeyControlled uiKeyControlled;
+	bool canMove : 1;
+	bool isMoving : 1;
+	bool registered	: 1;
+	bool inFocus : 1;
+	bool active : 1;
+	bool mousedOver : 1;
+	bool doubleCLicked : 1;
+	bool valid : 1;
+	
+	bool shouldManagerRender : 1;
+	bool changeCursor : 1;
+	bool wasClicked : 1;
+	bool rightClick : 1;
+	bool canFocus : 1;
+	bool ignoreMouse : 1;
+	bool inJunkPile : 1;
+	bool padBool : 1;
+	
+	uint8_t priority;
+	uint8_t basePriority;
+	int lastClickTime;
+	int moveX;
+	int moveY;
+	int mouseX;
+	int mouseY;
+	int renderX;
+	int renderY;
+	uiElement2 *parent;
+	uiElement2** children;
+	int childrenSize;
+	int childrenNum;
+	UNICODE_STRING** tooltip;
+	void* highlighter;
+};
+
+
 struct unitInfoScroll
 {
 	char pad[772];
@@ -48,18 +108,46 @@ struct campaignMapHud
 	DWORD* facButton;
 };
 
+struct otherCharacterInfoScroll
+{
+	char pad[776];
+	armyStruct* army;
+	char pad2[72];
+	uiElement* unitView;
+};
+
+struct fortInfoScroll
+{
+	char pad[788];
+	uiElement* unitView;
+	char pad2[20];
+	fortStruct* fort;
+};
+
 // Settlement UI Stuff
 struct stratUIStruct
 {
 public:
 	char pad_0000[104]; //0x0000
 	campaignMapHud* hud;
-	char pad_1[76]; //0x0000
+	char pad_1[72]; //0x0000
+	struct otherSettlementInfoScroll *otherSettScroll; //0x0054
 	struct settlementInfoScroll *settlementInfoScroll; //0x0054
-	int pad_0058[6]; //0x0000
+	int pad_0058[1]; //0x0000
+	otherCharacterInfoScroll* otherCharScroll; //0x005C
+	int pad_0060[3];
+	fortInfoScroll* fortScroll;
 	buildingInfoScroll* buildingInfoScroll;
 	unitInfoScroll* unitInfoScroll;
 }; //Size: 0x0164
+
+struct otherSettlementInfoScroll
+{
+	char pad[772];
+	settlementStruct* sett;
+	char pad2[12];
+	uiElement* unitView;
+};
 
 struct settlementTextStrings
 {
@@ -197,11 +285,15 @@ public:
 
 namespace gameUiHelpers
 {
+	void removeToolTips(const uiElement* unitView);
+	void removeToolTipsSett();
+	void removeToolTipsArmy();
 	settlementInfoScroll* getSettlementInfoScroll();
 	uiCardManager* getUiCardManager();
 	std::string getUIElementName(const uiElement* element);
 	uiElement* getSubElement(const uiElement* element, int index);
 	bool useButton(const char* buttonName);
+	void checkNeedRemoveTooltips();
 	uiElement* getUiElement(const char* elementName);
 	void useUiElement(uiElement* element);
 	unitInfoScroll* getUnitInfoScroll();

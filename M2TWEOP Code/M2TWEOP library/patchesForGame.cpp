@@ -22,6 +22,7 @@
 #include "unit.h"
 #include "army.h"
 #include "campaign.h"
+#include "gameUi.h"
 #include "rebelFactions.h"
 
 
@@ -1531,6 +1532,29 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 		{
 			battleCreator::onHotseatScreen();
 		}
+		else if (strcmp(str, "hotseat_scroll") == 0)
+		{
+			battleCreator::onHotseatScreen();
+		}
+		/*
+		else if (m2tweopOptions::getHideUnknownUnitTooltips() && !battleHelpers::inBattle())
+		{
+			if (strcmp(str, "enemy_army_info_scroll") == 0)
+			{
+				gameHelpers::logStringGame("enemy_army_info_scroll");
+				gameUiHelpers::removeToolTipsArmy();
+			}
+			else if (strcmp(str, "enemy_character_info_scroll") == 0)
+			{
+				gameHelpers::logStringGame("enemy_character_info_scroll");
+				gameUiHelpers::removeToolTipsArmy();
+			}
+			else if (strcmp(str, "enemy_settlement_info_scroll") == 0)
+			{
+				gameHelpers::logStringGame("enemy_settlement_info_scroll");
+				gameUiHelpers::removeToolTipsSett();
+			}
+		}*/
 	}
 	else if (eventCode == factionTurnStartCode)
 	{

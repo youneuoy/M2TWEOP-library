@@ -94,8 +94,14 @@ characterRecord* factionStruct::getCharacterByLabel(const std::string& label)
 	return nullptr;
 }
 
-void factionStruct::setLeader(characterRecord* newLeader, bool onlyLeader)
+void factionStruct::setLeader(characterRecord* newLeader, const bool onlyLeader)
 {
+	if (newLeader->faction->factionID != factionID)
+	{
+		gameHelpers::logStringGame("factionStruct.setLeader: character is not in the faction.");
+		return;
+	}
+	newLeader->isFamily = 1;
 	if (onlyLeader)
 	{
 		for (int i = 0; i < characterRecordNum; i++)
@@ -104,11 +110,20 @@ void factionStruct::setLeader(characterRecord* newLeader, bool onlyLeader)
 				record->isLeader())
 			{
 				record->status &= ~1;
-				record->status |= 4;
+				record->removeEpithet();
+				if (record->getTraitLevel("FactionLeader") > 0)
+					characterRecordHelpers::removeTrait(record, "FactionLeader");
 			}
 		}
 	}
+	const bool wasHeir = heir ? newLeader->index == heir->index : false;
+	newLeader->status &= ~2;
 	GAME_FUNC(void(__thiscall*)(factionStruct*, characterRecord*), switchFactionLeader)(this, newLeader);
+	if (wasHeir)
+	{
+		heir = nullptr;
+		callClassFunc<factionStruct*, void, characterRecord*, bool>(this, 0x28, nullptr, false);
+	}
 }
 
 void factionStruct::updateNeighbours()

@@ -16,6 +16,9 @@
 
 #include "imgui/ImFileDialog.h"
 #include <Winuser.h>
+
+#include "gameHelpers.h"
+#include "gameUi.h"
 #include "imgui/imgui_impl_dx9.h"
 #include "imgui/imgui_impl_win32.h"
 
@@ -211,6 +214,7 @@ void graphicsExport::unloadTextureFromGame(void* texture)
 	unloadTexture(static_cast<LPDIRECT3DTEXTURE9>(texture));
 }
 
+int TOOLTIP_COUNTER = 0;
 
 void graphicsD3D::onDrawAllGameStuff()
 {
@@ -225,6 +229,16 @@ void graphicsD3D::onDrawAllGameStuff()
 
 	auto& developerMode = globals::dataS.Modules.developerMode;
 	developerMode.update();
+	
+	if (m2tweopOptions::getHideUnknownUnitTooltips())
+	{
+		TOOLTIP_COUNTER++;
+		if (TOOLTIP_COUNTER > 10)
+		{
+			TOOLTIP_COUNTER = 0;
+			gameUiHelpers::checkNeedRemoveTooltips();
+		}
+	}
 
 	drawOnEndScene(dataS.pDevice);
 	

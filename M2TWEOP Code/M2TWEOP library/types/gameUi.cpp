@@ -6,6 +6,7 @@
 #include "pch.h"
 #include "gameUi.h"
 
+#include "campaign.h"
 #include "gameStringHelpers.h"
 #include "functionsOffsets.h"
 #include "gameHelpers.h"
@@ -114,6 +115,63 @@ namespace gameUiHelpers
 		if (!ui) 
 			return nullptr;
 		return ui->buildingInfoScroll;
+	}
+
+	void removeToolTips(const uiElement* unitView)
+	{
+		const auto localFacId = campaignHelpers::getLocalFactionID();
+		for (int i = 0; i < unitView->subElementsNum; i++)
+		{
+			const auto card = unitView->subElements[i];
+			const auto unitCard = reinterpret_cast<uiUnitCard*>(card);
+			if (const auto unit = unitCard->unit; unit && unit->spyingInfoUnit.spyingInfoFactionArray[localFacId] < 1)
+			{
+				card->xSize = 0;
+				card->ySize = 0;
+			}
+		}
+	}
+	
+	void removeToolTipsSett()
+	{
+		const auto ui = getStratUi();
+		if (!ui) 
+			return;
+		const auto settScroll = ui->otherSettScroll;
+		if (!settScroll)
+			return;
+		removeToolTips(settScroll->unitView);
+	}
+	
+	void removeToolTipsArmy()
+	{
+		const auto ui = getStratUi();
+		if (!ui) 
+			return;
+		const auto otherCharScroll = ui->otherCharScroll;
+		if (!otherCharScroll)
+			return;
+		removeToolTips(otherCharScroll->unitView);
+	}
+	
+	void removeToolTipsFort()
+	{
+		const auto ui = getStratUi();
+		if (!ui) 
+			return;
+		const auto fortScroll = ui->fortScroll;
+		if (!fortScroll)
+			return;
+		removeToolTips(fortScroll->unitView);
+	}
+
+	void checkNeedRemoveTooltips()
+	{
+		if (!stratMapHelpers::isStratMap())
+			return;
+		removeToolTipsSett();
+		removeToolTipsArmy();
+		removeToolTipsFort();
 	}
 
 	unitInfoScroll* getUnitInfoScroll()

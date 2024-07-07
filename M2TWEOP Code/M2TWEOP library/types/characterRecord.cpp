@@ -92,13 +92,15 @@ namespace characterRecordHelpers
 		if (fieldIndex == namedChar_localizedFullName)
 			return gameStringHelpers::uniStringToStr(genChar->localizedFullName);
 		if (fieldIndex == namedChar_localizedNameForSave)
-			return gameStringHelpers::uniStringToStr(genChar->localizedNameForSave);
+			return gameStringHelpers::uniStringToStr(*genChar->localizedNameForSave);
 		if (fieldIndex == namedChar_localizedNextNameForSave)
-			return gameStringHelpers::uniStringToStr(genChar->localizedNextNameForSave);
+			return gameStringHelpers::uniStringToStr(*genChar->localizedNextNameForSave);
 		if (fieldIndex == namedChar_localizedNicknameForSave)
-			return gameStringHelpers::uniStringToStr(genChar->localizedNicknameForSave);
+			return gameStringHelpers::uniStringToStr(*genChar->localizedNicknameForSave);
 		return "";
 	}
+
+	
 	
 	void namedCharSetLocalizedFullName(characterRecord* genChar, const char* str)
 	{
@@ -107,17 +109,17 @@ namespace characterRecordHelpers
 
 	void namedCharSetLocalizedNameForSave(characterRecord* genChar, const char* str)
 	{
-		gameStringHelpers::createUniString(genChar->localizedNameForSave, str);
+		gameStringHelpers::createUniString(*genChar->localizedNameForSave, str);
 	}
 
 	void namedCharSetLocalizedNextNameForSave(characterRecord* genChar, const char* str)
 	{
-		gameStringHelpers::createUniString(genChar->localizedNextNameForSave, str);
+		gameStringHelpers::createUniString(*genChar->localizedNextNameForSave, str);
 	}
 
 	void namedCharSetLocalizedNicknameForSave(characterRecord* genChar, const char* str)
 	{
-		gameStringHelpers::createUniString(genChar->localizedNicknameForSave, str);
+		gameStringHelpers::createUniString(*genChar->localizedNicknameForSave, str);
 	}
 	
 	void setHeir(characterRecord* gen, bool isJustSet)
@@ -967,6 +969,22 @@ std::string characterRecord::giveValidLabel()
 	}
 	gameStringHelpers::setHashedString(&label, testLabel.c_str());
 	return label;
+}
+
+void characterRecord::removeEpithet()
+{
+	std::string firstNameStr;
+	if (localizedNameForSave)
+		firstNameStr = characterRecordHelpers::namedCharUniStringToStr<namedChar_localizedNameForSave>(this);
+	std::string lastNameStr;
+	if (localizedNextNameForSave)
+		lastNameStr = characterRecordHelpers::namedCharUniStringToStr<namedChar_localizedNextNameForSave>(this);
+	if (firstNameStr.empty() && lastNameStr.empty())
+		return;
+	std::string fullNameStr = firstNameStr;
+	if (!lastNameStr.empty())
+		fullNameStr += " " + lastNameStr;
+	characterRecordHelpers::namedCharSetLocalizedFullName(this, fullNameStr.c_str());
 }
 
 stringWithHash* LOOKUP_STRING_ANC = new stringWithHash();

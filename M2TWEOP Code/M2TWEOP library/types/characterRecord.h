@@ -119,9 +119,9 @@ struct ancillary { /* structure of ancillary */
 struct characterRecord { /* many important info about character */
 	UINT32 index; /* index of character */
 	UNICODE_STRING** localizedFullName; /* displaying name */ //04
-	UNICODE_STRING** localizedNameForSave; /* name - saved to save file */ //0008
-	UNICODE_STRING** localizedNextNameForSave; /* surname - saved to save file */ //000C
-	UNICODE_STRING** localizedNicknameForSave; /* epithet - saved to save file */ //0010
+	UNICODE_STRING*** localizedNameForSave; /* name - saved to save file */ //0008
+	UNICODE_STRING*** localizedNextNameForSave; /* surname - saved to save file */ //000C
+	UNICODE_STRING*** localizedNicknameForSave; /* epithet - saved to save file */ //0010
 	char* shortName; /* not a full name) */ //0014
 	int shortNameHash;
 	char* lastName; //001C
@@ -235,6 +235,7 @@ struct characterRecord { /* many important info about character */
 	bool wasMarriageAlliance;
 public:
 	std::string giveValidLabel();
+	void removeEpithet();
 	bool hasAncillary(const std::string& ancName);
 	std::string getEopSetModel();
 	traitContainer* getTraits() const

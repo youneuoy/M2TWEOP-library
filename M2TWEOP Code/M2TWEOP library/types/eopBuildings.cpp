@@ -388,28 +388,28 @@ namespace eopBuildings
 	//get a building entry by its name, very useful to change some of the edb building attributes dynamically, does not save!
 
 
-	gameList<guild>& getGuilds()
+	gameList<guild>* getGuilds()
 	{
-		return reinterpret_cast<gameList<guild>&>(dataOffsets::offsets.guildDataStart);
+		return reinterpret_cast<gameList<guild>*>(dataOffsets::offsets.guildDataStart);
 	}
 	
 	guild* getGuild(const int index)
 	{
-		return getGuilds().get(index);
+		return getGuilds()->get(index);
 	}
 
 	int getGuildNum()
 	{
-		return getGuilds().size();
+		return getGuilds()->size();
 	}
 	
 	guild* getGuildByName(const std::string& name)
 	{
-		auto guilds = getGuilds();
-		const int guildNum = guilds.size();
+		const auto guilds = getGuilds();
+		const int guildNum = guilds->size();
 		for (int i = 0; i < guildNum; i++)
 		{
-			if (const auto guild = guilds.get(i); strcmp(guild->name, name.c_str()) == 0)
+			if (const auto guild = guilds->get(i); strcmp(guild->name, name.c_str()) == 0)
 				return guild;
 		}
 		return nullptr;
