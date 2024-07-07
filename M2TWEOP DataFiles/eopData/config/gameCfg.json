@@ -1,6 +1,8 @@
 {
   "isBlockLaunchWithoutEop": false,
   "isDiscordRichPresenceEnabled": false,
+  "isFreecamIntegrationEnabled": true,
+  "freecamFolder": "",
   "isDeveloperModeNeeded": true,
   "isTacticalMapViewerNeeded": true,
   "isContextMenuNeeded": true,

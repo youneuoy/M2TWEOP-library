@@ -9,7 +9,7 @@ public:
 	static bool loadTexture(const char* filename, GLuint* out_texture, int* out_width, int* out_height);
 
 	static LPWSTR ConvertStringToLPWSTR(const char* narrowString);
-	static void openProcess(LPSTR& exePath);
+	static void openProcess(LPSTR& exePath, LPSTR& workingDir);
 	static void closeProcess(const string& exeName);
 	static bool isProcessRunning(const string& exeName);
 
@@ -45,6 +45,9 @@ public:
 	static bool compareFiles(string& oneFile, string& nextFile);
 
 	static void getCurrentPath(string& path);
+	static std::string remove_extension(const std::string &filename);
+	static LPSTR ConvertWideStringToLPSTR(const std::wstring &wideString);
+	static std::wstring stringToWstring(const std::string& str);
 private:
 	static void setModFolder(string& modFolder);
 };
