@@ -2064,6 +2064,7 @@ namespace unitHelpers
 	unitGroup* defineUnitGroup(const armyStruct* army, const char* label, unit* un);
 	void addUnitToGroup(unitGroup* group, unit* un);
 	unitGroup* getGroupByLabel(const char* label);
+	void placeGroup(unitGroup* group, float xCoord, float yCoord, float angle);
 	void undefineUnitGroup(const unitGroup* group);
 	void removeUnitFromGroup(unitGroup* group, unit* un);
 	void automateGroup(const unitGroup* group, bool automate);

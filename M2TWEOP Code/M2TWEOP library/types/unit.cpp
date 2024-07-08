@@ -1152,18 +1152,8 @@ namespace unitHelpers
 		const auto coords = new float[2];
 		coords[0] = xCoord;
 		coords[1] = yCoord;
-		DWORD funcAddr = codes::offsets.placeGroup;
-		int16_t pushAngle = angleFloatToShort(angle);
-		_asm
-		{
-			push 4
-			push 1
-			push pushAngle
-			push coords
-			mov ecx, group
-			mov eax, funcAddr
-			call eax
-		}
+		const int16_t pushAngle = angleFloatToShort(angle);
+		GAME_FUNC(bool(__thiscall*)(unitGroup*, float*, int16_t, int, int), placeGroup)(group, coords, pushAngle, 1, 4);
 		delete[] coords;
 	}
 

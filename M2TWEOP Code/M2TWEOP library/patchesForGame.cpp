@@ -987,7 +987,6 @@ enum class groupMoveType
 	unformedUnitsUnformed,	
 };
 
-
 float distance(const float x, const float y, const float x2, const float y2)
 {
 	return static_cast<float>(sqrt(pow(x - x2, 2) + pow(y - y2, 2)));
@@ -1010,12 +1009,6 @@ void __fastcall patchesForGame::onPreBattlePlacement(aiTacticAssault* aiTactic)
 		static_cast<int>(groupMoveType::formed),
 		true,
 		true);
-	for (int i = 0; i < group1->unitsInFormationNum; i++)
-	{
-		if (const auto unit = group1->unitsInFormation[i];
-			distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 150)
-			unitActions::placeUnit(unit, aiTactic->advanceX, aiTactic->advanceY, aiTactic->angle, 0);
-	}
 	GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, float*, int16_t, int, bool, bool), funcAddr)(
 		group2,
 		&aiTactic->advanceX,
@@ -1023,18 +1016,19 @@ void __fastcall patchesForGame::onPreBattlePlacement(aiTacticAssault* aiTactic)
 		static_cast<int>(groupMoveType::formed),
 		true,
 		true);
-	for (int i = 0; i < group2->unitsInFormationNum; i++)
-	{
-		if (const auto unit = group2->unitsInFormation[i];
-			distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 150)
-			unitActions::placeUnit(unit, aiTactic->advanceX, aiTactic->advanceY, aiTactic->angle, 0);
-	}
 }
+
+std::vector<buildingBattle*> USED_GATES = {};
 
 bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetachment* detachment, int numRamsLeft)
 {
 	if (numRamsLeft <= 0)
 		return false;
+	for (auto usedGate : USED_GATES)
+	{
+		if (gate == usedGate)
+			return false;
+	}
 	int numLaddersTowers = 0;
 	int numRams = 0;
 	int infCavNum = 0;
@@ -1099,7 +1093,10 @@ bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetac
 			return distance(a->xCoord, a->yCoord, areaX, areaY) < distance(b->xCoord, b->yCoord, areaX, areaY);
 		});
 	if (gate == gates[0])
+	{
+		USED_GATES.push_back(gate);
 		return true;
+	}
 	int gateNum = static_cast<int>(gates.size());
 	ramsNeeded = std::clamp(ramsNeeded, 1, gateNum);
 	if (int ramsUsed = numRams - numRamsLeft; ramsUsed >= ramsNeeded)
@@ -1122,7 +1119,10 @@ bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetac
 	if (!isCloseEnough)
 		return false;
 	if (std::any_of(gates.begin(), gates.end(), [gate](const buildingBattle* gt){return gate == gt;}))
+	{
+		USED_GATES.push_back(gate);
 		return true;
+	}
 	return false;
 }
 
@@ -1495,6 +1495,25 @@ void __stdcall patchesForGame::onBattleStratScreen()
 
 }
 
+void deployGateAttackers(aiTacticAssault* aiTactic)
+{
+	const DWORD vFunc = getVFunc(aiTactic->vftable, 0x4C);
+	if (const int tacticType = GAME_FUNC_RAW(int(__thiscall*)(aiTacticAssault*), vFunc)(aiTactic); tacticType != 19)
+		return;
+	const auto group1 = reinterpret_cast<unitGroup*>(&aiTactic->aiUnitGroup);
+	const auto group2 = reinterpret_cast<unitGroup*>(&aiTactic->siegeUnitGroup);
+	for (int i = 0; i < group1->unitsInFormationNum; i++)
+	{
+		if (const auto unit = group1->unitsInFormation[i]; unit && distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 200)
+			unitActions::placeUnit(unit, aiTactic->advanceX * 1.25f, aiTactic->advanceY * 1.25f, aiTactic->angle, 0);
+	}
+	for (int i = 0; i < group2->unitsInFormationNum; i++)
+	{
+		if (const auto unit = group2->unitsInFormation[i]; unit && distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 200)
+			unitActions::placeUnit(unit, aiTactic->advanceX * 1.25f, aiTactic->advanceY * 1.25f, aiTactic->angle, 0);
+	}
+}
+
 bool FIRST_END = true;
 
 void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
@@ -1514,6 +1533,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	const DWORD gameReloaded = gameVersion == 1 ? 0x013319E4 : 0x012EC9C4;
 	const DWORD settlementTurnStart = gameVersion == 1 ? 0x0136E2B4 : 0x0132928C;
 	const DWORD settlementTurnEnd = gameVersion == 1 ? 0x0136FADC : 0x0132AAB4;
+	const DWORD conflictPhaseCommenced = gameVersion == 1 ? 0x013670AC : 0x01322084 ;
 	const DWORD factionTurnEnd = gameVersion == 1 ? 0x01369D74 : 0x01324D4C;
 	const DWORD characterTurnEnd = gameVersion == 1 ? 0x0136C0B4 : 0x0132708C;
 	const DWORD characterTurnStart = gameVersion == 1 ? 0x0136BFE4 : 0x01326FBC;
@@ -1569,6 +1589,42 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	{
 		eopSettlementDataDb::get()->onGameLoaded();
 		eopCharacterDataDb::get()->onGameLoaded();
+	}
+	else if (eventCode == conflictPhaseCommenced)
+	{
+		const auto battle = battleHelpers::getBattleData();
+		USED_GATES.clear();
+		if (battle && battle->battleType == battleType::siege)
+		{
+			if (const auto aiSide = battle->getAiSide(); aiSide && !aiSide->isDefender)
+			{
+				if (const auto battleAi = aiSide->battleAIPlan; battleAi->objectivesCount > 0)
+				{
+					for (int i = 0; i < battleAi->objectivesCount; i++)
+					{
+						const auto objective = battleAi->objectives[i];
+						if (const auto objType = objective->getType(); objType == gtaObjective_ATTACK_SETTLEMENT)
+						{
+							for (int j = 0; j < objective->aiDetachmentsCount; j++)
+							{
+								const auto detachment = objective->aiDetachments[j];
+								if (detachment->aiDetachUnitsCount == 0)
+									continue;
+								for (int t = 0; t < detachment->tacticsCount; t++)
+								{
+									const auto tactic = detachment->tactics[t];
+									if (const auto tacticType = callClassFunc<aiDetachmentTactic*, int>(tactic, 0x4C); tacticType == 19)
+									{
+										const auto assaultTactic = reinterpret_cast<aiTacticAssault*>(tactic);
+										deployGateAttackers(assaultTactic);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	else if (eventCode == characterTurnEnd)
 	{

@@ -1,9 +1,33 @@
-﻿#pragma once
+﻿
+#pragma once
 #include "realGameTypes.h"
 #include "lua/sol.hpp"
 
 struct streetPosition;
 struct towerStats;
+
+enum class battleType
+{
+	ambushSuccess,
+	ambushFail,
+	open,
+	siege,
+	sally,
+	naval,
+	withdrawal,
+	meetEnemy
+};
+
+inline bool operator == (int a, battleType b)
+{
+	return a == static_cast<int>(b);
+}
+
+inline bool operator != (int a, battleType b)
+{
+	return a == static_cast<int>(b);
+}
+
 
 /* 1869 */
 struct gateEntry
@@ -497,6 +521,7 @@ public:
 	char pad_006E[2];
 	int alliance;
 	gameStdVector<void*> perimeterStuff;
+	int getGateCount();
 
 }; //Size: 0x0144
 
@@ -979,7 +1004,7 @@ public:
 	int32_t aiDetachUnitsCount; //0x0010
 	int phase;
 	int nextPhase;
-	aiDetachmentTactic* tactics; //0x001C
+	aiDetachmentTactic** tactics; //0x001C
 	int32_t tacticsSize; //0x0020
 	int32_t tacticsCount; //0x0024
 	aiDetachmentTactic* surplusTactic;
@@ -1470,6 +1495,7 @@ public:
 	{
 		return playerArmies[index].army;
 	}
+	battleSide* getAiSide();
 };//Size: 0xCA7C
 
 struct battleCameraStruct

@@ -18,6 +18,18 @@
 #include "gameHelpers.h"
 
 
+int battleResidence::getGateCount()
+{
+	int gateNum = 0;
+	const auto buildings = battleBuildings;
+	for (int i = 0; i < buildings->allBuildingsNum; i++)
+	{
+		if (const auto building = buildings->allBuildings[i]; building->type == 3)
+			gateNum++;
+	}
+	return gateNum;
+}
+
 float battleTile::getGroundHeight()
 {
 	const auto terrainData = battleHelpers::getBattleTerrainData();
@@ -64,6 +76,31 @@ float battleTile::getWaterHeight()
 	if (!terrainData)
 		return 0;
 	return waterHeight * 0.1f + terrainData->heightOffset;
+}
+
+battleSide* battleDataS::getAiSide()
+{
+	if (!inBattle)
+		return nullptr;
+	for (int i = 0; i < sidesNum; i++)
+	{
+		bool hasPlayer = false;
+		const auto side = &sides[i];
+		for (int j = 0; j < side->armiesNum; j++)
+		{
+			if (const auto bArmy = side->getBattleArmy(j))
+			{
+				if (bArmy->army->faction->isPlayerControlled == 1)
+				{
+					hasPlayer = true;
+					break;
+				}
+			}
+		}
+		if (!hasPlayer)
+			return side;
+	}
+	return nullptr;
 }
 
 namespace battleHelpers

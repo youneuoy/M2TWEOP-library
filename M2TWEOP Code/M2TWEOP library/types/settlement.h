@@ -147,8 +147,8 @@ struct building { /* building structure */
 	int constructionPercent;
 	void setBuildingHealth(const int health)
 	{
-		const int hp = health;
-		GAME_FUNC(void(__thiscall*)(building*, int), repairBuilding)(this, hp);
+		const int newHp = health;
+		GAME_FUNC(void(__thiscall*)(building*, int), repairBuilding)(this, newHp);
 	}
 	int getBuildingHealth()
 	{
@@ -229,6 +229,7 @@ struct guild
 	int32_t level3Threshold; //0x0018
 	gameStdVector<int8_t> excludedGuilds; //0x001C
 	gameStdVector<std::pair<stringWithHash,int>> scores;
+	gameStdVector<const char*> unresolvedExclusions;
 }; //Size: 0x004C
 
 struct settlementBuildingOptions
