@@ -92,7 +92,7 @@ struct character
 	factionStruct** faction;
 	struct genMod* genType;
 	undefined field9_0x8c[24];
-	bool ifMarkedToKill;
+	bool markedForDeath;
 	bool deathAction;
 	bool inEnemyZOC; //0x00A6
 	bool inEnemyTerritory;

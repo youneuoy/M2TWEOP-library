@@ -203,7 +203,7 @@ int factionStruct::getAliveCharacterNumOfType(characterTypeStrat charType)
 		if (const auto record = characterRecords[i];
 			record->gen
 			&& record->gen->getTypeID() == charType
-			&& record->isAlive && !record->gen->ifMarkedToKill)
+			&& record->isAlive && !record->gen->markedForDeath)
 		{
 			num++;
 		}

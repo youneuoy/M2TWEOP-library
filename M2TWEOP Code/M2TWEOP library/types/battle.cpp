@@ -103,6 +103,20 @@ battleSide* battleDataS::getAiSide()
 	return nullptr;
 }
 
+battleSideArmy* battleDataS::getSideArmy(const armyStruct* army)
+{
+	for (int s = 0; s < sidesNum; s++)
+	{
+		const auto side = &sides[s];
+		for (int a = 0; a < side->battleSideArmyNum; a++)
+		{
+			if (const auto sideArmy = &side->armies[a]; sideArmy->stack == army)
+				return sideArmy;
+		}
+	}
+	return nullptr;
+}
+
 namespace battleHelpers
 {
 	battleResidence* getBattleResidence()

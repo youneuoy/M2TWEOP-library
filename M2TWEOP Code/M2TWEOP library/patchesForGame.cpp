@@ -1009,6 +1009,11 @@ void __fastcall patchesForGame::onPreBattlePlacement(aiTacticAssault* aiTactic)
 		static_cast<int>(groupMoveType::formed),
 		true,
 		true);
+	for (int i = 0; i < group1->unitsInFormationNum; i++)
+	{
+		if (const auto unit = group1->unitsInFormation[i]; unit && distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 500)
+			unitActions::placeUnit(unit, aiTactic->advanceX, aiTactic->advanceY, aiTactic->angle, 0);
+	}
 	GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, float*, int16_t, int, bool, bool), funcAddr)(
 		group2,
 		&aiTactic->advanceX,
@@ -1018,16 +1023,27 @@ void __fastcall patchesForGame::onPreBattlePlacement(aiTacticAssault* aiTactic)
 		true);
 }
 
-std::vector<buildingBattle*> USED_GATES = {};
+std::shared_ptr<std::vector<int>> USED_GATES = std::make_shared<std::vector<int>>();
+aiDetachment* LAST_DETACHMENT = nullptr;
+int GATES_IGNORED = 0;
 
 bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetachment* detachment, int numRamsLeft)
 {
-	if (numRamsLeft <= 0)
-		return false;
-	for (auto usedGate : USED_GATES)
+	if (detachment != LAST_DETACHMENT)
 	{
-		if (gate == usedGate)
+		GATES_IGNORED = 0;
+		LAST_DETACHMENT = detachment;
+	}
+	if (numRamsLeft + GATES_IGNORED <= 0)
+		return false;
+	for (auto usedGate : *USED_GATES)
+	{
+		if (gate->buildingIndex == usedGate)
+		{
+			GATES_IGNORED++;
+			gameHelpers::logStringGame("Gate already used: " + std::to_string(usedGate));
 			return false;
+		}
 	}
 	int numLaddersTowers = 0;
 	int numRams = 0;
@@ -1075,8 +1091,8 @@ bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetac
 				infCavNumDef++;
 		}
 	}
-	auto battleSideArmy = attacker->armies[0];
-	auto deployArea = &battleSideArmy.deploymentAreas.get(0)->area;
+	auto battleSideArmy = battleData->getSideArmy(detachment->aiDetachUnits[0].unit->army);
+	auto deployArea = &battleSideArmy->deploymentAreas.get(0)->area;
 	auto areaX = deployArea->centreX;
 	auto areaY = deployArea->centreY;
 	int bonus = std::clamp(infCavNum - infCavNumDef, -3, 3);
@@ -1094,7 +1110,8 @@ bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetac
 		});
 	if (gate == gates[0])
 	{
-		USED_GATES.push_back(gate);
+		gameHelpers::logStringGame("Using gate 0: " + std::to_string(gate->buildingIndex) + " with detachment " + std::to_string(reinterpret_cast<DWORD>(detachment)));
+		USED_GATES->push_back(gate->buildingIndex);
 		return true;
 	}
 	int gateNum = static_cast<int>(gates.size());
@@ -1109,9 +1126,9 @@ bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetac
 	bool isCloseEnough = false;
 	for (int i = 0; i < deployArea->coordsNum; i++)
 	{
-		if (distance(deployArea->coordsPairs[i].xCoord, deployArea->coordsPairs[i].yCoord, gate->xCoord, gate->yCoord) < 200)
+		if (distance(deployArea->coordsPairs[i].xCoord, deployArea->coordsPairs[i].yCoord, gate->xCoord, gate->yCoord) < 250)
 			isCloseEnough = true;
-		if (!gates.empty() && distance(gates[0]->xCoord, gates[0]->yCoord, gate->xCoord, gate->yCoord) < 125)
+		if (!gates.empty() && distance(gates[0]->xCoord, gates[0]->yCoord, gate->xCoord, gate->yCoord) < 200)
 			isCloseEnough = true;
 		if (isCloseEnough)
 			break;
@@ -1120,7 +1137,8 @@ bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetac
 		return false;
 	if (std::any_of(gates.begin(), gates.end(), [gate](const buildingBattle* gt){return gate == gt;}))
 	{
-		USED_GATES.push_back(gate);
+		gameHelpers::logStringGame("Using gate: " + std::to_string(gate->buildingIndex) + " with detachment " + std::to_string(reinterpret_cast<DWORD>(detachment)));
+		USED_GATES->push_back(gate->buildingIndex);
 		return true;
 	}
 	return false;
@@ -1495,23 +1513,10 @@ void __stdcall patchesForGame::onBattleStratScreen()
 
 }
 
-void deployGateAttackers(aiTacticAssault* aiTactic)
+void deployGateAttackers(const aiTacticAssault* aiTactic)
 {
-	const DWORD vFunc = getVFunc(aiTactic->vftable, 0x4C);
-	if (const int tacticType = GAME_FUNC_RAW(int(__thiscall*)(aiTacticAssault*), vFunc)(aiTactic); tacticType != 19)
-		return;
-	const auto group1 = reinterpret_cast<unitGroup*>(&aiTactic->aiUnitGroup);
-	const auto group2 = reinterpret_cast<unitGroup*>(&aiTactic->siegeUnitGroup);
-	for (int i = 0; i < group1->unitsInFormationNum; i++)
-	{
-		if (const auto unit = group1->unitsInFormation[i]; unit && distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 200)
-			unitActions::placeUnit(unit, aiTactic->advanceX * 1.25f, aiTactic->advanceY * 1.25f, aiTactic->angle, 0);
-	}
-	for (int i = 0; i < group2->unitsInFormationNum; i++)
-	{
-		if (const auto unit = group2->unitsInFormation[i]; unit && distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 200)
-			unitActions::placeUnit(unit, aiTactic->advanceX * 1.25f, aiTactic->advanceY * 1.25f, aiTactic->angle, 0);
-	}
+	if (const auto unit = aiTactic->attackUnit; unit && distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 200)
+		unitActions::placeUnit(unit, aiTactic->advanceX, aiTactic->advanceY, aiTactic->angle, 0);
 }
 
 bool FIRST_END = true;
@@ -1593,7 +1598,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	else if (eventCode == conflictPhaseCommenced)
 	{
 		const auto battle = battleHelpers::getBattleData();
-		USED_GATES.clear();
+		USED_GATES->clear();
 		if (battle && battle->battleType == battleType::siege)
 		{
 			if (const auto aiSide = battle->getAiSide(); aiSide && !aiSide->isDefender)

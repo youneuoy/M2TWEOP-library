@@ -670,7 +670,7 @@ namespace characterHelpers
 			gameHelpers::logStringGame("character.sendOffMap: character has no label, you wont be able to get him back, command cancelled.");
 			return;
 		}
-		if (gen->ifMarkedToKill == 1)
+		if (gen->markedForDeath)
 			return;
 		if ((gen->characterRecord->status & 8) != 0)
 			return;
@@ -1028,7 +1028,7 @@ namespace characterHelpers
 	@tfield int yCoord
 	@tfield characterRecord characterRecord
 	@tfield factionStruct faction
-	@tfield int isMarkedToKill can check if the character died before the game updates he is dead like post battle event
+	@tfield bool markedForDeath can check if the character died before the game updates he is dead like post battle event
 	@tfield bool inEnemyZOC
 	@tfield bool inEnemyTerritory
 	@tfield int sedentaryTurns
@@ -1110,7 +1110,7 @@ namespace characterHelpers
 	types.character.set("namedCharacter", &character::characterRecord);
 	types.character.set("characterRecord", &character::characterRecord);
 	types.character.set("faction", sol::property(&character::getFaction));
-	types.character.set("isMarkedToKill", &character::ifMarkedToKill);
+	types.character.set("markedForDeath", &character::markedForDeath);
 	types.character.set("inEnemyZOC", &character::inEnemyZOC);
 	types.character.set("inEnemyTerritory", &character::inEnemyTerritory);
 	types.character.set("sedentaryTurns", &character::sedentaryTurns);

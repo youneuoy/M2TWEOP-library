@@ -431,7 +431,7 @@ namespace settlementHelpers
 		}
 		for (auto character : characters)
 		{
-			if (character && !character->ifMarkedToKill && character->genType->type == characterTypeStrat::namedCharacter)
+			if (character && !character->markedForDeath && character->genType->type == characterTypeStrat::namedCharacter)
 			{
 				if (!character->characterRecord->label || character->characterRecord->labelCrypt == 0)
 				{

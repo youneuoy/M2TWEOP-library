@@ -216,7 +216,7 @@ namespace campaignAi
 
 bool armyResource::validate()
 {
-	if (used || !own || !army || army->inBattle || !army->gen || !army->gen->characterRecord || army->gen->ifMarkedToKill)
+	if (used || !own || !army || army->inBattle || !army->gen || !army->gen->characterRecord || army->gen->markedForDeath)
 		return false;
 	return true;
 }
@@ -767,7 +767,7 @@ bool attackArmyOrder::execute()
 	{
 		for (const auto& assignedArmy : assignedArmies)
 		{
-			if (!assignedArmy->validate() || !targetArmy->army || !targetArmy->army->gen || targetArmy->army->gen->ifMarkedToKill)
+			if (!assignedArmy->validate() || !targetArmy->army || !targetArmy->army->gen || targetArmy->army->gen->markedForDeath)
 				continue;
 			const std::string logString2 = "General: " + string(assignedArmy->army->gen->characterRecord->fullName);
 			gameHelpers::logStringGame(logString2);
@@ -1032,7 +1032,7 @@ void globalEopAiConfig::checkRegion(int regionId)
 void globalEopAiConfig::characterTurnStart(character* currentChar)
 {
 	m_Faction = currentChar->characterRecord->faction;
-	if (!m_Faction || m_Faction->factionRecord->slave || m_Faction->isHorde || !currentChar->army || !currentChar->isGeneral() || currentChar->ifMarkedToKill)
+	if (!m_Faction || m_Faction->factionRecord->slave || m_Faction->isHorde || !currentChar->army || !currentChar->isGeneral() || currentChar->markedForDeath)
 		return; 
 	const auto army = currentChar->army;
 	if (army->siege)
@@ -1061,7 +1061,7 @@ void globalEopAiConfig::characterTurnStart(character* currentChar)
 		if (!nearArmy.army->gen
 			|| nearArmy.army->isAdmiral
 			|| nearArmy.army->faction->factionID != m_Faction->factionID
-			|| nearArmy.army->gen->ifMarkedToKill)
+			|| nearArmy.army->gen->markedForDeath)
 			continue;
 		if (nearArmy.moveCost < 25.f && nearArmy.army->canReceiveMerge(army))
 		{

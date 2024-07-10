@@ -121,7 +121,7 @@ namespace battleCreator
 	{
 		jsn::json genJson;
 
-		if (gen->ifMarkedToKill == true)
+		if (gen->markedForDeath == true)
 		{
 			genJson["isCharacterDied"] = true;
 		}

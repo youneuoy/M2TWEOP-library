@@ -1496,6 +1496,7 @@ public:
 		return playerArmies[index].army;
 	}
 	battleSide* getAiSide();
+	battleSideArmy* getSideArmy(const armyStruct* army);
 };//Size: 0xCA7C
 
 struct battleCameraStruct
