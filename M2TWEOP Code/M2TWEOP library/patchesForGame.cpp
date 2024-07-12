@@ -1650,6 +1650,8 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 			&& record->faction->factionID == campaignHelpers::getCampaignData()->slaveFactionID
 			&& record->gen->getTypeID() == characterTypeStrat::general
 			&& record->gen->army
+			&& record->gen->army->descrRebel
+			&& record->gen->army->descrRebel->name
 			&& (!record->labelCrypt || !eopCharacterDataDb::get()->getCharacterData(record->label))
 			)
 		{
