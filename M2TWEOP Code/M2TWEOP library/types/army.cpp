@@ -39,17 +39,16 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 	auto tile = stratMapHelpers::getTile(x, y);
 	if (forceMerge)
 	{
-		const auto target = tile->getArmy(false);
-		if (target && target->faction == faction)
+		if (const auto target = tile->getArmy(false); target)
 		{
 			if (!target->canReceiveMerge(this))
 			{
 				gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
 				return nullptr;
 			}
-			mergeArmies(target, true);
+			return mergeArmies(target, true);
 		}
-		return this;
+		return nullptr;
 	}
 	const auto stratPathFind = gameHelpers::getGameDataAll()->stratPathFinding;
 	auto unitList = new unit*[numOfUnits];
@@ -59,7 +58,7 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 	if (auto tileArmy = tile->getArmy(); tileArmy && !tileArmy->canReceiveMerge(this))
 	{
 		const auto [newX, newY] = stratMapHelpers::findValidTileNearTile(x, y, isAdmiral ? 3 : 7);
-		gameHelpers::logStringGame("New tile: " + std::to_string(newX) + " " + std::to_string(newY));
+		//gameHelpers::logStringGame("New tile: " + std::to_string(newX) + " " + std::to_string(newY));
 		if (x== newX && y == newY)
 		{
 			gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
@@ -73,7 +72,7 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 	else if (auto tileSett = tile->getSettlement(); tileSett && tileSett->faction != faction)
 	{
 		const auto [newX, newY] = stratMapHelpers::findValidTileNearTile(x, y, isAdmiral ? 3 : 7);
-		gameHelpers::logStringGame("New tile: " + std::to_string(newX) + " " + std::to_string(newY));
+		//gameHelpers::logStringGame("New tile: " + std::to_string(newX) + " " + std::to_string(newY));
 		if (x== newX && y == newY)
 		{
 			gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
@@ -87,7 +86,7 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 	else if (auto tileFort = tile->getFort(); tileFort && tileFort->faction != faction)
 	{
 		const auto [newX, newY] = stratMapHelpers::findValidTileNearTile(x, y, isAdmiral ? 3 : 7);
-		gameHelpers::logStringGame("New tile: " + std::to_string(newX) + " " + std::to_string(newY));
+		//gameHelpers::logStringGame("New tile: " + std::to_string(newX) + " " + std::to_string(newY));
 		if (x== newX && y == newY)
 		{
 			gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
@@ -562,7 +561,7 @@ namespace armyHelpers
 
 	void mergeArmies(armyStruct* army, armyStruct* targetArmy)
     {
-    	if (army->numOfUnits + targetArmy->numOfUnits > 20)
+    	if (!targetArmy->canReceiveMerge(army))
     		return;
     	DWORD codeOffset = codes::offsets.mergeArmies;
     	_asm

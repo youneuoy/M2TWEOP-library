@@ -1668,8 +1668,8 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	{
 		const auto fac = reinterpret_cast<factionStruct*>(vTab[1]);
 		
-		if (globalEopAiConfig::getInstance()->enableLogging && !fac->isPlayerControlled)
-			fac->aiFaction->aiGlobalStrategyDirector->militaryDirector.logData();
+		//if (globalEopAiConfig::getInstance()->enableLogging && !fac->isPlayerControlled)
+		//	fac->aiFaction->aiGlobalStrategyDirector->militaryDirector.logData();
 		//globalEopAiConfig::getInstance()->turnStartMove(fac, true);
 		
 		FIRST_END = true;

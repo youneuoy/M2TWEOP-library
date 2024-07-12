@@ -319,7 +319,7 @@ for name in filenames:
             if userType.table.name != "" and classes.get(userType.table.name) is None:
                 classes[userType.table.name] = userType
             continue
-        if re.search(r'luaState.create_table', line) is not None:
+        if re.search(r'\.\S+\s*=\s*luaState\.create_table', line) is not None:
             if re.search(r'^\/\/', line) is not None:
                 continue
             if re.search(r'luaState\.create_table\(\"(\S+)\"\)', line) is not None:

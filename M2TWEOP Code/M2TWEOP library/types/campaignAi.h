@@ -915,6 +915,7 @@ public:
 	bool enableLogging = false;
 	float aggressionFactor = 1.f;
 	float defenseFactor = 1.f;
+	float religionFactor = 0.5f;
 	float nonBorderFactor = 0.33f;
 	float residenceFactor = 1.f;
 	float aidFactor = 0.5f;

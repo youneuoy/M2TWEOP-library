@@ -4,6 +4,7 @@
 #include "miniz.h"
 
 #include "functionsOffsets.h"
+#include "gameHelpers.h"
 #include "gameStringHelpers.h"
 #include "globals.h"
 
@@ -160,8 +161,16 @@ void techFuncs::deleteFiles(vector<string>& files)
 {
     for (string& file : files)
     {
-        if (filesystem::exists(file))
-            filesystem::remove(filesystem::path(file));
+        try
+        {
+            if (filesystem::exists(file))
+                filesystem::remove(filesystem::path(file));
+        }
+        catch (exception& e)
+        {
+            gameHelpers::logStringGame(e.what());
+            continue;
+        }
     }
 }
 

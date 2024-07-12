@@ -14,6 +14,7 @@
 #include "unit.h"
 #include "army.h"
 #include "campaign.h"
+#include "luaPlugin.h"
 #include "strategyMap.h"
 #include "techFuncs.h"
 
@@ -254,33 +255,41 @@ float globalEopAiConfig::calculateSettPriority(const std::shared_ptr<settlementR
 {
 	const auto campaignDbAi = campaignHelpers::getCampaignDb()->campaignDbAi;
 	const bool empty = !settRes->settlement->army || settRes->settlement->army->numOfUnits == 0;
-	const float balance = (settRes->totalThreatReceiving - (settRes->positionPower * campaignDbAi.siegeAttStrModifier));
+	float balance;
+	if (priType == priType_target)
+		balance = (settRes->totalThreatReceiving * campaignDbAi.siegeAttStrModifier) / (max(settRes->positionPower, 0) + 1);
+	else
+		balance = settRes->totalThreatReceiving / ((max(settRes->positionPower, 0) * campaignDbAi.siegeAttStrModifier) + 1);
 	if (balance < 1.f && !empty)
 		return 0.f;
 	const auto facData = getCurrentFactionData();
-	float priority = 0;
-	if (empty)
-		priority = 10000;
-	priority += clamp(balance, 0.f, 10000.f) * powerFactor;
-	priority *= residenceFactor;
-	if (priType != priType_target)
-		priority += clamp(settRes->totalThreatReceiving / 2.f, 0.f, 10000.f);
-	else
-		priority -= clamp(settRes->totalSupportReceiving * 1.f, 0.f, 10000.f);
-	if (priority < 1)
-		return 0.f;
-	priority += settRes->settlement->getSettlementValue();
-	priority += clamp(settRes->settlement->stats.settlementStats.TotalIncomeWithoutAdmin, 0, 10000);
+	float priority = clamp(settRes->settlement->stats.settlementStats.TotalIncomeWithoutAdmin * 2, 0, 50000);
+	const auto religion = settlementHelpers::getReligion(settRes->settlement, m_Faction->religion);
+	priority *= 1 + (religion * religionFactor);
+	priority += settRes->settlement->getSettlementValue() * 10;
+	priority *= facData->getSettlementFactor(settRes->settlement);
 	if (settRes->settlement->governor && settRes->settlement->governor->getTypeID() == characterTypeStrat::namedCharacter)
 	{
-		priority *= 1.25f;
+		priority *= 1.1f;
+		if (settRes->settlement->governor->characterRecord->isHeir())
+			priority *= 1.2f;
+		if (settRes->settlement->governor->characterRecord->isLeader())
+			priority *= 1.5f;
 		if (settRes->settlement->governor->characterRecord->isFamily)
 		{
-			priority *= 1.5f;
+			priority *= 1.25f;
 			if (settRes->settlement->faction->getAliveCharacterNumOfType(characterTypeStrat::namedCharacter) < 3)
-				priority *= 2.0f;
+				priority *= 1.5f;
 		}
 	}
+	if (priType == priType_target)
+		priority -= clamp(settRes->totalSupportReceiving * 2.f, 0.f, 50000.f);
+	if (priority < 1)
+		return 0.f;
+	if (empty)
+		priority *= 2.f;
+	priority *= (clamp(balance * powerFactor, 0.f, 4.f));
+	priority *= residenceFactor;
 	const auto config = campaignAi::getLtgdConfig();
 	switch(priType)
 	{
@@ -328,7 +337,6 @@ float globalEopAiConfig::calculateSettPriority(const std::shared_ptr<settlementR
 		}
 		break;
 	}
-	priority *= facData->getSettlementFactor(settRes->settlement);
 	if (!m_Faction->isInNeighbourArray(settRes->settlement->regionID))
 		priority *= nonBorderFactor;
 	return priority;
@@ -337,20 +345,23 @@ float globalEopAiConfig::calculateSettPriority(const std::shared_ptr<settlementR
 float globalEopAiConfig::calculateArmyPriority(const std::shared_ptr<armyResource>& armyRes, priorityType priType)
 {
 	const auto campaignDbAi = campaignHelpers::getCampaignDb()->campaignDbAi;
-	const float balance = (armyRes->totalThreatReceiving - (armyRes->positionPower * campaignDbAi.attStrModifier));
-	if (balance < 1)
+	float balance;
+	if (priType == priType_target)
+		balance = (armyRes->totalThreatReceiving * campaignDbAi.attStrModifier) / (max(armyRes->positionPower, 0) + 1);
+	else
+		balance = armyRes->totalThreatReceiving / ((max(armyRes->positionPower, 0) * campaignDbAi.attStrModifier) + 1);
+	if (balance < 1.f)
 		return 0.f;
 	const auto facData = getCurrentFactionData();
-	float priority = clamp(balance, 0.f, 10000.f) * powerFactor;
-	priority += clamp(armyRes->totalThreatGiving * (priType == priType_target ? 2.f : 1.f), 0.f, 10000.f);
-	priority += clamp(armyRes->army->totalStrength / 2.f, 0.f, 10000.f) * powerFactor;
-	if (priType == priType_target)
-		priority -= clamp(armyRes->totalSupportReceiving, 0, 10000) ;
-	if (priority < 1)
-		return 0.f;
+	float priority = clamp(armyRes->army->totalStrength * 1.f, 0.f, 20000.f);
+	priority += clamp(armyRes->totalThreatGiving * (priType == priType_target ? 3.f : 1.f), 0.f, 30000.f);
 	if (armyRes->army->gen && armyRes->army->gen->getTypeID() == characterTypeStrat::namedCharacter)
 	{
 		priority *= 1.25f;
+		if (armyRes->army->gen->characterRecord->isLeader())
+			priority *= 1.2f;
+		if (armyRes->army->gen->characterRecord->isLeader())
+			priority *= 1.5f;
 		if (armyRes->army->gen->characterRecord->isFamily)
 		{
 			priority *= 1.5f;
@@ -358,6 +369,11 @@ float globalEopAiConfig::calculateArmyPriority(const std::shared_ptr<armyResourc
 				priority *= 2.0f;
 		}
 	}
+	priority *= clamp(balance * powerFactor, 0.f, 4.f);
+	if (priType == priType_target)
+		priority -= clamp(armyRes->totalSupportReceiving, 0, 30000) ;
+	if (priority < 1)
+		return 0.f;
 	if (armyRes->army->siege)
 	{
 		if (const auto targetSett = armyRes->army->siege->getSiegedSettlement(); targetSett)
@@ -379,6 +395,8 @@ float globalEopAiConfig::calculateArmyPriority(const std::shared_ptr<armyResourc
 		{
 			if (!stratMapHelpers::getRegion(armyRes->army->gen->regionID)->hasAlliesToFaction(m_Faction->factionID, false))
 				priority *= 0.66f;
+			else
+				priority += stratMapHelpers::getRegion(armyRes->army->gen->regionID)->devastatedTilesCount * 200;
 			priority *= defenseFactor;
 			break;
 		}
@@ -421,8 +439,12 @@ void aiOrder::setTiles(const int x, const int y)
 			neighbours.pop();
 			if (stratMapHelpers::isTileValidForCharacterType(7, checkX, checkY))
 			{
-				validTiles.emplace_back(checkX, checkY);
-				tileNums.emplace_back(0);
+				const auto tile = stratMapHelpers::getTile(checkX, checkY);
+				if (const auto army = tile->getArmy(); (army && army->faction->factionID == globalEopAiConfig::getCurrentFaction()->factionID) || !army)
+				{
+					validTiles.emplace_back(checkX, checkY);
+					tileNums.emplace_back(army ? army->numOfUnits : 0);
+				}
 			}
 		}
 		if (validTiles.empty())
@@ -563,7 +585,7 @@ bool attackSettlementOrder::execute()
 					{
 						assignedArmy->army->gen->hasEopOrders = true;
 						const auto [xCoord, yCoord] = siege->army->getCoords();
-						if (assignedArmy->army->moveTactical(xCoord, yCoord, false))
+						if (assignedArmy->army->moveTactical(xCoord, yCoord, true))
 						{
 							if (const auto& armyRes = globalEopAiConfig::getInstance()->findArmyResource(siege->army))
 								armyRes->unitCount += assignedArmy->army->numOfUnits;
@@ -864,7 +886,15 @@ bool defendSettlementOrder::execute()
 			characterHelpers::moveNormal(assignedArmy->army->gen, newX, newY);
 		}
 		else
-			assignedArmy->army->moveTactical(targetSettlement->settlement->xCoord, targetSettlement->settlement->yCoord);
+		{
+			if (targetSettlement->settlement->army->canReceiveMerge(assignedArmy->army))
+				assignedArmy->army->moveTactical(targetSettlement->settlement->xCoord, targetSettlement->settlement->yCoord);
+			else
+			{
+				const auto [newX, newY] = stratMapHelpers::findValidTileNearTile(static_cast<int>(targetSettlement->settlement->xCoord), static_cast<int>(targetSettlement->settlement->yCoord), 7);
+				assignedArmy->army->moveTactical(newX, newY);
+			}
+		}
 		totalCommitted += assignedArmy->army->totalStrength;
 		if ((totalCommitted >> 1) > targetSettlement->totalThreatReceiving)
 			break;
@@ -1035,6 +1065,19 @@ void globalEopAiConfig::characterTurnStart(character* currentChar)
 	if (!m_Faction || m_Faction->factionRecord->slave || m_Faction->isHorde || !currentChar->army || !currentChar->isGeneral() || currentChar->markedForDeath)
 		return; 
 	const auto army = currentChar->army;
+	if (army->numOfUnits > 20)
+	{
+		MessageBoxA(nullptr, "Army has more than 20 units!", "Error", MB_OK);
+		gameHelpers::logStringGame("Character: " + string(currentChar->characterRecord->fullName) + " has more than 20 units!");
+		const auto [newX, newY] = stratMapHelpers::findValidTileNearTile(army->getX() + 1, army->getY() + 1, 7);
+		sol::table unitTable = plugData::data.luaAll.luaState.create_table();
+		for (int i = army->numOfUnits - 1; i > 19; i--)
+		{
+			const auto unit = army->getUnit(i);
+			unitTable.add(unit);
+		}
+		factionHelpers::splitArmy(currentChar->characterRecord->faction, unitTable, newX, newY);
+	}
 	if (army->siege)
 		return;
 	bool used = false;
@@ -1438,7 +1481,7 @@ void globalEopAiConfig::turnStartMove(factionStruct* fac, const bool isEnd)
 				const auto [xCoord, yCoord] = nearRes->army->getCoords();
 				if (xCoord == -1)
 					continue;
-				armyRes->army->moveTactical(xCoord, yCoord, true);
+				armyRes->army->moveTactical(xCoord, yCoord, false);
 				armyRes->used = true;
 				nearRes->used = true;
 				break;
