@@ -62,7 +62,7 @@ namespace campaignAi
 		{
 			if (const auto army = reg->getArmy(i);
 				army->faction->factionID == faction->factionID && army != settlement->army)
-				ownStr += army->settlement ? army->totalStrength / 2 : army->totalStrength;
+				ownStr += army->totalStrength / 2;
 			else if (army->isEnemyToFaction(faction))
 				enemyStr += army->settlement ? army->totalStrength / 2 : army->totalStrength;
 			else if (!army->isAllyToFaction(faction))
@@ -77,7 +77,7 @@ namespace campaignAi
 			{
 				if (const auto army = nRegion.region->getArmy(j);
 					army->faction->factionID == faction->factionID && army != settlement->army)
-					ownStr += army->settlement ? army->totalStrength / 4 : army->totalStrength / 2;
+					ownStr += army->settlement ? army->totalStrength / 8 : army->totalStrength / 4;
 				else if (army->isEnemyToFaction(faction))
 					enemyStr += army->settlement ? army->totalStrength / 4 : army->totalStrength / 2;
 				else if (!army->isAllyToFaction(faction))
@@ -309,7 +309,7 @@ float globalEopAiConfig::calculateSettPriority(const std::shared_ptr<settlementR
 			if (settRes->settlement->siegeNum > 0)
 			{
 				if (settRes->settlement->getSiege(0)->army && settRes->settlement->getSiege(0)->army->isAllyToFaction(m_Faction))
-					priority *= 2;
+					priority *= 5;
 				else
 					priority /= 4;
 			}
@@ -1067,8 +1067,8 @@ void globalEopAiConfig::characterTurnStart(character* currentChar)
 	const auto army = currentChar->army;
 	if (army->numOfUnits > 20)
 	{
-		MessageBoxA(nullptr, "Army has more than 20 units!", "Error", MB_OK);
 		gameHelpers::logStringGame("Character: " + string(currentChar->characterRecord->fullName) + " has more than 20 units!");
+		MessageBoxA(nullptr, "Army has more than 20 units!", "Error", MB_OK);
 		const auto [newX, newY] = stratMapHelpers::findValidTileNearTile(army->getX() + 1, army->getY() + 1, 7);
 		sol::table unitTable = plugData::data.luaAll.luaState.create_table();
 		for (int i = army->numOfUnits - 1; i > 19; i--)
@@ -1091,7 +1091,8 @@ void globalEopAiConfig::characterTurnStart(character* currentChar)
 			if ((!nearSett.settlement->army || nearSett.settlement->army->numOfUnits == 0) && nearSett.settlement->siegeNum == 0)
 			{
 				armyHelpers::createArmyInSettlement(nearSett.settlement);
-				army->moveTactical(nearSett.settlement->xCoord, nearSett.settlement->yCoord, true);
+				if (army->moveTactical(nearSett.settlement->xCoord, nearSett.settlement->yCoord, true))
+					gameHelpers::logStringGame("Character: " + string(currentChar->characterRecord->fullName) + " Garrisoned empty settlement!");
 				used = true;
 				break;
 			}
@@ -1111,7 +1112,8 @@ void globalEopAiConfig::characterTurnStart(character* currentChar)
 			const auto [xCoord, yCoord] = nearArmy.army->getCoords();
 			if (xCoord == -1)
 				continue;
-			army->moveTactical(xCoord, yCoord, true);
+			if (army->moveTactical(xCoord, yCoord, true))
+				gameHelpers::logStringGame("Character: " + string(currentChar->characterRecord->fullName) + " merged armies!");
 			break;
 		}
 	}
@@ -1474,14 +1476,18 @@ void globalEopAiConfig::turnStartMove(factionStruct* fac, const bool isEnd)
 		std::stable_sort(armyRes->nearResources.begin(), armyRes->nearResources.end(), distanceSort);
 		for (const auto& nearRes : armyRes->nearResources)
 		{
-			if (nearRes->used || nearRes->army->isAdmiral || nearRes->army->faction->factionID != m_Faction->factionID)
+			if (nearRes->used || nearRes->army->isAdmiral || nearRes->army->faction->factionID != m_Faction->factionID || nearRes->unitCount >= 20)
 				continue;
 			if (nearRes->army->canReceiveMerge(armyRes->army))
 			{
 				const auto [xCoord, yCoord] = nearRes->army->getCoords();
 				if (xCoord == -1)
 					continue;
-				armyRes->army->moveTactical(xCoord, yCoord, false);
+				string charName;
+				if (armyRes->army->gen->characterRecord->shortName)
+					charName = armyRes->army->gen->characterRecord->shortName;
+				if (armyRes->army->moveTactical(xCoord, yCoord, false))
+					gameHelpers::logStringGame("Character: " + charName + " merged armies!");
 				armyRes->used = true;
 				nearRes->used = true;
 				break;
@@ -1493,7 +1499,11 @@ void globalEopAiConfig::turnStartMove(factionStruct* fac, const bool isEnd)
 			if (armyRes->totalThreatReceiving > armyRes->positionPower && !armyRes->nearSetts.empty())
 			{
 				std::stable_sort(armyRes->nearSetts.begin(), armyRes->nearSetts.end(), distanceSort2);
-				armyRes->army->moveTactical(armyRes->nearSetts.front()->settlement->xCoord, armyRes->nearSetts.front()->settlement->yCoord, true);
+				string charName;
+				if (armyRes->army->gen->characterRecord->shortName)
+					charName = armyRes->army->gen->characterRecord->shortName;
+				if (armyRes->army->moveTactical(armyRes->nearSetts.front()->settlement->xCoord, armyRes->nearSetts.front()->settlement->yCoord, true))
+					gameHelpers::logStringGame("Character: " + charName + " moved to safety!");
 			}
 		}
 	}
@@ -1752,11 +1762,15 @@ int calculateRegionValue(const aiGlobalStrategyDirector* director, aiRegionData*
 		return 1;
 	if (settlement->isEnemyToFaction(director->faction))
 	{
-		const auto invadePriority = director->aiFaction->ltgd->longTermGoalValues[settlement->factionID].invadePriority / 10;
-		value += clamp(invadePriority, 0, 1000);
-		value = static_cast<int>(round(value * 1.5));
+		const auto invadePriority = campaignAi::getLtgdConfig()->getPriorityMod(director->faction, settlement->faction);
+		value = static_cast<int>(value * (invadePriority + 0.25f));
 		if (!settlement->army)
 			value *= 2;
+	}
+	if (globalEopAiConfig::getInstance()->enabled)
+	{
+		const auto facData = globalEopAiConfig::getInstance()->getFactionDataLua(director->faction);
+		value = static_cast<int>(roundf(value * facData->getSettlementFactor(settlement)));
 	}
 	return value;
 }
