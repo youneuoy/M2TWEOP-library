@@ -15,6 +15,7 @@
 #include "techFuncs.h"
 
 bool m2tweopOptions::hideUnknownUnitTooltips = true;
+bool m2tweopOptions::eopHandleUnitCards = true;
 
 scriptCommand::scriptCommand(const char* name) : className(name)
 {
@@ -813,12 +814,17 @@ namespace gameHelpers
 		@tfield int chatMsgDuration
 		@tfield int saveGameSpyPassword
 		@tfield int addDateToLogs
+		@tfield int playerFactionID
+		@tfield int campaignDifficulty
+		@tfield int battleDifficulty
 		@tfield int showToolTips
 		@tfield int isNormalHud
 		@tfield int showPackageLitter
 		@tfield float unitSizeMultiplierLow
 		@tfield float unitSizeMultiplierMedium
 		@tfield float unitSizeMultiplierLarge
+		@tfield isHotseatPlayer isHotseatPlayer
+		@tfield setHotseatPlayer setHotseatPlayer
 
 		@table options2
 		*/
@@ -868,6 +874,9 @@ namespace gameHelpers
 		typeAll.options2.set("speechVolume", &options2::speechVolume);
 		typeAll.options2.set("sfxVolume", &options2::sfxVolume);
 		typeAll.options2.set("subFactionAccents", &options2::subFactionAccents);
+		typeAll.options2.set("playerFactionID", &options2::playerFactionId);
+		typeAll.options2.set("campaignDifficulty", &options2::campaignDifficulty);
+		typeAll.options2.set("battleDifficulty", &options2::battleDifficulty);
 		typeAll.options2.set("tgaWidth", &options2::tgaWidth);
 		typeAll.options2.set("tgaAspect", &options2::tgaAspect);
 		typeAll.options2.set("tgaInputScale", &options2::tgaInputScale);
@@ -885,6 +894,26 @@ namespace gameHelpers
 		typeAll.options2.set("unitSizeMultiplierLow", &options2::unitSizeMultiplierLow);
 		typeAll.options2.set("unitSizeMultiplierMedium", &options2::unitSizeMultiplierMedium);
 		typeAll.options2.set("unitSizeMultiplierLarge", &options2::unitSizeMultiplierLarge);
+		
+		/***
+		Check if a faction was selected on faction select screen.
+		@function options2:isHotseatPlayer
+		@tparam int factionID
+		@treturn bool selected
+		@usage
+			local selected = options2:isHotseatPlayer(1)
+		*/
+		typeAll.options2.set_function("isHotseatPlayer", &options2::isHotseatPlayer);
+		
+		/***
+		Select a faction on faction select screen.
+		@function options2:setHotseatPlayer
+		@tparam int factionID
+		@tparam bool set
+		@usage
+			options2:setHotseatPlayer(1, true)
+		*/
+		typeAll.options2.set_function("setHotseatPlayer", &options2::setHotseatPlayer);
 	
 	}
 	

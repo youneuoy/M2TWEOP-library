@@ -36,6 +36,11 @@ void settlementStatsManager::setPopulation(const int newPop)
 	GAME_FUNC(void(__thiscall*)(settlementStatsManager*, int), setPop)(this, newPop);
 }
 
+fortStruct* settlementStruct::isFort()
+{
+	return stratMapHelpers::getTile(xCoord, yCoord)->getFort();
+}
+
 int settlementStruct::getFortificationLevel()
 {
 	return callClassFunc<settlementStruct*, int>(this, 0xB0);

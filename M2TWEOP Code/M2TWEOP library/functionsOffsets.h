@@ -140,6 +140,7 @@ public:
 		DWORD findParentForAdoptionFunc = NULL;
 		DWORD setArmyRegionEntriesFunc = NULL;
 		DWORD factionResurrectStuffFunc = NULL;
+		DWORD modifyWithSettMechanics = NULL;
 
 		DWORD unitMove = NULL;
 		DWORD unitOrderMove = NULL;

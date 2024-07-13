@@ -15,6 +15,7 @@
 #include "techFuncs.h"
 #include "campaignAi.h"
 #include "gameUi.h"
+#include "cultures.h"
 
 enum
 {
@@ -81,6 +82,17 @@ void factionStruct::setSecondaryColor(const uint8_t r, const uint8_t g, const ui
 	facRecord->secondary_colour_green = g;
 	facRecord->secondary_colour_blue = b;
 	stratMapHelpers::updateTerrain();
+}
+
+int factionRecord::getCultureId()
+{
+	return facCulture->cultureID;
+}
+
+void factionRecord::setCulture(const int Id)
+{
+	const auto culturesDb = cultures::getCultureDb();
+	facCulture = &culturesDb->cultures[Id];
 }
 
 characterRecord* factionStruct::getCharacterByLabel(const std::string& label)
@@ -1751,6 +1763,7 @@ namespace factionHelpers
 		@tfield int hordeUnitPerSettlementPop
 		@tfield int hordeMinNamedCharacters
 		@tfield int hordeMaxPercentArmyStack
+		@tfield int cultureID
 
 		@table factionRecord
 		*/
@@ -1763,6 +1776,7 @@ namespace factionHelpers
 		types.factionRecord.set("secondaryColorGreen", &factionRecord::secondary_colour_green);
 		types.factionRecord.set("secondaryColorBlue", &factionRecord::secondary_colour_blue);
 		types.factionRecord.set("triumphValue", &factionRecord::triumph_value);
+		types.factionRecord.set("cultureID", sol::property(&factionRecord::getCultureId, &factionRecord::setCulture));
 		types.factionRecord.set("standardIndex", &factionRecord::standard_index);
 		types.factionRecord.set("logoIndex", &factionRecord::logo_index);
 		types.factionRecord.set("smallLogoIndex", &factionRecord::small_logo_index);

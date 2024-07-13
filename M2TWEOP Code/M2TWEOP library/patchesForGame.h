@@ -39,6 +39,7 @@ public:
 	static char* __fastcall onSaveEDUStringS(eduEntry* eduEntry);
 	static void __fastcall initGlobalStrategyDirector(aiGlobalStrategyDirector* gsd);
 	static int __fastcall onCreateUnit(char** entryName, int* eduIndex);
+	static int __fastcall onCalculateMiningIncome(int value, const settlementStruct* settlement);
 	static int __fastcall onCreateMercUnitCheck(char** entryName, int eduIndex);
 	static void __fastcall onAttachRegionSettlement(settlementStruct* sett, int regionId);
 	static void __fastcall onCalculateSettlement(settlementStruct* sett);
@@ -49,6 +50,8 @@ public:
 	static int __fastcall onEvalAttObjective(const aiCampaignController* controller);
 	static void __fastcall onUpdateControllerAlloc(aiCampaignController* controller);
 	static int __fastcall onScoreBestCapital(const settlementStruct* sett);
+	static int __fastcall onGetUnitCard(const eduEntry* entry, int factionId, stringWithHash* newPath);
+	static int __fastcall onGetUnitInfoCard(const eduEntry* entry, int factionId, stringWithHash* newPath);
 	static int __fastcall onAssessRequiredStrength(const aiRegionController* controller);
 	static int __fastcall onCalcGarrisonStr(const aiRegionData* regData, const factionStruct* fac, const settlementStruct* sett);
 	static DWORD* __fastcall onCreateTakeResidenceObjective(aiCampaignController* campaignController, DWORD* oldResidence);

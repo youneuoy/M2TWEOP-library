@@ -1222,6 +1222,8 @@ namespace unitHelpers
 #define EduEntryStruct_Soldier 2
 #define EduEntryStruct_UnitCardTga 3
 #define EduEntryStruct_InfoCardTga 4
+#define EduEntryStruct_InfoPicDir 5
+#define EduEntryStruct_CardPicDir 6
 	
 	template <char fieldIndex>
 	std::string getStringPropertyEDU(const eduEntry* eduEn)
@@ -1242,6 +1244,14 @@ namespace unitHelpers
 		else if (fieldIndex == EduEntryStruct_InfoCardTga)
 		{
 			retS = eduEn->infoCardTga;
+		}
+		else if (fieldIndex == EduEntryStruct_InfoPicDir)
+		{
+			retS = eduEn->infoPicDir;
+		}
+		else if (fieldIndex == EduEntryStruct_CardPicDir)
+		{
+			retS = eduEn->cardPicDir;
 		}
 
 		if (retS != nullptr)
@@ -1265,6 +1275,10 @@ namespace unitHelpers
 			gameStringHelpers::setHashedString(&eduEn->unitCardTga, newS.c_str());
 		else if (fieldIndex == EduEntryStruct_InfoCardTga)
 			gameStringHelpers::setHashedString(&eduEn->infoCardTga, newS.c_str());
+		else if (fieldIndex == EduEntryStruct_InfoPicDir)
+			gameStringHelpers::setHashedString(&eduEn->infoPicDir, newS.c_str());
+		else if (fieldIndex == EduEntryStruct_CardPicDir)
+			gameStringHelpers::setHashedString(&eduEn->cardPicDir, newS.c_str());
 	}
 
 	std::string getLocalizedUnitName(const eduEntry* entry)
@@ -2243,6 +2257,8 @@ void luaPlugin::initUnits()
 	@tfield string soldier - Get only
 	@tfield string unitCardTga - Get only
 	@tfield string infoCardTga - Get only
+	@tfield string infoPicDir
+	@tfield string cardPicDir
 	@tfield string localizedName
 	@tfield string localizedDescription
 	@tfield string localizedDescriptionShort
@@ -2353,6 +2369,12 @@ void luaPlugin::initUnits()
 	                   ));
 	types.eduEntry.set("infoCardTga", sol::property(
 		                   &unitHelpers::getStringPropertyEDU<EduEntryStruct_InfoCardTga>, &unitHelpers::setStringPropertyEDU<EduEntryStruct_InfoCardTga>
+	                   ));
+	types.eduEntry.set("infoPicDir", sol::property(
+		                   &unitHelpers::getStringPropertyEDU<EduEntryStruct_InfoPicDir>, &unitHelpers::setStringPropertyEDU<EduEntryStruct_InfoPicDir>
+	                   ));
+	types.eduEntry.set("cardPicDir", sol::property(
+		                   &unitHelpers::getStringPropertyEDU<EduEntryStruct_CardPicDir>, &unitHelpers::setStringPropertyEDU<EduEntryStruct_CardPicDir>
 	                   ));
 	types.eduEntry.set("localizedName", sol::property(&unitHelpers::getLocalizedUnitName, &unitHelpers::setUnitName));
 	types.eduEntry.set("localizedDescription", sol::property(&unitHelpers::getLocalizedUnitDescr, &unitHelpers::setUnitDescr));

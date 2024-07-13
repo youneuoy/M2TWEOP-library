@@ -237,6 +237,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getEopAiConfig getEopAiConfig
 	@tfield getRebelFaction getRebelFaction
 	@tfield addBanner addBanner
+	@tfield getFactionRecord getFactionRecord
 	@table M2TWEOP
 	*/
 	
@@ -784,6 +785,16 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 		local bandits = M2TWEOP.getRebelFaction("Bandits")
 	*/
 	tables.M2TWEOP.set_function("getRebelFaction", &eopRebelFactionDb::getRebelFactionLua);
+	
+	/***
+	Get a faction record.
+	@function M2TWEOP.getFactionRecord
+	@tparam int factionID
+	@treturn factionRecord facRecord
+	@usage
+		local facRecord = M2TWEOP.getFactionRecord(sett.creatorFactionID)
+	*/
+	tables.M2TWEOP.set_function("getFactionRecord", &factionHelpers::getFactionRecord);
 	
 	/***
 	Add a banner symbol. Add them onCampaignMapLoaded or later!

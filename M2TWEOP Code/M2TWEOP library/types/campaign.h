@@ -1304,6 +1304,7 @@ namespace campaignHelpers
 	UINT32 getFactionsCount();
 	stratPathFinding* getStratPathFinding();
 	selectionInfo* getSelectionInfo();
+	int modifyWithSettMechanics(const std::string& mechanic, float raw, bool isCastle);
 	campaignDifficulty1* getCampaignDifficulty1();
 	campaignDifficulty2* getCampaignDifficulty2();
 	void setPerfectSpy(bool set);

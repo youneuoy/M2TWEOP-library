@@ -1498,6 +1498,39 @@ private:
 	LPVOID funcAddress;
 };
 
+class onCalculateMiningIncome
+	:public AATemplate
+{
+public:
+	onCalculateMiningIncome(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetUnitCard
+	:public AATemplate
+{
+public:
+	onGetUnitCard(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetUnitInfoCard
+	:public AATemplate
+{
+public:
+	onGetUnitInfoCard(MemWork* mem, LPVOID addr, int ver);
+	void SetOriginalCode(){}
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onUpdateControllerAlloc
 	:public AATemplate
 {
@@ -1602,6 +1635,18 @@ public:
 private:
 	LPVOID funcAddress;
 	DWORD otherFunc;
+};
+
+class onPopActionMem
+	:public AATemplate
+{
+public:
+	onPopActionMem(MemWork* mem, LPVOID addr, int ver);
+	~onPopActionMem() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
 };
 
 class OnCalculateUnitValue2

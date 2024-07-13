@@ -4286,6 +4286,110 @@ void onPredictedStats::SetNewCode()
 	delete a;
 }
 
+onCalculateMiningIncome::onCalculateMiningIncome(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x5F6B18;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x5F6728;
+}
+
+void onCalculateMiningIncome::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ecx);
+	a->push(edx);
+	a->mov(edx, edi);
+	a->mov(ecx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->push(eax);
+	a->push(0x290);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onGetUnitCard::onGetUnitCard(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x8EBFE5;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x8EB565;
+}
+
+void onGetUnitCard::SetNewCode()
+{
+	const auto a = new Assembler();
+	const auto label = a->newLabel();
+	a->push(ecx);
+	a->push(edx);
+	a->mov(edx, dword_ptr(esp, 0x18));
+	a->push(dword_ptr(esp, 0x1C));
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->sub(esp, 0x130);
+	a->cmp(eax, 0);
+	a->jz(label);
+	a->push(esi);
+	a->push(edi);
+	if (m_adress == 0x8EBFE5)
+		a->mov(eax, 0x8EC16F);
+	else
+		a->mov(eax, 0x8EB6EF);
+	a->jmp(eax);
+	a->bind(label);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onGetUnitInfoCard::onGetUnitInfoCard(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x8EC1A5;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x8EB725;
+}
+
+void onGetUnitInfoCard::SetNewCode()
+{
+	const auto a = new Assembler();
+	const auto label = a->newLabel();
+	a->push(ecx);
+	a->push(edx);
+	a->mov(edx, dword_ptr(esp, 0x18));
+	a->push(dword_ptr(esp, 0x1C));
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->sub(esp, 0x130);
+	a->cmp(eax, 0);
+	a->jz(label);
+	a->push(esi);
+	a->push(edi);
+	if (m_adress == 0x8EC1A5)
+		a->mov(eax, 0x8EC32F);
+	else
+		a->mov(eax, 0x8EB8AF);
+	a->jmp(eax);
+	a->bind(label);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onGetSupportingArmies::onGetSupportingArmies(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
@@ -4572,6 +4676,34 @@ void onRegionGroupStuff::SetNewCode()
 	a->mov(esi, eax);
 	a->mov(edx, dword_ptr(esi));
 	a->mov(ecx, esi);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onPopActionMem::onPopActionMem(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005B819E;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005B7CBE;
+}
+
+void onPopActionMem::SetNewCode()
+{
+	const auto a = new Assembler();
+	const auto label = a->newLabel();
+	a->mov(eax, dword_ptr(ecx));
+	a->cmp(eax, 0x401000);
+	a->jle(label);
+	a->mov(eax, dword_ptr(eax));
+	a->cmp(eax, 0x401000);
+	a->jle(label);
+	a->push(1);
+	a->call(eax);
+	a->bind(label);
 	a->ret();
 	m_cheatBytes = static_cast<unsigned char*>(a->make());
 	delete a;

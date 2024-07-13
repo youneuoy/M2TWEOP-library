@@ -283,6 +283,11 @@ int __fastcall patchesForGame::onCreateUnit(char** entryName, int* eduIndex)
 	return *eduIndex;
 }
 
+int patchesForGame::onCalculateMiningIncome(const int value, const settlementStruct* settlement)
+{
+	return campaignHelpers::modifyWithSettMechanics("SIF_MINING", static_cast<float>(value), settlement->isCastle == 1);
+}
+
 int __fastcall patchesForGame::onFindUnit(char* entry, int* eduIndex)
 {
 	if (eduIndex == nullptr)
@@ -502,6 +507,8 @@ char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEnt
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_preconstructed_building.tga";
 	return FILE_PATH.data();
 }
+
+
 
 char* __fastcall patchesForGame::getBuildingPic(buildingLevel* level, int cultureID)
 {
@@ -913,6 +920,44 @@ int patchesForGame::onScoreBestCapital(const settlementStruct* sett)
 	if (sett->isMinorSettlement)
 		return 0;
 	return 1;
+}
+
+std::string CARD_PATH;
+
+int patchesForGame::onGetUnitCard(const eduEntry* entry, const int factionId, stringWithHash* newPath)
+{
+	if (!m2tweopOptions::getHandleUnitCards())
+		return 0;
+	const auto facRecord = factionHelpers::getFactionRecord(factionId);
+	if (!facRecord || !entry->unitCardTga || !facRecord->facName)
+		return 0;
+	const string facName = facRecord->facName;
+	const string modPath = gameHelpers::getModPath();
+	CARD_PATH = modPath + "/data/ui/units/" + facName + "/" + entry->unitCardTga;
+	if (std::filesystem::exists(CARD_PATH))
+	{
+		gameStringHelpers::setHashedString(&newPath->name, CARD_PATH.c_str());
+		return 1;
+	}
+	return 0;
+}
+
+int patchesForGame::onGetUnitInfoCard(const eduEntry* entry, const int factionId, stringWithHash* newPath)
+{
+	if (!m2tweopOptions::getHandleUnitCards())
+		return 0;
+	const auto facRecord = factionHelpers::getFactionRecord(factionId);
+	if (!facRecord || !entry->infoCardTga || !facRecord->facName)
+		return 0;
+	const string facName = facRecord->facName;
+	const string modPath = gameHelpers::getModPath();
+	CARD_PATH = modPath + "/data/ui/unit_info/" + facName + "/" + entry->infoCardTga;
+	if (std::filesystem::exists(CARD_PATH))
+	{
+		gameStringHelpers::setHashedString(&newPath->name, CARD_PATH.c_str());
+		return 1;
+	}
+	return 0;
 }
 
 int patchesForGame::onAssessRequiredStrength(const aiRegionController* controller)

@@ -880,6 +880,7 @@ bool defendSettlementOrder::execute()
 		gameHelpers::logStringGame("character: " + string(assignedArmy->army->gen->characterRecord->fullName));
 		assignedArmy->army->gen->hasEopOrders = true;
 		assignedArmy->used = true;
+		totalCommitted += assignedArmy->army->totalStrength;
 		if (assignedArmy->moveCost > assignedArmy->army->gen->movePointsArmy || !targetSettlement->own || targetSettlement->settlement->siegeNum > 0)
 		{
 			const auto [newX, newY] = stratMapHelpers::findValidTileNearTile(static_cast<int>(targetSettlement->settlement->xCoord), static_cast<int>(targetSettlement->settlement->yCoord), 7);
@@ -888,14 +889,13 @@ bool defendSettlementOrder::execute()
 		else
 		{
 			if (targetSettlement->settlement->army->canReceiveMerge(assignedArmy->army))
-				assignedArmy->army->moveTactical(targetSettlement->settlement->xCoord, targetSettlement->settlement->yCoord);
+				assignedArmy->army->moveTactical(targetSettlement->settlement->xCoord, targetSettlement->settlement->yCoord, true);
 			else
 			{
 				const auto [newX, newY] = stratMapHelpers::findValidTileNearTile(static_cast<int>(targetSettlement->settlement->xCoord), static_cast<int>(targetSettlement->settlement->yCoord), 7);
 				assignedArmy->army->moveTactical(newX, newY);
 			}
 		}
-		totalCommitted += assignedArmy->army->totalStrength;
 		if ((totalCommitted >> 1) > targetSettlement->totalThreatReceiving)
 			break;
 	}
@@ -931,6 +931,13 @@ bool defendArmyOrder::evaluate()
 bool defendArmyOrder::execute()
 {
 	gameHelpers::logStringGame("Try defend army order for faction: " + std::to_string(globalEopAiConfig::getCurrentFaction()->factionID));
+	if (targetArmy->army && targetArmy->army->gen && targetArmy->army->gen->characterRecord)
+	{
+		const std::string logString = "target: " + string(targetArmy->army->gen->characterRecord->shortName);
+		gameHelpers::logStringGame(logString);
+	}
+	else
+		return false;
 	if (!evaluate())
 		return false;
 	sortArmies();
@@ -956,7 +963,16 @@ bool defendArmyOrder::execute()
 		}
 		else
 		{
-			assignedArmy->army->moveTactical(targetArmy->army->gen->xCoord, targetArmy->army->gen->yCoord);
+			if (targetArmy->army->canReceiveMerge(assignedArmy->army) && targetArmy->unitCount + assignedArmy->unitCount <= 20)
+			{
+				targetArmy->unitCount += assignedArmy->army->numOfUnits;
+				assignedArmy->army->moveTactical(targetArmy->army->gen->xCoord, targetArmy->army->gen->yCoord, true);
+			}
+			else
+			{
+				auto [newX, newY] = stratMapHelpers::findValidTileNearTile(targetArmy->army->gen->xCoord + 1, targetArmy->army->gen->yCoord + 1, 7);
+				assignedArmy->army->moveTactical(newX, newY);
+			}
 		}
 		if ((totalCommitted >> 1) > targetArmy->totalThreatReceiving)
 			break;
@@ -1478,7 +1494,7 @@ void globalEopAiConfig::turnStartMove(factionStruct* fac, const bool isEnd)
 		{
 			if (nearRes->used || nearRes->army->isAdmiral || nearRes->army->faction->factionID != m_Faction->factionID || nearRes->unitCount >= 20)
 				continue;
-			if (nearRes->army->canReceiveMerge(armyRes->army))
+			if (nearRes->army->canReceiveMerge(armyRes->army) && nearRes->unitCount + armyRes->unitCount <= 20)
 			{
 				const auto [xCoord, yCoord] = nearRes->army->getCoords();
 				if (xCoord == -1)
@@ -1486,7 +1502,7 @@ void globalEopAiConfig::turnStartMove(factionStruct* fac, const bool isEnd)
 				string charName;
 				if (armyRes->army->gen->characterRecord->shortName)
 					charName = armyRes->army->gen->characterRecord->shortName;
-				if (armyRes->army->moveTactical(xCoord, yCoord, false))
+				if (armyRes->army->moveTactical(xCoord, yCoord, true))
 					gameHelpers::logStringGame("Character: " + charName + " merged armies!");
 				armyRes->used = true;
 				nearRes->used = true;

@@ -642,6 +642,7 @@ public:
 	{
 		return stats.settlementStats.population;
 	}
+	fortStruct* isFort();
 	void setPopulation(int newPop)
 	{
 		stats.settlementStats.population = newPop;

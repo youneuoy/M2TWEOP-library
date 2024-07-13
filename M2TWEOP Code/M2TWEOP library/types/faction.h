@@ -434,7 +434,7 @@ struct factionRecord { /* see descr_sm_factions.txt */
 	int spawnsOnRevoltOwnerHash;
 	bool spawnsOnEvent;
 	char pad_0x1D[3];
-	struct culture* culture;
+	struct culture* facCulture;
 	int religionID;
 	struct model_Rigid* symbol;
 	char* symbolPath;
@@ -490,6 +490,8 @@ struct factionRecord { /* see descr_sm_factions.txt */
 	bool canBuildSiegeTowers; //0x00DB
 	bool canTransmitPlague; //0x00DC
 	char pad_00DD[3]; //0x00DD
+	int getCultureId();
+	void setCulture(int Id);
 };
 
 class eopFactionData

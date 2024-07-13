@@ -487,14 +487,40 @@ void managerF::execPatches()
 	toCustomBattleUnits->Enable();
 	f1 << "Done" << endl;
 
+
+	f1 << "Start applying onPopActionMem patch" << endl;
+	onPopActionMem* toPopActionMem = new onPopActionMem(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toPopActionMem->SetNewCode();
+	toPopActionMem->Enable();
+	f1 << "Done" << endl;
+
+
+	f1 << "Start applying onGetUnitInfoCard patch" << endl;
+	onGetUnitInfoCard* toGetUnitInfoCard = new onGetUnitInfoCard(mem, (LPVOID)patchesForGame::onGetUnitInfoCard, globals::dataS.gameVersion);
+	toGetUnitInfoCard->SetNewCode();
+	toGetUnitInfoCard->Enable();
+	f1 << "Done" << endl;
+
+
+	f1 << "Start applying onGetUnitCard patch" << endl;
+	onGetUnitCard* toGetUnitCard = new onGetUnitCard(mem, (LPVOID)patchesForGame::onGetUnitCard, globals::dataS.gameVersion);
+	toGetUnitCard->SetNewCode();
+	toGetUnitCard->Enable();
+	f1 << "Done" << endl;
+
+
+	f1 << "Start applying onCalculateMiningIncome patch" << endl;
+	onCalculateMiningIncome* toCalculateMiningIncome = new onCalculateMiningIncome(mem, (LPVOID)patchesForGame::onCalculateMiningIncome, globals::dataS.gameVersion);
+	toCalculateMiningIncome->SetNewCode();
+	toCalculateMiningIncome->Enable();
+	f1 << "Done" << endl;
+
 	f1 << "Start applying onNewGameLoaded patch" << endl;
 	onNewGameLoaded* toNewGameLoaded = new onNewGameLoaded(mem, (LPVOID)patchesForGame::onNewGameLoaded, globals::dataS.gameVersion);
 	toNewGameLoaded->SetNewCode();
 	toNewGameLoaded->Enable();
 	f1 << "Done" << endl;
-
-
-
+	
 	f1 << "Start applying onBattleRams patch" << endl;
 	onBattleRams* toBattleRams = new onBattleRams(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
 	toBattleRams->SetNewCode();

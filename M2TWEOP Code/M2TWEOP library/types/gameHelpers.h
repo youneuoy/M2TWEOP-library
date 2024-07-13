@@ -281,12 +281,22 @@ struct options2
 	char pad_01FA[2]; //0x01FA
 	uint16_t word_163A0EC; //0x01FC
 	char pad_01FE[54]; //0x01FE
-	int16_t currentHotseatPlayerOrSomething; //0x0234
-	char pad_0236[2]; //0x0236
+	uint32_t currentHotseatPlayersMask; //0x0234
 	class N0003DF44* keysetPointer; //0x0238
 	char pad_023C[4]; //0x023C
 	int32_t keySetUsed; //0x0240
 	int32_t preferencesWereLoaded; //0x0244
+	bool isHotseatPlayer(int id)
+	{
+		return currentHotseatPlayersMask & (1 << id);
+	}
+	void setHotseatPlayer(int id, bool value)
+	{
+		if (value)
+			currentHotseatPlayersMask |= (1 << id);
+		else
+			currentHotseatPlayersMask &= ~(1 << id);
+	}
 };
 
 struct fakeTextInput
@@ -338,7 +348,10 @@ class m2tweopOptions
 public:
 	static void setHideUnknownUnitTooltips(bool value) { hideUnknownUnitTooltips = value; }
 	static bool getHideUnknownUnitTooltips() { return hideUnknownUnitTooltips; }
+	static void setHandleUnitCards(bool value) { eopHandleUnitCards = value; }
+	static bool getHandleUnitCards() { return eopHandleUnitCards; }
 	static bool hideUnknownUnitTooltips;
+	static bool eopHandleUnitCards;
 };
 
 namespace gameHelpers

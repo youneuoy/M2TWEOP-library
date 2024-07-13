@@ -1278,8 +1278,13 @@ public:
 		else
 			ownership &= ~(1 << factionID);
 	}
+	
 	std::string getPrimaryAnim()
 	{
+		if (!modelEntry)
+			return "";
+		if (!modelEntry->animations)
+			return "";
 		if (!modelEntry->animations->primaryAnim)
 			return "";
 		return modelEntry->animations->primaryAnim->name;
@@ -1287,6 +1292,10 @@ public:
 
 	std::string getSecondaryAnim()
 	{
+		if (!modelEntry)
+			return "";
+		if (!modelEntry->animations)
+			return "";
 		if (!modelEntry->animations->secondaryAnim)
 			return "";
 		return modelEntry->animations->secondaryAnim->name;

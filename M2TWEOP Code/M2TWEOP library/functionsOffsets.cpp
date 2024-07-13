@@ -299,6 +299,7 @@ void codes::initCodes(int gameVer)
 		offsets.createEventAcceptObj = 0xA7FBE0;
 		offsets.createUnitFunc2 = 0x8EC560;
 		offsets.switchFactionLeader = 0x4E8FE0;
+		offsets.modifyWithSettMechanics = 0x8E6390;
 	}
 
 
@@ -600,5 +601,6 @@ void codes::initCodes(int gameVer)
 		offsets.incEventCounter = 0x48CC10;
 		offsets.createEventAcceptObj = 0xA80C40;
 		offsets.switchFactionLeader = 0x4E95F0;
+		offsets.modifyWithSettMechanics = 0x8E6E10;
 	}
 }
