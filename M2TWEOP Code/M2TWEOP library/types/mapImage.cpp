@@ -39,10 +39,6 @@ namespace mapImageManager
 		LPDIRECT3DTEXTURE9 retTexture = graphicsExport::loadTexture(path.c_str(), &x, &y);
 		retTexture = updateRegionColors(mapImage, retTexture, x, y);
 
-		sol::as_table_t int2 = sol::as_table(std::vector<int>{
-			x, y
-		});
-
 		return std::make_tuple(x, y, reinterpret_cast<void*>(retTexture));
 	}
 	

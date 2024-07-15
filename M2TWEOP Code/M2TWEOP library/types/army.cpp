@@ -968,6 +968,7 @@ namespace armyHelpers
 		@tfield int totalStrengthStart
 		@tfield int alliance
 		@tfield int generalDeathTimer
+		@tfield int upkeepModifier
 		@tfield int generalRoutTimer
 		@tfield bool isHalfDestroyed
 		@tfield int generalBattleCommand
@@ -1025,6 +1026,7 @@ namespace armyHelpers
 		types.armyStruct.set("isAdmiral", &armyStruct::isAdmiral);
 		types.armyStruct.set("supportingArmiesCampaign", &armyStruct::supportingArmiesCampaign);
 		types.armyStruct.set("canRetreat", &armyStruct::canRetreat);
+		types.armyStruct.set("upkeepModifier", &armyStruct::upkeepModifier);
 		types.armyStruct.set("battleLadders", &armyStruct::battleLadders);
 		types.armyStruct.set("battleRams", &armyStruct::battleRams);
 		types.armyStruct.set("battleOutcome", &armyStruct::battleOutcome);

@@ -2268,7 +2268,7 @@ void luaPlugin::initUnits()
 	@tfield int class - Get only
 	@tfield int categoryClassCombo - Get only
 	@tfield int recruitPriorityOffset times 4
-	@tfield int crusadingUpkeepModifier
+	@tfield float crusadingUpkeepModifier
 	@tfield float aiUnitValuePerSoldier
 	@tfield float aiUnitValue
 	@tfield int soldierCount

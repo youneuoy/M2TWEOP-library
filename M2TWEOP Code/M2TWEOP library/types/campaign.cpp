@@ -334,7 +334,7 @@ settlementStruct* campaign::getSettlementByName(const char* name)
 
 factionStruct* campaign::getFactionHashed(const std::string& name)
 {
-	if (!plugData::data.luaAll.hashLoaded)
+	if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.factions.empty())
 		plugData::data.luaAll.fillHashMaps();
 	const auto factionId = plugData::data.luaAll.factions.find(name);
 	if (factionId == plugData::data.luaAll.factions.end()) 

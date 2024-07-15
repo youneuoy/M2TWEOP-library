@@ -820,6 +820,7 @@ struct aiOrder
 	std::vector<std::pair<int, int>> validTiles{};
 	void setTiles(int x, int y);
 	void sortArmies();
+	bool playerInvolved = false;
 	bool executed = false;
 	void removeUsedResources();
 	std::vector<int> tileNums{};

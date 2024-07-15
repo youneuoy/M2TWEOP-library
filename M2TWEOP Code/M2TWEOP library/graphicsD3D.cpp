@@ -201,11 +201,7 @@ std::tuple<int, int, void*> graphicsExport::loadTextureToGame(const std::string&
 	int x = 0;
 	int y = 0;
 	LPDIRECT3DTEXTURE9 retTexture = loadTexture(path.c_str(), &x, &y);
-
-	sol::as_table_t int2 = sol::as_table(std::vector<int>{
-		x, y
-	});
-
+	
 	return std::make_tuple(x, y, reinterpret_cast<void*>(retTexture));
 }
 	
@@ -349,7 +345,7 @@ void graphicsD3D::onDrawAllGameStuff()
 	ImGui::Render();
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 
-	if (tempData.texturesForDeleting.size())
+	if (!tempData.texturesForDeleting.empty())
 	{
 		for (auto tex : tempData.texturesForDeleting)
 		{

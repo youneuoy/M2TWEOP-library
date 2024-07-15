@@ -1118,7 +1118,7 @@ struct eduEntry {
 	ushort customBattleCost;
 	ushort customBattleIncrease;
 	ushort customBattleLimit;
-	DWORD crusadingUpkeepModifier;
+	float crusadingUpkeepModifier;
 	DWORD recruitPriorityOffset;
 	int8_t formationHorde;
 	int8_t formationColumn;

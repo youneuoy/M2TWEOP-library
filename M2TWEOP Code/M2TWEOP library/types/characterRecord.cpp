@@ -183,9 +183,38 @@ namespace characterRecordHelpers
 		return retAnc;
 	}
 	
+	void removeAncillaryManual(characterRecord* character, ancillary* anc)
+	{
+		if (character == nullptr || anc == nullptr) return;
+		UINT32 index = 0;
+		bool found = false;
+		for (; index < character->ancNum; index++)
+		{
+			if (auto currAnc = character->ancillaries[index]->dataAnc; currAnc == anc)
+			{
+				found = true;
+				delete currAnc;
+				break;
+			}
+		}
+		if (!found) return;
+		--character->ancNum;
+		while (index < character->ancNum)
+		{
+			const auto a1 = character->ancillaries[index + 1];
+			const auto a2 = &character->ancillaries[index++];
+			*a2 = a1;
+		}
+	}
+	
 	void removeAncillary(characterRecord* character, ancillary* anc)
 	{
-		if (character == nullptr || anc == nullptr)return;
+		if (character == nullptr || anc == nullptr) return;
+		if (character->deathType > 0 || !character->gen)
+		{
+			removeAncillaryManual(character, anc);
+			return;
+		}
 		DWORD adr = codes::offsets.removeAncillary;
 		_asm
 		{

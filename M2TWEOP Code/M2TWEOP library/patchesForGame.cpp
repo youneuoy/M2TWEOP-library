@@ -1384,6 +1384,7 @@ void __stdcall patchesForGame::afterCampaignMapLoaded()
 {
 	discordManager::onCampaignMapLoaded();
 	globals::dataS.Modules.tacticalMapViewer.unView();
+	plugData::data.luaAll.fillHashMaps();
 	gameEvents::onCampaignMapLoaded();
 }
 
@@ -1637,6 +1638,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	}
 	else if (eventCode == gameReloaded)
 	{
+		minorSettlementDb::load();
 		eopSettlementDataDb::get()->onGameLoaded();
 		eopCharacterDataDb::get()->onGameLoaded();
 	}

@@ -202,7 +202,7 @@ namespace gameHelpers
 
 	const char* getReligionName(const int index)
 	{
-		if (!plugData::data.luaAll.hashLoaded)
+		if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.religionNames.empty())
 			plugData::data.luaAll.fillHashMaps();
 		const auto religionName = plugData::data.luaAll.religionNames.find(index);
 		if (religionName == plugData::data.luaAll.religionNames.end()) 
@@ -212,7 +212,7 @@ namespace gameHelpers
 
 	const char* getClimateName(const int index)
 	{
-		if (!plugData::data.luaAll.hashLoaded)
+		if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.climateNames.empty())
 			plugData::data.luaAll.fillHashMaps();
 		const auto name = plugData::data.luaAll.climateNames.find(index);
 		if (name == plugData::data.luaAll.climateNames.end()) 
@@ -222,7 +222,7 @@ namespace gameHelpers
 
 	const char* getCultureName(const int index)
 	{
-		if (!plugData::data.luaAll.hashLoaded)
+		if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.cultureNames.empty())
 			plugData::data.luaAll.fillHashMaps();
 		const auto name = plugData::data.luaAll.cultureNames.find(index);
 		if (name == plugData::data.luaAll.cultureNames.end()) 
@@ -243,7 +243,7 @@ namespace gameHelpers
 
 	int getReligionN(const std::string& name)
 	{
-		if (!plugData::data.luaAll.hashLoaded)
+		if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.religionIndex.empty())
 			plugData::data.luaAll.fillHashMaps();
 		const auto religionIndex = plugData::data.luaAll.religionIndex.find(name);
 		if (religionIndex == plugData::data.luaAll.religionIndex.end()) 
@@ -253,7 +253,7 @@ namespace gameHelpers
 
 	int getClimateN(const std::string& name)
 	{
-		if (!plugData::data.luaAll.hashLoaded)
+		if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.climateIndex.empty())
 			plugData::data.luaAll.fillHashMaps();
 		const auto index = plugData::data.luaAll.climateIndex.find(name);
 		if (index == plugData::data.luaAll.climateIndex.end()) 
@@ -263,7 +263,7 @@ namespace gameHelpers
 
 	int getCultureN(const std::string& name)
 	{
-		if (!plugData::data.luaAll.hashLoaded)
+		if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.cultureIndex.empty())
 			plugData::data.luaAll.fillHashMaps();
 		const auto index = plugData::data.luaAll.cultureIndex.find(name);
 		if (index == plugData::data.luaAll.cultureIndex.end()) 

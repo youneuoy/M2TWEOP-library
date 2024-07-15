@@ -101,6 +101,8 @@ settlementStruct* minorSettlementDb::getSettlementAtIndex(const int regionId, co
 	if (!m_Loaded)
 		load();
 	const auto setts = regionMinorSettlements[regionId];
+	if (setts.empty())
+		load();
 	if (index < 0 || index >= static_cast<int>(setts.size()))
 	{
 		gameHelpers::logStringGame("Minor settlement index out of bounds " + std::to_string(index) + " regionId: " + std::to_string(regionId));
@@ -514,7 +516,7 @@ namespace stratMapHelpers
 
 	settlementStruct* getSettlement(stratMap* map, const std::string& name)
 	{
-		if (!plugData::data.luaAll.hashLoaded)
+		if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.settlements.empty())
 			plugData::data.luaAll.fillHashMaps();
 		const auto regionId = plugData::data.luaAll.settlements.find(name);
 		if (regionId == plugData::data.luaAll.settlements.end()) 
@@ -532,7 +534,7 @@ namespace stratMapHelpers
 
 	regionStruct* getRegionByName(stratMap* map, const std::string& name)
 	{
-		if (!plugData::data.luaAll.hashLoaded)
+		if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.regions.empty())
 			plugData::data.luaAll.fillHashMaps();
 		const auto regionId = plugData::data.luaAll.regions.find(name);
 		if (regionId == plugData::data.luaAll.regions.end()) 

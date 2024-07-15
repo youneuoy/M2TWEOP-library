@@ -126,8 +126,8 @@ namespace gameUiHelpers
 			const auto unitCard = reinterpret_cast<uiUnitCard*>(card);
 			if (const auto unit = unitCard->unit; unit && unit->spyingInfoUnit.spyingInfoFactionArray[localFacId] < 1)
 			{
-				card->xSize = 0;
-				card->ySize = 0;
+				card->xSize = 1;
+				card->ySize = 1;
 			}
 		}
 	}

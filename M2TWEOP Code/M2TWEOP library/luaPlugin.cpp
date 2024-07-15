@@ -238,6 +238,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getRebelFaction getRebelFaction
 	@tfield addBanner addBanner
 	@tfield getFactionRecord getFactionRecord
+	@tfield hideUnknownUnitTooltips hideUnknownUnitTooltips
 	@table M2TWEOP
 	*/
 	
@@ -795,6 +796,24 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 		local facRecord = M2TWEOP.getFactionRecord(sett.creatorFactionID)
 	*/
 	tables.M2TWEOP.set_function("getFactionRecord", &factionHelpers::getFactionRecord);
+	
+	/***
+	Hides tooltips for unknown units, only use if you use empty card instead of question mark as the UI.
+	@function M2TWEOP.hideUnknownUnitTooltips
+	@tparam bool set
+	@usage
+		M2TWEOP.hideUnknownUnitTooltips(true)
+	*/
+	tables.M2TWEOP.set_function("hideUnknownUnitTooltips", &m2tweopOptions::setHideUnknownUnitTooltips);
+	
+	/***
+	Faction specific unit cards are always chosen if found.
+	@function M2TWEOP.handleUnitCards
+	@tparam bool set
+	@usage
+		M2TWEOP.handleUnitCards(true)
+	*/
+	tables.M2TWEOP.set_function("handleUnitCards", &m2tweopOptions::setHandleUnitCards);
 	
 	/***
 	Add a banner symbol. Add them onCampaignMapLoaded or later!

@@ -21,6 +21,7 @@
 std::shared_ptr<globalEopAiConfig> globalEopAiConfig::m_Instance = std::make_shared<globalEopAiConfig>();
 
 bool TURN_HAD_ACTION = false;
+bool PLAYER_ASSAULTED = false;
 
 namespace campaignAi
 {
@@ -440,7 +441,10 @@ void aiOrder::setTiles(const int x, const int y)
 			if (stratMapHelpers::isTileValidForCharacterType(7, checkX, checkY))
 			{
 				const auto tile = stratMapHelpers::getTile(checkX, checkY);
-				if (const auto army = tile->getArmy(); (army && army->faction->factionID == globalEopAiConfig::getCurrentFaction()->factionID) || !army)
+				const auto army = tile->getArmy();
+				if (army && army->faction->isPlayerControlled == 1)
+					playerInvolved = true;
+				if ((army && army->faction->factionID == globalEopAiConfig::getCurrentFaction()->factionID) || !army)
 				{
 					validTiles.emplace_back(checkX, checkY);
 					tileNums.emplace_back(army ? army->numOfUnits : 0);
@@ -522,12 +526,14 @@ bool attackSettlementOrder::evaluate()
 bool attackSettlementOrder::evaluateAttack()
 {
 	const auto settlement = targetSettlement->settlement;
+	if (assignedArmies.front()->moveCost >= assignedArmies.front()->army->gen->movePointsArmy || assignedArmies.front()->turns > 1)
+		return false;
 	if (!settlement->army)
 		return true;
-	int power = settlement->army->totalStrength;
+	int power = settlement->army ? settlement->army->totalStrength : 0;
 	const auto attModifier = campaignHelpers::getCampaignDb()->campaignDbAi.siegeAttStrModifier;
 	const auto fac = globalEopAiConfig::getCurrentFaction();
-	if (assignedArmies.size() == 1 && assignedArmies.front()->moveCost < assignedArmies.front()->army->gen->movePointsArmy)
+	if (assignedArmies.size() == 1 && assignedArmies.front()->moveCost < assignedArmies.front()->army->gen->movePointsArmy && assignedArmies.front()->turns < 2)
 	{
 		return targetSettlement->positionPower < assignedArmies.front()->army->totalStrength * attModifier;
 	}
@@ -603,14 +609,16 @@ bool attackSettlementOrder::execute()
 			TURN_HAD_ACTION = true;
 			if (!hasAssaulted)
 			{
-				if (assignedArmy->army->canStartAssault(targetSettlement->settlement))
+				if (assignedArmy->army->canStartAssault(targetSettlement->settlement) && assignedArmy->moveCost < assignedArmy->army->gen->movePointsArmy && assignedArmy->turns < 2 && !PLAYER_ASSAULTED)
 				{
 					gameHelpers::logStringGame("Assaulted");
 					assignedArmy->army->gen->hasEopOrders = true;
 					assignedArmy->army->siegeSettlement(targetSettlement->settlement, true);
+					if (playerInvolved || targetSettlement->settlement->isPlayerControlled())
+						PLAYER_ASSAULTED = true;
 					break;
 				}
-				if (targetSettlement->settlement->siegeNum < 8 || assignedArmy->army->siege)
+				if ((targetSettlement->settlement->siegeNum < 8 || assignedArmy->army->siege) && assignedArmy->moveCost < assignedArmy->army->gen->movePointsArmy && assignedArmy->turns < 2)
 				{
 					gameHelpers::logStringGame("Maintained siege");
 					assignedArmy->army->gen->hasEopOrders = true;
@@ -748,6 +756,8 @@ bool attackArmyOrder::evaluate()
 
 bool attackArmyOrder::evaluateAttack()
 {
+	if (PLAYER_ASSAULTED)
+		return false;
 	const auto attModifier = campaignHelpers::getCampaignDb()->campaignDbAi.attStrModifier;
 	if (assignedArmies.size() == 1)
 	{
@@ -795,6 +805,8 @@ bool attackArmyOrder::execute()
 			gameHelpers::logStringGame(logString2);
 			if (assignedArmy->army->attackArmy(targetArmy->army))
 			{
+				if (playerInvolved || targetArmy->army->faction->isPlayerControlled == 1)
+					PLAYER_ASSAULTED = true;
 				assignedArmy->army->gen->hasEopOrders = true;
 				assignedArmy->used = true;
 				TURN_HAD_ACTION = true;
@@ -1412,6 +1424,11 @@ void aiFactionData::setAidFactionFactor(const factionStruct* faction, const floa
 
 void aiFactionData::setSettlementFactor(const settlementStruct* settlement, float factor)
 {
+	if (!settlement)
+	{
+		gameHelpers::logStringGame("Settlement is null!");
+		return;
+	}
 	for (auto& [indexes, value] : settlementFactors)
 	{
 		if (const auto [regionId, settIndex] = indexes; regionId == settlement->regionID && settIndex == settlement->minorSettlementIndex)
@@ -1468,6 +1485,7 @@ void globalEopAiConfig::turnStartMove(factionStruct* fac, const bool isEnd)
 	m_Faction = fac;
 	m_CurrentFacData = getFactionData(m_Faction);
 	TURN_HAD_ACTION = false;
+	PLAYER_ASSAULTED = false;
 	isEndTurn = isEnd;
 	getData(fac);
 	assignOrders(fac);
