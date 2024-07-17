@@ -95,12 +95,16 @@ void factionRecord::setCulture(const int Id)
 	facCulture = &culturesDb->cultures[Id];
 }
 
+stringWithHash* LOOKUP_STRING_LABEL = new stringWithHash();
+
 characterRecord* factionStruct::getCharacterByLabel(const std::string& label)
 {
+	gameStringHelpers::setHashedString(&LOOKUP_STRING_LABEL->name, label.c_str());
 	const int recordCount = characterRecordNum;
+	const UINT32 hash = static_cast<UINT32>(LOOKUP_STRING_LABEL->hash);
 	for (int i = 0; i < recordCount; i++)
 	{
-		if (const auto rec = characterRecords[i]; rec->labelCrypt != 0 && rec->label && strcmp(rec->label, label.c_str()) == 0)
+		if (const auto rec = characterRecords[i]; rec->labelCrypt == hash)
 			return rec;
 	}
 	return nullptr;
@@ -122,7 +126,8 @@ void factionStruct::setLeader(characterRecord* newLeader, const bool onlyLeader)
 				record->isLeader())
 			{
 				record->status &= ~1;
-				record->removeEpithet();
+				GAME_FUNC(void(__thiscall*)(characterRecord*, const char*, const char*, UNICODE_STRING***, int, bool)
+				          , setCharacterName)(record, record->shortName, record->lastName, record->localizedNicknameForSave, 7, false);
 				if (record->getTraitLevel("FactionLeader") > 0)
 					characterRecordHelpers::removeTrait(record, "FactionLeader");
 			}

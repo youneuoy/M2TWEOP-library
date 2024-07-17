@@ -239,6 +239,9 @@ namespace characterHelpers
 		if (!gen || !gen->characterRecord || !sett || !gen->characterRecord->isAlive || gen->characterRecord->faction->factionID == sett->faction->factionID)
 			return;
 
+		if (sett->isFort())
+			return;
+
 		//if maintain option is on and general is leading an army and the army is sieging the settlement then do maintain stuff
 		if (!isAttack && gen->army && gen->army->siege && gen->army->siege->getSiegedSettlement() == sett)
 		{
@@ -287,7 +290,7 @@ namespace characterHelpers
 		
 		if (cadClass == 0) return;
 		
-		GAME_FUNC(DWORD(__thiscall*)(character* character, DWORD cadClassP, int a3),
+		GAME_FUNC(bool(__thiscall*)(character* character, DWORD cadClassP, int a3),
 			getReadySiegeCharacterGarrisonedFunc)(gen, cadClass, 0);
 		
 		DWORD adrFunc = codes::offsets.finalizeActionStrat;

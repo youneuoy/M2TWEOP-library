@@ -284,12 +284,12 @@ float globalEopAiConfig::calculateSettPriority(const std::shared_ptr<settlementR
 		}
 	}
 	if (priType == priType_target)
-		priority -= clamp(settRes->totalSupportReceiving * 2.f, 0.f, 50000.f);
+		priority -= clamp(settRes->totalSupportReceiving * 0.5f, 0.f, 50000.f);
 	if (priority < 1)
 		return 0.f;
 	if (empty)
 		priority *= 2.f;
-	priority *= (clamp(balance * powerFactor, 0.f, 4.f));
+	priority *= (clamp(balance * powerFactor, 0.f, 3.f));
 	priority *= residenceFactor;
 	const auto config = campaignAi::getLtgdConfig();
 	switch(priType)
@@ -355,7 +355,7 @@ float globalEopAiConfig::calculateArmyPriority(const std::shared_ptr<armyResourc
 		return 0.f;
 	const auto facData = getCurrentFactionData();
 	float priority = clamp(armyRes->army->totalStrength * 1.f, 0.f, 20000.f);
-	priority += clamp(armyRes->totalThreatGiving * (priType == priType_target ? 3.f : 1.f), 0.f, 30000.f);
+	priority += clamp(armyRes->totalThreatGiving * (priType == priType_target ? 3.5f : 1.f), 0.f, 30000.f);
 	if (armyRes->army->gen && armyRes->army->gen->getTypeID() == characterTypeStrat::namedCharacter)
 	{
 		priority *= 1.25f;
@@ -370,7 +370,7 @@ float globalEopAiConfig::calculateArmyPriority(const std::shared_ptr<armyResourc
 				priority *= 2.0f;
 		}
 	}
-	priority *= clamp(balance * powerFactor, 0.f, 4.f);
+	priority *= clamp(balance * powerFactor, 0.f, 3.f);
 	if (priType == priType_target)
 		priority -= clamp(armyRes->totalSupportReceiving, 0, 30000) ;
 	if (priority < 1)
@@ -396,8 +396,6 @@ float globalEopAiConfig::calculateArmyPriority(const std::shared_ptr<armyResourc
 		{
 			if (!stratMapHelpers::getRegion(armyRes->army->gen->regionID)->hasAlliesToFaction(m_Faction->factionID, false))
 				priority *= 0.66f;
-			else
-				priority += stratMapHelpers::getRegion(armyRes->army->gen->regionID)->devastatedTilesCount * 200;
 			priority *= defenseFactor;
 			break;
 		}
@@ -405,6 +403,8 @@ float globalEopAiConfig::calculateArmyPriority(const std::shared_ptr<armyResourc
 		{
 			if (!stratMapHelpers::getRegion(armyRes->army->gen->regionID)->hasAlliesToFaction(m_Faction->factionID, false))
 				priority *= 0.50f;
+			else
+				priority += stratMapHelpers::getRegion(armyRes->army->gen->regionID)->devastatedTilesCount * 200;
 			priority *= (config->getPriorityMod(m_Faction, armyRes->army->faction) * invadePriorityFactor);
 			priority *= facData->getTargetFactionFactor(armyRes->army->faction);
 			priority *= facData->getTargetReligionFactor(armyRes->army->faction->religion);
@@ -577,6 +577,8 @@ bool attackSettlementOrder::execute()
 				|| assignedArmy->army->gen->visitingArmy
 				|| !assignedArmy->army->canStartSiege(targetSettlement->settlement))
 				continue;
+			if (assignedArmy->army->siege && globalEopAiConfig::getInstance()->isEndTurn)
+				continue;
 			const std::string logString2 = "General: " + string(assignedArmy->army->gen->characterRecord->fullName);
 			gameHelpers::logStringGame(logString2);
 			const std::string logString = "Settlement: " + string(targetSettlement->settlement->name);
@@ -609,7 +611,11 @@ bool attackSettlementOrder::execute()
 			TURN_HAD_ACTION = true;
 			if (!hasAssaulted)
 			{
-				if (assignedArmy->army->canStartAssault(targetSettlement->settlement) && assignedArmy->moveCost < assignedArmy->army->gen->movePointsArmy && assignedArmy->turns < 2 && !PLAYER_ASSAULTED)
+				if (assignedArmy->army->canStartAssault(targetSettlement->settlement)
+					&& assignedArmy->moveCost < assignedArmy->army->gen->movePointsArmy
+					&& assignedArmy->turns < 2
+					&& !PLAYER_ASSAULTED
+					&& !globalEopAiConfig::getInstance()->isEndTurn)
 				{
 					gameHelpers::logStringGame("Assaulted");
 					assignedArmy->army->gen->hasEopOrders = true;
@@ -618,7 +624,9 @@ bool attackSettlementOrder::execute()
 						PLAYER_ASSAULTED = true;
 					break;
 				}
-				if ((targetSettlement->settlement->siegeNum < 8 || assignedArmy->army->siege) && assignedArmy->moveCost < assignedArmy->army->gen->movePointsArmy && assignedArmy->turns < 2)
+				if ((targetSettlement->settlement->siegeNum < 8 || assignedArmy->army->siege)
+					&& ((assignedArmy->moveCost < assignedArmy->army->gen->movePointsArmy && assignedArmy->turns < 2)
+					|| assignedArmy->army->isBorderingSettlement(targetSettlement->settlement)))
 				{
 					gameHelpers::logStringGame("Maintained siege");
 					assignedArmy->army->gen->hasEopOrders = true;
@@ -631,7 +639,7 @@ bool attackSettlementOrder::execute()
 			{
 				gameHelpers::logStringGame("Supported siege");
 				assignedArmy->army->gen->hasEopOrders = true;
-				assignedArmy->army->gen->movePointsArmy = 1;
+				assignedArmy->army->gen->movePointsArmy = 10;
 			}
 		}
 		gameHelpers::logStringGame("Executed attack settlement order for faction: " + std::to_string(globalEopAiConfig::getCurrentFaction()->factionID));
@@ -1047,7 +1055,7 @@ void globalEopAiConfig::checkRegion(int regionId)
 					regionArmyRes->totalThreatGiving += regionArmy->totalStrength / nearSettlement.turns;
 					settRes->totalThreatReceiving += regionArmy->totalStrength / nearSettlement.turns;
 				}
-				else
+				else if (nearSettlement.settlement->faction->factionID == regionArmy->faction->factionID)
 				{
 					regionArmyRes->totalSupportGiving += regionArmy->totalStrength / nearSettlement.turns;
 					settRes->totalSupportReceiving += regionArmy->totalStrength / nearSettlement.turns;
@@ -1075,7 +1083,7 @@ void globalEopAiConfig::checkRegion(int regionId)
 					regionArmyRes->totalThreatGiving += regionArmy->totalStrength / nearArmy.turns;
 					armyRes->totalThreatReceiving += regionArmy->totalStrength / nearArmy.turns;
 				}
-				else
+				else if (nearArmy.army->faction->factionID == regionArmy->faction->factionID)
 				{
 					regionArmyRes->totalSupportGiving += regionArmy->totalStrength / nearArmy.turns;
 					armyRes->totalSupportReceiving += regionArmy->totalStrength / nearArmy.turns;
@@ -1252,7 +1260,6 @@ const auto threatSort2 = [](const std::shared_ptr<armyResource>& a, const std::s
 
 void globalEopAiConfig::assignOrders(factionStruct* fac)
 {
-	const float turnsFactor = 1.f / maxTurnSearchCount;
 	for (const auto& settRes : m_Settlements)
 	{
 		const float priority = calculateSettPriority(settRes, priType_own);
@@ -1489,6 +1496,8 @@ void globalEopAiConfig::turnStartMove(factionStruct* fac, const bool isEnd)
 	isEndTurn = isEnd;
 	getData(fac);
 	assignOrders(fac);
+	if (isEnd)
+		return;
 	const auto strengthSort = [](const std::shared_ptr<armyResource>& a, const std::shared_ptr<armyResource>& b)
 	{
 		return a->army->totalStrength < b->army->totalStrength;

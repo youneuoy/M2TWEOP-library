@@ -921,7 +921,7 @@ void luaPlugin::fillHashMaps()
 		const int settCount = region->settlementCount();
 		for (int j = 0; j < settCount; j++)
 		{
-			if (const auto settlement = region->getSettlement(j))
+			if (const auto settlement = region->getSettlement(j); settlement)
 				settlements.insert_or_assign(std::string(settlement->name), i);
 		}
 	}

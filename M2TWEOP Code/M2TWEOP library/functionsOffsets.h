@@ -17,8 +17,7 @@ public:
 		DWORD setScriptCounter = NULL;
 		DWORD getUnitFullMovePoints = NULL;
 		DWORD createMoveExtents = NULL;
-
-
+		DWORD setCharacterName = NULL;
 
 		DWORD createIdleActionFunc = NULL;
 		DWORD makeCadDiplomacyFunc = NULL;

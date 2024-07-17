@@ -153,6 +153,7 @@ public:
 
 namespace cultures
 {
+	std::string getRandomPortrait(int cultureId, int religionId);
     enum class portraitType
     {
         civilians = 0,

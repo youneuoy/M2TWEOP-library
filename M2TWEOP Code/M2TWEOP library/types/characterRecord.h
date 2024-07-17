@@ -236,6 +236,10 @@ struct characterRecord { /* many important info about character */
 public:
 	std::string giveValidLabel();
 	void removeEpithet();
+	void applyName();
+	void setPortrait(const std::string& portraitPath);
+	void giveRandomName(int nameFactionId);
+	void giveRandomPortrait(int cultureId, int religionId);
 	bool hasAncillary(const std::string& ancName);
 	std::string getEopSetModel();
 	traitContainer* getTraits() const
@@ -382,15 +386,42 @@ class eopCharacterData
 {
 public:
 	std::string model;
+	int characterType;
+	std::string portrait;
+	std::string portrait2;
+	std::string localizedDisplayName;
+	std::string localizedName;
+	std::string localizedLastName;
+	std::string localizedEpithet;
+	std::string internalName;
+	std::string internalLastName;
 	nlohmann::json serialize()
 	{
 		nlohmann::json json;
 		json["model"] = model;
+		json["characterType"] = characterType;
+		json["portrait"] = portrait;
+		json["portrait2"] = portrait2;
+		json["localizedDisplayName"] = localizedDisplayName;
+		json["localizedName"] = localizedName;
+		json["localizedLastName"] = localizedLastName;
+		json["localizedEpithet"] = localizedEpithet;
+		json["internalName"] = internalName;
+		json["internalLastName"] = internalLastName;
 		return json;
 	}
 	void deserialize(const nlohmann::json& json)
 	{
 		model = json["model"];
+		characterType = json["characterType"];
+		portrait = json["portrait"];
+		portrait2 = json["portrait2"];
+		localizedDisplayName = json["localizedDisplayName"];
+		localizedName = json["localizedName"];
+		localizedLastName = json["localizedLastName"];
+		localizedEpithet = json["localizedEpithet"];
+		internalName = json["internalName"];
+		internalLastName = json["internalLastName"];
 	}
 };
 
@@ -413,6 +444,21 @@ public:
 			(*eopCharData)[label] = std::make_shared<eopCharacterData>();
 		return (*eopCharData)[label];
 	}
+	std::shared_ptr<eopCharacterData> getOrCreateData(const std::string& label, int characterType)
+	{
+		if (eopCharData->find(label) == eopCharData->end())
+		{
+			(*eopCharData)[label] = std::make_shared<eopCharacterData>();
+			(*eopCharData)[label]->characterType = characterType;
+		}
+		if (const auto data = (*eopCharData)[label]; data->characterType != characterType)
+		{
+			eopCharData->erase(label);
+			(*eopCharData)[label] = std::make_shared<eopCharacterData>();
+			(*eopCharData)[label]->characterType = characterType;
+		}
+		return (*eopCharData)[label];
+	}
 	void createCharacterData(const std::string& label)
 	{
 		if (eopCharData->find(label) == eopCharData->end())
@@ -422,6 +468,7 @@ public:
 	{
 		return instance.get();
 	}
+	static void validate();
 	std::shared_ptr<std::unordered_map<std::string, std::shared_ptr<eopCharacterData>>> eopCharData{};
 	static std::shared_ptr<eopCharacterDataDb> instance;
 	nlohmann::json serialize()

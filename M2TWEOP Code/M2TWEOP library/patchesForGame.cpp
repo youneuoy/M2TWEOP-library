@@ -113,7 +113,7 @@ DWORD __fastcall patchesForGame::onSearchUnitType(char* typeName)
 {
 	if (const auto eopUnit = eopDu::getEopEduEntryByName(typeName); eopUnit != nullptr)
 	{
-		gameHelpers::logStringGame("Unit found in M2TWEOP: " + std::string(typeName) + " index: " + std::to_string(eopUnit->index));
+		//gameHelpers::logStringGame("Unit found in M2TWEOP: " + std::string(typeName) + " index: " + std::to_string(eopUnit->index));
 		GLOBAL_NAME_INDEX_COMBO = std::make_shared<nameIndexCombo>(typeName, eopUnit->index);
 		return reinterpret_cast<DWORD>(GLOBAL_NAME_INDEX_COMBO.get());
 	}
@@ -1385,6 +1385,7 @@ void __stdcall patchesForGame::afterCampaignMapLoaded()
 	discordManager::onCampaignMapLoaded();
 	globals::dataS.Modules.tacticalMapViewer.unView();
 	plugData::data.luaAll.fillHashMaps();
+	eopCharacterDataDb::get()->onGameLoaded();
 	gameEvents::onCampaignMapLoaded();
 }
 
@@ -1418,7 +1419,6 @@ void __stdcall patchesForGame::onGameInit()
 
 void __stdcall patchesForGame::onUnloadCampaign()
 {
-	minorSettlementDb::clear();
 	eopRebelFactionDb::clear();
 	globalEopAiConfig::clearFactionData();
 	discordManager::menuLoaded();
@@ -1426,6 +1426,7 @@ void __stdcall patchesForGame::onUnloadCampaign()
 }
 void __stdcall patchesForGame::onNewGameLoaded()
 {
+	eopCharacterDataDb::get()->clearData();
 	minorSettlementDb::load();
 	eopSettlementDataDb::get()->newGameLoaded();
 	eopRebelFactionDb::loadData();
@@ -1447,6 +1448,7 @@ void __stdcall patchesForGame::onChangeTurnNum()
 	f1 << "onChangeTurnNum" << endl;
 	f1.close();
 #endif
+	eopCharacterDataDb::validate();
 	const int num = campaignHelpers::getCampaignData()->turnNumber;
 	discordManager::onChangeTurnNum(num);
 	gameEvents::onChangeTurnNum(num);
@@ -1581,6 +1583,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	const int gameVersion = gameHelpers::getGameVersion();
 	const DWORD scrollOpenedCode = gameVersion == 1 ? 0x013719FC : 0x0132C9D4;
 	const DWORD factionTurnStartCode = gameVersion == 1 ? 0x0136931C : 0x013242F4;
+	const DWORD preFactionTurnStartCode = gameVersion == 1 ? 0x013693EC : 0x013243C4;
 	const DWORD gameReloaded = gameVersion == 1 ? 0x013319E4 : 0x012EC9C4;
 	const DWORD settlementTurnStart = gameVersion == 1 ? 0x0136E2B4 : 0x0132928C;
 	const DWORD settlementTurnEnd = gameVersion == 1 ? 0x0136FADC : 0x0132AAB4;
@@ -1635,6 +1638,16 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 		discordManager::onFactionTurnStart(fac);
 		plannedRetreatRoute::onFactionTurnStart(fac);
 		AI_ACTIVE = true;
+	}
+	else if (eventCode == preFactionTurnStartCode)
+	{
+		factionStruct* fac = reinterpret_cast<factionStruct*>(vTab[1]);
+		const auto campaign = campaignHelpers::getCampaignData();
+		//This fixes some bugs with using the control console command, like winning battles if you quit them.
+		if (fac->isPlayerControlled == 1)
+			campaign->playerFacBitMap |= (1 << fac->factionID);
+		else
+			campaign->playerFacBitMap &= ~(1 << fac->factionID);
 	}
 	else if (eventCode == gameReloaded)
 	{
@@ -1716,7 +1729,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	else if (eventCode == factionTurnEnd)
 	{
 		const auto fac = reinterpret_cast<factionStruct*>(vTab[1]);
-		
+		globalEopAiConfig::getInstance()->turnStartMove(fac, true);
 		//if (globalEopAiConfig::getInstance()->enableLogging && !fac->isPlayerControlled)
 		//	fac->aiFaction->aiGlobalStrategyDirector->militaryDirector.logData();
 		//globalEopAiConfig::getInstance()->turnStartMove(fac, true);
@@ -1757,6 +1770,7 @@ void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
 		}
 	}
 	files = techFuncs::loadGameLoadArchive(files, savePath);
+	minorSettlementDb::clear();
 	eopSettlementDataDb::get()->onGameLoad(files);
 	eopCharacterDataDb::get()->onGameLoad(files);
 	gameEvents::onLoadGamePl(&files);

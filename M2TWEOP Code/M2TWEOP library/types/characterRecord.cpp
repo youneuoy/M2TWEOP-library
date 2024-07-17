@@ -10,9 +10,11 @@
 #include "gameStringHelpers.h"
 #include "functionsOffsets.h"
 #include "character.h"
+#include "cultures.h"
 #include "faction.h"
 #include "gameHelpers.h"
 #include "stratModelsChange.h"
+#include "techFuncs.h"
 #include "unit.h"
 
 enum
@@ -77,9 +79,15 @@ namespace characterRecordHelpers
 		else if (fieldIndex == characterRecord_modelName)
 			gameStringHelpers::setHashedString(&genChar->modelName, newS.c_str());
 		else if (fieldIndex == characterRecord_portrait)
+		{
 			gameStringHelpers::setHashedString(&genChar->portrait, newS.c_str());
+		}
 		else if (fieldIndex == characterRecord_portrait2)
+		{
+			if (const auto charData = eopCharacterDataDb::instance->getOrCreateData(genChar->giveValidLabel(), genChar->gen ? genChar->gen->getTypeID() : 7))
+				charData->portrait2 = newS;
 			gameStringHelpers::setHashedString(&genChar->portrait2, newS.c_str());
+		}
 		else if (fieldIndex == characterRecord_portrait_custom)
 			gameStringHelpers::setHashedString(&genChar->portrait_custom, newS.c_str());
 		else if (fieldIndex == characterRecord_lastName)
@@ -99,27 +107,70 @@ namespace characterRecordHelpers
 			return gameStringHelpers::uniStringToStr(*genChar->localizedNicknameForSave);
 		return "";
 	}
-
-	
 	
 	void namedCharSetLocalizedFullName(characterRecord* genChar, const char* str)
 	{
+		if (const auto charData = eopCharacterDataDb::instance->getOrCreateData(genChar->giveValidLabel(), genChar->gen ? genChar->gen->getTypeID() : 7))
+			charData->localizedDisplayName = str;
 		gameStringHelpers::createUniString(genChar->localizedFullName, str);
 	}
 
+	struct uni16pp
+	{
+		UNICODE_STRING* str;
+		uni16pp()
+		{
+			str = techFuncs::createGameClass<UNICODE_STRING>();
+		}
+	};
+
+	struct uni16ppp
+	{
+		uni16pp* str;
+		uni16ppp()
+		{
+			str = new uni16pp();
+		}
+	};
+
 	void namedCharSetLocalizedNameForSave(characterRecord* genChar, const char* str)
 	{
+		const auto newStr = new uni16ppp();
+		genChar->localizedNameForSave = reinterpret_cast<UNICODE_STRING***>(newStr);
 		gameStringHelpers::createUniString(*genChar->localizedNameForSave, str);
+		genChar->applyName();
+		if (const auto charData = eopCharacterDataDb::instance->getOrCreateData(genChar->giveValidLabel(), genChar->gen ? genChar->gen->getTypeID() : 7))
+		{
+			charData->localizedName = str;
+			if (charData->internalName.empty())
+				charData->internalName = characterRecordHelpers::getStringPropertyGenChar<characterRecord_shortName>(genChar);
+		}
 	}
 
 	void namedCharSetLocalizedNextNameForSave(characterRecord* genChar, const char* str)
 	{
+		const auto newStr = new uni16ppp();
+		genChar->localizedNextNameForSave = reinterpret_cast<UNICODE_STRING***>(newStr);
 		gameStringHelpers::createUniString(*genChar->localizedNextNameForSave, str);
+		genChar->applyName();
+		if (const auto charData = eopCharacterDataDb::instance->getOrCreateData(genChar->giveValidLabel(), genChar->gen ? genChar->gen->getTypeID() : 7))
+		{
+			charData->localizedLastName = str;
+			if (charData->internalLastName.empty())
+				charData->internalLastName = characterRecordHelpers::getStringPropertyGenChar<characterRecord_lastName>(genChar);
+		}
 	}
 
 	void namedCharSetLocalizedNicknameForSave(characterRecord* genChar, const char* str)
 	{
+		const auto newStr = new uni16ppp();
+		genChar->localizedNicknameForSave = reinterpret_cast<UNICODE_STRING***>(newStr);
 		gameStringHelpers::createUniString(*genChar->localizedNicknameForSave, str);
+		genChar->applyName();
+		if (const auto charData = eopCharacterDataDb::instance->getOrCreateData(genChar->giveValidLabel(), genChar->gen ? genChar->gen->getTypeID() : 7))
+		{
+			charData->localizedEpithet = str;
+		}
 	}
 	
 	void setHeir(characterRecord* gen, bool isJustSet)
@@ -497,6 +548,9 @@ namespace characterRecordHelpers
 		@tfield int unrest
 		@tfield int violence
 		@tfield int portraitIndex
+		@tfield string savedDisplayName
+		@tfield string savedDisplayLastName
+		@tfield string savedDisplayEpithet
 		@tfield int[10] combatVsReligion Maximum 10. EVEN IF YOU SET RELIGION LIMIT.
 		@tfield int[31] combatVsFaction Maximum 31.
 		@tfield getEopSetModel getEopSetModel
@@ -507,6 +561,9 @@ namespace characterRecordHelpers
 		@tfield getTrait getTrait
 		@tfield addTraitPoints addTraitPoints
 		@tfield getTraitLevel getTraitLevel
+		@tfield giveRandomName giveRandomName
+		@tfield setPortrait setPortrait
+		@tfield giveRandomPortrait giveRandomPortrait
 
 		@table characterRecord
 		*/
@@ -518,6 +575,9 @@ namespace characterRecordHelpers
 		types.characterRecord.set("lastName", sol::property(&getStringPropertyGenChar<characterRecord_lastName>, &setStringPropertyGenChar<characterRecord_lastName>));
 		types.characterRecord.set("fullName", sol::property(&getStringPropertyGenChar<characterRecord_fullName>, &setStringPropertyGenChar<characterRecord_fullName>));
 		types.characterRecord.set("localizedDisplayName", sol::property(&namedCharUniStringToStr<namedChar_localizedFullName>, &namedCharSetLocalizedFullName));
+		types.characterRecord.set("savedDisplayName", sol::property(&namedCharUniStringToStr<namedChar_localizedNameForSave>, &namedCharSetLocalizedNameForSave));
+		types.characterRecord.set("savedDisplayLastName", sol::property(&namedCharUniStringToStr<namedChar_localizedNextNameForSave>, &namedCharSetLocalizedNextNameForSave));
+		types.characterRecord.set("savedDisplayEpithet", sol::property(&namedCharUniStringToStr<namedChar_localizedNicknameForSave>, &namedCharSetLocalizedNicknameForSave));
 		types.characterRecord.set("label", sol::property(&getStringPropertyGenChar<characterRecord_label>, &setStringPropertyGenChar<characterRecord_label>));
 		types.characterRecord.set("portrait", sol::property(&getStringPropertyGenChar<characterRecord_portrait>, &setStringPropertyGenChar<characterRecord_portrait>));
 		types.characterRecord.set("portrait2", sol::property(&getStringPropertyGenChar<characterRecord_portrait2>, &setStringPropertyGenChar<characterRecord_portrait2>));
@@ -694,6 +754,31 @@ namespace characterRecordHelpers
 		      record:addTraitPoints("GoodCommander", 3)
 		*/
 		types.characterRecord.set_function("addTraitPoints", &characterRecord::addTraitPoints);
+		/***
+		Give a random name.
+		@function characterRecord:giveRandomName
+		@tparam int nameFactionId
+		@usage
+		      record:giveRandomName(3)
+		*/
+		types.characterRecord.set_function("giveRandomName", &characterRecord::giveRandomName);
+		/***
+		Set a characters portrait. Use a relative path from the mod folder!
+		@function characterRecord:setPortrait
+		@tparam string portraitPath
+		@usage
+		      record:setPortrait("data/ui/mesoamerican/portraits/portraits/young/generals/028.tga")
+		*/
+		types.characterRecord.set_function("setPortrait", &characterRecord::setPortrait);
+		/***
+		Select a random portrait from a culture for a character.
+		@function characterRecord:giveRandomPortrait
+		@tparam int cultureID
+		@tparam int religionID (Only for cultures that are set up with religion variations! Use -1 to disable.)
+		@usage
+		      record:giveRandomPortrait("")
+		*/
+		types.characterRecord.set_function("giveRandomPortrait", &characterRecord::giveRandomPortrait);
 			
 		types.characterRecord.set("level", &characterRecord::level);
 		types.characterRecord.set("authority", &characterRecord::authority);
@@ -1016,6 +1101,86 @@ void characterRecord::removeEpithet()
 	characterRecordHelpers::namedCharSetLocalizedFullName(this, fullNameStr.c_str());
 }
 
+void characterRecord::applyName()
+{
+	std::string name;
+	if (gen)
+	{
+		if (gen->getTypeID() == characterTypeStrat::general)
+			name = "Captain ";
+		if (gen->getTypeID() == characterTypeStrat::admiral)
+			name = "Admiral ";
+	}
+	if (localizedNameForSave)
+		name += characterRecordHelpers::namedCharUniStringToStr<namedChar_localizedNameForSave>(this);
+	if (localizedNextNameForSave)
+		name += " " + characterRecordHelpers::namedCharUniStringToStr<namedChar_localizedNextNameForSave>(this);
+	if (localizedNicknameForSave)
+		name += " " + characterRecordHelpers::namedCharUniStringToStr<namedChar_localizedNicknameForSave>(this);
+	characterRecordHelpers::namedCharSetLocalizedFullName(this, name.c_str());
+}
+
+void characterRecord::setPortrait(const std::string& portraitPath)
+{
+	string path = gameHelpers::getModPath();
+	path.append("/");
+	path.append(portraitPath);
+	if (!std::filesystem::exists(path))
+		return;
+	if (const auto charData = eopCharacterDataDb::instance->getOrCreateData(giveValidLabel(), gen ? gen->getTypeID() : 7))
+	{
+		charData->portrait = portraitPath;
+		charData->portrait2 = portraitPath;
+	}
+	std::string setPath = "mods/";
+	setPath.append(gameHelpers::getModFolderName());
+	setPath.append("/");
+	setPath.append(portraitPath);
+	characterRecordHelpers::setStringPropertyGenChar<characterRecord_portrait>(this, setPath);
+	characterRecordHelpers::setStringPropertyGenChar<characterRecord_portrait2>(this, setPath);
+}
+
+void characterRecord::giveRandomName(const int nameFactionId)
+{
+	if (!gen)
+		return;
+	const auto campaign = campaignHelpers::getCampaignData();
+	nameFaction = nameFactionId;
+	const int checkCountMax = faction->characterRecordNum * 10;
+	int checkCount = 0;
+	int firstNameIndex = 0;
+	int secondNameIndex = 0;
+	while (checkCount < checkCountMax)
+	{
+		GAME_FUNC(int(__cdecl*)(int*, int, bool, int*, int*), getRandomNameFunc)
+		(&campaign->lastRandomSeed, nameFaction, isMale, &firstNameIndex, &secondNameIndex);
+		bool research = false;
+		for(int i = 0; i < faction->characterRecordNum; i++)
+		{
+			if (const int nameIndex = GAME_FUNC(int(__thiscall*)(characterRecord*), getNameIndexFunc)(faction->characterRecords[i]);
+				firstNameIndex == nameIndex)
+			{
+				research = true;
+				break;
+			}
+		}
+		checkCount++;
+		if (research)
+			continue;
+		break;
+	}
+	const auto name = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(isMale ? 0 : 1 , nameFaction, firstNameIndex);
+	const auto name2 = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(2, nameFaction, secondNameIndex);
+	GAME_FUNC(void(__thiscall*)(characterRecord*, const char*, const char*, UNICODE_STRING***, int, bool)
+		, setCharacterName)(this, name, name2, localizedNicknameForSave, gen ? gen->getTypeID() : 7, false);
+}
+
+void characterRecord::giveRandomPortrait(const int cultureId, const int religionId)
+{
+	const auto randomPortrait = cultures::getRandomPortrait(cultureId, religionId);
+	setPortrait(randomPortrait);
+}
+
 stringWithHash* LOOKUP_STRING_ANC = new stringWithHash();
 
 bool characterRecord::hasAncillary(const std::string& ancName)
@@ -1059,6 +1224,19 @@ void characterRecord::addTraitPoints(const std::string& trait, const int points)
 	const int addPoints = points;
 	GAME_FUNC(void(__thiscall*)(characterRecord*, traitEntry*, int, bool),
 		addTraitPoints)(this, entry, addPoints, true);
+}
+
+void eopCharacterDataDb::validate()
+{
+	const auto campaign = campaignHelpers::getCampaignData();
+	for (auto it = instance->eopCharData->begin(); it != instance->eopCharData->end();)
+	{
+		if (const auto rec = campaign->getCharacterByLabel(it->first);
+			!campaign->getCharacterByLabel(it->first) || (rec && rec->gen && rec->gen->getTypeID() != it->second->characterType))
+			it = instance->eopCharData->erase(it);
+		else
+			++it;
+	}
 }
 
 std::string eopCharacterDataDb::onGameSave()
@@ -1119,8 +1297,30 @@ void eopCharacterDataDb::onGameLoaded()
 			const auto thisChar = fac->characters[c];
 			if (const auto rec = thisChar->characterRecord; rec && rec->labelCrypt != 0 && rec->label)
 			{
-				if (const auto data = getCharacterData(rec->label); data && !data->model.empty())
-					stratModelsChange::setCharacterModel(thisChar, data->model.c_str());
+				if (const auto data = getCharacterData(rec->label); data)
+				{
+					if (rec->gen->getTypeID() == data->characterType)
+					{
+						if (!data->model.empty())
+							stratModelsChange::setCharacterModel(thisChar, data->model.c_str());
+						if (!data->portrait.empty())
+							rec->setPortrait(data->portrait);
+						if (!data->internalName.empty())
+							characterRecordHelpers::setStringPropertyGenChar<characterRecord_shortName>(rec, data->internalName);
+						if (!data->internalLastName.empty())
+							characterRecordHelpers::setStringPropertyGenChar<characterRecord_lastName>(rec, data->internalLastName);
+						if (!data->localizedDisplayName.empty())
+							characterRecordHelpers::namedCharSetLocalizedFullName(rec, data->localizedDisplayName.c_str());
+						if (!data->localizedName.empty())
+							characterRecordHelpers::namedCharSetLocalizedNameForSave(rec, data->localizedName.c_str());
+						if (!data->localizedLastName.empty())
+							characterRecordHelpers::namedCharSetLocalizedNextNameForSave(rec, data->localizedLastName.c_str());
+						if (!data->localizedEpithet.empty())
+							characterRecordHelpers::namedCharSetLocalizedNicknameForSave(rec, data->localizedEpithet.c_str());
+					}
+					else
+						eopCharData->erase(rec->label);
+				}
 			}
 		}
 	}

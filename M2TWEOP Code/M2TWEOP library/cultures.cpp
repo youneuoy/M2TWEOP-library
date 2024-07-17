@@ -106,6 +106,52 @@ namespace cultures
     {
         return reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
     }
+
+    std::string getRandomPortrait(const int cultureId, const int religionId)
+    {
+        const auto cultureDb = reinterpret_cast<culturesDB*>(dataOffsets::offsets.cultureDatabase);
+        std::vector<std::string> portraitPaths;
+        const auto modName = gameHelpers::getModFolderName();
+        string folderPath;
+        folderPath.append("data/ui/");
+        folderPath.append(cultureDb->cultures[cultureId].cultureName);
+        folderPath.append("/portraits/portraits/young/");
+        if (religionId > -1)
+        {
+            const auto religionName = getReligionName(religionId);
+            folderPath.append(religionName);
+            folderPath.append("_generals/");
+        }
+        else
+            folderPath.append("generals/");
+        if (folderExists(gameHelpers::getModPath() + "/" + folderPath))
+        {
+            auto portraitIndex = 0;
+            while (true)
+            {
+                auto stringNum = std::to_string(portraitIndex);
+                constexpr size_t n = 3;
+                std::string result = std::string(n - stringNum.length(), '0') + stringNum;
+                portraitIndex++;
+                auto filePath = folderPath;
+                filePath.append(result);
+                filePath.append(".tga");
+                if (fileExists(gameHelpers::getModPath() + "/" + filePath))
+                {
+                    portraitPaths.push_back(filePath);
+                }
+                else
+                    break;
+            }
+        }
+        if (portraitPaths.empty())
+            return "";
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::shuffle(portraitPaths.begin(), portraitPaths.end(), g);
+        return portraitPaths[0];
+    }
+    
     
     void eopPortraitDb::createEopPortraitDb()
     {

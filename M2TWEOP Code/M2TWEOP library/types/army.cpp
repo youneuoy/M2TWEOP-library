@@ -391,10 +391,18 @@ void armyStruct::sortStack(int sortType, int sortType2, int sortType3)
 			sortTypes.push_back(sortType2);
 		if (sortType3 != 0)
 			sortTypes.push_back(sortType3);
+		const auto general = gen;
 		// Lambda function to compare unit objects based on multiple criteria
-		auto compareUnits = [&sortTypes](const unit* unitA, const unit* unitB)
+		auto compareUnits = [&sortTypes, general](const unit* unitA, const unit* unitB)
 		{
 			// Ensuring Generals stay at the front/start of the stack
+			if (general && general->bodyguards)
+			{
+				if (unitA == general->bodyguards)
+					return true;
+				if (unitB == general->bodyguards)
+					return false;
+			}
 			if (unitA->general && !unitB->general)
 				return true;
 			if (!unitA->general && unitB->general)
