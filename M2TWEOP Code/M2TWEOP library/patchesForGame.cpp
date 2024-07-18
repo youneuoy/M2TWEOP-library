@@ -283,6 +283,12 @@ int __fastcall patchesForGame::onCreateUnit(char** entryName, int* eduIndex)
 	return *eduIndex;
 }
 
+void patchesForGame::onSetArmyGeneralsUnit(armyStruct* army)
+{
+	if (army->gen && army->gen->bodyguards)
+		army->generalsUnit = army->gen->bodyguards;
+}
+
 int patchesForGame::onCalculateMiningIncome(const int value, const settlementStruct* settlement)
 {
 	return campaignHelpers::modifyWithSettMechanics("SIF_MINING", static_cast<float>(value), settlement->isCastle == 1);

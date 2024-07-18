@@ -13,6 +13,7 @@
 #include "luaPlugin.h"
 #include "memWork.h"
 #include "patchesForGame.h"
+#include "dbghelp.h"
 
 void managerF::debug()
 {
@@ -654,6 +655,12 @@ void managerF::execPatches()
 	toTransferSettlement->Enable();
 	f1 << "Done" << endl;
 	
+	f1 << "Start applying onSetArmyGeneralsUnit patch" << endl;
+	onSetArmyGeneralsUnit* toSetArmyGeneralsUnit = new onSetArmyGeneralsUnit(mem, (LPVOID)patchesForGame::onSetArmyGeneralsUnit, globals::dataS.gameVersion);
+	toSetArmyGeneralsUnit->SetNewCode();
+	toSetArmyGeneralsUnit->Enable();
+	f1 << "Done" << endl;
+	
 	f1 << "Start applying onTransferSettlementPort patch" << endl;
 	onTransferSettlementPort* toTransferSettlementPort = new onTransferSettlementPort(mem, (LPVOID)patchesForGame::onTransferSettlementPort, globals::dataS.gameVersion);
 	toTransferSettlementPort->SetNewCode();
@@ -1079,6 +1086,8 @@ EOP_EXPORT void managerExport::initEOP(const char* modPath, const int gameVer)
 		return;
 	globals::dataS.gameVersion = gameVer;
 	globals::dataS.modPath = modPath;
+	SymSetOptions(SYMOPT_DEFERRED_LOADS);
+	SymInitialize((HANDLE)GetCurrentProcess(), (PCSTR)modPath, TRUE);
 	CreateDirectoryA("logs", nullptr);
 	managerF::initThread();
 }

@@ -51,6 +51,7 @@ Copy-Item -Path  "M2TWEOP Code\Release\d3d9.dll" -Destination "./M2TWEOPGenerate
 Copy-Item -Path  "M2TWEOP Code\Release\M2TWEOP GUI.exe" -Destination "./M2TWEOPGenerated"
 # Copy-Item -Path  "M2TWEOP Code\Release\M2TWEOP tools.exe" -Destination "./M2TWEOPGenerated"
 Copy-Item -Path  "M2TWEOP Code\Release\M2TWEOPLibrary.dll" -Destination "./M2TWEOPGenerated"
+Copy-Item -Path  "M2TWEOP Code\Release\M2TWEOPLibrary.pdb" -Destination "./M2TWEOPGenerated"
 
 if ($shouldZip -eq 'True') {
     # 5) Generate Release ZIP

@@ -39,6 +39,7 @@ public:
 	static char* __fastcall onSaveEDUStringS(eduEntry* eduEntry);
 	static void __fastcall initGlobalStrategyDirector(aiGlobalStrategyDirector* gsd);
 	static int __fastcall onCreateUnit(char** entryName, int* eduIndex);
+	static void __fastcall onSetArmyGeneralsUnit(armyStruct* army);
 	static int __fastcall onCalculateMiningIncome(int value, const settlementStruct* settlement);
 	static int __fastcall onCreateMercUnitCheck(char** entryName, int eduIndex);
 	static void __fastcall onAttachRegionSettlement(settlementStruct* sett, int regionId);

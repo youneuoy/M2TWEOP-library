@@ -53,6 +53,7 @@ CopyFilesToFolder "documentationGenerator\EOPDocs\build\html" "./M2TWEOPGenerate
 Copy-Item -Path  "M2TWEOP Code\Debug\d3d9.dll" -Destination "./M2TWEOPGenerated"
 Copy-Item -Path  "M2TWEOP Code\Debug\M2TWEOP GUI.exe" -Destination "./M2TWEOPGenerated"
 Copy-Item -Path  "M2TWEOP Code\Debug\M2TWEOPLibrary.dll" -Destination "./M2TWEOPGenerated"
+Copy-Item -Path  "M2TWEOP Code\Debug\M2TWEOPLibrary.pdb" -Destination "./M2TWEOPGenerated"
 
 
 if ($modFolder) {
