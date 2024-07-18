@@ -82,11 +82,11 @@ characterMoveData::characterMoveData(character* charPtr, const int searchType, c
 					{
 						const auto [nX, nY] = neighbours.top();
 						neighbours.pop();
-						if (const auto neighbourTileEx = moveExtents->getTile(nX, nY);neighbourTileEx && neighbourTileEx->turns > 0 && neighbourTileEx->turns <= turns)
+						if (const auto neighbourTileEx = moveExtents->getTile(nX, nY); (nX == xCoord && nY == yCoord) || (neighbourTileEx && neighbourTileEx->turns > 0 && neighbourTileEx->turns <= turns))
 						{
 							settlements.emplace_back(settlement, tileEx, settlement->faction->factionID == thisChar->getFaction()->factionID);
-							settlements.back().turns = neighbourTileEx->turns;
-							settlements.back().moveCost = neighbourTileEx->movePoints;
+							settlements.back().turns = neighbourTileEx ? neighbourTileEx->turns : 1;
+							settlements.back().moveCost = neighbourTileEx ? neighbourTileEx->movePoints : 0;
 							break;
 						}
 					}

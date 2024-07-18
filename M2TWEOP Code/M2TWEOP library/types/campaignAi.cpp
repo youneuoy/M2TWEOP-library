@@ -619,14 +619,19 @@ bool attackSettlementOrder::execute()
 				{
 					gameHelpers::logStringGame("Assaulted");
 					assignedArmy->army->gen->hasEopOrders = true;
+					if (!targetSettlement->settlement->siegeNum)
+						targetSettlement->settlement->siegeNum == 1;
 					assignedArmy->army->siegeSettlement(targetSettlement->settlement, true);
 					if (playerInvolved || targetSettlement->settlement->isPlayerControlled())
 						PLAYER_ASSAULTED = true;
 					break;
 				}
-				if ((targetSettlement->settlement->siegeNum < 8 || assignedArmy->army->siege)
+				if (
+					(targetSettlement->settlement->siegeNum < 8 || assignedArmy->army->siege)
 					&& ((assignedArmy->moveCost < assignedArmy->army->gen->movePointsArmy && assignedArmy->turns < 2)
-					|| assignedArmy->army->isBorderingSettlement(targetSettlement->settlement)))
+						||
+						(assignedArmy->army->isBorderingSettlement(targetSettlement->settlement)))
+						)
 				{
 					gameHelpers::logStringGame("Maintained siege");
 					assignedArmy->army->gen->hasEopOrders = true;
@@ -1052,7 +1057,9 @@ void globalEopAiConfig::checkRegion(int regionId)
 				regionArmyRes->value += regionArmy->totalStrength - settRes->positionPower;
 				if (nearSettlement.settlement->faction->factionID == m_Faction->factionID)
 				{
-					regionArmyRes->totalThreatGiving += regionArmy->totalStrength / nearSettlement.turns;
+					const auto threatGiving = regionArmy->totalStrength - settRes->positionPower;
+					if (threatGiving > 0)
+						regionArmyRes->totalThreatGiving += threatGiving / nearSettlement.turns;
 					settRes->totalThreatReceiving += regionArmy->totalStrength / nearSettlement.turns;
 				}
 				else if (nearSettlement.settlement->faction->factionID == regionArmy->faction->factionID)
@@ -1080,7 +1087,9 @@ void globalEopAiConfig::checkRegion(int regionId)
 				regionArmyRes->value += regionArmy->totalStrength - armyRes->positionPower;
 				if (nearArmy.army->faction->factionID == m_Faction->factionID)
 				{
-					regionArmyRes->totalThreatGiving += regionArmy->totalStrength / nearArmy.turns;
+					const auto threatGiving = regionArmy->totalStrength - armyRes->positionPower;
+					if (threatGiving > 0)
+						regionArmyRes->totalThreatGiving += threatGiving / nearArmy.turns;
 					armyRes->totalThreatReceiving += regionArmy->totalStrength / nearArmy.turns;
 				}
 				else if (nearArmy.army->faction->factionID == regionArmy->faction->factionID)
@@ -1260,6 +1269,7 @@ const auto threatSort2 = [](const std::shared_ptr<armyResource>& a, const std::s
 
 void globalEopAiConfig::assignOrders(factionStruct* fac)
 {
+	const auto campaignData = campaignHelpers::getCampaignData();
 	for (const auto& settRes : m_Settlements)
 	{
 		const float priority = calculateSettPriority(settRes, priType_own);
@@ -1376,6 +1386,9 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 			continue;
 		order->execute();
 		order->executed = true;
+		campaignData->speedUp = true;
+		campaignData->ignoreSpeedUp = false;
+		campaignData->followMovement = false;
 		if (enableLogging)
 			gameHelpers::logStringGame(order->toString());
 	}
@@ -1489,6 +1502,8 @@ void globalEopAiConfig::turnStartMove(factionStruct* fac, const bool isEnd)
 {
 	if (!enabled || fac->isPlayerControlled > 0 || fac->factionRecord->slave || fac->isHorde)
 		return;
+	const auto campaignData = campaignHelpers::getCampaignData();
+	campaignData->speedUp = true;
 	m_Faction = fac;
 	m_CurrentFacData = getFactionData(m_Faction);
 	TURN_HAD_ACTION = false;
@@ -1496,6 +1511,7 @@ void globalEopAiConfig::turnStartMove(factionStruct* fac, const bool isEnd)
 	isEndTurn = isEnd;
 	getData(fac);
 	assignOrders(fac);
+	campaignData->speedUp = true;
 	if (isEnd)
 		return;
 	const auto strengthSort = [](const std::shared_ptr<armyResource>& a, const std::shared_ptr<armyResource>& b)
@@ -1560,6 +1576,7 @@ void globalEopAiConfig::turnStartMove(factionStruct* fac, const bool isEnd)
 		else if (m_CurrentFacData->noActionTurns < maxTurnSearchCount)
 			m_CurrentFacData->noActionTurns++;
 	}
+	campaignData->speedUp = true;
 }
 	
 
@@ -1669,7 +1686,9 @@ void globalEopAiConfig::getData(factionStruct* fac)
 				settRes->nearResources.back()->turns = nearSettlement.turns;
 				if (nearSettlement.settlement->isEnemyToFaction(m_Faction))
 				{
-					res->totalThreatGiving += res->army->totalStrength / nearSettlement.turns;
+					const auto threatGiving = res->army->totalStrength - settRes->positionPower;
+					if (threatGiving > 0)
+						res->totalThreatGiving += threatGiving / nearSettlement.turns;
 					settRes->totalThreatReceiving += res->army->totalStrength;
 				}
 				else
@@ -1691,7 +1710,9 @@ void globalEopAiConfig::getData(factionStruct* fac)
 				armyRes->nearResources.emplace_back(res);
 				if (nearArmy.army->isEnemyToFaction(m_Faction))
 				{
-					res->totalThreatGiving += res->army->totalStrength / nearArmy.turns;
+					const auto threatGiving = res->army->totalStrength - armyRes->positionPower;
+					if (threatGiving > 0)
+						res->totalThreatGiving += threatGiving / nearArmy.turns;
 					armyRes->totalThreatReceiving += res->army->totalStrength;
 				}
 				else

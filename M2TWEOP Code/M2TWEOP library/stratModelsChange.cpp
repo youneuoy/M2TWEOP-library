@@ -195,7 +195,8 @@ namespace stratModelsChange
 		}
 		for (const stratModelCharacterRecordChange* changeMod : stratModelCharacterChangeList) //character models
 		{
-			changeStratModel(changeMod->gen, changeMod->modelId);
+			if (changeMod->gen)
+				changeStratModel(changeMod->gen, changeMod->modelId);
 		}
 
 		for (UINT32 i = 0; i < stratModelCharacterChangeList.size(); i++) //remove character models from change list because it only has to happen once!
@@ -267,6 +268,8 @@ namespace stratModelsChange
 
 	void setCharacterModel(character* gen, const char* model) //add character to be changed to the queue
 	{
+		if (!gen || !model)
+			return;
 		const size_t stringsize = strlen(model);
 		for (UINT32 i = 0; i < stratModelCharacterChangeList.size(); i++)
 		{
@@ -344,7 +347,7 @@ namespace stratModelsChange
 		auto* array = reinterpret_cast<stratModelArrayEntry*>(dataOffsets::offsets.stratModelArray);
 		for (int i = 0; i < 255; i++)
 		{
-			if (&array[i] != nullptr)
+			if (&array[i] && array[i].typeName && array[i].model_flexi_m)
 			{
 				if (strcmp(name, array[i].typeName) == 0)
 				{

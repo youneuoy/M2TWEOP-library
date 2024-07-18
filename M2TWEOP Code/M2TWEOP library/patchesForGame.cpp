@@ -1391,12 +1391,13 @@ void __stdcall patchesForGame::afterCampaignMapLoaded()
 	discordManager::onCampaignMapLoaded();
 	globals::dataS.Modules.tacticalMapViewer.unView();
 	plugData::data.luaAll.fillHashMaps();
-	eopCharacterDataDb::get()->onGameLoaded();
 	gameEvents::onCampaignMapLoaded();
+	eopCharacterDataDb::get()->onGameLoaded();
 }
 
 void __stdcall patchesForGame::onNewGameStart()
 {
+	minorSettlementDb::clear();
 	eopSettlementDataDb::get()->clearData();
 	gameEvents::onNewGameStart();
 	plannedRetreatRoute::onNewGameStart();
@@ -1659,7 +1660,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	{
 		minorSettlementDb::load();
 		eopSettlementDataDb::get()->onGameLoaded();
-		eopCharacterDataDb::get()->onGameLoaded();
+		//eopCharacterDataDb::get()->onGameLoaded();
 	}
 	else if (eventCode == conflictPhaseCommenced)
 	{

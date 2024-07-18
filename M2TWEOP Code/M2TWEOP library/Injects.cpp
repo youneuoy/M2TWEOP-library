@@ -5584,7 +5584,7 @@ void onReadDescrStrat::SetNewCode()
 	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
 	a->call(eax);
 	a->mov(edi, eax);
-	a->add(eax, 0x3AF);
+	a->mov(eax, byte_ptr(eax, 0x3AF));
 	a->test(eax, 0x20);
 	a->pop(eax);
 	a->pop(ecx);
