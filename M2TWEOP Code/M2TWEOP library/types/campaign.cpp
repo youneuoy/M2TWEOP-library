@@ -367,7 +367,8 @@ scriptEvent::scriptEvent(const std::string& name, const std::string& eventType, 
 	positionArray[0].yCoord = yCoord;
 	positionArrayNum = 1;
 	gameStringHelpers::setHashedString(&eventTypeName, eventType.c_str());
-	gameStringHelpers::setHashedString(&eventName, name.c_str());
+	if (!name.empty())
+		gameStringHelpers::setHashedString(&eventName, name.c_str());
 	if (!movie.empty())
 		gameStringHelpers::setHashedString(&this->movie, movie.c_str());
 	this->scale = scale;
@@ -1039,7 +1040,7 @@ namespace campaignHelpers
         /***
 		Fire an event such as a disaster.
 		@function campaignStruct.execScriptEvent
-		@tparam string name Needs entry in historic_events.txt!
+		@tparam string name Needs entry in historic_events.txt! Empty string to disable (no message).
 		@tparam string eventType earthquake, flood, horde, storm, volcano, dustbowl, locusts, famine, plague, riot, fire, historic
 		@tparam int xCoord
 		@tparam int yCoord
