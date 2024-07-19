@@ -302,6 +302,8 @@ void codes::initCodes(int gameVer)
 		offsets.modifyWithSettMechanics = 0x8E6390;
 		offsets.setCharacterName = 0x005A3D20;
 		offsets.officerDestructor = 0x740A90;
+		offsets.getEventController = 0x488BD0;
+		offsets.deleteScriptEvent = 0x48AAD0; // 48AAD0
 	}
 
 
@@ -606,5 +608,7 @@ void codes::initCodes(int gameVer)
 		offsets.modifyWithSettMechanics = 0x8E6E10;
 		offsets.setCharacterName = 0x005A4200;
 		offsets.officerDestructor = 0x741220;
+		offsets.getEventController = 0x488FD0;
+		offsets.deleteScriptEvent = 0x48AED0; // 48AAD0
 	}
 }

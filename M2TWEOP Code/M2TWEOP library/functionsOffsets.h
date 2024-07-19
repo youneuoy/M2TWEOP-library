@@ -41,6 +41,8 @@ public:
 		DWORD canSeeCharacter = NULL;
 		DWORD getArmyCoords = NULL;
 		DWORD officerDestructor = NULL;
+		DWORD getEventController = NULL;
+		DWORD deleteScriptEvent = NULL;
 
 
 		DWORD getReadyForMovingFunc = NULL;

@@ -4,6 +4,7 @@
 #include "realGameTypes.h"
 #include "lua/sol.hpp"
 #include "faction.h"
+#include "techFuncs.h"
 
 struct regionStruct;
 namespace campaignEnums
@@ -137,6 +138,31 @@ public:
 	}
 }; //Size: 0x0050
 
+struct scriptEvent
+{
+	char *eventTypeName = nullptr;
+	int eventTypeNameHash{};
+	DWORD *eventController{};
+	char *eventName = nullptr;
+	int eventNameHash{};
+	float startDate = -1000.0;
+	int startSeason{};
+	float endDate = -1000.0;
+	int endSeason{};
+	coordPair *positionArray{};
+	int positionArraySize = 8;
+	int positionArrayNum{};
+	int *regionArray{};
+	int regionArraySize = 8;
+	int regionArrayNum{};
+	int scale = 1;
+	bool warning{};
+	char pad_41[3]{};
+	char *movie = nullptr;
+	int movieHash{};
+	uint32_t factionBitfield{};
+	scriptEvent(const std::string& name, const std::string& eventType, const int xCoord, const int yCoord, const int scale, const std::string& movie);
+};
 
 struct crusadeReward
 {
@@ -1302,6 +1328,8 @@ namespace campaignHelpers
 {
     campaign* getCampaignData();
 	UINT32 getFactionsCount();
+	void execScriptEvent(const std::string& name, const std::string& eventType, int xCoord, int yCoord
+		, int scale, const std::string& movie);
 	stratPathFinding* getStratPathFinding();
 	selectionInfo* getSelectionInfo();
 	int modifyWithSettMechanics(const std::string& mechanic, float raw, bool isCastle);

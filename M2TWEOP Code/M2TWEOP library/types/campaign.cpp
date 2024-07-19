@@ -358,6 +358,23 @@ void campaign::setFactionProtectorate(factionStruct* factionOne, factionStruct* 
 	}
 }
 
+scriptEvent::scriptEvent(const std::string& name, const std::string& eventType, const int xCoord, const int yCoord,
+	const int scale, const std::string& movie)
+{
+	positionArray = techFuncs::allocateGameClass<coordPair>(sizeof(coordPair) * 8);
+	regionArray = techFuncs::allocateGameClass<int>(sizeof(int) * 8);
+	positionArray[0].xCoord = xCoord;
+	positionArray[0].yCoord = yCoord;
+	positionArrayNum = 1;
+	gameStringHelpers::setHashedString(&eventTypeName, eventType.c_str());
+	gameStringHelpers::setHashedString(&eventName, name.c_str());
+	if (!movie.empty())
+		gameStringHelpers::setHashedString(&this->movie, movie.c_str());
+	this->scale = scale;
+	eventController = GAME_FUNC(DWORD*(__thiscall*)(DWORD, scriptEvent*)
+		, getEventController)(dataOffsets::offsets.eventManager, this);
+}
+
 void crusade::start(settlementStruct* target, const int timeToJoin, character* caller)
 {
 	callClassFunc<crusade*, void, settlementStruct*, int, character*>(this, 0x8, target, timeToJoin, caller);
@@ -419,6 +436,16 @@ mercPoolUnit* mercPool::addMercUnit(const int idx, const int exp, const int cost
 #define resource_dataStruct_type 1
 namespace campaignHelpers
 {
+	
+	void execScriptEvent(const std::string& name, const std::string& eventType, const int xCoord, const int yCoord,
+		const int scale, const std::string& movie)
+	{
+		const auto event = new scriptEvent(name, eventType, xCoord, yCoord, scale, movie);
+		if (event->eventController)
+			callClassFunc<DWORD*, void, scriptEvent*>(event->eventController, 0x0, event);
+		GAME_FUNC(void(__thiscall*)(scriptEvent*), deleteScriptEvent)(event);
+	}
+	
 	//stratResMod
 	template <char fieldIndex>
 	std::string getStringPropertyBD(const stratResMod* stratMod)
@@ -653,6 +680,7 @@ namespace campaignHelpers
 		@tfield addCharacterCas addCharacterCas
 		@tfield getCharacterByLabel getCharacterByLabel
 		@tfield worldwideAncillaryExists worldwideAncillaryExists
+		@tfield execScriptEvent execScriptEvent
 
 		@table campaignStruct
 		*/
@@ -1008,6 +1036,19 @@ namespace campaignHelpers
 		    local ringHolder = M2TW.campaign:worldwideAncillaryExists("one_ring")
 		*/
 		typeAll.campaignTable.set_function("worldwideAncillaryExists", &campaign::worldwideAncillaryExists);
+        /***
+		Fire an event such as a disaster.
+		@function campaignStruct.execScriptEvent
+		@tparam string name Needs entry in historic_events.txt!
+		@tparam string eventType earthquake, flood, horde, storm, volcano, dustbowl, locusts, famine, plague, riot, fire, historic
+		@tparam int xCoord
+		@tparam int yCoord
+		@tparam int scale default is 1
+		@tparam string movie Empty string if not applicable
+		@usage
+		    M2TW.campaign.execScriptEvent("my_event", "volcano", 214, 122, 1, "")
+		*/
+		typeAll.campaignTable.set_function("execScriptEvent", &execScriptEvent);
 
 		///Faction Diplomacy
 		//@section Faction diplomacy
