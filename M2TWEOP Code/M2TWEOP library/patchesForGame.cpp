@@ -125,7 +125,7 @@ int patchesForGame::onEvaluateUnit(const int eduIndex)
 	return eopDu::getEduEntry(eduIndex)->unitProductionClass;
 }
 
-DWORD __fastcall patchesForGame::onCustomBattleUnitCards(DWORD cardArrayThing, int factionID)
+DWORD __fastcall patchesForGame::onCustomBattleUnitCards(const DWORD cardArrayThing, const int factionID)
 {
 	const int eopUnitNum = eopDu::getEopEntryNum();
 	for (int i = 0; i < eopUnitNum; i++)
@@ -217,7 +217,7 @@ void __fastcall patchesForGame::initGlobalStrategyDirector(aiGlobalStrategyDirec
 	
 }
 
-int __fastcall patchesForGame::onCustomBattleUnits(eduEntry** unitArray, int currentCount, int factionID)
+int __fastcall patchesForGame::onCustomBattleUnits(eduEntry** unitArray, int currentCount, const int factionID)
 {
 	const int eopUnitNum = eopDu::getEopEntryNum();
 	for (int i = 0; i < eopUnitNum; i++)
@@ -243,7 +243,7 @@ int __fastcall patchesForGame::onCustomBattleUnits(eduEntry** unitArray, int cur
 	return currentCount;
 }
 
-eduEntry* patchesForGame::onEvaluateUnit2(int eduIndex)
+eduEntry* patchesForGame::onEvaluateUnit2(const int eduIndex)
 {
 	return eopDu::getEduEntry(eduIndex);
 }
@@ -263,7 +263,7 @@ int __fastcall patchesForGame::onFortificationLevelS(settlementStruct* settlemen
 	}
 	return selectedLevel;//use old thing
 }
-char* __fastcall patchesForGame::onSaveEDUStringS(eduEntry* eduEntry)
+char* __fastcall patchesForGame::onSaveEDUStringS(const eduEntry* eduEntry)
 {
 	char* retName = eopDu::getEopNameOfEduEntry(eduEntry);
 	if (retName == nullptr)
@@ -271,7 +271,7 @@ char* __fastcall patchesForGame::onSaveEDUStringS(eduEntry* eduEntry)
 	return retName;
 }
 
-int __fastcall patchesForGame::onCreateUnit(char** entryName, int* eduIndex)
+int __fastcall patchesForGame::onCreateUnit(char** entryName, const int* eduIndex)
 {
 	if (eduIndex == nullptr)
 	{
@@ -773,6 +773,40 @@ int __fastcall patchesForGame::onCreateMercUnitCheck(char** entryName, int eduIn
 		return 0;
 	}
 	return eduIndex;
+}
+
+void clearOfficers(unit* unit)
+{
+	if (unit->officer1)
+	{
+		GAME_FUNC(void(__thiscall*)(generalInfo*), officerDestructor)(unit->officer1);
+		delete unit->officer1;
+		unit->officer1 = nullptr;
+	}
+	if (unit->officer2)
+	{
+		GAME_FUNC(void(__thiscall*)(generalInfo*), officerDestructor)(unit->officer2);
+		delete unit->officer2;
+		unit->officer2 = nullptr;
+	}
+	if (unit->officer3)
+	{
+		GAME_FUNC(void(__thiscall*)(generalInfo*), officerDestructor)(unit->officer3);
+		delete unit->officer3;
+		unit->officer3 = nullptr;
+	}
+	if (unit->generalInfo)
+	{
+		GAME_FUNC(void(__thiscall*)(generalInfo*), officerDestructor)(unit->generalInfo);
+		delete unit->generalInfo;
+		unit->generalInfo = nullptr;
+	}
+}
+
+void __fastcall patchesForGame::onWriteSoldiersToStrat(unit* unit)
+{
+	if (unit && unit->SoldierCountStrat == 0)
+		unit->markedToKill = 1;
 }
 
 void patchesForGame::onAttachRegionSettlement(settlementStruct* sett, int regionId)

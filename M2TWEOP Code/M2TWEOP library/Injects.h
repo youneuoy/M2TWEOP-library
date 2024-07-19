@@ -1649,6 +1649,42 @@ private:
 	LPVOID funcAddress;
 };
 
+class onWriteSoldiersToStrat
+	:public AATemplate
+{
+public:
+	onWriteSoldiersToStrat(MemWork* mem, LPVOID addr, int ver);
+	~onWriteSoldiersToStrat() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onArmyDecimate
+	:public AATemplate
+{
+public:
+	onArmyDecimate(MemWork* mem, LPVOID addr, int ver);
+	~onArmyDecimate() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onUnitMerge
+	:public AATemplate
+{
+public:
+	onUnitMerge(MemWork* mem, LPVOID addr, int ver);
+	~onUnitMerge() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onSetArmyGeneralsUnit
 	:public AATemplate
 {

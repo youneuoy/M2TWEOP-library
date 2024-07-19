@@ -4735,6 +4735,80 @@ void onSetArmyGeneralsUnit::SetNewCode()
 	delete a;
 }
 
+onWriteSoldiersToStrat::onWriteSoldiersToStrat(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0075307B;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x007528EB;
+}
+
+void onWriteSoldiersToStrat::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->pushad();
+	a->pushf();
+	a->mov(dword_ptr(esi, 0x50c), eax);
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->popf();
+	a->popad();
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onArmyDecimate::onArmyDecimate(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0071489D;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00714198;
+}
+
+void onArmyDecimate::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(eax, 0);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+
+onUnitMerge::onUnitMerge(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00749EC1;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00749741;
+}
+
+void onUnitMerge::SetNewCode()
+{
+	const auto a = new Assembler();
+	const auto label = a->newLabel();
+	a->mov(edi, dword_ptr(ebx, 0x50c));
+	a->cmp(edi, 1);
+	a->jge(label);
+	if (m_adress == 0x00749EC1)
+		a->mov(ecx, 0x00749F18);
+	else
+		a->mov(ecx, 0x00749798);
+	a->jmp(ecx);
+	a->bind(label);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onUpdateControllerAlloc::onUpdateControllerAlloc(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

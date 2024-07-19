@@ -40,6 +40,7 @@ public:
 		DWORD getNumEnginesCanPenetrateWalls = NULL;
 		DWORD canSeeCharacter = NULL;
 		DWORD getArmyCoords = NULL;
+		DWORD officerDestructor = NULL;
 
 
 		DWORD getReadyForMovingFunc = NULL;

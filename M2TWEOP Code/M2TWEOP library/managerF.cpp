@@ -496,6 +496,27 @@ void managerF::execPatches()
 	f1 << "Done" << endl;
 
 
+	f1 << "Start applying onUnitMerge patch" << endl;
+	onUnitMerge* toUnitMerge = new onUnitMerge(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toUnitMerge->SetNewCode();
+	toUnitMerge->Enable();
+	f1 << "Done" << endl;
+
+
+	f1 << "Start applying onArmyDecimate patch" << endl;
+	onArmyDecimate* toArmyDecimate = new onArmyDecimate(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toArmyDecimate->SetNewCode();
+	toArmyDecimate->Enable();
+	f1 << "Done" << endl;
+
+
+	f1 << "Start applying onWriteSoldiersToStrat patch" << endl;
+	onWriteSoldiersToStrat* toWriteSoldiersToStrat = new onWriteSoldiersToStrat(mem, (LPVOID)patchesForGame::onWriteSoldiersToStrat, globals::dataS.gameVersion);
+	toWriteSoldiersToStrat->SetNewCode();
+	toWriteSoldiersToStrat->Enable();
+	f1 << "Done" << endl;
+
+
 	f1 << "Start applying onGetUnitInfoCard patch" << endl;
 	onGetUnitInfoCard* toGetUnitInfoCard = new onGetUnitInfoCard(mem, (LPVOID)patchesForGame::onGetUnitInfoCard, globals::dataS.gameVersion);
 	toGetUnitInfoCard->SetNewCode();
