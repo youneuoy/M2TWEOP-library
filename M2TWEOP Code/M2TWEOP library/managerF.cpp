@@ -500,6 +500,12 @@ void managerF::execPatches()
 	toSetSettlementModel->SetNewCode();
 	toSetSettlementModel->Enable();
 	f1 << "Done" << endl;
+
+	f1 << "Start applying onCalculateCommand patch" << endl;
+	onCalculateCommand* toCalculateCommand = new onCalculateCommand(mem, (LPVOID)patchesForGame::onCalculateCommand, globals::dataS.gameVersion);
+	toCalculateCommand->SetNewCode();
+	toCalculateCommand->Enable();
+	f1 << "Done" << endl;
 	
 	f1 << "Start applying onUnitMerge patch" << endl;
 	onUnitMerge* toUnitMerge = new onUnitMerge(mem, (LPVOID)noFunc, globals::dataS.gameVersion);

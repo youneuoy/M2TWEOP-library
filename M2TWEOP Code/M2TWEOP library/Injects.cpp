@@ -4734,6 +4734,36 @@ void onSetSettlementModel::SetNewCode()
 	delete a;
 }
 
+onCalculateCommand::onCalculateCommand(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x5A6521;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x5A6041;
+}
+
+void onCalculateCommand::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->pushad();
+	a->pushf();
+	a->mov(ecx, edi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(edx, dword_ptr(esp, 0x10));
+	a->add(edx, eax);
+	a->mov(dword_ptr(esp, 0x10), edx);
+	a->popf();
+	a->popad();
+	a->setz(al);
+	a->cmp(byte_ptr(ebp, 0), 0);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onSetArmyGeneralsUnit::onSetArmyGeneralsUnit(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

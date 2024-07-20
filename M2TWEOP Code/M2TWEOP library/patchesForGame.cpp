@@ -831,6 +831,13 @@ void patchesForGame::onSetSettlementModel(settlementStruct* settlement)
 	}
 }
 
+int patchesForGame::onCalculateCommand(const characterRecord* general)
+{
+	if (general->gen && general->gen->getTypeID() == characterTypeStrat::admiral)
+		return general->navalCommand;
+	return 0;
+}
+
 void patchesForGame::onAttachRegionSettlement(settlementStruct* sett, int regionId)
 {
 	sett->regionID = regionId;

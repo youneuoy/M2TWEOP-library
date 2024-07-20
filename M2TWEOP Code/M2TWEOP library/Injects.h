@@ -1697,6 +1697,18 @@ private:
 	LPVOID funcAddress;
 };
 
+class onCalculateCommand
+	:public AATemplate
+{
+public:
+	onCalculateCommand(MemWork* mem, LPVOID addr, int ver);
+	~onCalculateCommand() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onSetArmyGeneralsUnit
 	:public AATemplate
 {

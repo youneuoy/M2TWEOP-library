@@ -619,8 +619,8 @@ bool attackSettlementOrder::execute()
 				{
 					gameHelpers::logStringGame("Assaulted");
 					assignedArmy->army->gen->hasEopOrders = true;
-					if (!targetSettlement->settlement->siegeNum)
-						targetSettlement->settlement->siegeNum == 1;
+					if (!targetSettlement->settlement->siegeNum && targetSettlement->settlement->army)
+						targetSettlement->settlement->siegeNum = 1;
 					assignedArmy->army->siegeSettlement(targetSettlement->settlement, true);
 					if (playerInvolved || targetSettlement->settlement->isPlayerControlled())
 						PLAYER_ASSAULTED = true;

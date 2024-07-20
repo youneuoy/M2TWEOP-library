@@ -44,6 +44,7 @@ public:
 	static int __fastcall onCreateMercUnitCheck(char** entryName, int eduIndex);
 	static void __fastcall onWriteSoldiersToStrat(unit* unit);
 	static void __fastcall onSetSettlementModel(settlementStruct* settlement);
+	static int __fastcall onCalculateCommand(const characterRecord* general);
 	static void __fastcall onAttachRegionSettlement(settlementStruct* sett, int regionId);
 	static void __fastcall onCalculateSettlement(settlementStruct* sett);
 	static int* __fastcall onGetSupportingArmies(armyStruct* defender, armyStruct* attacker);
