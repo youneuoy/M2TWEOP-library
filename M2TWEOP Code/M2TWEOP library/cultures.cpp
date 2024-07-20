@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "cultures.h"
 
+#include "campaign.h"
 #include "dataOffsets.h"
 #include "gameHelpers.h"
 
@@ -90,6 +91,14 @@ namespace cultures
         if (cultureID >= getCultureCount())
             return "";
         return CULTURE_NAMES[cultureID];
+    }
+
+    cultureSettlement* getCultureSettlement(const int settlementLevel, const int factionId)
+    {
+        const auto cultureDb = getCultureDb();
+        const auto facRecord = factionHelpers::getFactionRecord(factionId);
+        const auto cultureId = facRecord->facCulture->cultureID;
+        return &cultureDb->cultures[cultureId].cultureSettlements[settlementLevel];
     }
 
     int getCultureCount()

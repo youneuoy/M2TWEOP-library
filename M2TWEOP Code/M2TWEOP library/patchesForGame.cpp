@@ -809,6 +809,28 @@ void __fastcall patchesForGame::onWriteSoldiersToStrat(unit* unit)
 		unit->markedToKill = 1;
 }
 
+void patchesForGame::onSetSettlementModel(settlementStruct* settlement)
+{
+	bool changed = false;
+	if (settlement->regionID > -1)
+	{
+		if (const auto settData = eopSettlementDataDb::get()->getSettlementData(settlement->regionID, settlement->minorSettlementIndex);
+			settData && settData->modelId && settData->modelId > -1)
+		{
+			if (const auto modelRecord = stratModelsChange::findStratModel(settData->modelId); modelRecord && modelRecord->modelP)
+			{
+				stratModelsChange::changeSettlementStratModel(settlement, modelRecord->modelP);
+				changed = true;
+			}
+		}
+	}
+	if (!changed)
+	{
+		const auto cultSett = cultures::getCultureSettlement(settlement->level, settlement->fac_creatorModNum);
+		settlement->model = cultSett;
+	}
+}
+
 void patchesForGame::onAttachRegionSettlement(settlementStruct* sett, int regionId)
 {
 	sett->regionID = regionId;

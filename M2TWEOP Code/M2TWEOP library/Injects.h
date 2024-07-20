@@ -1685,6 +1685,18 @@ private:
 	LPVOID funcAddress;
 };
 
+class onSetSettlementModel
+	:public AATemplate
+{
+public:
+	onSetSettlementModel(MemWork* mem, LPVOID addr, int ver);
+	~onSetSettlementModel() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onSetArmyGeneralsUnit
 	:public AATemplate
 {

@@ -4,6 +4,7 @@
 #include "functionsOffsets.h"
 #include "dataOffsets.h"
 #include "character.h"
+#include "gameHelpers.h"
 #include "strategyMap.h"
 
 namespace stratModelsChange
@@ -15,13 +16,6 @@ namespace stratModelsChange
 		needChange = 2
 	};
 	modelsChangeStatus changeModelsNeededNow = modelsChangeStatus::changed;
-
-	struct stratModelRecord
-	{
-		UINT32 modelId = 0;
-		string path;
-		model_Rigid* modelP = nullptr;
-	};
 
 	struct stratModelCharacterRecord
 	{
@@ -37,13 +31,18 @@ namespace stratModelsChange
 	map<UINT32, stratModelRecord*>stratModels;
 	vector<stratModelCharacterRecord*>characterStratModels;
 
-	void addModelToGame(const char* path, const UINT32 modelId)
+	void addModelToGame(const std::string& path, const UINT32 modelId, const bool isSettlement)
 	{
 		auto* modRec = new stratModelRecord();
 		modRec->path = path;
 		modRec->modelId = modelId;
-
+		modRec->isSettlement = isSettlement;
 		stratModels[modelId] = modRec;
+	}
+
+	void addModelToGameNoBool(const std::string& path, const UINT32 modelId)
+	{
+		addModelToGame(path, modelId);
 	}
 
 	struct stratModelChangeRecord
@@ -156,26 +155,21 @@ namespace stratModelsChange
 			changeModelsNeededNow = modelsChangeStatus::changed;
 			return;
 		}
+		
 		if (changeModelsNeededNow == modelsChangeStatus::changed)
 		{
 			return;
 		}
-
-		if (fortEntryCount > 0)
-			crashFixAr.reserve(fortEntryCount);
 		
 		const auto campaignData = campaignHelpers::getCampaignData();
 		changeModelsNeededNow = modelsChangeStatus::changed;
 		for (stratModelChangeRecord* changeMod : stratModelChangeList) //static models
 		{
-			stratModelRecord* mod1 = findStratModel(changeMod->modelId);
+			const stratModelRecord* mod1 = findStratModel(changeMod->modelId);
 			if (mod1 == nullptr)
 				continue;
 
-			stratModelRecord* mod2 = nullptr;
-			 
-			mod2 = findStratModel(changeMod->modelId2);
-
+			const stratModelRecord* mod2 = findStratModel(changeMod->modelId2);
 			if (changeModel(changeMod->x, changeMod->y, mod1->modelP, mod2->modelP) == true)
 			{
 				if (changeMod->isFort)
@@ -184,7 +178,7 @@ namespace stratModelsChange
 					{
 						auto fac = campaignData->getFactionByOrder(i);
 						auto vis = fac->getTileVisibility(changeMod->x, changeMod->y);
-						if (vis == 0)
+						if (vis < 1)
 							continue;
 						crashFixAr.emplace_back(changeMod->x, changeMod->y, fac, vis);
 						fac->revealTile(changeMod->x, changeMod->y);
@@ -219,11 +213,12 @@ namespace stratModelsChange
 	}
 	void loadModels()
 	{
-		if (modelsLoaded == true)return;
+		if (modelsLoaded == true)
+			return;
 
-		for (const auto& [fst, snd] : stratModels)
+		for (const auto& [index, record] : stratModels)
 		{
-			snd->modelP = loadModel(snd->path.c_str());
+			record->modelP = loadModel(record->path, record->isSettlement);
 		}
 		modelsLoaded = true;
 		changeModelsNeededNow = modelsChangeStatus::needChange;
@@ -239,31 +234,28 @@ namespace stratModelsChange
 		}
 	}
 
-	model_Rigid* loadModel(const char* path)
+	model_Rigid* loadModel(const std::string& path, const bool isSettlement)
 	{
-		DWORD adr = codes::offsets.loadStratCasModelFunc;
-		DWORD res = 0;
-		_asm {
-			push 0x1
-			push 0x1
-			push 0x1
-			push 0x2
-			push 0x97c
-			push path
-
-			mov eax, [adr]
-			call eax
-			add esp, 0x18
-			mov[res], eax
-		}
-		auto modsNum = reinterpret_cast<int*>(dataOffsets::offsets.statStratModelsListOffset + 0x8dc);
-
-		auto** modRig = reinterpret_cast<model_Rigid**>(dataOffsets::offsets.statStratModelsListOffset);
-		modRig[*modsNum - 1] = nullptr;
-
-		*modsNum = *modsNum - 1;
-
-		return reinterpret_cast<model_Rigid*>(res);
+		struct simpleCas
+		{
+			void* cas = nullptr;
+		}cas;
+		const char* casPath = GAME_FUNC(const char*(__cdecl*)(const char*), getRelativePath)(path.c_str());
+		gameHelpers::logStringGame("Loading model: " + string(casPath));
+		GAME_FUNC(bool(__thiscall*)(simpleCas*, const char*), parseCas)(&cas, casPath);
+		auto modelRigid = techFuncs::createGameClass<model_Rigid>();
+		modelRigid = GAME_FUNC(model_Rigid*(__thiscall*)(model_Rigid*), createModelRigid)(modelRigid);
+		char textureName[MAX_PATH];
+		strncpy(textureName, casPath, sizeof(textureName));
+		textureName[sizeof(textureName) -1] = '\0';
+		GAME_FUNC(void(__cdecl*)(char*), appendTexturesFolder)(textureName);
+		const DWORD casModel = GAME_FUNC(DWORD(__thiscall*)(simpleCas*), getCasModel)(&cas);
+		const uint32_t flags = isSettlement ? 2428 : 2332;
+		GAME_FUNC(char(__thiscall*)(model_Rigid*, DWORD, char*, uint32_t, int ,int, int, bool)
+			, loadModelRigid)(modelRigid, casModel, textureName, flags, 2, 1, 1, true);
+		GAME_FUNC(void(__thiscall*)(simpleCas*), closeCas)(&cas);
+		GAME_FUNC(void(__thiscall*)(simpleCas*), simpleCasDestructor)(&cas);
+		return modelRigid;
 	}
 
 	void setCharacterModel(character* gen, const char* model) //add character to be changed to the queue

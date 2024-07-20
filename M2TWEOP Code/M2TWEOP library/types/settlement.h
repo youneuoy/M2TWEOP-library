@@ -487,7 +487,7 @@ struct settlementStruct {
 	DWORD settVerification;
 	DWORD settVerificationPos;
 	DWORD settVerificationPos2;
-	struct settMod* model;
+	struct cultureSettlement* model;
 	struct settMod* model2; //0000014C
 	int cultureID;
 	float smthingPosX;

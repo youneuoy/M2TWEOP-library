@@ -776,7 +776,7 @@ struct portBuildingStruct {
 	undefined field_0x68[4];
 	struct armyStruct* army;
 	int partType;
-	struct stratPortModel* portStratModel;
+	struct cultureCasEntry* portStratModel;
 	struct portDockStrat* portDock;
 };
 
@@ -854,15 +854,10 @@ struct portDockStrat {
 	undefined field_0x68[4];
 	struct armyStruct* army;
 	int partType;
-	struct stratPortModel* dockStratModel;
+	struct cultureCasEntry* dockStratModel;
 	struct portBuildingStruct* port;
 	void* trackedPointerArmyVtbl3;
 	struct armyStruct* dockedArmy;
-};
-
-struct watchTowerModel {
-	struct model_Rigid* modelP;
-	undefined field_0x4[26];
 };
 
 //watchtower
@@ -878,7 +873,7 @@ struct watchTowerStruct {
 	float opacity;
 	bool highlighted;
 	char pad1[3];
-	struct watchTowerModel* model;
+	struct cultureCasEntry* model;
 	int32_t regionID; //0x0028
 	struct factionStruct* faction; //0x002C
 	struct settlementStruct* settlement; //0x0030

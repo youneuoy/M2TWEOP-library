@@ -4709,6 +4709,31 @@ void onPopActionMem::SetNewCode()
 	delete a;
 }
 
+onSetSettlementModel::onSetSettlementModel(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x5DB759;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x5DB299;
+}
+
+void onSetSettlementModel::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->pushad();
+	a->pushf();
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->popf();
+	a->popad();
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onSetArmyGeneralsUnit::onSetArmyGeneralsUnit(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

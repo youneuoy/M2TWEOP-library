@@ -495,7 +495,12 @@ void managerF::execPatches()
 	toPopActionMem->Enable();
 	f1 << "Done" << endl;
 
-
+	f1 << "Start applying onSetSettlementModel patch" << endl;
+	onSetSettlementModel* toSetSettlementModel = new onSetSettlementModel(mem, (LPVOID)patchesForGame::onSetSettlementModel, globals::dataS.gameVersion);
+	toSetSettlementModel->SetNewCode();
+	toSetSettlementModel->Enable();
+	f1 << "Done" << endl;
+	
 	f1 << "Start applying onUnitMerge patch" << endl;
 	onUnitMerge* toUnitMerge = new onUnitMerge(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
 	toUnitMerge->SetNewCode();

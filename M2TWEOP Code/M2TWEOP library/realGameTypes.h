@@ -379,7 +379,7 @@ struct stratResMod {
 
 /* rigid model(cas model for "static" objects - settlements, resources, etc) on stratmap! */
 struct model_Rigid { /* rigid model(cas model for "static" objects - settlements, resources, etc) on stratmap! */
-	undefined field_0x0[4];
+	undefined field_0x0[0x164];
 };
 
 //settlement model struct

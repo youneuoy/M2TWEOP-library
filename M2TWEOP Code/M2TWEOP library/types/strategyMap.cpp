@@ -72,6 +72,8 @@ void minorSettlementDb::addToMinorSettlements(const int regionId, settlementStru
 {
 	if (!m_Loaded)
 		load();
+	if (getSettlement(regionId, settlement->minorSettlementIndex))
+		return;
 	regionMinorSettlements[regionId].push_back(settlement);
 }
 
@@ -79,10 +81,12 @@ settlementStruct* minorSettlementDb::getSettlement(const int regionId, const int
 {
 	if (!m_Loaded)
 		load();
+	if (!m_Loaded)
+		return nullptr;
 	const auto setts = regionMinorSettlements[regionId];
 	for (const auto& sett : setts)
 	{
-		if (sett->getMinorSettlementIndex() == settlementIndex)
+		if (sett->minorSettlementIndex == settlementIndex)
 			return sett;
 	}
 	gameHelpers::logStringGame("Minor settlement not found " + std::to_string(settlementIndex) + " regionId: " + std::to_string(regionId));
@@ -114,13 +118,22 @@ settlementStruct* minorSettlementDb::getSettlementAtIndex(const int regionId, co
 void minorSettlementDb::load()
 {
 	const auto campaignData = campaignHelpers::getCampaignData();
-	m_Loaded = true;
+	const auto stratData = stratMapHelpers::getStratMap();
+	for (int i = 0; i < stratData->regionsNum; i++)
+	{
+		if (const auto region = stratData->getRegion(i); region->settlement)
+		{
+			m_Loaded = true;
+			addToMinorSettlements(region->regionID, region->settlement);
+		}
+	}
 	for (int i = 0; i < campaignData->factionCount; i++)
 	{
 		const auto fac = campaignData->getFactionByOrder(i);
 		for (int j = 0; j < fac->settlementsNum; j++)
 		{
 			const auto sett = fac->settlements[j];
+			m_Loaded = true;
 			addToMinorSettlements(sett->regionID, sett);
 		}
 	}

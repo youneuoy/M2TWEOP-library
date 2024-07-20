@@ -102,7 +102,6 @@ void eopSettlementDataDb::newGameLoaded()
 	eopSettData->clear();
 	if (map->regionsNum < 1)
 		return;
-	m_Loaded = true;
 	for (int i = 0; i < map->regionsNum; i++)
 	{
 		const int settCount = map->regions[i].settlementCount();
@@ -111,19 +110,30 @@ void eopSettlementDataDb::newGameLoaded()
 			const auto sett = map->regions[i].getSettlement(j);
 			if (!sett)
 				continue;
+			m_Loaded = true;
 			auto data = std::make_shared<eopSettlementData>();
 			data->settlementID = sett->minorSettlementIndex;
 			data->regionID = sett->regionID;
+			data->settlementLabel = string(sett->name);
 			eopSettData->push_back(data);
 		}
 	}
-	
 }
 
 std::shared_ptr<eopSettlementData> eopSettlementDataDb::getSettlementData(const int regionId, const int settlementId)
 {
-	if (m_Loaded == false)
+	if (regionId < 0 || settlementId < 0)
+		return nullptr;
+	if (!m_Loaded)
 		newGameLoaded();
+	if (!m_Loaded)
+		return nullptr;
+	if (regionId < static_cast<int>(eopSettData->size()))
+	{
+		if (const auto fastCheck = eopSettData->at(regionId);
+			fastCheck && fastCheck->regionID == regionId && fastCheck->settlementID == settlementId)
+			return fastCheck;
+	}
 	for (const auto& settData : *eopSettData)
 	{
 		if (settData->regionID == regionId && settData->settlementID == settlementId)

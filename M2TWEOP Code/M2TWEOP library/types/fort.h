@@ -41,7 +41,7 @@ public:
     struct descrRebelEntry* descrRebel; //0x00AC
     int32_t subFactionID; //0x00B0
 	spyingInfo spyInfo;
-    struct stratFortMod* stratModel;
+    struct cultureFort* stratModel;
     int regionID;
     struct factionStruct* faction;
     int32_t creatorFactionID; //0x00EC

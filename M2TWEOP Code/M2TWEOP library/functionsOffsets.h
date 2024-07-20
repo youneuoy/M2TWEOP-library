@@ -8,6 +8,18 @@ public:
 	{
 		DWORD stringCryptFunc = NULL;
 		DWORD loadStratCasModelFunc = NULL;
+		DWORD getRelativePath = NULL;
+		DWORD parseCas = NULL;
+		DWORD createModelRigid = NULL;
+		DWORD appendTexturesFolder = NULL;
+		DWORD loadModelRigid = NULL;
+		DWORD getCasModel = NULL;
+		DWORD closeCas = NULL;
+		DWORD simpleCasDestructor = NULL;
+		DWORD createCultureSettlement = NULL;
+		DWORD releaseCultureSettlement = NULL;
+		DWORD createCultureFort = NULL;
+		DWORD createCultureCasEntry = NULL;
 
 		DWORD allocMemFunc = NULL;
 		

@@ -40,27 +40,27 @@ struct underlay
 
 struct cultureCasEntry
 {
-	int field_0;
-	int field_4;
+	model_Rigid* model;
+	model_Rigid* wallsModel;
 	char *casName;
 	int casNameHash;
-	int field_10;
-	int field_14;
-	int field_18;
-	int field_1C;
+	char* wallCasName;
+	int wallCasNameHash;
+	char* uiTgaPath;
+	int uiTgaPathHash;
 	underlay *underlay;
 };
 
 struct cultureFort
 {
-	void *modelRigid;
-	void *stratModelArrayEntry;
+	model_Rigid *model;
+	model_Rigid *wallsModel;
 	stringWithHash fortCasName;
 	stringWithHash fortWallsCasName;
-	int array_18[31];
-	stringWithHash stringsHash_94[31];
-	char *strings_18c[31];
-	stringWithHash stringsHash_208[31];
+	model_Rigid* models[31];
+	stringWithHash modelPaths[31];
+	model_Rigid* wallModels[31];
+	stringWithHash wallModelPaths[31];
 	stringWithHash uiGenericFort;
 	underlay *underlay;
 };
@@ -76,22 +76,22 @@ struct smthingCult2
 
 struct cultureSettlement
 {
-	int field_0;
-	int field_4;
+	model_Rigid* cityModel;
+	model_Rigid* castleModel;
 	char *casNameCity;
 	int casNameCityHash;
 	void *casNameCastle;
 	int casNameCastleHash;
-	int field_18;
-	char *strings1C[31];
-	char *strings98[31];
-	stringWithHash stringHash114[31];
-	stringWithHash stringHash20c[31];
-	smthingCult2 field_304[5];
+	int index;
+	model_Rigid *settlementModels[31];
+	model_Rigid *castleModels[31];
+	stringWithHash settlementPaths[31];
+	stringWithHash castlePaths[31];
+	smthingCult2 fortificationLevels[5];
 	char *tgaFileCity;
-	int field_394;
+	int tgaFileCityHash;
 	char *tgaFileCastle;
-	int field_39C;
+	int tgaFileCastleHash;
 	underlay *underlay;
 };
 
@@ -178,6 +178,7 @@ namespace cultures
     int getCultureCount();
     culturesDB* getCultureDb();
     std::string getCultureName(int cultureID);
+	cultureSettlement* getCultureSettlement(int settlementLevel, int factionId);
     
     struct eopPortraitDb
     {

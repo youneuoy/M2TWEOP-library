@@ -304,6 +304,18 @@ void codes::initCodes(int gameVer)
 		offsets.officerDestructor = 0x740A90;
 		offsets.getEventController = 0x488BD0;
 		offsets.deleteScriptEvent = 0x48AAD0; // 48AAD0
+		offsets.getRelativePath = 0x41B9A0; // 48AAD0
+		offsets.parseCas = 0xD519A0;
+		offsets.createModelRigid = 0x9336C0;
+		offsets.appendTexturesFolder = 0x9FFBE0;
+		offsets.loadModelRigid = 0x933280;
+		offsets.getCasModel = 0xD4B960;
+		offsets.closeCas = 0xD518D0;
+		offsets.simpleCasDestructor = 0xD51970;
+		offsets.createCultureSettlement = 0x8BB560;
+		offsets.releaseCultureSettlement = 0x8B9C50;
+		offsets.createCultureFort = 0x8B9B10;
+		offsets.createCultureCasEntry = 0x8B88C0;
 	}
 
 
@@ -610,5 +622,17 @@ void codes::initCodes(int gameVer)
 		offsets.officerDestructor = 0x741220;
 		offsets.getEventController = 0x488FD0;
 		offsets.deleteScriptEvent = 0x48AED0; // 48AAD0
+		offsets.getRelativePath = 0x41BCC0;
+		offsets.parseCas = 0xD4BD00;
+		offsets.createModelRigid = 0x00934190;
+		offsets.appendTexturesFolder = 0xA00760;
+		offsets.loadModelRigid = 0x933D50;
+		offsets.getCasModel = 0xD45CC0;
+		offsets.closeCas = 0xD4BC30;
+		offsets.simpleCasDestructor = 0xD4BCD0;
+		offsets.createCultureSettlement = 0x8BBF50;
+		offsets.releaseCultureSettlement = 0x8BA640;
+		offsets.createCultureFort = 0x8BA500;
+		offsets.createCultureCasEntry = 0x8B92B0;
 	}
 }

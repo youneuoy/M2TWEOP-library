@@ -239,6 +239,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield addBanner addBanner
 	@tfield getFactionRecord getFactionRecord
 	@tfield hideUnknownUnitTooltips hideUnknownUnitTooltips
+	@tfield handleUnitCards handleUnitCards
 	@table M2TWEOP
 	*/
 	
@@ -686,10 +687,14 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@function M2TWEOP.addModelToGame
 	@tparam string path Relative path from the modfolder (starting with "data/").
 	@tparam int modelId  Unique ID to use the model later.
+	@tparam bool isSettlement optional
 	@usage
 	M2TWEOP.addModelToGame("data/models_strat/residences/invisible.CAS",1);
 	*/
-	tables.M2TWEOP.set_function("addModelToGame", &stratModelsChange::addModelToGame);
+	tables.M2TWEOP.set_function("addModelToGame", sol::overload(
+				sol::resolve<void(const std::string&, uint32_t)>(stratModelsChange::addModelToGameNoBool),
+				sol::resolve<void(const std::string&, uint32_t, bool)>(stratModelsChange::addModelToGame)
+			));
 	
 	/***
 	Check game condition.
