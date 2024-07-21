@@ -25,6 +25,7 @@ extentColor extentColors::m_Enemy =       { 0xFF, 0xFF, 0   , 0x28, 0xFF };
 extentColor extentColors::m_Zoc =         { 0xA0, 0x00, 0   , 0x00, 0xc8 };
 std::array<std::vector<settlementStruct*>, 200> minorSettlementDb::regionMinorSettlements = {};
 bool minorSettlementDb::m_Loaded = false;
+minorSettlementBalance* minorSettlementDb::m_BalanceModifiers = new minorSettlementBalance();
 
 oneTile* landingTile::getTile()
 {
@@ -840,6 +841,7 @@ namespace stratMapHelpers
             sol::usertype<landingPoint> landingPoint;
             sol::usertype<seaConnectedRegion> seaConnectedRegion;
             sol::usertype<neighbourRegion> neighbourRegion;
+            sol::usertype<minorSettlementBalance> minorSettlementBalance;
         }typeAll;
 
 		///Strat Map
@@ -1070,6 +1072,38 @@ namespace stratMapHelpers
 		     local x, y = M2TW.stratMap.findValidTileNearTile(160, 125, characterType.general)
 		*/
 		typeAll.stratMap.set_function("findValidTileNearTile", &findValidTileNearTileLua);
+		
+		/***
+		It is used as follows if region capital owner is different to minor settlement owner:
+		newValue = value * (modifierBase + (allianceOffset or NeutralOffset) + tradeRightsOffset)
+		if they belong to same faction it is just value * modifierOwnFaction
+		Affected income values are: trade, farms and mining
+		Affected growth values are: farms, baseFarm and trade
+
+		@tfield float incomeModifierBase Default: 0.0
+		@tfield float growthModifierBase Default: 0.25
+		@tfield float incomeModifierAllianceOffset Default: 0.30
+		@tfield float growthModifierAllianceOffset Default: 0.40
+		@tfield float incomeModifierNeutralOffset Default: 0.15
+		@tfield float growthModifierNeutralOffset Default: 0.20
+		@tfield float incomeModifierTradeRightsOffset Default: 0.30
+		@tfield float growthModifierTradeRightsOffset Default: 0.15
+		@tfield float incomeModifierOwnFaction Default: 0.75
+		@tfield float growthModifierOwnFaction Default: 0.75
+
+		@table minorSettlementBalance
+		*/
+		typeAll.minorSettlementBalance = luaState.new_usertype<minorSettlementBalance>("minorSettlementBalance");
+		typeAll.minorSettlementBalance.set("incomeModifierBase", &minorSettlementBalance::incomeModifierBase);
+		typeAll.minorSettlementBalance.set("growthModifierBase", &minorSettlementBalance::growthModifierBase);
+		typeAll.minorSettlementBalance.set("incomeModifierAllianceOffset", &minorSettlementBalance::incomeModifierAllianceOffset);
+		typeAll.minorSettlementBalance.set("growthModifierAllianceOffset", &minorSettlementBalance::growthModifierAllianceOffset);
+		typeAll.minorSettlementBalance.set("incomeModifierNeutralOffset", &minorSettlementBalance::incomeModifierNeutralOffset);
+		typeAll.minorSettlementBalance.set("growthModifierNeutralOffset", &minorSettlementBalance::growthModifierNeutralOffset);
+		typeAll.minorSettlementBalance.set("incomeModifierTradeRightsOffset", &minorSettlementBalance::incomeModifierTradeRightsOffset);
+		typeAll.minorSettlementBalance.set("growthModifierTradeRightsOffset", &minorSettlementBalance::growthModifierTradeRightsOffset);
+		typeAll.minorSettlementBalance.set("incomeModifierOwnFaction", &minorSettlementBalance::incomeModifierOwnFaction);
+		typeAll.minorSettlementBalance.set("growthModifierOwnFaction", &minorSettlementBalance::growthModifierOwnFaction);
 		
 		/***
 		Basic coordPair table.

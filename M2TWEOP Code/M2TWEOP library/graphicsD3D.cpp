@@ -151,48 +151,48 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	{
 		f();
 	}
-//	const bool battleState = battleHelpers::inBattle();
-//
-//	//1-stratmap
-//	//2-tactmap
-//	int drawType = 2;
-//	if (!battleState)
-//		drawType = 1;
-//
-//
-//	//Backup the DX9 state
-//	IDirect3DStateBlock9* d3d9_state_block = NULL;
-//	if (graphicsD3D::dataS.pDevice->CreateStateBlock(D3DSBT_ALL, &d3d9_state_block) < 0)
-//		return;
-//	if (d3d9_state_block->Capture() < 0)
-//	{
-//		d3d9_state_block->Release();
-//		return;
-//	}
-//	// Backup the DX9 transform (DX9 documentation suggests that it is included in the StateBlock but it doesn't appear to)
-//	D3DXMATRIX last_world, last_view, last_projection;
-//	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_WORLD, &last_world);
-//	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_VIEW, &last_view);
-//	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_PROJECTION, &last_projection);
-//
-//
-//	graphicsD3D::dataS.clearStateBlock->Apply();
-//
-//
-//
-//	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-//	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-//	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-//	fbxModels::draw(drawType, globals::dataS.gameVersion);
-//	// Restore the DX9 transform
-//
-//	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_WORLD, &last_world);
-//	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_VIEW, &last_view);
-//	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_PROJECTION, &last_projection);
-//
-//	// Restore the DX9 state
-//	d3d9_state_block->Apply();
-//	d3d9_state_block->Release();
+	const bool battleState = battleHelpers::inBattle();
+
+	//1-stratmap
+	//2-tactmap
+	int drawType = 2;
+	if (!battleState)
+		drawType = 1;
+
+
+	//Backup the DX9 state
+	IDirect3DStateBlock9* d3d9_state_block = NULL;
+	if (graphicsD3D::dataS.pDevice->CreateStateBlock(D3DSBT_ALL, &d3d9_state_block) < 0)
+		return;
+	if (d3d9_state_block->Capture() < 0)
+	{
+		d3d9_state_block->Release();
+		return;
+	}
+	// Backup the DX9 transform (DX9 documentation suggests that it is included in the StateBlock but it doesn't appear to)
+	D3DXMATRIX last_world, last_view, last_projection;
+	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_WORLD, &last_world);
+	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_VIEW, &last_view);
+	graphicsD3D::dataS.pDevice->GetTransform(D3DTS_PROJECTION, &last_projection);
+
+
+	graphicsD3D::dataS.clearStateBlock->Apply();
+
+
+
+	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	fbxModels::draw(drawType, globals::dataS.gameVersion);
+	// Restore the DX9 transform
+
+	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_WORLD, &last_world);
+	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_VIEW, &last_view);
+	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_PROJECTION, &last_projection);
+
+	// Restore the DX9 state
+	d3d9_state_block->Apply();
+	d3d9_state_block->Release();
 //
 }
 

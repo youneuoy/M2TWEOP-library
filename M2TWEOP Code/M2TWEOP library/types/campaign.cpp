@@ -600,6 +600,7 @@ namespace campaignHelpers
         	sol::usertype<moveDataArmy> moveDataArmy;
         	sol::usertype<moveDataCharacter> moveDataCharacter;
         	sol::usertype<moveDataSettlement> moveDataSettlement;
+        	sol::usertype<weatherData> weatherData;
         }typeAll;
     	
 		///Campaign
@@ -618,8 +619,6 @@ namespace campaignHelpers
 		@tfield collegeOfCardinals collegeOfCardinals
 		@tfield factionStruct papalFaction
 		@tfield bool fogOfWar
-		@tfield bool isPaused
-		@tfield bool followMovement
 		@tfield bool marianReformsActive
 		@tfield bool marianReformsDisabled
 		@tfield factionStruct slaveFaction
@@ -647,7 +646,14 @@ namespace campaignHelpers
 		@tfield int endSeason season (0=summer, 1=winter)
 		@tfield int daysInBattle
 		@tfield float currentTimeInBattle 24 max, so calculate as daysInBattle*24+currentTimeInBattle.
+		@tfield float timeOfDay
+		@tfield float windSpeed
+		@tfield weatherData weather
 		@tfield int fortsNum
+		@tfield bool speedUp
+		@tfield bool ignoreSpeedUp
+		@tfield bool isPaused
+		@tfield bool followMovement
 		@tfield int portsBuildingsNum
 		@tfield int watchTowerNum
 		@tfield int slaveFactionID
@@ -697,6 +703,9 @@ namespace campaignHelpers
 		typeAll.campaignTable.set("numberOfHumanFactions", &campaign::humanPlayers);
 		typeAll.campaignTable.set("collegeOfCardinals", &campaign::collegeOfCardinals);
 		typeAll.campaignTable.set("currentFaction", &campaign::currentFactionTurn);
+		typeAll.campaignTable.set("windSpeed", &campaign::windSpeed);
+		typeAll.campaignTable.set("timeOfDay", &campaign::timeOfDay);
+		typeAll.campaignTable.set("weather", &campaign::weatherData);
 		typeAll.campaignTable.set("factionTurnID", &campaign::factionTurnID);
 		typeAll.campaignTable.set("marianReformsActive", &campaign::marianReformsActive);
 		typeAll.campaignTable.set("marianReformsDisabled", &campaign::marianReformsDisabled);
@@ -706,6 +715,8 @@ namespace campaignHelpers
 		typeAll.campaignTable.set("secondCount", &campaign::secondCount);
 		typeAll.campaignTable.set("fogOfWar", &campaign::fogOfWar);
 		typeAll.campaignTable.set("isPaused", &campaign::isPaused);
+		typeAll.campaignTable.set("speedUp", &campaign::speedUp);
+		typeAll.campaignTable.set("ignoreSpeedUp", &campaign::ignoreSpeedUp);
 		typeAll.campaignTable.set("followMovement", &campaign::followMovement);
 		typeAll.campaignTable.set("passedTurnsNum", &campaign::turnNumber);
 		typeAll.campaignTable.set("turnNumber", &campaign::turnNumber);
@@ -1050,9 +1061,26 @@ namespace campaignHelpers
 		    M2TW.campaign.execScriptEvent("my_event", "volcano", 214, 122, 1, "")
 		*/
 		typeAll.campaignTable.set_function("execScriptEvent", &execScriptEvent);
+		
+		///Weather
+		//@section Weather Data
 
-		///Faction Diplomacy
-		//@section Faction diplomacy
+		/***
+		Basic weather data table.
+		@tfield float fogMin get only
+		@tfield float fogMax get only
+		@tfield float windStrength get only
+		@tfield int rainType get only
+		@tfield int rainLevel get only
+
+		@table weatherData
+		*/
+		typeAll.weatherData = luaState.new_usertype<weatherData>("weatherData");
+		typeAll.weatherData.set("fogMin", &weatherData::fogMin);
+		typeAll.weatherData.set("fogMax", &weatherData::fogMax);
+		typeAll.weatherData.set("windStrength", &weatherData::windStrength);
+		typeAll.weatherData.set("rainType", &weatherData::rainType);
+		typeAll.weatherData.set("rainLevel", &weatherData::rainLevel);
 
 		/***
 		Basic faction diplomacy table.

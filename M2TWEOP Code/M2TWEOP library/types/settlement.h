@@ -643,9 +643,10 @@ public:
 		return stats.settlementStats.population;
 	}
 	fortStruct* isFort();
-	void setPopulation(int newPop)
+	void setPopulation(const int newPop)
 	{
-		stats.settlementStats.population = newPop;
+		const auto pop = newPop;
+		stats.setPopulation(pop);
 	}
 	int getFortificationLevel();
 	settlementRecruitmentPool* getSettlementRecruitmentPool(int index)

@@ -927,6 +927,20 @@ struct mapTilesDb
 	mapArrows* mapArrows;
 };
 
+struct minorSettlementBalance
+{
+	float incomeModifierBase = 0.f;
+	float growthModifierBase = 0.25f;
+	float incomeModifierAllianceOffset = 0.30f;
+	float growthModifierAllianceOffset = 0.40f;
+	float incomeModifierNeutralOffset = 0.15f;
+	float growthModifierNeutralOffset = 0.20f;
+	float incomeModifierTradeRightsOffset = 0.30f;
+	float growthModifierTradeRightsOffset = 0.15f;
+	float incomeModifierOwnFaction = 0.75f;
+	float growthModifierOwnFaction = 0.75f;
+};
+
 class minorSettlementDb
 {
 public:
@@ -938,9 +952,11 @@ public:
 	static settlementStruct* getSettlementAtIndex(int regionId, int index);
 	static std::array<std::vector<settlementStruct*>, 200> regionMinorSettlements;
 	static bool isLoaded() { return m_Loaded; }
+	static minorSettlementBalance* getModifiers() { return m_BalanceModifiers; }
 	static void load();
 private:
 	static bool m_Loaded;
+	static minorSettlementBalance* m_BalanceModifiers;
 };
 
 

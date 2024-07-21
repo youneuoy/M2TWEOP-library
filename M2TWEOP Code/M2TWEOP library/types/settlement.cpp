@@ -228,13 +228,16 @@ void eopSettlementDataDb::onGameLoaded()
 			const auto sett = stratMap->regions[i].getSettlement(j);
 			if (!sett)
 				continue;
-			auto settData = getSettlementData(i, sett->minorSettlementIndex);
+			const auto settData = getSettlementData(i, sett->minorSettlementIndex);
+			if (region->settlement)
+				region->localizedSettlementName = region->settlement->localizedName;
 			if (sett->minorSettlementIndex == 0)
 			{
 				if (!settData->regionName.empty())
 					region->changeRegionName(settData->regionName.c_str());
 				if (!settData->regionRebelsName.empty())
 					region->changeRebelsName(settData->regionRebelsName.c_str());
+				region->localizedSettlementName = sett->localizedName;
 			}
 			if (!settData->settlementLabel.empty())
 				gameStringHelpers::setHashedString(&sett->name, settData->settlementLabel.c_str());

@@ -883,6 +883,51 @@ void luaPlugin::initLuaEnums()
 		"tower", 9,
 		"wall", 10
 	);
+
+	
+	/***
+	Enum of precipitation types
+
+	@tfield int none
+	@tfield int rain
+	@tfield int hail 
+	@tfield int snow
+	@tfield int dust
+	@tfield int invalid
+
+	@table rainType
+	*/
+	luaState.new_enum(
+		"rainType",
+		"none", 0,
+		"rain", 1,
+		"hail", 2,
+		"snow", 3,
+		"dust", 4,
+		"invalid", 5
+	);
+	
+	/***
+	Enum of precipitation levels
+
+	@tfield int dry
+	@tfield int drizzle
+	@tfield int light 
+	@tfield int heavy
+	@tfield int torrential
+	@tfield int invalid
+
+	@table rainLevel
+	*/
+	luaState.new_enum(
+		"rainLevel",
+		"dry", 0,
+		"drizzle", 1,
+		"light", 2,
+		"heavy", 3,
+		"torrential", 4,
+		"invalid", 5
+	);
 	
 	/***
 	Enum of battle ground types

@@ -958,25 +958,26 @@ bannerData* patchesForGame::onGetRebelSymbol(const trackedArmy* army, bannerData
 
 void patchesForGame::balanceMinorSettStats(settlementStats* stats, const settlementStruct* sett)
 {
+	const auto modifiers = minorSettlementDb::getModifiers();
 	if (const auto region = stratMapHelpers::getRegion(sett->regionID); region->factionOwner->factionID != sett->faction->factionID)
 	{
 		const auto facDip = campaignHelpers::getCampaignData()->getFactionDiplomacy(region->factionOwner->factionID, sett->faction->factionID);
-		float modifierIncome = 0.0f;
-		float modifierGrowth = 0.25f;
+		float modifierIncome = modifiers->incomeModifierBase;
+		float modifierGrowth = modifiers->growthModifierBase;
 		if (facDip->state == dipStance::alliance)
 		{
-			modifierIncome += 0.30f;
-			modifierGrowth += 0.40f;
+			modifierIncome += modifiers->incomeModifierAllianceOffset;
+			modifierGrowth += modifiers->growthModifierAllianceOffset;
 		}
 		else if (facDip->state < dipStance::war)
 		{
-			modifierIncome += 0.15f;
-			modifierGrowth += 0.20f;
+			modifierIncome += modifiers->incomeModifierNeutralOffset;
+			modifierGrowth += modifiers->growthModifierNeutralOffset;
 		}
 		if (facDip->hasTradeRights)
 		{
-			modifierIncome += 0.30f;
-			modifierGrowth += 0.15f;
+			modifierIncome += modifiers->incomeModifierTradeRightsOffset;
+			modifierGrowth += modifiers->growthModifierTradeRightsOffset;
 		}
 		stats->TradeIncome = static_cast<int>(round(stats->TradeIncome * modifierIncome));
 		stats->FarmsIncome = static_cast<int>(round(stats->FarmsIncome * modifierIncome));
@@ -987,12 +988,12 @@ void patchesForGame::balanceMinorSettStats(settlementStats* stats, const settlem
 	}
 	else
 	{
-		stats->TradeIncome = static_cast<int>(round(stats->TradeIncome * 0.75f));
-		stats->FarmsIncome = static_cast<int>(round(stats->FarmsIncome * 0.75f));
-		stats->MiningIncome = static_cast<int>(round(stats->MiningIncome * 0.75f));
-		stats->PopGrowthFarms = static_cast<int>(round(stats->PopGrowthFarms * 0.75f));
-		stats->PopGrowthBaseFarm = static_cast<int>(round(stats->PopGrowthBaseFarm * 0.75f));
-		stats->PopGrowthTrade = static_cast<int>(round(stats->PopGrowthTrade * 0.75f));
+		stats->TradeIncome = static_cast<int>(round(stats->TradeIncome * modifiers->incomeModifierOwnFaction));
+		stats->FarmsIncome = static_cast<int>(round(stats->FarmsIncome * modifiers->incomeModifierOwnFaction));
+		stats->MiningIncome = static_cast<int>(round(stats->MiningIncome * modifiers->incomeModifierOwnFaction));
+		stats->PopGrowthFarms = static_cast<int>(round(stats->PopGrowthFarms * modifiers->growthModifierOwnFaction));
+		stats->PopGrowthBaseFarm = static_cast<int>(round(stats->PopGrowthBaseFarm * modifiers->growthModifierOwnFaction));
+		stats->PopGrowthTrade = static_cast<int>(round(stats->PopGrowthTrade * modifiers->growthModifierOwnFaction));
 	}
 	stats->TotalIncomeWithoutAdmin = stats->TradeIncome + stats->FarmsIncome + stats->MiningIncome + stats->TaxesIncome;
 }

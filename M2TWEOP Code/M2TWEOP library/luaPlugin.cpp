@@ -240,6 +240,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getFactionRecord getFactionRecord
 	@tfield hideUnknownUnitTooltips hideUnknownUnitTooltips
 	@tfield handleUnitCards handleUnitCards
+	@tfield getMinorSettlementBalance getMinorSettlementBalance
 	@table M2TWEOP
 	*/
 	
@@ -819,6 +820,15 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 		M2TWEOP.handleUnitCards(true)
 	*/
 	tables.M2TWEOP.set_function("handleUnitCards", &m2tweopOptions::setHandleUnitCards);
+	
+	/***
+	Get modifiers for minor settlements for income and growth.
+	@function M2TWEOP.getMinorSettlementBalance
+	@treturn minorSettlementBalance modifiers
+	@usage
+		local modifiers = M2TWEOP.getMinorSettlementBalance()
+	*/
+	tables.M2TWEOP.set_function("getMinorSettlementBalance", &minorSettlementDb::getModifiers);
 	
 	/***
 	Add a banner symbol. Add them onCampaignMapLoaded or later!
