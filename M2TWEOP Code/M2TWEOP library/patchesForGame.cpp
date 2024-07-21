@@ -838,6 +838,14 @@ int patchesForGame::onCalculateCommand(const characterRecord* general)
 	return 0;
 }
 
+void patchesForGame::onRemoveFromUnitQueue(const unitRQ* queue, const int index)
+{
+	if (!queue || !queue->settlement)
+		return;
+	const auto item = queue->settlement->getUnitInQueue(index);
+	gameEvents::onRemoveFromUnitQueue(item);
+}
+
 void patchesForGame::onAttachRegionSettlement(settlementStruct* sett, int regionId)
 {
 	sett->regionID = regionId;

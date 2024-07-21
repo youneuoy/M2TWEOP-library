@@ -1697,6 +1697,18 @@ private:
 	LPVOID funcAddress;
 };
 
+class onRemoveFromUnitQueue
+	:public AATemplate
+{
+public:
+	onRemoveFromUnitQueue(MemWork* mem, LPVOID addr, int ver);
+	~onRemoveFromUnitQueue() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onCalculateCommand
 	:public AATemplate
 {

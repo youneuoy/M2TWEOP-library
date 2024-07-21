@@ -224,6 +224,59 @@ void luaPlugin::initLuaEnums()
 
 	
 	/***
+	Enum with a character death types.
+
+	@tfield int alive
+	@tfield int diedNatural
+	@tfield int diedInDisaster
+	@tfield int diedInBattle
+	@tfield int assassinated
+	@tfield int executed
+	@tfield int executedPrisoner
+	@tfield int poisoned
+	@tfield int plague
+	@tfield int starvation
+	@tfield int captainRemoval
+	@tfield int removedForRetraining
+	@tfield int incompatibleFaction
+	@tfield int bribed
+	@tfield int disbanded
+	@tfield int sunk
+	@tfield int married
+	@tfield int acquired
+	@tfield int retired
+	@tfield int disgraced
+	@tfield int denounced
+
+	@table deathType
+	*/
+	luaState.new_enum(
+		"deathType",
+		"alive", 0,
+		"diedNatural", 1,
+		"diedInDisaster", 2,
+		"diedInBattle", 3,
+		"assassinated", 4,
+		"executed", 5,
+		"executedPrisoner", 6,
+		"poisoned", 7,
+		"plague", 8,
+		"starvation", 9,
+		"captainRemoval", 10,
+		"removedForRetraining", 11,
+		"incompatibleFaction", 12,
+		"bribed", 13,
+		"disbanded", 14,
+		"sunk", 15,
+		"married", 16,
+		"acquired", 17,
+		"retired", 18,
+		"disgraced", 19,
+		"denounced", 20
+	);
+
+	
+	/***
 	Enum with a list of army sort types.
 
 	@tfield int eduType

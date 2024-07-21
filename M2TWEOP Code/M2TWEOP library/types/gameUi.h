@@ -3,6 +3,7 @@
 #include "lua/sol.hpp"
 
 
+struct characterRecord;
 struct fortStruct;
 struct armyStruct;
 struct uiElement;
@@ -102,6 +103,43 @@ struct unitInfoScroll
 	struct eduEntry* entry;
 };
 
+
+struct uiFamilyLeaf
+{
+	char pad[164];
+	characterRecord* record;
+	int generation;
+	uiFamilyLeaf* parent;
+	uiFamilyLeaf* spouse;
+	uiFamilyLeaf* children[4];
+	int numChildren;
+	uiFamilyLeaf* getChild(const int index)
+	{
+		if (index < 0 || index >= numChildren)
+			return nullptr;
+		return children[index];
+	}
+};
+
+
+struct uiFamilyTree
+{
+	char pad[96];
+	uiFamilyLeaf* familyRoot;
+	int generations;
+	uiFamilyLeaf* hoveredLeaf;
+	uiFamilyLeaf* selectedLeaf;
+	bool canSelectAll;
+	char pad2[3];
+};
+
+
+struct familyTreeScroll
+{
+	char pad[776];
+	uiFamilyTree* familyTree;
+};
+
 struct campaignMapHud
 {
 	char pad[0x1e8];
@@ -139,6 +177,8 @@ public:
 	fortInfoScroll* fortScroll;
 	buildingInfoScroll* buildingInfoScroll;
 	unitInfoScroll* unitInfoScroll;
+	char padDC[16];
+	familyTreeScroll* familyTreeScroll;
 }; //Size: 0x0164
 
 struct otherSettlementInfoScroll
@@ -287,6 +327,7 @@ namespace gameUiHelpers
 {
 	void removeToolTips(const uiElement* unitView);
 	void removeToolTipsSett();
+	uiFamilyTree* getFamilyTree();
 	void removeToolTipsArmy();
 	settlementInfoScroll* getSettlementInfoScroll();
 	uiCardManager* getUiCardManager();

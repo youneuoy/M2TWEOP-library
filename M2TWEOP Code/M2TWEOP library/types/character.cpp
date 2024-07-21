@@ -737,8 +737,8 @@ namespace characterHelpers
 		struct unitInfo
 		{
 			int xp{};
-			int armour{};
-			int weapon{};
+			uint8_t armour{};
+			uint8_t weapon{};
 			int soldierCount{};
 			UNICODE_STRING** alias{};
 			int supplies{};
@@ -756,10 +756,9 @@ namespace characterHelpers
 			}
 			[[nodiscard]] unit* CreateUnit(const factionStruct* faction, const character* character) const
 			{
-				unit* newUnit = unitHelpers::createUnitIdx(eduType, character->regionID, faction->factionID, xp, armour, weapon);
+				unit* newUnit = unitHelpers::createUnitIdx2(eduType, character->regionID, faction->factionID, xp, armour, weapon, soldierCount);
 				newUnit->alias = alias;
 				newUnit->foodRequirement = supplies;
-				newUnit->SoldierCountStrat = soldierCount;
 				return newUnit;
 			}
 		};
@@ -955,14 +954,9 @@ namespace characterHelpers
 	
 	void killCharacter(character* gen)
 	{
-		DWORD adr = codes::offsets.killCharStratMapFunc;
-
-		_asm {
-			push 0x1
-			mov ecx, [gen]
-			mov eax, [adr]
-			call eax
-		}
+		if (gen->characterRecord && !gen->characterRecord->deathType)
+			gen->characterRecord->deathType = 1;
+		GAME_FUNC(void(__thiscall*)(character*, bool), killCharStratMapFunc)(gen, true);
 	}
 	
 	void setBodyguard(character* gen, unit* un)

@@ -4734,6 +4734,36 @@ void onSetSettlementModel::SetNewCode()
 	delete a;
 }
 
+onRemoveFromUnitQueue::onRemoveFromUnitQueue(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x5EA313;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x5E9EB3;
+}
+
+void onRemoveFromUnitQueue::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(edx, dword_ptr(esp, 0x4));
+	a->pushad();
+	a->pushf();
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->popf();
+	a->popad();
+	if (m_adress == 0x5EA313)
+		a->mov(eax, 0x5E9A60);
+	else
+		a->mov(eax, 0x5E9600);
+	a->jmp(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onCalculateCommand::onCalculateCommand(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
@@ -4768,10 +4798,10 @@ onSetArmyGeneralsUnit::onSetArmyGeneralsUnit(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
 	if (ver == 2)//steam
-		m_adress = 0x0071B5A6;
+		m_adress = 0x71B5F4;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x0071AE76;
+		m_adress = 0x71AEC4;
 }
 
 void onSetArmyGeneralsUnit::SetNewCode()
@@ -4784,7 +4814,7 @@ void onSetArmyGeneralsUnit::SetNewCode()
 	a->call(eax);
 	a->popf();
 	a->popad();
-	a->mov(edi, dword_ptr(esi, 0xD4));
+	a->mov(ecx, dword_ptr(esi, 0xD8));
 	a->ret();
 	m_cheatBytes = static_cast<unsigned char*>(a->make());
 	delete a;

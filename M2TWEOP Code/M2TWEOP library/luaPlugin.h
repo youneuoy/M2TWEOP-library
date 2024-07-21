@@ -96,6 +96,7 @@ public:
 	std::unordered_map<int, const char*> climateNames = {
 	};
 	sol::function* onCampaignMapLoaded = nullptr;
+	sol::function* onRemoveFromUnitQueue = nullptr;
 	sol::function* onReadGameDbsAtStart = nullptr;
 	sol::function* onGameInit = nullptr;
 	sol::function* onUnloadCampaign = nullptr;

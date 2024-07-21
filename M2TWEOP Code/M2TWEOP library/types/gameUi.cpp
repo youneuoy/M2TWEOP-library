@@ -181,6 +181,17 @@ namespace gameUiHelpers
 			return nullptr;
 		return ui->unitInfoScroll;
 	}
+
+	uiFamilyTree* getFamilyTree()
+	{
+		const auto ui = getStratUi();
+		if (!ui) 
+			return nullptr;
+		const auto familyScroll = ui->familyTreeScroll;
+		if (!familyScroll)
+			return nullptr;
+		return familyScroll->familyTree;
+	}
 	
     void addToLua(sol::state& luaState)
     {
@@ -198,6 +209,8 @@ namespace gameUiHelpers
         	sol::usertype<uiCardManager> uiCardManager;
         	sol::usertype<buildingInfoScroll> buildingInfoScroll;
         	sol::usertype<unitInfoScroll> unitInfoScroll;
+        	sol::usertype<uiFamilyTree> uiFamilyTree;
+        	sol::usertype<uiFamilyLeaf> uiFamilyLeaf;
         }types;
 
 		///GameUI
@@ -364,6 +377,7 @@ namespace gameUiHelpers
 		@tfield getUnitCard getUnitCard
 		@tfield getBuildingInfoScroll getBuildingInfoScroll
 		@tfield getUnitInfoScroll getUnitInfoScroll
+		@tfield getFamilyTree getFamilyTree
 
 		@table uiCardManager
 		*/
@@ -410,6 +424,14 @@ namespace gameUiHelpers
 		local infoScroll = M2TW.uiCardManager.getUnitInfoScroll()
 		*/
 		types.uiCardManager.set_function("getUnitInfoScroll", &getUnitInfoScroll);
+		/***
+		Get family tree from scroll. Make sure scroll is open!
+		@function uiCardManager.getFamilyTree
+		@treturn uiFamilyTree familyTree
+		@usage
+		local familyTree = M2TW.uiCardManager.getFamilyTree()
+		*/
+		types.uiCardManager.set_function("getFamilyTree", &getFamilyTree);
 		
 		/***
 		Basic unitInfoScroll table
@@ -436,5 +458,52 @@ namespace gameUiHelpers
 		types.buildingInfoScroll.set("settlement", &buildingInfoScroll::settlement);
 		types.buildingInfoScroll.set("building", &buildingInfoScroll::building);
 		types.buildingInfoScroll.set("edbEntry", &buildingInfoScroll::entry);
+
+		/***
+		Basic uiFamilyLeaf table
+
+		@tfield characterRecord record
+		@tfield int generation
+		@tfield uiFamilyLeaf parent
+		@tfield uiFamilyLeaf spouse
+		@tfield int numChildren
+		@tfield getChild getChild
+
+		@table uiFamilyLeaf
+		*/
+		types.uiFamilyLeaf = luaState.new_usertype<uiFamilyLeaf>("uiFamilyLeaf");
+		types.uiFamilyLeaf.set("record", &uiFamilyLeaf::record);
+		types.uiFamilyLeaf.set("generation", &uiFamilyLeaf::generation);
+		types.uiFamilyLeaf.set("parent", &uiFamilyLeaf::parent);
+		types.uiFamilyLeaf.set("spouse", &uiFamilyLeaf::spouse);
+		types.uiFamilyLeaf.set("numChildren", &uiFamilyLeaf::numChildren);
+		
+		/***
+		Get a child.
+		@function uiFamilyLeaf:getChild
+		@tparam int index
+		@treturn uiFamilyLeaf child
+		@usage
+		local child = uiFamilyLeaf:getChild(0)
+		*/
+		types.uiFamilyLeaf.set_function("getChild", &uiFamilyLeaf::getChild);
+
+		/***
+		Basic uiFamilyTree table
+
+		@tfield uiFamilyLeaf familyRoot
+		@tfield int generations
+		@tfield uiFamilyLeaf hoveredLeaf
+		@tfield uiFamilyLeaf selectedLeaf
+		@tfield bool canSelectAll
+
+		@table uiFamilyTree
+		*/
+		types.uiFamilyTree = luaState.new_usertype<uiFamilyTree>("uiFamilyTree");
+		types.uiFamilyTree.set("familyRoot", &uiFamilyTree::familyRoot);
+		types.uiFamilyTree.set("generations", &uiFamilyTree::generations);
+		types.uiFamilyTree.set("hoveredLeaf", &uiFamilyTree::hoveredLeaf);
+		types.uiFamilyTree.set("selectedLeaf", &uiFamilyTree::selectedLeaf);
+		types.uiFamilyTree.set("canSelectAll", &uiFamilyTree::canSelectAll);
     }
 }

@@ -695,11 +695,9 @@ public:
 	}
 	unitRQ* getUnitInQueue(int index)
 	{
-		if (startIndexRQ + index > endIndexRQ)
-			index = endIndexRQ - startIndexRQ;
-		else
-			index = startIndexRQ + index;
-		return &unitQueue[index];
+		if (index > countRQ)
+			return nullptr;
+		return &unitQueue[(index + startIndexRQ) % 9];
 	}
 	void setGuildStanding(const int index, const int amount)
 	{

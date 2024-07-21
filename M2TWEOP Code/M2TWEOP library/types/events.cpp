@@ -891,6 +891,15 @@ void onNewGameStart()
 		tryLua((*plugData::data.luaAll.onNewGameStart)())
 	}
 }
+
+void onRemoveFromUnitQueue(const unitRQ* item)
+{
+	//initReligionNames();
+	if (plugData::data.luaAll.onRemoveFromUnitQueue != nullptr)
+	{
+		tryLua((*plugData::data.luaAll.onRemoveFromUnitQueue)(item))
+	}
+}
 	
 void onCampaignMapLoaded()
 {
@@ -1328,6 +1337,7 @@ void luaPlugin::onPluginLoadF()
 	@tfield onStartSiege onStartSiege
 	@tfield onPluginLoad onPluginLoad
 	@tfield onNewGameLoaded onNewGameLoaded
+	@tfield onRemoveFromUnitQueue onRemoveFromUnitQueue
 
 	@table EventsFunctionsList
 	*/
@@ -4185,6 +4195,21 @@ void luaPlugin::onPluginLoadF()
 	
 	onCampaignMapLoaded = new sol::function(luaState["onCampaignMapLoaded"]);
 	checkLuaFunc(&onCampaignMapLoaded);
+
+	/***
+	Called when a unit is removed from the unit queue.
+
+	@function onRemoveFromUnitQueue
+	@tparam unitInQueue item
+
+	@usage
+	function onRemoveFromUnitQueue(item)
+	--something here
+	end
+	*/
+	
+	onRemoveFromUnitQueue = new sol::function(luaState["onRemoveFromUnitQueue"]);
+	checkLuaFunc(&onRemoveFromUnitQueue);
 
 	/***
 	Called on plugin load (at game start).
