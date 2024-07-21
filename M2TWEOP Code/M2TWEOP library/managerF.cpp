@@ -693,6 +693,24 @@ void managerF::execPatches()
 	toRemoveFromUnitQueue->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onAddSettlementToDiplomacyScroll patch" << '\n';
+	onAddSettlementToDiplomacyScroll* toAddSettlementToDiplomacyScroll = new onAddSettlementToDiplomacyScroll(mem, (LPVOID)patchesForGame::onAddSettlementToDiplomacyScroll, globals::dataS.gameVersion);
+	toAddSettlementToDiplomacyScroll->SetNewCode();
+	toAddSettlementToDiplomacyScroll->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onCanWithdrawPreBattle patch" << '\n';
+	onCanWithdrawPreBattle* toCanWithdrawPreBattle = new onCanWithdrawPreBattle(mem, (LPVOID)patchesForGame::onCanWithdrawPreBattle, globals::dataS.gameVersion);
+	toCanWithdrawPreBattle->SetNewCode();
+	toCanWithdrawPreBattle->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onDecideMissionTarget patch" << '\n';
+	onDecideMissionTarget* toDecideMissionTarget = new onDecideMissionTarget(mem, (LPVOID)patchesForGame::onDecideMissionTarget, globals::dataS.gameVersion);
+	toDecideMissionTarget->SetNewCode();
+	toDecideMissionTarget->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onSetArmyGeneralsUnit patch" << '\n';
 	onSetArmyGeneralsUnit* toSetArmyGeneralsUnit = new onSetArmyGeneralsUnit(mem, (LPVOID)patchesForGame::onSetArmyGeneralsUnit, globals::dataS.gameVersion);
 	toSetArmyGeneralsUnit->SetNewCode();

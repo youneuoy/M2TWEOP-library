@@ -831,6 +831,34 @@ void patchesForGame::onSetSettlementModel(settlementStruct* settlement)
 	}
 }
 
+int patchesForGame::onAddSettlementToDiplomacyScroll(const settlementStruct* settlement)
+{
+	if (settlement->isMinorSettlement)
+		return 0;
+	return 1;
+}
+
+settlementStruct* patchesForGame::onDecideMissionTarget(settlementStruct* settlement, factionStruct* faction)
+{
+	if (settlement->isMinorSettlement)
+		return nullptr;
+	if (!settlement->isEnemyToFaction(faction))
+		return nullptr;
+	return settlement;
+}
+
+int patchesForGame::onCanWithdrawPreBattle(const settlementStruct* settlement)
+{
+	if (settlement && settlement->siegeNum > 0)
+		return 1;
+	if (const auto battle = battleHelpers::getBattleData();
+	 battle && battle->battleState > 0 && battle->battleType == battleType::siege)
+	{
+		return 1;
+	}
+	return 0;
+}
+
 int patchesForGame::onCalculateCommand(const characterRecord* general)
 {
 	if (general->gen && general->gen->getTypeID() == characterTypeStrat::admiral)

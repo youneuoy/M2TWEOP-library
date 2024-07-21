@@ -4764,6 +4764,107 @@ void onRemoveFromUnitQueue::SetNewCode()
 	delete a;
 }
 
+onDecideMissionTarget::onDecideMissionTarget(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0057096B;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005704AB;
+}
+
+void onDecideMissionTarget::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(edx);
+	a->mov(edx, dword_ptr(esp, 0x70));
+	a->push(ecx);
+	a->push(eax);
+	a->mov(ecx, ebp);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(ebp, eax);
+	a->pop(eax);
+	a->pop(ecx);
+	a->pop(edx);
+	a->test(ebp, ebp);
+	a->mov(dword_ptr(esp, 0x1c), ecx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onCanWithdrawPreBattle::onCanWithdrawPreBattle(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x714744;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x714044;
+}
+
+void onCanWithdrawPreBattle::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(ecx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->cmp(eax, 0);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onAddSettlementToDiplomacyScroll::onAddSettlementToDiplomacyScroll(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0xBC7491;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0xBCD131;
+}
+
+void onAddSettlementToDiplomacyScroll::SetNewCode()
+{
+	const auto a = new Assembler();
+	const auto label = a->newLabel();
+	a->mov(edx, dword_ptr(ecx, 0x128));
+	a->mov(edi, ebp);
+	a->imul(edi, 4);
+	a->add(edi, edx);
+	a->mov(edi, dword_ptr(edi, 0));
+	a->push(edi);
+	a->push(eax);
+	a->push(bl);
+	a->push(ebp);
+	a->push(ecx);
+	a->push(edx);
+	a->mov(ecx, edi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->pop(ebp);
+	a->pop(bl);
+	a->cmp(eax, 1);
+	a->pop(eax);
+	a->pop(edi);
+	a->jz(label);
+	if (m_adress == 0xBC7491)
+		a->mov(eax, 0xBC753C);
+	else
+		a->mov(eax, 0x00BCD1DC);
+	a->jmp(eax);
+	a->bind(label);
+	a->cmp(byte_ptr(eax, 0x91), bl);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onCalculateCommand::onCalculateCommand(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

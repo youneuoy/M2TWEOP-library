@@ -1709,6 +1709,42 @@ private:
 	LPVOID funcAddress;
 };
 
+class onAddSettlementToDiplomacyScroll
+	:public AATemplate
+{
+public:
+	onAddSettlementToDiplomacyScroll(MemWork* mem, LPVOID addr, int ver);
+	~onAddSettlementToDiplomacyScroll() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onDecideMissionTarget
+	:public AATemplate
+{
+public:
+	onDecideMissionTarget(MemWork* mem, LPVOID addr, int ver);
+	~onDecideMissionTarget() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCanWithdrawPreBattle
+	:public AATemplate
+{
+public:
+	onCanWithdrawPreBattle(MemWork* mem, LPVOID addr, int ver);
+	~onCanWithdrawPreBattle() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onCalculateCommand
 	:public AATemplate
 {

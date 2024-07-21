@@ -915,12 +915,12 @@ public:
 	bool enabled = true;
 	bool enableLogging = false;
 	float aggressionFactor = 1.f;
-	float defenseFactor = 1.f;
+	float defenseFactor = 0.75f;
 	float religionFactor = 0.5f;
-	float nonBorderFactor = 0.33f;
+	float nonBorderFactor = 0.20f;
 	float residenceFactor = 1.f;
 	float aidFactor = 0.5f;
-	float moveCostFactor = 1.0f;
+	float moveCostFactor = 30.0f;
 	float powerFactor = 1.f;
 	float invadePriorityFactor = 1.f;
 	int maxTurnSearchCount = 4;

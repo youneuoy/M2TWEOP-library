@@ -2,6 +2,7 @@
 #include "stratModelsChange.h"
 #include "graphicsD3D.h"
 #include "cultures.h"
+#include "faction.h"
 #include "unit.h"
 
 struct unitRQ;
@@ -45,6 +46,9 @@ public:
 	static int __fastcall onCreateMercUnitCheck(char** entryName, int eduIndex);
 	static void __fastcall onWriteSoldiersToStrat(unit* unit);
 	static void __fastcall onSetSettlementModel(settlementStruct* settlement);
+	static int __fastcall onAddSettlementToDiplomacyScroll(const settlementStruct* settlement);
+	static settlementStruct* __fastcall onDecideMissionTarget(settlementStruct* settlement, factionStruct* faction);
+	static int __fastcall onCanWithdrawPreBattle(const settlementStruct* settlement);
 	static int __fastcall onCalculateCommand(const characterRecord* general);
 	static void __fastcall onRemoveFromUnitQueue(const unitRQ* queue, int index);
 	static void __fastcall onAttachRegionSettlement(settlementStruct* sett, int regionId);
