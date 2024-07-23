@@ -79,15 +79,9 @@ namespace characterRecordHelpers
 		else if (fieldIndex == characterRecord_modelName)
 			gameStringHelpers::setHashedString(&genChar->modelName, newS.c_str());
 		else if (fieldIndex == characterRecord_portrait)
-		{
 			gameStringHelpers::setHashedString(&genChar->portrait, newS.c_str());
-		}
 		else if (fieldIndex == characterRecord_portrait2)
-		{
-			if (const auto charData = eopCharacterDataDb::instance->getOrCreateData(genChar->giveValidLabel(), genChar->gen ? genChar->gen->getTypeID() : 7))
-				charData->portrait2 = newS;
 			gameStringHelpers::setHashedString(&genChar->portrait2, newS.c_str());
-		}
 		else if (fieldIndex == characterRecord_portrait_custom)
 			gameStringHelpers::setHashedString(&genChar->portrait_custom, newS.c_str());
 		else if (fieldIndex == characterRecord_lastName)
@@ -193,27 +187,18 @@ namespace characterRecordHelpers
 	\*----------------------------------------------------------------------------------------------------------------*/
 #pragma region Ancillary helpers
 	
-	ancillary* findAncillary(const char* ancName)
+	ancillary* findAncillary(const std::string& ancName)
 	{
-		if (ancName == nullptr)
+		if (ancName.empty())
 			return nullptr;
-		DWORD adr = codes::offsets.findAncillary;
-		ancillary* anc = nullptr;
-		_asm
-		{
-			push ancName
-			mov eax, adr
-			call eax
-			add esp, 4
-			mov anc, eax
-		}
-		return anc;
+		return GAME_FUNC(ancillary*(__cdecl*)(const char*), findAncillary)(ancName.c_str());
 	}
 	
 	int addAncillaryName(characterRecord* character, const std::string& ancName)
 	{
-		ancillary* anc = findAncillary(ancName.c_str());
-		if (anc == nullptr)return 0;
+		ancillary* anc = findAncillary(ancName);
+		if (anc == nullptr)
+			return 0;
 		return addAncillary(character, anc);
 	}
 
@@ -564,6 +549,8 @@ namespace characterRecordHelpers
 		@tfield giveRandomName giveRandomName
 		@tfield setPortrait setPortrait
 		@tfield giveRandomPortrait giveRandomPortrait
+		@tfield acquireAncillary acquireAncillary
+		@tfield hasAncType hasAncType
 
 		@table characterRecord
 		*/
@@ -728,6 +715,15 @@ namespace characterRecordHelpers
 		*/
 		types.characterRecord.set_function("hasAncillary", &characterRecord::hasAncillary);
 		/***
+		Check if the character has a certain ancillary type.
+		@function characterRecord:hasAncType
+		@tparam string ancType
+		@treturn bool hasAnc
+		@usage
+		      local hasAnc = record:hasAncType("relic_ring")
+		*/
+		types.characterRecord.set_function("hasAncType", &characterRecord::hasAncType);
+		/***
 		Get a character trait.
 		@function characterRecord:getTrait
 		@tparam int index
@@ -755,6 +751,15 @@ namespace characterRecordHelpers
 		*/
 		types.characterRecord.set_function("addTraitPoints", &characterRecord::addTraitPoints);
 		/***
+		Give character an ancillary, checks excluded cultures.
+		@function characterRecord:acquireAncillary
+		@tparam string ancillaryName
+		@tparam bool noDuplicate Only add if character doesn't already have this ancillary.
+		@usage
+		      record:acquireAncillary("ancillary_name", true)
+		*/
+		types.characterRecord.set_function("acquireAncillary", &characterRecord::acquireAncillary);
+		/***
 		Give a random name.
 		@function characterRecord:giveRandomName
 		@tparam int nameFactionId
@@ -776,7 +781,7 @@ namespace characterRecordHelpers
 		@tparam int cultureID
 		@tparam int religionID (Only for cultures that are set up with religion variations! Use -1 to disable.)
 		@usage
-		      record:giveRandomPortrait("")
+		      record:giveRandomPortrait(M2TWEOP.getCultureID("southern_european"), -1)
 		*/
 		types.characterRecord.set_function("giveRandomPortrait", &characterRecord::giveRandomPortrait);
 			
@@ -1120,6 +1125,20 @@ void characterRecord::applyName()
 	characterRecordHelpers::namedCharSetLocalizedFullName(this, name.c_str());
 }
 
+void characterRecord::acquireAncillary(const std::string& name, const bool noDuplicate)
+{
+	if (!gen || gen->getTypeID() == characterTypeStrat::general)
+		return;
+	const auto anc = characterRecordHelpers::findAncillary(name);
+	if (!anc)
+		return;
+	if (anc->isExcluded(faction->cultureID))
+		return;
+	if (noDuplicate && hasAncillary(name))
+		return;
+	characterRecordHelpers::addAncillary(this, anc);
+}
+
 void characterRecord::setPortrait(const std::string& portraitPath)
 {
 	string path = gameHelpers::getModPath();
@@ -1194,6 +1213,17 @@ bool characterRecord::hasAncillary(const std::string& ancName)
 	return false;
 }
 
+bool characterRecord::hasAncType(const std::string& ancType)
+{
+	gameStringHelpers::setHashedString(&LOOKUP_STRING_ANC->name, ancType.c_str());
+	for (uint32_t i = 0; i < ancNum; i++)
+	{
+		if (const auto anc = ancillaries[i]; anc->dataAnc->typeHash == LOOKUP_STRING_ANC->hash)
+			return true;
+	}
+	return false;
+}
+
 std::string characterRecord::getEopSetModel()
 {
 	if (const auto data = eopCharacterDataDb::get()->getCharacterData(label);
@@ -1220,6 +1250,15 @@ void characterRecord::addTraitPoints(const std::string& trait, const int points)
 {
 	const auto entry = characterRecordHelpers::findTrait(trait);
 	if (!entry)
+		return;
+	bool isCharTypeValid;
+	if (gen)
+		isCharTypeValid = entry->isCharacterTypeValid(gen->getTypeID());
+	else
+		isCharTypeValid = entry->isCharacterTypeValid(static_cast<int>(characterTypeStrat::namedCharacter));
+	if (!isCharTypeValid)
+		return;
+	if (entry->isExcluded(faction->cultureID))
 		return;
 	const int addPoints = points;
 	GAME_FUNC(void(__thiscall*)(characterRecord*, traitEntry*, int, bool),

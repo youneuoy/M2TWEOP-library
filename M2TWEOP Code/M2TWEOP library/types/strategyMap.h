@@ -416,6 +416,7 @@ public:
 	int getEnemySettsToFaction(int factionId);
 	int getNeutralSettsToFaction(int factionId);
 	void changeRegionName(const char* newName);
+	void changeRegionSettlementName(const char* newName);
 	void changeRebelsName(const char* newName);
 	oneTile* getPatrolPoint(int index);
 	oneTile* getDevastatedTile(int index);

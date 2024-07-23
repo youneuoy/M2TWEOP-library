@@ -9,6 +9,7 @@
 #include "dataOffsets.h"
 #include "functionsOffsets.h"
 #include "gameHelpers.h"
+#include "luaPlugin.h"
 #include "techFuncs.h"
 
 std::vector<eopBuildEntry> buildEntryDB::eopEdb = {};
@@ -81,6 +82,21 @@ void buildEntryDB::addPools(buildingLevel* eopLevel, const buildingLevel* oldLev
 		*eopPool = *oldPool;
 		oldPool = oldPool->nextPool;
 	}
+}
+
+edbEntry* exportDescrBuildings::getBuildingByName(const std::string& name)
+{
+	if (!plugData::data.luaAll.hashNonCampaignLoaded || plugData::data.luaAll.buildings.empty())
+		plugData::data.luaAll.fillHashMapsNonCampaign();
+	if (const auto build = plugData::data.luaAll.buildings.find(name); build != plugData::data.luaAll.buildings.end()) 
+		return buildings.get(build->second);
+	const int buildingNum = buildings.size();
+	for (int i = 0; i < buildingNum; i++)
+	{
+		if (const auto entry = buildings.get(i); strcmp(entry->type, name.c_str()) == 0)
+			return entry;
+	}
+	return nullptr;
 }
 
 
@@ -418,6 +434,36 @@ namespace eopBuildings
 
 namespace buildingHelpers
 {
+	int getBuildingId(const std::string& name)
+	{
+		if (!plugData::data.luaAll.hashNonCampaignLoaded || plugData::data.luaAll.buildings.empty())
+			plugData::data.luaAll.fillHashMapsNonCampaign();
+		const auto id = plugData::data.luaAll.buildings.find(name);
+		if (id == plugData::data.luaAll.buildings.end()) 
+			return -1;
+		return id->second;
+	}
+
+	int getBuildingLevelId(const std::string& name)
+	{
+		if (!plugData::data.luaAll.hashNonCampaignLoaded || plugData::data.luaAll.buildingLevelLines.empty())
+			plugData::data.luaAll.fillHashMapsNonCampaign();
+		const auto id = plugData::data.luaAll.buildingLevelLines.find(name);
+		if (id == plugData::data.luaAll.buildingLevelLines.end()) 
+			return -1;
+		return id->second;
+	}
+
+	int getBuildingLevelPos(const std::string& name)
+	{
+		if (!plugData::data.luaAll.hashNonCampaignLoaded || plugData::data.luaAll.buildingLevels.empty())
+			plugData::data.luaAll.fillHashMapsNonCampaign();
+		const auto id = plugData::data.luaAll.buildingLevels.find(name);
+		if (id == plugData::data.luaAll.buildingLevels.end()) 
+			return -1;
+		return id->second;
+	}
+
 	void addToLua(sol::state& luaState)
 	{
 		struct

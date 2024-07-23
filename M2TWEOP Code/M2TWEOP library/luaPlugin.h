@@ -74,8 +74,10 @@ public:
 
 	sol::state luaState;
 	void fillHashMaps();
+	void fillHashMapsNonCampaign();
 	
 	bool hashLoaded = false;
+	bool hashNonCampaignLoaded = false;
 
 	std::unordered_map<std::string, int> factions = {
 	};
@@ -94,6 +96,12 @@ public:
 	std::unordered_map<std::string, int> climateIndex = {
 	};
 	std::unordered_map<int, const char*> climateNames = {
+	};
+	std::unordered_map<std::string, int> buildings = {
+	};
+	std::unordered_map<std::string, int> buildingLevelLines = {
+	};
+	std::unordered_map<std::string, int> buildingLevels = {
 	};
 	sol::function* onCampaignMapLoaded = nullptr;
 	sol::function* onRemoveFromUnitQueue = nullptr;

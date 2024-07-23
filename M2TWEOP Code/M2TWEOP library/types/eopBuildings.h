@@ -472,16 +472,7 @@ public:
 		}
 		return nullptr;
 	}
-	edbEntry* getBuildingByName(const char* name)
-	{
-		const int buildingNum = buildings.size();
-		for (int i = 0; i < buildingNum; i++)
-		{
-			if (const auto entry = buildings.get(i); strcmp(entry->type, name) == 0)
-				return entry;
-		}
-		return nullptr;
-	}
+	edbEntry* getBuildingByName(const std::string& name);
 
 }; //Size: 0x0350
 
@@ -504,7 +495,6 @@ namespace eopBuildings
     int getBuildingPoolNum(const edbEntry* entry, int level);
     void addCaps(buildingLevel* oldLevel, buildingLevel* eopLevel, int lvlIdx);
     void addPools(buildingLevel* oldLevel, buildingLevel* eopLevel, int lvlIdx);
-    edbEntry* getBuildingByName(const char* name);
     edbEntry* getBuildingByID(int id);
     exportDescrBuildings* getEdb();
     
@@ -573,4 +563,7 @@ namespace eopBuildings
 namespace buildingHelpers
 {
 	void addToLua(sol::state& luaState);
+	int getBuildingId(const std::string& name);
+	int getBuildingLevelId(const std::string& name);
+	int getBuildingLevelPos(const std::string& name);
 }

@@ -446,7 +446,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	/***
 	* Sets the new maximum amount of building levels within a chain.
 	* @function M2TWEOP.setBuildingChainLimit
-	* @tparam int limit default: 9, maximum: 57
+	* @tparam int limit default: 9, maximum: 56
 	* @usage
 	* M2TWEOP.setBuildingChainLimit(12);
 	*/
@@ -940,6 +940,21 @@ void luaPlugin::fillHashMaps()
 				settlements.insert_or_assign(std::string(settlement->name), i);
 		}
 	}
+	for (int i = 0; i < stratMap->climates->climatesNum; i++)
+	{
+		if (auto climateName = gameHelpers::getClimateName2(i))
+		{
+			climateNames.insert_or_assign(i, climateName);
+			climateIndex.insert_or_assign(std::string(climateName), i);
+		}
+	}
+	fillHashMapsNonCampaign();
+	hashLoaded = true;
+	gameHelpers::logStringGame("Hashmaps filled");
+}
+
+void luaPlugin::fillHashMapsNonCampaign()
+{
 	for (int i = 0; i < gameHelpers::getReligionCount(); i++)
 	{
 		if (auto religionName = gameHelpers::getReligionName2(i))
@@ -955,14 +970,19 @@ void luaPlugin::fillHashMaps()
 		cultureNames.insert_or_assign(culture->cultureID, culture->cultureName);
 		cultureIndex.insert_or_assign(std::string(culture->cultureName), culture->cultureID);
 	}
-	for (int i = 0; i < stratMap->climates->climatesNum; i++)
+	const auto edb = eopBuildings::getEdb();
+	const int entryNum = edb->getBuildingNum();
+	for (int i = 0; i < entryNum; i++)
 	{
-		if (auto climateName = gameHelpers::getClimateName2(i))
+		const auto building = edb->buildings.get(i);
+		buildings.insert_or_assign(std::string(building->type), building->buildingID);
+		const int levelNum = building->buildingLevelCount;
+		for (int j = 0; j < levelNum; j++)
 		{
-			climateNames.insert_or_assign(i, climateName);
-			climateIndex.insert_or_assign(std::string(climateName), i);
+			const auto level = &building->levels[j];
+			buildingLevels.insert_or_assign(std::string(level->name), j);
+			buildingLevelLines.insert_or_assign(std::string(level->name), building->buildingID);
 		}
 	}
-	hashLoaded = true;
-	gameHelpers::logStringGame("Hashmaps filled");
+	hashNonCampaignLoaded = true;
 }

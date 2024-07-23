@@ -295,22 +295,11 @@ bool campaign::checkDipStance(const campaignEnums::dipRelEnum dipType, const fac
 	return false;
 }
 
-void campaign::setFactionTrade(factionStruct* factionOne, factionStruct* factionTwo)
+void campaign::setFactionTrade(const factionStruct* factionOne, const factionStruct* factionTwo)
 {
-	DWORD funcAddr = codes::offsets.setFactionTrade;
-	auto diplomaticStuff = &diplomaticStandings;
-	int facIdOne = factionOne->factionID;
-	int facIdTwo = factionTwo->factionID;
-	auto set = diplomaticStandings[facIdOne][facIdTwo].hasTradeRights == 0 ? 1 : 0;
-	_asm
-	{
-		push set
-		push facIdTwo
-		push facIdOne
-		mov ecx, diplomaticStuff
-		mov eax, funcAddr
-		call eax
-	}
+	const auto set = diplomaticStandings[factionOne->factionID][factionTwo->factionID].hasTradeRights == 0 ? 1 : 0;
+	GAME_FUNC(void(__thiscall*)(void*, int, int, int)
+		, setFactionTrade)(&interFactionMarriage[0][0], factionOne->factionID, factionTwo->factionID, set);
 }
 
 std::string campaign::getCampaignPath()
@@ -342,20 +331,12 @@ factionStruct* campaign::getFactionHashed(const std::string& name)
 	return factionsSortedByID[factionId->second];
 }
 
-void campaign::setFactionProtectorate(factionStruct* factionOne, factionStruct* factionTwo)
+void campaign::setFactionProtectorate(const factionStruct* factionOne, const factionStruct* factionTwo)
 {
-	DWORD funcAddr = codes::offsets.setProtectorate;
-	auto diplomaticStuff = &diplomaticStandings;
-	int facIdOne = factionOne->factionID;
-	int facIdTwo = factionTwo->factionID;
-	_asm
-	{
-		push facIdTwo
-		push facIdOne
-		mov ecx, diplomaticStuff
-		mov eax, funcAddr
-		call eax
-	}
+	const auto diplomaticStuff = &interFactionMarriage[0][0];
+	const int facIdOne = factionOne->factionID;
+	const int facIdTwo = factionTwo->factionID;
+	GAME_FUNC(void(__thiscall*)(void*, int, int), setProtectorate)(diplomaticStuff, facIdOne, facIdTwo);
 }
 
 scriptEvent::scriptEvent(const std::string& name, const std::string& eventType, const int xCoord, const int yCoord,

@@ -137,7 +137,7 @@ struct uiFamilyTree
 struct familyTreeScroll
 {
 	char pad[776];
-	uiFamilyTree* familyTree;
+	uiFamilyTree familyTree;
 };
 
 struct campaignMapHud

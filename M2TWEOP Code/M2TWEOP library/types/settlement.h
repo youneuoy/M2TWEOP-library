@@ -712,6 +712,9 @@ public:
 	bool isEnemyToFaction(factionStruct* otherFac);
 	bool isAllyToFaction(factionStruct* otherFac);
 	int characterCount();
+	character* getCharacter(int index);
+	building* buildingPresent(const std::string& buildingName);
+	bool buildingPresentMinLevel(const std::string& levelName, bool exact);
 };
 
 struct eopSettlementData

@@ -169,6 +169,13 @@ void regionStruct::changeRegionName(const char* newName)
 	eopSettlementDataDb::get()->getSettlementData(regionID, 0)->regionName = newName;
 }
 
+void regionStruct::changeRegionSettlementName(const char* newName)
+{
+	const auto nameMem = new UNICODE_STRING*;
+	localizedSettlementName = nameMem;
+	gameStringHelpers::createUniString(localizedSettlementName, newName);
+}
+
 void regionStruct::changeRebelsName(const char* newName)
 {
 	const auto nameMem = new UNICODE_STRING*;

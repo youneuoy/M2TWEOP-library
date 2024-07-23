@@ -64,6 +64,14 @@ struct traitEntry { /* char* at 0x4 */
 	int32_t hidden;
 	struct stringWithHash antiTraitNames[20];
 	int32_t antiTraitNameCount;
+	bool isCharacterTypeValid(const int charType)
+	{
+		return (1 << (charType & 0x1F)) & *(&characterType + (charType >> 5));
+	}
+	bool isExcluded(const int cultureId)
+	{
+		return (1 << (cultureId & 0x1F)) & *(&excludeCulturesStart + (cultureId >> 5));
+	}
 };
 
 struct traitContainer {
@@ -112,6 +120,10 @@ struct ancillary { /* structure of ancillary */
 	traitEffect* getEffect(int i)
 	{
 		return &effects[i];
+	}
+	bool isExcluded(const int cultureID)
+	{
+		return (1 << (cultureID & 0x1F)) & *(&excludedCultures + (cultureID >> 5));
 	}
 };
 
@@ -237,10 +249,12 @@ public:
 	std::string giveValidLabel();
 	void removeEpithet();
 	void applyName();
+	void acquireAncillary(const std::string& name, bool noDuplicate);
 	void setPortrait(const std::string& portraitPath);
 	void giveRandomName(int nameFactionId);
 	void giveRandomPortrait(int cultureId, int religionId);
 	bool hasAncillary(const std::string& ancName);
+	bool hasAncType(const std::string& ancType);
 	std::string getEopSetModel();
 	traitContainer* getTraits() const
 	{
@@ -517,6 +531,7 @@ namespace characterRecordHelpers
 	int addAncillaryName(characterRecord* character, const std::string& ancName);
 	int addAncillary(characterRecord* character, ancillary* anc);
 	void removeAncillary(characterRecord* character, ancillary* anc);
+	ancillary* findAncillary(const std::string& ancName);
 	
 	void removeTrait(characterRecord* character, const char* traitName);
 	void addTrait(characterRecord* character, const char* traitName, int traitLevel);

@@ -190,7 +190,7 @@ namespace gameUiHelpers
 		const auto familyScroll = ui->familyTreeScroll;
 		if (!familyScroll)
 			return nullptr;
-		return familyScroll->familyTree;
+		return &familyScroll->familyTree;
 	}
 	
     void addToLua(sol::state& luaState)

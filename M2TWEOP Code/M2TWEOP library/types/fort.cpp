@@ -156,6 +156,7 @@ namespace fortHelpers
 			mov eax, adrFunc
 			call eax
 		}
+		newgen->characterRecord->deathType = static_cast<int>(deathType::captainRemoved);
 		characterHelpers::killCharacter(newgen);
 		campaignHelpers::getCampaignDb()->campaignDbSettlement.canBuildForts = oldOption;
 		fac->money = oldMoney;
@@ -191,8 +192,13 @@ namespace fortHelpers
 		@tfield int creatorCultureID
 		@tfield int gatesAreOpened
 		@tfield int fortFortificationLevel
+		@tfield int characterCount
 		@tfield getSiege getSiege
+		@tfield getCharacter getCharacter
 		@tfield changeOwner changeOwner
+		@tfield changeOwner changeOwner
+		@tfield isAllyToFaction isAllyToFaction
+		@tfield isEnemyToFaction isEnemyToFaction
 		
 		@table fortStruct
 		*/
@@ -205,6 +211,7 @@ namespace fortHelpers
 		luaType.fortStruct.set("xCoord", &fortStruct::xCoord);
 		luaType.fortStruct.set("yCoord", &fortStruct::yCoord);
 		luaType.fortStruct.set("governor", sol::property(&fortStruct::getGovernor));
+		luaType.fortStruct.set("characterCount", sol::property(&fortStruct::characterCount));
 		luaType.fortStruct.set("army", &fortStruct::army);
 		luaType.fortStruct.set("gatesAreOpened", &fortStruct::gatesAreOpened);
 		luaType.fortStruct.set("ownerFaction", &fortStruct::faction);
@@ -239,6 +246,20 @@ namespace fortHelpers
 		luaType.fortStruct.set_function("getSiege", &fortStruct::getSiege);
 
 		/***
+		Get a specific character by index.
+		@function fortStruct:getCharacter
+		@tparam int index
+		@treturn character foundChar
+		@usage
+		local characterNum = currFort.characterCount
+		for i = 0, characterNum - 1 do
+		   local char = currFort:getCharacter(i)
+		   --etc
+		end
+		*/
+		luaType.fortStruct.set_function("getCharacter", &fortStruct::getCharacter);
+
+		/***
 		Change fort ownership.
 		@function fortStruct:changeOwner
 		@tparam factionStruct newFaction
@@ -247,11 +268,31 @@ namespace fortHelpers
 			myFort:changeOwner(otherFac, true)
 		*/
 		luaType.fortStruct.set_function("changeOwner", &changeOwner);
+
+		/***
+		Check if fort is allied to faction.
+		@function fortStruct:isAllyToFaction
+		@tparam factionStruct otherFac
+		@treturn bool isAlly
+		@usage
+			local isAlly = myFort:isAllyToFaction(otherFac)
+		*/
+		luaType.fortStruct.set_function("isAllyToFaction", &fortStruct::isAllyToFaction);
+
+		/***
+		Check if fort is at war with faction.
+		@function fortStruct:isEnemyToFaction
+		@tparam factionStruct otherFac
+		@treturn bool isEnemy
+		@usage
+			local isEnemy = myFort:isEnemyToFaction(otherFac)
+		*/
+		luaType.fortStruct.set_function("isEnemyToFaction", &fortStruct::isEnemyToFaction);
     	
     }
 }
 
-bool fortStruct::isAllyToFaction(factionStruct* otherFac)
+bool fortStruct::isAllyToFaction(const factionStruct* otherFac)
 {
 	if (!faction || !otherFac)
 		return false;
@@ -263,7 +304,7 @@ bool fortStruct::isAllyToFaction(factionStruct* otherFac)
 	return facDip->state == dipStance::alliance;
 }
 
-bool fortStruct::isEnemyToFaction(factionStruct* otherFac)
+bool fortStruct::isEnemyToFaction(const factionStruct* otherFac)
 {
 	if (!faction || !otherFac)
 		return false;
@@ -273,4 +314,16 @@ bool fortStruct::isEnemyToFaction(factionStruct* otherFac)
 	if (!facDip)
 		return false;
 	return facDip->state == dipStance::war;
+}
+
+int fortStruct::characterCount()
+{
+	const auto tile = stratMapHelpers::getTile(xCoord, yCoord);
+	return tile->getTileCharacterCount();
+}
+
+character* fortStruct::getCharacter(const int index)
+{
+	const auto tile = stratMapHelpers::getTile(xCoord, yCoord);
+	return tile->getTileCharacterAtIndex(index);
 }

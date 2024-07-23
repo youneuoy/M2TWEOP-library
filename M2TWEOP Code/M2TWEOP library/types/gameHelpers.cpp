@@ -222,8 +222,8 @@ namespace gameHelpers
 
 	const char* getCultureName(const int index)
 	{
-		if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.cultureNames.empty())
-			plugData::data.luaAll.fillHashMaps();
+		if (!plugData::data.luaAll.hashNonCampaignLoaded || plugData::data.luaAll.cultureNames.empty())
+			plugData::data.luaAll.fillHashMapsNonCampaign();
 		const auto name = plugData::data.luaAll.cultureNames.find(index);
 		if (name == plugData::data.luaAll.cultureNames.end()) 
 			return nullptr;
@@ -243,8 +243,8 @@ namespace gameHelpers
 
 	int getReligionN(const std::string& name)
 	{
-		if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.religionIndex.empty())
-			plugData::data.luaAll.fillHashMaps();
+		if (!plugData::data.luaAll.hashNonCampaignLoaded || plugData::data.luaAll.religionIndex.empty())
+			plugData::data.luaAll.fillHashMapsNonCampaign();
 		const auto religionIndex = plugData::data.luaAll.religionIndex.find(name);
 		if (religionIndex == plugData::data.luaAll.religionIndex.end()) 
 			return -1;
@@ -263,8 +263,8 @@ namespace gameHelpers
 
 	int getCultureN(const std::string& name)
 	{
-		if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.cultureIndex.empty())
-			plugData::data.luaAll.fillHashMaps();
+		if (!plugData::data.luaAll.hashNonCampaignLoaded || plugData::data.luaAll.cultureIndex.empty())
+			plugData::data.luaAll.fillHashMapsNonCampaign();
 		const auto index = plugData::data.luaAll.cultureIndex.find(name);
 		if (index == plugData::data.luaAll.cultureIndex.end()) 
 			return -1;

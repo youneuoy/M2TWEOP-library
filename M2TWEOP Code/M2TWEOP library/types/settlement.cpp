@@ -96,6 +96,36 @@ int settlementStruct::characterCount()
 	return tile->getTileCharacterCount();
 }
 
+character* settlementStruct::getCharacter(const int index)
+{
+	const auto tile = stratMapHelpers::getTile(xCoord, yCoord);
+	return tile->getTileCharacterAtIndex(index);
+}
+
+building* settlementStruct::buildingPresent(const std::string& buildingName)
+{
+	const auto id = buildingHelpers::getBuildingId(buildingName);
+	if (id == -1)
+		return nullptr;
+	return buildingsByIndex[id];
+}
+
+bool settlementStruct::buildingPresentMinLevel(const std::string& levelName, const bool exact)
+{
+	const auto id = buildingHelpers::getBuildingLevelId(levelName);
+	if (id == -1)
+		return false;
+	const auto building = buildingsByIndex[id];
+	if (!building)
+		return false;
+	const auto lvl = buildingHelpers::getBuildingLevelPos(levelName);
+	if (lvl == -1)
+		return false;
+	if (exact)
+		return lvl == building->level;
+	return lvl >= building->level;
+}
+
 void eopSettlementDataDb::newGameLoaded()
 {
 	const auto map = stratMapHelpers::getStratMap();
@@ -229,15 +259,13 @@ void eopSettlementDataDb::onGameLoaded()
 			if (!sett)
 				continue;
 			const auto settData = getSettlementData(i, sett->minorSettlementIndex);
-			if (region->settlement)
-				region->localizedSettlementName = region->settlement->localizedName;
 			if (sett->minorSettlementIndex == 0)
 			{
 				if (!settData->regionName.empty())
 					region->changeRegionName(settData->regionName.c_str());
 				if (!settData->regionRebelsName.empty())
 					region->changeRebelsName(settData->regionRebelsName.c_str());
-				region->localizedSettlementName = sett->localizedName;
+				region->changeRegionSettlementName(settlementHelpers::getSettlementName(sett).c_str());
 			}
 			if (!settData->settlementLabel.empty())
 				gameStringHelpers::setHashedString(&sett->name, settData->settlementLabel.c_str());
@@ -590,6 +618,11 @@ namespace settlementHelpers
 		const auto nameMem = new UNICODE_STRING*;
 		sett->localizedName = nameMem;
 		gameStringHelpers::createUniString(sett->localizedName, newName);
+		if (sett->minorSettlementIndex == 0)
+		{
+			if (const auto region = stratMapHelpers::getRegion(sett->regionID); region)
+				region->changeRegionSettlementName(newName);
+		}
 	}
 	
 	void createBuilding(settlementStruct* sett, const char* buildingLevelId)
@@ -980,6 +1013,7 @@ namespace settlementHelpers
 		@tfield int publicHealth
 		@tfield int populationSize
 		@tfield int gatesAreOpened
+		@tfield int characterCount
 		@tfield table savedData
 		@tfield getReligion getReligion
 		@tfield setReligion setReligion
@@ -1006,6 +1040,9 @@ namespace settlementHelpers
 		@tfield getRecruitmentOptions getRecruitmentOptions
 		@tfield getUnitInQueue getUnitInQueue
 		@tfield createArmyInSettlement createArmyInSettlement
+		@tfield buildingPresent buildingPresent
+		@tfield buildingPresentMinLevel buildingPresentMinLevel
+		@tfield getCharacter getCharacter
 
 		@table settlementStruct
 		*/
@@ -1093,6 +1130,7 @@ namespace settlementHelpers
 		types.settlementStruct.set("merchantsInRecruitmentQueue", &settlementStruct::merchantsInRecruitmentQueue);
 		types.settlementStruct.set("priestsInRecruitmentQueue", &settlementStruct::priestsInRecruitmentQueue);
 		types.settlementStruct.set("settlementStats", sol::property(&settlementStruct::getSettlementStats));
+		types.settlementStruct.set("characterCount", sol::property(&settlementStruct::characterCount));
 		types.settlementStruct.set("settlementStatsLastTurn", sol::property(&settlementStruct::getSettlementStatsLastTurn));
 		types.settlementStruct.set("turmoil", sol::property(&settlementStruct::getTurmoil, &settlementStruct::setTurmoil));
 		/***
@@ -1186,6 +1224,19 @@ namespace settlementHelpers
 		*/
 		types.settlementStruct.set_function("getSiege", &settlementStruct::getSiege);
 		/***
+		Get a specific character by index.
+		@function settlementStruct:getCharacter
+		@tparam int index
+		@treturn character foundChar
+		@usage
+		local characterNum = currSet.characterCount
+		for i = 0, characterNum - 1 do
+		   local char = currSet:getCharacter(i)
+		   --etc
+		end
+		*/
+		types.settlementStruct.set_function("getCharacter", &settlementStruct::getCharacter);
+		/***
 		Get a capability by capability type.
 		@function settlementStruct:getSettlementCapability
 		@tparam int capabilityType
@@ -1238,6 +1289,25 @@ namespace settlementHelpers
 		      settlement:upgrade()
 		*/
 		types.settlementStruct.set_function("upgrade", &upgradeSettlement);
+		/***
+		Check if settlement has a building line.
+		@function settlementStruct:buildingPresent
+		@tparam string buildingName
+		@treturn building foundBuilding
+		@usage
+		      local build = settlement:buildingPresent("hinterland_roads")
+		*/
+		types.settlementStruct.set_function("buildingPresent", &settlementStruct::buildingPresent);
+		/***
+		Check if settlement has a minimum building level.
+		@function settlementStruct:buildingPresentMinLevel
+		@tparam string buildingLevelName
+		@tparam bool exact
+		@treturn bool result
+		@usage
+		      local isPresent = settlement:buildingPresentMinLevel("paved_roads", false)
+		*/
+		types.settlementStruct.set_function("buildingPresentMinLevel", &settlementStruct::buildingPresentMinLevel);
 		/***
 		Get available construction items.
 		@function settlementStruct:getConstructionOptions

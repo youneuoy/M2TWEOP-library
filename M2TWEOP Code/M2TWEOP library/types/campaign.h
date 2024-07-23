@@ -730,8 +730,8 @@ public:
 	}
 	void setDipStance(campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2);
 	bool checkDipStance(const campaignEnums::dipRelEnum dipType, const factionStruct* fac1, const factionStruct* fac2);
-	void setFactionTrade(factionStruct* factionOne, factionStruct* factionTwo);
-	void setFactionProtectorate(factionStruct* factionOne, factionStruct* factionTwo);
+	void setFactionTrade(const factionStruct* factionOne, const factionStruct* factionTwo);
+	void setFactionProtectorate(const factionStruct* factionOne, const factionStruct* factionTwo);
 	settlementStruct* getSettlementByName(const char* name);
 	factionStruct* getFactionHashed(const std::string& name);
 	std::string getCampaignPath();

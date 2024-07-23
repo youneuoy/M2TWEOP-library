@@ -972,6 +972,48 @@ void luaPlugin::initLuaEnums()
 	);
 	
 	/***
+	Enum of campaign ground types
+
+	@tfield int lowFertility
+	@tfield int mediumFertility
+	@tfield int highFertility
+	@tfield int wilderness
+	@tfield int highMountains
+	@tfield int lowMountains
+	@tfield int hills
+	@tfield int denseForest
+	@tfield int woodland
+	@tfield int swamp
+	@tfield int ocean
+	@tfield int deepSea
+	@tfield int shallowSea
+	@tfield int coast
+	@tfield int impassableLand
+	@tfield int impassableSea
+
+	@table strategyGroundType
+	*/
+	luaState.new_enum(
+		"strategyGroundType",
+		"lowFertility", 0,
+		"mediumFertility", 1,
+		"highFertility", 2,
+		"wilderness", 3,
+		"highMountains", 4,
+		"lowMountains", 5,
+		"hills", 6,
+		"denseForest", 7,
+		"woodland", 8,
+		"swamp", 9,
+		"ocean", 10,
+		"deepSea", 11,
+		"shallowSea", 12,
+		"coast", 13,
+		"impassableLand", 14,
+		"impassableSea", 15
+	);
+	
+	/***
 	Enum of engine types
 
 	@tfield int catapult

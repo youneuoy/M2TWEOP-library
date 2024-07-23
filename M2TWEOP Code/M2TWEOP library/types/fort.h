@@ -57,16 +57,14 @@ public :
 	{
 		return sieges[index].siege;
 	}
-	bool isAllyToFaction(factionStruct* otherFac);
-	bool isEnemyToFaction(factionStruct* otherFac);
-	character* getGovernor(const int index)
+	bool isAllyToFaction(const factionStruct* otherFac);
+	bool isEnemyToFaction(const factionStruct* otherFac);
+	int characterCount();
+	character* getCharacter(int index);
+	character* getGovernor()
 	{
-		if (!nextObject)
-			return nullptr;
-		if (callVFunc<4, int>(nextObject) == 28)
-		{
-			return static_cast<character*>(nextObject);
-		}
+		if (characterCount() > 0)
+			return getCharacter(0);
 		return nullptr;
 	}
 };

@@ -51,6 +51,11 @@ namespace stratModelsChange
 		*newMod = *oldMod;
 		newMod->cityModel = modelP;
 		newMod->castleModel = modelP;
+		for (int i = 0; i < 31; i++)
+		{
+			newMod->settlementModels[i] = nullptr;
+			newMod->castleModels[i] = nullptr;
+		}
 		settlement->model = newMod;
 	}
 	
@@ -66,6 +71,11 @@ namespace stratModelsChange
 			*newMod = *oldMod;
 		newMod->model = modelP;
 		newMod->wallsModel = modelP2;
+		for (int i = 0; i < 31; i++)
+		{
+			newMod->models[i] = nullptr;
+			newMod->wallModels[i] = nullptr;
+		}
 		fort->stratModel = newMod;
 	}
 

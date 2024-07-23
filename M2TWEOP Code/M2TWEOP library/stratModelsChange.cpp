@@ -145,48 +145,19 @@ namespace stratModelsChange
 
 	void checkAndChangeStratModels()
 	{
-		if (changeModelsNeededNow == modelsChangeStatus::needFixHiding)
-		{
-			for (const auto& visFix : crashFixAr)
-			{
-				visFix.fac->hideRevealedTile(visFix.xCoord, visFix.yCoord);
-			}
-			crashFixAr.clear();
-			changeModelsNeededNow = modelsChangeStatus::changed;
-			return;
-		}
-		
 		if (changeModelsNeededNow == modelsChangeStatus::changed)
-		{
 			return;
-		}
 		
-		const auto campaignData = campaignHelpers::getCampaignData();
 		changeModelsNeededNow = modelsChangeStatus::changed;
-		for (stratModelChangeRecord* changeMod : stratModelChangeList) //static models
+		for (const stratModelChangeRecord* changeMod : stratModelChangeList) //static models
 		{
 			const stratModelRecord* mod1 = findStratModel(changeMod->modelId);
 			if (mod1 == nullptr)
 				continue;
-
 			const stratModelRecord* mod2 = findStratModel(changeMod->modelId2);
-			if (changeModel(changeMod->x, changeMod->y, mod1->modelP, mod2->modelP) == true)
-			{
-				if (changeMod->isFort)
-				{
-					for (int i = 0; i < campaignData->factionCount; i++)
-					{
-						auto fac = campaignData->getFactionByOrder(i);
-						auto vis = fac->getTileVisibility(changeMod->x, changeMod->y);
-						if (vis < 1)
-							continue;
-						crashFixAr.emplace_back(changeMod->x, changeMod->y, fac, vis);
-						fac->revealTile(changeMod->x, changeMod->y);
-					}
-					changeModelsNeededNow = modelsChangeStatus::needFixHiding;
-				}
-			}
+			changeModel(changeMod->x, changeMod->y, mod1->modelP, mod2->modelP);
 		}
+		
 		for (const stratModelCharacterRecordChange* changeMod : stratModelCharacterChangeList) //character models
 		{
 			if (changeMod->gen)
