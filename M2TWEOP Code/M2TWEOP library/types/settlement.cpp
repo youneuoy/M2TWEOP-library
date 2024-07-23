@@ -123,7 +123,7 @@ bool settlementStruct::buildingPresentMinLevel(const std::string& levelName, con
 		return false;
 	if (exact)
 		return lvl == building->level;
-	return lvl >= building->level;
+	return building->level >= lvl;
 }
 
 void eopSettlementDataDb::newGameLoaded()

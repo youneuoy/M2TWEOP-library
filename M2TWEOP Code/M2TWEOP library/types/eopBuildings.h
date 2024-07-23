@@ -329,6 +329,7 @@ public:
 
 //building data
 struct edbEntry { /* SETTLEMENT_CONDITION_SETTLEMENT_FACTION */
+	int vfTable;
 	int factionBitField;
 	int factionsRaw;
 	int cultures;
@@ -339,7 +340,6 @@ struct edbEntry { /* SETTLEMENT_CONDITION_SETTLEMENT_FACTION */
 	int32_t classification; //0x0018
 	int material;
 	DWORD buildingPic[13];
-	DWORD pad;
 	DWORD eopBuildingID; //just using this mem to store if this is eop building entry
 	int genericPic;
 	int genericPicHash;
