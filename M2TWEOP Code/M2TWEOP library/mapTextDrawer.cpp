@@ -12,13 +12,13 @@ namespace mapTextDrawer
 
 	struct
 	{
-		std::list<Text3DDrawable*> textForDrawing;
+		std::list<text3dDrawable*> textForDrawing;
 		bool initialized = false;
 	}DATA;
 
 	namespace
 	{
-		void drawTextDrawable(const Text3DDrawable* text)
+		void drawTextDrawable(const text3dDrawable* text)
 		{
 			const auto device = graphicsExport::GetDevice();
 
@@ -106,13 +106,13 @@ namespace mapTextDrawer
 		DeleteObject(hFont);
 	}
 
-	Text3DDrawable* makeText(void* fontId, const char* utf8Text)
+	text3dDrawable* makeText(void* fontId, const char* utf8Text)
 	{
 		if (!utf8Text || !fontId)
 			return nullptr;
 		
 		const std::wstring utf16Text = techFuncs::convertUtf8ToWide(utf8Text);
-		auto newText = new Text3DDrawable();
+		auto newText = new text3dDrawable();
 		changeTextColor(newText, 255, 255, 255, 255);
 		const HDC hdc = CreateCompatibleDC(nullptr);
 		const auto hFont = static_cast<HFONT>(fontId);
@@ -130,7 +130,7 @@ namespace mapTextDrawer
 		return newText;
 	}
 	
-	void delete3dText(Text3DDrawable* text)
+	void delete3dText(text3dDrawable* text)
 	{
 		if (text == nullptr)
 			return;
@@ -140,7 +140,7 @@ namespace mapTextDrawer
 		delete text;
 	}
 	
-	void scaleText(const Text3DDrawable* text, const float scale)
+	void scaleText(const text3dDrawable* text, const float scale)
 	{
 		if (text == nullptr)
 			return;
@@ -157,7 +157,7 @@ namespace mapTextDrawer
 		textMesh->UnlockVertexBuffer();
 	}
 	
-	void setDimensionsTextXyz(Text3DDrawable* text, const float scaleX, const float scaleY, const float scaleZ)
+	void setDimensionsTextXyz(text3dDrawable* text, const float scaleX, const float scaleY, const float scaleZ)
 	{
 		if (text == nullptr)
 			return;
@@ -166,7 +166,7 @@ namespace mapTextDrawer
 		text->zSize = scaleZ;
 	}
 	
-	void setRotationTextXyz(Text3DDrawable* text, const float rotX, const float rotY, const float rotZ)
+	void setRotationTextXyz(text3dDrawable* text, const float rotX, const float rotY, const float rotZ)
 	{
 		if (text == nullptr)
 			return;
@@ -175,14 +175,14 @@ namespace mapTextDrawer
 		text->zRoll = rotZ;
 	}
 	
-	void changeTextColor(Text3DDrawable* text, const unsigned char a, const unsigned char r, const unsigned char g, const unsigned char b)
+	void changeTextColor(text3dDrawable* text, const unsigned char a, const unsigned char r, const unsigned char g, const unsigned char b)
 	{
 		if (text == nullptr)
 			return;
 		text->color = D3DCOLOR_ARGB(a, r, g, b);
 	}
 	
-	void setTextDrawingCoords(Text3DDrawable* text, const float x, const float y, const float z)
+	void setTextDrawingCoords(text3dDrawable* text, const float x, const float y, const float z)
 	{
 		if (text == nullptr)
 			return;
@@ -191,24 +191,24 @@ namespace mapTextDrawer
 		text->zCoord = z;
 	}
 	
-	void startDrawingText(Text3DDrawable* text)
+	void startDrawingText(text3dDrawable* text)
 	{
 		text->isDrawOnce = false;
 		DATA.textForDrawing.push_back(text);
 	}
 	
-	void stopDrawingText(Text3DDrawable* text)
+	void stopDrawingText(text3dDrawable* text)
 	{
 		DATA.textForDrawing.remove(text);
 	}
 	
-	void drawingTextOnce(Text3DDrawable* text)
+	void drawingTextOnce(text3dDrawable* text)
 	{
 		text->isDrawOnce = true;
 		DATA.textForDrawing.push_back(text);
 	}
 	
-	coordsVText::coordsVText(const int x, const int y, Text3DDrawable* pointText)
+	coordsVText::coordsVText(const int x, const int y, text3dDrawable* pointText)
 		:PointText(pointText), X(x), Y(y)
 	{
 		static std::once_flag initFlag;

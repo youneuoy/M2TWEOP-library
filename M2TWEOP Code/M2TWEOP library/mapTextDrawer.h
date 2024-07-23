@@ -4,25 +4,25 @@
 #include "headersMEM.h"
 #include "lua/sol.hpp"
 
+struct text3dDrawable
+{
+	LPD3DXMESH textMesh;
+	DWORD color;
+	float xCoord;
+	float yCoord;
+	float zCoord;
+	float xSize=1;
+	float ySize=0.2f;
+	float zSize=1;
+	float xRoll=1;
+	float yRoll=90;
+	float zRoll=1;
+	bool isDrawOnce;
+	bool isDeleteNeeded;
+};
 namespace mapTextDrawer
 {
 
-	struct Text3DDrawable
-	{
-		LPD3DXMESH textMesh;
-		DWORD color;
-		float xCoord;
-		float yCoord;
-		float zCoord;
-		float xSize=1;
-		float ySize=0.2f;
-		float zSize=1;
-		float xRoll=1;
-		float yRoll=90;
-		float zRoll=1;
-		bool isDrawOnce;
-		bool isDeleteNeeded;
-	};
 	void drawTexts();
 
 	//returns "id" of font, which is pointer to object
@@ -32,28 +32,28 @@ namespace mapTextDrawer
 	void deleteTextFont(void*  fontId);
 
 	//returns "id" of text, which is pointer to object
-	Text3DDrawable* makeText(void* fontId,const char* utf8Text);
-	void delete3dText(Text3DDrawable*text);
+	text3dDrawable* makeText(void* fontId,const char* utf8Text);
+	void delete3dText(text3dDrawable*text);
 
-	void scaleText(const Text3DDrawable* text,float scale);
-	void setDimensionsTextXyz(Text3DDrawable* text,float scaleX, float scaleY, float scaleZ);
-	void setRotationTextXyz(Text3DDrawable* text,float rotX, float rotY, float rotZ);
-	void changeTextColor(Text3DDrawable* text, unsigned char a, unsigned char r, unsigned char g, unsigned char b);
+	void scaleText(const text3dDrawable* text,float scale);
+	void setDimensionsTextXyz(text3dDrawable* text,float scaleX, float scaleY, float scaleZ);
+	void setRotationTextXyz(text3dDrawable* text,float rotX, float rotY, float rotZ);
+	void changeTextColor(text3dDrawable* text, unsigned char a, unsigned char r, unsigned char g, unsigned char b);
 
 
-	void setTextDrawingCoords(Text3DDrawable* text,float x, float y, float z);
+	void setTextDrawingCoords(text3dDrawable* text,float x, float y, float z);
 
-	void startDrawingText(Text3DDrawable* text);
-	void stopDrawingText(Text3DDrawable* text);
-	void drawingTextOnce(Text3DDrawable* text);
+	void startDrawingText(text3dDrawable* text);
+	void stopDrawingText(text3dDrawable* text);
+	void drawingTextOnce(text3dDrawable* text);
 
 	struct coordsVText
 	{
 	public:
 		coordsVText() = delete;
-		coordsVText(int x, int y, mapTextDrawer::Text3DDrawable* pointText);
+		coordsVText(int x, int y, text3dDrawable* pointText);
 		~coordsVText();
-		mapTextDrawer::Text3DDrawable* PointText = nullptr;
+		text3dDrawable* PointText = nullptr;
 		int X = 0;
 		int Y = 0;
 

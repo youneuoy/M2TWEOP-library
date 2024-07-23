@@ -264,7 +264,7 @@ float globalEopAiConfig::calculateSettPriority(const std::shared_ptr<settlementR
 	if (balance < 1.f && !empty)
 		return 0.f;
 	const auto facData = getCurrentFactionData();
-	float priority = clamp(settRes->settlement->stats.settlementStats.TotalIncomeWithoutAdmin * 2, 0, 50000);
+	float priority = clamp(settRes->settlement->stats.settlementStats.TotalIncomeWithoutAdmin * 5, 0, 50000);
 	const auto religion = settlementHelpers::getReligion(settRes->settlement, m_Faction->religion);
 	priority *= 1 + (religion * religionFactor);
 	priority += settRes->settlement->getSettlementValue() * 10;
@@ -354,18 +354,18 @@ float globalEopAiConfig::calculateArmyPriority(const std::shared_ptr<armyResourc
 	if (balance < 1.f)
 		return 0.f;
 	const auto facData = getCurrentFactionData();
-	float priority = clamp(armyRes->army->totalStrength * 1.f, 0.f, 20000.f);
-	priority += clamp(armyRes->totalThreatGiving * (priType == priType_target ? 3.5f : 1.f), 0.f, 30000.f);
+	float priority = clamp(armyRes->army->totalStrength * 1.f, 0.f, 10000.f);
+	priority += clamp(armyRes->totalThreatGiving * (priType == priType_target ? 1.5f : 1.f), 0.f, 20000.f);
 	if (armyRes->army->gen && armyRes->army->gen->getTypeID() == characterTypeStrat::namedCharacter)
 	{
-		priority *= 1.25f;
+		priority *= 1.1f;
 		if (armyRes->army->gen->characterRecord->isLeader())
 			priority *= 1.2f;
 		if (armyRes->army->gen->characterRecord->isLeader())
 			priority *= 1.5f;
 		if (armyRes->army->gen->characterRecord->isFamily)
 		{
-			priority *= 1.5f;
+			priority *= 1.1f;
 			if (armyRes->army->faction->getAliveCharacterNumOfType(characterTypeStrat::namedCharacter) < 3)
 				priority *= 2.0f;
 		}
@@ -395,14 +395,14 @@ float globalEopAiConfig::calculateArmyPriority(const std::shared_ptr<armyResourc
 	case priType_own:
 		{
 			if (!stratMapHelpers::getRegion(armyRes->army->gen->regionID)->hasAlliesToFaction(m_Faction->factionID, false))
-				priority *= 0.66f;
+				priority *= 0.75f;
 			priority *= defenseFactor;
 			break;
 		}
 	case priType_target:
 		{
 			if (!stratMapHelpers::getRegion(armyRes->army->gen->regionID)->hasAlliesToFaction(m_Faction->factionID, false))
-				priority *= 0.50f;
+				priority *= 0.33f;
 			else
 				priority += stratMapHelpers::getRegion(armyRes->army->gen->regionID)->devastatedTilesCount * 200;
 			priority *= (config->getPriorityMod(m_Faction, armyRes->army->faction) * invadePriorityFactor);
@@ -414,7 +414,7 @@ float globalEopAiConfig::calculateArmyPriority(const std::shared_ptr<armyResourc
 	case priType_aid:
 		{
 			if (!stratMapHelpers::getRegion(armyRes->army->gen->regionID)->hasAlliesToFaction(m_Faction->factionID, false))
-				priority *= 0.33f;
+				priority *= 0.50f;
 			priority *= facData->getAidFactionFactor(armyRes->army->faction);
 			priority *= facData->getAidReligionFactor(armyRes->army->faction->religion);
 			const auto fs = factionHelpers::getFactionStanding(m_Faction, armyRes->army->faction);
@@ -1331,7 +1331,7 @@ void globalEopAiConfig::assignOrders(factionStruct* fac)
 		const float priority = calculateArmyPriority(targetArmy, priType_target);
 		if (priority < 1.f)
 			continue;
-		m_Orders.emplace_back(make_shared<defendArmyOrder>(targetArmy));
+		m_Orders.emplace_back(make_shared<attackArmyOrder>(targetArmy));
 		m_Orders.back()->priority = priority;
 		for (const auto& army : targetArmy->nearResources)
 		{
