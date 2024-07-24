@@ -285,6 +285,8 @@ bool armyStruct::canReceiveMerge(armyStruct* other)
 {
 	if (!other)
 		return false;
+	if (settlement && settlement->siegeNum > 0)
+		return false;
 	if (faction->factionID != other->faction->factionID)
 		return false;
 	if (numOfUnits + other->numOfUnits > 20)

@@ -710,7 +710,11 @@ struct ltgdConfig
 	int assistanceOffset;
 	float scalePriority(int priority)
 	{
-		return ((priority - minInvadePriority) / static_cast<float>(maxInvadePriority - minInvadePriority)) * 100.f;
+		return priorityScale(priority) * 100.f;
+	}
+	float priorityScale(int priority)
+	{
+		return ((priority - minInvadePriority) / static_cast<float>(maxInvadePriority - minInvadePriority));
 	}
 	float getPriorityScaled(const factionStruct* fac1, const factionStruct* fac2);
 	float getPriorityMod(const factionStruct* fac1, const factionStruct* fac2);
@@ -767,16 +771,27 @@ struct armyResource;
 
 struct armySupportResource
 {
-	armyStruct* army{};
 	std::shared_ptr<armyResource> resource{};
 	float moveCost{};
-	armySupportResource(armyStruct* army) : army(army) {}
+	int8_t turns = 1;
+	armySupportResource(armyResource* army) : resource(army) {}
+	armySupportResource(const std::shared_ptr<armyResource>& army) : resource(army) {}
 };
+
+struct nearSettResource
+{
+	std::shared_ptr<settlementResource> resource{};
+	float moveCost{};
+	int8_t turns = 1;
+	nearSettResource(settlementResource* sett) : resource(sett) {}
+	nearSettResource(const std::shared_ptr<settlementResource>& sett) : resource(sett) {}
+};
+
 struct armyResource
 {
 	armyStruct* army{};
-	std::vector<std::shared_ptr<armyResource>> nearResources{};
-	std::vector<std::shared_ptr<settlementResource>> nearSetts{};
+	std::vector<std::shared_ptr<armySupportResource>> nearResources{};
+	std::vector<std::shared_ptr<nearSettResource>> nearSetts{};
 	int positionPower{};
 	float value = 0.f;
 	int totalThreatReceiving{};
@@ -788,8 +803,7 @@ struct armyResource
 	bool searched = false;
 	bool own = true;
 	bool enemy = false;
-	float moveCost{};
-	int8_t turns = 1;
+	int targets = 0;
 	bool validate();
 	armyResource(armyStruct* army) : army(army), unitCount(army->numOfUnits) {}
 	void calculatePositionPower();
@@ -798,7 +812,7 @@ struct armyResource
 struct settlementResource
 {
 	settlementStruct* settlement{};
-	std::vector<std::shared_ptr<armyResource>> nearResources{};
+	std::vector<std::shared_ptr<armySupportResource>> nearResources{};
 	int positionPower{};
 	float value = 0.f;
 	int totalThreatReceiving{};
@@ -807,7 +821,6 @@ struct settlementResource
 	bool searched = false;
 	bool own = true;
 	bool enemy = false;
-	float moveCost{};
 	settlementResource(settlementStruct* sett) : settlement(sett) {}
 	void calculatePositionPower();
 	int calculatePriority(bool isOwn);
@@ -816,7 +829,7 @@ struct settlementResource
 struct aiOrder
 {
 	float priority{};
-	std::vector<std::shared_ptr<armyResource>> assignedArmies{};
+	std::vector<std::shared_ptr<armySupportResource>> assignedArmies{};
 	std::vector<std::pair<int, int>> validTiles{};
 	void setTiles(int x, int y);
 	void sortArmies();
@@ -920,7 +933,7 @@ public:
 	float nonBorderFactor = 0.20f;
 	float residenceFactor = 1.f;
 	float aidFactor = 0.5f;
-	float moveCostFactor = 30.0f;
+	float moveCostFactor = 1.20f;
 	float powerFactor = 1.f;
 	float invadePriorityFactor = 1.f;
 	int maxTurnSearchCount = 4;
