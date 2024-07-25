@@ -7,18 +7,21 @@
 ## **Release Notes**
 
 ### **Launcher**
-- Added [Freecam](https://www.moddb.com/mods/freecam-medieval-2) integration *Medik*
+- Added [Freecam](https://www.moddb.com/mods/freecam-medieval-2) integration - *Medik*
   - Specify the path to your Freecam installation and enable the integration to automatically launch and close Freecam whenever you play the game
-- Updated [DXVK](https://github.com/doitsujin/dxvk/releases/tag/v2.4) to v2.4 *Medik*
+- Updated [DXVK](https://github.com/doitsujin/dxvk/releases/tag/v2.4) to v2.4 - *Medik*
 
-<!-- ### **Library** -->
+### **Library**
+- Reduced amount of EOP "branding" displayed on startup - *Medik*
+
 
 ### **Lua Plugin**
 - Stopped the game still receiving keyboard/mouse inputs when the EOP Console was open - *Medik*
 
 <!-- ### **ImGUI** -->
 
-<!--### **Documentation**-->
+### **Documentation**
+- Updated Erken's ImGUI PDF tutorial to V5 (Thanks Erken!) - *Medik*
 
 ### **Links**
 - [Known Bugs](https://github.com/youneuoy/M2TWEOP-library/issues/71)

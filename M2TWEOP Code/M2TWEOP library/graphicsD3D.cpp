@@ -309,7 +309,7 @@ void graphicsD3D::onDrawAllGameStuff()
 		else
 		{
 			drawParams.drawEOPStartInfo = false;
-			ImGuiToast bMsg(ImGuiToastType_Success, 25000);
+			ImGuiToast bMsg(ImGuiToastType_Success, 10000);
 
 			bMsg.set_title("Initializing M2TWEOP");
 			bMsg.set_content("Done");
