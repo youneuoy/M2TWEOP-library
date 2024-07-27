@@ -3,6 +3,7 @@
 #include "texturesManager.h"
 #include "plannedRetreatRoute.h"
 #include "strategyMap.h"
+#include "onlineThings.h"
 
 ContextMenuStrat::ContextMenuStrat()
 {
@@ -26,7 +27,8 @@ ContextMenuStrat::ContextMenuStrat()
 				return true;
 			}
 			)));
-		ctxItems.insert(std::make_pair("RetreatPlanner", ContextMenuItem(
+		if (battleCreator::IsRetreatsOverhaulEnabled()) {
+			ctxItems.insert(std::make_pair("RetreatPlanner", ContextMenuItem(
 			[]()
 			{
 				if (ImGui::Button("Set planned retreat route"))
@@ -48,7 +50,9 @@ ContextMenuStrat::ContextMenuStrat()
 
 				return false;
 			})));
+		}
 }
+
 void ContextMenuStrat::Draw()
 {
 	if (isContextMenuNeeded == false)
