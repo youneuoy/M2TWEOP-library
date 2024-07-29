@@ -53,8 +53,8 @@ namespace stratModelsChange
 		newMod->castleModel = modelP;
 		for (int i = 0; i < 31; i++)
 		{
-			newMod->settlementModels[i] = nullptr;
-			newMod->castleModels[i] = nullptr;
+			newMod->settlementModels[i] = modelP;
+			newMod->castleModels[i] = modelP;
 		}
 		settlement->model = newMod;
 	}
@@ -73,8 +73,8 @@ namespace stratModelsChange
 		newMod->wallsModel = modelP2;
 		for (int i = 0; i < 31; i++)
 		{
-			newMod->models[i] = nullptr;
-			newMod->wallModels[i] = nullptr;
+			newMod->models[i] = modelP;
+			newMod->wallModels[i] = modelP2;
 		}
 		fort->stratModel = newMod;
 	}
@@ -83,6 +83,8 @@ namespace stratModelsChange
 	{
 		if (!port->portDock && port->portStratModel->model == modelP)
 			return;
+		if (port->portDock && port->portDock->dockStratModel->model == modelP2 && port->portStratModel->model == modelP)
+			return; 
 		port->portStratModel = newCasEntry(port->portStratModel);
 		port->portStratModel->model = modelP;
 		

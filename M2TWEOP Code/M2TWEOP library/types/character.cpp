@@ -38,6 +38,8 @@ std::shared_ptr<characterMoveData> character::createMoveData(const int searchTyp
 
 int character::getTypeID()
 {
+	if (!genType)
+		return 12;
 	return genType->type;
 }
 

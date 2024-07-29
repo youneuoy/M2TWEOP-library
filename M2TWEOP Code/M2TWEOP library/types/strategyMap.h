@@ -548,15 +548,14 @@ struct oneTile {
 	uint32_t border : 1;
 	uint32_t landCoast : 1;
 	uint32_t seaCost : 1;
-	uint32_t settlement : 1;
-	uint32_t fort : 1;
-	uint32_t dock : 1;
-	uint32_t port : 1;
-	uint32_t watchtower : 1;
-	uint32_t navy : 1;
-	uint32_t army : 1;
+	bool settlement : 1;
+	bool fort : 1;
+	bool dock : 1;
+	bool port : 1;
+	bool watchtower : 1;
+	bool navy : 1;
+	bool army : 1;
 	int8_t nonPassable;
-	int16_t field_0x1E;
 	uint32_t armiesNearTile; //0x0028
 	uint32_t charactersOnTile; //0x002C
 	float mpModifier; //0x0030

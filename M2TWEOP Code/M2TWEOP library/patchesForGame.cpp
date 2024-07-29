@@ -861,7 +861,7 @@ int patchesForGame::onCanWithdrawPreBattle(const settlementStruct* settlement)
 
 int patchesForGame::onCalculateCommand(const characterRecord* general)
 {
-	if (general->gen && general->gen->getTypeID() == characterTypeStrat::admiral)
+	if (general && general->gen && general->gen->getTypeID() == characterTypeStrat::admiral)
 		return general->navalCommand;
 	return 0;
 }
