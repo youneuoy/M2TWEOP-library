@@ -26,12 +26,12 @@ void drawOnEndScene(LPDIRECT3DDEVICE9 pDevice)
 		{
 			static ImGuiWindowFlags transparentF = ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove;
 
-			ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-			ImGui::Begin("eopInitTitle", nullptr, transparentF);
-
-			ImGui::Text(globals::dataS.gameCfg.modVersion.c_str());
-
-			ImGui::End();
+			if ((globals::dataS.gameCfg.modVersion).length() > 0){
+				ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+				ImGui::Begin("eopInitTitle", nullptr, transparentF);
+					ImGui::Text(globals::dataS.gameCfg.modVersion.c_str());
+				ImGui::End();
+			}
 		}
 		else
 		{

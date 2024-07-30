@@ -161,6 +161,11 @@ namespace modSettingsUI
 				ImGui::Text("Warning: Mod path in %s does not match the current directory.", dataG::data.modData.configName.c_str());
 			}
 		}
+	
+		ImGui::Text("Mod Version");
+		ImGui::InputText("", &dataG::data.gameData.modVersion);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Mod version to display in the top left corner beneath EOP version. Set it in eopData/config/uiCfg.json");}
+
 		ImGui::Checkbox("Use M2TWEOP", &dataG::data.modData.useM2TWEOP);
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable EOP when launching the mod");}
 
@@ -192,11 +197,6 @@ namespace modSettingsUI
 		{
 			dataG::data.audio.bkgMusic.music->setVolume(dataG::data.audio.bkgMusic.musicVolume);
 		}
-
-		ImGui::NewLine();
-		ImGui::InputText("Mod Version", &dataG::data.gameData.modVersion);
-		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Mod version to display in the top left corner beneath EOP version");}
-		ImGui::NewLine();
 
 		// Get all the TOML files in the eopData/resources/themes folder
 		std::vector<std::string> tomlFiles = helpers::getTomlFilesInFolder();
@@ -289,6 +289,7 @@ namespace modSettingsUI
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Path to where you have Freecam installed (e.g  C:\\Users\\stead\\Documents\\Modding Tools\\Med2 Modding Tools\\Freecam)");}
 		ImGui::InputText("", &dataG::data.gameData.freecamFolder);
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Path to where you have Freecam installed (e.g  C:\\Users\\stead\\Documents\\Modding Tools\\Med2 Modding Tools\\Freecam)");}
+		ImGui::NewLine();
 	}
 	
 	void drawModSettingsUI(bool* isOpen)
