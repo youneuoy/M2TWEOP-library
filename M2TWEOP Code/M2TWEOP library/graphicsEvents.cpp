@@ -29,7 +29,7 @@ void drawOnEndScene(LPDIRECT3DDEVICE9 pDevice)
 			ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
 			ImGui::Begin("eopInitTitle", nullptr, transparentF);
 
-			ImGui::Text(globals::dataS.gameCfg.modVersion);
+			ImGui::Text(globals::dataS.gameCfg.modVersion.c_str());
 
 			ImGui::End();
 		}
