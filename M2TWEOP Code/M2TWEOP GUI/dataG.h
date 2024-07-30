@@ -45,6 +45,7 @@ public:
 
 			// Customization Options
 			string modTitle = "";
+			string modVersion = "";
 			string buttonColorString = "";
 			string buttonHoverColorString = "";
 

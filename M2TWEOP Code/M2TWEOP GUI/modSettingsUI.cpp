@@ -95,9 +95,6 @@ namespace modSettingsUI
 
 	void drawGeneralSettings()
 	{
-
-		//ImGui::InputText("Config file name", &dataG::data.modData.configName);
-
 		std::vector<std::string> cfgFiles = helpers::getCfgFilesInFolder();
 		std::vector<const char*> items;
 		for (const auto& file : cfgFiles) {
@@ -189,12 +186,16 @@ namespace modSettingsUI
 				dataG::data.audio.bkgMusic.music->play();
 			}
 		}
-		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enabled music in the EOP Launcher");}
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable music in the EOP Launcher");}
 
 		if (ImGui::SliderInt("Music volume", &dataG::data.audio.bkgMusic.musicVolume, 0, 100))
 		{
 			dataG::data.audio.bkgMusic.music->setVolume(dataG::data.audio.bkgMusic.musicVolume);
 		}
+
+		ImGui::NewLine();
+		ImGui::InputText("Mod Version", &dataG::data.gameData.modVersion);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Mod version to display in the top left corner beneath EOP version");}
 		ImGui::NewLine();
 
 		// Get all the TOML files in the eopData/resources/themes folder

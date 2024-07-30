@@ -2,6 +2,7 @@
 #include "graphicsEvents.h"
 #include "console.h"
 #include "luaPlugin.h"
+#include "globals.h"
 
 struct
 {
@@ -28,7 +29,7 @@ void drawOnEndScene(LPDIRECT3DDEVICE9 pDevice)
 			ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
 			ImGui::Begin("eopInitTitle", nullptr, transparentF);
 
-			// ImGui::Text("M2TWEOP LUA PLUGIN");
+			ImGui::Text(globals::dataS.gameCfg.modVersion);
 
 			ImGui::End();
 		}
