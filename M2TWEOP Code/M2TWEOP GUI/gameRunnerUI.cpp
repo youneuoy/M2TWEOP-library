@@ -177,6 +177,11 @@ namespace gameRunnerUI
 				LPSTR lpstr_folder = helpers::ConvertWideStringToLPSTR(wideFolderPath);
 				helpers::openProcess(lpstr, lpstr_folder);
 			}
+			// Stop the launcher background music if Rich Presence is enabled and the launcher will stay open
+			if (dataG::data.gameData.isDiscordRichPresenceEnabled == true && dataG::data.audio.bkgMusic.isMusicNeeded == true)
+			{
+				dataG::data.audio.bkgMusic.music->stop();
+			}
 
 			startProcess.sendingEndTime = ImGui::GetTime() + 34.5f;
 		}

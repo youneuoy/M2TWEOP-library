@@ -11,6 +11,7 @@
   - Specify the path to your Freecam installation and enable the integration to automatically launch and close Freecam whenever you play the game
 - Updated [DXVK](https://github.com/doitsujin/dxvk/releases/tag/v2.4) to v2.4 - *Medik*
 - Allow users to specify a mod version which is displayed in the top left beneath the EOP version at launch - *Medik*
+- Launcher no longer continues to play music if Discord Rich Presence is enabled and background music is enabled - *Medik*
 
 ### **Library**
 - Reduced amount of EOP "branding" displayed on startup - *Medik*
