@@ -24,10 +24,17 @@ new-item ./logs -itemtype directory -erroraction 'silentlycontinue'
 
 # 1) Build M2TWEOP-library
 Write-Host "`n`n======== 1) Build M2TWEOP-library ========`n" -ForegroundColor Magenta
+msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Release /p:Platform=x86 /t:"M2TWEOP library" /fileLogger /fileLoggerParameters:LogFile=logs\library.log /NoWarn:ALL /Verbosity:Minimal /p:WarningLevel=0 /p:RunCodeAnalysis=false -m
+if ($LASTEXITCODE -ne 0) { Write-Host "`n`n!!! Failure detected. Stopping the build process. !!!" -ForegroundColor DarkRed ; exit $LASTEXITCODE }
+# Build M2TWEOP GUI
+msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Release /p:Platform=x86 /t:"M2TWEOP GUI" /fileLogger /fileLoggerParameters:LogFile=logs\gui.log /NoWarn:ALL /Verbosity:Minimal  -m
+if ($LASTEXITCODE -ne 0) { Write-Host "`n`n!!! Failure detected. Stopping the build process. !!!" -ForegroundColor DarkRed ; exit $LASTEXITCODE }
 
-msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Release /p:Platform=x86 /t:"M2TWEOP library" /fileLogger /fileLoggerParameters:LogFile=logs\library.log /NoWarn:ALL -m
-msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Release /p:Platform=x86 /t:"M2TWEOP GUI" /fileLogger /fileLoggerParameters:LogFile=logs\gui.log /NoWarn:ALL -m
-msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Release /p:Platform=x86 /t:"d3d9" /fileLogger /fileLoggerParameters:LogFile=logs\d3d9.log /NoWarn:ALL -m
+# Build d3d9
+msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Release /p:Platform=x86 /t:"d3d9" /fileLogger /fileLoggerParameters:LogFile=logs\d3d9.log /NoWarn:ALL /Verbosity:Minimal -m
+if ($LASTEXITCODE -ne 0) { Write-Host "`n`n!!! Failure detected. Stopping the build process. !!!" -ForegroundColor DarkRed ; exit $LASTEXITCODE }
+
+Write-Host "`n`n======== Success! ========`n" -ForegroundColor Green
 
 # 3) Build Documentation
 Write-Host "`n`n======== 3) Build M2TWEOP-Documentation ========`n" -ForegroundColor Magenta
@@ -66,4 +73,4 @@ if ($modFolder) {
 }
 
 # 7) Done
-Write-Host "`n`n======== Success! EOP Built Successfully! ========`n" -ForegroundColor Magenta
+Write-Host "`n`n======== Success! EOP Built Successfully! ========`n" -ForegroundColor Green

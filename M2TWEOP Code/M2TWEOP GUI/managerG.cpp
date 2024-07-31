@@ -160,6 +160,10 @@ namespace managerG
 			{
 				getJson(dataG::data.gameData.modTitle, "modTitle");
 			}
+			if (json.contains("modVersion"))
+			{
+				getJson(dataG::data.gameData.modVersion, "modVersion");
+			}
 			if (json.contains("runButtonColor"))
 			{
 				getJson(dataG::data.gameData.buttonColorString, "runButtonColor");
@@ -247,6 +251,7 @@ namespace managerG
 		setJson("playBackgroundMusic", dataG::data.audio.bkgMusic.isMusicNeeded);
 		setJson("musicVolume", dataG::data.audio.bkgMusic.musicVolume);
 		setJson("modTitle", dataG::data.gameData.modTitle);
+		setJson("modVersion", dataG::data.gameData.modVersion);
 		setJson("runButtonColor", dataG::data.gameData.buttonColorString);
 		setJson("runButtonHoverColor", dataG::data.gameData.buttonHoverColorString);
 		setJson("launcherTheme", dataG::data.modData.themeName);

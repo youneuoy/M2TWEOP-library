@@ -1116,6 +1116,10 @@ void managerF::loadJsonSettings()
 		{
 			getJson(globals::dataS.gameCfg.launcherTheme, "launcherTheme")
 		}
+		if (json.contains("modVersion"))
+		{
+			getJson(globals::dataS.gameCfg.modVersion, "modVersion")
+		}
 	}
 	catch (jsn::json::type_error& e)
 	{

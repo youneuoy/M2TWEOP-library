@@ -25,8 +25,13 @@ new-item ./logs -itemtype directory -erroraction 'silentlycontinue'
 Write-Host "`n`n======== 1) Build M2TWEOP-library ========`n" -ForegroundColor Magenta
 
 msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Release /p:Platform=x86 /t:"M2TWEOP library" /fileLogger /fileLoggerParameters:LogFile=logs\library.log /NoWarn:ALL -m
+if ($LASTEXITCODE -ne 0) { Write-Host "`n`n!!! Failure detected. Stopping the build process. !!!" -ForegroundColor DarkRed ; exit $LASTEXITCODE }
+
 msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Release /p:Platform=x86 /t:"M2TWEOP GUI" /fileLogger /fileLoggerParameters:LogFile=logs\gui.log /NoWarn:ALL -m
+if ($LASTEXITCODE -ne 0) { Write-Host "`n`n!!! Failure detected. Stopping the build process. !!!" -ForegroundColor DarkRed ; exit $LASTEXITCODE }
+
 msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Release /p:Platform=x86 /t:"d3d9" /fileLogger /fileLoggerParameters:LogFile=logs\d3d9.log /NoWarn:ALL -m
+if ($LASTEXITCODE -ne 0) { Write-Host "`n`n!!! Failure detected. Stopping the build process. !!!" -ForegroundColor DarkRed ; exit $LASTEXITCODE }
 
 # 3) Build Documentation
 Write-Host "`n`n======== 3) Build M2TWEOP-Documentation ========`n" -ForegroundColor Magenta
