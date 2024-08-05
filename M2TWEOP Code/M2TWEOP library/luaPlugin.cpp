@@ -258,7 +258,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	tables.M2TWEOP.set_function("getModPath", &gameHelpers::getModPath);
 	
 	/***
-	Get relative path from the 'mods' folder.
+	Get the name of the mod folder.
 	@function M2TWEOP.getModFolderName
 	@treturn string mod path
 	@usage

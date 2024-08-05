@@ -281,9 +281,9 @@ int armyStruct::getNumEnginesCanPenetrateWallsLevel(const int level)
 	return GAME_FUNC(int(__thiscall*)(armyStruct*, int), getNumEnginesCanPenetrateWalls)(this, fLevel);
 }
 
-bool armyStruct::canReceiveMerge(armyStruct* other)
+bool armyStruct::canReceiveMerge(const armyStruct* other)
 {
-	if (!other)
+	if (!other || !this)  // NOLINT(clang-diagnostic-undefined-bool-conversion)
 		return false;
 	if (settlement && settlement->siegeNum > 0)
 		return false;

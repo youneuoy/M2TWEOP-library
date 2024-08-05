@@ -698,9 +698,20 @@ public:
 	{
 		return devastationLevel;
 	}
+	void setDevastationLevel(const int value)
+	{
+		int newValue = value;
+		if (value > 7)
+			newValue = 7;
+		devastationLevel = newValue;
+	}
 	bool isDeforested()
 	{
 		return deforested;
+	}
+	void setDeforested(const bool value)
+	{
+		deforested = value;
 	}
 	int getHighlightExtents()
 	{

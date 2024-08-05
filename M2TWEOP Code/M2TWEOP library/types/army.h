@@ -209,7 +209,7 @@ public:
 			return nullptr;
 		return characters[index];
 	}
-	bool canReceiveMerge(armyStruct* other);
+	bool canReceiveMerge(const armyStruct* other);
 	bool isEnemyTo(const armyStruct* other);
 	bool isAllyTo(const armyStruct* other);
 	bool isEnemyToFaction(const factionStruct* other);

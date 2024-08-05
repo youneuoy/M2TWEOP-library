@@ -1193,7 +1193,7 @@ namespace factionHelpers
 		Check if a region neighbours this faction.
 		@function factionStruct:isNeighbourRegion
 		@tparam int regionID
-		@tparam bool result
+		@treturn bool result
 		@usage
 		     local isNeighbour = fac:isNeighbourRegion(34)
 		*/

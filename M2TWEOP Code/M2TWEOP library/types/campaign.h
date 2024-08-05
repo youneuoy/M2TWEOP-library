@@ -885,11 +885,12 @@ struct watchTowerStruct {
 struct campaignDifficulty1
 {
 	int orderFromGrowth;
-	int considerWarWithPlayer;
+	bool aiHireMercenaries;
+	char pad[3];
 	float difficultyFloat1_unused;
 	float brigandChanceAi;
 	float brigandChancePlayer;
-	int forceAttackDelay;
+	int maxPlayerPeaceTurns;
 	float taxIncomeModifierPlayer;
 	float farmingIncomeModifierPlayer;
 	float incomeModifierAi;
@@ -904,11 +905,10 @@ public:
 	int32_t experienceBonusAi; //0x0008
 	int32_t difficultyInt4_unused; //0x000C
 	int32_t incomeBonusAi; //0x0010
-	int8_t wantsTargetPlayer; //0x0014
-	int8_t wantsTargetPlayerNaval; //0x0015
+	bool dontAttackAiDefenders; //0x0014
+	bool forceNavalInvasions; //0x0015
 	char pad_0016[6]; //0x0016
-	int32_t autoAttackPlayerIfCrusadeTarget; //0x001C
-	char pad_0020[32]; //0x0020
+	bool brigandControllerTargetSettlements; //0x001C
 }; //Size: 0x0040
 
 struct movePoint

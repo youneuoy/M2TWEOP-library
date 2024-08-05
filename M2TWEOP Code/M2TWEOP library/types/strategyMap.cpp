@@ -1272,8 +1272,8 @@ namespace stratMapHelpers
 		typeAll.tileStruct.set("volcanoLevel", sol::property(&oneTile::getVolcanoStrength));
 		typeAll.tileStruct.set("isScorched", sol::property(&oneTile::isScorched));
 		typeAll.tileStruct.set("isTradeRoute", sol::property(&oneTile::isTradeRoute));
-		typeAll.tileStruct.set("devastationLevel", sol::property(&oneTile::getDevastationLevel));
-		typeAll.tileStruct.set("isDeforested", sol::property(&oneTile::isDeforested));
+		typeAll.tileStruct.set("devastationLevel", sol::property(&oneTile::getDevastationLevel, &oneTile::setDevastationLevel));
+		typeAll.tileStruct.set("isDeforested", sol::property(&oneTile::isDeforested, &oneTile::setDeforested));
 		typeAll.tileStruct.set("isBorder", sol::property(&oneTile::isBorder));
 		typeAll.tileStruct.set("isLandCoast", sol::property(&oneTile::isLandCoast));
 		typeAll.tileStruct.set("isSeaCoast", sol::property(&oneTile::isSeaCoast));

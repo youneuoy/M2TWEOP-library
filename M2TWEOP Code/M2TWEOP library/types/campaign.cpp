@@ -842,7 +842,7 @@ namespace campaignHelpers
 		@usage
     	local campaign = M2TW.campaign
 		for i = 0, campaign.mercPoolNum - 1 do
-			local pool = campaign:getMercPool(i)
+            local pool = campaign:getMercPool(i)
 		end
 		*/
 		typeAll.campaignTable.set_function("getMercPool", &campaign::getMercPool);
@@ -968,8 +968,8 @@ namespace campaignHelpers
 		@usage
     	local campaign = M2TW.campaign
 		for i = 0, campaign.settlementNum - 1 do
-			local sett = campaign:getSettlement(i);
-		end
+		    local sett = campaign:getSettlement(i);
+        end
 		*/
 		typeAll.campaignTable.set_function("getSettlement", &campaign::getSettlement);
 		/***
@@ -1702,10 +1702,10 @@ namespace campaignHelpers
 		Basic campaignDifficulty1 table.
 
 		@tfield int orderFromGrowth
-		@tfield int considerWarWithPlayer
+		@tfield bool aiHireMercenaries
 		@tfield float brigandChanceAi
 		@tfield float brigandChancePlayer
-		@tfield int forceAttackDelay
+		@tfield int maxPlayerPeaceTurns
 		@tfield float taxIncomeModifierPlayer
 		@tfield float farmingIncomeModifierPlayer
 		@tfield float incomeModifierAi
@@ -1716,10 +1716,10 @@ namespace campaignHelpers
 
 		typeAll.campaignDifficulty1 = luaState.new_usertype<campaignDifficulty1>("campaignDifficulty1");
 		typeAll.campaignDifficulty1.set("orderFromGrowth", &campaignDifficulty1::orderFromGrowth);
-		typeAll.campaignDifficulty1.set("considerWarWithPlayer", &campaignDifficulty1::considerWarWithPlayer);
+		typeAll.campaignDifficulty1.set("aiHireMercenaries", &campaignDifficulty1::aiHireMercenaries);
 		typeAll.campaignDifficulty1.set("brigandChanceAi", &campaignDifficulty1::brigandChanceAi);
 		typeAll.campaignDifficulty1.set("brigandChancePlayer", &campaignDifficulty1::brigandChancePlayer);
-		typeAll.campaignDifficulty1.set("forceAttackDelay", &campaignDifficulty1::forceAttackDelay);
+		typeAll.campaignDifficulty1.set("maxPlayerPeaceTurns", &campaignDifficulty1::maxPlayerPeaceTurns);
 		typeAll.campaignDifficulty1.set("taxIncomeModifierPlayer", &campaignDifficulty1::taxIncomeModifierPlayer);
 		typeAll.campaignDifficulty1.set("farmingIncomeModifierPlayer", &campaignDifficulty1::farmingIncomeModifierPlayer);
 		typeAll.campaignDifficulty1.set("incomeModifierAi", &campaignDifficulty1::incomeModifierAi);
@@ -1732,9 +1732,9 @@ namespace campaignHelpers
 		@tfield int publicOrderBonusAi
 		@tfield int experienceBonusAi
 		@tfield int incomeBonusAi
-		@tfield int wantsTargetPlayer
-		@tfield int wantsTargetPlayerNaval
-		@tfield int autoAttackPlayerIfCrusadeTarget
+		@tfield bool dontAttackAiDefenders
+		@tfield bool forceNavalInvasions
+		@tfield bool brigandControllerTargetSettlements
 
 		@table campaignDifficulty2
 		*/
@@ -1744,9 +1744,9 @@ namespace campaignHelpers
 		typeAll.campaignDifficulty2.set("publicOrderBonusAi", &campaignDifficulty2::publicOrderBonusAi);
 		typeAll.campaignDifficulty2.set("experienceBonusAi", &campaignDifficulty2::experienceBonusAi);
 		typeAll.campaignDifficulty2.set("incomeBonusAi", &campaignDifficulty2::incomeBonusAi);
-		typeAll.campaignDifficulty2.set("wantsTargetPlayer", &campaignDifficulty2::wantsTargetPlayer);
-		typeAll.campaignDifficulty2.set("wantsTargetPlayerNaval", &campaignDifficulty2::wantsTargetPlayerNaval);
-		typeAll.campaignDifficulty2.set("autoAttackPlayerIfCrusadeTarget", &campaignDifficulty2::autoAttackPlayerIfCrusadeTarget);
+		typeAll.campaignDifficulty2.set("dontAttackAiDefenders", &campaignDifficulty2::dontAttackAiDefenders);
+		typeAll.campaignDifficulty2.set("forceNavalInvasions", &campaignDifficulty2::forceNavalInvasions);
+		typeAll.campaignDifficulty2.set("brigandControllerTargetSettlements", &campaignDifficulty2::brigandControllerTargetSettlements);
 		
 		///Selection Info
 		//@section Selection Info

@@ -1258,7 +1258,7 @@ bool defendSettlementOrder::execute()
 		}
 		else
 		{
-			if (targetSettlement->settlement->army->canReceiveMerge(assignedArmy->resource->army))
+			if (!targetSettlement->settlement->army || targetSettlement->settlement->army->canReceiveMerge(assignedArmy->resource->army))
 				assignedArmy->resource->army->moveTactical(targetSettlement->settlement->xCoord, targetSettlement->settlement->yCoord, true);
 			else
 			{
