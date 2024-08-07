@@ -185,7 +185,9 @@ return [==[
 #  for item in items() do
     <dt>
     <a name = "$(item.name)"></a>
-    <strong>$(display_name(item))</strong>
+    <a id="linkto" rel="noopener" href="#$(item.name)">
+        $(display_name(item))
+    </a>
 #   if ldoc.prettify_files and ldoc.is_file_prettified[item.module.file.filename] then
     <a style="float:right;" href="$(ldoc.source_ref(item))">line $(item.lineno)</a>
 #  end
