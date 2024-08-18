@@ -1,5 +1,6 @@
 #pragma once
 #include "luaPlugin.h"
+#include "console.h"
 #include <unordered_map>
 #include <functional>
 
@@ -13,11 +14,13 @@ auto funcResult = luaFunc;\
 if (!funcResult.valid())\
 {\
 	sol::error luaError = funcResult;\
-	MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);\
+	UINT defaultFlags = MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION;\
+	int result = MessageBoxA(NULL, luaError.what(), "Lua exception!", defaultFlags);\
 	if (plugData::data.luaAll.checkVar("terminateAtLuaException", 1) == true)\
 	{\
 		terminate();\
 	}\
+	console::handleMessageBoxResult(result);\
 }\
 
 struct eventTrigger

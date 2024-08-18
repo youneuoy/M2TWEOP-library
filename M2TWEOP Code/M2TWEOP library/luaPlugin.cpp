@@ -96,7 +96,7 @@ void replaceAll2(std::string& s, const std::string& search, const std::string& r
 }
 
 void luaPlugin::runScriptS(const std::string* script)
-{
+{	
 	logS.emplace_back("\n== Output ==");
 	sol::load_result scriptResult = luaState.load(*script);
 	if (!scriptResult.valid()) {
@@ -109,7 +109,7 @@ void luaPlugin::runScriptS(const std::string* script)
 		const sol::error luaError = result;
 		logS.emplace_back("\n== Error ==\n");
 		logS.emplace_back(luaError.what());
-	}
+	}	
 }
 
 bool luaPlugin::checkVar(const char* gName, int variable)
@@ -152,12 +152,14 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	std::string f = "\\";
 	std::string r = "/";
 	replaceAll2(packagePS, f, r);
+	UINT defaultFlags = MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION;  // Default type with exclamation icon
 
 	luaState["print"] = &ourP;
 	if (auto funcResult = luaState.script(packagePS); !funcResult.valid())
 	{
 		sol::error luaError = funcResult;
-		MessageBoxA(nullptr, luaError.what(), "Lua package error!", NULL);
+		int result = MessageBoxA(nullptr, luaError.what(), "Lua package error!", defaultFlags);
+		console::handleMessageBoxResult(result);
 		return nullptr;
 	}
 	
@@ -166,13 +168,15 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	if (!fileRes.valid())
 	{ 
 		sol::error luaError = fileRes;
-		MessageBoxA(nullptr, luaError.what(), "Lua syntax error!", NULL);
+		int result = MessageBoxA(nullptr, luaError.what(), "Lua syntax error!", defaultFlags);
+		console::handleMessageBoxResult(result);
 		return nullptr;
 	}
 	if (sol::protected_function_result result1 = fileRes(); !result1.valid())
 	{
 		sol::error luaError = result1;
-		MessageBoxA(nullptr, luaError.what(), "Lua execution error!", NULL);
+		int result = MessageBoxA(nullptr, luaError.what(), "Lua execution error!", defaultFlags);
+		console::handleMessageBoxResult(result);
 		return nullptr;
 	}
 

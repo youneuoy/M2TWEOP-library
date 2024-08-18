@@ -13,27 +13,31 @@
 
 #define tryLua(luaFunc)  \
 auto funcResult = luaFunc;\
+UINT defaultFlags = MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION;\
 if (!funcResult.valid())\
 {\
 	sol::error luaError = funcResult;\
-	MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);\
+	int result = MessageBoxA(NULL, luaError.what(), "Lua exception!", defaultFlags);\
 	if (plugData::data.luaAll.checkVar("terminateAtLuaException", 1) == true)\
 	{\
 		terminate();\
 	}\
+	console::handleMessageBoxResult(result);\
 }\
 
 
 #define tryLuaGetRes(luaFunc,result)  \
 auto funcResult = luaFunc;\
+UINT defaultFlags = MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION;\
 if (!funcResult.valid())\
 {\
 	sol::error luaError = funcResult;\
-	MessageBoxA(NULL, luaError.what(), "Lua exception!", NULL);\
+	int result = MessageBoxA(NULL, luaError.what(), "Lua exception!", defaultFlags);\
 	if (plugData::data.luaAll.checkVar("terminateAtLuaException", 1) == true)\
 	{\
 		terminate();\
 	}\
+	console::handleMessageBoxResult(result);\
 }\
 else\
 {\

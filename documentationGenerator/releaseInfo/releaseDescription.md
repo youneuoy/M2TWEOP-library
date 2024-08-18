@@ -12,15 +12,22 @@
 - Updated [DXVK](https://github.com/doitsujin/dxvk/releases/tag/v2.4) to v2.4 - *Medik*
 - Allow users to specify a mod version which is displayed in the top left beneath the EOP version at launch - *Medik*
 - Launcher no longer continues to play music if Discord Rich Presence is enabled and background music is enabled - *Medik*
+- Rename "M2TWEOP GUI.exe" to "M2TWEOP_GUI.exe" - *Medik*
 
 ### **Library**
 - Reduced amount of EOP "branding" displayed on startup - *Medik*
 
 ### **Lua Plugin**
 - Stopped the game still receiving keyboard/mouse inputs when the EOP Console was open - *Medik*
+- Added a "Clear Input" toggle in the console - *Medik*
+- If you encounter an error, you can now 
+  - Abort (Exits the game completely)
+  - Retry (Runs `restartLua()` in the background, very useful when stuck in `draw()` error loops)
+  - Ignore (Ignore the error and just continue)
 
 ### **ImGUI**
 - Stopped "Planned retreat route" from appearing when it was disabled - *Medik*
+- Updated default scrollbar theming - *Medik*
 
 ### **Documentation**
 - Updated Erken's ImGUI PDF tutorial to V5 (Thanks Erken!) - *Medik*
