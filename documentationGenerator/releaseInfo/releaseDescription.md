@@ -20,7 +20,7 @@
 ### **Lua Plugin**
 - Stopped the game still receiving keyboard/mouse inputs when the EOP Console was open - *Medik*
 - Added a "Clear Input" toggle in the console - *Medik*
-- If you encounter an error, you can now 
+- Updated Lua exception message box error handling
   - Abort (Exits the game completely)
   - Retry (Runs `restartLua()` in the background, very useful when stuck in `draw()` error loops)
   - Ignore (Ignore the error and just continue)
