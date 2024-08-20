@@ -28,6 +28,7 @@
 ### **ImGUI**
 - Stopped "Planned retreat route" from appearing when it was disabled - *Medik*
 - Updated default scrollbar theming - *Medik*
+- `reloadLua()` and `restartLua()` no long require opening the console - *Medik*
 
 ### **Documentation**
 - Updated Erken's ImGUI PDF tutorial to V5 (Thanks Erken!) - *Medik*
