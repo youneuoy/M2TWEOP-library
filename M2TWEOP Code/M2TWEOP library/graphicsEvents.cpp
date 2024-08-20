@@ -45,7 +45,7 @@ void drawOnEndScene(LPDIRECT3DDEVICE9 pDevice)
 	}
 
 	if(consoleData.shouldRestartLua){
-		initLuaPlugin();
+		initLuaPlugin(true);
 		consoleData.shouldRestartLua = false;
 	}
 }

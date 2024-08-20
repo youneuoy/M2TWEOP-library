@@ -29,6 +29,7 @@
 - Stopped "Planned retreat route" from appearing when it was disabled - *Medik*
 - Updated default scrollbar theming - *Medik*
 - `reloadLua()` and `restartLua()` no long require opening the console - *Medik*
+- A toast popup appears when `reloadLua()` and `restartLua()` is called to provide feedback that the restart/reload was successful - *Medik*
 
 ### **Documentation**
 - Updated Erken's ImGUI PDF tutorial to V5 (Thanks Erken!) - *Medik*
