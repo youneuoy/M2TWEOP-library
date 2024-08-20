@@ -171,16 +171,5 @@ namespace console
 		ImGui::InputTextMultiline("##consoleLog", &outputs, ImVec2(-FLT_MIN, -FLT_MIN), ImGuiInputTextFlags_ReadOnly);
 
 		ImGui::End();
-
-		if(consoleData.shouldReloadScript){
-			reloadLua();
-			consoleData.shouldReloadScript = false;
-		}
-
-		if(consoleData.shouldRestartLua){
-			initLuaPlugin();
-			consoleData.shouldRestartLua = false;
-		}
 	}
-
 }

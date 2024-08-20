@@ -38,6 +38,16 @@ void drawOnEndScene(LPDIRECT3DDEVICE9 pDevice)
 			drawParams.drawEopStartInfo = false;
 		}
 	}
+
+	if(consoleData.shouldReloadScript){
+		reloadLua();
+		consoleData.shouldReloadScript = false;
+	}
+
+	if(consoleData.shouldRestartLua){
+		initLuaPlugin();
+		consoleData.shouldRestartLua = false;
+	}
 }
 
 void onReset(LPDIRECT3DDEVICE9 pDevice)
