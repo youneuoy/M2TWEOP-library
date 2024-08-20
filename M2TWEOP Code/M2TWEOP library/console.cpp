@@ -2,6 +2,7 @@
 #include "console.h"
 #include "luaPlugin.h"
 #include "gameHelpers.h"
+#include "graphicsEvents.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_stdlib.h"
@@ -41,19 +42,6 @@ namespace console
 		}
 	}
 
-	void reloadScript()
-	{
-		plugData::data.luaAll.hashLoaded = false;
-		consoleData.shouldReloadScript = true;
-		consoleData.pressAmount = 0;
-	}
-
-	void restartLua()
-	{
-		plugData::data.luaAll.hashLoaded = false;
-		consoleData.shouldRestartLua = true;
-		consoleData.pressAmount = 0;
-	}
 
 	void handleMessageBoxResult(int result){
 		// Handle the return value

@@ -49,7 +49,7 @@ namespace gameEvents
 	void initEvents();
 }
 
-int initLuaPlugin();
+int initLuaPlugin(bool isReload);
 void reloadLua();
 
 class luaPlugin

@@ -27,6 +27,7 @@
 #include "campaignAi.h"
 #include "imgui/sol_ImGui.h"
 #include "rebelFactions.h"
+#include "graphicsEvents.h"
 plugData::pDat plugData::data;
 std::vector<std::string> luaPlugin::logS;
 std::vector<std::string> luaPlugin::logCommands;
@@ -54,8 +55,8 @@ int initLuaPlugin(bool isReload)
 	plugData::data.luaAll.onPluginLoadF();
 
 	if (isReload) {
-		bMsg = ImGuiToast(ImGuiToastType_Info, 1000);
-		bMsg.set_title("Restarted Lua plugin");
+		auto bMsg = ImGuiToast(ImGuiToastType_Info, 1000);
+		bMsg.set_title("Restarted Lua plugin!");
 		bMsg.set_content("");
 		ImGui::InsertNotification(bMsg);
 	}
@@ -69,8 +70,8 @@ void reloadLua()
 	auto script = plugData::data.luaAll.luaState.load_file(luaFile);
 	script();
 
-	bMsg = ImGuiToast(ImGuiToastType_Info, 1000);
-	bMsg.set_title("Reloaded Lua script");
+	auto bMsg = ImGuiToast(ImGuiToastType_Info, 1000);
+	bMsg.set_title("Reloaded Lua script!");
 	bMsg.set_content("");
 	ImGui::InsertNotification(bMsg);
 }
@@ -306,7 +307,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	    M2TWEOP.reloadScript();
 	*/
-	tables.M2TWEOP.set_function("reloadScript", &console::reloadScript);
+	tables.M2TWEOP.set_function("reloadScript", &reloadScript);
 	
 	/***
 	Restart the lua plugin (onPluginLoad fires).
@@ -314,7 +315,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	    M2TWEOP.restartLua();
 	*/
-	tables.M2TWEOP.set_function("restartLua", &console::restartLua);
+	tables.M2TWEOP.set_function("restartLua", &restartLua);
 	
 	/***
 	Save the game.

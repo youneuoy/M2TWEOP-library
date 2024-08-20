@@ -1135,7 +1135,7 @@ void managerF::initThread()
 	codes::initCodes(globals::dataS.gameVersion);
 	dataOffsets::initDataOffsets(globals::dataS.gameVersion);
 	execPatches();
-	initLuaPlugin();
+	initLuaPlugin(false);
 	globals::dataS.Modules.tacticalMapViewer.init(globals::dataS.gameVersion);
 }
 

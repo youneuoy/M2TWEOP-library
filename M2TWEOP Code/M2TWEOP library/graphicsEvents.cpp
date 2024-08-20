@@ -8,9 +8,26 @@ struct
 {
 	float drawInfoEndTime = 0;
 	bool drawEopStartInfo = false;
+	bool shouldReloadScript = false;
+	bool shouldRestartLua = false;
 
 	ImVec2 beginCoords{ 0.f,0.f };
 }drawParams;
+
+void reloadScript()
+{
+	plugData::data.luaAll.hashLoaded = false;
+	drawParams.shouldReloadScript = true;
+	console::consoleData.pressAmount = 0;
+}
+
+void restartLua()
+{
+	plugData::data.luaAll.hashLoaded = false;
+	drawParams.shouldRestartLua = true;
+	console::consoleData.pressAmount = 0;
+}
+
 void drawOnEndScene(LPDIRECT3DDEVICE9 pDevice)
 {
 	if (plugData::data.luaAll.drawLuaFunc != nullptr)
@@ -39,14 +56,14 @@ void drawOnEndScene(LPDIRECT3DDEVICE9 pDevice)
 		}
 	}
 
-	if(consoleData.shouldReloadScript){
+	if(drawParams.shouldReloadScript){
 		reloadLua();
-		consoleData.shouldReloadScript = false;
+		drawParams.shouldReloadScript = false;
 	}
 
-	if(consoleData.shouldRestartLua){
+	if(drawParams.shouldRestartLua){
 		initLuaPlugin(true);
-		consoleData.shouldRestartLua = false;
+		drawParams.shouldRestartLua = false;
 	}
 }
 
