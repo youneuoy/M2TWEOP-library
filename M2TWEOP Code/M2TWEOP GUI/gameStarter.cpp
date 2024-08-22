@@ -13,7 +13,7 @@ bool gameStarter::startGame()
 
 	if (helpers::selectGameExe(dataG::data.gameData.gameMode) == false)
 	{
-		MessageBoxA(NULL, "Cannot select exe file! Need correct medieval2 or kingdoms", "Error!", NULL);
+		MessageBoxA(NULL, "M2TWEOP cannot find medieval2.exe or kingdoms.exe. You probably installed the mod in the wrong folder. The file structure should look something 'Medieval II Total War/mods/<mod_folder>'", "Error!", NULL);
 		return false;
 	}
 	gameStartArgs += dataG::data.gameData.exeName + ' ';
@@ -41,7 +41,7 @@ bool gameStarter::startGame()
 	{
 		if (initM2TWEOP() == false)
 		{
-			MessageBoxA(NULL, "Cannot init M2TWEOP. START M2TWEOP WITH ADMIN RIGHTS IF IT NOT WORK.", "ERROR", MB_OK);
+			MessageBoxA(NULL, "Failed to start M2TWEOP. Please try running again with Adminstrator rights.", "ERROR", MB_OK);
 			exit(0);
 		}
 		if (dataG::data.modData.useVanillaConfig == true)
