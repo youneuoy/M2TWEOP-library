@@ -7,8 +7,12 @@
 ## **Release Notes**
 ***NOTE : NOT SAVEGAME COMPATIBLE!!!!***
 
+#### **M2TWEOP-3-3-1**
+- Fixed custom mod building UI in `data/ui/generic` not being read correctly when EOP was installed - *Medik*
+
 <!-- ### **Launcher** -->
 
+#### **M2TWEOP-3-3-0**
 
 (all changes by Fynn)
 ### **Library**

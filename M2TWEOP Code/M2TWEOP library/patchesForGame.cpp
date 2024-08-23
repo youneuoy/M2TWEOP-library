@@ -341,6 +341,9 @@ char* __fastcall patchesForGame::getBrowserPicConstructed(int cultureID, edbEntr
 		}
 	}
 	unitActions::logStringGame("getBrowserPicConstructed error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_constructed_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_constructed_building.tga";
 	return FILE_PATH.data();
 }
@@ -401,6 +404,9 @@ char* __fastcall patchesForGame::getBrowserPicConstruction(int cultureID, edbEnt
 		}
 	}
 	unitActions::logStringGame("getBrowserPicConstruction error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_preconstructed_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_preconstructed_building.tga";
 	return FILE_PATH.data();
 }
@@ -460,6 +466,9 @@ char* __fastcall patchesForGame::getBuildingPic(buildingLevel* level, int cultur
 		}
 	}
 	unitActions::logStringGame("getBuildingPic error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_building.tga";
 	return FILE_PATH.data();
 }
@@ -519,6 +528,9 @@ char* __fastcall patchesForGame::getBuildingPicConstructed(buildingLevel* level,
 		}
 	}
 	unitActions::logStringGame("getBuildingPicConstructed error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_constructed_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_constructed_building.tga";
 	return FILE_PATH.data();
 }
@@ -578,6 +590,9 @@ char* __fastcall patchesForGame::getBuildingPicConstruction(buildingLevel* level
 		}
 	}
 	unitActions::logStringGame("getBuildingPicConstruction error: " + std::string(modPath + picPath));
+	FILE_PATH = modPath + "/data/ui/generic/generic_preconstructed_building.tga";
+	if (std::filesystem::exists(FILE_PATH))
+		return FILE_PATH.data();
 	FILE_PATH = GAME_PATH + "/data/ui/generic/generic_preconstructed_building.tga";
 	return FILE_PATH.data();
 }
