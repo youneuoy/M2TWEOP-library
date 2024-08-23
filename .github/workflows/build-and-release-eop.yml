@@ -96,4 +96,5 @@ jobs:
         artifacts: "${{ env.EOP_VERSION }}.zip"
         bodyFile: "./documentationGenerator/releaseInfo/releaseDescription.md"
         token: ${{ secrets.GITHUB_TOKEN }}
-        allowUpdates: true
+        commit: "M2TWEOP-3-3-1-bugfix"
+        allowUpdates: false
