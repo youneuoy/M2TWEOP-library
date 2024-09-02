@@ -472,10 +472,9 @@ unit* armyStruct::createUnitByIndex(const int eduIndex, const int exp, const int
 }
 unit* armyStruct::createUnitByIndex(const int eduIndex, const int exp, const int arm, const int weapon, int soldierCount)
 {
-	unit *newUnit = unitHelpers::createUnitIdx2(eduIndex, regionID, faction->factionID, exp, arm, weapon, soldierCount);
-	if (newUnit == nullptr)
-		return newUnit;
-	armyHelpers::addUnitToArmy(this, newUnit);
+	unit *newUnit = unitHelpers::createUnitIdx2(eduIndex, regionID, faction->factionID, exp, static_cast<uint8_t>(arm), static_cast<uint8_t>(weapon), soldierCount);
+	if (newUnit)
+		armyHelpers::addUnitToArmy(this, newUnit);
 	return newUnit;
 }
 unit* armyStruct::createEopUnit(const int eduIndex, const int exp, const int arm, const int weapon)

@@ -434,6 +434,14 @@ namespace eopBuildings
 
 namespace buildingHelpers
 {
+	edbEntry* luaGetBuildingByName(const std::string& name)
+	{
+		const auto edb = eopBuildings::getEdb();
+		if (!edb)
+			return nullptr;
+		return edb->getBuildingByName(name);
+	}
+	
 	int getBuildingId(const std::string& name)
 	{
 		if (!plugData::data.luaAll.hashNonCampaignLoaded || plugData::data.luaAll.buildings.empty())
@@ -874,7 +882,7 @@ namespace buildingHelpers
 		@usage
 		local building = EDB:getBuildingByName("market")
 		*/
-		types.EDB.set_function("getBuildingByName", &exportDescrBuildings::getBuildingByName);
+		types.EDB.set_function("getBuildingByName", &luaGetBuildingByName);
 		
 		/***
 		Get a building edb entry by index (EOP buildings too).
