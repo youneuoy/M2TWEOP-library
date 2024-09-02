@@ -936,7 +936,7 @@ namespace buildingHelpers
 		@tparam string buildingname
 		@treturn edbEntry entry
 		@usage
-		local building = EDB:getBuildingByName("market")
+		local building = EDB.getBuildingByName("market")
 		*/
 		types.EDB.set_function("getBuildingByName", &luaGetBuildingByName);
 		
@@ -946,7 +946,7 @@ namespace buildingHelpers
 		@tparam int index
 		@treturn edbEntry entry
 		@usage
-		local building = EDB:getBuildingByID(22)
+		local building = EDB.getBuildingByID(22)
 		*/
 		types.EDB.set_function("getBuildingByID", &luaGetBuildingByID);
 		
@@ -955,7 +955,7 @@ namespace buildingHelpers
 		@function EDB.getBuildingNum
 		@treturn int num
 		@usage
-		local num = EDB:getBuildingNum()
+		local num = EDB.getBuildingNum()
 		*/
 		types.EDB.set_function("getBuildingNum", &getBuildingCount);
 		
