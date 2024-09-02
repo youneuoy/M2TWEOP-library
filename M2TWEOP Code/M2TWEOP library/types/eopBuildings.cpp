@@ -442,6 +442,62 @@ namespace buildingHelpers
 		return edb->getBuildingByName(name);
 	}
 	
+	edbEntry* luaGetBuildingByID(const int id)
+	{
+		const auto edb = eopBuildings::getEdb();
+		if (!edb)
+			return nullptr;
+		return edb->getBuildingByID(id);
+	}
+	
+	int getHiddenResourceCount()
+	{
+		const auto edb = eopBuildings::getEdb();
+		if (!edb)
+			return 0;
+		return edb->hiddenResourceCount;
+	}
+	
+	int getBuildingCount()
+	{
+		const auto edb = eopBuildings::getEdb();
+		if (!edb)
+			return 0;
+		return edb->getBuildingNum();
+	}
+	
+	edbEntry* getEdbPort()
+	{
+		const auto edb = eopBuildings::getEdb();
+		if (!edb)
+			return nullptr;
+		return edb->port;
+	}
+	
+	edbEntry* getEdbCastlePort()
+	{
+		const auto edb = eopBuildings::getEdb();
+		if (!edb)
+			return nullptr;
+		return edb->castlePort;
+	}
+	
+	edbEntry* getEdbCoreCityBuilding()
+	{
+		const auto edb = eopBuildings::getEdb();
+		if (!edb)
+			return nullptr;
+		return edb->coreCityBuilding;
+	}
+	
+	edbEntry* getEdbCoreCastleBuilding()
+	{
+		const auto edb = eopBuildings::getEdb();
+		if (!edb)
+			return nullptr;
+		return edb->coreCastleBuilding;
+	}
+	
 	int getBuildingId(const std::string& name)
 	{
 		if (!plugData::data.luaAll.hashNonCampaignLoaded || plugData::data.luaAll.buildings.empty())
@@ -858,11 +914,11 @@ namespace buildingHelpers
 		@table EDB
 		*/
 		types.EDB = luaState.new_usertype<exportDescrBuildings>("EDB");
-		types.EDB.set("hiddenResourceCount", &exportDescrBuildings::hiddenResourceCount);
-		types.EDB.set("port", &exportDescrBuildings::port);
-		types.EDB.set("castlePort", &exportDescrBuildings::castlePort);
-		types.EDB.set("coreCityBuilding", &exportDescrBuildings::coreCityBuilding);
-		types.EDB.set("coreCastleBuilding", &exportDescrBuildings::coreCastleBuilding);
+		types.EDB.set("hiddenResourceCount", sol::property(&getHiddenResourceCount));
+		types.EDB.set("port", sol::property(&getEdbPort));
+		types.EDB.set("castlePort", sol::property(&getEdbCastlePort));
+		types.EDB.set("coreCityBuilding", sol::property(&getEdbCoreCityBuilding));
+		types.EDB.set("coreCastleBuilding", sol::property(&getEdbCoreCastleBuilding));
 
 		/***
 		Create new EOP Building entry
@@ -892,7 +948,7 @@ namespace buildingHelpers
 		@usage
 		local building = EDB:getBuildingByID(22)
 		*/
-		types.EDB.set_function("getBuildingByID", &exportDescrBuildings::getBuildingByID);
+		types.EDB.set_function("getBuildingByID", &luaGetBuildingByID);
 		
 		/***
 		Get number of vanilla buildings.
@@ -901,7 +957,7 @@ namespace buildingHelpers
 		@usage
 		local num = EDB:getBuildingNum()
 		*/
-		types.EDB.set_function("getBuildingNum", &exportDescrBuildings::getBuildingNum);
+		types.EDB.set_function("getBuildingNum", &getBuildingCount);
 		
 		/***
 		Get a guild by index.
