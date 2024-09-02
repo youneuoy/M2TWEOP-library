@@ -133,6 +133,11 @@ void buildingLevel::addCapability(int capability, int16_t value, bool bonus, con
 		call eax
 	}
 	int capabilityNum = getCapabilityNum();
+	if (capabilityNum == 0)
+	{
+		capabilities = cap;
+		return;
+	}
 	auto lastCap = getCapability(capabilityNum - 1);
 	lastCap->nextCapability = cap;
 }
@@ -170,6 +175,11 @@ void buildingLevel::addFactionCapability(int capability, int16_t value, bool bon
 		call eax
 	}
 	int capabilityNum = getFactionCapabilityNum();
+	if (capabilityNum == 0)
+	{
+		factionCapabilities = cap;
+		return;
+	}
 	auto lastCap = getFactionCapability(capabilityNum - 1);
 	lastCap->nextCapability = cap;
 }
@@ -197,6 +207,11 @@ void buildingLevel::addRecruitPool(int eduIndex, float initialSize, float gainPe
 		call eax
 	}
 	int capabilityNum = getPoolNum();
+	if (capabilityNum == 0)
+	{
+		recruitPools = pool;
+		return;
+	}
 	auto lastCap = getPool(capabilityNum - 1);
 	lastCap->nextPool = pool;
 }
