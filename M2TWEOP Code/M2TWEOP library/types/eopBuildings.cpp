@@ -932,7 +932,7 @@ namespace buildingHelpers
 		
 		/***
 		Get a building edb entry by name.
-		@function EDB:getBuildingByName
+		@function EDB.getBuildingByName
 		@tparam string buildingname
 		@treturn edbEntry entry
 		@usage
@@ -942,7 +942,7 @@ namespace buildingHelpers
 		
 		/***
 		Get a building edb entry by index (EOP buildings too).
-		@function EDB:getBuildingByID
+		@function EDB.getBuildingByID
 		@tparam int index
 		@treturn edbEntry entry
 		@usage
@@ -952,7 +952,7 @@ namespace buildingHelpers
 		
 		/***
 		Get number of vanilla buildings.
-		@function EDB:getBuildingNum
+		@function EDB.getBuildingNum
 		@treturn int num
 		@usage
 		local num = EDB:getBuildingNum()
