@@ -23,15 +23,18 @@ edbEntry* buildEntryDB::addEopBuildEntry(edbEntry* oldEntry, const int newIndex)
 	eopEdb.push_back(newEntry);
 	edbEntry* entry = getEopBuildEntry(newIndex);
 	const int32_t levelNum = entry->buildingLevelCount; //because levels can be unlocked to 57 needs to be dynamic not 9
-	buildingLevel* eopLevel = techFuncs::allocateGameClass<buildingLevel>(sizeof(buildingLevel) * levelNum);
+	entry->levels = techFuncs::allocateGameClass<buildingLevel>(sizeof(buildingLevel) * levelNum);
 	//making a complete copy of the building
 	for (int i = 0; i < levelNum; i++)
 	{
-		eopLevel[i] = oldEntry->levels[i];
-		addCaps(eopLevel, oldEntry->levels);
-		addPools(eopLevel, oldEntry->levels);
+		memset(&entry->levels[i], 0, sizeof(buildingLevel));
+		if (i < oldEntry->buildingLevelCount)
+		{
+			entry->levels[i] = oldEntry->levels[i];
+			addCaps(&entry->levels[i], &oldEntry->levels[i]);
+			addPools(&entry->levels[i], &oldEntry->levels[i]);
+		}
 	}
-	entry->levels = eopLevel;
 	return entry;
 }
 
@@ -126,7 +129,7 @@ void buildingLevel::addCapability(int capability, int16_t value, bool bonus, con
 	auto conditionPtr = &buildingLevelCondition;
 	_asm
 	{
-		push 3
+		push 2
 		push conditionPtr
 		push fakeText
 		mov eax, makeConditionFunc
@@ -168,7 +171,7 @@ void buildingLevel::addFactionCapability(int capability, int16_t value, bool bon
 	auto conditionPtr = &buildingLevelCondition;
 	_asm
 	{
-		push 3
+		push 2
 		push conditionPtr
 		push fakeText
 		mov eax, makeConditionFunc
@@ -200,7 +203,7 @@ void buildingLevel::addRecruitPool(int eduIndex, float initialSize, float gainPe
 	auto conditionPtr = &pool->buildingLevelCondition;
 	_asm
 	{
-		push 3
+		push 1
 		push conditionPtr
 		push fakeText
 		mov eax, makeConditionFunc
