@@ -132,7 +132,6 @@ void buildingLevel::addCapability(int capability, int16_t value, bool bonus, con
 	cap->replenishment = 0;
 	cap->max = 0;
 	cap->buildingLevelCondition = nullptr;
-	cap->nextCapability = nullptr;
 	auto fakeText = make_shared<fakeTextInput>(condition.c_str(), 0);
 	const auto makeConditionFunc = codes::offsets.makeBuildingCondition;
 	auto conditionPtr = &buildingLevelCondition;
@@ -175,7 +174,6 @@ void buildingLevel::addFactionCapability(int capability, int16_t value, bool bon
 	cap->replenishment = 0;
 	cap->max = 0;
 	cap->buildingLevelCondition = nullptr;
-	cap->nextCapability = nullptr;
 	auto fakeText = make_shared<fakeTextInput>(condition.c_str(), 0);
 	const auto makeConditionFunc = codes::offsets.makeBuildingCondition;
 	auto conditionPtr = &buildingLevelCondition;
@@ -212,7 +210,6 @@ void buildingLevel::addRecruitPool(int eduIndex, float initialSize, float gainPe
 	pool->gainPerTurn = gainPerTurn;
 	pool->maxSize = maxSize;
 	pool->buildingLevelCondition = nullptr;
-	pool->nextPool = nullptr;
 	auto fakeText = make_shared<fakeTextInput>(condition.c_str(), 0);
 	const auto makeConditionFunc = codes::offsets.makeBuildingCondition;
 	auto conditionPtr = &pool->buildingLevelCondition;
