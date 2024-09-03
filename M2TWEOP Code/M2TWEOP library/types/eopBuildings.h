@@ -19,9 +19,9 @@ public:
 	int16_t capabilityLvl; //0x0004
 	int16_t bonus; //0x0006
 	int32_t capabilityID; //0x0008
-	DWORD funcPointer;
-	struct buildingLevel* buildingLevel;
-	DWORD EDBpointer;
+	float initial;
+	float replenishment;
+	float max;
 	void* buildingLevelCondition; //0x0018
 	struct buildingLevelCapability* nextCapability; //0x001C
 	int getCapabilityID()
@@ -132,7 +132,8 @@ struct buildingLevel { /* (name, tga's, models, etc) */
 	char pad_0243[1]; //0x0243
 	uint32_t settlementMinLvl; //0x0244
 	int8_t cityOneCastleMinusOne; //0x0248
-	char pad_0249[19]; //0x0249
+	char pad_0249[3]; //0x0249
+	gameStdVector<int8_t> converts; //0x024C
 	struct buildingLevelCapability* capabilities; //0x025C
 	struct recruitPool* recruitPools; //0x0260
 	struct buildingLevelCapability* factionCapabilities; //0x0264
