@@ -704,7 +704,7 @@ namespace buildingHelpers
 		Get construction picture of building.
 		@function buildingLevel:getBuildingPicConstruction
 		@tparam int cultureID of the culture to set the pic for. Only cultures 0-6 are valid.
-		@treturn string path Path to the picture.
+		@tparam string path Path to the picture.
 		@usage
 			local path = buildingLevel:getBuildingPicConstruction(0)
 		*/
