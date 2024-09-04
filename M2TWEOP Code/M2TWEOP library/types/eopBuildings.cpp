@@ -141,7 +141,7 @@ void buildingLevel::addCapability(int capability, int16_t value, bool bonus, con
 //add new building capability, bonus refers to bonus keyboard in edb
 void buildingLevel::addFactionCapability(int capability, int16_t value, bool bonus, const std::string& condition)
 {
-	int capabilityNum = getFactionCapabilityNum();
+	const int capabilityNum = getFactionCapabilityNum();
 	buildingLevelCapability* cap;
 	if (capabilityNum == 0)
 	{
@@ -150,7 +150,7 @@ void buildingLevel::addFactionCapability(int capability, int16_t value, bool bon
 	}
 	else
 	{
-		auto lastCap = getFactionCapability(capabilityNum - 1);
+		const auto lastCap = getFactionCapability(capabilityNum - 1);
 		lastCap->nextCapability = techFuncs::createGameClass<buildingLevelCapability>();
 		cap = lastCap->nextCapability;
 	}
@@ -167,22 +167,15 @@ void buildingLevel::addFactionCapability(int capability, int16_t value, bool bon
 	cap->replenishment = 0;
 	cap->max = 0;
 	cap->buildingLevelCondition = nullptr;
-	auto fakeText = make_shared<fakeTextInput>(condition.c_str(), 0);
-	const auto makeConditionFunc = codes::offsets.makeBuildingCondition;
-	auto conditionPtr = &cap->buildingLevelCondition;
-	_asm
-	{
-		push 2
-		push conditionPtr
-		push fakeText
-		mov eax, makeConditionFunc
-		call eax
-	}
+	if (condition.empty())
+		return;
+	const auto fakeText = make_shared<fakeTextInput>(condition.c_str(), 0);
+	GAME_FUNC(void(__stdcall*)(fakeTextInput*, void**, int), makeBuildingCondition)(fakeText.get(), &cap->buildingLevelCondition, 2);
 }
 
 void buildingLevel::addRecruitPool(int eduIndex, float initialSize, float gainPerTurn, float maxSize, int16_t exp, const std::string& condition)
 {
-	int capabilityNum = getPoolNum();
+	const int capabilityNum = getPoolNum();
 	recruitPool* pool;
 	if (capabilityNum == 0)
 	{
@@ -191,7 +184,7 @@ void buildingLevel::addRecruitPool(int eduIndex, float initialSize, float gainPe
 	}
 	else
 	{
-		auto lastCap = getPool(capabilityNum - 1);
+		const auto lastCap = getPool(capabilityNum - 1);
 		lastCap->nextPool = techFuncs::createGameClass<recruitPool>();
 		pool = lastCap->nextPool;
 	}
@@ -203,17 +196,10 @@ void buildingLevel::addRecruitPool(int eduIndex, float initialSize, float gainPe
 	pool->gainPerTurn = gainPerTurn;
 	pool->maxSize = maxSize;
 	pool->buildingLevelCondition = nullptr;
-	auto fakeText = make_shared<fakeTextInput>(condition.c_str(), 0);
-	const auto makeConditionFunc = codes::offsets.makeBuildingCondition;
-	auto conditionPtr = &pool->buildingLevelCondition;
-	_asm
-	{
-		push 1
-		push conditionPtr
-		push fakeText
-		mov eax, makeConditionFunc
-		call eax
-	}
+	if (condition.empty())
+		return;
+	const auto fakeText = make_shared<fakeTextInput>(condition.c_str(), 0);
+	GAME_FUNC(void(__stdcall*)(fakeTextInput*, void**, int), makeBuildingCondition)(fakeText.get(), &pool->buildingLevelCondition, 1);
 }
 
 
