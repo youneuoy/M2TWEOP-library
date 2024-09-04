@@ -106,7 +106,7 @@ edbEntry* exportDescrBuildings::getBuildingByName(const std::string& name)
 //add new building capability, bonus refers to bonus keyboard in edb
 void buildingLevel::addCapability(int capability, int16_t value, bool bonus, const std::string& condition)
 {
-	int capabilityNum = getCapabilityNum();
+	const int capabilityNum = getCapabilityNum();
 	buildingLevelCapability* cap;
 	if (capabilityNum == 0)
 	{
@@ -115,7 +115,7 @@ void buildingLevel::addCapability(int capability, int16_t value, bool bonus, con
 	}
 	else
 	{
-		auto lastCap = getCapability(capabilityNum - 1);
+		const auto lastCap = getCapability(capabilityNum - 1);
 		lastCap->nextCapability = techFuncs::createGameClass<buildingLevelCapability>();
 		cap = lastCap->nextCapability;
 	}
@@ -132,17 +132,10 @@ void buildingLevel::addCapability(int capability, int16_t value, bool bonus, con
 	cap->replenishment = 0;
 	cap->max = 0;
 	cap->buildingLevelCondition = nullptr;
-	auto fakeText = make_shared<fakeTextInput>(condition.c_str(), 0);
-	const auto makeConditionFunc = codes::offsets.makeBuildingCondition;
-	auto conditionPtr = &buildingLevelCondition;
-	_asm
-	{
-		push 2
-		push conditionPtr
-		push fakeText
-		mov eax, makeConditionFunc
-		call eax
-	}
+	if (condition.empty())
+		return;
+	const auto fakeText = make_shared<fakeTextInput>(condition.c_str(), 0);
+	GAME_FUNC(void(__stdcall*)(fakeTextInput*, void**, int), makeBuildingCondition)(fakeText.get(), &cap->buildingLevelCondition, 2);
 }
 
 //add new building capability, bonus refers to bonus keyboard in edb
@@ -176,7 +169,7 @@ void buildingLevel::addFactionCapability(int capability, int16_t value, bool bon
 	cap->buildingLevelCondition = nullptr;
 	auto fakeText = make_shared<fakeTextInput>(condition.c_str(), 0);
 	const auto makeConditionFunc = codes::offsets.makeBuildingCondition;
-	auto conditionPtr = &buildingLevelCondition;
+	auto conditionPtr = &cap->buildingLevelCondition;
 	_asm
 	{
 		push 2
@@ -202,7 +195,7 @@ void buildingLevel::addRecruitPool(int eduIndex, float initialSize, float gainPe
 		lastCap->nextPool = techFuncs::createGameClass<recruitPool>();
 		pool = lastCap->nextPool;
 	}
-	memset(pool, 0, sizeof(buildingLevelCapability));
+	memset(pool, 0, sizeof(recruitPool));
 	pool->capabilityType = 5; //5 means normal unit, there are some other for agents I haven't added yet
 	pool->experienceOrLevel = exp; //for units this always is xp, for agents this can be agent
 	pool->unitID = eduIndex;
