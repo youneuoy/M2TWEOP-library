@@ -1,3 +1,4 @@
+---@diagnostic disable
 -----------------------------------------------------------------------------
 -- SMTP client support for the Lua language.
 -- LuaSocket toolkit.

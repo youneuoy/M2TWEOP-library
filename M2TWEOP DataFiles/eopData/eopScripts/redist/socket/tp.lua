@@ -1,3 +1,4 @@
+---@diagnostic disable
 -----------------------------------------------------------------------------
 -- Unified SMTP/FTP subsystem
 -- LuaSocket toolkit.

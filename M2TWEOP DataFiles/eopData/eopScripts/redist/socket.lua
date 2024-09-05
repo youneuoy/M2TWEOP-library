@@ -1,3 +1,4 @@
+---@diagnostic disable
 -----------------------------------------------------------------------------
 -- LuaSocket helper module
 -- Author: Diego Nehab

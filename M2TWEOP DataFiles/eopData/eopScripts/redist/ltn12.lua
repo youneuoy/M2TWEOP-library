@@ -1,3 +1,4 @@
+---@diagnostic disable
 -----------------------------------------------------------------------------
 -- LTN12 - Filters, sources, sinks and pumps.
 -- LuaSocket toolkit.

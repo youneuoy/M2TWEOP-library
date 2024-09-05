@@ -1,3 +1,4 @@
+---@diagnostic disable
 -----------------------------------------------------------------------------
 -- URI parsing, composition and relative URL resolution
 -- LuaSocket toolkit.

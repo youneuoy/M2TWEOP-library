@@ -1,3 +1,4 @@
+---@diagnostic disable: lowercase-global
 require('myconfigs')
 
 -- Helper for managing persistence of tables across save/load
