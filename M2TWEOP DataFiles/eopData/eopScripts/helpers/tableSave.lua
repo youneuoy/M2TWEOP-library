@@ -1,3 +1,4 @@
+---@diagnostic disable
 local write, writeIndent, writers, refCount;
 
 persistence =
