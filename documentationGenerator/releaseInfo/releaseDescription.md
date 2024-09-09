@@ -16,6 +16,7 @@
 
 ### **Library**
 - Reduced amount of EOP "branding" displayed on startup - *Medik*
+- Now multiple hero abilities in generated battles works - *youneuoy*
 
 ### **Lua Plugin**
 - Stopped the game still receiving keyboard/mouse inputs when the EOP Console was open - *Medik*
