@@ -733,9 +733,10 @@ namespace battleCreator
 						newGeneral->characterRecord->index = armySide->unitsForTransfer[i]->numberInArmy;
 						if (!newGen.hero_ability.empty())
 						{
-							std::string heroAbility = newGen.hero_ability;
-							newGeneral->ability = new char[heroAbility.size() + 1];
-							std::copy(heroAbility.begin(), heroAbility.end(), newGeneral->ability);
+							//std::string heroAbility = newGen.hero_ability;
+							//newGeneral->ability = new char[heroAbility.size() + 1];
+							//std::copy(heroAbility.begin(), heroAbility.end(), newGeneral->ability);
+							gameStringHelpers::setHashedString(&newGeneral->ability, newGen.hero_ability.c_str());
 						}
 						for (std::string& anc : newGen.ancillaries)
 						{
