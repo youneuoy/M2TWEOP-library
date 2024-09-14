@@ -741,6 +741,18 @@ void managerF::execPatches()
 	toCheckBuildUpgrade2->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onCheckSettHasBuilding patch" << '\n';
+	onCheckSettHasBuilding* toCheckSettHasBuilding = new onCheckSettHasBuilding(mem, (LPVOID)patchesForGame::onCheckSettHasBuilding, globals::dataS.gameVersion);
+	toCheckSettHasBuilding->SetNewCode();
+	toCheckSettHasBuilding->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying getPossibleConstructions patch" << '\n';
+	getPossibleConstructions* toGetPossibleConstructions = new getPossibleConstructions(mem, (LPVOID)patchesForGame::getPossibleConstructions, globals::dataS.gameVersion);
+	toGetPossibleConstructions->SetNewCode();
+	toGetPossibleConstructions->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onCanWithdrawPreBattle patch" << '\n';
 	onCanWithdrawPreBattle* toCanWithdrawPreBattle = new onCanWithdrawPreBattle(mem, (LPVOID)patchesForGame::onCanWithdrawPreBattle, globals::dataS.gameVersion);
 	toCanWithdrawPreBattle->SetNewCode();

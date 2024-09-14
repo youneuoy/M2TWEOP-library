@@ -886,6 +886,58 @@ building* patchesForGame::onGetBuildingById(const settlementBuildings* buildings
 	return nullptr;
 }
 
+int patchesForGame::onCheckSettHasBuilding(const settlementBuildings* buildings, int index)
+{
+	if (index < 0)
+		return 0;
+	for (int i = 0; i < buildings->buildingsNum; i++)
+	{
+		if (buildings->buildings[i]->edbEntry->buildingID == index)
+			return 1;
+	}
+	return 0;
+}
+
+void patchesForGame::getPossibleConstructions(exportDescrBuildings* edb, settlementStruct* sett, void* data, void* caps,
+	void* bonus, const bool checkQueue, const bool forceTemple)
+{
+	int facId = sett->faction->factionID;
+	if (sett->faction->factionRecord->slave && sett->subFactionID < 31)
+		facId = sett->subFactionID;
+	edbEntry* entries[2048];  // NOLINT(clang-diagnostic-vla-extension)
+	const int total = GAME_FUNC(int(__thiscall*)(exportDescrBuildings*, int8_t, edbEntry**), getEntriesByFaction)(edb, static_cast<int8_t>(facId), entries);
+	const DWORD context = techFuncs::allocateGameMem(0x840);
+	GAME_FUNC(void(__thiscall*)(DWORD, settlementStruct*, void*), createSettlementConditionContext)(context, sett, caps);
+	const auto level = sett->level;
+	for (int i = 0; i < total; i++)
+	{
+		if (const auto currentEntry = entries[i]; currentEntry)
+		{
+			if (!GAME_FUNC(bool(__thiscall*)(DWORD, edbEntry*, bool), isBuildingTypePresent)(context, currentEntry, false)
+				&& currentEntry->classification != 5
+				&& (!currentEntry->isCoreBuilding || GAME_FUNC(bool(__thiscall*)(settlementStruct*), canSettlementUpgrade)(sett))
+				&& (forceTemple || !currentEntry->isTemple || !sett->hasReligiousBuilding))
+			{
+				const bool isCastle = sett->isCastle;
+				if (const auto buildLvl = currentEntry->classification == 4 ? level : 0;
+					GAME_FUNC(bool(__thiscall*)(edbEntry*, int8_t, int, int, bool), isLevelAvailableForLevel)(currentEntry, static_cast<int8_t>(facId), level, buildLvl, isCastle))
+				{
+					if (GAME_FUNC(bool(__thiscall*)(edbEntry*, DWORD, int), evaluateBuildingGuard)(currentEntry, context, 0) && currentEntry->levels->buildTime)
+					{
+						const auto item = GAME_FUNC(buildingInQueue*(__thiscall*)(void*), createConstructionOption)(data);
+						if (currentEntry->classification == 4)
+							GAME_FUNC(void(__thiscall*)(buildingInQueue*, settlementStruct*, edbEntry*, int, void*), createConvertSett)(item, sett, currentEntry, level, bonus);
+						else
+							GAME_FUNC(void(__thiscall*)(buildingInQueue*, settlementStruct*, edbEntry*, void*), createBuildingSett)(item, sett, currentEntry, bonus);
+						if (checkQueue && GAME_FUNC(bool(__thiscall*)(DWORD, buildingInQueue*), buildQueueConflictTest)(reinterpret_cast<DWORD>(sett) + 0x330, item))
+							GAME_FUNC(void(__thiscall*)(void*), removeBuildingSelection)(data);
+					}
+				}
+			}
+		}
+	}
+}
+
 int patchesForGame::onConflictTest(const buildingsQueue* queue, int index)
 {
 	for (int i = 0; i < queue->buildingsInQueue; i++)

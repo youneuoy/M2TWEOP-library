@@ -1793,6 +1793,30 @@ private:
 	LPVOID funcAddress;
 };
 
+class onCheckSettHasBuilding
+	:public AATemplate
+{
+public:
+	onCheckSettHasBuilding(MemWork* mem, LPVOID addr, int ver);
+	~onCheckSettHasBuilding() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class getPossibleConstructions
+	:public AATemplate
+{
+public:
+	getPossibleConstructions(MemWork* mem, LPVOID addr, int ver);
+	~getPossibleConstructions() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onGetBuildingByIdConst
 	:public AATemplate
 {

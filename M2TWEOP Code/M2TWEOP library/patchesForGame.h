@@ -52,6 +52,8 @@ public:
 	static int __fastcall onCalculateCommand(const characterRecord* general);
 	static void __fastcall onRemoveFromUnitQueue(const unitRQ* queue, int index);
 	static building* __fastcall onGetBuildingById(const settlementBuildings* buildings, int index);
+	static int __fastcall onCheckSettHasBuilding(const settlementBuildings* buildings, int index);
+	static void __fastcall getPossibleConstructions(exportDescrBuildings* edb, settlementStruct* sett, void* data, void* caps, void* bonus, bool checkQueue, bool forceTemple);
 	static int __fastcall onConflictTest(const buildingsQueue* queue, int index);
 	static building* __fastcall onCheckBuildUpgrade(const settlementStruct* sett, int buildingId);
 	static void __fastcall onAttachRegionSettlement(settlementStruct* sett, int regionId);

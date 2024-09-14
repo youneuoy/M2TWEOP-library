@@ -117,6 +117,17 @@ public:
 		DWORD getStringFromTable = NULL;
 		DWORD scriptCommandOne = NULL;
 		DWORD scriptCommandTwo = NULL;
+		DWORD getEntriesByFaction = NULL;
+		DWORD createSettlementConditionContext = NULL;
+		DWORD isBuildingTypePresent = NULL;
+		DWORD canSettlementUpgrade = NULL;
+		DWORD isLevelAvailableForLevel = NULL;
+		DWORD evaluateBuildingGuard = NULL;
+		DWORD createConstructionOption = NULL;
+		DWORD createConvertSett = NULL;
+		DWORD createBuildingSett = NULL;
+		DWORD buildQueueConflictTest = NULL;
+		DWORD removeBuildingSelection = NULL;
 
 
 		DWORD autoResolveFunc = NULL;

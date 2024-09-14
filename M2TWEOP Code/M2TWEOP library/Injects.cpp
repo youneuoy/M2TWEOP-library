@@ -4907,6 +4907,34 @@ void onGetBuildingById::SetNewCode()
 	delete a;
 }
 
+onCheckSettHasBuilding::onCheckSettHasBuilding(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005EB234;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EA4F0;
+}
+
+void onCheckSettHasBuilding::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(edx);
+	a->push(ecx);
+	a->push(eax);
+	a->mov(edx, dword_ptr(eax, 0x14));
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->cmp(eax, 0);
+	a->pop(eax);
+	a->pop(ecx);
+	a->pop(edx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onGetBuildingByIdConst::onGetBuildingByIdConst(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
@@ -4925,6 +4953,41 @@ void onGetBuildingByIdConst::SetNewCode()
 	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
 	a->call(eax);
 	a->pop(edx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+getPossibleConstructions::getPossibleConstructions(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x8A8D70;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EA500;
+}
+
+void getPossibleConstructions::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ebx);
+	a->push(esi);
+	a->push(edi);
+	a->push(byte_ptr(esp, 0x24));
+	a->push(byte_ptr(esp, 0x24));
+	a->push(dword_ptr(esp, 0x24));
+	a->push(dword_ptr(esp, 0x24));
+	a->push(dword_ptr(esp, 0x24));
+	a->mov(edx, dword_ptr(esp, 0x24));
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(edi);
+	a->pop(esi);
+	a->pop(ebx);
+	a->sub(esp, 0x0A4C);
+	a->mov(eax, 0x8A8EFF);
+	a->jmp(eax);
 	a->ret();
 	m_cheatBytes = static_cast<unsigned char*>(a->make());
 	delete a;
