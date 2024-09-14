@@ -827,8 +827,7 @@ bool attackSettlementOrder::execute()
 						&& siege->army->canReceiveMerge(assignedArmy->resource->army))
 					{
 						assignedArmy->resource->army->gen->hasEopOrders = true;
-						const auto [xCoord, yCoord] = siege->army->getCoords();
-						if (assignedArmy->resource->army->moveTactical(xCoord, yCoord, true))
+						if (const auto [xCoord, yCoord] = siege->army->getCoords(); assignedArmy->resource->army->moveTactical(xCoord, yCoord, true))
 						{
 							if (const auto& armyRes = globalEopAiConfig::getInstance()->findArmyResource(siege->army))
 								armyRes->unitCount += assignedArmy->resource->army->numOfUnits;

@@ -51,6 +51,9 @@ public:
 	static int __fastcall onCanWithdrawPreBattle(const settlementStruct* settlement);
 	static int __fastcall onCalculateCommand(const characterRecord* general);
 	static void __fastcall onRemoveFromUnitQueue(const unitRQ* queue, int index);
+	static building* __fastcall onGetBuildingById(const settlementBuildings* buildings, int index);
+	static int __fastcall onConflictTest(const buildingsQueue* queue, int index);
+	static building* __fastcall onCheckBuildUpgrade(const settlementStruct* sett, int buildingId);
 	static void __fastcall onAttachRegionSettlement(settlementStruct* sett, int regionId);
 	static void __fastcall onCalculateSettlement(settlementStruct* sett);
 	static int* __fastcall onGetSupportingArmies(armyStruct* defender, armyStruct* attacker);

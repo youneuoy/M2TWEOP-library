@@ -874,6 +874,48 @@ void patchesForGame::onRemoveFromUnitQueue(const unitRQ* queue, const int index)
 	gameEvents::onRemoveFromUnitQueue(item);
 }
 
+building* patchesForGame::onGetBuildingById(const settlementBuildings* buildings, const int index)
+{
+	if (index < 0)
+		return nullptr;
+	for (int i = 0; i < buildings->buildingsNum; i++)
+	{
+		if (buildings->buildings[i]->edbEntry->buildingID == index)
+			return buildings->buildings[i];
+	}
+	return nullptr;
+}
+
+int patchesForGame::onConflictTest(const buildingsQueue* queue, int index)
+{
+	for (int i = 0; i < queue->buildingsInQueue; i++)
+	{
+		const auto item = queue->items[(i + queue->firstIndex) % 6];
+		const auto entry = item.edbEntry;
+		const auto build = item.existsBuilding;
+		if ( item.constructType == 2)
+		{
+			if (build && build->edbEntry && build->edbEntry->buildingID == index)
+				return 1;
+		}
+		else if (entry && entry->buildingID == index)
+			return 1;
+	}
+	return 0;
+}
+
+building* patchesForGame::onCheckBuildUpgrade(const settlementStruct* sett, const int buildingId)
+{
+	if (buildingId < 0)
+		return nullptr;
+	for (int i = 0; i < sett->buildingsNum; i++)
+	{
+		if (sett->buildings[i]->edbEntry->buildingID == buildingId)
+			return sett->buildings[i];
+	}
+	return nullptr;
+}
+
 void patchesForGame::onAttachRegionSettlement(settlementStruct* sett, int regionId)
 {
 	sett->regionID = regionId;

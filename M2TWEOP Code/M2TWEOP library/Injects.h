@@ -1721,6 +1721,90 @@ private:
 	LPVOID funcAddress;
 };
 
+class onPartialConstructionPush
+	:public AATemplate
+{
+public:
+	onPartialConstructionPush(MemWork* mem, LPVOID addr, int ver);
+	~onPartialConstructionPush() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetBuildingById
+	:public AATemplate
+{
+public:
+	onGetBuildingById(MemWork* mem, LPVOID addr, int ver);
+	~onGetBuildingById() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onConflictTest
+	:public AATemplate
+{
+public:
+	onConflictTest(MemWork* mem, LPVOID addr, int ver);
+	~onConflictTest() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onConflictTest2
+	:public AATemplate
+{
+public:
+	onConflictTest2(MemWork* mem, LPVOID addr, int ver);
+	~onConflictTest2() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCheckBuildUpgrade
+	:public AATemplate
+{
+public:
+	onCheckBuildUpgrade(MemWork* mem, LPVOID addr, int ver);
+	~onCheckBuildUpgrade() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCheckBuildUpgrade2
+	:public AATemplate
+{
+public:
+	onCheckBuildUpgrade2(MemWork* mem, LPVOID addr, int ver);
+	~onCheckBuildUpgrade2() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetBuildingByIdConst
+	:public AATemplate
+{
+public:
+	onGetBuildingByIdConst(MemWork* mem, LPVOID addr, int ver);
+	~onGetBuildingByIdConst() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onDecideMissionTarget
 	:public AATemplate
 {

@@ -699,6 +699,48 @@ void managerF::execPatches()
 	toAddSettlementToDiplomacyScroll->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onPartialConstructionPush patch" << '\n';
+	onPartialConstructionPush* toPartialConstructionPush = new onPartialConstructionPush(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toPartialConstructionPush->SetNewCode();
+	toPartialConstructionPush->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onGetBuildingByIdConst patch" << '\n';
+	onGetBuildingByIdConst* toGetBuildingByIdConst = new onGetBuildingByIdConst(mem, (LPVOID)patchesForGame::onGetBuildingById, globals::dataS.gameVersion);
+	toGetBuildingByIdConst->SetNewCode();
+	toGetBuildingByIdConst->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onGetBuildingById patch" << '\n';
+	onGetBuildingById* toGetBuildingById = new onGetBuildingById(mem, (LPVOID)patchesForGame::onGetBuildingById, globals::dataS.gameVersion);
+	toGetBuildingById->SetNewCode();
+	toGetBuildingById->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onConflictTest2 patch" << '\n';
+	onConflictTest2* toConflictTest2 = new onConflictTest2(mem, (LPVOID)patchesForGame::onConflictTest, globals::dataS.gameVersion);
+	toConflictTest2->SetNewCode();
+	toConflictTest2->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onConflictTest patch" << '\n';
+	onConflictTest* toConflictTest = new onConflictTest(mem, (LPVOID)patchesForGame::onConflictTest, globals::dataS.gameVersion);
+	toConflictTest->SetNewCode();
+	toConflictTest->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onCheckBuildUpgrade patch" << '\n';
+	onCheckBuildUpgrade* toCheckBuildUpgrade = new onCheckBuildUpgrade(mem, (LPVOID)patchesForGame::onCheckBuildUpgrade, globals::dataS.gameVersion);
+	toCheckBuildUpgrade->SetNewCode();
+	toCheckBuildUpgrade->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onCheckBuildUpgrade2 patch" << '\n';
+	onCheckBuildUpgrade2* toCheckBuildUpgrade2 = new onCheckBuildUpgrade2(mem, (LPVOID)patchesForGame::onCheckBuildUpgrade, globals::dataS.gameVersion);
+	toCheckBuildUpgrade2->SetNewCode();
+	toCheckBuildUpgrade2->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onCanWithdrawPreBattle patch" << '\n';
 	onCanWithdrawPreBattle* toCanWithdrawPreBattle = new onCanWithdrawPreBattle(mem, (LPVOID)patchesForGame::onCanWithdrawPreBattle, globals::dataS.gameVersion);
 	toCanWithdrawPreBattle->SetNewCode();

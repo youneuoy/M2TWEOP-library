@@ -196,7 +196,7 @@ struct buildingInQueue { /* building in settlement queue */
 };
 
 struct buildingsQueue {
-	char smthingBuildingIdInQueue[128][2];
+	uint16_t summaryFlags[128];
 	int16_t somethingTemple;
 	int16_t conversion;
 	struct buildingInQueue items[6];
@@ -439,6 +439,15 @@ struct buildingDamage
 	int	type;
 	int8_t health;
 	char pad[3];
+};
+
+struct settlementBuildings
+{
+	struct building* buildingsByIndex[128];
+	struct building* buildings[128];
+	int buildingsNum; /* number of the buildings in the settlement */
+	int8_t hasReligiousBuilding;
+	struct building *guildList;
 };
 
 //settlement

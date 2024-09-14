@@ -102,12 +102,24 @@ character* settlementStruct::getCharacter(const int index)
 	return tile->getTileCharacterAtIndex(index);
 }
 
+building* getBuildingByIndex(const settlementStruct* sett, const int index)
+{
+	if (index < 0)
+		return nullptr;
+	for (int i = 0; i < sett->buildingsNum; i++)
+	{
+		if (sett->buildings[i]->edbEntry->buildingID == index)
+			return sett->buildings[i];
+	}
+	return nullptr;
+}
+
 building* settlementStruct::buildingPresent(const std::string& buildingName)
 {
 	const auto id = buildingHelpers::getBuildingId(buildingName);
 	if (id == -1)
 		return nullptr;
-	return buildingsByIndex[id];
+	return getBuildingByIndex(this, id);
 }
 
 bool settlementStruct::buildingPresentMinLevel(const std::string& levelName, const bool exact)
@@ -115,7 +127,7 @@ bool settlementStruct::buildingPresentMinLevel(const std::string& levelName, con
 	const auto id = buildingHelpers::getBuildingLevelId(levelName);
 	if (id == -1)
 		return false;
-	const auto building = buildingsByIndex[id];
+	const auto building = getBuildingByIndex(this, id);
 	if (!building)
 		return false;
 	const auto lvl = buildingHelpers::getBuildingLevelPos(levelName);
@@ -696,11 +708,8 @@ namespace settlementHelpers
 
 	buildingInQueue* getBuildingInQueue(buildingsQueue* queue, int position)
 	{
-		if (position > 0 && position <= queue->buildingsInQueue) {
-			int index = queue->firstIndex + position - 1;
-			if (index > 5) { index = index - 6; }
-			return &(queue->items[index]);
-		}
+		if (position > 0)
+			return &queue->items[(position + queue->firstIndex) % 6];
 		return nullptr;
 	}
 	
