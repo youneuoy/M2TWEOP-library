@@ -904,7 +904,7 @@ void patchesForGame::getPossibleConstructions(exportDescrBuildings* edb, settlem
 	int facId = sett->faction->factionID;
 	if (sett->faction->factionRecord->slave && sett->subFactionID < 31)
 		facId = sett->subFactionID;
-	edbEntry* entries[2048];  // NOLINT(clang-diagnostic-vla-extension)
+	edbEntry* entries[2048];
 	const int total = GAME_FUNC(int(__thiscall*)(exportDescrBuildings*, int8_t, edbEntry**), getEntriesByFaction)(edb, static_cast<int8_t>(facId), entries);
 	const DWORD context = techFuncs::allocateGameMem(0x840);
 	GAME_FUNC(void(__thiscall*)(DWORD, settlementStruct*, void*), createSettlementConditionContext)(context, sett, caps);

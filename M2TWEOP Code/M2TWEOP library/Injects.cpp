@@ -5063,6 +5063,7 @@ void onCheckBuildUpgrade::SetNewCode()
 	a->mov(edx, eax);
 	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
 	a->call(eax);
+	a->mov(ebx, eax);
 	a->pop(edx);
 	a->pop(ecx);
 	a->ret();
