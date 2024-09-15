@@ -4884,6 +4884,43 @@ void onPartialConstructionPush::SetNewCode()
 	delete a;
 }
 
+onAddBuilding::onAddBuilding(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x5EAE1D;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EA550;
+}
+
+void onAddBuilding::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(edx, dword_ptr(edx, 0x14));
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onRemoveBuilding::onRemoveBuilding(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x5EA9F6;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EA550;
+}
+
+void onRemoveBuilding::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onGetBuildingById::onGetBuildingById(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
@@ -5064,6 +5101,258 @@ void onCheckBuildUpgrade::SetNewCode()
 	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
 	a->call(eax);
 	a->mov(ebx, eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onSetCqFlags::onSetCqFlags(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005EB3C0;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EAF0C;
+}
+
+void onSetCqFlags::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onSetCqFlags2::onSetCqFlags2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005EB3F7;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EAF0C;
+}
+
+void onSetCqFlags2::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onRemoveCqFlags::onRemoveCqFlags(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005EB450;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EAF0C;
+}
+
+void onRemoveCqFlags::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onRemoveCqFlags2::onRemoveCqFlags2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005EB495;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EAF0C;
+}
+
+void onRemoveCqFlags2::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onAddBuildingCapsAfterConstruction::onAddBuildingCapsAfterConstruction(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005ED4E2;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EAF0C;
+}
+
+void onAddBuildingCapsAfterConstruction::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(eax);
+	a->push(ecx);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(dx, eax);
+	a->pop(ecx);
+	a->pop(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onAddBuildingCapsAfterConstruction2::onAddBuildingCapsAfterConstruction2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x5ED507;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EAF0C;
+}
+
+void onAddBuildingCapsAfterConstruction2::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(eax);
+	a->push(edx);
+	a->mov(edx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(cx, eax);
+	a->pop(edx);
+	a->pop(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onAddBuildingCapsAfterConstruction3::onAddBuildingCapsAfterConstruction3(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005ED60D;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EAF0C;
+}
+
+void onAddBuildingCapsAfterConstruction3::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(eax);
+	a->push(ecx);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(dx, eax);
+	a->pop(ecx);
+	a->pop(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onAddBuildingCapsAfterConstruction4::onAddBuildingCapsAfterConstruction4(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005ED632;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EAF0C;
+}
+
+void onAddBuildingCapsAfterConstruction4::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(eax);
+	a->push(edx);
+	a->mov(edx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(cx, eax);
+	a->pop(edx);
+	a->pop(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onAddBuildingCapsAfterConstruction5::onAddBuildingCapsAfterConstruction5(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x5EDA2A;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EAF0C;
+}
+
+void onAddBuildingCapsAfterConstruction5::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ecx);
+	a->push(edx);
+	a->mov(edx, eax);
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(ax, eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onGetDefensesBuilding::onGetDefensesBuilding(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x5EAEA3;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EAF0C;
+}
+
+void onGetDefensesBuilding::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ecx);
+	a->push(edx);
+	a->mov(edx, dword_ptr(eax, 0x14));
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onIsBuildingTypePresentAtMinLevel::onIsBuildingTypePresentAtMinLevel(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x5EB254;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EAF0C;
+}
+
+void onIsBuildingTypePresentAtMinLevel::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ecx);
+	a->mov(edx, dword_ptr(eax, 0x14));
+	a->push(edx);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
 	a->pop(edx);
 	a->pop(ecx);
 	a->ret();

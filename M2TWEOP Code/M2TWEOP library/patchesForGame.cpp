@@ -951,7 +951,29 @@ int patchesForGame::onConflictTest(const buildingsQueue* queue, int index)
 				return 1;
 		}
 		else if (entry && entry->buildingID == index)
+		{
 			return 1;
+		}
+	}
+	return 0;
+}
+
+int patchesForGame::onAddBuildingCapsAfterConstruction(const settlementStruct* sett, int index)
+{
+	for (int i = 0; i < sett->buildingsQueueArray.buildingsInQueue; i++)
+	{
+		const auto item = sett->buildingsQueueArray.items[(i + sett->buildingsQueueArray.firstIndex) % 6];
+		const auto entry = item.edbEntry;
+		const auto build = item.existsBuilding;
+		if ( item.constructType == 2)
+		{
+			if (build && build->edbEntry && build->edbEntry->buildingID == index)
+				return 3;
+		}
+		else if (entry && entry->buildingID == index)
+		{
+			return 1;
+		}
 	}
 	return 0;
 }

@@ -705,6 +705,18 @@ void managerF::execPatches()
 	toPartialConstructionPush->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onRemoveBuilding patch" << '\n';
+	onRemoveBuilding* toRemoveBuilding = new onRemoveBuilding(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toRemoveBuilding->SetNewCode();
+	toRemoveBuilding->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onAddBuilding patch" << '\n';
+	onAddBuilding* toAddBuilding = new onAddBuilding(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toAddBuilding->SetNewCode();
+	toAddBuilding->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onGetBuildingByIdConst patch" << '\n';
 	onGetBuildingByIdConst* toGetBuildingByIdConst = new onGetBuildingByIdConst(mem, (LPVOID)patchesForGame::onGetBuildingById, globals::dataS.gameVersion);
 	toGetBuildingByIdConst->SetNewCode();
@@ -715,6 +727,18 @@ void managerF::execPatches()
 	onGetBuildingById* toGetBuildingById = new onGetBuildingById(mem, (LPVOID)patchesForGame::onGetBuildingById, globals::dataS.gameVersion);
 	toGetBuildingById->SetNewCode();
 	toGetBuildingById->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onGetDefensesBuilding patch" << '\n';
+	onGetDefensesBuilding* toGetDefensesBuilding = new onGetDefensesBuilding(mem, (LPVOID)patchesForGame::onGetBuildingById, globals::dataS.gameVersion);
+	toGetDefensesBuilding->SetNewCode();
+	toGetDefensesBuilding->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onIsBuildingTypePresentAtMinLevel patch" << '\n';
+	onIsBuildingTypePresentAtMinLevel* toIsBuildingTypePresentAtMinLevel = new onIsBuildingTypePresentAtMinLevel(mem, (LPVOID)patchesForGame::onGetBuildingById, globals::dataS.gameVersion);
+	toIsBuildingTypePresentAtMinLevel->SetNewCode();
+	toIsBuildingTypePresentAtMinLevel->Enable();
 	f1 << "Done" << '\n';
 	
 	f1 << "Start applying onConflictTest2 patch" << '\n';
@@ -751,6 +775,48 @@ void managerF::execPatches()
 	getPossibleConstructions* toGetPossibleConstructions = new getPossibleConstructions(mem, (LPVOID)patchesForGame::getPossibleConstructions, globals::dataS.gameVersion);
 	toGetPossibleConstructions->SetNewCode();
 	toGetPossibleConstructions->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onSetCqFlags patch" << '\n';
+	onSetCqFlags* toSetCqFlags = new onSetCqFlags(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toSetCqFlags->SetNewCode();
+	toSetCqFlags->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onSetCqFlags2 patch" << '\n';
+	onSetCqFlags2* toSetCqFlags2 = new onSetCqFlags2(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toSetCqFlags2->SetNewCode();
+	toSetCqFlags2->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onAddBuildingCapsAfterConstruction patch" << '\n';
+	onAddBuildingCapsAfterConstruction* toAddBuildingCapsAfterConstruction = new onAddBuildingCapsAfterConstruction(mem, (LPVOID)patchesForGame::onAddBuildingCapsAfterConstruction, globals::dataS.gameVersion);
+	toAddBuildingCapsAfterConstruction->SetNewCode();
+	toAddBuildingCapsAfterConstruction->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onAddBuildingCapsAfterConstruction2 patch" << '\n';
+	onAddBuildingCapsAfterConstruction2* toAddBuildingCapsAfterConstruction2 = new onAddBuildingCapsAfterConstruction2(mem, (LPVOID)patchesForGame::onAddBuildingCapsAfterConstruction, globals::dataS.gameVersion);
+	toAddBuildingCapsAfterConstruction2->SetNewCode();
+	toAddBuildingCapsAfterConstruction2->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onAddBuildingCapsAfterConstruction3 patch" << '\n';
+	onAddBuildingCapsAfterConstruction3* toAddBuildingCapsAfterConstruction3 = new onAddBuildingCapsAfterConstruction3(mem, (LPVOID)patchesForGame::onAddBuildingCapsAfterConstruction, globals::dataS.gameVersion);
+	toAddBuildingCapsAfterConstruction3->SetNewCode();
+	toAddBuildingCapsAfterConstruction3->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onAddBuildingCapsAfterConstruction4 patch" << '\n';
+	onAddBuildingCapsAfterConstruction4* toAddBuildingCapsAfterConstruction4 = new onAddBuildingCapsAfterConstruction4(mem, (LPVOID)patchesForGame::onAddBuildingCapsAfterConstruction, globals::dataS.gameVersion);
+	toAddBuildingCapsAfterConstruction4->SetNewCode();
+	toAddBuildingCapsAfterConstruction4->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onAddBuildingCapsAfterConstruction5 patch" << '\n';
+	onAddBuildingCapsAfterConstruction5* toAddBuildingCapsAfterConstruction5 = new onAddBuildingCapsAfterConstruction5(mem, (LPVOID)patchesForGame::onAddBuildingCapsAfterConstruction, globals::dataS.gameVersion);
+	toAddBuildingCapsAfterConstruction5->SetNewCode();
+	toAddBuildingCapsAfterConstruction5->Enable();
 	f1 << "Done" << '\n';
 	
 	f1 << "Start applying onCanWithdrawPreBattle patch" << '\n';

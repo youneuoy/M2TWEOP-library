@@ -1733,6 +1733,30 @@ private:
 	LPVOID funcAddress;
 };
 
+class onAddBuilding
+	:public AATemplate
+{
+public:
+	onAddBuilding(MemWork* mem, LPVOID addr, int ver);
+	~onAddBuilding() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onRemoveBuilding
+	:public AATemplate
+{
+public:
+	onRemoveBuilding(MemWork* mem, LPVOID addr, int ver);
+	~onRemoveBuilding() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onGetBuildingById
 	:public AATemplate
 {
@@ -1811,6 +1835,139 @@ class getPossibleConstructions
 public:
 	getPossibleConstructions(MemWork* mem, LPVOID addr, int ver);
 	~getPossibleConstructions() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onSetCqFlags
+	:public AATemplate
+{
+public:
+	onSetCqFlags(MemWork* mem, LPVOID addr, int ver);
+	~onSetCqFlags() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onSetCqFlags2
+	:public AATemplate
+{
+public:
+	onSetCqFlags2(MemWork* mem, LPVOID addr, int ver);
+	~onSetCqFlags2() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onRemoveCqFlags
+	:public AATemplate
+{
+public:
+	onRemoveCqFlags(MemWork* mem, LPVOID addr, int ver);
+	~onRemoveCqFlags() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onRemoveCqFlags2
+	:public AATemplate
+{
+public:
+	onRemoveCqFlags2(MemWork* mem, LPVOID addr, int ver);
+	~onRemoveCqFlags2() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onAddBuildingCapsAfterConstruction
+	:public AATemplate
+{
+public:
+	onAddBuildingCapsAfterConstruction(MemWork* mem, LPVOID addr, int ver);
+	~onAddBuildingCapsAfterConstruction() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onAddBuildingCapsAfterConstruction2
+	:public AATemplate
+{
+public:
+	onAddBuildingCapsAfterConstruction2(MemWork* mem, LPVOID addr, int ver);
+	~onAddBuildingCapsAfterConstruction2() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onAddBuildingCapsAfterConstruction3
+	:public AATemplate
+{
+public:
+	onAddBuildingCapsAfterConstruction3(MemWork* mem, LPVOID addr, int ver);
+	~onAddBuildingCapsAfterConstruction3() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onAddBuildingCapsAfterConstruction4
+	:public AATemplate
+{
+public:
+	onAddBuildingCapsAfterConstruction4(MemWork* mem, LPVOID addr, int ver);
+	~onAddBuildingCapsAfterConstruction4() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onAddBuildingCapsAfterConstruction5
+	:public AATemplate
+{
+public:
+	onAddBuildingCapsAfterConstruction5(MemWork* mem, LPVOID addr, int ver);
+	~onAddBuildingCapsAfterConstruction5() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetDefensesBuilding
+	:public AATemplate
+{
+public:
+	onGetDefensesBuilding(MemWork* mem, LPVOID addr, int ver);
+	~onGetDefensesBuilding() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+
+class onIsBuildingTypePresentAtMinLevel
+	:public AATemplate
+{
+public:
+	onIsBuildingTypePresentAtMinLevel(MemWork* mem, LPVOID addr, int ver);
+	~onIsBuildingTypePresentAtMinLevel() = default;
 	
 	void SetNewCode();
 private:

@@ -55,6 +55,7 @@ public:
 	static int __fastcall onCheckSettHasBuilding(const settlementBuildings* buildings, int index);
 	static void __fastcall getPossibleConstructions(exportDescrBuildings* edb, settlementStruct* sett, void* data, void* caps, void* bonus, bool checkQueue, bool forceTemple);
 	static int __fastcall onConflictTest(const buildingsQueue* queue, int index);
+	static int __fastcall onAddBuildingCapsAfterConstruction(const settlementStruct* sett, int index);
 	static building* __fastcall onCheckBuildUpgrade(const settlementStruct* sett, int buildingId);
 	static void __fastcall onAttachRegionSettlement(settlementStruct* sett, int regionId);
 	static void __fastcall onCalculateSettlement(settlementStruct* sett);
