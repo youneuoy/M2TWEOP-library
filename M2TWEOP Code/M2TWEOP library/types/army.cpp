@@ -285,9 +285,11 @@ bool armyStruct::canReceiveMerge(const armyStruct* other)
 {
 	if (!other || !this)  // NOLINT(clang-diagnostic-undefined-bool-conversion)
 		return false;
+	if (faction->factionID != other->faction->factionID)
+		return false;
 	if (settlement && settlement->siegeNum > 0)
 		return false;
-	if (faction->factionID != other->faction->factionID)
+	if (other->settlement && other->settlement->siegeNum > 0)
 		return false;
 	if (numOfUnits + other->numOfUnits > 20)
 		return false;

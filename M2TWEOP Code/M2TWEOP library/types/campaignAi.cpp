@@ -814,8 +814,12 @@ bool attackSettlementOrder::execute()
 				continue;
 			if (assignedArmy->resource->army->siege && globalEopAiConfig::getInstance()->isEndTurn)
 				continue;
-			const std::string logString2 = "General: " + string(assignedArmy->resource->army->gen->characterRecord->fullName);
-			gameHelpers::logStringGame(logString2);
+			
+			if (assignedArmy->resource->army->gen->characterRecord->fullName)
+			{
+				const std::string logString2 = "General: " + string(assignedArmy->resource->army->gen->characterRecord->fullName);
+				gameHelpers::logStringGame(logString2);
+			}
 			const std::string logString = "Settlement: " + string(targetSettlement->settlement->name);
 			gameHelpers::logStringGame(logString);
 			if (targetSettlement->settlement->siegeNum > 0 && !assignedArmy->resource->army->siege)
@@ -1119,8 +1123,11 @@ bool attackArmyOrder::execute()
 		{
 			if (!assignedArmy->resource->validate() || !targetArmy->army || !targetArmy->army->gen || targetArmy->army->gen->markedForDeath)
 				continue;
-			const std::string logString2 = "General: " + string(assignedArmy->resource->army->gen->characterRecord->fullName);
-			gameHelpers::logStringGame(logString2);
+			if (assignedArmy->resource->army->gen->characterRecord->fullName)
+			{
+				const std::string logString2 = "General: " + string(assignedArmy->resource->army->gen->characterRecord->fullName);
+				gameHelpers::logStringGame(logString2);
+			}
 			if (assignedArmy->moveCost < assignedArmy->resource->army->gen->movePointsArmy && assignedArmy->turns < 2)
 			{
 				assignedArmy->resource->army->gen->hasEopOrders = true;
@@ -1169,8 +1176,11 @@ bool attackArmyOrder::execute()
 				continue;
 			assignedArmy->resource->army->gen->hasEopOrders = true;
 			assignedArmy->resource->used = true;
-			const std::string logString2 = "General: " + string(assignedArmy->resource->army->gen->characterRecord->fullName);
-			gameHelpers::logStringGame(logString2);
+			if (assignedArmy->resource->army->gen->characterRecord->fullName)
+			{
+				const std::string logString2 = "General: " + string(assignedArmy->resource->army->gen->characterRecord->fullName);
+				gameHelpers::logStringGame(logString2);
+			}
 			TURN_HAD_ACTION = true;
 			tileNums[tileIndex] += assignedArmy->resource->army->numOfUnits;
 			totalCommitted += assignedArmy->resource->army->totalStrength;
@@ -1246,7 +1256,8 @@ bool defendSettlementOrder::execute()
 			assignedArmy->resource->targets--;
 			continue;
 		}
-		gameHelpers::logStringGame("character: " + string(assignedArmy->resource->army->gen->characterRecord->fullName));
+		if (assignedArmy->resource->army->gen->characterRecord->fullName)
+			gameHelpers::logStringGame("character: " + string(assignedArmy->resource->army->gen->characterRecord->fullName));
 		assignedArmy->resource->army->gen->hasEopOrders = true;
 		assignedArmy->resource->used = true;
 		totalCommitted += assignedArmy->resource->army->totalStrength;
@@ -1523,8 +1534,10 @@ void globalEopAiConfig::characterTurnStart(character* currentChar)
 			if (xCoord == -1)
 				continue;
 			if (army->moveTactical(xCoord, yCoord, true))
+			{
 				gameHelpers::logStringGame("Character: " + string(currentChar->characterRecord->fullName) + " merged armies!");
-			break;
+				break;
+			}
 		}
 	}
 }
