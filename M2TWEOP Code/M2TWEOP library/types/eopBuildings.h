@@ -3,6 +3,7 @@
 
 #include "gameStringHelpers.h"
 #include "realGameTypes.h"
+#include "techFuncs.h"
 #include "lua/sol.hpp"
 
 enum
@@ -388,14 +389,15 @@ public:
 class eopBuildEntry
 {
 public:
-	edbEntry baseEntry;
-	eopBuildEntry(edbEntry* oldEntry, int newIndex)
+	edbEntry* baseEntry;
+	eopBuildEntry(const edbEntry* oldEntry, const int newIndex)
 	{
-		baseEntry = *oldEntry;
-		eopBuildID = newIndex;
-		baseEntry.eopBuildingID = newIndex;
+		baseEntry = techFuncs::createGameClass<edbEntry>();
+		*baseEntry = *oldEntry;
+		eopBuildId = newIndex;
+		baseEntry->eopBuildingID = newIndex;
 	}
-	int eopBuildID;
+	int eopBuildId;
 };
 
 class buildEntryDB
@@ -406,7 +408,7 @@ public:
 	static void addCaps(buildingLevel* eopLevel, const buildingLevel* oldLevel);
 	static void addPools(buildingLevel* eopLevel, const buildingLevel* oldLevel);
 public:
-	static std::vector<eopBuildEntry> eopEdb;
+	static std::vector<std::shared_ptr<eopBuildEntry>>  eopEdb;
 };
 
 struct exportDescrBuildings
@@ -496,7 +498,6 @@ namespace eopBuildings
     int getBuildingPoolNum(const edbEntry* entry, int level);
     void addCaps(buildingLevel* oldLevel, buildingLevel* eopLevel, int lvlIdx);
     void addPools(buildingLevel* oldLevel, buildingLevel* eopLevel, int lvlIdx);
-    edbEntry* getBuildingByID(int id);
     exportDescrBuildings* getEdb();
     
 #pragma region buildingLevel

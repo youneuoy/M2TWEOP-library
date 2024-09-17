@@ -364,7 +364,7 @@ namespace settlementHelpers
 		if (castle || level > 0)
 			coreBuildingName = entry->levels[castle ? level : level - 1].name;
 	    if (!coreBuildingName.empty())
-	    	createBuilding(settlement, coreBuildingName.c_str());
+	    	createBuilding(settlement, coreBuildingName);
 	    settlement->recalculate(true);
 		settlement->minorSettlementIndex = static_cast<int>(minorSettlementDb::regionMinorSettlements[settlement->regionID].size());
 		minorSettlementDb::addToMinorSettlements(settlement->regionID, settlement);
@@ -637,22 +637,26 @@ namespace settlementHelpers
 		}
 	}
 	
-	void createBuilding(settlementStruct* sett, const char* buildingLevelId)
+	building* createBuilding(settlementStruct* sett, const std::string& buildingLevelId)
 	{
-		DWORD adrFunc = codes::offsets.createBuildingFunc;
-		string command = sett->name;
-		command.push_back(' ');
-		command += buildingLevelId;
-		char buffer[100]{};
-		const char* cmdC = command.c_str();
-		_asm
+		const auto buildingId = buildingHelpers::getBuildingLevelId(buildingLevelId);
+		const auto buildingLevel = buildingHelpers::getBuildingLevelPos(buildingLevelId);
+		if (buildingId == -1 || buildingLevel == -1)
 		{
-			lea eax, buffer
-			push eax
-			push cmdC
-			mov eax, adrFunc
-			call eax
+			gameHelpers::logStringGame("settlementHelpers.createBuilding: building not found.");
+			return nullptr;
 		}
+		const auto edb = eopBuildings::getEdb();
+		const auto entry = edb->getBuildingByID(buildingId);
+		if (!entry)
+		{
+			gameHelpers::logStringGame("settlementHelpers.createBuilding: building not found.");
+			return nullptr;
+		}
+		const auto build = GAME_FUNC(building*(__thiscall*)(exportDescrBuildings*, settlementStruct*, edbEntry*, bool), createBuildInSett)(edb, sett, entry, true);
+		if (build)
+			build->level = static_cast<int8_t>(buildingLevel);
+		return build;
 	}
 	
 	void destroyBuilding(settlementStruct* sett, const char* typeName, bool isReturnMoney)
@@ -1194,9 +1198,10 @@ namespace settlementHelpers
 		/***
 		Create a building in the settlement.
 		@function settlementStruct:createBuilding
-		@tparam string building_level_id
+		@tparam string buildingLevelName
+		@treturn building build
 		@usage
-		settlementStruct:createBuilding("some_build1");
+		local build = mySett:createBuilding("someLevelName");
 		*/
 		types.settlementStruct.set_function("createBuilding", &createBuilding);
 		/***

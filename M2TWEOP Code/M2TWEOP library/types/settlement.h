@@ -771,7 +771,7 @@ namespace settlementHelpers
 	float getReligion(settlementStruct* sett, int index);
 	void setReligion(settlementStruct* sett, int index, float value);
 	void addToLua(sol::state& luaState);
-	void createBuilding(settlementStruct* sett, const char* buildingLevelId);
+	building* createBuilding(settlementStruct* sett, const std::string& buildingLevelId);
 	void destroyBuilding(settlementStruct* sett, const char* typeName, bool isReturnMoney);
 	
 	bool addBuildingToQueue(buildingInQueue* building);

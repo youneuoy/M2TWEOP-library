@@ -304,7 +304,7 @@ float globalEopAiConfig::calculateSettPriority(const std::shared_ptr<settlementR
 	if (balance < 1.f && !empty)
 		return 0.f;
 	const auto facData = getCurrentFactionData();
-	float priority = clamp(settRes->settlement->stats.settlementStats.TotalIncomeWithoutAdmin * 5, 0, 50000);
+	float priority = clamp<float>(settRes->settlement->stats.settlementStats.TotalIncomeWithoutAdmin * 5.f, 0.f, 50000.f);
 	LOG_PRIORITY("Income offset: " + to_string(clamp(settRes->settlement->stats.settlementStats.TotalIncomeWithoutAdmin * 5, 0, 50000)));
 	LOG_PRIORITY("Priotity #1: " + to_string(priority));
 	const auto religion = settlementHelpers::getReligion(settRes->settlement, m_Faction->religion);
