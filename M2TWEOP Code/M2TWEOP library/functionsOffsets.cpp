@@ -318,6 +318,17 @@ void codes::initCodes(int gameVer)
 		offsets.releaseCultureSettlement = 0x8B9C50;
 		offsets.createCultureFort = 0x8B9B10;
 		offsets.createCultureCasEntry = 0x8B88C0;
+		offsets.getEntriesByFaction = 0x8A8300;
+		offsets.createSettlementConditionContext = 0x609690;
+		offsets.isBuildingTypePresent = 0x6089C0;
+		offsets.canSettlementUpgrade = 0x5DB410;
+		offsets.isLevelAvailableForLevel = 0x5FE0D0;
+		offsets.evaluateBuildingGuard = 0x5FCC60;
+		offsets.createConstructionOption = 0x5FAD70;
+		offsets.createConvertSett = 0x5FAC00;
+		offsets.createBuildingSett = 0x5FAB60;
+		offsets.buildQueueConflictTest = 0x5EB100;
+		offsets.removeBuildingSelection = 0x5FA3A0;
 	}
 
 

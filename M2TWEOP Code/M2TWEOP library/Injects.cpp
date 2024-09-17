@@ -4894,7 +4894,7 @@ onAddBuilding::onAddBuilding(MemWork* mem, LPVOID addr, int ver)
 		m_adress = 0x5EAE1D;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EA550;
+		m_adress = 0x5EA9BD;
 }
 
 void onAddBuilding::SetNewCode()
@@ -4913,7 +4913,7 @@ onRemoveBuilding::onRemoveBuilding(MemWork* mem, LPVOID addr, int ver)
 		m_adress = 0x5EA9F6;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EA550;
+		m_adress = 0x5EA596;
 }
 
 void onRemoveBuilding::SetNewCode()
@@ -4954,7 +4954,7 @@ onCheckSettHasBuilding::onCheckSettHasBuilding(MemWork* mem, LPVOID addr, int ve
 		m_adress = 0x005EB234;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EA4F0;
+		m_adress = 0x5EADD4;
 }
 
 void onCheckSettHasBuilding::SetNewCode()
@@ -5005,7 +5005,7 @@ getPossibleConstructions::getPossibleConstructions(MemWork* mem, LPVOID addr, in
 		m_adress = 0x8A8D70;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EA500;
+		m_adress = 0x8A8390;
 }
 
 void getPossibleConstructions::SetNewCode()
@@ -5026,7 +5026,10 @@ void getPossibleConstructions::SetNewCode()
 	a->pop(esi);
 	a->pop(ebx);
 	a->sub(esp, 0x0A4C);
-	a->mov(eax, 0x8A8EFF);
+	if (m_adress == 0x8A8D70)
+		a->mov(eax, 0x8A8EFF);
+	else
+		a->mov(eax, 0x8A8520);
 	a->jmp(eax);
 	a->ret();
 	m_cheatBytes = static_cast<unsigned char*>(a->make());
@@ -5092,7 +5095,7 @@ onCheckBuildUpgrade::onCheckBuildUpgrade(MemWork* mem, LPVOID addr, int ver)
 		m_adress = 0x005EB774;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EAF0C;
+		m_adress = 0x005EB314;
 }
 
 void onCheckBuildUpgrade::SetNewCode()
@@ -5118,7 +5121,7 @@ onSetCqFlags::onSetCqFlags(MemWork* mem, LPVOID addr, int ver)
 		m_adress = 0x005EB3C0;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EAF0C;
+		m_adress = 0x005EAF60;
 }
 
 void onSetCqFlags::SetNewCode()
@@ -5136,7 +5139,7 @@ onSetCqFlags2::onSetCqFlags2(MemWork* mem, LPVOID addr, int ver)
 		m_adress = 0x005EB3F7;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EAF0C;
+		m_adress = 0x005EAF97;
 }
 
 void onSetCqFlags2::SetNewCode()
@@ -5154,7 +5157,7 @@ onRemoveCqFlags::onRemoveCqFlags(MemWork* mem, LPVOID addr, int ver)
 		m_adress = 0x005EB450;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EAF0C;
+		m_adress = 0x005EAFF0;
 }
 
 void onRemoveCqFlags::SetNewCode()
@@ -5172,7 +5175,7 @@ onRemoveCqFlags2::onRemoveCqFlags2(MemWork* mem, LPVOID addr, int ver)
 		m_adress = 0x005EB495;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EAF0C;
+		m_adress = 0x005EB035;
 }
 
 void onRemoveCqFlags2::SetNewCode()
@@ -5190,7 +5193,7 @@ onAddBuildingCapsAfterConstruction::onAddBuildingCapsAfterConstruction(MemWork* 
 		m_adress = 0x005ED4E2;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EAF0C;
+		m_adress = 0x005ED082;
 }
 
 void onAddBuildingCapsAfterConstruction::SetNewCode()
@@ -5215,7 +5218,7 @@ onAddBuildingCapsAfterConstruction2::onAddBuildingCapsAfterConstruction2(MemWork
 		m_adress = 0x5ED507;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EAF0C;
+		m_adress = 0x005ED0A7;
 }
 
 void onAddBuildingCapsAfterConstruction2::SetNewCode()
@@ -5241,7 +5244,7 @@ onAddBuildingCapsAfterConstruction3::onAddBuildingCapsAfterConstruction3(MemWork
 		m_adress = 0x005ED60D;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EAF0C;
+		m_adress = 0x005ED1AD;
 }
 
 void onAddBuildingCapsAfterConstruction3::SetNewCode()
@@ -5266,7 +5269,7 @@ onAddBuildingCapsAfterConstruction4::onAddBuildingCapsAfterConstruction4(MemWork
 		m_adress = 0x005ED632;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EAF0C;
+		m_adress = 0x005ED1D2;
 }
 
 void onAddBuildingCapsAfterConstruction4::SetNewCode()
@@ -5292,7 +5295,7 @@ onAddBuildingCapsAfterConstruction5::onAddBuildingCapsAfterConstruction5(MemWork
 		m_adress = 0x5EDA2A;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EAF0C;
+		m_adress = 0x005ED5CA;
 }
 
 void onAddBuildingCapsAfterConstruction5::SetNewCode()
@@ -5319,7 +5322,7 @@ onGetDefensesBuilding::onGetDefensesBuilding(MemWork* mem, LPVOID addr, int ver)
 		m_adress = 0x5EAEA3;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EAF0C;
+		m_adress = 0x5EAA43;
 }
 
 void onGetDefensesBuilding::SetNewCode()
@@ -5345,7 +5348,7 @@ onIsBuildingTypePresentAtMinLevel::onIsBuildingTypePresentAtMinLevel(MemWork* me
 		m_adress = 0x5EB254;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EAF0C;
+		m_adress = 0x5EADF4;
 }
 
 void onIsBuildingTypePresentAtMinLevel::SetNewCode()
@@ -5370,7 +5373,7 @@ onCheckBuildUpgrade2::onCheckBuildUpgrade2(MemWork* mem, LPVOID addr, int ver)
 		m_adress = 0x005EB722;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x005EAF0C;
+		m_adress = 0x5EB2C2;
 }
 
 void onCheckBuildUpgrade2::SetNewCode()
