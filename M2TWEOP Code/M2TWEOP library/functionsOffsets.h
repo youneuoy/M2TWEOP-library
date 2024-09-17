@@ -148,6 +148,8 @@ public:
 		DWORD deleteFortFuncOne = NULL;
 		DWORD deleteFortFuncTwo = NULL;
 		DWORD createFortFunc = NULL;
+		DWORD createsFort = NULL;
+		DWORD addToFortsArray = NULL;
 		DWORD mercEOPValue = NULL;
 		DWORD makeConditionFunc = NULL;
 		DWORD getEquipmentPreferencesFunc = NULL;

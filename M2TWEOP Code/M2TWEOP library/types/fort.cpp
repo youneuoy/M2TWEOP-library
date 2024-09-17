@@ -16,6 +16,7 @@
 #include "army.h"
 #include "campaignDb.h"
 #include "cultures.h"
+#include "gameHelpers.h"
 #include "strategyMap.h"
 #include "rebelFactions.h"
 
@@ -137,29 +138,38 @@ namespace fortHelpers
 		}
 	}
 	
-	void createFortXY(factionStruct* fac, int x, int y)
+	fortStruct* createFortXY(factionStruct* fac, const int x, const int y)
+	{
+		return createFortXYCulture(fac, x, y, fac->cultureID);
+	}
+
+	stringWithHash* WOODEN_FORT = nullptr;
+	
+	fortStruct* createFortXYCulture(factionStruct* fac, const int x, const int y, const int cultureId)
 	{
 		factionStruct* faction = fac;
-		character* newgen = characterHelpers::createCharacterWithoutSpawning("named character", faction, 30, "fort", "fort", 31, "default", x, y);
-		armyStruct* newarmy = armyHelpers::createArmy(newgen);
-		auto cultureDb = cultures::getCultureDb();
-		auto culture = cultureDb->cultures[fac->cultureID];
-		auto cost = culture.fortCost;
-		auto oldMoney = fac->money;
-		fac->money = cost;
-		auto oldOption = campaignHelpers::getCampaignDb()->campaignDbSettlement.canBuildForts;
-		campaignHelpers::getCampaignDb()->campaignDbSettlement.canBuildForts = true;
-		DWORD adrFunc = codes::offsets.createFortFunc;
-		_asm
+		const auto tile = stratMapHelpers::getStratMap()->getTile(x, y);
+		const int regionId = tile->regionId;
+		if (!WOODEN_FORT)
 		{
-			mov ecx, newarmy
-			mov eax, adrFunc
-			call eax
+			WOODEN_FORT = new stringWithHash();
+			gameStringHelpers::setHashedString(&WOODEN_FORT->name, "wooden_fort");
 		}
-		newgen->characterRecord->deathType = static_cast<int>(deathType::captainRemoved);
-		characterHelpers::killCharacter(newgen);
-		campaignHelpers::getCampaignDb()->campaignDbSettlement.canBuildForts = oldOption;
-		fac->money = oldMoney;
+		const auto fort = GAME_FUNC(fortStruct*(__cdecl*)(int, factionStruct*, int, const char*, int)
+			, createsFort)(regionId, faction, cultureId, WOODEN_FORT->name, WOODEN_FORT->hash);
+		if (!fort)
+		{
+			gameHelpers::logStringGame("Failed to create fort at x: " + std::to_string(x) + " y: " + std::to_string(y));
+			return nullptr;
+		}
+		coordPair coords { x, y };
+		GAME_FUNC(void(__thiscall*)(stratPathFinding*, void*, coordPair*),
+			spawnCreatedObject)(campaignHelpers::getStratPathFinding(), fort, &coords);
+		tile->fort = true;
+		const auto campaign = campaignHelpers::getCampaignData();
+		GAME_FUNC(char(__thiscall*)(fortStruct***, fortStruct*), addToFortsArray)(&campaign->fortsArray, fort);
+	    GAME_FUNC(char(__thiscall*)(fortStruct*), residenceTileCharacterCheck)(fort);
+		return fort;
 	}
 	
 	void addToLua(sol::state& luaState)

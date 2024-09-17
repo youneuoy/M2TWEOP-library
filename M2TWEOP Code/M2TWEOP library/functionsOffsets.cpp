@@ -124,6 +124,8 @@ void codes::initCodes(int gameVer)
 		offsets.deleteFortFuncOne = 0x00BB5B80;
 		offsets.deleteFortFuncTwo = 0x004BCA80;
 		offsets.createFortFunc = 0x00714760;
+		offsets.createsFort = 0x8B8C00;
+		offsets.addToFortsArray = 0x4BD330;
 		offsets.mercEOPValue = 0x0190B928;
 		
 		offsets.getUnitByLabel = 0x0A945A0;
@@ -449,6 +451,8 @@ void codes::initCodes(int gameVer)
 		offsets.deleteFortFuncOne = 0x00bafef0;
 		offsets.deleteFortFuncTwo = 0x004bd010;
 		offsets.createFortFunc = 0x00714E60;
+		offsets.createsFort = 0x8B95F0;
+		offsets.addToFortsArray = 0x4BD8C0;
 		offsets.mercEOPValue = 0x018C27C8;
 		
 		offsets.getUnitByLabel = 0x0A95600;
