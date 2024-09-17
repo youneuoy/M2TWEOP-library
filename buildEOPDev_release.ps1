@@ -1,4 +1,4 @@
-# .\buildEOP.ps1 -modFolder "E:\Steam\steamapps\common\Medieval II Total War\mods\Tsardoms-2.2"
+# .\buildEOPDev_release.ps1 -modFolder "E:\Steam\steamapps\common\Medieval II Total War\mods\Tsardoms-2.2"
 param(
     $modFolder
 )
@@ -32,6 +32,8 @@ if ($LASTEXITCODE -ne 0) { Write-Host "`n`n!!! Failure detected. Stopping the bu
 
 msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Release /p:Platform=x86 /t:"d3d9" /fileLogger /fileLoggerParameters:LogFile=logs\d3d9.log /NoWarn:ALL -m
 if ($LASTEXITCODE -ne 0) { Write-Host "`n`n!!! Failure detected. Stopping the build process. !!!" -ForegroundColor DarkRed ; exit $LASTEXITCODE }
+
+Write-Host "`n`n======== Success! ========`n" -ForegroundColor Green
 
 # 3) Build Documentation
 Write-Host "`n`n======== 3) Build M2TWEOP-Documentation ========`n" -ForegroundColor Magenta

@@ -35,7 +35,7 @@ EOP uses C++ and Assembly to modify the game's code in-memory and exposes this t
 * Create your own GUIs and overlays using the popular [ImgGui](https://github.com/ocornut/imgui)
 * New custom EDU system that allows the creation and modification of new units without the need to restart the game
 * Play out Hotseat battles online and transfer the results back to the campaign map
-* Set your own limits for the number of religions, ancillaries, bodyguard units, building chains, max unit size
+* Set your own limits for the number of religions, cultures, ancillaries, bodyguard units, building chains, max unit size
 * Set the boundaries of the number of soldiers in units and the size of the battle map
 * Fixed many engine bugs, crashes and oversights (e.g crashes when using berserkers in battle)
 * Edit worldpkgdesc for any settlement on the fly without the need to restart the game
@@ -121,9 +121,20 @@ Use Choco (https://chocolatey.org/install) for easy install.
 
 **How to build**
 1. Clone or download the project and extract it to a folder
-2. Run Developer Powershell for Visual Studio 2019 in Admin mode
+2. Run Developer Powershell for Visual Studio 2022 in Admin mode
 3. Navigate to where you have cloned/extracted the project
-4. Run buildEOP.ps1
+4. Run a build script like
+
+```
+# Default build script for full release
+.\buildEOP.ps1 -modFolder "E:\Steam\steamapps\common\Medieval II Total War\mods\Tsardoms-2.2"
+
+# Release build script without config or luaPluginScript.lua
+.\buildEOPDev_release.ps1 -modFolder "E:\Steam\steamapps\common\Medieval II Total War\mods\Tsardoms-2.2"
+
+# Debug build script without config or luaPluginScript.lua
+.\buildEOPDev_debug.ps1 -modFolder "E:\Steam\steamapps\common\Medieval II Total War\mods\Tsardoms-2.2"
+```
 
 You can get support for building/developing on our [Discord](https://discord.gg/Epqjm8u2WK) server.
 
