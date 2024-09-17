@@ -1236,10 +1236,10 @@ toResourcesReadModels::toResourcesReadModels(MemWork* mem, LPVOID adr, int ver)
 	:AATemplate(mem), funcAdress(adr)
 {
 	if (ver == 2)//steam
-		m_adress = 0x008e432d;
+		m_adress = 0x0044F4EF;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x008e38a9;
+		m_adress = 0x0044F1AF;
 }
 
 toResourcesReadModels::~toResourcesReadModels()
@@ -1250,8 +1250,9 @@ void toResourcesReadModels::SetOriginaResModelsCode()
 {
 	Assembler* a = new Assembler();
 
-	a->add(eax, 0x1);
-	a->cmp(eax, 0x1c);
+	a->push(0);
+	a->push(0);
+	a->push(0);
 
 	a->ret();
 	m_originalBytes = (unsigned char*)a->make();
@@ -1272,9 +1273,10 @@ void toResourcesReadModels::SetlResModelsCode()
 
 	a->popf();
 	a->popad();
-
-	a->add(eax, 0x1);
-	a->cmp(eax, 0x1c);
+	
+	a->push(0);
+	a->push(0);
+	a->push(0);
 
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();
@@ -1326,6 +1328,7 @@ void toCharReadModels::SetNewCode()
 	a->push(ebp);
 	a->push(esi);
 	a->push(edi);
+	a->mov(dword_ptr(esp, 0x10), 0);
 
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();

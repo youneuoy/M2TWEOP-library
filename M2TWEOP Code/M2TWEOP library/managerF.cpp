@@ -187,12 +187,12 @@ void managerF::execPatches()
 
 	f1 << "Done" << '\n';
 	
-	f1 << "Start applying models load patch #1" << '\n';
-	toStartReadModels* readModelsStart = new toStartReadModels(mem, (LPVOID)stratModelsChange::disableChecker, globals::dataS.gameVersion);
-	readModelsStart->SetlStReadModelsCode();
-	readModelsStart->Enable();
-
-	f1 << "Done" << '\n';
+	//f1 << "Start applying models load patch #1" << '\n';
+	//toStartReadModels* readModelsStart = new toStartReadModels(mem, (LPVOID)stratModelsChange::disableChecker, globals::dataS.gameVersion);
+	//readModelsStart->SetlStReadModelsCode();
+	//readModelsStart->Enable();
+//
+	//f1 << "Done" << '\n';
 
 
 	f1 << "Start applying unical strat models patch" << '\n';

@@ -1613,6 +1613,7 @@ void __stdcall patchesForGame::afterCampaignMapLoaded()
 
 void __stdcall patchesForGame::onNewGameStart()
 {
+	stratModelsChange::disableChecker();
 	minorSettlementDb::clear();
 	eopSettlementDataDb::get()->clearData();
 	gameEvents::onNewGameStart();
@@ -1995,6 +1996,7 @@ void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
 	}
 	files = techFuncs::loadGameLoadArchive(files, savePath);
 	minorSettlementDb::clear();
+	stratModelsChange::disableChecker();
 	eopSettlementDataDb::get()->onGameLoad(files);
 	eopCharacterDataDb::get()->onGameLoad(files);
 	gameEvents::onLoadGamePl(&files);
@@ -2057,7 +2059,9 @@ void __stdcall patchesForGame::unicalStratModsRead()
 	f1 << "unicalStratModsRead" << endl;
 	f1.close();
 #endif
+	gameHelpers::logStringGame("Loading strat models...");
 	stratModelsChange::loadModels();
+	gameHelpers::logStringGame("Strat models loaded");
 }
 
 void __stdcall patchesForGame::loadCharStratModels()
@@ -2068,7 +2072,9 @@ void __stdcall patchesForGame::loadCharStratModels()
 	f1 << "loadCharStratModels" << endl;
 	f1.close();
 #endif
+	gameHelpers::logStringGame("Loading strat characters models...");
 	stratModelsChange::loadCharModels();
+	gameHelpers::logStringGame("Strat character models loaded");
 }
 
 
