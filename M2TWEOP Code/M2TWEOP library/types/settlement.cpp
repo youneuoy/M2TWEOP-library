@@ -102,12 +102,24 @@ character* settlementStruct::getCharacter(const int index)
 	return tile->getTileCharacterAtIndex(index);
 }
 
+building* getBuildingByIndex(const settlementStruct* sett, const int index)
+{
+	if (index < 0)
+		return nullptr;
+	for (int i = 0; i < sett->buildingsNum; i++)
+	{
+		if (sett->buildings[i]->edbEntry->buildingID == index)
+			return sett->buildings[i];
+	}
+	return nullptr;
+}
+
 building* settlementStruct::buildingPresent(const std::string& buildingName)
 {
 	const auto id = buildingHelpers::getBuildingId(buildingName);
 	if (id == -1)
 		return nullptr;
-	return buildingsByIndex[id];
+	return getBuildingByIndex(this, id);
 }
 
 bool settlementStruct::buildingPresentMinLevel(const std::string& levelName, const bool exact)
@@ -115,7 +127,7 @@ bool settlementStruct::buildingPresentMinLevel(const std::string& levelName, con
 	const auto id = buildingHelpers::getBuildingLevelId(levelName);
 	if (id == -1)
 		return false;
-	const auto building = buildingsByIndex[id];
+	const auto building = getBuildingByIndex(this, id);
 	if (!building)
 		return false;
 	const auto lvl = buildingHelpers::getBuildingLevelPos(levelName);
@@ -352,7 +364,7 @@ namespace settlementHelpers
 		if (castle || level > 0)
 			coreBuildingName = entry->levels[castle ? level : level - 1].name;
 	    if (!coreBuildingName.empty())
-	    	createBuilding(settlement, coreBuildingName.c_str());
+	    	createBuilding(settlement, coreBuildingName);
 	    settlement->recalculate(true);
 		settlement->minorSettlementIndex = static_cast<int>(minorSettlementDb::regionMinorSettlements[settlement->regionID].size());
 		minorSettlementDb::addToMinorSettlements(settlement->regionID, settlement);
@@ -625,22 +637,26 @@ namespace settlementHelpers
 		}
 	}
 	
-	void createBuilding(settlementStruct* sett, const char* buildingLevelId)
+	building* createBuilding(settlementStruct* sett, const std::string& buildingLevelId)
 	{
-		DWORD adrFunc = codes::offsets.createBuildingFunc;
-		string command = sett->name;
-		command.push_back(' ');
-		command += buildingLevelId;
-		char buffer[100]{};
-		const char* cmdC = command.c_str();
-		_asm
+		const auto buildingId = buildingHelpers::getBuildingLevelId(buildingLevelId);
+		const auto buildingLevel = buildingHelpers::getBuildingLevelPos(buildingLevelId);
+		if (buildingId == -1 || buildingLevel == -1)
 		{
-			lea eax, buffer
-			push eax
-			push cmdC
-			mov eax, adrFunc
-			call eax
+			gameHelpers::logStringGame("settlementHelpers.createBuilding: building not found.");
+			return nullptr;
 		}
+		const auto edb = eopBuildings::getEdb();
+		const auto entry = edb->getBuildingByID(buildingId);
+		if (!entry)
+		{
+			gameHelpers::logStringGame("settlementHelpers.createBuilding: building not found.");
+			return nullptr;
+		}
+		const auto build = GAME_FUNC(building*(__thiscall*)(exportDescrBuildings*, settlementStruct*, edbEntry*, bool), createBuildInSett)(edb, sett, entry, true);
+		if (build)
+			build->level = static_cast<int8_t>(buildingLevel);
+		return build;
 	}
 	
 	void destroyBuilding(settlementStruct* sett, const char* typeName, bool isReturnMoney)
@@ -696,11 +712,8 @@ namespace settlementHelpers
 
 	buildingInQueue* getBuildingInQueue(buildingsQueue* queue, int position)
 	{
-		if (position > 0 && position <= queue->buildingsInQueue) {
-			int index = queue->firstIndex + position - 1;
-			if (index > 5) { index = index - 6; }
-			return &(queue->items[index]);
-		}
+		if (position > 0)
+			return &queue->items[(position + queue->firstIndex) % 6];
 		return nullptr;
 	}
 	
@@ -1185,9 +1198,10 @@ namespace settlementHelpers
 		/***
 		Create a building in the settlement.
 		@function settlementStruct:createBuilding
-		@tparam string building_level_id
+		@tparam string buildingLevelName
+		@treturn building build
 		@usage
-		settlementStruct:createBuilding("some_build1");
+		local build = mySett:createBuilding("someLevelName");
 		*/
 		types.settlementStruct.set_function("createBuilding", &createBuilding);
 		/***

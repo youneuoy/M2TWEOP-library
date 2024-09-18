@@ -124,6 +124,8 @@ void codes::initCodes(int gameVer)
 		offsets.deleteFortFuncOne = 0x00BB5B80;
 		offsets.deleteFortFuncTwo = 0x004BCA80;
 		offsets.createFortFunc = 0x00714760;
+		offsets.createsFort = 0x8B8C00;
+		offsets.addToFortsArray = 0x4BD330;
 		offsets.mercEOPValue = 0x0190B928;
 		
 		offsets.getUnitByLabel = 0x0A945A0;
@@ -316,6 +318,17 @@ void codes::initCodes(int gameVer)
 		offsets.releaseCultureSettlement = 0x8B9C50;
 		offsets.createCultureFort = 0x8B9B10;
 		offsets.createCultureCasEntry = 0x8B88C0;
+		offsets.getEntriesByFaction = 0x8A8300;
+		offsets.createSettlementConditionContext = 0x609690;
+		offsets.isBuildingTypePresent = 0x6089C0;
+		offsets.canSettlementUpgrade = 0x5DB410;
+		offsets.isLevelAvailableForLevel = 0x5FE0D0;
+		offsets.evaluateBuildingGuard = 0x5FCC60;
+		offsets.createConstructionOption = 0x5FAD70;
+		offsets.createConvertSett = 0x5FAC00;
+		offsets.createBuildingSett = 0x5FAB60;
+		offsets.buildQueueConflictTest = 0x5EB100;
+		offsets.removeBuildingSelection = 0x5FA3A0;
 	}
 
 
@@ -449,6 +462,8 @@ void codes::initCodes(int gameVer)
 		offsets.deleteFortFuncOne = 0x00bafef0;
 		offsets.deleteFortFuncTwo = 0x004bd010;
 		offsets.createFortFunc = 0x00714E60;
+		offsets.createsFort = 0x8B95F0;
+		offsets.addToFortsArray = 0x4BD8C0;
 		offsets.mercEOPValue = 0x018C27C8;
 		
 		offsets.getUnitByLabel = 0x0A95600;
@@ -634,5 +649,16 @@ void codes::initCodes(int gameVer)
 		offsets.releaseCultureSettlement = 0x8BA640;
 		offsets.createCultureFort = 0x8BA500;
 		offsets.createCultureCasEntry = 0x8B92B0;
+		offsets.getEntriesByFaction = 0x8A8CE0;
+		offsets.createSettlementConditionContext = 0x00609A40;
+		offsets.isBuildingTypePresent = 0x00608D70;
+		offsets.canSettlementUpgrade = 0x005DB8D0;
+		offsets.isLevelAvailableForLevel = 0x005FE4C0;
+		offsets.evaluateBuildingGuard = 0x005FD050;
+		offsets.createConstructionOption = 0x005FB160;
+		offsets.createConvertSett = 0x005FAFF0;
+		offsets.createBuildingSett = 0x005FAF50;
+		offsets.buildQueueConflictTest = 0x005EB560;
+		offsets.removeBuildingSelection = 0x005FA790;
 	}
 }

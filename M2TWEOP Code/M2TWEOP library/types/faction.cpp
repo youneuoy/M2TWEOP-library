@@ -860,11 +860,15 @@ namespace factionHelpers
 		@function factionStruct:createFortXY
 		@tparam int X
 		@tparam int Y
+		@tparam int cultureID optional
+		@treturn fortStruct fort
 		@usage
 		fac:createFortXY(193, 283)
 		*/
-		types.factionStruct.set_function("createFortXY", &fortHelpers::createFortXY);
-
+		types.factionStruct.set_function("createFortXY", sol::overload(
+			sol::resolve<fortStruct*(factionStruct*, int, int)>(fortHelpers::createFortXY),
+			sol::resolve<fortStruct*(factionStruct*, int, int, int)>(fortHelpers::createFortXYCulture)
+			));
 		/***
 		Create a watchtower at the specified coordinates.
 		@function factionStruct:createWatchtower

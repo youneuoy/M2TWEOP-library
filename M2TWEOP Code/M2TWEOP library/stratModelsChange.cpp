@@ -177,29 +177,30 @@ namespace stratModelsChange
 	{
 	}
 
-	bool modelsLoaded = false;
+	bool MODELS_LOADED = false;
+	bool CHAR_MODELS_LOADED = false;
 	void __stdcall disableChecker()
 	{
-		modelsLoaded = false;
+		MODELS_LOADED = false;
+		CHAR_MODELS_LOADED = false;
 	}
 	void loadModels()
 	{
-		if (modelsLoaded == true)
-			return;
+		//if (MODELS_LOADED == true)
+		//	return;
 
+		// ReSharper disable once CppUseElementsView
 		for (const auto& [index, record] : stratModels)
 		{
 			record->modelP = loadModel(record->path, record->isSettlement);
 		}
-		modelsLoaded = true;
+		MODELS_LOADED = true;
 		changeModelsNeededNow = modelsChangeStatus::needChange;
 	}
 
 	void loadCharModels() //rebuild character CAS entries to be sure no pointers were cleaned up
 	{
-		if (modelsLoaded == true)return;
-
-		for (stratModelCharacterRecord* modRec : characterStratModels)
+		for (const stratModelCharacterRecord* modRec : characterStratModels)
 		{
 			*modRec->entry = *buildCharacterCas(modRec->skeletonname, modRec->caspath, modRec->shadowcaspath, modRec->modelId, modRec->texturepath, modRec->scale);
 		}
@@ -233,7 +234,7 @@ namespace stratModelsChange
 	{
 		if (!gen || !model)
 			return;
-		const size_t stringsize = strlen(model);
+		const size_t stringSize = strlen(model);
 		for (UINT32 i = 0; i < stratModelCharacterChangeList.size(); i++)
 		{
 			if (stratModelCharacterChangeList[i]->gen == gen)
@@ -245,7 +246,7 @@ namespace stratModelsChange
 		}
 		auto* rec = new stratModelCharacterRecordChange();
 		rec->gen = gen;
-		const auto modelNameCopy = new char[stringsize];
+		const auto modelNameCopy = new char[stringSize];
 		strcpy(modelNameCopy, model);
 		rec->modelId = modelNameCopy;
 		stratModelCharacterChangeList.push_back(rec);
@@ -260,14 +261,14 @@ namespace stratModelsChange
 		if (gen == nullptr) { //maybe captain dont exist anymore
 			return;
 		}
-		stratModelArrayEntry* modelentry = findCharacterStratModel(model); //get eop strat model from vector
-		if (modelentry == nullptr) {
-			modelentry = getStratModelEntry(model); //get vanilla strat model from 255 array
+		stratModelArrayEntry* entry = findCharacterStratModel(model); //get eop strat model from vector
+		if (entry == nullptr) {
+			entry = getStratModelEntry(model); //get vanilla strat model from 255 array
 		}
-		if (modelentry == nullptr) {
+		if (entry == nullptr) {
 			return;
 		}
-		const size_t stringsize = strlen(model);
+		const size_t stringSize = strlen(model);
 
 		const auto characterFacEntry = new genMod; //make new descr character faction entry
 		*characterFacEntry = *gen->genType; //get data of old entry and copy it in
@@ -280,10 +281,10 @@ namespace stratModelsChange
 		{
 			if (&characterFacEntry->stratInfo->stratModelsArray[i] != nullptr)
 			{
-				const auto modelNameCopy = new char[stringsize];
+				const auto modelNameCopy = new char[stringSize];
 				strcpy(modelNameCopy, model);
 				characterFacEntry->stratInfo->stratModelsArray[i].modelName = modelNameCopy;
-				characterFacEntry->stratInfo->stratModelsArray[i].stratModelEntry = modelentry;
+				characterFacEntry->stratInfo->stratModelsArray[i].stratModelEntry = entry;
 			}
 		}
 

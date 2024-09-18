@@ -12,16 +12,16 @@
 #include "luaPlugin.h"
 #include "techFuncs.h"
 
-std::vector<eopBuildEntry> buildEntryDB::eopEdb = {};
+std::vector<std::shared_ptr<eopBuildEntry>> buildEntryDB::eopEdb = {};
 
 edbEntry* buildEntryDB::addEopBuildEntry(edbEntry* oldEntry, const int newIndex)
 {
 	if (getEopBuildEntry(newIndex)) //dont overwrite existing entries
 		return nullptr;
 
-	const eopBuildEntry newEntry(oldEntry, newIndex);
+	const auto newEntry = std::make_shared<eopBuildEntry>(oldEntry, newIndex);
 	eopEdb.push_back(newEntry);
-	edbEntry* entry = getEopBuildEntry(newIndex);
+	edbEntry* entry = newEntry->baseEntry;
 	const int32_t levelNum = entry->buildingLevelCount; //because levels can be unlocked to 57 needs to be dynamic not 9
 	entry->levels = techFuncs::allocateGameClass<buildingLevel>(sizeof(buildingLevel) * levelNum);
 	//making a complete copy of the building
@@ -41,12 +41,10 @@ edbEntry* buildEntryDB::addEopBuildEntry(edbEntry* oldEntry, const int newIndex)
 //get data from an existing eop build entry, in edb entry format
 edbEntry* buildEntryDB::getEopBuildEntry(const int idx)
 {
-	for (eopBuildEntry& entry : eopEdb)
+	for (const auto& entry : eopEdb)
 	{
-		if (entry.eopBuildID == idx)
-		{
-			return &entry.baseEntry;
-		}
+		if (entry->eopBuildId == idx)
+			return entry->baseEntry;
 	}
 	return nullptr;
 }

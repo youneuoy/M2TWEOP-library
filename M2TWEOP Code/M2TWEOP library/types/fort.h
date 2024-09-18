@@ -73,6 +73,7 @@ namespace fortHelpers
 {
 	void addToLua(sol::state& luaState);
 	void deleteFort(const factionStruct* fac, fortStruct* fort);
-	void createFortXY(factionStruct* fac, int x, int y);
+	fortStruct* createFortXY(factionStruct* fac, int x, int y);
+	fortStruct* createFortXYCulture(factionStruct* fac, int x, int y, int cultureId);
 	void changeOwner(fortStruct* fort, factionStruct* newFaction, bool convertGarrison);
 };
