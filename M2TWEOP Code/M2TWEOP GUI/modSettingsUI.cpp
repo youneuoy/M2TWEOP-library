@@ -13,6 +13,9 @@
 
 namespace modSettingsUI
 {
+	typedef void (*DrawSettingsFunc)();
+
+
 	enum selectedSettingsPage_
 	{
 		selectedSettingsPage_general,
@@ -27,6 +30,7 @@ namespace modSettingsUI
 	{
 		std::string pageName;
 		selectedSettingsPage_ pageId;
+		DrawSettingsFunc drawFunc;
 	};
 
 	struct
@@ -40,58 +44,15 @@ namespace modSettingsUI
 		ImVec2 selectablesSize{};
 	}settingsUIData;
 
+	void addSettingsPage(const std::string& name, selectedSettingsPage_ pageId, DrawSettingsFunc drawFunc) {
+		settingsPage page;
+		page.pageName = name;
+		page.pageId = pageId;
+		page.drawFunc = drawFunc;
 
-	void initSettingsUI()
-	{
-		settingsUIData.settingsPages.clear();
-
-		//main page
-		{
-			settingsPage generalPage;
-			generalPage.pageId = selectedSettingsPage_general;
-			generalPage.pageName = "General";
-
-			settingsUIData.settingsPages.push_back(std::move(generalPage));
-		}
-		//launcher page
-		{
-			settingsPage launcherPage;
-			launcherPage.pageId = selectedSettingsPage_launcher;
-			launcherPage.pageName = "Launcher";
-
-			settingsUIData.settingsPages.push_back(std::move(launcherPage));
-		}
-
-		//game page
-		{
-			settingsPage gamePage;
-			gamePage.pageId = selectedSettingsPage_game;
-			gamePage.pageName = "Game";
-
-			settingsUIData.settingsPages.push_back(std::move(gamePage));
-		}
-		//hs page
-		{
-			settingsPage hsPage;
-			hsPage.pageId = selectedSettingsPage_hs;
-			hsPage.pageName = "Hotseat";
-
-			settingsUIData.settingsPages.push_back(std::move(hsPage));
-		}
-
-		/*
-		//rules page
-		{
-			settingsPage rulesPage;
-			rulesPage.pageId = selectedSettingsPage_rules;
-			rulesPage.pageName = "Rules";
-
-			settingsUIData.settingsPages.push_back(std::move(rulesPage));
-		}*/
-
-		settingsUIData.selectablesSize.x = settingsUIData.selectableSize.x;
-		settingsUIData.selectablesSize.y = settingsUIData.selectableSize.y * settingsUIData.settingsPages.size() + ImGui::GetStyle().ItemSpacing.y * settingsUIData.settingsPages.size();
+		settingsUIData.settingsPages.push_back(std::move(page));
 	}
+
 
 	void drawGeneralSettings()
 	{
@@ -333,25 +294,10 @@ namespace modSettingsUI
 		{
 			ImGui::BeginChild("PreferencesContent", { -1,settingsUIData.selectablesSize.y});
 
-			if (settingsUIData.selectedPage == selectedSettingsPage_general)
-			{
-				drawGeneralSettings();
-			}
-			else if (settingsUIData.selectedPage == selectedSettingsPage_launcher)
-			{
-				drawLauncherSettings();
-			}
-			else if (settingsUIData.selectedPage == selectedSettingsPage_rules)
-			{
-				drawRulesSettings();
-			}
-			else if (settingsUIData.selectedPage == selectedSettingsPage_hs)
-			{
-				drawHsSettings();
-			}
-			else if (settingsUIData.selectedPage == selectedSettingsPage_game)
-			{
-				drawGameSettings();
+			for (const auto& page : settingsUIData.settingsPages) {
+				if (settingsUIData.selectedPage == page.pageId) {
+					page.drawFunc(); 
+				}
 			}
 
 			ImGui::EndChild();
@@ -364,5 +310,29 @@ namespace modSettingsUI
 		}
 
 		ImGui::End();
+	}
+
+	void initSettingsUI()
+	{
+		settingsUIData.settingsPages.clear();
+
+		addSettingsPage("General", selectedSettingsPage_general, drawGeneralSettings);
+		addSettingsPage("Launcher", selectedSettingsPage_launcher, drawLauncherSettings);
+		addSettingsPage("Game", selectedSettingsPage_game, drawGameSettings);
+		addSettingsPage("Hotseat", selectedSettingsPage_hs, drawHsSettings);
+
+
+		/*
+		//rules page
+		{
+			settingsPage rulesPage;
+			rulesPage.pageId = selectedSettingsPage_rules;
+			rulesPage.pageName = "Rules";
+
+			settingsUIData.settingsPages.push_back(std::move(rulesPage));
+		}*/
+
+		settingsUIData.selectablesSize.x = settingsUIData.selectableSize.x;
+		settingsUIData.selectablesSize.y = settingsUIData.selectableSize.y * settingsUIData.settingsPages.size() + ImGui::GetStyle().ItemSpacing.y * settingsUIData.settingsPages.size();
 	}
 };
