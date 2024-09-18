@@ -9,5 +9,5 @@ M2TWEOP's Tutorials
 	UPGRADING_TO_EOP_V3.md
 	BATTLE_RESULT_TUTORIAL.md
 	M2TWEOP_LAUNCHER_SETTINGS.md
-	Gui scripting basics by Erken, PDF file <_static/Introduction_to_ImGui_v4.pdf#http://>
-	Gui scripting basics by Erken, ODT file <_static/Introduction_to_ImGui_v4.odt#http://>
+	GUI scripting basics by Erken, PDF file <_static/Introduction_to_ImGui_v5.pdf#http://>
+	GUI scripting basics by Erken, ODT file <_static/Introduction_to_ImGui_v5.odt#http://>

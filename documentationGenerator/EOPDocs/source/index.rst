@@ -20,31 +20,49 @@ M2TWEOP: Medieval 2 Engine Overhaul Project
 		<a target="_blank" href="https://www.youtube.com/channel/UCMyHomaKeeGR4ZPGrBo9dYw"><img src="_static/youtube.png" alt="YouTube" width="200" height="70"/></a>
 	  </p>
 	  </div>
-	<p>M2TW Engine Overhaul Project is designed to expand the capabilities of the game Medieval 2: Total War.
-	<br>
-	EOP uses C++ and Assembly to modify the game's code in-memory and exposes this to the end user via a Lua API and the <a href="./_static/LuaLib/index.html">EOP Lua Plugin</a></p>
-	</div>
+	<p>The M2TW Engine Overhaul Project (M2TWEOP) is designed to expand the capabilities of the strategy game Medieval 2: Total War. EOP uses C++ and Assembly to modify the game's code in-memory and exposes this to the end user via a Lua API.</p>
 
 	<h2>Features</h2>
 	<ul>
-		<li>Hugely expanded Lua scripting system that integrates seamlessly with existing campaign_script scripts, hot-reload, new custom console, debugger and much more</li>
-		<li>Breaks the EDU limit allowing for more than 500 units in a mod</li>
-		<li>Place .fbx models anywhere on the strategy or battle map with full animation and texture support</li>
-		<li>Render .cas models for characters, settlements, forts, or anywhere on the map based on any kind of condition you can imagine</li>
-		<li>Play custom sounds or music with support for WAV, OGG/Vorbis and FLAC</li>
+		<li>
+			<strong><a href="https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html">Lua scripting system with 1000+ functions</a></strong>
+			<ul>
+				<li>Full documentation with code examples and VSCode Intellisense</li>
+				<li>Seamless integration with existing campaign_script scripts</li>
+				<li>Hot-reload</li>
+				<li>Custom console</li>
+				<li>Debugging support (VSCode)</li>
+				<li><a href="https://github.com/ocornut/imgui">ImgGui bindings</a></li>
+			</ul>
+		</li>
+		<li>
+			Removes engine limitations for
+			<ul>
+				<li>Number of unit types and unit sizes</li>
+				<li>Number of religions and cultures</li>
+				<li>Number of buildings and their chains</li>
+				<li>Number of ancillaries</li>
+				<li>Number of custom settlements</li>
+				<li>Number of custom cas models (characters and settlements)</li>
+			</ul>
+		</li>
 		<li>Unlocks all vanilla console commands</li>
-		<li>Rome: Total War style <a href="https://www.youtube.com/watch?v=RrGi4zxr7bU">tactical map viewer</a></li>
-		<li>Create your own GUIs and overlays using the popular <a href="https://github.com/ocornut/imgui">ImGUI</a></li>
-		<li>New custom EDU system that allows the creation and modification of new and existing units without the need to restart the game</li>
+		<li>
+			Fixes many engine bugs, crashes, and oversights such as
+			<ul>
+				<li>Berserker units instantly crashing</li>
+				<li>Elephant units breaking sieges</li>
+				<li>Elephant cannons unable to attack gates</li>
+			</ul>
+		</li>
+		<li>Draw cas models at any scale, anywhere on the campaign map</li>
+		<li>Fully customizable and configurable launcher</li>
+		<li>Discord Rich Presence support for 30+ mods</li>
+		<li><a href="https://www.youtube.com/watch?v=RrGi4zxr7bU">Rome: Total War style Tactical Map Viewer</a></li>
 		<li>Play out Hotseat battles online and transfer the results back to the campaign map</li>
-		<li>Set your own limits for the number of religions, ancillaries, bodyguard units, building chains, max unit size</li>
-		<li>Set the boundaries of the number of soldiers in units</li>
-		<li>Fixed many engine bugs, crashes and oversights (e.g crashes when using berserkers in battle)</li>
-		<li>Edit the .worldpkgdesc for any settlement on the fly without the need to restart the game</li>
 		<li>Custom keybinding support</li>
-		<li>Added ability to write your own add-ons in C++. The library exports many different functions.</li>
-		<li>Utilize the packaged <strong>M2TWEOP GUI</strong> launcher with full customization support as well as the included <strong>EOP Health Checker</strong> or just allow your mod to be launched directly</li>
-		<li>Many, many more!</li>
+		<li>Play custom sounds or music with support for WAV, OGG/Vorbis, and FLAC</li>
+		<li>Supports both disk (1.5) and Steam (1.52) versions</li>
 	</ul>
 
 	<h3>Breaking Engine Limits</h3>
@@ -80,11 +98,6 @@ M2TWEOP: Medieval 2 Engine Overhaul Project
 	<iframe frameborder="0" src="https://www.youtube.com/embed/itTng85dG5I" allowfullscreen></iframe>
 	<iframe frameborder="0" src="https://www.youtube.com/embed/caOiB0NaGGI" allowfullscreen></iframe>
 	<iframe frameborder="0" src="https://www.youtube.com/embed/RrGi4zxr7bU" allowfullscreen></iframe>
-	<iframe frameborder="0" src="https://www.youtube.com/watch?v=Vbpqde_YI68" allowfullscreen></iframe>
-
-	<a target="_blank" href="https://www.youtube.com/watch?v=hUvbcz8i7Wk">
-	<img src="https://i.imgur.com/ByebdSI.png">
-	</a>
 	</div>
 
 .. toctree::
