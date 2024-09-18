@@ -79,7 +79,7 @@ end
 ```lua
 -- onGeneralAssaultsGeneral is a custom EOP event
 function onGeneralAssaultsGeneral(eventData)
-    local atatcker, defender = eventData.attacker, eventData.defender
+    local attacker, defender = eventData.attacker, eventData.defender
     -- Check if the character is a Nazgul
     if (hasTrait(attacker, "NazgulRace")) then
         -- Play a sound
@@ -126,7 +126,7 @@ You can get support for building/developing on our [Discord](https://discord.gg/
 
 ## Disclaimer
 
-* Do not include the project in a mod without prior permission (this is simply to kepe track of usage)
+* Do not include the project in a mod without prior permission (this is simply to keep track of usage)
 * Do not release your mod with an unreleased version of M2TWEOP
 
 ## Acknowledgments
