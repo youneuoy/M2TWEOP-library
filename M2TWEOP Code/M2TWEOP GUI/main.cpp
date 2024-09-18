@@ -30,6 +30,7 @@
 
 #include "discordManager.h"
 
+
 struct {
     SDL_Window* window;
     SDL_GLContext gl_context;
@@ -123,6 +124,8 @@ void runApp(appTickFunc drawTick)
 {
     bool done = false;
     bool isGUIOpen = true;
+
+
     // Main loop
     while (!done)
     {
@@ -138,7 +141,6 @@ void runApp(appTickFunc drawTick)
         beginRender();
 
         drawTick(&isGUIOpen);
-
         endRender();
 
         if (isGUIOpen == false || done == true)
@@ -171,6 +173,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         runApp(toolRoutine::drawRedistTick);
     }
 
+
     if (!done)
     {
         SDL_Event event;
@@ -184,6 +187,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         }
 
         beginRender();
+
 
         toolRoutine::tryJustStartMod();
 

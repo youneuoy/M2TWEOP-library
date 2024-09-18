@@ -5,6 +5,7 @@
 #include "helpers.h"
 
 #include "markdownHelper.h"
+
 namespace aboutUI
 {
 	struct
@@ -214,6 +215,8 @@ First release.
 
 )";
 	}aboutUIData;
+
+
 	void drawAboutUi(bool* isOpen)
 	{
 		markdownHelper::setFonts();
@@ -228,3 +231,5 @@ First release.
 		ImGui::End();
 	}
 };
+
+

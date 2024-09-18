@@ -356,7 +356,7 @@ bool helpers::selectGameExe(int gameMode)
 	return false;
 }
 
-bool helpers::compareFiles(string& oneFile, string& nextFile)
+bool helpers::compareFiles(wstring& oneFile, wstring& nextFile)
 {
 	ifstream in1(oneFile, ios::binary);
 

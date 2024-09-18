@@ -28,6 +28,8 @@
 #include "imgui/sol_ImGui.h"
 #include "rebelFactions.h"
 #include "graphicsEvents.h"
+
+#include "eopVideos.h"
 plugData::pDat plugData::data;
 std::vector<std::string> luaPlugin::logS;
 std::vector<std::string> luaPlugin::logCommands;
@@ -43,6 +45,7 @@ int initLuaPlugin(bool isReload)
 	plugData::data.luaAll.initEopFbx();
 	plugData::data.luaAll.initEop3dObjects();
 	plugData::data.luaAll.initEopSounds();
+	eopVideos::addToLua(*luaState);
 	sol_ImGui::Init(*luaState);
 
 	gameEvents::initEvents();

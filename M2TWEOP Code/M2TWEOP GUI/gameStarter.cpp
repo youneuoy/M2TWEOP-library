@@ -105,6 +105,32 @@ bool gameStarter::runGameExe()
 
 	return true;
 }
+void gameStarter::ensureFiles(std::vector<std::wstring>& newFiles, std::vector<std::wstring>& oldFiles)
+{
+	using namespace boost::filesystem;
+	for (size_t i = 0; i < newFiles.size(); ++i)
+	{
+		// Get the full paths
+		path newFilePath = system_complete(newFiles[i]);
+		path oldFilePath = system_complete(oldFiles[i]);
+
+		std::wstring newFileStr = newFilePath.wstring();
+		std::wstring oldFileStr = oldFilePath.wstring();
+
+		if (helpers::compareFiles(oldFileStr, newFileStr) == false)
+		{
+			if (CopyFileW(newFileStr.c_str(), oldFileStr.c_str(), FALSE) == false)
+			{
+				DWORD ERR = GetLastError();
+				std::wstring errorMsg = L"Cannot run M2TWEOP, error replacing " + newFiles[i] + L"! Try deleting it in the game folder or copying it manually from the M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL DOESN'T WORK.";
+				MessageBoxW(NULL, errorMsg.c_str(), L"ERROR", MB_OK);
+				exit(0);
+			}
+		}
+	}
+
+	return;
+}
 
 bool gameStarter::initM2TWEOP()
 {
@@ -114,108 +140,36 @@ bool gameStarter::initM2TWEOP()
 		return true;
 	}
 
-	// d3d9_vk.dll
-	path wrapd3dS_vk = system_complete("d3d9_vk.dll");
+	std::vector<std::wstring> newFiles = {
+	L"d3d9_vk.dll",
+	L"d3d9.dll",
+	L"libfbxsdk.dll",
+	L"lua5.1.dll",
+	L"openal32.dll",
+	L"discord_game_sdk.dll",
+	L"avcodec-61.dll",
+	L"avfilter-10.dll",
+	L"avformat-61.dll",
+	L"avutil-59.dll",
+	L"swresample-5.dll",
+	L"swscale-8.dll",
+	};
 
-	path d3dS_vk = system_complete("..\\..\\d3d9_vk.dll");
-	string wrapd3dStr_vk = wrapd3dS_vk.string();
-	string d3dStr_vk = d3dS_vk.string();
-
-	if (helpers::compareFiles(d3dStr_vk, wrapd3dStr_vk) == false)
-	{
-
-		if (CopyFileA(wrapd3dStr_vk.c_str(), d3dStr_vk.c_str(), FALSE) == false)
-		{
-			DWORD ERR = GetLastError();
-			MessageBoxA(NULL, "Cannot run M2TWEOP, d3d9_vk.dll replacing error! Try to delete d3d9_vk.dll in game folder or copy d3d9_vk.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
-			exit(0);
-		}
-	}
-
-	// D3D9.dll
-	path wrapd3dS = system_complete("d3d9.dll");
-
-	path d3dS = system_complete("..\\..\\d3d9.dll");
-	string wrapd3dStr = wrapd3dS.string();
-	string d3dStr = d3dS.string();
-
-	if (helpers::compareFiles(d3dStr, wrapd3dStr) == false)
-	{
-
-		if (CopyFileA(wrapd3dStr.c_str(), d3dStr.c_str(), FALSE) == false)
-		{
-			DWORD ERR = GetLastError();
-			MessageBoxA(NULL, "Cannot run M2TWEOP, d3d9.dll replacing error! Try to delete d3d9.dll in game folder or copy d3d.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
-			exit(0);
-		}
-	}
-
-	// FBX SDK
-	path newFbxS = system_complete("libfbxsdk.dll");
-	path fbxS = system_complete("..\\..\\libfbxsdk.dll");
-
-	string newFbxStr = newFbxS.string();
-	string fbxStr = fbxS.string();
-	if (helpers::compareFiles(fbxStr, newFbxStr) == false)
-	{
-
-		if (CopyFileA(newFbxStr.c_str(), fbxStr.c_str(), FALSE) == false)
-		{
-			DWORD ERR = GetLastError();
-			MessageBoxA(NULL, "Cannot run M2TWEOP, libfbxsdk.dll replacing error! Try to delete libfbxsdk.dll in game folder or copy libfbxsdk.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
-			exit(0);
-		}
-	}
-
-	// Lua Dll
-	path newLuaS = system_complete("lua5.1.dll");
-	path luaS = system_complete("..\\..\\lua5.1.dll");
-
-	string newLuaStr = newLuaS.string();
-	string luaStr = luaS.string();
-	if (helpers::compareFiles(luaStr, newLuaStr) == false)
-	{
-
-		if (CopyFileA(newLuaStr.c_str(), luaStr.c_str(), FALSE) == false)
-		{
-			DWORD ERR = GetLastError();
-			MessageBoxA(NULL, "Cannot run M2TWEOP, lua5.1.dll replacing error! Try to delete lua5.1.dll in game folder or copy lua5.1.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
-			exit(0);
-		}
-	}
-
-	// OpenAl Dll
-	path newopenal32S = system_complete("openal32.dll");
-	path openal32S = system_complete("..\\..\\openal32.dll");
-
-	string newopenalStr = newopenal32S.string();
-	string openal32Str = openal32S.string();
-	if (helpers::compareFiles(openal32Str, newopenalStr) == false)
-	{
-
-		if (CopyFileA(newopenalStr.c_str(), openal32Str.c_str(), FALSE) == false)
-		{
-			DWORD ERR = GetLastError();
-			MessageBoxA(NULL, "Cannot run M2TWEOP, openal32.dll replacing error! Try to delete openal32.dll in game folder or copy openal32.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
-			exit(0);
-		}
-	}
-
-	// Discord Game SDK
-	path new_discord_game_sdk = system_complete("discord_game_sdk.dll");
-	path discord_game_sdk = system_complete("..\\..\\discord_game_sdk.dll");
-
-	string new_discord_game_sdk_str = new_discord_game_sdk.string();
-	string discord_game_sdk_str = discord_game_sdk.string();
-	if (helpers::compareFiles(discord_game_sdk_str, new_discord_game_sdk_str) == false)
-	{
-		if (CopyFileA(new_discord_game_sdk_str.c_str(), discord_game_sdk_str.c_str(), FALSE) == false)
-		{
-			DWORD ERR = GetLastError();
-			MessageBoxA(NULL, "Cannot run M2TWEOP, discord_game_sdk.dll replacing error! Try to delete discord_game_sdk.dll in game folder or copy discord_game_sdk.dll from M2TWEOP archive AND START M2TWEOP WITH ADMIN RIGHTS IF IT STILL NOT WORK AFTER THIS. ", "ERROR", MB_OK);
-			exit(0);
-		}
-	}
+	std::vector<std::wstring> oldFiles = {
+		L"..\\..\\d3d9_vk.dll",
+		L"..\\..\\d3d9.dll",
+		L"..\\..\\libfbxsdk.dll",
+		L"..\\..\\lua5.1.dll",
+		L"..\\..\\openal32.dll",
+		L"..\\..\\discord_game_sdk.dll",
+		L"..\\..\\avcodec-61.dll",
+		L"..\\..\\avfilter-10.dll",
+		L"..\\..\\avformat-61.dll",
+		L"..\\..\\avutil-59.dll",
+		L"..\\..\\swresample-5.dll",
+		L"..\\..\\swscale-8.dll",
+	};
+	ensureFiles(newFiles, oldFiles);
 
 	return true;
 }

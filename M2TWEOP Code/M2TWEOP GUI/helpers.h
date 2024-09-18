@@ -42,7 +42,7 @@ public:
 
 	static bool selectGameExe(int gameMode);
 
-	static bool compareFiles(string& oneFile, string& nextFile);
+	static bool compareFiles(wstring& oneFile, wstring& nextFile);
 
 	static void getCurrentPath(string& path);
 	static std::string remove_extension(const std::string &filename);

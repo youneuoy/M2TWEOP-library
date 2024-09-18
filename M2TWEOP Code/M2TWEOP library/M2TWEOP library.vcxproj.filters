@@ -151,6 +151,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Features\videoThings">
+      <UniqueIdentifier>{298e19a4-0550-4b64-91ae-efe752d92cd8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -543,6 +546,18 @@
     <ClInclude Include="types\unit.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="types\campaignAi.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="types\rebelFactions.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="eopVideos.h">
+      <Filter>Features\videoThings</Filter>
+    </ClInclude>
+    <ClInclude Include="eopVideo.h">
+      <Filter>Features\videoThings</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -886,6 +901,18 @@
     </ClCompile>
     <ClCompile Include="types\unit.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\campaignAi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="types\rebelFactions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="eopVideos.cpp">
+      <Filter>Features\videoThings</Filter>
+    </ClCompile>
+    <ClCompile Include="eopVideo.cpp">
+      <Filter>Features\videoThings</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
