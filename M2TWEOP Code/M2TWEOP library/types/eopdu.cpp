@@ -284,7 +284,7 @@ namespace eopDuHelpers
 		Create new M2TWEOPDU entry from a file describing it.
 		@function M2TWEOPDU.addEopEduEntryFromFile
 		@tparam string filepath path to file with unit type description(like in export\_descr\_unit.txt, but only with one record and without comments)
-		@tparam int eopEnryIndex Entry index, which will be assigned to a new record in DU (recommend starting from 1000, so that there is no confusion with records from EDU).
+		@tparam int eopEntryIndex Entry index, which will be assigned to a new record in DU (recommend starting from 1000, so that there is no confusion with records from EDU).
 		@treturn eduEntry retEntry Usually you shouldn't use this value.
 		@usage
 		M2TWEOPDU.addEopEduEntryFromFile(M2TWEOP.getModPath().."/eopData/unitTypes/myTestType.txt",1000);
@@ -294,8 +294,8 @@ namespace eopDuHelpers
 		/***
 		Create new M2TWEOPDU entry.
 		@function M2TWEOPDU.addEopEduEntryFromEDUID
-		@tparam int baseEnryIndex Entry index number, which will be taken as the base for this DU record.
-		@tparam int eopEnryIndex Entry index, which will be assigned to a new record in DU (recommend starting from 1000, so that there is no confusion with records from EDU).
+		@tparam int baseEntryIndex Entry index number, which will be taken as the base for this DU record.
+		@tparam int eopEntryIndex Entry index, which will be assigned to a new record in DU (recommend starting from 1000, so that there is no confusion with records from EDU).
 		@treturn eduEntry retEntry Usually you shouldn't use this value.
 		@usage
 		M2TWEOPDU.addEopEduEntryFromEDUID(1,1000);
@@ -305,7 +305,7 @@ namespace eopDuHelpers
 		/***
 		Get eduEntry of a M2TWEOPDU entry. Needed to change many parameters of the entry.
 		@function M2TWEOPDU.getEopEduEntryByID
-		@tparam int eopEnryIndex Entry index in M2TWEOPDU.
+		@tparam int eopEntryIndex Entry index in M2TWEOPDU.
 		@treturn eduEntry retEntry
 		@usage
 		local eduEntryOfEOPDU=M2TWEOPDU.getEopEduEntryByID(1000);
@@ -317,7 +317,7 @@ namespace eopDuHelpers
 		/***
 		Get eduEntry by index. Needed to change many parameters of the entry.
 		@function M2TWEOPDU.getEduEntry
-		@tparam int EnryIndex Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
+		@tparam int EntryIndex Entry index (Values lower then 500 look for edu entry, values over 500 look for EOP edu entry).
 		@treturn eduEntry retEntry
 		@usage
 		local eduEntry=M2TWEOPDU.getEduEntry(5);
@@ -369,7 +369,7 @@ namespace eopDuHelpers
 		/***
 		Set unit info card for a M2TWEOPDU entry. Requirements for the location and parameters of the image are unchanged in relation to the game.
 		@function M2TWEOPDU.setEntrySoldierModel
-		@tparam int eopEnryIndex Entry index in M2TWEOPDU.
+		@tparam int eopEntryIndex Entry index in M2TWEOPDU.
 		@tparam string newSoldierModel
 		@usage
 		M2TWEOPDU.setEntrySoldierModel(1000,"Sword_and_Buckler_Men");
