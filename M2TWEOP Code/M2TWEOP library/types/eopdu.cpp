@@ -19,7 +19,7 @@ std::unordered_map<int, std::shared_ptr<eopEduEntry>> eopDu::eopUnitIndexLookup{
 
 eopEduEntry::eopEduEntry(int baseIdx, int newIdx)
 {
-    eduEntry* oldEn = unitHelpers::getEDUEntryById(baseIdx);
+    eduEntry* oldEn = eopDu::getEduEntry(baseIdx);
     if (oldEn == nullptr)
     {
         std::string errs = "Can`t create eop`s unit entry:\n";
