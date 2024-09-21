@@ -153,7 +153,7 @@ namespace redistUI
 		ImGui::SetNextWindowPos(helpers::getScreen().screenHalfSize, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
 		ImGui::SetNextWindowSize(ImVec2(size.x, -1), ImGuiCond_Once);
 
-		ImGui::Begin("M2TWEOP health checker##2", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+		ImGui::Begin("M2TWEOP Health Checker##2", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
 		switch (startProcesses.installState)
 		{
@@ -190,7 +190,7 @@ namespace redistUI
 		ImGui::SetNextWindowPos(helpers::getScreen().screenHalfSize, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
 		ImGui::SetNextWindowSize(ImVec2(size.x, -1), ImGuiCond_Once);
 
-		ImGui::Begin("M2TWEOP health checker##1", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+		ImGui::Begin("M2TWEOP Health Checker##1", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
 		const char logoName[] = "eopData/resources/images/deathDance.png";
 		GLImage* imgFinded = helpers::findImage(logoName, sizeof logoName - 1);
