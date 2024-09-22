@@ -1629,6 +1629,7 @@ namespace campaignHelpers
 		@tfield getResourceValue getResourceValue
 		@tfield getResourceHasMine getResourceHasMine
 		@tfield getResourceImage getResourceImage
+		@tfield hasMineBuilt hasMineBuilt
 
 		@table tradeResource
 		*/
@@ -1669,7 +1670,7 @@ namespace campaignHelpers
 		*/
 		typeAll.tradeResource.set_function("getResourceValue", &resourceStruct::getResourceCost);
 		/***
-		Check if the resource has a mine.
+		Check if the resource can have a mine.
 		@function tradeResource:getResourceHasMine
 		@treturn int hasMine 0=no mine, 1=mine
 		@usage
@@ -1678,6 +1679,16 @@ namespace campaignHelpers
 		end
 		*/
 		typeAll.tradeResource.set_function("getResourceHasMine", &resourceStruct::getResourceHasMine);
+		/***
+		Check if the resource has a mine built.
+		@function tradeResource:hasMineBuilt
+		@treturn bool built
+		@usage
+		if tradeResource:hasMineBuilt() then
+			--do stuff
+		end
+		*/
+		typeAll.tradeResource.set_function("hasMineBuilt", &resourceStruct::hasMineBuilt);
 		/***
 		Get the resource's image (icon) relative path.
 		@function tradeResource:getResourceImage
