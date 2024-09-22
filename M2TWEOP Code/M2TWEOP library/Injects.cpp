@@ -4887,6 +4887,64 @@ void onPartialConstructionPush::SetNewCode()
 	delete a;
 }
 
+onOffMapModelThing::onOffMapModelThing(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x009D0194;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x9CF5F4;
+}
+
+void onOffMapModelThing::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(edx);
+	a->push(ecx);
+	a->push(ebp);
+	a->mov(ecx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(ebp);
+	a->pop(ecx);
+	a->pop(edx);
+	a->mov(dword_ptr(esp, 0x78), eax);
+	a->lea(eax, dword_ptr(esp, 0x28));
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onOffMapModelThing2::onOffMapModelThing2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x9D0000;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x9CF460;
+}
+
+void onOffMapModelThing2::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(edx);
+	a->push(ecx);
+	a->push(ebp);
+	a->mov(ecx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(ebp);
+	a->pop(ecx);
+	a->pop(edx);
+	a->mov(edi, eax);
+	a->lea(eax, dword_ptr(esp, 0x38));
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onAddBuilding::onAddBuilding(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

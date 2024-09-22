@@ -1733,6 +1733,30 @@ private:
 	LPVOID funcAddress;
 };
 
+class onOffMapModelThing
+	:public AATemplate
+{
+public:
+	onOffMapModelThing(MemWork* mem, LPVOID addr, int ver);
+	~onOffMapModelThing() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onOffMapModelThing2
+	:public AATemplate
+{
+public:
+	onOffMapModelThing2(MemWork* mem, LPVOID addr, int ver);
+	~onOffMapModelThing2() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onAddBuilding
 	:public AATemplate
 {

@@ -705,6 +705,18 @@ void managerF::execPatches()
 	toPartialConstructionPush->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onOffMapModelThing patch" << '\n';
+	onOffMapModelThing* toOffMapModelThing = new onOffMapModelThing(mem, (LPVOID)patchesForGame::onOffMapModelThing, globals::dataS.gameVersion);
+	toOffMapModelThing->SetNewCode();
+	toOffMapModelThing->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onOffMapModelThing2 patch" << '\n';
+	onOffMapModelThing2* toOffMapModelThing2 = new onOffMapModelThing2(mem, (LPVOID)patchesForGame::onOffMapModelThing, globals::dataS.gameVersion);
+	toOffMapModelThing2->SetNewCode();
+	toOffMapModelThing2->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onRemoveBuilding patch" << '\n';
 	onRemoveBuilding* toRemoveBuilding = new onRemoveBuilding(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
 	toRemoveBuilding->SetNewCode();

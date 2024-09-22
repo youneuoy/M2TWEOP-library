@@ -337,7 +337,7 @@ uint32_t __fastcall patchesForGame::onSetExtentsZoc()
 uint8_t __fastcall patchesForGame::onSetExtentsZocAlpha(uint8_t oldAlpha)
 {
 	const float alphaDiff = oldAlpha / 200.0f;
-	return extentColors::getZocColor().borderAlpha * alphaDiff;
+	return static_cast<uint8_t>(extentColors::getZocColor().borderAlpha * alphaDiff);
 }
 
 int __fastcall patchesForGame::onReligionCombatBonus(int religionID, characterRecord* namedChar)
@@ -956,6 +956,13 @@ int patchesForGame::onConflictTest(const buildingsQueue* queue, int index)
 		}
 	}
 	return 0;
+}
+
+int patchesForGame::onOffMapModelThing(const int culture)
+{
+	if (culture > 6)
+		return 0;
+	return culture;
 }
 
 int patchesForGame::onAddBuildingCapsAfterConstruction(const settlementStruct* sett, int index)
