@@ -4841,7 +4841,7 @@ void onAddSettlementToDiplomacyScroll::SetNewCode()
 	a->mov(edi, dword_ptr(edi, 0));
 	a->push(edi);
 	a->push(eax);
-	a->push(bl);
+	a->push(ebx);
 	a->push(ebp);
 	a->push(ecx);
 	a->push(edx);
@@ -4851,7 +4851,7 @@ void onAddSettlementToDiplomacyScroll::SetNewCode()
 	a->pop(edx);
 	a->pop(ecx);
 	a->pop(ebp);
-	a->pop(bl);
+	a->pop(ebx);
 	a->cmp(eax, 1);
 	a->pop(eax);
 	a->pop(edi);
@@ -5072,8 +5072,7 @@ void getPossibleConstructions::SetNewCode()
 	a->push(ebx);
 	a->push(esi);
 	a->push(edi);
-	a->push(byte_ptr(esp, 0x24));
-	a->push(byte_ptr(esp, 0x24));
+	a->push(word_ptr(esp, 0x24));
 	a->push(dword_ptr(esp, 0x24));
 	a->push(dword_ptr(esp, 0x24));
 	a->push(dword_ptr(esp, 0x24));
