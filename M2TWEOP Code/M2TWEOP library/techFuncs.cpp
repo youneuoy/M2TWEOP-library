@@ -132,6 +132,28 @@ void techFuncs::zip(std::string const& zipFile, std::vector<std::string>& files,
     }
 }
 
+std::string techFuncs::wstringTostring(const std::wstring& wideString)
+{
+    int bufferSize = WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, NULL, 0, NULL, NULL);
+    if (bufferSize == 0)
+    {
+        // Handle error, e.g., GetLastError()
+        return "";
+    }
+
+    LPSTR narrowString = new char[bufferSize];
+    if (WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, narrowString, bufferSize, NULL, NULL) == 0)
+    {
+        // Handle error, e.g., GetLastError()
+        delete[] narrowString;
+        return "";
+    }
+
+    std::string res = narrowString;
+    delete[] narrowString;
+    return res;
+}
+
 std::wstring techFuncs::convertUtf8ToWide(const std::string& str)
 {
     const int count = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), nullptr, 0);

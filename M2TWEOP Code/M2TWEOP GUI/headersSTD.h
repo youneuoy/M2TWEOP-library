@@ -51,8 +51,8 @@ json[jsonName]=field;
 struct fontS
 {
 	ImFont* font;
-	string path;
-	string name;
+	wstring path;
+	wstring name;
 };
 struct GLImage
 {

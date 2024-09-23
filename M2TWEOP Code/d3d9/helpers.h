@@ -20,9 +20,9 @@ json[jsonName]=field;
 class helpers
 {
 public:
-	static std::vector<std::string> splitString(const std::string& phrase, const std::string& delimiter);
-	static std::string doEOPPipe(int waitSeconds, bool cleanup);
-	static jsn::json loadJsonFromFile(const std::string& fpath);
-	static std::string helpers::getModPathFromSharedMemory();
-	static std::string helpers::getModFolderFromPipe(const std::string &msg);
+	static std::vector<std::wstring> splitString(const std::wstring& phrase, const std::wstring& delimiter);
+	static std::wstring doEOPPipe(int waitSeconds, bool cleanup);
+	static jsn::json loadJsonFromFile(const std::wstring& fpath);
+	static std::wstring helpers::getModPathFromSharedMemory();
+	static std::wstring helpers::getModFolderFromPipe(const std::wstring &msg);
 };

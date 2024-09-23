@@ -75,9 +75,9 @@ void markdown(const char* str, const char* str_end)
 }
 void markdownHelper::setFonts()
 {
-	fontsS.g_font_regular = helpers::findFont("markH1");
-	fontsS.g_font_bold = helpers::findFont("markH2");
-	fontsS.g_font_bold_large = helpers::findFont("markH3");
+	fontsS.g_font_regular = helpers::findFont(L"markH1");
+	fontsS.g_font_bold = helpers::findFont(L"markH2");
+	fontsS.g_font_bold_large = helpers::findFont(L"markH3");
 }
 
 void markdownHelper::drawMarkdown(const string& text)

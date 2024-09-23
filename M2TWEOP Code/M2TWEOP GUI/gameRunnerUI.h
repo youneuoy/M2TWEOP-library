@@ -2,7 +2,7 @@
 #include "headersSTD.h"
 namespace gameRunnerUI
 {
-	void setRunParams(const string&exePath,const string&exeArgs,const string&eopArgs,bool isEopNeeded);
+	void setRunParams(const wstring&exePath,const wstring&exeArgs,const wstring&eopArgs,bool isEopNeeded);
 	int drawUI(bool* isOpen);
 	void maintainGUI();
 };

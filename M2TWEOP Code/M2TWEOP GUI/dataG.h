@@ -29,16 +29,16 @@ public:
 		{
 			int gameMode = 0;
 
-			string gamePath;
-			string modFolder;
+			wstring gamePath;
+			wstring modFolder;
 
 			// Freecam Integration
-			string freecamExeName = "Freecam.exe";
+			wstring freecamExeName = L"Freecam.exe";
 			bool freecamIntegration = false;
 			string freecamFolder = "<folder_with_freecam.exe>";
 
-			string exeName;
-			string gameArgs;
+			wstring exeName;
+			wstring gameArgs;
 
 			// Discord Rich Presence
 			bool isDiscordRichPresenceEnabled = true;

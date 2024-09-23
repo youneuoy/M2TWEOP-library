@@ -59,6 +59,9 @@ namespace techFuncs
 	std::vector<std::string>unzip(std::string const& zipFile, std::string const& path);
 	void zip(std::string const& zipFile, std::vector<std::string>& files, const std::string& saveFile, const std::string& nameOfSaveFile);
 
+
+
+	std::string wstringTostring(const std::wstring& wideString);
 	std::wstring convertUtf8ToWide(const std::string& str);
 
 	std::string uniToAnsi(UNICODE_STRING**& uniStr);

@@ -8,7 +8,7 @@ using namespace std;
 namespace m2tweopStarter
 {
 
-	typedef void (*m2tweopInit)(const char*, int);
+	typedef void (*m2tweopInit)(const wchar_t*, int);
 	typedef void (*m2tweopD3DCreate)(IDirect3DDevice9*);
 	typedef void (*m2tweopEndScene)(IDirect3DDevice9*);
 
@@ -30,30 +30,30 @@ namespace m2tweopStarter
 		bool isEOPipe = false;
 
 
-		string modPath;
+		wstring modPath;
 		int gameVer=0;
 	}dataEOP;
 
-	bool parsePipeMessage(const string&msg)
+	bool parsePipeMessage(const wstring&msg)
 	{
-		vector<string>args=helpers::splitString(msg, "\n");
+		vector<wstring>args=helpers::splitString(msg, L"\n");
 		if (args.size() != 5)
 		{
 			return false;
 		}
 
-		if (args[0] != "m2tweopStartCommand")
+		if (args[0] != L"m2tweopStartCommand")
 		{
 			return false;
 		}
 
-		if (args[1] != "eopModFolder:")
+		if (args[1] != L"eopModFolder:")
 		{
 			return false;
 		}
 		dataEOP.modPath = args[2];
 
-		if (args[3] != "GameVer:")
+		if (args[3] != L"GameVer:")
 		{
 			return false;
 		}
@@ -64,7 +64,7 @@ namespace m2tweopStarter
 
 	void doM2TWEOP()
 	{
-		string resMsg = helpers::doEOPPipe(5, true);
+		wstring resMsg = helpers::doEOPPipe(5, true);
 		dataEOP.isEOPipe=parsePipeMessage(resMsg);
 
 		if (dataEOP.isEOPipe == false)
@@ -74,13 +74,13 @@ namespace m2tweopStarter
 		}
 
 
-		string libPath = dataEOP.modPath+"\\M2TWEOPLibrary.dll";
-		dataEOP.hmtw=LoadLibraryA(libPath.c_str());
+		wstring libPath = dataEOP.modPath+L"\\M2TWEOPLibrary.dll";
+		dataEOP.hmtw=LoadLibraryW(libPath.c_str());
 		if (dataEOP.hmtw == NULL)
 		{
-			string errmsg = "Cannot load ";
+			wstring errmsg = L"Cannot load ";
 			errmsg += libPath;
-			MessageBoxA(NULL, errmsg.c_str(), "ATTENTION!", NULL);
+			MessageBoxW(NULL, errmsg.c_str(), L"ATTENTION!", NULL);
 			exit(0);
 		}
 		dataEOP.eopInitF = (m2tweopInit)GetProcAddress(dataEOP.hmtw, "initEOP");

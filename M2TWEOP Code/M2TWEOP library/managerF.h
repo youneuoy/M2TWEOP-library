@@ -13,6 +13,6 @@ private:
 
 namespace managerExport
 {
-	EOP_EXPORT void initEOP(const char* modPath, int gameVer);
+	EOP_EXPORT void initEOP(const wchar_t* modPath, int gameVer);
 
 }

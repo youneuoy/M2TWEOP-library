@@ -4,7 +4,7 @@
 bool gameStarter::startGame()
 {
 	//SetCurrentDirectoryA("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Medieval II Total War\\mods\\teutonic");
-	string gameStartArgs;
+	wstring gameStartArgs;
 
 	if (dataG::data.gameData.gameMode == 0)
 	{
@@ -16,7 +16,7 @@ bool gameStarter::startGame()
 		MessageBoxA(NULL, "M2TWEOP cannot find medieval2.exe or kingdoms.exe. You probably installed the mod in the wrong folder. The file structure should look something 'Medieval II Total War/mods/<mod_folder>'", "Error!", NULL);
 		return false;
 	}
-	gameStartArgs += dataG::data.gameData.exeName + ' ';
+	gameStartArgs += dataG::data.gameData.exeName + L' ';
 
 	// vanilla
 	if (dataG::data.gameData.gameMode == 1)
@@ -46,7 +46,7 @@ bool gameStarter::startGame()
 		}
 		if (dataG::data.modData.useVanillaConfig == true)
 		{
-			dataG::data.gameData.gameArgs += " --features.mod=mods/";
+			dataG::data.gameData.gameArgs += L" --features.mod=mods/";
 			dataG::data.gameData.gameArgs += dataG::data.gameData.modFolder;
 			if (!runGameExe())
 			{
@@ -55,10 +55,10 @@ bool gameStarter::startGame()
 		}
 		else
 		{
-			dataG::data.gameData.gameArgs += " @mods\\";
+			dataG::data.gameData.gameArgs += L" @mods\\";
 			dataG::data.gameData.gameArgs += dataG::data.gameData.modFolder;
-			dataG::data.gameData.gameArgs += '\\';
-			dataG::data.gameData.gameArgs += dataG::data.modData.configName;
+			dataG::data.gameData.gameArgs += L'\\';
+			dataG::data.gameData.gameArgs += helpers::stringToWstring(dataG::data.modData.configName);
 
 
 			if (!runGameExe())
@@ -73,21 +73,21 @@ bool gameStarter::startGame()
 
 bool gameStarter::runGameExe()
 {
-	string eopArgs;
+	wstring eopArgs;
 	bool isEopNeeded = dataG::data.modData.useM2TWEOP;
 	if (isEopNeeded == true)
 	{
 
-		string currentPath;
-		helpers::getCurrentPath(currentPath);
+		wstring currentPath;
+		helpers::getCurrentPathW(currentPath);
 
-		eopArgs = helpers::makeFString(
-			"%s\n%s\n%s\n%s\n%s",
-			"m2tweopStartCommand",
-			"eopModFolder:",
+		eopArgs = helpers::makeFStringW(
+			L"%ws\n%ws\n%ws\n%ws\n%ws",
+			L"m2tweopStartCommand",
+			L"eopModFolder:",
 			currentPath.c_str(),
-			"GameVer:",
-			to_string(dataG::data.gameData.gameVer).c_str()
+			L"GameVer:",
+			to_wstring(dataG::data.gameData.gameVer).c_str()
 		);
 
 	}

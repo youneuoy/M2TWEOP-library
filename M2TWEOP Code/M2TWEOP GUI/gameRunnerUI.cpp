@@ -27,9 +27,9 @@ namespace gameRunnerUI
 	namespace bp = boost::process;
 	struct
 	{
-		string exePath;
-		string exeArgs;
-		string eopArgs;
+		wstring exePath;
+		wstring exeArgs;
+		wstring eopArgs;
 		bool isEopNeeded = false;
 		;
 
@@ -46,7 +46,7 @@ namespace gameRunnerUI
 		float sendingEndTime = 0.f;
 
 	} startProcess;
-	void setRunParams(const string &exePath, const string &exeArgs, const string &eopArgs, bool isEopNeeded)
+	void setRunParams(const wstring &exePath, const wstring &exeArgs, const wstring &eopArgs, bool isEopNeeded)
 	{
 
 		startProcess.exePath = exePath;
@@ -69,16 +69,16 @@ namespace gameRunnerUI
 			}
 		}
 	}
-	void runGameThread(std::atomic_bool &isStarted, std::atomic_bool &isEnded, std::atomic_bool &isGetResponse, const string &exePath, const string &exeArgs, const string &eopArgs, bool isEopNeeded)
+	void runGameThread(std::atomic_bool &isStarted, std::atomic_bool &isEnded, std::atomic_bool &isGetResponse, const wstring &exePath, const wstring &exeArgs, const wstring &eopArgs, bool isEopNeeded)
 	{
 
-		string startArgs = exeArgs;
+		wstring startArgs = exeArgs;
 		startArgs.erase(0, 1);
 
 		bp::child gameProcess(
 			dataG::data.gameData.gamePath,
 			bp::args(startArgs),
-			bp::start_dir = "..\\..");
+			bp::start_dir = L"..\\..");
 		gameProcess.detach();
 		bool startResult = helpers::doPipe(eopArgs, 200);
 
@@ -168,14 +168,10 @@ namespace gameRunnerUI
 			// Open Freecam if we are using the integration
 			if (dataG::data.gameData.freecamIntegration == true)
 			{
-				std::string exePath = dataG::data.gameData.freecamFolder + "\\Freecam.exe";
+				std::wstring exePath = helpers::stringToWstring(dataG::data.gameData.freecamFolder + "\\Freecam.exe");
 
-				std::wstring wideFolderPath = helpers::stringToWstring(dataG::data.gameData.freecamFolder);
-				std::wstring wideExePath = helpers::stringToWstring(exePath);
-
-				LPSTR lpstr = helpers::ConvertWideStringToLPSTR(wideExePath);
-				LPSTR lpstr_folder = helpers::ConvertWideStringToLPSTR(wideFolderPath);
-				helpers::openProcess(lpstr, lpstr_folder);
+				std::wstring workingDir = helpers::stringToWstring(dataG::data.gameData.freecamFolder);
+				helpers::openProcess(exePath, workingDir);
 			}
 			// Stop the launcher background music if Rich Presence is enabled and the launcher will stay open
 			if (dataG::data.gameData.isDiscordRichPresenceEnabled == true && dataG::data.audio.bkgMusic.isMusicNeeded == true)

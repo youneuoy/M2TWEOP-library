@@ -15,6 +15,8 @@
 #include "patchesForGame.h"
 #include "dbghelp.h"
 
+
+#include "techFuncs.h"
 void managerF::debug()
 {
 	//MessageBoxA(NULL, "TEST", "TEST", NULL);
@@ -1271,15 +1273,18 @@ void managerF::initThread()
 	globals::dataS.Modules.tacticalMapViewer.init(globals::dataS.gameVersion);
 }
 
-EOP_EXPORT void managerExport::initEOP(const char* modPath, const int gameVer)
+EOP_EXPORT void managerExport::initEOP(const wchar_t* modPath, const int gameVer)
 {
 	// Initialize MinHook.
 	if (MH_Initialize() != MH_OK)
 		return;
 	globals::dataS.gameVersion = gameVer;
-	globals::dataS.modPath = modPath;
+
+	std::wstring wPath = modPath;
+	std::string path = techFuncs::wstringTostring(wPath);
+	globals::dataS.modPath = path;
 	SymSetOptions(SYMOPT_DEFERRED_LOADS);
-	SymInitialize((HANDLE)GetCurrentProcess(), (PCSTR)modPath, TRUE);
+	SymInitialize((HANDLE)GetCurrentProcess(), (PCSTR)path.c_str(), TRUE);
 	CreateDirectoryA("logs", nullptr);
 	managerF::initThread();
 }

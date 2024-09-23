@@ -96,7 +96,7 @@ namespace mainUI
 		ImGui::Begin(windowTitle.c_str(), isOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
 		const char logoName[] = "eopData/resources/images/logoAbout.png";
-		GLImage* imgFinded = helpers::findImage("eopData/resources/images/logoAbout.png", sizeof logoName-1);
+		GLImage* imgFinded = helpers::findImage("eopData/resources/images/logoAbout.png", strlen(logoName));
 
 		ImVec2 const csz = ImGui::GetContentRegionAvail();
 		ImVec2 logoSize = ImVec2((float)imgFinded->xSize, (float)imgFinded->ySize);

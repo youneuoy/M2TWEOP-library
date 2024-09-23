@@ -11,6 +11,32 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <TlHelp32.h>
+std::wstring helpers::makeFStringW(const wchar_t* fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	std::vector<wchar_t> v(1024);
+	while (true)
+	{
+		va_list args2;
+		va_copy(args2, args);
+		int res = _vsnwprintf_s(v.data(), v.size(), v.size(), fmt, args2);
+		if ((res >= 0) && (res < static_cast<int>(v.size())))
+		{
+			va_end(args);
+			va_end(args2);
+			return std::wstring(v.data());
+		}
+		size_t size;
+		if (res < 0)
+			size = v.size() * 2;
+		else
+			size = static_cast<size_t>(res) + 1;
+		v.clear();
+		v.resize(size);
+		va_end(args2);
+	}
+}
 std::string helpers::makeFString(const char* fmt, ...)
 {
 	va_list args;
@@ -70,27 +96,27 @@ bool helpers::loadTexture(const char* filename, GLuint* out_texture, int* out_wi
 	return true;
 }
 
-void helpers::openProcess(LPSTR& exePath, LPSTR& workingDir)
+void helpers::openProcess(wstring& exePath, wstring& workingDir)
 {
 	// Create process information
 	PROCESS_INFORMATION processInfo;
 	ZeroMemory(&processInfo, sizeof(processInfo));
 
 	// Create startup information
-	STARTUPINFO startupInfo;
+	STARTUPINFOW startupInfo;
 	ZeroMemory(&startupInfo, sizeof(startupInfo));
 	startupInfo.cb = sizeof(startupInfo);
 
 	// Create the process
-	if (CreateProcess(
+	if (CreateProcessW(
 			NULL,	 // Application name (use NULL to use command line)
-			exePath, // Command line
+			(wchar_t*)exePath.c_str(), // Command line
 			NULL,	 // Process security attributes
 			NULL,	 // Thread security attributes
 			FALSE,	 // Inherit handles from the calling process
 			0,		 // Creation flags
 			NULL,	 // Use parent's environment block
-			workingDir,	 // Use parent's starting directory
+			workingDir.c_str(),	 // Use parent's starting directory
 			&startupInfo,
 			&processInfo))
 	{
@@ -109,18 +135,18 @@ void helpers::openProcess(LPSTR& exePath, LPSTR& workingDir)
 	}
 }
 
-void helpers::closeProcess(const string& exeName)
+void helpers::closeProcess(const wstring& exeName)
 {
 	HANDLE gameHNDL = NULL;
-	PROCESSENTRY32 Pc = { sizeof(PROCESSENTRY32) };
+	PROCESSENTRY32W Pc = { sizeof(PROCESSENTRY32W) };
 	HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, 0);
-	if (Process32First(hSnapshot, &Pc)) {
+	if (Process32FirstW(hSnapshot, &Pc)) {
 		do {
-			if (!strcmp(Pc.szExeFile, exeName.c_str())) {
+			if (!wcscmp(Pc.szExeFile, exeName.c_str())) {
 				gameHNDL= OpenProcess(PROCESS_ALL_ACCESS, TRUE, Pc.th32ProcessID);
 				break;
 			}
-		} while (Process32Next(hSnapshot, &Pc));
+		} while (Process32NextW(hSnapshot, &Pc));
 	}
 	if (gameHNDL == NULL)return;
 
@@ -130,16 +156,16 @@ void helpers::closeProcess(const string& exeName)
 	CloseHandle(gameHNDL);
 }
 
-bool helpers::isProcessRunning(const string& exeName) {
-	PROCESSENTRY32 Pc = { sizeof(PROCESSENTRY32) };
+bool helpers::isProcessRunning(const wstring& exeName) {
+	PROCESSENTRY32W Pc = { sizeof(PROCESSENTRY32W) };
 	HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, 0);
 	bool isProcessFound = false;
-	if (Process32First(hSnapshot, &Pc)) {
+	if (Process32FirstW(hSnapshot, &Pc)) {
 		do {
-			if (strcmp(Pc.szExeFile, exeName.c_str()) == 0) {
+			if (wcscmp(Pc.szExeFile, exeName.c_str()) == 0) {
 				isProcessFound = true;
 			}
-		} while (Process32Next(hSnapshot, &Pc));
+		} while (Process32NextW(hSnapshot, &Pc));
 	}
 
 	return isProcessFound;
@@ -178,54 +204,54 @@ GLImage* helpers::findImage(const char* name, int nameLen)
 	return findImage("empty", 5);
 }
 
-ImFont* helpers::findFont(const char* name)
+ImFont* helpers::findFont(const wchar_t* name)
 {
 	for (fontS* fnt : dataG::data.staticFontsCollection)
 	{
-		if (strcmp(name, fnt->name.c_str()) == 0)
+		if (wcscmp(name, fnt->name.c_str()) == 0)
 		{
 			return fnt->font;
 		}
 	}
-	return findFont("mainFont");
+	return findFont(L"mainFont");
 }
 #include <boost/process.hpp>
 
-void helpers::runGame(const char* exeFile, const char* exeParam)
+void helpers::runGame(const wchar_t* exeFile, const wchar_t* exeParam)
 {
 	namespace bp = boost::process;
-	string line;
-	line+= "\"";
+	wstring line;
+	line+= L"\"";
 	line += dataG::data.gameData.gamePath;
-	line += "\"";
+	line += L"\"";
 
 	line += exeParam;
 	bp::child c(bp::cmd(line)
-		, bp::start_dir = "..\\.."
+		, bp::start_dir = L"..\\.."
 	);
 	c.wait();
 
 }
 
-bool helpers::addModPathArg(string& args, int gameMode)
+bool helpers::addModPathArg(wstring& args, int gameMode)
 {
 	if (gameMode == 2)
 	{
-		args += "--features.mod=mods/americas ";
+		args += L"--features.mod=mods/americas ";
 	}
 	else if (gameMode == 3)
 	{
-		args += "--features.mod=mods/british_isles ";
+		args += L"--features.mod=mods/british_isles ";
 	}
 
 	else if (gameMode == 4)
 	{
-		args += "--features.mod=mods/crusades ";
+		args += L"--features.mod=mods/crusades ";
 	}
 
 	else if (gameMode == 5)
 	{
-		args += "--features.mod=mods/teutonic ";
+		args += L"--features.mod=mods/teutonic ";
 	}
 	else
 	{
@@ -238,14 +264,14 @@ bool helpers::addModPathArg(string& args, int gameMode)
 #define BOOST_DATE_TIME_NO_LIB 1
 #include <boost/interprocess/windows_shared_memory.hpp>
 #include <boost/interprocess/mapped_region.hpp>
-bool helpers::doPipe(const string& message, int waitSeconds)
+bool helpers::doPipe(const wstring& message, int waitSeconds)
 {
 	namespace bip = boost::interprocess;
 
 
 
 	//Create a native windows shared memory object.
-	bip::windows_shared_memory shm(bip::create_only, "M2TWEOPStartMem1", bip::read_write, message.size() + 5);
+	bip::windows_shared_memory shm(bip::create_only, "M2TWEOPStartMem1", bip::read_write, message.size()*2 + 5);
 
 	//Map the whole shared memory in this process
 	bip::mapped_region region(shm, bip::read_write);
@@ -279,16 +305,16 @@ bool helpers::doPipe(const string& message, int waitSeconds)
 
 
 
-int makeFullPath(string& path)
+int makeFullPath(wstring& path)
 {
-	TCHAR fullPath[MAX_PATH];
-	int iret = GetFullPathNameA(path.c_str(), MAX_PATH, fullPath, NULL);
+	WCHAR fullPath[MAX_PATH];
+	int iret = GetFullPathNameW(path.c_str(), MAX_PATH, fullPath, NULL);
 	path = fullPath;
 
 	return iret;
 }
 
-int getVersion(string& exePath)
+int getVersion(wstring& exePath)
 {
 	ifstream f1(exePath, ios::binary);
 
@@ -323,13 +349,13 @@ int getVersion(string& exePath)
 bool helpers::selectGameExe(int gameMode)
 {
 	setModFolder(dataG::data.gameData.modFolder);
-	string exePath = "..\\..\\medieval2.exe";
+	wstring exePath = L"..\\..\\medieval2.exe";
 	int gameVersion = getVersion(exePath);
 	if (gameMode == 1)
 	{
 		if (gameVersion != 0)
 		{
-			dataG::data.gameData.exeName = "medieval2.exe";
+			dataG::data.gameData.exeName = L"medieval2.exe";
 			dataG::data.gameData.gameVer = gameVersion;
 			dataG::data.gameData.gamePath = exePath;
 			return true;
@@ -337,17 +363,17 @@ bool helpers::selectGameExe(int gameMode)
 	}
 	if (gameVersion == 2 || gameVersion == 1)
 	{
-		dataG::data.gameData.exeName = "medieval2.exe";
+		dataG::data.gameData.exeName = L"medieval2.exe";
 		dataG::data.gameData.gameVer = gameVersion;
 		dataG::data.gameData.gamePath = exePath;
 		return true;
 	}
 
-	exePath = "..\\..\\kingdoms.exe";
+	exePath = L"..\\..\\kingdoms.exe";
 	gameVersion = getVersion(exePath);
 	if (gameVersion == 2 || gameVersion == 1)
 	{
-		dataG::data.gameData.exeName = "kingdoms.exe";
+		dataG::data.gameData.exeName = L"kingdoms.exe";
 		dataG::data.gameData.gameVer = gameVersion;
 		dataG::data.gameData.gamePath = exePath;
 		return true;
@@ -417,15 +443,21 @@ bool helpers::compareFiles(wstring& oneFile, wstring& nextFile)
 	return true;
 }
 
-void helpers::setModFolder(string& modFolder)
+void helpers::setModFolder(wstring& modFolder)
 {
-	TCHAR currentPath[MAX_PATH] = { 0 };
-	DWORD ret = GetCurrentDirectoryA(MAX_PATH, currentPath);
+	WCHAR currentPath[MAX_PATH] = { 0 };
+	DWORD ret = GetCurrentDirectoryW(MAX_PATH, currentPath);
 	modFolder = currentPath;
-	size_t pos = modFolder.find_last_of("\\/")+1;
+	size_t pos = modFolder.find_last_of(L"\\/")+1;
 	modFolder = modFolder.substr(pos);
 }
 
+void helpers::getCurrentPathW(wstring& path)
+{
+	WCHAR currentPath[MAX_PATH] = { 0 };
+	DWORD ret = GetCurrentDirectoryW(MAX_PATH, currentPath);
+	path = currentPath;
+}
 void helpers::getCurrentPath(string& path)
 {
 	TCHAR currentPath[MAX_PATH] = { 0 };
@@ -576,6 +608,8 @@ std::string helpers::remove_extension(const std::string &filename)
 	return filename.substr(0, lastdot);
 }
 
+
+
 // StringtoWstring function
 std::wstring helpers::stringToWstring(const std::string& str) {
     // Set the locale to the user's default locale
@@ -598,6 +632,27 @@ std::wstring helpers::stringToWstring(const std::string& str) {
 
     // Return the result as a std::wstring
     return std::wstring(buffer.data(), convertedChars);
+}
+std::string helpers::wstringTostring(const std::wstring& wideString)
+{
+	int bufferSize = WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, NULL, 0, NULL, NULL);
+	if (bufferSize == 0)
+	{
+		// Handle error, e.g., GetLastError()
+		return "";
+	}
+
+	LPSTR narrowString = new char[bufferSize];
+	if (WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, narrowString, bufferSize, NULL, NULL) == 0)
+	{
+		// Handle error, e.g., GetLastError()
+		delete[] narrowString;
+		return "";
+	}
+
+	std::string res = narrowString;
+	delete[] narrowString;
+	return res;
 }
 
 // Function to convert std::wstring to LPSTR

@@ -2,12 +2,12 @@
 #include "json.hpp"
 
 using namespace std;
-vector<std::string> helpers::splitString(const std::string &phrase, const std::string &delimiter)
+vector<std::wstring> helpers::splitString(const std::wstring &phrase, const std::wstring &delimiter)
 {
-    vector<string> list;
-    string s = string(phrase);
+    vector<wstring> list;
+    wstring s = wstring(phrase);
     size_t pos = 0;
-    string token;
+    wstring token;
     while ((pos = s.find(delimiter)) != string::npos)
     {
         token = s.substr(0, pos);
@@ -21,9 +21,9 @@ vector<std::string> helpers::splitString(const std::string &phrase, const std::s
 #define BOOST_DATE_TIME_NO_LIB 1
 #include <boost/interprocess/windows_shared_memory.hpp>
 #include <boost/interprocess/mapped_region.hpp>
-std::string helpers::doEOPPipe(int waitSeconds, bool cleanup)
+std::wstring helpers::doEOPPipe(int waitSeconds, bool cleanup)
 {   
-    std::string result;
+    std::wstring result;
     ULONGLONG startTime = GetTickCount64();
     ULONGLONG endTime = startTime + 1000ull * waitSeconds;
     namespace bip = boost::interprocess;
@@ -37,7 +37,7 @@ std::string helpers::doEOPPipe(int waitSeconds, bool cleanup)
             bip::windows_shared_memory shm(bip::open_only, "M2TWEOPStartMem1", bip::read_write);
             //Map the whole shared memory in this process
             bip::mapped_region region(shm, bip::read_write);
-            char* mem = static_cast<char*>(region.get_address());
+            wchar_t* mem = static_cast<wchar_t*>(region.get_address());
             result = mem;
 
             if (cleanup == true) {
@@ -54,50 +54,50 @@ std::string helpers::doEOPPipe(int waitSeconds, bool cleanup)
     return result;
 }
 
-std::string helpers::getModFolderFromPipe(const string &msg)
+std::wstring helpers::getModFolderFromPipe(const wstring &msg)
 {
-    vector<string> args = helpers::splitString(msg, "\n");
+    vector<wstring> args = helpers::splitString(msg, L"\n");
     return args[2];
 }
-bool IsEopPipeMessage(const string& msg)
+bool IsEopPipeMessage(const wstring& msg)
 {
-    vector<string>args = helpers::splitString(msg, "\n");
+    vector<wstring>args = helpers::splitString(msg, L"\n");
     if (args.size() != 5)
     {
         return false;
     }
 
-    if (args[0] != "m2tweopStartCommand")
+    if (args[0] != L"m2tweopStartCommand")
     {
         return false;
     }
 
-    if (args[1] != "eopModFolder:")
+    if (args[1] != L"eopModFolder:")
     {
         return false;
     }
 
-    if (args[3] != "GameVer:")
+    if (args[3] != L"GameVer:")
     {
         return false;
     }
 
     return true;
 }
-std::string helpers::getModPathFromSharedMemory()
+std::wstring helpers::getModPathFromSharedMemory()
 {
-    string resMsg = helpers::doEOPPipe(5, false);
+    wstring resMsg = helpers::doEOPPipe(5, false);
     if (IsEopPipeMessage(resMsg) == true)
     {
         return helpers::getModFolderFromPipe(resMsg);
     }
     else
     {
-        return "";
+        return L"";
     }
 }
 
-jsn::json helpers::loadJsonFromFile(const std::string &fpath)
+jsn::json helpers::loadJsonFromFile(const std::wstring &fpath)
 {
     try
     {

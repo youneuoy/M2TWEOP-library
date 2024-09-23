@@ -14,9 +14,10 @@ namespace managerG
 		helpers::loadTexture(dataG::data.images.logoBad.path.c_str(), &dataG::data.images.logoBad.image,
 			&dataG::data.images.logoBad.xSize, &dataG::data.images.logoBad.ySize);
 	}
-	void loadFont(fontS* fnt, const char* path, const char* name, float fontSize)
+	void loadFont(fontS* fnt, const wchar_t* path, const wchar_t* name, float fontSize)
 	{
-		fnt->font = ImGui::GetIO().Fonts->AddFontFromFileTTF(path, fontSize);
+		std::string fntPath = helpers::wstringTostring(path);
+		fnt->font = ImGui::GetIO().Fonts->AddFontFromFileTTF(fntPath.c_str(), fontSize);
 		if (fnt->font == nullptr)
 		{
 			ImFontConfig font_config;
@@ -33,11 +34,11 @@ namespace managerG
 	void loadFonts()
 	{
 		float fontsSize = 22.f;
-		loadFont(&dataG::data.fonts.mainFont, "eopData/resources/fonts/mainFont.ttf", "mainFont", fontsSize);
+		loadFont(&dataG::data.fonts.mainFont, L"eopData/resources/fonts/mainFont.ttf", L"mainFont", fontsSize);
 
-		loadFont(&dataG::data.fonts.markdownH1Font, "eopData/resources/fonts/markdownH1Font.ttf", "markdownH1Font", 12.f);
-		loadFont(&dataG::data.fonts.markdownH2Font, "eopData/resources/fonts/markdownH2Font.ttf", "markdownH2Font", 18.f);
-		loadFont(&dataG::data.fonts.markdownH3Font, "eopData/resources/fonts/markdownH3Font.ttf", "markdownH3Font", 22.f);
+		loadFont(&dataG::data.fonts.markdownH1Font, L"eopData/resources/fonts/markdownH1Font.ttf", L"markdownH1Font", 12.f);
+		loadFont(&dataG::data.fonts.markdownH2Font, L"eopData/resources/fonts/markdownH2Font.ttf", L"markdownH2Font", 18.f);
+		loadFont(&dataG::data.fonts.markdownH3Font, L"eopData/resources/fonts/markdownH3Font.ttf", L"markdownH3Font", 22.f);
 	}
 	bool isLibraryLoadable(const string& path)
 	{

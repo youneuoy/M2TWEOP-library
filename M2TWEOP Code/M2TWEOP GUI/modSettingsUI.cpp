@@ -198,9 +198,7 @@ namespace modSettingsUI
 		{
 			std::wstring folderPath = L".\\eopData\\resources\\themes\\ImTheme";
 			std::wstring exePath = L".\\eopData\\resources\\themes\\ImTheme\\ImThemes-0.2.6-amd64.exe";
-			LPSTR lpwstr = helpers::ConvertWideStringToLPSTR(exePath);
-			LPSTR lpwstr_folder = helpers::ConvertWideStringToLPSTR(folderPath);
-			helpers::openProcess(lpwstr, lpwstr_folder);
+			helpers::openProcess(exePath, folderPath);
 		}
 		if (ImGui::Button("Refresh theme", helpers::getScreen().centerXButton))
 		{
