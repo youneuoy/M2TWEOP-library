@@ -1,4 +1,5 @@
 ---@diagnostic disable: lowercase-global
+require('helpers/tableSave')
 
 -- Uncomment to use VSCode Lua Debugger
 -- json = require "helpers/dkjson"

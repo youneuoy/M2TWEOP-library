@@ -16,7 +16,7 @@ if (!funcResult.valid())\
 	sol::error luaError = funcResult;\
 	UINT defaultFlags = MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION;\
 	int result = MessageBoxA(NULL, luaError.what(), "Lua exception!", defaultFlags);\
-	if (plugData::data.luaAll.checkVar("terminateAtLuaException", 1) == true)\
+	if (plugData::data.luaAll.checkVar("TERMINATE_AT_LUA_EXCEPTION", 1) == true)\
 	{\
 		terminate();\
 	}\

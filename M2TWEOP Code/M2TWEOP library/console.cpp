@@ -35,11 +35,6 @@ namespace console
 	{
 		consoleData.isDraw = !consoleData.isDraw;
 		consoleData.pressAmount = 0;
-
-		if (plugData::data.luaAll.checkVar("enableConsole", 1) == false)
-		{
-			consoleData.isDraw = false;
-		}
 	}
 
 
