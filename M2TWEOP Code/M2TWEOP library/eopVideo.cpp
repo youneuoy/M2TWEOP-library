@@ -200,9 +200,9 @@ void eopVideo::uploadFrameToDirectXTexture()
 	uint8_t* data[1] = { nullptr };
 	int linesize[1] = { 0 };
 
-	std::vector<uint8_t> rgbData(videoWidth * videoHeight * 3);
+	std::vector<uint8_t> rgbData(videoWidth * videoHeight * 4);
 	data[0] = rgbData.data();
-	linesize[0] = videoWidth * 3;
+	linesize[0] = videoWidth * 4;
 
 	sws_scale(swsContext, frame->data, frame->linesize, 0, videoHeight, data, linesize);
 
