@@ -5072,7 +5072,8 @@ void getPossibleConstructions::SetNewCode()
 	a->push(ebx);
 	a->push(esi);
 	a->push(edi);
-	a->push(word_ptr(esp, 0x24));
+	a->push(dword_ptr(esp, 0x24));
+	a->push(dword_ptr(esp, 0x24));
 	a->push(dword_ptr(esp, 0x24));
 	a->push(dword_ptr(esp, 0x24));
 	a->push(dword_ptr(esp, 0x24));
