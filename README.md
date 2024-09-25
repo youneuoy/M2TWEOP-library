@@ -98,6 +98,7 @@ For a full list of EOP Events, see [here](https://youneuoy.github.io/M2TWEOP-lib
 
 ## Building Locally
 
+### M2TWEOP Library and GUI
 **Requirements**
 
 * [Microsoft Visual Studio 2022](https://community.chocolatey.org/packages/visualstudio2022community)
@@ -123,6 +124,14 @@ Use [Choco](https://chocolatey.org/install) for easy installation of the DirectX
 ```
 
 You can get support for building/developing on our [Discord](https://discord.gg/Epqjm8u2WK) server.
+
+### Documentation
+If you want to open a PR to fix documentation/Intellisense issue, please refer to the following files
+
+* `LuaDocs.lua` is generated from the files defined in [config.ld](https://github.com/youneuoy/M2TWEOP-library/blob/master/documentationGenerator/config.ld#L3)
+* `ImGUILuaDocs.lua` is generated from [sol_ImGui.cpp](https://github.com/youneuoy/M2TWEOP-library/blob/master/M2TWEOP%20Code/M2TWEOP%20library/imgui/sol_ImGui.cpp)
+
+See the [README](https://github.com/youneuoy/M2TWEOP-library/tree/master/documentationGenerator) in the documentationGenerator folder for more details 
 
 ## Disclaimer
 
