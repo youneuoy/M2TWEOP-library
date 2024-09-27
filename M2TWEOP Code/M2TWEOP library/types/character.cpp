@@ -742,24 +742,26 @@ namespace characterHelpers
 			uint8_t armour{};
 			uint8_t weapon{};
 			int soldierCount{};
-			UNICODE_STRING** alias{};
+			std::string alias;
 			int supplies{};
 			int eduType{};
 			unitInfo() = default;
-			explicit unitInfo(const unit* unit)
+			explicit unitInfo(unit* unit)
 			{
 				xp = unit->expScreen;
 				armour = unit->avgArmourUpg;
 				weapon = unit->avgWeaponUpg;
 				soldierCount = unit->SoldierCountStrat;
-				alias = unit->alias;
+				if (unit->alias)
+					alias = gameStringHelpers::uniStringToStr(unit->alias);
 				supplies = unit->foodRequirement;
 				eduType = unit->eduEntry->index;
 			}
-			[[nodiscard]] unit* CreateUnit(const factionStruct* faction, const character* character) const
+			[[nodiscard]] unit* CreateUnit(const factionStruct* faction, const character* character)
 			{
 				unit* newUnit = unitHelpers::createUnitIdx2(eduType, character->regionID, faction->factionID, xp, armour, weapon, soldierCount);
-				newUnit->alias = alias;
+				if (!alias.empty())
+					gameStringHelpers::createUniString(newUnit->alias, alias.c_str());
 				newUnit->foodRequirement = supplies;
 				return newUnit;
 			}
