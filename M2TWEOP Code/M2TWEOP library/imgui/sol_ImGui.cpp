@@ -3206,10 +3206,10 @@ namespace sol_ImGui
 		/***
 		Shortcut for PushStyleColor(ImGuiCol_Text, col); Text(fmt, ...); PopStyleColor();.
 		@function ImGui.TextColored
-		@treturn float colorR
-		@treturn float colorG
-		@treturn float colorB
-		@treturn float colorA
+		@tparam float colorR
+		@tparam float colorG
+		@tparam float colorB
+		@tparam float colorA
 		@tparam string text
 		@usage
 			ImGui.TextColored(0,0,0,255,"text");
