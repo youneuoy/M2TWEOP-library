@@ -1016,7 +1016,7 @@ namespace factionHelpers
 		@tparam int y
 		@tparam int visibility use tileVisibility enum
 		@usage
-		     fac:setTileVisibility(172, 293, tileVisibility.seen)
+		     fac:setTileVisibility(172, 293, tileVisibility.wasVisible)
 		*/
 		types.factionStruct.set_function("setTileVisibility", &factionStruct::setTileVisibility);
 
