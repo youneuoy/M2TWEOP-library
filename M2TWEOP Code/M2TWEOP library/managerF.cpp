@@ -445,7 +445,7 @@ void managerF::execPatches()
 	f1 << "Done" << '\n';
 
 	f1 << "Start applying onCustomBattleCost patch" << '\n';
-	onCustomBattleCost* toCustomBattleCost = new onCustomBattleCost(mem, (LPVOID)patchesForGame::recruitEopUnit, globals::dataS.gameVersion);
+	onCustomBattleCost* toCustomBattleCost = new onCustomBattleCost(mem, (LPVOID)patchesForGame::onCustomBattleCost, globals::dataS.gameVersion);
 	toCustomBattleCost->SetNewCode();
 	toCustomBattleCost->Enable();
 	f1 << "Done" << '\n';
