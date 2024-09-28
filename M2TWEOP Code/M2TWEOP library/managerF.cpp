@@ -1271,8 +1271,16 @@ void managerF::initThread()
 	globals::dataS.Modules.tacticalMapViewer.init(globals::dataS.gameVersion);
 }
 
+// void waitForDebugger() {
+//     while (!IsDebuggerPresent()) {
+//         std::this_thread::sleep_for(std::chrono::seconds(1)); // Sleep for 1 second
+//     }
+// }
+
 EOP_EXPORT void managerExport::initEOP(const char* modPath, const int gameVer)
 {
+    // waitForDebugger();
+
 	// Initialize MinHook.
 	if (MH_Initialize() != MH_OK)
 		return;

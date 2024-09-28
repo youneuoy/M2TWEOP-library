@@ -52,7 +52,6 @@ Copy-Item -Path  "M2TWEOP DataFiles\*" -Destination "./M2TWEOPGenerated" -recurs
 
 # Remove scripts and config we don't need
 Remove-Item -Path "./M2TWEOPGenerated/eopData/eopScripts/luaPluginScript.lua" -Force
-Remove-Item -Path "./M2TWEOPGenerated/eopData/eopScripts/myConfigs.lua" -Force
 Remove-Item -Path "./M2TWEOPGenerated/eopData/eopScripts/redist" -Force -Recurse -erroraction 'silentlycontinue'
 Remove-Item -Path "./M2TWEOPGenerated/eopData/eopScripts/helpers" -Force -Recurse -erroraction 'silentlycontinue'
 Remove-Item -Path "./M2TWEOPGenerated/eopData/config" -recurse -erroraction 'silentlycontinue' -Force
