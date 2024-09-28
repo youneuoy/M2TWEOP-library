@@ -1021,6 +1021,12 @@ void patchesForGame::onCalculateSettlement(settlementStruct* sett)
 	balanceMinorSettStats(&sett->stats.settlementStats, sett);
 }
 
+eduEntry* patchesForGame::onCustomBattleCost(const int eduIndexOffset)
+{
+	const int eduIndex = eduIndexOffset / 249;
+	return eopDu::getEduEntry(eduIndex);
+}
+
 //Sally out fix, consider armies around settlement not defender
 int* patchesForGame::onGetSupportingArmies(armyStruct* defender, armyStruct* attacker)
 {

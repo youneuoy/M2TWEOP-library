@@ -6521,10 +6521,11 @@ void onCustomBattleCost::SetNewCode()
 	Assembler* a = new Assembler();
 
 	a->push(eax);
-	a->mov(ecx, dword_ptr(esp, 0x8));
+	a->push(edx);
 	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
 	a->call(eax);
 	a->mov(ecx, eax);
+	a->pop(edx);
 	a->pop(eax);
 	a->ret();
 	m_cheatBytes = (unsigned char*)a->make();
