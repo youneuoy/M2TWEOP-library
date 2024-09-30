@@ -967,7 +967,7 @@ int patchesForGame::onOffMapModelThing(const int culture)
 
 DWORD* patchesForGame::onSetKhakiText(DWORD* text)
 {
-	if (text && *text == 0xFF807761)
+	if (text && (*text == 0xFF807761 || *text == 0xFF4B3C0A))
 		*text = m2tweopOptions::getColor();
 	return text;
 }
