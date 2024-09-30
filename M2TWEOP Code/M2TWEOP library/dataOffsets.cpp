@@ -77,6 +77,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.saveGameHandler = 0x02C649BC;
 		offsets.ancLimit = 0x005A57CD;
 		offsets.maxUnitSize = 0x008ef381;
+		offsets.battleMapSize = 0x00441335;
 		offsets.maxBgSize1 = 0x008ebd95;
 		offsets.maxBgSize2 = 0x008ebd9a;
 		offsets.unlockConsoleCommands1 = 0x00d2d763;
@@ -170,6 +171,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.saveGameHandler = 0x02C1B904;
 		offsets.ancLimit = 0x005A5CAD;
 		offsets.maxUnitSize = 0x008efe01;
+		offsets.battleMapSize = 0x00441675;
 		offsets.maxBgSize1 = 0x008ec815;
 		offsets.maxBgSize2 = 0x008ec81a;
 		offsets.unlockConsoleCommands1 = 0x00d27ae3;

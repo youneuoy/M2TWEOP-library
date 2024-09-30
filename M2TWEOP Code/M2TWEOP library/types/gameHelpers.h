@@ -413,6 +413,7 @@ namespace gameHelpers
 	void setAncLimit(uint8_t limit);
 	void setMaxUnitSize(signed short min, signed short max);
 	void setMaxBgSize(unsigned char size);
+	void setBattlemapSize(signed short x, signed short y);
 	void unlockConsoleCommands();
 	void toggleUnitHighlight();
 	void setReligionsLimit(unsigned char limit);

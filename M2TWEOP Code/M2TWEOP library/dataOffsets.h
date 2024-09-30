@@ -27,6 +27,7 @@ public:
 		DWORD saveGameHandler = NULL;
 		DWORD ancLimit = NULL;
 		DWORD maxUnitSize = NULL;
+		DWORD battleMapSize = NULL;
 		DWORD maxBgSize1 = NULL;
 		DWORD maxBgSize2 = NULL;
 		DWORD unlockConsoleCommands1 = NULL;

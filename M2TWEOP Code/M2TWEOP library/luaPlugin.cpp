@@ -443,6 +443,16 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	tables.M2TWEOP.set_function("setMaxBgSize", &gameHelpers::setMaxBgSize);
 
 	/***
+	Sets the new max size of battlemaps.
+	@function M2TWEOP.setBattlemapSize
+	@tparam int x 
+	@tparam int y
+	@usage
+	M2TWEOP.setBattlemapSize(500,500);
+	*/
+	tables.M2TWEOP.set_function("setBattlemapSize", &gameHelpers::setMaxBgSize);
+
+	/***
 	Sets the new maximum soldier count.
 	@function M2TWEOP.setEDUUnitsSize
 	@tparam int minSize maximum: 300

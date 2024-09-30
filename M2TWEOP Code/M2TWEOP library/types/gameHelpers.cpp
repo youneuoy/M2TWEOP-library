@@ -585,6 +585,14 @@ namespace gameHelpers
 		MemWork::WriteData(&size, cmpAdr, 1);
 		MemWork::WriteData(&size, retAdr, 1);
 	}
+	
+	void setBattlemapSize(signed short x, signed short y)
+	{
+		DWORD codeOffset = dataOffsets::offsets.battleMapSize;
+
+		MemWork::WriteData(&x, codeOffset, 0x00000080);
+		MemWork::WriteData(&y, codeOffset, 0x0000007C);
+	}
 
 	gameDataAllStruct* getGameDataAll()
 	{
