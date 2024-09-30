@@ -5399,6 +5399,118 @@ void onGetDefensesBuilding::SetNewCode()
 	delete a;
 }
 
+
+onSetKhakiText::onSetKhakiText(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00B18307;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00B1DFF7;
+}
+
+void onSetKhakiText::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ecx);
+	a->push(edx);
+	a->mov(ecx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->mov(dword_ptr(edi, 0x4), edx);
+	a->mov(byte_ptr(edi, 0x8), bl);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+
+onSetKhakiText2::onSetKhakiText2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0xB18457;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0xB1E147;
+}
+
+void onSetKhakiText2::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ecx);
+	a->push(edx);
+	a->mov(ecx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->mov(dword_ptr(edi, 0x4), edx);
+	a->mov(byte_ptr(edi, 0x8), bl);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+
+onSetKhakiText3::onSetKhakiText3(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0xB185CC;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0xB1E2BC;
+}
+
+void onSetKhakiText3::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ecx);
+	a->push(edx);
+	a->mov(ecx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->mov(dword_ptr(edi, 0x4), edx);
+	a->mov(byte_ptr(edi, 0x8), bl);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+
+onSetKhakiText4::onSetKhakiText4(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0xB1AA8C;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0xB2077C;
+}
+
+void onSetKhakiText4::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(dword_ptr(esi, 0x6C), eax);
+	a->mov(eax, dword_ptr(esp, 0x20));
+	a->push(ecx);
+	a->push(edx);
+	a->mov(ecx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onIsBuildingTypePresentAtMinLevel::onIsBuildingTypePresentAtMinLevel(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

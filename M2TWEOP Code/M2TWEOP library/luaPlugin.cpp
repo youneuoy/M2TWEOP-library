@@ -261,6 +261,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getFactionRecord getFactionRecord
 	@tfield hideUnknownUnitTooltips hideUnknownUnitTooltips
 	@tfield handleUnitCards handleUnitCards
+	@tfield setKhakiTextColor setKhakiTextColor
 	@tfield getMinorSettlementBalance getMinorSettlementBalance
 	@table M2TWEOP
 	*/
@@ -841,6 +842,17 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 		M2TWEOP.handleUnitCards(true)
 	*/
 	tables.M2TWEOP.set_function("handleUnitCards", &m2tweopOptions::setHandleUnitCards);
+	
+	/***
+	Change color of default khaki text.
+	@function M2TWEOP.setKhakiTextColor
+	@tparam int r
+	@tparam int g
+	@tparam int b
+	@usage
+		M2TWEOP.setKhakiTextColor(0,0,0)
+	*/
+	tables.M2TWEOP.set_function("setKhakiTextColor", &m2tweopOptions::setKhakiTextColor);
 	
 	/***
 	Get modifiers for minor settlements for income and growth.

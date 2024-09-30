@@ -965,6 +965,13 @@ int patchesForGame::onOffMapModelThing(const int culture)
 	return culture;
 }
 
+DWORD* patchesForGame::onSetKhakiText(DWORD* text)
+{
+	if (text && *text == 0xFF807761)
+		*text = m2tweopOptions::getColor();
+	return text;
+}
+
 int patchesForGame::onAddBuildingCapsAfterConstruction(const settlementStruct* sett, int index)
 {
 	for (int i = 0; i < sett->buildingsQueueArray.buildingsInQueue; i++)

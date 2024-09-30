@@ -843,6 +843,30 @@ void managerF::execPatches()
 	toDecideMissionTarget->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onSetKhakiText patch" << '\n';
+	onSetKhakiText* toSetKhakiText = new onSetKhakiText(mem, (LPVOID)patchesForGame::onSetKhakiText, globals::dataS.gameVersion);
+	toSetKhakiText->SetNewCode();
+	toSetKhakiText->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onSetKhakiText2 patch" << '\n';
+	onSetKhakiText2* toSetKhakiText2 = new onSetKhakiText2(mem, (LPVOID)patchesForGame::onSetKhakiText, globals::dataS.gameVersion);
+	toSetKhakiText2->SetNewCode();
+	toSetKhakiText2->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onSetKhakiText3 patch" << '\n';
+	onSetKhakiText3* toSetKhakiText3 = new onSetKhakiText3(mem, (LPVOID)patchesForGame::onSetKhakiText, globals::dataS.gameVersion);
+	toSetKhakiText3->SetNewCode();
+	toSetKhakiText3->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onSetKhakiText4 patch" << '\n';
+	onSetKhakiText4* toSetKhakiText4 = new onSetKhakiText4(mem, (LPVOID)patchesForGame::onSetKhakiText, globals::dataS.gameVersion);
+	toSetKhakiText4->SetNewCode();
+	toSetKhakiText4->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onSetArmyGeneralsUnit patch" << '\n';
 	onSetArmyGeneralsUnit* toSetArmyGeneralsUnit = new onSetArmyGeneralsUnit(mem, (LPVOID)patchesForGame::onSetArmyGeneralsUnit, globals::dataS.gameVersion);
 	toSetArmyGeneralsUnit->SetNewCode();

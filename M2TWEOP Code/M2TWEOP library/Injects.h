@@ -1985,6 +1985,54 @@ private:
 	LPVOID funcAddress;
 };
 
+class onSetKhakiText
+	:public AATemplate
+{
+public:
+	onSetKhakiText(MemWork* mem, LPVOID addr, int ver);
+	~onSetKhakiText() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onSetKhakiText2
+	:public AATemplate
+{
+public:
+	onSetKhakiText2(MemWork* mem, LPVOID addr, int ver);
+	~onSetKhakiText2() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onSetKhakiText3
+	:public AATemplate
+{
+public:
+	onSetKhakiText3(MemWork* mem, LPVOID addr, int ver);
+	~onSetKhakiText3() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onSetKhakiText4
+	:public AATemplate
+{
+public:
+	onSetKhakiText4(MemWork* mem, LPVOID addr, int ver);
+	~onSetKhakiText4() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 
 class onIsBuildingTypePresentAtMinLevel
 	:public AATemplate

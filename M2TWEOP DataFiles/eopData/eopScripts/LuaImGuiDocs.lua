@@ -401,12 +401,12 @@ function ImGui.TextUnformatted(text, textEnd) end
 function ImGui.Text(text) end 
 
 --- Shortcut for PushStyleColor(ImGuiCol_Text, col); Text(fmt, ...); PopStyleColor();.
+---@param colorR number 
+---@param colorG number 
+---@param colorB number 
+---@param colorA number 
 ---@param text string 
----@return number colorR 
----@return number colorG 
----@return number colorB 
----@return number colorA 
-function ImGui.TextColored(text) end 
+function ImGui.TextColored(colorR, colorG, colorB, colorA, text) end 
 
 --- Shortcut for PushStyleColor(ImGuiCol_Text, style.Colors[ImGuiCol_TextDisabled]); Text(fmt, ...); PopStyleColor();.
 ---@param text string 
