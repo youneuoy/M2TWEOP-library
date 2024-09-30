@@ -1,7 +1,7 @@
 #if !defined(_CRT_SECURE_NO_WARNINGS)
 #define _CRT_SECURE_NO_WARNINGS
 #endif
-
+#include "pch.h"
 #include "user_manager.h"
 
 #include "core.h"

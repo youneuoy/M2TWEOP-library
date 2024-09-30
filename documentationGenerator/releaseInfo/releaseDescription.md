@@ -6,26 +6,37 @@
 
 ## **Release Notes**
 
-<!-- ### **Launcher** -->
-
-<!-- ![](https://i.imgur.com/Pl02p1W.png) -->
-<!-- ![](https://i.imgur.com/h8UlYMT.png) -->
+### **Launcher**
+- Added [Freecam](https://www.moddb.com/mods/freecam-medieval-2) integration - *Medik*
+  - Specify the path to your Freecam installation and enable the integration to automatically launch and close Freecam whenever you play the game
+- Updated [DXVK](https://github.com/doitsujin/dxvk/releases/tag/v2.4) to v2.4 - *Medik*
+- Allow users to specify a mod version which is displayed in the top left beneath the EOP version at launch - *Medik*
+- Launcher no longer continues to play music if Discord Rich Presence is enabled and background music is enabled - *Medik*
+- Rename "M2TWEOP GUI.exe" to "M2TWEOP_GUI.exe" - *Medik*
 
 ### **Library**
-- fix for alpha channel in M2TWEOP3dObjects.MakeTextFont, ChangeColor for font, etc
-
+- Reduced amount of EOP "branding" displayed on startup - *Medik*
+- Now multiple hero abilities in generated battles works - *youneuoy*
 
 ### **Lua Plugin**
-- Enabled safety checks for lua events(broken since 3.0)
-- Added 2 new parameters - weight, isItalic to M2TWEOP3dObjects.MakeTextFont
+- Stopped the game still receiving keyboard/mouse inputs when the EOP Console was open - *Medik*
+- Added a "Clear Input" toggle in the console - *Medik*
+- Updated Lua exception message box error handling
+  - Abort (Exits the game completely)
+  - Retry (Runs `restartLua()` in the background, very useful when stuck in `draw()` error loops)
+  - Ignore (Ignore the error and just continue)
 
-<!-- ### **ImGUI** -->
+### **ImGUI**
+- Stopped "Planned retreat route" from appearing when it was disabled - *Medik*
+- Updated default scrollbar theming - *Medik*
+- `reloadLua()` and `restartLua()` no long require opening the console - *Medik*
+- A toast popup appears when `reloadLua()` and `restartLua()` is called to provide feedback that the restart/reload was successful - *Medik*
 
 ### **Documentation**
-- no
+- Updated Erken's ImGUI PDF tutorial to V5 (Thanks Erken!) - *Medik*
 
 ### **Links**
-
+- [Known Bugs](https://github.com/youneuoy/M2TWEOP-library/issues/71)
 - [Website](https://youneuoy.github.io/M2TWEOP-library/)
 - [FAQ](https://youneuoy.github.io/M2TWEOP-library/faq.html)
 - [Lua Documentation](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html)

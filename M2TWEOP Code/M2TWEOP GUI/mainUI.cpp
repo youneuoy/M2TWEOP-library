@@ -12,7 +12,6 @@
 
 #include <shellapi.h>
 
-
 namespace mainUI
 {
 	struct
@@ -38,7 +37,6 @@ namespace mainUI
 		childs.isGameRunnerUIOpen = true;
 		dataG::data.gameData.gameMode = 0;
 	}
-
 
 	int draw(bool* isOpen)
 	{
@@ -71,7 +69,7 @@ namespace mainUI
 		}
 		else if (childs.isDiscordUIOpen == true)
 		{
-			gameRunnerUI::maintainDiscordRichPresence();
+			gameRunnerUI::maintainGUI();
 			return 0;
 		}
 		ImVec2 windowSize = ImGui::CalcTextSize("Run Vanilla or DLC without M2TWEOP");
@@ -97,8 +95,8 @@ namespace mainUI
 
 		ImGui::Begin(windowTitle.c_str(), isOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
-		const char logoName[] = "eopData/images/logoAbout.png";
-		GLImage* imgFinded = helpers::findImage("eopData/images/logoAbout.png", sizeof logoName-1);
+		const char logoName[] = "eopData/resources/images/logoAbout.png";
+		GLImage* imgFinded = helpers::findImage("eopData/resources/images/logoAbout.png", sizeof logoName-1);
 
 		ImVec2 const csz = ImGui::GetContentRegionAvail();
 		ImVec2 logoSize = ImVec2((float)imgFinded->xSize, (float)imgFinded->ySize);
@@ -120,7 +118,7 @@ namespace mainUI
 				dataG::data.gameData.buttonColor.a,
 			));
 		}
-
+		//
 		if(dataG::data.gameData.buttonHoverColorString == "") {
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.564, 0.250, 0.230, 1.0f));
 		} else {

@@ -1,4 +1,5 @@
-#include "imgui.h"
+#include "pch.h"
+#include "imgui/imgui.h"
 #include "cpptoml.h"
 #include "globals.h"
 
@@ -22,16 +23,16 @@ void tomlToStyle(std::string themeName)
 {
 	// Light style from ImThemes
 	ImGuiStyle &style = ImGui::GetStyle();
-	std::string fPath = globals::dataS.modPatch;
+	std::string fPath = globals::dataS.modPath;
 
 	// Load the TOML file
 	if (themeName.find(".toml") != std::string::npos)
 	{
-		fPath += ".\\eopData\\themes\\" + themeName;
+		fPath += ".\\eopData\\resources\\themes\\" + themeName;
 	}
 	else
 	{
-		fPath += ".\\eopData\\themes\\" + themeName + ".toml";
+		fPath += ".\\eopData\\resources\\themes\\" + themeName + ".toml";
 	}
 
 	auto config = cpptoml::parse_file(fPath);
@@ -66,6 +67,25 @@ void tomlToStyle(std::string themeName)
 	// style.TabMinWidthForCloseButton = *config->get_as<double>("tabMinWidthForCloseButton");
 	// style.ButtonTextAlign = arrayToImVec2(*config->get_array_of<double>("buttonTextAlign"));
 	// style.SelectableTextAlign = arrayToImVec2(*config->get_array_of<double>("selectableTextAlign"));
+
+	style.PopupRounding = 3;
+
+	style.WindowPadding = ImVec2(4, 4);
+	style.FramePadding = ImVec2(6, 4);
+	style.ItemSpacing = ImVec2(6, 2);
+
+	style.ScrollbarSize = 18;
+
+	style.WindowBorderSize = 3;
+	style.ChildBorderSize = 1;
+	style.PopupBorderSize = 1;
+	style.FrameBorderSize = 1;
+
+	style.WindowRounding = 3;
+	style.ChildRounding = 3;
+	style.FrameRounding = 3;
+	style.ScrollbarRounding = 2;
+	style.GrabRounding = 3;
 
 	// // Access the 'colors' section in the TOML file
 	auto colorsTable = config->get_table("colors");

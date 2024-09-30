@@ -1,56 +1,59 @@
+#include "pch.h"
 #include "m2tweopTile.h"
+#include "globals.h"
+#include "faction.h"
+#include "army.h"
+#include "character.h"
+#include "strategyMap.h"
+
+#include "techFuncs.h"
 
 void m2tweopTile::buildTile(int x, int y)
 {
 	xTile = x;
 	yTile = y;
-	tileRegionID = fastFuncts::getTileRegionID(xTile, yTile);
-	factionStruct* owner = fastFuncts::getRegionOwner(tileRegionID);
-
+	const auto tile = stratMapHelpers::getTile(x, y);
+	tileRegionID = tile->regionId;
+	const factionStruct* owner = stratMapHelpers::getRegion(tileRegionID)->factionOwner;
 	if (owner != nullptr)
 	{
-		ownerDipNum = owner->dipNum;
+		ownerDipNum = owner->factionID;
 	}
-
-
-	settlementStruct* sett = fastFuncts::findSettlement(xTile, yTile);
+	const settlementStruct* sett = tile->getSettlement();
 	if (sett != nullptr)
 	{
 		buildAsSettlementTile();
 		return;
 	}
-
-	auto* fort = fastFuncts::findFort(xTile, yTile);
+	auto* fort = tile->getFort();
 	if (fort != nullptr)
 	{
 		buildAsFortTile();
 		return;
 	}
-	auto* port = fastFuncts::findPort(xTile, yTile);
+	auto* port = tile->getPort();
 	if (port != nullptr)
 	{
 		buildAsPortTile();
 		return;
 	}
-	auto* army = fastFuncts::findArmy(xTile, yTile);
-	if (army != nullptr)
+	const auto* character = tile->getCharacter();
+	if (character && character->army)
 	{
-		buildAsArmyTile(army);
+		buildAsArmyTile(character->army);
 		return;
 	}
-
-
 	if (owner != nullptr)
 	{
 
-		tileColor.x = owner->factSmDescr->primary_colour_red / 255.0F;
-		tileColor.y = owner->factSmDescr->primary_colour_green / 255.0F;
-		tileColor.z = owner->factSmDescr->primary_colour_blue / 255.0F;
+		tileColor.x = owner->factionRecord->primary_colour_red / 255.0F;
+		tileColor.y = owner->factionRecord->primary_colour_green / 255.0F;
+		tileColor.z = owner->factionRecord->primary_colour_blue / 255.0F;
 
 
-		tileSecColor.x = owner->factSmDescr->secondary_colour_red / 255.0F;
-		tileSecColor.y = owner->factSmDescr->secondary_colour_green / 255.0F;
-		tileSecColor.z = owner->factSmDescr->secondary_colour_blue / 255.0F;
+		tileSecColor.x = owner->factionRecord->secondary_colour_red / 255.0F;
+		tileSecColor.y = owner->factionRecord->secondary_colour_green / 255.0F;
+		tileSecColor.z = owner->factionRecord->secondary_colour_blue / 255.0F;
 	}
 }
 
@@ -206,15 +209,15 @@ void m2tweopTile::buildAsPortTile()
 	tileCont = tileContent::port;
 }
 
-void m2tweopTile::buildAsArmyTile(stackStruct* army)
+void m2tweopTile::buildAsArmyTile(armyStruct* army)
 {
 	factionStruct* fac = army->faction;
 
 	if (fac != nullptr)
 	{
-		tileColor.x = fac->factSmDescr->secondary_colour_red / 255.0F;
-		tileColor.y = fac->factSmDescr->secondary_colour_green / 255.0F;
-		tileColor.z = fac->factSmDescr->secondary_colour_blue / 255.0F;
+		tileColor.x = fac->factionRecord->secondary_colour_red / 255.0F;
+		tileColor.y = fac->factionRecord->secondary_colour_green / 255.0F;
+		tileColor.z = fac->factionRecord->secondary_colour_blue / 255.0F;
 	}
 
 	tileCont = tileContent::army;

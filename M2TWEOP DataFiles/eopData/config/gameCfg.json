@@ -1,0 +1,10 @@
+{
+  "isBlockLaunchWithoutEop": false,
+  "isDiscordRichPresenceEnabled": false,
+  "isFreecamIntegrationEnabled": false,
+  "freecamFolder": "",
+  "isDeveloperModeNeeded": true,
+  "isTacticalMapViewerNeeded": true,
+  "isContextMenuNeeded": true,
+  "isDXVKEnabled": false
+}

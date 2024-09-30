@@ -22,13 +22,14 @@
 
 #include "helpers.h"
 #include "toolRoutine.h"
-#include "themeManager.h"
+#include "themeManagerGUI.h"
 
 #include "managerG.h"
 
 #include <stb_image.h>
 
 #include "discordManager.h"
+
 
 struct {
     SDL_Window* window;
@@ -123,6 +124,8 @@ void runApp(appTickFunc drawTick)
 {
     bool done = false;
     bool isGUIOpen = true;
+
+
     // Main loop
     while (!done)
     {
@@ -138,7 +141,6 @@ void runApp(appTickFunc drawTick)
         beginRender();
 
         drawTick(&isGUIOpen);
-
         endRender();
 
         if (isGUIOpen == false || done == true)
@@ -171,6 +173,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
         runApp(toolRoutine::drawRedistTick);
     }
 
+
     if (!done)
     {
         SDL_Event event;
@@ -185,6 +188,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
         beginRender();
 
+
         toolRoutine::tryJustStartMod();
 
         endRender();
@@ -194,7 +198,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
     dataG::data.audio.bkgMusic.music = new sf::Music();
     if (dataG::data.modData.hideLauncherAtStart == false)
     {
-        dataG::data.audio.bkgMusic.musicLoaded=dataG::data.audio.bkgMusic.music->openFromFile("eopData/music/bkg.flac");
+        dataG::data.audio.bkgMusic.musicLoaded=dataG::data.audio.bkgMusic.music->openFromFile("eopData/resources/music/bkg.flac");
 
             if (dataG::data.audio.bkgMusic.musicLoaded == true)
             {

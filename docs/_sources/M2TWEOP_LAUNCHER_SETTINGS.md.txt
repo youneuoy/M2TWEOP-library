@@ -4,7 +4,7 @@
 
 #### Note: Remember that JSON does not allow comments so do not copy these examples directly
 
-#### ```eopData/uiCfg.json```
+#### ```eopData/config/uiCfg.json```
 
 ```
 {
@@ -22,7 +22,7 @@
 
 ### Configure the Battles
 
-#### ```eopBattles/battlesCfg.json```
+#### ```eopData/config/battlesCfg.json```
 
 ```
 {
@@ -33,7 +33,7 @@
 
 ### Configure the Game
 
-#### ```eopData/gameCfg.json```
+#### ```eopData/config/gameCfg.json```
 
 ```
 {
@@ -44,7 +44,7 @@
 
 ### Configure the Game
 
-#### ```eopData/discordRichPresenceCfg.json```
+#### ```eopData/config/discordRichPresenceCfg.json```
 
 If Discord Rich Presence is enabled, EOP will write information about your campaign to this file which is then read and used to update your Discord Rich Presence status.
 It is recommended not to write manually to this file.
@@ -56,6 +56,3 @@ It is recommended not to write manually to this file.
     "status": "On the campaign map 🗺️"
 }
 ```
-
-Rich Presence is enabled for the following mods
-![](https://cdn.discordapp.com/attachments/713369537948549194/1124290437734223912/image.png)

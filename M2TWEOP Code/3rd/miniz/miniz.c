@@ -23,7 +23,6 @@
  * THE SOFTWARE.
  *
  **************************************************************************/
-
 #include  "miniz.h"
 
 typedef unsigned char mz_validate_uint16[sizeof(mz_uint16) == 2 ? 1 : -1];

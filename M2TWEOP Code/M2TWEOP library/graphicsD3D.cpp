@@ -1,29 +1,35 @@
 #include "pch.h"
 #include "graphicsD3D.h"
-#include "plugins.h"
 #include <DxErr.h>
 #pragma comment(lib, "DXERR.lib")
 
-#include "eopImgui.h"
+#include "imgui/eopImgui.h"
 #include "imgui_notify.h"
 
 #include <d3d9.h>
 #include <d3dx9.h>
+#include "battle.h"
 
 #include "fbxModels.h"
 
 
 
-#include <ImFileDialog.h>
+#include "imgui/ImFileDialog.h"
 #include <Winuser.h>
+
+#include "gameHelpers.h"
+#include "gameUi.h"
+#include "imgui/imgui_impl_dx9.h"
+#include "imgui/imgui_impl_win32.h"
+
+#include "graphicsEvents.h"
 graphicsD3D::dataT graphicsD3D::dataS;
 
 #include "onlineThings.h"
 
-#include "m2tweopMapManager.h"
+#include "mapImage.h"
 
 #include "../../M2TWEOP Common/m2tweopConstData.h"
-#include "eduFastFuncts.h"
 #include <windowsx.h>
 #include "stratModelsChange.h"
 #include "themeManager.h"
@@ -37,7 +43,7 @@ T FnCast(uint32_t fnToCast, T pFnCastTo) {
 
 NOINLINE LRESULT APIENTRY graphicsD3D::hkWndProc2(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	plugins::onWindowProc(hWnd, uMsg, wParam, lParam);
+	onWndProc(hWnd, uMsg, wParam, lParam);
 
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
 	{
@@ -145,15 +151,13 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	{
 		f();
 	}
-	int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
+	const bool battleState = battleHelpers::inBattle();
 
 	//1-stratmap
 	//2-tactmap
 	int drawType = 2;
-	if (battleState == 0)
-	{
+	if (!battleState)
 		drawType = 1;
-	}
 
 
 	//Backup the DX9 state
@@ -179,7 +183,7 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	graphicsD3D::dataS.pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-	fbxModels::draw(drawType, globals::dataS.gamever);
+	fbxModels::draw(drawType, globals::dataS.gameVersion);
 	// Restore the DX9 transform
 
 	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_WORLD, &last_world);
@@ -189,11 +193,28 @@ NOINLINE void graphicsD3D::onDrawPartsOfStratObjects()
 	// Restore the DX9 state
 	d3d9_state_block->Apply();
 	d3d9_state_block->Release();
-
+//
 }
+
+std::tuple<int, int, void*> graphicsExport::loadTextureToGame(const std::string& path)
+{
+	int x = 0;
+	int y = 0;
+	LPDIRECT3DTEXTURE9 retTexture = loadTexture(path.c_str(), &x, &y);
+	
+	return std::make_tuple(x, y, reinterpret_cast<void*>(retTexture));
+}
+	
+void graphicsExport::unloadTextureFromGame(void* texture)
+{
+	unloadTexture(static_cast<LPDIRECT3DTEXTURE9>(texture));
+}
+
+int TOOLTIP_COUNTER = 0;
+
 void graphicsD3D::onDrawAllGameStuff()
 {
-	if (graphicsD3D::dataS.pDevice->BeginScene() < 0)
+	if (dataS.pDevice->BeginScene() < 0)
 	{
 		return;
 	}
@@ -203,25 +224,22 @@ void graphicsD3D::onDrawAllGameStuff()
 	ImGui::NewFrame();
 
 	auto& developerMode = globals::dataS.Modules.developerMode;
-	developerMode.Update();
-
-	plugins::onEndScene(graphicsD3D::dataS.pDevice);
-
-
-	int battleState = smallFuncs::getGameDataAll()->battleHandler->battleState;
-
-	//1-stratmap
-	//2-tactmap
-	int drawType = 2;
-	if (battleState == 0)
+	developerMode.update();
+	
+	if (m2tweopOptions::getHideUnknownUnitTooltips())
 	{
-		drawType = 1;
+		TOOLTIP_COUNTER++;
+		if (TOOLTIP_COUNTER > 10)
+		{
+			TOOLTIP_COUNTER = 0;
+			gameUiHelpers::checkNeedRemoveTooltips();
+		}
 	}
 
-	if (drawType == 1)
-	{
+	drawOnEndScene(dataS.pDevice);
+	
+	if (!battleHelpers::inBattle())
 		globals::dataS.Modules.contextMenuStrat.Draw();
-	}
 
 	//graphicsD3D::Draw(pDevice);
 	if (drawParams.drawEOPStartInfo == true)
@@ -235,7 +253,7 @@ void graphicsD3D::onDrawAllGameStuff()
 		{
 			if (logoEOP == nullptr)
 			{
-				//logoEOP=graphicsExport::loadTexture(std::string(globals::dataS.modPatch+ "/eopData/images/logoAbout.png").c_str(),&logoX,&logoY);
+				//logoEOP=graphicsExport::loadTexture(std::string(globals::dataS.modPatch+ "/eopData/resources/images/logoAbout.png").c_str(),&logoX,&logoY);
 				//ImGui::OpenPopup("M2TWEOP");
 			}
 
@@ -274,8 +292,7 @@ void graphicsD3D::onDrawAllGameStuff()
 					ImGui::NewLine();
 					ImGui::NewLine();
 					ImGui::SetCursorPosX((ImGui::GetWindowSize().x - logoPos.y * 2) * 0.5f);
-					ImGui::LoadingIndicatorCircle("##loadCircle1", logoPos.y, ImVec4(0.584, 0.270, 0.250, 1.0f), ImVec4(0.564, 0.250, 0.230, 1.0f), 15, 5);
-
+					
 					ImGui::NewLine();
 					ImGui::NewLine();
 					ImGui::NewLine();
@@ -292,7 +309,7 @@ void graphicsD3D::onDrawAllGameStuff()
 		else
 		{
 			drawParams.drawEOPStartInfo = false;
-			ImGuiToast bMsg(ImGuiToastType_Success, 25000);
+			ImGuiToast bMsg(ImGuiToastType_Success, 10000);
 
 			bMsg.set_title("Initializing M2TWEOP");
 			bMsg.set_content("Done");
@@ -328,7 +345,7 @@ void graphicsD3D::onDrawAllGameStuff()
 	ImGui::Render();
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 
-	if (tempData.texturesForDeleting.size())
+	if (!tempData.texturesForDeleting.empty())
 	{
 		for (auto tex : tempData.texturesForDeleting)
 		{
@@ -352,13 +369,13 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 	io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
 	io.ConfigFlags &= ~ImGuiConfigFlags_NavEnableKeyboard;
 	io.MouseDrawCursor = false;
-	string f = globals::dataS.modPatch;
+	string f = globals::dataS.modPath;
 	if (f.size() == 0)
 	{
 		MessageBoxA(NULL, "graphics init error", "Error", NULL);
 		exit(0);
 	}
-	f = f + "\\eopData\\fonts\\mainFont.ttf";
+	f = f + "\\eopData\\resources\\fonts\\mainFont.ttf";
 
 	// ImGui::StyleGrey();
 	setStyle(globals::dataS.gameCfg.launcherTheme);
@@ -379,7 +396,7 @@ NOINLINE void graphicsD3D::initImgGui(IDirect3DDevice9* pDevice)
 		io.Fonts->AddFontDefault(&font_config);
 	}
 
-	plugins::onLoadingFonts(pDevice);
+	onLoadingFonts(pDevice);
 	//init imnotify
 	ImGui::MergeIconsWithLatestFont(16.f, false);
 
@@ -399,7 +416,7 @@ bool graphicsD3D::init()
 	ImGuiMemFreeFunc freeF;
 	void* userD;
 	ImGui::GetAllocatorFunctions(&allocF, &freeF, &userD);
-	plugins::onChangeImGuiCtx(imCtx, allocF, freeF, userD);
+	onChangeImGuiContext(imCtx, allocF, freeF, userD);
 
 
 	while (dataS.Window == nullptr)
@@ -427,7 +444,7 @@ DWORD __stdcall graphicsD3D::InitS()
 	init();
 
 	DWORD adr = 0;
-	if (globals::dataS.gamever == 2)//steam
+	if (globals::dataS.gameVersion == 2)//steam
 	{
 		adr = 0x01178a40;
 	}
@@ -452,7 +469,7 @@ DWORD __stdcall graphicsD3D::InitS()
 }
 
 
-NOINLINE EOP_EXPORT  graphicsExport::D3dState graphicsExport::GetD3dState()
+graphicsExport::D3dState graphicsExport::GetD3dState()
 {
 	graphicsExport::D3dState retState;
 
@@ -468,22 +485,22 @@ NOINLINE EOP_EXPORT  graphicsExport::D3dState graphicsExport::GetD3dState()
 	return retState;
 }
 
-NOINLINE EOP_EXPORT void graphicsExport::AddStratmapDrawCallback(EOPDrawCallback callFunk)
+EOP_EXPORT void graphicsExport::AddStratmapDrawCallback(EOPDrawCallback callFunk)
 {
 	graphicsD3D::dataS.stratmapDrawCallbacks.push_back(callFunk);
 }
 
-NOINLINE EOP_EXPORT void graphicsExport::AddImGuiDrawCallback(EOPDrawCallback callFunk)
+EOP_EXPORT void graphicsExport::AddImGuiDrawCallback(EOPDrawCallback callFunk)
 {
 	graphicsD3D::dataS.imguiDrawCallbacks.push_back(callFunk);
 }
 
-NOINLINE EOP_EXPORT void graphicsExport::SetClearD3dState()
+EOP_EXPORT void graphicsExport::SetClearD3dState()
 {
 	graphicsD3D::dataS.clearStateBlock->Apply();
 }
 
-NOINLINE EOP_EXPORT void graphicsExport::SetD3dState(graphicsExport::D3dState& state)
+EOP_EXPORT void graphicsExport::SetD3dState(graphicsExport::D3dState& state)
 {
 	state.d3d9_state_block->Apply();
 
@@ -492,16 +509,16 @@ NOINLINE EOP_EXPORT void graphicsExport::SetD3dState(graphicsExport::D3dState& s
 	graphicsD3D::dataS.pDevice->SetTransform(D3DTS_PROJECTION, &state.projection);
 }
 
-NOINLINE EOP_EXPORT void graphicsExport::ReleaseD3dState(graphicsExport::D3dState& state)
+EOP_EXPORT void graphicsExport::ReleaseD3dState(graphicsExport::D3dState& state)
 {
 	state.d3d9_state_block->Release();
 }
 
-NOINLINE EOP_EXPORT const D3DXMATRIXA16* graphicsExport::GetMatView()
+EOP_EXPORT const D3DXMATRIXA16* graphicsExport::GetMatView()
 {
 	D3DXMATRIXA16* matView = nullptr;;
 
-	if (globals::dataS.gamever == 2)//steam
+	if (globals::dataS.gameVersion == 2)//steam
 	{
 		matView = reinterpret_cast<D3DXMATRIXA16*>(0x0193D604);
 	}
@@ -513,11 +530,11 @@ NOINLINE EOP_EXPORT const D3DXMATRIXA16* graphicsExport::GetMatView()
 	return matView;
 }
 
-NOINLINE EOP_EXPORT const D3DXMATRIXA16* graphicsExport::GetMatProj()
+EOP_EXPORT const D3DXMATRIXA16* graphicsExport::GetMatProj()
 {
 	D3DXMATRIXA16* matProj = nullptr;;
 
-	if (globals::dataS.gamever == 2)//steam
+	if (globals::dataS.gameVersion == 2)//steam
 	{
 		matProj = reinterpret_cast<D3DXMATRIXA16*>(0x02C9E0F8);
 	}
@@ -529,12 +546,12 @@ NOINLINE EOP_EXPORT const D3DXMATRIXA16* graphicsExport::GetMatProj()
 	return matProj;
 }
 
-NOINLINE EOP_EXPORT IDirect3DDevice9* graphicsExport::GetDevice()
+EOP_EXPORT IDirect3DDevice9* graphicsExport::GetDevice()
 {
 	return graphicsD3D::dataS.pDevice;
 }
 
-NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* path, int* x, int* y)
+EOP_EXPORT LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* path, int* x, int* y)
 {
 	LPDIRECT3DTEXTURE9 imageRet = nullptr;
 	// https://learn.microsoft.com/en-us/windows/win32/direct3d9/d3dxcreatetexturefromfileex
@@ -574,7 +591,7 @@ NOINLINE EOP_EXPORT LPDIRECT3DTEXTURE9 graphicsExport::loadTexture(const char* p
 	return imageRet;
 }
 
-NOINLINE EOP_EXPORT void graphicsExport::unloadTexture(LPDIRECT3DTEXTURE9 texture)
+EOP_EXPORT void graphicsExport::unloadTexture(LPDIRECT3DTEXTURE9 texture)
 {
 	if (texture == nullptr)
 	{
@@ -583,7 +600,7 @@ NOINLINE EOP_EXPORT void graphicsExport::unloadTexture(LPDIRECT3DTEXTURE9 textur
 	tempData.texturesForDeleting.push_back(texture);
 }
 
-NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevice)
+EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevice)
 {
 	managerF::loadJsonSettings();
 
@@ -650,12 +667,12 @@ NOINLINE EOP_EXPORT void graphicsExport::onCreateDevice(IDirect3DDevice9* pDevic
 	};
 }
 
-NOINLINE EOP_EXPORT void graphicsExport::onEndScene(IDirect3DDevice9* pDevice)
+EOP_EXPORT void graphicsExport::onEndScene(IDirect3DDevice9* pDevice)
 {
-
+		
 }
 
-NOINLINE EOP_EXPORT void graphicsExport::onReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
+EOP_EXPORT void graphicsExport::onReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
 {
 	ImGui_ImplDX9_InvalidateDeviceObjects();
 
@@ -664,7 +681,7 @@ NOINLINE EOP_EXPORT void graphicsExport::onReset(IDirect3DDevice9* pDevice, D3DP
 		graphicsD3D::dataS.clearStateBlock->Release();
 }
 
-NOINLINE EOP_EXPORT void graphicsExport::afterReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
+EOP_EXPORT void graphicsExport::afterReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)
 {
 	ImGui_ImplDX9_CreateDeviceObjects();
 

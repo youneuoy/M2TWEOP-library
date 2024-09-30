@@ -15,7 +15,7 @@ suggest new entries in our discord!
 	Just unpack the downloaded archive into the folder with your modification.
 
 *I installed M2TWEOP. How can I run a modification using it?*
-	Run M2TWEOPGUI.exe, specify your mods config file (e.g TATW.cfg) and hit 'Run Mod'.
+	Run `M2TWEOPGUI.exe` and hit 'Run Mod'.
 
 *I heard that M2TWEOP allows you to write plugins in the lua programming language. How to do it?*
 	Read https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html or watch a tutorial here: https://youtu.be/hUvbcz8i7Wk
@@ -30,9 +30,9 @@ suggest new entries in our discord!
 	4. Run mod via M2TWEOP like normal
 
 *How can I open the M2TWEOP Console, Reload the Script or use the Map Viewer?*
-	* CTRL+1 = Open Console
+	* CTRL+~ = Open Console
 	* CTRL+9+1 = Reloads `luaPluginScript.lua`
-	* CTRL+2 = Open EOP Map Viewer
+	* ALT+~ = Open EOP Map Viewer
 
 *How can I convert a non-EOP save to an EOP save?*
 	1. Make a copy of your save
@@ -46,5 +46,4 @@ suggest new entries in our discord!
 *What's the best way to write and debug EOP Lua scripts?*
 	We suggest you use `Visual Studio Code <https://code.visualstudio.com>`_  and the following `extension <https://marketplace.visualstudio.com/items?itemName=sumneko.lua>`_ because it enables linting, Intellisense and inline documentation for each EOP function.
 		
-			
 --------------------------------------------

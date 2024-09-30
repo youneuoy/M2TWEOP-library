@@ -43,7 +43,7 @@ namespace managerG
 
 	void loadBattleConfig()
 	{
-		std::string fPath = ".\\eopBattles\\battlesCfg.json";
+		std::string fPath = ".\\eopData\\config\\battlesCfg.json";
 		jsn::json json= loadJsonFromFile(fPath);
 
 		try
@@ -70,7 +70,7 @@ namespace managerG
 	void loadGameConfig()
 	{
 
-		std::string fPath = ".\\eopData\\gameCfg.json";
+		std::string fPath = ".\\eopData\\config\\gameCfg.json";
 		jsn::json json = loadJsonFromFile(fPath);
 
 		try
@@ -103,6 +103,14 @@ namespace managerG
 			{
 				getJson(dataG::data.gameData.isDiscordRichPresenceEnabled, "isDiscordRichPresenceEnabled");
 			}
+			if (json.contains("isFreecamIntegrationEnabled"))
+			{
+				getJson(dataG::data.gameData.freecamIntegration, "isFreecamIntegrationEnabled");
+			}
+			if (json.contains("freecamFolder"))
+			{
+				getJson(dataG::data.gameData.freecamFolder, "freecamFolder");
+			}
 		}
 		catch (jsn::json::type_error& e)
 		{
@@ -112,7 +120,7 @@ namespace managerG
 
 	void loadUIConfig()
 	{
-		std::string fPath = ".\\eopData\\uiCfg.json";
+		std::string fPath = ".\\eopData\\config\\uiCfg.json";
 		std::regex regex{ R"([\,\s]+)" };
 		jsn::json json = loadJsonFromFile(fPath);
 		std::string jsonStringValue;
@@ -151,6 +159,10 @@ namespace managerG
 			if (json.contains("modTitle"))
 			{
 				getJson(dataG::data.gameData.modTitle, "modTitle");
+			}
+			if (json.contains("modVersion"))
+			{
+				getJson(dataG::data.gameData.modVersion, "modVersion");
 			}
 			if (json.contains("runButtonColor"))
 			{
@@ -209,7 +221,7 @@ namespace managerG
 		std::string fPath;
 
 		// Save battle config
-		fPath = ".\\eopBattles\\battlesCfg.json";
+		fPath = ".\\eopData\\config\\battlesCfg.json";
 		setJson("enableAutoGeneration", dataG::data.battlesData.isGenerationNeeded);
 		setJson("enableResultsTransfer", dataG::data.battlesData.isResultTransferNeeded);
 		setJson("isPlannedRetreatRoute", dataG::data.battlesData.isPlannedRetreatRoute);
@@ -217,7 +229,7 @@ namespace managerG
 		json.clear();
 
 		// Save game config
-		fPath = ".\\eopData\\gameCfg.json";
+		fPath = ".\\eopData\\config\\gameCfg.json";
 		setJson("isDXVKEnabled", dataG::data.modulesData.isDXVKEnabled);
 		setJson("isContextMenuNeeded", dataG::data.modulesData.isContextMenuNeeded);
 		setJson("isTacticalMapViewerNeeded", dataG::data.modulesData.isTacticalMapViewerNeeded);
@@ -225,11 +237,13 @@ namespace managerG
 		setJson("isBlockLaunchWithoutEop", dataG::data.gameData.isBlockLaunchWithoutEop);
 		setJson("IsOverrideBattleCamera", dataG::data.gameData.IsOverrideBattleCamera);
 		setJson("isDiscordRichPresenceEnabled", dataG::data.gameData.isDiscordRichPresenceEnabled);
+		setJson("isFreecamIntegrationEnabled", dataG::data.gameData.freecamIntegration);
+		setJson("freecamFolder", dataG::data.gameData.freecamFolder);
 		writeJsonToFile(fPath, json);
 		json.clear();
 
 		// Save UI config
-		fPath = ".\\eopData\\uiCfg.json";
+		fPath = ".\\eopData\\config\\uiCfg.json";
 		setJson("useVanillaCfg", dataG::data.modData.useVanillaConfig);
 		setJson("modCfgFile", dataG::data.modData.configName);
 		setJson("useM2TWEOP", dataG::data.modData.useM2TWEOP);
@@ -237,6 +251,7 @@ namespace managerG
 		setJson("playBackgroundMusic", dataG::data.audio.bkgMusic.isMusicNeeded);
 		setJson("musicVolume", dataG::data.audio.bkgMusic.musicVolume);
 		setJson("modTitle", dataG::data.gameData.modTitle);
+		setJson("modVersion", dataG::data.gameData.modVersion);
 		setJson("runButtonColor", dataG::data.gameData.buttonColorString);
 		setJson("runButtonHoverColor", dataG::data.gameData.buttonHoverColorString);
 		setJson("launcherTheme", dataG::data.modData.themeName);

@@ -1,11 +1,12 @@
 #pragma once
+#include "faction.h"
 #include "realGameTypes.h"
-#include "headersSTD.h"
 
 namespace discordManager
 {
 	void battleLoaded();
+	void menuLoaded();
 	void onCampaignMapLoaded();
-	void OnFactionTurnStart(factionStruct*fac);
-	void OnChangeTurnNum(int num);
+	void onFactionTurnStart(factionStruct* fac);
+	void onChangeTurnNum(int num);
 }

@@ -1,6 +1,7 @@
 ﻿// dllmain.cpp : Определяет точку входа для приложения DLL.
 #include "pch.h"
 #include "managerF.h"
+#include <windows.h>
 
 //sfml(for audio)
 #if _DEBUG
@@ -11,6 +12,7 @@
 #pragma comment(lib,"sfml-audio-s.lib")
 
 #endif
+
 #pragma comment(lib,"vorbisfile.lib")
 #pragma comment(lib,"vorbisenc.lib")
 #pragma comment(lib,"vorbis.lib")
@@ -18,7 +20,11 @@
 #pragma comment(lib,"ogg.lib")
 #pragma comment(lib,"flac.lib")
 
-
+//ffmpeg(for video)
+#pragma comment(lib,"avutil.lib")
+#pragma comment(lib,"avcodec.lib")
+#pragma comment(lib,"avformat.lib")
+#pragma comment(lib,"swscale.lib")
 
 #if _DEBUG
 

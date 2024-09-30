@@ -5,12 +5,13 @@
 #include "helpers.h"
 
 #include "markdownHelper.h"
+
 namespace aboutUI
 {
 	struct
 	{
 		const std::string markdownText = R"(
-![logo](eopData/images/logoAbout.png)
+![logo](eopData/resources/images/logoAbout.png)
 ## What is M2TW Engine Overhaul Project?
 
 M2TW Engine Overhaul Project is designed to expand the capabilities of the game *Medieval 2: Total War*.
@@ -68,10 +69,6 @@ end
 ```
 For a full list of EOP Events, see [here](https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html)
 
-### Creating custom UI's with M2TWEOP' ImGUI Plugin
-![M2TWEOP-Tutorials](https://cdn.discordapp.com/attachments/939640870343426059/1075868416470155364/image.png)
-![M2TWEOP-Tutorials](https://cdn.discordapp.com/attachments/748027000353980508/971415742710960168/unknown.png)
-
 ### Developers
 * **youneuoy** - Project founder, Main Developer
 * **Jojo00182** - Great code contributions, engine bugfixes, reversing structs and much more
@@ -84,6 +81,7 @@ For a full list of EOP Events, see [here](https://youneuoy.github.io/M2TWEOP-lib
 * **Xamax** - Video tutorials, testing and many great suggestions
 * **Erken** - Excellent IMGUI tutorials, Lua examples and feedback
 * **DinarMayor** - Testing, great suggestions and examples
+* **Mekkerman** - Patron of the project
 
 ## Projects
 * [M2TWEOP Library](https://github.com/youneuoy/M2TWEOP-library) - Main project (C++ and Assembly)
@@ -217,6 +215,8 @@ First release.
 
 )";
 	}aboutUIData;
+
+
 	void drawAboutUi(bool* isOpen)
 	{
 		markdownHelper::setFonts();
@@ -231,3 +231,5 @@ First release.
 		ImGui::End();
 	}
 };
+
+

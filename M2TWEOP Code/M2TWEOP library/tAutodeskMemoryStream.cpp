@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "tAutodeskMemoryStream.h"
 
 FbxStream::EState tAutodeskMemoryStream::GetState()

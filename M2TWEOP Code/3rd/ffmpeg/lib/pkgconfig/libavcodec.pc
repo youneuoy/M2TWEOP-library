@@ -1,0 +1,15 @@
+prefix=${pcfiledir}/../..
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libavcodec
+Description: FFmpeg codec library
+Version: 61.3.100
+Requires: 
+Requires.private: libswresample >= 5.1.100, libavutil >= 59.8.100
+Conflicts:
+Libs: "-L${libdir}" -lavcodec
+Libs.private: mfuuid.lib -lole32 -lstrmiids -lole32 -luser32
+Cflags: "-I${includedir}"
+

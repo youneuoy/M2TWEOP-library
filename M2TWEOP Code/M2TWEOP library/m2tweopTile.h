@@ -1,18 +1,10 @@
 #pragma once
-#include <string>
 #include <vector>
-#include <windows.h>
-#include "FastFuncts.h" 
-#include "eventsCodes.h" 
-#include "globals.h"
-
-#include "techFuncs.h"
-#include "fastFuncts.h"
-#include "imgui.h"
-#include <d3d9.h>
-#include <sstream>
+#include <memory>
+#include "imgui/imgui.h"
 #include "realGameTypes.h"
-using namespace std;
+
+struct armyStruct;
 
 enum class tileContent:uint8_t
 {
@@ -26,28 +18,28 @@ class m2tweopTile
 {
 public:
 	void buildTile(int x,int y);
-	bool drawTile(const ImVec2&tileSize, const ImVec2& coordsStart, vector<ImVec2>*borders,bool isSelectedNow);
+	bool drawTile(const ImVec2&tileSize, const ImVec2& coordsStart, std::vector<ImVec2>*borders,bool isSelectedNow);
 
 	bool buildBorder(
-		const shared_ptr<m2tweopTile>& leftTile,
-		const shared_ptr<m2tweopTile>& rightTile,
-		const shared_ptr<m2tweopTile>& upTile,
-		const shared_ptr<m2tweopTile>& lowTile);
+		const std::shared_ptr<m2tweopTile>& leftTile,
+		const std::shared_ptr<m2tweopTile>& rightTile,
+		const std::shared_ptr<m2tweopTile>& upTile,
+		const std::shared_ptr<m2tweopTile>& lowTile);
 private:
 	bool haveLBorder = false;
 	bool haveRBorder = false;
 	bool haveUBorder = false;
 	bool haveDBorder = false;
 
-	bool IsSameCoords(shared_ptr<m2tweopTile> anotherTile);
-	bool isNeighbor(shared_ptr<m2tweopTile>anotherTile);
+	bool IsSameCoords(std::shared_ptr<m2tweopTile> anotherTile);
+	bool isNeighbor(std::shared_ptr<m2tweopTile>anotherTile);
 
 	int xTile = 0;
 	int yTile = 0;
 	void buildAsSettlementTile();
 	void buildAsFortTile();
 	void buildAsPortTile();
-	void buildAsArmyTile(stackStruct* army);
+	void buildAsArmyTile(armyStruct* army);
 
 	int tileRegionID = 0;
 	int ownerDipNum = 0;

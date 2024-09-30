@@ -2,43 +2,74 @@ import os
 import re
 
 def fixTypes(field):
-    if field.type == "int":
-        field.type = "integer"
-    if field.type == "float":
-        field.type = "number"
-    if field.type == "bool":
-        field.type = "boolean"
+    if re.search(r'\|', field) is not None:
+        types = re.findall(r'(\S+)\|', field)
+        newTypes = ""
+        for type in types:
+            newTypes += fixTypes(type) + "|"
+        newTypes = newTypes[:-1]
+        return newTypes
+    if field == "int":
+        return "integer"
+    if field == "float":
+        return "number"
+    if field == "bool":
+        return "boolean"
+    if field == "bool":
+        return "boolean"
+    if re.search(r'\[\d+\]', field):
+        tableType = re.findall(r'(\S+)\[\d+\]', field)[0]
+        tableType = fixTypes(tableType)
+        return "table<integer, " + tableType + ">"
+    return field
     
 def writeClass(newClass):
     outputfile.write("---" + newClass.descr.strip() + "\n")
-    outputfile.write("---@class " + newClass.name + "\n")
+    
+    if newClass.enum is None:
+        outputfile.write("---@class " + newClass.name + "\n")
+    else:
+        outputfile.write("---@enum " + newClass.name + "\n")
     outputfile.write(newClass.name + " = { \n\n")
     for field in newClass.tfields:
         if field.type != "function":
-            if field.comment != "":
-                outputfile.write("    ---" + field.comment.strip() + "\n") 
-            fixTypes(field)
-            outputfile.write("    ---@type " + field.type + "\n")
-            outputfile.write("    " + field.name + " = nil,\n\n")
+            if newClass.enum is None:
+                if field.comment != "":
+                    outputfile.write("    ---" + field.comment.strip() + "\n") 
+                thisType = fixTypes(field.type)
+                outputfile.write("    ---@type " + thisType + "\n")
+                outputfile.write("    " + field.name + " = nil,\n\n")
+            else:
+                if field.name in newClass.enum.values:
+                    if field.comment != "":
+                        outputfile.write("    ---" + field.comment.strip() + "\n") 
+                    thisType = fixTypes(field.type)
+                    outputfile.write("    ---@type " + thisType + "\n")
+                    if newClass.enum.values[field.name] is None:
+                        outputfile.write("    " + field.name + " = " +  "nil" + ",\n\n")
+                    else:
+                        outputfile.write("    " + field.name + " = " +  newClass.enum.values[field.name] + ",\n\n")
     outputfile.write("}\n\n")
     for field in newClass.tfields:
         if field.type == "function":
             if field.comment != "":
-                outputfile.write("---" + field.comment.strip() + "\n") 
+                outputfile.write("---" + field.comment + "\n") 
             nextparams = []
             firstParamBool = True
             firstparam = ""
             for paramfield in field.params:
-                fixTypes(paramfield)
-                outputfile.write("---@param " + paramfield.name + " " + paramfield.type + " " +  paramfield.comment.strip() + "\n")
+                thisType = fixTypes(paramfield.type)
+                if re.search(r'optional', paramfield.comment) is not None:
+                    thisType += "?"
+                outputfile.write("---@param " + paramfield.name + " " + thisType + " " +  paramfield.comment.strip() + "\n")
                 if firstParamBool == False:
                     nextparams.append(paramfield.name)
                 else:
                     firstparam = paramfield.name
                 firstParamBool = False
             for returnfield in field.returns:
-                fixTypes(returnfield)
-                outputfile.write("---@return " + returnfield.type + " " + returnfield.name + " " +  returnfield.comment.strip() + "\n")
+                thisType = fixTypes(returnfield.type)
+                outputfile.write("---@return " + thisType + " " + returnfield.name + " " +  returnfield.comment.strip() + "\n")
             outputfile.write(makeFunction(field.name, newClass.name, firstparam, nextparams, field.selfCall, field.funcEvent) + " \n\n")
             
 def makeFunction(name, funcClass, firstparam, params, selfCall, funcEvent):
@@ -58,6 +89,7 @@ class luaClass:
     name = ""
     tfields = []
     descr = ""
+    enum = None
 
 class returnValue:
     def __init__(self, type, name, comment):
@@ -74,6 +106,11 @@ class tfield:
     params = []
     selfCall = False
     funcEvent = False
+
+class enum:
+    def __init__(self):
+        self.values = {}
+    values = {}
         
 class param:
     def __init__(self, type, name, comment):
@@ -81,18 +118,20 @@ class param:
         self.name = name
         self.comment = comment
 
-filenames = ["imgui\\sol_ImGui.h"]
+filenames = ["imgui\\sol_ImGui.cpp", "imgui\\sol_ImGui_enums.cpp", "imgui\\sol_ImGui_enums2.cpp", "imgui\\sol_ImGui_keys.cpp"]
 cwd = os.getcwd()
 eopPath = re.findall(r'(.+)documentationGenerator', cwd)[0]
-luaPluginPath = eopPath + "M2TWEOP-luaPlugin\\luaPlugin\\"
-outputfile = open(eopPath + "M2TWEOP DataFiles\\youneuoy_Data\\plugins\\lua\\LuaImGuiDocs.lua", 'w')
+luaPluginPath = eopPath + "M2TWEOP Code\\M2TWEOP library\\"
+outputfile = open(eopPath + "M2TWEOP DataFiles\\eopData\\eopScripts\\LuaImGuiDocs.lua", 'w')
+outputfile.write("---@diagnostic disable: missing-return, lowercase-global\n")
 
-startWrite = False
-funcComment = ""
-funcName = ""
-nextLineComment = False
-newSection = False
 for name in filenames:
+    startWrite = False
+    funcComment = ""
+    funcName = ""
+    nextLineComment = False
+    newSection = False
+    countEnum = False
     file = open(luaPluginPath + name, 'r')
     for line in file:
         #print(line)
@@ -109,7 +148,7 @@ for name in filenames:
             continue
         if re.search(r'@tfield', line) is not None:
             nextLineComment = False
-            newType = re.findall(r'@tfield\s+(\S+) ', line)[0]
+            newType = re.findall(r'@tfield\s+(\S+)\s', line)[0]
             newName = re.findall(r'@tfield\s+\S+\s+(\S+)', line)[0]
             if len(re.findall(r'@tfield \S+ \S+ (.+)', line)) > 0:
                 newComment = re.findall(r'@tfield \S+ \S+ (.+)', line)[0]
@@ -165,17 +204,35 @@ for name in filenames:
         if re.search(r'@table', line) is not None:
             newClass.name = re.findall(r'@table\s+(\S+)', line)[0]
             newSection = False
+        if re.search(r'luaState.new_enum', line) is not None:
+            newClass.enum = enum()
+            countEnum = True
+            continue
+        if countEnum:
+            if re.search(r',', line) is not None:
+                if re.search(r',\s*\S', line) is not None:
+                    key = re.findall(r'\"(\S*)\"\s*,', line)[0].strip()
+                    if re.search(r',\s*(\d+)', line) is not None:
+                        value = re.findall(r',\s*(\d+)', line)[0].strip()
+                    else:
+                        value = None
+                    newClass.enum.values[key] = value
+            else:
+                countEnum = False
         if re.search(r'\*\*\*', line) is not None:
             nextLineComment = True
             continue
         if nextLineComment == True:
+            if line.strip() == "": continue
             if newSection == True:
                 newClass.descr = newClass.descr + line.strip() + " "
             else:
-                funcComment = funcComment + line.strip() + " "
-
-writeClass(newClass)                
-del newClass               
+                if funcComment == "":
+                    funcComment = line.strip()
+                else:
+                    funcComment += "\n-- " + line.strip() 
+    writeClass(newClass)                
+    del newClass           
              
 outputfile.flush()
 outputfile.close()

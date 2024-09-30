@@ -72,12 +72,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\3rd\cpptoml;$(SolutionDir)\3rd\discord;$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\M2TWEOPBoost;$(SolutionDir)\3rd\sdl\include;$(SolutionDir)\3rd\ImNotify;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\IPC;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(SolutionDir)\3rd\discord;$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\M2TWEOPBoost;$(SolutionDir)\3rd\sdl\include;$(SolutionDir)\3rd\ImNotify;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\IPC;$(IncludePath);</IncludePath>
     <LibraryPath>$(SolutionDir)\3rd\discord\lib;$(SolutionDir)\3rd\sfml\lib;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)\3rd\M2TWEOPBoost\boostLibs;$(SolutionDir)\3rd\sdl\libs</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)\3rd\cpptoml;$(SolutionDir)\3rd\discord;$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\M2TWEOPBoost;$(SolutionDir)\3rd\sdl\include;$(SolutionDir)\3rd\ImNotify;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\IPC;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(SolutionDir)\3rd\discord;$(DXSDK_DIR)\include;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\3rd\imguiDocking;$(SolutionDir)\3rd\M2TWEOPBoost;$(SolutionDir)\3rd\sdl\include;$(SolutionDir)\3rd\ImNotify;$(SolutionDir)\3rd\nlohmann;$(SolutionDir)\3rd\IPC;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\3rd\discord\lib;$(SolutionDir)\3rd\sfml\lib;$(DXSDK_DIR)\lib\x86;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)\3rd\M2TWEOPBoost\boostLibs;$(SolutionDir)\3rd\sdl\libs</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -91,6 +91,7 @@
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <VcpkgEnabled>false</VcpkgEnabled>
+    <VcpkgUseStatic>true</VcpkgUseStatic>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -99,13 +100,13 @@
       <PreprocessorDefinitions>SFML_STATIC;WIN32;WIN32_LEAN_AND_MEAN;_SILENCE_ALL_CXX23_DEPRECATION_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\cpptoml;$(SolutionDir)\3rd\sfml\include;..\3rd\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(SolutionDir)\3rd\sfml\include;..\3rd\glfw\include;%(AdditionalIncludeDirectories);$(SolutionDir)\M2TWEOP GUI;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>winmm.lib;imm32.lib;version.lib;Setupapi.lib;discord_game_sdk.dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dxva2.lib;evr.lib;mf.lib;mfplat.lib;mfplay.lib;mfreadwrite.lib;mfuuid.lib;bcrypt.lib;ws2_32.lib;Secur32.lib;Strmiids.lib;Mfuuid.lib;winmm.lib;imm32.lib;version.lib;Setupapi.lib;discord_game_sdk.dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <EnableUAC>true</EnableUAC>
       <AdditionalOptions>/Force:Multiple %(AdditionalOptions)</AdditionalOptions>
@@ -123,7 +124,7 @@
       <PreprocessorDefinitions>SFML_STATIC;WIN32;WIN32_LEAN_AND_MEAN;NDEBUG;_SILENCE_ALL_CXX23_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\cpptoml;$(SolutionDir)\3rd\sfml\include;..\3rd\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\3rd\logger;$(SolutionDir)\3rd\cpptoml;$(SolutionDir)\3rd\sfml\include;..\3rd\glfw\include;%(AdditionalIncludeDirectories);$(SolutionDir)\M2TWEOP GUI;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -131,7 +132,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>winmm.lib;imm32.lib;version.lib;Setupapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>dxva2.lib;evr.lib;mf.lib;mfplat.lib;mfplay.lib;mfreadwrite.lib;mfuuid.lib;bcrypt.lib;ws2_32.lib;Secur32.lib;Strmiids.lib;Mfuuid.lib;winmm.lib;imm32.lib;version.lib;Setupapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
       <EnableUAC>true</EnableUAC>
       <AdditionalOptions>/Force:Multiple %(AdditionalOptions)</AdditionalOptions>
@@ -146,6 +147,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(_ZVcpkgCurrentInstalledDir)include;$(SolutionDir)\M2TWEOP GUI;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -161,6 +163,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(_ZVcpkgCurrentInstalledDir)include;$(SolutionDir)\M2TWEOP GUI;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -208,8 +211,9 @@
     <ClCompile Include="managerGHelpers.cpp" />
     <ClCompile Include="markdownHelper.cpp" />
     <ClCompile Include="modSettingsUI.cpp" />
+    <ClCompile Include="pch.cpp" />
     <ClCompile Include="redistUI.cpp" />
-    <ClCompile Include="themeManager.cpp" />
+    <ClCompile Include="themeManagerGUI.cpp" />
     <ClCompile Include="toolRoutine.cpp" />
     <ClCompile Include="discordManager.cpp" />
   </ItemGroup>
@@ -229,7 +233,6 @@
     <ClInclude Include="..\3rd\imguiDocking\imstb_truetype.h" />
     <ClInclude Include="..\3rd\imguiDocking\md4c.h" />
     <ClInclude Include="..\3rd\imguiDocking\stb_image.h" />
-    <ClInclude Include="..\3rd\imgui\imgui_markdown.h" />
     <ClInclude Include="..\3rd\ImNotify\fa_solid_900.h" />
     <ClInclude Include="..\3rd\ImNotify\font_awesome_5.h" />
     <ClInclude Include="..\3rd\ImNotify\imgui_notify.h" />
@@ -265,11 +268,12 @@
     <ClInclude Include="managerGHelpers.h" />
     <ClInclude Include="markdownHelper.h" />
     <ClInclude Include="modSettingsUI.h" />
+    <ClInclude Include="pch.h" />
     <ClInclude Include="redistUI.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="toolRoutine.h" />
     <ClInclude Include="discordManager.h" />
-    <ClInclude Include="themeManager.h" />
+    <ClInclude Include="themeManagerGUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="M2TWEOP GUI.rc" />

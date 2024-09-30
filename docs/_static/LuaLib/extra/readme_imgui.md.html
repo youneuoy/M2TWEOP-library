@@ -274,7 +274,7 @@
         <h3 class="welcomeMessage">Welcome to the EOP Lua Plugin Documentation!</h3>
         <br>
         <h3 class="disclaimerMessage">Please note that many of the examples require additional checks and not all functions are fully documented. If you need additional help, we welcome you to join the Discord!</h3>
-        <p class="lastUpdatedMessage">Last updated: 2023-12-26 13:05:04</p>
+        <p class="lastUpdatedMessage">Last updated: 2024-06-09 22:27:37</p>
         <a target="_blank" href="https://discord.gg/Epqjm8u2WK">
             <img class="discordImage" src="https://img.shields.io/discord/713369537948549191?color=282828&label=DISCORD&style=for-the-badge"/>
         </a>
@@ -287,6 +287,7 @@
     <ul>
         <li><a href="https://www.youtube.com/watch?v=hUvbcz8i7Wk">Scripting Basics (Video Tutorial)</li>
         <li><a href="../../../_static/Introduction_to_ImGui_v4.pdf">Introduction to EOP ImGUI V4 by Erken (PDF)</a></li>
+        <li><a href="../../../UPGRADING_TO_EOP_V3.html">Upgrading from EOP V2 to EOP V3</a></li>
     <ul>
     </ul>
 </div>
@@ -295,22 +296,25 @@
 <h1></h1>
 
 <div class="disclaimerMessage">
+
 <p>
-  Welcome to the LuaPlugin ImGui bindings. These bindings are being developed to support https://github.com/youneuoy/M2TWEOP-luaPlugin. Enjoy!
+  Welcome to the EOP ImGui bindings. The following bindings allow you to use the ImGUI library inside Medieval 2.
 </p>
 
 <p>
-ImGui lua binding is based on
-<a href="https://github.com/youneuoy/sol2_ImGui_Bindings"> youneuoy`s fork</a>
-of
-<a href="https://github.com/MSeys/sol2_ImGui_Bindings">this</a>
-repository.
-</p>
-<p>
-This binding is adapted for the needs of the M2TW Engine Overhaul Project.
+  The current bindings are based on <a href="https://github.com/ocornut/imgui/releases/tag/v1.90.2">ImGUI version 1.90.2</a>
 
-You can find all the supported functions and overloads below.
+  You can find all the supported bindings in <a href="https://github.com/youneuoy/M2TWEOP-library/blob/master/M2TWEOP%20DataFiles/eopData/eopScripts/LuaImGuiDocs.lua">LuaImGuiDocs.lua</a>
 </p>
+
+<p>
+  The examples that you can find below were based on <a
+<pre>
+href=<span class="string">"https://github.com/ocornut/imgui/releases/tag/v1.86"</span>&gt;ImGUI version <span class="number">1.86</span>&lt;/a&gt;. They exist as samples <span class="keyword">and</span> general guidance but you should always reference the &lt;a href=<span class="string">"https://github.com/youneuoy/M2TWEOP-library/blob/master/M2TWEOP%20DataFiles/eopData/eopScripts/LuaImGuiDocs.lua"</span>&gt;LuaImGuiDocs.lua&lt;/a&gt; <span class="keyword">for</span> the latest changes.
+</pre>
+  This file is included as part of EOP and aso enables Intellisense when writing writing EOP code, assuming you are using VSCode and the Lua Language Server extension.
+</p>
+
 </div>
 
 
@@ -618,7 +622,7 @@ ImGui.SetNextWindowSize(backgroundWindowSizeRight, backgroundWindowSizeBottom)
 
   <span class="comment">-- Load the image
 </span>  BANNER_IMAGE = { x = <span class="number">0</span>, y = <span class="number">0</span>, img = <span class="keyword">nil</span> }
-  BANNER_IMAGE.x, BANNER_IMAGE.y, BANNER_IMAGE.img = M2TWEOP.loadTexture(M2TWEOP.getModPath()..<span class="string">'\\eopData\\images\\SCROLL_BACKGROUND.png'</span>)
+  BANNER_IMAGE.x, BANNER_IMAGE.y, BANNER_IMAGE.img = M2TWEOP.loadTexture(M2TWEOP.getModPath()..<span class="string">'\\eopData\\resources\\images\\SCROLL_BACKGROUND.png'</span>)
 
   <span class="comment">-- Draw the image in our centered window
 </span>  ImGui.Image(BANNER_IMAGE.img, scrollBackgroundWidth, scrollBackgroundHeight)
@@ -626,11 +630,9 @@ ImGui.SetNextWindowSize(backgroundWindowSizeRight, backgroundWindowSizeBottom)
 ImGui.End() <span class="comment">-- End window area</span>
 </pre>
 
-<p><img src="https://cdn.discordapp.com/attachments/939640870343426059/1075868416470155364/image.png" alt=""/></p>
 
 <p><a name="Parameters_Stacks__Shared_"></a></p>
 <h2>Parameters Stacks (Shared)</h2>
-<p>Note: This binding does not give functions that can obtain an ImFont* from inside Lua (besides GetFont), You'll need to add your own.</p>
 
 <pre>
   <span class="comment">-- ImGui.PushFont(...)

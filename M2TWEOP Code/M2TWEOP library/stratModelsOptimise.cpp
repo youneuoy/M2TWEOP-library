@@ -1,7 +1,9 @@
+#include "pch.h"
 #include "stratModelsOptimise.h"
-#include "fastFuncts.h"
 
 #include <ctime>
+#include "techFuncs.h"
+
 namespace stratModelsOptimise
 {
 
@@ -14,10 +16,10 @@ namespace stratModelsOptimise
 
 	model_Rigid* constructObject()
 	{
-		DWORD mem = fastFuncts::allocateGameMem(0x164);
+		DWORD mem = techFuncs::allocateGameMem(0x164);
 
 		DWORD constructorAdr = 0;
-		if (globals::dataS.gamever == 2)//steam
+		if (globals::dataS.gameVersion == 2)//steam
 		{
 			constructorAdr = 0x00934190;
 		}
