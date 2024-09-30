@@ -1,10 +1,24 @@
+#include "pch.h"
 #include "onlineThings.h"
 #include "imgui_notify.h"
 
 #include "onlineThings2.h"
+#include "globals.h"
+#include "fort.h"
+#include "unit.h"
+#include "characterRecord.h"
 
-#include <ImFileDialog.h>
-#include <imgui_internal.h>
+#include "techFuncs.h"
+#include "imgui/imgui.h"
+#include "character.h"
+#include "faction.h"
+#include "army.h"
+
+#include "battle.h"
+#include "campaign.h"
+#include "strategyMap.h"
+#include "imgui/ImFileDialog.h"
+#include "imgui/imgui_internal.h"
 namespace battleCreator
 {
 	struct
@@ -28,7 +42,7 @@ namespace battleCreator
 		data.isGenerationNeeded = isNeeded;
 	}
 
-	bool GetIsGenerationNeeded()
+	bool getIsGenerationNeeded()
 	{
 		return data.isGenerationNeeded;
 	}
@@ -41,8 +55,8 @@ namespace battleCreator
 	{
 		jsn::json json;
 
-		std::string fPath = globals::dataS.modPatch;
-		fPath += "\\eopBattles\\battlesCfg.json";
+		std::string fPath = globals::dataS.modPath;
+		fPath += "\\eopData\\config\\battlesCfg.json";
 
 
 		std::ifstream f1(fPath);
@@ -66,7 +80,7 @@ namespace battleCreator
 	string makeWeatherString()
 	{
 		string retS;
-		if (fastFuncts::getSeason() == 0)
+		if (campaignHelpers::getCampaignData()->season == 0)
 		{
 			retS = "summer";
 		}
@@ -74,19 +88,18 @@ namespace battleCreator
 		{
 			retS = "winter";
 		}
-
 		return retS;
 	}
+	
 	string makeBattleName()
 	{
 		string battleName = makeWeatherString();
-
+		const auto campaignData = campaignHelpers::getCampaignData();
 		battleName += "_T";
-		battleName += to_string(fastFuncts::getPassedTurnsNum());
+		battleName += to_string(campaignData->turnNumber);
 		battleName += "_";
-		factionStruct* currFac = smallFuncs::getGameDataAll()->campaignData->currentFactionTurn;
-		battleName += currFac->factSmDescr->facName;
-
+		const factionStruct* currFac = campaignData->currentFactionTurn;
+		battleName += currFac->factionRecord->facName;
 		return battleName;
 	}
 
@@ -94,7 +107,7 @@ namespace battleCreator
 	set<string>getFacsNamesInBattle()
 	{
 		set<string>retSet;
-		battleDataS* battleData = smallFuncs::getGameDataAll()->battleHandler;
+		battleDataS* battleData = battleHelpers::getBattleData();
 
 		for (int i = 0; i < battleData->sidesNum; i++)
 		{
@@ -103,9 +116,9 @@ namespace battleCreator
 
 			for (int j = 0; j < side.armiesNum; j++)
 			{
-				stackStruct* army = side.armies[j].stack;
+				armyStruct* army = side.armies[j].stack;
 
-				retSet.emplace(army->faction->factSmDescr->facName);
+				retSet.emplace(army->faction->factionRecord->facName);
 			}
 		}
 
@@ -182,7 +195,7 @@ namespace battleCreator
 		fileStrings.push_back("	plan_set default_set");
 
 
-		auto* facCreator = fastFuncts::GetFactSmDescrById(sett->fac_creatorModNum);
+		const auto* facCreator = factionHelpers::getFactionRecord(sett->fac_creatorModNum);
 		if (facCreator != nullptr)
 		{
 			fileStrings.push_back(string("	faction_creator ").append(facCreator->facName));
@@ -192,7 +205,7 @@ namespace battleCreator
 			fileStrings.push_back("	building");
 
 			string buildType = sett->buildings[bnum]->edbEntry->type;
-			buildingLevel level = sett->buildings[bnum]->edbEntry->buildingLevel[sett->buildings[bnum]->level];
+			buildingLevel level = sett->buildings[bnum]->edbEntry->levels[sett->buildings[bnum]->level];
 			string buildName = level.name;
 			fileStrings.push_back("	{");
 
@@ -207,46 +220,46 @@ namespace battleCreator
 		fileStrings.push_back("}");
 	}
 
-	void writeCharacterInfo(vector<string>& fileStrings, general* gen)
+	void writeCharacterInfo(vector<string>& fileStrings, character* gen)
 	{
-		int age = (gen->genChar->age >> 3) & 0x7f;
+		int age = (gen->characterRecord->age >> 3) & 0x7f;
 
 		string tempS = "character	";
-		if (gen->genChar->fullName == nullptr || string(gen->genChar->fullName).size() == 0)
+		if (gen->characterRecord->fullName == nullptr || string(gen->characterRecord->fullName).empty())
 		{
 			tempS.append("default");
 		}
 		else
 		{
-			tempS.append(gen->genChar->fullName);
+			tempS.append(gen->characterRecord->fullName);
 		}
 		tempS.append(", named character, male");
-		if (gen->genChar->status & 2)
+		if (gen->characterRecord->status & 2)
 		{
 			tempS.append(", heir");
 		}
-		else if (gen->genChar->status & 5)
+		else if (gen->characterRecord->status & 5)
 		{
 			tempS.append(", leader");
 		}
 		tempS.append(", age ").append(to_string(age));
 		tempS.append(", x ").append(to_string(gen->xCoord));
 		tempS.append(", y ").append(to_string(gen->yCoord));
-		if (gen->genChar->portrait_custom)
+		if (gen->characterRecord->portrait_custom)
 		{
-			tempS.append(", portrait ").append(gen->genChar->portrait_custom);
+			tempS.append(", portrait ").append(gen->characterRecord->portrait_custom);
 		}
-		if (gen->genChar->modelName)
+		if (gen->characterRecord->modelName)
 		{
-			tempS.append(", battle_model ").append(gen->genChar->modelName);
+			tempS.append(", battle_model ").append(gen->characterRecord->modelName);
 		}
 		if (gen->ability)
 		{
 			tempS.append(", hero_ability ").append(gen->ability);
 		}
-		if (gen->genChar->label)
+		if (gen->characterRecord->label)
 		{
-			tempS.append(", label ").append(gen->genChar->label);
+			tempS.append(", label ").append(gen->characterRecord->label);
 		}
 
 
@@ -254,26 +267,26 @@ namespace battleCreator
 
 		fileStrings.push_back(tempS);
 
-		if (gen->genChar->traits != nullptr)
+		if (gen->characterRecord->traitList.head != nullptr)
 		{
 			tempS = "traits";
-			traitContainer* traitCont = gen->genChar->traits;
+			auto traitCont = gen->characterRecord->traitList.head;
 			while (traitCont != nullptr)
 			{
-				tempS.append(" ").append(traitCont->trait->traitEntry->name).append(" ").append(to_string(traitCont->trait->level->level)).append(" ,");
+				tempS.append(" ").append(traitCont->element->traitEntry->name).append(" ").append(to_string(traitCont->element->level->level)).append(" ,");
 
 				traitCont = traitCont->next;
 			};
 			fileStrings.push_back(tempS);
 		}
 
-		if (gen->genChar->ancNum != 0)
+		if (gen->characterRecord->ancNum != 0)
 		{
 			tempS = "ancillaries";
-			UINT32 ancNum = gen->genChar->ancNum;
+			UINT32 ancNum = gen->characterRecord->ancNum;
 			for (UINT32 i = 0; i < ancNum; i++)
 			{
-				tempS.append(" ").append(gen->genChar->ancillaries[i]->dataAnc->ancName).append(" ,");
+				tempS.append(" ").append(gen->characterRecord->ancillaries[i]->dataAnc->ancName).append(" ,");
 			}
 			fileStrings.push_back(tempS);
 		}
@@ -303,12 +316,13 @@ namespace battleCreator
 		fileStrings.push_back("\n");
 		fileStrings.push_back("\n");
 
+		const auto year = campaignHelpers::getCampaignData()->currentDate;
 		tempS = "start_date	";
-		tempS.append(to_string(fastFuncts::getYear())).append(" ").append(makeWeatherString());
+		tempS.append(to_string(year)).append(" ").append(makeWeatherString());
 		fileStrings.push_back(tempS);
 
 		tempS = "end_date	";
-		tempS.append(to_string(fastFuncts::getYear())).append(" ").append(makeWeatherString());
+		tempS.append(to_string(year)).append(" ").append(makeWeatherString());
 		fileStrings.push_back(tempS);
 		fileStrings.push_back("\n");
 		fileStrings.push_back("\n");
@@ -317,7 +331,7 @@ namespace battleCreator
 	}
 	void createFactionsSection(vector<string>& fileStrings)
 	{
-		battleDataS* battleData = smallFuncs::getGameDataAll()->battleHandler;
+		battleDataS* battleData = battleHelpers::getBattleData();
 		string tempS;
 
 		fileStrings.push_back("; >>>> start of factions section <<<<\n");
@@ -331,35 +345,28 @@ namespace battleCreator
 
 			for (int j = 0; j < side.armiesNum; j++)
 			{
-				stackStruct* army = side.armies[j].stack;
-				if (facsNames.count(army->faction->factSmDescr->facName))
+				armyStruct* army = side.armies[j].stack;
+				if (facsNames.count(army->faction->factionRecord->facName))
 				{
-					facsNames.erase(army->faction->factSmDescr->facName);
+					facsNames.erase(army->faction->factionRecord->facName);
 
-					fileStrings.push_back(string("faction	").append(army->faction->factSmDescr->facName));
+					fileStrings.push_back(string("faction	").append(army->faction->factionRecord->facName));
 				}
 
 				if (army->gen != nullptr && army->gen->xCoord == battleData->xCoord
 					&& army->gen->yCoord == battleData->yCoord
 					)
 				{
-					settlementStruct* sett = fastFuncts::findSettlement(army->gen->xCoord, army->gen->yCoord);
-					if (sett != nullptr)
-					{
+					const auto tile = stratMapHelpers::getTile(army->gen->xCoord, army->gen->yCoord);
+					if (settlementStruct* sett = tile->getSettlement(); sett)
 						writeSettlementInfo(fileStrings, sett);
-					}
-
-
-					fortStruct* fort = fastFuncts::findFort(army->gen->xCoord, army->gen->yCoord);
-					if (fort != nullptr)
-					{
+					if (fortStruct* fort = tile->getFort(); fort)
 						writeFortInfo(fileStrings, fort);
-					}
 				}
 
 				if (army->gen != nullptr)
 				{
-					general* gen = army->gen;
+					character* gen = army->gen;
 					writeCharacterInfo(fileStrings, gen);
 				}
 				else
@@ -373,11 +380,11 @@ namespace battleCreator
 				{
 					unit* un = army->units[k];
 					tempS = "unit		";
-					tempS.append(un->eduEntry->Type);
+					tempS.append(un->eduEntry->eduType);
 					tempS.append("				soldiers ").append(to_string(un->SoldierCountStrat));
 					tempS.append(" exp ").append(to_string(un->expScreen));
-					tempS.append(" armour ").append(to_string(un->stats >> 0xd & 0x1f));
-					tempS.append(" weapon_lvl ").append(to_string(un->stats >> 0x8 & 0x1f));
+					tempS.append(" armour ").append(to_string(un->avgArmourUpg));
+					tempS.append(" weapon_lvl ").append(to_string(un->avgWeaponUpg));
 
 					fileStrings.push_back(tempS);
 				}
@@ -388,7 +395,7 @@ namespace battleCreator
 	}
 	void createBattleSection(vector<string>& fileStrings)
 	{
-		battleDataS* battleData = smallFuncs::getGameDataAll()->battleHandler;
+		battleDataS* battleData = battleHelpers::getBattleData();
 		string tempS;
 
 		fileStrings.push_back("; >>>> start of battle section <<<<\n");
@@ -398,14 +405,14 @@ namespace battleCreator
 		fileStrings.push_back(tempS);
 
 		tempS = "battle_time	";
-		tempS.append(to_string(smallFuncs::getGameDataAll()->campaignData->timeAtStartBattle));
+		tempS.append(to_string( campaignHelpers::getCampaignData()->timeAtStartBattle));
 		tempS.append("	0.00");
 		fileStrings.push_back(tempS);
 
 		fileStrings.push_back("weather	clear\n");
 
 		tempS = "home_faction	";
-		tempS.append(battleData->sides[0].armies[0].stack->faction->factSmDescr->facName);
+		tempS.append(battleData->sides[0].armies[0].stack->faction->factionRecord->facName);
 		fileStrings.push_back(tempS);
 
 
@@ -413,7 +420,7 @@ namespace battleCreator
 		{
 			battleSide& side = battleData->sides[i];
 			tempS = "alliance	";
-			if (side.isCanDeploy == true)
+			if (side.canDeploy == true)
 			{
 				tempS.append("can_deploy	");
 			}
@@ -421,9 +428,9 @@ namespace battleCreator
 			set<string>sideFactions;
 			for (int j = 0; j < side.armiesNum; j++)
 			{
-				stackStruct* army = side.armies[j].stack;
+				armyStruct* army = side.armies[j].stack;
 
-				sideFactions.emplace(army->faction->factSmDescr->facName);
+				sideFactions.emplace(army->faction->factionRecord->facName);
 			}
 			for (const string& fac : sideFactions)
 			{
@@ -449,8 +456,8 @@ namespace battleCreator
 
 			for (int j = 0; j < side.armiesNum; j++)
 			{
-				stackStruct* army = side.armies[j].stack;
-				char* armyFacName = army->faction->factSmDescr->facName;
+				armyStruct* army = side.armies[j].stack;
+				char* armyFacName = army->faction->factionRecord->facName;
 
 				fileStrings.push_back("");
 				tempS = "army	";
@@ -480,14 +487,14 @@ namespace battleCreator
 				fileStrings.push_back(tempS);
 				fileStrings.push_back("\n");
 
-				int coordsPairsNum = side.armies[j].deploymentArea->coordsNum;
-				float* coords = side.armies[j].deploymentArea->coordsPairs;
+				int coordsPairsNum = side.armies[j].deploymentAreas.get(0)->area.coordsNum;
+				battlePos* coords = side.armies[j].deploymentAreas.get(0)->area.coordsPairs;
 				for (int k = 0; k < coordsPairsNum; k++)
 				{
 					tempS = "deployment_area_point	";
-					tempS.append(to_string(coords[k * 2]));
+					tempS.append(to_string(coords[k].xCoord));
 					tempS.append(", ");
-					tempS.append(to_string(coords[k * 2 + 1]));
+					tempS.append(to_string(coords[k].yCoord));
 					fileStrings.push_back(tempS);
 				}
 				fileStrings.push_back("\n");
@@ -518,7 +525,7 @@ namespace battleCreator
 						tempS.append("50");
 
 
-						if (un->eduEntry->Category == 0 && un->engineRec != nullptr)
+						if (un->eduEntry->category == 0 && un->engineRec != nullptr)
 						{
 							engineRecord* enRec = un->engineRec;
 							if (enRec->classID == 18)//ram
@@ -548,7 +555,7 @@ namespace battleCreator
 
 	void createObjectivesSection(vector<string>& fileStrings)
 	{
-		battleDataS* battleData = smallFuncs::getGameDataAll()->battleHandler;
+		battleDataS* battleData = battleHelpers::getBattleData();
 		string tempS;
 
 		fileStrings.push_back("; >>>> start of objectives scripting section <<<<\n");
@@ -569,7 +576,7 @@ namespace battleCreator
 				if (winCond != 0)
 				{
 					tempS = "condition ";
-					tempS.append(smallFuncs::getWinConditionS(winCond));
+					tempS.append(battleHelpers::getWinConditionS(winCond));
 					fileStrings.push_back(tempS);
 				}
 			}
@@ -624,8 +631,8 @@ namespace battleCreator
 		bMsg.set_content("Objectives section of %s done", bName.c_str());
 		ImGui::InsertNotification(bMsg);
 
-		std::string fPath = globals::dataS.modPatch;
-		fPath += "\\eopBattles";
+		std::string fPath = globals::dataS.modPath;
+		fPath += "\\eopData\\config";
 		filesystem::create_directory(fPath);
 		fPath += "\\lastBattle";
 		filesystem::remove_all(fPath);
@@ -861,7 +868,7 @@ namespace battleCreator
 		}
 	}
 
-	void addCharactersToCustomBattleArmy(stackStruct* army, const std::string& relativePath)
+	void addCharactersToCustomBattleArmy(armyStruct* army, const std::string& relativePath)
 	{
 
 		std::filesystem::path charactersPath = relativePath;
@@ -875,17 +882,13 @@ namespace battleCreator
 			return "";
 		}
 
-		auto gameData = smallFuncs::getGameDataAll();
-		if (gameData->campaignData == nullptr)
-		{
+		auto campaign = campaignHelpers::getCampaignData();
+		if (!campaign)
 			return "";
-		}
-		if (gameData->campaignData->currentDescrFile == nullptr)
-		{
+		if (campaign->currentDescrFile == nullptr)
 			return "";
-		}
 
-		std::string relativePath = techFuncs::uniToANSI(smallFuncs::getGameDataAll()->campaignData->currentDescrFile);
+		std::string relativePath = techFuncs::uniToAnsi(campaign->currentDescrFile);
 
 		if (relativePath.find("battle") != std::string::npos)//need load/
 		{

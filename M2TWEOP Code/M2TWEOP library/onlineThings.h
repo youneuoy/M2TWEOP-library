@@ -1,27 +1,13 @@
 #pragma once
 #include <string>
-#include <vector>
-#include <windows.h>
-#include "FastFuncts.h" 
-#include "eventsCodes.h" 
-#include "globals.h"
-
-#include "techFuncs.h"
-#include "fastFuncts.h"
-#include "smallFuncs.h"
-#include "imgui.h"
-#include "imgui_stdlib.h"
 #include <d3d9.h>
-#include <sstream>
-#include <thread>
-#include <set>
-#include <map>
 #include <filesystem>
 #include "realGameTypes.h"
+struct armyStruct;
 using namespace std;
 namespace battleCreator
 {
-	bool GetIsGenerationNeeded();
+	bool getIsGenerationNeeded();
 	bool IsRetreatsOverhaulEnabled();
 
 	void setCreationNeeded(bool isNeeded = false);
@@ -40,7 +26,7 @@ namespace battleCreator
 	void draw(LPDIRECT3DDEVICE9 pDevice);
 
 
-	void addCharactersToCustomBattleArmy(stackStruct* army, const std::string& relativePath);
+	void addCharactersToCustomBattleArmy(armyStruct* army, const std::string& relativePath);
 	string selectWorldpkgdesc(const std::string &selectedRec, const std::string& selectedGroup);
 
 	void OnLoadSettlementWorldpkgdesc(const std::string &selectedRec, const std::string& selectedGroup);

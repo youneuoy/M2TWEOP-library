@@ -2,202 +2,201 @@
 #include "techFuncs.h"
 
 #include "miniz.h"
-#include <filesystem>
-#include "globals.h"
-#include "smallFuncs.h"
-void techFuncs::WriteData(void* ptr, DWORD to, size_t size)
-{
-    HANDLE h = GetCurrentProcess();
-    DWORD oldMemProtect = 0;
-    VirtualProtectEx(h, (LPVOID)to, size, PAGE_EXECUTE_READWRITE, &oldMemProtect);
-    WriteProcessMemory(h, (LPVOID)to, ptr, size, NULL);
-    VirtualProtectEx(h, (LPVOID)to, size, oldMemProtect, &oldMemProtect);
 
+#include "functionsOffsets.h"
+#include "gameHelpers.h"
+#include "gameStringHelpers.h"
+#include "globals.h"
+
+void techFuncs::writeData(const void* ptr, const DWORD to, const size_t size)
+{
+    const HANDLE h = GetCurrentProcess();
+    DWORD oldMemProtect = 0;
+    VirtualProtectEx(h, reinterpret_cast<LPVOID>(to), size, PAGE_EXECUTE_READWRITE, &oldMemProtect);
+    WriteProcessMemory(h, reinterpret_cast<LPVOID>(to), ptr, size, nullptr);
+    VirtualProtectEx(h, reinterpret_cast<LPVOID>(to), size, oldMemProtect, &oldMemProtect);
     CloseHandle(h);
 }
-void techFuncs::NopBytes(DWORD address, size_t size)
+
+void techFuncs::nopBytes(const DWORD address, const size_t size)
 {
-    std::vector<uint8_t> nops(size, 0x90);
-    WriteData(nops.data(), address, size);
+    const std::vector<uint8_t> nops(size, 0x90);
+    writeData(nops.data(), address, size);
 }
+
 std::vector<std::string>techFuncs::unzip(std::string const& zipFile, std::string const& path)
 {
     filesystem::path fPath = path;
     std::vector<std::string> files = {};
-    mz_zip_archive zip_archive;
-    memset(&zip_archive, 0, sizeof(zip_archive));
+    mz_zip_archive zipArchive = {};
 
-    auto status = mz_zip_reader_init_file(&zip_archive, zipFile.c_str(), 0);
-    if (!status) return files;
-    int fileCount = (int)mz_zip_reader_get_num_files(&zip_archive);
+    if (auto status = mz_zip_reader_init_file(&zipArchive, zipFile.c_str(), 0); !status)
+        return files;
+    int fileCount = static_cast<int>(mz_zip_reader_get_num_files(&zipArchive));
     if (fileCount == 0)
     {
-        mz_zip_reader_end(&zip_archive);
+        mz_zip_reader_end(&zipArchive);
         return files;
     }
-    mz_zip_archive_file_stat file_stat;
-    if (!mz_zip_reader_file_stat(&zip_archive, 0, &file_stat))
+    mz_zip_archive_file_stat fileStat;
+    if (!mz_zip_reader_file_stat(&zipArchive, 0, &fileStat))
     {
-        mz_zip_reader_end(&zip_archive);
+        mz_zip_reader_end(&zipArchive);
         return files;
     }
     // Get root folder
-    string lastDir = "";
-    string base = file_stat.m_filename; // path delim on end
+    string base = fileStat.m_filename; // path delim on end
     base += "\\";
-    //  string base = slash_path(get_path(file_stat.m_filename)); // path delim on end
 
-      // Get and print information about each file in the archive.
+    // Get and print information about each file in the archive.
     for (int i = 0; i < fileCount; i++)
     {
-        if (!mz_zip_reader_file_stat(&zip_archive, i, &file_stat)) continue;
-        if (mz_zip_reader_is_file_a_directory(&zip_archive, i)) continue; // skip directories for now
-        auto fileName = filesystem::path(file_stat.m_filename); // make path relative
+        string lastDir;
+        if (!mz_zip_reader_file_stat(&zipArchive, i, &fileStat)) continue;
+        if (mz_zip_reader_is_file_a_directory(&zipArchive, i)) continue; // skip directories for now
+        auto fileName = filesystem::path(fileStat.m_filename); // make path relative
 
         auto destFile = fPath;
-        destFile.append(fileName.string()).string();
-
+        auto newPath = destFile.append(fileName.string()).string();
         //string destFile = combine_path(path, fileName); // make full dest path
-        auto newDir = fileName.remove_filename(); // get the file's path
-        if (newDir != lastDir)
+        if (auto newDir = fileName.remove_filename(); newDir != lastDir)
         {
             auto newD = fPath;
             newD.append(newDir.string());
-
             if (!create_directory(newD)) // creates the directory
             {
 
             }
         }
-
-        if (mz_zip_reader_extract_to_file(&zip_archive, i, destFile.string().c_str(), 0))
+        if (mz_zip_reader_extract_to_file(&zipArchive, i, destFile.string().c_str(), 0))
         {
             files.emplace_back(destFile.string());
         }
     }
 
     // Close the archive, freeing any resources it was using
-    mz_zip_reader_end(&zip_archive);
+    mz_zip_reader_end(&zipArchive);
     return files;
 }
 
-void techFuncs::zip(std::string const& zipFile, std::vector<std::string>& files, std::string saveFile, std::string nameOfSaveFile)
+	
+std::string techFuncs::readFile(const std::filesystem::path& path)
 {
-    mz_zip_archive zip_archive;
-    memset(&zip_archive, 0, sizeof(zip_archive));
-    mz_bool status = mz_zip_writer_init_file(&zip_archive, zipFile.c_str(), 0);
+    // Open the stream to 'lock' the file.
+    std::ifstream f(path, std::ios::in | std::ios::binary);
+    // Obtain the size of the file.
+    const auto sz = file_size(path);
+    // Create a buffer.
+    std::string result(static_cast<size_t>(sz), '\0');
+    // Read the whole file into the buffer.
+    f.read(result.data(), sz);
+    return result;
+}
+
+void techFuncs::zip(std::string const& zipFile, std::vector<std::string>& files,
+    const std::string& saveFile, const std::string& nameOfSaveFile)
+{
+    mz_zip_archive zipArchive = {};
+    mz_bool status = mz_zip_writer_init_file(&zipArchive, zipFile.c_str(), 0);
     if (!status)
     {
-        MessageBoxA(NULL, "Cannot create M2TWEOP save file.", "ERROR", NULL);
+        MessageBoxA(nullptr, "Cannot create M2TWEOP save file.", "ERROR", NULL);
         exit(0);
     }
-
-
     for (string& file : files)
     {
-        status = mz_zip_writer_add_file(&zip_archive, filesystem::path(file).filename().string().c_str(), file.c_str(), nullptr, 0, MZ_DEFAULT_COMPRESSION);
+        status = mz_zip_writer_add_file(&zipArchive, filesystem::path(file).filename().string().c_str(), file.c_str(), nullptr, 0, MZ_DEFAULT_COMPRESSION);
         if (!status)
         {
-            MessageBoxA(NULL, "Cannot create M2TWEOP save file.", "ERROR", NULL);
+            MessageBoxA(nullptr, "Cannot create M2TWEOP save file.", "ERROR", NULL);
             exit(0);
         }
     }
-    status = mz_zip_writer_add_file(&zip_archive, nameOfSaveFile.c_str(), saveFile.c_str(), nullptr, 0, MZ_DEFAULT_COMPRESSION);
+    status = mz_zip_writer_add_file(&zipArchive, nameOfSaveFile.c_str(), saveFile.c_str(), nullptr, 0, MZ_DEFAULT_COMPRESSION);
     if (!status)
     {
-        MessageBoxA(NULL, "Cannot create M2TWEOP save file.", "ERROR", NULL);
+        MessageBoxA(nullptr, "Cannot create M2TWEOP save file.", "ERROR", NULL);
         exit(0);
     }
-
-    status = mz_zip_writer_finalize_archive(&zip_archive);
+    status = mz_zip_writer_finalize_archive(&zipArchive);
     if (!status)
     {
-        MessageBoxA(NULL, "Cannot create M2TWEOP save file.", "ERROR", NULL);
+        MessageBoxA(nullptr, "Cannot create M2TWEOP save file.", "ERROR", NULL);
         exit(0);
     }
-
-    status = mz_zip_writer_end(&zip_archive);
+    status = mz_zip_writer_end(&zipArchive);
     if (!status)
     {
-        MessageBoxA(NULL, "Cannot create M2TWEOP save file.", "ERROR", NULL);
+        MessageBoxA(nullptr, "Cannot create M2TWEOP save file.", "ERROR", NULL);
         exit(0);
     }
 }
 
-std::wstring techFuncs::ConvertUtf8ToWide(const std::string& str)
+std::wstring techFuncs::convertUtf8ToWide(const std::string& str)
 {
-    int count = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), NULL, 0);
+    const int count = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), nullptr, 0);
     std::wstring wstr(count, 0);
-    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), &wstr[0], count);
+    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), str.length(), wstr.data(), count);
     return wstr;
 }
 
-
-string techFuncs::uniToANSI(UNICODE_STRING**& uniStr)
-{
-    if (uniStr == nullptr || *uniStr == nullptr)
-    {
-        return "";
-    }
-	UNICODE_STRING* uniS = *uniStr;
-	wchar_t* wstr = (wchar_t*)&uniS->Buffer;
-
-	std::string strTo;
-    int size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL);
-
-	char* szTo = new char[size_needed];
-
-	WideCharToMultiByte(CP_UTF8, 0, wstr, -1, szTo, size_needed, NULL, NULL);
-    szTo[uniS->Length] = '\0';
-	strTo = szTo;
-	delete[] szTo;
-
-	return strTo;
-}
-
-
-void techFuncs::deleteFiles(vector<string>& files)
-{
-    for (string& file : files)
-    {
-        filesystem::remove(filesystem::path(file));
-    }
-}
-
-
-
-static string uniToACP(UNICODE_STRING**& uniStr)
+string techFuncs::uniToAnsi(UNICODE_STRING**& uniStr)
 {
     if (uniStr == nullptr || *uniStr == nullptr)
     {
         return "";
     }
     UNICODE_STRING* uniS = *uniStr;
-    wchar_t* wstr = (wchar_t*)&uniS->Buffer;
-
-    std::string strTo;
-    int size_needed = WideCharToMultiByte(CP_ACP, 0, wstr, -1, NULL, 0, NULL, NULL);
-
-    char* szTo = new char[size_needed];
-
-    WideCharToMultiByte(CP_ACP, 0, wstr, -1, szTo, size_needed, NULL, NULL);
+    const auto wstr = reinterpret_cast<wchar_t*>(&uniS->Buffer);
+    const int sizeNeeded = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, nullptr, 0, nullptr, nullptr);
+    const auto szTo = new char[sizeNeeded];
+	WideCharToMultiByte(CP_UTF8, 0, wstr, -1, szTo, sizeNeeded, nullptr, nullptr);
     szTo[uniS->Length] = '\0';
-    strTo = szTo;
-    delete[] szTo;
-
-    return strTo;
+	std::string strTo = szTo;
+	delete[] szTo;
+	return strTo;
 }
 
-void techFuncs::saveGameMakeArchive(UNICODE_STRING**& savePath, vector<string>& files)
+void techFuncs::deleteFiles(vector<string>& files)
 {
-    string relativePath = uniToACP(savePath);
-    string packPath = globals::dataS.modPatch;
+    for (string& file : files)
+    {
+        try
+        {
+            if (filesystem::exists(file))
+                filesystem::remove(filesystem::path(file));
+        }
+        catch (exception& e)
+        {
+            gameHelpers::logStringGame(e.what());
+            continue;
+        }
+    }
+}
 
+namespace
+{
+    string uniToAcp(UNICODE_STRING**& uniStr)
+    {
+        if (uniStr == nullptr || *uniStr == nullptr)
+            return "";
+        UNICODE_STRING* uniS = *uniStr;
+        const auto wstr = reinterpret_cast<wchar_t*>(&uniS->Buffer);
+        const int sizeNeeded = WideCharToMultiByte(CP_ACP, 0, wstr, -1, nullptr, 0, nullptr, nullptr);
+        const auto szTo = new char[sizeNeeded];
+        WideCharToMultiByte(CP_ACP, 0, wstr, -1, szTo, sizeNeeded, nullptr, nullptr);
+        szTo[uniS->Length] = '\0';
+        std::string strTo = szTo;
+        delete[] szTo;
+        return strTo;
+    }
+}
 
-
-    packPath += "\\youneuoy_Data";
-
-
+void techFuncs::saveGameMakeArchive(UNICODE_STRING**& savePath, const vector<string>& files)
+{
+    const string relativePath = uniToAcp(savePath);
+    string packPath = globals::dataS.modPath;
+    packPath += "\\eopData";
     if (!create_directory(filesystem::path(packPath))) // creates the directory
     {
 
@@ -215,34 +214,19 @@ void techFuncs::saveGameMakeArchive(UNICODE_STRING**& savePath, vector<string>& 
     packPath += "\\";
     filesystem::path p = relativePath;
     packPath += p.filename().string();
-
-    vector<string> zipfiles = files;
-
-
-
-    zip(packPath, zipfiles, relativePath,"M2TWEOPTEMPgameSaveDONTTOUCHTHISFILE.sav");
-
-    bool isRemoved=filesystem::remove(filesystem::path(relativePath));
-    bool isCopied=filesystem::copy_file(filesystem::path(packPath), filesystem::path(relativePath));
-
-
+    vector<string> zipFiles = files;
+    zip(packPath, zipFiles, relativePath,"M2TWEOPTEMPgameSaveDONTTOUCHTHISFILE.sav");
+    filesystem::remove(filesystem::path(relativePath));
+    filesystem::copy_file(filesystem::path(packPath), filesystem::path(relativePath));
 }
 
-vector<string> techFuncs::loadGameLoadArchive(UNICODE_STRING**& savePath)
+vector<string> techFuncs::getEopArchiveFiles(const string& savePath)
 {
-	vector<string> archiveFiles;
-
-    string relativePath = uniToANSI(savePath);
-    if (std::filesystem::exists(relativePath) == false)
-    {
+    vector<string> archiveFiles;
+    if (std::filesystem::exists(savePath) == false)
         return archiveFiles;
-    }
-    string unpackPath = globals::dataS.modPatch;
-
-
-    unpackPath += "\\youneuoy_Data";
-
-
+    string unpackPath = globals::dataS.modPath;
+    unpackPath += "\\eopData";
     if (!create_directory(filesystem::path(unpackPath))) // creates the directory
     {
 
@@ -257,35 +241,46 @@ vector<string> techFuncs::loadGameLoadArchive(UNICODE_STRING**& savePath)
     {
 
     }
+    archiveFiles = techFuncs::unzip(savePath, unpackPath);
+    return archiveFiles;
+}
 
-    archiveFiles=unzip(relativePath, unpackPath);
-    if (archiveFiles.size() == 0)
+DWORD techFuncs::allocateGameMem(size_t amount)
+{
+    DWORD retMem = 0;
+    DWORD adrFunc = codes::offsets.allocMemFunc;
+    _asm
     {
-        MessageBoxA(NULL, "You trying load standart game save with M2TWEOP. Don`t do this, EOP is not full savecompatible with it.", "ERROR", NULL);
+        push amount
+        mov eax, adrFunc
+        call eax
+        add esp, 0x4
+        mov retMem, eax
+    }
+    return retMem;
+}
+
+
+vector<string> techFuncs::loadGameLoadArchive(vector<string> files, UNICODE_STRING**& savePath)
+{
+    if (files.empty())
+    {
+        MessageBoxA(nullptr, "You have attempted to load a non-EOP save with EOP. This is not supported and the game will now exit. You can find instructions on converting a non-EOP save to an EOP save in our Discord.", "ERROR", NULL);
         exit(0);
     }
-
-    for (string& file : archiveFiles)
+    const string relativePath = uniToAnsi(savePath);
+    for (string& file : files)
     {
         if (filesystem::path(file).filename()=="M2TWEOPTEMPgameSaveDONTTOUCHTHISFILE.sav")
         {
-  
             filesystem::path p = relativePath;
-
-            p=p.parent_path();
-            p=p.parent_path();
-
+            p = p.parent_path();
+            p = p.parent_path();
             p += "/saves/M2TWEOPgameSaveDONTTOUCHTHISFILE.tmp";
             filesystem::remove(p);
             filesystem::copy_file(file, p);
-            smallFuncs::createUniString(savePath,p.string().c_str());
-          //  (*savePath)->something = 1;
+            gameStringHelpers::createUniString(savePath,p.string().c_str());
         }
     }
-
-
-
-
-
-    return archiveFiles;
+    return files;
 }

@@ -262,7 +262,7 @@ namespace discordManager
         try
         {
             // Read the campaign data from the file (written by M2TWEOP Library)
-            std::string fPath = ".\\eopData\\discordRichPresenceCfg.json";
+            std::string fPath = ".\\eopData\\config\\discordRichPresenceCfg.json";
             jsn::json json = loadJsonFromFile(fPath);
             std::string jsonStringValue;
             if (json.contains("factionName"))

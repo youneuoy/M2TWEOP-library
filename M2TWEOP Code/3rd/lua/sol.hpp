@@ -365,6 +365,7 @@
 #endif
 #endif
 
+
 #if defined(SOL_SAFE_FUNCTIONS)
 #if SOL_SAFE_FUNCTIONS != 0
 #define SOL_SAFE_FUNCTION_OBJECTS_I_ SOL_ON

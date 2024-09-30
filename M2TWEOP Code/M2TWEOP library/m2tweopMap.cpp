@@ -1,5 +1,7 @@
+#include "pch.h"
 #include "m2tweopMap.h"
-#include <imgui_internal.h>
+#include "dataOffsets.h"
+#include "strategyMap.h"
 
 void m2tweopMap::buildMap()
 {
@@ -45,7 +47,7 @@ void m2tweopMap::buildMap()
 	}
 }
 
-void m2tweopMap::drawMap(const ImVec2& tileSize)
+void m2tweopMap::drawMap(const ImVec2& size)
 {
 	borders.clear();
 
@@ -67,7 +69,7 @@ void m2tweopMap::drawMap(const ImVec2& tileSize)
 		{
 			auto& currTile = tiles[x * mapHeight + y];
 			bool isSelected = (selectedTile!=nullptr&&selectedTile->IsSameCoords(currTile));
-			if (true == currTile->drawTile(tileSize, mapStartPos, &borders, isSelected))
+			if (true == currTile->drawTile(size, mapStartPos, &borders, isSelected))
 			{
 				selectedTile = tiles[x * mapHeight + y];
 			}
@@ -75,7 +77,7 @@ void m2tweopMap::drawMap(const ImVec2& tileSize)
 			ImGui::SameLine();
 		}
 
-		ImGui::Dummy(tileSize);
+		ImGui::Dummy(size);
 
 	}
 
@@ -83,7 +85,7 @@ void m2tweopMap::drawMap(const ImVec2& tileSize)
 	{ 
 		for (size_t i = 0; i < borders.size()/2; i++)
 		{
-			drawList->AddLine(borders[i*2], borders[i*2+1], IM_COL32(200, 200, 200, 255), 0.2f * tileSize.y);
+			drawList->AddLine(borders[i*2], borders[i*2+1], IM_COL32(200, 200, 200, 255), 0.2f * size.y);
 		}
 	}
 
@@ -95,35 +97,26 @@ void m2tweopMap::drawMap(const ImVec2& tileSize)
 
 void m2tweopMap::drawInteract()
 {
-	ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_SpanAvailWidth;
-	if (ImGui::TreeNodeEx("Map settings", node_flags) == true)
+	const ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_SpanAvailWidth;
+	if (ImGui::TreeNodeEx("Map settings", nodeFlags) == true)
 	{
 		ImGui::Checkbox("Draw borders", &needDrawBorders);
 
 
 		ImGui::TreePop();
 	}
-	if (ImGui::TreeNodeEx("Selected tile", node_flags) == true)
+	if (ImGui::TreeNodeEx("Selected tile", nodeFlags) == true)
 	{
 		if (selectedTile != nullptr)
 		{
-				ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 				ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
-
-				ImGui::Text("Tile pointer:%p", fastFuncts::getTileStruct(selectedTile->xTile, selectedTile->yTile));
-				ImGui::InputScalar("X coordinate", ImGuiDataType_U32, &selectedTile->xTile, 0, NULL, "%u");
-				ImGui::InputScalar("Y coordinate", ImGuiDataType_U32, &selectedTile->yTile, 0, NULL, "%u");
-				ImGui::InputScalar("Region ID", ImGuiDataType_U32, &selectedTile->tileRegionID, 0, NULL, "%u");
-
+				oneTile* tile = stratMapHelpers::getTile(selectedTile->xTile, selectedTile->yTile);
+				ImGui::Text("Tile pointer:%p", reinterpret_cast<DWORD>(tile));
+				ImGui::InputScalar("X coordinate", ImGuiDataType_U32, &selectedTile->xTile, nullptr, nullptr, "%u");
+				ImGui::InputScalar("Y coordinate", ImGuiDataType_U32, &selectedTile->yTile, nullptr, nullptr, "%u");
 				ImGui::Separator();
-
-				ImGui::PopItemFlag();
 				ImGui::PopStyleVar();
 		}
-
-
-
-
 		ImGui::TreePop();
 	}
 

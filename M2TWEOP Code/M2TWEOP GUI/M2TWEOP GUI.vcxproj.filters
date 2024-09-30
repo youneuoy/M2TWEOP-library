@@ -174,12 +174,12 @@
     <ClCompile Include="themeManagerGUI.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rd\imgui\imgui_markdown.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="headersSTD.h">
@@ -342,6 +342,9 @@
       <Filter>3rd\discord</Filter>
     </ClInclude>
     <ClInclude Include="..\3rd\cpptoml\cpptoml.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

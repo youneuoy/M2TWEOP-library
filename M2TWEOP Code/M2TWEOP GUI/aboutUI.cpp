@@ -5,12 +5,13 @@
 #include "helpers.h"
 
 #include "markdownHelper.h"
+
 namespace aboutUI
 {
 	struct
 	{
 		const std::string markdownText = R"(
-![logo](eopData/images/logoAbout.png)
+![logo](eopData/resources/images/logoAbout.png)
 ## What is M2TW Engine Overhaul Project?
 
 M2TW Engine Overhaul Project is designed to expand the capabilities of the game *Medieval 2: Total War*.
@@ -214,6 +215,8 @@ First release.
 
 )";
 	}aboutUIData;
+
+
 	void drawAboutUi(bool* isOpen)
 	{
 		markdownHelper::setFonts();
@@ -228,3 +231,5 @@ First release.
 		ImGui::End();
 	}
 };
+
+

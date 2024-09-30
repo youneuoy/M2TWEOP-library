@@ -24,14 +24,17 @@ new-item ./logs -itemtype directory -erroraction 'silentlycontinue'
 
 # 1) Build M2TWEOP-library
 Write-Host "`n`n======== 1) Build M2TWEOP-library ========`n" -ForegroundColor Magenta
+msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Release /p:Platform=x86 /t:"M2TWEOP library" /fileLogger /fileLoggerParameters:LogFile=logs\library.log /NoWarn:ALL /Verbosity:Minimal /p:WarningLevel=0 /p:RunCodeAnalysis=false -m
+if ($LASTEXITCODE -ne 0) { Write-Host "`n`n!!! Failure detected. Stopping the build process. !!!" -ForegroundColor DarkRed ; exit $LASTEXITCODE }
+# Build M2TWEOP GUI
+msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Release /p:Platform=x86 /t:"M2TWEOP GUI" /fileLogger /fileLoggerParameters:LogFile=logs\gui.log /NoWarn:ALL /Verbosity:Minimal  -m
+if ($LASTEXITCODE -ne 0) { Write-Host "`n`n!!! Failure detected. Stopping the build process. !!!" -ForegroundColor DarkRed ; exit $LASTEXITCODE }
 
-msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Release /p:Platform=x86 /t:"M2TWEOP library" /fileLogger /fileLoggerParameters:LogFile=logs\library.log /NoWarn:ALL -m
-msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Release /p:Platform=x86 /t:"M2TWEOP GUI" /fileLogger /fileLoggerParameters:LogFile=logs\gui.log /NoWarn:ALL -m
-msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Release /p:Platform=x86 /t:"d3d9" /fileLogger /fileLoggerParameters:LogFile=logs\d3d9.log /NoWarn:ALL -m
+# Build d3d9
+msbuild  "M2TWEOP Code\M2TWEOP library.sln"/p:Configuration=Release /p:Platform=x86 /t:"d3d9" /fileLogger /fileLoggerParameters:LogFile=logs\d3d9.log /NoWarn:ALL /Verbosity:Minimal -m
+if ($LASTEXITCODE -ne 0) { Write-Host "`n`n!!! Failure detected. Stopping the build process. !!!" -ForegroundColor DarkRed ; exit $LASTEXITCODE }
 
-# 2) Build M2TWEOP-LuaPlugin
-Write-Host "`n`n======== 2) Build M2TWEOP-LuaPlugin ========`n" -ForegroundColor Magenta
-msbuild  "M2TWEOP-luaPlugin\luaPlugin.sln"/p:Configuration=Release /p:Platform=x86 /t:"luaPlugin" /fileLogger /fileLoggerParameters:LogFile=logs\luaPlugin.log /NoWarn:ALL -m
+Write-Host "`n`n======== Success! ========`n" -ForegroundColor Green
 
 # 3) Build Documentation
 Write-Host "`n`n======== 3) Build M2TWEOP-Documentation ========`n" -ForegroundColor Magenta
@@ -49,13 +52,13 @@ new-item ./M2TWEOPGenerated  -itemtype directory -erroraction 'silentlycontinue'
 Copy-Item -Path  "M2TWEOP DataFiles\*" -Destination "./M2TWEOPGenerated" -recurse
 
 Get-ChildItem -Path "documentationGenerator\EOPDocs\build\html\*" -erroraction 'continue'
-CopyFilesToFolder "documentationGenerator\EOPDocs\build\html" "./M2TWEOPGenerated/eopData/helpPages"
+CopyFilesToFolder "documentationGenerator\EOPDocs\build\html" "./M2TWEOPGenerated/eopData/documentation"
 
-Copy-Item -Path  "M2TWEOP-luaPlugin\Release\luaPlugin.dll" -Destination "./M2TWEOPGenerated/youneuoy_Data/plugins"
 Copy-Item -Path  "M2TWEOP Code\Release\d3d9.dll" -Destination "./M2TWEOPGenerated"
 Copy-Item -Path  "M2TWEOP Code\Release\M2TWEOP GUI.exe" -Destination "./M2TWEOPGenerated"
-# Copy-Item -Path  "M2TWEOP Code\Release\M2TWEOP tools.exe" -Destination "./M2TWEOPGenerated"
+Rename-Item -Path "./M2TWEOPGenerated/M2TWEOP GUI.exe" -NewName "M2TWEOP_GUI.exe"
 Copy-Item -Path  "M2TWEOP Code\Release\M2TWEOPLibrary.dll" -Destination "./M2TWEOPGenerated"
+Copy-Item -Path  "M2TWEOP Code\Release\M2TWEOPLibrary.pdb" -Destination "./M2TWEOPGenerated"
 
 if ($shouldZip -eq 'True') {
     # 5) Generate Release ZIP
@@ -70,4 +73,4 @@ if ($modFolder) {
 }
 
 # 7) Done
-Write-Host "`n`n======== Success! EOP Built Successfully! ========`n" -ForegroundColor Magenta
+Write-Host "`n`n======== Success! EOP Built Successfully! ========`n" -ForegroundColor Green

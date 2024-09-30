@@ -27,4 +27,4 @@ Write-Host "`n`n======== 3.4) Build documentation files  ========`n" -Foreground
 Copy-Item -Path "generatedLuaDocs/*" -Destination "EOPDocs/source/_static/LuaLib" -recurse
 Start-Process -FilePath ".\EOPDocs\WPy32-3890\scripts\cmdEOPDOCS.bat" -Wait -NoNewWindow
 
-Write-Host "`n`n======== 3.5) Success! Documentation built successfully.  ========`n" -ForegroundColor Magenta
+Write-Host "`n`n======== 3.5) Success! Documentation built successfully.  ========`n" -ForegroundColor Green

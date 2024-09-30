@@ -33,7 +33,7 @@
 
 ### Configure the Game
 
-#### ```eopData/gameCfg.json```
+#### ```eopData/config/gameCfg.json```
 
 ```
 {
@@ -44,7 +44,7 @@
 
 ### Configure the Game
 
-#### ```eopData/discordRichPresenceCfg.json```
+#### ```eopData/config/discordRichPresenceCfg.json```
 
 If Discord Rich Presence is enabled, EOP will write information about your campaign to this file which is then read and used to update your Discord Rich Presence status.
 It is recommended not to write manually to this file.

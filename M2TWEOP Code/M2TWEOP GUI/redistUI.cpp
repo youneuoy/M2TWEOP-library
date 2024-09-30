@@ -101,7 +101,7 @@ namespace redistUI
 			try
 			{
 				installState = installersState::msvc;
-				runAndWait("eopRedistributables\\MS_VisualC_Redist_Hybrid\\VCR_Hybrid_x86.exe", "/S");
+				//runAndWait("eopRedistributables\\MS_VisualC_Redist_Hybrid\\VCR_Hybrid_x86.exe", "/S");
 			}
 			catch (...)
 			{
@@ -123,7 +123,7 @@ namespace redistUI
 			try
 			{
 				installState = installersState::dx;
-				runAndWait("eopRedistributables\\DirectX_SDK\\DXSETUP.exe", "/Silent");
+				//runAndWait("eopRedistributables\\DirectX_SDK\\DXSETUP.exe", "/Silent");
 			}
 			catch (...)
 			{
@@ -153,7 +153,7 @@ namespace redistUI
 		ImGui::SetNextWindowPos(helpers::getScreen().screenHalfSize, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
 		ImGui::SetNextWindowSize(ImVec2(size.x, -1), ImGuiCond_Once);
 
-		ImGui::Begin("M2TWEOP health checker##2", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+		ImGui::Begin("M2TWEOP Health Checker##2", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
 		switch (startProcesses.installState)
 		{
@@ -190,9 +190,9 @@ namespace redistUI
 		ImGui::SetNextWindowPos(helpers::getScreen().screenHalfSize, ImGuiCond_Once, ImVec2(0.5f, 0.5f));
 		ImGui::SetNextWindowSize(ImVec2(size.x, -1), ImGuiCond_Once);
 
-		ImGui::Begin("M2TWEOP health checker##1", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
+		ImGui::Begin("M2TWEOP Health Checker##1", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
 
-		const char logoName[] = "eopData/images/deathDance.png";
+		const char logoName[] = "eopData/resources/images/deathDance.png";
 		GLImage* imgFinded = helpers::findImage(logoName, sizeof logoName - 1);
 
 		ImVec2 const csz = ImGui::GetContentRegionAvail();
@@ -210,13 +210,6 @@ namespace redistUI
 		const ImVec2 label_size = ImGui::CalcTextSize("Possible startup problems detected. Consider these paths for a solution.", NULL, true);
 		if (ImGui::Button("Possible startup problems detected. Consider these paths for a solution.", ImVec2(-1.0f, (label_size.y + style.FramePadding.y * 2.0f) * 2)))
 		{
-		}
-
-		if (ImGui::Button("Run Visual C++ Redistributable x86 Runtimes and DirectX SDK 9.0c installers", helpers::getScreen().centerXButton))
-		{
-			ImGui::OpenPopup("Redists installation progress");
-
-			startProcesses.runInstallers();
 		}
 		ImGui::NewLine();
 		if (ImGui::Button("Go to the M2TWEOP discord server for help", helpers::getScreen().centerXButton))

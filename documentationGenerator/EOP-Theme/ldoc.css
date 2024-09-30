@@ -31,8 +31,8 @@ body {
   display: none;
 }
 
-a:link { color: #ffffff; border-bottom: 5px; }
-a:visited { color: #ffffff; }
+a:link { color: #fdaa26; border-bottom: 5px; }
+a:visited {color: #fdaa26;}
 a:hover { color: gold; }
 
 h1 {font-size:24px;font-weight: bold;}
@@ -329,6 +329,10 @@ ul.nowrap {
 .section-description {
   padding-left: 15px;
   padding-right: 15px;
+}
+
+#linkto {
+  text-decoration: none !important;
 }
 
 /* stop sublists from having initial vertical space */

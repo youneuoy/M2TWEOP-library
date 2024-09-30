@@ -32,6 +32,11 @@ public:
 			string gamePath;
 			string modFolder;
 
+			// Freecam Integration
+			string freecamExeName = "Freecam.exe";
+			bool freecamIntegration = false;
+			string freecamFolder = "<folder_with_freecam.exe>";
+
 			string exeName;
 			string gameArgs;
 
@@ -40,6 +45,7 @@ public:
 
 			// Customization Options
 			string modTitle = "";
+			string modVersion = "";
 			string buttonColorString = "";
 			string buttonHoverColorString = "";
 

@@ -97,7 +97,7 @@ return [==[
         <li><a href="../../../articles.html">M2TWEOP Tutorials</li>
     <ul>
         <li><a href="https://www.youtube.com/watch?v=hUvbcz8i7Wk">Scripting Basics (Video Tutorial)</li>
-        <li><a href="../../../_static/Introduction_to_ImGui_v4.pdf">Introduction to EOP ImGUI V4 by Erken (PDF)</a></li>
+        <li><a href="../../../_static/Introduction_to_ImGui_v5.pdf">Introduction to EOP ImGUI V5 by Erken (PDF)</a></li>
         <li><a href="../../../UPGRADING_TO_EOP_V3.html">Upgrading from EOP V2 to EOP V3</a></li>
     <ul>
     </ul>
@@ -106,7 +106,7 @@ return [==[
         <li><a href="../../articles.html">M2TWEOP Tutorials</li>
     <ul>
         <li><a href="https://www.youtube.com/watch?v=hUvbcz8i7Wk">Scripting Basics (Video Tutorial)</li>
-        <li><a href="../../_static/Introduction_to_ImGui_v4.pdf">Introduction to EOP ImGUI V4 by Erken (PDF)</li>
+        <li><a href="../../_static/Introduction_to_ImGui_v5.pdf">Introduction to EOP ImGUI V5 by Erken (PDF)</li>
         <li><a href="../../_static/LuaLib/extra/readme_imgui.md.html">EOP's ImGUI Bindings</li>
     <ul>
     </ul>
@@ -185,7 +185,9 @@ return [==[
 #  for item in items() do
     <dt>
     <a name = "$(item.name)"></a>
-    <strong>$(display_name(item))</strong>
+    <a id="linkto" rel="noopener" href="#$(item.name)">
+        $(display_name(item))
+    </a>
 #   if ldoc.prettify_files and ldoc.is_file_prettified[item.module.file.filename] then
     <a style="float:right;" href="$(ldoc.source_ref(item))">line $(item.lineno)</a>
 #  end

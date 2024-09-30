@@ -1,10 +1,12 @@
+#include "pch.h"
 #include "stratModelsChange.h"
-
-#include <map>
-
-#include "fastFuncts.h"
+#include "campaign.h"
 #include "functionsOffsets.h"
 #include "dataOffsets.h"
+#include "character.h"
+#include "gameHelpers.h"
+#include "strategyMap.h"
+
 namespace stratModelsChange
 {
 	enum class modelsChangeStatus
@@ -14,13 +16,6 @@ namespace stratModelsChange
 		needChange = 2
 	};
 	modelsChangeStatus changeModelsNeededNow = modelsChangeStatus::changed;
-
-	struct stratModelRecord
-	{
-		UINT32 modelId = 0;
-		string path;
-		model_Rigid* modelP = nullptr;
-	};
 
 	struct stratModelCharacterRecord
 	{
@@ -36,13 +31,18 @@ namespace stratModelsChange
 	map<UINT32, stratModelRecord*>stratModels;
 	vector<stratModelCharacterRecord*>characterStratModels;
 
-	void addModelToGame(const char* path, const UINT32 modelId)
+	void addModelToGame(const std::string& path, const UINT32 modelId, const bool isSettlement)
 	{
 		auto* modRec = new stratModelRecord();
 		modRec->path = path;
 		modRec->modelId = modelId;
-
+		modRec->isSettlement = isSettlement;
 		stratModels[modelId] = modRec;
+	}
+
+	void addModelToGameNoBool(const std::string& path, const UINT32 modelId)
+	{
+		addModelToGame(path, modelId);
 	}
 
 	struct stratModelChangeRecord
@@ -56,7 +56,7 @@ namespace stratModelsChange
 
 	struct stratModelCharacterRecordChange
 	{
-		general* gen;
+		character* gen;
 
 		const char* modelId;
 	};
@@ -68,7 +68,8 @@ namespace stratModelsChange
 
 	void setModel(const int x, const int y, const UINT32 modelId, const UINT32 modelId2)
 	{
-
+		if (stratModels.find(modelId) == stratModels.end())
+			return;
 		for (size_t i = 0; i < stratModelChangeList.size(); i++)
 		{
 			if (stratModelChangeList[i]->x == x
@@ -86,18 +87,22 @@ namespace stratModelsChange
 		rec->x = x;
 		rec->y = y;
 		rec->isFort = false;
-
-		auto tile = fastFuncts::getTileStruct(x, y);
-		if (fastFuncts::getTileObject(tile, 30))
+		if (const auto tile = stratMapHelpers::getTile(x, y); tile->getFort())
 		{
 			fortEntryCount++;
 			rec->isFort = true;	
 		}
-
-
+		else if (const auto sett = tile->getSettlement(); sett)
+		{
+			eopSettlementDataDb::get()->getSettlementData(tile->regionId, sett->minorSettlementIndex)->modelId = modelId;
+		}
 		stratModelChangeList.push_back(rec);
-
 		changeModelsNeededNow = modelsChangeStatus::needChange;
+	}
+
+	void setModelOneVar(int x, int y, UINT32 modelId)
+	{
+		setModel(x, y, modelId, modelId);
 	}
 
 	stratModelRecord* findStratModel(const UINT32 modelId)
@@ -127,76 +132,36 @@ namespace stratModelsChange
 	struct visibilityCrashFixS
 	{
 		visibilityCrashFixS(int x, int y, factionStruct* fac, int8_t vis)
-			:X(x), Y(y), Fac(fac), Vis(vis)
+			:xCoord(x), yCoord(y), fac(fac), vis(vis)
 		{
 
 		}
-		int X;
-		int Y;
-		factionStruct* Fac = nullptr;
-		int8_t Vis = 0;
+		int xCoord;
+		int yCoord;
+		factionStruct* fac = nullptr;
+		int8_t vis = 0;
 	};
 	vector<visibilityCrashFixS> crashFixAr;
 
 	void checkAndChangeStratModels()
 	{
-		if (changeModelsNeededNow == modelsChangeStatus::needFixHiding)
-		{
-			for (auto& visFix : crashFixAr)
-			{
-				fastFuncts::hideRevealedTile(visFix.Fac, visFix.X, visFix.Y);
-			}
-			crashFixAr.clear();
-			changeModelsNeededNow = modelsChangeStatus::changed;
-			return;
-		}
 		if (changeModelsNeededNow == modelsChangeStatus::changed)
-		{
 			return;
-		}
-
-		if (fortEntryCount > 0)
-			crashFixAr.reserve(fortEntryCount);
-		UINT32 numFac = fastFuncts::getFactionsCount();
-		factionStruct** listFac = fastFuncts::getFactionsList();
-
+		
 		changeModelsNeededNow = modelsChangeStatus::changed;
-
-		for (stratModelChangeRecord* changeMod : stratModelChangeList) //static models
+		for (const stratModelChangeRecord* changeMod : stratModelChangeList) //static models
 		{
-			stratModelRecord* mod1 = findStratModel(changeMod->modelId);
-			if (mod1 == nullptr)continue;
-
-			stratModelRecord* mod2 = nullptr;
-			 
-			mod2 = findStratModel(changeMod->modelId2);
-
-			if (changeModel(changeMod->x, changeMod->y, mod1->modelP, mod2->modelP) == true)
-			{
-				if (changeMod->isFort)
-				{
-					for (UINT32 i = 0; i < numFac; i++)
-					{
-						auto vis = fastFuncts::getTileVisibility(listFac[i], changeMod->x, changeMod->y);
-
-						if (vis == 0)
-							continue;
-
-						crashFixAr.emplace_back(changeMod->x, changeMod->y, listFac[i], vis);
-
-						fastFuncts::revealTile(listFac[i], changeMod->x, changeMod->y);
-
-						//fastFuncts::setTileVisibility(listFac[i], changeMod->x, changeMod->y, 5);
-					}
-
-					changeModelsNeededNow = modelsChangeStatus::needFixHiding;
-				}
-
-			}
+			const stratModelRecord* mod1 = findStratModel(changeMod->modelId);
+			if (mod1 == nullptr)
+				continue;
+			const stratModelRecord* mod2 = findStratModel(changeMod->modelId2);
+			changeModel(changeMod->x, changeMod->y, mod1->modelP, mod2->modelP);
 		}
+		
 		for (const stratModelCharacterRecordChange* changeMod : stratModelCharacterChangeList) //character models
 		{
-			changeStratModel(changeMod->gen, changeMod->modelId);
+			if (changeMod->gen)
+				changeStratModel(changeMod->gen, changeMod->modelId);
 		}
 
 		for (UINT32 i = 0; i < stratModelCharacterChangeList.size(); i++) //remove character models from change list because it only has to happen once!
@@ -212,63 +177,64 @@ namespace stratModelsChange
 	{
 	}
 
-	bool modelsLoaded = false;
+	bool MODELS_LOADED = false;
+	bool CHAR_MODELS_LOADED = false;
 	void __stdcall disableChecker()
 	{
-		modelsLoaded = false;
+		MODELS_LOADED = false;
+		CHAR_MODELS_LOADED = false;
 	}
 	void loadModels()
 	{
-		if (modelsLoaded == true)return;
+		//if (MODELS_LOADED == true)
+		//	return;
 
-		for (const auto& [fst, snd] : stratModels)
+		// ReSharper disable once CppUseElementsView
+		for (const auto& [index, record] : stratModels)
 		{
-			snd->modelP = loadModel(snd->path.c_str());
+			record->modelP = loadModel(record->path, record->isSettlement);
 		}
-		modelsLoaded = true;
+		MODELS_LOADED = true;
 		changeModelsNeededNow = modelsChangeStatus::needChange;
 	}
 
 	void loadCharModels() //rebuild character CAS entries to be sure no pointers were cleaned up
 	{
-		if (modelsLoaded == true)return;
-
-		for (stratModelCharacterRecord* modRec : characterStratModels)
+		for (const stratModelCharacterRecord* modRec : characterStratModels)
 		{
 			*modRec->entry = *buildCharacterCas(modRec->skeletonname, modRec->caspath, modRec->shadowcaspath, modRec->modelId, modRec->texturepath, modRec->scale);
 		}
 	}
 
-	model_Rigid* loadModel(const char* path)
+	model_Rigid* loadModel(const std::string& path, const bool isSettlement)
 	{
-		DWORD adr = codes::offsets.loadStratCasModelFunc;
-		DWORD res = 0;
-		_asm {
-			push 0x1
-			push 0x1
-			push 0x1
-			push 0x2
-			push 0x97c
-			push path
-
-			mov eax, [adr]
-			call eax
-			add esp, 0x18
-			mov[res], eax
-		}
-		auto modsNum = reinterpret_cast<int*>(dataOffsets::offsets.statStratModelsListOffset + 0x8dc);
-
-		auto** modRig = reinterpret_cast<model_Rigid**>(dataOffsets::offsets.statStratModelsListOffset);
-		modRig[*modsNum - 1] = nullptr;
-
-		*modsNum = *modsNum - 1;
-
-		return reinterpret_cast<model_Rigid*>(res);
+		struct simpleCas
+		{
+			void* cas = nullptr;
+		}cas;
+		const char* casPath = GAME_FUNC(const char*(__cdecl*)(const char*), getRelativePath)(path.c_str());
+		gameHelpers::logStringGame("Loading model: " + string(casPath));
+		GAME_FUNC(bool(__thiscall*)(simpleCas*, const char*), parseCas)(&cas, casPath);
+		auto modelRigid = techFuncs::createGameClass<model_Rigid>();
+		modelRigid = GAME_FUNC(model_Rigid*(__thiscall*)(model_Rigid*), createModelRigid)(modelRigid);
+		char textureName[MAX_PATH];
+		strncpy(textureName, casPath, sizeof(textureName));
+		textureName[sizeof(textureName) -1] = '\0';
+		GAME_FUNC(void(__cdecl*)(char*), appendTexturesFolder)(textureName);
+		const DWORD casModel = GAME_FUNC(DWORD(__thiscall*)(simpleCas*), getCasModel)(&cas);
+		const uint32_t flags = isSettlement ? 2428 : 2332;
+		GAME_FUNC(char(__thiscall*)(model_Rigid*, DWORD, char*, uint32_t, int ,int, int, bool)
+			, loadModelRigid)(modelRigid, casModel, textureName, flags, 2, 1, 1, true);
+		GAME_FUNC(void(__thiscall*)(simpleCas*), closeCas)(&cas);
+		GAME_FUNC(void(__thiscall*)(simpleCas*), simpleCasDestructor)(&cas);
+		return modelRigid;
 	}
 
-	void setCharacterModel(general* gen, const char* model) //add character to be changed to the queue
+	void setCharacterModel(character* gen, const char* model) //add character to be changed to the queue
 	{
-		const size_t stringsize = strlen(model);
+		if (!gen || !model)
+			return;
+		const size_t stringSize = strlen(model);
 		for (UINT32 i = 0; i < stratModelCharacterChangeList.size(); i++)
 		{
 			if (stratModelCharacterChangeList[i]->gen == gen)
@@ -280,27 +246,29 @@ namespace stratModelsChange
 		}
 		auto* rec = new stratModelCharacterRecordChange();
 		rec->gen = gen;
-		const auto modelNameCopy = new char[stringsize];
+		const auto modelNameCopy = new char[stringSize];
 		strcpy(modelNameCopy, model);
 		rec->modelId = modelNameCopy;
 		stratModelCharacterChangeList.push_back(rec);
+		const auto charData = eopCharacterDataDb::get()->getOrCreateData(gen->characterRecord->giveValidLabel(), gen->getTypeID());
+		charData->model = model;
 
 		changeModelsNeededNow = modelsChangeStatus::needChange;
 	}
 
-	void changeStratModel(general* gen, const char* model)
+	void changeStratModel(character* gen, const char* model)
 	{
 		if (gen == nullptr) { //maybe captain dont exist anymore
 			return;
 		}
-		stratModelArrayEntry* modelentry = findCharacterStratModel(model); //get eop strat model from vector
-		if (modelentry == nullptr) {
-			modelentry = getStratModelEntry(model); //get vanilla strat model from 255 array
+		stratModelArrayEntry* entry = findCharacterStratModel(model); //get eop strat model from vector
+		if (entry == nullptr) {
+			entry = getStratModelEntry(model); //get vanilla strat model from 255 array
 		}
-		if (modelentry == nullptr) {
+		if (entry == nullptr) {
 			return;
 		}
-		const size_t stringsize = strlen(model);
+		const size_t stringSize = strlen(model);
 
 		const auto characterFacEntry = new genMod; //make new descr character faction entry
 		*characterFacEntry = *gen->genType; //get data of old entry and copy it in
@@ -313,10 +281,10 @@ namespace stratModelsChange
 		{
 			if (&characterFacEntry->stratInfo->stratModelsArray[i] != nullptr)
 			{
-				const auto modelNameCopy = new char[stringsize];
+				const auto modelNameCopy = new char[stringSize];
 				strcpy(modelNameCopy, model);
 				characterFacEntry->stratInfo->stratModelsArray[i].modelName = modelNameCopy;
-				characterFacEntry->stratInfo->stratModelsArray[i].stratModelEntry = modelentry;
+				characterFacEntry->stratInfo->stratModelsArray[i].stratModelEntry = entry;
 			}
 		}
 
@@ -343,7 +311,7 @@ namespace stratModelsChange
 		auto* array = reinterpret_cast<stratModelArrayEntry*>(dataOffsets::offsets.stratModelArray);
 		for (int i = 0; i < 255; i++)
 		{
-			if (&array[i] != nullptr)
+			if (&array[i] && array[i].typeName && array[i].model_flexi_m)
 			{
 				if (strcmp(name, array[i].typeName) == 0)
 				{
@@ -414,9 +382,7 @@ namespace stratModelsChange
 			push pushScale
 			push texturepath
 			push skeleton
-			mov eax, stratmodel
-			add eax, 0x64
-			push eax
+			push stratmodel
 			mov ecx, modelflexi
 			mov eax, funcAddr
 			call eax
@@ -438,9 +404,6 @@ namespace stratModelsChange
 				mov ecx, zeropointer
 				mov eax, loadFunc
 				call eax
-				test al, al
-				mov eax, [esp + 0x178]
-				mov stratModel, eax
 			}
 		}
 		else {
@@ -451,13 +414,10 @@ namespace stratModelsChange
 				mov ecx, zeropointer
 				mov eax, loadFunc
 				call eax
-				test al, al
-				mov eax, [esp + 0x17C]
-				mov stratModel, eax
 			}
 		}
 
-		return stratModel;
+		return *zeropointer;
 	}
 
 
@@ -492,10 +452,6 @@ namespace stratModelsChange
 		//build new cas file
 		const size_t stringsize = strlen(typeName);
 		const DWORD skeleton = getCasAnimSet(skeletonname);
-		const DWORD newModelFlexi = createModelFlexi(false);
-		const DWORD newModelFlexiShadow = createModelFlexi(true);
-		const DWORD stratmodel = loadStratCAS(caspath, false);//this is very fickle with the stack position the data gets pulled from, watch out!
-		const DWORD stratmodelShadow = loadStratCAS(shadowcaspath, true);
 
 		std::string texturepathString = texturepath;
 		size_t pos = texturepathString.find_last_of("\\/") + 1;
@@ -505,11 +461,16 @@ namespace stratModelsChange
 			pos = texturepathString.find_first_of("\\/") + 1;
 			texturepathString = texturepathString.substr(pos);
 		}
+		const int textureindex = readTGAfile(texturepath);
+		
+		const DWORD newModelFlexi = createModelFlexi(false);
+		const DWORD newModelFlexiShadow = createModelFlexi(true);
+		DWORD stratmodel = loadStratCAS(caspath, false) + 0x64;
+		DWORD stratmodelShadow = loadStratCAS(shadowcaspath, true) + 0x64;
 
 		fixModelFlexi(false, stratmodel, newModelFlexi, texturepathString.c_str(), skeleton, scale);
 		fixModelFlexi(true, stratmodelShadow, newModelFlexiShadow, texturepathString.c_str(), skeleton, scale);
 
-		const int textureindex = readTGAfile(texturepath);
 		auto* newEntry = new stratModelArrayEntry;
 		newEntry->model_flexi_m = newModelFlexi;
 		newEntry->zeropoint = 0; //just filling the 0 stuff with loops and assignments so that there isn't random crap in there, we don't know what's used as 0
