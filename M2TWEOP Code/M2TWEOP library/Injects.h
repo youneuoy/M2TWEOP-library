@@ -2033,6 +2033,18 @@ private:
 	LPVOID funcAddress;
 };
 
+class onSetKhakiText5
+	:public AATemplate
+{
+public:
+	onSetKhakiText5(MemWork* mem, LPVOID addr, int ver);
+	~onSetKhakiText5() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 
 class onIsBuildingTypePresentAtMinLevel
 	:public AATemplate

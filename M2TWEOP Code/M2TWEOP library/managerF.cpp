@@ -867,6 +867,12 @@ void managerF::execPatches()
 	toSetKhakiText4->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onSetKhakiText5 patch" << '\n';
+	onSetKhakiText5* toSetKhakiText5 = new onSetKhakiText5(mem, (LPVOID)patchesForGame::onSetKhakiText, globals::dataS.gameVersion);
+	toSetKhakiText5->SetNewCode();
+	toSetKhakiText5->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onSetArmyGeneralsUnit patch" << '\n';
 	onSetArmyGeneralsUnit* toSetArmyGeneralsUnit = new onSetArmyGeneralsUnit(mem, (LPVOID)patchesForGame::onSetArmyGeneralsUnit, globals::dataS.gameVersion);
 	toSetArmyGeneralsUnit->SetNewCode();

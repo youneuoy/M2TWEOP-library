@@ -5511,6 +5511,36 @@ void onSetKhakiText4::SetNewCode()
 	delete a;
 }
 
+
+onSetKhakiText5::onSetKhakiText5(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0xC44B8A;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0xC4A7BA;
+}
+
+void onSetKhakiText5::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ecx);
+	a->push(edx);
+	a->push(eax);
+	a->mov(ecx, dword_ptr(esp, 0x28));
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->sub(esp, 0x2C);
+	a->cmp(dword_ptr(eax, 0x34), 0);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onIsBuildingTypePresentAtMinLevel::onIsBuildingTypePresentAtMinLevel(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
