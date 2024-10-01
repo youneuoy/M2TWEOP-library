@@ -1016,7 +1016,7 @@ namespace stratMapHelpers
 		typeAll.stratMap.set_function("stopDrawModel", &casModelsDrawer::removeCasModelFromDrawList);
 
 		/***
-		Replace a custom tile. Change the custom battlefield on the specified coordinates.
+		Replace a custom tile. Change the custom battlefield on the specified coordinates. Note: You must have at least one entry in custom_tiles_db.txt for this to work.
 		@function stratMap.replaceTile
 		@tparam string label  Identifier.
 		@tparam int xCoord  X coordinate of tile.
