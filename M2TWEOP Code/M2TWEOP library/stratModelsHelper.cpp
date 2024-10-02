@@ -45,10 +45,15 @@ namespace stratModelsChange
 			&& settlement->model->cityModel == modelP
 			)return;
 
-		const auto oldMod = cultures::getCultureSettlement(settlement->level, settlement->fac_creatorModNum);
-		const auto newMod = techFuncs::createGameClass<cultureSettlement>();
-		GAME_FUNC(void(__thiscall*)(cultureSettlement*), createCultureSettlement)(newMod);
-		*newMod = *oldMod;
+		cultureSettlement* newMod = settlement->model;
+		if (settlement->model && settlement->model->index != 9999)
+		{
+			const auto oldMod = cultures::getCultureSettlement(settlement->level, settlement->fac_creatorModNum);
+			newMod = techFuncs::createGameClass<cultureSettlement>();
+			GAME_FUNC(void(__thiscall*)(cultureSettlement*), createCultureSettlement)(newMod);
+			*newMod = *oldMod;
+			newMod->index = 9999;
+		}
 		newMod->cityModel = modelP;
 		newMod->castleModel = modelP;
 		for (int i = 0; i < 31; i++)
@@ -58,17 +63,37 @@ namespace stratModelsChange
 		}
 		settlement->model = newMod;
 	}
+
+	bool isVanillaCultureFort(const DWORD addr)
+	{
+		const auto cultureDb = cultures::getCultureDb();
+		const auto cultureCount = cultureDb->culturesCount;
+		for (int i = 0; i < cultureCount; i++)
+		{
+			const auto culture = &cultureDb->cultures[i];
+			if (reinterpret_cast<DWORD>(&culture->fort) == addr)
+				return true;
+		}
+		return false;
+	}
 	
 	void changeFortStratModel(fortStruct* fort, model_Rigid* modelP, model_Rigid* modelP2)
 	{
 		if (fort->stratModel->model == modelP
 			&& fort->stratModel->wallsModel == modelP2)
 			return;
-		const auto oldMod = fort->stratModel;
-		const auto newMod = techFuncs::createGameClass<cultureFort>();
-		GAME_FUNC(void(__thiscall*)(cultureFort*), createCultureFort)(newMod);
-		if (oldMod)
-			*newMod = *oldMod;
+		
+		cultureFort* newMod = fort->stratModel;
+		
+		if (const DWORD addr = reinterpret_cast<DWORD>(fort->stratModel);
+			fort->stratModel && isVanillaCultureFort(addr))
+		{
+			const auto oldMod = fort->stratModel;
+			newMod = techFuncs::createGameClass<cultureFort>();
+			GAME_FUNC(void(__thiscall*)(cultureFort*), createCultureFort)(newMod);
+			if (oldMod)
+				*newMod = *oldMod;
+		}
 		newMod->model = modelP;
 		newMod->wallsModel = modelP2;
 		for (int i = 0; i < 31; i++)
