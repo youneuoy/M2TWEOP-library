@@ -111,6 +111,10 @@ namespace gameRunnerUI
 		}
 		// Open Freecam if we are using the integration after waiting a bit for the game to start
 		std::this_thread::sleep_for(std::chrono::seconds(5));
+		if (helpers::isProcessRunning(dataG::data.gameData.exeName) == false)
+		{
+			return;
+		}
 		if (dataG::data.gameData.freecamIntegration == true && dataG::data.gameData.freecamStarted == false)
 		{
 			string currentFolder;
