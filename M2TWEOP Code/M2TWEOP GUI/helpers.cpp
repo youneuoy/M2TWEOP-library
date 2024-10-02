@@ -369,7 +369,10 @@ bool helpers::compareFiles(wstring& oneFile, wstring& nextFile)
 	}
 	if (in2.is_open() == false)
 	{
-		MessageBoxA(NULL, "Cannot run M2TWEOP, missing dll. Reinstall M2TWEOP.", "ERROR", MB_OK);
+		// Use nextFile to specify the missing DLL name in the error message
+        string errorMessage = "Cannot run M2TWEOP. Missing " + string(nextFile.begin(), nextFile.end()) + ". You should reinstall M2TWEOP or ask for help on the Discord.";
+        
+        MessageBoxA(NULL, errorMessage.c_str(), "ERROR", MB_OK);
 		in1.close();
 		in2.close();
 
