@@ -1,0 +1,102 @@
+# Just put all the assembly memory addresses that write to camera coords in here, so that the program can remove them.
+
+#Definitive Edition addresses
+#CAMERA_X
+0x008F8E10 #Tabbing
+0x008F8B50 #Cutscene
+0x00E7EF6A #Cutscene2
+0x0094FCDC #Constant / restrictor
+0x008FAC69 #restrictor
+0x008F8C6C #Movement
+0x008F9439 #Movement2
+0x0095B40E #Map click pan
+0x0095B7F4 #Unit pan
+0x008F8E8B #Unit zoom
+0x008F6F29 #???
+0x0095B3B0 #???
+0x0094E996 #???
+0x008F9050 #???
+
+#CAMERA_Y
+0x008F8E1C #Tabbing
+0x008F8B5C #Cutscene
+0x00E7EF7F #Cutscene2
+0x0094FCE5 #Constant / restrictor
+0x008FAC72 #restrictor
+0x008F8C76 #Movement
+0x008F9443 #Movement2
+0x0095B429 #Map click pan
+0x0095B805 #Unit pan
+0x008F8E97 #Unit zoom
+0x008F6F39 #???
+0x0095B3BB #???
+0x0094E9DF #???
+0x008F905A #???
+
+#CAMERA_Z
+0x008F8E16 #Tabbing
+0x008F8B56 #Cutscene
+0x00E7EF74 #Cutscene2
+0x0094FCE0 #Constant / restrictor RTS
+0x0094FD2D #Constant / restrictor2 RTS
+0x008FAC6D #restrictor TWC
+0x008F8C71 #Movement TWC
+0x008F943E #Movement2 TWC
+0x0095B41B #Map click pan
+0x0095B499 #Map click pan2
+0x0095B7FC #Unit pan
+0x008F8E91 #Unit zoom
+0x008F6F2F #???
+0x0095B3B5 #???
+0x008F9011 #???
+
+# Gold Edition addresses (These have not been tested, they might cause the game to crash!)
+# Use a simple regex replace to quickly use these, replace "#0x" with "0x", make sure to remove or comment the previous defintive edition addresses!
+#CAMERA_X
+#0x00941f60
+#0x00941ca0
+#0x00ec80ba
+#0x00998e2c
+#0x00943db9
+#0x00941dbc
+#0x00942589
+#0x009a455e
+#0x009a4944
+#0x00941fdb
+#0x00940079
+#0x009a4500
+#0x00997ae6
+#0x009421a0
+
+#CAMERA_Y
+#0x00941f6c
+#0x00941cac
+#0x00ec80cf
+#0x00998e35
+#0x00943dc2
+#0x00941dc6
+#0x00942593
+#0x009a4579
+#0x009a4955
+#0x00941fe7
+#0x00940089
+#0x009a450b
+#0x00997b2f
+#0x009421aa
+
+#CAMERA_Z
+#0x00941f66
+#0x00941ca6
+#0x00ec80c4
+#0x00998e30
+#0x00998e7d
+#0x00943dbd
+#0x00941dc1
+#0x0094258e
+#0x009a456b
+#0x009a45e9
+#0x009a494c
+#0x00941fe1
+#0x0094007f
+#0x009a4505
+#0x00942161

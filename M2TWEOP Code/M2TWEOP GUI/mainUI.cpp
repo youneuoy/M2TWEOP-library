@@ -67,7 +67,7 @@ namespace mainUI
 			}
 			return 0;
 		}
-		else if (childs.isDiscordUIOpen == true)
+		else if (childs.isDiscordUIOpen == true || dataG::data.gameData.freecamIntegration == true)
 		{
 			gameRunnerUI::maintainGUI();
 			return 0;

@@ -35,7 +35,7 @@ public:
 			// Freecam Integration
 			string freecamExeName = "Freecam.exe";
 			bool freecamIntegration = false;
-			string freecamFolder = "<folder_with_freecam.exe>";
+			bool freecamStarted = false;
 
 			string exeName;
 			string gameArgs;

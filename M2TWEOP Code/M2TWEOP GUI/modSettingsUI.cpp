@@ -245,12 +245,6 @@ namespace modSettingsUI
 		// Freecam Settings
 		ImGui::Checkbox("Freecam Integration", &dataG::data.gameData.freecamIntegration);
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Automatically start and close the Freecam application when the game is launched");}
-
-		ImGui::Text("Freecam Folder");
-		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Path to where you have Freecam installed (e.g  C:\\Users\\stead\\Documents\\Modding Tools\\Med2 Modding Tools\\Freecam)");}
-		ImGui::InputText("", &dataG::data.gameData.freecamFolder);
-		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Path to where you have Freecam installed (e.g  C:\\Users\\stead\\Documents\\Modding Tools\\Med2 Modding Tools\\Freecam)");}
-		ImGui::NewLine();
 	}
 	
 	void drawModSettingsUI(bool* isOpen)

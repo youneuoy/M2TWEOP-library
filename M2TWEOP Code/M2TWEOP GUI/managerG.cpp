@@ -107,10 +107,6 @@ namespace managerG
 			{
 				getJson(dataG::data.gameData.freecamIntegration, "isFreecamIntegrationEnabled");
 			}
-			if (json.contains("freecamFolder"))
-			{
-				getJson(dataG::data.gameData.freecamFolder, "freecamFolder");
-			}
 		}
 		catch (jsn::json::type_error& e)
 		{
@@ -238,7 +234,6 @@ namespace managerG
 		setJson("IsOverrideBattleCamera", dataG::data.gameData.IsOverrideBattleCamera);
 		setJson("isDiscordRichPresenceEnabled", dataG::data.gameData.isDiscordRichPresenceEnabled);
 		setJson("isFreecamIntegrationEnabled", dataG::data.gameData.freecamIntegration);
-		setJson("freecamFolder", dataG::data.gameData.freecamFolder);
 		writeJsonToFile(fPath, json);
 		json.clear();
 

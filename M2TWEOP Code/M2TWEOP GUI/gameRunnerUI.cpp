@@ -109,6 +109,26 @@ namespace gameRunnerUI
 				exit(0);
 			}
 		}
+		// Open Freecam if we are using the integration after waiting a bit for the game to start
+		std::this_thread::sleep_for(std::chrono::seconds(5));
+		if (dataG::data.gameData.freecamIntegration == true && dataG::data.gameData.freecamStarted == false)
+		{
+			string currentFolder;
+			string freecamFolder;
+			string exePath;
+			helpers::getCurrentPath(currentFolder);
+
+			exePath = currentFolder + ".\\eopData\\resources\\tools\\freecam\\Freecam.exe";
+			freecamFolder = currentFolder + ".\\eopData\\resources\\tools\\freecam";
+
+			std::wstring wideFolderPath = helpers::stringToWstring(freecamFolder);
+			std::wstring wideExePath = helpers::stringToWstring(exePath);
+
+			LPSTR lpstr = helpers::ConvertWideStringToLPSTR(wideExePath);
+			LPSTR lpstr_folder = helpers::ConvertWideStringToLPSTR(wideFolderPath);
+			helpers::openProcess(lpstr, lpstr_folder);
+			dataG::data.gameData.freecamStarted = true;
+		}
 	}
 
 	int drawUI(bool *isOpen)
@@ -165,18 +185,6 @@ namespace gameRunnerUI
 				runGameThread, std::ref(startProcess.isRunStarted), std::ref(startProcess.isRunEnded), std::ref(startProcess.isGetResponse), std::ref(startProcess.exePath), std::ref(startProcess.exeArgs), std::ref(startProcess.eopArgs), startProcess.isEopNeeded);
 			thrUrl.detach();
 
-			// Open Freecam if we are using the integration
-			if (dataG::data.gameData.freecamIntegration == true)
-			{
-				std::string exePath = dataG::data.gameData.freecamFolder + "\\Freecam.exe";
-
-				std::wstring wideFolderPath = helpers::stringToWstring(dataG::data.gameData.freecamFolder);
-				std::wstring wideExePath = helpers::stringToWstring(exePath);
-
-				LPSTR lpstr = helpers::ConvertWideStringToLPSTR(wideExePath);
-				LPSTR lpstr_folder = helpers::ConvertWideStringToLPSTR(wideFolderPath);
-				helpers::openProcess(lpstr, lpstr_folder);
-			}
 			// Stop the launcher background music if Rich Presence is enabled and the launcher will stay open
 			if (dataG::data.gameData.isDiscordRichPresenceEnabled == true && dataG::data.audio.bkgMusic.isMusicNeeded == true)
 			{

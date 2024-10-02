@@ -1,0 +1,87 @@
+# Welcome to the freecam configuration file.
+# Advice: Do not use the middle mouse button for FREECAM, the game uses middle mouse button for zooming to units and that key is not rebindable sadly.
+#		  VK_XBUTTON1 Also suffers from a similar issue.
+# VK key codes can be found at - https://cherrytree.at/misc/vk.htm, Otherwise look up a VK_keycode map/list for your language.
+# It is not neccesary but it is highly reccommended that the controls below match the controls ingame.
+# Binds can either be a VK keycode or simply the character you desire.
+
+
+UPS 			= 60				# Updates per second, If you play with a fps other than 60, you might want to change this to whatever fps you have.
+									# Camera Movements will appear to be 60fps even if game is running at 120 as an example.
+									# Other settings such as camera speed, smoothening and such do not scale with this value, you will need to tweak 
+									# them if you change the UPS.
+
+RELIEVE_DELAY	= 1					# How long the game is paused in ms when the program releases or gives back control over the camera. Higher values will cause
+									# a noticable stutter when double clicking, lower values might increase risk of crashing on some systems.
+
+#General Bindings and freecam
+PAUSE				= VK_INSERT
+EXIT				= VK_END
+FAST				= VK_SHIFT  
+SLOW				= VK_MENU		# VK_MENU is left-alt
+
+FAST_MOD			= 250.0%		# How FAST,SLOW or both pressed will affect the speed of the camera.
+SLOW_MOD			= 25.0%
+BOTH_MOD			= 10.0%
+
+
+FREECAM				= VK_XBUTTON2	# The key that makes mouse control control the camera orientation.
+
+INVERT_MOUSE		= false
+INVERT_SCROLL		= true
+
+CAMERA_SMOOTHENING	= 50.0%
+SENSITIVITY			= 1.0
+
+PAN_PEED			= 1.0  			# Effects both edgepanning aswell as rotation controls
+ENABLE_EDGEPAN		= true
+	EDGEPAN_MARGIN		= 5     	# Pixel distance that triggers edgepanning
+
+ROTATION_CONTROLS	= false
+	ROTATE_UP			= r
+	ROTATE_DOWN			= f
+	ROTATE_LEFT			= q
+	ROTATE_RIGHT		= e
+
+
+# OVERRIDE_MOVEMENT gives control over the of the camera position to freecam. This allows for infinite zooming, more consistent camera speeds etc.
+# One issue currently is that you can go below ground.
+OVERRIDE_MOVEMENT	= true
+
+	HORIZONTAL_SMOOTHENING	= 90.0%
+	VERTICAL_SMOOTHENING	= 90.0%		# Effects scrolling
+
+	HORIZONTAL_SPEED	= 1.0
+	VERTICAL_SPEED		= 1.0
+
+	MOVE_FORWARD		= w
+	MOVE_LEFT			= a
+	MOVE_BACKWARD		= s
+	MOVE_RIGHT			= d
+	MOVE_UP				= VK_DOWN 	#Down arrow key
+	MOVE_DOWN			= VK_UP 	#Up arrow key
+
+
+
+
+
+
+################### ADDRESSES BELOW, DONT TOUCH UNLESS YOU KNOW WHAT YOU'RE DOING ###################
+
+#Definitive edition addresses 
+BATTLE 				= 0x0193D683
+TARGET_X 			= 0x0193D5DC
+TARGET_Y 			= 0x0193D5E4
+TARGET_Z 			= 0x0193D5E0
+CAMERA_X 			= 0x0193D598
+CAMERA_Y 			= 0x0193D5A0
+CAMERA_Z 			= 0x0193D59C
+
+#Gold edition addresses (Make sure to change the addresses in assemblyLines_Camera and assemblyLines_Target) also!
+#BATTLE 			= 0x019867D3
+#TARGET_X 			= 0x0198672C
+#TARGET_Y 			= 0x01986734
+#TARGET_Z 			= 0x01986730
+#CAMERA_X 			= 0x019866E8
+#CAMERA_Y 			= 0x019866F0
+#CAMERA_Z 			= 0x019866EC
