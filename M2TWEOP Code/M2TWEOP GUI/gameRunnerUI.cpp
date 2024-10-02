@@ -109,14 +109,10 @@ namespace gameRunnerUI
 				exit(0);
 			}
 		}
-		// Open Freecam if we are using the integration after waiting a bit for the game to start
-		std::this_thread::sleep_for(std::chrono::seconds(5));
-		if (helpers::isProcessRunning(dataG::data.gameData.exeName) == false)
+		if ((dataG::data.gameData.freecamIntegration == true && dataG::data.gameData.freecamStarted == false && helpers::isProcessRunning(dataG::data.gameData.exeName) == true))
 		{
-			return;
-		}
-		if (dataG::data.gameData.freecamIntegration == true && dataG::data.gameData.freecamStarted == false)
-		{
+			std::this_thread::sleep_for(std::chrono::seconds(5));
+			// Open Freecam if we are using the integration after waiting a bit for the game to start
 			string currentFolder;
 			string freecamFolder;
 			string exePath;
