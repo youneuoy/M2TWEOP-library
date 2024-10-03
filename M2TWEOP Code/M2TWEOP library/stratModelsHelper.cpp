@@ -19,12 +19,27 @@ namespace stratModelsChange
 		return newMod;
 	}
 	
+
+	bool isVanillaCultureWatchtower(const DWORD addr)
+	{
+		const auto cultureDb = cultures::getCultureDb();
+		const auto cultureCount = cultureDb->culturesCount;
+		for (int i = 0; i < cultureCount; i++)
+		{
+			const auto culture = &cultureDb->cultures[i];
+			if (reinterpret_cast<DWORD>(&culture->watchTower) == addr)
+				return true;
+		}
+		return false;
+	}
+	
 	void changeWatchTowerStratModel(watchTowerStruct* tower, model_Rigid* modelP)
 	{
 		if (tower->model->model == modelP)
 			return;
-		
-		tower->model = newCasEntry(tower->model);
+
+		if (isVanillaCultureWatchtower(reinterpret_cast<DWORD>(tower->model)))
+			tower->model = newCasEntry(tower->model);
 		tower->model->model = modelP;
 	}
 	void changeResourceStratModel(resourceStruct* resource, model_Rigid* modelP)
@@ -103,19 +118,53 @@ namespace stratModelsChange
 		}
 		fort->stratModel = newMod;
 	}
-
+	
+	bool isVanillaCulturePort(const DWORD addr)
+	{
+		const auto cultureDb = cultures::getCultureDb();
+		const auto cultureCount = cultureDb->culturesCount;
+		for (int i = 0; i < cultureCount; i++)
+		{
+			const auto culture = &cultureDb->cultures[i];
+			for (auto& portBuilding : culture->portBuildings)
+			{
+				if (reinterpret_cast<DWORD>(&portBuilding) == addr)
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	bool isVanillaCulturePortDock(const DWORD addr)
+	{
+		const auto cultureDb = cultures::getCultureDb();
+		const auto cultureCount = cultureDb->culturesCount;
+		for (int i = 0; i < cultureCount; i++)
+		{
+			const auto culture = &cultureDb->cultures[i];
+			for (auto& portBuilding : culture->portWalls)
+			{
+				if (reinterpret_cast<DWORD>(&portBuilding) == addr)
+					return true;
+			}
+		}
+		return false;
+	}
+	
 	void changePortStratModel(portBuildingStruct* port, model_Rigid* modelP, model_Rigid* modelP2)
 	{
 		if (!port->portDock && port->portStratModel->model == modelP)
 			return;
 		if (port->portDock && port->portDock->dockStratModel->model == modelP2 && port->portStratModel->model == modelP)
-			return; 
-		port->portStratModel = newCasEntry(port->portStratModel);
+			return;
+		if (isVanillaCulturePort(reinterpret_cast<DWORD>(port->portStratModel)))
+			port->portStratModel = newCasEntry(port->portStratModel);
 		port->portStratModel->model = modelP;
 		
 		if (port->portDock->dockStratModel->model == modelP2)
 			return;
-		port->portDock->dockStratModel = newCasEntry(port->portStratModel);
+		if (isVanillaCulturePortDock(reinterpret_cast<DWORD>(port->portDock->dockStratModel)))
+			port->portDock->dockStratModel = newCasEntry(port->portDock->dockStratModel);
 		port->portDock->dockStratModel->model = modelP2;
 	}
 	
