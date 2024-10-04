@@ -305,6 +305,34 @@ struct coastLine
 	int regionsNum;
 };
 
+struct mapRegion
+{
+	char* name; //0x0000
+	int nameHash; //0x0004
+	uint8_t blue; //0x0008
+	uint8_t green; //0x0009
+	uint8_t red; //0x000A
+	uint8_t pad; //0x000B
+	UNICODE_STRING*** regionName; //0x000C
+	char* legio; //0x0010
+	int legioHash; //0x0014
+	char* settlementName; //0x0018
+	int settlementNameHash; //0x001C
+	UNICODE_STRING*** localSettlementName; //0x0020
+	char* rebelName; //0x0024
+	int rebelNameHash; //0x0028
+	int factionId; //0x002C
+	uint32_t padResMask; //0x0030
+	uint32_t resourceMask; //0x0034
+	uint32_t padHResMask; //0x0038
+	uint32_t hiddenResourceMask1; //0x003C
+	uint32_t hiddenResourceMask2; //0x0040
+	uint32_t padHResMask2; //0x0044
+	int triumph; //0x0048
+	int baseFarm; //0x004C
+	float* religions; //0x0050
+};
+
 struct gameStratRect
 {
 	int minX;

@@ -329,6 +329,7 @@ void codes::initCodes(int gameVer)
 		offsets.createBuildingSett = 0x5FAB60;
 		offsets.buildQueueConflictTest = 0x5EB100;
 		offsets.removeBuildingSelection = 0x5FA3A0;
+		offsets.getNextWord = 0xD4F060;
 	}
 
 
@@ -660,5 +661,6 @@ void codes::initCodes(int gameVer)
 		offsets.createBuildingSett = 0x005FAF50;
 		offsets.buildQueueConflictTest = 0x005EB560;
 		offsets.removeBuildingSelection = 0x005FA790;
+		offsets.getNextWord = 0xD493C0;
 	}
 }

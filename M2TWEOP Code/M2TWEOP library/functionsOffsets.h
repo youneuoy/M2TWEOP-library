@@ -209,6 +209,7 @@ public:
 		DWORD switchArmyFaction = NULL;
 		DWORD changeCharacterTileStuff = NULL;
 		DWORD initPlaceCharacter = NULL;
+		DWORD getNextWord = NULL;
 		DWORD getResidenceCharacterNum = NULL;
 		DWORD getResidenceCharacterAtIndex = NULL;
 		DWORD removeSieges = NULL;

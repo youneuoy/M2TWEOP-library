@@ -45,6 +45,10 @@ public:
 	static int __fastcall onCalculateMiningIncome(int value, const settlementStruct* settlement);
 	static int __fastcall onCreateMercUnitCheck(char** entryName, int eduIndex);
 	static void __fastcall onWriteSoldiersToStrat(unit* unit);
+	static int __fastcall onSetRegionHiddenResources(int hiddenResourceId, const mapRegion* region);
+	static int __fastcall onReadHiddenResources(int hiddenResourceId, void* textBuffer);
+	static int __fastcall onGetHiddenResource(const stringWithHash* name);
+	static int __fastcall onCheckHiddenResource(int id, int region);
 	static void __fastcall onSetSettlementModel(settlementStruct* settlement);
 	static int __fastcall onAddSettlementToDiplomacyScroll(const settlementStruct* settlement);
 	static settlementStruct* __fastcall onDecideMissionTarget(settlementStruct* settlement, factionStruct* faction);

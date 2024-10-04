@@ -5541,6 +5541,194 @@ void onSetKhakiText5::SetNewCode()
 	delete a;
 }
 
+
+onSetRegionHiddenResources2::onSetRegionHiddenResources2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x8D95A3;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x8D8B43;
+}
+
+void onSetRegionHiddenResources2::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->pop(edx);
+	a->push(ecx);
+	a->push(edx);
+	a->push(ebx);
+	a->mov(ecx, edx);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(ebx);
+	a->pop(edx);
+	a->pop(ecx);
+	a->cmp(eax, ebx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+
+onHiddenResourceConditionParse::onHiddenResourceConditionParse(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x8A79AA;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x8A6FCA;
+}
+
+void onHiddenResourceConditionParse::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->pop(ecx);
+	a->push(edx);
+	a->push(ebp);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(ebp);
+	a->pop(edx);
+	a->mov(edi, eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+
+onHiddenResourceCheck::onHiddenResourceCheck(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x609E54;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x609AA4;
+}
+
+void onHiddenResourceCheck::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->pop(esi);
+	a->mov(edx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	if (m_adress == 0x609E54)
+		a->mov(ecx, 0x609E84);
+	else
+		a->mov(ecx, 0x609AD4);
+	a->jmp(ecx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onHiddenResourceCheck2::onHiddenResourceCheck2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x609F52;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x609BA2;
+}
+
+void onHiddenResourceCheck2::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->pop(esi);
+	a->mov(ecx, edx);
+	a->mov(edx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	if (m_adress == 0x609F52)
+		a->mov(ecx, 0x609F81);
+	else
+		a->mov(ecx, 0x609BD1);
+	a->jmp(ecx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+
+onSetRegionHiddenResources::onSetRegionHiddenResources(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x8D964B;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x8D8BEB;
+}
+
+void onSetRegionHiddenResources::SetNewCode()
+{
+	const auto a = new Assembler();
+	const auto label = a->newLabel();
+	a->push(eax);
+	a->mov(edx, esi);
+	a->mov(ecx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->cmp(eax, 0);
+	a->pop(eax);
+	a->jbe(label);
+	if (m_adress == 0x8D964B)
+		a->mov(eax, 0x008D9677);
+	else
+		a->mov(eax, 0x008D8C17);
+	a->jmp(eax);
+	a->bind(label);
+	a->mov(ecx, eax);
+	a->mov(edx, eax);
+	a->and_(eax, 0x1F);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+
+onReadHiddenResources::onReadHiddenResources(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x8AD0AD;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x8AC6BD;
+}
+
+void onReadHiddenResources::SetNewCode()
+{
+	const auto a = new Assembler();
+	const auto label = a->newLabel();
+	a->push(ecx);
+	a->push(edx);
+	a->push(eax);
+	a->mov(edx, ecx);
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->cmp(eax, 0);
+	a->pop(eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->jbe(label);
+	if (m_adress == 0x8AD0AD)
+		a->mov(eax, 0x8AD0CA);
+	else
+		a->mov(eax, 0x8AC6DA);
+	a->jmp(eax);
+	a->bind(label);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onIsBuildingTypePresentAtMinLevel::onIsBuildingTypePresentAtMinLevel(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

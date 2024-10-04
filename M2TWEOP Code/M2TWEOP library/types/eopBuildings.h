@@ -479,6 +479,24 @@ public:
 
 }; //Size: 0x0350
 
+class eopHiddenResources
+{
+public:
+	static int getHiddenResourceIndex(const std::string& name);
+	static void addHiddenResource(const std::string& name);
+	static void addHiddenResourceWithId(const std::string& name, int id);
+	static void addHiddenResourceToRegion(int regionId, const std::string& name);
+	static void addHiddenResourceToRegionIndex(const std::string& name, int id);
+	static bool hasHiddenResource(int regionId, int id);
+	static bool isInitialized() { return m_Initialized; }
+	static void setInitialized(const bool value) { m_Initialized = value; }
+	static void initialize();
+private:
+	static std::array<std::vector<int>, 200> m_HiddenResources;
+	static unordered_map<std::string, int> m_HiddenResourcesLookup;
+	static unordered_map<std::string, std::vector<int>> m_NamesToIndexes;
+	static bool m_Initialized;
+};
 
 namespace eopBuildings
 {
@@ -561,6 +579,8 @@ namespace eopBuildings
 
 #pragma endregion
 };
+
+
 
 namespace buildingHelpers
 {

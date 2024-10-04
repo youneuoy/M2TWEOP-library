@@ -809,6 +809,46 @@ void __fastcall patchesForGame::onWriteSoldiersToStrat(unit* unit)
 		unit->markedToKill = 1;
 }
 
+int patchesForGame::onSetRegionHiddenResources(const int hiddenResourceId, const mapRegion* region)
+{
+	eopHiddenResources::setInitialized(false);
+	eopHiddenResources::addHiddenResourceToRegionIndex(region->name, hiddenResourceId);
+	if (hiddenResourceId < 64)
+		return 0;
+	//gameHelpers::logStringGame("EOP Hidden resource with id: " + std::to_string(hiddenResourceId) + " added to region: " + region->name);
+	return 1;
+}
+
+int patchesForGame::onReadHiddenResources(const int hiddenResourceId, void* textBuffer)
+{
+	//gameHelpers::logStringGame("Hidden resource with id: " + std::to_string(hiddenResourceId));
+	if (hiddenResourceId > 63)
+	{
+		if (hiddenResourceId == 64)
+		{
+			const auto edb = eopBuildings::getEdb();
+			for (int i = 0; i < edb->hiddenResourceCount; i++)
+			{
+				eopHiddenResources::addHiddenResourceWithId(edb->hiddenResources[i].hiddenResName, i);
+			}
+		}
+		const char* name = GAME_FUNC(const char*(__thiscall*)(void*), getNextWord)(textBuffer);
+		eopHiddenResources::addHiddenResource(name);
+		return 1;
+	}
+	return 0;
+}
+
+int patchesForGame::onGetHiddenResource(const stringWithHash* name)
+{
+	return eopHiddenResources::getHiddenResourceIndex(name->name);
+}
+
+int patchesForGame::onCheckHiddenResource(const int id, const int region)
+{
+	return eopHiddenResources::hasHiddenResource(region, id);
+}
+
 void patchesForGame::onSetSettlementModel(settlementStruct* settlement)
 {
 	bool changed = false;
@@ -1624,6 +1664,8 @@ void __fastcall patchesForGame::clickAtTile(coordPair* xy)
 
 void __stdcall patchesForGame::afterCampaignMapLoaded()
 {
+	if (!eopHiddenResources::isInitialized())
+		eopHiddenResources::initialize();
 	discordManager::onCampaignMapLoaded();
 	globals::dataS.Modules.tacticalMapViewer.unView();
 	plugData::data.luaAll.fillHashMaps();
@@ -1660,6 +1702,7 @@ void __stdcall patchesForGame::onGameInit()
 	cultures::eopPortraitDb::createEopPortraitDb();
 	discordManager::menuLoaded();
 	gameEvents::onGameInit();
+	const auto edb = eopBuildings::getEdb();
 }
 
 void __stdcall patchesForGame::onUnloadCampaign()

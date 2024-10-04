@@ -13,6 +13,10 @@
 #include "techFuncs.h"
 
 std::vector<std::shared_ptr<eopBuildEntry>> buildEntryDB::eopEdb = {};
+std::array<std::vector<int>, 200> eopHiddenResources::m_HiddenResources = {};
+unordered_map<std::string, int> eopHiddenResources::m_HiddenResourcesLookup = {};
+unordered_map<std::string, std::vector<int>> eopHiddenResources::m_NamesToIndexes = {};
+bool eopHiddenResources::m_Initialized = false;
 
 edbEntry* buildEntryDB::addEopBuildEntry(edbEntry* oldEntry, const int newIndex)
 {
@@ -98,6 +102,63 @@ edbEntry* exportDescrBuildings::getBuildingByName(const std::string& name)
 			return entry;
 	}
 	return nullptr;
+}
+
+int eopHiddenResources::getHiddenResourceIndex(const std::string& name)
+{
+	if (const auto res = m_HiddenResourcesLookup.find(name);
+		res != m_HiddenResourcesLookup.end())
+		return res->second;
+	const auto edb = eopBuildings::getEdb();
+	if (!edb)
+		return -1;
+	return edb->getHiddenResourceIndex(name.c_str());
+}
+
+void eopHiddenResources::addHiddenResource(const std::string& name)
+{
+	m_HiddenResourcesLookup[name] = m_HiddenResourcesLookup.size();
+}
+
+void eopHiddenResources::addHiddenResourceWithId(const std::string& name, const int id)
+{
+	m_HiddenResourcesLookup[name] = id;
+}
+
+void eopHiddenResources::addHiddenResourceToRegion(const int regionId, const std::string& name)
+{
+	m_HiddenResources[regionId].push_back(getHiddenResourceIndex(name));
+}
+
+void eopHiddenResources::addHiddenResourceToRegionIndex(const std::string& name, const int id)
+{
+	if (m_NamesToIndexes.find(name) == m_NamesToIndexes.end())
+		m_NamesToIndexes[name] = {};
+	m_NamesToIndexes[name].push_back(id);
+}
+
+bool eopHiddenResources::hasHiddenResource(const int regionId, const int id)
+{
+	if (regionId >= static_cast<int>(m_HiddenResources.size()))
+		return false;
+	const auto& res = m_HiddenResources[regionId];
+	return std::find(res.begin(), res.end(), id) != res.end();
+}
+
+void eopHiddenResources::initialize()
+{
+	const auto mapData = stratMapHelpers::getStratMap();
+	const auto n = mapData->regionsNum;
+	for (int i = 0; i < n; i++)
+	{
+		if (const auto region = &mapData->regions[i]; m_NamesToIndexes.find(region->regionName) != m_NamesToIndexes.end())
+		{
+			const auto& res = m_NamesToIndexes[region->regionName];
+			for (const auto id : res)
+				m_HiddenResources[i].push_back(id);
+		}
+	}
+	m_Initialized = true;
 }
 
 

@@ -95,6 +95,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.descrRebels = 0x16673F0;
 		offsets.eventManager = 0x16F0BC8;
 		offsets.uiStratUiV2 = 0x2CB62FC;
+		offsets.currentRegion = 0x18FD970;
 
 		
 		offsets.fortVtbl = 0x13362F4;
@@ -192,6 +193,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.ltgdConfig = 0x01605134;
 		offsets.descrRebels = 0x161F518;
 		offsets.eventManager = 0x16A7A30;
+		offsets.currentRegion = 0x18B4800;
 		offsets.uiStratUiV2 = 0x2C6D1B0;
 
 		offsets.audioEnable = reinterpret_cast<bool*>(0x01639f1d);

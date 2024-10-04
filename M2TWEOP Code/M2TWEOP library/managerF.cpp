@@ -873,6 +873,42 @@ void managerF::execPatches()
 	toSetKhakiText5->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onReadHiddenResources patch" << '\n';
+	onReadHiddenResources* toReadHiddenResources = new onReadHiddenResources(mem, (LPVOID)patchesForGame::onReadHiddenResources, globals::dataS.gameVersion);
+	toReadHiddenResources->SetNewCode();
+	toReadHiddenResources->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onSetRegionHiddenResources patch" << '\n';
+	onSetRegionHiddenResources* toSetRegionHiddenResources = new onSetRegionHiddenResources(mem, (LPVOID)patchesForGame::onSetRegionHiddenResources, globals::dataS.gameVersion);
+	toSetRegionHiddenResources->SetNewCode();
+	toSetRegionHiddenResources->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onSetRegionHiddenResources2 patch" << '\n';
+	onSetRegionHiddenResources2* toSetRegionHiddenResources2 = new onSetRegionHiddenResources2(mem, (LPVOID)patchesForGame::onGetHiddenResource, globals::dataS.gameVersion);
+	toSetRegionHiddenResources2->SetNewCode();
+	toSetRegionHiddenResources2->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onHiddenResourceConditionParse patch" << '\n';
+	onHiddenResourceConditionParse* toHiddenResourceConditionParse = new onHiddenResourceConditionParse(mem, (LPVOID)patchesForGame::onGetHiddenResource, globals::dataS.gameVersion);
+	toHiddenResourceConditionParse->SetNewCode();
+	toHiddenResourceConditionParse->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying toHiddenResourceCheck patch" << '\n';
+	onHiddenResourceCheck* toHiddenResourceCheck = new onHiddenResourceCheck(mem, (LPVOID)patchesForGame::onCheckHiddenResource, globals::dataS.gameVersion);
+	toHiddenResourceCheck->SetNewCode();
+	toHiddenResourceCheck->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying toHiddenResourceCheck2 patch" << '\n';
+	onHiddenResourceCheck2* toHiddenResourceCheck2 = new onHiddenResourceCheck2(mem, (LPVOID)patchesForGame::onCheckHiddenResource, globals::dataS.gameVersion);
+	toHiddenResourceCheck2->SetNewCode();
+	toHiddenResourceCheck2->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onSetArmyGeneralsUnit patch" << '\n';
 	onSetArmyGeneralsUnit* toSetArmyGeneralsUnit = new onSetArmyGeneralsUnit(mem, (LPVOID)patchesForGame::onSetArmyGeneralsUnit, globals::dataS.gameVersion);
 	toSetArmyGeneralsUnit->SetNewCode();

@@ -2045,6 +2045,78 @@ private:
 	LPVOID funcAddress;
 };
 
+class onSetRegionHiddenResources
+	:public AATemplate
+{
+public:
+	onSetRegionHiddenResources(MemWork* mem, LPVOID addr, int ver);
+	~onSetRegionHiddenResources() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onSetRegionHiddenResources2
+	:public AATemplate
+{
+public:
+	onSetRegionHiddenResources2(MemWork* mem, LPVOID addr, int ver);
+	~onSetRegionHiddenResources2() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onHiddenResourceConditionParse
+	:public AATemplate
+{
+public:
+	onHiddenResourceConditionParse(MemWork* mem, LPVOID addr, int ver);
+	~onHiddenResourceConditionParse() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onHiddenResourceCheck
+	:public AATemplate
+{
+public:
+	onHiddenResourceCheck(MemWork* mem, LPVOID addr, int ver);
+	~onHiddenResourceCheck() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onHiddenResourceCheck2
+	:public AATemplate
+{
+public:
+	onHiddenResourceCheck2(MemWork* mem, LPVOID addr, int ver);
+	~onHiddenResourceCheck2() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onReadHiddenResources
+	:public AATemplate
+{
+public:
+	onReadHiddenResources(MemWork* mem, LPVOID addr, int ver);
+	~onReadHiddenResources() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 
 class onIsBuildingTypePresentAtMinLevel
 	:public AATemplate
