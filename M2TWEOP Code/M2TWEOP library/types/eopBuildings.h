@@ -486,6 +486,7 @@ public:
 	static void addHiddenResource(const std::string& name);
 	static void addHiddenResourceWithId(const std::string& name, int id);
 	static void addHiddenResourceToRegion(int regionId, const std::string& name);
+	static void removeHiddenResourceFromRegion(int regionId, const std::string& name);
 	static void addHiddenResourceToRegionIndex(const std::string& name, int id);
 	static bool hasHiddenResource(int regionId, int id);
 	static bool isInitialized() { return m_Initialized; }

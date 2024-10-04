@@ -513,20 +513,26 @@ public:
 	void setHiddenResource(const char* name, bool enable);
 	bool hasHiddenResourceId(const int index)
 	{
-		if (index < 0 || index >= 64)
+		if (index < 0)
 			return false;
-		const uint64_t* hiddenResourcesPtr = reinterpret_cast<uint64_t*>(&hiddenResources);
-		return *hiddenResourcesPtr & (1ULL << index);
+		return eopHiddenResources::hasHiddenResource(regionID, index);
 	}
 	void setHiddenResourceId(const int index, const bool enable)
 	{
-		if (index < 0 || index >= 64)
+		if (index < 0)
 			return;
-		const auto hiddenResourcesPtr = reinterpret_cast<uint64_t*>(&hiddenResources);
+		if (index < 64)
+		{
+			const auto hiddenResourcesPtr = reinterpret_cast<uint64_t*>(&hiddenResources);
+			if (enable)
+				*hiddenResourcesPtr |= (1ULL << index);
+			else
+				*hiddenResourcesPtr &= ~(1ULL << index);
+		}
 		if (enable)
-			*hiddenResourcesPtr |= (1ULL << index);
+			eopHiddenResources::addHiddenResourceToRegion(index, regionName);
 		else
-			*hiddenResourcesPtr &= ~(1ULL << index);
+			eopHiddenResources::removeHiddenResourceFromRegion(index, regionName);
 	}
 	int getHostileArmiesStrength(const int factionId)
 	{

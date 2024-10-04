@@ -186,24 +186,18 @@ void regionStruct::changeRebelsName(const char* newName)
 
 bool regionStruct::hasHiddenResource(const char* newName)
 {
-	const auto edb = eopBuildings::getEdb();
-	if (!edb)
+	const auto res =  eopHiddenResources::getHiddenResourceIndex(newName);
+	if (res == -1)
 		return false;
-	const int index = edb->getHiddenResourceIndex(newName);
-	if (index < 0)
-		return false;
-	return hasHiddenResourceId(index);
+	return eopHiddenResources::hasHiddenResource(regionID, res);
 }
 
 void regionStruct::setHiddenResource(const char* name, const bool enable)
 {
-	const auto edb = eopBuildings::getEdb();
-	if (!edb)
+	const auto res =  eopHiddenResources::getHiddenResourceIndex(name);
+	if (res == -1)
 		return;
-	const int index = edb->getHiddenResourceIndex(name);
-	if (index < 0)
-		return;
-	setHiddenResourceId(index, enable);
+	setHiddenResourceId(res, enable);
 }
 
 std::pair<int, int> oneTile::getTileCoords()

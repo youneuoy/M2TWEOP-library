@@ -130,6 +130,16 @@ void eopHiddenResources::addHiddenResourceToRegion(const int regionId, const std
 	m_HiddenResources[regionId].push_back(getHiddenResourceIndex(name));
 }
 
+void eopHiddenResources::removeHiddenResourceFromRegion(int regionId, const std::string& name)
+{
+	const auto res = getHiddenResourceIndex(name);
+	if (res == -1)
+		return;
+	auto& hiddenRes = m_HiddenResources[regionId];
+	if (const auto it = std::find(hiddenRes.begin(), hiddenRes.end(), res); it != hiddenRes.end())
+		hiddenRes.erase(it);
+}
+
 void eopHiddenResources::addHiddenResourceToRegionIndex(const std::string& name, const int id)
 {
 	if (m_NamesToIndexes.find(name) == m_NamesToIndexes.end())
