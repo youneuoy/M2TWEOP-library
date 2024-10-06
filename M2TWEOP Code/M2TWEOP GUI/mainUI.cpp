@@ -22,7 +22,7 @@ namespace mainUI
 		bool isModSettingsUIOpen = false;
 
 		bool isGameRunnerUIOpen = false;
-		bool isDiscordUIOpen = false;
+		bool keepGuiOpen = false;
 	} childs;
 
 	void tryJustStartMod()
@@ -63,11 +63,11 @@ namespace mainUI
 		{
 			int openStatus = gameRunnerUI::drawUI(&childs.isGameRunnerUIOpen);
 			if (openStatus == 2) {
-				childs.isDiscordUIOpen = true;
+				childs.keepGuiOpen = true;
 			}
 			return 0;
 		}
-		else if (childs.isDiscordUIOpen == true || dataG::data.gameData.freecamIntegration == true)
+		else if (childs.keepGuiOpen == true)
 		{
 			gameRunnerUI::maintainGUI();
 			return 0;

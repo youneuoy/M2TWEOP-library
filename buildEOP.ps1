@@ -51,6 +51,7 @@ new-item ./M2TWEOPGenerated  -itemtype directory -erroraction 'silentlycontinue'
 
 Copy-Item -Path  "M2TWEOP DataFiles\*" -Destination "./M2TWEOPGenerated" -recurse
 
+Remove-Item -Path "documentationGenerator\EOPDocs\build\html\.buildinfo" -recurse -erroraction 'silentlycontinue' -Force
 Get-ChildItem -Path "documentationGenerator\EOPDocs\build\html\*" -erroraction 'continue'
 CopyFilesToFolder "documentationGenerator\EOPDocs\build\html" "./M2TWEOPGenerated/eopData/documentation"
 

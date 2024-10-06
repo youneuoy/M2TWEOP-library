@@ -95,7 +95,7 @@ namespace gameRunnerUI
 
 	void maintainGUI()
 	{
-		if ((startProcess.isRunEnded == true && startProcess.isGetResponse == true))
+		if (startProcess.isRunEnded == true && startProcess.isGetResponse == true)
 		{
 			std::this_thread::sleep_for(std::chrono::seconds(3));
 			if (helpers::isProcessRunning(dataG::data.gameData.exeName) == false)
@@ -109,7 +109,7 @@ namespace gameRunnerUI
 				exit(0);
 			}
 		}
-		if ((dataG::data.gameData.freecamIntegration == true && dataG::data.gameData.freecamStarted == false && helpers::isProcessRunning(dataG::data.gameData.exeName) == true))
+		if ((dataG::data.gameData.freecamIntegration == true) && (dataG::data.gameData.freecamStarted == false) && (helpers::isProcessRunning(dataG::data.gameData.exeName) == true))
 		{
 			std::this_thread::sleep_for(std::chrono::seconds(5));
 			// Open Freecam if we are using the integration after waiting a bit for the game to start

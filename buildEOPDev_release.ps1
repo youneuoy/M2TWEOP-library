@@ -55,6 +55,7 @@ Remove-Item -Path "./M2TWEOPGenerated/eopData/eopScripts/luaPluginScript.lua" -F
 Remove-Item -Path "./M2TWEOPGenerated/eopData/eopScripts/redist" -Force -Recurse -erroraction 'silentlycontinue'
 Remove-Item -Path "./M2TWEOPGenerated/eopData/eopScripts/helpers" -Force -Recurse -erroraction 'silentlycontinue'
 Remove-Item -Path "./M2TWEOPGenerated/eopData/config" -recurse -erroraction 'silentlycontinue' -Force
+Remove-Item -Path "documentationGenerator\EOPDocs\build\html\.buildinfo" -recurse -erroraction 'silentlycontinue' -Force
 Remove-Item -Path "./.vs" -recurse -erroraction 'silentlycontinue' -Force
 
 Get-ChildItem -Path "documentationGenerator\EOPDocs\build\html\*" -erroraction 'continue'
