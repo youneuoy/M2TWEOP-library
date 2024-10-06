@@ -37,6 +37,7 @@ public:
 		DWORD scriptCountersSet = NULL;
 		DWORD buildingChainLimit = NULL;
 		DWORD guildCooldown = NULL;
+		DWORD isDLC = NULL;
 
 
 		DWORD unitTypesStart = NULL;

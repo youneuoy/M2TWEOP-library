@@ -469,6 +469,20 @@ namespace gameHelpers
 			add esp, 0x20
 		}
 	}
+
+	bool isPlayingDlc()
+	{
+		if (getGameVersion() == 1)
+			return true;
+		return *reinterpret_cast<bool*>(dataOffsets::offsets.isDLC);
+	}
+
+	void setPlayingDlc(const bool value)
+	{
+		if (getGameVersion() == 1)
+			return;
+		*reinterpret_cast<bool*>(dataOffsets::offsets.isDLC) = value;
+	}
 	
 	void historicEvent(const std::string& name, const std::string& title, const std::string& description, const bool isChoice)
 	{
@@ -708,6 +722,7 @@ namespace gameHelpers
 		@tfield int tutorialBattlePlayed
 		@tfield int disableVnVs
 		@tfield int allUsers
+		@tfield bool isPlayingDlc
 
 		@table options1
 		*/
@@ -724,6 +739,7 @@ namespace gameHelpers
 		typeAll.options1.set("isHotseatEnabled", &options1::isHotseatEnabled);
 		typeAll.options1.set("hotseatAutosave", &options1::hotseatAutosave);
 		typeAll.options1.set("email", &options1::email);
+		typeAll.options1.set("isPlayingDlc", sol::property(&isPlayingDlc, &setPlayingDlc));
 		typeAll.options1.set("saveConfig", &options1::saveConfig);
 		typeAll.options1.set("closeAfterSave", &options1::closeAfterSave);
 		typeAll.options1.set("validateData", &options1::validateData);

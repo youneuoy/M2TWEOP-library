@@ -195,6 +195,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.eventManager = 0x16A7A30;
 		offsets.currentRegion = 0x18B4800;
 		offsets.uiStratUiV2 = 0x2C6D1B0;
+		offsets.isDLC = 0x016A284C;
 
 		offsets.audioEnable = reinterpret_cast<bool*>(0x01639f1d);
 		offsets.audioMaster_vol = reinterpret_cast<int*>(0x01639f60);
