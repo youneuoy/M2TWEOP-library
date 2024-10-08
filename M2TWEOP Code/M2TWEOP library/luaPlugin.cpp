@@ -1038,7 +1038,6 @@ void luaPlugin::fillHashMapsVnv()
 	for (int i = 0; i < ancNum; i++)
 	{
 		const auto anc = &ancDb->ancillaries[i];
-		gameHelpers::logStringGame(std::to_string(i));
 		ancillaries.insert_or_assign(std::string(anc->ancName), i);
 	}
 	hashVnvLoaded = true;
