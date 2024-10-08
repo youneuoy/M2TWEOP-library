@@ -193,7 +193,7 @@ namespace characterRecordHelpers
 		if (ancName.empty())
 			return nullptr;
 		if (plugData::data.luaAll.ancillaries.empty())
-			plugData::data.luaAll.fillHashMapsNonCampaign();
+			plugData::data.luaAll.fillHashMapsVnv();
 		const auto ancDb = getAncillaryDb();
 		if (const auto ancIndex = plugData::data.luaAll.ancillaries.find(ancName); ancIndex != plugData::data.luaAll.ancillaries.end()) 
 			return &ancDb->ancillaries[ancIndex->second];
@@ -350,7 +350,7 @@ namespace characterRecordHelpers
 	traitEntry* findTrait(const std::string& name)
 	{
 		if (plugData::data.luaAll.traits.empty())
-			plugData::data.luaAll.fillHashMapsNonCampaign();
+			plugData::data.luaAll.fillHashMapsVnv();
 		const auto traitsDb = getTraitDb();
 		if (const auto traitIndex = plugData::data.luaAll.traits.find(name); traitIndex != plugData::data.luaAll.traits.end()) 
 			return &traitsDb->traits[traitIndex->second];

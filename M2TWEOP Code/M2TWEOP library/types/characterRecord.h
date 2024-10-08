@@ -131,15 +131,15 @@ struct ancillary { /* structure of ancillary */
 	char* type; //0048
 	int typeHash; //004C
 	bool transferable;//00050
-	char pad_0051[3];
+	char pad_0051[31];
 	
-	traitEffect* getEffect(int i)
+	traitEffect* getEffect(const int i)
 	{
 		return &effects[i];
 	}
-	bool isExcluded(const int cultureID)
+	bool isExcluded(const int cultureId)
 	{
-		return (1 << (cultureID & 0x1F)) & *(&excludedCultures + (cultureID >> 5));
+		return (1 << (cultureId & 0x1F)) & *(&excludedCultures + (cultureId >> 5));
 	}
 };
 

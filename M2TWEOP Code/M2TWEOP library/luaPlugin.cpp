@@ -1017,22 +1017,29 @@ void luaPlugin::fillHashMapsNonCampaign()
 			buildingLevelLines.insert_or_assign(std::string(level->name), building->buildingID);
 		}
 	}
-	
+	hashNonCampaignLoaded = true;
+}
+
+void luaPlugin::fillHashMapsVnv()
+{
 	const auto traitsDb = characterRecordHelpers::getTraitDb();
+	const auto ancDb = characterRecordHelpers::getAncillaryDb();
+	if (!traitsDb || !ancDb)
+		return;
 	const int traitNum = traitsDb->traitsNum;
+	const int ancNum = ancDb->ancillariesNum;
+	if (traitNum == 0 || ancNum == 0)
+		return;
 	for (int i = 0; i < traitNum; i++)
 	{
 		const auto trait = &traitsDb->traits[i];
 		traits.insert_or_assign(std::string(trait->name), i);
 	}
-	
-	const auto ancDb = characterRecordHelpers::getAncillaryDb();
-	const int ancNum = ancDb->ancillariesNum;
 	for (int i = 0; i < ancNum; i++)
 	{
 		const auto anc = &ancDb->ancillaries[i];
+		gameHelpers::logStringGame(std::to_string(i));
 		ancillaries.insert_or_assign(std::string(anc->ancName), i);
 	}
-	
-	hashNonCampaignLoaded = true;
+	hashVnvLoaded = true;
 }

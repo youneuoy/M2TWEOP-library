@@ -1698,7 +1698,9 @@ void __stdcall patchesForGame::onEduParsed()
 
 void __stdcall patchesForGame::onGameInit()
 {
+	gameHelpers::logStringGame("onGameInit");
 	plugData::data.luaAll.fillHashMapsNonCampaign();
+	plugData::data.luaAll.fillHashMapsVnv();
 	cultures::eopPortraitDb::createEopPortraitDb();
 	discordManager::menuLoaded();
 	gameEvents::onGameInit();

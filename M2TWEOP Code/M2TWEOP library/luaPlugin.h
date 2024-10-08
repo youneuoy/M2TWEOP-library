@@ -79,9 +79,11 @@ public:
 	sol::state luaState;
 	void fillHashMaps();
 	void fillHashMapsNonCampaign();
+	void fillHashMapsVnv();
 	
 	bool hashLoaded = false;
 	bool hashNonCampaignLoaded = false;
+	bool hashVnvLoaded = false;
 
 	std::unordered_map<std::string, int> factions = {
 	};
