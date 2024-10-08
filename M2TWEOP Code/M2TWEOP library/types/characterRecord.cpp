@@ -13,6 +13,7 @@
 #include "cultures.h"
 #include "faction.h"
 #include "gameHelpers.h"
+#include "luaPlugin.h"
 #include "stratModelsChange.h"
 #include "techFuncs.h"
 #include "unit.h"
@@ -191,13 +192,18 @@ namespace characterRecordHelpers
 	{
 		if (ancName.empty())
 			return nullptr;
-		return GAME_FUNC(ancillary*(__cdecl*)(const char*), findAncillary)(ancName.c_str());
+		if (plugData::data.luaAll.ancillaries.empty())
+			plugData::data.luaAll.fillHashMapsNonCampaign();
+		const auto ancDb = getAncillaryDb();
+		if (const auto ancIndex = plugData::data.luaAll.ancillaries.find(ancName); ancIndex != plugData::data.luaAll.ancillaries.end()) 
+			return &ancDb->ancillaries[ancIndex->second];
+		return nullptr;
 	}
 	
 	int addAncillaryName(characterRecord* character, const std::string& ancName)
 	{
 		ancillary* anc = findAncillary(ancName);
-		if (anc == nullptr)
+		if (!anc)
 			return 0;
 		return addAncillary(character, anc);
 	}
@@ -331,77 +337,46 @@ namespace characterRecordHelpers
 		return &level->effects[index];
 	}
 
+	traitDb* getTraitDb()
+	{
+		return reinterpret_cast<traitDb*>(dataOffsets::offsets.traitDb);
+	}
+
+	ancillaryDb* getAncillaryDb()
+	{
+		return reinterpret_cast<ancillaryDb*>(dataOffsets::offsets.ancillaryDb);
+	}
+
 	traitEntry* findTrait(const std::string& name)
 	{
-		const auto hashed = reinterpret_cast<stringWithHash*>(gameStringHelpers::createHashedString(name.c_str()));
-		return GAME_FUNC(traitEntry*(__cdecl*)(const char*, int), getTrait)(hashed->name, hashed->hash);
+		if (plugData::data.luaAll.traits.empty())
+			plugData::data.luaAll.fillHashMapsNonCampaign();
+		const auto traitsDb = getTraitDb();
+		if (const auto traitIndex = plugData::data.luaAll.traits.find(name); traitIndex != plugData::data.luaAll.traits.end()) 
+			return &traitsDb->traits[traitIndex->second];
+		return nullptr;
 	}
 	
 	void addTrait(characterRecord* character, const char* traitName, int traitLevel)
 	{
-		DWORD adrFunc = codes::offsets.getTrait;
-		char** cryptS = gameStringHelpers::createHashedString(traitName);
-		void* resTrait = nullptr;
-		auto oneArg = cryptS[0];
-		auto nextArg = cryptS[1];
-		_asm
-		{
-			push nextArg
-			push oneArg
-
-			mov eax, adrFunc
-			call eax
-
-			mov resTrait, eax
-			add esp, 0x8
-		}
-		if (resTrait == nullptr)
+		const auto traitsDb = getTraitDb();
+		traitEntry* trait = nullptr;
+		if (const auto traitIndex = plugData::data.luaAll.traits.find(traitName); traitIndex != plugData::data.luaAll.traits.end()) 
+			trait = &traitsDb->traits[traitIndex->second];
+		if (!trait)
 			return;
-		
-		//set trait
-		adrFunc = codes::offsets.addTrait;
-		_asm
-		{
-			push 1
-			push traitLevel
-			push resTrait
-			mov ecx, character
-			mov eax, adrFunc
-			call eax
-		}
+		GAME_FUNC(void(__thiscall*)(characterRecord*, traitEntry*, int, bool), addTrait)(character, trait, traitLevel, true);
 	}
 
 	void removeTrait(characterRecord* character, const char* traitName)
 	{
-		DWORD adrFunc = codes::offsets.getTrait;
-		char** cryptS = gameStringHelpers::createHashedString(traitName);
-		void* resTrait = nullptr;
-		auto oneArg = cryptS[0];
-		auto nextArg = cryptS[1];
-		_asm
-		{
-			push nextArg
-			push oneArg
-
-			mov eax, adrFunc
-			call eax
-
-			mov resTrait, eax
-			add esp, 0x8
-		}
-		if (resTrait == nullptr)
+		const auto traitsDb = getTraitDb();
+		traitEntry* trait = nullptr;
+		if (const auto traitIndex = plugData::data.luaAll.traits.find(traitName); traitIndex != plugData::data.luaAll.traits.end()) 
+			trait = &traitsDb->traits[traitIndex->second];
+		if (!trait)
 			return;
-		
-		//set trait
-		adrFunc = codes::offsets.removeTrait;
-		_asm
-		{
-			push resTrait
-			mov ecx, character
-
-			mov eax, adrFunc
-			call eax
-		}
+		GAME_FUNC(void(__thiscall*)(characterRecord*, traitEntry*), removeTrait)(character, trait);
 	}
 #pragma endregion Trait helpers
 	

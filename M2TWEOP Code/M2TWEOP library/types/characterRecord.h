@@ -74,6 +74,22 @@ struct traitEntry { /* char* at 0x4 */
 	}
 };
 
+struct traitDb
+{
+	traitEntry* traits;
+	int traitsSize;
+	int traitsNum;
+};
+
+struct ancillaryDb
+{
+public:
+	struct ancillary *ancillaries; //0x0000
+	int32_t ancillariesSize; //0x0004
+	int32_t ancillariesNum; //0x0008
+}; //Size: 0x129F0
+
+
 struct traitContainer {
 	struct trait* trait;
 	struct traitContainer* prev;
@@ -527,6 +543,8 @@ namespace characterRecordHelpers
 	void namedCharSetLocalizedNicknameForSave(characterRecord* genChar, const char* str);
 	void setHeir(characterRecord* gen, bool isJustSet);
 	std::string getEopSetModel();
+	traitDb* getTraitDb();
+	ancillaryDb* getAncillaryDb();
 	
 	int addAncillaryName(characterRecord* character, const std::string& ancName);
 	int addAncillary(characterRecord* character, ancillary* anc);

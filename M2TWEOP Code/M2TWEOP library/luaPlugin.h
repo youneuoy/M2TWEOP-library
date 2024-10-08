@@ -107,6 +107,10 @@ public:
 	};
 	std::unordered_map<std::string, int> buildingLevels = {
 	};
+	std::unordered_map<std::string, int> traits = {
+	};
+	std::unordered_map<std::string, int> ancillaries = {
+	};
 	sol::function* onCampaignMapLoaded = nullptr;
 	sol::function* onRemoveFromUnitQueue = nullptr;
 	sol::function* onReadGameDbsAtStart = nullptr;

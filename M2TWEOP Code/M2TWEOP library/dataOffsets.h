@@ -59,6 +59,8 @@ public:
 		DWORD edbDataStart = NULL;
 		DWORD religionDatabase = NULL;
 		DWORD portraitDatabase = NULL;
+		DWORD traitDb = NULL;
+		DWORD ancillaryDb = NULL;
 		DWORD cultureDatabase = NULL;
 		DWORD loadGameHandler = NULL;
 		DWORD selectedEra = NULL;

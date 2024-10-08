@@ -96,6 +96,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.eventManager = 0x16F0BC8;
 		offsets.uiStratUiV2 = 0x2CB62FC;
 		offsets.currentRegion = 0x18FD970;
+		offsets.traitDb = 0x1666F90;
+		offsets.ancillaryDb = 0x1666F40;
 
 		
 		offsets.fortVtbl = 0x13362F4;
@@ -145,6 +147,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.perfectSpy = 0x016A7CC4;
 		
 		offsets.portraitDatabase = 0x018671D0;
+		offsets.traitDb = 0x161F0B8;
+		offsets.ancillaryDb = 0x161F068;
 
 		offsets.cultureDatabase = 0x0161F0F0;
 		offsets.loadGameHandler = 0x02C6DC60;

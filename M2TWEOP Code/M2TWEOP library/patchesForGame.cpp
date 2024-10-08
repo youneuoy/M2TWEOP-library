@@ -1702,7 +1702,7 @@ void __stdcall patchesForGame::onGameInit()
 	cultures::eopPortraitDb::createEopPortraitDb();
 	discordManager::menuLoaded();
 	gameEvents::onGameInit();
-	const auto edb = eopBuildings::getEdb();
+	*reinterpret_cast<bool*>(dataOffsets::offsets.bugReport) = true;
 }
 
 void __stdcall patchesForGame::onUnloadCampaign()
