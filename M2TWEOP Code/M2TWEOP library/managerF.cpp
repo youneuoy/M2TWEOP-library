@@ -705,6 +705,12 @@ void managerF::execPatches()
 	toPartialConstructionPush->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onLoadBuilding patch" << '\n';
+	onLoadBuilding* toLoadBuilding = new onLoadBuilding(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toLoadBuilding->SetNewCode();
+	toLoadBuilding->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onOffMapModelThing patch" << '\n';
 	onOffMapModelThing* toOffMapModelThing = new onOffMapModelThing(mem, (LPVOID)patchesForGame::onOffMapModelThing, globals::dataS.gameVersion);
 	toOffMapModelThing->SetNewCode();

@@ -4887,6 +4887,25 @@ void onPartialConstructionPush::SetNewCode()
 	delete a;
 }
 
+onLoadBuilding::onLoadBuilding(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005EE0EB;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EDC8B;
+}
+
+void onLoadBuilding::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(ecx, dword_ptr(eax, 0x38));
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onOffMapModelThing::onOffMapModelThing(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

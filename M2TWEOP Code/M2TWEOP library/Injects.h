@@ -2093,6 +2093,18 @@ private:
 	LPVOID funcAddress;
 };
 
+class onLoadBuilding
+	:public AATemplate
+{
+public:
+	onLoadBuilding(MemWork* mem, LPVOID addr, int ver);
+	~onLoadBuilding() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onHiddenResourceCheck2
 	:public AATemplate
 {
