@@ -144,11 +144,30 @@ namespace fortHelpers
 	}
 
 	stringWithHash* WOODEN_FORT = nullptr;
+
+	bool isInMapBounds(const int x, const int y)
+	{
+		const auto stratMap = stratMapHelpers::getStratMap();
+		return x >= 0 && x < stratMap->mapWidth && y >= 0 && y < stratMap->mapHeight;
+	}
 	
 	fortStruct* createFortXYCulture(factionStruct* fac, const int x, const int y, const int cultureId)
 	{
 		factionStruct* faction = fac;
 		const auto tile = stratMapHelpers::getStratMap()->getTile(x, y);
+		auto neighbours = stratMapHelpers::getNeighbourTiles(x, y);
+		while (true)
+		{
+			if (neighbours.empty())
+				break;
+			const auto [checkX, checkY] = neighbours.front();
+			neighbours.pop();
+			const auto nTile = stratMapHelpers::getTile(checkX, checkY);
+			if (!nTile)
+				continue;
+			if (nTile->settlement || nTile->fort)
+				return nullptr;
+		}
 		const int regionId = tile->regionId;
 		if (!WOODEN_FORT)
 		{

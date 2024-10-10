@@ -321,6 +321,22 @@ namespace settlementHelpers
 			gameHelpers::logStringGame("settlementHelpers.createSettlement: settlement with this name already exists.");
 			return nullptr;
 		}
+		auto neighbours = stratMapHelpers::getNeighbourTiles(xCoord, yCoord);
+		while (true)
+		{
+			if (neighbours.empty())
+				break;
+			const auto [checkX, checkY] = neighbours.front();
+			neighbours.pop();
+			const auto nTile = stratMapHelpers::getTile(checkX, checkY);
+			if (!nTile)
+				continue;
+			if (nTile->settlement || nTile->fort)
+			{
+				gameHelpers::logStringGame("settlementHelpers.createSettlement: settlement not allowed to directly border residence.");
+				return nullptr;
+			}
+		}
 	    settlementStruct* settlement = techFuncs::createGameClass<settlementStruct>();
 	    const auto region = stratMapHelpers::getRegion(tile->regionId);
 		const auto campaign = campaignHelpers::getCampaignData();
