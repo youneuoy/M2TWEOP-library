@@ -170,8 +170,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.battlefieldEngines = 0x02C3A254;
 		offsets.options1 = 0x02C6D804;
 		offsets.options2 = 0x01639EF0;
-		offsets.campaignDiff1 = 0x016AB5C8;
-		offsets.campaignDiff2 = 0x01604000;
+		offsets.campaignDiff1 = 0x01604000;
+		offsets.campaignDiff2 = 0x016AB5C8;
 		offsets.equipmentCosts = 0x0160DCC8;
 		offsets.saveGameHandler = 0x02C1B904;
 		offsets.ancLimit = 0x005A5CAD;
