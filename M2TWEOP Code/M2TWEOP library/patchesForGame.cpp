@@ -914,6 +914,16 @@ void patchesForGame::onRemoveFromUnitQueue(const unitRQ* queue, const int index)
 	gameEvents::onRemoveFromUnitQueue(item);
 }
 
+void patchesForGame::onLoadModelRigid(model_Rigid* model)
+{
+	stratModelsChange::pushGameModel(model);
+}
+
+void patchesForGame::onUnloadModels()
+{
+	stratModelsChange::clearModels();
+}
+
 building* patchesForGame::onGetBuildingById(const settlementBuildings* buildings, const int index)
 {
 	if (index < 0)

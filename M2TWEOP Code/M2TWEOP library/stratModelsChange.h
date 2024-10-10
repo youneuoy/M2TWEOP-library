@@ -24,7 +24,9 @@ namespace stratModelsChange
 	void update();
 	void loadModels();
 	model_Rigid* loadModel(const std::string& path, bool isSettlement = false);
-
+	void pushGameModel(model_Rigid* model);
+	void closeModel(model_Rigid* model);
+	void clearModels();
 	//add model to a game
 	//pass path to model and its id(used for change models)
 	//example of path - eopData/models_strat/northern_european_large_castle.CAS

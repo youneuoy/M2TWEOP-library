@@ -38,6 +38,7 @@ public:
 		DWORD buildingChainLimit = NULL;
 		DWORD guildCooldown = NULL;
 		DWORD isDLC = NULL;
+		DWORD modelRigidCounts = NULL;
 
 
 		DWORD unitTypesStart = NULL;

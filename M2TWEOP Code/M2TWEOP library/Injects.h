@@ -2093,6 +2093,30 @@ private:
 	LPVOID funcAddress;
 };
 
+class onLoadModelRigid
+	:public AATemplate
+{
+public:
+	onLoadModelRigid(MemWork* mem, LPVOID addr, int ver);
+	~onLoadModelRigid() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onUnloadModels
+	:public AATemplate
+{
+public:
+	onUnloadModels(MemWork* mem, LPVOID addr, int ver);
+	~onUnloadModels() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onLoadBuilding
 	:public AATemplate
 {

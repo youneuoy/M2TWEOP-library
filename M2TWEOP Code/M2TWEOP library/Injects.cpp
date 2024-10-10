@@ -4906,6 +4906,59 @@ void onLoadBuilding::SetNewCode()
 	delete a;
 }
 
+onLoadModelRigid::onLoadModelRigid(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0xA04FEE;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0xA0446E;
+}
+
+void onLoadModelRigid::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(eax);
+	a->push(ecx);
+	a->push(edx);
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->pop(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onUnloadModels::onUnloadModels(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0xA0506C;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0xA044EC;
+}
+
+void onUnloadModels::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ecx);
+	a->push(edx);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(eax, 0);
+	a->test(eax, eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onOffMapModelThing::onOffMapModelThing(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

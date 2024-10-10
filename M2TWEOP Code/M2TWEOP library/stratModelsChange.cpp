@@ -15,21 +15,28 @@ namespace stratModelsChange
 		needFixHiding = 1,
 		needChange = 2
 	};
-	modelsChangeStatus changeModelsNeededNow = modelsChangeStatus::changed;
+	modelsChangeStatus CHANGE_MODELS_NEEDED_NOW = modelsChangeStatus::changed;
 
 	struct stratModelCharacterRecord
 	{
 		const char* modelId;
-		const char* skeletonname;
-		const char* caspath;
-		const char* shadowcaspath;
-		const char* texturepath;
+		const char* skeletonName;
+		const char* casPath;
+		const char* shadowCasPath;
+		const char* texturePath;
 		float scale;
 		stratModelArrayEntry* entry;
 	};
 
-	map<UINT32, stratModelRecord*>stratModels;
-	vector<stratModelCharacterRecord*>characterStratModels;
+	map<UINT32, stratModelRecord*>STRAT_MODELS;
+	vector<stratModelCharacterRecord*>CHARACTER_STRAT_MODELS;
+
+	std::vector<model_Rigid*> GAME_MODELS{};
+
+	void pushGameModel(model_Rigid* model)
+	{
+		GAME_MODELS.push_back(model);
+	}
 
 	void addModelToGame(const std::string& path, const UINT32 modelId, const bool isSettlement)
 	{
@@ -37,7 +44,7 @@ namespace stratModelsChange
 		modRec->path = path;
 		modRec->modelId = modelId;
 		modRec->isSettlement = isSettlement;
-		stratModels[modelId] = modRec;
+		STRAT_MODELS[modelId] = modRec;
 	}
 
 	void addModelToGameNoBool(const std::string& path, const UINT32 modelId)
@@ -68,7 +75,7 @@ namespace stratModelsChange
 
 	void setModel(const int x, const int y, const UINT32 modelId, const UINT32 modelId2)
 	{
-		if (stratModels.find(modelId) == stratModels.end())
+		if (STRAT_MODELS.find(modelId) == STRAT_MODELS.end())
 			return;
 		for (size_t i = 0; i < stratModelChangeList.size(); i++)
 		{
@@ -97,7 +104,7 @@ namespace stratModelsChange
 			eopSettlementDataDb::get()->getSettlementData(tile->regionId, sett->minorSettlementIndex)->modelId = modelId;
 		}
 		stratModelChangeList.push_back(rec);
-		changeModelsNeededNow = modelsChangeStatus::needChange;
+		CHANGE_MODELS_NEEDED_NOW = modelsChangeStatus::needChange;
 	}
 
 	void setModelOneVar(int x, int y, UINT32 modelId)
@@ -109,7 +116,7 @@ namespace stratModelsChange
 	{
 		try
 		{
-			return stratModels.at(modelId);
+			return STRAT_MODELS.at(modelId);
 		}
 		catch (...)
 		{
@@ -122,7 +129,7 @@ namespace stratModelsChange
 	{
 		try
 		{
-			return stratModels.at(modelId)->modelP;
+			return STRAT_MODELS.at(modelId)->modelP;
 		}
 		catch (...)
 		{
@@ -145,10 +152,10 @@ namespace stratModelsChange
 
 	void checkAndChangeStratModels()
 	{
-		if (changeModelsNeededNow == modelsChangeStatus::changed)
+		if (CHANGE_MODELS_NEEDED_NOW == modelsChangeStatus::changed)
 			return;
 		
-		changeModelsNeededNow = modelsChangeStatus::changed;
+		CHANGE_MODELS_NEEDED_NOW = modelsChangeStatus::changed;
 		for (const stratModelChangeRecord* changeMod : stratModelChangeList) //static models
 		{
 			const stratModelRecord* mod1 = findStratModel(changeMod->modelId);
@@ -190,19 +197,19 @@ namespace stratModelsChange
 		//	return;
 
 		// ReSharper disable once CppUseElementsView
-		for (const auto& [index, record] : stratModels)
+		for (const auto& [index, record] : STRAT_MODELS)
 		{
 			record->modelP = loadModel(record->path, record->isSettlement);
 		}
 		MODELS_LOADED = true;
-		changeModelsNeededNow = modelsChangeStatus::needChange;
+		CHANGE_MODELS_NEEDED_NOW = modelsChangeStatus::needChange;
 	}
 
 	void loadCharModels() //rebuild character CAS entries to be sure no pointers were cleaned up
 	{
-		for (const stratModelCharacterRecord* modRec : characterStratModels)
+		for (const stratModelCharacterRecord* modRec : CHARACTER_STRAT_MODELS)
 		{
-			*modRec->entry = *buildCharacterCas(modRec->skeletonname, modRec->caspath, modRec->shadowcaspath, modRec->modelId, modRec->texturepath, modRec->scale);
+			*modRec->entry = *buildCharacterCas(modRec->skeletonName, modRec->casPath, modRec->shadowCasPath, modRec->modelId, modRec->texturePath, modRec->scale);
 		}
 	}
 
@@ -225,9 +232,28 @@ namespace stratModelsChange
 		const uint32_t flags = isSettlement ? 2428 : 2332;
 		GAME_FUNC(char(__thiscall*)(model_Rigid*, DWORD, char*, uint32_t, int ,int, int, bool)
 			, loadModelRigid)(modelRigid, casModel, textureName, flags, 2, 1, 1, true);
+		pushGameModel(modelRigid);
 		GAME_FUNC(void(__thiscall*)(simpleCas*), closeCas)(&cas);
 		GAME_FUNC(void(__thiscall*)(simpleCas*), simpleCasDestructor)(&cas);
 		return modelRigid;
+	}
+
+	void closeModel(model_Rigid* model)
+	{
+		if (!model)
+			return;
+		callClassFunc<model_Rigid*, void>(model, 0x0);
+		GAME_FUNC(void(__thiscall*)(model_Rigid*), modelRigidDestructor)(model);
+	}
+
+	void clearModels()
+	{
+		for (model_Rigid* model : GAME_MODELS)
+		{
+			closeModel(model);
+		}
+		GAME_MODELS.clear();
+		*reinterpret_cast<int*>(dataOffsets::offsets.modelRigidCounts) = 0;
 	}
 
 	void setCharacterModel(character* gen, const char* model) //add character to be changed to the queue
@@ -253,7 +279,7 @@ namespace stratModelsChange
 		const auto charData = eopCharacterDataDb::get()->getOrCreateData(gen->characterRecord->giveValidLabel(), gen->getTypeID());
 		charData->model = model;
 
-		changeModelsNeededNow = modelsChangeStatus::needChange;
+		CHANGE_MODELS_NEEDED_NOW = modelsChangeStatus::needChange;
 	}
 
 	void changeStratModel(character* gen, const char* model)
@@ -290,13 +316,13 @@ namespace stratModelsChange
 
 		gen->genType = characterFacEntry; //assign new array to general
 
-		changeModelsNeededNow = modelsChangeStatus::needChange;
+		CHANGE_MODELS_NEEDED_NOW = modelsChangeStatus::needChange;
 	}
 
 
 	stratModelArrayEntry* findCharacterStratModel(const char* modelId) //find eop model from vector
 	{
-		for (const stratModelCharacterRecord* newRec : characterStratModels)
+		for (const stratModelCharacterRecord* newRec : CHARACTER_STRAT_MODELS)
 		{
 			if (strcmp(modelId, newRec->modelId) == 0) {
 				return newRec->entry;
@@ -431,19 +457,19 @@ namespace stratModelsChange
 		newRec->modelId = typeNameCopy2;
 		const auto skeletonCopy = new char[strlen(skeletonname)];
 		strcpy(skeletonCopy, skeletonname);
-		newRec->skeletonname = skeletonCopy;
+		newRec->skeletonName = skeletonCopy;
 		const auto caspathCopy = new char[strlen(caspath)];
 		strcpy(caspathCopy, caspath);
-		newRec->caspath = caspathCopy;
+		newRec->casPath = caspathCopy;
 		const auto shadowpathCopy = new char[strlen(shadowcaspath)];
 		strcpy(shadowpathCopy, shadowcaspath);
-		newRec->shadowcaspath = shadowpathCopy;
+		newRec->shadowCasPath = shadowpathCopy;
 		const auto textureCopy = new char[strlen(texturepath)];
 		strcpy(textureCopy, texturepath);
-		newRec->texturepath = textureCopy;
+		newRec->texturePath = textureCopy;
 		newRec->scale = scale;
-		newRec->entry = buildCharacterCas(newRec->skeletonname, newRec->caspath, newRec->shadowcaspath, newRec->modelId, newRec->texturepath, newRec->scale);
-		characterStratModels.push_back(newRec);
+		newRec->entry = buildCharacterCas(newRec->skeletonName, newRec->casPath, newRec->shadowCasPath, newRec->modelId, newRec->texturePath, newRec->scale);
+		CHARACTER_STRAT_MODELS.push_back(newRec);
 	}
 
 

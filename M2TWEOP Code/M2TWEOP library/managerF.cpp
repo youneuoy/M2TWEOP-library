@@ -711,6 +711,19 @@ void managerF::execPatches()
 	toLoadBuilding->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onLoadModelRigid patch" << '\n';
+	onLoadModelRigid* toLoadModelRigid = new onLoadModelRigid(mem, (LPVOID)patchesForGame::onLoadModelRigid, globals::dataS.gameVersion);
+	toLoadModelRigid->SetNewCode();
+	toLoadModelRigid->Enable();
+	f1 << "Done" << '\n';
+	
+	
+	f1 << "Start applying onUnloadModels patch" << '\n';
+	onUnloadModels* toUnloadModels = new onUnloadModels(mem, (LPVOID)patchesForGame::onUnloadModels, globals::dataS.gameVersion);
+	toUnloadModels->SetNewCode();
+	toUnloadModels->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onOffMapModelThing patch" << '\n';
 	onOffMapModelThing* toOffMapModelThing = new onOffMapModelThing(mem, (LPVOID)patchesForGame::onOffMapModelThing, globals::dataS.gameVersion);
 	toOffMapModelThing->SetNewCode();

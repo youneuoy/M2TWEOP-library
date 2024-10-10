@@ -207,6 +207,7 @@ public:
 		DWORD switchCharacterFaction = NULL;
 		DWORD switchNamedCharacterFaction = NULL;
 		DWORD switchArmyFaction = NULL;
+		DWORD modelRigidDestructor = NULL;
 		DWORD changeCharacterTileStuff = NULL;
 		DWORD initPlaceCharacter = NULL;
 		DWORD getNextWord = NULL;
