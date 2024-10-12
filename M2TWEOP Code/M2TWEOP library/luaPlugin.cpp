@@ -792,7 +792,13 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tparam string counterName The name of the counter
 	@treturn int counterValue Returns the value of the counter
 	@usage
-	isExist, counterValue =  M2TWEOP.getScriptCounter("SomeCounter")
+ 	---@param eventData eventTrigger
+	function onEventCounter(eventData)
+    		-- get the name and value of the triggered counter
+    		local counterName = eventData.eventCounter
+    		local counterValue =  M2TWEOP.getScriptCounter(counterName)
+    		print('counter : '..counterName..' has been set to : '..counterValue)
+	end
 	*/
 	tables.M2TWEOP.set_function("getScriptCounter", &gameHelpers::getScriptCounterNoBool);
 	
