@@ -135,6 +135,12 @@ namespace gameHelpers
 		return globals::dataS.gameVersion;
 	}
 
+	void generateSprite(const std::string& model)
+	{
+		void* unitSprites = nullptr;
+		return GAME_FUNC(void(__thiscall*)(void*, const char*), generateSprite)(unitSprites, model.c_str());
+	}
+
 	void scriptCommandLua(const std::string& command, sol::variadic_args va)
 	{
 		const char* commandC = command.c_str();

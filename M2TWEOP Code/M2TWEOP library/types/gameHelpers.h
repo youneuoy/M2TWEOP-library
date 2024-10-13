@@ -366,6 +366,7 @@ namespace gameHelpers
 	std::string getModFolderName();
 	std::string getModString(const std::string& path);
 	int getGameVersion();
+	void generateSprite(const std::string& model);
 	void addToLua(sol::state& luaState);
 	
 	std::string callConsole(const std::string& cmdName, sol::variadic_args va);

@@ -263,6 +263,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield handleUnitCards handleUnitCards
 	@tfield setKhakiTextColor setKhakiTextColor
 	@tfield getMinorSettlementBalance getMinorSettlementBalance
+	@tfield generateSprite generateSprite
 	@table M2TWEOP
 	*/
 	
@@ -868,6 +869,15 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 		local modifiers = M2TWEOP.getMinorSettlementBalance()
 	*/
 	tables.M2TWEOP.set_function("getMinorSettlementBalance", &minorSettlementDb::getModifiers);
+	
+	/***
+	Generate sprites for a battle model entry in the bmdb. There needs to be a export/unit_sprites folder in your vanilla Medieval II directory. The game will close after generating the sprites.
+	@function M2TWEOP.generateSprite
+	@tparam string modelName
+	@usage
+		M2TWEOP.generateSprite("peasants")
+	*/
+	tables.M2TWEOP.set_function("generateSprite", &gameHelpers::generateSprite);
 	
 	/***
 	Add a banner symbol. Add them onCampaignMapLoaded or later!

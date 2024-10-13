@@ -331,6 +331,7 @@ void codes::initCodes(int gameVer)
 		offsets.removeBuildingSelection = 0x5FA3A0;
 		offsets.getNextWord = 0xD4F060;
 		offsets.modelRigidDestructor = 0x933640;
+		offsets.generateSprite = 0xE7E220;
 	}
 
 
@@ -664,5 +665,6 @@ void codes::initCodes(int gameVer)
 		offsets.removeBuildingSelection = 0x005FA790;
 		offsets.getNextWord = 0xD493C0;
 		offsets.modelRigidDestructor = 0x934110;
+		offsets.generateSprite = 0xE78C00;
 	}
 }
