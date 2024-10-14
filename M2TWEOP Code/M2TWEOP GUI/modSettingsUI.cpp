@@ -244,7 +244,7 @@ namespace modSettingsUI
 		
 		// Freecam Settings
 		ImGui::Checkbox("Freecam Integration", &dataG::data.gameData.freecamIntegration);
-		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Automatically start and close the Freecam application when the game is launched");}
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Automatically start and close the Freecam application when the game is launched\nTo configure the tool, look in eopData/resources/tools/freecam/config.txt");}
 	}
 	
 	void drawModSettingsUI(bool* isOpen)
