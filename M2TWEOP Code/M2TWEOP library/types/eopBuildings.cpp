@@ -4,6 +4,7 @@
 //@author Fynn
 //@license GPL-3.0
 #include "pch.h"
+#include "faction.h"
 #include "eopBuildings.h"
 #include "settlement.h"
 #include "dataOffsets.h"
@@ -169,6 +170,36 @@ void eopHiddenResources::initialize()
 		}
 	}
 	m_Initialized = true;
+}
+
+
+std::string buildingLevel::getLocalizedName(const int factionID)
+{
+	if (const int facNum = factionHelpers::getFactionRecordNum(); factionID >= facNum)
+		return "";
+	if (buildingName[factionID] != nullptr && *buildingName[factionID] != nullptr)
+		return gameStringHelpers::uniStringToStr(*buildingName[factionID]);
+	return "";
+}
+
+
+std::string buildingLevel::getLocalizedDescr(const int factionID)
+{
+	if (const int facNum = factionHelpers::getFactionRecordNum(); factionID >= facNum)
+		return "";
+	if (buildingDescr[factionID] != nullptr && *buildingDescr[factionID] != nullptr)
+		return gameStringHelpers::uniStringToStr(*buildingDescr[factionID]);
+	return "";
+}
+
+
+std::string buildingLevel::getLocalizedDescrShort(const int factionID)
+{
+	if (const int facNum = factionHelpers::getFactionRecordNum(); factionID >= facNum)
+		return "";
+	if (buildingDescrShort[factionID] != nullptr)
+		return gameStringHelpers::uniStringToStr(*buildingDescrShort[factionID]);
+	return "";
 }
 
 

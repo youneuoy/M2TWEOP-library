@@ -259,6 +259,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getRebelFaction getRebelFaction
 	@tfield addBanner addBanner
 	@tfield getFactionRecord getFactionRecord
+	@tfield getFactionRecordNum getFactionRecordNum
 	@tfield hideUnknownUnitTooltips hideUnknownUnitTooltips
 	@tfield handleUnitCards handleUnitCards
 	@tfield setKhakiTextColor setKhakiTextColor
@@ -666,7 +667,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@function M2TWEOP.getOptions2
 	@treturn options2 options
 	@usage
-	local options = M2TWEOP.getOptions2();
+		local options = M2TWEOP.getOptions2();
 	*/
 	tables.M2TWEOP.set_function("getOptions2", &gameHelpers::getOptions2);
 	
@@ -675,7 +676,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@function M2TWEOP.getCampaignDifficulty1
 	@treturn campaignDifficulty1 options
 	@usage
-	local modifiers = M2TWEOP.getCampaignDifficulty1();
+		local modifiers = M2TWEOP.getCampaignDifficulty1();
 	*/
 	tables.M2TWEOP.set_function("getCampaignDifficulty1", &campaignHelpers::getCampaignDifficulty1);
 	
@@ -684,7 +685,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@function M2TWEOP.getCampaignDifficulty2
 	@treturn campaignDifficulty2 options
 	@usage
-	local modifiers = M2TWEOP.getCampaignDifficulty2();
+		local modifiers = M2TWEOP.getCampaignDifficulty2();
 	*/
 	tables.M2TWEOP.set_function("getCampaignDifficulty2", &campaignHelpers::getCampaignDifficulty2);
 	
@@ -693,7 +694,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@function M2TWEOP.getCampaignDb
 	@treturn campaignDb options
 	@usage
-	local options = M2TWEOP.getCampaignDb();
+		local options = M2TWEOP.getCampaignDb();
 	*/
 	tables.M2TWEOP.set_function("getCampaignDb", &campaignHelpers::getCampaignDb);
 	
@@ -702,7 +703,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@function M2TWEOP.getCampaignDbExtra
 	@treturn campaignDbExtra options
 	@usage
-	local options = M2TWEOP.getCampaignDbExtra();
+		local options = M2TWEOP.getCampaignDbExtra();
 	*/
 	tables.M2TWEOP.set_function("getCampaignDbExtra", &campaignHelpers::getCampaignDbExtra);
 	
@@ -713,7 +714,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int modelId  Unique ID to use the model later.
 	@tparam bool isSettlement optional
 	@usage
-	M2TWEOP.addModelToGame("data/models_strat/residences/invisible.CAS",1);
+		M2TWEOP.addModelToGame("data/models_strat/residences/invisible.CAS",1);
 	*/
 	tables.M2TWEOP.set_function("addModelToGame", sol::overload(
 				sol::resolve<void(const std::string&, uint32_t)>(stratModelsChange::addModelToGameNoBool),
@@ -727,9 +728,9 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tparam eventTrigger|nil eventData
 	@treturn bool isTrue
 	@usage
-	if M2TWEOP.condition("InEnemyLands", eventData) then
-		--do stuff
-	end
+		if M2TWEOP.condition("InEnemyLands", eventData) then
+			--do stuff
+		end
 	*/
 	tables.M2TWEOP.set_function("condition", &gameHelpers::conditionLua);
 	
@@ -742,7 +743,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int targetY only adjacent tiles! Does not calculate paths just the cost of moving from one tile to another.
 	@treturn float moveCost
 	@usage
-	local moveCost = M2TWEOP.getTileMoveCost(153, 245, 154, 245);
+		local moveCost = M2TWEOP.getTileMoveCost(153, 245, 154, 245);
 	*/
 	tables.M2TWEOP.set_function("getTileMoveCost", &stratMapHelpers::getTileMoveCost);
 	
@@ -754,8 +755,8 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int modelId used for: watchtower, resource, settlement, fort, port
 	@tparam int modelId2 used for: fort wall (use fort coords), dock (use port coords)
 	@usage
-	M2TWEOP.addModelToGame("data/models_strat/residences/invisible.CAS",1)
-	M2TWEOP.setModel(288,257,1,1)
+		M2TWEOP.addModelToGame("data/models_strat/residences/invisible.CAS",1)
+		M2TWEOP.setModel(288,257,1,1)
 	*/
 	tables.M2TWEOP.set_function("setModel", sol::overload(&stratModelsChange::setModel,&stratModelsChange::setModelOneVar));
 
@@ -767,13 +768,13 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@treturn string error Note: string can be empty but not nil
 	@usage
 	-- Creating units, adding money
-	function onCharacterSelected(eventData)
-		local selectedChar = eventData.character
-		local err = M2TWEOP.callConsole("add_money", "2321")
-		local err2 = M2TWEOP.callConsole("create_unit", "testcharacter 'Cool Unit' 4 1 1 1")
-		print(err)
-		print(err2)
-	end
+		function onCharacterSelected(eventData)
+			local selectedChar = eventData.character
+			local err = M2TWEOP.callConsole("add_money", "2321")
+			local err2 = M2TWEOP.callConsole("create_unit", "testcharacter 'Cool Unit' 4 1 1 1")
+			print(err)
+			print(err2)
+		end
 	*/
 	tables.M2TWEOP.set_function("callConsole", &gameHelpers::callConsole);
 	
@@ -783,7 +784,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tparam string counterName
 	@tparam int value
 	@usage
-	M2TWEOP.setScriptCounter("SomeCounter", 25)
+		M2TWEOP.setScriptCounter("SomeCounter", 25)
 	*/
 	tables.M2TWEOP.set_function("setScriptCounter", &gameHelpers::setScriptCounter);
 	
@@ -794,12 +795,12 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@treturn int counterValue Returns the value of the counter
 	@usage
  	---@param eventData eventTrigger
-	function onEventCounter(eventData)
-    		-- get the name and value of the triggered counter
-    		local counterName = eventData.eventCounter
-    		local counterValue =  M2TWEOP.getScriptCounter(counterName)
-    		print('counter : '..counterName..' has been set to : '..counterValue)
-	end
+		function onEventCounter(eventData)
+    			-- get the name and value of the triggered counter
+    			local counterName = eventData.eventCounter
+    			local counterValue =  M2TWEOP.getScriptCounter(counterName)
+    			print('counter : '..counterName..' has been set to : '..counterValue)
+		end
 	*/
 	tables.M2TWEOP.set_function("getScriptCounter", &gameHelpers::getScriptCounterNoBool);
 	
@@ -831,6 +832,15 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 		local facRecord = M2TWEOP.getFactionRecord(sett.creatorFactionID)
 	*/
 	tables.M2TWEOP.set_function("getFactionRecord", &factionHelpers::getFactionRecord);
+	
+	/***
+	Get amount of factions in descr_sm_factions.
+	@function M2TWEOP.getFactionRecordNum
+	@treturn int facNum
+	@usage
+		local facNum = M2TWEOP.getFactionRecordNum()
+	*/
+	tables.M2TWEOP.set_function("getFactionRecordNum", &factionHelpers::getFactionRecordNum);
 	
 	/***
 	Hides tooltips for unknown units, only use if you use empty card instead of question mark as the UI.

@@ -507,6 +507,7 @@ public:
 namespace factionHelpers
 {
 	factionRecord* getFactionRecord(int id);
+	int getFactionRecordNum();
 	std::string getFactionName(const factionStruct* fac);
 	void changeFactionName(factionStruct* fac, const char* newName);
 	UNICODE_STRING** getFactionNameLocal(factionStruct* fac);

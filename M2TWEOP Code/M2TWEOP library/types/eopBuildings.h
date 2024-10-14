@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+#include "dataOffsets.h"
 #include "gameStringHelpers.h"
 #include "realGameTypes.h"
 #include "techFuncs.h"
@@ -156,36 +157,21 @@ public:
 	{
 		gameStringHelpers::setHashedString(&name, newName.c_str());
 	}
-	std::string getLocalizedName(const int factionID)
-	{
-		if (buildingName[factionID] != nullptr)
-			return gameStringHelpers::uniStringToStr(*buildingName[factionID]);
-		return "";
-	}
+	std::string getLocalizedName(const int factionID);
 	void setLocalizedName(const int factionID, const std::string& newName)
 	{
 		const auto nameMem = new UNICODE_STRING**;
 		buildingName[factionID] = nameMem;
 		gameStringHelpers::createUniString(*buildingName[factionID], newName.c_str());
 	}
-	std::string getLocalizedDescr(const int factionID)
-	{
-		if (buildingDescr[factionID] != nullptr)
-			return gameStringHelpers::uniStringToStr(*buildingDescr[factionID]);
-		return "";
-	}
+	std::string getLocalizedDescr(const int factionID);
 	void setLocalizedDescr(const int factionID, const std::string& newName)
 	{
 		const auto nameMem = new UNICODE_STRING**;
 		buildingDescr[factionID] = nameMem;
 		gameStringHelpers::createUniString(*buildingDescr[factionID], newName.c_str());
 	}
-	std::string getLocalizedDescrShort(const int factionID)
-	{
-		if (buildingDescrShort[factionID] != nullptr)
-			return gameStringHelpers::uniStringToStr(*buildingDescrShort[factionID]);
-		return "";
-	}
+	std::string getLocalizedDescrShort(const int factionID);
 	void setLocalizedDescrShort(const int factionID, const std::string& newName)
 	{
 		const auto nameMem = new UNICODE_STRING**;

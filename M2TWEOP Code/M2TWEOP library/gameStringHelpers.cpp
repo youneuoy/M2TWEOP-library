@@ -89,18 +89,25 @@ namespace gameStringHelpers
 	
 	std::string uniStringToStr(UNICODE_STRING**& uniString)
 	{
-		UNICODE_STRING* uniS = *uniString;
-		const wchar_t* wstr = reinterpret_cast<wchar_t*>(&uniS->Buffer);
-		std::string strTo;
-		const int wCharsNum = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, nullptr, 0, nullptr, nullptr);
-		if (wCharsNum <= 0)
+		try
+		{
+			UNICODE_STRING* uniS = *uniString;
+			const wchar_t* wstr = reinterpret_cast<wchar_t*>(&uniS->Buffer);
+			std::string strTo;
+			const int wCharsNum = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, nullptr, 0, nullptr, nullptr);
+			if (wCharsNum <= 0)
+				return strTo;
+			const auto szTo = new char[wCharsNum];
+			szTo[wCharsNum-1] = '\0';
+			WideCharToMultiByte(CP_UTF8, 0, wstr, -1, szTo, wCharsNum, nullptr, nullptr);
+			strTo = szTo;
+			delete[] szTo;
 			return strTo;
-		const auto szTo = new char[wCharsNum];
-		szTo[wCharsNum-1] = '\0';
-		WideCharToMultiByte(CP_UTF8, 0, wstr, -1, szTo, wCharsNum, nullptr, nullptr);
-		strTo = szTo;
-		delete[] szTo;
-		return strTo;
+		}
+		catch (...)
+		{
+			return "";
+		}
 	}
 }
 

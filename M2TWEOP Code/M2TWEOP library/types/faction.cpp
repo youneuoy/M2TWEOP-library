@@ -264,6 +264,11 @@ namespace factionHelpers
 		return nullptr;
 	}
 
+	int getFactionRecordNum()
+	{
+		return dataOffsets::offsets.descr_sm_factionslist->size;
+	}
+
 	template <char fieldIndex>
 	std::string getStringProperty(const factionStruct* fac)
 	{
