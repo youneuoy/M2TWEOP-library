@@ -266,6 +266,8 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield setKhakiTextColor setKhakiTextColor
 	@tfield getMinorSettlementBalance getMinorSettlementBalance
 	@tfield generateSprite generateSprite
+	@tfield getGroundTypeMoveCost getGroundTypeMoveCost
+	@tfield setGroundTypeMoveCost setGroundTypeMoveCost
 	@table M2TWEOP
 	*/
 	
@@ -902,6 +904,26 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 		M2TWEOP.generateSprite("peasants")
 	*/
 	tables.M2TWEOP.set_function("generateSprite", &gameHelpers::generateSprite);
+	
+	/***
+	Get the move cost of a ground type.
+	@function M2TWEOP.getGroundTypeMoveCost
+	@tparam int groundType
+	@treturn float moveCost
+	@usage
+		local cost = M2TWEOP.getGroundTypeMoveCost(strategyGroundType.hills)
+	*/
+	tables.M2TWEOP.set_function("getGroundTypeMoveCost", &stratMapHelpers::getGroundTypeMoveCost);
+	
+	/***
+	Set the move cost of a ground type.
+	@function M2TWEOP.setGroundTypeMoveCost
+	@tparam int groundType
+	@tparam float moveCost
+	@usage
+		M2TWEOP.setGroundTypeMoveCost(strategyGroundType.hills, 11.0)
+	*/
+	tables.M2TWEOP.set_function("setGroundTypeMoveCost", &stratMapHelpers::setGroundTypeMoveCost);
 	
 	/***
 	Add a banner symbol. Add them onCampaignMapLoaded or later!

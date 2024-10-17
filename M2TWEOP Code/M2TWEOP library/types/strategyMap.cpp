@@ -740,7 +740,23 @@ namespace stratMapHelpers
 	{
 		globals::dataS.Modules.tacticalMapViewer.view(x, y);
 	}
-	
+
+	float getGroundTypeMoveCost(const int groundType)
+	{
+		if (groundType < 0 || groundType > strategyGroundType::impassableSea)
+			return -1;
+		const auto costsOffset = reinterpret_cast<float*>(dataOffsets::offsets.groundMoveCosts);
+		return costsOffset[groundType];
+	}
+
+	void setGroundTypeMoveCost(const int groundType, const float newCost)
+	{
+		if (groundType < 0 || groundType > strategyGroundType::impassableSea)
+			return;
+		const auto costsOffset = reinterpret_cast<float*>(dataOffsets::offsets.groundMoveCosts);
+		costsOffset[groundType] = newCost;
+	}
+
 	void moveStratCameraSlow(int x, int y)
 	{
 		if (!isStratMap())

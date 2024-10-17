@@ -16,6 +16,7 @@ public:
 		DWORD stringTable = NULL;
 		DWORD stratCursorCoords = NULL;
 		DWORD battleCursorCoords = NULL;
+		DWORD groundMoveCosts = NULL;
 		DWORD customTiles = NULL;
 		DWORD battleCamera = NULL;
 		DWORD battlePerimeters = NULL;

@@ -1026,6 +1026,8 @@ namespace stratMapHelpers
 	std::pair<int, int> findValidTileNearTile(int x, int y, int charType);
 	bool isTileValidForCharacterType(int charType, int x, int y);
 	void viewTacticalMap(int x, int y);
+	float getGroundTypeMoveCost(int groundType);
+	void setGroundTypeMoveCost(int groundType, float newCost);
 	void getGameTileCoordsWithCursor(int& x, int& y);
 	std::tuple<int, int> getStratHoveredCoords();
 	std::tuple<float, float, float> getBattleHoveredCoords();
