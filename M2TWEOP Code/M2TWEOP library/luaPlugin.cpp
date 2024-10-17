@@ -224,7 +224,8 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield setReligionsLimit setReligionsLimit
 	@tfield setEquipmentCosts setEquipmentCosts
 	@tfield isTileFree isTileFree
-	@tfield getGameTileCoordsWithCursor getGameTileCoordsWithCursor
+	@tfield getStratHoveredCoords getStratHoveredCoords
+	@tfield getBattleHoveredCoords getBattleHoveredCoords
 	@tfield getTileVisibility getTileVisibility
 	@tfield setGuildCooldown setGuildCooldown
 	@tfield setEDUUnitsSize setEDUUnitsSize
@@ -550,19 +551,32 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tparam int Y coordinate of the tile.
 	@return boolean isFree
 	@usage
-	M2TWEOP.isTileFree(55,25);
+		M2TWEOP.isTileFree(55,25);
 	*/
 	tables.M2TWEOP.set_function("isTileFree", &stratMapHelpers::isTileFreeLua);
 	
 	/***
-	Get the selected tile coords.
-	@function M2TWEOP.getGameTileCoordsWithCursor
+	Get the hovered tile coordinates on the strategy map.
+	@function M2TWEOP.getStratHoveredCoords
 	@treturn int x
 	@treturn int y
 	@usage
-	local x,y=M2TWEOP.getGameTileCoordsWithCursor();
+		local x,y=M2TWEOP.getStratHoveredCoords();
 	*/
-	tables.M2TWEOP.set_function("getGameTileCoordsWithCursor", &stratMapHelpers::getGameTileCoordsWithCursorLua);
+	tables.M2TWEOP.set_function("getStratHoveredCoords", &stratMapHelpers::getStratHoveredCoords);
+	
+	
+	/***
+	Get the hovered position coordinates on the battle map.
+	@function M2TWEOP.getBattleHoveredCoords
+	@treturn float x
+	@treturn float y
+	@treturn float z
+	@usage
+		local x,y,z = M2TWEOP.getBattleHoveredCoords();
+	*/
+	tables.M2TWEOP.set_function("getBattleHoveredCoords", &stratMapHelpers::getBattleHoveredCoords);
+	tables.M2TWEOP.set_function("getGameTileCoordsWithCursor", &stratMapHelpers::getStratHoveredCoords);
 	tables.M2TWEOP.set_function("getTileRegionID", &stratMapHelpers::getTileRegionID);
 	
 	/***

@@ -705,7 +705,7 @@ namespace stratMapHelpers
 		return true;
 	}
 
-	std::tuple<int, int> getGameTileCoordsWithCursorLua()
+	std::tuple<int, int> getStratHoveredCoords()
 	{
 		int x = 0;
 		int y = 0;
@@ -718,6 +718,15 @@ namespace stratMapHelpers
 		const int dx = x - destX;
 		const int dy = y - destY;
 		return static_cast<float>(sqrt(static_cast<double>(dx * dx) + static_cast<double>(dy * dy)));
+	}
+	
+	std::tuple<float, float, float> getBattleHoveredCoords()
+	{
+		const auto mouseOffset = reinterpret_cast<float*>(dataOffsets::offsets.battleCursorCoords);
+		float x = mouseOffset[0];
+		float z = mouseOffset[1];
+		float y = mouseOffset[2];
+		return std::make_tuple(x, y, z);
 	}
 	
 	void getGameTileCoordsWithCursor(int& x, int& y)

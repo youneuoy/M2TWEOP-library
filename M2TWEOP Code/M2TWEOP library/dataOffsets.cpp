@@ -65,6 +65,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.ltgdGlobals = 0x016F115C;
 		offsets.groupLabels = 0x001BA96A0;
 		offsets.stratCursorCoords = 0x02c86c28;
+		offsets.battleCursorCoords = 0x02C86C10;
 		offsets.modelsDb = 0x016e9dc8;
 		offsets.customTiles = 0x02C3BF50;
 		offsets.battlePerimeters = 0x16F0600;
@@ -166,6 +167,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.ltgdGlobals = 0x016A7Fc4;
 		offsets.groupLabels = 0x01B60580;
 		offsets.stratCursorCoords = 0x02c3da48;
+		offsets.battleCursorCoords = 0x02c3da30;
 		offsets.modelsDb = 0x016a0b98;
 		offsets.battlefieldEngines = 0x02C3A254;
 		offsets.options1 = 0x02C6D804;

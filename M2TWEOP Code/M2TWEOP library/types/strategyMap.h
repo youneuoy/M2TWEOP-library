@@ -1027,7 +1027,8 @@ namespace stratMapHelpers
 	bool isTileValidForCharacterType(int charType, int x, int y);
 	void viewTacticalMap(int x, int y);
 	void getGameTileCoordsWithCursor(int& x, int& y);
-	std::tuple<int, int> getGameTileCoordsWithCursorLua();
+	std::tuple<int, int> getStratHoveredCoords();
+	std::tuple<float, float, float> getBattleHoveredCoords();
 	settlementStruct* getSettlement(stratMap* map, const std::string& name);
 	regionStruct* getRegionByName(stratMap* map, const std::string& name);
 	std::pair<int, int> convertTileCoords(const DWORD arrayIndex);
