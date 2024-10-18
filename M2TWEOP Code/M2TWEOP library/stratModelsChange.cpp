@@ -4,6 +4,7 @@
 #include "functionsOffsets.h"
 #include "dataOffsets.h"
 #include "character.h"
+#include "fort.h"
 #include "gameHelpers.h"
 #include "strategyMap.h"
 
@@ -97,7 +98,8 @@ namespace stratModelsChange
 		if (const auto tile = stratMapHelpers::getTile(x, y); tile->getFort())
 		{
 			fortEntryCount++;
-			rec->isFort = true;	
+			rec->isFort = true;
+			eopFortDataDb::get()->addFortData(x, y, modelId, modelId2);
 		}
 		else if (const auto sett = tile->getSettlement(); sett)
 		{

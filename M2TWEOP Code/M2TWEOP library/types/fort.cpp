@@ -19,6 +19,9 @@
 #include "gameHelpers.h"
 #include "strategyMap.h"
 #include "rebelFactions.h"
+#include "stratModelsChange.h"
+
+eopFortDataDb* eopFortDataDb::m_Instance = new eopFortDataDb();
 
 namespace fortHelpers
 {
@@ -116,6 +119,10 @@ namespace fortHelpers
 
 	void deleteFort(const factionStruct* fac, fortStruct* fort)
 	{
+		if (!fort)
+			return;
+		if (eopFortDataDb::get()->getFortData(fort->xCoord, fort->yCoord))
+			eopFortDataDb::get()->removeFortData(fort->xCoord, fort->yCoord);
 		fortStruct* delFort = fort;
 		const factionStruct* delFaction = fac;
 		DWORD funcB = codes::offsets.deleteFortFuncOne;
@@ -355,4 +362,86 @@ character* fortStruct::getCharacter(const int index)
 {
 	const auto tile = stratMapHelpers::getTile(xCoord, yCoord);
 	return tile->getTileCharacterAtIndex(index);
+}
+
+eopFortData* eopFortDataDb::getFortData(const int x, const int y)
+{
+	const std::string identifier = std::to_string(x) + "_" + std::to_string(y);
+	if (const auto it = m_FortData.find(identifier); it != m_FortData.end())
+		return it->second.get();
+	return nullptr;
+}
+
+void eopFortDataDb::addFortData(int x, int y, int modelId, int modelIdWalls)
+{
+	const std::string identifier = std::to_string(x) + "_" + std::to_string(y);
+	m_FortData.insert_or_assign(identifier, std::make_shared<eopFortData>(x, y, modelId, modelIdWalls));
+}
+
+void eopFortDataDb::removeFortData(const int x, const int y)
+{
+	const std::string identifier = std::to_string(x) + "_" + std::to_string(y);
+	if (const auto it = m_FortData.find(identifier); it != m_FortData.end())
+		m_FortData.erase(it);
+}
+
+std::string eopFortDataDb::onGameSave()
+{
+	std::string fPath = gameHelpers::getModPath();
+	fPath += "\\eopData\\TempSaveData";
+	std::string outFile = fPath;
+	outFile += "\\fortData.json";
+	ofstream f1(outFile);
+	const jsn::json json = serialize();
+	f1 << setw(4) << json;
+	f1.close();
+	return outFile;
+}
+
+void eopFortDataDb::onGameLoad(const std::vector<std::string>& filePaths)
+{
+	for (auto& path : filePaths)
+	{
+		if (path.find("fortData.json") == string::npos)
+			continue;
+		jsn::json json;
+		try
+		{
+			std::ifstream file(path);
+			file >> json;
+			file.close();
+		}
+		catch (jsn::json::parse_error& e)
+		{
+			MessageBoxA(nullptr, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
+		try
+		{
+			deserialize(json);
+			m_Initialized = true;
+		}
+		catch (jsn::json::exception& e)
+		{
+			MessageBoxA(nullptr, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
+		return;
+	}
+}
+
+void eopFortDataDb::onGameLoaded()
+{
+	const auto campaign = campaignHelpers::getCampaignData();
+	if (!campaign)
+		return;
+	const auto fortNum = campaign->fortsNum;
+	for (int i = 0; i < fortNum; i++)
+	{
+		const auto fort = campaign->fortsArray[i];
+		if (!fort)
+			continue;
+		if (const auto fortData = getFortData(fort->xCoord, fort->yCoord); fortData && fortData->modelId != -1)
+		{
+			stratModelsChange::setModel(fort->xCoord, fort->yCoord, fortData->modelId, fortData->modelIdWalls);
+		}
+	}
 }

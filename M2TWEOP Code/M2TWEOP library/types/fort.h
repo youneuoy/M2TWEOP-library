@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "json.hpp"
 #include "realGameTypes.h"
 #include "lua/sol.hpp"
 
@@ -67,6 +68,71 @@ public :
 			return getCharacter(0);
 		return nullptr;
 	}
+};
+
+class eopFortData
+{
+public:
+	eopFortData() = default;
+	eopFortData(const int x, const int y, const int modelId, const int modelIdWalls)
+		: xCoord(x), yCoord(y), modelId(modelId), modelIdWalls(modelIdWalls) {}
+	int xCoord{};
+	int yCoord{};
+	int modelId = -1;
+	int modelIdWalls = -1;
+	nlohmann::json serialize()
+	{
+		nlohmann::json json;
+		json["xCoord"] = xCoord;
+		json["yCoord"] = yCoord;
+		json["modelId"] = modelId;
+		json["modelIdWalls"] = modelIdWalls;
+		return json;
+	}
+	void deserialize(const nlohmann::json& json)
+	{
+		xCoord = json["xCoord"];
+		yCoord = json["yCoord"];
+		modelId = json["modelId"];
+		modelIdWalls = json["modelIdWalls"];
+	}
+private:
+};
+
+class eopFortDataDb
+{
+public:
+	static eopFortDataDb* get() { return m_Instance; }
+	eopFortData* getFortData(int x, int y);
+	void addFortData(int x, int y, int modelId, int modelIdWalls);
+	void removeFortData(int x, int y);
+	nlohmann::json serialize()
+	{
+		nlohmann::json json;
+		for (auto& [label, data] : m_FortData)
+		{
+			json[label] = data->serialize();
+		}
+		return json;
+	}
+	void deserialize(const nlohmann::json& json)
+	{
+		m_FortData = std::unordered_map<std::string, std::shared_ptr<eopFortData>>();
+		for (auto it = json.begin(); it != json.end(); ++it)
+		{
+			const auto data = std::make_shared<eopFortData>();
+			data->deserialize(it.value());
+			m_FortData[it.key()] = data;
+		}
+	}
+	std::string onGameSave();
+	void onGameLoad(const std::vector<std::string>& filePaths);
+	void onGameLoaded();
+
+private:
+	static eopFortDataDb* m_Instance;
+	bool m_Initialized = false;
+	std::unordered_map<std::string, std::shared_ptr<eopFortData>> m_FortData{};
 };
 
 namespace fortHelpers

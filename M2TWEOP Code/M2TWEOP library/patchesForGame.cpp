@@ -1953,6 +1953,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	{
 		minorSettlementDb::load();
 		eopSettlementDataDb::get()->onGameLoaded();
+		eopFortDataDb::get()->onGameLoaded();
 		//eopCharacterDataDb::get()->onGameLoaded();
 	}
 	else if (eventCode == conflictPhaseCommenced)
@@ -2073,6 +2074,7 @@ void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
 	minorSettlementDb::clear();
 	stratModelsChange::disableChecker();
 	eopSettlementDataDb::get()->onGameLoad(files);
+	eopFortDataDb::get()->onGameLoad(files);
 	eopCharacterDataDb::get()->onGameLoad(files);
 	gameEvents::onLoadGamePl(&files);
 	plannedRetreatRoute::onGameLoad(files);
@@ -2093,6 +2095,8 @@ void __fastcall patchesForGame::onSaveGame(UNICODE_STRING**& savePath)
 		files.push_back(retreatsFile);
 	if (const std::string settlementData = eopSettlementDataDb::get()->onGameSave(); !settlementData.empty())
 		files.push_back(settlementData);
+	if (const std::string fortData = eopFortDataDb::get()->onGameSave(); !fortData.empty())
+		files.push_back(fortData);
 	if (const std::string characterData = eopCharacterDataDb::get()->onGameSave(); !characterData.empty())
 		files.push_back(characterData);
 	techFuncs::saveGameMakeArchive(savePath, files);
