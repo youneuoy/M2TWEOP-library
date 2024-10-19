@@ -89,6 +89,8 @@ namespace gameHelpers
 	
 	void setScriptCounter(const char* counterName, int counterValue)
 	{
+		if (!counterName)
+			return;
 		bool isExist = false;
 		const int value = getScriptCounter(counterName, isExist);
 		if (!isExist)
