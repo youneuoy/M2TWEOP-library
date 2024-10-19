@@ -1915,6 +1915,7 @@ void luaPlugin::initUnits()
 	@tfield float yCoord
 	@tfield float mass
 	@tfield int angle
+	@tfield int health
 	@tfield int engineID Unique ID not class!
 	@tfield unit currentUnit
 	@tfield unit lastUnit
@@ -1930,10 +1931,11 @@ void luaPlugin::initUnits()
 	types.siegeEngineStruct.set("zCoord", &siegeEngine::posZ);
 	types.siegeEngineStruct.set("yCoord", &siegeEngine::posY);
 	types.siegeEngineStruct.set("mass", &siegeEngine::mass);
+	types.siegeEngineStruct.set("health", &siegeEngine::health);
 	types.siegeEngineStruct.set("angle", sol::property(&unitHelpers::getEngineAngle, &unitHelpers::setEngineAngle));
 	types.siegeEngineStruct.set("currentUnit", &siegeEngine::currentUnit);
 	types.siegeEngineStruct.set("lastUnit", &siegeEngine::lastUnit);
-	types.siegeEngineStruct.set("engineID", &siegeEngine::engineID);
+	types.siegeEngineStruct.set("engineID", &siegeEngine::ID);
 	types.siegeEngineStruct.set("fireLevel", &siegeEngine::fireLevel);
 	types.siegeEngineStruct.set("isBurning", &siegeEngine::isBurning);
 	types.siegeEngineStruct.set("stats", &siegeEngine::stats);
