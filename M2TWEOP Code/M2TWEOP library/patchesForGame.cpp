@@ -1685,7 +1685,6 @@ void __stdcall patchesForGame::afterCampaignMapLoaded()
 
 void __stdcall patchesForGame::onNewGameStart()
 {
-	stratModelsChange::disableChecker();
 	minorSettlementDb::clear();
 	eopSettlementDataDb::get()->clearData();
 	gameEvents::onNewGameStart();
@@ -2072,7 +2071,6 @@ void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
 	}
 	files = techFuncs::loadGameLoadArchive(files, savePath);
 	minorSettlementDb::clear();
-	stratModelsChange::disableChecker();
 	eopSettlementDataDb::get()->onGameLoad(files);
 	eopFortDataDb::get()->onGameLoad(files);
 	eopCharacterDataDb::get()->onGameLoad(files);
@@ -2191,7 +2189,6 @@ void __stdcall patchesForGame::onDrawAll()
 
 void __stdcall patchesForGame::onStartOfDrawFunction()
 {
-	stratModelsChange::update();
 }
 
 void __stdcall patchesForGame::onRetreat()

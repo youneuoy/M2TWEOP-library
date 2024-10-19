@@ -37,10 +37,10 @@ namespace stratModelsChange
 	void changeStratModel(character* gen, const char* model);
 	DWORD getCasAnimSet(const char* name);
 	DWORD createModelFlexi(bool shadow);
-	void fixModelFlexi(bool shadow, DWORD stratmodel, DWORD modelflexi, const char* texturepath, DWORD skeleton, float scale);
-	DWORD loadStratCAS(const char* caspath, bool shadow);
-	void addCharacterCas(const char* skeletonname, const char* caspath, const char* shadowcaspath, const char* typeName, const char* texturepath, float scale);
-	stratModelArrayEntry* buildCharacterCas(const char* skeletonname, const char* caspath, const char* shadowcaspath, const char* typeName, const char* texturepath, float scale);
+	void fixModelFlexi(bool shadow, DWORD stratModel, DWORD modelFlexi, const char* texturePath, DWORD skeleton, float scale);
+	DWORD loadStratCas(const char* casPath, bool shadow);
+	void addCharacterCas(const char* skeletonName, const char* casPath, const char* shadowCasPath, const char* typeName, const char* texturePath, float scale);
+	stratModelArrayEntry* buildCharacterCas(const char* skeletonName, const char* casPath, const char* shadowCasPath, const char* typeName, const char* texturePath, float scale);
 	stratModelArrayEntry* getStratModelEntry(const char* name);
 	stratModelArrayEntry* findCharacterStratModel(const char* modelId);
 	stratModelRecord* findStratModel(UINT32 modelId);

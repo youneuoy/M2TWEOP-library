@@ -1257,9 +1257,9 @@ void managerF::execPatches()
 	onSelectForDrawPortsCas->SetNewCode();
 	onSelectForDrawPortsCas->Enable();
 
-	toStartOfDrawFunction* onStartOfDrawFunction = new toStartOfDrawFunction(mem, (LPVOID)patchesForGame::onStartOfDrawFunction, globals::dataS.gameVersion);
-	onStartOfDrawFunction->SetNewCode();
-	onStartOfDrawFunction->Enable();
+	//toStartOfDrawFunction* onStartOfDrawFunction = new toStartOfDrawFunction(mem, (LPVOID)patchesForGame::onStartOfDrawFunction, globals::dataS.gameVersion);
+	//onStartOfDrawFunction->SetNewCode();
+	//onStartOfDrawFunction->Enable();
 
 
 	if (battleCreator::IsRetreatsOverhaulEnabled())
