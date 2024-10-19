@@ -10,7 +10,7 @@ ContextMenuStrat::ContextMenuStrat()
 		ctxItems.insert(std::make_pair("TacticMapView", ContextMenuItem(
 			[]()
 			{
-				if (ImGui::Button("View tactical map"))
+				if (ImGui::Button("View battle map"))
 				{
 					int posAtMap[2]{};
 
