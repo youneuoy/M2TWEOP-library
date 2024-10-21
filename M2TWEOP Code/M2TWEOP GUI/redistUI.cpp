@@ -212,6 +212,10 @@ namespace redistUI
 		{
 		}
 		ImGui::NewLine();
+		if (ImGui::Button("Download and install required C++ and DirectX dependencies", helpers::getScreen().centerXButton))
+		{
+			ShellExecuteA(NULL, "open", "https://drive.google.com/file/u/1/d/1Do4Uu5j_7xX5Jw8IqNuSjMMnnATPsDTa/view?usp=sharing", NULL, NULL, SW_SHOWNORMAL);
+		}
 		if (ImGui::Button("Go to the M2TWEOP discord server for help", helpers::getScreen().centerXButton))
 		{
 			ShellExecuteA(NULL, "open", "https://discord.gg/xpPrysj", NULL, NULL, SW_SHOWNORMAL);

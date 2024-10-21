@@ -370,9 +370,10 @@ bool helpers::compareFiles(wstring& oneFile, wstring& nextFile)
 	if (in2.is_open() == false)
 	{
 		// Use nextFile to specify the missing DLL name in the error message
-        string errorMessage = "Cannot run M2TWEOP. Missing " + string(nextFile.begin(), nextFile.end()) + ". You should reinstall M2TWEOP or ask for help on the Discord.";
+        string errorMessage = "Cannot run M2TWEOP. The following .dll file cannot be loaded: " + string(nextFile.begin(), nextFile.end()) + ".Please try downloading and installing the following C++ and DirectX dependencies, restart your PC and try again. If the issue persists, please reach out on the M2TWEOP Discord for help.";
         
         MessageBoxA(NULL, errorMessage.c_str(), "ERROR", MB_OK);
+		ShellExecuteA(NULL, "open", "https://drive.google.com/file/u/1/d/1Do4Uu5j_7xX5Jw8IqNuSjMMnnATPsDTa/view?usp=sharing", NULL, NULL, SW_SHOWNORMAL);
 		in1.close();
 		in2.close();
 
