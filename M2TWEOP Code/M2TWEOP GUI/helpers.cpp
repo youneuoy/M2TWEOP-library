@@ -7,6 +7,7 @@
 #include <locale>   // for setlocale
 #include <stdexcept> // for std::runtime_error
 #include <cwchar>   // for mbstowcs_s
+#include <shellapi.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
