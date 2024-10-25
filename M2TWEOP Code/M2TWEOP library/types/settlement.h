@@ -145,9 +145,9 @@ struct building { /* building structure */
 	struct settlementStruct* settlement;
 	int constructType;
 	int constructionPercent;
-	void setBuildingHealth(const int health)
+	void setBuildingHealth(const int newHealth)
 	{
-		const int newHp = health;
+		const int newHp = newHealth - hp ;
 		GAME_FUNC(void(__thiscall*)(building*, int), repairBuilding)(this, newHp);
 	}
 	int getBuildingHealth()
