@@ -1084,6 +1084,13 @@ eduEntry* patchesForGame::onCustomBattleCost(const int eduIndexOffset)
 	return eopDu::getEduEntry(eduIndex);
 }
 
+int patchesForGame::onMarriageOption(const factionRecord* facRecord)
+{
+	if (m2tweopOptions::getEnableFamilyEventsForTeutonic())
+		return 1;
+	return facRecord->hasFamilyTree && !facRecord->teutonic;
+}
+
 //Sally out fix, consider armies around settlement not defender
 int* patchesForGame::onGetSupportingArmies(armyStruct* defender, armyStruct* attacker)
 {

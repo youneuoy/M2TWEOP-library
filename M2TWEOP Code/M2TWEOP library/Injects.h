@@ -2093,6 +2093,54 @@ private:
 	LPVOID funcAddress;
 };
 
+class onCreateMarriageOption
+	:public AATemplate
+{
+public:
+	onCreateMarriageOption(MemWork* mem, LPVOID addr, int ver);
+	~onCreateMarriageOption() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCreateMarriageOption2
+	:public AATemplate
+{
+public:
+	onCreateMarriageOption2(MemWork* mem, LPVOID addr, int ver);
+	~onCreateMarriageOption2() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCreateBirthOption
+	:public AATemplate
+{
+public:
+	onCreateBirthOption(MemWork* mem, LPVOID addr, int ver);
+	~onCreateBirthOption() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCreateBirthOption2
+	:public AATemplate
+{
+public:
+	onCreateBirthOption2(MemWork* mem, LPVOID addr, int ver);
+	~onCreateBirthOption2() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onLoadModelRigid
 	:public AATemplate
 {

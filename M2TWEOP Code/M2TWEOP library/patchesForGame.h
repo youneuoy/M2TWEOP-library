@@ -68,6 +68,7 @@ public:
 	static void __fastcall onAttachRegionSettlement(settlementStruct* sett, int regionId);
 	static void __fastcall onCalculateSettlement(settlementStruct* sett);
 	static eduEntry* __fastcall onCustomBattleCost(int eduIndexOffset);
+	static int __fastcall onMarriageOption(const factionRecord* facRecord);
 	static int* __fastcall onGetSupportingArmies(armyStruct* defender, armyStruct* attacker);
 	static uint32_t __fastcall onDrawBanner(const trackedArmy* army);
 	static bannerData* __fastcall onGetRebelSymbol(const trackedArmy* army, bannerData* oldData);

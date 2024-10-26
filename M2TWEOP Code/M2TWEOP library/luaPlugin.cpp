@@ -263,6 +263,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getFactionRecordNum getFactionRecordNum
 	@tfield hideUnknownUnitTooltips hideUnknownUnitTooltips
 	@tfield handleUnitCards handleUnitCards
+	@tfield enableFamilyEventsWithoutTree enableFamilyEventsWithoutTree
 	@tfield setKhakiTextColor setKhakiTextColor
 	@tfield getMinorSettlementBalance getMinorSettlementBalance
 	@tfield generateSprite generateSprite
@@ -875,6 +876,15 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 		M2TWEOP.handleUnitCards(true)
 	*/
 	tables.M2TWEOP.set_function("handleUnitCards", &m2tweopOptions::setHandleUnitCards);
+	
+	/***
+	Factions without a family tree or a teutonic one still get marriage offers and produce children.
+	@function M2TWEOP.enableFamilyEventsWithoutTree
+	@tparam bool set
+	@usage
+		M2TWEOP.enableFamilyEventsWithoutTree(true)
+	*/
+	tables.M2TWEOP.set_function("enableFamilyEventsWithoutTree", &m2tweopOptions::setEnableFamilyEventsForTeutonic);
 	
 	/***
 	Change color of default khaki text.

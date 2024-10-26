@@ -910,6 +910,30 @@ void managerF::execPatches()
 	toSetRegionHiddenResources2->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying toCreateMarriageOption patch" << '\n';
+	onCreateMarriageOption* toCreateMarriageOption = new onCreateMarriageOption(mem, (LPVOID)patchesForGame::onMarriageOption, globals::dataS.gameVersion);
+	toCreateMarriageOption->SetNewCode();
+	toCreateMarriageOption->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying toCreateMarriageOption2 patch" << '\n';
+	onCreateMarriageOption2* toCreateMarriageOption2 = new onCreateMarriageOption2(mem, (LPVOID)patchesForGame::onMarriageOption, globals::dataS.gameVersion);
+	toCreateMarriageOption2->SetNewCode();
+	toCreateMarriageOption2->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onCreateBirthOption patch" << '\n';
+	onCreateBirthOption* toCreateBirthOption = new onCreateBirthOption(mem, (LPVOID)patchesForGame::onMarriageOption, globals::dataS.gameVersion);
+	toCreateBirthOption->SetNewCode();
+	toCreateBirthOption->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onCreateBirthOption2 patch" << '\n';
+	onCreateBirthOption2* toCreateBirthOption2 = new onCreateBirthOption2(mem, (LPVOID)patchesForGame::onMarriageOption, globals::dataS.gameVersion);
+	toCreateBirthOption2->SetNewCode();
+	toCreateBirthOption2->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onHiddenResourceConditionParse patch" << '\n';
 	onHiddenResourceConditionParse* toHiddenResourceConditionParse = new onHiddenResourceConditionParse(mem, (LPVOID)patchesForGame::onGetHiddenResource, globals::dataS.gameVersion);
 	toHiddenResourceConditionParse->SetNewCode();

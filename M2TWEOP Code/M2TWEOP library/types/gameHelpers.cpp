@@ -14,8 +14,9 @@
 #include "MemWork.h"
 #include "techFuncs.h"
 
-bool m2tweopOptions::hideUnknownUnitTooltips = true;
+bool m2tweopOptions::hideUnknownUnitTooltips = false;
 bool m2tweopOptions::eopHandleUnitCards = true;
+bool m2tweopOptions::enableFamilyEventsForTeutonic = true;
 uint8_t m2tweopOptions::khakiTextRed = 0x80;
 uint8_t m2tweopOptions::khakiTextGreen = 0x77;
 uint8_t m2tweopOptions::khakiTextBlue = 0x61;

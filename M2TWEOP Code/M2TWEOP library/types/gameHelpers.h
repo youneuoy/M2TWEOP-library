@@ -348,12 +348,15 @@ class m2tweopOptions
 public:
 	static void setHideUnknownUnitTooltips(bool value) { hideUnknownUnitTooltips = value; }
 	static bool getHideUnknownUnitTooltips() { return hideUnknownUnitTooltips; }
+	static void setEnableFamilyEventsForTeutonic(bool value) { enableFamilyEventsForTeutonic = value; }
+	static bool getEnableFamilyEventsForTeutonic() { return enableFamilyEventsForTeutonic; }
 	static void setHandleUnitCards(bool value) { eopHandleUnitCards = value; }
 	static bool getHandleUnitCards() { return eopHandleUnitCards; }
 	static DWORD getColor() { return (0xFF << 24) | (khakiTextRed << 16) | (khakiTextGreen << 8) | khakiTextBlue; }
 	static void setKhakiTextColor(const uint8_t red, const uint8_t green, const uint8_t blue) { khakiTextRed = red; khakiTextGreen = green; khakiTextBlue = blue; }
 	static bool hideUnknownUnitTooltips;
 	static bool eopHandleUnitCards;
+	static bool enableFamilyEventsForTeutonic;
 	static uint8_t khakiTextRed;
 	static uint8_t khakiTextGreen;
 	static uint8_t khakiTextBlue;
