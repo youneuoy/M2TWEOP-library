@@ -2011,10 +2011,57 @@ namespace sol_ImGui
 	int GetMouseCursor() { return ImGui::GetMouseCursor(); }
 	void SetMouseCursor(int cursor_type) { ImGui::SetMouseCursor(static_cast<ImGuiMouseCursor>(cursor_type)); }
 	void SetNextFrameWantCaptureMouse(bool want_capture_mouse_value) { ImGui::SetNextFrameWantCaptureMouse(want_capture_mouse_value); }
-	ImFont* AddFontFromFileTTF(ImFontAtlas* fontAtlas, const char* filename, float size_pixels)
+
+	ImFont* AddFontFromFileTTF(ImFontAtlas* fontAtlas, const char* filename, float size_pixels, const ImFontConfig* font_cfg_template, const ImWchar* glyph_ranges)
 	{
-		return fontAtlas->AddFontFromFileTTF(filename, size_pixels);
+		return fontAtlas->AddFontFromFileTTF(filename, size_pixels, font_cfg_template, glyph_ranges);
 	}
+
+	const ImWchar* GetGlyphRangesDefault(ImFontAtlas* fontAtlas)
+	{
+		return fontAtlas->GetGlyphRangesDefault();
+	}
+
+	const ImWchar* GetGlyphRangesGreek(ImFontAtlas* fontAtlas)
+	{
+		return fontAtlas->GetGlyphRangesGreek();
+	}
+
+	const ImWchar* GetGlyphRangesKorean(ImFontAtlas* fontAtlas)
+	{
+		return fontAtlas->GetGlyphRangesKorean();
+	}
+
+	const ImWchar* GetGlyphRangesJapanese(ImFontAtlas* fontAtlas)
+	{
+		return fontAtlas->GetGlyphRangesJapanese();
+	}
+
+	const ImWchar* GetGlyphRangesChineseFull(ImFontAtlas* fontAtlas)
+	{
+		return fontAtlas->GetGlyphRangesChineseFull();
+	}
+
+	const ImWchar* GetGlyphRangesChineseSimplifiedCommon(ImFontAtlas* fontAtlas)
+	{
+		return fontAtlas->GetGlyphRangesChineseSimplifiedCommon();
+	}
+
+	const ImWchar* GetGlyphRangesCyrillic(ImFontAtlas* fontAtlas)
+	{
+		return fontAtlas->GetGlyphRangesCyrillic();
+	}
+
+	const ImWchar* GetGlyphRangesThai(ImFontAtlas* fontAtlas)
+	{
+		return fontAtlas->GetGlyphRangesThai();
+	}
+
+	const ImWchar* GetGlyphRangesVietnamese(ImFontAtlas* fontAtlas)
+	{
+		return fontAtlas->GetGlyphRangesVietnamese();
+	}
+
 
 	// Clipboard Utilities
 	std::string GetClipboardText() { return std::string(ImGui::GetClipboardText()); }
@@ -5624,6 +5671,85 @@ namespace sol_ImGui
 			FontAtlas:AddFontFromFileTTF();
 		*/
 		FontAtlas.set_function("AddFontFromFileTTF", &AddFontFromFileTTF);
+
+		/***
+		Access the IO structure (mouse/keyboard/gamepad inputs, time, various configuration options/flags).
+		@function FontAtlas:GetGlyphRangesDefault
+		@usage
+			FontAtlas:GetGlyphRangesDefault();
+		*/
+		FontAtlas.set_function("GetGlyphRangesDefault", &GetGlyphRangesDefault);
+
+
+		/***
+		Access the IO structure (mouse/keyboard/gamepad inputs, time, various configuration options/flags).
+		@function FontAtlas:GetGlyphRangesGreek
+		@usage
+			FontAtlas:GetGlyphRangesGreek();
+		*/
+		FontAtlas.set_function("GetGlyphRangesGreek", &GetGlyphRangesGreek);
+
+
+		/***
+		Access the IO structure (mouse/keyboard/gamepad inputs, time, various configuration options/flags).
+		@function FontAtlas:GetGlyphRangesKorean
+		@usage
+			FontAtlas:GetGlyphRangesKorean();
+		*/
+		FontAtlas.set_function("GetGlyphRangesKorean", &GetGlyphRangesKorean);
+
+
+		/***
+		Access the IO structure (mouse/keyboard/gamepad inputs, time, various configuration options/flags).
+		@function FontAtlas:GetGlyphRangesJapanese
+		@usage
+			FontAtlas:GetGlyphRangesJapanese();
+		*/
+		FontAtlas.set_function("GetGlyphRangesJapanese", &GetGlyphRangesJapanese);
+
+
+		/***
+		Access the IO structure (mouse/keyboard/gamepad inputs, time, various configuration options/flags).
+		@function FontAtlas:GetGlyphRangesChineseFull
+		@usage
+			FontAtlas:GetGlyphRangesChineseFull();
+		*/
+		FontAtlas.set_function("GetGlyphRangesChineseFull", &GetGlyphRangesChineseFull);
+
+
+		/***
+		Access the IO structure (mouse/keyboard/gamepad inputs, time, various configuration options/flags).
+		@function FontAtlas:GetGlyphRangesChineseSimplifiedCommon
+		@usage
+			FontAtlas:GetGlyphRangesChineseSimplifiedCommon();
+		*/
+		FontAtlas.set_function("GetGlyphRangesChineseSimplifiedCommon", &GetGlyphRangesChineseSimplifiedCommon);
+
+
+		/***
+		Access the IO structure (mouse/keyboard/gamepad inputs, time, various configuration options/flags).
+		@function FontAtlas:GetGlyphRangesCyrillic
+		@usage
+			FontAtlas:GetGlyphRangesCyrillic();
+		*/
+		FontAtlas.set_function("GetGlyphRangesCyrillic", &GetGlyphRangesCyrillic);
+
+
+		/***
+		Access the IO structure (mouse/keyboard/gamepad inputs, time, various configuration options/flags).
+		@function FontAtlas:GetGlyphRangesThai
+		@usage
+			FontAtlas:GetGlyphRangesThai();
+		*/
+		FontAtlas.set_function("GetGlyphRangesThai", &GetGlyphRangesThai);
+
+		/***
+		Access the IO structure (mouse/keyboard/gamepad inputs, time, various configuration options/flags).
+		@function FontAtlas:GetGlyphRangesVietnamese
+		@usage
+			FontAtlas:GetGlyphRangesVietnamese();
+		*/
+		FontAtlas.set_function("GetGlyphRangesVietnamese", &GetGlyphRangesVietnamese);
 
 		///ImDrawList
 		//@section ImDrawList
