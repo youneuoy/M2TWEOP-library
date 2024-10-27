@@ -1018,6 +1018,7 @@ void luaPlugin::onPluginLoadF()
 	struct
 	{
 		sol::usertype<eventTrigger> eventTrigger;
+		sol::usertype<missionDetails> missionDetailsStruct;
 	}typeAll;
 	
 	///Event Data
@@ -1050,7 +1051,7 @@ void luaPlugin::onPluginLoadF()
 	@tfield string disasterType
 	@tfield string missionSuccessLevel
 	@tfield int missionProbability
-	@tfield string missionDetails
+	@tfield missionDetailsStruct missionDetails
 	@tfield int eventID
 	@tfield int guildID
 	@tfield string eventCounter
@@ -1103,6 +1104,17 @@ void luaPlugin::onPluginLoadF()
 	typeAll.eventTrigger.set("captureInfo", sol::property(&eventTrigger::getCapturedFactionInfo));
 	typeAll.eventTrigger.set("ransomType", sol::property(&eventTrigger::getRansomType));
 	typeAll.eventTrigger.set("unit", sol::property(&eventTrigger::getUnit));
+	
+	/***
+	 
+	@tfield string missionName
+	@tfield string paybackName
+	
+	@table missionDetailsStruct
+	*/
+	typeAll.missionDetailsStruct = luaState.new_usertype<missionDetails>("missionDetailsStruct");
+	typeAll.missionDetailsStruct.set("missionName", sol::property(&missionDetails::getMissionName));
+	typeAll.missionDetailsStruct.set("paybackName", sol::property(&missionDetails::getPaybackName));
 	
 	///EOP Events
 	//@section EOP Events

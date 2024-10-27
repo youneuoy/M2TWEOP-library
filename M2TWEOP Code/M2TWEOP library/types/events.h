@@ -23,6 +23,22 @@ if (!funcResult.valid())\
 	console::handleMessageBoxResult(result);\
 }\
 
+struct missionDetails
+{
+	char* missionName;
+	int missionNameHash;
+	char* paybackName;
+	int paybackNameHash;
+	std::string getMissionName()
+	{
+		return missionName;
+	}
+	std::string getPaybackName()
+	{
+		return paybackName;
+	}
+};
+
 struct eventTrigger
 {
 	void* eventTrigger_vtbl; //0x0000
@@ -128,9 +144,9 @@ struct eventTrigger
 		return callVFunc<28, int>(this);
 	}
 	//29 mission_details
-	const char* getMissionDetails()
+	missionDetails* getMissionDetails()
 	{
-		return *callVFunc<29, const char**>(this);
+		return callVFunc<29, missionDetails*>(this);
 	}
 	//30 character_action_advice
 	//31 event
