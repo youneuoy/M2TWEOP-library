@@ -624,8 +624,16 @@ namespace sol_ImGui
 	int GetMouseCursor();
 	void SetMouseCursor(int cursor_type);
 	void SetNextFrameWantCaptureMouse(bool want_capture_mouse_value);
-	ImFont* AddFontFromFileTTF(ImFontAtlas* fontAtlas, const char* filename, float size_pixels);
-	
+	ImFont* AddFontFromFileTTF(ImFontAtlas* fontAtlas, const char* filename, float size_pixels, const ImFontConfig* font_cfg_template, const ImWchar* glyph_ranges);
+	const ImWchar* GetGlyphRangesDefault(ImFontAtlas* fontAtlas);
+	const ImWchar* GetGlyphRangesGreek(ImFontAtlas* fontAtlas);
+	const ImWchar* GetGlyphRangesKorean(ImFontAtlas* fontAtlas);
+	const ImWchar* GetGlyphRangesJapanese(ImFontAtlas* fontAtlas);
+	const ImWchar* GetGlyphRangesChineseFull(ImFontAtlas* fontAtlas);
+	const ImWchar* GetGlyphRangesChineseSimplifiedCommon(ImFontAtlas* fontAtlas);
+	const ImWchar* GetGlyphRangesCyrillic(ImFontAtlas* fontAtlas);
+	const ImWchar* GetGlyphRangesThai(ImFontAtlas* fontAtlas);
+	const ImWchar* GetGlyphRangesVietnamese(ImFontAtlas* fontAtlas);
 	void PushClipRectDraw(ImDrawList* drawlist, float posXmin, float posYmin, float posXmax, float posYmax);
 	void PushClipRectDraw(ImDrawList* drawlist, float posXmin, float posYmin, float posXmax, float posYmax, bool intersect);	
     void PopClipRectDraw(ImDrawList* drawlist);
