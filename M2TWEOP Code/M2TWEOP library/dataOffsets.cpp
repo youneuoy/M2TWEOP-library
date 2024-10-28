@@ -102,6 +102,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.modelRigidCounts = 0x1B5EFE4;
 		offsets.groundMoveCosts = 0x164A0A0;
 		offsets.expandedBinTable = 0x2CB97E8;
+		offsets.descrCharacter = 0x18AA8F8;
 
 		
 		offsets.fortVtbl = 0x13362F4;
