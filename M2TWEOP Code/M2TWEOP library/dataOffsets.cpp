@@ -208,6 +208,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.modelRigidCounts = 0x1B15EB4;
 		offsets.groundMoveCosts = 0x01602188;
 		offsets.expandedBinTable = 0x2C70760;
+		offsets.descrCharacter = 0x01861788;
 
 		offsets.audioEnable = reinterpret_cast<bool*>(0x01639f1d);
 		offsets.audioMaster_vol = reinterpret_cast<int*>(0x01639f60);

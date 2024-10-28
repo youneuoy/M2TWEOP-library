@@ -802,6 +802,26 @@ inline bool operator ==(int a, characterTypeStrat b)
 	return static_cast<characterTypeStrat>(a) == b;
 }
 
+inline bool operator >= (int a, characterTypeStrat b)
+{
+	return static_cast<characterTypeStrat>(a) >= b;
+}
+
+inline bool operator > (int a, characterTypeStrat b)
+{
+	return static_cast<characterTypeStrat>(a) > b;
+}
+
+inline bool operator <= (int a, characterTypeStrat b)
+{
+	return static_cast<characterTypeStrat>(a) <= b;
+}
+
+inline bool operator < (int a, characterTypeStrat b)
+{
+	return static_cast<characterTypeStrat>(a) < b;
+}
+
 inline bool operator !=(int a, characterTypeStrat b)
 {
 	return static_cast<characterTypeStrat>(a) != b;

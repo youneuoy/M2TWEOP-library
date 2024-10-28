@@ -492,6 +492,7 @@ struct factionRecord { /* see descr_sm_factions.txt */
 	char pad_00DD[3]; //0x00DD
 	int getCultureId();
 	void setCulture(int Id);
+	void setFactionStratModel(const std::string& model, int characterType, int level);
 };
 
 class eopFactionData

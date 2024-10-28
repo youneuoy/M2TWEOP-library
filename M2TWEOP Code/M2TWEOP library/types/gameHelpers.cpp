@@ -554,7 +554,7 @@ namespace gameHelpers
 			logStringGame("M2TWEOP.copyFile: File not found: " + file);
 			return;
 		}
-		std::filesystem::copy(file, to, std::filesystem::copy_options::overwrite_existing);
+		std::filesystem::copy(file, to, std::filesystem::copy_options::overwrite_existing | std::filesystem::copy_options::recursive);
 	}
 
 	UNICODE_STRING*** getHashedUniString(void* stringTable, const std::string& key)

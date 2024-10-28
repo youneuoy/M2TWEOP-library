@@ -16,6 +16,7 @@
 #include "campaignAi.h"
 #include "gameUi.h"
 #include "cultures.h"
+#include "stratModelsChange.h"
 
 enum
 {
@@ -93,6 +94,28 @@ void factionRecord::setCulture(const int Id)
 {
 	const auto culturesDb = cultures::getCultureDb();
 	facCulture = &culturesDb->cultures[Id];
+}
+
+void factionRecord::setFactionStratModel(const std::string& model, const int characterType, const int level)
+{
+	if (characterType < 0 || characterType >= characterTypeStrat::invalid || level < 0 || level > 10)
+		return;
+	stratModelArrayEntry* entry = stratModelsChange::findCharacterStratModel(model.c_str());
+	if (!entry)
+	{
+		gameHelpers::logStringGame("factionRecord.setFactionStratModel: model not found: " + model);
+		return;
+	}
+	const auto descrCharacterPtr = reinterpret_cast<descrCharacterArray*>(dataOffsets::offsets.descrCharacter);
+	const auto charTypeEntry = &descrCharacterPtr->entries[characterType];
+	const auto factionEntry = charTypeEntry->ptrsToDescrCharacterFactionEntries[id];
+	if (level >= factionEntry->modelCount)
+	{
+		gameHelpers::logStringGame("factionRecord.setFactionStratModel: level out of bounds. Need add more levels to vanilla entry to set this level.");
+		return;
+	}
+	const auto levelEntry = &factionEntry->stratInfo->stratModelsArray[level];
+	levelEntry->stratModelEntry = entry;
 }
 
 stringWithHash* LOOKUP_STRING_LABEL = new stringWithHash();
@@ -1778,6 +1801,7 @@ namespace factionHelpers
 		@tfield int hordeMinNamedCharacters
 		@tfield int hordeMaxPercentArmyStack
 		@tfield int cultureID
+		@tfield setFactionStratModel setFactionStratModel
 
 		@table factionRecord
 		*/
@@ -1819,5 +1843,20 @@ namespace factionHelpers
 		types.factionRecord.set("hordeUnitPerSettlementPop", &factionRecord::hordeUnitPerSettlementPop);
 		types.factionRecord.set("hordeMinNamedCharacters", &factionRecord::hordeMinNamedCharacters);
 		types.factionRecord.set("hordeMaxPercentArmyStack", &factionRecord::hordeMaxPercentArmyStack);
+
+		
+		/***
+		Set the strat model a character uses for a character type at a specific level. You can only set levels up to the amount defined in the vanilla descr_character entry. If using eop models only set after loading those (after campaign load).
+		@function factionRecord:setFactionStratModel
+		@tparam string model
+		@tparam int characterType
+		@tparam int level
+		@usage
+			factionRec:setFactionStratModel("arnor_general", characterType.general, 0)
+		*/
+		types.factionRecord.set_function("setFactionStratModel", &factionRecord::setFactionStratModel);
+
+
+		
     }
 }

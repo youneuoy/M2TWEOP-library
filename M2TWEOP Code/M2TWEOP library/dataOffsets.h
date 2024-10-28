@@ -18,6 +18,7 @@ public:
 		DWORD battleCursorCoords = NULL;
 		DWORD groundMoveCosts = NULL;
 		DWORD expandedBinTable = NULL;
+		DWORD descrCharacter = NULL;
 		DWORD customTiles = NULL;
 		DWORD battleCamera = NULL;
 		DWORD battlePerimeters = NULL;

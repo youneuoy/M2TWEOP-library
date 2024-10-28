@@ -249,10 +249,7 @@ namespace stratModelsChange
 		if (gen == nullptr) { //maybe captain dont exist anymore
 			return;
 		}
-		stratModelArrayEntry* entry = findCharacterStratModel(model); //get eop strat model from vector
-		if (entry == nullptr) {
-			entry = getStratModelEntry(model); //get vanilla strat model from 255 array
-		}
+		stratModelArrayEntry* entry = findCharacterStratModel(model);
 		if (entry == nullptr) {
 			return;
 		}
@@ -290,7 +287,7 @@ namespace stratModelsChange
 				return newRec->entry;
 			}
 		}
-		return nullptr;
+		return getStratModelEntry(modelId);
 	}
 
 	stratModelArrayEntry* getStratModelEntry(const char* name) //find vanilla model from array at offset
