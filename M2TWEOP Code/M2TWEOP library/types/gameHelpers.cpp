@@ -557,6 +557,24 @@ namespace gameHelpers
 		std::filesystem::copy(file, to, std::filesystem::copy_options::overwrite_existing);
 	}
 
+	UNICODE_STRING*** getHashedUniString(void* stringTable, const std::string& key)
+	{
+		auto uniString = new UNICODE_STRING();
+		UNICODE_STRING** lookup = &uniString;
+		gameStringHelpers::createUniString(lookup, key.c_str());
+		const auto value =  callClassFunc<void*, UNICODE_STRING***, UNICODE_STRING***>(stringTable, 0x4, &lookup);
+		return value;
+	}
+
+	void setExpandedString(const std::string& key, const std::string& value)
+	{
+		const auto stringTable = *reinterpret_cast<void**>(dataOffsets::offsets.expandedBinTable);
+		const auto uniString = getHashedUniString(stringTable, key);
+		if (!uniString)
+			return;
+		gameStringHelpers::createUniString(*uniString, value.c_str());
+	}
+
 	void setEquipmentCosts(const int equipType, const int cost)
 	{
 		struct equipmentCosts

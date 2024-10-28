@@ -101,6 +101,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.ancillaryDb = 0x1666F40;
 		offsets.modelRigidCounts = 0x1B5EFE4;
 		offsets.groundMoveCosts = 0x164A0A0;
+		offsets.expandedBinTable = 0x2CB97E8;
 
 		
 		offsets.fortVtbl = 0x13362F4;
@@ -206,6 +207,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.isDLC = 0x016A284C;
 		offsets.modelRigidCounts = 0x1B15EB4;
 		offsets.groundMoveCosts = 0x01602188;
+		offsets.expandedBinTable = 0x2C70760;
 
 		offsets.audioEnable = reinterpret_cast<bool*>(0x01639f1d);
 		offsets.audioMaster_vol = reinterpret_cast<int*>(0x01639f60);

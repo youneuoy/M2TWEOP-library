@@ -211,6 +211,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield toggleDeveloperMode toggleDeveloperMode
 	@tfield saveGame saveGame
 	@tfield copyFile copyFile
+	@tfield setExpandedString setExpandedString
 	@tfield getGameVersion getGameVersion
 	@tfield setPerfectSpy setPerfectSpy
 	@tfield getLocalFactionID getLocalFactionID
@@ -346,6 +347,16 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	    M2TWEOP.copyFile(M2TWEOP.getModPath().."/saves/newsave.sav",  M2TWEOP.getModPath().."/backupSaves/newsave.sav");
 	*/
 	tables.M2TWEOP.set_function("copyFile", &gameHelpers::copyFileLua);
+	
+	/***
+	Set a string in expanded string table.
+	@function M2TWEOP.setExpandedString
+	@tparam string key
+	@tparam string value
+	@usage
+	    M2TWEOP.setExpandedString("EMT_TURKS_FACTION_LEADER", "High King");
+	*/
+	tables.M2TWEOP.set_function("setExpandedString", &gameHelpers::setExpandedString);
 	
 	/***
 	Function to get the game version.
