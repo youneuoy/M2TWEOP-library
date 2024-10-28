@@ -1740,8 +1740,10 @@ ImFontAtlas = {
 --- Access the IO structure (mouse/keyboard/gamepad inputs, time, various configuration options/flags).
 ---@param filename string 
 ---@param sizePixels number 
+---@param fontConfig void? optional
+---@param glyphRanges void? optional
 ---@return ImFont font 
-function ImFontAtlas:AddFontFromFileTTF(filename, sizePixels) end 
+function ImFontAtlas:AddFontFromFileTTF(filename, sizePixels, fontConfig, glyphRanges) end 
 
 ---Basic ImDrawList table
 ---@class ImDrawList

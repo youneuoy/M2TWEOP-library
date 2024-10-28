@@ -210,6 +210,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield restartLua restartLua
 	@tfield toggleDeveloperMode toggleDeveloperMode
 	@tfield saveGame saveGame
+	@tfield copyFile copyFile
 	@tfield getGameVersion getGameVersion
 	@tfield setPerfectSpy setPerfectSpy
 	@tfield getLocalFactionID getLocalFactionID
@@ -335,6 +336,16 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	M2TWEOP.saveGame("mods/bare_geomod/saves/newsave.sav");
 	*/
 	tables.M2TWEOP.set_function("saveGame", &gameHelpers::saveGame);
+	
+	/***
+	Copy a file.
+	@function M2TWEOP.copyFile
+	@tparam string from
+	@tparam string to
+	@usage
+	    M2TWEOP.copyFile(M2TWEOP.getModPath().."/saves/newsave.sav",  M2TWEOP.getModPath().."/backupSaves/newsave.sav");
+	*/
+	tables.M2TWEOP.set_function("copyFile", &gameHelpers::copyFileLua);
 	
 	/***
 	Function to get the game version.

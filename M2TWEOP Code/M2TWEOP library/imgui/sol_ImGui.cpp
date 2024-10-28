@@ -2012,6 +2012,16 @@ namespace sol_ImGui
 	void SetMouseCursor(int cursor_type) { ImGui::SetMouseCursor(static_cast<ImGuiMouseCursor>(cursor_type)); }
 	void SetNextFrameWantCaptureMouse(bool want_capture_mouse_value) { ImGui::SetNextFrameWantCaptureMouse(want_capture_mouse_value); }
 
+	ImFont* AddFontFromFileTTF(ImFontAtlas* fontAtlas, const char* filename, float size_pixels)
+	{
+		return fontAtlas->AddFontFromFileTTF(filename, size_pixels);
+	}
+
+	ImFont* AddFontFromFileTTF(ImFontAtlas* fontAtlas, const char* filename, float size_pixels, const ImFontConfig* font_cfg_template)
+	{
+		return fontAtlas->AddFontFromFileTTF(filename, size_pixels, font_cfg_template);
+	}
+
 	ImFont* AddFontFromFileTTF(ImFontAtlas* fontAtlas, const char* filename, float size_pixels, const ImFontConfig* font_cfg_template, const ImWchar* glyph_ranges)
 	{
 		return fontAtlas->AddFontFromFileTTF(filename, size_pixels, font_cfg_template, glyph_ranges);
@@ -5666,11 +5676,17 @@ namespace sol_ImGui
 		@function FontAtlas:AddFontFromFileTTF
 		@tparam string filename
 		@tparam float sizePixels
+		@tparam void fontConfig optional
+		@tparam void glyphRanges optional
 		@treturn ImFont font
 		@usage
 			FontAtlas:AddFontFromFileTTF();
 		*/
-		FontAtlas.set_function("AddFontFromFileTTF", &AddFontFromFileTTF);
+		FontAtlas.set_function("AddFontFromFileTTF", sol::overload(
+			sol::resolve<ImFont*(ImFontAtlas*, const char*, float)>(AddFontFromFileTTF),
+			sol::resolve<ImFont*(ImFontAtlas*, const char*, float, const ImFontConfig*)>(AddFontFromFileTTF),
+			sol::resolve<ImFont*(ImFontAtlas*, const char*, float, const ImFontConfig*, const ImWchar*)>(AddFontFromFileTTF)
+		));
 
 		/***
 		Access the IO structure (mouse/keyboard/gamepad inputs, time, various configuration options/flags).

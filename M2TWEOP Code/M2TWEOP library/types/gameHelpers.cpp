@@ -546,6 +546,17 @@ namespace gameHelpers
 		return path.substr(pos + 1, path.length() - pos);
 	}
 
+	void copyFileLua(const std::string& file, const std::string& to)
+	{
+		//CopyFileA(file.c_str(), to.c_str(), FALSE);
+		if (!std::filesystem::exists(file))
+		{
+			logStringGame("M2TWEOP.copyFile: File not found: " + file);
+			return;
+		}
+		std::filesystem::copy(file, to, std::filesystem::copy_options::overwrite_existing);
+	}
+
 	void setEquipmentCosts(const int equipType, const int cost)
 	{
 		struct equipmentCosts
