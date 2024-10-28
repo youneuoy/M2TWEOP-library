@@ -116,6 +116,27 @@ void factionRecord::setFactionStratModel(const std::string& model, const int cha
 	}
 	const auto levelEntry = &factionEntry->stratInfo->stratModelsArray[level];
 	levelEntry->stratModelEntry = entry;
+	gameStringHelpers::setHashedString(&levelEntry->modelName, model.c_str());
+}
+
+void factionRecord::setFactionBattleModel(const std::string& model, const int characterType)
+{
+	if (characterType != characterTypeStrat::general  && characterType != characterTypeStrat::namedCharacter)
+		return;
+	const auto battleMod = unitHelpers::findBattleModel(model.c_str());
+	if (!battleMod)
+	{
+		gameHelpers::logStringGame("factionRecord.setFactionBattleModel: model not found: " + model);
+		return;
+	}
+	const auto descrCharacterPtr = reinterpret_cast<descrCharacterArray*>(dataOffsets::offsets.descrCharacter);
+	const auto charTypeEntry = &descrCharacterPtr->entries[characterType];
+	const auto factionEntry = charTypeEntry->ptrsToDescrCharacterFactionEntries[id];
+	factionEntry->battleMod = techFuncs::createGameClass<eduOfficer>();
+	factionEntry->battleMod->modelGroup = 0;
+	factionEntry->battleMod->modelIndex = 0;
+	gameStringHelpers::setHashedString(&factionEntry->battleMod->name, model.c_str());
+	factionEntry->battleMod->modelEntry = battleMod;
 }
 
 stringWithHash* LOOKUP_STRING_LABEL = new stringWithHash();
@@ -267,7 +288,6 @@ void factionTileStruct::update(factionStruct* fromFaction)
 
 namespace factionHelpers
 {
-	
 	/*----------------------------------------------------------------------------------------------------------------*\
 											 Faction helpers
 	\*----------------------------------------------------------------------------------------------------------------*/
@@ -518,7 +538,7 @@ namespace factionHelpers
 			if (!stack)
 				stack = unit->army;
 			if (unit && unit->army == stack)
-			    unitList[i - 1] = unit;
+				unitList[i - 1] = unit;
 		}
 		if (!stack)
 			return nullptr;
@@ -555,24 +575,24 @@ namespace factionHelpers
 #pragma endregion Faction helpers
 	
 	
-    void addToLua(sol::state& luaState)
-    {
-        struct
-        {
-            sol::usertype<factionStruct>factionStruct;
-            sol::usertype<factionRecord>factionRecord;
-            sol::usertype<factionEconomy>factionEconomy;
-            sol::usertype<factionRanking>factionRanking;
-            sol::usertype<aiFaction> aiFaction;
-            sol::usertype<aiLongTermGoalDirector> aiLongTermGoalDirector;
-            sol::usertype<aiPersonalityValues> aiPersonality;
-            sol::usertype<aiGlobalStrategyDirector> aiGlobalStrategyDirector;
-            sol::usertype<decisionValuesLTGD> decisionValuesLTGD;
-            sol::usertype<militaryValuesLTGD> aiFactionValues;
-        	sol::usertype<interFactionLTGD> interFactionLTGD;
-        	sol::usertype<holdRegionsWinCondition>holdRegionsWinCondition;
-        	sol::usertype<battleFactionCounter>battleFactionCounter;
-        }types;
+	void addToLua(sol::state& luaState)
+	{
+		struct
+		{
+			sol::usertype<factionStruct>factionStruct;
+			sol::usertype<factionRecord>factionRecord;
+			sol::usertype<factionEconomy>factionEconomy;
+			sol::usertype<factionRanking>factionRanking;
+			sol::usertype<aiFaction> aiFaction;
+			sol::usertype<aiLongTermGoalDirector> aiLongTermGoalDirector;
+			sol::usertype<aiPersonalityValues> aiPersonality;
+			sol::usertype<aiGlobalStrategyDirector> aiGlobalStrategyDirector;
+			sol::usertype<decisionValuesLTGD> decisionValuesLTGD;
+			sol::usertype<militaryValuesLTGD> aiFactionValues;
+			sol::usertype<interFactionLTGD> interFactionLTGD;
+			sol::usertype<holdRegionsWinCondition>holdRegionsWinCondition;
+			sol::usertype<battleFactionCounter>battleFactionCounter;
+		}types;
     	
 		///Faction
 		//@section Faction
@@ -904,7 +924,7 @@ namespace factionHelpers
 		@tparam int Y
 		@treturn watchtowerStruct watchTower
 		@usage
-		     fac:createWatchtower(193, 283)
+			 fac:createWatchtower(193, 283)
 		*/
 		types.factionStruct.set_function("createWatchtower", &spawnWatchtower);
 
@@ -1022,7 +1042,7 @@ namespace factionHelpers
 		@tparam int characterTypeIndex
 		@tparam int factionID
 		@usage
-		     fac:setCharacterNameFaction(characterType.spy, 2)
+			 fac:setCharacterNameFaction(characterType.spy, 2)
 		*/
 		types.factionStruct.set_function("setCharacterNameFaction", &factionStruct::setCharacterNameFaction);
 
@@ -1033,7 +1053,7 @@ namespace factionHelpers
 		@tparam int y
 		@treturn int visibility use tileVisibility enum
 		@usage
-		     local vis = fac:getTileVisibility(172, 293)
+			 local vis = fac:getTileVisibility(172, 293)
 		*/
 		types.factionStruct.set_function("getTileVisibility", &factionStruct::getTileVisibility);
 
@@ -1044,7 +1064,7 @@ namespace factionHelpers
 		@tparam int y
 		@tparam int visibility use tileVisibility enum
 		@usage
-		     fac:setTileVisibility(172, 293, tileVisibility.wasVisible)
+			 fac:setTileVisibility(172, 293, tileVisibility.wasVisible)
 		*/
 		types.factionStruct.set_function("setTileVisibility", &factionStruct::setTileVisibility);
 
@@ -1054,7 +1074,7 @@ namespace factionHelpers
 		@tparam int x
 		@tparam int y
 		@usage
-		     local vis = fac:revealTile(172, 293)
+			 local vis = fac:revealTile(172, 293)
 		*/
 		types.factionStruct.set_function("revealTile", &factionStruct::revealTile);
 
@@ -1064,7 +1084,7 @@ namespace factionHelpers
 		@tparam int x
 		@tparam int y
 		@usage
-		     fac:hideRevealedTile(172, 293)
+			 fac:hideRevealedTile(172, 293)
 		*/
 		types.factionStruct.set_function("hideRevealedTile", &factionStruct::hideRevealedTile);
 
@@ -1097,7 +1117,7 @@ namespace factionHelpers
 		@tparam bool castle
 		@treturn settlementStruct newSett
 		@usage
-		     fac:addSettlement(123, 234, "coolSettlement", 1, false)
+			 fac:addSettlement(123, 234, "coolSettlement", 1, false)
 		*/
 		types.factionStruct.set_function("addSettlement", &settlementHelpers::createSettlement);
 
@@ -1108,7 +1128,7 @@ namespace factionHelpers
 		@tparam int G 
 		@tparam int B
 		@usage
-		     fac:setColor(255, 255, 255) 
+			 fac:setColor(255, 255, 255) 
 		*/
 		types.factionStruct.set_function("setColor", &factionStruct::setColor);
 		
@@ -1119,7 +1139,7 @@ namespace factionHelpers
 		@tparam int G
 		@tparam int B
 		@usage
-		     fac:setSecondaryColor(255, 255, 255)
+			 fac:setSecondaryColor(255, 255, 255)
 		*/
 		types.factionStruct.set_function("setSecondaryColor", &factionStruct::setSecondaryColor);
 		
@@ -1213,11 +1233,11 @@ namespace factionHelpers
 		@tparam int targetX
 		@tparam int targetY
 		@usage
-		     local units = {}
-		     for i = 0, myStack.unitsNum / 2 - 1 do
-		         table.insert(units, myStack:getUnit(i))
-		     end
-		     fac:splitArmy(units, 154, 84)
+			 local units = {}
+			 for i = 0, myStack.unitsNum / 2 - 1 do
+				 table.insert(units, myStack:getUnit(i))
+			 end
+			 fac:splitArmy(units, 154, 84)
 		*/
 		types.factionStruct.set_function("splitArmy", &splitArmy);
 		
@@ -1227,7 +1247,7 @@ namespace factionHelpers
 		@tparam int regionID
 		@treturn bool result
 		@usage
-		     local isNeighbour = fac:isNeighbourRegion(34)
+			 local isNeighbour = fac:isNeighbourRegion(34)
 		*/
 		types.factionStruct.set_function("isNeighbourRegion", &factionStruct::isInNeighbourArray);
 		
@@ -1237,7 +1257,7 @@ namespace factionHelpers
 		@tparam int charType
 		@treturn int count
 		@usage
-		     local count = fac:getCharacterCountOfType(characterType.general)
+			 local count = fac:getCharacterCountOfType(characterType.general)
 		*/
 		types.factionStruct.set_function("getCharacterCountOfType", &factionStruct::getCharacterCountOfType);
 		
@@ -1247,7 +1267,7 @@ namespace factionHelpers
 		@tparam character candidate
 		@treturn bool canSee
 		@usage
-		     local canSee = fac:canSeeCharacter(someCharacter)
+			 local canSee = fac:canSeeCharacter(someCharacter)
 		*/
 		types.factionStruct.set_function("canSeeCharacter", &factionStruct::canSeeCharacter);
 		
@@ -1257,7 +1277,7 @@ namespace factionHelpers
 		@tparam string label
 		@treturn characterRecord charRecord
 		@usage
-		     local myChar = fac:getCharacterByLabel("rufus_1")
+			 local myChar = fac:getCharacterByLabel("rufus_1")
 		*/
 		types.factionStruct.set_function("getCharacterByLabel", &factionStruct::getCharacterByLabel);
 		
@@ -1663,7 +1683,7 @@ namespace factionHelpers
 		@tparam int type use building capabilities enum
 		@tparam int value
 		@usage
-		     aiPersonality:setConstructionValue(buildingCapability.law_bonus, 100)
+			 aiPersonality:setConstructionValue(buildingCapability.law_bonus, 100)
 		*/
 		types.aiPersonality.set_function("setConstructionValue", &aiPersonalityValues::setConstructionValue);
 		/***
@@ -1672,7 +1692,7 @@ namespace factionHelpers
 		@tparam int type use characterTypes
 		@tparam int value
 		@usage
-		     aiPersonality:setConstructionAgentValue(characterType.diplomat, 100)
+			 aiPersonality:setConstructionAgentValue(characterType.diplomat, 100)
 		*/
 		types.aiPersonality.set_function("setConstructionAgentValue", &aiPersonalityValues::setConstructionAgentValue);
 		/***
@@ -1681,7 +1701,7 @@ namespace factionHelpers
 		@tparam int type use unitCategoryClass enum
 		@tparam int value
 		@usage
-		     aiPersonality:setConstructionUnitValue(unitCategoryClass.heavyCavalry, 100)
+			 aiPersonality:setConstructionUnitValue(unitCategoryClass.heavyCavalry, 100)
 		*/
 		types.aiPersonality.set_function("setConstructionUnitValue", &aiPersonalityValues::setConstructionUnitValue);
 		/***
@@ -1802,6 +1822,7 @@ namespace factionHelpers
 		@tfield int hordeMaxPercentArmyStack
 		@tfield int cultureID
 		@tfield setFactionStratModel setFactionStratModel
+		@tfield setFactionBattleModel setFactionBattleModel
 
 		@table factionRecord
 		*/
@@ -1856,7 +1877,14 @@ namespace factionHelpers
 		*/
 		types.factionRecord.set_function("setFactionStratModel", &factionRecord::setFactionStratModel);
 
-
-		
-    }
+		/***
+		Set a faction's default battle model
+		@function factionRecord:setFactionBattleModel
+		@tparam string model
+		@tparam int characterType
+		@usage
+			factionRec:setFactionBattleModel("arnor_general", characterType.general)
+		*/
+		types.factionRecord.set_function("setFactionBattleModel", &factionRecord::setFactionBattleModel);
+	}
 }
