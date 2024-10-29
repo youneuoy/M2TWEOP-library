@@ -133,8 +133,11 @@ void factionRecord::setFactionBattleModel(const std::string& model, const int ch
 	const auto charTypeEntry = &descrCharacterPtr->entries[characterType];
 	const auto factionEntry = charTypeEntry->ptrsToDescrCharacterFactionEntries[id];
 	factionEntry->battleMod = techFuncs::createGameClass<eduOfficer>();
+	factionEntry->battleMod->name = nullptr;
+	factionEntry->battleMod->nameHash = 0;
 	factionEntry->battleMod->modelGroup = 0;
 	factionEntry->battleMod->modelIndex = 0;
+	factionEntry->battleMod->modelEntry = nullptr;
 	gameStringHelpers::setHashedString(&factionEntry->battleMod->name, model.c_str());
 	factionEntry->battleMod->modelEntry = battleMod;
 }

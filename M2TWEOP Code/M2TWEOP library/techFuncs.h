@@ -53,6 +53,7 @@ namespace techFuncs
 			add esp, 0x4
 			mov retMem, eax
 		}
+		std::memset(reinterpret_cast<void*>(retMem), 0, amount);
 		return reinterpret_cast<T*>(retMem);
 	}
 	
