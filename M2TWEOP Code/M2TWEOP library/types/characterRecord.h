@@ -132,6 +132,12 @@ struct ancillary { /* structure of ancillary */
 	int typeHash; //004C
 	bool transferable;//00050
 	char pad_0051[31];
+	std::string getLocalizedName();
+	void setLocalizedName(const std::string& newName);
+	std::string getLocalizedDescr();
+	void setLocalizedDescr(const std::string& newDescr);
+	std::string getLocalizedEffectsDescr();
+	void setLocalizedEffectsDescr(const std::string& newDescr);
 	
 	traitEffect* getEffect(const int i)
 	{
@@ -550,6 +556,7 @@ namespace characterRecordHelpers
 	int addAncillary(characterRecord* character, ancillary* anc);
 	void removeAncillary(characterRecord* character, ancillary* anc);
 	ancillary* findAncillary(const std::string& ancName);
+	traitEntry* findTrait(const std::string& name);
 	
 	void removeTrait(characterRecord* character, const char* traitName);
 	void addTrait(characterRecord* character, const char* traitName, int traitLevel);

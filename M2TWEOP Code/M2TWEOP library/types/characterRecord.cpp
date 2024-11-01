@@ -831,10 +831,13 @@ namespace characterRecordHelpers
 		Basic ancillary table
 	
 		@tfield int index
+		@tfield string localizedName
+		@tfield string description
+		@tfield string effectsDescription
+		@tfield string name (internal)
 		@tfield int effectsNum
 		@tfield bool isUnique
 		@tfield bool transferable
-		@tfield string name
 		@tfield string type
 		@tfield string imagePath
 		@tfield getEffect getEffect
@@ -854,6 +857,15 @@ namespace characterRecordHelpers
 			));
 		types.ancillary.set("imagePath", sol::property(
 			&getStringPropertyAnc<ancillaryStruct_imagePath>, &setStringPropertyAnc<ancillaryStruct_imagePath>
+			));
+		types.ancillary.set("localizedName", sol::property(
+			&ancillary::getLocalizedName, &ancillary::setLocalizedName
+			));
+		types.ancillary.set("description", sol::property(
+			&ancillary::getLocalizedDescr, &ancillary::setLocalizedDescr
+			));
+		types.ancillary.set("effectsDescription", sol::property(
+			&ancillary::getLocalizedEffectsDescr, &ancillary::setLocalizedEffectsDescr
 			));
 		/***
 		Get an ancillary effect.
@@ -1039,6 +1051,36 @@ namespace characterRecordHelpers
 		types.traitEffect.set("value", &traitEffect::value);
 
 	}
+}
+
+std::string ancillary::getLocalizedName()
+{
+	return gameStringHelpers::uniStringToStr(*localizedAncName);
+}
+
+void ancillary::setLocalizedName(const std::string& newName)
+{
+	gameStringHelpers::createUniString(*localizedAncName, newName.c_str());
+}
+
+std::string ancillary::getLocalizedDescr()
+{
+	return gameStringHelpers::uniStringToStr(*localizedAncDesc);
+}
+
+void ancillary::setLocalizedDescr(const std::string& newDescr)
+{
+	gameStringHelpers::createUniString(*localizedAncDesc, newDescr.c_str());
+}
+
+std::string ancillary::getLocalizedEffectsDescr()
+{
+	return gameStringHelpers::uniStringToStr(*effectsDescr);
+}
+
+void ancillary::setLocalizedEffectsDescr(const std::string& newDescr)
+{
+	gameStringHelpers::createUniString(*effectsDescr, newDescr.c_str());
 }
 
 std::string characterRecord::giveValidLabel()

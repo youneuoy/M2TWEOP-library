@@ -150,6 +150,8 @@ void eopHiddenResources::addHiddenResourceToRegionIndex(const std::string& name,
 
 bool eopHiddenResources::hasHiddenResource(const int regionId, const int id)
 {
+	if (!isInitialized())
+		initialize();
 	if (regionId >= static_cast<int>(m_HiddenResources.size()))
 		return false;
 	const auto& res = m_HiddenResources[regionId];

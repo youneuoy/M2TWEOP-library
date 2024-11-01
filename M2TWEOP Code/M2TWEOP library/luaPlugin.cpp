@@ -211,6 +211,8 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield toggleDeveloperMode toggleDeveloperMode
 	@tfield saveGame saveGame
 	@tfield copyFile copyFile
+	@tfield getAncillary getAncillary
+	@tfield getTrait getTrait
 	@tfield setExpandedString setExpandedString
 	@tfield getGameVersion getGameVersion
 	@tfield setPerfectSpy setPerfectSpy
@@ -337,6 +339,26 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	M2TWEOP.saveGame("mods/bare_geomod/saves/newsave.sav");
 	*/
 	tables.M2TWEOP.set_function("saveGame", &gameHelpers::saveGame);
+	
+	/***
+	Get an ancillary by name.
+	@function M2TWEOP.getAncillary
+	@tparam string name
+	@treturn ancillary anc
+	@usage
+	    M2TWEOP.getAncillary("ancillary_name");
+	*/
+	tables.M2TWEOP.set_function("getAncillary", &characterRecordHelpers::findAncillary);
+	
+	/***
+	Get a trait by name.
+	@function M2TWEOP.getTrait
+	@tparam string name
+	@tparam traitEntry trait
+	@usage
+	    M2TWEOP.getTrait("trait_name");
+	*/
+	tables.M2TWEOP.set_function("getTrait", &characterRecordHelpers::findTrait);
 	
 	/***
 	Copy a file.

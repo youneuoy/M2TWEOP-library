@@ -1681,8 +1681,6 @@ void __fastcall patchesForGame::clickAtTile(coordPair* xy)
 
 void __stdcall patchesForGame::afterCampaignMapLoaded()
 {
-	if (!eopHiddenResources::isInitialized())
-		eopHiddenResources::initialize();
 	discordManager::onCampaignMapLoaded();
 	globals::dataS.Modules.tacticalMapViewer.unView();
 	plugData::data.luaAll.fillHashMaps();
@@ -1732,6 +1730,8 @@ void __stdcall patchesForGame::onUnloadCampaign()
 }
 void __stdcall patchesForGame::onNewGameLoaded()
 {
+	if (!eopHiddenResources::isInitialized())
+		eopHiddenResources::initialize();
 	eopCharacterDataDb::get()->clearData();
 	minorSettlementDb::load();
 	eopSettlementDataDb::get()->newGameLoaded();
@@ -1957,6 +1957,8 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	}
 	else if (eventCode == gameReloaded)
 	{
+		if (!eopHiddenResources::isInitialized())
+			eopHiddenResources::initialize();
 		minorSettlementDb::load();
 		eopSettlementDataDb::get()->onGameLoaded();
 		eopFortDataDb::get()->onGameLoaded();

@@ -1794,6 +1794,7 @@ namespace factionHelpers
 		@tfield int secondaryColorBlue Warning: resets on reload.
 		@tfield int triumphValue Usage unknown.
 		@tfield int religionID
+		@tfield string name
 		@tfield int standardIndex Warning: resets on reload.
 		@tfield int logoIndex Warning: resets on reload.
 		@tfield int smallLogoIndex Warning: resets on reload.
@@ -1831,6 +1832,7 @@ namespace factionHelpers
 		*/
 		types.factionRecord = luaState.new_usertype<factionRecord>("factionRecord");
 		types.factionRecord.set("primaryColorRed", &factionRecord::primary_colour_red);
+		types.factionRecord.set("name", &factionRecord::facName);
 		types.factionRecord.set("primaryColorGreen", &factionRecord::primary_colour_green);
 		types.factionRecord.set("primaryColorBlue", &factionRecord::primary_colour_blue);
 		types.factionRecord.set("canHorde", &factionRecord::canHorde);
