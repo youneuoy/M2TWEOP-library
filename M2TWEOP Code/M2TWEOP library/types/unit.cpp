@@ -1298,22 +1298,22 @@ namespace unitHelpers
 
 	void setUnitName(eduEntry* entry, const std::string& name)
 	{
-		const auto nameMem = new UNICODE_STRING**;
+		const auto nameMem = techFuncs::createGameClass<UNICODE_STRING**>();
 		entry->localizedName = nameMem;
 		gameStringHelpers::createUniString(*entry->localizedName, name.c_str());
 	}
 
 	void setUnitDescr(eduEntry* entry, const std::string& descr)
 	{
-		const auto descrMem = new UNICODE_STRING * *[4];
-		entry->localizedDescr = descrMem;
+		const auto nameMem = techFuncs::createGameClass<UNICODE_STRING**>();
+		entry->localizedDescr = nameMem;
 		gameStringHelpers::createUniString(*entry->localizedDescr, descr.c_str());
 	}
 
 	void setUnitDescrShort(eduEntry* entry, const std::string& descr)
 	{
-		const auto shDescrMem = new UNICODE_STRING * *[4];
-		entry->localizedDescrShort = shDescrMem;
+		const auto nameMem = techFuncs::createGameClass<UNICODE_STRING**>();
+		entry->localizedDescrShort = nameMem;
 		gameStringHelpers::createUniString(*entry->localizedDescrShort, descr.c_str());
 	}
 	

@@ -2105,6 +2105,18 @@ private:
 	LPVOID funcAddress;
 };
 
+class onEnemyClicked
+	:public AATemplate
+{
+public:
+	onEnemyClicked(MemWork* mem, LPVOID addr, int ver);
+	~onEnemyClicked() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onCreateMarriageOption2
 	:public AATemplate
 {

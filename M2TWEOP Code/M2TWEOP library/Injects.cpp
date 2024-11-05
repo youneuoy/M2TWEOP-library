@@ -5754,6 +5754,34 @@ void onCreateMarriageOption::SetNewCode()
 	delete a;
 }
 
+onEnemyClicked::onEnemyClicked(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x004DCDD4;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x4F0FD3;
+}
+
+void onEnemyClicked::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->add(ecx, 0x88);
+	a->push(ecx);
+	a->push(edx);
+	a->push(eax);
+	a->mov(ecx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onCreateMarriageOption2::onCreateMarriageOption2(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

@@ -922,6 +922,12 @@ void managerF::execPatches()
 	toCreateMarriageOption2->Enable();
 	f1 << "Done" << '\n';
 	
+	//f1 << "Start applying onEnemyClicked patch" << '\n';
+	//onEnemyClicked* toEnemyClicked = new onEnemyClicked(mem, (LPVOID)patchesForGame::onEnemyClicked, globals::dataS.gameVersion);
+	//toEnemyClicked->SetNewCode();
+	//toEnemyClicked->Enable();
+	//f1 << "Done" << '\n';
+	
 	f1 << "Start applying onCreateBirthOption patch" << '\n';
 	onCreateBirthOption* toCreateBirthOption = new onCreateBirthOption(mem, (LPVOID)patchesForGame::onMarriageOption, globals::dataS.gameVersion);
 	toCreateBirthOption->SetNewCode();

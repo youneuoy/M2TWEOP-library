@@ -1675,8 +1675,18 @@ character* __fastcall patchesForGame::mercenaryMovePointsGetGeneral(armyStruct* 
 
 void __fastcall patchesForGame::clickAtTile(coordPair* xy)
 {
+	const auto tile = stratMapHelpers::getTile(xy->xCoord, xy->yCoord);
+	if (!tile)
+		return;
+	if (const auto character = tile->getCharacter(); character)
+		onCharacterClicked(character);
 	gameEvents::onClickAtTile(xy->xCoord, xy->yCoord);
 	plannedRetreatRoute::onClickAtTile(xy->xCoord, xy->yCoord);
+}
+
+void __fastcall patchesForGame::onCharacterClicked(character* enemy)
+{
+	gameEvents::onCharacterClicked(enemy);
 }
 
 void __stdcall patchesForGame::afterCampaignMapLoaded()

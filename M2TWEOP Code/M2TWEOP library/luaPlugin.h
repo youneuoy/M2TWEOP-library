@@ -126,6 +126,7 @@ public:
 	sol::function* onCalculateUnitValue = nullptr;
 	sol::function* onChangeTurnNumFunc = nullptr;
 	sol::function* onClickAtTile = nullptr;
+	sol::function* onCharacterClicked = nullptr;
 	sol::function* onNewGameStart = nullptr;
 	sol::function* onPluginLoad = nullptr;
 	sol::function* onCreateSaveFile = nullptr;

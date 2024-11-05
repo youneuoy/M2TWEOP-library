@@ -795,6 +795,14 @@ void onClickAtTile(int x, int y)
 	}
 }
 
+void onCharacterClicked(character* enemy)
+{
+	if (plugData::data.luaAll.onCharacterClicked != nullptr)
+	{
+		tryLua((*plugData::data.luaAll.onCharacterClicked)(enemy));
+	}
+}
+
 std::string* onSelectWorldpkgdesc(const char* selectedRec, const char* selectedGroup)
 {
 	std::string tmpS;
@@ -1338,6 +1346,7 @@ void luaPlugin::onPluginLoadF()
 	@tfield onUnloadCampaign onUnloadCampaign
 	@tfield onAiTurn onAiTurn
 	@tfield onClickAtTile onClickAtTile
+	@tfield onCharacterClicked onCharacterClicked
 	@tfield onCampaignMapLoaded onCampaignMapLoaded
 	@tfield onCreateSaveFile onCreateSaveFile
 	@tfield onLoadSaveFile onLoadSaveFile
@@ -4193,6 +4202,20 @@ void luaPlugin::onPluginLoadF()
 
 	onClickAtTile = new sol::function(luaState["onClickAtTile"]);
 	checkLuaFunc(&onClickAtTile);
+
+	/***
+	Called when clicking on a character.
+
+	@function onCharacterClicked
+	@tparam character clickedCharacter
+	@usage
+	
+	function onCharacterClicked(clickedCharacter)
+	--something here
+	end
+	*/
+	onCharacterClicked = new sol::function(luaState["onCharacterClicked"]);
+	checkLuaFunc(&onCharacterClicked);
 
 	/***
 	Called after loading the campaign map

@@ -122,6 +122,7 @@ public:
 	static unit** __fastcall onGetUnitByLabel(DWORD unitLabels, char* label);
 	static unitGroup** __fastcall onGetGroupByLabel(DWORD groupLabels, char* label);
 	static char* __fastcall onGetCultureEndTurnSound(int cultureID);
+	static void __fastcall onCharacterClicked(character* enemy);
 
 
 	static character* __fastcall mercenaryMovePointsGetGeneral(armyStruct* army);

@@ -160,21 +160,21 @@ public:
 	std::string getLocalizedName(const int factionID);
 	void setLocalizedName(const int factionID, const std::string& newName)
 	{
-		const auto nameMem = new UNICODE_STRING**;
+		const auto nameMem = techFuncs::createGameClass<UNICODE_STRING**>();
 		buildingName[factionID] = nameMem;
 		gameStringHelpers::createUniString(*buildingName[factionID], newName.c_str());
 	}
 	std::string getLocalizedDescr(const int factionID);
 	void setLocalizedDescr(const int factionID, const std::string& newName)
 	{
-		const auto nameMem = new UNICODE_STRING**;
+		const auto nameMem  = techFuncs::createGameClass<UNICODE_STRING**>();
 		buildingDescr[factionID] = nameMem;
 		gameStringHelpers::createUniString(*buildingDescr[factionID], newName.c_str());
 	}
 	std::string getLocalizedDescrShort(const int factionID);
 	void setLocalizedDescrShort(const int factionID, const std::string& newName)
 	{
-		const auto nameMem = new UNICODE_STRING**;
+		const auto nameMem  = techFuncs::createGameClass<UNICODE_STRING**>();
 		buildingDescrShort[factionID] = nameMem;
 		gameStringHelpers::createUniString(*buildingDescrShort[factionID], newName.c_str());
 	}
