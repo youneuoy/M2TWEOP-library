@@ -861,26 +861,36 @@ struct stratMap {
 public:
 	regionStruct* getRegion(const int index)
 	{
+		if (!isOpen)
+			return nullptr;
 		if (index < 0 || index >= regionsNum)
 			return nullptr;
 		return &regions[index];
 	}
 	oneTile* getTile(const int x, const int y)
 	{
+		if (!isOpen)
+			return nullptr;
 		if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight)
 			return nullptr;
 		return &tilesArr[y * mapWidth + x];
 	}
 	coordPair* getVolcanoCoords(const int index)
 	{
+		if (!isOpen)
+			return nullptr;
 		return &volcanoes[index];
 	}
 	coordPair* getLandConnection(const int index)
 	{
+		if (!isOpen)
+			return nullptr;
 		return &landMassConnections[index];
 	}
 	landMass* getLandMass(const int index)
 	{
+		if (!isOpen)
+			return nullptr;
 		return &landMasses[index];
 	}
 };

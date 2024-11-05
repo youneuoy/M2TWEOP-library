@@ -803,6 +803,23 @@ void onCharacterClicked(character* enemy)
 	}
 }
 
+void onCampaignTick()
+{
+	if (plugData::data.luaAll.onCampaignTick != nullptr)
+	{
+		tryLua((*plugData::data.luaAll.onCampaignTick)());
+	}
+}
+
+
+void onBattleTick()
+{
+	if (plugData::data.luaAll.onBattleTick != nullptr)
+	{
+		tryLua((*plugData::data.luaAll.onBattleTick)());
+	}
+}
+
 std::string* onSelectWorldpkgdesc(const char* selectedRec, const char* selectedGroup)
 {
 	std::string tmpS;
@@ -1347,6 +1364,8 @@ void luaPlugin::onPluginLoadF()
 	@tfield onAiTurn onAiTurn
 	@tfield onClickAtTile onClickAtTile
 	@tfield onCharacterClicked onCharacterClicked
+	@tfield onCampaignTick onCampaignTick
+	@tfield onBattleTick onBattleTick
 	@tfield onCampaignMapLoaded onCampaignMapLoaded
 	@tfield onCreateSaveFile onCreateSaveFile
 	@tfield onLoadSaveFile onLoadSaveFile
@@ -4216,6 +4235,32 @@ void luaPlugin::onPluginLoadF()
 	*/
 	onCharacterClicked = new sol::function(luaState["onCharacterClicked"]);
 	checkLuaFunc(&onCharacterClicked);
+
+	/***
+	Called on campaign tick.
+
+	@function onCampaignTick
+	@usage
+	
+	function onCampaignTick()
+	--something here
+	end
+	*/
+	onCampaignTick = new sol::function(luaState["onCampaignTick"]);
+	checkLuaFunc(&onCampaignTick);
+
+	/***
+	Called on battle tick.
+
+	@function onBattleTick
+	@usage
+	
+	function onBattleTick()
+	--something here
+	end
+	*/
+	onBattleTick = new sol::function(luaState["onBattleTick"]);
+	checkLuaFunc(&onBattleTick);
 
 	/***
 	Called after loading the campaign map

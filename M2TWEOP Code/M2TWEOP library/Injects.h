@@ -2117,6 +2117,30 @@ private:
 	LPVOID funcAddress;
 };
 
+class onCampaignTick
+	:public AATemplate
+{
+public:
+	onCampaignTick(MemWork* mem, LPVOID addr, int ver);
+	~onCampaignTick() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onBattleTick
+	:public AATemplate
+{
+public:
+	onBattleTick(MemWork* mem, LPVOID addr, int ver);
+	~onBattleTick() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onCreateMarriageOption2
 	:public AATemplate
 {

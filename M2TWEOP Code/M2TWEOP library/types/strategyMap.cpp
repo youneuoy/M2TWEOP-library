@@ -30,7 +30,7 @@ minorSettlementBalance* minorSettlementDb::m_BalanceModifiers = new minorSettlem
 oneTile* landingTile::getTile()
 {
 	const auto map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return nullptr;
 	return &map->tilesArr[tileId];
 }
@@ -38,7 +38,7 @@ oneTile* landingTile::getTile()
 oneTile* landingPoint::getTile()
 {
 	const auto map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return nullptr;
 	return &map->tilesArr[tileIndex];
 }
@@ -163,7 +163,7 @@ oneTileDouble* oneTile::tileToDoubleTile()
 
 void regionStruct::changeRegionName(const char* newName)
 {
-	const auto nameMem = new UNICODE_STRING*;
+	const auto nameMem = techFuncs::createGameClass<UNICODE_STRING*>();
 	localizedRegionName = nameMem;
 	gameStringHelpers::createUniString(localizedRegionName, newName);
 	eopSettlementDataDb::get()->getSettlementData(regionID, 0)->regionName = newName;
@@ -171,14 +171,14 @@ void regionStruct::changeRegionName(const char* newName)
 
 void regionStruct::changeRegionSettlementName(const char* newName)
 {
-	const auto nameMem = new UNICODE_STRING*;
+	const auto nameMem = techFuncs::createGameClass<UNICODE_STRING*>();
 	localizedSettlementName = nameMem;
 	gameStringHelpers::createUniString(localizedSettlementName, newName);
 }
 
 void regionStruct::changeRebelsName(const char* newName)
 {
-	const auto nameMem = new UNICODE_STRING*;
+	const auto nameMem = techFuncs::createGameClass<UNICODE_STRING*>();
 	localizedRebelsName = nameMem;
 	gameStringHelpers::createUniString(localizedRebelsName, newName);
 	eopSettlementDataDb::get()->getSettlementData(regionID, 0)->regionRebelsName = newName;
@@ -203,7 +203,7 @@ void regionStruct::setHiddenResource(const char* name, const bool enable)
 std::pair<int, int> oneTile::getTileCoords()
 {
 	const stratMap* map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return {-1, -1};
 	const int index = this - map->tilesArr;
 	const int y = index / map->mapWidth;
@@ -214,7 +214,7 @@ std::pair<int, int> oneTile::getTileCoords()
 int oneTile::getTileX()
 {
 	const stratMap* map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return -1;
 	const int index = this - map->tilesArr;
 	const int y = index / map->mapWidth;
@@ -242,7 +242,7 @@ armyStruct* oneTile::getArmy(const bool onlyLead)
 int oneTile::getTileY()
 {
 	const stratMap* map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return -1;
 	const int index = this - map->tilesArr;
 	return index / map->mapWidth;
@@ -251,7 +251,7 @@ int oneTile::getTileY()
 oneTile* landingPoint::getSeaTile()
 {
 	const auto map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return nullptr;
 	return &map->tilesArr[seaTileIndex];
 }
@@ -261,7 +261,7 @@ oneTile* neighbourRegion::getBorderTile(const int index)
 	if (index < 0 || index >= borderTilesCount)
 		return nullptr;
 	const auto map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return nullptr;
 	return &map->tilesArr[borderTiles[index]];
 }
@@ -271,7 +271,7 @@ oneTile* neighbourRegion::getFrontierTile(const int index)
 	if (index < 0 || index >= frontierTilesCount)
 		return nullptr;
 	const auto map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return nullptr;
 	return &map->tilesArr[frontierTiles[index]];
 }
@@ -281,7 +281,7 @@ oneTile* neighbourRegion::getAmbushTile(const int index)
 	if (index < 0 || index >= ambushTilesCount)
 		return nullptr;
 	const auto map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return nullptr;
 	return &map->tilesArr[ambushTiles[index]];
 }
@@ -291,7 +291,7 @@ oneTile* neighbourRegion::getDeepFrontierTile(const int index)
 	if (index < 0 || index >= deepFrontierTilesCount)
 		return nullptr;
 	const auto map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return nullptr;
 	return &map->tilesArr[deepFrontierTiles[index]];
 }
@@ -301,7 +301,7 @@ oneTile* neighbourRegion::getBorderCrossing(const int index)
 	if (index < 0 || index >= passableTilesCount)
 		return nullptr;
 	const auto map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return nullptr;
 	return &map->tilesArr[passableTiles[index]];
 }
@@ -423,7 +423,7 @@ oneTile* regionStruct::getPatrolPoint(const int index)
 	if (index < 0 || index >= patrolPointsCount)
 		return nullptr;
 	const auto map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return nullptr;
 	return &map->tilesArr[patrolPoints[index]];
 }
@@ -433,7 +433,7 @@ oneTile* regionStruct::getDevastatedTile(const int index)
 	if (index < 0 || index >= devastatedTilesCount)
 		return nullptr;
 	const auto map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return nullptr;
 	return &map->tilesArr[devastatedTiles[index]];
 }
@@ -443,7 +443,7 @@ oneTile* regionStruct::getTile(int index)
 	if (index < 0 || index >= tileCount)
 		return nullptr;
 	const auto map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return nullptr;
 	return &map->tilesArr[tiles[index]];
 }
@@ -453,7 +453,7 @@ oneTile* regionStruct::getFertileTile(int index)
 	if (index < 0 || index >= fertileTilesCount)
 		return nullptr;
 	const auto map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return nullptr;
 	return &map->tilesArr[fertileTiles[index]];
 }
@@ -463,7 +463,7 @@ oneTile* regionStruct::getTileBorderingEdgeOfMap(int index)
 	if (index < 0 || index >= tilesBorderingEdgeOfMapCount)
 		return nullptr;
 	const auto map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return nullptr;
 	return &map->tilesArr[tilesBorderingEdgeOfMap[index]];
 }
@@ -471,7 +471,7 @@ oneTile* regionStruct::getTileBorderingEdgeOfMap(int index)
 int oneTile::getTileHeatValue()
 {
 	const stratMap* map = stratMapHelpers::getStratMap();
-	if (!map)
+	if (!map || !map->isOpen)
 		return -1;
 	const auto climate = getTileClimate();
 	return map->climates->climateArray[climate].heatValue;
@@ -560,7 +560,7 @@ namespace stratMapHelpers
 	std::pair<int, int> convertTileCoords(const DWORD arrayIndex)
 	{
 		const auto map = getStratMap();
-		if (!map)
+		if (!map || !map->isOpen)
 			return {-1, -1};
 		const int x = arrayIndex % map->mapWidth;
 		const int y = arrayIndex / map->mapWidth;
@@ -569,14 +569,14 @@ namespace stratMapHelpers
 	
 	regionStruct* getRegion(const int index)
 	{
-		if (stratMap* map = getStratMap(); map)
+		if (stratMap* map = getStratMap(); map && map->isOpen)
 			return map->getRegion(index);
 		return nullptr;
 	}
 	
 	oneTile* getTile(const int x, const int y)
 	{
-		if (stratMap* map = getStratMap(); map)
+		if (stratMap* map = getStratMap(); map && map->isOpen)
 			return map->getTile(x, y);
 		return nullptr;
 	}
@@ -594,8 +594,8 @@ namespace stratMapHelpers
 	
 	float getTileMoveCost(int x, int y, int destX, int destY)
 	{
-		if (const auto map = getStratMap();
-			x < 0 || x > map->mapWidth || y < 0 || y > map->mapHeight)
+		if (const auto map = getStratMap(); !map || !map->isOpen ||
+			(x < 0 || x > map->mapWidth || y < 0 || y > map->mapHeight))
 			return -1;
 		int start[2] = {x, y};
 		int end[2] = {destX, destY};
@@ -605,6 +605,8 @@ namespace stratMapHelpers
 	std::queue<std::pair<int, int>> getNeighbourTiles(int x, int y)
 	{
 		const auto map = getStratMap();
+		if (!map || !map->isOpen)
+			return {};
 		std::queue<std::pair<int, int>> neighbours;
 		if (x - 1 < map->mapWidth - 1 && x - 1 >= 0)
 			neighbours.emplace(x - 1, y);
@@ -702,7 +704,10 @@ namespace stratMapHelpers
 			return false;
 		if (*isStratMap == 0)
 			return false;
-		return true;
+		const auto map = getStratMap();
+		if (map == nullptr)
+			return false;
+		return map->isOpen;
 	}
 
 	std::tuple<int, int> getStratHoveredCoords()
@@ -876,6 +881,7 @@ namespace stratMapHelpers
 		/***
 		Basic strat map table.
 
+		@tfield bool isLoaded
 		@tfield int mapWidth
 		@tfield int mapHeight
 		@tfield int regionsNum
@@ -904,6 +910,7 @@ namespace stratMapHelpers
 		*/
 		typeAll.stratMap = luaState.new_usertype<stratMap>("stratMap");
 		typeAll.stratMap.set("mapWidth", &stratMap::mapWidth);
+		typeAll.stratMap.set("isLoaded", &stratMap::isOpen);
 		typeAll.stratMap.set("mapHeight", &stratMap::mapHeight);
 		typeAll.stratMap.set("regionsNum", &stratMap::regionsNum);
 		typeAll.stratMap.set("volcanoesNum", &stratMap::volcanoesNum);

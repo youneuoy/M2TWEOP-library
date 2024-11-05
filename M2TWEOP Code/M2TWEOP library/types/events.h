@@ -237,6 +237,8 @@ namespace gameEvents
 
 	void onClickAtTile(int x, int y);
 	void onCharacterClicked(character* enemy);
+	void onCampaignTick();
+	void onBattleTick();
 	std::string * onSelectWorldpkgdesc(const char* selectedRec, const char* selectedGroup);
 	int onFortificationLevelS(settlementStruct * settlement, bool* isCastle, bool* isChanged);
 	float onCalculateUnitValue(eduEntry* entry, float value);

@@ -370,7 +370,8 @@ namespace battleHelpers
 		@tfield int finishTimer
 		@tfield float battleSpeed
 		@tfield float secondsPassed
-		@tfield int secondsSinceBattleLoaded
+		@tfield int tickCount
+		@tfield int ticksSinceBattleStart
 		@tfield int hidingEnabledSet
 		@tfield fortBattleInfo fortInfo
 		@tfield float mapWidth
@@ -424,7 +425,8 @@ namespace battleHelpers
 		typeAll.battleTable.set("inBattle", &battleDataS::inBattle);
 		typeAll.battleTable.set("battleSpeed", &battleDataS::speed);
 		typeAll.battleTable.set("secondsPassed", &battleDataS::secondsPassed);
-		typeAll.battleTable.set("secondsSinceBattleLoaded", &battleDataS::secondsSinceBattleLoaded);
+		typeAll.battleTable.set("tickCount", &battleDataS::tickCount);
+		typeAll.battleTable.set("ticksSinceBattleStart", &battleDataS::ticksSinceBattleStart);
 		typeAll.battleTable.set("hidingEnabledSet", &battleDataS::hidingEnabledSet);
 		typeAll.battleTable.set("mapWidthDoubled", &battleDataS::mapWidth);
 		typeAll.battleTable.set("mapHeightDoubled", &battleDataS::mapHeight);

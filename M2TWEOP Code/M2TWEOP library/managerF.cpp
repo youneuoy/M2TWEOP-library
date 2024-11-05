@@ -922,6 +922,18 @@ void managerF::execPatches()
 	toCreateMarriageOption2->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onCampaignTick patch" << '\n';
+	onCampaignTick* toCampaignTick = new onCampaignTick(mem, (LPVOID)patchesForGame::onCampaignTick, globals::dataS.gameVersion);
+	toCampaignTick->SetNewCode();
+	toCampaignTick->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onBattleTick patch" << '\n';
+	onBattleTick* toBattleTick = new onBattleTick(mem, (LPVOID)patchesForGame::onBattleTick, globals::dataS.gameVersion);
+	toBattleTick->SetNewCode();
+	toBattleTick->Enable();
+	f1 << "Done" << '\n';
+	
 	//f1 << "Start applying onEnemyClicked patch" << '\n';
 	//onEnemyClicked* toEnemyClicked = new onEnemyClicked(mem, (LPVOID)patchesForGame::onEnemyClicked, globals::dataS.gameVersion);
 	//toEnemyClicked->SetNewCode();

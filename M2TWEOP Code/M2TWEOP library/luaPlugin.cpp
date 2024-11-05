@@ -1075,7 +1075,7 @@ void luaPlugin::fillHashMaps()
 			factions.insert_or_assign(std::string(faction->factionRecord->facName), faction->factionID);
 	}
 	const auto stratMap = stratMapHelpers::getStratMap();
-	if (!stratMap)
+	if (!stratMap || !stratMap->isOpen)
 		return;
 	for (int i = 0; i < stratMap->regionsNum; i++)
 	{

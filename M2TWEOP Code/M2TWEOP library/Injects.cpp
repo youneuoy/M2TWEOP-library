@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Injects.h"
 
+#include "dataOffsets.h"
+
 
 Injects::Injects(MemWork* mem)
 	:AATemplate(mem)
@@ -5777,6 +5779,57 @@ void onEnemyClicked::SetNewCode()
 	a->pop(eax);
 	a->pop(edx);
 	a->pop(ecx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onCampaignTick::onCampaignTick(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x47D5B6;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x47D1D6;
+}
+
+void onCampaignTick::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(edx);
+	a->push(eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(ecx, eax);
+	a->pop(eax);
+	a->pop(edx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onBattleTick::onBattleTick(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x60FE6F;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x60FABF;
+}
+
+void onBattleTick::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ecx);
+	a->push(edx);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(edx);
+	a->pop(ecx);
+	a->mov(eax, dword_ptr(esi, 0x4));
+	a->cmp(eax, 5);
 	a->ret();
 	m_cheatBytes = static_cast<unsigned char*>(a->make());
 	delete a;

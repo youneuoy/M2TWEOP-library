@@ -1445,10 +1445,10 @@ struct battleDataS {
 	bool paused; //0x0054
 	char pad_0055[3]; //0x0055
 	float speed; //0x0058
-	int ticks;
+	int ticksSinceBattleStart;
 	int ticksMilliSec;
 	float secondsPassed; //0x0064
-	int32_t secondsSinceBattleLoaded; //0x0068
+	int32_t tickCount; //0x0068
 	int finishTimer;
 	int32_t autoResolveMode;
 	float centreX;

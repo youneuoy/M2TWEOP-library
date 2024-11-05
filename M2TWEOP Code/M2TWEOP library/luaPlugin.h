@@ -127,6 +127,8 @@ public:
 	sol::function* onChangeTurnNumFunc = nullptr;
 	sol::function* onClickAtTile = nullptr;
 	sol::function* onCharacterClicked = nullptr;
+	sol::function* onCampaignTick = nullptr;
+	sol::function* onBattleTick = nullptr;
 	sol::function* onNewGameStart = nullptr;
 	sol::function* onPluginLoad = nullptr;
 	sol::function* onCreateSaveFile = nullptr;

@@ -1689,6 +1689,18 @@ void __fastcall patchesForGame::onCharacterClicked(character* enemy)
 	gameEvents::onCharacterClicked(enemy);
 }
 
+DWORD patchesForGame::onCampaignTick()
+{
+	gameEvents::onCampaignTick();
+	const auto stratMap = stratMapHelpers::getStratMap();
+	return reinterpret_cast<DWORD>(stratMap);
+}
+
+void patchesForGame::onBattleTick()
+{
+	gameEvents::onBattleTick();
+}
+
 void __stdcall patchesForGame::afterCampaignMapLoaded()
 {
 	discordManager::onCampaignMapLoaded();

@@ -123,6 +123,8 @@ public:
 	static unitGroup** __fastcall onGetGroupByLabel(DWORD groupLabels, char* label);
 	static char* __fastcall onGetCultureEndTurnSound(int cultureID);
 	static void __fastcall onCharacterClicked(character* enemy);
+	static DWORD __fastcall onCampaignTick();
+	static void __fastcall onBattleTick();
 
 
 	static character* __fastcall mercenaryMovePointsGetGeneral(armyStruct* army);
