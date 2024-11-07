@@ -155,7 +155,7 @@ namespace mainUI
 
 		if (ImGui::Button("Documentation", helpers::getScreen().centerXButton))
 		{
-			ShellExecuteA(NULL, "open", "https://youneuoy.github.io/M2TWEOP-library/_static/LuaLib/index.html", NULL, NULL, SW_SHOWNORMAL);
+			ShellExecuteA(NULL, "open", "eopData\\helpPages\\index.html", NULL, NULL, SW_SHOWNORMAL);
 		}
 		if (ImGui::Button("Website", helpers::getScreen().centerXButton))
 		{
