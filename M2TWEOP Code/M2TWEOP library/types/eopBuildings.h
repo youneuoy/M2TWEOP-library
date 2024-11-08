@@ -339,7 +339,7 @@ struct edbEntry { /* SETTLEMENT_CONDITION_SETTLEMENT_FACTION */
 	int8_t isHinterland; //0x0068
 	int8_t isFarm; //0x0069
 	char pad_006A[2]; //0x006A
-	UNICODE_STRING** localizedName;
+	UNICODE_STRING*** localizedName;
 	gameStdVector<stringWithHash> converts;
 	char* type; /* type of building (core_building,barracks)  */
 	int typeHash;
@@ -354,6 +354,16 @@ public:
 		if (index < 0 || index >= buildingLevelCount)
 			return nullptr;
 		return &levels[index];
+	}
+	std::string getLocalizedName()
+	{
+		return gameStringHelpers::uniStringToStr(*localizedName);
+	}
+	void setLocalizedName(const std::string& newName)
+	{
+		const auto nameMem = techFuncs::createGameClass<UNICODE_STRING**>();
+		localizedName = nameMem;
+		gameStringHelpers::createUniString(*localizedName, newName.c_str());
 	}
 };
 

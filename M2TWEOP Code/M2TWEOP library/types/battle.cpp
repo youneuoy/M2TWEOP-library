@@ -217,7 +217,7 @@ namespace battleHelpers
 		const DWORD offset = reinterpret_cast<DWORD>(perimeters) + 0x48;
 		battlePos pos{x,y};
 		const auto posPtr = &pos;
-		return GAME_FUNC(int(__thiscall*)(DWORD, battlePos*), getZoneID)(offset, posPtr);
+		return GAME_FUNC(int(__thiscall*)(DWORD, battlePos*), getZoneID)(offset, posPtr) & 0b111;
 	}
 	
 	battlePerimeters* getBattlePerimeters()
