@@ -97,6 +97,15 @@ void unit::setArmour(const uint8_t armour)
 	GAME_FUNC(void(__thiscall*)(unit*, uint8_t), setUnitArmorFunc)(this, arm);
 }
 
+void unit::setExperience(const uint8_t exp)
+{
+	expScreen = exp;
+	for (int i = 0; i < SoldierCountStrat; i++)
+	{
+		soldiersArr[i].experience = exp;
+	}
+}
+
 void unit::setWeapon(uint8_t wpn)
 {
 	const auto weapon = wpn;
@@ -492,7 +501,7 @@ namespace unitActions
             mov eax, funcAddr
             call eax
         }
-        unit->unitPositionData->hasTargets = 1;
+        unit->unitPositionData->hasTargets = true;
     }
 
     /////////////////////////////////////// GROUP COMMANDS ////////////////////////////////////////////////////////////
@@ -838,7 +847,7 @@ namespace unitHelpers
 		{
 			un->setArmour(arm);
 			un->setWeapon(weapon);
-			un->expScreen = exp;
+			un->setExperience(exp);
 		}
 		return un;
 	}
@@ -917,7 +926,7 @@ namespace unitHelpers
 	
 	void setSoldiersCountAndExp(unit* un, int count, int exp)
 	{
-		un->expScreen = exp;
+		un->setExperience(exp);
 		setSoldiersCount(un, count);
 	}
 

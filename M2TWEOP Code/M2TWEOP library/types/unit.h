@@ -1803,9 +1803,9 @@ public:
 	{
 		return expScreen;
 	}
-	void setExp(int exp)
+	void setExp(const int exp)
 	{
-		expScreen = exp;
+		setExperience(exp);
 	}
 	int getArmourLevel()
 	{
@@ -1816,6 +1816,7 @@ public:
 		return avgWeaponUpg;
 	}
 	void setArmour(uint8_t armour);
+	void setExperience(uint8_t exp);
 	void setWeapon(uint8_t wpn);
 	void setarmourLVL(int lvl)
 	{
