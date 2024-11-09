@@ -986,6 +986,7 @@ namespace settlementHelpers
 		@tfield character lastGovernor
 		@tfield character portAdmiral
 		@tfield armyStruct army
+		@tfield portStruct port
 		@tfield string name internal name of settlement
 		@tfield string localizedName
 		@tfield factionStruct ownerFaction
@@ -1081,6 +1082,7 @@ namespace settlementHelpers
 		types.settlementStruct.set("governor", &settlementStruct::governor);
 		types.settlementStruct.set("army", &settlementStruct::army);
 		types.settlementStruct.set("rebelEntry", &settlementStruct::descrRebel);
+		types.settlementStruct.set("port", &settlementStruct::port);
 		types.settlementStruct.set("name", sol::property(
 			&settlementHelpers::getStringProperty<settlementStruct_name>, &settlementHelpers::setStringProperty<settlementStruct_name>
 			));
