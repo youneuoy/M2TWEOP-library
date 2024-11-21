@@ -613,6 +613,17 @@ public:
 	char pad_0074[144]; //0x0074
 }; //Size: 0x0104
 
+struct heroAbility
+{
+	char *name; //0x0000
+	char pad_0004[4]; //0x0004
+	void* generalStuff; //0x0008
+	int32_t usesLeft; //0x000C
+	int32_t cooldown; //0x0010
+	int32_t abilityTimer; //0x0014
+	int32_t duration; //0x0018
+};
+
 struct unitMoveStruct
 {
 	int xCoord;
@@ -2098,7 +2109,7 @@ namespace unitActions
     void moveToMissileRange(unit* un, const unit* targetUnit, bool run);
     void unitTurn(unit* un, int16_t angle, bool isRelative);
     void taunt(const unit* un);
-    void useSpecialAbility(const unit* un);
+    void useSpecialAbility(const unit* un, bool heroOnly);
     int getSiegeEngineType(const unit* un);
     void attackBuilding(unit* un, buildingBattle* building);
     void collectEngine(unit* un, siegeEngine* engine);

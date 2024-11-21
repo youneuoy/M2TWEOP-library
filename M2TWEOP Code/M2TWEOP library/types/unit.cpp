@@ -451,10 +451,22 @@ namespace unitActions
         unitUseSpecialAbility(const unit* un) : thisUnit(un) {}
     };
     
-    void useSpecialAbility(const unit* un)
+    void useSpecialAbility(const unit* un, bool heroOnly)
     {
         if (un == nullptr)
             return;
+    	const heroAbility* ability = nullptr;
+    	if (un->generalInfo)
+    		ability = un->generalInfo->ability;
+    	if (!ability && heroOnly)
+			return;
+    	if (ability)
+    	{
+		    if (ability->usesLeft > 0 && ability->abilityTimer > 0)
+				return;
+    		if (heroOnly && ability->usesLeft == 0)
+				return;
+    	}
         const auto order = std::make_shared<unitUseSpecialAbility>(un);
         gameHelpers::fireGameScriptFunc(order.get(), codes::offsets.useSpecialAbility);
     }
@@ -1778,6 +1790,7 @@ void luaPlugin::initUnits()
 	/***
 	Makes the unit perform their special ability.
 	@function unit:useSpecialAbility
+	@tparam bool heroOnly
 	@usage
 		unit:useSpecialAbility();
 	*/
