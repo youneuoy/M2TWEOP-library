@@ -869,7 +869,7 @@ namespace armyHelpers
 				call eax
 			}
 			delete[] spawnCoords;
-			if (army && label && strcmp(label, "") == 0)
+			if (army && label && strcmp(label, "") != 0)
 				gameStringHelpers::setHashedString(&gen->characterRecord->label, label);
 			return army;
 		}
