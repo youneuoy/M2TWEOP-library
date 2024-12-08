@@ -904,7 +904,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	tables.M2TWEOP.set_function("getFactionRecordNum", &factionHelpers::getFactionRecordNum);
 	
 	/***
-	Hides tooltips for unknown units, only use if you use empty card instead of question mark as the UI.
+	Hides tooltips for unknown units, only use if you use empty card instead of question mark as the UI. Disabled by default.
 	@function M2TWEOP.hideUnknownUnitTooltips
 	@tparam bool set
 	@usage
@@ -913,7 +913,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	tables.M2TWEOP.set_function("hideUnknownUnitTooltips", &m2tweopOptions::setHideUnknownUnitTooltips);
 	
 	/***
-	Faction specific unit cards are always chosen if found.
+	Faction specific unit cards are always chosen if found. Enabled by default.
 	@function M2TWEOP.handleUnitCards
 	@tparam bool set
 	@usage
@@ -922,7 +922,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	tables.M2TWEOP.set_function("handleUnitCards", &m2tweopOptions::setHandleUnitCards);
 	
 	/***
-	Factions without a family tree or a teutonic one still get marriage offers and produce children.
+	Factions without a family tree or a teutonic one still get marriage offers and produce children. Enabled by default.
 	@function M2TWEOP.enableFamilyEventsWithoutTree
 	@tparam bool set
 	@usage
