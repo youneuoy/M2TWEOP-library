@@ -55,7 +55,7 @@ int initLuaPlugin(bool isReload)
 		exit(0);
 	}
 	plugData::data.luaAll.addLegacy();
-	plugData::data.luaAll.checkLuaScript(luaFile);
+	plugData::data.luaAll.loadLuaScript(luaFile);
 	plugData::data.luaAll.onPluginLoadF();
 
 	if (isReload) {
@@ -68,7 +68,7 @@ int initLuaPlugin(bool isReload)
 	return 1;
 }
 
-void luaPlugin::checkLuaScript(std::string& luaFilePath)
+void luaPlugin::loadLuaScript(std::string& luaFilePath)
 {
 	UINT defaultFlags = MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION;  // Default type with exclamation icon
 	// This checks the syntax of the script, but does not execute it
