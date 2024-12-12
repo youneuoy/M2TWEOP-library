@@ -55,6 +55,7 @@ int initLuaPlugin(bool isReload)
 		exit(0);
 	}
 	plugData::data.luaAll.addLegacy();
+	plugData::data.luaAll.checkLuaScript(luaFile);
 	plugData::data.luaAll.onPluginLoadF();
 
 	if (isReload) {
@@ -67,6 +68,26 @@ int initLuaPlugin(bool isReload)
 	return 1;
 }
 
+void luaPlugin::checkLuaScript(std::string& luaFilePath)
+{
+	UINT defaultFlags = MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION;  // Default type with exclamation icon
+	// This checks the syntax of the script, but does not execute it
+	sol::load_result fileRes = luaState.load_file(luaFilePath);
+	if (!fileRes.valid())
+	{
+		sol::error luaError = fileRes;
+		int result = MessageBoxA(nullptr, luaError.what(), "Lua syntax error!", defaultFlags);
+		console::handleMessageBoxResult(result);
+		return;
+	}
+	if (sol::protected_function_result result1 = fileRes(); !result1.valid())
+	{
+		sol::error luaError = result1;
+		int result = MessageBoxA(nullptr, luaError.what(), "Lua execution error!", defaultFlags);
+		console::handleMessageBoxResult(result);
+		return;
+	}
+}
 void reloadLua()
 {
 	const std::string luaFile = globals::dataS.modPath + R"(\eopData\eopScripts\luaPluginScript.lua)";
@@ -180,22 +201,6 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 		return nullptr;
 	}
 	
-	// This checks the syntax of the script, but does not execute it
-	sol::load_result fileRes = luaState.load_file(luaFilePath);
-	if (!fileRes.valid())
-	{ 
-		sol::error luaError = fileRes;
-		int result = MessageBoxA(nullptr, luaError.what(), "Lua syntax error!", defaultFlags);
-		console::handleMessageBoxResult(result);
-		return nullptr;
-	}
-	if (sol::protected_function_result result1 = fileRes(); !result1.valid())
-	{
-		sol::error luaError = result1;
-		int result = MessageBoxA(nullptr, luaError.what(), "Lua execution error!", defaultFlags);
-		console::handleMessageBoxResult(result);
-		return nullptr;
-	}
 
 	///M2TWEOP
 	//@section m2tweopTable
