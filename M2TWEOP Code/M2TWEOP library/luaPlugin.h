@@ -75,7 +75,7 @@ public:
 
 	//lua functions and events controllers
 	void onPluginLoadF();
-
+	void loadLuaScript(std::string& luaFilePath);
 	sol::state luaState;
 	void fillHashMaps();
 	void fillHashMapsNonCampaign();
