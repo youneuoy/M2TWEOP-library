@@ -99,39 +99,23 @@ public:
 struct modelDbAnims
 {
 public:
-	char pad_0000[4]; //0x0000
-	char N000028CE[4]; //0x0004
-	char N000028CF[4]; //0x0008
-	char pad_000C[20]; //0x000C
-	char *N00022FB0; //0x0020
-	char pad_0024[52]; //0x0024
-	struct animSetModelDB *primaryAnim; //0x0058
-	void *N0000092A; //0x005C
-	void *N0000092B; //0x0060
-	char pad_0064[4]; //0x0064
-	struct animSetModelDB *secondaryAnim; //0x0068
-	char pad_006C[12]; //0x006C
+	basicStringGame mount;
+	basicStringGame primary;
+	basicStringGame secondary;
+	gameStdVector<basicStringGame> primaryAttachments;
+	gameStdVector<basicStringGame> secondaryAttachments;
 }; //Size: 0x0078
 
 
 struct modelDbEntry
 {
 public:
-	char pad_0000[4]; //0x0000
-	char N00002889[8]; //0x0004
-	char pad_000C[8]; //0x000C
-	int32_t nameLength; //0x0014
-	char pad_0018[4]; //0x0018
+	basicStringGame type;
 	float scale; //0x001C
-	char pad_0020[4]; //0x0020
-	struct ModelDbMesh* mesh; //0x0024
-	char pad_0028[12]; //0x0028
-	struct ModelDbEntryTextures* textures; //0x0034
-	char pad_0038[12]; //0x0038
-	struct ModelDbEntryTextures* attTextures; //0x0044
-	char pad_0048[12]; //0x0048
-	struct modelDbAnims* animations; //0x0054
-	char pad_0058[8]; //0x0058
+	gameStdVector<void*> meshes;
+	gameStdVector<void*> textures;
+	gameStdVector<void*> attTextures;
+	gameStdVector<modelDbAnims> skeletons;
 	int32_t torchAttachBone; //0x0060
 	float N00000857; //0x0064
 	float N00000858; //0x0068
@@ -1294,22 +1278,18 @@ public:
 	{
 		if (!modelEntry)
 			return "";
-		if (!modelEntry->animations)
+		if (modelEntry->skeletons.empty())
 			return "";
-		if (!modelEntry->animations->primaryAnim)
-			return "";
-		return modelEntry->animations->primaryAnim->name;
+		return modelEntry->skeletons[0].primary.getString();
 	}
 
 	std::string getSecondaryAnim()
 	{
 		if (!modelEntry)
 			return "";
-		if (!modelEntry->animations)
+		if (modelEntry->skeletons.empty())
 			return "";
-		if (!modelEntry->animations->secondaryAnim)
-			return "";
-		return modelEntry->animations->secondaryAnim->name;
+		return modelEntry->skeletons[0].secondary.getString();
 	}
 	bool getIsLegio()
 	{

@@ -1374,7 +1374,9 @@ int GATES_IGNORED = 0;
 bool __fastcall patchesForGame::onDecideRamAttacks(buildingBattle* gate, aiDetachment* detachment, int numRamsLeft)
 {
 	if (gate->perimeter > 0 && battleHelpers::getBattleData()->battleState >= 5)
+	{
 		return true;
+	}
 	if (detachment != LAST_DETACHMENT)
 	{
 		GATES_IGNORED = 0;
