@@ -159,11 +159,11 @@ namespace mainUI
 		}
 		if (ImGui::Button("Website", helpers::getScreen().centerXButton))
 		{
-			ShellExecuteA(NULL, "open", dataG::data.gameData.websiteLink, NULL, NULL, SW_SHOWNORMAL);
+			ShellExecuteA(NULL, "open", dataG::data.gameData.websiteLink.c_str(), NULL, NULL, SW_SHOWNORMAL);
 		}
 		if (ImGui::Button("Discord", helpers::getScreen().centerXButton))
 		{
-			ShellExecuteA(NULL, "open", dataG::data.gameData.discordServerLink;, NULL, NULL, SW_SHOWNORMAL);
+			ShellExecuteA(NULL, "open", dataG::data.gameData.discordServerLink.c_str(), NULL, NULL, SW_SHOWNORMAL);
 		}
 		ImGui::End();
 
