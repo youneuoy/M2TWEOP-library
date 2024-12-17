@@ -42,6 +42,8 @@ public:
 
 			// Discord Rich Presence
 			bool isDiscordRichPresenceEnabled = true;
+			string discordServerLink = "";
+			string websiteLink = "";
 
 			// Customization Options
 			string modTitle = "";

@@ -156,6 +156,14 @@ namespace managerG
 			{
 				getJson(dataG::data.gameData.modTitle, "modTitle");
 			}
+			if (json.contains("discordServerLink"))
+			{
+				getJson(dataG::data.gameData.discordServerLink, "discordServerLink");
+			}
+			if (json.contains("websiteLink"))
+			{
+				getJson(dataG::data.gameData.websiteLink, "websiteLink");
+			}
 			if (json.contains("modVersion"))
 			{
 				getJson(dataG::data.gameData.modVersion, "modVersion");
@@ -245,6 +253,8 @@ namespace managerG
 		setJson("hideLauncher", dataG::data.modData.hideLauncherAtStart);
 		setJson("playBackgroundMusic", dataG::data.audio.bkgMusic.isMusicNeeded);
 		setJson("musicVolume", dataG::data.audio.bkgMusic.musicVolume);
+		setJson("websiteLink", dataG::data.gameData.websiteLink);
+		setJson("discordServerLink", dataG::data.gameData.discordServerLink);
 		setJson("modTitle", dataG::data.gameData.modTitle);
 		setJson("modVersion", dataG::data.gameData.modVersion);
 		setJson("runButtonColor", dataG::data.gameData.buttonColorString);
