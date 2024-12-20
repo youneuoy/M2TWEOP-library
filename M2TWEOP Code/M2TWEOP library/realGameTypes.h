@@ -40,15 +40,38 @@ ReturnType callClassFunc(ClassType instance, const DWORD offset, TArgs ... args)
 
 struct basicStringGame
 {
-	char pad[0x1C];
+	char pad[0x4];
+	union
+	{
+		char* long_string;
+		char short_string[16];
+	};
+	int stringLength;
+	int stringCapacity;
 public:
+	char* getData ()
+	{
+		if (stringCapacity < 16)
+			return short_string;
+		return long_string;
+	}
+	
 	std::string getString()
 	{
-		return *reinterpret_cast<std::string*>(this);
+		const char* str = getData();
+		return {str};
 	}
+	
 	void setString(const std::string& str)
 	{
-		*reinterpret_cast<std::string*>(this) = str;
+		if (stringCapacity < 16)
+		{
+			strcpy(short_string, str.c_str());
+		}
+		else
+		{
+			strcpy(long_string, str.c_str());
+		}
 	}
 };
 

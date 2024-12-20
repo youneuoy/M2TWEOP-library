@@ -1280,7 +1280,8 @@ public:
 			return "";
 		if (modelEntry->skeletons.empty())
 			return "";
-		return modelEntry->skeletons[0].primary.getString();
+		std::string name = modelEntry->skeletons[0].primary.getString();
+		return name;
 	}
 
 	std::string getSecondaryAnim()
@@ -1289,7 +1290,8 @@ public:
 			return "";
 		if (modelEntry->skeletons.empty())
 			return "";
-		return modelEntry->skeletons[0].secondary.getString();
+		std::string name = modelEntry->skeletons[0].secondary.getString();
+		return name;
 	}
 	bool getIsLegio()
 	{
