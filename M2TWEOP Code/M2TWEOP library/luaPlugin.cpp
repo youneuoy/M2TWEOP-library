@@ -55,7 +55,6 @@ int initLuaPlugin(bool isReload)
 		exit(0);
 	}
 	plugData::data.luaAll.addLegacy();
-	plugData::data.luaAll.loadLuaScript(luaFile);
 	plugData::data.luaAll.onPluginLoadF();
 
 	if (isReload) {
@@ -200,8 +199,9 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 		console::handleMessageBoxResult(result);
 		return nullptr;
 	}
-	
 
+	plugData::data.luaAll.loadLuaScript(luaFilePath);
+	
 	///M2TWEOP
 	//@section m2tweopTable
 
