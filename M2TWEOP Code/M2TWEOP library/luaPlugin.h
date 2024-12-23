@@ -116,6 +116,7 @@ public:
 	sol::function* onCampaignMapLoaded = nullptr;
 	sol::function* onRemoveFromUnitQueue = nullptr;
 	sol::function* onReadGameDbsAtStart = nullptr;
+	sol::function* onEduParsed = nullptr;
 	sol::function* onGameInit = nullptr;
 	sol::function* onUnloadCampaign = nullptr;
 	sol::function* onAiTurn = nullptr;

@@ -736,6 +736,10 @@ void onReadGameDbsAtStart()
 	{
 		tryLua((*plugData::data.luaAll.onReadGameDbsAtStart)());
 	}
+	if (plugData::data.luaAll.onEduParsed != nullptr)
+	{
+		tryLua((*plugData::data.luaAll.onEduParsed)());
+	}
 }
 
 void onGameInit()
@@ -1358,7 +1362,7 @@ void luaPlugin::onPluginLoadF()
 	@tfield draw draw
 	@tfield onLoadingFonts onLoadingFonts
 	@tfield onNewGameStart onNewGameStart
-	@tfield onReadGameDbsAtStart onReadGameDbsAtStart
+	@tfield onEduParsed onEduParsed
 	@tfield onGameInit onGameInit
 	@tfield onUnloadCampaign onUnloadCampaign
 	@tfield onAiTurn onAiTurn
@@ -4125,19 +4129,22 @@ void luaPlugin::onPluginLoadF()
 	*/
 	onNewGameStart = new sol::function(luaState["onNewGameStart"]);
 	checkLuaFunc(&onNewGameStart);
+	
+	onReadGameDbsAtStart = new sol::function(luaState["onReadGameDbsAtStart"]);
+	checkLuaFunc(&onReadGameDbsAtStart);
 
 	/***
-	Called after the game reads the EDU at startup (add units here).
+	Called after the game reads the EDU at startup (add units here). Previously called onReadGameDbsAtStart.
 
-	@function onReadGameDbsAtStart
+	@function onEduParsed
 
 	@usage
-	function onReadGameDbsAtStart()
+	function onEduParsed()
 	--something here
 	end
 	*/
-	onReadGameDbsAtStart = new sol::function(luaState["onReadGameDbsAtStart"]);
-	checkLuaFunc(&onReadGameDbsAtStart);
+	onEduParsed = new sol::function(luaState["onEduParsed"]);
+	checkLuaFunc(&onEduParsed);
 
 	/***
 	Called after the game has loaded to the main menu.
