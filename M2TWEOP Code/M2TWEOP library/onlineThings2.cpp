@@ -141,7 +141,7 @@ namespace battleCreator
 		}
 		genJson["name"] = genName;
 		
-		int age = (gen->characterRecord->age >> 3) & 0x7f;
+		int age = gen->characterRecord->getAge();
 		genJson["index"] = gen->characterRecord->index;
 		genJson["age"] = age;
 		genJson["faction"] = gen->characterRecord->faction->factionRecord->facName;
