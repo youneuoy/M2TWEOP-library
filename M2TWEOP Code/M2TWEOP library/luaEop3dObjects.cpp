@@ -76,7 +76,7 @@ void luaPlugin::initEop3dObjects()
 	3d text object. Not use it onPluginLoad(graphics system not initialized here yet).  
 	@tfield float xSize default value 1
 	@tfield float ySize default value 0.2
-	@tfield float zSize	default value 1
+	@tfield float zSize default value 1
 	@tfield float xRoll default value 1
 	@tfield float yRoll default value 90
 	@tfield float zRoll default value 1

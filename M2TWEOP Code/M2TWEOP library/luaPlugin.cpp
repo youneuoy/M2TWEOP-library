@@ -75,6 +75,7 @@ void luaPlugin::loadLuaScript(std::string& luaFilePath)
 	if (!fileRes.valid())
 	{
 		sol::error luaError = fileRes;
+		gameHelpers::logStringGame(luaError.what());
 		int result = MessageBoxA(nullptr, luaError.what(), "Lua syntax error!", defaultFlags);
 		console::handleMessageBoxResult(result);
 		return;
@@ -82,6 +83,7 @@ void luaPlugin::loadLuaScript(std::string& luaFilePath)
 	if (sol::protected_function_result result1 = fileRes(); !result1.valid())
 	{
 		sol::error luaError = result1;
+		gameHelpers::logStringGame(luaError.what());
 		int result = MessageBoxA(nullptr, luaError.what(), "Lua execution error!", defaultFlags);
 		console::handleMessageBoxResult(result);
 		return;

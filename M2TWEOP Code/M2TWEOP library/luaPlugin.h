@@ -10,6 +10,7 @@
 #define SOL_LUAJIT 1
 #include "lua/sol.hpp"
 #include <string>
+#include "gameHelpers.h"
 
 #define tryLua(luaFunc)  \
 auto funcResult = luaFunc;\
@@ -17,6 +18,7 @@ UINT defaultFlags = MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION;\
 if (!funcResult.valid())\
 {\
 	sol::error luaError = funcResult;\
+	gameHelpers::logStringGame(luaError.what());\
 	int result = MessageBoxA(NULL, luaError.what(), "Lua exception!", defaultFlags);\
 	if (plugData::data.luaAll.checkVar("TERMINATE_AT_LUA_EXCEPTION", 1) == true)\
 	{\
@@ -32,6 +34,7 @@ UINT defaultFlags = MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION;\
 if (!funcResult.valid())\
 {\
 	sol::error luaError = funcResult;\
+	gameHelpers::logStringGame(luaError.what());\
 	int result = MessageBoxA(NULL, luaError.what(), "Lua exception!", defaultFlags);\
 	if (plugData::data.luaAll.checkVar("TERMINATE_AT_LUA_EXCEPTION", 1) == true)\
 	{\
