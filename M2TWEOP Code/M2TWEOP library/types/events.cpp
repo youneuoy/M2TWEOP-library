@@ -1023,8 +1023,8 @@ const char* eventTrigger::getMissionSuccessLevel()
 {
 	auto level = "unknown";
 	if (const auto levelNumber = callVFunc<27, int>(this);
-		DISASTER_TYPES.find(levelNumber) != DISASTER_TYPES.end()) {
-		level = DISASTER_TYPES.at(levelNumber);
+		MISSION_SUCCESS_LVL.find(levelNumber) != MISSION_SUCCESS_LVL.end()) {
+		level = MISSION_SUCCESS_LVL.at(levelNumber);
 	}
 	return level;
 }
