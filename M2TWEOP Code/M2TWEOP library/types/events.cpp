@@ -2547,7 +2547,7 @@ void luaPlugin::onPluginLoadF()
 
 	/***
 	A guild has been created/upgraded.
-	Exports: settlement, faction, regionID, resourceDescription, guild, religion
+	Exports: settlement, faction, regionID, resourceDescription, guildId, religion
 
 	@function onGuildUpgraded
 	@tparam eventTrigger eventData
@@ -2560,7 +2560,7 @@ void luaPlugin::onPluginLoadF()
 
 	/***
 	A guild has been destroyed.
-	Exports: settlement, faction, regionID, guild, religion
+	Exports: settlement, faction, regionID, guildId, religion
 
 	@function onGuildDestroyed
 	@tparam eventTrigger eventData
