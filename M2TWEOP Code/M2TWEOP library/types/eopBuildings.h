@@ -348,6 +348,7 @@ struct edbEntry { /* SETTLEMENT_CONDITION_SETTLEMENT_FACTION */
 	int32_t buildingLevelCount; //0x0090
 	void *plugins;
 	int pluginCount;
+
 public:
 	buildingLevel* getBuildingLevel(const int index)
 	{
@@ -364,6 +365,14 @@ public:
 		const auto nameMem = techFuncs::createGameClass<UNICODE_STRING**>();
 		localizedName = nameMem;
 		gameStringHelpers::createUniString(*localizedName, newName.c_str());
+	}
+	std::string getName()
+	{
+		return std::string(type);
+	}
+	void setName(const std::string& newName)
+	{
+		gameStringHelpers::setHashedString(&type, newName.c_str());
 	}
 };
 

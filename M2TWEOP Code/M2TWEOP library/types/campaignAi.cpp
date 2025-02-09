@@ -2185,7 +2185,9 @@ void globalEopAiConfig::getData(factionStruct* fac)
 					checkRegion(nRegion.region->regionID);
 			}
 		}
-		const auto moveData = currentChar->createMoveData(static_cast<int>(searchType::avoidZoc), 1 + (isEndTurn ? 0 : m_CurrentFacData->noActionTurns));
+		const auto noActionTurns = max(currentChar->numTurnsIdle, m_CurrentFacData->noActionTurns);
+		const auto searchTurns = min(noActionTurns, maxTurnSearchCount * 2);
+		const auto moveData = currentChar->createMoveData(static_cast<int>(searchType::avoidZoc), 1 + (isEndTurn ? 0 : searchTurns));
 		for (auto& nearSettlement : moveData->settlements)
 		{
 			if (auto settRes = findSettResource(nearSettlement.settlement); settRes)

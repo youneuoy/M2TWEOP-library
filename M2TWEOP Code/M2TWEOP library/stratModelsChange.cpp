@@ -246,6 +246,7 @@ namespace stratModelsChange
 
 	void changeStratModel(character* gen, const char* model)
 	{
+		gameHelpers::logStringGame("assigning new model to character: " + string(model));
 		if (gen == nullptr) { //maybe captain dont exist anymore
 			return;
 		}
@@ -255,10 +256,10 @@ namespace stratModelsChange
 		}
 		const size_t stringSize = strlen(model);
 
-		const auto characterFacEntry = new genMod; //make new descr character faction entry
+		const auto characterFacEntry = techFuncs::createGameClass<genMod>(); //make new descr character faction entry
 		*characterFacEntry = *gen->genType; //get data of old entry and copy it in
 
-		auto* modelArray = new descrCharacterStratModelArray; //make new model array
+		auto* modelArray = techFuncs::createGameClass<descrCharacterStratModelArray>(); //make new model array
 		*modelArray = *gen->genType->stratInfo; //get data of old model array
 		characterFacEntry->stratInfo = modelArray; //assign new model array to new descr character faction entry
 

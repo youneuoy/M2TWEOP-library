@@ -650,6 +650,7 @@ namespace buildingHelpers
 
 		@tfield int buildingID
 		@tfield string localizedName
+		@tfield string name
 		@tfield int classification
 		@tfield int isCoreBuilding
 		@tfield int isPort
@@ -674,6 +675,7 @@ namespace buildingHelpers
 		types.edbEntry.set("religionID", &edbEntry::religionID);
 		types.edbEntry.set("isHinterland", &edbEntry::isHinterland);
 		types.edbEntry.set("isFarm", &edbEntry::isFarm);
+		types.edbEntry.set("name", sol::property(&edbEntry::getName, &edbEntry::setName));
 		types.edbEntry.set("localizedName", sol::property(&edbEntry::getLocalizedName, &edbEntry::setLocalizedName));
 		types.edbEntry.set("buildingLevelCount", &edbEntry::buildingLevelCount);
 		

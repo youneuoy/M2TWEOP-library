@@ -394,6 +394,12 @@ namespace settlementHelpers
 		data->settlementID = settlement->minorSettlementIndex;
 		eopSettlementDataDb::get()->eopSettData->push_back(data);
 		plugData::data.luaAll.settlements.insert_or_assign(std::string(settlement->name), settlement->regionID);
+		if (region->settlement->faction->isPlayerControlled == 1
+			&& region->settlement->aiProductionController
+			&& region->settlement->aiProductionController->autoManagePolicy != settlementPolicy::none)
+		{
+			region->settlement->aiProductionController->isAutoManagedTaxes = false;
+		}
 		return settlement;
 	}
 	
