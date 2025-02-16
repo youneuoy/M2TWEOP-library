@@ -9,6 +9,7 @@
 #include "strategyMap.h"
 #include "lua/sol.hpp"
 
+
 enum class productionBias
 {
 	frontier,
@@ -717,6 +718,7 @@ public:
 	{
 		stats.recalculate(recalculateFacEconomy);
 	}
+	bool canConstructBuilding(const edbEntry* entry, int lvl);
 	bool isPlayerControlled();
 	bool isEnemyToFaction(factionStruct* otherFac);
 	bool isAllyToFaction(factionStruct* otherFac);
@@ -758,6 +760,19 @@ struct eopSettlementData
 		regionID = json["regionID"];
 	}
 };
+
+struct settlementConditionContext
+{
+	settlementStruct *sett;
+	struct capabilityStruct *caps;
+	int settFactionId;
+	int buildingFactionId;
+	int forcedFactionId;
+	capabilityStruct fallbackCapabilities;
+};
+
+settlementConditionContext* createSettlementConditionContext(settlementStruct* sett);
+
 namespace settlementHelpers
 {
 	void setSettlementOwner(settlementStruct* sett, factionStruct* newOwner, bool convertGarrison);

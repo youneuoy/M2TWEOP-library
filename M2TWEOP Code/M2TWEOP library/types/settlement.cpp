@@ -61,6 +61,12 @@ int settlementStruct::getSettlementValue()
 	return value;
 }
 
+bool settlementStruct::canConstructBuilding(const edbEntry* entry, const int lvl)
+{
+		auto context = createSettlementConditionContext(this);
+		return GAME_FUNC(bool(__thiscall*)(const edbEntry*, DWORD, int), evaluateBuildingGuard)(entry, reinterpret_cast<DWORD>(context), lvl);
+}
+
 bool settlementStruct::isPlayerControlled()
 {
 	return faction->isPlayerControlled == 1;
@@ -300,13 +306,21 @@ void eopSettlementDataDb::onGameLoaded()
 	}
 }
 
+	
+settlementConditionContext* createSettlementConditionContext(settlementStruct* sett)
+{
+	return GAME_FUNC(settlementConditionContext*(__thiscall*)(settlementConditionContext*, settlementStruct*, capabilityStruct*),
+		createSettlementConditionContext)(techFuncs::createGameClass<settlementConditionContext>(), sett, &sett->capabilities);
+}
+
+
 namespace settlementHelpers
 {
 	/*----------------------------------------------------------------------------------------------------------------*\
 											 Settlement helpers
     \*----------------------------------------------------------------------------------------------------------------*/
 #pragma region Settlement helpers
-
+	
 	settlementStruct* createSettlement(factionStruct* faction, const int xCoord, const int yCoord, const std::string& name,
 		const int level, const bool castle)
 	{
@@ -1079,6 +1093,7 @@ namespace settlementHelpers
 		@tfield buildingPresent buildingPresent
 		@tfield buildingPresentMinLevel buildingPresentMinLevel
 		@tfield getCharacter getCharacter
+		@tfield canConstructBuilding canConstructBuilding
 
 		@table settlementStruct
 		*/
@@ -1381,6 +1396,18 @@ namespace settlementHelpers
 		end
 		*/
 		types.settlementStruct.set_function("createArmyInSettlement", &armyHelpers::createArmyInSettlement);
+		/***
+		Check if the settlement can construct a building level.
+		@function settlementStruct:canConstructBuilding
+		@tparam edbEntry entry
+		@tparam int level
+		@treturn bool canConstuct
+		@usage
+		if sett:canConstructBuilding(buildingEntry, 1) then
+		      print("Can construct")
+		end
+		*/
+		types.settlementStruct.set_function("canConstructBuilding", &settlementStruct::canConstructBuilding);
 		
 		/***
 		Basic settlementStats table

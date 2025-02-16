@@ -119,7 +119,7 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 		call eax
 	}
 	delete[] targetCoords;
-	stratMapHelpers::clearSundries();
+	stratMapHelpers::clearSundries(this->gen);
 	delete[] unitList;
 	return this;
 }
@@ -373,7 +373,7 @@ int armyStruct::attackArmy(armyStruct* defender)
 		mov eax, funcAddr
 		call eax
 	}
-	stratMapHelpers::clearSundries();
+	stratMapHelpers::clearSundries(this->gen);
 	return 1;
 }
 settlementStruct* armyStruct::findInSettlement()

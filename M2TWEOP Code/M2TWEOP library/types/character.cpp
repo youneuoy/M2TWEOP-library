@@ -304,7 +304,7 @@ namespace characterHelpers
 			call eax
 		}
 		callVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); //Destructor
-		stratMapHelpers::clearSundries();
+		stratMapHelpers::clearSundries(gen);
 	}
 	
 	void siegeFort(character* gen, fortStruct* fort, bool isAttack)
@@ -383,7 +383,7 @@ namespace characterHelpers
 			mov eax, adrFunc
 			call eax
 		}
-		stratMapHelpers::clearSundries();
+		stratMapHelpers::clearSundries(gen);
 	}
 	
 	void attackCharacter(character* attacker, character* defender)
@@ -416,7 +416,7 @@ namespace characterHelpers
 		}
 		//Destructor -- game doesnt call it, but I think it might be a bug
 		callVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); 
-		stratMapHelpers::clearSundries();
+		stratMapHelpers::clearSundries(attacker);
 	}
 
 	void moveNormal(character* gen, int x, int y)
@@ -446,7 +446,7 @@ namespace characterHelpers
 			call eax
 		}
 		callVFunc<0, void>(reinterpret_cast<void*>(cadClass), 1); //Destructor
-		stratMapHelpers::clearSundries();
+		stratMapHelpers::clearSundries(gen);
 	}
 
 	///Target character
@@ -472,7 +472,7 @@ namespace characterHelpers
 			mov eax, adrFunc
 			call eax
 		}
-		stratMapHelpers::clearSundries();
+		stratMapHelpers::clearSundries(gen);
 	}
 
 	void denounce(character* gen, character* targetCharacter)
@@ -557,7 +557,7 @@ namespace characterHelpers
 			mov eax, adrFunc
 			call eax
 		}
-		stratMapHelpers::clearSundries();
+		stratMapHelpers::clearSundries(gen);
 	}
 
 	void bribeSettlement(character* gen, settlementStruct* targetSettlement)
@@ -612,7 +612,7 @@ namespace characterHelpers
 			mov eax, finalize
 			call eax
 		}
-		stratMapHelpers::clearSundries();
+		stratMapHelpers::clearSundries(gen);
 	}
 
 	//Target fort
@@ -638,7 +638,7 @@ namespace characterHelpers
 			mov eax, adrFunc
 			call eax
 		}
-		stratMapHelpers::clearSundries();
+		stratMapHelpers::clearSundries(gen);
 	}
 
 	void diplomacyFort(character* gen, fortStruct* targetFort)
@@ -1453,6 +1453,11 @@ void character::joinCrusade()
 {
 	const auto newCrusade = &campaignHelpers::getCampaignData()->crusade;
 	GAME_FUNC(void(__thiscall*)(character*, crusade*), generalJoinCrusade)(this, newCrusade);
+}
+
+void character::clearCharacterStuff()
+{
+	GAME_FUNC(void(__thiscall*)(character*), clearCharacterStuff)(this);
 }
 
 void character::leaveCrusade(bool triggerEvent)

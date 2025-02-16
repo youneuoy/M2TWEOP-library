@@ -186,6 +186,7 @@ public:
 		return nullptr;
 	}
 	void joinCrusade();
+	void clearCharacterStuff();
 	void leaveCrusade(bool triggerEvent);
 	void joinJihad();
 	void leaveJihad(bool triggerEvent);

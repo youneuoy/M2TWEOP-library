@@ -666,5 +666,6 @@ void codes::initCodes(int gameVer)
 		offsets.getNextWord = 0xD493C0;
 		offsets.modelRigidDestructor = 0x934110;
 		offsets.generateSprite = 0xE78C00;
+		offsets.clearCharacterStuff = 0x5A0BE0;
 	}
 }

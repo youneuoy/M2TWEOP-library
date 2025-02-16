@@ -642,8 +642,9 @@ namespace stratMapHelpers
 		}
 	}
 	
-	void clearSundries()
+	void clearSundries(character* thisChar)
 	{
+		//thisChar->clearCharacterStuff();
 		const auto selectInfoPtr = gameHelpers::getGameDataAll()->selectInfo;
 		GAME_FUNC(void(__thiscall*)(selectionInfo*), clearPaths)(selectInfoPtr);
 		clearAllMapArrows();

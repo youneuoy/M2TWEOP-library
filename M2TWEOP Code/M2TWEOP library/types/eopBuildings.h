@@ -376,6 +376,7 @@ public:
 	}
 };
 
+
 struct hiddenResource
 {
 public:

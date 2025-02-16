@@ -1923,6 +1923,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	const DWORD factionTurnEnd = gameVersion == 1 ? 0x01369D74 : 0x01324D4C;
 	const DWORD characterTurnEnd = gameVersion == 1 ? 0x0136C0B4 : 0x0132708C;
 	const DWORD characterTurnStart = gameVersion == 1 ? 0x0136BFE4 : 0x01326FBC;
+	const DWORD postBattle = gameVersion == 1 ? 0x01367ADC : 0x01322AB4; 
 	if (eventCode == scrollOpenedCode)
 	{
 		char* str = reinterpret_cast<char*>(vTab[1]);
@@ -2070,6 +2071,18 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 		//globalEopAiConfig::getInstance()->turnStartMove(fac, true);
 		
 		FIRST_END = true;
+	}
+	else if (eventCode == settlementTurnStart)
+	{
+		const auto sett = reinterpret_cast<settlementStruct*>(vTab[1]);
+		if (const auto fac = sett->faction; fac->isPlayerControlled == 1 && sett->aiProductionController && !sett->aiProductionController->isAutoManaged )
+		{
+			sett->aiProductionController->isAutoManagedTaxes = false;
+		}
+	}
+	else if (eventCode == postBattle)
+	{
+		campaignHelpers::getCampaignData()->ignoreSpeedUp = false;
 	}
 	//else if (eventCode == settlementTurnStart)
 	//{

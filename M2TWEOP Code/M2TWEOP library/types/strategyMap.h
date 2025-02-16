@@ -1023,7 +1023,7 @@ namespace stratMapHelpers
 	void moveStratCameraFast(int x, int y);
 	//zoom stratmap camera
 	void zoomStratCamera(float zoom);
-	void clearSundries();
+	void clearSundries(character* thisChar);
 	stratMap* getStratMap();
 	bool isTileFree(int* xy);
 	bool isTileFreeLua(int x, int y);

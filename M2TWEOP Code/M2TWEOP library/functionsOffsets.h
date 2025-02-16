@@ -64,6 +64,7 @@ public:
 		DWORD makeTrackedPointerToAttackFunc = NULL;
 		DWORD makeCadAttackFunc = NULL;
 		DWORD somethingWithTrackedPointerAttackFunc = NULL;
+		DWORD clearCharacterStuff = NULL;
 		
 		DWORD somethingWithTrackedPointerFortFunc = NULL;
 
@@ -303,6 +304,7 @@ public:
 		DWORD resetRegionGroupControllers = NULL;
 		DWORD addNavalTargetRegion = NULL;
 		DWORD removeNavalTargetRegion = NULL;
+		DWORD createSettCondContext = NULL;
 		DWORD createHordeController = NULL;
 		DWORD createRegionController = NULL;
 		DWORD addToRegionControllers = NULL;

@@ -75,3 +75,4 @@ if ($modFolder) {
 
 # 7) Done
 Write-Host "`n`n======== Success! EOP Built Successfully! ========`n" -ForegroundColor Green
+Get-Date -format r
