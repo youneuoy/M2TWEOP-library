@@ -27,9 +27,9 @@ jobs:
         with:
           vsversion: "2022"
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
-          name: M2TWEOP-latest-build
+          name: "M2TWEOP-latest-build-${{ github.workflow_sha }}"
           path: M2TWEOP.zip
 
   # This job is used to update the online documentation
