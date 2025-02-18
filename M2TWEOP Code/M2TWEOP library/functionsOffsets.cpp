@@ -332,6 +332,9 @@ void codes::initCodes(int gameVer)
 		offsets.getNextWord = 0xD4F060;
 		offsets.modelRigidDestructor = 0x933640;
 		offsets.generateSprite = 0xE7E220;
+		offsets.initGameScriptLog = 0xD39670;
+		offsets.createSpCountedBase = 0x403A60;
+		offsets.createLogger = 0x4224C0;
 	}
 
 
@@ -667,5 +670,8 @@ void codes::initCodes(int gameVer)
 		offsets.modelRigidDestructor = 0x934110;
 		offsets.generateSprite = 0xE78C00;
 		offsets.clearCharacterStuff = 0x5A0BE0;
+		offsets.initGameScriptLog = 0x00D339F0;
+		offsets.createSpCountedBase = 0x403B00;
+		offsets.createLogger = 0x4227F0;
 	}
 }

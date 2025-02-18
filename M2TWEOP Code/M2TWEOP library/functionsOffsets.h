@@ -202,6 +202,9 @@ public:
 		DWORD groupMoveUnformed = NULL;
 		DWORD groupRelativeMoveFormed = NULL;
 		DWORD groupRelativeMoveUnformed = NULL;
+		DWORD initGameScriptLog = NULL;
+		DWORD createSpCountedBase = NULL;
+		DWORD createLogger = NULL;
 		DWORD groupTurn = NULL;
 		DWORD gameLogCommand = NULL;
 		DWORD executeCADTargetCharacter = NULL;

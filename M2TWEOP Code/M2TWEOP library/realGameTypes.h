@@ -64,6 +64,8 @@ public:
 	
 	void setString(const std::string& str)
 	{
+		stringLength = str.length();
+		stringCapacity = str.capacity();
 		if (stringCapacity < 16)
 		{
 			strcpy(short_string, str.c_str());
@@ -223,6 +225,17 @@ struct UNICODE_STRING {
 	USHORT Length;//idk
 	USHORT something2;//idk
 	PWSTR Buffer;//y
+};
+
+struct boostLoggerImpl
+{
+	gameStdVector<void*> appenders;
+	gameStdVector<void*> modifiers;
+	basicStringGame name;
+	unsigned int level;
+	bool isCompileTime;
+	char pad[0x3];
+	char threadingMutex[0x18];
 };
 
 struct trackedObject

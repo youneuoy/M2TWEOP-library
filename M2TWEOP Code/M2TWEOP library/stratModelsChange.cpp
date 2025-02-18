@@ -246,8 +246,8 @@ namespace stratModelsChange
 
 	void changeStratModel(character* gen, const char* model)
 	{
-		gameHelpers::logStringGame("assigning new model to character: " + string(model));
-		if (gen == nullptr) { //maybe captain dont exist anymore
+		gameHelpers::logStringGame("assigning new model to character: " + string(model), false);
+		if (!gen || !gen->genType) { //maybe captain dont exist anymore
 			return;
 		}
 		stratModelArrayEntry* entry = findCharacterStratModel(model);

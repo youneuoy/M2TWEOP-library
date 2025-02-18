@@ -362,6 +362,58 @@ public:
 	static uint8_t khakiTextBlue;
 };
 
+struct boostLightMutex
+{
+	int l;
+};
+
+struct boostSpCountedBase
+{
+	DWORD vTable;
+	int useCount;
+	int weakCount;
+	boostLightMutex mutex;
+};
+
+struct boostSharedCount
+{
+	boostSpCountedBase* pi;
+	boostSharedCount()
+	{
+		pi = techFuncs::createGameClass<boostSpCountedBase>();
+		GAME_FUNC(boostSpCountedBase*(__thiscall*)(boostSpCountedBase*), createSpCountedBase)(pi);
+	}
+};
+
+struct boostSharedPtr
+{
+	boostLoggerImpl* px;
+	boostSharedCount pn;
+};
+	
+struct boostLogger
+{
+	boostSharedPtr impl;
+	bool destroyed;
+	char pad[0x3];
+};
+
+class eopLogging
+{
+public:
+	boostLogger* eopLog = nullptr;
+	std::string eopLogName = "M2TWEOP.core";
+	boostLogger* eopLuaLog = nullptr;
+	std::string eopLuaLogName = "M2TWEOP.lua";
+	boostLoggerImpl* backupLogger = nullptr;
+	void createEopLoggers();
+	bool isInitialized() { return m_LoggersCreated; }
+	static eopLogging* get() { return m_Instance; }
+private:
+	static eopLogging* m_Instance;
+	bool m_LoggersCreated = false;
+};
+
 namespace gameHelpers
 {
 	std::string getModPath();
@@ -385,7 +437,8 @@ namespace gameHelpers
 	void scriptCommandLua(const std::string& command, sol::variadic_args va);
 	void scriptCommand(const char* command, const char* args);
 	void fireGameScriptFunc(void* scriptStruct, DWORD offset);
-	void logStringGame(const std::string& msg);
+	void logStringGame(const std::string& msg, const bool fromLua = false);
+	void logStringLua(const std::string& msg);
 	void logFuncError(const std::string& funcName, const std::string& error);
 	int getScriptCounterNoBool(const char* type);
 

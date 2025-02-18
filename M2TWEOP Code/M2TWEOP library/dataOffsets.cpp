@@ -109,6 +109,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.fortSpyingVtbl = 0x13362D0;
 		offsets.settlementVtbl = 0x1341F54;
 		offsets.settlementSpyingVtbl = 0x1341F34;
+		offsets.gameScriptLogger = 0x2CBD7F8;
 		offsets.descr_sm_factionslist = reinterpret_cast<smFactionsDb*>(0x01667288);
 	}
 	else if (gameVer == 2) //steam
@@ -210,6 +211,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.groundMoveCosts = 0x01602188;
 		offsets.expandedBinTable = 0x2C70760;
 		offsets.descrCharacter = 0x01861788;
+		offsets.gameScriptLogger = 0x02C747A0;
 
 		offsets.audioEnable = reinterpret_cast<bool*>(0x01639f1d);
 		offsets.audioMaster_vol = reinterpret_cast<int*>(0x01639f60);

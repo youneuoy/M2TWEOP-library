@@ -26,6 +26,21 @@ scriptCommand::scriptCommand(const char* name) : className(name)
 	this->vftable = dataOffsets::offsets.scriptCommandVFT;
 }
 
+eopLogging* eopLogging::m_Instance = new eopLogging();
+
+void eopLogging::createEopLoggers()
+{
+	eopLog = techFuncs::createGameClass<boostLogger>();
+	basicStringGame target{};
+	target.setString(eopLogName);
+	GAME_FUNC(boostLogger*(__thiscall*)(boostLogger*, basicStringGame*), createLogger)(eopLog, &target);
+	eopLuaLog = techFuncs::createGameClass<boostLogger>();
+	basicStringGame target2{};
+	target2.setString(eopLuaLogName);
+	GAME_FUNC(boostLogger*(__thiscall*)(boostLogger*, basicStringGame*), createLogger)(eopLuaLog, &target2);
+	m_LoggersCreated = true;
+}
+
 namespace gameHelpers
 {
 	using namespace std;
@@ -374,14 +389,42 @@ namespace gameHelpers
 		}
 	}
 	
-	void logStringGame(const std::string& msg)
+	void logStringLua(const std::string& msg)
 	{
+		logStringGame(msg, true);
+	}
+	
+	void logStringGame(const std::string& msg, const bool fromLua)
+	{
+		const auto eopLog = eopLogging::get();
+		if (!eopLog->isInitialized())
+			eopLog->createEopLoggers();
 		const auto flushRate = reinterpret_cast<int*>(dataOffsets::offsets.logFlushRate);
 		const int oldRate = *flushRate;
 		*flushRate = 1;
+		auto logger = *reinterpret_cast<boostLoggerImpl**>(dataOffsets::offsets.gameScriptLogger);
+		if (!logger)
+		{
+			GAME_FUNC(void(__cdecl*)(), initGameScriptLog)();
+			logger = *reinterpret_cast<boostLoggerImpl**>(dataOffsets::offsets.gameScriptLogger);
+		}
+		if (!eopLog->backupLogger)
+		{
+			eopLog->backupLogger = techFuncs::createGameClass<boostLoggerImpl>();
+			*eopLog->backupLogger = *logger;
+		}
+		if (logger)
+		{
+			if (fromLua)
+				*reinterpret_cast<boostLoggerImpl**>(dataOffsets::offsets.gameScriptLogger) = eopLog->eopLuaLog->impl.px;
+			else
+				*reinterpret_cast<boostLoggerImpl**>(dataOffsets::offsets.gameScriptLogger) = eopLog->eopLog->impl.px;
+		}
 		const auto order = std::make_shared<gameLogCommand>(msg.c_str());
 		fireGameScriptFunc(order.get(), codes::offsets.gameLogCommand);
 		*flushRate = oldRate;
+		if (logger)
+			*reinterpret_cast<boostLoggerImpl**>(dataOffsets::offsets.gameScriptLogger) = eopLog->backupLogger;
 	}
 	
 	void logFuncError(const std::string& funcName, const std::string& error)

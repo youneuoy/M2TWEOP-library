@@ -431,7 +431,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@usage
 	 M2TWEOP.logGame("log message");
 	*/
-	tables.M2TWEOP.set_function("logGame", &gameHelpers::logStringGame);
+	tables.M2TWEOP.set_function("logGame", &gameHelpers::logStringLua);
 	
 	/***
 	Load a savegame.
