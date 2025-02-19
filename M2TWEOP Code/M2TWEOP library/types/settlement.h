@@ -200,13 +200,14 @@ struct buildingsQueue {
 	uint16_t summaryFlags[128];
 	int16_t somethingTemple;
 	int16_t conversion;
-	struct buildingInQueue items[6];
-	int firstIndex;
-	int lastIndex;
-	int buildingsInQueue;
-	int currentBuildingIndex;
+	gameCircularBuffer<buildingInQueue, 6> buildingQueue;
+	int constructionPoints;
 	struct settlementStruct *settlement;
 	struct factionStruct **faction;
+	int getBuildingQueueSize()
+	{
+		return buildingQueue.num;
+	}
 };
 
 struct availableBuildings
@@ -523,10 +524,7 @@ struct settlementStruct {
 	int32_t moneySpentTraining;//0x01BC
 	int32_t moneySpentRecruitment;//0x01C0
 	char agentRecruitnotification[16];
-	struct unitRQ unitQueue[9];
-	int startIndexRQ;
-	int endIndexRQ;
-	int countRQ;
+	gameCircularBuffer<unitRQ, 9> unitQueue;
 	int32_t recruitmentPoints;
 	struct settlementStruct *thisBeforeBuildings;
 	struct factionStruct **pointerToSelfFaction2;
@@ -706,9 +704,11 @@ public:
 	}
 	unitRQ* getUnitInQueue(int index)
 	{
-		if (index > countRQ)
-			return nullptr;
-		return &unitQueue[(index + startIndexRQ) % 9];
+		return &unitQueue[index];
+	}
+	int getUnitQueueSize()
+	{
+		return unitQueue.num;
 	}
 	void setGuildStanding(const int index, const int amount)
 	{

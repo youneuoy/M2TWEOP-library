@@ -730,6 +730,56 @@ void luaPlugin::initLuaEnums()
 	);
 	
 	/***
+	Enum of unit actions.
+
+	@tfield int changeFormation
+	@tfield int changeFormationClose
+	@tfield int changeFormationWidth
+	@tfield int changeSpeed
+	@tfield int changeMeleeState
+	@tfield int setupEngine
+	@tfield int collectEngine
+	@tfield int dropEngine
+	@tfield int hide
+	@tfield int move
+	@tfield int moveIntoPlayableArea
+	@tfield int turn
+	@tfield int attackUnit
+	@tfield int attackBuilding
+	@tfield int attackEngine
+	@tfield int withdraw
+	@tfield int feignRout
+	@tfield int useAbility
+	@tfield int halt
+	@tfield int idle
+
+	@table unitAction
+	*/
+	luaState.new_enum(
+		"unitAction",
+		"changeFormation", 0,
+		"changeFormationClose", 1,
+		"changeFormationWidth", 2,
+		"changeSpeed", 3,
+		"changeMeleeState", 4,
+		"setupEngine", 5,
+		"collectEngine", 6,
+		"dropEngine", 7,
+		"hide", 8,
+		"move", 9,
+		"moveIntoPlayableArea", 10,
+		"turn", 11,
+		"attackUnit", 12,
+		"attackBuilding", 13,
+		"attackEngine", 14,
+		"withdraw", 15,
+		"feignRout", 16,
+		"useAbility", 17,
+		"halt", 18,
+		"idle", 19
+	);
+	
+	/***
 	Enum of unit classes
 
 	@tfield int heavy

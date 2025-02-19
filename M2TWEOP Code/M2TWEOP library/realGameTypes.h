@@ -193,6 +193,40 @@ struct gameLinkedList
 	}
 };
 
+template<typename T, const int N>
+struct gameCircularBuffer
+{
+	T elements[N];
+	int head;
+	int tail;
+	int num;
+
+	T& operator[](const int index)
+	{
+		return elements[(head + index) % N];
+	}
+
+	const T&  operator[](const int index) const
+	{
+		return elements[(head + index) % N];
+	}
+
+	bool empty()
+	{
+		return num == 0;
+	}
+
+	T& first()
+	{
+		return elements[head];
+	}
+
+	T& last()
+	{
+		return elements[tail];
+	}
+};
+
 struct scriptCommand
 {
 	DWORD vftable /*VFT*/;
@@ -993,6 +1027,7 @@ enum class unitActionType
 	unitFeignRout = 16,
 	unitUseAbility = 17,
 	unitHalt = 18,
+	unitIdle = 19,
 };
 
 inline bool operator ==(int a, unitActionType b)

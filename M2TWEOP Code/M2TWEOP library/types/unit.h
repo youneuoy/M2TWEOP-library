@@ -765,10 +765,7 @@ public:
 	int facingX;
 	int facingY;
 	int wallEntityID;
-	struct targetPos targetArray[16];
-	int32_t startIndex;
-	int32_t endIndex;
-	int32_t currentIndex;
+	gameCircularBuffer<targetPos, 16> targetArray;
 	bool hasTargets;
 	bool isHalted;
 	char pad_B86[2];
@@ -855,15 +852,21 @@ public:
 	{
 		if (!battleHelpers::inBattle())
 			return nullptr;
-		if (!hasTargets || isHalted)
+		if (!hasTargets || isHalted || targetArray.empty())
 		{
 			return nullptr;
 		}
-		if (targetArray[currentIndex].targetVerification.tablePos)
+		return targetArray.first().targetVerification.tablePos->unit;
+	}
+	int getActionType()
+	{
+		if (!battleHelpers::inBattle())
+			return 19;
+		if (targetArray.empty())
 		{
-			return targetArray[currentIndex].targetVerification.tablePos->unit;
+			return 19;
 		}
-		return nullptr;
+		return targetArray.first().actionType;
 	}
 }; //Size: 0x0C3C
 	

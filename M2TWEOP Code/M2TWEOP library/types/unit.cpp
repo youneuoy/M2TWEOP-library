@@ -820,7 +820,7 @@ namespace unitActions
         un->unitPositionData->targetArray[0].actionType = static_cast<int>(unitActionType::unitCollectEngine);
         un->unitPositionData->isHalted = false;
         un->unitPositionData->hasTargets = true;
-        un->unitPositionData->currentIndex = 1;
+        un->unitPositionData->targetArray.num = 1;
     }
 }
 
@@ -1928,6 +1928,7 @@ void luaPlugin::initUnits()
 	@tfield getUnitUnderFireFrom getUnitUnderFireFrom
 	@tfield getEngagedUnit getEngagedUnit
 	@tfield getTargetUnit getTargetUnit
+	@tfield getActionType getActionType
 
 	@table unitPositionData
 	*/
@@ -1973,6 +1974,15 @@ void luaPlugin::initUnits()
 	local enemyUnit = unit.unitPositionData:getTargetUnit();
 	*/
 	types.unitPositionData.set_function("getTargetUnit", &unitPositionData::getTargetUnit);
+
+	/***
+	Get unit's current action type (use enum).
+	@function unitPositionData:getActionType
+	@treturn int actionType
+	@usage
+	local action = unit.unitPositionData:getActionType();
+	*/
+	types.unitPositionData.set_function("getActionType", &unitPositionData::getActionType);
     	
 
 	///Siege Engine

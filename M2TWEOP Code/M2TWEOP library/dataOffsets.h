@@ -99,6 +99,7 @@ public:
 		DWORD recruitmentItems = NULL;
 		DWORD ltgdGlobals = NULL;
 		DWORD battlefieldEngines = NULL;
+		DWORD battleAreas = NULL;
 		DWORD ltgdConfig = NULL;
 		DWORD bugReport = NULL;
 		DWORD uiNotify = NULL;

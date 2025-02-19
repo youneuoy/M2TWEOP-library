@@ -117,6 +117,11 @@ battleSideArmy* battleDataS::getSideArmy(const armyStruct* army)
 	return nullptr;
 }
 
+bool battleDataS::isRiverBattle()
+{
+	return battleHelpers::getBattleAreas()->isRiverBattle && sidesNum == 2;
+}
+
 namespace battleHelpers
 {
 	battleResidence* getBattleResidence()
@@ -300,6 +305,11 @@ namespace battleHelpers
 		return gameHelpers::getGameDataAll()->battleTerrainDataPtr;
 	}
 
+	battleAreas* getBattleAreas()
+	{
+		return *reinterpret_cast<battleAreas**>(dataOffsets::offsets.battleAreas);
+	}
+
 	battleTile* getBattleTile(const float xCoord, const float yCoord)
 	{
 		const auto terrainData = getBattleTerrainData();
@@ -394,6 +404,7 @@ namespace battleHelpers
 		@tfield getZoneID getZoneID
 		@tfield getPosPerimeter getPosPerimeter
 		@tfield isZoneValid isZoneValid
+		@tfield isRiverBattle isRiverBattle
 
 		@table battleStruct
 		*/
@@ -538,6 +549,15 @@ namespace battleHelpers
 		     local valid = BATTLE.isZoneValid(3);
 		*/
 		typeAll.battleTable.set_function("isZoneValid", &isZoneValid);
+		
+		/***
+		Is battle a river battle.
+		@function battleStruct:isRiverBattle
+		@treturn bool riverBattle
+		@usage
+		     local riverBattle = BATTLE:isRiverBattle()
+		*/
+		typeAll.battleTable.set_function("isRiverBattle", &battleDataS::isRiverBattle);
 		
 		/***
 		Basic battlefieldEngines table

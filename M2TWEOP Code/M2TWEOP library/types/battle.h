@@ -763,8 +763,8 @@ struct crossing
 
 struct battleAreas
 {
-	char byte_0;
-	char byte_1;
+	bool isLoaded;
+	bool isRiverBattle;
 	char gap2[2];
 	void *areas;
 	void *wholeArea;
@@ -1497,6 +1497,7 @@ public:
 	}
 	battleSide* getAiSide();
 	battleSideArmy* getSideArmy(const armyStruct* army);
+	bool isRiverBattle();
 };//Size: 0xCA7C
 
 struct battleCameraStruct
@@ -1532,6 +1533,7 @@ namespace battleHelpers
 	std::string getWinConditionS(DWORD condObject);
 	battleDataS* getBattleData();
 	battleTerrainData* getBattleTerrainData();
+	battleAreas* getBattleAreas();
 	battlePerimeters* getBattlePerimeters();
 	battleCameraStruct* getBattleCamCoords();
 	battleTile* getBattleTile(float xCoord, float yCoord);

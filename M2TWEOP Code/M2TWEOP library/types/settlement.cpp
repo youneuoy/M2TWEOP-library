@@ -749,7 +749,7 @@ namespace settlementHelpers
 	buildingInQueue* getBuildingInQueue(buildingsQueue* queue, int position)
 	{
 		if (position > 0)
-			return &queue->items[(position + queue->firstIndex) % 6];
+			return &queue->buildingQueue[position];
 		return nullptr;
 	}
 	
@@ -798,9 +798,13 @@ namespace settlementHelpers
 		int hash = 0;
 		for (int i = 0; i < sett->buildingsNum; i++)
 			hash += sett->buildings[i]->edbEntry->buildingID;
-		for (int i = sett->buildingsQueueArray.firstIndex; i <= sett->buildingsQueueArray.currentBuildingIndex; i++)
-			if (const auto inQueue = &sett->buildingsQueueArray.items[i]; inQueue && inQueue->edbEntry)
+		for (int i = 0; i <= sett->buildingsQueueArray.buildingQueue.num; i++)
+		{
+			if (const buildingInQueue* inQueue = &sett->buildingsQueueArray.buildingQueue[i]; inQueue->edbEntry)
+			{
 				hash += inQueue->edbEntry->buildingID * 2;
+			}
+		}
 		return hash;
 	}
 	
@@ -1155,7 +1159,7 @@ namespace settlementHelpers
 		types.settlementStruct.set("siegeHoldoutTurns", &settlementStruct::maxHoldoutTurns);
 		types.settlementStruct.set("takenByCrusade", &settlementStruct::takenByCrusade);
 		types.settlementStruct.set("siegeCasualties", &settlementStruct::siegeCasualties);
-		types.settlementStruct.set("unitInQueueCount", &settlementStruct::countRQ);
+		types.settlementStruct.set("unitInQueueCount", sol::property(&settlementStruct::getUnitQueueSize));
 		types.settlementStruct.set("maxHoldoutTurns", &settlementStruct::maxHoldoutTurns);
 		types.settlementStruct.set("siegeDuration", &settlementStruct::siegeDuration);
 		types.settlementStruct.set("turnsSieged", &settlementStruct::siegeDuration);
@@ -1564,15 +1568,13 @@ namespace settlementHelpers
 		/***
 		Basic buildingsQueue table
 
-		@tfield int currentlyBuilding position in queue of building currently under construction, usually 1
 		@tfield int numBuildingsInQueue maximum is 6
 		@tfield getBuildingInQueue getBuildingInQueue by position in queue (1-6)
 
 		@table buildingsQueue
 		*/
 		types.buildingsQueue = luaState.new_usertype<buildingsQueue>("buildingsQueue");
-		types.buildingsQueue.set("currentlyBuilding", &buildingsQueue::currentBuildingIndex);
-		types.buildingsQueue.set("numBuildingsInQueue", &buildingsQueue::buildingsInQueue);
+		types.buildingsQueue.set("numBuildingsInQueue", sol::property(&buildingsQueue::getBuildingQueueSize));
 		/***
 		Get building in queue by position
 

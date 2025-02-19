@@ -990,9 +990,9 @@ void patchesForGame::getPossibleConstructions(exportDescrBuildings* edb, settlem
 
 int patchesForGame::onConflictTest(const buildingsQueue* queue, int index)
 {
-	for (int i = 0; i < queue->buildingsInQueue; i++)
+	for (int i = 0; i < queue->buildingQueue.num; i++)
 	{
-		const auto item = queue->items[(i + queue->firstIndex) % 6];
+		const auto item = queue->buildingQueue[i];
 		const auto entry = item.edbEntry;
 		const auto build = item.existsBuilding;
 		if ( item.constructType == 2)
@@ -1024,9 +1024,9 @@ DWORD* patchesForGame::onSetKhakiText(DWORD* text)
 
 int patchesForGame::onAddBuildingCapsAfterConstruction(const settlementStruct* sett, int index)
 {
-	for (int i = 0; i < sett->buildingsQueueArray.buildingsInQueue; i++)
+	for (int i = 0; i < sett->buildingsQueueArray.buildingQueue.num; i++)
 	{
-		const auto item = sett->buildingsQueueArray.items[(i + sett->buildingsQueueArray.firstIndex) % 6];
+		const auto item = sett->buildingsQueueArray.buildingQueue[i];
 		const auto entry = item.edbEntry;
 		const auto build = item.existsBuilding;
 		if ( item.constructType == 2)
