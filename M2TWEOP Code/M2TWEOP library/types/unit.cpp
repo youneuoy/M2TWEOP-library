@@ -1655,7 +1655,7 @@ void luaPlugin::initUnits()
 	@usage
 	local status = unit:getActionStatusInt();
 	*/
-	types.unit.set_function("getActionStatus", &unit::getActionStatusInt);
+	types.unit.set_function("getActionStatusInt", &unit::getActionStatusInt);
 	/***
 	Is unit set to run?
 	@function unit:isMovingFastSet
