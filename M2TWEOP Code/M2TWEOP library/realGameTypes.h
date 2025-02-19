@@ -1099,6 +1099,45 @@ inline bool operator !=(int a, buildingCapabilities b)
 {
 	return static_cast<buildingCapabilities>(a) != b;
 }
+
+enum class unitStatus									
+{
+	idle,									
+	hiding,									
+	taunting,								
+	celebrating,
+	ready,									
+	reforming,								
+	moving,									
+	withdrawing,							
+	missilesFiring,							
+	missilesReloading,						
+	charging,								
+	fighting,								
+	pursuing,								
+	routing,								
+	fightingBacksToTheWalls,				
+	runningAmok,							
+	berserk,								
+	rallying,								
+	dead,									
+	leavingBattle,							
+	enteringBattle,							
+	leftBattle,								
+	bracing,								
+	infighting,								
+};
+
+inline bool operator ==(int a, unitStatus b)
+{
+	return static_cast<unitStatus>(a) == b;
+}
+
+inline bool operator !=(int a, unitStatus b)
+{
+	return static_cast<unitStatus>(a) != b;
+}
+
 #pragma endregion Game Enums
 
 #pragma pack(pop)

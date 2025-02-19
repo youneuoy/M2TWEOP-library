@@ -1788,6 +1788,10 @@ public:
 	float getUnitAngle();
 	void setUnitAngle(float angle);
 	const char* getActionStatus();
+	int getActionStatusInt();
+	unitStatus getActionStatusEnum();
+	bool isFiring();
+	bool isIdle();
 	int getUnitFormation()
 	{
 		return callVFunc<0x1, int>(formationsArray);

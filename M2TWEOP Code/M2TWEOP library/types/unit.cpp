@@ -91,6 +91,28 @@ const char* unit::getActionStatus()
 	return "unknown";
 }
 
+int unit::getActionStatusInt()
+{
+	return actionStatus;
+}
+
+unitStatus unit::getActionStatusEnum()
+{
+	return static_cast<unitStatus>(actionStatus);
+}
+
+bool unit::isFiring()
+{
+	const auto status = getActionStatusEnum();
+	return status == unitStatus::missilesFiring || status == unitStatus::missilesReloading;
+}
+
+bool unit::isIdle()
+{
+	const auto status = getActionStatusInt();
+	return status < 5;
+}
+
 void unit::setArmour(const uint8_t armour)
 {
 	const auto arm = armour;
@@ -1491,6 +1513,7 @@ void luaPlugin::initUnits()
 	@tfield hasBattleProperty hasBattleProperty
 	@tfield setBattleProperty setBattleProperty
 	@tfield getActionStatus getActionStatus
+	@tfield getActionStatusInt getActionStatusInt
 	@tfield isMovingFastSet isMovingFastSet
 	@tfield setMovingFastSet setMovingFastSet
 	@tfield isOnWalls isOnWalls
@@ -1518,6 +1541,8 @@ void luaPlugin::initUnits()
 	@tfield getNearbyFriendlyUnit getNearbyFriendlyUnit
 	@tfield getNearbyEnemyUnit getNearbyEnemyUnit
 	@tfield releaseUnit releaseUnit
+	@tfield isFiring isFiring
+	@tfield isIdle isIdle
 	@tfield unitStats unitStats
 
 	@table unit
@@ -1623,6 +1648,14 @@ void luaPlugin::initUnits()
 	local status = unit:getActionStatus();
 	*/
 	types.unit.set_function("getActionStatus", &unit::getActionStatus);
+	/***
+	Get unit action status in battle (use enum, faster than string).
+	@function unit:getActionStatusInt
+	@treturn int actionStatus
+	@usage
+	local status = unit:getActionStatusInt();
+	*/
+	types.unit.set_function("getActionStatus", &unit::getActionStatusInt);
 	/***
 	Is unit set to run?
 	@function unit:isMovingFastSet
@@ -1845,6 +1878,22 @@ void luaPlugin::initUnits()
 		unit:releaseUnit();
 	*/
 	types.unit.set_function("releaseUnit", &unit::releaseUnit);
+	/***
+	Check if action status is firing or reloading.
+	@function unit:isFiring
+	@treturn bool isFiring
+	@usage
+		local isFiring = unit:isFiring()
+	*/
+	types.unit.set_function("isFiring", &unit::isFiring);
+	/***
+	Check if action status is idle or hiding or taunting or celebrating or ready.
+	@function unit:isIdle
+	@treturn bool isIdle
+	@usage
+		local isIdle = unit:isIdle()
+	*/
+	types.unit.set_function("isIdle", &unit::isIdle);
 
 	/***
 

@@ -731,6 +731,8 @@ bool attackSettlementOrder::evaluateAttack()
 #ifdef PRIORITY_DEBUG
 	gameHelpers::logStringGame("evaluateAttack attackSettlementOrder");
 #endif
+	if (PLAYER_ASSAULTED)
+		return false;
 	const auto settlement = targetSettlement->settlement;
 	if (assignedArmies.front()->moveCost >= assignedArmies.front()->resource->army->gen->movePointsArmy || assignedArmies.front()->turns > 1)
 	{

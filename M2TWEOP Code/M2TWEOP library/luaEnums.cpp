@@ -670,7 +670,64 @@ void luaPlugin::initLuaEnums()
 		"victoryScroll", 6,
 		"pursuit", 7
 	);
+	
+	/***
+	Enum of unit status.
 
+	@tfield int idle
+	@tfield int hiding
+	@tfield int taunting
+	@tfield int celebrating
+	@tfield int ready
+	@tfield int reforming
+	@tfield int moving
+	@tfield int withdrawing
+	@tfield int missilesFiring
+	@tfield int missilesReloading
+	@tfield int charging
+	@tfield int fighting
+	@tfield int pursuing
+	@tfield int routing
+	@tfield int fightingBacksToTheWalls
+	@tfield int runningAmok
+	@tfield int berserk
+	@tfield int rallying
+	@tfield int dead
+	@tfield int leavingBattle
+	@tfield int enteringBattle
+	@tfield int leftBattle
+	@tfield int bracing
+	@tfield int infighting
+
+	@table unitStatus
+	*/
+	luaState.new_enum(
+		"unitStatus",
+		"idle", 0,
+		"hiding", 1,
+		"taunting", 2,
+		"celebrating", 3,
+		"ready", 4,
+		"reforming", 5,
+		"moving", 6,
+		"withdrawing", 7,
+		"missilesFiring", 8,
+		"missilesReloading", 9,
+		"charging", 10,
+		"fighting", 11,
+		"pursuing", 12,
+		"routing", 13,
+		"fightingBacksToTheWalls", 14,
+		"runningAmok", 15,
+		"berserk", 16,
+		"rallying", 17,
+		"dead", 18,
+		"leavingBattle", 19,
+		"enteringBattle", 20,
+		"leftBattle", 21,
+		"bracing", 22,
+		"infighting", 23
+	);
 	
 	/***
 	Enum of unit classes
