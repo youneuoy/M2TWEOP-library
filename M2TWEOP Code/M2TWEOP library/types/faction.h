@@ -494,6 +494,7 @@ struct factionRecord { /* see descr_sm_factions.txt */
 	void setCulture(int Id);
 	void setFactionStratModel(const std::string& model, int characterType, int level);
 	void setFactionBattleModel(const std::string& model, int characterType);
+	std::string getLocalizedName();
 };
 
 class eopFactionData
@@ -512,7 +513,7 @@ namespace factionHelpers
 	int getFactionRecordNum();
 	std::string getFactionName(const factionStruct* fac);
 	void changeFactionName(factionStruct* fac, const char* newName);
-	UNICODE_STRING** getFactionNameLocal(factionStruct* fac);
+	std::string getFactionNameLocalStr(const std::string& name);
 	bool hasMilitaryAccess(const factionStruct* fac1, const factionStruct* fac2);
 	void setMilitaryAccess(const factionStruct* fac1, const factionStruct* fac2, bool set);
 	float getFactionStanding(const factionStruct* fac1, const factionStruct* fac2);

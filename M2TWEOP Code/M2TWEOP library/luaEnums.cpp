@@ -783,30 +783,30 @@ void luaPlugin::initLuaEnums()
 	Enum of character attributes
 
 	@tfield int command
-	@tfield int influence
+	@tfield int influence increases command radius
 	@tfield int subterfuge
 	@tfield int loyalty
-	@tfield int charm
-	@tfield int finance
+	@tfield int charm princess only
+	@tfield int finance merchant only
 	@tfield int piety
-	@tfield int magic
+	@tfield int magic witch only, doesnt really do anything
 	@tfield int chivalry
 	@tfield int authority
 	@tfield int level
-	@tfield int unorthodoxy
-	@tfield int heresyImmunity
+	@tfield int unorthodoxy influences chance for priest to become heretic
+	@tfield int heresyImmunity value over 1 makes it impossible for priest to become heretic
 	@tfield int assassination
 	@tfield int sabotage
-	@tfield int eligibility
-	@tfield int purity
-	@tfield int violence
-	@tfield int disposition
-	@tfield int boldness
-	@tfield int generosity
-	@tfield int management
+	@tfield int eligibility increases college of cardinals eligibility
+	@tfield int purity used for catholic mission scoring
+	@tfield int violence used for cease fire / break alliance mission scoring
+	@tfield int disposition useless
+	@tfield int boldness useless
+	@tfield int generosity useless
+	@tfield int management useless
 	@tfield int bodyguardSize
 	@tfield int troopMorale
-	@tfield int movementPoints
+	@tfield int movementPoints 5% per point
 	@tfield int attack
 	@tfield int defence
 	@tfield int siegeAttack
@@ -815,18 +815,18 @@ void luaPlugin::initLuaEnums()
 	@tfield int navalCommand
 	@tfield int siegeEngineering
 	@tfield int nightBattle
-	@tfield int personalSecurity
-	@tfield int publicSecurity
-	@tfield int bribery
-	@tfield int briberyResistance
-	@tfield int electability
+	@tfield int personalSecurity increases bodyguard size
+	@tfield int publicSecurity increases counterspy ability as governor
+	@tfield int bribery divided by campaign db briber attr divisor
+	@tfield int briberyResistance divided by campaign db bribee attr divisor
+	@tfield int electability useless
 	@tfield int lineOfSight
-	@tfield int trainingUnits
-	@tfield int trainingAgents
-	@tfield int construction
-	@tfield int trading
+	@tfield int trainingUnits -5% cost per point
+	@tfield int trainingAgents -5% cost per point
+	@tfield int construction -5% cost per point
+	@tfield int trading 1% per point
 	@tfield int localPopularity
-	@tfield int footInTheDoor
+	@tfield int footInTheDoor useless
 	@tfield int farming
 	@tfield int mining
 	@tfield int taxCollection
@@ -890,6 +890,7 @@ void luaPlugin::initLuaEnums()
 	@tfield int hitPoints
 	@tfield int trainingAnimalUnits
 	@tfield int battleSurgery
+	@tfield int attributeNum
 	
 	@table characterAttr
 	*/

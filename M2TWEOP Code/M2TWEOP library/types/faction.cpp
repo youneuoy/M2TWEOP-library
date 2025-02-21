@@ -142,6 +142,11 @@ void factionRecord::setFactionBattleModel(const std::string& model, const int ch
 	factionEntry->battleMod->modelEntry = battleMod;
 }
 
+std::string factionRecord::getLocalizedName()
+{
+	return factionHelpers::getFactionNameLocalStr(facName);
+}
+
 stringWithHash* LOOKUP_STRING_LABEL = new stringWithHash();
 
 characterRecord* factionStruct::getCharacterByLabel(const std::string& label)
@@ -351,12 +356,12 @@ namespace factionHelpers
 		gameStringHelpers::createUniString(fac->localizedName, newName);
 	}
 
-	UNICODE_STRING** getFactionNameLocal(factionStruct* fac)
+	std::string getFactionNameLocalStr(const std::string& name)
 	{
-		std::string facName = fac->factionRecord->facName;
-		std::transform(facName.begin(), facName.end(), facName.begin(), ::toupper);
-		auto nameMem = new UNICODE_STRING*;
-		gameStringHelpers::createUniString(nameMem, facName.c_str());
+		std::string upperName = name;
+		std::transform(upperName.begin(), upperName.end(), upperName.begin(), ::toupper);
+		auto nameMem = techFuncs::createGameClass<UNICODE_STRING*>();
+		gameStringHelpers::createUniString(nameMem, upperName.c_str());
 		UNICODE_STRING*** nameMem2 = &nameMem;
 		DWORD funcAddr = codes::offsets.getStringFromTable;
 		DWORD stringTable = dataOffsets::offsets.stringTable;
@@ -369,7 +374,8 @@ namespace factionHelpers
 			call eax
 			mov nameMem2, eax
 		}
-		return *nameMem2;
+		const auto localName = gameStringHelpers::uniStringToStr(*nameMem2);
+		return localName;
 	}
 	
 	//legacy
@@ -456,7 +462,7 @@ namespace factionHelpers
 	{
 		UNICODE_STRING** localizedName = fac->localizedName;
 		if (const UNICODE_STRING* name = *localizedName; name->Length == 0)
-			localizedName = getFactionNameLocal(fac);
+			return fac->factionRecord->getLocalizedName();
 		return gameStringHelpers::uniStringToStr(localizedName);
 	}
 
@@ -1827,6 +1833,7 @@ namespace factionHelpers
 		@tfield int cultureID
 		@tfield setFactionStratModel setFactionStratModel
 		@tfield setFactionBattleModel setFactionBattleModel
+		@tfield getLocalizedName getLocalizedName
 
 		@table factionRecord
 		*/
@@ -1891,5 +1898,14 @@ namespace factionHelpers
 			factionRec:setFactionBattleModel("arnor_general", characterType.general)
 		*/
 		types.factionRecord.set_function("setFactionBattleModel", &factionRecord::setFactionBattleModel);
+
+		/***
+		Get localized name.
+		@function factionRecord:getLocalizedName
+		@treturn string model
+		@usage
+			local name = factionRec:getLocalizedName()
+		*/
+		types.factionRecord.set_function("getLocalizedName", &factionRecord::getLocalizedName);
 	}
 }

@@ -218,6 +218,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield toggleDeveloperMode toggleDeveloperMode
 	@tfield saveGame saveGame
 	@tfield copyFile copyFile
+	@tfield getAncillary getAncillary
 	@tfield getAncillaryByIndex getAncillaryByIndex
 	@tfield getAncillaryCount getAncillaryCount
 	@tfield getTrait getTrait
