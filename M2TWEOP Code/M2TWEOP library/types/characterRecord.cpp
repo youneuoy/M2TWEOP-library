@@ -34,6 +34,105 @@ enum
 	characterRecord_lastName = 8
 };
 std::shared_ptr<eopCharacterDataDb> eopCharacterDataDb::instance = std::make_shared<eopCharacterDataDb>();
+
+std::string traitLevel::getLocalizedName()
+{
+	if (localizedName == nullptr)
+		return "";
+	return gameStringHelpers::uniStringToStr(*localizedName);
+}
+	
+void traitLevel::setLocalizedName(const std::string& newName)
+{
+	localizedName = techFuncs::createGameClass<UNICODE_STRING**>();
+	gameStringHelpers::createUniString(*localizedName, newName.c_str());
+}
+
+std::string traitLevel::getLocalizedDescription()
+{
+	if (localizedDescription == nullptr)
+		return "";
+	return gameStringHelpers::uniStringToStr(*localizedDescription);
+}
+
+void traitLevel::setLocalizedDescription(const std::string& newDescr)
+{
+	localizedDescription = techFuncs::createGameClass<UNICODE_STRING**>();
+	gameStringHelpers::createUniString(*localizedDescription, newDescr.c_str());
+}
+
+std::string traitLevel::getLocalizedEpithetDescription()
+{
+	if (localizedEpithetDescription == nullptr)
+		return "";
+	return gameStringHelpers::uniStringToStr(*localizedEpithetDescription);
+}
+
+void traitLevel::setLocalizedEpithetDescription(const std::string& newDescr)
+{
+	localizedEpithetDescription = techFuncs::createGameClass<UNICODE_STRING**>();
+	gameStringHelpers::createUniString(*localizedEpithetDescription, newDescr.c_str());
+}
+
+std::string traitLevel::getLocalizedGainDescription()
+{
+	if (localizedGainDescription == nullptr)
+		return "";
+	return gameStringHelpers::uniStringToStr(*localizedGainDescription);
+}
+
+void traitLevel::setLocalizedGainDescription(const std::string& newDescr)
+{
+	localizedGainDescription = techFuncs::createGameClass<UNICODE_STRING**>();
+	gameStringHelpers::createUniString(*localizedGainDescription, newDescr.c_str());
+}
+
+std::string traitLevel::getLocalizedLoseDescription()
+{
+	if (localizedLoseDescription == nullptr)
+		return "";
+	return gameStringHelpers::uniStringToStr(*localizedLoseDescription);
+}
+
+void traitLevel::setLocalizedLoseDescription(const std::string& newDescr)
+{
+	localizedLoseDescription = techFuncs::createGameClass<UNICODE_STRING**>();
+	gameStringHelpers::createUniString(*localizedLoseDescription, newDescr.c_str());
+}
+
+std::string traitLevel::getLocalizedEffectsDescription()
+{
+	if (localizedEffectsDescription == nullptr)
+		return "";
+	return gameStringHelpers::uniStringToStr(*localizedEffectsDescription);
+}
+
+void traitLevel::setLocalizedEffectsDescription(const std::string& newDescr)
+{
+	localizedEffectsDescription = techFuncs::createGameClass<UNICODE_STRING**>();
+	gameStringHelpers::createUniString(*localizedEffectsDescription, newDescr.c_str());
+}
+
+traitEntry* traitDb::getTrait(const int i)
+{
+	if (i < 0 || i >= traitsNum)
+	{
+		gameHelpers::logStringGame("traitDb::getTrait - Trait index out of bounds: " + std::to_string(i));
+		return nullptr;
+	}
+	return &traits[i];
+}
+
+ancillary* ancillaryDb::getAncillary(const int i)
+{
+	if (i < 0 || i >= ancillariesNum)
+	{
+		gameHelpers::logStringGame("ancillaryDb::getAncillary - Ancillary index out of bounds: " + std::to_string(i));
+		return nullptr;
+	}
+	return &ancillaries[i];
+}
+
 namespace characterRecordHelpers
 {
 
@@ -315,6 +414,8 @@ namespace characterRecordHelpers
 									            Traits
     \*----------------------------------------------------------------------------------------------------------------*/
 #pragma region Trait helpers	 
+
+
 	
 	int getTraitLevel(const traitContainer* currTrait)
 	{
@@ -841,6 +942,7 @@ namespace characterRecordHelpers
 		@tfield string type
 		@tfield string imagePath
 		@tfield getEffect getEffect
+		@tfield isCultureExcluded isCultureExcluded
 	
 		@table ancillary
 		*/
@@ -873,9 +975,18 @@ namespace characterRecordHelpers
 		@tparam int index
 		@treturn traitEffect effect
 		@usage
-		      ancillary:getEffect(2);
+		      local eff = anc:getEffect(2);
 		*/
 		types.ancillary.set_function("getEffect", &ancillary::getEffect);
+		/***
+		Is culture exluded?
+		@function ancillary:isCultureExcluded
+		@tparam int cultureId
+		@treturn bool isExcluded
+		@usage
+		      local isExcluded = anc:isCultureExcluded(1);
+		*/
+		types.ancillary.set_function("isCultureExcluded", &ancillary::isExcluded);
 		
 		///Captured Faction Info
 		//@section Captured Faction Info
@@ -994,12 +1105,15 @@ namespace characterRecordHelpers
 	
 		@tfield int index
 		@tfield string name
-		@tfield traitLevel[10] levels Maximum: 10
-		@tfield int levelCount
+		@tfield traitLevel[10] levels Maximum: 10, first real level seems to be at index 1 (so 2 in lua), use function instead
+		@tfield int levelCount will be one over the actual count
 		@tfield traitEntry[20] antiTraits Maximum: 20
 		@tfield int antiTraitCount
 		@tfield int noGoingBackLevel
-		@tfield int hidden
+		@tfield bool hidden
+		@tfield getLevel getLevel
+		@tfield isCharacterTypeValid isCharacterTypeValid
+		@tfield isCultureExcluded isCultureExcluded
 	
 		@table traitEntry
 		*/
@@ -1014,11 +1128,48 @@ namespace characterRecordHelpers
 		types.traitEntry.set("hidden", &traitEntry::hidden);
 		
 		/***
+		Get trait level, dont need to account for the first level being at index 1.
+		@function traitEntry:getLevel
+		@tparam int index
+		@treturn traitLevel lvl
+		@usage
+			local lvl = entry:getLevel(0);
+		*/
+		types.traitEntry.set_function("getLevel", &traitEntry::getLevel);
+		
+		/***
+		Is character type valid?
+		@function traitEntry:isCharacterTypeValid
+		@tparam int characterType
+		@treturn bool isValid
+		@usage
+			local isValid = entry:isCharacterTypeValid(characterType.spy);
+		*/
+		types.traitEntry.set_function("isCharacterTypeValid", &traitEntry::isCharacterTypeValid);
+		
+		/***
+		Is culture excluded?
+		@function traitEntry:isCultureExcluded
+		@tparam int cultureId
+		@treturn bool isExcluded
+		@usage
+			local isExcluded = entry:isCultureExcluded(1);
+		*/
+		types.traitEntry.set_function("isCultureExcluded", &traitEntry::isExcluded);
+		
+		/***
 		Basic traitLevel table
 	
 		@tfield int level
 		@tfield int threshold
 		@tfield int effectsCount
+		@tfield string name
+		@tfield string description
+		@tfield string effectsDescription
+		@tfield string epithetDescription
+		@tfield string gainDescription
+		@tfield string loseDescription
+		
 		@tfield getTraitEffect getTraitEffect
 	
 		@table traitLevel
@@ -1027,6 +1178,12 @@ namespace characterRecordHelpers
 		types.traitLevel.set("level", &traitLevel::level);
 		types.traitLevel.set("threshold", &traitLevel::threshold);
 		types.traitLevel.set("effectsCount", &traitLevel::effectsCount);
+		types.traitLevel.set("name", sol::property(&traitLevel::getLocalizedName, &traitLevel::setLocalizedName));
+		types.traitLevel.set("description", sol::property(&traitLevel::getLocalizedDescription, &traitLevel::setLocalizedDescription));
+		types.traitLevel.set("effectsDescription", sol::property(&traitLevel::getLocalizedEffectsDescription, &traitLevel::setLocalizedEffectsDescription));
+		types.traitLevel.set("epithetDescription", sol::property(&traitLevel::getLocalizedEpithetDescription, &traitLevel::setLocalizedEpithetDescription));
+		types.traitLevel.set("gainDescription", sol::property(&traitLevel::getLocalizedGainDescription, &traitLevel::setLocalizedGainDescription));
+		types.traitLevel.set("loseDescription", sol::property(&traitLevel::getLocalizedLoseDescription, &traitLevel::setLocalizedLoseDescription));
 		
 		/***
 		Get trait effect.
@@ -1051,6 +1208,27 @@ namespace characterRecordHelpers
 		types.traitEffect.set("value", &traitEffect::value);
 
 	}
+
+	int getAncillaryCount()
+	{
+		return  getAncillaryDb()->ancillariesNum;
+	}
+
+	ancillary* getAncillaryByIndex(const int index)
+	{
+		return getAncillaryDb()->getAncillary(index);
+	}
+
+	int getTraitCount()
+	{
+		return getTraitDb()->traitsNum;
+	}
+
+	traitEntry* getTraitByIndex(const int index)
+	{
+		return getTraitDb()->getTrait(index);
+	}
+	
 }
 
 std::string ancillary::getLocalizedName()

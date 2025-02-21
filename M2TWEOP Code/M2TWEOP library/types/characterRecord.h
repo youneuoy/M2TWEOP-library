@@ -46,7 +46,22 @@ struct traitLevel
 	int32_t effectsSize;
 	int32_t effectsCount;
 	struct UNICODE_STRING*** localizedEffectsDescription;
+	std::string getLocalizedName();
+	void setLocalizedName(const std::string& newName);
+	std::string getLocalizedDescription();
+	void setLocalizedDescription(const std::string& newDescr);
+	std::string getLocalizedEpithetDescription();
+	void setLocalizedEpithetDescription(const std::string& newDescr);
+	std::string getLocalizedGainDescription();
+	void setLocalizedGainDescription(const std::string& newDescr);
+	std::string getLocalizedLoseDescription();
+	void setLocalizedLoseDescription(const std::string& newDescr);
+	std::string getLocalizedEffectsDescription();
+	void setLocalizedEffectsDescription(const std::string& newDescr);
 };
+
+
+
 
 struct traitEntry { /* char* at 0x4 */
 	int32_t index;
@@ -61,9 +76,16 @@ struct traitEntry { /* char* at 0x4 */
 	int32_t noGoingBackLevel;
 	int32_t excludeCulturesNum;
 	uint32_t excludeCulturesStart;
-	int32_t hidden;
+	bool hidden;
+	char pad[0x3];
 	struct stringWithHash antiTraitNames[20];
 	int32_t antiTraitNameCount;
+	traitLevel* getLevel(const int i)
+	{
+		if (i < 0 || i >= levelCount - 1)
+			return nullptr;
+		return &levels[i + 1];
+	}
 	bool isCharacterTypeValid(const int charType)
 	{
 		return (1 << (charType & 0x1F)) & *(&characterType + (charType >> 5));
@@ -79,6 +101,7 @@ struct traitDb
 	traitEntry* traits;
 	int traitsSize;
 	int traitsNum;
+	traitEntry* getTrait(int i);
 };
 
 struct ancillaryDb
@@ -87,6 +110,7 @@ public:
 	struct ancillary *ancillaries; //0x0000
 	int32_t ancillariesSize; //0x0004
 	int32_t ancillariesNum; //0x0008
+	ancillary* getAncillary(int i);
 }; //Size: 0x129F0
 
 
@@ -561,4 +585,8 @@ namespace characterRecordHelpers
 	void removeTrait(characterRecord* character, const char* traitName);
 	void addTrait(characterRecord* character, const char* traitName, int traitLevel);
 	void addToLua(sol::state& luaState);
+	int getAncillaryCount();
+	ancillary* getAncillaryByIndex(int index);
+	int getTraitCount();
+	traitEntry* getTraitByIndex(int index);
 }

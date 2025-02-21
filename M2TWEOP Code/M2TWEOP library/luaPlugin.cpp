@@ -218,8 +218,11 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield toggleDeveloperMode toggleDeveloperMode
 	@tfield saveGame saveGame
 	@tfield copyFile copyFile
-	@tfield getAncillary getAncillary
+	@tfield getAncillaryByIndex getAncillaryByIndex
+	@tfield getAncillaryCount getAncillaryCount
 	@tfield getTrait getTrait
+	@tfield getTraitByIndex getTraitByIndex
+	@tfield getTraitCount getTraitCount
 	@tfield setExpandedString setExpandedString
 	@tfield getGameVersion getGameVersion
 	@tfield setPerfectSpy setPerfectSpy
@@ -353,9 +356,31 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tparam string name
 	@treturn ancillary anc
 	@usage
-	    M2TWEOP.getAncillary("ancillary_name");
+	    local anc = M2TWEOP.getAncillary("ancillary_name");
 	*/
 	tables.M2TWEOP.set_function("getAncillary", &characterRecordHelpers::findAncillary);
+	
+	/***
+	Get an ancillary by index.
+	@function M2TWEOP.getAncillaryByIndex
+	@tparam int index
+	@treturn ancillary anc
+	@usage
+	    local anc = M2TWEOP.getAncillaryByIndex(0);
+	*/
+	tables.M2TWEOP.set_function("getAncillaryByIndex", &characterRecordHelpers::getAncillaryByIndex);
+	
+	/***
+	Get ancillary count.
+	@function M2TWEOP.getAncillaryCount
+	@treturn int ancNum
+	@usage
+		local ancNum = M2TWEOP.getAncillaryCount();
+	    for i = 0, ancNum - 1 do
+	        local anc = M2TWEOP.getAncillary(i)
+	    end
+	*/
+	tables.M2TWEOP.set_function("getAncillaryCount", &characterRecordHelpers::getAncillaryCount);
 	
 	/***
 	Get a trait by name.
@@ -363,9 +388,31 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tparam string name
 	@tparam traitEntry trait
 	@usage
-	    M2TWEOP.getTrait("trait_name");
+	    local trait = M2TWEOP.getTrait("trait_name");
 	*/
 	tables.M2TWEOP.set_function("getTrait", &characterRecordHelpers::findTrait);
+
+	/***
+	Get a trait by index.
+	@function M2TWEOP.getTraitByIndex
+	@tparam int index
+	@treturn traitEntry trait
+	@usage
+	    local trait = M2TWEOP.getTraitByIndex(0)
+	 */
+	tables.M2TWEOP.set_function("getTraitByIndex", &characterRecordHelpers::getTraitByIndex);
+	
+	/***
+	Get trait count.
+	@function M2TWEOP.getTraitCount
+	@treturn int traitNum
+	@usage
+		local traitNum = M2TWEOP.getTraitCount();
+		for i = 0, traitNum - 1 do
+			local trait = M2TWEOP.getTraitByIndex(i)
+		end
+	*/
+	tables.M2TWEOP.set_function("getTraitCount", &characterRecordHelpers::getTraitCount);
 	
 	/***
 	Copy a file.

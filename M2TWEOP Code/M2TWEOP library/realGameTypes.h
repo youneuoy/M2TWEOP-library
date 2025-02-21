@@ -1173,6 +1173,149 @@ inline bool operator !=(int a, unitStatus b)
 	return static_cast<unitStatus>(a) != b;
 }
 
+enum charAttributes
+{
+	command = 0,
+	influence = 1,
+	subterfuge = 2,
+	loyalty = 3,
+	charm = 4,
+	finance = 5,
+	piety = 6,
+	magic = 7,
+	chivalry = 8,
+	authority = 9,
+	level = 10,
+	unorthodoxy = 11,
+	heresyImmunity = 12,
+	assassination = 13,
+	sabotage = 14,
+	eligibility = 15,
+	purity = 16,
+	violence = 17,
+	disposition = 18,
+	boldness = 19,
+	generosity = 20,
+	management = 21,
+	bodyguardSize = 22,
+	troopMorale = 23,
+	movementPoints = 24,
+	attack = 25,
+	defence = 26,
+	siegeAttack = 27,
+	siegeDefence = 28,
+	ambush = 29,
+	navalCommand = 30,
+	siegeEngineering = 31,
+	nightBattle = 32,
+	personalSecurity = 33,
+	publicSecurity = 34,
+	bribery = 35,
+	briberyResistance = 36,
+	electability = 37,
+	lineOfSight = 38,
+	trainingUnits = 39,
+	trainingAgents = 40,
+	construction = 41,
+	trading = 42,
+	localPopularity = 43,
+	footInTheDoor = 44,
+	farming = 45,
+	mining = 46,
+	taxCollection = 47,
+	fertility = 48,
+	cavalryCommand = 49,
+	infantryCommand = 50,
+	gunpowderCommand = 51,
+	artilleryCommand = 52,
+	startReligionCombat = 53,
+	combatVReligion0 = startReligionCombat,
+	combatVReligion1,
+	combatVReligion2,
+	combatVReligion3,
+	combatVReligion4,
+	combatVReligion5,
+	combatVReligion6,
+	combatVReligion7,
+	combatVReligion8,
+	combatVReligion9,
+	endReligionCombat = combatVReligion9,
+	startFactionCombat,
+	combatVFaction0 = startFactionCombat,
+	combatVFaction1,
+	combatVFaction2,
+	combatVFaction3,
+	combatVFaction4,
+	combatVFaction5,
+	combatVFaction6,
+	combatVFaction7,
+	combatVFaction8,
+	combatVFaction9,
+	combatVFaction10,
+	combatVFaction11,
+	combatVFaction12,
+	combatVFaction13,
+	combatVFaction14,
+	combatVFaction15,
+	combatVFaction16,
+	combatVFaction17,
+	combatVFaction18,
+	combatVFaction19,
+	combatVFaction20,
+	combatVFaction21,
+	combatVFaction22,
+	combatVFaction23,
+	combatVFaction24,
+	combatVFaction25,
+	combatVFaction26,
+	combatVFaction27,
+	combatVFaction28,
+	combatVFaction29,
+	combatVFaction30,
+	combatVFaction31,
+	endFactionCombat = combatVFaction31,
+	health,
+	squalor,
+	unrest,
+	law,
+	looting,
+	bodyguardValour,
+	hitPoints,
+	trainingAnimalUnits,
+	battleSurgery,
+	attributeNum
+};
+
+inline bool operator ==(int a, charAttributes b)
+{
+	return static_cast<charAttributes>(a) == b;
+}
+
+inline bool operator !=(int a, charAttributes b)
+{
+	return static_cast<charAttributes>(a) != b;
+}
+
+inline bool operator >=(int a, charAttributes b)
+{
+	return static_cast<charAttributes>(a) >= b;
+}
+
+inline bool operator >(int a, charAttributes b)
+{
+	return static_cast<charAttributes>(a) > b;
+}
+
+inline bool operator <= (int a, charAttributes b)
+{
+	return static_cast<charAttributes>(a) <= b;
+}
+
+inline bool operator < (int a, charAttributes b)
+{
+	return static_cast<charAttributes>(a) < b;
+}
+
 #pragma endregion Game Enums
 
 #pragma pack(pop)

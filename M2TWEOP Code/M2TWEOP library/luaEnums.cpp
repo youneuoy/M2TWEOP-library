@@ -778,6 +778,233 @@ void luaPlugin::initLuaEnums()
 		"halt", 18,
 		"idle", 19
 	);
+
+	/***
+	Enum of character attributes
+
+	@tfield int command
+	@tfield int influence
+	@tfield int subterfuge
+	@tfield int loyalty
+	@tfield int charm
+	@tfield int finance
+	@tfield int piety
+	@tfield int magic
+	@tfield int chivalry
+	@tfield int authority
+	@tfield int level
+	@tfield int unorthodoxy
+	@tfield int heresyImmunity
+	@tfield int assassination
+	@tfield int sabotage
+	@tfield int eligibility
+	@tfield int purity
+	@tfield int violence
+	@tfield int disposition
+	@tfield int boldness
+	@tfield int generosity
+	@tfield int management
+	@tfield int bodyguardSize
+	@tfield int troopMorale
+	@tfield int movementPoints
+	@tfield int attack
+	@tfield int defence
+	@tfield int siegeAttack
+	@tfield int siegeDefence
+	@tfield int ambush
+	@tfield int navalCommand
+	@tfield int siegeEngineering
+	@tfield int nightBattle
+	@tfield int personalSecurity
+	@tfield int publicSecurity
+	@tfield int bribery
+	@tfield int briberyResistance
+	@tfield int electability
+	@tfield int lineOfSight
+	@tfield int trainingUnits
+	@tfield int trainingAgents
+	@tfield int construction
+	@tfield int trading
+	@tfield int localPopularity
+	@tfield int footInTheDoor
+	@tfield int farming
+	@tfield int mining
+	@tfield int taxCollection
+	@tfield int fertility
+	@tfield int cavalryCommand
+	@tfield int infantryCommand
+	@tfield int gunpowderCommand
+	@tfield int artilleryCommand
+	@tfield int startReligionCombat
+	@tfield int combatVReligion0
+	@tfield int combatVReligion1
+	@tfield int combatVReligion2
+	@tfield int combatVReligion3
+	@tfield int combatVReligion4
+	@tfield int combatVReligion5
+	@tfield int combatVReligion6
+	@tfield int combatVReligion7
+	@tfield int combatVReligion8
+	@tfield int combatVReligion9
+	@tfield int endReligionCombat
+	@tfield int startFactionCombat
+	@tfield int combatVFaction0
+	@tfield int combatVFaction1
+	@tfield int combatVFaction2
+	@tfield int combatVFaction3
+	@tfield int combatVFaction4
+	@tfield int combatVFaction5
+	@tfield int combatVFaction6
+	@tfield int combatVFaction7
+	@tfield int combatVFaction8
+	@tfield int combatVFaction9
+	@tfield int combatVFaction10
+	@tfield int combatVFaction11
+	@tfield int combatVFaction12
+	@tfield int combatVFaction13
+	@tfield int combatVFaction14
+	@tfield int combatVFaction15
+	@tfield int combatVFaction16
+	@tfield int combatVFaction17
+	@tfield int combatVFaction18
+	@tfield int combatVFaction19
+	@tfield int combatVFaction20
+	@tfield int combatVFaction21
+	@tfield int combatVFaction22
+	@tfield int combatVFaction23
+	@tfield int combatVFaction24
+	@tfield int combatVFaction25
+	@tfield int combatVFaction26
+	@tfield int combatVFaction27
+	@tfield int combatVFaction28
+	@tfield int combatVFaction29
+	@tfield int combatVFaction30
+	@tfield int combatVFaction31
+	@tfield int endFactionCombat
+	@tfield int health
+	@tfield int squalor
+	@tfield int unrest
+	@tfield int law
+	@tfield int looting
+	@tfield int bodyguardValour
+	@tfield int hitPoints
+	@tfield int trainingAnimalUnits
+	@tfield int battleSurgery
+	
+	@table characterAttr
+	*/
+	luaState.new_enum(
+		"characterAttr",
+		"command", 0,
+		"influence", 1,
+		"subterfuge", 2,
+		"loyalty", 3,
+		"charm", 4,
+		"finance", 5,
+		"piety", 6,
+		"magic", 7,
+		"chivalry", 8,
+		"authority", 9,
+		"level", 10,
+		"unorthodoxy", 11,
+		"heresyImmunity", 12,
+		"assassination", 13,
+		"sabotage", 14,
+		"eligibility", 15,
+		"purity", 16,
+		"violence", 17,
+		"disposition", 18,
+		"boldness", 19,
+		"generosity", 20,
+		"management", 21,
+		"bodyguardSize", 22,
+		"troopMorale", 23,
+		"movementPoints", 24,
+		"attack", 25,
+		"defence", 26,
+		"siegeAttack", 27,
+		"siegeDefence", 28,
+		"ambush", 29,
+		"navalCommand", 30,
+		"siegeEngineering", 31,
+		"nightBattle", 32,
+		"personalSecurity", 33,
+		"publicSecurity", 34,
+		"bribery", 35,
+		"briberyResistance", 36,
+		"electability", 37,
+		"lineOfSight", 38,
+		"trainingUnits", 39,
+		"trainingAgents", 40,
+		"construction", 41,
+		"trading", 42,
+		"localPopularity", 43,
+		"footInTheDoor", 44,
+		"farming", 45,
+		"mining", 46,
+		"taxCollection", 47,
+		"fertility", 48,
+		"cavalryCommand", 49,
+		"infantryCommand", 50,
+		"gunpowderCommand", 51,
+		"artilleryCommand", 52,
+		"startReligionCombat", 53,
+		"combatVReligion0", 53,
+		"combatVReligion1", 54,
+		"combatVReligion2", 55,
+		"combatVReligion3", 56,
+		"combatVReligion4", 57,
+		"combatVReligion5", 58,
+		"combatVReligion6", 59,
+		"combatVReligion7", 60,
+		"combatVReligion8", 61,
+		"combatVReligion9", 62,
+		"endReligionCombat", 62,
+		"startFactionCombat", 63,
+		"combatVFaction0", 63,
+		"combatVFaction1", 64,
+		"combatVFaction2", 65,
+		"combatVFaction3", 66,
+		"combatVFaction4", 67,
+		"combatVFaction5", 68,
+		"combatVFaction6", 69,
+		"combatVFaction7", 70,
+		"combatVFaction8", 71,
+		"combatVFaction9", 72,
+		"combatVFaction10", 73,
+		"combatVFaction11", 74,
+		"combatVFaction12", 75,
+		"combatVFaction13", 76,
+		"combatVFaction14", 77,
+		"combatVFaction15", 78,
+		"combatVFaction16", 79,
+		"combatVFaction17", 80,
+		"combatVFaction18", 81,
+		"combatVFaction19", 82,
+		"combatVFaction20", 83,
+		"combatVFaction21", 84,
+		"combatVFaction22", 85,
+		"combatVFaction23", 86,
+		"combatVFaction24", 87,
+		"combatVFaction25", 88,
+		"combatVFaction26", 89,
+		"combatVFaction27", 90,
+		"combatVFaction28", 91,
+		"combatVFaction29", 92,
+		"combatVFaction30", 93,
+		"combatVFaction31", 94,
+		"endFactionCombat", 94,
+		"health", 95,
+		"squalor", 96,
+		"unrest", 97,
+		"law", 98,
+		"looting", 99,
+		"bodyguardValour", 100,
+		"hitPoints", 101,
+		"trainingAnimalUnits", 102,
+		"battleSurgery", 103,
+		"attributeNum", 104
+	);
 	
 	/***
 	Enum of unit classes
