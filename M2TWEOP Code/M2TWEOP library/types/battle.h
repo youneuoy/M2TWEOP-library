@@ -83,6 +83,12 @@ struct battleGroup
 	int unitNumVisible;
 };
 
+struct vector2
+{
+	float x;
+	float y;
+};
+
 struct arrayInUnitGroup
 {
 	int order;
@@ -437,6 +443,7 @@ public:
 	void* slotData;
 	int slotDataSize;
 	int slotDataNum;
+	void getFacing(vector2& facing);
 }; //Size: 0x0050
 
 struct perimeterBuildings
@@ -1510,6 +1517,14 @@ public:
 	float zCoord; //0x0020
 }; //Size: 0x0024
 
+struct unitGroupDeployer
+{
+	int vfTable;
+	deploymentAreaS* area;
+	unitGroup* group;
+	int centreBlock;
+};
+
 struct battlefieldEngines
 {
 public:
@@ -1532,6 +1547,7 @@ namespace battleHelpers
 	int getBattleCondCode(DWORD condObject);
 	std::string getWinConditionS(DWORD condObject);
 	battleDataS* getBattleData();
+	float* getSineValues();
 	battleTerrainData* getBattleTerrainData();
 	battleAreas* getBattleAreas();
 	battlePerimeters* getBattlePerimeters();

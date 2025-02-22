@@ -65,7 +65,7 @@ namespace gameStringHelpers
 	{
 		DWORD funcAdr = codes::offsets.createUniString;
 		size_t lenS = strlen(nonUniStr);
-		newUniStringPointer = reinterpret_cast<UNICODE_STRING**>(new char[(lenS + 6 + 4) * 2]);
+		newUniStringPointer = reinterpret_cast<UNICODE_STRING**>(techFuncs::allocateGameMem((lenS + 6 + 4) * 2));
 		UNICODE_STRING** uniStr = newUniStringPointer;
 		_asm {
 			mov ecx, uniStr

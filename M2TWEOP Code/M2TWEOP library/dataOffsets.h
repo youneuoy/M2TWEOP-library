@@ -106,6 +106,7 @@ public:
 		DWORD mapTilesDb = NULL;
 		DWORD campaignControllerVtbl = NULL;
 		DWORD gameScriptLogger = NULL;
+		DWORD sineValues = NULL;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);

@@ -1336,35 +1336,76 @@ float distance(const float x, const float y, const float x2, const float y2)
 	return static_cast<float>(sqrt(pow(x - x2, 2) + pow(y - y2, 2)));
 }
 
-void __fastcall patchesForGame::onPreBattlePlacement(aiTacticAssault* aiTactic)
+bool USE_NEW_PLACEMENT = true;
+
+void newPlacement(aiTacticAssault* aiTactic)
 {
-	if (const auto battle = battleHelpers::getBattleData(); !battle || battle->battleState >= 5)
+	const auto battleData = battleHelpers::getBattleData(); 
+	if (!battleData || battleData->battleState >= 5)
 		return;
 	const DWORD vFunc = getVFunc(aiTactic->vftable, 0x4C);
 	if (const int tacticType = GAME_FUNC_RAW(int(__thiscall*)(aiTacticAssault*), vFunc)(aiTactic); tacticType != 19)
 		return;
-	const auto group1 = &aiTactic->aiUnitGroup;
-	const auto group2 = &aiTactic->siegeUnitGroup;
-	const DWORD funcAddr = codes::offsets.issueMoveOrder;
-	GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, float*, int16_t, int, bool, bool), funcAddr)(
-		group1,
-		&aiTactic->advanceX,
-		aiTactic->angle,
-		static_cast<int>(groupMoveType::formed),
-		true,
-		true);
-	for (int i = 0; i < group1->unitsInFormationNum; i++)
+	const auto battleSideArmy = battleData->getSideArmy(aiTactic->units[0]->army);
+	const auto area = &battleSideArmy->deploymentAreas.get(0)->area;
+	const auto unitDeployer = techFuncs::createGameClass<unitGroupDeployer>();
+	GAME_FUNC(void(__thiscall*)(unitGroupDeployer*, unitGroup*, deploymentAreaS*), createUnitGroupDeployer)(unitDeployer, &aiTactic->aiUnitGroup, area);
+	vector2 pos{};
+	pos.x = aiTactic->advanceX;
+	pos.y = aiTactic->advanceY;
+	const bool found = GAME_FUNC(bool(__thiscall*)(unitGroupDeployer*, vector2*, int16_t, vector2*, bool, bool), findDeployPosition)(unitDeployer, &pos, aiTactic->angle, &pos, true, false);
+	GAME_FUNC(void(__thiscall*)(unitGroup*, vector2*, int16_t, int, int), placeGroup)(&aiTactic->aiUnitGroup, &pos, aiTactic->angle, 1, 1);
+	GAME_FUNC(void(__thiscall*)(unitGroup*, vector2*, int16_t, int, int), placeGroup)(&aiTactic->siegeUnitGroup, &pos, aiTactic->angle, 1, 1);
+}
+
+void __fastcall patchesForGame::onPreBattlePlacement(aiTacticAssault* aiTactic)
+{
+	if (USE_NEW_PLACEMENT)
 	{
-		if (const auto unit = group1->unitsInFormation[i]; unit && distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 500)
-			unitActions::placeUnit(unit, aiTactic->advanceX, aiTactic->advanceY, aiTactic->angle, 0);
+		newPlacement(aiTactic);
 	}
-	GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, float*, int16_t, int, bool, bool), funcAddr)(
-		group2,
-		&aiTactic->advanceX,
-		aiTactic->angle,
-		static_cast<int>(groupMoveType::formed),
-		true,
-		true);
+	else
+	{
+		constexpr float extraDist = 70.0;
+		if (const auto battle = battleHelpers::getBattleData(); !battle || battle->battleState >= 5)
+			return;
+		const DWORD vFunc = getVFunc(aiTactic->vftable, 0x4C);
+		if (const int tacticType = GAME_FUNC_RAW(int(__thiscall*)(aiTacticAssault*), vFunc)(aiTactic); tacticType != 19)
+			return;
+		const auto group1 = &aiTactic->aiUnitGroup;
+		const auto group2 = &aiTactic->siegeUnitGroup;
+		struct battleCoords
+		{
+			float x;
+			float y;
+		};
+		const auto coords = new battleCoords;
+		const auto facingX = 0.0f - battleHelpers::getSineValues()[aiTactic->angle >> 2];
+		const auto facingY = 0.0f - battleHelpers::getSineValues()[(aiTactic->angle + 0x4000) >> 2];
+		coords->x = aiTactic->advanceX + (facingX * extraDist);
+		coords->y = aiTactic->advanceY + (facingY * extraDist);
+		const DWORD funcAddr = codes::offsets.issueMoveOrder;
+		GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, float*, int16_t, int, bool, bool), funcAddr)(
+			group1,
+			&coords->x,
+			aiTactic->angle,
+			static_cast<int>(groupMoveType::formed),
+			true,
+			true);
+		for (int i = 0; i < group1->unitsInFormationNum; i++)
+		{
+			if (const auto unit = group1->unitsInFormation[i]; unit && distance(unit->positionX, unit->positionY, coords->x, coords->y) > 500)
+				unitActions::placeUnit(unit, coords->x, coords->y, aiTactic->angle, 0);
+		}
+		GAME_FUNC_RAW(bool(__thiscall*)(aiUnitGroup*, float*, int16_t, int, bool, bool), funcAddr)(
+			group2,
+			&coords->x,
+			aiTactic->angle,
+			static_cast<int>(groupMoveType::formed),
+			true,
+			true);
+		delete coords;
+	}
 }
 
 std::shared_ptr<std::vector<int>> USED_GATES = std::make_shared<std::vector<int>>();

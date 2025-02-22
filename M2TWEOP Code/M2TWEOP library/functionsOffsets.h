@@ -244,6 +244,9 @@ public:
 		DWORD removeTrait = NULL;
 		DWORD removeAncillary = NULL;
 		DWORD issueMoveOrder = NULL;
+		DWORD createUnitGroupDeployer = NULL;
+		DWORD buildingBattleGetFacing = NULL;
+		DWORD findDeployPosition = NULL;
 		DWORD issueFormationOrder = NULL;
 		DWORD repairBuilding = NULL;
 		DWORD addBuildingToQueue = NULL;

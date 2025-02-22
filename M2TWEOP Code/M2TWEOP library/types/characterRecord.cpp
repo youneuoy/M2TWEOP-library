@@ -110,6 +110,8 @@ std::string traitLevel::getLocalizedEffectsDescription()
 void traitLevel::setLocalizedEffectsDescription(const std::string& newDescr)
 {
 	localizedEffectsDescription = techFuncs::createGameClass<UNICODE_STRING**>();
+	//*localizedEffectsDescription = techFuncs::createGameClass<UNICODE_STRING*>();
+	//**localizedEffectsDescription = techFuncs::createGameClass<UNICODE_STRING>();
 	gameStringHelpers::createUniString(*localizedEffectsDescription, newDescr.c_str());
 }
 
@@ -1258,6 +1260,7 @@ std::string ancillary::getLocalizedEffectsDescr()
 
 void ancillary::setLocalizedEffectsDescr(const std::string& newDescr)
 {
+	effectsDescr = techFuncs::createGameClass<UNICODE_STRING**>();
 	gameStringHelpers::createUniString(*effectsDescr, newDescr.c_str());
 }
 

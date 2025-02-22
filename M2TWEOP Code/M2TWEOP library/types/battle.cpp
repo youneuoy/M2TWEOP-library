@@ -18,6 +18,11 @@
 #include "gameHelpers.h"
 
 
+void buildingBattle::getFacing(vector2& facing)
+{
+	GAME_FUNC(void(__thiscall*)(buildingBattle*, vector2&), buildingBattleGetFacing)(this, facing);
+}
+
 int battleResidence::getGateCount()
 {
 	int gateNum = 0;
@@ -256,6 +261,11 @@ namespace battleHelpers
 	battleDataS* getBattleData()
 	{
 		return gameHelpers::getGameDataAll()->battleHandler;
+	}
+
+	float* getSineValues()
+	{
+		return *reinterpret_cast<float**>(dataOffsets::offsets.sineValues);
 	}
 
 	int getBattleTileIndex(const float xCoord, const float yCoord)

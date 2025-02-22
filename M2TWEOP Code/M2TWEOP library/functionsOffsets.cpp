@@ -335,6 +335,9 @@ void codes::initCodes(int gameVer)
 		offsets.initGameScriptLog = 0xD39670;
 		offsets.createSpCountedBase = 0x403A60;
 		offsets.createLogger = 0x4224C0;
+		offsets.createUnitGroupDeployer = 0x6D6640;
+		offsets.buildingBattleGetFacing = 0x6EA3F0;
+		offsets.findDeployPosition = 0x6D6D20;
 	}
 
 
@@ -673,5 +676,8 @@ void codes::initCodes(int gameVer)
 		offsets.initGameScriptLog = 0x00D339F0;
 		offsets.createSpCountedBase = 0x403B00;
 		offsets.createLogger = 0x4227F0;
+		offsets.createUnitGroupDeployer = 0x6D6BF0;
+		offsets.buildingBattleGetFacing = 0x6EA9D0;
+		offsets.findDeployPosition = 0x6D72D0;
 	}
 }
