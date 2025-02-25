@@ -5318,6 +5318,59 @@ void onRemoveCqFlags2::SetNewCode()
 	delete a;
 }
 
+onDamageCoreBuilding::onDamageCoreBuilding(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005EE19A;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EDD3A;
+}
+
+void onDamageCoreBuilding::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->pushad();
+	a->mov(edx, eax);
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->xor_(ebp, ebp);
+	a->cmp(eax, ebp);
+	a->popad();
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onDamageCoreBuilding2::onDamageCoreBuilding2(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x005EE1D0;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x005EDD70;
+}
+
+void onDamageCoreBuilding2::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(ecx, dword_ptr(eax, 0x14));
+	a->pushad();
+	a->mov(edx, ecx);
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->xor_(ebp, ebp);
+	a->cmp(eax, ebp);
+	a->popad();
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onAddBuildingCapsAfterConstruction::onAddBuildingCapsAfterConstruction(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

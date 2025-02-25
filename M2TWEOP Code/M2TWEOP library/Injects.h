@@ -1913,6 +1913,30 @@ private:
 	LPVOID funcAddress;
 };
 
+class onDamageCoreBuilding
+	:public AATemplate
+{
+public:
+	onDamageCoreBuilding(MemWork* mem, LPVOID addr, int ver);
+	~onDamageCoreBuilding() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onDamageCoreBuilding2
+	:public AATemplate
+{
+public:
+	onDamageCoreBuilding2(MemWork* mem, LPVOID addr, int ver);
+	~onDamageCoreBuilding2() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onAddBuildingCapsAfterConstruction
 	:public AATemplate
 {
