@@ -1618,6 +1618,7 @@ void luaPlugin::initUnits()
 	/***
 	Check if unit has edu attribute.
 	@function unit:hasAttribute
+	@tparam string attributeName
 	@usage
 	local hasAttr = unit:hasAttribute("sea_faring");
 	*/
