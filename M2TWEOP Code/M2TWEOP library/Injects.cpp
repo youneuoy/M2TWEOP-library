@@ -5371,6 +5371,44 @@ void onDamageCoreBuilding2::SetNewCode()
 	delete a;
 }
 
+onDamageCoreBuilding3::onDamageCoreBuilding3(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x05EDA92;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x05ED632;
+}
+
+void onDamageCoreBuilding3::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(eax, dword_ptr(eax, 0x14));
+	a->push(eax);
+	a->push(ebx);
+	a->push(ecx);
+	a->push(edx);
+	a->push(esp);
+	a->push(ebp);
+	a->push(esi);
+	a->mov(edx, eax);
+	a->mov(ecx, edi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(edi, eax);
+	a->pop(esi);
+	a->pop(ebp);
+	a->pop(esp);
+	a->pop(edx);
+	a->pop(ecx);
+	a->pop(ebx);
+	a->pop(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onAddBuildingCapsAfterConstruction::onAddBuildingCapsAfterConstruction(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

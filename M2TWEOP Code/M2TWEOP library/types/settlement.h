@@ -571,7 +571,7 @@ struct settlementStruct {
 	void* governorTrackedVtbl;
 	struct character* governor;//0x0E20
 	void* governorTrackedVtbl2;
-	struct character* lastGovernor;//0x0E20
+		struct character* lastGovernor;//0x0E20
 	void* governorTrackedVtbl3;
 	struct character* portAdmiral;//0x0E20
 	int32_t publicHealth; //0x0E34

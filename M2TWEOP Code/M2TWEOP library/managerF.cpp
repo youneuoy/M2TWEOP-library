@@ -772,6 +772,12 @@ void managerF::execPatches()
 	toDamageCoreBuilding2->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onDamageCoreBuilding3 patch" << '\n';
+	onDamageCoreBuilding3* toDamageCoreBuilding3 = new onDamageCoreBuilding3(mem, (LPVOID)patchesForGame::onGetBuildingById, globals::dataS.gameVersion);
+	toDamageCoreBuilding3->SetNewCode();
+	toDamageCoreBuilding3->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onGetDefensesBuilding patch" << '\n';
 	onGetDefensesBuilding* toGetDefensesBuilding = new onGetDefensesBuilding(mem, (LPVOID)patchesForGame::onGetBuildingById, globals::dataS.gameVersion);
 	toGetDefensesBuilding->SetNewCode();
