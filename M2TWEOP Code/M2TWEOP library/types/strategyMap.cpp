@@ -80,6 +80,8 @@ void minorSettlementDb::addToMinorSettlements(const int regionId, settlementStru
 
 settlementStruct* minorSettlementDb::getSettlement(const int regionId, const int settlementIndex)
 {
+	if (const auto stratMap = stratMapHelpers::getStratMap(); !stratMap || !stratMap->isOpen)
+		return nullptr;
 	if (!m_Loaded)
 		load();
 	if (!m_Loaded)
@@ -90,7 +92,7 @@ settlementStruct* minorSettlementDb::getSettlement(const int regionId, const int
 		if (sett->minorSettlementIndex == settlementIndex)
 			return sett;
 	}
-	gameHelpers::logStringGame("Minor settlement not found " + std::to_string(settlementIndex) + " regionId: " + std::to_string(regionId));
+	//gameHelpers::logStringGame("Minor settlement not found " + std::to_string(settlementIndex) + " regionId: " + std::to_string(regionId));
 	return nullptr;
 }
 

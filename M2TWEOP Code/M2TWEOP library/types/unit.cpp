@@ -1387,7 +1387,10 @@ namespace unitHelpers
 		const int unitsNum = edu->numberOfEntries;
 		for (int i = 0; i < unitsNum; i++)
 		{
-			BASE_UNITS_LOOKUP[edu->unitEntries[i].eduType] = edu->unitEntries[i].index;
+			if (edu->unitEntries[i].eduType)
+				BASE_UNITS_LOOKUP[edu->unitEntries[i].eduType] = edu->unitEntries[i].index;
+			else
+				gameHelpers::logStringGame("initBaseUnitsLookup: No name for unit at index: " + std::to_string(i));
 		}
 	}
 	
@@ -1401,9 +1404,16 @@ namespace unitHelpers
 		const int unitsNum = edu->numberOfEntries;
 		for (int i = 0; i < unitsNum; i++)
 		{
-			if (strcmp(edu->unitEntries[i].eduType, type) == 0)
+			if (edu->unitEntries[i].eduType)
 			{
-				return &edu->unitEntries[i];
+				if (strcmp(edu->unitEntries[i].eduType, type) == 0)
+				{
+					return &edu->unitEntries[i];
+				}
+			}
+			else
+			{
+				gameHelpers::logStringGame("getEduEntryByName: No name for unit at index: " + std::to_string(i));
 			}
 		}
 		return nullptr;

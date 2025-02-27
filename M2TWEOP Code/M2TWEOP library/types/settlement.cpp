@@ -1098,6 +1098,7 @@ namespace settlementHelpers
 		@tfield buildingPresentMinLevel buildingPresentMinLevel
 		@tfield getCharacter getCharacter
 		@tfield canConstructBuilding canConstructBuilding
+		@tfield getFortificationLevel getFortificationLevel
 
 		@table settlementStruct
 		*/
@@ -1412,6 +1413,14 @@ namespace settlementHelpers
 		end
 		*/
 		types.settlementStruct.set_function("canConstructBuilding", &settlementStruct::canConstructBuilding);
+		/***
+		Get fortitication level of the settlement.
+		@function settlementStruct:getFortificationLevel
+		@treturn int lvl
+		@usage
+		local lvl = sett:getFortificationLevel()
+		*/
+		types.settlementStruct.set_function("getFortificationLevel", &settlementStruct::getFortificationLevel);
 		
 		/***
 		Basic settlementStats table
