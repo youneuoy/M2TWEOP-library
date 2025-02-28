@@ -15,7 +15,10 @@ jobs:
   # This job is used to build EOP
   # It runs on every commit pushed to GitHub
   build-eop:
-    runs-on: windows-2019
+    # The C++ version can change, we do not have control over it. EOP should generally be able to compile with the latest
+    # Microsoft Visual C++ 2022 Minimum Runtime
+    # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md#microsoft-visual-c
+    runs-on: windows-2022
 
     # Steps
     steps:
@@ -33,7 +36,7 @@ jobs:
   # This job is used to update the online documentation
   # It requires a commit message beginning with 'Docs' to run
   update-docs:
-      runs-on: windows-2019
+      runs-on: windows-2022
 
       if: "startsWith(github.event.head_commit.message, 'Docs:')"
       steps:
@@ -51,7 +54,7 @@ jobs:
   # This job is used to release EOP to GitHub and update the documentation
   # It requires a commit message beginning with 'Release' to run
   release-eop:
-    runs-on: windows-2019
+    runs-on: windows-2022
 
     # If the latest commit message starts with 'Release', update docs and issue a release on GitHub
     if: "startsWith(github.event.head_commit.message, 'Release:')"
