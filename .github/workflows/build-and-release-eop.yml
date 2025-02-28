@@ -15,7 +15,7 @@ jobs:
   # This job is used to build EOP
   # It runs on every commit pushed to GitHub
   build-eop:
-    runs-on: windows-2022
+    runs-on: windows-2019
 
     # Steps
     steps:
@@ -33,7 +33,7 @@ jobs:
   # This job is used to update the online documentation
   # It requires a commit message beginning with 'Docs' to run
   update-docs:
-      runs-on: windows-2022
+      runs-on: windows-2019
 
       if: "startsWith(github.event.head_commit.message, 'Docs:')"
       steps:
@@ -51,7 +51,7 @@ jobs:
   # This job is used to release EOP to GitHub and update the documentation
   # It requires a commit message beginning with 'Release' to run
   release-eop:
-    runs-on: windows-2022
+    runs-on: windows-2019
 
     # If the latest commit message starts with 'Release', update docs and issue a release on GitHub
     if: "startsWith(github.event.head_commit.message, 'Release:')"
