@@ -4,10 +4,11 @@ description: 'Builds the Project (Restores Cache, Setups Env and Builds Project)
 runs:
   using: "composite"
   steps:
-    # Use msvc-dev  building
+      # Use msvc-dev building
+      # The C++ version can change, we do not have control over it. EOP should generally be able to compile with the latest
+      # Microsoft Visual C++ 2022 Minimum Runtime
+      # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md#microsoft-visual-c
     - uses: ilammy/msvc-dev-cmd@v1
-      with:
-          vsversion: "2022"
 
     - name: Show checked out files
       run: ls -l

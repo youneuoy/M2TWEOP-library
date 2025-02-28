@@ -15,6 +15,9 @@ jobs:
   # This job is used to build EOP
   # It runs on every commit pushed to GitHub
   build-eop:
+    # The C++ version can change, we do not have control over it. EOP should generally be able to compile with the latest
+    # Microsoft Visual C++ 2022 Minimum Runtime
+    # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md#microsoft-visual-c
     runs-on: windows-2022
 
     # Steps
@@ -24,8 +27,6 @@ jobs:
 
       - name: Build EOP
         uses: ./.github/workflows/composite-actions/build-eop
-        with:
-          vsversion: "2022"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -44,8 +45,6 @@ jobs:
 
       - name: Build EOP
         uses: ./.github/workflows/composite-actions/build-eop
-        with:
-          vsversion: "2022"
 
       - name: Update EOP Online Documentation
         uses: ./.github/workflows/composite-actions/build-docs
@@ -65,8 +64,6 @@ jobs:
 
     - name: Build EOP
       uses: ./.github/workflows/composite-actions/build-eop
-      with:
-        vsversion: "2022"
 
     - name: Read release version info from source
       run: |
