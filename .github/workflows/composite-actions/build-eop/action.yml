@@ -6,8 +6,8 @@ runs:
   steps:
     # Use msvc-dev  building
     - uses: ilammy/msvc-dev-cmd@v1
-      with:
-          toolset: "14.42"
+      # with:
+          # toolset: "14.42"
 
     - name: Show checked out files
       run: ls -l
