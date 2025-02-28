@@ -3,7 +3,7 @@
 
 #include "discord.h"
 #include "managerG.h"
-#include <thread>
+#include <chrono>
 
 using namespace std::chrono;
 using namespace std::literals::chrono_literals;
