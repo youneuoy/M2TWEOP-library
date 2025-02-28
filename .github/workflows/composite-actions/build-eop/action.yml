@@ -7,7 +7,7 @@ runs:
     # Use msvc-dev  building
     - uses: ilammy/msvc-dev-cmd@v1
       with:
-          vsversion: "2022"
+          toolset: "14.43.34808"
 
     - name: Show checked out files
       run: ls -l
