@@ -57,8 +57,10 @@ void factionStruct::revealTile(const int x, const int y)
 {
 	if (stratMapHelpers::isStratMap() == false)
 		return;
+	if (!stratMapHelpers::getStratMap()->isInBounds(x, y))
+		gameHelpers::logStringGame("factionStruct.revealTile: tile out of bounds. x: " + std::to_string(x) + " y: " + std::to_string(y));
 	int coords[2] = {x, y};
-	GAME_FUNC(int*(__thiscall*)(void*, int*, int, float), revealTile)(tilesFac, coords, 1, -1.0);
+	GAME_FUNC(int*(__thiscall*)(void*, int*, int, float), revealTile)(tilesFac, coords, 2, -1.0);
 }
 
 bool factionStruct::canSeeCharacter(character* candidate)

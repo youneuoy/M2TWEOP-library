@@ -360,7 +360,7 @@ namespace settlementHelpers
 	    gameStringHelpers::setHashedString(&settlement->name, name.c_str());
 	    coordPair coords { xCoord, yCoord };
 	    GAME_FUNC(void(__thiscall*)(stratPathFinding*, void*, coordPair*),
-	    	spawnCreatedObject)(campaignHelpers::getStratPathFinding(), settlement, &coords);
+	              spawnCreatedObject)(campaignHelpers::getStratPathFinding(), settlement, &coords);
 		
 	    changeSettlementName(settlement, name.c_str());
 	    GAME_FUNC(void(__thiscall*)(settlementStruct*, factionStruct*), settAttachFaction)(settlement, faction);

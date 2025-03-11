@@ -189,6 +189,7 @@ public:
 	void nullifyMovePoints();
 	coordPair* getCoordPair();
 	void siegeSettlement(settlementStruct* sett, bool isAttack);
+	void siegeFort(fortStruct* fort, bool isAttack);
 	bool isBorderingSettlement(const settlementStruct* sett);
 	int calculatePositionPower();
 	bool canStartSiege(settlementStruct* sett);

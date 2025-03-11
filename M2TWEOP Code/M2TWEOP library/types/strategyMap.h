@@ -893,6 +893,10 @@ public:
 			return nullptr;
 		return &landMasses[index];
 	}
+	bool isInBounds(const int x, const int y)
+	{
+		return x >= 0 && x < mapWidth && y >= 0 && y < mapHeight;
+	}
 };
 
 struct extentColor

@@ -181,6 +181,13 @@ void armyStruct::siegeSettlement(settlementStruct* sett, const bool isAttack)
 	characterHelpers::siegeSettlement(gen, sett, isAttack);
 }
 
+void armyStruct::siegeFort(fortStruct* fort, const bool isAttack)
+{
+	if (!gen)
+		return;
+	characterHelpers::siegeFort(gen, fort, isAttack);
+}
+
 bool armyStruct::isBorderingSettlement(const settlementStruct* sett)
 {
 	const auto [xCoord, yCoord] = getCoords();
@@ -1239,7 +1246,7 @@ namespace armyHelpers
 		@usage
 		army:siegeFort(fort)
 		*/
-		types.armyStruct.set_function("siegeFort", &characterHelpers::siegeFort);
+		types.armyStruct.set_function("siegeFort", &armyStruct::siegeFort);
 
 		/***
 		Blockade a port.
