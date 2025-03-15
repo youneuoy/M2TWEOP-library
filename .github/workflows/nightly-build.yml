@@ -1,0 +1,60 @@
+name: Nightly Build
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天 UTC 时间 00:00 运行
+  workflow_dispatch:  # 支持手动触发
+
+jobs:
+  build:
+    runs-on: windows-latest  # 使用 Windows 环境
+
+    steps:
+      # 步骤 1：拉取代码
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 步骤 2：设置构建环境
+      - name: Set up build environment
+        shell: pwsh
+        run: |
+          # 安装必要的工具
+          choco install cmake --version=3.25.0 -y
+          choco install ninja -y
+          choco install 7zip -y
+
+      # 步骤 3：构建项目
+      - name: Build project
+        shell: pwsh
+        run: |
+          # 创建构建目录
+          mkdir build
+          cd build
+
+          # 使用 CMake 配置项目
+          cmake -G "Ninja" ..
+
+          # 使用 Ninja 构建项目
+          ninja
+
+      # 步骤 4：打包构建产物
+      - name: Package artifacts
+        shell: pwsh
+        run: |
+          # 创建打包目录
+          mkdir dist
+
+          # 复制构建产物到打包目录
+          Copy-Item -Path "build/*.dll" -Destination "dist/"
+          Copy-Item -Path "build/*.exe" -Destination "dist/"
+          Copy-Item -Path "README.md" -Destination "dist/"
+
+          # 使用 7zip 打包构建产物
+          7z a nightly-build.zip ./dist/*
+
+      # 步骤 5：上传构建产物
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: nightly-build
+          path: nightly-build.zip
