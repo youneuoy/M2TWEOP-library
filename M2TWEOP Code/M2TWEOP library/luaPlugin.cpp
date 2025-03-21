@@ -421,7 +421,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tparam string from
 	@tparam string to
 	@usage
-	    M2TWEOP.copyFile(M2TWEOP.getModPath().."/saves/newsave.sav",  M2TWEOP.getModPath().."/backupSaves/newsave.sav");
+	    M2TWEOP.copyFile(M2TWEOP.getModPath().."/saves/newsave.sav",  M2TWEOP.getModPath().."/isSaveBackupEnabled/newsave.sav");
 	*/
 	tables.M2TWEOP.set_function("copyFile", &gameHelpers::copyFileLua);
 	

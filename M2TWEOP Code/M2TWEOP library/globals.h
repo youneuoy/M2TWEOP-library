@@ -22,6 +22,7 @@ public:
 			bool isDiscordRichPresenceEnabled = true;
 			string launcherTheme = "default";
 			string modVersion = "";
+			bool isSaveBackupEnabled = true;
 		}gameCfg;
 		struct modulesS
 		{

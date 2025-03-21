@@ -70,6 +70,7 @@ public:
 
 			int gameVer = 0;
 
+			bool isSaveBackupEnabled = false;
 			bool isBlockLaunchWithoutEop = false;
 			bool IsOverrideBattleCamera = false;
 		}gameData;

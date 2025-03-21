@@ -11,6 +11,8 @@
 #include <codecvt>
 #include <string>
 
+#include <shellapi.h>
+
 namespace modSettingsUI
 {
 	typedef void (*DrawSettingsFunc)();
@@ -242,9 +244,18 @@ namespace modSettingsUI
 		ImGui::Checkbox("Block modification launch without EOP", &dataG::data.gameData.isBlockLaunchWithoutEop);
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Prevent your mod from starting without EOP enabled. See FAQ for more details.");}
 		
+		ImGui::Checkbox("Create backup saves", &dataG::data.gameData.isSaveBackupEnabled);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Automatically creates backups of Quick and Auto saves to prevent potential corruption");}
+		
 		// Freecam Settings
 		ImGui::Checkbox("Freecam Integration", &dataG::data.gameData.freecamIntegration);
-		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Automatically start and close the Freecam application when the game is launched\nTo configure the tool, look in eopData/resources/tools/freecam/config.txt");}
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Automatically start and close the Freecam application when the game is launched");}
+		
+		std::string configPath = dataG::data.gameData.modFolder + "\\eopData\\resources\\tools\\freecam\\config.txt";
+		if (ImGui::Button("Open Freecam config", helpers::getScreen().centerXButton))
+		{
+			ShellExecuteA(NULL, "open", configPath.c_str(), NULL, NULL, SW_SHOWNORMAL);
+		}
 	}
 	
 	void drawModSettingsUI(bool* isOpen)

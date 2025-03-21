@@ -1295,19 +1295,19 @@ void managerF::execPatches()
 	toCreateMercUnitCheck->Enable();
 	f1 << "Done" << '\n';
 
-	f1 << "Start applying OnQuickSave patch" << '\n';
-	OnQuickSave* onQuickSave = new OnQuickSave(mem, (LPVOID)patchesForGame::onQuickSave, globals::dataS.gameVersion);
-	onQuickSave->SetNewCode();
-	onQuickSave->Enable();
-	f1 << "Done" << '\n';
+	if (globals::dataS.gameCfg.isSaveBackupEnabled == true) {
+		f1 << "Start applying OnQuickSave patch" << '\n';
+		OnQuickSave* onQuickSave = new OnQuickSave(mem, (LPVOID)patchesForGame::onQuickSave, globals::dataS.gameVersion);
+		onQuickSave->SetNewCode();
+		onQuickSave->Enable();
+		f1 << "Done" << '\n';
 
-
-	f1 << "Start applying OnAutoSave patch" << '\n';
-	OnAutoSave* onAutoSave = new OnAutoSave(mem, (LPVOID)patchesForGame::onAutoSave, globals::dataS.gameVersion);
-	onAutoSave->SetNewCode();
-	onAutoSave->Enable();
-	f1 << "Done" << '\n';
-
+		f1 << "Start applying OnAutoSave patch" << '\n';
+		OnAutoSave* onAutoSave = new OnAutoSave(mem, (LPVOID)patchesForGame::onAutoSave, globals::dataS.gameVersion);
+		onAutoSave->SetNewCode();
+		onAutoSave->Enable();
+		f1 << "Done" << '\n';
+	}
 
 	OnPathCasheCrashPlace* onPathCasheCrashPlace = new OnPathCasheCrashPlace(mem, (LPVOID)&tacticalMapViewer::getPathCache, globals::dataS.gameVersion, (LPVOID)&globals::dataS.Modules.tacticalMapViewer);
 	onPathCasheCrashPlace->SetNewCode();
@@ -1377,6 +1377,11 @@ void managerF::loadJsonSettings()
 		{
 			getJson(jsonBoolValue, "isDiscordRichPresenceEnabled")
 			globals::dataS.gameCfg.isDiscordRichPresenceEnabled = jsonBoolValue;
+		}
+		if (json.contains("isSaveBackupEnabled"))
+		{
+			getJson(jsonBoolValue, "isSaveBackupEnabled")
+			globals::dataS.gameCfg.isSaveBackupEnabled = jsonBoolValue;
 		}
 	}
 	catch (jsn::json::type_error &e)
