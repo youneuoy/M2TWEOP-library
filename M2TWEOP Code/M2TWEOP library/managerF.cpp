@@ -778,6 +778,12 @@ void managerF::execPatches()
 	toDamageCoreBuilding3->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onGetWatchTowerRange patch" << '\n';
+	onGetWatchTowerRange* toGetWatchTowerRange = new onGetWatchTowerRange(mem, (LPVOID)patchesForGame::onGetWatchTowerRange, globals::dataS.gameVersion);
+	toGetWatchTowerRange->SetNewCode();
+	toGetWatchTowerRange->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onGetDefensesBuilding patch" << '\n';
 	onGetDefensesBuilding* toGetDefensesBuilding = new onGetDefensesBuilding(mem, (LPVOID)patchesForGame::onGetBuildingById, globals::dataS.gameVersion);
 	toGetDefensesBuilding->SetNewCode();

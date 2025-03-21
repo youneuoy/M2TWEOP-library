@@ -17,6 +17,7 @@
 bool m2tweopOptions::hideUnknownUnitTooltips = false;
 bool m2tweopOptions::eopHandleUnitCards = true;
 bool m2tweopOptions::enableFamilyEventsForTeutonic = true;
+int m2tweopOptions::watchTowerRange = 10;
 uint8_t m2tweopOptions::khakiTextRed = 0x80;
 uint8_t m2tweopOptions::khakiTextGreen = 0x77;
 uint8_t m2tweopOptions::khakiTextBlue = 0x61;

@@ -346,12 +346,14 @@ struct countersObjectS
 class m2tweopOptions
 {
 public:
-	static void setHideUnknownUnitTooltips(bool value) { hideUnknownUnitTooltips = value; }
+	static void setHideUnknownUnitTooltips(const bool value) { hideUnknownUnitTooltips = value; }
 	static bool getHideUnknownUnitTooltips() { return hideUnknownUnitTooltips; }
-	static void setEnableFamilyEventsForTeutonic(bool value) { enableFamilyEventsForTeutonic = value; }
+	static void setEnableFamilyEventsForTeutonic(const bool value) { enableFamilyEventsForTeutonic = value; }
 	static bool getEnableFamilyEventsForTeutonic() { return enableFamilyEventsForTeutonic; }
-	static void setHandleUnitCards(bool value) { eopHandleUnitCards = value; }
+	static void setHandleUnitCards(const bool value) { eopHandleUnitCards = value; }
 	static bool getHandleUnitCards() { return eopHandleUnitCards; }
+	static void setWatchTowerRange(const int value) { watchTowerRange = value; }
+	static int getWatchTowerRange() { return watchTowerRange; }
 	static DWORD getColor() { return (0xFF << 24) | (khakiTextRed << 16) | (khakiTextGreen << 8) | khakiTextBlue; }
 	static void setKhakiTextColor(const uint8_t red, const uint8_t green, const uint8_t blue) { khakiTextRed = red; khakiTextGreen = green; khakiTextBlue = blue; }
 	static bool hideUnknownUnitTooltips;
@@ -360,6 +362,7 @@ public:
 	static uint8_t khakiTextRed;
 	static uint8_t khakiTextGreen;
 	static uint8_t khakiTextBlue;
+	static int watchTowerRange;
 };
 
 struct boostLightMutex

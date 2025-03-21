@@ -849,6 +849,11 @@ int patchesForGame::onCheckHiddenResource(const int id, const int region)
 	return eopHiddenResources::hasHiddenResource(region, id);
 }
 
+int patchesForGame::onGetWatchTowerRange()
+{
+	return m2tweopOptions::getWatchTowerRange();
+}
+
 void patchesForGame::onSetSettlementModel(settlementStruct* settlement)
 {
 	bool changed = false;

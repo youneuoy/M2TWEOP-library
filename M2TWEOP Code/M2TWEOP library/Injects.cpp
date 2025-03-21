@@ -5409,6 +5409,40 @@ void onDamageCoreBuilding3::SetNewCode()
 	delete a;
 }
 
+onGetWatchTowerRange::onGetWatchTowerRange(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x004DD330;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x4DCD80;
+}
+
+void onGetWatchTowerRange::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ebx);
+	a->push(ecx);
+	a->push(edx);
+	a->push(esp);
+	a->push(ebp);
+	a->push(edi);
+	a->push(esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(esi);
+	a->pop(edi);
+	a->pop(ebp);
+	a->pop(esp);
+	a->pop(edx);
+	a->pop(ecx);
+	a->pop(ebx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onAddBuildingCapsAfterConstruction::onAddBuildingCapsAfterConstruction(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

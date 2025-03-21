@@ -278,6 +278,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getFactionRecordNum getFactionRecordNum
 	@tfield hideUnknownUnitTooltips hideUnknownUnitTooltips
 	@tfield handleUnitCards handleUnitCards
+	@tfield setWatchTowerRange setWatchTowerRange
 	@tfield enableFamilyEventsWithoutTree enableFamilyEventsWithoutTree
 	@tfield setKhakiTextColor setKhakiTextColor
 	@tfield getMinorSettlementBalance getMinorSettlementBalance
@@ -975,6 +976,15 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 		M2TWEOP.handleUnitCards(true)
 	*/
 	tables.M2TWEOP.set_function("handleUnitCards", &m2tweopOptions::setHandleUnitCards);
+
+	/***
+	Set watchtower range. Default: 10.
+	@function M2TWEOP.setWatchTowerRange
+	@tparam int newRange
+	@usage
+		M2TWEOP.setWatchTowerRange(20)
+	*/
+	tables.M2TWEOP.set_function("setWatchTowerRange", &m2tweopOptions::setWatchTowerRange);
 	
 	/***
 	Factions without a family tree or a teutonic one still get marriage offers and produce children. Enabled by default.

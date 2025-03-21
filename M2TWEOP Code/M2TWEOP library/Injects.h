@@ -1949,6 +1949,18 @@ private:
 	LPVOID funcAddress;
 };
 
+class onGetWatchTowerRange
+	:public AATemplate
+{
+public:
+	onGetWatchTowerRange(MemWork* mem, LPVOID addr, int ver);
+	~onGetWatchTowerRange() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onAddBuildingCapsAfterConstruction
 	:public AATemplate
 {

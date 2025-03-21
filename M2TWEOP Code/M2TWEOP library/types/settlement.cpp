@@ -51,8 +51,7 @@ int settlementStruct::getSettlementValue()
 	const int settlementLevelValues[] = {5, 30, 60, 80, 100, 120};
 	int value = settlementLevelValues[level];
 	int popVal = stats.settlementStats.population / 50;
-	if (popVal > 40)
-		popVal = 40;
+	popVal = min(popVal, 40);
 	value += popVal;
 	if (isCapital)
 		value += 50;
