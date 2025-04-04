@@ -38,7 +38,7 @@ struct buildingInfoScroll
 	char pad3[12];
 	struct edbEntry* entry;
 	void* techTreeItem;
-	buildingLevel* level;
+	struct buildingLevel* level;
 };
 
 struct uiKeyControlled
