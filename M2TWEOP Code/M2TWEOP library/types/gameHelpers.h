@@ -354,7 +354,7 @@ public:
 	static bool getHandleUnitCards() { return eopHandleUnitCards; }
 	static void setWatchTowerRange(const int value) { watchTowerRange = value; }
 	static int getWatchTowerRange() { return watchTowerRange; }
-	static DWORD getColor() { return (0xFF << 24) | (khakiTextRed << 16) | (khakiTextGreen << 8) | khakiTextBlue; }
+	static DWORD getColor() { return (static_cast<uint32_t>(0xFF) << 24) | (khakiTextRed << 16) | (khakiTextGreen << 8) | khakiTextBlue; }
 	static void setKhakiTextColor(const uint8_t red, const uint8_t green, const uint8_t blue) { khakiTextRed = red; khakiTextGreen = green; khakiTextBlue = blue; }
 	static bool hideUnknownUnitTooltips;
 	static bool eopHandleUnitCards;

@@ -451,6 +451,7 @@ namespace gameUiHelpers
 		@tfield settlementStruct settlement
 		@tfield building building If the scroll is about existing building, this is set and edbEntry empty.
 		@tfield edbEntry edbEntry only for non-constructed buildings.
+		@tfield buildingLevel level only for non-constructed buildings.
 
 		@table buildingInfoScroll
 		*/
@@ -458,6 +459,7 @@ namespace gameUiHelpers
 		types.buildingInfoScroll.set("settlement", &buildingInfoScroll::settlement);
 		types.buildingInfoScroll.set("building", &buildingInfoScroll::building);
 		types.buildingInfoScroll.set("edbEntry", &buildingInfoScroll::entry);
+		types.buildingInfoScroll.set("level", &buildingInfoScroll::level);
 
 		/***
 		Basic uiFamilyLeaf table

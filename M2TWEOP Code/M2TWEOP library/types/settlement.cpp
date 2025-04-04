@@ -1017,9 +1017,9 @@ namespace settlementHelpers
 		@tfield int creatorFactionID
 		@tfield int regionID
 		@tfield int level
-		@tfield int salliedOut
+		@tfield bool salliedOut
 		@tfield int previousOwner
-		@tfield int readyToSurrender
+		@tfield bool readyToSurrender
 		@tfield int lastHordeFaction
 		@tfield int moneySpentConstruction
 		@tfield int moneySpentTraining
@@ -1028,20 +1028,21 @@ namespace settlementHelpers
 		@tfield crusadeStruct takenByCrusade
 		@tfield int isCastle
 		@tfield int plagueDuration
-		@tfield int scriptRebel
+		@tfield bool scriptRebel
 		@tfield int factionTradedFrom
 		@tfield int maxHoldoutTurns
 		@tfield int siegeCasualties
 		@tfield int siegeDuration
 		@tfield int subFactionID
 		@tfield int yearFounded
-		@tfield int isCapital
-		@tfield int isTradeBlocked
+		@tfield bool isCapital
+		@tfield bool isMinorSettlement
+		@tfield bool isTradeBlocked
 		@tfield int harvestSuccess
 		@tfield int baseFertility
 		@tfield int loyaltyLastTurn
 		@tfield int rebelFactionChance
-		@tfield int plagued
+		@tfield bool plagued
 		@tfield int plagueDeaths
 		@tfield int turnsOwned start at 10 for settlements owned at game start without specification in descr_strat
 		@tfield int populationSiegeStart
@@ -1065,7 +1066,7 @@ namespace settlementHelpers
 		@tfield int isProvokedRebellion
 		@tfield int publicHealth
 		@tfield int populationSize
-		@tfield int gatesAreOpened
+		@tfield bool gatesAreOpened
 		@tfield int characterCount
 		@tfield table savedData
 		@tfield getReligion getReligion
@@ -1168,6 +1169,7 @@ namespace settlementHelpers
 		types.settlementStruct.set("subFactionID", &settlementStruct::subFactionID);
 		types.settlementStruct.set("yearFounded", &settlementStruct::yearFounded);
 		types.settlementStruct.set("isCapital", &settlementStruct::isCapital);
+		types.settlementStruct.set("isMinorSettlement", &settlementStruct::isMinorSettlement);
 		types.settlementStruct.set("aiProductionController", &settlementStruct::aiProductionController);
 		types.settlementStruct.set("harvestSuccess", &settlementStruct::harvestSuccess);
 		types.settlementStruct.set("baseFertility", sol::property(&settlementStruct::getBaseFertility, &settlementStruct::setBaseFertility));

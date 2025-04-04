@@ -481,10 +481,10 @@ struct settlementStruct {
 	int32_t preSiegePopulation;
 	int32_t factionTradedFrom;
 	int32_t plagueDuration;
-	int8_t plagued;
-	int8_t salliedOut; //0x00A5
-	int8_t gatesAreOpened;
-	int8_t readyToSurrender;
+	bool plagued;
+	bool salliedOut; //0x00A5
+	bool gatesAreOpened;
+	bool readyToSurrender;
 	struct crusade* takenByCrusade;
 	struct descrRebelEntry* descrRebel; //0x00AC
 	int32_t subFactionID; //0x00B0
@@ -556,13 +556,13 @@ struct settlementStruct {
 	struct aiProductionController* aiProductionController; //0x0DFC
 	int32_t plagueDeaths; //0x0E00
 	int8_t scriptRebel; //0x0E04
-	uchar isProvokedRebellion;//0x0E05
+	bool isProvokedRebellion;//0x0E05
 	bool isMinorSettlement;
 	int8_t pad3[1];
 	int timeSinceLastRebellion;
 	int entertainmentType;
-	int8_t isCapital; //0x0E10
-	int8_t isTradeBlocked;
+	bool isCapital; //0x0E10
+	bool isTradeBlocked;
 	int8_t gamesMessage;
 	int8_t racesMessage; 
 	int8_t governorLeft; 
