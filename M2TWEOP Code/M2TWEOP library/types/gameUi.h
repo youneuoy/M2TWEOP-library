@@ -29,6 +29,26 @@ public:
 	struct stratUIStruct *stratUI; //0x0034
 }; //Size: 0x00A0
 
+struct techTreeThreadItem
+{
+	int state;
+	UNICODE_STRING** name;
+	UNICODE_STRING** description;
+	UNICODE_STRING** dependencies;
+	char* imagePath;
+	int imagePathHash;
+	char* cardPath;
+	int cardPathHash;
+	int cost;
+	int turns;
+	bool hasDependencies;
+	char pad [3];
+	struct edbEntry* entry;
+	int level;
+	struct settlementStruct* settlement;
+	struct buildingLevel* getLevel();
+};
+
 struct buildingInfoScroll
 {
 	char pad[812];
@@ -37,8 +57,10 @@ struct buildingInfoScroll
 	struct building* building;
 	char pad3[12];
 	struct edbEntry* entry;
-	void* techTreeItem;
+	struct techTreeThreadItem* techTreeItem;
 	struct buildingLevel* level;
+	struct buildingLevel* getLevel();
+	struct edbEntry* getEdbEntry();
 };
 
 struct uiKeyControlled

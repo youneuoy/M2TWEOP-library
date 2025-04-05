@@ -449,17 +449,17 @@ namespace gameUiHelpers
 		Basic buildingInfoScroll table
 
 		@tfield settlementStruct settlement
-		@tfield building building If the scroll is about existing building, this is set and edbEntry empty.
-		@tfield edbEntry edbEntry only for non-constructed buildings.
-		@tfield buildingLevel level only for non-constructed buildings.
+		@tfield building building
+		@tfield edbEntry edbEntry
+		@tfield buildingLevel level
 
 		@table buildingInfoScroll
 		*/
 		types.buildingInfoScroll = luaState.new_usertype<buildingInfoScroll>("buildingInfoScroll");
 		types.buildingInfoScroll.set("settlement", &buildingInfoScroll::settlement);
 		types.buildingInfoScroll.set("building", &buildingInfoScroll::building);
-		types.buildingInfoScroll.set("edbEntry", &buildingInfoScroll::entry);
-		types.buildingInfoScroll.set("level", &buildingInfoScroll::level);
+		types.buildingInfoScroll.set("edbEntry", sol::property(&buildingInfoScroll::getEdbEntry));
+		types.buildingInfoScroll.set("level", sol::property(&buildingInfoScroll::getLevel));
 
 		/***
 		Basic uiFamilyLeaf table
@@ -508,4 +508,58 @@ namespace gameUiHelpers
 		types.uiFamilyTree.set("selectedLeaf", &uiFamilyTree::selectedLeaf);
 		types.uiFamilyTree.set("canSelectAll", &uiFamilyTree::canSelectAll);
     }
+}
+
+buildingLevel* buildingInfoScroll::getLevel()
+{
+	if (level)
+		return level;
+	if (entry && settlement)
+	{
+		int8_t lvl = 0;
+		for (int i = 0; i < settlement->buildingsNum; i++)
+		{
+			if (settlement->getBuilding(i)->edbEntry == entry)
+			{
+				lvl = settlement->getBuilding(i)->level;
+				break;
+			}
+		}
+		if ((lvl + 1) < entry->buildingLevelCount)
+			return entry->getBuildingLevel(lvl + 1);
+		return entry->getBuildingLevel(lvl);
+	}
+	if (techTreeItem)
+	{
+		return techTreeItem->getLevel();
+	}
+	if (building)
+	{
+		return building->edbEntry->getBuildingLevel(building->level);
+	}
+	return nullptr;
+}
+
+edbEntry* buildingInfoScroll::getEdbEntry()
+{
+	if (entry)
+		return entry;
+	if (building)
+		return building->edbEntry;
+	if (techTreeItem)
+		return techTreeItem->entry;
+	if (level)
+	{
+		if (const auto id = buildingHelpers::getBuildingLevelId(level->name); id != -1)
+		{
+			return eopBuildings::getEdb()->getBuildingByID(id);
+		}
+	}
+	return nullptr;
+}
+
+
+buildingLevel* techTreeThreadItem::getLevel()
+{
+	return entry->getBuildingLevel(level);
 }
