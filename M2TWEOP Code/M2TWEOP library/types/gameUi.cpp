@@ -516,7 +516,7 @@ buildingLevel* buildingInfoScroll::getLevel()
 		return level;
 	if (entry && settlement)
 	{
-		int8_t lvl = 0;
+		int8_t lvl = -1;
 		for (int i = 0; i < settlement->buildingsNum; i++)
 		{
 			if (settlement->getBuilding(i)->edbEntry == entry)
@@ -525,6 +525,8 @@ buildingLevel* buildingInfoScroll::getLevel()
 				break;
 			}
 		}
+		if (lvl == -1)
+			return entry->getBuildingLevel(0);
 		if ((lvl + 1) < entry->buildingLevelCount)
 			return entry->getBuildingLevel(lvl + 1);
 		return entry->getBuildingLevel(lvl);
