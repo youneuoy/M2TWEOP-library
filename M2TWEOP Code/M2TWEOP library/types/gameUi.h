@@ -123,8 +123,11 @@ struct unitInfoScroll
 {
 	char pad[772];
 	unit* unit;
-	char pad2[20];
+	char pad2[12];
+	struct unitRQ* recruitmentItem;
+	struct mercPoolUnit* mercenary;
 	struct eduEntry* entry;
+	struct eduEntry* getEntry();
 };
 
 

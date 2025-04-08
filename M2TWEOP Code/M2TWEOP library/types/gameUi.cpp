@@ -436,14 +436,18 @@ namespace gameUiHelpers
 		/***
 		Basic unitInfoScroll table
 
-		@tfield unit unit If the scroll is about existing unit, this is set and eduEntry empty.
-		@tfield eduEntry eduEntry only for non-recruited units.
+		@tfield unit unit If the scroll is about existing unit
+		@tfield eduEntry eduEntry
+		@tfield unitInQueue recruitmentItem
+		@tfield mercPoolUnit mercenary
 
 		@table unitInfoScroll
 		*/
 		types.unitInfoScroll = luaState.new_usertype<unitInfoScroll>("unitInfoScroll");
 		types.unitInfoScroll.set("unit", &unitInfoScroll::unit);
-		types.unitInfoScroll.set("eduEntry", &unitInfoScroll::entry);
+		types.unitInfoScroll.set("eduEntry", sol::property(&unitInfoScroll::getEntry));
+		types.unitInfoScroll.set("recruitmentItem", &unitInfoScroll::recruitmentItem);
+		types.unitInfoScroll.set("mercenary", &unitInfoScroll::mercenary);
 
 		/***
 		Basic buildingInfoScroll table
@@ -557,6 +561,19 @@ edbEntry* buildingInfoScroll::getEdbEntry()
 			return eopBuildings::getEdb()->getBuildingByID(id);
 		}
 	}
+	return nullptr;
+}
+
+struct eduEntry* unitInfoScroll::getEntry()
+{
+	if (entry)
+		return entry;
+	if (unit)
+		return unit->eduEntry;
+	if (recruitmentItem)
+		return recruitmentItem->entry;
+	if (mercenary)
+		return mercenary->eduEntry;
 	return nullptr;
 }
 
