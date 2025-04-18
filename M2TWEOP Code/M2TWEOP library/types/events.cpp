@@ -4118,7 +4118,7 @@ void luaPlugin::onPluginLoadF()
 	checkLuaFunc(&initDXFunc);
 
 	/***
-	Called when a new campaign is started from the menu.
+	Called when a new campaign is started from the menu (when you click the start campaign button, nothing loaded yet).
 
 	@function onNewGameStart
 
@@ -4160,7 +4160,7 @@ void luaPlugin::onPluginLoadF()
 	checkLuaFunc(&onGameInit);
 
 	/***
-	Called after a new campaign has been loaded first time.
+	Called after a new campaign's data has been loaded first time. (M2TW.stratMap and M2TW.campaign)
 	@function onNewGameLoaded
 	@usage
 	function onNewGameLoaded()
@@ -4270,7 +4270,7 @@ void luaPlugin::onPluginLoadF()
 	checkLuaFunc(&onBattleTick);
 
 	/***
-	Called after loading the campaign map
+	Called after loading the campaign map, including cas models and textures. Best used for model related stuff. This fires every time including post-battle and save loading.
 
 	@function onCampaignMapLoaded
 
