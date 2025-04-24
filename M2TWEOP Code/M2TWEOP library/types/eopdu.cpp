@@ -345,7 +345,7 @@ namespace eopDuHelpers
 		tables.M2TWEOPEDUTable.set_function("getEopEntryNum", &eopDu::getEopEntryNum);
 
 		/***
-		Get eduEntry by edu type name. Needed to change many parameters of the entry.
+		Get eduEntry by EDU type name. Needed to change many parameters of the entry. Works for EOP units too.
 		@function M2TWEOPDU.getEduEntryByType
 		@tparam string type Unit type as in export_descr_unit.
 		@treturn eduEntry retEntry
@@ -357,7 +357,7 @@ namespace eopDuHelpers
 		tables.M2TWEOPEDUTable.set_function("getEduEntryByType", &unitHelpers::getEduEntryByName);
 
 		/***
-		Get edu index by edu type name. Needed to use many edu functions.
+		Get EDU index by EDU type name. Needed to change many parameters of the entry. Works for EOP units too.
 		@function M2TWEOPDU.getEduIndexByType
 		@tparam string type Unit type as in export_descr_unit.
 		@treturn int eduindex
