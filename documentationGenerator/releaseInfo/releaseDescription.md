@@ -33,6 +33,7 @@
 - Updated default scrollbar theming - *Medik*
 - `reloadLua()` and `restartLua()` no long require opening the console - *Medik*
 - A toast popup appears when `reloadLua()` and `restartLua()` is called to provide feedback that the restart/reload was successful - *Medik*
+- Added `Copy to clipboard` button for console output
 
 ### **Documentation**
 - Updated Erken's ImGUI PDF tutorial to V5 (Thanks Erken!) - *Medik*

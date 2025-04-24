@@ -142,6 +142,19 @@ namespace console
 		ImGui::Begin("##consoleWindow", nullptr, iwf);
 
 		ImGui::Button("Output");
+		ImGui::SameLine();
+		if (ImGui::Button("Copy to clipboard"))
+		{
+			std::string outputs;
+
+			for (const auto &str : luaPlugin::logS)
+			{
+				outputs += str;
+				outputs += "\n";
+			}
+
+			ImGui::SetClipboardText(outputs.c_str());
+		}
 
 		std::string outputs;
 
