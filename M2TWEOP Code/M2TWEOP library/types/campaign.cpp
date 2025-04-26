@@ -1030,7 +1030,7 @@ namespace campaignHelpers
 		*/
 		typeAll.campaignTable.set_function("worldwideAncillaryExists", &campaign::worldwideAncillaryExists);
         /***
-		Fire an event such as a disaster.
+		Fire an event such as a disaster. You need vision of the event or the event must be in your lands to get a notification event message.
 		@function campaignStruct.execScriptEvent
 		@tparam string name Needs entry in historic_events.txt! Empty string to disable (no message).
 		@tparam string eventType earthquake, flood, horde, storm, volcano, dustbowl, locusts, famine, plague, riot, fire, historic

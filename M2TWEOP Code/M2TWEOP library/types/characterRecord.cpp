@@ -512,9 +512,9 @@ namespace characterRecordHelpers
 		@tfield string fullName Internal name including surname.
 		@tfield string localizedDisplayName Display name, resets upon reloading a save.
 		@tfield string label
-		@tfield string portrait Wives (who have never been princesses) and children do not have anything for this field. Path to 'young' portrait used starting from 'mods' folder. Resets upon reloading a save.
-		@tfield string portrait2 Wives (who have never been princesses) and children do not have anything for this field. Path to 'old' portrait used starting from 'mods' folder. Resets upon reloading a save.
-		@tfield string portrait_custom Wives (who have never been princesses) and children do not have anything for this field. Folder name in ui/custom_portraits folder.
+		@tfield string portrait Wives (who have never been princesses) and children do not have anything for this field. Path to 'young' portrait used starting from 'mods' folder. Resets upon reloading a save. Use setPortrait() to set a new persistent portrait.
+		@tfield string portrait2 Wives (who have never been princesses) and children do not have anything for this field. Path to 'old' portrait used starting from 'mods' folder. Resets upon reloading a save. Use setPortrait() to set a new persistent portrait.
+		@tfield string portrait_custom Wives (who have never been princesses) and children do not have anything for this field. Folder name in ui/custom_portraits folder. Use setPortrait() to set a new persistent portrait.
 		@tfield string modelName Battle model (needs battle_models.modeldb entry).
 		@tfield int status 5-leader,2 - heir, 0 - ordinary character, read only, do not set value
 		@tfield setAsHeir setAsHeir
@@ -579,7 +579,7 @@ namespace characterRecordHelpers
 		@tfield int gunpowderCommand
 		@tfield int health
 		@tfield int heresyImmunity
-		@tfield int hitpoints
+		@tfield int hitpoints Note: Generals have base 5 hitpoints and can gain up to 5 more from traits/ancillaries. Hitpoint values can exceed 10 but effective hitpoints are capped at 10.
 		@tfield int infantryCommand
 		@tfield int influence
 		@tfield int law
@@ -705,7 +705,7 @@ namespace characterRecordHelpers
 		*/
 		types.characterRecord.set_function("getTraits", &characterRecord::getTraits);
 		/***
-		Add a trait to the character.
+		Add a trait to the character. Case sensitive.
 		@function characterRecord:addTrait
 		@tparam string traitName Trait's internal name per export\_descr\_character\_traits.txt
 		@tparam int traitLevel Trait's level.
@@ -714,7 +714,7 @@ namespace characterRecordHelpers
 		*/
 		types.characterRecord.set_function("addTrait", &addTrait);
 		/***
-		Remove a trait from the character.
+		Remove a trait from the character. Case sensitive.
 		@function characterRecord:removeTrait
 		@tparam string traitName Trait's internal name per export\_descr\_character\_traits.txt
 		@usage
@@ -811,7 +811,7 @@ namespace characterRecordHelpers
 		*/
 		types.characterRecord.set_function("getTrait", &characterRecord::getTrait);
 		/***
-		Get the level of a trait the character has (or 0 if the character does not have the trait).
+		Get the level of a trait the character has (or 0 if the character does not have the trait). Case sensitive.
 		@function characterRecord:getTraitLevel
 		@tparam string traitName
 		@treturn int level
@@ -820,7 +820,7 @@ namespace characterRecordHelpers
 		*/
 		types.characterRecord.set_function("getTraitLevel", &characterRecord::getTraitLevel);
 		/***
-		Add trait points to a trait, will upgrade/downgrade the level if it passes the thresholds.
+		Add trait points to a trait, will upgrade/downgrade the level if it passes the thresholds.  Case sensitive.
 		@function characterRecord:addTraitPoints
 		@tparam string traitName
 		@tparam int points
@@ -846,11 +846,14 @@ namespace characterRecordHelpers
 		*/
 		types.characterRecord.set_function("giveRandomName", &characterRecord::giveRandomName);
 		/***
-		Set a characters portrait. Use a relative path from the mod folder!
+		Set a characters portrait. Use a relative path from the mod folder! This is persistent and the recommended method for setting a portrait, including custom ones.
 		@function characterRecord:setPortrait
 		@tparam string portraitPath
 		@usage
+			  // Setting specific portrait from the generic folder    
 		      record:setPortrait("data/ui/mesoamerican/portraits/portraits/young/generals/028.tga")
+			  // Setting specific portrait from the custom folder    
+		      record:setPortrait("/data/ui/custom_portraits/saruman_manycolours/portrait_young.tga")
 		*/
 		types.characterRecord.set_function("setPortrait", &characterRecord::setPortrait);
 		/***
