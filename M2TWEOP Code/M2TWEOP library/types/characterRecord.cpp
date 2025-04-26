@@ -1405,7 +1405,9 @@ bool characterRecord::hasAncillary(const std::string& ancName)
 	gameStringHelpers::setHashedString(&LOOKUP_STRING_ANC->name, ancName.c_str());
 	for (uint32_t i = 0; i < ancNum; i++)
 	{
-		if (const auto anc = ancillaries[i]; anc->dataAnc->ancNameHash == LOOKUP_STRING_ANC->hash)
+		if (const auto anc = ancillaries[i];
+			anc->dataAnc->ancNameHash == LOOKUP_STRING_ANC->hash
+			&& strcmp(anc->dataAnc->ancName, ancName.c_str()) == 0)
 			return true;
 	}
 	return false;
@@ -1416,7 +1418,9 @@ bool characterRecord::hasAncType(const std::string& ancType)
 	gameStringHelpers::setHashedString(&LOOKUP_STRING_ANC->name, ancType.c_str());
 	for (uint32_t i = 0; i < ancNum; i++)
 	{
-		if (const auto anc = ancillaries[i]; anc->dataAnc->typeHash == LOOKUP_STRING_ANC->hash)
+		if (const auto anc = ancillaries[i];
+			anc->dataAnc->typeHash == LOOKUP_STRING_ANC->hash
+			&& strcmp(anc->dataAnc->type, ancType.c_str()) == 0)
 			return true;
 	}
 	return false;
@@ -1438,7 +1442,9 @@ int characterRecord::getTraitLevel(const std::string& traitName)
 	const int traitCount = getTraitCount();
 	for (int i = 0; i < traitCount; i++)
 	{
-		if (const auto trait = &traitList[i]; trait->traitEntry->nameHash == LOOKUP_STRING->hash)
+		if (const auto trait = &traitList[i];
+			trait->traitEntry->nameHash == LOOKUP_STRING->hash
+			&& strcmp(trait->traitEntry->name, traitName.c_str()) == 0)
 			return trait->level->level;
 	}
 	return 0;
