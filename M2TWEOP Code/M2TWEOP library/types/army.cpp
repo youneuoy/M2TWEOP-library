@@ -929,11 +929,7 @@ namespace armyHelpers
 		float minMp = GAME_FUNC(float(__thiscall*)(unit*), getUnitFullMovePoints)(army->units[0]);
 		for (int i = 1; i < army->numOfUnits; ++i)
 		{
-			if (const float unitFullMp = GAME_FUNC(float(__thiscall*)(unit*), getUnitFullMovePoints)(army->units[i]);
-				unitFullMp < minMp)
-			{
-				minMp = unitFullMp;
-			}
+			minMp = min(minMp, GAME_FUNC(float(__thiscall*)(unit*), getUnitFullMovePoints)(army->units[i]));
 		}
 		return minMp;
 	}

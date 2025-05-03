@@ -15,6 +15,7 @@ def fixTypes(field):
     return field
     
 def writeClass(userType):
+    outputfile_globals.write(f'"{userType.table.name}",\n')
     outputfile.write("---" + userType.table.descr.strip() + "\n")
     if userType.isEnum is False:
         outputfile.write("---@class " + userType.table.name + "\n")
@@ -69,6 +70,7 @@ def writeClass(userType):
 def makeFunction(name, funcClass, firstparam, params, selfCall, funcEvent):
     if funcEvent == True:
         funcline = "function " + name + "(" + firstparam
+        outputfile_globals.write(f'"{name}",\n')
     else:
         if selfCall == False:
             funcline = "function " + funcClass + "." + name + "(" + firstparam
@@ -133,6 +135,7 @@ for file in os.listdir(typesPath):
         filenames.append("types/" + file)
 luaPluginPath = eopPath + "M2TWEOP Code\\M2TWEOP library\\"
 outputfile = open(eopPath + "M2TWEOP DataFiles\\eopData\\eopScripts\\LuaDocs.lua", 'w')
+outputfile_globals = open(eopPath + "M2TWEOP DataFiles\\eopData\\eopScripts\\globals.txt", 'w')
 outputfile.write("---@diagnostic disable: missing-return, lowercase-global\n")
 legacyNames = ["getTileRegionID",
                 "getRegionOwner", 

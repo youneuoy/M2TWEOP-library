@@ -24,6 +24,7 @@ def fixTypes(field):
     return field
     
 def writeClass(newClass):
+    outputfile_globals.write(f'"{newClass.name}",\n')
     outputfile.write("---" + newClass.descr.strip() + "\n")
     
     if newClass.enum is None:
@@ -75,6 +76,7 @@ def writeClass(newClass):
 def makeFunction(name, funcClass, firstparam, params, selfCall, funcEvent):
     if funcEvent == True:
         funcline = "function " + name + "(" + firstparam
+        outputfile_globals.write(f'"{name}",\n')
     else:
         if selfCall == False:
             funcline = "function " + funcClass + "." + name + "(" + firstparam
@@ -123,6 +125,7 @@ cwd = os.getcwd()
 eopPath = re.findall(r'(.+)documentationGenerator', cwd)[0]
 luaPluginPath = eopPath + "M2TWEOP Code\\M2TWEOP library\\"
 outputfile = open(eopPath + "M2TWEOP DataFiles\\eopData\\eopScripts\\LuaImGuiDocs.lua", 'w')
+outputfile_globals = open(eopPath + "M2TWEOP DataFiles\\eopData\\eopScripts\\globals_imgui.txt", 'w')
 outputfile.write("---@diagnostic disable: missing-return, lowercase-global\n")
 
 for name in filenames:

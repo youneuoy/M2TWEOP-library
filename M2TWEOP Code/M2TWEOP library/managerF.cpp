@@ -844,6 +844,18 @@ void managerF::execPatches()
 	toSetCqFlags2->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onRemoveCqFlags patch" << '\n';
+	onRemoveCqFlags* toRemoveCqFlags = new onRemoveCqFlags(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toRemoveCqFlags->SetNewCode();
+	toRemoveCqFlags->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onRemoveCqFlags2 patch" << '\n';
+	onRemoveCqFlags2* toRemoveCqFlags2 = new onRemoveCqFlags2(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toRemoveCqFlags2->SetNewCode();
+	toRemoveCqFlags2->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onAddBuildingCapsAfterConstruction patch" << '\n';
 	onAddBuildingCapsAfterConstruction* toAddBuildingCapsAfterConstruction = new onAddBuildingCapsAfterConstruction(mem, (LPVOID)patchesForGame::onAddBuildingCapsAfterConstruction, globals::dataS.gameVersion);
 	toAddBuildingCapsAfterConstruction->SetNewCode();
