@@ -1961,6 +1961,30 @@ private:
 	LPVOID funcAddress;
 };
 
+class onCheckGarrison
+	:public AATemplate
+{
+public:
+	onCheckGarrison(MemWork* mem, LPVOID addr, int ver);
+	~onCheckGarrison() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onValidateGarrison
+	:public AATemplate
+{
+public:
+	onValidateGarrison(MemWork* mem, LPVOID addr, int ver);
+	~onValidateGarrison() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onAddBuildingCapsAfterConstruction
 	:public AATemplate
 {

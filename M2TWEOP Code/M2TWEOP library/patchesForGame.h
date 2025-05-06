@@ -75,6 +75,8 @@ public:
 	static bannerData* __fastcall onGetRebelSymbol(const trackedArmy* army, bannerData* oldData);
 	static void __fastcall onPredictedStats(settlementStats* statsManager);
 	static int __fastcall onEvalAttObjective(const aiCampaignController* controller);
+	static factionStruct* __fastcall onCheckGarrison(const aiRegionController* controller);
+	static int __fastcall onValidateGarrison(const aiRegionController* controller, const armyStruct* army);
 	static void __fastcall onUpdateControllerAlloc(aiCampaignController* controller);
 	static int __fastcall onScoreBestCapital(const settlementStruct* sett);
 	static int __fastcall onGetUnitCard(const eduEntry* entry, int factionId, stringWithHash* newPath);

@@ -1214,6 +1214,16 @@ int patchesForGame::onEvalAttObjective(const aiCampaignController* controller)
 	return factionId;
 }
 
+factionStruct* patchesForGame::onCheckGarrison(const aiRegionController* controller)
+{
+	return controller->settlement->faction;
+}
+
+int patchesForGame::onValidateGarrison(const aiRegionController* controller, const armyStruct* army)
+{
+	return army->settlement == controller->settlement ? 1 : 0;
+}
+
 void patchesForGame::onUpdateControllerAlloc(aiCampaignController* controller)
 {
 	controller->updateAllocation();

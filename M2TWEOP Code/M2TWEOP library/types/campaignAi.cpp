@@ -2515,7 +2515,7 @@ void aiRegionData::calculateRegionStrengths()
 
 void aiRegionController::initialize()
 {
-	if (!region->hasFaction(aiFaction->factionID))
+	if (this->settlement->faction != aiFaction->faction)
 	{
 		if (garrison)
 			aiFaction->aiResourceManager->releaseResource(garrison);
@@ -2528,6 +2528,25 @@ void aiRegionController::initialize()
 			|| (gsdData->strength.ownStrength / static_cast<float>(gsdData->strength.enemyStrength) > 0.9))
 		{
 			garrisonType = 1;
+		}
+	}
+}
+
+void aiRegionController::update()
+{
+	this->productionController = this->settlement->aiProductionController;
+	callClassFunc<aiRegionController*, void>(this, 0x1c);
+	const auto reg = stratMapHelpers::getRegion(regionID);
+	if (reg)
+	{
+		const auto settlementNum = reg->settlementCount();
+		for (int i = 0; i < settlementNum; i++)
+		{
+			const auto sett = reg->getSettlement(i);
+			if (sett->siegeNum == 0 || !sett->isMinorSettlement || sett->faction->isPlayerControlled == 1)
+				continue;
+			const auto sallyForthObjective = techFuncs::createGameClass<aiCampaignObjective>();
+			GAME_FUNC(void(__thiscall*)(aiCampaignObjective*, struct aiFaction*), createSallyForthObjective)(sallyForthObjective, sett->faction->aiFaction);
 		}
 	}
 }
@@ -3628,8 +3647,7 @@ void aiGlobalStrategyDirector::initNeighbourRegions()
 				regionData->regionValue += 250;
 			if(sett->faction->factionRecord->slave)
 				regionData->regionValue += campaignHelpers::getCampaignData()->turnNumber < 30 ? 500 : 250;
-			if (regionData->regionValue < 0)
-				regionData->regionValue = 0;
+			regionData->regionValue = max(regionData->regionValue, 0);
 			regionData->neighbourEnemyNum = -1;
 			regionData->neighbourOtherNum = -1;
 			regionData->setRisk(regionRisk::safe);
@@ -3650,10 +3668,10 @@ void aiGlobalStrategyDirector::updateRegionControllers()
 		{
 			for (int j = 0; j < ownRegionsCount; j++)
 			{
-				auto regData = ownRegions[j];
-				if (regData.regionID == settlement->regionID && settlement->getMinorSettlementIndex() == regData.settlementIndex)
+				auto regData = &ownRegions[j];
+				if (regData->regionID == settlement->regionID && settlement->getMinorSettlementIndex() == regData->settlementIndex)
 				{
-					controller->gsdData = &regData;
+					controller->gsdData = regData;
 					break;
 				}
 			}

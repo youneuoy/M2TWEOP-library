@@ -364,6 +364,7 @@ struct aiRegionController
     int garrisonType;
     int requiredGarrisonStrength;
     void initialize();
+    void update();
 };
 
 struct decisionValuesLTGD

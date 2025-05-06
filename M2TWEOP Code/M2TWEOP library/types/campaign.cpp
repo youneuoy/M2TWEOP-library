@@ -235,8 +235,12 @@ characterRecord* campaign::getCharacterByLabel(const std::string& label)
 	for (int i = 0; i < factionCount; i++)
 	{
 		const auto fac = getFactionByOrder(i);
+		if (fac->deadStatus > 0)
+			continue;
 		if (const auto rec = fac->getCharacterByLabel(label); rec)
+		{
 			return rec;
+		}
 	}
 	return nullptr;
 }
@@ -247,6 +251,8 @@ characterRecord* campaign::worldwideAncillaryExists(const std::string& ancName)
 	{
 		if (const auto fac = getFactionByOrder(i); fac)
 		{
+			if (fac->deadStatus > 0)
+				continue;
 			if (const auto rec = fac->ancillaryExists(ancName); rec)
 				return rec;
 		}

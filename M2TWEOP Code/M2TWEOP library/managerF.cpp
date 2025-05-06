@@ -862,6 +862,18 @@ void managerF::execPatches()
 	toAddBuildingCapsAfterConstruction->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onCheckGarrison patch" << '\n';
+	onCheckGarrison* toCheckGarrison = new onCheckGarrison(mem, (LPVOID)patchesForGame::onCheckGarrison, globals::dataS.gameVersion);
+	toCheckGarrison->SetNewCode();
+	toCheckGarrison->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onValidateGarrison patch" << '\n';
+	onValidateGarrison* toValidateGarrison = new onValidateGarrison(mem, (LPVOID)patchesForGame::onValidateGarrison, globals::dataS.gameVersion);
+	toValidateGarrison->SetNewCode();
+	toValidateGarrison->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onAddBuildingCapsAfterConstruction2 patch" << '\n';
 	onAddBuildingCapsAfterConstruction2* toAddBuildingCapsAfterConstruction2 = new onAddBuildingCapsAfterConstruction2(mem, (LPVOID)patchesForGame::onAddBuildingCapsAfterConstruction, globals::dataS.gameVersion);
 	toAddBuildingCapsAfterConstruction2->SetNewCode();

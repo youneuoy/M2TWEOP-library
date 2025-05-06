@@ -5443,6 +5443,79 @@ void onGetWatchTowerRange::SetNewCode()
 	delete a;
 }
 
+onCheckGarrison::onCheckGarrison(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x5506BA;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x55022A;
+}
+
+void onCheckGarrison::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ebx);
+	a->push(ecx);
+	a->push(esp);
+	a->push(ebp);
+	a->push(edi);
+	a->push(esi);
+	a->mov(ecx, esi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(edx, eax);
+	a->pop(esi);
+	a->pop(edi);
+	a->pop(ebp);
+	a->pop(esp);
+	a->pop(ecx);
+	a->pop(ebx);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onValidateGarrison::onValidateGarrison(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x55067D;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x5501ED;
+}
+
+void onValidateGarrison::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(eax);
+	a->push(edx);
+	a->push(ebx);
+	a->push(ecx);
+	a->push(esp);
+	a->push(ebp);
+	a->push(edi);
+	a->push(esi);
+	a->mov(edx, eax);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->mov(edx, 1);
+	a->cmp(edx, eax);
+	a->pop(esi);
+	a->pop(edi);
+	a->pop(ebp);
+	a->pop(esp);
+	a->pop(ecx);
+	a->pop(ebx);
+	a->pop(edx);
+	a->pop(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onAddBuildingCapsAfterConstruction::onAddBuildingCapsAfterConstruction(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

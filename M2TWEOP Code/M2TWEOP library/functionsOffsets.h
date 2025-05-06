@@ -255,6 +255,7 @@ public:
 		DWORD upgradeBuildInSett = NULL;
 		DWORD upgradeSett = NULL;
 		DWORD createSettlement = NULL;
+		DWORD createSallyForthObjective = NULL;
 		DWORD createRallyPointSundry = NULL;
 		DWORD initRallyPoint = NULL;
 		DWORD getRecruitmentOptions = NULL;
