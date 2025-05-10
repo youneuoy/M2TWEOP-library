@@ -71,7 +71,10 @@ namespace stratModelsChange
 	void setModel(const int x, const int y, const UINT32 modelId, const UINT32 modelId2)
 	{
 		if (STRAT_MODELS.find(modelId) == STRAT_MODELS.end())
+		{
+			gameHelpers::logStringGame("setModel: modelId not found in STRAT_MODELS" + std::to_string(modelId));
 			return;
+		}
 		for (size_t i = 0; i < STRAT_MODEL_CHANGE_LIST.size(); i++)
 		{
 			if (STRAT_MODEL_CHANGE_LIST[i]->x == x

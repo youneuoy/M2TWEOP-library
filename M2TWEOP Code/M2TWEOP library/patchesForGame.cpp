@@ -343,7 +343,10 @@ uint8_t __fastcall patchesForGame::onSetExtentsZocAlpha(uint8_t oldAlpha)
 int __fastcall patchesForGame::onReligionCombatBonus(int religionID, characterRecord* namedChar)
 {
 	if (religionID > 9)
+	{
+		gameHelpers::logStringGame("Using invalid religion ID: " + std::to_string(religionID) + " for religion combat bonus");
 		return 0;
+	}
 
 	return namedChar->combatVsReligion[religionID];
 }
@@ -874,6 +877,14 @@ void patchesForGame::onSetSettlementModel(settlementStruct* settlement)
 		const auto cultSett = cultures::getCultureSettlement(settlement->level, settlement->fac_creatorModNum);
 		settlement->model = cultSett;
 	}
+}
+
+void patchesForGame::onGeneralAssaultAction(generalAssault* assault)
+{
+	if (!assault || !assault->settlement)
+		return;
+	if (!assault->settlement->army)
+		gameHelpers::logStringGame("GeneralAssaultAction: No army in settlement: " + std::string(assault->settlement->name));
 }
 
 int patchesForGame::onAddSettlementToDiplomacyScroll(const settlementStruct* settlement)

@@ -43,7 +43,7 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 		{
 			if (!target->canReceiveMerge(this))
 			{
-				gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
+				gameHelpers::logStringGame("armyStruct.moveTactical: can not merge army.");
 				return nullptr;
 			}
 			return mergeArmies(target, true);
@@ -61,7 +61,7 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 		//gameHelpers::logStringGame("New tile: " + std::to_string(newX) + " " + std::to_string(newY));
 		if (x== newX && y == newY)
 		{
-			gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
+			gameHelpers::logStringGame("armyStruct.moveTactical: can not merge army or find valid near tile.");
 			delete[] unitList;
 			return nullptr;
 		}
@@ -75,7 +75,7 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 		//gameHelpers::logStringGame("New tile: " + std::to_string(newX) + " " + std::to_string(newY));
 		if (x== newX && y == newY)
 		{
-			gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
+			gameHelpers::logStringGame("armyStruct.moveTactical: can not merge army into settlement or find valid near tile.");
 			delete[] unitList;
 			return nullptr;
 		}
@@ -89,7 +89,7 @@ armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
 		//gameHelpers::logStringGame("New tile: " + std::to_string(newX) + " " + std::to_string(newY));
 		if (x== newX && y == newY)
 		{
-			gameHelpers::logStringGame("armyStruct.moveTactical: can not move army.");
+			gameHelpers::logStringGame("armyStruct.moveTactical: can not merge army into fort or find valid near tile.");
 			delete[] unitList;
 			return nullptr;
 		}
@@ -254,7 +254,9 @@ bool armyStruct::canStartAssault(settlementStruct* sett)
 {
 	if (!sett || sett->faction->factionID == faction->factionID)
 		return false;
-	if (!sett->army || sett->army->numOfUnits == 0)
+	if (!sett->army)
+		return false;
+	if (sett->army->numOfUnits == 0)
 		return true;
 	if (siege && siege->getSiegedSettlement() == sett)
 		return GAME_FUNC(int(__thiscall*)(armyStruct*), canStartAssault)(this) == 0;
@@ -266,7 +268,9 @@ bool armyStruct::canStartAssaultFort(const fortStruct* fort)
 {
 	if (!fort || fort->faction->factionID == faction->factionID)
 		return false;
-	if (!fort->army || fort->army->numOfUnits == 0)
+	if (!fort->army)
+		return false;
+	if (fort->army->numOfUnits == 0)
 		return true;
 	if (siege && siege->getSiegedFort() == fort)
 		return GAME_FUNC(int(__thiscall*)(armyStruct*), canStartAssault)(this) == 0;

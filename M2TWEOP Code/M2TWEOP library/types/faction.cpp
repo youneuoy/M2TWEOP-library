@@ -158,7 +158,7 @@ characterRecord* factionStruct::getCharacterByLabel(const std::string& label)
 	const UINT32 hash = static_cast<UINT32>(LOOKUP_STRING_LABEL->hash);
 	for (int i = 0; i < recordCount; i++)
 	{
-		if (const auto rec = characterRecords[i]; rec->labelCrypt == hash)
+		if (const auto rec = characterRecords[i]; rec->labelCrypt == hash && strcmp(rec->label, label.c_str()) == 0)
 			return rec;
 	}
 	return nullptr;

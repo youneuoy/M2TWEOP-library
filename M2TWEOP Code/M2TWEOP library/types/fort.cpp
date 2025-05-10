@@ -173,7 +173,10 @@ namespace fortHelpers
 			if (!nTile)
 				continue;
 			if (nTile->settlement || nTile->fort)
+			{
+				gameHelpers::logStringGame("createFortXYCulture: can't create - tile is bordered by settlement or fort.");
 				return nullptr;
+			}
 		}
 		const int regionId = tile->regionId;
 		if (!WOODEN_FORT)

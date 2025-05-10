@@ -61,6 +61,8 @@ namespace gameHelpers
 	
 	bool callGameConsoleCommand(const char* name, const char* arg, char* errorBuffer)
 	{
+		if (!name)
+			return false;
 		const auto cmd = dataOffsets::offsets.consoleCommands;
 		for (int i = 0; i < cmd->size; i++)
 		{
@@ -69,11 +71,14 @@ namespace gameHelpers
 				continue;
 			return (**currCom->function)(arg, errorBuffer);
 		}
+		logStringGame("Command not found: " + std::string(name));
 		return false;
 	}
 	
 	int getScriptCounter(const char* counterName, bool& success)
 	{
+		if (!counterName)
+			return 0;
 		auto eventsObject = reinterpret_cast<countersObjectS*>(dataOffsets::offsets.scriptCounters);
 		counterS* retS = nullptr;
 		int retValue = 0;
@@ -233,8 +238,11 @@ namespace gameHelpers
 		if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.religionNames.empty())
 			plugData::data.luaAll.fillHashMaps();
 		const auto religionName = plugData::data.luaAll.religionNames.find(index);
-		if (religionName == plugData::data.luaAll.religionNames.end()) 
+		if (religionName == plugData::data.luaAll.religionNames.end())
+		{
+			logStringGame("getReligionName: Could not find religion name for index " + std::to_string(index));
 			return nullptr;
+		}
 		return religionName->second;
 	}
 
@@ -243,8 +251,11 @@ namespace gameHelpers
 		if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.climateNames.empty())
 			plugData::data.luaAll.fillHashMaps();
 		const auto name = plugData::data.luaAll.climateNames.find(index);
-		if (name == plugData::data.luaAll.climateNames.end()) 
+		if (name == plugData::data.luaAll.climateNames.end())
+		{
+			logStringGame("getClimateName: Could not find climate name for index " + std::to_string(index));
 			return nullptr;
+		}
 		return name->second;
 	}
 
@@ -253,8 +264,11 @@ namespace gameHelpers
 		if (!plugData::data.luaAll.hashNonCampaignLoaded || plugData::data.luaAll.cultureNames.empty())
 			plugData::data.luaAll.fillHashMapsNonCampaign();
 		const auto name = plugData::data.luaAll.cultureNames.find(index);
-		if (name == plugData::data.luaAll.cultureNames.end()) 
+		if (name == plugData::data.luaAll.cultureNames.end())
+		{
+			logStringGame("getCultureName: Could not find culture name for index " + std::to_string(index));
 			return nullptr;
+		}
 		return name->second;
 	}
 
@@ -274,8 +288,11 @@ namespace gameHelpers
 		if (!plugData::data.luaAll.hashNonCampaignLoaded || plugData::data.luaAll.religionIndex.empty())
 			plugData::data.luaAll.fillHashMapsNonCampaign();
 		const auto religionIndex = plugData::data.luaAll.religionIndex.find(name);
-		if (religionIndex == plugData::data.luaAll.religionIndex.end()) 
+		if (religionIndex == plugData::data.luaAll.religionIndex.end())
+		{
+			logStringGame("getReligionN: Could not find religion index for name " + name);
 			return -1;
+		}
 		return religionIndex->second;
 	}
 
@@ -284,8 +301,11 @@ namespace gameHelpers
 		if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.climateIndex.empty())
 			plugData::data.luaAll.fillHashMaps();
 		const auto index = plugData::data.luaAll.climateIndex.find(name);
-		if (index == plugData::data.luaAll.climateIndex.end()) 
+		if (index == plugData::data.luaAll.climateIndex.end())
+		{
+			logStringGame("getClimateN: Could not find climate index for name " + name);
 			return -1;
+		}
 		return index->second;
 	}
 
@@ -294,8 +314,11 @@ namespace gameHelpers
 		if (!plugData::data.luaAll.hashNonCampaignLoaded || plugData::data.luaAll.cultureIndex.empty())
 			plugData::data.luaAll.fillHashMapsNonCampaign();
 		const auto index = plugData::data.luaAll.cultureIndex.find(name);
-		if (index == plugData::data.luaAll.cultureIndex.end()) 
+		if (index == plugData::data.luaAll.cultureIndex.end())
+		{
+			logStringGame("getCultureN: Could not find culture index for name " + name);
 			return -1;
+		}
 		return index->second;
 	}
 	
@@ -334,7 +357,10 @@ namespace gameHelpers
 			add esp, 0x4
 		}
 		if (result == nullptr)
+		{
+			logStringGame("Condition: Could not create condition for " + std::string(condition));
 			return false;
+		}
 		return callVFunc<1, bool>(result, eventData);
 	}
 
@@ -368,7 +394,10 @@ namespace gameHelpers
 			add esp, 0x4
 		}
 		if (scriptObject == 0x0)
+		{
+			logStringGame("ScriptCommand: Could not create script object for " + std::string(command));
 			return;
+		}
 		_asm
 		{
 			mov ecx, scriptObject
@@ -640,6 +669,7 @@ namespace gameHelpers
 			costs->siegeTower = cost;
 			break;
 		default:
+			logStringGame("setEquipmentCosts: Invalid equipment type " + std::to_string(equipType));
 			break;
 		}
 	}

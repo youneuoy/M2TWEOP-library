@@ -1985,6 +1985,18 @@ private:
 	LPVOID funcAddress;
 };
 
+class onGeneralAssaultAction
+	:public AATemplate
+{
+public:
+	onGeneralAssaultAction(MemWork* mem, LPVOID addr, int ver);
+	~onGeneralAssaultAction() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onAddBuildingCapsAfterConstruction
 	:public AATemplate
 {

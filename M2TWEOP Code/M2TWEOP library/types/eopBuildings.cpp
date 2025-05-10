@@ -606,8 +606,11 @@ namespace buildingHelpers
 		if (!plugData::data.luaAll.hashNonCampaignLoaded || plugData::data.luaAll.buildings.empty())
 			plugData::data.luaAll.fillHashMapsNonCampaign();
 		const auto id = plugData::data.luaAll.buildings.find(name);
-		if (id == plugData::data.luaAll.buildings.end()) 
+		if (id == plugData::data.luaAll.buildings.end())
+		{
+			gameHelpers::logStringGame("eopBuildings::getBuildingId: building not found: " + name);
 			return -1;
+		}
 		return id->second;
 	}
 
@@ -616,8 +619,11 @@ namespace buildingHelpers
 		if (!plugData::data.luaAll.hashNonCampaignLoaded || plugData::data.luaAll.buildingLevelLines.empty())
 			plugData::data.luaAll.fillHashMapsNonCampaign();
 		const auto id = plugData::data.luaAll.buildingLevelLines.find(name);
-		if (id == plugData::data.luaAll.buildingLevelLines.end()) 
+		if (id == plugData::data.luaAll.buildingLevelLines.end())
+		{
+			gameHelpers::logStringGame("eopBuildings::getBuildingLevelId: building level not found: " + name);
 			return -1;
+		}
 		return id->second;
 	}
 
@@ -626,8 +632,11 @@ namespace buildingHelpers
 		if (!plugData::data.luaAll.hashNonCampaignLoaded || plugData::data.luaAll.buildingLevels.empty())
 			plugData::data.luaAll.fillHashMapsNonCampaign();
 		const auto id = plugData::data.luaAll.buildingLevels.find(name);
-		if (id == plugData::data.luaAll.buildingLevels.end()) 
+		if (id == plugData::data.luaAll.buildingLevels.end())
+		{
+			gameHelpers::logStringGame("eopBuildings::getBuildingLevelPos: building level not found: " + name);
 			return -1;
+		}
 		return id->second;
 	}
 

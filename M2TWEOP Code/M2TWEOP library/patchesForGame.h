@@ -29,6 +29,23 @@ struct trackedArmy
 	armyStruct* army;
 };
 
+struct generalAssault
+{
+	DWORD vtbl;
+	int8_t finished : 1;
+	int8_t started : 1;
+	int8_t init : 1;
+	int8_t stop : 1;
+	character* character;
+	int xCoordStart;
+	int yCoordStart;
+	int xCoordTarget;
+	int yCoordTarget;
+	settlementStruct* settlement;
+	bool nightBattle;
+	char pad[3];
+};
+
 class patchesForGame
 {
 public:
@@ -51,6 +68,7 @@ public:
 	static int __fastcall onCheckHiddenResource(int id, int region);
 	static int __cdecl onGetWatchTowerRange();
 	static void __fastcall onSetSettlementModel(settlementStruct* settlement);
+	static void __fastcall onGeneralAssaultAction(generalAssault* assault);
 	static int __fastcall onAddSettlementToDiplomacyScroll(const settlementStruct* settlement);
 	static settlementStruct* __fastcall onDecideMissionTarget(settlementStruct* settlement, factionStruct* faction);
 	static int __fastcall onCanWithdrawPreBattle(const settlementStruct* settlement);

@@ -198,7 +198,10 @@ void regionStruct::setHiddenResource(const char* name, const bool enable)
 {
 	const auto res =  eopHiddenResources::getHiddenResourceIndex(name);
 	if (res == -1)
+	{
+		gameHelpers::logStringGame("Hidden resource not found: " + std::string(name));
 		return;
+	}
 	setHiddenResourceId(res, enable);
 }
 
@@ -536,8 +539,11 @@ namespace stratMapHelpers
 		if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.settlements.empty())
 			plugData::data.luaAll.fillHashMaps();
 		const auto regionId = plugData::data.luaAll.settlements.find(name);
-		if (regionId == plugData::data.luaAll.settlements.end()) 
+		if (regionId == plugData::data.luaAll.settlements.end())
+		{
+			gameHelpers::logStringGame("Settlement not found: " + name);
 			return nullptr;
+		}
 		const auto region = &map->regions[regionId->second];
 		const int settCount = region->settlementCount();
 		for (int j = 0; j < settCount; j++)
@@ -554,8 +560,11 @@ namespace stratMapHelpers
 		if (!plugData::data.luaAll.hashLoaded || plugData::data.luaAll.regions.empty())
 			plugData::data.luaAll.fillHashMaps();
 		const auto regionId = plugData::data.luaAll.regions.find(name);
-		if (regionId == plugData::data.luaAll.regions.end()) 
+		if (regionId == plugData::data.luaAll.regions.end())
+		{
+			gameHelpers::logStringGame("Region not found: " + name);
 			return nullptr;
+		}
 		return &map->regions[regionId->second];
 	}
 	

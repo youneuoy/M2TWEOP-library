@@ -830,13 +830,33 @@ namespace unitHelpers
 
 	unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap)
 	{
+		if (!type)
+		{
+			gameHelpers::logStringGame("Can not create unit, type is null");
+			return nullptr;
+		}
 		const int unitIndex = getEduIndex(type);
+		if (unitIndex == -1)
+		{
+			gameHelpers::logStringGame("Can not create unit, type not found: " + std::string(type));
+			return nullptr;
+		}
 		return createUnitIdx2(unitIndex, regionID, facNum, exp, arm, weap, -1);
 	}
 	
 	unit* createUnitN(const char* type, int regionID, int facNum, int exp, int arm, int weap, int soldierCount)
 	{
+		if (!type)
+		{
+			gameHelpers::logStringGame("Can not create unit, type is null");
+			return nullptr;
+		}
 		const int unitIndex = getEduIndex(type);
+		if (unitIndex == -1)
+		{
+			gameHelpers::logStringGame("Can not create unit, type not found: " + std::string(type));
+			return nullptr;
+		}
 		return createUnitIdx2(unitIndex, regionID, facNum, exp, arm, weap, soldierCount);
 	}
 
@@ -873,7 +893,10 @@ namespace unitHelpers
 	unit* createUnitIdx2(const int index, const int regionId, const int facNum, const int exp, const uint8_t arm, const uint8_t weapon, const int soldiers)
 	{
 		if (!eopDu::getEduEntry(index))
+		{
+			gameHelpers::logStringGame("Can not create unit, index not found: " + std::to_string(index));
 			return nullptr;
+		}
 		
 		regionStruct* region = stratMapHelpers::getRegion(regionId);
 		const auto un = GAME_FUNC(unit*(__stdcall*)(regionStruct*, int, int, int, int), createUnitFunc2)(region, index, facNum, exp, soldiers);
@@ -966,7 +989,7 @@ namespace unitHelpers
 
 	void setSoldiersCount(unit* un, int count)
 	{
-		if (count == 0)
+		if (count <= 0)
 		{
 			killUnit(un);
 			return;
@@ -1109,6 +1132,11 @@ namespace unitHelpers
 			mov group, eax
 		}
 		delete labelHash;
+		if (!group)
+		{
+			gameHelpers::logStringGame("Can not find group with label: " + std::string(label));
+			return nullptr;
+		}
 		return *group;
 	}
 	
@@ -1124,6 +1152,7 @@ namespace unitHelpers
 			if (allLabels->labels[i].group == group)
 				return allLabels->labels[i].name;
 		}
+		gameHelpers::logStringGame("getGroupLabel: Can not find group label");
 		return "";
 	}
 
@@ -1362,6 +1391,9 @@ namespace unitHelpers
 	
 	int getEduIndex(const char* type)
 	{
+		if (!type)
+			return -1;
+		
 		if (const auto data = eopDu::getEopEduEntryByName(type))
 			return data->index;
 		
@@ -1376,6 +1408,7 @@ namespace unitHelpers
 			}
 		}
 
+		gameHelpers::logStringGame("Edu index not found for type: " + std::string(type));
 		return -1;
 	}
 
@@ -1416,6 +1449,7 @@ namespace unitHelpers
 				gameHelpers::logStringGame("getEduEntryByName: No name for unit at index: " + std::to_string(i));
 			}
 		}
+		gameHelpers::logStringGame("getEduEntryByName: No unit found with name: " + std::string(type));
 		return nullptr;
 	}
 

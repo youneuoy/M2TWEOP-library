@@ -874,6 +874,12 @@ void managerF::execPatches()
 	toValidateGarrison->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onGeneralAssaultAction patch" << '\n';
+	onGeneralAssaultAction* toGeneralAssaultAction = new onGeneralAssaultAction(mem, (LPVOID)patchesForGame::onGeneralAssaultAction, globals::dataS.gameVersion);
+	toGeneralAssaultAction->SetNewCode();
+	toGeneralAssaultAction->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onAddBuildingCapsAfterConstruction2 patch" << '\n';
 	onAddBuildingCapsAfterConstruction2* toAddBuildingCapsAfterConstruction2 = new onAddBuildingCapsAfterConstruction2(mem, (LPVOID)patchesForGame::onAddBuildingCapsAfterConstruction, globals::dataS.gameVersion);
 	toAddBuildingCapsAfterConstruction2->SetNewCode();

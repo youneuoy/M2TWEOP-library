@@ -298,6 +298,7 @@ namespace characterRecordHelpers
 		const auto ancDb = getAncillaryDb();
 		if (const auto ancIndex = plugData::data.luaAll.ancillaries.find(ancName); ancIndex != plugData::data.luaAll.ancillaries.end()) 
 			return &ancDb->ancillaries[ancIndex->second];
+		gameHelpers::logStringGame("WARNING: findAncillary: Ancillary not found: " + ancName);
 		return nullptr;
 	}
 	
@@ -457,6 +458,7 @@ namespace characterRecordHelpers
 		const auto traitsDb = getTraitDb();
 		if (const auto traitIndex = plugData::data.luaAll.traits.find(name); traitIndex != plugData::data.luaAll.traits.end()) 
 			return &traitsDb->traits[traitIndex->second];
+		gameHelpers::logStringGame("WARNING: findTrait: Trait not found: " + name);
 		return nullptr;
 	}
 	
@@ -1328,7 +1330,7 @@ void characterRecord::applyName()
 
 void characterRecord::acquireAncillary(const std::string& name, const bool noDuplicate)
 {
-	if (!gen || gen->getTypeID() == characterTypeStrat::general)
+	if (gen && gen->getTypeID() == characterTypeStrat::general)
 		return;
 	const auto anc = characterRecordHelpers::findAncillary(name);
 	if (!anc)
@@ -1346,7 +1348,10 @@ void characterRecord::setPortrait(const std::string& portraitPath)
 	path.append("/");
 	path.append(portraitPath);
 	if (!std::filesystem::exists(path))
+	{
+		gameHelpers::logStringGame("characterRecord::setPortrait: file not found: " + path);
 		return;
+	}
 	if (const auto charData = eopCharacterDataDb::instance->getOrCreateData(giveValidLabel(), gen ? gen->getTypeID() : 7))
 	{
 		charData->portrait = portraitPath;
@@ -1398,7 +1403,13 @@ void characterRecord::giveRandomName(const int nameFactionId)
 void characterRecord::giveRandomPortrait(const int cultureId, const int religionId)
 {
 	const auto randomPortrait = cultures::getRandomPortrait(cultureId, religionId);
-	setPortrait(randomPortrait);
+	if (!randomPortrait.empty())
+		setPortrait(randomPortrait);
+	else
+	{
+		gameHelpers::logStringGame("characterRecord::giveRandomPortrait: no portrait found for cultureId: " + std::to_string(cultureId) + " religionId: " + std::to_string(religionId));
+		gameHelpers::logStringGame("Make sure the portraits start with 000.tga");
+	}
 }
 
 stringWithHash* LOOKUP_STRING_ANC = new stringWithHash();

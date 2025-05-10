@@ -5516,6 +5516,42 @@ void onValidateGarrison::SetNewCode()
 	delete a;
 }
 
+onGeneralAssaultAction::onGeneralAssaultAction(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x05BEDA1;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x5BE8C1;
+}
+
+void onGeneralAssaultAction::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(eax);
+	a->push(edx);
+	a->push(ebx);
+	a->push(ecx);
+	a->push(esp);
+	a->push(ebp);
+	a->push(edi);
+	a->mov(esi, ecx);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->test(byte_ptr(esi, 0x4), 2);
+	a->pop(edi);
+	a->pop(ebp);
+	a->pop(esp);
+	a->pop(ecx);
+	a->pop(ebx);
+	a->pop(edx);
+	a->pop(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onAddBuildingCapsAfterConstruction::onAddBuildingCapsAfterConstruction(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {
