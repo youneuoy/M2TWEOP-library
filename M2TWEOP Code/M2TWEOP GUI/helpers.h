@@ -10,6 +10,7 @@ public:
 
 	static LPWSTR ConvertStringToLPWSTR(const char* narrowString);
 	static void openProcess(LPSTR& exePath, LPSTR& workingDir);
+	static void openProcessWithParams(LPSTR& exePath, LPSTR& workingDir, LPSTR& params);
 	static void closeProcess(const string& exeName);
 	static bool isProcessRunning(const string& exeName);
 

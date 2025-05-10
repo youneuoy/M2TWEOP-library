@@ -105,6 +105,11 @@ namespace gameRunnerUI
 				{
 					helpers::closeProcess(dataG::data.gameData.freecamExeName);
 				}
+				// Close the OpenTelemetry Collector if we are using the integration
+				if (dataG::data.gameData.otelCollectorIntegration == true)
+				{
+					helpers::closeProcess(dataG::data.gameData.otelCollectorExeName);
+				}
 
 				exit(0);
 			}
@@ -128,6 +133,28 @@ namespace gameRunnerUI
 			LPSTR lpstr_folder = helpers::ConvertWideStringToLPSTR(wideFolderPath);
 			helpers::openProcess(lpstr, lpstr_folder);
 			dataG::data.gameData.freecamStarted = true;
+		}
+		if ((dataG::data.gameData.otelCollectorIntegration == true) && (dataG::data.gameData.otelCollectorStarted == false) && (helpers::isProcessRunning(dataG::data.gameData.exeName) == true))
+		{
+			std::this_thread::sleep_for(std::chrono::seconds(5));
+			// Open the OpenTelemetry Collector if we are using the integration after waiting a bit for the game to start
+			string currentFolder;
+			string openTelemetryFolder;
+			string exePath;
+			helpers::getCurrentPath(currentFolder);
+
+			exePath = currentFolder + ".\\eopData\\resources\\tools\\OpenTelemetry\\otelcol.exe";
+			openTelemetryFolder = currentFolder + ".\\eopData\\resources\\tools\\OpenTelemetry";
+
+			std::wstring wideFolderPath = helpers::stringToWstring(openTelemetryFolder);
+			std::wstring wideExePath = helpers::stringToWstring(exePath);
+
+			LPSTR lpstr = helpers::ConvertWideStringToLPSTR(wideExePath);
+			LPSTR lpstr_folder = helpers::ConvertWideStringToLPSTR(wideFolderPath);
+			std::string paramStr = "--config config.yaml";
+			LPSTR params = const_cast<LPSTR>(paramStr.c_str());
+			helpers::openProcessWithParams(lpstr, lpstr_folder, params);
+			dataG::data.gameData.otelCollectorStarted = true;
 		}
 	}
 
@@ -200,7 +227,7 @@ namespace gameRunnerUI
 			{
 				helpers::closeProcess(dataG::data.gameData.exeName);
 			}
-			if (dataG::data.gameData.isDiscordRichPresenceEnabled == false && dataG::data.gameData.freecamIntegration == false)
+			if (dataG::data.gameData.isDiscordRichPresenceEnabled == false && dataG::data.gameData.freecamIntegration == false && dataG::data.gameData.otelCollectorIntegration)
 			{
 				exit(0);
 			}
