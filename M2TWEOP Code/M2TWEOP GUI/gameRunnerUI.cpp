@@ -151,7 +151,7 @@ namespace gameRunnerUI
 
 			LPSTR lpstr = helpers::ConvertWideStringToLPSTR(wideExePath);
 			LPSTR lpstr_folder = helpers::ConvertWideStringToLPSTR(wideFolderPath);
-			std::string paramStr = "--config config.yaml";
+			std::string paramStr = "--config config.yml";
 			LPSTR params = const_cast<LPSTR>(paramStr.c_str());
 			helpers::openProcessWithParams(lpstr, lpstr_folder, params);
 			dataG::data.gameData.otelCollectorStarted = true;

@@ -109,7 +109,6 @@ void helpers::openProcess(LPSTR& exePath, LPSTR& workingDir)
 		DWORD error = GetLastError();
 	}
 }
-
 void helpers::openProcessWithParams(LPSTR& exePath, LPSTR& workingDir, LPSTR& params)
 {
 	// Create process information
@@ -120,6 +119,8 @@ void helpers::openProcessWithParams(LPSTR& exePath, LPSTR& workingDir, LPSTR& pa
 	STARTUPINFO startupInfo;
 	ZeroMemory(&startupInfo, sizeof(startupInfo));
 	startupInfo.cb = sizeof(startupInfo);
+	startupInfo.dwFlags = STARTF_USESHOWWINDOW;
+	startupInfo.wShowWindow = SW_HIDE; // Hide the window
 
 	// Create command line only with params if they exist
 	std::string commandLine;
@@ -137,7 +138,7 @@ void helpers::openProcessWithParams(LPSTR& exePath, LPSTR& workingDir, LPSTR& pa
 			NULL,			  // Process security attributes
 			NULL,			  // Thread security attributes
 			FALSE,			  // Inherit handles from the calling process
-			0,				  // Creation flags
+			CREATE_NO_WINDOW, // Creation flags to run in the background
 			NULL,			  // Use parent's environment block
 			workingDir,		  // Use parent's starting directory
 			&startupInfo,
