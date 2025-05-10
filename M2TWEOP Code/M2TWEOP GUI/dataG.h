@@ -32,6 +32,11 @@ public:
 			string gamePath;
 			string modFolder;
 
+			// OpenTelemetry Collector Integration
+			string otelCollectorExeName = "otelcol.exe";
+			bool otelCollectorIntegration = false;
+			bool otelCollectorStarted = false;
+
 			// Freecam Integration
 			string freecamExeName = "Freecam.exe";
 			bool freecamIntegration = false;

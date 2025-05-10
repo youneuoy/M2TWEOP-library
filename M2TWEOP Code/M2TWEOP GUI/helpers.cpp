@@ -109,6 +109,55 @@ void helpers::openProcess(LPSTR& exePath, LPSTR& workingDir)
 		DWORD error = GetLastError();
 	}
 }
+void helpers::openProcessWithParams(LPSTR& exePath, LPSTR& workingDir, LPSTR& params)
+{
+	// Create process information
+	PROCESS_INFORMATION processInfo;
+	ZeroMemory(&processInfo, sizeof(processInfo));
+
+	// Create startup information
+	STARTUPINFO startupInfo;
+	ZeroMemory(&startupInfo, sizeof(startupInfo));
+	startupInfo.cb = sizeof(startupInfo);
+	startupInfo.dwFlags = STARTF_USESHOWWINDOW;
+	startupInfo.wShowWindow = SW_HIDE; // Hide the window
+
+	// Create command line only with params if they exist
+	std::string commandLine;
+	if (params && *params) { 
+		commandLine = std::string(exePath) + " " + std::string(params);
+	} else {
+		commandLine = std::string(exePath);
+	}
+	LPSTR commandLineCStr = const_cast<LPSTR>(commandLine.c_str());
+
+	// Create the process
+	if (CreateProcess(
+			NULL,			  // Application name (use NULL to use command line)
+			commandLineCStr,  // Command line
+			NULL,			  // Process security attributes
+			NULL,			  // Thread security attributes
+			FALSE,			  // Inherit handles from the calling process
+			CREATE_NO_WINDOW, // Creation flags to run in the background
+			NULL,			  // Use parent's environment block
+			workingDir,		  // Use parent's starting directory
+			&startupInfo,
+			&processInfo))
+	{
+
+		// Optionally wait for the process to complete
+		// WaitForSingleObject(processInfo.hProcess, INFINITE);
+
+		// Close process and thread handles
+		CloseHandle(processInfo.hProcess);
+		CloseHandle(processInfo.hThread);
+	}
+	else
+	{
+		// Handle error
+		DWORD error = GetLastError();
+	}
+}
 
 void helpers::closeProcess(const string& exeName)
 {

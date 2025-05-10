@@ -241,11 +241,15 @@ namespace modSettingsUI
 		ImGui::Checkbox("M2TWEOP Developer Mode", &dataG::data.modulesData.isDeveloperModeNeeded);
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Enable to quickly debug battle maps and .worldpackage files");}
 		
-		ImGui::Checkbox("Block modification launch without EOP", &dataG::data.gameData.isBlockLaunchWithoutEop);
+		ImGui::Checkbox("Block mod launch without EOP", &dataG::data.gameData.isBlockLaunchWithoutEop);
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Prevent your mod from starting without EOP enabled. See FAQ for more details.");}
 		
 		ImGui::Checkbox("Create backup saves", &dataG::data.gameData.isSaveBackupEnabled);
 		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Automatically creates backups of Quick and Auto saves to prevent potential corruption");}
+
+		// OpenTelelemtry Collector Settings
+		ImGui::Checkbox("OpenTelemetry Collector Integration", &dataG::data.gameData.otelCollectorIntegration);
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) { ImGui::SetTooltip("Automatically start and close the OpenTelemetry Collector application when the game is launched");}
 		
 		// Freecam Settings
 		ImGui::Checkbox("Freecam Integration", &dataG::data.gameData.freecamIntegration);

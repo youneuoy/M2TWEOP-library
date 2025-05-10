@@ -111,6 +111,10 @@ namespace managerG
 			{
 				getJson(dataG::data.gameData.freecamIntegration, "isFreecamIntegrationEnabled");
 			}
+			if (json.contains("isOpenTelemetryCollectorIntegrationEnabled"))
+			{
+				getJson(dataG::data.gameData.otelCollectorIntegration, "isOpenTelemetryCollectorIntegrationEnabled");
+			}
 		}
 		catch (jsn::json::type_error& e)
 		{
@@ -247,6 +251,7 @@ namespace managerG
 		setJson("IsOverrideBattleCamera", dataG::data.gameData.IsOverrideBattleCamera);
 		setJson("isDiscordRichPresenceEnabled", dataG::data.gameData.isDiscordRichPresenceEnabled);
 		setJson("isFreecamIntegrationEnabled", dataG::data.gameData.freecamIntegration);
+		setJson("isOpenTelemetryCollectorIntegrationEnabled", dataG::data.gameData.otelCollectorIntegration);
 		writeJsonToFile(fPath, json);
 		json.clear();
 
