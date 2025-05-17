@@ -97,7 +97,7 @@ namespace gameHelpers
 		{
 			if (retS != nullptr)
 			{
-				if (retS->nameCrypt == reinterpret_cast<int>(cryptS[1]))
+				if (retS->nameCrypt == reinterpret_cast<int>(cryptS[1]) && retS->counterName && strcmp(retS->counterName, counterName) == 0)
 				{
 					success = true;
 					return retS->counterValue;
@@ -121,6 +121,8 @@ namespace gameHelpers
 			scriptCommand("set_event_counter", commandArgs.c_str());
 			return;
 		}
+		if (value == counterValue)
+			return;
 		DWORD eventsObject = dataOffsets::offsets.scriptCountersSet;
 		DWORD funcAdr = codes::offsets.setScriptCounter;
 		char** cryptS = gameStringHelpers::createHashedString(counterName);
