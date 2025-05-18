@@ -6,6 +6,7 @@
 #include "strategyMap.h"
 #include "campaign.h"
 #include "cultures.h"
+#include "gameHelpers.h"
 
 namespace stratModelsChange
 {
@@ -160,7 +161,8 @@ namespace stratModelsChange
 		if (isVanillaCulturePort(reinterpret_cast<DWORD>(port->portStratModel)))
 			port->portStratModel = newCasEntry(port->portStratModel);
 		port->portStratModel->model = modelP;
-		
+		if (!port->portDock)
+            return;
 		if (port->portDock->dockStratModel->model == modelP2)
 			return;
 		if (isVanillaCulturePortDock(reinterpret_cast<DWORD>(port->portDock->dockStratModel)))
@@ -173,6 +175,7 @@ namespace stratModelsChange
 		if (!modelP)
 			return false;
 		const auto tile = stratMapHelpers::getTile(x, y);
+		gameHelpers::logStringGame("changeModel: tile: " + std::to_string(x) + ", " + std::to_string(y));
 		if (modelP2)
 		{
 			if (fortStruct* fort = tile->getFort(); fort)
