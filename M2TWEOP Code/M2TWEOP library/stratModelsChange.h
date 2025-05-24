@@ -34,17 +34,17 @@ namespace stratModelsChange
 	void addModelToGameNoBool(const std::string& path, UINT32 modelId);
 	void setModel(int x, int y, UINT32 modelId, UINT32 modelId2);
 	void setModelOneVar(int x, int y, UINT32 modelId);
-	void changeStratModel(character* gen, const char* model);
+	void changeStratModel(character* gen, const std::string& model);
 	DWORD getCasAnimSet(const char* name);
 	DWORD createModelFlexi(bool shadow);
 	void fixModelFlexi(bool shadow, DWORD stratModel, DWORD modelFlexi, const char* texturePath, DWORD skeleton, float scale);
 	DWORD loadStratCas(const char* casPath, bool shadow);
-	void addCharacterCas(const char* skeletonName, const char* casPath, const char* shadowCasPath, const char* typeName, const char* texturePath, float scale);
-	stratModelArrayEntry* buildCharacterCas(const char* skeletonName, const char* casPath, const char* shadowCasPath, const char* typeName, const char* texturePath, float scale);
+	void addCharacterCas(const std::string& skeletonName, const std::string& casPath, const std::string& shadowCasPath, const std::string& typeName, const std::string& texturePath, float scale);
+	stratModelArrayEntry* buildCharacterCas(const std::string& skeletonName, const std::string& casPath, const std::string& shadowCasPath, const std::string& typeName, const std::string& texturePath, float scale);
 	stratModelArrayEntry* getStratModelEntry(const char* name);
-	stratModelArrayEntry* findCharacterStratModel(const char* modelId);
-	stratModelRecord* findStratModel(UINT32 modelId);
-	void setCharacterModel(character* gen, const char* model);
+	stratModelArrayEntry* findCharacterStratModel(const std::string& modelId);
+	std::shared_ptr<stratModelRecord> findStratModel(UINT32 modelId);
+	void setCharacterModel(character* gen, const std::string& model);
 	// ReSharper disable once CppInconsistentNaming
 	int readTGAfile(const char* path);
 	void loadCharModels();

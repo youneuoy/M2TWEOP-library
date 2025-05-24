@@ -13,20 +13,21 @@
 #include "faction.h"
 #include "fort.h"
 #include "gameHelpers.h"
-#include "luaPlugin.h"
 #include "strategyMap.h"
 #include "rebelFactions.h"
 
 std::unordered_map<std::string, std::shared_ptr<bannerData>> eopBannerSymbols::banners = {};
 
+namespace {
+	float distance(const int x1, const int y1, const int x2, const int y2)
+	{
+		return static_cast<float>(sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2)));
+	}
+}
+
 settlementStruct* siegeS::getSiegedSettlement()
 {
     return stratMapHelpers::getTile(goal->xCoord, goal->yCoord)->getSettlement();
-}
-
-float distance(const int x1, const int y1, const int x2, const int y2)
-{
-	return static_cast<float>(sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2)));
 }
 
 armyStruct* armyStruct::moveTactical(int x, int y, bool forceMerge)
@@ -451,7 +452,7 @@ void armyStruct::sortStack(int sortType, int sortType2, int sortType3)
 							return unitA->eduEntry->unitProductionClass < unitB->eduEntry->unitProductionClass;
 						break;
 					case 7: // aiUnitValue
-						if (unitA->eduEntry->aiUnitValuePerSoldier != unitB->eduEntry->aiUnitValuePerSoldier)
+						if (!FLOAT_EQUAL(unitA->eduEntry->aiUnitValuePerSoldier, unitB->eduEntry->aiUnitValuePerSoldier)) 
 							return unitA->eduEntry->aiUnitValuePerSoldier < unitB->eduEntry->aiUnitValuePerSoldier;
 						break;
 					default:
@@ -668,23 +669,25 @@ namespace armyHelpers
 		}
     	return 1;
     }
-	
-	//used for spawnArmy function
-	std::unordered_map<int, const char*> characterTypes = {
-	    {0,"spy"},
-		{1,"assassin"},
-		{2,"diplomat"},
-		{3,"admiral"},
-		{4,"merchant"},
-		{5,"priest"},
-		{6,"general"},
-		{7,"named character"},
-		{8,"princess"},
-		{9,"heretic"},
-		{10,"witch"},
-		{11,"inquisitor"},
-		{13,"pope"}
-	};
+	namespace {
+		//used for spawnArmy function
+		std::array<const char*, 14> CHARACTER_TYPES = {
+		    "spy",
+			"assassin",
+			"diplomat",
+			"admiral",
+			"merchant",
+			"priest",
+			"general",
+			"named character",
+			"princess",
+			"heretic",
+			"witch",
+			"inquisitor",
+			"named character",
+			"pope"
+		};
+    }
 
 	armyStruct* spawnArmy(
 		factionStruct* faction,
@@ -700,8 +703,8 @@ namespace armyHelpers
 		int subFaction,
 		int unitIndex,
 		int exp,
-		int wpn,
-		int armour
+		uint8_t wpn,
+		uint8_t armour
 		)
 	{
 		return spawnArmy(faction, name, name2, characterType, label, portrait, x, y, age, family, subFaction, unitIndex, exp, wpn, armour, -1);
@@ -721,8 +724,8 @@ namespace armyHelpers
 		int subFaction,
 		int unitIndex,
 		int exp,
-		int wpn,
-		int armour,
+		uint8_t wpn,
+		uint8_t armour,
 		int soldierCount
 		)
 	{
@@ -733,9 +736,27 @@ namespace armyHelpers
 		if (label != nullptr && strlen(label) == 0)
 			label = nullptr;
 		stratMap* map = stratMapHelpers::getStratMap();
-		auto [spawnX, spawnY] = stratMapHelpers::findValidTileNearTile(x, y, characterType);
+    	auto tile = stratMapHelpers::getTile(x, y);
+    	coordPair spawnCoords {x, y};
+    	armyStruct* mergeArmy = nullptr;
+    	//Merge with navy
+		if (const auto tileChar = tile->getTileCharacterAtIndex(0); tileChar
+    		&& tileChar->army
+    		&& tileChar->army->isAdmiral
+    		&& tileChar->army->faction->factionID == faction->factionID
+    		&& characterType != characterTypeStrat::admiral)
+		{
+			mergeArmy = tileChar->army;
+		}
+    	else
+    	{
+    		const auto [spawnX, spawnY] = stratMapHelpers::findValidTileNearTile(x, y, characterType);
+    		spawnCoords.xCoord = spawnX;
+    		spawnCoords.yCoord = spawnY;
+    		tile = stratMapHelpers::getTile(spawnCoords.xCoord, spawnCoords.yCoord);
+    	}
 		character* gen = nullptr;
-		const char* typeName = characterTypes.find(characterType)->second;
+		const char* typeName = CHARACTER_TYPES.at(characterType);
 		campaign* campaign = campaignHelpers::getCampaignData();
 		if (label && !std::string(label).empty())
 		{
@@ -753,7 +774,6 @@ namespace armyHelpers
 							gen = GAME_FUNC(character*(__cdecl*)(stringWithHash*, int, characterRecord*, const char*), respawnOffMapCharacterFunc)(typeHashed, faction->factionID, namedChar, portrait);
 							if (gen)
 							{
-								coordPair spawnCoords{ spawnX, spawnY };
 								GAME_FUNC(void(__thiscall*)(stratPathFinding*, void*, coordPair*), spawnCreatedObject)(campaignHelpers::getStratPathFinding(), gen, &spawnCoords);
 							}
 							gameStringHelpers::freeHashString(typeHashed);
@@ -768,81 +788,59 @@ namespace armyHelpers
 		}
 		if (!gen)
 		{
-			gen = characterHelpers::createCharacterWithoutSpawning(typeName, faction, age, name, name2, subFaction, portrait, x, y);
-			auto namedChar = gen->characterRecord;
+			gen = characterHelpers::createCharacterWithoutSpawning(typeName, faction, age, name, name2, subFaction, portrait, spawnCoords.xCoord, spawnCoords.yCoord);
+			const auto namedChar = gen->characterRecord;
 			namedChar->isFamily = family;
 			if (!faction->leader)
 			{
 				namedChar->isFamily = 1;
-				DWORD codeOffset = codes::offsets.setFactionLeaderFunc;
-				_asm
-				{
-					push namedChar
-					mov ecx, faction
-					mov eax, codeOffset
-					call eax
-				}
+				GAME_FUNC(void(__thiscall*)(factionStruct*, characterRecord*), setFactionLeaderFunc)(faction, namedChar);
 			}
 			if (namedChar->isFamily)
 			{
 				DWORD facDWORD = reinterpret_cast<DWORD>(faction);
 				facDWORD += 0xEC8;
-				auto parent = GAME_FUNC(characterRecord*(__thiscall*)(DWORD, characterRecord*), findParentForAdoptionFunc)
-				(facDWORD, namedChar);
-				if (parent)
+				if (const auto parent = GAME_FUNC(characterRecord*(__thiscall*)(DWORD, characterRecord*), findParentForAdoptionFunc)(facDWORD, namedChar))
 				{
 					namedChar->parent = parent;
-					int childNum = parent->numberOfChildren;
-					parent->numberOfChildren = childNum + 1;
-					namedChar->parent->childs[childNum] = namedChar;
+					namedChar->parent->childs[parent->numberOfChildren] = namedChar;
+					parent->numberOfChildren += 1;
+				}
+				else if (namedChar->isLeader())
+				{
+					if (const auto head = faction->getFamilyHead())
+						head->isFamilyHead = false;
+					namedChar->isFamilyHead = true;
 				}
 			}
 		}
-		if (gen)
+    	
+    	if (!gen)
+    		return nullptr;
+    	
+		GAME_FUNC(void(__thiscall*)(factionTileStruct*, character*, bool), doSomeWithCharacterFunc)(faction->tilesFac, gen, false);
+		armyStruct* army = createArmy(gen);
+		const int regionId = tile->regionId;
+		GAME_FUNC(void(__thiscall*)(stratMap*, armyStruct*, int), setArmyRegionEntriesFunc)(map, army, regionId);
+		unit* bgUnit = unitHelpers::createUnitIdx2(eopDu::getEduEntry(unitIndex) ? unitIndex : 0, regionId, faction->factionID, exp, armour, wpn, soldierCount);
+		if (!bgUnit)
 		{
-			
-			DWORD adrFunc = codes::offsets.doSomeWithCharacterFunc;
-			void* some = faction->tilesFac;
-			_asm
-			{
-				push 0
-				push gen
-				mov ecx, some
-				mov eax, adrFunc
-				call eax
-			}
-				
-			armyStruct* army = createArmy(gen);
-			const oneTile* tile = stratMapHelpers::getTile(spawnX, spawnY);
-			int regionId = tile->regionId;
-			GAME_FUNC(void(__thiscall*)(stratMap*, armyStruct*, int), setArmyRegionEntriesFunc)(map, army, regionId);
-			unit* bgUnit = nullptr;
-			if (eopDu::getEduEntry(unitIndex))
-			{
-				bgUnit = unitHelpers::createUnitIdx2(unitIndex, regionId, faction->factionID, exp, armour, wpn, soldierCount);
-			}
-			else
-			{
-				bgUnit = unitHelpers::createUnitIdx2(0, regionId, faction->factionID, exp, armour, wpn, soldierCount);
-			}
-			addUnitToArmy(army, bgUnit);
-			if (characterType == characterTypeStrat::namedCharacter)
-				characterHelpers::setBodyguard(gen, bgUnit);
-			auto spawnCoords = new int[2]{ spawnX, spawnY };
-			adrFunc = codes::offsets.factionResurrectStuffFunc;
-			_asm
-			{
-				mov ecx, faction
-				push spawnCoords
-				mov eax, adrFunc
-				call eax
-			}
-			delete[] spawnCoords;
-			if (army && label && strcmp(label, "") != 0)
-				gameStringHelpers::setHashedString(&gen->characterRecord->label, label);
-			return army;
+			gameHelpers::logStringGame("armyHelpers::spawnArmy: could not create bodyguard unit with index: ." + std::to_string(unitIndex) + ".");
+			return nullptr;
 		}
-		return nullptr;
+		addUnitToArmy(army, bgUnit);
+		if (characterType == characterTypeStrat::namedCharacter)
+			characterHelpers::setBodyguard(gen, bgUnit);
+    	
+    	//Merge with navy
+		if (mergeArmy)
+			GAME_FUNC(void(__thiscall*)(armyStruct*, armyStruct*), mergeArmies)(mergeArmy, army);
+    	
+		GAME_FUNC(void(__thiscall*)(factionStruct*, coordPair*), factionResurrectStuffFunc)(faction, &spawnCoords);
+		if (army && label && strcmp(label, "") != 0)
+			gameStringHelpers::setHashedString(&gen->characterRecord->label, label);
+    	
+		return army;
 	}
     
 	void addToSettlement(armyStruct* army, settlementStruct* set)

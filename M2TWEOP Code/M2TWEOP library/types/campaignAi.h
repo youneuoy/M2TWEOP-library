@@ -985,7 +985,7 @@ protected:
 	float calculateSettPriority(const std::shared_ptr<settlementResource>& settRes, priorityType priType);
 	float calculateArmyPriority(const std::shared_ptr<armyResource>& armyRes, priorityType priType);
 	void checkRegion(int regionId);
-	void getData(factionStruct* fac);
+	void getData(const factionStruct* fac);
 	void clearData()
 	{
 		m_Armies.clear();

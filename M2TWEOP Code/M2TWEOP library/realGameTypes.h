@@ -306,9 +306,9 @@ public:
 struct coordPair
 {
 public:
-	int32_t xCoord; //0x0000
-	int32_t yCoord; //0x0004
-	coordPair(int32_t x, int32_t y) : xCoord(x), yCoord(y) {}
+	int xCoord; //0x0000
+	int yCoord; //0x0004
+	explicit coordPair(int x, int y) : xCoord(x), yCoord(y) {}
 	coordPair() : xCoord(0), yCoord(0) {}
 }; //Size: 0x0008
 
@@ -386,35 +386,32 @@ struct casTextures
 struct stratModelArrayEntry
 {
 public:
-	DWORD model_flexi_m; //0x0000
-	int32_t zeropoint; //0x0004
-	int32_t zeroarray[6]; //0x0008
-	float lodRange; //0x0020
-	int32_t zeroarray2[9]; //0x0024
+	DWORD models[8]; //0x0000
+	float lodRanges[8]; //0x0020
+	bool builtModels[8]; //0x0020
 	struct casTextures modelTexturesFactionArray[31]; //0x0048
-	int32_t somearray[33]; //0x0140
-	int32_t somearray2[3]; //0x01C4
-	float lod2; //0x01D0
-	DWORD skeleton; //0x01D4
-	float scale; //0x01D8
-	int32_t modelCountNotShadow; //0x01DC
-	float indevRangeSquared; //0x01E0
-	DWORD shadow_model_flexi; //0x01E4
-	int32_t zeroarray3[7]; //0x01E8
-	float lod3; //0x0204
-	int32_t zeroarray4[7]; //0x0208
-	int32_t modelCountShadow; //0x0224
-	int32_t zeroint; //0x0228
+	int32_t altTextures[31]; //0x0140
+	int32_t diffuse; //0x01C4
+	int32_t gloss; //0x01C4
+	float red;
+	float green;
+	float blue;
+	float triRange; //0x01D8
+	DWORD skeleton[2]; //0x01D4
+	int32_t modelCount; //0x01DC
+	float indivRangeSquared; //0x01E0
+	DWORD shadowModels[8]; //0x01E4
+	float shadowModelRanges[8]; //0x0204
+	int32_t shadowModelCount; //0x0224
+	void* attachmentDb; //0x0228
 	char* typeName; //0x022C
-	int32_t N54788969; //0x0230
-
+	int32_t typeNameHash; //0x0230
 }; //Size: 0x0234
 
 struct stratModelListEntry
 {
 public:
-	char* modelName; //0x0000
-	int32_t crypt; //0x0004
+	stringWithHash modelName; //0x0000
 	struct stratModelArrayEntry* stratModelEntry; //0x0008
 }; //Size: 0x000C
 
@@ -849,7 +846,7 @@ struct eduOfficer
 \*----------------------------------------------------------------------------------------------------------------*/
 #pragma region Game Enums
 
-enum class characterTypeStrat
+enum class characterTypeStrat : uint8_t
 {
 	spy = 0,
 	assassin = 1,

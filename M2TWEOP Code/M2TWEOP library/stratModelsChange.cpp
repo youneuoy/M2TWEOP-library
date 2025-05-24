@@ -10,7 +10,7 @@
 
 namespace stratModelsChange
 {
-	enum class ModelsChangeStatus
+	enum class ModelsChangeStatus : uint8_t
 	{
 		Changed = 0,
 		NeedChange = 1
@@ -18,11 +18,11 @@ namespace stratModelsChange
 
 	struct stratModelCharacterRecord
 	{
-		const char* modelId;
-		const char* skeletonName;
-		const char* casPath;
-		const char* shadowCasPath;
-		const char* texturePath;
+		std::string modelId;
+		std::string skeletonName;
+		std::string casPath;
+		std::string shadowCasPath;
+		std::string texturePath;
 		float scale;
 		stratModelArrayEntry* entry;
 	};
@@ -38,17 +38,19 @@ namespace stratModelsChange
 	struct stratModelCharacterRecordChange
 	{
 		character* gen;
-		const char* modelId;
+		std::string modelId;
 	};
-	
-	ModelsChangeStatus CHANGE_MODELS_NEEDED_NOW = ModelsChangeStatus::Changed;
-	
-	map<UINT32, stratModelRecord*>STRAT_MODELS;
-	vector<stratModelCharacterRecord*>CHARACTER_STRAT_MODELS;
-	std::vector<model_Rigid*> GAME_MODELS{};
-	vector<stratModelChangeRecord*> STRAT_MODEL_CHANGE_LIST;
-	vector<stratModelCharacterRecordChange*> STRAT_MODEL_CHARACTER_CHANGE_LIST;
 
+	namespace
+	{
+		auto CHANGE_MODELS_NEEDED_NOW = ModelsChangeStatus::Changed;
+		map<UINT32, std::shared_ptr<stratModelRecord>> STRAT_MODELS;
+		std::vector<std::shared_ptr<stratModelCharacterRecord>> CHARACTER_STRAT_MODELS;
+		std::vector<model_Rigid*> GAME_MODELS{};
+		vector<std::shared_ptr<stratModelChangeRecord>> STRAT_MODEL_CHANGE_LIST;
+		vector<std::shared_ptr<stratModelCharacterRecordChange>> STRAT_MODEL_CHARACTER_CHANGE_LIST;
+	}
+	
 	void pushGameModel(model_Rigid* model)
 	{
 		GAME_MODELS.push_back(model);
@@ -56,11 +58,10 @@ namespace stratModelsChange
 
 	void addModelToGame(const std::string& path, const UINT32 modelId, const bool isSettlement)
 	{
-		auto* modRec = new stratModelRecord();
-		modRec->path = path;
-		modRec->modelId = modelId;
-		modRec->isSettlement = isSettlement;
-		STRAT_MODELS[modelId] = modRec;
+		STRAT_MODELS[modelId] = std::make_shared<stratModelRecord>();
+		STRAT_MODELS[modelId]->path = path;
+		STRAT_MODELS[modelId]->modelId = modelId;
+		STRAT_MODELS[modelId]->isSettlement = isSettlement;
 	}
 
 	void addModelToGameNoBool(const std::string& path, const UINT32 modelId)
@@ -81,12 +82,11 @@ namespace stratModelsChange
 				&& STRAT_MODEL_CHANGE_LIST[i]->y == y
 				)
 			{
-				delete STRAT_MODEL_CHANGE_LIST[i];
 				STRAT_MODEL_CHANGE_LIST.erase(STRAT_MODEL_CHANGE_LIST.begin() + i);
 				i--;
 			}
 		}
-		auto* rec = new stratModelChangeRecord();
+		const auto rec = std::make_shared<stratModelChangeRecord>();
 		rec->modelId = modelId;
 		rec->modelId2 = modelId2;
 		rec->x = x;
@@ -106,7 +106,7 @@ namespace stratModelsChange
 		setModel(x, y, modelId, modelId);
 	}
 
-	stratModelRecord* findStratModel(const UINT32 modelId)
+	std::shared_ptr<stratModelRecord> findStratModel(const UINT32 modelId)
 	{
 		try
 		{
@@ -136,16 +136,16 @@ namespace stratModelsChange
 			return;
 		
 		CHANGE_MODELS_NEEDED_NOW = ModelsChangeStatus::Changed;
-		for (const stratModelChangeRecord* changeMod : STRAT_MODEL_CHANGE_LIST) //static models
+		for (const auto& changeMod : STRAT_MODEL_CHANGE_LIST) //static models
 		{
-			const stratModelRecord* mod1 = findStratModel(changeMod->modelId);
+			const auto mod1 = findStratModel(changeMod->modelId);
 			if (mod1 == nullptr)
 				continue;
-			const stratModelRecord* mod2 = findStratModel(changeMod->modelId2);
+			const auto mod2 = findStratModel(changeMod->modelId2);
 			changeModel(changeMod->x, changeMod->y, mod1->modelP, mod2->modelP);
 		}
 		
-		for (const stratModelCharacterRecordChange* changeMod : STRAT_MODEL_CHARACTER_CHANGE_LIST) //character models
+		for (const auto& changeMod : STRAT_MODEL_CHARACTER_CHANGE_LIST) //character models
 		{
 			if (changeMod->gen)
 				changeStratModel(changeMod->gen, changeMod->modelId);
@@ -153,7 +153,6 @@ namespace stratModelsChange
 
 		for (UINT32 i = 0; i < STRAT_MODEL_CHARACTER_CHANGE_LIST.size(); i++) //remove character models from change list because it only has to happen once!
 		{
-			delete STRAT_MODEL_CHARACTER_CHANGE_LIST[i];
 			STRAT_MODEL_CHARACTER_CHANGE_LIST.erase(STRAT_MODEL_CHARACTER_CHANGE_LIST.begin() + i);
 			i--;
 		}
@@ -172,7 +171,7 @@ namespace stratModelsChange
 
 	void loadCharModels() //rebuild character CAS entries to be sure no pointers were cleaned up
 	{
-		for (const stratModelCharacterRecord* modRec : CHARACTER_STRAT_MODELS)
+		for (const auto& modRec : CHARACTER_STRAT_MODELS)
 		{
 			*modRec->entry = *buildCharacterCas(modRec->skeletonName, modRec->casPath, modRec->shadowCasPath, modRec->modelId, modRec->texturePath, modRec->scale);
 		}
@@ -221,25 +220,21 @@ namespace stratModelsChange
 		*reinterpret_cast<int*>(dataOffsets::offsets.modelRigidCounts) = 0;
 	}
 
-	void setCharacterModel(character* gen, const char* model) //add character to be changed to the queue
+	void setCharacterModel(character* gen, const std::string& model) //add character to be changed to the queue
 	{
-		if (!gen || !model)
+		if (!gen || model.empty())
 			return;
-		const size_t stringSize = strlen(model);
 		for (UINT32 i = 0; i < STRAT_MODEL_CHARACTER_CHANGE_LIST.size(); i++)
 		{
 			if (STRAT_MODEL_CHARACTER_CHANGE_LIST[i]->gen == gen)
 			{
-				delete STRAT_MODEL_CHARACTER_CHANGE_LIST[i];
 				STRAT_MODEL_CHARACTER_CHANGE_LIST.erase(STRAT_MODEL_CHARACTER_CHANGE_LIST.begin() + i);
 				i--;
 			}
 		}
-		auto* rec = new stratModelCharacterRecordChange();
+		const auto rec = std::make_shared<stratModelCharacterRecordChange>();
 		rec->gen = gen;
-		const auto modelNameCopy = new char[stringSize];
-		strcpy(modelNameCopy, model);
-		rec->modelId = modelNameCopy;
+		rec->modelId = model;
 		STRAT_MODEL_CHARACTER_CHANGE_LIST.push_back(rec);
 		const auto charData = eopCharacterDataDb::get()->getOrCreateData(gen->characterRecord->giveValidLabel(), gen->getTypeID());
 		charData->model = model;
@@ -247,51 +242,62 @@ namespace stratModelsChange
 		CHANGE_MODELS_NEEDED_NOW = ModelsChangeStatus::NeedChange;
 	}
 
-	void changeStratModel(character* gen, const char* model)
+	void changeStratModel(character* gen, const std::string& model)
 	{
-		gameHelpers::logStringGame("assigning new model to character: " + string(model), false);
+		gameHelpers::logStringGame("assigning new model to character: " + model, false);
 		if (!gen || !gen->genType) { //maybe captain dont exist anymore
 			return;
 		}
 		stratModelArrayEntry* entry = findCharacterStratModel(model);
 		if (entry == nullptr) {
+			gameHelpers::logStringGame("stratModelsChange::changeStratModel: model not found: " + model);
 			return;
 		}
-		const size_t stringSize = strlen(model);
-
-		const auto characterFacEntry = techFuncs::createGameClass<genMod>(); //make new descr character faction entry
-		*characterFacEntry = *gen->genType; //get data of old entry and copy it in
-
+		auto characterFacEntry = gen->genType;
+		if (characterFacEntry->isEopEntry != 1)
+		{
+			characterFacEntry = techFuncs::createGameClass<genMod>(); //make new descr character faction entry
+			*characterFacEntry = *gen->genType; //get data of old entry and copy it in
+		}
+		else
+		{
+			if ( &characterFacEntry->stratInfo->stratModelsArray[0]
+				&& characterFacEntry->stratInfo->stratModelsArray[0].stratModelEntry == entry
+				&& strcmp(characterFacEntry->stratInfo->stratModelsArray[0].modelName.name, model.c_str()) == 0
+				)
+			{
+				CHANGE_MODELS_NEEDED_NOW = ModelsChangeStatus::NeedChange;
+				return;
+			}
+		}
+		characterFacEntry->isEopEntry = 1;
+		
 		auto* modelArray = techFuncs::createGameClass<descrCharacterStratModelArray>(); //make new model array
 		*modelArray = *gen->genType->stratInfo; //get data of old model array
 		characterFacEntry->stratInfo = modelArray; //assign new model array to new descr character faction entry
-
+		
 		for (int i = 0; i < characterFacEntry->modelCount; i++) //change all models to new one in this array
 		{
 			if (&characterFacEntry->stratInfo->stratModelsArray[i] != nullptr)
 			{
-				const auto modelNameCopy = new char[stringSize];
-				strcpy(modelNameCopy, model);
-				characterFacEntry->stratInfo->stratModelsArray[i].modelName = modelNameCopy;
+				characterFacEntry->stratInfo->stratModelsArray[i].modelName = *gameStringHelpers::createHashedStringGame(model.c_str());
 				characterFacEntry->stratInfo->stratModelsArray[i].stratModelEntry = entry;
 			}
 		}
-
 		gen->genType = characterFacEntry; //assign new array to general
-
 		CHANGE_MODELS_NEEDED_NOW = ModelsChangeStatus::NeedChange;
 	}
 
 
-	stratModelArrayEntry* findCharacterStratModel(const char* modelId) //find eop model from vector
+	stratModelArrayEntry* findCharacterStratModel(const std::string& modelId) //find eop model from vector
 	{
-		for (const stratModelCharacterRecord* newRec : CHARACTER_STRAT_MODELS)
+		for (const auto& newRec : CHARACTER_STRAT_MODELS)
 		{
-			if (strcmp(modelId, newRec->modelId) == 0) {
+			if (newRec->modelId == modelId) {
 				return newRec->entry;
 			}
 		}
-		return getStratModelEntry(modelId);
+		return getStratModelEntry(modelId.c_str());
 	}
 
 	stratModelArrayEntry* getStratModelEntry(const char* name) //find vanilla model from array at offset
@@ -299,7 +305,7 @@ namespace stratModelsChange
 		auto* array = reinterpret_cast<stratModelArrayEntry*>(dataOffsets::offsets.stratModelArray);
 		for (int i = 0; i < 255; i++)
 		{
-			if (&array[i] && array[i].typeName && array[i].model_flexi_m)
+			if (&array[i] && array[i].typeName && array[i].models[0])
 			{
 				if (strcmp(name, array[i].typeName) == 0)
 				{
@@ -409,98 +415,61 @@ namespace stratModelsChange
 	}
 
 
-	void addCharacterCas(const char* skeletonName, const char* casPath, const char* shadowCasPath, const char* typeName, const char* texturePath, const float scale)
+	void addCharacterCas(const std::string& skeletonName, const std::string& casPath, const std::string& shadowCasPath, const std::string& typeName, const std::string& texturePath, const float scale)
 	{
 		//add entry to vector, using all info that is needed to rebuild cas
-		const size_t size = strlen(typeName);
-		auto* newRec = new stratModelCharacterRecord();
-		const auto typeNameCopy2 = new char[size];
-		strcpy(typeNameCopy2, typeName);
-		newRec->modelId = typeNameCopy2;
-		const auto skeletonCopy = new char[strlen(skeletonName)];
-		strcpy(skeletonCopy, skeletonName);
-		newRec->skeletonName = skeletonCopy;
-		const auto copy = new char[strlen(casPath)];
-		strcpy(copy, casPath);
-		newRec->casPath = copy;
-		const auto shadowCopy = new char[strlen(shadowCasPath)];
-		strcpy(shadowCopy, shadowCasPath);
-		newRec->shadowCasPath = shadowCopy;
-		const auto textureCopy = new char[strlen(texturePath)];
-		strcpy(textureCopy, texturePath);
-		newRec->texturePath = textureCopy;
+		const auto newRec = std::make_shared<stratModelCharacterRecord>();
+		newRec->modelId = typeName;
+		newRec->skeletonName = skeletonName;
+		newRec->casPath = casPath;
+		newRec->shadowCasPath = shadowCasPath;
+		newRec->texturePath = texturePath;
 		newRec->scale = scale;
 		newRec->entry = buildCharacterCas(newRec->skeletonName, newRec->casPath, newRec->shadowCasPath, newRec->modelId, newRec->texturePath, newRec->scale);
 		CHARACTER_STRAT_MODELS.push_back(newRec);
 	}
 
 
-	stratModelArrayEntry* buildCharacterCas(const char* skeletonName, const char* casPath, const char* shadowCasPath, const char* typeName, const char* texturePath, const float scale)
+	stratModelArrayEntry* buildCharacterCas(const std::string& skeletonName, const std::string& casPath, const std::string& shadowCasPath, const std::string& typeName, const std::string& texturePath, const float scale)
 	{
 		//build new cas file
-		const size_t size = strlen(typeName);
-		const DWORD skeleton = getCasAnimSet(skeletonName);
+		const DWORD skeleton = getCasAnimSet(skeletonName.c_str());
 
-		std::string textureString = texturePath;
-		size_t pos = textureString.find_last_of("\\/") + 1;
-		textureString = textureString.substr(0, pos);
+		size_t pos = texturePath.find_last_of("\\/") + 1;
+		auto textureString = texturePath.substr(0, pos);
 		for (int i = 0; i < 2; i++)
 		{
 			pos = textureString.find_first_of("\\/") + 1;
 			textureString = textureString.substr(pos);
 		}
-		const int texIndex = readTGAfile(texturePath);
+		const int texIndex = readTGAfile(texturePath.c_str());
 		
 		const DWORD newModelFlexi = createModelFlexi(false);
 		const DWORD newModelFlexiShadow = createModelFlexi(true);
-		const DWORD stratModel = loadStratCas(casPath, false) + 0x64;
-		const DWORD stratModelShadow = loadStratCas(shadowCasPath, true) + 0x64;
+		const DWORD stratModel = loadStratCas(casPath.c_str(), false) + 0x64;
+		const DWORD stratModelShadow = loadStratCas(shadowCasPath.c_str(), true) + 0x64;
 
 		fixModelFlexi(false, stratModel, newModelFlexi, textureString.c_str(), skeleton, scale);
 		fixModelFlexi(true, stratModelShadow, newModelFlexiShadow, textureString.c_str(), skeleton, scale);
 
-		auto* newEntry = new stratModelArrayEntry;
-		newEntry->model_flexi_m = newModelFlexi;
-		newEntry->zeropoint = 0; //just filling the 0 stuff with loops and assignments so that there isn't random crap in there, we don't know what's used as 0
-		for (int& i : newEntry->zeroarray)
-		{
-			i = 0;
-		}
-		newEntry->lodRange = 1000000.0f;
-		for (int& i : newEntry->zeroarray2)
-		{
-			i = 0;
-		}
+		auto* newEntry = techFuncs::createGameClass<stratModelArrayEntry>();
+		newEntry->models[0] = newModelFlexi;
+		newEntry->lodRanges[0] = 1000000.0f;
 		for (auto& [textureIndex, glossTextureIndex] : newEntry->modelTexturesFactionArray)
 		{ //assigning texture for every faction
 			textureIndex = texIndex;
 			glossTextureIndex = -1;
 		}
-		for (int& i : newEntry->somearray)
-		{
-			i = -1;
-		}
-		for (int& i : newEntry->somearray2)
-		{
-			i = 0;
-		}
-		newEntry->lod2 = 1000000.0f;
-		newEntry->scale = 0;
-		newEntry->skeleton = skeleton;
-		newEntry->modelCountNotShadow = 1;
-		newEntry->indevRangeSquared = 160000;
-		newEntry->shadow_model_flexi = newModelFlexiShadow;
-		for (int i = 0; i < 7; i++) {
-			newEntry->zeroarray3[i] = 0;
-			newEntry->zeroarray4[i] = 0;
-		}
-		newEntry->lod3 = 1000000.0f;
-		newEntry->modelCountShadow = 1;
-		newEntry->zeroint = 0;
-		const auto typeNameCopy = new char[size];
-		strcpy(typeNameCopy, typeName);
-		newEntry->typeName = typeNameCopy;
-		newEntry->N54788969 = 54788969;
+		newEntry->diffuse = -1;
+		newEntry->gloss = -1;
+		newEntry->triRange = 1000000.0f;
+		newEntry->skeleton[0] = skeleton;
+		newEntry->modelCount = 1;
+		newEntry->indivRangeSquared = 160000;
+		newEntry->shadowModels[0] = newModelFlexiShadow;
+		newEntry->shadowModelRanges[0] = 1000000.0f;
+		newEntry->shadowModelCount = 1;
+		newEntry->typeName = *reinterpret_cast<char**>(gameStringHelpers::createHashedStringGame(typeName.c_str()));
 		return newEntry;
 	}
 

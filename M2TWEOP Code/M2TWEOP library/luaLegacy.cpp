@@ -54,8 +54,8 @@ void luaPlugin::addLegacy()
 					int,
 					int,
 					int,
-					int,
-					int)>(&armyHelpers::spawnArmy),
+					uint8_t,
+					uint8_t)>(&armyHelpers::spawnArmy),
 					sol::resolve<armyStruct*(
 						factionStruct*,
 						const char*,
@@ -70,8 +70,8 @@ void luaPlugin::addLegacy()
 						int,
 						int,
 						int,
-						int,
-						int,
+						uint8_t,
+						uint8_t,
 						int)>(&armyHelpers::spawnArmy)
 			));
 	tables.game.set_function("createArmy", &armyHelpers::createArmy);

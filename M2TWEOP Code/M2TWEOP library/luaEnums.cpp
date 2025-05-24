@@ -36,11 +36,11 @@ void luaPlugin::initLuaEnums()
 	*/
 	luaState.new_enum(
 		"dipRelType",
-		"war", dipRelEnum::war,
-		"peace", dipRelEnum::peace,
-		"alliance", dipRelEnum::alliance,
-		"suzerain", dipRelEnum::suzerain,
-		"trade", dipRelEnum::trade
+		"war", DipRelEnum::War,
+		"peace", DipRelEnum::Peace,
+		"alliance", DipRelEnum::Alliance,
+		"suzerain", DipRelEnum::Suzerain,
+		"trade", DipRelEnum::Trade
 	);
 
 	

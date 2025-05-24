@@ -13,10 +13,10 @@ struct color
 
 struct tileColor
 {
-	tileColor() : color(0), coords({ 0,0 }) {}
-	tileColor(const uint32_t colorA, const int x, const int y) : color(colorA), coords({ x,y }) {}
-	uint32_t color;
-	coordPair coords;
+	tileColor() : color(0) {}
+	tileColor(const uint32_t colorA, const int x, const int y) : color(colorA), coords(x, y) {}
+	uint32_t color{};
+	coordPair coords{};
 };
 
 struct mapImage

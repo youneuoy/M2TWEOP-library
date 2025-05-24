@@ -14,7 +14,6 @@
 #include "settlement.h"
 #include "army.h"
 #include "unit.h"
-#include "character.h"
 #include "gameHelpers.h"
 
 

@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "character.h"
-#include "characterRecord.h"
 #include "realGameTypes.h"
 #include "lua/sol.hpp"
 #include "faction.h"
@@ -9,19 +8,19 @@
 struct regionStruct;
 namespace campaignEnums
 {
-	enum dipRelEnum :int
+	enum DipRelEnum : uint8_t
 	{
-		war = 1,
-		peace = 2,
-		alliance = 3,
-		suzerain = 4,
-		trade = 6
+		War = 1,
+		Peace = 2,
+		Alliance = 3,
+		Suzerain = 4,
+		Trade = 6
 	};
-	enum dipStateInternalEnum :int
+	enum DipStateInternalEnum : uint16_t
 	{
-		peaceState = 200,
-		warState = 600,
-		allianceState = 0
+		AllianceState = 0,
+		PeaceState = 200,
+		WarState = 600
 	};
 }
 
@@ -382,7 +381,7 @@ struct otherPlayerId
 {
 	bool inBattle;
 	bool turnEnded;
-	bool isAutoresolving;
+	bool isAutoResolving;
 	bool autoResolve;
 	int factionID;
 };
@@ -397,10 +396,10 @@ struct weatherValues
 	float mainColorG;
 	float mainColorB;
 	float mainColorA;
-	float enviromentShadeR;
-	float enviromentShadeG;
-	float enviromentShadeB;
-	float enviromentShadeA;
+	float environmentShadeR;
+	float environmentShadeG;
+	float environmentShadeB;
+	float environmentShadeA;
 	float entityGlowR;
 	float entityGlowG;
 	float entityGlowB;
@@ -484,9 +483,9 @@ struct campaign {
 	int8_t byte_0392[2];
 	char *weatherPatternFixed;
 	int weatherPatternFixedHash;
-	void *battleVolcanos;
-	int32_t battleVolcanosSize;
-	int32_t battleVolcanosCount;
+	void *battleVolcanoes;
+	int32_t battleVolcanoesSize;
+	int32_t battleVolcanoesCount;
 	void *battleFords;
 	int32_t battleFordsSize;
 	int32_t battleFordsCount;
@@ -728,8 +727,8 @@ public:
 	{
 		return getFactionById(slaveFactionID);
 	}
-	void setDipStance(campaignEnums::dipRelEnum dipType, factionStruct* fac1, factionStruct* fac2);
-	bool checkDipStance(const campaignEnums::dipRelEnum dipType, const factionStruct* fac1, const factionStruct* fac2);
+	void setDipStance(campaignEnums::DipRelEnum dipType, const factionStruct* fac1, const factionStruct* fac2);
+	bool checkDipStance(const campaignEnums::DipRelEnum dipType, const factionStruct* fac1, const factionStruct* fac2);
 	void setFactionTrade(const factionStruct* factionOne, const factionStruct* factionTwo);
 	void setFactionProtectorate(const factionStruct* factionOne, const factionStruct* factionTwo);
 	settlementStruct* getSettlementByName(const char* name);
@@ -1335,7 +1334,7 @@ namespace campaignHelpers
 	factionStruct* getFaction(int index);
 	int getPoolIndex(const gameList<mercPoolUnit> *unitPtr);
 	mercPoolUnit* getNewMercUnit(gameList<mercPoolUnit>* unitPtr);
-	bool checkDipStance(const campaign* campaignStruct, campaignEnums::dipRelEnum dipType, const factionStruct* fac1, const factionStruct* fac2);
+	bool checkDipStance(const campaign* campaignStruct, campaignEnums::DipRelEnum dipType, const factionStruct* fac1, const factionStruct* fac2);
 	void setFactionTrade(factionStruct* factionOne, factionStruct* factionTwo);
 	void setFactionProtectorate(factionStruct* factionOne, factionStruct* factionTwo);
     void addToLua(sol::state& luaState);

@@ -102,7 +102,7 @@ void factionRecord::setFactionStratModel(const std::string& model, const int cha
 {
 	if (characterType < 0 || characterType >= characterTypeStrat::invalid || level < 0 || level > 10)
 		return;
-	stratModelArrayEntry* entry = stratModelsChange::findCharacterStratModel(model.c_str());
+	stratModelArrayEntry* entry = stratModelsChange::findCharacterStratModel(model);
 	if (!entry)
 	{
 		gameHelpers::logStringGame("factionRecord.setFactionStratModel: model not found: " + model);
@@ -118,7 +118,7 @@ void factionRecord::setFactionStratModel(const std::string& model, const int cha
 	}
 	const auto levelEntry = &factionEntry->stratInfo->stratModelsArray[level];
 	levelEntry->stratModelEntry = entry;
-	gameStringHelpers::setHashedString(&levelEntry->modelName, model.c_str());
+	gameStringHelpers::setHashedStringGame(&levelEntry->modelName, model.c_str());
 }
 
 void factionRecord::setFactionBattleModel(const std::string& model, const int characterType)
@@ -161,6 +161,17 @@ characterRecord* factionStruct::getCharacterByLabel(const std::string& label)
 		if (const auto rec = characterRecords[i]; rec->labelCrypt == hash && rec->label && strcmp(rec->label, label.c_str()) == 0)
 			return rec;
 	}
+	return nullptr;
+}
+
+characterRecord* factionStruct::getFamilyHead()
+{
+	for (int i = 0; i < characterRecordNum; i++)
+	{
+		if (const auto record = characterRecords[i]; record->isFamilyHead)
+			return record;
+	}
+
 	return nullptr;
 }
 
@@ -460,7 +471,7 @@ namespace factionHelpers
 		campaign->diplomaticStandings[fac1->factionID][fac2->factionID].factionStanding = standing;
 	}
 	
-	std::string getLocalizedFactionName(factionStruct* fac)
+	std::string getLocalizedFactionName(const factionStruct* fac)
 	{
 		UNICODE_STRING** localizedName = fac->localizedName;
 		if (const UNICODE_STRING* name = *localizedName; name->Length == 0)
@@ -1216,8 +1227,8 @@ namespace factionHelpers
 					int,
 					int,
 					int,
-					int,
-					int)>(&armyHelpers::spawnArmy),
+					uint8_t,
+					uint8_t)>(&armyHelpers::spawnArmy),
 					sol::resolve<armyStruct*(
 						factionStruct*,
 						const char*,
@@ -1232,8 +1243,8 @@ namespace factionHelpers
 						int,
 						int,
 						int,
-						int,
-						int,
+						uint8_t,
+						uint8_t,
 						int)>(&armyHelpers::spawnArmy)
 			));
 		

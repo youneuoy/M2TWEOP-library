@@ -271,8 +271,8 @@ namespace armyHelpers
 		int subFaction,
 		int unitIndex,
 		int exp,
-		int wpn,
-		int armour
+		uint8_t wpn,
+		uint8_t armour
 		);
 	armyStruct* spawnArmy(
 		factionStruct* faction,
@@ -288,8 +288,8 @@ namespace armyHelpers
 		int subFaction,
 		int unitIndex,
 		int exp,
-		int wpn,
-		int armour,
+		uint8_t wpn,
+		uint8_t armour,
 		int soldierCount
 		);
 	

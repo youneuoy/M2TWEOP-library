@@ -27,7 +27,7 @@ struct genMod {
 	char* rebelPortrait;
 	int rebelPortraitHash;
 	struct eduOfficer* battleMod;
-	void* actions;
+	int isEopEntry;
 };
 
 struct descrCharacterEntry
