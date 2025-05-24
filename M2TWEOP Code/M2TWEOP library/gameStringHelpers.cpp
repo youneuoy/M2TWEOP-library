@@ -9,23 +9,22 @@ namespace gameStringHelpers
 {
 	void setHashedString(char** targetS, const char* newS)
 	{
-		UINT32 functionOffset = codes::offsets.stringCryptFunc;
-		_asm {
-			push newS
-			mov ecx, targetS
-			mov eax, functionOffset
-			call eax
-		}
+		GAME_FUNC(void(__thiscall*)(char**, const char*), stringCryptFunc)(targetS, newS);
 	}
+	
 	void setHashedString(const char** targetS, const char* newS)
 	{
-		UINT32 functionOffset = codes::offsets.stringCryptFunc;
-		_asm {
-			push newS
-			mov ecx, targetS
-			mov eax, functionOffset
-			call eax
-		}
+		GAME_FUNC(void(__thiscall*)(const char**, const char*), stringCryptFunc)(targetS, newS);
+	}
+	
+	void setHashedStringGame(stringWithHash* str, const char* newS)
+	{
+		GAME_FUNC(void(__thiscall*)(stringWithHash*, const char*), stringCryptFunc)(str, newS);
+	}
+
+	void freeHashString(stringWithHash* str)
+	{
+		GAME_FUNC(void(__thiscall*)(stringWithHash*), freeHashString)(str);
 	}
 	
 	char** createHashedString(const char* string)
@@ -36,9 +35,16 @@ namespace gameStringHelpers
 			MessageBoxA(nullptr, "Cannot allocate memory for m2tweop", "ERROR!", NULL);
 			exit(0);
 		}
-		memset(cryptS, 0, 8);
+		memset((void*)cryptS, 0, 8);
 		setHashedString(cryptS, string);
 		return cryptS;
+	}
+	
+	stringWithHash* createHashedStringGame(const char* string)
+	{
+		stringWithHash* hashedString = techFuncs::createGameClass<stringWithHash>();
+		setHashedStringGame(hashedString, string);
+		return hashedString;
 	}
 	
 	std::string wstrToAnsiStr(const std::wstring& wstr)

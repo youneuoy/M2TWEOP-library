@@ -48,57 +48,25 @@ namespace gameUiHelpers
 
 	bool useButton(const char* buttonName)
 	{
-		DWORD foundButton = 0;
-		char** cryptS = gameStringHelpers::createHashedString(buttonName);
-		DWORD adrF = codes::offsets.getUiElementFunc;
-		_asm
-		{
-			push cryptS
-			mov eax, adrF
-			call eax
-			mov foundButton, eax
-			add esp, 0x4
-		}
-		
-		if (foundButton == 0)
+		uiElement* foundButton = getUiElement(buttonName);
+		if (!foundButton)
 			return false;
-
-		adrF = codes::offsets.useButtonFunc;
-		_asm
-		{
-			mov ecx, foundButton
-			mov eax, adrF
-			call eax
-		}
+		useUiElement(foundButton);
 		return true;
 	}
 	
 	uiElement* getUiElement(const char* elementName)
 	{
-		uiElement* resElement = nullptr;
-		char** cryptS = gameStringHelpers::createHashedString(elementName);
-		DWORD adrF = codes::offsets.getUiElementFunc;
-		_asm
-		{
-			push cryptS
-			mov eax, adrF
-			call eax
-			mov resElement, eax
-			add esp, 0x4
-		}
+		const auto hashedName = gameStringHelpers::createHashedStringGame(elementName);
+		uiElement* resElement = GAME_FUNC(uiElement*(__cdecl*)(stringWithHash*), getUiElementFunc)(hashedName);
+		gameStringHelpers::freeHashString(hashedName);
 
 		return resElement;
 	}
 	
 	void useUiElement(uiElement* element)
 	{
-		DWORD adrF = codes::offsets.useButtonFunc;
-		_asm
-		{
-			mov ecx, element
-			mov eax, adrF
-			call eax
-		}
+		GAME_FUNC(void(__cdecl*)(uiElement*), useButtonFunc)(element);
 	}
 
 	stratUIStruct* getStratUi()

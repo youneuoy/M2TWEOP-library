@@ -79,37 +79,30 @@ namespace gameHelpers
 	{
 		if (!counterName)
 			return 0;
-		auto eventsObject = reinterpret_cast<countersObjectS*>(dataOffsets::offsets.scriptCounters);
-		counterS* retS = nullptr;
-		int retValue = 0;
-		DWORD funcAdr = codes::offsets.getScriptCounter;
-		char** cryptS = gameStringHelpers::createHashedString(counterName);
-		_asm {
-			push cryptS
-			mov ecx, eventsObject
-			mov eax, funcAdr
-			call eax
-			mov retS, eax
-		}
+		const auto eventsObject = reinterpret_cast<countersObjectS*>(dataOffsets::offsets.scriptCounters);
+		stringWithHash* cryptS = gameStringHelpers::createHashedStringGame(counterName);
+		const auto retS = GAME_FUNC(counterS*(__thiscall*)(countersObjectS*, stringWithHash*), getScriptCounter)(eventsObject, cryptS);
+		gameStringHelpers::freeHashString(cryptS);
 		if (retS == eventsObject->testCounterSValue)
 			success = false;
 		else
 		{
 			if (retS != nullptr)
 			{
-				if (retS->nameCrypt == reinterpret_cast<int>(cryptS[1]) && retS->counterName && strcmp(retS->counterName, counterName) == 0)
+				if (retS->nameCrypt == cryptS->hash && retS->counterName && strcmp(retS->counterName, counterName) == 0)
 				{
 					success = true;
 					return retS->counterValue;
 				}
-				else
-					success = false;
+				success = false;
 			}
+			else
+				success = false;
 		}
 		return 0;
 	}
 	
-	void setScriptCounter(const char* counterName, int counterValue)
+	void setScriptCounter(const char* counterName, const int counterValue)
 	{
 		if (!counterName)
 			return;
@@ -123,17 +116,10 @@ namespace gameHelpers
 		}
 		if (value == counterValue)
 			return;
-		DWORD eventsObject = dataOffsets::offsets.scriptCountersSet;
-		DWORD funcAdr = codes::offsets.setScriptCounter;
-		char** cryptS = gameStringHelpers::createHashedString(counterName);
-		_asm {
-			push counterValue
-			push cryptS
-			mov ecx, eventsObject
-			mov eax, funcAdr
-			call eax
-		}
-		return;
+		const DWORD eventsObject = dataOffsets::offsets.scriptCountersSet;
+		const auto hashedName = gameStringHelpers::createHashedStringGame(counterName);
+		GAME_FUNC(void(__thiscall*)(DWORD, stringWithHash*, int), setScriptCounter)(eventsObject, hashedName, counterValue);
+		gameStringHelpers::freeHashString(hashedName);
 	}
 	
 	std::tuple<bool, int> getScriptCounterLua(const char* type)
@@ -345,19 +331,9 @@ namespace gameHelpers
 	
 	bool condition(const char* condition, const eventTrigger* eventData)
 	{
-		auto fakeText = std::make_shared<fakeTextInput>(fakeTextInput(condition, 0));
-		auto rawText = fakeText.get();
-		const auto makeConditionFunc = reinterpret_cast<DWORD*>(codes::offsets.parseCondition);
-		void* result = nullptr;
-		_asm
-		{
-			push rawText
-			mov ecx, rawText
-			mov eax, makeConditionFunc
-			call eax
-			mov result, eax
-			add esp, 0x4
-		}
+		const auto fakeText = std::make_unique<fakeTextInput>(fakeTextInput(condition, 0));
+		const auto rawText = fakeText.get();
+		void* result = GAME_FUNC(void*(__cdecl*)(fakeTextInput*), parseCondition)(rawText);
 		if (result == nullptr)
 		{
 			logStringGame("Condition: Could not create condition for " + std::string(condition));

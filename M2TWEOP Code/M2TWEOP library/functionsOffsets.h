@@ -7,6 +7,7 @@ public:
 	static struct offsetsT
 	{
 		DWORD stringCryptFunc = NULL;
+		DWORD freeHashString = NULL;
 		DWORD loadStratCasModelFunc = NULL;
 		DWORD getRelativePath = NULL;
 		DWORD parseCas = NULL;

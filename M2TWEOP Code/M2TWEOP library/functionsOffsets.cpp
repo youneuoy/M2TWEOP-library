@@ -339,6 +339,7 @@ void codes::initCodes(int gameVer)
 		offsets.buildingBattleGetFacing = 0x6EA3F0;
 		offsets.findDeployPosition = 0x6D6D20;
 		offsets.createSallyForthObjective = 0x51D3D0;
+		offsets.freeHashString = 0xD4B9E0;
 	}
 
 
@@ -681,5 +682,6 @@ void codes::initCodes(int gameVer)
 		offsets.buildingBattleGetFacing = 0x6EA9D0;
 		offsets.findDeployPosition = 0x6D72D0;
 		offsets.createSallyForthObjective = 0x51D9C0;
+		offsets.freeHashString = 0xD45D40;
 	}
 }

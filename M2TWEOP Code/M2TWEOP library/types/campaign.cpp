@@ -536,8 +536,10 @@ namespace campaignHelpers
 
 	int modifyWithSettMechanics(const std::string& mechanic, const float raw, const bool isCastle)
 	{
-		const auto hashed = reinterpret_cast<stringWithHash*>(gameStringHelpers::createHashedString(mechanic.c_str()));
-		return GAME_FUNC(int(__cdecl*)(const char*, int, float, bool), modifyWithSettMechanics)(hashed->name, hashed->hash, raw, isCastle);
+		const auto hashed = gameStringHelpers::createHashedStringGame(mechanic.c_str());
+		const auto returnValue = GAME_FUNC(int(__cdecl*)(const char*, int, float, bool), modifyWithSettMechanics)(hashed->name, hashed->hash, raw, isCastle);
+		gameStringHelpers::freeHashString(hashed);
+		return returnValue;
 	}
 
 	factionStruct* getFaction(const int index)

@@ -60,7 +60,7 @@ void character::setTypeID(int charType)
 
 namespace characterHelpers
 {
-	std::unordered_map<int, const char*> characterTypes = {
+	std::unordered_map<int, const char*> CHARACTER_TYPES = {
 		{0,"spy"},
 		{1,"assassin"},
 		{2,"diplomat"},
@@ -75,6 +75,22 @@ namespace characterHelpers
 		{11,"inquisitor"},
 		{13,"pope"}
 	};
+	
+	std::unordered_map<const char*, int> CHARACTER_TYPES_ID = {
+		{"spy", 0},
+		{"assassin", 1},
+		{"diplomat", 2},
+		{"admiral", 3},
+		{"merchant", 4},
+		{"priest", 5},
+		{"general", 6},
+		{"named_character", 7},
+		{"princess", 8},
+		{"heretic", 9},
+		{"witch", 10},
+		{"inquisitor", 11},
+		{"pope", 13}
+	};
 
 	/*----------------------------------------------------------------------------------------------------------------*\
 												Getters and Setters
@@ -82,8 +98,8 @@ namespace characterHelpers
 	
 	const char* getTypeName(const character* gen)
 	{
-		const auto charType = characterTypes.find(gen->genType->type);
-		if (charType != characterTypes.end())
+		const auto charType = CHARACTER_TYPES.find(gen->genType->type);
+		if (charType != CHARACTER_TYPES.end())
 		{
 			return charType->second;
 		}
@@ -121,53 +137,7 @@ namespace characterHelpers
 		character->genType = retVal;
 	}
 	
-	character* createCharacterWithoutSpawning(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
-	{
-		DWORD adrFunc = codes::offsets.createCharacterFunc;
-
-		character* gen = nullptr;
-
-		char** cryptS = gameStringHelpers::createHashedString(type);
-
-		DWORD adrType = reinterpret_cast<DWORD>(cryptS);
-		_asm
-		{
-			push portrait
-			push subFaction
-			push name2
-			push name
-			push age
-			push fac
-			push adrType
-			mov eax, adrFunc
-			call eax
-			mov gen, eax
-			add esp, 0x1c
-		}
-		struct xyS
-		{
-			int x = 0;
-			int y = 0;
-		}xy;
-		xy.x = x;
-		xy.y = y;
-
-
-		adrFunc = codes::offsets.spawnCreatedObject;
-		xyS* xyP = &xy;
-
-		_asm
-		{
-			push xyP
-			push gen
-			mov eax, adrFunc
-			call eax
-		}
-
-		return gen;
-	}
-	
-	character* createCharacter(const char* type, factionStruct* fac, int age, const char* name, const char* name2, int subFaction, const char* portrait, int x, int y)
+	character* createCharacterWithoutSpawning(const char* type, factionStruct* fac, const int age, const char* name, const char* name2, const int subFaction, const char* portrait, const int x, const int y)
 	{
 		if (portrait != nullptr && strlen(portrait) == 0)
 			portrait = nullptr;
@@ -175,58 +145,63 @@ namespace characterHelpers
 			name = nullptr;
 		if (name2 != nullptr && strlen(name2) == 0)
 			name2 = nullptr;
-		DWORD adrFunc = codes::offsets.createCharacterFunc;
 
-		character* gen = nullptr;
-
-		char** cryptS = gameStringHelpers::createHashedString(type);
-
-		DWORD adrType = reinterpret_cast<DWORD>(cryptS);
-		_asm
+		if (!name || strcmp(name, "random_name") == 0)
 		{
-			push portrait
-			push subFaction
-			push name2
-			push name
-			push age
-			push fac
-			push adrType
-			mov eax, adrFunc
-			call eax
-			mov gen, eax
-			add esp, 0x1c
+			const int checkCountMax = fac->characterRecordNum * 10;
+			int checkCount = 0;
+			int firstNameIndex = 0;
+			int secondNameIndex = 0;
+			const auto campaign = campaignHelpers::getCampaignData();
+			int typeId = 7;
+			if (CHARACTER_TYPES_ID.find(type) != CHARACTER_TYPES_ID.end())
+				typeId = CHARACTER_TYPES_ID[type];
+			int nameFaction = fac->agentNameFactionId[typeId];
+			if (subFaction != 31)
+				nameFaction = subFaction;
+			while (checkCount < checkCountMax)
+			{
+				GAME_FUNC(int(__cdecl*)(int*, int, bool, int*, int*), getRandomNameFunc)
+				(&campaign->lastRandomSeed, nameFaction, true, &firstNameIndex, &secondNameIndex);
+				bool research = false;
+				for(int i = 0; i < fac->characterRecordNum; i++)
+				{
+					if (const int nameIndex = GAME_FUNC(int(__thiscall*)(characterRecord*), getNameIndexFunc)(fac->characterRecords[i]);
+						firstNameIndex == nameIndex)
+					{
+						research = true;
+						break;
+					}
+				}
+				checkCount++;
+				if (research)
+					continue;
+				break;
+			}
+
+			name = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(typeId == characterTypeStrat::princess ? 1 : 0 , nameFaction, firstNameIndex);
+			name2 = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(2, nameFaction, secondNameIndex);
 		}
-		struct xyS
+		
+		const auto typeHashed = gameStringHelpers::createHashedStringGame(type);
+		character* gen = GAME_FUNC(character*(__cdecl*)(stringWithHash*, factionStruct*, int, const char*, const char*, int, const char*, int, int),
+			createCharacterFunc)(typeHashed, fac, age, name, name2, subFaction, portrait, x, y);
+		
+		coordPair coords{x, y};
+		GAME_FUNC(void(__thiscall*)(stratPathFinding*, void*, coordPair*), spawnCreatedObject)(campaignHelpers::getStratPathFinding(), gen, &coords);
+		gameStringHelpers::freeHashString(typeHashed);
+		return gen;
+	}
+	
+	character* createCharacter(const char* type, factionStruct* fac, const int age, const char* name, const char* name2, const int subFaction, const char* portrait, const int x, const int y)
+	{
+		character* gen = createCharacterWithoutSpawning(type, fac, age, name, name2, subFaction, portrait, x, y);
+		if (!gen)
 		{
-			int x = 0;
-			int y = 0;
-		}xy;
-		xy.x = x;
-		xy.y = y;
-
-
-		adrFunc = codes::offsets.spawnCreatedObject;
-		xyS* xyP = &xy;
-
-		_asm
-		{
-			push xyP
-			push gen
-			mov eax, adrFunc
-			call eax
+			gameHelpers::logStringGame("characterHelpers::createCharacter: Failed to create character at " + std::to_string(x) + ", " + std::to_string(y) );
+			return nullptr;
 		}
-
-		adrFunc = codes::offsets.doSomeWithCharacterFunc;
-		void* some = fac->tilesFac;
-		_asm
-		{
-			push 0
-			push gen
-			mov ecx, some
-			mov eax, adrFunc
-			call eax
-		}
-
+		GAME_FUNC(void(__thiscall*)(factionTileStruct*, character*, bool), doSomeWithCharacterFunc)(fac->tilesFac, gen, false);
 		return gen;
 	}
 

@@ -694,24 +694,11 @@ namespace settlementHelpers
 		return build;
 	}
 	
-	void destroyBuilding(settlementStruct* sett, const char* typeName, bool isReturnMoney)
+	void destroyBuilding(settlementStruct* sett, const char* typeName, const bool isReturnMoney)
 	{
-
-		DWORD adr = codes::offsets.destroyBuildingFunc;
-		char** buildTypeS = gameStringHelpers::createHashedString(typeName);
-		if (buildTypeS == nullptr)return;
-		char* buildType = buildTypeS[0];
-		char* hash = buildTypeS[1];
-		int returnMoney = isReturnMoney ? 1 : 0;
-		_asm {
-			push returnMoney
-			push hash
-			push buildType
-			mov ecx, [sett]
-			mov eax, [adr]
-			call eax
-		}
-		return;
+		const auto hashString = gameStringHelpers::createHashedStringGame(typeName);
+		GAME_FUNC(void(__thiscall*)(settlementStruct*, const char*, int, bool), destroyBuildingFunc)(sett, hashString->name, hashString->hash, isReturnMoney);
+		gameStringHelpers::freeHashString(hashString);
 	}
 	
 #pragma endregion

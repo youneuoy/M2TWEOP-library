@@ -36,6 +36,11 @@ namespace techFuncs
 			add esp, 0x4
 			mov retMem, eax
 		}
+		if (retMem == 0)
+		{
+			MessageBoxA(nullptr, "Cannot allocate memory for m2tweop", "ERROR!", NULL);
+			exit(0);
+		}
 		return reinterpret_cast<T*>(retMem);
 	}
 	
@@ -52,6 +57,11 @@ namespace techFuncs
 			call eax
 			add esp, 0x4
 			mov retMem, eax
+		}
+		if (retMem == 0)
+		{
+			MessageBoxA(nullptr, "Cannot allocate memory for m2tweop", "ERROR!", NULL);
+			exit(0);
 		}
 		std::memset(reinterpret_cast<void*>(retMem), 0, amount);
 		return reinterpret_cast<T*>(retMem);

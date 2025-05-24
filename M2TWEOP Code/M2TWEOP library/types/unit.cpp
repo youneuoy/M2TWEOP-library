@@ -139,8 +139,16 @@ namespace unitActions
 	
     unit* getUnitByLabel(const char* label)
     {
-        const auto labelCrypt = gameStringHelpers::createHashedString(label);
-        return GAME_FUNC(unit*(__cdecl*)(char**), getUnitByLabel)(labelCrypt);
+    	if (!label)
+    		return nullptr;
+        const auto labelCrypt = gameStringHelpers::createHashedStringGame(label);
+        const auto un = GAME_FUNC(unit*(__cdecl*)(stringWithHash*), getUnitByLabel)(labelCrypt);
+    	gameStringHelpers::freeHashString(labelCrypt);
+    	if (!un)
+    	{
+    		gameHelpers::logStringGame("unitActions::getUnitByLabel: unit not found with label: " + std::string(label));
+    	}
+	    return un;
     }
     
     /*----------------------------------------------------------------------------------------------------------------*\
