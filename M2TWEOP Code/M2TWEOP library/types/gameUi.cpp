@@ -66,7 +66,7 @@ namespace gameUiHelpers
 	
 	void useUiElement(uiElement* element)
 	{
-		GAME_FUNC(void(__cdecl*)(uiElement*), useButtonFunc)(element);
+		GAME_FUNC(void(__thiscall*)(uiElement*), useButtonFunc)(element);
 	}
 
 	stratUIStruct* getStratUi()

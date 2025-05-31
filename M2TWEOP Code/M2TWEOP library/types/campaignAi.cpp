@@ -3317,7 +3317,7 @@ bool aiLongTermGoalDirector::isTrustedAlly(int targetFactionId)
 
 void aiLongTermGoalDirector::update()
 {
-	enum ltgdVFuncs
+	enum ltgdVFuncs : uint8_t
 	{
 		calcFreeStrength = 0x0,
 		calcEnemyFreeStrength = 0x4,
@@ -3334,14 +3334,14 @@ void aiLongTermGoalDirector::update()
 	{
 		callClassFunc<aiLongTermGoalDirector*, void>(this, parseDefendDecisions);
 		callClassFunc<aiLongTermGoalDirector*, void>(this, parseInvadeDecisions);
-	}
-	gameEvents::onCalculateLTGD(this);
-	const auto campaign = campaignHelpers::getCampaignData();
-	const auto config = campaignAi::getLtgdConfig();
-	for (int i = 0; i < campaign->factionCount; i++)
-	{
-		const auto invadePriority = this->longTermGoalValues[faction->factionID].invadePriority;
-		this->longTermGoalValues[faction->factionID].invadePriority = clamp(invadePriority, config->minInvadePriority, config->maxInvadePriority);
+		gameEvents::onCalculateLTGD(this);
+		const auto campaign = campaignHelpers::getCampaignData();
+		const auto config = campaignAi::getLtgdConfig();
+		for (int i = 0; i < campaign->factionCount; i++)
+		{
+			const auto invadePriority = this->longTermGoalValues[faction->factionID].invadePriority;
+			this->longTermGoalValues[faction->factionID].invadePriority = clamp(invadePriority, config->minInvadePriority, config->maxInvadePriority);
+		}
 	}
 	if (this->consideringNavalInvasion)
 		setNavalTarget();
@@ -3413,18 +3413,16 @@ void aiLongTermGoalDirector::setNavalTarget()
 	}
 }
 
-int aiLongTermGoalDirector::getNavalTargetScore(seaConnectedRegion* seaRegion, int fromRegionId)
+int aiLongTermGoalDirector::getNavalTargetScore(const seaConnectedRegion* seaRegion, int fromRegionId)
 {
 	constexpr  float baseMinFloat = 30.0f;
-	constexpr  int baseMaxRange = 240;
-	constexpr  int baseScore = 260;
 	constexpr  int baseMapSize = 295 * 189;
 	
 	const auto sMap = stratMapHelpers::getStratMap();
 	const int targetRegionId = seaRegion->regionID;
 	const auto targetRegion = &sMap->regions[targetRegionId];
-	const auto aiFactionId = this->faction->factionID;
-	if (!targetRegion->landingPointsCount
+	if (const auto aiFactionId = this->faction->factionID;
+		!targetRegion->landingPointsCount
 		|| !targetRegion->getTargetSettForFaction(this->faction)
 		|| isTrustedAlly(targetRegion->factionOwner->factionID)
 		|| targetRegion->hasFaction(aiFactionId)
@@ -3438,7 +3436,8 @@ int aiLongTermGoalDirector::getNavalTargetScore(seaConnectedRegion* seaRegion, i
 	int score = static_cast<int>(seaRegion->moveCostBestLandTile - (baseMinFloat * mapSizeModifier));
 	if (score > 0)
 	{
-		if (score > baseMaxRange * mapSizeModifier)
+		constexpr  int baseScore = 260;
+		if (constexpr  int baseMaxRange = 240; score > baseMaxRange * mapSizeModifier)
 			return -1;
 		score = 5 * ((baseScore * mapSizeModifier) - score);
 	}
@@ -3448,8 +3447,7 @@ int aiLongTermGoalDirector::getNavalTargetScore(seaConnectedRegion* seaRegion, i
 	}
 	if (GAME_FUNC(bool(__cdecl*)(int), isLoneRegionGroup)(targetRegionId))
 		score += 500;
-	const auto campaign = campaignHelpers::getCampaignData();
-	if (targetRegion->hasFaction(campaign->slaveFactionID))
+	if (const auto campaign = campaignHelpers::getCampaignData(); targetRegion->hasFaction(campaign->slaveFactionID))
 		score += campaign->turnNumber < 30 ? 1000 : 500;
 	if (targetRegion->landMass != sMap->regions[fromRegionId].landMass)
 		score += 300;

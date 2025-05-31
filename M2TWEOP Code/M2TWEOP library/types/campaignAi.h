@@ -609,7 +609,7 @@ public:
 	bool isTrustedAlly(int targetFactionId);
 	void update();
 	void setNavalTarget();
-	int getNavalTargetScore(seaConnectedRegion* seaRegion, int fromRegionId);
+	int getNavalTargetScore(const seaConnectedRegion* seaRegion, int fromRegionId);
 }; //Size: 0x0604
 
 struct aiPersonalityValues

@@ -649,7 +649,7 @@ namespace characterRecordHelpers
 		types.characterRecord.set("portrait", sol::property(&getStringPropertyGenChar<characterRecord_portrait>, &setStringPropertyGenChar<characterRecord_portrait>));
 		types.characterRecord.set("portrait2", sol::property(&getStringPropertyGenChar<characterRecord_portrait2>, &setStringPropertyGenChar<characterRecord_portrait2>));
 		types.characterRecord.set("portrait_custom", sol::property(&getStringPropertyGenChar<characterRecord_portrait_custom>, &setStringPropertyGenChar<characterRecord_portrait_custom>));
-		types.characterRecord.set("modelName", sol::property(&getStringPropertyGenChar<characterRecord_modelName>, &setStringPropertyGenChar<characterRecord_modelName>));
+		types.characterRecord.set("modelName", sol::property(&getStringPropertyGenChar<characterRecord_modelName>, &characterRecord::setBattleModel));
 		types.characterRecord.set("status", &characterRecord::status);
 		/***
 		Sets the named character as the faction heir.
@@ -1462,6 +1462,16 @@ int characterRecord::getTraitLevel(const std::string& traitName)
 			return trait->level->level;
 	}
 	return 0;
+}
+
+void characterRecord::setBattleModel(const std::string& model)
+{
+	if (const auto battleMod = unitHelpers::findBattleModel(model.c_str()); !battleMod)
+	{
+		gameHelpers::logStringGame("characterRecord::setBattleModel: model not found: " + model);
+		return;
+	}
+	gameStringHelpers::setHashedString(&this->modelName, model.c_str());
 }
 
 void characterRecord::addTraitPoints(const std::string& trait, const int points)

@@ -395,6 +395,7 @@ public:
 	{
 		isFamilyHead = set;
 	}
+	void setBattleModel(const std::string& model);
 	void addTraitPoints(const std::string& trait, int points);
 };
 
