@@ -214,10 +214,12 @@ settlementStruct* regionStruct::getTargetSettForFaction(factionStruct* faction)
 	for (int i = 0; i < settNum; i++)
 	{
 		const auto sett = getSettlement(i);
-		if (sett->faction == faction || ltgd->isTrustedAlly(sett->faction->factionID))
+		if (!sett || !sett->faction || sett->faction == faction)
 			continue;
 		if (sett->isEnemyToFaction(faction))
 			return sett;
+		if (!ltgd)
+			continue;
 		if (ltgd->longTermGoalValues[sett->faction->factionID].invasionType < 5
 			&& ltgd->longTermGoalValues[sett->faction->factionID].invadePriority > bestPriority)
 		{

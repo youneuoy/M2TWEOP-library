@@ -3392,7 +3392,7 @@ void aiLongTermGoalDirector::setNavalTarget()
 	}
 	if (navalTargetId > -1)
 	{
-		const auto targetRegion = &sMap->regions[navalTargetRegionID];
+		const auto targetRegion = &sMap->regions[navalTargetId];
 		if (const auto sett = targetRegion->getTargetSettForFaction(this->faction))
 		{
 			this->consideringNavalInvasion = true;
