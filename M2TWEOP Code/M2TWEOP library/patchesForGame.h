@@ -5,6 +5,7 @@
 #include "faction.h"
 #include "unit.h"
 
+struct aiLongTermGoalDirector;
 struct unitRQ;
 struct bannerData;
 struct aiRegionData;
@@ -93,6 +94,7 @@ public:
 	static bannerData* __fastcall onGetRebelSymbol(const trackedArmy* army, bannerData* oldData);
 	static void __fastcall onPredictedStats(settlementStats* statsManager);
 	static int __fastcall onEvalAttObjective(const aiCampaignController* controller);
+	static void __fastcall onCalculateLTGD(aiLongTermGoalDirector* ltgd);
 	static factionStruct* __fastcall onCheckGarrison(const aiRegionController* controller);
 	static int __fastcall onValidateGarrison(const aiRegionController* controller, const armyStruct* army);
 	static void __fastcall onUpdateControllerAlloc(aiCampaignController* controller);

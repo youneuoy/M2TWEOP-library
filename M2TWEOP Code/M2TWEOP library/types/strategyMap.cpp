@@ -205,6 +205,29 @@ void regionStruct::setHiddenResource(const char* name, const bool enable)
 	setHiddenResourceId(res, enable);
 }
 
+settlementStruct* regionStruct::getTargetSettForFaction(factionStruct* faction)
+{
+	settlementStruct* neutralSett = nullptr;
+	int bestPriority = -9999;
+	const auto settNum = settlementCount();
+	const auto ltgd = faction->aiFaction->ltgd;
+	for (int i = 0; i < settNum; i++)
+	{
+		const auto sett = getSettlement(i);
+		if (sett->faction == faction || ltgd->isTrustedAlly(sett->faction->factionID))
+			continue;
+		if (sett->isEnemyToFaction(faction))
+			return sett;
+		if (ltgd->longTermGoalValues[sett->faction->factionID].invasionType < 5
+			&& ltgd->longTermGoalValues[sett->faction->factionID].invadePriority > bestPriority)
+		{
+			neutralSett = sett;
+			bestPriority = ltgd->longTermGoalValues[sett->faction->factionID].invadePriority;
+		}
+	}
+	return neutralSett;
+}
+
 std::pair<int, int> oneTile::getTileCoords()
 {
 	const stratMap* map = stratMapHelpers::getStratMap();
@@ -332,6 +355,19 @@ int regionStruct::getResourcesValue()
 	for (int i = 0; i < resourcesNum; i++)
 		value += resources[i]->stratMod->resource_cost;
 	return value;
+}
+
+bool regionStruct::neighboursFaction(const int factionId)
+{
+	for (int i = 0; i < neighbourRegionsNum; i++)
+	{
+		const auto neighbour = getNeighbourRegion(i);
+		if (!neighbour || neighbour->isBlocked || neighbour->region->isSea)
+			continue;
+		if (neighbour->region->hasFaction(factionId))
+			return true;
+	}
+	return false;
 }
 
 void regionStruct::calculateRegionStrengths(const int factionId, regionStrengths* strengths)
@@ -528,6 +564,237 @@ namespace stratMapHelpers
 		return gameHelpers::getGameDataAll()->stratMap;
 	}
 
+	std::shared_ptr<stratMovePath> getMovePath(const int fromX, const int fromY, const int destX, const int destY)
+	{
+		const auto sMap = getStratMap();
+		if (!sMap || !sMap->isOpen)
+			return nullptr;
+		if (!sMap->isInBounds(fromX, fromY))
+			gameHelpers::logStringGame("getMovePath: fromX or fromY out of bounds: " + std::to_string(fromX) + ", " + std::to_string(fromY));
+		if (!sMap->isInBounds(destX, destY))
+			gameHelpers::logStringGame("getMovePath: destX or destY out of bounds: " + std::to_string(destX) + ", " + std::to_string(destY));
+		coordPair from {fromX, fromY};
+		coordPair dest {destX, destY};
+		auto path = std::make_shared<stratMovePath>();
+		*reinterpret_cast<DWORD*>(dataOffsets::offsets.currentCharacterActionType) = static_cast<DWORD>(characterAction::constructingRoad);
+		const auto stratPathFind = campaignHelpers::getStratPathFinding();
+		if (stratPathFind->trackedPointerCharacter.character)
+			GAME_FUNC(void(__thiscall*)(void*, void*), removeTrackedReference)(&stratPathFind->trackedPointerCharacter, &stratPathFind->trackedPointerCharacter.character->trackedObject);
+		stratPathFind->trackedPointerCharacter.character = nullptr;
+		stratPathFind->faction = nullptr;
+		stratPathFind->characterType = static_cast<int>(characterTypeStrat::invalid);
+		const DWORD aStarTilesGlobal = *reinterpret_cast<DWORD*>(dataOffsets::offsets.aStarTilesGlobal);
+		auto node = GAME_FUNC(pathFindingNode*(__thiscall*)(DWORD, searchType, coordPair*, coordPair*, bool), getMovePath)(aStarTilesGlobal, searchType::direct, &from, &dest, false);
+		while (node)
+		{
+			path->tiles.emplace_back(node->xCoord, node->yCoord);
+			if (const auto parent = node->parent)
+			{
+				coordPair start {node->xCoord, node->yCoord};
+				coordPair parentCoord {parent->xCoord, parent->yCoord};
+				path->totalCost += GAME_FUNC(float(__stdcall*)(coordPair*, coordPair*), getTileMoveCost)(&start, &parentCoord);
+			}
+			node = node->parent;
+		}
+		return path;
+	}
+
+	void rebuildFrontiers()
+	{
+		const auto sMap = getStratMap();
+		if (!sMap || !sMap->isOpen)
+		{
+			gameHelpers::logStringGame("rebuildFrontiers: StratMap is not open");
+			return;
+		}
+		const auto regionNum = sMap->regionsNum;
+		for (int regionID = 0; regionID < regionNum; regionID++)
+		{
+			const auto region = &sMap->regions[regionID];
+			for (int n = 0; n < region->neighbourRegionsNum; n++)
+			{
+				const auto neighbour = &region->neighbourRegions[n];
+				const auto nbRegion = neighbour->region;
+				if (neighbour->isBlocked || nbRegion->isSea || (neighbour->passableTilesCount == 0 && !neighbour->isSeaFord))
+					continue;
+				const auto capital = region->settlement;
+				const auto targetCapital = nbRegion->settlement;
+				if (!capital || !targetCapital)
+					continue;
+				const auto movePath = getMovePath(capital->xCoord, capital->yCoord, targetCapital->xCoord, targetCapital->yCoord);
+				if (movePath->tiles.empty())
+					continue;
+				int halfWayIndex = 0;
+				neighbour->deepFrontierTilesCount = 0;
+				neighbour->frontierTilesCount = 0;
+				neighbour->ambushTilesCount = 0;
+				for (auto p = static_cast<int>(movePath->tiles.size()) - 1; p >= 0; p--)
+				{
+					const auto coord = movePath->tiles[p];
+					const auto tile = sMap->getTile(coord.xCoord, coord.yCoord);
+					if (halfWayIndex == 0 && tile->regionId != regionID)
+						halfWayIndex = movePath->tiles.size() - ((movePath->tiles.size() - p) / 2);
+					int tileIndex = coord.yCoord * sMap->mapWidth + coord.xCoord;
+					if (!tile->isImpassible()
+						&& !tile->getFort()
+						&& !tile->getSettlement()
+						&& (gameHelpers::intArrayContains(&neighbour->passableTiles, tileIndex) || gameHelpers::intArrayContains(&neighbour->borderTiles, tileIndex))
+						&& !gameHelpers::intArrayContains(&neighbour->frontierTiles, tileIndex)
+						&& !gameHelpers::intArrayContains(&neighbour->ambushTiles, tileIndex)
+						)
+					{
+						gameHelpers::addToIntArray(&neighbour->frontierTiles, &tileIndex);
+					}
+					else if (!tile->isImpassible()
+						&& tile->groundType == strategyGroundType::woodland
+						&& !tile->road
+						&& !tile->getFort()
+						&& !tile->getSettlement()
+						&& !gameHelpers::intArrayContains(&neighbour->frontierTiles, tileIndex)
+						&& !gameHelpers::intArrayContains(&neighbour->ambushTiles, tileIndex)
+						)
+					{
+						gameHelpers::addToIntArray(&neighbour->ambushTiles, &tileIndex);
+					}
+					auto neighbours = getNeighbourTiles(coord.xCoord, coord.yCoord, 2);
+					while (!neighbours.empty())
+					{
+						const auto [x, y] = neighbours.front();
+						neighbours.pop();
+						const auto neighbourTileStruct = sMap->getTile(x, y);
+						int neighbourIndex = y * sMap->mapWidth + x;
+						if (neighbourTileStruct->regionId == regionID)
+						{
+							if (!neighbourTileStruct->isImpassible()
+								&& !neighbourTileStruct->getFort()
+								&& !neighbourTileStruct->getSettlement()
+								&& !gameHelpers::intArrayContains(&neighbour->frontierTiles, neighbourIndex)
+								&& !gameHelpers::intArrayContains(&neighbour->ambushTiles, neighbourIndex)
+								&& gameHelpers::intArrayContains(&neighbour->passableTiles, neighbourIndex)
+							)
+							{
+								gameHelpers::addToIntArray(&neighbour->frontierTiles, &neighbourIndex);
+							}
+							else if (!neighbourTileStruct->isImpassible()
+								&& neighbourTileStruct->groundType == strategyGroundType::woodland
+								&& !neighbourTileStruct->getFort()
+								&& !neighbourTileStruct->getSettlement()
+								&& !tile->road
+								&& !gameHelpers::intArrayContains(&neighbour->frontierTiles, neighbourIndex)
+								&& !gameHelpers::intArrayContains(&neighbour->ambushTiles, neighbourIndex))
+							{
+								gameHelpers::addToIntArray(&neighbour->ambushTiles, &neighbourIndex);
+							}
+						}
+					}
+				}
+				if (neighbour->frontierTilesCount < 2)
+				{
+					for (const auto moveTile : movePath->tiles)
+					{
+						int tileIndex = moveTile.yCoord * sMap->mapWidth + moveTile.xCoord;
+						if (const auto tileStruct = sMap->getTile(moveTile.xCoord, moveTile.yCoord);
+							tileStruct->regionId != regionID || tileStruct->getFort() || tileStruct->getSettlement() || tileStruct->isImpassible())
+							continue;
+						if (gameHelpers::intArrayContains(&neighbour->frontierTiles, tileIndex))
+							continue;
+						gameHelpers::addToIntArray(&neighbour->frontierTiles, &tileIndex);
+						break;
+					}
+				}
+				const auto deepTile = movePath->tiles[max(halfWayIndex, 0)];
+				int tileIndex = deepTile.yCoord * sMap->mapWidth + deepTile.xCoord;
+				if (const auto deepTileStruct = sMap->getTile(deepTile.xCoord, deepTile.yCoord);
+					deepTileStruct->regionId == regionID && !deepTileStruct->getFort() && !deepTileStruct->getSettlement() && !deepTileStruct->isImpassible())
+				{
+					if (!gameHelpers::intArrayContains(&neighbour->frontierTiles, tileIndex)
+						&& !gameHelpers::intArrayContains(&neighbour->ambushTiles, tileIndex))
+						gameHelpers::addToIntArray(&neighbour->deepFrontierTiles, &tileIndex);
+				}
+				auto deepNeighbours = getNeighbourTiles(deepTile.xCoord, deepTile.yCoord, 1);
+				while (!deepNeighbours.empty())
+				{
+					const auto [x, y] = deepNeighbours.front();
+					deepNeighbours.pop();
+					if (sMap->isInBounds(x, y))
+					{
+						const auto neighbourTileStruct = sMap->getTile(x, y);
+						int neighbourIndex = y * sMap->mapWidth + x;
+						if (neighbourTileStruct->regionId == regionID && !neighbourTileStruct->getFort() && !neighbourTileStruct->getSettlement() && !neighbourTileStruct->isImpassible())
+						{
+							if (!gameHelpers::intArrayContains(&neighbour->frontierTiles, neighbourIndex)
+							&& !gameHelpers::intArrayContains(&neighbour->ambushTiles, neighbourIndex))
+								gameHelpers::addToIntArray(&neighbour->deepFrontierTiles, &neighbourIndex);
+						}
+					}
+				}
+				
+			}
+		}
+		for (int b = 0; b < sMap->crossingsNum; b++)
+		{
+			const auto bridge = &sMap->crossings[b];
+			auto neighbours = getNeighbourTiles(bridge->xCoord, bridge->yCoord, 1);
+			while (!neighbours.empty())
+			{
+				const auto [x, y] = neighbours.front();
+				neighbours.pop();
+				const auto tile = sMap->getTile(x, y);
+				int tileIndex = y * sMap->mapWidth + x;
+				const auto region = sMap->getRegion(tile->regionId);
+				if (!region || region->isSea || tile->isImpassible() || tile->getFort() || tile->getSettlement())
+					continue;
+				for (int n = 0; n < region->neighbourRegionsNum; n++)
+				{
+					const auto neighbour = &region->neighbourRegions[n];
+					if (const auto nbRegion = neighbour->region; neighbour->isBlocked || nbRegion->isSea)
+						continue;
+					if (gameHelpers::intArrayContains(&neighbour->borderTiles, tileIndex))
+					{
+						if (
+							!gameHelpers::intArrayContains(&neighbour->frontierTiles, tileIndex) &&
+							!gameHelpers::intArrayContains(&neighbour->ambushTiles, tileIndex)
+							)
+						{
+							gameHelpers::addToIntArray(&neighbour->frontierTiles, &tileIndex);
+						}
+					}
+				}
+			}
+		}
+		for (int s = 0; s < sMap->landMassConnectionsNum; s++)
+		{
+			const auto seaFord = &sMap->landMassConnections[s];
+			auto neighbours = getNeighbourTiles(seaFord->xCoord, seaFord->yCoord, 3);
+			while (!neighbours.empty())
+			{
+				const auto [x, y] = neighbours.front();
+				neighbours.pop();
+				const auto tile = sMap->getTile(x, y);
+				int tileIndex = y * sMap->mapWidth + x;
+				const auto region = sMap->getRegion(tile->regionId);
+				if (!region || region->isSea || tile->isImpassible() || tile->getFort() || tile->getSettlement())
+					continue;
+				for (int n = 0; n < region->neighbourRegionsNum; n++)
+				{
+					const auto neighbour = &region->neighbourRegions[n];
+					if (const auto nbRegion = neighbour->region; neighbour->isBlocked || nbRegion->isSea)
+						continue;
+					if (gameHelpers::intArrayContains(&neighbour->borderTiles, tileIndex))
+					{
+						if (
+							!gameHelpers::intArrayContains(&neighbour->frontierTiles, tileIndex) &&
+							!gameHelpers::intArrayContains(&neighbour->ambushTiles, tileIndex)
+							)
+						{
+							gameHelpers::addToIntArray(&neighbour->frontierTiles, &tileIndex);
+						}
+					}
+				}
+			}
+		}
+	}
+
 	void updateTerrain()
 	{
 		GAME_FUNC(void(__cdecl*)(), updateTerrain)();
@@ -613,28 +880,25 @@ namespace stratMapHelpers
 		return GAME_FUNC(float(__stdcall*)(int*, int*), getTileMoveCost)(start, end);
 	}
 	
-	std::queue<std::pair<int, int>> getNeighbourTiles(int x, int y)
+	std::queue<std::pair<int, int>> getNeighbourTiles(int x, int y, int depth)
 	{
 		const auto map = getStratMap();
 		if (!map || !map->isOpen)
 			return {};
 		std::queue<std::pair<int, int>> neighbours;
-		if (x - 1 < map->mapWidth - 1 && x - 1 >= 0)
-			neighbours.emplace(x - 1, y);
-		if (x + 1 < map->mapWidth - 1 && x + 1 >= 0)
-			neighbours.emplace(x + 1, y);
-		if (y - 1 < map->mapHeight - 1 && y - 1 >= 0)
-			neighbours.emplace(x, y - 1);
-		if (y + 1 < map->mapHeight - 1 && y + 1 >= 0)
-			neighbours.emplace(x, y + 1);
-		if (x - 1 < map->mapWidth - 1 && x - 1 >= 0 && y - 1 < map->mapHeight - 1 && y - 1 >= 0)
-			neighbours.emplace(x - 1, y - 1);
-		if (x + 1 < map->mapWidth - 1 && x + 1 >= 0 && y + 1 < map->mapHeight - 1 && y + 1 >= 0)
-			neighbours.emplace(x + 1, y + 1);
-		if (x - 1 < map->mapWidth - 1 && x - 1 >= 0 && y + 1 < map->mapHeight - 1 && y + 1 >= 0)
-			neighbours.emplace(x - 1, y + 1);
-		if (x + 1 < map->mapWidth - 1 && x + 1 >= 0 && y - 1 < map->mapHeight - 1 && y - 1 >= 0)
-			neighbours.emplace(x + 1, y - 1);
+		for (int i = -depth; i <= depth; i++)
+		{
+			for (int j = -depth; j <= depth; j++)
+			{
+				if (i == 0 && j == 0)
+					continue;
+				int newX = x + i;
+				int newY = y + j;
+				if (!map->isInBounds(newX, newY))
+					continue;
+				neighbours.emplace(newX, newY);
+			}
+		}
 		return neighbours;
 	}
 
@@ -885,6 +1149,7 @@ namespace stratMapHelpers
             sol::usertype<seaConnectedRegion> seaConnectedRegion;
             sol::usertype<neighbourRegion> neighbourRegion;
             sol::usertype<minorSettlementBalance> minorSettlementBalance;
+            sol::usertype<stratMovePath> stratMovePath;
         }typeAll;
 
 		///Strat Map
@@ -917,6 +1182,9 @@ namespace stratMapHelpers
 		@tfield setEnemyExtentsColor setEnemyExtentsColor
 		@tfield setZocColor setZocColor
 		@tfield findValidTileNearTile findValidTileNearTile
+		@tfield isInBounds isInBounds
+		@tfield getMovePath getMovePath
+		@tfield rebuildFrontiers rebuildFrontiers
 
 		@table stratMap
 		*/
@@ -1117,6 +1385,38 @@ namespace stratMapHelpers
 		     local x, y = M2TW.stratMap.findValidTileNearTile(160, 125, characterType.general)
 		*/
 		typeAll.stratMap.set_function("findValidTileNearTile", &findValidTileNearTileLua);
+
+		/***
+		Check if the position is contained within the strat map.
+		@function stratMap:isInBounds
+		@tparam int x
+		@tparam int y
+		@treturn bool inBounds
+		@usage
+			 local inBounds = M2TW.stratMap:isInBounds(160, 125)
+		*/
+		typeAll.stratMap.set_function("isInBounds", &stratMap::isInBounds);
+
+		/***
+		Get the shortest between 2 positions.
+		@function stratMap.getMovePath
+		@tparam int fromX
+		@tparam int fromY
+		@tparam int destX
+		@tparam int destY
+		@treturn stratMovePath movePath
+		@usage
+		     local path = M2TW.stratMap.getMovePath(160, 125, 180, 239)
+		*/
+		typeAll.stratMap.set_function("getMovePath", &getMovePath);
+
+		/***
+		Regenerate frontier tiles.
+		@function stratMap.rebuildFrontiers
+		@usage
+		     local path = M2TW.stratMap.rebuildFrontiers()
+		*/
+		typeAll.stratMap.set_function("rebuildFrontiers", &rebuildFrontiers);
 		
 		/***
 		It is used as follows if region capital owner is different to minor settlement owner:
@@ -1934,6 +2234,29 @@ namespace stratMapHelpers
 		typeAll.landingTile = luaState.new_usertype<landingTile>("landingTile");
 		typeAll.landingTile.set("tile", sol::property(&landingTile::getTile));
 		typeAll.landingTile.set("moveCost", &landingTile::moveCost);
+		
+		/***
+		Basic stratMovePath table.
+
+		@tfield float totalCost
+		@tfield int totalTiles
+		@tfield getPathCoords getPathCoords
+		
+		@table stratMovePath
+		*/
+		typeAll.stratMovePath = luaState.new_usertype<stratMovePath>("stratMovePath");
+		typeAll.stratMovePath.set("totalTiles", sol::property(&stratMovePath::getTileCount));
+		typeAll.stratMovePath.set("totalCost", &stratMovePath::totalCost);
+
+		/***
+		Get move path coords by index.
+		@function stratMovePath:getPathCoords
+		@tparam int index
+		@treturn coordPair coords
+		@usage
+		local coords = movePath:getPathCoords(0)
+		*/
+		typeAll.stratMovePath.set_function("getPathCoords", &stratMovePath::getTile);
 
     }
 };

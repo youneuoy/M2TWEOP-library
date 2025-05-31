@@ -205,6 +205,34 @@ public:
     }
 }; //Size: 0x0038
 
+struct pathFindingNode
+{
+	float f;
+	float h;
+	float g;
+	int tileIndex;
+	int xCoord;
+	int yCoord;
+	pathFindingNode* parent;
+	pathFindingNode* children[16];
+};
+
+struct stratMovePath
+{
+	std::vector<coordPair> tiles{};
+	float totalCost{};
+	int getTileCount()
+	{
+		return static_cast<int>(tiles.size());
+	}
+	coordPair* getTile(const int index)
+	{
+		if (index < 0 || index >= getTileCount())
+			return nullptr;
+		return &tiles[index];
+	}
+};
+
 
 
 struct neighbourRegion
@@ -436,6 +464,7 @@ public:
 	std::string getLocalizedRebelsName();
 	int settlementCount();
 	int getResourcesValue();
+	bool neighboursFaction(int factionId);
 	void calculateRegionStrengths(int factionId, regionStrengths* strengths);
 	void calculateBackupRegionStrengths(regionStrengths* strengths, int* enemyNum, int* neutralNum);
 	settlementStruct* getSettlement(int index);
@@ -443,6 +472,7 @@ public:
 	bool hasAlliesToFaction(int factionId, bool trustedOnly);
 	int getEnemySettsToFaction(int factionId);
 	int getNeutralSettsToFaction(int factionId);
+	settlementStruct* getTargetSettForFaction(factionStruct* faction);
 	void changeRegionName(const char* newName);
 	void changeRegionSettlementName(const char* newName);
 	void changeRebelsName(const char* newName);
@@ -1029,6 +1059,8 @@ namespace stratMapHelpers
 	void zoomStratCamera(float zoom);
 	void clearSundries(character* thisChar);
 	stratMap* getStratMap();
+	std::shared_ptr<stratMovePath> getMovePath(int fromX, int fromY, int destX, int destY);
+	void rebuildFrontiers();
 	bool isTileFree(int* xy);
 	bool isTileFreeLua(int x, int y);
 	bool isStratMap();
@@ -1048,7 +1080,7 @@ namespace stratMapHelpers
 	settlementStruct* getSettlement(stratMap* map, const std::string& name);
 	regionStruct* getRegionByName(stratMap* map, const std::string& name);
 	std::pair<int, int> convertTileCoords(const DWORD arrayIndex);
-	std::queue<std::pair<int, int>> getNeighbourTiles(int x, int y);
+	std::queue<std::pair<int, int>> getNeighbourTiles(int x, int y, int depth = 1);
 	oneTile* getTile(int x, int y);
 	regionStruct* getRegion(int index);
 	float getDistanceInTiles(const int x, const int y, const int destX, const int destY);

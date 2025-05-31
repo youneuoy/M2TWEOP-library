@@ -104,6 +104,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.groundMoveCosts = 0x164A0A0;
 		offsets.expandedBinTable = 0x2CB97E8;
 		offsets.descrCharacter = 0x18AA8F8;
+		offsets.currentCharacterActionType = 0x16F0E58;
+		offsets.aStarTilesGlobal = 0x16F0E60;
 
 		
 		offsets.fortVtbl = 0x13362F4;
@@ -216,6 +218,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.descrCharacter = 0x01861788;
 		offsets.gameScriptLogger = 0x02C747A0;
 		offsets.sineValues = 0x2C9D800;
+		offsets.currentCharacterActionType = 0x16A7CC0;
+		offsets.aStarTilesGlobal = 0x16A7CC8;
 
 		offsets.audioEnable = reinterpret_cast<bool*>(0x01639f1d);
 		offsets.audioMaster_vol = reinterpret_cast<int*>(0x01639f60);

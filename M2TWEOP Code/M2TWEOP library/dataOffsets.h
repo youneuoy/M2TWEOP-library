@@ -55,6 +55,8 @@ public:
 		DWORD getMovePath = NULL;
 		DWORD modelsDb = NULL;
 		DWORD eventManager = NULL;
+		DWORD currentCharacterActionType = NULL;
+		DWORD aStarTilesGlobal = NULL;
 
 		gameDataAllStruct* gameDataAllOffset = nullptr;
 		consoleCommands* consoleCommands = nullptr;

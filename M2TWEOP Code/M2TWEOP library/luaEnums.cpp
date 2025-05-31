@@ -1103,6 +1103,51 @@ void luaPlugin::initLuaEnums()
 		"growth", 3,
 		"cultural", 4,
 		"noPolicy", 5
+		);
+
+	
+	/***
+	Enum of invasion types for LTGD.
+
+	@tfield int buildup
+	@tfield int immediate
+	@tfield int raids
+	@tfield int opportunistic
+	@tfield int start
+	@tfield int none
+
+	@table invadeType
+	*/
+	luaState.new_enum(
+		"invadeType",
+		"buildup", 0,
+		"immediate", 1,
+		"raids", 2,
+		"opportunistic", 3,
+		"start", 4,
+		"none", 5
+		);
+	
+	/***
+	Enum of defend types for LTGD.
+
+	@tfield int minimal
+	@tfield int normal
+	@tfield int raid
+	@tfield int frontline
+	@tfield int fortified
+	@tfield int deep
+
+	@table defendType
+	*/
+	luaState.new_enum(
+		"defendType",
+		"minimal", 0,
+		"normal", 1,
+		"raid", 2,
+		"frontline", 3,
+		"fortified", 4,
+		"deep", 5
 	);
 	
 	/***

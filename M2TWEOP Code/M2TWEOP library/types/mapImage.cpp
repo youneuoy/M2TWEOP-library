@@ -253,6 +253,33 @@ namespace mapImageManager
 			}
 		}
 	}
+
+	void exportImage(const mapImage* img, const std::string& name)
+	{
+		const stratMap* sMap = stratMapHelpers::getStratMap();
+		if (!sMap || !sMap->isOpen) 
+			return;
+		const int width = sMap->mapWidth;
+		const int height = sMap->mapHeight;
+		cimg_library::CImg<unsigned char> image(width, height, 1, 3, 0);
+		for (const auto& tile : img->tiles)
+		{
+			if (const int imageY = height - 1 - tile.coords.yCoord; tile.coords.xCoord >= 0 && tile.coords.xCoord < width && 
+				imageY >= 0 && imageY < height)
+			{
+				
+				const unsigned char red = GET_RED(tile.color);
+				const unsigned char green = GET_GREEN(tile.color);
+				const unsigned char blue = GET_BLUE(tile.color);
+				
+				image(tile.coords.xCoord, imageY, 0, 0) = red;
+				image(tile.coords.xCoord, imageY, 0, 1) = green;
+				image(tile.coords.xCoord, imageY, 0, 2) = blue;
+			}
+		}
+		// ReSharper disable once CppExpressionWithoutSideEffects
+		image.save_bmp(std::string(name + ".bmp").c_str());
+	}
 	
 	IDirect3DTexture9* updateRegionColors(const mapImage* img, IDirect3DTexture9* regionDataTexture, const int width, const int height)
 	{
@@ -337,6 +364,7 @@ namespace mapImageManager
 		@tfield bool useBlur
 		@tfield bool adaptiveBlur Can be slow on large or frequently updated images! needs use blur also true.
 		@tfield makeMapImage makeMapImage
+		@tfield exportImage exportImage
 		@tfield clearMapImage clearMapImage
 		@tfield loadMapTexture loadMapTexture
 		@tfield fillRegionColor fillRegionColor
@@ -358,6 +386,15 @@ namespace mapImageManager
 		local mapImage = mapImageStruct.makeMapImage();
 		*/
 		typeAll.mapImageStruct.set_function("makeMapImage", &makeMapImage);
+		
+		/***
+		Export image with current tiles set and black background.
+		@function mapImageStruct:exportImage
+		@tparam string name
+		@usage
+		local mapImage = mapImageStruct.exportImage("myMapImage");
+		*/
+		typeAll.mapImageStruct.set_function("exportImage", &exportImage);
 		
 		/***
 		Reset image state.

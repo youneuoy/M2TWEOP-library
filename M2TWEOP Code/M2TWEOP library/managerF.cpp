@@ -910,6 +910,12 @@ void managerF::execPatches()
 	toCanWithdrawPreBattle->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onCalculateLTGD patch" << '\n';
+	onCalculateLTGD* toCalculateLTGD = new onCalculateLTGD(mem, (LPVOID)patchesForGame::onCalculateLTGD, globals::dataS.gameVersion);
+	toCalculateLTGD->SetNewCode();
+	toCalculateLTGD->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onDecideMissionTarget patch" << '\n';
 	onDecideMissionTarget* toDecideMissionTarget = new onDecideMissionTarget(mem, (LPVOID)patchesForGame::onDecideMissionTarget, globals::dataS.gameVersion);
 	toDecideMissionTarget->SetNewCode();

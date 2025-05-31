@@ -280,6 +280,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield handleUnitCards handleUnitCards
 	@tfield setWatchTowerRange setWatchTowerRange
 	@tfield enableFamilyEventsWithoutTree enableFamilyEventsWithoutTree
+	@tfield useEopFrontiers useEopFrontiers
 	@tfield setKhakiTextColor setKhakiTextColor
 	@tfield getMinorSettlementBalance getMinorSettlementBalance
 	@tfield generateSprite generateSprite
@@ -967,6 +968,15 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 		M2TWEOP.hideUnknownUnitTooltips(true)
 	*/
 	tables.M2TWEOP.set_function("hideUnknownUnitTooltips", &m2tweopOptions::setHideUnknownUnitTooltips);
+	
+	/***
+	Recalculates frontier tiles for the AI using EOP algorithms.
+	@function M2TWEOP.useEopFrontiers
+	@tparam bool set
+	@usage
+		M2TWEOP.useEopFrontiers(true)
+	*/
+	tables.M2TWEOP.set_function("useEopFrontiers", &m2tweopOptions::setUseEopFrontiers);
 	
 	/***
 	Faction specific unit cards are always chosen if found. Enabled by default.

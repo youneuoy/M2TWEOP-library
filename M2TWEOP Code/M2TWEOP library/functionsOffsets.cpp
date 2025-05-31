@@ -340,6 +340,13 @@ void codes::initCodes(int gameVer)
 		offsets.findDeployPosition = 0x6D6D20;
 		offsets.createSallyForthObjective = 0x51D3D0;
 		offsets.freeHashString = 0xD4B9E0;
+		offsets.getMovePath = 0x4D7DF0;
+		offsets.removeTrackedReference = 0xD6F200;
+		offsets.resetLtgd = 0x53C1A0;
+		offsets.setLtgdNavalTarget = 0x53F520;
+		offsets.getRegionGroup = 0x518E40;
+		offsets.getFactionRegionGroupNum = 0x518E90;
+		offsets.isLoneRegionGroup = 0x5190E0;
 	}
 
 
@@ -683,5 +690,12 @@ void codes::initCodes(int gameVer)
 		offsets.findDeployPosition = 0x6D72D0;
 		offsets.createSallyForthObjective = 0x51D9C0;
 		offsets.freeHashString = 0xD45D40;
+		offsets.getMovePath = 0x4D8390;
+		offsets.removeTrackedReference = 0xD69580;
+		offsets.resetLtgd = 0x53C5C0;
+		offsets.setLtgdNavalTarget = 0x53F940;
+		offsets.getRegionGroup = 0x519430;
+		offsets.getFactionRegionGroupNum = 0x519480;
+		offsets.isLoneRegionGroup = 0x5196D0;
 	}
 }

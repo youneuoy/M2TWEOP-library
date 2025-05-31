@@ -17,6 +17,7 @@
 bool m2tweopOptions::hideUnknownUnitTooltips = false;
 bool m2tweopOptions::eopHandleUnitCards = true;
 bool m2tweopOptions::enableFamilyEventsForTeutonic = true;
+bool m2tweopOptions::useEopFrontiers = true;
 int m2tweopOptions::watchTowerRange = 10;
 uint8_t m2tweopOptions::khakiTextRed = 0x80;
 uint8_t m2tweopOptions::khakiTextGreen = 0x77;
@@ -665,6 +666,42 @@ namespace gameHelpers
 	void addToIntArray(int** array, int* value)
 	{
 		GAME_FUNC(void(__thiscall*)(int**, int*), addToArrayInt)(array, value);
+	}
+	
+	struct intArray
+	{
+		int* elements;
+		int capacity;
+		int count;
+	};
+
+	bool intArrayContains(int** array, const int value)
+	{
+		const auto arr = reinterpret_cast<intArray*>(array);
+		for (int i = 0; i < arr->count; i++)
+		{
+			if (arr->elements[i] == value)
+				return true;
+		}
+		return false;
+	}
+
+	void removeFromIntArray(int** array, const int index)
+	{
+		const auto arr = reinterpret_cast<intArray*>(array);
+		if (!arr || index < 0 || index >= arr->count)
+		{
+			logStringGame("removeFromIntArray: Invalid index " + std::to_string(index));
+			return;
+		}
+		arr->count--;
+		int next;
+		int *curr;
+		for (int i = index; i < arr->count; *curr = next)
+		{
+			next = arr->elements[i + 1];
+			curr = &arr->elements[i++];
+		}
 	}
 
 	void setAncLimit(uint8_t limit)

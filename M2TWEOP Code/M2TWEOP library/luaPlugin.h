@@ -133,6 +133,7 @@ public:
 	sol::function* onCharacterClicked = nullptr;
 	sol::function* onCampaignTick = nullptr;
 	sol::function* onBattleTick = nullptr;
+	sol::function* onCalculateLTGD = nullptr;
 	sol::function* onNewGameStart = nullptr;
 	sol::function* onPluginLoad = nullptr;
 	sol::function* onCreateSaveFile = nullptr;

@@ -354,11 +354,14 @@ public:
 	static bool getHandleUnitCards() { return eopHandleUnitCards; }
 	static void setWatchTowerRange(const int value) { watchTowerRange = value; }
 	static int getWatchTowerRange() { return watchTowerRange; }
+	static void setUseEopFrontiers(const bool value) { useEopFrontiers = value; }
+	static int getUseEopFrontiers() { return useEopFrontiers; }
 	static DWORD getColor() { return (static_cast<uint32_t>(0xFF) << 24) | (khakiTextRed << 16) | (khakiTextGreen << 8) | khakiTextBlue; }
 	static void setKhakiTextColor(const uint8_t red, const uint8_t green, const uint8_t blue) { khakiTextRed = red; khakiTextGreen = green; khakiTextBlue = blue; }
 	static bool hideUnknownUnitTooltips;
 	static bool eopHandleUnitCards;
 	static bool enableFamilyEventsForTeutonic;
+	static bool useEopFrontiers;
 	static uint8_t khakiTextRed;
 	static uint8_t khakiTextGreen;
 	static uint8_t khakiTextBlue;
@@ -457,6 +460,8 @@ namespace gameHelpers
 	options2* getOptions2();
 	
 	void addToIntArray(int** array, int* value);
+	bool intArrayContains(int** array, int value);
+	void removeFromIntArray(int** array, int index);
 	
 	void saveGame(const char* path);
 	void loadSaveGame(const char* saveName);

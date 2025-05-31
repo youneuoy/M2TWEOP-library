@@ -1515,7 +1515,7 @@ namespace factionHelpers
 		/***
 		Check if another faction is an enemy of one the faction's trusted allies.
 		@function aiLongTermGoalDirector:isTrustedAllyEnemy
-		@tparam int targetFactionID
+		@tparam factionStruct targetFaction
 		@treturn bool isAllyEnemy
 		@usage
 		local isAllyEnemy = LTGD:isTrustedAllyEnemy(2)
@@ -1569,18 +1569,18 @@ namespace factionHelpers
 		@tfield int defendPriority
 		@tfield int invasionType
 		@tfield int invadePriority
-		@tfield int atWar
-		@tfield int wantPeace
-		@tfield int wantAlly
-		@tfield int forceInvade
-		@tfield int wantBeProtect
-		@tfield int wantOfferProtect
-		@tfield int allianceAgainst
+		@tfield bool atWar
+		@tfield bool wantPeace
+		@tfield bool wantAlly
+		@tfield bool forceInvade
+		@tfield bool wantBeProtect
+		@tfield bool wantOfferProtect
+		@tfield bool allianceAgainst
 		@tfield int ptsDesire
 		@tfield int ptsAlliance
 		@tfield int pointsInvasion
 		@tfield int pointsDefense
-		@tfield int canForceInvade
+		@tfield bool canForceInvade
 
 		@table decisionValuesLTGD
 		*/

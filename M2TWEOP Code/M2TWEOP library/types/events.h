@@ -6,6 +6,7 @@
 
 #include "gameHelpers.h"
 #include "realGameTypes.h"
+struct aiLongTermGoalDirector;
 struct buildingBattle;
 using namespace std;
 
@@ -240,6 +241,7 @@ namespace gameEvents
 	void onCharacterClicked(character* enemy);
 	void onCampaignTick();
 	void onBattleTick();
+	void onCalculateLTGD(aiLongTermGoalDirector* ltgd);
 	std::string * onSelectWorldpkgdesc(const char* selectedRec, const char* selectedGroup);
 	int onFortificationLevelS(settlementStruct * settlement, bool* isCastle, bool* isChanged);
 	float onCalculateUnitValue(eduEntry* entry, float value);

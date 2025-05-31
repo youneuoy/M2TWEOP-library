@@ -6069,6 +6069,33 @@ void onBattleTick::SetNewCode()
 	delete a;
 }
 
+onCalculateLTGD::onCalculateLTGD(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x53FCB1;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x53F891;
+}
+
+void onCalculateLTGD::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ecx);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(esi);
+	if (m_adress == 0x53FCB1)
+		a->mov(eax,0x53FCFA);
+	else
+		a->mov(eax,0x53F8DA);
+	a->jmp(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
 onCreateMarriageOption2::onCreateMarriageOption2(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

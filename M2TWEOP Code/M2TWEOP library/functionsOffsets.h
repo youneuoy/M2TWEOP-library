@@ -170,6 +170,7 @@ public:
 		DWORD setArmyRegionEntriesFunc = NULL;
 		DWORD factionResurrectStuffFunc = NULL;
 		DWORD modifyWithSettMechanics = NULL;
+		DWORD getMovePath = NULL;
 
 		DWORD unitMove = NULL;
 		DWORD unitOrderMove = NULL;
@@ -291,7 +292,13 @@ public:
 		DWORD isTileFree = NULL;
 		DWORD hideRevealedTile = NULL;
 		DWORD findBattleModel = NULL;
+		DWORD resetLtgd = NULL;
+		DWORD setLtgdNavalTarget = NULL;
+		DWORD getRegionGroup = NULL;
+		DWORD getFactionRegionGroupNum = NULL;
+		DWORD isLoneRegionGroup = NULL;
 		DWORD isZoneValid = NULL;
+		DWORD removeTrackedReference = NULL;
 		DWORD getZonePerimeter = NULL;
 		DWORD getZoneID = NULL;
 		DWORD settAttachFaction = NULL;

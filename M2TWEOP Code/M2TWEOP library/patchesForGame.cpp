@@ -1222,6 +1222,11 @@ int patchesForGame::onEvalAttObjective(const aiCampaignController* controller)
 	return factionId;
 }
 
+void patchesForGame::onCalculateLTGD(aiLongTermGoalDirector* ltgd)
+{
+	ltgd->update();
+}
+
 factionStruct* patchesForGame::onCheckGarrison(const aiRegionController* controller)
 {
 	return controller->settlement->faction;
@@ -1769,6 +1774,8 @@ void patchesForGame::onBattleTick()
 	gameEvents::onBattleTick();
 }
 
+bool NEED_BUILD_FRONTIERS = true;
+
 void __stdcall patchesForGame::afterCampaignMapLoaded()
 {
 	discordManager::onCampaignMapLoaded();
@@ -1776,6 +1783,11 @@ void __stdcall patchesForGame::afterCampaignMapLoaded()
 	plugData::data.luaAll.fillHashMaps();
 	gameEvents::onCampaignMapLoaded();
 	eopCharacterDataDb::get()->onGameLoaded();
+	if (NEED_BUILD_FRONTIERS && m2tweopOptions::getUseEopFrontiers())
+	{
+		stratMapHelpers::rebuildFrontiers();
+		NEED_BUILD_FRONTIERS = false;
+	}
 }
 
 void __stdcall patchesForGame::onNewGameStart()
@@ -1828,6 +1840,7 @@ void __stdcall patchesForGame::onNewGameLoaded()
 	eopRebelFactionDb::loadData();
 	plugData::data.luaAll.fillHashMaps();
 	gameEvents::onNewGameLoaded();
+	NEED_BUILD_FRONTIERS = true;
 }
 
 bool AI_ACTIVE = false;
@@ -1964,6 +1977,7 @@ void deployGateAttackers(const aiTacticAssault* aiTactic)
 }
 
 bool FIRST_END = true;
+bool NEED_BUILD_FRONTIER = true;
 
 void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 {
@@ -2189,6 +2203,7 @@ void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
 	gameEvents::onLoadGamePl(&files);
 	plannedRetreatRoute::onGameLoad(files);
 	techFuncs::deleteFiles(files);
+	NEED_BUILD_FRONTIERS = true;
 }
 
 void __fastcall patchesForGame::onSaveGame(UNICODE_STRING**& savePath)

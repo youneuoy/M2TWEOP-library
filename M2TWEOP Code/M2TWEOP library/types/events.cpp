@@ -824,6 +824,14 @@ void onBattleTick()
 	}
 }
 
+void onCalculateLTGD(aiLongTermGoalDirector* ltgd)
+{
+	if (plugData::data.luaAll.onCalculateLTGD != nullptr)
+	{
+		tryLua((*plugData::data.luaAll.onCalculateLTGD)(ltgd));
+	}
+}
+
 std::string* onSelectWorldpkgdesc(const char* selectedRec, const char* selectedGroup)
 {
 	std::string tmpS;
@@ -1366,6 +1374,7 @@ void luaPlugin::onPluginLoadF()
 	@tfield onGameInit onGameInit
 	@tfield onUnloadCampaign onUnloadCampaign
 	@tfield onAiTurn onAiTurn
+	@tfield onCalculateLTGD onCalculateLTGD
 	@tfield onClickAtTile onClickAtTile
 	@tfield onCharacterClicked onCharacterClicked
 	@tfield onCampaignTick onCampaignTick
@@ -4197,6 +4206,21 @@ void luaPlugin::onPluginLoadF()
 
 	onAiTurn = new sol::function(luaState["onAiTurn"]);
 	checkLuaFunc(&onAiTurn);
+
+	/***
+	Called just after LTGD reads xml every turn.
+
+	@function onCalculateLTGD
+	@tparam aiLongTermGoalDirector ltgd
+
+	@usage
+	function onCalculateLTGD(ltgd)
+	--something here
+	end
+	*/
+
+	onCalculateLTGD = new sol::function(luaState["onCalculateLTGD"]);
+	checkLuaFunc(&onCalculateLTGD);
 
 	/***
 	Called on clicking the stratmap.

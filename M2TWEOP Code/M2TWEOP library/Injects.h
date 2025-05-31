@@ -2225,6 +2225,18 @@ private:
 	LPVOID funcAddress;
 };
 
+class onCalculateLTGD
+	:public AATemplate
+{
+public:
+	onCalculateLTGD(MemWork* mem, LPVOID addr, int ver);
+	~onCalculateLTGD() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onCreateMarriageOption2
 	:public AATemplate
 {

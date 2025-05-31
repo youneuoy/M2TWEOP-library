@@ -9,6 +9,20 @@ struct aiCampaignController;
 struct aiResourcePrivate;
 struct aiRegionController;
 
+enum class unitCategoryClass
+{
+	nonCombatant = 0,
+	lightInfantry = 1,
+	heavyInfantry = 2,
+	spearmenInfantry = 3,
+	missileInfantry = 4,
+	lightCavalry = 5,
+	heavyCavalry = 6,
+	missileCavalry = 7,
+	siegeWeapon = 8,
+	animalHandler = 9,
+	battleShip = 10
+};
 
 enum class defendTypes
 {
@@ -374,12 +388,12 @@ public:
     int32_t defendPriority; //0x0004
     int32_t invasionType; //0x0008
     int32_t invadePriority; //0x000C
-    int8_t atWar; //0x0010
-    int8_t wantPeace; //0x0011
-    int8_t wantAlly; //0x0012
-    int8_t wantBeProtect; //0x0013
-    int8_t wantOfferProtect; //0x0014
-    int8_t forceInvade;
+    bool atWar; //0x0010
+    bool wantPeace; //0x0011
+    bool wantAlly; //0x0012
+    bool wantBeProtect; //0x0013
+    bool wantOfferProtect; //0x0014
+    bool forceInvade;
     int8_t pad16;
     int8_t pad17;
     int32_t allianceAgainst; //0x0018
@@ -387,7 +401,7 @@ public:
     int32_t ptsAlliance; //0x0020
     int32_t pointsInvasion; //0x0024
     int32_t pointsDefense; //0x0028
-    int8_t canForceInvade; //0x002C
+    bool canForceInvade; //0x002C
     char pad_002D[3]; //0x002D
 }; //Size: 0x0030
 
@@ -531,6 +545,37 @@ public:
 	struct aiMerchantController* aiMerchantController; //0x0048
 }; //Size: 0x0058
 
+struct trackedAiRegionData
+{
+	void* vtbl; //0x0000
+	aiRegionData* regionData;
+};
+
+struct regionGroupElement
+{
+	int regionID;
+	regionStruct *region;
+	trackedAiRegionData aiGsdRegion;
+};
+
+struct regionGroup
+{
+	regionGroupElement *regions;
+	int32_t regionsSize;
+	int32_t regionsNum;
+	struct factionStruct *faction;
+	int32_t factionID;
+	uint32_t neighbourFactionBitfield;
+	int population;
+	int area;
+	int income;
+	int frontage;
+	int allArmiesStrength;
+	regionStrengths strengths;
+	int *neighbourSeaRegionIds;
+	int neighbourSeaRegionIdsSize;
+	int neighbourSeaRegionIdsNum;
+};
 
 struct aiLongTermGoalDirector
 {
@@ -562,6 +607,9 @@ public:
 	int getInvasionTargetPriority(int regionId);
 	bool regionsBordersOnlyTrusted(int regionId);
 	bool isTrustedAlly(int targetFactionId);
+	void update();
+	void setNavalTarget();
+	int getNavalTargetScore(seaConnectedRegion* seaRegion, int fromRegionId);
 }; //Size: 0x0604
 
 struct aiPersonalityValues
@@ -624,9 +672,17 @@ public:
 	{
 		return unitBuildingValues[type];
 	}
+	int getConstructionUnitValueEnum(unitCategoryClass type)
+	{
+		return unitBuildingValues[static_cast<int>(type)];
+	}
 	int getRecruitmentValue(int type)
 	{
 		return unitRecruitmentValues[type];
+	}
+	int getRecruitmentValueEnum(unitCategoryClass type)
+	{
+		return unitBuildingValues[static_cast<int>(type)];
 	}
 	int getAgentValue(int type)
 	{
@@ -638,7 +694,7 @@ public:
 	}
 	void evaluatePolicies(int regionId, int settlementIndex);
 	settlementPolicy decideSettlementPolicy(const settlementStruct* settlement);
-	static settlementTroopPolicy decideSettlementTroopPolicy(const settlementStruct* settlement);
+	settlementTroopPolicy decideSettlementTroopPolicy(const settlementStruct* settlement);
 	float getPolicyPriority(settlementPolicy policyType);
 };
 
