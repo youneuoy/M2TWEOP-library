@@ -322,6 +322,7 @@ public:
 	characterRecord* getFamilyHead();
 	void setLeader(characterRecord* newLeader, bool onlyLeader);
 	void updateNeighbours();
+	void setCapital(settlementStruct* newCapital);
 	void setFactionBanner(const std::string& newFac);
 	characterRecord* ancillaryExists(const std::string& ancName);
 	int getAliveCharacterNumOfType(characterTypeStrat charType);

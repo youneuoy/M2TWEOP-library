@@ -309,6 +309,11 @@ std::string campaign::getCampaignPath()
 	return gameStringHelpers::uniStringToStr(currentDescrFile);
 }
 
+bool campaign::isMicroManageAll()
+{
+	return GAME_FUNC(bool(__thiscall*)(campaign*), isMicroManageAll)(this);
+}
+
 settlementStruct* campaign::getSettlementByName(const char* name)
 {
 	const auto stratMap = stratMapHelpers::getStratMap();

@@ -3992,10 +3992,10 @@ onCreateProductionController::onCreateProductionController(MemWork* mem, LPVOID 
 	:AATemplate(mem), funcAddress(addr)
 {
 	if (ver == 2)//steam
-		m_adress = 0x005321E6;
+		m_adress = 0x52E7D6;
 
 	else if (ver == 1)//kingdoms
-		m_adress = 0x00531BD6;
+		m_adress = 0x52E1D6;
 }
 
 onCreateProductionController::~onCreateProductionController()
@@ -4005,10 +4005,6 @@ onCreateProductionController::~onCreateProductionController()
 void onCreateProductionController::SetOriginalCode()
 {
 	auto a = new Assembler();
-
-	a->mov(ebp, eax);
-	a->mov(ecx, dword_ptr(esi));
-	a->shl(ebx, 4);
 
 	a->ret();
 	m_originalBytes = static_cast<unsigned char*>(a->make());
@@ -4020,13 +4016,8 @@ void onCreateProductionController::SetOriginalCode()
 void onCreateProductionController::SetNewCode()
 {
 	const auto a = new Assembler();
-	a->mov(edx, dword_ptr(esp, 0x1C));
-	a->mov(ecx, eax);
-	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
-	a->call(eax);
-	a->mov(ebp, eax);
-	a->mov(ecx, dword_ptr(esi));
-	a->shl(ebx, 4);
+	a->pop(eax);
+	a->pop(edx);
 	a->ret();
 	m_cheatBytes = static_cast<unsigned char*>(a->make());
 	delete a;
@@ -6091,6 +6082,142 @@ void onCalculateLTGD::SetNewCode()
 	else
 		a->mov(eax,0x53F8DA);
 	a->jmp(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onStartProductionTurn::onStartProductionTurn(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x532502;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x531EF2;
+}
+
+void onStartProductionTurn::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	if (m_adress == 0x532502)
+		a->mov(eax,0x532544);
+	else
+		a->mov(eax,0x531F34);
+	a->jmp(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onSetBuildPolicies::onSetBuildPolicies(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x52E841;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x52E241;
+}
+
+void onSetBuildPolicies::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(edx, dword_ptr(esp, 0x8));
+	a->push(dword_ptr(esp, 0xC));
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	if (m_adress == 0x52E841)
+		a->mov(eax,0x52E894);
+	else
+		a->mov(eax,0x52E294);
+	a->jmp(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onUpdateProdControllers::onUpdateProdControllers(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x532553;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x531F43;
+}
+
+void onUpdateProdControllers::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->pop(esi);
+	a->pop(ebp);
+	a->add(esp, 0x4);
+	if (m_adress == 0x532553)
+		a->mov(eax,0x5322A0);
+	else
+		a->mov(eax,0x531C90);
+	a->jmp(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onSetProdPriorities::onSetProdPriorities(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x0532724;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x532114;
+}
+
+void onSetProdPriorities::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->pop(edx);
+	a->pop(edx);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onGetTrueBuildingCapabilities::onGetTrueBuildingCapabilities(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x5FC1A7;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x5FBDB7;
+}
+
+void onGetTrueBuildingCapabilities::SetNewCode()
+{
+	const auto a = new Assembler();
+	const Label skipJump = a->newLabel();
+	a->mov(dword_ptr(ebx, ecx, 2), esi);
+	a->add(dword_ptr(edi), 1);
+	a->mov(edx, ebp); //stackCapabilities has sett ptr
+	a->mov(ecx, dword_ptr(edi)); //counter
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->test(eax, eax);
+	a->jz(skipJump);
+	//early exit
+	if (m_adress == 0x5FC1A7)
+		a->mov(eax, 0x005FC1B4);
+	else
+		a->mov(eax, 0x5FBDC4);
+	a->jmp(eax);
+	a->bind(skipJump);
 	a->ret();
 	m_cheatBytes = static_cast<unsigned char*>(a->make());
 	delete a;

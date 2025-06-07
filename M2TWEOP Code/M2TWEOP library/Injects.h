@@ -2237,6 +2237,66 @@ private:
 	LPVOID funcAddress;
 };
 
+class onStartProductionTurn
+	:public AATemplate
+{
+public:
+	onStartProductionTurn(MemWork* mem, LPVOID addr, int ver);
+	~onStartProductionTurn() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onSetBuildPolicies
+	:public AATemplate
+{
+public:
+	onSetBuildPolicies(MemWork* mem, LPVOID addr, int ver);
+	~onSetBuildPolicies() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onUpdateProdControllers
+	:public AATemplate
+{
+public:
+	onUpdateProdControllers(MemWork* mem, LPVOID addr, int ver);
+	~onUpdateProdControllers() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onSetProdPriorities
+	:public AATemplate
+{
+public:
+	onSetProdPriorities(MemWork* mem, LPVOID addr, int ver);
+	~onSetProdPriorities() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetTrueBuildingCapabilities
+	:public AATemplate
+{
+public:
+	onGetTrueBuildingCapabilities(MemWork* mem, LPVOID addr, int ver);
+	~onGetTrueBuildingCapabilities() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onCreateMarriageOption2
 	:public AATemplate
 {

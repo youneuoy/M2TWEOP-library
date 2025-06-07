@@ -670,9 +670,33 @@ void managerF::execPatches()
 	f1 << "Done" << '\n';
 	
 	f1 << "Start applying onCreateProductionController patch" << '\n';
-	onCreateProductionController* toCreateProductionController = new onCreateProductionController(mem, (LPVOID)patchesForGame::onCreateProductionController, globals::dataS.gameVersion);
+	onCreateProductionController* toCreateProductionController = new onCreateProductionController(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
 	toCreateProductionController->SetNewCode();
 	toCreateProductionController->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onSetBuildPolicies patch" << '\n';
+	onSetBuildPolicies* toSetBuildPolicies = new onSetBuildPolicies(mem, (LPVOID)patchesForGame::onSetBuildPolicies, globals::dataS.gameVersion);
+	toSetBuildPolicies->SetNewCode();
+	toSetBuildPolicies->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onUpdateProdControllers patch" << '\n';
+	onUpdateProdControllers* toUpdateProdControllers = new onUpdateProdControllers(mem, (LPVOID)patchesForGame::onUpdateProdControllers, globals::dataS.gameVersion);
+	toUpdateProdControllers->SetNewCode();
+	toUpdateProdControllers->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onSetProdPriorities patch" << '\n';
+	onSetProdPriorities* toSetProdPriorities = new onSetProdPriorities(mem, (LPVOID)patchesForGame::onSetProdPriorities, globals::dataS.gameVersion);
+	toSetProdPriorities->SetNewCode();
+	toSetProdPriorities->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onGetTrueBuildingCapabilities patch" << '\n';
+	onGetTrueBuildingCapabilities* toGetTrueBuildingCapabilities = new onGetTrueBuildingCapabilities(mem, (LPVOID)patchesForGame::onGetTrueBuildingCapabilities, globals::dataS.gameVersion);
+	toGetTrueBuildingCapabilities->SetNewCode();
+	toGetTrueBuildingCapabilities->Enable();
 	f1 << "Done" << '\n';
 	
 	f1 << "Start applying onDecideNeighbours patch" << '\n';
@@ -914,6 +938,12 @@ void managerF::execPatches()
 	onCalculateLTGD* toCalculateLTGD = new onCalculateLTGD(mem, (LPVOID)patchesForGame::onCalculateLTGD, globals::dataS.gameVersion);
 	toCalculateLTGD->SetNewCode();
 	toCalculateLTGD->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onStartProductionTurn patch" << '\n';
+	onStartProductionTurn* toStartProductionTurn = new onStartProductionTurn(mem, (LPVOID)patchesForGame::onStartProductionTurn, globals::dataS.gameVersion);
+	toStartProductionTurn->SetNewCode();
+	toStartProductionTurn->Enable();
 	f1 << "Done" << '\n';
 	
 	f1 << "Start applying onDecideMissionTarget patch" << '\n';

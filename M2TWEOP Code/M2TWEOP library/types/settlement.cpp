@@ -27,6 +27,102 @@
 
 std::shared_ptr<eopSettlementDataDb> eopSettlementDataDb::instance = std::make_shared<eopSettlementDataDb>();
 
+void aiProductionController::setBuildPoliciesAndTaxLevel(const int policy, const int recruitPolicy)
+{
+	if (this == nullptr)
+		return;
+	if (this->autoManagePolicy != settlementPolicy::none)
+		--*(&this->aiFaction->aiProductionControllers->balancedPolicyNum + policy);
+	this->autoManagePolicy = policy;
+	this->secondaryPolicy = recruitPolicy;
+	this->aiFaction->aiProductionControllers->updatePolicies(this->settlement, policy);
+	if (this->autoManagePolicy != settlementPolicy::none)
+	{
+		this->isAutoManagedTaxes = true;
+		this->isAutoManaged = true;
+		setSettlementTaxLevel();
+	}
+	else
+	{
+		this->isAutoManagedTaxes = false;
+		this->isAutoManaged = false;
+	}
+}
+
+void aiProductionController::setSettlementTaxLevel()
+{
+	GAME_FUNC(void(__thiscall*)(aiProductionController*), setSettlementTaxLevel)(this);
+}
+
+void aiProductionController::setPriorities()
+{
+	GAME_FUNC(void(__thiscall*)(aiProductionController*, int*, int*), prodSetPriorities)(this, this->aiFaction->aiProductionControllers->buildingValues, this->aiFaction->aiProductionControllers->agentRecruitValues);
+	const auto sett = this->settlement;
+	if (!sett)
+		return;
+	if (sett->isMinorSettlement)
+	{
+		setConstructionValueEnum(buildingCapabilities::trade_fleet, 0);
+		setConstructionValueEnum(buildingCapabilities::road_level, 0);
+		setConstructionValueEnum(buildingCapabilities::mine_resource, 0);
+		setConstructionValueEnum(buildingCapabilities::farming_level, 0);
+		setConstructionValueEnum(buildingCapabilities::religion_level, 0);
+		setConstructionValueEnum(buildingCapabilities::amplify_religion_level, 0);
+	}
+	if (!sett->army || sett->army->numOfUnits == 0)
+	{
+		for (int i = 1; i < 8; i++)
+		{
+			incConstructionUnitValue(i, 100);
+			incRecruitmentValue(i, 200);
+		}
+	}
+	else
+	{
+		if (sett->getSettlementStats()->PublicOrder < 70)
+		{
+			incConstructionValueEnum(buildingCapabilities::law_bonus, 50);
+			incConstructionValueEnum(buildingCapabilities::happiness_bonus, 50);
+			incConstructionValueEnum(buildingCapabilities::population_health_bonus, 25);
+			if (!sett->isMinorSettlement)
+				incConstructionValueEnum(buildingCapabilities::religion_level, 25);
+			for (int i = 1; i < 8; i++)
+				incRecruitmentValue(i, 25);
+		}
+		if (sett->getSettlementStats()->population - sett->lastPopulation <= 0)
+		{
+			incConstructionValueEnum(buildingCapabilities::population_growth_bonus, 50);
+			incConstructionValueEnum(buildingCapabilities::population_health_bonus, 50);
+			if (!sett->isMinorSettlement)
+				incConstructionValueEnum(buildingCapabilities::farming_level, 25);
+		}
+		if (sett->isMinorSettlement)
+			return;
+		if (const auto relPercent = sett->getSettlementStats()->religionPercentages[this->aiFaction->faction->religion]; relPercent < 50)
+		{
+			incConstructionValueEnum(buildingCapabilities::religion_level, (50 - relPercent) * 2);
+		}
+	}
+}
+
+void aiProductionController::underControlCheck(const factionStruct* faction)
+{
+	if (this->settlement->faction == faction)
+	{
+		settlement->aiProductionController = this;
+		this->isAutoManaged = this->autoManagePolicy != settlementPolicy::none;
+		this->notControlledDuration = 0;
+	}
+	else
+	{
+		if (settlement->aiProductionController == this)
+			settlement->aiProductionController = nullptr;
+		this->isAutoManaged = false;
+		this->notControlledDuration++;
+	}
+	
+}
+
 void settlementStatsManager::recalculate(const bool recalculateFacEconomy)
 {
 	GAME_FUNC(void(__thiscall*)(settlementStatsManager*, bool), recalculateSettlement)(this, recalculateFacEconomy);

@@ -5,6 +5,7 @@
 #include "faction.h"
 #include "unit.h"
 
+struct aiPersonalityValues;
 struct aiLongTermGoalDirector;
 struct unitRQ;
 struct bannerData;
@@ -86,6 +87,7 @@ public:
 	static int __fastcall onAddBuildingCapsAfterConstruction(const settlementStruct* sett, int index);
 	static building* __fastcall onCheckBuildUpgrade(const settlementStruct* sett, int buildingId);
 	static void __fastcall onAttachRegionSettlement(settlementStruct* sett, int regionId);
+	static int __fastcall onGetTrueBuildingCapabilities(int counter, const stackCapabilities* cap);
 	static void __fastcall onCalculateSettlement(settlementStruct* sett);
 	static eduEntry* __fastcall onCustomBattleCost(int eduIndexOffset);
 	static int __fastcall onMarriageOption(const factionRecord* facRecord);
@@ -95,6 +97,7 @@ public:
 	static void __fastcall onPredictedStats(settlementStats* statsManager);
 	static int __fastcall onEvalAttObjective(const aiCampaignController* controller);
 	static void __fastcall onCalculateLTGD(aiLongTermGoalDirector* ltgd);
+	static void __fastcall onStartProductionTurn(aiPersonalityValues* personality);
 	static factionStruct* __fastcall onCheckGarrison(const aiRegionController* controller);
 	static int __fastcall onValidateGarrison(const aiRegionController* controller, const armyStruct* army);
 	static void __fastcall onUpdateControllerAlloc(aiCampaignController* controller);
@@ -121,7 +124,9 @@ public:
 	static void __fastcall onDecideNeighbours(factionStruct* faction);
 	static void __fastcall onInitGsd(aiGlobalStrategyDirector* director);
 	static void __fastcall onInitGsd2(aiGlobalStrategyDirector* director);
-	static aiProductionController* __fastcall onCreateProductionController(aiProductionController* controller, settlementStruct* sett);
+	static void __fastcall onSetBuildPolicies(aiProductionController* controller, int policy, int secondaryPolicy);
+	static void __fastcall onUpdateProdControllers(aiPersonalityValues* personality);
+	static void __fastcall onSetProdPriorities(aiProductionController* controller);
 	static DWORD __fastcall onUnitInfo(DWORD entryAddress);
 	static void __fastcall onTransferSettlement(const settlementStruct* settlement, int reason, factionStruct* faction);
 	static portBuildingStruct* __fastcall onTransferSettlementPort(const settlementStruct* settlement);

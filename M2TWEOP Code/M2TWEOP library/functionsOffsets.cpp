@@ -347,6 +347,15 @@ void codes::initCodes(int gameVer)
 		offsets.getRegionGroup = 0x518E40;
 		offsets.getFactionRegionGroupNum = 0x518E90;
 		offsets.isLoneRegionGroup = 0x5190E0;
+		offsets.setCapital = 0x4FB500;
+		offsets.setSettlementTaxLevel = 0x52D070;
+		offsets.usePersonalityType = 0x530940;
+		offsets.usePersonalityName = 0x530DC0;
+		offsets.isMicroManageAll = 0x467730;
+		offsets.addSettlementPolicy = 0x5316E0;
+		offsets.createAiProductionController = 0x52E020;
+		offsets.prodSetPriorities = 0x52E3B0;
+		offsets.addToProductionControllers = 0x5315F0;
 	}
 
 
@@ -697,5 +706,14 @@ void codes::initCodes(int gameVer)
 		offsets.getRegionGroup = 0x519430;
 		offsets.getFactionRegionGroupNum = 0x519480;
 		offsets.isLoneRegionGroup = 0x5196D0;
+		offsets.setCapital = 0x4FBA60;//4FB500
+		offsets.setSettlementTaxLevel = 0x52D670;
+		offsets.usePersonalityType = 0x530F50;
+		offsets.usePersonalityName = 0x5313D0;
+		offsets.isMicroManageAll = 0x467AB0;
+		offsets.addSettlementPolicy = 0x531CF0;
+		offsets.createAiProductionController = 0x52E620;
+		offsets.prodSetPriorities = 0x0052E9B0;
+		offsets.addToProductionControllers = 0x531C00;
 	}
 }

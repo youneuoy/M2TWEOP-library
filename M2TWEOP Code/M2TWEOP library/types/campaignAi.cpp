@@ -1521,7 +1521,8 @@ void globalEopAiConfig::characterTurnStart(character* currentChar)
 		{
 			if ((!nearSett.settlement->army || nearSett.settlement->army->numOfUnits == 0) && nearSett.settlement->siegeNum == 0)
 			{
-				armyHelpers::createArmyInSettlement(nearSett.settlement);
+				if (!nearSett.settlement->army)
+					armyHelpers::createArmyInSettlement(nearSett.settlement);
 				if (army->moveTactical(nearSett.settlement->xCoord, nearSett.settlement->yCoord, true))
 					gameHelpers::logStringGame("Character: " + string(currentChar->characterRecord->fullName) + " Garrisoned empty settlement!");
 				used = true;
@@ -3320,8 +3321,8 @@ void aiLongTermGoalDirector::update()
 	enum ltgdVFuncs : uint8_t
 	{
 		calcFreeStrength = 0x0,
-		calcEnemyFreeStrength = 0x4,
-		calcMilitaryBalance = 0x8,
+		setPolicy = 0x4,
+		setTroopStatus = 0x8,
 		parseDefendDecisions = 0x10,
 		parseInvadeDecisions = 0x14,
 		doAllianceStuff = 0x18,
@@ -3329,25 +3330,56 @@ void aiLongTermGoalDirector::update()
 	};
 	
 	callClassFunc<aiLongTermGoalDirector*, void>(this, checkCapital);
-	GAME_FUNC(void(__thiscall*)(aiLongTermGoalDirector*), resetLtgd)(this);
+	reset();
 	if (!this->faction->isHorde)
 	{
 		callClassFunc<aiLongTermGoalDirector*, void>(this, parseDefendDecisions);
 		callClassFunc<aiLongTermGoalDirector*, void>(this, parseInvadeDecisions);
 		gameEvents::onCalculateLTGD(this);
-		const auto campaign = campaignHelpers::getCampaignData();
-		const auto config = campaignAi::getLtgdConfig();
-		for (int i = 0; i < campaign->factionCount; i++)
-		{
-			const auto invadePriority = this->longTermGoalValues[faction->factionID].invadePriority;
-			this->longTermGoalValues[faction->factionID].invadePriority = clamp(invadePriority, config->minInvadePriority, config->maxInvadePriority);
-		}
+		clampInvadePriority();
 	}
+	callClassFunc<aiLongTermGoalDirector*, void>(this, calcFreeStrength);
+	callClassFunc<aiLongTermGoalDirector*, void>(this, setPolicy);
+	callClassFunc<aiLongTermGoalDirector*, void>(this, setTroopStatus);
+	checkConsiderNavalInvasion();
 	if (this->consideringNavalInvasion)
 		setNavalTarget();
-	callClassFunc<aiLongTermGoalDirector*, void>(this, calcFreeStrength);
-	callClassFunc<aiLongTermGoalDirector*, void>(this, calcEnemyFreeStrength);
-	callClassFunc<aiLongTermGoalDirector*, void>(this, calcMilitaryBalance);
+}
+
+void aiLongTermGoalDirector::reset()
+{
+	GAME_FUNC(void(__thiscall*)(aiLongTermGoalDirector*), resetLtgd)(this);
+}
+
+void aiLongTermGoalDirector::clampInvadePriority()
+{
+	const auto campaign = campaignHelpers::getCampaignData();
+	const auto config = campaignAi::getLtgdConfig();
+	for (int i = 0; i < campaign->factionCount; i++)
+	{
+		const auto invadePriority = this->longTermGoalValues[faction->factionID].invadePriority;
+		this->longTermGoalValues[faction->factionID].invadePriority = clamp(invadePriority, config->minInvadePriority, config->maxInvadePriority);
+	}
+}
+
+void aiLongTermGoalDirector::checkConsiderNavalInvasion()
+{
+	if (this->longTermTroopStatus <= 1 || this->longTermPolicy == 0)
+	{
+		this->consideringNavalInvasion = false;
+		return;
+	}
+	if (!this->consideringNavalInvasion)
+	{
+		const auto values = campaignAi::getAiFactionValues(this->faction);
+		const auto enemyThreshold = this->faction->factionRecord->prefersNavalInvasions ? 3 : 4;
+		const auto threshold = this->faction->factionRecord->prefersNavalInvasions ? 500 : 1000;
+		if (const auto strengthBalance = (values->totalStrength + 1) / (values->immediateEnemyStrength + 1); values->fleetCount > 1)
+		{
+			if (values->freeStrength > threshold && values->enemyNum < enemyThreshold && strengthBalance >= 1.f)
+				this->consideringNavalInvasion = true;
+		}
+	}
 }
 
 void aiLongTermGoalDirector::setNavalTarget()
@@ -3477,33 +3509,28 @@ int aiLongTermGoalDirector::getNavalTargetScore(const seaConnectedRegion* seaReg
 \*--------------------------------------------------------------------------------------------------------------------*/
 #pragma region aiPersonalityValues methods
 
-void aiPersonalityValues::evaluatePolicies(const int regionId, const int settlementIndex)
+void aiPersonalityValues::evaluatePolicies(const settlementStruct* sett)
 {
+	if (!sett || !sett->aiProductionController)
+		return;
 	if (settlementPoliciesCount == 0)
 		return;
-	std::vector<int> regionPolicies;
-	for (int i = 0; i < settlementPoliciesCount; i++)
+	if (const int policyIndex = getPolicyIndex(sett); policyIndex > -1)
 	{
-		if (settlementPolicies[i].regionID == regionId)
-		{
-			regionPolicies.push_back(i);
-		}
-	}
-	if (settlementIndex < static_cast<int>(regionPolicies.size()))
-	{
-		const auto settlement = minorSettlementDb::getSettlement(regionId, settlementIndex);
-		const int policyIndex = regionPolicies[settlementIndex];
 		const auto policy = &settlementPolicies[policyIndex];
-		policy->autoManageBuildPolicy = static_cast<int>(this->decideSettlementPolicy(settlement));
-		policy->secondaryPolicy = static_cast<int>(this->decideSettlementTroopPolicy(settlement));
-		settlement->aiProductionController->autoManagePolicy = policy->autoManageBuildPolicy;
-		settlement->aiProductionController->secondaryPolicy = policy->secondaryPolicy;
+		const auto newPolicy = static_cast<int>(this->decideSettlementPolicy(sett));
+		const auto newTroopPolicy = static_cast<int>(this->decideSettlementTroopPolicy(sett));
+		policy->autoManageBuildPolicy = newPolicy;
+		policy->secondaryPolicy = newTroopPolicy;
+		sett->aiProductionController->setBuildPoliciesAndTaxLevel(newPolicy, newTroopPolicy);
 	}
 }
 
 settlementPolicy aiPersonalityValues::decideSettlementPolicy(const settlementStruct* settlement)
 {
-	const int oldPolicy = settlement->aiProductionController->autoManagePolicy;
+	int oldPolicy = static_cast<int>(settlementPolicy::none);
+	if (settlement->aiProductionController)
+		oldPolicy = settlement->aiProductionController->autoManagePolicy;
 	const auto region = stratMapHelpers::getRegion(settlement->regionID);
 	const int neighbourNum = region->neighbourRegionsNum;
 	int enemyNum = region->getEnemySettsToFaction(settlement->factionID);
@@ -3662,6 +3689,190 @@ float aiPersonalityValues::getPolicyPriority(const settlementPolicy policyType)
 	}
 	return 0.0f;
 }
+
+void aiPersonalityValues::init()
+{
+	initValues();
+	initControllers();
+	for (int controllerIndex = 0; controllerIndex < this->aiProductionControllersNum; controllerIndex++)
+	{
+		const auto prodController = this->aiProductionControllers[controllerIndex];
+		prodController->setPriorities();
+	}
+}
+
+void aiPersonalityValues::initValues()
+{
+	clearBuildingBias();
+	clearRecruitmentBias();
+	int boost = (3 - this->aiFaction->ltgd->longTermPolicy) * 25;
+	const int troopBoost = (3 - this->aiFaction->ltgd->longTermTroopStatus) * 25;
+	if (boost)
+	{
+		incConstructionValueEnum(buildingCapabilities::gate_strength, boost);
+		incConstructionValueEnum(buildingCapabilities::gate_defences, boost);
+		incConstructionValueEnum(buildingCapabilities::wall_level, boost);
+		incConstructionValueEnum(buildingCapabilities::tower_level, boost);
+		incConstructionValueEnum(buildingCapabilities::weapon_melee_blade, boost);
+		incConstructionValueEnum(buildingCapabilities::weapon_missile_mechanical, boost);
+		incConstructionValueEnum(buildingCapabilities::weapon_missile_gunpowder, boost);
+		incConstructionValueEnum(buildingCapabilities::weapon_artillery_mechanical, boost);
+		incConstructionValueEnum(buildingCapabilities::weapon_artillery_gunpowder, boost);
+		incConstructionValueEnum(buildingCapabilities::weapon_naval_gunpowder, boost);
+		incConstructionValueEnum(buildingCapabilities::armour, boost);
+	}
+	if (troopBoost)
+	{
+		boost += troopBoost;
+		for (int i = 1; i < 8; i++)
+		{
+			incConstructionUnitValue(i, boost);
+			incRecruitmentValue(i, troopBoost);
+		}
+	}
+	economicBoost();
+	GAME_FUNC(void(__thiscall*)(aiPersonalityValues*), usePersonalityType)(this);
+	GAME_FUNC(void(__thiscall*)(aiPersonalityValues*), usePersonalityName)(this);
+	for (int& unitRecruitmentValue : unitRecruitmentValues)
+		unitRecruitmentValue = max(0, unitRecruitmentValue);
+	gameEvents::onSetProductionControllers(this);
+}
+
+void aiPersonalityValues::initControllers()
+{
+	const auto currentFac = this->aiFaction->faction;
+	const auto isPlayer = currentFac->isPlayerControlled == 1;
+	const auto isAutoControl = !campaignHelpers::getCampaignData()->isMicroManageAll() || !isPlayer;
+	for (int settIndex = 0; settIndex < currentFac->settlementsNum; settIndex++)
+	{
+		const auto sett = currentFac->settlements[settIndex];
+		int controllerIndex = 0;
+		for (; controllerIndex < this->aiProductionControllersNum; controllerIndex++)
+		{
+			if (const auto prodController = this->aiProductionControllers[controllerIndex]; sett == prodController->settlement)
+			{
+				prodController->resetExtraBias();
+				if (isAutoControl && prodController->autoManagePolicy == settlementPolicy::none)
+					evaluatePolicies(prodController->settlement);
+				sett->aiProductionController = prodController;
+				break;
+			}
+		}
+		if (controllerIndex == this->aiProductionControllersNum)
+		{
+			struct settlementPolicies* settPolicy;
+			auto policyIndex = getPolicyIndex(sett);
+			if (policyIndex == -1)
+			{
+				GAME_FUNC(void(__thiscall*)(struct settlementPolicies**), addSettlementPolicy)(&this->settlementPolicies);
+				policyIndex = this->settlementPoliciesCount - 1;
+				settPolicy = &this->settlementPolicies[policyIndex];
+				settPolicy->regionID = sett->regionID;
+				auto buildPolicy = settlementPolicy::none;
+				if (isAutoControl)
+					buildPolicy = decideSettlementPolicy(sett);
+				settPolicy->autoManageBuildPolicy = static_cast<int>(buildPolicy);
+				settPolicy->secondaryPolicy = static_cast<int>(decideSettlementTroopPolicy(sett));
+				settPolicy->autoManagedConstruction = this->autoManagedConstruction;
+				settPolicy->autoManagedRecruitment = this->autoManagedRecruitment;
+				settPolicy->settlementIndex = static_cast<uint8_t>(sett->minorSettlementIndex);
+			}
+			settPolicy = &this->settlementPolicies[policyIndex];
+			auto newController = techFuncs::createGameClass<aiProductionController>();
+			GAME_FUNC(aiProductionController*(__thiscall*)(aiProductionController*, struct aiFaction*, int, int, int), createAiProductionController)
+			(   newController,
+			    this->aiFaction,
+			    settPolicy->autoManageBuildPolicy,
+			    settPolicy->secondaryPolicy,
+			    sett->regionID
+			    );
+			newController->settlement = sett;
+			sett->aiProductionController = newController;
+			updatePolicies(sett, settPolicy->autoManageBuildPolicy);
+			newController->isAutoManagedConstruction = settPolicy->autoManagedConstruction;
+			newController->isAutoManagedRecruitment = settPolicy->autoManagedRecruitment;
+			newController->isAutoManagedTaxes = this->autoManagedTaxes;
+			newController->resetExtraBias();
+			newController->setPriorities();
+			GAME_FUNC(void(__thiscall*)(struct aiProductionController***, aiProductionController**), addToProductionControllers)(&this->aiProductionControllers, &newController);
+		}
+	}
+}
+
+void aiPersonalityValues::updateControllers()
+{
+	int controllerIndex = this->aiProductionControllersNum - 1;
+	for (; controllerIndex >= 0; --controllerIndex)
+	{
+		const auto controller = this->aiProductionControllers[controllerIndex];
+		controller->underControlCheck(this->aiFaction->faction);
+		if (!controller->isAutoManaged && controller->notControlledDuration > 10)
+		{
+			int policyIndex = getPolicyIndex(controller->settlement);
+			if (policyIndex > -1)
+			{
+				this->settlementPolicies[policyIndex].autoManagedConstruction = controller->isAutoManagedConstruction;
+				this->settlementPolicies[policyIndex].autoManagedRecruitment = controller->isAutoManagedRecruitment;
+			}
+			struct aiProductionController **temp;
+			--this->aiProductionControllersNum;
+			for (int i = controllerIndex; i < this->aiProductionControllersNum; *temp = temp[1] )
+				temp = &this->aiProductionControllers[i++];
+			callClassFunc<aiProductionController*, void, int>(controller, 0x0, 1); //destructor
+		}
+	}
+	initControllers();
+}
+
+void aiPersonalityValues::updatePolicies(const settlementStruct* sett, int policyType)
+{
+	const int index = getPolicyIndex(sett);
+	if (index == -1)
+		return;
+	this->settlementPolicies[index].autoManageBuildPolicy = policyType;
+	if (policyType != settlementPolicy::none)
+		++*(&this->balancedPolicyNum + policyType);
+}
+
+int aiPersonalityValues::getPolicyIndex(const settlementStruct* settlement)
+{
+	for (int i = 0; i < settlementPoliciesCount; i++)
+	{
+		if (settlementPolicies[i].regionID == settlement->regionID && settlementPolicies[i].settlementIndex == settlement->minorSettlementIndex)
+			return i;
+	}
+	return -1;
+}
+
+void aiPersonalityValues::economicBoost()
+{
+	const auto financeManager = this->aiFaction->aiFinanceManager;
+	if (const auto balance = financeManager->balance; balance >= 2 && financeManager->state > 1)
+	{
+		int bonus = 0;
+		switch (balance)
+		{
+		case 2:
+			bonus = 80;
+			break;
+		case 3:
+			bonus = 160;
+			break;
+		case 4:
+			bonus = 240;
+			break;
+		default:
+			break;
+		}
+		incConstructionValueEnum(buildingCapabilities::trade_base_income_bonus, bonus);
+		incConstructionValueEnum(buildingCapabilities::trade_level_bonus, bonus);
+		incConstructionValueEnum(buildingCapabilities::trade_fleet, bonus);
+		incConstructionValueEnum(buildingCapabilities::mine_resource, bonus);
+		incConstructionValueEnum(buildingCapabilities::farming_level, bonus);
+		incConstructionValueEnum(buildingCapabilities::road_level, bonus);
+	}
+}
+
 #pragma endregion aiPersonalityValues methods
 
 /*--------------------------------------------------------------------------------------------------------------------*\
@@ -3847,7 +4058,7 @@ void aiGlobalStrategyDirector::updateRegionControllers()
 			for (int j = 0; j < settlementCount; j++)
 			{
 				if (const auto sett = region->getSettlement(j); sett->faction == faction)
-					aiFaction->aiProductionControllers->evaluatePolicies(sett->regionID, sett->getMinorSettlementIndex());
+					aiFaction->aiProductionControllers->evaluatePolicies(sett);
 			}
 			for (int j = 0; j < region->neighbourRegionsNum; j++)
 			{
@@ -3856,7 +4067,7 @@ void aiGlobalStrategyDirector::updateRegionControllers()
 				for (int n = 0; n < nSettCount; n++)
 				{
 					if (const auto sett = nRegion->getSettlement(n); sett->faction == faction)
-						aiFaction->aiProductionControllers->evaluatePolicies(sett->regionID, sett->getMinorSettlementIndex());
+						aiFaction->aiProductionControllers->evaluatePolicies(sett);
 				}
 			}
 			--regionControllersNum;
@@ -3897,7 +4108,7 @@ void aiGlobalStrategyDirector::updateRegionControllers()
 			for (int j = 0; j < settlementCount; j++)
 			{
 				if (const auto sett2 = region->getSettlement(j); sett2->faction == faction)
-					aiFaction->aiProductionControllers->evaluatePolicies(sett2->regionID, sett2->getMinorSettlementIndex());
+					aiFaction->aiProductionControllers->evaluatePolicies(sett2);
 			}
 			for (int j = 0; j < region->neighbourRegionsNum; j++)
 			{
@@ -3906,7 +4117,7 @@ void aiGlobalStrategyDirector::updateRegionControllers()
 				for (int n = 0; n < nSettCount; n++)
 				{
 					if (const auto sett2 = nRegion->getSettlement(n); sett2->faction == faction)
-						aiFaction->aiProductionControllers->evaluatePolicies(sett2->regionID, sett2->getMinorSettlementIndex());
+						aiFaction->aiProductionControllers->evaluatePolicies(sett2);
 				}
 			}
 		}

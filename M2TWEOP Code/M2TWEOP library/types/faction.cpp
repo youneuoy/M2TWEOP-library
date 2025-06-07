@@ -244,6 +244,11 @@ void factionStruct::updateNeighbours()
 	}
 }
 
+void factionStruct::setCapital(settlementStruct* newCapital)
+{
+	GAME_FUNC(void(__thiscall*)(factionStruct*, settlementStruct*), setCapital)(this, newCapital);
+}
+
 void factionStruct::setFactionBanner(const std::string& newFac)
 {
 	int newId = -1;
@@ -714,6 +719,7 @@ namespace factionHelpers
 		@tfield ancillaryExists ancillaryExists
 		@tfield setFactionBanner setFactionBanner
 		@tfield setLeader setLeader
+		@tfield setCapital setCapital
 
 		@table factionStruct
 		*/
@@ -1321,6 +1327,15 @@ namespace factionHelpers
 			fac:setLeader(myChar, true)
 		*/
 		types.factionStruct.set_function("setLeader", &factionStruct::setLeader);
+		
+		/***
+		Set new faction capital.
+		@function factionStruct:setCapital
+		@tparam settlementStruct newCapital
+		@usage
+			fac:setCapital(mySett)
+		*/
+		types.factionStruct.set_function("setCapital", &factionStruct::setCapital);
 
 		/***
 		Basic battleFactionCounter table
@@ -1487,6 +1502,7 @@ namespace factionHelpers
 		@tfield regionsBordersOnlyTrusted regionsBordersOnlyTrusted
 		@tfield getInvasionTargetPriority getInvasionTargetPriority
 		@tfield getInvasionTargetNum getInvasionTargetNum
+		@tfield reset reset
 
 		@table aiLongTermGoalDirector
 		*/
@@ -1561,6 +1577,14 @@ namespace factionHelpers
 		local result = LTGD:getInvasionTargetPriority(2)
 		*/
 		types.aiLongTermGoalDirector.set_function("getInvasionTargetPriority", &aiLongTermGoalDirector::getInvasionTargetPriority);
+
+		/***
+		Reset decision values.
+		@function aiLongTermGoalDirector:reset
+		@usage
+			LTGD:reset()
+		*/
+		types.aiLongTermGoalDirector.set_function("reset", &aiLongTermGoalDirector::reset);
 		
 		/***
 		Basic decisionValuesLTGD table

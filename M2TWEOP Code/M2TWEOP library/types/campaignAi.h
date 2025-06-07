@@ -519,6 +519,34 @@ struct aiBrigandController : aiMilitaryController
     int weakestArmy;
 };
 
+struct aiSpendingLevel
+{
+	int priority;
+	float priorityFloat;
+	int max;
+};
+
+struct aiFinanceManager
+{
+	DWORD vtbl;
+	struct aiFaction *aiFaction;
+	struct factionStruct *faction;
+	int policy;
+	int balance;
+	int state;
+	int estimatedIncome;
+	int estimatedMaintenance;
+	int estimatedSpending;
+	int maxSpending;
+	int spendingOverNormal;
+	int spendingNormal;
+	int spendingMinimum;
+	int committed;
+	struct aiSpendingLevel levels[5];
+	int spendingByType[3];
+};
+
+
 struct aiFaction
 {
 public:
@@ -536,7 +564,7 @@ public:
 	struct aiDiplomacyManager* aiDiplomacyManager; //0x0024
 	struct aiActionRequestController* aiActionRequestController; //0x0028
 	struct aiResourceManager* aiResourceManager; //0x002C
-	struct AiFinanceManager* AiFinanceManager; //0x0030
+	struct aiFinanceManager* aiFinanceManager; //0x0030
 	struct aiPersonalityValues* aiProductionControllers; //0x0034
 	struct aiGlobalStrategyDirector* aiGlobalStrategyDirector; //0x0038
 	aiSubterfugeController* subterfugeController; //0x003C
@@ -608,6 +636,9 @@ public:
 	bool regionsBordersOnlyTrusted(int regionId);
 	bool isTrustedAlly(int targetFactionId);
 	void update();
+	void reset();
+	void checkConsiderNavalInvasion();
+	void clampInvadePriority();
 	void setNavalTarget();
 	int getNavalTargetScore(const seaConnectedRegion* seaRegion, int fromRegionId);
 }; //Size: 0x0604
@@ -624,7 +655,7 @@ struct aiPersonalityValues
 	int32_t ancillaryValues[4];
 	int32_t agentBuildingValues[6];
 	int32_t unitBuildingValues[11];
-	int32_t populationBias;
+	int32_t coreBuildingBias;
 	int32_t agentRecruitValues[6];
 	int32_t unitRecruitmentValues[11];
 	int32_t balancedPolicyNum;
@@ -635,14 +666,39 @@ struct aiPersonalityValues
 	struct settlementPolicies* settlementPolicies;
 	int32_t settlementPoliciesSize;
 	int32_t settlementPoliciesCount;
-	int8_t autoManagedRecruitment;
-	int8_t autoManagedConstruction;
-	int8_t autoManagedTaxes;
+	bool autoManagedRecruitment;
+	bool autoManagedConstruction;
+	bool autoManagedTaxes;
 	char pad_01BB[1];
+	void clearBuildingBias()
+	{
+		for (int& buildingValue : buildingValues)
+			buildingValue = 0;
+		for (int& agentBuildingValue : agentBuildingValues)
+			agentBuildingValue = 0;
+		for (int& unitBuildingValue : unitBuildingValues)
+			unitBuildingValue = 0;
+		coreBuildingBias = 0;
+	}
+	void clearRecruitmentBias()
+	{
+		for (int& agentRecruitValue : agentRecruitValues)
+			agentRecruitValue = 0;
+		for (int& unitRecruitmentValue : unitRecruitmentValues)
+			unitRecruitmentValue = 0;
+	}
 public:
 	void setConstructionValue(int type, int value)
 	{
 		buildingValues[type] = value;
+	}
+	void setConstructionValueEnum(buildingCapabilities type, int value)
+	{
+		buildingValues[static_cast<int>(type)] = value;
+	}
+	void incConstructionValueEnum(buildingCapabilities type, int value)
+	{
+		buildingValues[static_cast<int>(type)] += value;
 	}
 	void setConstructionAgentValue(int type, int value)
 	{
@@ -652,9 +708,21 @@ public:
 	{
 		unitBuildingValues[type] = value;
 	}
+	void incConstructionUnitValue(int type, int value)
+	{
+		unitBuildingValues[type] = value;
+	}
 	void setRecruitmentValue(int type, int value)
 	{
 		unitRecruitmentValues[type] = value;
+	}
+	void incRecruitmentValue(int type, int value)
+	{
+		unitRecruitmentValues[type] += value;
+	}
+	void setRecruitmentValueEnum(unitCategoryClass type, int value)
+	{
+		unitRecruitmentValues[static_cast<int>(type)] = value;
 	}
 	void setAgentValue(int type, int value)
 	{
@@ -692,10 +760,17 @@ public:
 	{
 		return aiProductionControllers[index];
 	}
-	void evaluatePolicies(int regionId, int settlementIndex);
+	void evaluatePolicies(const settlementStruct* sett);
 	settlementPolicy decideSettlementPolicy(const settlementStruct* settlement);
 	settlementTroopPolicy decideSettlementTroopPolicy(const settlementStruct* settlement);
 	float getPolicyPriority(settlementPolicy policyType);
+	void init();
+	void initValues();
+	void initControllers();
+	void updateControllers();
+	void updatePolicies(const settlementStruct* sett, int policyType);
+	int getPolicyIndex(const settlementStruct* settlement);
+	void economicBoost();
 };
 
 struct aiNavalRegion

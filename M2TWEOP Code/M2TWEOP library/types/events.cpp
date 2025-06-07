@@ -828,7 +828,15 @@ void onCalculateLTGD(aiLongTermGoalDirector* ltgd)
 {
 	if (plugData::data.luaAll.onCalculateLTGD != nullptr)
 	{
-		tryLua((*plugData::data.luaAll.onCalculateLTGD)(ltgd));
+		tryLua((*plugData::data.luaAll.onCalculateLTGD)(ltgd))
+	}
+}
+
+void onSetProductionControllers(aiPersonalityValues* personality)
+{
+	if (plugData::data.luaAll.onSetProductionControllers != nullptr)
+	{
+		tryLua((*plugData::data.luaAll.onSetProductionControllers)(personality))
 	}
 }
 
@@ -1375,6 +1383,7 @@ void luaPlugin::onPluginLoadF()
 	@tfield onUnloadCampaign onUnloadCampaign
 	@tfield onAiTurn onAiTurn
 	@tfield onCalculateLTGD onCalculateLTGD
+	@tfield onSetProductionControllers onSetProductionControllers
 	@tfield onClickAtTile onClickAtTile
 	@tfield onCharacterClicked onCharacterClicked
 	@tfield onCampaignTick onCampaignTick
@@ -4221,6 +4230,21 @@ void luaPlugin::onPluginLoadF()
 
 	onCalculateLTGD = new sol::function(luaState["onCalculateLTGD"]);
 	checkLuaFunc(&onCalculateLTGD);
+
+	/***
+	Called just before the personality production values are propogated to the production controllers.
+
+	@function onSetProductionControllers
+	@tparam aiPersonality personality
+
+	@usage
+	function onSetProductionControllers(personality)
+	--something here
+	end
+	*/
+
+	onSetProductionControllers = new sol::function(luaState["onSetProductionControllers"]);
+	checkLuaFunc(&onSetProductionControllers);
 
 	/***
 	Called on clicking the stratmap.

@@ -734,6 +734,7 @@ public:
 	settlementStruct* getSettlementByName(const char* name);
 	factionStruct* getFactionHashed(const std::string& name);
 	std::string getCampaignPath();
+	bool isMicroManageAll();
 };
 
 struct stratPortModel {

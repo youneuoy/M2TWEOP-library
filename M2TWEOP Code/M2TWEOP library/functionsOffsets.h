@@ -292,6 +292,7 @@ public:
 		DWORD isTileFree = NULL;
 		DWORD hideRevealedTile = NULL;
 		DWORD findBattleModel = NULL;
+		DWORD setCapital = NULL;
 		DWORD resetLtgd = NULL;
 		DWORD setLtgdNavalTarget = NULL;
 		DWORD getRegionGroup = NULL;
@@ -317,6 +318,11 @@ public:
 		DWORD calculateBackupRegionStrengths = NULL;
 		DWORD isTrustedAlly = NULL;
 		DWORD resetRegionGroupControllers = NULL;
+		DWORD setSettlementTaxLevel = NULL;
+		DWORD usePersonalityType = NULL;
+		DWORD isMicroManageAll = NULL;
+		DWORD usePersonalityName = NULL;
+		DWORD addSettlementPolicy = NULL;
 		DWORD addNavalTargetRegion = NULL;
 		DWORD removeNavalTargetRegion = NULL;
 		DWORD createSettCondContext = NULL;
@@ -341,6 +347,8 @@ public:
 		DWORD destroyFaction = NULL;
 		DWORD reduceUnitProduction = NULL;
 		DWORD reduceEconomicProduction = NULL;
+		DWORD prodSetPriorities = NULL;
+		DWORD addToProductionControllers = NULL;
 		DWORD attachResourceSett = NULL;
 		DWORD updateFowTableObject = NULL;
 		DWORD updateFowTable = NULL;
@@ -351,6 +359,7 @@ public:
 		DWORD generalLeaveCrusade = NULL;
 		DWORD incEventCounter = NULL;
 		DWORD createEventAcceptObj = NULL;
+		DWORD createAiProductionController = NULL;
 	}offsets;
 
 	static void initCodes(int gameVer);

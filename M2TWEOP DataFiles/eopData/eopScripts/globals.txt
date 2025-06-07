@@ -352,6 +352,7 @@
 "onUnloadCampaign",
 "onAiTurn",
 "onCalculateLTGD",
+"onSetProductionControllers",
 "onClickAtTile",
 "onCharacterClicked",
 "onCampaignTick",

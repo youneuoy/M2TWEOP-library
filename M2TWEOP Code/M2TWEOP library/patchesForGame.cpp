@@ -146,10 +146,19 @@ DWORD __fastcall patchesForGame::onCustomBattleUnitCards(const DWORD cardArrayTh
 	return cardArrayThing;
 }
 
-aiProductionController* __fastcall patchesForGame::onCreateProductionController(aiProductionController* controller, settlementStruct* sett)
+void __fastcall patchesForGame::onSetBuildPolicies(aiProductionController* controller, int policy, int secondaryPolicy)
 {
-	controller->settlement = sett;
-	return controller;
+	controller->setBuildPoliciesAndTaxLevel(policy, secondaryPolicy);
+}
+
+void patchesForGame::onUpdateProdControllers(aiPersonalityValues* personality)
+{
+	personality->updateControllers();
+}
+
+void patchesForGame::onSetProdPriorities(aiProductionController* controller)
+{
+	controller->setPriorities();
 }
 
 void __fastcall patchesForGame::onDecideNeighbours(factionStruct* faction)
@@ -1084,6 +1093,17 @@ void patchesForGame::onAttachRegionSettlement(settlementStruct* sett, int region
 	}
 }
 
+int patchesForGame::onGetTrueBuildingCapabilities(const int counter, const stackCapabilities* cap)
+{
+	if (counter < 32)
+		return 0;
+	if (cap->settlement && cap->settlement->name)
+		gameHelpers::logStringGame("Settlement: " + std::string(cap->settlement->name) + " has too many true building capabilities!");
+	else
+		gameHelpers::logStringGame("A settlement has too many true building capabilities!");
+	return 1;
+}
+
 void patchesForGame::onCalculateSettlement(settlementStruct* sett)
 {
 	if(!sett->isMinorSettlement)
@@ -1225,6 +1245,11 @@ int patchesForGame::onEvalAttObjective(const aiCampaignController* controller)
 void patchesForGame::onCalculateLTGD(aiLongTermGoalDirector* ltgd)
 {
 	ltgd->update();
+}
+
+void patchesForGame::onStartProductionTurn(aiPersonalityValues* personality)
+{
+	personality->init();
 }
 
 factionStruct* patchesForGame::onCheckGarrison(const aiRegionController* controller)
@@ -2002,6 +2027,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 	const DWORD characterTurnEnd = gameVersion == 1 ? 0x0136C0B4 : 0x0132708C;
 	const DWORD characterTurnStart = gameVersion == 1 ? 0x0136BFE4 : 0x01326FBC;
 	const DWORD postBattle = gameVersion == 1 ? 0x01367ADC : 0x01322AB4; 
+	const DWORD preBattleWithdrawal = gameVersion == 1 ? 0x01366D54 : 0x01321D2C; 
 	if (eventCode == scrollOpenedCode)
 	{
 		char* str = reinterpret_cast<char*>(vTab[1]);
@@ -2158,7 +2184,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 			sett->aiProductionController->isAutoManagedTaxes = false;
 		}
 	}
-	else if (eventCode == postBattle)
+	else if (eventCode == postBattle || eventCode == preBattleWithdrawal)
 	{
 		campaignHelpers::getCampaignData()->ignoreSpeedUp = false;
 	}

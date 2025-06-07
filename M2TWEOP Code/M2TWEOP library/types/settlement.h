@@ -261,7 +261,8 @@ struct settlementPolicies
 	int32_t secondaryPolicy;
 	int8_t autoManagedConstruction;
 	int8_t autoManagedRecruitment;
-	char pad_000E[2];
+	uint8_t settlementIndex;
+	uint8_t pad_000E;
 };
 
 struct aiProductionItem
@@ -318,9 +319,25 @@ struct aiProductionController
 	{
 		buildingBias[type] = value;
 	}
+	void incConstructionValueEnum(buildingCapabilities type, int value)
+	{
+		buildingBias[static_cast<int>(type)] += value;
+	}
+	void setConstructionValueEnum(buildingCapabilities type, int value)
+	{
+		buildingBias[static_cast<int>(type)] = value;
+	}
 	void setRecruitmentValueSett(int type, int value)
 	{
 		recruitBias[type] = value;
+	}
+	void incRecruitmentValue(int type, int value)
+	{
+		recruitBias[type] += value;
+	}
+	void incConstructionUnitValue(int type, int value)
+	{
+		unitBias[type] += value;
 	}
 	void setExtraBias(int type, int value)
 	{
@@ -337,6 +354,17 @@ struct aiProductionController
 	int getRecruitmentValueSett(int type)
 	{
 		return recruitBias[type];
+	}
+	void setBuildPoliciesAndTaxLevel(int policy, int recruitPolicy);
+	void setSettlementTaxLevel();
+	void setPriorities();
+	void underControlCheck(const factionStruct* faction);
+	void resetExtraBias()
+	{
+		for (int& bias : extraBias)
+			bias = 0;
+		extraX = 0;
+		extraY = 0;
 	}
 };
 
@@ -450,6 +478,16 @@ struct settlementBuildings
 	int buildingsNum; /* number of the buildings in the settlement */
 	int8_t hasReligiousBuilding;
 	struct building *guildList;
+};
+
+struct stackCapabilities
+{
+	struct settlementStruct* settlement;
+	struct factionStruct* faction;
+	int factionId;
+	int factionId2;
+	int factionId3;
+	struct capabilityStruct* capabilities;
 };
 
 //settlement
