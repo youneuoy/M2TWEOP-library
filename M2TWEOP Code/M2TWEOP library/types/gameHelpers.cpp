@@ -30,6 +30,11 @@ scriptCommand::scriptCommand(const char* name) : className(name)
 
 eopLogging* eopLogging::m_Instance = new eopLogging();
 
+char* descrParser::getFileName()
+{
+	return GAME_FUNC(char*(__thiscall*)(descrParser*), getParserFileName)(this);
+}
+
 void eopLogging::createEopLoggers()
 {
 	eopLog = techFuncs::createGameClass<boostLogger>();
@@ -725,6 +730,12 @@ namespace gameHelpers
 		const DWORD retAdr = dataOffsets::offsets.maxBgSize2 + 1;
 		MemWork::WriteData(&size, cmpAdr, 1);
 		MemWork::WriteData(&size, retAdr, 1);
+	}
+
+	void fixReligionTrigger()
+	{
+		int8_t fixValue = -3;
+		MemWork::WriteData(&fixValue, dataOffsets::offsets.religionTriggerBug, 1);
 	}
 
 	gameDataAllStruct* getGameDataAll()

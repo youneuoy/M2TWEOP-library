@@ -3447,15 +3447,17 @@ void aiLongTermGoalDirector::setNavalTarget()
 
 int aiLongTermGoalDirector::getNavalTargetScore(const seaConnectedRegion* seaRegion, int fromRegionId)
 {
-	constexpr  float baseMinFloat = 30.0f;
+	constexpr  float baseMinFloat = 40.0f;
 	constexpr  int baseMapSize = 295 * 189;
 	
 	const auto sMap = stratMapHelpers::getStratMap();
 	const int targetRegionId = seaRegion->regionID;
 	const auto targetRegion = &sMap->regions[targetRegionId];
+	const auto sett = targetRegion->getTargetSettForFaction(this->faction);
 	if (const auto aiFactionId = this->faction->factionID;
 		!targetRegion->landingPointsCount
-		|| !targetRegion->getTargetSettForFaction(this->faction)
+		|| !sett
+		|| sett->siegeNum > 0
 		|| isTrustedAlly(targetRegion->factionOwner->factionID)
 		|| targetRegion->hasFaction(aiFactionId)
 		|| targetRegion->neighboursFaction(aiFactionId)
@@ -3468,8 +3470,8 @@ int aiLongTermGoalDirector::getNavalTargetScore(const seaConnectedRegion* seaReg
 	int score = static_cast<int>(seaRegion->moveCostBestLandTile - (baseMinFloat * mapSizeModifier));
 	if (score > 0)
 	{
-		constexpr  int baseScore = 260;
-		if (constexpr  int baseMaxRange = 240; score > baseMaxRange * mapSizeModifier)
+		constexpr  int baseScore = 280;
+		if (constexpr  int baseMaxRange = 260; score > baseMaxRange * mapSizeModifier)
 			return -1;
 		score = 5 * ((baseScore * mapSizeModifier) - score);
 	}
@@ -3485,7 +3487,6 @@ int aiLongTermGoalDirector::getNavalTargetScore(const seaConnectedRegion* seaReg
 		score += 300;
 	score += GAME_FUNC(int(__cdecl*)(int), getRegionIsolationScore)(targetRegionId);
 	score += targetRegion->getResourcesValue();
-	const auto sett = targetRegion->getTargetSettForFaction(this->faction);
 	int settScore = sett->getSettlementValue();
 	settScore += sett->stats.settlementStats.TotalIncomeWithoutAdmin / 10;
 	const auto invadePriority = campaignAi::getLtgdConfig()->getPriorityMod(this->faction, sett->faction);
@@ -3705,8 +3706,10 @@ void aiPersonalityValues::initValues()
 {
 	clearBuildingBias();
 	clearRecruitmentBias();
-	int boost = (3 - this->aiFaction->ltgd->longTermPolicy) * 25;
-	const int troopBoost = (3 - this->aiFaction->ltgd->longTermTroopStatus) * 25;
+	constexpr int policyLevels[4] = { 32, 16, 8, 0 };
+	constexpr int troopStatus[4] = { 64, 32, 16, 0 };
+	int boost = policyLevels[this->aiFaction->ltgd->longTermPolicy];
+	const int troopBoost = troopStatus[this->aiFaction->ltgd->longTermTroopStatus];
 	if (boost)
 	{
 		incConstructionValueEnum(buildingCapabilities::gate_strength, boost);

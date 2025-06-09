@@ -699,6 +699,24 @@ void managerF::execPatches()
 	toGetTrueBuildingCapabilities->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onCheckMountedEngineValid patch" << '\n';
+	onCheckMountedEngineValid* toCheckMountedEngineValid = new onCheckMountedEngineValid(mem, (LPVOID)patchesForGame::onGetMountedEngine, globals::dataS.gameVersion);
+	toCheckMountedEngineValid->SetNewCode();
+	toCheckMountedEngineValid->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onGetMountedEngine patch" << '\n';
+	onGetMountedEngine* toGetMountedEngine = new onGetMountedEngine(mem, (LPVOID)patchesForGame::onGetMountedEngine, globals::dataS.gameVersion);
+	toGetMountedEngine->SetNewCode();
+	toGetMountedEngine->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onParseMountedEngines patch" << '\n';
+	onParseMountedEngines* toParseMountedEngines = new onParseMountedEngines(mem, (LPVOID)patchesForGame::onParseMountedEngines, globals::dataS.gameVersion);
+	toParseMountedEngines->SetNewCode();
+	toParseMountedEngines->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onDecideNeighbours patch" << '\n';
 	onDecideNeighbours* toDecideNeighbours = new onDecideNeighbours(mem, (LPVOID)patchesForGame::onDecideNeighbours, globals::dataS.gameVersion);
 	toDecideNeighbours->SetNewCode();

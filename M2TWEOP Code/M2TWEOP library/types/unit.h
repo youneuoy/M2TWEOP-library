@@ -4,6 +4,8 @@
 #include "realGameTypes.h"
 #include "lua/sol.hpp"
 
+struct descrParser;
+
 enum unitBattleProperties :int
 	{
 		guardMode = 1,
@@ -126,14 +128,23 @@ public:
 	char pad_007C[4]; //0x007C
 }; //Size: 0x0080
 
+struct vector3
+{
+	float x;
+	float y;
+	float z;
+};
+
 struct descrMountEntry
 {
 public:
 	char *name; //0x0000
-	char pad_0004[4]; //0x0004
+	int nameHash; //0x0004
 	int32_t mountClass; //0x0008
 	char *modelName; //0x000C
-	char pad_0010[12]; //0x0010
+	int modelNameHash;
+	void* model;
+	int modelIndex;
 	float radius; //0x001C
 	float xRadius; //0x0020
 	float yRadius; //0x0024
@@ -148,17 +159,19 @@ public:
 	float elephantTuskZ; //0x0048
 	float elephantTuskRadius; //0x004C
 	int32_t elephantNumberOfRiders; //0x0050
-	float elephantRiderOffset1X; //0x0054
-	float elephantRiderOffset1Y; //0x0058
-	float elephantRiderOffset1Z; //0x005C
-	char pad_0060[168]; //0x0060
+	vector3 elephantOffsets[15];
 	float rootNodeHeight; //0x0108
 	float riderOffSetX; //0x010C
 	float riderOffSetY; //0x0110
 	float riderOffsetZ; //0x0114
-	char pad_0118[8]; //0x0118
-	char *waterTrailEffect; //0x0120
-	char pad_0124[20]; //0x0124
+	int tabShapeHandle;
+	basicStringGame waterTrailEffectName;
+	vector3* getElephantRiderOffset(const int index)
+	{
+		if (index < 0 || index >= elephantNumberOfRiders)
+			return nullptr;
+		return &elephantOffsets[index];
+	}
 }; //Size: 0x0138
 
 struct groupLabel
@@ -488,7 +501,58 @@ public:
 		weapon = newWeapon;
 	}
 };
+struct artilleryEntry
+{
+	float missileX;
+	float missileY;
+	float missileZ;
+	bool commence;
+	char normalShots;
+	char specialShots;
+	char multiShotDelay;
+	int shot_pfx_front;
+	char gap14[24];
+	int shot_pfx_back;
+	char gap30[24];
+	int shot_sfx;
+	char gap4C[28];
+	void *field_68;
+	int field_6C;
+	char gap70[4];
+	void *field_74;
+	int field_78;
+	char gap7C[4];
+	void *field_80;
+	int field_84;
+	char gap88[4];
+	void *field_8C;
+	int field_90;
+};
 
+struct engineRecordBase
+{
+	int vtable;
+	char* name;
+	int nameHash;
+	uint32_t culturesBitfield;
+	int RefPointsAlloc;
+	int RefPoints;
+	int RefPointsEnd;
+	int RefPointsSize;
+	artilleryEntry artilleryEntry;
+	int engineType;
+	int engineVariant;
+	int points;
+	int pointsStart;
+	int pointsEnd;
+	int pointsAllocated;
+};
+
+struct mountedEngine
+{
+	engineRecordBase record;
+	mountedEngine() = default;
+};
 	
 
 struct engineRecord {
@@ -1166,7 +1230,7 @@ struct eduEntry {
 	modelDbEntry *animalBmdbEntry;
 	statPri animalStats; 
 	statArmour statArmourAnimal;
-	void* mountedEngine;
+	mountedEngine* mountedEngine;
 	void* ship;
 	uint32_t ownership;
 	gameStdVector<uint32_t> eraOwnerShips{};
@@ -2036,6 +2100,61 @@ struct unitDb { /* structure with all edu entries */
 	UINT32 qq;
 	struct eduEntry unitEntries[500];
 	UINT32 numberOfEntries;
+};
+
+struct indexLookUp
+{
+	const char *name;
+	int index;
+};
+
+struct mountedEngineDb
+{
+	DWORD vtable;
+	mountedEngine mountedEngines[4];
+	int mountedEngineNum;
+	int mountedEngineMax;
+	indexLookUp *lookups;
+	char gap33C[12];
+	char field_34C;
+	int field_350;
+	int field_354;
+	int field_358;
+	int field_35C;
+	int field_360;
+	int field_364;
+	int field_368;
+	int field_36C;
+	int field_370;
+	void *field_374;
+	bool parse(descrParser* parser);
+};
+
+
+struct eopMountedEngineDb
+{
+public:
+	void addMountedEngine(const std::string& name, mountedEngine* engine)
+	{
+		m_Engines[name] = std::unique_ptr<mountedEngine>(engine);
+	}
+	mountedEngine* getMountedEngine(const std::string& name)
+	{
+		if (const auto it = m_Engines.find(name); it != m_Engines.end())
+		{
+			return it->second.get();
+		}
+		return nullptr;
+	}
+	static eopMountedEngineDb* get() {return m_MountedEngineDb.get(); }
+	int getMountedEngineNum() const
+	{
+		return static_cast<int>(m_Engines.size());
+	}
+
+private:
+	std::unordered_map<std::string, std::unique_ptr<mountedEngine>> m_Engines;
+	static std::unique_ptr<eopMountedEngineDb> m_MountedEngineDb;
 };
 
 namespace unitHelpers

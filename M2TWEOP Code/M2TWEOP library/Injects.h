@@ -2297,6 +2297,42 @@ private:
 	LPVOID funcAddress;
 };
 
+class onCheckMountedEngineValid
+	:public AATemplate
+{
+public:
+	onCheckMountedEngineValid(MemWork* mem, LPVOID addr, int ver);
+	~onCheckMountedEngineValid() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetMountedEngine
+	:public AATemplate
+{
+public:
+	onGetMountedEngine(MemWork* mem, LPVOID addr, int ver);
+	~onGetMountedEngine() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onParseMountedEngines
+	:public AATemplate
+{
+public:
+	onParseMountedEngines(MemWork* mem, LPVOID addr, int ver);
+	~onParseMountedEngines() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onCreateMarriageOption2
 	:public AATemplate
 {

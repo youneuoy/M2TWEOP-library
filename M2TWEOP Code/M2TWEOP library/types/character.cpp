@@ -162,7 +162,7 @@ namespace characterHelpers
 			while (checkCount < checkCountMax)
 			{
 				GAME_FUNC(int(__cdecl*)(int*, int, bool, int*, int*), getRandomNameFunc)
-				(&campaign->lastRandomSeed, nameFaction, true, &firstNameIndex, &secondNameIndex);
+				(&campaign->lastRandomSeed, nameFaction, typeId != characterTypeStrat::princess, &firstNameIndex, &secondNameIndex);
 				bool research = false;
 				for(int i = 0; i < fac->characterRecordNum; i++)
 				{

@@ -362,6 +362,7 @@ public:
 	static bool eopHandleUnitCards;
 	static bool enableFamilyEventsForTeutonic;
 	static bool useEopFrontiers;
+	static bool fixHeroAbilityKillChance;
 	static uint8_t khakiTextRed;
 	static uint8_t khakiTextGreen;
 	static uint8_t khakiTextBlue;
@@ -402,6 +403,35 @@ struct boostLogger
 	boostSharedPtr impl;
 	bool destroyed;
 	char pad[0x3];
+};
+
+struct loggerAndLevel
+{
+	boostLogger* logger;
+	int level;
+	loggerAndLevel(boostLogger* logger, const int level)
+		: logger(logger), level(level) {}
+};
+
+struct enabledLogger
+{
+	std::ostringstream* stream;
+	boostLogger* logger;
+	int level;
+};
+
+struct descrParser
+{
+	char *buffer;
+	int size;
+	char *end;
+	UNICODE_STRING **filename;
+	char *walker;
+	char *lineStart;
+	int lineNumber;
+	bool ownBuffer;
+	char pad[3];
+	char* getFileName();
 };
 
 class eopLogging
@@ -480,6 +510,7 @@ namespace gameHelpers
 	void setAncLimit(uint8_t limit);
 	void setMaxUnitSize(signed short min, signed short max);
 	void setMaxBgSize(unsigned char size);
+	void fixReligionTrigger();
 	void unlockConsoleCommands();
 	void toggleUnitHighlight();
 	void setReligionsLimit(unsigned char limit);

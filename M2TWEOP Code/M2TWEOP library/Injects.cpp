@@ -6222,6 +6222,89 @@ void onGetTrueBuildingCapabilities::SetNewCode()
 	m_cheatBytes = static_cast<unsigned char*>(a->make());
 	delete a;
 }
+onCheckMountedEngineValid::onCheckMountedEngineValid(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x8ED625;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x8ECBA5;
+}
+
+void onCheckMountedEngineValid::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->pop(ecx);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+onParseMountedEngines::onParseMountedEngines(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x8CF233;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x8CE813;
+}
+
+void onParseMountedEngines::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ebp);
+	a->push(esi);
+	a->push(edi);
+	a->mov(edx, ebx);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	if (m_adress == 0x8CF233)
+		a->mov(esi, 0x8CF2D6);
+	else
+		a->mov(esi, 0x8CE8B6);
+	a->jmp(esi);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+onGetMountedEngine::onGetMountedEngine(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x8ED561;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x8ECAE1;
+}
+
+void onGetMountedEngine::SetNewCode()
+{
+	const auto a = new Assembler();
+	const Label error = a->newLabel();
+	a->pop(ecx);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	a->test(eax, eax);
+	a->jz(error);
+	a->pop(edi);
+	if (m_adress == 0x8ED561)
+		a->mov(esi, 0x8ED57B);
+	else
+		a->mov(esi, 0x8ECAFB);
+	a->jmp(esi);
+	a->bind(error);
+	if (m_adress == 0x8ED561)
+		a->mov(eax, 0x8ED58D);
+	else
+		a->mov(eax, 0x8ECB0D);
+	a->jmp(eax);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
 
 onCreateMarriageOption2::onCreateMarriageOption2(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)

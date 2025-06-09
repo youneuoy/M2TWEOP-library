@@ -29,7 +29,7 @@ std::shared_ptr<eopSettlementDataDb> eopSettlementDataDb::instance = std::make_s
 
 void aiProductionController::setBuildPoliciesAndTaxLevel(const int policy, const int recruitPolicy)
 {
-	if (this == nullptr)
+	if (this == nullptr)  // NOLINT(clang-diagnostic-tautological-undefined-compare)
 		return;
 	if (this->autoManagePolicy != settlementPolicy::none)
 		--*(&this->aiFaction->aiProductionControllers->balancedPolicyNum + policy);

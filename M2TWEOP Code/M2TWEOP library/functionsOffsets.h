@@ -352,6 +352,7 @@ public:
 		DWORD attachResourceSett = NULL;
 		DWORD updateFowTableObject = NULL;
 		DWORD updateFowTable = NULL;
+		DWORD ParseDescrMountedEngineEntry = NULL;
 		DWORD updateTerrain = NULL;
 		DWORD updateRadar = NULL;
 		DWORD canMerge = NULL;
@@ -359,6 +360,12 @@ public:
 		DWORD generalLeaveCrusade = NULL;
 		DWORD incEventCounter = NULL;
 		DWORD createEventAcceptObj = NULL;
+		DWORD formatStringAdd = NULL;
+		DWORD getParserFileName = NULL;
+		DWORD getDataInvalidLogger = NULL;
+		DWORD createEnabledLogger = NULL;
+		DWORD destroyLogObject = NULL;
+		DWORD createMountedEngineRecord = NULL;
 		DWORD createAiProductionController = NULL;
 	}offsets;
 

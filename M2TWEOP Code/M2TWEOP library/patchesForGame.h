@@ -3,6 +3,7 @@
 #include "graphicsD3D.h"
 #include "cultures.h"
 #include "faction.h"
+#include "gameHelpers.h"
 #include "unit.h"
 
 struct aiPersonalityValues;
@@ -71,6 +72,8 @@ public:
 	static int __cdecl onGetWatchTowerRange();
 	static void __fastcall onSetSettlementModel(settlementStruct* settlement);
 	static void __fastcall onGeneralAssaultAction(generalAssault* assault);
+	static mountedEngine* __fastcall onGetMountedEngine(const stringWithHash* name);
+	static bool __fastcall onParseMountedEngines(mountedEngineDb* db, descrParser* parser);
 	static int __fastcall onAddSettlementToDiplomacyScroll(const settlementStruct* settlement);
 	static settlementStruct* __fastcall onDecideMissionTarget(settlementStruct* settlement, factionStruct* faction);
 	static int __fastcall onCanWithdrawPreBattle(const settlementStruct* settlement);

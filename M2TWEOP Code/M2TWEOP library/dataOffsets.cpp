@@ -106,6 +106,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.descrCharacter = 0x18AA8F8;
 		offsets.currentCharacterActionType = 0x16F0E58;
 		offsets.aStarTilesGlobal = 0x16F0E60;
+		offsets.religionTriggerBug = 0x892F7C;
 
 		
 		offsets.fortVtbl = 0x13362F4;
@@ -220,6 +221,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.sineValues = 0x2C9D800;
 		offsets.currentCharacterActionType = 0x16A7CC0;
 		offsets.aStarTilesGlobal = 0x16A7CC8;
+		offsets.religionTriggerBug = 0x892FBC;
 
 		offsets.audioEnable = reinterpret_cast<bool*>(0x01639f1d);
 		offsets.audioMaster_vol = reinterpret_cast<int*>(0x01639f60);

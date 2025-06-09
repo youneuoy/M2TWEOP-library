@@ -430,6 +430,7 @@
 "unitGroup",
 "projectileStruct",
 "mountStruct",
+"vector3",
 "eduEntry",
 "attackStats",
 "defenseStats",

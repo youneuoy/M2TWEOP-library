@@ -893,6 +893,18 @@ void patchesForGame::onGeneralAssaultAction(generalAssault* assault)
 		gameHelpers::logStringGame("GeneralAssaultAction: No army in settlement: " + std::string(assault->settlement->name));
 }
 
+mountedEngine* patchesForGame::onGetMountedEngine(const stringWithHash* name)
+{
+	if (!name || !name->name)
+		return nullptr;
+	return eopMountedEngineDb::get()->getMountedEngine(std::string(name->name));
+}
+
+bool patchesForGame::onParseMountedEngines(mountedEngineDb* db, descrParser* parser)
+{
+	return db->parse(parser);
+}
+
 int patchesForGame::onAddSettlementToDiplomacyScroll(const settlementStruct* settlement)
 {
 	if (settlement->isMinorSettlement)
@@ -1826,6 +1838,7 @@ void __stdcall patchesForGame::onNewGameStart()
 //#define TESTPATCHES
 void __stdcall patchesForGame::onEduParsed()
 {
+	gameHelpers::fixReligionTrigger();
 	*reinterpret_cast<bool*>(dataOffsets::offsets.bugReport) = true;
 	unitHelpers::initBaseUnitsLookup();
 	gameEvents::onReadGameDbsAtStart();

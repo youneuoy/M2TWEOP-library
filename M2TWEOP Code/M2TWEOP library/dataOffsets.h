@@ -30,6 +30,7 @@ public:
 		DWORD equipmentCosts = NULL;
 		DWORD saveGameHandler = NULL;
 		DWORD ancLimit = NULL;
+		DWORD religionTriggerBug = NULL;
 		DWORD maxUnitSize = NULL;
 		DWORD maxBgSize1 = NULL;
 		DWORD maxBgSize2 = NULL;

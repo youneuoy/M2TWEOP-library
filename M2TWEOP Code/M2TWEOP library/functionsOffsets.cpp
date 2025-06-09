@@ -356,6 +356,13 @@ void codes::initCodes(int gameVer)
 		offsets.createAiProductionController = 0x52E020;
 		offsets.prodSetPriorities = 0x52E3B0;
 		offsets.addToProductionControllers = 0x5315F0;
+		offsets.ParseDescrMountedEngineEntry = 0x8CD4E0;
+		offsets.formatStringAdd = 0xD386E0;
+		offsets.getParserFileName = 0xD4D270;
+		offsets.getDataInvalidLogger = 0xD388C0;
+		offsets.createEnabledLogger = 0x403D60;
+		offsets.destroyLogObject = 0x403DF0;
+		offsets.createMountedEngineRecord = 0x8CE1B0;
 	}
 
 
@@ -715,5 +722,12 @@ void codes::initCodes(int gameVer)
 		offsets.createAiProductionController = 0x52E620;
 		offsets.prodSetPriorities = 0x0052E9B0;
 		offsets.addToProductionControllers = 0x531C00;
+		offsets.ParseDescrMountedEngineEntry = 0x8CDEF0;
+		offsets.formatStringAdd = 0xD32A60;
+		offsets.getParserFileName = 0xD475D0;
+		offsets.getDataInvalidLogger = 0xD32C40;
+		offsets.createEnabledLogger = 0x403E00;
+		offsets.destroyLogObject = 0x403E90;
+		offsets.createMountedEngineRecord = 0x8CEBC0;
 	}
 }

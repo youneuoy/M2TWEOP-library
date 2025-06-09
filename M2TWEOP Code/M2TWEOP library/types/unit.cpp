@@ -19,6 +19,7 @@
 #include "gameHelpers.h"
 #include "strategyMap.h"
 
+std::unique_ptr<eopMountedEngineDb> eopMountedEngineDb::m_MountedEngineDb = std::make_unique<eopMountedEngineDb>();
 
 std::unordered_map<int, const char*> actionTypes = {
 	{0,"idling"},
@@ -132,6 +133,43 @@ void unit::setWeapon(uint8_t wpn)
 {
 	const auto weapon = wpn;
 	GAME_FUNC(void(__thiscall*)(unit*, uint8_t), setUnitWeaponFunc)(this, weapon);
+}
+
+bool mountedEngineDb::parse(descrParser* parser)
+{
+	while (parser->walker < parser->end)
+	{
+		mountedEngine* newEngine;
+		if (this->mountedEngineNum < 4)
+		{
+			newEngine = &this->mountedEngines[this->mountedEngineNum];
+			this->mountedEngineNum++;
+		}
+		else
+		{
+			newEngine = techFuncs::createGameClass<mountedEngine>();
+			GAME_FUNC(void(__thiscall*)(mountedEngine*), createMountedEngineRecord)(newEngine);
+		}
+		if (!GAME_FUNC(bool(__thiscall*)(mountedEngine*, descrParser*), ParseDescrMountedEngineEntry)(newEngine, parser))
+		{
+			const char* formatString = GAME_FUNC(char*(__cdecl*)(char*), formatStringAdd)(nullptr);
+			char* fileName = parser->getFileName();
+			formatString = GAME_FUNC(char*(__cdecl*)(const char*, char*), formatStringAdd)("DATABASE_TABLE error found : error reading record from file %s.\n", fileName);
+			loggerAndLevel key(GAME_FUNC(boostLogger*(__cdecl*)(), getDataInvalidLogger)(), 1600);
+			enabledLogger keep{};
+			GAME_FUNC(void(__cdecl*)(enabledLogger*, loggerAndLevel*), createEnabledLogger)(&keep, &key);
+			if (keep.stream)
+				*keep.stream << formatString;
+			GAME_FUNC(void(__thiscall*)(enabledLogger*), destroyLogObject)(&keep);
+			return false;
+		}
+		
+		if (eopMountedEngineDb::get()->getMountedEngine(std::string(newEngine->record.name)))
+			gameHelpers::logStringGame("mountedEngineDb::parse: Added duplicate engine, overwriting");
+		
+		eopMountedEngineDb::get()->addMountedEngine(std::string(newEngine->record.name), newEngine);
+	}
+	return true;
 }
 
 namespace unitActions
@@ -1503,6 +1541,7 @@ void luaPlugin::initUnits()
 		sol::usertype<statArmour> defenseStats;
 		sol::usertype<unitStats> unitStats;
 		sol::usertype<unitAiGroupData> unitAiGroupData;
+		sol::usertype<vector3> vector3;
 	}types;
 	
 	///Unit
@@ -2367,22 +2406,70 @@ void luaPlugin::initUnits()
 	/***
 
 	@tfield string name
+	@tfield string modelName
 	@tfield int mountClass
 	@tfield float radius
+	@tfield float xRadius
+	@tfield float yRadius
+	@tfield float yOffset
+	@tfield float height
 	@tfield float mass
 	@tfield float elephantDeadRadius
 	@tfield float elephantTuskRadius
+	@tfield float elephantTuskZ
+	@tfield float elephantRootNodeHeight
+	@tfield int elephantNumberOfRiders
+	@tfield float riderOffSetX
+	@tfield float riderOffSetY
+	@tfield float riderOffsetZ
+	@tfield float rootNodeHeight
+	@tfield getElephantRiderOffset getElephantRiderOffset
 
 	@table mountStruct
 	*/
 	types.mountStruct = luaState.new_usertype<descrMountEntry>("mountStruct");
 	types.mountStruct.set("name", &descrMountEntry::name);
+	types.mountStruct.set("modelName", &descrMountEntry::modelName);
 	types.mountStruct.set("mountClass", &descrMountEntry::mountClass);
 	types.mountStruct.set("radius", &descrMountEntry::radius);
+	types.mountStruct.set("xRadius", &descrMountEntry::xRadius);
+	types.mountStruct.set("yRadius", &descrMountEntry::yRadius);
+	types.mountStruct.set("yOffset", &descrMountEntry::yOffset);
+	types.mountStruct.set("height", &descrMountEntry::height);
 	types.mountStruct.set("mass", &descrMountEntry::radius);
 	types.mountStruct.set("elephantDeadRadius", &descrMountEntry::elephantDeadRadius);
 	types.mountStruct.set("elephantTuskRadius", &descrMountEntry::elephantTuskRadius);
+	types.mountStruct.set("elephantTuskZ", &descrMountEntry::elephantTuskZ);
+	types.mountStruct.set("elephantRootNodeHeight", &descrMountEntry::elephantRootNodeHeight);
+	types.mountStruct.set("elephantNumberOfRiders", &descrMountEntry::elephantNumberOfRiders);
+	types.mountStruct.set("riderOffSetX", &descrMountEntry::riderOffSetX);
+	types.mountStruct.set("riderOffSetY", &descrMountEntry::riderOffSetY);
+	types.mountStruct.set("riderOffsetZ", &descrMountEntry::riderOffsetZ);
+	types.mountStruct.set("rootNodeHeight", &descrMountEntry::rootNodeHeight);
+	
+	/***
+	Get elephant rider offset.
+	@function mountStruct:getElephantRiderOffset
+	@tparam int index
+	@treturn vector3 offsets
+	@usage
+	local offsets = mount:getElephantRiderOffset(0);
+	*/
+	types.mountStruct.set_function("getElephantRiderOffset", &descrMountEntry::getElephantRiderOffset);
+	
+	/***
 
+	@tfield float xCoord
+	@tfield float yCoord
+	@tfield float zCoord
+
+	@table vector3
+	*/
+	types.vector3 = luaState.new_usertype<vector3>("vector3");
+	types.vector3.set("xCoord", &vector3::x);
+	types.vector3.set("yCoord", &vector3::y);
+	types.vector3.set("zCoord", &vector3::z);
+	
 	///Edu Entry
 	//@section Edu Entry
 
