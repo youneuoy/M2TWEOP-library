@@ -2333,6 +2333,18 @@ private:
 	LPVOID funcAddress;
 };
 
+class onParseEdu
+	:public AATemplate
+{
+public:
+	onParseEdu(MemWork* mem, LPVOID addr, int ver);
+	~onParseEdu() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onCreateMarriageOption2
 	:public AATemplate
 {

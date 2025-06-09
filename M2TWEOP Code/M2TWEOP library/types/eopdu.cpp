@@ -54,6 +54,16 @@ eopEduEntry::eopEduEntry(const char* fileName, int newIdx)
     eopTypeName.append(std::to_string(newIdx));//added to make typename unique
 }
 
+eopEduEntry::eopEduEntry(eduEntry* entry)
+{
+    data.edu = *entry;
+    originalTypeName = data.edu.eduType;
+    isFileAdded = true;
+    eopTypeName.append(data.edu.eduType);
+    eopTypeName.append("_");
+    eopTypeName.append(std::to_string(data.edu.index));//added to make typename unique
+}
+
 struct pseudoFile {
 	char* _ptr;
 	int _cnt;
@@ -164,6 +174,22 @@ eduEntry* eopDu::addEopEduEntryFromFile(const char* fileName, int newIdx)
         return nullptr;
     }
     return getEopEduEntry(newIdx);
+}
+    
+void eopDu::addEopEduEntryFromEdu(eduEntry* entry)
+{
+	const auto sharedP = std::make_shared<eopEduEntry>(entry);
+	if (unitHelpers::getEduEntryByName(sharedP->originalTypeName.c_str()))
+	{
+		gameHelpers::logStringGame("Duplicate unit name " + sharedP->originalTypeName + " in addEopEduEntryFromFile");
+		std::string errS = "Can`t add: " + sharedP->originalTypeName + " Duplicate type name";
+		MessageBoxA(NULL, errS.c_str(), "ERROR!", NULL);
+		exit(0);
+	}
+	eopUnitDb.push_back(sharedP);
+	eopUnitLookup.insert_or_assign(eopUnitDb.back()->originalTypeName, sharedP);
+	eopUnitLookup.insert_or_assign(eopUnitDb.back()->eopTypeName, sharedP);
+	eopUnitIndexLookup.insert_or_assign(entry->index, sharedP);
 }
 
 eduEntry* eopDu::addEopEduEntry(int baseIdx, int newIdx)

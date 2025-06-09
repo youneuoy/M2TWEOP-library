@@ -6270,6 +6270,32 @@ void onParseMountedEngines::SetNewCode()
 	m_cheatBytes = static_cast<unsigned char*>(a->make());
 	delete a;
 }
+
+onParseEdu::onParseEdu(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x8F3300;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x8F2880;
+}
+
+void onParseEdu::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->mov(edx, edi);
+	a->mov(eax, reinterpret_cast<DWORD>(funcAddress));
+	a->call(eax);
+	if (m_adress == 0x8F3300)
+		a->mov(esi, 0x8F33B0);
+	else
+		a->mov(esi, 0x8F2930);
+	a->jmp(esi);
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
 onGetMountedEngine::onGetMountedEngine(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

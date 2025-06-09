@@ -135,6 +135,60 @@ void unit::setWeapon(uint8_t wpn)
 	GAME_FUNC(void(__thiscall*)(unit*, uint8_t), setUnitWeaponFunc)(this, weapon);
 }
 
+bool unitDb::parse(descrParser* parser)
+{
+	while (parser->walker < parser->end)
+	{
+		eduEntry* newEntry;
+		if (this->numberOfEntries < 500)
+		{
+			newEntry = &unitEntries[this->numberOfEntries];
+			this->numberOfEntries++;
+		}
+		else
+		{
+			newEntry = techFuncs::createGameClass<eduEntry>();
+			GAME_FUNC(void(__thiscall*)(eduEntry*), createEduEntry)(newEntry);
+		}
+		if (!GAME_FUNC(bool(__thiscall*)(eduEntry*, descrParser*), readEDUEntryFunc)(newEntry, parser))
+		{
+			const char* formatString = GAME_FUNC(char*(__cdecl*)(char*), formatStringAdd)(nullptr);
+			char* fileName = parser->getFileName();
+			formatString = GAME_FUNC(char*(__cdecl*)(const char*, char*), formatStringAdd)("DATABASE_TABLE error found : error reading record from file %s.\n", fileName);
+			loggerAndLevel key(GAME_FUNC(boostLogger*(__cdecl*)(), getDataInvalidLogger)(), 1600);
+			enabledLogger keep{};
+			GAME_FUNC(void(__cdecl*)(enabledLogger*, loggerAndLevel*), createEnabledLogger)(&keep, &key);
+			if (keep.stream)
+				*keep.stream << formatString;
+			GAME_FUNC(void(__thiscall*)(enabledLogger*), destroyLogObject)(&keep);
+			return false;
+		}
+		if (char** name = &newEntry->eduType; this->numberOfEntries <= 500)
+		{
+			if (GAME_FUNC(int(__thiscall*)(int*, char**), dbHashTableGet)(&this->maxEntryNum, name))
+			{
+				const char* formatString = GAME_FUNC(char*(__cdecl*)(char*), formatStringAdd)(nullptr);
+				char* fileName = parser->getFileName();
+				formatString = GAME_FUNC(char*(__cdecl*)(const char*, const char*, char*), formatStringAdd)("DATABASE_TABLE error found : ids must be unique, non-unique entry %s found in file %s.\n", *name, fileName);
+				loggerAndLevel key(GAME_FUNC(boostLogger*(__cdecl*)(), getDataInvalidLogger)(), 1600);
+				enabledLogger keep{};
+				GAME_FUNC(void(__cdecl*)(enabledLogger*, loggerAndLevel*), createEnabledLogger)(&keep, &key);
+				if (keep.stream)
+					*keep.stream << formatString;
+				GAME_FUNC(void(__thiscall*)(enabledLogger*), destroyLogObject)(&keep);
+				return false;
+			}
+			GAME_FUNC(void(__thiscall*)(int*, char**, unsigned long*), dbHashTableSet)(&this->maxEntryNum, name, &newEntry->index);
+		}
+		else
+		{
+			eopDu::addEopEduEntryFromEdu(newEntry);
+		}
+		
+	}
+	return true;
+}
+
 bool mountedEngineDb::parse(descrParser* parser)
 {
 	while (parser->walker < parser->end)

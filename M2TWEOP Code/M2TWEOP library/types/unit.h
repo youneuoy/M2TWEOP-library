@@ -2096,16 +2096,42 @@ public:
 	}
 };
 
-struct unitDb { /* structure with all edu entries */
-	UINT32 qq;
-	struct eduEntry unitEntries[500];
-	UINT32 numberOfEntries;
-};
-
 struct indexLookUp
 {
 	const char *name;
 	int index;
+};
+
+struct unitDb { /* structure with all edu entries */
+	UINT32 qq;
+	struct eduEntry unitEntries[500];
+	UINT32 numberOfEntries;
+    int maxEntryNum;
+	struct indexLookUp *indexLookUps;
+	char *pad_79960;
+	char *smthingCmparedForTypeLookup;
+	int32_t minusOne;
+	int8_t fieldss;
+	int arraysmething[1000];
+	int32_t smthing;
+	int32_t maxTypesAgainProb;
+	void *N000237FD;
+	char pad_7A91C[24];
+	int32_t int7a934;
+	uint32_t unitDbHash;
+	uint16_t mostExpensiveInfantry;
+	uint16_t N0002391D;
+	uint16_t mostExpensiveCavalry;
+	uint16_t N00023913;
+	uint16_t mostExpensiveSiege;
+	uint16_t N00023915;
+	uint16_t leastExpensiveInfantry;
+	uint16_t N00023917;
+	uint16_t leastExpensiveCavalry;
+	uint16_t N00023919;
+	uint16_t leastExpensiveSiege;
+	uint16_t N0002391B;
+	bool parse(descrParser* parser);
 };
 
 struct mountedEngineDb

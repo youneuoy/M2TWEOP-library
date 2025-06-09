@@ -905,6 +905,11 @@ bool patchesForGame::onParseMountedEngines(mountedEngineDb* db, descrParser* par
 	return db->parse(parser);
 }
 
+bool patchesForGame::onParseEdu(unitDb* db, descrParser* parser)
+{
+	return db->parse(parser);
+}
+
 int patchesForGame::onAddSettlementToDiplomacyScroll(const settlementStruct* settlement)
 {
 	if (settlement->isMinorSettlement)

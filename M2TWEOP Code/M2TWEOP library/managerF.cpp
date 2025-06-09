@@ -717,6 +717,12 @@ void managerF::execPatches()
 	toParseMountedEngines->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onParseEdu patch" << '\n';
+	onParseEdu* toParseEdu = new onParseEdu(mem, (LPVOID)patchesForGame::onParseEdu, globals::dataS.gameVersion);
+	toParseEdu->SetNewCode();
+	toParseEdu->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onDecideNeighbours patch" << '\n';
 	onDecideNeighbours* toDecideNeighbours = new onDecideNeighbours(mem, (LPVOID)patchesForGame::onDecideNeighbours, globals::dataS.gameVersion);
 	toDecideNeighbours->SetNewCode();

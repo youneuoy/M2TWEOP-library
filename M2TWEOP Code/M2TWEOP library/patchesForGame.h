@@ -74,6 +74,7 @@ public:
 	static void __fastcall onGeneralAssaultAction(generalAssault* assault);
 	static mountedEngine* __fastcall onGetMountedEngine(const stringWithHash* name);
 	static bool __fastcall onParseMountedEngines(mountedEngineDb* db, descrParser* parser);
+	static bool __fastcall onParseEdu(unitDb* db, descrParser* parser);
 	static int __fastcall onAddSettlementToDiplomacyScroll(const settlementStruct* settlement);
 	static settlementStruct* __fastcall onDecideMissionTarget(settlementStruct* settlement, factionStruct* faction);
 	static int __fastcall onCanWithdrawPreBattle(const settlementStruct* settlement);

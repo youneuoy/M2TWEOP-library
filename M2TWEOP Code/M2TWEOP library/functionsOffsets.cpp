@@ -363,6 +363,8 @@ void codes::initCodes(int gameVer)
 		offsets.createEnabledLogger = 0x403D60;
 		offsets.destroyLogObject = 0x403DF0;
 		offsets.createMountedEngineRecord = 0x8CE1B0;
+		offsets.dbHashTableGet = 0x437DF0;
+		offsets.dbHashTableSet = 0x437890;
 	}
 
 
@@ -729,5 +731,7 @@ void codes::initCodes(int gameVer)
 		offsets.createEnabledLogger = 0x403E00;
 		offsets.destroyLogObject = 0x403E90;
 		offsets.createMountedEngineRecord = 0x8CEBC0;
+		offsets.dbHashTableGet = 0x438130;
+		offsets.dbHashTableSet = 0x437BD0;
 	}
 }

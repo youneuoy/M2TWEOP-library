@@ -148,6 +148,8 @@ public:
 
 		DWORD readEDUEntryFunc = NULL;
 		DWORD deleteFortFuncOne = NULL;
+		DWORD dbHashTableGet = NULL;
+		DWORD dbHashTableSet = NULL;
 		DWORD deleteFortFuncTwo = NULL;
 		DWORD createFortFunc = NULL;
 		DWORD createsFort = NULL;

@@ -7,6 +7,7 @@ class eopEduEntry
 public:
     eopEduEntry(int baseIdx, int newIdx);
     eopEduEntry(const char* fileName, int newIdx);
+    explicit eopEduEntry(eduEntry* entry);
     std::string eopTypeName;
     std::string originalTypeName;
     std::string eopUnitLabel;
@@ -27,6 +28,7 @@ public:
     static std::unordered_map<std::string, std::shared_ptr<eopEduEntry>> eopUnitLookup;
     static std::unordered_map<int, std::shared_ptr<eopEduEntry>> eopUnitIndexLookup;
     static eduEntry* addEopEduEntryFromFile(const char* fileName, int newIdx);
+    static void addEopEduEntryFromEdu(eduEntry* entry);
     static eduEntry* getEopEduEntry(int idx);
     static int readEduFile(const std::string& fileName, eduEntry* entryForFilling);
     static eduEntry* addEopEduEntry(int baseIdx, int newIdx);
