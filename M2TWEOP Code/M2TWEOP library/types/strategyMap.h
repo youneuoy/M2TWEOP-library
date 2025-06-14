@@ -539,8 +539,8 @@ public:
 			return nullptr;
 		return resources[index];
 	}
-	bool hasHiddenResource(const char* name);
-	void setHiddenResource(const char* name, bool enable);
+	bool hasHiddenResource(const std::string& name);
+	void setHiddenResource(const std::string& name, bool enable);
 	bool hasHiddenResourceId(const int index)
 	{
 		if (index < 0)
@@ -559,10 +559,6 @@ public:
 			else
 				*hiddenResourcesPtr &= ~(1ULL << index);
 		}
-		if (enable)
-			eopHiddenResources::addHiddenResourceToRegion(index, regionName);
-		else
-			eopHiddenResources::removeHiddenResourceFromRegion(index, regionName);
 	}
 	int getHostileArmiesStrength(const int factionId)
 	{

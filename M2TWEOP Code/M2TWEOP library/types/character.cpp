@@ -76,7 +76,7 @@ namespace characterHelpers
 		{13,"pope"}
 	};
 	
-	std::unordered_map<const char*, int> CHARACTER_TYPES_ID = {
+	std::unordered_map<std::string, int> CHARACTER_TYPES_ID = {
 		{"spy", 0},
 		{"assassin", 1},
 		{"diplomat", 2},
@@ -137,17 +137,13 @@ namespace characterHelpers
 		character->genType = retVal;
 	}
 	
-	character* createCharacterWithoutSpawning(const char* type, factionStruct* fac, const int age, const char* name, const char* name2, const int subFaction, const char* portrait, const int x, const int y)
+	character* createCharacterWithoutSpawning(const std::string& type, factionStruct* fac, const int age, const std::string& name, const std::string& name2, const int subFaction, const std::string& portrait, const int x, const int y)
 	{
-		if (portrait != nullptr && strlen(portrait) == 0)
-			portrait = nullptr;
-		if (name != nullptr && strlen(name) == 0)
-			name = nullptr;
-		if (name2 != nullptr && strlen(name2) == 0)
-			name2 = nullptr;
-
-		if (!name || strcmp(name, "random_name") == 0)
+		std::string firstName = name;
+		std::string lastName = name2;
+		if (name == "random_name" || name.empty())
 		{
+			gameHelpers::logStringGame("Getting random name for character type: " + std::string(type));
 			const int checkCountMax = fac->characterRecordNum * 10;
 			int checkCount = 0;
 			int firstNameIndex = 0;
@@ -156,13 +152,14 @@ namespace characterHelpers
 			int typeId = 7;
 			if (CHARACTER_TYPES_ID.find(type) != CHARACTER_TYPES_ID.end())
 				typeId = CHARACTER_TYPES_ID[type];
+			const bool isMale = typeId != characterTypeStrat::princess;
 			int nameFaction = fac->agentNameFactionId[typeId];
 			if (subFaction != 31)
 				nameFaction = subFaction;
 			while (checkCount < checkCountMax)
 			{
 				GAME_FUNC(int(__cdecl*)(int*, int, bool, int*, int*), getRandomNameFunc)
-				(&campaign->lastRandomSeed, nameFaction, typeId != characterTypeStrat::princess, &firstNameIndex, &secondNameIndex);
+				(&campaign->lastRandomSeed, nameFaction, isMale, &firstNameIndex, &secondNameIndex);
 				bool research = false;
 				for(int i = 0; i < fac->characterRecordNum; i++)
 				{
@@ -179,13 +176,13 @@ namespace characterHelpers
 				break;
 			}
 
-			name = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(typeId == characterTypeStrat::princess ? 1 : 0 , nameFaction, firstNameIndex);
-			name2 = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(2, nameFaction, secondNameIndex);
+			firstName = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(isMale ? 0 : 1 , nameFaction, firstNameIndex);
+			lastName = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(2, nameFaction, secondNameIndex);
 		}
 		
-		const auto typeHashed = gameStringHelpers::createHashedStringGame(type);
+		const auto typeHashed = gameStringHelpers::createHashedStringGame(type.c_str());
 		character* gen = GAME_FUNC(character*(__cdecl*)(stringWithHash*, factionStruct*, int, const char*, const char*, int, const char*, int, int),
-			createCharacterFunc)(typeHashed, fac, age, name, name2, subFaction, portrait, x, y);
+			createCharacterFunc)(typeHashed, fac, age, firstName.c_str(), lastName.empty() ? nullptr : lastName.c_str(), subFaction, portrait.empty() ? nullptr : portrait.c_str(), x, y);
 		
 		coordPair coords{x, y};
 		GAME_FUNC(void(__thiscall*)(stratPathFinding*, void*, coordPair*), spawnCreatedObject)(campaignHelpers::getStratPathFinding(), gen, &coords);
@@ -193,7 +190,7 @@ namespace characterHelpers
 		return gen;
 	}
 	
-	character* createCharacter(const char* type, factionStruct* fac, const int age, const char* name, const char* name2, const int subFaction, const char* portrait, const int x, const int y)
+	character* createCharacter(const std::string& type, factionStruct* fac, const int age, const std::string& name, const std::string& name2, const int subFaction, const std::string& portrait, const int x, const int y)
 	{
 		character* gen = createCharacterWithoutSpawning(type, fac, age, name, name2, subFaction, portrait, x, y);
 		if (!gen)

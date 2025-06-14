@@ -2345,6 +2345,54 @@ private:
 	LPVOID funcAddress;
 };
 
+class onApplyKillChance
+	:public AATemplate
+{
+public:
+	onApplyKillChance(MemWork* mem, LPVOID addr, int ver);
+	~onApplyKillChance() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onRemoveKillChance
+	:public AATemplate
+{
+public:
+	onRemoveKillChance(MemWork* mem, LPVOID addr, int ver);
+	~onRemoveKillChance() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onInitUnitBattle
+	:public AATemplate
+{
+public:
+	onInitUnitBattle(MemWork* mem, LPVOID addr, int ver);
+	~onInitUnitBattle() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCreateUnitKillChance
+	:public AATemplate
+{
+public:
+	onCreateUnitKillChance(MemWork* mem, LPVOID addr, int ver);
+	~onCreateUnitKillChance() = default;
+	
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onCreateMarriageOption2
 	:public AATemplate
 {

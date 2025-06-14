@@ -6296,6 +6296,109 @@ void onParseEdu::SetNewCode()
 	m_cheatBytes = static_cast<unsigned char*>(a->make());
 	delete a;
 }
+
+onApplyKillChance::onApplyKillChance(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x008249A0;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x824130;
+}
+
+void onApplyKillChance::SetNewCode()
+{
+	const auto a = new Assembler();
+	const Label notZero = a->newLabel();
+	a->mov(edx, dword_ptr(ebx, 0x10)); //heroability kill chance
+	a->test(edx, edx); //test if killchance is 0
+	a->jnz(notZero);
+	a->mov(edx, 0x3F800000);
+	a->movd(xmm0, edx); // Move 1 into xmm0
+	a->bind(notZero);
+	a->mulss(xmm0, dword_ptr(eax, 0x2d8));
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onInitUnitBattle::onInitUnitBattle(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x752B02;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x752372;
+}
+
+void onInitUnitBattle::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(ecx);
+	a->mov(ecx, 0x3F800000);
+	a->movd(xmm0, ecx); // Move 1 into xmm0
+	a->pop(ecx);
+	a->movss(dword_ptr(esi, 0x2d8), xmm0); //move result into unit
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onCreateUnitKillChance::onCreateUnitKillChance(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x74C1D8;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x74BA58;
+}
+
+void onCreateUnitKillChance::SetNewCode()
+{
+	const auto a = new Assembler();
+	a->push(edx);
+	a->mov(edx, 0x3F800000);
+	a->movd(xmm0, edx); // Move 1 into xmm0
+	a->pop(edx);
+	a->movss(dword_ptr(esi, 0x2d8), xmm0); //move result into unit
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
+
+onRemoveKillChance::onRemoveKillChance(MemWork* mem, LPVOID addr, int ver)
+	:AATemplate(mem), funcAddress(addr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00824A6B;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x8241FB;
+}
+
+void onRemoveKillChance::SetNewCode()
+{
+	const auto a = new Assembler();
+	const Label isZero = a->newLabel();
+	a->mov(edx, 0x3F800000);
+	a->push(eax);
+	a->movd(xmm0, edx); // Move 1 into xmm0
+	a->mov(eax, dword_ptr(ebx, 0x10)); //heroability kill chance
+	a->test(eax, eax); //test if killchance is 0
+	a->pop(eax);
+	a->jz(isZero); //if 0 then just jump to setting xmm0 which contains 1 into unit kill chance
+	a->movss(xmm1, dword_ptr(ebx, 0x10)); //move heroability chance into float register
+	a->divss(xmm0, xmm1); //divide 1 by hero ability
+	a->mulss(xmm0, dword_ptr(eax, 0x2d8)); //multiply with unit kill chance
+	a->bind(isZero);
+	a->movss(dword_ptr(eax, 0x2d8), xmm0); //move result into unit
+	a->ret();
+	m_cheatBytes = static_cast<unsigned char*>(a->make());
+	delete a;
+}
 onGetMountedEngine::onGetMountedEngine(MemWork* mem, LPVOID addr, int ver)
 	:AATemplate(mem), funcAddress(addr)
 {

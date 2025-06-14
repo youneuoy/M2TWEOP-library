@@ -731,8 +731,6 @@ namespace armyHelpers
 	{
 		if (!faction)
 			return nullptr;
-		if (portrait != nullptr && strlen(portrait) == 0)
-			portrait = nullptr;
 		if (label != nullptr && strlen(label) == 0)
 			label = nullptr;
 		stratMap* map = stratMapHelpers::getStratMap();

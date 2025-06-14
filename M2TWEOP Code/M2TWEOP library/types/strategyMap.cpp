@@ -186,15 +186,15 @@ void regionStruct::changeRebelsName(const char* newName)
 	eopSettlementDataDb::get()->getSettlementData(regionID, 0)->regionRebelsName = newName;
 }
 
-bool regionStruct::hasHiddenResource(const char* newName)
+bool regionStruct::hasHiddenResource(const std::string& name)
 {
-	const auto res =  eopHiddenResources::getHiddenResourceIndex(newName);
+	const auto res =  eopHiddenResources::getHiddenResourceIndex(name);
 	if (res == -1)
 		return false;
 	return eopHiddenResources::hasHiddenResource(regionID, res);
 }
 
-void regionStruct::setHiddenResource(const char* name, const bool enable)
+void regionStruct::setHiddenResource(const std::string& name, const bool enable)
 {
 	const auto res =  eopHiddenResources::getHiddenResourceIndex(name);
 	if (res == -1)
@@ -203,6 +203,10 @@ void regionStruct::setHiddenResource(const char* name, const bool enable)
 		return;
 	}
 	setHiddenResourceId(res, enable);
+	if (enable)
+		eopHiddenResources::addHiddenResourceToRegion(regionID, name);
+	else
+		eopHiddenResources::removeHiddenResourceFromRegion(regionID, name);
 }
 
 settlementStruct* regionStruct::getTargetSettForFaction(factionStruct* faction)

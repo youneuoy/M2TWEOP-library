@@ -723,6 +723,30 @@ void managerF::execPatches()
 	toParseEdu->Enable();
 	f1 << "Done" << '\n';
 	
+	f1 << "Start applying onApplyKillChance patch" << '\n';
+	onApplyKillChance* toApplyKillChance = new onApplyKillChance(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toApplyKillChance->SetNewCode();
+	toApplyKillChance->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onRemoveKillChance patch" << '\n';
+	onRemoveKillChance* toRemoveKillChance = new onRemoveKillChance(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toRemoveKillChance->SetNewCode();
+	toRemoveKillChance->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onInitUnitBattle patch" << '\n';
+	onInitUnitBattle* toInitUnitBattle = new onInitUnitBattle(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toInitUnitBattle->SetNewCode();
+	toInitUnitBattle->Enable();
+	f1 << "Done" << '\n';
+	
+	f1 << "Start applying onCreateUnitKillChance patch" << '\n';
+	onCreateUnitKillChance* toCreateUnitKillChance = new onCreateUnitKillChance(mem, (LPVOID)noFunc, globals::dataS.gameVersion);
+	toCreateUnitKillChance->SetNewCode();
+	toCreateUnitKillChance->Enable();
+	f1 << "Done" << '\n';
+	
 	f1 << "Start applying onDecideNeighbours patch" << '\n';
 	onDecideNeighbours* toDecideNeighbours = new onDecideNeighbours(mem, (LPVOID)patchesForGame::onDecideNeighbours, globals::dataS.gameVersion);
 	toDecideNeighbours->SetNewCode();

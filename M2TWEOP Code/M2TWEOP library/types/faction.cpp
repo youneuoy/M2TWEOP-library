@@ -521,7 +521,7 @@ namespace factionHelpers
 		const int y
 		)
 	{
-		return characterHelpers::createCharacter(type.c_str(), fac, age, name.c_str(), lastName.c_str(), subFaction, portrait.c_str(), x, y);
+		return characterHelpers::createCharacter(type, fac, age, name, lastName, subFaction, portrait, x, y);
 	}
 
 	armyStruct* splitArmy(factionStruct *faction, const sol::table& units, int x, int y)

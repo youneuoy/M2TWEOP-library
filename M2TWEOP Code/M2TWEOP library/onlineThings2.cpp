@@ -727,7 +727,7 @@ namespace battleCreator
 						}
 	
 						character*newGeneral=characterHelpers::createCharacterWithoutSpawning("named character",army->faction, newGen.age
-							, newGen.genName.c_str(), newGen.genName.c_str(), newGen.subfaction
+							, newGen.genName, newGen.genName, newGen.subfaction
 							, portrait, 0,0);
 						characterHelpers::setBodyguard(newGeneral, army->units[i]);
 						newGeneral->characterRecord->index = armySide->unitsForTransfer[i]->numberInArmy;
