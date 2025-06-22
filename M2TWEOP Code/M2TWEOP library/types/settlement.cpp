@@ -27,6 +27,35 @@
 
 std::shared_ptr<eopSettlementDataDb> eopSettlementDataDb::instance = std::make_shared<eopSettlementDataDb>();
 
+unitRQ::unitRQ()
+{
+	settlement = nullptr;
+	frozen = 0;
+	experience = 0;
+	armourUpg = 0;
+	weaponUpgrade = 0;
+	weaponUpgradeSec = 0;
+	turnsTrainedAlready = 0;
+	percentFinished = 0;
+	turnsToTrain = 0;
+	cost = 0;
+	soldierCount = 0;
+	turnNumber = 0;
+	isValid = 0;
+	purchased = 0;
+	availability = 0;
+	isMercenary = 0;
+}
+
+eduEntry* unitRQ::getUnitEntry()
+{
+	if (recruitType < 2)
+		return this->entry;
+	if (recruitType > 2)
+		return reinterpret_cast<unit*>(this)->eduEntry;
+	return nullptr;
+}
+
 void aiProductionController::setBuildPoliciesAndTaxLevel(const int policy, const int recruitPolicy)
 {
 	if (this == nullptr)  // NOLINT(clang-diagnostic-tautological-undefined-compare)
@@ -1012,13 +1041,14 @@ namespace settlementHelpers
 		const int turnNum = campaignHelpers::getCampaignData()->turnNumber;
 		const int hash = makeRecruitOptionsHash(sett);
 		auto options = recruitOptionsDbPtr->settRecruitOptions[index];
-		if (options && options->hash == hash && options->turn == turnNum)
+		if (options && options->hash == hash && options->settIndex == sett->minorSettlementIndex && options->turn == turnNum)
 			return options.get();
 		
 		recruitOptionsDbPtr->settRecruitOptions[index] = std::make_shared<settlementRecruitmentOptions>();
 		options = recruitOptionsDbPtr->settRecruitOptions[index];
 		options->hash = hash;
 		options->turn = turnNum;
+		options->settIndex = sett->minorSettlementIndex;
 		auto available = getAvailableUnits(sett);
 		const int trainCount = (available->lastUnit - reinterpret_cast<DWORD>(available->units)) / sizeof(unitRQ);
 		options->count = trainCount;
@@ -1036,6 +1066,7 @@ namespace settlementHelpers
 		{
 			options->recruitOptions.push_back(std::make_shared<unitRQ>());
 			*options->recruitOptions[i] = available->units[i];
+			options->recruitOptions[i]->recruitType = 3;
 			options->totalCost += options->recruitOptions[i]->cost;
 			options->totalTime += options->recruitOptions[i]->turnsToTrain;
 		}
@@ -1811,6 +1842,7 @@ namespace settlementHelpers
 		@tfield int armourUpg
 		@tfield int weaponUpg
 		@tfield eduEntry eduEntry
+		@tfield unit retrainingUnit
 		@tfield int agentType
 		@tfield int soldierCount
 		@tfield int cost
@@ -1830,6 +1862,7 @@ namespace settlementHelpers
 		types.unitInQueue.set("weaponUpg", &unitRQ::weaponUpgrade);
 		types.unitInQueue.set("eduEntry", sol::property(&unitRQ::getUnitEntry, &unitRQ::setUnitEntry));
 		types.unitInQueue.set("agentType", sol::property(&unitRQ::getAgentType, &unitRQ::setAgentType));
+		types.unitInQueue.set("retrainingUnit", sol::property(&unitRQ::getUnit, &unitRQ::setUnit));
 		types.unitInQueue.set("soldierCount", &unitRQ::soldierCount);
 		types.unitInQueue.set("cost", &unitRQ::cost);
 		types.unitInQueue.set("recruitTime", &unitRQ::turnsToTrain);

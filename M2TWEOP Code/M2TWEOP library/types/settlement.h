@@ -102,12 +102,16 @@ public:
 	int16_t availability{}; //0x001E
 	int8_t isMercenary{}; //0x0020
 	char pad_0021[3]{}; //0x0021
+
 public:
+	unitRQ();
 	
-	eduEntry* getUnitEntry()
+	eduEntry* getUnitEntry();
+	
+	unit* getUnit()
 	{
-		if (recruitType != 2)
-			return this->entry;
+		if (recruitType >= 3)
+			return reinterpret_cast<unit*>(this->entry);
 		return nullptr;
 	}
 
@@ -120,14 +124,20 @@ public:
 
 	void setUnitEntry(eduEntry* newEntry)
 	{
-		if (recruitType != 2)
+		if (recruitType < 2)
 			entry = newEntry;
 	}
 
-	void setAgentType(int type)
+	void setAgentType(const int type)
 	{
 		if (recruitType == 2)
 			entry = reinterpret_cast<eduEntry*>(type);
+	}
+	
+	void setUnit(unit* unit)
+	{
+		if (recruitType >= 3)
+			entry = reinterpret_cast<eduEntry*>(unit);
 	}
 }; //Size: 0x0024
 
@@ -252,6 +262,7 @@ struct settlementRecruitmentOptions
 	int totalTime;
 	int turn;
 	int hash;
+	int settIndex{};
 };
 
 struct settlementPolicies
