@@ -89,7 +89,7 @@ void __fastcall patchesForGame::onLoadSettlementWorldpkgdesc(worldRecord* select
 
 	const string selectRecordS = battleMapWorker.getRecordName(selectedRecord);
 	const string selectRecordG = battleMapWorker.getRecordGroup(selectedRecord);
-	battleCreator::OnLoadSettlementWorldpkgdesc(selectRecordS, selectRecordG);
+	battleCreator::onLoadSettlementWorldpkgdesc(selectRecordS, selectRecordG);
 }
 
 float __fastcall patchesForGame::onCalculateUnitValue(eduEntry* entry, const DWORD value)

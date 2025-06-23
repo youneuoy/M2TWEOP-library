@@ -563,85 +563,247 @@ struct engineRecord {
 	undefined field_0xb8[564];
 };
 
-struct soldierInBattle {
-	undefined field_0x0[8];
-	int32_t unitCategory; //0x0008
-	int16_t someFlags; //0x000C
-	int8_t N00008AC5; //0x000E
-	int8_t N00008AC7; //0x000F
+struct physicalObject
+{
+	DWORD vtbl;
+	int field_4;
+	int type;
+	int bitfield;
 	float mass; //0x0010
 	float inverseMass; //0x0014
 	float xCoord;
 	float zCoord;
 	float yCoord;
-	struct soldierInBattle* self; //0x0024
+	struct soldierInBattle* soldier; //0x0024
 	float someRadius1; //0x0028
 	float someRadius2; //0x002C
 	float someRadius3; //0x0030
 	float markerRadius; //0x0034
 	float height; //0x0038
-	char pad_003C[8]; //0x003C
+	int field_3C_initMinus1;
+	int field_40;
 	int16_t rotation; //0x0044
 	char pad_0046[2]; //0x0046
-	float velocity1;
-	float velocity2;
-	float velocity3;
-	char pad_0054[196]; //0x0054
-	struct soldierInBattle* self2; //0x0118
-	char pad_011C[4]; //0x011C
-	float speed; //0x0120
-	char pad_0124[4]; //0x0124
-	float xCoord_writable;
-	float zCoord_writable;
-	float yCoord_writable;
-	uint16_t angle_writable; //0x0134
-	int8_t N0000713A; //0x0136
-	int8_t N00009525; //0x0137
-	float velocityModifier; //0x0138
-	int32_t currentStateGroupID; //0x013C
-	int32_t currentStateStateID; //0x0140
-	int32_t pendingStateGroupID; //0x0144
-	int32_t pendingStateStateID; //0x0148
-	char pad_014C[4]; //0x014C
-	float xCoord_destination;
-	float zCoord_destination;
-	float yCoord_destination;
-	int16_t destinationAngle; //0x015C
-	int16_t thisIsAngleCauseTwoByteMaybe; //0x015E
-	float destinationRadius; //0x0160
-	char pad_0164[16]; //0x0164
-	int16_t N00001DC6; //0x0174
-	char pad_0176[2]; //0x0176
-	int32_t targetStateGroupID; //0x0178
-	int32_t targetStateStateID; //0x017C (One = Standing, 2 = Walking, 3 = running)
-	int32_t moveStateGroupID; //0x0180
-	int32_t moveStateStateID; //0x0184 (2 = walking, 3 = running)
-	int32_t finishStateGroupID; //0x0188
-	int32_t finishStateStateID; //0x018C
-	int32_t options; //0x0190
-	int32_t pendingAction; //0x0194
-	float stoppingModifier; //0x0198
-	float slideRotation; //0x019C
-	int32_t numTicks; //0x01A0
-	char pad_01A4[20]; //0x01A4
-	int32_t surfaceID; //0x01B8
-	int16_t pathHistoryAndObstacleDirection; //0x01BC
-	int16_t unk; //0x01BE
-	char pad_01C0[16]; //0x01C0
-	int16_t waypoint; //0x01D0
-	char pad_01D2[18]; //0x01D2
-	int16_t cone; //0x01E4
-	int16_t directionOffset; //0x01E6
-	int16_t blockedCounter; //0x01E8
-	int16_t N0000954E; //0x01EA
-	float radiusModifier; //0x01EC
-	float speedModifier; //0x01F0
-	int32_t deflectionCounter; //0x01F4
-	float stoppingDistance; //0x01F8
-	float externalModifier; //0x01FC
-	uint32_t locomotionFlags; //0x0200
-	char pad[960]; //0x01D2
+	int velocityX;
+	int velocityZ;
+	int velocityY;
+	int field_54;
+	battleTile *battleTile;
+	int field_5C;
+};
 
+struct locomotiveElement
+{
+	int field_0;
+	float posX;
+	float posZ;
+	float posY;
+	__int16 angle;
+	float velocityModifier;
+	int currentStateGroupID;
+	int currentStateStateID;
+	int pendingStateGroupID;
+	int pendingStateStateID;
+	int field_28;
+	int destinationPositionX;
+	int destinationPositionZ;
+	int destinationPositionY;
+	__int16 destinationAngle;
+	float destinationRadius;
+	int field_40;
+	int field_44;
+	int field_48;
+	int field_4C;
+	__int16 short_50;
+	int targetStateGroupID;
+	int targetStateStateID;
+	int moveStateGroupID;
+	int moveStateStateID;
+	int finishStateGroupID;
+	int finishStateStateID;
+	int options;
+	int pendingAction;
+	float stoppingModifier;
+	float slideRotation;
+	int numTicks;
+	int field_80;
+	int field_84;
+	int field_88;
+	int field_8C;
+	int field_90;
+	int surfaceID;
+	int16_t pathHistoryAndObstacleDirection;
+	int16_t short_9a;
+	int field_9C;
+	int field_A0;
+	int field_A4;
+	int field_A8;
+	int field_AC;
+	int field_B0;
+	int field_B4;
+	int field_B8;
+	int cone;
+	__int16 directionOffset;
+	__int16 blockedCounter;
+	__int16 short_C4;
+	float radiusModifier;
+	float speedModifier;
+	int deflectionCounter;
+	float stoppingDistance;
+	float externalModifier;
+	int locomotionFlags;
+};
+
+struct soldierActionMem
+{
+	soldierInBattle *thisSoldier;
+	unsigned __int8 pool[88];
+};
+
+struct soldierInBattle {
+	physicalObject thisObject;
+	void* obstacleHandlerIgnore;
+	uint32_t bitfield_64;
+	int field_68;
+	int field_6C;
+	int field_70;
+	char byte_74;
+	char byte_75;
+	char gap76[2];
+	int field_78;
+	int field_7C;
+	int field_80;
+	int field_84;
+	int field_88;
+	int field_8C;
+	int field_90;
+	int field_94;
+	int field_98;
+	int field_9C;
+	void *horse;
+	int array_A4;
+	int array_A4Size;
+	int array_A4Num;
+	int soldierLocomotionTable;
+	uint32_t bitfield_B4;
+	physicalObject moverProxy;
+	void *thisLocomotion;
+	char byte_11C;
+	char pad_11D[3];
+	float speed;
+	locomotiveElement locomotiveElement; //0x124
+	int field_204;
+	int field_208;
+	void *soldierController;
+	void *soldierControllerFsmStates;
+	int elevenFobidsAnimsfifteenAllows;
+	int field_218;
+	int anotherOffsetsToBeAbleToTriggerAnims;
+	int field_220;
+	float destinationSourceX;
+	float destinationSourceZ;
+	float destinationSourceY;
+	int field_230;
+	int field_234;
+	int field_238;
+	int field_23C;
+	int field_240;
+	__int16 short_244;
+	__int16 short_246;
+	int field_248;
+	int nextAnim;
+	int syncLoggerSyncedEntitySoldier[2];
+	int animPredictorSoldier;
+	int braceType;
+	float brace;
+	float invBrace;
+	float momentum;
+	float invMomentum;
+	char skeletonState[0xB0];
+	float scale;
+	soldierData soldierOnStratMap;
+	unitStats stats;
+	int32_t impactResponse;
+	int impactStatusZone;
+	int16_t errorAngle;
+	int16_t pad_38a;
+	float momentumXImpact;
+	float momentumYImpact;
+	float momentumModSqImpact;
+	float movementXImpact;
+	float movementYImpact;
+	float formationX;
+	float formationY;
+	float formationDisplacement;
+	char fatigueModifier;
+	uint8_t baseFatigue;
+	uint16_t fatigueCount;
+	int groundFatigueModifier;
+	int displayInfo[0x48];
+	void *spear;
+	float attackTimeStamp;
+	unit *thisUnit;
+	void *mount;
+	int soldierPresentation;
+	unsigned __int32 alliance : 3;
+	unsigned __int32 morale : 4;
+	unsigned __int32 fatigue : 4;
+	unsigned __int32 health : 6;
+	unsigned __int32 previousHealth : 6;
+	unsigned __int32 isGeneral : 1;
+	unsigned __int32 isOfficerCommanding : 1;
+	unsigned __int32 isOfficer : 1;
+	unsigned __int32 isLesserGeneral : 1;
+	unsigned __int32 isInFormation : 1;
+	unsigned __int32 isAnimal : 1;
+	unsigned __int32 isOnBattlefield : 1;
+	unsigned __int32 isInPlayableArea : 1;
+	unsigned __int32 isDeceased : 1;
+	unsigned __int32 isRecoverable : 1;
+	unsigned __int32 isInvulnerable : 1;
+	unsigned __int32 officerIndex : 3;
+	unsigned __int32 unspawnPeasant : 1;
+	unsigned __int32 mountSlot : 4;
+	unsigned __int32 interceptedMeleeTarget : 1;
+	unsigned __int32 interceptedMissileTarget : 1;
+	unsigned __int32 hasWeapon : 1;
+	unsigned __int32 inCombat : 1;
+	unsigned __int32 usingPrimaryWeapon : 1;
+	unsigned __int32 usingSecondaryWeapon : 1;
+	unsigned __int32 weaponLoaded : 1;
+	unsigned __int32 lastMissileCouldntFire : 1;
+	unsigned __int32 numAnimals : 2;
+	unsigned __int32 sapping : 1;
+	unsigned __int32 aimTargetValid : 1;
+	unsigned __int32 isVisible : 1;
+	unsigned __int32 flamedToDeath : 1;
+	unsigned __int32 fallingDeath : 1;
+	unsigned __int32 isFlaming : 1;
+	unsigned __int32 randomNum : 8;
+	unsigned __int32 numHits : 8;
+	unsigned __int32 overlayUpdateIndex : 5;
+	unsigned __int32 diedOnEntity : 1;
+	unit *captor;
+	int allowDeadObstacle;
+	float aimTargetX;
+	float aimTargetY;
+	float aimTargetZ;
+	soldierInBattle *handledAnimals[3];
+	__int16 targetCount;
+	__int16 soldierId;
+	int soundAnimObserver[3];
+	int soundBankAnimObserver[3];
+	int soundVoiceObserver[3];
+	int soundAmbientObserver[3];
+	int lastEnemiesCollided;
+	int lastCollision;
+	int burningSound;
+	void *attachments;
+	float focus;
+	float focusRecovery;
+	int groundType;
+	float overlayEffect;
+	soldierActionMem memory;
 };
 
 struct generalInfo

@@ -27,7 +27,7 @@ ContextMenuStrat::ContextMenuStrat()
 				return true;
 			}
 			)));
-		if (battleCreator::IsRetreatsOverhaulEnabled()) {
+		if (battleCreator::isRetreatsOverhaulEnabled()) {
 			ctxItems.insert(std::make_pair("RetreatPlanner", ContextMenuItem(
 			[]()
 			{

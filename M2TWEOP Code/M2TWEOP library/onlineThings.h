@@ -8,7 +8,7 @@ using namespace std;
 namespace battleCreator
 {
 	bool getIsGenerationNeeded();
-	bool IsRetreatsOverhaulEnabled();
+	bool isRetreatsOverhaulEnabled();
 
 	void setCreationNeeded(bool isNeeded = false);
 
@@ -29,9 +29,9 @@ namespace battleCreator
 	void addCharactersToCustomBattleArmy(armyStruct* army, const std::string& relativePath);
 	string selectWorldpkgdesc(const std::string &selectedRec, const std::string& selectedGroup);
 
-	void OnLoadSettlementWorldpkgdesc(const std::string &selectedRec, const std::string& selectedGroup);
+	void onLoadSettlementWorldpkgdesc(const std::string &selectedRec, const std::string& selectedGroup);
 
-	string getWorldpkgDescFromBattleFile(const std::string& relativePath);
+	string getWorldPkgDescrFromBattleFile(const std::string& relativePath);
 };
 
 

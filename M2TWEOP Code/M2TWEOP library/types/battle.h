@@ -3,6 +3,7 @@
 #include "realGameTypes.h"
 #include "lua/sol.hpp"
 
+struct soldierInBattle;
 struct streetPosition;
 struct towerStats;
 
@@ -28,6 +29,58 @@ inline bool operator != (int a, battleType b)
 	return a == static_cast<int>(b);
 }
 
+struct action
+{
+	DWORD vtable /*VFT*/;
+	unsigned __int8 finished : 1;
+	unsigned __int8 started : 1;
+	unsigned __int8 stage : 4;
+	unsigned __int8 : 1;
+	unsigned __int8 notifySend : 1;
+	uint16_t updateCounter;
+	soldierInBattle *soldier;
+};
+
+struct actAttackMelee
+{
+	action baseAction;
+	unit *targetUnit;
+	soldierInBattle *targetSoldier;
+	soldierInBattle *attackSoldier;
+	soldierInBattle *hintSoldier;
+	float posX;
+	float posY;
+	float posXPrev;
+	float posYPrev;
+	uint16_t rotation;
+	uint16_t recoverTicks;
+	uint16_t updateTicks;
+	uint16_t strikeHandle;
+	uint16_t hintAnim;
+	uint16_t hintStrike;
+	unsigned __int32 attackAnim : 10;
+	unsigned __int32 reactionAnim : 10;
+	unsigned __int32 reactionTime : 6;
+	unsigned __int32 targetMode : 2;
+	unsigned __int32 crowded : 1;
+	unsigned __int8 usePrimary : 1;
+	unsigned __int8 readyStance : 1;
+	unsigned __int8 allowAttack : 1;
+	unsigned __int8 attackContact : 1;
+	unsigned __int8 reactingToHint : 1;
+	unsigned __int8 locked : 1;
+	unsigned __int8 unlocked : 1;
+	unsigned __int8 isSideStepping : 1;
+	uint8_t attackChain;
+	uint8_t recoverSlideTicks;
+	uint8_t defenseHandle;
+	int8_t hintTicks;
+	uint8_t hintAttackType;
+	soldierInBattle* getSoldier()
+	{
+		return baseAction.soldier;
+	}
+};
 
 /* 1869 */
 struct gateEntry

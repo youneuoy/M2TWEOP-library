@@ -1442,7 +1442,7 @@ void managerF::execPatches()
 	//onStartOfDrawFunction->Enable();
 
 
-	if (battleCreator::IsRetreatsOverhaulEnabled())
+	if (battleCreator::isRetreatsOverhaulEnabled())
 	{
 		toRetreat* onRetreat = new toRetreat(mem, (LPVOID)patchesForGame::onRetreat, globals::dataS.gameVersion);
 		onRetreat->SetNewCode();

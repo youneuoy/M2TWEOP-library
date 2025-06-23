@@ -152,30 +152,14 @@ bool unitDb::parse(descrParser* parser)
 		}
 		if (!GAME_FUNC(bool(__thiscall*)(eduEntry*, descrParser*), readEDUEntryFunc)(newEntry, parser))
 		{
-			const char* formatString = GAME_FUNC(char*(__cdecl*)(char*), formatStringAdd)(nullptr);
-			char* fileName = parser->getFileName();
-			formatString = GAME_FUNC(char*(__cdecl*)(const char*, char*), formatStringAdd)("DATABASE_TABLE error found : error reading record from file %s.\n", fileName);
-			loggerAndLevel key(GAME_FUNC(boostLogger*(__cdecl*)(), getDataInvalidLogger)(), 1600);
-			enabledLogger keep{};
-			GAME_FUNC(void(__cdecl*)(enabledLogger*, loggerAndLevel*), createEnabledLogger)(&keep, &key);
-			if (keep.stream)
-				*keep.stream << formatString;
-			GAME_FUNC(void(__thiscall*)(enabledLogger*), destroyLogObject)(&keep);
+			gameHelpers::logStringGame("DATABASE_TABLE error found : error reading record from file  " + std::string(parser->getFileName()));
 			return false;
 		}
 		if (char** name = &newEntry->eduType; this->numberOfEntries <= 500)
 		{
 			if (GAME_FUNC(int(__thiscall*)(int*, char**), dbHashTableGet)(&this->maxEntryNum, name))
 			{
-				const char* formatString = GAME_FUNC(char*(__cdecl*)(char*), formatStringAdd)(nullptr);
-				char* fileName = parser->getFileName();
-				formatString = GAME_FUNC(char*(__cdecl*)(const char*, const char*, char*), formatStringAdd)("DATABASE_TABLE error found : ids must be unique, non-unique entry %s found in file %s.\n", *name, fileName);
-				loggerAndLevel key(GAME_FUNC(boostLogger*(__cdecl*)(), getDataInvalidLogger)(), 1600);
-				enabledLogger keep{};
-				GAME_FUNC(void(__cdecl*)(enabledLogger*, loggerAndLevel*), createEnabledLogger)(&keep, &key);
-				if (keep.stream)
-					*keep.stream << formatString;
-				GAME_FUNC(void(__thiscall*)(enabledLogger*), destroyLogObject)(&keep);
+				gameHelpers::logStringGame("DATABASE_TABLE error found : ids must be unique, non-unique entry " + std::string(*name) + " found in file " + parser->getFileName());
 				return false;
 			}
 			GAME_FUNC(void(__thiscall*)(int*, char**, unsigned long*), dbHashTableSet)(&this->maxEntryNum, name, &newEntry->index);
@@ -206,15 +190,7 @@ bool mountedEngineDb::parse(descrParser* parser)
 		}
 		if (!GAME_FUNC(bool(__thiscall*)(mountedEngine*, descrParser*), ParseDescrMountedEngineEntry)(newEngine, parser))
 		{
-			const char* formatString = GAME_FUNC(char*(__cdecl*)(char*), formatStringAdd)(nullptr);
-			char* fileName = parser->getFileName();
-			formatString = GAME_FUNC(char*(__cdecl*)(const char*, char*), formatStringAdd)("DATABASE_TABLE error found : error reading record from file %s.\n", fileName);
-			loggerAndLevel key(GAME_FUNC(boostLogger*(__cdecl*)(), getDataInvalidLogger)(), 1600);
-			enabledLogger keep{};
-			GAME_FUNC(void(__cdecl*)(enabledLogger*, loggerAndLevel*), createEnabledLogger)(&keep, &key);
-			if (keep.stream)
-				*keep.stream << formatString;
-			GAME_FUNC(void(__thiscall*)(enabledLogger*), destroyLogObject)(&keep);
+			gameHelpers::logStringGame("DATABASE_TABLE error found: error reading record from file " + std::string(parser->getFileName()));
 			return false;
 		}
 		
