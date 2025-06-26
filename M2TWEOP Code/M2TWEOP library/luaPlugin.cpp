@@ -529,6 +529,18 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	M2TWEOP.setAncillariesLimit(15);
 	*/
 	tables.M2TWEOP.set_function("setAncillariesLimit", &gameHelpers::setAncLimit);
+
+	/***
+	Displays the battle map at the specified coordinates. Functions the same as the MMB button viewer.
+	@function M2TWEOP.viewBattleMap(x,y)
+	@tparam int x 
+	@tparam int y
+	@usage
+	M2TWEOP.viewBattleMap(100,200);
+	local sett = CAMPAIGN:getSettlement("Rome");
+	M2TWEOP.viewBattleMap(sett.xCoord, sett.yCoord);
+	*/
+	tables.M2TWEOP.set_function("viewBattleMap", &globals::dataS.Modules.tacticalMapViewer.view);
 	
 	/***
 	Unlocks all console commands, also allows the use of the 'control' command to change factions in singleplayer campaigns.
