@@ -619,7 +619,7 @@ namespace battleHelpers
 		@tfield bool canWithdraw
 		@tfield bool canDeploy
 		@tfield int wonBattle 0 = lose, 1 = draw, 2 = win
-		@tfield int battleSuccess 0 = close, 1 = average, 2 = clear, 3 = crushing
+		@tfield battleSuccess battleSuccess 0 = close, 1 = average, 2 = clear, 3 = crushing
 		@tfield int[4] winConditions Returns an int index of a wincondition. Maximum 4.
 		@tfield getWinConditionString getWinConditionString
 		@tfield int armiesNum
