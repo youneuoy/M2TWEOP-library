@@ -540,7 +540,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	local sett = CAMPAIGN:getSettlement("Rome");
 	M2TWEOP.viewBattleMap(sett.xCoord, sett.yCoord);
 	*/
-	tables.M2TWEOP.set_function("viewBattleMap", &globals::dataS.Modules.tacticalMapViewer.view);
+	tables.M2TWEOP.set_function("viewBattleMap", &globals::view);
 	
 	/***
 	Unlocks all console commands, also allows the use of the 'control' command to change factions in singleplayer campaigns.
