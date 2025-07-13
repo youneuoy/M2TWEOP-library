@@ -365,6 +365,9 @@ void codes::initCodes(int gameVer)
 		offsets.createMountedEngineRecord = 0x8CE1B0;
 		offsets.dbHashTableGet = 0x437DF0;
 		offsets.dbHashTableSet = 0x437890;
+		offsets.createCharacterRecord = 0x4F3F70;
+		offsets.birthLog = 0x832F70;
+		offsets.marryCharacters = 0x5A7CB0;
 	}
 
 
@@ -733,5 +736,8 @@ void codes::initCodes(int gameVer)
 		offsets.createMountedEngineRecord = 0x8CEBC0;
 		offsets.dbHashTableGet = 0x438130;
 		offsets.dbHashTableSet = 0x437BD0;
+		offsets.createCharacterRecord = 0x4F4540;
+		offsets.birthLog = 0x8337E0;
+		offsets.marryCharacters = 0x5A8190;
 	}
 }

@@ -194,10 +194,10 @@ bool mountedEngineDb::parse(descrParser* parser)
 			return false;
 		}
 		
-		if (eopMountedEngineDb::get()->getMountedEngine(std::string(newEngine->record.name)))
+		if (eopMountedEngineDb::get()->getMountedEngine(newEngine->record.name.getString()))
 			gameHelpers::logStringGame("mountedEngineDb::parse: Added duplicate engine, overwriting");
 		
-		eopMountedEngineDb::get()->addMountedEngine(std::string(newEngine->record.name), newEngine);
+		eopMountedEngineDb::get()->addMountedEngine(newEngine->record.name.getString(), newEngine);
 	}
 	return true;
 }

@@ -320,6 +320,7 @@ struct factionStruct {
 public:
 	characterRecord* getCharacterByLabel(const std::string& label);
 	characterRecord* getFamilyHead();
+	characterRecord* newRecord();
 	void setLeader(characterRecord* newLeader, bool onlyLeader);
 	void updateNeighbours();
 	void setCapital(settlementStruct* newCapital);

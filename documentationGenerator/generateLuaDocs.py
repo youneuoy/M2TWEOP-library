@@ -208,221 +208,227 @@ for name in filenames:
     enumCount = 0
     file = open(luaPluginPath + name, 'r')
     for line in file:
-        if line.strip() == "": continue
-        #print(name + " -> " + line.strip())
-        if re.search(r'\/\*\*\*', line) is not None:
-            countEnum = False
-            del newObject
-            newObject = luaObject()
-            startNewTable = True
-            nextLineComment = True
-            currentFunction = ""
-            currentType = ""
-            continue
-        if re.search(r'@tfield', line) is not None:
-            nextLineComment = False
-            if startNewTable:
-                for field in userType.table.tfields:
-                    if field.confirmed == False:
-                        print("[Warning]  Field " + field.name + " not confirmed in class " + userType.table.name)
-                del userType
-                userType = luaUserType()
-                userType.functions = {}
-                userType.table = luaTable(newObject)
-                userType.table.tfields = []
-                startNewTable = False
-            newType = re.findall(r'@tfield\s+(\S+) ', line)[0]
-            newName = re.findall(r'@tfield\s+\S+\s+(\S+)', line)[0]
-            if len(re.findall(r'@tfield \S+ \S+ (.+)', line)) > 0:
-                newComment = re.findall(r'@tfield \S+ \S+ (.+)', line)[0]
-            else:
-                newComment = ""
-            userType.table.tfields.append(typedField(newType, newName, newComment))
-            commentCache = ""
-            continue
-        if re.search(r'@function', line) is not None:
-            nextLineComment = False
-            newFunction = luaFunction(newObject)
-            newFunction.returns = []
-            newFunction.params = []
-            if re.search(r'\.(\S+)', line) is not None:
-                newFunction.name = re.findall(r'\.(\w+)(?:\s|\n|$)', line)[0]
-                newFunction.selfCall = False
-                newFunction.funcEvent = False
-                newFunction.typeName = re.findall(r'(\S+)\.\S+', line)[0]
-            elif re.search(r'\:(\S+)', line) is not None:
-                newFunction.name = re.findall(r'\:(\w+)(?:\s|\n|$)', line)[0]
-                newFunction.funcEvent = False
-                newFunction.selfCall = True
-                newFunction.typeName = re.findall(r'(\S+)\:\S+', line)[0]
-            else:   
-                newFunction.selfCall = False
-                newFunction.funcEvent = True
-                newFunction.name = re.findall(r'@function\s+(\S+)', line)[0]
-                newFunction.typeName = "EventsFunctionsList"
-            if newFunction.typeName == "":
+        try:
+
+            if line.strip() == "": continue
+            #print(name + " -> " + line.strip())
+            if re.search(r'\/\*\*\*', line) is not None:
+                countEnum = False
+                del newObject
+                newObject = luaObject()
+                startNewTable = True
+                nextLineComment = True
+                currentFunction = ""
+                currentType = ""
                 continue
-            functionFound = False
-            if classes.get(newFunction.typeName) is not None:
-                for field in classes[newFunction.typeName].table.tfields:
-                    if field.name == newFunction.name:
-                        field.type = "function"
-                        functionFound = True
-                        break
-            if functionFound == False and newFunction.name not in legacyNames:
-                print("[Warning]  Function " + newFunction.name + " not found in class " + newFunction.typeName)
-            commentCache = ""
-            classes[newFunction.typeName].functions[newFunction.name] = luaFunction()
-            classes[newFunction.typeName].functions[newFunction.name].name = newFunction.name
-            classes[newFunction.typeName].functions[newFunction.name].typeName = newFunction.typeName
-            classes[newFunction.typeName].functions[newFunction.name].descr = newFunction.descr
-            classes[newFunction.typeName].functions[newFunction.name].selfCall = newFunction.selfCall
-            classes[newFunction.typeName].functions[newFunction.name].funcEvent = newFunction.funcEvent
-            classes[newFunction.typeName].functions[newFunction.name].returns = []
-            classes[newFunction.typeName].functions[newFunction.name].params = []
-            currentFunction = newFunction.name
-            currentType = newFunction.typeName
-            del newFunction
-            continue
-        if re.search(r'@tparam', line) is not None:
-            nextLineComment = False
-            newType = re.findall(r'@tparam\s+(\S+) ', line)[0]
-            newName = re.findall(r'@tparam\s+\S+\s+(\S+)', line)[0]
-            if len(re.findall(r'@tparam \S+ \S+ (.+)', line)) > 0:
-                newComment = re.findall(r'@tparam \S+ \S+ (.+)', line)[0]
-            else:
-                newComment = ""
-            classes[currentType].functions[currentFunction].params.append(typedField(newType, newName, newComment))
-            continue
-        if re.search(r'@treturn', line) is not None:
-            nextLineComment = False
-            newType = re.findall(r'@treturn\s+(\S+) ', line)[0]
-            newName = re.findall(r'@treturn\s+\S+\s+(\S+)', line)[0]
-            if len(re.findall(r'@treturn \S+ \S+ (.+)', line)) > 0:
-                newComment = re.findall(r'@treturn \S+ \S+ (.+)', line)[0]
-            else:
-                newComment = ""
-            classes[currentType].functions[currentFunction].returns.append(typedField(newType, newName, newComment))
-            continue
-        if re.search(r'@table', line) is not None:
-            userType.table.name = re.findall(r'@table\s+(\S+)', line)[0]
-            if userType.table.name == "EventsFunctionsList":
-                classes[userType.table.name] = userType
-            if userType.table.name != "" and classes.get(userType.table.name) is None:
-                classes[userType.table.name] = userType
-            continue
-        if re.search(r'luaState.new_usertype', line) is not None:
-            if re.search(r'^\/\/', line) is not None:
+            if re.search(r'@tfield', line) is not None:
+                nextLineComment = False
+                if startNewTable:
+                    for field in userType.table.tfields:
+                        if field.confirmed == False:
+                            print("[Warning]  Field " + field.name + " not confirmed in class " + userType.table.name)
+                    del userType
+                    userType = luaUserType()
+                    userType.functions = {}
+                    userType.table = luaTable(newObject)
+                    userType.table.tfields = []
+                    startNewTable = False
+                newType = re.findall(r'@tfield\s+(\S+) ', line)[0]
+                newName = re.findall(r'@tfield\s+\S+\s+(\S+)', line)[0]
+                if len(re.findall(r'@tfield \S+ \S+ (.+)', line)) > 0:
+                    newComment = re.findall(r'@tfield \S+ \S+ (.+)', line)[0]
+                else:
+                    newComment = ""
+                userType.table.tfields.append(typedField(newType, newName, newComment))
+                commentCache = ""
                 continue
-            oldname = userType.table.name
-            userType.table.name = re.findall(r'luaState\.new_usertype\<.+\>\(\"(\S+)\"\)', line)[0]
-            if userType.table.name != oldname:
-                print("[Warning]  Documentation inconsistency: " + userType.table.name)
-            userType.internalName = re.findall(r'\.(\S+)\s*=\s*luaState\.new_usertype', line)[0]
-            internalClasses[userType.internalName] = userType.table.name
-            if userType.table.name != "" and classes.get(userType.table.name) is None:
-                classes[userType.table.name] = userType
-            continue
-        if re.search(r'\.\S+\s*=\s*luaState\.create_table', line) is not None:
-            if re.search(r'^\/\/', line) is not None:
+            if re.search(r'@function', line) is not None:
+                nextLineComment = False
+                newFunction = luaFunction(newObject)
+                newFunction.returns = []
+                newFunction.params = []
+                if re.search(r'\.(\S+)', line) is not None:
+                    newFunction.name = re.findall(r'\.(\w+)(?:\s|\n|$)', line)[0]
+                    newFunction.selfCall = False
+                    newFunction.funcEvent = False
+                    newFunction.typeName = re.findall(r'(\S+)\.\S+', line)[0]
+                elif re.search(r'\:(\S+)', line) is not None:
+                    newFunction.name = re.findall(r'\:(\w+)(?:\s|\n|$)', line)[0]
+                    newFunction.funcEvent = False
+                    newFunction.selfCall = True
+                    newFunction.typeName = re.findall(r'(\S+)\:\S+', line)[0]
+                else:   
+                    newFunction.selfCall = False
+                    newFunction.funcEvent = True
+                    newFunction.name = re.findall(r'@function\s+(\S+)', line)[0]
+                    newFunction.typeName = "EventsFunctionsList"
+                if newFunction.typeName == "":
+                    continue
+                functionFound = False
+                if classes.get(newFunction.typeName) is not None:
+                    for field in classes[newFunction.typeName].table.tfields:
+                        if field.name == newFunction.name:
+                            field.type = "function"
+                            functionFound = True
+                            break
+                if functionFound == False and newFunction.name not in legacyNames:
+                    print("[Warning]  Function " + newFunction.name + " not found in class " + newFunction.typeName)
+                commentCache = ""
+                classes[newFunction.typeName].functions[newFunction.name] = luaFunction()
+                classes[newFunction.typeName].functions[newFunction.name].name = newFunction.name
+                classes[newFunction.typeName].functions[newFunction.name].typeName = newFunction.typeName
+                classes[newFunction.typeName].functions[newFunction.name].descr = newFunction.descr
+                classes[newFunction.typeName].functions[newFunction.name].selfCall = newFunction.selfCall
+                classes[newFunction.typeName].functions[newFunction.name].funcEvent = newFunction.funcEvent
+                classes[newFunction.typeName].functions[newFunction.name].returns = []
+                classes[newFunction.typeName].functions[newFunction.name].params = []
+                currentFunction = newFunction.name
+                currentType = newFunction.typeName
+                del newFunction
                 continue
-            if re.search(r'luaState\.create_table\(\"(\S+)\"\)', line) is not None:
+            if re.search(r'@tparam', line) is not None:
+                nextLineComment = False
+                newType = re.findall(r'@tparam\s+(\S+) ', line)[0]
+                newName = re.findall(r'@tparam\s+\S+\s+(\S+)', line)[0]
+                if len(re.findall(r'@tparam \S+ \S+ (.+)', line)) > 0:
+                    newComment = re.findall(r'@tparam \S+ \S+ (.+)', line)[0]
+                else:
+                    newComment = ""
+                classes[currentType].functions[currentFunction].params.append(typedField(newType, newName, newComment))
+                continue
+            if re.search(r'@treturn', line) is not None:
+                nextLineComment = False
+                newType = re.findall(r'@treturn\s+(\S+) ', line)[0]
+                newName = re.findall(r'@treturn\s+\S+\s+(\S+)', line)[0]
+                if len(re.findall(r'@treturn \S+ \S+ (.+)', line)) > 0:
+                    newComment = re.findall(r'@treturn \S+ \S+ (.+)', line)[0]
+                else:
+                    newComment = ""
+                classes[currentType].functions[currentFunction].returns.append(typedField(newType, newName, newComment))
+                continue
+            if re.search(r'@table', line) is not None:
+                userType.table.name = re.findall(r'@table\s+(\S+)', line)[0]
+                if userType.table.name == "EventsFunctionsList":
+                    classes[userType.table.name] = userType
+                if userType.table.name != "" and classes.get(userType.table.name) is None:
+                    classes[userType.table.name] = userType
+                continue
+            if re.search(r'luaState.new_usertype', line) is not None:
+                if re.search(r'^\/\/', line) is not None:
+                    continue
                 oldname = userType.table.name
-                userType.table.name = re.findall(r'luaState\.create_table\(\"(\S+)\"\)', line)[0]
+                userType.table.name = re.findall(r'luaState\.new_usertype\<.+\>\(\"(\S+)\"\)', line)[0]
                 if userType.table.name != oldname:
                     print("[Warning]  Documentation inconsistency: " + userType.table.name)
-                userType.internalName = re.findall(r'\.(\S+)\s*=\s*luaState\.create_table', line)[0]
+                userType.internalName = re.findall(r'\.(\S+)\s*=\s*luaState\.new_usertype', line)[0]
                 internalClasses[userType.internalName] = userType.table.name
-            else:
-                userType.internalName = re.findall(r'\.(\S+)\s*=\s*luaState\.create_table', line)[0]
-                internalClasses[userType.internalName] = userType.table.name
-            if userType.table.name != "" and classes.get(userType.table.name) is None:
-                classes[userType.table.name] = userType
-            continue
-        if re.search(r'\.set\(\"(\S+)\"', line) is not None:
-            if re.search(r'^\/\/', line) is not None:
+                if userType.table.name != "" and classes.get(userType.table.name) is None:
+                    classes[userType.table.name] = userType
                 continue
-            fieldName = re.findall(r'\.set\(\"(\S+)\"', line)[0]
-            className = re.findall(r'\.(\S+)\.set\(\"\S+\"', line)[0]
-            if internalClasses.get(className) is not None:
-                className = internalClasses[className]
-            else:
-                print("[Warning]  Class " + className + " not found")
-            fieldFound = False
-            if classes.get(className) is not None:
-                for field in classes[className].table.tfields:
-                    if field.name == fieldName:
-                        fieldFound = True
-                        field.confirmed = True
-                        break
-            if fieldFound == False and fieldName not in legacyNames:
-                print("[Warning]  Field " + fieldName + " not found in class " + className)
-            continue
-        if re.search(r'\.set_function\(\"(\S+)\"', line) is not None:
-            if re.search(r'^\s*\/\/', line) is not None:
-                continue
-            functionName = re.findall(r'\.set_function\(\"(\S+)\"', line)[0]
-            className = re.findall(r'\.(\S+)\.set_function\(\"\S+\"', line)[0]
-            if internalClasses.get(className) is not None:
-                className = internalClasses[className]
-            else:
-                print("[Warning]  Class " + className + " not found")
-            functionFound = False
-            if classes.get(className) is not None:
-                for function in classes[className].functions:
-                    if classes[className].functions[function].name == functionName:
-                        functionFound = True
-                        break
-            if classes.get(className) is not None:
-                for field in classes[className].table.tfields:
-                    if field.name == functionName:
-                        fieldFound = True
-                        field.confirmed = True
-                        break
-            if functionFound == False and functionName not in legacyNames:
-                print("[Warning]  function " + functionName + " not found in class " + className)
-            continue
-        if re.search(r'luaState.new_enum', line) is not None:
-            if re.search(r'^\/\/', line) is not None:
-                continue
-            userType.isEnum = True
-            userType.table = enum(userType.table)
-            countEnum = True
-            enumCount = 0
-            continue
-        if countEnum:
-            if re.search(r',', line) is not None:
-                if enumCount == 0:
+            if re.search(r'\.\S+\s*=\s*luaState\.create_table', line) is not None:
+                if re.search(r'^\/\/', line) is not None:
+                    continue
+                if re.search(r'luaState\.create_table\(\"(\S+)\"\)', line) is not None:
                     oldname = userType.table.name
-                    userType.table.name = re.findall(r'\"(\S*)\"\s*,', line)[0].strip()
+                    userType.table.name = re.findall(r'luaState\.create_table\(\"(\S+)\"\)', line)[0]
                     if userType.table.name != oldname:
                         print("[Warning]  Documentation inconsistency: " + userType.table.name)
-                    enumCount += 1
-                if re.search(r',\s*\S', line) is not None:
-                    enumCount += 1
-                    key = re.findall(r'\"(\S*)\"\s*,', line)[0].strip()
-                    if re.search(r',\s*(\d+)', line) is not None:
-                        value = re.findall(r',\s*(\d+)', line)[0].strip()
-                    else:
-                        value = None
-                    userType.table.values[key] = value
-                    foundField = False
-                    for field in userType.table.tfields:
-                        if field.name == key:
-                            foundField = True
+                    userType.internalName = re.findall(r'\.(\S+)\s*=\s*luaState\.create_table', line)[0]
+                    internalClasses[userType.internalName] = userType.table.name
+                else:
+                    userType.internalName = re.findall(r'\.(\S+)\s*=\s*luaState\.create_table', line)[0]
+                    internalClasses[userType.internalName] = userType.table.name
+                if userType.table.name != "" and classes.get(userType.table.name) is None:
+                    classes[userType.table.name] = userType
+                continue
+            if re.search(r'\.set\(\"(\S+)\"', line) is not None:
+                if re.search(r'^\/\/', line) is not None:
+                    continue
+                fieldName = re.findall(r'\.set\(\"(\S+)\"', line)[0]
+                className = re.findall(r'\.(\S+)\.set\(\"\S+\"', line)[0]
+                if internalClasses.get(className) is not None:
+                    className = internalClasses[className]
+                else:
+                    print("[Warning]  Class " + className + " not found")
+                fieldFound = False
+                if classes.get(className) is not None:
+                    for field in classes[className].table.tfields:
+                        if field.name == fieldName:
+                            fieldFound = True
                             field.confirmed = True
                             break
-                    if foundField == False:
-                        print("Field " + key + " not found in enum " + userType.table.name)
-            else:
-                countEnum = False
-            continue
-        if nextLineComment == True:
-            if line.strip() == "": continue
-            if newObject.descr == "":
-                newObject.descr = line.strip()
-            else:
-                newObject.descr = newObject.descr + "\n---" + line.strip()
+                if fieldFound == False and fieldName not in legacyNames:
+                    print("[Warning]  Field " + fieldName + " not found in class " + className)
+                continue
+            if re.search(r'\.set_function\(\"(\S+)\"', line) is not None:
+                if re.search(r'^\s*\/\/', line) is not None:
+                    continue
+                functionName = re.findall(r'\.set_function\(\"(\S+)\"', line)[0]
+                className = re.findall(r'\.(\S+)\.set_function\(\"\S+\"', line)[0]
+                if internalClasses.get(className) is not None:
+                    className = internalClasses[className]
+                else:
+                    print("[Warning]  Class " + className + " not found")
+                functionFound = False
+                if classes.get(className) is not None:
+                    for function in classes[className].functions:
+                        if classes[className].functions[function].name == functionName:
+                            functionFound = True
+                            break
+                if classes.get(className) is not None:
+                    for field in classes[className].table.tfields:
+                        if field.name == functionName:
+                            fieldFound = True
+                            field.confirmed = True
+                            break
+                if functionFound == False and functionName not in legacyNames:
+                    print("[Warning]  function " + functionName + " not found in class " + className)
+                continue
+            if re.search(r'luaState.new_enum', line) is not None:
+                if re.search(r'^\/\/', line) is not None:
+                    continue
+                userType.isEnum = True
+                userType.table = enum(userType.table)
+                countEnum = True
+                enumCount = 0
+                continue
+            if countEnum:
+                if re.search(r',', line) is not None:
+                    if enumCount == 0:
+                        oldname = userType.table.name
+                        userType.table.name = re.findall(r'\"(\S*)\"\s*,', line)[0].strip()
+                        if userType.table.name != oldname:
+                            print("[Warning]  Documentation inconsistency: " + userType.table.name)
+                        enumCount += 1
+                    if re.search(r',\s*\S', line) is not None:
+                        enumCount += 1
+                        key = re.findall(r'\"(\S*)\"\s*,', line)[0].strip()
+                        if re.search(r',\s*(\d+)', line) is not None:
+                            value = re.findall(r',\s*(\d+)', line)[0].strip()
+                        else:
+                            value = None
+                        userType.table.values[key] = value
+                        foundField = False
+                        for field in userType.table.tfields:
+                            if field.name == key:
+                                foundField = True
+                                field.confirmed = True
+                                break
+                        if foundField == False:
+                            print("Field " + key + " not found in enum " + userType.table.name)
+                else:
+                    countEnum = False
+                continue
+            if nextLineComment == True:
+                if line.strip() == "": continue
+                if newObject.descr == "":
+                    newObject.descr = line.strip()
+                else:
+                    newObject.descr = newObject.descr + "\n---" + line.strip()
+                continue
+        except Exception as e:
+            print("[Error]  Error in file " + name + ": " + str(e))
+            print("Line: " + line.strip())
             continue
 
 classes[userType.table.name] = userType

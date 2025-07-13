@@ -252,6 +252,7 @@ struct settlementBuildingOptions
 	int totalTime;
 	int turn;
 	int hash;
+	int settIndex;
 };
 
 struct settlementRecruitmentOptions

@@ -9,7 +9,7 @@ typedef unsigned char uchar;
 typedef unsigned short ushort;
 #pragma pack(push,1)
 
-#define FLOAT_EQUAL(a,b) (fabs(a-b) < 0.0001f)
+#define FLOAT_EQUAL(_a, _b) (fabs(_a - _b) < 0.0001f)
 
 /*----------------------------------------------------------------------------------------------------------------*\
 									Firing game function helpers
@@ -49,29 +49,21 @@ struct basicStringGame
 	int stringLength;
 	int stringCapacity;
 public:
-	char* getData ()
-	{
-		if (stringCapacity < 16)
-			return short_string;
-		return long_string;
-	}
-	
-	std::string getString()
-	{
-		const char* str = getData();
-		return {str};
-	}
-	
+	char* getData () { return stringCapacity < 16 ? short_string : long_string; }
+	std::string getString() { return { getData()};}
 	void setString(const std::string& str)
 	{
 		stringLength = str.length();
 		stringCapacity = str.capacity();
 		if (stringCapacity < 16)
 		{
+			std::memset(short_string, 0, 16);
 			strcpy(short_string, str.c_str());
 		}
 		else
 		{
+			delete long_string;
+			long_string = new char[stringCapacity];
 			strcpy(long_string, str.c_str());
 		}
 	}
@@ -100,7 +92,7 @@ public:
 	}
 	bool contains(T* thing)
 	{
-		int num = size();
+		const int num = size();
 		for (int i = 0; i < num; i++)
 		{
 			if (elements[i] == thing)
@@ -252,6 +244,8 @@ struct stringWithHash
 public:
 	const char* name; //0x0000
 	int32_t hash; //0x0004
+	[[nodiscard]] std::string getString() const { return {name}; }
+	void setString(const std::string& str);
 }; //Size
 
 struct UNICODE_STRING {

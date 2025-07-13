@@ -292,6 +292,8 @@ struct characterRecord { /* many important info about character */
 	unsigned __int32 isFamilyHead : 1;
 	bool wasMarriageAlliance;
 public:
+	characterRecord* birthChild(const std::string& name, const std::string& childLastName, int childAge, bool childMale, bool childAlive);
+	characterRecord* marryWife(const std::string& name, int wifeAge);
 	std::string giveValidLabel();
 	void removeEpithet();
 	void applyName();
