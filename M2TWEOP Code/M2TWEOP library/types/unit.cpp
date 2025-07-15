@@ -140,6 +140,7 @@ bool unitDb::parse(descrParser* parser)
 	while (parser->walker < parser->end)
 	{
 		eduEntry* newEntry;
+		bool isEop = false;
 		if (this->numberOfEntries < 500)
 		{
 			newEntry = &unitEntries[this->numberOfEntries];
@@ -149,14 +150,16 @@ bool unitDb::parse(descrParser* parser)
 		{
 			newEntry = techFuncs::createGameClass<eduEntry>();
 			GAME_FUNC(void(__thiscall*)(eduEntry*), createEduEntry)(newEntry);
+			isEop = true;
 		}
 		if (!GAME_FUNC(bool(__thiscall*)(eduEntry*, descrParser*), readEDUEntryFunc)(newEntry, parser))
 		{
 			gameHelpers::logStringGame("DATABASE_TABLE error found : error reading record from file  " + std::string(parser->getFileName()));
 			return false;
 		}
-		if (char** name = &newEntry->eduType; this->numberOfEntries <= 500)
+		if (!isEop)
 		{
+			char** name = &newEntry->eduType; 
 			if (GAME_FUNC(int(__thiscall*)(int*, char**), dbHashTableGet)(&this->maxEntryNum, name))
 			{
 				gameHelpers::logStringGame("DATABASE_TABLE error found : ids must be unique, non-unique entry " + std::string(*name) + " found in file " + parser->getFileName());
