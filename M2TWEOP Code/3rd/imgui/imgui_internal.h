@@ -792,9 +792,9 @@ struct ImGuiTextIndex
     int             EndOffset = 0;                          // Because we don't own text buffer we need to maintain EndOffset (may bake in LineOffsets?)
 
     void            clear()                                 { LineOffsets.clear(); EndOffset = 0; }
-    int             size()                                  { return LineOffsets.Size; }
+    int             size()                                  { return LineOffsets.size(); }
     const char*     get_line_begin(const char* base, int n) { return base + LineOffsets[n]; }
-    const char*     get_line_end(const char* base, int n)   { return base + (n + 1 < LineOffsets.Size ? (LineOffsets[n + 1] - 1) : EndOffset); }
+    const char*     get_line_end(const char* base, int n)   { return base + (n + 1 < LineOffsets.size() ? (LineOffsets[n + 1] - 1) : EndOffset); }
     void            append(const char* base, int old_size, int new_size);
 };
 
@@ -840,8 +840,8 @@ struct IMGUI_API ImDrawListSharedData
     const ImVec4*   TexUvLines;                 // UV of anti-aliased lines in the atlas (== FontAtlas->TexUvLines)
     ImFontAtlas*    FontAtlas;                  // Current font atlas
     ImFont*         Font;                       // Current font (used for simplified AddText overload)
-    float           FontSize;                   // Current font size (used for for simplified AddText overload)
-    float           FontScale;                  // Current font scale (== FontSize / Font->FontSize)
+    float           ImGui::GetFontSize();                   // Current font size (used for for simplified AddText overload)
+    float           FontScale;                  // Current font scale (== ImGui::GetFontSize() / Font->ImGui::GetFontSize())
     float           CurveTessellationTol;       // Tessellation tolerance when using PathBezierCurveTo()
     float           CircleSegmentMaxError;      // Number of circle segments to use per pixel of radius for AddCircle() etc
     float           InitialFringeScale;         // Initial scale to apply to AA fringe
@@ -872,8 +872,8 @@ struct ImDrawDataBuilder
 struct ImFontStackData
 {
     ImFont*     Font;
-    float       FontSizeBeforeScaling;      // ~~ style.FontSizeBase
-    float       FontSizeAfterScaling;       // ~~ g.FontSize
+    float       ImGui::GetFontSize()BeforeScaling;      // ~~ style.ImGui::GetFontSize()Base
+    float       ImGui::GetFontSize()AfterScaling;       // ~~ ImGui::GetImGui::GetFontSize()()
 };
 
 //-----------------------------------------------------------------------------
@@ -2144,10 +2144,10 @@ struct ImGuiContext
     ImGuiStyle              Style;
     ImVector<ImFontAtlas*>  FontAtlases;                        // List of font atlases used by the context (generally only contains g.IO.Fonts aka the main font atlas)
     ImFont*                 Font;                               // Currently bound font. (== FontStack.back().Font)
-    ImFontBaked*            FontBaked;                          // Currently bound font at currently bound size. (== Font->GetFontBaked(FontSize))
-    float                   FontSize;                           // Currently bound font size == line height (== FontSizeBase + externals scales applied in the UpdateCurrentFontSize() function).
-    float                   FontSizeBase;                       // Font size before scaling == style.FontSizeBase == value passed to PushFont() when specified.
-    float                   FontBakedScale;                     // == FontBaked->Size / FontSize. Scale factor over baked size. Rarely used nowadays, very often == 1.0f.
+    ImFontBaked*            FontBaked;                          // Currently bound font at currently bound size. (== Font->GetFontBaked(ImGui::GetFontSize()))
+    float                   ImGui::GetFontSize();                           // Currently bound font size == line height (== ImGui::GetFontSize()Base + externals scales applied in the UpdateCurrentImGui::GetFontSize()() function).
+    float                   ImGui::GetFontSize()Base;                       // Font size before scaling == style.ImGui::GetFontSize()Base == value passed to PushFont() when specified.
+    float                   FontBakedScale;                     // == FontBaked->Size / ImGui::GetFontSize(). Scale factor over baked size. Rarely used nowadays, very often == 1.0f.
     float                   FontRasterizerDensity;              // Current font density. Used by all calls to GetFontBaked().
     float                   CurrentDpiScale;                    // Current window/viewport DpiScale == CurrentViewport->DpiScale
     ImDrawListSharedData    DrawListSharedData;
@@ -2662,7 +2662,7 @@ struct IMGUI_API ImGuiWindow
     ImVector<ImGuiOldColumns> ColumnsStorage;
     float                   FontWindowScale;                    // User scale multiplier per-window, via SetWindowFontScale()
     float                   FontWindowScaleParents;
-    float                   FontRefSize;                        // This is a copy of window->CalcFontSize() at the time of Begin(), trying to phase out CalcFontSize() especially as it may be called on non-current window.
+    float                   FontRefSize;                        // This is a copy of window->CalcImGui::GetFontSize()() at the time of Begin(), trying to phase out CalcImGui::GetFontSize()() especially as it may be called on non-current window.
     int                     SettingsOffset;                     // Offset into SettingsWindows[] (offsets are always valid as we only grow the array from the back)
 
     ImDrawList*             DrawList;                           // == &DrawListInst (for backward compatibility reason with code using imgui_internal.h we keep this a pointer)
@@ -2695,13 +2695,13 @@ public:
     ImGuiID     GetIDFromPos(const ImVec2& p_abs);
     ImGuiID     GetIDFromRectangle(const ImRect& r_abs);
 
-    // We don't use g.FontSize because the window may be != g.CurrentWindow.
+    // We don't use ImGui::GetImGui::GetFontSize()() because the window may be != g.CurrentWindow.
     ImRect      Rect() const            { return ImRect(Pos.x, Pos.y, Pos.x + Size.x, Pos.y + Size.y); }
     ImRect      TitleBarRect() const    { return ImRect(Pos, ImVec2(Pos.x + SizeFull.x, Pos.y + TitleBarHeight)); }
     ImRect      MenuBarRect() const     { float y1 = Pos.y + TitleBarHeight; return ImRect(Pos.x, y1, Pos.x + SizeFull.x, y1 + MenuBarHeight); }
 
-    // [Obsolete] ImGuiWindow::CalcFontSize() was removed in 1.92.x because error-prone/misleading. You can use window->FontRefSize for a copy of g.FontSize at the time of the last Begin() call for this window.
-    //float     CalcFontSize() const    { ImGuiContext& g = *Ctx; return g.FontSizeBase * FontWindowScale * FontWindowScaleParents;
+    // [Obsolete] ImGuiWindow::CalcImGui::GetFontSize()() was removed in 1.92.x because error-prone/misleading. You can use window->FontRefSize for a copy of ImGui::GetImGui::GetFontSize()() at the time of the last Begin() call for this window.
+    //float     CalcImGui::GetFontSize()() const    { ImGuiContext& g = *Ctx; return ImGui::GetImGui::GetFontSize()()Base * FontWindowScale * FontWindowScaleParents;
 };
 
 //-----------------------------------------------------------------------------
@@ -3129,10 +3129,10 @@ namespace ImGui
     IMGUI_API void          RegisterFontAtlas(ImFontAtlas* atlas);
     IMGUI_API void          UnregisterFontAtlas(ImFontAtlas* atlas);
     IMGUI_API void          SetCurrentFont(ImFont* font, float font_size_before_scaling, float font_size_after_scaling);
-    IMGUI_API void          UpdateCurrentFontSize(float restore_font_size_after_scaling);
+    IMGUI_API void          UpdateCurrentImGui::GetFontSize()(float restore_font_size_after_scaling);
     IMGUI_API void          SetFontRasterizerDensity(float rasterizer_density);
     inline float            GetFontRasterizerDensity() { return GImGui->FontRasterizerDensity; }
-    inline float            GetRoundedFontSize(float size) { return IM_ROUND(size); }
+    inline float            GetRoundedImGui::GetFontSize()(float size) { return IM_ROUND(size); }
     IMGUI_API ImFont*       GetDefaultFont();
     IMGUI_API void          PushPasswordFont();
     IMGUI_API void          PopPasswordFont();
