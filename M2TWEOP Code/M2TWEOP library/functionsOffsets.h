@@ -31,6 +31,8 @@ public:
 		DWORD getUnitFullMovePoints = NULL;
 		DWORD createMoveExtents = NULL;
 		DWORD setCharacterName = NULL;
+		DWORD birthLog = NULL;
+		DWORD marryCharacters = NULL;
 
 		DWORD createIdleActionFunc = NULL;
 		DWORD makeCadDiplomacyFunc = NULL;
@@ -224,6 +226,7 @@ public:
 		DWORD getResidenceCharacterAtIndex = NULL;
 		DWORD removeSieges = NULL;
 		DWORD doHordeStuff = NULL;
+		DWORD createCharacterRecord = NULL;
 		DWORD getTileCharactersFunc = NULL;
 		DWORD getValidRegionTile = NULL;
 		DWORD isTileValidForCharacter = NULL;

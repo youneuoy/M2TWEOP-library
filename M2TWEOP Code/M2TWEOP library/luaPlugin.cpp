@@ -529,7 +529,7 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	M2TWEOP.setAncillariesLimit(15);
 	*/
 	tables.M2TWEOP.set_function("setAncillariesLimit", &gameHelpers::setAncLimit);
-	
+
 	/***
 	Unlocks all console commands, also allows the use of the 'control' command to change factions in singleplayer campaigns.
 	@function M2TWEOP.unlockGameConsoleCommands

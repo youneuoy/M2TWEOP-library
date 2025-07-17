@@ -175,6 +175,11 @@ characterRecord* factionStruct::getFamilyHead()
 	return nullptr;
 }
 
+characterRecord* factionStruct::newRecord()
+{
+	return GAME_FUNC(characterRecord*(__thiscall*)(factionStruct*), createCharacterRecord)(this);
+}
+
 void factionStruct::setLeader(characterRecord* newLeader, const bool onlyLeader)
 {
 	if (newLeader->faction->factionID != factionID)

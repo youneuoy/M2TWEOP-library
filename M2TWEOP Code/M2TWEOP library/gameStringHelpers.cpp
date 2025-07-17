@@ -5,6 +5,11 @@
 #include "dataOffsets.h"
 #include "techFuncs.h"
 
+void stringWithHash::setString(const std::string& str)
+{
+	gameStringHelpers::setHashedStringGame(this, str.c_str());
+}
+
 namespace gameStringHelpers
 {
 	void setHashedString(char** targetS, const char* newS)
@@ -21,6 +26,8 @@ namespace gameStringHelpers
 	{
 		GAME_FUNC(void(__thiscall*)(stringWithHash*, const char*), stringCryptFunc)(str, newS);
 	}
+
+	
 
 	void freeHashString(stringWithHash* str)
 	{

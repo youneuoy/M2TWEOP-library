@@ -925,13 +925,14 @@ namespace settlementHelpers
 		const int turnNum = campaignHelpers::getCampaignData()->turnNumber;
 		const int hash = makeBuildOptionsHash(sett);
 		auto options = buildingOptionsDbPtr->settOptions[index];
-		if (options && options->hash == hash && options->turn == turnNum)
+		if (options && options->hash == hash && options->turn == turnNum && options->settIndex == sett->minorSettlementIndex)
 			return options.get();
 		
 		buildingOptionsDbPtr->settOptions[index] = std::make_shared<settlementBuildingOptions>();
 		options = buildingOptionsDbPtr->settOptions[index];
 		options->hash = hash;
 		options->turn = turnNum;
+		options->settIndex = sett->minorSettlementIndex;
 		const auto available = getAvailableBuildings(sett);
 		options->count = getAvailableBuildingsCount(available);
 		for (int i = 0; i < options->count; i++)

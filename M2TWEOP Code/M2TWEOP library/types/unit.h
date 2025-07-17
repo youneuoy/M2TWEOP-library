@@ -532,20 +532,13 @@ struct artilleryEntry
 struct engineRecordBase
 {
 	int vtable;
-	char* name;
-	int nameHash;
+	stringWithHash name;
 	uint32_t culturesBitfield;
-	int RefPointsAlloc;
-	int RefPoints;
-	int RefPointsEnd;
-	int RefPointsSize;
+	gameStdVector<void*> refPoints;
 	artilleryEntry artilleryEntry;
 	int engineType;
 	int engineVariant;
-	int points;
-	int pointsStart;
-	int pointsEnd;
-	int pointsAllocated;
+	gameStdVector<void*> points;
 };
 
 struct mountedEngine

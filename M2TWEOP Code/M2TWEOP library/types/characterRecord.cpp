@@ -7,6 +7,7 @@
 #include "characterRecord.h"
 
 #include "campaign.h"
+#include "campaignDb.h"
 #include "gameStringHelpers.h"
 #include "functionsOffsets.h"
 #include "character.h"
@@ -631,6 +632,8 @@ namespace characterRecordHelpers
 		@tfield giveRandomPortrait giveRandomPortrait
 		@tfield acquireAncillary acquireAncillary
 		@tfield hasAncType hasAncType
+		@tfield birthChild birthChild
+		@tfield marryWife marryWife
 
 		@table characterRecord
 		*/
@@ -867,6 +870,29 @@ namespace characterRecordHelpers
 		      record:giveRandomPortrait(M2TWEOP.getCultureID("southern_european"), -1)
 		*/
 		types.characterRecord.set_function("giveRandomPortrait", &characterRecord::giveRandomPortrait);
+		/***
+		Create a new child for the character. You need to select the father for this.
+		@function characterRecord:birthChild
+		@tparam string name random_name for random
+		@tparam string lastName
+		@tparam int age
+		@tparam bool isMale
+		@tparam bool isAlive
+		@treturn characterRecord child
+		@usage
+		      local newKid = record:birthChild("random_name", "", 0, true, true)
+		*/
+		types.characterRecord.set_function("birthChild", &characterRecord::birthChild);
+		/***
+		Create and marry a wife.
+		@function characterRecord:marryWife
+		@tparam string name random_name for random
+		@tparam int age
+		@treturn characterRecord wife
+		@usage
+		      local wife = record:marryWife("random_name", 30)
+		*/
+		types.characterRecord.set_function("marryWife", &characterRecord::marryWife);
 			
 		types.characterRecord.set("level", &characterRecord::level);
 		types.characterRecord.set("authority", &characterRecord::authority);
@@ -1267,6 +1293,106 @@ void ancillary::setLocalizedEffectsDescr(const std::string& newDescr)
 {
 	effectsDescr = techFuncs::createGameClass<UNICODE_STRING**>();
 	gameStringHelpers::createUniString(*effectsDescr, newDescr.c_str());
+}
+
+characterRecord* characterRecord::birthChild(const std::string& name, const std::string& childLastName, const int childAge,
+	const bool childMale, const bool childAlive)
+{
+	if (!this->isMale)
+	{
+		gameHelpers::logStringGame("characterRecord::birthChild: only fathers can birth children");
+		return nullptr;
+	}
+	if (!this->spouse)
+	{
+		gameHelpers::logStringGame("characterRecord::birthChild: character does not have a spouse");
+		return nullptr;
+	}
+	if (this->numberOfChildren > 3)
+	{
+		gameHelpers::logStringGame("characterRecord::birthChild: can only have 4 children");
+		return nullptr;
+	}
+	const auto campaignDb = campaignHelpers::getCampaignDb();
+	if ((age - childAge < campaignDb->campaignDbFamilyTree.ageOfManhood)
+		||(spouse->age - childAge < campaignDb->campaignDbFamilyTree.daughtersAgeOfConsent))
+	{
+		gameHelpers::logStringGame("characterRecord::birthChild: character is not old enough to birth this child");
+		return nullptr;
+	}
+	if (childMale && childAge >= campaignDb->campaignDbFamilyTree.ageOfManhood)
+	{
+		gameHelpers::logStringGame("characterRecord::birthChild: child is too old, create a general and adopt him");
+		return nullptr;
+	}
+	const auto newRecord = this->faction->newRecord();
+	newRecord->setAge(childAge);
+	newRecord->setWasLeader(false);
+	newRecord->isMale = childMale;
+	if (name == "random_name" || name.empty())
+		newRecord->giveRandomName(this->faction->factionID);
+	else
+	{
+		GAME_FUNC(void(__thiscall*)(characterRecord*, const char*, const char*, UNICODE_STRING***, int, bool)
+		          , setCharacterName)(newRecord, name.c_str(), childLastName.c_str(), localizedNicknameForSave, 7, false);
+	}
+	newRecord->yearOfBirth = campaignHelpers::getCampaignData()->currentDate - static_cast<float>(childAge);
+	newRecord->seasonOfBirth = childAge == 0 ? campaignHelpers::getCampaignData()->season : campaignHelpers::getCampaignData()->tickCount % 2;
+	newRecord->isAlive = childAlive;
+	if (!childAlive)
+	{
+		newRecord->deathYear = campaignHelpers::getCampaignData()->currentDate;
+		newRecord->deathSeason = campaignHelpers::getCampaignData()->season;
+	}
+	if (isMale || (childAge < campaignDb->campaignDbFamilyTree.daughtersAgeOfConsent))
+		newRecord->isChild = true;
+	newRecord->parent = this;
+	newRecord->isFamily = true;
+	this->childs[numberOfChildren++] = newRecord;
+	GAME_FUNC(void(__cdecl*)(characterRecord*), birthLog)(newRecord);
+	return newRecord;
+}
+
+characterRecord* characterRecord::marryWife(const std::string& name, int wifeAge)
+{
+	if (!isMale)
+	{
+		gameHelpers::logStringGame("characterRecord::marryWife: Character is not male");
+		return nullptr;
+	}
+	if (spouse)
+	{
+		gameHelpers::logStringGame("characterRecord::marryWife: Character already married");
+		return nullptr;
+	}
+	const auto campaignDb = campaignHelpers::getCampaignDb();
+	if (age < campaignDb->campaignDbFamilyTree.ageOfManhood)
+	{
+		gameHelpers::logStringGame("characterRecord::marryWife: Character is too young");
+		return nullptr;
+	}
+	if (wifeAge < campaignDb->campaignDbFamilyTree.daughtersAgeOfConsent)
+	{
+		gameHelpers::logStringGame("characterRecord::marryWife: Wife is too young");
+		return nullptr;
+	}
+	const auto newRecord = this->faction->newRecord();
+	newRecord->setAge(wifeAge);
+	newRecord->setWasLeader(false);
+	newRecord->isMale = false;
+	if (name == "random_name" || name.empty())
+		newRecord->giveRandomName(this->faction->factionID);
+	else
+	{
+		GAME_FUNC(void(__thiscall*)(characterRecord*, const char*, const char*, UNICODE_STRING***, int, bool)
+		, setCharacterName)(newRecord, name.c_str(), "", localizedNicknameForSave, 7, false);
+	}
+	newRecord->yearOfBirth = campaignHelpers::getCampaignData()->currentDate - static_cast<float>(wifeAge);
+	newRecord->seasonOfBirth = campaignHelpers::getCampaignData()->tickCount % 2;
+	newRecord->isAlive = true;
+	newRecord->isFamily = true;
+	GAME_FUNC(void(__thiscall*)(characterRecord*, characterRecord*), marryCharacters)(newRecord, this);
+	return newRecord;
 }
 
 std::string characterRecord::giveValidLabel()

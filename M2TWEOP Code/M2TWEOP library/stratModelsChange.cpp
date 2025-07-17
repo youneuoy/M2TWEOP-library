@@ -263,7 +263,7 @@ namespace stratModelsChange
 		{
 			if ( &characterFacEntry->stratInfo->stratModelsArray[0]
 				&& characterFacEntry->stratInfo->stratModelsArray[0].stratModelEntry == entry
-				&& strcmp(characterFacEntry->stratInfo->stratModelsArray[0].modelName.name, model.c_str()) == 0
+				&& characterFacEntry->stratInfo->stratModelsArray[0].modelName.getString() == model
 				)
 			{
 				CHANGE_MODELS_NEEDED_NOW = ModelsChangeStatus::NeedChange;

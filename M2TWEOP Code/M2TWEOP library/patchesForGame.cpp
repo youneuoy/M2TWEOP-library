@@ -2428,13 +2428,13 @@ void __fastcall patchesForGame::onLoadDescrBattleCharacter(armyStruct* army, cha
 {
 	characterHelpers::setBodyguard(goalGen, army->units[0]);//we replace game function what set army leader character.
 
+	
 	std::string relativePath = techFuncs::uniToAnsi(campaignHelpers::getCampaignData()->currentDescrFile);
 
 	if (relativePath.find("battle") != std::string::npos)
 	{
 		battleCreator::addCharactersToCustomBattleArmy(army, relativePath);
 	}
-	//general*newGen=fastFuncts::createCharacter("named character",army->faction,25,"testGen", "testGen",0,nullptr, 0,0);
 }
 
 void __stdcall patchesForGame::onBattleStateChange()
