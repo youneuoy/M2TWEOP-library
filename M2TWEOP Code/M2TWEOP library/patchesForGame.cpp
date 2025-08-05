@@ -2015,7 +2015,7 @@ void __stdcall patchesForGame::onBattleStratScreen()
 
 void deployGateAttackers(const aiTacticAssault* aiTactic)
 {
-	if (const auto unit = aiTactic->attackUnit; unit && distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 200)
+	if (const auto unit = aiTactic->attackUnit; unit && distance(unit->positionX, unit->positionY, aiTactic->advanceX, aiTactic->advanceY) > 500)
 		unitActions::placeUnit(unit, aiTactic->advanceX, aiTactic->advanceY, aiTactic->angle, 0);
 }
 

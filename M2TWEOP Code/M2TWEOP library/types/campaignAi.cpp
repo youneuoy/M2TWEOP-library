@@ -3754,7 +3754,6 @@ void aiPersonalityValues::initControllers()
 		{
 			if (const auto prodController = this->aiProductionControllers[controllerIndex]; sett == prodController->settlement)
 			{
-				prodController->resetExtraBias();
 				if (isAutoControl && prodController->autoManagePolicy == settlementPolicy::none)
 					evaluatePolicies(prodController->settlement);
 				sett->aiProductionController = prodController;
