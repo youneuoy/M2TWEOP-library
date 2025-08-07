@@ -1634,6 +1634,8 @@ void luaPlugin::initUnits()
 	@tfield setParams setParams change soldierCountStratMap, exp, armourLVL, weaponLVL at one time.
 	@tfield hasAttribute hasAttribute Check if unit has edu attribute.
 	@tfield string alias
+	@tfield int crusadeState >0 means crusading, <0 means disbaning, 0 means no crusade
+	@tfield crusadeStruct crusade
 	@tfield hasBattleProperty hasBattleProperty
 	@tfield setBattleProperty setBattleProperty
 	@tfield getActionStatus getActionStatus
@@ -1689,6 +1691,8 @@ void luaPlugin::initUnits()
 	types.unit.set("flankRightThreat", &unit::flankRightThreat);
 	types.unit.set("flankLeftThreat", &unit::flankLeftThreat);
 	types.unit.set("flankRearThreat", &unit::flankRearThreat);
+	types.unit.set("crusadeState", &unit::crusadeState);
+	types.unit.set("crusade", &unit::crusade);
 	types.unit.set("soldiersFled", &unit::soldiersFled);
 	types.unit.set("aiGroupData", &unit::unitAiGroupData);
 	types.unit.set("isInfighting", &unit::isInfighting);

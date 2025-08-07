@@ -1978,7 +1978,7 @@ struct unit
 	void *torchAllocator;
 	void *currentWaypoint;
 	struct crusade *crusade;
-	int8_t isOnCrusadeMaybe;
+	int8_t crusadeState;
 	int8_t markedToKill;
 	int8_t taskMelee;
 	int8_t taskSkirmish;
