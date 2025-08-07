@@ -176,8 +176,10 @@ namespace characterHelpers
 				break;
 			}
 
-			firstName = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(isMale ? 0 : 1 , nameFaction, firstNameIndex);
-			lastName = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(2, nameFaction, secondNameIndex);
+			if (const auto firstNameC = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(isMale ? 0 : 1 , nameFaction, firstNameIndex))
+				firstName = firstNameC;
+			if (const auto lastNameC = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(2, nameFaction, secondNameIndex))
+				lastName = lastNameC;
 		}
 		
 		const auto typeHashed = gameStringHelpers::createHashedStringGame(type.c_str());
