@@ -44,6 +44,8 @@ public:
 		DWORD guildCooldown = NULL;
 		DWORD isDLC = NULL;
 		DWORD modelRigidCounts = NULL;
+		DWORD mapRegionsSize1 = NULL;
+		DWORD mapRegionsSize2 = NULL;
 
 
 		DWORD unitTypesStart = NULL;

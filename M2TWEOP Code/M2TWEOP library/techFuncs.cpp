@@ -140,6 +140,33 @@ std::wstring techFuncs::convertUtf8ToWide(const std::string& str)
     return wstr;
 }
 
+namespace
+{
+    string uniToAcp(UNICODE_STRING**& uniStr)
+    {
+        if (uniStr == nullptr || *uniStr == nullptr)
+            return "";
+        UNICODE_STRING* uniS = *uniStr;
+        const auto wstr = reinterpret_cast<wchar_t*>(&uniS->Buffer);
+        const int sizeNeeded = WideCharToMultiByte(CP_ACP, 0, wstr, -1, nullptr, 0, nullptr, nullptr);
+        const auto szTo = new char[sizeNeeded];
+        WideCharToMultiByte(CP_ACP, 0, wstr, -1, szTo, sizeNeeded, nullptr, nullptr);
+        szTo[uniS->Length] = '\0';
+        std::string strTo = szTo;
+        delete[] szTo;
+        return strTo;
+    }
+}
+
+static bool checNonStandardChar(string text)
+{
+    if (text.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890_/-.,") != std::string::npos)
+    {
+        return true;
+    }
+    return false;
+}
+
 string techFuncs::uniToAnsi(UNICODE_STRING**& uniStr)
 {
     if (uniStr == nullptr || *uniStr == nullptr)
@@ -150,11 +177,18 @@ string techFuncs::uniToAnsi(UNICODE_STRING**& uniStr)
     const auto wstr = reinterpret_cast<wchar_t*>(&uniS->Buffer);
     const int sizeNeeded = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, nullptr, 0, nullptr, nullptr);
     const auto szTo = new char[sizeNeeded];
-	WideCharToMultiByte(CP_UTF8, 0, wstr, -1, szTo, sizeNeeded, nullptr, nullptr);
+    WideCharToMultiByte(CP_UTF8, 0, wstr, -1, szTo, sizeNeeded, nullptr, nullptr);
     szTo[uniS->Length] = '\0';
-	std::string strTo = szTo;
-	delete[] szTo;
-	return strTo;
+    std::string strTo = szTo;
+    delete[] szTo;
+
+    // Russian save fix   
+    if (checNonStandardChar(strTo))
+    {
+        strTo = uniToAcp(uniStr);
+    }
+
+    return strTo;
 }
 
 void techFuncs::deleteFiles(vector<string>& files)
@@ -171,24 +205,6 @@ void techFuncs::deleteFiles(vector<string>& files)
             gameHelpers::logStringGame(e.what());
             continue;
         }
-    }
-}
-
-namespace
-{
-    string uniToAcp(UNICODE_STRING**& uniStr)
-    {
-        if (uniStr == nullptr || *uniStr == nullptr)
-            return "";
-        UNICODE_STRING* uniS = *uniStr;
-        const auto wstr = reinterpret_cast<wchar_t*>(&uniS->Buffer);
-        const int sizeNeeded = WideCharToMultiByte(CP_ACP, 0, wstr, -1, nullptr, 0, nullptr, nullptr);
-        const auto szTo = new char[sizeNeeded];
-        WideCharToMultiByte(CP_ACP, 0, wstr, -1, szTo, sizeNeeded, nullptr, nullptr);
-        szTo[uniS->Length] = '\0';
-        std::string strTo = szTo;
-        delete[] szTo;
-        return strTo;
     }
 }
 

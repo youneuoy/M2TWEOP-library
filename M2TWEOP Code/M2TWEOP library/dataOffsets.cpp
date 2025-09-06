@@ -107,7 +107,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.currentCharacterActionType = 0x16F0E58;
 		offsets.aStarTilesGlobal = 0x16F0E60;
 		offsets.religionTriggerBug = 0x892F7C;
-
+		offsets.mapRegionsSize1 = 0x00B6CDA9;
+		offsets.mapRegionsSize2 = 0x00B6C968;
 		
 		offsets.fortVtbl = 0x13362F4;
 		offsets.fortSpyingVtbl = 0x13362D0;
@@ -222,6 +223,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.currentCharacterActionType = 0x16A7CC0;
 		offsets.aStarTilesGlobal = 0x16A7CC8;
 		offsets.religionTriggerBug = 0x892FBC;
+		offsets.mapRegionsSize1 = 0x00B66CF8;
+		offsets.mapRegionsSize2 = 0x00B67139;
 
 		offsets.audioEnable = reinterpret_cast<bool*>(0x01639f1d);
 		offsets.audioMaster_vol = reinterpret_cast<int*>(0x01639f60);

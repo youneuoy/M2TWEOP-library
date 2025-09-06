@@ -802,6 +802,17 @@ namespace gameHelpers
 		return *dataOffsets::offsets.gameUnit_size;
 	}
 	
+	void setBigMapRegionsSize()
+	{
+		const DWORD mapSizeLimit1 = dataOffsets::offsets.mapRegionsSize1;
+		int fix1 = 0x10;
+		MemWork::WriteData(&fix1, mapSizeLimit1, 1);
+
+		const DWORD mapSizeLimit2 = dataOffsets::offsets.mapRegionsSize2;
+		int fix2 = 0x08;
+		MemWork::WriteData(&fix2, mapSizeLimit2, 1);
+	}
+
 	void addToLua(sol::state& luaState)
 	{
 		struct
