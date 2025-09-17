@@ -253,6 +253,7 @@ namespace gameEvents
 	void onLoadGamePl(const std::vector<std::string>*saveFiles);
 	std::vector<std::string>*onSaveGamePl(UNICODE_STRING * *&savePath);
 	void onEventWrapper(DWORD eventAddr, DWORD** vTab);
+	void onFactionSymbolSelect(int factionID);
 	
 	template<EventType EvType> class Event :public EventBase
 	{

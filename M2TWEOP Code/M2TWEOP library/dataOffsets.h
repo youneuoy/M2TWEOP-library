@@ -46,6 +46,7 @@ public:
 		DWORD modelRigidCounts = NULL;
 		DWORD mapRegionsSize1 = NULL;
 		DWORD mapRegionsSize2 = NULL;
+		DWORD selectedFactionSymbol = NULL;
 
 
 		DWORD unitTypesStart = NULL;

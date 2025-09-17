@@ -957,6 +957,15 @@ void onCampaignMapLoaded()
 		tryLua((*plugData::data.luaAll.onCampaignMapLoaded)())
 	}
 }
+
+void onFactionSymbolSelect(int factionID)
+{
+	if (plugData::data.luaAll.onFactionSymbolSelect != nullptr)
+	{
+		tryLua((*plugData::data.luaAll.onFactionSymbolSelect)(factionID))
+	}
+}
+
 void onLoadGamePl(const std::vector<std::string>* saveFiles)
 {
 	if (plugData::data.luaAll.onLoadSaveFile != nullptr)
@@ -1400,6 +1409,7 @@ void luaPlugin::onPluginLoadF()
 	@tfield onPluginLoad onPluginLoad
 	@tfield onNewGameLoaded onNewGameLoaded
 	@tfield onRemoveFromUnitQueue onRemoveFromUnitQueue
+	@tfield onFactionSymbolSelect onFactionSymbolSelect
 
 	@table EventsFunctionsList
 	*/
@@ -4527,7 +4537,23 @@ void luaPlugin::onPluginLoadF()
 	*/
 	onStartSiege = new sol::function(luaState["onStartSiege"]);
 	checkLuaFunc(&onStartSiege);
-	
+
+
+	/***
+	Called when clicking on a faction symbol in the faction selection menu.
+
+	@function onFactionSymbolSelect(factionID)
+	@tparam int factionID
+
+	@usage
+	function onFactionSymbolSelect(factionID)
+	--something here
+	end
+	*/
+	onFactionSymbolSelect = new sol::function(luaState["onFactionSymbolSelect"]);
+	checkLuaFunc(&onFactionSymbolSelect);
+
+
 	if (onPluginLoad != nullptr)
 	{
 		tryLua((*onPluginLoad)())

@@ -1462,6 +1462,15 @@ void managerF::execPatches()
 	//DWORD instruction = 0x191468;
 	//MemWork::WriteData(&instruction, 0x008B963E, 3);
 	//MemWork::WriteData(&instruction, 0x004BD9C0, 3);
+
+
+	f1 << "Start applying new game patch" << '\n';
+	toFactionSymbolSelect* newFacSymSelect = new toFactionSymbolSelect(mem, (LPVOID)patchesForGame::onFactionSymbolSelect, globals::dataS.gameVersion);
+	newFacSymSelect->SetNewFactionSymbolSelect();
+	newFacSymSelect->Enable();
+
+	f1 << "Done" << '\n';
+
 }
 
 

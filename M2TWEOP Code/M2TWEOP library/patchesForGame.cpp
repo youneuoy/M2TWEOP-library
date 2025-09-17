@@ -2446,6 +2446,12 @@ void __stdcall patchesForGame::onBattleStateChange()
 	}
 }
 
+void __thiscall patchesForGame::onFactionSymbolSelect()
+{
+	int factionID = *reinterpret_cast<int*>(dataOffsets::offsets.selectedFactionSymbol);
+	gameEvents::onFactionSymbolSelect(factionID);
+}
+
 struct
 {
 	bool isComingFromConsole = false;

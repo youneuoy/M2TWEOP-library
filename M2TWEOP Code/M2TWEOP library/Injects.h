@@ -3126,3 +3126,28 @@ public:
 private:
 	LPVOID funcAddress;
 };
+
+
+//Faction Symbol Select
+class toFactionSymbolSelect
+	:public AATemplate
+{
+public:
+	toFactionSymbolSelect(MemWork* mem, LPVOID adr, int ver);
+	~toFactionSymbolSelect();
+
+	void SetOriginalFactionSymbolSelect();
+	void SetNewFactionSymbolSelect();
+private:
+	LPVOID funcAdress;
+};
+
+
+
+
+
+
+
+
+
+

@@ -346,6 +346,7 @@ public:
 	sol::function* resetDXFunc = nullptr;
 	sol::function* onLoadingFonts = nullptr;
 	sol::function* initDXFunc = nullptr;
+	sol::function* onFactionSymbolSelect = nullptr;
 	static void checkLuaFunc(sol::function** lRef);
 private:
 

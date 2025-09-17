@@ -9808,3 +9808,53 @@ void toRetreat::SetNewCode()
 
 	delete a;
 }
+
+toFactionSymbolSelect::toFactionSymbolSelect(MemWork* mem, LPVOID adr, int ver)
+	:AATemplate(mem), funcAdress(adr)
+{
+	if (ver == 2)//steam
+		m_adress = 0x00cbfed5;
+
+	else if (ver == 1)//kingdoms
+		m_adress = 0x00cc59b5;
+}
+
+toFactionSymbolSelect::~toFactionSymbolSelect()
+{
+}
+
+void toFactionSymbolSelect::SetOriginalFactionSymbolSelect()
+{
+	Assembler* a = new Assembler();
+
+	a->sub(esp, 0x84);
+
+	a->ret();
+	m_originalBytes = (unsigned char*)a->make();
+	m_originalSize = m_memory->GetASMSize(m_originalBytes);
+
+	delete a;
+}
+
+void toFactionSymbolSelect::SetNewFactionSymbolSelect()
+{
+	Assembler* a = new Assembler();
+
+	a->sub(esp, 0x84);
+
+	a->pushad();
+	a->pushf();
+
+	a->mov(eax, (DWORD)funcAdress);
+
+	a->call(eax);
+
+	a->popf();
+	a->popad();
+
+	a->ret();
+	m_cheatBytes = (unsigned char*)a->make();
+
+	delete a;
+}
+

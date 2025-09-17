@@ -250,6 +250,8 @@ public:
 
 	//called not in all cases!
 	static void WINAPI onBattleStateChange();
+
+	static void __thiscall onFactionSymbolSelect();
 };
 
 class consolePatches
