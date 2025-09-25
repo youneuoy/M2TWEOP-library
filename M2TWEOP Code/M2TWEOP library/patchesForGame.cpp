@@ -747,6 +747,9 @@ char* patchesForGame::onGetGuildOfferPic(DWORD level, int cultureID)
 
 unit** __fastcall patchesForGame::onGetUnitByLabel(DWORD unitLabels, char* label)
 {
+	if (!label || !label[0])
+		return nullptr;
+
 	if (const DWORD value = **reinterpret_cast<DWORD**>(label); value >= 0x01308DE4 && value <= 0x0135106C)
 		return reinterpret_cast<unit**>(label);
 	
@@ -756,6 +759,9 @@ unit** __fastcall patchesForGame::onGetUnitByLabel(DWORD unitLabels, char* label
 //12FFA84
 unitGroup** __fastcall patchesForGame::onGetGroupByLabel(DWORD groupLabels, char* label)
 {
+	if (!label || !label[0])
+		return nullptr;
+
 	if (const DWORD value = **reinterpret_cast<DWORD**>(label); value == 0x12FFA84 || value == 0x01344AA4)
 		return reinterpret_cast<unitGroup**>(label);
 	

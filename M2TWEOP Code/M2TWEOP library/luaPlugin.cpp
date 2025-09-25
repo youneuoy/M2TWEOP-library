@@ -560,12 +560,12 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	tables.M2TWEOP.set_function("setEDUUnitsSize", &gameHelpers::setMaxUnitSize);
 
 	/***
-	Set a size limit for map_regions.tga. The new maximum size is 2048 x 2048. Don't use regions that are too gigantic!   
-	@function M2TWEOP.setBigMapRegionsSize
+	Set a size limit for UI texture cache. The new maximum size is 2048 x 2048. This also changes the maximum size for map_regions.tga. Don't use regions that are too gigantic!   
+	@function M2TWEOP.setTextureCacheSize
 	@usage
-	M2TWEOP.setBigMapRegionsSize();
+	M2TWEOP.setTextureCacheSize();
 	*/
-	tables.M2TWEOP.set_function("setBigMapRegionsSize", &gameHelpers::setBigMapRegionsSize);
+	tables.M2TWEOP.set_function("setTextureCacheSize", &gameHelpers::setTextureCacheSize);
 
 	/***
 	Gets a struct containing color information about the settlement info scroll.

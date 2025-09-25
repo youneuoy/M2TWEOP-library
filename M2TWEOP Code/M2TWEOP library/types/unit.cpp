@@ -1379,6 +1379,11 @@ namespace unitHelpers
 	template <char fieldIndex>
 	std::string getStringPropertyEDU(const eduEntry* eduEn)
 	{
+		if (*reinterpret_cast<DWORD*>(&eduEn) <= 2)
+		{
+			return std::string("");
+		}
+
 		char* retS = nullptr;
 		if (fieldIndex == EduEntryStruct_Type)
 		{

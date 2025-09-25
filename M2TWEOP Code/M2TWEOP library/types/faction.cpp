@@ -784,6 +784,7 @@ namespace factionHelpers
 		types.factionStruct.set("otherFactionCount", &factionStruct::otherFactionCount);
 		types.factionStruct.set("numOfNamedCharacters", &factionStruct::characterRecordNum);
 		types.factionStruct.set("characterRecordNum", &factionStruct::characterRecordNum);
+		types.factionStruct.set("winCondition", &factionStruct::WinConditions);
 		types.factionStruct.set_function("getNamedCharacter", &factionStruct::getCharacterRecord);
 		/***
 		Get a character record using it's index.

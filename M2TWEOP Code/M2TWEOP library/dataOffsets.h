@@ -44,8 +44,8 @@ public:
 		DWORD guildCooldown = NULL;
 		DWORD isDLC = NULL;
 		DWORD modelRigidCounts = NULL;
-		DWORD mapRegionsSize1 = NULL;
-		DWORD mapRegionsSize2 = NULL;
+		DWORD mapCacheSize1 = NULL;
+		DWORD mapCacheSize2 = NULL;
 		DWORD selectedFactionSymbol = NULL;
 
 
