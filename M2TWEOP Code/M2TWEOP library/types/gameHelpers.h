@@ -517,7 +517,7 @@ namespace gameHelpers
 	void setBuildingChainLimit(unsigned int limit);
 	void setGuildCooldown(unsigned char turns);
 	int getUnitSize();
-	void setTextureCacheSize();
+	void setBigMapRegionsSize();
 
 	religionDatabase* getReligionDatabase();
 	gameDataAllStruct* getGameDataAll();
