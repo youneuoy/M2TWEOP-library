@@ -116,8 +116,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.sineValues = 0x2CE67A0;
 		offsets.descr_sm_factionslist = reinterpret_cast<smFactionsDb*>(0x01667288);
 
-		offsets.mapRegionsSize1 = 0x00B6CDA9;
-		offsets.mapRegionsSize2 = 0x00B6C968;
+		offsets.mapCacheSize1 = 0x00B6CDA9;
+		offsets.mapCacheSize2 = 0x00B6C968;
 		offsets.selectedFactionSymbol = 0x01687e4c;
 	}
 	else if (gameVer == 2) //steam
@@ -231,8 +231,8 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.gameUnit_size = reinterpret_cast<int*>(0x01639f4c);
 		offsets.descr_sm_factionslist = reinterpret_cast<smFactionsDb*>(0x0161f3b0);
 
-		offsets.mapRegionsSize1 = 0x00B66CF8;
-		offsets.mapRegionsSize2 = 0x00B67139;
+		offsets.mapCacheSize1 = 0x00B66CF8;
+		offsets.mapCacheSize2 = 0x00B67139;
 		offsets.selectedFactionSymbol = 0x01640574;
 	}
 }

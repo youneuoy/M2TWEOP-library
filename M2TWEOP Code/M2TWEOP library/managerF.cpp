@@ -1337,11 +1337,13 @@ void managerF::execPatches()
 	toGetUnitByLabel->Enable();
 	f1 << "Done" << '\n';
 
+#ifdef _DEBUG // need to figure out why this is causing the crash, for example, Germanicus
 	f1 << "Start applying onGetGroupByLabel patch" << '\n';
 	onGetGroupByLabel* toGetGroupByLabel = new onGetGroupByLabel(mem, (LPVOID)patchesForGame::onGetGroupByLabel, globals::dataS.gameVersion);
 	toGetGroupByLabel->SetNewCode();
 	toGetGroupByLabel->Enable();
 	f1 << "Done" << '\n';
+#endif
 
 	f1 << "Start applying onReadBuildingPool patch" << '\n';
 	onReadBuildingPool* toReadBuildingPool = new onReadBuildingPool(mem, (LPVOID)patchesForGame::onEvaluateUnit2, globals::dataS.gameVersion);
@@ -1464,7 +1466,7 @@ void managerF::execPatches()
 	//MemWork::WriteData(&instruction, 0x004BD9C0, 3);
 
 
-	f1 << "Start applying new game patch" << '\n';
+	f1 << "Start applying onFactionSymbolSelect patch" << '\n';
 	toFactionSymbolSelect* newFacSymSelect = new toFactionSymbolSelect(mem, (LPVOID)patchesForGame::onFactionSymbolSelect, globals::dataS.gameVersion);
 	newFacSymSelect->SetNewFactionSymbolSelect();
 	newFacSymSelect->Enable();
