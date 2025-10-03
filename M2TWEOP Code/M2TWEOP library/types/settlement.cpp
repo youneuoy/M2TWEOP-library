@@ -52,7 +52,7 @@ eduEntry* unitRQ::getUnitEntry()
 	if (recruitType < 2)
 		return this->entry;
 	if (recruitType > 2)
-		return reinterpret_cast<unit*>(this)->eduEntry;
+		return reinterpret_cast<unit*>(this->entry)->eduEntry;
 	return nullptr;
 }
 
