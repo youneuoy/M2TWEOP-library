@@ -129,7 +129,7 @@ void codes::initCodes(int gameVer)
 		offsets.mercEOPValue = 0x0190B928;
 		
 		offsets.getUnitByLabel = 0x0A945A0;
-		offsets.getGroupByLabel = 0x00A945C0;
+		offsets.getGroupByLabel = 0x00A92160;
 		offsets.getUnitByLabel2 = 0x0A91780;
 		
 		offsets.unitOrderMove = 0x00A6DAA0;
