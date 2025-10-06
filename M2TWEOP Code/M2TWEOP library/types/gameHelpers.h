@@ -518,6 +518,7 @@ namespace gameHelpers
 	void setGuildCooldown(unsigned char turns);
 	int getUnitSize();
 	void setTextureCacheSize();
+	void unlockWeaponLimit();
 
 	religionDatabase* getReligionDatabase();
 	gameDataAllStruct* getGameDataAll();

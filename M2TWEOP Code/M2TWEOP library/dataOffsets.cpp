@@ -119,6 +119,11 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.mapCacheSize1 = 0x00B6CDA9;
 		offsets.mapCacheSize2 = 0x00B6C968;
 		offsets.selectedFactionSymbol = 0x01687e4c;
+		offsets.weaponLimit1 = 0x0073BA72;
+		offsets.weaponLimit2 = 0x0073BA76;
+		offsets.weaponLimit3 = 0x0073BB05;
+		offsets.weaponLimit4 = 0x0073BB0F;
+		offsets.weaponLimit5 = 0x005F76DF;
 	}
 	else if (gameVer == 2) //steam
 	{
@@ -234,5 +239,10 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.mapCacheSize1 = 0x00B66CF8;
 		offsets.mapCacheSize2 = 0x00B67139;
 		offsets.selectedFactionSymbol = 0x01640574;
+		offsets.weaponLimit1 = 0x0073C202;
+		offsets.weaponLimit2 = 0x0073C206;
+		offsets.weaponLimit3 = 0x0073C295;
+		offsets.weaponLimit4 = 0x0073C29F;
+		offsets.weaponLimit5 = 0x005F7ACF;
 	}
 }

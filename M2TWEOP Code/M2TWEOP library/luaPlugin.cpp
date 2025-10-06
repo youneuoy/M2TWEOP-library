@@ -568,6 +568,14 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	tables.M2TWEOP.set_function("setTextureCacheSize", &gameHelpers::setTextureCacheSize);
 
 	/***
+	Set the weapon limit for units to 3.
+	@function M2TWEOP.unlockWeaponLimit
+	@usage
+	M2TWEOP.unlockWeaponLimit();
+	*/
+	tables.M2TWEOP.set_function("unlockWeaponLimit", &gameHelpers::unlockWeaponLimit);
+
+	/***
 	Gets a struct containing color information about the settlement info scroll.
 	@function M2TWEOP.getSettlementInfoScroll
 	@treturn settlementInfoScroll infoScroll

@@ -813,6 +813,27 @@ namespace gameHelpers
 		MemWork::WriteData(&fix2, mapCacheLimit2, 1);
 	}
 
+	void unlockWeaponLimit()
+	{
+		int fix1 = 0x03;
+		int fix2 = 0x04;
+
+		const DWORD limit1 = dataOffsets::offsets.weaponLimit1;
+		MemWork::WriteData(&fix1, limit1, 1);
+
+		const DWORD limit2 = dataOffsets::offsets.weaponLimit2;
+		MemWork::WriteData(&fix1, limit2, 1);
+
+		const DWORD limit3 = dataOffsets::offsets.weaponLimit3;
+		MemWork::WriteData(&fix1, limit3, 1);
+
+		const DWORD limit4 = dataOffsets::offsets.weaponLimit4;
+		MemWork::WriteData(&fix1, limit4, 1);
+
+		const DWORD limit5 = dataOffsets::offsets.weaponLimit5;
+		MemWork::WriteData(&fix2, limit5, 1);
+	}
+
 	void addToLua(sol::state& luaState)
 	{
 		struct

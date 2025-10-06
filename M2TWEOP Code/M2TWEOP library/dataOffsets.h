@@ -47,6 +47,11 @@ public:
 		DWORD mapCacheSize1 = NULL;
 		DWORD mapCacheSize2 = NULL;
 		DWORD selectedFactionSymbol = NULL;
+		DWORD weaponLimit1 = NULL;
+		DWORD weaponLimit2 = NULL;
+		DWORD weaponLimit3 = NULL;
+		DWORD weaponLimit4 = NULL;
+		DWORD weaponLimit5 = NULL;
 
 
 		DWORD unitTypesStart = NULL;
