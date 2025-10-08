@@ -52,6 +52,10 @@ public:
 		DWORD weaponLimit3 = NULL;
 		DWORD weaponLimit4 = NULL;
 		DWORD weaponLimit5 = NULL;
+		DWORD weaponLimit6 = NULL;
+		DWORD weaponLimit7 = NULL;
+		DWORD weaponLimit8 = NULL;
+		DWORD weaponLimit9 = NULL;
 
 
 		DWORD unitTypesStart = NULL;

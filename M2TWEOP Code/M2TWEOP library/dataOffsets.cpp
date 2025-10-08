@@ -124,6 +124,10 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.weaponLimit3 = 0x0073BB05;
 		offsets.weaponLimit4 = 0x0073BB0F;
 		offsets.weaponLimit5 = 0x005F76DF;
+		offsets.weaponLimit6 = 0x00475B60;
+		offsets.weaponLimit7 = 0x00475B64;
+		offsets.weaponLimit8 = 0x00632B12;
+		offsets.weaponLimit9 = 0x00632B05;
 	}
 	else if (gameVer == 2) //steam
 	{
@@ -244,5 +248,9 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.weaponLimit3 = 0x0073C295;
 		offsets.weaponLimit4 = 0x0073C29F;
 		offsets.weaponLimit5 = 0x005F7ACF;
+		offsets.weaponLimit6 = 0x00475F50;
+		offsets.weaponLimit7 = 0x00475F54;
+		offsets.weaponLimit8 = 0x00632EB2;
+		offsets.weaponLimit9 = 0x00632EA5;
 	}
 }

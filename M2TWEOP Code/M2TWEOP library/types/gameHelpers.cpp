@@ -818,6 +818,7 @@ namespace gameHelpers
 		int fix1 = 0x03;
 		int fix2 = 0x04;
 
+		//campaign
 		const DWORD limit1 = dataOffsets::offsets.weaponLimit1;
 		MemWork::WriteData(&fix1, limit1, 1);
 
@@ -832,6 +833,21 @@ namespace gameHelpers
 
 		const DWORD limit5 = dataOffsets::offsets.weaponLimit5;
 		MemWork::WriteData(&fix2, limit5, 1);
+
+		//custom
+		const DWORD limit6 = dataOffsets::offsets.weaponLimit6;
+		MemWork::WriteData(&fix1, limit6, 1);
+
+		const DWORD limit7 = dataOffsets::offsets.weaponLimit7;
+		MemWork::WriteData(&fix1, limit7, 1);
+
+		const DWORD limit8 = dataOffsets::offsets.weaponLimit8;
+		MemWork::WriteData(&fix1, limit8, 1);
+
+		const DWORD limit9 = dataOffsets::offsets.weaponLimit9;
+		MemWork::WriteData(&fix2, limit9, 1);
+
+		//historic battle?
 	}
 
 	void addToLua(sol::state& luaState)
