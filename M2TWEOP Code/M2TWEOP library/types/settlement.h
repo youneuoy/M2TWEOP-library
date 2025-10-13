@@ -10,6 +10,7 @@
 #include "lua/sol.hpp"
 
 
+
 enum class productionBias
 {
 	frontier,
@@ -167,13 +168,6 @@ struct building { /* building structure */
 	}
 };
 
-struct recruitmentOptions
-{
-	int field0;
-	struct unitRQ *units;
-	int lastUnit;
-	int unitsEnd;
-};
 
 enum class constructionType
 {
@@ -220,14 +214,8 @@ struct buildingsQueue {
 	}
 };
 
-struct availableBuildings
-{
-	struct buildingInQueue *buildingsList;
-	struct availableBuildings *next;
-	struct availableBuildings *previous;
-	int listSize;
-	int buildingCount;
-};
+using availableBuildings = gameList<buildingInQueue>;
+using recruitmentOptions = gameStdVector<unitRQ>;
 
 struct guild
 {
@@ -787,6 +775,8 @@ struct eopSettlementData
 	std::string regionName;
 	std::string settlementLabel;
 	std::string regionRebelsName;
+	std::vector<std::string> addedHiddenResources;
+	std::vector<std::string> removedHiddenResources;
 	nlohmann::json serialize()
 	{
 		nlohmann::json json;
@@ -797,6 +787,14 @@ struct eopSettlementData
 		json["regionRebelsName"] = regionRebelsName;
 		json["settlementID"] = settlementID;
 		json["regionID"] = regionID;
+		for (const auto& resource : addedHiddenResources)
+		{
+			json["addedHiddenResources"].push_back(resource);
+		}
+		for (const auto& resource : removedHiddenResources)
+		{
+			json["removedHiddenResources"].push_back(resource);
+		}
 		return json;
 	}
 	void deserialize(const nlohmann::json& json)
@@ -808,6 +806,16 @@ struct eopSettlementData
 		regionRebelsName = json["regionRebelsName"];
 		settlementID = json["settlementID"];
 		regionID = json["regionID"];
+		addedHiddenResources.clear();
+		removedHiddenResources.clear();
+		for (const auto& resource : json["addedHiddenResources"])
+		{
+			addedHiddenResources.push_back(resource.get<std::string>());
+		}
+		for (const auto& resource : json["removedHiddenResources"])
+		{
+			removedHiddenResources.push_back(resource.get<std::string>());
+		}
 	}
 };
 
@@ -840,9 +848,7 @@ namespace settlementHelpers
 	void destroyBuilding(settlementStruct* sett, const char* typeName, bool isReturnMoney);
 	
 	bool addBuildingToQueue(buildingInQueue* building);
-	int getAvailableBuildingsCount(const availableBuildings* list);
 	buildingInQueue* getBuildingInQueue(buildingsQueue* queue, int position);
-	buildingInQueue* getBuildingOption(const availableBuildings* list, int index);
 	availableBuildings* getAvailableBuildingsMem();
 	availableBuildings* getAvailableBuildings(settlementStruct* sett);
 	int makeBuildOptionsHash(const settlementStruct* sett);

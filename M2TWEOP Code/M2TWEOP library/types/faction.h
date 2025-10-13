@@ -500,16 +500,142 @@ struct factionRecord { /* see descr_sm_factions.txt */
 	std::string getLocalizedName();
 };
 
+struct facStratModel
+{
+	std::string model;
+	int characterType;
+	int level;
+	facStratModel(std::string model, int charType, int lvl)
+		: model(std::move(model)), characterType(charType), level(lvl) {}
+};
+
+struct facBattleModel
+{
+	std::string model;
+	int characterType;
+	facBattleModel(std::string model, int charType)
+		: model(std::move(model)), characterType(charType) {}
+};
+
 class eopFactionData
 {
 public:
-	int8_t primaryColorR{};
-	int8_t primaryColorG{};
-	int8_t primaryColorB{};
-	int8_t secondaryColorR{};
-	int8_t secondaryColorG{};
-	int8_t secondaryColorB{};
+	uint8_t primaryColorR{};
+	uint8_t primaryColorG{};
+	uint8_t primaryColorB{};
+	uint8_t secondaryColorR{};
+	uint8_t secondaryColorG{};
+	uint8_t secondaryColorB{};
+	int cultureID{};
+	std::vector<facStratModel> changedStratModels{};
+	std::vector<facBattleModel> changedBattleModels{};
+	nlohmann::json serialize() const
+	{
+		nlohmann::json json;
+		json["primaryColorR"] = primaryColorR;
+		json["primaryColorG"] = primaryColorG;
+		json["primaryColorB"] = primaryColorB;
+		json["secondaryColorR"] = secondaryColorR;
+		json["secondaryColorG"] = secondaryColorG;
+		json["secondaryColorB"] = secondaryColorB;
+		json["cultureID"] = cultureID;
+
+		for (const auto& model : changedStratModels)
+		{
+			nlohmann::json modelJson;
+			modelJson["model"] = model.model;
+			modelJson["characterType"] = model.characterType;
+			modelJson["level"] = model.level;
+			json["changedStratModels"].push_back(modelJson);
+		}
+
+		for (const auto& model : changedBattleModels)
+		{
+			nlohmann::json modelJson;
+			modelJson["model"] = model.model;
+			modelJson["characterType"] = model.characterType;
+			json["changedBattleModels"].push_back(modelJson);
+		}
+
+		return json;
+	}
+
+	void deserialize(const nlohmann::json& json)
+	{
+		primaryColorR = json["primaryColorR"];
+		primaryColorG = json["primaryColorG"];
+		primaryColorB = json["primaryColorB"];
+		secondaryColorR = json["secondaryColorR"];
+		secondaryColorG = json["secondaryColorG"];
+		secondaryColorB = json["secondaryColorB"];
+		cultureID = json["cultureID"];
+
+		for (const auto& modelJson : json["changedStratModels"])
+		{
+			facStratModel model(modelJson["model"], modelJson["characterType"], modelJson["level"]);
+			changedStratModels.push_back(model);
+		}
+
+		for (const auto& modelJson : json["changedBattleModels"])
+		{
+			facBattleModel model(modelJson["model"], modelJson["characterType"]);
+			changedBattleModels.push_back(model);
+		}
+	}
 };
+
+class eopFactionDataDb
+{
+public:
+	void getOriginalData();
+	void setNewStratModel(const int factionId, const std::string& model, int charType, int level);
+	void setNewBattleModel(const int factionId, const std::string& model, int charType);
+	static eopFactionDataDb* get() { return m_Instance.get(); }
+	eopFactionData* getFactionData(const int factionId)
+	{
+		if (factionId < 0 || factionId >= m_FactionData.size())
+			return nullptr;
+		return &m_FactionData[factionId];
+	}
+	eopFactionData* getOriginalFactionData(const int factionId)
+	{
+		if (factionId < 0 || factionId >= m_OriginalData.size())
+			return nullptr;
+		return &m_OriginalData[factionId];
+	}
+	void checkInitialized();
+	void restoreOriginalData();
+	bool isRestoring() const
+	{
+		return m_Restoring;
+	}
+	nlohmann::json serialize()
+	{
+		nlohmann::json json;
+		for (const auto& data : m_FactionData)
+		{
+			json.push_back(data.serialize());
+		}
+		return json;
+	}
+	void deserialize(const nlohmann::json& json)
+	{
+		for (size_t i = 0; i < json.size() && i < m_FactionData.size(); ++i)
+		{
+			m_FactionData[i].deserialize(json[i]);
+		}
+	}
+	void onGameLoad(const std::vector<std::string>& filePaths);
+	void onGameLoaded();
+	std::string onGameSave();
+private:
+	static unique_ptr<eopFactionDataDb> m_Instance;
+	std::array<eopFactionData, 31> m_FactionData{};
+	std::array<eopFactionData, 31> m_OriginalData{};
+	bool m_Initialized = false;
+	bool m_Restoring = false;
+};
+
 namespace factionHelpers
 {
 	factionRecord* getFactionRecord(int id);

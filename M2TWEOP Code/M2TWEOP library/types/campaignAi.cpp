@@ -88,8 +88,10 @@ namespace campaignAi
 		const auto reg = stratMapHelpers::getRegion(settlement->regionID);
 		for (int i = 0; i < reg->stacksNum; i++)
 		{
-			if (const auto army = reg->getArmy(i);
-				army->faction->factionID == faction->factionID && army != settlement->army)
+			const auto army = reg->getArmy(i);
+			if (army == settlement->army)
+				continue;
+			if (army->faction->factionID == faction->factionID)
 				ownStr += army->totalStrength / 2;
 			else if (army->isEnemyToFaction(faction))
 				enemyStr += army->settlement ? army->totalStrength / 2 : army->totalStrength;
@@ -103,8 +105,7 @@ namespace campaignAi
 				continue;
 			for (int j = 0; j < nRegion.region->stacksNum; j++)
 			{
-				if (const auto army = nRegion.region->getArmy(j);
-					army->faction->factionID == faction->factionID && army != settlement->army)
+				if (const auto army = nRegion.region->getArmy(j); army->faction->factionID == faction->factionID)
 					ownStr += army->settlement ? army->totalStrength / 8 : army->totalStrength / 4;
 				else if (army->isEnemyToFaction(faction))
 					enemyStr += army->settlement ? army->totalStrength / 4 : army->totalStrength / 2;
@@ -257,6 +258,7 @@ void armyResource::calculatePositionPower()
 void settlementResource::calculatePositionPower()
 {
 	positionPower = settlement->army ? settlement->army->totalStrength : 0;
+	const auto checkFaction = globalEopAiConfig::getInstance()->getCurrentFaction();
 	auto neighbourTiles = stratMapHelpers::getNeighbourTiles(settlement->xCoord, settlement->yCoord);
 	while (true)
 	{
@@ -270,9 +272,9 @@ void settlementResource::calculatePositionPower()
 		const auto tileArmy = tile->getArmy(false);
 		if (!tileArmy || tileArmy->isAdmiral)
 			continue;
-		if (tileArmy->isAllyToFaction(settlement->faction))
+		if (tileArmy->isAllyToFaction(settlement->faction) && (checkFaction == settlement->faction || tileArmy->isEnemyToFaction(checkFaction)))
 			positionPower += tileArmy->totalStrength;
-		if (tileArmy->isEnemyToFaction(settlement->faction))
+		if (tileArmy->isEnemyToFaction(settlement->faction) && (checkFaction == settlement->faction || tileArmy->isAllyToFaction(checkFaction)))
 			positionPower -= tileArmy->totalStrength;
 	}
 }

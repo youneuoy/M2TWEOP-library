@@ -103,6 +103,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.modelRigidCounts = 0x1B5EFE4;
 		offsets.groundMoveCosts = 0x164A0A0;
 		offsets.expandedBinTable = 0x2CB97E8;
+		offsets.stratBinTable = 0x2CB9800;
 		offsets.descrCharacter = 0x18AA8F8;
 		offsets.currentCharacterActionType = 0x16F0E58;
 		offsets.aStarTilesGlobal = 0x16F0E60;
@@ -228,6 +229,7 @@ void dataOffsets::initDataOffsets(int gameVer)
 		offsets.modelRigidCounts = 0x1B15EB4;
 		offsets.groundMoveCosts = 0x01602188;
 		offsets.expandedBinTable = 0x2C70760;
+		offsets.stratBinTable = 0x02C70778;
 		offsets.descrCharacter = 0x01861788;
 		offsets.gameScriptLogger = 0x02C747A0;
 		offsets.sineValues = 0x2C9D800;

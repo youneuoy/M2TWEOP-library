@@ -591,16 +591,20 @@ namespace gameHelpers
 	
 	std::string getModFolderName()
 	{
-		const std::string path = getModPath();
-		size_t pos = path.length();
-		if (path.back() == '/' || path.back() == '\\')
-			pos--;
-		for (; pos > 0; pos--)
+		if (globals::dataS.modFolderName.empty())
 		{
-			if (path[pos] == '/' || path[pos] == '\\')
-				break;
+			const std::string path = getModPath();
+			size_t pos = path.length();
+			if (path.back() == '/' || path.back() == '\\')
+				pos--;
+			for (; pos > 0; pos--)
+			{
+				if (path[pos] == '/' || path[pos] == '\\')
+					break;
+			}
+			globals::dataS.modFolderName = path.substr(pos + 1, path.length() - pos);
 		}
-		return path.substr(pos + 1, path.length() - pos);
+		return globals::dataS.modFolderName;
 	}
 
 	void copyFileLua(const std::string& file, const std::string& to)
@@ -626,6 +630,15 @@ namespace gameHelpers
 	void setExpandedString(const std::string& key, const std::string& value)
 	{
 		const auto stringTable = *reinterpret_cast<void**>(dataOffsets::offsets.expandedBinTable);
+		const auto uniString = getHashedUniString(stringTable, key);
+		if (!uniString)
+			return;
+		gameStringHelpers::createUniString(*uniString, value.c_str());
+	}
+
+	void setStratString(const std::string& key, const std::string& value)
+	{
+		const auto stringTable = *reinterpret_cast<void**>(dataOffsets::offsets.stratBinTable);
 		const auto uniString = getHashedUniString(stringTable, key);
 		if (!uniString)
 			return;

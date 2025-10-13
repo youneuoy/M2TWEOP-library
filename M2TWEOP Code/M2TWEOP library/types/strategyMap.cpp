@@ -62,6 +62,15 @@ void oneTile::setTileGroundType(const int ground)
 	stratMapHelpers::updateTerrain();
 }
 
+void stratMap::fixAllReligionLevels()
+{
+	for (int i = 0; i < regionsNum; i++)
+	{
+		const auto region = &regions[i];
+		region->fixReligionLevels();
+	}
+}
+
 std::vector<settlementStruct*> minorSettlementDb::getMinorSettlements(const int regionId)
 {
 	if (!m_Loaded)
@@ -186,6 +195,28 @@ void regionStruct::changeRebelsName(const char* newName)
 	eopSettlementDataDb::get()->getSettlementData(regionID, 0)->regionRebelsName = newName;
 }
 
+void regionStruct::fixReligionLevels()
+{
+	const auto religionCount = gameHelpers::getReligionCount();
+	auto biggestReligionIndex = 0;
+	auto biggestReligionValue = 0.0f;
+	auto totalReligionValue = 0.0f;
+	for (int r = 0; r < religionCount; r++)
+	{
+		totalReligionValue += this->religionsARR[r];
+		if (this->religionsARR[r] > biggestReligionValue)
+		{
+			biggestReligionValue = this->religionsARR[r];
+			biggestReligionIndex = r;
+		}
+	}
+	if (!FLOAT_EQUAL(1.0f, totalReligionValue))
+	{
+		const auto diff = 1.0f - totalReligionValue;
+		this->religionsARR[biggestReligionIndex] += diff;
+	}
+}
+
 bool regionStruct::hasHiddenResource(const std::string& name)
 {
 	const auto res =  eopHiddenResources::getHiddenResourceIndex(name);
@@ -203,10 +234,19 @@ void regionStruct::setHiddenResource(const std::string& name, const bool enable)
 		return;
 	}
 	setHiddenResourceId(res, enable);
+	const auto settData = eopSettlementDataDb::get()->getSettlementData(regionID, 0);
 	if (enable)
+	{
+		if (std::find(settData->addedHiddenResources.begin(), settData->addedHiddenResources.end(), name) == settData->addedHiddenResources.end())
+			settData->addedHiddenResources.push_back(name);
 		eopHiddenResources::addHiddenResourceToRegion(regionID, name);
+	}
 	else
+	{
+		if (std::find(settData->removedHiddenResources.begin(), settData->removedHiddenResources.end(), name) == settData->removedHiddenResources.end())
+			settData->removedHiddenResources.push_back(name);
 		eopHiddenResources::removeHiddenResourceFromRegion(regionID, name);
+	}
 }
 
 settlementStruct* regionStruct::getTargetSettForFaction(factionStruct* faction)

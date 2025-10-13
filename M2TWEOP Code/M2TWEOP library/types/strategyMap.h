@@ -476,6 +476,7 @@ public:
 	void changeRegionName(const char* newName);
 	void changeRegionSettlementName(const char* newName);
 	void changeRebelsName(const char* newName);
+	void fixReligionLevels();
 	oneTile* getPatrolPoint(int index);
 	oneTile* getDevastatedTile(int index);
 	oneTile* getTile(int index);
@@ -923,6 +924,7 @@ public:
 	{
 		return x >= 0 && x < mapWidth && y >= 0 && y < mapHeight;
 	}
+	void fixAllReligionLevels();
 };
 
 struct extentColor

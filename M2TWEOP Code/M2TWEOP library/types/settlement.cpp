@@ -408,6 +408,16 @@ void eopSettlementDataDb::onGameLoaded()
 				if (!settData->regionRebelsName.empty())
 					region->changeRebelsName(settData->regionRebelsName.c_str());
 				region->changeRegionSettlementName(settlementHelpers::getSettlementName(sett).c_str());
+				for (size_t r = 0; r < settData->addedHiddenResources.size(); r++)
+				{
+					if (!region->hasHiddenResource(settData->addedHiddenResources[i]))
+						region->setHiddenResource(settData->addedHiddenResources[i], true);
+				}
+				for (size_t r = 0; r < settData->removedHiddenResources.size(); r++)
+				{
+					if (region->hasHiddenResource(settData->removedHiddenResources[i]))
+						region->setHiddenResource(settData->removedHiddenResources[i], false);
+				}
 			}
 			if (!settData->settlementLabel.empty())
 				gameStringHelpers::setHashedString(&sett->name, settData->settlementLabel.c_str());
@@ -448,6 +458,23 @@ namespace settlementHelpers
 	settlementStruct* createSettlement(factionStruct* faction, const int xCoord, const int yCoord, const std::string& name,
 		const int level, const bool castle)
 	{
+		if (name.empty())
+		{
+			gameHelpers::logStringGame("settlementHelpers.createSettlement: empty name given");
+			return nullptr;
+		}
+		// Check if name has whitespace
+		if (name.find_first_of(" \t\n\r") != std::string::npos)
+		{
+			gameHelpers::logStringGame("settlementHelpers.createSettlement: invalid name, whitespace not allowed: " + name);
+			return nullptr;
+		}
+		// Check for unicode characters in name
+		if (std::any_of(name.begin(), name.end(), [](unsigned char c) { return c < 32 || c > 126; }))
+		{
+			gameHelpers::logStringGame("settlementHelpers.createSettlement: invalid name: " + name);
+			return nullptr;
+		}
 	    const auto tile = stratMapHelpers::getTile(xCoord, yCoord);
 		if (tile->settlement || tile->fort || tile->port || !tile->isLand)
 		{
@@ -776,8 +803,9 @@ namespace settlementHelpers
 	
 	void setReligion(settlementStruct* sett, int index, float value)
 	{
-		const regionStruct* currRegion = &stratMapHelpers::getStratMap()->regions[sett->regionID];
+		regionStruct* currRegion = &stratMapHelpers::getStratMap()->regions[sett->regionID];
 		currRegion->religionsARR[index] = value;
+		currRegion->fixReligionLevels();
 	}
 	
 	std::string getSettlementName(settlementStruct* sett)
@@ -863,32 +891,6 @@ namespace settlementHelpers
 			return &queue->buildingQueue[position];
 		return nullptr;
 	}
-	
-	int getAvailableBuildingsCount(const availableBuildings* list)
-	{
-		int count = 0;
-		while (list)
-		{
-			count += list->buildingCount;
-			list = list->next;
-		}
-		return count;
-	}
-
-	buildingInQueue* getBuildingOption(const availableBuildings* list, const int index)
-	{
-		int passed = 0;
-		while (list)
-		{
-			if (index < passed + list->buildingCount)
-			{
-				return &list->buildingsList[index - passed];
-			}
-			passed += list->buildingCount;
-			list = list->next;
-		}
-		return nullptr;
-	}
 
 	availableBuildings* getAvailableBuildingsMem()
 	{
@@ -908,12 +910,12 @@ namespace settlementHelpers
 	{
 		int hash = 0;
 		for (int i = 0; i < sett->buildingsNum; i++)
-			hash += sett->buildings[i]->edbEntry->buildingID;
+			hash += sett->buildings[i]->edbEntry->buildingID * (i + 1);
 		for (int i = 0; i <= sett->buildingsQueueArray.buildingQueue.num; i++)
 		{
 			if (const buildingInQueue* inQueue = &sett->buildingsQueueArray.buildingQueue[i]; inQueue->edbEntry)
 			{
-				hash += inQueue->edbEntry->buildingID * 2;
+				hash += inQueue->edbEntry->buildingID * ((i + 1) * 2);
 			}
 		}
 		return hash;
@@ -934,11 +936,11 @@ namespace settlementHelpers
 		options->turn = turnNum;
 		options->settIndex = sett->minorSettlementIndex;
 		const auto available = getAvailableBuildings(sett);
-		options->count = getAvailableBuildingsCount(available);
+		options->count = available->size();
 		for (int i = 0; i < options->count; i++)
 		{
 			options->constructionOptions.push_back(std::make_shared<buildingInQueue>());
-			*options->constructionOptions[i] = *getBuildingOption(available, i);
+			*options->constructionOptions[i] = *available->get(i);
 			options->totalCost += options->constructionOptions[i]->buildCost;
 			options->totalTime += options->constructionOptions[i]->turnsToBuild;
 		}
@@ -1051,22 +1053,22 @@ namespace settlementHelpers
 		options->turn = turnNum;
 		options->settIndex = sett->minorSettlementIndex;
 		auto available = getAvailableUnits(sett);
-		const int trainCount = (available->lastUnit - reinterpret_cast<DWORD>(available->units)) / sizeof(unitRQ);
+		const int trainCount = available->size();
 		options->count = trainCount;
 		for (int i = 0; i < options->count; i++)
 		{
 			options->recruitOptions.push_back(std::make_shared<unitRQ>());
-			*options->recruitOptions[i] = available->units[i];
+			*options->recruitOptions[i] = (*available)[i];
 			options->totalCost += options->recruitOptions[i]->cost;
 			options->totalTime += options->recruitOptions[i]->turnsToTrain;
 		}
 		available = getAvailableRetrainingUnits(sett);
-		const int retrainCount = (available->lastUnit - reinterpret_cast<DWORD>(available->units)) / sizeof(unitRQ);
+		const int retrainCount = available->size();
 		options->count += retrainCount;
 		for (int i = trainCount; i < options->count; i++)
 		{
 			options->recruitOptions.push_back(std::make_shared<unitRQ>());
-			*options->recruitOptions[i] = available->units[i];
+			*options->recruitOptions[i] = (*available)[i];
 			options->recruitOptions[i]->recruitType = 3;
 			options->totalCost += options->recruitOptions[i]->cost;
 			options->totalTime += options->recruitOptions[i]->turnsToTrain;

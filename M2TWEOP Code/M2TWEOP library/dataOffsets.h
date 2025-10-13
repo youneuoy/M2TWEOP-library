@@ -122,6 +122,7 @@ public:
 		DWORD campaignControllerVtbl = NULL;
 		DWORD gameScriptLogger = NULL;
 		DWORD sineValues = NULL;
+		DWORD stratBinTable = NULL;
 	}offsets;
 
 	static void initDataOffsets(int gameVer);

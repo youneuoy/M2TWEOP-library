@@ -18,6 +18,8 @@
 #include "cultures.h"
 #include "stratModelsChange.h"
 
+std::unique_ptr<eopFactionDataDb> eopFactionDataDb::m_Instance = std::make_unique<eopFactionDataDb>();
+
 enum
 {
 	factionStruct_ai_label = 1,
@@ -72,6 +74,11 @@ bool factionStruct::canSeeCharacter(character* candidate)
 void factionStruct::setColor(const uint8_t r, const uint8_t g, const uint8_t b)
 {
 	const auto facRecord = factionRecord;
+	eopFactionDataDb::get()->checkInitialized();
+	const auto facData = eopFactionDataDb::get()->getFactionData(facRecord->id);
+	facData->primaryColorR = r;
+	facData->primaryColorG = g;
+	facData->primaryColorB = b;
 	facRecord->primary_colour_red = r;
 	facRecord->primary_colour_green = g;
 	facRecord->primary_colour_blue = b;
@@ -81,6 +88,11 @@ void factionStruct::setColor(const uint8_t r, const uint8_t g, const uint8_t b)
 void factionStruct::setSecondaryColor(const uint8_t r, const uint8_t g, const uint8_t b)
 {
 	const auto facRecord = factionRecord;
+	eopFactionDataDb::get()->checkInitialized();
+	const auto facData = eopFactionDataDb::get()->getFactionData(facRecord->id);
+	facData->secondaryColorR = r;
+	facData->secondaryColorG = g;
+	facData->secondaryColorB = b;
 	facRecord->secondary_colour_red = r;
 	facRecord->secondary_colour_green = g;
 	facRecord->secondary_colour_blue = b;
@@ -96,6 +108,8 @@ void factionRecord::setCulture(const int Id)
 {
 	const auto culturesDb = cultures::getCultureDb();
 	facCulture = &culturesDb->cultures[Id];
+	eopFactionDataDb::get()->checkInitialized();
+	eopFactionDataDb::get()->getFactionData(this->id)->cultureID = Id;
 }
 
 void factionRecord::setFactionStratModel(const std::string& model, const int characterType, const int level)
@@ -116,6 +130,12 @@ void factionRecord::setFactionStratModel(const std::string& model, const int cha
 		gameHelpers::logStringGame("factionRecord.setFactionStratModel: level out of bounds. Need add more levels to vanilla entry to set this level.");
 		return;
 	}
+	const auto factionDataDb = eopFactionDataDb::get();
+	if (!factionDataDb->isRestoring())
+	{
+		factionDataDb->checkInitialized();
+		factionDataDb->setNewStratModel(this->id, model, characterType, level);
+	}
 	const auto levelEntry = &factionEntry->stratInfo->stratModelsArray[level];
 	levelEntry->stratModelEntry = entry;
 	gameStringHelpers::setHashedStringGame(&levelEntry->modelName, model.c_str());
@@ -130,6 +150,12 @@ void factionRecord::setFactionBattleModel(const std::string& model, const int ch
 	{
 		gameHelpers::logStringGame("factionRecord.setFactionBattleModel: model not found: " + model);
 		return;
+	}
+	const auto factionDataDb = eopFactionDataDb::get();
+	if (!factionDataDb->isRestoring())
+	{
+		factionDataDb->checkInitialized();
+		factionDataDb->setNewBattleModel(this->id, model, characterType);
 	}
 	const auto descrCharacterPtr = reinterpret_cast<descrCharacterArray*>(dataOffsets::offsets.descrCharacter);
 	const auto charTypeEntry = &descrCharacterPtr->entries[characterType];
@@ -147,6 +173,195 @@ void factionRecord::setFactionBattleModel(const std::string& model, const int ch
 std::string factionRecord::getLocalizedName()
 {
 	return factionHelpers::getFactionNameLocalStr(facName);
+}
+
+void eopFactionDataDb::getOriginalData()
+{
+	if (m_Initialized)
+		return;
+	const auto factionRecordNum = factionHelpers::getFactionRecordNum();
+	for (int f = 0; f < factionRecordNum; f++)
+	{
+		const auto rec = factionHelpers::getFactionRecord(f);
+		if (!rec)
+			continue;
+		m_OriginalData[f].cultureID = rec->facCulture->cultureID;
+		m_OriginalData[f].primaryColorB = rec->primary_colour_blue;
+		m_OriginalData[f].primaryColorG = rec->primary_colour_green;
+		m_OriginalData[f].primaryColorR = rec->primary_colour_red;
+		m_OriginalData[f].secondaryColorB = rec->secondary_colour_blue;
+		m_OriginalData[f].secondaryColorG = rec->secondary_colour_green;
+		m_OriginalData[f].secondaryColorR = rec->secondary_colour_red;
+	}
+	m_Initialized = true;
+}
+
+void eopFactionDataDb::setNewStratModel(const int factionId, const std::string& model, int charType,
+	int level)
+{
+	const auto facData = &m_FactionData[factionId];
+	const auto origData = &m_OriginalData[factionId];
+	bool needSave = true;
+	for (const auto& changedStratModel : origData->changedStratModels)
+	{
+		if (changedStratModel.characterType == charType && changedStratModel.level == level)
+		{
+			needSave = false;
+			break;
+		}
+	}
+	if (needSave)
+		origData->changedStratModels.emplace_back(model, charType, level);
+	for (auto& changedStratModel : facData->changedStratModels)
+	{
+		if (changedStratModel.characterType == charType && changedStratModel.level == level)
+		{
+			changedStratModel.model = model;
+			return;
+		}
+	}
+	facData->changedStratModels.emplace_back(model, charType, level);
+}
+
+void eopFactionDataDb::setNewBattleModel(const int factionId, const std::string& model, int charType)
+{
+	const auto facData = &m_FactionData[factionId];
+	const auto origData = &m_OriginalData[factionId];
+	bool needSave = true;
+	for (const auto& changedBattleModel : origData->changedBattleModels)
+	{
+		if (changedBattleModel.characterType == charType)
+		{
+			needSave = false;
+			break;
+		}
+	}
+	if (needSave)
+		origData->changedBattleModels.emplace_back(model, charType);
+	for (auto& changedBattleModel : facData->changedBattleModels)
+	{
+		if (changedBattleModel.characterType == charType)
+		{
+			changedBattleModel.model = model;
+			return;
+		}
+	}
+	facData->changedBattleModels.emplace_back(model, charType);
+}
+
+
+void eopFactionDataDb::onGameLoad(const std::vector<std::string>& filePaths)
+{
+	for (auto& path : filePaths)
+	{
+		if (path.find("factionData.json") == string::npos)
+			continue;
+		jsn::json json;
+		try
+		{
+			std::ifstream file(path);
+			file >> json;
+			file.close();
+		}
+		catch (jsn::json::parse_error& e)
+		{
+			MessageBoxA(nullptr, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
+		try
+		{
+			deserialize(json);
+		}
+		catch (jsn::json::exception& e)
+		{
+			MessageBoxA(nullptr, e.what(), "Warning!", MB_APPLMODAL | MB_SETFOREGROUND);
+		}
+		return;
+	}
+}
+
+
+std::string eopFactionDataDb::onGameSave()
+{
+	std::string fPath = gameHelpers::getModPath();
+	fPath += "\\eopData\\TempSaveData";
+	filesystem::remove_all(fPath);
+	filesystem::create_directory(fPath);
+	std::string outFile = fPath;
+	outFile += "\\factionData.json";
+	ofstream f1(outFile);
+	jsn::json json = serialize();
+	f1 << setw(4) << json;
+	f1.close();
+	return outFile;
+	
+}
+
+void eopFactionDataDb::onGameLoaded()
+{
+	m_Restoring = true;
+	const auto factionRecordNum = factionHelpers::getFactionRecordNum();
+	for (int f = 0; f < factionRecordNum; f++)
+	{
+		const auto rec = factionHelpers::getFactionRecord(f);
+		if (!rec)
+			continue;
+		const auto& facData = m_FactionData[f];
+		rec->facCulture = &cultures::getCultureDb()->cultures[facData.cultureID];
+		rec->primary_colour_red = facData.primaryColorR;
+		rec->primary_colour_green = facData.primaryColorG;
+		rec->primary_colour_blue = facData.primaryColorB;
+		rec->secondary_colour_red = facData.secondaryColorR;
+		rec->secondary_colour_green = facData.secondaryColorG;
+		rec->secondary_colour_blue = facData.secondaryColorB;
+		for (const auto& changedStratModel : facData.changedStratModels)
+		{
+			rec->setFactionStratModel(changedStratModel.model, changedStratModel.characterType, changedStratModel.level);
+		}
+		for (const auto& changedBattleModel : facData.changedBattleModels)
+		{
+			rec->setFactionBattleModel(changedBattleModel.model, changedBattleModel.characterType);
+		}
+	}
+	m_Restoring = false;
+}
+
+void eopFactionDataDb::checkInitialized()
+{
+	if (!m_Initialized)
+	{
+		getOriginalData();
+	}
+}
+
+void eopFactionDataDb::restoreOriginalData()
+{
+	if (!m_Initialized)
+		return;
+	m_Restoring = true;
+	const auto factionRecordNum = factionHelpers::getFactionRecordNum();
+	for (int f = 0; f < factionRecordNum; f++)
+	{
+		const auto rec = factionHelpers::getFactionRecord(f);
+		if (!rec)
+			continue;
+		const auto& origData = m_OriginalData[f];
+		rec->facCulture = &cultures::getCultureDb()->cultures[origData.cultureID];
+		rec->primary_colour_red = origData.primaryColorR;
+		rec->primary_colour_green = origData.primaryColorG;
+		rec->primary_colour_blue = origData.primaryColorB;
+		rec->secondary_colour_red = origData.secondaryColorR;
+		rec->secondary_colour_green = origData.secondaryColorG;
+		rec->secondary_colour_blue = origData.secondaryColorB;
+		for (const auto& changedStratModel : origData.changedStratModels)
+		{
+			rec->setFactionStratModel(changedStratModel.model, changedStratModel.characterType, changedStratModel.level);
+		}
+		for (const auto& changedBattleModel : origData.changedBattleModels)
+		{
+			rec->setFactionBattleModel(changedBattleModel.model, changedBattleModel.characterType);
+		}
+	}
+	m_Restoring = false;
 }
 
 stringWithHash* LOOKUP_STRING_LABEL = new stringWithHash();
@@ -1146,7 +1361,7 @@ namespace factionHelpers
 		@function factionStruct:addSettlement
 		@tparam int xCoord
 		@tparam int yCoord
-		@tparam string name
+		@tparam string name Internal name! No invalid characters!
 		@tparam int level
 		@tparam bool castle
 		@treturn settlementStruct newSett

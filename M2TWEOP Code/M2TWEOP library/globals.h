@@ -36,6 +36,7 @@ public:
 		//steam =2, kingdoms=1
 		UINT32 gameVersion;
 		string modPath;
+		string modFolderName{};
 
 		struct
 		{

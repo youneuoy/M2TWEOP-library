@@ -128,6 +128,9 @@ void eopHiddenResources::addHiddenResourceWithId(const std::string& name, const 
 
 void eopHiddenResources::addHiddenResourceToRegion(const int regionId, const std::string& name)
 {
+	const auto index = getHiddenResourceIndex(name);
+	if (std::find(m_HiddenResources[regionId].begin(), m_HiddenResources[regionId].end(), index) != m_HiddenResources[regionId].end())
+		return; //already added
 	m_HiddenResources[regionId].push_back(getHiddenResourceIndex(name));
 }
 

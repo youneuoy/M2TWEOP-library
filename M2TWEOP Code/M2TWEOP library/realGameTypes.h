@@ -121,11 +121,31 @@ struct gameList
 		}
 		return total;
 	}
+	int size() const
+	{
+		return size();
+	}
 	bool empty()
 	{
 		return currentCount == 0;
 	}
+	bool empty() const
+	{
+		return empty();
+	}
 	T* get(int index)
+	{
+		gameList<T>* current = this;
+		while (current && index >= current->currentCount)
+		{
+			index -= current->currentCount;
+			current = current->next;
+		}
+		if (current)
+			return &current->elements[index];
+		return nullptr;
+	}
+	T* get(int index) const
 	{
 		gameList<T>* current = this;
 		while (current && index >= current->currentCount)

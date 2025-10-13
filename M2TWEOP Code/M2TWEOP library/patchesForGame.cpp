@@ -1861,6 +1861,11 @@ void __stdcall patchesForGame::onEduParsed()
 #endif
 }
 
+namespace
+{
+	bool FIRST_LOAD = true;
+}
+
 void __stdcall patchesForGame::onGameInit()
 {
 	gameHelpers::logStringGame("onGameInit");
@@ -1868,6 +1873,7 @@ void __stdcall patchesForGame::onGameInit()
 	plugData::data.luaAll.fillHashMapsVnv();
 	cultures::eopPortraitDb::createEopPortraitDb();
 	discordManager::menuLoaded();
+	eopFactionDataDb::get()->getOriginalData();
 	gameEvents::onGameInit();
 	*reinterpret_cast<bool*>(dataOffsets::offsets.bugReport) = true;
 }
@@ -1883,6 +1889,9 @@ void __stdcall patchesForGame::onNewGameLoaded()
 {
 	if (!eopHiddenResources::isInitialized())
 		eopHiddenResources::initialize();
+	const auto sMap = stratMapHelpers::getStratMap();
+	sMap->fixAllReligionLevels();
+	eopFactionDataDb::get()->restoreOriginalData();
 	eopCharacterDataDb::get()->clearData();
 	minorSettlementDb::load();
 	eopSettlementDataDb::get()->newGameLoaded();
@@ -2117,6 +2126,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 		minorSettlementDb::load();
 		eopSettlementDataDb::get()->onGameLoaded();
 		eopFortDataDb::get()->onGameLoaded();
+		eopFactionDataDb::get()->onGameLoaded();
 		//eopCharacterDataDb::get()->onGameLoaded();
 	}
 	else if (eventCode == conflictPhaseCommenced)
@@ -2186,7 +2196,7 @@ void __fastcall patchesForGame::onEvent(DWORD** vTab, DWORD arg2)
 				std::mt19937 g(rd());
 				std::shuffle(rebelFac->characterModels.begin(), rebelFac->characterModels.end(), g);
 				const auto randomModel = rebelFac->characterModels.front();
-				stratModelsChange::setCharacterModel(record->gen, randomModel.c_str());
+				stratModelsChange::setCharacterModel(record->gen, randomModel);
 			}
 		}
 	}
@@ -2250,6 +2260,7 @@ void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
 	eopSettlementDataDb::get()->onGameLoad(files);
 	eopFortDataDb::get()->onGameLoad(files);
 	eopCharacterDataDb::get()->onGameLoad(files);
+	eopFactionDataDb::get()->onGameLoad(files);
 	gameEvents::onLoadGamePl(&files);
 	plannedRetreatRoute::onGameLoad(files);
 	techFuncs::deleteFiles(files);
@@ -2274,6 +2285,8 @@ void __fastcall patchesForGame::onSaveGame(UNICODE_STRING**& savePath)
 		files.push_back(fortData);
 	if (const std::string characterData = eopCharacterDataDb::get()->onGameSave(); !characterData.empty())
 		files.push_back(characterData);
+	if (const std::string factionData = eopFactionDataDb::get()->onGameSave(); !factionData.empty())
+		files.push_back(factionData);
 	techFuncs::saveGameMakeArchive(savePath, files);
 	techFuncs::deleteFiles(files);
 }
