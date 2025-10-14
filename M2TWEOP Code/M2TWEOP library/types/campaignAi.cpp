@@ -346,7 +346,7 @@ float globalEopAiConfig::calculateSettPriority(const std::shared_ptr<settlementR
 	}
 	if (empty)
 	{
-		priority *= 2.f;
+		priority *= 10.f;
 		LOG_PRIORITY("Priotity #5: " + to_string(priority));
 	}
 	LOG_PRIORITY("totalSupportReceiving: " + to_string(settRes->totalSupportReceiving));
