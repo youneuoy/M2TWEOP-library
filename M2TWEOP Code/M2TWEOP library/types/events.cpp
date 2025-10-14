@@ -4542,7 +4542,7 @@ void luaPlugin::onPluginLoadF()
 	/***
 	Called when clicking on a faction symbol in the faction selection menu.
 
-	@function onFactionSymbolSelect(factionID)
+	@function onFactionSymbolSelect
 	@tparam int factionID
 
 	@usage
