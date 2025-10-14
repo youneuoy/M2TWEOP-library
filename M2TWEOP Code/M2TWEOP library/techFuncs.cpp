@@ -105,29 +105,34 @@ void techFuncs::zip(std::string const& zipFile, std::vector<std::string>& files,
     }
     for (string& file : files)
     {
+        gameHelpers::logStringGame("Adding file to archive: " + file);
         status = mz_zip_writer_add_file(&zipArchive, filesystem::path(file).filename().string().c_str(), file.c_str(), nullptr, 0, MZ_DEFAULT_COMPRESSION);
         if (!status)
         {
-            MessageBoxA(nullptr, "Cannot create M2TWEOP save file.", "ERROR", NULL);
+            gameHelpers::logStringGame("Cannot create M2TWEOP save file. 1");
+            MessageBoxA(nullptr, "Cannot create M2TWEOP save file. 1", "ERROR", NULL);
             exit(0);
         }
     }
     status = mz_zip_writer_add_file(&zipArchive, nameOfSaveFile.c_str(), saveFile.c_str(), nullptr, 0, MZ_DEFAULT_COMPRESSION);
     if (!status)
     {
-        MessageBoxA(nullptr, "Cannot create M2TWEOP save file.", "ERROR", NULL);
+        gameHelpers::logStringGame("Cannot create M2TWEOP save file. 2");
+        MessageBoxA(nullptr, "Cannot create M2TWEOP save file. 2", "ERROR", NULL);
         exit(0);
     }
     status = mz_zip_writer_finalize_archive(&zipArchive);
     if (!status)
     {
-        MessageBoxA(nullptr, "Cannot create M2TWEOP save file.", "ERROR", NULL);
+        gameHelpers::logStringGame("Cannot create M2TWEOP save file. 3");
+        MessageBoxA(nullptr, "Cannot create M2TWEOP save file. 3", "ERROR", NULL);
         exit(0);
     }
     status = mz_zip_writer_end(&zipArchive);
     if (!status)
     {
-        MessageBoxA(nullptr, "Cannot create M2TWEOP save file.", "ERROR", NULL);
+        gameHelpers::logStringGame("Cannot create M2TWEOP save file. 4");
+        MessageBoxA(nullptr, "Cannot create M2TWEOP save file. 4", "ERROR", NULL);
         exit(0);
     }
 }

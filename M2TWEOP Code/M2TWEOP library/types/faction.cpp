@@ -284,8 +284,6 @@ std::string eopFactionDataDb::onGameSave()
 {
 	std::string fPath = gameHelpers::getModPath();
 	fPath += "\\eopData\\TempSaveData";
-	filesystem::remove_all(fPath);
-	filesystem::create_directory(fPath);
 	std::string outFile = fPath;
 	outFile += "\\factionData.json";
 	ofstream f1(outFile);
@@ -905,6 +903,7 @@ namespace factionHelpers
 		@tfield int watchtowersNum
 		@tfield getWatchtower getWatchtower
 		@tfield int neighbourRegionsNum
+		@tfield holdRegionsWinCondition winCondition
 		@tfield deleteFort deleteFort
 		@tfield createFortXY createFortXY
 		@tfield createWatchtower createWatchtower

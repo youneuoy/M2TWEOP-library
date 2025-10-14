@@ -368,6 +368,7 @@
 "onCalculateUnitValue",
 "onEndSiege",
 "onStartSiege",
+"onFactionSymbolSelect",
 "factionStruct",
 "battleFactionCounter",
 "holdRegionsWinCondition",

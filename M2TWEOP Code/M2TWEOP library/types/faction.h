@@ -593,13 +593,13 @@ public:
 	static eopFactionDataDb* get() { return m_Instance.get(); }
 	eopFactionData* getFactionData(const int factionId)
 	{
-		if (factionId < 0 || factionId >= m_FactionData.size())
+		if (factionId < 0 || factionId >= static_cast<int>(m_FactionData.size()))
 			return nullptr;
 		return &m_FactionData[factionId];
 	}
 	eopFactionData* getOriginalFactionData(const int factionId)
 	{
-		if (factionId < 0 || factionId >= m_OriginalData.size())
+		if (factionId < 0 || factionId >= static_cast<int>(m_OriginalData.size()))
 			return nullptr;
 		return &m_OriginalData[factionId];
 	}

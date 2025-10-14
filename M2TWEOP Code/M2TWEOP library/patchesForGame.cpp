@@ -1147,6 +1147,11 @@ int patchesForGame::onMarriageOption(const factionRecord* facRecord)
 	return facRecord->hasFamilyTree && !facRecord->teutonic;
 }
 
+int patchesForGame::onCalcUnitStatsWpn(const int weapon)
+{
+	return weapon * m2tweopOptions::weaponBonusModifier;
+}
+
 //Sally out fix, consider armies around settlement not defender
 int* patchesForGame::onGetSupportingArmies(armyStruct* defender, armyStruct* attacker)
 {
@@ -2267,6 +2272,14 @@ void __fastcall patchesForGame::onLoadSaveFile(UNICODE_STRING**& savePath)
 	NEED_BUILD_FRONTIERS = true;
 }
 
+void cleanTempSaveFiles()
+{
+	std::string fPath = gameHelpers::getModPath();
+	fPath += "\\eopData\\TempSaveData";
+	filesystem::remove_all(fPath);
+	filesystem::create_directory(fPath);
+}
+
 void __fastcall patchesForGame::onSaveGame(UNICODE_STRING**& savePath)
 {
 	vector<string>files;
@@ -2279,6 +2292,7 @@ void __fastcall patchesForGame::onSaveGame(UNICODE_STRING**& savePath)
 	delete plugFiles;
 	if (const std::string retreatsFile = plannedRetreatRoute::onGameSave(); !retreatsFile.empty())
 		files.push_back(retreatsFile);
+	cleanTempSaveFiles();
 	if (const std::string settlementData = eopSettlementDataDb::get()->onGameSave(); !settlementData.empty())
 		files.push_back(settlementData);
 	if (const std::string fortData = eopFortDataDb::get()->onGameSave(); !fortData.empty())

@@ -356,6 +356,8 @@ public:
 	static int getWatchTowerRange() { return watchTowerRange; }
 	static void setUseEopFrontiers(const bool value) { useEopFrontiers = value; }
 	static int getUseEopFrontiers() { return useEopFrontiers; }
+	static int getWeaponBonusModifier() { return weaponBonusModifier; }
+	static void setWeaponBonusModifier(const int value) { weaponBonusModifier = value & 0xFF; }
 	static DWORD getColor() { return (static_cast<uint32_t>(0xFF) << 24) | (khakiTextRed << 16) | (khakiTextGreen << 8) | khakiTextBlue; }
 	static void setKhakiTextColor(const uint8_t red, const uint8_t green, const uint8_t blue) { khakiTextRed = red; khakiTextGreen = green; khakiTextBlue = blue; }
 	static bool hideUnknownUnitTooltips;
@@ -367,6 +369,7 @@ public:
 	static uint8_t khakiTextGreen;
 	static uint8_t khakiTextBlue;
 	static int watchTowerRange;
+	static int weaponBonusModifier;
 };
 
 struct boostLightMutex

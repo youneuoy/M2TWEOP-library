@@ -337,8 +337,6 @@ std::string eopSettlementDataDb::onGameSave()
 	}
 	std::string fPath = gameHelpers::getModPath();
 	fPath += "\\eopData\\TempSaveData";
-	filesystem::remove_all(fPath);
-	filesystem::create_directory(fPath);
 	std::string outFile = fPath;
 	outFile += "\\settlementData.json";
 	ofstream f1(outFile);

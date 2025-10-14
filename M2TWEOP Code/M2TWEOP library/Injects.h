@@ -1124,6 +1124,54 @@ private:
 	LPVOID funcAddress;
 };
 
+class onCalcUnitStatsWpn
+	:public AATemplate
+{
+public:
+	onCalcUnitStatsWpn(MemWork* mem, LPVOID adr, int ver);
+	~onCalcUnitStatsWpn() = default;
+
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onCalcUnitValueWpn
+	:public AATemplate
+{
+public:
+	onCalcUnitValueWpn(MemWork* mem, LPVOID adr, int ver);
+	~onCalcUnitValueWpn() = default;
+
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetUnitStatsUi1
+	:public AATemplate
+{
+public:
+	onGetUnitStatsUi1(MemWork* mem, LPVOID adr, int ver);
+	~onGetUnitStatsUi1() = default;
+
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
+class onGetUnitStatsUi2
+	:public AATemplate
+{
+public:
+	onGetUnitStatsUi2(MemWork* mem, LPVOID adr, int ver);
+	~onGetUnitStatsUi2() = default;
+
+	void SetNewCode();
+private:
+	LPVOID funcAddress;
+};
+
 class onCustomBattleUnitCards
 	:public AATemplate
 {

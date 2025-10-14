@@ -64,9 +64,13 @@ void oneTile::setTileGroundType(const int ground)
 
 void stratMap::fixAllReligionLevels()
 {
+	if (!isOpen)
+		return;
 	for (int i = 0; i < regionsNum; i++)
 	{
 		const auto region = &regions[i];
+		if (region->isSea)
+			continue;
 		region->fixReligionLevels();
 	}
 }

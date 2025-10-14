@@ -279,12 +279,15 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 	@tfield getFactionRecordNum getFactionRecordNum
 	@tfield hideUnknownUnitTooltips hideUnknownUnitTooltips
 	@tfield handleUnitCards handleUnitCards
+	@tfield setWeaponBonusModifier setWeaponBonusModifier
 	@tfield setWatchTowerRange setWatchTowerRange
 	@tfield enableFamilyEventsWithoutTree enableFamilyEventsWithoutTree
 	@tfield useEopFrontiers useEopFrontiers
 	@tfield setKhakiTextColor setKhakiTextColor
 	@tfield getMinorSettlementBalance getMinorSettlementBalance
 	@tfield generateSprite generateSprite
+	@tfield setTextureCacheSize setTextureCacheSize
+	@tfield unlockWeaponLimit unlockWeaponLimit
 	@tfield getGroundTypeMoveCost getGroundTypeMoveCost
 	@tfield setGroundTypeMoveCost setGroundTypeMoveCost
 	@table M2TWEOP
@@ -1013,6 +1016,15 @@ sol::state* luaPlugin::init(std::string& luaFilePath, std::string& modPath)
 		M2TWEOP.handleUnitCards(true)
 	*/
 	tables.M2TWEOP.set_function("handleUnitCards", &m2tweopOptions::setHandleUnitCards);
+	
+	/***
+	Set attack added for each level of weapon bonus. Default: 3.
+	@function M2TWEOP.setWeaponBonusModifier
+	@tparam int modifier Default: 3
+	@usage
+		M2TWEOP.setWeaponBonusModifier(1)
+	*/
+	tables.M2TWEOP.set_function("setWeaponBonusModifier", &m2tweopOptions::setWeaponBonusModifier);
 
 	/***
 	Set watchtower range. Default: 10.
