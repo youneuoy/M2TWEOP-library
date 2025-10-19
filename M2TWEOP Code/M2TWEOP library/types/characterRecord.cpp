@@ -1493,8 +1493,6 @@ void characterRecord::setPortrait(const std::string& portraitPath)
 
 void characterRecord::giveRandomName(const int nameFactionId)
 {
-	if (!gen)
-		return;
 	const auto campaign = campaignHelpers::getCampaignData();
 	nameFaction = nameFactionId;
 	const int checkCountMax = faction->characterRecordNum * 10;
