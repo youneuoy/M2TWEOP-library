@@ -574,6 +574,7 @@ namespace characterRecordHelpers
 	void namedCharSetLocalizedNameForSave(characterRecord* genChar, const char* str);
 	void namedCharSetLocalizedNextNameForSave(characterRecord* genChar, const char* str);
 	void namedCharSetLocalizedNicknameForSave(characterRecord* genChar, const char* str);
+	std::tuple<const char*, const char*> getRandomNames(const factionStruct* faction, int nameFactionId, bool isMale);
 	void setHeir(characterRecord* gen, bool isJustSet);
 	std::string getEopSetModel();
 	traitDb* getTraitDb();

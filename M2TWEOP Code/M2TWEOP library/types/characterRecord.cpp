@@ -230,6 +230,37 @@ namespace characterRecordHelpers
 		}
 	};
 
+	std::tuple<const char*, const char*> getRandomNames(const factionStruct* faction, const int nameFactionId, const bool isMale)
+	{
+		const auto campaign = campaignHelpers::getCampaignData();
+		const int checkCountMax = faction->characterRecordNum * 10;
+		int checkCount = 0;
+		int firstNameIndex = 0;
+		int secondNameIndex = 0;
+		while (checkCount < checkCountMax)
+		{
+			GAME_FUNC(int(__cdecl*)(int*, int, bool, int*, int*), getRandomNameFunc)
+			(&campaign->lastRandomSeed, nameFactionId, isMale, &firstNameIndex, &secondNameIndex);
+			bool research = false;
+			for(int i = 0; i < faction->characterRecordNum; i++)
+			{
+				if (const int nameIndex = GAME_FUNC(int(__thiscall*)(characterRecord*), getNameIndexFunc)(faction->characterRecords[i]);
+					firstNameIndex == nameIndex)
+				{
+					research = true;
+					break;
+				}
+			}
+			checkCount++;
+			if (research)
+				continue;
+			break;
+		}
+		const auto name = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(isMale ? 0 : 1 , nameFactionId, firstNameIndex);
+		const auto name2 = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(2, nameFactionId, secondNameIndex);
+		return std::make_tuple(name, name2);
+	}
+
 	void namedCharSetLocalizedNameForSave(characterRecord* genChar, const char* str)
 	{
 		const auto newStr = new uni16ppp();
@@ -1308,12 +1339,17 @@ characterRecord* characterRecord::birthChild(const std::string& name, const std:
 		gameHelpers::logStringGame("characterRecord::birthChild: character does not have a spouse");
 		return nullptr;
 	}
-	if (this->numberOfChildren > 3)
+	if (this->numberOfChildren > 7)
 	{
-		gameHelpers::logStringGame("characterRecord::birthChild: can only have 4 children");
+		gameHelpers::logStringGame("characterRecord::birthChild: can only have 8 children");
 		return nullptr;
 	}
 	const auto campaignDb = campaignHelpers::getCampaignDb();
+	if (this->numberOfChildren == campaignDb->campaignDbFamilyTree.maxNumberOfChildren)
+	{
+		gameHelpers::logStringGame("characterRecord::birthChild: character at campaign db max number of children");
+		return nullptr;
+	}
 	if ((age - childAge < campaignDb->campaignDbFamilyTree.ageOfManhood)
 		||(spouse->age - childAge < campaignDb->campaignDbFamilyTree.daughtersAgeOfConsent))
 	{
@@ -1330,7 +1366,13 @@ characterRecord* characterRecord::birthChild(const std::string& name, const std:
 	newRecord->setWasLeader(false);
 	newRecord->isMale = childMale;
 	if (name == "random_name" || name.empty())
-		newRecord->giveRandomName(this->faction->factionID);
+	{
+		auto [rName, rName2] = characterRecordHelpers::getRandomNames(faction, this->faction->factionID, isMale);
+		if (!childLastName.empty())
+			rName2 = childLastName.c_str();
+		GAME_FUNC(void(__thiscall*)(characterRecord*, const char*, const char*, UNICODE_STRING***, int, bool)
+				  , setCharacterName)(newRecord, rName, rName2, localizedNicknameForSave, 7, false);
+	}
 	else
 	{
 		GAME_FUNC(void(__thiscall*)(characterRecord*, const char*, const char*, UNICODE_STRING***, int, bool)
@@ -1493,33 +1535,7 @@ void characterRecord::setPortrait(const std::string& portraitPath)
 
 void characterRecord::giveRandomName(const int nameFactionId)
 {
-	const auto campaign = campaignHelpers::getCampaignData();
-	nameFaction = nameFactionId;
-	const int checkCountMax = faction->characterRecordNum * 10;
-	int checkCount = 0;
-	int firstNameIndex = 0;
-	int secondNameIndex = 0;
-	while (checkCount < checkCountMax)
-	{
-		GAME_FUNC(int(__cdecl*)(int*, int, bool, int*, int*), getRandomNameFunc)
-		(&campaign->lastRandomSeed, nameFaction, isMale, &firstNameIndex, &secondNameIndex);
-		bool research = false;
-		for(int i = 0; i < faction->characterRecordNum; i++)
-		{
-			if (const int nameIndex = GAME_FUNC(int(__thiscall*)(characterRecord*), getNameIndexFunc)(faction->characterRecords[i]);
-				firstNameIndex == nameIndex)
-			{
-				research = true;
-				break;
-			}
-		}
-		checkCount++;
-		if (research)
-			continue;
-		break;
-	}
-	const auto name = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(isMale ? 0 : 1 , nameFaction, firstNameIndex);
-	const auto name2 = GAME_FUNC(const char*(__cdecl*)(int, int, int), getCharacterName)(2, nameFaction, secondNameIndex);
+	auto [name, name2] = characterRecordHelpers::getRandomNames(faction, nameFactionId, isMale);
 	GAME_FUNC(void(__thiscall*)(characterRecord*, const char*, const char*, UNICODE_STRING***, int, bool)
 		, setCharacterName)(this, name, name2, localizedNicknameForSave, gen ? gen->getTypeID() : 7, false);
 }
