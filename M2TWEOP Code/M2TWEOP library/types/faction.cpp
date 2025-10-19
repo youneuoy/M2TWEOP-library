@@ -82,6 +82,10 @@ void factionStruct::setColor(const uint8_t r, const uint8_t g, const uint8_t b)
 	facRecord->primary_colour_red = r;
 	facRecord->primary_colour_green = g;
 	facRecord->primary_colour_blue = b;
+	facData->secondaryColorR = facRecord->primary_colour_red;
+	facData->secondaryColorG = facRecord->primary_colour_green;
+	facData->secondaryColorB = facRecord->primary_colour_blue;
+	facData->hasCustomColors = true;
 	stratMapHelpers::updateTerrain();
 }
 
@@ -96,6 +100,10 @@ void factionStruct::setSecondaryColor(const uint8_t r, const uint8_t g, const ui
 	facRecord->secondary_colour_red = r;
 	facRecord->secondary_colour_green = g;
 	facRecord->secondary_colour_blue = b;
+	facData->hasCustomColors = true;
+	facData->primaryColorR = facRecord->primary_colour_red;
+	facData->primaryColorG = facRecord->primary_colour_green;
+	facData->primaryColorB = facRecord->primary_colour_blue;
 	stratMapHelpers::updateTerrain();
 }
 
@@ -279,6 +287,38 @@ void eopFactionDataDb::onGameLoad(const std::vector<std::string>& filePaths)
 	}
 }
 
+void eopFactionData::deserialize(const nlohmann::json& json)
+{
+	//gameHelpers::logStringGame("deserialize: hasCustomColors");
+	hasCustomColors = json["hasCustomColors"];
+	//gameHelpers::logStringGame("deserialize: primaryColorR");
+	primaryColorR = json["primaryColorR"];
+	//gameHelpers::logStringGame("deserialize: primaryColorG");
+	primaryColorG = json["primaryColorG"];
+	//gameHelpers::logStringGame("deserialize: primaryColorB");
+	primaryColorB = json["primaryColorB"];
+	//gameHelpers::logStringGame("deserialize: secondaryColorR");
+	secondaryColorR = json["secondaryColorR"];
+	//gameHelpers::logStringGame("deserialize: secondaryColorG");
+	secondaryColorG = json["secondaryColorG"];
+	//gameHelpers::logStringGame("deserialize: secondaryColorB");
+	secondaryColorB = json["secondaryColorB"];
+	//gameHelpers::logStringGame("deserialize: cultureID");
+	cultureID = json["cultureID"];
+
+	for (const auto& modelJson : json["changedStratModels"])
+	{
+		facStratModel model(modelJson["model"], modelJson["characterType"], modelJson["level"]);
+		changedStratModels.push_back(model);
+	}
+
+	for (const auto& modelJson : json["changedBattleModels"])
+	{
+		facBattleModel model(modelJson["model"], modelJson["characterType"]);
+		changedBattleModels.push_back(model);
+	}
+}
+
 
 std::string eopFactionDataDb::onGameSave()
 {
@@ -296,6 +336,10 @@ std::string eopFactionDataDb::onGameSave()
 
 void eopFactionDataDb::onGameLoaded()
 {
+	if (!m_Initialized)
+	{
+		getOriginalData();
+	}
 	m_Restoring = true;
 	const auto factionRecordNum = factionHelpers::getFactionRecordNum();
 	for (int f = 0; f < factionRecordNum; f++)
@@ -304,13 +348,17 @@ void eopFactionDataDb::onGameLoaded()
 		if (!rec)
 			continue;
 		const auto& facData = m_FactionData[f];
-		rec->facCulture = &cultures::getCultureDb()->cultures[facData.cultureID];
-		rec->primary_colour_red = facData.primaryColorR;
-		rec->primary_colour_green = facData.primaryColorG;
-		rec->primary_colour_blue = facData.primaryColorB;
-		rec->secondary_colour_red = facData.secondaryColorR;
-		rec->secondary_colour_green = facData.secondaryColorG;
-		rec->secondary_colour_blue = facData.secondaryColorB;
+		if (facData.hasCustomColors)
+		{
+			rec->primary_colour_red = facData.primaryColorR;
+			rec->primary_colour_green = facData.primaryColorG;
+			rec->primary_colour_blue = facData.primaryColorB;
+			rec->secondary_colour_red = facData.secondaryColorR;
+			rec->secondary_colour_green = facData.secondaryColorG;
+			rec->secondary_colour_blue = facData.secondaryColorB;
+		}
+		if (facData.cultureID != -1)
+			rec->facCulture = &cultures::getCultureDb()->cultures[facData.cultureID];
 		for (const auto& changedStratModel : facData.changedStratModels)
 		{
 			rec->setFactionStratModel(changedStratModel.model, changedStratModel.characterType, changedStratModel.level);

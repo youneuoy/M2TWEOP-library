@@ -1350,8 +1350,8 @@ characterRecord* characterRecord::birthChild(const std::string& name, const std:
 		gameHelpers::logStringGame("characterRecord::birthChild: character at campaign db max number of children");
 		return nullptr;
 	}
-	if ((age - childAge < campaignDb->campaignDbFamilyTree.ageOfManhood)
-		||(spouse->age - childAge < campaignDb->campaignDbFamilyTree.daughtersAgeOfConsent))
+	if ((age - childAge < static_cast<uint32_t>(campaignDb->campaignDbFamilyTree.ageOfManhood))
+		||(spouse->age - childAge < static_cast<uint32_t>(campaignDb->campaignDbFamilyTree.daughtersAgeOfConsent)))
 	{
 		gameHelpers::logStringGame("characterRecord::birthChild: character is not old enough to birth this child");
 		return nullptr;
@@ -1408,7 +1408,7 @@ characterRecord* characterRecord::marryWife(const std::string& name, int wifeAge
 		return nullptr;
 	}
 	const auto campaignDb = campaignHelpers::getCampaignDb();
-	if (age < campaignDb->campaignDbFamilyTree.ageOfManhood)
+	if (age < static_cast<uint32_t>(campaignDb->campaignDbFamilyTree.ageOfManhood))
 	{
 		gameHelpers::logStringGame("characterRecord::marryWife: Character is too young");
 		return nullptr;

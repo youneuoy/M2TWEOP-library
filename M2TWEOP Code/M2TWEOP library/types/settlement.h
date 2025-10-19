@@ -787,6 +787,8 @@ struct eopSettlementData
 		json["regionRebelsName"] = regionRebelsName;
 		json["settlementID"] = settlementID;
 		json["regionID"] = regionID;
+		json["addedHiddenResources"] = nlohmann::json::array();
+		json["removedHiddenResources"] = nlohmann::json::array();
 		for (const auto& resource : addedHiddenResources)
 		{
 			json["addedHiddenResources"].push_back(resource);

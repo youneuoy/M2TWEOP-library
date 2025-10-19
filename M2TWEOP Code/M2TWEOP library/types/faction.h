@@ -526,7 +526,8 @@ public:
 	uint8_t secondaryColorR{};
 	uint8_t secondaryColorG{};
 	uint8_t secondaryColorB{};
-	int cultureID{};
+	bool hasCustomColors = false;
+	int cultureID  = -1;
 	std::vector<facStratModel> changedStratModels{};
 	std::vector<facBattleModel> changedBattleModels{};
 	nlohmann::json serialize() const
@@ -538,7 +539,10 @@ public:
 		json["secondaryColorR"] = secondaryColorR;
 		json["secondaryColorG"] = secondaryColorG;
 		json["secondaryColorB"] = secondaryColorB;
+		json["hasCustomColors"] = hasCustomColors;
 		json["cultureID"] = cultureID;
+		json["changedStratModels"] = nlohmann::json::array();
+		json["changedBattleModels"] = nlohmann::json::array();
 
 		for (const auto& model : changedStratModels)
 		{
@@ -560,36 +564,15 @@ public:
 		return json;
 	}
 
-	void deserialize(const nlohmann::json& json)
-	{
-		primaryColorR = json["primaryColorR"];
-		primaryColorG = json["primaryColorG"];
-		primaryColorB = json["primaryColorB"];
-		secondaryColorR = json["secondaryColorR"];
-		secondaryColorG = json["secondaryColorG"];
-		secondaryColorB = json["secondaryColorB"];
-		cultureID = json["cultureID"];
-
-		for (const auto& modelJson : json["changedStratModels"])
-		{
-			facStratModel model(modelJson["model"], modelJson["characterType"], modelJson["level"]);
-			changedStratModels.push_back(model);
-		}
-
-		for (const auto& modelJson : json["changedBattleModels"])
-		{
-			facBattleModel model(modelJson["model"], modelJson["characterType"]);
-			changedBattleModels.push_back(model);
-		}
-	}
+	void deserialize(const nlohmann::json& json);
 };
 
 class eopFactionDataDb
 {
 public:
 	void getOriginalData();
-	void setNewStratModel(const int factionId, const std::string& model, int charType, int level);
-	void setNewBattleModel(const int factionId, const std::string& model, int charType);
+	void setNewStratModel(int factionId, const std::string& model, int charType, int level);
+	void setNewBattleModel(int factionId, const std::string& model, int charType);
 	static eopFactionDataDb* get() { return m_Instance.get(); }
 	eopFactionData* getFactionData(const int factionId)
 	{
@@ -605,7 +588,7 @@ public:
 	}
 	void checkInitialized();
 	void restoreOriginalData();
-	bool isRestoring() const
+	[[nodiscard]] bool isRestoring() const
 	{
 		return m_Restoring;
 	}
