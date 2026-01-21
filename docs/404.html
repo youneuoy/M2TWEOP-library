@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Moved</title>
+  <script>
+    (function () {
+      const oldBase = "/M2TWEOP-library";
+      const newBase = "https://eop-labs.github.io/M2TWEOP-library";
+
+      const path = window.location.pathname;
+      const rest = path.startsWith(oldBase)
+        ? path.substring(oldBase.length)
+        : "";
+
+      const target = newBase + rest + window.location.search + window.location.hash;
+      window.location.replace(target);
+    })();
+  </script>
+</head>
+<body>
+  <p>Project moved to <a href="https://eop-labs.github.io/M2TWEOP-library/">EOP Labs</a></p>
+</body>
+</html>
